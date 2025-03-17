@@ -4,6 +4,36 @@ using UnityEngine;
 
 public interface IGameAction { void Execute(); }
 
+public class DrawCardAction : IGameAction {
+    private readonly IPlayer player;
+    private readonly int amount;
+
+    public DrawCardAction(IPlayer player, int amount = 1) {
+        this.player = player;
+        this.amount = amount;
+        Log($"Created DrawCardAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to draw {amount} card(s)",
+            LogTag.Actions | LogTag.Cards);
+    }
+
+    public void Execute() {
+        if (player == null) {
+            LogError("Cannot execute draw action - player is null", LogTag.Actions | LogTag.Cards);
+            return;
+        }
+
+        for (int i = 0; i < amount; i++) {
+            player.DrawCard();
+        }
+
+        Log($"Executed draw of {amount} card(s) for {(player.IsPlayer1() ? "Player 1" : "Player 2")}",
+            LogTag.Actions | LogTag.Cards);
+    }
+
+    public override string ToString() {
+        return $"DrawCardAction: Player={(player.IsPlayer1() ? "1" : "2")}, Amount={amount}";
+    }
+}
+
 public class SummonCreatureAction : IGameAction {
     private readonly ICreature creature;
     private readonly IPlayer owner;

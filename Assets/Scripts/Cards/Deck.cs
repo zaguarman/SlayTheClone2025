@@ -7,14 +7,18 @@ public interface IDeck {
     ICard DrawCard();
     void AddCardToTop(ICard card);
     void AddCardToBottom(ICard card);
+    void Shuffle();
 }
 
 public class Deck : IDeck {
-    private Queue<ICard> cards;
+    private List<ICard> cards;
+    private System.Random random;
+
     public int CardsRemaining => cards?.Count ?? 0;
 
     public Deck() {
-        cards = new Queue<ICard>();
+        cards = new List<ICard>();
+        random = new System.Random();
     }
 
     public void Initialize(List<CardData> cardDataList) {
@@ -25,13 +29,14 @@ public class Deck : IDeck {
 
         cards.Clear();
         foreach (var cardData in cardDataList) {
-            Log($"Creating card {cardData.cardName} with {cardData.effects.Count} effects", LogTag.Cards | LogTag.Initialization);
             var card = CardFactory.CreateCard(cardData);
             if (card != null) {
                 Log($"Added {card.Name} to deck with {card.Effects.Count} effects", LogTag.Cards | LogTag.Initialization);
+                cards.Add(card);
             }
-            cards.Enqueue(card);
         }
+
+        Shuffle();
         Log($"Initialized with {cards.Count} cards", LogTag.Cards | LogTag.Initialization);
     }
 
@@ -40,7 +45,10 @@ public class Deck : IDeck {
             LogWarning("Attempted to draw from empty deck", LogTag.Cards);
             return null;
         }
-        var drawnCard = cards.Dequeue();
+
+        var drawnCard = cards[0];
+        cards.RemoveAt(0);
+        Log($"Drew card: {drawnCard.Name}", LogTag.Cards);
         return drawnCard;
     }
 
@@ -49,9 +57,8 @@ public class Deck : IDeck {
             LogError("Attempted to add null card to deck", LogTag.Cards);
             return;
         }
-        var tempList = new List<ICard>(cards);
-        tempList.Add(card);
-        cards = new Queue<ICard>(tempList);
+
+        cards.Insert(0, card);
         Log($"Added card to top: {card.Name}", LogTag.Cards);
     }
 
@@ -60,7 +67,22 @@ public class Deck : IDeck {
             LogError("Attempted to add null card to deck", LogTag.Cards);
             return;
         }
-        cards.Enqueue(card);
+
+        cards.Add(card);
         Log($"Added card to bottom: {card.Name}", LogTag.Cards);
+    }
+
+    public void Shuffle() {
+        if (cards.Count <= 1) return;
+
+        // Fisher-Yates shuffle algorithm
+        for (int i = cards.Count - 1; i > 0; i--) {
+            int j = random.Next(0, i + 1);
+            var temp = cards[i];
+            cards[i] = cards[j];
+            cards[j] = temp;
+        }
+
+        Log($"Shuffled deck ({cards.Count} cards)", LogTag.Cards);
     }
 }

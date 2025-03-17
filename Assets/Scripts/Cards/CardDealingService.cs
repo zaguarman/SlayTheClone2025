@@ -18,10 +18,7 @@ public class CardDealingService : ICardDealingService {
     }
 
     public void InitializeDecks(List<CardData> player1Cards, List<CardData> player2Cards) {
-        Log($"Initializing decks - Player1 cards: {player1Cards.Count}", LogTag.Cards);
-        foreach (var card in player1Cards) {
-            Log($"- {card.cardName} with {card.effects?.Count ?? 0} effects", LogTag.Cards);
-        }
+        Log($"Initializing decks - Player1 cards: {player1Cards.Count}, Player2 cards: {player2Cards.Count}", LogTag.Cards);
 
         var gameManager = GameManager.Instance;
         if (gameManager == null) {
@@ -74,19 +71,18 @@ public class CardDealingService : ICardDealingService {
         var card = deck.DrawCard();
         if (card != null) {
             player.AddToHand(card);
-            gameMediator.NotifyGameStateChanged();
-            Log($"Drew card for {(player.IsPlayer1() ? "Player 1" : "Player 2")}: {card.Name}", LogTag.Cards | LogTag.Initialization);
+            gameMediator.NotifyHandStateChanged(player);
+            Log($"Drew card for {(player.IsPlayer1() ? "Player 1" : "Player 2")}: {card.Name}", LogTag.Cards);
         }
     }
 
     public void ShuffleDeck(IPlayer player) {
         if (!playerDecks.TryGetValue(player, out var deck)) {
-            LogError($"Could not find deck for player to shuffle", LogTag.Cards | LogTag.Initialization);
+            LogError($"Could not find deck for player to shuffle", LogTag.Cards);
             return;
         }
 
-        // Implementation of deck shuffling would go here
-        // Note: The current Deck class would need to be modified to support shuffling
-        Log($"Shuffled deck for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards | LogTag.Initialization);
+        deck.Shuffle();
+        Log($"Shuffled deck for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
     }
 }

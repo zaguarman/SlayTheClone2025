@@ -41,7 +41,7 @@ public class GameManager : InitializableComponent {
 
     private GameMediator gameMediator;
     private GameReferences gameReferences;
-    private ICardDealingService cardDealingService;
+    public ICardDealingService cardDealingService { get; private set; }
     private System.Random random = new System.Random();
 
     public BattlefieldCombatHandler CombatHandler => combatHandler;
@@ -131,8 +131,10 @@ public class GameManager : InitializableComponent {
 
     private void InitializeCards() {
         var testSetup = gameObject.AddComponent<TestSetup>();
-        var testCards = testSetup.CreateTestCards();
-        cardDealingService.InitializeDecks(testCards, testCards);
+        var player1Cards = testSetup.CreateTestCards();
+        var player2Cards = testSetup.CreateTestCards();
+        cardDealingService.InitializeDecks(player1Cards, player2Cards);
+        Log("Decks initialized with test cards", LogTag.Cards | LogTag.Initialization);
     }
 
     private void PlaceInitialCreatures() {
@@ -190,5 +192,11 @@ public class GameManager : InitializableComponent {
 
     private void OnResolveButtonClicked() {
         ActionsQueue?.ResolveActions();
+    }
+
+    // Add method to handle draw card actions
+    public void DrawCardForPlayer(IPlayer player) {
+        if (player == null) return;
+        player.DrawCard();
     }
 }

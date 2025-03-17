@@ -18,6 +18,7 @@ public interface IPlayer : IEntity, IDamageable {
     void RemoveFromBattlefield(ICard creature, bool destroyCard = true);
     PlayerDamagedUnityEvent OnDamaged { get; }
     void InitializeBattlefield(List<BattlefieldSlot> battlefieldSlots);
+    void DrawCard();
 }
 
 public class Player : Entity, IPlayer {
@@ -63,6 +64,20 @@ public class Player : Entity, IPlayer {
         if (card == null) return;
         Hand.Add(card);
         gameMediator?.NotifyHandStateChanged(this);
+    }
+
+    public void DrawCard() {
+        var cardDealingService = GameManager.Instance?.cardDealingService;
+        if (cardDealingService == null) {
+            LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
+            return;
+        }
+
+        if (cardDealingService.CanDrawCard(this)) {
+            cardDealingService.DrawCardForPlayer(this);
+        } else {
+            LogWarning($"No cards left in {(IsPlayer1() ? "Player 1" : "Player 2")}'s deck", LogTag.Cards);
+        }
     }
 
     public void AddToBattlefield(ICard card, ITarget slot = null) {
