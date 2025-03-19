@@ -43,10 +43,11 @@ public class ActionsQueue {
             SummonCreatureAction => -1,
             MoveCreatureAction or SwapCreaturesAction => 0,
             PlayCardAction => 1,
-            DirectDamageAction => 2,
-            MarkCombatTargetAction => 3,
-            DamageCreatureAction or DamagePlayerAction => 4,
-            _ => 5
+            DrawCardAction => 2,
+            DirectDamageAction => 3,
+            MarkCombatTargetAction => 4,
+            DamageCreatureAction or DamagePlayerAction => 5,
+            _ => 6
         };
     }
 

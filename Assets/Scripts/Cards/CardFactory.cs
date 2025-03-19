@@ -1,13 +1,10 @@
 using static DebugLogger;
-using System.Collections.Generic;
 using System.Linq;
 using System;
 using UnityEngine.Events;
 using UnityEngine;
 
 public static class CardFactory {
-    private static Dictionary<string, CardData> cardDataCache = new Dictionary<string, CardData>();
-
     public static ICard CreateCard(CardData cardData) {
         if (cardData == null) return null;
 
@@ -31,6 +28,23 @@ public static class CardFactory {
                 }
                 card = creature;
                 break;
+
+            case SpellData spellData:
+                var spell = new Spell(spellData.cardName, spellData.spellPower, spellData.defaultTargetType);
+                foreach (var effect in cardData.effects) {
+                    var newEffect = new CardEffect {
+                        effectType = effect.effectType,
+                        trigger = effect.trigger,
+                        actions = effect.actions.Select(a => new EffectAction {
+                            actionType = a.actionType,
+                            value = a.value,
+                            targetType = a.targetType
+                        }).ToList()
+                    };
+                    spell.Effects.Add(newEffect);
+                }
+                card = spell;
+                break;
         }
 
         return card;
@@ -49,7 +63,11 @@ public static class CardFactory {
         var controller = cardObj.GetComponent<CardController>();
         if (controller != null) {
             var data = CreateCardData(card);
-            controller.Setup(data, owner, (ICreature)card);
+
+            // Only cast to ICreature if the card is actually a creature
+            ICreature creature = card as ICreature;
+
+            controller.Setup(data, owner, creature);
             Log($"Created card controller for {card.Name}", LogTag.Cards | LogTag.Initialization);
         }
         return controller;
@@ -77,6 +95,28 @@ public static class CardFactory {
             }).ToList();
 
             return creatureData;
+        }
+
+        // For spells, create SpellData
+        if (card is Spell spell) {
+            var spellData = ScriptableObject.CreateInstance<SpellData>();
+            spellData.cardName = spell.Name;
+            spellData.spellPower = spell.SpellPower;
+            spellData.defaultTargetType = spell.DefaultTargetType;
+            spellData.description = "Spell card";  // You might want a more descriptive text
+
+            // Copy effects from the spell to the new data
+            spellData.effects = spell.Effects.Select(e => new CardEffect {
+                effectType = e.effectType,
+                trigger = e.trigger,
+                actions = e.actions.Select(a => new EffectAction {
+                    actionType = a.actionType,
+                    value = a.value,
+                    targetType = a.targetType
+                }).ToList()
+            }).ToList();
+
+            return spellData;
         }
 
         return null;

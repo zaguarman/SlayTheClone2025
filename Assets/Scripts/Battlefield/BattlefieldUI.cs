@@ -85,9 +85,31 @@ public class BattlefieldUI : CardContainer {
         if (cardData != null) {
             var newCard = CardFactory.CreateCard(cardData);
             if (newCard != null) {
-                Log($"Adding PlayCardAction for {cardData.cardName} to slot {target.TargetId}",
-                    LogTag.Actions | LogTag.Cards);
-                gameManager.ActionsQueue.AddAction(new PlayCardAction(newCard, Player, target));
+                // Determine if the target is valid based on card type
+                ITarget validTarget = target;
+
+                // For creatures, we need a slot
+                if (cardData is CreatureData) {
+                    Log($"Adding PlayCardAction for creature {cardData.cardName} to slot {target.TargetId}",
+                        LogTag.Actions | LogTag.Cards);
+                }
+                // For spells, we might need a different target (creature in slot or player)
+                else if (cardData is SpellData) {
+                    // If the slot is occupied, target the creature
+                    if (target is BattlefieldSlot slot && slot.IsOccupied()) {
+                        validTarget = slot.OccupyingCreature;
+                        Log($"Adding PlayCardAction for spell {cardData.cardName} targeting creature {validTarget.TargetId}",
+                            LogTag.Actions | LogTag.Cards);
+                    }
+                    // Otherwise target the opponent player
+                    else {
+                        validTarget = Player.Opponent;
+                        Log($"Adding PlayCardAction for spell {cardData.cardName} targeting player {(Player.Opponent.IsPlayer1() ? "1" : "2")}",
+                            LogTag.Actions | LogTag.Cards);
+                    }
+                }
+
+                gameManager.ActionsQueue.AddAction(new PlayCardAction(newCard, Player, validTarget));
             }
         }
     }

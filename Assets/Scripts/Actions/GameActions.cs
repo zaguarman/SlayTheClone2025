@@ -34,6 +34,38 @@ public class DrawCardAction : IGameAction {
     }
 }
 
+public class PlaySpellAction : IGameAction {
+    private readonly Spell spell;
+    private readonly IPlayer owner;
+    private readonly ITarget target;
+
+    public PlaySpellAction(Spell spell, IPlayer owner, ITarget target = null) {
+        this.spell = spell;
+        this.owner = owner;
+        this.target = target;
+        Log($"Created PlaySpellAction for {spell.Name}", LogTag.Actions | LogTag.Cards);
+    }
+
+    public void Execute() {
+        if (spell == null || owner == null) {
+            LogError("Cannot execute PlaySpellAction - spell or owner is null", LogTag.Actions);
+            return;
+        }
+
+        // Remove the spell from hand
+        owner.Hand.Remove(spell);
+
+        // Process spell effects
+        spell.Play(owner, GameManager.Instance.ActionsQueue, target);
+
+        Log($"Executed PlaySpellAction for {spell.Name}", LogTag.Actions | LogTag.Cards);
+    }
+
+    public override string ToString() {
+        return $"PlaySpellAction: Spell={spell?.Name}, Owner={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")}, Target={target?.TargetId}";
+    }
+}
+
 public class SummonCreatureAction : IGameAction {
     private readonly ICreature creature;
     private readonly IPlayer owner;
@@ -229,7 +261,7 @@ public class PlayCardAction : IGameAction {
         this.card = card;
         this.owner = owner;
         this.target = target;
-        Log($"Created PlayCardAction for {card.Name} targeting slot {target}", LogTag.Actions | LogTag.Cards);
+        Log($"Created PlayCardAction for {card.Name} targeting {target?.TargetId}", LogTag.Actions | LogTag.Cards);
     }
 
     public void Execute() {
@@ -241,14 +273,20 @@ public class PlayCardAction : IGameAction {
         // Remove the card from hand first
         owner.Hand.Remove(card);
 
-        // Process any immediate effects
-        card.Play(owner, GameManager.Instance.ActionsQueue, target);
+        // Process based on card type
+        if (card is Spell spell) {
+            // Create a specific spell action for better tracking
+            GameManager.Instance.ActionsQueue.AddAction(new PlaySpellAction(spell, owner, target));
+        } else {
+            // Process any immediate effects for other card types
+            card.Play(owner, GameManager.Instance.ActionsQueue, target);
+        }
 
         Log($"Executed PlayCardAction for {card.Name}", LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {
-        return $"PlayCardAction: Card={card?.Name}, Owner={owner?.Name}, Target={target?.TargetId}";
+        return $"PlayCardAction: Card={card?.Name}, Owner={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")}, Target={target?.TargetId}";
     }
 }
 

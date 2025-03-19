@@ -119,6 +119,9 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             } else {
                 statsText.text = $"{creatureData.attack}/{creatureData.health}";
             }
+        } else if (cardData is SpellData spellData) {
+            statsText.gameObject.SetActive(true);
+            statsText.text = $"SP: {spellData.spellPower}";
         } else {
             statsText.gameObject.SetActive(false);
         }
