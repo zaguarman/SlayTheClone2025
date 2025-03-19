@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using UnityEngine.Events;
 using UnityEngine;
+using static Enums;
 
 public static class CardFactory {
     public static ICard CreateCard(CardData cardData) {
@@ -30,19 +31,11 @@ public static class CardFactory {
                 break;
 
             case SpellData spellData:
-                var spell = new Spell(spellData.cardName, spellData.spellPower, spellData.defaultTargetType);
-                foreach (var effect in cardData.effects) {
-                    var newEffect = new CardEffect {
-                        effectType = effect.effectType,
-                        trigger = effect.trigger,
-                        actions = effect.actions.Select(a => new EffectAction {
-                            actionType = a.actionType,
-                            value = a.value,
-                            targetType = a.targetType
-                        }).ToList()
-                    };
-                    spell.Effects.Add(newEffect);
-                }
+                var spell = new Spell(spellData.cardName, spellData.defaultTargetType);
+
+                // Map spell name to predefined actions
+                ConfigureSpellActions(spell, spellData.cardName);
+
                 card = spell;
                 break;
         }
@@ -101,25 +94,44 @@ public static class CardFactory {
         if (card is Spell spell) {
             var spellData = ScriptableObject.CreateInstance<SpellData>();
             spellData.cardName = spell.Name;
-            spellData.spellPower = spell.SpellPower;
             spellData.defaultTargetType = spell.DefaultTargetType;
-            spellData.description = "Spell card";  // You might want a more descriptive text
 
-            // Copy effects from the spell to the new data
-            spellData.effects = spell.Effects.Select(e => new CardEffect {
-                effectType = e.effectType,
-                trigger = e.trigger,
-                actions = e.actions.Select(a => new EffectAction {
-                    actionType = a.actionType,
-                    value = a.value,
-                    targetType = a.targetType
-                }).ToList()
-            }).ToList();
+            spellData.description = "Spell card"; // Default fallback in case no description is found
 
             return spellData;
         }
 
         return null;
+    }
+
+    private static void ConfigureSpellActions(Spell spell, string spellName) {
+        switch (spellName) {
+            case "Fireball":
+                // Primary effect: Deal 3 damage to target
+                spell.AddAction(ActionType.Damage, 3, TargetType.AllCreatures);
+                // Secondary effect: Draw a card
+                spell.AddAction(ActionType.Draw, 1, TargetType.Player);
+                break;
+
+            case "Storm":
+                // Primary effect: Deal 1 damage to all enemy creatures
+                spell.AddAction(ActionType.Damage, 1, TargetType.EnemyCreatures);
+                // Secondary effect: Heal all friendly creatures for 1
+                spell.AddAction(ActionType.Heal, 1, TargetType.FriendlyCreatures);
+                break;
+
+            case "Insight":
+                // Primary effect: Draw 2 cards
+                spell.AddAction(ActionType.Draw, 2, TargetType.Player);
+                // Secondary effect: Heal player for 1
+                spell.AddAction(ActionType.Heal, 1, TargetType.Player);
+                break;
+
+            default:
+                // Generic spell - just draw a card as fallback
+                spell.AddAction(ActionType.Draw, 1, TargetType.Player);
+                break;
+        }
     }
 
     // TODO

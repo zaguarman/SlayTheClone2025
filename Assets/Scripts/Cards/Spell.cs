@@ -3,59 +3,67 @@ using static DebugLogger;
 using static Enums;
 
 public class Spell : Card {
-    public int SpellPower { get; private set; }
     public TargetType DefaultTargetType { get; private set; }
+    private List<SpellAction> spellActions = new List<SpellAction>();
 
-    public Spell(string name, int spellPower, TargetType defaultTargetType) : base(name) {
-        SpellPower = spellPower;
+    public Spell(string name, TargetType defaultTargetType) : base(name) {
         DefaultTargetType = defaultTargetType;
     }
 
+    public void AddAction(ActionType actionType, int value, TargetType targetType) {
+        spellActions.Add(new SpellAction(actionType, value, targetType));
+    }
+
     public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
-        Log($"Playing spell {Name} with {Effects.Count} effects", LogTag.Cards | LogTag.Actions);
+        Log($"Playing spell {Name} with {spellActions.Count} actions", LogTag.Cards | LogTag.Actions);
 
-        // Process each effect and create appropriate actions
-        foreach (var effect in Effects) {
-            ProcessSpellEffect(effect, owner, context, target);
+        // Process each spell action
+        foreach (var spellAction in spellActions) {
+            ProcessSpellAction(spellAction, owner, context, target);
         }
     }
 
-    private void ProcessSpellEffect(CardEffect effect, IPlayer owner, ActionsQueue context, ITarget target) {
-        Log($"Processing spell effect with trigger {effect.trigger}", LogTag.Cards | LogTag.Effects);
+    private void ProcessSpellAction(SpellAction spellAction, IPlayer owner, ActionsQueue context, ITarget specificTarget = null) {
+        // Determine targets based on the targeting strategy
+        var targets = DetermineTargets(spellAction.TargetType, owner, specificTarget);
 
-        foreach (var action in effect.actions) {
-            // Determine targets based on action's target type or the provided target
-            var targets = target != null
-                ? new List<ITarget> { target }
-                : TargetingSystem.GetValidTargets(owner, action.targetType);
-
-            foreach (var actionTarget in targets) {
-                CreateActionForTarget(action, actionTarget, owner, context);
-            }
+        // Create game actions for each target
+        foreach (var target in targets) {
+            CreateGameAction(spellAction.ActionType, spellAction.Value, target, owner, context);
         }
     }
 
-    private void CreateActionForTarget(EffectAction action, ITarget target, IPlayer owner, ActionsQueue context) {
-        switch (action.actionType) {
+    private List<ITarget> DetermineTargets(TargetType targetType, IPlayer owner, ITarget specificTarget) {
+        // If a specific target was provided when playing the card, use it for ALL_TARGETS type
+        if (specificTarget != null && targetType == TargetType.AllCreatures) {
+            return new List<ITarget> { specificTarget };
+        }
+
+        // Otherwise use the targeting system to get valid targets
+        return TargetingSystem.GetValidTargets(owner, targetType);
+    }
+
+    private void CreateGameAction(ActionType actionType, int value, ITarget target, IPlayer owner, ActionsQueue context) {
+        switch (actionType) {
             case ActionType.Damage:
-                CreateDamageAction(action.value, target, owner, context);
+                CreateDamageAction(value, target, context);
                 break;
 
             case ActionType.Heal:
-                CreateHealAction(action.value, target, owner, context);
+                CreateHealAction(value, target, context);
                 break;
 
             case ActionType.Draw:
-                CreateDrawAction(action.value, owner, context);
+                CreateDrawAction(value, owner, context);
                 break;
 
             case ActionType.Summon:
-                // Summoning would be handled differently, not implemented in this prototype
+                // Not implemented in this prototype
                 break;
         }
     }
 
-    private void CreateDamageAction(int value, ITarget target, IPlayer owner, ActionsQueue context) {
+    private void CreateDamageAction(int value, ITarget target, ActionsQueue context) {
         if (target is ICreature creature) {
             Log($"Creating direct damage action for {value} to creature {creature.Name}", LogTag.Cards | LogTag.Actions);
             context.AddAction(new DirectDamageAction(creature, value));
@@ -65,13 +73,31 @@ public class Spell : Card {
         }
     }
 
-    private void CreateHealAction(int value, ITarget target, IPlayer owner, ActionsQueue context) {
-        // Heal action would be implemented here
-        // Not included in this prototype
+    private void CreateHealAction(int value, ITarget target, ActionsQueue context) {
+        if (target is ICreature creature) {
+            Log($"Creating heal action for {value} to creature {creature.Name}", LogTag.Cards | LogTag.Actions);
+            context.AddAction(new HealCreatureAction(creature, value));
+        } else if (target is IPlayer player) {
+            Log($"Creating heal action for {value} to player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Cards | LogTag.Actions);
+            context.AddAction(new HealPlayerAction(player, value));
+        }
     }
 
-    private void CreateDrawAction(int value, IPlayer owner, ActionsQueue context) {
+    private void CreateDrawAction(int value, IPlayer player, ActionsQueue context) {
         Log($"Creating draw action for {value} cards", LogTag.Cards | LogTag.Actions);
-        context.AddAction(new DrawCardAction(owner, value));
+        context.AddAction(new DrawCardAction(player, value));
+    }
+}
+
+// Simple container for spell action data
+public class SpellAction {
+    public ActionType ActionType { get; }
+    public int Value { get; }
+    public TargetType TargetType { get; }
+
+    public SpellAction(ActionType actionType, int value, TargetType targetType) {
+        ActionType = actionType;
+        Value = value;
+        TargetType = targetType;
     }
 }

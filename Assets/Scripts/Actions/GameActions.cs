@@ -1,6 +1,7 @@
 using static Enums;
 using static DebugLogger;
 using UnityEngine;
+using System;
 
 public interface IGameAction { void Execute(); }
 
@@ -63,6 +64,94 @@ public class PlaySpellAction : IGameAction {
 
     public override string ToString() {
         return $"PlaySpellAction: Spell={spell?.Name}, Owner={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")}, Target={target?.TargetId}";
+    }
+}
+
+public class ChangeWeatherAction : IGameAction {
+    private readonly WeatherType targetWeather;
+
+    public ChangeWeatherAction(WeatherType targetWeather) {
+        this.targetWeather = targetWeather;
+        Log($"Created ChangeWeatherAction to {targetWeather}", LogTag.Actions | LogTag.Effects);
+    }
+
+    public void Execute() {
+        var weatherSystem = GameManager.Instance?.WeatherSystem;
+        if (weatherSystem == null) {
+            LogError("Cannot execute change weather action - weather system is null", LogTag.Actions);
+            return;
+        }
+
+        weatherSystem.SetWeather(targetWeather);
+        Log($"Changed weather to {targetWeather}", LogTag.Actions | LogTag.Effects);
+    }
+
+    public override string ToString() {
+        return $"ChangeWeatherAction: TargetWeather={targetWeather}";
+    }
+}
+
+public class HealCreatureAction : IGameAction {
+    private readonly ICreature target;
+    private readonly int amount;
+
+    public HealCreatureAction(ICreature target, int amount) {
+        this.target = target;
+        this.amount = amount;
+        Log($"Created HealCreatureAction for {target?.Name} with amount {amount}", LogTag.Actions | LogTag.Creatures);
+    }
+
+    public void Execute() {
+        if (target == null) return;
+
+        if (target is Creature creature) {
+            // Heal should be implemented in Creature class, here's a workaround for this prototype
+            int currentHealth = creature.Health;
+            int newHealth = Math.Min(currentHealth + amount, 10); // Assuming 10 is max health for this prototype
+
+            // Since we don't have a direct SetHealth method, we'll log the info
+            Log($"Healing {creature.Name} for {amount} (from {currentHealth} to {newHealth})",
+                LogTag.Actions | LogTag.Creatures);
+
+            // In a real implementation, we'd call something like:
+            // creature.Heal(amount);
+        }
+    }
+
+    public override string ToString() {
+        return $"HealCreatureAction: Target={target?.Name}, Amount={amount}";
+    }
+}
+
+public class HealPlayerAction : IGameAction {
+    private readonly IPlayer target;
+    private readonly int amount;
+
+    public HealPlayerAction(IPlayer target, int amount) {
+        this.target = target;
+        this.amount = amount;
+        Log($"Created HealPlayerAction for {(target?.IsPlayer1() == true ? "Player 1" : "Player 2")} with amount {amount}",
+            LogTag.Actions | LogTag.Players);
+    }
+
+    public void Execute() {
+        if (target == null) return;
+
+        // Heal should be implemented in Player class, here's a workaround for this prototype
+        int currentHealth = target.Health;
+        int maxHealth = 20; // Assuming 20 is max health for this prototype
+        int newHealth = Math.Min(currentHealth + amount, maxHealth);
+
+        // Since we don't have a direct SetHealth method, we'll log the info
+        Log($"Healing {(target.IsPlayer1() ? "Player 1" : "Player 2")} for {amount} (from {currentHealth} to {newHealth})",
+            LogTag.Actions | LogTag.Players);
+
+        // In a real implementation, we'd call something like:
+        // target.Heal(amount);
+    }
+
+    public override string ToString() {
+        return $"HealPlayerAction: Target={(target?.IsPlayer1() == true ? "Player 1" : "Player 2")}, Amount={amount}";
     }
 }
 

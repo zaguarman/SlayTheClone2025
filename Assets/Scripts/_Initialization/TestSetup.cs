@@ -54,68 +54,31 @@ public class TestSetup : MonoBehaviour {
     private List<CardData> CreateTestSpells() {
         var spells = new List<CardData>();
 
-        // Fireball - direct damage spell
+        // Fireball - direct damage spell + draw a card
         var fireball = ScriptableObject.CreateInstance<SpellData>();
         fireball.cardName = "Fireball";
-        fireball.spellPower = 3;
-        fireball.description = "Deal 3 damage to a creature or player.";
+        fireball.description = "Deal 3 damage to target. Draw a card.";
         fireball.defaultTargetType = TargetType.AllCreatures;
-
-        fireball.effects.Add(new CardEffect {
-            effectType = EffectType.Immediate,
-            trigger = EffectTrigger.OnPlay,
-            actions = new List<EffectAction> {
-                new EffectAction {
-                    actionType = ActionType.Damage,
-                    value = 3,
-                    targetType = TargetType.AllCreatures
-                }
-            }
-        });
 
         spells.Add(fireball);
 
-        // Storm - damage all enemy creatures
+        // Storm - damage all enemy creatures + heal friendly creatures
         var storm = ScriptableObject.CreateInstance<SpellData>();
         storm.cardName = "Storm";
-        storm.spellPower = 1;
-        storm.description = "Deal 1 damage to all enemy creatures.";
+        storm.description = "Deal 1 damage to all enemy creatures. Heal all friendly creatures for 1.";
         storm.defaultTargetType = TargetType.EnemyCreatures;
-
-        storm.effects.Add(new CardEffect {
-            effectType = EffectType.Immediate,
-            trigger = EffectTrigger.OnPlay,
-            actions = new List<EffectAction> {
-                new EffectAction {
-                    actionType = ActionType.Damage,
-                    value = 1,
-                    targetType = TargetType.EnemyCreatures
-                }
-            }
-        });
 
         spells.Add(storm);
 
-        // Insight - draw cards
+        // Insight - draw cards + heal player
         var insight = ScriptableObject.CreateInstance<SpellData>();
         insight.cardName = "Insight";
-        insight.spellPower = 0;
-        insight.description = "Draw 2 cards.";
+        insight.description = "Draw 2 cards. Heal yourself for 1.";
         insight.defaultTargetType = TargetType.Player;
 
-        insight.effects.Add(new CardEffect {
-            effectType = EffectType.Immediate,
-            trigger = EffectTrigger.OnPlay,
-            actions = new List<EffectAction> {
-                new EffectAction {
-                    actionType = ActionType.Draw,
-                    value = 2,
-                    targetType = TargetType.Player
-                }
-            }
-        });
-
         spells.Add(insight);
+
+        // Note: We don't need to add effects here anymore - the actions are configured in CardFactory.ConfigureSpellActions
 
         return spells;
     }

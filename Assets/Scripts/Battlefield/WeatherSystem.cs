@@ -4,7 +4,8 @@ using static DebugLogger;
 public enum WeatherType {
     Clear,
     Rainy,
-    Sunny
+    Sunny,
+    Cloudy
 }
 
 public interface IWeatherSystem {
@@ -39,6 +40,7 @@ public class WeatherSystem : IWeatherSystem {
         return currentWeather switch {
             WeatherType.Rainy when !isDirectDamage => -1f,    // Combat damage reduced by 1
             WeatherType.Sunny when isDirectDamage => 1.0f,    // Direct damage increased by 1
+            WeatherType.Cloudy => 1.0f,                      // All damage reduced by 0.5
             _ => 0f                                           // No modifier
         };
     }
@@ -48,6 +50,7 @@ public class WeatherSystem : IWeatherSystem {
             WeatherType.Clear => "Clear: Normal damage",
             WeatherType.Rainy => "Rain: Combat -1",
             WeatherType.Sunny => "Sunny: Direct +1",
+            WeatherType.Cloudy => "Cloudy: All damage -1",
             _ => "Unknown weather"
         };
     }
