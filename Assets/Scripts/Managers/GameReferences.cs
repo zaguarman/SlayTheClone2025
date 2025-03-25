@@ -48,6 +48,10 @@ public class GameReferences : Singleton<GameReferences> {
     [SerializeField] private Button weatherCycleButton;
     [SerializeField] private TextMeshProUGUI weatherText;
 
+    [Header("Deck View")]
+    [SerializeField] private DeckViewUI deckViewUI;
+    [SerializeField] private Button deckViewButton;
+
     [Header("Player References")]
     [SerializeField] private PlayerUIReferences player1References;
     [SerializeField] private PlayerUIReferences player2References;
@@ -61,10 +65,21 @@ public class GameReferences : Singleton<GameReferences> {
 
     private bool referencesValidated = false;
 
+    private void Start() {
+        // Add the DeckViewController to manage deck view interactions
+        var deckViewController = GetComponent<DeckViewController>();
+        if (deckViewController == null) {
+            Log("Adding DeckViewController to GameReferences", LogTag.Initialization);
+            deckViewController = gameObject.AddComponent<DeckViewController>();
+        }
+    }
+
     public override void Initialize() {
         if (IsInitialized) return;
         ValidateReferences();
         base.Initialize();
+
+        Log("GameReferences initialized", LogTag.Initialization);
     }
 
     private void OnEnable() {
@@ -96,10 +111,26 @@ public class GameReferences : Singleton<GameReferences> {
             isValid = false;
         }
 
+        if (deckViewUI == null) {
+            Log("DeckViewUI reference missing in GameReferences!", LogTag.Initialization);
+            isValid = false;
+        }
+
+        if (deckViewButton == null) {
+            Log("DeckViewButton reference missing in GameReferences!", LogTag.Initialization);
+            isValid = false;
+        }
+
         isValid &= player1References.ValidateReferences("Player 1");
         isValid &= player2References.ValidateReferences("Player 2");
 
         referencesValidated = isValid;
+
+        if (isValid) {
+            Log("All references validated successfully in GameReferences", LogTag.Initialization);
+        } else {
+            LogWarning("Some references are missing in GameReferences", LogTag.Initialization);
+        }
     }
 
     // Immutable references getters
@@ -115,6 +146,18 @@ public class GameReferences : Singleton<GameReferences> {
     public Color GetPlayer2CardColor() => player2CardColor;
     public Button GetWeatherCycleButton() => weatherCycleButton;
     public TextMeshProUGUI GetWeatherText() => weatherText;
+    public DeckViewUI GetDeckViewUI() {
+        if (deckViewUI == null) {
+            LogWarning("DeckViewUI is null when GetDeckViewUI was called", LogTag.UI);
+        }
+        return deckViewUI;
+    }
+    public Button GetDeckViewButton() {
+        if (deckViewButton == null) {
+            LogWarning("DeckViewButton is null when GetDeckViewButton was called", LogTag.UI);
+        }
+        return deckViewButton;
+    }
 
     public bool AreReferencesValid() {
         ValidateReferences();  // Force revalidation each time
