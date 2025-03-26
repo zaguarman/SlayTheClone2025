@@ -52,6 +52,7 @@ public class GameReferences : Singleton<GameReferences> {
     [SerializeField] private DeckViewUI deckViewUI;
     [SerializeField] private Button deckViewButton;
     [SerializeField] private Button discardViewButton;
+    [SerializeField] private TextMeshProUGUI deckViewTitleText;
 
     [Header("Player References")]
     [SerializeField] private PlayerUIReferences player1References;

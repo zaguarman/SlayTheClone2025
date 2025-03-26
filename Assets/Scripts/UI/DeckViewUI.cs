@@ -2,12 +2,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.EventSystems;
 using static DebugLogger;
 
 public class DeckViewUI : UIComponent {
     [SerializeField] public GameObject deckViewPanel;
     [SerializeField] public Transform cardListContent;
     [SerializeField] public Button closeButton;
+    [SerializeField] public TextMeshProUGUI titleText;
     [SerializeField] public TextMeshProUGUI deckCountText;
     [SerializeField] public TextMeshProUGUI discardPileCountText;
     [SerializeField] public int columnsCount = 3; // Number of columns to display
@@ -36,6 +39,10 @@ public class DeckViewUI : UIComponent {
         } else {
             closeButton.onClick.AddListener(HideDeckView);
             Log("Close button listener attached in Awake", LogTag.UI | LogTag.Initialization);
+        }
+
+        if (titleText == null) {
+            LogWarning("TitleText is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
         }
 
         if (deckViewPanel != null) {
@@ -188,16 +195,21 @@ public class DeckViewUI : UIComponent {
             return;
         }
 
-        var deckCards = GetPlayerDeckCards(player);
+        // Update title
+        if (titleText != null) {
+            titleText.text = "Deck View";
+        }
 
+        var deckCards = GetPlayerDeckCards(player);
+        var discardCount = gameManager.cardDealingService.GetDiscardPileCount(player);
+
+        // Update both count texts
         if (deckCountText != null) {
             deckCountText.text = $"Cards in deck: {deckCards.Count}";
         }
 
         if (discardPileCountText != null) {
-            // Display discard pile count even when viewing deck
-            var discardCount = gameManager.cardDealingService.GetDiscardPileCount(player);
-            discardPileCountText.text = $"Discard pile: {discardCount}";
+            discardPileCountText.text = $"Discarded cards: {discardCount}";
         }
 
         foreach (var card in deckCards) {
@@ -215,17 +227,22 @@ public class DeckViewUI : UIComponent {
             return;
         }
 
+        // Update title
+        if (titleText != null) {
+            titleText.text = "Discard Pile";
+        }
+
         // Get the cards from the player's discard pile
         var discardPileCards = GetPlayerDiscardPileCards(player);
+        var deckCount = gameManager.cardDealingService.GetDeckPreview(player).Count;
 
+        // Update both count texts
         if (deckCountText != null) {
-            // Keep showing deck count even when viewing discard pile
-            var deckCount = gameManager.cardDealingService.GetDeckPreview(player).Count;
             deckCountText.text = $"Cards in deck: {deckCount}";
         }
 
         if (discardPileCountText != null) {
-            discardPileCountText.text = $"Discard pile: {discardPileCards.Count}";
+            discardPileCountText.text = $"Discarded cards: {discardPileCards.Count}";
         }
 
         foreach (var card in discardPileCards) {
