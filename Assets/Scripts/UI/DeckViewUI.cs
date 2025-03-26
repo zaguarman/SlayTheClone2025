@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine.EventSystems;
 using static DebugLogger;
 
 public class DeckViewUI : UIComponent {
@@ -12,8 +10,6 @@ public class DeckViewUI : UIComponent {
     [SerializeField] public Button closeButton;
     [SerializeField] public TextMeshProUGUI deckCountText;
     [SerializeField] public TextMeshProUGUI discardPileCountText;
-    [SerializeField] public Button viewDeckButton;
-    [SerializeField] public Button viewDiscardButton;
     [SerializeField] public int columnsCount = 3; // Number of columns to display
     [SerializeField] public float cardScale = 0.5f; // Scale of cards in the deck view
 
@@ -45,15 +41,6 @@ public class DeckViewUI : UIComponent {
         if (deckViewPanel != null) {
             deckViewPanel.SetActive(false);
             Log("DeckViewPanel set to inactive on start", LogTag.UI | LogTag.Initialization);
-        }
-
-        // Set up toggle buttons if they exist
-        if (viewDeckButton != null) {
-            viewDeckButton.onClick.AddListener(ShowDeckCards);
-        }
-
-        if (viewDiscardButton != null) {
-            viewDiscardButton.onClick.AddListener(ShowDiscardPileCards);
         }
 
         // Setup grid layout for cards
@@ -113,17 +100,6 @@ public class DeckViewUI : UIComponent {
         closeButton.onClick.AddListener(HideDeckView);
         Log("Close button listener attached", LogTag.UI | LogTag.Initialization);
 
-        // Set up view toggle buttons
-        if (viewDeckButton != null) {
-            viewDeckButton.onClick.RemoveAllListeners();
-            viewDeckButton.onClick.AddListener(ShowDeckCards);
-        }
-
-        if (viewDiscardButton != null) {
-            viewDiscardButton.onClick.RemoveAllListeners();
-            viewDiscardButton.onClick.AddListener(ShowDiscardPileCards);
-        }
-
         IsInitialized = true;
         Log("DeckViewUI initialized", LogTag.UI | LogTag.Initialization);
     }
@@ -174,7 +150,7 @@ public class DeckViewUI : UIComponent {
             Initialize(Player);
         }
 
-        // Default to showing the deck, not the discard pile
+        // Default to showing the deck
         viewingDiscardPile = false;
         UpdateUI(Player);
         deckViewPanel.SetActive(true);
@@ -193,19 +169,15 @@ public class DeckViewUI : UIComponent {
     }
 
     public void ShowDeckCards() {
-        if (viewingDiscardPile) {
-            viewingDiscardPile = false;
-            UpdateUI(Player);
-            Log("Switched to viewing deck", LogTag.UI);
-        }
+        viewingDiscardPile = false;
+        UpdateUI(Player);
+        Log("Showing deck cards", LogTag.UI);
     }
 
     public void ShowDiscardPileCards() {
-        if (!viewingDiscardPile) {
-            viewingDiscardPile = true;
-            UpdateUI(Player);
-            Log("Switched to viewing discard pile", LogTag.UI);
-        }
+        viewingDiscardPile = true;
+        UpdateUI(Player);
+        Log("Showing discard pile cards", LogTag.UI);
     }
 
     public void UpdateDeckDisplay(IPlayer player) {
@@ -370,14 +342,6 @@ public class DeckViewUI : UIComponent {
     protected override void OnDestroy() {
         if (closeButton != null) {
             closeButton.onClick.RemoveListener(HideDeckView);
-        }
-
-        if (viewDeckButton != null) {
-            viewDeckButton.onClick.RemoveListener(ShowDeckCards);
-        }
-
-        if (viewDiscardButton != null) {
-            viewDiscardButton.onClick.RemoveListener(ShowDiscardPileCards);
         }
 
         ClearCardEntries();

@@ -51,6 +51,7 @@ public class GameReferences : Singleton<GameReferences> {
     [Header("Deck View")]
     [SerializeField] private DeckViewUI deckViewUI;
     [SerializeField] private Button deckViewButton;
+    [SerializeField] private Button discardViewButton;
 
     [Header("Player References")]
     [SerializeField] private PlayerUIReferences player1References;
@@ -121,6 +122,11 @@ public class GameReferences : Singleton<GameReferences> {
             isValid = false;
         }
 
+        if (discardViewButton == null) {
+            Log("DiscardViewButton reference missing in GameReferences!", LogTag.Initialization);
+            isValid = false;
+        }
+
         isValid &= player1References.ValidateReferences("Player 1");
         isValid &= player2References.ValidateReferences("Player 2");
 
@@ -157,6 +163,13 @@ public class GameReferences : Singleton<GameReferences> {
             LogWarning("DeckViewButton is null when GetDeckViewButton was called", LogTag.UI);
         }
         return deckViewButton;
+    }
+
+    public Button GetDiscardViewButton() {
+        if (discardViewButton == null) {
+            LogWarning("DiscardViewButton is null when GetDiscardViewButton was called", LogTag.UI);
+        }
+        return discardViewButton;
     }
 
     public bool AreReferencesValid() {

@@ -131,18 +131,13 @@ public class GameManager : InitializableComponent {
 
     private void InitializeCards() {
         var testSetup = gameObject.AddComponent<TestSetup>();
-        // Create a larger pool of cards for the decks
-        var player1Cards = new List<CardData>();
-        var player2Cards = new List<CardData>();
 
-        // Get test cards and duplicate them to create a larger deck
+        // Get test cards without duplication
         var baseCards = testSetup.CreateTestCards();
 
-        // Add 20 cards to each player deck to ensure there are enough cards
-        for (int i = 0; i < 4; i++) {
-            player1Cards.AddRange(baseCards);
-            player2Cards.AddRange(baseCards);
-        }
+        // Use just one copy of each card for both players
+        var player1Cards = new List<CardData>(baseCards);
+        var player2Cards = new List<CardData>(baseCards);
 
         cardDealingService.InitializeDecks(player1Cards, player2Cards);
         Log($"Decks initialized with {player1Cards.Count} cards per player", LogTag.Cards | LogTag.Initialization);
@@ -150,8 +145,6 @@ public class GameManager : InitializableComponent {
         // Clean up the test setup component
         Destroy(testSetup);
     }
-
-    
 
     private void PlaceInitialCreatures() {
         if (!HasValidBattlefields()) {

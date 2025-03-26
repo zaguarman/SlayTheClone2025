@@ -4,13 +4,17 @@ using TMPro;
 using static DebugLogger;
 
 public class DeckViewController : MonoBehaviour {
-    private Button deckViewButton;
-    private TextMeshProUGUI buttonText;
+    [SerializeField] private Button deckViewButton;
+    [SerializeField] private Button discardViewButton;
+
+    private TextMeshProUGUI deckButtonText;
+    private TextMeshProUGUI discardButtonText;
     private DeckViewUI deckViewUI;
     private GameManager gameManager;
     private GameReferences gameReferences;
 
-    private bool isViewingDeck = false;
+    private bool isDeckViewOpen = false;
+    private bool isDiscardViewOpen = false;
     private bool isInitialized = false;
 
     private void Awake() {
@@ -24,7 +28,7 @@ public class DeckViewController : MonoBehaviour {
 
         if (gameManager != null && gameReferences != null && gameReferences.AreReferencesValid()) {
             GetUIReferences();
-            SetupButton();
+            SetupButtons();
             isInitialized = true;
             Log("DeckViewController initialized successfully", LogTag.Initialization);
         } else {
@@ -47,7 +51,7 @@ public class DeckViewController : MonoBehaviour {
 
             if (gameManager != null && gameReferences != null && gameReferences.AreReferencesValid()) {
                 GetUIReferences();
-                SetupButton();
+                SetupButtons();
                 isInitialized = true;
                 Log("DeckViewController initialized after delay", LogTag.Initialization);
                 yield break;
@@ -61,11 +65,24 @@ public class DeckViewController : MonoBehaviour {
     }
 
     private void GetUIReferences() {
-        deckViewButton = gameReferences.GetDeckViewButton();
+        // If buttons aren't assigned in the inspector, get them from GameReferences
+        if (deckViewButton == null) {
+            deckViewButton = gameReferences.GetDeckViewButton();
+        }
+
+        if (discardViewButton == null) {
+            discardViewButton = gameReferences.GetDiscardViewButton();
+        }
+
         deckViewUI = gameReferences.GetDeckViewUI();
 
         if (deckViewButton == null) {
             LogError("DeckViewButton reference is null", LogTag.UI | LogTag.Initialization);
+            return;
+        }
+
+        if (discardViewButton == null) {
+            LogError("DiscardViewButton reference is null", LogTag.UI | LogTag.Initialization);
             return;
         }
 
@@ -74,18 +91,25 @@ public class DeckViewController : MonoBehaviour {
             return;
         }
 
-        // Get the button text component
-        buttonText = deckViewButton.GetComponentInChildren<TextMeshProUGUI>();
-        if (buttonText == null) {
-            LogWarning("Button text component not found, toggling text will not work", LogTag.UI);
+        // Get the button text components
+        deckButtonText = deckViewButton.GetComponentInChildren<TextMeshProUGUI>();
+        discardButtonText = discardViewButton.GetComponentInChildren<TextMeshProUGUI>();
+
+        if (deckButtonText == null) {
+            LogWarning("Deck button text component not found", LogTag.UI);
         } else {
-            // Initialize button text
-            buttonText.text = "View Deck";
-            Log("Set initial button text to 'View Deck'", LogTag.UI | LogTag.Initialization);
+            deckButtonText.text = "View Deck";
+        }
+
+        if (discardButtonText == null) {
+            LogWarning("Discard button text component not found", LogTag.UI);
+        } else {
+            discardButtonText.text = "View Discard";
         }
 
         // Ensure UI elements are active
         deckViewButton.gameObject.SetActive(true);
+        discardViewButton.gameObject.SetActive(true);
 
         if (deckViewUI.deckViewPanel != null) {
             deckViewUI.deckViewPanel.SetActive(false);
@@ -95,31 +119,35 @@ public class DeckViewController : MonoBehaviour {
         }
     }
 
-    private void SetupButton() {
-        Log("Setting up deck view button", LogTag.UI | LogTag.Initialization);
+    private void SetupButtons() {
+        Log("Setting up deck view buttons", LogTag.UI | LogTag.Initialization);
 
-        if (deckViewButton == null) {
-            LogError("Cannot setup button - deckViewButton is null", LogTag.UI | LogTag.Initialization);
+        if (deckViewButton == null || discardViewButton == null) {
+            LogError("Cannot setup buttons - button references are null", LogTag.UI | LogTag.Initialization);
             return;
         }
 
-        // First verify if the button has the Image component it needs
+        // First verify if the buttons have the Image component they need
         if (deckViewButton.GetComponent<Image>() == null) {
-            LogError("DeckViewButton is missing Image component - button may not work correctly", LogTag.UI | LogTag.Initialization);
+            LogError("DeckViewButton is missing Image component", LogTag.UI | LogTag.Initialization);
+        }
+
+        if (discardViewButton.GetComponent<Image>() == null) {
+            LogError("DiscardViewButton is missing Image component", LogTag.UI | LogTag.Initialization);
         }
 
         // Remove any existing listeners first
         deckViewButton.onClick.RemoveAllListeners();
+        discardViewButton.onClick.RemoveAllListeners();
 
-        // Add our toggle listener
-        deckViewButton.onClick.AddListener(ToggleDeckViewInternal);
+        // Add our toggle listeners
+        deckViewButton.onClick.AddListener(ToggleDeckView);
+        discardViewButton.onClick.AddListener(ToggleDiscardView);
 
-        Log($"Deck view button listener added, current listener count: {deckViewButton.onClick.GetPersistentEventCount()}",
-            LogTag.UI | LogTag.Initialization);
+        Log("Button listeners added", LogTag.UI | LogTag.Initialization);
 
         // Configure the close button to update our state
         if (deckViewUI != null && deckViewUI.closeButton != null) {
-            // Add our listener after the DeckViewUI adds its own
             deckViewUI.closeButton.onClick.AddListener(OnCloseButtonClicked);
             Log("Added listener to close button", LogTag.UI | LogTag.Initialization);
         } else {
@@ -127,54 +155,66 @@ public class DeckViewController : MonoBehaviour {
         }
     }
 
-    // Internal method to handle button click
-    private void ToggleDeckViewInternal() {
-        Log($"Toggle button clicked, current state: {isViewingDeck}", LogTag.UI);
-
-        if (!isInitialized) {
-            LogError("Cannot toggle - not fully initialized yet", LogTag.UI);
-            return;
-        }
-
-        ToggleDeckView();
-    }
-
-    // Main toggle method
     public void ToggleDeckView() {
-        if (deckViewUI == null) {
-            LogError("Cannot toggle deck view - deckViewUI is null", LogTag.UI);
+        if (!isInitialized) {
+            LogError("Cannot toggle deck view - not fully initialized yet", LogTag.UI);
             return;
         }
 
-        if (deckViewUI.deckViewPanel == null) {
-            LogError("Cannot toggle deck view - deckViewPanel is null", LogTag.UI);
-            return;
+        // If discard view is open, close it first
+        if (isDiscardViewOpen) {
+            isDiscardViewOpen = false;
+            UpdateDiscardButtonText();
         }
 
-        isViewingDeck = !isViewingDeck;
+        isDeckViewOpen = !isDeckViewOpen;
+        UpdateDeckButtonText();
 
-        Log($"Toggled deck view to {(isViewingDeck ? "visible" : "hidden")}", LogTag.UI);
-
-        if (isViewingDeck) {
-            ShowDeckView();
+        if (isDeckViewOpen) {
+            ShowDeckView(false);
         } else {
             HideDeckView();
         }
-
-        UpdateButtonText();
     }
 
-    private void OnCloseButtonClicked() {
-        // Update our internal state when the close button is clicked
-        if (isViewingDeck) {
-            isViewingDeck = false;
-            UpdateButtonText();
-            Log("Close button clicked, updated deck view button state", LogTag.UI);
+    public void ToggleDiscardView() {
+        if (!isInitialized) {
+            LogError("Cannot toggle discard view - not fully initialized yet", LogTag.UI);
+            return;
+        }
+
+        // If deck view is open, close it first
+        if (isDeckViewOpen) {
+            isDeckViewOpen = false;
+            UpdateDeckButtonText();
+        }
+
+        isDiscardViewOpen = !isDiscardViewOpen;
+        UpdateDiscardButtonText();
+
+        if (isDiscardViewOpen) {
+            ShowDeckView(true);
+        } else {
+            HideDeckView();
         }
     }
 
-    private void ShowDeckView() {
-        Log("ShowDeckView called", LogTag.UI);
+    private void OnCloseButtonClicked() {
+        if (isDeckViewOpen) {
+            isDeckViewOpen = false;
+            UpdateDeckButtonText();
+        }
+
+        if (isDiscardViewOpen) {
+            isDiscardViewOpen = false;
+            UpdateDiscardButtonText();
+        }
+
+        Log("Close button clicked, updated button states", LogTag.UI);
+    }
+
+    private void ShowDeckView(bool showDiscard) {
+        Log($"ShowDeckView called with showDiscard={showDiscard}", LogTag.UI);
 
         if (deckViewUI == null || deckViewUI.deckViewPanel == null) {
             LogError("Cannot show deck view - references missing", LogTag.UI);
@@ -191,24 +231,37 @@ public class DeckViewController : MonoBehaviour {
             }
 
             try {
-                // Update the deck display first
-                deckViewUI.UpdateDeckDisplay(activePlayer);
-                Log("Updated deck display", LogTag.UI);
+                // Set viewing state and update UI accordingly
+                if (showDiscard) {
+                    deckViewUI.ShowDiscardPileCards();
+                } else {
+                    deckViewUI.ShowDeckCards();
+                }
 
                 // Now make the panel visible
                 deckViewUI.deckViewPanel.SetActive(true);
-                Log($"Made deck view panel visible for {(activePlayer.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.UI);
+                Log($"Made {(showDiscard ? "discard" : "deck")} view panel visible for {(activePlayer.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.UI);
             } catch (System.Exception e) {
-                LogError($"Error showing deck view: {e.Message}\n{e.StackTrace}", LogTag.UI);
-                // Revert our state since we couldn't show the deck view
-                isViewingDeck = false;
-                UpdateButtonText();
+                LogError($"Error showing view: {e.Message}\n{e.StackTrace}", LogTag.UI);
+                // Revert our state since we couldn't show the view
+                if (showDiscard) {
+                    isDiscardViewOpen = false;
+                    UpdateDiscardButtonText();
+                } else {
+                    isDeckViewOpen = false;
+                    UpdateDeckButtonText();
+                }
             }
         } else {
-            LogError("Cannot show deck view - no active player found", LogTag.UI);
-            // Revert our state since we couldn't show the deck view
-            isViewingDeck = false;
-            UpdateButtonText();
+            LogError("Cannot show view - no active player found", LogTag.UI);
+            // Revert our state since we couldn't show the view
+            if (showDiscard) {
+                isDiscardViewOpen = false;
+                UpdateDiscardButtonText();
+            } else {
+                isDeckViewOpen = false;
+                UpdateDeckButtonText();
+            }
         }
     }
 
@@ -223,12 +276,21 @@ public class DeckViewController : MonoBehaviour {
         }
     }
 
-    private void UpdateButtonText() {
-        if (buttonText != null) {
-            buttonText.text = isViewingDeck ? "Hide Deck" : "View Deck";
-            Log($"Updated button text to '{buttonText.text}'", LogTag.UI);
+    private void UpdateDeckButtonText() {
+        if (deckButtonText != null) {
+            deckButtonText.text = isDeckViewOpen ? "Hide Deck" : "View Deck";
+            Log($"Updated deck button text to '{deckButtonText.text}'", LogTag.UI);
         } else {
-            LogWarning("Cannot update button text - buttonText is null", LogTag.UI);
+            LogWarning("Cannot update deck button text - text component is null", LogTag.UI);
+        }
+    }
+
+    private void UpdateDiscardButtonText() {
+        if (discardButtonText != null) {
+            discardButtonText.text = isDiscardViewOpen ? "Hide Discard" : "View Discard";
+            Log($"Updated discard button text to '{discardButtonText.text}'", LogTag.UI);
+        } else {
+            LogWarning("Cannot update discard button text - text component is null", LogTag.UI);
         }
     }
 
@@ -252,23 +314,37 @@ public class DeckViewController : MonoBehaviour {
 
         if (deckViewUI != null && deckViewUI.deckViewPanel != null) {
             bool isPanelActive = deckViewUI.deckViewPanel.activeSelf;
-            if (isViewingDeck != isPanelActive) {
-                Log($"Panel state changed externally to {isPanelActive}, updating internal state", LogTag.UI);
-                isViewingDeck = isPanelActive;
-                UpdateButtonText();
+
+            // If panel was closed externally
+            if (!isPanelActive && (isDeckViewOpen || isDiscardViewOpen)) {
+                if (isDeckViewOpen) {
+                    isDeckViewOpen = false;
+                    UpdateDeckButtonText();
+                }
+
+                if (isDiscardViewOpen) {
+                    isDiscardViewOpen = false;
+                    UpdateDiscardButtonText();
+                }
+
+                Log("Panel state changed externally, updated button states", LogTag.UI);
             }
         }
     }
 
     private void OnDestroy() {
         if (deckViewButton != null) {
-            deckViewButton.onClick.RemoveListener(ToggleDeckViewInternal);
-            Log("Removed click listener from deck view button", LogTag.UI);
+            deckViewButton.onClick.RemoveListener(ToggleDeckView);
+        }
+
+        if (discardViewButton != null) {
+            discardViewButton.onClick.RemoveListener(ToggleDiscardView);
         }
 
         if (deckViewUI != null && deckViewUI.closeButton != null) {
             deckViewUI.closeButton.onClick.RemoveListener(OnCloseButtonClicked);
-            Log("Removed click listener from close button", LogTag.UI);
         }
+
+        Log("Removed click listeners from buttons", LogTag.UI);
     }
 }
