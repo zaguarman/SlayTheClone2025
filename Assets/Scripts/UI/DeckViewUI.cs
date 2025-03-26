@@ -11,11 +11,15 @@ public class DeckViewUI : UIComponent {
     [SerializeField] public Transform cardListContent;
     [SerializeField] public Button closeButton;
     [SerializeField] public TextMeshProUGUI deckCountText;
+    [SerializeField] public TextMeshProUGUI discardPileCountText;
+    [SerializeField] public Button viewDeckButton;
+    [SerializeField] public Button viewDiscardButton;
     [SerializeField] public int columnsCount = 3; // Number of columns to display
     [SerializeField] public float cardScale = 0.5f; // Scale of cards in the deck view
 
     private List<CardController> cardEntries = new List<CardController>();
     private GridLayoutGroup gridLayout;
+    private bool viewingDiscardPile = false;
 
     protected override void Awake() {
         base.Awake();
@@ -41,6 +45,15 @@ public class DeckViewUI : UIComponent {
         if (deckViewPanel != null) {
             deckViewPanel.SetActive(false);
             Log("DeckViewPanel set to inactive on start", LogTag.UI | LogTag.Initialization);
+        }
+
+        // Set up toggle buttons if they exist
+        if (viewDeckButton != null) {
+            viewDeckButton.onClick.AddListener(ShowDeckCards);
+        }
+
+        if (viewDiscardButton != null) {
+            viewDiscardButton.onClick.AddListener(ShowDiscardPileCards);
         }
 
         // Setup grid layout for cards
@@ -100,6 +113,17 @@ public class DeckViewUI : UIComponent {
         closeButton.onClick.AddListener(HideDeckView);
         Log("Close button listener attached", LogTag.UI | LogTag.Initialization);
 
+        // Set up view toggle buttons
+        if (viewDeckButton != null) {
+            viewDeckButton.onClick.RemoveAllListeners();
+            viewDeckButton.onClick.AddListener(ShowDeckCards);
+        }
+
+        if (viewDiscardButton != null) {
+            viewDiscardButton.onClick.RemoveAllListeners();
+            viewDiscardButton.onClick.AddListener(ShowDiscardPileCards);
+        }
+
         IsInitialized = true;
         Log("DeckViewUI initialized", LogTag.UI | LogTag.Initialization);
     }
@@ -130,7 +154,11 @@ public class DeckViewUI : UIComponent {
             return;
         }
 
-        UpdateDeckDisplay(targetPlayer);
+        if (viewingDiscardPile) {
+            UpdateDiscardPileDisplay(targetPlayer);
+        } else {
+            UpdateDeckDisplay(targetPlayer);
+        }
     }
 
     public void ShowDeckView() {
@@ -146,6 +174,8 @@ public class DeckViewUI : UIComponent {
             Initialize(Player);
         }
 
+        // Default to showing the deck, not the discard pile
+        viewingDiscardPile = false;
         UpdateUI(Player);
         deckViewPanel.SetActive(true);
         Log($"Showing deck view for {(Player?.IsPlayer1() == true ? "Player 1" : "Player 2")}", LogTag.UI);
@@ -159,6 +189,22 @@ public class DeckViewUI : UIComponent {
             Log("Hiding deck view", LogTag.UI);
         } else {
             LogError("Cannot hide deck view - deckViewPanel is null", LogTag.UI);
+        }
+    }
+
+    public void ShowDeckCards() {
+        if (viewingDiscardPile) {
+            viewingDiscardPile = false;
+            UpdateUI(Player);
+            Log("Switched to viewing deck", LogTag.UI);
+        }
+    }
+
+    public void ShowDiscardPileCards() {
+        if (!viewingDiscardPile) {
+            viewingDiscardPile = true;
+            UpdateUI(Player);
+            Log("Switched to viewing discard pile", LogTag.UI);
         }
     }
 
@@ -176,11 +222,45 @@ public class DeckViewUI : UIComponent {
             deckCountText.text = $"Cards in deck: {deckCards.Count}";
         }
 
+        if (discardPileCountText != null) {
+            // Display discard pile count even when viewing deck
+            var discardCount = gameManager.cardDealingService.GetDiscardPileCount(player);
+            discardPileCountText.text = $"Discard pile: {discardCount}";
+        }
+
         foreach (var card in deckCards) {
             CreateCardEntry(card, player);
         }
 
         Log($"Updated deck display with {deckCards.Count} cards", LogTag.UI | LogTag.Cards);
+    }
+
+    public void UpdateDiscardPileDisplay(IPlayer player) {
+        ClearCardEntries();
+
+        if (player == null || gameManager == null) {
+            LogError("Cannot update discard pile display - references missing", LogTag.UI);
+            return;
+        }
+
+        // Get the cards from the player's discard pile
+        var discardPileCards = GetPlayerDiscardPileCards(player);
+
+        if (deckCountText != null) {
+            // Keep showing deck count even when viewing discard pile
+            var deckCount = gameManager.cardDealingService.GetDeckPreview(player).Count;
+            deckCountText.text = $"Cards in deck: {deckCount}";
+        }
+
+        if (discardPileCountText != null) {
+            discardPileCountText.text = $"Discard pile: {discardPileCards.Count}";
+        }
+
+        foreach (var card in discardPileCards) {
+            CreateCardEntry(card, player);
+        }
+
+        Log($"Updated discard pile display with {discardPileCards.Count} cards", LogTag.UI | LogTag.Cards);
     }
 
     private List<ICard> GetPlayerDeckCards(IPlayer player) {
@@ -219,6 +299,21 @@ public class DeckViewUI : UIComponent {
         }
 
         LogError("Cannot get deck cards - Player or Deck not available", LogTag.Cards | LogTag.UI);
+        return new List<ICard>();
+    }
+
+    private List<ICard> GetPlayerDiscardPileCards(IPlayer player) {
+        if (player != null && player.Deck != null) {
+            if (gameManager?.cardDealingService != null) {
+                var cardDealingService = gameManager.cardDealingService;
+                var discardCards = cardDealingService.GetDiscardPilePreview(player);
+
+                Log($"Retrieved {discardCards.Count} cards for player discard pile preview", LogTag.Cards);
+                return discardCards;
+            }
+        }
+
+        LogError("Cannot get discard pile cards - Player or Deck not available", LogTag.Cards | LogTag.UI);
         return new List<ICard>();
     }
 
@@ -275,6 +370,14 @@ public class DeckViewUI : UIComponent {
     protected override void OnDestroy() {
         if (closeButton != null) {
             closeButton.onClick.RemoveListener(HideDeckView);
+        }
+
+        if (viewDeckButton != null) {
+            viewDeckButton.onClick.RemoveListener(ShowDeckCards);
+        }
+
+        if (viewDiscardButton != null) {
+            viewDiscardButton.onClick.RemoveListener(ShowDiscardPileCards);
         }
 
         ClearCardEntries();

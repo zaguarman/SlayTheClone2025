@@ -7,18 +7,23 @@ public interface IDeck {
     ICard DrawCard();
     void AddCardToTop(ICard card);
     void AddCardToBottom(ICard card);
+    void AddToDiscardPile(ICard card);
     void Shuffle();
     List<ICard> GetDeckPreview();
+    List<ICard> GetDiscardPilePreview();
 }
 
 public class Deck : IDeck {
     private List<ICard> cards;
+    private List<ICard> discardPile;
     private System.Random random;
 
     public int CardsRemaining => cards?.Count ?? 0;
+    public int DiscardPileCount => discardPile?.Count ?? 0;
 
     public Deck() {
         cards = new List<ICard>();
+        discardPile = new List<ICard>();
         random = new System.Random();
     }
 
@@ -29,6 +34,7 @@ public class Deck : IDeck {
         }
 
         cards.Clear();
+        discardPile.Clear();
         foreach (var cardData in cardDataList) {
             var card = CardFactory.CreateCard(cardData);
             if (card != null) {
@@ -73,6 +79,16 @@ public class Deck : IDeck {
         Log($"Added card to bottom: {card.Name}", LogTag.Cards);
     }
 
+    public void AddToDiscardPile(ICard card) {
+        if (card == null) {
+            LogError("Attempted to add null card to discard pile", LogTag.Cards);
+            return;
+        }
+
+        discardPile.Add(card);
+        Log($"Added card to discard pile: {card.Name}", LogTag.Cards);
+    }
+
     public void Shuffle() {
         if (cards.Count <= 1) return;
 
@@ -92,6 +108,14 @@ public class Deck : IDeck {
         // Create a copy of cards to avoid exposing the internal collection
         var previewCards = new List<ICard>(cards);
         Log($"Created deck preview with {previewCards.Count} cards", LogTag.Cards);
+        return previewCards;
+    }
+
+    // Get a copy of the discard pile for preview purposes
+    public List<ICard> GetDiscardPilePreview() {
+        // Create a copy of discard pile to avoid exposing the internal collection
+        var previewCards = new List<ICard>(discardPile);
+        Log($"Created discard pile preview with {previewCards.Count} cards", LogTag.Cards);
         return previewCards;
     }
 }

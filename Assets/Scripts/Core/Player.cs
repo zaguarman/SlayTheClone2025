@@ -13,10 +13,12 @@ public interface IPlayer : IEntity, IDamageable {
     IPlayer Opponent { get; set; }
     List<ICard> Hand { get; }
     List<BattlefieldSlot> Battlefield { get; }
-    IDeck Deck { get; }  // Added this property
+    IDeck Deck { get; }
     void AddToHand(ICard card);
+    void RemoveFromHand(ICard card);
     void AddToBattlefield(ICard creature, ITarget slotId = null);
     void RemoveFromBattlefield(ICard creature, bool destroyCard = true);
+    void DiscardCard(ICard card);
     PlayerDamagedUnityEvent OnDamaged { get; }
     void InitializeBattlefield(List<BattlefieldSlot> battlefieldSlots);
     void DrawCard();
@@ -26,7 +28,7 @@ public class Player : Entity, IPlayer {
     public int Health { get; private set; } = 20;
     public IPlayer Opponent { get; set; }
     public List<ICard> Hand { get; private set; }
-    public IDeck Deck { get; private set; }  // Added implementation
+    public IDeck Deck { get; private set; }
 
     public List<BattlefieldSlot> Battlefield { get; private set; }
     public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
@@ -39,7 +41,7 @@ public class Player : Entity, IPlayer {
     public Player(string name = "Player") : base(name) {
         Hand = new List<ICard>();
         Battlefield = new List<BattlefieldSlot>();
-        Deck = new Deck();  // Initialize deck
+        Deck = new Deck();
         gameMediator = GameMediator.Instance;
     }
 
@@ -67,6 +69,27 @@ public class Player : Entity, IPlayer {
         if (card == null) return;
         Hand.Add(card);
         gameMediator?.NotifyHandStateChanged(this);
+    }
+
+    public void RemoveFromHand(ICard card) {
+        if (card == null) return;
+        if (Hand.Remove(card)) {
+            Log($"Removed card {card.Name} from hand", LogTag.Cards);
+            gameMediator?.NotifyHandStateChanged(this);
+        }
+    }
+
+    public void DiscardCard(ICard card) {
+        if (card == null) return;
+
+        if (Hand.Contains(card)) {
+            RemoveFromHand(card);
+
+            if (Deck is Deck deck) {
+                deck.AddToDiscardPile(card);
+                Log($"Discarded card {card.Name} from hand to discard pile", LogTag.Cards);
+            }
+        }
     }
 
     public void DrawCard() {

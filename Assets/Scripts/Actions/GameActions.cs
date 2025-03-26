@@ -53,8 +53,10 @@ public class PlaySpellAction : IGameAction {
             return;
         }
 
-        // Remove the spell from hand
-        owner.Hand.Remove(spell);
+        // Discard the spell from hand if it hasn't been already
+        if (owner.Hand.Contains(spell)) {
+            owner.DiscardCard(spell);
+        }
 
         // Process spell effects
         spell.Play(owner, GameManager.Instance.ActionsQueue, target);
@@ -359,8 +361,8 @@ public class PlayCardAction : IGameAction {
             return;
         }
 
-        // Remove the card from hand first
-        owner.Hand.Remove(card);
+        // Discard the card from hand instead of just removing it
+        owner.DiscardCard(card);
 
         // Process based on card type
         if (card is Spell spell) {

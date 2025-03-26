@@ -1,4 +1,5 @@
 using System.Linq;
+using UnityEngine;
 using static DebugLogger;
 
 public class HandUI : CardContainer {
@@ -29,6 +30,7 @@ public class HandUI : CardContainer {
 
         if (player != Player) return;
 
+        // Clear all current cards
         foreach (var card in cards.ToList()) {
             RemoveCard(card);
             if (card != null) {
@@ -37,6 +39,7 @@ public class HandUI : CardContainer {
         }
         cards.Clear();
 
+        // Create new card controllers for each card in hand
         foreach (var cardData in player.Hand) {
             var controller = CreateCard(cardData);
             if (controller != null) {
@@ -66,6 +69,28 @@ public class HandUI : CardContainer {
 
     protected override void OnCardDropped(CardController card) {
         Log($"Card dropped from hand: {card.GetCardData()?.cardName}", LogTag.UI | LogTag.Cards);
+
+        // If the card was successfully dropped onto a valid target,
+        // it will be removed from the hand by the PlayCardAction
+        // We'll check if it's still in the player's hand after a short delay
+        StartCoroutine(CheckCardAfterDrop(card));
+
+        UpdateLayout();
+    }
+
+    private System.Collections.IEnumerator CheckCardAfterDrop(CardController card) {
+        // Wait a short time for other handlers to process
+        yield return new WaitForSeconds(0.1f);
+
+        // If the card controller is null or destroyed, we don't need to do anything
+        if (card == null) yield break;
+
+        // Find the matching card in the player's hand by name
+        var cardData = card.GetCardData();
+        if (cardData == null) yield break;
+
+        // If the card is still in the hand, it wasn't handled by another component
+        // Just update layout again to ensure proper positioning
         UpdateLayout();
     }
 

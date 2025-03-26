@@ -109,7 +109,21 @@ public class BattlefieldUI : CardContainer {
                     }
                 }
 
-                gameManager.ActionsQueue.AddAction(new PlayCardAction(newCard, Player, validTarget));
+                // Find the card in the player's hand that matches the card data
+                ICard cardToPlay = null;
+                foreach (var handCard in Player.Hand) {
+                    if (handCard.Name == cardData.cardName) {
+                        cardToPlay = handCard;
+                        break;
+                    }
+                }
+
+                // If we found the card, use it; otherwise use the newly created one
+                if (cardToPlay != null) {
+                    gameManager.ActionsQueue.AddAction(new PlayCardAction(cardToPlay, Player, validTarget));
+                } else {
+                    gameManager.ActionsQueue.AddAction(new PlayCardAction(newCard, Player, validTarget));
+                }
             }
         }
     }

@@ -7,7 +7,9 @@ public interface ICardDealingService {
     bool CanDrawCard(IPlayer player);
     void DrawCardForPlayer(IPlayer player);
     void ShuffleDeck(IPlayer player);
-    List<ICard> GetDeckPreview(IPlayer player); // Added method for deck preview
+    List<ICard> GetDeckPreview(IPlayer player);
+    List<ICard> GetDiscardPilePreview(IPlayer player);
+    int GetDiscardPileCount(IPlayer player);
 }
 
 public class CardDealingService : ICardDealingService {
@@ -101,5 +103,29 @@ public class CardDealingService : ICardDealingService {
 
         // Get a copy of the cards in the deck
         return deck.GetDeckPreview();
+    }
+
+    // Get a preview of the player's discard pile
+    public List<ICard> GetDiscardPilePreview(IPlayer player) {
+        if (player == null) {
+            LogError("Cannot get discard pile preview - player is null", LogTag.Cards);
+            return new List<ICard>();
+        }
+
+        if (!playerDecks.TryGetValue(player, out var deck)) {
+            LogError($"Could not find deck for player to get discard pile", LogTag.Cards);
+            return new List<ICard>();
+        }
+
+        return deck.GetDiscardPilePreview();
+    }
+
+    // Get the number of cards in a player's discard pile
+    public int GetDiscardPileCount(IPlayer player) {
+        if (player == null || !playerDecks.TryGetValue(player, out var deck)) {
+            return 0;
+        }
+
+        return deck.GetDiscardPilePreview().Count;
     }
 }
