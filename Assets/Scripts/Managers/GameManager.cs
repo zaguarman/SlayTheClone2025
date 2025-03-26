@@ -113,8 +113,8 @@ public class GameManager : InitializableComponent {
     }
 
     private void CompleteGameInitialization() {
-        PlaceInitialCreatures();
         SetupInitialGameState();
+        PlaceInitialCreatures();
         SetupResolveButton();
         gameMediator.NotifyGameInitialized();
     }
@@ -131,11 +131,27 @@ public class GameManager : InitializableComponent {
 
     private void InitializeCards() {
         var testSetup = gameObject.AddComponent<TestSetup>();
-        var player1Cards = testSetup.CreateTestCards();
-        var player2Cards = testSetup.CreateTestCards();
+        // Create a larger pool of cards for the decks
+        var player1Cards = new List<CardData>();
+        var player2Cards = new List<CardData>();
+
+        // Get test cards and duplicate them to create a larger deck
+        var baseCards = testSetup.CreateTestCards();
+
+        // Add 20 cards to each player deck to ensure there are enough cards
+        for (int i = 0; i < 4; i++) {
+            player1Cards.AddRange(baseCards);
+            player2Cards.AddRange(baseCards);
+        }
+
         cardDealingService.InitializeDecks(player1Cards, player2Cards);
-        Log("Decks initialized with test cards", LogTag.Cards | LogTag.Initialization);
+        Log($"Decks initialized with {player1Cards.Count} cards per player", LogTag.Cards | LogTag.Initialization);
+
+        // Clean up the test setup component
+        Destroy(testSetup);
     }
+
+    
 
     private void PlaceInitialCreatures() {
         if (!HasValidBattlefields()) {
@@ -179,8 +195,9 @@ public class GameManager : InitializableComponent {
     }
 
     private void SetupInitialGameState() {
-        cardDealingService.DealInitialHands(Player1, Player2);
-        gameMediator.NotifyGameInitialized();
+        // Deal initial hands with fewer cards to ensure deck has cards remaining
+        cardDealingService.DealInitialHands(Player1, Player2, 5);
+        Log("Initial cards dealt to players", LogTag.Initialization);
     }
 
     private void SetupResolveButton() {

@@ -7,6 +7,7 @@ public interface ICardDealingService {
     bool CanDrawCard(IPlayer player);
     void DrawCardForPlayer(IPlayer player);
     void ShuffleDeck(IPlayer player);
+    List<ICard> GetDeckPreview(IPlayer player); // Added method for deck preview
 }
 
 public class CardDealingService : ICardDealingService {
@@ -27,12 +28,12 @@ public class CardDealingService : ICardDealingService {
         }
 
         // Create and initialize deck for Player 1
-        var player1Deck = new Deck();
+        var player1Deck = gameManager.Player1.Deck as Deck;
         player1Deck.Initialize(player1Cards);
         playerDecks[gameManager.Player1] = player1Deck;
 
         // Create and initialize deck for Player 2
-        var player2Deck = new Deck();
+        var player2Deck = gameManager.Player2.Deck as Deck;
         player2Deck.Initialize(player2Cards);
         playerDecks[gameManager.Player2] = player2Deck;
 
@@ -84,5 +85,21 @@ public class CardDealingService : ICardDealingService {
 
         deck.Shuffle();
         Log($"Shuffled deck for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
+    }
+
+    // Get a preview of the player's deck cards
+    public List<ICard> GetDeckPreview(IPlayer player) {
+        if (player == null) {
+            LogError("Cannot get deck preview - player is null", LogTag.Cards);
+            return new List<ICard>();
+        }
+
+        if (!playerDecks.TryGetValue(player, out var deck)) {
+            LogError($"Could not find deck for player to preview", LogTag.Cards);
+            return new List<ICard>();
+        }
+
+        // Get a copy of the cards in the deck
+        return deck.GetDeckPreview();
     }
 }

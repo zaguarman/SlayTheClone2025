@@ -13,6 +13,7 @@ public interface IPlayer : IEntity, IDamageable {
     IPlayer Opponent { get; set; }
     List<ICard> Hand { get; }
     List<BattlefieldSlot> Battlefield { get; }
+    IDeck Deck { get; }  // Added this property
     void AddToHand(ICard card);
     void AddToBattlefield(ICard creature, ITarget slotId = null);
     void RemoveFromBattlefield(ICard creature, bool destroyCard = true);
@@ -25,6 +26,7 @@ public class Player : Entity, IPlayer {
     public int Health { get; private set; } = 20;
     public IPlayer Opponent { get; set; }
     public List<ICard> Hand { get; private set; }
+    public IDeck Deck { get; private set; }  // Added implementation
 
     public List<BattlefieldSlot> Battlefield { get; private set; }
     public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
@@ -37,6 +39,7 @@ public class Player : Entity, IPlayer {
     public Player(string name = "Player") : base(name) {
         Hand = new List<ICard>();
         Battlefield = new List<BattlefieldSlot>();
+        Deck = new Deck();  // Initialize deck
         gameMediator = GameMediator.Instance;
     }
 

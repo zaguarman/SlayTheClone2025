@@ -8,6 +8,7 @@ public interface IDeck {
     void AddCardToTop(ICard card);
     void AddCardToBottom(ICard card);
     void Shuffle();
+    List<ICard> GetDeckPreview();
 }
 
 public class Deck : IDeck {
@@ -84,5 +85,13 @@ public class Deck : IDeck {
         }
 
         Log($"Shuffled deck ({cards.Count} cards)", LogTag.Cards);
+    }
+
+    // Get a copy of the deck for preview purposes
+    public List<ICard> GetDeckPreview() {
+        // Create a copy of cards to avoid exposing the internal collection
+        var previewCards = new List<ICard>(cards);
+        Log($"Created deck preview with {previewCards.Count} cards", LogTag.Cards);
+        return previewCards;
     }
 }

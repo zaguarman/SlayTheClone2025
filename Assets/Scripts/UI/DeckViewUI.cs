@@ -106,14 +106,14 @@ public class DeckViewUI : UIComponent {
 
     protected override void RegisterEvents() {
         if (gameMediator != null) {
-            // No specific events needed for now
+            // Register for deck changes if needed
             Log("DeckViewUI events registered", LogTag.UI | LogTag.Initialization);
         }
     }
 
     protected override void UnregisterEvents() {
         if (gameMediator != null) {
-            // No specific events to unregister
+            // Unregister events if needed
             Log("DeckViewUI events unregistered", LogTag.UI);
         }
     }
@@ -184,26 +184,41 @@ public class DeckViewUI : UIComponent {
     }
 
     private List<ICard> GetPlayerDeckCards(IPlayer player) {
-        // Get the cards from a test setup since we don't have direct deck access
-        if (gameManager != null) {
+        // Get the cards from the player's deck directly
+        if (player != null && player.Deck != null) {
+            // Return a copy of the deck so we don't modify the actual deck
+            var deckCards = new List<ICard>();
+
+            // Get cards from the player's deck
+            if (gameManager?.cardDealingService != null) {
+                // Since we can't access the internal cards list directly from IDeck
+                // We need to peek at them through the CardDealingService
+                var cardDealingService = gameManager.cardDealingService;
+                deckCards = cardDealingService.GetDeckPreview(player);
+
+                Log($"Retrieved {deckCards.Count} cards for player deck preview", LogTag.Cards);
+                return deckCards;
+            }
+
+            // Fallback to demo cards if we can't access the real deck 
+            // (This will be removed once the CardDealingService is updated)
             var testSetup = gameObject.AddComponent<TestSetup>();
-            var cards = testSetup.CreateTestCards();
+            var testCards = testSetup.CreateTestCards();
             Destroy(testSetup);
 
             // Convert CardData to ICard
-            var deckCards = new List<ICard>();
-            foreach (var cardData in cards) {
+            foreach (var cardData in testCards) {
                 var card = CardFactory.CreateCard(cardData);
                 if (card != null) {
                     deckCards.Add(card);
                 }
             }
 
-            Log($"Retrieved {deckCards.Count} cards for player deck", LogTag.Cards);
+            Log($"Retrieved {deckCards.Count} fallback test cards for player deck", LogTag.Cards);
             return deckCards;
         }
 
-        LogError("Cannot get deck cards - GameManager not available", LogTag.Cards | LogTag.UI);
+        LogError("Cannot get deck cards - Player or Deck not available", LogTag.Cards | LogTag.UI);
         return new List<ICard>();
     }
 
