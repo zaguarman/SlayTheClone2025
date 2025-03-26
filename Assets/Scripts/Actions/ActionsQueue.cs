@@ -119,6 +119,13 @@ public class ActionsQueue {
     }
 
     public void ResolveActions() {
+        // Add draw cards actions for both players at the end of the queue
+        var gameManager = GameManager.Instance;
+        if (gameManager != null) {
+            AddAction(new DrawCardAction(gameManager.Player1, 2));
+            AddAction(new DrawCardAction(gameManager.Player2, 2));
+        }
+
         if (actionsList.Count == 0) {
             Log("No actions to resolve", LogTag.Actions);
             return;

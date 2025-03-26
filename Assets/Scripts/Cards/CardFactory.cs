@@ -109,7 +109,7 @@ public static class CardFactory {
             case "Fireball":
                 // Primary effect: Deal 3 damage to target
                 spell.AddAction(ActionType.Damage, 3, TargetType.AllCreatures);
-                // Secondary effect: Draw a card
+                // Secondary effect: Draw a card FOR THE CASTER (using TargetType.Player)
                 spell.AddAction(ActionType.Draw, 1, TargetType.Player);
                 break;
 
@@ -125,6 +125,20 @@ public static class CardFactory {
                 spell.AddAction(ActionType.Draw, 2, TargetType.Player);
                 // Secondary effect: Heal player for 1
                 spell.AddAction(ActionType.Heal, 1, TargetType.Player);
+                break;
+
+            case "Mystic Barrier":
+                // Primary effect: Heal player for 2
+                spell.AddAction(ActionType.Heal, 2, TargetType.Player);
+                // Secondary effect: Draw a card
+                spell.AddAction(ActionType.Draw, 1, TargetType.Player);
+                break;
+
+            case "Shadow Strike":
+                // Primary effect: Deal 2 damage to target enemy creature
+                spell.AddAction(ActionType.Damage, 2, TargetType.EnemyCreatures);
+                // Secondary effect: Deal 1 damage to enemy player
+                spell.AddAction(ActionType.Damage, 1, TargetType.Enemy);
                 break;
 
             default:
