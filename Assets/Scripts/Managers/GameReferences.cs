@@ -5,14 +5,14 @@ using static DebugLogger;
 
 public class GameReferences : Singleton<GameReferences> {
     [System.Serializable]
-    private class PlayerUIReferences {
+    public class PlayerUIReferences {
         [Header("Main UI")]
-        [SerializeField] private PlayerUI playerUI;
-        [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] public PlayerUI playerUI;
+        [SerializeField] public TextMeshProUGUI healthText;
 
         [Header("Card Containers")]
-        [SerializeField] private HandUI handUI;
-        [SerializeField] private BattlefieldUI battlefieldUI;
+        [SerializeField] public HandUI handUI;
+        [SerializeField] public BattlefieldUI battlefieldUI;
 
         public PlayerUI PlayerUI => playerUI;
         public TextMeshProUGUI HealthText => healthText;
@@ -55,8 +55,8 @@ public class GameReferences : Singleton<GameReferences> {
     [SerializeField] private TextMeshProUGUI deckViewTitleText;
 
     [Header("Player References")]
-    [SerializeField] private PlayerUIReferences player1References;
-    [SerializeField] private PlayerUIReferences player2References;
+    [SerializeField] public PlayerUIReferences player1References;
+    [SerializeField] public PlayerUIReferences player2References;
 
     [Header("Card Components")]
     [SerializeField] private Button cardPrefab;

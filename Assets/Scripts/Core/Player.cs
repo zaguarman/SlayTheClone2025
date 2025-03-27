@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using static DebugLogger;
 using System.Linq;
 using UnityEngine;
+using TMPro;
 
 [Serializable]
 public class PlayerDamagedUnityEvent : UnityEvent<int> { }
@@ -22,6 +23,8 @@ public interface IPlayer : IEntity, IDamageable {
     PlayerDamagedUnityEvent OnDamaged { get; }
     void InitializeBattlefield(List<BattlefieldSlot> battlefieldSlots);
     void DrawCard();
+    void UpdateHealthUI();
+    void SetHealthText(TextMeshProUGUI healthText);
 }
 
 public class Player : Entity, IPlayer {
@@ -39,12 +42,34 @@ public class Player : Entity, IPlayer {
     public bool Is_Player1 => IsPlayer1();
 
     private readonly GameMediator gameMediator;
+    private TextMeshProUGUI healthText;
 
     public Player(string name = "Player") : base(name) {
         Hand = new List<ICard>();
         Battlefield = new List<BattlefieldSlot>();
         Deck = new Deck();
         gameMediator = GameMediator.Instance;
+
+        // Set up the event listener for our own damage event
+        OnDamaged.AddListener(OnPlayerDamaged);
+    }
+
+    public void SetHealthText(TextMeshProUGUI healthText) {
+        this.healthText = healthText;
+        UpdateHealthUI(); // Update UI immediately after setting the reference
+    }
+
+    private void OnPlayerDamaged(int damage) {
+        // This is called whenever this player takes damage
+        // Update our UI here
+        UpdateHealthUI();
+        Log($"{(IsPlayer1() ? "Player 1" : "Player 2")} took {damage} damage, health: {Health}", LogTag.Players | LogTag.Combat);
+    }
+
+    public void UpdateHealthUI() {
+        if (healthText != null) {
+            healthText.text = $"Health: {Health}";
+        }
     }
 
     public void InitializeBattlefield(List<BattlefieldSlot> slots) {
@@ -114,8 +139,6 @@ public class Player : Entity, IPlayer {
 
         if (cardDealingService.CanDrawCard(this)) {
             cardDealingService.DrawCardForPlayer(this);
-        } else {
-            LogWarning($"No cards left in {(IsPlayer1() ? "Player 1" : "Player 2")}'s deck", LogTag.Cards);
         }
     }
 
