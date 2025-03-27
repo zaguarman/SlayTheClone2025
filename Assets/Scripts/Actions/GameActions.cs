@@ -22,11 +22,27 @@ public class DrawCardAction : IGameAction {
             return;
         }
 
+        int cardsDrawn = 0;
+
         for (int i = 0; i < amount; i++) {
+            // Check if we've hit the hand size limit
+            if (player.Hand.Count >= Player.MAX_HAND_SIZE) {
+                Log($"Draw stopped: {(player.IsPlayer1() ? "Player 1" : "Player 2")} has reached the maximum hand size ({Player.MAX_HAND_SIZE})",
+                    LogTag.Actions | LogTag.Cards);
+                break;
+            }
+
             player.DrawCard();
+            cardsDrawn++;
         }
 
-        Log($"Executed draw of {amount} card(s) for {(player.IsPlayer1() ? "Player 1" : "Player 2")}",
+        int cardsMissed = amount - cardsDrawn;
+        if (cardsMissed > 0) {
+            Log($"{(player.IsPlayer1() ? "Player 1" : "Player 2")} could not draw {cardsMissed} card(s) due to hand size limit",
+                LogTag.Actions | LogTag.Cards);
+        }
+
+        Log($"Executed draw of {cardsDrawn}/{amount} card(s) for {(player.IsPlayer1() ? "Player 1" : "Player 2")}",
             LogTag.Actions | LogTag.Cards);
     }
 

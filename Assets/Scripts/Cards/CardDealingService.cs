@@ -44,10 +44,16 @@ public class CardDealingService : ICardDealingService {
 
     public void DealInitialHands(IPlayer player1, IPlayer player2, int handSize = 7) {
         for (int i = 0; i < handSize; i++) {
-            DrawCardForPlayer(player1);
-            DrawCardForPlayer(player2);
+            // Check hand size limits before drawing
+            if (player1.Hand.Count < Player.MAX_HAND_SIZE) {
+                DrawCardForPlayer(player1);
+            }
+
+            if (player2.Hand.Count < Player.MAX_HAND_SIZE) {
+                DrawCardForPlayer(player2);
+            }
         }
-        Log($"Dealt initial hands of {handSize} cards to both players", LogTag.Cards | LogTag.Initialization);
+        Log($"Dealt initial hands to both players", LogTag.Cards | LogTag.Initialization);
     }
 
     public bool CanDrawCard(IPlayer player) {
@@ -57,12 +63,18 @@ public class CardDealingService : ICardDealingService {
         }
 
         var deck = playerDecks[player];
-        return deck != null && deck.CardsRemaining > 0;
+        // Check both deck and hand size
+        return deck != null && deck.CardsRemaining > 0 && player.Hand.Count < Player.MAX_HAND_SIZE;
     }
 
     public void DrawCardForPlayer(IPlayer player) {
         if (player == null) {
             LogError("Cannot draw card - player is null", LogTag.Cards | LogTag.Initialization);
+            return;
+        }
+
+        if (player.Hand.Count >= Player.MAX_HAND_SIZE) {
+            Log($"Player {(player.IsPlayer1() ? "1" : "2")} has a full hand ({Player.MAX_HAND_SIZE} cards), skipping draw", LogTag.Cards);
             return;
         }
 

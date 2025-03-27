@@ -25,6 +25,8 @@ public interface IPlayer : IEntity, IDamageable {
 }
 
 public class Player : Entity, IPlayer {
+    public const int MAX_HAND_SIZE = 10;
+
     public int Health { get; private set; } = 20;
     public IPlayer Opponent { get; set; }
     public List<ICard> Hand { get; private set; }
@@ -67,6 +69,12 @@ public class Player : Entity, IPlayer {
 
     public void AddToHand(ICard card) {
         if (card == null) return;
+
+        if (Hand.Count >= MAX_HAND_SIZE) {
+            Log($"Hand full ({MAX_HAND_SIZE} cards), cannot add more cards", LogTag.Cards);
+            return;
+        }
+
         Hand.Add(card);
         gameMediator?.NotifyHandStateChanged(this);
     }
@@ -96,6 +104,11 @@ public class Player : Entity, IPlayer {
         var cardDealingService = GameManager.Instance?.cardDealingService;
         if (cardDealingService == null) {
             LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
+            return;
+        }
+
+        if (Hand.Count >= MAX_HAND_SIZE) {
+            Log($"Hand full ({MAX_HAND_SIZE} cards), cannot draw more cards", LogTag.Cards);
             return;
         }
 
