@@ -2,22 +2,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.EventSystems;
 using static DebugLogger;
 
 public class DeckViewUI : UIComponent {
+    // Keep these serialized fields as they're required for editor setup, but use GameReferences for runtime
     [SerializeField] public GameObject deckViewPanel;
     [SerializeField] public Transform cardListContent;
     [SerializeField] public Button closeButton;
     [SerializeField] public TextMeshProUGUI titleText;
-    [SerializeField] public TextMeshProUGUI deckCountText;
-    [SerializeField] public TextMeshProUGUI discardPileCountText;
-    [SerializeField] public int columnsCount = 3; // Number of columns to display
-    [SerializeField] public float cardScale = 0.5f; // Scale of cards in the deck view
+    [SerializeField] public TextMeshProUGUI cardsCountText;
+    [SerializeField] public int columnsCount = 4; // Increased column count
+    [SerializeField] public float cardScale = 0.7f; // Increased card scale
+    [SerializeField] public float scrollSensitivity = 20f; // Scroll sensitivity
 
     private List<CardController> cardEntries = new List<CardController>();
     private GridLayoutGroup gridLayout;
+    private ScrollRect scrollRect;
     private bool viewingDiscardPile = false;
 
     protected override void Awake() {
@@ -52,6 +53,9 @@ public class DeckViewUI : UIComponent {
 
         // Setup grid layout for cards
         SetupCardGrid();
+
+        // Configure ScrollRect
+        ConfigureScrollRect();
     }
 
     private void SetupCardGrid() {
@@ -68,8 +72,8 @@ public class DeckViewUI : UIComponent {
 
         // Add grid layout
         gridLayout = cardListContent.gameObject.AddComponent<GridLayoutGroup>();
-        gridLayout.cellSize = new Vector2(120, 160); // Default card size
-        gridLayout.spacing = new Vector2(10, 10);
+        gridLayout.cellSize = new Vector2(150, 200); // Larger card size
+        gridLayout.spacing = new Vector2(15, 15); // More spacing between cards
         gridLayout.startCorner = GridLayoutGroup.Corner.UpperLeft;
         gridLayout.startAxis = GridLayoutGroup.Axis.Horizontal;
         gridLayout.childAlignment = TextAnchor.UpperCenter;
@@ -84,6 +88,20 @@ public class DeckViewUI : UIComponent {
         fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
         Log("Card grid setup complete", LogTag.UI | LogTag.Initialization);
+    }
+
+    private void ConfigureScrollRect() {
+        // Find or add ScrollRect component
+        scrollRect = cardListContent.GetComponentInParent<ScrollRect>();
+        if (scrollRect != null) {
+            // Set scroll sensitivity directly
+            scrollRect.scrollSensitivity = scrollSensitivity;
+            // Make scroll deceleration faster for better feel
+            scrollRect.decelerationRate = 0.1f;
+            Log($"ScrollRect configured with sensitivity: {scrollSensitivity}", LogTag.UI | LogTag.Initialization);
+        } else {
+            LogWarning("ScrollRect not found in parent hierarchy", LogTag.UI | LogTag.Initialization);
+        }
     }
 
     public override void Initialize(IPlayer player = null) {
@@ -101,6 +119,9 @@ public class DeckViewUI : UIComponent {
             LogError("Missing references for DeckViewUI", LogTag.UI | LogTag.Initialization);
             return;
         }
+
+        // Reconfigure the scroll rect to ensure it has the correct sensitivity
+        ConfigureScrollRect();
 
         // Ensure the close button works
         closeButton.onClick.RemoveAllListeners();
@@ -203,13 +224,9 @@ public class DeckViewUI : UIComponent {
         var deckCards = GetPlayerDeckCards(player);
         var discardCount = gameManager.cardDealingService.GetDiscardPileCount(player);
 
-        // Update both count texts
-        if (deckCountText != null) {
-            deckCountText.text = $"Cards in deck: {deckCards.Count}";
-        }
-
-        if (discardPileCountText != null) {
-            discardPileCountText.text = $"Discarded cards: {discardCount}";
+        // Update count text
+        if (cardsCountText != null) {
+            cardsCountText.text = $"Cards in deck: {deckCards.Count}";
         }
 
         foreach (var card in deckCards) {
@@ -217,6 +234,11 @@ public class DeckViewUI : UIComponent {
         }
 
         Log($"Updated deck display with {deckCards.Count} cards", LogTag.UI | LogTag.Cards);
+
+        // Reset scroll position to top
+        if (scrollRect != null) {
+            scrollRect.normalizedPosition = new Vector2(0, 1);
+        }
     }
 
     public void UpdateDiscardPileDisplay(IPlayer player) {
@@ -236,13 +258,9 @@ public class DeckViewUI : UIComponent {
         var discardPileCards = GetPlayerDiscardPileCards(player);
         var deckCount = gameManager.cardDealingService.GetDeckPreview(player).Count;
 
-        // Update both count texts
-        if (deckCountText != null) {
-            deckCountText.text = $"Cards in deck: {deckCount}";
-        }
-
-        if (discardPileCountText != null) {
-            discardPileCountText.text = $"Discarded cards: {discardPileCards.Count}";
+        // Update count text for discard pile
+        if (cardsCountText != null) {
+            cardsCountText.text = $"Discarded cards: {discardPileCards.Count}";
         }
 
         foreach (var card in discardPileCards) {
@@ -250,6 +268,17 @@ public class DeckViewUI : UIComponent {
         }
 
         Log($"Updated discard pile display with {discardPileCards.Count} cards", LogTag.UI | LogTag.Cards);
+
+        // Reset scroll position to top
+        if (scrollRect != null) {
+            scrollRect.normalizedPosition = new Vector2(0, 1);
+
+            // Double-check that our scroll sensitivity is applied
+            if (Mathf.Approximately(scrollRect.scrollSensitivity, scrollSensitivity) == false) {
+                Log($"Fixing scroll sensitivity from {scrollRect.scrollSensitivity} to {scrollSensitivity}", LogTag.UI);
+                scrollRect.scrollSensitivity = scrollSensitivity;
+            }
+        }
     }
 
     private List<ICard> GetPlayerDeckCards(IPlayer player) {
@@ -316,7 +345,7 @@ public class DeckViewUI : UIComponent {
         var cardController = CardFactory.CreateCardController(card, owner, cardListContent);
 
         if (cardController != null) {
-            // Disable dragging and other interactive features for the preview
+            // Disable all interactive components for the preview
             DisableCardInteractions(cardController);
 
             // Scale the card
@@ -334,16 +363,39 @@ public class DeckViewUI : UIComponent {
     private void DisableCardInteractions(CardController cardController) {
         if (cardController == null) return;
 
-        // Disable any dragging components
-        var components = cardController.GetComponents<MonoBehaviour>();
-        foreach (var component in components) {
-            string typeName = component.GetType().Name;
-            if (typeName.Contains("DragHandler") ||
-                typeName.Contains("DropHandler") ||
-                typeName.Contains("PointerHandler")) {
-                component.enabled = false;
+        // Disable drag-and-drop components
+        var dragHandlers = cardController.GetComponents<IDragHandler>();
+        foreach (var handler in dragHandlers) {
+            var behavior = handler as MonoBehaviour;
+            if (behavior != null) {
+                behavior.enabled = false;
             }
         }
+
+        // Disable begin drag handlers
+        var beginDragHandlers = cardController.GetComponents<IBeginDragHandler>();
+        foreach (var handler in beginDragHandlers) {
+            var behavior = handler as MonoBehaviour;
+            if (behavior != null) {
+                behavior.enabled = false;
+            }
+        }
+
+        // Disable end drag handlers
+        var endDragHandlers = cardController.GetComponents<IEndDragHandler>();
+        foreach (var handler in endDragHandlers) {
+            var behavior = handler as MonoBehaviour;
+            if (behavior != null) {
+                behavior.enabled = false;
+            }
+        }
+
+        // Remove any event listeners
+        cardController.OnBeginDragEvent.RemoveAllListeners();
+        cardController.OnEndDragEvent.RemoveAllListeners();
+        cardController.OnCardDropped.RemoveAllListeners();
+        cardController.OnPointerEnterHandler = null;
+        cardController.OnPointerExitHandler = null;
     }
 
     private void ClearCardEntries() {

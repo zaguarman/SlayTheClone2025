@@ -1,11 +1,13 @@
+// File: Scripts/Deck/DeckViewController.cs
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using static DebugLogger;
 
 public class DeckViewController : MonoBehaviour {
-    [SerializeField] private Button deckViewButton;
-    [SerializeField] private Button discardViewButton;
+    // Remove these serialized fields and use GameReferences instead
+    private Button deckViewButton;
+    private Button discardViewButton;
 
     private TextMeshProUGUI deckButtonText;
     private TextMeshProUGUI discardButtonText;
@@ -65,15 +67,9 @@ public class DeckViewController : MonoBehaviour {
     }
 
     private void GetUIReferences() {
-        // If buttons aren't assigned in the inspector, get them from GameReferences
-        if (deckViewButton == null) {
-            deckViewButton = gameReferences.GetDeckViewButton();
-        }
-
-        if (discardViewButton == null) {
-            discardViewButton = gameReferences.GetDiscardViewButton();
-        }
-
+        // Always get references from GameReferences
+        deckViewButton = gameReferences.GetDeckViewButton();
+        discardViewButton = gameReferences.GetDiscardViewButton();
         deckViewUI = gameReferences.GetDeckViewUI();
 
         if (deckViewButton == null) {

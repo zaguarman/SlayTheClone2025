@@ -831,10 +831,11 @@ MonoBehaviour:
   deckViewPanel: {fileID: 6701851519121273788}
   cardListContent: {fileID: 4185264978344886169}
   closeButton: {fileID: 5714500430518028515}
-  deckCountText: {fileID: 3398293037444592334}
+  titleText: {fileID: 769353087148832654}
+  cardsCountText: {fileID: 3398293037444592334}
   columnsCount: 3
-  cardSpacing: 10
-  cardSize: {x: 200, y: 300}
+  cardScale: 0.7
+  scrollSensitivity: 20
 --- !u!1 &7816149148825276662
 GameObject:
   m_ObjectHideFlags: 0
