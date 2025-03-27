@@ -1,3 +1,4 @@
+// File: Scripts/UI/DeckViewUI.cs
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -14,7 +15,6 @@ public class DeckViewUI : UIComponent {
     [SerializeField] public TextMeshProUGUI cardsCountText;
     [SerializeField] public int columnsCount = 4; // Increased column count
     [SerializeField] public float cardScale = 0.7f; // Increased card scale
-    [SerializeField] public float scrollSensitivity = 20f; // Scroll sensitivity
 
     private List<CardController> cardEntries = new List<CardController>();
     private GridLayoutGroup gridLayout;
@@ -53,9 +53,6 @@ public class DeckViewUI : UIComponent {
 
         // Setup grid layout for cards
         SetupCardGrid();
-
-        // Configure ScrollRect
-        ConfigureScrollRect();
     }
 
     private void SetupCardGrid() {
@@ -90,20 +87,6 @@ public class DeckViewUI : UIComponent {
         Log("Card grid setup complete", LogTag.UI | LogTag.Initialization);
     }
 
-    private void ConfigureScrollRect() {
-        // Find or add ScrollRect component
-        scrollRect = cardListContent.GetComponentInParent<ScrollRect>();
-        if (scrollRect != null) {
-            // Set scroll sensitivity directly
-            scrollRect.scrollSensitivity = scrollSensitivity;
-            // Make scroll deceleration faster for better feel
-            scrollRect.decelerationRate = 0.1f;
-            Log($"ScrollRect configured with sensitivity: {scrollSensitivity}", LogTag.UI | LogTag.Initialization);
-        } else {
-            LogWarning("ScrollRect not found in parent hierarchy", LogTag.UI | LogTag.Initialization);
-        }
-    }
-
     public override void Initialize(IPlayer player = null) {
         base.Initialize(player);
 
@@ -119,9 +102,6 @@ public class DeckViewUI : UIComponent {
             LogError("Missing references for DeckViewUI", LogTag.UI | LogTag.Initialization);
             return;
         }
-
-        // Reconfigure the scroll rect to ensure it has the correct sensitivity
-        ConfigureScrollRect();
 
         // Ensure the close button works
         closeButton.onClick.RemoveAllListeners();
@@ -272,12 +252,6 @@ public class DeckViewUI : UIComponent {
         // Reset scroll position to top
         if (scrollRect != null) {
             scrollRect.normalizedPosition = new Vector2(0, 1);
-
-            // Double-check that our scroll sensitivity is applied
-            if (Mathf.Approximately(scrollRect.scrollSensitivity, scrollSensitivity) == false) {
-                Log($"Fixing scroll sensitivity from {scrollRect.scrollSensitivity} to {scrollSensitivity}", LogTag.UI);
-                scrollRect.scrollSensitivity = scrollSensitivity;
-            }
         }
     }
 
@@ -297,23 +271,6 @@ public class DeckViewUI : UIComponent {
                 Log($"Retrieved {deckCards.Count} cards for player deck preview", LogTag.Cards);
                 return deckCards;
             }
-
-            // Fallback to demo cards if we can't access the real deck 
-            // (This will be removed once the CardDealingService is updated)
-            var testSetup = gameObject.AddComponent<TestSetup>();
-            var testCards = testSetup.CreateTestCards();
-            Destroy(testSetup);
-
-            // Convert CardData to ICard
-            foreach (var cardData in testCards) {
-                var card = CardFactory.CreateCard(cardData);
-                if (card != null) {
-                    deckCards.Add(card);
-                }
-            }
-
-            Log($"Retrieved {deckCards.Count} fallback test cards for player deck", LogTag.Cards);
-            return deckCards;
         }
 
         LogError("Cannot get deck cards - Player or Deck not available", LogTag.Cards | LogTag.UI);

@@ -1934,21 +1934,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1620705591}
     m_Modifications:
+    - target: {fileID: 898209085040013873, guid: c69cc7d8f5093814981569c68ae8efdc, type: 3}
+      propertyPath: m_Elasticity
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 898209085040013873, guid: c69cc7d8f5093814981569c68ae8efdc, type: 3}
+      propertyPath: m_MovementType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 898209085040013873, guid: c69cc7d8f5093814981569c68ae8efdc, type: 3}
+      propertyPath: m_ScrollSensitivity
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 1608220519137462064, guid: c69cc7d8f5093814981569c68ae8efdc, type: 3}
       propertyPath: cardScale
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1608220519137462064, guid: c69cc7d8f5093814981569c68ae8efdc, type: 3}
-      propertyPath: titleText
-      value: 
-      objectReference: {fileID: 1976086030}
-    - target: {fileID: 1608220519137462064, guid: c69cc7d8f5093814981569c68ae8efdc, type: 3}
       propertyPath: columnsCount
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1608220519137462064, guid: c69cc7d8f5093814981569c68ae8efdc, type: 3}
-      propertyPath: scrollSensitivity
-      value: 1500
+      propertyPath: scrollStepSize
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1608220519137462064, guid: c69cc7d8f5093814981569c68ae8efdc, type: 3}
       propertyPath: discardPileCountText
