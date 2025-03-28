@@ -206,12 +206,17 @@ public class CardTooltip : MonoBehaviour {
     public void EnableTooltipOnly(CardController card) {
         if (card == null) return;
 
-        // Remove existing listeners
-        card.OnBeginDragEvent.RemoveAllListeners();
-        card.OnEndDragEvent.RemoveAllListeners();
-        card.OnCardDropped.RemoveAllListeners();
+        // We no longer need to set up event listeners here
+        // as the DeckViewCardInterceptor component will handle all interactions
 
-        // Add dummy handler to prevent dragging
-        card.OnBeginDragEvent.AddListener((_) => { /* Prevent dragging */ });
+        // The interceptor directly calls ShowTooltip and HideTooltip methods
+        // on this CardTooltip instance
+
+        // Make sure the card can still receive pointer events for tooltips
+        var canvasGroup = card.GetComponent<CanvasGroup>();
+        if (canvasGroup != null) {
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+        }
     }
 }

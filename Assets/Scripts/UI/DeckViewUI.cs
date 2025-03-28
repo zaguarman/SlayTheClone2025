@@ -344,36 +344,41 @@ public class DeckViewUI : UIComponent {
             cardTooltip.EnableTooltipOnly(cardController);
         }
 
-        // Additionally disable all other drag handlers that might be attached
-        var dragHandlers = cardController.GetComponents<IDragHandler>();
-        foreach (var handler in dragHandlers) {
-            var behavior = handler as MonoBehaviour;
-            if (behavior != null && behavior != cardController) {
-                behavior.enabled = false;
-            }
+        // Completely replace the original CardController's drag handlers with our own
+        // by adding a component that will intercept dragging at a higher level
+        var interceptor = cardController.gameObject.AddComponent<DeckViewCardInterceptor>();
+
+        // We'll get the component reference to the actual CardController
+        var cardComp = cardController.GetComponent<CardController>();
+        if (cardComp != null) {
+            // Disable the CardController component completely to prevent any drag behavior
+            cardComp.enabled = false;
+
+            // But keep track of it for tooltip functionality
+            interceptor.Initialize(cardController, cardTooltip);
         }
 
-        var beginDragHandlers = cardController.GetComponents<IBeginDragHandler>();
-        foreach (var handler in beginDragHandlers) {
-            var behavior = handler as MonoBehaviour;
-            if (behavior != null && behavior != cardController) {
-                behavior.enabled = false;
-            }
+        // Make sure the canvas group is set up to allow tooltips but prevent dragging
+        var canvasGroup = cardController.GetComponent<CanvasGroup>();
+        if (canvasGroup != null) {
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
         }
 
-        var endDragHandlers = cardController.GetComponents<IEndDragHandler>();
-        foreach (var handler in endDragHandlers) {
-            var behavior = handler as MonoBehaviour;
-            if (behavior != null && behavior != cardController) {
-                behavior.enabled = false;
-            }
-        }
+        Log($"Disabled drag interactions for card {cardController.name}", LogTag.Cards | LogTag.UI);
+    }
+
+    // This method is no longer needed as we're replacing the entire drag handling approach
+    // Kept as a reference for now, but not used
+    private void DisableAllDragHandlers(CardController cardController) {
+        // We now completely disable the CardController component and replace it with our interceptor
+        // This is a more effective way to prevent drag behavior
     }
 
     private void ClearCardEntries() {
         // Hide the tooltip
         if (cardTooltip == null) {
-            cardTooltip = gameReferences.GetCardTooltip();
+            cardTooltip = gameReferences?.GetCardTooltip();
         }
 
         if (cardTooltip != null) {
@@ -397,5 +402,54 @@ public class DeckViewUI : UIComponent {
 
         ClearCardEntries();
         base.OnDestroy();
+    }
+}
+
+// Special component for DeckView cards that completely prevents dragging
+// while still allowing tooltips to work
+public class DeckViewCardInterceptor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
+                                       IBeginDragHandler, IDragHandler, IEndDragHandler {
+    private CardController cardController;
+    private CardTooltip tooltip;
+
+    public void Initialize(CardController controller, CardTooltip tooltip) {
+        this.cardController = controller;
+        this.tooltip = tooltip;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData) {
+        // Show tooltip on hover
+        if (tooltip != null && cardController != null) {
+            tooltip.ShowTooltip(cardController);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+        // Hide tooltip when mouse exits
+        if (tooltip != null) {
+            tooltip.HideTooltip();
+        }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData) {
+        // Immediately set pointerDrag to null to prevent any drag behavior
+        eventData.pointerDrag = null;
+
+        // This will completely stop the drag from starting
+        eventData.Use();
+
+        // Extra safety: prevent selection too
+        eventData.eligibleForClick = false;
+    }
+
+    public void OnDrag(PointerEventData eventData) {
+        // Ensure drag doesn't continue
+        eventData.pointerDrag = null;
+        eventData.Use();
+    }
+
+    public void OnEndDrag(PointerEventData eventData) {
+        // Nothing needed here as we prevented the drag from starting
+        eventData.Use();
     }
 }
