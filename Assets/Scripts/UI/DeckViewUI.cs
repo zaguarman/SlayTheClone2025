@@ -1,4 +1,3 @@
-// File: Scripts/UI/DeckViewUI.cs
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,19 +6,20 @@ using UnityEngine.EventSystems;
 using static DebugLogger;
 
 public class DeckViewUI : UIComponent {
-    // Keep these serialized fields as they're required for editor setup, but use GameReferences for runtime
+    // Keep these serialized fields as they're required for editor setup
     [SerializeField] public GameObject deckViewPanel;
     [SerializeField] public Transform cardListContent;
     [SerializeField] public Button closeButton;
     [SerializeField] public TextMeshProUGUI titleText;
     [SerializeField] public TextMeshProUGUI cardsCountText;
-    [SerializeField] public int columnsCount = 4; // Increased column count
-    [SerializeField] public float cardScale = 0.7f; // Increased card scale
+    [SerializeField] public int columnsCount = 4;
+    [SerializeField] public float cardScale = 0.7f;
 
     private List<CardController> cardEntries = new List<CardController>();
     private GridLayoutGroup gridLayout;
     private ScrollRect scrollRect;
     private bool viewingDiscardPile = false;
+    private CardTooltip cardTooltip;
 
     protected override void Awake() {
         base.Awake();
@@ -53,6 +53,12 @@ public class DeckViewUI : UIComponent {
 
         // Setup grid layout for cards
         SetupCardGrid();
+
+        // Get the scroll rect component
+        scrollRect = cardListContent?.GetComponentInParent<ScrollRect>();
+        if (scrollRect == null) {
+            LogWarning("ScrollRect not found in DeckViewUI", LogTag.UI | LogTag.Initialization);
+        }
     }
 
     private void SetupCardGrid() {
@@ -69,8 +75,8 @@ public class DeckViewUI : UIComponent {
 
         // Add grid layout
         gridLayout = cardListContent.gameObject.AddComponent<GridLayoutGroup>();
-        gridLayout.cellSize = new Vector2(150, 200); // Larger card size
-        gridLayout.spacing = new Vector2(15, 15); // More spacing between cards
+        gridLayout.cellSize = new Vector2(150, 200);
+        gridLayout.spacing = new Vector2(15, 15);
         gridLayout.startCorner = GridLayoutGroup.Corner.UpperLeft;
         gridLayout.startAxis = GridLayoutGroup.Axis.Horizontal;
         gridLayout.childAlignment = TextAnchor.UpperCenter;
@@ -169,6 +175,14 @@ public class DeckViewUI : UIComponent {
         Log("HideDeckView called", LogTag.UI);
 
         if (deckViewPanel != null) {
+            // Hide tooltip when closing the panel
+            if (cardTooltip == null) {
+                cardTooltip = gameReferences.GetCardTooltip();
+            }
+            if (cardTooltip != null) {
+                cardTooltip.HideTooltip();
+            }
+
             deckViewPanel.SetActive(false);
             Log("Hiding deck view", LogTag.UI);
         } else {
@@ -302,7 +316,7 @@ public class DeckViewUI : UIComponent {
         var cardController = CardFactory.CreateCardController(card, owner, cardListContent);
 
         if (cardController != null) {
-            // Disable all interactive components for the preview
+            // Disable dragging but keep tooltip functionality
             DisableCardInteractions(cardController);
 
             // Scale the card
@@ -320,42 +334,53 @@ public class DeckViewUI : UIComponent {
     private void DisableCardInteractions(CardController cardController) {
         if (cardController == null) return;
 
-        // Disable drag-and-drop components
+        // Get the tooltip from GameReferences
+        if (cardTooltip == null) {
+            cardTooltip = gameReferences.GetCardTooltip();
+        }
+
+        // Use CardTooltip to enable tooltip-only functionality
+        if (cardTooltip != null) {
+            cardTooltip.EnableTooltipOnly(cardController);
+        }
+
+        // Additionally disable all other drag handlers that might be attached
         var dragHandlers = cardController.GetComponents<IDragHandler>();
         foreach (var handler in dragHandlers) {
             var behavior = handler as MonoBehaviour;
-            if (behavior != null) {
+            if (behavior != null && behavior != cardController) {
                 behavior.enabled = false;
             }
         }
 
-        // Disable begin drag handlers
         var beginDragHandlers = cardController.GetComponents<IBeginDragHandler>();
         foreach (var handler in beginDragHandlers) {
             var behavior = handler as MonoBehaviour;
-            if (behavior != null) {
+            if (behavior != null && behavior != cardController) {
                 behavior.enabled = false;
             }
         }
 
-        // Disable end drag handlers
         var endDragHandlers = cardController.GetComponents<IEndDragHandler>();
         foreach (var handler in endDragHandlers) {
             var behavior = handler as MonoBehaviour;
-            if (behavior != null) {
+            if (behavior != null && behavior != cardController) {
                 behavior.enabled = false;
             }
         }
-
-        // Remove any event listeners
-        cardController.OnBeginDragEvent.RemoveAllListeners();
-        cardController.OnEndDragEvent.RemoveAllListeners();
-        cardController.OnCardDropped.RemoveAllListeners();
-        cardController.OnPointerEnterHandler = null;
-        cardController.OnPointerExitHandler = null;
     }
 
     private void ClearCardEntries() {
+        // Hide the tooltip
+        if (cardTooltip == null) {
+            cardTooltip = gameReferences.GetCardTooltip();
+        }
+
+        if (cardTooltip != null) {
+            cardTooltip.HideTooltip();
+        }
+
+        // Then destroy all cards
         foreach (var entry in cardEntries) {
             if (entry != null) {
                 Destroy(entry.gameObject);

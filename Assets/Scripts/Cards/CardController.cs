@@ -26,6 +26,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     private CardData cardData;
 
     private ICreature linkedCreature;
+    private CardTooltip cardTooltip;
 
     public CardUnityEvent OnBeginDragEvent = new CardUnityEvent();
     public CardUnityEvent OnEndDragEvent = new CardUnityEvent();
@@ -37,7 +38,6 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     public ICreature GetLinkedCreature() => linkedCreature;
     public bool IsPlayer1Card() => Player?.IsPlayer1() ?? false;
     public CardData GetCardData() => cardData;
-
 
     protected override void Awake() {
         base.Awake();
@@ -58,7 +58,6 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         base.Initialize(owner);
         cardData = data;
         linkedCreature = creature;
-
         UpdateUI();
     }
 
@@ -81,6 +80,9 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             Log($"Creature {creature.Name} took {damage} damage, updating UI", LogTag.Creatures | LogTag.UI);
             linkedCreature = creature;
             UpdateUI();
+
+            // If tooltip is showing this card, update it
+            GetTooltip().UpdateTooltipContent(this);
         }
     }
 
@@ -89,7 +91,17 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             Log($"Creature {creature.Name} died, updating UI", LogTag.Creatures | LogTag.UI);
             linkedCreature = null;
             UpdateUI();
+
+            // Hide tooltip if showing
+            GetTooltip().HideTooltip();
         }
+    }
+
+    private CardTooltip GetTooltip() {
+        if (cardTooltip == null) {
+            cardTooltip = gameReferences.GetCardTooltip();
+        }
+        return cardTooltip;
     }
 
     public override void UpdateUI(IPlayer player = null) {
@@ -149,6 +161,9 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         canvasGroup.blocksRaycasts = false;
         transform.SetAsLastSibling();
 
+        // Hide tooltip when dragging starts
+        GetTooltip().HideTooltip();
+
         OnBeginDragEvent.Invoke(this);
     }
 
@@ -178,17 +193,28 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData) {
         if (!isDragging) {
+            GetTooltip().ShowTooltip(this);
             OnPointerEnterHandler?.Invoke();
         }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
         if (!isDragging) {
+            GetTooltip().HideTooltip();
             OnPointerExitHandler?.Invoke();
         }
     }
 
+    // Make sure to clean up when the card is destroyed
     protected override void OnDestroy() {
+        // Hide tooltip if showing for this card
+        if (gameReferences != null) {
+            var tooltip = GetTooltip();
+            if (tooltip != null) {
+                tooltip.HideTooltip();
+            }
+        }
+
         if (transform != null) {
             DOTween.Kill(transform);
         }
