@@ -8,6 +8,7 @@ public interface IDeck {
     void AddCardToTop(ICard card);
     void AddCardToBottom(ICard card);
     void AddToDiscardPile(ICard card);
+    void ClearDiscardPile();
     void Shuffle();
     List<ICard> GetDeckPreview();
     List<ICard> GetDiscardPilePreview();
@@ -87,6 +88,12 @@ public class Deck : IDeck {
 
         discardPile.Add(card);
         Log($"Added card to discard pile: {card.Name}", LogTag.Cards);
+    }
+
+    public void ClearDiscardPile() {
+        int count = discardPile.Count;
+        discardPile.Clear();
+        Log($"Cleared discard pile ({count} cards)", LogTag.Cards);
     }
 
     public void Shuffle() {

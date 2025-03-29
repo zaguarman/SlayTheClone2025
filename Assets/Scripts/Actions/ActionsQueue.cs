@@ -43,11 +43,12 @@ public class ActionsQueue {
             SummonCreatureAction => -1,
             MoveCreatureAction or SwapCreaturesAction => 0,
             PlayCardAction => 1,
-            DrawCardAction => 2,
             DirectDamageAction => 3,
             MarkCombatTargetAction => 4,
             DamageCreatureAction or DamagePlayerAction => 5,
-            _ => 6
+            DiscardHandAction => 6, // Discard hand should happen after all other actions
+            DrawCardsAction => 7,   // Draw cards should happen after discarding hand
+            _ => 8
         };
     }
 
@@ -119,25 +120,34 @@ public class ActionsQueue {
     }
 
     public void ResolveActions() {
-        // Add draw cards actions for both players at the end of the queue
-        var gameManager = GameManager.Instance;
-        if (gameManager != null) {
-            AddAction(new DrawCardAction(gameManager.Player1, 2));
-            AddAction(new DrawCardAction(gameManager.Player2, 2));
-        }
-
-        if (actionsList.Count == 0) {
-            Log("No actions to resolve", LogTag.Actions);
-            return;
-        }
-
         bool queueChanged = false;
         currentIterationDepth++;
-        Log($"Resolving actions. Queue size: {actionsList.Count}", LogTag.Actions);
+
+        // Log the initial state for debugging
+        int initialActionCount = actionsList.Count;
+        Log($"Resolving actions. Initial queue size: {initialActionCount}", LogTag.Actions);
 
         processedEffects.Clear();
         Log("Cleared processed effects for new resolution chain", LogTag.Effects);
 
+        // Add discard hand actions for both players
+        var gameManager = GameManager.Instance;
+        if (gameManager != null) {
+            Log("Adding mandatory discard and draw actions", LogTag.Actions);
+
+            // Add discard actions
+            AddAction(new DiscardHandAction(gameManager.Player1));
+            AddAction(new DiscardHandAction(gameManager.Player2));
+
+            // Add draw cards actions after discarding
+            AddAction(new DrawCardsAction(gameManager.Player1, gameManager.Player1.CardsToDraw));
+            AddAction(new DrawCardsAction(gameManager.Player2, gameManager.Player2.CardsToDraw));
+
+            // Log the updated queue size
+            Log($"After adding mandatory actions, queue size: {actionsList.Count}", LogTag.Actions);
+        }
+
+        // Process all actions in the queue
         while (actionsList.Count > 0) {
             var action = actionsList[0];
             actionsList.Remove(action);

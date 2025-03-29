@@ -5,6 +5,63 @@ using System;
 
 public interface IGameAction { void Execute(); }
 
+public class DiscardHandAction : IGameAction {
+    private readonly IPlayer player;
+
+    public DiscardHandAction(IPlayer player) {
+        this.player = player;
+        Log($"Created DiscardHandAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
+    }
+
+    public void Execute() {
+        if (player == null) {
+            LogError("Cannot execute discard hand action - player is null", LogTag.Actions | LogTag.Cards);
+            return;
+        }
+
+        // Discard all cards in the player's hand
+        player.DiscardHand();
+        Log($"Executed discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
+    }
+
+    public override string ToString() {
+        return $"DiscardHandAction: Player={(player?.IsPlayer1() == true ? "1" : "2")}";
+    }
+}
+
+// Replacing the old DrawCardAction with this more flexible version
+public class DrawCardsAction : IGameAction {
+    private readonly IPlayer player;
+    private readonly int amount;
+
+    public DrawCardsAction(IPlayer player, int amount = 1) {
+        this.player = player;
+        this.amount = amount;
+        Log($"Created DrawCardsAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to draw {amount} cards", LogTag.Actions | LogTag.Cards);
+    }
+
+    public void Execute() {
+        if (player == null) {
+            LogError("Cannot execute draw cards action - player is null", LogTag.Actions | LogTag.Cards);
+            return;
+        }
+
+        var cardDealingService = GameManager.Instance?.cardDealingService;
+        if (cardDealingService == null) {
+            LogError("Cannot execute draw cards action - card dealing service not available", LogTag.Actions | LogTag.Cards);
+            return;
+        }
+
+        // Draw the specified number of cards
+        cardDealingService.DrawCards(player, amount);
+        Log($"Executed draw cards action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} - drew up to {amount} cards", LogTag.Actions | LogTag.Cards);
+    }
+
+    public override string ToString() {
+        return $"DrawCardsAction: Player={(player?.IsPlayer1() == true ? "1" : "2")}, Amount={amount}";
+    }
+}
+
 public class DrawCardAction : IGameAction {
     private readonly IPlayer player;
     private readonly int amount;

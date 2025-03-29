@@ -7,6 +7,8 @@ public interface ICardDealingService {
     bool CanDrawCard(IPlayer player);
     void DrawCardForPlayer(IPlayer player);
     void ShuffleDeck(IPlayer player);
+    bool RecycleDiscardPile(IPlayer player);
+    void DrawCards(IPlayer player, int count);
     List<ICard> GetDeckPreview(IPlayer player);
     List<ICard> GetDiscardPilePreview(IPlayer player);
     int GetDiscardPileCount(IPlayer player);
@@ -63,6 +65,18 @@ public class CardDealingService : ICardDealingService {
         }
 
         var deck = playerDecks[player];
+
+        // If the deck is empty, check if we can recycle
+        if (deck.CardsRemaining == 0) {
+            // Try to recycle discard pile
+            if (GetDiscardPileCount(player) > 0) {
+                Log($"Deck empty, checking if discard pile can be recycled for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
+                return true;
+            }
+            // No cards left in deck or discard
+            return false;
+        }
+
         // Check both deck and hand size
         return deck != null && deck.CardsRemaining > 0 && player.Hand.Count < Player.MAX_HAND_SIZE;
     }
@@ -83,12 +97,85 @@ public class CardDealingService : ICardDealingService {
             return;
         }
 
+        // Check if deck is empty and needs recycling
+        if (deck.CardsRemaining == 0) {
+            bool recycled = RecycleDiscardPile(player);
+            if (!recycled) {
+                Log($"No cards left in deck or discard pile for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
+                return;
+            }
+        }
+
+        // Draw the card now that we know there are cards available
         var card = deck.DrawCard();
         if (card != null) {
             player.AddToHand(card);
             gameMediator.NotifyHandStateChanged(player);
             Log($"Drew card for {(player.IsPlayer1() ? "Player 1" : "Player 2")}: {card.Name}", LogTag.Cards);
         }
+    }
+
+    public void DrawCards(IPlayer player, int count) {
+        if (player == null) {
+            LogError("Cannot draw cards - player is null", LogTag.Cards);
+            return;
+        }
+
+        Log($"Drawing {count} cards for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
+
+        int drawnCount = 0;
+        for (int i = 0; i < count; i++) {
+            if (player.Hand.Count >= Player.MAX_HAND_SIZE) {
+                Log($"Hand full ({Player.MAX_HAND_SIZE} cards), stopped drawing after {drawnCount} cards", LogTag.Cards);
+                break;
+            }
+
+            // Check if we need to recycle before drawing
+            if (!playerDecks.TryGetValue(player, out var deck) || deck.CardsRemaining == 0) {
+                if (!RecycleDiscardPile(player)) {
+                    Log($"No more cards in deck or discard pile after drawing {drawnCount} cards", LogTag.Cards);
+                    break;
+                }
+            }
+
+            DrawCardForPlayer(player);
+            drawnCount++;
+        }
+
+        Log($"Drew {drawnCount} out of {count} requested cards for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
+    }
+
+    public bool RecycleDiscardPile(IPlayer player) {
+        if (!playerDecks.TryGetValue(player, out var deck)) {
+            LogError($"Could not find deck for player to recycle discard pile", LogTag.Cards);
+            return false;
+        }
+
+        // Check if there are cards in the discard pile
+        var discardPileCards = GetDiscardPilePreview(player);
+        if (discardPileCards.Count == 0) {
+            Log($"No cards in discard pile to recycle for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
+            return false;
+        }
+
+        // Implement recycling logic
+        if (deck is Deck deckImpl) {
+            // Add cards from discard to deck and shuffle
+            foreach (var card in discardPileCards) {
+                deckImpl.AddCardToBottom(card);
+            }
+
+            // Clear the discard pile (this should be part of the Deck implementation)
+            deckImpl.ClearDiscardPile();
+
+            // Shuffle the deck
+            deckImpl.Shuffle();
+
+            Log($"Recycled {discardPileCards.Count} cards from discard pile for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
+            return true;
+        }
+
+        return false;
     }
 
     public void ShuffleDeck(IPlayer player) {

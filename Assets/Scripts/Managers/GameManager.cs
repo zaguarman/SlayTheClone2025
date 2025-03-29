@@ -125,6 +125,10 @@ public class GameManager : InitializableComponent {
         Player1.Opponent = Player2;
         Player2.Opponent = Player1;
 
+        // Set default cards to draw
+        Player1.CardsToDraw = 5;
+        Player2.CardsToDraw = 5;
+
         gameMediator.RegisterPlayer(Player1);
         gameMediator.RegisterPlayer(Player2);
     }
@@ -201,12 +205,54 @@ public class GameManager : InitializableComponent {
     }
 
     private void OnResolveButtonClicked() {
+        Log("Resolve button clicked, processing actions queue", LogTag.UI | LogTag.Actions);
+
+        // Always resolve the actions - even if there are no player actions,
+        // this will handle the discard and draw process
         ActionsQueue?.ResolveActions();
     }
 
-    // Add method to handle draw card actions
+    // Methods to handle cards to draw
+    public void SetCardsToDraw(IPlayer player, int count) {
+        if (player == null) return;
+
+        player.CardsToDraw = count;
+        Log($"Set cards to draw for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to {count}", LogTag.Players | LogTag.Cards);
+    }
+
+    // Methods to force discard hand
+    public void DiscardHand(IPlayer player) {
+        if (player == null) return;
+
+        ActionsQueue?.AddAction(new DiscardHandAction(player));
+        Log($"Added discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
+    }
+
+    // Method to force discard hand for all players
+    public void DiscardAllHands() {
+        if (Player1 != null) {
+            ActionsQueue?.AddAction(new DiscardHandAction(Player1));
+        }
+
+        if (Player2 != null) {
+            ActionsQueue?.AddAction(new DiscardHandAction(Player2));
+        }
+
+        Log("Added discard hand actions for all players", LogTag.Actions | LogTag.Cards);
+    }
+
+    // Method to draw cards for a player
+    public void DrawCardsForPlayer(IPlayer player, int count = 1) {
+        if (player == null) return;
+
+        // Always use DrawCardsAction for consistency
+        ActionsQueue?.AddAction(new DrawCardsAction(player, count));
+        Log($"Added draw cards action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to draw {count} cards", LogTag.Actions | LogTag.Cards);
+    }
+
+    // Update the existing method to use the new action for consistency
     public void DrawCardForPlayer(IPlayer player) {
         if (player == null) return;
-        player.DrawCard();
+        DrawCardsForPlayer(player, 1);
     }
 }

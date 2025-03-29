@@ -15,11 +15,13 @@ public interface IPlayer : IEntity, IDamageable {
     List<ICard> Hand { get; }
     List<BattlefieldSlot> Battlefield { get; }
     IDeck Deck { get; }
+    int CardsToDraw { get; set; }
     void AddToHand(ICard card);
     void RemoveFromHand(ICard card);
     void AddToBattlefield(ICard creature, ITarget slotId = null);
     void RemoveFromBattlefield(ICard creature, bool destroyCard = true);
     void DiscardCard(ICard card);
+    void DiscardHand();
     PlayerDamagedUnityEvent OnDamaged { get; }
     void InitializeBattlefield(List<BattlefieldSlot> battlefieldSlots);
     void DrawCard();
@@ -34,6 +36,7 @@ public class Player : Entity, IPlayer {
     public IPlayer Opponent { get; set; }
     public List<ICard> Hand { get; private set; }
     public IDeck Deck { get; private set; }
+    public int CardsToDraw { get; set; } = 2; // Default to drawing 2 cards
 
     public List<BattlefieldSlot> Battlefield { get; private set; }
     public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
@@ -123,6 +126,25 @@ public class Player : Entity, IPlayer {
                 Log($"Discarded card {card.Name} from hand to discard pile", LogTag.Cards);
             }
         }
+    }
+
+    public void DiscardHand() {
+        Log($"Discarding entire hand for {(IsPlayer1() ? "Player 1" : "Player 2")}: {Hand.Count} cards", LogTag.Cards);
+
+        // Create a copy of the hand to avoid modification during iteration
+        List<ICard> cardsToDiscard = new List<ICard>(Hand);
+
+        // Discard each card
+        foreach (var card in cardsToDiscard) {
+            DiscardCard(card);
+        }
+
+        // Hand should be empty now, but let's ensure that
+        Hand.Clear();
+
+        // Notify that the hand has changed
+        gameMediator?.NotifyHandStateChanged(this);
+        Log($"Hand discarded for {(IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
     }
 
     public void DrawCard() {
