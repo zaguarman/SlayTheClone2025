@@ -463,18 +463,26 @@ public class MarkCombatTargetAction : IGameAction {
     public MarkCombatTargetAction(ICreature attacker, ITarget targetSlot) {
         this.attacker = attacker;
         this.targetSlot = (BattlefieldSlot)targetSlot;
+        Log($"Created MarkCombatTargetAction: {attacker?.Name} targeting slot {targetSlot?.TargetId}", LogTag.Actions | LogTag.Combat);
     }
 
     public void Execute() {
+        if (attacker == null || targetSlot == null) {
+            LogError("Cannot execute combat action - attacker or target slot is null", LogTag.Actions | LogTag.Combat);
+            return;
+        }
+
         if (targetSlot.IsOccupied()) {
             var targetCreature = targetSlot.OccupyingCreature;
             if (targetCreature != null) {
+                Log($"Creature {attacker.Name} attacking creature {targetCreature.Name}", LogTag.Combat);
                 var damageAction = new DamageCreatureAction(targetCreature, attacker.Attack, attacker);
                 GameManager.Instance.ActionsQueue.AddAction(damageAction);
             }
         } else {
             var targetPlayer = attacker.Owner?.Opponent;
             if (targetPlayer != null) {
+                Log($"Creature {attacker.Name} attacking player {(targetPlayer.IsPlayer1() ? "1" : "2")}", LogTag.Combat);
                 GameManager.Instance.ActionsQueue.AddAction(
                     new DamagePlayerAction(targetPlayer, attacker.Attack)
                 );
@@ -483,7 +491,7 @@ public class MarkCombatTargetAction : IGameAction {
     }
 
     public override string ToString() {
-        return $"MarkCombatTargetAction: Attacker={attacker?.Name}, TargetSlot={targetSlot.name}";
+        return $"MarkCombatTargetAction: Attacker={attacker?.Name}, TargetSlot={targetSlot?.TargetId}";
     }
 }
 

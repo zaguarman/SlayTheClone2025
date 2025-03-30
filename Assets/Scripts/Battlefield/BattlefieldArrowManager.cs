@@ -12,6 +12,7 @@ public class BattlefieldArrowManager {
     private Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
     private bool isUpdating = false;
     private int lastProcessedActionCount = 0;
+    private HashSet<string> lastProcessedActionKeys = new HashSet<string>();
 
     public BattlefieldArrowManager(Transform parent, GameManager gameManager, GameMediator gameMediator) {
         this.parentTransform = parent;
@@ -24,17 +25,43 @@ public class BattlefieldArrowManager {
 
     private void RegisterEvents() {
         gameMediator.AddActionsQueueChangedListener(OnActionsQueueChanged);
-        gameMediator.AddBattlefieldStateChangedListener(OnBattlefieldStateChanged); // Add this line
+        gameMediator.AddBattlefieldStateChangedListener(OnBattlefieldStateChanged);
     }
 
     private void OnActionsQueueChanged() {
         if (gameManager.ActionsQueue == null) return;
 
-        int currentActionCount = gameManager.ActionsQueue.GetPendingActionsCount();
-        if (currentActionCount != lastProcessedActionCount) {
+        var pendingActions = gameManager.ActionsQueue.GetPendingActions();
+        int currentActionCount = pendingActions.Count();
+
+        // Get the keys of all current actions
+        HashSet<string> currentActionKeys = new HashSet<string>();
+        foreach (var action in pendingActions) {
+            string actionKey = GetActionKey(action);
+            if (actionKey != null) {
+                currentActionKeys.Add(actionKey);
+            }
+        }
+
+        // Update if the count changed OR if the action keys changed
+        if (currentActionCount != lastProcessedActionCount || !SetEquals(currentActionKeys, lastProcessedActionKeys)) {
             lastProcessedActionCount = currentActionCount;
+            lastProcessedActionKeys = currentActionKeys;
             UpdateArrowsFromActionsQueue();
         }
+    }
+
+    // Helper method to check if two sets are equal
+    private bool SetEquals(HashSet<string> set1, HashSet<string> set2) {
+        if (set1.Count != set2.Count)
+            return false;
+
+        foreach (var item in set1) {
+            if (!set2.Contains(item))
+                return false;
+        }
+
+        return true;
     }
 
     private void OnBattlefieldStateChanged(IPlayer player) {
@@ -108,9 +135,9 @@ public class BattlefieldArrowManager {
 
     private string GetActionKey(IGameAction action) {
         return action switch {
-            MarkCombatTargetAction markCombatAction => $"combat_{markCombatAction.GetAttacker()?.TargetId}",
-            DamageCreatureAction damageAction => $"damage_{damageAction.GetAttacker()?.TargetId}",
-            MoveCreatureAction moveAction => $"move_{moveAction.GetCreature()?.TargetId}",
+            MarkCombatTargetAction markCombatAction => $"combat_{markCombatAction.GetAttacker()?.TargetId}_{markCombatAction.GetTargetSlot()?.TargetId}",
+            DamageCreatureAction damageAction => $"damage_{damageAction.GetAttacker()?.TargetId}_{damageAction.GetTarget()?.TargetId}",
+            MoveCreatureAction moveAction => $"move_{moveAction.GetCreature()?.TargetId}_{moveAction.GetToSlot()?.TargetId}",
             _ => null
         };
     }
@@ -256,5 +283,6 @@ public class BattlefieldArrowManager {
             Object.Destroy(dragArrowIndicator.gameObject);
         }
         lastProcessedActionCount = 0;
+        lastProcessedActionKeys.Clear();
     }
 }

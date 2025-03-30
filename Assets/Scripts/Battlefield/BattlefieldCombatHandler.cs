@@ -118,6 +118,9 @@ public class BattlefieldCombatHandler {
     private void QueueCombatAction(ICreature attackerCreature, ITarget targetSlot) {
         gameManager.ActionsQueue.AddAction(new MarkCombatTargetAction(attackerCreature, targetSlot));
         Log($"{attackerCreature.Name} with ID {attackerCreature.TargetId} targets slot {targetSlot.TargetId}", LogTag.Creatures | LogTag.Combat);
+
+        // Notify that the actions queue changed to ensure arrows update
+        GameMediator.Instance?.NotifyActionsQueueChanged();
     }
 
     public void ResetAttackingCreatures() {
