@@ -3,14 +3,17 @@ using static DebugLogger;
 
 public interface ICard : IEntity {
     List<CardEffect> Effects { get; }
+    string Description { get; set; }
     void Play(IPlayer owner, ActionsQueue context, ITarget target = null);
 }
 
 public class Card : Entity, ICard {
     public List<CardEffect> Effects { get; protected set; }
+    public string Description { get; set; }
 
     public Card(string name) : base(name) {
         Effects = new List<CardEffect>();
+        Description = "";
     }
 
     public virtual void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {

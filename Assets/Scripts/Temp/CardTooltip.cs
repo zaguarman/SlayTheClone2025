@@ -77,7 +77,7 @@ public class CardTooltip : MonoBehaviour {
         tooltipText.ForceMeshUpdate();
         // Set fixed size for all tooltip types
         float width = 350;
-        float height = 180;
+        float height = 250; // Increased from 180 to ensure there's enough space for description
         tooltipRect.sizeDelta = new Vector2(width, height);
     }
 
@@ -111,11 +111,6 @@ public class CardTooltip : MonoBehaviour {
         } else if (cardData is SpellData) {
             // Add extra padding to spell cards to make content more consistent with creatures
             cardTypeInfo = $"<b>{cardData.cardName}</b>\n<i>Spell</i>\n\n";
-
-            // If description is short, add spacing to match creature card height
-            if (description.Length < 30 && (cardData.effects == null || cardData.effects.Count == 0)) {
-                description += "\n\n";
-            }
         }
 
         // Add effects info
@@ -186,6 +181,11 @@ public class CardTooltip : MonoBehaviour {
         if (pos.y + tooltipHeight > topEdgeScreen) {
             // If tooltip would go off top edge, place it below the cursor instead
             pos.y = Input.mousePosition.y - 20 - tooltipHeight;
+        }
+
+        // Ensure the tooltip doesn't go below the bottom edge of the screen
+        if (pos.y - tooltipHeight < 0) {
+            pos.y = tooltipHeight;
         }
 
         // Set the adjusted position

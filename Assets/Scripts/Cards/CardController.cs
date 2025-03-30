@@ -119,7 +119,20 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
 
     private void UpdateCardText() {
         nameText.text = cardData.cardName;
-        descriptionText.text = cardData.description ?? string.Empty;
+
+        // Only update description text for the on-card description if it exists
+        if (descriptionText != null) {
+            // For cards in hand, show a brief description (first few words)
+            if (!string.IsNullOrEmpty(cardData.description)) {
+                string shortDesc = cardData.description;
+                if (shortDesc.Length > 30) {
+                    shortDesc = shortDesc.Substring(0, 27) + "...";
+                }
+                descriptionText.text = shortDesc;
+            } else {
+                descriptionText.text = "";
+            }
+        }
 
         if (cardData is CreatureData creatureData) {
             statsText.gameObject.SetActive(true);

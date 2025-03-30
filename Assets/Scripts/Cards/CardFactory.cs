@@ -15,6 +15,9 @@ public static class CardFactory {
         switch (cardData) {
             case CreatureData creatureData:
                 var creature = new Creature(creatureData.cardName, creatureData.attack, creatureData.health);
+                // Copy over the description
+                creature.Description = creatureData.description;
+
                 foreach (var effect in cardData.effects) {
                     var newEffect = new CardEffect {
                         effectType = effect.effectType,
@@ -32,15 +35,32 @@ public static class CardFactory {
 
             case SpellData spellData:
                 var spell = new Spell(spellData.cardName, spellData.defaultTargetType);
+                // Copy over the description
+                spell.Description = spellData.description;
 
-                // Map spell name to predefined actions
-                ConfigureSpellActions(spell, spellData.cardName);
+                // Configure spell actions based on the spell data's effects
+                ConfigureSpellActionsFromEffects(spell, spellData);
 
                 card = spell;
                 break;
         }
 
         return card;
+    }
+
+    private static void ConfigureSpellActionsFromEffects(Spell spell, SpellData spellData) {
+        // If there are explicit effects defined, use those
+        if (spellData.effects != null && spellData.effects.Count > 0) {
+            foreach (var effect in spellData.effects) {
+                foreach (var action in effect.actions) {
+                    spell.AddAction(action.actionType, action.value, action.targetType);
+                }
+            }
+        }
+        // Otherwise fall back to simple draw action
+        else {
+            spell.AddAction(ActionType.Draw, 1, TargetType.Player);
+        }
     }
 
     public static CardController CreateCardController(ICard card, IPlayer owner, Transform parent) {
@@ -75,6 +95,7 @@ public static class CardFactory {
             creatureData.cardName = creature.Name;
             creatureData.attack = creature.Attack;
             creatureData.health = creature.Health;
+            creatureData.description = creature.Description;  // Copy description
 
             // Copy effects from the creature to the new data
             creatureData.effects = creature.Effects.Select(e => new CardEffect {
@@ -95,57 +116,12 @@ public static class CardFactory {
             var spellData = ScriptableObject.CreateInstance<SpellData>();
             spellData.cardName = spell.Name;
             spellData.defaultTargetType = spell.DefaultTargetType;
-
-            spellData.description = "Spell card"; // Default fallback in case no description is found
+            spellData.description = spell.Description;  // Copy description
 
             return spellData;
         }
 
         return null;
-    }
-
-    private static void ConfigureSpellActions(Spell spell, string spellName) {
-        switch (spellName) {
-            case "Fireball":
-                // Primary effect: Deal 3 damage to target
-                spell.AddAction(ActionType.Damage, 3, TargetType.AllCreatures);
-                // Secondary effect: Draw a card FOR THE CASTER (using TargetType.Player)
-                spell.AddAction(ActionType.Draw, 1, TargetType.Player);
-                break;
-
-            case "Storm":
-                // Primary effect: Deal 1 damage to all enemy creatures
-                spell.AddAction(ActionType.Damage, 1, TargetType.EnemyCreatures);
-                // Secondary effect: Heal all friendly creatures for 1
-                spell.AddAction(ActionType.Heal, 1, TargetType.FriendlyCreatures);
-                break;
-
-            case "Insight":
-                // Primary effect: Draw 2 cards
-                spell.AddAction(ActionType.Draw, 2, TargetType.Player);
-                // Secondary effect: Heal player for 1
-                spell.AddAction(ActionType.Heal, 1, TargetType.Player);
-                break;
-
-            case "Mystic Barrier":
-                // Primary effect: Heal player for 2
-                spell.AddAction(ActionType.Heal, 2, TargetType.Player);
-                // Secondary effect: Draw a card
-                spell.AddAction(ActionType.Draw, 1, TargetType.Player);
-                break;
-
-            case "Shadow Strike":
-                // Primary effect: Deal 2 damage to target enemy creature
-                spell.AddAction(ActionType.Damage, 2, TargetType.EnemyCreatures);
-                // Secondary effect: Deal 1 damage to enemy player
-                spell.AddAction(ActionType.Damage, 1, TargetType.Enemy);
-                break;
-
-            default:
-                // Generic spell - just draw a card as fallback
-                spell.AddAction(ActionType.Draw, 1, TargetType.Player);
-                break;
-        }
     }
 
     // TODO
