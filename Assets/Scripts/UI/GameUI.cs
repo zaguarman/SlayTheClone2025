@@ -20,6 +20,7 @@ public class GameUI : UIComponent {
     private BattlefieldUI player1BattlefieldUI;
     private BattlefieldUI player2BattlefieldUI;
     private WeatherController weatherController;
+    private TurnUI turnUI;
     private bool weatherSystemInitialized = false;
 
     protected override void Awake() {
@@ -49,6 +50,15 @@ public class GameUI : UIComponent {
         InitializeWeatherSystem();
         RegisterEvents();
 
+        // Update "Resolve Actions" button to say "End Turn"
+        var resolveButton = gameReferences.GetResolveActionsButton();
+        if (resolveButton != null) {
+            var buttonText = resolveButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (buttonText != null) {
+                buttonText.text = "End Turn";
+            }
+        }
+
         IsInitialized = true;
         Log("GameUI initialized successfully", LogTag.UI | LogTag.Initialization);
         onInitialized.Invoke();
@@ -64,6 +74,39 @@ public class GameUI : UIComponent {
         player2UI = gameReferences.GetPlayer2UI();
         player1BattlefieldUI = gameReferences.GetPlayer1BattlefieldUI();
         player2BattlefieldUI = gameReferences.GetPlayer2BattlefieldUI();
+
+        // Find TurnUI, create it if it doesn't exist
+        turnUI = FindObjectOfType<TurnUI>();
+        if (turnUI == null) {
+            GameObject turnUIObj = new GameObject("TurnUI");
+            turnUIObj.transform.SetParent(transform, false);
+            turnUI = turnUIObj.AddComponent<TurnUI>();
+
+            // Add TextMeshProUGUI component for displaying turn number
+            GameObject textObj = new GameObject("TurnText");
+            textObj.transform.SetParent(turnUIObj.transform, false);
+            var turnText = textObj.AddComponent<TMPro.TextMeshProUGUI>();
+            turnText.alignment = TMPro.TextAlignmentOptions.Center;
+            turnText.fontSize = 24;
+            turnText.color = Color.white;
+
+            // Position the turn UI at the top of the screen
+            var rectTransform = turnUIObj.AddComponent<RectTransform>();
+            rectTransform.anchorMin = new Vector2(0.5f, 1);
+            rectTransform.anchorMax = new Vector2(0.5f, 1);
+            rectTransform.pivot = new Vector2(0.5f, 1);
+            rectTransform.anchoredPosition = new Vector2(0, -20);
+            rectTransform.sizeDelta = new Vector2(200, 40);
+
+            // Position the text properly
+            var textRectTransform = textObj.GetComponent<RectTransform>();
+            textRectTransform.anchorMin = Vector2.zero;
+            textRectTransform.anchorMax = Vector2.one;
+            textRectTransform.offsetMin = Vector2.zero;
+            textRectTransform.offsetMax = Vector2.zero;
+
+            Log("Created TurnUI component", LogTag.UI | LogTag.Initialization);
+        }
     }
 
     private bool ValidateReferences() {
@@ -74,6 +117,11 @@ public class GameUI : UIComponent {
 
         if (player1BattlefieldUI == null || player2BattlefieldUI == null) {
             LogError("Battlefield UI references missing", LogTag.UI | LogTag.Initialization);
+            return false;
+        }
+
+        if (turnUI == null) {
+            LogError("TurnUI reference missing", LogTag.UI | LogTag.Initialization);
             return false;
         }
 
@@ -101,6 +149,12 @@ public class GameUI : UIComponent {
         if (player2BattlefieldUI != null && gameManager.Player2 != null) {
             player2BattlefieldUI.Initialize(gameManager.Player2);
             Log("Player 2 Battlefield UI initialized", LogTag.UI | LogTag.Initialization);
+        }
+
+        // Initialize Turn UI
+        if (turnUI != null) {
+            turnUI.Initialize();
+            Log("Turn UI initialized", LogTag.UI | LogTag.Initialization | LogTag.Turns);
         }
     }
 

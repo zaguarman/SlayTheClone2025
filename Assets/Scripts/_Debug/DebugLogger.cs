@@ -48,6 +48,7 @@ public class DebugLogger : MonoBehaviour {
         Cards = 32,
         Combat = 64,
         Initialization = 128,
+        Turns = 256,
         All = ~0
     }
 
@@ -66,6 +67,7 @@ public class DebugLogger : MonoBehaviour {
         { LogTag.Cards, GetColorFromHex("#E0E0E0") },
         { LogTag.Combat, GetColorFromHex("#FF9999") },
         { LogTag.Initialization, GetColorFromHex("#DEB887") },
+        { LogTag.Turns, GetColorFromHex("#FFA500") },
     };
 
     public static readonly string[] AvailableClasses = new string[] {

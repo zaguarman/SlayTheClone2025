@@ -19,7 +19,6 @@ public class GameManager : InitializableComponent {
     }
 
     public Player Player1 { get; private set; }
-
     public Player Player2 { get; private set; }
 
     [ShowInInspector, BoxGroup("Hands"), PropertyOrder]
@@ -38,6 +37,7 @@ public class GameManager : InitializableComponent {
     public ActionsQueue ActionsQueue { get; private set; }
     public IWeatherSystem WeatherSystem { get; private set; }
     private BattlefieldCombatHandler combatHandler;
+    private TurnManager turnManager;
 
     private GameMediator gameMediator;
     private GameReferences gameReferences;
@@ -45,6 +45,7 @@ public class GameManager : InitializableComponent {
     private System.Random random = new System.Random();
 
     public BattlefieldCombatHandler CombatHandler => combatHandler;
+    public TurnManager TurnManager => turnManager;
 
     private bool weatherSystemInitialized = false;
 
@@ -70,6 +71,9 @@ public class GameManager : InitializableComponent {
         gameMediator = GameMediator.Instance;
         gameReferences = GameReferences.Instance;
         cardDealingService = new CardDealingService(gameMediator);
+
+        // Initialize turn manager
+        turnManager = TurnManager.Instance;
 
         InitializeWeatherSystem();
         InitializeCombatSystem();
@@ -200,16 +204,19 @@ public class GameManager : InitializableComponent {
     private void SetupResolveButton() {
         var resolveButton = gameReferences.GetResolveActionsButton();
         if (resolveButton != null) {
+            resolveButton.onClick.RemoveAllListeners();
             resolveButton.onClick.AddListener(OnResolveButtonClicked);
         }
     }
 
     private void OnResolveButtonClicked() {
-        Log("Resolve button clicked, processing actions queue", LogTag.UI | LogTag.Actions);
+        Log("Resolve button clicked, ending turn", LogTag.UI | LogTag.Actions | LogTag.Turns);
 
-        // Always resolve the actions - even if there are no player actions,
-        // this will handle the discard and draw process
-        ActionsQueue?.ResolveActions();
+        // Use the TurnManager to end the current turn, which will:
+        // 1. Trigger end-of-turn effects
+        // 2. Process the actions queue
+        // 3. Trigger start-of-turn effects for the next turn
+        turnManager.EndTurn();
     }
 
     // Methods to handle cards to draw
