@@ -47,7 +47,7 @@ public class CardTooltip : MonoBehaviour {
         // Store active card
         activeCard = card;
 
-        // Generate or reuse content
+        // Always update tooltip content when showing it
         UpdateTooltipContent(card);
 
         // Position at mouse with offset
@@ -68,19 +68,17 @@ public class CardTooltip : MonoBehaviour {
     public void UpdateTooltipContent(CardController card) {
         if (card == null || card.GetCardData() == null) return;
 
-        // Only regenerate if it's a different card
-        if (card != activeCard || currentContent == null) {
-            var content = GenerateTooltipContent(card);
-            currentContent = content;
-            tooltipText.text = content;
+        // Always regenerate content to ensure it's up to date
+        var content = GenerateTooltipContent(card);
+        currentContent = content;
+        tooltipText.text = content;
 
-            // Adjust size based on content
-            tooltipText.ForceMeshUpdate();
-            Vector2 textSize = tooltipText.GetRenderedValues(false);
-            float width = Mathf.Max(300, textSize.x + 30);
-            float height = Mathf.Max(80, textSize.y + 30);
-            tooltipRect.sizeDelta = new Vector2(width, height);
-        }
+        // Use a fixed size for all tooltips regardless of content
+        tooltipText.ForceMeshUpdate();
+        // Set fixed size for all tooltip types
+        float width = 350;
+        float height = 180;
+        tooltipRect.sizeDelta = new Vector2(width, height);
     }
 
     /// <summary>
@@ -111,7 +109,13 @@ public class CardTooltip : MonoBehaviour {
                 cardTypeInfo = $"<b>{cardData.cardName}</b> ({creatureData.attack}/{creatureData.health})\n<i>Creature</i>\n\n";
             }
         } else if (cardData is SpellData) {
+            // Add extra padding to spell cards to make content more consistent with creatures
             cardTypeInfo = $"<b>{cardData.cardName}</b>\n<i>Spell</i>\n\n";
+
+            // If description is short, add spacing to match creature card height
+            if (description.Length < 30 && (cardData.effects == null || cardData.effects.Count == 0)) {
+                description += "\n\n";
+            }
         }
 
         // Add effects info

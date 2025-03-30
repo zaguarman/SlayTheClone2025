@@ -82,7 +82,10 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             UpdateUI();
 
             // If tooltip is showing this card, update it
-            GetTooltip().UpdateTooltipContent(this);
+            var tooltip = GetTooltip();
+            if (tooltip != null && tooltip.gameObject.activeSelf) {
+                tooltip.UpdateTooltipContent(this);
+            }
         }
     }
 
@@ -162,7 +165,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         transform.SetAsLastSibling();
 
         // Hide tooltip when dragging starts
-        GetTooltip().HideTooltip();
+        GetTooltip()?.HideTooltip();
 
         OnBeginDragEvent.Invoke(this);
     }
@@ -193,14 +196,19 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData) {
         if (!isDragging) {
-            GetTooltip().ShowTooltip(this);
+            // Always show tooltip on hover
+            var tooltip = GetTooltip();
+            if (tooltip != null) {
+                tooltip.ShowTooltip(this);
+            }
+
             OnPointerEnterHandler?.Invoke();
         }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
         if (!isDragging) {
-            GetTooltip().HideTooltip();
+            GetTooltip()?.HideTooltip();
             OnPointerExitHandler?.Invoke();
         }
     }
