@@ -166,8 +166,12 @@ public class GameManager : InitializableComponent {
             .Cast<CreatureData>()
             .ToList();
 
-        PlaceCreaturesForPlayer(Player1, availableCreatures);
-        PlaceCreaturesForPlayer(Player2, availableCreatures);
+        // Place 3 creatures for each player
+        PlaceCreaturesForPlayer(Player1, availableCreatures, 3);
+        PlaceCreaturesForPlayer(Player2, availableCreatures, 3);
+
+        // Clean up the test setup
+        Destroy(testSetup);
     }
 
     private bool HasValidBattlefields() {
@@ -175,24 +179,42 @@ public class GameManager : InitializableComponent {
                Player2?.Battlefield != null && Player2.Battlefield.Any();
     }
 
-    private void PlaceCreaturesForPlayer(IPlayer player, List<CreatureData> availableCreatures) {
-        //for (int i = 0; i < 2; i++) {
-        //    int randomIndex = random.Next(availableCreatures.Count);
-        //    var creatureData = availableCreatures[randomIndex];
-        //    var creature = CardFactory.CreateCard(creatureData) as ICreature;
+    private void PlaceCreaturesForPlayer(IPlayer player, List<CreatureData> availableCreatures, int count) {
+        // Get the empty slots from the player's battlefield
+        var emptySlots = player.Battlefield.Where(s => !s.IsOccupied()).ToList();
 
-        //    if (creature == null) continue;
+        // Place up to 'count' creatures, or as many as we have empty slots for
+        int creaturesToPlace = Mathf.Min(count, emptySlots.Count);
 
-        //    var emptySlot = player.Battlefield.FirstOrDefault(s => !s.IsOccupied());
-        //    if (emptySlot == null) {
-        //        LogWarning($"No empty battlefield slots available for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Creatures);
-        //        continue;
-        //    }
+        // Create a copy of emptySlots that we can modify
+        List<BattlefieldSlot> availableSlots = new List<BattlefieldSlot>(emptySlots);
 
-        //    creature.SetOwner(player);
-        //    player.AddToBattlefield(creature, emptySlot);
-        //    Log($"Added {creature.Name} to {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s battlefield", LogTag.Creatures | LogTag.Initialization);
-        //}
+        for (int i = 0; i < creaturesToPlace; i++) {
+            // Get a random creature from the available ones
+            int randomCreatureIndex = random.Next(availableCreatures.Count);
+            var creatureData = availableCreatures[randomCreatureIndex];
+
+            // Get a random slot from the available slots
+            int randomSlotIndex = random.Next(availableSlots.Count);
+            var slot = availableSlots[randomSlotIndex];
+
+            // Remove the selected slot from available slots to prevent duplicates
+            availableSlots.RemoveAt(randomSlotIndex);
+
+            // Create the creature
+            var creature = CardFactory.CreateCard(creatureData) as ICreature;
+            if (creature == null) continue;
+
+            // Set the owner and add to battlefield
+            creature.SetOwner(player);
+            player.AddToBattlefield(creature, slot);
+
+            // Get the slot's index for logging purposes
+            int slotPosition = player.Battlefield.IndexOf(slot) + 1;
+
+            Log($"Added {creature.Name} to {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s battlefield in slot {slotPosition}",
+                LogTag.Creatures | LogTag.Initialization);
+        }
     }
 
     private void SetupInitialGameState() {

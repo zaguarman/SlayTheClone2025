@@ -53,12 +53,6 @@ public class DeckViewUI : UIComponent {
 
         // Setup grid layout for cards
         SetupCardGrid();
-
-        // Get the scroll rect component
-        scrollRect = cardListContent?.GetComponentInParent<ScrollRect>();
-        if (scrollRect == null) {
-            LogWarning("ScrollRect not found in DeckViewUI", LogTag.UI | LogTag.Initialization);
-        }
     }
 
     private void SetupCardGrid() {
