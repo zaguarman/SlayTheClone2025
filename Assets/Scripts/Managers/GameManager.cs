@@ -194,18 +194,82 @@ public class GameManager : InitializableComponent {
             return;
         }
 
-        // Get creature cards from decks
-        List<CreatureData> availableCreatures = new List<CreatureData>();
+        // Place creatures for each player from their own deck
+        PlaceCreaturesForPlayerFromDeck(Player1, 3);
+        PlaceCreaturesForPlayerFromDeck(Player2, 3);
+    }
 
-        // Get creatures from player 1's deck
-        var player1Cards = gameReferences.GetPlayer1DeckCards();
-        availableCreatures.AddRange(player1Cards
-            .Where(card => card is CreatureData)
-            .Cast<CreatureData>());
+    private void PlaceCreaturesForPlayerFromDeck(IPlayer player, int count) {
+        // Get the empty slots from the player's battlefield
+        var emptySlots = player.Battlefield.Where(s => !s.IsOccupied()).ToList();
 
-        // Place creatures for each player
-        PlaceCreaturesForPlayer(Player1, availableCreatures, 3);
-        PlaceCreaturesForPlayer(Player2, availableCreatures, 3);
+        // If there are no empty slots, we can't place any creatures
+        if (emptySlots.Count == 0) {
+            LogWarning($"No empty slots available for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Initialization);
+            return;
+        }
+
+        // Get a preview of the player's deck to find creatures
+        var deckPreview = cardDealingService.GetDeckPreview(player);
+        List<ICard> deckCreatures = deckPreview.Where(card => card is ICreature).ToList();
+
+        // Place up to 'count' creatures, or as many as we have empty slots/creatures for
+        int creaturesToPlace = Mathf.Min(count, emptySlots.Count, deckCreatures.Count);
+
+        // Create a copy of emptySlots that we can modify
+        List<BattlefieldSlot> availableSlots = new List<BattlefieldSlot>(emptySlots);
+        List<ICard> creaturesPlaced = new List<ICard>();
+
+        for (int i = 0; i < creaturesToPlace; i++) {
+            // Get a random creature from the available ones
+            int randomCreatureIndex = random.Next(deckCreatures.Count);
+            var creatureCard = deckCreatures[randomCreatureIndex];
+
+            // Remove to avoid duplicates
+            deckCreatures.RemoveAt(randomCreatureIndex);
+
+            // Get a random slot from the available slots
+            int randomSlotIndex = random.Next(availableSlots.Count);
+            var slot = availableSlots[randomSlotIndex];
+
+            // Remove the selected slot from available slots to prevent duplicates
+            availableSlots.RemoveAt(randomSlotIndex);
+
+            // Track the creature we're placing so we can remove it from the deck later
+            creaturesPlaced.Add(creatureCard);
+
+            // Set the owner and add to battlefield
+            ICreature creature = creatureCard as ICreature;
+            if (creature == null) continue;
+
+            creature.SetOwner(player);
+            player.AddToBattlefield(creature, slot);
+
+            // Get the slot's index for logging purposes
+            int slotPosition = player.Battlefield.IndexOf(slot) + 1;
+
+            Log($"Added {creature.Name} to {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s battlefield in slot {slotPosition} from deck",
+                LogTag.Creatures | LogTag.Initialization);
+        }
+
+        // Remove the placed creatures from the deck
+        if (creaturesPlaced.Count > 0) {
+            RemoveCardsFromDeck(player, creaturesPlaced);
+        }
+    }
+
+    private void RemoveCardsFromDeck(IPlayer player, List<ICard> cardsToRemove) {
+        if (player == null || cardsToRemove == null || cardsToRemove.Count == 0) return;
+
+        // Access the Deck implementation to remove the cards
+        if (cardDealingService != null) {
+            foreach (var card in cardsToRemove) {
+                cardDealingService.RemoveCardFromDeck(player, card);
+            }
+
+            Log($"Removed {cardsToRemove.Count} creatures from {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s deck",
+                LogTag.Cards | LogTag.Initialization);
+        }
     }
 
     private bool HasValidBattlefields() {

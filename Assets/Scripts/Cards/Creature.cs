@@ -1,6 +1,7 @@
 using static DebugLogger;
 using static Enums;
 using System.Linq;
+using System;
 
 public interface ICreature : ICard {
     int Attack { get; }
@@ -32,7 +33,11 @@ public class Creature : Card, ICreature {
     public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
         Log($"Playing {Name} with {Effects.Count} effects", LogTag.Creatures | LogTag.Cards | LogTag.Actions);
         Owner = owner;
-        context.AddAction(new SummonCreatureAction(this, owner, target));
+
+        // Check if the creature is in the player's hand to determine if we need to remove it from the deck
+        bool fromHand = owner.Hand.Contains(this);
+
+        context.AddAction(new SummonCreatureAction(this, owner, target, fromHand));
     }
 
     public void TakeDamage(int damage) {
@@ -97,6 +102,9 @@ public class Creature : Card, ICreature {
                         break;
                     case ActionType.Draw:
                         ProcessDrawEffect(action, actionsQueue);
+                        break;
+                    case ActionType.Summon:
+                        ProcessSummonEffect(action, actionsQueue);
                         break;
                         // Additional cases can be added for other action types
                 }
@@ -194,6 +202,72 @@ public class Creature : Card, ICreature {
             Log($"Adding DrawCardAction - Player: {(targetPlayer.IsPlayer1() ? "1" : "2")}, Amount: {action.value}",
                 LogTag.Creatures | LogTag.Actions | LogTag.Cards);
             actionsQueue.AddAction(new DrawCardAction(targetPlayer, action.value));
+        }
+    }
+
+    // Add this method inside Creature class to support summoning effects
+    private void ProcessSummonEffect(EffectAction action, ActionsQueue actionsQueue) {
+        if (Owner == null) {
+            LogError($"Cannot handle summon effect for {Name} - Owner is null", LogTag.Creatures | LogTag.Effects);
+            return;
+        }
+
+        Log($"Processing summon effect for {Name}. TargetType: {action.targetType}, Value: {action.value}",
+            LogTag.Creatures | LogTag.Actions);
+
+        // Handle summoning based on targeting
+        IPlayer targetPlayer = Owner;
+        if (action.targetType == TargetType.Enemy) {
+            targetPlayer = Owner.Opponent;
+        } else if (action.targetType != TargetType.Player && action.targetType != TargetType.FriendlyCreatures) {
+            LogWarning($"Unexpected target type for summon effect: {action.targetType}", LogTag.Effects);
+            return;
+        }
+
+        // Get available creature cards from the deck
+        var gameManager = GameManager.Instance;
+        if (gameManager?.cardDealingService == null) return;
+
+        var deckCards = gameManager.cardDealingService.GetDeckPreview(targetPlayer);
+        var creaturesInDeck = deckCards.Where(c => c is ICreature).ToList();
+
+        if (creaturesInDeck.Count == 0) {
+            Log($"No creatures available in {(targetPlayer.IsPlayer1() ? "Player 1" : "Player 2")}'s deck to summon",
+                LogTag.Creatures | LogTag.Cards);
+            return;
+        }
+
+        // Find valid slots
+        var validSlots = targetPlayer.Battlefield.Where(s => !s.IsOccupied()).ToList();
+        if (validSlots.Count == 0) {
+            Log($"No valid slots available for {(targetPlayer.IsPlayer1() ? "Player 1" : "Player 2")} to summon creatures",
+                LogTag.Creatures | LogTag.Cards);
+            return;
+        }
+
+        // Determine how many creatures to summon (up to value, but limited by available slots/creatures)
+        int countToSummon = Math.Min(action.value, Math.Min(validSlots.Count, creaturesInDeck.Count));
+        var random = new System.Random();
+
+        for (int i = 0; i < countToSummon; i++) {
+            // Select a random creature from the deck
+            int creatureIndex = random.Next(creaturesInDeck.Count);
+            var creatureToSummon = creaturesInDeck[creatureIndex] as ICreature;
+            if (creatureToSummon == null) continue;
+
+            // Remove it from our local list to avoid duplicates
+            creaturesInDeck.RemoveAt(creatureIndex);
+
+            // Select a random valid slot
+            int slotIndex = random.Next(validSlots.Count);
+            var slot = validSlots[slotIndex];
+            validSlots.RemoveAt(slotIndex);
+
+            // Add summon action (with fromDeck=true since we're summoning from deck)
+            actionsQueue.AddAction(new SummonCreatureAction(creatureToSummon, targetPlayer, slot, true));
+
+            Log($"Queued summon effect for {creatureToSummon.Name} to slot {slot.TargetId}",
+                LogTag.Creatures | LogTag.Effects | LogTag.Actions);
         }
     }
 }

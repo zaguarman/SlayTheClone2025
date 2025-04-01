@@ -234,22 +234,40 @@ public class SummonCreatureAction : IGameAction {
     private readonly ICreature creature;
     private readonly IPlayer owner;
     private readonly ITarget target;
+    private readonly bool fromDeck;
 
-    public SummonCreatureAction(ICreature creature, IPlayer owner, ITarget target = null) {
+    public SummonCreatureAction(ICreature creature, IPlayer owner, ITarget target = null, bool fromDeck = false) {
         this.creature = creature;
         this.owner = owner;
         this.target = target;
-        Log($"Created SummonCreatureAction for {creature.Name} targeting slot {target.TargetId} with {creature.Effects.Count} effects", LogTag.Actions | LogTag.Creatures);
+        this.fromDeck = fromDeck;
+        Log($"Created SummonCreatureAction for {creature.Name} targeting slot {target?.TargetId} with {creature.Effects.Count} effects (fromDeck: {fromDeck})",
+            LogTag.Actions | LogTag.Creatures);
     }
 
     public void Execute() {
+        if (creature == null || owner == null) {
+            LogError("Cannot execute summon action - creature or owner is null", LogTag.Actions);
+            return;
+        }
+
         // 1. Set owner first
         creature.SetOwner(owner);
 
-        // 2. Add to battlefield before processing effects
+        // 2. If summoning from hand, remove from the player's deck to prevent drawing it later
+        if (!fromDeck && !owner.Hand.Contains(creature)) {
+            var gameManager = GameManager.Instance;
+            if (gameManager?.cardDealingService != null) {
+                gameManager.cardDealingService.RemoveCardFromDeck(owner, creature);
+                Log($"Removed {creature.Name} from {(owner.IsPlayer1() ? "Player 1" : "Player 2")}'s deck after summoning from hand",
+                    LogTag.Cards | LogTag.Creatures);
+            }
+        }
+
+        // 3. Add to battlefield
         owner.AddToBattlefield(creature, target);
 
-        // 3. Process effects after battlefield placement
+        // 4. Process effects after battlefield placement
         if (creature is Creature c) {
             Log($"Processing OnPlay effects for {c.Name} with {c.Effects.Count} effects",
                 LogTag.Actions | LogTag.Effects);
@@ -258,7 +276,7 @@ public class SummonCreatureAction : IGameAction {
     }
 
     public override string ToString() {
-        return $"SummonCreatureAction: Creature={creature?.Name}, Player={(owner.IsPlayer1() ? "1" : "2")}, Target={target?.TargetId}";
+        return $"SummonCreatureAction: Creature={creature?.Name}, Player={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")}, Target={target?.TargetId}, FromDeck={fromDeck}";
     }
 }
 
@@ -434,15 +452,22 @@ public class PlayCardAction : IGameAction {
             return;
         }
 
-        // Discard the card from hand instead of just removing it
+        // Discard the card from hand
+        bool wasInHand = owner.Hand.Contains(card);
         owner.DiscardCard(card);
 
         // Process based on card type
         if (card is Spell spell) {
             // Create a specific spell action for better tracking
             GameManager.Instance.ActionsQueue.AddAction(new PlaySpellAction(spell, owner, target));
+        } else if (card is ICreature creature) {
+            // If it's a creature, explicitly create a summon action with fromHand=true
+            // This tells the action to remove the card from the deck if it wasn't already in hand
+            GameManager.Instance.ActionsQueue.AddAction(
+                new SummonCreatureAction(creature, owner, target, wasInHand)
+            );
         } else {
-            // Process any immediate effects for other card types
+            // Process any other card types
             card.Play(owner, GameManager.Instance.ActionsQueue, target);
         }
 

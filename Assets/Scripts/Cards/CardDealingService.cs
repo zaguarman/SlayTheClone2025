@@ -12,7 +12,10 @@ public interface ICardDealingService {
     List<ICard> GetDeckPreview(IPlayer player);
     List<ICard> GetDiscardPilePreview(IPlayer player);
     int GetDiscardPileCount(IPlayer player);
+    bool RemoveCardFromDeck(IPlayer player, ICard card);
 }
+
+
 
 public class CardDealingService : ICardDealingService {
     private readonly Dictionary<IPlayer, IDeck> playerDecks = new Dictionary<IPlayer, IDeck>();
@@ -226,5 +229,29 @@ public class CardDealingService : ICardDealingService {
         }
 
         return deck.GetDiscardPilePreview().Count;
+    }
+
+    public bool RemoveCardFromDeck(IPlayer player, ICard card) {
+        if (player == null || card == null) {
+            LogError("Cannot remove card from deck - player or card is null", LogTag.Cards);
+            return false;
+        }
+
+        if (!playerDecks.TryGetValue(player, out var deck)) {
+            LogError($"Could not find deck for player to remove card", LogTag.Cards);
+            return false;
+        }
+
+        if (deck is Deck deckImpl) {
+            bool removed = deckImpl.RemoveCard(card);
+            if (removed) {
+                Log($"Removed card {card.Name} from {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s deck", LogTag.Cards);
+            } else {
+                LogWarning($"Failed to remove card {card.Name} from {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s deck - card not found", LogTag.Cards);
+            }
+            return removed;
+        }
+
+        return false;
     }
 }

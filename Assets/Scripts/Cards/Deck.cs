@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using static DebugLogger;
 
 public interface IDeck {
@@ -12,6 +13,7 @@ public interface IDeck {
     void Shuffle();
     List<ICard> GetDeckPreview();
     List<ICard> GetDiscardPilePreview();
+    bool RemoveCard(ICard card);
 }
 
 public class Deck : IDeck {
@@ -108,6 +110,38 @@ public class Deck : IDeck {
         }
 
         Log($"Shuffled deck ({cards.Count} cards)", LogTag.Cards);
+    }
+
+    public bool RemoveCard(ICard card) {
+        if (card == null) {
+            LogError("Attempted to remove null card from deck", LogTag.Cards);
+            return false;
+        }
+
+        // Find the card by name and ID (since we can't check reference equality directly)
+        var cardToRemove = cards.FirstOrDefault(c =>
+            c.Name == card.Name && c.TargetId == card.TargetId);
+
+        if (cardToRemove != null) {
+            bool removed = cards.Remove(cardToRemove);
+            if (removed) {
+                Log($"Removed card {card.Name} from deck", LogTag.Cards);
+            }
+            return removed;
+        }
+
+        // If we couldn't find the exact card, try to find any card with the same name
+        cardToRemove = cards.FirstOrDefault(c => c.Name == card.Name);
+        if (cardToRemove != null) {
+            bool removed = cards.Remove(cardToRemove);
+            if (removed) {
+                Log($"Removed card {card.Name} from deck (by name match)", LogTag.Cards);
+            }
+            return removed;
+        }
+
+        LogWarning($"Could not find card {card.Name} in deck to remove", LogTag.Cards);
+        return false;
     }
 
     // Get a copy of the deck for preview purposes
