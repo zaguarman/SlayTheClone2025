@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: HealingDove
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: e2ecd44f-bfc9-4e2e-b49b-ef0d9e52e8d9
+  cardId: f2dcc09f-4ada-4e23-942c-06e0cd76b121
   cardName: Healing Dove
   description: Its gentle presence mends wounds.
   cardType: 0

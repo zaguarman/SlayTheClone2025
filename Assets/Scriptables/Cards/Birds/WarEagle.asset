@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: WarEagle
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: fae3665c-f648-460d-ab9f-09ac90162a5d
+  cardId: d1265de8-46ff-464b-8ff5-808dde630052
   cardName: War Eagle
   description: A battle-hardened bird that leads the charge in combat.
   cardType: 0

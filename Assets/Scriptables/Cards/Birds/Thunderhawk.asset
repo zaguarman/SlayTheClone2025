@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Thunderhawk
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 994008bf-7e27-4b2c-b598-414ebf2589fe
+  cardId: c0338b55-c9ce-4e7d-99a0-6910bfa491b2
   cardName: Thunderhawk
   description: Calls lightning down upon enemies.
   cardType: 0

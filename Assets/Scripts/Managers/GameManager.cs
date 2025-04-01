@@ -142,50 +142,9 @@ public class GameManager : InitializableComponent {
         var player1Cards = gameReferences.GetPlayer1DeckCards();
         var player2Cards = gameReferences.GetPlayer2DeckCards();
 
-        // Make sure we have cards
-        if (player1Cards.Count == 0 || player2Cards.Count == 0) {
-            LogError("One or both player decks are empty. Using fallback cards.", LogTag.Cards | LogTag.Initialization);
-
-            // Create some fallback cards if the decks are empty
-            var fallbackCards = CreateFallbackCards();
-
-            if (player1Cards.Count == 0)
-                player1Cards = new List<CardData>(fallbackCards);
-
-            if (player2Cards.Count == 0)
-                player2Cards = new List<CardData>(fallbackCards);
-        }
-
         cardDealingService.InitializeDecks(player1Cards, player2Cards);
         Log($"Decks initialized with {player1Cards.Count} cards for Player 1 and {player2Cards.Count} cards for Player 2",
             LogTag.Cards | LogTag.Initialization);
-    }
-
-    private List<CardData> CreateFallbackCards() {
-        Log("Creating fallback cards", LogTag.Cards | LogTag.Initialization);
-
-        List<CardData> fallbackCards = new List<CardData>();
-
-        // Create a few basic creature cards
-        for (int i = 1; i <= 5; i++) {
-            CreatureData creature = ScriptableObject.CreateInstance<CreatureData>();
-            creature.cardName = $"Creature {i}";
-            creature.description = "A basic creature";
-            creature.attack = i;
-            creature.health = i + 1;
-            fallbackCards.Add(creature);
-        }
-
-        // Create a couple of spell cards
-        for (int i = 1; i <= 2; i++) {
-            SpellData spell = ScriptableObject.CreateInstance<SpellData>();
-            spell.cardName = $"Spell {i}";
-            spell.description = "A basic spell";
-            spell.defaultTargetType = Enums.TargetType.EnemyCreatures;
-            fallbackCards.Add(spell);
-        }
-
-        return fallbackCards;
     }
 
     private void PlaceInitialCreatures() {

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: RoyalFalcon
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: a92fb7df-f2f7-40b3-a6d7-01c4f719ec5a
+  cardId: 31b5c862-2e92-4ae5-93cc-ae88d4b96235
   cardName: Royal Falcon
   description: A noble bird trained for hunting, with exceptional speed.
   cardType: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: VenomousSpider
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: bb753e1a-5163-4c15-8630-a8da07fbce94
+  cardId: 7b97c963-4f65-4d45-b547-fa2af8d79ab5
   cardName: Venomous Spider
   description: A small but deadly spider whose poison weakens enemies over time.
   cardType: 0
