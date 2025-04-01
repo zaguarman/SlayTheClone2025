@@ -47,13 +47,13 @@ public class DebugLoggerSettingsEditor : Editor {
         tagSettingsProp = serializedObject.FindProperty("tagSettings");
         classFiltersProp = serializedObject.FindProperty("classFilters");
         showStackTraceProp = serializedObject.FindProperty("showStackTrace");
-        InitializeStyles();
 
         if (!Application.isPlaying && (tagSettingsProp == null || tagSettingsProp.arraySize == 0)) {
             InitializeDefaultTagSettings();
         }
     }
 
+    // Moved initialization to OnInspectorGUI to ensure it runs inside GUI context
     private void InitializeStyles() {
         if (buttonStyle == null) {
             buttonStyle = new GUIStyle(GUI.skin.button) {
@@ -69,6 +69,9 @@ public class DebugLoggerSettingsEditor : Editor {
     }
 
     public override void OnInspectorGUI() {
+        // Initialize styles at the beginning of OnInspectorGUI
+        InitializeStyles();
+
         serializedObject.Update();
 
         DrawHeaderTitle();
@@ -100,7 +103,7 @@ public class DebugLoggerSettingsEditor : Editor {
 
         EditorGUI.indentLevel++;
         tagSearchString = EditorGUILayout.TextField("Search", tagSearchString ?? "", GUILayout.Height(rowHeight));
-        
+
         EditorGUILayout.Space(20);
 
         if (GUILayout.Button("Cycle All Tags", GUILayout.Height(rowHeight))) {
