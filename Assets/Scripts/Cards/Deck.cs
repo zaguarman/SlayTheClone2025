@@ -20,6 +20,7 @@ public class Deck : IDeck {
     private List<ICard> cards;
     private List<ICard> discardPile;
     private System.Random random;
+    private List<CardData> originalCardDataList;
 
     public int CardsRemaining => cards?.Count ?? 0;
     public int DiscardPileCount => discardPile?.Count ?? 0;
@@ -35,6 +36,9 @@ public class Deck : IDeck {
             LogError("Attempted to initialize deck with null or empty card list", LogTag.Cards | LogTag.Initialization);
             return;
         }
+
+        // Store the original card data for restoration purposes
+        originalCardDataList = new List<CardData>(cardDataList);
 
         cards.Clear();
         discardPile.Clear();
@@ -88,8 +92,63 @@ public class Deck : IDeck {
             return;
         }
 
+        // Check if the card is a creature that needs restoration
+        if (card is ICreature creature) {
+            // Look for the original card data to restore from using cardId
+            ICard restoredCard = RestoreToOriginalValues(creature);
+
+            if (restoredCard != null) {
+                discardPile.Add(restoredCard);
+                Log($"Added restored creature card to discard pile: {restoredCard.Name}", LogTag.Cards);
+                return;
+            }
+        }
+
+        // If it's not a creature or restoration failed, add the original card
         discardPile.Add(card);
         Log($"Added card to discard pile: {card.Name}", LogTag.Cards);
+    }
+
+    private ICard RestoreToOriginalValues(ICreature creature) {
+        if (creature == null) return null;
+
+        Log($"Restoring creature {creature.Name} to initial values", LogTag.Cards | LogTag.Creatures);
+
+        // Find the original card data by ID instead of name
+        CardData originalData = originalCardDataList?.FirstOrDefault(c => c.cardId == creature.CardId);
+
+        if (originalData != null) {
+            // Create a fresh card from the original data
+            ICard restoredCard = CardFactory.CreateCard(originalData);
+
+            Log($"Successfully restored {creature.Name} to initial values using cardId: {creature.CardId}", LogTag.Cards | LogTag.Creatures);
+            return restoredCard;
+        }
+
+        // If original data not found by ID, try to find by name as fallback
+        originalData = originalCardDataList?.FirstOrDefault(c => c.cardName == creature.Name);
+
+        if (originalData != null) {
+            // Create a fresh card from the original data
+            ICard restoredCard = CardFactory.CreateCard(originalData);
+            Log($"Successfully restored {creature.Name} to initial values by name (fallback)", LogTag.Cards | LogTag.Creatures);
+            return restoredCard;
+        }
+
+        // If original data not found, create a generic version
+        Log($"Could not find original data for {creature.Name} with ID {creature.CardId}, creating generic version", LogTag.Cards | LogTag.Creatures);
+        int health = creature.Health <= 0 ? creature.Attack + 1 : creature.Health;
+        var newCreature = new Creature(creature.Name, creature.Attack, health, creature.CardId);
+        newCreature.Description = creature.Description;
+
+        // Copy effects
+        if (creature.Effects != null && creature.Effects.Count > 0) {
+            foreach (var effect in creature.Effects) {
+                newCreature.Effects.Add(effect);
+            }
+        }
+
+        return newCreature;
     }
 
     public void ClearDiscardPile() {
@@ -118,19 +177,18 @@ public class Deck : IDeck {
             return false;
         }
 
-        // Find the card by name and ID (since we can't check reference equality directly)
-        var cardToRemove = cards.FirstOrDefault(c =>
-            c.Name == card.Name && c.TargetId == card.TargetId);
+        // First try to find by CardId (more reliable than name)
+        var cardToRemove = cards.FirstOrDefault(c => c.CardId == card.CardId);
 
         if (cardToRemove != null) {
             bool removed = cards.Remove(cardToRemove);
             if (removed) {
-                Log($"Removed card {card.Name} from deck", LogTag.Cards);
+                Log($"Removed card {card.Name} from deck by ID: {card.CardId}", LogTag.Cards);
             }
             return removed;
         }
 
-        // If we couldn't find the exact card, try to find any card with the same name
+        // If we couldn't find by CardId, fall back to finding by name
         cardToRemove = cards.FirstOrDefault(c => c.Name == card.Name);
         if (cardToRemove != null) {
             bool removed = cards.Remove(cardToRemove);
@@ -140,7 +198,7 @@ public class Deck : IDeck {
             return removed;
         }
 
-        LogWarning($"Could not find card {card.Name} in deck to remove", LogTag.Cards);
+        LogWarning($"Could not find card {card.Name} (ID: {card.CardId}) in deck to remove", LogTag.Cards);
         return false;
     }
 

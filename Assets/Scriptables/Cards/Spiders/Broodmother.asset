@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Broodmother
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
+  cardId: 19943c0d-59dc-4a65-aa21-e1dcec069045
   cardName: Broodmother
   description: Spawns smaller spiders when threatened.
   cardType: 0

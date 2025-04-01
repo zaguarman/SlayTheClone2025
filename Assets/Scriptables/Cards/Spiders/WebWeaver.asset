@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: WebWeaver
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
+  cardId: 42de7668-60cd-4b91-8d58-ee4600215814
   cardName: Web Weaver
   description: Spins strong webs that immobilize attackers.
   cardType: 0

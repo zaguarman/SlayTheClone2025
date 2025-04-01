@@ -26,6 +26,12 @@ public class Creature : Card, ICreature {
         Health = health;
     }
 
+    // Constructor with cardId parameter
+    public Creature(string name, int attack, int health, string cardId) : base(name, cardId) {
+        Attack = attack;
+        Health = health;
+    }
+
     public void SetOwner(IPlayer owner) {
         Owner = owner;
     }
@@ -60,9 +66,17 @@ public class Creature : Card, ICreature {
 
         if (Health <= 0 && !isDead) {
             isDead = true;
-            Owner?.RemoveFromBattlefield(this);
-            Log($"Creature died: {Name}", LogTag.Creatures);
+
+            // Notify that the creature died (for event listeners)
             GameMediator.Instance?.NotifyCreatureDied(this);
+
+            // Remove from battlefield (which will handle adding to discard pile)
+            if (Owner != null) {
+                // When a creature dies, we want to add it to the discard pile but not destroy the card
+                Owner.RemoveFromBattlefield(this, false);
+            }
+
+            Log($"Creature died: {Name}", LogTag.Creatures);
         }
 
         GameMediator.Instance?.NotifyCreatureDamaged(this, damage);

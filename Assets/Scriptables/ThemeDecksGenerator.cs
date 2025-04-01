@@ -1,0 +1,481 @@
+#if UNITY_EDITOR
+using UnityEngine;
+using UnityEditor;
+using System.Collections.Generic;
+using System.IO;
+using static Enums;
+using System.Linq;
+
+public class ThemeDecksGenerator : EditorWindow {
+    [MenuItem("Cards/Generate Theme Decks")]
+    public static void GenerateThemeDecks() {
+        // Create directories if they don't exist
+        CreateDirectoryIfNeeded("Assets/Scriptables");
+        CreateDirectoryIfNeeded("Assets/Scriptables/Cards");
+        CreateDirectoryIfNeeded("Assets/Scriptables/Cards/Spiders");
+        CreateDirectoryIfNeeded("Assets/Scriptables/Cards/Birds");
+        CreateDirectoryIfNeeded("Assets/Scriptables/Decks");
+
+        // Generate Spider Cards
+        List<CardDataScriptableObject> spiderCards = GenerateSpiderCards();
+
+        // Generate Bird Cards
+        List<CardDataScriptableObject> birdCards = GenerateBirdCards();
+
+        // Create Spider Deck
+        CreateDeck("SpiderDeck", spiderCards, "Assets/Scriptables/Decks/SpiderDeck.asset");
+
+        // Create Bird Deck
+        CreateDeck("BirdDeck", birdCards, "Assets/Scriptables/Decks/BirdDeck.asset");
+
+        AssetDatabase.SaveAssets();
+        Debug.Log("Generated Spider and Bird decks successfully!");
+    }
+
+    [MenuItem("Cards/Show Card IDs")]
+    public static void ShowCardIDs() {
+        // Show card IDs in the console for reference
+        Dictionary<string, string> spiderIds = GatherExistingCardIds("Assets/Scriptables/Cards/Spiders");
+        Dictionary<string, string> birdIds = GatherExistingCardIds("Assets/Scriptables/Cards/Birds");
+
+        Debug.Log("Spider Cards IDs:");
+        foreach (var pair in spiderIds) {
+            Debug.Log($"{pair.Key}: {pair.Value}");
+        }
+
+        Debug.Log("Bird Cards IDs:");
+        foreach (var pair in birdIds) {
+            Debug.Log($"{pair.Key}: {pair.Value}");
+        }
+    }
+
+    private static void CreateDirectoryIfNeeded(string path) {
+        if (!Directory.Exists(path)) {
+            Directory.CreateDirectory(path);
+            AssetDatabase.Refresh();
+        }
+    }
+
+    private static List<CardDataScriptableObject> GenerateSpiderCards() {
+        List<CardDataScriptableObject> cards = new List<CardDataScriptableObject>();
+
+        // Check if cards already exist and gather their IDs
+        Dictionary<string, string> existingCardIds = GatherExistingCardIds("Assets/Scriptables/Cards/Spiders");
+
+        // 1. Venomous Spider
+        cards.Add(CreateSpiderCard(
+            "Venomous Spider",
+            "A small but deadly spider whose poison weakens enemies over time.",
+            2, 2,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
+                }),
+            "Assets/Scriptables/Cards/Spiders/VenomousSpider.asset",
+            existingCardIds.ContainsKey("VenomousSpider") ? existingCardIds["VenomousSpider"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 2. Web Weaver
+        cards.Add(CreateSpiderCard(
+            "Web Weaver",
+            "Spins strong webs that immobilize attackers.",
+            1, 3,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
+                }),
+            "Assets/Scriptables/Cards/Spiders/WebWeaver.asset",
+            existingCardIds.ContainsKey("WebWeaver") ? existingCardIds["WebWeaver"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 3. Shadow Lurker
+        cards.Add(CreateSpiderCard(
+            "Shadow Lurker",
+            "A stealthy spider that ambushes from the shadows.",
+            3, 1,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 2, TargetType.EnemyCreatures)
+                }),
+            "Assets/Scriptables/Cards/Spiders/ShadowLurker.asset",
+            existingCardIds.ContainsKey("ShadowLurker") ? existingCardIds["ShadowLurker"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 4. Broodmother
+        cards.Add(CreateSpiderCard(
+            "Broodmother",
+            "Spawns smaller spiders when threatened.",
+            2, 4,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.EndOfTurn,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Draw, 1, TargetType.Player)
+                }),
+            "Assets/Scriptables/Cards/Spiders/Broodmother.asset",
+            existingCardIds.ContainsKey("Broodmother") ? existingCardIds["Broodmother"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 5. Tunnel Spider
+        cards.Add(CreateSpiderCard(
+            "Tunnel Spider",
+            "Creates elaborate tunnel networks to ambush prey.",
+            4, 2,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.StartOfTurn,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 1, TargetType.Enemy)
+                }),
+            "Assets/Scriptables/Cards/Spiders/TunnelSpider.asset",
+            existingCardIds.ContainsKey("TunnelSpider") ? existingCardIds["TunnelSpider"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 6. Silk Spinner
+        cards.Add(CreateSpiderCard(
+            "Silk Spinner",
+            "Its valuable silk can heal allies.",
+            1, 2,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.StartOfTurn,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Heal, 1, TargetType.FriendlyCreatures)
+                }),
+            "Assets/Scriptables/Cards/Spiders/SilkSpinner.asset",
+            existingCardIds.ContainsKey("SilkSpinner") ? existingCardIds["SilkSpinner"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 7. Giant Tarantula
+        cards.Add(CreateSpiderCard(
+            "Giant Tarantula",
+            "This massive spider crushes opponents with brute force.",
+            5, 5,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 2, TargetType.EnemyCreatures)
+                }),
+            "Assets/Scriptables/Cards/Spiders/GiantTarantula.asset",
+            existingCardIds.ContainsKey("GiantTarantula") ? existingCardIds["GiantTarantula"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 8. Widow Assassin
+        cards.Add(CreateSpiderCard(
+            "Widow Assassin",
+            "Its deadly venom can take down creatures many times its size.",
+            3, 2,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 3, TargetType.EnemyCreatures)
+                }),
+            "Assets/Scriptables/Cards/Spiders/WidowAssassin.asset",
+            existingCardIds.ContainsKey("WidowAssassin") ? existingCardIds["WidowAssassin"] : System.Guid.NewGuid().ToString()
+        ));
+
+        return cards;
+    }
+
+    private static List<CardDataScriptableObject> GenerateBirdCards() {
+        List<CardDataScriptableObject> cards = new List<CardDataScriptableObject>();
+
+        // Check if cards already exist and gather their IDs
+        Dictionary<string, string> existingCardIds = GatherExistingCardIds("Assets/Scriptables/Cards/Birds");
+
+        // 1. Royal Falcon
+        cards.Add(CreateBirdCard(
+            "Royal Falcon",
+            "A noble bird trained for hunting, with exceptional speed.",
+            3, 2,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 1, TargetType.AllCreatures)
+                }),
+            "Assets/Scriptables/Cards/Birds/RoyalFalcon.asset",
+            existingCardIds.ContainsKey("RoyalFalcon") ? existingCardIds["RoyalFalcon"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 2. Wise Owl
+        cards.Add(CreateBirdCard(
+            "Wise Owl",
+            "Its wisdom allows allies to find new strategies.",
+            2, 3,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.EndOfTurn,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Draw, 1, TargetType.Player)
+                }),
+            "Assets/Scriptables/Cards/Birds/WiseOwl.asset",
+            existingCardIds.ContainsKey("WiseOwl") ? existingCardIds["WiseOwl"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 3. Thunderhawk
+        cards.Add(CreateBirdCard(
+            "Thunderhawk",
+            "Calls lightning down upon enemies.",
+            4, 3,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 2, TargetType.EnemyCreatures)
+                }),
+            "Assets/Scriptables/Cards/Birds/Thunderhawk.asset",
+            existingCardIds.ContainsKey("Thunderhawk") ? existingCardIds["Thunderhawk"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 4. Healing Dove
+        cards.Add(CreateBirdCard(
+            "Healing Dove",
+            "Its gentle presence mends wounds.",
+            1, 2,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.StartOfTurn,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Heal, 2, TargetType.Player)
+                }),
+            "Assets/Scriptables/Cards/Birds/HealingDove.asset",
+            existingCardIds.ContainsKey("HealingDove") ? existingCardIds["HealingDove"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 5. War Eagle
+        cards.Add(CreateBirdCard(
+            "War Eagle",
+            "A battle-hardened bird that leads the charge in combat.",
+            5, 4,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 2, TargetType.Enemy)
+                }),
+            "Assets/Scriptables/Cards/Birds/WarEagle.asset",
+            existingCardIds.ContainsKey("WarEagle") ? existingCardIds["WarEagle"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 6. Mischievous Raven
+        cards.Add(CreateBirdCard(
+            "Mischievous Raven",
+            "Steals valuable items to aid its allies.",
+            2, 1,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Draw, 2, TargetType.Player)
+                }),
+            "Assets/Scriptables/Cards/Birds/MischievousRaven.asset",
+            existingCardIds.ContainsKey("MischievousRaven") ? existingCardIds["MischievousRaven"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 7. Phoenix Hatchling
+        cards.Add(CreateBirdCard(
+            "Phoenix Hatchling",
+            "Though young, it carries the flame of rebirth.",
+            1, 3,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnDeath,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 2, TargetType.AllCreatures)
+                }),
+            "Assets/Scriptables/Cards/Birds/PhoenixHatchling.asset",
+            existingCardIds.ContainsKey("PhoenixHatchling") ? existingCardIds["PhoenixHatchling"] : System.Guid.NewGuid().ToString()
+        ));
+
+        // 8. Majestic Griffin
+        cards.Add(CreateBirdCard(
+            "Majestic Griffin",
+            "Half eagle, half lion, all power.",
+            4, 5,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
+                new List<EffectActionData> {
+                    new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures),
+                    new EffectActionData(ActionType.Heal, 1, TargetType.FriendlyCreatures)
+                }),
+            "Assets/Scriptables/Cards/Birds/MajesticGriffin.asset",
+            existingCardIds.ContainsKey("MajesticGriffin") ? existingCardIds["MajesticGriffin"] : System.Guid.NewGuid().ToString()
+        ));
+
+        return cards;
+    }
+
+    private static Dictionary<string, string> GatherExistingCardIds(string folderPath) {
+        Dictionary<string, string> cardIds = new Dictionary<string, string>();
+
+        if (!Directory.Exists(folderPath)) return cardIds;
+
+        // Find all card scriptable objects in the folder
+        string[] guids = AssetDatabase.FindAssets("t:ScriptableObject", new[] { folderPath });
+
+        foreach (string guid in guids) {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            var cardData = AssetDatabase.LoadAssetAtPath<CardData>(path);
+
+            if (cardData != null) {
+                string cardNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
+                // If cardId is empty, we'll generate a new one later
+                if (!string.IsNullOrEmpty(cardData.cardId)) {
+                    cardIds[cardNameWithoutExtension] = cardData.cardId;
+                    Debug.Log($"Found existing card {cardNameWithoutExtension} with ID: {cardData.cardId}");
+                } else {
+                    Debug.Log($"Found existing card {cardNameWithoutExtension} with no ID");
+                }
+            }
+        }
+
+        return cardIds;
+    }
+
+    private static CreatureCardScriptableObject CreateSpiderCard(
+        string name,
+        string description,
+        int attack,
+        int health,
+        CardEffectData effectData,
+        string path,
+        string cardId) {
+        // Check if the card already exists
+        CreatureCardScriptableObject card = null;
+        if (File.Exists(path)) {
+            card = AssetDatabase.LoadAssetAtPath<CreatureCardScriptableObject>(path);
+            if (card != null) {
+                Debug.Log($"Updating existing card: {name} with ID: {card.cardId}");
+
+                // Update existing card properties
+                card.cardName = name;
+                card.description = description;
+                card.attack = attack;
+                card.health = health;
+
+                // Keep the existing cardId if it exists, otherwise set the new one
+                if (string.IsNullOrEmpty(card.cardId)) {
+                    card.cardId = cardId;
+                    Debug.Log($"Setting new ID for {name}: {cardId}");
+                } else {
+                    Debug.Log($"Keeping existing ID for {name}: {card.cardId}");
+                }
+
+                // Clear existing effects and add new ones
+                UpdateCardEffects(card, effectData);
+
+                EditorUtility.SetDirty(card);
+                AssetDatabase.SaveAssetIfDirty(card);
+                return card;
+            }
+        }
+
+        // If card doesn't exist or couldn't be loaded, create a new one
+        Debug.Log($"Creating new card: {name} with ID: {cardId}");
+        card = ScriptableObject.CreateInstance<CreatureCardScriptableObject>();
+        card.cardName = name;
+        card.description = description;
+        card.attack = attack;
+        card.health = health;
+        card.cardId = cardId; // Set the card ID
+
+        AddEffectToCard(card, effectData);
+
+        AssetDatabase.CreateAsset(card, path);
+        return card;
+    }
+
+    private static CreatureCardScriptableObject CreateBirdCard(
+        string name,
+        string description,
+        int attack,
+        int health,
+        CardEffectData effectData,
+        string path,
+        string cardId) {
+        // Using the same implementation as CreateSpiderCard since they're identical
+        return CreateSpiderCard(name, description, attack, health, effectData, path, cardId);
+    }
+
+    private static void CreateDeck(string name, List<CardDataScriptableObject> cards, string path) {
+        DeckScriptableObject deck = null;
+
+        // Check if the deck already exists
+        if (File.Exists(path)) {
+            deck = AssetDatabase.LoadAssetAtPath<DeckScriptableObject>(path);
+            Debug.Log($"Updating existing deck: {name}");
+        }
+
+        // If it doesn't exist, create a new one
+        if (deck == null) {
+            deck = ScriptableObject.CreateInstance<DeckScriptableObject>();
+            Debug.Log($"Creating new deck: {name}");
+            AssetDatabase.CreateAsset(deck, path);
+        }
+
+        // Set the cards in the deck
+        SerializedObject serializedDeck = new SerializedObject(deck);
+
+        // Set deck name
+        SerializedProperty nameProp = serializedDeck.FindProperty("deckName");
+        nameProp.stringValue = name;
+
+        // Set cards array
+        SerializedProperty cardsProp = serializedDeck.FindProperty("cards");
+        cardsProp.ClearArray();
+        cardsProp.arraySize = cards.Count;
+
+        for (int i = 0; i < cards.Count; i++) {
+            cardsProp.GetArrayElementAtIndex(i).objectReferenceValue = cards[i];
+        }
+
+        serializedDeck.ApplyModifiedProperties();
+        EditorUtility.SetDirty(deck);
+        Debug.Log($"Deck {name} now contains {cards.Count} cards");
+    }
+
+    // Updates effects on an existing card
+    private static void UpdateCardEffects(CreatureCardScriptableObject card, CardEffectData effectData) {
+        SerializedObject serializedCard = new SerializedObject(card);
+        SerializedProperty effectsProp = serializedCard.FindProperty("effects");
+        effectsProp.ClearArray();
+        effectsProp.arraySize = 1;
+
+        SerializedProperty effectProp = effectsProp.GetArrayElementAtIndex(0);
+
+        SerializedProperty triggerProp = effectProp.FindPropertyRelative("trigger");
+        triggerProp.enumValueIndex = (int)effectData.trigger;
+
+        SerializedProperty typeProp = effectProp.FindPropertyRelative("effectType");
+        typeProp.enumValueIndex = (int)effectData.effectType;
+
+        SerializedProperty actionsProp = effectProp.FindPropertyRelative("actions");
+        actionsProp.ClearArray();
+        actionsProp.arraySize = effectData.actions.Count;
+
+        for (int i = 0; i < effectData.actions.Count; i++) {
+            SerializedProperty actionProp = actionsProp.GetArrayElementAtIndex(i);
+
+            SerializedProperty actionTypeProp = actionProp.FindPropertyRelative("actionType");
+            actionTypeProp.enumValueIndex = (int)effectData.actions[i].actionType;
+
+            SerializedProperty valueProp = actionProp.FindPropertyRelative("value");
+            valueProp.intValue = effectData.actions[i].value;
+
+            SerializedProperty targetTypeProp = actionProp.FindPropertyRelative("targetType");
+            targetTypeProp.enumValueIndex = (int)effectData.actions[i].targetType;
+        }
+
+        serializedCard.ApplyModifiedProperties();
+    }
+
+    private static void AddEffectToCard(CreatureCardScriptableObject card, CardEffectData effectData) {
+        // This method is the same as UpdateCardEffects, just with a different name for clarity
+        UpdateCardEffects(card, effectData);
+    }
+
+    // Helper class to define card effects
+    private class CardEffectData {
+        public EffectType effectType;
+        public EffectTrigger trigger;
+        public List<EffectActionData> actions;
+
+        public CardEffectData(EffectType effectType, EffectTrigger trigger, List<EffectActionData> actions) {
+            this.effectType = effectType;
+            this.trigger = trigger;
+            this.actions = actions;
+        }
+    }
+
+    // Helper class to define effect actions
+    private class EffectActionData {
+        public ActionType actionType;
+        public int value;
+        public TargetType targetType;
+
+        public EffectActionData(ActionType actionType, int value, TargetType targetType) {
+            this.actionType = actionType;
+            this.value = value;
+            this.targetType = targetType;
+        }
+    }
+}
+#endif

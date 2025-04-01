@@ -14,7 +14,12 @@ public static class CardFactory {
         ICard card = null;
         switch (cardData) {
             case CreatureData creatureData:
-                var creature = new Creature(creatureData.cardName, creatureData.attack, creatureData.health);
+                var creature = new Creature(
+                    creatureData.cardName,
+                    creatureData.attack,
+                    creatureData.health,
+                    creatureData.cardId); // Pass cardId
+
                 // Copy over the description
                 creature.Description = creatureData.description;
 
@@ -34,7 +39,11 @@ public static class CardFactory {
                 break;
 
             case SpellData spellData:
-                var spell = new Spell(spellData.cardName, spellData.defaultTargetType);
+                var spell = new Spell(
+                    spellData.cardName,
+                    spellData.defaultTargetType,
+                    spellData.cardId); // Pass cardId
+
                 // Copy over the description
                 spell.Description = spellData.description;
 
@@ -92,6 +101,7 @@ public static class CardFactory {
         // For creatures, copy ALL data including effects
         if (card is ICreature creature) {
             var creatureData = ScriptableObject.CreateInstance<CreatureData>();
+            creatureData.cardId = card.CardId; // Copy the cardId
             creatureData.cardName = creature.Name;
             creatureData.attack = creature.Attack;
             creatureData.health = creature.Health;
@@ -114,6 +124,7 @@ public static class CardFactory {
         // For spells, create SpellData
         if (card is Spell spell) {
             var spellData = ScriptableObject.CreateInstance<SpellData>();
+            spellData.cardId = card.CardId; // Copy the cardId
             spellData.cardName = spell.Name;
             spellData.defaultTargetType = spell.DefaultTargetType;
             spellData.description = spell.Description;  // Copy description

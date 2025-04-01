@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using static Enums;
 
 public abstract class CardData : ScriptableObject {
+    public string cardId; // Added unique ID field
     public string cardName;
     public string description;
     public CardType cardType;
     public List<CardEffect> effects = new List<CardEffect>();
+
+    // OnEnable can be used to initialize cardId if null
+    public virtual void OnEnable() {
+        if (string.IsNullOrEmpty(cardId)) {
+            cardId = System.Guid.NewGuid().ToString();
+        }
+    }
 }
 
 public class CreatureData : CardData {
     public int attack;
     public int health;
 
-    public void OnEnable() {
+    public override void OnEnable() {
+        base.OnEnable();
         cardType = CardType.Creature;
     }
 }

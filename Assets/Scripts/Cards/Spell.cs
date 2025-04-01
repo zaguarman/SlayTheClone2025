@@ -10,6 +10,11 @@ public class Spell : Card {
         DefaultTargetType = defaultTargetType;
     }
 
+    // Constructor with cardId parameter
+    public Spell(string name, TargetType defaultTargetType, string cardId) : base(name, cardId) {
+        DefaultTargetType = defaultTargetType;
+    }
+
     public void AddAction(ActionType actionType, int value, TargetType targetType) {
         spellActions.Add(new SpellAction(actionType, value, targetType));
     }

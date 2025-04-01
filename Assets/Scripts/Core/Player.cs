@@ -189,6 +189,13 @@ public class Player : Entity, IPlayer {
 
         var slot = Battlefield.FirstOrDefault(s => s.OccupyingCreature == creature as ICreature);
         if (slot != null) {
+            // If we're not destroying the card, add it to the discard pile
+            if (!destroyCard && creature is ICreature && Deck is Deck deck) {
+                // When a creature is removed from battlefield without being destroyed, add it to discard pile
+                deck.AddToDiscardPile(creature);
+                Log($"Added creature {creature.Name} to discard pile after removing from battlefield", LogTag.Cards | LogTag.Creatures);
+            }
+
             slot.ClearSlot(destroyCard);
             Log($"Removed creature {creature.Name} from battlefield", LogTag.Creatures);
             gameMediator?.NotifyBattlefieldStateChanged(this);
