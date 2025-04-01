@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f658da3497ce1f6429d79de38cd111ce, type: 3}
+  m_Name: SpiderDeck
+  m_EditorClassIdentifier: 
+  deckName: SpiderDeck
+  cards:
+  - {fileID: 11400000, guid: 2f773ce5f1dcbd042944a8e74b1da9ca, type: 2}
+  - {fileID: 11400000, guid: 9a6201be928dc5941a339479d2fad47a, type: 2}
+  - {fileID: 11400000, guid: 5ccb0188efc4fb64e90a3fb0a47dbec2, type: 2}
+  - {fileID: 11400000, guid: 209f6364941503f4fadb2b47234c852c, type: 2}
+  - {fileID: 11400000, guid: 1e3f3f8759d5dfc48890c8df2ce1ea83, type: 2}
+  - {fileID: 11400000, guid: 569bb11717fa2ec428e035b69adfe37e, type: 2}
+  - {fileID: 11400000, guid: 90c31c6842106f249838ef50b7953bed, type: 2}
+  - {fileID: 11400000, guid: 26d1d8875bf1672409be4a2ecf1bbf20, type: 2}

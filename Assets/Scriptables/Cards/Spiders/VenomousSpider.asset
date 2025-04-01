@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: VenomousSpider
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
+  cardName: Venomous Spider
+  description: A small but deadly spider whose poison weakens enemies over time.
+  cardType: 0
+  effects:
+  - effectType: 1
+    trigger: 2
+    actions:
+    - actionType: 0
+      value: 1
+      targetType: 4
+  attack: 2
+  health: 2

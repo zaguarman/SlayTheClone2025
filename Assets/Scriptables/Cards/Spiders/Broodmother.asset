@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Broodmother
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
+  cardName: Broodmother
+  description: Spawns smaller spiders when threatened.
+  cardType: 0
+  effects:
+  - effectType: 1
+    trigger: 4
+    actions:
+    - actionType: 2
+      value: 1
+      targetType: 0
+  attack: 2
+  health: 4

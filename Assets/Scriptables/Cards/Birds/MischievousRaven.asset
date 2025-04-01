@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: MischievousRaven
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
+  cardName: Mischievous Raven
+  description: Steals valuable items to aid its allies.
+  cardType: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 2
+      value: 2
+      targetType: 0
+  attack: 2
+  health: 1

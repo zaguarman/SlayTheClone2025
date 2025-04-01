@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -70,6 +71,10 @@ public class GameReferences : Singleton<GameReferences> {
     [Header("Card Style")]
     [SerializeField] private Color player1CardColor = new Color(0.8f, 0.9f, 1f);
     [SerializeField] private Color player2CardColor = new Color(1f, 0.8f, 0.8f);
+
+    [Header("Decks")]
+    [SerializeField] private DeckScriptableObject player1Deck;
+    [SerializeField] private DeckScriptableObject player2Deck;
 
     private bool referencesValidated = false;
 
@@ -210,6 +215,17 @@ public class GameReferences : Singleton<GameReferences> {
             isValid = false;
         }
 
+        // Validate deck references
+        if (player1Deck == null) {
+            Log("Player 1 deck reference missing!", LogTag.Initialization);
+            isValid = false;
+        }
+
+        if (player2Deck == null) {
+            Log("Player 2 deck reference missing!", LogTag.Initialization);
+            isValid = false;
+        }
+
         // Validate tooltip reference
         if (cardTooltip == null) {
             Log("CardTooltip reference missing, will create one when needed", LogTag.Initialization);
@@ -266,6 +282,23 @@ public class GameReferences : Singleton<GameReferences> {
             CreateCardTooltip();
         }
         return cardTooltip;
+    }
+
+    // New methods to get deck data
+    public List<CardData> GetPlayer1DeckCards() {
+        if (player1Deck == null) {
+            LogError("Player1Deck is null when GetPlayer1DeckCards was called", LogTag.Cards);
+            return new List<CardData>();
+        }
+        return player1Deck.GetCardDataList();
+    }
+
+    public List<CardData> GetPlayer2DeckCards() {
+        if (player2Deck == null) {
+            LogError("Player2Deck is null when GetPlayer2DeckCards was called", LogTag.Cards);
+            return new List<CardData>();
+        }
+        return player2Deck.GetCardDataList();
     }
 
     public bool AreReferencesValid() {

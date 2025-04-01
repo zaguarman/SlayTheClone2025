@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f658da3497ce1f6429d79de38cd111ce, type: 3}
+  m_Name: BirdDeck
+  m_EditorClassIdentifier: 
+  deckName: BirdDeck
+  cards:
+  - {fileID: 11400000, guid: aafd2fda5a361424cbaab9bada6880f3, type: 2}
+  - {fileID: 11400000, guid: e3f538d9b5f96634a8865535b5f280f8, type: 2}
+  - {fileID: 11400000, guid: fc35c65f5ce2d774e818e32f35872cb9, type: 2}
+  - {fileID: 11400000, guid: 9dad258dff6e91f44aacb5066e4720e1, type: 2}
+  - {fileID: 11400000, guid: d47ac62a3f9c5f14fbfac0c895bdf07b, type: 2}
+  - {fileID: 11400000, guid: 004c211cbabd1e04c8f2d5a9e3a53b27, type: 2}
+  - {fileID: 11400000, guid: 3a959442a0a58b543a79f36574215228, type: 2}
+  - {fileID: 11400000, guid: 5d55d660854674244b8df823a0b5e721, type: 2}

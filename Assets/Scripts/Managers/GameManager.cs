@@ -138,20 +138,54 @@ public class GameManager : InitializableComponent {
     }
 
     private void InitializeCards() {
-        var testSetup = gameObject.AddComponent<TestSetup>();
+        // Get cards from GameReferences instead of TestSetup
+        var player1Cards = gameReferences.GetPlayer1DeckCards();
+        var player2Cards = gameReferences.GetPlayer2DeckCards();
 
-        // Get test cards without duplication
-        var baseCards = testSetup.CreateTestCards();
+        // Make sure we have cards
+        if (player1Cards.Count == 0 || player2Cards.Count == 0) {
+            LogError("One or both player decks are empty. Using fallback cards.", LogTag.Cards | LogTag.Initialization);
 
-        // Use just one copy of each card for both players
-        var player1Cards = new List<CardData>(baseCards);
-        var player2Cards = new List<CardData>(baseCards);
+            // Create some fallback cards if the decks are empty
+            var fallbackCards = CreateFallbackCards();
+
+            if (player1Cards.Count == 0)
+                player1Cards = new List<CardData>(fallbackCards);
+
+            if (player2Cards.Count == 0)
+                player2Cards = new List<CardData>(fallbackCards);
+        }
 
         cardDealingService.InitializeDecks(player1Cards, player2Cards);
-        Log($"Decks initialized with {player1Cards.Count} cards per player", LogTag.Cards | LogTag.Initialization);
+        Log($"Decks initialized with {player1Cards.Count} cards for Player 1 and {player2Cards.Count} cards for Player 2",
+            LogTag.Cards | LogTag.Initialization);
+    }
 
-        // Clean up the test setup component
-        Destroy(testSetup);
+    private List<CardData> CreateFallbackCards() {
+        Log("Creating fallback cards", LogTag.Cards | LogTag.Initialization);
+
+        List<CardData> fallbackCards = new List<CardData>();
+
+        // Create a few basic creature cards
+        for (int i = 1; i <= 5; i++) {
+            CreatureData creature = ScriptableObject.CreateInstance<CreatureData>();
+            creature.cardName = $"Creature {i}";
+            creature.description = "A basic creature";
+            creature.attack = i;
+            creature.health = i + 1;
+            fallbackCards.Add(creature);
+        }
+
+        // Create a couple of spell cards
+        for (int i = 1; i <= 2; i++) {
+            SpellData spell = ScriptableObject.CreateInstance<SpellData>();
+            spell.cardName = $"Spell {i}";
+            spell.description = "A basic spell";
+            spell.defaultTargetType = Enums.TargetType.EnemyCreatures;
+            fallbackCards.Add(spell);
+        }
+
+        return fallbackCards;
     }
 
     private void PlaceInitialCreatures() {
@@ -160,18 +194,18 @@ public class GameManager : InitializableComponent {
             return;
         }
 
-        var testSetup = gameObject.AddComponent<TestSetup>();
-        var availableCreatures = testSetup.CreateTestCards()
-            .Where(card => card is CreatureData)
-            .Cast<CreatureData>()
-            .ToList();
+        // Get creature cards from decks
+        List<CreatureData> availableCreatures = new List<CreatureData>();
 
-        // Place 3 creatures for each player
+        // Get creatures from player 1's deck
+        var player1Cards = gameReferences.GetPlayer1DeckCards();
+        availableCreatures.AddRange(player1Cards
+            .Where(card => card is CreatureData)
+            .Cast<CreatureData>());
+
+        // Place creatures for each player
         PlaceCreaturesForPlayer(Player1, availableCreatures, 3);
         PlaceCreaturesForPlayer(Player2, availableCreatures, 3);
-
-        // Clean up the test setup
-        Destroy(testSetup);
     }
 
     private bool HasValidBattlefields() {
@@ -184,7 +218,7 @@ public class GameManager : InitializableComponent {
         var emptySlots = player.Battlefield.Where(s => !s.IsOccupied()).ToList();
 
         // Place up to 'count' creatures, or as many as we have empty slots for
-        int creaturesToPlace = Mathf.Min(count, emptySlots.Count);
+        int creaturesToPlace = Mathf.Min(count, emptySlots.Count, availableCreatures.Count);
 
         // Create a copy of emptySlots that we can modify
         List<BattlefieldSlot> availableSlots = new List<BattlefieldSlot>(emptySlots);
