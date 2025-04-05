@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: WidowAssassin
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 199de630-e2c5-4dbc-912c-aefb3b4e1626
+  cardId: b860a454-a52c-4ca7-85a3-cdfab8b80e7d
   cardName: Widow Assassin
   description: Its deadly venom can take down creatures many times its size.
   cardType: 0

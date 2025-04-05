@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: PhoenixHatchling
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 830ec87e-678e-44b1-b18f-1c840a2c0910
+  cardId: 7ef533db-1fa5-4d00-9d7a-3f1a8a17ea22
   cardName: Phoenix Hatchling
   description: Though young, it carries the flame of rebirth.
   cardType: 0

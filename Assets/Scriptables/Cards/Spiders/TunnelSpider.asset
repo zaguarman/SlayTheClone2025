@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: TunnelSpider
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 7c828dbe-a766-4297-a5fa-8bc36acf5c19
+  cardId: bd4e8865-b8eb-42e2-9c10-d4320b0a61f5
   cardName: Tunnel Spider
   description: Creates elaborate tunnel networks to ambush prey.
   cardType: 0
