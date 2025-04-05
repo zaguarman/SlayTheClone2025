@@ -77,7 +77,7 @@ public class CardTooltip : MonoBehaviour {
         tooltipText.ForceMeshUpdate();
         // Set fixed size for all tooltip types
         float width = 350;
-        float height = 250; // Increased from 180 to ensure there's enough space for description
+        float height = 280; // Increased from 250 to ensure there's enough space for target ID
         tooltipRect.sizeDelta = new Vector2(width, height);
     }
 
@@ -99,12 +99,18 @@ public class CardTooltip : MonoBehaviour {
 
         string description = string.IsNullOrEmpty(cardData.description) ? "No description" : cardData.description;
         string cardTypeInfo = "";
+        // Truncate card ID to show only first 4 and last 4 characters
+        string truncatedCardId = TruncateId(cardData.cardId);
+        string targetIdInfo = $"<color=#888888>ID: {truncatedCardId}</color>";
 
         // Generate based on card type
         if (cardData is CreatureData creatureData) {
             var creature = card.GetLinkedCreature();
             if (creature != null) {
                 cardTypeInfo = $"<b>{cardData.cardName}</b> ({creature.Attack}/{creature.Health})\n<i>Creature</i>\n\n";
+                // If we have a creature, add its target ID too (truncated)
+                string truncatedTargetId = TruncateId(creature.TargetId);
+                targetIdInfo = $"<color=#888888>Card ID: {truncatedCardId}\nTarget ID: {truncatedTargetId}</color>";
             } else {
                 cardTypeInfo = $"<b>{cardData.cardName}</b> ({creatureData.attack}/{creatureData.health})\n<i>Creature</i>\n\n";
             }
@@ -122,7 +128,17 @@ public class CardTooltip : MonoBehaviour {
             }
         }
 
-        return $"{cardTypeInfo}{description}{effectsInfo}";
+        return $"{cardTypeInfo}{description}{effectsInfo}\n\n{targetIdInfo}";
+    }
+
+    /// <summary>
+    /// Truncates an ID to show only first 4 and last 4 characters with ... in between, all in uppercase
+    /// </summary>
+    private string TruncateId(string id) {
+        if (string.IsNullOrEmpty(id) || id.Length <= 8) {
+            return id.ToUpper();
+        }
+        return $"{id.Substring(0, 4).ToUpper()}...{id.Substring(id.Length - 4).ToUpper()}";
     }
 
     private string DescribeEffect(CardEffect effect) {

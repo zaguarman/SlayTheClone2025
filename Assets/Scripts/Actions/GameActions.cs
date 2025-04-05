@@ -10,7 +10,7 @@ public class DiscardHandAction : IGameAction {
 
     public DiscardHandAction(IPlayer player) {
         this.player = player;
-        Log($"Created DiscardHandAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
+        Log($"Created DiscardHandAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
     }
 
     public void Execute() {
@@ -21,11 +21,11 @@ public class DiscardHandAction : IGameAction {
 
         // Discard all cards in the player's hand
         player.DiscardHand();
-        Log($"Executed discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
+        Log($"Executed discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {
-        return $"DiscardHandAction: Player={(player?.IsPlayer1() == true ? "1" : "2")}";
+        return $"DiscardHandAction: Player={(player?.IsPlayer1() == true ? "1" : "2")} (TargetID: {player?.TargetId.ToUpper()})";
     }
 }
 
@@ -37,7 +37,7 @@ public class DrawCardsAction : IGameAction {
     public DrawCardsAction(IPlayer player, int amount = 1) {
         this.player = player;
         this.amount = amount;
-        Log($"Created DrawCardsAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to draw {amount} cards", LogTag.Actions | LogTag.Cards);
+        Log($"Created DrawCardsAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) to draw {amount} cards", LogTag.Actions | LogTag.Cards);
     }
 
     public void Execute() {
@@ -54,11 +54,11 @@ public class DrawCardsAction : IGameAction {
 
         // Draw the specified number of cards
         cardDealingService.DrawCards(player, amount);
-        Log($"Executed draw cards action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} - drew up to {amount} cards", LogTag.Actions | LogTag.Cards);
+        Log($"Executed draw cards action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) - drew up to {amount} cards", LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {
-        return $"DrawCardsAction: Player={(player?.IsPlayer1() == true ? "1" : "2")}, Amount={amount}";
+        return $"DrawCardsAction: Player={(player?.IsPlayer1() == true ? "1" : "2")} (TargetID: {player?.TargetId.ToUpper()}), Amount={amount}";
     }
 }
 
@@ -69,7 +69,7 @@ public class DrawCardAction : IGameAction {
     public DrawCardAction(IPlayer player, int amount = 1) {
         this.player = player;
         this.amount = amount;
-        Log($"Created DrawCardAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to draw {amount} card(s)",
+        Log($"Created DrawCardAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) to draw {amount} card(s)",
             LogTag.Actions | LogTag.Cards);
     }
 
@@ -84,7 +84,7 @@ public class DrawCardAction : IGameAction {
         for (int i = 0; i < amount; i++) {
             // Check if we've hit the hand size limit
             if (player.Hand.Count >= Player.MAX_HAND_SIZE) {
-                Log($"Draw stopped: {(player.IsPlayer1() ? "Player 1" : "Player 2")} has reached the maximum hand size ({Player.MAX_HAND_SIZE})",
+                Log($"Draw stopped: {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) has reached the maximum hand size ({Player.MAX_HAND_SIZE})",
                     LogTag.Actions | LogTag.Cards);
                 break;
             }
@@ -95,16 +95,16 @@ public class DrawCardAction : IGameAction {
 
         int cardsMissed = amount - cardsDrawn;
         if (cardsMissed > 0) {
-            Log($"{(player.IsPlayer1() ? "Player 1" : "Player 2")} could not draw {cardsMissed} card(s) due to hand size limit",
+            Log($"{(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) could not draw {cardsMissed} card(s) due to hand size limit",
                 LogTag.Actions | LogTag.Cards);
         }
 
-        Log($"Executed draw of {cardsDrawn}/{amount} card(s) for {(player.IsPlayer1() ? "Player 1" : "Player 2")}",
+        Log($"Executed draw of {cardsDrawn}/{amount} card(s) for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})",
             LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {
-        return $"DrawCardAction: Player={(player.IsPlayer1() ? "1" : "2")}, Amount={amount}";
+        return $"DrawCardAction: Player={(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}), Amount={amount}";
     }
 }
 
@@ -117,7 +117,7 @@ public class PlaySpellAction : IGameAction {
         this.spell = spell;
         this.owner = owner;
         this.target = target;
-        Log($"Created PlaySpellAction for {spell.Name}", LogTag.Actions | LogTag.Cards);
+        Log($"Created PlaySpellAction for {spell.Name} (TargetID: {spell.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
     }
 
     public void Execute() {
@@ -134,11 +134,11 @@ public class PlaySpellAction : IGameAction {
         // Process spell effects
         spell.Play(owner, GameManager.Instance.ActionsQueue, target);
 
-        Log($"Executed PlaySpellAction for {spell.Name}", LogTag.Actions | LogTag.Cards);
+        Log($"Executed PlaySpellAction for {spell.Name} (TargetID: {spell.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {
-        return $"PlaySpellAction: Spell={spell?.Name}, Owner={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")}, Target={target?.TargetId}";
+        return $"PlaySpellAction: Spell={spell?.Name} (TargetID: {spell?.TargetId.ToUpper()}), Owner={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")} (TargetID: {owner?.TargetId.ToUpper()}), Target={target?.TargetId.ToUpper()}";
     }
 }
 
@@ -173,7 +173,7 @@ public class HealCreatureAction : IGameAction {
     public HealCreatureAction(ICreature target, int amount) {
         this.target = target;
         this.amount = amount;
-        Log($"Created HealCreatureAction for {target?.Name} with amount {amount}", LogTag.Actions | LogTag.Creatures);
+        Log($"Created HealCreatureAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper()}) with amount {amount}", LogTag.Actions | LogTag.Creatures);
     }
 
     public void Execute() {
@@ -185,7 +185,7 @@ public class HealCreatureAction : IGameAction {
             int newHealth = Math.Min(currentHealth + amount, 10); // Assuming 10 is max health for this prototype
 
             // Since we don't have a direct SetHealth method, we'll log the info
-            Log($"Healing {creature.Name} for {amount} (from {currentHealth} to {newHealth})",
+            Log($"Healing {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) for {amount} (from {currentHealth} to {newHealth})",
                 LogTag.Actions | LogTag.Creatures);
 
             // In a real implementation, we'd call something like:
@@ -194,7 +194,7 @@ public class HealCreatureAction : IGameAction {
     }
 
     public override string ToString() {
-        return $"HealCreatureAction: Target={target?.Name}, Amount={amount}";
+        return $"HealCreatureAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Amount={amount}";
     }
 }
 
@@ -205,7 +205,7 @@ public class HealPlayerAction : IGameAction {
     public HealPlayerAction(IPlayer target, int amount) {
         this.target = target;
         this.amount = amount;
-        Log($"Created HealPlayerAction for {(target?.IsPlayer1() == true ? "Player 1" : "Player 2")} with amount {amount}",
+        Log($"Created HealPlayerAction for {(target?.IsPlayer1() == true ? "Player 1" : "Player 2")} (TargetID: {target?.TargetId.ToUpper()}) with amount {amount}",
             LogTag.Actions | LogTag.Players);
     }
 
@@ -218,7 +218,7 @@ public class HealPlayerAction : IGameAction {
         int newHealth = Math.Min(currentHealth + amount, maxHealth);
 
         // Since we don't have a direct SetHealth method, we'll log the info
-        Log($"Healing {(target.IsPlayer1() ? "Player 1" : "Player 2")} for {amount} (from {currentHealth} to {newHealth})",
+        Log($"Healing {(target.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {target.TargetId.ToUpper()}) for {amount} (from {currentHealth} to {newHealth})",
             LogTag.Actions | LogTag.Players);
 
         // In a real implementation, we'd call something like:
@@ -226,7 +226,7 @@ public class HealPlayerAction : IGameAction {
     }
 
     public override string ToString() {
-        return $"HealPlayerAction: Target={(target?.IsPlayer1() == true ? "Player 1" : "Player 2")}, Amount={amount}";
+        return $"HealPlayerAction: Target={(target?.IsPlayer1() == true ? "Player 1" : "Player 2")} (TargetID: {target?.TargetId.ToUpper()}), Amount={amount}";
     }
 }
 

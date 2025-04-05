@@ -37,7 +37,7 @@ public class Creature : Card, ICreature {
     }
 
     public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
-        Log($"Playing {Name} with {Effects.Count} effects", LogTag.Creatures | LogTag.Cards | LogTag.Actions);
+        Log($"Playing {Name} (TargetID: {TargetId.ToUpper()}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Cards | LogTag.Actions);
         Owner = owner;
 
         // Check if the creature is in the player's hand to determine if we need to remove it from the deck
@@ -55,12 +55,19 @@ public class Creature : Card, ICreature {
 
         lastAttacker = attacker;
         Health = System.Math.Max(0, Health - damage);
-        Log($"{Name} took {damage} damage, health now: {Health}. Has {Effects.Count} effects",
-            LogTag.Creatures | LogTag.Combat);
+
+        // Updated log format to include target IDs
+        if (attacker != null) {
+            Log($"{attacker.Name} (TargetID: {attacker.TargetId.ToUpper()}) dealt {damage} damage to {Name} (TargetID: {TargetId.ToUpper()}), health now: {Health}. Has {Effects.Count} effects",
+                LogTag.Creatures | LogTag.Combat);
+        } else {
+            Log($"{Name} (TargetID: {TargetId.ToUpper()}) took {damage} damage, health now: {Health}. Has {Effects.Count} effects",
+                LogTag.Creatures | LogTag.Combat);
+        }
 
         var gameManager = GameManager.Instance;
         if (gameManager?.ActionsQueue != null) {
-            Log($"Processing OnDamage effects for {Name}", LogTag.Creatures | LogTag.Effects);
+            Log($"Processing OnDamage effects for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
             HandleEffect(EffectTrigger.OnDamage, gameManager.ActionsQueue);
         }
 
@@ -76,7 +83,7 @@ public class Creature : Card, ICreature {
                 Owner.RemoveFromBattlefield(this, false);
             }
 
-            Log($"Creature died: {Name}", LogTag.Creatures);
+            Log($"Creature died: {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures);
         }
 
         GameMediator.Instance?.NotifyCreatureDamaged(this, damage);
@@ -84,7 +91,7 @@ public class Creature : Card, ICreature {
     }
 
     public void HandleEffect(EffectTrigger trigger, ActionsQueue actionsQueue) {
-        Log($"Checking effects for {Name} (ID: {TargetId}) with trigger: {trigger}", LogTag.Effects);
+        Log($"Checking effects for {Name} (TargetID: {TargetId.ToUpper()}) with trigger: {trigger}", LogTag.Effects);
         Log($"Effects count: {Effects.Count}", LogTag.Effects);
 
         foreach (var effect in Effects) {
@@ -93,11 +100,11 @@ public class Creature : Card, ICreature {
 
         // Skip if this effect was already handled in current resolution chain
         if (actionsQueue.IsEffectProcessed(TargetId, trigger)) {
-            Log($"Skipping already processed {trigger} effect for {Name}", LogTag.Effects);
+            Log($"Skipping already processed {trigger} effect for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Effects);
             return;
         }
 
-        Log($"Handling {trigger} effect for {Name} with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects);
+        Log($"Handling {trigger} effect for {Name} (TargetID: {TargetId.ToUpper()}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects);
 
         foreach (var effect in Effects.Where(e => e.trigger == trigger)) {
             Log($"Processing effect - Trigger: {effect.trigger}, Actions: {effect.actions.Count}",
@@ -126,21 +133,21 @@ public class Creature : Card, ICreature {
         }
 
         actionsQueue.MarkEffectProcessed(TargetId, trigger);
-        Log($"Marked {trigger} effect as processed for {Name}", LogTag.Effects);
+        Log($"Marked {trigger} effect as processed for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Effects);
     }
 
     private void ProcessDamageEffect(EffectAction action, ActionsQueue actionsQueue) {
         if (Owner == null) {
-            LogError($"Cannot handle damage effect for {Name} - Owner is null", LogTag.Creatures | LogTag.Effects);
+            LogError($"Cannot handle damage effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
             return;
         }
 
-        Log($"Processing damage effect for {Name}. TargetType: {action.targetType}, Damage: {action.value}",
+        Log($"Processing damage effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Damage: {action.value}",
             LogTag.Creatures | LogTag.Actions);
 
         // Handle retaliatory damage
         if (lastAttacker != null && action.targetType == TargetType.AllCreatures && Effects.Any(e => e.trigger == EffectTrigger.OnDamage)) {
-            Log($"Targeting attacker {lastAttacker.Name} for retaliation damage",
+            Log($"Targeting attacker {lastAttacker.Name} (TargetID: {lastAttacker.TargetId.ToUpper()}) for retaliation damage",
                 LogTag.Creatures | LogTag.Actions);
             actionsQueue.AddAction(new DirectDamageAction(lastAttacker, action.value, this));
             return;
@@ -148,21 +155,21 @@ public class Creature : Card, ICreature {
 
         // Handle normal targeting
         var targets = TargetingSystem.GetValidTargets(Owner, action.targetType);
-        Log($"Found {targets.Count} targets for {Name}'s damage effect",
+        Log($"Found {targets.Count} targets for {Name} (TargetID: {TargetId.ToUpper()})'s damage effect",
             LogTag.Creatures | LogTag.Actions);
 
         foreach (var target in targets) {
             if (target is BattlefieldSlot slot) {
                 if (!slot.IsOccupied()) continue;
-                Log($"Adding DirectDamageAction - Source: {Name}, Target: {slot.OccupyingCreature.Name}, Damage: {action.value}",
+                Log($"Adding DirectDamageAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: {slot.OccupyingCreature.Name} (TargetID: {slot.OccupyingCreature.TargetId.ToUpper()}), Damage: {action.value}",
                     LogTag.Creatures | LogTag.Actions | LogTag.Combat);
                 actionsQueue.AddAction(new DirectDamageAction(slot.OccupyingCreature, action.value, this));
             } else if (target is IPlayer player) {
-                Log($"Adding DamagePlayerAction - Target: Player {(player.IsPlayer1() ? "1" : "2")}, Damage: {action.value}",
+                Log($"Adding DamagePlayerAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: Player {(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}), Damage: {action.value}",
                     LogTag.Creatures | LogTag.Actions | LogTag.Players | LogTag.Combat);
                 actionsQueue.AddAction(new DamagePlayerAction(player, action.value));
             } else if (target is ICreature creature) {
-                Log($"Adding DirectDamageAction - Source: {Name}, Target: {creature.Name}, Damage: {action.value}",
+                Log($"Adding DirectDamageAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: {creature.Name} (TargetID: {creature.TargetId.ToUpper()}), Damage: {action.value}",
                     LogTag.Creatures | LogTag.Actions | LogTag.Combat);
                 actionsQueue.AddAction(new DirectDamageAction(creature, action.value, this));
             }
@@ -171,21 +178,21 @@ public class Creature : Card, ICreature {
 
     private void ProcessHealEffect(EffectAction action, ActionsQueue actionsQueue) {
         if (Owner == null) {
-            LogError($"Cannot handle heal effect for {Name} - Owner is null", LogTag.Creatures | LogTag.Effects);
+            LogError($"Cannot handle heal effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
             return;
         }
 
         var targets = TargetingSystem.GetValidTargets(Owner, action.targetType);
-        Log($"Found {targets.Count} targets for {Name}'s heal effect",
+        Log($"Found {targets.Count} targets for {Name} (TargetID: {TargetId.ToUpper()})'s heal effect",
             LogTag.Creatures | LogTag.Actions);
 
         foreach (var target in targets) {
             if (target is ICreature creature) {
-                Log($"Adding HealCreatureAction - Target: {creature.Name}, Amount: {action.value}",
+                Log($"Adding HealCreatureAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: {creature.Name} (TargetID: {creature.TargetId.ToUpper()}), Amount: {action.value}",
                     LogTag.Creatures | LogTag.Actions);
                 actionsQueue.AddAction(new HealCreatureAction(creature, action.value));
             } else if (target is IPlayer player) {
-                Log($"Adding HealPlayerAction - Target: Player {(player.IsPlayer1() ? "1" : "2")}, Amount: {action.value}",
+                Log($"Adding HealPlayerAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: Player {(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}), Amount: {action.value}",
                     LogTag.Creatures | LogTag.Actions | LogTag.Players);
                 actionsQueue.AddAction(new HealPlayerAction(player, action.value));
             }
@@ -194,7 +201,7 @@ public class Creature : Card, ICreature {
 
     private void ProcessDrawEffect(EffectAction action, ActionsQueue actionsQueue) {
         if (Owner == null) {
-            LogError($"Cannot handle draw effect for {Name} - Owner is null", LogTag.Creatures | LogTag.Effects);
+            LogError($"Cannot handle draw effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
             return;
         }
 
@@ -213,20 +220,19 @@ public class Creature : Card, ICreature {
         }
 
         if (targetPlayer != null) {
-            Log($"Adding DrawCardAction - Player: {(targetPlayer.IsPlayer1() ? "1" : "2")}, Amount: {action.value}",
+            Log($"Adding DrawCardAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Player: {(targetPlayer.IsPlayer1() ? "1" : "2")} (TargetID: {targetPlayer.TargetId.ToUpper()}), Amount: {action.value}",
                 LogTag.Creatures | LogTag.Actions | LogTag.Cards);
             actionsQueue.AddAction(new DrawCardAction(targetPlayer, action.value));
         }
     }
 
-    // Add this method inside Creature class to support summoning effects
     private void ProcessSummonEffect(EffectAction action, ActionsQueue actionsQueue) {
         if (Owner == null) {
-            LogError($"Cannot handle summon effect for {Name} - Owner is null", LogTag.Creatures | LogTag.Effects);
+            LogError($"Cannot handle summon effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
             return;
         }
 
-        Log($"Processing summon effect for {Name}. TargetType: {action.targetType}, Value: {action.value}",
+        Log($"Processing summon effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {action.value}",
             LogTag.Creatures | LogTag.Actions);
 
         // Handle summoning based on targeting
@@ -246,7 +252,7 @@ public class Creature : Card, ICreature {
         var creaturesInDeck = deckCards.Where(c => c is ICreature).ToList();
 
         if (creaturesInDeck.Count == 0) {
-            Log($"No creatures available in {(targetPlayer.IsPlayer1() ? "Player 1" : "Player 2")}'s deck to summon",
+            Log($"No creatures available in {(targetPlayer.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {targetPlayer.TargetId.ToUpper()})'s deck to summon",
                 LogTag.Creatures | LogTag.Cards);
             return;
         }
@@ -254,7 +260,7 @@ public class Creature : Card, ICreature {
         // Find valid slots
         var validSlots = targetPlayer.Battlefield.Where(s => !s.IsOccupied()).ToList();
         if (validSlots.Count == 0) {
-            Log($"No valid slots available for {(targetPlayer.IsPlayer1() ? "Player 1" : "Player 2")} to summon creatures",
+            Log($"No valid slots available for {(targetPlayer.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {targetPlayer.TargetId.ToUpper()}) to summon creatures",
                 LogTag.Creatures | LogTag.Cards);
             return;
         }
@@ -280,7 +286,7 @@ public class Creature : Card, ICreature {
             // Add summon action (with fromDeck=true since we're summoning from deck)
             actionsQueue.AddAction(new SummonCreatureAction(creatureToSummon, targetPlayer, slot, true));
 
-            Log($"Queued summon effect for {creatureToSummon.Name} to slot {slot.TargetId}",
+            Log($"Queued summon effect for {creatureToSummon.Name} (TargetID: {creatureToSummon.TargetId.ToUpper()}) to slot (TargetID: {slot.TargetId.ToUpper()})",
                 LogTag.Creatures | LogTag.Effects | LogTag.Actions);
         }
     }

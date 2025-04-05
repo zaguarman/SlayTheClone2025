@@ -43,7 +43,7 @@ public class BattlefieldCombatHandler {
                 RegisterAttack(attackerCreature, targetSlot);
                 QueueCombatAction(attackerCreature, targetSlot);
             } else {
-                Log($"Invalid target selected for {attackerCreature.Name}", LogTag.Creatures | LogTag.Combat);
+                Log($"Invalid target selected for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
             }
         }
     }
@@ -63,7 +63,7 @@ public class BattlefieldCombatHandler {
     private void UpdateAttackAction(ICreature attackerCreature, ITarget newTargetSlot) {
         // Remove old attack data
         if (targetedSlots.TryGetValue(attackerCreature, out var oldTargetSlot)) {
-            Log($"Updating attack target for {attackerCreature.Name} from {oldTargetSlot.TargetId} to {newTargetSlot.TargetId}",
+            Log($"Updating attack target for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()}) from slot (TargetID: {oldTargetSlot.TargetId.ToUpper()}) to slot (TargetID: {newTargetSlot.TargetId.ToUpper()})",
                 LogTag.Creatures | LogTag.Combat);
         }
 
@@ -78,7 +78,7 @@ public class BattlefieldCombatHandler {
     }
 
     private void CancelAttackAction(ICreature attackerCreature) {
-        Log($"Cancelling attack for {attackerCreature.Name}", LogTag.Creatures | LogTag.Combat);
+        Log($"Cancelling attack for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
 
         // Remove from tracking
         attackingCreatures.Remove(attackerCreature);
@@ -101,7 +101,7 @@ public class BattlefieldCombatHandler {
                 // update the queue's state through its tracking system
                 // This assumes the ActionsQueue has a method to clear an action for a creature
                 if (actionsQueue.HasActiveAction(attackerCreature.TargetId)) {
-                    Log($"Removing combat action for {attackerCreature.Name}", LogTag.Creatures | LogTag.Combat);
+                    Log($"Removing combat action for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
                     // The action is automatically removed when adding a new one for the same creature
                     // or it will be cleared when the action queue is reset
                     break;
@@ -117,7 +117,7 @@ public class BattlefieldCombatHandler {
 
     private void QueueCombatAction(ICreature attackerCreature, ITarget targetSlot) {
         gameManager.ActionsQueue.AddAction(new MarkCombatTargetAction(attackerCreature, targetSlot));
-        Log($"{attackerCreature.Name} with ID {attackerCreature.TargetId} targets slot {targetSlot.TargetId}", LogTag.Creatures | LogTag.Combat);
+        Log($"{attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()}) targets slot (TargetID: {targetSlot.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
 
         // Notify that the actions queue changed to ensure arrows update
         GameMediator.Instance?.NotifyActionsQueueChanged();
