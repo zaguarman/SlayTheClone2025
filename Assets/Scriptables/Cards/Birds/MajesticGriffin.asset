@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: MajesticGriffin
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 32ecff6f-83e4-45ec-84ec-2dee3910ae9a
+  cardId: 52afaaf7-fcda-4e33-9cde-d13d43918197
   cardName: Majestic Griffin
   description: Half eagle, half lion, all power.
   cardType: 0

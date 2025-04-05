@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: MischievousRaven
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: cc5e51b7-8228-4333-970f-6aedd6728476
+  cardId: 445ce4fc-97a1-4cf5-9999-40e2a90d7ce0
   cardName: Mischievous Raven
   description: Steals valuable items to aid its allies.
   cardType: 0

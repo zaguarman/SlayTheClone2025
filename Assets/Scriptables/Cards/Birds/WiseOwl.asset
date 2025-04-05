@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: WiseOwl
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: ca6a5e22-9d1b-41c9-9597-3dc9e737e946
+  cardId: c7a8a9f4-0656-4ad6-a53c-0b8964215d2c
   cardName: Wise Owl
   description: Its wisdom allows allies to find new strategies.
   cardType: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: ShadowLurker
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 761c978d-6f2c-4a47-963c-e51c2137d290
+  cardId: b3ddf9e3-e97e-45c8-b00e-cac01b807c84
   cardName: Shadow Lurker
   description: A stealthy spider that ambushes from the shadows.
   cardType: 0

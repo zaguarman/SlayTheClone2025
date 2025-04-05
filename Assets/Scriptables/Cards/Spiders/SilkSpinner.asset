@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: SilkSpinner
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: e979634c-ffe5-40d3-b2b1-a4dbd426b1b1
+  cardId: 5d27a08d-ab2b-42b6-b21f-068a1754ee54
   cardName: Silk Spinner
   description: Its valuable silk can heal allies.
   cardType: 0

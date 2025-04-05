@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: GiantTarantula
   m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 38cdaa02-6ceb-4e56-bf73-1dccec3e3c0d
+  cardId: 086231b6-2dfd-42af-b9b6-81a7289e8e9e
   cardName: Giant Tarantula
   description: This massive spider crushes opponents with brute force.
   cardType: 0
