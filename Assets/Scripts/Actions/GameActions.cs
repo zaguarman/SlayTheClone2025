@@ -10,26 +10,31 @@ public class DiscardHandAction : IGameAction {
 
     public DiscardHandAction(IPlayer player) {
         this.player = player;
-        Log($"Created DiscardHandAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
+        Log($"Created DiscardHandAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (PlayerID: {player.TargetId.ToUpper()}) with {player.Hand.Count} cards",
+            LogTag.Actions | LogTag.Cards);
     }
 
     public void Execute() {
         if (player == null) {
-            LogError("Cannot execute discard hand action - player is null", LogTag.Actions | LogTag.Cards);
+            LogError($"Cannot execute discard hand action - player is null (ActionID: {GetHashCode().ToString().ToUpper()})",
+                LogTag.Actions | LogTag.Cards);
             return;
         }
 
+        int initialHandCount = player.Hand.Count;
+
         // Discard all cards in the player's hand
         player.DiscardHand();
-        Log($"Executed discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
+
+        Log($"Executed discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (PlayerID: {player.TargetId.ToUpper()}) - discarded {initialHandCount} cards",
+            LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {
-        return $"DiscardHandAction: Player={(player?.IsPlayer1() == true ? "1" : "2")} (TargetID: {player?.TargetId.ToUpper()})";
+        return $"DiscardHandAction: Player={(player?.IsPlayer1() == true ? "1" : "2")} (PlayerID: {player?.TargetId.ToUpper() ?? "UNKNOWN"}) with {player?.Hand.Count ?? 0} cards";
     }
 }
 
-// Replacing the old DrawCardAction with this more flexible version
 public class DrawCardsAction : IGameAction {
     private readonly IPlayer player;
     private readonly int amount;
@@ -393,6 +398,7 @@ public class DirectDamageAction : IGameAction {
         return $"DirectDamageAction: Source={source?.Name}, Target={target?.Name}, Damage={damage}";
     }
 }
+
 public class SwapCreaturesAction : IGameAction {
     private readonly ICreature fromCreature;
     private readonly ICreature toCreature;
@@ -410,27 +416,40 @@ public class SwapCreaturesAction : IGameAction {
         this.fromSlot = fromSlot;
         this.toSlot = toSlot;
         this.owner = owner;
-        Log($"Created SwapCreaturesAction between {fromCreature.Name} (slot {fromSlot}) and {toCreature.Name} (slot {toSlot})",
+
+        Log($"Created SwapCreaturesAction between {fromCreature.Name} (CreatureID: {fromCreature.TargetId.ToUpper()}) in slot (SlotID: {fromSlot.TargetId.ToUpper()}) and {toCreature.Name} (CreatureID: {toCreature.TargetId.ToUpper()}) in slot (SlotID: {toSlot.TargetId.ToUpper()}) by player {(owner.IsPlayer1() ? "1" : "2")} (PlayerID: {owner.TargetId.ToUpper()}) (ActionID: {GetHashCode().ToString().ToUpper()})",
             LogTag.Actions | LogTag.Creatures);
     }
 
     public void Execute() {
         if (fromCreature == null || toCreature == null || owner == null) {
-            LogError("Cannot execute swap - one or more components are null", LogTag.Actions | LogTag.Creatures);
+            LogError($"Cannot execute swap - one or more components are null (ActionID: {GetHashCode().ToString().ToUpper()})",
+                LogTag.Actions | LogTag.Creatures);
             return;
         }
 
         owner.RemoveFromBattlefield(fromCreature);
+        Log($"Removed {fromCreature.Name} (CreatureID: {fromCreature.TargetId.ToUpper()}) from battlefield in slot (SlotID: {fromSlot.TargetId.ToUpper()})",
+            LogTag.Actions | LogTag.Creatures);
+
         owner.RemoveFromBattlefield(toCreature);
+        Log($"Removed {toCreature.Name} (CreatureID: {toCreature.TargetId.ToUpper()}) from battlefield in slot (SlotID: {toSlot.TargetId.ToUpper()})",
+            LogTag.Actions | LogTag.Creatures);
 
         owner.AddToBattlefield(fromCreature, toSlot);
-        owner.AddToBattlefield(toCreature, fromSlot);
+        Log($"Added {fromCreature.Name} (CreatureID: {fromCreature.TargetId.ToUpper()}) to battlefield in slot (SlotID: {toSlot.TargetId.ToUpper()})",
+            LogTag.Actions | LogTag.Creatures);
 
-        Log($"Executed swap between {fromCreature.Name} and {toCreature.Name}", LogTag.Actions | LogTag.Creatures);
+        owner.AddToBattlefield(toCreature, fromSlot);
+        Log($"Added {toCreature.Name} (CreatureID: {toCreature.TargetId.ToUpper()}) to battlefield in slot (SlotID: {fromSlot.TargetId.ToUpper()})",
+            LogTag.Actions | LogTag.Creatures);
+
+        Log($"Executed swap between {fromCreature.Name} (CreatureID: {fromCreature.TargetId.ToUpper()}) and {toCreature.Name} (CreatureID: {toCreature.TargetId.ToUpper()}) (ActionID: {GetHashCode().ToString().ToUpper()})",
+            LogTag.Actions | LogTag.Creatures);
     }
 
     public override string ToString() {
-        return $"SwapCreaturesAction: From={fromCreature?.Name} (Slot={fromSlot}), To={toCreature?.Name} (Slot={toSlot})";
+        return $"SwapCreaturesAction: From={fromCreature?.Name} (CreatureID: {fromCreature?.TargetId.ToUpper() ?? "UNKNOWN"}) in Slot=(SlotID: {fromSlot?.TargetId.ToUpper() ?? "UNKNOWN"}), To={toCreature?.Name} (CreatureID: {toCreature?.TargetId.ToUpper() ?? "UNKNOWN"}) in Slot=(SlotID: {toSlot?.TargetId.ToUpper() ?? "UNKNOWN"})";
     }
 }
 

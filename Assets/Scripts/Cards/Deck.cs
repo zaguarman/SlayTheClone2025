@@ -21,6 +21,7 @@ public class Deck : IDeck {
     private List<ICard> discardPile;
     private System.Random random;
     private List<CardData> originalCardDataList;
+    private string deckId;
 
     public int CardsRemaining => cards?.Count ?? 0;
     public int DiscardPileCount => discardPile?.Count ?? 0;
@@ -29,11 +30,13 @@ public class Deck : IDeck {
         cards = new List<ICard>();
         discardPile = new List<ICard>();
         random = new System.Random();
+        deckId = System.Guid.NewGuid().ToString();
     }
 
     public void Initialize(List<CardData> cardDataList) {
         if (cardDataList == null || cardDataList.Count == 0) {
-            LogError("Attempted to initialize deck with null or empty card list", LogTag.Cards | LogTag.Initialization);
+            LogError($"Attempted to initialize deck with null or empty card list (DeckID: {deckId.ToUpper()})",
+                LogTag.Cards | LogTag.Initialization);
             return;
         }
 
@@ -45,50 +48,52 @@ public class Deck : IDeck {
         foreach (var cardData in cardDataList) {
             var card = CardFactory.CreateCard(cardData);
             if (card != null) {
-                Log($"Added {card.Name} to deck with {card.Effects.Count} effects", LogTag.Cards | LogTag.Initialization);
+                Log($"Added {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()}) with {card.Effects.Count} effects",
+                    LogTag.Cards | LogTag.Initialization);
                 cards.Add(card);
             }
         }
 
         Shuffle();
-        Log($"Initialized with {cards.Count} cards", LogTag.Cards | LogTag.Initialization);
+        Log($"Initialized deck (DeckID: {deckId.ToUpper()}) with {cards.Count} cards",
+            LogTag.Cards | LogTag.Initialization);
     }
 
     public ICard DrawCard() {
         if (cards.Count == 0) {
-            LogWarning("Attempted to draw from empty deck", LogTag.Cards);
+            LogWarning($"Attempted to draw from empty deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
             return null;
         }
 
         var drawnCard = cards[0];
         cards.RemoveAt(0);
-        Log($"Drew card: {drawnCard.Name}", LogTag.Cards);
+        Log($"Drew card: {drawnCard.Name} (CardID: {drawnCard.TargetId.ToUpper()}) from deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
         return drawnCard;
     }
 
     public void AddCardToTop(ICard card) {
         if (card == null) {
-            LogError("Attempted to add null card to deck", LogTag.Cards);
+            LogError($"Attempted to add null card to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
             return;
         }
 
         cards.Insert(0, card);
-        Log($"Added card to top: {card.Name}", LogTag.Cards);
+        Log($"Added card to top: {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
     }
 
     public void AddCardToBottom(ICard card) {
         if (card == null) {
-            LogError("Attempted to add null card to deck", LogTag.Cards);
+            LogError($"Attempted to add null card to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
             return;
         }
 
         cards.Add(card);
-        Log($"Added card to bottom: {card.Name}", LogTag.Cards);
+        Log($"Added card to bottom: {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
     }
 
     public void AddToDiscardPile(ICard card) {
         if (card == null) {
-            LogError("Attempted to add null card to discard pile", LogTag.Cards);
+            LogError($"Attempted to add null card to discard pile (DeckID: {deckId.ToUpper()})", LogTag.Cards);
             return;
         }
 
@@ -99,20 +104,21 @@ public class Deck : IDeck {
 
             if (restoredCard != null) {
                 discardPile.Add(restoredCard);
-                Log($"Added restored creature card to discard pile: {restoredCard.Name}", LogTag.Cards);
+                Log($"Added restored creature card to discard pile: {restoredCard.Name} (CardID: {restoredCard.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
                 return;
             }
         }
 
         // If it's not a creature or restoration failed, add the original card
         discardPile.Add(card);
-        Log($"Added card to discard pile: {card.Name}", LogTag.Cards);
+        Log($"Added card to discard pile: {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
     }
 
     private ICard RestoreToOriginalValues(ICreature creature) {
         if (creature == null) return null;
 
-        Log($"Restoring creature {creature.Name} to initial values", LogTag.Cards | LogTag.Creatures);
+        Log($"Restoring creature {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) to initial values for deck (DeckID: {deckId.ToUpper()})",
+            LogTag.Cards | LogTag.Creatures);
 
         // Find the original card data by ID instead of name
         CardData originalData = originalCardDataList?.FirstOrDefault(c => c.cardId == creature.CardId);
@@ -121,7 +127,8 @@ public class Deck : IDeck {
             // Create a fresh card from the original data
             ICard restoredCard = CardFactory.CreateCard(originalData);
 
-            Log($"Successfully restored {creature.Name} to initial values using cardId: {creature.CardId}", LogTag.Cards | LogTag.Creatures);
+            Log($"Successfully restored {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) to initial values using cardId: {creature.CardId.ToUpper()} for deck (DeckID: {deckId.ToUpper()})",
+                LogTag.Cards | LogTag.Creatures);
             return restoredCard;
         }
 
@@ -131,12 +138,14 @@ public class Deck : IDeck {
         if (originalData != null) {
             // Create a fresh card from the original data
             ICard restoredCard = CardFactory.CreateCard(originalData);
-            Log($"Successfully restored {creature.Name} to initial values by name (fallback)", LogTag.Cards | LogTag.Creatures);
+            Log($"Successfully restored {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) to initial values by name (fallback) for deck (DeckID: {deckId.ToUpper()})",
+                LogTag.Cards | LogTag.Creatures);
             return restoredCard;
         }
 
         // If original data not found, create a generic version
-        Log($"Could not find original data for {creature.Name} with ID {creature.CardId}, creating generic version", LogTag.Cards | LogTag.Creatures);
+        Log($"Could not find original data for {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) with ID {creature.CardId.ToUpper()}, creating generic version for deck (DeckID: {deckId.ToUpper()})",
+            LogTag.Cards | LogTag.Creatures);
         int health = creature.Health <= 0 ? creature.Attack + 1 : creature.Health;
         var newCreature = new Creature(creature.Name, creature.Attack, health, creature.CardId);
         newCreature.Description = creature.Description;
@@ -154,7 +163,7 @@ public class Deck : IDeck {
     public void ClearDiscardPile() {
         int count = discardPile.Count;
         discardPile.Clear();
-        Log($"Cleared discard pile ({count} cards)", LogTag.Cards);
+        Log($"Cleared discard pile ({count} cards) for deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
     }
 
     public void Shuffle() {
@@ -168,12 +177,12 @@ public class Deck : IDeck {
             cards[j] = temp;
         }
 
-        Log($"Shuffled deck ({cards.Count} cards)", LogTag.Cards);
+        Log($"Shuffled deck ({cards.Count} cards) (DeckID: {deckId.ToUpper()})", LogTag.Cards);
     }
 
     public bool RemoveCard(ICard card) {
         if (card == null) {
-            LogError("Attempted to remove null card from deck", LogTag.Cards);
+            LogError($"Attempted to remove null card from deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
             return false;
         }
 
@@ -183,7 +192,7 @@ public class Deck : IDeck {
         if (cardToRemove != null) {
             bool removed = cards.Remove(cardToRemove);
             if (removed) {
-                Log($"Removed card {card.Name} from deck by ID: {card.CardId}", LogTag.Cards);
+                Log($"Removed card {card.Name} (CardID: {card.CardId.ToUpper()}) from deck (DeckID: {deckId.ToUpper()}) by ID", LogTag.Cards);
             }
             return removed;
         }
@@ -193,12 +202,12 @@ public class Deck : IDeck {
         if (cardToRemove != null) {
             bool removed = cards.Remove(cardToRemove);
             if (removed) {
-                Log($"Removed card {card.Name} from deck (by name match)", LogTag.Cards);
+                Log($"Removed card {card.Name} (CardID: {card.CardId.ToUpper()}) from deck (DeckID: {deckId.ToUpper()}) by name match", LogTag.Cards);
             }
             return removed;
         }
 
-        LogWarning($"Could not find card {card.Name} (ID: {card.CardId}) in deck to remove", LogTag.Cards);
+        LogWarning($"Could not find card {card.Name} (CardID: {card.CardId.ToUpper()}) in deck (DeckID: {deckId.ToUpper()}) to remove", LogTag.Cards);
         return false;
     }
 
@@ -206,7 +215,7 @@ public class Deck : IDeck {
     public List<ICard> GetDeckPreview() {
         // Create a copy of cards to avoid exposing the internal collection
         var previewCards = new List<ICard>(cards);
-        Log($"Created deck preview with {previewCards.Count} cards", LogTag.Cards);
+        Log($"Created deck preview with {previewCards.Count} cards for deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
         return previewCards;
     }
 
@@ -214,7 +223,7 @@ public class Deck : IDeck {
     public List<ICard> GetDiscardPilePreview() {
         // Create a copy of discard pile to avoid exposing the internal collection
         var previewCards = new List<ICard>(discardPile);
-        Log($"Created discard pile preview with {previewCards.Count} cards", LogTag.Cards);
+        Log($"Created discard pile preview with {previewCards.Count} cards for deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
         return previewCards;
     }
 }
