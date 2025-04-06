@@ -77,7 +77,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
 
     private void OnCreatureDamaged(ICreature creature, int damage) {
         if (linkedCreature != null && creature.TargetId == linkedCreature.TargetId) {
-            Log($"Creature {creature.Name} took {damage} damage, updating UI", LogTag.Creatures | LogTag.UI);
+            Log($"Creature {creature.Name} took {damage} damage, updating UI (TargetID: {creature.TargetId.ToUpper()}) (Card TargetID: {GetInstanceID().ToString().ToUpper()})", LogTag.Creatures | LogTag.UI);
             linkedCreature = creature;
             UpdateUI();
 
@@ -91,7 +91,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
 
     private void OnCreatureDied(ICreature creature) {
         if (linkedCreature != null && creature.TargetId == linkedCreature.TargetId) {
-            Log($"Creature {creature.Name} died, updating UI", LogTag.Creatures | LogTag.UI);
+            Log($"Creature {creature.Name} died, updating UI (TargetID: {creature.TargetId.ToUpper()}) (Card TargetID: {GetInstanceID().ToString().ToUpper()})", LogTag.Creatures | LogTag.UI);
             linkedCreature = null;
             UpdateUI();
 
@@ -109,7 +109,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
 
     public override void UpdateUI(IPlayer player = null) {
         if (cardData == null) {
-            LogWarning("Attempted to update UI with null card data", LogTag.UI | LogTag.Cards);
+            LogWarning("Attempted to update UI with null card data (Card TargetID: " + GetInstanceID().ToString().ToUpper() + ")", LogTag.UI | LogTag.Cards);
             return;
         }
 
@@ -139,7 +139,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
 
             if (linkedCreature != null) {
                 if (linkedCreature.Health <= 0) {
-                    Log($"Creature {linkedCreature.Name} is dead, should be removed", LogTag.Creatures);
+                    Log($"Creature {linkedCreature.Name} is dead, should be removed (TargetID: {linkedCreature.TargetId.ToUpper()}) (Card TargetID: {GetInstanceID().ToString().ToUpper()})", LogTag.Creatures);
                     statsText.text = $"{creatureData.attack}/{creatureData.health}";
                 } else {
                     statsText.text = $"{linkedCreature.Attack}/{linkedCreature.Health}";
@@ -167,7 +167,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
         if (canvasGroup == null) {
-            LogWarning("CanvasGroup is missing, adding it now", LogTag.UI);
+            LogWarning("CanvasGroup is missing, adding it now (Card TargetID: " + GetInstanceID().ToString().ToUpper() + ")", LogTag.UI);
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
 

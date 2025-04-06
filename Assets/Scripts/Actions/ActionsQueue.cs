@@ -29,7 +29,6 @@ public class ActionsQueue {
         }
     }
 
-
     public UnityEvent OnActionsQueued { get; } = new UnityEvent();
     public UnityEvent OnActionsResolved { get; } = new UnityEvent();
 
@@ -63,7 +62,7 @@ public class ActionsQueue {
 
     public void AddAction(IGameAction action) {
         if (currentIterationDepth >= maxIterationDepth) {
-            LogWarning("Maximum iteration depth reached, skipping action", LogTag.Actions);
+            LogWarning("Maximum iteration depth reached, skipping action (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
             return;
         }
 
@@ -72,7 +71,7 @@ public class ActionsQueue {
 
         if (activeCreatureId != null) {
             if (activeCreatureActions.ContainsKey(activeCreatureId)) {
-                Log($"Replacing existing action for creature {activeCreatureId}", LogTag.Actions);
+                Log($"Replacing existing action for creature (TargetID: {activeCreatureId.ToUpper()})", LogTag.Actions);
                 actionsList.Remove(activeCreatureActions[activeCreatureId]);
                 queueChanged = true;
             }
@@ -82,8 +81,8 @@ public class ActionsQueue {
 
         InsertActionWithPriority(action);
         queueChanged = true;
-        Log($"Added action to queue: {action.GetType().Name}", LogTag.Actions);
-        Log($"Actions in queue: {actionsList.Count}", LogTag.Actions);
+        Log($"Added action to queue: {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
+        Log($"Actions in queue: {actionsList.Count} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
 
         if (queueChanged) {
             OnActionsQueued.Invoke();
@@ -103,20 +102,20 @@ public class ActionsQueue {
         }
 
         actionsList.Insert(insertIndex, action);
-        Log($"Inserted action {action.GetType().Name} at priority {priority}, position {insertIndex}", LogTag.Actions);
+        Log($"Inserted action {action.GetType().Name} at priority {priority}, position {insertIndex} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
     }
 
     public bool IsEffectProcessed(string sourceId, EffectTrigger trigger) {
         bool isProcessed = processedEffects.Contains((sourceId, trigger));
         if (isProcessed) {
-            Log($"Effect {trigger} for creature {sourceId} has already been processed", LogTag.Effects);
+            Log($"Effect {trigger} for creature (TargetID: {sourceId.ToUpper()}) has already been processed (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Effects);
         }
         return isProcessed;
     }
 
     public void MarkEffectProcessed(string sourceId, EffectTrigger trigger) {
         processedEffects.Add((sourceId, trigger));
-        Log($"Marked effect {trigger} for creature {sourceId} as processed", LogTag.Effects);
+        Log($"Marked effect {trigger} for creature (TargetID: {sourceId.ToUpper()}) as processed (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Effects);
     }
 
     public void ResolveActions() {
@@ -125,15 +124,15 @@ public class ActionsQueue {
 
         // Log the initial state for debugging
         int initialActionCount = actionsList.Count;
-        Log($"Resolving actions. Initial queue size: {initialActionCount}", LogTag.Actions);
+        Log($"Resolving actions. Initial queue size: {initialActionCount} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
 
         processedEffects.Clear();
-        Log("Cleared processed effects for new resolution chain", LogTag.Effects);
+        Log("Cleared processed effects for new resolution chain (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Effects);
 
         // Add discard hand actions for both players
         var gameManager = GameManager.Instance;
         if (gameManager != null) {
-            Log("Adding mandatory discard and draw actions", LogTag.Actions);
+            Log("Adding mandatory discard and draw actions (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
 
             // Add discard actions
             AddAction(new DiscardHandAction(gameManager.Player1));
@@ -144,7 +143,7 @@ public class ActionsQueue {
             AddAction(new DrawCardsAction(gameManager.Player2, gameManager.Player2.CardsToDraw));
 
             // Log the updated queue size
-            Log($"After adding mandatory actions, queue size: {actionsList.Count}", LogTag.Actions);
+            Log($"After adding mandatory actions, queue size: {actionsList.Count} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
         }
 
         // Process all actions in the queue
@@ -158,7 +157,7 @@ public class ActionsQueue {
                 activeCreatureActions.Remove(activeCreatureId);
             }
 
-            Log($"Executing action: {action.GetType().Name}", LogTag.Actions);
+            Log($"Executing action: {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
             action.Execute();
         }
 
@@ -171,7 +170,7 @@ public class ActionsQueue {
             gameMediator.NotifyActionsQueueChanged();
             gameMediator.NotifyGameStateChanged();
         }
-        Log("Action resolution complete", LogTag.Actions);
+        Log("Action resolution complete (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
     }
 
     public bool HasActiveAction(string creatureId) {
@@ -190,7 +189,7 @@ public class ActionsQueue {
             processedEffects.Clear();
             OnActionsQueued.RemoveAllListeners();
             OnActionsResolved.RemoveAllListeners();
-            Log("Actions queue cleaned up", LogTag.Actions);
+            Log("Actions queue cleaned up (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
         }
     }
 }

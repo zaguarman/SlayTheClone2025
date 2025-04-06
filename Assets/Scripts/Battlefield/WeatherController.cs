@@ -30,7 +30,7 @@ public class WeatherController : MonoBehaviour {
             SetupButton();
             Log("WeatherController initialized successfully", LogTag.Initialization);
         } else {
-            Log("Starting delayed initialization", LogTag.Initialization);
+            Log("Starting delayed initialization for WeatherController", LogTag.Initialization);
             StartCoroutine(WaitForInitialization());
         }
     }
@@ -85,18 +85,18 @@ public class WeatherController : MonoBehaviour {
         if (cycleWeatherButton != null) {
             cycleWeatherButton.onClick.RemoveAllListeners();
             cycleWeatherButton.onClick.AddListener(CycleWeather);
-            Log("Weather button listener added", LogTag.UI | LogTag.Initialization);
+            Log("Weather button listener added (TargetID: " + gameObject.GetInstanceID().ToString().ToUpper() + ")", LogTag.UI | LogTag.Initialization);
         }
 
         if (gameManager?.WeatherSystem != null) {
             gameManager.WeatherSystem.OnWeatherChanged.AddListener(UpdateWeatherText);
-            Log("Weather system change listener added", LogTag.UI | LogTag.Initialization);
+            Log("Weather system change listener added (TargetID: " + gameObject.GetInstanceID().ToString().ToUpper() + ")", LogTag.UI | LogTag.Initialization);
         }
     }
 
     private void CycleWeather() {
         if (gameManager?.WeatherSystem == null) {
-            LogError("Cannot cycle weather - WeatherSystem is null", LogTag.UI | LogTag.Effects);
+            LogError("Cannot cycle weather - WeatherSystem is null (TargetID: " + gameObject.GetInstanceID().ToString().ToUpper() + ")", LogTag.UI | LogTag.Effects);
             return;
         }
 
@@ -108,7 +108,7 @@ public class WeatherController : MonoBehaviour {
             _ => WeatherType.Clear
         };
 
-        Log($"Setting weather to: {nextWeather}", LogTag.UI | LogTag.Effects);
+        Log($"Setting weather to: {nextWeather} (TargetID: {gameObject.GetInstanceID().ToString().ToUpper()})", LogTag.UI | LogTag.Effects);
         gameManager.WeatherSystem.SetWeather(nextWeather);
     }
 

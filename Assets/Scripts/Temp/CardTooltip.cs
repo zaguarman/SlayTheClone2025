@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using static DebugLogger;
 
 /// <summary>
 /// Manages a single reusable card tooltip for the game.
@@ -60,6 +61,8 @@ public class CardTooltip : MonoBehaviour {
         // Show the tooltip
         canvasGroup.alpha = 1;
         gameObject.SetActive(true);
+
+        Log($"Showing tooltip for card: {card.GetCardData().cardName} (CardID: {card.GetCardData().cardId.ToUpper()}) (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
     }
 
     /// <summary>
@@ -79,12 +82,18 @@ public class CardTooltip : MonoBehaviour {
         float width = 350;
         float height = 280; // Increased from 250 to ensure there's enough space for target ID
         tooltipRect.sizeDelta = new Vector2(width, height);
+
+        Log($"Updated tooltip content for card: {card.GetCardData().cardName} (CardID: {card.GetCardData().cardId.ToUpper()}) (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
     }
 
     /// <summary>
     /// Hides the tooltip
     /// </summary>
     public void HideTooltip() {
+        if (activeCard != null) {
+            Log($"Hiding tooltip (CardID: {activeCard.GetCardData()?.cardId.ToUpper() ?? "UNKNOWN"}) (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
+        }
+
         activeCard = null;
         canvasGroup.alpha = 0;
         gameObject.SetActive(false);
@@ -238,5 +247,7 @@ public class CardTooltip : MonoBehaviour {
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
         }
+
+        Log($"Enabled tooltip-only mode for card: {card.GetCardData().cardName} (CardID: {card.GetCardData().cardId.ToUpper()}) (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
     }
 }

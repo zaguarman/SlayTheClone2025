@@ -443,12 +443,13 @@ public class PlayCardAction : IGameAction {
         this.card = card;
         this.owner = owner;
         this.target = target;
-        Log($"Created PlayCardAction for {card.Name} targeting {target?.TargetId}", LogTag.Actions | LogTag.Cards);
+        Log($"Created PlayCardAction for {card.Name} (CardID: {card.TargetId.ToUpper()}) by player {(owner.IsPlayer1() ? "1" : "2")} (PlayerID: {owner.TargetId.ToUpper()}) targeting (TargetID: {target?.TargetId.ToUpper() ?? "NONE"})",
+            LogTag.Actions | LogTag.Cards);
     }
 
     public void Execute() {
         if (card == null || owner == null) {
-            LogError("Cannot execute PlayCardAction - card or owner is null", LogTag.Actions);
+            LogError($"Cannot execute PlayCardAction - card or owner is null (ActionID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
             return;
         }
 
@@ -459,23 +460,30 @@ public class PlayCardAction : IGameAction {
         // Process based on card type
         if (card is Spell spell) {
             // Create a specific spell action for better tracking
+            Log($"Creating PlaySpellAction for {card.Name} (CardID: {card.TargetId.ToUpper()}) targeting (TargetID: {target?.TargetId.ToUpper() ?? "NONE"})",
+                LogTag.Actions | LogTag.Cards);
             GameManager.Instance.ActionsQueue.AddAction(new PlaySpellAction(spell, owner, target));
         } else if (card is ICreature creature) {
             // If it's a creature, explicitly create a summon action with fromHand=true
             // This tells the action to remove the card from the deck if it wasn't already in hand
+            Log($"Creating SummonCreatureAction for {card.Name} (CardID: {card.TargetId.ToUpper()}) targeting slot (TargetID: {target?.TargetId.ToUpper() ?? "NONE"}) (wasInHand: {wasInHand})",
+                LogTag.Actions | LogTag.Cards | LogTag.Creatures);
             GameManager.Instance.ActionsQueue.AddAction(
                 new SummonCreatureAction(creature, owner, target, wasInHand)
             );
         } else {
             // Process any other card types
+            Log($"Processing generic card play for {card.Name} (CardID: {card.TargetId.ToUpper()})",
+                LogTag.Actions | LogTag.Cards);
             card.Play(owner, GameManager.Instance.ActionsQueue, target);
         }
 
-        Log($"Executed PlayCardAction for {card.Name}", LogTag.Actions | LogTag.Cards);
+        Log($"Executed PlayCardAction for {card.Name} (CardID: {card.TargetId.ToUpper()}) by player {(owner.IsPlayer1() ? "1" : "2")} (PlayerID: {owner.TargetId.ToUpper()})",
+            LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {
-        return $"PlayCardAction: Card={card?.Name}, Owner={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")}, Target={target?.TargetId}";
+        return $"PlayCardAction: Card={card?.Name} (CardID: {card?.TargetId.ToUpper() ?? "UNKNOWN"}), Owner={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")} (PlayerID: {owner?.TargetId.ToUpper() ?? "UNKNOWN"}), Target=(TargetID: {target?.TargetId.ToUpper() ?? "NONE"})";
     }
 }
 
@@ -535,11 +543,14 @@ public class MoveCreatureAction : IGameAction {
         this.fromSlot = fromSlot;
         this.toSlot = toSlot;
         this.player = player;
+
+        Log($"Created MoveCreatureAction for {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) from slot (SlotID: {fromSlot.TargetId.ToUpper()}) to slot (SlotID: {toSlot.TargetId.ToUpper()}) by player {(player.IsPlayer1() ? "1" : "2")} (PlayerID: {player.TargetId.ToUpper()})",
+            LogTag.Actions | LogTag.Creatures);
     }
 
     public void Execute() {
         if (creature == null || player == null) {
-            LogError("Invalid move action - creature or player is null", LogTag.Actions);
+            LogError($"Invalid move action - creature or player is null (ActionID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
             return;
         }
 
@@ -555,7 +566,7 @@ public class MoveCreatureAction : IGameAction {
             HandleMove(fromSlotComponent, toSlotComponent);
         }
 
-        Log($"Executed move action for {creature.Name} from slot {fromSlot} to slot {toSlot}",
+        Log($"Executed move action for {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) from slot (SlotID: {fromSlot.TargetId.ToUpper()}) to slot (SlotID: {toSlot.TargetId.ToUpper()})",
             LogTag.Actions | LogTag.Creatures);
     }
 
@@ -563,6 +574,11 @@ public class MoveCreatureAction : IGameAction {
         // Get the CardControllers from both slots
         var fromController = fromSlot.OccupyingCard;
         var toController = toSlot.OccupyingCard;
+
+        if (fromController != null && toController != null) {
+            Log($"Handling swap between {fromController.GetLinkedCreature()?.Name ?? "Unknown"} (CreatureID: {fromController.GetLinkedCreature()?.TargetId.ToUpper() ?? "UNKNOWN"}) and {toController.GetLinkedCreature()?.Name ?? "Unknown"} (CreatureID: {toController.GetLinkedCreature()?.TargetId.ToUpper() ?? "UNKNOWN"})",
+                LogTag.Actions | LogTag.Creatures);
+        }
 
         // Clear both slots without destroying the CardControllers
         fromSlot.ClearSlot(false); // Pass false to avoid destroying the controller
@@ -586,8 +602,15 @@ public class MoveCreatureAction : IGameAction {
     private void HandleMove(BattlefieldSlot fromSlot, BattlefieldSlot toSlot) {
         var fromController = fromSlot.OccupyingCard;
 
+        if (fromController != null) {
+            Log($"Handling move of {fromController.GetLinkedCreature()?.Name ?? "Unknown"} (CreatureID: {fromController.GetLinkedCreature()?.TargetId.ToUpper() ?? "UNKNOWN"}) to new slot (SlotID: {toSlot.TargetId.ToUpper()})",
+                LogTag.Actions | LogTag.Creatures);
+        }
+
         // Clear the target slot if occupied (optional, based on game rules)
         if (toSlot.IsOccupied()) {
+            Log($"Target slot already occupied, clearing (SlotID: {toSlot.TargetId.ToUpper()}, Occupying creature: {toSlot.OccupyingCreature?.Name ?? "Unknown"} (CreatureID: {toSlot.OccupyingCreature?.TargetId.ToUpper() ?? "UNKNOWN"}))",
+                LogTag.Actions | LogTag.Creatures);
             toSlot.ClearSlot(true); // Destroy existing if necessary
         }
 
@@ -604,6 +627,6 @@ public class MoveCreatureAction : IGameAction {
     }
 
     public override string ToString() {
-        return $"MoveCreatureAction: Creature={creature?.Name}, FromSlot={fromSlot?.TargetId}, ToSlot={toSlot?.TargetId}";
+        return $"MoveCreatureAction: Creature={creature?.Name} (CreatureID: {creature?.TargetId.ToUpper() ?? "UNKNOWN"}), FromSlot=(SlotID: {fromSlot?.TargetId.ToUpper() ?? "UNKNOWN"}), ToSlot=(SlotID: {toSlot?.TargetId.ToUpper() ?? "UNKNOWN"})";
     }
 }
