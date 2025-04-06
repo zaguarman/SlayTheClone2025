@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using static DebugLogger;
 
 public class BattlefieldUI : CardContainer {
@@ -33,10 +32,10 @@ public class BattlefieldUI : CardContainer {
 
         InitializeManagers();
         CreateSlots();
-        Log("BattlefieldUI initialized", LogTag.Initialization);
+        Log($"BattlefieldUI initialized for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Initialization);
 
         player.InitializeBattlefield(BattlefieldSlotsList);
-        Log("Player Battlefield initialized", LogTag.Initialization);
+        Log($"Player Battlefield initialized for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Initialization);
 
         UpdateUI(Player);
     }
@@ -90,7 +89,7 @@ public class BattlefieldUI : CardContainer {
 
                 // For creatures, we need a slot
                 if (cardData is CreatureData) {
-                    Log($"Adding PlayCardAction for creature {cardData.cardName} to slot {target.TargetId}",
+                    Log($"Adding PlayCardAction for creature {cardData.cardName} (TargetID: {cardData.cardId.ToUpper()}) to slot (TargetID: {target.TargetId.ToUpper()})",
                         LogTag.Actions | LogTag.Cards);
                 }
                 // For spells, we might need a different target (creature in slot or player)
@@ -98,13 +97,13 @@ public class BattlefieldUI : CardContainer {
                     // If the slot is occupied, target the creature
                     if (target is BattlefieldSlot slot && slot.IsOccupied()) {
                         validTarget = slot.OccupyingCreature;
-                        Log($"Adding PlayCardAction for spell {cardData.cardName} targeting creature {validTarget.TargetId}",
+                        Log($"Adding PlayCardAction for spell {cardData.cardName} (TargetID: {cardData.cardId.ToUpper()}) targeting creature (TargetID: {validTarget.TargetId.ToUpper()})",
                             LogTag.Actions | LogTag.Cards);
                     }
                     // Otherwise target the opponent player
                     else {
                         validTarget = Player.Opponent;
-                        Log($"Adding PlayCardAction for spell {cardData.cardName} targeting player {(Player.Opponent.IsPlayer1() ? "1" : "2")}",
+                        Log($"Adding PlayCardAction for spell {cardData.cardName} (TargetID: {cardData.cardId.ToUpper()}) targeting player (TargetID: {validTarget.TargetId.ToUpper()})",
                             LogTag.Actions | LogTag.Cards);
                     }
                 }
@@ -298,7 +297,7 @@ public class BattlefieldUI : CardContainer {
     }
 
     public BattlefieldSlot GetSlot(ICreature creature) {
-        var slot = BattlefieldSlotsList.FirstOrDefault(s => s.OccupyingCreature == creature) ?? 
+        var slot = BattlefieldSlotsList.FirstOrDefault(s => s.OccupyingCreature == creature) ??
             GetOpponentBattlefield().BattlefieldSlotsList.FirstOrDefault(s => s.OccupyingCreature == creature);
 
         return slot;
@@ -318,7 +317,7 @@ public class BattlefieldUI : CardContainer {
     }
 
     protected override void OnCardDropped(CardController card) {
-        Log($"Card dropped from Battlefield: {card.GetCardData()?.cardName}", LogTag.UI | LogTag.Cards);
+        Log($"Card dropped from Battlefield: {card.GetCardData()?.cardName} (TargetID: {card.GetCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
         UpdateLayout();
     }
 

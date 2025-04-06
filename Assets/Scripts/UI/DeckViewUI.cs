@@ -162,7 +162,7 @@ public class DeckViewUI : UIComponent {
         viewingDiscardPile = false;
         UpdateUI(Player);
         deckViewPanel.SetActive(true);
-        Log($"Showing deck view for {(Player?.IsPlayer1() == true ? "Player 1" : "Player 2")}", LogTag.UI);
+        Log($"Showing deck view for {(Player?.IsPlayer1() == true ? "Player 1" : "Player 2")} (TargetID: {Player?.TargetId.ToUpper()})", LogTag.UI);
     }
 
     public void HideDeckView() {
@@ -187,13 +187,13 @@ public class DeckViewUI : UIComponent {
     public void ShowDeckCards() {
         viewingDiscardPile = false;
         UpdateUI(Player);
-        Log("Showing deck cards", LogTag.UI);
+        Log($"Showing deck cards for player (TargetID: {Player?.TargetId.ToUpper()})", LogTag.UI);
     }
 
     public void ShowDiscardPileCards() {
         viewingDiscardPile = true;
         UpdateUI(Player);
-        Log("Showing discard pile cards", LogTag.UI);
+        Log($"Showing discard pile cards for player (TargetID: {Player?.TargetId.ToUpper()})", LogTag.UI);
     }
 
     public void UpdateDeckDisplay(IPlayer player) {
@@ -221,7 +221,7 @@ public class DeckViewUI : UIComponent {
             CreateCardEntry(card, player);
         }
 
-        Log($"Updated deck display with {deckCards.Count} cards", LogTag.UI | LogTag.Cards);
+        Log($"Updated deck display with {deckCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Cards);
 
         // Reset scroll position to top
         if (scrollRect != null) {
@@ -255,7 +255,7 @@ public class DeckViewUI : UIComponent {
             CreateCardEntry(card, player);
         }
 
-        Log($"Updated discard pile display with {discardPileCards.Count} cards", LogTag.UI | LogTag.Cards);
+        Log($"Updated discard pile display with {discardPileCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Cards);
 
         // Reset scroll position to top
         if (scrollRect != null) {
@@ -276,12 +276,12 @@ public class DeckViewUI : UIComponent {
                 var cardDealingService = gameManager.cardDealingService;
                 deckCards = cardDealingService.GetDeckPreview(player);
 
-                Log($"Retrieved {deckCards.Count} cards for player deck preview", LogTag.Cards);
+                Log($"Retrieved {deckCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()}) deck preview", LogTag.Cards);
                 return deckCards;
             }
         }
 
-        LogError("Cannot get deck cards - Player or Deck not available", LogTag.Cards | LogTag.UI);
+        LogError($"Cannot get deck cards - Player (TargetID: {player?.TargetId.ToUpper()}) or Deck not available", LogTag.Cards | LogTag.UI);
         return new List<ICard>();
     }
 
@@ -291,18 +291,18 @@ public class DeckViewUI : UIComponent {
                 var cardDealingService = gameManager.cardDealingService;
                 var discardCards = cardDealingService.GetDiscardPilePreview(player);
 
-                Log($"Retrieved {discardCards.Count} cards for player discard pile preview", LogTag.Cards);
+                Log($"Retrieved {discardCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()}) discard pile preview", LogTag.Cards);
                 return discardCards;
             }
         }
 
-        LogError("Cannot get discard pile cards - Player or Deck not available", LogTag.Cards | LogTag.UI);
+        LogError($"Cannot get discard pile cards - Player (TargetID: {player?.TargetId.ToUpper()}) or Deck not available", LogTag.Cards | LogTag.UI);
         return new List<ICard>();
     }
 
     private void CreateCardEntry(ICard card, IPlayer owner) {
         if (card == null || cardListContent == null) {
-            LogError("Cannot create card entry - card or content is null", LogTag.Cards);
+            LogError($"Cannot create card entry - card or content is null", LogTag.Cards);
             return;
         }
 
@@ -319,9 +319,9 @@ public class DeckViewUI : UIComponent {
             // Add to our list for tracking
             cardEntries.Add(cardController);
 
-            Log($"Created card entry for {card.Name}", LogTag.Cards);
+            Log($"Created card entry for {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
         } else {
-            LogError($"Failed to create card controller for {card.Name}", LogTag.Cards);
+            LogError($"Failed to create card controller for {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
         }
     }
 
@@ -359,7 +359,7 @@ public class DeckViewUI : UIComponent {
             canvasGroup.interactable = true;
         }
 
-        Log($"Disabled drag interactions for card {cardController.name}", LogTag.Cards | LogTag.UI);
+        Log($"Disabled drag interactions for card {cardController.name} (TargetID: {cardController.GetCardData()?.cardId.ToUpper()})", LogTag.Cards | LogTag.UI);
     }
 
     // This method is no longer needed as we're replacing the entire drag handling approach

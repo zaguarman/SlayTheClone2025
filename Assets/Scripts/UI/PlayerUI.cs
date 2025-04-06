@@ -1,4 +1,3 @@
-using UnityEngine;
 using TMPro;
 using static DebugLogger;
 
@@ -20,17 +19,17 @@ public class PlayerUI : UIComponent {
             gameReferences.player2References.HealthText;
 
         if (healthText == null) {
-            LogWarning($"Health text reference missing for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.UI | LogTag.Initialization);
+            LogWarning($"Health text reference missing for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
         } else {
             // Give the player direct access to its health text
             player.SetHealthText(healthText);
-            Log($"Health text set for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.UI | LogTag.Initialization);
+            Log($"Health text set for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
         }
 
         InitializeHandUI(player);
 
         IsInitialized = true;
-        Log($"PlayerUI initialized for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.UI | LogTag.Initialization);
+        Log($"PlayerUI initialized for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
     }
 
     protected override void RegisterEvents() {
@@ -71,9 +70,9 @@ public class PlayerUI : UIComponent {
 
         if (handUI != null) {
             handUI.Initialize(player);
-            Log($"HandUI initialized for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.UI | LogTag.Initialization);
+            Log($"HandUI initialized for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
         } else {
-            LogError($"HandUI reference missing for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.UI | LogTag.Initialization);
+            LogError($"HandUI reference missing for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
         }
     }
 
