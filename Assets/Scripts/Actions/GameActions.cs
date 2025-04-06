@@ -74,13 +74,14 @@ public class DrawCardAction : IGameAction {
     public DrawCardAction(IPlayer player, int amount = 1) {
         this.player = player;
         this.amount = amount;
-        Log($"Created DrawCardAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) to draw {amount} card(s)",
+        Log($"Created DrawCardAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (PlayerID: {player.TargetId.ToUpper()}) to draw {amount} card(s) (ActionID: {GetHashCode().ToString().ToUpper()})",
             LogTag.Actions | LogTag.Cards);
     }
 
     public void Execute() {
         if (player == null) {
-            LogError("Cannot execute draw action - player is null", LogTag.Actions | LogTag.Cards);
+            LogError($"Cannot execute draw action - player is null (ActionID: {GetHashCode().ToString().ToUpper()})",
+                LogTag.Actions | LogTag.Cards);
             return;
         }
 
@@ -89,7 +90,7 @@ public class DrawCardAction : IGameAction {
         for (int i = 0; i < amount; i++) {
             // Check if we've hit the hand size limit
             if (player.Hand.Count >= Player.MAX_HAND_SIZE) {
-                Log($"Draw stopped: {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) has reached the maximum hand size ({Player.MAX_HAND_SIZE})",
+                Log($"Draw stopped: {(player.IsPlayer1() ? "Player 1" : "Player 2")} (PlayerID: {player.TargetId.ToUpper()}) has reached the maximum hand size ({Player.MAX_HAND_SIZE}) (ActionID: {GetHashCode().ToString().ToUpper()})",
                     LogTag.Actions | LogTag.Cards);
                 break;
             }
@@ -100,16 +101,16 @@ public class DrawCardAction : IGameAction {
 
         int cardsMissed = amount - cardsDrawn;
         if (cardsMissed > 0) {
-            Log($"{(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) could not draw {cardsMissed} card(s) due to hand size limit",
+            Log($"{(player.IsPlayer1() ? "Player 1" : "Player 2")} (PlayerID: {player.TargetId.ToUpper()}) could not draw {cardsMissed} card(s) due to hand size limit (ActionID: {GetHashCode().ToString().ToUpper()})",
                 LogTag.Actions | LogTag.Cards);
         }
 
-        Log($"Executed draw of {cardsDrawn}/{amount} card(s) for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})",
+        Log($"Executed draw of {cardsDrawn}/{amount} card(s) for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (PlayerID: {player.TargetId.ToUpper()}) (ActionID: {GetHashCode().ToString().ToUpper()})",
             LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {
-        return $"DrawCardAction: Player={(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}), Amount={amount}";
+        return $"DrawCardAction: Player={(player?.IsPlayer1() == true ? "1" : "2")} (PlayerID: {player?.TargetId.ToUpper() ?? "UNKNOWN"}), Amount={amount} (ActionID: {GetHashCode().ToString().ToUpper()})";
     }
 }
 
@@ -366,7 +367,7 @@ public class DirectDamageAction : IGameAction {
         this.target = target;
         this.damage = damage;
         this.source = source;
-        Log($"Created DirectDamageAction - Source: {source?.Name}, Target: {target?.Name}, Damage: {damage}",
+        Log($"Created DirectDamageAction - Source: {source?.Name ?? "Unknown"} (SourceID: {source?.TargetId.ToUpper() ?? "NONE"}), Target: {target?.Name ?? "Unknown"} (TargetID: {target?.TargetId.ToUpper() ?? "UNKNOWN"}), Damage: {damage} (ActionID: {GetHashCode().ToString().ToUpper()})",
             LogTag.Actions | LogTag.Creatures | LogTag.Combat);
     }
 
@@ -380,11 +381,11 @@ public class DirectDamageAction : IGameAction {
         // Apply weather modifiers
         if (modifier != 0f) {
             modifiedDamage = Mathf.Max(0, modifiedDamage + Mathf.RoundToInt(modifier));
-            Log($"Weather modified direct damage from {damage} to {modifiedDamage} (modifier: {modifier})",
+            Log($"Weather modified direct damage from {damage} to {modifiedDamage} (modifier: {modifier}) (ActionID: {GetHashCode().ToString().ToUpper()})",
                 LogTag.Actions | LogTag.Combat | LogTag.Effects);
         }
 
-        Log($"Executing DirectDamageAction - Source: {source?.Name}, Target: {target.Name}, Original Damage: {damage}, Modified Damage: {modifiedDamage}, Weather Modifier: {modifier}",
+        Log($"Executing DirectDamageAction - Source: {source?.Name ?? "Unknown"} (SourceID: {source?.TargetId.ToUpper() ?? "NONE"}), Target: {target.Name} (TargetID: {target.TargetId.ToUpper()}), Original Damage: {damage}, Modified Damage: {modifiedDamage}, Weather Modifier: {modifier} (ActionID: {GetHashCode().ToString().ToUpper()})",
             LogTag.Actions | LogTag.Creatures | LogTag.Combat);
 
         if (target is Creature creatureTarget) {
@@ -395,7 +396,7 @@ public class DirectDamageAction : IGameAction {
     }
 
     public override string ToString() {
-        return $"DirectDamageAction: Source={source?.Name}, Target={target?.Name}, Damage={damage}";
+        return $"DirectDamageAction: Source={source?.Name ?? "Unknown"} (SourceID: {source?.TargetId.ToUpper() ?? "NONE"}), Target={target?.Name ?? "Unknown"} (TargetID: {target?.TargetId.ToUpper() ?? "UNKNOWN"}), Damage={damage} (ActionID: {GetHashCode().ToString().ToUpper()})";
     }
 }
 
@@ -515,26 +516,30 @@ public class MarkCombatTargetAction : IGameAction {
     public MarkCombatTargetAction(ICreature attacker, ITarget targetSlot) {
         this.attacker = attacker;
         this.targetSlot = (BattlefieldSlot)targetSlot;
-        Log($"Created MarkCombatTargetAction: {attacker?.Name} targeting slot {targetSlot?.TargetId}", LogTag.Actions | LogTag.Combat);
+        Log($"Created MarkCombatTargetAction: {attacker?.Name ?? "Unknown"} (AttackerID: {attacker?.TargetId.ToUpper() ?? "UNKNOWN"}) targeting slot (SlotID: {targetSlot?.TargetId.ToUpper() ?? "UNKNOWN"}) (ActionID: {GetHashCode().ToString().ToUpper()})",
+            LogTag.Actions | LogTag.Combat);
     }
 
     public void Execute() {
         if (attacker == null || targetSlot == null) {
-            LogError("Cannot execute combat action - attacker or target slot is null", LogTag.Actions | LogTag.Combat);
+            LogError($"Cannot execute combat action - attacker or target slot is null (ActionID: {GetHashCode().ToString().ToUpper()})",
+                LogTag.Actions | LogTag.Combat);
             return;
         }
 
         if (targetSlot.IsOccupied()) {
             var targetCreature = targetSlot.OccupyingCreature;
             if (targetCreature != null) {
-                Log($"Creature {attacker.Name} attacking creature {targetCreature.Name}", LogTag.Combat);
+                Log($"Creature {attacker.Name} (AttackerID: {attacker.TargetId.ToUpper()}) attacking creature {targetCreature.Name} (TargetID: {targetCreature.TargetId.ToUpper()}) (ActionID: {GetHashCode().ToString().ToUpper()})",
+                    LogTag.Combat);
                 var damageAction = new DamageCreatureAction(targetCreature, attacker.Attack, attacker);
                 GameManager.Instance.ActionsQueue.AddAction(damageAction);
             }
         } else {
             var targetPlayer = attacker.Owner?.Opponent;
             if (targetPlayer != null) {
-                Log($"Creature {attacker.Name} attacking player {(targetPlayer.IsPlayer1() ? "1" : "2")}", LogTag.Combat);
+                Log($"Creature {attacker.Name} (AttackerID: {attacker.TargetId.ToUpper()}) attacking player {(targetPlayer.IsPlayer1() ? "1" : "2")} (PlayerID: {targetPlayer.TargetId.ToUpper()}) (ActionID: {GetHashCode().ToString().ToUpper()})",
+                    LogTag.Combat);
                 GameManager.Instance.ActionsQueue.AddAction(
                     new DamagePlayerAction(targetPlayer, attacker.Attack)
                 );
@@ -543,7 +548,7 @@ public class MarkCombatTargetAction : IGameAction {
     }
 
     public override string ToString() {
-        return $"MarkCombatTargetAction: Attacker={attacker?.Name}, TargetSlot={targetSlot?.TargetId}";
+        return $"MarkCombatTargetAction: Attacker={attacker?.Name ?? "Unknown"} (AttackerID: {attacker?.TargetId.ToUpper() ?? "UNKNOWN"}), TargetSlot=(SlotID: {targetSlot?.TargetId.ToUpper() ?? "UNKNOWN"}) (ActionID: {GetHashCode().ToString().ToUpper()})";
     }
 }
 
