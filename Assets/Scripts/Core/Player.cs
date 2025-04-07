@@ -5,6 +5,8 @@ using static DebugLogger;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using System.Threading.Tasks;
+using System.Threading;
 
 [Serializable]
 public class PlayerDamagedUnityEvent : UnityEvent<int> { }
@@ -164,6 +166,25 @@ public class Player : Entity, IPlayer {
         }
     }
 
+    public async Task<bool> DrawCardAsync(CancellationToken cancellationToken = default) {
+        var cardDealingService = GameManager.Instance?.cardDealingService;
+        if (cardDealingService == null) {
+            LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
+            return false;
+        }
+
+        if (Hand.Count >= MAX_HAND_SIZE) {
+            Log($"Hand full ({MAX_HAND_SIZE} cards), cannot draw more cards", LogTag.Cards);
+            return false;
+        }
+
+        if (cardDealingService.CanDrawCard(this)) {
+            await cardDealingService.DrawCardForPlayerAsync(this, cancellationToken);
+            return true;
+        }
+        return false;
+    }
+
     public void AddToBattlefield(ICard card, ITarget slot = null) {
         if (card == null) return;
 
@@ -182,6 +203,28 @@ public class Player : Entity, IPlayer {
             targetSlot.AssignCreature(cardController);
             gameMediator?.NotifyBattlefieldStateChanged(this);
         }
+    }
+
+    public async Task<bool> AddToBattlefieldAsync(ICard card, ITarget slot = null, CancellationToken cancellationToken = default) {
+        if (card == null) return false;
+
+        var targetSlot = Battlefield.FirstOrDefault(s => s.TargetId == slot.TargetId);
+        if (targetSlot == null) return false;
+
+        // Clear existing card if needed
+        if (targetSlot.IsOccupied()) {
+            var oldCreature = targetSlot.OccupyingCreature;
+            RemoveFromBattlefield(oldCreature);
+        }
+
+        // Create new card controller asynchronously
+        var cardController = await CardFactory.CreateCardControllerAsync(card, this, targetSlot.transform, cancellationToken);
+        if (cardController != null) {
+            targetSlot.AssignCreature(cardController);
+            gameMediator?.NotifyBattlefieldStateChanged(this);
+            return true;
+        }
+        return false;
     }
 
     public void RemoveFromBattlefield(ICard creature, bool destroyCard = true) {

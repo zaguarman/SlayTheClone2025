@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using static DebugLogger;
 
 public interface ICardDealingService {
@@ -6,6 +8,7 @@ public interface ICardDealingService {
     void DealInitialHands(IPlayer player1, IPlayer player2, int handSize = 6);
     bool CanDrawCard(IPlayer player);
     void DrawCardForPlayer(IPlayer player);
+    Task<bool> DrawCardForPlayerAsync(IPlayer player, CancellationToken cancellationToken = default);
     void ShuffleDeck(IPlayer player);
     bool RecycleDiscardPile(IPlayer player);
     void DrawCards(IPlayer player, int count);
@@ -80,6 +83,45 @@ public class CardDealingService : ICardDealingService {
 
         // Check both deck and hand size
         return deck != null && deck.CardsRemaining > 0 && player.Hand.Count < Player.MAX_HAND_SIZE;
+    }
+
+    public async Task<bool> DrawCardForPlayerAsync(IPlayer player, CancellationToken cancellationToken = default) {
+        if (player == null) {
+            LogError("Cannot draw card - player is null", LogTag.Cards | LogTag.Initialization);
+            return false;
+        }
+
+        if (player.Hand.Count >= Player.MAX_HAND_SIZE) {
+            Log($"Player {(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}) has a full hand ({Player.MAX_HAND_SIZE} cards), skipping draw", LogTag.Cards);
+            return false;
+        }
+
+        if (!playerDecks.TryGetValue(player, out var deck)) {
+            LogError($"Could not find deck for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards | LogTag.Initialization);
+            return false;
+        }
+
+        // Check if deck is empty and needs recycling
+        if (deck.CardsRemaining == 0) {
+            bool recycled = RecycleDiscardPile(player);
+            if (!recycled) {
+                Log($"No cards left in deck or discard pile for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+                return false;
+            }
+        }
+
+        // Add small delay to spread out card draws
+        await Task.Delay(100, cancellationToken);
+
+        // Draw the card now that we know there are cards available
+        var card = deck.DrawCard();
+        if (card != null) {
+            player.AddToHand(card);
+            gameMediator.NotifyHandStateChanged(player);
+            Log($"Drew card for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}): {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
+            return true;
+        }
+        return false;
     }
 
     public void DrawCardForPlayer(IPlayer player) {

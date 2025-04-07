@@ -70,3 +70,21 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Assets/Scriptables/Decks/SpiderDeck.asset
+Assets/Scriptables/Decks/BirdDeck.asset
+Assets/Scriptables/Cards/Spiders/WidowAssassin.asset
+Assets/Scriptables/Cards/Spiders/WebWeaver.asset
+Assets/Scriptables/Cards/Spiders/VenomousSpider.asset
+Assets/Scriptables/Cards/Spiders/TunnelSpider.asset
+Assets/Scriptables/Cards/Spiders/SilkSpinner.asset
+Assets/Scriptables/Cards/Spiders/ShadowLurker.asset
+Assets/Scriptables/Cards/Spiders/GiantTarantula.asset
+Assets/Scriptables/Cards/Spiders/Broodmother.asset
+Assets/Scriptables/Cards/Birds/WiseOwl.asset
+Assets/Scriptables/Cards/Birds/WarEagle.asset
+Assets/Scriptables/Cards/Birds/Thunderhawk.asset
+Assets/Scriptables/Cards/Birds/RoyalFalcon.asset
+Assets/Scriptables/Cards/Birds/PhoenixHatchling.asset
+Assets/Scriptables/Cards/Birds/MischievousRaven.asset
+Assets/Scriptables/Cards/Birds/MajesticGriffin.asset
+Assets/Scriptables/Cards/Birds/HealingDove.asset

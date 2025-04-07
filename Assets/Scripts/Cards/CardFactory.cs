@@ -4,6 +4,8 @@ using System;
 using UnityEngine.Events;
 using UnityEngine;
 using static Enums;
+using System.Threading;
+using System.Threading.Tasks;
 
 public static class CardFactory {
     public static ICard CreateCard(CardData cardData) {
@@ -70,6 +72,32 @@ public static class CardFactory {
         else {
             spell.AddAction(ActionType.Draw, 1, TargetType.Player);
         }
+    }
+
+    public static async Task<CardController> CreateCardControllerAsync(ICard card, IPlayer owner, Transform parent, CancellationToken cancellationToken = default) {
+        if (card == null || parent == null) return null;
+
+        var cardPrefab = GameReferences.Instance.GetCardPrefab();
+        if (cardPrefab == null) {
+            LogError("Failed to get card prefab from game references", LogTag.Cards | LogTag.Initialization);
+            return null;
+        }
+
+        // Add small delay to spread out card creation
+        await Task.Delay(100, cancellationToken);
+
+        var cardObj = GameObject.Instantiate(cardPrefab, parent);
+        var controller = cardObj.GetComponent<CardController>();
+        if (controller != null) {
+            var data = CreateCardData(card);
+
+            // Only cast to ICreature if the card is actually a creature
+            ICreature creature = card as ICreature;
+
+            controller.Setup(data, owner, creature);
+            Log($"Created card controller for {card.Name}", LogTag.Cards | LogTag.Initialization);
+        }
+        return controller;
     }
 
     public static CardController CreateCardController(ICard card, IPlayer owner, Transform parent) {
