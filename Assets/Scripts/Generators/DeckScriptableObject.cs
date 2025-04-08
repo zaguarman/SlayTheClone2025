@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using static DebugLogger;
 
-[CreateAssetMenu(fileName = "NewDeck", menuName = "Cards/Deck")]
 public class DeckScriptableObject : ScriptableObject {
     [SerializeField] private string deckName = "New Deck";
     [SerializeField] private List<CardDataScriptableObject> cards = new List<CardDataScriptableObject>();

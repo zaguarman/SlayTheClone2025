@@ -259,14 +259,6 @@ public class Tooltip : MonoBehaviour {
     /// </summary>
     public void EnableTooltipOnly(CardController card) {
         if (card == null) return;
-
-        // We no longer need to set up event listeners here
-        // as the DeckViewCardInterceptor component will handle all interactions
-
-        // The interceptor directly calls ShowTooltip and HideTooltip methods
-        // on this CardTooltip instance
-
-        // Make sure the card can still receive pointer events for tooltips
         var canvasGroup = card.GetComponent<CanvasGroup>();
         if (canvasGroup != null) {
             canvasGroup.blocksRaycasts = true;

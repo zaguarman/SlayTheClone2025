@@ -42,8 +42,6 @@ public abstract class CardDataScriptableObject : ScriptableObject {
     }
 }
 
-// Creature card scriptable object
-[CreateAssetMenu(fileName = "NewCreature", menuName = "Cards/Creature")]
 public class CreatureCardScriptableObject : CardDataScriptableObject {
     public int attack;
     public int health;
@@ -66,8 +64,6 @@ public class CreatureCardScriptableObject : CardDataScriptableObject {
     }
 }
 
-// Spell card scriptable object
-[CreateAssetMenu(fileName = "NewSpell", menuName = "Cards/Spell")]
 public class SpellCardScriptableObject : CardDataScriptableObject {
     public TargetType defaultTargetType;
 

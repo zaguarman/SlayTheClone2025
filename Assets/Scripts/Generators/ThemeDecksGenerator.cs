@@ -283,7 +283,8 @@ public class ThemeDecksGenerator : EditorWindow {
                 if (!string.IsNullOrEmpty(cardData.cardId)) {
                     cardIds[cardNameWithoutExtension] = cardData.cardId;
                     Debug.Log($"Found existing card {cardNameWithoutExtension} with ID: {cardData.cardId}");
-                } else {
+                }
+                else {
                     Debug.Log($"Found existing card {cardNameWithoutExtension} with no ID");
                 }
             }
@@ -317,7 +318,8 @@ public class ThemeDecksGenerator : EditorWindow {
                 if (string.IsNullOrEmpty(card.cardId)) {
                     card.cardId = cardId;
                     Debug.Log($"Setting new ID for {name}: {cardId}");
-                } else {
+                }
+                else {
                     Debug.Log($"Keeping existing ID for {name}: {card.cardId}");
                 }
 
