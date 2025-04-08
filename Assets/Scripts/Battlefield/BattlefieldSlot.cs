@@ -84,7 +84,7 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     public bool IsValidTarget() => true;
 
     public void OnPointerEnter(PointerEventData eventData) {
-        Tooltip tooltip = GameReferences.Instance.GetCardTooltip();
+        Tooltip tooltip = GameReferences.Instance.GetTooltip();
         if (tooltip == null) return;
 
         if (IsOccupied()) {
@@ -101,7 +101,7 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        Tooltip tooltip = GameReferences.Instance.GetCardTooltip();
+        Tooltip tooltip = GameReferences.Instance.GetTooltip();
         if (tooltip != null) {
             tooltip.HideTooltip();
         }

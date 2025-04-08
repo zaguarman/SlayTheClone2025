@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using static DebugLogger;
 using static Enums;
-using UnityEngine;
-using System;
 using System.Linq;
 
 public class Spell : Card {

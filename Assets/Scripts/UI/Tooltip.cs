@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using static DebugLogger;
 
@@ -6,6 +7,79 @@ using static DebugLogger;
 /// Manages a single reusable card tooltip for the game.
 /// </summary>
 public class Tooltip : MonoBehaviour {
+    /// <summary>
+    /// Creates and initializes a new tooltip instance
+    /// </summary>
+    public static Tooltip Create(Transform parent) {
+        // Create tooltip GameObject
+        GameObject tooltipObj = new GameObject("Tooltip");
+        tooltipObj.transform.SetParent(parent, false);
+
+        // Add Canvas component for UI rendering
+        Canvas tooltipCanvas = tooltipObj.AddComponent<Canvas>();
+        tooltipCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        tooltipCanvas.sortingOrder = 10000; // Make sure it's always on top
+
+        // Add CanvasScaler for consistent UI sizing
+        CanvasScaler scaler = tooltipObj.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+
+        // Add CanvasGroup for fade control
+        CanvasGroup canvasGroup = tooltipObj.AddComponent<CanvasGroup>();
+
+        // Create background panel
+        GameObject bgPanel = new GameObject("Background");
+        bgPanel.transform.SetParent(tooltipObj.transform, false);
+
+        // Add Image component to background
+        Image background = bgPanel.AddComponent<Image>();
+        background.color = new Color(0.1f, 0.1f, 0.1f, 0.9f);
+
+        // Configure the RectTransform for proper sizing and positioning
+        RectTransform bgRect = background.rectTransform;
+        bgRect.anchorMin = new Vector2(0.5f, 0);
+        bgRect.anchorMax = new Vector2(0.5f, 0);
+        bgRect.pivot = new Vector2(0.5f, 0);
+        bgRect.sizeDelta = new Vector2(300, 150);
+
+        // Add text for tooltip content
+        GameObject textObj = new GameObject("TooltipText");
+        textObj.transform.SetParent(bgPanel.transform, false);
+
+        // Add TextMeshProUGUI component
+        TextMeshProUGUI tooltipText = textObj.AddComponent<TextMeshProUGUI>();
+        tooltipText.alignment = TextAlignmentOptions.Center;
+        tooltipText.fontSize = 16;
+        tooltipText.color = Color.white;
+        tooltipText.enableWordWrapping = true;
+
+        // Configure text RectTransform
+        RectTransform textRect = tooltipText.rectTransform;
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.offsetMin = new Vector2(10, 10);
+        textRect.offsetMax = new Vector2(-10, -10);
+
+        // Add shadow to make text more readable
+        Shadow shadow = bgPanel.AddComponent<Shadow>();
+        shadow.effectColor = new Color(0, 0, 0, 0.5f);
+        shadow.effectDistance = new Vector2(2, -2);
+
+        // Add Tooltip component
+        Tooltip tooltip = tooltipObj.AddComponent<Tooltip>();
+
+        // Set references
+        tooltip.SetupReferences(tooltipText, bgRect, canvasGroup);
+
+        // Hide initially
+        tooltipObj.SetActive(false);
+
+        Log("Card tooltip created successfully", LogTag.Initialization);
+        return tooltip;
+    }
+
+    // References to tooltip components
     // References to tooltip components
     private TextMeshProUGUI tooltipText;
     private RectTransform tooltipRect;

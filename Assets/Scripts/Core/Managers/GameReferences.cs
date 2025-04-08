@@ -57,9 +57,8 @@ public class GameReferences : Singleton<GameReferences> {
     [SerializeField] private Button discardViewButton;
     [SerializeField] private TextMeshProUGUI deckViewTitleText;
 
-    // Add reference for card tooltip
-    [Header("Card Tooltip")]
-    [SerializeField] private Tooltip cardTooltip;
+    [Header("Tooltip")]
+    [SerializeField] private Tooltip tooltip;
 
     [Header("Player References")]
     [SerializeField] public PlayerUIReferences player1References;
@@ -87,79 +86,10 @@ public class GameReferences : Singleton<GameReferences> {
         }
 
         // Ensure we have a tooltip instance
-        if (cardTooltip == null) {
+        if (tooltip == null) {
             Log("CardTooltip reference missing, creating one", LogTag.Initialization);
-            CreateCardTooltip();
+            tooltip = Tooltip.Create(transform);
         }
-    }
-
-    // Method to create a tooltip if one doesn't exist
-    private void CreateCardTooltip() {
-        // Create tooltip GameObject
-        GameObject tooltipObj = new GameObject("CardTooltip");
-        tooltipObj.transform.SetParent(transform, false);
-
-        // Add Canvas component for UI rendering
-        Canvas tooltipCanvas = tooltipObj.AddComponent<Canvas>();
-        tooltipCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        tooltipCanvas.sortingOrder = 10000; // Make sure it's always on top
-
-        // Add CanvasScaler for consistent UI sizing
-        CanvasScaler scaler = tooltipObj.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-
-        // Add CanvasGroup for fade control
-        CanvasGroup canvasGroup = tooltipObj.AddComponent<CanvasGroup>();
-
-        // Create background panel
-        GameObject bgPanel = new GameObject("Background");
-        bgPanel.transform.SetParent(tooltipObj.transform, false);
-
-        // Add Image component to background
-        Image background = bgPanel.AddComponent<Image>();
-        background.color = new Color(0.1f, 0.1f, 0.1f, 0.9f);
-
-        // Configure the RectTransform for proper sizing and positioning
-        RectTransform bgRect = background.rectTransform;
-        bgRect.anchorMin = new Vector2(0.5f, 0);
-        bgRect.anchorMax = new Vector2(0.5f, 0);
-        bgRect.pivot = new Vector2(0.5f, 0);
-        bgRect.sizeDelta = new Vector2(300, 150);
-
-        // Add text for tooltip content
-        GameObject textObj = new GameObject("TooltipText");
-        textObj.transform.SetParent(bgPanel.transform, false);
-
-        // Add TextMeshProUGUI component
-        TextMeshProUGUI tooltipText = textObj.AddComponent<TextMeshProUGUI>();
-        tooltipText.alignment = TextAlignmentOptions.Center;
-        tooltipText.fontSize = 16;
-        tooltipText.color = Color.white;
-        tooltipText.enableWordWrapping = true;
-
-        // Configure text RectTransform
-        RectTransform textRect = tooltipText.rectTransform;
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.offsetMin = new Vector2(10, 10);
-        textRect.offsetMax = new Vector2(-10, -10);
-
-        // Add shadow to make text more readable
-        Shadow shadow = bgPanel.AddComponent<Shadow>();
-        shadow.effectColor = new Color(0, 0, 0, 0.5f);
-        shadow.effectDistance = new Vector2(2, -2);
-
-        // Add CardTooltip component
-        cardTooltip = tooltipObj.AddComponent<Tooltip>();
-
-        // Set references
-        cardTooltip.SetupReferences(tooltipText, bgRect, canvasGroup);
-
-        // Hide initially
-        tooltipObj.SetActive(false);
-
-        Log("Card tooltip created successfully", LogTag.Initialization);
     }
 
     public override void Initialize() {
@@ -227,7 +157,7 @@ public class GameReferences : Singleton<GameReferences> {
         }
 
         // Validate tooltip reference
-        if (cardTooltip == null) {
+        if (tooltip == null) {
             Log("CardTooltip reference missing, will create one when needed", LogTag.Initialization);
         }
 
@@ -276,12 +206,12 @@ public class GameReferences : Singleton<GameReferences> {
     }
 
     // Method to get the tooltip, creating it if needed
-    public Tooltip GetCardTooltip() {
-        if (cardTooltip == null) {
+    public Tooltip GetTooltip() {
+        if (tooltip == null) {
             LogWarning("CardTooltip is null when GetCardTooltip was called, creating one", LogTag.UI);
-            CreateCardTooltip();
+            tooltip = Tooltip.Create(transform);
         }
-        return cardTooltip;
+        return tooltip;
     }
 
     // New methods to get deck data

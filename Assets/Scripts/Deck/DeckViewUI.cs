@@ -171,7 +171,7 @@ public class DeckViewUI : UIComponent {
         if (deckViewPanel != null) {
             // Hide tooltip when closing the panel
             if (cardTooltip == null) {
-                cardTooltip = gameReferences.GetCardTooltip();
+                cardTooltip = gameReferences.GetTooltip();
             }
             if (cardTooltip != null) {
                 cardTooltip.HideTooltip();
@@ -330,7 +330,7 @@ public class DeckViewUI : UIComponent {
 
         // Get the tooltip from GameReferences
         if (cardTooltip == null) {
-            cardTooltip = gameReferences.GetCardTooltip();
+            cardTooltip = gameReferences.GetTooltip();
         }
 
         // Use CardTooltip to enable tooltip-only functionality
@@ -372,7 +372,7 @@ public class DeckViewUI : UIComponent {
     private void ClearCardEntries() {
         // Hide the tooltip
         if (cardTooltip == null) {
-            cardTooltip = gameReferences?.GetCardTooltip();
+            cardTooltip = gameReferences?.GetTooltip();
         }
 
         if (cardTooltip != null) {
