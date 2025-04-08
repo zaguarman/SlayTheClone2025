@@ -87,12 +87,9 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
         Tooltip tooltip = GameReferences.Instance.GetTooltip();
         if (tooltip == null) return;
 
-        if (IsOccupied()) {
-            // Show creature info first, then slot info
-            string tooltipText = $"<b>{OccupyingCreature.Name}</b>\n";
-            tooltipText += $"TargetID: {OccupyingCreature.TargetId}\n\n";
-            tooltipText += $"<color=#888888>Slot: {name}\nTargetID: {TargetId}</color>";
-            tooltip.ShowTooltip(tooltipText);
+        if (IsOccupied() && OccupyingCard != null) {
+            // Show the card tooltip which includes effects info
+            tooltip.ShowTooltip(OccupyingCard);
         } else {
             // Show just slot info
             string tooltipText = $"<b>Slot: {name}</b>\nTargetID: {TargetId}";
