@@ -59,7 +59,7 @@ public class GameReferences : Singleton<GameReferences> {
 
     // Add reference for card tooltip
     [Header("Card Tooltip")]
-    [SerializeField] private CardTooltip cardTooltip;
+    [SerializeField] private Tooltip cardTooltip;
 
     [Header("Player References")]
     [SerializeField] public PlayerUIReferences player1References;
@@ -151,7 +151,7 @@ public class GameReferences : Singleton<GameReferences> {
         shadow.effectDistance = new Vector2(2, -2);
 
         // Add CardTooltip component
-        cardTooltip = tooltipObj.AddComponent<CardTooltip>();
+        cardTooltip = tooltipObj.AddComponent<Tooltip>();
 
         // Set references
         cardTooltip.SetupReferences(tooltipText, bgRect, canvasGroup);
@@ -276,7 +276,7 @@ public class GameReferences : Singleton<GameReferences> {
     }
 
     // Method to get the tooltip, creating it if needed
-    public CardTooltip GetCardTooltip() {
+    public Tooltip GetCardTooltip() {
         if (cardTooltip == null) {
             LogWarning("CardTooltip is null when GetCardTooltip was called, creating one", LogTag.UI);
             CreateCardTooltip();

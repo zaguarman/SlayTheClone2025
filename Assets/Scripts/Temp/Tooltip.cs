@@ -5,7 +5,7 @@ using static DebugLogger;
 /// <summary>
 /// Manages a single reusable card tooltip for the game.
 /// </summary>
-public class CardTooltip : MonoBehaviour {
+public class Tooltip : MonoBehaviour {
     // References to tooltip components
     private TextMeshProUGUI tooltipText;
     private RectTransform tooltipRect;

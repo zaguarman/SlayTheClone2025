@@ -19,7 +19,7 @@ public class DeckViewUI : UIComponent {
     private GridLayoutGroup gridLayout;
     private ScrollRect scrollRect;
     private bool viewingDiscardPile = false;
-    private CardTooltip cardTooltip;
+    private Tooltip cardTooltip;
 
     protected override void Awake() {
         base.Awake();
@@ -404,9 +404,9 @@ public class DeckViewUI : UIComponent {
 public class DeckViewCardInterceptor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
                                        IBeginDragHandler, IDragHandler, IEndDragHandler {
     private CardController cardController;
-    private CardTooltip tooltip;
+    private Tooltip tooltip;
 
-    public void Initialize(CardController controller, CardTooltip tooltip) {
+    public void Initialize(CardController controller, Tooltip tooltip) {
         this.cardController = controller;
         this.tooltip = tooltip;
     }

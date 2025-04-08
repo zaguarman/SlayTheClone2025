@@ -26,7 +26,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     private CardData cardData;
 
     private ICreature linkedCreature;
-    private CardTooltip cardTooltip;
+    private Tooltip cardTooltip;
 
     public CardUnityEvent OnBeginDragEvent = new CardUnityEvent();
     public CardUnityEvent OnEndDragEvent = new CardUnityEvent();
@@ -100,7 +100,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         }
     }
 
-    private CardTooltip GetTooltip() {
+    private Tooltip GetTooltip() {
         if (cardTooltip == null) {
             cardTooltip = gameReferences.GetCardTooltip();
         }
