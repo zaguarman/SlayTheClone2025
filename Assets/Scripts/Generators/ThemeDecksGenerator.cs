@@ -4,7 +4,6 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.IO;
 using static Enums;
-using System.Linq;
 
 public class ThemeDecksGenerator : EditorWindow {
     [MenuItem("Cards/Generate Theme Decks")]
@@ -30,23 +29,6 @@ public class ThemeDecksGenerator : EditorWindow {
 
         AssetDatabase.SaveAssets();
         Debug.Log("Generated Spider and Bird decks successfully!");
-    }
-
-    [MenuItem("Cards/Show Card IDs")]
-    public static void ShowCardIDs() {
-        // Show card IDs in the console for reference
-        Dictionary<string, string> spiderIds = GatherExistingCardIds("Assets/Scriptables/Cards/Spiders");
-        Dictionary<string, string> birdIds = GatherExistingCardIds("Assets/Scriptables/Cards/Birds");
-
-        Debug.Log("Spider Cards IDs:");
-        foreach (var pair in spiderIds) {
-            Debug.Log($"{pair.Key}: {pair.Value}");
-        }
-
-        Debug.Log("Bird Cards IDs:");
-        foreach (var pair in birdIds) {
-            Debug.Log($"{pair.Key}: {pair.Value}");
-        }
     }
 
     private static void CreateDirectoryIfNeeded(string path) {

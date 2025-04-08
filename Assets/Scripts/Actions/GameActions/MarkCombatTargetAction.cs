@@ -1,7 +1,4 @@
-using static Enums;
 using static DebugLogger;
-using UnityEngine;
-using System;
 
 public class MarkCombatTargetAction : IGameAction {
     private readonly ICreature attacker;
@@ -11,24 +8,39 @@ public class MarkCombatTargetAction : IGameAction {
 
     public MarkCombatTargetAction(ICreature attacker, ITarget targetSlot) {
         this.attacker = attacker;
-        this.targetSlot = targetSlot as BattlefieldSlot;
-        Log($"Created MarkCombatTargetAction for {attacker?.Name} (TargetID: {attacker?.TargetId.ToUpper()}) targeting slot {targetSlot?.TargetId.ToUpper()}",
+        this.targetSlot = (BattlefieldSlot)targetSlot;
+        Log($"Created MarkCombatTargetAction: {attacker?.Name ?? "Unknown"} (AttackerID: {attacker?.TargetId.ToUpper() ?? "UNKNOWN"}) targeting slot (SlotID: {targetSlot?.TargetId.ToUpper() ?? "UNKNOWN"}) (ActionID: {GetHashCode().ToString().ToUpper()})",
             LogTag.Actions | LogTag.Combat);
     }
 
     public void Execute() {
         if (attacker == null || targetSlot == null) {
-            LogError("Cannot execute MarkCombatTargetAction - attacker or target slot is null", LogTag.Actions);
+            LogError($"Cannot execute combat action - attacker or target slot is null (ActionID: {GetHashCode().ToString().ToUpper()})",
+                LogTag.Actions | LogTag.Combat);
             return;
         }
 
-        // Mark the target slot for combat
-        targetSlot.MarkForCombat();
-        Log($"Marked slot {targetSlot.TargetId.ToUpper()} as combat target for {attacker.Name} (TargetID: {attacker.TargetId.ToUpper()})",
-            LogTag.Actions | LogTag.Combat);
+        if (targetSlot.IsOccupied()) {
+            var targetCreature = targetSlot.OccupyingCreature;
+            if (targetCreature != null) {
+                Log($"Creature {attacker.Name} (AttackerID: {attacker.TargetId.ToUpper()}) attacking creature {targetCreature.Name} (TargetID: {targetCreature.TargetId.ToUpper()}) (ActionID: {GetHashCode().ToString().ToUpper()})",
+                    LogTag.Combat);
+                var damageAction = new DamageCreatureAction(targetCreature, attacker.Attack, attacker);
+                GameManager.Instance.ActionsQueue.AddAction(damageAction);
+            }
+        } else {
+            var targetPlayer = attacker.Owner?.Opponent;
+            if (targetPlayer != null) {
+                Log($"Creature {attacker.Name} (AttackerID: {attacker.TargetId.ToUpper()}) attacking player {(targetPlayer.IsPlayer1() ? "1" : "2")} (PlayerID: {targetPlayer.TargetId.ToUpper()}) (ActionID: {GetHashCode().ToString().ToUpper()})",
+                    LogTag.Combat);
+                GameManager.Instance.ActionsQueue.AddAction(
+                    new DamagePlayerAction(targetPlayer, attacker.Attack)
+                );
+            }
+        }
     }
 
     public override string ToString() {
-        return $"MarkCombatTargetAction: Attacker={attacker?.Name} (TargetID: {attacker?.TargetId.ToUpper()}), TargetSlot={targetSlot?.TargetId.ToUpper()}";
+        return $"MarkCombatTargetAction: Attacker={attacker?.Name ?? "Unknown"} (AttackerID: {attacker?.TargetId.ToUpper() ?? "UNKNOWN"}), TargetSlot=(SlotID: {targetSlot?.TargetId.ToUpper() ?? "UNKNOWN"}) (ActionID: {GetHashCode().ToString().ToUpper()})";
     }
-} 
+}
