@@ -24,6 +24,9 @@ public class SummonCreatureAction : IGameAction {
             return;
         }
 
+        // Set the owner on the creature to ensure it has an owner
+        creature.SetOwner(owner);
+        
         // If the creature is in the hand, remove it
         if (!fromDeck && owner.Hand.Contains(creature)) {
             owner.DiscardCard(creature);

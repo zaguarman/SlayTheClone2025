@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: AbyssalCucumber
+  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
+  cardId: b78ee33b-cc7d-4eda-b729-49d162ad9dae
+  cardName: Abyssal Cucumber
+  description: Filters nutrients to empower allies.
+  cardType: 0
+  effects:
+  - effectType: 0
+    trigger: 3
+    actions:
+    - actionType: 6
+      value: 1
+      targetType: 3
+  attack: 1
+  health: 4

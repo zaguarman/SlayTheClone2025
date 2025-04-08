@@ -137,6 +137,23 @@ public class Creature : Card, ICreature {
     }
 
     private void ProcessDamageEffect(EffectAction action, ActionsQueue actionsQueue) {
+        // Handle retaliatory damage that doesn't need Owner
+        if (lastAttacker != null && action.targetType == TargetType.AllCreatures && Effects.Any(e => e.trigger == EffectTrigger.OnDamage)) {
+            Log($"Targeting attacker {lastAttacker.Name} (TargetID: {lastAttacker.TargetId.ToUpper()}) for retaliation damage",
+                LogTag.Creatures | LogTag.Actions);
+            actionsQueue.AddAction(new DirectDamageAction(lastAttacker, action.value, this));
+            return;
+        }
+
+        // Special case for Self target - can self-harm without Owner
+        if (action.targetType == TargetType.Self) {
+            Log($"Adding DirectDamageAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: Self, Damage: {action.value}",
+                LogTag.Creatures | LogTag.Actions);
+            actionsQueue.AddAction(new DirectDamageAction(this, action.value, this));
+            return;
+        }
+
+        // For targeting other entities, we need Owner
         if (Owner == null) {
             LogError($"Cannot handle damage effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
             return;
@@ -144,14 +161,6 @@ public class Creature : Card, ICreature {
 
         Log($"Processing damage effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Damage: {action.value}",
             LogTag.Creatures | LogTag.Actions);
-
-        // Handle retaliatory damage
-        if (lastAttacker != null && action.targetType == TargetType.AllCreatures && Effects.Any(e => e.trigger == EffectTrigger.OnDamage)) {
-            Log($"Targeting attacker {lastAttacker.Name} (TargetID: {lastAttacker.TargetId.ToUpper()}) for retaliation damage",
-                LogTag.Creatures | LogTag.Actions);
-            actionsQueue.AddAction(new DirectDamageAction(lastAttacker, action.value, this));
-            return;
-        }
 
         // Handle normal targeting
         var targets = TargetingSystem.GetValidTargets(Owner, action.targetType);
@@ -177,6 +186,15 @@ public class Creature : Card, ICreature {
     }
 
     private void ProcessHealEffect(EffectAction action, ActionsQueue actionsQueue) {
+        // Special case for Self target - we can heal ourselves even if Owner is null
+        if (action.targetType == TargetType.Self) {
+            Log($"Adding HealCreatureAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: Self, Amount: {action.value}",
+                LogTag.Creatures | LogTag.Actions);
+            actionsQueue.AddAction(new HealCreatureAction(this, action.value));
+            return;
+        }
+
+        // For other target types, we need Owner
         if (Owner == null) {
             LogError($"Cannot handle heal effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
             return;
