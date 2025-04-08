@@ -66,6 +66,31 @@ public class Tooltip : MonoBehaviour {
     }
 
     /// <summary>
+    /// Shows a text tooltip with the specified content
+    /// </summary>
+    public void ShowTooltip(string content) {
+        if (string.IsNullOrEmpty(content)) return;
+
+        // Clear active card
+        activeCard = null;
+        currentContent = content;
+        tooltipText.text = content;
+
+        // Position at mouse with offset
+        Vector2 mousePos = Input.mousePosition;
+        tooltipRect.position = new Vector2(mousePos.x, mousePos.y + 40);
+
+        // Make sure it's on screen
+        AdjustPosition();
+
+        // Show the tooltip
+        canvasGroup.alpha = 1;
+        gameObject.SetActive(true);
+
+        Log($"Showing text tooltip (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
+    }
+
+    /// <summary>
     /// Updates the tooltip content for the specified card
     /// </summary>
     public void UpdateTooltipContent(CardController card) {
@@ -133,7 +158,7 @@ public class Tooltip : MonoBehaviour {
         if (cardData.effects != null && cardData.effects.Count > 0) {
             effectsInfo = "\n<b>Effects:</b>\n";
             foreach (var effect in cardData.effects) {
-                effectsInfo += $"• {DescribeEffect(effect)}\n";
+                effectsInfo += $"â€¢ {DescribeEffect(effect)}\n";
             }
         }
 

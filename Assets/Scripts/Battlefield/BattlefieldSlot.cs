@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class BattlefieldSlot : MonoBehaviour, ITarget {
+public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPointerExitHandler {
     private RectTransform rectTransform;
     private Image backgroundImage;
 
@@ -79,4 +80,28 @@ public class BattlefieldSlot : MonoBehaviour, ITarget {
     }
 
     public bool IsValidTarget() => true;
+
+    public void OnPointerEnter(PointerEventData eventData) {
+        Tooltip tooltip = GameReferences.Instance.GetCardTooltip();
+        if (tooltip == null) return;
+
+        if (IsOccupied()) {
+            // Show creature info first, then slot info
+            string tooltipText = $"<b>{OccupyingCreature.Name}</b>\n";
+            tooltipText += $"TargetID: {OccupyingCreature.TargetId}\n\n";
+            tooltipText += $"<color=#888888>Slot: {name}\nTargetID: {TargetId}</color>";
+            tooltip.ShowTooltip(tooltipText);
+        } else {
+            // Show just slot info
+            string tooltipText = $"<b>Slot: {name}</b>\nTargetID: {TargetId}";
+            tooltip.ShowTooltip(tooltipText);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+        Tooltip tooltip = GameReferences.Instance.GetCardTooltip();
+        if (tooltip != null) {
+            tooltip.HideTooltip();
+        }
+    }
 }
