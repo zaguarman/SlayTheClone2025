@@ -220,9 +220,9 @@ public class Creature : Card, ICreature {
         }
 
         if (targetPlayer != null) {
-            Log($"Adding DrawCardAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Player: {(targetPlayer.IsPlayer1() ? "1" : "2")} (TargetID: {targetPlayer.TargetId.ToUpper()}), Amount: {action.value}",
+            Log($"Adding DrawCardsAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Player: {(targetPlayer.IsPlayer1() ? "1" : "2")} (TargetID: {targetPlayer.TargetId.ToUpper()}), Amount: {action.value}",
                 LogTag.Creatures | LogTag.Actions | LogTag.Cards);
-            actionsQueue.AddAction(new DrawCardAction(targetPlayer, action.value));
+            actionsQueue.AddAction(new DrawCardsAction(targetPlayer, action.value));
         }
     }
 

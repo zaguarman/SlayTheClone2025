@@ -14,10 +14,10 @@ public class WeatherController : MonoBehaviour {
     }
 
     private void Start() {
-        // Set initial weather to Rainy after everything is initialized
+        // Set initial weather to Clear after everything is initialized
         if (gameManager?.WeatherSystem != null) {
-            gameManager.WeatherSystem.SetWeather(WeatherType.Rainy);
-            UpdateWeatherText(WeatherType.Rainy);
+            gameManager.WeatherSystem.SetWeather(WeatherType.Clear);
+            UpdateWeatherText(WeatherType.Clear);
         }
     }
 
@@ -53,8 +53,8 @@ public class WeatherController : MonoBehaviour {
 
                 // Set initial weather after delayed initialization
                 if (gameManager.WeatherSystem != null) {
-                    gameManager.WeatherSystem.SetWeather(WeatherType.Rainy);
-                    Log("Set initial weather to Rainy after delayed initialization", LogTag.UI | LogTag.Effects);
+                    gameManager.WeatherSystem.SetWeather(WeatherType.Clear);
+                    Log("Set initial weather to Clear after delayed initialization", LogTag.UI | LogTag.Effects);
                 }
 
                 yield break;

@@ -134,8 +134,6 @@ public static class CardFactory {
             creatureData.attack = creature.Attack;
             creatureData.health = creature.Health;
             creatureData.description = creature.Description;  // Copy description
-
-            // Copy effects from the creature to the new data
             creatureData.effects = creature.Effects.Select(e => new CardEffect {
                 effectType = e.effectType,
                 trigger = e.trigger,
@@ -145,18 +143,25 @@ public static class CardFactory {
                     targetType = a.targetType
                 }).ToList()
             }).ToList();
-
             return creatureData;
         }
 
-        // For spells, create SpellData
+        // For spells, copy the data and effects
         if (card is Spell spell) {
             var spellData = ScriptableObject.CreateInstance<SpellData>();
-            spellData.cardId = card.CardId; // Copy the cardId
+            spellData.cardId = card.CardId;
             spellData.cardName = spell.Name;
+            spellData.description = spell.Description;
             spellData.defaultTargetType = spell.DefaultTargetType;
-            spellData.description = spell.Description;  // Copy description
-
+            spellData.effects = spell.Effects.Select(e => new CardEffect {
+                effectType = e.effectType,
+                trigger = e.trigger,
+                actions = e.actions.Select(a => new EffectAction {
+                    actionType = a.actionType,
+                    value = a.value,
+                    targetType = a.targetType
+                }).ToList()
+            }).ToList();
             return spellData;
         }
 

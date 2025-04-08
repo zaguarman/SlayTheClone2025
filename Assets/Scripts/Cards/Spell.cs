@@ -1,51 +1,57 @@
 using System.Collections.Generic;
 using static DebugLogger;
 using static Enums;
+using UnityEngine;
+using System;
+using System.Linq;
 
 public class Spell : Card {
-    public TargetType DefaultTargetType { get; private set; }
-    private List<SpellAction> spellActions = new List<SpellAction>();
+    private readonly List<SpellAction> actions = new List<SpellAction>();
+    private readonly TargetType defaultTargetType;
+
+    public TargetType DefaultTargetType => defaultTargetType;
 
     public Spell(string name, TargetType defaultTargetType) : base(name) {
-        DefaultTargetType = defaultTargetType;
+        this.defaultTargetType = defaultTargetType;
     }
 
     // Constructor with cardId parameter
     public Spell(string name, TargetType defaultTargetType, string cardId) : base(name, cardId) {
-        DefaultTargetType = defaultTargetType;
+        this.defaultTargetType = defaultTargetType;
     }
 
     public void AddAction(ActionType actionType, int value, TargetType targetType) {
-        spellActions.Add(new SpellAction(actionType, value, targetType));
+        actions.Add(new SpellAction(actionType, value, targetType));
     }
 
     public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
-        Log($"Playing spell {Name} with {spellActions.Count} actions", LogTag.Cards | LogTag.Actions);
+        Log($"Playing spell {Name} (TargetID: {TargetId.ToUpper()}) with {actions.Count} actions", LogTag.Cards | LogTag.Actions);
 
-        // Process each spell action
-        foreach (var spellAction in spellActions) {
-            ProcessSpellAction(spellAction, owner, context, target);
+        // If no target is specified, use the default target type
+        if (target == null) {
+            target = GetDefaultTarget(owner);
+        }
+
+        // Execute each action
+        foreach (var action in actions) {
+            CreateGameAction(action.ActionType, action.Value, target, owner, context);
         }
     }
 
-    private void ProcessSpellAction(SpellAction spellAction, IPlayer owner, ActionsQueue context, ITarget specificTarget = null) {
-        // Determine targets based on the targeting strategy
-        var targets = DetermineTargets(spellAction.TargetType, owner, specificTarget);
-
-        // Create game actions for each target
-        foreach (var target in targets) {
-            CreateGameAction(spellAction.ActionType, spellAction.Value, target, owner, context);
+    private ITarget GetDefaultTarget(IPlayer owner) {
+        // If the default target type is Player, return the owner
+        if (defaultTargetType == TargetType.Player) {
+            return owner;
         }
-    }
 
-    private List<ITarget> DetermineTargets(TargetType targetType, IPlayer owner, ITarget specificTarget) {
-        // If a specific target was provided when playing the card, use it for ALL_TARGETS type
-        if (specificTarget != null && targetType == TargetType.AllCreatures) {
-            return new List<ITarget> { specificTarget };
+        // If the default target type is Enemy, return the opponent
+        if (defaultTargetType == TargetType.Enemy) {
+            return owner.Opponent;
         }
 
         // Otherwise use the targeting system to get valid targets
-        return TargetingSystem.GetValidTargets(owner, targetType);
+        var targets = TargetingSystem.GetValidTargets(owner, defaultTargetType);
+        return targets.FirstOrDefault();
     }
 
     private void CreateGameAction(ActionType actionType, int value, ITarget target, IPlayer owner, ActionsQueue context) {
@@ -90,7 +96,7 @@ public class Spell : Card {
 
     private void CreateDrawAction(int value, IPlayer player, ActionsQueue context) {
         Log($"Creating draw action for {value} cards", LogTag.Cards | LogTag.Actions);
-        context.AddAction(new DrawCardAction(player, value));
+        context.AddAction(new DrawCardsAction(player, value));
     }
 }
 

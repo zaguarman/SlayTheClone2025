@@ -14,6 +14,7 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     private Color validDropColor;
     private Color invalidDropColor;
     private Color hoverColor;
+    private Color combatMarkColor;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>() ?? gameObject.AddComponent<RectTransform>();
@@ -27,6 +28,7 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
         this.validDropColor = validDropColor;
         this.invalidDropColor = invalidDropColor;
         this.hoverColor = hoverColor;
+        this.combatMarkColor = new Color(1f, 0.5f, 0.5f, 0.5f); // Light red with transparency
 
         backgroundImage.color = defaultColor;
         ClearSlot();
@@ -102,6 +104,12 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
         Tooltip tooltip = GameReferences.Instance.GetCardTooltip();
         if (tooltip != null) {
             tooltip.HideTooltip();
+        }
+    }
+
+    public void MarkForCombat() {
+        if (backgroundImage != null) {
+            backgroundImage.color = combatMarkColor;
         }
     }
 }

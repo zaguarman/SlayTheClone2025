@@ -83,7 +83,7 @@ public class GameManager : InitializableComponent {
         base.Initialize();
 
         if (WeatherSystem != null) {
-            WeatherSystem.SetWeather(WeatherType.Rainy);
+            WeatherSystem.SetWeather(WeatherType.Clear);
         }
     }
 
