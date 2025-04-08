@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: PhoenixHatchling
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 7ef533db-1fa5-4d00-9d7a-3f1a8a17ea22
+  m_EditorClassIdentifier: 
+  cardId: 5cf77d0b-7afd-4b37-bfac-a6e1014df9b5
   cardName: Phoenix Hatchling
   description: Though young, it carries the flame of rebirth.
   cardType: 0
   effects:
-  - effectType: 1
-    trigger: 1
+  - effectType: 0
+    trigger: 4
     actions:
     - actionType: 0
       value: 2
-      targetType: 2
+      targetType: 5
   attack: 1
   health: 3

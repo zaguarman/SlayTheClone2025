@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: DancingDolphin
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 1ac1e7c2-f59c-4379-85f2-e0dba32f3ed9
+  m_EditorClassIdentifier: 
+  cardId: 697868bc-e45a-4750-a91c-033f9c85404e
   cardName: Dancing Dolphin
   description: Playful movements boost ally morale.
   cardType: 0

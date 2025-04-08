@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: MajesticGriffin
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: c6be96ec-fcd5-44e0-9519-b23f14f823d6
+  m_EditorClassIdentifier: 
+  cardId: b61eb4b2-ef3d-43de-ae89-c086a6bd9750
   cardName: Majestic Griffin
   description: Half eagle, half lion, all power.
   cardType: 0
   effects:
-  - effectType: 1
+  - effectType: 0
     trigger: 0
     actions:
     - actionType: 0

@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: VenomousSpider
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 13076117-10b9-4da0-bc46-b20c8e2fbe44
+  m_EditorClassIdentifier: 
+  cardId: 4f2ef19c-2fc2-4d12-abfa-860c8eca500b
   cardName: Venomous Spider
   description: A small but deadly spider whose poison weakens enemies over time.
   cardType: 0
   effects:
-  - effectType: 1
-    trigger: 2
+  - effectType: 0
+    trigger: 1
     actions:
     - actionType: 0
       value: 1

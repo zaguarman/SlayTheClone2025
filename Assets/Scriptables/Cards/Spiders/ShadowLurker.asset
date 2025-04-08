@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: ShadowLurker
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 5370804c-de4e-40c7-99cb-53bbcbe75c30
+  m_EditorClassIdentifier: 
+  cardId: c117875c-fd62-4c31-b9b1-70d81e076765
   cardName: Shadow Lurker
   description: A stealthy spider that ambushes from the shadows.
   cardType: 0
   effects:
-  - effectType: 1
+  - effectType: 0
     trigger: 0
     actions:
     - actionType: 0

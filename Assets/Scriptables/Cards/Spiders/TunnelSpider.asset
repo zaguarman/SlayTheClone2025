@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: TunnelSpider
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: bd4e8865-b8eb-42e2-9c10-d4320b0a61f5
+  m_EditorClassIdentifier: 
+  cardId: 972fc9b7-572d-4e1d-afb0-b1600240a480
   cardName: Tunnel Spider
   description: Creates elaborate tunnel networks to ambush prey.
   cardType: 0
   effects:
-  - effectType: 1
-    trigger: 3
+  - effectType: 0
+    trigger: 2
     actions:
     - actionType: 0
       value: 1

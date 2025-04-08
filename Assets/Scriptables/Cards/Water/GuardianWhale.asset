@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: GuardianWhale
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 967c2c76-1dbc-49f2-a392-843a888befbc
+  m_EditorClassIdentifier: 
+  cardId: 66c741a5-e421-4071-a0f0-52046f68f121
   cardName: Guardian Whale
   description: Massive presence protects allies.
   cardType: 0

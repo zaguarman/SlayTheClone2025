@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: TidepoolStar
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: e1b5d127-da52-4b5d-b02f-afe07a35a41b
+  m_EditorClassIdentifier: 
+  cardId: 03786f26-9448-4279-8803-c17930418fd7
   cardName: Tidepool Star
   description: Regenerates during low tide.
   cardType: 0

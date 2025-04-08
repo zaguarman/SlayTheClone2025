@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: CoralBuilder
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 92dc04b5-9cc9-498b-ac3b-8df2685fcd1d
+  m_EditorClassIdentifier: 
+  cardId: cf2d8171-f8ba-494a-89e0-8f90e93507a8
   cardName: Coral Builder
   description: Constructs protective barriers.
   cardType: 0

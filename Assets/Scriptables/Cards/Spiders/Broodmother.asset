@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: Broodmother
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 8b270f21-2f34-4ef7-886a-12423d920b34
+  m_EditorClassIdentifier: 
+  cardId: 10209e0b-e48b-4aca-8db6-1de50de905f0
   cardName: Broodmother
   description: Spawns smaller spiders when threatened.
   cardType: 0
   effects:
-  - effectType: 1
-    trigger: 4
+  - effectType: 0
+    trigger: 3
     actions:
     - actionType: 2
       value: 1

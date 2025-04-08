@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: GiantTarantula
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 29c65f71-b303-4f06-a666-611fa23b0e53
+  m_EditorClassIdentifier: 
+  cardId: 8c3de064-993a-444e-b6fb-a21049b009d9
   cardName: Giant Tarantula
   description: This massive spider crushes opponents with brute force.
   cardType: 0
   effects:
-  - effectType: 1
-    trigger: 2
+  - effectType: 0
+    trigger: 1
     actions:
     - actionType: 0
       value: 2

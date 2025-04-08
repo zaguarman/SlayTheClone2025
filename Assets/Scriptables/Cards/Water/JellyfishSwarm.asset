@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: JellyfishSwarm
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: 4b586ff2-c714-4818-adfe-6251daf6b32e
+  m_EditorClassIdentifier: 
+  cardId: f8f50c3e-83f4-4d9d-a153-126d7bc29a04
   cardName: Jellyfish Swarm
   description: Paralyzes enemies with gentle pulses.
   cardType: 0

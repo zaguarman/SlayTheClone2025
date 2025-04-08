@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: SilkSpinner
-  m_EditorClassIdentifier: Assembly-CSharp::CreatureCardScriptableObject
-  cardId: fad204e2-940a-4eee-91f5-d57495052742
+  m_EditorClassIdentifier: 
+  cardId: 3f114dbc-ce3b-4694-b310-f1b5be33f872
   cardName: Silk Spinner
   description: Its valuable silk can heal allies.
   cardType: 0
   effects:
-  - effectType: 1
-    trigger: 3
+  - effectType: 0
+    trigger: 2
     actions:
     - actionType: 1
       value: 1
