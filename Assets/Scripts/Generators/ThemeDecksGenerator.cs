@@ -30,7 +30,7 @@ public class ThemeDecksGenerator : EditorWindow {
 
         // Generate Water Cards
         List<CardDataScriptableObject> waterCards = GenerateWaterCards();
-        
+
         // Create Water Deck
         CreateDeck("WaterDeck", waterCards, "Assets/Scriptables/Decks/WaterDeck.asset");
 
@@ -344,11 +344,11 @@ public class ThemeDecksGenerator : EditorWindow {
         // 6. Abyssal Cucumber
         cards.Add(CreateWaterCard(
             "Abyssal Cucumber",
-            "Filters nutrients to empower allies.",
+            "Filters nutrients to boost allies' attack power.",
             1, 4,
             new CardEffectData(EffectType.Triggered, EffectTrigger.EndOfTurn,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Buff, 1, TargetType.FriendlyCreatures)
+                    new EffectActionData(ActionType.Buff, 1, TargetType.FriendlyCreatures, true, false)
                 }),
             "Assets/Scriptables/Cards/Water/AbyssalCucumber.asset",
             existingCardIds.ContainsKey("AbyssalCucumber") ? existingCardIds["AbyssalCucumber"] : System.Guid.NewGuid().ToString()
@@ -527,7 +527,7 @@ public class ThemeDecksGenerator : EditorWindow {
         CardEffectData effectData,
         string path,
         string cardId) {
-        
+
         SpellCardScriptableObject spell = AssetDatabase.LoadAssetAtPath<SpellCardScriptableObject>(path);
         if (spell != null) {
             spell.cardName = name;
@@ -720,6 +720,18 @@ public class ThemeDecksGenerator : EditorWindow {
 
             SerializedProperty targetTypeProp = actionProp.FindPropertyRelative("targetType");
             targetTypeProp.enumValueIndex = (int)effectData.actions[i].targetType;
+
+            // Store buff-specific properties if this is a buff action
+            if (effectData.actions[i].actionType == ActionType.Buff) {
+                // Check if the properties exist in the serialized object
+                SerializedProperty buffAttackProp = actionProp.FindPropertyRelative("buffAttack");
+                SerializedProperty buffHealthProp = actionProp.FindPropertyRelative("buffHealth");
+
+                if (buffAttackProp != null && buffHealthProp != null) {
+                    buffAttackProp.boolValue = effectData.actions[i].buffAttack;
+                    buffHealthProp.boolValue = effectData.actions[i].buffHealth;
+                }
+            }
         }
 
         serializedCard.ApplyModifiedProperties();
@@ -760,6 +772,18 @@ public class ThemeDecksGenerator : EditorWindow {
 
             SerializedProperty targetTypeProp = actionProp.FindPropertyRelative("targetType");
             targetTypeProp.enumValueIndex = (int)effectData.actions[i].targetType;
+
+            // Store buff-specific properties if this is a buff action
+            if (effectData.actions[i].actionType == ActionType.Buff) {
+                // Check if the properties exist in the serialized object
+                SerializedProperty buffAttackProp = actionProp.FindPropertyRelative("buffAttack");
+                SerializedProperty buffHealthProp = actionProp.FindPropertyRelative("buffHealth");
+
+                if (buffAttackProp != null && buffHealthProp != null) {
+                    buffAttackProp.boolValue = effectData.actions[i].buffAttack;
+                    buffHealthProp.boolValue = effectData.actions[i].buffHealth;
+                }
+            }
         }
 
         serializedCard.ApplyModifiedProperties();
@@ -810,11 +834,21 @@ public class ThemeDecksGenerator : EditorWindow {
         public ActionType actionType;
         public int value;
         public TargetType targetType;
+        public bool buffAttack = true; // For Buff action type: whether to buff attack
+        public bool buffHealth = true; // For Buff action type: whether to buff health
 
         public EffectActionData(ActionType actionType, int value, TargetType targetType) {
             this.actionType = actionType;
             this.value = value;
             this.targetType = targetType;
+        }
+
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
+            this.actionType = actionType;
+            this.value = value;
+            this.targetType = targetType;
+            this.buffAttack = buffAttack;
+            this.buffHealth = buffHealth;
         }
     }
 }

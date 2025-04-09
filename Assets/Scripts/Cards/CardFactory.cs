@@ -6,6 +6,7 @@ using UnityEngine;
 using static Enums;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public static class CardFactory {
     public static ICard CreateCard(CardData cardData) {
@@ -32,7 +33,9 @@ public static class CardFactory {
                         actions = effect.actions.Select(a => new EffectAction {
                             actionType = a.actionType,
                             value = a.value,
-                            targetType = a.targetType
+                            targetType = a.targetType,
+                            buffAttack = a.buffAttack,
+                            buffHealth = a.buffHealth
                         }).ToList()
                     };
                     creature.Effects.Add(newEffect);
@@ -63,14 +66,46 @@ public static class CardFactory {
         // If there are explicit effects defined, use those
         if (spellData.effects != null && spellData.effects.Count > 0) {
             foreach (var effect in spellData.effects) {
+                var newEffect = new CardEffect {
+                    effectType = effect.effectType,
+                    trigger = effect.trigger
+                };
+
                 foreach (var action in effect.actions) {
-                    spell.AddAction(action.actionType, action.value, action.targetType);
+                    var newAction = new EffectAction {
+                        actionType = action.actionType,
+                        value = action.value,
+                        targetType = action.targetType,
+                        buffAttack = action.buffAttack,
+                        buffHealth = action.buffHealth
+                    };
+                    newEffect.actions.Add(newAction);
+
+                    // Also add the action to the spell's action list for direct execution
+                    if (action.actionType == ActionType.Buff) {
+                        spell.AddAction(action.actionType, action.value, action.targetType, action.buffAttack, action.buffHealth);
+                    } else {
+                        spell.AddAction(action.actionType, action.value, action.targetType);
+                    }
                 }
+
+                spell.Effects.Add(newEffect);
             }
         }
         // Otherwise fall back to simple draw action
         else {
-            spell.AddAction(ActionType.Draw, 1, TargetType.Player);
+            var defaultEffect = new CardEffect {
+                effectType = EffectType.Immediate,
+                trigger = EffectTrigger.OnPlay,
+                actions = new List<EffectAction> {
+                    new EffectAction {
+                        actionType = ActionType.Draw,
+                        value = 1,
+                        targetType = TargetType.Player
+                    }
+                }
+            };
+            spell.Effects.Add(defaultEffect);
         }
     }
 
@@ -140,7 +175,9 @@ public static class CardFactory {
                 actions = e.actions.Select(a => new EffectAction {
                     actionType = a.actionType,
                     value = a.value,
-                    targetType = a.targetType
+                    targetType = a.targetType,
+                    buffAttack = a.buffAttack,
+                    buffHealth = a.buffHealth
                 }).ToList()
             }).ToList();
             return creatureData;
@@ -159,7 +196,9 @@ public static class CardFactory {
                 actions = e.actions.Select(a => new EffectAction {
                     actionType = a.actionType,
                     value = a.value,
-                    targetType = a.targetType
+                    targetType = a.targetType,
+                    buffAttack = a.buffAttack,
+                    buffHealth = a.buffHealth
                 }).ToList()
             }).ToList();
             return spellData;

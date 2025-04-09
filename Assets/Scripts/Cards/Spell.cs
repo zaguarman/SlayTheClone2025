@@ -22,6 +22,10 @@ public class Spell : Card {
         actions.Add(new SpellAction(actionType, value, targetType));
     }
 
+    public void AddAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
+        actions.Add(new SpellAction(actionType, value, targetType, buffAttack, buffHealth));
+    }
+
     public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
         Log($"Playing spell {Name} (TargetID: {TargetId.ToUpper()}) with {actions.Count} actions", LogTag.Cards | LogTag.Actions);
 
@@ -53,6 +57,11 @@ public class Spell : Card {
     }
 
     private void CreateGameAction(ActionType actionType, int value, ITarget target, IPlayer owner, ActionsQueue context) {
+        // Find the corresponding SpellAction to get buff flags if needed
+        SpellAction spellAction = actions.FirstOrDefault(a => a.ActionType == actionType);
+        bool buffAttack = spellAction?.BuffAttack ?? true;
+        bool buffHealth = spellAction?.BuffHealth ?? true;
+
         switch (actionType) {
             case ActionType.Damage:
                 CreateDamageAction(value, target, context);
@@ -64,6 +73,10 @@ public class Spell : Card {
 
             case ActionType.Draw:
                 CreateDrawAction(value, owner, context);
+                break;
+
+            case ActionType.Buff:
+                CreateBuffAction(value, target, context, buffAttack, buffHealth);
                 break;
 
             case ActionType.Summon:
@@ -96,6 +109,22 @@ public class Spell : Card {
         Log($"Creating draw action for {value} cards", LogTag.Cards | LogTag.Actions);
         context.AddAction(new DrawCardsAction(player, value));
     }
+
+    private void CreateBuffAction(int value, ITarget target, ActionsQueue context, bool buffAttack, bool buffHealth) {
+        string buffDescription = "";
+        if (buffAttack && buffHealth) {
+            buffDescription = $"+{value}/+{value}";
+        } else if (buffAttack) {
+            buffDescription = $"+{value} attack";
+        } else if (buffHealth) {
+            buffDescription = $"+{value} health";
+        }
+
+        if (target is ICreature creature) {
+            Log($"Creating buff action for {buffDescription} to creature {creature.Name}", LogTag.Cards | LogTag.Actions);
+            context.AddAction(new BuffCreatureAction(creature, value, value, buffAttack, buffHealth));
+        }
+    }
 }
 
 // Simple container for spell action data
@@ -103,10 +132,22 @@ public class SpellAction {
     public ActionType ActionType { get; }
     public int Value { get; }
     public TargetType TargetType { get; }
+    public bool BuffAttack { get; }
+    public bool BuffHealth { get; }
 
     public SpellAction(ActionType actionType, int value, TargetType targetType) {
         ActionType = actionType;
         Value = value;
         TargetType = targetType;
+        BuffAttack = true;
+        BuffHealth = true;
+    }
+
+    public SpellAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
+        ActionType = actionType;
+        Value = value;
+        TargetType = targetType;
+        BuffAttack = buffAttack;
+        BuffHealth = buffHealth;
     }
 }

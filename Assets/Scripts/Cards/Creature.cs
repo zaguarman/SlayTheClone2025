@@ -2,19 +2,36 @@ using static DebugLogger;
 using static Enums;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 public interface ICreature : ICard {
     int Attack { get; }
     int Health { get; }
+    int BaseAttack { get; }
+    int BaseHealth { get; }
     BattlefieldSlot Slot { get; set; }
     void TakeDamage(int damage);
     IPlayer Owner { get; }
     void SetOwner(IPlayer owner);
+    void ResetModifiers();
+    void AddAttackModifier(StatModifier modifier);
+    void AddHealthModifier(StatModifier modifier);
 }
 
 public class Creature : Card, ICreature {
-    public int Attack { get; private set; }
-    public int Health { get; private set; }
+    // Base stats (never change after initialization)
+    public int BaseAttack { get; private set; }
+    public int BaseHealth { get; private set; }
+
+    // Modifier collections
+    private List<StatModifier> attackModifiers = new List<StatModifier>();
+    private List<StatModifier> healthModifiers = new List<StatModifier>();
+
+    // Current stats (calculated properties)
+    public int Attack => CalculateAttack();
+    public int Health => CalculateHealth();
+
+    private int currentHealth; // Tracks damage taken
     private bool isDead = false;
     public IPlayer Owner { get; private set; }
     public BattlefieldSlot Slot { get; set; }
@@ -22,14 +39,78 @@ public class Creature : Card, ICreature {
     private ICreature lastAttacker;
 
     public Creature(string name, int attack, int health) : base(name) {
-        Attack = attack;
-        Health = health;
+        BaseAttack = attack;
+        BaseHealth = health;
+        currentHealth = health;
     }
 
     // Constructor with cardId parameter
     public Creature(string name, int attack, int health, string cardId) : base(name, cardId) {
-        Attack = attack;
-        Health = health;
+        BaseAttack = attack;
+        BaseHealth = health;
+        currentHealth = health;
+    }
+
+    private int CalculateAttack() {
+        int result = BaseAttack;
+        foreach (var mod in attackModifiers) {
+            result = mod.Apply(result);
+        }
+        return Math.Max(0, result); // Attack can't be negative
+    }
+
+    private int CalculateHealth() {
+        int maxHealth = BaseHealth;
+        foreach (var mod in healthModifiers) {
+            maxHealth = mod.Apply(maxHealth);
+        }
+        return Math.Max(0, Math.Min(currentHealth, maxHealth)); // Health can't exceed modified max or be negative
+    }
+
+    public void AddAttackModifier(StatModifier modifier) {
+        if (modifier == null) return;
+
+        attackModifiers.Add(modifier);
+        Log($"Added {modifier.Type} attack modifier of {modifier.Value} to {Name} (TargetID: {TargetId.ToUpper()})",
+            LogTag.Creatures | LogTag.Effects);
+
+        // Notify that the creature was modified
+        GameMediator.Instance?.NotifyCreatureDamaged(this, 0); // Using damage notification with 0 damage to trigger UI update
+    }
+
+    public void AddHealthModifier(StatModifier modifier) {
+        if (modifier == null) return;
+
+        healthModifiers.Add(modifier);
+        Log($"Added {modifier.Type} health modifier of {modifier.Value} to {Name} (TargetID: {TargetId.ToUpper()})",
+            LogTag.Creatures | LogTag.Effects);
+
+        // Heal to new max health if appropriate
+        int newMaxHealth = BaseHealth;
+        foreach (var mod in healthModifiers) {
+            newMaxHealth = mod.Apply(newMaxHealth);
+        }
+
+        if (currentHealth < newMaxHealth) {
+            // Only heal if we're below max health
+            currentHealth = newMaxHealth;
+        }
+
+        // Notify that the creature was modified
+        GameMediator.Instance?.NotifyCreatureDamaged(this, 0); // Using damage notification with 0 damage to trigger UI update
+    }
+
+    public void ResetModifiers() {
+        bool hadModifiers = attackModifiers.Count > 0 || healthModifiers.Count > 0;
+
+        attackModifiers.Clear();
+        healthModifiers.Clear();
+
+        if (hadModifiers) {
+            Log($"Reset all modifiers for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
+            // Notify that the creature was modified
+            GameMediator.Instance?.NotifyCreatureDamaged(this, 0); // Using damage notification with 0 damage to trigger UI update
+        }
     }
 
     public void SetOwner(IPlayer owner) {
@@ -54,7 +135,7 @@ public class Creature : Card, ICreature {
         if (isDead) return;
 
         lastAttacker = attacker;
-        Health = System.Math.Max(0, Health - damage);
+        currentHealth = System.Math.Max(0, currentHealth - damage);
 
         // Updated log format to include target IDs
         if (attacker != null) {
@@ -126,6 +207,9 @@ public class Creature : Card, ICreature {
                         break;
                     case ActionType.Summon:
                         ProcessSummonEffect(action, actionsQueue);
+                        break;
+                    case ActionType.Buff:
+                        ProcessBuffEffect(action, actionsQueue);
                         break;
                         // Additional cases can be added for other action types
                 }
@@ -306,6 +390,57 @@ public class Creature : Card, ICreature {
 
             Log($"Queued summon effect for {creatureToSummon.Name} (TargetID: {creatureToSummon.TargetId.ToUpper()}) to slot (TargetID: {slot.TargetId.ToUpper()})",
                 LogTag.Creatures | LogTag.Effects | LogTag.Actions);
+        }
+    }
+
+    private void ProcessBuffEffect(EffectAction action, ActionsQueue actionsQueue) {
+        // Get buff flags directly from the action
+        bool buffAttack = action.buffAttack;
+        bool buffHealth = action.buffHealth;
+
+        string buffDescription = "";
+        if (buffAttack && buffHealth) {
+            buffDescription = $"+{action.value}/+{action.value}";
+        } else if (buffAttack) {
+            buffDescription = $"+{action.value} attack";
+        } else if (buffHealth) {
+            buffDescription = $"+{action.value} health";
+        }
+
+        Log($"Processing buff effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {buffDescription}",
+            LogTag.Creatures | LogTag.Actions | LogTag.Effects);
+
+        // For self-targeting, we can buff ourselves even if Owner is null
+        if (action.targetType == TargetType.Self) {
+            // Add modifiers based on what should be buffed
+            if (buffAttack) {
+                AddAttackModifier(new FlatModifier(action.value));
+            }
+            if (buffHealth) {
+                AddHealthModifier(new FlatModifier(action.value));
+            }
+            return;
+        }
+
+        // For other target types, we need Owner
+        if (Owner == null) {
+            LogError($"Cannot handle buff effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
+            return;
+        }
+
+        // Get valid targets based on targeting type
+        var targets = TargetingSystem.GetValidTargets(Owner, action.targetType);
+        Log($"Found {targets.Count} targets for {Name} (TargetID: {TargetId.ToUpper()})'s buff effect",
+            LogTag.Creatures | LogTag.Actions | LogTag.Effects);
+
+        foreach (var target in targets) {
+            if (target is ICreature creature) {
+                Log($"Buffing creature {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) with {buffDescription}",
+                    LogTag.Creatures | LogTag.Actions | LogTag.Effects);
+
+                // Add buff action to the queue with specific buff flags
+                actionsQueue.AddAction(new BuffCreatureAction(creature, action.value, action.value, buffAttack, buffHealth));
+            }
         }
     }
 }

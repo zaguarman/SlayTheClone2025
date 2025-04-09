@@ -232,11 +232,18 @@ public class Player : Entity, IPlayer {
 
         var slot = Battlefield.FirstOrDefault(s => s.OccupyingCreature == creature as ICreature);
         if (slot != null) {
-            // If we're not destroying the card, add it to the discard pile
-            if (!destroyCard && creature is ICreature && Deck is Deck deck) {
-                // When a creature is removed from battlefield without being destroyed, add it to discard pile
-                deck.AddToDiscardPile(creature);
-                Log($"Added creature {creature.Name} to discard pile after removing from battlefield", LogTag.Cards | LogTag.Creatures);
+            // Reset modifiers when a creature is removed from the battlefield
+            if (creature is ICreature creatureInterface) {
+                // Reset all modifiers to restore base stats
+                creatureInterface.ResetModifiers();
+                Log($"Reset modifiers for creature {creature.Name} when removing from battlefield", LogTag.Cards | LogTag.Creatures | LogTag.Effects);
+
+                // If we're not destroying the card, add it to the discard pile
+                if (!destroyCard && Deck is Deck deck) {
+                    // When a creature is removed from battlefield without being destroyed, add it to discard pile
+                    deck.AddToDiscardPile(creature);
+                    Log($"Added creature {creature.Name} to discard pile after removing from battlefield", LogTag.Cards | LogTag.Creatures);
+                }
             }
 
             slot.ClearSlot(destroyCard);

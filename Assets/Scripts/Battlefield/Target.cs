@@ -19,14 +19,30 @@ public static class TargetingSystem {
                 validTargets.Add(controller);
                 break;
             case TargetType.AllCreatures:
-                validTargets.AddRange(controller.Battlefield.Where(s => s.IsValidTarget()).Cast<ITarget>());
-                validTargets.AddRange(controller.Opponent.Battlefield.Where(s => s.IsValidTarget()).Cast<ITarget>());
+                // Get creatures from friendly battlefield
+                validTargets.AddRange(controller.Battlefield
+                    .Where(s => s.IsValidTarget() && s.IsOccupied() && s.OccupyingCreature != null)
+                    .Select(s => s.OccupyingCreature)
+                    .Cast<ITarget>());
+                // Get creatures from enemy battlefield
+                validTargets.AddRange(controller.Opponent.Battlefield
+                    .Where(s => s.IsValidTarget() && s.IsOccupied() && s.OccupyingCreature != null)
+                    .Select(s => s.OccupyingCreature)
+                    .Cast<ITarget>());
                 break;
             case TargetType.FriendlyCreatures:
-                validTargets.AddRange(controller.Battlefield.Where(s => s.IsValidTarget()).Cast<ITarget>());
+                // Get creatures from friendly battlefield
+                validTargets.AddRange(controller.Battlefield
+                    .Where(s => s.IsValidTarget() && s.IsOccupied() && s.OccupyingCreature != null)
+                    .Select(s => s.OccupyingCreature)
+                    .Cast<ITarget>());
                 break;
             case TargetType.EnemyCreatures:
-                validTargets.AddRange(controller.Opponent.Battlefield.Where(s => s.IsValidTarget()).Cast<ITarget>());
+                // Get creatures from enemy battlefield
+                validTargets.AddRange(controller.Opponent.Battlefield
+                    .Where(s => s.IsValidTarget() && s.IsOccupied() && s.OccupyingCreature != null)
+                    .Select(s => s.OccupyingCreature)
+                    .Cast<ITarget>());
                 break;
         }
 
