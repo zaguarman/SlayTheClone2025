@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using static DebugLogger;
 
 /// <summary>
 /// Manages a single reusable card tooltip for the game.
@@ -75,7 +74,6 @@ public class Tooltip : MonoBehaviour {
         // Hide initially
         tooltipObj.SetActive(false);
 
-        Log("Card tooltip created successfully", LogTag.Initialization);
         return tooltip;
     }
 
@@ -135,8 +133,6 @@ public class Tooltip : MonoBehaviour {
         // Show the tooltip
         canvasGroup.alpha = 1;
         gameObject.SetActive(true);
-
-        Log($"Showing tooltip for card: {card.GetCardData().cardName} (CardID: {card.GetCardData().cardId.ToUpper()}) (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
     }
 
     /// <summary>
@@ -160,8 +156,6 @@ public class Tooltip : MonoBehaviour {
         // Show the tooltip
         canvasGroup.alpha = 1;
         gameObject.SetActive(true);
-
-        Log($"Showing text tooltip (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
     }
 
     /// <summary>
@@ -181,18 +175,12 @@ public class Tooltip : MonoBehaviour {
         float width = 350;
         float height = 280; // Increased from 250 to ensure there's enough space for target ID
         tooltipRect.sizeDelta = new Vector2(width, height);
-
-        Log($"Updated tooltip content for card: {card.GetCardData().cardName} (CardID: {card.GetCardData().cardId.ToUpper()}) (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
     }
 
     /// <summary>
     /// Hides the tooltip
     /// </summary>
     public void HideTooltip() {
-        if (activeCard != null) {
-            Log($"Hiding tooltip (CardID: {activeCard.GetCardData()?.cardId.ToUpper() ?? "UNKNOWN"}) (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
-        }
-
         activeCard = null;
         canvasGroup.alpha = 0;
         gameObject.SetActive(false);
@@ -338,7 +326,5 @@ public class Tooltip : MonoBehaviour {
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
         }
-
-        Log($"Enabled tooltip-only mode for card: {card.GetCardData().cardName} (CardID: {card.GetCardData().cardId.ToUpper()}) (TooltipID: {GetInstanceID().ToString().ToUpper()})", LogTag.UI);
     }
 }
