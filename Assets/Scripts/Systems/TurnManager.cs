@@ -3,6 +3,7 @@ using static Enums;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour {
+    #region Singleton
     private static TurnManager instance;
     public static TurnManager Instance {
         get {
@@ -14,13 +15,19 @@ public class TurnManager : MonoBehaviour {
             return instance;
         }
     }
+    #endregion
 
+    #region Fields
     private int turnNumber = 0;
     private GameManager gameManager;
     private GameMediator gameMediator;
+    #endregion
 
+    #region Properties
     public int TurnNumber => turnNumber;
+    #endregion
 
+    #region Unity Lifecycle
     private void Awake() {
         if (instance != null && instance != this) {
             Destroy(gameObject);
@@ -35,7 +42,9 @@ public class TurnManager : MonoBehaviour {
         gameMediator = GameMediator.Instance;
         turnNumber = 0;
     }
+    #endregion
 
+    #region Public Methods
     public void EndTurn() {
         turnNumber++;
         Log($"Ending turn {turnNumber - 1}, starting turn {turnNumber}", LogTag.Turns);
@@ -69,7 +78,9 @@ public class TurnManager : MonoBehaviour {
         LogBattlefieldState(gameManager.Player1, "Player 1");
         LogBattlefieldState(gameManager.Player2, "Player 2");
     }
+    #endregion
 
+    #region Private Helper Methods
     private void TriggerEndOfTurnEffects() {
         Log("Triggering end of turn effects", LogTag.Effects | LogTag.Turns);
         TriggerEffectsForPlayer(gameManager.Player1, EffectTrigger.EndOfTurn);
@@ -137,4 +148,5 @@ public class TurnManager : MonoBehaviour {
         Log("Reducing stun duration for all creatures", LogTag.Creatures | LogTag.Effects | LogTag.Turns);
         // to be implemented in the future, ignore for now
     }
+    #endregion
 }

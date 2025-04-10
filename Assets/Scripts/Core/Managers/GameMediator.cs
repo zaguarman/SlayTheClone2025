@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using static DebugLogger;
 
 public class GameMediator : Singleton<GameMediator> {
+    #region Game Events Class
     private class GameEvents {
         public readonly UnityEvent<IPlayer, int> PlayerDamaged = new UnityEvent<IPlayer, int>();
         public readonly UnityEvent<ICreature, int> CreatureDamaged = new UnityEvent<ICreature, int>();
@@ -30,10 +31,13 @@ public class GameMediator : Singleton<GameMediator> {
             BattlefieldStateChanged.RemoveAllListeners();
         }
     }
+    #endregion
 
+    #region Fields
     private readonly GameEvents events = new GameEvents();
     private readonly HashSet<IPlayer> registeredPlayers = new HashSet<IPlayer>();
     private bool gameInitialized = false;
+    #endregion
 
     #region Event Registration Methods
     public void AddGameStateChangedListener(UnityAction listener) {
@@ -267,12 +271,15 @@ public class GameMediator : Singleton<GameMediator> {
     }
     #endregion
 
+    #region Initialization Validation
     private void ValidateInitialization() {
         if (!IsInitialized) {
             throw new System.InvalidOperationException("GameMediator is not initialized");
         }
     }
+    #endregion
 
+    #region Unity Lifecycle
     protected override void OnDestroy() {
         if (this == Instance) {
             events.ClearAllListeners();
@@ -280,4 +287,5 @@ public class GameMediator : Singleton<GameMediator> {
         }
         base.OnDestroy();
     }
+    #endregion
 }
