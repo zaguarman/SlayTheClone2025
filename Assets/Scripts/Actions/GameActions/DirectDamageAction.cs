@@ -25,7 +25,7 @@ public class DirectDamageAction : IGameAction {
         if (target is Creature creature) {
             // Apply direct damage to the creature
             creature.TakeDamage(damage, source);
-            Log($"Applied {damage} direct damage to {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) from {source?.Name ?? "direct source"}",
+            Log($"Applied {damage} direct damage to {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) from {source?.Name ?? "direct source"} (TargetID: {creature.TargetId.ToUpper()})",
                 LogTag.Actions | LogTag.Creatures);
         }
     }

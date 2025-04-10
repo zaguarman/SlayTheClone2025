@@ -203,6 +203,26 @@ public class GameMediator : Singleton<GameMediator> {
         NotifyGameStateChanged();
     }
 
+    public void NotifyCreatureHealed(ICreature creature, int amount) {
+        ValidateInitialization();
+        if (creature == null) throw new System.ArgumentNullException(nameof(creature));
+
+        // If we had a CreatureHealed event, we would invoke it here
+        // events.CreatureHealed.Invoke(creature, amount);
+        Log($"{creature.Name} healed for {amount}, health now: {creature.Health}", LogTag.Creatures | LogTag.Effects);
+        NotifyGameStateChanged();
+    }
+
+    public void NotifyPlayerHealed(IPlayer player, int amount) {
+        ValidateInitialization();
+        if (player == null) throw new System.ArgumentNullException(nameof(player));
+
+        // If we had a PlayerHealed event, we would invoke it here
+        // events.PlayerHealed.Invoke(player, amount);
+        Log($"{(player.IsPlayer1() ? "Player 1" : "Player 2")} healed for {amount}, health now: {player.Health}", LogTag.Players | LogTag.Effects);
+        NotifyGameStateChanged();
+    }
+
     public void NotifyGameOver(IPlayer winner) {
         ValidateInitialization();
         if (winner == null) throw new System.ArgumentNullException(nameof(winner));

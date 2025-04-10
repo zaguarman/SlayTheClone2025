@@ -409,9 +409,9 @@ public class ThemeDecksGenerator : EditorWindow {
         // 11. Mermaid Healer
         cards.Add(CreateWaterCard(
             "Mermaid Healer",
-            "Restores health to damaged allies.",
+            "Restores health to damaged allies at the start of your turn.",
             1, 4,
-            new CardEffectData(EffectType.Triggered, EffectTrigger.EndOfTurn,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.StartOfTurn,
                 new List<EffectActionData> {
                     new EffectActionData(ActionType.Heal, 2, TargetType.FriendlyCreatures)
                 }),

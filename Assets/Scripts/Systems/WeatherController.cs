@@ -103,8 +103,7 @@ public class WeatherController : MonoBehaviour {
         WeatherType nextWeather = gameManager.WeatherSystem.CurrentWeather switch {
             WeatherType.Clear => WeatherType.Rainy,
             WeatherType.Rainy => WeatherType.Sunny,
-            WeatherType.Sunny => WeatherType.Cloudy,
-            WeatherType.Cloudy => WeatherType.Clear,
+            WeatherType.Sunny => WeatherType.Clear,
             _ => WeatherType.Clear
         };
 
@@ -113,7 +112,7 @@ public class WeatherController : MonoBehaviour {
     }
 
     private void UpdateWeatherText(WeatherType weather) {
-        weatherText.text = WeatherSystem.GetWeatherDescription(weather);
+        weatherText.text = gameManager.WeatherSystem.GetWeatherDescription(weather);
     }
 
     private void OnDestroy() {

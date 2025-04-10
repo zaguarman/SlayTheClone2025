@@ -29,6 +29,7 @@ public interface IPlayer : IEntity, IDamageable {
     void DrawCard();
     void UpdateHealthUI();
     void SetHealthText(TextMeshProUGUI healthText);
+    void SetHealth(int newHealth);
 }
 
 public class Player : Entity, IPlayer {
@@ -95,6 +96,13 @@ public class Player : Entity, IPlayer {
     public void TakeDamage(int amount) {
         Health = Math.Max(0, Health - amount);
         OnDamaged.Invoke(amount);
+    }
+
+    public void SetHealth(int newHealth) {
+        Health = Math.Min(newHealth, 99);
+
+        // Update UI
+        UpdateHealthUI();
     }
 
     public void AddToHand(ICard card) {

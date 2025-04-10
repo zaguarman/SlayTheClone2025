@@ -380,7 +380,8 @@ public class DebugLoggerSettingsEditor : Editor {
             LogTag.Players,
             LogTag.Cards,
             LogTag.Combat,
-            LogTag.Initialization
+            LogTag.Initialization,
+            LogTag.Turns
         };
 
         foreach (var tag in orderedTags) {
