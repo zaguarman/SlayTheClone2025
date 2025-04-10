@@ -24,12 +24,7 @@ public class WeatherUI : UIComponent {
 
     private void UpdateWeatherUI(WeatherType weather) {
         if (weatherText != null) {
-            string effectText = weather switch {
-                WeatherType.Rainy => "Combat damage reduced by 50%",
-                WeatherType.Sunny => "Direct damage +1",
-                _ => "Normal damage"
-            };
-            weatherText.text = $"{weather}\n{effectText}";
+            weatherText.text = gameManager.WeatherSystem.GetWeatherDescription(weather);
         }
     }
 

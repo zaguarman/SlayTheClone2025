@@ -4,8 +4,7 @@ using static DebugLogger;
 public enum WeatherType {
     Clear,
     Rainy,
-    Sunny,
-    Cloudy
+    Sunny
 }
 
 public interface IWeatherSystem {
@@ -13,6 +12,7 @@ public interface IWeatherSystem {
     void SetWeather(WeatherType weatherType);
     float GetDamageModifier(bool isDirectDamage);
     UnityEvent<WeatherType> OnWeatherChanged { get; }
+    string GetWeatherDescription(WeatherType weatherType);
 }
 
 public class WeatherSystem : IWeatherSystem {
@@ -39,18 +39,16 @@ public class WeatherSystem : IWeatherSystem {
     public float GetDamageModifier(bool isDirectDamage) {
         return currentWeather switch {
             WeatherType.Rainy when !isDirectDamage => -1f,    // Combat damage reduced by 1
-            WeatherType.Sunny when isDirectDamage => 1.0f,    // Direct damage increased by 1
-            WeatherType.Cloudy => 1.0f,                      // All damage reduced by 0.5
+            WeatherType.Sunny when isDirectDamage => 1.0f,    // Direct damage increased by 1                    
             _ => 0f                                           // No modifier
         };
     }
 
-    public static string GetWeatherDescription(WeatherType weather) {
+    public string GetWeatherDescription(WeatherType weather) {
         return weather switch {
             WeatherType.Clear => "Clear: Normal damage",
             WeatherType.Rainy => "Rain: Combat -1",
             WeatherType.Sunny => "Sunny: Direct +1",
-            WeatherType.Cloudy => "Cloudy: All damage -1",
             _ => "Unknown weather"
         };
     }
