@@ -38,9 +38,9 @@ public class WeatherSystem : IWeatherSystem {
 
     public float GetDamageModifier(bool isDirectDamage) {
         return currentWeather switch {
-            WeatherType.Rainy when !isDirectDamage => -1f,    // Combat damage reduced by 1
-            WeatherType.Sunny when isDirectDamage => 1.0f,    // Direct damage increased by 1                    
-            _ => 0f                                           // No modifier
+            WeatherType.Rainy when !isDirectDamage => -1f,    
+            WeatherType.Sunny when isDirectDamage => 1.0f,    
+            _ => 0f                                           
         };
     }
 
