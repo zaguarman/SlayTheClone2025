@@ -16,17 +16,21 @@ public interface IWeatherSystem {
 }
 
 public class WeatherSystem : IWeatherSystem {
+    #region Fields & Properties
     private WeatherType currentWeather = WeatherType.Clear;
     private readonly GameMediator gameMediator;
     private readonly UnityEvent<WeatherType> onWeatherChanged = new UnityEvent<WeatherType>();
-
     public WeatherType CurrentWeather => currentWeather;
     public UnityEvent<WeatherType> OnWeatherChanged => onWeatherChanged;
+    #endregion
 
+    #region Constructor
     public WeatherSystem(GameMediator gameMediator) {
         this.gameMediator = gameMediator;
     }
+    #endregion
 
+    #region Methods
     public void SetWeather(WeatherType weatherType) {
         if (currentWeather != weatherType) {
             currentWeather = weatherType;
@@ -52,4 +56,5 @@ public class WeatherSystem : IWeatherSystem {
             _ => "Unknown weather"
         };
     }
+    #endregion
 }

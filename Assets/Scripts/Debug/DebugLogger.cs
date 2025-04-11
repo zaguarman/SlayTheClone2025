@@ -37,6 +37,7 @@ public class ClassFilter {
 }
 
 public class DebugLogger : MonoBehaviour {
+    #region Enums
     [Flags]
     public enum LogTag {
         None = 0,
@@ -57,7 +58,9 @@ public class DebugLogger : MonoBehaviour {
         Neutral,    // Don't consider this flag in filtering
         Exclude     // Explicitly exclude items with this flag
     }
+    #endregion
 
+    #region Fields
     public static readonly Dictionary<LogTag, Color> DefaultColors = new Dictionary<LogTag, Color>() {
         { LogTag.UI, GetColorFromHex("#80FFFF") },
         { LogTag.Actions, GetColorFromHex("#FFE066") },
@@ -101,13 +104,14 @@ public class DebugLogger : MonoBehaviour {
         "TestSetup",
         "UIComponent"
     };
-
     [SerializeField] private DebugLoggerSettings settings;
 
     private Dictionary<LogTag, string> _tagColorMap;
     private HashSet<string> _enabledClasses;
     private static DebugLogger _instance;
+    #endregion
 
+    #region Unity Lifecycle
     private void Awake() {
         if (_instance != null && _instance != this) {
             Destroy(gameObject);
@@ -133,7 +137,9 @@ public class DebugLogger : MonoBehaviour {
             InitializeLogger();
         }
     }
+    #endregion
 
+    #region Methods
     private static Color GetColorFromHex(string hex) {
         Color color;
         ColorUtility.TryParseHtmlString(hex, out color);
@@ -160,7 +166,6 @@ public class DebugLogger : MonoBehaviour {
         [CallerFilePath] string sourceFilePath = "") {
         _instance?.LogWithType(LogType.Error, message, tags, sourceFilePath);
     }
-
     private void LogWithType(
         LogType logType,
         object message,
@@ -287,4 +292,5 @@ public class DebugLogger : MonoBehaviour {
                 : tag
         ));
     }
+    #endregion
 }

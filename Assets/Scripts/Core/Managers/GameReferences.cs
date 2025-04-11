@@ -44,6 +44,7 @@ public class GameReferences : Singleton<GameReferences> {
     }
 
     // Original game control serialized fields
+    #region Fields
     [Header("Game Control")]
     [SerializeField] private Button resolveActionsButton;
 
@@ -76,7 +77,9 @@ public class GameReferences : Singleton<GameReferences> {
     [SerializeField] private DeckScriptableObject player2Deck;
 
     private bool referencesValidated = false;
+    #endregion
 
+    #region Unity Lifecycle
     private void Start() {
         // Add the DeckViewController to manage deck view interactions
         var deckViewController = GetComponent<DeckViewController>();
@@ -92,6 +95,7 @@ public class GameReferences : Singleton<GameReferences> {
         }
     }
 
+    #region Initialization
     public override void Initialize() {
         if (IsInitialized) return;
         ValidateReferences();
@@ -99,11 +103,14 @@ public class GameReferences : Singleton<GameReferences> {
 
         Log("GameReferences initialized", LogTag.Initialization);
     }
+    #endregion
 
     private void OnEnable() {
         ValidateReferences();
     }
+    #endregion
 
+    #region Validation
     private void ValidateReferences() {
         if (referencesValidated) return;
 
@@ -173,6 +180,13 @@ public class GameReferences : Singleton<GameReferences> {
         }
     }
 
+    public bool AreReferencesValid() {
+        ValidateReferences();  // Force revalidation each time
+        return referencesValidated;
+    }
+    #endregion
+
+    #region Methods
     // All the original getter methods
     public PlayerUI GetPlayer1UI() => player1References.PlayerUI;
     public PlayerUI GetPlayer2UI() => player2References.PlayerUI;
@@ -231,8 +245,5 @@ public class GameReferences : Singleton<GameReferences> {
         return player2Deck.GetCardDataList();
     }
 
-    public bool AreReferencesValid() {
-        ValidateReferences();  // Force revalidation each time
-        return referencesValidated;
-    }
+    #endregion // End of Methods
 }

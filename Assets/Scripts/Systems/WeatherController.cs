@@ -4,11 +4,14 @@ using TMPro;
 using static DebugLogger;
 
 public class WeatherController : MonoBehaviour {
+    #region Fields
     private Button cycleWeatherButton;
     private TextMeshProUGUI weatherText;
     private GameManager gameManager;
     private GameReferences gameReferences;
+    #endregion
 
+    #region Unity Lifecycle
     private void Awake() {
         InitializeReferences();
     }
@@ -21,6 +24,18 @@ public class WeatherController : MonoBehaviour {
         }
     }
 
+    private void OnDestroy() {
+        if (cycleWeatherButton != null) {
+            cycleWeatherButton.onClick.RemoveAllListeners();
+        }
+
+        if (gameManager?.WeatherSystem != null) {
+            gameManager.WeatherSystem.OnWeatherChanged.RemoveListener(UpdateWeatherText);
+        }
+    }
+    #endregion
+
+    #region Private Helper Methods
     private void InitializeReferences() {
         gameManager = GameManager.Instance;
         gameReferences = GameReferences.Instance;
@@ -114,14 +129,5 @@ public class WeatherController : MonoBehaviour {
     private void UpdateWeatherText(WeatherType weather) {
         weatherText.text = gameManager.WeatherSystem.GetWeatherDescription(weather);
     }
-
-    private void OnDestroy() {
-        if (cycleWeatherButton != null) {
-            cycleWeatherButton.onClick.RemoveAllListeners();
-        }
-
-        if (gameManager?.WeatherSystem != null) {
-            gameManager.WeatherSystem.OnWeatherChanged.RemoveListener(UpdateWeatherText);
-        }
-    }
+    #endregion
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 using static DebugLogger;
 
 public class GameManager : InitializableComponent {
+    #region Singleton
     private static GameManager instance;
 
     public static GameManager Instance {
@@ -17,7 +18,20 @@ public class GameManager : InitializableComponent {
             return instance;
         }
     }
+    #endregion
 
+    #region Fields & Properties
+    [ShowInInspector]
+    public ActionsQueue ActionsQueue { get; private set; }
+    public IWeatherSystem WeatherSystem { get; private set; }
+    private BattlefieldCombatHandler combatHandler;
+    private TurnManager turnManager;
+
+    private GameMediator gameMediator;
+    private GameReferences gameReferences;
+    public ICardDealingService cardDealingService { get; private set; }
+    private System.Random random = new System.Random();
+    private bool weatherSystemInitialized = false;
     public Player Player1 { get; private set; }
     public Player Player2 { get; private set; }
 
@@ -33,22 +47,12 @@ public class GameManager : InitializableComponent {
         .Select((card, index) => $"Card {index + 1}: {card.Name}")
         .ToList() ?? new List<string>();
 
-    [ShowInInspector]
-    public ActionsQueue ActionsQueue { get; private set; }
-    public IWeatherSystem WeatherSystem { get; private set; }
-    private BattlefieldCombatHandler combatHandler;
-    private TurnManager turnManager;
-
-    private GameMediator gameMediator;
-    private GameReferences gameReferences;
-    public ICardDealingService cardDealingService { get; private set; }
-    private System.Random random = new System.Random();
-
+    public ICardDealingService CardDealingService => cardDealingService;
     public BattlefieldCombatHandler CombatHandler => combatHandler;
     public TurnManager TurnManager => turnManager;
+    #endregion
 
-    private bool weatherSystemInitialized = false;
-
+    #region Unity Lifecycle
     protected override void Awake() {
         base.Awake();
         if (instance != null && instance != this) {
@@ -86,7 +90,9 @@ public class GameManager : InitializableComponent {
             WeatherSystem.SetWeather(WeatherType.Clear);
         }
     }
+    #endregion
 
+    #region Methods
     private void InitializeWeatherSystem() {
         if (!weatherSystemInitialized) {
             WeatherSystem = new WeatherSystem(gameMediator);
@@ -341,4 +347,5 @@ public class GameManager : InitializableComponent {
         if (player == null) return;
         DrawCardsForPlayer(player, 1);
     }
+    #endregion
 }

@@ -4,13 +4,16 @@ using UnityEngine;
 using System;
 
 public class DirectDamageAction : IGameAction {
+    #region Fields & Properties
     private readonly ICreature target;
     private readonly int damage;
     private readonly ICreature source;
     public ICreature GetTarget() => target;
     public ICreature GetSource() => source;
     public int GetDamage() => damage;
+    #endregion
 
+    #region Constructor
     public DirectDamageAction(ICreature target, int damage, ICreature source = null) {
         this.target = target;
         this.damage = damage;
@@ -18,7 +21,9 @@ public class DirectDamageAction : IGameAction {
         Log($"Created DirectDamageAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper()}) with {damage} damage from {source?.Name ?? "direct source"}",
             LogTag.Actions | LogTag.Creatures);
     }
+    #endregion
 
+    #region Methods
     public void Execute() {
         if (target == null) return;
 
@@ -33,4 +38,5 @@ public class DirectDamageAction : IGameAction {
     public override string ToString() {
         return $"DirectDamageAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Damage={damage}, Source={source?.Name ?? "None"}";
     }
+    #endregion
 } 

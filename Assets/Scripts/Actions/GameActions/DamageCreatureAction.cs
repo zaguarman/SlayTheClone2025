@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 
 public class DamageCreatureAction : IGameAction {
+    #region Fields & Properties
     private readonly ICreature target;
     private readonly int damage;
     private readonly ICreature attacker;
@@ -11,7 +12,9 @@ public class DamageCreatureAction : IGameAction {
     public ICreature GetTarget() => target;
     public ICreature GetAttacker() => attacker;
     public int GetDamage() => damage;
+    #endregion
 
+    #region Constructor
     public DamageCreatureAction(ICreature target, int damage, ICreature attacker = null, bool isDirectDamage = false) {
         this.target = target;
         this.damage = damage;
@@ -20,7 +23,9 @@ public class DamageCreatureAction : IGameAction {
         Log($"Created DamageCreatureAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper()}) with {damage} damage from {attacker?.Name ?? "direct source"}",
             LogTag.Actions | LogTag.Creatures);
     }
+    #endregion
 
+    #region Methods
     public void Execute() {
         if (target == null) return;
 
@@ -35,4 +40,5 @@ public class DamageCreatureAction : IGameAction {
     public override string ToString() {
         return $"DamageCreatureAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Damage={damage}, Attacker={attacker?.Name ?? "None"}, IsDirect={isDirectDamage}";
     }
+    #endregion
 } 

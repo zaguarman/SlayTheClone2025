@@ -4,15 +4,20 @@ using UnityEngine;
 using System;
 
 public class HealCreatureAction : IGameAction {
+    #region Fields & Properties
     private readonly ICreature target;
     private readonly int amount;
+    #endregion
 
+    #region Constructor
     public HealCreatureAction(ICreature target, int amount) {
         this.target = target;
         this.amount = amount;
         Log($"Created HealCreatureAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper()}) with amount {amount}", LogTag.Actions | LogTag.Creatures);
     }
+    #endregion
 
+    #region Methods
     public void Execute() {
         if (target == null) return;
 
@@ -33,4 +38,5 @@ public class HealCreatureAction : IGameAction {
     public override string ToString() {
         return $"HealCreatureAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Amount={amount}";
     }
+    #endregion
 } 

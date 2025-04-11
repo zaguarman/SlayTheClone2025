@@ -6,9 +6,12 @@ using static DebugLogger;
 
 [CustomEditor(typeof(DebugLogger))]
 public class DebugLoggerEditor : Editor {
+    #region Fields
     private SerializedProperty settingsProp;
     private Editor settingsEditor;
+    #endregion
 
+    #region Unity Editor Lifecycle
     private void OnEnable() {
         settingsProp = serializedObject.FindProperty("settings");
     }
@@ -22,10 +25,12 @@ public class DebugLoggerEditor : Editor {
         }
         serializedObject.ApplyModifiedProperties();
     }
+    #endregion
 }
 
 [CustomEditor(typeof(DebugLoggerSettings))]
 public class DebugLoggerSettingsEditor : Editor {
+    #region Fields
     private SerializedProperty tagSettingsProp;
     private SerializedProperty classFiltersProp;
     private SerializedProperty showStackTraceProp;
@@ -42,7 +47,9 @@ public class DebugLoggerSettingsEditor : Editor {
     private readonly Color includeColor = new Color(0.5f, 1f, 0.5f);
     private readonly Color neutralColor = new Color(0.8f, 0.8f, 0.8f);
     private readonly Color excludeColor = new Color(1f, 0.5f, 0.5f);
+    #endregion
 
+    #region Unity Editor Lifecycle
     private void OnEnable() {
         tagSettingsProp = serializedObject.FindProperty("tagSettings");
         classFiltersProp = serializedObject.FindProperty("classFilters");
@@ -50,21 +57,6 @@ public class DebugLoggerSettingsEditor : Editor {
 
         if (!Application.isPlaying && (tagSettingsProp == null || tagSettingsProp.arraySize == 0)) {
             InitializeDefaultTagSettings();
-        }
-    }
-
-    // Moved initialization to OnInspectorGUI to ensure it runs inside GUI context
-    private void InitializeStyles() {
-        if (buttonStyle == null) {
-            buttonStyle = new GUIStyle(GUI.skin.button) {
-                fixedWidth = 80
-            };
-        }
-
-        if (nameStyle == null) {
-            nameStyle = new GUIStyle(EditorStyles.label) {
-                alignment = TextAnchor.MiddleLeft
-            };
         }
     }
 
@@ -80,6 +72,23 @@ public class DebugLoggerSettingsEditor : Editor {
         DrawClassFilters();
 
         serializedObject.ApplyModifiedProperties();
+    }
+    #endregion
+
+    #region GUI Drawing & Logic Methods
+    // Moved initialization to OnInspectorGUI to ensure it runs inside GUI context
+    private void InitializeStyles() {
+        if (buttonStyle == null) {
+            buttonStyle = new GUIStyle(GUI.skin.button) {
+                fixedWidth = 80
+            };
+        }
+
+        if (nameStyle == null) {
+            nameStyle = new GUIStyle(EditorStyles.label) {
+                alignment = TextAnchor.MiddleLeft
+            };
+        }
     }
 
     private void DrawHeaderTitle() {
@@ -367,6 +376,9 @@ public class DebugLoggerSettingsEditor : Editor {
             newFilter.FindPropertyRelative("filterState").enumValueIndex = (int)state;
         }
     }
+    #endregion
+
+    #region Initialization
 
     private void InitializeDefaultTagSettings() {
         serializedObject.Update();
@@ -394,8 +406,7 @@ public class DebugLoggerSettingsEditor : Editor {
                 element.FindPropertyRelative("color").colorValue = DefaultColors[tag];
             }
         }
-
-        serializedObject.ApplyModifiedProperties();
+        serializedObject.ApplyModifiedProperties(); // Moved ApplyModifiedProperties here
     }
 
     private void ResetTagColors() {
@@ -416,5 +427,6 @@ public class DebugLoggerSettingsEditor : Editor {
             }
         }
     }
+    #endregion
 }
 #endif

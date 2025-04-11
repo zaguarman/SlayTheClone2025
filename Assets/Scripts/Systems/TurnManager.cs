@@ -17,13 +17,10 @@ public class TurnManager : MonoBehaviour {
     }
     #endregion
 
-    #region Fields
+    #region Fields & Properties
     private int turnNumber = 0;
     private GameManager gameManager;
     private GameMediator gameMediator;
-    #endregion
-
-    #region Properties
     public int TurnNumber => turnNumber;
     #endregion
 
@@ -44,7 +41,7 @@ public class TurnManager : MonoBehaviour {
     }
     #endregion
 
-    #region Public Methods
+    #region Methods
     public void EndTurn() {
         turnNumber++;
         Log($"Ending turn {turnNumber - 1}, starting turn {turnNumber}", LogTag.Turns);
@@ -78,9 +75,6 @@ public class TurnManager : MonoBehaviour {
         LogBattlefieldState(gameManager.Player1, "Player 1");
         LogBattlefieldState(gameManager.Player2, "Player 2");
     }
-    #endregion
-
-    #region Private Helper Methods
     private void TriggerEndOfTurnEffects() {
         Log("Triggering end of turn effects", LogTag.Effects | LogTag.Turns);
         TriggerEffectsForPlayer(gameManager.Player1, EffectTrigger.EndOfTurn);

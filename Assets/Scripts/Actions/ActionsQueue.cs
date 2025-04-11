@@ -6,6 +6,7 @@ using static Enums;
 
 public class ActionsQueue {
 
+    #region Fields
     private readonly List<IGameAction> actionsList = new List<IGameAction>();
     private readonly HashSet<(string, EffectTrigger)> processedEffects = new HashSet<(string, EffectTrigger)>();
     private readonly Dictionary<string, IGameAction> activeCreatureActions = new Dictionary<string, IGameAction>();
@@ -13,7 +14,9 @@ public class ActionsQueue {
     private readonly int maxIterationDepth = 3;
     private readonly GameMediator gameMediator;
     private readonly BattlefieldCombatHandler combatHandler;
+    #endregion
 
+    #region Properties
     public int GetPendingActionsCount() => actionsList.Count;
 
     public IReadOnlyCollection<IGameAction> GetPendingActions() => actionsList.AsReadOnly();
@@ -28,15 +31,21 @@ public class ActionsQueue {
             return descriptions;
         }
     }
+    #endregion
 
+    #region Events
     public UnityEvent OnActionsQueued { get; } = new UnityEvent();
     public UnityEvent OnActionsResolved { get; } = new UnityEvent();
+    #endregion
 
+    #region Constructor
     public ActionsQueue(GameMediator gameMediator, BattlefieldCombatHandler combatHandler) {
         this.gameMediator = gameMediator;
         this.combatHandler = combatHandler;
     }
+    #endregion
 
+    #region Methods
     private int GetActionPriority(IGameAction action) {
         return action switch {
             SummonCreatureAction => -1,
@@ -182,6 +191,9 @@ public class ActionsQueue {
         return action;
     }
 
+    #endregion
+
+    #region Cleanup
     public void Cleanup() {
         if (actionsList.Count > 0 || activeCreatureActions.Count > 0) {
             actionsList.Clear();
@@ -192,4 +204,5 @@ public class ActionsQueue {
             Log("Actions queue cleaned up (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
         }
     }
+    #endregion
 }

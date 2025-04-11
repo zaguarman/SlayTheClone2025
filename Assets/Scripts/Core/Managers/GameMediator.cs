@@ -33,13 +33,13 @@ public class GameMediator : Singleton<GameMediator> {
     }
     #endregion
 
-    #region Fields
+    #region Fields & Properties
     private readonly GameEvents events = new GameEvents();
     private readonly HashSet<IPlayer> registeredPlayers = new HashSet<IPlayer>();
     private bool gameInitialized = false;
     #endregion
 
-    #region Event Registration Methods
+    #region Methods
     public void AddGameStateChangedListener(UnityAction listener) {
         ValidateInitialization();
         events.GameStateChanged.AddListener(listener);
