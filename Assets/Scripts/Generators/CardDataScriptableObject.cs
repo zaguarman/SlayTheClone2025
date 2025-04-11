@@ -33,7 +33,10 @@ public abstract class CardDataScriptableObject : ScriptableObject {
                 effectCopy.actions.Add(new EffectAction {
                     actionType = action.actionType,
                     value = action.value,
-                    targetType = action.targetType
+                    targetType = action.targetType,
+                    targetModifier = action.targetModifier,
+                    buffAttack = action.buffAttack,
+                    buffHealth = action.buffHealth
                 });
             }
             effectsCopy.Add(effectCopy);

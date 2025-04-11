@@ -34,6 +34,7 @@ public static class CardFactory {
                             actionType = a.actionType,
                             value = a.value,
                             targetType = a.targetType,
+                            targetModifier = a.targetModifier,
                             buffAttack = a.buffAttack,
                             buffHealth = a.buffHealth
                         }).ToList()
@@ -76,6 +77,7 @@ public static class CardFactory {
                         actionType = action.actionType,
                         value = action.value,
                         targetType = action.targetType,
+                        targetModifier = action.targetModifier,
                         buffAttack = action.buffAttack,
                         buffHealth = action.buffHealth
                     };
@@ -83,9 +85,9 @@ public static class CardFactory {
 
                     // Also add the action to the spell's action list for direct execution
                     if (action.actionType == ActionType.Buff) {
-                        spell.AddAction(action.actionType, action.value, action.targetType, action.buffAttack, action.buffHealth);
+                        spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier, action.buffAttack, action.buffHealth);
                     } else {
-                        spell.AddAction(action.actionType, action.value, action.targetType);
+                        spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
                     }
                 }
 
@@ -176,6 +178,7 @@ public static class CardFactory {
                     actionType = a.actionType,
                     value = a.value,
                     targetType = a.targetType,
+                    targetModifier = a.targetModifier,
                     buffAttack = a.buffAttack,
                     buffHealth = a.buffHealth
                 }).ToList()
@@ -197,6 +200,7 @@ public static class CardFactory {
                     actionType = a.actionType,
                     value = a.value,
                     targetType = a.targetType,
+                    targetModifier = a.targetModifier,
                     buffAttack = a.buffAttack,
                     buffHealth = a.buffHealth
                 }).ToList()

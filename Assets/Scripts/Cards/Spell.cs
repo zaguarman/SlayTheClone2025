@@ -26,6 +26,14 @@ public class Spell : Card {
         actions.Add(new SpellAction(actionType, value, targetType, buffAttack, buffHealth));
     }
 
+    public void AddAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
+        actions.Add(new SpellAction(actionType, value, targetType, targetModifier));
+    }
+
+    public void AddAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
+        actions.Add(new SpellAction(actionType, value, targetType, targetModifier, buffAttack, buffHealth));
+    }
+
     public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
         Log($"Playing spell {Name} (TargetID: {TargetId.ToUpper()}) with {actions.Count} actions", LogTag.Cards | LogTag.Actions);
 
@@ -51,16 +59,32 @@ public class Spell : Card {
             return owner.Opponent;
         }
 
+        // Get the target modifier from the first action (if any)
+        TargetModifier targetModifier = TargetModifier.None;
+        if (actions.Count > 0) {
+            targetModifier = actions[0].TargetModifier;
+        }
+
         // Otherwise use the targeting system to get valid targets
-        var targets = TargetingSystem.GetValidTargets(owner, defaultTargetType);
+        var targets = TargetingSystem.GetValidTargets(owner, defaultTargetType, targetModifier);
         return targets.FirstOrDefault();
     }
 
     private void CreateGameAction(ActionType actionType, int value, ITarget target, IPlayer owner, ActionsQueue context) {
-        // Find the corresponding SpellAction to get buff flags if needed
+        // Find the corresponding SpellAction to get buff flags and target modifier if needed
         SpellAction spellAction = actions.FirstOrDefault(a => a.ActionType == actionType);
         bool buffAttack = spellAction?.BuffAttack ?? true;
         bool buffHealth = spellAction?.BuffHealth ?? true;
+        TargetModifier targetModifier = spellAction?.TargetModifier ?? TargetModifier.None;
+
+        // If we have a target type and a target modifier, we need to get appropriate targets
+        if (spellAction != null && targetModifier != TargetModifier.None) {
+            // If no target is provided or we have a random modifier, get targets from the targeting system
+            if (target == null || targetModifier.HasFlag(TargetModifier.Random)) {
+                var targets = TargetingSystem.GetValidTargets(owner, spellAction.TargetType, targetModifier);
+                target = targets.FirstOrDefault();
+            }
+        }
 
         switch (actionType) {
             case ActionType.Damage:
@@ -132,6 +156,7 @@ public class SpellAction {
     public ActionType ActionType { get; }
     public int Value { get; }
     public TargetType TargetType { get; }
+    public TargetModifier TargetModifier { get; }
     public bool BuffAttack { get; }
     public bool BuffHealth { get; }
 
@@ -139,6 +164,7 @@ public class SpellAction {
         ActionType = actionType;
         Value = value;
         TargetType = targetType;
+        TargetModifier = TargetModifier.None;
         BuffAttack = true;
         BuffHealth = true;
     }
@@ -147,6 +173,25 @@ public class SpellAction {
         ActionType = actionType;
         Value = value;
         TargetType = targetType;
+        TargetModifier = TargetModifier.None;
+        BuffAttack = buffAttack;
+        BuffHealth = buffHealth;
+    }
+
+    public SpellAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
+        ActionType = actionType;
+        Value = value;
+        TargetType = targetType;
+        TargetModifier = targetModifier;
+        BuffAttack = true;
+        BuffHealth = true;
+    }
+
+    public SpellAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
+        ActionType = actionType;
+        Value = value;
+        TargetType = targetType;
+        TargetModifier = targetModifier;
         BuffAttack = buffAttack;
         BuffHealth = buffHealth;
     }

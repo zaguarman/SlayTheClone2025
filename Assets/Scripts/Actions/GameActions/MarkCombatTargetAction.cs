@@ -1,4 +1,5 @@
 using static DebugLogger;
+using static Enums;
 
 public class MarkCombatTargetAction : IGameAction {
     #region Fields & Properties
@@ -12,7 +13,12 @@ public class MarkCombatTargetAction : IGameAction {
     public MarkCombatTargetAction(ICreature attacker, ITarget targetSlot) {
         this.attacker = attacker;
         this.targetSlot = (BattlefieldSlot)targetSlot;
-        Log($"Created MarkCombatTargetAction: {attacker?.Name ?? "Unknown"} (AttackerID: {attacker?.TargetId.ToUpper() ?? "UNKNOWN"}) targeting slot (SlotID: {targetSlot?.TargetId.ToUpper() ?? "UNKNOWN"}) (ActionID: {GetHashCode().ToString().ToUpper()})",
+
+        string attackerName = attacker != null ? attacker.Name : "Unknown";
+        string attackerId = attacker != null ? attacker.TargetId.ToUpper() : "UNKNOWN";
+        string slotId = targetSlot != null ? targetSlot.TargetId.ToUpper() : "UNKNOWN";
+
+        Log($"Created MarkCombatTargetAction: {attackerName} (AttackerID: {attackerId}) targeting slot (SlotID: {slotId}) (ActionID: {GetHashCode().ToString().ToUpper()})",
             LogTag.Actions | LogTag.Combat);
     }
     #endregion
@@ -25,28 +31,50 @@ public class MarkCombatTargetAction : IGameAction {
             return;
         }
 
+        var actionsQueue = GameManager.Instance.ActionsQueue;
+        ITarget primaryTarget = null;
+
         if (targetSlot.IsOccupied()) {
             var targetCreature = targetSlot.OccupyingCreature;
             if (targetCreature != null) {
+                primaryTarget = targetCreature;
                 Log($"Creature {attacker.Name} (AttackerID: {attacker.TargetId.ToUpper()}) attacking creature {targetCreature.Name} (TargetID: {targetCreature.TargetId.ToUpper()}) (ActionID: {GetHashCode().ToString().ToUpper()})",
                     LogTag.Combat);
                 var damageAction = new DamageCreatureAction(targetCreature, attacker.Attack, attacker);
-                GameManager.Instance.ActionsQueue.AddAction(damageAction);
+                actionsQueue.AddAction(damageAction);
             }
         } else {
             var targetPlayer = attacker.Owner?.Opponent;
             if (targetPlayer != null) {
+                primaryTarget = targetPlayer;
                 Log($"Creature {attacker.Name} (AttackerID: {attacker.TargetId.ToUpper()}) attacking player {(targetPlayer.IsPlayer1() ? "1" : "2")} (PlayerID: {targetPlayer.TargetId.ToUpper()}) (ActionID: {GetHashCode().ToString().ToUpper()})",
                     LogTag.Combat);
-                GameManager.Instance.ActionsQueue.AddAction(
+                actionsQueue.AddAction(
                     new DamagePlayerAction(targetPlayer, attacker.Attack)
                 );
+            }
+        }
+
+        // Check if the attacker has any spread damage effects
+        if (primaryTarget != null && attacker is Creature creature) {
+            // Look for spread damage effects in the creature's effects
+            foreach (var effect in creature.Effects) {
+                foreach (var action in effect.actions) {
+                    if (action.targetModifier != TargetModifier.None) {
+                        Log($"Applying spread damage effect with modifier {action.targetModifier} for {attacker.Name} (AttackerID: {attacker.TargetId.ToUpper()})",
+                            LogTag.Combat | LogTag.Effects);
+                        SpreadDamageEffect.ApplySpreadDamage(primaryTarget, attacker.Attack, attacker, action.targetModifier, actionsQueue);
+                    }
+                }
             }
         }
     }
 
     public override string ToString() {
-        return $"MarkCombatTargetAction: Attacker={attacker?.Name ?? "Unknown"} (AttackerID: {attacker?.TargetId.ToUpper() ?? "UNKNOWN"}), TargetSlot=(SlotID: {targetSlot?.TargetId.ToUpper() ?? "UNKNOWN"}) (ActionID: {GetHashCode().ToString().ToUpper()})";
+        string attackerName = attacker != null ? attacker.Name : "Unknown";
+        string attackerId = attacker != null ? attacker.TargetId.ToUpper() : "UNKNOWN";
+        string slotId = targetSlot != null ? targetSlot.TargetId.ToUpper() : "UNKNOWN";
+        return $"MarkCombatTargetAction: Attacker={attackerName} (AttackerID: {attackerId}), TargetSlot=(SlotID: {slotId}) (ActionID: {GetHashCode().ToString().ToUpper()})";
     }
     #endregion
 }

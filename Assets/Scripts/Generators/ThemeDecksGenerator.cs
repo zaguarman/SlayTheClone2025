@@ -383,11 +383,11 @@ public class ThemeDecksGenerator : EditorWindow {
         // 9. Electric Eel
         cards.Add(CreateWaterCard(
             "Electric Eel",
-            "Zaps multiple enemies with chain lightning.",
+            "When attacking, zaps the primary target and chains lightning to 2 additional targets in a random direction.",
             4, 3,
-            new CardEffectData(EffectType.Triggered, EffectTrigger.OnDeath,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Damage, 3, TargetType.AllCreatures)
+                    new EffectActionData(ActionType.Damage, 4, TargetType.EnemyCreatures, TargetModifier.Chained)
                 }),
             "Assets/Scriptables/Cards/Water/ElectricEel.asset",
             existingCardIds.ContainsKey("ElectricEel") ? existingCardIds["ElectricEel"] : System.Guid.NewGuid().ToString()
@@ -721,6 +721,9 @@ public class ThemeDecksGenerator : EditorWindow {
             SerializedProperty targetTypeProp = actionProp.FindPropertyRelative("targetType");
             targetTypeProp.enumValueIndex = (int)effectData.actions[i].targetType;
 
+            SerializedProperty targetModifierProp = actionProp.FindPropertyRelative("targetModifier");
+            targetModifierProp.intValue = (int)effectData.actions[i].targetModifier;
+
             // Store buff-specific properties if this is a buff action
             if (effectData.actions[i].actionType == ActionType.Buff) {
                 // Check if the properties exist in the serialized object
@@ -772,6 +775,9 @@ public class ThemeDecksGenerator : EditorWindow {
 
             SerializedProperty targetTypeProp = actionProp.FindPropertyRelative("targetType");
             targetTypeProp.enumValueIndex = (int)effectData.actions[i].targetType;
+
+            SerializedProperty targetModifierProp = actionProp.FindPropertyRelative("targetModifier");
+            targetModifierProp.intValue = (int)effectData.actions[i].targetModifier;
 
             // Store buff-specific properties if this is a buff action
             if (effectData.actions[i].actionType == ActionType.Buff) {
@@ -834,6 +840,7 @@ public class ThemeDecksGenerator : EditorWindow {
         public ActionType actionType;
         public int value;
         public TargetType targetType;
+        public TargetModifier targetModifier = TargetModifier.None; // Target modifier for spread damage effects
         public bool buffAttack = true; // For Buff action type: whether to buff attack
         public bool buffHealth = true; // For Buff action type: whether to buff health
 
@@ -847,6 +854,22 @@ public class ThemeDecksGenerator : EditorWindow {
             this.actionType = actionType;
             this.value = value;
             this.targetType = targetType;
+            this.buffAttack = buffAttack;
+            this.buffHealth = buffHealth;
+        }
+
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
+            this.actionType = actionType;
+            this.value = value;
+            this.targetType = targetType;
+            this.targetModifier = targetModifier;
+        }
+
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
+            this.actionType = actionType;
+            this.value = value;
+            this.targetType = targetType;
+            this.targetModifier = targetModifier;
             this.buffAttack = buffAttack;
             this.buffHealth = buffHealth;
         }

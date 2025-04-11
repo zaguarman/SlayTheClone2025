@@ -23,6 +23,7 @@ MonoBehaviour:
     - actionType: 3
       value: 1
       targetType: 0
+      targetModifier: 0
       buffAttack: 0
       buffHealth: 0
   defaultTargetType: 0

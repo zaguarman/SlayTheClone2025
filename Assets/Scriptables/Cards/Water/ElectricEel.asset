@@ -14,15 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 52d0b8c8-7476-41f6-8d44-5c9ad9acaa84
   cardName: Electric Eel
-  description: Zaps multiple enemies with chain lightning.
+  description: When attacking, zaps the primary target and chains lightning to 2
+    additional targets in a random direction.
   cardType: 0
   effects:
   - effectType: 0
-    trigger: 4
+    trigger: 1
     actions:
     - actionType: 0
-      value: 3
-      targetType: 5
+      value: 4
+      targetType: 4
+      targetModifier: 8
       buffAttack: 0
       buffHealth: 0
   attack: 4
