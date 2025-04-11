@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: SeahorseScout
   m_EditorClassIdentifier: 
-  cardId: bcc7b005-7394-4c51-9955-b71a3655dddd
+  cardId: 68739bbd-34f6-4836-abca-cc7074686fc1
   cardName: Seahorse Scout
   description: Quickly discovers new resources.
   cardType: 0

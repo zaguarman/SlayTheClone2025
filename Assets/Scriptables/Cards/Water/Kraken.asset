@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: Kraken
   m_EditorClassIdentifier: 
-  cardId: 4d212dfb-66b7-43a6-9277-7e676cb89e9a
+  cardId: 344ad879-ed7d-4ad1-991a-3f2866e3d70d
   cardName: Kraken
   description: Massive sea monster that terrifies enemies.
   cardType: 0

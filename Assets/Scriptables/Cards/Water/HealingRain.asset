@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
   m_Name: HealingRain
   m_EditorClassIdentifier: 
-  cardId: add72ddc-df9a-4049-9361-d6f98957dd38
+  cardId: 3d8560b6-327b-49ec-a917-dd6f4f1c4d59
   cardName: Healing Rain
   description: Restore health to all friendly creatures.
   cardType: 1

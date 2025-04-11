@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: MermaidHealer
   m_EditorClassIdentifier: 
-  cardId: 97d36f2e-0db2-46ae-bf5b-04f68d5ee814
+  cardId: 0f70f30e-0643-47d5-a6e7-3b5b895e0a33
   cardName: Mermaid Healer
   description: Restores health to damaged allies at the start of your turn.
   cardType: 0

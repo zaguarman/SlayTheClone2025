@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
   m_Name: Whirlpool
   m_EditorClassIdentifier: 
-  cardId: 3f388381-2200-43a0-bf06-ce3f9eef186f
+  cardId: c50cb807-6bab-4137-b43a-2a72480be234
   cardName: Whirlpool
   description: Trap enemies in a spinning vortex.
   cardType: 1

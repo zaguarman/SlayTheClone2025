@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: DancingDolphin
   m_EditorClassIdentifier: 
-  cardId: 697868bc-e45a-4750-a91c-033f9c85404e
+  cardId: b3342dae-b03f-4ef5-aa52-4db2d7842561
   cardName: Dancing Dolphin
   description: Playful movements boost ally morale.
   cardType: 0

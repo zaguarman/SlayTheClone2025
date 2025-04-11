@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: DeepSeaAngler
   m_EditorClassIdentifier: 
-  cardId: 8ba9fcb4-0aa1-43e1-955f-fdfa44c97ab3
+  cardId: b4657f47-d57e-4965-b8e3-0c2500f3431c
   cardName: Deep Sea Angler
   description: Lures enemies with bioluminescent bait.
   cardType: 0

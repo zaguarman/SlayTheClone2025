@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: GuardianWhale
   m_EditorClassIdentifier: 
-  cardId: 66c741a5-e421-4071-a0f0-52046f68f121
+  cardId: f6335772-6d30-4503-8d0c-bef8f5bc7fa7
   cardName: Guardian Whale
   description: Massive presence protects allies.
   cardType: 0

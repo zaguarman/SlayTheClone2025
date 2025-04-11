@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: JellyfishSwarm
   m_EditorClassIdentifier: 
-  cardId: f8f50c3e-83f4-4d9d-a153-126d7bc29a04
+  cardId: cbc42f32-9706-4006-8cd4-872cf4b755ab
   cardName: Jellyfish Swarm
   description: Paralyzes enemies with gentle pulses.
   cardType: 0

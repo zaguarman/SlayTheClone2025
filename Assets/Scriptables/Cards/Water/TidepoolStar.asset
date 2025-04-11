@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: TidepoolStar
   m_EditorClassIdentifier: 
-  cardId: 03786f26-9448-4279-8803-c17930418fd7
+  cardId: d73bb0c5-d044-4d58-994c-ce0b2ac67a2d
   cardName: Tidepool Star
   description: Regenerates during low tide.
   cardType: 0

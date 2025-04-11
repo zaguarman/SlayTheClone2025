@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: CoralBuilder
   m_EditorClassIdentifier: 
-  cardId: cf2d8171-f8ba-494a-89e0-8f90e93507a8
+  cardId: 307f66a0-0487-4641-9b49-04af216309f7
   cardName: Coral Builder
   description: Constructs protective barriers.
   cardType: 0

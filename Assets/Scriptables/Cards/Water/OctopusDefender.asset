@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: OctopusDefender
   m_EditorClassIdentifier: 
-  cardId: f6ced547-2e4e-4454-8dfc-d18bd8eea251
+  cardId: 21e50b50-751c-4719-9fb8-e305acef0447
   cardName: Octopus Defender
   description: Uses tentacles to block incoming attacks.
   cardType: 0

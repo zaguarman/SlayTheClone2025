@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: ElectricEel
   m_EditorClassIdentifier: 
-  cardId: d2098479-75ff-44ee-857f-90c91c7bf338
+  cardId: 52d0b8c8-7476-41f6-8d44-5c9ad9acaa84
   cardName: Electric Eel
   description: Zaps multiple enemies with chain lightning.
   cardType: 0
