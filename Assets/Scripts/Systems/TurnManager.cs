@@ -1,6 +1,7 @@
 using static DebugLogger;
 using static Enums;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class TurnManager : MonoBehaviour {
     #region Singleton
@@ -55,6 +56,10 @@ public class TurnManager : MonoBehaviour {
         if (gameManager?.ActionsQueue != null) {
             gameManager.ActionsQueue.ResolveActions();
         }
+
+        // 2b. Notify all creatures that a turn has ended (for duration effects)
+        Log("Step 2b: Notifying turn ended", LogTag.Turns);
+        gameMediator?.NotifyTurnEnded(turnNumber);
 
         // 3. Trigger start of turn effects for the new turn
         Log("Step 3: Triggering start of turn effects", LogTag.Turns);

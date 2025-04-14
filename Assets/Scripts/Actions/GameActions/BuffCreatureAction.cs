@@ -1,5 +1,4 @@
 using static DebugLogger;
-using static Enums;
 
 public class BuffCreatureAction : IGameAction {
     private readonly ICreature target;

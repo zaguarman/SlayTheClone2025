@@ -344,11 +344,11 @@ public class ThemeDecksGenerator : EditorWindow {
         // 6. Abyssal Cucumber
         cards.Add(CreateWaterCard(
             "Abyssal Cucumber",
-            "Filters nutrients to boost allies' attack power.",
+            "Gives all friendly creatures +2 attack for 2 turns.",
             1, 4,
-            new CardEffectData(EffectType.Triggered, EffectTrigger.EndOfTurn,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Buff, 1, TargetType.FriendlyCreatures, true, false)
+                    new EffectActionData(ActionType.Buff, 2, TargetType.FriendlyCreatures, true, false)
                 }),
             "Assets/Scriptables/Cards/Water/AbyssalCucumber.asset",
             existingCardIds.ContainsKey("AbyssalCucumber") ? existingCardIds["AbyssalCucumber"] : System.Guid.NewGuid().ToString()
@@ -857,6 +857,8 @@ public class ThemeDecksGenerator : EditorWindow {
             this.buffAttack = buffAttack;
             this.buffHealth = buffHealth;
         }
+
+
 
         public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
             this.actionType = actionType;

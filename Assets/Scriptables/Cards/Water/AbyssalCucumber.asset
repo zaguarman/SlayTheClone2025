@@ -11,17 +11,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: AbyssalCucumber
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   cardId: f6ee2f22-3b58-4a10-a210-3c1305eaa563
   cardName: Abyssal Cucumber
-  description: Filters nutrients to boost allies' attack power.
+  description: Gives all friendly creatures +2 attack for 2 turns.
   cardType: 0
   effects:
-  - effectType: 0
-    trigger: 3
+  - effectType: 3
+    trigger: 0
     actions:
     - actionType: 6
-      value: 1
+      value: 2
       targetType: 3
       targetModifier: 0
       buffAttack: 1

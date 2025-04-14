@@ -16,6 +16,7 @@ public class GameMediator : Singleton<GameMediator> {
         public readonly UnityEvent ActionsQueueChanged = new UnityEvent();
         public readonly UnityEvent<IPlayer> HandStateChanged = new UnityEvent<IPlayer>();
         public readonly UnityEvent<IPlayer> BattlefieldStateChanged = new UnityEvent<IPlayer>();
+        public readonly UnityEvent<int> TurnEnded = new UnityEvent<int>();
 
         public void ClearAllListeners() {
             PlayerDamaged.RemoveAllListeners();
@@ -29,6 +30,7 @@ public class GameMediator : Singleton<GameMediator> {
             ActionsQueueChanged.RemoveAllListeners();
             HandStateChanged.RemoveAllListeners();
             BattlefieldStateChanged.RemoveAllListeners();
+            TurnEnded.RemoveAllListeners();
         }
     }
     #endregion
@@ -119,6 +121,15 @@ public class GameMediator : Singleton<GameMediator> {
 
     public void RemoveActionsQueueChangedListener(UnityAction listener) {
         events.ActionsQueueChanged.RemoveListener(listener);
+    }
+
+    public void AddTurnEndedListener(UnityAction<int> listener) {
+        ValidateInitialization();
+        events.TurnEnded.AddListener(listener);
+    }
+
+    public void RemoveTurnEndedListener(UnityAction<int> listener) {
+        events.TurnEnded.RemoveListener(listener);
     }
 
     public void AddHandStateChangedListener(UnityAction<IPlayer> listener) {
@@ -268,6 +279,12 @@ public class GameMediator : Singleton<GameMediator> {
         ValidateInitialization();
         events.BattlefieldStateChanged.Invoke(player);
         Log($"Battlefield state changed for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Players | LogTag.Cards);
+    }
+
+    public void NotifyTurnEnded(int turnNumber) {
+        ValidateInitialization();
+        events.TurnEnded.Invoke(turnNumber);
+        Log($"Turn {turnNumber} ended", LogTag.Turns);
     }
     #endregion
 
