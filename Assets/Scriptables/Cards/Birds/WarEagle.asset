@@ -26,5 +26,6 @@ MonoBehaviour:
       targetModifier: 0
       buffAttack: 0
       buffHealth: 0
+      modifierToApply: {fileID: 0}
   attack: 5
   health: 4

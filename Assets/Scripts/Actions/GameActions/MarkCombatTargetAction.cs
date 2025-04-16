@@ -1,5 +1,5 @@
 using static DebugLogger;
-using static Enums;
+using Enums;
 
 public class MarkCombatTargetAction : IGameAction {
     #region Fields & Properties

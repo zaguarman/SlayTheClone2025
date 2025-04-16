@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using static Enums;
+using Enums;
 
 // Base card scriptable object
 public abstract class CardDataScriptableObject : ScriptableObject {

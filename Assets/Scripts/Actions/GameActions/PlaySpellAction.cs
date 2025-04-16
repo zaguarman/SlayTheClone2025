@@ -1,4 +1,4 @@
-using static Enums;
+using Enums;
 using static DebugLogger;
 using UnityEngine;
 using System;

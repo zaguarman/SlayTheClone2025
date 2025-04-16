@@ -50,15 +50,6 @@ public class GameUI : UIComponent {
         InitializeWeatherSystem();
         RegisterEvents();
 
-        // Update "Resolve Actions" button to say "End Turn"
-        var resolveButton = gameReferences.GetResolveActionsButton();
-        if (resolveButton != null) {
-            var buttonText = resolveButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (buttonText != null) {
-                buttonText.text = "End Turn";
-            }
-        }
-
         IsInitialized = true;
         Log("GameUI initialized successfully", LogTag.UI | LogTag.Initialization);
         onInitialized.Invoke();

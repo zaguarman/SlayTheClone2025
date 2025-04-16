@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using static DebugLogger;
-using static Enums;
+using Enums;
 
 public class ActionsQueue {
 
@@ -138,22 +138,9 @@ public class ActionsQueue {
         processedEffects.Clear();
         Log("Cleared processed effects for new resolution chain (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Effects);
 
-        // Add discard hand actions for both players
-        var gameManager = GameManager.Instance;
-        if (gameManager != null) {
-            Log("Adding mandatory discard and draw actions (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
-
-            // Add discard actions
-            AddAction(new DiscardHandAction(gameManager.Player1));
-            AddAction(new DiscardHandAction(gameManager.Player2));
-
-            // Add draw cards actions after discarding
-            AddAction(new DrawCardsAction(gameManager.Player1, gameManager.Player1.CardsToDraw));
-            AddAction(new DrawCardsAction(gameManager.Player2, gameManager.Player2.CardsToDraw));
-
-            // Log the updated queue size
-            Log($"After adding mandatory actions, queue size: {actionsList.Count} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
-        }
+        // Discard and draw actions are now handled explicitly in TurnManager.EndTurn()
+        // instead of being automatically added here
+        Log("Resolving actions without adding automatic discard/draw (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
 
         // Process all actions in the queue
         while (actionsList.Count > 0) {

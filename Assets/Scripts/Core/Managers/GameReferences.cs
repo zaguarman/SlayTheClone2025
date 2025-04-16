@@ -195,7 +195,7 @@ public class GameReferences : Singleton<GameReferences> {
     public BattlefieldUI GetPlayer1BattlefieldUI() => player1References.BattlefieldUI;
     public BattlefieldUI GetPlayer2BattlefieldUI() => player2References.BattlefieldUI;
     public Button GetCardPrefab() => cardPrefab;
-    public Button GetResolveActionsButton() => resolveActionsButton;
+    public Button GetEndTurnButton() => resolveActionsButton;
     public Color GetPlayer1CardColor() => player1CardColor;
     public Color GetPlayer2CardColor() => player2CardColor;
     public Button GetWeatherCycleButton() => weatherCycleButton;
@@ -244,6 +244,17 @@ public class GameReferences : Singleton<GameReferences> {
         }
         return player2Deck.GetCardDataList();
     }
+
+    // Add ModifierFactory Access (assuming it's managed by GameManager)
+    public ModifierFactory ModifierFactory => GameManager.Instance?.ModifierFactory;
+
+    // --- Optional: Preload Modifier Data ---
+    // You could add a field to hold loaded ModifierData if ModifierFactory doesn't load them itself.
+    // [Header("Modifier Assets")]
+    // [SerializeField] private List<ModifierData> allModifierDatas;
+    // public IEnumerable<ModifierData> GetAllModifierData() => allModifierDatas;
+    // Ensure this list is populated in the Inspector.
+    // Then ModifierFactory.Initialize would take this list instead of loading from Resources.
 
     #endregion // End of Methods
 }

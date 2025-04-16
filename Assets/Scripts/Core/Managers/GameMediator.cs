@@ -5,6 +5,7 @@ using static DebugLogger;
 public class GameMediator : Singleton<GameMediator> {
     #region Game Events Class
     private class GameEvents {
+        // --- Existing Events ---
         public readonly UnityEvent<IPlayer, int> PlayerDamaged = new UnityEvent<IPlayer, int>();
         public readonly UnityEvent<ICreature, int> CreatureDamaged = new UnityEvent<ICreature, int>();
         public readonly UnityEvent<ICreature> CreatureDied = new UnityEvent<ICreature>();
@@ -12,11 +13,18 @@ public class GameMediator : Singleton<GameMediator> {
         public readonly UnityEvent GameStateChanged = new UnityEvent();
         public readonly UnityEvent GameInitialized = new UnityEvent();
         public readonly UnityEvent<ICreature, IPlayer> CreatureSummoned = new UnityEvent<ICreature, IPlayer>();
-        public readonly UnityEvent<ICreature> CreaturePreSummon = new UnityEvent<ICreature>();
+        public readonly UnityEvent<ICreature> CreaturePreSummon = new UnityEvent<ICreature>(); // Keep if used
         public readonly UnityEvent ActionsQueueChanged = new UnityEvent();
         public readonly UnityEvent<IPlayer> HandStateChanged = new UnityEvent<IPlayer>();
         public readonly UnityEvent<IPlayer> BattlefieldStateChanged = new UnityEvent<IPlayer>();
-        public readonly UnityEvent<int> TurnEnded = new UnityEvent<int>();
+        public readonly UnityEvent<int> TurnEnded = new UnityEvent<int>(); // Used for modifier tick
+
+        // --- New Events ---
+        // We'll use object for now and cast when needed to avoid circular dependencies
+        public readonly UnityEvent<object> ModifierApplied = new UnityEvent<object>();
+        public readonly UnityEvent<object> ModifierRemoved = new UnityEvent<object>();
+        public readonly UnityEvent<object> ModifierExpired = new UnityEvent<object>();
+        // Healed events removed - using NotifyGameStateChanged instead
 
         public void ClearAllListeners() {
             PlayerDamaged.RemoveAllListeners();
@@ -31,6 +39,12 @@ public class GameMediator : Singleton<GameMediator> {
             HandStateChanged.RemoveAllListeners();
             BattlefieldStateChanged.RemoveAllListeners();
             TurnEnded.RemoveAllListeners();
+
+            // Clear new listeners
+            ModifierApplied.RemoveAllListeners();
+            ModifierRemoved.RemoveAllListeners();
+            ModifierExpired.RemoveAllListeners();
+            // Healed events removed
         }
     }
     #endregion
@@ -149,6 +163,18 @@ public class GameMediator : Singleton<GameMediator> {
     public void RemoveBattlefieldStateChangedListener(UnityAction<IPlayer> listener) {
         events.BattlefieldStateChanged.RemoveListener(listener);
     }
+
+    // --- New Listener Methods ---
+    public void AddModifierAppliedListener(UnityAction<object> listener) { ValidateInitialization(); events.ModifierApplied.AddListener(listener); }
+    public void RemoveModifierAppliedListener(UnityAction<object> listener) { events.ModifierApplied.RemoveListener(listener); }
+
+    public void AddModifierRemovedListener(UnityAction<object> listener) { ValidateInitialization(); events.ModifierRemoved.AddListener(listener); }
+    public void RemoveModifierRemovedListener(UnityAction<object> listener) { events.ModifierRemoved.RemoveListener(listener); }
+
+    public void AddModifierExpiredListener(UnityAction<object> listener) { ValidateInitialization(); events.ModifierExpired.AddListener(listener); }
+    public void RemoveModifierExpiredListener(UnityAction<object> listener) { events.ModifierExpired.RemoveListener(listener); }
+
+     // Healed event listeners removed
     #endregion
 
     #region Player Registration
@@ -218,24 +244,31 @@ public class GameMediator : Singleton<GameMediator> {
         NotifyGameStateChanged();
     }
 
-    public void NotifyCreatureHealed(ICreature creature, int amount) {
-        ValidateInitialization();
-        if (creature == null) throw new System.ArgumentNullException(nameof(creature));
+    // Healed notification methods removed - using NotifyGameStateChanged instead
 
-        // If we had a CreatureHealed event, we would invoke it here
-        // events.CreatureHealed.Invoke(creature, amount);
-        Log($"{creature.Name} healed for {amount}, health now: {creature.Health}", LogTag.Creatures | LogTag.Effects);
-        NotifyGameStateChanged();
+    // --- New Notify Methods ---
+    public void NotifyModifierApplied(object modifier) {
+        ValidateInitialization();
+        if (modifier == null) return;
+        // Log($"Notifying Modifier Applied: {modifier.Data.modifierId} to {modifier.Target.GetModifiableId()}", LogTag.Effects);
+        events.ModifierApplied.Invoke(modifier);
+        NotifyGameStateChanged(); // Applying modifiers changes state
     }
 
-    public void NotifyPlayerHealed(IPlayer player, int amount) {
+    public void NotifyModifierRemoved(object modifier) {
         ValidateInitialization();
-        if (player == null) throw new System.ArgumentNullException(nameof(player));
+        if (modifier == null) return;
+        // Log($"Notifying Modifier Removed: {modifier.Data.modifierId} from {modifier.Target.GetModifiableId()}", LogTag.Effects);
+        events.ModifierRemoved.Invoke(modifier);
+        NotifyGameStateChanged(); // Removing modifiers changes state
+    }
 
-        // If we had a PlayerHealed event, we would invoke it here
-        // events.PlayerHealed.Invoke(player, amount);
-        Log($"{(player.IsPlayer1() ? "Player 1" : "Player 2")} healed for {amount}, health now: {player.Health}", LogTag.Players | LogTag.Effects);
-        NotifyGameStateChanged();
+    public void NotifyModifierExpired(object modifier) {
+        ValidateInitialization();
+        if (modifier == null) return;
+        // Log($"Notifying Modifier Expired: {modifier.Data.modifierId} on {modifier.Target.GetModifiableId()}", LogTag.Effects);
+        events.ModifierExpired.Invoke(modifier);
+        // Note: State change is already handled by the removal notification path
     }
 
     public void NotifyGameOver(IPlayer winner) {

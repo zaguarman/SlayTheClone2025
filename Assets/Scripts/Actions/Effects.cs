@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Enums;
+using Enums;
 
 public class Effects : MonoBehaviour {
     public class CardEffect {

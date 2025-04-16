@@ -39,7 +39,7 @@ public class Player : Entity, IPlayer {
     public IPlayer Opponent { get; set; }
     public List<ICard> Hand { get; private set; }
     public IDeck Deck { get; private set; }
-    public int CardsToDraw { get; set; } = 2; // Default to drawing 2 cards
+    public int CardsToDraw { get; set; } = 5; // Default to drawing 2 cards
 
     public List<BattlefieldSlot> Battlefield { get; private set; }
     public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
@@ -242,10 +242,8 @@ public class Player : Entity, IPlayer {
         if (slot != null) {
             // Reset modifiers when a creature is removed from the battlefield
             if (creature is ICreature creatureInterface) {
-                // Reset all modifiers to restore base stats
-                creatureInterface.ResetModifiers();
-                Log($"Reset modifiers for creature {creature.Name} when removing from battlefield", LogTag.Cards | LogTag.Creatures | LogTag.Effects);
-
+                // When creature died reset all modifiers to restore base stats, remove all status effects
+                
                 // If we're not destroying the card, add it to the discard pile
                 if (!destroyCard && Deck is Deck deck) {
                     // When a creature is removed from battlefield without being destroyed, add it to discard pile

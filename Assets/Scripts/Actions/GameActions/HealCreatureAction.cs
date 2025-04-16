@@ -1,4 +1,4 @@
-using static Enums;
+using Enums;
 using static DebugLogger;
 using UnityEngine;
 using System;
@@ -19,19 +19,15 @@ public class HealCreatureAction : IGameAction {
 
     #region Methods
     public void Execute() {
-        if (target == null) return;
+        if (target == null || amount <= 0) return;
 
-        if (target is Creature creature) {
-            // Heal should be implemented in Creature class, here's a workaround for this prototype
-            int currentHealth = creature.Health;
-            int newHealth = Math.Min(currentHealth + amount, 10); // Assuming 10 is max health for this prototype
-
-            // Since we don't have a direct SetHealth method, we'll log the info
-            Log($"Healing {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) for {amount} (from {currentHealth} to {newHealth})",
-                LogTag.Actions | LogTag.Creatures);
-
-            // In a real implementation, we'd call something like:
-            // creature.Heal(amount);
+        // Use the Heal method on the Creature instance
+        if (target is Creature creatureImpl) {
+            creatureImpl.Heal(amount);
+             // Logging is now handled inside Creature.Heal
+             // Log($"Executed HealCreatureAction: Healed {creatureImpl.Name} ({creatureImpl.TargetId}) for {amount}", LogTag.Actions | LogTag.Creatures);
+        } else {
+             LogError($"HealCreatureAction target {target.Name} ({target.TargetId}) is not a Creature implementation.", LogTag.Actions);
         }
     }
 
@@ -39,4 +35,4 @@ public class HealCreatureAction : IGameAction {
         return $"HealCreatureAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Amount={amount}";
     }
     #endregion
-} 
+}

@@ -1,4 +1,4 @@
-using static Enums;
+using Enums;
 
 public class SpellData : CardData {
     public TargetType defaultTargetType;

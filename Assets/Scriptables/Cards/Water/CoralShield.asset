@@ -26,4 +26,5 @@ MonoBehaviour:
       targetModifier: 0
       buffAttack: 0
       buffHealth: 0
+      modifierToApply: {fileID: 0}
   defaultTargetType: 3

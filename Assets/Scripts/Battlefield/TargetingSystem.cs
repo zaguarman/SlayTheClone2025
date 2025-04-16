@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using static Enums;
+using Enums;
 
 public interface ITarget {
     string TargetId { get; }

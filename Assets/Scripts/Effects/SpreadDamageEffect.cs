@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using static Enums;
+using Enums;
 using static DebugLogger;
 
 public static class SpreadDamageEffect {

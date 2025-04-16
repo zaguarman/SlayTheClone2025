@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using static DebugLogger;
-using static Enums;
+using Enums;
 using System.Linq;
 
 public class Spell : Card {
@@ -99,10 +99,6 @@ public class Spell : Card {
                 CreateDrawAction(value, owner, context);
                 break;
 
-            case ActionType.Buff:
-                CreateBuffAction(value, target, context, buffAttack, buffHealth);
-                break;
-
             case ActionType.Summon:
                 // Not implemented in this prototype
                 break;
@@ -132,22 +128,6 @@ public class Spell : Card {
     private void CreateDrawAction(int value, IPlayer player, ActionsQueue context) {
         Log($"Creating draw action for {value} cards", LogTag.Cards | LogTag.Actions);
         context.AddAction(new DrawCardsAction(player, value));
-    }
-
-    private void CreateBuffAction(int value, ITarget target, ActionsQueue context, bool buffAttack, bool buffHealth) {
-        string buffDescription = "";
-        if (buffAttack && buffHealth) {
-            buffDescription = $"+{value}/+{value}";
-        } else if (buffAttack) {
-            buffDescription = $"+{value} attack";
-        } else if (buffHealth) {
-            buffDescription = $"+{value} health";
-        }
-
-        if (target is ICreature creature) {
-            Log($"Creating buff action for {buffDescription} to creature {creature.Name}", LogTag.Cards | LogTag.Actions);
-            context.AddAction(new BuffCreatureAction(creature, value, value, buffAttack, buffHealth));
-        }
     }
 }
 

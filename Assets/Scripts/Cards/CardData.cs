@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using static Enums;
+using Enums;
 
 public abstract class CardData : ScriptableObject {
     public string cardId; // Added unique ID field
@@ -36,10 +36,22 @@ public class CardEffect {
 
 [System.Serializable]
 public class EffectAction {
-    public ActionType actionType;
+    public ActionType actionType; // Use Enums.ActionType
     public int value;
-    public TargetType targetType;
-    public TargetModifier targetModifier = TargetModifier.None; // Target modifier for spread damage effects
-    public bool buffAttack = true; // For Buff action type: whether to buff attack
-    public bool buffHealth = true; // For Buff action type: whether to buff health
+    public TargetType targetType; // Use Enums.TargetType
+    public TargetModifier targetModifier = TargetModifier.None; // Use Enums.TargetModifier
+
+    // --- Option 1: Keep Buff flags for compatibility ---
+    [Tooltip("For Buff action type (Legacy): Buff attack?")]
+    public bool buffAttack = true;
+    [Tooltip("For Buff action type (Legacy): Buff health?")]
+    public bool buffHealth = true;
+
+    // --- Option 2: Use ModifierData reference for ApplyModifier action ---
+    [Tooltip("Assign ModifierData asset here if actionType is ApplyModifier")]
+    public ModifierData modifierToApply;
+
+    // --- Option 3: Add ID for RemoveModifier action ---
+    // [Tooltip("Enter Modifier ID here if actionType is RemoveModifier")]
+    // public string modifierIdToRemove;
 }

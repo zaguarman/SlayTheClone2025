@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.IO;
-using static Enums;
+using Enums;
 
 public class ThemeDecksGenerator : EditorWindow {
     [MenuItem("Cards/Generate Theme Decks")]

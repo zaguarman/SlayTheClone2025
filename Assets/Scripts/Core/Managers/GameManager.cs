@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static DebugLogger;
-using static Enums;
 
 public class GameManager : InitializableComponent {
     #region Singleton
@@ -35,6 +34,7 @@ public class GameManager : InitializableComponent {
     private bool weatherSystemInitialized = false;
     public Player Player1 { get; private set; }
     public Player Player2 { get; private set; }
+    public ModifierFactory ModifierFactory { get; private set; } // Add ModifierFactory property
 
     [ShowInInspector, BoxGroup("Hands"), PropertyOrder]
     [ListDrawerSettings]
@@ -68,28 +68,56 @@ public class GameManager : InitializableComponent {
         if (IsInitialized) return;
 
         var initManager = InitializationManager.Instance;
+        // Ensure dependencies are met BEFORE initializing this component
         if (!initManager.IsComponentInitialized<GameReferences>() ||
             !initManager.IsComponentInitialized<GameMediator>()) {
-            throw new System.InvalidOperationException("Required dependencies not initialized");
+            LogError("GameManager Initialization Error: Dependencies (GameReferences/GameMediator) not ready.", LogTag.Initialization);
+            return;
         }
 
+        Log("Initializing GameManager...", LogTag.Initialization);
         gameMediator = GameMediator.Instance;
         gameReferences = GameReferences.Instance;
         cardDealingService = new CardDealingService(gameMediator);
 
-        // Initialize turn manager
-        turnManager = TurnManager.Instance;
+        // Initialize turn manager instance
+        turnManager = TurnManager.Instance; // Ensure it exists
+        turnManager.Initialize(this, gameMediator); // Explicitly initialize with references
 
-        InitializeWeatherSystem();
-        InitializeCombatSystem();
-        InitializeActionsQueue();
-        InitializeGameSystem();
+        // Initialize systems
+        InitializeWeatherSystem(); // Depends on Mediator
+        InitializeCombatSystem();  // Depends on this (GameManager)
+        InitializeActionsQueue();  // Depends on Mediator, CombatHandler
+        InitializeModifierFactory(); // Depends on nothing external yet, but load assets
+        InitializeGameSystem();    // Depends on many things (Players, Cards)
 
         base.Initialize();
+        Log("GameManager core initialized.", LogTag.Initialization);
 
+        // Now perform game setup tasks that might depend on core systems being ready
+        SetupInitialGameState();    // Deals cards
+        PlaceInitialCreatures(); // Places creatures (Requires player battlefields)
+        SetupEndTurnButton();   // Requires GameReferences
+
+        gameMediator.NotifyGameInitialized(); // Notify AFTER GameManager setup is complete
+        Log("Game Initialized notification sent.", LogTag.Initialization);
+        Log("GameManager Initialization sequence completed.", LogTag.Initialization);
+
+        // Initial weather setting (can stay here or move after game fully initialized)
         if (WeatherSystem != null) {
             WeatherSystem.SetWeather(WeatherType.Clear);
         }
+    }
+
+    private void InitializeModifierFactory() {
+        ModifierFactory = new ModifierFactory();
+        // Load all ModifierData assets (adjust path as needed)
+        var allModifierDataAssets = Resources.LoadAll<ModifierData>("Modifiers");
+        if (allModifierDataAssets == null || allModifierDataAssets.Length == 0) {
+            LogWarning("No ModifierData assets found in Resources/Modifiers folder.", LogTag.Initialization | LogTag.Effects);
+        }
+        ModifierFactory.Initialize(allModifierDataAssets);
+        // Log moved inside Factory.Initialize
     }
     #endregion
 
@@ -112,36 +140,25 @@ public class GameManager : InitializableComponent {
         Log("Actions queue initialized", LogTag.Initialization);
     }
 
+    // Ensure Player initialization happens early in InitializeGameSystem
     private void InitializeGameSystem() {
         InitializePlayers();
         InitializeCards();
-
-        if (GameUI.Instance.IsInitialized) {
-            CompleteGameInitialization();
-        } else {
-            GameUI.Instance.onInitialized.AddListener(CompleteGameInitialization);
-        }
-    }
-
-    private void CompleteGameInitialization() {
-        SetupInitialGameState();
-        PlaceInitialCreatures();
-        SetupResolveButton();
-        gameMediator.NotifyGameInitialized();
     }
 
     private void InitializePlayers() {
-        Player1 = new Player();
-        Player2 = new Player();
+        Player1 = new Player("Player 1"); // Pass name for clarity
+        Player2 = new Player("Player 2");
         Player1.Opponent = Player2;
         Player2.Opponent = Player1;
 
-        // Set default cards to draw
+        // Set default cards to draw (can be adjusted later)
         Player1.CardsToDraw = 5;
         Player2.CardsToDraw = 5;
 
         gameMediator.RegisterPlayer(Player1);
         gameMediator.RegisterPlayer(Player2);
+        Log("Players initialized and registered with Mediator.", LogTag.Initialization | LogTag.Players);
     }
 
     private void InitializeCards() {
@@ -166,10 +183,8 @@ public class GameManager : InitializableComponent {
     }
 
     private void PlaceCreaturesForPlayerFromDeck(IPlayer player, int count) {
-        // Get the empty slots from the player's battlefield
         var emptySlots = player.Battlefield.Where(s => !s.IsOccupied()).ToList();
 
-        // If there are no empty slots, we can't place any creatures
         if (emptySlots.Count == 0) {
             LogWarning($"No empty slots available for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Initialization);
             return;
@@ -243,143 +258,28 @@ public class GameManager : InitializableComponent {
                Player2?.Battlefield != null && Player2.Battlefield.Any();
     }
 
-    private void PlaceCreaturesForPlayer(IPlayer player, List<CreatureData> availableCreatures, int count) {
-        // Get the empty slots from the player's battlefield
-        var emptySlots = player.Battlefield.Where(s => !s.IsOccupied()).ToList();
-
-        // Place up to 'count' creatures, or as many as we have empty slots for
-        int creaturesToPlace = Mathf.Min(count, emptySlots.Count, availableCreatures.Count);
-
-        // Create a copy of emptySlots that we can modify
-        List<BattlefieldSlot> availableSlots = new List<BattlefieldSlot>(emptySlots);
-
-        for (int i = 0; i < creaturesToPlace; i++) {
-            // Get a random creature from the available ones
-            int randomCreatureIndex = random.Next(availableCreatures.Count);
-            var creatureData = availableCreatures[randomCreatureIndex];
-
-            // Get a random slot from the available slots
-            int randomSlotIndex = random.Next(availableSlots.Count);
-            var slot = availableSlots[randomSlotIndex];
-
-            // Remove the selected slot from available slots to prevent duplicates
-            availableSlots.RemoveAt(randomSlotIndex);
-
-            // Create the creature
-            var creature = CardFactory.CreateCard(creatureData) as ICreature;
-            if (creature == null) continue;
-
-            // Set the owner and add to battlefield
-            creature.SetOwner(player);
-            player.AddToBattlefield(creature, slot);
-
-            // Get the slot's index for logging purposes
-            int slotPosition = player.Battlefield.IndexOf(slot) + 1;
-
-            Log($"Added {creature.Name} to {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s battlefield in slot {slotPosition}",
-                LogTag.Creatures | LogTag.Initialization);
-        }
-    }
-
     private void SetupInitialGameState() {
         // Deal initial hands with fewer cards to ensure deck has cards remaining
         cardDealingService.DealInitialHands(Player1, Player2, 5);
         Log("Initial cards dealt to players", LogTag.Initialization);
     }
 
-    private void SetupResolveButton() {
-        var resolveButton = gameReferences.GetResolveActionsButton();
-        if (resolveButton != null) {
-            resolveButton.onClick.RemoveAllListeners();
-            resolveButton.onClick.AddListener(OnResolveButtonClicked);
+    private void SetupEndTurnButton() {
+        var endTurnButton = gameReferences.GetEndTurnButton();
+        if (endTurnButton != null) {
+            endTurnButton.onClick.RemoveAllListeners();
+            endTurnButton.onClick.AddListener(OnEndTurnButtonClicked);
         }
     }
 
-    private void OnResolveButtonClicked() {
-        Log("Resolve button clicked, ending turn", LogTag.UI | LogTag.Actions | LogTag.Turns);
+    private void OnEndTurnButtonClicked() {
+        Log("End Turn button clicked, ending turn", LogTag.UI | LogTag.Actions | LogTag.Turns);
 
         // Use the TurnManager to end the current turn, which will:
         // 1. Trigger end-of-turn effects
         // 2. Process the actions queue
         // 3. Trigger start-of-turn effects for the next turn
         turnManager.EndTurn();
-    }
-
-    // Methods to handle cards to draw
-    public void SetCardsToDraw(IPlayer player, int count) {
-        if (player == null) return;
-
-        player.CardsToDraw = count;
-        Log($"Set cards to draw for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to {count}", LogTag.Players | LogTag.Cards);
-    }
-
-    // Methods to force discard hand
-    public void DiscardHand(IPlayer player) {
-        if (player == null) return;
-
-        ActionsQueue?.AddAction(new DiscardHandAction(player));
-        Log($"Added discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
-    }
-
-    // Method to force discard hand for all players
-    public void DiscardAllHands() {
-        if (Player1 != null) {
-            ActionsQueue?.AddAction(new DiscardHandAction(Player1));
-        }
-
-        if (Player2 != null) {
-            ActionsQueue?.AddAction(new DiscardHandAction(Player2));
-        }
-
-        Log("Added discard hand actions for all players", LogTag.Actions | LogTag.Cards);
-    }
-
-    // Method to draw cards for a player
-    public void DrawCardsForPlayer(IPlayer player, int count = 1) {
-        if (player == null) return;
-
-        // Always use DrawCardsAction for consistency
-        ActionsQueue?.AddAction(new DrawCardsAction(player, count));
-        Log($"Added draw cards action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to draw {count} cards", LogTag.Actions | LogTag.Cards);
-    }
-
-    // Update the existing method to use the new action for consistency
-    public void DrawCardForPlayer(IPlayer player) {
-        if (player == null) return;
-        DrawCardsForPlayer(player, 1);
-    }
-
-    // Method to create and add the Electric Eel card to Player 1's hand
-    public void AddElectricEelCardToPlayer1() {
-        if (Player1 == null) return;
-
-        // Create the Electric Eel creature with chained damage effect
-        var electricEel = ScriptableObject.CreateInstance<CreatureData>();
-        electricEel.cardName = "Electric Eel";
-        electricEel.description = "When this creature attacks, it also deals damage to 2 additional targets in a chain.";
-        electricEel.attack = 3;
-        electricEel.health = 4;
-
-        var effect = new CardEffect {
-            effectType = EffectType.Continuous,
-            trigger = EffectTrigger.OnPlay,
-            actions = new List<EffectAction> {
-                new EffectAction {
-                    actionType = ActionType.Damage,
-                    value = 3, // Same damage as the attack value
-                    targetType = TargetType.EnemyCreatures,
-                    targetModifier = TargetModifier.Chained
-                }
-            }
-        };
-
-        electricEel.effects.Add(effect);
-
-        // Create the card and add to player's hand
-        var creature = CardFactory.CreateCard(electricEel);
-        Player1.AddToHand(creature);
-
-        Log("Added Electric Eel card to Player 1's hand", LogTag.Cards | LogTag.Initialization);
     }
     #endregion
 }

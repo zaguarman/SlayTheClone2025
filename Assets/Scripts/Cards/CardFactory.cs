@@ -3,7 +3,7 @@ using System.Linq;
 using System;
 using UnityEngine.Events;
 using UnityEngine;
-using static Enums;
+using Enums;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
