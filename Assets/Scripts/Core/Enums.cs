@@ -1,11 +1,11 @@
 
-namespace Enums { 
+namespace Enums {
     public enum CardType { Creature, Spell, Enchantment }
     public enum EffectType { Immediate, Triggered, Continuous, Timed }
     public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn }
     // Updated ActionType
     public enum ActionType {
-        Damage, Heal, Draw, Summon, Armor, Stun, Buff, // Existing/Old
+        Damage, Heal, Draw, Summon, Armor, Stun, // Removed Buff
         ApplyModifier, RemoveModifier // New modifier actions
     }
     public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }

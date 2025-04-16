@@ -35,8 +35,7 @@ public static class CardFactory {
                             value = a.value,
                             targetType = a.targetType,
                             targetModifier = a.targetModifier,
-                            buffAttack = a.buffAttack,
-                            buffHealth = a.buffHealth
+                            modifierToApply = a.modifierToApply
                         }).ToList()
                     };
                     creature.Effects.Add(newEffect);
@@ -78,17 +77,12 @@ public static class CardFactory {
                         value = action.value,
                         targetType = action.targetType,
                         targetModifier = action.targetModifier,
-                        buffAttack = action.buffAttack,
-                        buffHealth = action.buffHealth
+                        modifierToApply = action.modifierToApply
                     };
                     newEffect.actions.Add(newAction);
 
                     // Also add the action to the spell's action list for direct execution
-                    if (action.actionType == ActionType.Buff) {
-                        spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier, action.buffAttack, action.buffHealth);
-                    } else {
-                        spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
-                    }
+                    spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
                 }
 
                 spell.Effects.Add(newEffect);
@@ -179,8 +173,7 @@ public static class CardFactory {
                     value = a.value,
                     targetType = a.targetType,
                     targetModifier = a.targetModifier,
-                    buffAttack = a.buffAttack,
-                    buffHealth = a.buffHealth
+                    modifierToApply = a.modifierToApply
                 }).ToList()
             }).ToList();
             return creatureData;
@@ -201,8 +194,7 @@ public static class CardFactory {
                     value = a.value,
                     targetType = a.targetType,
                     targetModifier = a.targetModifier,
-                    buffAttack = a.buffAttack,
-                    buffHealth = a.buffHealth
+                    modifierToApply = a.modifierToApply
                 }).ToList()
             }).ToList();
             return spellData;

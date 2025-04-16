@@ -253,6 +253,9 @@ public class Tooltip : MonoBehaviour {
                 case Enums.ActionType.Draw:
                     actionText += $"Draw {action.value} card(s)";
                     break;
+                case Enums.ActionType.ApplyModifier:
+                    actionText += $"Apply modifier to {target}"; // Simplistic description
+                    break;
                 default:
                     actionText += $"{action.actionType} {action.value} to {target}";
                     break;

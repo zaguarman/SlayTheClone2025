@@ -22,17 +22,11 @@ public class Spell : Card {
         actions.Add(new SpellAction(actionType, value, targetType));
     }
 
-    public void AddAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
-        actions.Add(new SpellAction(actionType, value, targetType, buffAttack, buffHealth));
-    }
 
     public void AddAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
         actions.Add(new SpellAction(actionType, value, targetType, targetModifier));
     }
 
-    public void AddAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
-        actions.Add(new SpellAction(actionType, value, targetType, targetModifier, buffAttack, buffHealth));
-    }
 
     public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
         Log($"Playing spell {Name} (TargetID: {TargetId.ToUpper()}) with {actions.Count} actions", LogTag.Cards | LogTag.Actions);
@@ -71,10 +65,8 @@ public class Spell : Card {
     }
 
     private void CreateGameAction(ActionType actionType, int value, ITarget target, IPlayer owner, ActionsQueue context) {
-        // Find the corresponding SpellAction to get buff flags and target modifier if needed
+        // Find the corresponding SpellAction to get target modifier if needed
         SpellAction spellAction = actions.FirstOrDefault(a => a.ActionType == actionType);
-        bool buffAttack = spellAction?.BuffAttack ?? true;
-        bool buffHealth = spellAction?.BuffHealth ?? true;
         TargetModifier targetModifier = spellAction?.TargetModifier ?? TargetModifier.None;
 
         // If we have a target type and a target modifier, we need to get appropriate targets
@@ -137,42 +129,25 @@ public class SpellAction {
     public int Value { get; }
     public TargetType TargetType { get; }
     public TargetModifier TargetModifier { get; }
-    public bool BuffAttack { get; }
-    public bool BuffHealth { get; }
+
 
     public SpellAction(ActionType actionType, int value, TargetType targetType) {
         ActionType = actionType;
         Value = value;
         TargetType = targetType;
         TargetModifier = TargetModifier.None;
-        BuffAttack = true;
-        BuffHealth = true;
+
     }
 
-    public SpellAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
-        ActionType = actionType;
-        Value = value;
-        TargetType = targetType;
-        TargetModifier = TargetModifier.None;
-        BuffAttack = buffAttack;
-        BuffHealth = buffHealth;
-    }
+
 
     public SpellAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
         ActionType = actionType;
         Value = value;
         TargetType = targetType;
         TargetModifier = targetModifier;
-        BuffAttack = true;
-        BuffHealth = true;
+
     }
 
-    public SpellAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
-        ActionType = actionType;
-        Value = value;
-        TargetType = targetType;
-        TargetModifier = targetModifier;
-        BuffAttack = buffAttack;
-        BuffHealth = buffHealth;
-    }
+
 }

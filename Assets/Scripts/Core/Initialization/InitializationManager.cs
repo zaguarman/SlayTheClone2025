@@ -69,6 +69,9 @@ public class InitializationManager : MonoBehaviour {
             InitializeComponent<GameManager>();
             InitializeComponent<GameUI>();
 
+            // Note: CompleteGameSetup is now called by GameBootstrap after all components are initialized
+            // This allows for a more controlled initialization sequence
+
             CheckSystemInitialization();
         } catch (System.Exception e) {
             Debug.LogError($"Initialization failed: {e}");

@@ -14,7 +14,5 @@ public class Effects : MonoBehaviour {
         public int value;
         public TargetType targetType;
         public TargetModifier targetModifier = TargetModifier.None; // Target modifier for spread damage effects
-        public bool buffAttack = true; // For Buff action type: whether to buff attack
-        public bool buffHealth = true; // For Buff action type: whether to buff health
     }
 }

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad73bfdb57761a4488e2ca4f15803cf0, type: 3}
-  m_Name: Strength
+  m_Name: AttackBuff_2Turn
   m_EditorClassIdentifier: 
   modifierId: baba837e-58e7-45ad-a70f-5efe7a4de900
   displayName: Strength
-  description: Modifier description.
+  description: Adds Strenght to the target creature.
   icon: {fileID: 0}
-  durationType: 0
-  baseDuration: 1
+  durationType: 1
+  baseDuration: 2
   stackingType: 2
   maxStacks: 1
   statAdjustments:

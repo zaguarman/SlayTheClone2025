@@ -41,11 +41,6 @@ public class EffectAction {
     public TargetType targetType; // Use Enums.TargetType
     public TargetModifier targetModifier = TargetModifier.None; // Use Enums.TargetModifier
 
-    // --- Option 1: Keep Buff flags for compatibility ---
-    [Tooltip("For Buff action type (Legacy): Buff attack?")]
-    public bool buffAttack = true;
-    [Tooltip("For Buff action type (Legacy): Buff health?")]
-    public bool buffHealth = true;
 
     // --- Option 2: Use ModifierData reference for ApplyModifier action ---
     [Tooltip("Assign ModifierData asset here if actionType is ApplyModifier")]

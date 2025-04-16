@@ -96,4 +96,4 @@ MonoBehaviour:
     filterState: 1
   - className: UIComponent
     filterState: 1
-  showStackTrace: 0
+  showStackTrace: 1

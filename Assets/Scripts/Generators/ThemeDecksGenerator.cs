@@ -276,6 +276,15 @@ public class ThemeDecksGenerator : EditorWindow {
         List<CardDataScriptableObject> cards = new List<CardDataScriptableObject>();
         Dictionary<string, string> existingCardIds = GatherExistingCardIds("Assets/Scriptables/Cards/Water");
 
+        // --- Load the ModifierData asset ---
+        // IMPORTANT: Adjust the path and filename to match your actual ModifierData asset
+        string attackBuffPath = "Assets/Resources/Modifiers/AttackBuff_2Turn.asset";
+        ModifierData attackBuffModifier = AssetDatabase.LoadAssetAtPath<ModifierData>(attackBuffPath);
+        if (attackBuffModifier == null) {
+            Debug.LogError($"Could not load ModifierData for Attack Buff at path: {attackBuffPath}. Abyssal Cucumber effect will fail.");
+        }
+        // --- End loading ModifierData ---
+
         // 1. Dancing Dolphin
         cards.Add(CreateWaterCard(
             "Dancing Dolphin",
@@ -348,7 +357,8 @@ public class ThemeDecksGenerator : EditorWindow {
             1, 4,
             new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Buff, 2, TargetType.FriendlyCreatures, true, false)
+                    // Use the constructor that includes ModifierData
+                    new EffectActionData(ActionType.ApplyModifier, 0, TargetType.FriendlyCreatures, attackBuffModifier)
                 }),
             "Assets/Scriptables/Cards/Water/AbyssalCucumber.asset",
             existingCardIds.ContainsKey("AbyssalCucumber") ? existingCardIds["AbyssalCucumber"] : System.Guid.NewGuid().ToString()
@@ -695,7 +705,14 @@ public class ThemeDecksGenerator : EditorWindow {
         SerializedObject serializedCard = new SerializedObject(card);
         SerializedProperty effectsProp = serializedCard.FindProperty("effects");
         effectsProp.ClearArray();
-        effectsProp.arraySize = 1;
+
+        // Check if effectData is null or has no actions
+        if (effectData == null || effectData.actions == null || effectData.actions.Count == 0) {
+            serializedCard.ApplyModifiedProperties(); // Apply changes even if clearing effects
+            return;
+        }
+
+        effectsProp.arraySize = 1; // Assuming one effect per CardEffectData for simplicity here
 
         SerializedProperty effectProp = effectsProp.GetArrayElementAtIndex(0);
 
@@ -703,7 +720,7 @@ public class ThemeDecksGenerator : EditorWindow {
         triggerProp.enumValueIndex = (int)effectData.trigger;
 
         SerializedProperty typeProp = effectProp.FindPropertyRelative("effectType");
-        typeProp.enumValueIndex = (int)effectData.effectType;
+        typeProp.enumValueIndex = (int)effectData.effectType; // Corrected enum usage
 
         SerializedProperty actionsProp = effectProp.FindPropertyRelative("actions");
         actionsProp.ClearArray();
@@ -711,30 +728,30 @@ public class ThemeDecksGenerator : EditorWindow {
 
         for (int i = 0; i < effectData.actions.Count; i++) {
             SerializedProperty actionProp = actionsProp.GetArrayElementAtIndex(i);
+            var actionData = effectData.actions[i]; // Get the source data
 
             SerializedProperty actionTypeProp = actionProp.FindPropertyRelative("actionType");
-            actionTypeProp.enumValueIndex = (int)effectData.actions[i].actionType;
+            actionTypeProp.enumValueIndex = (int)actionData.actionType;
 
             SerializedProperty valueProp = actionProp.FindPropertyRelative("value");
-            valueProp.intValue = effectData.actions[i].value;
+            valueProp.intValue = actionData.value;
 
             SerializedProperty targetTypeProp = actionProp.FindPropertyRelative("targetType");
-            targetTypeProp.enumValueIndex = (int)effectData.actions[i].targetType;
+            targetTypeProp.enumValueIndex = (int)actionData.targetType;
 
             SerializedProperty targetModifierProp = actionProp.FindPropertyRelative("targetModifier");
-            targetModifierProp.intValue = (int)effectData.actions[i].targetModifier;
+            targetModifierProp.intValue = (int)actionData.targetModifier; // Use intValue for flags enum
 
-            // Store buff-specific properties if this is a buff action
-            if (effectData.actions[i].actionType == ActionType.Buff) {
-                // Check if the properties exist in the serialized object
-                SerializedProperty buffAttackProp = actionProp.FindPropertyRelative("buffAttack");
-                SerializedProperty buffHealthProp = actionProp.FindPropertyRelative("buffHealth");
-
-                if (buffAttackProp != null && buffHealthProp != null) {
-                    buffAttackProp.boolValue = effectData.actions[i].buffAttack;
-                    buffHealthProp.boolValue = effectData.actions[i].buffHealth;
-                }
+            // --- Serialize the ModifierData reference ---
+            SerializedProperty modifierToApplyProp = actionProp.FindPropertyRelative("modifierToApply");
+            if (modifierToApplyProp != null) // Check if the property exists
+            {
+                 modifierToApplyProp.objectReferenceValue = actionData.modifierToApply; // Assign the asset reference
+                 // Debug.Log($"Assigned modifier {actionData.modifierToApply?.name} to action {i} for card {card.name}");
+            } else {
+                 Debug.LogWarning($"Could not find 'modifierToApply' property on EffectAction for card {card.name}");
             }
+            // --- End serialization ---
         }
 
         serializedCard.ApplyModifiedProperties();
@@ -745,11 +762,18 @@ public class ThemeDecksGenerator : EditorWindow {
         UpdateCardEffects(card, effectData);
     }
 
-    // Add a new method for spell card effects
+     // Modify UpdateSpellCardEffects similarly
     private static void UpdateSpellCardEffects(SpellCardScriptableObject card, CardEffectData effectData) {
         SerializedObject serializedCard = new SerializedObject(card);
         SerializedProperty effectsProp = serializedCard.FindProperty("effects");
         effectsProp.ClearArray();
+
+        // Check if effectData is null or has no actions
+        if (effectData == null || effectData.actions == null || effectData.actions.Count == 0) {
+            serializedCard.ApplyModifiedProperties();
+            return;
+        }
+
         effectsProp.arraySize = 1;
 
         SerializedProperty effectProp = effectsProp.GetArrayElementAtIndex(0);
@@ -758,7 +782,7 @@ public class ThemeDecksGenerator : EditorWindow {
         triggerProp.enumValueIndex = (int)effectData.trigger;
 
         SerializedProperty typeProp = effectProp.FindPropertyRelative("effectType");
-        typeProp.enumValueIndex = (int)effectData.effectType;
+        typeProp.enumValueIndex = (int)effectData.effectType; // Corrected enum usage
 
         SerializedProperty actionsProp = effectProp.FindPropertyRelative("actions");
         actionsProp.ClearArray();
@@ -766,30 +790,29 @@ public class ThemeDecksGenerator : EditorWindow {
 
         for (int i = 0; i < effectData.actions.Count; i++) {
             SerializedProperty actionProp = actionsProp.GetArrayElementAtIndex(i);
+            var actionData = effectData.actions[i];
 
             SerializedProperty actionTypeProp = actionProp.FindPropertyRelative("actionType");
-            actionTypeProp.enumValueIndex = (int)effectData.actions[i].actionType;
+            actionTypeProp.enumValueIndex = (int)actionData.actionType;
 
             SerializedProperty valueProp = actionProp.FindPropertyRelative("value");
-            valueProp.intValue = effectData.actions[i].value;
+            valueProp.intValue = actionData.value;
 
             SerializedProperty targetTypeProp = actionProp.FindPropertyRelative("targetType");
-            targetTypeProp.enumValueIndex = (int)effectData.actions[i].targetType;
+            targetTypeProp.enumValueIndex = (int)actionData.targetType;
 
             SerializedProperty targetModifierProp = actionProp.FindPropertyRelative("targetModifier");
-            targetModifierProp.intValue = (int)effectData.actions[i].targetModifier;
+            targetModifierProp.intValue = (int)actionData.targetModifier;
 
-            // Store buff-specific properties if this is a buff action
-            if (effectData.actions[i].actionType == ActionType.Buff) {
-                // Check if the properties exist in the serialized object
-                SerializedProperty buffAttackProp = actionProp.FindPropertyRelative("buffAttack");
-                SerializedProperty buffHealthProp = actionProp.FindPropertyRelative("buffHealth");
-
-                if (buffAttackProp != null && buffHealthProp != null) {
-                    buffAttackProp.boolValue = effectData.actions[i].buffAttack;
-                    buffHealthProp.boolValue = effectData.actions[i].buffHealth;
-                }
+            // --- Serialize the ModifierData reference ---
+            SerializedProperty modifierToApplyProp = actionProp.FindPropertyRelative("modifierToApply");
+             if (modifierToApplyProp != null) {
+                 modifierToApplyProp.objectReferenceValue = actionData.modifierToApply;
+                 // Debug.Log($"Assigned modifier {actionData.modifierToApply?.name} to action {i} for card {card.name}");
+            } else {
+                 Debug.LogWarning($"Could not find 'modifierToApply' property on EffectAction for card {card.name}");
             }
+            // --- End serialization ---
         }
 
         serializedCard.ApplyModifiedProperties();
@@ -841,24 +864,13 @@ public class ThemeDecksGenerator : EditorWindow {
         public int value;
         public TargetType targetType;
         public TargetModifier targetModifier = TargetModifier.None; // Target modifier for spread damage effects
-        public bool buffAttack = true; // For Buff action type: whether to buff attack
-        public bool buffHealth = true; // For Buff action type: whether to buff health
+        public ModifierData modifierToApply; // Added field for ModifierData reference
 
         public EffectActionData(ActionType actionType, int value, TargetType targetType) {
             this.actionType = actionType;
             this.value = value;
             this.targetType = targetType;
         }
-
-        public EffectActionData(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
-            this.actionType = actionType;
-            this.value = value;
-            this.targetType = targetType;
-            this.buffAttack = buffAttack;
-            this.buffHealth = buffHealth;
-        }
-
-
 
         public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
             this.actionType = actionType;
@@ -867,13 +879,18 @@ public class ThemeDecksGenerator : EditorWindow {
             this.targetModifier = targetModifier;
         }
 
-        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
-            this.actionType = actionType;
-            this.value = value;
-            this.targetType = targetType;
-            this.targetModifier = targetModifier;
-            this.buffAttack = buffAttack;
-            this.buffHealth = buffHealth;
+        // Constructor including ModifierData
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, ModifierData modifier)
+             : this(actionType, value, targetType) // Chain constructor
+        {
+            this.modifierToApply = modifier;
+        }
+
+        // Constructor including ModifierData and TargetModifier
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, ModifierData modifier)
+             : this(actionType, value, targetType, targetModifier) // Chain constructor
+        {
+            this.modifierToApply = modifier;
         }
     }
 }

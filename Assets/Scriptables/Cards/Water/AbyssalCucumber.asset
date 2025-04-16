@@ -21,11 +21,9 @@ MonoBehaviour:
     trigger: 0
     actions:
     - actionType: 6
-      value: 2
+      value: 0
       targetType: 3
       targetModifier: 0
-      buffAttack: 1
-      buffHealth: 0
-      modifierToApply: {fileID: 0}
+      modifierToApply: {fileID: 11400000, guid: eeb12307502d02745b77f7d2a245de25, type: 2}
   attack: 1
   health: 4

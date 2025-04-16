@@ -1,5 +1,5 @@
 using static DebugLogger;
-using Enums; 
+using Enums;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -250,7 +250,6 @@ public class Creature : Card, ICreature, IModifiable, IModifierSource {
 
     // Helper method to queue actions based on EffectAction data
     private void ProcessActionFromEffect(EffectAction action, ActionsQueue actionsQueue) {
-        // --- Target Resolution (based on effect action's targetType and Owner) ---
         List<ITarget> resolvedTargets = new List<ITarget>();
         bool requiresOwner = !(action.targetType == TargetType.Self || (action.targetType == TargetType.AllCreatures && action.actionType == ActionType.Damage && lastAttacker != null));
 
@@ -273,27 +272,16 @@ public class Creature : Card, ICreature, IModifiable, IModifierSource {
              resolvedTargets.Clear();
              resolvedTargets.Add(this);
         }
-        // --- End Target Resolution ---
 
-        if (resolvedTargets.Count == 0 && action.targetType != TargetType.Player && action.targetType != TargetType.Enemy) {
-            // Don't warn if targeting players specifically, as they might be the intended target anyway
-            // LogWarning($"[{TargetId}] No valid targets found for effect action {action.actionType} targeting {action.targetType}.", LogTag.Effects);
-            // return; // Allow actions like Draw Player even if no creatures match
-        }
-
-
-        // --- Queue Game Actions ---
         foreach (var target in resolvedTargets) {
             QueueGameActionForTarget(action, target, actionsQueue);
         }
 
-        // Handle actions targeting Players directly if targetType indicates Player/Enemy
          if (action.targetType == TargetType.Player && Owner != null) {
              QueueGameActionForTarget(action, Owner, actionsQueue);
          } else if (action.targetType == TargetType.Enemy && Owner?.Opponent != null) {
              QueueGameActionForTarget(action, Owner.Opponent, actionsQueue);
          }
-        // --- End Queue Game Actions ---
     }
 
     // Queues the appropriate IGameAction based on the EffectAction and resolved target
@@ -351,10 +339,6 @@ public class Creature : Card, ICreature, IModifiable, IModifierSource {
                 // ProcessSummonEffect(effectAction, actionsQueue); // Call old logic if needed
                 break;
 
-             case ActionType.Buff: // Legacy Buff action
-                // Buff action type is deprecated, use ApplyModifier instead
-                LogWarning($"[{TargetId}] Buff action type is deprecated. Use ApplyModifier instead.", LogTag.Effects);
-                break;
 
              // Add cases for other ActionTypes like Stun, Armor, etc.
              default:
