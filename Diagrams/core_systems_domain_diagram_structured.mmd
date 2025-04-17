@@ -1,0 +1,124 @@
+flowchart TD
+    %% Define subgraphs for domains with explicit direction
+    subgraph CoreManagement["Core Management Domain"]
+        direction TB
+        GameManager["Game Manager"]
+        GameMediator["Game Mediator"]
+    end
+    
+    subgraph SystemsDomain["Game Systems"]
+        direction TB
+        subgraph TurnDomain["Turn Management"]
+            direction TB
+            TurnManager["Turn Manager"]
+            EffectTrigger["Effect Triggers"]
+        end
+        
+        subgraph ActionsDomain["Actions System"]
+            direction TB
+            ActionsQueue["Actions Queue"]
+            GameActions["Game Actions"]
+            DamageAction["Damage Actions"]
+            SummonAction["Summon Actions"]
+            ModifierAction["Modifier Actions"]
+        end
+        
+        subgraph WeatherDomain["Weather System"]
+            direction TB
+            WeatherSystem["Weather System"]
+        end
+        
+        subgraph CombatDomain["Combat System"]
+            direction TB
+            BattlefieldCombatHandler["Combat Handler"]
+        end
+    end
+    
+    subgraph EntityDomain["Entity Systems"]
+        direction TB
+        subgraph CardDomain["Card System"]
+            direction TB
+            Card["Card System"]
+            Creature["Creature Cards"]
+            Spell["Spell Cards"]
+            CardEffect["Card Effects"]
+        end
+        
+        subgraph ModifierDomain["Modifier System"]
+            direction TB
+            ModifierFactory["Modifier Factory"]
+            ModifierController["Modifier Controller"]
+            ActiveModifier["Active Modifiers"]
+        end
+        
+        subgraph TargetingDomain["Targeting System"]
+            direction TB
+            TargetingSystem["Targeting System"]
+            ITarget["Targetable Entities"]
+        end
+        
+        subgraph PlayerDomain["Player System"]
+            direction TB
+            Player["Player"]
+            Hand["Hand"]
+            Battlefield["Battlefield"]
+            Deck["Deck"]
+        end
+    end
+    
+    %% Core connections - simplified and organized
+    GameManager --> TurnManager
+    GameManager --> ActionsQueue
+    GameManager --> ModifierFactory
+    GameManager --> WeatherSystem
+    GameManager --> BattlefieldCombatHandler
+    
+    %% Mediator Pattern - bidirectional arrows only where essential
+    GameMediator --- GameManager
+    GameMediator --- TurnManager
+    GameMediator --- ActionsQueue
+    
+    %% Card Domain connections - simplified
+    Card --> Creature
+    Card --> Spell
+    Card --> CardEffect
+    
+    %% Creature Domain connections - direct
+    Creature --> ModifierController
+    
+    %% Modifier Domain connections - clean
+    ModifierController --> ActiveModifier
+    ModifierFactory --> ActiveModifier
+    
+    %% Actions Domain connections - hierarchical
+    ActionsQueue --> GameActions
+    GameActions --> DamageAction
+    GameActions --> SummonAction
+    GameActions --> ModifierAction
+    
+    %% Targeting Domain connections - minimal
+    CardEffect --> TargetingSystem
+    TargetingSystem --> ITarget
+    
+    %% Turn Domain connections - essential only
+    TurnManager --> EffectTrigger
+    TurnManager --> ModifierController
+    
+    %% Player Domain connections - hierarchical
+    Player --> Hand
+    Player --> Battlefield
+    Player --> Deck
+    
+    %% Class styling
+    classDef manager fill:#bbf,stroke:#333,stroke-width:1px
+    classDef system fill:#bfb,stroke:#333,stroke-width:1px
+    classDef card fill:#fbb,stroke:#333,stroke-width:1px
+    classDef action fill:#fbf,stroke:#333,stroke-width:1px
+    
+    class GameManager,TurnManager manager
+    class WeatherSystem,TargetingSystem,ModifierFactory,ModifierController system
+    class Card,Creature,Spell,CardEffect card
+    class ActionsQueue,GameActions,DamageAction,SummonAction,ModifierAction action
+
+    %% Linkstyle to make arrows cleaner
+    linkStyle default stroke:#333,stroke-width:1px;

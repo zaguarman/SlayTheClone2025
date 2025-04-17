@@ -1,0 +1,116 @@
+flowchart TD
+    %% Define subgraphs for domains
+    subgraph ModifierCore["Modifier Core Domain"]
+        ModifierFactory["Modifier Factory"]
+        ModifierData["Modifier Data"]
+        ActiveModifier["Active Modifier"]
+        ModifierController["Modifier Controller"]
+    end
+    
+    subgraph InterfaceDomain["Interface Domain"]
+        IModifiable["IModifiable Interface"]
+        IModifierSource["IModifier Source Interface"]
+    end
+    
+    subgraph ImplementationDomain["Implementation Domain"]
+        Creature["Creature"]
+        BattlefieldSlot["Battlefield Slot"]
+    end
+    
+    subgraph TypesDomain["Modifier Types Domain"]
+        DurationType["Duration Types"]
+        StackingType["Stacking Types"]
+        StatAdjustmentType["Stat Adjustment Types"]
+        StatType["Stat Types"]
+    end
+    
+    subgraph DurationTypesDomain["Duration Types"]
+        Permanent["Permanent"]
+        TurnBased["Turn Based"]
+    end
+    
+    subgraph StackingTypesDomain["Stacking Types"]
+        Stackable["Stackable"]
+        RefreshDuration["Refresh Duration"]
+        NonStackable["Non-Stackable"]
+    end
+    
+    subgraph StatTypesDomain["Stat Types"]
+        Attack["Attack"]
+        Health["Health"]
+        MaxHealth["Max Health"]
+    end
+    
+    subgraph AdjustmentTypesDomain["Adjustment Types"]
+        Flat["Flat Adjustment"]
+        Percentage["Percentage Adjustment"]
+    end
+    
+    subgraph ActionsDomain["Actions Domain"]
+        ApplyModifierAction["Apply Modifier Action"]
+        RemoveModifierAction["Remove Modifier Action"]
+    end
+    
+    subgraph TurnDomain["Turn Domain"]
+        TurnManager["Turn Manager"]
+    end
+    
+    %% Connections within ModifierCore
+    ModifierFactory --> ModifierData
+    ModifierFactory --> ActiveModifier
+    ModifierController --> ActiveModifier
+    ModifierController --> StatType
+    
+    %% Interface connections
+    IModifiable --> ModifierController
+    IModifierSource --> ActiveModifier
+    
+    %% Implementation connections
+    Creature -.->|implements| IModifiable
+    Creature -.->|implements| IModifierSource
+    BattlefieldSlot -.->|implements| IModifiable
+    
+    %% Type connections
+    ModifierData --> DurationType
+    ModifierData --> StackingType
+    ModifierData --> StatAdjustmentType
+    
+    %% Duration Types connections
+    DurationType --> Permanent
+    DurationType --> TurnBased
+    
+    %% Stacking Types connections
+    StackingType --> Stackable
+    StackingType --> RefreshDuration
+    StackingType --> NonStackable
+    
+    %% Stat Types connections
+    StatType --> Attack
+    StatType --> Health
+    StatType --> MaxHealth
+    
+    %% Adjustment Types connections
+    StatAdjustmentType --> Flat
+    StatAdjustmentType --> Percentage
+    
+    %% Actions connections
+    ApplyModifierAction --> ModifierFactory
+    RemoveModifierAction --> ModifierController
+    
+    %% Turn Manager connections
+    TurnManager --> ModifierController
+    
+    %% Class styling
+    classDef factory fill:#f9f,stroke:#333,stroke-width:1px
+    classDef controller fill:#bbf,stroke:#333,stroke-width:1px
+    classDef interface fill:#bfb,stroke:#333,stroke-width:1px
+    classDef implementation fill:#fbb,stroke:#333,stroke-width:1px
+    classDef enum fill:#bff,stroke:#333,stroke-width:1px
+    classDef action fill:#fbf,stroke:#333,stroke-width:1px
+    
+    class ModifierFactory factory
+    class ModifierController controller
+    class IModifiable,IModifierSource interface
+    class Creature,BattlefieldSlot implementation
+    class DurationType,StackingType,StatType,StatAdjustmentType enum
+    class ApplyModifierAction,RemoveModifierAction action

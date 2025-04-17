@@ -1,0 +1,137 @@
+flowchart TD
+    %% Define subgraphs for domains
+    subgraph EntityDomain["Entity Domain"]
+        Entity["Entity"]
+        IEntity["IEntity"]
+        ITarget["ITarget"]
+    end
+    
+    subgraph CardHierarchyDomain["Card Hierarchy Domain"]
+        Card["Card"]
+        ICard["ICard"]
+        Creature["Creature"]
+        ICreature["ICreature"]
+        Spell["Spell"]
+        Enchantment["Enchantment"]
+    end
+    
+    subgraph CardComponentsDomain["Card Components Domain"]
+        CardEffect["Card Effect"]
+        EffectTrigger["Effect Trigger"]
+        EffectAction["Effect Action"]
+    end
+    
+    subgraph EffectTriggersDomain["Effect Triggers Domain"]
+        OnPlay["On Play"]
+        OnDeath["On Death"]
+        OnDamage["On Damage"]
+        StartOfTurn["Start of Turn"]
+        EndOfTurn["End of Turn"]
+    end
+    
+    subgraph EffectTypesDomain["Effect Types Domain"]
+        EffectType["Effect Type"]
+        Immediate["Immediate"]
+        Triggered["Triggered"]
+        Continuous["Continuous"]
+        Timed["Timed"]
+    end
+    
+    subgraph ActionTypesDomain["Action Types Domain"]
+        ActionType["Action Type"]
+        Damage["Damage"]
+        Heal["Heal"]
+        Draw["Draw"]
+        Summon["Summon"]
+        Armor["Armor"]
+        Stun["Stun"]
+        ApplyModifier["Apply Modifier"]
+        RemoveModifier["Remove Modifier"]
+    end
+    
+    subgraph CardFactoryDomain["Card Factory Domain"]
+        CardFactory["Card Factory"]
+        CardController["Card Controller"]
+        CardData["Card Data"]
+    end
+    
+    subgraph CreatureSpecificsDomain["Creature Specifics Domain"]
+        Attack["Attack"]
+        Health["Health"]
+        ModifierController["Modifier Controller"]
+    end
+    
+    subgraph TargetingDomain["Targeting Domain"]
+        TargetType["Target Type"]
+        TargetModifier["Target Modifier"]
+        TargetingSystem["Targeting System"]
+    end
+    
+    %% Entity Domain connections
+    IEntity -.->|implemented by| Entity
+    ITarget -.->|extended by| IEntity
+    
+    %% Card Hierarchy Domain connections
+    Entity --> Card
+    Card --> Creature
+    Card --> Spell
+    Card --> Enchantment
+    ICard -.->|implemented by| Card
+    ICreature -.->|implemented by| Creature
+    
+    %% Card Components Domain connections
+    Card --> CardEffect
+    CardEffect --> EffectTrigger
+    CardEffect --> EffectAction
+    
+    %% Effect Triggers Domain connections
+    EffectTrigger --> OnPlay
+    EffectTrigger --> OnDeath
+    EffectTrigger --> OnDamage
+    EffectTrigger --> StartOfTurn
+    EffectTrigger --> EndOfTurn
+    
+    %% Effect Types Domain connections
+    EffectType --> Immediate
+    EffectType --> Triggered
+    EffectType --> Continuous
+    EffectType --> Timed
+    
+    %% Action Types Domain connections
+    ActionType --> Damage
+    ActionType --> Heal
+    ActionType --> Draw
+    ActionType --> Summon
+    ActionType --> Armor
+    ActionType --> Stun
+    ActionType --> ApplyModifier
+    ActionType --> RemoveModifier
+    
+    %% Card Factory Domain connections
+    CardFactory --> CardController
+    CardController --> CardData
+    
+    %% Creature Specifics Domain connections
+    Creature --> Attack
+    Creature --> Health
+    Creature --> ModifierController
+    
+    %% Targeting Domain connections
+    EffectAction --> TargetType
+    EffectAction --> TargetModifier
+    TargetingSystem --> TargetType
+    TargetingSystem --> TargetModifier
+    
+    %% Class styling
+    classDef entity fill:#f9f,stroke:#333,stroke-width:1px
+    classDef card fill:#bbf,stroke:#333,stroke-width:1px
+    classDef effect fill:#bfb,stroke:#333,stroke-width:1px
+    classDef interface fill:#fbb,stroke:#333,stroke-width:1px
+    classDef enum fill:#bff,stroke:#333,stroke-width:1px
+    classDef factory fill:#fbf,stroke:#333,stroke-width:1px
+    
+    class Entity,IEntity,ITarget entity
+    class Card,Creature,Spell,Enchantment,ICard,ICreature card
+    class CardEffect,EffectAction,EffectTrigger effect
+    class EffectType,ActionType,TargetType,TargetModifier enum
+    class CardFactory,CardController factory

@@ -1,0 +1,107 @@
+flowchart TD
+    %% Define subgraphs for domains
+    subgraph ActionsQueueDomain["Actions Queue Domain"]
+        ActionsQueue["Actions Queue"]
+        ResolveActions["Resolve Actions"]
+        ExecuteAction["Execute Action"]
+    end
+    
+    subgraph GameActionsDomain["Game Actions Domain"]
+        IGameAction["IGame Action"]
+        DamageCreatureAction["Damage Creature Action"]
+        SummonCreatureAction["Summon Creature Action"]
+        DrawCardsAction["Draw Cards Action"]
+        DiscardHandAction["Discard Hand Action"]
+        ApplyModifierAction["Apply Modifier Action"]
+        RemoveModifierAction["Remove Modifier Action"]
+        MarkCombatTargetAction["Mark Combat Target Action"]
+    end
+    
+    subgraph TurnManagerDomain["Turn Manager Domain"]
+        TurnManager["Turn Manager"]
+        EndTurn["End Turn Process"]
+    end
+    
+    subgraph EndTurnProcessDomain["End Turn Process Domain"]
+        EndTurnEffects["1. End Turn Effects"]
+        DiscardPhase["2. Discard Phase"]
+        DrawPhase["3. Draw Phase"]
+        ModifierTicks["4. Modifier Ticks"]
+        StartTurnEffects["5. Start Turn Effects"]
+    end
+    
+    subgraph EffectTriggersDomain["Effect Triggers Domain"]
+        EffectTrigger["Effect Trigger"]
+        OnPlay["On Play"]
+        OnDeath["On Death"]
+        OnDamage["On Damage"]
+        StartOfTurn["Start of Turn"]
+        EndOfTurn["End of Turn"]
+    end
+    
+    subgraph CombatSystemDomain["Combat System Domain"]
+        BattlefieldCombatHandler["Battlefield Combat Handler"]
+        HandleCreatureCombat["Handle Creature Combat"]
+        RegisterAttack["Register Attack"]
+        QueueCombatAction["Queue Combat Action"]
+    end
+    
+    subgraph MediatorDomain["Mediator Domain"]
+        GameMediator["Game Mediator"]
+    end
+    
+    %% Actions Queue Domain connections
+    ActionsQueue --> IGameAction
+    ActionsQueue --> ResolveActions
+    ResolveActions --> ExecuteAction
+    
+    %% Game Actions Domain connections
+    IGameAction --> DamageCreatureAction
+    IGameAction --> SummonCreatureAction
+    IGameAction --> DrawCardsAction
+    IGameAction --> DiscardHandAction
+    IGameAction --> ApplyModifierAction
+    IGameAction --> RemoveModifierAction
+    IGameAction --> MarkCombatTargetAction
+    
+    %% Turn Manager Domain connections
+    TurnManager --> EndTurn
+    TurnManager --> EffectTrigger
+    
+    %% End Turn Process Domain connections
+    EndTurn --> EndTurnEffects
+    EndTurnEffects --> DiscardPhase
+    DiscardPhase --> DrawPhase
+    DrawPhase --> ModifierTicks
+    ModifierTicks --> StartTurnEffects
+    
+    %% Effect Triggers Domain connections
+    EffectTrigger --> OnPlay
+    EffectTrigger --> OnDeath
+    EffectTrigger --> OnDamage
+    EffectTrigger --> StartOfTurn
+    EffectTrigger --> EndOfTurn
+    
+    %% Combat System Domain connections
+    BattlefieldCombatHandler --> HandleCreatureCombat
+    HandleCreatureCombat --> RegisterAttack
+    RegisterAttack --> QueueCombatAction
+    QueueCombatAction --> MarkCombatTargetAction
+    
+    %% Mediator Integration
+    GameMediator <--> ActionsQueue
+    GameMediator <--> TurnManager
+    GameMediator <--> BattlefieldCombatHandler
+    
+    %% Class styling
+    classDef queue fill:#f9f,stroke:#333,stroke-width:1px
+    classDef action fill:#bbf,stroke:#333,stroke-width:1px
+    classDef turn fill:#bfb,stroke:#333,stroke-width:1px
+    classDef combat fill:#fbb,stroke:#333,stroke-width:1px
+    classDef mediator fill:#bff,stroke:#333,stroke-width:1px
+    
+    class ActionsQueue,ResolveActions queue
+    class IGameAction,DamageCreatureAction,SummonCreatureAction,DrawCardsAction,DiscardHandAction,ApplyModifierAction,RemoveModifierAction,MarkCombatTargetAction action
+    class TurnManager,EndTurn,EndTurnEffects,DiscardPhase,DrawPhase,ModifierTicks,StartTurnEffects turn
+    class BattlefieldCombatHandler,HandleCreatureCombat,RegisterAttack,QueueCombatAction combat
+    class GameMediator mediator

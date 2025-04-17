@@ -1,0 +1,286 @@
+flowchart TD
+    %% Define subgraphs for domains
+    subgraph InitializationDomain["Initialization Domain"]
+        GameBootstrap["GameBootstrap"]
+        InitializationManager["InitializationManager"]
+    end
+    
+    subgraph CoreManagersDomain["Core Managers Domain"]
+        GameReferences["GameReferences"]
+        GameMediator["GameMediator"]
+        GameManager["GameManager"]
+    end
+    
+    subgraph EventsDomain["Events Domain"]
+        Events["Events System"]
+        PlayerDamaged["PlayerDamaged"]
+        CreatureDamaged["CreatureDamaged"]
+        CreatureDied["CreatureDied"]
+        GameOver["GameOver"]
+        GameStateChanged["GameStateChanged"]
+        GameInitialized["GameInitialized"]
+        CreatureSummoned["CreatureSummoned"]
+        CreaturePreSummon["CreaturePreSummon"]
+        ActionsQueueChanged["ActionsQueueChanged"]
+        HandStateChanged["HandStateChanged"]
+        BattlefieldStateChanged["BattlefieldStateChanged"]
+        TurnEnded["TurnEnded"]
+        ModifierApplied["ModifierApplied"]
+        ModifierRemoved["ModifierRemoved"]
+        ModifierExpired["ModifierExpired"]
+    end
+    
+    subgraph UIDomain["UI Domain"]
+        GameUI["GameUI"]
+        PlayerUIReferences["PlayerUIReferences"]
+        PlayerUI["PlayerUI"]
+        HandUI["HandUI"]
+        BattlefieldUI["BattlefieldUI"]
+        Tooltip["Tooltip"]
+        DeckViewUI["DeckViewUI"]
+        BattlefieldArrowManager["BattlefieldArrowManager"]
+        ArrowIndicator["ArrowIndicator"]
+    end
+    
+    subgraph CardDomain["Card Domain"]
+        Card["Card"]
+        ICard["ICard"]
+        CardEffect["CardEffect"]
+        Creature["Creature"]
+        ICreature["ICreature"]
+        Spell["Spell"]
+        Enchantment["Enchantment"]
+    end
+    
+    subgraph CardFactoryDomain["Card Factory Domain"]
+        CardFactory["CardFactory"]
+        CardController["CardController"]
+        CardData["CardData"]
+    end
+    
+    subgraph PlayerDomain["Player Domain"]
+        Player["Player"]
+        IPlayer["IPlayer"]
+        IEntity["IEntity"]
+        IDamageable["IDamageable"]
+        Hand["Hand Cards"]
+        Battlefield["Battlefield Slots"]
+        Deck["Deck"]
+    end
+    
+    subgraph BattlefieldDomain["Battlefield Domain"]
+        BattlefieldSlot["BattlefieldSlot"]
+        ITarget["ITarget"]
+        BattlefieldCombatHandler["BattlefieldCombatHandler"]
+        MarkCombatTargetAction["MarkCombatTargetAction"]
+    end
+    
+    subgraph ActionsDomain["Actions Domain"]
+        ActionsQueue["ActionsQueue"]
+        IGameAction["IGameAction"]
+        DamageCreatureAction["DamageCreatureAction"]
+        SummonCreatureAction["SummonCreatureAction"]
+        DrawCardsAction["DrawCardsAction"]
+        DiscardHandAction["DiscardHandAction"]
+        ApplyModifierAction["ApplyModifierAction"]
+        RemoveModifierAction["RemoveModifierAction"]
+    end
+    
+    subgraph TargetingDomain["Targeting Domain"]
+        TargetingSystem["TargetingSystem"]
+        TargetType["TargetType"]
+        TargetModifier["TargetModifier"]
+    end
+    
+    subgraph ModifierDomain["Modifier Domain"]
+        ModifierFactory["ModifierFactory"]
+        ModifierData["ModifierData"]
+        ActiveModifier["ActiveModifier"]
+        ModifierController["ModifierController"]
+        IModifiable["IModifiable"]
+        IModifierSource["IModifierSource"]
+        StatType["StatType"]
+    end
+    
+    subgraph EntityDomain["Entity Domain"]
+        Entity["Entity"]
+    end
+    
+    subgraph WeatherDomain["Weather Domain"]
+        WeatherSystem["WeatherSystem"]
+        WeatherType["WeatherType"]
+    end
+    
+    subgraph EnumsDomain["Enums Domain"]
+        Enums["Enums"]
+        CardType["CardType"]
+        EffectType["EffectType"]
+        EffectTrigger["EffectTrigger"]
+        ActionType["ActionType"]
+    end
+    
+    subgraph ModifierSystemEnumsDomain["ModifierSystem Enums Domain"]
+        ModifierSystem["ModifierSystem"]
+        ModifierDurationType["ModifierDurationType"]
+        ModifierStackingType["ModifierStackingType"]
+        StatAdjustmentType["StatAdjustmentType"]
+    end
+    
+    subgraph DebugDomain["Debug Domain"]
+        DebugLogger["DebugLogger"]
+        LogTag["LogTag"]
+    end
+    
+    subgraph TurnDomain["Turn Domain"]
+        TurnManager["TurnManager"]
+    end
+    
+    %% Initialization Domain connections
+    GameBootstrap --> InitializationManager
+    
+    %% Core Managers Domain connections
+    InitializationManager --> GameReferences
+    InitializationManager --> GameMediator
+    InitializationManager --> GameManager
+    InitializationManager --> GameUI
+    
+    %% Game Manager connections
+    GameManager --> TurnManager
+    GameManager --> WeatherSystem
+    GameManager --> BattlefieldCombatHandler
+    GameManager --> ActionsQueue
+    GameManager --> ModifierFactory
+    GameManager --> Player1["Player 1"]
+    GameManager --> Player2["Player 2"]
+    GameManager --> CardDealingService["CardDealingService"]
+    
+    %% Game Mediator Events connections
+    GameMediator --> Events
+    Events --> PlayerDamaged
+    Events --> CreatureDamaged
+    Events --> CreatureDied
+    Events --> GameOver
+    Events --> GameStateChanged
+    Events --> GameInitialized
+    Events --> CreatureSummoned
+    Events --> CreaturePreSummon
+    Events --> ActionsQueueChanged
+    Events --> HandStateChanged
+    Events --> BattlefieldStateChanged
+    Events --> TurnEnded
+    Events --> ModifierApplied
+    Events --> ModifierRemoved
+    Events --> ModifierExpired
+    
+    %% Game References connections
+    GameReferences --> PlayerUIReferences
+    PlayerUIReferences --> PlayerUI
+    PlayerUIReferences --> HandUI
+    PlayerUIReferences --> BattlefieldUI
+    GameReferences --> Tooltip
+    GameReferences --> DeckViewUI
+    
+    %% Card Domain connections
+    Card -.->|implements| ICard
+    Card --> CardEffect
+    Creature -.->|extends| Card
+    Creature -.->|implements| ICreature
+    Creature -.->|implements| IModifiable
+    Creature -.->|implements| IModifierSource
+    Creature --> ModifierController
+    Spell -.->|extends| Card
+    Enchantment -.->|extends| Card
+    
+    %% Card Factory Domain connections
+    CardFactory --> CardController
+    CardController --> CardData
+    
+    %% Player Domain connections
+    Player -.->|implements| IPlayer
+    Player -.->|implements| IEntity
+    Player -.->|implements| IDamageable
+    Player --> Hand
+    Player --> Battlefield
+    Player --> Deck
+    
+    %% Battlefield Domain connections
+    BattlefieldSlot -.->|implements| ITarget
+    BattlefieldSlot -.->|implements| IModifiable
+    BattlefieldSlot --> ModifierController
+    BattlefieldUI --> BattlefieldSlot
+    BattlefieldCombatHandler --> MarkCombatTargetAction
+    
+    %% Actions Domain connections
+    ActionsQueue --> IGameAction
+    IGameAction --> DamageCreatureAction
+    IGameAction --> SummonCreatureAction
+    IGameAction --> DrawCardsAction
+    IGameAction --> DiscardHandAction
+    IGameAction --> ApplyModifierAction
+    IGameAction --> RemoveModifierAction
+    IGameAction --> MarkCombatTargetAction
+    
+    %% Targeting Domain connections
+    TargetingSystem --> ITarget
+    ITarget -.->|implemented by| BattlefieldSlot
+    ITarget -.->|implemented by| Player
+    ITarget -.->|implemented by| Creature
+    TargetingSystem --> TargetType
+    TargetingSystem --> TargetModifier
+    
+    %% Modifier Domain connections
+    ModifierFactory --> ModifierData
+    ModifierFactory --> ActiveModifier
+    ModifierController --> ActiveModifier
+    IModifiable -.->|implemented by| Creature
+    IModifiable -.->|implemented by| BattlefieldSlot
+    IModifierSource -.->|implemented by| Creature
+    ModifierController --> StatType
+    
+    %% Entity Domain connections
+    Entity -.->|implements| IEntity
+    IEntity -.->|extends| ITarget
+    Card -.->|extends| Entity
+    Player -.->|extends| Entity
+    
+    %% Weather Domain connections
+    WeatherSystem --> WeatherType
+    
+    %% Enums Domain connections
+    Enums --> CardType
+    Enums --> EffectType
+    Enums --> EffectTrigger
+    Enums --> ActionType
+    Enums --> TargetType
+    Enums --> TargetModifier
+    
+    %% ModifierSystem Enums Domain connections
+    ModifierSystem --> ModifierDurationType
+    ModifierSystem --> ModifierStackingType
+    ModifierSystem --> StatType
+    ModifierSystem --> StatAdjustmentType
+    
+    %% UI Domain connections
+    GameUI --> PlayerUI
+    PlayerUI --> HandUI
+    PlayerUI --> BattlefieldUI
+    HandUI --> CardController
+    BattlefieldUI --> BattlefieldSlot
+    BattlefieldUI --> BattlefieldArrowManager
+    BattlefieldArrowManager --> ArrowIndicator
+    
+    %% Debug Domain connections
+    DebugLogger --> LogTag
+
+    %% Class styling
+    classDef bootstrap fill:#f9f,stroke:#333,stroke-width:2px
+    classDef manager fill:#bbf,stroke:#333,stroke-width:1px
+    classDef system fill:#bfb,stroke:#333,stroke-width:1px
+    classDef card fill:#fbb,stroke:#333,stroke-width:1px
+    classDef ui fill:#bff,stroke:#333,stroke-width:1px
+    
+    class GameBootstrap bootstrap
+    class GameManager,InitializationManager,TurnManager manager
+    class WeatherSystem,TargetingSystem,ModifierFactory,ModifierController system
+    class Card,Creature,Spell,Enchantment card
+    class GameUI,PlayerUI,HandUI,BattlefieldUI ui

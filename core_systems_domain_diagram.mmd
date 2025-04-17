@@ -1,0 +1,106 @@
+flowchart TD
+    %% Define subgraphs for domains
+    subgraph CoreManagement["Core Management Domain"]
+        GameManager["Game Manager"]
+        GameMediator["Game Mediator"]
+    end
+    
+    subgraph TurnDomain["Turn Management Domain"]
+        TurnManager["Turn Manager"]
+        EffectTrigger["Effect Triggers"]
+    end
+    
+    subgraph ActionsDomain["Actions Domain"]
+        ActionsQueue["Actions Queue"]
+        GameActions["Game Actions"]
+        DamageAction["Damage Actions"]
+        SummonAction["Summon Actions"]
+        ModifierAction["Modifier Actions"]
+    end
+    
+    subgraph CardDomain["Card Domain"]
+        Card["Card System"]
+        Creature["Creature Cards"]
+        Spell["Spell Cards"]
+        CardEffect["Card Effects"]
+    end
+    
+    subgraph ModifierDomain["Modifier Domain"]
+        ModifierFactory["Modifier Factory"]
+        ModifierController["Modifier Controller"]
+        ActiveModifier["Active Modifiers"]
+    end
+    
+    subgraph TargetingDomain["Targeting Domain"]
+        TargetingSystem["Targeting System"]
+        ITarget["Targetable Entities"]
+    end
+    
+    subgraph WeatherDomain["Weather Domain"]
+        WeatherSystem["Weather System"]
+    end
+    
+    subgraph CombatDomain["Combat Domain"]
+        BattlefieldCombatHandler["Combat Handler"]
+    end
+    
+    subgraph PlayerDomain["Player Domain"]
+        Player["Player"]
+        Hand["Hand"]
+        Battlefield["Battlefield"]
+        Deck["Deck"]
+    end
+    
+    %% Connections between domains
+    GameManager --> TurnManager
+    GameManager --> ActionsQueue
+    GameManager --> ModifierFactory
+    GameManager --> WeatherSystem
+    GameManager --> BattlefieldCombatHandler
+    
+    %% Mediator Pattern
+    GameMediator <--> GameManager
+    GameMediator <--> TurnManager
+    GameMediator <--> ActionsQueue
+    
+    %% Card Domain connections
+    Card --> Creature
+    Card --> Spell
+    Card --> CardEffect
+    
+    %% Creature Domain connections
+    Creature --> ModifierController
+    
+    %% Modifier Domain connections
+    ModifierController --> ActiveModifier
+    ModifierFactory --> ActiveModifier
+    
+    %% Actions Domain connections
+    ActionsQueue --> GameActions
+    GameActions --> DamageAction
+    GameActions --> SummonAction
+    GameActions --> ModifierAction
+    
+    %% Targeting Domain connections
+    CardEffect --> TargetingSystem
+    TargetingSystem --> ITarget
+    
+    %% Turn Domain connections
+    TurnManager --> EffectTrigger
+    TurnManager --> ModifierController
+    
+    %% Player Domain connections
+    Player --> Hand
+    Player --> Battlefield
+    Player --> Deck
+    
+    %% Class styling
+    classDef manager fill:#bbf,stroke:#333,stroke-width:1px
+    classDef system fill:#bfb,stroke:#333,stroke-width:1px
+    classDef card fill:#fbb,stroke:#333,stroke-width:1px
+    classDef action fill:#fbf,stroke:#333,stroke-width:1px
+    
+    class GameManager,TurnManager manager
+    class WeatherSystem,TargetingSystem,ModifierFactory,ModifierController system
+    class Card,Creature,Spell,CardEffect card
+    class ActionsQueue,GameActions,DamageAction,SummonAction,ModifierAction action

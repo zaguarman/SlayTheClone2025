@@ -1,0 +1,79 @@
+flowchart TD
+    %% Core Management at the top
+    GameManager["Game Manager"]
+    GameMediator["Game Mediator"]
+    
+    %% Main Systems - second level
+    TurnManager["Turn Manager"]
+    ActionsQueue["Actions Queue"]
+    ModifierFactory["Modifier Factory"]
+    WeatherSystem["Weather System"]
+    BattlefieldCombatHandler["Combat Handler"]
+    
+    %% Subsystems - third level
+    EffectTrigger["Effect Triggers"]
+    GameActions["Game Actions"]
+    ModifierController["Modifier Controller"]
+    Card["Card System"]
+    TargetingSystem["Targeting System"]
+    Player["Player"]
+    
+    %% Fourth level components
+    ActiveModifier["Active Modifiers"]
+    DamageAction["Damage Actions"]
+    SummonAction["Summon Actions"]
+    ModifierAction["Modifier Actions"]
+    Creature["Creature Cards"]
+    Spell["Spell Cards"]
+    CardEffect["Card Effects"]
+    ITarget["Targetable Entities"]
+    Hand["Hand"]
+    Battlefield["Battlefield"]
+    Deck["Deck"]
+    
+    %% Core connections - top level
+    GameManager --> TurnManager
+    GameManager --> ActionsQueue
+    GameManager --> ModifierFactory
+    GameManager --> WeatherSystem
+    GameManager --> BattlefieldCombatHandler
+    
+    %% Mediator connections
+    GameMediator <--> GameManager
+    GameMediator <--> TurnManager
+    GameMediator <--> ActionsQueue
+    
+    %% Second level connections
+    TurnManager --> EffectTrigger
+    TurnManager --> ModifierController
+    ActionsQueue --> GameActions
+    ModifierFactory --> ModifierController
+    ModifierFactory --> ActiveModifier
+    
+    %% Third level connections
+    ModifierController --> ActiveModifier
+    GameActions --> DamageAction
+    GameActions --> SummonAction
+    GameActions --> ModifierAction
+    Card --> Creature
+    Card --> Spell
+    Card --> CardEffect
+    TargetingSystem --> ITarget
+    Player --> Hand
+    Player --> Battlefield
+    Player --> Deck
+    
+    %% Cross-domain connections
+    CardEffect --> TargetingSystem
+    Creature --> ModifierController
+    
+    %% Class styling
+    classDef manager fill:#bbf,stroke:#333,stroke-width:1px
+    classDef system fill:#bfb,stroke:#333,stroke-width:1px
+    classDef card fill:#fbb,stroke:#333,stroke-width:1px
+    classDef action fill:#fbf,stroke:#333,stroke-width:1px
+    
+    class GameManager,TurnManager manager
+    class WeatherSystem,TargetingSystem,ModifierFactory,ModifierController system
+    class Card,Creature,Spell,CardEffect card
+    class ActionsQueue,GameActions,DamageAction,SummonAction,ModifierAction action
