@@ -52,8 +52,12 @@ public class BattlefieldUI : CardContainer {
     #endregion
 
     #region Card Handling
+    // Override CreateCard to use the instance factory
+    protected override CardController CreateCard(ICard cardData) {
+        return gameManager?.CardFactory?.CreateCardController(cardData, Player, transform);
+    }
+
     protected override void HandleCardDropped(CardController card) {
-        if (card == null || !CanAcceptCard(card)) return;
         if (gameManager == null) return;
 
         var targetSlot = GetTargetSlot();
@@ -81,8 +85,8 @@ public class BattlefieldUI : CardContainer {
 
     private void HandleCardFromHand(CardController card, ITarget target) {
         var cardData = card.GetCardData();
-        if (cardData != null) {
-            var newCard = CardFactory.CreateCard(cardData);
+        if (cardData != null && gameManager?.CardFactory != null) {
+            var newCard = gameManager.CardFactory.CreateCard(cardData);
             if (newCard != null) {
                 // Determine if the target is valid based on card type
                 ITarget validTarget = target;
@@ -235,6 +239,7 @@ public class BattlefieldUI : CardContainer {
     #region Event Handling
     protected override void RegisterEvents() {
         if (gameMediator != null) {
+            // Note: Base CardContainer now handles Setup/Cleanup calls via Add/RemoveCard
             gameMediator.AddCreatureSummonedListener(OnCreatureSummoned);
             gameMediator.AddBattlefieldStateChangedListener(UpdateUI);
             gameMediator.AddCreatureDiedListener(OnCreatureDied);
@@ -245,6 +250,7 @@ public class BattlefieldUI : CardContainer {
 
     protected override void UnregisterEvents() {
         if (gameMediator != null) {
+            // Note: Base CardContainer now handles Setup/Cleanup calls via Add/RemoveCard
             gameMediator.RemoveCreatureSummonedListener(OnCreatureSummoned);
             // BattlefieldStateChanged listener is already handled by UpdateUI in base Initialize
             gameMediator.RemoveCreatureDiedListener(OnCreatureDied);
@@ -263,11 +269,7 @@ public class BattlefieldUI : CardContainer {
     }
     // --- END ADDED METHOD ---
 
-    protected override void SetupCardEventHandlers(CardController controller) {
-        controller.OnBeginDragEvent.AddListener(OnCardBeginDrag);
-        controller.OnEndDragEvent.AddListener(OnCardEndDrag);
-        controller.OnCardDropped.AddListener(OnCardDropped);
-    }
+
 
     private void OnCreatureSummoned(ICreature creature, IPlayer player) {
         if (!IsInitialized || player != Player) return;

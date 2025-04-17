@@ -31,6 +31,7 @@ public class GameManager : InitializableComponent {
     private GameReferences gameReferences;
     public ICardDealingService cardDealingService { get; private set; }
     private System.Random random = new System.Random();
+    public CardFactory CardFactory { get; private set; } // Add CardFactory instance
     private bool weatherSystemInitialized = false;
     public Player Player1 { get; private set; }
     public Player Player2 { get; private set; }
@@ -99,6 +100,8 @@ public class GameManager : InitializableComponent {
         InitializeCombatSystem();  // Depends on this (GameManager)
         InitializeActionsQueue();  // Depends on Mediator, CombatHandler
         InitializeModifierFactory(); // Depends on nothing external yet, but load assets
+        CardFactory = new CardFactory(); // Instantiate CardFactory HERE, before InitializeGameSystem
+        Log("CardFactory initialized", LogTag.Initialization | LogTag.Cards);
         InitializeGameSystem();    // Depends on many things (Players, Cards)
 
         // --- Moved initial game state setup to CompleteGameSetup ---
@@ -106,9 +109,11 @@ public class GameManager : InitializableComponent {
         // Initialize things that DON'T depend on populated battlefields
         SetupEndTurnButton();   // Requires GameReferences
 
+        // --- GameInitialized notification is moved to CompleteGameSetup ---
+
+        // *** Mark as initialized AFTER core setup but BEFORE CompleteGameSetup ***
         base.Initialize();
         Log("GameManager core initialized.", LogTag.Initialization);
-        // --- GameInitialized notification is moved to CompleteGameSetup ---
     }
 
     // New method to be called AFTER GameUI is initialized
@@ -116,7 +121,7 @@ public class GameManager : InitializableComponent {
     {
         if (!IsInitialized)
         {
-            LogError("Attempted to complete game setup before GameManager was initialized.", LogTag.Initialization);
+            LogError("Attempted to complete game setup before GameManager core was initialized.", LogTag.Initialization);
             return;
         }
 
@@ -136,6 +141,8 @@ public class GameManager : InitializableComponent {
         // Now notify that the game is fully ready
         gameMediator.NotifyGameInitialized();
         Log("Game Initialized notification sent.", LogTag.Initialization);
+
+        // *** REMOVED base.Initialize(); from here ***
         Log("GameManager Initialization sequence completed.", LogTag.Initialization);
     }
 

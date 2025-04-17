@@ -7,9 +7,11 @@ using Enums;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine.UI; // Needed for Button prefab type
 
-public static class CardFactory {
-    public static ICard CreateCard(CardData cardData) {
+// Changed from static to instance class
+public class CardFactory {
+    public ICard CreateCard(CardData cardData) {
         if (cardData == null) return null;
 
         Log($"Creating card: {cardData.cardName} with {cardData.effects.Count} effects", LogTag.Cards | LogTag.Initialization);
@@ -62,7 +64,7 @@ public static class CardFactory {
         return card;
     }
 
-    private static void ConfigureSpellActionsFromEffects(Spell spell, SpellData spellData) {
+    private void ConfigureSpellActionsFromEffects(Spell spell, SpellData spellData) {
         // If there are explicit effects defined, use those
         if (spellData.effects != null && spellData.effects.Count > 0) {
             foreach (var effect in spellData.effects) {
@@ -105,11 +107,12 @@ public static class CardFactory {
         }
     }
 
-    public static async Task<CardController> CreateCardControllerAsync(ICard card, IPlayer owner, Transform parent, CancellationToken cancellationToken = default) {
+    // Method remains largely the same, but is now an instance method
+    public async Task<CardController> CreateCardControllerAsync(ICard card, IPlayer owner, Transform parent, CancellationToken cancellationToken = default) {
         if (card == null || parent == null) return null;
 
-        var cardPrefab = GameReferences.Instance.GetCardPrefab();
-        if (cardPrefab == null) {
+        Button cardPrefabButton = GameReferences.Instance.GetCardPrefab(); // Assuming GetCardPrefab returns Button
+        if (cardPrefabButton == null) {
             LogError("Failed to get card prefab from game references", LogTag.Cards | LogTag.Initialization);
             return null;
         }
@@ -117,10 +120,12 @@ public static class CardFactory {
         // Add small delay to spread out card creation
         await Task.Delay(100, cancellationToken);
 
-        var cardObj = GameObject.Instantiate(cardPrefab, parent);
+        var cardObj = GameObject.Instantiate(cardPrefabButton.gameObject, parent); // Instantiate the GameObject of the Button
         var controller = cardObj.GetComponent<CardController>();
         if (controller != null) {
-            var data = CreateCardData(card);
+            // CardData creation is now handled elsewhere (e.g., DeckViewUI) if needed for display
+            // We just need the ICard reference here.
+            var data = CreateCardDataForDisplay(card); // Assume this helper exists if needed, or pass CardData directly
 
             // Only cast to ICreature if the card is actually a creature
             ICreature creature = card as ICreature;
@@ -131,19 +136,20 @@ public static class CardFactory {
         return controller;
     }
 
-    public static CardController CreateCardController(ICard card, IPlayer owner, Transform parent) {
-        if (card == null || parent == null) return null;
+    // Method remains largely the same, but is now an instance method
+    public CardController CreateCardController(ICard card, IPlayer owner, Transform parent) {
+        if (card == null || parent == null || GameReferences.Instance == null) return null;
 
-        var cardPrefab = GameReferences.Instance.GetCardPrefab();
-        if (cardPrefab == null) {
+        Button cardPrefabButton = GameReferences.Instance.GetCardPrefab(); // Assuming GetCardPrefab returns Button
+        if (cardPrefabButton == null) {
             LogError("Failed to get card prefab from game references", LogTag.Cards | LogTag.Initialization);
             return null;
         }
 
-        var cardObj = GameObject.Instantiate(cardPrefab, parent);
+        var cardObj = GameObject.Instantiate(cardPrefabButton.gameObject, parent); // Instantiate the GameObject of the Button
         var controller = cardObj.GetComponent<CardController>();
-        if (controller != null) {
-            var data = CreateCardData(card);
+        if (controller != null) { // CardData creation is now handled elsewhere (e.g., DeckViewUI) if needed for display
+            var data = CreateCardDataForDisplay(card); // Use the helper to get display data
 
             // Only cast to ICreature if the card is actually a creature
             ICreature creature = card as ICreature;
@@ -154,7 +160,9 @@ public static class CardFactory {
         return controller;
     }
 
-    public static CardData CreateCardData(ICard card) {
+    // This method converts runtime ICard back to a temporary CardData structure FOR DISPLAY PURPOSES.
+    // Moved to DeckViewUI as it's the primary user. Renamed for clarity.
+    private CardData CreateCardDataForDisplay(ICard card) {
         if (card == null) return null;
 
         // For creatures, copy ALL data including effects
@@ -201,36 +209,6 @@ public static class CardFactory {
         }
 
         return null;
-    }
-
-    // TODO
-    public static void SetupCardEventHandlers(
-        CardController controller,
-        UnityAction<CardController> onBeginDrag = null,
-        UnityAction<CardController> onEndDrag = null,
-        UnityAction<CardController> onDrop = null,
-        Action onPointerEnter = null,
-        Action onPointerExit = null) {
-        if (controller == null) return;
-
-        CleanupCardEventHandlers(controller);
-
-        if (onBeginDrag != null)
-            controller.OnBeginDragEvent.AddListener(onBeginDrag);
-
-        if (onEndDrag != null)
-            controller.OnEndDragEvent.AddListener(onEndDrag);
-
-        if (onDrop != null)
-            controller.OnCardDropped.AddListener(onDrop);
-
-        if (onPointerEnter != null)
-            controller.OnPointerEnterHandler += onPointerEnter;
-
-        if (onPointerExit != null)
-            controller.OnPointerExitHandler += onPointerExit;
-
-        Log($"Set up event handlers for card {controller.name}", LogTag.Cards | LogTag.UI);
     }
 
     public static void CleanupCardEventHandlers(CardController controller) {

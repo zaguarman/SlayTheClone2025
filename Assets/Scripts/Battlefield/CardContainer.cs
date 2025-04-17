@@ -176,7 +176,8 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
 
     protected virtual void SetupCardEventHandlers(CardController card) {
         if (card == null) return;
-
+        // Ensure previous are cleared before adding new ones
+        CleanupCardEventHandlers(card);
         card.OnBeginDragEvent.AddListener(OnCardBeginDrag);
         card.OnEndDragEvent.AddListener(OnCardEndDrag);
         card.OnCardDropped.AddListener(OnCardDropped);
@@ -220,19 +221,24 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
         UpdateLayout();
     }
 
+    // Make CreateCard virtual so derived classes can override if needed
+    // Use the instance CardFactory
     protected virtual CardController CreateCard(ICard cardData) {
-        return CardFactory.CreateCardController(cardData, Player, transform);
+        // Access CardFactory via GameManager instance
+        return gameManager?.CardFactory?.CreateCardController(cardData, Player, transform);
     }
 
     public virtual void AddCard(CardController card) {
         if (card == null) return;
         cards.Add(card);
+        // Setup handlers when adding
         SetupCardEventHandlers(card);
         UpdateLayout();
     }
 
     public virtual void RemoveCard(CardController card) {
         if (card == null) return;
+        // Cleanup handlers when removing
         CleanupCardEventHandlers(card);
         cards.Remove(card);
         UpdateLayout();

@@ -25,6 +25,7 @@ public interface IPlayer : IEntity, IDamageable {
     void DiscardCard(ICard card);
     void DiscardHand();
     PlayerDamagedUnityEvent OnDamaged { get; }
+    bool IsBattlefieldInitialized { get; } // Add this property
     void InitializeBattlefield(List<BattlefieldSlot> battlefieldSlots);
     void DrawCard();
     void UpdateHealthUI();
@@ -46,6 +47,7 @@ public class Player : Entity, IPlayer {
 
     // is player 1 prop using the isplayer1 method
     public bool Is_Player1 => IsPlayer1();
+    public bool IsBattlefieldInitialized { get; private set; } // Add this property
 
     private readonly GameMediator gameMediator;
     private TextMeshProUGUI healthText;
@@ -54,6 +56,7 @@ public class Player : Entity, IPlayer {
         Hand = new List<ICard>();
         Battlefield = new List<BattlefieldSlot>();
         Deck = new Deck();
+        IsBattlefieldInitialized = false; // Initialize to false
         gameMediator = GameMediator.Instance;
 
         // Set up the event listener for our own damage event
@@ -79,12 +82,14 @@ public class Player : Entity, IPlayer {
     }
 
     public void InitializeBattlefield(List<BattlefieldSlot> slots) {
+        IsBattlefieldInitialized = false; // Reset in case of re-initialization
         if (slots == null || slots.Count == 0) {
             LogError("Cannot initialize battlefield with null or empty slots", LogTag.Initialization);
             return;
         }
         Battlefield.Clear();
         Battlefield.AddRange(slots);
+        IsBattlefieldInitialized = true; // Set flag when done
         Log($"Initialized battlefield with {slots.Count} slots", LogTag.Initialization);
     }
 
@@ -195,7 +200,8 @@ public class Player : Entity, IPlayer {
 
     public void AddToBattlefield(ICard card, ITarget slot = null) {
         if (card == null) return;
-
+        var gameManager = GameManager.Instance;
+        if (gameManager == null || gameManager.CardFactory == null) return;
         var targetSlot = Battlefield.FirstOrDefault(s => s.TargetId == slot.TargetId);
         if (targetSlot == null) return;
 
@@ -206,16 +212,17 @@ public class Player : Entity, IPlayer {
         }
 
         // Create new card controller
-        var cardController = CardFactory.CreateCardController(card, this, targetSlot.transform);
+        var cardController = gameManager.CardFactory.CreateCardController(card, this, targetSlot.transform);
         if (cardController != null) {
             targetSlot.AssignCreature(cardController);
-            gameMediator?.NotifyBattlefieldStateChanged(this);
+            if (gameMediator != null) gameMediator.NotifyBattlefieldStateChanged(this);
         }
     }
 
     public async Task<bool> AddToBattlefieldAsync(ICard card, ITarget slot = null, CancellationToken cancellationToken = default) {
         if (card == null) return false;
-
+        var gameManager = GameManager.Instance;
+        if (gameManager == null || gameManager.CardFactory == null) return false;
         var targetSlot = Battlefield.FirstOrDefault(s => s.TargetId == slot.TargetId);
         if (targetSlot == null) return false;
 
@@ -226,10 +233,10 @@ public class Player : Entity, IPlayer {
         }
 
         // Create new card controller asynchronously
-        var cardController = await CardFactory.CreateCardControllerAsync(card, this, targetSlot.transform, cancellationToken);
+        var cardController = await gameManager.CardFactory.CreateCardControllerAsync(card, this, targetSlot.transform, cancellationToken);
         if (cardController != null) {
             targetSlot.AssignCreature(cardController);
-            gameMediator?.NotifyBattlefieldStateChanged(this);
+            if (gameMediator != null) gameMediator.NotifyBattlefieldStateChanged(this);
             return true;
         }
         return false;
@@ -243,7 +250,7 @@ public class Player : Entity, IPlayer {
             // Reset modifiers when a creature is removed from the battlefield
             if (creature is ICreature creatureInterface) {
                 // When creature died reset all modifiers to restore base stats, remove all status effects
-                
+
                 // If we're not destroying the card, add it to the discard pile
                 if (!destroyCard && Deck is Deck deck) {
                     // When a creature is removed from battlefield without being destroyed, add it to discard pile
@@ -254,8 +261,10 @@ public class Player : Entity, IPlayer {
 
             slot.ClearSlot(destroyCard);
             Log($"Removed creature {creature.Name} from battlefield", LogTag.Creatures);
-            gameMediator?.NotifyBattlefieldStateChanged(this);
-            gameMediator?.NotifyGameStateChanged();
+            if (gameMediator != null) {
+                gameMediator.NotifyBattlefieldStateChanged(this);
+                gameMediator.NotifyGameStateChanged();
+            }
         }
     }
 

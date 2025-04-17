@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.EventSystems;
 using static DebugLogger;
 
@@ -53,6 +54,50 @@ public class DeckViewUI : UIComponent {
 
         // Setup grid layout for cards
         SetupCardGrid();
+    }
+
+    // Moved CreateCardData from CardFactory here, as it's display-specific
+    private CardData CreateCardDataForDisplay(ICard card) {
+        if (card == null) return null;
+
+        // For creatures, copy ALL data including effects
+        if (card is ICreature creature) {
+            var creatureData = ScriptableObject.CreateInstance<CreatureData>();
+            creatureData.cardId = card.CardId; // Copy the cardId
+            creatureData.cardName = creature.Name;
+            creatureData.attack = creature.Attack; // Use current calculated attack
+            creatureData.health = creature.Health; // Use current calculated health
+            creatureData.description = creature.Description;  // Copy description
+            creatureData.effects = creature.Effects.Select(e => new CardEffect {
+                effectType = e.effectType,
+                trigger = e.trigger,
+                actions = e.actions.Select(a => new EffectAction {
+                    actionType = a.actionType,
+                    value = a.value,
+                    targetType = a.targetType,
+                    targetModifier = a.targetModifier,
+                    modifierToApply = a.modifierToApply
+                }).ToList()
+            }).ToList();
+            return creatureData;
+        }
+
+        // For spells, create basic data
+        if (card is Spell spell) {
+             // Replicate the SpellData creation logic here for display
+             var spellData = ScriptableObject.CreateInstance<SpellData>();
+             spellData.cardId = spell.CardId;
+             spellData.cardName = spell.Name;
+             spellData.description = spell.Description;
+             spellData.defaultTargetType = spell.DefaultTargetType;
+             // We might not need full effects in the tooltip, but copy if necessary
+             // spellData.effects = spell.Effects.Select(...copy logic...).ToList();
+
+
+            //var spellData = CardFactory.CreateCardData(spell); // Use the helper for consistency if needed
+            return spellData;
+        }
+        return null;
     }
 
     private void SetupCardGrid() {
@@ -306,8 +351,8 @@ public class DeckViewUI : UIComponent {
             return;
         }
 
-        // Use CardFactory to create the card controller with the existing prefab
-        var cardController = CardFactory.CreateCardController(card, owner, cardListContent);
+        // Use the instance CardFactory to create the card controller with the existing prefab
+        var cardController = gameManager?.CardFactory?.CreateCardController(card, owner, cardListContent);
 
         if (cardController != null) {
             // Disable dragging but keep tooltip functionality

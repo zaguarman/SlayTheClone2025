@@ -46,7 +46,13 @@ public class Deck : IDeck {
         cards.Clear();
         discardPile.Clear();
         foreach (var cardData in cardDataList) {
-            var card = CardFactory.CreateCard(cardData);
+            // Access CardFactory via GameManager instance
+            var cardFactory = GameManager.Instance.CardFactory; // Assume GameManager.Instance is valid here due to init order
+             if (cardFactory == null) {
+                 LogError($"Cannot initialize deck - CardFactory is null (DeckID: {deckId.ToUpper()})", LogTag.Cards | LogTag.Initialization);
+                 continue; // Skip this card if factory is not available
+             }
+            var card = cardFactory.CreateCard(cardData);
             if (card != null) {
                 Log($"Added {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()}) with {card.Effects.Count} effects",
                     LogTag.Cards | LogTag.Initialization);
@@ -123,9 +129,16 @@ public class Deck : IDeck {
         // Find the original card data by ID instead of name
         CardData originalData = originalCardDataList?.FirstOrDefault(c => c.cardId == creature.CardId);
 
+        // Access CardFactory via GameManager instance
+        var cardFactory = GameManager.Instance?.CardFactory;
+        if (cardFactory == null) {
+            LogError($"Cannot restore creature - CardFactory is null (DeckID: {deckId.ToUpper()})", LogTag.Cards | LogTag.Creatures);
+            return creature; // Return the original if we can't restore
+        }
+
         if (originalData != null) {
             // Create a fresh card from the original data
-            ICard restoredCard = CardFactory.CreateCard(originalData);
+            ICard restoredCard = cardFactory.CreateCard(originalData);
 
             Log($"Successfully restored {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) to initial values using cardId: {creature.CardId.ToUpper()} for deck (DeckID: {deckId.ToUpper()})",
                 LogTag.Cards | LogTag.Creatures);
@@ -137,7 +150,7 @@ public class Deck : IDeck {
 
         if (originalData != null) {
             // Create a fresh card from the original data
-            ICard restoredCard = CardFactory.CreateCard(originalData);
+            ICard restoredCard = cardFactory.CreateCard(originalData);
             Log($"Successfully restored {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) to initial values by name (fallback) for deck (DeckID: {deckId.ToUpper()})",
                 LogTag.Cards | LogTag.Creatures);
             return restoredCard;

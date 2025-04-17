@@ -35,7 +35,13 @@ public class SummonCreatureAction : IGameAction {
         // Summon the creature to the battlefield
         if (target is BattlefieldSlot slot) {
             // Create a new card controller for the creature
-            var cardController = CardFactory.CreateCardController(creature, owner, slot.transform);
+            // Access CardFactory via GameManager instance
+            var cardFactory = GameManager.Instance?.CardFactory;
+            if (cardFactory == null) {
+                LogError($"Cannot execute SummonCreatureAction - CardFactory is null", LogTag.Actions);
+                return;
+            }
+            var cardController = cardFactory.CreateCardController(creature, owner, slot.transform);
             if (cardController != null) {
                 slot.AssignCreature(cardController);
                 Log($"Summoned {creature.Name} to slot {slot.TargetId}", LogTag.Actions | LogTag.Creatures);

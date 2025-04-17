@@ -94,6 +94,5 @@ public class HandUI : CardContainer {
         UpdateLayout();
     }
 
-    protected override void OnCardHoverEnter(CardController card) { }
-    protected override void OnCardHoverExit(CardController card) { }
+
 }
