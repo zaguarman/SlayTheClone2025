@@ -24,5 +24,5 @@ MonoBehaviour:
       value: 1
       targetType: 0
       targetModifier: 0
-      modifierToApply: {fileID: 0}
+      modifierIdToApply: 
   defaultTargetType: 0

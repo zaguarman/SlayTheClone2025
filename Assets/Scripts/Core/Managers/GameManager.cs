@@ -146,14 +146,26 @@ public class GameManager : InitializableComponent {
         Log("GameManager Initialization sequence completed.", LogTag.Initialization);
     }
 
+    // --- MODIFIED: InitializeModifierFactory ---
     private void InitializeModifierFactory() {
         ModifierFactory = new ModifierFactory();
-        // Load all ModifierData assets (adjust path as needed)
+
+        // Load all ModifierData ScriptableObject assets
         var allModifierDataAssets = Resources.LoadAll<ModifierData>("Modifiers");
         if (allModifierDataAssets == null || allModifierDataAssets.Length == 0) {
             LogWarning("No ModifierData assets found in Resources/Modifiers folder.", LogTag.Initialization | LogTag.Effects);
         }
-        ModifierFactory.Initialize(allModifierDataAssets);
+
+        // Convert ScriptableObjects to runtime ModifierDefinition
+        List<ModifierDefinition> definitions = new List<ModifierDefinition>();
+        foreach (var dataAsset in allModifierDataAssets) {
+            if (dataAsset != null) {
+                definitions.Add(dataAsset.ToModifierDefinition());
+            }
+        }
+
+        // Initialize the factory with the runtime definitions
+        ModifierFactory.Initialize(definitions);
         // Log moved inside Factory.Initialize
     }
     #endregion

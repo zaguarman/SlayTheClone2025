@@ -36,7 +36,7 @@ public abstract class CardDataScriptableObject : ScriptableObject {
                     value = action.value,
                     targetType = action.targetType,
                     targetModifier = action.targetModifier,
-                    modifierToApply = action.modifierToApply // <<< COPY THE REFERENCE
+                    modifierIdToApply = action.modifierIdToApply // <<< COPY THE ID
                 });
             }
             effectsCopy.Add(effectCopy);

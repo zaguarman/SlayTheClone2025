@@ -24,6 +24,6 @@ MonoBehaviour:
       value: 3
       targetType: 4
       targetModifier: 0
-      modifierToApply: {fileID: 0}
+      modifierIdToApply: 
   attack: 3
   health: 2

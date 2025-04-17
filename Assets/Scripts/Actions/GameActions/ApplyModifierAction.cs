@@ -1,80 +1,68 @@
 using static DebugLogger;
-using System.Collections.Generic; // Needed for List<T>
+using System.Collections.Generic;
+using Enums; // Assuming StatType uses Enums namespace
 
 public class ApplyModifierAction : IGameAction {
-    private readonly ITarget targetSpecifier; // Can be Creature, Player, Slot etc.
-    private readonly ModifierData modifierData;
-    private readonly IModifierSource source; // Optional: Who applied it
+    private readonly ITarget targetSpecifier;
+    private readonly string modifierId; // Store the ID
+    private readonly IModifierSource source;
 
-    // Constructor using ModifierData directly (preferred)
-    public ApplyModifierAction(ITarget targetSpecifier, ModifierData modifierData, IModifierSource source = null) {
+    // Constructor using modifier ID (now the primary way)
+    public ApplyModifierAction(ITarget targetSpecifier, string modifierId, IModifierSource source = null) {
         this.targetSpecifier = targetSpecifier;
-        this.modifierData = modifierData;
-        this.source = source; // Can be null
+        this.modifierId = modifierId; // Store the ID
+        this.source = source;
         #if UNITY_EDITOR || DEVELOPMENT_BUILD
-        Log($"Created ApplyModifierAction: Modifier={modifierData?.modifierId ?? "NULL"}, Target={targetSpecifier?.TargetId ?? "NULL"}", LogTag.Actions | LogTag.Effects);
+        Log($"Created ApplyModifierAction: ModifierID={modifierId ?? "NULL"}, Target={targetSpecifier?.TargetId ?? "NULL"}", LogTag.Actions | LogTag.Effects);
         #endif
     }
 
-    // Constructor using modifier ID (requires factory lookup)
-    public ApplyModifierAction(ITarget targetSpecifier, string modifierId, IModifierSource source = null)
-        : this(targetSpecifier, GetModifierDataFromFactory(modifierId), source) { }
-
-    private static ModifierData GetModifierDataFromFactory(string modifierId) {
-        // Assuming ModifierFactory is accessible via GameReferences
-        var factory = GameReferences.Instance?.ModifierFactory;
-         if (factory == null) {
-             LogError("ApplyModifierAction: ModifierFactory not accessible via GameReferences.", LogTag.Actions | LogTag.Effects);
-             return null;
-         }
-        return factory.GetModifierData(modifierId);
-    }
-
     public void Execute() {
-        if (modifierData == null) {
-            LogError("Cannot execute ApplyModifierAction - ModifierData is null.", LogTag.Actions | LogTag.Effects);
+        // Use the stored modifierId
+        if (string.IsNullOrEmpty(modifierId)) {
+            LogError("Cannot execute ApplyModifierAction - Modifier ID is null or empty.", LogTag.Actions | LogTag.Effects);
             return;
         }
         if (targetSpecifier == null) {
-             LogError("Cannot execute ApplyModifierAction - Target is null.", LogTag.Actions | LogTag.Effects);
-             return;
+            LogError("Cannot execute ApplyModifierAction - Target is null.", LogTag.Actions | LogTag.Effects);
+            return;
         }
 
-        // --- Target Resolution Logic ---
         List<IModifiable> resolvedTargets = ResolveTargets();
-        // --- End Target Resolution ---
-
 
         if (resolvedTargets.Count == 0) {
             LogWarning($"ApplyModifierAction: No valid IModifiable targets found for specifier {targetSpecifier.TargetId}.", LogTag.Actions | LogTag.Effects);
             return;
         }
 
-        // Assuming ModifierFactory is accessible via GameReferences
-        var factory = GameReferences.Instance?.ModifierFactory;
+        // Access the ModifierFactory (assuming via GameReferences or GameManager)
+        var factory = GameReferences.Instance?.ModifierFactory; // Or GameManager.Instance.ModifierFactory
         if (factory == null) {
             LogError("ModifierFactory not accessible.", LogTag.Actions | LogTag.Effects);
             return;
         }
 
         int successCount = 0;
-        foreach(var modifiableTarget in resolvedTargets) {
-            if(modifiableTarget == null) continue; // Skip if null
+        foreach (var modifiableTarget in resolvedTargets) {
+            if (modifiableTarget == null) continue;
 
-            ActiveModifier newModifier = factory.Create(modifierData, modifiableTarget, source);
+            // Create ActiveModifier using the factory with the ID
+            ActiveModifier newModifier = factory.Create(modifierId, modifiableTarget, source);
             if (newModifier != null) {
                 if (modifiableTarget.ModifierController.AddModifier(newModifier)) {
                     successCount++;
                 }
             } else {
-                LogError($"Failed to create ActiveModifier instance for {modifierData.modifierId}.", LogTag.Actions | LogTag.Effects);
+                // Factory Create method already logs error if ID not found
+                // LogError($"Failed to create ActiveModifier instance for {modifierId}.", LogTag.Actions | LogTag.Effects);
             }
         }
 
         if (successCount > 0) {
-             Log($"Executed ApplyModifierAction: Applied {modifierData.modifierId} to {successCount} target(s) originating from {targetSpecifier.TargetId}.", LogTag.Actions | LogTag.Effects);
+            Log($"Executed ApplyModifierAction: Applied {modifierId} to {successCount} target(s) originating from {targetSpecifier.TargetId}.", LogTag.Actions | LogTag.Effects);
         } else {
-             Log($"Executed ApplyModifierAction: Modifier {modifierData.modifierId} was not applied to any targets originating from {targetSpecifier.TargetId} (e.g., stacking rules).", LogTag.Actions | LogTag.Effects);
+            // Don't log warning if simply not applied due to stacking rules etc. AddModifier logs details.
+            // Log($"Executed ApplyModifierAction: Modifier {modifierId} was not applied to any targets originating from {targetSpecifier.TargetId} (e.g., stacking rules).", LogTag.Actions | LogTag.Effects);
         }
     }
 
@@ -109,6 +97,7 @@ public class ApplyModifierAction : IGameAction {
 
     public override string ToString() {
         string sourceName = source?.GetSourceName() ?? "Unknown";
-        return $"ApplyModifierAction: Modifier={modifierData?.modifierId}, TargetSpecifier={targetSpecifier?.TargetId}, Source={sourceName}({source?.GetSourceId()})";
+        // Use the stored modifierId
+        return $"ApplyModifierAction: ModifierID={modifierId}, TargetSpecifier={targetSpecifier?.TargetId}, Source={sourceName}({source?.GetSourceId()})";
     }
 }

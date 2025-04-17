@@ -41,12 +41,10 @@ public class EffectAction {
     public TargetType targetType; // Use Enums.TargetType
     public TargetModifier targetModifier = TargetModifier.None; // Use Enums.TargetModifier
 
+    // --- CHANGED: Use Modifier ID string instead of direct reference ---
+    [Tooltip("Enter Modifier ID here if actionType is ApplyModifier")]
+    public string modifierIdToApply;
 
-    // --- Option 2: Use ModifierData reference for ApplyModifier action ---
-    [Tooltip("Assign ModifierData asset here if actionType is ApplyModifier")]
-    public ModifierData modifierToApply;
-
-    // --- Option 3: Add ID for RemoveModifier action ---
-    // [Tooltip("Enter Modifier ID here if actionType is RemoveModifier")]
-    // public string modifierIdToRemove;
+    // --- REMOVED: ModifierData reference ---
+    // public ModifierData modifierToApply;
 }

@@ -36,42 +36,57 @@ public class ModifierController {
 
     public bool AddModifier(ActiveModifier modifierToAdd) {
         if (modifierToAdd == null || modifierToAdd.Data == null) {
-            LogError($"[{ownerId}] Attempted to add null modifier or modifier with null data.", LogTag.Effects);
+            LogError($"[{ownerId}] Attempted to add null modifier or modifier with null definition.", LogTag.Effects);
             return false;
         }
 
-        var existingModifier = activeModifiers.FirstOrDefault(m => m.Data.modifierId == modifierToAdd.Data.modifierId);
+        var data = modifierToAdd.Data; // Use the definition
+        var existingModifier = activeModifiers.FirstOrDefault(m => m.Data.modifierId == data.modifierId);
 
         if (existingModifier != null) {
-            switch (modifierToAdd.Data.stackingType) {
-                case ModifierStackingType.NonStackable:
-                    Log($"[{ownerId}] Modifier {modifierToAdd.Data.modifierId} is NonStackable and already exists. Ignoring.", LogTag.Effects);
-                    return false; // Cannot add if already exists
+            // --- Use ModifierDefinition properties for logic ---
+            if (data.IsNonStackable) // maxStacks == 0
+            {
+                Log($"[{ownerId}] Modifier {data.modifierId} is NonStackable and already exists. Ignoring.", LogTag.Effects);
+                return false;
+            }
+            else if (data.IsRefreshOnly) // maxStacks == 1
+            {
+                if (existingModifier.Data.IsTurnBased) // Only refresh duration if it's turn-based
+                {
+                    existingModifier.RemainingDuration = data.duration;
+                }
+                existingModifier.Source = modifierToAdd.Source; // Update source
+                Log($"[{ownerId}] Refreshed duration (if applicable) for modifier {data.modifierId}.", LogTag.Effects);
+                mediator?.NotifyModifierApplied(existingModifier); // Notify update
+                return true;
+            }
+            else // IsStackable (maxStacks > 1 or -1)
+            {
+                bool canAddStack = data.HasInfiniteStacks || existingModifier.CurrentStacks < data.maxStacks;
 
-                case ModifierStackingType.RefreshDuration:
-                    existingModifier.RemainingDuration = modifierToAdd.Data.baseDuration;
-                    existingModifier.Source = modifierToAdd.Source; // Update source if refreshed
-                    Log($"[{ownerId}] Refreshed duration for modifier {modifierToAdd.Data.modifierId}.", LogTag.Effects);
+                if (canAddStack) {
+                    existingModifier.CurrentStacks++;
+                    if (existingModifier.Data.IsTurnBased) // Always refresh duration when adding a stack if turn-based
+                    {
+                        existingModifier.RemainingDuration = data.duration;
+                    }
+                    existingModifier.Source = modifierToAdd.Source; // Update source
+                    Log($"[{ownerId}] Incremented stacks for modifier {data.modifierId} to {existingModifier.CurrentStacks}. Duration refreshed (if applicable).", LogTag.Effects);
                     mediator?.NotifyModifierApplied(existingModifier); // Notify update
                     return true;
-
-                case ModifierStackingType.Stackable:
-                    if (existingModifier.CurrentStacks < modifierToAdd.Data.maxStacks) {
-                        existingModifier.CurrentStacks++;
-                        // Always refresh duration when adding a stack
-                        existingModifier.RemainingDuration = modifierToAdd.Data.baseDuration;
-                        existingModifier.Source = modifierToAdd.Source; // Update source
-                        Log($"[{ownerId}] Incremented stacks for modifier {modifierToAdd.Data.modifierId} to {existingModifier.CurrentStacks}. Duration refreshed.", LogTag.Effects);
-                        mediator?.NotifyModifierApplied(existingModifier); // Notify update
-                        return true;
-                    } else {
-                        // Option: Refresh duration even if max stacks are reached? Yes, usually expected.
-                        existingModifier.RemainingDuration = modifierToAdd.Data.baseDuration;
-                        existingModifier.Source = modifierToAdd.Source;
-                        Log($"[{ownerId}] Modifier {modifierToAdd.Data.modifierId} is already at max stacks ({modifierToAdd.Data.maxStacks}). Refreshed duration.", LogTag.Effects);
-                        mediator?.NotifyModifierApplied(existingModifier); // Notify update even if only duration changed
-                        return true; // Indicate an update happened (duration refresh)
+                } else {
+                    // Max stacks reached (and not infinite)
+                    // Still refresh duration if it's turn-based
+                    if (existingModifier.Data.IsTurnBased)
+                    {
+                        existingModifier.RemainingDuration = data.duration;
                     }
+                    existingModifier.Source = modifierToAdd.Source; // Update source
+                    Log($"[{ownerId}] Modifier {data.modifierId} is already at max stacks ({data.maxStacks}). Refreshed duration (if applicable).", LogTag.Effects);
+                    mediator?.NotifyModifierApplied(existingModifier); // Notify update even if only duration changed
+                    return true; // Indicate an update happened
+                }
             }
         }
 
@@ -106,28 +121,25 @@ public class ModifierController {
 
     public float GetTotalStatAdjustment(StatType statType, StatAdjustmentType adjustmentType) {
         float totalAdjustment = 0;
-        // Use Where + Sum LINQ methods for conciseness
         totalAdjustment = activeModifiers
-            .SelectMany(mod => mod.Data.statAdjustments
+            .SelectMany(mod => mod.Data.statAdjustments // Access definition data
                                   .Where(adj => adj.statType == statType && adj.adjustmentType == adjustmentType)
-                                  .Select(adj => adj.value * mod.CurrentStacks) // Multiply adjustment by stacks
+                                  .Select(adj => adj.value * mod.CurrentStacks) // Apply stacks
                        )
             .Sum();
-
         return totalAdjustment;
     }
 
-    // Renamed from TickTurn to avoid confusion with TurnManager's Tick
     private void OnTurnEnded(int turnNumber) {
-        // Don't process if the owner might already be destroyed/cleaned up
         if (owner == null) return;
 
-        List<ActiveModifier> expiredModifiers = null; // Lazy initialization
+        List<ActiveModifier> expiredModifiers = null;
 
-        foreach (var modifier in activeModifiers) {
-            // Tick only TurnBased modifiers
-            if (modifier.TickTurn()) {
-                // Log($"[{ownerId}] Ticked modifier {modifier.Data.modifierId}. Remaining Duration: {modifier.RemainingDuration}", LogTag.Effects | LogTag.Turns);
+        // Iterate backwards for safe removal if needed directly (though we collect first)
+        for (int i = activeModifiers.Count - 1; i >= 0; i--)
+        {
+            var modifier = activeModifiers[i];
+            if (modifier.TickTurn()) { // TickTurn now checks if it's turn-based internally
                 if (modifier.IsExpired) {
                     if (expiredModifiers == null) expiredModifiers = new List<ActiveModifier>();
                     expiredModifiers.Add(modifier);
@@ -135,14 +147,12 @@ public class ModifierController {
             }
         }
 
-        // Remove expired modifiers
         if (expiredModifiers != null) {
             foreach (var expired in expiredModifiers) {
-                 Log($"[{ownerId}] Modifier {expired.Data.modifierId} expired.", LogTag.Effects | LogTag.Turns);
-                 // Remove first, then notify
-                 if(RemoveModifier(expired, false)) { // Use normal removal notification path
-                    mediator?.NotifyModifierExpired(expired); // Specific event for expiration
-                 }
+                Log($"[{ownerId}] Modifier {expired.Data.modifierId} expired.", LogTag.Effects | LogTag.Turns);
+                if (RemoveModifier(expired, false)) {
+                    mediator?.NotifyModifierExpired(expired);
+                }
             }
         }
     }

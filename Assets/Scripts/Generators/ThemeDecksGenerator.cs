@@ -276,11 +276,17 @@ public class ThemeDecksGenerator : EditorWindow {
         List<CardDataScriptableObject> cards = new List<CardDataScriptableObject>();
         Dictionary<string, string> existingCardIds = GatherExistingCardIds("Assets/Scriptables/Cards/Water");
 
-        // --- Load the ModifierData asset ---
-        // IMPORTANT: Adjust the path and filename to match your actual ModifierData asset
+        // --- Load the ModifierData asset to get its ID ---
         string attackBuffPath = "Assets/Resources/Modifiers/AttackBuff_2Turn.asset";
-        ModifierData attackBuffModifier = AssetDatabase.LoadAssetAtPath<ModifierData>(attackBuffPath);
-        if (attackBuffModifier == null) {
+        ModifierData attackBuffModifierData = AssetDatabase.LoadAssetAtPath<ModifierData>(attackBuffPath);
+        string attackBuffModifierId = null; // Store the ID as a string
+
+        if (attackBuffModifierData != null) {
+            attackBuffModifierId = attackBuffModifierData.modifierId; // Get the ID
+            if (string.IsNullOrEmpty(attackBuffModifierId)) {
+                Debug.LogError($"ModifierData at '{attackBuffPath}' is missing its modifierId! Abyssal Cucumber effect might fail.");
+            }
+        } else {
             Debug.LogError($"Could not load ModifierData for Attack Buff at path: {attackBuffPath}. Abyssal Cucumber effect will fail.");
         }
         // --- End loading ModifierData ---
@@ -357,8 +363,8 @@ public class ThemeDecksGenerator : EditorWindow {
             1, 4,
             new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
                 new List<EffectActionData> {
-                    // Use the constructor that includes ModifierData
-                    new EffectActionData(ActionType.ApplyModifier, 0, TargetType.FriendlyCreatures, attackBuffModifier)
+                    // --- CHANGED: Pass the MODIFIER ID string ---
+                    new EffectActionData(ActionType.ApplyModifier, 0, TargetType.FriendlyCreatures, attackBuffModifierId) // Pass the ID string
                 }),
             "Assets/Scriptables/Cards/Water/AbyssalCucumber.asset",
             existingCardIds.ContainsKey("AbyssalCucumber") ? existingCardIds["AbyssalCucumber"] : System.Guid.NewGuid().ToString()
@@ -742,14 +748,12 @@ public class ThemeDecksGenerator : EditorWindow {
             SerializedProperty targetModifierProp = actionProp.FindPropertyRelative("targetModifier");
             targetModifierProp.intValue = (int)actionData.targetModifier; // Use intValue for flags enum
 
-            // --- Serialize the ModifierData reference ---
-            SerializedProperty modifierToApplyProp = actionProp.FindPropertyRelative("modifierToApply");
-            if (modifierToApplyProp != null) // Check if the property exists
-            {
-                 modifierToApplyProp.objectReferenceValue = actionData.modifierToApply; // Assign the asset reference
-                 // Debug.Log($"Assigned modifier {actionData.modifierToApply?.name} to action {i} for card {card.name}");
+            // --- Serialize the Modifier ID string ---
+            SerializedProperty modifierIdProp = actionProp.FindPropertyRelative("modifierIdToApply"); // Match field name in EffectAction
+            if (modifierIdProp != null) {
+                 modifierIdProp.stringValue = actionData.modifierId; // Assign the string ID
             } else {
-                 Debug.LogWarning($"Could not find 'modifierToApply' property on EffectAction for card {card.name}");
+                 Debug.LogWarning($"Could not find 'modifierIdToApply' property on EffectAction for card {card.name}");
             }
             // --- End serialization ---
         }
@@ -804,13 +808,12 @@ public class ThemeDecksGenerator : EditorWindow {
             SerializedProperty targetModifierProp = actionProp.FindPropertyRelative("targetModifier");
             targetModifierProp.intValue = (int)actionData.targetModifier;
 
-            // --- Serialize the ModifierData reference ---
-            SerializedProperty modifierToApplyProp = actionProp.FindPropertyRelative("modifierToApply");
-             if (modifierToApplyProp != null) {
-                 modifierToApplyProp.objectReferenceValue = actionData.modifierToApply;
-                 // Debug.Log($"Assigned modifier {actionData.modifierToApply?.name} to action {i} for card {card.name}");
+            // --- Serialize the Modifier ID string ---
+            SerializedProperty modifierIdProp = actionProp.FindPropertyRelative("modifierIdToApply"); // Match field name in EffectAction
+            if (modifierIdProp != null) {
+                 modifierIdProp.stringValue = actionData.modifierId; // Assign the string ID
             } else {
-                 Debug.LogWarning($"Could not find 'modifierToApply' property on EffectAction for card {card.name}");
+                 Debug.LogWarning($"Could not find 'modifierIdToApply' property on EffectAction for card {card.name}");
             }
             // --- End serialization ---
         }
@@ -858,39 +861,59 @@ public class ThemeDecksGenerator : EditorWindow {
         }
     }
 
-    // Helper class to define effect actions
+    // --- UPDATED: EffectActionData ---
+    // Helper class to define effect actions within the generator
     public class EffectActionData {
         public ActionType actionType;
         public int value;
         public TargetType targetType;
-        public TargetModifier targetModifier = TargetModifier.None; // Target modifier for spread damage effects
-        public ModifierData modifierToApply; // Added field for ModifierData reference
+        public TargetModifier targetModifier = TargetModifier.None;
+        public string modifierId; // Store modifier ID as string
+        public ModifierData modifierToApply; // Keep for backward compatibility
 
-        public EffectActionData(ActionType actionType, int value, TargetType targetType) {
-            this.actionType = actionType;
-            this.value = value;
-            this.targetType = targetType;
-        }
-
-        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
+        // Constructor without modifier
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier = TargetModifier.None) {
             this.actionType = actionType;
             this.value = value;
             this.targetType = targetType;
             this.targetModifier = targetModifier;
+            this.modifierId = null; // Ensure it's null if not provided
         }
 
-        // Constructor including ModifierData
+        // Constructor including Modifier ID string
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, string modifierId)
+             : this(actionType, value, targetType) // Chain constructor
+        {
+            this.modifierId = modifierId;
+        }
+
+        // Constructor including Modifier ID string and TargetModifier
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, string modifierId)
+             : this(actionType, value, targetType, targetModifier) // Chain constructor
+        {
+            this.modifierId = modifierId;
+        }
+
+        // Constructor including ModifierData (for backward compatibility)
         public EffectActionData(ActionType actionType, int value, TargetType targetType, ModifierData modifier)
              : this(actionType, value, targetType) // Chain constructor
         {
             this.modifierToApply = modifier;
+            // Extract the ID from the ModifierData if available
+            if (modifier != null) {
+                this.modifierId = modifier.modifierId;
+            }
         }
 
-        // Constructor including ModifierData and TargetModifier
+        // Constructor including ModifierData and TargetModifier (for backward compatibility)
         public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, ModifierData modifier)
              : this(actionType, value, targetType, targetModifier) // Chain constructor
         {
             this.modifierToApply = modifier;
+            // Extract the ID from the ModifierData if available
+            if (modifier != null) {
+                this.modifierId = modifier.modifierId;
+            }
         }
     }
 }

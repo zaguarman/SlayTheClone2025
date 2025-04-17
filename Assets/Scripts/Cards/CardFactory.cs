@@ -37,7 +37,7 @@ public class CardFactory {
                             value = a.value,
                             targetType = a.targetType,
                             targetModifier = a.targetModifier,
-                            modifierToApply = a.modifierToApply
+                            modifierIdToApply = a.modifierIdToApply
                         }).ToList()
                     };
                     creature.Effects.Add(newEffect);
@@ -79,7 +79,7 @@ public class CardFactory {
                         value = action.value,
                         targetType = action.targetType,
                         targetModifier = action.targetModifier,
-                        modifierToApply = action.modifierToApply
+                        modifierIdToApply = action.modifierIdToApply
                     };
                     newEffect.actions.Add(newAction);
 
@@ -181,7 +181,7 @@ public class CardFactory {
                     value = a.value,
                     targetType = a.targetType,
                     targetModifier = a.targetModifier,
-                    modifierToApply = a.modifierToApply
+                    modifierIdToApply = a.modifierIdToApply
                 }).ToList()
             }).ToList();
             return creatureData;
@@ -202,7 +202,7 @@ public class CardFactory {
                     value = a.value,
                     targetType = a.targetType,
                     targetModifier = a.targetModifier,
-                    modifierToApply = a.modifierToApply
+                    modifierIdToApply = a.modifierIdToApply
                 }).ToList()
             }).ToList();
             return spellData;

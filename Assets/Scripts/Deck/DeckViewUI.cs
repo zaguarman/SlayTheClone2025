@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.EventSystems;
 using static DebugLogger;
+using Enums; // Make sure Enums namespace is included
 
 public class DeckViewUI : UIComponent {
     // Keep these serialized fields as they're required for editor setup
@@ -68,15 +69,15 @@ public class DeckViewUI : UIComponent {
             creatureData.attack = creature.Attack; // Use current calculated attack
             creatureData.health = creature.Health; // Use current calculated health
             creatureData.description = creature.Description;  // Copy description
-            creatureData.effects = creature.Effects.Select(e => new CardEffect {
+            creatureData.effects = creature.Effects.Select(e => new global::CardEffect {
                 effectType = e.effectType,
                 trigger = e.trigger,
-                actions = e.actions.Select(a => new EffectAction {
+                actions = e.actions.Select(a => new global::EffectAction {
                     actionType = a.actionType,
                     value = a.value,
                     targetType = a.targetType,
                     targetModifier = a.targetModifier,
-                    modifierToApply = a.modifierToApply
+                    modifierIdToApply = a.modifierIdToApply // Changed from modifierToApply
                 }).ToList()
             }).ToList();
             return creatureData;
@@ -90,11 +91,19 @@ public class DeckViewUI : UIComponent {
              spellData.cardName = spell.Name;
              spellData.description = spell.Description;
              spellData.defaultTargetType = spell.DefaultTargetType;
-             // We might not need full effects in the tooltip, but copy if necessary
-             // spellData.effects = spell.Effects.Select(...copy logic...).ToList();
+             // Copy effects for the tooltip
+             spellData.effects = spell.Effects.Select(e => new global::CardEffect {
+                effectType = e.effectType,
+                trigger = e.trigger,
+                actions = e.actions.Select(a => new global::EffectAction {
+                    actionType = a.actionType,
+                    value = a.value,
+                    targetType = a.targetType,
+                    targetModifier = a.targetModifier,
+                    modifierIdToApply = a.modifierIdToApply // Use the correct field name
+                }).ToList()
+            }).ToList();
 
-
-            //var spellData = CardFactory.CreateCardData(spell); // Use the helper for consistency if needed
             return spellData;
         }
         return null;
@@ -152,6 +161,12 @@ public class DeckViewUI : UIComponent {
         closeButton.onClick.RemoveAllListeners();
         closeButton.onClick.AddListener(HideDeckView);
         Log("Close button listener attached", LogTag.UI | LogTag.Initialization);
+
+        // Get the scroll rect component
+        scrollRect = GetComponentInChildren<ScrollRect>();
+        if (scrollRect == null) {
+            LogWarning("ScrollRect component not found within DeckViewUI children.", LogTag.UI);
+        }
 
         IsInitialized = true;
         Log("DeckViewUI initialized", LogTag.UI | LogTag.Initialization);
@@ -383,9 +398,11 @@ public class DeckViewUI : UIComponent {
             cardTooltip.EnableTooltipOnly(cardController);
         }
 
-        // Completely replace the original CardController's drag handlers with our own
-        // by adding a component that will intercept dragging at a higher level
-        var interceptor = cardController.gameObject.AddComponent<DeckViewCardInterceptor>();
+        // Add interceptor component
+        var interceptor = cardController.gameObject.GetComponent<DeckViewCardInterceptor>();
+        if (interceptor == null) { // Add only if it doesn't exist
+            interceptor = cardController.gameObject.AddComponent<DeckViewCardInterceptor>();
+        }
 
         // We'll get the component reference to the actual CardController
         var cardComp = cardController.GetComponent<CardController>();
@@ -427,6 +444,12 @@ public class DeckViewUI : UIComponent {
         // Then destroy all cards
         foreach (var entry in cardEntries) {
             if (entry != null) {
+                // Retrieve original CardController component and re-enable it before destroying
+                // This ensures event listeners are properly cleaned up if CardController handles that in OnDestroy
+                var cardComp = entry.GetComponent<CardController>();
+                if (cardComp != null) {
+                    cardComp.enabled = true; // Re-enable before destroy
+                }
                 Destroy(entry.gameObject);
             }
         }

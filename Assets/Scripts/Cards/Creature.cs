@@ -313,24 +313,28 @@ public class Creature : Card, ICreature, IModifiable, IModifierSource {
                  break;
 
              case ActionType.ApplyModifier:
-                 if (effectAction.modifierToApply != null) {
-                      // Pass 'this' (the creature) as the IModifierSource
-                     actionsQueue.AddAction(new ApplyModifierAction(target, effectAction.modifierToApply, this));
+                 // --- CHANGED: Use modifierIdToApply string ---
+                 if (!string.IsNullOrEmpty(effectAction.modifierIdToApply)) {
+                     // Pass 'this' (the creature) as the IModifierSource
+                     // ApplyModifierAction now primarily takes the ID
+                     actionsQueue.AddAction(new ApplyModifierAction(target, effectAction.modifierIdToApply, this));
                  } else {
-                     LogError($"[{TargetId}] ApplyModifier effect action is missing ModifierData reference.", LogTag.Effects);
+                     LogError($"[{TargetId}] ApplyModifier effect action is missing modifierIdToApply.", LogTag.Effects);
                  }
                  break;
 
               case ActionType.RemoveModifier:
-                 // Need a way to specify which modifier to remove in EffectAction
-                 // e.g., add a string field 'modifierIdToRemove' to EffectAction
-                 // string modId = effectAction.modifierIdToRemove;
-                 // if (!string.IsNullOrEmpty(modId)) {
-                 //    actionsQueue.AddAction(new RemoveModifierAction(target, modId));
-                 // } else {
-                 //    LogError($"[{TargetId}] RemoveModifier effect action is missing modifierIdToRemove.", LogTag.Effects);
-                 // }
-                 LogWarning("RemoveModifier action type from effects not fully implemented yet.", LogTag.Effects);
+                 // --- CHANGED: This logic was already planned to use an ID ---
+                 // If EffectAction had a field like 'modifierIdToRemove', use it here.
+                 // For now, assuming the 'value' might encode which modifier or we need a dedicated field.
+                 // Let's assume we add 'modifierIdToRemove' to EffectAction for this.
+                 // string modId = effectAction.modifierIdToRemove; // Hypothetical field
+                 string modId = effectAction.modifierIdToApply; // REUSING ID FIELD FOR NOW - NEEDS CLARIFICATION
+                 if (!string.IsNullOrEmpty(modId)) {
+                    actionsQueue.AddAction(new RemoveModifierAction(target, modId));
+                 } else {
+                    LogError($"[{TargetId}] RemoveModifier effect action is missing modifierId to remove.", LogTag.Effects);
+                 }
                  break;
 
              case ActionType.Summon:

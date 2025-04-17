@@ -14,5 +14,8 @@ public class Effects : MonoBehaviour {
         public int value;
         public TargetType targetType;
         public TargetModifier targetModifier = TargetModifier.None; // Target modifier for spread damage effects
+
+        // --- CHANGED: Use Modifier ID string ---
+        public string modifierIdToApply;
     }
 }

@@ -24,6 +24,6 @@ MonoBehaviour:
       value: 0
       targetType: 3
       targetModifier: 0
-      modifierToApply: {fileID: 11400000, guid: eeb12307502d02745b77f7d2a245de25, type: 2}
+      modifierIdToApply: baba837e-58e7-45ad-a70f-5efe7a4de900
   attack: 1
   health: 4
