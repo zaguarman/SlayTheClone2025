@@ -20,7 +20,7 @@ MonoBehaviour:
   - effectType: 1
     trigger: 0
     actions:
-    - actionType: 5
+    - actionType: 0
       value: 2
       targetType: 4
       targetModifier: 0

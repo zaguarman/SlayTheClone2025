@@ -5,7 +5,7 @@ namespace Enums {
     public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn }
     // Updated ActionType
     public enum ActionType {
-        Damage, Heal, Draw, Summon, Armor, Stun, ApplyModifier, RemoveModifier
+        Damage, Heal, Draw, Summon, ApplyModifier, RemoveModifier
     }
     public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 

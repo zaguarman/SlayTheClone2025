@@ -305,7 +305,7 @@ public class ThemeDecksGenerator : EditorWindow {
             1, 6,
             new CardEffectData(EffectType.Triggered, EffectTrigger.StartOfTurn,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Armor, 2, TargetType.FriendlyCreatures)
+                    new EffectActionData(ActionType.Heal, 2, TargetType.FriendlyCreatures)
                 }),
             "Assets/Scriptables/Cards/Water/GuardianWhale.asset",
             existingCardIds.ContainsKey("GuardianWhale") ? existingCardIds["GuardianWhale"] : System.Guid.NewGuid().ToString()
@@ -331,7 +331,7 @@ public class ThemeDecksGenerator : EditorWindow {
             0, 4,
             new CardEffectData(EffectType.Triggered, EffectTrigger.OnDeath,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Stun, 1, TargetType.EnemyCreatures)
+                    new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
                 }),
             "Assets/Scriptables/Cards/Water/JellyfishSwarm.asset",
             existingCardIds.ContainsKey("JellyfishSwarm") ? existingCardIds["JellyfishSwarm"] : System.Guid.NewGuid().ToString()
@@ -344,7 +344,7 @@ public class ThemeDecksGenerator : EditorWindow {
             0, 3,
             new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Armor, 3, TargetType.FriendlyCreatures)
+                    new EffectActionData(ActionType.Heal, 3, TargetType.FriendlyCreatures)
                 }),
             "Assets/Scriptables/Cards/Water/CoralBuilder.asset",
             existingCardIds.ContainsKey("CoralBuilder") ? existingCardIds["CoralBuilder"] : System.Guid.NewGuid().ToString()
@@ -384,7 +384,7 @@ public class ThemeDecksGenerator : EditorWindow {
             2, 5,
             new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Stun, 1, TargetType.Enemy)
+                    new EffectActionData(ActionType.Damage, 1, TargetType.Enemy)
                 }),
             "Assets/Scriptables/Cards/Water/DeepSeaAngler.asset",
             existingCardIds.ContainsKey("DeepSeaAngler") ? existingCardIds["DeepSeaAngler"] : System.Guid.NewGuid().ToString()
@@ -436,7 +436,7 @@ public class ThemeDecksGenerator : EditorWindow {
             0, 7,
             new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Armor, 2, TargetType.Self)
+                    new EffectActionData(ActionType.Heal, 2, TargetType.Self)
                 }),
             "Assets/Scriptables/Cards/Water/OctopusDefender.asset",
             existingCardIds.ContainsKey("OctopusDefender") ? existingCardIds["OctopusDefender"] : System.Guid.NewGuid().ToString()
@@ -487,7 +487,7 @@ public class ThemeDecksGenerator : EditorWindow {
                 TargetType.EnemyCreatures,
                 new CardEffectData(EffectType.Instantaneous, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
-                        new EffectActionData(ActionType.Stun, 2, TargetType.EnemyCreatures)
+                        new EffectActionData(ActionType.Damage, 2, TargetType.EnemyCreatures)
                     }),
                 "Assets/Scriptables/Cards/Water/Whirlpool.asset",
                 existingCardIds.ContainsKey("Whirlpool") ? existingCardIds["Whirlpool"] : System.Guid.NewGuid().ToString()
@@ -509,7 +509,7 @@ public class ThemeDecksGenerator : EditorWindow {
                 TargetType.FriendlyCreatures,
                 new CardEffectData(EffectType.Instantaneous, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
-                        new EffectActionData(ActionType.Armor, 4, TargetType.FriendlyCreatures)
+                        new EffectActionData(ActionType.Heal, 4, TargetType.FriendlyCreatures)
                     }),
                 "Assets/Scriptables/Cards/Water/CoralShield.asset",
                 existingCardIds.ContainsKey("CoralShield") ? existingCardIds["CoralShield"] : System.Guid.NewGuid().ToString()

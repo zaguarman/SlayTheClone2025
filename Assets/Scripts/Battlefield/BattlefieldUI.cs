@@ -175,7 +175,7 @@ public class BattlefieldUI : CardContainer {
             bool existsInSlot = player.Battlefield.Any(s => s.OccupyingCard == card);
             if (!existsInSlot) {
                 RemoveCard(card);
-                Destroy(card.gameObject);
+                if (card != null) Destroy(card.gameObject); // Check for null before destroy
             }
         }
 
@@ -190,6 +190,14 @@ public class BattlefieldUI : CardContainer {
                 PositionCardInSlot(slot.OccupyingCard, slot);
             }
         }
+
+        // --- Explicitly update the UI of cards already in slots ---
+        foreach (var slot in BattlefieldSlotsList) { // Use the internal list
+            if (slot.OccupyingCard != null) {
+                slot.OccupyingCard.UpdateUI(); // Tell the card controller to refresh its display
+            }
+        }
+        // --- End added section ---
 
         UpdateLayout();
     }
@@ -230,15 +238,30 @@ public class BattlefieldUI : CardContainer {
             gameMediator.AddCreatureSummonedListener(OnCreatureSummoned);
             gameMediator.AddBattlefieldStateChangedListener(UpdateUI);
             gameMediator.AddCreatureDiedListener(OnCreatureDied);
+            // --- ADD THIS LISTENER ---
+            gameMediator.AddGameStateChangedListener(OnGameStateChanged);
         }
     }
 
     protected override void UnregisterEvents() {
         if (gameMediator != null) {
             gameMediator.RemoveCreatureSummonedListener(OnCreatureSummoned);
+            // BattlefieldStateChanged listener is already handled by UpdateUI in base Initialize
             gameMediator.RemoveCreatureDiedListener(OnCreatureDied);
+            // --- REMOVE THIS LISTENER ---
+            gameMediator.RemoveGameStateChangedListener(OnGameStateChanged);
         }
     }
+
+    // --- ADD THIS METHOD ---
+    private void OnGameStateChanged() {
+        // We need to update the UI for the player associated with this battlefield
+        // Check IsInitialized and Player validity
+        if (IsInitialized && Player != null) {
+            UpdateUI(Player);
+        }
+    }
+    // --- END ADDED METHOD ---
 
     protected override void SetupCardEventHandlers(CardController controller) {
         controller.OnBeginDragEvent.AddListener(OnCardBeginDrag);
@@ -252,12 +275,13 @@ public class BattlefieldUI : CardContainer {
     }
 
     private void OnCreatureDied(ICreature creature) {
-        if (!IsInitialized) return;
+        if (!IsInitialized || creature.Owner != Player) return; // Only handle if the creature belonged to this player
         var slot = GetSlot(creature);
 
         if (slot != null) {
-            slot.ClearSlot();
-            UpdateUI(creature.Owner);
+            // ClearSlot now handles destroying the card object if requested (default: true)
+            slot.ClearSlot(true);
+            UpdateUI(Player); // Refresh UI after removal
         }
     }
     #endregion
@@ -282,7 +306,10 @@ public class BattlefieldUI : CardContainer {
 
     protected override void OnCardEndDrag(CardController card) {
         arrowManager.HideDragArrow();
-        UpdateUI(Player);
+        // No need to call UpdateUI here, OnGameStateChanged will handle it if a move/attack happened
+        // If the card is just dropped back, it should snap back (handled by CardController or Container)
+        // Let's ensure layout updates if nothing else handles it.
+        UpdateLayout();
     }
     #endregion
 
@@ -297,10 +324,25 @@ public class BattlefieldUI : CardContainer {
     }
 
     public BattlefieldSlot GetSlot(ICreature creature) {
-        var slot = BattlefieldSlotsList.FirstOrDefault(s => s.OccupyingCreature == creature) ??
-            GetOpponentBattlefield().BattlefieldSlotsList.FirstOrDefault(s => s.OccupyingCreature == creature);
+        // Check own battlefield first
+        var slot = BattlefieldSlotsList.FirstOrDefault(s => s.OccupyingCreature == creature);
+        if (slot != null) return slot;
 
-        return slot;
+        // If not found, check opponent's battlefield (needed for targeting)
+        var opponentBattlefield = GetOpponentBattlefield();
+        if (opponentBattlefield != null)
+        {
+            slot = opponentBattlefield.BattlefieldSlotsList.FirstOrDefault(s => s.OccupyingCreature == creature);
+            if (slot != null) return slot;
+        }
+
+        // Check if the creature has a direct reference to its slot
+        if (creature?.Slot != null) {
+            return creature.Slot;
+        }
+
+
+        return null; // Return null if not found anywhere
     }
 
     public BattlefieldSlot GetSlot(CardController card) {
@@ -308,17 +350,15 @@ public class BattlefieldUI : CardContainer {
     }
 
     private BattlefieldUI GetOpponentBattlefield() {
+        if (gameReferences == null || Player == null) return null;
         var player1 = Player.IsPlayer1();
-        if (player1) {
-            return gameReferences.GetPlayer2BattlefieldUI();
-        } else {
-            return gameReferences.GetPlayer1BattlefieldUI();
-        }
+        return player1 ? gameReferences.GetPlayer2BattlefieldUI() : gameReferences.GetPlayer1BattlefieldUI();
     }
 
     protected override void OnCardDropped(CardController card) {
         Log($"Card dropped from Battlefield: {card.GetCardData()?.cardName} (TargetID: {card.GetCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
-        UpdateLayout();
+        // Dropping a card onto the battlefield is handled by HandleCardFromBattlefield
+        // UpdateLayout(); // No need to call UpdateLayout, state changes will trigger it
     }
 
     #region Cleanup
