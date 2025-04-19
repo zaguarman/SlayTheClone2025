@@ -67,6 +67,12 @@ public class GameManager : InitializableComponent {
         DontDestroyOnLoad(gameObject);
     }
 
+    protected override void OnDestroy() {
+        ModifierManager?.Cleanup(); // Call the cleanup method we added earlier
+        // ... other cleanup ...
+        base.OnDestroy(); // If inheriting from MonoBehaviour/Singleton
+    }
+
     public override void Initialize() {
         if (IsInitialized) return;
 

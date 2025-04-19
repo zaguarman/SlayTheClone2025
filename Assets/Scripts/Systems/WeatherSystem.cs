@@ -10,7 +10,8 @@ public enum WeatherType {
 public interface IWeatherSystem {
     WeatherType CurrentWeather { get; }
     void SetWeather(WeatherType weatherType);
-    float GetDamageModifier(bool isDirectDamage);
+    // Removed bool isDirectDamage parameter
+    float GetDamageModifier();
     UnityEvent<WeatherType> OnWeatherChanged { get; }
     string GetWeatherDescription(WeatherType weatherType);
 }
@@ -40,19 +41,27 @@ public class WeatherSystem : IWeatherSystem {
         }
     }
 
-    public float GetDamageModifier(bool isDirectDamage) {
+    // Updated GetDamageModifier
+    public float GetDamageModifier() {
+        // Simplification: Rainy affects combat (MarkCombatTargetAction processing), Sunny affects all damage actions.
+        // A more complex system could check action type if needed.
         return currentWeather switch {
-            WeatherType.Rainy when !isDirectDamage => -1f,    
-            WeatherType.Sunny when isDirectDamage => 1.0f,    
-            _ => 0f                                           
+            // Example: Maybe Rainy only affects damage queued by MarkCombatTargetAction
+            // Example: Sunny could boost all DamageCreature/DamagePlayer actions
+            WeatherType.Rainy => -1f, // Let's assume this affects combat damage logic elsewhere for now
+            WeatherType.Sunny => 1.0f, // Assume this boosts all damage actions
+            _ => 0f
         };
+        // Note: The actual application of this modifier needs to be implemented
+        // where damage is calculated or applied (e.g., in DamageCreatureAction.Execute or Creature.TakeDamage)
+        // For now, this just returns the value.
     }
 
     public string GetWeatherDescription(WeatherType weather) {
         return weather switch {
             WeatherType.Clear => "Clear: Normal damage",
-            WeatherType.Rainy => "Rain: Combat -1",
-            WeatherType.Sunny => "Sunny: Direct +1",
+            WeatherType.Rainy => "Rain: Combat -1", // Description remains
+            WeatherType.Sunny => "Sunny: Damage +1", // Description remains
             _ => "Unknown weather"
         };
     }

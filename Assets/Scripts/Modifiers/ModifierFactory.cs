@@ -15,6 +15,9 @@ public interface IModifierFactory
     // IModifier CreateTurnEndedModifier(string name, string description, UnityAction<int> action);
     // IModifier CreateCreatureSummonedModifier(string name, string description, UnityAction<ICreature, IPlayer> action);
     // IModifier CreateCreatureDiedModifier(string name, string description, UnityAction<ICreature> action);
+
+    // Creates a status effect modifier
+    IModifier CreateStatusEffectModifier(string name, string description, StatusEffectType type, int duration, int potency, int currentTurn);
 }
 
 public class SimpleModifierFactory : IModifierFactory
@@ -38,4 +41,9 @@ public class SimpleModifierFactory : IModifierFactory
     // public IModifier CreateTurnEndedModifier(...) { return new EventSubscriberModifier(..., EffectTrigger.EndOfTurn, ...); }
     // public IModifier CreateCreatureSummonedModifier(...) { return new EventSubscriberModifier(..., EffectTrigger.OnPlay, ...); }
     // public IModifier CreateCreatureDiedModifier(...) { return new EventSubscriberModifier(..., EffectTrigger.OnDeath, ...); }
+
+    public IModifier CreateStatusEffectModifier(string name, string description, StatusEffectType type, int duration, int potency, int currentTurn)
+    {
+        return new StatusEffectModifier(name, description, type, duration, potency, currentTurn);
+    }
 }

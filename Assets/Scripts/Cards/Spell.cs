@@ -30,21 +30,24 @@ public class Spell : Card {
         actions.Add(new SpellAction(actionType, value, targetType, targetModifier));
     }
 
-    public void AddAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
-        actions.Add(new SpellAction(actionType, value, targetType, targetModifier, buffAttack, buffHealth));
+    public void AddAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth, TargetModifier targetModifier = TargetModifier.None) {
+        actions.Add(new SpellAction(actionType, value, targetType, buffAttack, buffHealth, targetModifier));
     }
 
     public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
-        Log($"Playing spell {Name} (TargetID: {TargetId.ToUpper()}) with {actions.Count} actions", LogTag.Cards | LogTag.Actions);
+        Log($"Playing spell {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)}) with {actions.Count} actions", LogTag.Cards | LogTag.Actions);
 
         // If no target is specified, use the default target type
         if (target == null) {
             target = GetDefaultTarget(owner);
         }
 
-        // Execute each action
+        // Execute each action defined for the spell
         foreach (var action in actions) {
-            CreateGameAction(action.ActionType, action.Value, target, owner, context);
+             // Spells generally have IMMEDIATE effects.
+             // So, we queue GameActions rather than applying modifiers directly here.
+             // The GameActions (like BuffCreatureAction, ApplyStatusEffectAction) will then apply the modifiers.
+             CreateGameActionFromSpell(action, target, owner, context);
         }
     }
 
@@ -70,129 +73,149 @@ public class Spell : Card {
         return targets.FirstOrDefault();
     }
 
-    private void CreateGameAction(ActionType actionType, int value, ITarget target, IPlayer owner, ActionsQueue context) {
+     // Renamed from CreateGameAction to avoid confusion with IGameAction interface
+     private void CreateGameActionFromSpell(SpellAction spellAction, ITarget target, IPlayer owner, ActionsQueue context) {
         // Find the corresponding SpellAction to get buff flags and target modifier if needed
-        SpellAction spellAction = actions.FirstOrDefault(a => a.ActionType == actionType);
         bool buffAttack = spellAction?.BuffAttack ?? true;
         bool buffHealth = spellAction?.BuffHealth ?? true;
         TargetModifier targetModifier = spellAction?.TargetModifier ?? TargetModifier.None;
 
-        // If we have a target type and a target modifier, we need to get appropriate targets
-        if (spellAction != null && targetModifier != TargetModifier.None) {
-            // If no target is provided or we have a random modifier, get targets from the targeting system
-            if (target == null || targetModifier.HasFlag(TargetModifier.Random)) {
-                var targets = TargetingSystem.GetValidTargets(owner, spellAction.TargetType, targetModifier);
-                target = targets.FirstOrDefault();
-            }
+        // Resolve target if needed (e.g., random)
+        if (target == null || targetModifier.HasFlag(TargetModifier.Random)) {
+            var targets = TargetingSystem.GetValidTargets(owner, spellAction.TargetType, targetModifier);
+            target = targets.FirstOrDefault(); // Get the first (potentially random) target
         }
 
-        switch (actionType) {
+         // Based on SpellAction.ActionType, queue the appropriate IGameAction
+        switch (spellAction.ActionType) {
             case ActionType.Damage:
-                CreateDamageAction(value, target, context);
+                CreateDamageAction(spellAction.Value, target, context); // Queues DamageCreature/PlayerAction
                 break;
-
             case ActionType.Heal:
-                CreateHealAction(value, target, context);
+                CreateHealAction(spellAction.Value, target, context); // Queues HealCreature/PlayerAction
                 break;
-
             case ActionType.Draw:
-                CreateDrawAction(value, owner, context);
+                CreateDrawAction(spellAction.Value, owner, context); // Queues DrawCardsAction
                 break;
-
             case ActionType.Buff:
-                CreateBuffAction(value, target, context, buffAttack, buffHealth);
+                // Queue BuffCreatureAction - it will handle applying the modifier
+                CreateBuffAction(spellAction.Value, target, context, buffAttack, buffHealth);
                 break;
-
+             case ActionType.ApplyStatus:
+                 // Queue ApplyStatusEffectAction - it will handle applying the modifier
+                 CreateApplyStatusAction(target, context, spellAction.StatusEffectToApply, spellAction.StatusDuration, spellAction.StatusPotency);
+                 break;
             case ActionType.Summon:
                 // Not implemented in this prototype
+                LogWarning($"Summon action for spells not implemented yet.", LogTag.Actions);
                 break;
+             case ActionType.Armor:
+             case ActionType.Stun:
+                 LogWarning($"{spellAction.ActionType} action for spells not fully implemented yet.", LogTag.Actions);
+                  // Could map these to Buff/ApplyStatus actions if desired
+                 break;
         }
     }
 
+     // --- Action Queuing Methods (mostly unchanged) ---
     private void CreateDamageAction(int value, ITarget target, ActionsQueue context) {
-        if (target is ICreature creature) {
-            Log($"Creating direct damage action for {value} to creature {creature.Name}", LogTag.Cards | LogTag.Actions);
-            context.AddAction(new DirectDamageAction(creature, value));
+         if (target is ICreature creature) {
+            Log($"Spell: Queueing DamageCreatureAction for {value} to {creature.Name}", LogTag.Actions);
+            context.AddAction(new DamageCreatureAction(creature, value)); // Use consolidated action
         } else if (target is IPlayer player) {
-            Log($"Creating damage action for {value} to player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Cards | LogTag.Actions);
+            Log($"Spell: Queueing DamagePlayerAction for {value} to Player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Actions);
             context.AddAction(new DamagePlayerAction(player, value));
+        } else {
+             LogWarning($"Spell Damage: Invalid target type {target?.GetType().Name}", LogTag.Actions);
         }
     }
 
     private void CreateHealAction(int value, ITarget target, ActionsQueue context) {
-        if (target is ICreature creature) {
-            Log($"Creating heal action for {value} to creature {creature.Name}", LogTag.Cards | LogTag.Actions);
-            context.AddAction(new HealCreatureAction(creature, value));
-        } else if (target is IPlayer player) {
-            Log($"Creating heal action for {value} to player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Cards | LogTag.Actions);
-            context.AddAction(new HealPlayerAction(player, value));
-        }
+         if (target is ICreature creature) {
+             Log($"Spell: Queueing HealCreatureAction for {value} to {creature.Name}", LogTag.Actions);
+             context.AddAction(new HealCreatureAction(creature, value));
+         } else if (target is IPlayer player) {
+             Log($"Spell: Queueing HealPlayerAction for {value} to Player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Actions);
+             context.AddAction(new HealPlayerAction(player, value));
+         } else {
+             LogWarning($"Spell Heal: Invalid target type {target?.GetType().Name}", LogTag.Actions);
+         }
     }
 
     private void CreateDrawAction(int value, IPlayer player, ActionsQueue context) {
-        Log($"Creating draw action for {value} cards", LogTag.Cards | LogTag.Actions);
+        Log($"Spell: Queueing DrawCardsAction for {value} cards for Player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Actions);
         context.AddAction(new DrawCardsAction(player, value));
     }
 
+     // Updated CreateBuffAction to queue the action
     private void CreateBuffAction(int value, ITarget target, ActionsQueue context, bool buffAttack, bool buffHealth) {
-        string buffDescription = "";
-        if (buffAttack && buffHealth) {
-            buffDescription = $"+{value}/+{value}";
-        } else if (buffAttack) {
-            buffDescription = $"+{value} attack";
-        } else if (buffHealth) {
-            buffDescription = $"+{value} health";
-        }
-
         if (target is ICreature creature) {
-            Log($"Creating buff action for {buffDescription} to creature {creature.Name}", LogTag.Cards | LogTag.Actions);
-            context.AddAction(new BuffCreatureAction(creature, value, value, buffAttack, buffHealth));
+             string buffDesc = DescribeBuffForLog(value, buffAttack, buffHealth);
+            Log($"Spell: Queueing BuffCreatureAction for {buffDesc} to {creature.Name}", LogTag.Actions);
+             // Assuming spell buffs are permanent unless specified otherwise in data
+            context.AddAction(new BuffCreatureAction(creature, value, buffAttack, buffHealth, 0)); // Default duration 0
+        } else {
+             LogWarning($"Spell Buff: Invalid target type {target?.GetType().Name}", LogTag.Actions);
         }
+    }
+
+     // --- NEW: Method to queue ApplyStatusEffectAction ---
+    private void CreateApplyStatusAction(ITarget target, ActionsQueue context, StatusEffectType statusType, int duration, int potency) {
+         if (target is ICreature creature) {
+             Log($"Spell: Queueing ApplyStatusEffectAction ({statusType}, Dur:{duration}, Pot:{potency}) to {creature.Name}", LogTag.Actions);
+             context.AddAction(new ApplyStatusEffectAction(creature, statusType, duration, potency));
+         } else {
+             LogWarning($"Spell ApplyStatus: Invalid target type {target?.GetType().Name}", LogTag.Actions);
+         }
+    }
+
+    private string DescribeBuffForLog(int value, bool buffAttack, bool buffHealth) {
+         if (buffAttack && buffHealth) return $"+{value}/+{value}";
+         if (buffAttack) return $"+{value} Attack";
+         if (buffHealth) return $"+{value} Health";
+         return "No effect";
     }
 }
 
-// Simple container for spell action data
+// --- Update SpellAction Class ---
 public class SpellAction {
     public ActionType ActionType { get; }
-    public int Value { get; }
+    public int Value { get; } // Keep for damage, heal, draw amounts
     public TargetType TargetType { get; }
     public TargetModifier TargetModifier { get; }
+    // Buff Specific
     public bool BuffAttack { get; }
     public bool BuffHealth { get; }
+    // ApplyStatus Specific
+    public StatusEffectType StatusEffectToApply { get; }
+    public int StatusDuration { get; }
+    public int StatusPotency { get; }
 
-    public SpellAction(ActionType actionType, int value, TargetType targetType) {
-        ActionType = actionType;
-        Value = value;
-        TargetType = targetType;
-        TargetModifier = TargetModifier.None;
-        BuffAttack = true;
-        BuffHealth = true;
+    // Constructor for simple actions
+    public SpellAction(ActionType actionType, int value, TargetType targetType, TargetModifier modifier = TargetModifier.None)
+    {
+        ActionType = actionType; Value = value; TargetType = targetType; TargetModifier = modifier;
+        // Set defaults for others
+        BuffAttack = false; BuffHealth = false; StatusEffectToApply = StatusEffectType.None; StatusDuration = 0; StatusPotency = 0;
     }
 
-    public SpellAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
-        ActionType = actionType;
-        Value = value;
-        TargetType = targetType;
-        TargetModifier = TargetModifier.None;
-        BuffAttack = buffAttack;
-        BuffHealth = buffHealth;
+    // Constructor for Buff actions
+    public SpellAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth, TargetModifier modifier = TargetModifier.None)
+    {
+         if (actionType != ActionType.Buff) throw new System.ArgumentException("Incorrect constructor for non-Buff action.");
+         ActionType = actionType; Value = value; TargetType = targetType; TargetModifier = modifier;
+         BuffAttack = buffAttack; BuffHealth = buffHealth;
+         // Set defaults for others
+         StatusEffectToApply = StatusEffectType.None; StatusDuration = 0; StatusPotency = 0;
     }
 
-    public SpellAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
-        ActionType = actionType;
-        Value = value;
-        TargetType = targetType;
-        TargetModifier = targetModifier;
-        BuffAttack = true;
-        BuffHealth = true;
-    }
-
-    public SpellAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
-        ActionType = actionType;
-        Value = value;
-        TargetType = targetType;
-        TargetModifier = targetModifier;
-        BuffAttack = buffAttack;
-        BuffHealth = buffHealth;
+     // Constructor for ApplyStatus actions
+    public SpellAction(ActionType actionType, TargetType targetType, StatusEffectType status, int duration, int potency, TargetModifier modifier = TargetModifier.None)
+    {
+         if (actionType != ActionType.ApplyStatus) throw new System.ArgumentException("Incorrect constructor for non-ApplyStatus action.");
+         ActionType = actionType; TargetType = targetType; TargetModifier = modifier;
+         StatusEffectToApply = status; StatusDuration = duration; StatusPotency = potency;
+          // Set defaults for others
+         Value = 0; BuffAttack = false; BuffHealth = false;
     }
 }

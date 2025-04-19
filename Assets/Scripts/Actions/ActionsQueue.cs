@@ -51,8 +51,9 @@ public class ActionsQueue {
             SummonCreatureAction => -1,
             MoveCreatureAction or SwapCreaturesAction => 0,
             PlayCardAction => 1,
-            DirectDamageAction => 3,
+            // DirectDamageAction removed
             MarkCombatTargetAction => 4,
+            // DamageCreatureAction priority remains
             DamageCreatureAction or DamagePlayerAction => 5,
             DiscardHandAction => 6, // Discard hand should happen after all other actions
             DrawCardsAction => 7,   // Draw cards should happen after discarding hand

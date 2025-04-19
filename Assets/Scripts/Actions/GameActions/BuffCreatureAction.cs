@@ -1,62 +1,60 @@
 using static DebugLogger;
-using static Enums; // Assuming your Enums class is accessible
+using static Enums;
+using System; // Added for Math.Max
 
 public class BuffCreatureAction : IGameAction {
     private readonly ICreature targetCreature;
-    private readonly int value; // Use a single value for simplicity, applied to attack/health based on flags
+    private readonly int value;
     private readonly bool buffAttack;
     private readonly bool buffHealth;
-    private readonly ModifierCalculationType calculationType; // Add calculation type (e.g., Flat)
-    private readonly int durationInTurns; // Duration in turns (0 = permanent)
+    private readonly ModifierCalculationType calculationType;
+    private readonly int durationInTurns; // 0 = permanent
 
-    // Constructor for flat buffs with no duration (permanent)
-    public BuffCreatureAction(ICreature target, int flatValue, bool buffAttack, bool buffHealth)
-        : this(target, flatValue, buffAttack, buffHealth, 0) { }
-
-    // Constructor for flat buffs with duration
-    public BuffCreatureAction(ICreature target, int flatValue, bool buffAttack, bool buffHealth, int durationInTurns) {
-        this.targetCreature = target;
-        this.value = flatValue;
-        this.buffAttack = buffAttack;
-        this.buffHealth = buffHealth;
-        this.calculationType = ModifierCalculationType.Flat; // Defaulting to Flat
-        this.durationInTurns = durationInTurns;
-
-        string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : " (permanent)";
-        Log($"Created BuffCreatureAction (Flat: {value}{durationText}) for {target?.Name} (TargetID: {target?.TargetId.ToUpper().Substring(0, 8)}), BuffAttack={buffAttack}, BuffHealth={buffHealth}",
-            LogTag.Actions | LogTag.Creatures | LogTag.Effects);
-    }
-
-    // Constructor for backward compatibility
-    public BuffCreatureAction(ICreature target, int attackBuff, int healthBuff, bool buffAttack, bool buffHealth)
-        : this(target, buffAttack ? attackBuff : healthBuff, buffAttack, buffHealth, 0) { }
-
-    // Constructor with duration for backward compatibility
-    public BuffCreatureAction(ICreature target, int attackBuff, int healthBuff, bool buffAttack, bool buffHealth, int durationInTurns) {
-        this.targetCreature = target;
-        this.value = buffAttack ? attackBuff : healthBuff; // Use the appropriate value based on which buff is active
-        this.buffAttack = buffAttack;
-        this.buffHealth = buffHealth;
-        this.calculationType = ModifierCalculationType.Flat; // Defaulting to Flat
-        this.durationInTurns = durationInTurns;
-
-        string buffDescription = "";
-        if (buffAttack && buffHealth) {
-            buffDescription = $"+{attackBuff}/+{healthBuff}";
-        } else if (buffAttack) {
-            buffDescription = $"+{attackBuff} attack";
-        } else if (buffHealth) {
-            buffDescription = $"+{healthBuff} health";
+    // --- Single Primary Constructor ---
+    public BuffCreatureAction(
+        ICreature target,
+        int value,
+        bool buffAttack,
+        bool buffHealth,
+        int durationInTurns = 0, // Default to permanent
+        ModifierCalculationType calculationType = ModifierCalculationType.Flat) // Default to Flat
+    {
+        if (target == null)
+        {
+            LogWarning($"BuffCreatureAction: Target creature is null. Action cannot be created.", LogTag.Actions | LogTag.Effects);
+            // Optional: throw an exception or handle gracefully
+            // For now, we'll allow creation but Execute will fail safely.
         }
 
-        string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : " (permanent)";
-        Log($"Created BuffCreatureAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper().Substring(0, 8)}) with {buffDescription}{durationText}",
+        this.targetCreature = target;
+        // Ensure value isn't negative if we only intend to buff
+        this.value = (buffAttack || buffHealth) ? Math.Max(0, value) : value; // Allow negative for debuffs if needed later
+        this.buffAttack = buffAttack;
+        this.buffHealth = buffHealth;
+        this.calculationType = calculationType;
+        this.durationInTurns = Math.Max(0, durationInTurns); // Ensure non-negative duration
+
+        string buffDesc = DescribeBuff();
+        string durationText = this.durationInTurns > 0 ? $" for {this.durationInTurns} turns" : " (permanent)";
+        string targetName = target?.Name ?? "NULL TARGET";
+        string targetId = target?.TargetId?.ToUpper().Substring(0, 8) ?? "UNKNOWN";
+
+        Log($"Created BuffCreatureAction ({calculationType}) for {targetName} (TargetID: {targetId}) with {buffDesc}{durationText}",
             LogTag.Actions | LogTag.Creatures | LogTag.Effects);
     }
 
-    // For backward compatibility
-    public BuffCreatureAction(ICreature target, int attackBuff, int healthBuff)
-        : this(target, attackBuff, healthBuff, true, true, 0) { }
+    private string DescribeBuff()
+    {
+        string desc = "";
+        string sign = (calculationType == ModifierCalculationType.Flat && value >= 0) ? "+" : "";
+        string suffix = (calculationType == ModifierCalculationType.Percentage) ? "%" : "";
+
+        if (buffAttack && buffHealth) desc = $"{sign}{value}{suffix} Attack & Health";
+        else if (buffAttack) desc = $"{sign}{value}{suffix} Attack";
+        else if (buffHealth) desc = $"{sign}{value}{suffix} Health";
+        else desc = "No Stat Buff"; // Should not happen if constructor logic is sound
+        return desc;
+    }
 
     public void Execute() {
         if (targetCreature == null)
@@ -65,8 +63,11 @@ public class BuffCreatureAction : IGameAction {
             return;
         }
 
+        // --- This action now directly applies the modifier ---
+        // No longer queues another action.
+
         var modifierManager = GameManager.Instance?.ModifierManager;
-        var factory = modifierManager?._modifierFactory; // Access factory via manager (make it accessible if needed)
+        var factory = modifierManager?._modifierFactory;
 
         if (modifierManager == null || factory == null) {
              LogError($"BuffCreatureAction: ModifierManager or Factory is null. Cannot apply buff to {targetCreature.Name}.", LogTag.Actions | LogTag.Effects);
@@ -80,49 +81,44 @@ public class BuffCreatureAction : IGameAction {
         if (buffAttack && value != 0) {
             string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
             string modName = $"Attack Buff ({calculationType} {value}{durationText})";
-            string modDesc = $"{(calculationType == ModifierCalculationType.Flat ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Attack{durationText}";
+            string modDesc = $"{(calculationType == ModifierCalculationType.Flat && value >= 0 ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Attack{durationText}";
 
             IModifier attackMod;
             if (durationInTurns > 0) {
-                // Create a timed modifier
                 attackMod = factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Attack, calculationType, value, durationInTurns, currentTurn);
                 Log($"BuffCreatureAction applying Timed Attack Modifier: {attackMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
             } else {
-                // Create a permanent modifier
                 attackMod = factory.CreateStatModifier(modName, modDesc, ModifiableStat.Attack, calculationType, value);
                 Log($"BuffCreatureAction applying Permanent Attack Modifier: {attackMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
             }
-
             modifierManager.ApplyModifier(targetCreature, attackMod);
         }
 
         if (buffHealth && value != 0) {
+             // NOTE: Health buffs apply to MAX health. Current health is clamped.
             string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
             string modName = $"Health Buff ({calculationType} {value}{durationText})";
-            string modDesc = $"{(calculationType == ModifierCalculationType.Flat ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Max Health{durationText}";
+            string modDesc = $"{(calculationType == ModifierCalculationType.Flat && value >= 0 ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Max Health{durationText}";
 
             IModifier healthMod;
             if (durationInTurns > 0) {
-                // Create a timed modifier
                 healthMod = factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Health, calculationType, value, durationInTurns, currentTurn);
-                Log($"BuffCreatureAction applying Timed Health Modifier: {healthMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
+                 Log($"BuffCreatureAction applying Timed Health Modifier: {healthMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
             } else {
-                // Create a permanent modifier
                 healthMod = factory.CreateStatModifier(modName, modDesc, ModifiableStat.Health, calculationType, value);
                 Log($"BuffCreatureAction applying Permanent Health Modifier: {healthMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
             }
-
             modifierManager.ApplyModifier(targetCreature, healthMod);
+             // RecalculateStats called within ApplyModifier will handle clamping current health
         }
     }
 
     public override string ToString() {
-        string buffDesc = "";
-        if (buffAttack) buffDesc += $"Attack {(calculationType == ModifierCalculationType.Flat ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} ";
-        if (buffHealth) buffDesc += $"Health {(calculationType == ModifierCalculationType.Flat ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")}";
-
+        string buffDesc = DescribeBuff();
         string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : " (permanent)";
+        string targetName = targetCreature?.Name ?? "NULL";
+        string targetId = targetCreature?.TargetId?.ToUpper().Substring(0, 8) ?? "UNKNOWN";
 
-        return $"BuffCreatureAction: Target={targetCreature?.Name} (ID: {targetCreature?.TargetId.ToUpper().Substring(0, 8)}), Buff={buffDesc.Trim()}{durationText}";
+        return $"BuffCreatureAction: Target={targetName}({targetId}), Buff={buffDesc}{durationText}, Calc={calculationType}";
     }
 }

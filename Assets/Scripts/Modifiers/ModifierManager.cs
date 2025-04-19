@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static DebugLogger;
+using static Enums; // Add this for StatusEffectType enum
 
 public class ModifierManager
 {
+    #region Fields & Properties
     private readonly GameMediator _mediator;
     public readonly IModifierFactory _modifierFactory;
 
@@ -13,14 +15,19 @@ public class ModifierManager
 
     // Tracks registered creatures for quick lookup
     private readonly Dictionary<string, Creature> _creatures = new Dictionary<string, Creature>();
+    #endregion
 
+    #region Constructor
     public ModifierManager(GameMediator mediator, IModifierFactory factory)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _modifierFactory = factory ?? throw new ArgumentNullException(nameof(factory));
-        Log("ModifierManager initialized.", LogTag.Initialization | LogTag.Effects);
+        _mediator.AddTurnEndedListener(ProcessEndOfTurn); // Subscribe manager itself to TurnEnded
+        Log("ModifierManager initialized and subscribed to TurnEnded.", LogTag.Initialization | LogTag.Effects);
     }
+    #endregion
 
+    #region Creature Registration
     // Register a creature when it enters play
     public void RegisterCreature(Creature creature)
     {
@@ -56,6 +63,9 @@ public class ModifierManager
         }
     }
 
+    #endregion
+
+    #region Modifier Management
     // Get all modifiers affecting a specific creature
     // TODO: Extend this later to include modifiers from the creature's slot
     public IEnumerable<IModifier> GetActiveModifiersFor(Creature creature)
@@ -173,60 +183,115 @@ public class ModifierManager
         }
     }
 
-    // Process end of turn and check for expired modifiers
-    public void ProcessEndOfTurn(int currentTurn)
-    {
-        Log($"ModifierManager: Processing end of turn {currentTurn}", LogTag.Effects | LogTag.Turns);
+    #endregion
 
-        // Create a dictionary to track which creatures need recalculation
+    #region Status Effect Queries
+    // Method to check if a creature has a specific modifier instance by ID
+    public bool HasModifier(Creature creature, Guid modifierId)
+    {
+        if (creature == null) return false;
+        if (_activeModifiers.TryGetValue(creature.TargetId, out var mods))
+        {
+            return mods.Any(m => m.Id == modifierId);
+        }
+        return false;
+    }
+
+
+    // --- New Helper Method to Query Status Effects ---
+    public bool HasStatusEffect(Creature creature, StatusEffectType statusType)
+    {
+        if (creature == null || statusType == StatusEffectType.None) return false;
+
+        if (_activeModifiers.TryGetValue(creature.TargetId, out var mods))
+        {
+            return mods.OfType<StatusEffectModifier>().Any(mod => mod.EffectType == statusType);
+        }
+        return false;
+    }
+
+    // --- New Helper Method to Query if Actions are Prevented ---
+    public bool AreActionsPrevented(Creature creature)
+    {
+        if (creature == null) return false;
+
+        if (_activeModifiers.TryGetValue(creature.TargetId, out var mods))
+        {
+            // Check all StatusEffectModifiers on the creature
+            foreach (var mod in mods.OfType<StatusEffectModifier>())
+            {
+                if (mod.PreventsActions())
+                {
+                    Log($"Actions for {creature.Name} prevented by StatusEffect '{mod.Name}' ({mod.EffectType})", LogTag.Effects | LogTag.Creatures | LogTag.Combat);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    // --- End Helper Methods ---
+    #endregion
+
+    #region Turn Processing
+    // Process end of turn - now triggered by GameMediator event
+    // Parameter is the turn number that just *ended*
+    public void ProcessEndOfTurn(int endedTurnNumber)
+    {
+        Log($"ModifierManager: Processing end of turn {endedTurnNumber}", LogTag.Effects | LogTag.Turns);
+        int nextTurnNumber = endedTurnNumber + 1; // The turn number we use for expiration checks
+
+        // Create a dictionary to track which creatures need recalculation (if any status caused stat changes)
         Dictionary<string, Creature> creaturesToRecalculate = new Dictionary<string, Creature>();
 
-        // Check all active modifiers for expiration
-        foreach (var kvp in _activeModifiers.ToList()) // Use ToList to avoid modification during enumeration
+        // Check all active modifiers for expiration using the *next* turn number
+        foreach (var kvp in _activeModifiers.ToList())
         {
             string targetId = kvp.Key;
             var modifiers = kvp.Value;
 
-            // Skip if no creature is found for this targetId
             if (!_creatures.TryGetValue(targetId, out Creature creature))
                 continue;
 
-            // Check each modifier for expiration
             var expiredModifiers = new List<IModifier>();
             foreach (var modifier in modifiers)
             {
-                // Check if it's a timed modifier and has expired
-                if (modifier is TimedStatModifier timedMod && timedMod.HasExpired(currentTurn))
+                // Check if it's a timed modifier (Stat or Status) and has expired
+                if (modifier is ITimedModifier timedMod && timedMod.HasExpired(nextTurnNumber)) // Check against next turn
                 {
                     expiredModifiers.Add(modifier);
-                    Log($"ModifierManager: Timed modifier '{modifier.Name}' has expired for {creature.Name}", LogTag.Effects | LogTag.Turns);
+                    // Logging moved into HasExpired methods
                 }
             }
 
-            // Remove expired modifiers
             bool needsRecalculation = false;
             foreach (var expiredMod in expiredModifiers)
             {
                 RemoveModifier(creature, expiredMod);
-                needsRecalculation = true;
+                // If the expired mod affected stats, mark for recalc
+                if (expiredMod.TryGetStatModification(ModifiableStat.Attack, out _, out _) || expiredMod.TryGetStatModification(ModifiableStat.Health, out _, out _))
+                {
+                     needsRecalculation = true;
+                }
             }
 
-            // Mark for recalculation if needed
             if (needsRecalculation && !creaturesToRecalculate.ContainsKey(targetId))
             {
                 creaturesToRecalculate.Add(targetId, creature);
             }
         }
 
-        // Recalculate stats for affected creatures
+        // Recalculate stats for affected creatures AFTER removing expired mods
         foreach (var creature in creaturesToRecalculate.Values)
         {
             RecalculateStats(creature);
         }
 
-        Log($"ModifierManager: End of turn {currentTurn} processing complete. {creaturesToRecalculate.Count} creatures affected.", LogTag.Effects | LogTag.Turns);
+        Log($"ModifierManager: End of turn {endedTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
     }
 
+    #endregion
+
+    #region Stat Calculation
     // Central Stat Calculation Logic
     public void RecalculateStats(Creature creature)
     {
@@ -301,4 +366,14 @@ public class ModifierManager
         // Notify UI or other systems if needed (CreatureDamaged with 0 damage is a common pattern)
         _mediator?.NotifyCreatureDamaged(creature, 0);
     }
+    #endregion
+
+    #region Cleanup
+    // Cleanup subscription on destroy
+     public void Cleanup()
+     {
+        _mediator?.RemoveTurnEndedListener(ProcessEndOfTurn);
+        Log("ModifierManager cleaned up TurnEnded subscription.", LogTag.Initialization | LogTag.Effects);
+     }
+     #endregion
 }

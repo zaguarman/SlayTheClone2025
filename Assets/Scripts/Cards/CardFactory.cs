@@ -85,7 +85,7 @@ public static class CardFactory {
 
                     // Also add the action to the spell's action list for direct execution
                     if (action.actionType == ActionType.Buff) {
-                        spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier, action.buffAttack, action.buffHealth);
+                        spell.AddAction(action.actionType, action.value, action.targetType, action.buffAttack, action.buffHealth, action.targetModifier);
                     } else {
                         spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
                     }

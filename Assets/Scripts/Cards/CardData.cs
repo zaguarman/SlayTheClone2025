@@ -35,11 +35,19 @@ public class CardEffect {
 }
 
 [System.Serializable]
-public class EffectAction {
+public class EffectAction { // Add new fields here too
     public ActionType actionType;
     public int value;
     public TargetType targetType;
-    public TargetModifier targetModifier = TargetModifier.None; // Target modifier for spread damage effects
-    public bool buffAttack = true; // For Buff action type: whether to buff attack
-    public bool buffHealth = true; // For Buff action type: whether to buff health
+    public TargetModifier targetModifier = TargetModifier.None;
+
+    // Buff Specific
+    public bool buffAttack = true;
+    public bool buffHealth = true;
+    // public ModifierCalculationType calculationType = ModifierCalculationType.Flat;
+
+    // ApplyStatus Specific
+    public StatusEffectType statusEffectToApply = StatusEffectType.None;
+    public int statusDuration = 0;
+    public int statusPotency = 0;
 }

@@ -1,6 +1,7 @@
 using static DebugLogger;
 using System.Collections.Generic;
 using System.Linq;
+using static Enums; // Make sure Enums is accessible
 
 public class BattlefieldCombatHandler {
     private readonly GameManager gameManager;
@@ -23,6 +24,17 @@ public class BattlefieldCombatHandler {
             LogWarning("Target slot is null", LogTag.Creatures | LogTag.Combat);
             return;
         }
+
+        // --- Check for Paralysis ---
+        if (gameManager?.ModifierManager != null &&
+            attackerCreature is Creature concreteAttacker &&
+            gameManager.ModifierManager.AreActionsPrevented(concreteAttacker))
+        {
+            Log($"Creature {attackerCreature.Name} cannot attack due to status effect (e.g., Paralyzed).", LogTag.Combat | LogTag.Effects);
+            // Optionally provide feedback to the player here
+            return; // Prevent combat action
+        }
+        // --- End Check ---
 
         // Check if the target is valid
         bool isValidTarget = IsValidTarget(targetSlot);

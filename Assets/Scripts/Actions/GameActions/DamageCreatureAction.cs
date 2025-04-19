@@ -3,42 +3,47 @@ using static DebugLogger;
 using UnityEngine;
 using System;
 
+// Consolidated damage action for creatures
 public class DamageCreatureAction : IGameAction {
     #region Fields & Properties
     private readonly ICreature target;
     private readonly int damage;
-    private readonly ICreature attacker;
-    private readonly bool isDirectDamage;
+    private readonly ICreature attacker; // Renamed from source for clarity in combat context
+    // Removed isDirectDamage flag
+
     public ICreature GetTarget() => target;
-    public ICreature GetAttacker() => attacker;
+    public ICreature GetAttacker() => attacker; // Changed getter name
     public int GetDamage() => damage;
     #endregion
 
     #region Constructor
-    public DamageCreatureAction(ICreature target, int damage, ICreature attacker = null, bool isDirectDamage = false) {
+    // Simplified constructor
+    public DamageCreatureAction(ICreature target, int damage, ICreature attacker = null) {
         this.target = target;
         this.damage = damage;
-        this.attacker = attacker;
-        this.isDirectDamage = isDirectDamage;
-        Log($"Created DamageCreatureAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper()}) with {damage} damage from {attacker?.Name ?? "direct source"}",
+        this.attacker = attacker; // Use attacker field
+        Log($"Created DamageCreatureAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper().Substring(0, 8)}) with {damage} damage from {attacker?.Name ?? "source"}",
             LogTag.Actions | LogTag.Creatures);
     }
     #endregion
 
     #region Methods
     public void Execute() {
-        if (target == null) return;
+        if (target == null || target.Health <= 0) return; // Check if target exists and is alive
 
         if (target is Creature creature) {
             // Apply damage to the creature
-            creature.TakeDamage(damage, attacker);
-            Log($"Applied {damage} damage to {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) from {attacker?.Name ?? "direct source"}",
-                LogTag.Actions | LogTag.Creatures);
+            Log($"Executing DamageCreatureAction: Applying {damage} damage to {creature.Name} (TargetID: {creature.TargetId.ToUpper().Substring(0, 8)}) from {attacker?.Name ?? "source"}",
+                LogTag.Actions | LogTag.Creatures | LogTag.Combat);
+            creature.TakeDamage(damage, attacker); // Pass attacker
+        } else {
+            LogWarning($"DamageCreatureAction: Target {target.Name} is not a concrete Creature.", LogTag.Actions | LogTag.Creatures);
         }
     }
 
     public override string ToString() {
-        return $"DamageCreatureAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Damage={damage}, Attacker={attacker?.Name ?? "None"}, IsDirect={isDirectDamage}";
+        // Updated ToString
+        return $"DamageCreatureAction: Target={target?.Name}({target?.TargetId.ToUpper().Substring(0, 8)}), Dmg={damage}, Attacker={attacker?.Name ?? "Source"}";
     }
     #endregion
-} 
+}

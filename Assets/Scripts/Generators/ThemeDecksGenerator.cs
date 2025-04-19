@@ -318,11 +318,12 @@ public class ThemeDecksGenerator : EditorWindow {
         // 4. Jellyfish Swarm
         cards.Add(CreateWaterCard(
             "Jellyfish Swarm",
-            "Paralyzes enemies with gentle pulses.",
+            "Paralyzes enemies with gentle pulses when destroyed.", // Updated description
             0, 4,
             new CardEffectData(EffectType.Triggered, EffectTrigger.OnDeath,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Stun, 1, TargetType.EnemyCreatures)
+                    // Use the new ApplyStatus constructor
+                    new EffectActionData(ActionType.ApplyStatus, TargetType.EnemyCreatures, StatusEffectType.Paralyzed, 1, 0) // 1 turn duration, 0 potency
                 }),
             "Assets/Scriptables/Cards/Water/JellyfishSwarm.asset",
             existingCardIds.ContainsKey("JellyfishSwarm") ? existingCardIds["JellyfishSwarm"] : System.Guid.NewGuid().ToString()
@@ -370,11 +371,12 @@ public class ThemeDecksGenerator : EditorWindow {
         // 8. Deep Sea Angler
         cards.Add(CreateWaterCard(
             "Deep Sea Angler",
-            "Lures enemies with bioluminescent bait.",
+            "Lures enemies with bioluminescent bait, paralyzing them.",
             2, 5,
             new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Stun, 1, TargetType.Enemy)
+                    // Use the new ApplyStatus constructor
+                    new EffectActionData(ActionType.ApplyStatus, TargetType.Enemy, StatusEffectType.Paralyzed, 1, 0) // 1 turn duration, 0 potency
                 }),
             "Assets/Scriptables/Cards/Water/DeepSeaAngler.asset",
             existingCardIds.ContainsKey("DeepSeaAngler") ? existingCardIds["DeepSeaAngler"] : System.Guid.NewGuid().ToString()
@@ -473,11 +475,12 @@ public class ThemeDecksGenerator : EditorWindow {
             ),
             CreateWaterSpell(
                 "Whirlpool",
-                "Trap enemies in a spinning vortex.",
+                "Trap enemies in a spinning vortex, paralyzing them for 2 turns.",
                 TargetType.EnemyCreatures,
                 new CardEffectData(EffectType.Instantaneous, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
-                        new EffectActionData(ActionType.Stun, 2, TargetType.EnemyCreatures)
+                        // Use the new ApplyStatus constructor
+                        new EffectActionData(ActionType.ApplyStatus, TargetType.EnemyCreatures, StatusEffectType.Paralyzed, 2, 0) // 2 turn duration, 0 potency
                     }),
                 "Assets/Scriptables/Cards/Water/Whirlpool.asset",
                 existingCardIds.ContainsKey("Whirlpool") ? existingCardIds["Whirlpool"] : System.Guid.NewGuid().ToString()
@@ -735,6 +738,18 @@ public class ThemeDecksGenerator : EditorWindow {
                     buffHealthProp.boolValue = effectData.actions[i].buffHealth;
                 }
             }
+
+            // --- Add serialization for ApplyStatus fields ---
+            if (effectData.actions[i].actionType == ActionType.ApplyStatus) {
+                SerializedProperty statusTypeProp = actionProp.FindPropertyRelative("statusEffectToApply");
+                SerializedProperty statusDurationProp = actionProp.FindPropertyRelative("statusDuration");
+                SerializedProperty statusPotencyProp = actionProp.FindPropertyRelative("statusPotency");
+
+                if (statusTypeProp != null) statusTypeProp.enumValueIndex = (int)effectData.actions[i].statusEffectToApply;
+                if (statusDurationProp != null) statusDurationProp.intValue = effectData.actions[i].statusDuration;
+                if (statusPotencyProp != null) statusPotencyProp.intValue = effectData.actions[i].statusPotency;
+            }
+            // --- End Add ---
         }
 
         serializedCard.ApplyModifiedProperties();
@@ -790,6 +805,18 @@ public class ThemeDecksGenerator : EditorWindow {
                     buffHealthProp.boolValue = effectData.actions[i].buffHealth;
                 }
             }
+
+            // --- Add serialization for ApplyStatus fields ---
+            if (effectData.actions[i].actionType == ActionType.ApplyStatus) {
+                 SerializedProperty statusTypeProp = actionProp.FindPropertyRelative("statusEffectToApply");
+                SerializedProperty statusDurationProp = actionProp.FindPropertyRelative("statusDuration");
+                SerializedProperty statusPotencyProp = actionProp.FindPropertyRelative("statusPotency");
+
+                 if (statusTypeProp != null) statusTypeProp.enumValueIndex = (int)effectData.actions[i].statusEffectToApply;
+                if (statusDurationProp != null) statusDurationProp.intValue = effectData.actions[i].statusDuration;
+                if (statusPotencyProp != null) statusPotencyProp.intValue = effectData.actions[i].statusPotency;
+            }
+             // --- End Add ---
         }
 
         serializedCard.ApplyModifiedProperties();
@@ -840,40 +867,44 @@ public class ThemeDecksGenerator : EditorWindow {
         public ActionType actionType;
         public int value;
         public TargetType targetType;
-        public TargetModifier targetModifier = TargetModifier.None; // Target modifier for spread damage effects
-        public bool buffAttack = true; // For Buff action type: whether to buff attack
-        public bool buffHealth = true; // For Buff action type: whether to buff health
+        public TargetModifier targetModifier = TargetModifier.None;
+        // Buff Specific
+        public bool buffAttack = true;
+        public bool buffHealth = true;
+        // --- ApplyStatus Specific ---
+        public StatusEffectType statusEffectToApply = StatusEffectType.None;
+        public int statusDuration = 0;
+        public int statusPotency = 0;
 
+        // Constructor for basic actions
         public EffectActionData(ActionType actionType, int value, TargetType targetType) {
-            this.actionType = actionType;
-            this.value = value;
-            this.targetType = targetType;
+            this.actionType = actionType; this.value = value; this.targetType = targetType;
         }
-
+        // Constructor for buff actions
         public EffectActionData(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
-            this.actionType = actionType;
-            this.value = value;
-            this.targetType = targetType;
-            this.buffAttack = buffAttack;
-            this.buffHealth = buffHealth;
+            this.actionType = actionType; this.value = value; this.targetType = targetType;
+            this.buffAttack = buffAttack; this.buffHealth = buffHealth;
         }
-
-
-
+        // Constructor for actions with modifiers
         public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
-            this.actionType = actionType;
-            this.value = value;
-            this.targetType = targetType;
+            this.actionType = actionType; this.value = value; this.targetType = targetType;
             this.targetModifier = targetModifier;
         }
-
+        // Constructor for buffs with modifiers
         public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
+            this.actionType = actionType; this.value = value; this.targetType = targetType;
+            this.targetModifier = targetModifier; this.buffAttack = buffAttack; this.buffHealth = buffHealth;
+        }
+        // --- Constructor for ApplyStatus actions ---
+         public EffectActionData(ActionType actionType, TargetType targetType, StatusEffectType status, int duration, int potency, TargetModifier modifier = TargetModifier.None) {
+            if (actionType != ActionType.ApplyStatus) Debug.LogError("Incorrect constructor used for non-ApplyStatus action");
             this.actionType = actionType;
-            this.value = value;
             this.targetType = targetType;
-            this.targetModifier = targetModifier;
-            this.buffAttack = buffAttack;
-            this.buffHealth = buffHealth;
+            this.statusEffectToApply = status;
+            this.statusDuration = duration;
+            this.statusPotency = potency;
+            this.targetModifier = modifier;
+            this.value = 0; // Value field is not used for ApplyStatus
         }
     }
 }

@@ -143,170 +143,157 @@ public class Creature : Card, ICreature {
         Owner?.RemoveFromBattlefield(this, false); // false = don't destroy, add to discard
     }
 
+    // --- Updated HandleEffect ---
     public void HandleEffect(EffectTrigger trigger, ActionsQueue actionsQueue) {
-        Log($"Checking effects for {Name} (TargetID: {TargetId.ToUpper()}) with trigger: {trigger}", LogTag.Effects);
-        Log($"Effects count: {Effects.Count}", LogTag.Effects);
-
-        foreach (var effect in Effects) {
-            Log($"Effect found: {effect.trigger}", LogTag.Effects);
+        // Use GameManager.Instance to access systems if Owner might be null (e.g., OnDeath effects)
+        var gameManager = GameManager.Instance;
+        if (gameManager == null) {
+            LogError($"Cannot handle effect {trigger} for {Name} - GameManager instance is null.", LogTag.Effects | LogTag.Creatures);
+            return;
         }
+        var modifierManager = gameManager.ModifierManager;
+        var factory = modifierManager?._modifierFactory; // Access factory
 
-        // Skip if this effect was already handled in current resolution chain
+        // Check if processed
         if (actionsQueue.IsEffectProcessed(TargetId, trigger)) {
-            Log($"Skipping already processed {trigger} effect for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Effects);
+            // Log($"Skipping already processed {trigger} effect for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Effects);
             return;
         }
 
-        Log($"Handling {trigger} effect for {Name} (TargetID: {TargetId.ToUpper()}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects);
+        Log($"Handling {trigger} effect for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects);
 
         foreach (var effect in Effects.Where(e => e.trigger == trigger)) {
-            Log($"Processing effect - Trigger: {effect.trigger}, Actions: {effect.actions.Count}",
-                LogTag.Creatures | LogTag.Effects);
-
+            Log($"-- Processing Effect: Trigger={effect.trigger}, Type={effect.effectType}, Actions={effect.actions.Count}", LogTag.Effects);
             foreach (var action in effect.actions) {
-                Log($"Processing action - Type: {action.actionType}, Value: {action.value}, Target: {action.targetType}",
-                    LogTag.Creatures | LogTag.Effects);
+                 Log($"---- Action: Type={action.actionType}, Target={action.targetType}, Value={action.value}, Status={action.statusEffectToApply}", LogTag.Effects);
 
+                // --- Refactored Logic ---
                 switch (action.actionType) {
                     case ActionType.Damage:
+                        // Immediate damage (OnPlay, OnDeath) - Queue action directly
                         ProcessDamageEffect(action, actionsQueue);
                         break;
                     case ActionType.Heal:
+                        // Immediate heal (OnPlay, OnDeath) - Queue action directly
                         ProcessHealEffect(action, actionsQueue);
                         break;
                     case ActionType.Draw:
+                        // Immediate draw - Queue action directly
                         ProcessDrawEffect(action, actionsQueue);
                         break;
                     case ActionType.Summon:
+                        // Immediate summon - Queue action directly
                         ProcessSummonEffect(action, actionsQueue);
                         break;
                     case ActionType.Buff:
-                        ProcessBuffEffect(action, actionsQueue);
+                        // Apply as a Modifier via ModifierManager
+                        ProcessBuffModifier(action, modifierManager, factory);
                         break;
-                        // Additional cases can be added for other action types
+                    case ActionType.ApplyStatus:
+                         // Apply as a Modifier via ModifierManager
+                        ProcessApplyStatusModifier(action, modifierManager, factory);
+                        break;
+                    // Add cases for ActionType.Armor, ActionType.Stun etc.
+                    // Armor might apply a temporary StatModifier for a "Defense" stat or reduce incoming damage via an event modifier.
+                    // Stun might apply a StatusEffectModifier (e.g., Paralyzed).
+                     case ActionType.Stun: // Example: Map Stun to Paralyzed Status
+                        action.statusEffectToApply = StatusEffectType.Paralyzed;
+                        action.statusDuration = action.value; // Use 'value' for duration
+                        action.statusPotency = 0;
+                        ProcessApplyStatusModifier(action, modifierManager, factory);
+                        break;
+                    case ActionType.Armor: // Example: Apply temporary Health buff (like temporary HP)
+                         // For simplicity, treat Armor as a timed health buff for now.
+                         // A more complex system could have a separate Armor stat or damage reduction modifier.
+                         action.buffAttack = false;
+                         action.buffHealth = true;
+                         // Let's assume armor lasts 1 turn by default if not specified
+                         int armorDuration = 1; // Could be part of EffectAction data later
+                         ProcessBuffModifier(action, modifierManager, factory, ModifierCalculationType.Flat, armorDuration); // Pass duration
+                        break;
                 }
             }
         }
 
-        actionsQueue.MarkEffectProcessed(TargetId, trigger);
-        Log($"Marked {trigger} effect as processed for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Effects);
+        actionsQueue.MarkEffectProcessed(TargetId, trigger); // Mark as processed *after* handling all actions for this trigger
+        Log($"Marked {trigger} effect as processed for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)})", LogTag.Effects);
     }
 
+    // --- Keep existing direct action queuing methods (Damage, Heal, Draw, Summon) ---
+    // These are now primarily for immediate effects (OnPlay, OnDeath)
     private void ProcessDamageEffect(EffectAction action, ActionsQueue actionsQueue) {
-        // Handle retaliatory damage that doesn't need Owner
+         // Ensure Owner exists if targeting others
+        if (Owner == null && action.targetType != TargetType.Self && lastAttacker == null) {
+            LogError($"Damage Effect: Cannot target others for {Name} - Owner is null and not self/retaliation.", LogTag.Effects);
+            return;
+        }
+
+        // Retaliation
         if (lastAttacker != null && action.targetType == TargetType.AllCreatures && Effects.Any(e => e.trigger == EffectTrigger.OnDamage)) {
-            Log($"Targeting attacker {lastAttacker.Name} (TargetID: {lastAttacker.TargetId.ToUpper()}) for retaliation damage",
-                LogTag.Creatures | LogTag.Actions);
-            actionsQueue.AddAction(new DirectDamageAction(lastAttacker, action.value, this));
+            Log($"Queueing Retaliation DamageAction: Attacker={lastAttacker.Name}, Damage={action.value}", LogTag.Effects);
+            actionsQueue.AddAction(new DamageCreatureAction(lastAttacker, action.value, this));
             return;
         }
-
-        // Special case for Self target - can self-harm without Owner
+         // Self Damage
         if (action.targetType == TargetType.Self) {
-            Log($"Adding DirectDamageAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: Self, Damage: {action.value}",
-                LogTag.Creatures | LogTag.Actions);
-            actionsQueue.AddAction(new DirectDamageAction(this, action.value, this));
+             Log($"Queueing Self DamageAction: Target={Name}, Damage={action.value}", LogTag.Effects);
+            actionsQueue.AddAction(new DamageCreatureAction(this, action.value, this));
             return;
         }
 
-        // For targeting other entities, we need Owner
-        if (Owner == null) {
-            LogError($"Cannot handle damage effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
-            return;
-        }
-
-        Log($"Processing damage effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Damage: {action.value}",
-            LogTag.Creatures | LogTag.Actions);
-
-        // Handle normal targeting
-        var targets = TargetingSystem.GetValidTargets(Owner, action.targetType);
-        Log($"Found {targets.Count} targets for {Name} (TargetID: {TargetId.ToUpper()})'s damage effect",
-            LogTag.Creatures | LogTag.Actions);
-
+        // Normal Targeting (Requires Owner)
+        var targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
+         Log($"Damage Effect: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
         foreach (var target in targets) {
-            if (target is BattlefieldSlot slot) {
-                if (!slot.IsOccupied()) continue;
-                Log($"Adding DirectDamageAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: {slot.OccupyingCreature.Name} (TargetID: {slot.OccupyingCreature.TargetId.ToUpper()}), Damage: {action.value}",
-                    LogTag.Creatures | LogTag.Actions | LogTag.Combat);
-                actionsQueue.AddAction(new DirectDamageAction(slot.OccupyingCreature, action.value, this));
-            } else if (target is IPlayer player) {
-                Log($"Adding DamagePlayerAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: Player {(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}), Damage: {action.value}",
-                    LogTag.Creatures | LogTag.Actions | LogTag.Players | LogTag.Combat);
-                actionsQueue.AddAction(new DamagePlayerAction(player, action.value));
-            } else if (target is ICreature creature) {
-                Log($"Adding DirectDamageAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: {creature.Name} (TargetID: {creature.TargetId.ToUpper()}), Damage: {action.value}",
-                    LogTag.Creatures | LogTag.Actions | LogTag.Combat);
-                actionsQueue.AddAction(new DirectDamageAction(creature, action.value, this));
+            if (target is ICreature creatureTarget) {
+                actionsQueue.AddAction(new DamageCreatureAction(creatureTarget, action.value, this));
+            } else if (target is IPlayer playerTarget) {
+                actionsQueue.AddAction(new DamagePlayerAction(playerTarget, action.value));
             }
         }
     }
 
     private void ProcessHealEffect(EffectAction action, ActionsQueue actionsQueue) {
-        // Special case for Self target - we can heal ourselves even if Owner is null
+        if (Owner == null && action.targetType != TargetType.Self) {
+             LogError($"Heal Effect: Cannot target others for {Name} - Owner is null and not self.", LogTag.Effects);
+            return;
+        }
+
         if (action.targetType == TargetType.Self) {
-            Log($"Adding HealCreatureAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: Self, Amount: {action.value}",
-                LogTag.Creatures | LogTag.Actions);
-            actionsQueue.AddAction(new HealCreatureAction(this, action.value));
-            return;
+             actionsQueue.AddAction(new HealCreatureAction(this, action.value));
+             return;
         }
 
-        // For other target types, we need Owner
-        if (Owner == null) {
-            LogError($"Cannot handle heal effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
-            return;
-        }
-
-        var targets = TargetingSystem.GetValidTargets(Owner, action.targetType);
-        Log($"Found {targets.Count} targets for {Name} (TargetID: {TargetId.ToUpper()})'s heal effect",
-            LogTag.Creatures | LogTag.Actions);
-
+        var targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
+        Log($"Heal Effect: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
         foreach (var target in targets) {
-            if (target is ICreature creature) {
-                Log($"Adding HealCreatureAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: {creature.Name} (TargetID: {creature.TargetId.ToUpper()}), Amount: {action.value}",
-                    LogTag.Creatures | LogTag.Actions);
-                actionsQueue.AddAction(new HealCreatureAction(creature, action.value));
-            } else if (target is IPlayer player) {
-                Log($"Adding HealPlayerAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Target: Player {(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}), Amount: {action.value}",
-                    LogTag.Creatures | LogTag.Actions | LogTag.Players);
-                actionsQueue.AddAction(new HealPlayerAction(player, action.value));
+            if (target is ICreature creatureTarget) {
+                actionsQueue.AddAction(new HealCreatureAction(creatureTarget, action.value));
+            } else if (target is IPlayer playerTarget) {
+                actionsQueue.AddAction(new HealPlayerAction(playerTarget, action.value));
             }
         }
     }
 
-    private void ProcessDrawEffect(EffectAction action, ActionsQueue actionsQueue) {
-        if (Owner == null) {
-            LogError($"Cannot handle draw effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
-            return;
-        }
-
-        // Draw effects typically target the owner or their opponent
-        IPlayer targetPlayer = null;
-        switch (action.targetType) {
-            case TargetType.Player:
-                targetPlayer = Owner;
-                break;
-            case TargetType.Enemy:
-                targetPlayer = Owner.Opponent;
-                break;
-            default:
-                LogWarning($"Unexpected target type for draw effect: {action.targetType}", LogTag.Effects);
-                return;
-        }
-
+     private void ProcessDrawEffect(EffectAction action, ActionsQueue actionsQueue) {
+         if (Owner == null) {
+              LogError($"Draw Effect: Cannot process for {Name} - Owner is null.", LogTag.Effects);
+             return;
+         }
+        IPlayer targetPlayer = action.targetType == TargetType.Enemy ? Owner.Opponent : Owner;
         if (targetPlayer != null) {
-            Log($"Adding DrawCardsAction - Source: {Name} (TargetID: {TargetId.ToUpper()}), Player: {(targetPlayer.IsPlayer1() ? "1" : "2")} (TargetID: {targetPlayer.TargetId.ToUpper()}), Amount: {action.value}",
-                LogTag.Creatures | LogTag.Actions | LogTag.Cards);
             actionsQueue.AddAction(new DrawCardsAction(targetPlayer, action.value));
         }
     }
 
     private void ProcessSummonEffect(EffectAction action, ActionsQueue actionsQueue) {
-        if (Owner == null) {
-            LogError($"Cannot handle summon effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
-            return;
-        }
-
-        Log($"Processing summon effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {action.value}",
+         if (Owner == null) {
+             LogError($"Summon Effect: Cannot process for {Name} - Owner is null.", LogTag.Effects);
+             return;
+         }
+         // Existing logic... (finding creatures, finding slots, queuing action)
+         // ...
+         Log($"Processing summon effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {action.value}",
             LogTag.Creatures | LogTag.Actions);
 
         // Handle summoning based on targeting
@@ -360,63 +347,121 @@ public class Creature : Card, ICreature {
             // Add summon action (with fromDeck=true since we're summoning from deck)
             actionsQueue.AddAction(new SummonCreatureAction(creatureToSummon, targetPlayer, slot, true));
 
-            Log($"Queued summon effect for {creatureToSummon.Name} (TargetID: {creatureToSummon.TargetId.ToUpper()}) to slot (TargetID: {slot.TargetId.ToUpper()})",
+             Log($"Queued summon effect for {creatureToSummon.Name} (TargetID: {creatureToSummon.TargetId.ToUpper()}) to slot (TargetID: {slot.TargetId.ToUpper()})",
                 LogTag.Creatures | LogTag.Effects | LogTag.Actions);
         }
+         // ...
     }
 
-    private void ProcessBuffEffect(EffectAction action, ActionsQueue actionsQueue) {
-        // Get buff flags directly from the action
+    // --- NEW: Methods to apply modifiers ---
+
+    // Optional parameters for calcType and duration added for flexibility (e.g., Armor mapping)
+    private void ProcessBuffModifier(EffectAction action, ModifierManager manager, IModifierFactory factory, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
+        if (manager == null || factory == null) {
+            LogError("Buff Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
+            return;
+        }
+        if (Owner == null && action.targetType != TargetType.Self) {
+             LogError($"Buff Modifier: Cannot target others for {Name} - Owner is null and not self.", LogTag.Effects);
+            return;
+        }
+
         bool buffAttack = action.buffAttack;
         bool buffHealth = action.buffHealth;
+        int value = action.value;
+        int duration = forcedDuration ?? 0; // Use forced duration if provided, else 0 (permanent)
 
-        string buffDescription = "";
-        if (buffAttack && buffHealth) {
-            buffDescription = $"+{action.value}/+{action.value}";
-        } else if (buffAttack) {
-            buffDescription = $"+{action.value} attack";
-        } else if (buffHealth) {
-            buffDescription = $"+{action.value} health";
+         // Special duration logic (Example: Abyssal Cucumber) - This could be data-driven
+        if (Name == "Abyssal Cucumber" && value == 2 && buffAttack && !buffHealth && forcedDuration == null) {
+            duration = 2;
+             Log($"Applying Abyssal Cucumber specific duration: {duration} turns", LogTag.Effects);
         }
 
-        Log($"Processing buff effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {buffDescription}",
-            LogTag.Creatures | LogTag.Actions | LogTag.Effects);
+         // Determine targets
+         List<ITarget> targets;
+         if (action.targetType == TargetType.Self) {
+             targets = new List<ITarget> { this };
+         } else {
+             targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
+         }
+          Log($"Buff Modifier: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
 
-        // Check if this is the Abyssal Cucumber card (which gives +2 attack for 2 turns)
-        int durationInTurns = 0; // Default: permanent buff
-        if (Name == "Abyssal Cucumber" && action.value == 2 && buffAttack && !buffHealth) {
-            durationInTurns = 2; // Set duration to 2 turns for Abyssal Cucumber
-            Log($"Detected Abyssal Cucumber buff: Setting duration to {durationInTurns} turns", LogTag.Creatures | LogTag.Effects);
-        }
+         int currentTurn = GameManager.Instance.TurnManager.TurnNumber;
 
-        // For self-targeting, we can buff ourselves even if Owner is null
-        if (action.targetType == TargetType.Self) {
-            if (buffAttack || buffHealth) {
-                actionsQueue.AddAction(new BuffCreatureAction(this, action.value, action.value, buffAttack, buffHealth, durationInTurns));
-            }
-            return;
-        }
+         foreach (var target in targets) {
+             if (target is Creature creatureTarget) {
+                Log($"Applying Buff Modifier to {creatureTarget.Name}: Attack={buffAttack}, Health={buffHealth}, Val={value}, Dur={duration}", LogTag.Effects);
 
-        // For other target types, we need Owner
-        if (Owner == null) {
-            LogError($"Cannot handle buff effect for {Name} (TargetID: {TargetId.ToUpper()}) - Owner is null", LogTag.Creatures | LogTag.Effects);
-            return;
-        }
-
-        // Get valid targets based on targeting type
-        var targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
-        Log($"Found {targets.Count} targets for {Name} (TargetID: {TargetId.ToUpper()})'s buff effect",
-            LogTag.Creatures | LogTag.Actions | LogTag.Effects);
-
-        foreach (var target in targets) {
-            if (target is ICreature creature) {
-                string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
-                Log($"Buffing creature {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) with {buffDescription}{durationText}",
-                    LogTag.Creatures | LogTag.Actions | LogTag.Effects);
-
-                // Add buff action to the queue with specific buff flags and duration
-                actionsQueue.AddAction(new BuffCreatureAction(creature, action.value, action.value, buffAttack, buffHealth, durationInTurns));
-            }
-        }
+                 // Apply Attack Buff
+                 if (buffAttack && value != 0) {
+                     string modName = $"Attack Buff ({calcType} {value})";
+                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Attack";
+                     IModifier attackMod = duration > 0
+                         ? factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Attack, calcType, value, duration, currentTurn)
+                         : factory.CreateStatModifier(modName, modDesc, ModifiableStat.Attack, calcType, value);
+                     manager.ApplyModifier(creatureTarget, attackMod);
+                 }
+                 // Apply Health Buff
+                 if (buffHealth && value != 0) {
+                     string modName = $"Health Buff ({calcType} {value})";
+                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Max Health";
+                     IModifier healthMod = duration > 0
+                        ? factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Health, calcType, value, duration, currentTurn)
+                        : factory.CreateStatModifier(modName, modDesc, ModifiableStat.Health, calcType, value);
+                     manager.ApplyModifier(creatureTarget, healthMod);
+                 }
+             }
+         }
     }
+
+    private void ProcessApplyStatusModifier(EffectAction action, ModifierManager manager, IModifierFactory factory) {
+         if (manager == null || factory == null) {
+             LogError("ApplyStatus Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
+             return;
+         }
+         if (Owner == null && action.targetType != TargetType.Self) {
+              LogError($"ApplyStatus Modifier: Cannot target others for {Name} - Owner is null and not self.", LogTag.Effects);
+             return;
+         }
+
+         StatusEffectType statusType = action.statusEffectToApply;
+         int duration = action.statusDuration;
+         int potency = action.statusPotency;
+
+         if (statusType == StatusEffectType.None || duration <= 0) {
+             LogWarning($"ApplyStatus Modifier: Invalid status type ({statusType}) or duration ({duration}) for action.", LogTag.Effects);
+             return;
+         }
+
+         // Determine targets
+         List<ITarget> targets;
+          if (action.targetType == TargetType.Self) {
+             targets = new List<ITarget> { this };
+         } else {
+             targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
+         }
+         Log($"ApplyStatus Modifier: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
+
+         int currentTurn = GameManager.Instance.TurnManager.TurnNumber;
+
+         foreach (var target in targets) {
+             if (target is Creature creatureTarget) {
+                 Log($"Applying Status Modifier to {creatureTarget.Name}: Type={statusType}, Dur={duration}, Pot={potency}", LogTag.Effects);
+
+                 string effectName = $"{statusType} Effect ({Name})"; // Include source name
+                 string effectDescription = $"Applies {statusType} for {duration} turns (Potency: {potency})";
+
+                 IModifier statusModifier = factory.CreateStatusEffectModifier(
+                     effectName,
+                     effectDescription,
+                     statusType,
+                     duration,
+                     potency,
+                     currentTurn
+                 );
+                 manager.ApplyModifier(creatureTarget, statusModifier);
+             }
+         }
+    }
+    // --- End New Method ---
 }

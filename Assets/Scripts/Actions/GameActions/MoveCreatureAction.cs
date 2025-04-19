@@ -32,6 +32,17 @@ public class MoveCreatureAction : IGameAction {
             return;
         }
 
+        // --- Check for Paralysis ---
+        var modManager = GameManager.Instance?.ModifierManager;
+        if (modManager != null &&
+            creature is Creature concreteCreature &&
+            modManager.AreActionsPrevented(concreteCreature))
+        {
+            Log($"Creature {creature.Name} cannot move due to status effect (e.g., Paralyzed).", LogTag.Actions | LogTag.Effects);
+            return; // Prevent move action
+        }
+        // --- End Check ---
+
         if (fromSlot is BattlefieldSlot fromBattlefieldSlot && toSlot is BattlefieldSlot toBattlefieldSlot) {
             if (toBattlefieldSlot.IsOccupied()) {
                 HandleSwap(fromBattlefieldSlot, toBattlefieldSlot);
@@ -84,4 +95,4 @@ public class MoveCreatureAction : IGameAction {
         return $"MoveCreatureAction: Creature={creature?.Name} (TargetID: {creature?.TargetId.ToUpper()}), FromSlot={fromSlot?.TargetId.ToUpper()}, ToSlot={toSlot?.TargetId.ToUpper()}";
     }
     #endregion
-} 
+}

@@ -22,7 +22,7 @@ public static class SpreadDamageEffect {
             if (target is ICreature creature) {
                 Log($"Applying spread damage of {damage} to {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) from {attacker.Name} (TargetID: {attacker.TargetId.ToUpper()})",
                     LogTag.Creatures | LogTag.Combat | LogTag.Effects);
-                actionsQueue.AddAction(new DirectDamageAction(creature, damage, attacker));
+                actionsQueue.AddAction(new DamageCreatureAction(creature, damage, attacker));
             } else if (target is IPlayer player) {
                 Log($"Applying spread damage of {damage} to player {(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}) from {attacker.Name} (TargetID: {attacker.TargetId.ToUpper()})",
                     LogTag.Players | LogTag.Combat | LogTag.Effects);
