@@ -5,43 +5,48 @@ using System;
 using System.Collections.Generic;
 
 public interface ICreature : ICard {
-    int Attack { get; }
-    int Health { get; }
+    int Attack { get; } // Now returns effective attack
+    int Health { get; } // Now returns current health
+    int MaxHealth { get; } // New property for effective max health
     int BaseAttack { get; }
     int BaseHealth { get; }
     BattlefieldSlot Slot { get; set; }
     void TakeDamage(int damage);
+    void TakeDamage(int damage, ICreature attacker); // Keep internal version accessible
     IPlayer Owner { get; }
     void SetOwner(IPlayer owner);
-    void ResetModifiers();
-    void AddAttackModifier(StatModifier modifier);
-    void AddHealthModifier(StatModifier modifier);
 }
 
 public class Creature : Card, ICreature {
-    // Base stats (never change after initialization)
+    // Base stats (read-only after initialization)
     public int BaseAttack { get; private set; }
     public int BaseHealth { get; private set; }
 
-    // Modifier collections
-    private List<StatModifier> attackModifiers = new List<StatModifier>();
-    private List<StatModifier> healthModifiers = new List<StatModifier>();
+    // Effective stats (calculated and set by ModifierManager)
+    private int _effectiveAttack;
+    private int _effectiveMaxHealth;
 
-    // Current stats (calculated properties)
-    public int Attack => CalculateAttack();
-    public int Health => CalculateHealth();
-
-    private int currentHealth; // Tracks damage taken
+    // Current health tracking
+    private int currentHealth;
     private bool isDead = false;
+
+    // Public properties accessing calculated/current stats
+    public int Attack => _effectiveAttack;
+    public int MaxHealth => _effectiveMaxHealth;
+    public int Health => currentHealth; // Current health is tracked separately
+
     public IPlayer Owner { get; private set; }
     public BattlefieldSlot Slot { get; set; }
 
-    private ICreature lastAttacker;
+    private ICreature lastAttacker; // Keep for OnDamage effect context
 
+    // Constructor: Initializes base stats and sets effective stats initially
     public Creature(string name, int attack, int health) : base(name) {
         BaseAttack = attack;
         BaseHealth = health;
         currentHealth = health;
+        _effectiveAttack = attack; // Initial effective stats match base stats
+        _effectiveMaxHealth = health;
     }
 
     // Constructor with cardId parameter
@@ -49,68 +54,20 @@ public class Creature : Card, ICreature {
         BaseAttack = attack;
         BaseHealth = health;
         currentHealth = health;
+        _effectiveAttack = attack; // Initial effective stats match base stats
+        _effectiveMaxHealth = health;
     }
 
-    private int CalculateAttack() {
-        int result = BaseAttack;
-        foreach (var mod in attackModifiers) {
-            result = mod.Apply(result);
-        }
-        return Math.Max(0, result); // Attack can't be negative
-    }
+    // Internal method for ModifierManager to update calculated stats
+    internal void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth)
+    {
+        _effectiveAttack = Math.Max(0, newEffectiveAttack); // Ensure non-negative
+        _effectiveMaxHealth = Math.Max(1, newEffectiveMaxHealth); // Ensure at least 1 max health
 
-    private int CalculateHealth() {
-        int maxHealth = BaseHealth;
-        foreach (var mod in healthModifiers) {
-            maxHealth = mod.Apply(maxHealth);
-        }
-        return Math.Max(0, Math.Min(currentHealth, maxHealth)); // Health can't exceed modified max or be negative
-    }
+        // Clamp current health to the new max health
+        currentHealth = Math.Min(currentHealth, _effectiveMaxHealth);
 
-    public void AddAttackModifier(StatModifier modifier) {
-        if (modifier == null) return;
-
-        attackModifiers.Add(modifier);
-        Log($"Added {modifier.Type} attack modifier of {modifier.Value} to {Name} (TargetID: {TargetId.ToUpper()})",
-            LogTag.Creatures | LogTag.Effects);
-
-        // Notify that the creature was modified
-        GameMediator.Instance?.NotifyCreatureDamaged(this, 0); // Using damage notification with 0 damage to trigger UI update
-    }
-
-    public void AddHealthModifier(StatModifier modifier) {
-        if (modifier == null) return;
-
-        healthModifiers.Add(modifier);
-        Log($"Added {modifier.Type} health modifier of {modifier.Value} to {Name} (TargetID: {TargetId.ToUpper()})",
-            LogTag.Creatures | LogTag.Effects);
-
-        // Heal to new max health if appropriate
-        int newMaxHealth = BaseHealth;
-        foreach (var mod in healthModifiers) {
-            newMaxHealth = mod.Apply(newMaxHealth);
-        }
-
-        if (currentHealth < newMaxHealth) {
-            // Only heal if we're below max health
-            currentHealth = newMaxHealth;
-        }
-
-        // Notify that the creature was modified
-        GameMediator.Instance?.NotifyCreatureDamaged(this, 0); // Using damage notification with 0 damage to trigger UI update
-    }
-
-    public void ResetModifiers() {
-        bool hadModifiers = attackModifiers.Count > 0 || healthModifiers.Count > 0;
-
-        attackModifiers.Clear();
-        healthModifiers.Clear();
-
-        if (hadModifiers) {
-            Log($"Reset all modifiers for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
-            // Notify that the creature was modified
-            GameMediator.Instance?.NotifyCreatureDamaged(this, 0); // Using damage notification with 0 damage to trigger UI update
-        }
+        // Note: We don't automatically heal to max here. Healing is a separate action/effect.
     }
 
     public void SetOwner(IPlayer owner) {
@@ -121,54 +78,69 @@ public class Creature : Card, ICreature {
         Log($"Playing {Name} (TargetID: {TargetId.ToUpper()}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Cards | LogTag.Actions);
         Owner = owner;
 
-        // Check if the creature is in the player's hand to determine if we need to remove it from the deck
-        bool fromHand = owner.Hand.Contains(this);
+        // Determine if summoning from hand or deck (important for SummonCreatureAction)
+        bool fromHand = owner?.Hand.Contains(this) ?? false;
 
-        context.AddAction(new SummonCreatureAction(this, owner, target, fromHand));
+        // Add SummonCreatureAction to the queue
+        // The action itself will handle registration with ModifierManager
+        context.AddAction(new SummonCreatureAction(this, owner, target, !fromHand)); // fromDeck = !fromHand
     }
 
     public void TakeDamage(int damage) {
         TakeDamage(damage, null);
     }
 
-    internal void TakeDamage(int damage, ICreature attacker) {
-        if (isDead) return;
+    public void TakeDamage(int damage, ICreature attacker) {
+        if (isDead || damage <= 0) return;
 
-        lastAttacker = attacker;
-        currentHealth = System.Math.Max(0, currentHealth - damage);
+        lastAttacker = attacker; // Store attacker for potential OnDamage effects
+        int previousHealth = currentHealth;
+        currentHealth = Math.Max(0, currentHealth - damage);
+        int actualDamage = previousHealth - currentHealth; // Calculate actual damage dealt
 
-        // Updated log format to include target IDs
-        if (attacker != null) {
-            Log($"{attacker.Name} (TargetID: {attacker.TargetId.ToUpper()}) dealt {damage} damage to {Name} (TargetID: {TargetId.ToUpper()}), health now: {Health}. Has {Effects.Count} effects",
-                LogTag.Creatures | LogTag.Combat);
-        } else {
-            Log($"{Name} (TargetID: {TargetId.ToUpper()}) took {damage} damage, health now: {Health}. Has {Effects.Count} effects",
-                LogTag.Creatures | LogTag.Combat);
-        }
+        // Log damage
+        string attackerName = attacker != null ? $"{attacker.Name} (ID: {attacker.TargetId.ToUpper().Substring(0, 8)})" : "Source";
+        Log($"{attackerName} dealt {actualDamage} damage to {Name} (ID: {TargetId.ToUpper().Substring(0, 8)}), health now: {Health}/{MaxHealth}. Has {Effects.Count} CardEffects.",
+            LogTag.Creatures | LogTag.Combat);
 
+        // Trigger built-in CardData effects (kept separate from Modifier system)
         var gameManager = GameManager.Instance;
         if (gameManager?.ActionsQueue != null) {
-            Log($"Processing OnDamage effects for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
+            // Log($"Processing OnDamage CardEffects for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
             HandleEffect(EffectTrigger.OnDamage, gameManager.ActionsQueue);
         }
 
+        // Notify Mediator about damage (for UI, event modifiers, etc.)
+        GameMediator.Instance?.NotifyCreatureDamaged(this, actualDamage);
+
+        // Check for death AFTER notifying and handling effects
         if (Health <= 0 && !isDead) {
-            isDead = true;
-
-            // Notify that the creature died (for event listeners)
-            GameMediator.Instance?.NotifyCreatureDied(this);
-
-            // Remove from battlefield (which will handle adding to discard pile)
-            if (Owner != null) {
-                // When a creature dies, we want to add it to the discard pile but not destroy the card
-                Owner.RemoveFromBattlefield(this, false);
-            }
-
-            Log($"Creature died: {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures);
+            Die();
         }
 
-        GameMediator.Instance?.NotifyCreatureDamaged(this, damage);
-        lastAttacker = null;
+        lastAttacker = null; // Clear attacker context after processing
+    }
+
+    private void Die()
+    {
+        isDead = true;
+        Log($"Creature died: {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures);
+
+        // Trigger OnDeath CardEffects FIRST
+        var gameManager = GameManager.Instance;
+        if (gameManager?.ActionsQueue != null) {
+            // Log($"Processing OnDeath CardEffects for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
+            HandleEffect(EffectTrigger.OnDeath, gameManager.ActionsQueue);
+        }
+
+        // Notify Mediator about death SECOND (after OnDeath effects)
+        GameMediator.Instance?.NotifyCreatureDied(this); // For UI, game state checks, etc.
+
+        // Unregister from ModifierManager THIRD
+        gameManager?.ModifierManager?.UnregisterCreature(this);
+
+        // Remove from Owner's battlefield LAST (this might trigger UI updates)
+        Owner?.RemoveFromBattlefield(this, false); // false = don't destroy, add to discard
     }
 
     public void HandleEffect(EffectTrigger trigger, ActionsQueue actionsQueue) {
@@ -410,14 +382,17 @@ public class Creature : Card, ICreature {
         Log($"Processing buff effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {buffDescription}",
             LogTag.Creatures | LogTag.Actions | LogTag.Effects);
 
+        // Check if this is the Abyssal Cucumber card (which gives +2 attack for 2 turns)
+        int durationInTurns = 0; // Default: permanent buff
+        if (Name == "Abyssal Cucumber" && action.value == 2 && buffAttack && !buffHealth) {
+            durationInTurns = 2; // Set duration to 2 turns for Abyssal Cucumber
+            Log($"Detected Abyssal Cucumber buff: Setting duration to {durationInTurns} turns", LogTag.Creatures | LogTag.Effects);
+        }
+
         // For self-targeting, we can buff ourselves even if Owner is null
         if (action.targetType == TargetType.Self) {
-            // Add modifiers based on what should be buffed
-            if (buffAttack) {
-                AddAttackModifier(new FlatModifier(action.value));
-            }
-            if (buffHealth) {
-                AddHealthModifier(new FlatModifier(action.value));
+            if (buffAttack || buffHealth) {
+                actionsQueue.AddAction(new BuffCreatureAction(this, action.value, action.value, buffAttack, buffHealth, durationInTurns));
             }
             return;
         }
@@ -429,17 +404,18 @@ public class Creature : Card, ICreature {
         }
 
         // Get valid targets based on targeting type
-        var targets = TargetingSystem.GetValidTargets(Owner, action.targetType);
+        var targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
         Log($"Found {targets.Count} targets for {Name} (TargetID: {TargetId.ToUpper()})'s buff effect",
             LogTag.Creatures | LogTag.Actions | LogTag.Effects);
 
         foreach (var target in targets) {
             if (target is ICreature creature) {
-                Log($"Buffing creature {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) with {buffDescription}",
+                string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
+                Log($"Buffing creature {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) with {buffDescription}{durationText}",
                     LogTag.Creatures | LogTag.Actions | LogTag.Effects);
 
-                // Add buff action to the queue with specific buff flags
-                actionsQueue.AddAction(new BuffCreatureAction(creature, action.value, action.value, buffAttack, buffHealth));
+                // Add buff action to the queue with specific buff flags and duration
+                actionsQueue.AddAction(new BuffCreatureAction(creature, action.value, action.value, buffAttack, buffHealth, durationInTurns));
             }
         }
     }

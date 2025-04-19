@@ -85,6 +85,11 @@ public class TurnManager : MonoBehaviour {
         TriggerEffectsForPlayer(gameManager.Player1, EffectTrigger.EndOfTurn);
         TriggerEffectsForPlayer(gameManager.Player2, EffectTrigger.EndOfTurn);
 
+        // Process timed modifiers expiration
+        if (gameManager?.ModifierManager != null) {
+            gameManager.ModifierManager.ProcessEndOfTurn(turnNumber);
+        }
+
         // Reduce stun duration for all creatures at the end of turn
         ReduceStunDurationForAllCreatures();
     }
