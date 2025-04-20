@@ -44,9 +44,9 @@ public class EffectAction { // Add new fields here too
     public TargetModifier targetModifier = TargetModifier.None;
 
     // Buff Specific
-    public bool buffAttack = true;
-    public bool buffHealth = true;
-    public bool buffSpeed = false; // Added flag for speed buffing
+    public bool modifyAttack = true;
+    public bool modifyHealth = true;
+    public bool modifySpeed = false; // Added flag for speed buffing
     // public ModifierCalculationType calculationType = ModifierCalculationType.Flat;
 
     // ApplyStatus Specific

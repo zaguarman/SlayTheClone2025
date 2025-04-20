@@ -35,8 +35,8 @@ public abstract class CardDataScriptableObject : ScriptableObject {
                     value = action.value,
                     targetType = action.targetType,
                     targetModifier = action.targetModifier,
-                    buffAttack = action.buffAttack,
-                    buffHealth = action.buffHealth
+                    modifyAttack = action.modifyAttack,
+                    modifyHealth = action.modifyHealth
                 });
             }
             effectsCopy.Add(effectCopy);

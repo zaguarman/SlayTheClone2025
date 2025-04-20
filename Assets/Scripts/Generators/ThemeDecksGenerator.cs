@@ -730,12 +730,12 @@ public class ThemeDecksGenerator : EditorWindow {
             // Store buff-specific properties if this is a buff action
             if (effectData.actions[i].actionType == ActionType.Buff) {
                 // Check if the properties exist in the serialized object
-                SerializedProperty buffAttackProp = actionProp.FindPropertyRelative("buffAttack");
-                SerializedProperty buffHealthProp = actionProp.FindPropertyRelative("buffHealth");
+                SerializedProperty modifyAttackProp = actionProp.FindPropertyRelative("modifyAttack");
+                SerializedProperty modifyHealthProp = actionProp.FindPropertyRelative("modifyHealth");
 
-                if (buffAttackProp != null && buffHealthProp != null) {
-                    buffAttackProp.boolValue = effectData.actions[i].buffAttack;
-                    buffHealthProp.boolValue = effectData.actions[i].buffHealth;
+                if (modifyAttackProp != null && modifyHealthProp != null) {
+                    modifyAttackProp.boolValue = effectData.actions[i].modifyAttack;
+                    modifyHealthProp.boolValue = effectData.actions[i].modifyHealth;
                 }
             }
 
@@ -797,12 +797,12 @@ public class ThemeDecksGenerator : EditorWindow {
             // Store buff-specific properties if this is a buff action
             if (effectData.actions[i].actionType == ActionType.Buff) {
                 // Check if the properties exist in the serialized object
-                SerializedProperty buffAttackProp = actionProp.FindPropertyRelative("buffAttack");
-                SerializedProperty buffHealthProp = actionProp.FindPropertyRelative("buffHealth");
+                SerializedProperty modifyAttackProp = actionProp.FindPropertyRelative("modifyAttack");
+                SerializedProperty modifyHealthProp = actionProp.FindPropertyRelative("modifyHealth");
 
-                if (buffAttackProp != null && buffHealthProp != null) {
-                    buffAttackProp.boolValue = effectData.actions[i].buffAttack;
-                    buffHealthProp.boolValue = effectData.actions[i].buffHealth;
+                if (modifyAttackProp != null && modifyHealthProp != null) {
+                    modifyAttackProp.boolValue = effectData.actions[i].modifyAttack;
+                    modifyHealthProp.boolValue = effectData.actions[i].modifyHealth;
                 }
             }
 
@@ -869,8 +869,8 @@ public class ThemeDecksGenerator : EditorWindow {
         public TargetType targetType;
         public TargetModifier targetModifier = TargetModifier.None;
         // Buff Specific
-        public bool buffAttack = true;
-        public bool buffHealth = true;
+        public bool modifyAttack = true;
+        public bool modifyHealth = true;
         // --- ApplyStatus Specific ---
         public StatusEffectType statusEffectToApply = StatusEffectType.None;
         public int statusDuration = 0;
@@ -881,9 +881,9 @@ public class ThemeDecksGenerator : EditorWindow {
             this.actionType = actionType; this.value = value; this.targetType = targetType;
         }
         // Constructor for buff actions
-        public EffectActionData(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, bool modifyAttack, bool modifyHealth) {
             this.actionType = actionType; this.value = value; this.targetType = targetType;
-            this.buffAttack = buffAttack; this.buffHealth = buffHealth;
+            this.modifyAttack = modifyAttack; this.modifyHealth = modifyHealth;
         }
         // Constructor for actions with modifiers
         public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
@@ -891,9 +891,9 @@ public class ThemeDecksGenerator : EditorWindow {
             this.targetModifier = targetModifier;
         }
         // Constructor for buffs with modifiers
-        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool buffAttack, bool buffHealth) {
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool modifyAttack, bool modifyHealth) {
             this.actionType = actionType; this.value = value; this.targetType = targetType;
-            this.targetModifier = targetModifier; this.buffAttack = buffAttack; this.buffHealth = buffHealth;
+            this.targetModifier = targetModifier; this.modifyAttack = modifyAttack; this.modifyHealth = modifyHealth;
         }
         // --- Constructor for ApplyStatus actions ---
          public EffectActionData(ActionType actionType, TargetType targetType, StatusEffectType status, int duration, int potency, TargetModifier modifier = TargetModifier.None) {

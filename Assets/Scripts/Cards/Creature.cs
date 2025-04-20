@@ -196,8 +196,8 @@ public class Creature : Card, ICreature {
                         ProcessSummonEffect(action, actionsQueue);
                         break;
                     case ActionType.Buff:
-                        // Pass buffSpeed flag
-                        ProcessBuffModifier(action, modifierManager, factory, action.buffSpeed);
+                        // Pass modifySpeed flag
+                        ProcessBuffModifier(action, modifierManager, factory, action.modifySpeed);
                         break;
                     case ActionType.ApplyStatus:
                          // Apply as a Modifier via ModifierManager
@@ -215,11 +215,11 @@ public class Creature : Card, ICreature {
                     case ActionType.Armor: // Example: Apply temporary Health buff (like temporary HP)
                          // For simplicity, treat Armor as a timed health buff for now.
                          // A more complex system could have a separate Armor stat or damage reduction modifier.
-                         action.buffAttack = false;
-                         action.buffHealth = true;
-                         action.buffSpeed = false; // Armor doesn't affect speed
+                         action.modifyAttack = false;
+                         action.modifyHealth = true;
+                         action.modifySpeed = false; // Armor doesn't affect speed
                          int armorDuration = 1;
-                         ProcessBuffModifier(action, modifierManager, factory, false, ModifierCalculationType.Flat, armorDuration); // Pass false for buffSpeed
+                         ProcessBuffModifier(action, modifierManager, factory, false, ModifierCalculationType.Flat, armorDuration); // Pass false for modifySpeed
                         break;
                 }
             }
@@ -365,8 +365,8 @@ public class Creature : Card, ICreature {
 
     // --- NEW: Methods to apply modifiers ---
 
-    // --- Updated ProcessBuffModifier to include buffSpeed ---
-    private void ProcessBuffModifier(EffectAction action, ModifierManager manager, IModifierFactory factory, bool buffSpeed, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
+    // --- Updated ProcessBuffModifier to include modifySpeed ---
+    private void ProcessBuffModifier(EffectAction action, ModifierManager manager, IModifierFactory factory, bool modifySpeed, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
         if (manager == null || factory == null) {
             LogError("Buff Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
             return;
@@ -374,9 +374,9 @@ public class Creature : Card, ICreature {
          if (Owner == null && action.targetType != TargetType.Self) return;
 
 
-        bool buffAttack = action.buffAttack;
-        bool buffHealth = action.buffHealth;
-        // buffSpeed is now passed as parameter
+        bool modifyAttack = action.modifyAttack;
+        bool modifyHealth = action.modifyHealth;
+        // modifySpeed is now passed as parameter
         int value = action.value;
         int duration = forcedDuration ?? 0;
 
@@ -393,9 +393,9 @@ public class Creature : Card, ICreature {
 
         foreach (var target in targets) {
             if (target is Creature creatureTarget) {
-                Log($"Applying Buff Modifier to {creatureTarget.Name}: A={buffAttack}, H={buffHealth}, S={buffSpeed}, Val={value}, Dur={duration}", LogTag.Effects);
+                Log($"Applying Buff Modifier to {creatureTarget.Name}: A={modifyAttack}, H={modifyHealth}, S={modifySpeed}, Val={value}, Dur={duration}", LogTag.Effects);
 
-                 if (buffAttack && value != 0) {
+                 if (modifyAttack && value != 0) {
                      string modName = $"Attack Buff ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
                      string modDesc = $"{(value >= 0 ? "+" : "")}{value} Attack{(duration > 0 ? $" ({duration} turns)" : "")}";
                      IModifier mod = duration > 0
@@ -403,7 +403,7 @@ public class Creature : Card, ICreature {
                          : factory.CreateStatModifier(modName, modDesc, ModifiableStat.Attack, calcType, value);
                      manager.ApplyModifier(creatureTarget, mod);
                  }
-                 if (buffHealth && value != 0) {
+                 if (modifyHealth && value != 0) {
                       string modName = $"Health Buff ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
                      string modDesc = $"{(value >= 0 ? "+" : "")}{value} Max Health{(duration > 0 ? $" ({duration} turns)" : "")}";
                      IModifier mod = duration > 0
@@ -412,7 +412,7 @@ public class Creature : Card, ICreature {
                      manager.ApplyModifier(creatureTarget, mod);
                  }
                  // --- Add Speed Buff ---
-                 if (buffSpeed && value != 0) {
+                 if (modifySpeed && value != 0) {
                     string modName = $"Speed Buff ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Speed{(duration > 0 ? $" ({duration} turns)" : "")}";
                     IModifier mod = duration > 0

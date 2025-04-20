@@ -69,7 +69,7 @@ public class ActionsQueue {
         ICreature creature = action switch {
             BattlefieldCombatAction combatAction => combatAction.GetAttacker(),
             DamageCreatureAction damageAction => damageAction.GetAttacker(),
-            BuffCreatureAction buffAction => buffAction.GetTarget() as ICreature,
+            ModifyAction modifyAction => modifyAction.GetTarget() as ICreature,
             _ => null
         };
 

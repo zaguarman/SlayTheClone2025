@@ -18,8 +18,8 @@ public class Effects : MonoBehaviour {
         public TargetModifier targetModifier = TargetModifier.None;
 
         // --- Buff Specific ---
-        public bool buffAttack = true;
-        public bool buffHealth = true;
+        public bool modifyAttack = true;
+        public bool modifyHealth = true;
         // public ModifierCalculationType calculationType = ModifierCalculationType.Flat; // Optional: Add if needed per-action
 
         // --- ApplyStatus Specific ---

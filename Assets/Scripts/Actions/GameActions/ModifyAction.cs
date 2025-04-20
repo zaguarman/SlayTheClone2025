@@ -1,25 +1,24 @@
 using static DebugLogger;
-using static Enums;
 using System; // Added for Math.Max
 using System.Collections.Generic; // Added for List<string>
 using System.Linq; // Added for LINQ extension methods like Take()
 
-public class BuffCreatureAction : IGameAction {
+public class ModifyAction : IGameAction {
     private readonly ICreature targetCreature;
     private readonly int value;
-    private readonly bool buffAttack;
-    private readonly bool buffHealth;
-    private readonly bool buffSpeed;     // Added buffSpeed flag
+    private readonly bool modifyAttack;
+    private readonly bool modifyHealth;
+    private readonly bool modifySpeed;     // Added modifySpeed flag
     private readonly ModifierCalculationType calculationType;
     private readonly int durationInTurns; // 0 = permanent
 
-    // --- Updated Constructor with buffSpeed parameter ---
-    public BuffCreatureAction(
+    // --- Updated Constructor with modifySpeed parameter ---
+    public ModifyAction(
         ICreature target,
         int value,
-        bool buffAttack,
-        bool buffHealth,
-        bool buffSpeed,
+        bool modifyAttack,
+        bool modifyHealth,
+        bool modifySpeed,
         int durationInTurns = 0, // Default to permanent
         ModifierCalculationType calculationType = ModifierCalculationType.Flat) // Default to Flat
     {
@@ -32,10 +31,10 @@ public class BuffCreatureAction : IGameAction {
 
         this.targetCreature = target;
         // Ensure value isn't negative if we only intend to buff
-        this.value = (buffAttack || buffHealth || buffSpeed) ? Math.Max(0, value) : value; // Allow negative for debuffs if needed later
-        this.buffAttack = buffAttack;
-        this.buffHealth = buffHealth;
-        this.buffSpeed = buffSpeed;
+        this.value = (modifyAttack || modifyHealth || modifySpeed) ? Math.Max(0, value) : value; // Allow negative for debuffs if needed later
+        this.modifyAttack = modifyAttack;
+        this.modifyHealth = modifyHealth;
+        this.modifySpeed = modifySpeed;
         this.calculationType = calculationType;
         this.durationInTurns = Math.Max(0, durationInTurns); // Ensure non-negative duration
 
@@ -57,9 +56,9 @@ public class BuffCreatureAction : IGameAction {
 
         // Build description based on which stats are being buffed
         List<string> buffedStats = new List<string>();
-        if (buffAttack) buffedStats.Add("Attack");
-        if (buffHealth) buffedStats.Add("Health");
-        if (buffSpeed) buffedStats.Add("Speed");
+        if (modifyAttack) buffedStats.Add("Attack");
+        if (modifyHealth) buffedStats.Add("Health");
+        if (modifySpeed) buffedStats.Add("Speed");
 
         if (buffedStats.Count == 0) {
             desc = "No Stat Buff"; // Should not happen with proper constructor usage
@@ -99,7 +98,7 @@ public class BuffCreatureAction : IGameAction {
         int currentTurn = GameManager.Instance?.TurnManager?.TurnNumber ?? 0;
 
         // Create and apply modifiers via the ModifierManager
-        if (buffAttack && value != 0) {
+        if (modifyAttack && value != 0) {
             string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
             string modName = $"Attack Buff ({calculationType} {value}{durationText})";
             string modDesc = $"{(calculationType == ModifierCalculationType.Flat && value >= 0 ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Attack{durationText}";
@@ -115,7 +114,7 @@ public class BuffCreatureAction : IGameAction {
             modifierManager.ApplyModifier(targetCreature, attackMod);
         }
 
-        if (buffHealth && value != 0) {
+        if (modifyHealth && value != 0) {
              // NOTE: Health buffs apply to MAX health. Current health is clamped.
             string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
             string modName = $"Health Buff ({calculationType} {value}{durationText})";
@@ -134,7 +133,7 @@ public class BuffCreatureAction : IGameAction {
         }
 
         // Apply Speed Modifier if requested
-        if (buffSpeed && value != 0) {
+        if (modifySpeed && value != 0) {
             string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
             string modName = $"Speed Buff ({calculationType} {value}{durationText})";
             string modDesc = $"{(calculationType == ModifierCalculationType.Flat && value >= 0 ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Speed{durationText}";

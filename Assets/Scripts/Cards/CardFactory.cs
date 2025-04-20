@@ -36,9 +36,9 @@ public static class CardFactory {
                             value = a.value,
                             targetType = a.targetType,
                             targetModifier = a.targetModifier,
-                            buffAttack = a.buffAttack,
-                            buffHealth = a.buffHealth,
-                            buffSpeed = a.buffSpeed
+                            modifyAttack = a.modifyAttack,
+                            modifyHealth = a.modifyHealth,
+                            modifySpeed = a.modifySpeed
                         }).ToList()
                     };
                     creature.Effects.Add(newEffect);
@@ -80,15 +80,15 @@ public static class CardFactory {
                         value = action.value,
                         targetType = action.targetType,
                         targetModifier = action.targetModifier,
-                        buffAttack = action.buffAttack,
-                        buffHealth = action.buffHealth,
-                        buffSpeed = action.buffSpeed
+                        modifyAttack = action.modifyAttack,
+                        modifyHealth = action.modifyHealth,
+                        modifySpeed = action.modifySpeed
                     };
                     newEffect.actions.Add(newAction);
 
                     // Also add the action to the spell's action list for direct execution
                     if (action.actionType == ActionType.Buff) {
-                        spell.AddAction(action.actionType, action.value, action.targetType, action.buffAttack, action.buffHealth, action.buffSpeed, action.targetModifier);
+                        spell.AddAction(action.actionType, action.value, action.targetType, action.modifyAttack, action.modifyHealth, action.modifySpeed, action.targetModifier);
                     } else if (action.actionType == ActionType.ApplyStatus) {
                          spell.AddAction(action.actionType, action.targetType, action.statusEffectToApply, action.statusDuration, action.statusPotency, action.targetModifier);
                     } else { // Handle simple actions (Damage, Heal, Draw, etc.)
@@ -186,9 +186,9 @@ public static class CardFactory {
                     value = a.value,
                     targetType = a.targetType,
                     targetModifier = a.targetModifier,
-                    buffAttack = a.buffAttack,
-                    buffHealth = a.buffHealth,
-                    buffSpeed = a.buffSpeed
+                    modifyAttack = a.modifyAttack,
+                    modifyHealth = a.modifyHealth,
+                    modifySpeed = a.modifySpeed
                 }).ToList()
             }).ToList();
             return creatureData;
@@ -209,9 +209,9 @@ public static class CardFactory {
                     value = a.value,
                     targetType = a.targetType,
                     targetModifier = a.targetModifier,
-                    buffAttack = a.buffAttack,
-                    buffHealth = a.buffHealth,
-                    buffSpeed = a.buffSpeed
+                    modifyAttack = a.modifyAttack,
+                    modifyHealth = a.modifyHealth,
+                    modifySpeed = a.modifySpeed
                 }).ToList()
             }).ToList();
             return spellData;
@@ -286,9 +286,9 @@ public static class CardFactory {
                         value = actionData.value,
                         targetType = actionData.targetType,
                         targetModifier = actionData.targetModifier,
-                        buffAttack = actionData.buffAttack,
-                        buffHealth = actionData.buffHealth,
-                        buffSpeed = actionData.buffSpeed,
+                        modifyAttack = actionData.modifyAttack,
+                        modifyHealth = actionData.modifyHealth,
+                        modifySpeed = actionData.modifySpeed,
                         statusEffectToApply = actionData.statusEffectToApply,
                         statusDuration = actionData.statusDuration,
                         statusPotency = actionData.statusPotency
