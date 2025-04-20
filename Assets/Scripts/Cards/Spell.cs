@@ -48,9 +48,6 @@ public class Spell : Card {
 
         // Execute each action defined for the spell
         foreach (var action in actions) {
-            // Spells generally have IMMEDIATE effects.
-            // So, we queue GameActions rather than applying modifiers directly here.
-            // The GameActions (like BuffCreatureAction, ApplyStatusEffectAction) will then apply the modifiers.
             CreateGameActionFromSpell(action, target, owner, context);
         }
     }
@@ -86,40 +83,57 @@ public class Spell : Card {
         TargetModifier targetModifier = spellAction?.TargetModifier ?? TargetModifier.None;
 
         // Resolve target if needed (e.g., random)
-        if (target == null || targetModifier.HasFlag(TargetModifier.Random)) {
-            var targets = TargetingSystem.GetValidTargets(owner, spellAction.TargetType, targetModifier);
-            target = targets.FirstOrDefault(); // Get the first (potentially random) target
+        List<ITarget> targetsToProcess = new List<ITarget>();
+        if (target == null || targetModifier.HasFlag(TargetModifier.Random) || targetModifier.HasFlag(TargetModifier.AllSameTypeTargets)) // Check if modifier requires multiple targets
+        {
+            targetsToProcess.AddRange(TargetingSystem.GetValidTargets(owner, spellAction.TargetType, targetModifier));
+            Log($"Spell action resolved to {targetsToProcess.Count} targets for {spellAction.TargetType}/{targetModifier}.", LogTag.Actions | LogTag.Effects);
+        } else {
+            targetsToProcess.Add(target); // Use the single provided target
         }
 
-        // Based on SpellAction.ActionType, queue the appropriate IGameAction
-        switch (spellAction.ActionType) {
-            case ActionType.Damage:
-                CreateDamageAction(spellAction.Value, target, context); // Queues DamageCreature/PlayerAction
-                break;
-            case ActionType.Heal:
-                CreateHealAction(spellAction.Value, target, context); // Queues HealCreature/PlayerAction
-                break;
-            case ActionType.Draw:
-                CreateDrawAction(spellAction.Value, owner, context); // Queues DrawCardsAction
-                break;
-            case ActionType.ModifyStat:
-                // Queue ModifyAction - it will handle applying the modifier
-                CreatemodifyAction(spellAction.Value, target, context, modifyAttack, modifyHealth, modifySpeed);
-                break;
-            case ActionType.ApplyStatus:
-                // Queue ApplyStatusEffectAction - it will handle applying the modifier
-                CreateApplyStatusAction(target, context, spellAction.StatusEffectToApply, spellAction.StatusDuration, spellAction.StatusPotency);
-                break;
-            case ActionType.Summon:
-                // Not implemented in this prototype
-                LogWarning($"Summon action for spells not implemented yet.", LogTag.Actions);
-                break;
-            case ActionType.Armor:
-            case ActionType.Stun:
-                LogWarning($"{spellAction.ActionType} action for spells not fully implemented yet.", LogTag.Actions);
-                // Could map these to Buff/ApplyStatus actions if desired
-                break;
-        }
+
+        // Iterate through all resolved targets
+        foreach(var currentTarget in targetsToProcess)
+        {
+            // Based on SpellAction.ActionType, queue the appropriate IGameAction
+            switch (spellAction.ActionType) {
+                case ActionType.Damage:
+                    CreateDamageAction(spellAction.Value, currentTarget, context); // Queues DamageCreature/PlayerAction
+                    break;
+                case ActionType.Heal:
+                    CreateHealAction(spellAction.Value, currentTarget, context); // Queues HealCreature/PlayerAction
+                    break;
+                case ActionType.Draw:
+                    // Draw usually targets the player or opponent, handle based on targetType
+                    IPlayer drawTargetPlayer = currentTarget as IPlayer ?? owner; // Default to owner if target isn't player
+                    if(spellAction.TargetType == TargetType.Enemy && owner.Opponent != null) drawTargetPlayer = owner.Opponent;
+                    if(spellAction.TargetType == TargetType.Player) drawTargetPlayer = owner;
+                    CreateDrawAction(spellAction.Value, drawTargetPlayer, context); // Queues DrawCardsAction
+                    break;
+                case ActionType.ModifyStat:
+                    // Queue ModifyAction - it will handle applying the modifier
+                    CreatemodifyAction(spellAction.Value, currentTarget, context, modifyAttack, modifyHealth, modifySpeed);
+                    break;
+                case ActionType.ApplyStatus:
+                    // Queue ApplyStatusEffectAction - it will handle applying the modifier
+                    CreateApplyStatusAction(currentTarget, context, spellAction.StatusEffectToApply, spellAction.StatusDuration, spellAction.StatusPotency);
+                    break;
+                case ActionType.Armor: // <<< MODIFIED CASE
+                    // Queue ModifyArmorAction - it will handle applying the modifier
+                    CreateModifyArmorAction(currentTarget, context, spellAction.Value); // Use Value for amount
+                    break;
+                case ActionType.Stun: // Map Stun to ApplyStatus Paralyzed for now
+                     Log($"Spell: Mapping Stun action to ApplyStatus (Paralyzed, Dur:{spellAction.Value})", LogTag.Actions);
+                     CreateApplyStatusAction(currentTarget, context, StatusEffectType.Paralyzed, spellAction.Value, 0); // Use Value for duration
+                     break;
+                case ActionType.Summon:
+                    // Not implemented in this prototype
+                    LogWarning($"Summon action for spells not implemented yet.", LogTag.Actions);
+                    break;
+                // Removed default warning for Armor/Stun
+            }
+        } // End foreach target loop
     }
 
     // --- Action Queuing Methods (mostly unchanged) ---
@@ -171,6 +185,18 @@ public class Spell : Card {
             context.AddAction(new ApplyStatusEffectAction(creature, statusType, duration, potency));
         } else {
             LogWarning($"Spell ApplyStatus: Invalid target type {target?.GetType().Name}", LogTag.Actions);
+        }
+    }
+
+    // --- UPDATED: Method to queue ModifyArmorAction ---
+    private void CreateModifyArmorAction(ITarget target, ActionsQueue context, int value)
+    {
+        if (target is ICreature creature)
+        {
+            Log($"Spell: Queueing ModifyArmorAction (Value:{value}) to {creature.Name}", LogTag.Actions | LogTag.Effects);
+            context.AddAction(new ModifyArmorAction(creature, value));
+        } else {
+            LogWarning($"Spell ModifyArmor: Invalid target type {target?.GetType().Name}. Only Creatures can receive armor.", LogTag.Actions | LogTag.Effects);
         }
     }
 

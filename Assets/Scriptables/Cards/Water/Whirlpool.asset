@@ -12,18 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
   m_Name: Whirlpool
   m_EditorClassIdentifier: 
-  cardId: c50cb807-6bab-4137-b43a-2a72480be234
+  cardId: a230bd29-3e76-4a8b-8282-292bbd2f664d
   cardName: Whirlpool
-  description: Trap enemies in a spinning vortex.
+  description: Trap enemies in a spinning vortex, paralyzing them for 2 turns.
   cardType: 1
   effects:
   - effectType: 1
     trigger: 0
     actions:
-    - actionType: 5
-      value: 2
+    - actionType: 7
+      value: 0
       targetType: 4
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 2
+      statusDuration: 2
+      statusPotency: 0
   defaultTargetType: 4

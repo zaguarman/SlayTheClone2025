@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: SeahorseScout
   m_EditorClassIdentifier: 
-  cardId: 68739bbd-34f6-4836-abca-cc7074686fc1
+  cardId: e2bd7cca-2eea-4ea3-84ab-3d42c47fcc6c
   cardName: Seahorse Scout
   description: Quickly discovers new resources.
   cardType: 0
@@ -24,7 +24,11 @@ MonoBehaviour:
       value: 1
       targetType: 0
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   attack: 1
   health: 1

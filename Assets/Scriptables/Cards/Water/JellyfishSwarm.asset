@@ -12,19 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: JellyfishSwarm
   m_EditorClassIdentifier: 
-  cardId: cbc42f32-9706-4006-8cd4-872cf4b755ab
+  cardId: 471b873e-513e-48d9-a29a-5685da5e47bc
   cardName: Jellyfish Swarm
-  description: Paralyzes enemies with gentle pulses.
+  description: Paralyzes enemies with gentle pulses when destroyed.
   cardType: 0
   effects:
   - effectType: 0
     trigger: 4
     actions:
-    - actionType: 5
-      value: 1
+    - actionType: 7
+      value: 0
       targetType: 4
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 2
+      statusDuration: 1
+      statusPotency: 0
   attack: 0
   health: 4

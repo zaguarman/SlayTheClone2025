@@ -12,20 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: AbyssalCucumber
   m_EditorClassIdentifier: 
-  cardId: f6ee2f22-3b58-4a10-a210-3c1305eaa563
+  cardId: a4b0b276-45c7-4bb1-b339-7d330a7ef09f
   cardName: Abyssal Cucumber
   description: Gives all friendly creatures +2 attack for 2 turns.
   cardType: 0
   effects:
   - effectType: 0
-    trigger: 0
+    trigger: 2
     actions:
     - actionType: 6
       value: 2
       targetType: 3
       targetModifier: 0
-      buffAttack: 1
-      buffHealth: 0
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0

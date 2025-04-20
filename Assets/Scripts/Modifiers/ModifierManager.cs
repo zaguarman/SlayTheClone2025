@@ -113,7 +113,8 @@ public class ModifierManager
                 // Trigger recalculation if it's a stat modifier
                 if (modifier.TryGetStatModification(ModifiableStat.Attack, out _, out _) ||
                     modifier.TryGetStatModification(ModifiableStat.Health, out _, out _) ||
-                    modifier.TryGetStatModification(ModifiableStat.Speed, out _, out _))
+                    modifier.TryGetStatModification(ModifiableStat.Speed, out _, out _) ||
+                    false) // modifier is ArmorModifier) // REMOVED Armor check - Armor is separate pool
                 {
                     RecalculateStats(creatureTarget);
                 }
@@ -155,7 +156,8 @@ public class ModifierManager
                         // Trigger recalculation if it was a stat modifier
                         if (existingModifier.TryGetStatModification(ModifiableStat.Attack, out _, out _) ||
                             existingModifier.TryGetStatModification(ModifiableStat.Health, out _, out _) ||
-                            existingModifier.TryGetStatModification(ModifiableStat.Speed, out _, out _))
+                            existingModifier.TryGetStatModification(ModifiableStat.Speed, out _, out _) ||
+                            false) // existingModifier is ArmorModifier) // REMOVED Armor check
                         {
                              // Ensure creature is still registered before recalculating
                             if (_creatures.ContainsKey(targetId))
@@ -271,10 +273,11 @@ public class ModifierManager
             foreach (var expiredMod in expiredModifiers)
             {
                 RemoveModifier(creature, expiredMod);
-                // If the expired mod affected stats, mark for recalc
+                // Check if stats were affected
                 if (expiredMod.TryGetStatModification(ModifiableStat.Attack, out _, out _) ||
                     expiredMod.TryGetStatModification(ModifiableStat.Health, out _, out _) ||
-                    expiredMod.TryGetStatModification(ModifiableStat.Speed, out _, out _))
+                    expiredMod.TryGetStatModification(ModifiableStat.Speed, out _, out _) ||
+                    false) // expiredMod is ArmorModifier) // REMOVED Armor check
                 {
                      needsRecalculation = true;
                 }
@@ -298,95 +301,66 @@ public class ModifierManager
     #endregion
 
     #region Stat Calculation
-    // Central Stat Calculation Logic
+    // Updated RecalculateStats to include Armor
     public void RecalculateStats(Creature creature)
     {
-        if (creature == null || !_creatures.ContainsKey(creature.TargetId))
-        {
-            // Don't log warning here, might be called after unregistration naturally
-            // LogWarning($"ModifierManager: Cannot recalculate stats for null or unregistered creature.", LogTag.Effects | LogTag.Creatures);
+        if (creature == null || !_creatures.ContainsKey(creature.TargetId)) {
             return;
         }
 
-        // Log($"ModifierManager: Recalculating stats for '{creature.Name}' (TargetID: {creature.TargetId.ToUpper()})...", LogTag.Effects | LogTag.Creatures);
-        var mods = GetActiveModifiersFor(creature).ToList(); // Get all relevant mods
+        // Log($"ModifierManager: Recalculating stats & armor for '{creature.Name}' (TargetID: {creature.TargetId.ToUpper()})...", LogTag.Effects | LogTag.Creatures);
+        var mods = GetActiveModifiersFor(creature).ToList();
 
-        // --- Calculation Order: Base + Flat Mods, then apply Percentage Mods ---
-
-        // 1. Calculate Flat Modifications
+        // --- Calculate Stats ---
         int flatAttackMod = 0;
-        int flatHealthMod = 0; // Affects Max Health
-        int flatSpeedMod = 0;  // Added for Speed
+        int flatHealthMod = 0;
+        int flatSpeedMod = 0;
 
-        foreach (var mod in mods)
-        {
-            if (mod.TryGetStatModification(ModifiableStat.Attack, out var calcType, out var value))
-            {
-                if (calcType == ModifierCalculationType.Flat) flatAttackMod += value;
-            }
-            if (mod.TryGetStatModification(ModifiableStat.Health, out calcType, out value))
-            {
-                if (calcType == ModifierCalculationType.Flat) flatHealthMod += value;
-            }
-            if (mod.TryGetStatModification(ModifiableStat.Speed, out calcType, out value))
-            {
-                if (calcType == ModifierCalculationType.Flat) flatSpeedMod += value;
-            }
+        foreach (var mod in mods) {
+             if (mod.TryGetStatModification(ModifiableStat.Attack, out var calcType, out var value)) {
+                 if (calcType == ModifierCalculationType.Flat) flatAttackMod += value;
+             }
+             if (mod.TryGetStatModification(ModifiableStat.Health, out calcType, out value)) {
+                 if (calcType == ModifierCalculationType.Flat) flatHealthMod += value;
+             }
+             if (mod.TryGetStatModification(ModifiableStat.Speed, out calcType, out value)) {
+                 if (calcType == ModifierCalculationType.Flat) flatSpeedMod += value;
+             }
         }
-
         int attackAfterFlat = creature.BaseAttack + flatAttackMod;
-        int healthAfterFlat = creature.BaseHealth + flatHealthMod; // Max Health after flat mods
-        int speedAfterFlat = creature.BaseSpeed + flatSpeedMod;   // Speed after flat mods
+        int healthAfterFlat = creature.BaseHealth + flatHealthMod;
+        int speedAfterFlat = creature.BaseSpeed + flatSpeedMod;
 
-        // 2. Calculate Percentage Modifications
-        // Apply percentages multiplicatively based on the value *after* flat mods
-        // Percentage mods are stored as integers (e.g., 10 for 10%), convert to float multiplier (1.10)
         float attackMultiplier = 1.0f;
-        float healthMultiplier = 1.0f; // Max Health multiplier
-        float speedMultiplier = 1.0f;  // Added Speed multiplier
+        float healthMultiplier = 1.0f;
+        float speedMultiplier = 1.0f;
 
-        foreach (var mod in mods)
-        {
-             if (mod.TryGetStatModification(ModifiableStat.Attack, out var calcType, out var value))
-            {
-                 if (calcType == ModifierCalculationType.Percentage)
-                 {
-                     attackMultiplier *= (1.0f + (value / 100.0f));
-                 }
-            }
-            if (mod.TryGetStatModification(ModifiableStat.Health, out calcType, out value))
-            {
-                 if (calcType == ModifierCalculationType.Percentage)
-                 {
-                     healthMultiplier *= (1.0f + (value / 100.0f));
-                 }
-            }
-            if (mod.TryGetStatModification(ModifiableStat.Speed, out calcType, out value))
-            {
-                 if (calcType == ModifierCalculationType.Percentage)
-                 {
-                     speedMultiplier *= (1.0f + (value / 100.0f));
-                 }
-            }
+        foreach (var mod in mods) {
+              if (mod.TryGetStatModification(ModifiableStat.Attack, out var calcType, out var value)) {
+                  if (calcType == ModifierCalculationType.Percentage) attackMultiplier *= (1.0f + (value / 100.0f));
+              }
+              if (mod.TryGetStatModification(ModifiableStat.Health, out calcType, out value)) {
+                  if (calcType == ModifierCalculationType.Percentage) healthMultiplier *= (1.0f + (value / 100.0f));
+              }
+              if (mod.TryGetStatModification(ModifiableStat.Speed, out calcType, out value)) {
+                  if (calcType == ModifierCalculationType.Percentage) speedMultiplier *= (1.0f + (value / 100.0f));
+              }
         }
-
-        // 3. Final Calculation
         int finalAttack = (int)Math.Round(attackAfterFlat * attackMultiplier);
         int finalMaxHealth = (int)Math.Round(healthAfterFlat * healthMultiplier);
         int finalSpeed = (int)Math.Round(speedAfterFlat * speedMultiplier);
 
-        // Ensure stats don't go below reasonable minimums
-        finalAttack = Math.Max(0, finalAttack);     // Attack shouldn't be negative
-        finalMaxHealth = Math.Max(1, finalMaxHealth); // Max Health should be at least 1
-        finalSpeed = Math.Max(0, finalSpeed);      // Speed shouldn't be negative
+        finalAttack = Math.Max(0, finalAttack);
+        finalMaxHealth = Math.Max(1, finalMaxHealth);
+        finalSpeed = Math.Max(0, finalSpeed);
 
-        // 4. Update the creature's effective stats
+        // --- Calculate Armor --- // REMOVED - Armor pool is handled separately
+
+        // --- Update Creature --- // REMOVED Armor from this call
         creature.UpdateEffectiveStats(finalAttack, finalMaxHealth, finalSpeed);
 
-        // Log($"ModifierManager: Stats recalculated for '{creature.Name}' - Attack: {finalAttack}, MaxHealth: {finalMaxHealth}, Speed: {finalSpeed}", LogTag.Effects | LogTag.Creatures);
-
-        // Notify UI or other systems if needed (CreatureDamaged with 0 damage is a common pattern)
-        _mediator?.NotifyCreatureDamaged(creature, 0);
+        Log($"ModifierManager: Stats recalculated for '{creature.Name}' - Attack: {finalAttack}, MaxHealth: {finalMaxHealth}, Speed: {finalSpeed}", LogTag.Effects | LogTag.Creatures);
+        _mediator?.NotifyCreatureDamaged(creature, 0); // Notify UI update
     }
     #endregion
 

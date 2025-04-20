@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
   m_Name: CoralShield
   m_EditorClassIdentifier: 
-  cardId: bb8de0b7-3b0d-48b6-9dce-5fb11cc36b54
+  cardId: d5b3d117-a5c8-4dde-a63a-1340db1737d0
   cardName: Coral Shield
   description: Create temporary armor for allies.
   cardType: 1
@@ -24,6 +24,10 @@ MonoBehaviour:
       value: 4
       targetType: 3
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   defaultTargetType: 3

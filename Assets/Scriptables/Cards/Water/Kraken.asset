@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: Kraken
   m_EditorClassIdentifier: 
-  cardId: 344ad879-ed7d-4ad1-991a-3f2866e3d70d
+  cardId: f6c408c0-27ee-4f1f-a027-211488ae9fb1
   cardName: Kraken
   description: Massive sea monster that terrifies enemies.
   cardType: 0
@@ -24,7 +24,11 @@ MonoBehaviour:
       value: 3
       targetType: 4
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   attack: 6
   health: 8

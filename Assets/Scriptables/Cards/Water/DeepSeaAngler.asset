@@ -12,19 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: DeepSeaAngler
   m_EditorClassIdentifier: 
-  cardId: b4657f47-d57e-4965-b8e3-0c2500f3431c
+  cardId: 4b57d991-bf1a-4ed9-ae35-a99d35e70d15
   cardName: Deep Sea Angler
-  description: Lures enemies with bioluminescent bait.
+  description: Lures enemies with bioluminescent bait, paralyzing them.
   cardType: 0
   effects:
   - effectType: 0
     trigger: 1
     actions:
-    - actionType: 5
-      value: 1
+    - actionType: 7
+      value: 0
       targetType: 1
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 2
+      statusDuration: 1
+      statusPotency: 0
   attack: 2
   health: 5

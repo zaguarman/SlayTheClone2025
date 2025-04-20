@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: DancingDolphin
   m_EditorClassIdentifier: 
-  cardId: b3342dae-b03f-4ef5-aa52-4db2d7842561
+  cardId: 7e9d7407-b710-4900-a188-b7d498d7b6b6
   cardName: Dancing Dolphin
   description: Playful movements boost ally morale.
   cardType: 0
@@ -24,7 +24,11 @@ MonoBehaviour:
       value: 1
       targetType: 0
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   attack: 2
   health: 3

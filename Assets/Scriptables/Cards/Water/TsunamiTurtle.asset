@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: TsunamiTurtle
   m_EditorClassIdentifier: 
-  cardId: 38099ae5-0153-4a12-8c30-ad994d317d53
+  cardId: 91fc5562-43b4-46ec-a552-9387cbf76b31
   cardName: Tsunami Turtle
   description: Creates massive waves when attacking.
   cardType: 0
@@ -24,7 +24,11 @@ MonoBehaviour:
       value: 1
       targetType: 4
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   attack: 4
   health: 6

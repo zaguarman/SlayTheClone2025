@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: GuardianWhale
   m_EditorClassIdentifier: 
-  cardId: f6335772-6d30-4503-8d0c-bef8f5bc7fa7
+  cardId: ee532c22-496f-47c1-bfbe-ddc2ed9b2769
   cardName: Guardian Whale
-  description: Massive presence protects allies.
+  description: Massive presence provides permanent protection to allies.
   cardType: 0
   effects:
   - effectType: 0
@@ -24,7 +24,11 @@ MonoBehaviour:
       value: 2
       targetType: 3
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   attack: 1
   health: 6

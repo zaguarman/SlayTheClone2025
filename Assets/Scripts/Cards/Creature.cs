@@ -5,19 +5,21 @@ using System;
 using System.Collections.Generic;
 
 public interface ICreature : ICard {
-    int Attack { get; }     // Effective attack
-    int Health { get; }     // Current health
-    int Speed { get; }      // Effective speed
-    int MaxHealth { get; }  // Effective max health
+    int Attack { get; }        // Effective attack
+    int Health { get; }        // Current health
+    int Speed { get; }         // Effective speed
+    int MaxHealth { get; }     // Effective max health
+    int CurrentArmorPool { get; } // NEW: Current value of the armor pool
     int BaseAttack { get; }
     int BaseHealth { get; }
     int BaseSpeed { get; }  // Added BaseSpeed
     BattlefieldSlot Slot { get; set; }
-    void TakeDamage(int damage);
-    void TakeDamage(int damage, ICreature attacker);
+    void TakeHealthDamage(int healthDamage, ICreature attacker); // Renamed, only affects health
+    void ModifyArmorPool(int amount); // NEW: Method to change the armor pool
     IPlayer Owner { get; }
     void SetOwner(IPlayer owner);
-    // No UpdateEffectiveStats here, it's internal to Creature class
+    // Internal method for ModifierManager to update calculated stats
+    void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed); // Removed armor
 }
 
 public class Creature : Card, ICreature {
@@ -30,6 +32,7 @@ public class Creature : Card, ICreature {
     private int _effectiveAttack;
     private int _effectiveMaxHealth;
     private int _effectiveSpeed; // Added effective speed
+    public int CurrentArmorPool { get; private set; } // NEW: Armor Pool property
 
     // Current health tracking
     private int currentHealth;
@@ -55,29 +58,37 @@ public class Creature : Card, ICreature {
         _effectiveAttack = attack; // Initial effective stats match base stats
         _effectiveMaxHealth = health;
         _effectiveSpeed = BaseSpeed; // Initialize effective speed
+        CurrentArmorPool = 0; // Initialize armor pool to 0
     }
 
-    // Internal method for ModifierManager to update calculated stats including speed
-    internal void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed)
+    // Updated internal method signature - removed armor parameter
+    public void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed)
     {
         int oldMaxHealth = _effectiveMaxHealth;
 
-        _effectiveAttack = Math.Max(0, newEffectiveAttack); // Ensure non-negative attack
-        _effectiveMaxHealth = Math.Max(1, newEffectiveMaxHealth); // Ensure at least 1 max health
-        _effectiveSpeed = Math.Max(0, newEffectiveSpeed); // Ensure non-negative speed
+        _effectiveAttack = Math.Max(0, newEffectiveAttack);
+        _effectiveMaxHealth = Math.Max(1, newEffectiveMaxHealth);
+        _effectiveSpeed = Math.Max(0, newEffectiveSpeed);
 
-        // If max health increased, optionally increase current health by the same amount (common game mechanic)
         int healthIncrease = _effectiveMaxHealth - oldMaxHealth;
         if (healthIncrease > 0)
         {
             currentHealth += healthIncrease;
         }
 
-        // Clamp current health to the new max health AFTER potential increase
         currentHealth = Math.Min(currentHealth, _effectiveMaxHealth);
-        currentHealth = Math.Max(0, currentHealth); // Ensure current health isn't negative
+        currentHealth = Math.Max(0, currentHealth);
 
         // Log($"Updated Effective Stats for {Name}: A:{Attack}, H:{Health}/{MaxHealth}, S:{Speed}", LogTag.Creatures | LogTag.Effects);
+    }
+
+    // NEW: Method to modify the armor pool directly
+    public void ModifyArmorPool(int amount) {
+        int previousArmor = CurrentArmorPool;
+        CurrentArmorPool += amount;
+        CurrentArmorPool = Math.Max(0, CurrentArmorPool); // Armor cannot go below 0
+        Log($"{Name} armor changed by {amount}. Previous: {previousArmor}, New: {CurrentArmorPool}", LogTag.Effects | LogTag.Creatures | LogTag.Combat);
+        GameMediator.Instance?.NotifyCreatureArmorChanged(this, CurrentArmorPool); // Notify UI
     }
 
     public void SetOwner(IPlayer owner) {
@@ -96,39 +107,38 @@ public class Creature : Card, ICreature {
         context.AddAction(new SummonCreatureAction(this, owner, target, !fromHand)); // fromDeck = !fromHand
     }
 
-    public void TakeDamage(int damage) {
-        TakeDamage(damage, null);
-    }
+    // Renamed: Now only handles HEALTH damage
+    public void TakeHealthDamage(int healthDamage, ICreature attacker) {
+        if (isDead || healthDamage <= 0) return;
 
-    public void TakeDamage(int damage, ICreature attacker) {
-        if (isDead || damage <= 0) return;
-
-        lastAttacker = attacker; // Store attacker for potential OnDamage effects
+        lastAttacker = attacker;
         int previousHealth = currentHealth;
-        currentHealth = Math.Max(0, currentHealth - damage);
-        int actualDamage = previousHealth - currentHealth; // Calculate actual damage dealt
 
-        // Log damage
+        // Apply damage directly to health
+        int actualDamageDealt = Math.Min(healthDamage, currentHealth); // Damage cannot exceed current health
+        currentHealth -= actualDamageDealt;
+        currentHealth = Math.Max(0, currentHealth); // Ensure health doesn't go below 0
+
+        // Log health damage
         string attackerName = attacker != null ? $"{attacker.Name} (ID: {attacker.TargetId.ToUpper().Substring(0, 8)})" : "Source";
-        Log($"{attackerName} dealt {actualDamage} damage to {Name} (ID: {TargetId.ToUpper().Substring(0, 8)}), health now: {Health}/{MaxHealth}. Has {Effects.Count} CardEffects.",
-            LogTag.Creatures | LogTag.Combat);
+        string damageLog = $"{attackerName} dealt {actualDamageDealt} damage directly to {Name}'s health (ID: {TargetId.ToUpper().Substring(0, 8)}). ";
+        damageLog += $"Health: {previousHealth} -> {Health}.";
+        Log(damageLog, LogTag.Creatures | LogTag.Combat | LogTag.Effects);
 
-        // Trigger built-in CardData effects (kept separate from Modifier system)
+        // Trigger OnDamage effects
         var gameManager = GameManager.Instance;
         if (gameManager?.ActionsQueue != null) {
-            // Log($"Processing OnDamage CardEffects for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
             HandleEffect(EffectTrigger.OnDamage, gameManager.ActionsQueue);
         }
 
-        // Notify Mediator about damage (for UI, event modifiers, etc.)
-        GameMediator.Instance?.NotifyCreatureDamaged(this, actualDamage);
+        // Notify Mediator about health damage
+        GameMediator.Instance?.NotifyCreatureDamaged(this, actualDamageDealt); // Notify UI etc. about health change
 
-        // Check for death AFTER notifying and handling effects
         if (Health <= 0 && !isDead) {
             Die();
         }
 
-        lastAttacker = null; // Clear attacker context after processing
+        lastAttacker = null;
     }
 
     private void Die()
@@ -172,7 +182,7 @@ public class Creature : Card, ICreature {
 
         Log($"Handling {trigger} effect for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects);
 
-        foreach (var effect in Effects.Where(e => e.trigger == trigger)) {
+        foreach (var effect in Effects.Where(e => e.trigger == trigger).ToList()) { // ToList() to avoid modification issues if effect adds another effect
             Log($"-- Processing Effect: Trigger={effect.trigger}, Type={effect.effectType}, Actions={effect.actions.Count}", LogTag.Effects);
             foreach (var action in effect.actions) {
                  Log($"---- Action: Type={action.actionType}, Target={action.targetType}, Value={action.value}, Status={action.statusEffectToApply}", LogTag.Effects);
@@ -212,14 +222,9 @@ public class Creature : Card, ICreature {
                         action.statusPotency = 0;
                         ProcessApplyStatusModifier(action, modifierManager, factory);
                         break;
-                    case ActionType.Armor: // Example: Apply temporary Health buff (like temporary HP)
-                         // For simplicity, treat Armor as a timed health buff for now.
-                         // A more complex system could have a separate Armor stat or damage reduction modifier.
-                         action.modifyAttack = false;
-                         action.modifyHealth = true;
-                         action.modifySpeed = false; // Armor doesn't affect speed
-                         int armorDuration = 1;
-                         ProcessModifyStatModifier(action, modifierManager, factory, false, ModifierCalculationType.Flat, armorDuration); // Pass false for modifySpeed
+                    case ActionType.Armor:
+                        // NEW: Queue an action to modify the armor pool
+                        ProcessModifyArmorAction(action, actionsQueue);
                         break;
                 }
             }
@@ -474,5 +479,32 @@ public class Creature : Card, ICreature {
              }
          }
     }
-    // --- End New Method ---
+
+    // --- NEW: Method to queue ModifyArmorAction ---
+    private void ProcessModifyArmorAction(EffectAction action, ActionsQueue actionsQueue) {
+
+        if (Owner == null && action.targetType != TargetType.Self)
+        {
+            LogError($"ModifyArmor Action: Cannot target others for {Name} - Owner is null and not self.", LogTag.Effects);
+            return;
+        }
+
+        int value = action.value;
+        if (value == 0) return; // Don't queue if amount is zero
+
+        List<ITarget> targets;
+        if (action.targetType == TargetType.Self) {
+            targets = new List<ITarget> { this };
+        } else {
+            targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
+        }
+        Log($"ModifyArmor Action: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
+
+        foreach (var target in targets) {
+            if (target is ICreature creatureTarget) {
+                Log($"Queueing ModifyArmorAction for {creatureTarget.Name}: Amount={value}", LogTag.Effects | LogTag.Actions);
+                actionsQueue.AddAction(new ModifyArmorAction(creatureTarget, value));
+            }
+        }
+    }
 }

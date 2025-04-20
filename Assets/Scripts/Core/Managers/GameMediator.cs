@@ -12,6 +12,7 @@ public class GameMediator : Singleton<GameMediator> {
         public readonly UnityEvent GameStateChanged = new UnityEvent();
         public readonly UnityEvent GameInitialized = new UnityEvent();
         public readonly UnityEvent<ICreature, IPlayer> CreatureSummoned = new UnityEvent<ICreature, IPlayer>();
+        public readonly UnityEvent<ICreature, int> CreatureArmorChanged = new UnityEvent<ICreature, int>(); // NEW Event
         public readonly UnityEvent<ICreature> CreaturePreSummon = new UnityEvent<ICreature>();
         public readonly UnityEvent ActionsQueueChanged = new UnityEvent();
         public readonly UnityEvent<IPlayer> HandStateChanged = new UnityEvent<IPlayer>();
@@ -26,6 +27,7 @@ public class GameMediator : Singleton<GameMediator> {
             GameStateChanged.RemoveAllListeners();
             GameInitialized.RemoveAllListeners();
             CreatureSummoned.RemoveAllListeners();
+            CreatureArmorChanged.RemoveAllListeners();
             CreaturePreSummon.RemoveAllListeners();
             ActionsQueueChanged.RemoveAllListeners();
             HandStateChanged.RemoveAllListeners();
@@ -103,6 +105,17 @@ public class GameMediator : Singleton<GameMediator> {
 
     public void RemoveCreatureSummonedListener(UnityAction<ICreature, IPlayer> listener) {
         events.CreatureSummoned.RemoveListener(listener);
+    }
+
+    // --- NEW Armor Change Listeners ---
+    public void AddCreatureArmorChangedListener(UnityAction<ICreature, int> listener) {
+        ValidateInitialization();
+        events.CreatureArmorChanged.AddListener(listener);
+    }
+
+    public void RemoveCreatureArmorChangedListener(UnityAction<ICreature, int> listener) {
+        events.CreatureArmorChanged.RemoveListener(listener);
+
     }
 
     public void AddCreaturePreSummonListener(UnityAction<ICreature> listener) {
@@ -262,6 +275,16 @@ public class GameMediator : Singleton<GameMediator> {
         events.CreatureSummoned.Invoke(creature, owner);
         Log($"Creature summoned: {creature.Name} by {(owner.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Creatures);
         NotifyGameStateChanged();
+    }
+    // --- NEW Armor Change Notifier ---
+    public void NotifyCreatureArmorChanged(ICreature creature, int newArmor) {
+        ValidateInitialization();
+        if (creature == null) throw new System.ArgumentNullException(nameof(creature));
+
+        events.CreatureArmorChanged.Invoke(creature, newArmor);
+        // Optional Log: Can be noisy if armor changes frequently
+        // Log($"Creature armor changed: {creature.Name} now has {newArmor} armor", LogTag.Creatures | LogTag.Effects);
+        NotifyGameStateChanged(); // Ensure UI updates
     }
 
     public void NotifyActionsQueueChanged() {

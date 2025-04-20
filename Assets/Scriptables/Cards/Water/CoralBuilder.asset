@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: CoralBuilder
   m_EditorClassIdentifier: 
-  cardId: 307f66a0-0487-4641-9b49-04af216309f7
+  cardId: f62f8190-6873-487b-b5b3-5bd51c99bf80
   cardName: Coral Builder
-  description: Constructs protective barriers.
+  description: Constructs permanent protective barriers for allies.
   cardType: 0
   effects:
   - effectType: 0
@@ -22,9 +22,13 @@ MonoBehaviour:
     actions:
     - actionType: 4
       value: 3
-      targetType: 3
+      targetType: 2
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   attack: 0
   health: 3

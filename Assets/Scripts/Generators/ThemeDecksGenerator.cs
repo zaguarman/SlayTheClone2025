@@ -289,14 +289,15 @@ public class ThemeDecksGenerator : EditorWindow {
             existingCardIds.ContainsKey("DancingDolphin") ? existingCardIds["DancingDolphin"] : System.Guid.NewGuid().ToString()
         ));
 
-        // 2. Guardian Whale
+        // 2. Guardian Whale (with permanent armor)
         cards.Add(CreateWaterCard(
             "Guardian Whale",
-            "Massive presence protects allies.",
+            "Massive presence provides permanent protection to allies.",
             1, 6,
-            new CardEffectData(EffectType.Triggered, EffectTrigger.StartOfTurn,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage, // Changed Trigger to OnDamage
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Armor, 2, TargetType.FriendlyCreatures)
+                    // Queue ModifyArmorAction for Self
+                    new EffectActionData(ActionType.Armor, 2, TargetType.Self, 0) // Value=2, Target=Self, Duration=0 (ignored)
                 }),
             "Assets/Scriptables/Cards/Water/GuardianWhale.asset",
             existingCardIds.ContainsKey("GuardianWhale") ? existingCardIds["GuardianWhale"] : System.Guid.NewGuid().ToString()
@@ -329,14 +330,15 @@ public class ThemeDecksGenerator : EditorWindow {
             existingCardIds.ContainsKey("JellyfishSwarm") ? existingCardIds["JellyfishSwarm"] : System.Guid.NewGuid().ToString()
         ));
 
-        // 5. Coral Builder
+        // 5. Coral Builder (with permanent armor)
         cards.Add(CreateWaterCard(
             "Coral Builder",
-            "Constructs protective barriers.",
+            "Constructs permanent protective barriers for allies.",
             0, 3,
             new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Armor, 3, TargetType.FriendlyCreatures)
+                    // This will be converted to permanent armor in ProcessArmorModifier
+                    new EffectActionData(ActionType.Armor, 3, TargetType.Self, 0) // Apply to Self OnPlay, Duration ignored
                 }),
             "Assets/Scriptables/Cards/Water/CoralBuilder.asset",
             existingCardIds.ContainsKey("CoralBuilder") ? existingCardIds["CoralBuilder"] : System.Guid.NewGuid().ToString()
@@ -422,14 +424,15 @@ public class ThemeDecksGenerator : EditorWindow {
             existingCardIds.ContainsKey("MermaidHealer") ? existingCardIds["MermaidHealer"] : System.Guid.NewGuid().ToString()
         ));
 
-        // 12. Octopus Defender
+        // 12. Octopus Defender (with permanent armor)
         cards.Add(CreateWaterCard(
             "Octopus Defender",
-            "Uses tentacles to block incoming attacks.",
+            "Uses tentacles to create permanent armor for itself when damaged.",
             0, 7,
-            new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage, // Trigger is correct
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Armor, 2, TargetType.Self)
+                    // Queue ModifyArmorAction for Self
+                    new EffectActionData(ActionType.Armor, 2, TargetType.Self, 0) // Value=2, Target=Self, Duration=0 (ignored)
                 }),
             "Assets/Scriptables/Cards/Water/OctopusDefender.asset",
             existingCardIds.ContainsKey("OctopusDefender") ? existingCardIds["OctopusDefender"] : System.Guid.NewGuid().ToString()
@@ -503,7 +506,8 @@ public class ThemeDecksGenerator : EditorWindow {
                 TargetType.FriendlyCreatures,
                 new CardEffectData(EffectType.Instantaneous, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
-                        new EffectActionData(ActionType.Armor, 4, TargetType.FriendlyCreatures)
+                        // Use the new Armor constructor with duration
+                        new EffectActionData(ActionType.Armor, 4, TargetType.FriendlyCreatures, 2)
                     }),
                 "Assets/Scriptables/Cards/Water/CoralShield.asset",
                 existingCardIds.ContainsKey("CoralShield") ? existingCardIds["CoralShield"] : System.Guid.NewGuid().ToString()
@@ -547,7 +551,7 @@ public class ThemeDecksGenerator : EditorWindow {
         spell.description = description;
         spell.defaultTargetType = (Enums.TargetType)defaultTargetType;
         spell.cardId = cardId;
-        AddSpellEffectToCard(spell, effectData);
+        UpdateSpellCardEffects(spell, effectData); // Use Update here as well for consistency
         AssetDatabase.CreateAsset(spell, path);
         return spell;
     }
@@ -931,6 +935,15 @@ public class ThemeDecksGenerator : EditorWindow {
             this.targetModifier = modifier;
             this.value = 0; // Value field is not used for ApplyStatus
         }
+        // Constructor for Armor actions (uses value for amount, statusDuration for duration)
+         public EffectActionData(ActionType actionType, int value, TargetType targetType, int duration, TargetModifier modifier = TargetModifier.None) {
+            if (actionType != ActionType.Armor) Debug.LogError("Incorrect constructor used for non-Armor action");
+            this.actionType = actionType; this.value = value; this.targetType = targetType; this.targetModifier = modifier;
+            this.statusDuration = duration; // Use statusDuration field for armor duration
+             // Set defaults for others
+             this.modifyAttack = false; this.modifyHealth = false; this.modifySpeed = false;
+             this.statusEffectToApply = StatusEffectType.None; this.statusPotency = 0;
+         }
     }
 }
 #endif

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
   m_Name: TidalSurge
   m_EditorClassIdentifier: 
-  cardId: 0048d00a-1ce6-4cfc-b219-9b0c3dd1c7c2
+  cardId: f2dfe73c-0acc-4226-921c-73e7885bca37
   cardName: Tidal Surge
   description: Wash away enemy defenses.
   cardType: 1
@@ -24,6 +24,10 @@ MonoBehaviour:
       value: 4
       targetType: 4
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   defaultTargetType: 4

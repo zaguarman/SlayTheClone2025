@@ -1,9 +1,8 @@
-using System;
 using UnityEngine.Events;
-using static Enums; // Assuming your Enums class is accessible
+using static Enums;
+using static DebugLogger;
 
-public interface IModifierFactory
-{
+public interface IModifierFactory {
     // Creates a permanent stat modifier
     IModifier CreateStatModifier(string name, string description, ModifiableStat stat, ModifierCalculationType calcType, int value);
 
@@ -18,22 +17,21 @@ public interface IModifierFactory
 
     // Creates a status effect modifier
     IModifier CreateStatusEffectModifier(string name, string description, StatusEffectType type, int duration, int potency, int currentTurn);
+
+    // Armor Modifiers (Permanent only) // REMOVED - Armor is no longer a modifier type
+    // IModifier CreateArmorModifier(string name, string description, int value);
 }
 
-public class SimpleModifierFactory : IModifierFactory
-{
-    public IModifier CreateStatModifier(string name, string description, ModifiableStat stat, ModifierCalculationType calcType, int value)
-    {
+public class SimpleModifierFactory : IModifierFactory {
+    public IModifier CreateStatModifier(string name, string description, ModifiableStat stat, ModifierCalculationType calcType, int value) {
         return new StatModifier(name, description, stat, calcType, value);
     }
 
-    public IModifier CreateTimedStatModifier(string name, string description, ModifiableStat stat, ModifierCalculationType calcType, int value, int durationInTurns, int currentTurn)
-    {
+    public IModifier CreateTimedStatModifier(string name, string description, ModifiableStat stat, ModifierCalculationType calcType, int value, int durationInTurns, int currentTurn) {
         return new TimedStatModifier(name, description, stat, calcType, value, durationInTurns, currentTurn);
     }
 
-    public IModifier CreateCreatureDamagedModifier(string name, string description, UnityAction<ICreature, int> action)
-    {
+    public IModifier CreateCreatureDamagedModifier(string name, string description, UnityAction<ICreature, int> action) {
         return new EventSubscriberModifier(name, description, EffectTrigger.OnDamage, action);
     }
 
@@ -42,8 +40,13 @@ public class SimpleModifierFactory : IModifierFactory
     // public IModifier CreateCreatureSummonedModifier(...) { return new EventSubscriberModifier(..., EffectTrigger.OnPlay, ...); }
     // public IModifier CreateCreatureDiedModifier(...) { return new EventSubscriberModifier(..., EffectTrigger.OnDeath, ...); }
 
-    public IModifier CreateStatusEffectModifier(string name, string description, StatusEffectType type, int duration, int potency, int currentTurn)
-    {
+    public IModifier CreateStatusEffectModifier(string name, string description, StatusEffectType type, int duration, int potency, int currentTurn) {
         return new StatusEffectModifier(name, description, type, duration, potency, currentTurn);
     }
+
+    // REMOVED - Armor is no longer a modifier type
+    // public IModifier CreateArmorModifier(string name, string description, int value) {
+    //     Log($"Factory creating PermanentArmorModifier: {name}, Value: {value}", LogTag.Effects);
+    //     return new PermanentArmorModifier(name, description, value);
+    // }
 }

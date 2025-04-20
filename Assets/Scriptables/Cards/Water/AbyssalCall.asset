@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
   m_Name: AbyssalCall
   m_EditorClassIdentifier: 
-  cardId: fdb962de-600c-4232-b281-597e0a33992d
+  cardId: 7c913b16-355c-48e3-bcce-beddb960126b
   cardName: Abyssal Call
   description: Summon a powerful deep sea creature.
   cardType: 1
@@ -24,6 +24,10 @@ MonoBehaviour:
       value: 1
       targetType: 0
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   defaultTargetType: 0

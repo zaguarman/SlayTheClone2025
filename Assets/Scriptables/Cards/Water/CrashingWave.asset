@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: CrashingWave
   m_EditorClassIdentifier: 
-  cardId: c8a1de3d-8d16-4d93-8091-96ec26ebf0af
+  cardId: a67d1a0e-1ef1-4e29-a8ae-e7e73404a640
   cardName: Crashing Wave
   description: A powerful wave that crashes onto enemies.
   cardType: 0
@@ -24,7 +24,11 @@ MonoBehaviour:
       value: 2
       targetType: 4
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   attack: 3
   health: 4

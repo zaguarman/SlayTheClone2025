@@ -24,7 +24,11 @@ MonoBehaviour:
       value: 2
       targetType: 0
       targetModifier: 0
-      buffAttack: 0
-      buffHealth: 0
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   attack: 2
   health: 1
