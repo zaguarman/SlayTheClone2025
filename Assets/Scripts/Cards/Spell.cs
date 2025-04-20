@@ -22,16 +22,20 @@ public class Spell : Card {
         actions.Add(new SpellAction(actionType, value, targetType));
     }
 
-    public void AddAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth) {
-        actions.Add(new SpellAction(actionType, value, targetType, buffAttack, buffHealth));
-    }
-
-    public void AddAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
+    public void AddAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier = TargetModifier.None) {
         actions.Add(new SpellAction(actionType, value, targetType, targetModifier));
     }
 
-    public void AddAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth, TargetModifier targetModifier = TargetModifier.None) {
-        actions.Add(new SpellAction(actionType, value, targetType, buffAttack, buffHealth, targetModifier));
+    public void AddAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth, bool buffSpeed = false, TargetModifier targetModifier = TargetModifier.None) {
+        actions.Add(new SpellAction(actionType, value, targetType, buffAttack, buffHealth, buffSpeed, targetModifier));
+    }
+
+    public void AddAction(ActionType actionType, TargetType targetType, StatusEffectType statusType, int duration, int potency, TargetModifier targetModifier = TargetModifier.None) {
+        actions.Add(new SpellAction(actionType, targetType, statusType, duration, potency, targetModifier));
+    }
+
+    public void ClearActions() {
+        actions.Clear();
     }
 
     public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
@@ -78,6 +82,7 @@ public class Spell : Card {
         // Find the corresponding SpellAction to get buff flags and target modifier if needed
         bool buffAttack = spellAction?.BuffAttack ?? true;
         bool buffHealth = spellAction?.BuffHealth ?? true;
+        bool buffSpeed = spellAction?.BuffSpeed ?? false; // Default to false for speed
         TargetModifier targetModifier = spellAction?.TargetModifier ?? TargetModifier.None;
 
         // Resolve target if needed (e.g., random)
@@ -99,7 +104,7 @@ public class Spell : Card {
                 break;
             case ActionType.Buff:
                 // Queue BuffCreatureAction - it will handle applying the modifier
-                CreateBuffAction(spellAction.Value, target, context, buffAttack, buffHealth);
+                CreateBuffAction(spellAction.Value, target, context, buffAttack, buffHealth, buffSpeed);
                 break;
              case ActionType.ApplyStatus:
                  // Queue ApplyStatusEffectAction - it will handle applying the modifier
@@ -147,13 +152,13 @@ public class Spell : Card {
         context.AddAction(new DrawCardsAction(player, value));
     }
 
-     // Updated CreateBuffAction to queue the action
-    private void CreateBuffAction(int value, ITarget target, ActionsQueue context, bool buffAttack, bool buffHealth) {
+     // Updated CreateBuffAction to queue the action with buffSpeed parameter
+    private void CreateBuffAction(int value, ITarget target, ActionsQueue context, bool buffAttack, bool buffHealth, bool buffSpeed = false) {
         if (target is ICreature creature) {
-             string buffDesc = DescribeBuffForLog(value, buffAttack, buffHealth);
+             string buffDesc = DescribeBuffForLog(value, buffAttack, buffHealth, buffSpeed);
             Log($"Spell: Queueing BuffCreatureAction for {buffDesc} to {creature.Name}", LogTag.Actions);
              // Assuming spell buffs are permanent unless specified otherwise in data
-            context.AddAction(new BuffCreatureAction(creature, value, buffAttack, buffHealth, 0)); // Default duration 0
+            context.AddAction(new BuffCreatureAction(creature, value, buffAttack, buffHealth, buffSpeed, 0)); // Default duration 0
         } else {
              LogWarning($"Spell Buff: Invalid target type {target?.GetType().Name}", LogTag.Actions);
         }
@@ -169,11 +174,13 @@ public class Spell : Card {
          }
     }
 
-    private string DescribeBuffForLog(int value, bool buffAttack, bool buffHealth) {
-         if (buffAttack && buffHealth) return $"+{value}/+{value}";
-         if (buffAttack) return $"+{value} Attack";
-         if (buffHealth) return $"+{value} Health";
-         return "No effect";
+    private string DescribeBuffForLog(int value, bool buffAttack, bool buffHealth, bool buffSpeed) {
+        List<string> buffs = new List<string>();
+        if (buffAttack) buffs.Add($"+{value} Atk");
+        if (buffHealth) buffs.Add($"+{value} HP");
+        if (buffSpeed) buffs.Add($"+{value} Spd");
+
+        return buffs.Count > 0 ? string.Join(" & ", buffs) : "No effect";
     }
 }
 
@@ -186,6 +193,7 @@ public class SpellAction {
     // Buff Specific
     public bool BuffAttack { get; }
     public bool BuffHealth { get; }
+    public bool BuffSpeed { get; }
     // ApplyStatus Specific
     public StatusEffectType StatusEffectToApply { get; }
     public int StatusDuration { get; }
@@ -196,15 +204,16 @@ public class SpellAction {
     {
         ActionType = actionType; Value = value; TargetType = targetType; TargetModifier = modifier;
         // Set defaults for others
-        BuffAttack = false; BuffHealth = false; StatusEffectToApply = StatusEffectType.None; StatusDuration = 0; StatusPotency = 0;
+        BuffAttack = false; BuffHealth = false; BuffSpeed = false;
+        StatusEffectToApply = StatusEffectType.None; StatusDuration = 0; StatusPotency = 0;
     }
 
     // Constructor for Buff actions
-    public SpellAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth, TargetModifier modifier = TargetModifier.None)
+    public SpellAction(ActionType actionType, int value, TargetType targetType, bool buffAttack, bool buffHealth, bool buffSpeed = false, TargetModifier modifier = TargetModifier.None)
     {
          if (actionType != ActionType.Buff) throw new System.ArgumentException("Incorrect constructor for non-Buff action.");
          ActionType = actionType; Value = value; TargetType = targetType; TargetModifier = modifier;
-         BuffAttack = buffAttack; BuffHealth = buffHealth;
+         BuffAttack = buffAttack; BuffHealth = buffHealth; BuffSpeed = buffSpeed;
          // Set defaults for others
          StatusEffectToApply = StatusEffectType.None; StatusDuration = 0; StatusPotency = 0;
     }
@@ -216,6 +225,6 @@ public class SpellAction {
          ActionType = actionType; TargetType = targetType; TargetModifier = modifier;
          StatusEffectToApply = status; StatusDuration = duration; StatusPotency = potency;
           // Set defaults for others
-         Value = 0; BuffAttack = false; BuffHealth = false;
+         Value = 0; BuffAttack = false; BuffHealth = false; BuffSpeed = false;
     }
 }

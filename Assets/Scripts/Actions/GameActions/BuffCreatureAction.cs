@@ -1,21 +1,25 @@
 using static DebugLogger;
 using static Enums;
 using System; // Added for Math.Max
+using System.Collections.Generic; // Added for List<string>
+using System.Linq; // Added for LINQ extension methods like Take()
 
 public class BuffCreatureAction : IGameAction {
     private readonly ICreature targetCreature;
     private readonly int value;
     private readonly bool buffAttack;
     private readonly bool buffHealth;
+    private readonly bool buffSpeed;     // Added buffSpeed flag
     private readonly ModifierCalculationType calculationType;
     private readonly int durationInTurns; // 0 = permanent
 
-    // --- Single Primary Constructor ---
+    // --- Updated Constructor with buffSpeed parameter ---
     public BuffCreatureAction(
         ICreature target,
         int value,
         bool buffAttack,
         bool buffHealth,
+        bool buffSpeed,
         int durationInTurns = 0, // Default to permanent
         ModifierCalculationType calculationType = ModifierCalculationType.Flat) // Default to Flat
     {
@@ -28,9 +32,10 @@ public class BuffCreatureAction : IGameAction {
 
         this.targetCreature = target;
         // Ensure value isn't negative if we only intend to buff
-        this.value = (buffAttack || buffHealth) ? Math.Max(0, value) : value; // Allow negative for debuffs if needed later
+        this.value = (buffAttack || buffHealth || buffSpeed) ? Math.Max(0, value) : value; // Allow negative for debuffs if needed later
         this.buffAttack = buffAttack;
         this.buffHealth = buffHealth;
+        this.buffSpeed = buffSpeed;
         this.calculationType = calculationType;
         this.durationInTurns = Math.Max(0, durationInTurns); // Ensure non-negative duration
 
@@ -48,11 +53,27 @@ public class BuffCreatureAction : IGameAction {
         string desc = "";
         string sign = (calculationType == ModifierCalculationType.Flat && value >= 0) ? "+" : "";
         string suffix = (calculationType == ModifierCalculationType.Percentage) ? "%" : "";
+        string valueStr = $"{sign}{value}{suffix}";
 
-        if (buffAttack && buffHealth) desc = $"{sign}{value}{suffix} Attack & Health";
-        else if (buffAttack) desc = $"{sign}{value}{suffix} Attack";
-        else if (buffHealth) desc = $"{sign}{value}{suffix} Health";
-        else desc = "No Stat Buff"; // Should not happen if constructor logic is sound
+        // Build description based on which stats are being buffed
+        List<string> buffedStats = new List<string>();
+        if (buffAttack) buffedStats.Add("Attack");
+        if (buffHealth) buffedStats.Add("Health");
+        if (buffSpeed) buffedStats.Add("Speed");
+
+        if (buffedStats.Count == 0) {
+            desc = "No Stat Buff"; // Should not happen with proper constructor usage
+        }
+        else if (buffedStats.Count == 1) {
+            desc = $"{valueStr} {buffedStats[0]}"; // Single stat buff
+        }
+        else {
+            // Join multiple stats with commas and "&" for the last one
+            string statsText = string.Join(", ", buffedStats.Take(buffedStats.Count - 1));
+            statsText += $" & {buffedStats[buffedStats.Count - 1]}";
+            desc = $"{valueStr} {statsText}";
+        }
+
         return desc;
     }
 
@@ -111,6 +132,23 @@ public class BuffCreatureAction : IGameAction {
             modifierManager.ApplyModifier(targetCreature, healthMod);
              // RecalculateStats called within ApplyModifier will handle clamping current health
         }
+
+        // Apply Speed Modifier if requested
+        if (buffSpeed && value != 0) {
+            string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
+            string modName = $"Speed Buff ({calculationType} {value}{durationText})";
+            string modDesc = $"{(calculationType == ModifierCalculationType.Flat && value >= 0 ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Speed{durationText}";
+
+            IModifier speedMod;
+            if (durationInTurns > 0) {
+                speedMod = factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Speed, calculationType, value, durationInTurns, currentTurn);
+                Log($"BuffCreatureAction applying Timed Speed Modifier: {speedMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
+            } else {
+                speedMod = factory.CreateStatModifier(modName, modDesc, ModifiableStat.Speed, calculationType, value);
+                Log($"BuffCreatureAction applying Permanent Speed Modifier: {speedMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
+            }
+            modifierManager.ApplyModifier(targetCreature, speedMod);
+        }
     }
 
     public override string ToString() {
@@ -120,5 +158,10 @@ public class BuffCreatureAction : IGameAction {
         string targetId = targetCreature?.TargetId?.ToUpper().Substring(0, 8) ?? "UNKNOWN";
 
         return $"BuffCreatureAction: Target={targetName}({targetId}), Buff={buffDesc}{durationText}, Calc={calculationType}";
+    }
+
+    // Added method to get the target creature for action sorting
+    public ITarget GetTarget() {
+        return targetCreature;
     }
 }

@@ -147,7 +147,8 @@ public class Deck : IDeck {
         Log($"Could not find original data for {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) with ID {creature.CardId.ToUpper()}, creating generic version for deck (DeckID: {deckId.ToUpper()})",
             LogTag.Cards | LogTag.Creatures);
         int health = creature.Health <= 0 ? creature.Attack + 1 : creature.Health;
-        var newCreature = new Creature(creature.Name, creature.Attack, health, creature.CardId);
+        int speed = creature.BaseSpeed;
+        var newCreature = new Creature(creature.Name, creature.Attack, health, speed, creature.CardId);
         newCreature.Description = creature.Description;
 
         // Copy effects

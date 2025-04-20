@@ -12,8 +12,9 @@ public enum ModifierCalculationType
 public enum ModifiableStat
 {
     Attack,
-    Health // Represents Max Health modifications
-    // Add other stats like Speed, Cost, etc. if needed
+    Health, // Represents Max Health modifications
+    Speed   // Added Speed stat
+    // Add other stats like Cost, etc. if needed
 }
 
 // Interface for all modifiers

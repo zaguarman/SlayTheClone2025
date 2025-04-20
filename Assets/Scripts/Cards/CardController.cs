@@ -137,20 +137,28 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         if (cardData is CreatureData creatureData) {
             statsText.gameObject.SetActive(true);
 
-            if (linkedCreature != null) {
-                if (linkedCreature.Health <= 0) {
-                    Log($"Creature {linkedCreature.Name} is dead, should be removed (TargetID: {linkedCreature.TargetId.ToUpper()}) (Card TargetID: {GetInstanceID().ToString().ToUpper()})", LogTag.Creatures);
-                    statsText.text = $"{creatureData.attack}/{creatureData.health}";
-                } else {
-                    statsText.text = $"{linkedCreature.Attack}/{linkedCreature.Health}";
-                }
-            } else {
-                statsText.text = $"{creatureData.attack}/{creatureData.health}";
+            if (linkedCreature != null && linkedCreature.Health > 0) {
+                // Creature is alive and linked, show current effective stats
+                string atk = linkedCreature.Attack.ToString();
+                string health = linkedCreature.Health.ToString();
+                string speed = linkedCreature.Speed.ToString();
+                // Format: A / H / S
+                statsText.text = $"{atk} / {health} / {speed}";
+            }
+            else {
+                // Creature is dead, not linked, or data is just for display (e.g., in hand)
+                // Show base stats from CreatureData
+                string atk = creatureData.attack.ToString();
+                string health = creatureData.health.ToString();
+                string speed = creatureData.speed.ToString(); // Show base speed
+                // Format: A / H / S
+                statsText.text = $"{atk} / {health} / {speed}";
             }
         } else if (cardData is SpellData) {
             statsText.gameObject.SetActive(true);
-            statsText.text = "Spell";
+            statsText.text = "Spell"; // Spells don't have A/H/S
         } else {
+            // Hide stats for other card types (if any)
             statsText.gameObject.SetActive(false);
         }
     }

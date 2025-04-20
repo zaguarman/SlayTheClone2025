@@ -46,19 +46,40 @@ public class ActionsQueue {
     #endregion
 
     #region Methods
+    // Get the base priority of an action type
     private int GetActionPriority(IGameAction action) {
         return action switch {
             SummonCreatureAction => -1,
             MoveCreatureAction or SwapCreaturesAction => 0,
             PlayCardAction => 1,
-            // DirectDamageAction removed
             BattlefieldCombatAction => 4,
-            // DamageCreatureAction priority remains
             DamageCreatureAction or DamagePlayerAction => 5,
             DiscardHandAction => 6, // Discard hand should happen after all other actions
             DrawCardsAction => 7,   // Draw cards should happen after discarding hand
             _ => 8
         };
+    }
+
+    // Get the speed of a creature involved in an action (if any)
+    private int GetActionSpeed(IGameAction action) {
+        // Default speed is 1 if no creature is involved
+        int speed = 1;
+
+        // Extract the creature from the action based on action type
+        ICreature creature = action switch {
+            BattlefieldCombatAction combatAction => combatAction.GetAttacker(),
+            DamageCreatureAction damageAction => damageAction.GetAttacker(),
+            BuffCreatureAction buffAction => buffAction.GetTarget() as ICreature,
+            _ => null
+        };
+
+        // If we found a creature, use its speed
+        if (creature != null) {
+            speed = creature.Speed;
+            // Log($"Action {action.GetType().Name} has speed {speed} from creature {creature.Name}", LogTag.Actions);
+        }
+
+        return speed;
     }
 
     private string GetActiveCreatureId(IGameAction action) {
@@ -102,17 +123,33 @@ public class ActionsQueue {
 
     private void InsertActionWithPriority(IGameAction action) {
         int priority = GetActionPriority(action);
+        int speed = GetActionSpeed(action);
         int insertIndex = actionsList.Count;
 
+        // First sort by priority (lower priority values go first)
+        // Then within same priority, sort by speed (higher speed values go first)
         for (int i = 0; i < actionsList.Count; i++) {
-            if (GetActionPriority(actionsList[i]) > priority) {
+            int existingPriority = GetActionPriority(actionsList[i]);
+
+            if (existingPriority > priority) {
+                // Found a higher priority number (lower priority), insert before it
                 insertIndex = i;
                 break;
+            }
+            else if (existingPriority == priority) {
+                // Same priority, check speed
+                int existingSpeed = GetActionSpeed(actionsList[i]);
+
+                if (existingSpeed < speed) {
+                    // Found a lower speed within same priority, insert before it
+                    insertIndex = i;
+                    break;
+                }
             }
         }
 
         actionsList.Insert(insertIndex, action);
-        Log($"Inserted action {action.GetType().Name} at priority {priority}, position {insertIndex} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
+        Log($"Inserted action {action.GetType().Name} at priority {priority}, speed {speed}, position {insertIndex} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
     }
 
     public bool IsEffectProcessed(string sourceId, EffectTrigger trigger) {

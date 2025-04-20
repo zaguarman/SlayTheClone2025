@@ -21,6 +21,7 @@ public static class CardFactory {
                     creatureData.cardName,
                     creatureData.attack,
                     creatureData.health,
+                    creatureData.speed, // Pass speed
                     creatureData.cardId); // Pass cardId
 
                 // Copy over the description
@@ -36,7 +37,8 @@ public static class CardFactory {
                             targetType = a.targetType,
                             targetModifier = a.targetModifier,
                             buffAttack = a.buffAttack,
-                            buffHealth = a.buffHealth
+                            buffHealth = a.buffHealth,
+                            buffSpeed = a.buffSpeed
                         }).ToList()
                     };
                     creature.Effects.Add(newEffect);
@@ -79,15 +81,18 @@ public static class CardFactory {
                         targetType = action.targetType,
                         targetModifier = action.targetModifier,
                         buffAttack = action.buffAttack,
-                        buffHealth = action.buffHealth
+                        buffHealth = action.buffHealth,
+                        buffSpeed = action.buffSpeed
                     };
                     newEffect.actions.Add(newAction);
 
                     // Also add the action to the spell's action list for direct execution
                     if (action.actionType == ActionType.Buff) {
-                        spell.AddAction(action.actionType, action.value, action.targetType, action.buffAttack, action.buffHealth, action.targetModifier);
-                    } else {
-                        spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
+                        spell.AddAction(action.actionType, action.value, action.targetType, action.buffAttack, action.buffHealth, action.buffSpeed, action.targetModifier);
+                    } else if (action.actionType == ActionType.ApplyStatus) {
+                         spell.AddAction(action.actionType, action.targetType, action.statusEffectToApply, action.statusDuration, action.statusPotency, action.targetModifier);
+                    } else { // Handle simple actions (Damage, Heal, Draw, etc.)
+                         spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
                     }
                 }
 
@@ -168,9 +173,11 @@ public static class CardFactory {
             var creatureData = ScriptableObject.CreateInstance<CreatureData>();
             creatureData.cardId = card.CardId; // Copy the cardId
             creatureData.cardName = creature.Name;
-            creatureData.attack = creature.Attack;
-            creatureData.health = creature.Health;
-            creatureData.description = creature.Description;  // Copy description
+            creatureData.description = creature.Description;
+            creatureData.cardType = CardType.Creature; // Assuming creature type
+            creatureData.attack = creature.BaseAttack; // Use BASE stats for data representation
+            creatureData.health = creature.BaseHealth;
+            creatureData.speed = creature.BaseSpeed;   // Use BASE speed
             creatureData.effects = creature.Effects.Select(e => new CardEffect {
                 effectType = e.effectType,
                 trigger = e.trigger,
@@ -180,7 +187,8 @@ public static class CardFactory {
                     targetType = a.targetType,
                     targetModifier = a.targetModifier,
                     buffAttack = a.buffAttack,
-                    buffHealth = a.buffHealth
+                    buffHealth = a.buffHealth,
+                    buffSpeed = a.buffSpeed
                 }).ToList()
             }).ToList();
             return creatureData;
@@ -202,7 +210,8 @@ public static class CardFactory {
                     targetType = a.targetType,
                     targetModifier = a.targetModifier,
                     buffAttack = a.buffAttack,
-                    buffHealth = a.buffHealth
+                    buffHealth = a.buffHealth,
+                    buffSpeed = a.buffSpeed
                 }).ToList()
             }).ToList();
             return spellData;
@@ -251,5 +260,43 @@ public static class CardFactory {
         controller.OnPointerExitHandler = null;
 
         Log($"Cleaned up event handlers for card {controller.name}", LogTag.Cards | LogTag.UI);
+    }
+
+    // Helper to deep copy effects list
+    private static List<CardEffect> CopyEffectsList(List<CardEffect> originalEffects)
+    {
+        if (originalEffects == null) return new List<CardEffect>();
+
+        List<CardEffect> effectsCopy = new List<CardEffect>(originalEffects.Count);
+        foreach (var effectData in originalEffects)
+        {
+            var newEffect = new CardEffect
+            {
+                effectType = effectData.effectType,
+                trigger = effectData.trigger,
+                actions = new List<EffectAction>()
+            };
+            if (effectData.actions != null)
+            {
+                foreach (var actionData in effectData.actions)
+                {
+                    newEffect.actions.Add(new EffectAction
+                    {
+                        actionType = actionData.actionType,
+                        value = actionData.value,
+                        targetType = actionData.targetType,
+                        targetModifier = actionData.targetModifier,
+                        buffAttack = actionData.buffAttack,
+                        buffHealth = actionData.buffHealth,
+                        buffSpeed = actionData.buffSpeed,
+                        statusEffectToApply = actionData.statusEffectToApply,
+                        statusDuration = actionData.statusDuration,
+                        statusPotency = actionData.statusPotency
+                    });
+                }
+            }
+            effectsCopy.Add(newEffect);
+        }
+        return effectsCopy;
     }
 }

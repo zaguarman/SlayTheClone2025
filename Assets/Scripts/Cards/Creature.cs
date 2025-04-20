@@ -5,26 +5,31 @@ using System;
 using System.Collections.Generic;
 
 public interface ICreature : ICard {
-    int Attack { get; } // Now returns effective attack
-    int Health { get; } // Now returns current health
-    int MaxHealth { get; } // New property for effective max health
+    int Attack { get; }     // Effective attack
+    int Health { get; }     // Current health
+    int Speed { get; }      // Effective speed
+    int MaxHealth { get; }  // Effective max health
     int BaseAttack { get; }
     int BaseHealth { get; }
+    int BaseSpeed { get; }  // Added BaseSpeed
     BattlefieldSlot Slot { get; set; }
     void TakeDamage(int damage);
-    void TakeDamage(int damage, ICreature attacker); // Keep internal version accessible
+    void TakeDamage(int damage, ICreature attacker);
     IPlayer Owner { get; }
     void SetOwner(IPlayer owner);
+    // No UpdateEffectiveStats here, it's internal to Creature class
 }
 
 public class Creature : Card, ICreature {
     // Base stats (read-only after initialization)
     public int BaseAttack { get; private set; }
     public int BaseHealth { get; private set; }
+    public int BaseSpeed { get; private set; } // Added BaseSpeed
 
     // Effective stats (calculated and set by ModifierManager)
     private int _effectiveAttack;
     private int _effectiveMaxHealth;
+    private int _effectiveSpeed; // Added effective speed
 
     // Current health tracking
     private int currentHealth;
@@ -33,41 +38,46 @@ public class Creature : Card, ICreature {
     // Public properties accessing calculated/current stats
     public int Attack => _effectiveAttack;
     public int MaxHealth => _effectiveMaxHealth;
-    public int Health => currentHealth; // Current health is tracked separately
+    public int Speed => _effectiveSpeed; // Added Speed property
+    public int Health => currentHealth;
 
     public IPlayer Owner { get; private set; }
     public BattlefieldSlot Slot { get; set; }
 
     private ICreature lastAttacker; // Keep for OnDamage effect context
 
-    // Constructor: Initializes base stats and sets effective stats initially
-    public Creature(string name, int attack, int health) : base(name) {
+    // Updated Constructor with speed
+    public Creature(string name, int attack, int health, int speed, string cardId) : base(name, cardId) {
         BaseAttack = attack;
         BaseHealth = health;
+        BaseSpeed = Math.Max(0, speed); // Ensure base speed isn't negative
         currentHealth = health;
         _effectiveAttack = attack; // Initial effective stats match base stats
         _effectiveMaxHealth = health;
+        _effectiveSpeed = BaseSpeed; // Initialize effective speed
     }
 
-    // Constructor with cardId parameter
-    public Creature(string name, int attack, int health, string cardId) : base(name, cardId) {
-        BaseAttack = attack;
-        BaseHealth = health;
-        currentHealth = health;
-        _effectiveAttack = attack; // Initial effective stats match base stats
-        _effectiveMaxHealth = health;
-    }
-
-    // Internal method for ModifierManager to update calculated stats
-    internal void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth)
+    // Internal method for ModifierManager to update calculated stats including speed
+    internal void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed)
     {
-        _effectiveAttack = Math.Max(0, newEffectiveAttack); // Ensure non-negative
+        int oldMaxHealth = _effectiveMaxHealth;
+
+        _effectiveAttack = Math.Max(0, newEffectiveAttack); // Ensure non-negative attack
         _effectiveMaxHealth = Math.Max(1, newEffectiveMaxHealth); // Ensure at least 1 max health
+        _effectiveSpeed = Math.Max(0, newEffectiveSpeed); // Ensure non-negative speed
 
-        // Clamp current health to the new max health
+        // If max health increased, optionally increase current health by the same amount (common game mechanic)
+        int healthIncrease = _effectiveMaxHealth - oldMaxHealth;
+        if (healthIncrease > 0)
+        {
+            currentHealth += healthIncrease;
+        }
+
+        // Clamp current health to the new max health AFTER potential increase
         currentHealth = Math.Min(currentHealth, _effectiveMaxHealth);
+        currentHealth = Math.Max(0, currentHealth); // Ensure current health isn't negative
 
-        // Note: We don't automatically heal to max here. Healing is a separate action/effect.
+        // Log($"Updated Effective Stats for {Name}: A:{Attack}, H:{Health}/{MaxHealth}, S:{Speed}", LogTag.Creatures | LogTag.Effects);
     }
 
     public void SetOwner(IPlayer owner) {
@@ -186,8 +196,8 @@ public class Creature : Card, ICreature {
                         ProcessSummonEffect(action, actionsQueue);
                         break;
                     case ActionType.Buff:
-                        // Apply as a Modifier via ModifierManager
-                        ProcessBuffModifier(action, modifierManager, factory);
+                        // Pass buffSpeed flag
+                        ProcessBuffModifier(action, modifierManager, factory, action.buffSpeed);
                         break;
                     case ActionType.ApplyStatus:
                          // Apply as a Modifier via ModifierManager
@@ -207,9 +217,9 @@ public class Creature : Card, ICreature {
                          // A more complex system could have a separate Armor stat or damage reduction modifier.
                          action.buffAttack = false;
                          action.buffHealth = true;
-                         // Let's assume armor lasts 1 turn by default if not specified
-                         int armorDuration = 1; // Could be part of EffectAction data later
-                         ProcessBuffModifier(action, modifierManager, factory, ModifierCalculationType.Flat, armorDuration); // Pass duration
+                         action.buffSpeed = false; // Armor doesn't affect speed
+                         int armorDuration = 1;
+                         ProcessBuffModifier(action, modifierManager, factory, false, ModifierCalculationType.Flat, armorDuration); // Pass false for buffSpeed
                         break;
                 }
             }
@@ -355,63 +365,64 @@ public class Creature : Card, ICreature {
 
     // --- NEW: Methods to apply modifiers ---
 
-    // Optional parameters for calcType and duration added for flexibility (e.g., Armor mapping)
-    private void ProcessBuffModifier(EffectAction action, ModifierManager manager, IModifierFactory factory, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
+    // --- Updated ProcessBuffModifier to include buffSpeed ---
+    private void ProcessBuffModifier(EffectAction action, ModifierManager manager, IModifierFactory factory, bool buffSpeed, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
         if (manager == null || factory == null) {
             LogError("Buff Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
             return;
         }
-        if (Owner == null && action.targetType != TargetType.Self) {
-             LogError($"Buff Modifier: Cannot target others for {Name} - Owner is null and not self.", LogTag.Effects);
-            return;
-        }
+         if (Owner == null && action.targetType != TargetType.Self) return;
+
 
         bool buffAttack = action.buffAttack;
         bool buffHealth = action.buffHealth;
+        // buffSpeed is now passed as parameter
         int value = action.value;
-        int duration = forcedDuration ?? 0; // Use forced duration if provided, else 0 (permanent)
+        int duration = forcedDuration ?? 0;
 
-         // Special duration logic (Example: Abyssal Cucumber) - This could be data-driven
-        if (Name == "Abyssal Cucumber" && value == 2 && buffAttack && !buffHealth && forcedDuration == null) {
-            duration = 2;
-             Log($"Applying Abyssal Cucumber specific duration: {duration} turns", LogTag.Effects);
-        }
-
-         // Determine targets
-         List<ITarget> targets;
-         if (action.targetType == TargetType.Self) {
+        List<ITarget> targets;
+        if (action.targetType == TargetType.Self) {
              targets = new List<ITarget> { this };
          } else {
+              if (Owner == null) return; // Need owner for non-self targets
              targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
          }
-          Log($"Buff Modifier: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
+        // Log($"Buff Modifier: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
 
-         int currentTurn = GameManager.Instance.TurnManager.TurnNumber;
+        int currentTurn = GameManager.Instance?.TurnManager?.TurnNumber ?? 0;
 
-         foreach (var target in targets) {
-             if (target is Creature creatureTarget) {
-                Log($"Applying Buff Modifier to {creatureTarget.Name}: Attack={buffAttack}, Health={buffHealth}, Val={value}, Dur={duration}", LogTag.Effects);
+        foreach (var target in targets) {
+            if (target is Creature creatureTarget) {
+                Log($"Applying Buff Modifier to {creatureTarget.Name}: A={buffAttack}, H={buffHealth}, S={buffSpeed}, Val={value}, Dur={duration}", LogTag.Effects);
 
-                 // Apply Attack Buff
                  if (buffAttack && value != 0) {
-                     string modName = $"Attack Buff ({calcType} {value})";
-                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Attack";
-                     IModifier attackMod = duration > 0
+                     string modName = $"Attack Buff ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
+                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Attack{(duration > 0 ? $" ({duration} turns)" : "")}";
+                     IModifier mod = duration > 0
                          ? factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Attack, calcType, value, duration, currentTurn)
                          : factory.CreateStatModifier(modName, modDesc, ModifiableStat.Attack, calcType, value);
-                     manager.ApplyModifier(creatureTarget, attackMod);
+                     manager.ApplyModifier(creatureTarget, mod);
                  }
-                 // Apply Health Buff
                  if (buffHealth && value != 0) {
-                     string modName = $"Health Buff ({calcType} {value})";
-                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Max Health";
-                     IModifier healthMod = duration > 0
+                      string modName = $"Health Buff ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
+                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Max Health{(duration > 0 ? $" ({duration} turns)" : "")}";
+                     IModifier mod = duration > 0
                         ? factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Health, calcType, value, duration, currentTurn)
                         : factory.CreateStatModifier(modName, modDesc, ModifiableStat.Health, calcType, value);
-                     manager.ApplyModifier(creatureTarget, healthMod);
+                     manager.ApplyModifier(creatureTarget, mod);
                  }
+                 // --- Add Speed Buff ---
+                 if (buffSpeed && value != 0) {
+                    string modName = $"Speed Buff ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
+                    string modDesc = $"{(value >= 0 ? "+" : "")}{value} Speed{(duration > 0 ? $" ({duration} turns)" : "")}";
+                    IModifier mod = duration > 0
+                        ? factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Speed, calcType, value, duration, currentTurn)
+                        : factory.CreateStatModifier(modName, modDesc, ModifiableStat.Speed, calcType, value);
+                    manager.ApplyModifier(creatureTarget, mod);
+                 }
+                 // --- End Speed Buff ---
              }
-         }
+        }
     }
 
     private void ProcessApplyStatusModifier(EffectAction action, ModifierManager manager, IModifierFactory factory) {

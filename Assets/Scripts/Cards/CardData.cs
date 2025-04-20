@@ -20,10 +20,12 @@ public abstract class CardData : ScriptableObject {
 public class CreatureData : CardData {
     public int attack;
     public int health;
+    public int speed = 1; // Default speed to 1
 
     public override void OnEnable() {
         base.OnEnable();
         cardType = CardType.Creature;
+        if (speed <= 0) speed = 1; // Ensure speed is at least 1 on enable
     }
 }
 
@@ -44,6 +46,7 @@ public class EffectAction { // Add new fields here too
     // Buff Specific
     public bool buffAttack = true;
     public bool buffHealth = true;
+    public bool buffSpeed = false; // Added flag for speed buffing
     // public ModifierCalculationType calculationType = ModifierCalculationType.Flat;
 
     // ApplyStatus Specific
