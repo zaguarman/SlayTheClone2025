@@ -1,6 +1,5 @@
 using UnityEngine.Events;
 using static Enums;
-using static DebugLogger;
 
 public interface IModifierFactory {
     // Creates a permanent stat modifier
@@ -43,10 +42,4 @@ public class SimpleModifierFactory : IModifierFactory {
     public IModifier CreateStatusEffectModifier(string name, string description, StatusEffectType type, int duration, int potency, int currentTurn) {
         return new StatusEffectModifier(name, description, type, duration, potency, currentTurn);
     }
-
-    // REMOVED - Armor is no longer a modifier type
-    // public IModifier CreateArmorModifier(string name, string description, int value) {
-    //     Log($"Factory creating PermanentArmorModifier: {name}, Value: {value}", LogTag.Effects);
-    //     return new PermanentArmorModifier(name, description, value);
-    // }
 }
