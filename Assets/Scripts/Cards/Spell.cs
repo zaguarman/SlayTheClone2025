@@ -102,8 +102,8 @@ public class Spell : Card {
             case ActionType.Draw:
                 CreateDrawAction(spellAction.Value, owner, context); // Queues DrawCardsAction
                 break;
-            case ActionType.Buff:
-                // Queue BuffCreatureAction - it will handle applying the modifier
+            case ActionType.ModifyStat:
+                // Queue ModifyAction - it will handle applying the modifier
                 CreatemodifyAction(spellAction.Value, target, context, modifyAttack, modifyHealth, modifySpeed);
                 break;
             case ActionType.ApplyStatus:
@@ -156,11 +156,11 @@ public class Spell : Card {
     private void CreatemodifyAction(int value, ITarget target, ActionsQueue context, bool modifyAttack, bool modifyHealth, bool modifySpeed = false) {
         if (target is ICreature creature) {
             string buffDesc = DescribeModificationForLog(value, modifyAttack, modifyHealth, modifySpeed);
-            Log($"Spell: Queueing BuffCreatureAction for {buffDesc} to {creature.Name}", LogTag.Actions);
+            Log($"Spell: Queueing ModifyAction for {buffDesc} to {creature.Name}", LogTag.Actions);
             // Assuming spell buffs are permanent unless specified otherwise in data
             context.AddAction(new ModifyAction(creature, value, modifyAttack, modifyHealth, modifySpeed, 0)); // Default duration 0
         } else {
-            LogWarning($"Spell Buff: Invalid target type {target?.GetType().Name}", LogTag.Actions);
+            LogWarning($"Spell ModifyStat: Invalid target type {target?.GetType().Name}", LogTag.Actions);
         }
     }
 
@@ -209,7 +209,7 @@ public class SpellAction {
 
     // Constructor for Modify actions
     public SpellAction(ActionType actionType, int value, TargetType targetType, bool modifyAttack, bool modifyHealth, bool modifySpeed = false, TargetModifier modifier = TargetModifier.None) {
-        if (actionType != ActionType.Buff) throw new System.ArgumentException("Incorrect constructor for non-Buff action.");
+         if (actionType != ActionType.ModifyStat) throw new System.ArgumentException("Incorrect constructor for non-ModifyStat action.");
         ActionType = actionType; Value = value; TargetType = targetType; TargetModifier = modifier;
         ModifyAttack = modifyAttack; ModifyHealth = modifyHealth; ModifySpeed = modifySpeed;
         // Set defaults for others

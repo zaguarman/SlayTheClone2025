@@ -31,16 +31,18 @@ public static class CardFactory {
                     var newEffect = new CardEffect {
                         effectType = effect.effectType,
                         trigger = effect.trigger,
-                        actions = effect.actions.Select(a => new EffectAction {
+                        actions = new List<EffectAction>() // Create a new list
+                    };
+                    foreach (var a in effect.actions) {
+                        newEffect.actions.Add(new EffectAction { // Add actions one by one
                             actionType = a.actionType,
                             value = a.value,
                             targetType = a.targetType,
                             targetModifier = a.targetModifier,
-                            modifyAttack = a.modifyAttack,
-                            modifyHealth = a.modifyHealth,
-                            modifySpeed = a.modifySpeed
-                        }).ToList()
-                    };
+                            modifyAttack = a.modifyAttack, modifyHealth = a.modifyHealth, modifySpeed = a.modifySpeed, // Copy modify flags
+                            statusEffectToApply = a.statusEffectToApply, statusDuration = a.statusDuration, statusPotency = a.statusPotency // Copy status fields
+                        });
+                    }
                     creature.Effects.Add(newEffect);
                 }
                 card = creature;
@@ -70,27 +72,27 @@ public static class CardFactory {
         if (spellData.effects != null && spellData.effects.Count > 0) {
             foreach (var effect in spellData.effects) {
                 var newEffect = new CardEffect {
-                    effectType = effect.effectType,
-                    trigger = effect.trigger
+                    effectType = effect.effectType, trigger = effect.trigger, actions = new List<EffectAction>()
                 };
 
                 foreach (var action in effect.actions) {
                     var newAction = new EffectAction {
                         actionType = action.actionType,
-                        value = action.value,
-                        targetType = action.targetType,
-                        targetModifier = action.targetModifier,
+                        value = action.value, targetType = action.targetType, targetModifier = action.targetModifier,
                         modifyAttack = action.modifyAttack,
                         modifyHealth = action.modifyHealth,
-                        modifySpeed = action.modifySpeed
+                        modifySpeed = action.modifySpeed,
+                        statusEffectToApply = action.statusEffectToApply,
+                        statusDuration = action.statusDuration,
+                        statusPotency = action.statusPotency
                     };
                     newEffect.actions.Add(newAction);
 
                     // Also add the action to the spell's action list for direct execution
-                    if (action.actionType == ActionType.Buff) {
+                    if (action.actionType == ActionType.ModifyStat) { // Changed from Buff
                         spell.AddAction(action.actionType, action.value, action.targetType, action.modifyAttack, action.modifyHealth, action.modifySpeed, action.targetModifier);
                     } else if (action.actionType == ActionType.ApplyStatus) {
-                         spell.AddAction(action.actionType, action.targetType, action.statusEffectToApply, action.statusDuration, action.statusPotency, action.targetModifier);
+                        spell.AddAction(action.actionType, action.targetType, action.statusEffectToApply, action.statusDuration, action.statusPotency, action.targetModifier);
                     } else { // Handle simple actions (Damage, Heal, Draw, etc.)
                          spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
                     }
@@ -183,13 +185,14 @@ public static class CardFactory {
                 trigger = e.trigger,
                 actions = e.actions.Select(a => new EffectAction {
                     actionType = a.actionType,
-                    value = a.value,
-                    targetType = a.targetType,
-                    targetModifier = a.targetModifier,
+                    value = a.value, targetType = a.targetType, targetModifier = a.targetModifier,
                     modifyAttack = a.modifyAttack,
                     modifyHealth = a.modifyHealth,
-                    modifySpeed = a.modifySpeed
-                }).ToList()
+                    modifySpeed = a.modifySpeed,
+                    statusEffectToApply = a.statusEffectToApply, // Ensure these are copied
+                    statusDuration = a.statusDuration,
+                    statusPotency = a.statusPotency
+                }).ToList() // Keep ToList() here as Select returns IEnumerable
             }).ToList();
             return creatureData;
         }
@@ -206,12 +209,14 @@ public static class CardFactory {
                 trigger = e.trigger,
                 actions = e.actions.Select(a => new EffectAction {
                     actionType = a.actionType,
-                    value = a.value,
-                    targetType = a.targetType,
-                    targetModifier = a.targetModifier,
+                    value = a.value, targetType = a.targetType, targetModifier = a.targetModifier,
                     modifyAttack = a.modifyAttack,
                     modifyHealth = a.modifyHealth,
-                    modifySpeed = a.modifySpeed
+                    modifySpeed = a.modifySpeed,
+                    statusEffectToApply = a.statusEffectToApply, // Ensure these are copied
+                    statusDuration = a.statusDuration,
+                    statusPotency = a.statusPotency
+
                 }).ToList()
             }).ToList();
             return spellData;

@@ -195,9 +195,9 @@ public class Creature : Card, ICreature {
                         // Immediate summon - Queue action directly
                         ProcessSummonEffect(action, actionsQueue);
                         break;
-                    case ActionType.Buff:
+                    case ActionType.ModifyStat:
                         // Pass modifySpeed flag
-                        ProcessBuffModifier(action, modifierManager, factory, action.modifySpeed);
+                        ProcessModifyStatModifier(action, modifierManager, factory, action.modifySpeed);
                         break;
                     case ActionType.ApplyStatus:
                          // Apply as a Modifier via ModifierManager
@@ -219,7 +219,7 @@ public class Creature : Card, ICreature {
                          action.modifyHealth = true;
                          action.modifySpeed = false; // Armor doesn't affect speed
                          int armorDuration = 1;
-                         ProcessBuffModifier(action, modifierManager, factory, false, ModifierCalculationType.Flat, armorDuration); // Pass false for modifySpeed
+                         ProcessModifyStatModifier(action, modifierManager, factory, false, ModifierCalculationType.Flat, armorDuration); // Pass false for modifySpeed
                         break;
                 }
             }
@@ -365,13 +365,13 @@ public class Creature : Card, ICreature {
 
     // --- NEW: Methods to apply modifiers ---
 
-    // --- Updated ProcessBuffModifier to include modifySpeed ---
-    private void ProcessBuffModifier(EffectAction action, ModifierManager manager, IModifierFactory factory, bool modifySpeed, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
-        if (manager == null || factory == null) {
-            LogError("Buff Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
-            return;
-        }
-         if (Owner == null && action.targetType != TargetType.Self) return;
+    // --- Updated ProcessModifyStatModifier to include modifySpeed ---
+    private void ProcessModifyStatModifier(EffectAction action, ModifierManager manager, IModifierFactory factory, bool modifySpeed, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
+         if (manager == null || factory == null) {
+             LogError("ModifyStat Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
+             return;
+         }
+          if (Owner == null && action.targetType != TargetType.Self) return;
 
 
         bool modifyAttack = action.modifyAttack;
@@ -387,33 +387,33 @@ public class Creature : Card, ICreature {
               if (Owner == null) return; // Need owner for non-self targets
              targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
          }
-        // Log($"Buff Modifier: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
+         // Log($"ModifyStat Modifier: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
 
         int currentTurn = GameManager.Instance?.TurnManager?.TurnNumber ?? 0;
 
         foreach (var target in targets) {
             if (target is Creature creatureTarget) {
-                Log($"Applying Buff Modifier to {creatureTarget.Name}: A={modifyAttack}, H={modifyHealth}, S={modifySpeed}, Val={value}, Dur={duration}", LogTag.Effects);
+                Log($"Applying Stat Modifier to {creatureTarget.Name}: A={modifyAttack}, H={modifyHealth}, S={modifySpeed}, Val={value}, Dur={duration}", LogTag.Effects);
 
                  if (modifyAttack && value != 0) {
-                     string modName = $"Attack Buff ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
-                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Attack{(duration > 0 ? $" ({duration} turns)" : "")}";
+                    string modName = $"Attack Modify ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
+                    string modDesc = $"{(value >= 0 ? "+" : "")}{value} Attack{(duration > 0 ? $" ({duration} turns)" : "")}";
                      IModifier mod = duration > 0
                          ? factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Attack, calcType, value, duration, currentTurn)
                          : factory.CreateStatModifier(modName, modDesc, ModifiableStat.Attack, calcType, value);
                      manager.ApplyModifier(creatureTarget, mod);
                  }
                  if (modifyHealth && value != 0) {
-                      string modName = $"Health Buff ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
-                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Max Health{(duration > 0 ? $" ({duration} turns)" : "")}";
+                    string modName = $"Health Modify ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
+                    string modDesc = $"{(value >= 0 ? "+" : "")}{value} Max Health{(duration > 0 ? $" ({duration} turns)" : "")}";
                      IModifier mod = duration > 0
                         ? factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Health, calcType, value, duration, currentTurn)
                         : factory.CreateStatModifier(modName, modDesc, ModifiableStat.Health, calcType, value);
                      manager.ApplyModifier(creatureTarget, mod);
                  }
-                 // --- Add Speed Buff ---
+                // --- Add Speed Modification ---
                  if (modifySpeed && value != 0) {
-                    string modName = $"Speed Buff ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
+                    string modName = $"Speed Modify ({calcType} {value}){(duration > 0 ? $" [{duration}t]" : "")}";
                     string modDesc = $"{(value >= 0 ? "+" : "")}{value} Speed{(duration > 0 ? $" ({duration} turns)" : "")}";
                     IModifier mod = duration > 0
                         ? factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Speed, calcType, value, duration, currentTurn)

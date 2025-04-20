@@ -347,9 +347,10 @@ public class ThemeDecksGenerator : EditorWindow {
             "Abyssal Cucumber",
             "Gives all friendly creatures +2 attack for 2 turns.",
             1, 4,
-            new CardEffectData(EffectType.Triggered, EffectTrigger.OnPlay,
+            new CardEffectData(EffectType.Triggered, EffectTrigger.StartOfTurn,
                 new List<EffectActionData> {
-                    new EffectActionData(ActionType.Buff, 2, TargetType.FriendlyCreatures, true, false)
+                    // Example: Use the constructor for ModifyStat actions
+                    new EffectActionData(ActionType.ModifyStat, 2, TargetType.FriendlyCreatures, true, false) // Modify Attack, not Health
                 }),
             "Assets/Scriptables/Cards/Water/AbyssalCucumber.asset",
             existingCardIds.ContainsKey("AbyssalCucumber") ? existingCardIds["AbyssalCucumber"] : System.Guid.NewGuid().ToString()
@@ -728,14 +729,16 @@ public class ThemeDecksGenerator : EditorWindow {
             targetModifierProp.intValue = (int)effectData.actions[i].targetModifier;
 
             // Store buff-specific properties if this is a buff action
-            if (effectData.actions[i].actionType == ActionType.Buff) {
+            if (effectData.actions[i].actionType == ActionType.ModifyStat) {
                 // Check if the properties exist in the serialized object
                 SerializedProperty modifyAttackProp = actionProp.FindPropertyRelative("modifyAttack");
                 SerializedProperty modifyHealthProp = actionProp.FindPropertyRelative("modifyHealth");
+                SerializedProperty modifySpeedProp = actionProp.FindPropertyRelative("modifySpeed");
 
                 if (modifyAttackProp != null && modifyHealthProp != null) {
                     modifyAttackProp.boolValue = effectData.actions[i].modifyAttack;
                     modifyHealthProp.boolValue = effectData.actions[i].modifyHealth;
+                    if (modifySpeedProp != null) modifySpeedProp.boolValue = effectData.actions[i].modifySpeed; // Ensure speed is copied
                 }
             }
 
@@ -795,14 +798,16 @@ public class ThemeDecksGenerator : EditorWindow {
             targetModifierProp.intValue = (int)effectData.actions[i].targetModifier;
 
             // Store buff-specific properties if this is a buff action
-            if (effectData.actions[i].actionType == ActionType.Buff) {
+            if (effectData.actions[i].actionType == ActionType.ModifyStat) {
                 // Check if the properties exist in the serialized object
                 SerializedProperty modifyAttackProp = actionProp.FindPropertyRelative("modifyAttack");
                 SerializedProperty modifyHealthProp = actionProp.FindPropertyRelative("modifyHealth");
+                SerializedProperty modifySpeedProp = actionProp.FindPropertyRelative("modifySpeed");
 
                 if (modifyAttackProp != null && modifyHealthProp != null) {
                     modifyAttackProp.boolValue = effectData.actions[i].modifyAttack;
                     modifyHealthProp.boolValue = effectData.actions[i].modifyHealth;
+                    if (modifySpeedProp != null) modifySpeedProp.boolValue = effectData.actions[i].modifySpeed; // Ensure speed is copied
                 }
             }
 
@@ -868,9 +873,10 @@ public class ThemeDecksGenerator : EditorWindow {
         public int value;
         public TargetType targetType;
         public TargetModifier targetModifier = TargetModifier.None;
-        // Buff Specific
+        // ModifyStat Specific
         public bool modifyAttack = true;
         public bool modifyHealth = true;
+        public bool modifySpeed = false; // Added flag for speed modification
         // --- ApplyStatus Specific ---
         public StatusEffectType statusEffectToApply = StatusEffectType.None;
         public int statusDuration = 0;
@@ -880,26 +886,45 @@ public class ThemeDecksGenerator : EditorWindow {
         public EffectActionData(ActionType actionType, int value, TargetType targetType) {
             this.actionType = actionType; this.value = value; this.targetType = targetType;
         }
-        // Constructor for buff actions
+        // Constructor for ModifyStat actions
         public EffectActionData(ActionType actionType, int value, TargetType targetType, bool modifyAttack, bool modifyHealth) {
+            if (actionType != ActionType.ModifyStat) Debug.LogError("Incorrect constructor used for non-ModifyStat action");
             this.actionType = actionType; this.value = value; this.targetType = targetType;
             this.modifyAttack = modifyAttack; this.modifyHealth = modifyHealth;
+            this.modifySpeed = false; // Default to false for speed
+        }
+
+        // Constructor for ModifyStat actions with speed
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, bool modifyAttack, bool modifyHealth, bool modifySpeed) {
+            if (actionType != ActionType.ModifyStat) Debug.LogError("Incorrect constructor used for non-ModifyStat action");
+            this.actionType = actionType; this.value = value; this.targetType = targetType;
+            this.modifyAttack = modifyAttack; this.modifyHealth = modifyHealth;
+            this.modifySpeed = modifySpeed; // Use provided speed value
         }
         // Constructor for actions with modifiers
         public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier) {
             this.actionType = actionType; this.value = value; this.targetType = targetType;
             this.targetModifier = targetModifier;
         }
-        // Constructor for buffs with modifiers
+        // Constructor for ModifyStat with modifiers
         public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool modifyAttack, bool modifyHealth) {
+             if (actionType != ActionType.ModifyStat) Debug.LogError("Incorrect constructor used for non-ModifyStat action");
             this.actionType = actionType; this.value = value; this.targetType = targetType;
             this.targetModifier = targetModifier; this.modifyAttack = modifyAttack; this.modifyHealth = modifyHealth;
+            this.modifySpeed = false; // Default to false for speed
         }
-        // --- Constructor for ApplyStatus actions ---
+
+        // Constructor for ModifyStat with modifiers and speed
+        public EffectActionData(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier, bool modifyAttack, bool modifyHealth, bool modifySpeed) {
+             if (actionType != ActionType.ModifyStat) Debug.LogError("Incorrect constructor used for non-ModifyStat action");
+            this.actionType = actionType; this.value = value; this.targetType = targetType;
+            this.targetModifier = targetModifier; this.modifyAttack = modifyAttack; this.modifyHealth = modifyHealth;
+            this.modifySpeed = modifySpeed; // Use provided speed value
+        }
+        // Constructor for ApplyStatus actions
          public EffectActionData(ActionType actionType, TargetType targetType, StatusEffectType status, int duration, int potency, TargetModifier modifier = TargetModifier.None) {
             if (actionType != ActionType.ApplyStatus) Debug.LogError("Incorrect constructor used for non-ApplyStatus action");
-            this.actionType = actionType;
-            this.targetType = targetType;
+            this.actionType = actionType; this.targetType = targetType;
             this.statusEffectToApply = status;
             this.statusDuration = duration;
             this.statusPotency = potency;

@@ -18,9 +18,9 @@ public class Effects : MonoBehaviour {
         public TargetModifier targetModifier = TargetModifier.None;
 
         // --- Buff Specific ---
-        public bool modifyAttack = true;
-        public bool modifyHealth = true;
-        // public ModifierCalculationType calculationType = ModifierCalculationType.Flat; // Optional: Add if needed per-action
+        public bool modifyAttack = true; // Flag to indicate if Attack should be modified
+        public bool modifyHealth = true; // Flag to indicate if Health should be modified
+        public bool modifySpeed = false; // Flag to indicate if Speed should be modified
 
         // --- ApplyStatus Specific ---
         [Tooltip("Which status effect to apply (only used if actionType is ApplyStatus)")]

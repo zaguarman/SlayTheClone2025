@@ -5,7 +5,7 @@ public class Enums {
     public enum CardType { Creature, Spell, Enchantment }
     public enum EffectType { Immediate, Triggered, Continuous, Timed, Status } // Added Status
     public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted } // Added ActionAttempted
-    public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, Buff, ApplyStatus } // Added ApplyStatus
+    public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus } // Renamed Buff to ModifyStat
     public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
     // --- New Enum for Status Effects ---
