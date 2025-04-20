@@ -1,7 +1,5 @@
 using static Enums;
 using static DebugLogger;
-using UnityEngine;
-using System;
 
 public class SummonCreatureAction : IGameAction {
     private readonly ICreature creature;

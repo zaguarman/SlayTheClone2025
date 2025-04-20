@@ -1,16 +1,13 @@
 using static DebugLogger;
 using static Enums;
 
-public class MarkCombatTargetAction : IGameAction {
-    #region Fields & Properties
+public class BattlefieldCombatAction : IGameAction {
     private readonly ICreature attacker;
     private readonly BattlefieldSlot targetSlot;
     public ICreature GetAttacker() => attacker;
     public BattlefieldSlot GetTargetSlot() => targetSlot;
-    #endregion
 
-    #region Constructor
-    public MarkCombatTargetAction(ICreature attacker, ITarget targetSlot) {
+    public BattlefieldCombatAction(ICreature attacker, ITarget targetSlot) {
         this.attacker = attacker;
         this.targetSlot = (BattlefieldSlot)targetSlot;
 
@@ -21,9 +18,7 @@ public class MarkCombatTargetAction : IGameAction {
         Log($"Created MarkCombatTargetAction: {attackerName} (AttackerID: {attackerId}) targeting slot (SlotID: {slotId}) (ActionID: {GetHashCode().ToString().ToUpper()})",
             LogTag.Actions | LogTag.Combat);
     }
-    #endregion
-
-    #region Methods
+    
     public void Execute() {
         if (attacker == null || targetSlot == null) {
             LogError($"Cannot execute combat action - attacker or target slot is null (ActionID: {GetHashCode().ToString().ToUpper()})",
@@ -76,5 +71,4 @@ public class MarkCombatTargetAction : IGameAction {
         string slotId = targetSlot != null ? targetSlot.TargetId.ToUpper() : "UNKNOWN";
         return $"MarkCombatTargetAction: Attacker={attackerName} (AttackerID: {attackerId}), TargetSlot=(SlotID: {slotId}) (ActionID: {GetHashCode().ToString().ToUpper()})";
     }
-    #endregion
 }

@@ -52,7 +52,7 @@ public class ActionsQueue {
             MoveCreatureAction or SwapCreaturesAction => 0,
             PlayCardAction => 1,
             // DirectDamageAction removed
-            MarkCombatTargetAction => 4,
+            BattlefieldCombatAction => 4,
             // DamageCreatureAction priority remains
             DamageCreatureAction or DamagePlayerAction => 5,
             DiscardHandAction => 6, // Discard hand should happen after all other actions
@@ -65,7 +65,7 @@ public class ActionsQueue {
         return action switch {
             DamageCreatureAction damageAction => damageAction.GetAttacker()?.TargetId,
             SwapCreaturesAction swapAction => swapAction.GetCreature1()?.TargetId,
-            MarkCombatTargetAction combatAction => combatAction.GetAttacker()?.TargetId,
+            BattlefieldCombatAction combatAction => combatAction.GetAttacker()?.TargetId,
             _ => null
         };
     }

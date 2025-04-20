@@ -106,7 +106,7 @@ public class BattlefieldCombatHandler {
         var pendingActions = actionsQueue.GetPendingActions();
 
         foreach (var action in pendingActions) {
-            if (action is MarkCombatTargetAction combatAction &&
+            if (action is BattlefieldCombatAction combatAction &&
                 combatAction.GetAttacker()?.TargetId == attackerCreature.TargetId) {
 
                 // We can't directly remove from the queue, so we'll need to
@@ -128,7 +128,7 @@ public class BattlefieldCombatHandler {
     }
 
     private void QueueCombatAction(ICreature attackerCreature, ITarget targetSlot) {
-        gameManager.ActionsQueue.AddAction(new MarkCombatTargetAction(attackerCreature, targetSlot));
+        gameManager.ActionsQueue.AddAction(new BattlefieldCombatAction(attackerCreature, targetSlot));
         Log($"{attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()}) targets slot (TargetID: {targetSlot.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
 
         // Notify that the actions queue changed to ensure arrows update

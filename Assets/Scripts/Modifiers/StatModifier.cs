@@ -1,6 +1,4 @@
-using System;
 using static DebugLogger;
-using static Enums; // Assuming your Enums class is accessible
 
 // Represents a modifier that changes a creature's stats
 public class StatModifier : BaseModifier {

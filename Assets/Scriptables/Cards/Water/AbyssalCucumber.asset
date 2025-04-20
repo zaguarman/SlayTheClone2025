@@ -26,5 +26,8 @@ MonoBehaviour:
       targetModifier: 0
       buffAttack: 1
       buffHealth: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
   attack: 1
   health: 4

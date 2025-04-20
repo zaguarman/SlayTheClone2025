@@ -135,7 +135,7 @@ public class BattlefieldArrowManager {
 
     private string GetActionKey(IGameAction action) {
         return action switch {
-            MarkCombatTargetAction markCombatAction => $"combat_{markCombatAction.GetAttacker()?.TargetId}_{markCombatAction.GetTargetSlot()?.TargetId}",
+            BattlefieldCombatAction markCombatAction => $"combat_{markCombatAction.GetAttacker()?.TargetId}_{markCombatAction.GetTargetSlot()?.TargetId}",
             DamageCreatureAction damageAction => $"damage_{damageAction.GetAttacker()?.TargetId}_{damageAction.GetTarget()?.TargetId}",
             MoveCreatureAction moveAction => $"move_{moveAction.GetCreature()?.TargetId}_{moveAction.GetToSlot()?.TargetId}",
             _ => null
@@ -144,7 +144,7 @@ public class BattlefieldArrowManager {
 
     private void CreateArrowForAction(IGameAction action, string actionKey) {
         switch (action) {
-            case MarkCombatTargetAction markCombatAction:
+            case BattlefieldCombatAction markCombatAction:
                 CreateArrowForMarkCombatAction(markCombatAction, actionKey);
                 break;
             case DamageCreatureAction damageAction:
@@ -156,7 +156,7 @@ public class BattlefieldArrowManager {
         }
     }
 
-    private void CreateArrowForMarkCombatAction(MarkCombatTargetAction action, string actionKey) {
+    private void CreateArrowForMarkCombatAction(BattlefieldCombatAction action, string actionKey) {
         var attacker = action.GetAttacker();
         var targetSlot = action.GetTargetSlot();
 
