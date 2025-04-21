@@ -1638,12 +1638,12 @@ MonoBehaviour:
   discardViewButton: {fileID: 1911068244}
   deckViewTitleText: {fileID: 1976086030}
   tooltip: {fileID: 0}
-  player1References:
+  _player1References:
     playerUI: {fileID: 1123533886}
     healthText: {fileID: 1544506893}
     handUI: {fileID: 1587845791}
     battlefieldUI: {fileID: 1445917820}
-  player2References:
+  _player2References:
     playerUI: {fileID: 1736996917}
     healthText: {fileID: 54383538}
     handUI: {fileID: 1707401508}
