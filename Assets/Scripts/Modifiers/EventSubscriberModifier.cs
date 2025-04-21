@@ -25,19 +25,19 @@ public class EventSubscriberModifier : BaseModifier
      // public EventSubscriberModifier(string name, string description, EffectTrigger trigger, UnityAction<int> turnEndAction) ...
      // public EventSubscriberModifier(string name, string description, EffectTrigger trigger, UnityAction<ICreature, IPlayer> summonAction) ...
 
-    public override void Apply(object target, GameMediator mediator)
+    public override void Apply(object target, IGameMediator mediator)
     {
         Log($"EventSubscriberModifier '{Name}' applying (subscribing) to {EventToListenTo} for target {target}", LogTag.Effects);
         SubscribeToEvent(mediator, true);
     }
 
-    public override void Remove(object target, GameMediator mediator)
+    public override void Remove(object target, IGameMediator mediator)
     {
         Log($"EventSubscriberModifier '{Name}' removing (unsubscribing) from {EventToListenTo} for target {target}", LogTag.Effects);
         SubscribeToEvent(mediator, false);
     }
 
-    private void SubscribeToEvent(GameMediator mediator, bool subscribe)
+    private void SubscribeToEvent(IGameMediator mediator, bool subscribe)
     {
         try
         {

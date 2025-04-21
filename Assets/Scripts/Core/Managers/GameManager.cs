@@ -28,8 +28,8 @@ public class GameManager : InitializableComponent {
     private BattlefieldCombatHandler combatHandler;
     private TurnManager turnManager;
 
-    private GameMediator gameMediator;
-    private GameReferences gameReferences;
+    private IGameMediator gameMediator;
+    private IGameReferences gameReferences;
     public ICardDealingService cardDealingService { get; private set; }
     private System.Random random = new System.Random();
     private bool weatherSystemInitialized = false;
@@ -84,6 +84,7 @@ public class GameManager : InitializableComponent {
             return;
         }
 
+        // Get dependencies from singletons (will be injected in the future)
         gameMediator = GameMediator.Instance;
         gameReferences = GameReferences.Instance;
         cardDealingService = new CardDealingService(gameMediator);

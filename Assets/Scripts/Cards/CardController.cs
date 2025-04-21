@@ -54,8 +54,11 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         cardImage = GetComponent<Image>();
     }
 
-    public void Setup(CardData data, IPlayer owner, ICreature creature = null) {
-        base.Initialize(owner);
+    public void Setup(CardData data, IPlayer owner, ICreature creature, IGameMediator mediator, IGameReferences references) {
+        // Call base Initialize with dependencies FIRST
+        base.Initialize(owner, mediator, references);
+
+        // Now do CardController specific setup
         cardData = data;
         linkedCreature = creature;
         UpdateUI();
@@ -123,8 +126,22 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     }
 
     private Tooltip GetTooltip() {
-        if (tooltip == null) {
-            tooltip = gameReferences.GetTooltip();
+        // Use gameReferences from base class
+        // Check if gameReferences itself is valid before accessing GetTooltip
+        if (tooltip == null && gameReferences != null) { // Add null check for gameReferences
+             // Check if the GameReferences object hasn't been destroyed
+             if ((UnityEngine.Object)gameReferences != null) // Cast to UnityEngine.Object for null check
+             {
+                tooltip = gameReferences.GetTooltip();
+             }
+             else {
+                 // GameReferences was destroyed, can't get tooltip
+                 return null;
+             }
+        }
+        // Check if the tooltip we have cached hasn't been destroyed
+        if (tooltip != null && tooltip.gameObject == null) {
+            tooltip = null; // Clear the cached reference if destroyed
         }
         return tooltip;
     }
@@ -266,20 +283,29 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
 
     // Make sure to clean up when the card is destroyed
     protected override void OnDestroy() {
-        // Hide tooltip if showing for this card
-        if (gameReferences != null) {
-            var tooltip = GetTooltip();
-            if (tooltip != null) {
-                tooltip.HideTooltip();
+        // Check if gameReferences is still valid *before* trying to use it
+        if (gameReferences != null) // Use the inherited field
+        {
+            var tooltip = GetTooltip(); // GetTooltip also uses gameReferences
+            if (tooltip != null) // Check if tooltip is valid too
+            {
+                // Check if the tooltip GameObject itself hasn't been destroyed
+                // This uses Unity's overloaded '==' operator for destroyed objects
+                if(tooltip.gameObject != null)
+                {
+                    tooltip.HideTooltip();
+                }
             }
         }
 
+        // Existing cleanup
         if (transform != null) {
             DOTween.Kill(transform);
         }
-
         CleanupEvents();
-        base.OnDestroy();
+
+        // Call the base OnDestroy last
+        base.OnDestroy(); // base.OnDestroy handles UnregisterEvents etc.
     }
 
     private void CleanupEvents() {

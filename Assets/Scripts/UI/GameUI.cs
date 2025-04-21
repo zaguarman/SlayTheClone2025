@@ -1,7 +1,8 @@
 using UnityEngine;
 using static DebugLogger;
+using UnityEngine.Events;
 
-public class GameUI : UIComponent {
+public class GameUI : InitializableComponent {
     private static GameUI instance;
     public static GameUI Instance {
         get {
@@ -19,9 +20,20 @@ public class GameUI : UIComponent {
     private PlayerUI player2UI;
     private BattlefieldUI player1BattlefieldUI;
     private BattlefieldUI player2BattlefieldUI;
+    private HandUI player1HandUI;
+    private HandUI player2HandUI;
     private WeatherController weatherController;
     private TurnUI turnUI;
+    private DeckViewController deckViewController;
     private bool weatherSystemInitialized = false;
+
+    // Keep fields to store dependencies needed by children
+    private GameManager _gameManager; // Change to IGameManager later
+    private IGameMediator _gameMediator;
+    private IGameReferences _gameReferences;
+
+    // UnityEvent for initialization completion
+    public UnityEvent onInitialized = new UnityEvent();
 
     protected override void Awake() {
         base.Awake();
@@ -32,48 +44,58 @@ public class GameUI : UIComponent {
         instance = this;
     }
 
-    public override void Initialize() {
+    // This correctly overrides Initialize from InitializableComponent
+    public override void Initialize()
+    {
         if (IsInitialized) return;
 
-        if (!InitializationManager.Instance.IsComponentInitialized<GameManager>()) {
-            LogError("Cannot initialize GameUI - GameManager not initialized", LogTag.UI | LogTag.Initialization);
+        // Get dependencies (still okay to use Singletons here in the root)
+        _gameManager = GameManager.Instance;
+        _gameMediator = GameMediator.Instance;
+        _gameReferences = GameReferences.Instance;
+
+        if (_gameManager == null || _gameMediator == null || _gameReferences == null) {
+            LogError("Cannot initialize GameUI - Core dependencies not ready", LogTag.UI | LogTag.Initialization);
+            return;
+        }
+        if (!_gameReferences.AreReferencesValid()) {
+             LogError("Cannot initialize GameUI - GameReferences are invalid", LogTag.UI | LogTag.Initialization);
+             return;
+        }
+
+        // Call base.Initialize() from InitializableComponent to set the flag
+        base.Initialize(); // Sets IsInitialized = true
+
+        GetChildReferences();
+        if (!ValidateChildReferences()) {
+            LogError("Failed to validate child UI references in GameUI", LogTag.UI | LogTag.Initialization);
             return;
         }
 
-        GetReferences();
-        if (!ValidateReferences()) {
-            LogError("Failed to validate UI references", LogTag.UI | LogTag.Initialization);
-            return;
-        }
+        InitializeChildUI(); // Initialize children, passing dependencies
+        InitializeControllers(); // Initialize WeatherController, DeckViewController
 
-        InitializeUI();
-        InitializeWeatherSystem();
-        RegisterEvents();
-
-        // Update "Resolve Actions" button to say "End Turn"
-        var resolveButton = gameReferences.GetResolveActionsButton();
+        // Update "Resolve Actions" button text
+        var resolveButton = _gameReferences.GetResolveActionsButton();
         if (resolveButton != null) {
             var buttonText = resolveButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (buttonText != null) {
-                buttonText.text = "End Turn";
-            }
+            if (buttonText != null) buttonText.text = "End Turn";
         }
 
-        IsInitialized = true;
+        // IsInitialized is set by base.Initialize()
         Log("GameUI initialized successfully", LogTag.UI | LogTag.Initialization);
-        onInitialized.Invoke();
+        onInitialized.Invoke(); // Notify that GameUI itself is ready
     }
 
-    private void GetReferences() {
-        if (gameReferences == null) {
-            LogError("GameReferences not found during UI initialization", LogTag.UI | LogTag.Initialization);
-            return;
-        }
+    private void GetChildReferences() {
+        if (_gameReferences == null) return;
 
-        player1UI = gameReferences.GetPlayer1UI();
-        player2UI = gameReferences.GetPlayer2UI();
-        player1BattlefieldUI = gameReferences.GetPlayer1BattlefieldUI();
-        player2BattlefieldUI = gameReferences.GetPlayer2BattlefieldUI();
+        player1UI = _gameReferences.GetPlayer1UI();
+        player2UI = _gameReferences.GetPlayer2UI();
+        player1BattlefieldUI = _gameReferences.GetPlayer1BattlefieldUI();
+        player2BattlefieldUI = _gameReferences.GetPlayer2BattlefieldUI();
+        player1HandUI = _gameReferences.GetPlayer1HandUI();
+        player2HandUI = _gameReferences.GetPlayer2HandUI();
 
         // Find TurnUI, create it if it doesn't exist
         turnUI = FindObjectOfType<TurnUI>();
@@ -109,90 +131,70 @@ public class GameUI : UIComponent {
         }
     }
 
-    private bool ValidateReferences() {
-        if (player1UI == null || player2UI == null) {
-            LogError("Player UI references missing", LogTag.UI | LogTag.Initialization);
-            return false;
-        }
-
-        if (player1BattlefieldUI == null || player2BattlefieldUI == null) {
-            LogError("Battlefield UI references missing", LogTag.UI | LogTag.Initialization);
-            return false;
-        }
-
-        if (turnUI == null) {
-            LogError("TurnUI reference missing", LogTag.UI | LogTag.Initialization);
-            return false;
-        }
-
-        return true;
+    private bool ValidateChildReferences() {
+        bool isValid = true;
+        if (player1UI == null) { LogError("Player 1 UI reference missing in GameReferences", LogTag.UI); isValid = false; }
+        if (player2UI == null) { LogError("Player 2 UI reference missing in GameReferences", LogTag.UI); isValid = false; }
+        if (player1BattlefieldUI == null) { LogError("Player 1 Battlefield UI reference missing in GameReferences", LogTag.UI); isValid = false; }
+        if (player2BattlefieldUI == null) { LogError("Player 2 Battlefield UI reference missing in GameReferences", LogTag.UI); isValid = false; }
+        if (player1HandUI == null) { LogError("Player 1 Hand UI reference missing in GameReferences", LogTag.UI); isValid = false; }
+        if (player2HandUI == null) { LogError("Player 2 Hand UI reference missing in GameReferences", LogTag.UI); isValid = false; }
+        if (turnUI == null) { LogError("TurnUI reference missing", LogTag.UI); isValid = false; }
+        return isValid;
     }
 
-    private void InitializeUI() {
-        // Initialize Player UIs
-        if (player1UI != null && gameManager.Player1 != null) {
-            player1UI.Initialize(gameManager.Player1);
-            Log("Player 1 UI initialized", LogTag.UI | LogTag.Initialization);
+    private void InitializeChildUI() {
+        if (_gameManager.Player1 == null || _gameManager.Player2 == null) {
+             LogError("Players not initialized in GameManager before GameUI initialization!", LogTag.Initialization | LogTag.UI);
+             return;
         }
 
-        if (player2UI != null && gameManager.Player2 != null) {
-            player2UI.Initialize(gameManager.Player2);
-            Log("Player 2 UI initialized", LogTag.UI | LogTag.Initialization);
-        }
+        player1UI?.Initialize(_gameManager.Player1, _gameMediator, _gameReferences);
+        player2UI?.Initialize(_gameManager.Player2, _gameMediator, _gameReferences);
+        player1BattlefieldUI?.Initialize(_gameManager.Player1, _gameMediator, _gameReferences);
+        player2BattlefieldUI?.Initialize(_gameManager.Player2, _gameMediator, _gameReferences);
+        player1HandUI?.Initialize(_gameManager.Player1, _gameMediator, _gameReferences);
+        player2HandUI?.Initialize(_gameManager.Player2, _gameMediator, _gameReferences);
+        turnUI?.Initialize(_gameMediator, _gameReferences);
+        _gameReferences.GetDeckViewUI()?.Initialize(_gameMediator, _gameReferences); // DeckViewUI doesn't need player
 
-        // Initialize Battlefield UIs
-        if (player1BattlefieldUI != null && gameManager.Player1 != null) {
-            player1BattlefieldUI.Initialize(gameManager.Player1);
-            Log("Player 1 Battlefield UI initialized", LogTag.UI | LogTag.Initialization);
-        }
-
-        if (player2BattlefieldUI != null && gameManager.Player2 != null) {
-            player2BattlefieldUI.Initialize(gameManager.Player2);
-            Log("Player 2 Battlefield UI initialized", LogTag.UI | LogTag.Initialization);
-        }
-
-        // Initialize Turn UI
-        if (turnUI != null) {
-            turnUI.Initialize();
-            Log("Turn UI initialized", LogTag.UI | LogTag.Initialization | LogTag.Turns);
-        }
+        Log("All child UI components initialized", LogTag.UI | LogTag.Initialization);
     }
 
-    private void InitializeWeatherSystem() {
-        // Only initialize if GameManager's WeatherSystem is ready
-        if (gameManager?.WeatherSystem == null) {
+    private void InitializeControllers() {
+        // Initialize WeatherController
+        if (_gameManager?.WeatherSystem == null) {
             LogError("Cannot initialize WeatherController - WeatherSystem not ready", LogTag.UI | LogTag.Initialization);
-            return;
-        }
-
-        if (weatherController == null) {
-            weatherController = gameObject.AddComponent<WeatherController>();
+        } else {
+            weatherController = GetComponent<WeatherController>();
+            if (weatherController == null) weatherController = gameObject.AddComponent<WeatherController>();
             weatherSystemInitialized = true;
             Log("Weather controller initialized", LogTag.UI | LogTag.Initialization);
         }
+
+        // Initialize DeckViewController
+        deckViewController = GetComponent<DeckViewController>();
+        if (deckViewController == null) deckViewController = gameObject.AddComponent<DeckViewController>();
+        Log("DeckViewController initialized", LogTag.UI | LogTag.Initialization);
     }
 
-    protected override void RegisterEvents() {
-        if (gameMediator != null) {
-            gameMediator.AddGameInitializedListener(OnGameInitialized);
-            Log("GameUI events registered", LogTag.UI | LogTag.Initialization);
+    private void OnEnable() {
+        if (IsInitialized && _gameMediator != null) {
+            _gameMediator.AddGameInitializedListener(OnGameInitialized);
+            Log("GameUI events registered", LogTag.UI);
         }
     }
 
-    protected override void UnregisterEvents() {
-        if (gameMediator != null) {
-            gameMediator.RemoveGameInitializedListener(OnGameInitialized);
+    private void OnDisable() {
+        if (_gameMediator != null) {
+            _gameMediator.RemoveGameInitializedListener(OnGameInitialized);
             Log("GameUI events unregistered", LogTag.UI);
         }
     }
 
-    public override void UpdateUI(IPlayer player = null) {
-        // do nothing, the ui components are self contained
-    }
-
     private void OnGameInitialized() {
-        UpdateUI();
-        Log("GameUI updated after game initialization", LogTag.UI);
+        Log("GameUI notified of game initialization", LogTag.UI);
+        // Notify child components if needed
     }
 
     protected override void OnDestroy() {
@@ -202,6 +204,7 @@ public class GameUI : UIComponent {
                 weatherSystemInitialized = false;
             }
             instance = null;
+            onInitialized.RemoveAllListeners(); // Clean up listeners
             Log("GameUI destroyed", LogTag.UI);
         }
         base.OnDestroy();

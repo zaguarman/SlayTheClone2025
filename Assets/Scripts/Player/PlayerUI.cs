@@ -5,18 +5,14 @@ public class PlayerUI : UIComponent {
     private HandUI handUI;
     private TextMeshProUGUI healthText;
 
-    public override void Initialize(IPlayer player) {
-        base.Initialize(player);
-
-        if (gameReferences == null) {
-            LogError("GameReferences not found during PlayerUI initialization", LogTag.UI | LogTag.Initialization);
-            return;
-        }
+    public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references) {
+        // Call base UIComponent Initialize FIRST
+        base.Initialize(player, mediator, references);
 
         // Get the player's health text based on whether it's player 1 or 2
         healthText = player.IsPlayer1() ?
-            gameReferences.player1References.HealthText :
-            gameReferences.player2References.HealthText;
+            references.player1References.HealthText :
+            references.player2References.HealthText;
 
         if (healthText == null) {
             LogWarning($"Health text reference missing for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
@@ -26,9 +22,10 @@ public class PlayerUI : UIComponent {
             Log($"Health text set for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
         }
 
-        InitializeHandUI(player);
+        // Don't initialize HandUI here, let GameUI handle its children's initialization
+        // InitializeHandUI(player); // REMOVE THIS CALL
 
-        IsInitialized = true;
+        // IsInitialized is set by base class
         Log($"PlayerUI initialized for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
     }
 
@@ -58,23 +55,8 @@ public class PlayerUI : UIComponent {
         player.UpdateHealthUI();
     }
 
-    private void InitializeHandUI(IPlayer player) {
-        if (player == null) {
-            LogError("Player is null on PlayerUI", LogTag.UI | LogTag.Initialization);
-            return;
-        }
-
-        handUI = player.IsPlayer1() ?
-            gameReferences.GetPlayer1HandUI() :
-            gameReferences.GetPlayer2HandUI();
-
-        if (handUI != null) {
-            handUI.Initialize(player);
-            Log($"HandUI initialized for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
-        } else {
-            LogError($"HandUI reference missing for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
-        }
-    }
+    // Remove InitializeHandUI - this should be managed by GameUI
+    // private void InitializeHandUI(IPlayer player) { ... } // REMOVED
 
     protected override void CleanupComponent() {
         // No need to clean up the health handler as it's now managed by the Player

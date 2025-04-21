@@ -2,7 +2,11 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using static DebugLogger;
 
-public class GameMediator : Singleton<GameMediator> {
+/// <summary>
+/// GameMediator serves as the central event hub for game events and notifications.
+/// It implements IGameMediator to support dependency injection.
+/// </summary>
+public class GameMediator : Singleton<GameMediator>, IGameMediator {
     #region Game Events Class
     private class GameEvents {
         public readonly UnityEvent<IPlayer, int> PlayerDamaged = new UnityEvent<IPlayer, int>();

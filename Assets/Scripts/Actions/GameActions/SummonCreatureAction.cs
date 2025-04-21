@@ -1,5 +1,6 @@
 using static Enums;
 using static DebugLogger;
+using UnityEngine; // Needed for transform
 
 public class SummonCreatureAction : IGameAction {
     private readonly ICreature creature;
@@ -47,9 +48,19 @@ public class SummonCreatureAction : IGameAction {
              owner.RemoveFromBattlefield(slot.OccupyingCreature, true); // Destroy the old card controller
         }
 
+        // --- Get Dependencies (Temporary Singleton Access) ---
+        var mediator = GameMediator.Instance;
+        var references = GameReferences.Instance;
+
+        if (mediator == null || references == null)
+        {
+            LogError($"Failed to get Mediator or References in SummonCreatureAction for {creature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Initialization);
+            return;
+        }
+        // --- End Dependency Get ---
+
         // 2. Create CardController and assign to slot
-        // The CardFactory now returns the controller directly
-        var cardController = CardFactory.CreateCardController(creature, owner, slot.transform);
+        var cardController = CardFactory.CreateCardController(creature, owner, slot.transform, mediator, references);
         if (cardController != null) {
             slot.AssignCreature(cardController); // Assigns controller and sets creature.Slot
             Log($"Summoned {creature.Name} to slot {slot.TargetId.ToUpper().Substring(0,8)}", LogTag.Actions | LogTag.Creatures);
@@ -59,12 +70,11 @@ public class SummonCreatureAction : IGameAction {
 
             // 4. Trigger OnPlay CardEffects (existing system)
             if (creature is Creature creatureImpl) {
-                // Log($"Triggering OnPlay CardEffects for {creature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Effects);
-                creatureImpl.HandleEffect(EffectTrigger.OnPlay, GameManager.Instance.ActionsQueue);
+                creatureImpl.HandleEffect(EffectTrigger.OnPlay, GameManager.Instance.ActionsQueue); // Pass ActionsQueue instance
             }
 
              // 5. Notify GameMediator AFTER registration and effects
-             GameMediator.Instance?.NotifyCreatureSummoned(creature, owner);
+             mediator.NotifyCreatureSummoned(creature, owner); // Use the obtained mediator instance
 
         } else {
             LogError($"Failed to create card controller for {creature.Name}", LogTag.Actions | LogTag.Creatures);

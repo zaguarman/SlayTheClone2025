@@ -87,8 +87,9 @@ public class DeckViewUI : UIComponent {
         Log("Card grid setup complete", LogTag.UI | LogTag.Initialization);
     }
 
-    public override void Initialize(IPlayer player = null) {
-        base.Initialize(player);
+    public override void Initialize(IGameMediator mediator, IGameReferences references) {
+        // Call base UIComponent Initialize FIRST
+        base.Initialize(mediator, references);
 
         Log("DeckViewUI Initialize called", LogTag.UI | LogTag.Initialization);
 
@@ -108,7 +109,7 @@ public class DeckViewUI : UIComponent {
         closeButton.onClick.AddListener(HideDeckView);
         Log("Close button listener attached", LogTag.UI | LogTag.Initialization);
 
-        IsInitialized = true;
+        // IsInitialized is set by base class
         Log("DeckViewUI initialized", LogTag.UI | LogTag.Initialization);
     }
 
@@ -155,7 +156,7 @@ public class DeckViewUI : UIComponent {
 
         if (!IsInitialized) {
             LogWarning("DeckViewUI not initialized yet, attempting to initialize now", LogTag.UI);
-            Initialize(Player);
+            Initialize(gameMediator, gameReferences);
         }
 
         // Default to showing the deck
@@ -306,8 +307,8 @@ public class DeckViewUI : UIComponent {
             return;
         }
 
-        // Use CardFactory to create the card controller with the existing prefab
-        var cardController = CardFactory.CreateCardController(card, owner, cardListContent);
+        // Use CardFactory to create the card controller with the existing prefab and dependencies
+        var cardController = CardFactory.CreateCardController(card, owner, cardListContent, gameMediator, gameReferences);
 
         if (cardController != null) {
             // Disable dragging but keep tooltip functionality
@@ -369,23 +370,37 @@ public class DeckViewUI : UIComponent {
         // This is a more effective way to prevent drag behavior
     }
 
+    // Helper to safely get tooltip within DeckViewUI
+    private Tooltip GetTooltipFromReferences() {
+        if (gameReferences != null && (UnityEngine.Object)gameReferences != null) {
+            return gameReferences.GetTooltip();
+        }
+        return null;
+    }
+
     private void ClearCardEntries() {
-        // Hide the tooltip
-        if (cardTooltip == null) {
-            cardTooltip = gameReferences?.GetTooltip();
+        // Hide the tooltip ONLY if references are still valid
+        if (gameReferences != null) // Use inherited field
+        {
+             // Check if the GameReferences object hasn't been destroyed
+             if((UnityEngine.Object)gameReferences != null)
+             {
+                // Get the tooltip (using the potentially safer GetTooltip method)
+                if (cardTooltip == null) {
+                    cardTooltip = GetTooltipFromReferences();
+                }
+                if (cardTooltip != null && cardTooltip.gameObject != null) { // Check tooltip validity
+                    cardTooltip.HideTooltip();
+                }
+             }
         }
 
-        if (cardTooltip != null) {
-            cardTooltip.HideTooltip();
-        }
-
-        // Then destroy all cards
+        // Destroy card GameObjects (this part is safe)
         foreach (var entry in cardEntries) {
-            if (entry != null) {
+            if (entry != null && entry.gameObject != null) { // Add gameObject null check
                 Destroy(entry.gameObject);
             }
         }
-
         cardEntries.Clear();
     }
 

@@ -16,8 +16,8 @@ public abstract class BaseModifier : IModifier
         Log($"Modifier '{Name}' created (ID: {Id.ToString().ToUpper().Substring(0, 8)})", LogTag.Effects);
     }
 
-    public abstract void Apply(object target, GameMediator mediator);
-    public abstract void Remove(object target, GameMediator mediator);
+    public abstract void Apply(object target, IGameMediator mediator);
+    public abstract void Remove(object target, IGameMediator mediator);
 
     public virtual bool TryGetStatModification(ModifiableStat stat, out ModifierCalculationType calcType, out int value)
     {

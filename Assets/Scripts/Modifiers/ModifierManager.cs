@@ -7,7 +7,7 @@ using static Enums; // Add this for StatusEffectType enum
 public class ModifierManager
 {
     #region Fields & Properties
-    private readonly GameMediator _mediator;
+    private readonly IGameMediator _mediator;
     public readonly IModifierFactory _modifierFactory;
 
     // Tracks active modifiers: Key = TargetId of Creature (or Slot later), Value = List of modifiers
@@ -18,7 +18,7 @@ public class ModifierManager
     #endregion
 
     #region Constructor
-    public ModifierManager(GameMediator mediator, IModifierFactory factory)
+    public ModifierManager(IGameMediator mediator, IModifierFactory factory)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _modifierFactory = factory ?? throw new ArgumentNullException(nameof(factory));

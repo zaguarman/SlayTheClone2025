@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using static DebugLogger;
+using System.Collections; // Add this
 
 public class DeckViewController : MonoBehaviour {
     // Remove these serialized fields and use GameReferences instead
@@ -13,7 +14,8 @@ public class DeckViewController : MonoBehaviour {
     private TextMeshProUGUI discardButtonText;
     private DeckViewUI deckViewUI;
     private GameManager gameManager;
-    private GameReferences gameReferences;
+    private IGameMediator gameMediator; // Store mediator reference
+    private IGameReferences gameReferences; // Store references
 
     private bool isDeckViewOpen = false;
     private bool isDiscardViewOpen = false;
@@ -21,50 +23,55 @@ public class DeckViewController : MonoBehaviour {
 
     private void Awake() {
         Log("DeckViewController Awake called", LogTag.UI | LogTag.Initialization);
-        InitializeReferences();
+        // Don't initialize here, wait for Start or Coroutine
+    }
+
+    private void Start() // Use Start for initialization that depends on other Singletons
+    {
+         InitializeReferences();
     }
 
     private void InitializeReferences() {
+        // Get dependencies using Singleton access (okay in this controller context for now)
         gameManager = GameManager.Instance;
+        gameMediator = GameMediator.Instance;
         gameReferences = GameReferences.Instance;
 
-        if (gameManager != null && gameReferences != null && gameReferences.AreReferencesValid()) {
+        if (gameManager != null && gameMediator != null && gameReferences != null && gameReferences.AreReferencesValid()) {
             GetUIReferences();
             SetupButtons();
             isInitialized = true;
             Log("DeckViewController initialized successfully", LogTag.Initialization);
         } else {
             Log("Starting delayed initialization for DeckViewController", LogTag.Initialization);
-            StartCoroutine(WaitForInitialization());
+            StartCoroutine(WaitForInitialization()); // Use coroutine as fallback
         }
     }
 
-    private System.Collections.IEnumerator WaitForInitialization() {
-        float timeoutDuration = 5f;
-        float elapsed = 0f;
+    private IEnumerator WaitForInitialization() {
+         float timeoutDuration = 5f;
+         float elapsed = 0f;
 
-        while (elapsed < timeoutDuration) {
-            if (gameManager == null) {
-                gameManager = GameManager.Instance;
-            }
-            if (gameReferences == null) {
-                gameReferences = GameReferences.Instance;
-            }
+         while (elapsed < timeoutDuration) {
+             // Try getting instances again
+             if (gameManager == null) gameManager = GameManager.Instance;
+             if (gameMediator == null) gameMediator = GameMediator.Instance;
+             if (gameReferences == null) gameReferences = GameReferences.Instance;
 
-            if (gameManager != null && gameReferences != null && gameReferences.AreReferencesValid()) {
-                GetUIReferences();
-                SetupButtons();
-                isInitialized = true;
-                Log("DeckViewController initialized after delay", LogTag.Initialization);
-                yield break;
-            }
+            // Check if all dependencies are ready
+             if (gameManager != null && gameMediator != null && gameReferences != null && gameReferences.AreReferencesValid()) {
+                 GetUIReferences();
+                 SetupButtons();
+                 isInitialized = true;
+                 Log("DeckViewController initialized after delay", LogTag.Initialization);
+                 yield break; // Exit coroutine
+             }
 
-            elapsed += 0.1f;
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        LogError("DeckViewController initialization timed out", LogTag.Initialization);
-    }
+             elapsed += 0.1f;
+             yield return new WaitForSeconds(0.1f);
+         }
+         LogError("DeckViewController initialization timed out", LogTag.Initialization);
+     }
 
     private void GetUIReferences() {
         // Always get references from GameReferences
@@ -212,41 +219,37 @@ public class DeckViewController : MonoBehaviour {
     private void ShowDeckView(bool showDiscard) {
         Log($"ShowDeckView called with showDiscard={showDiscard}", LogTag.UI);
 
-        if (deckViewUI == null || deckViewUI.deckViewPanel == null) {
-            LogError("Cannot show deck view - references missing", LogTag.UI);
+        // Check essential references obtained during initialization
+        if (deckViewUI == null || deckViewUI.deckViewPanel == null || gameMediator == null || gameReferences == null) {
+            LogError("Cannot show deck view - references missing (DeckViewUI, Mediator, or References)", LogTag.UI);
             return;
         }
 
-        // Get the active player from game manager
         var activePlayer = GetActivePlayer();
         if (activePlayer != null) {
-            // Initialize if not already
+            // Initialize DeckViewUI using the NEW signature
             if (!deckViewUI.IsInitialized) {
-                deckViewUI.Initialize(activePlayer);
-                Log("Initialized DeckViewUI with player", LogTag.UI);
+                // DeckViewUI doesn't need a specific player for initialization
+                deckViewUI.Initialize(gameMediator, gameReferences);
+                Log("Initialized DeckViewUI with dependencies", LogTag.UI);
             }
 
             try {
                 // Set viewing state and update UI accordingly
+                // Pass the active player to UpdateUI methods which DeckViewUI might use internally
                 if (showDiscard) {
-                    deckViewUI.ShowDiscardPileCards();
+                    deckViewUI.ShowDiscardPileCards(); // Internally calls UpdateUI(activePlayer)
                 } else {
-                    deckViewUI.ShowDeckCards();
+                    deckViewUI.ShowDeckCards(); // Internally calls UpdateUI(activePlayer)
                 }
 
-                // Now make the panel visible
                 deckViewUI.deckViewPanel.SetActive(true);
                 Log($"Made {(showDiscard ? "discard" : "deck")} view panel visible for {(activePlayer.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.UI);
             } catch (System.Exception e) {
-                LogError($"Error showing view: {e.Message}\n{e.StackTrace}", LogTag.UI);
-                // Revert our state since we couldn't show the view
-                if (showDiscard) {
-                    isDiscardViewOpen = false;
-                    UpdateDiscardButtonText();
-                } else {
-                    isDeckViewOpen = false;
-                    UpdateDeckButtonText();
-                }
+                 LogError($"Error showing view: {e.Message}\n{e.StackTrace}", LogTag.UI);
+                 // Revert state
+                 if (showDiscard) isDiscardViewOpen = false; else isDeckViewOpen = false;
+                 UpdateDeckButtonText(); UpdateDiscardButtonText();
             }
         } else {
             LogError("Cannot show view - no active player found", LogTag.UI);

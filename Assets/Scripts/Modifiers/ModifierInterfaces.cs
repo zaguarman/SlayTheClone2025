@@ -25,10 +25,10 @@ public interface IModifier
     string Description { get; }
 
     // Called when the modifier is applied to a target (Creature, Slot, etc.)
-    void Apply(object target, GameMediator mediator);
+    void Apply(object target, IGameMediator mediator);
 
     // Called when the modifier is removed from a target
-    void Remove(object target, GameMediator mediator);
+    void Remove(object target, IGameMediator mediator);
 
     // Method for StatModifiers to declare their effect without applying it
     // Returns true if this modifier affects the given stat

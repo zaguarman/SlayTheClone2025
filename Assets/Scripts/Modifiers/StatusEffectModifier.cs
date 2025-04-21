@@ -37,7 +37,7 @@ public class StatusEffectModifier : BaseModifier, ITimedModifier
         return expired;
     }
 
-    public override void Apply(object target, GameMediator mediator)
+    public override void Apply(object target, IGameMediator mediator)
     {
         Log($"Applying StatusEffect '{Name}' ({EffectType}) to {target}", LogTag.Effects);
         // Subscribe to events based on the effect type
@@ -59,7 +59,7 @@ public class StatusEffectModifier : BaseModifier, ITimedModifier
         }
     }
 
-    public override void Remove(object target, GameMediator mediator)
+    public override void Remove(object target, IGameMediator mediator)
     {
         Log($"Removing StatusEffect '{Name}' ({EffectType}) from {target}", LogTag.Effects);
         // Unsubscribe from events
@@ -83,7 +83,7 @@ public class StatusEffectModifier : BaseModifier, ITimedModifier
 
     // --- Specific Effect Logic ---
 
-    private void HandleEndOfTurn(object target, int turnNumber, GameMediator mediator)
+    private void HandleEndOfTurn(object target, int turnNumber, IGameMediator mediator)
     {
         // Check if this modifier is still active for the target (sanity check)
         var creatureTarget = target as Creature;

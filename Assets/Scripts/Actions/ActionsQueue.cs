@@ -12,7 +12,7 @@ public class ActionsQueue {
     private readonly Dictionary<string, IGameAction> activeCreatureActions = new Dictionary<string, IGameAction>();
     private int currentIterationDepth = 0;
     private readonly int maxIterationDepth = 3;
-    private readonly GameMediator gameMediator;
+    private readonly IGameMediator gameMediator;
     private readonly BattlefieldCombatHandler combatHandler;
     #endregion
 
@@ -39,7 +39,7 @@ public class ActionsQueue {
     #endregion
 
     #region Constructor
-    public ActionsQueue(GameMediator gameMediator, BattlefieldCombatHandler combatHandler) {
+    public ActionsQueue(IGameMediator gameMediator, BattlefieldCombatHandler combatHandler) {
         this.gameMediator = gameMediator;
         this.combatHandler = combatHandler;
     }

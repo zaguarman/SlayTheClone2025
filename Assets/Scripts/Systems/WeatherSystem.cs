@@ -19,14 +19,14 @@ public interface IWeatherSystem {
 public class WeatherSystem : IWeatherSystem {
     #region Fields & Properties
     private WeatherType currentWeather = WeatherType.Clear;
-    private readonly GameMediator gameMediator;
+    private readonly IGameMediator gameMediator;
     private readonly UnityEvent<WeatherType> onWeatherChanged = new UnityEvent<WeatherType>();
     public WeatherType CurrentWeather => currentWeather;
     public UnityEvent<WeatherType> OnWeatherChanged => onWeatherChanged;
     #endregion
 
     #region Constructor
-    public WeatherSystem(GameMediator gameMediator) {
+    public WeatherSystem(IGameMediator gameMediator) {
         this.gameMediator = gameMediator;
     }
     #endregion

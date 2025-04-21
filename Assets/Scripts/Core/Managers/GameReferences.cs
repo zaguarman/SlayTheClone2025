@@ -4,7 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using static DebugLogger;
 
-public class GameReferences : Singleton<GameReferences> {
+/// <summary>
+/// Provides access to game references and UI components.
+/// Implements IGameReferences to support dependency injection.
+/// </summary>
+public class GameReferences : Singleton<GameReferences>, IGameReferences {
     [System.Serializable]
     public class PlayerUIReferences {
         // Player UI references as in original implementation
@@ -62,8 +66,12 @@ public class GameReferences : Singleton<GameReferences> {
     [SerializeField] private Tooltip tooltip;
 
     [Header("Player References")]
-    [SerializeField] public PlayerUIReferences player1References;
-    [SerializeField] public PlayerUIReferences player2References;
+    [SerializeField] private PlayerUIReferences _player1References;
+    [SerializeField] private PlayerUIReferences _player2References;
+
+    // Expose PlayerUIReferences via properties to satisfy the interface
+    public PlayerUIReferences player1References => _player1References;
+    public PlayerUIReferences player2References => _player2References;
 
     [Header("Card Components")]
     [SerializeField] private Button cardPrefab;
@@ -168,8 +176,8 @@ public class GameReferences : Singleton<GameReferences> {
             Log("CardTooltip reference missing, will create one when needed", LogTag.Initialization);
         }
 
-        isValid &= player1References.ValidateReferences("Player 1");
-        isValid &= player2References.ValidateReferences("Player 2");
+        isValid &= _player1References.ValidateReferences("Player 1");
+        isValid &= _player2References.ValidateReferences("Player 2");
 
         referencesValidated = isValid;
 
@@ -188,12 +196,12 @@ public class GameReferences : Singleton<GameReferences> {
 
     #region Methods
     // All the original getter methods
-    public PlayerUI GetPlayer1UI() => player1References.PlayerUI;
-    public PlayerUI GetPlayer2UI() => player2References.PlayerUI;
-    public HandUI GetPlayer1HandUI() => player1References.HandUI;
-    public HandUI GetPlayer2HandUI() => player2References.HandUI;
-    public BattlefieldUI GetPlayer1BattlefieldUI() => player1References.BattlefieldUI;
-    public BattlefieldUI GetPlayer2BattlefieldUI() => player2References.BattlefieldUI;
+    public PlayerUI GetPlayer1UI() => _player1References.PlayerUI;
+    public PlayerUI GetPlayer2UI() => _player2References.PlayerUI;
+    public HandUI GetPlayer1HandUI() => _player1References.HandUI;
+    public HandUI GetPlayer2HandUI() => _player2References.HandUI;
+    public BattlefieldUI GetPlayer1BattlefieldUI() => _player1References.BattlefieldUI;
+    public BattlefieldUI GetPlayer2BattlefieldUI() => _player2References.BattlefieldUI;
     public Button GetCardPrefab() => cardPrefab;
     public Button GetResolveActionsButton() => resolveActionsButton;
     public Color GetPlayer1CardColor() => player1CardColor;
@@ -221,9 +229,22 @@ public class GameReferences : Singleton<GameReferences> {
 
     // Method to get the tooltip, creating it if needed
     public Tooltip GetTooltip() {
+        // Check if this instance has already been destroyed
+        if (this == null || this.gameObject == null) {
+            // LogWarning("Attempting to get Tooltip from destroyed GameReferences.", LogTag.UI);
+            return null; // Return null if GameReferences is destroyed
+        }
+
         if (tooltip == null) {
             LogWarning("CardTooltip is null when GetCardTooltip was called, creating one", LogTag.UI);
-            tooltip = Tooltip.Create(transform);
+            // Ensure creation happens on a valid transform (this.transform)
+            tooltip = Tooltip.Create(this.transform);
+        }
+        // Add an extra check in case the tooltip object got destroyed independently
+        else if (tooltip.gameObject == null)
+        {
+             LogWarning("Cached CardTooltip was destroyed, creating a new one", LogTag.UI);
+             tooltip = Tooltip.Create(this.transform);
         }
         return tooltip;
     }

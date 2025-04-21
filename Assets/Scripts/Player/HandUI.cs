@@ -3,8 +3,9 @@ using UnityEngine;
 using static DebugLogger;
 
 public class HandUI : CardContainer {
-    public override void Initialize(IPlayer player) {
-        base.Initialize(player);
+    public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references) {
+        // Call base CardContainer Initialize FIRST
+        base.Initialize(player, mediator, references);
     }
 
     protected override void RegisterEvents() {

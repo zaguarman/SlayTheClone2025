@@ -194,10 +194,18 @@ public class Player : Entity, IPlayer {
     }
 
     public void AddToBattlefield(ICard card, ITarget slot = null) {
-        if (card == null) return;
+        if (card == null || !(slot is BattlefieldSlot targetSlot)) return;
 
-        var targetSlot = Battlefield.FirstOrDefault(s => s.TargetId == slot.TargetId);
-        if (targetSlot == null) return;
+        // Need Mediator and References. Get via Singleton temporarily, or pass them in.
+        // Let's assume the caller (e.g., an Action or UI handler) provides them.
+        // For now, we'll use Singleton access as a fallback if not provided.
+        var mediator = GameMediator.Instance; // TEMPORARY
+        var references = GameReferences.Instance; // TEMPORARY
+
+        if (mediator == null || references == null) {
+            LogError($"Mediator or References null when adding {card.Name} to battlefield.", LogTag.Players);
+            return;
+        }
 
         // Clear existing card if needed
         if (targetSlot.IsOccupied()) {
@@ -205,19 +213,23 @@ public class Player : Entity, IPlayer {
             RemoveFromBattlefield(oldCreature);
         }
 
-        // Create new card controller
-        var cardController = CardFactory.CreateCardController(card, this, targetSlot.transform);
+        // Create controller, passing dependencies
+        var cardController = CardFactory.CreateCardController(card, this, targetSlot.transform, mediator, references);
         if (cardController != null) {
             targetSlot.AssignCreature(cardController);
-            gameMediator?.NotifyBattlefieldStateChanged(this);
+            mediator.NotifyBattlefieldStateChanged(this);
         }
     }
 
     public async Task<bool> AddToBattlefieldAsync(ICard card, ITarget slot = null, CancellationToken cancellationToken = default) {
-        if (card == null) return false;
+        if (card == null || !(slot is BattlefieldSlot targetSlot)) return false;
 
-        var targetSlot = Battlefield.FirstOrDefault(s => s.TargetId == slot.TargetId);
-        if (targetSlot == null) return false;
+        var mediator = GameMediator.Instance; // TEMPORARY
+        var references = GameReferences.Instance; // TEMPORARY
+        if (mediator == null || references == null) {
+            LogError($"Mediator or References null when adding {card.Name} to battlefield async.", LogTag.Players);
+            return false;
+        }
 
         // Clear existing card if needed
         if (targetSlot.IsOccupied()) {
@@ -225,11 +237,11 @@ public class Player : Entity, IPlayer {
             RemoveFromBattlefield(oldCreature);
         }
 
-        // Create new card controller asynchronously
-        var cardController = await CardFactory.CreateCardControllerAsync(card, this, targetSlot.transform, cancellationToken);
+        // Create new card controller asynchronously with dependencies
+        var cardController = await CardFactory.CreateCardControllerAsync(card, this, targetSlot.transform, mediator, references, cancellationToken);
         if (cardController != null) {
             targetSlot.AssignCreature(cardController);
-            gameMediator?.NotifyBattlefieldStateChanged(this);
+            mediator.NotifyBattlefieldStateChanged(this);
             return true;
         }
         return false;

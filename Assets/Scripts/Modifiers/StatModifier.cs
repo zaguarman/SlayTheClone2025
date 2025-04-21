@@ -16,12 +16,12 @@ public class StatModifier : BaseModifier {
 
     // Stat modifiers don't need complex Apply/Remove if the Manager handles recalculation.
     // They primarily provide data via TryGetStatModification.
-    public override void Apply(object target, GameMediator mediator) {
+    public override void Apply(object target, IGameMediator mediator) {
         // Log($"StatModifier '{Name}' applied to {target}. Manager will recalculate stats.", LogTag.Effects);
         // No direct action needed here. The ModifierManager will query this modifier during recalculation.
     }
 
-    public override void Remove(object target, GameMediator mediator) {
+    public override void Remove(object target, IGameMediator mediator) {
         // Log($"StatModifier '{Name}' removed from {target}. Manager will recalculate stats.", LogTag.Effects);
         // No direct action needed here. The ModifierManager will trigger recalculation.
     }

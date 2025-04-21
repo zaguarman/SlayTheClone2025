@@ -118,10 +118,10 @@ public static class CardFactory {
         }
     }
 
-    public static async Task<CardController> CreateCardControllerAsync(ICard card, IPlayer owner, Transform parent, CancellationToken cancellationToken = default) {
-        if (card == null || parent == null) return null;
+    public static async Task<CardController> CreateCardControllerAsync(ICard card, IPlayer owner, Transform parent, IGameMediator mediator, IGameReferences references, CancellationToken cancellationToken = default) {
+        if (card == null || parent == null || mediator == null || references == null) return null;
 
-        var cardPrefab = GameReferences.Instance.GetCardPrefab();
+        var cardPrefab = references.GetCardPrefab();
         if (cardPrefab == null) {
             LogError("Failed to get card prefab from game references", LogTag.Cards | LogTag.Initialization);
             return null;
@@ -130,7 +130,7 @@ public static class CardFactory {
         // Add small delay to spread out card creation
         await Task.Delay(100, cancellationToken);
 
-        var cardObj = GameObject.Instantiate(cardPrefab, parent);
+        var cardObj = GameObject.Instantiate(cardPrefab.gameObject, parent);
         var controller = cardObj.GetComponent<CardController>();
         if (controller != null) {
             var data = CreateCardData(card);
@@ -138,22 +138,22 @@ public static class CardFactory {
             // Only cast to ICreature if the card is actually a creature
             ICreature creature = card as ICreature;
 
-            controller.Setup(data, owner, creature);
+            controller.Setup(data, owner, creature, mediator, references);
             Log($"Created card controller for {card.Name}", LogTag.Cards | LogTag.Initialization);
         }
         return controller;
     }
 
-    public static CardController CreateCardController(ICard card, IPlayer owner, Transform parent) {
-        if (card == null || parent == null) return null;
+    public static CardController CreateCardController(ICard card, IPlayer owner, Transform parent, IGameMediator mediator, IGameReferences references) {
+        if (card == null || parent == null || mediator == null || references == null) return null;
 
-        var cardPrefab = GameReferences.Instance.GetCardPrefab();
+        var cardPrefab = references.GetCardPrefab();
         if (cardPrefab == null) {
             LogError("Failed to get card prefab from game references", LogTag.Cards | LogTag.Initialization);
             return null;
         }
 
-        var cardObj = GameObject.Instantiate(cardPrefab, parent);
+        var cardObj = GameObject.Instantiate(cardPrefab.gameObject, parent);
         var controller = cardObj.GetComponent<CardController>();
         if (controller != null) {
             var data = CreateCardData(card);
@@ -161,7 +161,7 @@ public static class CardFactory {
             // Only cast to ICreature if the card is actually a creature
             ICreature creature = card as ICreature;
 
-            controller.Setup(data, owner, creature);
+            controller.Setup(data, owner, creature, mediator, references);
             Log($"Created card controller for {card.Name}", LogTag.Cards | LogTag.Initialization);
         }
         return controller;

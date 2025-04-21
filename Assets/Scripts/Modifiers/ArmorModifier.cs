@@ -15,12 +15,12 @@ public abstract class ArmorModifier : BaseModifier
 
     // Armor modifiers don't directly apply logic on Apply/Remove,
     // they just provide data for the ModifierManager's calculations.
-    public override void Apply(object target, GameMediator mediator)
+    public override void Apply(object target, IGameMediator mediator)
     {
         // Log($"ArmorModifier '{Name}' applied to {target}. Manager will recalculate stats.", LogTag.Effects);
     }
 
-    public override void Remove(object target, GameMediator mediator)
+    public override void Remove(object target, IGameMediator mediator)
     {
         // Log($"ArmorModifier '{Name}' removed from {target}. Manager will recalculate stats.", LogTag.Effects);
     }

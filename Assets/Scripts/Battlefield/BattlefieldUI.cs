@@ -12,7 +12,8 @@ public class BattlefieldUI : CardContainer {
 
     #region Initialization
     private void InitializeManagers() {
-        arrowManager = new BattlefieldArrowManager(transform, gameManager, gameMediator);
+        // Create ArrowManager using injected dependencies from UIComponent base class
+        arrowManager = new BattlefieldArrowManager(transform, gameMediator, gameReferences);
     }
 
     private void CreateSlots() {
@@ -27,9 +28,11 @@ public class BattlefieldUI : CardContainer {
         UpdateSlotPositions();
     }
 
-    public override void Initialize(IPlayer player) {
-        base.Initialize(player);
+    public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references) {
+        // Call base CardContainer Initialize FIRST
+        base.Initialize(player, mediator, references);
 
+        // Now initialize Battlefield specific things
         InitializeManagers();
         CreateSlots();
         Log($"BattlefieldUI initialized for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Initialization);
@@ -37,6 +40,7 @@ public class BattlefieldUI : CardContainer {
         player.InitializeBattlefield(BattlefieldSlotsList);
         Log($"Player Battlefield initialized for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Initialization);
 
+        // Update UI based on initial state
         UpdateUI(Player);
     }
 

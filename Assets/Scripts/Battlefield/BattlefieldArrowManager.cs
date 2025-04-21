@@ -5,20 +5,20 @@ using System.Linq;
 
 public class BattlefieldArrowManager {
     private readonly Transform parentTransform;
-    private readonly GameManager gameManager;
-    private readonly GameReferences gameReferences;
-    private readonly GameMediator gameMediator;
+    private readonly GameManager gameManager; // Keep for now, will be replaced with interface later
+    private readonly IGameReferences gameReferences;
+    private readonly IGameMediator gameMediator;
     private ArrowIndicator dragArrowIndicator;
     private Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
     private bool isUpdating = false;
     private int lastProcessedActionCount = 0;
     private HashSet<string> lastProcessedActionKeys = new HashSet<string>();
 
-    public BattlefieldArrowManager(Transform parent, GameManager gameManager, GameMediator gameMediator) {
+    public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IGameReferences references) {
         this.parentTransform = parent;
-        this.gameManager = gameManager;
-        this.gameReferences = GameReferences.Instance;
-        this.gameMediator = gameMediator;
+        this.gameManager = GameManager.Instance; // Temporary, will be injected later
+        this.gameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
+        this.gameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
         SetupDragArrow();
         RegisterEvents();
     }

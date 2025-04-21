@@ -71,9 +71,11 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
         // Override in derived classes if needed
     }
 
-    public override void Initialize(IPlayer player) {
-        base.Initialize(player);
+    public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references) {
+        // Call base UIComponent Initialize FIRST
+        base.Initialize(player, mediator, references);
 
+        // Now do CardContainer specific setup
         containerRect = GetComponent<RectTransform>();
         if (containerRect == null) {
             containerRect = gameObject.AddComponent<RectTransform>();
@@ -81,8 +83,8 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
 
         SetupDropZone();
         UpdateLayout();
-        IsInitialized = true;
-        UpdateUI(Player);
+        // IsInitialized is set by base class
+        UpdateUI(Player); // Use Player property from base class
     }
 
     protected virtual void UpdateLayout() {
@@ -221,7 +223,8 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
     }
 
     protected virtual CardController CreateCard(ICard cardData) {
-        return CardFactory.CreateCardController(cardData, Player, transform);
+        // Use the gameMediator and gameReferences fields inherited from UIComponent
+        return CardFactory.CreateCardController(cardData, Player, transform, gameMediator, gameReferences);
     }
 
     public virtual void AddCard(CardController card) {

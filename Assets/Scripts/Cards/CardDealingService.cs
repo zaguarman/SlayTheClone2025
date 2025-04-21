@@ -20,9 +20,9 @@ public interface ICardDealingService {
 
 public class CardDealingService : ICardDealingService {
     private readonly Dictionary<IPlayer, IDeck> playerDecks = new Dictionary<IPlayer, IDeck>();
-    private readonly GameMediator gameMediator;
+    private readonly IGameMediator gameMediator;
 
-    public CardDealingService(GameMediator gameMediator) {
+    public CardDealingService(IGameMediator gameMediator) {
         this.gameMediator = gameMediator;
     }
 
