@@ -8,7 +8,6 @@ public class Enums {
     public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus } // Renamed Buff to ModifyStat
     public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
-    // --- New Enum for Status Effects ---
     public enum StatusEffectType {
         None,
         Burned,     // Takes damage at end of turn
@@ -16,7 +15,6 @@ public class Enums {
         Frozen,     // Similar to Paralyzed, potentially longer duration or different interactions
         Poisoned    // Takes increasing damage over time (more complex, start simple)
     }
-    // --- End New Enum ---
 
     [Flags] // Make sure System is imported
     public enum TargetModifier {
