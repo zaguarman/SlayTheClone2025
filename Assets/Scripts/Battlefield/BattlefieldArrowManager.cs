@@ -2,23 +2,25 @@ using UnityEngine;
 using System.Collections.Generic;
 using static DebugLogger;
 using System.Linq;
+using System;
 
 public class BattlefieldArrowManager {
     private readonly Transform parentTransform;
-    private readonly GameManager gameManager; // Keep for now, will be replaced with interface later
     private readonly IGameReferences gameReferences;
     private readonly IGameMediator gameMediator;
+    private readonly IActionsQueue actionsQueue; // Use injected interface
     private ArrowIndicator dragArrowIndicator;
     private Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
     private bool isUpdating = false;
     private int lastProcessedActionCount = 0;
     private HashSet<string> lastProcessedActionKeys = new HashSet<string>();
 
-    public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IGameReferences references) {
-        this.parentTransform = parent;
-        this.gameManager = GameManager.Instance; // Temporary, will be injected later
-        this.gameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
-        this.gameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
+    // Updated Constructor to accept IActionsQueue
+    public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IGameReferences references, IActionsQueue actionsQueue) {
+        this.parentTransform = parent ?? throw new ArgumentNullException(nameof(parent));
+        this.gameReferences = references ?? throw new ArgumentNullException(nameof(references));
+        this.gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue)); // Store injected ActionsQueue
         SetupDragArrow();
         RegisterEvents();
     }
@@ -29,9 +31,9 @@ public class BattlefieldArrowManager {
     }
 
     private void OnActionsQueueChanged() {
-        if (gameManager.ActionsQueue == null) return;
+        if (actionsQueue == null) return; // Use injected actionsQueue
 
-        var pendingActions = gameManager.ActionsQueue.GetPendingActions();
+        var pendingActions = actionsQueue.GetPendingActions(); // Use injected actionsQueue
         int currentActionCount = pendingActions.Count();
 
         // Get the keys of all current actions
@@ -99,13 +101,13 @@ public class BattlefieldArrowManager {
 
         ClearExistingArrows();
 
-        if (gameManager.ActionsQueue == null) {
+        if (actionsQueue == null) { // Use injected actionsQueue
             LogWarning("ActionsQueue is null!", LogTag.Actions);
             isUpdating = false;
             return;
         }
 
-        var pendingActions = gameManager.ActionsQueue.GetPendingActions();
+        var pendingActions = actionsQueue.GetPendingActions(); // Use injected actionsQueue
         Log($"Number of pending actions: {pendingActions.Count()}", LogTag.Actions);
 
         ProcessQueuedActions(pendingActions);
@@ -116,7 +118,7 @@ public class BattlefieldArrowManager {
     private void ClearExistingArrows() {
         foreach (var arrow in activeArrows.Values) {
             if (arrow != null) {
-                Object.Destroy(arrow.gameObject);
+                GameObject.Destroy(arrow.gameObject);
             }
         }
         activeArrows.Clear();
@@ -276,11 +278,21 @@ public class BattlefieldArrowManager {
         return slotTransform != null ? slotTransform.position : Vector3.zero;
     }
 
+    private void RemoveCombatActionFromQueue(ICreature attackerCreature) {
+        // Use the ActionsQueue's mechanism to handle replacement/removal
+        if (actionsQueue.HasActiveAction(attackerCreature.TargetId)) {
+            Log($"Cancelling/Removing combat action for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()}) by queuing a null/empty action (or similar mechanism in ActionsQueue)", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
+            // ActionsQueue.AddAction(new NullAction(attackerCreature)); // Example: Queue a placeholder to trigger removal
+            // Or rely on the fact that adding a new action for the same creature replaces the old one.
+            // If simply cancelling without replacement, ActionsQueue might need a RemoveActionForCreature method.
+        }
+    }
+
     public void Cleanup() {
         gameMediator.RemoveActionsQueueChangedListener(OnActionsQueueChanged);
         ClearExistingArrows();
-        if (dragArrowIndicator != null) {
-            Object.Destroy(dragArrowIndicator.gameObject);
+        if (dragArrowIndicator != null && dragArrowIndicator.gameObject != null) { // Check if gameObject exists
+            GameObject.Destroy(dragArrowIndicator.gameObject);
         }
         lastProcessedActionCount = 0;
         lastProcessedActionKeys.Clear();

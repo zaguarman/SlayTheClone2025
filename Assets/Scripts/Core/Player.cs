@@ -47,17 +47,32 @@ public class Player : Entity, IPlayer {
     // is player 1 prop using the isplayer1 method
     public bool Is_Player1 => IsPlayer1();
 
-    private readonly GameMediator gameMediator;
+    private IGameMediator gameMediator; // Changed to interface
+    private IGameReferences gameReferences; // Added reference
+    private ICardDealingService cardDealingService; // Added reference
     private TextMeshProUGUI healthText;
 
     public Player(string name = "Player") : base(name) {
-        Hand = new List<ICard>();
-        Battlefield = new List<BattlefieldSlot>();
+        Hand = new List<ICard>(); // Initialize lists
+        Battlefield = new List<BattlefieldSlot>(); // Initialize list
         Deck = new Deck();
         gameMediator = GameMediator.Instance;
 
         // Set up the event listener for our own damage event
         OnDamaged.AddListener(OnPlayerDamaged);
+    }
+
+    // New Initialize method to inject dependencies
+    public void Initialize(IGameMediator mediator, IGameReferences references, ICardDealingService dealer) {
+        if (mediator == null || references == null || dealer == null) {
+             LogError($"Player ({Name}) initialization failed: Dependencies cannot be null.", LogTag.Initialization | LogTag.Players);
+             return; // Or throw exception
+        }
+        this.gameMediator = mediator;
+        this.gameReferences = references;
+        this.cardDealingService = dealer;
+        Log($"Player ({Name}) initialized with dependencies.", LogTag.Initialization | LogTag.Players);
+        // Note: OnDamaged listener is already added in constructor
     }
 
     public void SetHealthText(TextMeshProUGUI healthText) {
@@ -89,8 +104,12 @@ public class Player : Entity, IPlayer {
     }
 
     public bool IsPlayer1() {
-        var gameManager = GameManager.Instance;
-        return gameManager != null && gameManager.Player1 == this;
+        // Check against the GameManager instance (which should be set up correctly)
+        // This avoids relying on GameManager.Instance directly within Player logic
+        var manager = GameManager.Instance; // Still need instance here, but it's less problematic
+        if (manager == null) return false; // Avoid null ref if manager not ready
+
+        return manager.Player1 == this;
     }
 
     public void TakeDamage(int amount) {
@@ -158,7 +177,7 @@ public class Player : Entity, IPlayer {
     }
 
     public void DrawCard() {
-        var cardDealingService = GameManager.Instance?.CardDealingService;
+        // Use injected cardDealingService
         if (cardDealingService == null) {
             LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
             return;
@@ -175,7 +194,7 @@ public class Player : Entity, IPlayer {
     }
 
     public async Task<bool> DrawCardAsync(CancellationToken cancellationToken = default) {
-        var cardDealingService = GameManager.Instance?.CardDealingService;
+        // Use injected cardDealingService
         if (cardDealingService == null) {
             LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
             return false;
@@ -196,12 +215,9 @@ public class Player : Entity, IPlayer {
     public void AddToBattlefield(ICard card, ITarget slot = null) {
         if (card == null || !(slot is BattlefieldSlot targetSlot)) return;
 
-        // Need Mediator and References. Get via Singleton temporarily, or pass them in.
-        // Let's assume the caller (e.g., an Action or UI handler) provides them.
-        // For now, we'll use Singleton access as a fallback if not provided.
-        var mediator = GameMediator.Instance; // TEMPORARY
-        var references = UnityEngine.Object.FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
-
+        // Use injected dependencies
+        var mediator = this.gameMediator;
+        var references = this.gameReferences;
         if (mediator == null || references == null) {
             LogError($"Mediator or References null when adding {card.Name} to battlefield.", LogTag.Players);
             return;
@@ -224,8 +240,9 @@ public class Player : Entity, IPlayer {
     public async Task<bool> AddToBattlefieldAsync(ICard card, ITarget slot = null, CancellationToken cancellationToken = default) {
         if (card == null || !(slot is BattlefieldSlot targetSlot)) return false;
 
-        var mediator = GameMediator.Instance; // TEMPORARY
-        var references = UnityEngine.Object.FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
+        // Use injected dependencies
+        var mediator = this.gameMediator;
+        var references = this.gameReferences;
         if (mediator == null || references == null) {
             LogError($"Mediator or References null when adding {card.Name} to battlefield async.", LogTag.Players);
             return false;

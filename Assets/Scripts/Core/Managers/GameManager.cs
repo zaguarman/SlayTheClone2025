@@ -199,6 +199,7 @@ public class GameManager : InitializableComponent, IGameManager {
         // --- 3. Initialize Game State ---
         InitializePlayers(); // Uses gameMediator
         InitializeCards(); // Uses gameReferences, CardDealingService
+        InitializePlayerDependencies(); // Inject dependencies into Players
 
         // --- 4. Mark as Initialized (MUST be before any calls that might rely on IsInitialized) ---
         base.Initialize(); // Sets IsInitialized = true
@@ -345,6 +346,13 @@ public class GameManager : InitializableComponent, IGameManager {
         gameMediator.RegisterPlayer(Player1);
         gameMediator.RegisterPlayer(Player2);
     }
+
+    private void InitializePlayerDependencies() {
+         // Pass dependencies to players *after* GameManager has them
+         Player1?.Initialize(gameMediator, gameReferences, cardDealingService);
+         Player2?.Initialize(gameMediator, gameReferences, cardDealingService);
+         Log("Injected dependencies into Player instances.", LogTag.Initialization | LogTag.Players);
+     }
 
     private void InitializeCards() {
         // Get cards from GameReferences instead of TestSetup
