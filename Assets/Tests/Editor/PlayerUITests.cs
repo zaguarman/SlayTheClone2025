@@ -98,7 +98,8 @@ public class PlayerUITests
         // Call the reset method we added to the Singleton base class
         Singleton<GameManager>.ResetInstanceForTests();
         Singleton<GameMediator>.ResetInstanceForTests();
-        Singleton<GameReferences>.ResetInstanceForTests();
+        // GameReferences is no longer a singleton
+        // Singleton<GameReferences>.ResetInstanceForTests();
         // Add resets for any other singletons
 
         // Allow a frame for destruction to process

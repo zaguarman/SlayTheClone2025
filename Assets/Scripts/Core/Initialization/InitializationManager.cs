@@ -57,8 +57,9 @@ public class InitializationManager : MonoBehaviour {
     }
 
     public void InitializeComponents() {
-        if (GameReferences.Instance == null) {
-            LogError("GameReferences not found in scene! Please add it to the scene first.", LogTag.Initialization);
+        var gameReferences = FindObjectOfType<GameReferences>();
+        if (gameReferences == null) {
+            LogError("GameReferences component not found in scene! Please add it to the scene first.", LogTag.Initialization);
             return;
         }
 

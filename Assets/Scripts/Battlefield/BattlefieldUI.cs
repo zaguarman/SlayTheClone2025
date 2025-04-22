@@ -23,6 +23,12 @@ public class BattlefieldUI : CardContainer {
 
             var slot = slotObj.AddComponent<BattlefieldSlot>();
             slot.Initialize(defaultColor, validDropColor, invalidDropColor, hoverColor);
+
+            // Pass the GameReferences to the slot
+            if (gameReferences != null) {
+                slot.SetGameReferences(gameReferences);
+            }
+
             BattlefieldSlotsList.Add(slot);
         }
         UpdateSlotPositions();

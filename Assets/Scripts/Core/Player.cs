@@ -200,7 +200,7 @@ public class Player : Entity, IPlayer {
         // Let's assume the caller (e.g., an Action or UI handler) provides them.
         // For now, we'll use Singleton access as a fallback if not provided.
         var mediator = GameMediator.Instance; // TEMPORARY
-        var references = GameReferences.Instance; // TEMPORARY
+        var references = UnityEngine.Object.FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
 
         if (mediator == null || references == null) {
             LogError($"Mediator or References null when adding {card.Name} to battlefield.", LogTag.Players);
@@ -225,7 +225,7 @@ public class Player : Entity, IPlayer {
         if (card == null || !(slot is BattlefieldSlot targetSlot)) return false;
 
         var mediator = GameMediator.Instance; // TEMPORARY
-        var references = GameReferences.Instance; // TEMPORARY
+        var references = UnityEngine.Object.FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
         if (mediator == null || references == null) {
             LogError($"Mediator or References null when adding {card.Name} to battlefield async.", LogTag.Players);
             return false;

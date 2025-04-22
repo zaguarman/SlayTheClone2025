@@ -66,9 +66,9 @@ public abstract class UIComponent : InitializableComponent {
             return;
         }
 
-        // Get dependencies from singletons
+        // Get dependencies from singletons and direct find
         gameMediator = GameMediator.Instance;
-        gameReferences = GameReferences.Instance;
+        gameReferences = UnityEngine.Object.FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
         gameManager = GameManager.Instance;
 
         RegisterEvents();

@@ -239,9 +239,9 @@ public class GameManager : InitializableComponent, IGameManager {
         // This method should not be called directly, but we don't want to break the interface
         // If called through IInitializable, provide a fallback implementation
         if (!IsInitialized) {
-            // Fallback to using singletons
+            // Fallback to using singletons and direct find
             var mediator = GameMediator.Instance;
-            var references = GameReferences.Instance;
+            var references = FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
             if (mediator != null && references != null) {
                 // Use the full Initialize method with dependencies
                 var tm = FindObjectOfType<TurnManager>();

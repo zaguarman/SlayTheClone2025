@@ -48,9 +48,9 @@ public class SummonCreatureAction : IGameAction {
              owner.RemoveFromBattlefield(slot.OccupyingCreature, true); // Destroy the old card controller
         }
 
-        // --- Get Dependencies (Temporary Singleton Access) ---
+        // --- Get Dependencies (Temporary Singleton Access for mediator, direct find for references) ---
         var mediator = GameMediator.Instance;
-        var references = GameReferences.Instance;
+        var references = UnityEngine.Object.FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
 
         if (mediator == null || references == null)
         {

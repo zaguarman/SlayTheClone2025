@@ -3,84 +3,60 @@ using UnityEngine.UI;
 using TMPro;
 using static DebugLogger;
 
-public class WeatherController : MonoBehaviour {
+public class WeatherController : UIComponent {
     #region Fields
     private Button cycleWeatherButton;
     private TextMeshProUGUI weatherText;
-    private GameManager gameManager;
-    private GameReferences gameReferences;
+    // GameManager, gameMediator, and gameReferences are inherited from UIComponent
     #endregion
 
-    #region Unity Lifecycle
-    private void Awake() {
-        InitializeReferences();
-    }
+    #region Private Helper Methods
+    // Override Initialize from UIComponent
+    public override void Initialize(IGameMediator mediator, IGameReferences references) {
+        if (IsInitialized) return;
 
-    private void Start() {
-        // Set initial weather to Clear after everything is initialized
-        if (gameManager?.WeatherSystem != null) {
-            gameManager.WeatherSystem.SetWeather(WeatherType.Clear);
-            UpdateWeatherText(WeatherType.Clear);
+        // Call base Initialize FIRST to set mediator/references/manager fields
+        base.Initialize(mediator, references); // Pass null for player
+
+        // Use inherited fields (gameManager, gameReferences) set by base.Initialize
+        if (gameManager != null && gameReferences.AreReferencesValid()) {
+            GetUIReferences(); // Get references using the now-set gameReferences
+            SetupButton();     // Setup using the obtained references
+
+             // Set initial weather state AFTER initialization and getting references
+             if (gameManager.WeatherSystem != null) {
+                 gameManager.WeatherSystem.SetWeather(WeatherType.Clear);
+                 Log("Set initial weather to Clear during WeatherController Initialize", LogTag.UI | LogTag.Effects);
+                 // Directly update text here since the listener might not be active yet
+                 UpdateWeatherText(WeatherType.Clear);
+             } else {
+                 LogError("WeatherSystem is null during WeatherController Initialize", LogTag.Initialization);
+             }
+
+            // Base class sets IsInitialized = true
+            Log("WeatherController initialized with dependencies", LogTag.Initialization);
+        } else {
+            LogError("Cannot initialize WeatherController - GameManager not ready or references invalid", LogTag.Initialization);
+            enabled = false; // Disable component if init fails
         }
     }
 
-    private void OnDestroy() {
+    protected override void OnDestroy() { // Mark as override
         if (cycleWeatherButton != null) {
             cycleWeatherButton.onClick.RemoveAllListeners();
         }
 
+        // Use inherited gameManager field
         if (gameManager?.WeatherSystem != null) {
             gameManager.WeatherSystem.OnWeatherChanged.RemoveListener(UpdateWeatherText);
         }
-    }
-    #endregion
-
-    #region Private Helper Methods
-    private void InitializeReferences() {
-        gameManager = GameManager.Instance;
-        gameReferences = GameReferences.Instance;
-
-        if (gameManager != null && gameReferences != null && gameReferences.AreReferencesValid()) {
-            GetUIReferences();
-            SetupButton();
-            Log("WeatherController initialized successfully", LogTag.Initialization);
-        } else {
-            Log("Starting delayed initialization for WeatherController", LogTag.Initialization);
-            StartCoroutine(WaitForInitialization());
-        }
+        base.OnDestroy(); // Call base class OnDestroy
     }
 
-    private System.Collections.IEnumerator WaitForInitialization() {
-        float timeoutDuration = 5f;
-        float elapsed = 0f;
-
-        while (elapsed < timeoutDuration) {
-            if (gameManager == null) {
-                gameManager = GameManager.Instance;
-            }
-            if (gameReferences == null) {
-                gameReferences = GameReferences.Instance;
-            }
-
-            if (gameManager != null && gameReferences != null && gameReferences.AreReferencesValid()) {
-                GetUIReferences();
-                SetupButton();
-
-                // Set initial weather after delayed initialization
-                if (gameManager.WeatherSystem != null) {
-                    gameManager.WeatherSystem.SetWeather(WeatherType.Clear);
-                    Log("Set initial weather to Clear after delayed initialization", LogTag.UI | LogTag.Effects);
-                }
-
-                yield break;
-            }
-
-            elapsed += 0.1f;
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        LogError("WeatherController initialization timed out", LogTag.Initialization);
-    }
+    // Add required implementations for abstract methods from UIComponent
+    protected override void RegisterEvents() { /* Listener added in SetupButton */ }
+    protected override void UnregisterEvents() { /* Listener removed in OnDestroy */ }
+    public override void UpdateUI(IPlayer player = null) { /* Update logic handled by event listener */ }
 
     private void GetUIReferences() {
         cycleWeatherButton = gameReferences.GetWeatherCycleButton();
@@ -127,7 +103,10 @@ public class WeatherController : MonoBehaviour {
     }
 
     private void UpdateWeatherText(WeatherType weather) {
-        weatherText.text = gameManager.WeatherSystem.GetWeatherDescription(weather);
+         // Added null check for safety
+         if (weatherText != null && gameManager?.WeatherSystem != null) {
+            weatherText.text = gameManager.WeatherSystem.GetWeatherDescription(weather);
+         }
     }
     #endregion
 }

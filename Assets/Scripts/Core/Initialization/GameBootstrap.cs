@@ -22,11 +22,11 @@ public class GameBootstrap : MonoBehaviour
         // --- Order is important ---
 
         // 1. Initialize References
-        // Assuming GameReferences is in the scene and uses Singleton pattern for access
-        var gameReferences = GameReferences.Instance;
-        if (gameReferences == null || !FindObjectOfType<GameReferences>())
+        // Find GameReferences in the scene directly (no longer using Singleton pattern)
+        var gameReferences = FindObjectOfType<GameReferences>();
+        if (gameReferences == null)
         {
-            LogError("GameReferences instance not found in scene! Initialization cannot proceed.", LogTag.Initialization);
+            LogError("GameReferences component not found in scene! Initialization cannot proceed.", LogTag.Initialization);
             yield break;
         }
         if (!gameReferences.IsInitialized)
@@ -82,15 +82,15 @@ public class GameBootstrap : MonoBehaviour
         Log("GameManager initialized", LogTag.Initialization);
 
         // 5. Initialize GameUI (Depends on GameManager being initialized)
-        var gameUI = GameUI.Instance;
-         if (gameUI == null || !FindObjectOfType<GameUI>()) {
-             LogError("GameUI instance not found in scene! Initialization cannot proceed.", LogTag.Initialization);
-             yield break;
-         }
+        var gameUI = FindObjectOfType<GameUI>();
+        if (gameUI == null) {
+            LogError("GameUI component not found in scene! Initialization cannot proceed.", LogTag.Initialization);
+            yield break;
+        }
         if (!gameUI.IsInitialized)
         {
-            // GameUI's Initialize now implicitly gets dependencies from initialized Singletons
-            gameUI.Initialize(); // GameUI's Initialize handles getting its dependencies
+            // Pass the dependencies explicitly to GameUI
+            gameUI.Initialize(gameMediator, gameReferences);
             yield return new WaitUntil(() => gameUI.IsInitialized);
         }
         Log("GameUI initialized", LogTag.Initialization);

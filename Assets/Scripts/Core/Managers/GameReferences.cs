@@ -7,8 +7,10 @@ using static DebugLogger;
 /// <summary>
 /// Provides access to game references and UI components.
 /// Implements IGameReferences to support dependency injection.
+/// NOTE: This class no longer uses the Singleton pattern directly.
+///       It should be found and managed by a bootstrap or service locator.
 /// </summary>
-public class GameReferences : Singleton<GameReferences>, IGameReferences {
+public class GameReferences : InitializableComponent, IGameReferences {
     [System.Serializable]
     public class PlayerUIReferences {
         // Player UI references as in original implementation
@@ -88,6 +90,11 @@ public class GameReferences : Singleton<GameReferences>, IGameReferences {
     #endregion
 
     #region Unity Lifecycle
+    protected override void Awake() {
+        base.Awake(); // Call base from InitializableComponent if needed
+        // No singleton checks here anymore
+    }
+
     private void Start() {
         // Add the DeckViewController to manage deck view interactions
         var deckViewController = GetComponent<DeckViewController>();

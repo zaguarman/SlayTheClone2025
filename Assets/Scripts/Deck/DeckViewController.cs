@@ -3,9 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using static DebugLogger;
-using System.Collections; // Add this
 
-public class DeckViewController : MonoBehaviour {
+public class DeckViewController : UIComponent {
     // Remove these serialized fields and use GameReferences instead
     private Button deckViewButton;
     private Button discardViewButton;
@@ -13,65 +12,29 @@ public class DeckViewController : MonoBehaviour {
     private TextMeshProUGUI deckButtonText;
     private TextMeshProUGUI discardButtonText;
     private DeckViewUI deckViewUI;
-    private GameManager gameManager;
-    private IGameMediator gameMediator; // Store mediator reference
-    private IGameReferences gameReferences; // Store references
+    // GameManager, gameMediator, and gameReferences are inherited from UIComponent
 
     private bool isDeckViewOpen = false;
     private bool isDiscardViewOpen = false;
-    private bool isInitialized = false;
+    // isInitialized is inherited from UIComponent base class
 
-    private void Awake() {
-        Log("DeckViewController Awake called", LogTag.UI | LogTag.Initialization);
-        // Don't initialize here, wait for Start or Coroutine
-    }
+    // Override Initialize from UIComponent
+    public override void Initialize(IGameMediator mediator, IGameReferences references) {
+        if (IsInitialized) return; // Prevent double initialization
 
-    private void Start() // Use Start for initialization that depends on other Singletons
-    {
-         InitializeReferences();
-    }
+        // Call base Initialize FIRST to set mediator/references/manager fields
+        base.Initialize(mediator, references); // Pass null for player
 
-    private void InitializeReferences() {
-        // Get dependencies using Singleton access (okay in this controller context for now)
-        gameManager = GameManager.Instance;
-        gameMediator = GameMediator.Instance;
-        gameReferences = GameReferences.Instance;
-
-        if (gameManager != null && gameMediator != null && gameReferences != null && gameReferences.AreReferencesValid()) {
-            GetUIReferences();
-            SetupButtons();
-            isInitialized = true;
-            Log("DeckViewController initialized successfully", LogTag.Initialization);
+        if (gameManager != null && gameReferences.AreReferencesValid()) {
+            GetUIReferences(); // Get references using the now-set gameReferences
+            SetupButtons();    // Setup using the obtained references
+            // Base class sets IsInitialized = true
+            Log("DeckViewController initialized with dependencies", LogTag.Initialization);
         } else {
-            Log("Starting delayed initialization for DeckViewController", LogTag.Initialization);
-            StartCoroutine(WaitForInitialization()); // Use coroutine as fallback
+            LogError("Cannot initialize DeckViewController - GameManager not ready or references invalid", LogTag.Initialization);
+            enabled = false; // Disable component if init fails
         }
     }
-
-    private IEnumerator WaitForInitialization() {
-         float timeoutDuration = 5f;
-         float elapsed = 0f;
-
-         while (elapsed < timeoutDuration) {
-             // Try getting instances again
-             if (gameManager == null) gameManager = GameManager.Instance;
-             if (gameMediator == null) gameMediator = GameMediator.Instance;
-             if (gameReferences == null) gameReferences = GameReferences.Instance;
-
-            // Check if all dependencies are ready
-             if (gameManager != null && gameMediator != null && gameReferences != null && gameReferences.AreReferencesValid()) {
-                 GetUIReferences();
-                 SetupButtons();
-                 isInitialized = true;
-                 Log("DeckViewController initialized after delay", LogTag.Initialization);
-                 yield break; // Exit coroutine
-             }
-
-             elapsed += 0.1f;
-             yield return new WaitForSeconds(0.1f);
-         }
-         LogError("DeckViewController initialization timed out", LogTag.Initialization);
-     }
 
     private void GetUIReferences() {
         // Always get references from GameReferences
@@ -159,7 +122,7 @@ public class DeckViewController : MonoBehaviour {
     }
 
     public void ToggleDeckView() {
-        if (!isInitialized) {
+        if (!IsInitialized) { // Use base class property
             LogError("Cannot toggle deck view - not fully initialized yet", LogTag.UI);
             return;
         }
@@ -181,7 +144,7 @@ public class DeckViewController : MonoBehaviour {
     }
 
     public void ToggleDiscardView() {
-        if (!isInitialized) {
+        if (!IsInitialized) { // Use base class property
             LogError("Cannot toggle discard view - not fully initialized yet", LogTag.UI);
             return;
         }
@@ -309,7 +272,7 @@ public class DeckViewController : MonoBehaviour {
 
     // Check if the panel state changed externally
     private void Update() {
-        if (!isInitialized) return;
+        if (!IsInitialized) return; // Use base property
 
         if (deckViewUI != null && deckViewUI.deckViewPanel != null) {
             bool isPanelActive = deckViewUI.deckViewPanel.activeSelf;
@@ -331,7 +294,7 @@ public class DeckViewController : MonoBehaviour {
         }
     }
 
-    private void OnDestroy() {
+    protected override void OnDestroy() { // Mark as override
         if (deckViewButton != null) {
             deckViewButton.onClick.RemoveListener(ToggleDeckView);
         }
@@ -345,5 +308,11 @@ public class DeckViewController : MonoBehaviour {
         }
 
         Log("Removed click listeners from buttons", LogTag.UI);
+        base.OnDestroy(); // Call base class OnDestroy
     }
+
+    // Add required implementations for abstract methods from UIComponent
+    protected override void RegisterEvents() { /* No specific events needed */ }
+    protected override void UnregisterEvents() { /* No specific events needed */ }
+    public override void UpdateUI(IPlayer player = null) { /* Update logic handled by Show/Hide */ }
 }

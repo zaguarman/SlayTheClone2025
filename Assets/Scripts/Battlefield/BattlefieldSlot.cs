@@ -83,8 +83,22 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
 
     public bool IsValidTarget() => true;
 
+    // Reference to GameReferences for tooltip access
+    private IGameReferences gameReferences;
+
+    // Method to set the GameReferences dependency
+    public void SetGameReferences(IGameReferences references) {
+        gameReferences = references;
+    }
+
     public void OnPointerEnter(PointerEventData eventData) {
-        Tooltip tooltip = GameReferences.Instance.GetTooltip();
+        // Try to find GameReferences if not set
+        if (gameReferences == null) {
+            gameReferences = FindObjectOfType<GameReferences>();
+            if (gameReferences == null) return;
+        }
+
+        Tooltip tooltip = gameReferences.GetTooltip();
         if (tooltip == null) return;
 
         if (IsOccupied() && OccupyingCard != null) {
@@ -98,7 +112,12 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        Tooltip tooltip = GameReferences.Instance.GetTooltip();
+        if (gameReferences == null) {
+            gameReferences = FindObjectOfType<GameReferences>();
+            if (gameReferences == null) return;
+        }
+
+        Tooltip tooltip = gameReferences.GetTooltip();
         if (tooltip != null) {
             tooltip.HideTooltip();
         }

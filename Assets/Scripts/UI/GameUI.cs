@@ -44,18 +44,20 @@ public class GameUI : InitializableComponent {
         instance = this;
     }
 
-    // This correctly overrides Initialize from InitializableComponent
-    public override void Initialize()
+    // New Initialize method with explicit dependency injection
+    public void Initialize(IGameMediator mediator, IGameReferences references)
     {
         if (IsInitialized) return;
 
-        // Get dependencies (still okay to use Singletons here in the root)
-        _gameManager = GameManager.Instance;
-        _gameMediator = GameMediator.Instance;
-        _gameReferences = GameReferences.Instance;
+        // Store injected dependencies
+        _gameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
+        _gameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
 
-        if (_gameManager == null || _gameMediator == null || _gameReferences == null) {
-            LogError("Cannot initialize GameUI - Core dependencies not ready", LogTag.UI | LogTag.Initialization);
+        // Still using GameManager singleton for now (will be refactored later)
+        _gameManager = GameManager.Instance;
+
+        if (_gameManager == null) {
+            LogError("Cannot initialize GameUI - GameManager not ready", LogTag.UI | LogTag.Initialization);
             return;
         }
         if (!_gameReferences.AreReferencesValid()) {
@@ -168,14 +170,18 @@ public class GameUI : InitializableComponent {
         } else {
             weatherController = GetComponent<WeatherController>();
             if (weatherController == null) weatherController = gameObject.AddComponent<WeatherController>();
+            // Ensure WeatherController is initialized with dependencies
+            weatherController.Initialize(_gameMediator, _gameReferences); // <<< ADDED CALL
             weatherSystemInitialized = true;
-            Log("Weather controller initialized", LogTag.UI | LogTag.Initialization);
+            Log("Weather controller initialized via GameUI", LogTag.UI | LogTag.Initialization);
         }
 
         // Initialize DeckViewController
         deckViewController = GetComponent<DeckViewController>();
         if (deckViewController == null) deckViewController = gameObject.AddComponent<DeckViewController>();
-        Log("DeckViewController initialized", LogTag.UI | LogTag.Initialization);
+        // Ensure DeckViewController is initialized with dependencies
+        deckViewController.Initialize(_gameMediator, _gameReferences); // <<< ADDED CALL
+        Log("DeckViewController initialized via GameUI", LogTag.UI | LogTag.Initialization);
     }
 
     private void OnEnable() {
@@ -199,10 +205,11 @@ public class GameUI : InitializableComponent {
 
     protected override void OnDestroy() {
         if (instance == this) {
-            if (weatherController != null) {
-                Destroy(weatherController);
-                weatherSystemInitialized = false;
-            }
+            // No longer need to destroy weatherController here if it's a component
+            // if (weatherController != null) {
+            //     Destroy(weatherController);
+            //     weatherSystemInitialized = false;
+            // }
             instance = null;
             onInitialized.RemoveAllListeners(); // Clean up listeners
             Log("GameUI destroyed", LogTag.UI);
@@ -212,5 +219,22 @@ public class GameUI : InitializableComponent {
 
     public bool IsWeatherSystemInitialized() {
         return weatherSystemInitialized && weatherController != null;
+    }
+
+    // Hide the base Initialize method with a new implementation instead of overriding
+    // This avoids the CS0809 warning about obsolete method overriding non-obsolete method
+    public new void Initialize()
+    {
+        LogWarning("Using obsolete GameUI.Initialize() without dependencies. This will be removed in a future version.", LogTag.UI | LogTag.Initialization);
+
+        // Try to get dependencies from singletons
+        var mediator = GameMediator.Instance;
+        var references = FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
+
+        if (mediator != null && references != null) {
+            Initialize(mediator, references);
+        } else {
+            LogError("Cannot initialize GameUI - Dependencies not available", LogTag.UI | LogTag.Initialization);
+        }
     }
 }
