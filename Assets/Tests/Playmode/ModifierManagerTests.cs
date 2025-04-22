@@ -54,7 +54,7 @@ public class ModifierManagerTests {
         yield return new WaitUntil(() => gameManager != null && gameManager.IsInitialized);
         Debug.Log("[Test] GameManager Initialized.");
         // Get ModifierManager *after* GameManager is initialized
-        modifierManager = gameManager.ModifierManager;
+        modifierManager = gameManager.ModifierManager as ModifierManager;
         Assert.IsNotNull(modifierManager, "ModifierManager is null after GameManager initialized.");
         Debug.Log("[Test] ModifierManager reference obtained.");
         yield return new WaitUntil(() => gameUI != null && gameUI.IsInitialized);
@@ -103,7 +103,7 @@ public class ModifierManagerTests {
         Creature creature = GetFirstAvailableCreature(gameManager.Player1);
         int initialAttack = creature.Attack;
         int modifierValue = 5;
-        IModifier attackMod = modifierManager._modifierFactory.CreateStatModifier("Test Attack Buff", "+5 Attack", ModifiableStat.Attack, ModifierCalculationType.Flat, modifierValue);
+        IModifier attackMod = modifierManager.ModifierFactory.CreateStatModifier("Test Attack Buff", "+5 Attack", ModifiableStat.Attack, ModifierCalculationType.Flat, modifierValue);
 
         // Act
         modifierManager.ApplyModifier(creature, attackMod);
@@ -123,7 +123,7 @@ public class ModifierManagerTests {
         int modifierValue = 10;
         int duration = 2;
         int startTurn = turnManager.TurnNumber;
-        IModifier timedHealthMod = modifierManager._modifierFactory.CreateTimedStatModifier(
+        IModifier timedHealthMod = modifierManager.ModifierFactory.CreateTimedStatModifier(
             "Test Timed Health Buff", "+10 Max Health (2 Turns)", ModifiableStat.Health, ModifierCalculationType.Flat, modifierValue, duration, startTurn
         );
 
@@ -164,7 +164,7 @@ public class ModifierManagerTests {
         Creature creature = GetFirstAvailableCreature(gameManager.Player1);
         int duration = 1;
         int startTurn = turnManager.TurnNumber;
-        IModifier paralyzeMod = modifierManager._modifierFactory.CreateStatusEffectModifier(
+        IModifier paralyzeMod = modifierManager.ModifierFactory.CreateStatusEffectModifier(
             "Test Paralyze", "Paralyzed (1 Turn)", StatusEffectType.Paralyzed, duration, 0, startTurn
         );
 
@@ -201,7 +201,7 @@ public class ModifierManagerTests {
         Creature creature = GetFirstAvailableCreature(gameManager.Player1);
         int initialAttack = creature.Attack; // Attack after initial setup/mods
         int percentageIncrease = 50; // +50%
-        IModifier percentAttackMod = modifierManager._modifierFactory.CreateStatModifier(
+        IModifier percentAttackMod = modifierManager.ModifierFactory.CreateStatModifier(
             "Test Percent Attack Buff", "+50% Attack", ModifiableStat.Attack, ModifierCalculationType.Percentage, percentageIncrease
         );
         // Expected calculation based on RecalculateStats: (Base + Flat) * Multiplier
@@ -230,7 +230,7 @@ public class ModifierManagerTests {
         int modifierValue = -2; // Apply a debuff
         int duration = 5; // Long duration so it won't expire naturally during test
         int startTurn = turnManager.TurnNumber;
-        IModifier timedSpeedMod = modifierManager._modifierFactory.CreateTimedStatModifier(
+        IModifier timedSpeedMod = modifierManager.ModifierFactory.CreateTimedStatModifier(
             "Test Slow Debuff", "-2 Speed (5 Turns)", ModifiableStat.Speed, ModifierCalculationType.Flat, modifierValue, duration, startTurn
         );
 
@@ -260,8 +260,8 @@ public class ModifierManagerTests {
         int initialAttack = creature.Attack; // Attack after initial setup/mods
         int mod1Value = 3;
         int mod2Value = 2;
-        IModifier attackMod1 = modifierManager._modifierFactory.CreateStatModifier("Test Attack Buff 1", "+3 Attack", ModifiableStat.Attack, ModifierCalculationType.Flat, mod1Value);
-        IModifier attackMod2 = modifierManager._modifierFactory.CreateStatModifier("Test Attack Buff 2", "+2 Attack", ModifiableStat.Attack, ModifierCalculationType.Flat, mod2Value);
+        IModifier attackMod1 = modifierManager.ModifierFactory.CreateStatModifier("Test Attack Buff 1", "+3 Attack", ModifiableStat.Attack, ModifierCalculationType.Flat, mod1Value);
+        IModifier attackMod2 = modifierManager.ModifierFactory.CreateStatModifier("Test Attack Buff 2", "+2 Attack", ModifiableStat.Attack, ModifierCalculationType.Flat, mod2Value);
         int expectedAttack = initialAttack + mod1Value + mod2Value;
 
         // Act: Apply both modifiers

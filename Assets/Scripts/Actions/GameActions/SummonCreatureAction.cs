@@ -69,8 +69,12 @@ public class SummonCreatureAction : IGameAction {
             GameManager.Instance?.ModifierManager?.RegisterCreature(creature as Creature); // Cast to concrete type if needed
 
             // 4. Trigger OnPlay CardEffects (existing system)
-            if (creature is Creature creatureImpl) {
-                creatureImpl.HandleEffect(EffectTrigger.OnPlay, GameManager.Instance.ActionsQueue); // Pass ActionsQueue instance
+            if (creature is Creature creatureInstance) {
+                // Get ActionsQueue through interface
+                var actionsQueue = GameManager.Instance?.ActionsQueue;
+                if (actionsQueue != null) {
+                    creatureInstance.HandleEffect(EffectTrigger.OnPlay, actionsQueue);
+                }
             }
 
              // 5. Notify GameMediator AFTER registration and effects

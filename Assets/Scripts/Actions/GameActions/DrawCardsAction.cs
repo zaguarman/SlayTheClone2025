@@ -24,7 +24,7 @@ public class DrawCardsAction : IGameAction {
             return;
         }
 
-        var cardDealingService = GameManager.Instance?.cardDealingService;
+        var cardDealingService = GameManager.Instance?.CardDealingService;
         if (cardDealingService == null) {
             LogError("Cannot execute draw cards action - card dealing service not available", LogTag.Actions | LogTag.Cards);
             return;
@@ -39,4 +39,4 @@ public class DrawCardsAction : IGameAction {
         return $"DrawCardsAction: Player={(player?.IsPlayer1() == true ? "1" : "2")} (TargetID: {player?.TargetId.ToUpper()}), Amount={amount}";
     }
     #endregion
-} 
+}

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine.Events;
 using static DebugLogger;
 using static Enums;
+using System;
 
-public class ActionsQueue {
+public class ActionsQueue : IActionsQueue {
 
     #region Fields
     private readonly List<IGameAction> actionsList = new List<IGameAction>();
@@ -13,7 +14,7 @@ public class ActionsQueue {
     private int currentIterationDepth = 0;
     private readonly int maxIterationDepth = 3;
     private readonly IGameMediator gameMediator;
-    private readonly BattlefieldCombatHandler combatHandler;
+    private readonly IBattlefieldCombatHandler combatHandler;
     #endregion
 
     #region Properties
@@ -39,9 +40,9 @@ public class ActionsQueue {
     #endregion
 
     #region Constructor
-    public ActionsQueue(IGameMediator gameMediator, BattlefieldCombatHandler combatHandler) {
-        this.gameMediator = gameMediator;
-        this.combatHandler = combatHandler;
+    public ActionsQueue(IGameMediator gameMediator, IBattlefieldCombatHandler combatHandler) {
+        this.gameMediator = gameMediator ?? throw new ArgumentNullException(nameof(gameMediator));
+        this.combatHandler = combatHandler ?? throw new ArgumentNullException(nameof(combatHandler));
     }
     #endregion
 
@@ -177,7 +178,9 @@ public class ActionsQueue {
         Log("Cleared processed effects for new resolution chain (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Effects);
 
         // Add discard hand actions for both players
-        var gameManager = GameManager.Instance;
+        // Note: This is a temporary solution. In the future, TurnManager should handle this
+        // by explicitly calling DiscardHand and DrawCards methods on GameManager
+        var gameManager = GameManager.Instance; // Still using singleton for now
         if (gameManager != null) {
             Log("Adding mandatory discard and draw actions (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
 
@@ -186,8 +189,12 @@ public class ActionsQueue {
             AddAction(new DiscardHandAction(gameManager.Player2));
 
             // Add draw cards actions after discarding
-            AddAction(new DrawCardsAction(gameManager.Player1, gameManager.Player1.CardsToDraw));
-            AddAction(new DrawCardsAction(gameManager.Player2, gameManager.Player2.CardsToDraw));
+            if (gameManager.Player1 is Player p1) {
+                AddAction(new DrawCardsAction(p1, p1.CardsToDraw));
+            }
+            if (gameManager.Player2 is Player p2) {
+                AddAction(new DrawCardsAction(p2, p2.CardsToDraw));
+            }
 
             // Log the updated queue size
             Log($"After adding mandatory actions, queue size: {actionsList.Count} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);

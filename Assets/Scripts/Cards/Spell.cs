@@ -38,7 +38,7 @@ public class Spell : Card {
         actions.Clear();
     }
 
-    public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
+    public override void Play(IPlayer owner, IActionsQueue context, ITarget target = null) {
         Log($"Playing spell {Name} (TargetID: {TargetId.ToUpper().Substring(0, 8)}) with {actions.Count} actions", LogTag.Cards | LogTag.Actions);
 
         // If no target is specified, use the default target type
@@ -75,7 +75,7 @@ public class Spell : Card {
     }
 
     // Renamed from CreateGameAction to avoid confusion with IGameAction interface
-    private void CreateGameActionFromSpell(SpellAction spellAction, ITarget target, IPlayer owner, ActionsQueue context) {
+    private void CreateGameActionFromSpell(SpellAction spellAction, ITarget target, IPlayer owner, IActionsQueue context) {
         // Find the corresponding SpellAction to get buff flags and target modifier if needed
         bool modifyAttack = spellAction?.ModifyAttack ?? true;
         bool modifyHealth = spellAction?.ModifyHealth ?? true;
@@ -137,7 +137,7 @@ public class Spell : Card {
     }
 
     // --- Action Queuing Methods (mostly unchanged) ---
-    private void CreateDamageAction(int value, ITarget target, ActionsQueue context) {
+    private void CreateDamageAction(int value, ITarget target, IActionsQueue context) {
         if (target is ICreature creature) {
             Log($"Spell: Queueing DamageCreatureAction for {value} to {creature.Name}", LogTag.Actions);
             context.AddAction(new DamageCreatureAction(creature, value)); // Use consolidated action
@@ -149,7 +149,7 @@ public class Spell : Card {
         }
     }
 
-    private void CreateHealAction(int value, ITarget target, ActionsQueue context) {
+    private void CreateHealAction(int value, ITarget target, IActionsQueue context) {
         if (target is ICreature creature) {
             Log($"Spell: Queueing HealCreatureAction for {value} to {creature.Name}", LogTag.Actions);
             context.AddAction(new HealCreatureAction(creature, value));
@@ -161,13 +161,13 @@ public class Spell : Card {
         }
     }
 
-    private void CreateDrawAction(int value, IPlayer player, ActionsQueue context) {
+    private void CreateDrawAction(int value, IPlayer player, IActionsQueue context) {
         Log($"Spell: Queueing DrawCardsAction for {value} cards for Player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Actions);
         context.AddAction(new DrawCardsAction(player, value));
     }
 
     // Updated CreatemodifyAction to queue the action with modifySpeed parameter
-    private void CreatemodifyAction(int value, ITarget target, ActionsQueue context, bool modifyAttack, bool modifyHealth, bool modifySpeed = false) {
+    private void CreatemodifyAction(int value, ITarget target, IActionsQueue context, bool modifyAttack, bool modifyHealth, bool modifySpeed = false) {
         if (target is ICreature creature) {
             string buffDesc = DescribeModificationForLog(value, modifyAttack, modifyHealth, modifySpeed);
             Log($"Spell: Queueing ModifyAction for {buffDesc} to {creature.Name}", LogTag.Actions);
@@ -179,7 +179,7 @@ public class Spell : Card {
     }
 
     // --- NEW: Method to queue ApplyStatusEffectAction ---
-    private void CreateApplyStatusAction(ITarget target, ActionsQueue context, StatusEffectType statusType, int duration, int potency) {
+    private void CreateApplyStatusAction(ITarget target, IActionsQueue context, StatusEffectType statusType, int duration, int potency) {
         if (target is ICreature creature) {
             Log($"Spell: Queueing ApplyStatusEffectAction ({statusType}, Dur:{duration}, Pot:{potency}) to {creature.Name}", LogTag.Actions);
             context.AddAction(new ApplyStatusEffectAction(creature, statusType, duration, potency));
@@ -189,7 +189,7 @@ public class Spell : Card {
     }
 
     // --- UPDATED: Method to queue ModifyArmorAction ---
-    private void CreateModifyArmorAction(ITarget target, ActionsQueue context, int value)
+    private void CreateModifyArmorAction(ITarget target, IActionsQueue context, int value)
     {
         if (target is ICreature creature)
         {

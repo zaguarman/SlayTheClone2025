@@ -98,7 +98,7 @@ public class Creature : Card, ICreature {
         Owner = owner;
     }
 
-    public override void Play(IPlayer owner, ActionsQueue context, ITarget target = null) {
+    public override void Play(IPlayer owner, IActionsQueue context, ITarget target = null) {
         Log($"Playing {Name} (TargetID: {TargetId.ToUpper()}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Cards | LogTag.Actions);
         Owner = owner;
 
@@ -167,7 +167,7 @@ public class Creature : Card, ICreature {
     }
 
     // --- Updated HandleEffect ---
-    public void HandleEffect(EffectTrigger trigger, ActionsQueue actionsQueue) {
+    public void HandleEffect(EffectTrigger trigger, IActionsQueue actionsQueue) {
         // Use GameManager.Instance to access systems if Owner might be null (e.g., OnDeath effects)
         var gameManager = GameManager.Instance;
         if (gameManager == null) {
@@ -175,7 +175,7 @@ public class Creature : Card, ICreature {
             return;
         }
         var modifierManager = gameManager.ModifierManager;
-        var factory = modifierManager?._modifierFactory; // Access factory
+        var factory = modifierManager?.ModifierFactory; // Access factory through interface property
 
         // Check if processed
         if (actionsQueue.IsEffectProcessed(TargetId, trigger)) {
@@ -239,7 +239,7 @@ public class Creature : Card, ICreature {
 
     // --- Keep existing direct action queuing methods (Damage, Heal, Draw, Summon) ---
     // These are now primarily for immediate effects (OnPlay, OnDeath)
-    private void ProcessDamageEffect(EffectAction action, ActionsQueue actionsQueue) {
+    private void ProcessDamageEffect(EffectAction action, IActionsQueue actionsQueue) {
          // Ensure Owner exists if targeting others
         if (Owner == null && action.targetType != TargetType.Self && lastAttacker == null) {
             LogError($"Damage Effect: Cannot target others for {Name} - Owner is null and not self/retaliation.", LogTag.Effects);
@@ -271,7 +271,7 @@ public class Creature : Card, ICreature {
         }
     }
 
-    private void ProcessHealEffect(EffectAction action, ActionsQueue actionsQueue) {
+    private void ProcessHealEffect(EffectAction action, IActionsQueue actionsQueue) {
         if (Owner == null && action.targetType != TargetType.Self) {
              LogError($"Heal Effect: Cannot target others for {Name} - Owner is null and not self.", LogTag.Effects);
             return;
@@ -293,7 +293,7 @@ public class Creature : Card, ICreature {
         }
     }
 
-     private void ProcessDrawEffect(EffectAction action, ActionsQueue actionsQueue) {
+     private void ProcessDrawEffect(EffectAction action, IActionsQueue actionsQueue) {
          if (Owner == null) {
               LogError($"Draw Effect: Cannot process for {Name} - Owner is null.", LogTag.Effects);
              return;
@@ -304,7 +304,7 @@ public class Creature : Card, ICreature {
         }
     }
 
-    private void ProcessSummonEffect(EffectAction action, ActionsQueue actionsQueue) {
+    private void ProcessSummonEffect(EffectAction action, IActionsQueue actionsQueue) {
          if (Owner == null) {
              LogError($"Summon Effect: Cannot process for {Name} - Owner is null.", LogTag.Effects);
              return;
@@ -325,9 +325,9 @@ public class Creature : Card, ICreature {
 
         // Get available creature cards from the deck
         var gameManager = GameManager.Instance;
-        if (gameManager?.cardDealingService == null) return;
+        if (gameManager?.CardDealingService == null) return;
 
-        var deckCards = gameManager.cardDealingService.GetDeckPreview(targetPlayer);
+        var deckCards = gameManager.CardDealingService.GetDeckPreview(targetPlayer);
         var creaturesInDeck = deckCards.Where(c => c is ICreature).ToList();
 
         if (creaturesInDeck.Count == 0) {
@@ -374,7 +374,7 @@ public class Creature : Card, ICreature {
     // --- NEW: Methods to apply modifiers ---
 
     // --- Updated ProcessModifyStatModifier to include modifySpeed ---
-    private void ProcessModifyStatModifier(EffectAction action, ModifierManager manager, IModifierFactory factory, bool modifySpeed, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
+    private void ProcessModifyStatModifier(EffectAction action, IModifierManager manager, IModifierFactory factory, bool modifySpeed, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
          if (manager == null || factory == null) {
              LogError("ModifyStat Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
              return;
@@ -433,7 +433,7 @@ public class Creature : Card, ICreature {
         }
     }
 
-    private void ProcessApplyStatusModifier(EffectAction action, ModifierManager manager, IModifierFactory factory) {
+    private void ProcessApplyStatusModifier(EffectAction action, IModifierManager manager, IModifierFactory factory) {
          if (manager == null || factory == null) {
              LogError("ApplyStatus Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
              return;
@@ -484,7 +484,7 @@ public class Creature : Card, ICreature {
     }
 
     // --- NEW: Method to queue ModifyArmorAction ---
-    private void ProcessModifyArmorAction(EffectAction action, ActionsQueue actionsQueue) {
+    private void ProcessModifyArmorAction(EffectAction action, IActionsQueue actionsQueue) {
 
         if (Owner == null && action.targetType != TargetType.Self)
         {

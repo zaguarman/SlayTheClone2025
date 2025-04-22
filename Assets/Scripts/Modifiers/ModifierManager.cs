@@ -4,11 +4,14 @@ using System.Linq;
 using static DebugLogger;
 using static Enums; // Add this for StatusEffectType enum
 
-public class ModifierManager
+public class ModifierManager : IModifierManager
 {
     #region Fields & Properties
     private readonly IGameMediator _mediator;
-    public readonly IModifierFactory _modifierFactory;
+    private readonly IModifierFactory _modifierFactory;
+
+    // Implement IModifierManager.ModifierFactory property
+    public IModifierFactory ModifierFactory => _modifierFactory;
 
     // Tracks active modifiers: Key = TargetId of Creature (or Slot later), Value = List of modifiers
     private readonly Dictionary<string, List<IModifier>> _activeModifiers = new Dictionary<string, List<IModifier>>();
@@ -199,6 +202,17 @@ public class ModifierManager
         if (_activeModifiers.TryGetValue(creature.TargetId, out var mods))
         {
             return mods.Any(m => m.Id == modifierId);
+        }
+        return false;
+    }
+
+    // Method to check if a creature has any modifier matching a predicate
+    public bool HasModifier(Creature creature, Predicate<IModifier> predicate)
+    {
+        if (creature == null || predicate == null) return false;
+        if (_activeModifiers.TryGetValue(creature.TargetId, out var mods))
+        {
+            return mods.Any(m => predicate(m));
         }
         return false;
     }

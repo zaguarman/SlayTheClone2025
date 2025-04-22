@@ -211,7 +211,7 @@ public class DeckViewUI : UIComponent {
         }
 
         var deckCards = GetPlayerDeckCards(player);
-        var discardCount = gameManager.cardDealingService.GetDiscardPileCount(player);
+        var discardCount = gameManager.CardDealingService.GetDiscardPileCount(player);
 
         // Update count text
         if (cardsCountText != null) {
@@ -245,7 +245,7 @@ public class DeckViewUI : UIComponent {
 
         // Get the cards from the player's discard pile
         var discardPileCards = GetPlayerDiscardPileCards(player);
-        var deckCount = gameManager.cardDealingService.GetDeckPreview(player).Count;
+        var deckCount = gameManager.CardDealingService.GetDeckPreview(player).Count;
 
         // Update count text for discard pile
         if (cardsCountText != null) {
@@ -271,10 +271,10 @@ public class DeckViewUI : UIComponent {
             var deckCards = new List<ICard>();
 
             // Get cards from the player's deck
-            if (gameManager?.cardDealingService != null) {
+            if (gameManager?.CardDealingService != null) {
                 // Since we can't access the internal cards list directly from IDeck
                 // We need to peek at them through the CardDealingService
-                var cardDealingService = gameManager.cardDealingService;
+                var cardDealingService = gameManager.CardDealingService;
                 deckCards = cardDealingService.GetDeckPreview(player);
 
                 Log($"Retrieved {deckCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()}) deck preview", LogTag.Cards);
@@ -288,8 +288,8 @@ public class DeckViewUI : UIComponent {
 
     private List<ICard> GetPlayerDiscardPileCards(IPlayer player) {
         if (player != null && player.Deck != null) {
-            if (gameManager?.cardDealingService != null) {
-                var cardDealingService = gameManager.cardDealingService;
+            if (gameManager?.CardDealingService != null) {
+                var cardDealingService = gameManager.CardDealingService;
                 var discardCards = cardDealingService.GetDiscardPilePreview(player);
 
                 Log($"Retrieved {discardCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()}) discard pile preview", LogTag.Cards);

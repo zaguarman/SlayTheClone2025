@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using static Enums; // Make sure Enums is accessible
 
-public class BattlefieldCombatHandler {
-    private readonly GameManager gameManager;
+public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
+    private readonly IGameManager gameManager; // Use interface
     private HashSet<ITarget> attackingCreatures = new HashSet<ITarget>();
     private readonly Dictionary<ITarget, BattlefieldSlot> targetedSlots = new Dictionary<ITarget, BattlefieldSlot>();
 
-    public BattlefieldCombatHandler(GameManager gameManager) {
-        this.gameManager = gameManager;
+    // Constructor now takes IGameManager
+    public BattlefieldCombatHandler(IGameManager gameManager) {
+        this.gameManager = gameManager ?? throw new System.ArgumentNullException(nameof(gameManager));
     }
 
     public void HandleCreatureCombat(CardController attackingCard, ITarget targetSlot) {
@@ -128,11 +129,13 @@ public class BattlefieldCombatHandler {
     }
 
     private void QueueCombatAction(ICreature attackerCreature, ITarget targetSlot) {
-        gameManager.ActionsQueue.AddAction(new BattlefieldCombatAction(attackerCreature, targetSlot));
+        gameManager.ActionsQueue.AddAction(new BattlefieldCombatAction(attackerCreature, targetSlot)); // Use field
         Log($"{attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()}) targets slot (TargetID: {targetSlot.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
 
-        // Notify that the actions queue changed to ensure arrows update
-        GameMediator.Instance?.NotifyActionsQueueChanged();
+        // Access mediator via GameManager if needed, or inject Mediator directly if preferred
+        gameManager.ActionsQueue?.MarkEffectProcessed(attackerCreature.TargetId, EffectTrigger.ActionAttempted); // Example: Mark action attempted
+        // Notify via mediator (obtained how? Pass IGameMediator to constructor?)
+         GameMediator.Instance?.NotifyActionsQueueChanged(); // Keep temporary singleton access for now
     }
 
     public void ResetAttackingCreatures() {

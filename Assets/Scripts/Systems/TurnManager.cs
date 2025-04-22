@@ -2,8 +2,9 @@ using static DebugLogger;
 using static Enums;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
-public class TurnManager : MonoBehaviour {
+public class TurnManager : MonoBehaviour, ITurnManager {
     #region Singleton
     private static TurnManager instance;
     public static TurnManager Instance {
@@ -44,69 +45,86 @@ public class TurnManager : MonoBehaviour {
 
     #region Methods
     public void EndTurn() {
-        turnNumber++;
-        Log($"Ending turn {turnNumber - 1}, starting turn {turnNumber}", LogTag.Turns);
-
-        // 1. Trigger end of turn effects for the previous turn
-        Log("Step 1: Triggering end of turn effects", LogTag.Turns);
-        TriggerEndOfTurnEffects();
-
-        // 2. Let ActionsQueue handle discards and draws
-        Log("Step 2: Resolving actions queue for discards and draws", LogTag.Turns);
-        if (gameManager?.ActionsQueue != null) {
-            gameManager.ActionsQueue.ResolveActions();
+         // Ensure GameManager instance is available before proceeding
+        if (gameManager == null)
+        {
+            gameManager = GameManager.Instance; // Try to get it again
+            if (gameManager == null)
+            {
+                LogError("GameManager instance is null in TurnManager.EndTurn! Cannot proceed.", LogTag.Turns);
+                return;
+            }
         }
+         if (gameMediator == null)
+         {
+            gameMediator = GameMediator.Instance; // Try to get it again
+             if (gameMediator == null) {
+                LogError("GameMediator instance is null in TurnManager.EndTurn! Cannot proceed.", LogTag.Turns);
+                 return;
+             }
+         }
 
-        // 2b. Notify all creatures that a turn has ended (for duration effects)
-        Log("Step 2b: Notifying turn ended", LogTag.Turns);
-        gameMediator?.NotifyTurnEnded(turnNumber);
+        turnNumber++; // Increment turn FIRST
+        Log($"--- Ending Turn {turnNumber - 1}, Starting Turn {turnNumber} ---", LogTag.Turns);
 
-        // 3. Trigger start of turn effects for the new turn
-        Log("Step 3: Triggering start of turn effects", LogTag.Turns);
+        // 1. Process End-of-Turn Effects & Expirations
+        Log($"Turn {turnNumber}: Processing End-of-Turn effects for Turn {turnNumber - 1}...", LogTag.Turns);
+        TriggerEndOfTurnEffects(); // Handles creature effects AND ModifierManager processing
+
+        // 2. Resolve Actions (Discard/Draw are queued by ActionsQueue.ResolveActions)
+        Log($"Turn {turnNumber}: Resolving main action queue...", LogTag.Turns | LogTag.Actions);
+        gameManager.ActionsQueue?.ResolveActions(); // Resolve actions including mandatory discard/draw
+
+        // --- Mediator Notification ---
+        // Notify AFTER EOT effects resolve, but BEFORE SOT effects trigger
+        Log($"Turn {turnNumber}: Notifying Mediator TurnEnded ({turnNumber - 1})", LogTag.Turns);
+        gameMediator?.NotifyTurnEnded(turnNumber - 1); // Notify that the previous turn number has ENDED
+
+        // 3. Trigger Start-of-Turn Effects for the NEW turn
+        Log($"Turn {turnNumber}: Processing Start-of-Turn effects for Turn {turnNumber}...", LogTag.Turns | LogTag.Effects);
         TriggerStartOfTurnEffects();
 
-        // 3b. Resolve any actions queued by start of turn effects
-        Log("Step 3b: Resolving actions queued by start of turn effects", LogTag.Turns);
-        if (gameManager?.ActionsQueue != null) {
-            gameManager.ActionsQueue.ResolveActions();
-        }
+        // 4. Resolve Actions Queued by Start-of-Turn Effects
+        Log($"Turn {turnNumber}: Resolving actions queued by Start-of-Turn effects...", LogTag.Turns | LogTag.Actions);
+        gameManager.ActionsQueue?.ResolveActions();
 
-        // 4. Notify UI and other systems of turn change
-        Log("Step 4: Notifying game state changed", LogTag.Turns);
+        // 5. Notify UI/Game State Changed
+        Log($"Turn {turnNumber}: Notifying Game State Changed.", LogTag.Turns);
         gameMediator?.NotifyGameStateChanged();
 
-        // Log the final battlefield state after all effects
-        Log("Final battlefield state after turn change:", LogTag.Turns);
-        LogBattlefieldState(gameManager.Player1, "Player 1");
-        LogBattlefieldState(gameManager.Player2, "Player 2");
+        // Log final state
+        Log($"--- Turn {turnNumber} Started ---", LogTag.Turns);
+        // LogBattlefieldState(gameManager.Player1, "Player 1"); // Logging can be verbose, optional
+        // LogBattlefieldState(gameManager.Player2, "Player 2");
     }
     private void TriggerEndOfTurnEffects() {
-        Log("Triggering end of turn effects", LogTag.Effects | LogTag.Turns);
+        Log($"[Turn {turnNumber-1} End] Triggering EndOfTurn effects.", LogTag.Effects | LogTag.Turns);
+        // Ensure gameManager reference is valid
+        if (gameManager == null) gameManager = GameManager.Instance;
+        if (gameManager == null) { LogError("GameManager null in TriggerEndOfTurnEffects", LogTag.Turns); return; }
+
         TriggerEffectsForPlayer(gameManager.Player1, EffectTrigger.EndOfTurn);
         TriggerEffectsForPlayer(gameManager.Player2, EffectTrigger.EndOfTurn);
 
-        // Process timed modifiers expiration
-        if (gameManager?.ModifierManager != null) {
-            gameManager.ModifierManager.ProcessEndOfTurn(turnNumber);
-        }
+        // Process timed modifiers expiration - Pass the turn number that just ENDED
+        gameManager.ModifierManager?.ProcessEndOfTurn(turnNumber - 1);
 
         // Reduce stun duration for all creatures at the end of turn
-        ReduceStunDurationForAllCreatures();
+        // ReduceStunDurationForAllCreatures(); // Assuming ModifierManager handles this now
     }
 
-    private void TriggerStartOfTurnEffects() {
-        Log("Triggering start of turn effects", LogTag.Effects | LogTag.Turns);
+     private void TriggerStartOfTurnEffects() {
+         Log($"[Turn {turnNumber} Start] Triggering StartOfTurn effects.", LogTag.Effects | LogTag.Turns);
+        // Ensure gameManager reference is valid
+        if (gameManager == null) gameManager = GameManager.Instance;
+        if (gameManager == null) { LogError("GameManager null in TriggerStartOfTurnEffects", LogTag.Turns); return; }
 
-        // Log the current state of the battlefield before triggering effects
-        LogBattlefieldState(gameManager.Player1, "Player 1");
-        LogBattlefieldState(gameManager.Player2, "Player 2");
+         LogBattlefieldState(gameManager.Player1, "Player 1");
+         LogBattlefieldState(gameManager.Player2, "Player 2");
 
-        TriggerEffectsForPlayer(gameManager.Player1, EffectTrigger.StartOfTurn);
-        TriggerEffectsForPlayer(gameManager.Player2, EffectTrigger.StartOfTurn);
-
-        // Note: We don't resolve the actions queue here anymore.
-        // It's now handled in the EndTurn method right after this method is called.
-    }
+         TriggerEffectsForPlayer(gameManager.Player1, EffectTrigger.StartOfTurn);
+         TriggerEffectsForPlayer(gameManager.Player2, EffectTrigger.StartOfTurn);
+     }
 
     private void LogBattlefieldState(IPlayer player, string playerName) {
         if (player == null) return;
@@ -122,31 +140,27 @@ public class TurnManager : MonoBehaviour {
         }
     }
 
-    private void TriggerEffectsForPlayer(IPlayer player, EffectTrigger trigger) {
-        if (player == null) return;
+     private void TriggerEffectsForPlayer(IPlayer player, EffectTrigger trigger) {
+         if (player == null) return;
+         // Ensure gameManager reference is valid
+        if (gameManager == null) gameManager = GameManager.Instance;
+        if (gameManager == null) { LogError("GameManager null in TriggerEffectsForPlayer", LogTag.Turns); return; }
 
-        foreach (var slot in player.Battlefield) {
-            if (slot.IsOccupied() && slot.OccupyingCreature != null) {
-                // Handle the effect if the creature has one with this trigger
-                var creature = slot.OccupyingCreature as Creature;
-                if (creature != null && HasEffectWithTrigger(creature, trigger)) {
-                    Log($"Processing {trigger} effects for {creature.Name}", LogTag.Effects | LogTag.Turns);
-                    creature.HandleEffect(trigger, gameManager.ActionsQueue);
-                }
-            }
-        }
-    }
+         foreach (var slot in player.Battlefield) {
+             if (slot.IsOccupied() && slot.OccupyingCreature != null) {
+                 var creature = slot.OccupyingCreature as Creature;
+                 if (creature != null && HasEffectWithTrigger(creature, trigger)) {
+                     Log($"Processing {trigger} effects for {creature.Name}", LogTag.Effects | LogTag.Turns);
+                     creature.HandleEffect(trigger, gameManager.ActionsQueue);
+                 }
+             }
+         }
+     }
 
-    private bool HasEffectWithTrigger(Creature creature, EffectTrigger trigger) {
+     private bool HasEffectWithTrigger(Creature creature, EffectTrigger trigger) {
         if (creature?.Effects == null) return false;
-
-        foreach (var effect in creature.Effects) {
-            if (effect.trigger == trigger) {
-                return true;
-            }
-        }
-        return false;
-    }
+        return creature.Effects.Any(effect => effect.trigger == trigger);
+     }
 
     private void ReduceStunDurationForAllCreatures() {
         Log("Reducing stun duration for all creatures", LogTag.Creatures | LogTag.Effects | LogTag.Turns);

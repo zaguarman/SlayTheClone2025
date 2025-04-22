@@ -87,7 +87,7 @@ public class ModifyAction : IGameAction {
         // No longer queues another action.
 
         var modifierManager = GameManager.Instance?.ModifierManager;
-        var factory = modifierManager?._modifierFactory;
+        var factory = modifierManager?.ModifierFactory;
 
         if (modifierManager == null || factory == null) {
              LogError($"BuffCreatureAction: ModifierManager or Factory is null. Cannot apply buff to {targetCreature.Name}.", LogTag.Actions | LogTag.Effects);

@@ -11,7 +11,7 @@ public static class SpreadDamageEffect {
     /// <param name="attacker">The creature that is attacking</param>
     /// <param name="targetModifier">The target modifier to apply</param>
     /// <param name="actionsQueue">The actions queue to add damage actions to</param>
-    public static void ApplySpreadDamage(ITarget primaryTarget, int damage, ICreature attacker, TargetModifier targetModifier, ActionsQueue actionsQueue) {
+    public static void ApplySpreadDamage(ITarget primaryTarget, int damage, ICreature attacker, TargetModifier targetModifier, IActionsQueue actionsQueue) {
         if (targetModifier == TargetModifier.None) return;
 
         // Get additional targets based on the target modifier

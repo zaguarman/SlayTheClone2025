@@ -27,7 +27,12 @@ public class PlaySpellAction : IGameAction {
         }
 
         // Process spell effects
-        spell.Play(owner, GameManager.Instance.ActionsQueue, target);
+        var actionsQueue = GameManager.Instance?.ActionsQueue;
+        if (actionsQueue != null) {
+            spell.Play(owner, actionsQueue, target);
+        } else {
+            LogError($"Cannot play spell {spell.Name} - ActionsQueue is null", LogTag.Actions | LogTag.Cards);
+        }
 
         Log($"Executed PlaySpellAction for {spell.Name} (TargetID: {spell.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
     }
@@ -35,4 +40,4 @@ public class PlaySpellAction : IGameAction {
     public override string ToString() {
         return $"PlaySpellAction: Spell={spell?.Name} (TargetID: {spell?.TargetId.ToUpper()}), Owner={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")} (TargetID: {owner?.TargetId.ToUpper()}), Target={target?.TargetId.ToUpper()}";
     }
-} 
+}

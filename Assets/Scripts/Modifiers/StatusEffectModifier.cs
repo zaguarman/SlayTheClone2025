@@ -90,7 +90,7 @@ public class StatusEffectModifier : BaseModifier, ITimedModifier
         if (creatureTarget == null) return;
 
         var modManager = GameManager.Instance?.ModifierManager;
-        if (modManager == null || !modManager.HasModifier(creatureTarget, this.Id))
+        if (modManager == null || !modManager.HasModifier(creatureTarget, mod => mod.Id == this.Id))
         {
              // If the modifier was removed before the event fired, do nothing
              // Log($"StatusEffect '{Name}' ({EffectType}) event fired for {creatureTarget.Name}, but modifier is no longer active.", LogTag.Effects | LogTag.Turns);

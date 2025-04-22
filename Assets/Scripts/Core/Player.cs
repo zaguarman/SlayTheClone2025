@@ -158,7 +158,7 @@ public class Player : Entity, IPlayer {
     }
 
     public void DrawCard() {
-        var cardDealingService = GameManager.Instance?.cardDealingService;
+        var cardDealingService = GameManager.Instance?.CardDealingService;
         if (cardDealingService == null) {
             LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
             return;
@@ -175,7 +175,7 @@ public class Player : Entity, IPlayer {
     }
 
     public async Task<bool> DrawCardAsync(CancellationToken cancellationToken = default) {
-        var cardDealingService = GameManager.Instance?.cardDealingService;
+        var cardDealingService = GameManager.Instance?.CardDealingService;
         if (cardDealingService == null) {
             LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
             return false;

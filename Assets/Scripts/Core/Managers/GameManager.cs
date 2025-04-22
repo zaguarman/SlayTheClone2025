@@ -4,17 +4,87 @@ using System.Linq;
 using UnityEngine;
 using static DebugLogger;
 using static Enums;
+using System;
+using System.Collections;
 
-public class GameManager : InitializableComponent {
-    #region Singleton
+public interface IGameManager : IInitializable {
+    // Properties for accessing core systems via interfaces
+    IActionsQueue ActionsQueue { get; }
+    IWeatherSystem WeatherSystem { get; }
+    ITurnManager TurnManager { get; }
+    ICardDealingService CardDealingService { get; }
+    IModifierManager ModifierManager { get; }
+    IBattlefieldCombatHandler CombatHandler { get; }
+    // Expose players via IPlayer interface
+    IPlayer Player1 { get; }
+    IPlayer Player2 { get; }
+
+    // Add any essential methods needed publicly
+    void SetCardsToDraw(IPlayer player, int count);
+    void DiscardHand(IPlayer player);
+    void DiscardAllHands();
+    void DrawCardsForPlayer(IPlayer player, int count);
+    void DrawCardForPlayer(IPlayer player);
+}
+
+public interface ITurnManager {
+    int TurnNumber { get; }
+    void EndTurn();
+}
+
+public interface IModifierManager {
+    // Add essential public methods needed by other systems
+    void RegisterCreature(Creature creature);
+    void UnregisterCreature(Creature creature);
+    void ApplyModifier(object target, IModifier modifier);
+    void RemoveModifier(object target, IModifier modifier);
+    IEnumerable<IModifier> GetActiveModifiersFor(Creature creature);
+    bool HasStatusEffect(Creature creature, StatusEffectType statusType);
+    bool AreActionsPrevented(Creature creature);
+    void RecalculateStats(Creature creature);
+    void ProcessEndOfTurn(int endedTurnNumber);
+    void Cleanup();
+
+    // Add missing methods needed by other classes
+    bool HasModifier(Creature creature, Predicate<IModifier> predicate);
+
+    // Expose the ModifierFactory for creating modifiers
+    IModifierFactory ModifierFactory { get; }
+}
+
+public interface IActionsQueue {
+    void AddAction(IGameAction action);
+    void ResolveActions();
+    int GetPendingActionsCount();
+    IReadOnlyCollection<IGameAction> GetPendingActions();
+    bool IsEffectProcessed(string sourceId, EffectTrigger trigger);
+    void MarkEffectProcessed(string sourceId, EffectTrigger trigger);
+    bool HasActiveAction(string creatureId);
+    IGameAction GetActiveAction(string creatureId);
+    void Cleanup();
+    // Events
+    UnityEngine.Events.UnityEvent OnActionsQueued { get; }
+    UnityEngine.Events.UnityEvent OnActionsResolved { get; }
+}
+
+public interface IBattlefieldCombatHandler {
+    void HandleCreatureCombat(CardController attackingCard, ITarget targetSlot);
+    void ResetAttackingCreatures();
+    bool HasCreatureAttacked(ITarget creature);
+    BattlefieldSlot GetTargetedSlot(ITarget attacker);
+}
+
+public class GameManager : InitializableComponent, IGameManager {
+    #region Singleton (Modified)
+    // Keep singleton for access, but initialization will be controlled externally
     private static GameManager instance;
-
-    public static GameManager Instance {
+    public static GameManager Instance // Keep static Instance for now
+    {
         get {
-            if (instance == null) {
-                var go = new GameObject("GameManager");
-                instance = go.AddComponent<GameManager>();
-                DontDestroyOnLoad(go);
+            // Don't auto-create, just return if exists
+            if (instance == null && Application.isPlaying) {
+                // LogError instead of creating, GameBootstrap should handle creation/finding
+                Debug.LogError($"GameManager instance accessed before it was initialized or assigned!");
             }
             return instance;
         }
@@ -22,22 +92,28 @@ public class GameManager : InitializableComponent {
     #endregion
 
     #region Fields & Properties
+    // System References (using Interface Types)
     [ShowInInspector]
-    public ActionsQueue ActionsQueue { get; private set; }
+    public IActionsQueue ActionsQueue { get; private set; }
     public IWeatherSystem WeatherSystem { get; private set; }
-    private BattlefieldCombatHandler combatHandler;
-    private TurnManager turnManager;
+    private IBattlefieldCombatHandler combatHandler;
+    private ITurnManager turnManager;
 
+    // Dependencies (to be injected)
     private IGameMediator gameMediator;
     private IGameReferences gameReferences;
-    public ICardDealingService cardDealingService { get; private set; }
+    public ICardDealingService cardDealingService; // Made public to fix access issues
     private System.Random random = new System.Random();
     private bool weatherSystemInitialized = false;
-    public Player Player1 { get; private set; }
-    public Player Player2 { get; private set; }
+    public Player Player1 { get; private set; } // Keep concrete Player for internal use
+    public Player Player2 { get; private set; } // Keep concrete Player for internal use
+
+    // Interface Property Implementations (Exposing Players as IPlayer)
+    IPlayer IGameManager.Player1 => Player1;
+    IPlayer IGameManager.Player2 => Player2;
 
     [ShowInInspector, BoxGroup("Systems")]
-    public ModifierManager ModifierManager { get; private set; } // Add ModifierManager property
+    public IModifierManager ModifierManager { get; private set; }
 
     [ShowInInspector, BoxGroup("Hands"), PropertyOrder]
     [ListDrawerSettings]
@@ -51,72 +127,142 @@ public class GameManager : InitializableComponent {
         .Select((card, index) => $"Card {index + 1}: {card.Name}")
         .ToList() ?? new List<string>();
 
+    // Interface implementations
     public ICardDealingService CardDealingService => cardDealingService;
-    public BattlefieldCombatHandler CombatHandler => combatHandler;
-    public TurnManager TurnManager => turnManager;
+    public IBattlefieldCombatHandler CombatHandler => combatHandler;
+    public ITurnManager TurnManager => turnManager;
     #endregion
 
     #region Unity Lifecycle
     protected override void Awake() {
+        // Base awake does nothing specific here, but good practice to call
         base.Awake();
-        if (instance != null && instance != this) {
+
+        // Singleton Registration Logic
+        if (instance == null) {
+            instance = this;
+            // DontDestroyOnLoad(gameObject); // Let GameBootstrap manage persistence
+        } else if (instance != this) {
+            LogWarning($"Duplicate GameManager instance found on {gameObject.name}. Destroying self.", LogTag.Initialization);
             Destroy(gameObject);
             return;
         }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DO NOT Initialize here. GameBootstrap will call Initialize externally
     }
 
     protected override void OnDestroy() {
-        ModifierManager?.Cleanup(); // Call the cleanup method we added earlier
-        // ... other cleanup ...
-        base.OnDestroy(); // If inheriting from MonoBehaviour/Singleton
+        // Cleanup systems
+        ModifierManager?.Cleanup();
+        ActionsQueue?.Cleanup();
+        // Add cleanup for other systems if they need it
+
+        if (instance == this) {
+            instance = null; // Clear static reference if this was the instance
+        }
+        base.OnDestroy();
     }
 
-    public override void Initialize() {
-        if (IsInitialized) return;
+    #region Initialization (Refactored for Dependency Injection)
 
-        var initManager = InitializationManager.Instance;
-        if (!initManager.IsComponentInitialized<GameReferences>() ||
-            !initManager.IsComponentInitialized<GameMediator>()) {
-            // LogError instead of throwing exception to potentially recover
-            LogError("Required dependencies (GameReferences or GameMediator) not initialized for GameManager", LogTag.Initialization);
+    // NEW Initialize method accepting dependencies
+    public void Initialize(
+        IGameMediator mediator,
+        IGameReferences references,
+        ITurnManager turnManager,
+        IModifierFactory modFactory) {
+        if (IsInitialized) {
+            LogWarning("GameManager Initialize called but already initialized.", LogTag.Initialization);
             return;
         }
 
-        // Get dependencies from singletons (will be injected in the future)
-        gameMediator = GameMediator.Instance;
-        gameReferences = GameReferences.Instance;
-        cardDealingService = new CardDealingService(gameMediator);
+        // --- 1. Store Injected Dependencies ---
+        Log("GameManager Initializing with injected dependencies...", LogTag.Initialization);
+        gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        gameReferences = references ?? throw new ArgumentNullException(nameof(references));
+        this.turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager)); // Store injected TurnManager
+        IModifierFactory modifierFactory = modFactory ?? throw new ArgumentNullException(nameof(modFactory)); // Store injected factory
 
-        // Initialize turn manager
-        turnManager = TurnManager.Instance; // Assuming TurnManager is a Singleton or handled elsewhere
+        if (!gameReferences.AreReferencesValid()) {
+            LogError("GameReferences are invalid during GameManager Initialize!", LogTag.Initialization);
+            // Optionally handle this more gracefully, e.g., disable the component
+            enabled = false;
+            return;
+        }
 
-        // Initialize Modifier System FIRST
-        InitializeModifierSystem(); // Add this call
+        // --- 2. Initialize Internal Systems (using stored dependencies) ---
+        cardDealingService = new CardDealingService(gameMediator); // Pass mediator
+        combatHandler = new BattlefieldCombatHandler(this); // Pass IGameManager (this)
+        ModifierManager = new ModifierManager(gameMediator, modifierFactory); // Pass mediator and factory
+        WeatherSystem = new WeatherSystem(gameMediator); // Pass mediator
+        ActionsQueue = new ActionsQueue(gameMediator, combatHandler); // Pass mediator and combat handler
 
-        // Then other systems
-        InitializeWeatherSystem();
-        InitializeCombatSystem();
-        InitializeActionsQueue();
-        InitializeGameSystem(); // This initializes players, cards, etc.
+        // --- 3. Initialize Game State ---
+        InitializePlayers(); // Uses gameMediator
+        InitializeCards(); // Uses gameReferences, CardDealingService
 
-        base.Initialize(); // Mark GameManager as initialized
+        // --- 4. Mark as Initialized (MUST be before any calls that might rely on IsInitialized) ---
+        base.Initialize(); // Sets IsInitialized = true
+
+        // --- 5. Final Setup ---
+        // Setup initial game state (like placing creatures) *after* main initialization
+        // Using a Coroutine to ensure UI might be ready
+        StartCoroutine(CompleteGameInitialization());
 
         // Set initial weather after all systems are ready
-        if (WeatherSystem != null) {
-            WeatherSystem.SetWeather(WeatherType.Clear);
-             Log("Initial weather set to Clear", LogTag.Initialization | LogTag.Effects);
-        }
-         Log("GameManager Initialization complete.", LogTag.Initialization);
+        WeatherSystem.SetWeather(WeatherType.Clear);
+        Log("Initial weather set to Clear", LogTag.Initialization | LogTag.Effects);
+
+        Log("GameManager Initialization complete.", LogTag.Initialization);
     }
+
+    // Overload for convenience if TurnManager or ModFactory are provided elsewhere (e.g., singletons for now)
+    // Mark as obsolete to encourage using the main injection method
+    [Obsolete("Use Initialize with all dependencies injected.")]
+    public void Initialize(IGameMediator mediator, IGameReferences references) {
+        if (IsInitialized) return;
+        LogWarning("Using obsolete GameManager Initialize method. Dependencies should be injected.", LogTag.Initialization);
+        // Provide default dependencies (using singletons temporarily)
+        var tm = FindObjectOfType<TurnManager>(); // Find TurnManager in scene
+        if (tm == null) {
+            LogError("Cannot find TurnManager in scene. Initialization failed.", LogTag.Initialization);
+            return;
+        }
+        IModifierFactory mf = new SimpleModifierFactory(); // Create default factory
+        Initialize(mediator, references, tm, mf);
+    }
+
+    // Hide the base Initialize method with a new implementation
+    // This is safer than using Obsolete with error=true which can cause compiler errors
+    // when the base class method is called through the interface
+    public new void Initialize() {
+        LogError("GameManager.Initialize() without parameters should not be called. Use Initialize with dependencies.", LogTag.Initialization);
+        // This method should not be called directly, but we don't want to break the interface
+        // If called through IInitializable, provide a fallback implementation
+        if (!IsInitialized) {
+            // Fallback to using singletons
+            var mediator = GameMediator.Instance;
+            var references = GameReferences.Instance;
+            if (mediator != null && references != null) {
+                // Use the full Initialize method with dependencies
+                var tm = FindObjectOfType<TurnManager>();
+                if (tm != null) {
+                    IModifierFactory mf = new SimpleModifierFactory();
+                    Initialize(mediator, references, tm, mf);
+                } else {
+                    LogError("Cannot find TurnManager in scene. Initialization failed.", LogTag.Initialization);
+                }
+            } else {
+                LogError("Cannot initialize GameManager - dependencies not available", LogTag.Initialization);
+            }
+        }
+    }
+
+    #endregion
     #endregion
 
     #region Methods
-    private void InitializeModifierSystem()
-    {
-        if (ModifierManager == null)
-        {
+    private void InitializeModifierSystem() {
+        if (ModifierManager == null) {
             IModifierFactory factory = new SimpleModifierFactory();
             ModifierManager = new ModifierManager(gameMediator, factory);
             Log("Modifier system initialized", LogTag.Initialization | LogTag.Effects);
@@ -145,18 +291,45 @@ public class GameManager : InitializableComponent {
         InitializePlayers();
         InitializeCards();
 
-        if (GameUI.Instance.IsInitialized) {
-            CompleteGameInitialization();
+        if (GameUI.Instance != null) {
+            if (GameUI.Instance.IsInitialized) {
+                StartCoroutine(CompleteGameInitialization());
+            } else {
+                // Use UnityEvent.AddListener which takes an Action (no parameters)
+                // This requires a wrapper method that calls StartCoroutine
+                GameUI.Instance.onInitialized.AddListener(OnGameUIInitialized);
+            }
         } else {
-            GameUI.Instance.onInitialized.AddListener(CompleteGameInitialization);
+            LogWarning("GameUI.Instance is null in InitializeGameSystem", LogTag.Initialization);
+            // Proceed anyway
+            StartCoroutine(CompleteGameInitialization());
         }
     }
 
-    private void CompleteGameInitialization() {
-        SetupInitialGameState();
-        PlaceInitialCreatures();
-        SetupResolveButton();
-        gameMediator.NotifyGameInitialized();
+    private void OnGameUIInitialized() {
+        StartCoroutine(CompleteGameInitialization());
+    }
+
+    // Coroutine for setup steps that might need UI or happen after initial init
+    private IEnumerator CompleteGameInitialization() {
+        // Wait a frame to allow UI potentially initialize if needed
+        yield return null;
+
+        // Wait until the GameUI signals it's ready (optional, but safer)
+        // This assumes GameUI.onInitialized event exists and is fired
+        if (GameUI.Instance != null && !GameUI.Instance.IsInitialized) {
+            Log("GameManager waiting for GameUI initialization...", LogTag.Initialization);
+            yield return new WaitUntil(() => GameUI.Instance.IsInitialized);
+            Log("GameUI initialization detected by GameManager.", LogTag.Initialization);
+        }
+
+        // Now perform setup that might depend on UI or full initialization
+        SetupInitialGameState(); // Deal hands
+        PlaceInitialCreatures(); // Place creatures (uses SummonAction -> affects UI/Modifiers)
+        SetupResolveButton(); // Setup UI button listener
+
+        gameMediator.NotifyGameInitialized(); // Notify game is fully ready
+        Log("GameManager final setup complete.", LogTag.Initialization);
     }
 
     private void InitializePlayers() {
@@ -188,20 +361,22 @@ public class GameManager : InitializableComponent {
             LogError("Cannot place creatures - battlefield not initialized", LogTag.Initialization);
             return;
         }
-
-        // Place creatures for each player from their own deck
         PlaceCreaturesForPlayerFromDeck(Player1, 3);
         PlaceCreaturesForPlayerFromDeck(Player2, 3);
+        // Resolve actions immediately after placing initial creatures
+        // This ensures OnPlay effects trigger and creatures are registered properly
+        ActionsQueue.ResolveActions();
+        Log("Initial creatures placed and actions resolved.", LogTag.Initialization | LogTag.Creatures);
     }
 
     private void PlaceCreaturesForPlayerFromDeck(IPlayer player, int count) {
         var emptySlots = player.Battlefield.Where(s => !s.IsOccupied()).ToList();
         if (emptySlots.Count == 0) {
-             LogWarning($"No empty slots available for {(player.IsPlayer1() ? "Player 1" : "Player 2")} during initial placement", LogTag.Initialization);
+            LogWarning($"No empty slots available for {(player.IsPlayer1() ? "Player 1" : "Player 2")} during initial placement", LogTag.Initialization);
             return;
         }
 
-        var deckPreview = cardDealingService.GetDeckPreview(player);
+        var deckPreview = CardDealingService.GetDeckPreview(player);
         List<ICard> deckCreatures = deckPreview.Where(card => card is ICreature).ToList();
         int creaturesToPlace = Mathf.Min(count, emptySlots.Count, deckCreatures.Count);
         List<BattlefieldSlot> availableSlots = new List<BattlefieldSlot>(emptySlots);
@@ -223,36 +398,26 @@ public class GameManager : InitializableComponent {
 
             creature.SetOwner(player);
 
-            // --- CRITICAL CHANGE: Use Summon Action to place and register ---
-            // This ensures the creature is registered with the ModifierManager
-            // Use the target slot provided by placement logic
-            // Use fromDeck = true
-            var summonAction = new SummonCreatureAction(creature, player, slot, true);
-            // Execute immediately for initial setup? Or queue? Queuing might be safer.
-            // ActionsQueue.AddAction(summonAction); // Add to queue
-            summonAction.Execute(); // Execute directly for initial placement simplicity
+            // Queue the Summon Action
+            var summonAction = new SummonCreatureAction(creature, player, slot, true); // fromDeck = true
+            ActionsQueue.AddAction(summonAction); // Queue the action
 
-            int slotPosition = player.Battlefield.IndexOf(slot) + 1;
-            // Log within SummonCreatureAction will now cover this
-            // Log($"Placed {creature.Name} into slot {slotPosition} for {(player.IsPlayer1() ? "Player 1" : "Player 2")} via initial setup.", LogTag.Creatures | LogTag.Initialization);
+            // Log that the action was QUEUED, not executed yet.
+            Log($"Queued initial placement action for {creature.Name} into slot {player.Battlefield.IndexOf(slot) + 1} for {(player.IsPlayer1() ? "Player 1" : "Player 2")}.", LogTag.Creatures | LogTag.Initialization | LogTag.Actions);
         }
 
         if (creaturesPlaced.Count > 0) {
-            RemoveCardsFromDeck(player, creaturesPlaced);
+            RemoveCardsFromDeck(player, creaturesPlaced); // Remove the cards from the deck data
         }
     }
 
     private void RemoveCardsFromDeck(IPlayer player, List<ICard> cardsToRemove) {
         if (player == null || cardsToRemove == null || cardsToRemove.Count == 0) return;
-
-        // Access the Deck implementation to remove the cards
-        if (cardDealingService != null) {
+        if (CardDealingService != null) {
             foreach (var card in cardsToRemove) {
-                cardDealingService.RemoveCardFromDeck(player, card);
+                CardDealingService.RemoveCardFromDeck(player, card);
             }
-
-            Log($"Removed {cardsToRemove.Count} creatures from {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s deck",
-                LogTag.Cards | LogTag.Initialization);
+            Log($"Removed {cardsToRemove.Count} creatures from {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s deck", LogTag.Cards | LogTag.Initialization);
         }
     }
 
@@ -314,56 +479,39 @@ public class GameManager : InitializableComponent {
     }
 
     private void OnResolveButtonClicked() {
-        Log("Resolve button clicked, ending turn", LogTag.UI | LogTag.Actions | LogTag.Turns);
-
-        // Use the TurnManager to end the current turn, which will:
-        // 1. Trigger end-of-turn effects
-        // 2. Process the actions queue
-        // 3. Trigger start-of-turn effects for the next turn
-        turnManager.EndTurn();
+        Log("End Turn button clicked", LogTag.UI | LogTag.Actions | LogTag.Turns);
+        turnManager.EndTurn(); // Use the stored ITurnManager
     }
 
     // Methods to handle cards to draw
     public void SetCardsToDraw(IPlayer player, int count) {
         if (player == null) return;
-
-        player.CardsToDraw = count;
-        Log($"Set cards to draw for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to {count}", LogTag.Players | LogTag.Cards);
+        if (player is Player p) // Need concrete Player to set property
+        {
+            p.CardsToDraw = count;
+            Log($"Set cards to draw for {(p.IsPlayer1() ? "Player 1" : "Player 2")} to {count}", LogTag.Players | LogTag.Cards);
+        }
     }
 
-    // Methods to force discard hand
     public void DiscardHand(IPlayer player) {
         if (player == null) return;
-
         ActionsQueue?.AddAction(new DiscardHandAction(player));
         Log($"Added discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
     }
 
-    // Method to force discard hand for all players
     public void DiscardAllHands() {
-        if (Player1 != null) {
-            ActionsQueue?.AddAction(new DiscardHandAction(Player1));
-        }
-
-        if (Player2 != null) {
-            ActionsQueue?.AddAction(new DiscardHandAction(Player2));
-        }
-
+        if (Player1 != null) ActionsQueue?.AddAction(new DiscardHandAction(Player1));
+        if (Player2 != null) ActionsQueue?.AddAction(new DiscardHandAction(Player2));
         Log("Added discard hand actions for all players", LogTag.Actions | LogTag.Cards);
     }
 
-    // Method to draw cards for a player
     public void DrawCardsForPlayer(IPlayer player, int count = 1) {
         if (player == null) return;
-
-        // Always use DrawCardsAction for consistency
         ActionsQueue?.AddAction(new DrawCardsAction(player, count));
         Log($"Added draw cards action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to draw {count} cards", LogTag.Actions | LogTag.Cards);
     }
 
-    // Update the existing method to use the new action for consistency
     public void DrawCardForPlayer(IPlayer player) {
-        if (player == null) return;
         DrawCardsForPlayer(player, 1);
     }
 

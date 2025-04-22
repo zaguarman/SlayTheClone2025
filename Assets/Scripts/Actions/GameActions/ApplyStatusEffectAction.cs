@@ -29,7 +29,7 @@ public class ApplyStatusEffectAction : IGameAction
         }
 
         var modifierManager = GameManager.Instance?.ModifierManager;
-        var factory = modifierManager?._modifierFactory;
+        var factory = modifierManager?.ModifierFactory;
         var turnManager = GameManager.Instance?.TurnManager;
 
         if (modifierManager == null || factory == null || turnManager == null)
