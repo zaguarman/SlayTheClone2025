@@ -71,9 +71,16 @@ public class TurnManager : MonoBehaviour, ITurnManager {
         Log($"Turn {turnNumber}: Processing End-of-Turn effects for Turn {turnNumber - 1}...", LogTag.Turns);
         TriggerEndOfTurnEffects(); // Handles creature effects AND ModifierManager processing
 
-        // 2. Resolve Actions (Discard/Draw are queued by ActionsQueue.ResolveActions)
+        // 1.5 Queue Discard & Draw Actions (Managed by TurnManager now)
+        Log($"Turn {turnNumber}: Queuing mandatory discard and draw actions...", LogTag.Turns | LogTag.Actions | LogTag.Cards);
+        gameManager.DiscardHand(gameManager.Player1);
+        gameManager.DiscardHand(gameManager.Player2);
+        gameManager.DrawCardsForPlayer(gameManager.Player1, gameManager.Player1.CardsToDraw);
+        gameManager.DrawCardsForPlayer(gameManager.Player2, gameManager.Player2.CardsToDraw);
+
+        // 2. Resolve Actions (Including the discard/draw actions we just queued)
         Log($"Turn {turnNumber}: Resolving main action queue...", LogTag.Turns | LogTag.Actions);
-        gameManager.ActionsQueue?.ResolveActions(); // Resolve actions including mandatory discard/draw
+        gameManager.ActionsQueue?.ResolveActions(); // Resolve all queued actions
 
         // --- Mediator Notification ---
         // Notify AFTER EOT effects resolve, but BEFORE SOT effects trigger

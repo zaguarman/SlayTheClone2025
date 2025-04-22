@@ -177,29 +177,6 @@ public class ActionsQueue : IActionsQueue {
         processedEffects.Clear();
         Log("Cleared processed effects for new resolution chain (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Effects);
 
-        // Add discard hand actions for both players
-        // Note: This is a temporary solution. In the future, TurnManager should handle this
-        // by explicitly calling DiscardHand and DrawCards methods on GameManager
-        var gameManager = GameManager.Instance; // Still using singleton for now
-        if (gameManager != null) {
-            Log("Adding mandatory discard and draw actions (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
-
-            // Add discard actions
-            AddAction(new DiscardHandAction(gameManager.Player1));
-            AddAction(new DiscardHandAction(gameManager.Player2));
-
-            // Add draw cards actions after discarding
-            if (gameManager.Player1 is Player p1) {
-                AddAction(new DrawCardsAction(p1, p1.CardsToDraw));
-            }
-            if (gameManager.Player2 is Player p2) {
-                AddAction(new DrawCardsAction(p2, p2.CardsToDraw));
-            }
-
-            // Log the updated queue size
-            Log($"After adding mandatory actions, queue size: {actionsList.Count} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
-        }
-
         // Process all actions in the queue
         while (actionsList.Count > 0) {
             var action = actionsList[0];
