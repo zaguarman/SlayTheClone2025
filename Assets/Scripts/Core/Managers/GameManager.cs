@@ -222,13 +222,13 @@ public class GameManager : InitializableComponent, IGameManager {
         if (IsInitialized) return;
         LogWarning("Using obsolete GameManager Initialize method. Dependencies should be injected.", LogTag.Initialization);
         // Provide default dependencies (using singletons temporarily)
-        var tm = FindObjectOfType<TurnManager>(); // Find TurnManager in scene
-        if (tm == null) {
+        var turnManager = FindObjectOfType<TurnManager>(); // Find TurnManager in scene
+        if (turnManager == null) {
             LogError("Cannot find TurnManager in scene. Initialization failed.", LogTag.Initialization);
             return;
         }
-        IModifierFactory mf = new SimpleModifierFactory(); // Create default factory
-        Initialize(mediator, references, tm, mf);
+        IModifierFactory modifierFactory = new SimpleModifierFactory(); // Create default factory
+        Initialize(mediator, references, turnManager, modifierFactory);
     }
 
     // Hide the base Initialize method with a new implementation
