@@ -1,12 +1,13 @@
-using static Enums;
 using static DebugLogger;
-using UnityEngine;
-using System;
 
 public class DrawCardsAction : IGameAction {
     #region Fields
     private readonly IPlayer player;
     private readonly int amount;
+
+    // Add getters for ActionsQueue special handling
+    public IPlayer GetPlayer() => player;
+    public int GetAmount() => amount;
     #endregion
 
     #region Constructor
@@ -24,15 +25,13 @@ public class DrawCardsAction : IGameAction {
             return;
         }
 
-        var cardDealingService = GameManager.Instance?.CardDealingService;
-        if (cardDealingService == null) {
-            LogError("Cannot execute draw cards action - card dealing service not available", LogTag.Actions | LogTag.Cards);
-            return;
-        }
+        // This Execute method might still be called if the action is somehow
+        // executed outside the ActionsQueue's ResolveActions loop, or for testing.
+        // The primary execution logic is now handled *by* the ActionsQueue.
 
-        // Draw the specified number of cards
-        cardDealingService.DrawCards(player, amount);
-        Log($"Executed draw cards action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) - drew up to {amount} cards", LogTag.Actions | LogTag.Cards);
+        // Log the intent, but don't perform the actual operation
+        // This avoids the direct dependency on GameManager.Instance
+        Log($"DrawCardsAction: Intent to draw {amount} cards for {(player.IsPlayer1() ? "Player 1" : "Player 2")}. (Actual execution handled by ActionsQueue)", LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {

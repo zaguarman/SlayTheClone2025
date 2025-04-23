@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using static DebugLogger;
 using static Enums;
 using System;
+// Using the existing IWeatherSystem interface from WeatherSystem.cs
 
 public class ActionsQueue : IActionsQueue {
 
@@ -15,6 +16,8 @@ public class ActionsQueue : IActionsQueue {
     private readonly int maxIterationDepth = 3;
     private readonly IGameMediator gameMediator;
     private readonly IBattlefieldCombatHandler combatHandler;
+    private readonly IWeatherSystem weatherSystem; // <<< INJECTED DEPENDENCY
+    private readonly ICardDealingService cardDealingService; // <<< INJECTED DEPENDENCY
     #endregion
 
     #region Properties
@@ -40,9 +43,12 @@ public class ActionsQueue : IActionsQueue {
     #endregion
 
     #region Constructor
-    public ActionsQueue(IGameMediator gameMediator, IBattlefieldCombatHandler combatHandler) {
+    // Updated Constructor to accept IWeatherSystem and ICardDealingService
+    public ActionsQueue(IGameMediator gameMediator, IBattlefieldCombatHandler combatHandler, IWeatherSystem weatherSystem, ICardDealingService cardDealingService) {
         this.gameMediator = gameMediator ?? throw new ArgumentNullException(nameof(gameMediator));
         this.combatHandler = combatHandler ?? throw new ArgumentNullException(nameof(combatHandler));
+        this.weatherSystem = weatherSystem ?? throw new ArgumentNullException(nameof(weatherSystem)); // Store injected WeatherSystem
+        this.cardDealingService = cardDealingService ?? throw new ArgumentNullException(nameof(cardDealingService)); // Store injected CardDealingService
     }
     #endregion
 
@@ -98,28 +104,23 @@ public class ActionsQueue : IActionsQueue {
             return;
         }
 
-        bool queueChanged = false;
         string activeCreatureId = GetActiveCreatureId(action);
 
         if (activeCreatureId != null) {
-            if (activeCreatureActions.ContainsKey(activeCreatureId)) {
+            if (activeCreatureActions.TryGetValue(activeCreatureId, out var existingAction)) {
                 Log($"Replacing existing action for creature (TargetID: {activeCreatureId.ToUpper()})", LogTag.Actions);
-                actionsList.Remove(activeCreatureActions[activeCreatureId]);
-                queueChanged = true;
+                actionsList.Remove(existingAction); // Make sure to remove the correct instance
             }
             activeCreatureActions[activeCreatureId] = action;
-            queueChanged = true;
         }
 
         InsertActionWithPriority(action);
-        queueChanged = true;
         Log($"Added action to queue: {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
         Log($"Actions in queue: {actionsList.Count} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
 
-        if (queueChanged) {
-            OnActionsQueued.Invoke();
-            gameMediator.NotifyActionsQueueChanged();
-        }
+        // Always invoke events/notify mediator after successfully adding an action
+        OnActionsQueued.Invoke();
+        gameMediator.NotifyActionsQueueChanged();
     }
 
     private void InsertActionWithPriority(IGameAction action) {
@@ -167,29 +168,58 @@ public class ActionsQueue : IActionsQueue {
     }
 
     public void ResolveActions() {
-        bool queueChanged = false;
         currentIterationDepth++;
 
-        // Log the initial state for debugging
         int initialActionCount = actionsList.Count;
         Log($"Resolving actions. Initial queue size: {initialActionCount} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
 
         processedEffects.Clear();
         Log("Cleared processed effects for new resolution chain (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Effects);
 
+        // Only set queueChanged once if we process any actions
+        bool queueChanged = actionsList.Count > 0;
+
         // Process all actions in the queue
         while (actionsList.Count > 0) {
+            // Dequeue the action
             var action = actionsList[0];
-            actionsList.Remove(action);
-            queueChanged = true;
+            actionsList.RemoveAt(0); // Remove the first element
 
+            // Handle creature-specific bookkeeping
             string activeCreatureId = GetActiveCreatureId(action);
             if (activeCreatureId != null) {
                 activeCreatureActions.Remove(activeCreatureId);
             }
 
-            Log($"Executing action: {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
-            action.Execute();
+            Log($"Processing action: {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
+
+            // --- MODIFIED EXECUTION LOGIC ---
+            if (action is ChangeWeatherAction changeWeatherAction) {
+                // Specific handling for ChangeWeatherAction using the injected system
+                if (weatherSystem != null) {
+                    WeatherType targetWeather = changeWeatherAction.GetTargetWeather();
+                    weatherSystem.SetWeather(targetWeather);
+                    Log($"Executed ChangeWeatherAction via ActionsQueue: Weather set to {targetWeather}", LogTag.Actions | LogTag.Effects);
+                }
+            } else if (action is DrawCardsAction drawCardsAction) {
+                // Specific handling for DrawCardsAction using the injected service
+                if (cardDealingService != null) {
+                    var player = drawCardsAction.GetPlayer();
+                    var amount = drawCardsAction.GetAmount();
+                    if (player != null) {
+                        cardDealingService.DrawCards(player, amount);
+                        Log($"Executed DrawCardsAction via ActionsQueue: Drew {amount} cards for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
+                    } else {
+                        LogError("Cannot execute DrawCardsAction - player is null", LogTag.Actions | LogTag.Cards);
+                    }
+                } else {
+                    LogError("Cannot execute DrawCardsAction - CardDealingService is null in ActionsQueue!", LogTag.Actions | LogTag.Cards);
+                }
+            } else {
+                // Default execution for all other action types
+                action.Execute();
+            }
+            // --- END MODIFIED EXECUTION LOGIC ---
         }
 
         currentIterationDepth--;

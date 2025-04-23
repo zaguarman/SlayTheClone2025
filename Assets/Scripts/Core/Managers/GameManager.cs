@@ -194,7 +194,7 @@ public class GameManager : InitializableComponent, IGameManager {
         combatHandler = new BattlefieldCombatHandler(this); // Pass IGameManager (this)
         ModifierManager = new ModifierManager(gameMediator, modifierFactory); // Pass mediator and factory
         WeatherSystem = new WeatherSystem(gameMediator); // Pass mediator
-        ActionsQueue = new ActionsQueue(gameMediator, combatHandler); // Pass mediator and combat handler
+        ActionsQueue = new ActionsQueue(gameMediator, combatHandler, WeatherSystem, cardDealingService); // Pass dependencies to ActionsQueue constructor
 
         // --- 3. Initialize Game State ---
         InitializePlayers(); // Uses gameMediator
@@ -284,7 +284,11 @@ public class GameManager : InitializableComponent, IGameManager {
     }
 
     private void InitializeActionsQueue() {
-        ActionsQueue = new ActionsQueue(gameMediator, combatHandler);
+        // Make sure WeatherSystem is initialized first if needed
+        if (WeatherSystem == null) {
+            InitializeWeatherSystem();
+        }
+        ActionsQueue = new ActionsQueue(gameMediator, combatHandler, WeatherSystem, cardDealingService);
         Log("Actions queue initialized", LogTag.Initialization);
     }
 
