@@ -1,11 +1,11 @@
 using Sirenix.OdinInspector;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static DebugLogger;
 using static Enums;
-using System;
-using System.Collections;
 
 public interface IGameManager : IInitializable {
     // Properties for accessing core systems via interfaces
@@ -194,7 +194,34 @@ public class GameManager : InitializableComponent, IGameManager {
         combatHandler = new BattlefieldCombatHandler(this); // Pass IGameManager (this)
         ModifierManager = new ModifierManager(gameMediator, modifierFactory); // Pass mediator and factory
         WeatherSystem = new WeatherSystem(gameMediator); // Pass mediator
-        ActionsQueue = new ActionsQueue(gameMediator, combatHandler, WeatherSystem, cardDealingService); // Pass dependencies to ActionsQueue constructor
+
+        // --- Create Action Executors ---
+        var defaultExecutor = new DefaultActionExecutor();
+        var executors = new Dictionary<Type, IActionExecutor>
+        {
+            [typeof(DrawCardsAction)] = new DrawCardsActionExecutor(),
+            [typeof(ChangeWeatherAction)] = new ChangeWeatherActionExecutor(),
+            [typeof(SummonCreatureAction)] = new SummonCreatureActionExecutor(),
+            [typeof(PlayCardAction)] = new PlayCardActionExecutor(),
+            [typeof(PlaySpellAction)] = new PlaySpellActionExecutor(),
+            [typeof(BattlefieldCombatAction)] = new BattlefieldCombatActionExecutor(),
+            [typeof(ModifyAction)] = new ModifyActionExecutor(),
+            [typeof(ApplyStatusEffectAction)] = new ApplyStatusEffectActionExecutor(),
+            [typeof(MoveCreatureAction)] = new MoveCreatureActionExecutor(),
+            [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor()
+        };
+
+        // Initialize ActionsQueue with all dependencies and executors
+        ActionsQueue = new ActionsQueue(
+            gameMediator,
+            combatHandler,
+            WeatherSystem,
+            cardDealingService,
+            gameReferences,
+            ModifierManager,
+            executors,
+            defaultExecutor
+        );
 
         // --- 3. Initialize Game State ---
         InitializePlayers(); // Uses gameMediator
@@ -288,8 +315,36 @@ public class GameManager : InitializableComponent, IGameManager {
         if (WeatherSystem == null) {
             InitializeWeatherSystem();
         }
-        ActionsQueue = new ActionsQueue(gameMediator, combatHandler, WeatherSystem, cardDealingService);
-        Log("Actions queue initialized", LogTag.Initialization);
+
+        // Create executors
+        var defaultExecutor = new DefaultActionExecutor();
+        var executors = new Dictionary<Type, IActionExecutor>
+        {
+            [typeof(DrawCardsAction)] = new DrawCardsActionExecutor(),
+            [typeof(ChangeWeatherAction)] = new ChangeWeatherActionExecutor(),
+            [typeof(SummonCreatureAction)] = new SummonCreatureActionExecutor(),
+            [typeof(PlayCardAction)] = new PlayCardActionExecutor(),
+            [typeof(PlaySpellAction)] = new PlaySpellActionExecutor(),
+            [typeof(BattlefieldCombatAction)] = new BattlefieldCombatActionExecutor(),
+            [typeof(ModifyAction)] = new ModifyActionExecutor(),
+            [typeof(ApplyStatusEffectAction)] = new ApplyStatusEffectActionExecutor(),
+            [typeof(MoveCreatureAction)] = new MoveCreatureActionExecutor(),
+            [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor()
+        };
+
+        // Initialize ActionsQueue with all dependencies and executors
+        ActionsQueue = new ActionsQueue(
+            gameMediator,
+            combatHandler,
+            WeatherSystem,
+            cardDealingService,
+            gameReferences,
+            ModifierManager,
+            executors,
+            defaultExecutor
+        );
+
+        Log("Actions queue initialized with Strategy Executors", LogTag.Initialization);
     }
 
     private void InitializeGameSystem() {

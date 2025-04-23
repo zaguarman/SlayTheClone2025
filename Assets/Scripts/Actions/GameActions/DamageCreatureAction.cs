@@ -29,31 +29,8 @@ public class DamageCreatureAction : IGameAction {
 
     #region Methods
     public void Execute() {
-        if (target == null || target.Health <= 0) return; // Check if target exists and is alive
-
-
-        if (target is Creature creature) {
-             Log($"Executing DamageCreatureAction: Intent to deal {damage} damage to {creature.Name} (TargetID: {creature.TargetId.ToUpper().Substring(0, 8)}, Armor: {creature.CurrentArmorPool}) from {attacker?.Name ?? "source"}",
-                LogTag.Actions | LogTag.Creatures | LogTag.Combat);
-
-            // --- Armor Check Logic ---
-            int damageToArmor = Math.Min(damage, creature.CurrentArmorPool);
-            int remainingDamage = damage - damageToArmor;
-
-            if (damageToArmor > 0) {
-                // Apply damage to armor pool *directly* here
-                creature.ModifyArmorPool(-damageToArmor);
-                Log($"DamageCreatureAction: {damageToArmor} damage absorbed by armor. {creature.Name} armor remaining: {creature.CurrentArmorPool}", LogTag.Actions | LogTag.Effects | LogTag.Combat);
-            }
-
-            if (remainingDamage > 0 && creature.Health > 0) {
-                // Apply remaining damage to health using the specific health damage method
-                Log($"DamageCreatureAction: Applying {remainingDamage} remaining damage to health.", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
-                creature.TakeHealthDamage(remainingDamage, attacker); // Pass attacker
-            }
-        } else {
-             LogWarning($"DamageCreatureAction: Target {target.Name} is not a concrete Creature.", LogTag.Actions | LogTag.Creatures);
-        }
+        // Logic moved to DamageCreatureActionExecutor
+        Log($"DamageCreatureAction Execute() called for {target?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
     }
 
     public override string ToString() {

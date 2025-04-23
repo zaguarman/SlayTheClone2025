@@ -1,12 +1,14 @@
-using static Enums;
 using static DebugLogger;
-using UnityEngine;
-using System;
 
 public class PlaySpellAction : IGameAction {
     private readonly Spell spell;
     private readonly IPlayer owner;
     private readonly ITarget target;
+
+    // Getters for executor
+    public Spell GetSpell() => spell;
+    public IPlayer GetOwner() => owner;
+    public ITarget GetTarget() => target;
 
     public PlaySpellAction(Spell spell, IPlayer owner, ITarget target = null) {
         this.spell = spell;
@@ -16,25 +18,8 @@ public class PlaySpellAction : IGameAction {
     }
 
     public void Execute() {
-        if (spell == null || owner == null) {
-            LogError("Cannot execute PlaySpellAction - spell or owner is null", LogTag.Actions);
-            return;
-        }
-
-        // Discard the spell from hand if it hasn't been already
-        if (owner.Hand.Contains(spell)) {
-            owner.DiscardCard(spell);
-        }
-
-        // Process spell effects
-        var actionsQueue = GameManager.Instance?.ActionsQueue;
-        if (actionsQueue != null) {
-            spell.Play(owner, actionsQueue, target);
-        } else {
-            LogError($"Cannot play spell {spell.Name} - ActionsQueue is null", LogTag.Actions | LogTag.Cards);
-        }
-
-        Log($"Executed PlaySpellAction for {spell.Name} (TargetID: {spell.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
+        // Logic moved to PlaySpellActionExecutor
+        Log($"PlaySpellAction Execute() called for {spell?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {

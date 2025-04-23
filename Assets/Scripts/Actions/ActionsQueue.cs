@@ -1,10 +1,10 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.Events;
 using static DebugLogger;
 using static Enums;
-using System;
-// Using the existing IWeatherSystem interface from WeatherSystem.cs
 
 public class ActionsQueue : IActionsQueue {
 
@@ -14,10 +14,19 @@ public class ActionsQueue : IActionsQueue {
     private readonly Dictionary<string, IGameAction> activeCreatureActions = new Dictionary<string, IGameAction>();
     private int currentIterationDepth = 0;
     private readonly int maxIterationDepth = 3;
+
+    // Dependencies
     private readonly IGameMediator gameMediator;
     private readonly IBattlefieldCombatHandler combatHandler;
-    private readonly IWeatherSystem weatherSystem; // <<< INJECTED DEPENDENCY
-    private readonly ICardDealingService cardDealingService; // <<< INJECTED DEPENDENCY
+    private readonly IWeatherSystem weatherSystem;
+    private readonly ICardDealingService cardDealingService;
+    private readonly IGameReferences gameReferences;
+    private readonly IModifierManager modifierManager;
+
+    // Executor related fields
+    private readonly Dictionary<Type, IActionExecutor> _actionExecutors;
+    private readonly IActionExecutor _defaultExecutor;
+    private readonly ActionExecutionContext _executionContext;
     #endregion
 
     #region Properties
@@ -43,12 +52,41 @@ public class ActionsQueue : IActionsQueue {
     #endregion
 
     #region Constructor
-    // Updated Constructor to accept IWeatherSystem and ICardDealingService
-    public ActionsQueue(IGameMediator gameMediator, IBattlefieldCombatHandler combatHandler, IWeatherSystem weatherSystem, ICardDealingService cardDealingService) {
+    // Updated Constructor to accept all dependencies including executors
+    public ActionsQueue(
+        IGameMediator gameMediator,
+        IBattlefieldCombatHandler combatHandler,
+        IWeatherSystem weatherSystem,
+        ICardDealingService cardDealingService,
+        IGameReferences gameReferences,
+        IModifierManager modifierManager,
+        Dictionary<Type, IActionExecutor> actionExecutors,
+        IActionExecutor defaultExecutor)
+    {
         this.gameMediator = gameMediator ?? throw new ArgumentNullException(nameof(gameMediator));
         this.combatHandler = combatHandler ?? throw new ArgumentNullException(nameof(combatHandler));
-        this.weatherSystem = weatherSystem ?? throw new ArgumentNullException(nameof(weatherSystem)); // Store injected WeatherSystem
-        this.cardDealingService = cardDealingService ?? throw new ArgumentNullException(nameof(cardDealingService)); // Store injected CardDealingService
+        this.weatherSystem = weatherSystem ?? throw new ArgumentNullException(nameof(weatherSystem));
+        this.cardDealingService = cardDealingService ?? throw new ArgumentNullException(nameof(cardDealingService));
+        this.gameReferences = gameReferences ?? throw new ArgumentNullException(nameof(gameReferences));
+        this.modifierManager = modifierManager ?? throw new ArgumentNullException(nameof(modifierManager));
+
+        // Store executor map and default
+        _actionExecutors = actionExecutors ?? new Dictionary<Type, IActionExecutor>();
+        _defaultExecutor = defaultExecutor ?? new DefaultActionExecutor();
+
+        // Create the context object with all necessary services
+        _executionContext = new ActionExecutionContext(
+            gameMediator,
+            gameReferences,
+            cardDealingService,
+            weatherSystem,
+            modifierManager,
+            modifierManager.ModifierFactory,
+            this, // Pass self (IActionsQueue) to context
+            combatHandler
+        );
+
+        Log("ActionsQueue initialized with Strategy Executors.", LogTag.Initialization);
     }
     #endregion
 
@@ -193,33 +231,24 @@ public class ActionsQueue : IActionsQueue {
 
             Log($"Processing action: {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
 
-            // --- MODIFIED EXECUTION LOGIC ---
-            if (action is ChangeWeatherAction changeWeatherAction) {
-                // Specific handling for ChangeWeatherAction using the injected system
-                if (weatherSystem != null) {
-                    WeatherType targetWeather = changeWeatherAction.GetTargetWeather();
-                    weatherSystem.SetWeather(targetWeather);
-                    Log($"Executed ChangeWeatherAction via ActionsQueue: Weather set to {targetWeather}", LogTag.Actions | LogTag.Effects);
-                }
-            } else if (action is DrawCardsAction drawCardsAction) {
-                // Specific handling for DrawCardsAction using the injected service
-                if (cardDealingService != null) {
-                    var player = drawCardsAction.GetPlayer();
-                    var amount = drawCardsAction.GetAmount();
-                    if (player != null) {
-                        cardDealingService.DrawCards(player, amount);
-                        Log($"Executed DrawCardsAction via ActionsQueue: Drew {amount} cards for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
-                    } else {
-                        LogError("Cannot execute DrawCardsAction - player is null", LogTag.Actions | LogTag.Cards);
-                    }
-                } else {
-                    LogError("Cannot execute DrawCardsAction - CardDealingService is null in ActionsQueue!", LogTag.Actions | LogTag.Cards);
-                }
-            } else {
-                // Default execution for all other action types
-                action.Execute();
+            // --- STRATEGY PATTERN EXECUTION ---
+            IActionExecutor executor = _actionExecutors.TryGetValue(action.GetType(), out var specificExecutor)
+                                        ? specificExecutor
+                                        : _defaultExecutor;
+
+            Log($"Using Executor: {executor.GetType().Name}", LogTag.Actions);
+
+            try
+            {
+                // Execute using the chosen strategy and the shared context
+                executor.Execute(action, _executionContext);
             }
-            // --- END MODIFIED EXECUTION LOGIC ---
+            catch (Exception ex)
+            {
+                LogError($"Error executing action {action.GetType().Name} via {executor.GetType().Name}: {ex.Message}\n{ex.StackTrace}", LogTag.Actions);
+                // Decide how to handle errors - skip action, stop queue? For now, log and continue.
+            }
+            // --- END STRATEGY PATTERN ---
         }
 
         currentIterationDepth--;

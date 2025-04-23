@@ -77,77 +77,8 @@ public class ModifyAction : IGameAction {
     }
 
     public void Execute() {
-        if (targetCreature == null)
-        {
-            LogWarning($"BuffCreatureAction: Target creature is null. Cannot apply buff.", LogTag.Actions | LogTag.Effects);
-            return;
-        }
-
-        // --- This action now directly applies the modifier ---
-        // No longer queues another action.
-
-        var modifierManager = GameManager.Instance?.ModifierManager;
-        var factory = modifierManager?.ModifierFactory;
-
-        if (modifierManager == null || factory == null) {
-             LogError($"BuffCreatureAction: ModifierManager or Factory is null. Cannot apply buff to {targetCreature.Name}.", LogTag.Actions | LogTag.Effects);
-            return;
-        }
-
-        // Get current turn number for timed modifiers
-        int currentTurn = GameManager.Instance?.TurnManager?.TurnNumber ?? 0;
-
-        // Create and apply modifiers via the ModifierManager
-        if (modifyAttack && value != 0) {
-            string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
-            string modName = $"Attack Buff ({calculationType} {value}{durationText})";
-            string modDesc = $"{(calculationType == ModifierCalculationType.Flat && value >= 0 ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Attack{durationText}";
-
-            IModifier attackMod;
-            if (durationInTurns > 0) {
-                attackMod = factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Attack, calculationType, value, durationInTurns, currentTurn);
-                Log($"BuffCreatureAction applying Timed Attack Modifier: {attackMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
-            } else {
-                attackMod = factory.CreateStatModifier(modName, modDesc, ModifiableStat.Attack, calculationType, value);
-                Log($"BuffCreatureAction applying Permanent Attack Modifier: {attackMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
-            }
-            modifierManager.ApplyModifier(targetCreature, attackMod);
-        }
-
-        if (modifyHealth && value != 0) {
-             // NOTE: Health buffs apply to MAX health. Current health is clamped.
-            string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
-            string modName = $"Health Buff ({calculationType} {value}{durationText})";
-            string modDesc = $"{(calculationType == ModifierCalculationType.Flat && value >= 0 ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Max Health{durationText}";
-
-            IModifier healthMod;
-            if (durationInTurns > 0) {
-                healthMod = factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Health, calculationType, value, durationInTurns, currentTurn);
-                 Log($"BuffCreatureAction applying Timed Health Modifier: {healthMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
-            } else {
-                healthMod = factory.CreateStatModifier(modName, modDesc, ModifiableStat.Health, calculationType, value);
-                Log($"BuffCreatureAction applying Permanent Health Modifier: {healthMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
-            }
-            modifierManager.ApplyModifier(targetCreature, healthMod);
-             // RecalculateStats called within ApplyModifier will handle clamping current health
-        }
-
-        // Apply Speed Modifier if requested
-        if (modifySpeed && value != 0) {
-            string durationText = durationInTurns > 0 ? $" for {durationInTurns} turns" : "";
-            string modName = $"Speed Buff ({calculationType} {value}{durationText})";
-            string modDesc = $"{(calculationType == ModifierCalculationType.Flat && value >= 0 ? "+" : "")}{value}{(calculationType == ModifierCalculationType.Percentage ? "%" : "")} Speed{durationText}";
-
-            IModifier speedMod;
-            if (durationInTurns > 0) {
-                speedMod = factory.CreateTimedStatModifier(modName, modDesc, ModifiableStat.Speed, calculationType, value, durationInTurns, currentTurn);
-                Log($"BuffCreatureAction applying Timed Speed Modifier: {speedMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
-            } else {
-                speedMod = factory.CreateStatModifier(modName, modDesc, ModifiableStat.Speed, calculationType, value);
-                Log($"BuffCreatureAction applying Permanent Speed Modifier: {speedMod} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
-            }
-            modifierManager.ApplyModifier(targetCreature, speedMod);
-        }
+        // Logic moved to ModifyActionExecutor
+        Log($"ModifyAction Execute() called for {targetCreature?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Effects);
     }
 
     public override string ToString() {
@@ -159,8 +90,12 @@ public class ModifyAction : IGameAction {
         return $"BuffCreatureAction: Target={targetName}({targetId}), Buff={buffDesc}{durationText}, Calc={calculationType}";
     }
 
-    // Added method to get the target creature for action sorting
-    public ITarget GetTarget() {
-        return targetCreature;
-    }
+    // Getters for executor
+    public ITarget GetTarget() => targetCreature;
+    public int GetValue() => value;
+    public bool ShouldModifyAttack() => modifyAttack;
+    public bool ShouldModifyHealth() => modifyHealth;
+    public bool ShouldModifySpeed() => modifySpeed;
+    public int GetDuration() => durationInTurns;
+    public ModifierCalculationType GetCalculationType() => calculationType;
 }

@@ -8,6 +8,12 @@ public class SummonCreatureAction : IGameAction {
     private readonly ITarget targetSlot; // Target is expected to be a BattlefieldSlot
     private readonly bool fromDeck;
 
+    // Getters for executor
+    public ICreature GetCreature() => creature;
+    public IPlayer GetOwner() => owner;
+    public ITarget GetTargetSlot() => targetSlot;
+    public bool IsFromDeck() => fromDeck;
+
     public SummonCreatureAction(ICreature creature, IPlayer owner, ITarget target, bool fromDeck = false) {
         this.creature = creature;
         this.owner = owner;
@@ -18,71 +24,8 @@ public class SummonCreatureAction : IGameAction {
     }
 
     public void Execute() {
-        if (creature == null || owner == null) {
-            LogError("Cannot execute SummonCreatureAction - creature or owner is null", LogTag.Actions | LogTag.Creatures);
-            return;
-        }
-         if (!(targetSlot is BattlefieldSlot slot)) {
-            LogError($"Cannot summon creature {creature.Name} - invalid target slot type: {targetSlot?.GetType().Name ?? "null"}", LogTag.Actions | LogTag.Creatures);
-            return;
-        }
-
-        Log($"Executing SummonCreatureAction: Creature={creature.Name} (ID: {creature.TargetId.ToUpper().Substring(0,8)}), Owner={(owner.IsPlayer1() ? "P1" : "P2")}, Slot={slot.TargetId.ToUpper().Substring(0,8)}, FromDeck={fromDeck}", LogTag.Actions | LogTag.Creatures);
-
-        // Ensure owner is set (might be redundant but safe)
-        creature.SetOwner(owner);
-
-        // Remove from hand if summoned from hand
-        if (!fromDeck && owner.Hand.Contains(creature)) {
-            // DiscardCard handles removing from hand and adding to discard (if applicable later)
-             owner.DiscardCard(creature);
-            // Log($"Removed {creature.Name} from owner's hand.", LogTag.Actions | LogTag.Cards);
-        }
-        // If summoned from deck, the CardDealingService should have already removed it.
-
-        // --- Core Summon Logic ---
-        // 1. Clear the target slot if occupied (handle potential replacement logic if needed)
-        if (slot.IsOccupied()) {
-             LogWarning($"Target slot {slot.TargetId} for {creature.Name} is already occupied by {slot.OccupyingCreature?.Name}. Replacing...", LogTag.Actions | LogTag.Creatures);
-            // Consider if replacement should trigger "OnDeath" for the old creature
-             owner.RemoveFromBattlefield(slot.OccupyingCreature, true); // Destroy the old card controller
-        }
-
-        // --- Get Dependencies (Temporary Singleton Access for mediator, direct find for references) ---
-        var mediator = GameMediator.Instance;
-        var references = UnityEngine.Object.FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
-
-        if (mediator == null || references == null)
-        {
-            LogError($"Failed to get Mediator or References in SummonCreatureAction for {creature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Initialization);
-            return;
-        }
-        // --- End Dependency Get ---
-
-        // 2. Create CardController and assign to slot
-        var cardController = CardFactory.CreateCardController(creature, owner, slot.transform, mediator, references);
-        if (cardController != null) {
-            slot.AssignCreature(cardController); // Assigns controller and sets creature.Slot
-            Log($"Summoned {creature.Name} to slot {slot.TargetId.ToUpper().Substring(0,8)}", LogTag.Actions | LogTag.Creatures);
-
-            // 3. --- REGISTER WITH MODIFIER MANAGER ---
-            GameManager.Instance?.ModifierManager?.RegisterCreature(creature as Creature); // Cast to concrete type if needed
-
-            // 4. Trigger OnPlay CardEffects (existing system)
-            if (creature is Creature creatureInstance) {
-                // Get ActionsQueue through interface
-                var actionsQueue = GameManager.Instance?.ActionsQueue;
-                if (actionsQueue != null) {
-                    creatureInstance.HandleEffect(EffectTrigger.OnPlay, actionsQueue);
-                }
-            }
-
-             // 5. Notify GameMediator AFTER registration and effects
-             mediator.NotifyCreatureSummoned(creature, owner); // Use the obtained mediator instance
-
-        } else {
-            LogError($"Failed to create card controller for {creature.Name}", LogTag.Actions | LogTag.Creatures);
-        }
+        // Logic moved to SummonCreatureActionExecutor
+        Log($"SummonCreatureAction Execute() called for {creature?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures);
     }
 
     public override string ToString() {

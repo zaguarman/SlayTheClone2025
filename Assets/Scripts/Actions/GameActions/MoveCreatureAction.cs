@@ -12,6 +12,7 @@ public class MoveCreatureAction : IGameAction {
     public ICreature GetCreature() => creature;
     public ITarget GetFromSlot() => fromSlot;
     public ITarget GetToSlot() => toSlot;
+    public IPlayer GetPlayer() => player;
     #endregion
 
     #region Constructor
@@ -27,31 +28,8 @@ public class MoveCreatureAction : IGameAction {
 
     #region Methods
     public void Execute() {
-        if (creature == null || fromSlot == null || toSlot == null || player == null) {
-            LogError("Cannot execute MoveCreatureAction - one or more required components are null", LogTag.Actions);
-            return;
-        }
-
-        // --- Check for Paralysis ---
-        var modManager = GameManager.Instance?.ModifierManager;
-        if (modManager != null &&
-            creature is Creature concreteCreature &&
-            modManager.AreActionsPrevented(concreteCreature))
-        {
-            Log($"Creature {creature.Name} cannot move due to status effect (e.g., Paralyzed).", LogTag.Actions | LogTag.Effects);
-            return; // Prevent move action
-        }
-        // --- End Check ---
-
-        if (fromSlot is BattlefieldSlot fromBattlefieldSlot && toSlot is BattlefieldSlot toBattlefieldSlot) {
-            if (toBattlefieldSlot.IsOccupied()) {
-                HandleSwap(fromBattlefieldSlot, toBattlefieldSlot);
-            } else {
-                HandleMove(fromBattlefieldSlot, toBattlefieldSlot);
-            }
-        } else {
-            LogError("Cannot execute MoveCreatureAction - invalid slot types", LogTag.Actions);
-        }
+        // Logic moved to MoveCreatureActionExecutor
+        Log($"MoveCreatureAction Execute() called for {creature?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures);
     }
 
     private void HandleSwap(BattlefieldSlot fromSlot, BattlefieldSlot toSlot) {
