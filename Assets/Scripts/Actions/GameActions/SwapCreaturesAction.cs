@@ -21,31 +21,14 @@ public class SwapCreaturesAction : IGameAction {
     }
 
     public void Execute() {
-        if (fromSlot == null || toSlot == null) {
-            LogError("Cannot execute swap action - one or both slots are null", LogTag.Actions);
-            return;
-        }
-
-        // Get the card controllers for both creatures
-        var fromCard = fromSlot.OccupyingCard;
-        var toCard = toSlot.OccupyingCard;
-
-        // Clear both slots
-        fromSlot.ClearSlot(false);
-        toSlot.ClearSlot(false);
-
-        // Assign the creatures to their new slots
-        if (fromCard != null) {
-            toSlot.AssignCreature(fromCard);
-        }
-        if (toCard != null) {
-            fromSlot.AssignCreature(toCard);
-        }
-
-        Log($"Executed swap action: {fromCreature?.Name ?? "Unknown"} (TargetID: {fromCreature?.TargetId.ToUpper() ?? "UNKNOWN"}) swapped with {toCreature?.Name ?? "Unknown"} (TargetID: {toCreature?.TargetId.ToUpper() ?? "UNKNOWN"})", LogTag.Actions | LogTag.Creatures);
+        Log($"SwapCreaturesAction Execute() called for {fromCreature?.Name ?? "Unknown"} & {toCreature?.Name ?? "Unknown"}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures);
     }
+
+    // Getters for executor
+    public BattlefieldSlot GetFromSlot() => fromSlot;
+    public BattlefieldSlot GetToSlot() => toSlot;
 
     public override string ToString() {
         return $"SwapCreaturesAction: From={fromCreature?.Name ?? "Unknown"} (TargetID: {fromCreature?.TargetId.ToUpper() ?? "UNKNOWN"}), To={toCreature?.Name ?? "Unknown"} (TargetID: {toCreature?.TargetId.ToUpper() ?? "UNKNOWN"})";
     }
-} 
+}

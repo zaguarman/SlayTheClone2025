@@ -18,23 +18,14 @@ public class DiscardHandAction : IGameAction {
 
     #region Methods
     public void Execute() {
-        if (player == null) {
-            LogError($"Cannot execute discard hand action - player is null (ActionID: {GetHashCode().ToString().ToUpper()})",
-                LogTag.Actions | LogTag.Cards);
-            return;
-        }
-
-        int initialHandCount = player.Hand.Count;
-
-        // Discard all cards in the player's hand
-        player.DiscardHand();
-
-        Log($"Executed discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (PlayerID: {player.TargetId.ToUpper()}) - discarded {initialHandCount} cards",
-            LogTag.Actions | LogTag.Cards);
+        Log($"DiscardHandAction Execute() called for {(player?.IsPlayer1() == true ? "Player 1" : "Player 2")}. Logic handled by Executor.", LogTag.Actions | LogTag.Cards);
     }
+
+    // Getter for executor
+    public IPlayer GetPlayer() => player;
 
     public override string ToString() {
         return $"DiscardHandAction: Player={(player?.IsPlayer1() == true ? "1" : "2")} (PlayerID: {player?.TargetId.ToUpper() ?? "UNKNOWN"}) with {player?.Hand.Count ?? 0} cards";
     }
     #endregion
-} 
+}

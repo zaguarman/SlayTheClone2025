@@ -19,24 +19,15 @@ public class HealCreatureAction : IGameAction {
 
     #region Methods
     public void Execute() {
-        if (target == null) return;
-
-        if (target is Creature creature) {
-            // Heal should be implemented in Creature class, here's a workaround for this prototype
-            int currentHealth = creature.Health;
-            int newHealth = Math.Min(currentHealth + amount, 10); // Assuming 10 is max health for this prototype
-
-            // Since we don't have a direct SetHealth method, we'll log the info
-            Log($"Healing {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) for {amount} (from {currentHealth} to {newHealth})",
-                LogTag.Actions | LogTag.Creatures);
-
-            // In a real implementation, we'd call something like:
-            // creature.Heal(amount);
-        }
+        Log($"HealCreatureAction Execute() called for {target?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures);
     }
+
+    // Getters for executor
+    public ICreature GetTarget() => target;
+    public int GetAmount() => amount;
 
     public override string ToString() {
         return $"HealCreatureAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Amount={amount}";
     }
     #endregion
-} 
+}

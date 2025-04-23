@@ -199,6 +199,7 @@ public class GameManager : InitializableComponent, IGameManager {
         var defaultExecutor = new DefaultActionExecutor();
         var executors = new Dictionary<Type, IActionExecutor>
         {
+            // Previous executors
             [typeof(DrawCardsAction)] = new DrawCardsActionExecutor(),
             [typeof(ChangeWeatherAction)] = new ChangeWeatherActionExecutor(),
             [typeof(SummonCreatureAction)] = new SummonCreatureActionExecutor(),
@@ -209,6 +210,14 @@ public class GameManager : InitializableComponent, IGameManager {
             [typeof(ApplyStatusEffectAction)] = new ApplyStatusEffectActionExecutor(),
             [typeof(MoveCreatureAction)] = new MoveCreatureActionExecutor(),
             [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor()
+
+            // Newly added executors will be registered after they're compiled
+            // [typeof(ModifyArmorAction)] = new ModifyArmorActionExecutor(),
+            // [typeof(DamagePlayerAction)] = new DamagePlayerActionExecutor(),
+            // [typeof(DiscardHandAction)] = new DiscardHandActionExecutor(),
+            // [typeof(HealCreatureAction)] = new HealCreatureActionExecutor(),
+            // [typeof(HealPlayerAction)] = new HealPlayerActionExecutor(),
+            // [typeof(SwapCreaturesAction)] = new SwapCreaturesActionExecutor()
         };
 
         // Initialize ActionsQueue with all dependencies and executors
@@ -320,6 +329,7 @@ public class GameManager : InitializableComponent, IGameManager {
         var defaultExecutor = new DefaultActionExecutor();
         var executors = new Dictionary<Type, IActionExecutor>
         {
+            // Previous executors
             [typeof(DrawCardsAction)] = new DrawCardsActionExecutor(),
             [typeof(ChangeWeatherAction)] = new ChangeWeatherActionExecutor(),
             [typeof(SummonCreatureAction)] = new SummonCreatureActionExecutor(),
@@ -330,6 +340,14 @@ public class GameManager : InitializableComponent, IGameManager {
             [typeof(ApplyStatusEffectAction)] = new ApplyStatusEffectActionExecutor(),
             [typeof(MoveCreatureAction)] = new MoveCreatureActionExecutor(),
             [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor()
+
+            // Newly added executors will be registered after they're compiled
+            // [typeof(ModifyArmorAction)] = new ModifyArmorActionExecutor(),
+            // [typeof(DamagePlayerAction)] = new DamagePlayerActionExecutor(),
+            // [typeof(DiscardHandAction)] = new DiscardHandActionExecutor(),
+            // [typeof(HealCreatureAction)] = new HealCreatureActionExecutor(),
+            // [typeof(HealPlayerAction)] = new HealPlayerActionExecutor(),
+            // [typeof(SwapCreaturesAction)] = new SwapCreaturesActionExecutor()
         };
 
         // Initialize ActionsQueue with all dependencies and executors

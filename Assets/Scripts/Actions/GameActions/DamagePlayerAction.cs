@@ -22,12 +22,11 @@ public class DamagePlayerAction : IGameAction {
 
     #region Methods
     public void Execute() {
-        if (target == null) return;
-        target.TakeDamage(damage);
+        Log($"DamagePlayerAction Execute() called for {(target?.IsPlayer1() == true ? "Player 1" : "Player 2")}. Logic handled by Executor.", LogTag.Actions | LogTag.Players);
     }
 
     public override string ToString() {
         return $"DamagePlayerAction: Target={(target?.IsPlayer1() == true ? "Player 1" : "Player 2")} (TargetID: {target?.TargetId.ToUpper()}), Damage={damage}";
     }
     #endregion
-} 
+}

@@ -21,16 +21,12 @@ public class ModifyArmorAction : IGameAction
 
     public void Execute()
     {
-        if (targetCreature == null)
-        {
-            LogWarning($"ModifyArmorAction: Target creature is null. Cannot modify armor.", LogTag.Actions | LogTag.Effects);
-            return;
-        }
-
-        // Directly call the creature's method to modify its armor pool
-        targetCreature.ModifyArmorPool(amount);
-        Log($"Executed ModifyArmorAction: Modified armor for {targetCreature.Name} by {amount}. New Armor Pool: {targetCreature.CurrentArmorPool}", LogTag.Actions | LogTag.Effects | LogTag.Creatures);
+        Log($"ModifyArmorAction Execute() called for {targetCreature?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Effects);
     }
+
+    // Getters for executor
+    public ICreature GetTargetCreature() => targetCreature;
+    public int GetAmount() => amount;
 
      public override string ToString() {
         return $"ModifyArmorAction: Target={targetCreature?.Name}, Amount={amount}";
