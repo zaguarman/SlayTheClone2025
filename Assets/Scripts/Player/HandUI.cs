@@ -60,16 +60,16 @@ public class HandUI : CardContainer {
     protected override void OnCardBeginDrag(CardController card) {
         if (card == null) return;
         card.transform.SetAsLastSibling();
-        Log($"Begin dragging card from hand: {card.GetCardData()?.cardName} (TargetID: {card.GetCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
+        Log($"Begin dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
     }
 
     protected override void OnCardEndDrag(CardController card) {
-        Log($"End dragging card from hand: {card.GetCardData()?.cardName} (TargetID: {card.GetCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
+        Log($"End dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
         UpdateLayout();
     }
 
     protected override void OnCardDropped(CardController card) {
-        Log($"Card dropped from hand: {card.GetCardData()?.cardName} (TargetID: {card.GetCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
+        Log($"Card dropped from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
 
         // If the card was successfully dropped onto a valid target,
         // it will be removed from the hand by the PlayCardAction
@@ -87,7 +87,7 @@ public class HandUI : CardContainer {
         if (card == null) yield break;
 
         // Find the matching card in the player's hand by name
-        var cardData = card.GetCardData();
+        var cardData = card.GetBaseCardData();
         if (cardData == null) yield break;
 
         // If the card is still in the hand, it wasn't handled by another component

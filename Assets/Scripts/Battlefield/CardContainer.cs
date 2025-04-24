@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using static DebugLogger;
 
 public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
     [SerializeField] protected ContainerSettings settings = new ContainerSettings();
@@ -222,9 +223,41 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
         UpdateLayout();
     }
 
-    protected virtual CardController CreateCard(ICard cardData) {
+    protected virtual CardController CreateCard(ICard card) {
         // Use the gameMediator and gameReferences fields inherited from UIComponent
-        return CardFactory.CreateCardController(cardData, Player, transform, gameMediator, gameReferences);
+
+        // Get the original CardData for this card
+        CardData originalData = null;
+
+        // Try to find the original card data in the deck
+        if (Player != null && card.CardId != null) {
+            // Since we don't have direct access to the deck's original data,
+            // we'll create a temporary CardData based on the card's base properties
+            if (card is ICreature creature) {
+                var tempData = ScriptableObject.CreateInstance<CreatureData>();
+                tempData.cardId = card.CardId;
+                tempData.cardName = card.Name;
+                tempData.description = card.Description;
+                tempData.attack = creature.BaseAttack;
+                tempData.health = creature.BaseHealth;
+                tempData.speed = creature.BaseSpeed;
+                originalData = tempData;
+            } else if (card is Spell spell) {
+                var tempData = ScriptableObject.CreateInstance<SpellData>();
+                tempData.cardId = card.CardId;
+                tempData.cardName = card.Name;
+                tempData.description = card.Description;
+                tempData.defaultTargetType = spell.DefaultTargetType;
+                originalData = tempData;
+            }
+        }
+
+        // If we couldn't create original data, log a warning
+        if (originalData == null) {
+            LogWarning($"Could not create CardData for {card.Name}, display may not be accurate", LogTag.Cards);
+        }
+
+        return CardFactory.CreateCardController(card, originalData, Player, transform, gameMediator, gameReferences);
     }
 
     public virtual void AddCard(CardController card) {

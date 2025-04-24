@@ -115,7 +115,7 @@ public class Tooltip : MonoBehaviour {
     /// Shows the tooltip for the specified card
     /// </summary>
     public void ShowTooltip(CardController card) {
-        if (card == null || card.GetCardData() == null) return;
+        if (card == null || card.GetBaseCardData() == null) return;
 
         // Store active card
         activeCard = card;
@@ -162,10 +162,10 @@ public class Tooltip : MonoBehaviour {
     /// Updates the tooltip content for the specified card
     /// </summary>
     public void UpdateTooltipContent(CardController card) {
-        if (card == null || card.GetCardData() == null) return;
+        if (card == null || card.GetBaseCardData() == null) return;
 
-        // Always regenerate content to ensure it's up to date
-        var content = GenerateTooltipContent(card);
+        // Get formatted text directly from the CardController
+        string content = card.GetFormattedTooltipText();
         currentContent = content;
         tooltipText.text = content;
 
@@ -186,81 +186,8 @@ public class Tooltip : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// Generates tooltip content for a specific card
-    /// </summary>
-    private string GenerateTooltipContent(CardController card) {
-        var cardData = card.GetCardData();
-        if (cardData == null) return "";
-
-        string description = string.IsNullOrEmpty(cardData.description) ? "No description" : cardData.description;
-        string cardTypeInfo = "";
-        // Truncate card ID to show only first 4 and last 4 characters
-        string truncatedCardId = TruncateId(cardData.cardId);
-        string targetIdInfo = $"<color=#888888>ID: {truncatedCardId}</color>";
-
-        // Generate based on card type
-        if (cardData is CreatureData creatureData) {
-            var creature = card.GetLinkedCreature();
-            if (creature != null) {
-                cardTypeInfo = $"<b>{cardData.cardName}</b> ({creature.Attack}/{creature.Health})\n<i>Creature</i>\n\n";
-                // If we have a creature, add its target ID too (truncated)
-                string truncatedTargetId = TruncateId(creature.TargetId);
-                targetIdInfo = $"<color=#888888>Card ID: {truncatedCardId}\nTarget ID: {truncatedTargetId}</color>";
-            } else {
-                cardTypeInfo = $"<b>{cardData.cardName}</b> ({creatureData.attack}/{creatureData.health})\n<i>Creature</i>\n\n";
-            }
-        } else if (cardData is SpellData) {
-            // Add extra padding to spell cards to make content more consistent with creatures
-            cardTypeInfo = $"<b>{cardData.cardName}</b>\n<i>Spell</i>\n\n";
-        }
-
-        // Add effects info
-        string effectsInfo = "";
-        if (cardData.effects != null && cardData.effects.Count > 0) {
-            effectsInfo = "\n<b>Effects:</b>\n";
-            foreach (var effect in cardData.effects) {
-                effectsInfo += $"• {DescribeEffect(effect)}\n";
-            }
-        }
-
-        return $"{cardTypeInfo}{description}{effectsInfo}\n\n{targetIdInfo}";
-    }
-
-    /// <summary>
-    /// Truncates an ID to show only first 4 and last 4 characters with ... in between, all in uppercase
-    /// </summary>
-    private string TruncateId(string id) {
-        if (string.IsNullOrEmpty(id) || id.Length <= 8) {
-            return id.ToUpper();
-        }
-        return $"{id.Substring(0, 4).ToUpper()}...{id.Substring(id.Length - 4).ToUpper()}";
-    }
-
-    private string DescribeEffect(CardEffect effect) {
-        string triggerText = effect.trigger.ToString();
-        string actionText = "";
-
-        foreach (var action in effect.actions) {
-            string target = action.targetType.ToString();
-            switch (action.actionType) {
-                case Enums.ActionType.Damage:
-                    actionText += $"Deal {action.value} damage to {target}";
-                    break;
-                case Enums.ActionType.Heal:
-                    actionText += $"Heal {action.value} to {target}";
-                    break;
-                case Enums.ActionType.Draw:
-                    actionText += $"Draw {action.value} card(s)";
-                    break;
-                default:
-                    actionText += $"{action.actionType} {action.value} to {target}";
-                    break;
-            }
-        }
-
-        return $"{triggerText}: {actionText}";
-    }
+    // Removed GenerateTooltipContent, TruncateId, and DescribeEffect methods
+    // Now using CardController.GetFormattedTooltipText() instead
 
     /// <summary>
     /// Keeps the tooltip on screen by adjusting position

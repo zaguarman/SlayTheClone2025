@@ -209,15 +209,16 @@ public class GameManager : InitializableComponent, IGameManager {
             [typeof(ModifyAction)] = new ModifyActionExecutor(),
             [typeof(ApplyStatusEffectAction)] = new ApplyStatusEffectActionExecutor(),
             [typeof(MoveCreatureAction)] = new MoveCreatureActionExecutor(),
-            [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor()
+            [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor(),
 
-            // Newly added executors will be registered after they're compiled
-            // [typeof(ModifyArmorAction)] = new ModifyArmorActionExecutor(),
-            // [typeof(DamagePlayerAction)] = new DamagePlayerActionExecutor(),
-            // [typeof(DiscardHandAction)] = new DiscardHandActionExecutor(),
-            // [typeof(HealCreatureAction)] = new HealCreatureActionExecutor(),
-            // [typeof(HealPlayerAction)] = new HealPlayerActionExecutor(),
-            // [typeof(SwapCreaturesAction)] = new SwapCreaturesActionExecutor()
+            // --- ADDED MISSING EXECUTORS ---
+            [typeof(ModifyArmorAction)] = new ModifyArmorActionExecutor(),
+            [typeof(DamagePlayerAction)] = new DamagePlayerActionExecutor(),
+            [typeof(DiscardHandAction)] = new DiscardHandActionExecutor(),
+            [typeof(HealCreatureAction)] = new HealCreatureActionExecutor(),
+            [typeof(HealPlayerAction)] = new HealPlayerActionExecutor(),
+            [typeof(SwapCreaturesAction)] = new SwapCreaturesActionExecutor()
+            // --- END ADDED EXECUTORS ---
         };
 
         // Initialize ActionsQueue with all dependencies and executors
@@ -339,15 +340,16 @@ public class GameManager : InitializableComponent, IGameManager {
             [typeof(ModifyAction)] = new ModifyActionExecutor(),
             [typeof(ApplyStatusEffectAction)] = new ApplyStatusEffectActionExecutor(),
             [typeof(MoveCreatureAction)] = new MoveCreatureActionExecutor(),
-            [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor()
+            [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor(),
 
-            // Newly added executors will be registered after they're compiled
-            // [typeof(ModifyArmorAction)] = new ModifyArmorActionExecutor(),
-            // [typeof(DamagePlayerAction)] = new DamagePlayerActionExecutor(),
-            // [typeof(DiscardHandAction)] = new DiscardHandActionExecutor(),
-            // [typeof(HealCreatureAction)] = new HealCreatureActionExecutor(),
-            // [typeof(HealPlayerAction)] = new HealPlayerActionExecutor(),
-            // [typeof(SwapCreaturesAction)] = new SwapCreaturesActionExecutor()
+            // --- ADDED MISSING EXECUTORS ---
+            [typeof(ModifyArmorAction)] = new ModifyArmorActionExecutor(),
+            [typeof(DamagePlayerAction)] = new DamagePlayerActionExecutor(),
+            [typeof(DiscardHandAction)] = new DiscardHandActionExecutor(),
+            [typeof(HealCreatureAction)] = new HealCreatureActionExecutor(),
+            [typeof(HealPlayerAction)] = new HealPlayerActionExecutor(),
+            [typeof(SwapCreaturesAction)] = new SwapCreaturesActionExecutor()
+            // --- END ADDED EXECUTORS ---
         };
 
         // Initialize ActionsQueue with all dependencies and executors

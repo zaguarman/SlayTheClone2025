@@ -96,7 +96,7 @@ public class BattlefieldUI : CardContainer {
     }
 
     private void HandleCardFromHand(CardController card, ITarget target) {
-        var cardData = card.GetCardData();
+        var cardData = card.GetBaseCardData();
         if (cardData != null) {
             var newCard = CardFactory.CreateCard(cardData);
             if (newCard != null) {
@@ -333,7 +333,7 @@ public class BattlefieldUI : CardContainer {
     }
 
     protected override void OnCardDropped(CardController card) {
-        Log($"Card dropped from Battlefield: {card.GetCardData()?.cardName} (TargetID: {card.GetCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
+        Log($"Card dropped from Battlefield: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
         UpdateLayout();
     }
 

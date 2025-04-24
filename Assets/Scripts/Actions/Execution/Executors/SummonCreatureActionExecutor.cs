@@ -1,5 +1,6 @@
 using static DebugLogger;
 using static Enums;
+using UnityEngine; // Added for ScriptableObject
 
 /// <summary>
 /// Executor for SummonCreatureAction
@@ -61,7 +62,21 @@ public class SummonCreatureActionExecutor : IActionExecutor
             owner.RemoveFromBattlefield(slot.OccupyingCreature, true);
         }
 
-        var cardController = CardFactory.CreateCardController(creature, owner, slot.transform, mediator, references);
+        // Create a temporary CardData for the creature
+        CardData originalData = null;
+        if (creature is ICreature creatureData)
+        {
+            var tempData = ScriptableObject.CreateInstance<CreatureData>();
+            tempData.cardId = creature.CardId;
+            tempData.cardName = creature.Name;
+            tempData.description = creature.Description;
+            tempData.attack = creatureData.BaseAttack;
+            tempData.health = creatureData.BaseHealth;
+            tempData.speed = creatureData.BaseSpeed;
+            originalData = tempData;
+        }
+
+        var cardController = CardFactory.CreateCardController(creature, originalData, owner, slot.transform, mediator, references);
         if (cardController != null)
         {
             slot.AssignCreature(cardController);

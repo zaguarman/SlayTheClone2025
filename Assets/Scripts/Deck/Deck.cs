@@ -14,6 +14,7 @@ public interface IDeck {
     List<ICard> GetDeckPreview();
     List<ICard> GetDiscardPilePreview();
     bool RemoveCard(ICard card);
+    CardData FindOriginalCardDataById(string cardId);
 }
 
 public class Deck : IDeck {
@@ -226,5 +227,23 @@ public class Deck : IDeck {
         var previewCards = new List<ICard>(discardPile);
         Log($"Created discard pile preview with {previewCards.Count} cards for deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
         return previewCards;
+    }
+
+    // Find the original CardData by ID
+    public CardData FindOriginalCardDataById(string cardId) {
+        if (string.IsNullOrEmpty(cardId) || originalCardDataList == null) {
+            return null;
+        }
+
+        // Find the original card data by ID
+        CardData originalData = originalCardDataList.FirstOrDefault(c => c.cardId == cardId);
+
+        if (originalData != null) {
+            Log($"Found original CardData for card with ID {cardId.ToUpper()} in deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
+            return originalData;
+        }
+
+        LogWarning($"Could not find original CardData for card with ID {cardId.ToUpper()} in deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
+        return null;
     }
 }

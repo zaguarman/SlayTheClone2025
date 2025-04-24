@@ -118,8 +118,8 @@ public static class CardFactory {
         }
     }
 
-    public static async Task<CardController> CreateCardControllerAsync(ICard card, IPlayer owner, Transform parent, IGameMediator mediator, IGameReferences references, CancellationToken cancellationToken = default) {
-        if (card == null || parent == null || mediator == null || references == null) return null;
+    public static async Task<CardController> CreateCardControllerAsync(ICard cardInstance, CardData baseCardData, IPlayer owner, Transform parent, IGameMediator mediator, IGameReferences references, CancellationToken cancellationToken = default) {
+        if (baseCardData == null || parent == null || mediator == null || references == null) return null;
 
         var cardPrefab = references.GetCardPrefab();
         if (cardPrefab == null) {
@@ -128,24 +128,20 @@ public static class CardFactory {
         }
 
         // Add small delay to spread out card creation
-        await Task.Delay(100, cancellationToken);
+        await Task.Delay(50, cancellationToken); // Reduced delay
 
         var cardObj = GameObject.Instantiate(cardPrefab.gameObject, parent);
         var controller = cardObj.GetComponent<CardController>();
         if (controller != null) {
-            var data = CreateCardData(card);
-
-            // Only cast to ICreature if the card is actually a creature
-            ICreature creature = card as ICreature;
-
-            controller.Setup(data, owner, creature, mediator, references);
-            Log($"Created card controller for {card.Name}", LogTag.Cards | LogTag.Initialization);
+            // Pass the base CardData and the potentially live ICard instance
+            controller.Setup(baseCardData, owner, cardInstance, mediator, references);
+            Log($"Created card controller for {baseCardData.cardName}", LogTag.Cards | LogTag.Initialization);
         }
         return controller;
     }
 
-    public static CardController CreateCardController(ICard card, IPlayer owner, Transform parent, IGameMediator mediator, IGameReferences references) {
-        if (card == null || parent == null || mediator == null || references == null) return null;
+    public static CardController CreateCardController(ICard cardInstance, CardData baseCardData, IPlayer owner, Transform parent, IGameMediator mediator, IGameReferences references) {
+        if (baseCardData == null || parent == null || mediator == null || references == null) return null;
 
         var cardPrefab = references.GetCardPrefab();
         if (cardPrefab == null) {
@@ -156,74 +152,16 @@ public static class CardFactory {
         var cardObj = GameObject.Instantiate(cardPrefab.gameObject, parent);
         var controller = cardObj.GetComponent<CardController>();
         if (controller != null) {
-            var data = CreateCardData(card);
-
-            // Only cast to ICreature if the card is actually a creature
-            ICreature creature = card as ICreature;
-
-            controller.Setup(data, owner, creature, mediator, references);
-            Log($"Created card controller for {card.Name}", LogTag.Cards | LogTag.Initialization);
+            // Pass the base CardData and the potentially live ICard instance
+            controller.Setup(baseCardData, owner, cardInstance, mediator, references);
+            Log($"Created card controller for {baseCardData.cardName}", LogTag.Cards | LogTag.Initialization);
         }
         return controller;
     }
 
-    public static CardData CreateCardData(ICard card) {
-        if (card == null) return null;
-
-        // For creatures, copy ALL data including effects
-        if (card is ICreature creature) {
-            var creatureData = ScriptableObject.CreateInstance<CreatureData>();
-            creatureData.cardId = card.CardId; // Copy the cardId
-            creatureData.cardName = creature.Name;
-            creatureData.description = creature.Description;
-            creatureData.cardType = CardType.Creature; // Assuming creature type
-            creatureData.attack = creature.BaseAttack; // Use BASE stats for data representation
-            creatureData.health = creature.BaseHealth;
-            creatureData.speed = creature.BaseSpeed;   // Use BASE speed
-            creatureData.effects = creature.Effects.Select(e => new CardEffect {
-                effectType = e.effectType,
-                trigger = e.trigger,
-                actions = e.actions.Select(a => new EffectAction {
-                    actionType = a.actionType,
-                    value = a.value, targetType = a.targetType, targetModifier = a.targetModifier,
-                    modifyAttack = a.modifyAttack,
-                    modifyHealth = a.modifyHealth,
-                    modifySpeed = a.modifySpeed,
-                    statusEffectToApply = a.statusEffectToApply, // Ensure these are copied
-                    statusDuration = a.statusDuration,
-                    statusPotency = a.statusPotency
-                }).ToList() // Keep ToList() here as Select returns IEnumerable
-            }).ToList();
-            return creatureData;
-        }
-
-        // For spells, copy the data and effects
-        if (card is Spell spell) {
-            var spellData = ScriptableObject.CreateInstance<SpellData>();
-            spellData.cardId = card.CardId;
-            spellData.cardName = spell.Name;
-            spellData.description = spell.Description;
-            spellData.defaultTargetType = spell.DefaultTargetType;
-            spellData.effects = spell.Effects.Select(e => new CardEffect {
-                effectType = e.effectType,
-                trigger = e.trigger,
-                actions = e.actions.Select(a => new EffectAction {
-                    actionType = a.actionType,
-                    value = a.value, targetType = a.targetType, targetModifier = a.targetModifier,
-                    modifyAttack = a.modifyAttack,
-                    modifyHealth = a.modifyHealth,
-                    modifySpeed = a.modifySpeed,
-                    statusEffectToApply = a.statusEffectToApply, // Ensure these are copied
-                    statusDuration = a.statusDuration,
-                    statusPotency = a.statusPotency
-
-                }).ToList()
-            }).ToList();
-            return spellData;
-        }
-
-        return null;
-    }
+    // CreateCardData method has been removed to ensure clear separation between
+    // WYSIWYG display (showing current state of cards in play/hand) and
+    // reliable restoration (resetting cards to original state when discarded/returned to deck)
 
     // TODO
     public static void SetupCardEventHandlers(

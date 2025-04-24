@@ -229,8 +229,32 @@ public class Player : Entity, IPlayer {
             RemoveFromBattlefield(oldCreature);
         }
 
-        // Create controller, passing dependencies
-        var cardController = CardFactory.CreateCardController(card, this, targetSlot.transform, mediator, references);
+        // Get the original CardData for this card
+        CardData originalData = null;
+
+        // Try to find the original card data in the deck using the new method
+        if (card.CardId != null && Deck != null) {
+            originalData = Deck.FindOriginalCardDataById(card.CardId);
+        }
+
+        // If we couldn't find the original data, create a temporary one from current state
+        if (originalData == null) {
+            LogWarning($"Could not find original CardData for {card.Name}, using current state", LogTag.Cards);
+            // This is a fallback that should rarely happen
+            if (card is ICreature creature) {
+                var tempData = ScriptableObject.CreateInstance<CreatureData>();
+                tempData.cardId = card.CardId;
+                tempData.cardName = card.Name;
+                tempData.description = card.Description;
+                tempData.attack = creature.BaseAttack;
+                tempData.health = creature.BaseHealth;
+                tempData.speed = creature.BaseSpeed;
+                originalData = tempData;
+            }
+        }
+
+        // Create controller, passing both the original data and the live instance
+        var cardController = CardFactory.CreateCardController(card, originalData, this, targetSlot.transform, mediator, references);
         if (cardController != null) {
             targetSlot.AssignCreature(cardController);
             mediator.NotifyBattlefieldStateChanged(this);
@@ -238,11 +262,11 @@ public class Player : Entity, IPlayer {
     }
 
     public async Task<bool> AddToBattlefieldAsync(ICard card, ITarget slot = null, CancellationToken cancellationToken = default) {
-        if (card == null || !(slot is BattlefieldSlot targetSlot)) return false;
+        if (card == null || slot is not BattlefieldSlot targetSlot) return false;
 
         // Use injected dependencies
-        var mediator = this.gameMediator;
-        var references = this.gameReferences;
+        var mediator = gameMediator;
+        var references = gameReferences;
         if (mediator == null || references == null) {
             LogError($"Mediator or References null when adding {card.Name} to battlefield async.", LogTag.Players);
             return false;
@@ -254,8 +278,31 @@ public class Player : Entity, IPlayer {
             RemoveFromBattlefield(oldCreature);
         }
 
+        // Get the original CardData for this card (same logic as in AddToBattlefield)
+        CardData originalData = null;
+
+        // Try to find the original card data in the deck using the new method
+        if (card.CardId != null && Deck != null) {
+            originalData = Deck.FindOriginalCardDataById(card.CardId);
+        }
+
+        // If we couldn't find the original data, create a temporary one
+        if (originalData == null) {
+            LogWarning($"Could not find original CardData for {card.Name}, using current state", LogTag.Cards);
+            if (card is ICreature creature) {
+                var tempData = ScriptableObject.CreateInstance<CreatureData>();
+                tempData.cardId = card.CardId;
+                tempData.cardName = card.Name;
+                tempData.description = card.Description;
+                tempData.attack = creature.BaseAttack;
+                tempData.health = creature.BaseHealth;
+                tempData.speed = creature.BaseSpeed;
+                originalData = tempData;
+            }
+        }
+
         // Create new card controller asynchronously with dependencies
-        var cardController = await CardFactory.CreateCardControllerAsync(card, this, targetSlot.transform, mediator, references, cancellationToken);
+        var cardController = await CardFactory.CreateCardControllerAsync(card, originalData, this, targetSlot.transform, mediator, references, cancellationToken);
         if (cardController != null) {
             targetSlot.AssignCreature(cardController);
             mediator.NotifyBattlefieldStateChanged(this);

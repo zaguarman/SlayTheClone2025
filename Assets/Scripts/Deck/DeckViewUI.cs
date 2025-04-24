@@ -133,20 +133,24 @@ public class DeckViewUI : UIComponent {
             return;
         }
 
-        IPlayer targetPlayer = player ?? Player;
-        if (targetPlayer == null) {
-            LogError("Cannot update UI - No valid player reference", LogTag.UI);
+        // We now require a valid player parameter - don't fall back to Player property
+        if (player == null) {
+            LogError("Cannot update UI - Player parameter is null", LogTag.UI);
+            // Clear the display if we have no player
+            ClearCardEntries();
+            if (titleText != null) titleText.text = "Error";
+            if (cardsCountText != null) cardsCountText.text = "No Player";
             return;
         }
 
         if (viewingDiscardPile) {
-            UpdateDiscardPileDisplay(targetPlayer);
+            UpdateDiscardPileDisplay(player);
         } else {
-            UpdateDeckDisplay(targetPlayer);
+            UpdateDeckDisplay(player);
         }
     }
 
-    public void ShowDeckView() {
+    public void ShowDeckView(IPlayer player) {
         Log("ShowDeckView called", LogTag.UI);
 
         if (deckViewPanel == null) {
@@ -159,11 +163,16 @@ public class DeckViewUI : UIComponent {
             Initialize(gameMediator, gameReferences);
         }
 
+        if (player == null) {
+            LogError("Cannot show deck view - player parameter is null", LogTag.UI);
+            return;
+        }
+
         // Default to showing the deck
         viewingDiscardPile = false;
-        UpdateUI(Player);
+        UpdateUI(player);
         deckViewPanel.SetActive(true);
-        Log($"Showing deck view for {(Player?.IsPlayer1() == true ? "Player 1" : "Player 2")} (TargetID: {Player?.TargetId.ToUpper()})", LogTag.UI);
+        Log($"Showing deck view for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI);
     }
 
     public void HideDeckView() {
@@ -185,16 +194,16 @@ public class DeckViewUI : UIComponent {
         }
     }
 
-    public void ShowDeckCards() {
+    public void ShowDeckCards(IPlayer player) {
         viewingDiscardPile = false;
-        UpdateUI(Player);
-        Log($"Showing deck cards for player (TargetID: {Player?.TargetId.ToUpper()})", LogTag.UI);
+        UpdateUI(player);
+        Log($"Showing deck cards for player (TargetID: {player?.TargetId.ToUpper()})", LogTag.UI);
     }
 
-    public void ShowDiscardPileCards() {
+    public void ShowDiscardPileCards(IPlayer player) {
         viewingDiscardPile = true;
-        UpdateUI(Player);
-        Log($"Showing discard pile cards for player (TargetID: {Player?.TargetId.ToUpper()})", LogTag.UI);
+        UpdateUI(player);
+        Log($"Showing discard pile cards for player (TargetID: {player?.TargetId.ToUpper()})", LogTag.UI);
     }
 
     public void UpdateDeckDisplay(IPlayer player) {
@@ -307,8 +316,28 @@ public class DeckViewUI : UIComponent {
             return;
         }
 
+        // Create a CardData from the card's properties
+        CardData originalData = null;
+        if (card is ICreature creature) {
+            var tempData = ScriptableObject.CreateInstance<CreatureData>();
+            tempData.cardId = card.CardId;
+            tempData.cardName = card.Name;
+            tempData.description = card.Description;
+            tempData.attack = creature.BaseAttack;
+            tempData.health = creature.BaseHealth;
+            tempData.speed = creature.BaseSpeed;
+            originalData = tempData;
+        } else if (card is Spell spell) {
+            var tempData = ScriptableObject.CreateInstance<SpellData>();
+            tempData.cardId = card.CardId;
+            tempData.cardName = card.Name;
+            tempData.description = card.Description;
+            tempData.defaultTargetType = spell.DefaultTargetType;
+            originalData = tempData;
+        }
+
         // Use CardFactory to create the card controller with the existing prefab and dependencies
-        var cardController = CardFactory.CreateCardController(card, owner, cardListContent, gameMediator, gameReferences);
+        var cardController = CardFactory.CreateCardController(card, originalData, owner, cardListContent, gameMediator, gameReferences);
 
         if (cardController != null) {
             // Disable dragging but keep tooltip functionality
@@ -360,7 +389,7 @@ public class DeckViewUI : UIComponent {
             canvasGroup.interactable = true;
         }
 
-        Log($"Disabled drag interactions for card {cardController.name} (TargetID: {cardController.GetCardData()?.cardId.ToUpper()})", LogTag.Cards | LogTag.UI);
+        Log($"Disabled drag interactions for card {cardController.name} (TargetID: {cardController.GetBaseCardData()?.cardId.ToUpper()})", LogTag.Cards | LogTag.UI);
     }
 
     // This method is no longer needed as we're replacing the entire drag handling approach

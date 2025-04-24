@@ -199,11 +199,11 @@ public class DeckViewController : UIComponent {
 
             try {
                 // Set viewing state and update UI accordingly
-                // Pass the active player to UpdateUI methods which DeckViewUI might use internally
+                // Pass the active player explicitly to DeckViewUI methods
                 if (showDiscard) {
-                    deckViewUI.ShowDiscardPileCards(); // Internally calls UpdateUI(activePlayer)
+                    deckViewUI.ShowDiscardPileCards(activePlayer); // Pass the active player
                 } else {
-                    deckViewUI.ShowDeckCards(); // Internally calls UpdateUI(activePlayer)
+                    deckViewUI.ShowDeckCards(activePlayer); // Pass the active player
                 }
 
                 deckViewUI.deckViewPanel.SetActive(true);
@@ -257,16 +257,19 @@ public class DeckViewController : UIComponent {
     }
 
     private IPlayer GetActivePlayer() {
-        // For now, we'll return Player1, but you could implement turn-based logic later
+        // Use the inherited gameManager field
         if (gameManager != null) {
-            var player = gameManager.Player1;
-            if (player == null) {
-                LogError("Player1 is null in GameManager", LogTag.UI);
+            // --- REFINED LOGIC ---
+            // As per user clarification, Player 1 is always the context for deck/discard viewing.
+            var player1 = gameManager.Player1;
+            if (player1 == null) {
+                LogError("Player1 is null in GameManager! Cannot determine active player for deck view.", LogTag.UI | LogTag.Initialization);
             }
-            return player;
+            return player1; // Always return Player 1
+            // --- END REFINED LOGIC ---
         }
 
-        LogError("GameManager is null", LogTag.UI);
+        LogError("GameManager is null when trying to get active player for deck view", LogTag.UI | LogTag.Initialization);
         return null;
     }
 

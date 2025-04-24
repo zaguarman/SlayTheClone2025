@@ -47,7 +47,7 @@ public class CardDropZone {
     }
 
     protected virtual bool ValidateCardType(CardController card) {
-        return card?.GetCardData() != null;
+        return card?.GetBaseCardData() != null;
     }
 
     public void HandleDrop(PointerEventData eventData) {
