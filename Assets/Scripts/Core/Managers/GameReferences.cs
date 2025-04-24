@@ -10,7 +10,8 @@ using static DebugLogger;
 /// NOTE: This class no longer uses the Singleton pattern directly.
 ///       It should be found and managed by a bootstrap or service locator.
 /// </summary>
-public class GameReferences : InitializableComponent, IGameReferences {
+public class GameReferences : MonoBehaviour, IGameReferences {
+    public bool IsInitialized { get; private set; }
     [System.Serializable]
     public class PlayerUIReferences {
         // Player UI references as in original implementation
@@ -90,8 +91,8 @@ public class GameReferences : InitializableComponent, IGameReferences {
     #endregion
 
     #region Unity Lifecycle
-    protected override void Awake() {
-        base.Awake(); // Call base from InitializableComponent if needed
+    protected void Awake() {
+        // No base call needed anymore
         // No singleton checks here anymore
     }
 
@@ -111,10 +112,10 @@ public class GameReferences : InitializableComponent, IGameReferences {
     }
 
     #region Initialization
-    public override void Initialize() {
+    public void Initialize() {
         if (IsInitialized) return;
         ValidateReferences();
-        base.Initialize();
+        IsInitialized = true;
 
         Log("GameReferences initialized", LogTag.Initialization);
     }

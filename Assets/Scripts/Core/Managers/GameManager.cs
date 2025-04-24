@@ -7,7 +7,10 @@ using UnityEngine;
 using static DebugLogger;
 using static Enums;
 
-public interface IGameManager : IInitializable {
+public interface IGameManager {
+    // Add IsInitialized property from former IInitializable interface
+    bool IsInitialized { get; }
+    void Initialize(IGameMediator mediator, IGameReferences references, ITurnManager turnManager, IModifierFactory modFactory);
     // Properties for accessing core systems via interfaces
     IActionsQueue ActionsQueue { get; }
     IWeatherSystem WeatherSystem { get; }
@@ -74,7 +77,9 @@ public interface IBattlefieldCombatHandler {
     BattlefieldSlot GetTargetedSlot(ITarget attacker);
 }
 
-public class GameManager : InitializableComponent, IGameManager {
+public class GameManager : MonoBehaviour, IGameManager {
+    // Implement IsInitialized property from IGameManager interface
+    public bool IsInitialized { get; private set; }
     #region Singleton (Modified)
     // Keep singleton for access, but initialization will be controlled externally
     private static GameManager instance;
@@ -134,10 +139,7 @@ public class GameManager : InitializableComponent, IGameManager {
     #endregion
 
     #region Unity Lifecycle
-    protected override void Awake() {
-        // Base awake does nothing specific here, but good practice to call
-        base.Awake();
-
+    protected void Awake() {
         // Singleton Registration Logic
         if (instance == null) {
             instance = this;
@@ -150,7 +152,7 @@ public class GameManager : InitializableComponent, IGameManager {
         // DO NOT Initialize here. GameBootstrap will call Initialize externally
     }
 
-    protected override void OnDestroy() {
+    protected void OnDestroy() {
         // Cleanup systems
         ModifierManager?.Cleanup();
         ActionsQueue?.Cleanup();
@@ -159,7 +161,7 @@ public class GameManager : InitializableComponent, IGameManager {
         if (instance == this) {
             instance = null; // Clear static reference if this was the instance
         }
-        base.OnDestroy();
+        IsInitialized = false;
     }
 
     #region Initialization (Refactored for Dependency Injection)
@@ -239,7 +241,7 @@ public class GameManager : InitializableComponent, IGameManager {
         InitializePlayerDependencies(); // Inject dependencies into Players
 
         // --- 4. Mark as Initialized (MUST be before any calls that might rely on IsInitialized) ---
-        base.Initialize(); // Sets IsInitialized = true
+        IsInitialized = true;
 
         // --- 5. Final Setup ---
         // Setup initial game state (like placing creatures) *after* main initialization

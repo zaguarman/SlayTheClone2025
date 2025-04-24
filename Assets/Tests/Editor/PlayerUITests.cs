@@ -61,76 +61,7 @@ public class PlayerUITests
         Assert.IsTrue(gameReferences.player1References.playerUI.IsInitialized, "Player 1 UI did not initialize within the scene.");
         Assert.IsNotNull(gameReferences.player1References.healthText, "Player 1 Health Text reference missing in GameReferences (Scene Inspector).");
     }
-
-
-    // --- MODIFIED Teardown ---
-    [UnityTearDown] // Use UnityTearDown for coroutine support
-    public IEnumerator TearDown()
-    {
-        Debug.Log("[Test] Starting Teardown...");
-
-        // --- Destroy Singleton Objects Explicitly ---
-        // Find potential persistent instances and destroy them
-        GameManager managerInstance = Object.FindObjectOfType<GameManager>();
-        if (managerInstance != null)
-        {
-            Debug.Log($"[Test] Destroying GameManager instance: {managerInstance.gameObject.name}");
-            Object.Destroy(managerInstance.gameObject);
-        }
-
-        GameMediator mediatorInstance = Object.FindObjectOfType<GameMediator>();
-        if (mediatorInstance != null)
-        {
-             Debug.Log($"[Test] Destroying GameMediator instance: {mediatorInstance.gameObject.name}");
-            Object.Destroy(mediatorInstance.gameObject);
-        }
-
-        GameReferences referencesInstance = Object.FindObjectOfType<GameReferences>();
-        if (referencesInstance != null)
-        {
-             Debug.Log($"[Test] Destroying GameReferences instance: {referencesInstance.gameObject.name}");
-            Object.Destroy(referencesInstance.gameObject);
-        }
-
-        // Find any other DontDestroyOnLoad objects you might have created if necessary
-
-        // --- Reset Static Singleton References ---
-        // Call the reset method we added to the Singleton base class
-        Singleton<GameManager>.ResetInstanceForTests();
-        Singleton<GameMediator>.ResetInstanceForTests();
-        // GameReferences is no longer a singleton
-        // Singleton<GameReferences>.ResetInstanceForTests();
-        // Add resets for any other singletons
-
-        // Allow a frame for destruction to process
-        yield return null;
-
-        // --- Load Blank Scene ---
-        Debug.Log($"[Test] Loading blank scene: {BlankSceneName}...");
-        if (SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/" + BlankSceneName + ".unity") >= 0)
-        {
-            yield return SceneManager.LoadSceneAsync(BlankSceneName, LoadSceneMode.Single);
-             Debug.Log($"[Test] Blank scene {BlankSceneName} loaded.");
-        }
-        else
-        {
-            Debug.LogError($"[Test] Blank scene '{BlankSceneName}' not found in Build Settings!");
-        }
-
-
-        // --- Clear Local References ---
-        gameManager = null;
-        gameMediator = null;
-        gameReferences = null;
-        gameUI = null;
-
-        // Allow a frame for the blank scene load to fully complete
-        yield return null;
-
-        Debug.Log("[Test] Teardown complete.");
-    }
-
-
+    
     // --- THE TESTS (Unchanged) ---
 
     [UnityTest]

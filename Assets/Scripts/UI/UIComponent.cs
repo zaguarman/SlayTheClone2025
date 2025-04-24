@@ -4,7 +4,8 @@ using UnityEngine.Events;
 /// <summary>
 /// Base class for UI components that can be initialized with dependencies.
 /// </summary>
-public abstract class UIComponent : InitializableComponent {
+public abstract class UIComponent : MonoBehaviour {
+    public bool IsInitialized { get; protected set; }
     // Store injected references instead of directly accessing singletons
     protected IGameMediator gameMediator { get; private set; }
     protected IGameReferences gameReferences { get; private set; }
@@ -16,8 +17,8 @@ public abstract class UIComponent : InitializableComponent {
 
     public IPlayer Player { get; private set; }
 
-    protected override void Awake() {
-        base.Awake();
+    protected virtual void Awake() {
+        // No base call needed anymore
     }
 
     /// <summary>
@@ -34,7 +35,7 @@ public abstract class UIComponent : InitializableComponent {
         gameManager = GameManager.Instance; // Still using singleton for now
 
         RegisterEvents();
-        base.Initialize();
+        IsInitialized = true;
 
         // Fire the UnityEvent when initialization is complete
         onInitialized.Invoke();
@@ -61,13 +62,13 @@ public abstract class UIComponent : InitializableComponent {
         }
     }
 
-    protected override void OnDestroy() {
+    protected virtual void OnDestroy() {
         if (IsInitialized) {
             onInitialized.RemoveAllListeners();
             UnregisterEvents();
             CleanupComponent();
         }
-        base.OnDestroy();
+        IsInitialized = false;
     }
 
     protected virtual void CleanupComponent() {

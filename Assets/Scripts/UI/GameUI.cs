@@ -2,7 +2,8 @@ using UnityEngine;
 using static DebugLogger;
 using UnityEngine.Events;
 
-public class GameUI : InitializableComponent {
+public class GameUI : MonoBehaviour {
+    public bool IsInitialized { get; private set; }
     private static GameUI instance;
     public static GameUI Instance {
         get {
@@ -35,8 +36,7 @@ public class GameUI : InitializableComponent {
     // UnityEvent for initialization completion
     public UnityEvent onInitialized = new UnityEvent();
 
-    protected override void Awake() {
-        base.Awake();
+    protected void Awake() {
         if (instance != null && instance != this) {
             Destroy(gameObject);
             return;
@@ -65,8 +65,8 @@ public class GameUI : InitializableComponent {
              return;
         }
 
-        // Call base.Initialize() from InitializableComponent to set the flag
-        base.Initialize(); // Sets IsInitialized = true
+        // Set the IsInitialized flag
+        IsInitialized = true;
 
         GetChildReferences();
         if (!ValidateChildReferences()) {
@@ -203,7 +203,7 @@ public class GameUI : InitializableComponent {
         // Notify child components if needed
     }
 
-    protected override void OnDestroy() {
+    protected void OnDestroy() {
         if (instance == this) {
             // No longer need to destroy weatherController here if it's a component
             // if (weatherController != null) {
@@ -214,7 +214,7 @@ public class GameUI : InitializableComponent {
             onInitialized.RemoveAllListeners(); // Clean up listeners
             Log("GameUI destroyed", LogTag.UI);
         }
-        base.OnDestroy();
+        IsInitialized = false;
     }
 
     public bool IsWeatherSystemInitialized() {
