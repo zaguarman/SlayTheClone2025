@@ -4,15 +4,17 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
+// Interface remains the same
+// public interface ITurnManager { ... }
+
+// TurnManager depends on GameManager for access to other systems
 public class TurnManager : MonoBehaviour, ITurnManager {
-    #region Singleton
+    #region Singleton (Keep for now, ensure bootstrap initializes it)
     private static TurnManager instance;
     public static TurnManager Instance {
         get {
-            if (instance == null) {
-                var go = new GameObject("TurnManager");
-                instance = go.AddComponent<TurnManager>();
-                DontDestroyOnLoad(go);
+            if (instance == null && Application.isPlaying) {
+                 Debug.LogError("TurnManager instance accessed before it was initialized or assigned!");
             }
             return instance;
         }
@@ -21,8 +23,11 @@ public class TurnManager : MonoBehaviour, ITurnManager {
 
     #region Fields & Properties
     private int turnNumber = 0;
-    private GameManager gameManager;
-    private GameMediator gameMediator;
+    private IGameManager _gameManager; // Store as interface
+    private IGameMediator _gameMediator; // Store as interface
+    private IModifierManager _modifierManager; // Store as interface
+    private IActionsQueue _actionsQueue; // Store as interface
+
     public int TurnNumber => turnNumber;
     #endregion
 
@@ -33,145 +38,90 @@ public class TurnManager : MonoBehaviour, ITurnManager {
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject); // Let GameBootstrap handle persistence if needed
     }
 
-    private void Start() {
-        gameManager = GameManager.Instance;
-        gameMediator = GameMediator.Instance;
-        turnNumber = 0;
+    // No Start() method - Initialization driven by GameBootstrap calling Initialize
+    public void Initialize(IGameManager gameManager, IGameMediator mediator)
+    {
+        if (gameManager == null || mediator == null)
+        {
+            LogError("TurnManager initialization failed: GameManager or GameMediator is null.", LogTag.Initialization | LogTag.Turns);
+            enabled = false;
+            return;
+        }
+        _gameManager = gameManager;
+        _gameMediator = mediator;
+        // Get other systems from GameManager *after* it's initialized
+        _modifierManager = gameManager.ModifierManager;
+        _actionsQueue = gameManager.ActionsQueue;
+
+        if (_modifierManager == null || _actionsQueue == null)
+        {
+             LogError("TurnManager initialization failed: ModifierManager or ActionsQueue not ready via GameManager.", LogTag.Initialization | LogTag.Turns);
+             enabled = false;
+            return;
+        }
+
+        turnNumber = 0; // Reset turn number on initialization
+        Log("TurnManager Initialized with dependencies.", LogTag.Initialization | LogTag.Turns);
     }
     #endregion
 
     #region Methods
     public void EndTurn() {
-         // Ensure GameManager instance is available before proceeding
-        if (gameManager == null)
-        {
-            gameManager = GameManager.Instance; // Try to get it again
-            if (gameManager == null)
-            {
-                LogError("GameManager instance is null in TurnManager.EndTurn! Cannot proceed.", LogTag.Turns);
-                return;
-            }
-        }
-         if (gameMediator == null)
+        // --- Pre-checks ---
+         if (_gameManager == null || _gameMediator == null || _modifierManager == null || _actionsQueue == null)
          {
-            gameMediator = GameMediator.Instance; // Try to get it again
-             if (gameMediator == null) {
-                LogError("GameMediator instance is null in TurnManager.EndTurn! Cannot proceed.", LogTag.Turns);
-                 return;
-             }
+             LogError("TurnManager.EndTurn called before fully initialized or dependencies lost!", LogTag.Turns | LogTag.Initialization);
+             // Don't attempt re-initialization - this should be handled by GameBootstrap
+             return; // Exit if not initialized
          }
 
-        turnNumber++; // Increment turn FIRST
-        Log($"--- Ending Turn {turnNumber - 1}, Starting Turn {turnNumber} ---", LogTag.Turns);
+        int endedTurn = turnNumber; // Store the turn number that just ended
+        turnNumber++; // Increment turn number for the new turn
+        Log($"--- Ending Turn {endedTurn}, Starting Turn {turnNumber} ---", LogTag.Turns);
 
-        // 1. Process End-of-Turn Effects & Expirations
-        Log($"Turn {turnNumber}: Processing End-of-Turn effects for Turn {turnNumber - 1}...", LogTag.Turns);
-        TriggerEndOfTurnEffects(); // Handles creature effects AND ModifierManager processing
+        // --- Phase 1: End of Turn Processing (for the turn that just finished) ---
+        Log($"[End of Turn {endedTurn}] Processing...", LogTag.Turns);
+        // 1a. Process End-of-Turn Effects & Modifier Expirations (handled by ModifierManager)
+        _modifierManager.ProcessEndOfTurn(endedTurn, _actionsQueue);
+        // 1b. Resolve any actions queued by End-of-Turn effects/expirations
+        Log($"[End of Turn {endedTurn}] Resolving actions queued by EOT effects...", LogTag.Turns | LogTag.Actions);
+        _actionsQueue.ResolveActions();
 
-        // 1.5 Queue Discard & Draw Actions (Managed by TurnManager now)
-        Log($"Turn {turnNumber}: Queuing mandatory discard and draw actions...", LogTag.Turns | LogTag.Actions | LogTag.Cards);
-        gameManager.DiscardHand(gameManager.Player1);
-        gameManager.DiscardHand(gameManager.Player2);
-        gameManager.DrawCardsForPlayer(gameManager.Player1, gameManager.Player1.CardsToDraw);
-        gameManager.DrawCardsForPlayer(gameManager.Player2, gameManager.Player2.CardsToDraw);
-
-        // 2. Resolve Actions (Including the discard/draw actions we just queued)
-        Log($"Turn {turnNumber}: Resolving main action queue...", LogTag.Turns | LogTag.Actions);
-        gameManager.ActionsQueue?.ResolveActions(); // Resolve all queued actions
+        // --- Phase 2: Turn Transition & Mandatory Actions ---
+        Log($"[Turn {turnNumber} Start] Queuing mandatory discard/draw actions...", LogTag.Turns | LogTag.Actions | LogTag.Cards);
+        // 2a. Queue Discard & Draw Actions
+        _gameManager.DiscardHand(_gameManager.Player1);
+        _gameManager.DiscardHand(_gameManager.Player2);
+        _gameManager.DrawCardsForPlayer(_gameManager.Player1, _gameManager.Player1.CardsToDraw);
+        _gameManager.DrawCardsForPlayer(_gameManager.Player2, _gameManager.Player2.CardsToDraw);
+        // 2b. Resolve the discard/draw actions immediately
+        Log($"[Turn {turnNumber} Start] Resolving discard/draw actions...", LogTag.Turns | LogTag.Actions);
+        _actionsQueue.ResolveActions();
 
         // --- Mediator Notification ---
-        // Notify AFTER EOT effects resolve, but BEFORE SOT effects trigger
-        Log($"Turn {turnNumber}: Notifying Mediator TurnEnded ({turnNumber - 1})", LogTag.Turns);
-        gameMediator?.NotifyTurnEnded(turnNumber - 1); // Notify that the previous turn number has ENDED
+        // Notify AFTER mandatory actions, BEFORE Start-of-Turn effects
+        Log($"[Turn {turnNumber} Start] Notifying Mediator TurnEnded ({endedTurn})", LogTag.Turns);
+        _gameMediator.NotifyTurnEnded(endedTurn); // Notify that the PREVIOUS turn number has ENDED
 
-        // 3. Trigger Start-of-Turn Effects for the NEW turn
-        Log($"Turn {turnNumber}: Processing Start-of-Turn effects for Turn {turnNumber}...", LogTag.Turns | LogTag.Effects);
-        TriggerStartOfTurnEffects();
+        // --- Phase 3: Start of Turn Processing (for the new turn) ---
+        Log($"[Turn {turnNumber} Start] Processing Start-of-Turn effects...", LogTag.Turns | LogTag.Effects);
+        // 3a. Process Start-of-Turn Effects (handled by ModifierManager)
+        _modifierManager.ProcessStartOfTurn(turnNumber, _actionsQueue);
+        // 3b. Resolve actions queued by Start-of-Turn effects
+        Log($"[Turn {turnNumber} Start] Resolving actions queued by SOT effects...", LogTag.Turns | LogTag.Actions);
+        _actionsQueue.ResolveActions();
 
-        // 4. Resolve Actions Queued by Start-of-Turn Effects
-        Log($"Turn {turnNumber}: Resolving actions queued by Start-of-Turn effects...", LogTag.Turns | LogTag.Actions);
-        gameManager.ActionsQueue?.ResolveActions();
-
-        // 5. Notify UI/Game State Changed
-        Log($"Turn {turnNumber}: Notifying Game State Changed.", LogTag.Turns);
-        gameMediator?.NotifyGameStateChanged();
-
-        // Log final state
+        // --- Phase 4: Finalize ---
+        // 4a. Notify UI/Game State Changed
+        Log($"[Turn {turnNumber} Start] Notifying Game State Changed.", LogTag.Turns);
+        _gameMediator.NotifyGameStateChanged();
+        // 4b. Final Log
         Log($"--- Turn {turnNumber} Started ---", LogTag.Turns);
-        // LogBattlefieldState(gameManager.Player1, "Player 1"); // Logging can be verbose, optional
-        // LogBattlefieldState(gameManager.Player2, "Player 2");
     }
-    private void TriggerEndOfTurnEffects() {
-        Log($"[Turn {turnNumber-1} End] Triggering EndOfTurn effects.", LogTag.Effects | LogTag.Turns);
-        // Ensure gameManager reference is valid
-        if (gameManager == null) gameManager = GameManager.Instance;
-        if (gameManager == null) { LogError("GameManager null in TriggerEndOfTurnEffects", LogTag.Turns); return; }
-
-        TriggerEffectsForPlayer(gameManager.Player1, EffectTrigger.EndOfTurn);
-        TriggerEffectsForPlayer(gameManager.Player2, EffectTrigger.EndOfTurn);
-
-        // Process timed modifiers expiration - Pass the turn number that just ENDED
-        gameManager.ModifierManager?.ProcessEndOfTurn(turnNumber - 1);
-
-        // Reduce stun duration for all creatures at the end of turn
-        // ReduceStunDurationForAllCreatures(); // Assuming ModifierManager handles this now
-    }
-
-     private void TriggerStartOfTurnEffects() {
-         Log($"[Turn {turnNumber} Start] Triggering StartOfTurn effects.", LogTag.Effects | LogTag.Turns);
-        // Ensure gameManager reference is valid
-        if (gameManager == null) gameManager = GameManager.Instance;
-        if (gameManager == null) { LogError("GameManager null in TriggerStartOfTurnEffects", LogTag.Turns); return; }
-
-         LogBattlefieldState(gameManager.Player1, "Player 1");
-         LogBattlefieldState(gameManager.Player2, "Player 2");
-
-         TriggerEffectsForPlayer(gameManager.Player1, EffectTrigger.StartOfTurn);
-         TriggerEffectsForPlayer(gameManager.Player2, EffectTrigger.StartOfTurn);
-     }
-
-    private void LogBattlefieldState(IPlayer player, string playerName) {
-        if (player == null) return;
-
-        Log($"Battlefield state for {playerName}:", LogTag.Creatures | LogTag.Turns);
-        foreach (var slot in player.Battlefield) {
-            if (slot.IsOccupied() && slot.OccupyingCreature != null) {
-                var creature = slot.OccupyingCreature;
-                Log($"  Slot {player.Battlefield.IndexOf(slot) + 1}: {creature.Name}, Health: {creature.Health}/{(creature as Creature)?.BaseHealth}", LogTag.Creatures | LogTag.Turns);
-            } else {
-                Log($"  Slot {player.Battlefield.IndexOf(slot) + 1}: Empty", LogTag.Creatures | LogTag.Turns);
-            }
-        }
-    }
-
-     private void TriggerEffectsForPlayer(IPlayer player, EffectTrigger trigger) {
-         if (player == null) return;
-         // Ensure gameManager reference is valid
-        if (gameManager == null) gameManager = GameManager.Instance;
-        if (gameManager == null) { LogError("GameManager null in TriggerEffectsForPlayer", LogTag.Turns); return; }
-
-         foreach (var slot in player.Battlefield) {
-             if (slot.IsOccupied() && slot.OccupyingCreature != null) {
-                 var creature = slot.OccupyingCreature as Creature;
-                 if (creature != null && HasEffectWithTrigger(creature, trigger)) {
-                     Log($"Processing {trigger} effects for {creature.Name}", LogTag.Effects | LogTag.Turns);
-                     creature.HandleEffect(trigger, gameManager.ActionsQueue);
-                 }
-             }
-         }
-     }
-
-     private bool HasEffectWithTrigger(Creature creature, EffectTrigger trigger) {
-        if (creature?.Effects == null) return false;
-        return creature.Effects.Any(effect => effect.trigger == trigger);
-     }
-
-    private void ReduceStunDurationForAllCreatures() {
-        Log("Reducing stun duration for all creatures", LogTag.Creatures | LogTag.Effects | LogTag.Turns);
-        // to be implemented in the future, ignore for now
-    }
+    // REMOVED TriggerEndOfTurnEffects and TriggerStartOfTurnEffects - Responsibility moved to ModifierManager
+    // REMOVED LogBattlefieldState, HasEffectWithTrigger, ReduceStunDuration - Not needed here anymore
     #endregion
 }

@@ -17,11 +17,18 @@ public interface ICreature : ICard {
     int BaseHealth { get; }
     int BaseSpeed { get; }
     BattlefieldSlot Slot { get; set; }
-    void TakeHealthDamage(int healthDamage, ICreature attacker);
+    // Keep internal damage modification, but consequences are external
+    int TakeHealthDamage(int healthDamage); // Returns actual damage dealt
     void ModifyArmorPool(int amount);
     IPlayer Owner { get; }
     void SetOwner(IPlayer owner);
     void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed);
+    bool IsDead { get; } // Expose IsDead flag
+    void MarkAsDead(); // Method to explicitly mark as dead
+
+    // Effect Handling Methods
+    void HandleEffect(EffectTrigger trigger, ActionExecutionContext context);
+    void HandleTurnBasedEffect(EffectTrigger trigger, IActionsQueue actionsQueue, IModifierManager modifierManager, ITurnManager turnManager);
 }
 
 public class Creature : Card, ICreature {
@@ -35,7 +42,7 @@ public class Creature : Card, ICreature {
     public int CurrentArmorPool { get; private set; }
 
     private int currentHealth;
-    private bool isDead = false;
+    public bool IsDead { get; private set; } = false; // Use property
 
     public int Attack => _effectiveAttack;
     public int MaxHealth => _effectiveMaxHealth;
@@ -50,12 +57,13 @@ public class Creature : Card, ICreature {
     public Creature(string name, int attack, int health, int speed, string cardId) : base(name, cardId) {
         BaseAttack = attack;
         BaseHealth = health;
-        BaseSpeed = Math.Max(0, speed);
+        BaseSpeed = Math.Max(1, speed); // Ensure minimum speed 1
         currentHealth = health;
         _effectiveAttack = attack;
         _effectiveMaxHealth = health;
         _effectiveSpeed = BaseSpeed;
         CurrentArmorPool = 0;
+        IsDead = false; // Explicitly false on creation
     }
 
     public void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed)
@@ -63,25 +71,28 @@ public class Creature : Card, ICreature {
         int oldMaxHealth = _effectiveMaxHealth;
 
         _effectiveAttack = Math.Max(0, newEffectiveAttack);
-        _effectiveMaxHealth = Math.Max(1, newEffectiveMaxHealth);
+        _effectiveMaxHealth = Math.Max(1, newEffectiveMaxHealth); // Ensure max health is at least 1
         _effectiveSpeed = Math.Max(0, newEffectiveSpeed);
 
         int healthIncrease = _effectiveMaxHealth - oldMaxHealth;
-        if (healthIncrease > 0)
+        // Only increase current health if max health increased AND creature is not dead
+        if (healthIncrease > 0 && !IsDead)
         {
             currentHealth += healthIncrease;
         }
 
-        currentHealth = Math.Min(currentHealth, _effectiveMaxHealth);
-        currentHealth = Math.Max(0, currentHealth);
+        // Clamp current health between 0 and the new max health
+        currentHealth = Math.Clamp(currentHealth, 0, _effectiveMaxHealth);
+
+        // If health was 0 and max health increased, it stays at 0 unless explicitly healed.
     }
 
     public void ModifyArmorPool(int amount) {
         int previousArmor = CurrentArmorPool;
         CurrentArmorPool += amount;
         CurrentArmorPool = Math.Max(0, CurrentArmorPool);
-        Log($"{Name} armor changed by {amount}. Previous: {previousArmor}, New: {CurrentArmorPool}", LogTag.Effects | LogTag.Creatures | LogTag.Combat);
-        GameMediator.Instance?.NotifyCreatureArmorChanged(this, CurrentArmorPool);
+        // Log removed, notification handled by executor or mediator
+        // GameMediator.Instance?.NotifyCreatureArmorChanged(this, CurrentArmorPool); // REMOVED
     }
 
     public void SetOwner(IPlayer owner) {
@@ -96,64 +107,110 @@ public class Creature : Card, ICreature {
         context.AddAction(new SummonCreatureAction(this, owner, target, !fromHand));
     }
 
-    public void TakeHealthDamage(int healthDamage, ICreature attacker) {
-        if (isDead || healthDamage <= 0) return;
+    // Modified: Only applies damage, returns actual damage dealt. Consequences handled externally.
+    public int TakeHealthDamage(int healthDamage) {
+        if (IsDead || healthDamage <= 0) return 0;
 
-        lastAttacker = attacker;
         int previousHealth = currentHealth;
-
         int actualDamageDealt = Math.Min(healthDamage, currentHealth);
         currentHealth -= actualDamageDealt;
-        currentHealth = Math.Max(0, currentHealth);
+        currentHealth = Math.Max(0, currentHealth); // Ensure health doesn't go below 0
 
-        string attackerName = attacker != null ? $"{attacker.Name} (ID: {attacker.TargetId.ToUpper().Substring(0, 8)})" : "Source";
-        string damageLog = $"{attackerName} dealt {actualDamageDealt} damage directly to {Name}'s health (ID: {TargetId.ToUpper().Substring(0, 8)}). ";
+        string damageLog = $"Creature {Name} (ID: {TargetId.ToUpper().Substring(0, 8)}) took {actualDamageDealt} health damage. ";
         damageLog += $"Health: {previousHealth} -> {Health}.";
         Log(damageLog, LogTag.Creatures | LogTag.Combat | LogTag.Effects);
 
-        var gameManager = GameManager.Instance;
-        if (gameManager?.ActionsQueue != null) {
-            HandleEffect(EffectTrigger.OnDamage, gameManager.ActionsQueue);
-        }
+        // REMOVED external calls:
+        // HandleEffect(EffectTrigger.OnDamage, ...)
+        // GameMediator.Instance?.NotifyCreatureDamaged(...)
+        // if (Health <= 0 && !isDead) { Die(); }
 
-        GameMediator.Instance?.NotifyCreatureDamaged(this, actualDamageDealt);
-
-        if (Health <= 0 && !isDead) {
-            Die();
-        }
-
-        lastAttacker = null;
+        return actualDamageDealt; // Return how much damage was actually dealt
     }
 
-    private void Die()
+    // Modified: Only marks the creature as dead internally. Consequences handled externally.
+    public void MarkAsDead()
     {
-        isDead = true;
-        Log($"Creature died: {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures);
+        if (IsDead) return; // Already dead
 
-        var gameManager = GameManager.Instance;
-        if (gameManager?.ActionsQueue != null) {
-            HandleEffect(EffectTrigger.OnDeath, gameManager.ActionsQueue);
-        }
+        IsDead = true;
+        Log($"Creature marked as dead: {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures);
 
-        GameMediator.Instance?.NotifyCreatureDied(this);
-        gameManager?.ModifierManager?.UnregisterCreature(this);
-        Owner?.RemoveFromBattlefield(this, false);
+        // REMOVED external calls:
+        // HandleEffect(EffectTrigger.OnDeath, ...)
+        // GameMediator.Instance?.NotifyCreatureDied(...)
+        // gameManager?.ModifierManager?.UnregisterCreature(this)
+        // Owner?.RemoveFromBattlefield(this, false);
     }
 
-    public void HandleEffect(EffectTrigger trigger, IActionsQueue actionsQueue) {
-        var gameManager = GameManager.Instance;
-        if (gameManager == null) {
-            LogError($"Cannot handle effect {trigger} for {Name} - GameManager instance is null.", LogTag.Effects | LogTag.Creatures);
+    // Handles effects triggered by actions (needs full context)
+    public void HandleEffect(EffectTrigger trigger, ActionExecutionContext context)
+    {
+         if (IsDead && trigger != EffectTrigger.OnDeath) return; // Don't trigger most effects if dead
+
+        if (context == null) {
+            LogError($"Cannot handle effect {trigger} for {Name} - ActionExecutionContext is null.", LogTag.Effects | LogTag.Creatures);
             return;
         }
-        var modifierManager = gameManager.ModifierManager;
-        var factory = modifierManager?.ModifierFactory;
+
+        // Use context dependencies
+        var actionsQueue = context.ActionsQueue;
+        var modifierManager = context.ModifierManager;
+        var factory = context.ModifierFactory;
+        var turnManager = context.TurnManager; // Get TurnManager from context
+
+        if (actionsQueue == null || modifierManager == null || factory == null || turnManager == null) {
+             LogError($"Cannot handle effect {trigger} for {Name} - Missing dependencies in context.", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
+             return;
+        }
 
         if (actionsQueue.IsEffectProcessed(TargetId, trigger)) {
             return;
         }
 
-        Log($"Handling {trigger} effect for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects);
+        Log($"Handling Action Effect: {trigger} for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects);
+
+        ProcessEffectsInternal(trigger, actionsQueue, modifierManager, factory, turnManager, null); // Pass null for lastAttacker
+
+        actionsQueue.MarkEffectProcessed(TargetId, trigger);
+        Log($"Marked Action Effect {trigger} as processed for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)})", LogTag.Effects);
+    }
+
+    // Handles effects triggered by turn progression (needs specific interfaces)
+    public void HandleTurnBasedEffect(EffectTrigger trigger, IActionsQueue actionsQueue, IModifierManager modifierManager, ITurnManager turnManager)
+    {
+        if (IsDead) return; // Don't trigger turn effects if dead
+
+        if (actionsQueue == null || modifierManager == null || turnManager == null) {
+             LogError($"Cannot handle turn effect {trigger} for {Name} - Missing dependencies.", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
+             return;
+        }
+
+        // Check IsEffectProcessed using the provided actionsQueue
+        if (actionsQueue.IsEffectProcessed(TargetId, trigger)) {
+             // Log($"Turn-based effect {trigger} for {Name} already processed this cycle.", LogTag.Effects | LogTag.Turns);
+            return;
+        }
+
+        Log($"Handling Turn Effect: {trigger} for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects | LogTag.Turns);
+
+        ProcessEffectsInternal(trigger, actionsQueue, modifierManager, modifierManager.ModifierFactory, turnManager, null); // Pass null for lastAttacker
+
+        // Mark processed AFTER handling to allow multiple instances in one turn cycle if needed (though currently cleared each cycle)
+        actionsQueue.MarkEffectProcessed(TargetId, trigger);
+        Log($"Marked Turn Effect {trigger} as processed for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)})", LogTag.Effects | LogTag.Turns);
+    }
+
+
+    // --- Internal Helper for Processing Effects ---
+    private void ProcessEffectsInternal(EffectTrigger trigger, IActionsQueue actionsQueue, IModifierManager modifierManager, IModifierFactory factory, ITurnManager turnManager, ICreature lastAttacker)
+    {
+        if (factory == null) factory = modifierManager?.ModifierFactory; // Ensure factory is available
+
+        if (actionsQueue == null || modifierManager == null || factory == null || turnManager == null) {
+            LogError($"Internal Error: Missing dependencies in ProcessEffectsInternal for {Name} ({trigger}).", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
+            return;
+        }
 
         foreach (var effect in Effects.Where(e => e.trigger == trigger).ToList()) {
             Log($"-- Processing Effect: Trigger={effect.trigger}, Type={effect.effectType}, Actions={effect.actions.Count}", LogTag.Effects);
@@ -162,7 +219,7 @@ public class Creature : Card, ICreature {
 
                 switch (action.actionType) {
                     case ActionType.Damage:
-                        ProcessDamageEffect(action, actionsQueue);
+                        ProcessDamageEffect(action, actionsQueue, lastAttacker); // Pass lastAttacker if needed
                         break;
                     case ActionType.Heal:
                         ProcessHealEffect(action, actionsQueue);
@@ -171,19 +228,19 @@ public class Creature : Card, ICreature {
                         ProcessDrawEffect(action, actionsQueue);
                         break;
                     case ActionType.Summon:
-                        ProcessSummonEffect(action, actionsQueue);
+                        ProcessSummonEffect(action, actionsQueue, modifierManager); // Need MM to check deck
                         break;
                     case ActionType.ModifyStat:
-                        ProcessModifyStatModifier(action, modifierManager, factory, action.modifySpeed);
+                        ProcessModifyStatModifier(action, modifierManager, factory, turnManager, action.modifySpeed); // Pass turnManager
                         break;
                     case ActionType.ApplyStatus:
-                        ProcessApplyStatusModifier(action, modifierManager, factory);
+                        ProcessApplyStatusModifier(action, modifierManager, factory, turnManager); // Pass turnManager
                         break;
-                    case ActionType.Stun:
+                    case ActionType.Stun: // Convert Stun to Paralyzed status effect
                         action.statusEffectToApply = StatusEffectType.Paralyzed;
                         action.statusDuration = action.value;
-                        action.statusPotency = 0;
-                        ProcessApplyStatusModifier(action, modifierManager, factory);
+                        action.statusPotency = 0; // Potency not relevant for Paralyzed
+                        ProcessApplyStatusModifier(action, modifierManager, factory, turnManager); // Pass turnManager
                         break;
                     case ActionType.Armor:
                         ProcessModifyArmorAction(action, actionsQueue);
@@ -191,29 +248,30 @@ public class Creature : Card, ICreature {
                 }
             }
         }
-
-        actionsQueue.MarkEffectProcessed(TargetId, trigger);
-        Log($"Marked {trigger} effect as processed for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)})", LogTag.Effects);
     }
 
-    private void ProcessDamageEffect(EffectAction action, IActionsQueue actionsQueue) {
+    private void ProcessDamageEffect(EffectAction action, IActionsQueue actionsQueue, ICreature lastAttacker) {
         if (Owner == null && action.targetType != TargetType.Self && lastAttacker == null) {
             LogError($"Damage Effect: Cannot target others for {Name} - Owner is null and not self/retaliation.", LogTag.Effects);
             return;
         }
 
+        // Retaliation logic - check if trigger was OnDamage and lastAttacker exists
         if (lastAttacker != null && action.targetType == TargetType.AllCreatures && Effects.Any(e => e.trigger == EffectTrigger.OnDamage)) {
             Log($"Queueing Retaliation DamageAction: Attacker={lastAttacker.Name}, Damage={action.value}", LogTag.Effects);
             actionsQueue.AddAction(new DamageCreatureAction(lastAttacker, action.value, this));
             return;
         }
 
+        // Self Damage
         if (action.targetType == TargetType.Self) {
              Log($"Queueing Self DamageAction: Target={Name}, Damage={action.value}", LogTag.Effects);
             actionsQueue.AddAction(new DamageCreatureAction(this, action.value, this));
             return;
         }
 
+        // Other Targets
+        if (Owner == null) return; // Need owner for other targets
         var targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
          Log($"Damage Effect: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
         foreach (var target in targets) {
@@ -258,14 +316,25 @@ public class Creature : Card, ICreature {
         }
     }
 
-    private void ProcessSummonEffect(EffectAction action, IActionsQueue actionsQueue) {
-         if (Owner == null) {
+    // Updated to use injected ModifierManager to get deck (needs CardDealingService access)
+    private void ProcessSummonEffect(EffectAction action, IActionsQueue actionsQueue, IModifierManager modifierManager) {
+        if (Owner == null) {
              LogError($"Summon Effect: Cannot process for {Name} - Owner is null.", LogTag.Effects);
              return;
-         }
+        }
 
-         Log($"Processing summon effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {action.value}",
-            LogTag.Creatures | LogTag.Actions);
+        // Need access to CardDealingService - How? ModifierManager doesn't have it.
+        // TEMPORARY WORKAROUND: Use GameManager.Instance ONLY for CardDealingService here.
+        // TODO: Refactor CardDealingService dependency. Maybe pass it into HandleEffect context?
+        var cardDealingService = GameManager.Instance?.CardDealingService;
+        if (cardDealingService == null)
+        {
+             LogError($"Summon Effect failed for {Name}: CardDealingService instance not found.", LogTag.Effects | LogTag.Initialization);
+             return;
+        }
+
+        Log($"Processing summon effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {action.value}",
+           LogTag.Creatures | LogTag.Actions);
 
         IPlayer targetPlayer = Owner;
         if (action.targetType == TargetType.Enemy) {
@@ -275,10 +344,7 @@ public class Creature : Card, ICreature {
             return;
         }
 
-        var gameManager = GameManager.Instance;
-        if (gameManager?.CardDealingService == null) return;
-
-        var deckCards = gameManager.CardDealingService.GetDeckPreview(targetPlayer);
+        var deckCards = cardDealingService.GetDeckPreview(targetPlayer);
         var creaturesInDeck = deckCards.Where(c => c is ICreature).ToList();
 
         if (creaturesInDeck.Count == 0) {
@@ -302,11 +368,14 @@ public class Creature : Card, ICreature {
             var creatureToSummon = creaturesInDeck[creatureIndex] as ICreature;
             if (creatureToSummon == null) continue;
 
-            creaturesInDeck.RemoveAt(creatureIndex);
+            creaturesInDeck.RemoveAt(creatureIndex); // Remove the selected creature from the temp list
+
+            // IMPORTANT: Also remove the card from the actual deck using the service
+            cardDealingService.RemoveCardFromDeck(targetPlayer, creatureToSummon);
 
             int slotIndex = random.Next(validSlots.Count);
             var slot = validSlots[slotIndex];
-            validSlots.RemoveAt(slotIndex);
+            validSlots.RemoveAt(slotIndex); // Remove the selected slot from the temp list
 
             actionsQueue.AddAction(new SummonCreatureAction(creatureToSummon, targetPlayer, slot, true));
 
@@ -317,14 +386,13 @@ public class Creature : Card, ICreature {
 
     // --- NEW: Methods to apply modifiers ---
 
-    // --- Updated ProcessModifyStatModifier to include modifySpeed ---
-    private void ProcessModifyStatModifier(EffectAction action, IModifierManager manager, IModifierFactory factory, bool modifySpeed, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
-         if (manager == null || factory == null) {
-             LogError("ModifyStat Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
+    // Updated to use injected manager/factory/turnManager
+    private void ProcessModifyStatModifier(EffectAction action, IModifierManager manager, IModifierFactory factory, ITurnManager turnManager, bool modifySpeed, ModifierCalculationType calcType = ModifierCalculationType.Flat, int? forcedDuration = null) {
+         if (manager == null || factory == null || turnManager == null) {
+             LogError("ModifyStat Modifier: Manager, Factory or TurnManager is null.", LogTag.Effects | LogTag.Creatures);
              return;
          }
           if (Owner == null && action.targetType != TargetType.Self) return;
-
 
         bool modifyAttack = action.modifyAttack;
         bool modifyHealth = action.modifyHealth;
@@ -341,7 +409,7 @@ public class Creature : Card, ICreature {
          }
          // Log($"ModifyStat Modifier: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
 
-        int currentTurn = GameManager.Instance?.TurnManager?.TurnNumber ?? 0;
+        int currentTurn = turnManager.TurnNumber; // Get current turn from injected manager
 
         foreach (var target in targets) {
             if (target is Creature creatureTarget) {
@@ -377,9 +445,10 @@ public class Creature : Card, ICreature {
         }
     }
 
-    private void ProcessApplyStatusModifier(EffectAction action, IModifierManager manager, IModifierFactory factory) {
-         if (manager == null || factory == null) {
-             LogError("ApplyStatus Modifier: ModifierManager or Factory is null.", LogTag.Effects | LogTag.Creatures);
+    // Updated to use injected manager/factory/turnManager
+    private void ProcessApplyStatusModifier(EffectAction action, IModifierManager manager, IModifierFactory factory, ITurnManager turnManager) {
+         if (manager == null || factory == null || turnManager == null) {
+             LogError("ApplyStatus Modifier: Manager, Factory or TurnManager is null.", LogTag.Effects | LogTag.Creatures);
              return;
          }
          if (Owner == null && action.targetType != TargetType.Self) {
@@ -401,11 +470,12 @@ public class Creature : Card, ICreature {
           if (action.targetType == TargetType.Self) {
              targets = new List<ITarget> { this };
          } else {
+              if (Owner == null) return; // Need owner for non-self targets
              targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
          }
          Log($"ApplyStatus Modifier: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
 
-         int currentTurn = GameManager.Instance.TurnManager.TurnNumber;
+         int currentTurn = turnManager.TurnNumber; // Get current turn from injected manager
 
          foreach (var target in targets) {
              if (target is Creature creatureTarget) {

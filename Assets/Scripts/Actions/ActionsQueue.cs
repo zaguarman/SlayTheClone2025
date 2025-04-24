@@ -1,7 +1,6 @@
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.Events;
 using static DebugLogger;
 using static Enums;
@@ -60,8 +59,7 @@ public class ActionsQueue : IActionsQueue {
         IModifierManager modifierManager,
         ITurnManager turnManager,
         Dictionary<Type, IActionExecutor> actionExecutors,
-        IActionExecutor defaultExecutor)
-    {
+        IActionExecutor defaultExecutor) {
         this.gameMediator = gameMediator ?? throw new ArgumentNullException(nameof(gameMediator));
         this.combatHandler = combatHandler ?? throw new ArgumentNullException(nameof(combatHandler));
         this.weatherSystem = weatherSystem ?? throw new ArgumentNullException(nameof(weatherSystem));
@@ -226,12 +224,10 @@ public class ActionsQueue : IActionsQueue {
 
             Log($"Using Executor: {executor.GetType().Name}", LogTag.Actions);
 
-            try
-            {
+            try {
                 executor.Execute(action, _executionContext);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 LogError($"Error executing action {action.GetType().Name} via {executor.GetType().Name}: {ex.Message}\n{ex.StackTrace}", LogTag.Actions);
             }
         }

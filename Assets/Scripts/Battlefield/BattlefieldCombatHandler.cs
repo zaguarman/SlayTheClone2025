@@ -4,151 +4,130 @@ using System.Linq;
 using static Enums; // Make sure Enums is accessible
 
 public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
-    private readonly IGameManager gameManager; // Use interface
-    private HashSet<ITarget> attackingCreatures = new HashSet<ITarget>();
-    private readonly Dictionary<ITarget, BattlefieldSlot> targetedSlots = new Dictionary<ITarget, BattlefieldSlot>();
+    private readonly IGameManager _gameManager; // Use interface
+    private HashSet<string> attackingCreatureIds = new HashSet<string>(); // Store IDs
+    private readonly Dictionary<string, BattlefieldSlot> targetedSlotsById = new Dictionary<string, BattlefieldSlot>(); // Store by ID
 
-    // Constructor now takes IGameManager
+    // Constructor takes IGameManager
     public BattlefieldCombatHandler(IGameManager gameManager) {
-        this.gameManager = gameManager ?? throw new System.ArgumentNullException(nameof(gameManager));
+        _gameManager = gameManager ?? throw new System.ArgumentNullException(nameof(gameManager));
     }
 
     public void HandleCreatureCombat(CardController attackingCard, ITarget targetSlot) {
-        var attackerCreature = attackingCard.GetLinkedCreature();
+        var attackerCreature = attackingCard?.GetLinkedCreature();
 
         if (attackerCreature == null) {
             LogWarning("Attacker creature is null", LogTag.Creatures | LogTag.Combat);
             return;
         }
 
-        if (targetSlot == null) {
-            LogWarning("Target slot is null", LogTag.Creatures | LogTag.Combat);
+        if (targetSlot == null || !(targetSlot is BattlefieldSlot targetBattlefieldSlot)) {
+            LogWarning("Target slot is null or not a BattlefieldSlot", LogTag.Creatures | LogTag.Combat);
             return;
         }
 
-        // --- Check for Paralysis ---
-        if (gameManager?.ModifierManager != null &&
+        // Use injected ModifierManager via IGameManager
+        if (_gameManager.ModifierManager != null &&
             attackerCreature is Creature concreteAttacker &&
-            gameManager.ModifierManager.AreActionsPrevented(concreteAttacker))
+            _gameManager.ModifierManager.AreActionsPrevented(concreteAttacker))
         {
             Log($"Creature {attackerCreature.Name} cannot attack due to status effect (e.g., Paralyzed).", LogTag.Combat | LogTag.Effects);
             // Optionally provide feedback to the player here
             return; // Prevent combat action
         }
-        // --- End Check ---
 
-        // Check if the target is valid
-        bool isValidTarget = IsValidTarget(targetSlot);
+        // Check if the target is valid (basic check, can be expanded)
+        bool isValidTarget = targetBattlefieldSlot != null; // Basic check
 
-        // Check if the creature has already attacked
-        bool hasAttacked = HasCreatureAttacked(attackerCreature);
+        string attackerId = attackerCreature.TargetId;
+        bool hasAttacked = HasCreatureAttacked(attackerCreature); // Use interface method
 
         if (hasAttacked) {
             // If the creature has already attacked, update or cancel the attack
             if (isValidTarget) {
-                UpdateAttackAction(attackerCreature, targetSlot);
+                UpdateAttackAction(attackerCreature, targetBattlefieldSlot);
             } else {
                 CancelAttackAction(attackerCreature);
             }
         } else {
             // First time attacking, register if target is valid
             if (isValidTarget) {
-                RegisterAttack(attackerCreature, targetSlot);
-                QueueCombatAction(attackerCreature, targetSlot);
+                RegisterAttack(attackerCreature, targetBattlefieldSlot);
+                QueueCombatAction(attackerCreature, targetBattlefieldSlot);
             } else {
-                Log($"Invalid target selected for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
+                Log($"Invalid target selected for {attackerCreature.Name} (TargetID: {attackerId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
             }
         }
     }
 
-    private bool IsValidTarget(ITarget targetSlot) {
-        // Basic validation - can be expanded based on game rules
-        if (targetSlot == null) return false;
+    // Removed IsValidTarget - basic check integrated above
 
-        if (targetSlot is BattlefieldSlot slot) {
-            // Check if the slot contains a creature or is empty for direct attack
-            return true; // For now, allow any slot
-        }
+    private void UpdateAttackAction(ICreature attackerCreature, BattlefieldSlot newTargetSlot) {
+        string attackerId = attackerCreature.TargetId;
 
-        return false;
-    }
-
-    private void UpdateAttackAction(ICreature attackerCreature, ITarget newTargetSlot) {
-        // Remove old attack data
-        if (targetedSlots.TryGetValue(attackerCreature, out var oldTargetSlot)) {
-            Log($"Updating attack target for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()}) from slot (TargetID: {oldTargetSlot.TargetId.ToUpper()}) to slot (TargetID: {newTargetSlot.TargetId.ToUpper()})",
+        // Log update intent
+        if (targetedSlotsById.TryGetValue(attackerId, out var oldTargetSlot)) {
+             Log($"Updating attack target for {attackerCreature.Name} (ID: {attackerId.ToUpper()}) from slot {oldTargetSlot?.TargetId.ToUpper()} to slot {newTargetSlot.TargetId.ToUpper()}",
                 LogTag.Creatures | LogTag.Combat);
         }
 
-        // Remove combat action from the queue and register the new one
-        RemoveCombatAction(attackerCreature);
+        // Update target in tracking dictionary
+        targetedSlotsById[attackerId] = newTargetSlot;
 
-        // Update target in our tracking dictionaries
-        targetedSlots[attackerCreature] = (BattlefieldSlot)newTargetSlot;
-
-        // Queue the new action
+        // ActionsQueue AddAction handles replacement automatically
         QueueCombatAction(attackerCreature, newTargetSlot);
     }
 
     private void CancelAttackAction(ICreature attackerCreature) {
-        Log($"Cancelling attack for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
+         string attackerId = attackerCreature.TargetId;
+        Log($"Cancelling attack for {attackerCreature.Name} (ID: {attackerId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
 
         // Remove from tracking
-        attackingCreatures.Remove(attackerCreature);
-        targetedSlots.Remove(attackerCreature);
+        attackingCreatureIds.Remove(attackerId);
+        targetedSlotsById.Remove(attackerId);
 
-        // Remove from action queue
-        RemoveCombatAction(attackerCreature);
+        // Remove from action queue by adding a new action that replaces it (ActionsQueue handles this)
+        // We need to ensure the ActionsQueue knows this creature is no longer taking an action.
+        // If ActionsQueue doesn't have a specific "Cancel", adding a new action might be the way.
+        // OR rely on ResetAttackingCreatures at end of resolution.
+        // Let's rely on ResetAttackingCreatures for now. The visual arrow removal is handled by ActionsQueue changes.
+         _gameManager.ActionsQueue?.AddAction(new BattlefieldCombatAction(attackerCreature, null)); // Queueing with null target effectively cancels
     }
 
-    private void RemoveCombatAction(ICreature attackerCreature) {
-        // Get actions from queue
-        var actionsQueue = gameManager.ActionsQueue;
-        var pendingActions = actionsQueue.GetPendingActions();
+    // Removed RemoveCombatAction - ActionsQueue AddAction handles replacement
 
-        foreach (var action in pendingActions) {
-            if (action is BattlefieldCombatAction combatAction &&
-                combatAction.GetAttacker()?.TargetId == attackerCreature.TargetId) {
-
-                // We can't directly remove from the queue, so we'll need to
-                // update the queue's state through its tracking system
-                // This assumes the ActionsQueue has a method to clear an action for a creature
-                if (actionsQueue.HasActiveAction(attackerCreature.TargetId)) {
-                    Log($"Removing combat action for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
-                    // The action is automatically removed when adding a new one for the same creature
-                    // or it will be cleared when the action queue is reset
-                    break;
-                }
-            }
-        }
-    }
-
-    private void RegisterAttack(ITarget attacker, ITarget targetSlot) {
-        attackingCreatures.Add(attacker);
-        targetedSlots[attacker] = (BattlefieldSlot)targetSlot;
+    private void RegisterAttack(ICreature attacker, BattlefieldSlot targetSlot) {
+         string attackerId = attacker.TargetId;
+        attackingCreatureIds.Add(attackerId);
+        targetedSlotsById[attackerId] = targetSlot;
     }
 
     private void QueueCombatAction(ICreature attackerCreature, ITarget targetSlot) {
-        gameManager.ActionsQueue.AddAction(new BattlefieldCombatAction(attackerCreature, targetSlot)); // Use field
-        Log($"{attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()}) targets slot (TargetID: {targetSlot.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
+        // Use injected ActionsQueue via IGameManager
+        _gameManager.ActionsQueue?.AddAction(new BattlefieldCombatAction(attackerCreature, targetSlot));
+        // Log($"Queued BattlefieldCombatAction: {attackerCreature.Name} (ID: {attackerCreature.TargetId.ToUpper()}) targets slot {targetSlot?.TargetId.ToUpper()}", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
 
-        // Access mediator via GameManager if needed, or inject Mediator directly if preferred
-        gameManager.ActionsQueue?.MarkEffectProcessed(attackerCreature.TargetId, EffectTrigger.ActionAttempted); // Example: Mark action attempted
-        // Notify via mediator (obtained how? Pass IGameMediator to constructor?)
-         GameMediator.Instance?.NotifyActionsQueueChanged(); // Keep temporary singleton access for now
+        // Mark action attempted if needed (though this might be better in the action execution itself)
+        // _gameManager.ActionsQueue?.MarkEffectProcessed(attackerCreature.TargetId, EffectTrigger.ActionAttempted);
+
+        // Mediator notification happens via ActionsQueue events now
+        // _gameManager.GameMediator?.NotifyActionsQueueChanged(); // REMOVED
     }
 
     public void ResetAttackingCreatures() {
-        attackingCreatures.Clear();
-        targetedSlots.Clear();
+        attackingCreatureIds.Clear();
+        targetedSlotsById.Clear();
         Log("Reset attacking creatures tracking", LogTag.Creatures | LogTag.Combat);
     }
 
+    // Updated to use ID
     public bool HasCreatureAttacked(ITarget creature) {
-        return attackingCreatures.Contains(creature);
+        return creature != null && attackingCreatureIds.Contains(creature.TargetId);
     }
 
+    // Updated to use ID
     public BattlefieldSlot GetTargetedSlot(ITarget attacker) {
-        return targetedSlots.TryGetValue(attacker, out var slot) ? slot : null;
+        if (attacker == null) return null;
+        return targetedSlotsById.TryGetValue(attacker.TargetId, out var slot) ? slot : null;
     }
 }

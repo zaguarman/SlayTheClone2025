@@ -45,7 +45,8 @@ public interface IModifierManager {
     bool HasStatusEffect(Creature creature, StatusEffectType statusType);
     bool AreActionsPrevented(Creature creature);
     void RecalculateStats(Creature creature);
-    void ProcessEndOfTurn(int endedTurnNumber);
+    void ProcessEndOfTurn(int endedTurnNumber, IActionsQueue actionsQueue);
+    void ProcessStartOfTurn(int startingTurnNumber, IActionsQueue actionsQueue);
     void Cleanup();
 
     // Add missing methods needed by other classes
@@ -108,8 +109,7 @@ public class GameManager : MonoBehaviour, IGameManager {
     private IGameMediator gameMediator;
     private IGameReferences gameReferences;
     public ICardDealingService cardDealingService; // Made public to fix access issues
-    private System.Random random = new System.Random();
-    private bool weatherSystemInitialized = false;
+    private readonly System.Random random = new System.Random();
     public Player Player1 { get; private set; } // Keep concrete Player for internal use
     public Player Player2 { get; private set; } // Keep concrete Player for internal use
 
@@ -119,6 +119,9 @@ public class GameManager : MonoBehaviour, IGameManager {
 
     [ShowInInspector, BoxGroup("Systems")]
     public IModifierManager ModifierManager { get; private set; }
+
+    [ShowInInspector, BoxGroup("Systems")]
+    public IModifierFactory ModifierFactory { get; private set; }
 
     [ShowInInspector, BoxGroup("Hands"), PropertyOrder]
     [ListDrawerSettings]
@@ -194,10 +197,11 @@ public class GameManager : MonoBehaviour, IGameManager {
         // --- 2. Initialize Internal Systems (using stored dependencies) ---
         cardDealingService = new CardDealingService(gameMediator); // Pass mediator
         combatHandler = new BattlefieldCombatHandler(this); // Pass IGameManager (this)
-        ModifierManager = new ModifierManager(gameMediator, modifierFactory); // Pass mediator and factory
-        WeatherSystem = new WeatherSystem(gameMediator); // Pass mediator
 
-        // --- Create Action Executors ---
+        // Create WeatherSystem first (needed for ActionsQueue)
+        WeatherSystem = new WeatherSystem(gameMediator);
+
+        // Create executors for ActionsQueue
         var defaultExecutor = new DefaultActionExecutor();
         var executors = new Dictionary<Type, IActionExecutor>
         {
@@ -212,18 +216,19 @@ public class GameManager : MonoBehaviour, IGameManager {
             [typeof(ApplyStatusEffectAction)] = new ApplyStatusEffectActionExecutor(),
             [typeof(MoveCreatureAction)] = new MoveCreatureActionExecutor(),
             [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor(),
-
-            // --- ADDED MISSING EXECUTORS ---
             [typeof(ModifyArmorAction)] = new ModifyArmorActionExecutor(),
             [typeof(DamagePlayerAction)] = new DamagePlayerActionExecutor(),
             [typeof(DiscardHandAction)] = new DiscardHandActionExecutor(),
             [typeof(HealCreatureAction)] = new HealCreatureActionExecutor(),
             [typeof(HealPlayerAction)] = new HealPlayerActionExecutor(),
             [typeof(SwapCreaturesAction)] = new SwapCreaturesActionExecutor()
-            // --- END ADDED EXECUTORS ---
         };
 
-        // Initialize ActionsQueue with all dependencies and executors
+        // Create ModifierManager first (no longer needs ActionsQueue)
+        ModifierFactory = modifierFactory;
+        ModifierManager = new ModifierManager(gameMediator, modifierFactory, turnManager);
+
+        // Now create ActionsQueue with the ModifierManager
         ActionsQueue = new ActionsQueue(
             gameMediator,
             combatHandler,
@@ -231,10 +236,12 @@ public class GameManager : MonoBehaviour, IGameManager {
             cardDealingService,
             gameReferences,
             ModifierManager,
-            this.turnManager,
+            turnManager,
             executors,
             defaultExecutor
         );
+
+        // ActionsQueue already initialized above
 
         // --- 3. Initialize Game State ---
         InitializePlayers(); // Uses gameMediator
@@ -264,97 +271,9 @@ public class GameManager : MonoBehaviour, IGameManager {
     #endregion
 
     #region Methods
-    private void InitializeModifierSystem() {
-        if (ModifierManager == null) {
-            IModifierFactory factory = new SimpleModifierFactory();
-            ModifierManager = new ModifierManager(gameMediator, factory);
-            Log("Modifier system initialized", LogTag.Initialization | LogTag.Effects);
-        }
-    }
+    // This method is no longer used - initialization is done in the Initialize method
 
-    private void InitializeWeatherSystem() {
-        if (!weatherSystemInitialized) {
-            WeatherSystem = new WeatherSystem(gameMediator);
-            weatherSystemInitialized = true;
-            Log("Weather system initialized", LogTag.Initialization);
-        }
-    }
-
-    private void InitializeCombatSystem() {
-        combatHandler = new BattlefieldCombatHandler(this);
-        Log("Combat system initialized", LogTag.Initialization);
-    }
-
-    private void InitializeActionsQueue() {
-        // Make sure WeatherSystem is initialized first if needed
-        if (WeatherSystem == null) {
-            InitializeWeatherSystem();
-        }
-
-        // Create executors
-        var defaultExecutor = new DefaultActionExecutor();
-        var executors = new Dictionary<Type, IActionExecutor>
-        {
-            // Previous executors
-            [typeof(DrawCardsAction)] = new DrawCardsActionExecutor(),
-            [typeof(ChangeWeatherAction)] = new ChangeWeatherActionExecutor(),
-            [typeof(SummonCreatureAction)] = new SummonCreatureActionExecutor(),
-            [typeof(PlayCardAction)] = new PlayCardActionExecutor(),
-            [typeof(PlaySpellAction)] = new PlaySpellActionExecutor(),
-            [typeof(BattlefieldCombatAction)] = new BattlefieldCombatActionExecutor(),
-            [typeof(ModifyAction)] = new ModifyActionExecutor(),
-            [typeof(ApplyStatusEffectAction)] = new ApplyStatusEffectActionExecutor(),
-            [typeof(MoveCreatureAction)] = new MoveCreatureActionExecutor(),
-            [typeof(DamageCreatureAction)] = new DamageCreatureActionExecutor(),
-
-            // --- ADDED MISSING EXECUTORS ---
-            [typeof(ModifyArmorAction)] = new ModifyArmorActionExecutor(),
-            [typeof(DamagePlayerAction)] = new DamagePlayerActionExecutor(),
-            [typeof(DiscardHandAction)] = new DiscardHandActionExecutor(),
-            [typeof(HealCreatureAction)] = new HealCreatureActionExecutor(),
-            [typeof(HealPlayerAction)] = new HealPlayerActionExecutor(),
-            [typeof(SwapCreaturesAction)] = new SwapCreaturesActionExecutor()
-            // --- END ADDED EXECUTORS ---
-        };
-
-        // Initialize ActionsQueue with all dependencies and executors
-        ActionsQueue = new ActionsQueue(
-            gameMediator,
-            combatHandler,
-            WeatherSystem,
-            cardDealingService,
-            gameReferences,
-            ModifierManager,
-            this.turnManager,
-            executors,
-            defaultExecutor
-        );
-
-        Log("Actions queue initialized with Strategy Executors", LogTag.Initialization);
-    }
-
-    private void InitializeGameSystem() {
-        InitializePlayers();
-        InitializeCards();
-
-        if (GameUI.Instance != null) {
-            if (GameUI.Instance.IsInitialized) {
-                StartCoroutine(CompleteGameInitialization());
-            } else {
-                // Use UnityEvent.AddListener which takes an Action (no parameters)
-                // This requires a wrapper method that calls StartCoroutine
-                GameUI.Instance.onInitialized.AddListener(OnGameUIInitialized);
-            }
-        } else {
-            LogWarning("GameUI.Instance is null in InitializeGameSystem", LogTag.Initialization);
-            // Proceed anyway
-            StartCoroutine(CompleteGameInitialization());
-        }
-    }
-
-    private void OnGameUIInitialized() {
-        StartCoroutine(CompleteGameInitialization());
-    }
+    // These methods are no longer used - initialization is done in the Initialize method
 
     // Coroutine for setup steps that might need UI or happen after initial init
     private IEnumerator CompleteGameInitialization() {
@@ -477,44 +396,6 @@ public class GameManager : MonoBehaviour, IGameManager {
     private bool HasValidBattlefields() {
         return Player1?.Battlefield != null && Player1.Battlefield.Any() &&
                Player2?.Battlefield != null && Player2.Battlefield.Any();
-    }
-
-    private void PlaceCreaturesForPlayer(IPlayer player, List<CreatureData> availableCreatures, int count) {
-        // Get the empty slots from the player's battlefield
-        var emptySlots = player.Battlefield.Where(s => !s.IsOccupied()).ToList();
-
-        // Place up to 'count' creatures, or as many as we have empty slots for
-        int creaturesToPlace = Mathf.Min(count, emptySlots.Count, availableCreatures.Count);
-
-        // Create a copy of emptySlots that we can modify
-        List<BattlefieldSlot> availableSlots = new List<BattlefieldSlot>(emptySlots);
-
-        for (int i = 0; i < creaturesToPlace; i++) {
-            // Get a random creature from the available ones
-            int randomCreatureIndex = random.Next(availableCreatures.Count);
-            var creatureData = availableCreatures[randomCreatureIndex];
-
-            // Get a random slot from the available slots
-            int randomSlotIndex = random.Next(availableSlots.Count);
-            var slot = availableSlots[randomSlotIndex];
-
-            // Remove the selected slot from available slots to prevent duplicates
-            availableSlots.RemoveAt(randomSlotIndex);
-
-            // Create the creature
-            var creature = CardFactory.CreateCard(creatureData) as ICreature;
-            if (creature == null) continue;
-
-            // Set the owner and add to battlefield
-            creature.SetOwner(player);
-            player.AddToBattlefield(creature, slot);
-
-            // Get the slot's index for logging purposes
-            int slotPosition = player.Battlefield.IndexOf(slot) + 1;
-
-            Log($"Added {creature.Name} to {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s battlefield in slot {slotPosition}",
-                LogTag.Creatures | LogTag.Initialization);
-        }
     }
 
     private void SetupInitialGameState() {

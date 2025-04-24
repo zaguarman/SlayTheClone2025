@@ -55,31 +55,35 @@ public class GameBootstrap : MonoBehaviour
         }
         Log("GameMediator initialized", LogTag.Initialization);
 
-        // 3. Initialize TurnManager (Assuming Singleton for now)
-        var turnManager = TurnManager.Instance;
-        if (turnManager == null || !FindObjectOfType<TurnManager>()) {
-             LogError("TurnManager instance not found in scene! Initialization cannot proceed.", LogTag.Initialization);
-             yield break;
-         }
-        // TurnManager likely doesn't have an explicit Initialize method in this structure
-        Log("TurnManager instance accessed", LogTag.Initialization);
+        // 3. Find and Initialize TurnManager (No longer using Singleton pattern)
+        var turnManager = FindObjectOfType<TurnManager>();
+        if (turnManager == null) {
+            LogError("TurnManager component not found in scene! Initialization cannot proceed.", LogTag.Initialization);
+            yield break;
+        }
+        // TurnManager will be initialized later with GameManager
+        Log("TurnManager component found", LogTag.Initialization);
 
 
         // 4. Find and Initialize GameManager (Injecting Dependencies)
-        var gameManager = GameManager.Instance; // Use instance property to find it
-        if (gameManager == null || !FindObjectOfType<GameManager>())
+        var gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
         {
-             LogError("GameManager instance not found in scene! Initialization cannot proceed.", LogTag.Initialization);
+             LogError("GameManager component not found in scene! Initialization cannot proceed.", LogTag.Initialization);
              yield break;
         }
         if (!gameManager.IsInitialized)
         {
             IModifierFactory modFactory = new SimpleModifierFactory(); // Create factory instance
-            // Call the NEW Initialize method with dependencies
+            // Call the Initialize method with dependencies
             gameManager.Initialize(gameMediator, gameReferences, turnManager, modFactory);
             yield return new WaitUntil(() => gameManager.IsInitialized);
         }
         Log("GameManager initialized", LogTag.Initialization);
+
+        // Now initialize TurnManager with the initialized GameManager
+        turnManager.Initialize(gameManager, gameMediator);
+        Log("TurnManager initialized with dependencies", LogTag.Initialization);
 
         // 5. Initialize GameUI (Depends on GameManager being initialized)
         var gameUI = FindObjectOfType<GameUI>();
