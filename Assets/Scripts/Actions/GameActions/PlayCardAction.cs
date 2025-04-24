@@ -24,6 +24,6 @@ public class PlayCardAction : IGameAction {
     }
 
     public override string ToString() {
-        return $"PlayCardAction: Card={card?.Name} (TargetID: {card?.TargetId.ToUpper()}), Owner={(owner?.IsPlayer1() == true ? "Player 1" : "Player 2")} (TargetID: {owner?.TargetId.ToUpper()}), Target={target?.TargetId.ToUpper()}";
+        return $"PlayCardAction: Card={card?.Name} (TargetID: {card?.TargetId.ToUpper()}), Owner={(owner?.IsPlayer1 == true ? "Player 1" : "Player 2")} (TargetID: {owner?.TargetId.ToUpper()}), Target={target?.TargetId.ToUpper()}";
     }
 }

@@ -24,7 +24,7 @@ public static class SpreadDamageEffect {
                     LogTag.Creatures | LogTag.Combat | LogTag.Effects);
                 actionsQueue.AddAction(new DamageCreatureAction(creature, damage, attacker));
             } else if (target is IPlayer player) {
-                Log($"Applying spread damage of {damage} to player {(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}) from {attacker.Name} (TargetID: {attacker.TargetId.ToUpper()})",
+                Log($"Applying spread damage of {damage} to player {(player.IsPlayer1 ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}) from {attacker.Name} (TargetID: {attacker.TargetId.ToUpper()})",
                     LogTag.Players | LogTag.Combat | LogTag.Effects);
                 actionsQueue.AddAction(new DamagePlayerAction(player, damage));
             }

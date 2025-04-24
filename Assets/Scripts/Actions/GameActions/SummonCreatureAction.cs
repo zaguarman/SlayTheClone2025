@@ -30,6 +30,6 @@ public class SummonCreatureAction : IGameAction {
 
     public override string ToString() {
          string slotIdStr = (targetSlot is BattlefieldSlot s) ? s.TargetId.ToUpper().Substring(0,8) : targetSlot?.TargetId ?? "UNKNOWN";
-        return $"SummonCreatureAction: Cr={creature?.Name}({creature?.TargetId.ToUpper().Substring(0,8)}), Own={(owner?.IsPlayer1() == true ? "P1" : "P2")}, Slot={slotIdStr}, Deck={fromDeck}";
+        return $"SummonCreatureAction: Cr={creature?.Name}({creature?.TargetId.ToUpper().Substring(0,8)}), Own={(owner?.IsPlayer1 == true ? "P1" : "P2")}, Slot={slotIdStr}, Deck={fromDeck}";
     }
 }

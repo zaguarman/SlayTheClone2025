@@ -207,7 +207,7 @@ public class DeckViewController : UIComponent {
                 }
 
                 deckViewUI.deckViewPanel.SetActive(true);
-                Log($"Made {(showDiscard ? "discard" : "deck")} view panel visible for {(activePlayer.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.UI);
+                Log($"Made {(showDiscard ? "discard" : "deck")} view panel visible for {(activePlayer.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.UI);
             } catch (System.Exception e) {
                  LogError($"Error showing view: {e.Message}\n{e.StackTrace}", LogTag.UI);
                  // Revert state

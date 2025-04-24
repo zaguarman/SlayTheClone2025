@@ -42,7 +42,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     public ICreature GetLinkedCreature() => linkedCreature;
     public ICard GetLinkedCardInstance() => linkedCardInstance;
     public CardData GetBaseCardData() => baseCardData; // Expose base data if needed
-    public bool IsPlayer1Card() => Player?.IsPlayer1() ?? false;
+    public bool IsPlayer1Card() => Player?.IsPlayer1 ?? false;
 
     protected override void Awake() {
         base.Awake();
@@ -229,7 +229,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     private void UpdateCardVisuals() {
         // Update color based on owner
         if (cardImage != null && Player != null && gameReferences != null) {
-            cardImage.color = Player.IsPlayer1()
+            cardImage.color = Player.IsPlayer1
                 ? gameReferences.GetPlayer1CardColor()
                 : gameReferences.GetPlayer2CardColor();
         }

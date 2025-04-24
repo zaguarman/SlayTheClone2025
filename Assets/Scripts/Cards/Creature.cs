@@ -348,14 +348,14 @@ public class Creature : Card, ICreature {
         var creaturesInDeck = deckCards.Where(c => c is ICreature).ToList();
 
         if (creaturesInDeck.Count == 0) {
-            Log($"No creatures available in {(targetPlayer.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {targetPlayer.TargetId.ToUpper()})'s deck to summon",
+            Log($"No creatures available in {(targetPlayer.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {targetPlayer.TargetId.ToUpper()})'s deck to summon",
                 LogTag.Creatures | LogTag.Cards);
             return;
         }
 
         var validSlots = targetPlayer.Battlefield.Where(s => !s.IsOccupied()).ToList();
         if (validSlots.Count == 0) {
-            Log($"No valid slots available for {(targetPlayer.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {targetPlayer.TargetId.ToUpper()}) to summon creatures",
+            Log($"No valid slots available for {(targetPlayer.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {targetPlayer.TargetId.ToUpper()}) to summon creatures",
                 LogTag.Creatures | LogTag.Cards);
             return;
         }

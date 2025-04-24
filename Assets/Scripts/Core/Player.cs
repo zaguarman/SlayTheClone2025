@@ -12,7 +12,7 @@ using System.Threading;
 public class PlayerDamagedUnityEvent : UnityEvent<int> { }
 
 public interface IPlayer : IEntity, IDamageable {
-    bool IsPlayer1();
+    bool IsPlayer1 { get; } // Property to identify if this is Player 1
     IPlayer Opponent { get; set; }
     List<ICard> Hand { get; }
     List<BattlefieldSlot> Battlefield { get; }
@@ -44,15 +44,17 @@ public class Player : Entity, IPlayer {
     public List<BattlefieldSlot> Battlefield { get; private set; }
     public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
 
+    private readonly bool _isPlayer1; // Add field to store identity
     // is player 1 prop using the isplayer1 method
-    public bool Is_Player1 => IsPlayer1();
+    public bool Is_Player1 => IsPlayer1;
 
     private IGameMediator gameMediator; // Changed to interface
     private IGameReferences gameReferences; // Added reference
     private ICardDealingService cardDealingService; // Added reference
     private TextMeshProUGUI healthText;
 
-    public Player(string name = "Player") : base(name) {
+    // Modify constructor to accept identity
+    public Player(string name = "Player", bool isPlayer1 = false) : base(name) {
         Hand = new List<ICard>(); // Initialize lists
         Battlefield = new List<BattlefieldSlot>(); // Initialize list
         Deck = new Deck();
@@ -60,7 +62,11 @@ public class Player : Entity, IPlayer {
 
         // Set up the event listener for our own damage event
         OnDamaged.AddListener(OnPlayerDamaged);
+        _isPlayer1 = isPlayer1; // Store the identity
     }
+
+    // Implement IsPlayer1 property from interface
+    public bool IsPlayer1 => _isPlayer1;
 
     // New Initialize method to inject dependencies
     public void Initialize(IGameMediator mediator, IGameReferences references, ICardDealingService dealer) {
@@ -84,7 +90,7 @@ public class Player : Entity, IPlayer {
         // This is called whenever this player takes damage
         // Update our UI here
         UpdateHealthUI();
-        Log($"{(IsPlayer1() ? "Player 1" : "Player 2")} took {damage} damage, health: {Health}", LogTag.Players | LogTag.Combat);
+        Log($"{(IsPlayer1 ? "Player 1" : "Player 2")} took {damage} damage, health: {Health}", LogTag.Players | LogTag.Combat);
     }
 
     public void UpdateHealthUI() {
@@ -103,14 +109,7 @@ public class Player : Entity, IPlayer {
         Log($"Initialized battlefield with {slots.Count} slots", LogTag.Initialization);
     }
 
-    public bool IsPlayer1() {
-        // Check against the GameManager instance (which should be set up correctly)
-        // This avoids relying on GameManager.Instance directly within Player logic
-        var manager = GameManager.Instance; // Still need instance here, but it's less problematic
-        if (manager == null) return false; // Avoid null ref if manager not ready
-
-        return manager.Player1 == this;
-    }
+    // The IsPlayer1() method is replaced by the IsPlayer1 property
 
     public void TakeDamage(int amount) {
         Health = Math.Max(0, Health - amount);
@@ -158,7 +157,7 @@ public class Player : Entity, IPlayer {
     }
 
     public void DiscardHand() {
-        Log($"Discarding entire hand for {(IsPlayer1() ? "Player 1" : "Player 2")}: {Hand.Count} cards", LogTag.Cards);
+        Log($"Discarding entire hand for {(IsPlayer1 ? "Player 1" : "Player 2")}: {Hand.Count} cards", LogTag.Cards);
 
         // Create a copy of the hand to avoid modification during iteration
         List<ICard> cardsToDiscard = new List<ICard>(Hand);
@@ -173,7 +172,7 @@ public class Player : Entity, IPlayer {
 
         // Notify that the hand has changed
         gameMediator?.NotifyHandStateChanged(this);
-        Log($"Hand discarded for {(IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Cards);
+        Log($"Hand discarded for {(IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Cards);
     }
 
     public void DrawCard() {

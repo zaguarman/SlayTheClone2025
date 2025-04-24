@@ -145,7 +145,7 @@ public class BattlefieldUI : CardContainer {
 
     private void HandleCardFromBattlefield(CardController card, ITarget target) {
         if (target != null) {
-            if (card.IsPlayer1Card() != Player.IsPlayer1()) {
+            if (card.IsPlayer1Card() != Player.IsPlayer1) {
                 gameManager.CombatHandler.HandleCreatureCombat(card, target);
             } else {
                 HandleCreatureMove(card, target);
@@ -324,7 +324,7 @@ public class BattlefieldUI : CardContainer {
     }
 
     private BattlefieldUI GetOpponentBattlefield() {
-        var player1 = Player.IsPlayer1();
+        var player1 = Player.IsPlayer1;
         if (player1) {
             return gameReferences.GetPlayer2BattlefieldUI();
         } else {

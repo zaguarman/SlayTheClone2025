@@ -34,7 +34,7 @@ public class SummonCreatureActionExecutor : IActionExecutor
             return;
         }
 
-        Log($"Executor: Summoning Creature={creature.Name} (ID: {creature.TargetId.ToUpper().Substring(0,8)}), Owner={(owner.IsPlayer1() ? "P1" : "P2")}, Slot={slot.TargetId.ToUpper().Substring(0,8)}, FromDeck={fromDeck}", LogTag.Actions | LogTag.Creatures);
+        Log($"Executor: Summoning Creature={creature.Name} (ID: {creature.TargetId.ToUpper().Substring(0,8)}), Owner={(owner.IsPlayer1 ? "P1" : "P2")}, Slot={slot.TargetId.ToUpper().Substring(0,8)}, FromDeck={fromDeck}", LogTag.Actions | LogTag.Creatures);
 
         // Get Dependencies from Context
         var mediator = context.GameMediator;

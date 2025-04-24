@@ -83,7 +83,7 @@ public class ModifierManagerTests {
         Assert.IsNotNull(player.Battlefield, "Player's battlefield is null.");
 
         var occupiedSlot = player.Battlefield.FirstOrDefault(slot => slot.IsOccupied() && slot.OccupyingCreature != null);
-        Assert.IsNotNull(occupiedSlot, $"No occupied slot with a creature found for player {(player.IsPlayer1() ? "1" : "2")}.");
+        Assert.IsNotNull(occupiedSlot, $"No occupied slot with a creature found for player {(player.IsPlayer1 ? "1" : "2")}.");
 
         var creature = occupiedSlot.OccupyingCreature as Creature;
         Assert.IsNotNull(creature, "Occupying entity is not a concrete Creature.");

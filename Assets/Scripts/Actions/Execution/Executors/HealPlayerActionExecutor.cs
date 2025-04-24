@@ -37,7 +37,7 @@ public class HealPlayerActionExecutor : IActionExecutor
         // target.Heal(amount); // which would update currentHealth and trigger events
 
         // Placeholder logging:
-        Log($"Executed HealPlayerAction via Executor: Healing {(target.IsPlayer1() ? "P1" : "P2")} for {amount} (Actual: {actualHealAmount}). Health: {currentHealth} -> {newHealth}/{maxHealth}", LogTag.Actions | LogTag.Players);
+        Log($"Executed HealPlayerAction via Executor: Healing {(target.IsPlayer1 ? "P1" : "P2")} for {amount} (Actual: {actualHealAmount}). Health: {currentHealth} -> {newHealth}/{maxHealth}", LogTag.Actions | LogTag.Players);
 
         // If player.Heal doesn't notify, notify here
         // context.GameMediator?.NotifyPlayerHealed(target, actualHealAmount);

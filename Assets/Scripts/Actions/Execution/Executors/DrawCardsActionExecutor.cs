@@ -35,6 +35,6 @@ public class DrawCardsActionExecutor : IActionExecutor
 
         // Execute logic
         cardDealingService.DrawCards(player, amount);
-        Log($"Executed DrawCardsAction via Executor: Drew {amount} cards for {(player.IsPlayer1() ? "P1" : "P2")}", LogTag.Actions | LogTag.Cards);
+        Log($"Executed DrawCardsAction via Executor: Drew {amount} cards for {(player.IsPlayer1 ? "P1" : "P2")}", LogTag.Actions | LogTag.Cards);
     }
 }

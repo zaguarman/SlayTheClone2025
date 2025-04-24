@@ -27,6 +27,6 @@ public class DiscardHandActionExecutor : IActionExecutor
         int initialHandCount = player.Hand.Count;
         player.DiscardHand(); // Call the player's method
 
-        Log($"Executed DiscardHandAction via Executor for {(player.IsPlayer1() ? "P1" : "P2")} - discarded {initialHandCount} cards", LogTag.Actions | LogTag.Cards);
+        Log($"Executed DiscardHandAction via Executor for {(player.IsPlayer1 ? "P1" : "P2")} - discarded {initialHandCount} cards", LogTag.Actions | LogTag.Cards);
     }
 }

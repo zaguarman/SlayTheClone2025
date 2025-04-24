@@ -239,7 +239,7 @@ public class BattlefieldArrowManager {
     }
 
     private Vector3 GetPlayerTargetPosition(IPlayer player) {
-        var playerUI = player.IsPlayer1() ?
+        var playerUI = player.IsPlayer1 ?
             gameReferences.GetPlayer1UI() :
             gameReferences.GetPlayer2UI();
 
@@ -247,7 +247,7 @@ public class BattlefieldArrowManager {
             return playerUI.transform.position;
         }
 
-        LogWarning($"Could not find UI for Player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Actions);
+        LogWarning($"Could not find UI for Player {(player.IsPlayer1 ? "1" : "2")}", LogTag.Actions);
         return Vector3.zero;
     }
 

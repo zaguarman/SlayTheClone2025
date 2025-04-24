@@ -175,14 +175,14 @@ public class GameMediator : Singleton<GameMediator>, IGameMediator {
 
         if (registeredPlayers.Add(player)) {
             player.OnDamaged.AddListener((damage) => NotifyPlayerDamaged(player, damage));
-            Log($"Player registered: {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Players);
+            Log($"Player registered: {(player.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Players);
         }
     }
 
     public void UnregisterPlayer(IPlayer player) {
         if (player == null) return;
         if (registeredPlayers.Remove(player)) {
-            Log($"Player unregistered: {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Players);
+            Log($"Player unregistered: {(player.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Players);
         }
     }
     #endregion
@@ -207,7 +207,7 @@ public class GameMediator : Singleton<GameMediator>, IGameMediator {
         if (player == null) throw new System.ArgumentNullException(nameof(player));
 
         events.PlayerDamaged.Invoke(player, damage);
-        Log($"{damage} damage to {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Players | LogTag.Combat);
+        Log($"{damage} damage to {(player.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Players | LogTag.Combat);
 
         if (player.Health <= 0) {
             NotifyGameOver(player.Opponent);
@@ -251,7 +251,7 @@ public class GameMediator : Singleton<GameMediator>, IGameMediator {
 
         // If we had a PlayerHealed event, we would invoke it here
         // events.PlayerHealed.Invoke(player, amount);
-        Log($"{(player.IsPlayer1() ? "Player 1" : "Player 2")} healed for {amount}, health now: {player.Health}", LogTag.Players | LogTag.Effects);
+        Log($"{(player.IsPlayer1 ? "Player 1" : "Player 2")} healed for {amount}, health now: {player.Health}", LogTag.Players | LogTag.Effects);
         NotifyGameStateChanged();
     }
 
@@ -259,7 +259,7 @@ public class GameMediator : Singleton<GameMediator>, IGameMediator {
         ValidateInitialization();
         if (winner == null) throw new System.ArgumentNullException(nameof(winner));
 
-        Log($"Game over: {(winner.IsPlayer1() ? "Player 1" : "Player 2")} wins", LogTag.Players);
+        Log($"Game over: {(winner.IsPlayer1 ? "Player 1" : "Player 2")} wins", LogTag.Players);
         events.GameOver.Invoke(winner);
     }
 
@@ -277,7 +277,7 @@ public class GameMediator : Singleton<GameMediator>, IGameMediator {
         if (owner == null) throw new System.ArgumentNullException(nameof(owner));
 
         events.CreatureSummoned.Invoke(creature, owner);
-        Log($"Creature summoned: {creature.Name} by {(owner.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Creatures);
+        Log($"Creature summoned: {creature.Name} by {(owner.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Creatures);
         NotifyGameStateChanged();
     }
     // --- NEW Armor Change Notifier ---
@@ -299,13 +299,13 @@ public class GameMediator : Singleton<GameMediator>, IGameMediator {
     public void NotifyHandStateChanged(IPlayer player) {
         ValidateInitialization();
         events.HandStateChanged.Invoke(player);
-        Log($"Hand state changed for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Players | LogTag.Cards);
+        Log($"Hand state changed for {(player.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Players | LogTag.Cards);
     }
 
     public void NotifyBattlefieldStateChanged(IPlayer player) {
         ValidateInitialization();
         events.BattlefieldStateChanged.Invoke(player);
-        Log($"Battlefield state changed for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Players | LogTag.Cards);
+        Log($"Battlefield state changed for {(player.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Players | LogTag.Cards);
     }
 
     public void NotifyTurnEnded(int turnNumber) {

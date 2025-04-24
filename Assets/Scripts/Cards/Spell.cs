@@ -120,7 +120,7 @@ public class Spell : Card {
             Log($"Spell: Queueing DamageCreatureAction for {value} to {creature.Name}", LogTag.Actions);
             context.AddAction(new DamageCreatureAction(creature, value));
         } else if (target is IPlayer player) {
-            Log($"Spell: Queueing DamagePlayerAction for {value} to Player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Actions);
+            Log($"Spell: Queueing DamagePlayerAction for {value} to Player {(player.IsPlayer1 ? "1" : "2")}", LogTag.Actions);
             context.AddAction(new DamagePlayerAction(player, value));
         } else {
             LogWarning($"Spell Damage: Invalid target type {target?.GetType().Name}", LogTag.Actions);
@@ -132,7 +132,7 @@ public class Spell : Card {
             Log($"Spell: Queueing HealCreatureAction for {value} to {creature.Name}", LogTag.Actions);
             context.AddAction(new HealCreatureAction(creature, value));
         } else if (target is IPlayer player) {
-            Log($"Spell: Queueing HealPlayerAction for {value} to Player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Actions);
+            Log($"Spell: Queueing HealPlayerAction for {value} to Player {(player.IsPlayer1 ? "1" : "2")}", LogTag.Actions);
             context.AddAction(new HealPlayerAction(player, value));
         } else {
             LogWarning($"Spell Heal: Invalid target type {target?.GetType().Name}", LogTag.Actions);
@@ -140,7 +140,7 @@ public class Spell : Card {
     }
 
     private void CreateDrawAction(int value, IPlayer player, IActionsQueue context) {
-        Log($"Spell: Queueing DrawCardsAction for {value} cards for Player {(player.IsPlayer1() ? "1" : "2")}", LogTag.Actions);
+        Log($"Spell: Queueing DrawCardsAction for {value} cards for Player {(player.IsPlayer1 ? "1" : "2")}", LogTag.Actions);
         context.AddAction(new DrawCardsAction(player, value));
     }
 

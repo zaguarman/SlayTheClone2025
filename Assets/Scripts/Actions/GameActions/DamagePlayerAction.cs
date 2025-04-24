@@ -15,18 +15,18 @@ public class DamagePlayerAction : IGameAction {
     public DamagePlayerAction(IPlayer target, int damage) {
         this.target = target;
         this.damage = damage;
-        Log($"Created DamagePlayerAction for {(target.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {target.TargetId.ToUpper()}) with {damage} damage",
+        Log($"Created DamagePlayerAction for {(target.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {target.TargetId.ToUpper()}) with {damage} damage",
             LogTag.Actions | LogTag.Players);
     }
     #endregion
 
     #region Methods
     public void Execute() {
-        Log($"DamagePlayerAction Execute() called for {(target?.IsPlayer1() == true ? "Player 1" : "Player 2")}. Logic handled by Executor.", LogTag.Actions | LogTag.Players);
+        Log($"DamagePlayerAction Execute() called for {(target?.IsPlayer1 == true ? "Player 1" : "Player 2")}. Logic handled by Executor.", LogTag.Actions | LogTag.Players);
     }
 
     public override string ToString() {
-        return $"DamagePlayerAction: Target={(target?.IsPlayer1() == true ? "Player 1" : "Player 2")} (TargetID: {target?.TargetId.ToUpper()}), Damage={damage}";
+        return $"DamagePlayerAction: Target={(target?.IsPlayer1 == true ? "Player 1" : "Player 2")} (TargetID: {target?.TargetId.ToUpper()}), Damage={damage}";
     }
     #endregion
 }

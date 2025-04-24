@@ -14,7 +14,7 @@ public class DrawCardsAction : IGameAction {
     public DrawCardsAction(IPlayer player, int amount = 1) {
         this.player = player;
         this.amount = amount;
-        Log($"Created DrawCardsAction for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) to draw {amount} cards", LogTag.Actions | LogTag.Cards);
+        Log($"Created DrawCardsAction for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}) to draw {amount} cards", LogTag.Actions | LogTag.Cards);
     }
     #endregion
 
@@ -31,11 +31,11 @@ public class DrawCardsAction : IGameAction {
 
         // Log the intent, but don't perform the actual operation
         // This avoids the direct dependency on GameManager.Instance
-        Log($"DrawCardsAction: Intent to draw {amount} cards for {(player.IsPlayer1() ? "Player 1" : "Player 2")}. (Actual execution handled by ActionsQueue)", LogTag.Actions | LogTag.Cards);
+        Log($"DrawCardsAction: Intent to draw {amount} cards for {(player.IsPlayer1 ? "Player 1" : "Player 2")}. (Actual execution handled by ActionsQueue)", LogTag.Actions | LogTag.Cards);
     }
 
     public override string ToString() {
-        return $"DrawCardsAction: Player={(player?.IsPlayer1() == true ? "1" : "2")} (TargetID: {player?.TargetId.ToUpper()}), Amount={amount}";
+        return $"DrawCardsAction: Player={(player?.IsPlayer1 == true ? "1" : "2")} (TargetID: {player?.TargetId.ToUpper()}), Amount={amount}";
     }
     #endregion
 }

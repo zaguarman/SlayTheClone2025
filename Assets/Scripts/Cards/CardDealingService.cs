@@ -74,7 +74,7 @@ public class CardDealingService : ICardDealingService {
         if (deck.CardsRemaining == 0) {
             // Try to recycle discard pile
             if (GetDiscardPileCount(player) > 0) {
-                Log($"Deck empty, checking if discard pile can be recycled for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+                Log($"Deck empty, checking if discard pile can be recycled for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
                 return true;
             }
             // No cards left in deck or discard
@@ -92,7 +92,7 @@ public class CardDealingService : ICardDealingService {
         }
 
         if (player.Hand.Count >= Player.MAX_HAND_SIZE) {
-            Log($"Player {(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}) has a full hand ({Player.MAX_HAND_SIZE} cards), skipping draw", LogTag.Cards);
+            Log($"Player {(player.IsPlayer1 ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}) has a full hand ({Player.MAX_HAND_SIZE} cards), skipping draw", LogTag.Cards);
             return false;
         }
 
@@ -105,7 +105,7 @@ public class CardDealingService : ICardDealingService {
         if (deck.CardsRemaining == 0) {
             bool recycled = RecycleDiscardPile(player);
             if (!recycled) {
-                Log($"No cards left in deck or discard pile for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+                Log($"No cards left in deck or discard pile for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
                 return false;
             }
         }
@@ -118,7 +118,7 @@ public class CardDealingService : ICardDealingService {
         if (card != null) {
             player.AddToHand(card);
             gameMediator.NotifyHandStateChanged(player);
-            Log($"Drew card for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}): {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
+            Log($"Drew card for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}): {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
             return true;
         }
         return false;
@@ -131,7 +131,7 @@ public class CardDealingService : ICardDealingService {
         }
 
         if (player.Hand.Count >= Player.MAX_HAND_SIZE) {
-            Log($"Player {(player.IsPlayer1() ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}) has a full hand ({Player.MAX_HAND_SIZE} cards), skipping draw", LogTag.Cards);
+            Log($"Player {(player.IsPlayer1 ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}) has a full hand ({Player.MAX_HAND_SIZE} cards), skipping draw", LogTag.Cards);
             return;
         }
 
@@ -144,7 +144,7 @@ public class CardDealingService : ICardDealingService {
         if (deck.CardsRemaining == 0) {
             bool recycled = RecycleDiscardPile(player);
             if (!recycled) {
-                Log($"No cards left in deck or discard pile for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+                Log($"No cards left in deck or discard pile for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
                 return;
             }
         }
@@ -154,7 +154,7 @@ public class CardDealingService : ICardDealingService {
         if (card != null) {
             player.AddToHand(card);
             gameMediator.NotifyHandStateChanged(player);
-            Log($"Drew card for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}): {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
+            Log($"Drew card for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}): {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
         }
     }
 
@@ -164,7 +164,7 @@ public class CardDealingService : ICardDealingService {
             return;
         }
 
-        Log($"Drawing {count} cards for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+        Log($"Drawing {count} cards for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
 
         int drawnCount = 0;
         for (int i = 0; i < count; i++) {
@@ -185,7 +185,7 @@ public class CardDealingService : ICardDealingService {
             drawnCount++;
         }
 
-        Log($"Drew {drawnCount} out of {count} requested cards for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+        Log($"Drew {drawnCount} out of {count} requested cards for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
     }
 
     public bool RecycleDiscardPile(IPlayer player) {
@@ -197,7 +197,7 @@ public class CardDealingService : ICardDealingService {
         // Check if there are cards in the discard pile
         var discardPileCards = GetDiscardPilePreview(player);
         if (discardPileCards.Count == 0) {
-            Log($"No cards in discard pile to recycle for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+            Log($"No cards in discard pile to recycle for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
             return false;
         }
 
@@ -214,7 +214,7 @@ public class CardDealingService : ICardDealingService {
             // Shuffle the deck
             deckImpl.Shuffle();
 
-            Log($"Recycled {discardPileCards.Count} cards from discard pile for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+            Log($"Recycled {discardPileCards.Count} cards from discard pile for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
             return true;
         }
 
@@ -228,7 +228,7 @@ public class CardDealingService : ICardDealingService {
         }
 
         deck.Shuffle();
-        Log($"Shuffled deck for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+        Log($"Shuffled deck for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
     }
 
     // Get a preview of the player's deck cards
@@ -285,9 +285,9 @@ public class CardDealingService : ICardDealingService {
         if (deck is Deck deckImpl) {
             bool removed = deckImpl.RemoveCard(card);
             if (removed) {
-                Log($"Removed card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck", LogTag.Cards);
+                Log($"Removed card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck", LogTag.Cards);
             } else {
-                LogWarning($"Failed to remove card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck - card not found", LogTag.Cards);
+                LogWarning($"Failed to remove card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck - card not found", LogTag.Cards);
             }
             return removed;
         }

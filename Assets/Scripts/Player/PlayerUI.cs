@@ -10,23 +10,23 @@ public class PlayerUI : UIComponent {
         base.Initialize(player, mediator, references);
 
         // Get the player's health text based on whether it's player 1 or 2
-        healthText = player.IsPlayer1() ?
+        healthText = player.IsPlayer1 ?
             references.player1References.HealthText :
             references.player2References.HealthText;
 
         if (healthText == null) {
-            LogWarning($"Health text reference missing for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
+            LogWarning($"Health text reference missing for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
         } else {
             // Give the player direct access to its health text
             player.SetHealthText(healthText);
-            Log($"Health text set for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
+            Log($"Health text set for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
         }
 
         // Don't initialize HandUI here, let GameUI handle its children's initialization
         // InitializeHandUI(player); // REMOVE THIS CALL
 
         // IsInitialized is set by base class
-        Log($"PlayerUI initialized for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
+        Log($"PlayerUI initialized for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
     }
 
     protected override void RegisterEvents() {

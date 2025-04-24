@@ -53,7 +53,7 @@ public class BattlefieldCombatActionExecutor : IActionExecutor
             if (targetPlayer != null)
             {
                 primaryTarget = targetPlayer;
-                Log($"Executor: Creature {attacker.Name} attacking player {(targetPlayer.IsPlayer1() ? "1" : "2")}", LogTag.Combat);
+                Log($"Executor: Creature {attacker.Name} attacking player {(targetPlayer.IsPlayer1 ? "1" : "2")}", LogTag.Combat);
                 // Queue DamagePlayerAction
                 actionsQueue.AddAction(new DamagePlayerAction(targetPlayer, attacker.Attack));
             }
@@ -75,7 +75,7 @@ public class BattlefieldCombatActionExecutor : IActionExecutor
                 }
             }
         }
-        
+
         Log($"Executed BattlefieldCombatAction via Executor for {attacker.Name}", LogTag.Actions | LogTag.Combat);
     }
 }

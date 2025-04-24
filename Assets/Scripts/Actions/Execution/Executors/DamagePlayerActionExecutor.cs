@@ -27,6 +27,6 @@ public class DamagePlayerActionExecutor : IActionExecutor
 
         // --- Execute Logic (moved from DamagePlayerAction.Execute) ---
         target.TakeDamage(damage);
-        Log($"Executed DamagePlayerAction via Executor for Player {(target.IsPlayer1() ? "1" : "2")}, Damage: {damage}", LogTag.Actions | LogTag.Players);
+        Log($"Executed DamagePlayerAction via Executor for Player {(target.IsPlayer1 ? "1" : "2")}, Damage: {damage}", LogTag.Actions | LogTag.Players);
     }
 }

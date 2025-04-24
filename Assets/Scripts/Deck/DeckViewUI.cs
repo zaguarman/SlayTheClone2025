@@ -172,7 +172,7 @@ public class DeckViewUI : UIComponent {
         viewingDiscardPile = false;
         UpdateUI(player);
         deckViewPanel.SetActive(true);
-        Log($"Showing deck view for {(player.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI);
+        Log($"Showing deck view for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI);
     }
 
     public void HideDeckView() {

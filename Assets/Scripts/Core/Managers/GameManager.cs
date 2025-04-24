@@ -298,8 +298,9 @@ public class GameManager : MonoBehaviour, IGameManager {
     }
 
     private void InitializePlayers() {
-        Player1 = new Player();
-        Player2 = new Player();
+        // Pass the identity flag during construction
+        Player1 = new Player("Player 1", true);
+        Player2 = new Player("Player 2", false);
         Player1.Opponent = Player2;
         Player2.Opponent = Player1;
 
@@ -344,7 +345,7 @@ public class GameManager : MonoBehaviour, IGameManager {
     private void PlaceCreaturesForPlayerFromDeck(IPlayer player, int count) {
         var emptySlots = player.Battlefield.Where(s => !s.IsOccupied()).ToList();
         if (emptySlots.Count == 0) {
-            LogWarning($"No empty slots available for {(player.IsPlayer1() ? "Player 1" : "Player 2")} during initial placement", LogTag.Initialization);
+            LogWarning($"No empty slots available for {(player.IsPlayer1 ? "Player 1" : "Player 2")} during initial placement", LogTag.Initialization);
             return;
         }
 
@@ -375,7 +376,7 @@ public class GameManager : MonoBehaviour, IGameManager {
             ActionsQueue.AddAction(summonAction); // Queue the action
 
             // Log that the action was QUEUED, not executed yet.
-            Log($"Queued initial placement action for {creature.Name} into slot {player.Battlefield.IndexOf(slot) + 1} for {(player.IsPlayer1() ? "Player 1" : "Player 2")}.", LogTag.Creatures | LogTag.Initialization | LogTag.Actions);
+            Log($"Queued initial placement action for {creature.Name} into slot {player.Battlefield.IndexOf(slot) + 1} for {(player.IsPlayer1 ? "Player 1" : "Player 2")}.", LogTag.Creatures | LogTag.Initialization | LogTag.Actions);
         }
 
         if (creaturesPlaced.Count > 0) {
@@ -389,7 +390,7 @@ public class GameManager : MonoBehaviour, IGameManager {
             foreach (var card in cardsToRemove) {
                 CardDealingService.RemoveCardFromDeck(player, card);
             }
-            Log($"Removed {cardsToRemove.Count} creatures from {(player.IsPlayer1() ? "Player 1" : "Player 2")}'s deck", LogTag.Cards | LogTag.Initialization);
+            Log($"Removed {cardsToRemove.Count} creatures from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s deck", LogTag.Cards | LogTag.Initialization);
         }
     }
 
@@ -423,14 +424,14 @@ public class GameManager : MonoBehaviour, IGameManager {
         if (player is Player p) // Need concrete Player to set property
         {
             p.CardsToDraw = count;
-            Log($"Set cards to draw for {(p.IsPlayer1() ? "Player 1" : "Player 2")} to {count}", LogTag.Players | LogTag.Cards);
+            Log($"Set cards to draw for {(p.IsPlayer1 ? "Player 1" : "Player 2")} to {count}", LogTag.Players | LogTag.Cards);
         }
     }
 
     public void DiscardHand(IPlayer player) {
         if (player == null) return;
         ActionsQueue?.AddAction(new DiscardHandAction(player));
-        Log($"Added discard hand action for {(player.IsPlayer1() ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
+        Log($"Added discard hand action for {(player.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
     }
 
     public void DiscardAllHands() {
@@ -442,7 +443,7 @@ public class GameManager : MonoBehaviour, IGameManager {
     public void DrawCardsForPlayer(IPlayer player, int count = 1) {
         if (player == null) return;
         ActionsQueue?.AddAction(new DrawCardsAction(player, count));
-        Log($"Added draw cards action for {(player.IsPlayer1() ? "Player 1" : "Player 2")} to draw {count} cards", LogTag.Actions | LogTag.Cards);
+        Log($"Added draw cards action for {(player.IsPlayer1 ? "Player 1" : "Player 2")} to draw {count} cards", LogTag.Actions | LogTag.Cards);
     }
 
     public void DrawCardForPlayer(IPlayer player) {
