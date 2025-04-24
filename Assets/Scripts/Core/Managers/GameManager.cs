@@ -436,7 +436,6 @@ public class GameManager : MonoBehaviour, IGameManager {
         turnManager.EndTurn(); // Use the stored ITurnManager
     }
 
-    // Methods to handle cards to draw
     public void SetCardsToDraw(IPlayer player, int count) {
         if (player == null) return;
         if (player is Player p) // Need concrete Player to set property
@@ -466,39 +465,6 @@ public class GameManager : MonoBehaviour, IGameManager {
 
     public void DrawCardForPlayer(IPlayer player) {
         DrawCardsForPlayer(player, 1);
-    }
-
-    // Method to create and add the Electric Eel card to Player 1's hand
-    public void AddElectricEelCardToPlayer1() {
-        if (Player1 == null) return;
-
-        // Create the Electric Eel creature with chained damage effect
-        var electricEel = ScriptableObject.CreateInstance<CreatureData>();
-        electricEel.cardName = "Electric Eel";
-        electricEel.description = "When this creature attacks, it also deals damage to 2 additional targets in a chain.";
-        electricEel.attack = 3;
-        electricEel.health = 4;
-
-        var effect = new CardEffect {
-            effectType = EffectType.Continuous,
-            trigger = EffectTrigger.OnPlay,
-            actions = new List<EffectAction> {
-                new EffectAction {
-                    actionType = ActionType.Damage,
-                    value = 3, // Same damage as the attack value
-                    targetType = TargetType.EnemyCreatures,
-                    targetModifier = TargetModifier.Chained
-                }
-            }
-        };
-
-        electricEel.effects.Add(effect);
-
-        // Create the card and add to player's hand
-        var creature = CardFactory.CreateCard(electricEel);
-        Player1.AddToHand(creature);
-
-        Log("Added Electric Eel card to Player 1's hand", LogTag.Cards | LogTag.Initialization);
     }
     #endregion
 }

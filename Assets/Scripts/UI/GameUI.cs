@@ -4,18 +4,6 @@ using UnityEngine.Events;
 
 public class GameUI : MonoBehaviour {
     public bool IsInitialized { get; private set; }
-    private static GameUI instance;
-    public static GameUI Instance {
-        get {
-            if (instance == null) {
-                instance = FindObjectOfType<GameUI>();
-                if (instance == null) {
-                    Debug.LogError("GameUI not found in scene!");
-                }
-            }
-            return instance;
-        }
-    }
 
     private PlayerUI player1UI;
     private PlayerUI player2UI;
@@ -37,11 +25,7 @@ public class GameUI : MonoBehaviour {
     public UnityEvent onInitialized = new UnityEvent();
 
     protected void Awake() {
-        if (instance != null && instance != this) {
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
+        // No singleton initialization needed
     }
 
     // Initialize method with explicit dependency injection including IGameManager
@@ -193,16 +177,9 @@ public class GameUI : MonoBehaviour {
     }
 
     protected void OnDestroy() {
-        if (instance == this) {
-            // No longer need to destroy weatherController here if it's a component
-            // if (weatherController != null) {
-            //     Destroy(weatherController);
-            //     weatherSystemInitialized = false;
-            // }
-            instance = null;
-            onInitialized.RemoveAllListeners(); // Clean up listeners
-            Log("GameUI destroyed", LogTag.UI);
-        }
+        // Clean up resources
+        onInitialized.RemoveAllListeners();
+        Log("GameUI destroyed", LogTag.UI);
         IsInitialized = false;
     }
 
