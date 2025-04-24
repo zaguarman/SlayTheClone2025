@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using static DebugLogger;
 
 public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPointerExitHandler {
     private RectTransform rectTransform;
@@ -15,6 +16,9 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     private Color invalidDropColor;
     private Color hoverColor;
     private Color combatMarkColor;
+
+    // Reference to GameReferences for tooltip access - MUST be set via SetGameReferences
+    private IGameReferences gameReferences;
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>() ?? gameObject.AddComponent<RectTransform>();
@@ -83,23 +87,31 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
 
     public bool IsValidTarget() => true;
 
-    // Reference to GameReferences for tooltip access
-    private IGameReferences gameReferences;
-
-    // Method to set the GameReferences dependency
+    // Method to set the GameReferences dependency (called by BattlefieldUI)
     public void SetGameReferences(IGameReferences references) {
         gameReferences = references;
+        if (gameReferences == null)
+        {
+             LogError($"SetGameReferences called with null references for slot {name} (TargetID: {TargetId})", LogTag.Initialization | LogTag.UI);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        // Try to find GameReferences if not set
+        // --- FIX: Check if gameReferences was correctly injected ---
         if (gameReferences == null) {
-            gameReferences = FindObjectOfType<GameReferences>();
-            if (gameReferences == null) return;
+            // Log an error - this indicates a problem in BattlefieldUI's initialization
+            LogError($"Cannot handle PointerEnter for slot {name} (TargetID: {TargetId}) - gameReferences is null. Check BattlefieldUI initialization.", LogTag.Initialization | LogTag.UI);
+            return; // Cannot proceed without references
         }
+        // --- END FIX ---
 
         Tooltip tooltip = gameReferences.GetTooltip();
-        if (tooltip == null) return;
+        if (tooltip == null)
+        {
+            // Log a warning if the tooltip system isn't ready, but don't crash
+            LogWarning($"Tooltip system not available when hovering over slot {name}", LogTag.UI);
+            return;
+        }
 
         if (IsOccupied() && OccupyingCard != null) {
             // Show the card tooltip which includes effects info
@@ -112,13 +124,17 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        if (gameReferences == null) {
-            gameReferences = FindObjectOfType<GameReferences>();
-            if (gameReferences == null) return;
-        }
+         // --- FIX: Check if gameReferences was correctly injected ---
+         if (gameReferences == null) {
+            // No need to log again if it was already logged in OnPointerEnter,
+            // but check is needed to prevent NullReferenceException when accessing tooltip.
+            return;
+         }
+         // --- END FIX ---
 
         Tooltip tooltip = gameReferences.GetTooltip();
-        if (tooltip != null) {
+        // Also check if tooltip object exists before calling HideTooltip
+        if (tooltip != null && tooltip.gameObject != null) {
             tooltip.HideTooltip();
         }
     }
