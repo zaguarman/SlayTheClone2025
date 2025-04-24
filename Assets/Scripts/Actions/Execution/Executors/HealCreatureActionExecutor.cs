@@ -16,37 +16,34 @@ public class HealCreatureActionExecutor : IActionExecutor
         }
 
         // --- Get data from Action ---
-        var target = healAction.GetTarget();
+        var targetCreature = healAction.GetTarget();
         var amount = healAction.GetAmount();
 
-        // --- Validate ---
-        if (target == null) {
-            LogWarning("HealCreatureActionExecutor: Target creature is null.", LogTag.Actions | LogTag.Creatures);
+        // --- Get Dependencies from Context ---
+        var mediator = context.GameMediator;
+        if (mediator == null)
+        {
+            LogError("HealCreatureActionExecutor: GameMediator is null in context.", LogTag.Actions | LogTag.Initialization);
             return;
         }
 
-        // --- Execute Logic (moved from HealCreatureAction.Execute) ---
-        // Actual heal logic should live in Creature.Heal() or similar.
-        // For now, replicate the placeholder logging.
-        if (target is Creature creature) {
-            int currentHealth = creature.Health;
-            // Assuming MaxHealth property exists or we use a placeholder
-            int maxHealth = creature.MaxHealth; // Use actual max health
-            int newHealth = Math.Min(currentHealth + amount, maxHealth);
-            int actualHealAmount = newHealth - currentHealth; // Calculate actual amount healed
-
-            // In a real implementation, we'd call:
-            // creature.Heal(amount); // which would update currentHealth and trigger events
-
-            // Placeholder logging:
-            Log($"Executed HealCreatureAction via Executor: Healing {creature.Name} for {amount} (Actual: {actualHealAmount}). Health: {currentHealth} -> {newHealth}/{maxHealth}", LogTag.Actions | LogTag.Creatures);
-
-            // If creature.Heal doesn't notify, notify here (but ideally it should)
-            // context.GameMediator?.NotifyCreatureHealed(creature, actualHealAmount);
-            // context.GameMediator?.NotifyGameStateChanged();
+        // --- Validate Target ---
+        if (targetCreature == null || targetCreature.IsDead) {
+            // LogWarning($"HealCreatureActionExecutor: Target creature {(targetCreature?.Name ?? "null")} is null or dead. Skipping heal.", LogTag.Actions | LogTag.Creatures);
+            return;
         }
-        else {
-             LogWarning($"HealCreatureActionExecutor: Target {target.Name} is not a concrete Creature.", LogTag.Actions | LogTag.Creatures);
+
+        // --- Execute Logic ---
+        int actualHealAmount = targetCreature.Heal(amount);
+
+        // --- Notify Mediator ---
+        if (actualHealAmount > 0) {
+            // Notify AFTER the action is performed
+            mediator.NotifyCreatureHealed(targetCreature, actualHealAmount);
+            // Optionally notify general game state change if needed, but CreatureHealed might be sufficient
+            // mediator.NotifyGameStateChanged();
         }
+
+        Log($"Executed HealCreatureAction via Executor: Healed {targetCreature.Name} for {amount} (Actual: {actualHealAmount}). Health: {targetCreature.Health}/{targetCreature.MaxHealth}", LogTag.Actions | LogTag.Creatures | LogTag.Effects);
     }
 }

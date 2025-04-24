@@ -77,31 +77,4 @@ public class PlayerUITests
         Assert.IsNotNull(healthText, "HealthText component not found in scene.");
         Assert.AreEqual($"Health: {gameManager.Player1.Health}", healthText.text, "Initial health text is incorrect based on scene setup.");
     }
-
-    [UnityTest]
-    public IEnumerator PlayerUI_TakeDamage_UpdatesHealthText()
-    {
-        // Arrange
-        yield return SetupSceneAndWait();
-
-        IPlayer player1 = gameManager.Player1;
-        TextMeshProUGUI healthText = gameReferences.player1References.healthText;
-        int initialHealth = player1.Health;
-        int damageAmount = 5;
-        int expectedHealth = initialHealth - damageAmount;
-
-        Assert.IsNotNull(player1, "Player1 is null after scene setup.");
-        Assert.IsNotNull(healthText, "HealthText is null after scene setup.");
-
-        // Act
-        Debug.Log($"[Test] Applying {damageAmount} damage to Player 1 (Initial Health: {initialHealth})...");
-        player1.TakeDamage(damageAmount);
-        Debug.Log($"[Test] Player 1 Health after TakeDamage call: {player1.Health}");
-
-        yield return null;
-
-        // Assert
-        Debug.Log($"[Test] Expected Health Text: 'Health: {expectedHealth}', Actual: '{healthText.text}'");
-        Assert.AreEqual($"Health: {expectedHealth}", healthText.text, "Health text did not update correctly after taking damage.");
-    }
 }

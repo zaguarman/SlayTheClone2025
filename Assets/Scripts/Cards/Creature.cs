@@ -29,6 +29,13 @@ public interface ICreature : ICard {
     // Effect Handling Methods
     void HandleEffect(EffectTrigger trigger, ActionExecutionContext context);
     void HandleTurnBasedEffect(EffectTrigger trigger, IActionsQueue actionsQueue, IModifierManager modifierManager, ITurnManager turnManager);
+
+    /// <summary>
+    /// Heals the creature by the specified amount, up to its maximum health.
+    /// </summary>
+    /// <param name="amount">The amount to heal.</param>
+    /// <returns>The actual amount the creature was healed.</returns>
+    int Heal(int amount);
 }
 
 public class Creature : Card, ICreature {
@@ -147,6 +154,38 @@ public class Creature : Card, ICreature {
         // GameMediator.Instance?.NotifyCreatureDied(...)
         // gameManager?.ModifierManager?.UnregisterCreature(this)
         // Owner?.RemoveFromBattlefield(this, false);
+    }
+
+    /// <summary>
+    /// Heals the creature by the specified amount, up to its maximum health.
+    /// </summary>
+    /// <param name="amount">The amount to heal.</param>
+    /// <returns>The actual amount the creature was healed.</returns>
+    public int Heal(int amount)
+    {
+        if (IsDead || amount <= 0)
+        {
+            return 0; // Cannot heal dead creatures or with non-positive amount
+        }
+
+        int previousHealth = currentHealth;
+        int maxPossibleHeal = MaxHealth - currentHealth; // How much health is missing
+        int actualHealAmount = Math.Min(amount, maxPossibleHeal); // Heal only up to max health
+
+        if (actualHealAmount <= 0)
+        {
+            return 0; // Already at full health
+        }
+
+        currentHealth += actualHealAmount;
+
+        Log($"Creature {Name} healed for {actualHealAmount} (requested {amount}). Health: {previousHealth} -> {Health}/{MaxHealth}",
+            LogTag.Creatures | LogTag.Effects);
+
+        // Note: Notification to GameMediator is handled by the HealCreatureActionExecutor
+        // after this method returns, to keep Creature focused on internal state.
+
+        return actualHealAmount;
     }
 
     // Handles effects triggered by actions (needs full context)

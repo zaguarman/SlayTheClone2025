@@ -11,13 +11,14 @@ using System.Threading;
 [Serializable]
 public class PlayerDamagedUnityEvent : UnityEvent<int> { }
 
-public interface IPlayer : IEntity, IDamageable {
+public interface IPlayer : IEntity {
     bool IsPlayer1 { get; } // Property to identify if this is Player 1
     IPlayer Opponent { get; set; }
     List<ICard> Hand { get; }
     List<BattlefieldSlot> Battlefield { get; }
     IDeck Deck { get; }
     int CardsToDraw { get; set; }
+    int Health { get; }
     void AddToHand(ICard card);
     void RemoveFromHand(ICard card);
     void AddToBattlefield(ICard creature, ITarget slotId = null);
@@ -34,6 +35,13 @@ public interface IPlayer : IEntity, IDamageable {
     IGameMediator GameMediator { get; }
     // Expose GameManager for dependency access
     IGameManager GameManager { get; }
+
+    /// <summary>
+    /// Heals the player by the specified amount, up to their maximum health.
+    /// </summary>
+    /// <param name="amount">The amount to heal.</param>
+    /// <returns>The actual amount the player was healed.</returns>
+    int Heal(int amount);
 }
 
 public class Player : Entity, IPlayer {
@@ -120,18 +128,46 @@ public class Player : Entity, IPlayer {
         Log($"Initialized battlefield with {slots.Count} slots", LogTag.Initialization);
     }
 
-    // The IsPlayer1() method is replaced by the IsPlayer1 property
-
-    public void TakeDamage(int amount) {
-        Health = Math.Max(0, Health - amount);
-        OnDamaged.Invoke(amount);
-    }
-
     public void SetHealth(int newHealth) {
         Health = Math.Min(newHealth, 99);
 
         // Update UI
         UpdateHealthUI();
+    }
+
+    /// <summary>
+    /// Heals the player by the specified amount, up to their maximum health.
+    /// </summary>
+    /// <param name="amount">The amount to heal.</param>
+    /// <returns>The actual amount the player was healed.</returns>
+    public int Heal(int amount)
+    {
+        if (amount <= 0)
+        {
+            return 0; // Cannot heal with non-positive amount
+        }
+
+        const int PLAYER_MAX_HEALTH = 20; // Define max health for players
+        int previousHealth = Health;
+        int maxPossibleHeal = PLAYER_MAX_HEALTH - Health;
+        int actualHealAmount = Math.Min(amount, maxPossibleHeal);
+
+        if (actualHealAmount <= 0)
+        {
+            return 0; // Already at full health
+        }
+
+        Health += actualHealAmount;
+
+        Log($"Player {Name} healed for {actualHealAmount} (requested {amount}). Health: {previousHealth} -> {Health}/{PLAYER_MAX_HEALTH}",
+            LogTag.Players | LogTag.Effects);
+
+        // Update UI immediately after health changes
+        UpdateHealthUI();
+
+        // Note: Notification to GameMediator is handled by the HealPlayerActionExecutor
+
+        return actualHealAmount;
     }
 
     public void AddToHand(ICard card) {
