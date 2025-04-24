@@ -221,20 +221,5 @@ public class GameUI : InitializableComponent {
         return weatherSystemInitialized && weatherController != null;
     }
 
-    // Hide the base Initialize method with a new implementation instead of overriding
-    // This avoids the CS0809 warning about obsolete method overriding non-obsolete method
-    public new void Initialize()
-    {
-        LogWarning("Using obsolete GameUI.Initialize() without dependencies. This will be removed in a future version.", LogTag.UI | LogTag.Initialization);
 
-        // Try to get dependencies from singletons
-        var mediator = GameMediator.Instance;
-        var references = FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
-
-        if (mediator != null && references != null) {
-            Initialize(mediator, references);
-        } else {
-            LogError("Cannot initialize GameUI - Dependencies not available", LogTag.UI | LogTag.Initialization);
-        }
-    }
 }

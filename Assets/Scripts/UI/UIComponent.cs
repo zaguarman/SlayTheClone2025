@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-using System; // Needed for Obsolete attribute
 
 /// <summary>
 /// Base class for UI components that can be initialized with dependencies.
@@ -48,35 +47,7 @@ public abstract class UIComponent : InitializableComponent {
         Initialize(null, mediator, references);
     }
 
-    /// <summary>
-    /// Legacy initialization method for backward compatibility.
-    /// Will be removed once all code is migrated to DI.
-    /// </summary>
-    [Obsolete("Use Initialize with explicit dependencies (IGameMediator, IGameReferences) instead", true)] // true = error
-    public virtual void Initialize(IPlayer player = null) {
-        if (Player == null) {
-            Player = player;
-        }
 
-        if (IsInitialized) return;
-
-        // Ensure dependencies are initialized and get them from singletons
-        if (!InitializationManager.Instance.IsComponentInitialized<GameMediator>()) {
-            Debug.LogWarning($"{GetType().Name}: GameMediator not initialized yet");
-            return;
-        }
-
-        // Get dependencies from singletons and direct find
-        gameMediator = GameMediator.Instance;
-        gameReferences = UnityEngine.Object.FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
-        gameManager = GameManager.Instance;
-
-        RegisterEvents();
-        base.Initialize();
-
-        // Fire the UnityEvent when initialization is complete
-        onInitialized.Invoke();
-    }
 
     protected virtual void OnEnable() {
         if (IsInitialized && !hasBeenDestroyed) {

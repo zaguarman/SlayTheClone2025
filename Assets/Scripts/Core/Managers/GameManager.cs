@@ -253,47 +253,9 @@ public class GameManager : InitializableComponent, IGameManager {
         Log("GameManager Initialization complete.", LogTag.Initialization);
     }
 
-    // Overload for convenience if TurnManager or ModFactory are provided elsewhere (e.g., singletons for now)
-    // Mark as obsolete to encourage using the main injection method
-    [Obsolete("Use Initialize with all dependencies injected.")]
-    public void Initialize(IGameMediator mediator, IGameReferences references) {
-        if (IsInitialized) return;
-        LogWarning("Using obsolete GameManager Initialize method. Dependencies should be injected.", LogTag.Initialization);
-        // Provide default dependencies (using singletons temporarily)
-        var turnManager = FindObjectOfType<TurnManager>(); // Find TurnManager in scene
-        if (turnManager == null) {
-            LogError("Cannot find TurnManager in scene. Initialization failed.", LogTag.Initialization);
-            return;
-        }
-        IModifierFactory modifierFactory = new SimpleModifierFactory(); // Create default factory
-        Initialize(mediator, references, turnManager, modifierFactory);
-    }
 
-    // Hide the base Initialize method with a new implementation
-    // This is safer than using Obsolete with error=true which can cause compiler errors
-    // when the base class method is called through the interface
-    public new void Initialize() {
-        LogError("GameManager.Initialize() without parameters should not be called. Use Initialize with dependencies.", LogTag.Initialization);
-        // This method should not be called directly, but we don't want to break the interface
-        // If called through IInitializable, provide a fallback implementation
-        if (!IsInitialized) {
-            // Fallback to using singletons and direct find
-            var mediator = GameMediator.Instance;
-            var references = FindObjectOfType<GameReferences>(); // Direct find since GameReferences is no longer a singleton
-            if (mediator != null && references != null) {
-                // Use the full Initialize method with dependencies
-                var tm = FindObjectOfType<TurnManager>();
-                if (tm != null) {
-                    IModifierFactory mf = new SimpleModifierFactory();
-                    Initialize(mediator, references, tm, mf);
-                } else {
-                    LogError("Cannot find TurnManager in scene. Initialization failed.", LogTag.Initialization);
-                }
-            } else {
-                LogError("Cannot initialize GameManager - dependencies not available", LogTag.Initialization);
-            }
-        }
-    }
+
+
 
     #endregion
     #endregion
