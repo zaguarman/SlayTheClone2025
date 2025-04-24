@@ -34,16 +34,27 @@ public class ModifyActionExecutor : IActionExecutor
         // Get Dependencies from Context
         var modifierManager = context.ModifierManager;
         var factory = context.ModifierFactory;
+        var turnManager = context.TurnManager; // <<< Get TurnManager from context
 
         if (modifierManager == null || factory == null)
         {
-            LogError($"ModifyActionExecutor: ModifierManager or Factory is null in context.", LogTag.Actions | LogTag.Effects);
+            LogError($"ModifyActionExecutor: ModifierManager or Factory is null in context.", LogTag.Actions | LogTag.Effects | LogTag.Initialization);
             return;
         }
+        // --- Added Check for TurnManager ---
+        if (turnManager == null)
+        {
+             LogError($"ModifyActionExecutor: TurnManager is null in context. Cannot process timed modifiers.", LogTag.Actions | LogTag.Effects | LogTag.Initialization);
+             // Depending on requirements, you might want to allow non-timed modifiers
+             // or simply return if duration > 0. For simplicity, let's return if missing.
+             return;
+        }
+        // --- End Added Check ---
+
 
         // Execute Logic
-        // Get current turn number for timed modifiers
-        int currentTurn = GameManager.Instance?.TurnManager?.TurnNumber ?? 0;
+        // Get current turn number for timed modifiers using the context
+        int currentTurn = turnManager.TurnNumber; // <<< FIXED: Use context.TurnManager
 
         // Create and apply modifiers via the ModifierManager
         if (modifyAttack && value != 0)
