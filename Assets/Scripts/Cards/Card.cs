@@ -16,7 +16,7 @@ public class Card : Entity, ICard {
     public Card(string name) : base(name) {
         Effects = new List<CardEffect>();
         Description = "";
-        CardId = System.Guid.NewGuid().ToString(); // Generate a unique ID on creation
+        CardId = System.Guid.NewGuid().ToString();
     }
 
     public Card(string name, string cardId) : base(name) {
@@ -27,7 +27,6 @@ public class Card : Entity, ICard {
 
     public virtual void Play(IPlayer owner, IActionsQueue context, ITarget target = null) {
         Log($"[Card] Playing {Name} with {Effects.Count} effects and target {target?.TargetId ?? "null"}", LogTag.Cards | LogTag.Actions);
-        // Base implementation for non-creature cards
         foreach (var effect in Effects) {
             Log($"[Card] Processing effect with trigger {effect.trigger}", LogTag.Cards | LogTag.Actions | LogTag.Effects);
         }

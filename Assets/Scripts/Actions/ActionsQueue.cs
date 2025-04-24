@@ -15,7 +15,6 @@ public class ActionsQueue : IActionsQueue {
     private int currentIterationDepth = 0;
     private readonly int maxIterationDepth = 3;
 
-    // Dependencies
     private readonly IGameMediator gameMediator;
     private readonly IBattlefieldCombatHandler combatHandler;
     private readonly IWeatherSystem weatherSystem;
@@ -23,7 +22,6 @@ public class ActionsQueue : IActionsQueue {
     private readonly IGameReferences gameReferences;
     private readonly IModifierManager modifierManager;
 
-    // Executor related fields
     private readonly Dictionary<Type, IActionExecutor> _actionExecutors;
     private readonly IActionExecutor _defaultExecutor;
     private readonly ActionExecutionContext _executionContext;
@@ -52,7 +50,6 @@ public class ActionsQueue : IActionsQueue {
     #endregion
 
     #region Constructor
-    // Updated Constructor to accept all dependencies including executors
     public ActionsQueue(
         IGameMediator gameMediator,
         IBattlefieldCombatHandler combatHandler,
@@ -70,11 +67,9 @@ public class ActionsQueue : IActionsQueue {
         this.gameReferences = gameReferences ?? throw new ArgumentNullException(nameof(gameReferences));
         this.modifierManager = modifierManager ?? throw new ArgumentNullException(nameof(modifierManager));
 
-        // Store executor map and default
         _actionExecutors = actionExecutors ?? new Dictionary<Type, IActionExecutor>();
         _defaultExecutor = defaultExecutor ?? new DefaultActionExecutor();
 
-        // Create the context object with all necessary services
         _executionContext = new ActionExecutionContext(
             gameMediator,
             gameReferences,
@@ -82,7 +77,7 @@ public class ActionsQueue : IActionsQueue {
             weatherSystem,
             modifierManager,
             modifierManager.ModifierFactory,
-            this, // Pass self (IActionsQueue) to context
+            this,
             combatHandler
         );
 
@@ -91,7 +86,6 @@ public class ActionsQueue : IActionsQueue {
     #endregion
 
     #region Methods
-    // Get the base priority of an action type
     private int GetActionPriority(IGameAction action) {
         return action switch {
             SummonCreatureAction => -1,
@@ -99,18 +93,15 @@ public class ActionsQueue : IActionsQueue {
             PlayCardAction => 1,
             BattlefieldCombatAction => 4,
             DamageCreatureAction or DamagePlayerAction => 5,
-            DiscardHandAction => 6, // Discard hand should happen after all other actions
-            DrawCardsAction => 7,   // Draw cards should happen after discarding hand
+            DiscardHandAction => 6,
+            DrawCardsAction => 7,
             _ => 8
         };
     }
 
-    // Get the speed of a creature involved in an action (if any)
     private int GetActionSpeed(IGameAction action) {
-        // Default speed is 1 if no creature is involved
         int speed = 1;
 
-        // Extract the creature from the action based on action type
         ICreature creature = action switch {
             BattlefieldCombatAction combatAction => combatAction.GetAttacker(),
             DamageCreatureAction damageAction => damageAction.GetAttacker(),
@@ -118,10 +109,8 @@ public class ActionsQueue : IActionsQueue {
             _ => null
         };
 
-        // If we found a creature, use its speed
         if (creature != null) {
             speed = creature.Speed;
-            // Log($"Action {action.GetType().Name} has speed {speed} from creature {creature.Name}", LogTag.Actions);
         }
 
         return speed;
@@ -214,16 +203,12 @@ public class ActionsQueue : IActionsQueue {
         processedEffects.Clear();
         Log("Cleared processed effects for new resolution chain (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Effects);
 
-        // Only set queueChanged once if we process any actions
         bool queueChanged = actionsList.Count > 0;
 
-        // Process all actions in the queue
         while (actionsList.Count > 0) {
-            // Dequeue the action
             var action = actionsList[0];
-            actionsList.RemoveAt(0); // Remove the first element
+            actionsList.RemoveAt(0);
 
-            // Handle creature-specific bookkeeping
             string activeCreatureId = GetActiveCreatureId(action);
             if (activeCreatureId != null) {
                 activeCreatureActions.Remove(activeCreatureId);
@@ -231,7 +216,6 @@ public class ActionsQueue : IActionsQueue {
 
             Log($"Processing action: {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
 
-            // --- STRATEGY PATTERN EXECUTION ---
             IActionExecutor executor = _actionExecutors.TryGetValue(action.GetType(), out var specificExecutor)
                                         ? specificExecutor
                                         : _defaultExecutor;
@@ -240,15 +224,12 @@ public class ActionsQueue : IActionsQueue {
 
             try
             {
-                // Execute using the chosen strategy and the shared context
                 executor.Execute(action, _executionContext);
             }
             catch (Exception ex)
             {
                 LogError($"Error executing action {action.GetType().Name} via {executor.GetType().Name}: {ex.Message}\n{ex.StackTrace}", LogTag.Actions);
-                // Decide how to handle errors - skip action, stop queue? For now, log and continue.
             }
-            // --- END STRATEGY PATTERN ---
         }
 
         currentIterationDepth--;

@@ -8,63 +8,56 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Tests")]
 
 public interface ICreature : ICard {
-    int Attack { get; }        // Effective attack
-    int Health { get; }        // Current health
-    int Speed { get; }         // Effective speed
-    int MaxHealth { get; }     // Effective max health
-    int CurrentArmorPool { get; } // NEW: Current value of the armor pool
+    int Attack { get; }
+    int Health { get; }
+    int Speed { get; }
+    int MaxHealth { get; }
+    int CurrentArmorPool { get; }
     int BaseAttack { get; }
     int BaseHealth { get; }
-    int BaseSpeed { get; }  // Added BaseSpeed
+    int BaseSpeed { get; }
     BattlefieldSlot Slot { get; set; }
-    void TakeHealthDamage(int healthDamage, ICreature attacker); // Renamed, only affects health
-    void ModifyArmorPool(int amount); // NEW: Method to change the armor pool
+    void TakeHealthDamage(int healthDamage, ICreature attacker);
+    void ModifyArmorPool(int amount);
     IPlayer Owner { get; }
     void SetOwner(IPlayer owner);
-    // Internal method for ModifierManager to update calculated stats
-    void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed); // Removed armor
+    void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed);
 }
 
 public class Creature : Card, ICreature {
-    // Base stats (read-only after initialization)
     public int BaseAttack { get; private set; }
     public int BaseHealth { get; private set; }
-    public int BaseSpeed { get; private set; } // Added BaseSpeed
+    public int BaseSpeed { get; private set; }
 
-    // Effective stats (calculated and set by ModifierManager)
     private int _effectiveAttack;
     private int _effectiveMaxHealth;
-    private int _effectiveSpeed; // Added effective speed
-    public int CurrentArmorPool { get; private set; } // NEW: Armor Pool property
+    private int _effectiveSpeed;
+    public int CurrentArmorPool { get; private set; }
 
-    // Current health tracking
     private int currentHealth;
     private bool isDead = false;
 
-    // Public properties accessing calculated/current stats
     public int Attack => _effectiveAttack;
     public int MaxHealth => _effectiveMaxHealth;
-    public int Speed => _effectiveSpeed; // Added Speed property
+    public int Speed => _effectiveSpeed;
     public int Health => currentHealth;
 
     public IPlayer Owner { get; private set; }
     public BattlefieldSlot Slot { get; set; }
 
-    private ICreature lastAttacker; // Keep for OnDamage effect context
+    private ICreature lastAttacker;
 
-    // Updated Constructor with speed
     public Creature(string name, int attack, int health, int speed, string cardId) : base(name, cardId) {
         BaseAttack = attack;
         BaseHealth = health;
-        BaseSpeed = Math.Max(0, speed); // Ensure base speed isn't negative
+        BaseSpeed = Math.Max(0, speed);
         currentHealth = health;
-        _effectiveAttack = attack; // Initial effective stats match base stats
+        _effectiveAttack = attack;
         _effectiveMaxHealth = health;
-        _effectiveSpeed = BaseSpeed; // Initialize effective speed
-        CurrentArmorPool = 0; // Initialize armor pool to 0
+        _effectiveSpeed = BaseSpeed;
+        CurrentArmorPool = 0;
     }
 
-    // Updated internal method signature - removed armor parameter
     public void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed)
     {
         int oldMaxHealth = _effectiveMaxHealth;
@@ -81,17 +74,14 @@ public class Creature : Card, ICreature {
 
         currentHealth = Math.Min(currentHealth, _effectiveMaxHealth);
         currentHealth = Math.Max(0, currentHealth);
-
-        // Log($"Updated Effective Stats for {Name}: A:{Attack}, H:{Health}/{MaxHealth}, S:{Speed}", LogTag.Creatures | LogTag.Effects);
     }
 
-    // NEW: Method to modify the armor pool directly
     public void ModifyArmorPool(int amount) {
         int previousArmor = CurrentArmorPool;
         CurrentArmorPool += amount;
-        CurrentArmorPool = Math.Max(0, CurrentArmorPool); // Armor cannot go below 0
+        CurrentArmorPool = Math.Max(0, CurrentArmorPool);
         Log($"{Name} armor changed by {amount}. Previous: {previousArmor}, New: {CurrentArmorPool}", LogTag.Effects | LogTag.Creatures | LogTag.Combat);
-        GameMediator.Instance?.NotifyCreatureArmorChanged(this, CurrentArmorPool); // Notify UI
+        GameMediator.Instance?.NotifyCreatureArmorChanged(this, CurrentArmorPool);
     }
 
     public void SetOwner(IPlayer owner) {
@@ -102,40 +92,31 @@ public class Creature : Card, ICreature {
         Log($"Playing {Name} (TargetID: {TargetId.ToUpper()}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Cards | LogTag.Actions);
         Owner = owner;
 
-        // Determine if summoning from hand or deck (important for SummonCreatureAction)
         bool fromHand = owner?.Hand.Contains(this) ?? false;
-
-        // Add SummonCreatureAction to the queue
-        // The action itself will handle registration with ModifierManager
-        context.AddAction(new SummonCreatureAction(this, owner, target, !fromHand)); // fromDeck = !fromHand
+        context.AddAction(new SummonCreatureAction(this, owner, target, !fromHand));
     }
 
-    // Renamed: Now only handles HEALTH damage
     public void TakeHealthDamage(int healthDamage, ICreature attacker) {
         if (isDead || healthDamage <= 0) return;
 
         lastAttacker = attacker;
         int previousHealth = currentHealth;
 
-        // Apply damage directly to health
-        int actualDamageDealt = Math.Min(healthDamage, currentHealth); // Damage cannot exceed current health
+        int actualDamageDealt = Math.Min(healthDamage, currentHealth);
         currentHealth -= actualDamageDealt;
-        currentHealth = Math.Max(0, currentHealth); // Ensure health doesn't go below 0
+        currentHealth = Math.Max(0, currentHealth);
 
-        // Log health damage
         string attackerName = attacker != null ? $"{attacker.Name} (ID: {attacker.TargetId.ToUpper().Substring(0, 8)})" : "Source";
         string damageLog = $"{attackerName} dealt {actualDamageDealt} damage directly to {Name}'s health (ID: {TargetId.ToUpper().Substring(0, 8)}). ";
         damageLog += $"Health: {previousHealth} -> {Health}.";
         Log(damageLog, LogTag.Creatures | LogTag.Combat | LogTag.Effects);
 
-        // Trigger OnDamage effects
         var gameManager = GameManager.Instance;
         if (gameManager?.ActionsQueue != null) {
             HandleEffect(EffectTrigger.OnDamage, gameManager.ActionsQueue);
         }
 
-        // Notify Mediator about health damage
-        GameMediator.Instance?.NotifyCreatureDamaged(this, actualDamageDealt); // Notify UI etc. about health change
+        GameMediator.Instance?.NotifyCreatureDamaged(this, actualDamageDealt);
 
         if (Health <= 0 && !isDead) {
             Die();
@@ -149,117 +130,90 @@ public class Creature : Card, ICreature {
         isDead = true;
         Log($"Creature died: {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures);
 
-        // Trigger OnDeath CardEffects FIRST
         var gameManager = GameManager.Instance;
         if (gameManager?.ActionsQueue != null) {
-            // Log($"Processing OnDeath CardEffects for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
             HandleEffect(EffectTrigger.OnDeath, gameManager.ActionsQueue);
         }
 
-        // Notify Mediator about death SECOND (after OnDeath effects)
-        GameMediator.Instance?.NotifyCreatureDied(this); // For UI, game state checks, etc.
-
-        // Unregister from ModifierManager THIRD
+        GameMediator.Instance?.NotifyCreatureDied(this);
         gameManager?.ModifierManager?.UnregisterCreature(this);
-
-        // Remove from Owner's battlefield LAST (this might trigger UI updates)
-        Owner?.RemoveFromBattlefield(this, false); // false = don't destroy, add to discard
+        Owner?.RemoveFromBattlefield(this, false);
     }
 
-    // --- Updated HandleEffect ---
     public void HandleEffect(EffectTrigger trigger, IActionsQueue actionsQueue) {
-        // Use GameManager.Instance to access systems if Owner might be null (e.g., OnDeath effects)
         var gameManager = GameManager.Instance;
         if (gameManager == null) {
             LogError($"Cannot handle effect {trigger} for {Name} - GameManager instance is null.", LogTag.Effects | LogTag.Creatures);
             return;
         }
         var modifierManager = gameManager.ModifierManager;
-        var factory = modifierManager?.ModifierFactory; // Access factory through interface property
+        var factory = modifierManager?.ModifierFactory;
 
-        // Check if processed
         if (actionsQueue.IsEffectProcessed(TargetId, trigger)) {
-            // Log($"Skipping already processed {trigger} effect for {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Effects);
             return;
         }
 
         Log($"Handling {trigger} effect for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects);
 
-        foreach (var effect in Effects.Where(e => e.trigger == trigger).ToList()) { // ToList() to avoid modification issues if effect adds another effect
+        foreach (var effect in Effects.Where(e => e.trigger == trigger).ToList()) {
             Log($"-- Processing Effect: Trigger={effect.trigger}, Type={effect.effectType}, Actions={effect.actions.Count}", LogTag.Effects);
             foreach (var action in effect.actions) {
                  Log($"---- Action: Type={action.actionType}, Target={action.targetType}, Value={action.value}, Status={action.statusEffectToApply}", LogTag.Effects);
 
-                // --- Refactored Logic ---
                 switch (action.actionType) {
                     case ActionType.Damage:
-                        // Immediate damage (OnPlay, OnDeath) - Queue action directly
                         ProcessDamageEffect(action, actionsQueue);
                         break;
                     case ActionType.Heal:
-                        // Immediate heal (OnPlay, OnDeath) - Queue action directly
                         ProcessHealEffect(action, actionsQueue);
                         break;
                     case ActionType.Draw:
-                        // Immediate draw - Queue action directly
                         ProcessDrawEffect(action, actionsQueue);
                         break;
                     case ActionType.Summon:
-                        // Immediate summon - Queue action directly
                         ProcessSummonEffect(action, actionsQueue);
                         break;
                     case ActionType.ModifyStat:
-                        // Pass modifySpeed flag
                         ProcessModifyStatModifier(action, modifierManager, factory, action.modifySpeed);
                         break;
                     case ActionType.ApplyStatus:
-                         // Apply as a Modifier via ModifierManager
                         ProcessApplyStatusModifier(action, modifierManager, factory);
                         break;
-                    // Add cases for ActionType.Armor, ActionType.Stun etc.
-                    // Armor might apply a temporary StatModifier for a "Defense" stat or reduce incoming damage via an event modifier.
-                    // Stun might apply a StatusEffectModifier (e.g., Paralyzed).
-                     case ActionType.Stun: // Example: Map Stun to Paralyzed Status
+                    case ActionType.Stun:
                         action.statusEffectToApply = StatusEffectType.Paralyzed;
-                        action.statusDuration = action.value; // Use 'value' for duration
+                        action.statusDuration = action.value;
                         action.statusPotency = 0;
                         ProcessApplyStatusModifier(action, modifierManager, factory);
                         break;
                     case ActionType.Armor:
-                        // NEW: Queue an action to modify the armor pool
                         ProcessModifyArmorAction(action, actionsQueue);
                         break;
                 }
             }
         }
 
-        actionsQueue.MarkEffectProcessed(TargetId, trigger); // Mark as processed *after* handling all actions for this trigger
+        actionsQueue.MarkEffectProcessed(TargetId, trigger);
         Log($"Marked {trigger} effect as processed for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)})", LogTag.Effects);
     }
 
-    // --- Keep existing direct action queuing methods (Damage, Heal, Draw, Summon) ---
-    // These are now primarily for immediate effects (OnPlay, OnDeath)
     private void ProcessDamageEffect(EffectAction action, IActionsQueue actionsQueue) {
-         // Ensure Owner exists if targeting others
         if (Owner == null && action.targetType != TargetType.Self && lastAttacker == null) {
             LogError($"Damage Effect: Cannot target others for {Name} - Owner is null and not self/retaliation.", LogTag.Effects);
             return;
         }
 
-        // Retaliation
         if (lastAttacker != null && action.targetType == TargetType.AllCreatures && Effects.Any(e => e.trigger == EffectTrigger.OnDamage)) {
             Log($"Queueing Retaliation DamageAction: Attacker={lastAttacker.Name}, Damage={action.value}", LogTag.Effects);
             actionsQueue.AddAction(new DamageCreatureAction(lastAttacker, action.value, this));
             return;
         }
-         // Self Damage
+
         if (action.targetType == TargetType.Self) {
              Log($"Queueing Self DamageAction: Target={Name}, Damage={action.value}", LogTag.Effects);
             actionsQueue.AddAction(new DamageCreatureAction(this, action.value, this));
             return;
         }
 
-        // Normal Targeting (Requires Owner)
         var targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
          Log($"Damage Effect: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
         foreach (var target in targets) {
@@ -309,12 +263,10 @@ public class Creature : Card, ICreature {
              LogError($"Summon Effect: Cannot process for {Name} - Owner is null.", LogTag.Effects);
              return;
          }
-         // Existing logic... (finding creatures, finding slots, queuing action)
-         // ...
+
          Log($"Processing summon effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {action.value}",
             LogTag.Creatures | LogTag.Actions);
 
-        // Handle summoning based on targeting
         IPlayer targetPlayer = Owner;
         if (action.targetType == TargetType.Enemy) {
             targetPlayer = Owner.Opponent;
@@ -323,7 +275,6 @@ public class Creature : Card, ICreature {
             return;
         }
 
-        // Get available creature cards from the deck
         var gameManager = GameManager.Instance;
         if (gameManager?.CardDealingService == null) return;
 
@@ -336,7 +287,6 @@ public class Creature : Card, ICreature {
             return;
         }
 
-        // Find valid slots
         var validSlots = targetPlayer.Battlefield.Where(s => !s.IsOccupied()).ToList();
         if (validSlots.Count == 0) {
             Log($"No valid slots available for {(targetPlayer.IsPlayer1() ? "Player 1" : "Player 2")} (TargetID: {targetPlayer.TargetId.ToUpper()}) to summon creatures",
@@ -344,31 +294,25 @@ public class Creature : Card, ICreature {
             return;
         }
 
-        // Determine how many creatures to summon (up to value, but limited by available slots/creatures)
         int countToSummon = Math.Min(action.value, Math.Min(validSlots.Count, creaturesInDeck.Count));
         var random = new System.Random();
 
         for (int i = 0; i < countToSummon; i++) {
-            // Select a random creature from the deck
             int creatureIndex = random.Next(creaturesInDeck.Count);
             var creatureToSummon = creaturesInDeck[creatureIndex] as ICreature;
             if (creatureToSummon == null) continue;
 
-            // Remove it from our local list to avoid duplicates
             creaturesInDeck.RemoveAt(creatureIndex);
 
-            // Select a random valid slot
             int slotIndex = random.Next(validSlots.Count);
             var slot = validSlots[slotIndex];
             validSlots.RemoveAt(slotIndex);
 
-            // Add summon action (with fromDeck=true since we're summoning from deck)
             actionsQueue.AddAction(new SummonCreatureAction(creatureToSummon, targetPlayer, slot, true));
 
              Log($"Queued summon effect for {creatureToSummon.Name} (TargetID: {creatureToSummon.TargetId.ToUpper()}) to slot (TargetID: {slot.TargetId.ToUpper()})",
                 LogTag.Creatures | LogTag.Effects | LogTag.Actions);
         }
-         // ...
     }
 
     // --- NEW: Methods to apply modifiers ---
