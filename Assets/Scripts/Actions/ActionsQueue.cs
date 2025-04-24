@@ -21,6 +21,7 @@ public class ActionsQueue : IActionsQueue {
     private readonly ICardDealingService cardDealingService;
     private readonly IGameReferences gameReferences;
     private readonly IModifierManager modifierManager;
+    private readonly ITurnManager turnManager;
 
     private readonly Dictionary<Type, IActionExecutor> _actionExecutors;
     private readonly IActionExecutor _defaultExecutor;
@@ -57,6 +58,7 @@ public class ActionsQueue : IActionsQueue {
         ICardDealingService cardDealingService,
         IGameReferences gameReferences,
         IModifierManager modifierManager,
+        ITurnManager turnManager,
         Dictionary<Type, IActionExecutor> actionExecutors,
         IActionExecutor defaultExecutor)
     {
@@ -66,6 +68,7 @@ public class ActionsQueue : IActionsQueue {
         this.cardDealingService = cardDealingService ?? throw new ArgumentNullException(nameof(cardDealingService));
         this.gameReferences = gameReferences ?? throw new ArgumentNullException(nameof(gameReferences));
         this.modifierManager = modifierManager ?? throw new ArgumentNullException(nameof(modifierManager));
+        this.turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
 
         _actionExecutors = actionExecutors ?? new Dictionary<Type, IActionExecutor>();
         _defaultExecutor = defaultExecutor ?? new DefaultActionExecutor();
@@ -78,7 +81,8 @@ public class ActionsQueue : IActionsQueue {
             modifierManager,
             modifierManager.ModifierFactory,
             this,
-            combatHandler
+            combatHandler,
+            turnManager
         );
 
         Log("ActionsQueue initialized with Strategy Executors.", LogTag.Initialization);

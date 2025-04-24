@@ -30,9 +30,15 @@ public class ApplyStatusEffectActionExecutor : IActionExecutor
         // Get Dependencies from Context
         var modifierManager = context.ModifierManager;
         var factory = context.ModifierFactory;
-        
+        var turnManager = context.TurnManager;
+
         // Need current turn number
-        int currentTurn = GameManager.Instance?.TurnManager?.TurnNumber ?? 0;
+        if (turnManager == null)
+        {
+            LogError($"ApplyStatusEffectActionExecutor: TurnManager is null in context. Cannot apply {statusType} to {targetCreature.Name}.", LogTag.Actions | LogTag.Effects | LogTag.Initialization);
+            return;
+        }
+        int currentTurn = turnManager.TurnNumber;
 
         if (modifierManager == null || factory == null)
         {

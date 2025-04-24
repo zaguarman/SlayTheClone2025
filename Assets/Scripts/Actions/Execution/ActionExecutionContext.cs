@@ -13,6 +13,7 @@ public class ActionExecutionContext
     public IModifierFactory ModifierFactory { get; }
     public IActionsQueue ActionsQueue { get; } // Actions might need to queue more actions
     public IBattlefieldCombatHandler CombatHandler { get; } // Needed for combat/spread damage
+    public ITurnManager TurnManager { get; } // Added for turn-based effects
 
     /// <summary>
     /// Constructor to initialize the context with all required dependencies
@@ -25,7 +26,8 @@ public class ActionExecutionContext
         IModifierManager modifierManager,
         IModifierFactory modifierFactory,
         IActionsQueue actionsQueue,
-        IBattlefieldCombatHandler combatHandler)
+        IBattlefieldCombatHandler combatHandler,
+        ITurnManager turnManager)
     {
         GameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         GameReferences = references ?? throw new ArgumentNullException(nameof(references));
@@ -35,5 +37,6 @@ public class ActionExecutionContext
         ModifierFactory = modifierFactory ?? throw new ArgumentNullException(nameof(modifierFactory));
         ActionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
         CombatHandler = combatHandler ?? throw new ArgumentNullException(nameof(combatHandler));
+        TurnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
     }
 }

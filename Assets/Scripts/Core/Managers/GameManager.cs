@@ -231,6 +231,7 @@ public class GameManager : MonoBehaviour, IGameManager {
             cardDealingService,
             gameReferences,
             ModifierManager,
+            this.turnManager,
             executors,
             defaultExecutor
         );
@@ -324,6 +325,7 @@ public class GameManager : MonoBehaviour, IGameManager {
             cardDealingService,
             gameReferences,
             ModifierManager,
+            this.turnManager,
             executors,
             defaultExecutor
         );
