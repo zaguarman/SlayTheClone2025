@@ -19,11 +19,11 @@ public class DeckViewController : UIComponent {
     // isInitialized is inherited from UIComponent base class
 
     // Override Initialize from UIComponent
-    public override void Initialize(IGameMediator mediator, IGameReferences references) {
+    public override void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
         if (IsInitialized) return; // Prevent double initialization
 
         // Call base Initialize FIRST to set mediator/references/manager fields
-        base.Initialize(mediator, references); // Pass null for player
+        base.Initialize(mediator, references, manager); // Pass manager
 
         if (gameManager != null && gameReferences.AreReferencesValid()) {
             GetUIReferences(); // Get references using the now-set gameReferences
@@ -193,7 +193,7 @@ public class DeckViewController : UIComponent {
             // Initialize DeckViewUI using the NEW signature
             if (!deckViewUI.IsInitialized) {
                 // DeckViewUI doesn't need a specific player for initialization
-                deckViewUI.Initialize(gameMediator, gameReferences);
+                deckViewUI.Initialize(gameMediator, gameReferences, gameManager);
                 Log("Initialized DeckViewUI with dependencies", LogTag.UI);
             }
 

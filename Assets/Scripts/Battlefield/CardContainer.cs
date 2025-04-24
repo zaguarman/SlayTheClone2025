@@ -72,9 +72,9 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
         // Override in derived classes if needed
     }
 
-    public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references) {
+    public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
         // Call base UIComponent Initialize FIRST
-        base.Initialize(player, mediator, references);
+        base.Initialize(player, mediator, references, manager);
 
         // Now do CardContainer specific setup
         containerRect = GetComponent<RectTransform>();
@@ -223,7 +223,7 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
         UpdateLayout();
     }
 
-    protected virtual CardController CreateCard(ICard card) {
+    protected virtual CardController CreateCard(ICard card, IGameManager manager = null) {
         // Use the gameMediator and gameReferences fields inherited from UIComponent
 
         // Get the original CardData for this card
@@ -257,7 +257,9 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
             LogWarning($"Could not create CardData for {card.Name}, display may not be accurate", LogTag.Cards);
         }
 
-        return CardFactory.CreateCardController(card, originalData, Player, transform, gameMediator, gameReferences);
+        // Use the passed manager or fall back to the gameManager from UIComponent
+        IGameManager managerToUse = manager ?? gameManager;
+        return CardFactory.CreateCardController(card, originalData, Player, transform, gameMediator, gameReferences, managerToUse); // Pass gameManager
     }
 
     public virtual void AddCard(CardController card) {

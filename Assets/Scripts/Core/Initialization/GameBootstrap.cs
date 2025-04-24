@@ -41,16 +41,14 @@ public class GameBootstrap : MonoBehaviour
              yield break;
         }
 
-        // 2. Initialize Mediator
-        // Assuming GameMediator is in the scene and uses Singleton pattern for access
-        var gameMediator = GameMediator.Instance;
-         if (gameMediator == null || !FindObjectOfType<GameMediator>()) {
+        // 2. Initialize Mediator (Find and call Initialize)
+        var gameMediator = FindObjectOfType<GameMediator>(); // Find the instance
+         if (gameMediator == null) {
              LogError("GameMediator instance not found in scene! Initialization cannot proceed.", LogTag.Initialization);
              yield break;
          }
-        if (!gameMediator.IsInitialized)
-        {
-            gameMediator.Initialize();
+        if (!gameMediator.IsInitialized) {
+            gameMediator.Initialize(); // Call its initialize method
             yield return new WaitUntil(() => gameMediator.IsInitialized);
         }
         Log("GameMediator initialized", LogTag.Initialization);
@@ -93,8 +91,8 @@ public class GameBootstrap : MonoBehaviour
         }
         if (!gameUI.IsInitialized)
         {
-            // Pass the dependencies explicitly to GameUI
-            gameUI.Initialize(gameMediator, gameReferences);
+            // Pass the found gameManager instance
+            gameUI.Initialize(gameMediator, gameReferences, gameManager);
             yield return new WaitUntil(() => gameUI.IsInitialized);
         }
         Log("GameUI initialized", LogTag.Initialization);

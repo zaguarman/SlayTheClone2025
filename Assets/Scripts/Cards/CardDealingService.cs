@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using static DebugLogger;
 
 public interface ICardDealingService {
-    void InitializeDecks(List<CardData> player1Cards, List<CardData> player2Cards);
+    void InitializeDecks(IPlayer player1, List<CardData> player1Cards, IPlayer player2, List<CardData> player2Cards);
     void DealInitialHands(IPlayer player1, IPlayer player2, int handSize = 6);
     bool CanDrawCard(IPlayer player);
     void DrawCardForPlayer(IPlayer player);
@@ -26,24 +26,31 @@ public class CardDealingService : ICardDealingService {
         this.gameMediator = gameMediator;
     }
 
-    public void InitializeDecks(List<CardData> player1Cards, List<CardData> player2Cards) {
-        Log($"Initializing decks - Player1 cards: {player1Cards.Count}, Player2 cards: {player2Cards.Count}", LogTag.Cards);
-
-        var gameManager = GameManager.Instance;
-        if (gameManager == null) {
-            LogError("GameManager not found when initializing decks", LogTag.Cards | LogTag.Initialization);
+    public void InitializeDecks(IPlayer player1, List<CardData> player1Cards, IPlayer player2, List<CardData> player2Cards) {
+        if (player1 == null || player2 == null)
+        {
+            LogError("Cannot initialize decks - player instances are null.", LogTag.Cards | LogTag.Initialization);
             return;
         }
+        Log($"Initializing decks - Player1 cards: {player1Cards?.Count ?? 0}, Player2 cards: {player2Cards?.Count ?? 0}", LogTag.Cards);
 
         // Create and initialize deck for Player 1
-        var player1Deck = gameManager.Player1.Deck as Deck;
+        var player1Deck = player1.Deck as Deck; // Assuming Deck is concrete, maybe use IDeck if possible
+        if (player1Deck == null) {
+             LogError("Player 1 Deck is null or not of type Deck", LogTag.Cards | LogTag.Initialization);
+             return;
+        }
         player1Deck.Initialize(player1Cards);
-        playerDecks[gameManager.Player1] = player1Deck;
+        playerDecks[player1] = player1Deck;
 
         // Create and initialize deck for Player 2
-        var player2Deck = gameManager.Player2.Deck as Deck;
+        var player2Deck = player2.Deck as Deck;
+        if (player2Deck == null) {
+             LogError("Player 2 Deck is null or not of type Deck", LogTag.Cards | LogTag.Initialization);
+             return;
+        }
         player2Deck.Initialize(player2Cards);
-        playerDecks[gameManager.Player2] = player2Deck;
+        playerDecks[player2] = player2Deck;
 
         Log("Card dealing service initialized decks successfully", LogTag.Cards | LogTag.Initialization);
     }

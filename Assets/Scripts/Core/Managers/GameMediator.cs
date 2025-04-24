@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
 using static DebugLogger;
 
@@ -6,7 +7,9 @@ using static DebugLogger;
 /// GameMediator serves as the central event hub for game events and notifications.
 /// It implements IGameMediator to support dependency injection.
 /// </summary>
-public class GameMediator : Singleton<GameMediator>, IGameMediator {
+public class GameMediator : MonoBehaviour, IGameMediator {
+    // Implement IsInitialized property
+    public bool IsInitialized { get; private set; }
     #region Game Events Class
     private class GameEvents {
         public readonly UnityEvent<IPlayer, int> PlayerDamaged = new UnityEvent<IPlayer, int>();
@@ -46,6 +49,14 @@ public class GameMediator : Singleton<GameMediator>, IGameMediator {
     private readonly HashSet<IPlayer> registeredPlayers = new HashSet<IPlayer>();
     private bool gameInitialized = false;
     #endregion
+
+    // Add Initialize method
+    public void Initialize()
+    {
+        if (IsInitialized) return;
+        IsInitialized = true;
+        Log("GameMediator Initialized", LogTag.Initialization);
+    }
 
     #region Methods
     public void AddGameStateChangedListener(UnityAction listener) {
@@ -324,12 +335,10 @@ public class GameMediator : Singleton<GameMediator>, IGameMediator {
     #endregion
 
     #region Unity Lifecycle
-    protected override void OnDestroy() {
-        if (this == Instance) {
-            events.ClearAllListeners();
-            registeredPlayers.Clear();
-        }
-        base.OnDestroy();
+    protected void OnDestroy() { // Changed from override
+        events.ClearAllListeners();
+        registeredPlayers.Clear();
+        IsInitialized = false; // Mark as not initialized on destroy
     }
     #endregion
 }

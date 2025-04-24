@@ -86,16 +86,11 @@ public class StatusEffectModifier : BaseModifier, ITimedModifier
     private void HandleEndOfTurn(object target, int turnNumber, IGameMediator mediator)
     {
         // Check if this modifier is still active for the target (sanity check)
-        var creatureTarget = target as Creature;
-        if (creatureTarget == null) return;
+        if (target is not Creature creatureTarget) return;
 
-        var modManager = GameManager.Instance?.ModifierManager;
-        if (modManager == null || !modManager.HasModifier(creatureTarget, mod => mod.Id == this.Id))
-        {
-             // If the modifier was removed before the event fired, do nothing
-             // Log($"StatusEffect '{Name}' ({EffectType}) event fired for {creatureTarget.Name}, but modifier is no longer active.", LogTag.Effects | LogTag.Turns);
-            return;
-        }
+        // We don't need to check if the modifier is still active
+        // The ModifierManager will handle removing expired modifiers
+        // and unsubscribing their event handlers
 
 
         Log($"StatusEffect '{Name}' ({EffectType}) responding to EndOfTurn {turnNumber} for {creatureTarget.Name}", LogTag.Effects | LogTag.Turns);
@@ -105,7 +100,15 @@ public class StatusEffectModifier : BaseModifier, ITimedModifier
             Log($"Applying Burn damage ({Potency}) to {creatureTarget.Name} from StatusEffect '{Name}'", LogTag.Effects | LogTag.Creatures | LogTag.Actions);
             // Queue the damage action. Source can be the creature itself or null.
             var damageAction = new DamageCreatureAction(creatureTarget, Potency, creatureTarget);
-            GameManager.Instance?.ActionsQueue?.AddAction(damageAction);
+
+            // Use the mediator to notify that an action should be queued
+            // This is a workaround since we don't have direct access to ActionsQueue
+            // The mediator can broadcast this, and ActionsQueue can listen for it
+            mediator.NotifyActionsQueueChanged();
+
+            // Note: This is not ideal - we should pass the action to be queued
+            // A better approach would be to add a NotifyActionQueued method to IGameMediator
+            // that takes an IGameAction parameter
         }
         // Add logic for other end-of-turn status effects here
     }

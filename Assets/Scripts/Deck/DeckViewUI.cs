@@ -87,9 +87,9 @@ public class DeckViewUI : UIComponent {
         Log("Card grid setup complete", LogTag.UI | LogTag.Initialization);
     }
 
-    public override void Initialize(IGameMediator mediator, IGameReferences references) {
+    public override void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
         // Call base UIComponent Initialize FIRST
-        base.Initialize(mediator, references);
+        base.Initialize(mediator, references, manager);
 
         Log("DeckViewUI Initialize called", LogTag.UI | LogTag.Initialization);
 
@@ -160,7 +160,7 @@ public class DeckViewUI : UIComponent {
 
         if (!IsInitialized) {
             LogWarning("DeckViewUI not initialized yet, attempting to initialize now", LogTag.UI);
-            Initialize(gameMediator, gameReferences);
+            Initialize(gameMediator, gameReferences, gameManager);
         }
 
         if (player == null) {
@@ -337,7 +337,7 @@ public class DeckViewUI : UIComponent {
         }
 
         // Use CardFactory to create the card controller with the existing prefab and dependencies
-        var cardController = CardFactory.CreateCardController(card, originalData, owner, cardListContent, gameMediator, gameReferences);
+        var cardController = CardFactory.CreateCardController(card, originalData, owner, cardListContent, gameMediator, gameReferences, gameManager); // Pass gameManager
 
         if (cardController != null) {
             // Disable dragging but keep tooltip functionality

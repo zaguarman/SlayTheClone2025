@@ -53,6 +53,7 @@ public class Creature : Card, ICreature {
     public BattlefieldSlot Slot { get; set; }
 
     private ICreature lastAttacker;
+    private IGameMediator gameMediator; // Add field for gameMediator
 
     public Creature(string name, int attack, int health, int speed, string cardId) : base(name, cardId) {
         BaseAttack = attack;
@@ -97,6 +98,11 @@ public class Creature : Card, ICreature {
 
     public void SetOwner(IPlayer owner) {
         Owner = owner;
+
+        // Get gameMediator from owner if available
+        if (owner is Player player && player.GameMediator != null) {
+            gameMediator = player.GameMediator;
+        }
     }
 
     public override void Play(IPlayer owner, IActionsQueue context, ITarget target = null) {
@@ -153,14 +159,10 @@ public class Creature : Card, ICreature {
             return;
         }
 
-        // Use context dependencies
-        var actionsQueue = context.ActionsQueue;
-        var modifierManager = context.ModifierManager;
-        var factory = context.ModifierFactory;
-        var turnManager = context.TurnManager; // Get TurnManager from context
+        var actionsQueue = context.ActionsQueue; // Get queue from context
 
-        if (actionsQueue == null || modifierManager == null || factory == null || turnManager == null) {
-             LogError($"Cannot handle effect {trigger} for {Name} - Missing dependencies in context.", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
+        if (actionsQueue == null) {
+             LogError($"Cannot handle effect {trigger} for {Name} - ActionsQueue missing from context.", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
              return;
         }
 
@@ -170,7 +172,8 @@ public class Creature : Card, ICreature {
 
         Log($"Handling Action Effect: {trigger} for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects);
 
-        ProcessEffectsInternal(trigger, actionsQueue, modifierManager, factory, turnManager, null); // Pass null for lastAttacker
+        // Pass full context
+        ProcessEffectsInternal(trigger, context);
 
         actionsQueue.MarkEffectProcessed(TargetId, trigger);
         Log($"Marked Action Effect {trigger} as processed for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)})", LogTag.Effects);
@@ -179,37 +182,89 @@ public class Creature : Card, ICreature {
     // Handles effects triggered by turn progression (needs specific interfaces)
     public void HandleTurnBasedEffect(EffectTrigger trigger, IActionsQueue actionsQueue, IModifierManager modifierManager, ITurnManager turnManager)
     {
-        if (IsDead) return; // Don't trigger turn effects if dead
+        if (IsDead) return;
 
         if (actionsQueue == null || modifierManager == null || turnManager == null) {
              LogError($"Cannot handle turn effect {trigger} for {Name} - Missing dependencies.", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
              return;
         }
 
-        // Check IsEffectProcessed using the provided actionsQueue
+        // --- Get GameManager from Owner ---
+        var ownerManager = Owner?.GameManager;
+        if (ownerManager == null)
+        {
+            LogError($"Cannot handle turn effect {trigger} for {Name} - Owner or Owner.GameManager is null.", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
+            return;
+        }
+
+        // --- Get required dependencies from GameManager ---
+        var references = ownerManager.GameReferences;
+        var cardDealingService = ownerManager.CardDealingService;
+        var weatherSystem = ownerManager.WeatherSystem;
+        var combatHandler = ownerManager.CombatHandler;
+        var factory = modifierManager.ModifierFactory; // Still get factory from modifierManager
+
+        // --- Validate fetched dependencies ---
+        if (references == null || cardDealingService == null || weatherSystem == null || combatHandler == null || factory == null)
+        {
+            LogError($"Cannot handle turn effect {trigger} for {Name} - Failed to retrieve dependencies from GameManager.", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
+            return;
+        }
+
         if (actionsQueue.IsEffectProcessed(TargetId, trigger)) {
-             // Log($"Turn-based effect {trigger} for {Name} already processed this cycle.", LogTag.Effects | LogTag.Turns);
             return;
         }
 
         Log($"Handling Turn Effect: {trigger} for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)}) with {Effects.Count} effects", LogTag.Creatures | LogTag.Effects | LogTag.Turns);
 
-        ProcessEffectsInternal(trigger, actionsQueue, modifierManager, modifierManager.ModifierFactory, turnManager, null); // Pass null for lastAttacker
+        // Create the context with VALID dependencies
+        ActionExecutionContext turnContext = new ActionExecutionContext(
+            gameMediator,         // Use the instance variable
+            references,           // Use fetched references
+            cardDealingService,   // Use fetched service
+            weatherSystem,        // Use fetched system
+            modifierManager,      // Use passed parameter
+            factory,              // Use fetched factory
+            actionsQueue,         // Use passed parameter
+            combatHandler,        // Use fetched handler
+            turnManager,          // Use passed parameter
+            ownerManager          // Use fetched GameManager
+        );
 
-        // Mark processed AFTER handling to allow multiple instances in one turn cycle if needed (though currently cleared each cycle)
+        ProcessEffectsInternal(trigger, turnContext);
+
         actionsQueue.MarkEffectProcessed(TargetId, trigger);
         Log($"Marked Turn Effect {trigger} as processed for {Name} (TargetID: {TargetId.ToUpper().Substring(0,8)})", LogTag.Effects | LogTag.Turns);
     }
 
 
     // --- Internal Helper for Processing Effects ---
-    private void ProcessEffectsInternal(EffectTrigger trigger, IActionsQueue actionsQueue, IModifierManager modifierManager, IModifierFactory factory, ITurnManager turnManager, ICreature lastAttacker)
+    private void ProcessEffectsInternal(EffectTrigger trigger, ActionExecutionContext context) // Pass full context
     {
-        if (factory == null) factory = modifierManager?.ModifierFactory; // Ensure factory is available
-
-        if (actionsQueue == null || modifierManager == null || factory == null || turnManager == null) {
-            LogError($"Internal Error: Missing dependencies in ProcessEffectsInternal for {Name} ({trigger}).", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
+        if (context == null) {
+            LogError($"Internal Error: ActionExecutionContext is null in ProcessEffectsInternal for {Name} ({trigger}).", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
             return;
+        }
+
+        // Extract dependencies from context
+        var actionsQueue = context.ActionsQueue;
+        var modifierManager = context.ModifierManager;
+        var factory = context.ModifierFactory;
+        var turnManager = context.TurnManager;
+        var cardDealingService = context.CardDealingService; // Extract card dealing service
+        var gameManagerContext = context.GameManager; // Also get GameManager if needed by effects
+
+        // Adjusted null check: Core dependencies must be present
+        if (actionsQueue == null || modifierManager == null || factory == null || turnManager == null) {
+            LogError($"Internal Error: Missing core dependencies in context for ProcessEffectsInternal for {Name} ({trigger}).", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
+            return;
+        }
+
+        // Check for Summon effects which need cardDealingService
+        if (Effects.Any(e => e.trigger == trigger && e.actions.Any(a => a.actionType == ActionType.Summon)) && cardDealingService == null)
+        {
+            LogError($"Internal Error: CardDealingService is null but required for Summon effect processing for {Name} ({trigger}).", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
+            // We'll continue and let the ProcessSummonEffect method handle the null check
         }
 
         foreach (var effect in Effects.Where(e => e.trigger == trigger).ToList()) {
@@ -219,7 +274,7 @@ public class Creature : Card, ICreature {
 
                 switch (action.actionType) {
                     case ActionType.Damage:
-                        ProcessDamageEffect(action, actionsQueue, lastAttacker); // Pass lastAttacker if needed
+                        ProcessDamageEffect(action, actionsQueue, null); // lastAttacker context needs review
                         break;
                     case ActionType.Heal:
                         ProcessHealEffect(action, actionsQueue);
@@ -228,19 +283,20 @@ public class Creature : Card, ICreature {
                         ProcessDrawEffect(action, actionsQueue);
                         break;
                     case ActionType.Summon:
-                        ProcessSummonEffect(action, actionsQueue, modifierManager); // Need MM to check deck
+                        // Pass full context
+                        ProcessSummonEffect(action, context);
                         break;
                     case ActionType.ModifyStat:
-                        ProcessModifyStatModifier(action, modifierManager, factory, turnManager, action.modifySpeed); // Pass turnManager
+                        ProcessModifyStatModifier(action, modifierManager, factory, turnManager, action.modifySpeed);
                         break;
                     case ActionType.ApplyStatus:
-                        ProcessApplyStatusModifier(action, modifierManager, factory, turnManager); // Pass turnManager
+                        ProcessApplyStatusModifier(action, modifierManager, factory, turnManager);
                         break;
-                    case ActionType.Stun: // Convert Stun to Paralyzed status effect
+                    case ActionType.Stun:
                         action.statusEffectToApply = StatusEffectType.Paralyzed;
                         action.statusDuration = action.value;
-                        action.statusPotency = 0; // Potency not relevant for Paralyzed
-                        ProcessApplyStatusModifier(action, modifierManager, factory, turnManager); // Pass turnManager
+                        action.statusPotency = 0;
+                        ProcessApplyStatusModifier(action, modifierManager, factory, turnManager);
                         break;
                     case ActionType.Armor:
                         ProcessModifyArmorAction(action, actionsQueue);
@@ -316,20 +372,20 @@ public class Creature : Card, ICreature {
         }
     }
 
-    // Updated to use injected ModifierManager to get deck (needs CardDealingService access)
-    private void ProcessSummonEffect(EffectAction action, IActionsQueue actionsQueue, IModifierManager modifierManager) {
+    // Updated to use context.CardDealingService
+    private void ProcessSummonEffect(EffectAction action, ActionExecutionContext context) {
         if (Owner == null) {
              LogError($"Summon Effect: Cannot process for {Name} - Owner is null.", LogTag.Effects);
              return;
         }
 
-        // Need access to CardDealingService - How? ModifierManager doesn't have it.
-        // TEMPORARY WORKAROUND: Use GameManager.Instance ONLY for CardDealingService here.
-        // TODO: Refactor CardDealingService dependency. Maybe pass it into HandleEffect context?
-        var cardDealingService = GameManager.Instance?.CardDealingService;
-        if (cardDealingService == null)
+        // Get dependencies from context
+        var cardDealingService = context.CardDealingService;
+        var actionsQueue = context.ActionsQueue; // Get queue from context too
+
+        if (cardDealingService == null || actionsQueue == null)
         {
-             LogError($"Summon Effect failed for {Name}: CardDealingService instance not found.", LogTag.Effects | LogTag.Initialization);
+             LogError($"Summon Effect failed for {Name}: CardDealingService or ActionsQueue missing from context.", LogTag.Effects | LogTag.Initialization);
              return;
         }
 

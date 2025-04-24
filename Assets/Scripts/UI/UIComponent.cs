@@ -9,7 +9,7 @@ public abstract class UIComponent : MonoBehaviour {
     // Store injected references instead of directly accessing singletons
     protected IGameMediator gameMediator { get; private set; }
     protected IGameReferences gameReferences { get; private set; }
-    protected GameManager gameManager { get; private set; } // Keep for now, will be replaced with interface later
+    protected IGameManager gameManager { get; private set; }
 
     private bool hasBeenDestroyed = false;
 
@@ -24,7 +24,7 @@ public abstract class UIComponent : MonoBehaviour {
     /// <summary>
     /// Initialize the component with a player and dependencies.
     /// </summary>
-    public virtual void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references) {
+    public virtual void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
         // Only initialize once
         if (IsInitialized) return;
 
@@ -32,7 +32,7 @@ public abstract class UIComponent : MonoBehaviour {
         Player = player;
         gameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
         gameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
-        gameManager = GameManager.Instance; // Still using singleton for now
+        gameManager = manager ?? throw new System.ArgumentNullException(nameof(manager));
 
         RegisterEvents();
         IsInitialized = true;
@@ -44,8 +44,29 @@ public abstract class UIComponent : MonoBehaviour {
     /// <summary>
     /// Initialize the component with dependencies but no player.
     /// </summary>
+    public virtual void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
+        Initialize(null, mediator, references, manager);
+    }
+
+    /// <summary>
+    /// Initialize the component with dependencies but no GameManager.
+    /// For components that truly don't need GameManager.
+    /// </summary>
     public virtual void Initialize(IGameMediator mediator, IGameReferences references) {
-        Initialize(null, mediator, references);
+        // Only initialize once
+        if (IsInitialized) return;
+
+        // Store references
+        Player = null; // No player in this context
+        gameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
+        gameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
+        gameManager = null; // Explicitly null
+
+        RegisterEvents();
+        IsInitialized = true;
+
+        // Fire the UnityEvent when initialization is complete
+        onInitialized.Invoke();
     }
 
 

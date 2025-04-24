@@ -98,7 +98,7 @@ public class SummonCreatureActionExecutor : IActionExecutor
         }
 
         // Create Controller and assign to slot
-        var cardController = CardFactory.CreateCardController(creature, originalData, owner, slot.transform, mediator, references);
+        var cardController = CardFactory.CreateCardController(creature, originalData, owner, slot.transform, mediator, references, context.GameManager);
         if (cardController != null)
         {
             slot.AssignCreature(cardController); // Assigns creature AND sets creature.Slot

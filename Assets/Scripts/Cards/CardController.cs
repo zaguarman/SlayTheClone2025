@@ -60,9 +60,10 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     }
 
     // Updated Setup method to accept ICard and store both base data and linked instance
-    public void Setup(CardData data, IPlayer owner, ICard cardInstance, IGameMediator mediator, IGameReferences references) {
+    public void Setup(CardData data, IPlayer owner, ICard cardInstance, IGameMediator mediator, IGameReferences references, IGameManager manager) {
         // Call base Initialize with dependencies FIRST
-        base.Initialize(owner, mediator, references);
+        // Pass all required dependencies, including the manager
+        base.Initialize(owner, mediator, references, manager);
 
         // Now do CardController specific setup
         baseCardData = data;

@@ -4,7 +4,7 @@ using static DebugLogger;
 
 public class TurnUI : UIComponent {
     [SerializeField] private TextMeshProUGUI turnText;
-    private TurnManager turnManager;
+    private ITurnManager turnManager;
 
     protected override void Awake() {
         base.Awake();
@@ -18,13 +18,14 @@ public class TurnUI : UIComponent {
         }
     }
 
-    public override void Initialize(IGameMediator mediator, IGameReferences references) {
+    public override void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
         // Call base UIComponent Initialize FIRST
-        base.Initialize(mediator, references); // Pass null for player
+        base.Initialize(mediator, references, manager); // Pass dependencies
 
-        turnManager = TurnManager.Instance; // Get manager instance here if needed, or rely on events
+        // Get TurnManager from GameManager
+        turnManager = manager?.TurnManager;
         if (turnManager == null) {
-            LogError("TurnManager not found when initializing TurnUI", LogTag.UI | LogTag.Initialization);
+            LogError("TurnManager not available when initializing TurnUI", LogTag.UI | LogTag.Initialization);
         }
 
         UpdateUI(); // Initial UI update

@@ -18,6 +18,8 @@ public interface IGameManager {
     ICardDealingService CardDealingService { get; }
     IModifierManager ModifierManager { get; }
     IBattlefieldCombatHandler CombatHandler { get; }
+    // Expose GameReferences for dependency access
+    IGameReferences GameReferences { get; }
     // Expose players via IPlayer interface
     IPlayer Player1 { get; }
     IPlayer Player2 { get; }
@@ -31,6 +33,7 @@ public interface IGameManager {
 }
 
 public interface ITurnManager {
+    bool IsInitialized { get; }
     int TurnNumber { get; }
     void EndTurn();
 }
@@ -81,21 +84,7 @@ public interface IBattlefieldCombatHandler {
 public class GameManager : MonoBehaviour, IGameManager {
     // Implement IsInitialized property from IGameManager interface
     public bool IsInitialized { get; private set; }
-    #region Singleton (Modified)
-    // Keep singleton for access, but initialization will be controlled externally
-    private static GameManager instance;
-    public static GameManager Instance // Keep static Instance for now
-    {
-        get {
-            // Don't auto-create, just return if exists
-            if (instance == null && Application.isPlaying) {
-                // LogError instead of creating, GameBootstrap should handle creation/finding
-                Debug.LogError($"GameManager instance accessed before it was initialized or assigned!");
-            }
-            return instance;
-        }
-    }
-    #endregion
+    // Singleton pattern removed
 
     #region Fields & Properties
     // System References (using Interface Types)
@@ -139,19 +128,12 @@ public class GameManager : MonoBehaviour, IGameManager {
     public ICardDealingService CardDealingService => cardDealingService;
     public IBattlefieldCombatHandler CombatHandler => combatHandler;
     public ITurnManager TurnManager => turnManager;
+    public IGameReferences GameReferences => gameReferences;
     #endregion
 
     #region Unity Lifecycle
     protected void Awake() {
-        // Singleton Registration Logic
-        if (instance == null) {
-            instance = this;
-            // DontDestroyOnLoad(gameObject); // Let GameBootstrap manage persistence
-        } else if (instance != this) {
-            LogWarning($"Duplicate GameManager instance found on {gameObject.name}. Destroying self.", LogTag.Initialization);
-            Destroy(gameObject);
-            return;
-        }
+        // No singleton logic needed
         // DO NOT Initialize here. GameBootstrap will call Initialize externally
     }
 
@@ -161,9 +143,6 @@ public class GameManager : MonoBehaviour, IGameManager {
         ActionsQueue?.Cleanup();
         // Add cleanup for other systems if they need it
 
-        if (instance == this) {
-            instance = null; // Clear static reference if this was the instance
-        }
         IsInitialized = false;
     }
 
@@ -238,7 +217,8 @@ public class GameManager : MonoBehaviour, IGameManager {
             ModifierManager,
             turnManager,
             executors,
-            defaultExecutor
+            defaultExecutor,
+            this // Pass this GameManager instance
         );
 
         // ActionsQueue already initialized above
@@ -277,20 +257,31 @@ public class GameManager : MonoBehaviour, IGameManager {
 
     // Coroutine for setup steps that might need UI or happen after initial init
     private IEnumerator CompleteGameInitialization() {
-        // Wait a frame to allow UI potentially initialize if needed
-        yield return null;
-
-        // Wait until the GameUI signals it's ready (optional, but safer)
-        // This assumes GameUI.onInitialized event exists and is fired
-        if (GameUI.Instance != null && !GameUI.Instance.IsInitialized) {
-            Log("GameManager waiting for GameUI initialization...", LogTag.Initialization);
-            yield return new WaitUntil(() => GameUI.Instance.IsInitialized);
-            Log("GameUI initialization detected by GameManager.", LogTag.Initialization);
+        // --- Wait for GameUI to be initialized ---
+        // Find GameUI instance (needed for the wait)
+        var gameUI = FindObjectOfType<GameUI>();
+        if (gameUI == null) {
+            LogError("GameUI component not found in scene! GameManager cannot complete initialization.", LogTag.Initialization);
+            yield break; // Abort coroutine if GameUI is missing
         }
 
-        // Now perform setup that might depend on UI or full initialization
+        // Wait until GameUI signals it's initialized using its public IsInitialized property
+        Log("GameManager waiting for GameUI to be fully initialized...", LogTag.Initialization);
+        yield return new WaitUntil(() => gameUI.IsInitialized);
+        Log("GameUI is initialized, proceeding with GameManager final setup.", LogTag.Initialization);
+        // --- End Wait ---
+
+        // Now perform setup that depends on UI being ready
         SetupInitialGameState(); // Deal hands
-        PlaceInitialCreatures(); // Place creatures (uses SummonAction -> affects UI/Modifiers)
+
+        // Check battlefield initialization before placing creatures
+        if (HasValidBattlefields()) {
+            Log("Battlefields are properly initialized, placing initial creatures.", LogTag.Initialization);
+            PlaceInitialCreatures(); // Player Battlefields should now be populated
+        } else {
+            LogError("Battlefields are still not initialized after waiting for GameUI. Cannot place initial creatures.", LogTag.Initialization);
+        }
+
         SetupResolveButton(); // Setup UI button listener
 
         gameMediator.NotifyGameInitialized(); // Notify game is fully ready
@@ -314,8 +305,8 @@ public class GameManager : MonoBehaviour, IGameManager {
 
     private void InitializePlayerDependencies() {
          // Pass dependencies to players *after* GameManager has them
-         Player1?.Initialize(gameMediator, gameReferences, cardDealingService);
-         Player2?.Initialize(gameMediator, gameReferences, cardDealingService);
+         Player1?.Initialize(gameMediator, gameReferences, cardDealingService, this);
+         Player2?.Initialize(gameMediator, gameReferences, cardDealingService, this);
          Log("Injected dependencies into Player instances.", LogTag.Initialization | LogTag.Players);
      }
 
@@ -324,7 +315,8 @@ public class GameManager : MonoBehaviour, IGameManager {
         var player1Cards = gameReferences.GetPlayer1DeckCards();
         var player2Cards = gameReferences.GetPlayer2DeckCards();
 
-        cardDealingService.InitializeDecks(player1Cards, player2Cards);
+        // Pass Player1 and Player2 instances to InitializeDecks
+        cardDealingService.InitializeDecks(Player1, player1Cards, Player2, player2Cards);
         Log($"Decks initialized with {player1Cards.Count} cards for Player 1 and {player2Cards.Count} cards for Player 2",
             LogTag.Cards | LogTag.Initialization);
     }
@@ -332,10 +324,27 @@ public class GameManager : MonoBehaviour, IGameManager {
     private void PlaceInitialCreatures() {
         if (!HasValidBattlefields()) {
             LogError("Cannot place creatures - battlefield not initialized", LogTag.Initialization);
+            // Log more detailed diagnostic information
+            if (Player1?.Battlefield == null) {
+                LogError("Player1.Battlefield is null", LogTag.Initialization);
+            } else if (!Player1.Battlefield.Any()) {
+                LogError("Player1.Battlefield is empty (no slots)", LogTag.Initialization);
+            }
+
+            if (Player2?.Battlefield == null) {
+                LogError("Player2.Battlefield is null", LogTag.Initialization);
+            } else if (!Player2.Battlefield.Any()) {
+                LogError("Player2.Battlefield is empty (no slots)", LogTag.Initialization);
+            }
             return;
         }
+
+        Log($"Placing initial creatures. Player1 has {Player1.Battlefield.Count} battlefield slots, Player2 has {Player2.Battlefield.Count} slots.",
+            LogTag.Initialization | LogTag.Creatures);
+
         PlaceCreaturesForPlayerFromDeck(Player1, 3);
         PlaceCreaturesForPlayerFromDeck(Player2, 3);
+
         // Resolve actions immediately after placing initial creatures
         // This ensures OnPlay effects trigger and creatures are registered properly
         ActionsQueue.ResolveActions();
@@ -395,8 +404,24 @@ public class GameManager : MonoBehaviour, IGameManager {
     }
 
     private bool HasValidBattlefields() {
-        return Player1?.Battlefield != null && Player1.Battlefield.Any() &&
-               Player2?.Battlefield != null && Player2.Battlefield.Any();
+        bool player1Valid = Player1?.Battlefield != null && Player1.Battlefield.Any();
+        bool player2Valid = Player2?.Battlefield != null && Player2.Battlefield.Any();
+
+        // Log detailed information about battlefield state
+        if (!player1Valid || !player2Valid) {
+            Log($"Battlefield validation: Player1 valid: {player1Valid}, Player2 valid: {player2Valid}",
+                LogTag.Initialization);
+
+            if (Player1?.Battlefield != null) {
+                Log($"Player1 battlefield has {Player1.Battlefield.Count} slots", LogTag.Initialization);
+            }
+
+            if (Player2?.Battlefield != null) {
+                Log($"Player2 battlefield has {Player2.Battlefield.Count} slots", LogTag.Initialization);
+            }
+        }
+
+        return player1Valid && player2Valid;
     }
 
     private void SetupInitialGameState() {

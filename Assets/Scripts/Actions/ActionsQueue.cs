@@ -59,7 +59,8 @@ public class ActionsQueue : IActionsQueue {
         IModifierManager modifierManager,
         ITurnManager turnManager,
         Dictionary<Type, IActionExecutor> actionExecutors,
-        IActionExecutor defaultExecutor) {
+        IActionExecutor defaultExecutor,
+        IGameManager gameManager = null) {
         this.gameMediator = gameMediator ?? throw new ArgumentNullException(nameof(gameMediator));
         this.combatHandler = combatHandler ?? throw new ArgumentNullException(nameof(combatHandler));
         this.weatherSystem = weatherSystem ?? throw new ArgumentNullException(nameof(weatherSystem));
@@ -80,7 +81,8 @@ public class ActionsQueue : IActionsQueue {
             modifierManager.ModifierFactory,
             this,
             combatHandler,
-            turnManager
+            turnManager,
+            gameManager // Pass the gameManager parameter
         );
 
         Log("ActionsQueue initialized with Strategy Executors.", LogTag.Initialization);

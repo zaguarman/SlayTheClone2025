@@ -13,10 +13,10 @@ public class BattlefieldUI : CardContainer {
     #region Initialization
     private void InitializeManagers(IPlayer player) {
         // Create ArrowManager using injected dependencies from UIComponent base class
-        // Get ActionsQueue from GameManager.Instance since we can't modify gameManager property
-        var actionsQueue = GameManager.Instance?.ActionsQueue;
+        // Get ActionsQueue from the injected gameManager
+        var actionsQueue = gameManager?.ActionsQueue;
         if (actionsQueue == null) {
-            LogError("Cannot initialize BattlefieldArrowManager - ActionsQueue is null", LogTag.Initialization);
+            LogError("Cannot initialize BattlefieldArrowManager - ActionsQueue is null via gameManager", LogTag.Initialization);
             return;
         }
         arrowManager = new BattlefieldArrowManager(transform, gameMediator, gameReferences, actionsQueue);
@@ -40,9 +40,9 @@ public class BattlefieldUI : CardContainer {
         UpdateSlotPositions();
     }
 
-    public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references) {
+    public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
         // Call base CardContainer Initialize FIRST
-        base.Initialize(player, mediator, references);
+        base.Initialize(player, mediator, references, manager);
 
         // Now initialize Battlefield specific things
         InitializeManagers(player); // Pass player

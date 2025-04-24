@@ -29,7 +29,7 @@ public class GameUI : MonoBehaviour {
     private bool weatherSystemInitialized = false;
 
     // Keep fields to store dependencies needed by children
-    private GameManager _gameManager; // Change to IGameManager later
+    private IGameManager _gameManager; // Changed to IGameManager
     private IGameMediator _gameMediator;
     private IGameReferences _gameReferences;
 
@@ -44,29 +44,20 @@ public class GameUI : MonoBehaviour {
         instance = this;
     }
 
-    // New Initialize method with explicit dependency injection
-    public void Initialize(IGameMediator mediator, IGameReferences references)
+    // Initialize method with explicit dependency injection including IGameManager
+    public void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager)
     {
         if (IsInitialized) return;
 
         // Store injected dependencies
         _gameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
         _gameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
+        _gameManager = manager ?? throw new System.ArgumentNullException(nameof(manager));
 
-        // Still using GameManager singleton for now (will be refactored later)
-        _gameManager = GameManager.Instance;
-
-        if (_gameManager == null) {
-            LogError("Cannot initialize GameUI - GameManager not ready", LogTag.UI | LogTag.Initialization);
-            return;
-        }
         if (!_gameReferences.AreReferencesValid()) {
              LogError("Cannot initialize GameUI - GameReferences are invalid", LogTag.UI | LogTag.Initialization);
              return;
         }
-
-        // Set the IsInitialized flag
-        IsInitialized = true;
 
         GetChildReferences();
         if (!ValidateChildReferences()) {
@@ -84,9 +75,10 @@ public class GameUI : MonoBehaviour {
             if (buttonText != null) buttonText.text = "End Turn";
         }
 
-        // IsInitialized is set by base.Initialize()
+        // Set flag AFTER setup
+        IsInitialized = true;
         Log("GameUI initialized successfully", LogTag.UI | LogTag.Initialization);
-        onInitialized.Invoke(); // Notify that GameUI itself is ready
+        onInitialized.Invoke();
     }
 
     private void GetChildReferences() {
@@ -146,42 +138,39 @@ public class GameUI : MonoBehaviour {
     }
 
     private void InitializeChildUI() {
-        if (_gameManager.Player1 == null || _gameManager.Player2 == null) {
-             LogError("Players not initialized in GameManager before GameUI initialization!", LogTag.Initialization | LogTag.UI);
+        if (_gameManager == null || _gameManager.Player1 == null || _gameManager.Player2 == null) { // Check gameManager itself too
+             LogError("GameManager or Players not initialized before GameUI.InitializeChildUI!", LogTag.Initialization | LogTag.UI);
              return;
         }
 
-        player1UI?.Initialize(_gameManager.Player1, _gameMediator, _gameReferences);
-        player2UI?.Initialize(_gameManager.Player2, _gameMediator, _gameReferences);
-        player1BattlefieldUI?.Initialize(_gameManager.Player1, _gameMediator, _gameReferences);
-        player2BattlefieldUI?.Initialize(_gameManager.Player2, _gameMediator, _gameReferences);
-        player1HandUI?.Initialize(_gameManager.Player1, _gameMediator, _gameReferences);
-        player2HandUI?.Initialize(_gameManager.Player2, _gameMediator, _gameReferences);
-        turnUI?.Initialize(_gameMediator, _gameReferences);
-        _gameReferences.GetDeckViewUI()?.Initialize(_gameMediator, _gameReferences); // DeckViewUI doesn't need player
+        // Pass _gameManager (IGameManager) to Initialize methods
+        player1UI?.Initialize(_gameManager.Player1, _gameMediator, _gameReferences, _gameManager);
+        player2UI?.Initialize(_gameManager.Player2, _gameMediator, _gameReferences, _gameManager);
+        player1BattlefieldUI?.Initialize(_gameManager.Player1, _gameMediator, _gameReferences, _gameManager);
+        player2BattlefieldUI?.Initialize(_gameManager.Player2, _gameMediator, _gameReferences, _gameManager);
+        player1HandUI?.Initialize(_gameManager.Player1, _gameMediator, _gameReferences, _gameManager);
+        player2HandUI?.Initialize(_gameManager.Player2, _gameMediator, _gameReferences, _gameManager);
+        turnUI?.Initialize(_gameMediator, _gameReferences, _gameManager); // TurnUI also needs GameManager
+        _gameReferences.GetDeckViewUI()?.Initialize(_gameMediator, _gameReferences, _gameManager); // DeckViewUI also needs GameManager
 
         Log("All child UI components initialized", LogTag.UI | LogTag.Initialization);
     }
 
     private void InitializeControllers() {
         // Initialize WeatherController
-        if (_gameManager?.WeatherSystem == null) {
-            LogError("Cannot initialize WeatherController - WeatherSystem not ready", LogTag.UI | LogTag.Initialization);
-        } else {
-            weatherController = GetComponent<WeatherController>();
-            if (weatherController == null) weatherController = gameObject.AddComponent<WeatherController>();
-            // Ensure WeatherController is initialized with dependencies
-            weatherController.Initialize(_gameMediator, _gameReferences); // <<< ADDED CALL
-            weatherSystemInitialized = true;
-            Log("Weather controller initialized via GameUI", LogTag.UI | LogTag.Initialization);
-        }
+        weatherController = GetComponent<WeatherController>();
+        if (weatherController == null) weatherController = gameObject.AddComponent<WeatherController>();
+        weatherController.Initialize(_gameMediator, _gameReferences, _gameManager); // Pass manager
+        weatherSystemInitialized = (weatherController != null && weatherController.IsInitialized); // Check IsInitialized
+        if (weatherSystemInitialized) Log("Weather controller initialized via GameUI", LogTag.UI | LogTag.Initialization);
+        else LogError("Weather controller FAILED initialization via GameUI", LogTag.UI | LogTag.Initialization);
 
         // Initialize DeckViewController
         deckViewController = GetComponent<DeckViewController>();
         if (deckViewController == null) deckViewController = gameObject.AddComponent<DeckViewController>();
-        // Ensure DeckViewController is initialized with dependencies
-        deckViewController.Initialize(_gameMediator, _gameReferences); // <<< ADDED CALL
-        Log("DeckViewController initialized via GameUI", LogTag.UI | LogTag.Initialization);
+        deckViewController.Initialize(_gameMediator, _gameReferences, _gameManager); // Pass manager
+        if(deckViewController.IsInitialized) Log("DeckViewController initialized via GameUI", LogTag.UI | LogTag.Initialization);
+        else LogError("DeckViewController FAILED initialization via GameUI", LogTag.UI | LogTag.Initialization);
     }
 
     private void OnEnable() {

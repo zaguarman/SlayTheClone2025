@@ -30,6 +30,10 @@ public interface IPlayer : IEntity, IDamageable {
     void UpdateHealthUI();
     void SetHealthText(TextMeshProUGUI healthText);
     void SetHealth(int newHealth);
+    // Expose GameMediator for Creature to access
+    IGameMediator GameMediator { get; }
+    // Expose GameManager for dependency access
+    IGameManager GameManager { get; }
 }
 
 public class Player : Entity, IPlayer {
@@ -51,32 +55,39 @@ public class Player : Entity, IPlayer {
     private IGameMediator gameMediator; // Changed to interface
     private IGameReferences gameReferences; // Added reference
     private ICardDealingService cardDealingService; // Added reference
+    private IGameManager gameManager; // Added reference
     private TextMeshProUGUI healthText;
+
+    // Expose GameMediator for Creature to access
+    public IGameMediator GameMediator => gameMediator;
+
+    // Expose GameManager for dependency access
+    public IGameManager GameManager => gameManager;
 
     // Modify constructor to accept identity
     public Player(string name = "Player", bool isPlayer1 = false) : base(name) {
-        Hand = new List<ICard>(); // Initialize lists
-        Battlefield = new List<BattlefieldSlot>(); // Initialize list
+        Hand = new List<ICard>();
+        Battlefield = new List<BattlefieldSlot>();
         Deck = new Deck();
-        gameMediator = GameMediator.Instance;
+        // --- REMOVED: gameMediator = GameMediator.Instance; ---
 
-        // Set up the event listener for our own damage event
         OnDamaged.AddListener(OnPlayerDamaged);
-        _isPlayer1 = isPlayer1; // Store the identity
+        _isPlayer1 = isPlayer1;
     }
 
     // Implement IsPlayer1 property from interface
     public bool IsPlayer1 => _isPlayer1;
 
     // New Initialize method to inject dependencies
-    public void Initialize(IGameMediator mediator, IGameReferences references, ICardDealingService dealer) {
-        if (mediator == null || references == null || dealer == null) {
+    public void Initialize(IGameMediator mediator, IGameReferences references, ICardDealingService dealer, IGameManager manager) {
+        if (mediator == null || references == null || dealer == null || manager == null) {
              LogError($"Player ({Name}) initialization failed: Dependencies cannot be null.", LogTag.Initialization | LogTag.Players);
              return; // Or throw exception
         }
-        this.gameMediator = mediator;
-        this.gameReferences = references;
-        this.cardDealingService = dealer;
+        gameMediator = mediator;
+        gameReferences = references;
+        cardDealingService = dealer;
+        gameManager = manager;
         Log($"Player ({Name}) initialized with dependencies.", LogTag.Initialization | LogTag.Players);
         // Note: OnDamaged listener is already added in constructor
     }
@@ -160,7 +171,7 @@ public class Player : Entity, IPlayer {
         Log($"Discarding entire hand for {(IsPlayer1 ? "Player 1" : "Player 2")}: {Hand.Count} cards", LogTag.Cards);
 
         // Create a copy of the hand to avoid modification during iteration
-        List<ICard> cardsToDiscard = new List<ICard>(Hand);
+        var cardsToDiscard = new List<ICard>(Hand);
 
         // Discard each card
         foreach (var card in cardsToDiscard) {
@@ -212,12 +223,10 @@ public class Player : Entity, IPlayer {
     }
 
     public void AddToBattlefield(ICard card, ITarget slot = null) {
-        if (card == null || !(slot is BattlefieldSlot targetSlot)) return;
+        if (card == null || slot is not BattlefieldSlot targetSlot) return;
 
         // Use injected dependencies
-        var mediator = this.gameMediator;
-        var references = this.gameReferences;
-        if (mediator == null || references == null) {
+        if (gameMediator == null || gameReferences == null) {
             LogError($"Mediator or References null when adding {card.Name} to battlefield.", LogTag.Players);
             return;
         }
@@ -253,10 +262,10 @@ public class Player : Entity, IPlayer {
         }
 
         // Create controller, passing both the original data and the live instance
-        var cardController = CardFactory.CreateCardController(card, originalData, this, targetSlot.transform, mediator, references);
+        var cardController = CardFactory.CreateCardController(card, originalData, this, targetSlot.transform, gameMediator, gameReferences, gameManager); // Pass gameManager
         if (cardController != null) {
             targetSlot.AssignCreature(cardController);
-            mediator.NotifyBattlefieldStateChanged(this);
+            gameMediator.NotifyBattlefieldStateChanged(this);
         }
     }
 
@@ -264,9 +273,7 @@ public class Player : Entity, IPlayer {
         if (card == null || slot is not BattlefieldSlot targetSlot) return false;
 
         // Use injected dependencies
-        var mediator = gameMediator;
-        var references = gameReferences;
-        if (mediator == null || references == null) {
+        if (gameMediator == null || gameReferences == null) {
             LogError($"Mediator or References null when adding {card.Name} to battlefield async.", LogTag.Players);
             return false;
         }
@@ -301,10 +308,10 @@ public class Player : Entity, IPlayer {
         }
 
         // Create new card controller asynchronously with dependencies
-        var cardController = await CardFactory.CreateCardControllerAsync(card, originalData, this, targetSlot.transform, mediator, references, cancellationToken);
+        var cardController = await CardFactory.CreateCardControllerAsync(card, originalData, this, targetSlot.transform, gameMediator, gameReferences, gameManager, cancellationToken); // Pass gameManager
         if (cardController != null) {
             targetSlot.AssignCreature(cardController);
-            mediator.NotifyBattlefieldStateChanged(this);
+            gameMediator.NotifyBattlefieldStateChanged(this);
             return true;
         }
         return false;

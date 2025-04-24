@@ -9,17 +9,9 @@ using System.Linq;
 
 // TurnManager depends on GameManager for access to other systems
 public class TurnManager : MonoBehaviour, ITurnManager {
-    #region Singleton (Keep for now, ensure bootstrap initializes it)
-    private static TurnManager instance;
-    public static TurnManager Instance {
-        get {
-            if (instance == null && Application.isPlaying) {
-                 Debug.LogError("TurnManager instance accessed before it was initialized or assigned!");
-            }
-            return instance;
-        }
-    }
-    #endregion
+    // Singleton pattern removed
+    // Implement IsInitialized property
+    public bool IsInitialized { get; private set; }
 
     #region Fields & Properties
     private int turnNumber = 0;
@@ -33,12 +25,7 @@ public class TurnManager : MonoBehaviour, ITurnManager {
 
     #region Unity Lifecycle
     private void Awake() {
-        if (instance != null && instance != this) {
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
-        // DontDestroyOnLoad(gameObject); // Let GameBootstrap handle persistence if needed
+        // No singleton logic needed
     }
 
     // No Start() method - Initialization driven by GameBootstrap calling Initialize
@@ -64,6 +51,7 @@ public class TurnManager : MonoBehaviour, ITurnManager {
         }
 
         turnNumber = 0; // Reset turn number on initialization
+        IsInitialized = true; // Mark as initialized
         Log("TurnManager Initialized with dependencies.", LogTag.Initialization | LogTag.Turns);
     }
     #endregion

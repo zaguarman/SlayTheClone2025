@@ -118,7 +118,16 @@ public static class CardFactory {
         }
     }
 
-    public static async Task<CardController> CreateCardControllerAsync(ICard cardInstance, CardData baseCardData, IPlayer owner, Transform parent, IGameMediator mediator, IGameReferences references, CancellationToken cancellationToken = default) {
+    // Updated CreateCardControllerAsync to accept IGameManager
+    public static async Task<CardController> CreateCardControllerAsync(
+        ICard cardInstance,
+        CardData baseCardData,
+        IPlayer owner,
+        Transform parent,
+        IGameMediator mediator,
+        IGameReferences references,
+        IGameManager manager, // Added manager parameter
+        CancellationToken cancellationToken = default) {
         if (baseCardData == null || parent == null || mediator == null || references == null) return null;
 
         var cardPrefab = references.GetCardPrefab();
@@ -134,13 +143,22 @@ public static class CardFactory {
         var controller = cardObj.GetComponent<CardController>();
         if (controller != null) {
             // Pass the base CardData and the potentially live ICard instance
-            controller.Setup(baseCardData, owner, cardInstance, mediator, references);
+            // Pass manager to Setup
+            controller.Setup(baseCardData, owner, cardInstance, mediator, references, manager);
             Log($"Created card controller for {baseCardData.cardName}", LogTag.Cards | LogTag.Initialization);
         }
         return controller;
     }
 
-    public static CardController CreateCardController(ICard cardInstance, CardData baseCardData, IPlayer owner, Transform parent, IGameMediator mediator, IGameReferences references) {
+    // Updated CreateCardController to accept IGameManager
+    public static CardController CreateCardController(
+        ICard cardInstance,
+        CardData baseCardData,
+        IPlayer owner,
+        Transform parent,
+        IGameMediator mediator,
+        IGameReferences references,
+        IGameManager manager) { // Added manager parameter
         if (baseCardData == null || parent == null || mediator == null || references == null) return null;
 
         var cardPrefab = references.GetCardPrefab();
@@ -153,7 +171,8 @@ public static class CardFactory {
         var controller = cardObj.GetComponent<CardController>();
         if (controller != null) {
             // Pass the base CardData and the potentially live ICard instance
-            controller.Setup(baseCardData, owner, cardInstance, mediator, references);
+            // Pass manager to Setup
+            controller.Setup(baseCardData, owner, cardInstance, mediator, references, manager);
             Log($"Created card controller for {baseCardData.cardName}", LogTag.Cards | LogTag.Initialization);
         }
         return controller;
