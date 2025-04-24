@@ -52,16 +52,21 @@ public class GameUI : MonoBehaviour {
         InitializeChildUI(); // Initialize children, passing dependencies
         InitializeControllers(); // Initialize WeatherController, DeckViewController
 
-        // Update "Resolve Actions" button text
-        var resolveButton = _gameReferences.GetResolveActionsButton();
-        if (resolveButton != null) {
-            var buttonText = resolveButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (buttonText != null) buttonText.text = "End Turn";
-        }
+        // Setup the resolve button (End Turn)
+        SetupResolveButton();
 
         // Set flag AFTER setup
         IsInitialized = true;
         Log("GameUI initialized successfully", LogTag.UI | LogTag.Initialization);
+
+        // Now that UI and battlefields are initialized, place initial creatures
+        if (_gameManager != null && _gameManager.IsInitialized) {
+            Log("Calling GameManager to place initial creatures now that battlefields are initialized", LogTag.UI | LogTag.Initialization);
+            _gameManager.PlaceInitialCreatures();
+        } else {
+            LogError("Cannot place initial creatures - GameManager is null or not initialized", LogTag.UI | LogTag.Initialization);
+        }
+
         onInitialized.Invoke();
     }
 
@@ -187,5 +192,21 @@ public class GameUI : MonoBehaviour {
         return weatherSystemInitialized && weatherController != null;
     }
 
+    private void SetupResolveButton() {
+        var resolveButton = _gameReferences.GetResolveActionsButton();
+        var turnManager = _gameManager?.TurnManager; // Get TurnManager via injected GameManager
 
+        if (resolveButton != null && turnManager != null) {
+            resolveButton.onClick.RemoveAllListeners(); // Clear existing
+            resolveButton.onClick.AddListener(turnManager.EndTurn); // Hook directly to TurnManager
+
+            // Update button text
+            var buttonText = resolveButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (buttonText != null) buttonText.text = "End Turn";
+
+            Log("Resolve Actions Button (End Turn) listener set up by GameUI.", LogTag.UI | LogTag.Initialization);
+        } else {
+            LogError("Failed to set up Resolve Actions Button listener in GameUI.", LogTag.UI | LogTag.Initialization);
+        }
+    }
 }

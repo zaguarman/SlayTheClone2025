@@ -1,6 +1,5 @@
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,6 +29,9 @@ public interface IGameManager {
     void DiscardAllHands();
     void DrawCardsForPlayer(IPlayer player, int count);
     void DrawCardForPlayer(IPlayer player);
+
+    // Method to place initial creatures (called by GameUI after battlefields are initialized)
+    void PlaceInitialCreatures();
 }
 
 public interface ITurnManager {
@@ -130,17 +132,9 @@ public class GameManager : MonoBehaviour, IGameManager {
     public IGameReferences GameReferences => gameReferences;
     #endregion
 
-    #region Unity Lifecycle
-    protected void OnDestroy() {
-        // Cleanup systems
-        ModifierManager?.Cleanup();
-        ActionsQueue?.Cleanup();
-        // Add cleanup for other systems if they need it
 
-        IsInitialized = false;
-    }
 
-    #region Initialization (Refactored for Dependency Injection)
+    #region Initialization
 
     // NEW Initialize method accepting dependencies
     public void Initialize(
@@ -175,8 +169,7 @@ public class GameManager : MonoBehaviour, IGameManager {
         WeatherSystem = new WeatherSystem(gameMediator);
 
         // Create executors for ActionsQueue
-        var executors = new Dictionary<Type, IActionExecutor>
-        {
+        var executors = new Dictionary<Type, IActionExecutor> {
             // Assign specific executors for each action type
             [typeof(DrawCardsAction)] = new DrawCardsActionExecutor(),
             [typeof(ChangeWeatherAction)] = new ChangeWeatherActionExecutor(),
@@ -225,61 +218,21 @@ public class GameManager : MonoBehaviour, IGameManager {
         IsInitialized = true;
 
         // --- 5. Final Setup ---
-        // Setup initial game state (like placing creatures) *after* main initialization
-        // Using a Coroutine to ensure UI might be ready
-        StartCoroutine(CompleteGameInitialization());
+        // Setup initial game state directly (no need to wait for UI)
+        SetupInitialGameState(); // Deal hands
 
         // Set initial weather after all systems are ready
         WeatherSystem.SetWeather(WeatherType.Clear);
         Log("Initial weather set to Clear", LogTag.Initialization | LogTag.Effects);
 
+        // Note: Initial creatures will be placed by GameUI after battlefields are initialized
+        // Game initialization notification will happen after creatures are placed
         Log("GameManager Initialization complete.", LogTag.Initialization);
     }
 
-
-
-
-
-    #endregion
     #endregion
 
     #region Methods
-    // This method is no longer used - initialization is done in the Initialize method
-
-    // These methods are no longer used - initialization is done in the Initialize method
-
-    // Coroutine for setup steps that might need UI or happen after initial init
-    private IEnumerator CompleteGameInitialization() {
-        // --- Wait for GameUI to be initialized ---
-        // Find GameUI instance (needed for the wait)
-        var gameUI = FindObjectOfType<GameUI>();
-        if (gameUI == null) {
-            LogError("GameUI component not found in scene! GameManager cannot complete initialization.", LogTag.Initialization);
-            yield break; // Abort coroutine if GameUI is missing
-        }
-
-        // Wait until GameUI signals it's initialized using its public IsInitialized property
-        Log("GameManager waiting for GameUI to be fully initialized...", LogTag.Initialization);
-        yield return new WaitUntil(() => gameUI.IsInitialized);
-        Log("GameUI is initialized, proceeding with GameManager final setup.", LogTag.Initialization);
-        // --- End Wait ---
-
-        // Now perform setup that depends on UI being ready
-        SetupInitialGameState(); // Deal hands
-
-        // Check battlefield initialization before placing creatures
-        if (HasValidBattlefields()) {
-            Log("Battlefields are properly initialized, placing initial creatures.", LogTag.Initialization);
-            PlaceInitialCreatures(); // Player Battlefields should now be populated
-        } else {
-            LogError("Battlefields are still not initialized after waiting for GameUI. Cannot place initial creatures.", LogTag.Initialization);
-        }
-
-        SetupResolveButton(); // Setup UI button listener
-
-        gameMediator.NotifyGameInitialized(); // Notify game is fully ready
-        Log("GameManager final setup complete.", LogTag.Initialization);
-    }
 
     private void InitializePlayers() {
         // Pass the identity flag during construction
@@ -297,11 +250,11 @@ public class GameManager : MonoBehaviour, IGameManager {
     }
 
     private void InitializePlayerDependencies() {
-         // Pass dependencies to players *after* GameManager has them
-         Player1?.Initialize(gameMediator, gameReferences, cardDealingService, this);
-         Player2?.Initialize(gameMediator, gameReferences, cardDealingService, this);
-         Log("Injected dependencies into Player instances.", LogTag.Initialization | LogTag.Players);
-     }
+        // Pass dependencies to players *after* GameManager has them
+        Player1?.Initialize(gameMediator, gameReferences, cardDealingService, this);
+        Player2?.Initialize(gameMediator, gameReferences, cardDealingService, this);
+        Log("Injected dependencies into Player instances.", LogTag.Initialization | LogTag.Players);
+    }
 
     private void InitializeCards() {
         // Get cards from GameReferences instead of TestSetup
@@ -314,19 +267,21 @@ public class GameManager : MonoBehaviour, IGameManager {
             LogTag.Cards | LogTag.Initialization);
     }
 
-    private void PlaceInitialCreatures() {
+    public void PlaceInitialCreatures() {
         if (!HasValidBattlefields()) {
             LogError("Cannot place creatures - battlefield not initialized", LogTag.Initialization);
             // Log more detailed diagnostic information
             if (Player1?.Battlefield == null) {
                 LogError("Player1.Battlefield is null", LogTag.Initialization);
-            } else if (!Player1.Battlefield.Any()) {
+            }
+            else if (!Player1.Battlefield.Any()) {
                 LogError("Player1.Battlefield is empty (no slots)", LogTag.Initialization);
             }
 
             if (Player2?.Battlefield == null) {
                 LogError("Player2.Battlefield is null", LogTag.Initialization);
-            } else if (!Player2.Battlefield.Any()) {
+            }
+            else if (!Player2.Battlefield.Any()) {
                 LogError("Player2.Battlefield is empty (no slots)", LogTag.Initialization);
             }
             return;
@@ -342,6 +297,9 @@ public class GameManager : MonoBehaviour, IGameManager {
         // This ensures OnPlay effects trigger and creatures are registered properly
         ActionsQueue.ResolveActions();
         Log("Initial creatures placed and actions resolved.", LogTag.Initialization | LogTag.Creatures);
+
+        // Notify game is fully ready after creatures are placed
+        gameMediator.NotifyGameInitialized();
     }
 
     private void PlaceCreaturesForPlayerFromDeck(IPlayer player, int count) {
@@ -423,18 +381,7 @@ public class GameManager : MonoBehaviour, IGameManager {
         Log("Initial cards dealt to players", LogTag.Initialization);
     }
 
-    private void SetupResolveButton() {
-        var resolveButton = gameReferences.GetResolveActionsButton();
-        if (resolveButton != null) {
-            resolveButton.onClick.RemoveAllListeners();
-            resolveButton.onClick.AddListener(OnResolveButtonClicked);
-        }
-    }
 
-    private void OnResolveButtonClicked() {
-        Log("End Turn button clicked", LogTag.UI | LogTag.Actions | LogTag.Turns);
-        turnManager.EndTurn(); // Use the stored ITurnManager
-    }
 
     public void SetCardsToDraw(IPlayer player, int count) {
         if (player == null) return;
@@ -465,6 +412,16 @@ public class GameManager : MonoBehaviour, IGameManager {
 
     public void DrawCardForPlayer(IPlayer player) {
         DrawCardsForPlayer(player, 1);
+    }
+
+    #endregion
+
+    #region Cleanup
+    protected void OnDestroy() {
+        ModifierManager?.Cleanup();
+        ActionsQueue?.Cleanup();
+
+        IsInitialized = false;
     }
     #endregion
 }
