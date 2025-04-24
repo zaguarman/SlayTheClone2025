@@ -1,5 +1,4 @@
 using static DebugLogger;
-using System.Linq;
 using System;
 using UnityEngine.Events;
 using UnityEngine;
@@ -39,8 +38,12 @@ public static class CardFactory {
                             value = a.value,
                             targetType = a.targetType,
                             targetModifier = a.targetModifier,
-                            modifyAttack = a.modifyAttack, modifyHealth = a.modifyHealth, modifySpeed = a.modifySpeed, // Copy modify flags
-                            statusEffectToApply = a.statusEffectToApply, statusDuration = a.statusDuration, statusPotency = a.statusPotency // Copy status fields
+                            modifyAttack = a.modifyAttack,
+                            modifyHealth = a.modifyHealth,
+                            modifySpeed = a.modifySpeed, // Copy modify flags
+                            statusEffectToApply = a.statusEffectToApply,
+                            statusDuration = a.statusDuration,
+                            statusPotency = a.statusPotency // Copy status fields
                         });
                     }
                     creature.Effects.Add(newEffect);
@@ -72,13 +75,17 @@ public static class CardFactory {
         if (spellData.effects != null && spellData.effects.Count > 0) {
             foreach (var effect in spellData.effects) {
                 var newEffect = new CardEffect {
-                    effectType = effect.effectType, trigger = effect.trigger, actions = new List<EffectAction>()
+                    effectType = effect.effectType,
+                    trigger = effect.trigger,
+                    actions = new List<EffectAction>()
                 };
 
                 foreach (var action in effect.actions) {
                     var newAction = new EffectAction {
                         actionType = action.actionType,
-                        value = action.value, targetType = action.targetType, targetModifier = action.targetModifier,
+                        value = action.value,
+                        targetType = action.targetType,
+                        targetModifier = action.targetModifier,
                         modifyAttack = action.modifyAttack,
                         modifyHealth = action.modifyHealth,
                         modifySpeed = action.modifySpeed,
@@ -91,10 +98,12 @@ public static class CardFactory {
                     // Also add the action to the spell's action list for direct execution
                     if (action.actionType == ActionType.ModifyStat) { // Changed from Buff
                         spell.AddAction(action.actionType, action.value, action.targetType, action.modifyAttack, action.modifyHealth, action.modifySpeed, action.targetModifier);
-                    } else if (action.actionType == ActionType.ApplyStatus) {
+                    }
+                    else if (action.actionType == ActionType.ApplyStatus) {
                         spell.AddAction(action.actionType, action.targetType, action.statusEffectToApply, action.statusDuration, action.statusPotency, action.targetModifier);
-                    } else { // Handle simple actions (Damage, Heal, Draw, etc.)
-                         spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
+                    }
+                    else { // Handle simple actions (Damage, Heal, Draw, etc.)
+                        spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
                     }
                 }
 
@@ -178,10 +187,6 @@ public static class CardFactory {
         return controller;
     }
 
-    // CreateCardData method has been removed to ensure clear separation between
-    // WYSIWYG display (showing current state of cards in play/hand) and
-    // reliable restoration (resetting cards to original state when discarded/returned to deck)
-
     // TODO
     public static void SetupCardEventHandlers(
         CardController controller,
@@ -222,43 +227,5 @@ public static class CardFactory {
         controller.OnPointerExitHandler = null;
 
         Log($"Cleaned up event handlers for card {controller.name}", LogTag.Cards | LogTag.UI);
-    }
-
-    // Helper to deep copy effects list
-    private static List<CardEffect> CopyEffectsList(List<CardEffect> originalEffects)
-    {
-        if (originalEffects == null) return new List<CardEffect>();
-
-        List<CardEffect> effectsCopy = new List<CardEffect>(originalEffects.Count);
-        foreach (var effectData in originalEffects)
-        {
-            var newEffect = new CardEffect
-            {
-                effectType = effectData.effectType,
-                trigger = effectData.trigger,
-                actions = new List<EffectAction>()
-            };
-            if (effectData.actions != null)
-            {
-                foreach (var actionData in effectData.actions)
-                {
-                    newEffect.actions.Add(new EffectAction
-                    {
-                        actionType = actionData.actionType,
-                        value = actionData.value,
-                        targetType = actionData.targetType,
-                        targetModifier = actionData.targetModifier,
-                        modifyAttack = actionData.modifyAttack,
-                        modifyHealth = actionData.modifyHealth,
-                        modifySpeed = actionData.modifySpeed,
-                        statusEffectToApply = actionData.statusEffectToApply,
-                        statusDuration = actionData.statusDuration,
-                        statusPotency = actionData.statusPotency
-                    });
-                }
-            }
-            effectsCopy.Add(newEffect);
-        }
-        return effectsCopy;
     }
 }
