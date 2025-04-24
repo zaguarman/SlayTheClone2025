@@ -32,42 +32,7 @@ public class MoveCreatureAction : IGameAction {
         Log($"MoveCreatureAction Execute() called for {creature?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures);
     }
 
-    private void HandleSwap(BattlefieldSlot fromSlot, BattlefieldSlot toSlot) {
-        // Get the card controllers for both creatures
-        var fromCard = fromSlot.OccupyingCard;
-        var toCard = toSlot.OccupyingCard;
 
-        // Remove both creatures from their slots
-        fromSlot.ClearSlot(false);
-        toSlot.ClearSlot(false);
-
-        // Assign the creatures to their new slots
-        if (fromCard != null) {
-            toSlot.AssignCreature(fromCard);
-        }
-        if (toCard != null) {
-            fromSlot.AssignCreature(toCard);
-        }
-
-        Log($"Swapped {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) with {toSlot.OccupyingCreature?.Name ?? "Unknown"} (TargetID: {toSlot.OccupyingCreature?.TargetId.ToUpper() ?? "UNKNOWN"})",
-            LogTag.Actions | LogTag.Creatures);
-    }
-
-    private void HandleMove(BattlefieldSlot fromSlot, BattlefieldSlot toSlot) {
-        // Get the card controller for the creature
-        var card = fromSlot.OccupyingCard;
-
-        // Remove creature from current slot
-        fromSlot.ClearSlot(false);
-
-        // Place creature in new slot
-        if (card != null) {
-            toSlot.AssignCreature(card);
-        }
-
-        Log($"Moved {creature.Name} (TargetID: {creature.TargetId.ToUpper()}) from slot {fromSlot.TargetId.ToUpper()} to {toSlot.TargetId.ToUpper()}",
-            LogTag.Actions | LogTag.Creatures);
-    }
 
     public override string ToString() {
         return $"MoveCreatureAction: Creature={creature?.Name} (TargetID: {creature?.TargetId.ToUpper()}), FromSlot={fromSlot?.TargetId.ToUpper()}, ToSlot={toSlot?.TargetId.ToUpper()}";
