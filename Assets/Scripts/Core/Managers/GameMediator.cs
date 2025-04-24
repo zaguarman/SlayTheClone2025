@@ -335,7 +335,7 @@ public class GameMediator : MonoBehaviour, IGameMediator {
     #endregion
 
     #region Unity Lifecycle
-    protected void OnDestroy() { // Changed from override
+    protected void OnDestroy() {
         events.ClearAllListeners();
         registeredPlayers.Clear();
         IsInitialized = false; // Mark as not initialized on destroy

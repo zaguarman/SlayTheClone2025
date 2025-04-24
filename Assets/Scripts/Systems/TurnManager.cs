@@ -24,9 +24,6 @@ public class TurnManager : MonoBehaviour, ITurnManager {
     #endregion
 
     #region Unity Lifecycle
-    private void Awake() {
-        // No singleton logic needed
-    }
 
     // No Start() method - Initialization driven by GameBootstrap calling Initialize
     public void Initialize(IGameManager gameManager, IGameMediator mediator)

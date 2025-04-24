@@ -84,7 +84,6 @@ public interface IBattlefieldCombatHandler {
 public class GameManager : MonoBehaviour, IGameManager {
     // Implement IsInitialized property from IGameManager interface
     public bool IsInitialized { get; private set; }
-    // Singleton pattern removed
 
     #region Fields & Properties
     // System References (using Interface Types)
@@ -132,11 +131,6 @@ public class GameManager : MonoBehaviour, IGameManager {
     #endregion
 
     #region Unity Lifecycle
-    protected void Awake() {
-        // No singleton logic needed
-        // DO NOT Initialize here. GameBootstrap will call Initialize externally
-    }
-
     protected void OnDestroy() {
         // Cleanup systems
         ModifierManager?.Cleanup();

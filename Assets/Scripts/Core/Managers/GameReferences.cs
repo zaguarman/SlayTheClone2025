@@ -91,11 +91,6 @@ public class GameReferences : MonoBehaviour, IGameReferences {
     #endregion
 
     #region Unity Lifecycle
-    protected void Awake() {
-        // No base call needed anymore
-        // No singleton checks here anymore
-    }
-
     private void Start() {
         // Add the DeckViewController to manage deck view interactions
         var deckViewController = GetComponent<DeckViewController>();
