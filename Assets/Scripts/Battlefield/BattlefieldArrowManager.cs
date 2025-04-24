@@ -278,16 +278,6 @@ public class BattlefieldArrowManager {
         return slotTransform != null ? slotTransform.position : Vector3.zero;
     }
 
-    private void RemoveCombatActionFromQueue(ICreature attackerCreature) {
-        // Use the ActionsQueue's mechanism to handle replacement/removal
-        if (actionsQueue.HasActiveAction(attackerCreature.TargetId)) {
-            Log($"Cancelling/Removing combat action for {attackerCreature.Name} (TargetID: {attackerCreature.TargetId.ToUpper()}) by queuing a null/empty action (or similar mechanism in ActionsQueue)", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
-            // ActionsQueue.AddAction(new NullAction(attackerCreature)); // Example: Queue a placeholder to trigger removal
-            // Or rely on the fact that adding a new action for the same creature replaces the old one.
-            // If simply cancelling without replacement, ActionsQueue might need a RemoveActionForCreature method.
-        }
-    }
-
     public void Cleanup() {
         gameMediator.RemoveActionsQueueChangedListener(OnActionsQueueChanged);
         ClearExistingArrows();
