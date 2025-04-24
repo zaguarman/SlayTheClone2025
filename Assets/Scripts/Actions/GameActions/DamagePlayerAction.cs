@@ -21,9 +21,7 @@ public class DamagePlayerAction : IGameAction {
     #endregion
 
     #region Methods
-    public void Execute() {
-        Log($"DamagePlayerAction Execute() called for {(target?.IsPlayer1 == true ? "Player 1" : "Player 2")}. Logic handled by Executor.", LogTag.Actions | LogTag.Players);
-    }
+
 
     public override string ToString() {
         return $"DamagePlayerAction: Target={(target?.IsPlayer1 == true ? "Player 1" : "Player 2")} (TargetID: {target?.TargetId.ToUpper()}), Damage={damage}";

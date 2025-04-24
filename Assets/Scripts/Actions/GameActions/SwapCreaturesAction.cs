@@ -20,9 +20,7 @@ public class SwapCreaturesAction : IGameAction {
         Log($"Created SwapCreaturesAction: {fromCreature?.Name ?? "Unknown"} (TargetID: {fromCreature?.TargetId.ToUpper() ?? "UNKNOWN"}) swapping with {toCreature?.Name ?? "Unknown"} (TargetID: {toCreature?.TargetId.ToUpper() ?? "UNKNOWN"})", LogTag.Actions | LogTag.Creatures);
     }
 
-    public void Execute() {
-        Log($"SwapCreaturesAction Execute() called for {fromCreature?.Name ?? "Unknown"} & {toCreature?.Name ?? "Unknown"}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures);
-    }
+
 
     // Getters for executor
     public BattlefieldSlot GetFromSlot() => fromSlot;

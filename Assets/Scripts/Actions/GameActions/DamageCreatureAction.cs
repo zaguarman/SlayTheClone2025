@@ -28,11 +28,6 @@ public class DamageCreatureAction : IGameAction {
     #endregion
 
     #region Methods
-    public void Execute() {
-        // Logic moved to DamageCreatureActionExecutor
-        Log($"DamageCreatureAction Execute() called for {target?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
-    }
-
     public override string ToString() {
         // Updated ToString
         return $"DamageCreatureAction: Target={target?.Name}({target?.TargetId.ToUpper().Substring(0, 8)}), Dmg={damage}, Attacker={attacker?.Name ?? "Source"}";

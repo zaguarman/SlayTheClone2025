@@ -175,10 +175,9 @@ public class GameManager : MonoBehaviour, IGameManager {
         WeatherSystem = new WeatherSystem(gameMediator);
 
         // Create executors for ActionsQueue
-        var defaultExecutor = new DefaultActionExecutor();
         var executors = new Dictionary<Type, IActionExecutor>
         {
-            // Previous executors
+            // Assign specific executors for each action type
             [typeof(DrawCardsAction)] = new DrawCardsActionExecutor(),
             [typeof(ChangeWeatherAction)] = new ChangeWeatherActionExecutor(),
             [typeof(SummonCreatureAction)] = new SummonCreatureActionExecutor(),
@@ -195,6 +194,7 @@ public class GameManager : MonoBehaviour, IGameManager {
             [typeof(HealCreatureAction)] = new HealCreatureActionExecutor(),
             [typeof(HealPlayerAction)] = new HealPlayerActionExecutor(),
             [typeof(SwapCreaturesAction)] = new SwapCreaturesActionExecutor()
+            // Add any other specific action types and their executors here
         };
 
         // Create ModifierManager first (no longer needs ActionsQueue)
@@ -211,7 +211,6 @@ public class GameManager : MonoBehaviour, IGameManager {
             ModifierManager,
             turnManager,
             executors,
-            defaultExecutor,
             this // Pass this GameManager instance
         );
 

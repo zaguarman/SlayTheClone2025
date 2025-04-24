@@ -23,10 +23,7 @@ public class ApplyStatusEffectAction : IGameAction {
         Log($"Created ApplyStatusEffectAction: Target={target?.Name}, Status={type}, Duration={this.duration}, Potency={this.potency}", LogTag.Actions | LogTag.Effects);
     }
 
-    public void Execute() {
-        // Logic moved to ApplyStatusEffectActionExecutor
-        Log($"ApplyStatusEffectAction Execute() called for {targetCreature?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Effects);
-    }
+
 
     public override string ToString() {
         return $"ApplyStatusEffectAction: Target={targetCreature?.Name}, Status={statusType}, Duration={duration}, Potency={potency}";

@@ -76,10 +76,7 @@ public class ModifyAction : IGameAction {
         return desc;
     }
 
-    public void Execute() {
-        // Logic moved to ModifyActionExecutor
-        Log($"ModifyAction Execute() called for {targetCreature?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Effects);
-    }
+
 
     public override string ToString() {
         string buffDesc = DescribeBuff();

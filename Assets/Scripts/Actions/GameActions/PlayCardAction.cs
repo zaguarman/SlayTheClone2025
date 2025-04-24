@@ -18,10 +18,7 @@ public class PlayCardAction : IGameAction {
             LogTag.Actions | LogTag.Cards);
     }
 
-    public void Execute() {
-        // Logic moved to PlayCardActionExecutor
-        Log($"PlayCardAction Execute() called for {card?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Cards);
-    }
+
 
     public override string ToString() {
         return $"PlayCardAction: Card={card?.Name} (TargetID: {card?.TargetId.ToUpper()}), Owner={(owner?.IsPlayer1 == true ? "Player 1" : "Player 2")} (TargetID: {owner?.TargetId.ToUpper()}), Target={target?.TargetId.ToUpper()}";

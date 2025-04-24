@@ -68,15 +68,18 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     }
 
     public void ClearSlot(bool destroyCard = true) {
-        if (OccupyingCard != null && destroyCard) {
+        // Check if OccupyingCard and its GameObject exist before destroying
+        if (OccupyingCard != null && OccupyingCard.gameObject != null && destroyCard) {
             Destroy(OccupyingCard.gameObject);
         }
+        // Always clear the references
         OccupyingCard = null;
         OccupyingCreature = null;
     }
 
     public bool IsOccupied() {
-        return OccupyingCreature != null;
+        // Check if either the controller or creature reference is non-null
+        return OccupyingCard != null || OccupyingCreature != null;
     }
 
     public void ResetVisuals() {
@@ -92,48 +95,50 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
         gameReferences = references;
         if (gameReferences == null)
         {
+             // Log an error if null references are passed during setup
              LogError($"SetGameReferences called with null references for slot {name} (TargetID: {TargetId})", LogTag.Initialization | LogTag.UI);
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        // --- FIX: Check if gameReferences was correctly injected ---
+        // --- Dependency Check ---
         if (gameReferences == null) {
-            // Log an error - this indicates a problem in BattlefieldUI's initialization
             LogError($"Cannot handle PointerEnter for slot {name} (TargetID: {TargetId}) - gameReferences is null. Check BattlefieldUI initialization.", LogTag.Initialization | LogTag.UI);
-            return; // Cannot proceed without references
-        }
-        // --- END FIX ---
-
-        Tooltip tooltip = gameReferences.GetTooltip();
-        if (tooltip == null)
-        {
-            // Log a warning if the tooltip system isn't ready, but don't crash
-            LogWarning($"Tooltip system not available when hovering over slot {name}", LogTag.UI);
             return;
         }
 
+        Tooltip tooltip = gameReferences.GetTooltip();
+        // --- Tooltip System Check ---
+        if (tooltip == null) {
+            LogWarning($"Tooltip system (via gameReferences) not available when hovering over slot {name}", LogTag.UI);
+            return; // Cannot proceed without a valid tooltip instance
+        }
+        // Ensure the tooltip GameObject itself hasn't been destroyed
+        if (tooltip.gameObject == null) {
+             LogWarning($"Tooltip GameObject was destroyed. Cannot show tooltip for slot {name}", LogTag.UI);
+             return;
+        }
+
+        // --- Show Tooltip ---
         if (IsOccupied() && OccupyingCard != null) {
-            // Show the card tooltip which includes effects info
-            tooltip.ShowTooltip(OccupyingCard);
+            tooltip.ShowTooltip(OccupyingCard); // Show card details
         } else {
-            // Show just slot info
-            string tooltipText = $"<b>Slot: {name}</b>\nTargetID: {TargetId}";
+            // Show basic slot info
+            string tooltipText = $"<b>Slot: {name}</b>\nTargetID: {TargetId.ToUpper().Substring(0,8)}";
             tooltip.ShowTooltip(tooltipText);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-         // --- FIX: Check if gameReferences was correctly injected ---
+         // --- Dependency Check ---
          if (gameReferences == null) {
-            // No need to log again if it was already logged in OnPointerEnter,
-            // but check is needed to prevent NullReferenceException when accessing tooltip.
+            // No need to log again if logged in Enter, but check is crucial
             return;
          }
-         // --- END FIX ---
 
         Tooltip tooltip = gameReferences.GetTooltip();
-        // Also check if tooltip object exists before calling HideTooltip
+        // --- Tooltip System Check ---
+        // Check if tooltip instance and its GameObject exist before hiding
         if (tooltip != null && tooltip.gameObject != null) {
             tooltip.HideTooltip();
         }

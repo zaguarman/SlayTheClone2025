@@ -13,12 +13,7 @@ public class ChangeWeatherAction : IGameAction {
         Log($"Created ChangeWeatherAction to {targetWeather}", LogTag.Actions | LogTag.Effects);
     }
 
-    // Execute remains simple, the logic is moved to the executor (ActionsQueue)
-    public void Execute() {
-        // Intentionally left blank or could add a log.
-        // The actual weather change logic is now handled by the ActionsQueue.
-        Log($"ChangeWeatherAction Execute() called for {targetWeather}. Logic handled by ActionsQueue.", LogTag.Actions | LogTag.Effects);
-    }
+
 
     public override string ToString() {
         return $"ChangeWeatherAction: TargetWeather={targetWeather}";

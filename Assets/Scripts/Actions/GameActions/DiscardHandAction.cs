@@ -17,9 +17,7 @@ public class DiscardHandAction : IGameAction {
     #endregion
 
     #region Methods
-    public void Execute() {
-        Log($"DiscardHandAction Execute() called for {(player?.IsPlayer1 == true ? "Player 1" : "Player 2")}. Logic handled by Executor.", LogTag.Actions | LogTag.Cards);
-    }
+
 
     // Getter for executor
     public IPlayer GetPlayer() => player;

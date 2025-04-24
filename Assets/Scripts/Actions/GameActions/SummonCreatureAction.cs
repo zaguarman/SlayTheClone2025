@@ -23,10 +23,7 @@ public class SummonCreatureAction : IGameAction {
         //     LogTag.Actions | LogTag.Creatures);
     }
 
-    public void Execute() {
-        // Logic moved to SummonCreatureActionExecutor
-        Log($"SummonCreatureAction Execute() called for {creature?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures);
-    }
+
 
     public override string ToString() {
          string slotIdStr = (targetSlot is BattlefieldSlot s) ? s.TargetId.ToUpper().Substring(0,8) : targetSlot?.TargetId ?? "UNKNOWN";

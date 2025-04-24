@@ -17,10 +17,7 @@ public class PlaySpellAction : IGameAction {
         Log($"Created PlaySpellAction for {spell.Name} (TargetID: {spell.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
     }
 
-    public void Execute() {
-        // Logic moved to PlaySpellActionExecutor
-        Log($"PlaySpellAction Execute() called for {spell?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Cards);
-    }
+
 
     public override string ToString() {
         return $"PlaySpellAction: Spell={spell?.Name} (TargetID: {spell?.TargetId.ToUpper()}), Owner={(owner?.IsPlayer1 == true ? "Player 1" : "Player 2")} (TargetID: {owner?.TargetId.ToUpper()}), Target={target?.TargetId.ToUpper()}";

@@ -19,10 +19,7 @@ public class ModifyArmorAction : IGameAction
         Log($"Created ModifyArmorAction: Target={target?.Name}, Amount={amount}", LogTag.Actions | LogTag.Effects);
     }
 
-    public void Execute()
-    {
-        Log($"ModifyArmorAction Execute() called for {targetCreature?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Effects);
-    }
+
 
     // Getters for executor
     public ICreature GetTargetCreature() => targetCreature;

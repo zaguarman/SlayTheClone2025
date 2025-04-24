@@ -19,9 +19,7 @@ public class HealPlayerAction : IGameAction {
     #endregion
 
     #region Methods
-    public void Execute() {
-        Log($"HealPlayerAction Execute() called for {(target?.IsPlayer1 == true ? "Player 1" : "Player 2")}. Logic handled by Executor.", LogTag.Actions | LogTag.Players);
-    }
+
 
     // Getters for executor
     public IPlayer GetTargetPlayer() => target;

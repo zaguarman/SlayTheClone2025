@@ -19,10 +19,7 @@ public class BattlefieldCombatAction : IGameAction {
             LogTag.Actions | LogTag.Combat);
     }
 
-    public void Execute() {
-        // Logic moved to BattlefieldCombatActionExecutor
-        Log($"BattlefieldCombatAction Execute() called for {attacker?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Combat);
-    }
+
 
     public override string ToString() {
         string attackerName = attacker != null ? attacker.Name : "Unknown";

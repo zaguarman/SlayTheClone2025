@@ -23,7 +23,6 @@ public class ActionsQueue : IActionsQueue {
     private readonly ITurnManager turnManager;
 
     private readonly Dictionary<Type, IActionExecutor> _actionExecutors;
-    private readonly IActionExecutor _defaultExecutor;
     private readonly ActionExecutionContext _executionContext;
     #endregion
 
@@ -59,7 +58,6 @@ public class ActionsQueue : IActionsQueue {
         IModifierManager modifierManager,
         ITurnManager turnManager,
         Dictionary<Type, IActionExecutor> actionExecutors,
-        IActionExecutor defaultExecutor,
         IGameManager gameManager = null) {
         this.gameMediator = gameMediator ?? throw new ArgumentNullException(nameof(gameMediator));
         this.combatHandler = combatHandler ?? throw new ArgumentNullException(nameof(combatHandler));
@@ -69,8 +67,7 @@ public class ActionsQueue : IActionsQueue {
         this.modifierManager = modifierManager ?? throw new ArgumentNullException(nameof(modifierManager));
         this.turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
 
-        _actionExecutors = actionExecutors ?? new Dictionary<Type, IActionExecutor>();
-        _defaultExecutor = defaultExecutor ?? new DefaultActionExecutor();
+        _actionExecutors = actionExecutors ?? throw new ArgumentNullException(nameof(actionExecutors));
 
         _executionContext = new ActionExecutionContext(
             gameMediator,
@@ -220,9 +217,14 @@ public class ActionsQueue : IActionsQueue {
 
             Log($"Processing action: {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
 
-            IActionExecutor executor = _actionExecutors.TryGetValue(action.GetType(), out var specificExecutor)
-                                        ? specificExecutor
-                                        : _defaultExecutor;
+            // --- UPDATED Executor Lookup ---
+            if (!_actionExecutors.TryGetValue(action.GetType(), out var executor))
+            {
+                // This case should *not* happen if all actions have registered executors
+                LogError($"No executor registered for action type {action.GetType().Name}. Skipping action. (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
+                continue; // Skip this action
+            }
+            // --- End Update ---
 
             Log($"Using Executor: {executor.GetType().Name}", LogTag.Actions);
 

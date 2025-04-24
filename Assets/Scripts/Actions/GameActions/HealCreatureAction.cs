@@ -18,9 +18,7 @@ public class HealCreatureAction : IGameAction {
     #endregion
 
     #region Methods
-    public void Execute() {
-        Log($"HealCreatureAction Execute() called for {target?.Name}. Logic handled by Executor.", LogTag.Actions | LogTag.Creatures);
-    }
+
 
     // Getters for executor
     public ICreature GetTarget() => target;
