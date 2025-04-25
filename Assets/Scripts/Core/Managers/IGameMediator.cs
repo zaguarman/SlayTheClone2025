@@ -12,40 +12,43 @@ public interface IGameMediator
     #region Event Subscription Methods
     void AddGameStateChangedListener(UnityAction listener);
     void RemoveGameStateChangedListener(UnityAction listener);
-    
+
     void AddPlayerDamagedListener(UnityAction<IPlayer, int> listener);
     void RemovePlayerDamagedListener(UnityAction<IPlayer, int> listener);
-    
+
     void AddCreatureDamagedListener(UnityAction<ICreature, int> listener);
     void RemoveCreatureDamagedListener(UnityAction<ICreature, int> listener);
-    
+
     void AddCreatureDiedListener(UnityAction<ICreature> listener);
     void RemoveCreatureDiedListener(UnityAction<ICreature> listener);
-    
+
     void AddGameOverListener(UnityAction<IPlayer> listener);
     void RemoveGameOverListener(UnityAction<IPlayer> listener);
-    
+
     void AddGameInitializedListener(UnityAction listener);
     void RemoveGameInitializedListener(UnityAction listener);
-    
+
     void AddCreatureSummonedListener(UnityAction<ICreature, IPlayer> listener);
     void RemoveCreatureSummonedListener(UnityAction<ICreature, IPlayer> listener);
-    
+
     void AddCreatureArmorChangedListener(UnityAction<ICreature, int> listener);
     void RemoveCreatureArmorChangedListener(UnityAction<ICreature, int> listener);
-    
+
+    void AddCreatureStatsChangedListener(UnityAction<ICreature> listener); // NEW
+    void RemoveCreatureStatsChangedListener(UnityAction<ICreature> listener); // NEW
+
     void AddCreaturePreSummonListener(UnityAction<ICreature> listener);
     void RemoveCreaturePreSummonListener(UnityAction<ICreature> listener);
-    
+
     void AddActionsQueueChangedListener(UnityAction listener);
     void RemoveActionsQueueChangedListener(UnityAction listener);
-    
+
     void AddHandStateChangedListener(UnityAction<IPlayer> listener);
     void RemoveHandStateChangedListener(UnityAction<IPlayer> listener);
-    
+
     void AddBattlefieldStateChangedListener(UnityAction<IPlayer> listener);
     void RemoveBattlefieldStateChangedListener(UnityAction<IPlayer> listener);
-    
+
     void AddTurnEndedListener(UnityAction<int> listener);
     void RemoveTurnEndedListener(UnityAction<int> listener);
     #endregion
@@ -67,6 +70,7 @@ public interface IGameMediator
     void NotifyCreaturePreSummon(ICreature creature);
     void NotifyCreatureSummoned(ICreature creature, IPlayer owner);
     void NotifyCreatureArmorChanged(ICreature creature, int newArmor);
+    void NotifyCreatureStatsChanged(ICreature creature); // NEW
     void NotifyActionsQueueChanged();
     void NotifyHandStateChanged(IPlayer player);
     void NotifyBattlefieldStateChanged(IPlayer player);

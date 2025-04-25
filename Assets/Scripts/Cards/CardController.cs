@@ -75,12 +75,11 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
 
     protected override void RegisterEvents() {
         if (gameMediator != null) {
-            // Listen for CreatureDamaged event to update Health/Armor display
             gameMediator.AddCreatureDamagedListener(OnCreatureDamaged);
             gameMediator.AddCreatureDiedListener(OnCreatureDied);
-            gameMediator.AddCreatureArmorChangedListener(OnCreatureArmorChanged); // Listen for armor changes
-            // Also listen for general game state changes which might affect modifiers
-            gameMediator.AddGameStateChangedListener(OnGameStateChanged);
+            gameMediator.AddCreatureArmorChangedListener(OnCreatureArmorChanged);
+            // gameMediator.AddGameStateChangedListener(OnGameStateChanged); // Keep if needed for other reasons
+            gameMediator.AddCreatureStatsChangedListener(OnCreatureStatsChanged); // <<< ADD LISTENER
         }
     }
 
@@ -89,15 +88,21 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             gameMediator.RemoveCreatureDamagedListener(OnCreatureDamaged);
             gameMediator.RemoveCreatureDiedListener(OnCreatureDied);
             gameMediator.RemoveCreatureArmorChangedListener(OnCreatureArmorChanged);
-            gameMediator.RemoveGameStateChangedListener(OnGameStateChanged);
+            // gameMediator.RemoveGameStateChangedListener(OnGameStateChanged);
+            gameMediator.RemoveCreatureStatsChangedListener(OnCreatureStatsChanged); // <<< REMOVE LISTENER
         }
     }
 
+    // Note: OnGameStateChanged might still be useful if other general state changes
+    // could affect the card's appearance indirectly, but for direct stat updates,
+    // OnCreatureStatsChanged is more specific. If OnGameStateChanged isn't needed
+    // for anything else in CardController, it can be removed along with its listener registration.
     private void OnGameStateChanged() {
-        // If this card is linked to a creature or any card instance, update its UI as modifiers might have changed
-        // Also update if it's just linked to an ICard (in case spell state could change, though unlikely)
+        // If linkedCardInstance is not null, update UI.
+        // This can catch broader changes but might be less efficient.
+        // Keep if necessary, otherwise rely on specific events.
         if (linkedCardInstance != null) {
-            UpdateUI();
+            // UpdateUI(); // Potentially redundant if specific listeners handle changes
         }
     }
 
@@ -121,6 +126,22 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             Log($"Creature {creature.Name} armor changed to {newArmor}, updating UI (TargetID: {creature.TargetId.ToUpper()}) (Card TargetID: {GetInstanceID().ToString().ToUpper()})", LogTag.Creatures | LogTag.UI | LogTag.Effects);
             // No need to reassign linkedCreature, just update UI
             UpdateUI();
+        }
+    }
+
+    // NEW Event Handler
+    private void OnCreatureStatsChanged(ICreature creature) {
+        // Check if the notification is for the creature linked to this card
+        if (linkedCreature != null && creature != null && creature.TargetId == linkedCreature.TargetId) {
+            Log($"Creature {creature.Name} stats changed, updating UI (Card TargetID: {GetInstanceID().ToString().ToUpper()})", LogTag.Creatures | LogTag.UI | LogTag.Effects);
+            linkedCreature = creature; // Ensure we have the latest reference if needed elsewhere
+            UpdateUI(); // Trigger a UI refresh
+
+            // Optionally update tooltip if it's currently showing this card
+            var tooltip = GetTooltip();
+            if (tooltip != null && tooltip.gameObject.activeSelf) {
+                tooltip.UpdateTooltipContent(this);
+            }
         }
     }
 

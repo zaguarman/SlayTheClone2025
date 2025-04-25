@@ -100,66 +100,51 @@ public class Deck : IDeck {
 
         // Check if the card is a creature that needs restoration
         if (card is ICreature creature) {
-            // Look for the original card data to restore from using cardId
             ICard restoredCard = RestoreToOriginalValues(creature);
 
+            // If restoration (based on ID) was successful, add the restored card
             if (restoredCard != null) {
-                discardPile.Add(restoredCard);
-                Log($"Added restored creature card to discard pile: {restoredCard.Name} (CardID: {restoredCard.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
-                return;
+                 discardPile.Add(restoredCard);
+                 Log($"Added restored creature card to discard pile: {restoredCard.Name} (CardID: {restoredCard.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
+                 return; // <- Important: return after adding restored card
             }
+            // If RestoreToOriginalValues returned null (ID lookup failed), fall through to add the original 'card' instance
+            // This covers the case where original data is missing but we still need to discard *something*.
+             LogWarning($"Restoration by ID failed for {creature.Name}. Adding original instance to discard.", LogTag.Cards | LogTag.Creatures);
         }
 
-        // If it's not a creature or restoration failed, add the original card
+        // Add the original card instance if not a creature or if restoration failed
         discardPile.Add(card);
-        Log($"Added card to discard pile: {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
+        Log($"Added card (original instance) to discard pile: {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
     }
 
     private ICard RestoreToOriginalValues(ICreature creature) {
-        if (creature == null) return null;
+        if (creature == null || string.IsNullOrEmpty(creature.CardId)) {
+             LogWarning($"Cannot restore creature with null reference or missing CardId.", LogTag.Cards | LogTag.Creatures);
+             return null; // Return null if creature or ID is invalid
+        }
 
-        Log($"Restoring creature {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) to initial values for deck (DeckID: {deckId.ToUpper()})",
+        Log($"Attempting to restore creature {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}, CardID: {creature.CardId.ToUpper()}) for deck (DeckID: {deckId.ToUpper()})",
             LogTag.Cards | LogTag.Creatures);
 
-        // Find the original card data by ID instead of name
-        CardData originalData = originalCardDataList?.FirstOrDefault(c => c.cardId == creature.CardId);
+        // Find the original card data by ID
+        CardData originalData = FindOriginalCardDataById(creature.CardId); // Use existing helper
 
         if (originalData != null) {
-            // Create a fresh card from the original data
             ICard restoredCard = CardFactory.CreateCard(originalData);
-
-            Log($"Successfully restored {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) to initial values using cardId: {creature.CardId.ToUpper()} for deck (DeckID: {deckId.ToUpper()})",
+            Log($"Successfully restored {creature.Name} using CardID {creature.CardId.ToUpper()} for deck (DeckID: {deckId.ToUpper()})",
                 LogTag.Cards | LogTag.Creatures);
-            return restoredCard;
+            return restoredCard; // Return the successfully restored card
         }
 
-        // If original data not found by ID, try to find by name as fallback
-        originalData = originalCardDataList?.FirstOrDefault(c => c.cardName == creature.Name);
+        // If original data not found by ID, log error and return null
+        // Do NOT fall back to name matching.
+        LogError($"Could not find original data for {creature.Name} with CardID {creature.CardId.ToUpper()}. Cannot restore by ID. Fallback to name matching removed.",
+                 LogTag.Cards | LogTag.Creatures);
 
-        if (originalData != null) {
-            // Create a fresh card from the original data
-            ICard restoredCard = CardFactory.CreateCard(originalData);
-            Log($"Successfully restored {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) to initial values by name (fallback) for deck (DeckID: {deckId.ToUpper()})",
-                LogTag.Cards | LogTag.Creatures);
-            return restoredCard;
-        }
-
-        // If original data not found, create a generic version
-        Log($"Could not find original data for {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}) with ID {creature.CardId.ToUpper()}, creating generic version for deck (DeckID: {deckId.ToUpper()})",
-            LogTag.Cards | LogTag.Creatures);
-        int health = creature.Health <= 0 ? creature.Attack + 1 : creature.Health;
-        int speed = creature.BaseSpeed;
-        var newCreature = new Creature(creature.Name, creature.Attack, health, speed, creature.CardId);
-        newCreature.Description = creature.Description;
-
-        // Copy effects
-        if (creature.Effects != null && creature.Effects.Count > 0) {
-            foreach (var effect in creature.Effects) {
-                newCreature.Effects.Add(effect);
-            }
-        }
-
-        return newCreature;
+        // Return null indicating restoration by ID failed.
+        // The calling method (AddToDiscardPile) will handle adding the original instance.
+        return null;
     }
 
     public void ClearDiscardPile() {

@@ -19,7 +19,8 @@ public class GameMediator : MonoBehaviour, IGameMediator {
         public readonly UnityEvent GameStateChanged = new UnityEvent();
         public readonly UnityEvent GameInitialized = new UnityEvent();
         public readonly UnityEvent<ICreature, IPlayer> CreatureSummoned = new UnityEvent<ICreature, IPlayer>();
-        public readonly UnityEvent<ICreature, int> CreatureArmorChanged = new UnityEvent<ICreature, int>(); // NEW Event
+        public readonly UnityEvent<ICreature, int> CreatureArmorChanged = new UnityEvent<ICreature, int>();
+        public readonly UnityEvent<ICreature> CreatureStatsChanged = new UnityEvent<ICreature>(); // NEW Event
         public readonly UnityEvent<ICreature> CreaturePreSummon = new UnityEvent<ICreature>();
         public readonly UnityEvent ActionsQueueChanged = new UnityEvent();
         public readonly UnityEvent<IPlayer> HandStateChanged = new UnityEvent<IPlayer>();
@@ -35,6 +36,7 @@ public class GameMediator : MonoBehaviour, IGameMediator {
             GameInitialized.RemoveAllListeners();
             CreatureSummoned.RemoveAllListeners();
             CreatureArmorChanged.RemoveAllListeners();
+            CreatureStatsChanged.RemoveAllListeners(); // NEW
             CreaturePreSummon.RemoveAllListeners();
             ActionsQueueChanged.RemoveAllListeners();
             HandStateChanged.RemoveAllListeners();
@@ -130,7 +132,16 @@ public class GameMediator : MonoBehaviour, IGameMediator {
 
     public void RemoveCreatureArmorChangedListener(UnityAction<ICreature, int> listener) {
         events.CreatureArmorChanged.RemoveListener(listener);
+    }
 
+    // --- NEW Stats Change Listeners ---
+    public void AddCreatureStatsChangedListener(UnityAction<ICreature> listener) {
+        ValidateInitialization();
+        events.CreatureStatsChanged.AddListener(listener);
+    }
+
+    public void RemoveCreatureStatsChangedListener(UnityAction<ICreature> listener) {
+        events.CreatureStatsChanged.RemoveListener(listener);
     }
 
     public void AddCreaturePreSummonListener(UnityAction<ICreature> listener) {
@@ -300,6 +311,16 @@ public class GameMediator : MonoBehaviour, IGameMediator {
         // Optional Log: Can be noisy if armor changes frequently
         // Log($"Creature armor changed: {creature.Name} now has {newArmor} armor", LogTag.Creatures | LogTag.Effects);
         NotifyGameStateChanged(); // Ensure UI updates
+    }
+
+    // --- NEW Stats Change Notifier ---
+    public void NotifyCreatureStatsChanged(ICreature creature) {
+        ValidateInitialization();
+        if (creature == null) throw new System.ArgumentNullException(nameof(creature));
+
+        events.CreatureStatsChanged.Invoke(creature);
+        Log($"Stats changed for {creature.Name} (TargetID: {creature.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
+        NotifyGameStateChanged(); // Still notify general state change for broader updates if needed
     }
 
     public void NotifyActionsQueueChanged() {

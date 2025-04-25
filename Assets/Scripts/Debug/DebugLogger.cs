@@ -101,7 +101,6 @@ public class DebugLogger : MonoBehaviour {
         "Player",
         "PlayerUI",
         "Target",
-        "TestSetup",
         "UIComponent"
     };
     [SerializeField] private DebugLoggerSettings settings;

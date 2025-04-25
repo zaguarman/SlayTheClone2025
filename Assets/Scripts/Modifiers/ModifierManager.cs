@@ -336,13 +336,18 @@ public class ModifierManager : IModifierManager {
         int finalSpeed = (int)Math.Round(speedAfterFlat * speedMultiplier);
 
         finalAttack = Math.Max(0, finalAttack);
-        finalMaxHealth = Math.Max(1, finalMaxHealth);
+        finalMaxHealth = Math.Max(1, finalMaxHealth); // Keep health >= 1
         finalSpeed = Math.Max(0, finalSpeed);
 
+        // Update creature's internal effective stats
         creature.UpdateEffectiveStats(finalAttack, finalMaxHealth, finalSpeed);
 
         Log($"ModifierManager: Stats recalculated for '{creature.Name}' - Attack: {finalAttack}, MaxHealth: {finalMaxHealth}, Speed: {finalSpeed}", LogTag.Effects | LogTag.Creatures);
-        _mediator?.NotifyCreatureDamaged(creature, 0);
+
+        // --- USE NEW NOTIFICATION ---
+        _mediator?.NotifyCreatureStatsChanged(creature);
+        // REMOVED: _mediator?.NotifyCreatureDamaged(creature, 0);
+        // --- END ---
     }
     #endregion
 
