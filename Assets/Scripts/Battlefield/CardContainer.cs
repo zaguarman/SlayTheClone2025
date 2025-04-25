@@ -223,16 +223,10 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
         UpdateLayout();
     }
 
-    protected virtual CardController CreateCard(ICard card, IGameManager manager = null) {
-        // Use the gameMediator and gameReferences fields inherited from UIComponent
-
-        // Get the original CardData for this card
+    protected virtual CardController CreateCard(ICard card) {
         CardData originalData = null;
 
-        // Try to find the original card data in the deck
         if (Player != null && card.CardId != null) {
-            // Since we don't have direct access to the deck's original data,
-            // we'll create a temporary CardData based on the card's base properties
             if (card is ICreature creature) {
                 var tempData = ScriptableObject.CreateInstance<CreatureData>();
                 tempData.cardId = card.CardId;
@@ -252,14 +246,11 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
             }
         }
 
-        // If we couldn't create original data, log a warning
         if (originalData == null) {
             LogWarning($"Could not create CardData for {card.Name}, display may not be accurate", LogTag.Cards);
         }
 
-        // Use the passed manager or fall back to the gameManager from UIComponent
-        IGameManager managerToUse = manager ?? gameManager;
-        return CardFactory.CreateCardController(card, originalData, Player, transform, gameMediator, gameReferences, managerToUse); // Pass gameManager
+        return CardFactory.CreateCardController(card, originalData, Player, transform, gameMediator, gameReferences, gameManager);
     }
 
     public virtual void AddCard(CardController card) {
