@@ -59,14 +59,6 @@ public class GameUI : MonoBehaviour {
         IsInitialized = true;
         Log("GameUI initialized successfully", LogTag.UI | LogTag.Initialization);
 
-        // Now that UI and battlefields are initialized, place initial creatures
-        if (_gameManager != null && _gameManager.IsInitialized) {
-            Log("Calling GameManager to place initial creatures now that battlefields are initialized", LogTag.UI | LogTag.Initialization);
-            _gameManager.PlaceInitialCreatures();
-        } else {
-            LogError("Cannot place initial creatures - GameManager is null or not initialized", LogTag.UI | LogTag.Initialization);
-        }
-
         onInitialized.Invoke();
     }
 

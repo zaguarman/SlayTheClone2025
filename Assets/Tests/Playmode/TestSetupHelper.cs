@@ -75,21 +75,15 @@ public static class TestSetupHelper
         Assert.IsNotNull(modifierManager, "ModifierManager is null after GameManager initialized.");
         Debug.Log("[TestSetup] ModifierManager reference obtained.");
 
-        // --- 5. Wait for Creature Placement & Action Resolution ---
-        // GameManager.PlaceInitialCreatures is called by GameUI.Initialize
-        // Wait a few frames for potential Summon actions to resolve
-        Debug.Log("[TestSetup] Waiting for initial creature placement/actions...");
+        // --- 5. Wait for Action Resolution ---
+        // Wait a few frames for any pending actions to resolve
+        Debug.Log("[TestSetup] Waiting for any pending actions to resolve...");
         yield return new WaitForSeconds(0.2f); // Adjust delay if needed
 
         // --- 6. Final Validation ---
         Assert.IsNotNull(gameManager.Player1, "GameManager did not initialize Player1.");
         Assert.IsNotNull(gameManager.Player1.Battlefield, "Player 1 Battlefield is null.");
-        // Ensure *some* creature exists after setup for tests that need one
-        bool creaturePlaced = gameManager.Player1.Battlefield.Any(slot => slot.IsOccupied());
-        if (!creaturePlaced) {
-             creaturePlaced = gameManager.Player2.Battlefield.Any(slot => slot.IsOccupied());
-        }
-        Assert.IsTrue(creaturePlaced, "No creatures found on either battlefield after setup. Check GameManager.PlaceInitialCreatures and scene decks.");
+        // Removed pre-placement check - tests will spawn their own creatures
 
         Debug.Log("[TestSetup] Scene setup complete.");
 
@@ -97,23 +91,5 @@ public static class TestSetupHelper
         onSetupComplete?.Invoke(gameManager, gameMediator, gameReferences, turnManager, modifierManager);
     }
 
-    // Helper to get the first available creature for testing
-    public static Creature GetFirstAvailableCreature(IPlayer player, ModifierManager modifierManager)
-    {
-        Assert.IsNotNull(player, "Player is null when trying to find a creature.");
-        Assert.IsNotNull(player.Battlefield, "Player's battlefield is null.");
-        Assert.IsNotNull(modifierManager, "ModifierManager is null when trying to get creature.");
 
-        var occupiedSlot = player.Battlefield.FirstOrDefault(slot => slot.IsOccupied() && slot.OccupyingCreature != null);
-        Assert.IsNotNull(occupiedSlot, $"No occupied slot with a creature found for player {(player.IsPlayer1 ? "1" : "2")}.");
-
-        var creature = occupiedSlot.OccupyingCreature as Creature;
-        Assert.IsNotNull(creature, "Occupying entity is not a concrete Creature.");
-
-        // Ensure stats are calculated before returning (important!)
-        modifierManager.RecalculateStats(creature);
-        Debug.Log($"[TestHelper] Found creature: {creature.Name} (Atk: {creature.Attack}, HP: {creature.Health}/{creature.MaxHealth}, Spd: {creature.Speed})");
-
-        return creature;
-    }
 }

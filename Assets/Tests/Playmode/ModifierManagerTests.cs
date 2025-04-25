@@ -17,18 +17,97 @@ public class ModifierManagerTests {
     private Creature _testCreatureP1;
     private Creature _testCreatureP2;
 
+    // Helper class to hold spawn results
+    private class SpawnResult
+    {
+        public Creature Creature { get; set; }
+        public BattlefieldSlot Slot { get; set; }
+    }
+
+    // Helper to spawn a creature and return the concrete Creature type
+    private IEnumerator SpawnCreatureForTest(IPlayer player, int cardDataIndex)
+    {
+        var deckList = player.IsPlayer1 ? _gameManager.GameReferences.GetPlayer1DeckCards() : _gameManager.GameReferences.GetPlayer2DeckCards();
+        var cardData = deckList[cardDataIndex] as CreatureData;
+        Assert.IsNotNull(cardData, $"Card data at index {cardDataIndex} is not CreatureData.");
+
+        ICard cardToSpawn = CardFactory.CreateCard(cardData);
+        Assert.IsNotNull(cardToSpawn, "Failed to create creature card instance.");
+        ICreature creatureToSpawn = cardToSpawn as ICreature;
+        Assert.IsNotNull(creatureToSpawn, "Card is not a creature.");
+
+        BattlefieldSlot targetSlot = player.Battlefield.First(s => !s.IsOccupied());
+        Assert.IsNotNull(targetSlot, $"No empty slot for Player {(player.IsPlayer1 ? "1" : "2")} to spawn creature.");
+
+        _actionsQueue.AddAction(new SummonCreatureAction(creatureToSpawn, player, targetSlot, false));
+        _actionsQueue.ResolveActions();
+        yield return null;
+
+        Creature spawnedCreature = targetSlot.OccupyingCreature as Creature; // Cast to concrete type
+        Assert.IsNotNull(spawnedCreature, "Spawned creature is not a concrete Creature type.");
+
+        var result = new SpawnResult { Creature = spawnedCreature, Slot = targetSlot };
+        yield return result;
+    }
+
     // Use the helper for setup
     [UnitySetUp]
     public IEnumerator Setup() {
+        // First set up the core game systems
+        bool setupComplete = false;
+        GameManager gameManager = null;
+        GameMediator gameMediator = null;
+        GameReferences gameReferences = null;
+        TurnManager turnManager = null;
+        ModifierManager modifierManager = null;
+
         yield return TestSetupHelper.SetupSceneAndWait((gm, med, refs, tm, mm) => {
-            _gameManager = gm;
-            _turnManager = tm;
-            _modifierManager = mm;
-            _factory = mm.ModifierFactory; // Get factory from manager
-            _actionsQueue = gm.ActionsQueue; // Get actions queue
-            _testCreatureP1 = TestSetupHelper.GetFirstAvailableCreature(gm.Player1, mm);
-            _testCreatureP2 = TestSetupHelper.GetFirstAvailableCreature(gm.Player2, mm);
+            gameManager = gm;
+            gameMediator = med;
+            gameReferences = refs;
+            turnManager = tm;
+            modifierManager = mm;
+            setupComplete = true;
         });
+
+        Assert.IsTrue(setupComplete, "Test setup did not complete");
+
+        // Store references
+        _gameManager = gameManager;
+        _turnManager = turnManager;
+        _modifierManager = modifierManager;
+        _factory = modifierManager.ModifierFactory;
+        _actionsQueue = gameManager.ActionsQueue;
+
+        // Now spawn creatures
+        var spawnP1 = SpawnCreatureForTest(gameManager.Player1, 0);
+        while (spawnP1.MoveNext())
+        {
+            if (spawnP1.Current is SpawnResult result)
+            {
+                _testCreatureP1 = result.Creature;
+            }
+            else
+            {
+                yield return spawnP1.Current;
+            }
+        }
+
+        var spawnP2 = SpawnCreatureForTest(gameManager.Player2, 0);
+        while (spawnP2.MoveNext())
+        {
+            if (spawnP2.Current is SpawnResult result)
+            {
+                _testCreatureP2 = result.Creature;
+            }
+            else
+            {
+                yield return spawnP2.Current;
+            }
+        }
+
+        Assert.IsNotNull(_testCreatureP1, "Failed to spawn test creature for Player 1");
+        Assert.IsNotNull(_testCreatureP2, "Failed to spawn test creature for Player 2");
     }
 
     [TearDown]

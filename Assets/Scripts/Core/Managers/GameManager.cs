@@ -29,9 +29,8 @@ public interface IGameManager {
     void DiscardAllHands();
     void DrawCardsForPlayer(IPlayer player, int count);
     void DrawCardForPlayer(IPlayer player);
-
-    // Method to place initial creatures (called by GameUI after battlefields are initialized)
-    void PlaceInitialCreatures();
+    int TurnNumber { get; }
+    void EndTurn();
 }
 
 public interface ITurnManager {
@@ -99,7 +98,6 @@ public class GameManager : MonoBehaviour, IGameManager {
     private IGameMediator gameMediator;
     private IGameReferences gameReferences;
     public ICardDealingService cardDealingService; // Made public to fix access issues
-    private readonly System.Random random = new System.Random();
     public Player Player1 { get; private set; } // Keep concrete Player for internal use
     public Player Player2 { get; private set; } // Keep concrete Player for internal use
 
@@ -130,6 +128,10 @@ public class GameManager : MonoBehaviour, IGameManager {
     public IBattlefieldCombatHandler CombatHandler => combatHandler;
     public ITurnManager TurnManager => turnManager;
     public IGameReferences GameReferences => gameReferences;
+
+    // Implement ITurnManager methods through delegation
+    public int TurnNumber => turnManager.TurnNumber;
+    public void EndTurn() => turnManager.EndTurn();
     #endregion
 
 
@@ -225,8 +227,8 @@ public class GameManager : MonoBehaviour, IGameManager {
         WeatherSystem.SetWeather(WeatherType.Clear);
         Log("Initial weather set to Clear", LogTag.Initialization | LogTag.Effects);
 
-        // Note: Initial creatures will be placed by GameUI after battlefields are initialized
-        // Game initialization notification will happen after creatures are placed
+        // Game initialization is now complete from GameManager's perspective
+        gameMediator.NotifyGameInitialized();
         Log("GameManager Initialization complete.", LogTag.Initialization);
     }
 
@@ -267,113 +269,7 @@ public class GameManager : MonoBehaviour, IGameManager {
             LogTag.Cards | LogTag.Initialization);
     }
 
-    public void PlaceInitialCreatures() {
-        if (!HasValidBattlefields()) {
-            LogError("Cannot place creatures - battlefield not initialized", LogTag.Initialization);
-            // Log more detailed diagnostic information
-            if (Player1?.Battlefield == null) {
-                LogError("Player1.Battlefield is null", LogTag.Initialization);
-            }
-            else if (!Player1.Battlefield.Any()) {
-                LogError("Player1.Battlefield is empty (no slots)", LogTag.Initialization);
-            }
 
-            if (Player2?.Battlefield == null) {
-                LogError("Player2.Battlefield is null", LogTag.Initialization);
-            }
-            else if (!Player2.Battlefield.Any()) {
-                LogError("Player2.Battlefield is empty (no slots)", LogTag.Initialization);
-            }
-            return;
-        }
-
-        Log($"Placing initial creatures. Player1 has {Player1.Battlefield.Count} battlefield slots, Player2 has {Player2.Battlefield.Count} slots.",
-            LogTag.Initialization | LogTag.Creatures);
-
-        PlaceCreaturesForPlayerFromDeck(Player1, 3);
-        PlaceCreaturesForPlayerFromDeck(Player2, 3);
-
-        // Resolve actions immediately after placing initial creatures
-        // This ensures OnPlay effects trigger and creatures are registered properly
-        ActionsQueue.ResolveActions();
-        Log("Initial creatures placed and actions resolved.", LogTag.Initialization | LogTag.Creatures);
-
-        // Notify game is fully ready after creatures are placed
-        gameMediator.NotifyGameInitialized();
-    }
-
-    private void PlaceCreaturesForPlayerFromDeck(IPlayer player, int count) {
-        var emptySlots = player.Battlefield.Where(s => !s.IsOccupied()).ToList();
-        if (emptySlots.Count == 0) {
-            LogWarning($"No empty slots available for {(player.IsPlayer1 ? "Player 1" : "Player 2")} during initial placement", LogTag.Initialization);
-            return;
-        }
-
-        var deckPreview = CardDealingService.GetDeckPreview(player);
-        List<ICard> deckCreatures = deckPreview.Where(card => card is ICreature).ToList();
-        int creaturesToPlace = Mathf.Min(count, emptySlots.Count, deckCreatures.Count);
-        List<BattlefieldSlot> availableSlots = new List<BattlefieldSlot>(emptySlots);
-        List<ICard> creaturesPlaced = new List<ICard>();
-
-        for (int i = 0; i < creaturesToPlace; i++) {
-            int randomCreatureIndex = random.Next(deckCreatures.Count);
-            var creatureCard = deckCreatures[randomCreatureIndex];
-            deckCreatures.RemoveAt(randomCreatureIndex);
-
-            int randomSlotIndex = random.Next(availableSlots.Count);
-            var slot = availableSlots[randomSlotIndex];
-            availableSlots.RemoveAt(randomSlotIndex);
-
-            creaturesPlaced.Add(creatureCard);
-
-            ICreature creature = creatureCard as ICreature;
-            if (creature == null) continue;
-
-            creature.SetOwner(player);
-
-            // Queue the Summon Action
-            var summonAction = new SummonCreatureAction(creature, player, slot, true); // fromDeck = true
-            ActionsQueue.AddAction(summonAction); // Queue the action
-
-            // Log that the action was QUEUED, not executed yet.
-            Log($"Queued initial placement action for {creature.Name} into slot {player.Battlefield.IndexOf(slot) + 1} for {(player.IsPlayer1 ? "Player 1" : "Player 2")}.", LogTag.Creatures | LogTag.Initialization | LogTag.Actions);
-        }
-
-        if (creaturesPlaced.Count > 0) {
-            RemoveCardsFromDeck(player, creaturesPlaced); // Remove the cards from the deck data
-        }
-    }
-
-    private void RemoveCardsFromDeck(IPlayer player, List<ICard> cardsToRemove) {
-        if (player == null || cardsToRemove == null || cardsToRemove.Count == 0) return;
-        if (CardDealingService != null) {
-            foreach (var card in cardsToRemove) {
-                CardDealingService.RemoveCardFromDeck(player, card);
-            }
-            Log($"Removed {cardsToRemove.Count} creatures from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s deck", LogTag.Cards | LogTag.Initialization);
-        }
-    }
-
-    private bool HasValidBattlefields() {
-        bool player1Valid = Player1?.Battlefield != null && Player1.Battlefield.Any();
-        bool player2Valid = Player2?.Battlefield != null && Player2.Battlefield.Any();
-
-        // Log detailed information about battlefield state
-        if (!player1Valid || !player2Valid) {
-            Log($"Battlefield validation: Player1 valid: {player1Valid}, Player2 valid: {player2Valid}",
-                LogTag.Initialization);
-
-            if (Player1?.Battlefield != null) {
-                Log($"Player1 battlefield has {Player1.Battlefield.Count} slots", LogTag.Initialization);
-            }
-
-            if (Player2?.Battlefield != null) {
-                Log($"Player2 battlefield has {Player2.Battlefield.Count} slots", LogTag.Initialization);
-            }
-        }
-
-        return player1Valid && player2Valid;
-    }
 
     private void SetupInitialGameState() {
         // Deal initial hands with fewer cards to ensure deck has cards remaining
