@@ -223,35 +223,7 @@ public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHa
         UpdateLayout();
     }
 
-    protected virtual CardController CreateCard(ICard card) {
-        CardData originalData = null;
 
-        if (Player != null && card.CardId != null) {
-            if (card is ICreature creature) {
-                var tempData = ScriptableObject.CreateInstance<CreatureData>();
-                tempData.cardId = card.CardId;
-                tempData.cardName = card.Name;
-                tempData.description = card.Description;
-                tempData.attack = creature.BaseAttack;
-                tempData.health = creature.BaseHealth;
-                tempData.speed = creature.BaseSpeed;
-                originalData = tempData;
-            } else if (card is Spell spell) {
-                var tempData = ScriptableObject.CreateInstance<SpellData>();
-                tempData.cardId = card.CardId;
-                tempData.cardName = card.Name;
-                tempData.description = card.Description;
-                tempData.defaultTargetType = spell.DefaultTargetType;
-                originalData = tempData;
-            }
-        }
-
-        if (originalData == null) {
-            LogWarning($"Could not create CardData for {card.Name}, display may not be accurate", LogTag.Cards);
-        }
-
-        return CardFactory.CreateCardController(card, originalData, Player, transform, gameMediator, gameReferences, gameManager);
-    }
 
     public virtual void AddCard(CardController card) {
         if (card == null) return;

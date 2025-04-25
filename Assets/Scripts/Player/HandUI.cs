@@ -42,7 +42,21 @@ public class HandUI : CardContainer {
 
         // Create new card controllers for each card in hand
         foreach (var cardData in player.Hand) {
-            var controller = CreateCard(cardData);
+            // Get the ICard instance from the player's hand
+            ICard handCard = cardData; // cardData is actually an ICard instance here
+
+            // Find the original CardData using the player's deck
+            CardData originalData = player.Deck?.FindOriginalCardDataById(handCard.CardId);
+
+            if (originalData == null) {
+                LogWarning($"HandUI: Could not find original CardData for {handCard.Name} (ID: {handCard.CardId}) in Player {player.Name}'s deck. Display might be inaccurate.", LogTag.UI | LogTag.Cards);
+                // As a fallback, you might create temporary data, but ideally, this shouldn't happen for cards dealt from a deck.
+                // For now, we'll skip creating a controller if original data is missing to highlight the issue.
+                continue;
+            }
+
+            // Use CardFactory to create the controller, passing the live ICard instance and the original CardData
+            var controller = CardFactory.CreateCardController(handCard, originalData, Player, transform, gameMediator, gameReferences, gameManager);
             if (controller != null) {
                 AddCard(controller);
             }
