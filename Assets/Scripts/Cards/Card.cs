@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using static DebugLogger;
 
 public interface ICard : IEntity {
     string CardId { get; }
@@ -8,7 +7,7 @@ public interface ICard : IEntity {
     void Play(IPlayer owner, IActionsQueue context, ITarget target = null);
 }
 
-public class Card : Entity, ICard {
+public abstract class Card : Entity, ICard {
     public string CardId { get; protected set; }
     public List<CardEffect> Effects { get; protected set; }
     public string Description { get; set; }
@@ -25,10 +24,5 @@ public class Card : Entity, ICard {
         CardId = !string.IsNullOrEmpty(cardId) ? cardId : System.Guid.NewGuid().ToString();
     }
 
-    public virtual void Play(IPlayer owner, IActionsQueue context, ITarget target = null) {
-        Log($"[Card] Playing {Name} with {Effects.Count} effects and target {target?.TargetId ?? "null"}", LogTag.Cards | LogTag.Actions);
-        foreach (var effect in Effects) {
-            Log($"[Card] Processing effect with trigger {effect.trigger}", LogTag.Cards | LogTag.Actions | LogTag.Effects);
-        }
-    }
+    public abstract void Play(IPlayer owner, IActionsQueue context, ITarget target = null);
 }

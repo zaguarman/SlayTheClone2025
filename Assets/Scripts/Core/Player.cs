@@ -37,6 +37,12 @@ public interface IPlayer : IEntity {
     IGameManager GameManager { get; }
 
     /// <summary>
+    /// Applies damage to the player, reducing their health.
+    /// </summary>
+    /// <param name="amount">The amount of damage to apply.</param>
+    void TakeDamage(int amount);
+
+    /// <summary>
     /// Heals the player by the specified amount, up to their maximum health.
     /// </summary>
     /// <param name="amount">The amount to heal.</param>
@@ -133,6 +139,34 @@ public class Player : Entity, IPlayer {
 
         // Update UI
         UpdateHealthUI();
+    }
+
+    /// <summary>
+    /// Applies damage to the player, reducing their health.
+    /// </summary>
+    /// <param name="amount">The amount of damage to apply.</param>
+    public void TakeDamage(int amount)
+    {
+        if (amount <= 0) return; // No damage to take
+
+        int previousHealth = Health;
+        int actualDamage = Math.Min(Health, amount); // Can't take more damage than current health
+
+        Health -= actualDamage;
+        Health = Math.Max(0, Health); // Prevent health going below 0
+
+        Log($"Player {Name} took {actualDamage} damage. Health: {previousHealth} -> {Health}",
+            LogTag.Players | LogTag.Combat);
+
+        // Invoke the OnDamaged event. The GameMediator listens to this.
+        if (actualDamage > 0)
+        {
+            OnDamaged?.Invoke(actualDamage);
+            // No need to call mediator.NotifyPlayerDamaged here,
+            // as the mediator should be subscribed via RegisterPlayer.
+        }
+
+        // Update UI is handled by the OnDamaged listener calling UpdateHealthUI
     }
 
     /// <summary>
