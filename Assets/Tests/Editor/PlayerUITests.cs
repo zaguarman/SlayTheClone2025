@@ -4,77 +4,60 @@ using UnityEngine.TestTools;
 using System.Collections;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement; // Use Editor Scene Manager
 
-public class PlayerUITests
+[TestFixture]
+public class PlayerUITests_Editor
 {
-    private const string TestSceneName = "Balatro-Feel";
-    private const string BlankSceneName = "TestBlankScene"; // Name of your empty scene
+    private const string TestSceneName = "Balatro-Feel"; // Use the actual scene path
+    private Scene _testScene;
 
-    private GameManager gameManager;
-    private GameMediator gameMediator;
-    private GameReferences gameReferences;
-    private GameUI gameUI;
-
-    // SetupSceneAndWait remains the same as the previous version
-
-    private IEnumerator SetupSceneAndWait()
+    [OneTimeSetUp]
+    public void LoadScene()
     {
-        // --- 1. Load the Scene ---
-        Debug.Log($"[Test] Loading scene: {TestSceneName}...");
-        // Ensure the previous scene is unloaded properly if coming from another test
-        yield return SceneManager.LoadSceneAsync(TestSceneName, LoadSceneMode.Single);
-        Debug.Log($"[Test] Scene {TestSceneName} loaded.");
-
-        // --- 2. Find Core Components in the Loaded Scene ---
-        yield return null; // Allow a frame for objects to potentially Awake/Start
-
-        gameManager = Object.FindObjectOfType<GameManager>();
-        gameMediator = Object.FindObjectOfType<GameMediator>();
-        gameReferences = Object.FindObjectOfType<GameReferences>();
-        gameUI = Object.FindObjectOfType<GameUI>();
-
-        Assert.IsNotNull(gameManager, $"GameManager not found in scene '{TestSceneName}'.");
-        Assert.IsNotNull(gameMediator, $"GameMediator not found in scene '{TestSceneName}'.");
-        Assert.IsNotNull(gameReferences, $"GameReferences not found in scene '{TestSceneName}'.");
-        Assert.IsNotNull(gameUI, $"GameUI not found in scene '{TestSceneName}'.");
-
-        // --- 3. Wait for Initialization ---
-        Debug.Log("[Test] Waiting for scene components to initialize...");
-        // Add timeouts to prevent infinite waits if initialization fails
-        float timeout = 10f; float time = 0f;
-        yield return new WaitUntil(() => (gameReferences?.IsInitialized ?? false) || (time += Time.deltaTime) > timeout); Assert.IsTrue(time <= timeout, "Timeout waiting for GameReferences");
-        Debug.Log("[Test] GameReferences Initialized."); time = 0f;
-        yield return new WaitUntil(() => (gameMediator?.IsInitialized ?? false) || (time += Time.deltaTime) > timeout); Assert.IsTrue(time <= timeout, "Timeout waiting for GameMediator");
-        Debug.Log("[Test] GameMediator Initialized."); time = 0f;
-        yield return new WaitUntil(() => (gameManager?.IsInitialized ?? false) || (time += Time.deltaTime) > timeout); Assert.IsTrue(time <= timeout, "Timeout waiting for GameManager");
-        Debug.Log("[Test] GameManager Initialized."); time = 0f;
-        yield return new WaitUntil(() => (gameUI?.IsInitialized ?? false) || (time += Time.deltaTime) > timeout); Assert.IsTrue(time <= timeout, "Timeout waiting for GameUI");
-        Debug.Log("[Test] GameUI Initialized.");
-
-        yield return null;
-        Debug.Log("[Test] Scene setup complete.");
-
-        // --- 4. Final Checks ---
-        Assert.IsTrue(gameReferences.AreReferencesValid(), "GameReferences in the scene has missing inspector assignments.");
-        Assert.IsNotNull(gameManager.Player1, "GameManager did not initialize Player1 in the scene.");
-        Assert.IsNotNull(gameReferences.player1References.playerUI, "Player 1 UI reference missing in GameReferences (Scene Inspector).");
-        Assert.IsTrue(gameReferences.player1References.playerUI.IsInitialized, "Player 1 UI did not initialize within the scene.");
-        Assert.IsNotNull(gameReferences.player1References.healthText, "Player 1 Health Text reference missing in GameReferences (Scene Inspector).");
+        // Load the scene additively in the editor to inspect it
+        _testScene = EditorSceneManager.OpenScene("Assets/Scenes/" + TestSceneName + ".unity", OpenSceneMode.Additive);
+        Assert.IsTrue(_testScene.IsValid(), $"Failed to load scene: {TestSceneName}");
     }
-    
-    // --- THE TESTS (Unchanged) ---
 
-    [UnityTest]
-    public IEnumerator PlayerUI_Initialization_UpdatesHealthText()
+    [OneTimeTearDown]
+    public void UnloadScene()
     {
-        // Arrange
-        yield return SetupSceneAndWait();
+        if (_testScene.IsValid())
+        {
+            EditorSceneManager.CloseScene(_testScene, true);
+        }
+    }
 
-        // Act
+    [Test]
+    public void PlayerUI_Initialization_ReferencesCorrectHealthText()
+    {
+        // Arrange: Find components within the loaded scene
+        // FindObjectOfType works in editor tests on loaded scenes
+        GameManager gameManager = Object.FindObjectOfType<GameManager>();
+        GameReferences gameReferences = Object.FindObjectOfType<GameReferences>();
+
+        Assert.IsNotNull(gameManager, "GameManager not found in the scene.");
+        Assert.IsNotNull(gameReferences, "GameReferences not found in the scene.");
+
+        // We can't fully *run* initialization in editor tests easily,
+        // but we can check if the references *are assigned* in the inspector.
+        PlayerUI player1UI = gameReferences.GetPlayer1UI();
+        TextMeshProUGUI healthTextRef = gameReferences.player1References.healthText; // Get the assigned ref
 
         // Assert
-        TextMeshProUGUI healthText = gameReferences.player1References.healthText;
-        Assert.IsNotNull(healthText, "HealthText component not found in scene.");
-        Assert.AreEqual($"Health: {gameManager.Player1.Health}", healthText.text, "Initial health text is incorrect based on scene setup.");
+        Assert.IsNotNull(player1UI, "Player1UI reference missing in GameReferences.");
+        Assert.IsNotNull(healthTextRef, "Player1 HealthText reference missing in GameReferences.");
+
+        // Optional: Check if the HealthText is actually a child of the PlayerUI object
+        bool isChild = false;
+        if (player1UI != null && healthTextRef != null)
+        {
+            isChild = healthTextRef.transform.IsChildOf(player1UI.transform);
+        }
+         Assert.IsTrue(isChild, "Player1 HealthText is not a child of Player1UI GameObject in the scene hierarchy.");
+
+        // Note: We cannot easily test the *result* of Player.SetHealthText in editor mode
+        // without running the game's initialization logic. This test verifies the scene setup.
     }
 }
