@@ -84,8 +84,8 @@ public class DamageCreatureActionExecutor : IActionExecutor
             Log($"Executor: Triggering OnDeath effects for {targetCreature.Name}", LogTag.Effects | LogTag.Actions);
             targetCreature.HandleEffect(EffectTrigger.OnDeath, context); // Pass context
 
-            // Unregister from ModifierManager
-            modifierManager.UnregisterCreature(targetCreature as Creature); // Requires concrete type
+            // Unregister from ModifierManager - NO CAST NEEDED
+            modifierManager.UnregisterCreature(targetCreature);
 
             // Remove from Battlefield (let Player handle this)
             targetCreature.Owner?.RemoveFromBattlefield(targetCreature, false); // destroyCard = false (already handled by Died event?) - Keep false for now

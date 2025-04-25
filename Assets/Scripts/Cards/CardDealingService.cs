@@ -34,21 +34,23 @@ public class CardDealingService : ICardDealingService {
         }
         Log($"Initializing decks - Player1 cards: {player1Cards?.Count ?? 0}, Player2 cards: {player2Cards?.Count ?? 0}", LogTag.Cards);
 
-        // Create and initialize deck for Player 1
-        var player1Deck = player1.Deck as Deck; // Assuming Deck is concrete, maybe use IDeck if possible
+        // Get IDeck from player (no cast needed)
+        var player1Deck = player1.Deck;
         if (player1Deck == null) {
-             LogError("Player 1 Deck is null or not of type Deck", LogTag.Cards | LogTag.Initialization);
+             LogError("Player 1 Deck is null", LogTag.Cards | LogTag.Initialization);
              return;
         }
+        // Use IDeck.Initialize
         player1Deck.Initialize(player1Cards);
         playerDecks[player1] = player1Deck;
 
-        // Create and initialize deck for Player 2
-        var player2Deck = player2.Deck as Deck;
+        // Get IDeck from player (no cast needed)
+        var player2Deck = player2.Deck;
         if (player2Deck == null) {
-             LogError("Player 2 Deck is null or not of type Deck", LogTag.Cards | LogTag.Initialization);
+             LogError("Player 2 Deck is null", LogTag.Cards | LogTag.Initialization);
              return;
         }
+        // Use IDeck.Initialize
         player2Deck.Initialize(player2Cards);
         playerDecks[player2] = player2Deck;
 
@@ -208,24 +210,19 @@ public class CardDealingService : ICardDealingService {
             return false;
         }
 
-        // Implement recycling logic
-        if (deck is Deck deckImpl) {
-            // Add cards from discard to deck and shuffle
-            foreach (var card in discardPileCards) {
-                deckImpl.AddCardToBottom(card);
-            }
-
-            // Clear the discard pile (this should be part of the Deck implementation)
-            deckImpl.ClearDiscardPile();
-
-            // Shuffle the deck
-            deckImpl.Shuffle();
-
-            Log($"Recycled {discardPileCards.Count} cards from discard pile for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
-            return true;
+        // Add cards from discard to deck and shuffle using IDeck methods
+        foreach (var card in discardPileCards) {
+            deck.AddCardToBottom(card);
         }
 
-        return false;
+        // Clear the discard pile using IDeck method
+        deck.ClearDiscardPile();
+
+        // Shuffle the deck using IDeck method
+        deck.Shuffle();
+
+        Log($"Recycled {discardPileCards.Count} cards from discard pile for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+        return true;
     }
 
     public void ShuffleDeck(IPlayer player) {
@@ -289,16 +286,13 @@ public class CardDealingService : ICardDealingService {
             return false;
         }
 
-        if (deck is Deck deckImpl) {
-            bool removed = deckImpl.RemoveCard(card);
-            if (removed) {
-                Log($"Removed card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck", LogTag.Cards);
-            } else {
-                LogWarning($"Failed to remove card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck - card not found", LogTag.Cards);
-            }
-            return removed;
+        // Call RemoveCard directly on IDeck
+        bool removed = deck.RemoveCard(card);
+        if (removed) {
+            Log($"Removed card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck", LogTag.Cards);
+        } else {
+            LogWarning($"Failed to remove card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck - card not found", LogTag.Cards);
         }
-
-        return false;
+        return removed;
     }
 }

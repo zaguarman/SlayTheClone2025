@@ -40,14 +40,18 @@ public class ModifierManager : IModifierManager {
         }
     }
 
-    public void UnregisterCreature(Creature creature) {
+    // Method signature now accepts ICreature
+    public void UnregisterCreature(ICreature creature) {
         if (creature == null) return;
+
+        // Use TargetId directly from ICreature
         if (_creatures.Remove(creature.TargetId)) {
             Log($"ModifierManager: Unregistered Creature '{creature.Name}' (TargetID: {creature.TargetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
 
             if (_activeModifiers.TryGetValue(creature.TargetId, out var mods)) {
                 var modifiersToRemove = mods.ToList();
                 foreach (var mod in modifiersToRemove) {
+                    // RemoveModifier takes object, so ICreature is fine here
                     RemoveModifier(creature, mod);
                 }
                 _activeModifiers.Remove(creature.TargetId);

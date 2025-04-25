@@ -42,8 +42,8 @@ public interface ITurnManager {
 
 public interface IModifierManager {
     // Add essential public methods needed by other systems
-    void RegisterCreature(Creature creature);
-    void UnregisterCreature(Creature creature);
+    void RegisterCreature(Creature creature); // Register still takes concrete for simplicity if needed internally
+    void UnregisterCreature(ICreature creature); // Changed from Creature to ICreature
     void ApplyModifier(object target, IModifier modifier);
     void RemoveModifier(object target, IModifier modifier);
     IEnumerable<IModifier> GetActiveModifiersFor(Creature creature);

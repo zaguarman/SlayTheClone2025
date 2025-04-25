@@ -68,7 +68,7 @@ public class SummonCreatureActionExecutor : IActionExecutor
              if (oldCreature != null)
              {
                  owner.RemoveFromBattlefield(oldCreature, true); // destroyCard = true
-                 modifierManager.UnregisterCreature(oldCreature as Creature); // Unregister replaced creature
+                 modifierManager.UnregisterCreature(oldCreature); // Unregister replaced creature
              }
              else
              {
@@ -118,7 +118,7 @@ public class SummonCreatureActionExecutor : IActionExecutor
         {
             LogError($"SummonCreatureActionExecutor: Failed to create card controller for {creature.Name}", LogTag.Actions | LogTag.Creatures);
             // If controller creation fails, we should probably unregister the creature if it was registered
-            modifierManager.UnregisterCreature(creature as Creature);
+            modifierManager.UnregisterCreature(creature);
         }
     }
 }
