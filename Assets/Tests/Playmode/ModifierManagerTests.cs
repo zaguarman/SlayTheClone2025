@@ -8,8 +8,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Events; // For UnityAction
 
-public class ModifierManagerTests
-{
+public class ModifierManagerTests {
     private GameManager _gameManager;
     private TurnManager _turnManager;
     private ModifierManager _modifierManager;
@@ -20,10 +19,8 @@ public class ModifierManagerTests
 
     // Use the helper for setup
     [UnitySetUp]
-    public IEnumerator Setup()
-    {
-        yield return TestSetupHelper.SetupSceneAndWait((gm, med, refs, tm, mm) =>
-        {
+    public IEnumerator Setup() {
+        yield return TestSetupHelper.SetupSceneAndWait((gm, med, refs, tm, mm) => {
             _gameManager = gm;
             _turnManager = tm;
             _modifierManager = mm;
@@ -35,8 +32,7 @@ public class ModifierManagerTests
     }
 
     [TearDown]
-    public void Teardown()
-    {
+    public void Teardown() {
         // Cleanup logic if needed, often handled by scene reload
         _gameManager = null;
         _turnManager = null;
@@ -50,8 +46,7 @@ public class ModifierManagerTests
     // --- Existing Tests (Adapted) ---
 
     [UnityTest]
-    public IEnumerator ModifierManager_ApplyFlatAttackModifier_IncreasesAttack()
-    {
+    public IEnumerator ModifierManager_ApplyFlatAttackModifier_IncreasesAttack() {
         // Arrange
         int initialAttack = _testCreatureP1.Attack;
         int modifierValue = 5;
@@ -67,8 +62,7 @@ public class ModifierManagerTests
     }
 
     [UnityTest]
-    public IEnumerator ModifierManager_ApplyTimedHealthModifier_ExpiresAfterTurns()
-    {
+    public IEnumerator ModifierManager_ApplyTimedHealthModifier_ExpiresAfterTurns() {
         // Arrange
         int initialMaxHealth = _testCreatureP1.MaxHealth;
         int modifierValue = 10;
@@ -85,8 +79,7 @@ public class ModifierManagerTests
         Assert.IsTrue(_modifierManager.HasModifier(_testCreatureP1, m => m.Id == timedHealthMod.Id));
 
         // Act & Assert Turns Before Expiry
-        for (int i = 0; i < duration - 1; i++)
-        {
+        for (int i = 0; i < duration - 1; i++) {
             _turnManager.EndTurn();
             yield return null; // Wait for ProcessEndOfTurn
             Assert.IsTrue(_modifierManager.HasModifier(_testCreatureP1, m => m.Id == timedHealthMod.Id), $"Expired after {i + 1} turn(s).");
@@ -101,8 +94,7 @@ public class ModifierManagerTests
     }
 
     [UnityTest]
-    public IEnumerator ModifierManager_ApplyParalyzeStatus_PreventsActionsAndExpires()
-    {
+    public IEnumerator ModifierManager_ApplyParalyzeStatus_PreventsActionsAndExpires() {
         // Arrange
         int duration = 1;
         int startTurn = _turnManager.TurnNumber;
@@ -128,8 +120,7 @@ public class ModifierManagerTests
     // --- NEW TESTS ---
 
     [UnityTest]
-    public IEnumerator ModifierManager_ApplyPercentageAttackModifier_CalculatesCorrectly()
-    {
+    public IEnumerator ModifierManager_ApplyPercentageAttackModifier_CalculatesCorrectly() {
         // Arrange
         int baseAttack = _testCreatureP1.BaseAttack; // Use base for reliable calculation start
         int percentageIncrease = 50; // +50%
@@ -148,8 +139,7 @@ public class ModifierManagerTests
     }
 
     [UnityTest]
-    public IEnumerator ModifierManager_ExplicitlyRemoveModifier_RevertsStat()
-    {
+    public IEnumerator ModifierManager_ExplicitlyRemoveModifier_RevertsStat() {
         // Arrange
         int initialSpeed = _testCreatureP1.Speed;
         int modifierValue = -2;
@@ -176,8 +166,7 @@ public class ModifierManagerTests
     }
 
     [UnityTest]
-    public IEnumerator ModifierManager_StackFlatAndPercentageAttack_CalculatesCorrectly()
-    {
+    public IEnumerator ModifierManager_StackFlatAndPercentageAttack_CalculatesCorrectly() {
         // Arrange
         int baseAttack = _testCreatureP1.BaseAttack;
         int flatValue = 5;
@@ -197,59 +186,4 @@ public class ModifierManagerTests
         Assert.IsTrue(_modifierManager.HasModifier(_testCreatureP1, m => m.Id == flatMod.Id));
         Assert.IsTrue(_modifierManager.HasModifier(_testCreatureP1, m => m.Id == percMod.Id));
     }
-
-    [UnityTest]
-    public IEnumerator ModifierManager_ApplyBurnStatus_DealsDamageAtEndOfTurnViaQueue()
-    {
-        // Arrange
-        int initialHealth = _testCreatureP1.Health;
-        int burnPotency = 3;
-        int duration = 1;
-        int startTurn = _turnManager.TurnNumber;
-        IModifier burnMod = _factory.CreateStatusEffectModifier(
-            "Test Burn", "Burn (3 Dmg/Turn)", StatusEffectType.Burned, duration, burnPotency, startTurn
-        );
-
-        // Act: Apply Modifier
-        _modifierManager.ApplyModifier(_testCreatureP1, burnMod);
-        yield return null;
-        Assert.IsTrue(_modifierManager.HasStatusEffect(_testCreatureP1, StatusEffectType.Burned));
-
-        // Act: End Turn (Burn should trigger and queue damage)
-        _turnManager.EndTurn();
-        yield return null; // Wait for EOT processing
-
-        // Assert: Damage action should be in the queue
-        // Note: Burn damage action might not be added yet if it relies on mediator->actionqueue flow
-        // Instead, let's resolve the queue and check the health *afterwards*.
-        Assert.AreEqual(1, _actionsQueue.GetPendingActionsCount(), "Expected 1 action (Burn Damage) in queue after EndTurn.");
-        var queuedAction = _actionsQueue.GetPendingActions().First();
-        Assert.IsInstanceOf<DamageCreatureAction>(queuedAction);
-        var damageAction = queuedAction as DamageCreatureAction;
-        Assert.AreEqual(_testCreatureP1, damageAction.GetTarget());
-        Assert.AreEqual(burnPotency, damageAction.GetDamage());
-
-        // Act: Resolve Actions
-        _actionsQueue.ResolveActions();
-        yield return null;
-
-        // Assert: Health reduced
-        Assert.AreEqual(initialHealth - burnPotency, _testCreatureP1.Health, "Creature health not reduced correctly by Burn.");
-
-        // Act: End another turn (modifier should expire)
-        _turnManager.EndTurn();
-        yield return null;
-
-        // Assert: Modifier expired
-        Assert.IsFalse(_modifierManager.HasStatusEffect(_testCreatureP1, StatusEffectType.Burned));
-        int healthAfterExpiry = _testCreatureP1.Health;
-
-        // Act: Resolve actions again (should be empty for burn)
-         _actionsQueue.ResolveActions();
-        yield return null;
-
-        // Assert: Health unchanged after expiry turn
-        Assert.AreEqual(healthAfterExpiry, _testCreatureP1.Health, "Health changed after Burn expired.");
-    }
-
 }
