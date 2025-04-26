@@ -40,6 +40,11 @@ public class HealCreatureActionExecutor : IActionExecutor
         if (actualHealAmount > 0) {
             // Notify AFTER the action is performed
             mediator.NotifyCreatureHealed(targetCreature, actualHealAmount);
+
+            // Since health changed, notify that stats changed so CardController updates
+            mediator.NotifyCreatureStatsChanged(targetCreature);
+            Log($"HealCreatureActionExecutor: Notified CreatureStatsChanged for {targetCreature.Name} after healing.", LogTag.Actions | LogTag.Creatures | LogTag.Effects);
+
             // Optionally notify general game state change if needed, but CreatureHealed might be sufficient
             // mediator.NotifyGameStateChanged();
         }
