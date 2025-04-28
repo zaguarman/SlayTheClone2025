@@ -18,11 +18,11 @@ MonoBehaviour:
   cardType: 0
   effects:
   - effectType: 0
-    trigger: 2
+    trigger: 1
     actions:
     - actionType: 4
       value: 2
-      targetType: 3
+      targetType: 2
       targetModifier: 0
       modifyAttack: 0
       modifyHealth: 0
