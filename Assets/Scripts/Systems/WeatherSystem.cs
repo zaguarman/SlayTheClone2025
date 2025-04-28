@@ -1,11 +1,6 @@
 ﻿using UnityEngine.Events;
 using static DebugLogger;
-
-public enum WeatherType {
-    Clear,
-    Rainy,
-    Sunny
-}
+using static Enums;
 
 public interface IWeatherSystem {
     WeatherType CurrentWeather { get; }

@@ -1,6 +1,6 @@
-using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static Enums;
 using static DebugLogger;
 
 public class WeatherController : UIComponent {

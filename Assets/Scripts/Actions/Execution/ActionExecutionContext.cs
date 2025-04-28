@@ -17,6 +17,13 @@ public class ActionExecutionContext
     public IGameManager GameManager { get; } // Added for card creation
 
     /// <summary>
+    /// Stores the creature that triggered the current action being processed,
+    /// particularly useful for OnDamage effects to know the attacker.
+    /// Set temporarily by the relevant executor.
+    /// </summary>
+    public ICreature TriggeringAttacker { get; set; }
+
+    /// <summary>
     /// Constructor to initialize the context with all required dependencies
     /// </summary>
     public ActionExecutionContext(
@@ -40,5 +47,6 @@ public class ActionExecutionContext
         CombatHandler = combatHandler ?? throw new ArgumentNullException(nameof(combatHandler));
         TurnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
         GameManager = gameManager; // Can be null
+        TriggeringAttacker = null; // Initialize to null
     }
 }

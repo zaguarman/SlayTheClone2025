@@ -313,7 +313,8 @@ public class Creature : Card, ICreature {
 
                 switch (action.actionType) {
                     case ActionType.Damage:
-                        ProcessDamageEffect(action, actionsQueue, null); // lastAttacker context needs review
+                        // Pass the full context instead of just actionsQueue and null lastAttacker
+                        ProcessDamageEffect(action, context);
                         break;
                     case ActionType.Heal:
                         ProcessHealEffect(action, actionsQueue);
@@ -345,34 +346,87 @@ public class Creature : Card, ICreature {
         }
     }
 
-    private void ProcessDamageEffect(EffectAction action, IActionsQueue actionsQueue, ICreature lastAttacker) {
-        if (Owner == null && action.targetType != TargetType.Self && lastAttacker == null) {
-            LogError($"Damage Effect: Cannot target others for {Name} - Owner is null and not self/retaliation.", LogTag.Effects);
+    private void ProcessDamageEffect(EffectAction action, ActionExecutionContext context) {
+        // Get necessary info from context
+        var actionsQueue = context.ActionsQueue;
+        ICreature originalAttacker = context.TriggeringAttacker; // Get attacker from context
+
+        if (actionsQueue == null) {
+             LogError($"Damage Effect Error for {Name}: ActionsQueue is null in context.", LogTag.Effects | LogTag.Initialization);
+             return;
+        }
+
+        // Basic owner check for non-self targetting
+        if (Owner == null && action.targetType != TargetType.Self) {
+            LogError($"Damage Effect Error for {Name}: Cannot target others - Owner is null and target is not Self.", LogTag.Effects);
             return;
         }
 
-        // Retaliation logic - check if trigger was OnDamage and lastAttacker exists
-        if (lastAttacker != null && action.targetType == TargetType.AllCreatures && Effects.Any(e => e.trigger == EffectTrigger.OnDamage)) {
-            Log($"Queueing Retaliation DamageAction: Attacker={lastAttacker.Name}, Damage={action.value}", LogTag.Effects);
-            actionsQueue.AddAction(new DamageCreatureAction(lastAttacker, action.value, this));
+        // --- Specific Logic for Chained Damage (e.g., Electric Eel) ---
+        // NOTE: Chain logic is now handled in BattlefieldCombatActionExecutor
+        // This code is kept for reference but disabled to prevent duplicate chain effects
+        if (false && context.GameMediator != null && Effects.Any(e => e.trigger == EffectTrigger.OnDamage) && action.targetModifier == TargetModifier.Chained)
+        {
+            // The creature THIS effect belongs to is the one that was *hit*
+            // The originalAttacker is the one who dealt the initial damage (e.g., the Eel)
+            if (originalAttacker == null)
+            {
+                LogWarning($"Chained Damage Effect Warning for {Name}: TriggeringAttacker is null in context. Cannot process chain.", LogTag.Effects | LogTag.Combat);
+                return; // Cannot process chain without knowing the original attacker
+            }
+
+            // Chain starts adjacent to THIS creature (the one hit)
+            var chainTargets = TargetingSystem.GetDirectionalChainTargets(this, 2); // Max 2 jumps
+            Log($"Chained Damage Effect ({originalAttacker.Name} -> {this.Name}): Found {chainTargets.Count} chain targets.", LogTag.Effects | LogTag.Combat);
+
+            int currentDamage = action.value; // Initial damage specified in the EffectAction (e.g., 4 for Eel)
+            foreach (var chainTarget in chainTargets)
+            {
+                if (currentDamage <= 0) break; // Stop if damage drops to 0 or below
+
+                Log($"Queueing Chained DamageAction: Target={chainTarget.Name}, Damage={currentDamage}, Attacker={originalAttacker.Name}", LogTag.Effects | LogTag.Combat | LogTag.Actions);
+
+                // Damage action source is the ORIGINAL attacker (the Eel)
+                actionsQueue.AddAction(new DamageCreatureAction(chainTarget, currentDamage, originalAttacker));
+
+                currentDamage /= 2; // Halve damage for the next jump (integer division floors)
+            }
+            // After handling the chain, we want to prevent the default damage logic below
+            // since the EffectAction for the Eel's OnDamage *is* the chain effect itself
+            return; // Exit after processing the chain for this specific action
+        }
+
+        // Skip chain effects since they're now handled in BattlefieldCombatActionExecutor
+        if (action.targetModifier == TargetModifier.Chained) {
+            Log($"Skipping Chained effect in ProcessDamageEffect for {Name} - now handled by BattlefieldCombatActionExecutor", LogTag.Effects | LogTag.Combat);
             return;
         }
 
-        // Self Damage
+        // --- Default/Other Damage Logic ---
+        List<ITarget> targets;
         if (action.targetType == TargetType.Self) {
-             Log($"Queueing Self DamageAction: Target={Name}, Damage={action.value}", LogTag.Effects);
-            actionsQueue.AddAction(new DamageCreatureAction(this, action.value, this));
-            return;
+            targets = new List<ITarget> { this };
+        }
+        // Handle Retaliation - target the original attacker if trigger was OnDamage
+        else if (originalAttacker != null && action.targetType == TargetType.Enemy && Effects.Any(e => e.trigger == EffectTrigger.OnDamage)) {
+            targets = new List<ITarget> { originalAttacker };
+            Log($"Retaliation Damage Effect: Targeting attacker {originalAttacker.Name}", LogTag.Effects | LogTag.Combat);
+        }
+        else {
+             if (Owner == null) return; // Need owner for non-self targets
+             targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
         }
 
-        // Other Targets
-        if (Owner == null) return; // Need owner for other targets
-        var targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
-         Log($"Damage Effect: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
+        Log($"Damage Effect ({Name}): Found {targets.Count} target(s) for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
+
         foreach (var target in targets) {
             if (target is ICreature creatureTarget) {
+                // Use 'this' as the source/attacker for effects originating from this creature
+                Log($"Queueing DamageCreatureAction: Target={creatureTarget.Name}, Damage={action.value}, Source={this.Name}", LogTag.Effects | LogTag.Actions);
                 actionsQueue.AddAction(new DamageCreatureAction(creatureTarget, action.value, this));
             } else if (target is IPlayer playerTarget) {
+                Log($"Queueing DamagePlayerAction: Target={(playerTarget.IsPlayer1 ? "P1" : "P2")}, Damage={action.value}, Source={this.Name}", LogTag.Effects | LogTag.Actions);
+                // DamagePlayerAction doesn't take a creature source currently
                 actionsQueue.AddAction(new DamagePlayerAction(playerTarget, action.value));
             }
         }

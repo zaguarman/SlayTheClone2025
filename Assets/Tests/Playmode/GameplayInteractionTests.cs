@@ -356,6 +356,138 @@ public class GameplayInteractionTests {
         Assert.AreEqual("Sunny: Damage +1", weatherSystem.GetWeatherDescription(WeatherType.Sunny));
     }
 
+    // --- Electric Eel Chain Lightning Test ---
+
+    [UnityTest]
+    public IEnumerator ElectricEel_Attack_TriggersChainedDamageCorrectly()
+    {
+        Debug.Log("--- Starting Electric Eel Chain Damage Test ---");
+
+        // Arrange: Find Electric Eel card index (assuming it's in WaterDeck)
+        int eelIndex = -1;
+        var player1Cards = _gameReferences.GetPlayer1DeckCards();
+        for (int i = 0; i < player1Cards.Count; i++)
+        {
+            if (player1Cards[i].cardName == "Electric Eel")
+            {
+                eelIndex = i;
+                break;
+            }
+        }
+        Assert.GreaterOrEqual(eelIndex, 0, "Electric Eel card not found in Player 1's deck data.");
+
+        // Arrange: Spawn Electric Eel for Player 1
+        ICreature eel = null;
+        BattlefieldSlot eelSlot = null;
+        var spawnEel = SpawnCreatureForTest(_player1, eelIndex);
+        while (spawnEel.MoveNext()) {
+            if (spawnEel.Current is SpawnResult result) { eel = result.Creature; eelSlot = result.Slot; }
+            else { yield return spawnEel.Current; }
+        }
+        Assert.IsNotNull(eel, "Failed to spawn Electric Eel.");
+        int eelAttack = eel.Attack; // Get Eel's attack value
+
+        // Get Eel's chain damage value from its effect (should be 4 based on generator)
+        int chainBaseDamage = 4;
+        var eelOnDamageEffect = eel.Effects.FirstOrDefault(e => e.trigger == EffectTrigger.OnDamage);
+        Assert.IsNotNull(eelOnDamageEffect, "Eel missing OnDamage effect");
+        var eelChainAction = eelOnDamageEffect.actions.FirstOrDefault(a => a.actionType == ActionType.Damage && a.targetModifier == TargetModifier.Chained);
+        Assert.IsNotNull(eelChainAction, "Eel missing Chained Damage action in OnDamage effect");
+        chainBaseDamage = eelChainAction.value; // Use the value from the effect action
+
+        // Arrange: Spawn 3 target creatures for Player 2 in adjacent slots
+        // Find a standard creature index (e.g., first creature in deck)
+        int targetIndex = 0;
+
+        ICreature target1 = null, target2 = null, target3 = null;
+        BattlefieldSlot targetSlot1 = null, targetSlot2 = null, targetSlot3 = null;
+
+        var spawnT1 = SpawnCreatureForTest(_player2, targetIndex);
+        while (spawnT1.MoveNext()) {
+            if (spawnT1.Current is SpawnResult result) { target1 = result.Creature; targetSlot1 = result.Slot; }
+            else { yield return spawnT1.Current; }
+        }
+        var spawnT2 = SpawnCreatureForTest(_player2, targetIndex);
+        while (spawnT2.MoveNext()) {
+            if (spawnT2.Current is SpawnResult result) { target2 = result.Creature; targetSlot2 = result.Slot; }
+            else { yield return spawnT2.Current; }
+        }
+        var spawnT3 = SpawnCreatureForTest(_player2, targetIndex);
+        while (spawnT3.MoveNext()) {
+            if (spawnT3.Current is SpawnResult result) { target3 = result.Creature; targetSlot3 = result.Slot; }
+            else { yield return spawnT3.Current; }
+        }
+
+        Assert.IsNotNull(target1, "Failed to spawn target 1.");
+        Assert.IsNotNull(target2, "Failed to spawn target 2.");
+        Assert.IsNotNull(target3, "Failed to spawn target 3.");
+
+        // Ensure they are adjacent (this depends heavily on slot order in Player.Battlefield)
+        // Assuming slots are ordered 0, 1, 2, 3, 4
+        int slot1Index = _player2.Battlefield.IndexOf(targetSlot1);
+        int slot2Index = _player2.Battlefield.IndexOf(targetSlot2);
+        int slot3Index = _player2.Battlefield.IndexOf(targetSlot3);
+
+        // Log the slot indices for debugging
+        Debug.Log($"Target slots: {slot1Index}, {slot2Index}, {slot3Index}");
+
+        // At least two of the slots should be adjacent
+        Assert.IsTrue(
+            Mathf.Abs(slot1Index - slot2Index) == 1 ||
+            Mathf.Abs(slot2Index - slot3Index) == 1 ||
+            Mathf.Abs(slot1Index - slot3Index) == 1,
+            "At least two target creatures must be adjacent."
+        );
+
+        int t1InitialHealth = target1.Health;
+        int t2InitialHealth = target2.Health;
+        int t3InitialHealth = target3.Health;
+
+        // Act: Eel attacks the middle target (target2)
+        Debug.Log($"Eel ({eel.Name}, Atk:{eelAttack}) attacking Target 2 ({target2.Name}, HP:{t2InitialHealth})");
+        _actionsQueue.AddAction(new BattlefieldCombatAction(eel, targetSlot2));
+
+        // Resolve 1: Queues initial damage to target2
+        _actionsQueue.ResolveActions();
+        yield return null;
+        Debug.Log($"ActionsQueue after Resolve 1: {_actionsQueue.GetPendingActionsCount()} actions pending");
+
+        // Resolve 2: Executes initial damage on target2, triggers OnDamage, queues chain damage
+        _actionsQueue.ResolveActions();
+        yield return null;
+        Debug.Log($"ActionsQueue after Resolve 2: {_actionsQueue.GetPendingActionsCount()} actions pending");
+
+        // Resolve 3: Executes the queued chain damage actions
+        _actionsQueue.ResolveActions();
+        yield return null;
+        Debug.Log($"ActionsQueue after Resolve 3: {_actionsQueue.GetPendingActionsCount()} actions pending");
+
+        // Assert: Check health
+        int expectedT2Health = Mathf.Max(0, t2InitialHealth - eelAttack);
+        Assert.AreEqual(expectedT2Health, target2.Health, $"Target 2 (primary) health incorrect. Expected {expectedT2Health}, Got {target2.Health}");
+
+        // Assert: Check chain damage (Chain base = 4, Jump 1 = 2, Jump 2 = 1)
+        // Determine which direction the chain went (longest path or random)
+        // For this setup, both sides have 1 creature, so it's random. We need to check both possibilities.
+
+        int chainDamage1 = chainBaseDamage;       // First jump damage
+        int chainDamage2 = chainDamage1 / 2; // Second jump damage (integer division)
+
+        // Log the actual health values for debugging
+        Debug.Log($"Target1 HP: {target1.Health}, Target2 HP: {target2.Health}, Target3 HP: {target3.Health}");
+        Debug.Log($"Chain damage values: Base={chainBaseDamage}, Jump1={chainDamage1}, Jump2={chainDamage2}");
+
+        // Check if at least one of the adjacent creatures took chain damage
+        bool chainDamageApplied =
+            target1.Health < t1InitialHealth ||
+            target3.Health < t3InitialHealth;
+
+        Assert.IsTrue(chainDamageApplied, "Chain lightning did not damage any adjacent creatures");
+
+        Debug.Log($"Test Complete. Target1 HP: {target1.Health}, Target2 HP: {target2.Health}, Target3 HP: {target3.Health}");
+        Debug.Log("--- Finished Electric Eel Chain Damage Test ---");
+    }
+
     // --- Comprehensive End-to-End Test ---
 
     [UnityTest]

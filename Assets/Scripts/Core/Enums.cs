@@ -2,6 +2,7 @@
 using System; // Add this for Flags attribute
 
 public class Enums {
+    // Card/Effect Enums
     public enum CardType { Creature, Spell, Enchantment }
     public enum EffectType { Immediate, Triggered, Continuous, Timed, Status } // Added Status
     public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted } // Added ActionAttempted
@@ -16,6 +17,7 @@ public class Enums {
         Poisoned    // Takes increasing damage over time (more complex, start simple)
     }
 
+    // Targeting Modifiers
     [Flags] // Make sure System is imported
     public enum TargetModifier {
         None = 0,
@@ -23,5 +25,12 @@ public class Enums {
         AllSameTypeTargets = 1 << 1,
         Random = 1 << 2,
         Chained = 1 << 3,
+    }
+
+    // Weather Types
+    public enum WeatherType {
+        Clear,
+        Rainy,
+        Sunny
     }
 }

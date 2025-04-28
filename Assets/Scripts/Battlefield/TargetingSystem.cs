@@ -237,4 +237,57 @@ public static class TargetingSystem {
 
         return chainedTargets;
     }
+
+    /// <summary>
+    /// Gets targets in a chain starting *adjacent* to the primary target, following the longest path.
+    /// Specific logic for Electric Eel.
+    /// </summary>
+    /// <param name="primaryTarget">The target that was initially hit (used to find the battlefield).</param>
+    /// <param name="maxChainLength">The maximum number of additional targets in the chain.</param>
+    /// <returns>An *ordered* list of targets in the chain (first jump, second jump, etc.).</returns>
+    public static List<ICreature> GetDirectionalChainTargets(ITarget primaryTarget, int maxChainLength) {
+        var chainTargets = new List<ICreature>();
+        if (maxChainLength <= 0) return chainTargets;
+
+        // We need a creature target to determine the battlefield and position
+        if (!(primaryTarget is ICreature creature && creature.Slot != null && creature.Owner != null)) {
+            return chainTargets; // Cannot determine chain without a creature in a slot
+        }
+
+        var ownerBattlefield = creature.Owner.Battlefield;
+        var slotIndex = ownerBattlefield.IndexOf(creature.Slot);
+        if (slotIndex == -1) return chainTargets; // Creature not found on battlefield?
+
+        // Count potential chain targets to the left and right
+        int leftCount = 0;
+        for (int i = slotIndex - 1; i >= 0 && ownerBattlefield[i].IsOccupied(); i--) leftCount++;
+
+        int rightCount = 0;
+        for (int i = slotIndex + 1; i < ownerBattlefield.Count && ownerBattlefield[i].IsOccupied(); i++) rightCount++;
+
+        // Determine direction
+        int direction; // -1 for left, 1 for right
+        if (leftCount > rightCount) {
+            direction = -1;
+        } else if (rightCount > leftCount) {
+            direction = 1;
+        } else if (leftCount == 0 && rightCount == 0) {
+            return chainTargets; // No adjacent targets
+        } else {
+            direction = random.Next(2) == 0 ? -1 : 1; // Random tie-breaker
+        }
+
+        // Build the chain in the chosen direction
+        int currentSlotIndex = slotIndex + direction;
+        while (chainTargets.Count < maxChainLength && currentSlotIndex >= 0 && currentSlotIndex < ownerBattlefield.Count) {
+            var slot = ownerBattlefield[currentSlotIndex];
+            if (slot.IsOccupied() && slot.OccupyingCreature != null) {
+                chainTargets.Add(slot.OccupyingCreature);
+            } else {
+                break; // Chain broken
+            }
+            currentSlotIndex += direction;
+        }
+        return chainTargets;
+    }
 }

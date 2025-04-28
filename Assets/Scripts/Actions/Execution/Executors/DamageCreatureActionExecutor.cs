@@ -68,7 +68,11 @@ public class DamageCreatureActionExecutor : IActionExecutor
         if (actualHealthDamage > 0 && !targetCreature.IsDead)
         {
             Log($"Executor: Triggering OnDamage effects for {targetCreature.Name}", LogTag.Effects | LogTag.Actions);
+            // Set the attacker in the context before triggering effects
+            context.TriggeringAttacker = attacker;
             targetCreature.HandleEffect(EffectTrigger.OnDamage, context); // Pass context
+            // Reset attacker in context (good practice)
+            context.TriggeringAttacker = null;
         }
 
         // Check for Death AFTER applying damage and triggering OnDamage effects
@@ -82,7 +86,11 @@ public class DamageCreatureActionExecutor : IActionExecutor
 
             // Trigger OnDeath Effects
             Log($"Executor: Triggering OnDeath effects for {targetCreature.Name}", LogTag.Effects | LogTag.Actions);
+            // Set the attacker in the context before triggering effects (could be relevant for some OnDeath)
+            context.TriggeringAttacker = attacker;
             targetCreature.HandleEffect(EffectTrigger.OnDeath, context); // Pass context
+            // Reset attacker in context
+            context.TriggeringAttacker = null;
 
             // Unregister from ModifierManager - NO CAST NEEDED
             modifierManager.UnregisterCreature(targetCreature);
