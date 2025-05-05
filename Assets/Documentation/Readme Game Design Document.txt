@@ -156,211 +156,73 @@ Slot-based traps via hidden slot effects.
 
 Status Effects (Detailed Definitions):
 
-Addicted (X turns | Requires: Stat Alteration):
+Addicted (X turns | Requires: Stat Alteration): At the beginning of its controller's turn, if this creature did not have its Attack, Health, or Speed stats directly altered (increase or decrease) by any effect during the previous turn, it gains Suppressed 1. Check occurs each turn for the duration X. Theme: Dependency, withdrawal.
 
-At the beginning of its controller's turn, if this creature did not have its Attack, Health, or Speed stats directly altered (increase or decrease) by any effect during the previous turn, it gains Suppressed 1.
+Blessed: Persists until consumed. Negates the next negative status effect that would be applied, then Blessed is removed. Does not stack. Theme: Single-use ward, divine protection.
 
-Check occurs each turn for the duration X.
+Bleeding / Corroding (X turns): At the End of its controller's Turn, this creature takes 1 damage. Lasts X turns. Stacks duration. Damage does trigger "OnDamage" passive abilities. Theme: Damage over time, wounds, decay.
 
-Theme: Dependency, withdrawal.
+Bored (X turns): At the beginning of its controller's turn, if not targeted last turn, skips action/passives this turn. Heals 1 HP End of Turn. Lasts X turns. Theme: Apathy, complacency.
 
-Blessed:
+Caffeinated (X turns): Actions +1 Priority. +1 Attack. Takes 1 damage End of Turn. Lasts X turns. Cannot be cleansed. Stacks duration. Cleanses Tired. Theme: Stimulant, hyperactive, burn out.
 
-Persists until consumed.
+Compromised: Persists until triggered once. When targeted by enemy "Intelligence", triggers a negative effect for its controller (defined by source). Removed after triggering. Can be applied secretly. Theme: Leaky information, double agent, honeypot.
 
-Negates the next negative status effect that would be applied to this creature, then Blessed is removed.
+Concealed: Persists until next action resolves or removed/overridden. Planned action hidden/obscured in opponent's queue preview. Overrides Revealed. Theme: Secrets, hidden intent, misdirection.
 
-Does not stack (applying Blessed to an already Blessed creature has no effect).
+Cursed (X turns): End of controller's turn, apply a random negative status from a predefined pool. Lasts X turns. Stacks duration. Theme: Bad luck, persistent misfortune.
 
-Theme: Single-use ward, divine protection.
+Delayed (X turns): Next X turns, actions have base Priority -1. Stacks additively. Duration resets/extends. Theme: Sluggishness, lag.
 
-Bleeding / Corroding (X turns):
+Deployment Time (X turns): Applied on entry. For X turns, cannot perform actions, passives don't trigger (exceptions possible). Decreases by 1/turn. Theme: Initialization, mobilization.
 
-At the End of its controller's Turn, this creature takes 1 damage.
+Depressed (X turns): Attack stat halved (rounded). Lasts X turns. Stacks duration. 3+ total turns -> remove all Depressed, apply Doomed. Theme: Morale loss, reduced effectiveness.
 
-Lasts X turns. Stacks duration (applying Bleeding 2 to a creature with Bleeding 3 results in Bleeding 5).
+Doomed (X turns): Destroyed after X turns. Gains +1 Attack start of each turn. Cannot gain Depressed. Cannot be cleansed. Cannot stack duration. Theme: Marked for death, final surge.
 
-Damage taken from this effect does trigger "OnDamage" passive abilities.
+Heavy (X turns): Cannot perform Move actions, cannot be moved. Gains 1 Armor End of Turn. Lasts X turns. Stacks duration. Theme: Anchored, immovable.
 
-Theme: Damage over time, wounds, decay.
+Ostracized (X turns): Cannot be targeted by actions/abilities. Cannot gain new status effects. Existing effects remain. Can still act. Lasts X turns. Stacks duration. Theme: Isolation, untouchable, phased out.
 
-Bored (X turns):
+Revealed (X turns): Planned action visible to opponent in queue preview. Decreases by 1/turn. Stacks duration. Overridden by Concealed. Theme: Information leak, surveillance.
 
-At the beginning of its controller's turn, if this creature was not attacked or targeted by an ability during the previous turn, it skips performing its queued action this turn, and its passive abilities do not trigger this turn.
+Suppressed (X turns): Cannot perform actions (except Move). Passives don't trigger. Lasts X turns. Stacks duration. Theme: Major disablement, suppression.
 
-Heals 1 HP at the End of Turn regardless of whether it acted or not.
+Targeted (X intensity): Takes X additional damage from all sources. Stacks intensity. Duration refreshes/extends. Theme: Defenses breached, weak point.
 
-Lasts X turns.
-
-Theme: Apathy, complacency, disinterest leading to inaction.
-
-Caffeinated (X turns):
-
-This creature's actions have +1 Priority.
-
-This creature gains +1 Attack.
-
-Takes 1 damage at the End of its controller's Turn.
-
-Lasts X turns. Cannot be cleansed. Stacks duration.
-
-Applying Caffeinated cleanses (removes) the Tired status effect.
-
-Theme: Stimulated, hyperactive, temporary boost followed by burnout.
-
-Compromised:
-
-Persists until triggered once.
-
-When this creature is successfully targeted by an enemy "Intelligence" action, Compromised triggers a negative effect for its controller (e.g., controller draws 1 fewer card next turn, controller takes 1 damage, apply Revealed 1 to this creature or its slot). The specific drawback is defined by the card that applied Compromised.
-
-After triggering, Compromised is removed.
-
-Can potentially be applied secretly (opponent doesn't know it's there until triggered).
-
-Theme: Leaky information, double agent, hidden vulnerability, honeypot.
-
-Concealed:
-
-Persists until the creature's next action resolves or the status is removed/overridden.
-
-This creature's planned action (target, destination slot for movement) is hidden or obscured (e.g., shows as "?", or provides false information like targeting a different slot) in the opponent's preview of the action queue.
-
-Overrides the Revealed status (if both are present, Concealed takes precedence).
-
-Theme: Secrets, hidden intent, misdirection, plausible deniability.
-
-Cursed (X turns):
-
-At the end of its controller's turn, apply a random negative status effect to this creature from a predefined pool of possibilities (e.g., Bleeding 1, Delayed 1, Depressed 1).
-
-Lasts X turns. Stacks duration.
-
-Theme: Bad luck, persistent misfortune, plagued.
-
-Delayed (X turns):
-
-For the next X turns, actions performed by this creature have their base Priority lowered by 1.
-
-Stacks additively (Delayed 1 + Delayed 1 = Delayed 2, resulting in -2 Priority). Duration resets/extends with new applications.
-
-Theme: Sluggishness, lag, slow response.
-
-Deployment Time (X turns):
-
-Applied automatically when a creature enters the battlefield (from hand or Revive).
-
-For X turns, the creature cannot perform any actions (Attacks, Active non-Attack Abilities), and its passive abilities do not trigger (exceptions may exist for specific passives explicitly stated to work during deployment).
-
-The duration decreases by 1 at the start of its controller's turn. When it reaches 0, the creature can act normally.
-
-Theme: Initialization, mobilization, summoning sickness, arrival time.
-
-Depressed (X turns):
-
-This creature's Attack stat is halved (rounded down or up, consistently defined).
-
-Lasts X turns. Stacks duration.
-
-If applying Depressed causes the creature to have 3 or more total turns of Depressed active simultaneously, all stacks of Depressed are immediately removed, and the creature gains the Doomed status effect instead.
-
-Theme: Morale loss, reduced combat effectiveness, despair.
-
-Doomed (X turns):
-
-The creature will be destroyed after X turns (typically at the end of the Xth turn after application).
-
-While Doomed, the creature gains +1 Attack at the start of each of its controller's turns.
-
-While Doomed, the creature cannot gain the Depressed status effect (attempts to apply Depressed fail).
-
-Cannot be cleansed.
-
-Cannot stack duration; subsequent applications of Doomed on an already Doomed creature are ignored.
-
-Theme: Marked for death, final desperate surge, inevitable fate.
-
-Heavy (X turns):
-
-This creature cannot perform Move actions (actions primarily focused on changing slots) and cannot be moved by other card effects (friendly or enemy).
-
-Gains 1 Armor at the end of each of its controller's turns while Heavy remains.
-
-Lasts X turns. Stacks duration.
-
-Theme: Anchored, immovable, fortified but immobile.
-
-Ostracized (X turns):
-
-This creature cannot be targeted by any actions or abilities (friendly or enemy). It cannot gain any new status effects.
-
-Existing status effects on the creature remain and function normally (e.g., Bleeding continues to deal damage). Passives continue to trigger if conditions met. Creature can still perform actions if able.
-
-Lasts X turns. Stacks duration.
-
-Theme: Isolation, untouchable, shunned, phased out.
-
-Revealed (X turns):
-
-This creature's planned action (target, destination slot for movement) is visible to the opponent in their preview of the action queue.
-
-Decreases by 1 turn at the end of each turn. Can stack duration.
-
-Is overridden by Concealed if both are present.
-
-Theme: Information leak, under surveillance, exposed plans.
-
-Suppressed (X turns):
-
-This creature cannot perform any actions (including Attacks, Active non-Attack Abilities), except for Move actions (actions primarily focused on changing slots initiated by abilities).
-
-This creature's passive abilities do not trigger.
-
-Lasts X turns. Stacks duration.
-
-Represents being significantly hindered or shut down in most capacities but retaining basic mobility.
-
-Theme: Major disablement, suppression, neutralized, censored, silenced.
-
-Targeted (X turns):
-
-This creature takes X additional damage from all sources (Attacks, Abilities, Status Effects like Bleeding, Slot Effects).
-
-Stacks intensity (Targeted 1 + Targeted 1 = Targeted 2, meaning +2 damage taken). Duration refreshes/extends with new applications.
-
-Theme: Defenses breached, weak point identified, vulnerable.
-
-Tired (X stacks):
-
-This status uses stacks rather than turns. Each application adds a stack.
-
-Effect depends on stack count at the time of potential action resolution:
-
-1 stack: Will gain Suppressed 1 in 2 turns (countdown starts now).
-
-2 stacks (gained in same turn or across turns): Will gain Suppressed 1 next turn.
-
-3+ stacks (gained in same turn or across turns): Immediately gain Suppressed 1 this turn. If the creature had an action queued (other than Move), that action is removed from the queue.
-
-Applying Caffeinated removes all stacks of Tired. Resolving Suppressed from Tired likely removes Tired stacks.
-
-Theme: Gradual exhaustion leading to shutdown.
+Tired (X stacks): Adds stacks. 1 stack -> Suppressed 1 in 2 turns. 2 stacks -> Suppressed 1 next turn. 3+ stacks -> Suppressed 1 immediately this turn (removes queued actions except Move). Cleansed by Caffeinated. Theme: Gradual exhaustion to shutdown.
 
 V. Game Design Philosophy & Balancing
 
-Balancing Focus: Key priority.
+Balancing Focus: Key priority. Rigorous playtesting and iteration needed.
 
-Numerical Balance: Conservative numbers, careful stacking.
+Numerical Balance: Effects modifying stats or numerical values should use conservative numbers and stack carefully (additively/multiplicatively) to prevent exponential scaling and easily broken interactions.
 
-Balancing Levers: Opportunity Cost (Card choice, slot occupation, sacrifice, discarding), Space Limitations, Domino Effects.
+Status Effect Design Principle: When designing new cards or effects, prioritize utilizing the existing pool of status effects (defined in Section IV). Avoid creating new, unique status effects unless the desired mechanic cannot be reasonably achieved by combining or slightly modifying existing ones. This promotes system coherence, reduces rule complexity, and encourages synergistic interactions.
+
+Creature Ability Design Principle: Similarly, when designing new creature abilities (passive or active), prioritize reusing existing core ability mechanics (e.g., dealing damage, applying status, moving, healing, modifying stats) and established trigger types (e.g., OnAttack, OnDamage, OnTurnEnd). Avoid creating entirely novel ability mechanics if the desired gameplay effect can be achieved by applying existing mechanics in new ways, combining them, leveraging status effects, or using different trigger conditions. However, the specific trigger conditions themselves (e.g., 'OnFriendlyCreatureOfTypeX moves', 'OnTakingSpellDamage', 'WhileAdjacentToY') can be freely modified and combined to fit the unique theme and function of a card.
+
+Balancing Levers:
+
+Opportunity Cost: Card choice (deck slot), Slot Occupation (board space), Sacrifice mechanics (unit loss for gain), Discarding cards (hand resource cost).
+
+Space Limitations: Finite creature slots (5 per side), hand size limits (implied).
+
+Domino Effects: Intentionally designed chain reactions (abilities, statuses, positioning). Requires risk/reward assessment.
 
 Development Goals & Player Experience:
 
-Reward: Strategic Planning, Creative Deckbuilding & Synergies, Adaptation, Comebacks.
+Reward: Strategic Planning (long-term goals), Creative Deckbuilding & Synergies (finding combos), Adaptation (reacting to opponent and board state), opportunities for Comebacks (avoiding deterministic losses).
 
-Avoid: Complicated Math, Unfair Situations (focus on clear cause-and-effect).
+Avoid: Overly complex calculations required mid-turn (Complicated Math), situations that feel inherently unwinnable due to luck rather than strategy (Unfair Situations). Focus on clear cause-and-effect for actions and consequences.
 
-Core Design Tenet - Double-Edged Sword: Positives have drawbacks; negatives have upsides.
+Core Design Tenet - Double-Edged Sword:
+
+Major positive effects should ideally have a drawback or risk.
+
+Major negative effects or costs should ideally have a potential positive side-effect or compensation.
+
+All cards should have at least one effect; ideally, always a drawback (even minor).
 
 Examples: "OnMove: +1 Attack" + "OnAttacked: Controller takes 1 damage"; "Doomed" + Attack bonus; "Reckless Assault" (Attack bonus + recoil damage).
 
