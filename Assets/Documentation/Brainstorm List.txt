@@ -1,0 +1,1509 @@
+Card Game Factions Overview
+	Neutral Resources
+		Tools & Objects
+			Autonomous Vehicle
+			Backpack
+			Barcode
+			Board Game
+			Bomber Drone
+			Chainsaw
+			Coffee
+			Coin
+			Compass
+			Concealed Weapon
+			Credit Card
+			Dumbbell
+			E-Bike
+			E-Scooter
+			Eject Button
+			Exoskeleton
+			First Aid Kit
+			Flamethrower
+			GPS Tracker
+			Graffiti
+			Graphene
+			Hologram Projector
+			Hourglass
+			Hovercraft
+			Implant (Neural/Cybernetic)
+			Joker Card
+			Katana
+			Kevlar
+			Laser Gun
+			Laser Pointer
+			Lockpicks
+			Lyre
+			Magnet
+			Mechanic
+			Memo Note
+			Metaphor
+			Microchip
+			Muscle Building Drug
+			Nanobots
+			Notepad
+			Office Plant
+			Passport
+			Phone
+			Piranha Plant
+			Plasma Rifle
+			Portal Gun
+			Portable Console
+			Power Armor
+			Protein Shake
+			Private Jet
+			Real Cash
+			Refrigerator
+			Robot
+			Semiconductors
+			Smartwatch
+			Solid State Battery
+			Stealth Suit
+			Stimulant Drug
+			Suit
+			Sugar Substitutes
+			Supercomputer
+			Surveillance Drone
+			Survival Kit
+			Synthesizer
+			Superglue
+			Tailored Suit
+			Tailored Uniform
+			Taser
+			Teflon
+			Teleportation
+			Teleporter
+			USB Stick
+			VR Headset
+			Water Bottle Filter
+			Workout Supplement
+			Yoga Mat
+			Zweihander
+		Food & Consumables
+			Air Fryer
+			Air Purifier
+			Chinese Food
+			Mexican Food
+			Condom
+			Creatine
+			Dentures
+			Freeze Dry Food
+			Japanese Curry
+			Mocktail
+			Nicotine
+			Soy Milk
+			Soylent
+			Sourdough Starter
+			Takeaway Food
+			Vegan Substitute
+		General Concepts
+			Gear Shift
+			Reusable Shopping Bag
+			Scrap Metal
+	Locations Group
+		Abandoned Mall
+		Airport
+		Airport Lounge
+		Airport Parking
+		Alcatraz
+		Alexandria Library
+		Anthrax Laboratory
+		Arc De Triomphe
+		Arctic Research Station
+		Area 51
+		Back Alley
+		Bank Vault
+		Black Site
+		Bunker
+		Bus Stop
+		Casino
+		Champs-Élysées
+		Coffee Shop
+		Command Center
+		Confessionary
+		Control Tower
+		Co-working Space
+		Courtroom
+		Crime Scene
+		Dark Alley
+		Data Center
+		Duty Free Shop
+		Eden
+		Embassy
+		Empty Playground
+		Exit
+		Factory Farm
+		Film Set
+		Forbidden Temple
+		Fort Knox
+		Gas Stations
+		Ghost Town
+		Gigafactory
+		Hackerspace
+		Home Office
+		Emergency Room
+		Internet Cafe
+		Island Nation
+		Junkyard
+		Kindergarten
+		Kitchen
+		Las Vegas
+		Library of Alexandria
+		Lunar Base
+		Mars Colony
+		Megachurch
+		Michelin Star Restaurant
+		Military Base
+		Mind the Gap
+		Monastery
+		Museum
+		National Park
+		Nightclub
+		No-Go Zone
+		Nuclear Silo
+		Office Cubicle Farm
+		Offshore Platform
+		Oil Refinery
+		Old Warehouse
+		Online Forum
+		Orphanage
+		Pantheon
+		Park
+		Parking Garages
+		Pentagon
+		Penthouse
+		Police Station
+		Post Office
+		Power Plant
+		Prison Cell
+		Public Library
+		Public Transport Hub
+		Pyramids
+		Refugee Camp
+		Rented Apartment
+		Research Lab
+		Roman Circus Arena
+		Rooftop Garden
+		Roundabout
+		Safe House
+		Sanctum Omnium (Vaticano)
+		Sauna
+		Secret Laboratory
+		Server Farm
+		Sewers
+		Shibuya
+		Skyscrapper
+		Skyscraper Rooftop
+		Space Elevator
+		Space Station
+		Speakeasy
+		Stairwells
+		Stonehenge
+		Subway Platform
+		Supply Depot
+		Swiss Bank Account
+		Tax Haven
+		Tax Paradise
+		Theme Park
+		Tourist Trap
+		Toxic Waste Dump
+		Trading Floor
+		Unfinished Construction Site
+		University Campus
+		Volcanic Lair
+		Waiting Room
+		Weather Station
+		Yacht
+		Zebra Crossing
+	Faction: Tech & Cyber
+		Core Technologies & Infrastructure
+			AI Assistant
+			Antivirus Software
+			Backdoor
+			Bandwidth
+			Bandwidth Limit
+			Biometric Data
+			Bloatware
+			Blockchain
+			CCTV Camera
+			Cold Storage Backup
+			Common Vulnerabilities and Exposures
+			Someone else's Computer (Cloud)
+			Crypto Wallet
+			Ctrl + Enter
+			Data Leak
+			DDOS Attack
+			Decentralized Network
+			Defi
+			Encryption Key
+			End-to-End Encryption
+			Feedback
+			Feedback Loop
+			Intellectual Property (Software/Data)
+			IOT
+			Key Card
+			Legacy Code
+			Logic Bomb
+			Malware
+			Man-in-the-Middle
+			Metadata
+			Motherboard
+			Neural Network
+			Operating System
+			Password Sticky Note
+			Quantum Computer
+			RF Radio
+			Ring Camera
+			Robotics
+			Satellite Phone
+			Secure Channel
+			Slave Factory
+			Solid State Drive
+			Stable Connection
+			Subdermic Computer
+			System Crash
+			System Glitch
+			System Update
+			Technical Debt
+			Transhumanism
+			Turbo
+			Two-Factor Authentication
+			Unstable Connection
+			Unstable Wi-Fi
+			VPN
+			Worm
+			Zero-Day Exploit
+		Software Development & Concepts
+			Abandonware
+			Branch
+			Bug Fix
+			Code Review
+			Confusing Documentation
+			Context Poisoning
+			Cryptographer
+			Cypher
+			Decypher
+			Data Mining
+			Deja Vu
+			Digital Editing
+			Disruptor
+			Email
+			Fork (Software Project)
+			Growth Hacking
+			Hacker
+			Here Be Dragons
+			Infinite Loop
+			Insider Job
+			Jailbreak
+			Linked Lunatics
+			Malinformation
+			Minimum Viable Product
+			Pair Programming
+			Pen-Testing
+			Planned Obsolescence
+			Promt Injection
+			QR Code
+			Ransomware Attack
+			Refactoring
+			Remote Work
+			Rubber Duck Debugging
+			Scalability
+			Scope Creep
+			Search Engine Optimization
+			Scrum Master
+			Software "Engineer"
+			SOLID
+			SQL Injection
+			Sprint
+			Startup
+			Startup Incubator
+			Syntax Error
+			Template
+			User Engagement Metrics
+			User Friendly
+			Video Game Preservation
+			Web Scraping
+			White Hat Hacker
+			WYSIWYG
+		Roles & Archetypes
+			DevOps Engineer
+			End User
+			Full Stack Developer
+			IT Guy
+			Monkey Clicking
+			Script Kiddie
+			System Administrator (SysAdmin)
+			Threat Hunter
+	Faction: Internet Culture
+		Online Life & Phenomena
+			404 Not Found
+			AdBlocker
+			Aesthetic
+			ASMR
+			Bad Review on Internet
+			Banana Gun
+			Benching (Relationship)
+			Body Positivity (But Not For You)
+			Breadcrumbing
+			Cancel Culture
+			Chronically Online
+			Clickbait
+			Creepypasta
+			Dead Internet
+			Deepfake
+			Digital Avatar
+			Digital Detox
+			Digital Footprint
+			Dislike Button
+			Dogpile
+			Doxxing
+			Fake User Profile
+			Forgotten Password
+			Friendzone
+			Frutiger Aero
+			Furnies
+			Ghosting
+			Girl Math
+			Hive Mentality
+			Internet Beggar
+			Internet Stalker
+			Its A Trap
+			Jump Scare
+			Meditation App
+			Metaverse
+			Microtransaction
+			NFT
+			NPC Streamer
+			Paywall
+			Phishing Email
+			Piracy Is Not Stealing
+			Play To Earn
+			Quack'd
+			Rage Bait
+			Refresh Feed
+			Remove Dislike Button
+			Revenge Porn
+			Roko's Basilisk
+			Rugpull
+			Rupee (Zelda)
+			Screen Time
+			Sealioning
+			Shitposting
+			Sleepy Cat
+			Snowflake
+			SPAM
+			Speedrunning
+			Stan Culture
+			Steampunk
+			Streisand Effect
+			Stream Sniping
+			Subreddit
+			System Glitch (Matrix Glitch)
+			The Simulation (The Matrix)
+			Thirst Trap
+			Tinfoil Hat
+			Trading Card Games
+			U Mad Bro?
+			Unwanted Advertisement
+			Urban Dictionary Definition
+			Vaporwave
+			Viral Challenge
+			Viral Trend
+			Wojak Living The Dream
+			WTF Happened In 1971
+		Memes & Language
+			Birb (Meme)
+			Bonk! (Meme)
+			Brainlet Watermill (Wojak meme)
+			Caturday
+			Copypasta
+			Doomer (meme)
+			Hide the Pain Harold
+			Meme
+			No U (Counter And Redirect)
+			NPC (Meme)
+			OMG
+			Pastafari
+			Pastafarian God
+			WTF
+			XD
+			Yoink
+		Archetypes & Roles
+			Afiliate Marketing
+			Attwhore
+			Buy My Course
+			Catfish
+			Cryptobro
+			Digital Nomad
+			E-Girl
+			Ghost (Incel)
+			Influencer
+			Keyboard Warrior
+			MGTOW
+			Overly Attached Girlfriend
+			Startup Bro
+			Tech Bro
+			Trad Wife
+			V-Tuber
+			Zoomer
+	Faction: Corporate Machine
+		Business Models & Strategy
+			An Offer You Can't Refuse
+			Appraiser
+			As Is
+			Asset
+			Astroturfing
+			Backroom Deal
+			Binding Contract
+			Broken Social Elevator
+			Business To Business
+			Business To Customer
+			Cascade
+			Cashcow
+			Corporate Espionage
+			Crane
+			Dark Pattern (UI/UX)
+			Dogfooding
+			Drop Shipping
+			Due Date
+			Dump It
+			Employee Stock Ownership Plan (ESOP)
+			Enterprise Resource Planning (ERP)
+			Excavator
+			Flagship
+			Follow The Money
+			Forklift
+			Free Dismissal
+			Game Theory
+			Greenwashing
+			Hostile Takeover
+			Impossible Initial Investment
+			Insider Information
+			Intellectual Property
+			IPO Launch
+			Its How The Market Works, Folks!
+			Just In Time
+			Key Performance Indicator (KPI)
+			Leverage
+			Limited Liability
+			Mafia
+			Market Manipulation
+			Mastermind
+			Menu Of The Day
+			Meritocratic Inheritance
+			Money As Only Ideology
+			Monopoly
+			Oligopoly
+			Non-Profit
+			Opt-In
+			Opt-Out
+			Opportunity Cost
+			Patent Pending
+			Patent Troll
+			Patented
+			Performance Improvement Plan
+			Performance Review
+			Personal Brand
+			Phase Out
+			Poison Pill
+			Ponzi Scheme
+			Power Hoarding
+			Price Gouging
+			Privatization
+			Pyramid Scheme
+			Recycling
+			Relaxed Monopoly Enforcement
+			Return On Investment (ROI)
+			Sales/Marketing Funnel
+			Screening
+			Securities And Exchange Commission (SEC)
+			Shareholder Meeting
+			Short Squeeze
+			SICAV
+			Software As A Service
+			Special Purpose Entities
+			Speculation
+			Stakeholder
+			Strong Sales Projection
+			Subscription Auto-Renewal
+			Subscription Box
+			Sugar Lobby
+			Supply Chain Disruption
+			Synergy Meeting
+			Targeted Advertisement
+			Team Building Exercise
+			Titanic
+			Trade Offer
+			Unicorn (Enterprise)
+			Usury
+			Vendor Lock-In
+			Venture Capital
+			White Collar Crime
+			Whine Menu
+			Window Dressing
+			Zero-Sum Game
+		Finance & Economics
+			American Dream
+			Arabic Investor
+			Capital Gains Tax
+			Car Insurance
+			Creative Accounting
+			Dark Money Donation
+			Dark Pools
+			Dead Cat Bounce
+			Deforestation
+			Dental Insurance
+			Digital Millennium Copyright Act
+			Expensive Watch
+			Futures Market
+			Golden Handcuffs
+			Golden Parachute
+			Great Depression
+			Housing Crisis
+			Inflation
+			Interest Rate Change
+			Investment Trusts
+			Invisible Hand
+			Loan
+			Long Term Investment
+			Market Crash
+			Mortgagae Papers
+			Multilevel Marketing Seller
+			Negative Growth
+			Notary
+			Pharma Lobby
+			Political Donations
+			Stock Market
+			Stock Market Rally
+			Stocks
+		Workplace & Labor
+			Auditor
+			Barista
+			Bribery
+			Burnout (Workplace)
+			Butler
+			Carbon Copy (CC)
+			C-Suite
+			Chain Reaction
+			Charter Flight
+			Child Support
+			Container Ship
+			Cooking The Books
+			English Teacher
+			False Meritocracy
+			Financial Advisor
+			FIRE Movement
+			Glass Ceiling
+			Human Resources Person
+			Janitor
+			Just A Number In The Spreadsheet
+			Lawyer (Corporate)
+			Mass Document Destruction
+			Mass Layoffs
+			Meeting Culture: Meetings About Meetings
+			Middle Manager
+			Micromanager
+			Multimillionaire Philanthropist
+			Overachieving Intern
+			Overtime
+			Personal Shopper
+			Salaryman
+			Sommelier
+			Unpaid Intern
+			Workplace Hazard
+	Faction: Shadow Operations
+		Espionage & Covert Actions
+			Alibi
+			Arms Dealer
+			Asset Recruitment
+			Asymmetric Warfare
+			Baiting USB Stick
+			Black Bag Job
+			Black Box
+			Bribery
+			Brush Pass
+			Burn Notice
+			Burner Phone
+			Cameras Off Suicide
+			Cleaner
+			Codename
+			Compartmentalization
+			Compromised Agent
+			Counter-Intelligence
+			Counter-Surveillance
+			Covert Operation
+			Dark Web
+			Dead Drop
+			Dead Man's Switch
+			Death By "Natural Causes"
+			Deep Cover
+			Deep Work
+			Eavesdrop
+			Election Interference
+			Enigma Machine
+			Ethical Dilemma
+			Extraction
+			Fake Data Leak
+			Fake Fake News
+			Fake News
+			Falsified Documents
+			False Flag Operation
+			False Report
+			Frame Job
+			Ghost Guns
+			Guerrilla Tactics
+			Hacker
+			Hidden Agenda
+			HOAX
+			Honeypot
+			Human Intelligence (HUMINT)
+			If I Told You, I'd Have To Kill You
+			Implant (Tracking/Control)
+			Informant
+			Insider Information
+			Insider Job
+			Intentional Leaks
+			Internal Betrayal
+			Internet Censored Encyclopedia
+			Invisibility Cloak
+			It Wasn't Me
+			Known Unknown
+			Unknown Unknown
+			Laser Microphone
+			Lawyer (The Fixer)
+			Lie Detector
+			Malinformation
+			Masonry
+			Mass Document Destruction
+			Memory Wipe
+			Mind Control Device
+			Misinformation
+			Mk Ultra
+			Mole (Spy)
+			Natural Death
+			Nonchalant Agent
+			Panic Button
+			Persuasion Vs Coercion
+			Plausible Deniability
+			Poison
+			Political Decoy
+			Political Police
+			Polonium Umbrella
+			Private Investigator
+			Protocol Enforcers (Men In Black)
+			Puppeteer
+			Reflexive Control
+			Refugee
+			Return to Sender
+			Sabotage
+			Sanitize
+			Scapegoat
+			Secure Deletion
+			Secret Service
+			Secret Service Bodyguard
+			Self Destruct Button
+			Shaken Martini
+			Signal Jammer
+			Sleeper Agent
+			Smoke And Mirrors
+			Snatch
+			Snitch
+			Social Engineering
+			Spy
+			Statal Surveillance
+			Steganography
+			Stockholm Syndrome
+			Subliminal Message
+			Subverting Expectations
+			Tapped Communications
+			Telescreen
+			Traceability
+			Tracking Beacon
+			Undercover Agent
+			Wet Work
+			Whistle
+			Whistleblower
+			Witness Protection Program
+		Conspiracy & Control Systems
+			Alien Body
+			Blackout
+			Conspiracy Theorist
+			Control
+			Cult
+			Dark Money Donation
+			Deep State
+			Designed Narrative
+			Epistemic Security
+			Fact-Checker
+			Geopolitical Yapper
+			HAARP
+			Involution
+			Kafka Trap
+			Mandela Effect
+			Masonic Salute
+			Mass Hysteria
+			Mental Breakdown
+			Political Prisoner
+			Power Vacuum
+			Propaganda
+		Psychological Warfare & Tactics
+			Psyop
+	Faction: Statecraft & Conflict
+		Governance & Politics
+			Alegal
+			Alien Body
+			Apex
+			Anti Homeless Architecture
+			Authoritarianism
+			Ban Hammer
+			Behavioral Sink
+			Border Crossing
+			Naturalization
+			Bribery
+			Constitution
+			Controlled Dissidence
+			Coup D'Etat
+			Cyber Cop
+			Demagogue
+			Demonstration
+			Public Protest
+			Diplomata
+			Disruptor
+			Domestic Security Agency (DSA, NSA Parodia)
+			Embargo
+			Emergency Broadcast
+			Everybody Is Equal Before The Law
+			Eunuch
+			Exodus
+			Expropriate
+			Filibuster
+			Geopolitical Yapper
+			Gerontocracy
+			Kakistocracy
+			Globalization
+			Great Depression
+			Gun Control
+			Illuminati
+			Internal Revenue Service (IRS)
+			King's Jester
+			Kleptocracy
+			Lawyer (State)
+			Local Police
+			Limited Resources
+			Mass Emigration
+			Mass Inmigration
+			Ministry Of Truth
+			Ministry Of Love
+			Ministry Of Peace
+			Ministry Of Plenty
+			Big Brother
+			Newspeak
+			Facecrime
+			Thoughtcrime
+			Oldthink
+			Blackwhite
+			Vaporize
+			Purge
+			Doublethink
+			Ministry Of Equality
+			Ministry Of Propaganda
+			Modus Operandi
+			National Treasury
+			Negative Priming
+			Nobel Peace Price
+			OPEP+
+			OVNI
+			Panem Et Circenses
+			Panopticon
+			Patriotism
+			Persona Non Grata
+			Pledge (Political)
+			Political Agenda
+			Political Campaign Donations
+			Political Correctness
+			Political Pledge
+			Populism
+			Post-Truth
+			Power Grid Failure
+			Power Vacuum
+			Praegustator
+			President
+			Prince
+			The King
+			Privatization
+			Professors
+			Propaganda
+			Protección Diplomática
+			Pullitzer Prize
+			Purge Day
+			Quid Pro Quo
+			Radar Camera
+			Red Tape
+			Red Telephone
+			Regime Change
+			Retelling History
+			Revolution
+			Rey Emérito
+			Sanctions
+			Secret Handshake
+			Security Guard
+			Security Level
+			Social Distancing
+			Social Mobility
+			Sparta
+			Speed Limit
+			State Controlled Media
+			Status Quo
+			Supreme Court
+			Tax Season
+			Terrorist Attack
+			Tower Of Babel
+			Trade War
+			Traffic Jam
+			Universal Healthcare
+			Utopia
+			Dystopian Present
+			Veni Vidi Vici
+			Vernacular Information Dissemination
+			WWIII
+		Warfare & Military
+			Anthrax Laboratory
+			Asymmetric Warfare
+			Breaking News
+			Ceasefire
+			Chronos Feast Order
+			Cold War
+			Collateral Damage
+			Conquer
+			Friendly Fire
+			Gungnir
+			Huszár
+			I Am Become Death, The Destroyer Of Worlds
+			Loaded Language
+			Lost Landmine
+			Manhattan Project
+			Martial Law
+			Militar Salute
+			Mercenaries
+			Misile Crisis
+			Mutually Assured Destruction
+			Navy Soldier
+			Samurai
+			Ninja
+			Nuclear Disaster
+			Nuclear Submarine
+			Police Line Do Not Cross
+			Peace Force
+			Peace Treaty
+			Retaliation
+			Si Vis Pacem, Para Bellum
+			Soft Landing
+	Faction: Myths & Mysteries
+		Mythic Beings & Deities
+			Horsemen Of Apocalypse
+			Ancient Greece Gods
+			Ancient Rome Gods
+			Baphomet
+			Birth Of Venus
+			Calypso
+			Chimera
+			Chupacabras
+			Cultist
+			Cyclop
+			David (Michelangelo)
+			Doppelganger
+			Fenix
+			Fool
+			Ghandi
+			Ghost
+			Giant Laserthrowing Futuristic Titanium Lizard
+			Goddess
+			Golem
+			Guardian Spirit
+			Head Of Medusa
+			Hermit
+			High Priestess
+			Justice
+			Kings Jester
+			Lilith
+			Living Dead
+			Magician
+			Martyr
+			Medusa
+			Minotaur
+			Minotaur Guardian
+			Modern Gods, Typical
+			Monk
+			Mortician
+			Mummy
+			Mulo (Romani Folk Creature)
+			Ness Monster
+			Norne
+			Oracle of Delphi
+			Pasiflora
+			Pleiades
+			Celaeno, Electra, Maia, Merope, Pleione, Taygeta, Atlas
+			Pope
+			Preacher
+			Praegustator
+			Robinhood
+			Siren
+			Sorcerer
+			Space-Time Bearded Wizard
+			Strength
+			Stigma
+			Succubus
+			Temperance
+			Templar Knight
+			The Chariot
+			The Chosen One
+			The Devil
+			The Emperor
+			The Empress
+			The Hanged Man
+			The Hierophant
+			The High Priestess
+			The Lovers
+			The Magician
+			The Moon
+			The Star
+			The Sun
+			The Tower
+			Trinity
+			Unicorn
+			Valkyrie
+			Vampire
+			Werewolf
+			Wheel of Fortune
+			Witcher
+			Yeti
+			Zealot
+		Ancient & Mythic Concepts
+			Acting In Bad Faith
+			Aeon
+			Afterlife
+			Apocalypse
+			Ascend
+			Atlantis
+			Babylon
+			Bermuda Triangle
+			Beyond
+			Bread And Wine
+			Broken Mirror
+			Canibalism
+			Celibacy
+			Cult
+			Curse Of Hubris
+			Curse of Sisyphus
+			Cursed Problem
+			Death
+			Destiny Bond
+			Deus Ex Machina
+			Die For It
+			Duplicating Fish
+			Exodus
+			Fire Stolen From The Gods
+			Free Will
+			Predestination
+			God's Grace
+			Harmony
+			Hero's Journey
+			Holiday
+			Inuit Senilicide
+			Karma
+			Know
+			Law Of Attraction
+			Lucid Dreaming
+			Lucky Clover
+			Luna
+			Sol
+			Memento Mori
+			Midas Hand
+			Nepotism
+			Odyssey
+			Origin Of The Universe
+			Pandora Box
+			Philosopher's Stone
+			Poetic Justice
+			Portal To Hell
+			Potion
+			Prophecy
+			Quintessence
+			Rebirth
+			Reincarnation
+			Religious Instrumentalization
+			Rigor Mortis
+			Sacrificial Ritual
+			Second Opportunity
+			7 Sins
+			Sisyphus
+			Stupid Mysticism
+			Sunrise
+			Sunset
+			Symbiosis
+			Taqiyya
+			Terrenal Paradise
+			The Egg
+			The Great Flood
+			The Moral Order
+			True Myth
+			Ying-Yang
+		Legendary Objects & Places
+			Albino Silverback Gorilla
+			Anthology
+			Astrolabe
+			Constellation
+			Night Sky
+			Crystal Ball
+			Dancing Crabs Island
+			Dead Sea Scrolls
+			Excalibur
+			Flickering Candle
+			Fountain Of Youth
+			Frankenstein
+			Gungnir
+			Hex
+			Holy Grail
+			Holy Quest
+			Homing Pidgeon
+			Jade Monkey
+			Lance Of Longinus
+			Spear Of Longinus
+			Mimic (Chest)
+			Monkey Hand
+			Nacre
+			Necronomicon
+			Omamori
+			Phoenix Feather
+			Red Cross
+			Resurrected T-Rex
+			Rosetta Stone
+			Sacred Book
+			Tarot Cards
+			The Aegis
+			The Holy Grail
+			The Lost Ark
+			Venecian Mask
+			Vitruvian Man
+		Practices & Phenomena
+			Exorcism
+			Omen Reading
+			Spontaneous Combustion
+	Faction: Applied Science & Futurism
+		Core Sciences & Math
+			Absolute Zero
+			Abiogenesis
+			Alpha
+			Antimatter
+			Astrophysics
+			Beta
+			Big Bang
+			Black Hole
+			Carbon Footprint
+			Chameleon (Animal - Biology)
+			Climate Change
+			Dark Matter
+			Delta
+			Desert Rose
+			Dyson Swarm
+			Evolution Theory
+			Exponential Growth
+			Extremophile
+			Force Field
+			Gamma
+			Giraffe
+			HAARP
+			Hexagons
+			Hydroponics
+			Ionosphere
+			Kardashev Zenith
+			Lambda
+			Magnetosphere
+			Magnetic Field
+			Mathematician
+			Meteor Strike
+			Mutation
+			Nautical Charts
+			Omega
+			Origin Of The Universe
+			Overpopulation
+			Particle Accelerator
+			Perpetual Motion Machine
+			Philosophy Phd
+			Pioneer
+			Prion Disease
+			Quantum Entanglement
+			Quantum Physicist
+			Quark
+			Scientific Method
+			Sea Star
+			Sigma
+			Splitting The Atom
+			Stasis Field
+			String Theory
+			Summa Cum Laude
+			T-Rex Bone
+			Traceability
+			Wave Particle Duality
+			White Dwarf (Star)
+			Wormhole
+		Medicine & Biology
+			Alzheimer Cure
+			Anti-Radiation Cactus
+			Artificial Womb
+			Biohacking
+			Bioweapon
+			Black Box
+			Blood Transfusion
+			Clone
+			Cold Fusion
+			Contagious Disease
+			Viral Outbreak
+			Pandemy
+			DNA Test
+			Energy Transition
+			Epigenetics
+			Gene Editing
+			Genetic Sequencer
+			Genetically Modified Organism
+			Geoengineering
+			Geomagnetic Reversal
+			Hazmat Suit
+			Heimlich Maneuver
+			Hyperion (Tree)
+			Incision
+			Insulin
+			Bioengineered Meat
+			Malady
+			Medical Records
+			Microdosing
+			Morbid Obesity
+			Pandemy
+			Pharma Lobby
+			Pidgeon Experiments
+			Placebo
+			Plague Medic
+			Radiation Sickness
+			State Of The Art
+			Vaccine
+		Futurism & Sci-Fi Concepts
+			Asteroid Mining Colony
+			Biodegradable Plastic
+			Cherenkov Radiation
+			Exoplanet
+			Science Fiction
+			Space Elevator
+			Space Mining
+			Space Satellites
+			Tidal Wave
+	Faction: Mind & Paradox
+		Psychology & Cognition
+			Abilene Paradox
+			ADHD
+			Amnesia
+			Anxiety
+			Balance
+			Behavioral Sink
+			Better Late Than Never
+			Blissful Ignorance
+			Brain Drain
+			Brainstorm
+			Broken Telephone (Game)
+			Burnout (Psychological State)
+			Choice Overload
+			Cognitive Dissonance
+			Cognitive Maneuver
+			Compartmentalization
+			Confirmation Bias
+			Controlled Chaos
+			Contradiction
+			Coping Mechanism
+			Copium
+			Damocles Sword
+			Daydreaming
+			Depression
+			Mental Breakdown
+			Designated Scapegoat
+			Dissociation
+			Domino Effect
+			Double Edged Sword
+			Drunken Sincerity
+			Dyslexia
+			Ecological Anxiety
+			Educated Guess
+			Empathy
+			Encore
+			Equilibrium
+			Existential Dread
+			Fear Of Missing Out (FOMO)
+			Fermi Paradox
+			Forking Path
+			Freudian Slip
+			Generational Trauma
+			Halo Effect
+			Herd Mentality
+			Heuristics
+			Hypnosis
+			Imposter Syndrome
+			Information Asymmetry
+			Introvert
+			Kafka
+			Kafkian
+			Known Unknown
+			Liar Paradox
+			Liminality
+			Loss Aversion
+			Main Character Energy
+			Main Character Syndrome
+			Maslow's Pyramid
+			Mens Sana In Corpore Sano
+			Momentum
+			Murphy's Law
+			Narcissist
+			Nonchalant
+			Normalcy Bias
+			Neurodiversity
+			Optimist
+			Pessimist
+			Original Copy
+			Ostracism
+			Oxymoron
+			Pareidolia
+			Passive-aggressive
+			Pavlovian Conditioning
+			Performative Allyship
+			Placebo Effect
+			Poe's Law
+			Precognition
+			Projection (Psychology)
+			Psychiatrists
+			Pygmalion Effect
+			Quaternity
+			Red Herring
+			Reflect
+			Resonate
+			Schrodinger's Cat
+			Selective Perception
+			Self-Fulfilling Prophecy
+			Senile Dementia
+			Spotlight Effect
+			Straw Man Argument
+			Survivorship Bias
+			Synergy
+			Tabula Rasa
+			Teleportation
+			The Human Factor
+			Thought Experiment
+			Tourette
+			Toxic Relationship
+			Trolley Problem
+			Uncanny Valley
+			Unity
+			Wise Fool
+			Wishful Thinking
+			YOLO
+			Zeno's Paradoxes
+		Philosophy & Logic
+			Aesthetic (Philosophy Of Beauty)
+			Ad Hominem
+			Appeal To Authority
+			Appeal To Nature
+			Appeal To Tradition
+			Bona Fide
+			Ad Hoc
+			Ipso Facto
+			Modus Operandi
+			Vice Versa
+			Status Quo
+			Ad Nauseam
+			Errare Humanum Est
+			Quid Pro Quo
+			Mea Culpa
+			Cogito, Ergo Sum
+			Tempus Fugit
+			Post Mortem
+			Carpe Diem
+			Carpe Noctem
+			Cascade
+			Cheap Philosophy
+			Cherry Picking
+			Circular Reasoning
+			Duality
+			False Dichotomy
+			Gambler's Fallacy
+			Hanlon's Razor
+			Introspection
+			Law Of Attraction
+			Non Sequitur
+			Pascal's Wager
+			Post Hoc Ergo Propter Hoc (False Cause)
+			Reductio Ad Absurdum
+			No True Scotsman
+			Slippery Slope
+			Whataboutism
+			Occam's Razor
+	Faction: Zeitgeist & Archetypes
+		Social Trends & Commentary
+			Agnosticism
+			All Along The Watchtower
+			Amuse Bouche
+			Anthropomorphization
+			Aprils Fool
+			Attention Attentione Atención (!)
+			Black Friday
+			Burn The Candle At Both Ends
+			Canon
+			Choice Overload
+			Color Theory
+			Consumism
+			Deja Vu
+			Designed In California, Assembled In China
+			Duelo A Garrotazos
+			Dunning Kruger Effect
+			Earworm
+			Ecological Anxiety
+			Euthanasia
+			Fatphobic
+			Weight Loss Drug
+			Feminist Dance
+			Gaslight
+			Gerontofication
+			Goy
+			Grazie Signore
+			Grown In Argentina, Packed In Thailand
+			In This House We Obey The Laws Of Thermodynamics!
+			In-group/Out-group Ethnophaulism
+			Inverted Population Pyramid
+			Jet Lag
+			Junk Mail
+			Ladies First
+			Left Hand Free
+			Listen Kid (I Dont Have Much Time)
+			Loneliness Epidemic
+			Loss Of Identity
+			Lunar Taxes Metamorfosis (Transexual Anagram)
+			Mandatory Fun
+			Mental Health Day
+			Metrosexual
+			Microagression
+			Minimalism
+			Mindfulness
+			Missed Call
+			Modern Art
+			Morning Commute
+			New Rich
+			Old Money Style
+			Night Shift
+			Nihilism
+			No Masters
+			Nocturne In F Minor, Op. 55, No. 1
+			Operation Mayhem
+			Overton Window
+			Paella
+			Paradise Circus
+			Parasite
+			Passive Smoker
+			Chain Smoker
+			Performative Allyship
+			Political Correctness
+			Pro-Choice
+			Pro-Life
+			Purely Economic Factors
+			Quiet Quitting
+			Racist Joke
+			Renaissance
+			Reverse Racism
+			Rush Hour
+			Russian Roulette
+			Saturno From Goya
+			Serendipity
+			Side Hustle
+			Slack Off
+			Snake Oil
+			Soap
+			Stepstone
+			Stonewalling
+			Strike (Huelga)
+			Sudoku
+			Tax The Rich
+			Tessellate
+			The Great Replacement Theory
+			The Grind (Meme)
+			This Is Fine
+			This Is From Matilda
+			Tiger Parenting
+			Toxic Positivity
+			Toxic Relationship
+			Universal Basic Income (UBI)
+			Virtue Signaling
+			Wasted Potential
+			Weaponized Incompetence
+			White Russian
+			White Woman Missing Syndrome
+			Whistle (Silbar)
+			Wishful Thinking
+			Work Life Balance
+			World's Smallest Violin
+			You Cannot Eat Money
+			Zeitgeist
+		Archetypes & Roles
+			Annoying Customer
+			Antihero
+			Bodybuilder
+			Boomer
+			Blue Haired Woman
+			Construction Worker
+			Copycat
+			Culturist
+			Delivery Cyclist
+			Dogmatic Approach
+			Drug Smuggler
+			Drunken Sincerity
+			Freelancer
+			Good Boi (Dog Meme)
+			Hipster
+			Hobo
+			Janitor
+			Karen
+			King's Jester
+			Low IQ Individuals
+			Mail Bride
+			Medical Tourism
+			Minimalist
+			Mortician
+			Nomad (Asking For Cigar)
+			Normie
+			Passport Bro
+			Personal Shopper
+			Pickpocketer
+			Plague Medic
+			Postal Worker
+			Prepper
+			Punk
+			Raptor Jesus
+			Reality TV Star
+			Runner
+			Sassy
+			Scam Artist
+			Single Mom
+			Surrogate pregnancy
+			Trad Wife
+			Transhumanistic Human
+			Trevor
+			Truck Driver
+			Underdog
+			VIP
+			White Knight
+			Yoga Instructor
+		Cultural Objects & Events
+			A Copy Of A Copy
+			Birthday Party
+			BYOBBB
+			Cyberpunk
+			Fidget Spinner
+			Jetpack
+			Kimono
+			Massive Song Contest
+			Matsuri
+			Misho The Fish
+			Plot Armor
+			Plot Twist
