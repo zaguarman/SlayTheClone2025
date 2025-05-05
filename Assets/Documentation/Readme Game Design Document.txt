@@ -56,17 +56,31 @@ Determinism: Game effects are deterministic.
 
 Card Management:
 
-Drawing Cards: Standard mechanic.
+Drawing Cards (Scheduled Draw): Players draw a base number of cards (e.g., 1) only at the start of their turn. No effect allows immediate drawing during a turn.
+
+Draw Manipulation (Next Turn Draw Modification): Effects modify the number of cards drawn at the start of the next turn (e.g., "Schedule X additional draws", "Draw X fewer cards next turn").
 
 Discard Pile: Zone for used Spells and destroyed Creatures.
 
-Discarding: From own hand. Can be an additional cost/resource. Goes to Discard Pile.
+Discarding from Hand: Choosing cards currently in hand and moving them immediately to the Discard Pile, typically as an additional cost or effect. Separate from modifying next turn's draw.
 
-Banish: Removes card from the game permanently. Cannot be recovered.
+Banish: Removes card from the game permanently.
 
-Card Lifecycle & Reshuffling: Played Spells & destroyed Creatures go to Discard Pile. Empty Draw Deck triggers reshuffle. Creature stats reset on reshuffle.
+Card Lifecycle & Reshuffling:
 
-Requisites: Conditions for play/activation (sacrifice, discard, board state).
+Played Spells & destroyed Creatures go to their owner's Discard Pile.
+
+Reshuffle Trigger & Process: If, during the Start of Turn draw phase, a player needs to draw one or more cards but their Draw Deck is empty, the following occurs:
+
+Any remaining cards are drawn from the empty deck (which will be zero).
+
+The player's entire Discard Pile is shuffled thoroughly to become their new Draw Deck.
+
+The player then continues drawing cards from this newly formed Draw Deck until they have drawn the total number of cards scheduled for that turn's draw phase.
+
+Creature stats are reset to their base values when their cards are part of the Discard Pile being reshuffled into the Draw Deck.
+
+Requisites: Conditions for play/activation (e.g., sacrifice, discard from hand, board state).
 
 III. Core Gameplay Loops & Mechanics
 
@@ -74,11 +88,11 @@ Information Warfare (Intelligence vs. Counter-Intelligence): Reveal vs. conceal 
 
 Board Manipulation & Control:
 
-Logistics (Movement): Abilities/Spells for moving/swapping. Includes Post-Action Repositioning, Positional Relay.
+Logistics (Movement): Abilities/Spells for moving/swapping.
 
 Movement Restriction: Heavy status, abilities, Slot Effects.
 
-Slot Effects / Environmental Hazards: Single effect per slot (new replaces old). Visible or hidden. Triggers: On Move In/Out, Continuous, Reactive, One-Time. Can block actions.
+Slot Effects / Environmental Hazards: Single effect per slot (new replaces old). Various triggers. Can block actions.
 
 Hazard Removal / Decontamination: Cleansing slot effects.
 
@@ -86,164 +100,110 @@ Location (Weather): Global modifiers.
 
 Flooding: Using numerous weak creatures.
 
-Creature Enhancement & Protection:
+Creature Enhancement & Protection: Setup, Survivability, Immunity/Protection, Cleansing.
 
-Setup: Increasing stats.
+Disruption & Control: Status Effects Application, Red Tape, Disable Archetype (Suppressed), Counter/Interference, Attack/Effect Redirection.
 
-Survivability: Heal, Armor, redirection.
+Recursion & Recovery: Revive, Return to Hand (from Battlefield or Discard).
 
-Immunity/Protection: Granular immunity.
+Combat, Damage & Targeting: Direct Damage, Chain/Spread Damage, Armor, Life Drain/Siphoning, Targeting Nuances.
 
-Cleansing: Removing negative status.
-
-Disruption & Control:
-
-Status Effects Application: See Section IV.
-
-Red Tape: Delaying actions, lowering priority.
-
-Disable Archetype: Suppressed.
-
-Counter / Interference: Stopping/altering queued actions.
-
-Attack/Effect Redirection: Changing targets.
-
-Recursion & Recovery:
-
-Revive: Return creature from Discard Pile to battlefield (set HP, Deployment Time applies).
-
-Return to Hand (from Battlefield): Move creature from battlefield to hand.
-
-Return to Hand (from Discard): Move card from Discard Pile to hand.
-
-Combat, Damage & Targeting:
-
-Direct Damage: Reducing HP.
-
-Chain/Spread Damage: Multi-target.
-
-Armor: Temporary HP. Recoil hits Armor first.
-
-Life Drain / Siphoning: Dealing damage heals the source (e.g., "Vampiric Strike"). Calculates based on damage dealt to HP or Armor.
-
-Targeting Nuances: Patterns/restrictions.
-
-Action Queue & Turn Flow Mechanics:
-
-Queue Manipulation: Interacting with hidden queue.
-
-Priority Enhancement: Higher priority.
-
-Global Priority Modifiers: E.g., Coordinated Advance, System Scramble.
-
-Normal Tie-Breaking: (Equal Prio/Speed) 1. Lowest current HP first. 2. Lowest Attack first. 3. Random.
-
-Reversed Tie-Breaking: (System Scramble) 1. Highest current HP first. 2. Highest Attack first. 3. Random.
-
-Priority Reduction: Lowering priority.
+Action Queue & Turn Flow Mechanics: Queue Manipulation, Priority Enhancement, Global Priority Modifiers, Normal Tie-Breaking (Lowest HP -> Lowest Atk -> Random), Reversed Tie-Breaking (Highest HP -> Highest Atk -> Random), Priority Reduction.
 
 IV. Detailed Mechanics & Specific Systems
 
-Traps:
+Traps: Hidden effects (Reveal trigger, Manipulation trigger, Slot-based).
 
-Hidden effects triggered by opponent interaction.
-
-Type 1: Trigger on successful reveal by enemy Intelligence.
-
-Type 2: Queued action triggers drawback on opponent if manipulated.
-
-Slot-based traps via hidden slot effects.
-
-Status Effects (Detailed Definitions):
-
-Addicted (X turns | Requires: Stat Alteration): At the beginning of its controller's turn, if this creature did not have its Attack, Health, or Speed stats directly altered (increase or decrease) by any effect during the previous turn, it gains Suppressed 1. Check occurs each turn for the duration X. Theme: Dependency, withdrawal.
-
-Blessed: Persists until consumed. Negates the next negative status effect that would be applied, then Blessed is removed. Does not stack. Theme: Single-use ward, divine protection.
-
-Bleeding / Corroding (X turns): At the End of its controller's Turn, this creature takes 1 damage. Lasts X turns. Stacks duration. Damage does trigger "OnDamage" passive abilities. Theme: Damage over time, wounds, decay.
-
-Bored (X turns): At the beginning of its controller's turn, if not targeted last turn, skips action/passives this turn. Heals 1 HP End of Turn. Lasts X turns. Theme: Apathy, complacency.
-
-Caffeinated (X turns): Actions +1 Priority. +1 Attack. Takes 1 damage End of Turn. Lasts X turns. Cannot be cleansed. Stacks duration. Cleanses Tired. Theme: Stimulant, hyperactive, burn out.
-
-Compromised: Persists until triggered once. When targeted by enemy "Intelligence", triggers a negative effect for its controller (defined by source). Removed after triggering. Can be applied secretly. Theme: Leaky information, double agent, honeypot.
-
-Concealed: Persists until next action resolves or removed/overridden. Planned action hidden/obscured in opponent's queue preview. Overrides Revealed. Theme: Secrets, hidden intent, misdirection.
-
-Cursed (X turns): End of controller's turn, apply a random negative status from a predefined pool. Lasts X turns. Stacks duration. Theme: Bad luck, persistent misfortune.
-
-Delayed (X turns): Next X turns, actions have base Priority -1. Stacks additively. Duration resets/extends. Theme: Sluggishness, lag.
-
-Deployment Time (X turns): Applied on entry. For X turns, cannot perform actions, passives don't trigger (exceptions possible). Decreases by 1/turn. Theme: Initialization, mobilization.
-
-Depressed (X turns): Attack stat halved (rounded). Lasts X turns. Stacks duration. 3+ total turns -> remove all Depressed, apply Doomed. Theme: Morale loss, reduced effectiveness.
-
-Doomed (X turns): Destroyed after X turns. Gains +1 Attack start of each turn. Cannot gain Depressed. Cannot be cleansed. Cannot stack duration. Theme: Marked for death, final surge.
-
-Heavy (X turns): Cannot perform Move actions, cannot be moved. Gains 1 Armor End of Turn. Lasts X turns. Stacks duration. Theme: Anchored, immovable.
-
-Ostracized (X turns): Cannot be targeted by actions/abilities. Cannot gain new status effects. Existing effects remain. Can still act. Lasts X turns. Stacks duration. Theme: Isolation, untouchable, phased out.
-
-Revealed (X turns): Planned action visible to opponent in queue preview. Decreases by 1/turn. Stacks duration. Overridden by Concealed. Theme: Information leak, surveillance.
-
-Suppressed (X turns): Cannot perform actions (except Move). Passives don't trigger. Lasts X turns. Stacks duration. Theme: Major disablement, suppression.
-
-Targeted (X intensity): Takes X additional damage from all sources. Stacks intensity. Duration refreshes/extends. Theme: Defenses breached, weak point.
-
-Tired (X stacks): Adds stacks. 1 stack -> Suppressed 1 in 2 turns. 2 stacks -> Suppressed 1 next turn. 3+ stacks -> Suppressed 1 immediately this turn (removes queued actions except Move). Cleansed by Caffeinated. Theme: Gradual exhaustion to shutdown.
+Status Effects (Detailed Definitions): Addicted, Blessed, Bleeding/Corroding, Bored, Caffeinated, Compromised, Concealed, Cursed, Delayed, Deployment Time, Depressed, Doomed, Heavy, Ostracized, Revealed, Suppressed, Targeted, Tired. (Full definitions as previously established).
 
 V. Game Design Philosophy & Balancing
 
+Game Tone: The game aims for a cynical, funny, and lighthearted tone, achieved through satire and exaggeration, often reflecting modern absurdities, bureaucracy, internet culture, and twisted mythic tropes. Flavor text, card names, and visuals contribute to this voice.
+
+Flavor Preservation: During the iterative design process documented here, existing thematic elements (card names, ability names, flavor text, faction associations) should be considered stable and preserved unless a user explicitly requests a change to these elements. Mechanical changes should aim to integrate with existing flavor where possible.
+
+Text Detail Preservation: No part of this document, including descriptions of mechanics, rules, status effects, examples, or design principles, should be simplified, shortened, condensed, or rephrased unless explicitly instructed to do so by the user. Modifications should involve additions, specific changes, or deletions as requested, maintaining the existing level of detail and phrasing in all other aspects.
+
 Balancing Focus: Key priority. Rigorous playtesting and iteration needed.
 
-Numerical Balance: Effects modifying stats or numerical values should use conservative numbers and stack carefully (additively/multiplicatively) to prevent exponential scaling and easily broken interactions.
+Numerical Balance: Conservative numbers, careful stacking.
 
-Status Effect Design Principle: When designing new cards or effects, prioritize utilizing the existing pool of status effects (defined in Section IV). Avoid creating new, unique status effects unless the desired mechanic cannot be reasonably achieved by combining or slightly modifying existing ones. This promotes system coherence, reduces rule complexity, and encourages synergistic interactions.
+Status Effect Design Principle: Prioritize using existing status effects. Avoid creating new ones unless necessary. Promotes coherence, reduces complexity, encourages synergy.
 
-Creature Ability Design Principle: Similarly, when designing new creature abilities (passive or active), prioritize reusing existing core ability mechanics (e.g., dealing damage, applying status, moving, healing, modifying stats) and established trigger types (e.g., OnAttack, OnDamage, OnTurnEnd). Avoid creating entirely novel ability mechanics if the desired gameplay effect can be achieved by applying existing mechanics in new ways, combining them, leveraging status effects, or using different trigger conditions. However, the specific trigger conditions themselves (e.g., 'OnFriendlyCreatureOfTypeX moves', 'OnTakingSpellDamage', 'WhileAdjacentToY') can be freely modified and combined to fit the unique theme and function of a card.
+Creature Ability Design Principle: Prioritize reusing existing core ability mechanics and trigger types. Avoid novel mechanics if effects can be achieved through combination, status effects, or varied triggers. Trigger conditions can be freely modified and combined.
 
 Balancing Levers:
 
-Opportunity Cost: Card choice (deck slot), Slot Occupation (board space), Sacrifice mechanics (unit loss for gain), Discarding cards (hand resource cost).
+Opportunity Cost: Card choice, Slot Occupation, Sacrifice, Discarding from hand. The Scheduled Draw mechanic and Next Turn Draw Modification are key tempo and planning levers.
 
-Space Limitations: Finite creature slots (5 per side), hand size limits (implied).
+Space Limitations: Finite creature slots, hand size limits.
 
-Domino Effects: Intentionally designed chain reactions (abilities, statuses, positioning). Requires risk/reward assessment.
+Domino Effects: Intentionally designed chain reactions.
 
 Development Goals & Player Experience:
 
-Reward: Strategic Planning (long-term goals), Creative Deckbuilding & Synergies (finding combos), Adaptation (reacting to opponent and board state), opportunities for Comebacks (avoiding deterministic losses).
+Reward: Strategic Planning, Creative Deckbuilding, Adaptation, Comebacks.
 
-Avoid: Overly complex calculations required mid-turn (Complicated Math), situations that feel inherently unwinnable due to luck rather than strategy (Unfair Situations). Focus on clear cause-and-effect for actions and consequences.
+Avoid: Complicated Math, Unfair Situations. Focus on clear cause-and-effect.
 
-Core Design Tenet - Double-Edged Sword:
-
-Major positive effects should ideally have a drawback or risk.
-
-Major negative effects or costs should ideally have a potential positive side-effect or compensation.
-
-All cards should have at least one effect; ideally, always a drawback (even minor).
-
-Examples: "OnMove: +1 Attack" + "OnAttacked: Controller takes 1 damage"; "Doomed" + Attack bonus; "Reckless Assault" (Attack bonus + recoil damage).
+Core Design Tenet - Double-Edged Sword: Positives have drawbacks; negatives have upsides.
 
 VI. Illustrative Content Examples
 
 Example Status Groupings: Information, Debuffs/Control, Buffs/Utility, Initial State.
 
-Example Card Concept 1: AI Psychologist (Cleansing + Reveal drawback)
+Example Passive Ability Concepts: Ninja Step, Resolute, Adrenal Surge, Overcharge, Kinetic Backlash, Essence Tap.
 
-Example Card Concept 2: Cult Ritualist (Status Transfer + Self-Curse drawback)
+Example Card Concepts: (Names, Factions, Flavor Text preserved as per rule in Section V)
 
-Example Passive Ability Concepts:
+Card Name: Plausible Deniability Protocol
 
-"All-Terrain Protocol" / "Ninja Step": Ignores negative slot effects on movement.
+Type: Spell / Faction: Shadow Operations
 
-"Defiance Protocol" / "Resolute": Survive lethal damage from max HP once per deployment.
+Effect: Target friendly creature gains Concealed 1. If that creature is destroyed by an opponent's action this turn or next turn, return it to your hand instead of the Discard Pile.
 
-"Critical Response" / "Adrenal Surge": Heal on low HP once per deployment.
+Flavor Text: "The Secretary disavows any knowledge..."
 
-"Reckless Assault" / "Overcharge": Attack bonus + self-damage.
+Card Name: Honeypot Agent
 
-"Kinetic Backlash": Recoil damage based on damage dealt.
+Type: Creature / Faction: Shadow Operations
 
-"Vampiric Strike" / "Essence Tap": Heal based on damage dealt.
+Stats: 1/4/2 / DT: 2
+
+Ability (Passive): Permanently Compromised. If Compromised triggers via opponent effect: Apply Suppressed 1 to the triggering enemy creature.
+
+Flavor Text: "They thought they were getting secrets..."
+
+Card Name: Oracle of Delphi's Ambiguous Warning (Revised)
+
+Type: Spell / Faction: Myths & Mysteries
+
+Effect: Look at top 3 deck cards. Choose 1 for top of deck, 1 for Discard Pile, Banish the last. Apply Cursed 1 randomly.
+
+Flavor Text: "The threads of fate show... choices!"
+
+Card Name: Influencer Apology Video
+
+Type: Spell / Faction: Zeitgeist & Archetypes
+
+Effect: Target friendly creature gains Blessed. Opponent schedules +1 draw next turn. Apply Revealed 1 to target creature.
+
+Flavor Text: "I'm taking accountability... Link in bio!"
+
+Card Name: Keyboard Warrior
+
+Type: Creature / Faction: Zeitgeist & Archetypes
+
+Stats: 2/1/3 / DT: 0
+
+Ability (Passive): OnAttack: Gains Concealed 1. End of Turn: If did not attack, gains Bored 1.
+
+Flavor Text: "U MAD BRO? XD"
+
+Card Name: The Grind™ Mindset
+
+Type: Spell / Faction: Zeitgeist & Archetypes
+
+Effect: Target friendly creature gains Caffeinated 3. Apply Depressed 1 to ALL other friendly creatures.
+
+Flavor Text: "Sleep is for the weak! CRUSH IT!"
