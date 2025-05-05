@@ -3,11 +3,9 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using System.Collections;
 using System.Linq;
-using System.Collections.Generic; // For List
 using TMPro; // For TextMeshProUGUI
 using UnityEngine.Events; // For UnityAction
 using static Enums; // Make sure Enums are accessible
-using System; // For Math
 
 public class GameplayInteractionTests {
     private GameManager _gameManager;
