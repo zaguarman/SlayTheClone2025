@@ -34,9 +34,7 @@ Card Game Factions Overview
 			Lockpicks
 			Lyre
 			Magnet
-			Mechanic
 			Memo Note
-			Metaphor
 			Microchip
 			Muscle Building Drug
 			Nanobots
@@ -97,7 +95,6 @@ Card Game Factions Overview
 			Vegan Substitute
 		General Concepts
 			Gear Shift
-			Reusable Shopping Bag
 			Scrap Metal
 	Locations Group
 		Abandoned Mall
@@ -105,14 +102,13 @@ Card Game Factions Overview
 		Airport Lounge
 		Airport Parking
 		Alcatraz
-		Alexandria Library
-		Anthrax Laboratory
 		Arc De Triomphe
 		Arctic Research Station
 		Area 51
 		Back Alley
 		Bank Vault
 		Black Site
+		Boulangerie
 		Bunker
 		Bus Stop
 		Casino
@@ -147,13 +143,11 @@ Card Game Factions Overview
 		Kindergarten
 		Kitchen
 		Las Vegas
-		Library of Alexandria
 		Lunar Base
 		Mars Colony
 		Megachurch
 		Michelin Star Restaurant
 		Military Base
-		Mind the Gap
 		Monastery
 		Museum
 		National Park
@@ -191,7 +185,7 @@ Card Game Factions Overview
 		Server Farm
 		Sewers
 		Shibuya
-		Skyscrapper
+		Skyscraper
 		Skyscraper Rooftop
 		Space Elevator
 		Space Station
@@ -200,9 +194,7 @@ Card Game Factions Overview
 		Stonehenge
 		Subway Platform
 		Supply Depot
-		Swiss Bank Account
 		Tax Haven
-		Tax Paradise
 		Theme Park
 		Tourist Trap
 		Toxic Waste Dump
@@ -256,7 +248,6 @@ Card Game Factions Overview
 			Robotics
 			Satellite Phone
 			Secure Channel
-			Slave Factory
 			Solid State Drive
 			Stable Connection
 			Subdermic Computer
@@ -283,13 +274,11 @@ Card Game Factions Overview
 			Cypher
 			Decypher
 			Data Mining
-			Deja Vu
 			Digital Editing
 			Disruptor
 			Email
 			Fork (Software Project)
 			Growth Hacking
-			Hacker
 			Here Be Dragons
 			Infinite Loop
 			Insider Job
@@ -382,7 +371,6 @@ Card Game Factions Overview
 			Refresh Feed
 			Remove Dislike Button
 			Revenge Porn
-			Roko's Basilisk
 			Rugpull
 			Rupee (Zelda)
 			Screen Time
@@ -575,6 +563,8 @@ Card Game Factions Overview
 			Stock Market
 			Stock Market Rally
 			Stocks
+			Swiss Bank Account
+			Tax Haven
 		Workplace & Labor
 			Auditor
 			Barista
@@ -585,7 +575,6 @@ Card Game Factions Overview
 			C-Suite
 			Chain Reaction
 			Charter Flight
-			Child Support
 			Container Ship
 			Cooking The Books
 			English Teacher
@@ -602,11 +591,13 @@ Card Game Factions Overview
 			Meeting Culture: Meetings About Meetings
 			Middle Manager
 			Micromanager
+			Mortician
 			Multimillionaire Philanthropist
 			Overachieving Intern
 			Overtime
 			Personal Shopper
 			Salaryman
+			Slave Factory
 			Sommelier
 			Unpaid Intern
 			Workplace Hazard
@@ -651,7 +642,6 @@ Card Game Factions Overview
 			Frame Job
 			Ghost Guns
 			Guerrilla Tactics
-			Hacker
 			Hidden Agenda
 			HOAX
 			Honeypot
@@ -672,7 +662,6 @@ Card Game Factions Overview
 			Lawyer (The Fixer)
 			Lie Detector
 			Malinformation
-			Masonry
 			Mass Document Destruction
 			Memory Wipe
 			Mind Control Device
@@ -724,33 +713,29 @@ Card Game Factions Overview
 			Whistleblower
 			Witness Protection Program
 		Conspiracy & Control Systems
-			Alien Body
+			Alien Body (Area51)
 			Blackout
 			Conspiracy Theorist
 			Control
-			Cult
 			Dark Money Donation
 			Deep State
 			Designed Narrative
 			Epistemic Security
 			Fact-Checker
-			Geopolitical Yapper
 			HAARP
 			Involution
-			Kafka Trap
 			Mandela Effect
 			Masonic Salute
 			Mass Hysteria
 			Mental Breakdown
 			Political Prisoner
 			Power Vacuum
-			Propaganda
 		Psychological Warfare & Tactics
 			Psyop
 	Faction: Statecraft & Conflict
 		Governance & Politics
 			Alegal
-			Alien Body
+			Alien Body (Area51)
 			Apex
 			Anti Homeless Architecture
 			Authoritarianism
@@ -776,12 +761,12 @@ Card Game Factions Overview
 			Exodus
 			Expropriate
 			Filibuster
-			Geopolitical Yapper
 			Gerontocracy
 			Kakistocracy
 			Globalization
 			Great Depression
 			Gun Control
+			Hacker
 			Illuminati
 			Internal Revenue Service (IRS)
 			King's Jester
@@ -815,6 +800,7 @@ Card Game Factions Overview
 			Panem Et Circenses
 			Panopticon
 			Patriotism
+			Pegasus (Statecraft)
 			Persona Non Grata
 			Pledge (Political)
 			Political Agenda
@@ -851,11 +837,13 @@ Card Game Factions Overview
 			Social Mobility
 			Sparta
 			Speed Limit
+			State Controlled Digital Money
 			State Controlled Media
 			Status Quo
 			Supreme Court
 			Tax Season
 			Terrorist Attack
+			The Fifth Amendment
 			Tower Of Babel
 			Trade War
 			Traffic Jam
@@ -875,8 +863,6 @@ Card Game Factions Overview
 			Collateral Damage
 			Conquer
 			Friendly Fire
-			Gungnir
-			Huszár
 			I Am Become Death, The Destroyer Of Worlds
 			Loaded Language
 			Lost Landmine
@@ -923,7 +909,6 @@ Card Game Factions Overview
 			Hermit
 			High Priestess
 			Justice
-			Kings Jester
 			Lilith
 			Living Dead
 			Magician
@@ -933,7 +918,6 @@ Card Game Factions Overview
 			Minotaur Guardian
 			Modern Gods, Typical
 			Monk
-			Mortician
 			Mummy
 			Mulo (Romani Folk Creature)
 			Ness Monster
@@ -961,7 +945,6 @@ Card Game Factions Overview
 			The Empress
 			The Hanged Man
 			The Hierophant
-			The High Priestess
 			The Lovers
 			The Magician
 			The Moon
@@ -1011,11 +994,11 @@ Card Game Factions Overview
 			Inuit Senilicide
 			Karma
 			Know
-			Law Of Attraction
 			Lucid Dreaming
 			Lucky Clover
 			Luna
 			Sol
+			Masonry
 			Memento Mori
 			Midas Hand
 			Nepotism
@@ -1067,7 +1050,8 @@ Card Game Factions Overview
 			Homing Pidgeon
 			Jade Monkey
 			Lance Of Longinus
-			Spear Of Longinus
+			Library of Alexandria
+			Magic Beans
 			Mimic (Chest)
 			Monkey Hand
 			Nacre
@@ -1177,11 +1161,8 @@ Card Game Factions Overview
 			Medical Records
 			Microdosing
 			Morbid Obesity
-			Pandemy
-			Pharma Lobby
 			Pidgeon Experiments
 			Placebo
-			Plague Medic
 			Radiation Sickness
 			State Of The Art
 			Vaccine
@@ -1228,7 +1209,6 @@ Card Game Factions Overview
 			Double Edged Sword
 			Drunken Sincerity
 			Dyslexia
-			Ecological Anxiety
 			Educated Guess
 			Empathy
 			Encore
@@ -1246,7 +1226,7 @@ Card Game Factions Overview
 			Imposter Syndrome
 			Information Asymmetry
 			Introvert
-			Kafka
+			Kafka Trap
 			Kafkian
 			Known Unknown
 			Liar Paradox
@@ -1263,14 +1243,12 @@ Card Game Factions Overview
 			Normalcy Bias
 			Neurodiversity
 			Optimist
-			Pessimist
-			Original Copy
 			Ostracism
 			Oxymoron
 			Pareidolia
 			Passive-aggressive
 			Pavlovian Conditioning
-			Performative Allyship
+			Pessimist
 			Placebo Effect
 			Poe's Law
 			Precognition
@@ -1291,56 +1269,59 @@ Card Game Factions Overview
 			Synergy
 			Tabula Rasa
 			Teleportation
+			Terminal Lucidity
+			The Eliza Effect
 			The Human Factor
 			Thought Experiment
 			Tourette
-			Toxic Relationship
 			Trolley Problem
 			Uncanny Valley
 			Unity
 			Wise Fool
-			Wishful Thinking
 			YOLO
 			Zeno's Paradoxes
 		Philosophy & Logic
 			Aesthetic (Philosophy Of Beauty)
+			Ad Hoc
 			Ad Hominem
+			Ad Nauseam
 			Appeal To Authority
 			Appeal To Nature
 			Appeal To Tradition
 			Bona Fide
-			Ad Hoc
-			Ipso Facto
-			Modus Operandi
-			Vice Versa
-			Status Quo
-			Ad Nauseam
-			Errare Humanum Est
-			Quid Pro Quo
-			Mea Culpa
-			Cogito, Ergo Sum
-			Tempus Fugit
-			Post Mortem
 			Carpe Diem
 			Carpe Noctem
 			Cascade
 			Cheap Philosophy
 			Cherry Picking
 			Circular Reasoning
+			Cogito, Ergo Sum
 			Duality
+			Errare Humanum Est
 			False Dichotomy
 			Gambler's Fallacy
 			Hanlon's Razor
 			Introspection
+			Ipso Facto
 			Law Of Attraction
+			Mea Culpa
+			Metaphor
+			Modus Operandi
+			No True Scotsman
 			Non Sequitur
+			Occam's Razor
+			Original Copy
 			Pascal's Wager
 			Post Hoc Ergo Propter Hoc (False Cause)
+			Post Mortem
+			Quid Pro Quo
 			Reductio Ad Absurdum
-			No True Scotsman
+			Roko's Basilisk
 			Slippery Slope
+			Status Quo
+			Tempus Fugit
+			Vice Versa
 			Whataboutism
-			Occam's Razor
 	Faction: Zeitgeist & Archetypes
 		Social Trends & Commentary
 			Agnosticism
@@ -1352,7 +1333,7 @@ Card Game Factions Overview
 			Black Friday
 			Burn The Candle At Both Ends
 			Canon
-			Choice Overload
+			Child Support
 			Color Theory
 			Consumism
 			Deja Vu
@@ -1361,6 +1342,7 @@ Card Game Factions Overview
 			Dunning Kruger Effect
 			Earworm
 			Ecological Anxiety
+			Edgar's Fall
 			Euthanasia
 			Fatphobic
 			Weight Loss Drug
@@ -1371,6 +1353,7 @@ Card Game Factions Overview
 			Grazie Signore
 			Grown In Argentina, Packed In Thailand
 			In This House We Obey The Laws Of Thermodynamics!
+			Industrial Society and Its Future
 			In-group/Out-group Ethnophaulism
 			Inverted Population Pyramid
 			Jet Lag
@@ -1385,6 +1368,7 @@ Card Game Factions Overview
 			Mental Health Day
 			Metrosexual
 			Microagression
+			Mind the Gap
 			Minimalism
 			Mindfulness
 			Missed Call
@@ -1411,6 +1395,7 @@ Card Game Factions Overview
 			Quiet Quitting
 			Racist Joke
 			Renaissance
+			Reusable Shopping Bag
 			Reverse Racism
 			Rush Hour
 			Russian Roulette
@@ -1443,6 +1428,7 @@ Card Game Factions Overview
 			Wishful Thinking
 			Work Life Balance
 			World's Smallest Violin
+			Yvan Eht Nio (aniram atsila, Uncle Joe Poster)
 			You Cannot Eat Money
 			Zeitgeist
 		Archetypes & Roles
@@ -1456,20 +1442,21 @@ Card Game Factions Overview
 			Culturist
 			Delivery Cyclist
 			Dogmatic Approach
+			Dogsitter
 			Drug Smuggler
 			Drunken Sincerity
 			Freelancer
+			Geopolitical Yapper
 			Good Boi (Dog Meme)
 			Hipster
 			Hobo
 			Janitor
 			Karen
-			King's Jester
 			Low IQ Individuals
 			Mail Bride
+			Mechanic
 			Medical Tourism
 			Minimalist
-			Mortician
 			Nomad (Asking For Cigar)
 			Normie
 			Passport Bro
