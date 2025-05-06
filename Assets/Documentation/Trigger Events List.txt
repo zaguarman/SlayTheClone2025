@@ -1,0 +1,114 @@
+DOCUMENT USAGE GUIDELINES:
+
+1.  Comprehensive List: This document contains the definitive list of standardized game events that can serve as triggers for abilities and game effects.
+2.  Stability of Definitions: The names and core definitions (including primary parameters) of these trigger events are stable and should not be altered, removed, or significantly rephrased without explicit instruction. This ensures consistent interpretation across all game mechanics.
+3.  Adding New Triggers: New trigger events should only be added if a fundamentally new type of game interaction occurs that cannot be adequately represented by existing triggers, even with flexible ability conditions.
+4.  Parameter Expansion: Parameters for existing triggers may be expanded if new mechanics require additional contextual information, but the original parameters must be maintained.
+5.  Distinction from Ability Conditions: This list defines *what event occurs* (e.g., `OnDamaged`). The specific conditions under which a card's ability *reacts* to this event (e.g., 'OnDamaged by a Spell while Concealed') are defined on individual cards and are highly flexible, as per the main Game Design Document (Section V.B.5 - Creature Ability Design Principle).
+
+Trigger Events List
+
+This section defines common game events that can trigger passive abilities or other effects. Many triggers provide contextual information (e.g., source of damage, specific status applied) that can be used by the ability's logic.
+
+1. Combat & Creature State Changes:
+* OnDamaged(damageSource, damageAmount, damageType): Triggers when this creature (or entity with this trigger) takes damage.
+    * damageSource: The entity or effect (e.g., creature, spell, status) that caused the damage.
+    * damageAmount: The numerical value of Health and/or Armor damage taken.
+    * damageType: Category of damage (e.g., 'Attack', 'Spell', 'AbilityEffect', 'StatusEffect', 'Recoil', 'LocationEffect', 'SlotEffect').
+* OnDealDamage(damagedTarget, damageAmount, damageType): Triggers when this creature deals damage.
+    * damagedTarget: The entity that received the damage.
+    * damageAmount: The numerical value of Health and/or Armor damage dealt.
+    * damageType: As above.
+* OnHeal(healingSource, healAmount): Triggers when this creature is healed.
+    * healingSource: The entity or effect that caused the healing.
+    * healAmount: The numerical value of Health restored.
+* OnAttack(attackTarget): Triggers when this creature initiates/declares an Attack action. This typically resolves before damage calculation and before OnAttacked on the target.
+    * attackTarget: The creature or slot targeted by the attack.
+* OnAttacked(attackingCreature): Triggers when this creature is targeted by an Attack action. This typically resolves before damage calculation.
+    * attackingCreature: The creature performing the attack.
+* OnKill(killedCreature): Triggers when this creature's action (e.g., Attack, ability) directly results in another creature being destroyed.
+    * killedCreature: The creature that was destroyed by this creature.
+* OnDied(deathSource): Triggers when this creature is destroyed (Health reduced to 0 or less, or by a "destroy" effect) and sent to the Discard Pile.
+    * deathSource: The entity, effect, or game rule (e.g., 'CombatDamage', 'SpellEffect', 'StatusDoomed') that caused the death.
+* OnArmorGained(amountGained): Triggers when this creature gains Armor.
+    * amountGained: The quantity of Armor added.
+* OnArmorBroken: Triggers when this creature's Armor is reduced from a positive value to 0 by damage.
+* OnStatChange(statChanged, oldValue, newValue): Triggers when one of this creature's core stats (Attack, Health, Speed) is modified.
+    * statChanged: The specific stat (e.g., 'Attack', 'Health', 'Speed').
+    * oldValue: The value of the stat before the change.
+    * newValue: The value of the stat after the change.
+
+2. Turn Structure & Action Flow:
+* OnTurnStart: Triggers at the beginning of this creature's controller's turn, typically before the Scheduled Draw phase.
+* OnTurnEnd: Triggers at the end of this creature's controller's turn, after all queued actions for the turn have resolved.
+* OnActionQueued(actionDetails): Triggers when an action involving this creature (either as the source or a target) is added to the action queue.
+    * actionDetails: Information about the queued action (e.g., type, source, target).
+* OnActionResolved(actionDetails): Triggers when an action involving this creature (as source or target) resolves from the queue.
+    * actionDetails: Information about the resolved action.
+* OnDeploymentTimeComplete: Triggers specifically when this creature's Deployment Time counter reaches zero and it becomes fully operational.
+
+3. Movement & Positioning:
+* OnMove(originSlot, destinationSlot): Triggers when this creature successfully completes a move action.
+    * originSlot: The slot this creature moved from.
+    * destinationSlot: The slot this creature moved to.
+* OnEnterSlot(enteredSlot, method): Triggers when this creature enters a slot.
+    * enteredSlot: The slot the creature has entered.
+    * method: How the creature entered (e.g., 'Played', 'Moved', 'Swapped', 'Pulled', 'Pushed', 'Revived', 'Recruited', 'Converted', 'ReturnedToOwner').
+* OnLeaveSlot(leftSlot, method): Triggers when this creature leaves a slot.
+    * leftSlot: The slot the creature has left.
+    * method: How the creature left (e.g., 'Moved', 'Swapped', 'ReturnedToHand', 'Destroyed', 'Recruited', 'Converted', 'ReturnedToOwner').
+* OnEnterBattlefield: Triggers when this creature card enters the battlefield from any zone (Hand, Discard Pile via Revive). Occurs after Deployment Time is applied, but before OnDeploymentTimeComplete. (Note: Generally does not re-trigger if a temporarily recruited creature returns to its owner, unless specified by an effect).
+* OnLeaveBattlefield(destinationZone): Triggers when this creature is removed from the battlefield.
+    * destinationZone: The zone the creature card is moving to (e.g., 'Hand', 'DiscardPile', 'Banish', 'Owner'sHand' if returned from temporary recruitment when board is full).
+
+4. Status Effects & Information Warfare:
+* OnStatusEffectApplied(statusEffect, effectSource): Triggers when any status effect is applied to this creature.
+    * statusEffect: The specific status (e.g., Blessed, Depressed, including its duration/intensity if applicable).
+    * effectSource: The entity or card that applied the status.
+* OnStatusEffectRemoved(statusEffect, reason): Triggers when any status effect is removed from this creature.
+    * statusEffect: The specific status that was removed.
+    * reason: Why it was removed (e.g., 'Expired', 'Cleansed', 'Consumed').
+* OnGainSpecificStatus: A more specific trigger for when a particular status is gained (e.g., OnGainConcealed, OnGainBlessed).
+    * effectSource: The entity or card that applied the status.
+* OnLoseSpecificStatus: A more specific trigger for when a particular status is lost/removed (e.g., OnLoseRevealed, OnLoseCaffeinated).
+    * reason: Why it was removed.
+* OnRevealedByIntelligence(revealingSource): Triggers when this creature (or its pending action) is successfully revealed by an opponent's Intelligence effect.
+    * revealingSource: The enemy card or effect that caused the reveal.
+* OnCompromisedTrigger(triggeringSource): Triggers when this creature's Compromised status is activated by an opponent's Intelligence effect.
+    * triggeringSource: The enemy Intelligence effect that triggered Compromised.
+* OnBecomeTargetable: Triggers when this creature transitions from an untargetable state (e.g., Ostracized ends) to a targetable state.
+* OnBecomeUntargetable: Triggers when this creature transitions from a targetable state to an untargetable state (e.g., Ostracized applied).
+
+5. Card & Resource Management (Primarily Player/Controller Level):
+* OnCardDrawn(drawnCard): Player-level trigger. Triggers when the player controlling this ability draws one or more cards.
+    * drawnCard: The card(s) that were drawn.
+* OnCardDiscardedFromHand(discardedCard): Player-level trigger. Triggers when the player discards one or more cards from their hand.
+    * discardedCard: The card(s) that were discarded.
+* OnCardPlayed(playedCard): Player-level trigger. Triggers when the player plays a card from their hand.
+    * playedCard: The Spell or Creature card that was played.
+* OnReturnToHand: Triggers when this specific creature card is returned to its owner's hand from the battlefield or Discard Pile.
+* OnRevive: Triggers when this specific creature card is returned to the battlefield from the Discard Pile.
+* OnDeckReshuffle: Player-level trigger. Triggers when the player's draw deck is reshuffled.
+
+6. Environment & Global State:
+* OnLocationChange(oldLocation, newLocation): Global trigger, can affect all creatures or players. Triggers when the active Location (Weather) changes.
+    * oldLocation: The previous Location effect.
+    * newLocation: The new Location effect now active.
+* OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based or slot-based) is sprung.
+    * trapDetails: Information about the trap that was triggered.
+    * activatingEntity: The creature, action, or effect that triggered the trap.
+* OnSlotEffectApplied(slot, slotEffect): Triggers if this creature is on a slot when a new Slot Effect is applied to it.
+    * slot: The slot this creature occupies.
+    * slotEffect: The Slot Effect that was applied.
+* OnSlotEffectRemoved(slot, slotEffect): Triggers if this creature is on a slot when a Slot Effect is removed from it.
+    * slot: The slot this creature occupies.
+    * slotEffect: The Slot Effect that was removed.
+* OnOpponentPlaysSpell(playedSpell, spellTarget): Player-level trigger. Triggers when the opponent plays a Spell card.
+    * playedSpell: The Spell card played by the opponent.
+    * spellTarget: The target of the opponent's spell, if any.
+* OnEnemyCreatureGainConcealed(creature, source): Player-level or specific creature trigger. Triggers when an enemy creature gains Concealed.
+    * creature: The enemy creature that gained Concealed.
+    * source: The source of the Concealed status.
+* OnBeingTargetedByEnemyIntelligence(targetingSource): Triggers when this creature is specifically targeted by an enemy's Intelligence effect.
+    * targetingSource: The enemy creature or spell that is the source of the Intelligence effect.
+* OnFriendlyTurnStart: (Can be considered a more specific version of OnTurnStart for abilities concerned with friendly context, though OnTurnStart usually implies current controller's turn). Triggers at the start of the turn of the player who controls this creature.

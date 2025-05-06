@@ -286,7 +286,6 @@ Card Game Factions Overview
 			Minimum Viable Product
 			Pair Programming
 			Pen-Testing
-			Planned Obsolescence
 			Promt Injection
 			QR Code
 			Ransomware Attack
@@ -509,6 +508,7 @@ Card Game Factions Overview
 			Performance Review
 			Personal Brand
 			Phase Out
+			Planned Obsolescence
 			Poison Pill
 			Ponzi Scheme
 			Power Hoarding
@@ -1377,10 +1377,12 @@ Card Game Factions Overview
 			Goy
 			Grazie Signore
 			Grown In Argentina, Packed In Thailand
+			I don't want to be this kind of animal anymore (disco elysium reference) (zeitgeist)
 			In This House We Obey The Laws Of Thermodynamics!
 			Industrial Society and Its Future
 			In-group/Out-group Ethnophaulism
 			Inverted Population Pyramid
+			It's All Disco, Baby (disco elysium reference) (zeitgeist)
 			Jet Lag
 			Junk Mail
 			Ladies First
@@ -1449,6 +1451,7 @@ Card Game Factions Overview
 			Virtue Signaling
 			Wasted Potential
 			Weaponized Incompetence
+			What is reality anyway? A collective delusion? (disco elysium reference) (zeitgeist)
 			White Russian
 			White Woman Missing Syndrome
 			Whistle (Silbar)

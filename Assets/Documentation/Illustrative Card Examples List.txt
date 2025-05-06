@@ -1,0 +1,121 @@
+DOCUMENT USAGE GUIDELINES:
+
+1.  Preservation of Existing Content: All existing thematic elements (card names, ability names, flavor text, factions, specific examples) are stable and must be preserved unless the user explicitly requests a change to a specific element.
+2.  Mechanical Alignment: Mechanical changes must align with existing flavor.
+3.  No Simplification/Condensation: No part of this document (concepts, mechanics, rules, status definitions, examples, principles) should be simplified, shortened, condensed, or significantly rephrased unless explicitly instructed by the user. Maintain existing detail, nuance, and phrasing in all other sections when implementing user requests.
+4.  Example Card List Integrity: This "Illustrative Card Examples List" is fixed. The number of cards on this list cannot be modified (no additions or unsolicited removals) unless explicitly requested by the user. If an existing card example needs mechanical adjustment to fit a new rule, its core concept and flavor must be preserved.
+
+Illustrative Card Examples List
+
+Card Name: Aggressive Downsizing
+Type: Spell
+Faction: Corporate
+Effect: Destroy target friendly creature. Schedule 2 additional card draws for your next turn. If the destroyed creature had 3 or more base Attack, also apply Depressed 1 to all enemy creatures.
+Flavor Text: "We're streamlining operations to maximize shareholder value. Your contribution was... no longer synergistic."
+
+Card Name: Patent Troll Firm
+Type: Creature
+Faction: Corporate
+Stats: 0 Attack / 5 Health / 1 Speed / Deployment Time: 3
+Ability (Passive): OnOpponentPlaysSpell: If this creature is not Suppressed, your opponent must discard 1 card or their spell has no effect. This creature then gains Tired 1.
+Flavor Text: "That innovative idea you have? We patented something vaguely similar in 1998. Pay up."
+
+Card Name: Content Moderator Bot
+Type: Creature
+Faction: Digital Society
+Stats: 1 Attack / 2 Health / 4 Speed / Deployment Time: 0
+Ability (Passive): OnEnemyCreatureGainConcealed: Apply Revealed 1 to that creature.
+Flavor Text: "Violation of Community Guideline 3.4.7b: 'Attempting to be mysterious in a clearly designated public forum'. Revealing..."
+
+Card Name: Sock Puppet Army
+Type: Spell
+Faction: Digital Society
+Effect: For each empty friendly slot, summon a "Fake User Profile" (0 Attack / 1 Health / 1 Speed / DT:0, Passive: OnDied: Opponent draws 1 fewer card next turn).
+Flavor Text: "My opinions are incredibly popular. Just ask my 500 identical friends."
+
+Card Name: DDoS Specialist
+Type: Creature
+Faction: Digital Society
+Stats: 2 Attack / 1 Health / 5 Speed / Deployment Time: 1
+Ability (Passive): OnAttack: Apply Delayed 1 to the attacked creature. If this creature is destroyed, apply Delayed 1 to all enemy creatures.
+Flavor Text: "Their servers can't handle this much... 'enthusiasm'."
+
+Card Name: Banned Troll
+Type: Creature
+Faction: Zeitgeist
+Stats: 3 Attack / 2 Health / 3 Speed / Deployment Time: 1
+Ability (Passive): This creature cannot be targeted by Spells. OnTurnStart: If this creature is Ostracized, it gains +2 Attack this turn.
+Flavor Text: "They can't silence me! They can only make me shout louder from increasingly obscure corners of the internet."
+
+Card Name: Keeper of Sacred Texts
+Type: Creature
+Faction: Myth
+Stats: 0 Attack / 4 Health / 2 Speed / Deployment Time: 2
+Ability (Passive): OnBeingTargetedByEnemyIntelligence: The enemy creature that targeted this creature gains Cursed 1.
+Flavor Text: "The scrolls say... 'Do not read these scrolls.' How delightfully paradoxical."
+
+Card Name: Middle Manager
+Type: Creature
+Faction: Corporate
+Stats: 1 Attack / 3 Health / 2 Speed / Deployment Time: 1
+Ability (Passive): OnFriendlyTurnStart: If there are friendly creatures in both adjacent slots, this creature gains +1 Attack this turn. Otherwise, it gains Tired 1.
+Flavor Text: "My primary function is to delegate the delegation of tasks. And attend meetings. So many meetings."
+
+Card Name: Influencer Apology Video
+Type: Spell
+Faction: Zeitgeist
+Effect: Target friendly creature gains Blessed. Your opponent schedules 1 additional card draw for their next turn. Apply Revealed 1 to the target creature.
+Flavor Text: "I'm taking accountability... by reading this statement my PR team wrote. Link in bio to my merch store!"
+
+Card Name: Plausible Deniability Protocol
+Type: Spell
+Faction: Shadow Ops.
+Effect: Target friendly creature gains Concealed 1. If that creature is destroyed by an opponent's action this turn or next turn, return it to your hand instead of the Discard Pile.
+Flavor Text: "The Secretary disavows any knowledge of this meme. Or this operation. Or Tuesdays."
+
+Card Name: Sleeper Cell Activation
+Type: Spell
+Faction: Shadow Ops.
+Effect: Choose a friendly creature with Deployment Time 1 or more. Its Deployment Time becomes 0. It gains Doomed 2.
+Flavor Text: "Code phrase 'Mockingbird's Lament'. Your quiet time is over."
+
+Card Name: Legacy Code Maintainer
+Type: Creature
+Faction: Tech
+Stats: 0 Attack / 6 Health / 1 Speed / Deployment Time: 3
+Ability (Passive): Friendly Tech creatures cannot have their base stats reduced by enemy effects. OnTurnStart: If this creature is not Suppressed, remove 1 turn duration from a negative status effect on an adjacent friendly Tech creature. This creature then gains Tired 1.
+Flavor Text: "Don't touch that! It's load-bearing spaghetti code. I just keep it from completely collapsing... most of the time."
+
+Card Name: Socratic Interlocutor
+Type: Creature
+Faction: Mind
+Stats: 1 Attack / 3 Health / 3 Speed / Deployment Time: 1
+Ability (Passive): When an opponent queues an Attack action: If this creature is not Suppressed and is a valid target for that Attack, the Attack automatically targets this creature instead. If it does, the attacking creature gains Delayed 1. (This redirection is automatic if conditions are met; no player choice at trigger time.)
+Flavor Text: "But why do you wish to attack him? Have you considered the alternatives? Let's explore your motivations... slowly."
+
+Card Name: Thought Experiment Chamber
+Type: Spell
+Faction: Mind
+Effect: Choose a friendly creature and an enemy creature. Swap their Attack stats until end of turn. The friendly creature gains Depressed 1, the enemy creature gains Revealed 1.
+Flavor Text: "What if... just for a moment... you were strong and they were weak? Or vice versa? Food for thought. And tactical repositioning."
+
+Card Name: Nationalized Asset
+Type: Creature
+Faction: Statecraft
+Stats: 2 Attack / 3 Health / 2 Speed / Deployment Time: 1
+Ability (Passive): OnEnterBattlefield: If this creature was played from hand, target an enemy creature with base Attack 2 or less. It gains Ostracized 1. If that creature is Corporate faction, it also loses 1 Health.
+Flavor Text: "Under new management. For the good of the State, of course. Your... 'contributions' are now ours."
+
+Card Name: Black Site Interrogator
+Type: Creature
+Faction: Shadow Ops.
+Stats: 1 Attack / 4 Health / 2 Speed / Deployment Time: 2
+Ability (Passive): OnTurnStart: If there is an enemy creature in the opposing slot, apply Revealed 1 to it. If that creature is already Revealed, its controller draws 1 less card next turn.
+Flavor Text: "We have ways of making them... transparent. Or at least making their handlers lose paperwork."
+
+Card Name: Hostile Takeover Specialist
+Type: Creature
+Faction: Corporate
+Stats: 1 Attack / 2 Health / 3 Speed / Deployment Time: 2
+Ability (Active - Queue this action): Target an enemy creature with Health 2 or less (chosen when this action is queued). As an additional cost when this action resolves, this creature takes damage equal to the target's Health (determined at resolution). If this creature survives and an empty friendly slot is available, permanently gain control of the target creature. It enters an empty friendly slot. If no empty slot or this creature is destroyed by the cost, the action fails.
+Flavor Text: "They weren't 'liquidated,' they were 'synergistically integrated' into our portfolio after a 'valuation adjustment'."
