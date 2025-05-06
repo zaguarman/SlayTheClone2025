@@ -1,341 +1,424 @@
 Game Design Document
 
-I. Core Concept, Vision & High-Level Interactions
+I. Core Concept & Vision
 
-Game Premise: The game is envisioned as a card game where the primary focus is on outsmarting the opponent through strategic planning, information control, and tactical positioning on a constrained battlefield.
+Premise: A card game focused on outsmarting opponents via strategic planning, information control, and tactical positioning on a constrained battlefield.
 
-Genre: It is designed as a Roguelite Deckbuilder, where players progressively build and modify their deck throughout a single run, making strategic card choices and adapting to unforeseen challenges crucial for success.
+Genre: Roguelite Deckbuilder. Players build and modify their deck during a run, making card choices and adapting to challenges crucial.
 
-Central Conflict: The core tension revolves around Intelligence versus Counter-Intelligence. Thematically, this is mirrored by a conflict between forces of Control (represented by factions like Myth, Statecraft) seeking order and predictability, versus forces of Chaos (represented by factions like Shadow Operations, Zeitgeist & Archetypes) thriving on unpredictability and disruption.
+Central Conflict: The core tension revolves around Intelligence versus Counter-Intelligence. Thematically, this is mirrored by a multifaceted conflict:
 
-Primary Goal: Players aim to outsmart opponents through several key avenues: actively gathering information about the opponent's hidden plans, denying crucial information to the opponent, controlling the shared game location (e.g., influencing the global 'Weather' effect), creating and manipulating impactful status effects on creatures and board slots, and strategically moving friendly or enemy creatures to gain positional advantages or disrupt opponent formations.
+Established pyramidal powers (Statecraft, Myth, Corporate) strive to impose and maintain their specific paradigms of order and control, often by manipulating information, enforcing dogma, and preserving hierarchical structures.
 
-Key Interaction Space - Tactical Positioning:
+Decentralized, emergent forces (Digital Society, Zeitgeist, Mind) challenge these established norms, thriving on fluidity, the free flow of (and sometimes weaponized) information, and the unpredictable power of collective or individual consciousness.
 
-Battlefield Layout: Each player controls one side of the battlefield. Each side consists of a single row containing 5 discrete creature slots. The two rows (player and opponent) are positioned opposite each other in a symmetrical layout.
+Navigating and exploiting this dynamic are clandestine networks and transformative systems (Shadow Ops., Tech, Applied Sci-Fi), which wield sophisticated tools of intelligence, counter-intelligence, disruption, and innovation. These entities may serve various masters, subvert existing powers, or pursue their own distinct agendas within this complex web of influence.
 
-Slot Occupation: Each individual slot can hold a maximum of one creature at any time. The specific placement of creatures onto these limited slots is a critical tactical decision.
+Primary Goal: Outsmart opponents by:
 
-Adjacency: For a creature occupying a slot not on the extreme left or right edge, there are typically two adjacent friendly slots (one to its immediate left, one to its immediate right within the same row) and one opposing enemy slot directly across from it in the opponent's row. Creatures positioned in the edge slots naturally have fewer adjacent slots (only one friendly adjacent slot and one opposing enemy slot).
+Gathering info on opponent's hidden plans.
 
-Movement & Blocking: Creature placement fundamentally dictates available movement paths, determines valid targets for many attacks and abilities (especially those based on adjacency or relative position), triggers adjacency-based passive effects, and establishes overall board control. Creatures physically occupy their slot, preventing any other creature (friendly or enemy) from moving into or passing through that slot unless a specific ability explicitly allows crossing occupied slots, swapping positions with the occupant, or forcibly pushing/pulling the occupant. It is important to note that creatures do not have an inherent ability to move freely; all movement must be initiated via specific Spells or creature abilities.
+Denying info to the opponent.
 
-Key Mechanic - Fog of War: By default, the opponent's pending actions for the current turn (such as creature movements, the specific targets chosen for attacks, the targets of abilities) are hidden from the player within the shared action queue until the turn resolves. This inherent uncertainty makes active information gathering (Intelligence) a vital part of developing effective strategies and counter-plays. Conversely, Counter-Intelligence mechanics aim to exploit or deepen this fog. Resolved actions, once they occur during turn resolution, become immediately visible to both players. Information revealed through Intelligence effects (like seeing a specific planned target) typically only persists until the end of the current turn unless actively concealed again by a Counter-Intelligence effect.
+Controlling the global 'Location' effect (currently prototyped as 'Weather,' but will encompass various environmental or zone-wide states that fulfill the same role).
+
+Creating/manipulating status effects on creatures and slots.
+
+Strategically moving creatures (friendly or enemy) for advantage.
+
+Key Interaction: Tactical Positioning
+
+Battlefield: Each player controls one row of 5 creature slots, facing each other symmetrically.
+
+Slot Occupation: Max one creature per slot. Placement is key.
+
+Adjacency: Non-edge slots have 2 adjacent friendly slots (left/right) and 1 opposing enemy slot. Edge slots have 1 adjacent friendly and 1 opposing enemy slot.
+
+Movement & Blocking: Placement dictates movement paths, targets (adjacency/position), triggers passive effects, and controls the board. Creatures block their slot; other creatures cannot move into or through it unless an ability specifically allows crossing, swapping, or pushing/pulling. Crucially, creatures cannot move freely; all movement requires specific Spells or creature abilities.
+
+Key Mechanic: Fog of War
+
+Default State: Opponent's pending actions this turn (movements, attack targets, ability targets) are hidden in the action queue until resolution.
+
+Intelligence: Actions that reveal opponent's hidden information. Vital for strategy.
+
+Counter-Intelligence: Actions that exploit or deepen the fog of war.
+
+Resolution: Actions become visible to both players once they resolve.
+
+Revealed Info: Information gained via Intelligence typically lasts only until the end of the current turn, unless concealed again by Counter-Intelligence.
 
 II. Foundational Game Systems & Rules
 
-Faction System:
-
-All cards (Creatures and Spells) are categorized into distinct factions (examples mentioned include Statecraft, Shadow Operations, Myths & Mysteries, Zeitgeist & Archetypes).
-
+A. Faction System
+All cards are categorized into distinct factions. The primary factions include: Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, and Applied Sci-Fi.
 Deckbuilding allows and encourages combinations of factions within a single deck, similar to color pairs or shards in Magic: The Gathering. This system promotes diverse deck archetypes built around combined faction strategies and identities.
+(Placeholder - Idea for Future Development): Faction-based interactions exist as a soft, granular version of type matchups, providing subtle advantages or disadvantages rather than hard counters. This can manifest as creatures receiving modified outcomes when targeted by actions originating from specific factions, reflecting the thematic relationships and conflicts between them. These benefits or drawbacks are intended to be minor, such as a 1-point damage reduction when an attack is resisted, a slight increase or decrease in the duration of a status effect, or immunity to specific, less impactful status effects (e.g., a minor debuff), rather than creating hard counters or overwhelming advantages.
 
-Thematic Associations: Broadly, Control-oriented strategies are associated with Myth and State factions, while Chaos-oriented strategies align with Shadow and Zeitgeist factions.
+B. Detailed Faction Themes & Relationships
+Shadow Ops.: Embodies: Chaos (in its disruptive potential), Unknown (its hidden nature), Control (its manipulative methods), Covert (its operational mode), Institution (as an organized, albeit clandestine, entity). Operates within a centralized pyramidal structure, viewing its assets with stark utilitarianism – instruments to be employed and, once their purpose is served or they become a liability, to be expunged with clinical precision, leaving no trace. Its loyalties can be complex, sometimes serving, sometimes undermining the established Order for its own interests.
+Statecraft: Embodies: Order (its aim to govern), Structure (through its hierarchies and laws), Known (its public-facing pronouncements), Control (through legislation and enforcement), Institution (as the formal apparatus of governance). It is inherently a centralized pyramidal structure built upon a community-based ethos (however skewed or enforced), designed for top-down command and the preservation of the Status Quo. It relies on Tradition and maintains wary, transactional relationships with other pyramidal powers.
+Myth: Embodies: Tradition (keeper of appropriated beliefs), Dogma (presenting a facade of Harmony), Influence (shaping culture and morality through a community-based narrative). Typically operates as a centralized pyramidal structure, fostering a culture of willing sacrifice. It proffers solace from existential dreads it subtly cultivates or even personifies, demanding devotion as the sole bulwark against the very shadows it defines, thereby binding its followers to its will.
+Corporate: Embodies: Order (within its structures, aimed at profit), Structure (hierarchical organization), Control (over resources and markets, wielding significant raw Power), Influence (economically and politically). It is a quintessential centralized pyramidal structure driven by an unyielding, individualistic hunger. Its grand narrative of self-made triumph serves as a meticulously crafted lure, a superficial veneer of meritocracy designed to enlist aspirants into its machinery, transforming their ambitions into fuel for its ceaseless expansion. Within its sphere, the currents churn with predatory instinct as entities devour or subsume rivals in a relentless pursuit of dominance.
+Digital Society: Embodies: Chaos (its emergent, unpredictable nature, amplified by the overwhelming flood of information whose sheer size and constant shift make it unmanageable and inherently uncontrollable), Flow/Fluidity (rapidly evolving trends), Innovation/Novelty (constantly generating new expression), Autonomy (resisting direct Control), Emergence (as a collective phenomenon). It thrives as a decentralized flat structure, a vast, interconnected community of ephemeral thought and expression, sharing a deep, synergistic, and fraternal relationship with Zeitgeist.
+Zeitgeist: Embodies: Flow/Fluidity (the shifting spirit of an era), Innovation/Novelty (driving new cultural trends), Unknown (its emergent direction), Influence (shaping public opinion), Chaos (disrupting established norms), Emergence (reflecting a community's collective consciousness and subconscious). It operates as a decentralized flat structure, synergizing strongly with Digital Society.
+Mind: Embodies: Critical Discernment (the faculty of rigorous thought, deconstructing illusions and exposing manipulation), Autonomy (individual consciousness resisting Control), Influence/Manipulation (shaping thoughts subtly), Unknown (depths of the subconscious). Represents the power of individual and networked thought, operating as a decentralized flat structure. It is a potent counter to the dogma of pyramidal Myth and the seductive illusions of Corporate, sharing a natural intellectual kinship with Applied Sci-Fi.
+Tech: Embodies: Innovation/Novelty (rapid technological advancement), Structure/System (its power derives from vast, intricately interwoven systems, a lattice of dependencies capable of extraordinary output, yet this very interconnectedness renders it acutely susceptible to cascading failures or targeted disruption), Control (offering tools for information control), Flow/Fluidity (constant evolution), Power (immense impact when leveraged, yet this power can sometimes surge beyond the grasp of its creators, an unpredictable current of its own).
+Applied Sci-Fi: Embodies: Innovation/Novelty (its domain is the realized frontier of human ambition, where once-speculative marvels—advanced material sciences, engineered biospheres, the very reshaping of worlds—are wielded as tangible instruments of will), Empirical Scrutiny (the rigorous application of the scientific method), Knowledge (its core strength lies in deciphering the universe's mechanisms and mastering their application, built upon a foundation of audacious theory that has already dared to chart the contours of existence, from the quantum weave to the cosmic tapestry), Order (in its methodologies). It shares a natural kinship with Mind, as both are dedicated to the rigorous deconstruction of the apparent and the relentless pursuit of underlying truths—one through introspective clarity, the other through empirical dominion over the material. Its profound insights are often coveted for exploitation by Statecraft and Corporate.
 
-Faction-based interactions exist as a soft, granular version of type matchups, providing subtle advantages or disadvantages rather than hard counters. This can manifest as creatures being inherently weak to certain damage types (e.g., 'Attacks', 'Spell Damage'), resistant to specific categories of status effects (e.g., 'Mental Debuffs'), or cards providing benefits specifically when used against creatures or effects of another faction.
+C. Action Economy & Tempo
+No resource cost (mana/energy) to play cards from hand. Play limited by hand size and timing.
+Tempo managed primarily by Deployment Time (X) (see Section IV.B for full definition). This represents the time it takes for a creature to become fully operational after entering play, though this duration can be manipulated by certain game effects like Spells, creature abilities, or Locations.
 
-Action Economy & Tempo:
+D. Action Types & Triggering
+1. Creature Stats: Attack, Health, Speed (influences action order with Priority). Stats can be modified.
+2. Creature Abilities (Passive): Always passive. Trigger automatically on specific game events (e.g., OnDamage, OnAttack, OnFriendlyCreatureMove, OnRevealed). Targeting for effects is predetermined by card text (e.g., "target the attacker," "adjacent creatures") or random; never chosen by the player at trigger time. (See Section IV.C Trigger Events for detailed list).
+3. Special Creature Archetypes:
+Support/Specialists: May lack a standard Attack. Might have an Active Ability (e.g., deal damage, heal, apply status) that the player queues each turn, selecting targets per the ability's rules. Subject to Deployment Time and queue mechanics.
+Automated Units: May lack an Attack. Have powerful passive abilities triggering automatically each turn (e.g., OnTurnStart: deal 1 damage randomly; OnTurnEnd: grant 1 Armor adjacently). Target is predetermined by the ability.
+4. Creature Attacks: Actively queued by the player during planning. Target selection might be restricted by rules (e.g., only target slot in front, cannot target Concealed).
+5. Spells: Active actions. Played from hand, activated by player, often with chosen targets. Effects resolve immediately or are queued. Can cause movement, status, damage, healing, etc.
+6. Determinism: Game effects are deterministic. No percentage-based randomness for success/failure (except explicit random targeting). Outcomes are predictable based on game state and interactions.
 
-There is no traditional resource cost system (like mana or energy) required to play cards from hand. Card play is primarily limited by hand size and strategic timing.
+E. Card Management
+1. Drawing Cards (Scheduled Draw):
+Players draw a base number of cards (e.g., 1) only at the Start of their Turn. This is the only time cards naturally enter hand from the deck.
+The number drawn = Base Draw + Sum of all positive/negative draw modifiers accumulated during the previous turn.
+No effect allows drawing cards immediately from the deck mid-turn.
+2. Draw Manipulation (Next Turn Draw Modification): Affects future draws.
+Card advantage effects: "Schedule X additional card draws for your next turn." Increments a counter for the next turn's draw.
+Card disadvantage effects: "Draw X fewer cards next turn" / "Scheduled draw reduced by X." Decrements the counter (min 0 cards).
+Modifiers accumulate additively during a turn; resolved together for the next turn's Start of Turn draw calculation.
+3. Discard Pile: Zone for used Spells and destroyed Creatures.
+4. Discarding from Hand:
+Action: Player selects card(s) in hand -> moves them immediately to Discard Pile.
+Use: Primarily as an additional cost ("As an additional cost..., discard 3 cards") or part of an effect ("Deal 3 damage..., then discard 1 card").
+Distinction: Different from Draw Manipulation. Discarding from Hand is immediate, affecting current hand. Modifying next turn's draw is delayed, affecting future resources.
+5. Banish: Removes a card (from hand, board, discard, deck) from the game permanently. Banished cards are outside all zones, irretrievable (no Revive, Return to Hand, etc.).
+6. Card Lifecycle & Reshuffling:
+Spell played -> Resolves -> Goes to Discard Pile.
+Creature destroyed (0 HP or "destroy" effect) -> Goes from battlefield to Discard Pile.
+Reshuffle Trigger: Activates only when required to draw at Start of Turn, but Draw Deck has fewer cards than scheduled.
+Reshuffle Process:
+Attempt to draw scheduled cards. Draw any remaining from Draw Deck (could be 0).
+If Draw Deck is empty and draw requirement unmet: Shuffle entire Discard Pile -> becomes new Draw Deck.
+Immediately continue drawing from new Draw Deck until total drawn matches the scheduled number for that Start of Turn phase.
+7. Creature Reset: When creature cards reshuffle from Discard to Deck, temporary mods (current HP changes, temp stats, some statuses) reset to printed base values.
+8. Requisites: Some powerful cards require conditions met before play/activation (e.g., sacrifice creature, discard X cards, have X creatures in play, total friendly Attack > Y).
 
-Tempo, the pacing and initiative within the game, is primarily managed by the Deployment Time (X) mechanic (see Section IV for full definition). This represents the time it takes for a creature to become fully operational after entering play.
-
-Action Types & Triggering:
-
-Creatures possess core stats, including Attack (influencing damage output), Health (determining survivability), and Speed (primarily influencing action resolution order alongside Priority). These stats can be modified by various effects and interactions.
-
-Creature Abilities: Are always passive in nature. They trigger automatically based on specific, predefined game events occurring (e.g., OnDamage: when the creature takes damage; OnAttack: when the creature performs its attack action; OnFriendlyCreatureMove: when any allied creature changes slots; OnRevealed: when successfully targeted by an enemy Intelligence action). Targeting for the effects of these passive abilities is always predetermined by the card's rules text (e.g., "target the attacker," "target adjacent creatures") or is random (e.g., "target a random enemy"); it is never chosen or queued directly by the player at the time of triggering.
-
-Special Creature Archetypes: Some creatures deviate from the standard attack-focused role:
-
-Support Units / Specialists: May lack the ability to perform a standard 'Attack' action. Instead, they might possess an Active Ability (e.g., deal direct damage, heal an ally, apply a status effect) that the player actively chooses to queue each turn, including selecting the target according to the ability's parameters. These active abilities are still subject to Deployment Time and standard action queue mechanics.
-
-Automated Units: May lack a standard 'Attack' action but possess powerful passive abilities triggering automatically each turn (e.g., OnTurnStart: deal 1 damage to a random enemy; OnTurnEnd: grant 1 Armor to an adjacent ally). The target for these automatic actions is predetermined by the ability's rules.
-
-Creature Attacks: Are actively queued by the player during their planning phase. The player chooses to use the creature's Attack action, though the specific target might be constrained by the creature's inherent rules (e.g., can only target the slot directly in front, cannot target Concealed creatures).
-
-Spells: Have active actions, implying they are played from hand and activated directly by the player, often with chosen targets or effects that resolve immediately or are added to the action queue. Spells can initiate a wide range of effects, including movement, status application, direct damage, healing, etc.
-
-Determinism: Game effects are designed to be deterministic. There are no percentage-based chances for moves or effects to succeed or fail based on randomness (outside of explicitly random targeting where specified). Outcomes are predictable based on the game state and card interactions.
-
-Card Management:
-
-Drawing Cards (Scheduled Draw): Players draw a base number of cards (e.g., 1) only at the start of their turn. This is the designated, singular moment cards naturally enter the hand from the Draw Deck. The exact number of cards drawn during this phase is calculated based on the base draw amount plus the sum of all positive and negative draw modifiers accumulated during the player's previous turn. Crucially, no effect in the game allows a player to draw cards immediately into their hand from the deck during the course of their turn outside this Start of Turn phase.
-
-Draw Manipulation (Next Turn Draw Modification): This mechanic affects future card acquisition.
-
-Effects providing card advantage are typically worded as "Schedule X additional card draws for your next turn". These effects increment a counter that modifies the number of cards drawn during the Start of Turn phase of the player's subsequent turn.
-
-Effects hindering card advantage are typically worded as "Draw X fewer cards next turn" or "Your scheduled draw for next turn is reduced by X". These effects decrement the counter for the next turn's draw (with a minimum draw of 0 cards).
-
-These positive and negative modifications accumulate additively throughout a player's turn and are resolved together when calculating the total draw count for the following turn's Start of Turn phase.
-
-Discard Pile: A distinct game zone where used Spell cards and destroyed Creature cards are placed after resolving or being removed from the battlefield.
-
-Discarding from Hand:
-
-This specific action involves a player selecting one or more cards currently held in their hand and moving those cards immediately to their owner's Discard Pile.
-
-This action is primarily used as an additional cost required to play certain powerful cards (text might read: "As an additional cost to play Bureaucratic Shutdown, discard 3 cards from your hand") or as part of a card's resolution (text might read: "Deal 3 damage to target creature, then discard 1 card from your hand").
-
-It is critically important to distinguish this mechanic from Draw Manipulation. Discarding from Hand is an immediate action affecting the current hand state and potentially enabling specific plays. Modifying the next turn's draw is a delayed effect impacting future resources.
-
-Banish: An effect that removes a targeted card (from hand, battlefield, discard pile, or even deck) from the game entirely and permanently. Banished cards are placed outside all standard game zones and cannot be retrieved or interacted with by any subsequent effects, including recursion like Revive or Return to Hand.
-
-Card Lifecycle & Reshuffling:
-
-When a Spell card is played from hand and its effect resolves, the card is placed into its owner's Discard Pile.
-
-When a Creature on the battlefield is destroyed (either by having its Health reduced to 0 or less, or by a specific "destroy" effect), its corresponding card is moved from the battlefield to its owner's Discard Pile.
-
-Reshuffle Trigger & Process: The reshuffle mechanic activates only when a player is required to draw cards during their Start of Turn draw phase, but their Draw Deck contains fewer cards than they are scheduled to draw. The exact sequence is:
-
-The player attempts to draw the scheduled number of cards. They draw any remaining cards from their Draw Deck (if any; this could be zero if the deck was already empty).
-
-Once the Draw Deck is confirmed empty and the draw requirement is not yet met, the player takes their entire Discard Pile, shuffles it thoroughly, and places it face down to form their new Draw Deck.
-
-The player then immediately continues drawing cards from this newly created Draw Deck, one by one, until the total number of cards drawn for that Start of Turn phase matches the number originally scheduled (base draw +/- modifiers).
-
-When creature cards are moved from the Discard Pile back into the Draw Deck as part of this reshuffling process, any temporary modifications they acquired during their last time on the battlefield (like changes to current Health, temporary stat boosts/penalties, potentially some lingering status effects depending on specific status rules) are reset to the card's original printed base values. They enter the deck as if new.
-
-Requisites: Some powerful creatures or spells may require a specific condition (a requisite) to be met before they can be played from hand or activated. Examples include: sacrificing a friendly creature already on the battlefield, discarding X cards from hand, having at least X creatures currently in play, or the sum of all friendly creatures' Attack stats being greater than Y.
+F. Action Queue & Turn Flow Mechanics
+1. Queue Manipulation: Actions interacting with opponent's hidden queue (reveal, modify parameters, destroy actions, reorder opponent's view).
+2. Priority Enhancement: Granting actions higher Priority value -> resolve earlier, regardless of Speed. (Similar to Pokémon priority). Can be innate on creature actions ("Priority Attack: +1 Priority").
+3. Global Priority Modifiers: Effects impacting all actions' Priority for a duration.
+Example ("Coordinated Advance"): Friendly actions this turn & next 3 turns get +1 Priority.
+Example ("Temporal Distortion"): For X turns, the normal action resolution order based on Speed is inverted (similar to Pokémon's Trick Room). Actions with higher Priority still resolve before actions with lower Priority, in their normal Speed order (or subsequent tie-breakers if Speed is tied for these Priority actions). However, among actions of the same Priority level (including actions with no inherent Priority modifiers), creatures with lower Speed will act before creatures with higher Speed.
+4. Normal Tie-Breaking: If actions tie in Priority & creature Speed:
+Lowest current (Health + Armor) resolves first.
+If (Health + Armor) tied, lowest base Attack resolves first.
+If Attack tied, resolve randomly (with potential minor influence from the Karma System if implemented and active to mitigate extreme luck streaks).
+5. Tie-Breaking During Temporal Distortion: If actions that are subject to the inverted Speed order (i.e., they have the same Priority level) also tie in Speed:
+Lowest current (Health + Armor) resolves first.
+If (Health + Armor) tied, lowest base Attack resolves first.
+If Attack tied, resolve randomly (with potential minor influence from the Karma System if implemented and active to mitigate extreme luck streaks).
+6. Priority Reduction: Actions or effects that assign a negative modifier to an action's base Priority (e.g., Priority -1). This causes the affected action to resolve later in the turn's queue, after actions with higher (or the default 0) Priority. If the reduction is significant, the action might resolve even after actions from slower creatures that have a higher effective Priority.
 
 III. Core Gameplay Loops & Mechanics
 
-Information Warfare (Intelligence vs. Counter-Intelligence): The constant push and pull between revealing the opponent's hidden intentions (pending actions, creature identities) and concealing one's own plans or setting information-based traps.
+A. Information Warfare
+Constant interaction between revealing opponent's hidden plans (Intelligence) and concealing yours or setting traps (Counter-Intelligence).
 
-Board Manipulation & Control:
+B. Board Manipulation & Control
+1. Logistics (Movement): Use abilities/Spells to reposition creatures (self, allies, enemies) or swap positions. Optimizes attacks, blocks, adjacency; disrupts opponents. Includes tactics like Post-Action Repositioning ("Hit and Run"), Positional Relays (buffs on moving into vacated slot).
+2. Movement Restriction: Use Heavy status, specific abilities, or Slot Effects to lock down enemies or protect allies.
+3. Slot Effects / Environmental Hazards: Persistent or triggered effects on battlefield slots. Rule: Only one effect per slot; new replaces old. Can be visible or hidden traps. Triggers vary (On Move In/Out, Continuous Turn Start/End, Reactive, One-Time). Can block actions (e.g., "Movement Jammer").
+4. Hazard Removal / Decontamination: Actions/abilities to cleanse negative Slot Effects, resetting them or replacing with neutral/beneficial effects.
+5. Location (Weather): Cards imposing global modifiers on the whole battlefield (duration or until changed). Can restrict (no certain card types), buff (+1 Armor/turn), trigger effects (heal all), enable strategies.
+6. Flooding: Overwhelm board with many weak/token creatures ("junk") to obstruct movement, dilute single-target effects, enable quantity-based strategies.
 
-Logistics (Movement): Utilizing abilities and Spells to reposition creatures (self, allies, enemies) or swap their positions to optimize attacks, blocks, adjacency bonuses, or disrupt opponent setups. Includes specific tactics like Post-Action Repositioning ("Hit and Run") and Positional Relays (buffing units moving into vacated slots).
+C. Creature Enhancement & Protection
+1. Setup: Actions/abilities increasing core stats (Attack, Health, Speed) of self or allies.
+2. Survivability: Actions like Heal (restore HP), Add Armor (temp HP buffer), abilities redirecting attacks (from weak to durable, or back at attacker).
+3. Immunity/Protection: Granular immunity negating specific negative effects (e.g., 'Mental Debuffs', non-friendly movement, direct damage types, AoE damage, Intelligence reveal). Not blanket invulnerability.
+4. Cleansing: Actively removing negative status effects from friendlies or slots (via active ability, passive trigger, timed effect, recurring effect).
 
-Movement Restriction: Employing the Heavy status effect, specific abilities that prevent movement, or tactical use of Slot Effects to lock down key enemy units or protect vulnerable allies.
+D. Disruption & Control
+1. Status Effects Application: Core mechanic of applying defined status effects (Section IV.B) to enemies/slots to hinder, expose, or control.
+2. Red Tape: Effects delaying opponent actions, lowering Priority (resolve later), adding Deployment Time turns. Slows tempo.
+3. Disable Archetype: Strategies disabling key enemy functions (granularly: passive only, Attack only; or significantly: Suppressed - blocks most actions but allows ability-initiated Move).
+4. Counter / Interference: Abilities interacting with opponent's hidden queue to stop a specific queued action. Might remove it or replace it (potentially with a detrimental action).
+5. Attack/Effect Redirection: Abilities changing an opponent's queued action target (to self, ally, random valid, or back to an enemy/source).
 
-Slot Effects / Environmental Hazards: Applying persistent or triggered effects directly to the battlefield slots themselves. Rule: Only one effect per slot; new applications replace existing ones. Effects can be visible or hidden traps. Trigger conditions vary widely: On Move In/Out, Continuous effects at Turn Start/End, Reactive effects responding to actions performed on the slot, or general One-Time Triggers. Can include potent effects like blocking specific action types (e.g., "Movement Jammer").
+E. Recursion & Recovery
+1. Revive: Ability/Spell selects creature card from Discard -> returns to empty battlefield slot. Enters with specified HP (e.g., half max, full), subject to Deployment Time.
+2. Return to Hand (from Battlefield): Ability/Spell removes creature (friendly/enemy) from slot -> puts card into owner's hand. Allows redeploy or protection.
+3. Return to Hand (from Discard): Ability/Spell selects card (Creature/Spell) from Discard -> puts into player's hand immediately. Available to play again.
 
-Hazard Removal / Decontamination: Using specific actions or abilities to cleanse negative effects from board slots, effectively resetting them or replacing a harmful effect with a neutral state (or potentially a beneficial one if specified by the cleansing effect).
-
-Location (Weather): Playing cards that impose global modifiers affecting the entire battlefield for a set duration or until changed again. These can impose restrictions (e.g., preventing certain card types), provide buffs (e.g., +1 Armor per turn), trigger effects (e.g., healing all units), or enable specific strategies.
-
-Flooding: Overwhelming the board with numerous, often weak or token creatures ("junk") primarily to obstruct opponent movement, dilute the effectiveness of single-target attacks/abilities, or enable strategies based on having a high quantity of units.
-
-Creature Enhancement & Protection:
-
-Setup: Actions or abilities that increase the core stats (Attack, Health, Speed) of the creature itself or other friendly creatures, preparing them for future turns.
-
-Survivability: Employing actions like Heal (restoring lost HP to creatures or the player directly), Add Armor (providing a temporary, ablative HP pool), or abilities that redirect incoming attacks away from critical or low-health targets towards more durable ones (or even back at the attacker).
-
-Immunity/Protection: Granting specific, granular immunity to negate certain negative effects. This is not a blanket invulnerability but targeted protection against specific status effect categories (e.g., 'Mental Debuffs'), non-friendly movement attempts, direct damage sources, area-of-effect battlefield damage, Intelligence revelation attempts, etc.
-
-Cleansing: Actively removing negative status effects from friendly creatures or occupied slots. This can be an active ability on a Spell or creature, a passive trigger (like Self-Cleansing units removing debuffs periodically), a timed effect, or a recurring effect.
-
-Disruption & Control:
-
-Status Effects Application: The core mechanic of applying various defined status effects (detailed in Section IV) to enemy creatures or board slots to hinder their function, expose them to further harm, or control their actions.
-
-Red Tape: Actions or effects specifically designed to delay opponent actions, lower their calculated Priority in the action queue (making them resolve later), or add extra turns to their Deployment Time, slowing their tempo.
-
-Disable Archetype: Strategies focusing on disabling key functions of enemy creatures. This can be granular (disabling only passive abilities, only Attack actions) or achieve a more significant shutdown via effects like Suppressed (which blocks most actions but crucially still allows movement initiated by abilities).
-
-Counter / Interference: Abilities that directly interact with the opponent's hidden action queue to stop a specific queued action from resolving entirely. This might involve selecting a revealed action and removing it, or potentially replacing it with a different, possibly detrimental, action chosen by the player using the Counter effect.
-
-Attack/Effect Redirection: Abilities that change the original intended target of an opponent's queued attack or ability. Targets can potentially be redirected to the creature using the redirection ability itself, another allied creature, a random valid target, or even back onto an enemy creature (including the original source).
-
-Recursion & Recovery: Mechanics focused on mitigating losses and reusing resources from the Discard Pile.
-
-Revive: An ability or Spell effect that selects a specific creature card from the player's Discard Pile and returns it directly to an empty slot on the battlefield. The revived creature typically enters with a specified amount of Health (e.g., half its maximum HP, or full HP, depending on the reviving card's text) and is always subject to the standard Deployment Time rules.
-
-Return to Hand (from Battlefield): An ability or Spell effect that removes a chosen creature (usually friendly, sometimes enemy) from its current slot on the battlefield and places its card directly into its owner's hand. This allows redeploying it later or protecting it from imminent destruction.
-
-Return to Hand (from Discard): An ability or Spell effect that selects a specific card (Creature or Spell) from the player's Discard Pile and places it directly into the player's hand, making it available to be played again. Unlike drawing, this puts the card into hand immediately.
-
-Combat, Damage & Targeting:
-
-Direct Damage: The straightforward application of damage to reduce a target's Health points.
-
-Chain/Spread Damage: Effects that hit multiple distinct targets, either sequentially (damage bounces from one target to the next) or simultaneously (hitting multiple targets in an area or based on a condition).
-
-Armor: A separate, temporary pool of Health points displayed on creatures (not players). Damage is typically dealt to Armor first; only once Armor is depleted does damage affect the creature's main Health pool. Armor can often be removed directly by specific "Armor removal" effects. Recoil damage from abilities like "Reckless Assault" also hits Armor first.
-
-Life Drain / Siphoning: A combat modifier, often a passive ability (e.g., "Vampiric Strike," "Essence Tap"), where dealing damage with an attack or ability simultaneously heals the source creature or its controller. The amount healed is typically based on the damage successfully dealt (often a percentage). This calculation usually considers damage dealt to either the target's main Health or its Armor pool.
-
-Targeting Nuances: Many creatures and effects have specific, non-standard targeting restrictions or patterns. Examples include: affecting only the slot directly in front, affecting any slot except the one directly in front, hitting targets in a specific geometric pattern (like a 'V' or '+'), targeting randomly amongst a valid pool (e.g., 3 random enemy creatures, 1 random friendly creature), or targeting based on specific conditions (e.g., can only target Concealed creatures, only targets Depressed creatures, only targets creatures with Attack greater than X).
-
-Action Queue & Turn Flow Mechanics:
-
-Queue Manipulation: Actions specifically related to interacting with the opponent's hidden pending action queue. This includes revealing actions within it, modifying their parameters (like targets, if possible), destroying specific queued actions before they resolve, or reordering how actions appear to the opponent (Counter-Intelligence).
-
-Priority Enhancement: Granting specific actions a higher Priority value, causing them to resolve earlier in the turn resolution sequence, independent of the creature's base Speed stat. This is conceptually similar to priority moves in Pokémon. Some creatures may possess innate Priority modifiers on their standard actions (e.g., "Priority Attack: This creature's Attack action always has +1 Priority").
-
-Global Priority Modifiers: Effects, often from Spells or Location changes, that impact the Priority of all actions for a specified duration.
-
-Example Effect ("Coordinated Advance"): All friendly actions queued this turn and for the next 3 turns have +1 Priority.
-
-Example Effect ("System Scramble / Temporal Distortion"): For the next X turns, resolve the Action Queue in reverse order. The resolution order is determined by the final calculated Priority/Speed values, but inverted.
-
-Normal Tie-Breaking: When two or more actions in the queue have the exact same final Priority value and the creatures performing them have the exact same Speed stat, the tie is broken sequentially based on the stats of the creatures involved:
-
-The action originating from the creature with the lowest current Health resolves first.
-
-If current Health is also tied, the action originating from the creature with the lowest base Attack stat resolves first.
-
-If Attack is also tied, the resolution order between the remaining tied actions is determined randomly.
-
-Reversed Tie-Breaking (during System Scramble): When resolving the queue in reverse order and encountering ties in Priority and Speed:
-
-The action originating from the creature with the highest current Health resolves first.
-
-If current Health is also tied, the action originating from the creature with the highest base Attack stat resolves first.
-
-If Attack is also tied, the resolution order between the remaining tied actions is determined randomly.
-
-Priority Reduction: Actions or effects that inherently lower the Priority of certain actions, causing them to resolve later.
+F. Combat, Damage & Targeting
+1. Direct Damage: Reducing target's Health.
+2. Chain/Spread Damage: Hits multiple distinct targets (sequentially or simultaneously).
+3. Armor: Temporary HP pool on creatures. Damage hits Armor first, then Health. Can be removed by specific effects. Recoil damage also hits Armor first.
+4. Life Drain / Siphoning: Dealing damage also heals the source/controller (often based on damage dealt to HP or Armor). Typically a passive ability.
+5. Targeting Nuances: Many effects have specific restrictions/patterns (e.g., only slot in front, any slot except front, geometric patterns like 'V'/' +', random among valid pool, condition-based like only Concealed/Depressed/high Attack targets).
 
 IV. Detailed Mechanics & Specific Systems
 
-Traps:
+A. Traps
+Hidden triggers activated by opponent interaction.
+Type 1: Passive ability/effect triggers when revealed by enemy Intelligence (e.g., "Trap Card: When revealed..., deal 1 damage to enemy player").
+Type 2: Queued action with hidden rider. If opponent manipulates that specific action (Counter, Delay, Reorder), rider triggers negative effect on opponent (e.g., "If this action is countered, opponent discards 1 card").
+Slot-based traps via hidden Slot Effects are possible.
 
-Cards or effects designed with hidden triggers activated by specific opponent interactions.
-
-Type 1: A passive ability or hidden effect that triggers when the associated card/creature is successfully revealed by an opponent's Intelligence action (e.g., "Trap Card: When revealed by an enemy effect, deal 1 damage to the enemy player").
-
-Type 2: Involves placing an action in the queue that carries a hidden rider effect. If the opponent successfully manipulates that specific queued action (e.g., Counters it, Delays it, Reorders it), the hidden rider triggers, imposing a negative effect or drawback on the opponent (e.g., "If this action is countered, the opponent discards a card from hand").
-
-Slot-based traps are also possible via hidden Slot Effects that trigger on movement or other interactions.
-
-Status Effects (Detailed Definitions): (Maintaining full definitions as previously provided)
-
-Addicted (X turns | Requires: Stat Alteration): At the beginning of its controller's turn, if this creature did not have its Attack, Health, or Speed stats directly altered (increase or decrease) by any effect during the previous turn, it gains Suppressed 1. Check occurs each turn for the duration X. Theme: Dependency, withdrawal.
-
+B. Status Effects (Detailed Definitions)
+Addicted (X turns): At the beginning of its controller's turn, if this creature did not have its stats directly altered (increase or decrease) by any effect during the previous turn, it gains Suppressed 1. This check occurs each turn for the duration X. Theme: Dependency on continuous stat alterations; withdrawal occurs if stat alterations cease.
 Blessed: Persists until consumed. Negates the next negative status effect that would be applied, then Blessed is removed. Does not stack. Theme: Single-use ward, divine protection.
-
 Bleeding / Corroding (X turns): At the End of its controller's Turn, this creature takes 1 damage. Lasts X turns. Stacks duration. Damage does trigger "OnDamage" passive abilities. Theme: Damage over time, wounds, decay.
-
 Bored (X turns): At the beginning of its controller's turn, if not targeted last turn, skips action/passives this turn. Heals 1 HP End of Turn. Lasts X turns. Theme: Apathy, complacency.
-
 Caffeinated (X turns): Actions +1 Priority. +1 Attack. Takes 1 damage End of Turn. Lasts X turns. Cannot be cleansed. Stacks duration. Cleanses Tired. Theme: Stimulant, hyperactive, burn out.
-
 Compromised: Persists until triggered once. When targeted by enemy "Intelligence", triggers a negative effect for its controller (defined by source). Removed after triggering. Can be applied secretly. Theme: Leaky information, double agent, honeypot.
-
 Concealed: Persists until next action resolves or removed/overridden. Planned action hidden/obscured in opponent's queue preview. Overrides Revealed. Theme: Secrets, hidden intent, misdirection.
-
 Cursed (X turns): End of controller's turn, apply a random negative status from a predefined pool. Lasts X turns. Stacks duration. Theme: Bad luck, persistent misfortune.
-
 Delayed (X turns): Next X turns, actions have base Priority -1. Stacks additively. Duration resets/extends. Theme: Sluggishness, lag.
-
-Deployment Time (X turns): Applied on entry. For X turns, cannot perform actions, passives don't trigger (exceptions possible). Decreases by 1/turn. Theme: Initialization, mobilization.
-
+Deployment Time (X turns): Applied on entry. For X turns, cannot perform actions, passives don't trigger (exceptions possible). Decreases by 1/turn. This duration can be reduced by specific Spells, creature abilities, or Location effects.
 Depressed (X turns): Attack stat halved (rounded). Lasts X turns. Stacks duration. 3+ total turns -> remove all Depressed, apply Doomed. Theme: Morale loss, reduced effectiveness.
-
 Doomed (X turns): Destroyed after X turns. Gains +1 Attack start of each turn. Cannot gain Depressed. Cannot be cleansed. Cannot stack duration. Theme: Marked for death, final surge.
-
 Heavy (X turns): Cannot perform Move actions, cannot be moved. Gains 1 Armor End of Turn. Lasts X turns. Stacks duration. Theme: Anchored, immovable.
-
 Ostracized (X turns): Cannot be targeted by actions/abilities. Cannot gain new status effects. Existing effects remain. Can still act. Lasts X turns. Stacks duration. Theme: Isolation, untouchable, phased out.
-
 Revealed (X turns): Planned action visible to opponent in queue preview. Decreases by 1/turn. Stacks duration. Overridden by Concealed. Theme: Information leak, surveillance.
-
 Suppressed (X turns): Cannot perform actions (except Move). Passives don't trigger. Lasts X turns. Stacks duration. Theme: Major disablement, suppression.
-
 Targeted (X intensity): Takes X additional damage from all sources. Stacks intensity. Duration refreshes/extends. Theme: Defenses breached, weak point.
-
 Tired (X stacks): Adds stacks. 1 stack -> Suppressed 1 in 2 turns. 2 stacks -> Suppressed 1 next turn. 3+ stacks -> Suppressed 1 immediately this turn (removes queued actions except Move). Cleansed by Caffeinated. Theme: Gradual exhaustion to shutdown.
+
+C. Trigger Events
+This section defines common game events that can trigger passive abilities or other effects. Many triggers provide contextual information (e.g., source of damage, specific status applied) that can be used by the ability's logic.
+1. Combat & Creature State Changes:
+* OnDamaged(damageSource, damageAmount, damageType): Triggers when this creature (or entity with this trigger) takes damage.
+* damageSource: The entity or effect (e.g., creature, spell, status) that caused the damage.
+* damageAmount: The numerical value of Health and/or Armor damage taken.
+* damageType: Category of damage (e.g., 'Attack', 'Spell', 'AbilityEffect', 'StatusEffect', 'Recoil', 'LocationEffect', 'SlotEffect').
+* OnDealDamage(damagedTarget, damageAmount, damageType): Triggers when this creature deals damage.
+* damagedTarget: The entity that received the damage.
+* damageAmount: The numerical value of Health and/or Armor damage dealt.
+* damageType: As above.
+* OnHeal(healingSource, healAmount): Triggers when this creature is healed.
+* healingSource: The entity or effect that caused the healing.
+* healAmount: The numerical value of Health restored.
+* OnAttack(attackTarget): Triggers when this creature initiates/declares an Attack action. This typically resolves before damage calculation and before OnAttacked on the target.
+* attackTarget: The creature or slot targeted by the attack.
+* OnAttacked(attackingCreature): Triggers when this creature is targeted by an Attack action. This typically resolves before damage calculation.
+* attackingCreature: The creature performing the attack.
+* OnKill(killedCreature): Triggers when this creature's action (e.g., Attack, ability) directly results in another creature being destroyed.
+* killedCreature: The creature that was destroyed by this creature.
+* OnDied(deathSource): Triggers when this creature is destroyed (Health reduced to 0 or less, or by a "destroy" effect) and sent to the Discard Pile.
+* deathSource: The entity, effect, or game rule (e.g., 'CombatDamage', 'SpellEffect', 'StatusDoomed') that caused the death.
+* OnArmorGained(amountGained): Triggers when this creature gains Armor.
+* amountGained: The quantity of Armor added.
+* OnArmorBroken: Triggers when this creature's Armor is reduced from a positive value to 0 by damage.
+* OnStatChange(statChanged, oldValue, newValue): Triggers when one of this creature's core stats (Attack, Health, Speed) is modified.
+* statChanged: The specific stat (e.g., 'Attack', 'Health', 'Speed').
+* oldValue: The value of the stat before the change.
+* newValue: The value of the stat after the change.
+2. Turn Structure & Action Flow:
+* OnTurnStart: Triggers at the beginning of this creature's controller's turn, typically before the Scheduled Draw phase.
+* OnTurnEnd: Triggers at the end of this creature's controller's turn, after all queued actions for the turn have resolved.
+* OnActionQueued(actionDetails): Triggers when an action involving this creature (either as the source or a target) is added to the action queue.
+* actionDetails: Information about the queued action (e.g., type, source, target).
+* OnActionResolved(actionDetails): Triggers when an action involving this creature (as source or target) resolves from the queue.
+* actionDetails: Information about the resolved action.
+* OnDeploymentTimeComplete: Triggers specifically when this creature's Deployment Time counter reaches zero and it becomes fully operational.
+3. Movement & Positioning:
+* OnMove(originSlot, destinationSlot): Triggers when this creature successfully completes a move action.
+* originSlot: The slot this creature moved from.
+* destinationSlot: The slot this creature moved to.
+* OnEnterSlot(enteredSlot, method): Triggers when this creature enters a slot.
+* enteredSlot: The slot the creature has entered.
+* method: How the creature entered (e.g., 'Played', 'Moved', 'Swapped', 'Pulled', 'Pushed', 'Revived').
+* OnLeaveSlot(leftSlot, method): Triggers when this creature leaves a slot.
+* leftSlot: The slot the creature has left.
+* method: How the creature left (e.g., 'Moved', 'Swapped', 'ReturnedToHand', 'Destroyed').
+* OnEnterBattlefield: Triggers when this creature card enters the battlefield from any zone (Hand, Discard Pile via Revive). Occurs after Deployment Time is applied, but before OnDeploymentTimeComplete.
+* OnLeaveBattlefield(destinationZone): Triggers when this creature is removed from the battlefield.
+* destinationZone: The zone the creature card is moving to (e.g., 'Hand', 'DiscardPile', 'Banish').
+4. Status Effects & Information Warfare:
+* OnStatusEffectApplied(statusEffect, effectSource): Triggers when any status effect is applied to this creature.
+* statusEffect: The specific status (e.g., Blessed, Depressed, including its duration/intensity if applicable).
+* effectSource: The entity or card that applied the status.
+* OnStatusEffectRemoved(statusEffect, reason): Triggers when any status effect is removed from this creature.
+* statusEffect: The specific status that was removed.
+* reason: Why it was removed (e.g., 'Expired', 'Cleansed', 'Consumed').
+* OnGainSpecificStatus: A more specific trigger for when a particular status is gained (e.g., OnGainConcealed, OnGainBlessed).
+* effectSource: The entity or card that applied the status.
+* OnLoseSpecificStatus: A more specific trigger for when a particular status is lost/removed (e.g., OnLoseRevealed, OnLoseCaffeinated).
+* reason: Why it was removed.
+* OnRevealedByIntelligence(revealingSource): Triggers when this creature (or its pending action) is successfully revealed by an opponent's Intelligence effect.
+* revealingSource: The enemy card or effect that caused the reveal.
+* OnCompromisedTrigger(triggeringSource): Triggers when this creature's Compromised status is activated by an opponent's Intelligence effect.
+* triggeringSource: The enemy Intelligence effect that triggered Compromised.
+* OnBecomeTargetable: Triggers when this creature transitions from an untargetable state (e.g., Ostracized ends) to a targetable state.
+* OnBecomeUntargetable: Triggers when this creature transitions from a targetable state to an untargetable state (e.g., Ostracized applied).
+5. Card & Resource Management (Primarily Player/Controller Level):
+* OnCardDrawn(drawnCard): Player-level trigger. Triggers when the player controlling this ability draws one or more cards.
+* drawnCard: The card(s) that were drawn.
+* OnCardDiscardedFromHand(discardedCard): Player-level trigger. Triggers when the player discards one or more cards from their hand.
+* discardedCard: The card(s) that were discarded.
+* OnCardPlayed(playedCard): Player-level trigger. Triggers when the player plays a card from their hand.
+* playedCard: The Spell or Creature card that was played.
+* OnReturnToHand: Triggers when this specific creature card is returned to its owner's hand from the battlefield or Discard Pile.
+* OnRevive: Triggers when this specific creature card is returned to the battlefield from the Discard Pile.
+* OnDeckReshuffle: Player-level trigger. Triggers when the player's draw deck is reshuffled.
+6. Environment & Global State:
+* OnLocationChange(oldLocation, newLocation): Global trigger, can affect all creatures or players. Triggers when the active Location (Weather) changes.
+* oldLocation: The previous Location effect.
+* newLocation: The new Location effect now active.
+* OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based or slot-based) is sprung.
+* trapDetails: Information about the trap that was triggered.
+* activatingEntity: The creature, action, or effect that triggered the trap.
+* OnSlotEffectApplied(slot, slotEffect): Triggers if this creature is on a slot when a new Slot Effect is applied to it.
+* slot: The slot this creature occupies.
+* slotEffect: The Slot Effect that was applied.
+* OnSlotEffectRemoved(slot, slotEffect): Triggers if this creature is on a slot when a Slot Effect is removed from it.
+* slot: The slot this creature occupies.
+* slotEffect: The Slot Effect that was removed.
+* OnOpponentPlaysSpell(playedSpell, spellTarget): Player-level trigger. Triggers when the opponent plays a Spell card.
+* playedSpell: The Spell card played by the opponent.
+* spellTarget: The target of the opponent's spell, if any.
+* OnEnemyCreatureGainConcealed(creature, source): Player-level or specific creature trigger. Triggers when an enemy creature gains Concealed.
+* creature: The enemy creature that gained Concealed.
+* source: The source of the Concealed status.
+* OnBeingTargetedByEnemyIntelligence(targetingSource): Triggers when this creature is specifically targeted by an enemy's Intelligence effect.
+* targetingSource: The enemy creature or spell that is the source of the Intelligence effect.
+* OnFriendlyTurnStart: (Can be considered a more specific version of OnTurnStart for abilities concerned with friendly context, though OnTurnStart usually implies current controller's turn). Triggers at the start of the turn of the player who controls this creature.
 
 V. Game Design Philosophy & Balancing
 
-Game Tone: The game intentionally cultivates a cynical, funny, and lighthearted tone, distinct from typical fantasy or sci-fi seriousness. This tone is primarily achieved through the consistent application of satire and exaggeration in card concepts, mechanics, and presentation. It often pokes fun at modern absurdities, bureaucratic inefficiencies, internet culture phenomena, and traditional mythic tropes reinterpreted through a contemporary, often absurd, lens. Flavor text, card names, ability names, and visual design should all actively work together to reinforce this specific satirical voice.
+A. Game Tone
+Intentionally cynical, funny, lighthearted. Achieved via consistent satire/exaggeration in card concepts, mechanics, presentation (mocking modern absurdities, bureaucracy, internet culture, myth tropes). Flavor text, names, visuals reinforce this.
 
-Flavor Preservation: During the iterative design process represented by interactions modifying this document, all existing thematic elements—including established card names, ability names, flavor text passages, and faction associations—should be considered stable and must be preserved unless a user explicitly and unambiguously requests a change to one of these specific elements. Any introduced mechanical changes should be integrated in a way that respects and aligns with the existing flavor profile where feasible.
+B. Document Integrity and Thematic Cohesion
+All existing thematic elements (card names, ability names, flavor text, factions) are stable and must be preserved unless the user explicitly requests a change to a specific element; mechanical changes must align with existing flavor. Furthermore, no part of this document (concepts, mechanics, rules, status definitions, examples, principles) should be simplified, shortened, condensed, or significantly rephrased unless explicitly instructed by the user. Maintain existing detail, nuance, and phrasing in all other sections when implementing user requests.
 
-Text Detail Preservation: It is imperative that no part of this document—encompassing descriptions of core concepts, mechanics, rules, status effects definitions, illustrative examples, or design principles—be simplified, shortened, condensed, or significantly rephrased unless the user provides explicit instructions to do so. Modifications requested by the user should be implemented as additions, specific targeted changes, or deletions, while rigorously maintaining the existing level of detail, nuance, and phrasing in all other sections of the document.
-
-Balancing Focus: Achieving game balance is a paramount design goal, acknowledged as requiring rigorous playtesting, data analysis, and ongoing iteration throughout development.
-
-Numerical Balance: Effects that modify core stats (Attack, Health, Speed) or other numerical values (damage, healing, Armor, turn durations) should utilize conservative numbers initially. Stacking of these effects (whether additive or multiplicative) must be carefully considered and implemented to prevent trivial exponential scaling or easily exploitable interactions that break game balance.
-
-Status Effect Design Principle: When conceiving new card effects or mechanics, the design process must prioritize leveraging the existing, defined pool of status effects (found in Section IV). Creating new, unique status effects should be actively avoided unless the desired gameplay mechanic demonstrably cannot be achieved through creative combination, interaction, or minor modification of the established status effects. Adherence to this principle promotes system coherence, significantly reduces the learning curve and rule complexity for players, and encourages designers and players alike to discover synergistic interactions within the existing mechanical framework.
-
-Creature Ability Design Principle: A similar principle applies to designing new creature abilities (both passive triggers and active non-attack abilities). Priority should be given to reusing the established core ability mechanics (e.g., dealing direct damage, applying a defined status effect, initiating movement, healing HP, adding Armor, modifying stats) and leveraging the defined trigger types (e.g., OnAttack, OnDamage, OnTurnEnd, OnRevealed). Creating entirely novel underlying ability mechanics is discouraged if the intended gameplay result can be functionally replicated by applying existing mechanics in innovative contexts, combining standard mechanics, utilizing status effects as intermediaries, or employing more specific or conditional trigger conditions. However, the trigger conditions themselves (e.g., 'OnFriendlyCreatureOfTypeX moves onto an affected slot', 'OnTaking Spell Damage while Blessed', 'WhileAdjacentTo exactly one enemy creature') offer significant flexibility and can be freely modified, combined, and invented to precisely match the unique theme, function, and conditional nature of a specific card.
-
-Balancing Levers: Several core systems act as levers for balancing card power and game flow:
-
-Opportunity Cost: Manifests in multiple ways: choosing one card for a deck slot means excluding another; occupying a board slot prevents deploying another unit there; sacrifice mechanics require losing a unit for an effect; discarding cards from hand consumes immediate resources. The Scheduled Draw mechanic and Next Turn Draw Modification create significant opportunity costs related to tempo and future planning.
-
-Space Limitations: The hard limit of 5 creature slots per player fundamentally constrains deployment strategies. Hand size limitations, while not a hard cap, are implicitly managed by the rate of scheduled draw versus card play and discard.
-
-Domino Effects: The game design intentionally embraces complex chain reactions resulting from the interplay of creature abilities, status effects, positioning, and timing. Balancing involves managing the predictability and impact of these cascades, requiring players to perform careful risk/reward assessments.
-
-Development Goals & Player Experience:
-
-Reward: The game should reward players for: thorough Strategic Planning (anticipating future turns, especially with scheduled draw), Creative Deckbuilding (discovering and exploiting synergies), effective Adaptation (reacting dynamically to the opponent's plays and the evolving board state), and providing opportunities for Comebacks (ensuring games don't become easily snowballed or deterministic).
-
-Avoid: Design should actively avoid demanding complex mental calculations during timed turns (Complicated Math). It should also strive to minimize situations that feel inherently unwinnable solely due to extreme luck variance rather than strategic missteps (Unfair Situations). The focus should be on clear cause-and-effect relationships, even within complex interactions. The strict scheduled draw rule contributes to predictable tempo boundaries.
-
-Core Design Tenet - Double-Edged Sword: A fundamental principle applied across card design:
-
-Significant positive effects should ideally come with a tangible drawback, risk, or associated cost.
-
-Significant negative effects or high costs should ideally offer a potential compensatory upside, strategic niche, or alternative benefit.
-
-Ideally, almost all cards should possess at least one primary effect and a secondary aspect that acts as a drawback or mitigating factor, however minor, ensuring few cards are purely beneficial without consequence.
-
-Examples previously cited remain valid: "OnMove: +1 Attack" paired with "OnAttacked: Controller takes 1 damage"; the "Doomed" status granting an Attack bonus before destruction; "Reckless Assault" providing bonus damage at the cost of recoil self-damage.
+C. Balancing Focus
+Paramount goal, requires playtesting, data analysis, iteration.
+1. Numerical Balance: Use conservative numbers initially for stat mods, damage, healing, Armor, durations. Carefully consider stacking (additive/multiplicative) to prevent broken scaling.
+2. Priority Modifier Rarity: Cards granting direct Priority enhancements (e.g., "+1 Priority to an action") are intended to be less common or have higher associated costs/drawbacks compared to cards that alter base Speed stats. This reflects the significant, turn-order-defining impact of Priority.
+3. Deployment Time Manipulation: Abilities that reduce or bypass Deployment Time ("agilize deployment") should be rare and carefully balanced due to their significant tempo advantage.
+4. Status Effect Design Principle: Prioritize using the existing defined status effects (Section IV.B). Avoid creating new ones unless the mechanic is impossible otherwise. Promotes coherence, reduces complexity, encourages synergy discovery.
+5. Creature Ability Design Principle: Prioritize reusing established core mechanics (damage, status, move, heal, armor, stats) and defined trigger types (Section IV.C). Discourage novel underlying mechanics if replicable with existing tools. However, trigger conditions themselves are highly flexible and can be freely modified, combined, and invented (e.g., 'OnFriendlyOfTypeX moves onto affected slot', 'OnTaking Spell Damage while Blessed', 'WhileAdjacentTo exactly one enemy').
+6. Faction Synergy & Strategic Versatility Principle:
+While individual factions offer powerful internal synergies, relying exclusively on a single faction can lead to inherent strategic limitations or "blind spots"—similar to how a mono-color deck in Magic: The Gathering might excel in its core strategy but lack answers to specific threats (e.g., Elves having potent creature strategies but limited means to deal with flying opponents). Optimal deck performance, therefore, often involves a thoughtful trade-off: incorporating cards or sub-systems from other factions to gain access to mechanics, tools, or answers that complement the primary faction's strengths and cover its weaknesses. This encourages creative deckbuilding aimed at achieving a more robust and versatile strategic toolbox.
+7. Underdog Affinity & Comeback Potential: The game aims to foster an environment where comebacks are possible and strategic play can overcome a disadvantage. Some mechanics are subtly tuned to support this, creating an "underdog leaning" feel without explicitly punishing success. For example, the tie-breaking resolution order (lowest current Health + Armor, then lowest base Attack) can occasionally give a slight edge to a creature or player currently in a weaker board state, promoting tighter matches.
+8. Embracing and Leveraging Chaos for Strategic Depth:
+The game encourages players to navigate and even embrace the inherent chaos of its complex interactions. Winning often involves asking the most difficult strategic questions to the opponent, creating board states or action queues that are challenging for them to resolve optimally, and capitalizing on any resulting missteps or suboptimal plays. This mirrors the strategic depth found in games like chess or competitive Pokémon, where anticipating and outmaneuvering the opponent through complex scenarios is key.
+9. Rewarding Emergent and 'Game-Breaking' Synergies:
+The design philosophy embraces the potential for players to discover powerful, unconventional strategies that might feel like "breaking the game." These moments are intended to be "aha!" experiences, rewarding deep system knowledge, creative deckbuilding, and a sense of outsmarting established patterns.
+Conceptually similar to "reanimator" archetypes in other card games (e.g., discarding high-cost creatures to revive them cheaply) or unexpected, potent combos like "Dead Branch + Corruption" in Slay the Spire.
+These strategies, while potentially very effective, should be:
+a. Rare: Often requiring specific, multi-card combinations, unique circumstances, or significant setup.
+b. Balanced: Not universally dominant, but offering a high-risk/high-reward alternative path. Their existence should not invalidate other core strategies.
+c. Quirky & Thematic: Ideally aligning with the game's cynical and humorous tone, making their discovery and execution enjoyable. Some of this quirkiness may stem from players recognizing and combining elements based on their understanding of the meta-references embedded within the game (e.g., phrases from The Simpsons, internet memes, cultural touchstones like Fight Club), leading to unexpectedly synergistic or thematically amusing outcomes when these referenced elements are used together.
+d. A Reward for Creativity: Their existence is a nod to player ingenuity and encourages exploration of the game's systems.
+10. Balancing Levers:
+a. Opportunity Cost: Strategic choices like deck slot allocation, board space management, and manipulating scheduled draws influence tempo and future planning.
+b. Additional Resource Costs: Many actions or powerful effects will require the expenditure of specific resources, such as sacrificing creatures, discarding cards from hand, or other defined costs, further influencing decision-making.
+c. Space Limitations: Hard 5 creature slots per side constrain deployment. Hand size implicitly managed by draw vs play/discard rate.
+d. Domino Effects: Intentionally embrace complex chain reactions. Balance involves managing predictability/impact of cascades; requires player risk/reward assessment.
+11. Development Goals & Player Experience:
+a. Reward: Strategic Planning, Creative Deckbuilding, Adaptation, Comeback potential.
+b. Avoid: Complicated Math, Unfair Situations (extreme luck variance feeling unwinnable). Focus on clear cause/effect. Scheduled draw aids predictable tempo.
+12. Prototype Karma System (Future Consideration):
+A "Karma System" is being considered as a subtle, background mechanic to mitigate extreme "bad luck" streaks due to inherent game randomness. This system would notionally track statistically improbable negative outcomes for a player.
+If such a streak is detected, future low-impact random resolutions (e.g., certain random target selections where multiple valid targets exist, or truly random tie-breaks not covered by other rules) might receive an infinitesimally small, temporary bias in that player's favor.
+The goal is to gently nudge probabilities towards a perceived fairness over a longer game, not to directly influence outcomes or become a strategic element.
+This effect would be:
+a. Extremely minor and often imperceptible.
+b. Designed to be non-exploitable.
+c. Quickly self-correcting or decaying once a "favorable" random outcome occurs for the player.
+d. Aimed at improving player experience by reducing "feel-bad" moments from severe statistical outliers, rather than impacting core strategic decisions or win conditions.
+e. Its implementation would require rigorous testing and be carefully balanced to ensure it remains a background "smoothing" effect and doesn't introduce new imbalances.
+13. Core Design Tenet - Double-Edged Sword:
+Significant positive effects should have a drawback, risk, or cost.
+Significant negative effects/costs should offer potential upside, niche, or benefit.
+Most cards should have primary effect + secondary drawback/mitigator (even minor).
+Examples remain valid: "OnMove: +1 Attack" / "OnAttacked: Controller takes 1 damage"; Doomed (+Attack before death); Reckless Assault (+Damage for recoil).
 
 VI. Illustrative Content Examples
 
-Example Status Groupings: Information (Revealed, Concealed, Compromised), Debuffs/Control (Bored, Delayed, Heavy, Suppressed, Cursed, Ostracized, Addicted, Targeted, Doomed, Depressed, Tired, Bleeding/Corroding), Buffs/Utility (Blessed, Caffeinated), Initial State (Deployment Time).
+A. Example Status Groupings
+Information (Revealed, Concealed, Compromised), Debuffs/Control (Bored, Delayed, Heavy, Suppressed, Cursed, Ostracized, Addicted, Targeted, Doomed, Depressed, Tired, Bleeding/Corroding), Buffs/Utility (Blessed, Caffeinated), Initial State (Deployment Time).
 
-Example Passive Ability Concepts: Ninja Step (ignores slot effects), Resolute (survives lethal blow once), Adrenal Surge (heals on low HP once), Overcharge/Reckless Assault (bonus damage + recoil), Kinetic Backlash (recoil based on damage dealt), Essence Tap/Vampiric Strike (life drain).
+B. Example Passive Ability Concepts
+Ninja Step (ignores slot effects), Resolute (survive lethal once), Adrenal Surge (heals low HP once), Overcharge/Reckless Assault (bonus damage + recoil), Kinetic Backlash (recoil based on damage dealt), Essence Tap/Vampiric Strike (life drain).
 
-Example Card Concepts: (Maintaining full names, factions, flavor text, and mechanics as established per Section V rules)
+C. Example Card Concepts
+(Maintaining full details per Section V.B rules)
 
-Card Name: Plausible Deniability Protocol
+Card Name: Aggressive Downsizing
+Type: Spell
+Faction: Corporate
+Effect: Destroy target friendly creature. Schedule 2 additional card draws for your next turn. If the destroyed creature had 3 or more base Attack, also apply Depressed 1 to all enemy creatures.
+Flavor Text: "We're streamlining operations to maximize shareholder value. Your contribution was... no longer synergistic."
 
-Type: Spell / Faction: Shadow Operations
+Card Name: Patent Troll Firm
+Type: Creature
+Faction: Corporate
+Stats: 0 Attack / 5 Health / 1 Speed / Deployment Time: 3
+Ability (Passive): OnOpponentPlaysSpell: If this creature is not Suppressed, your opponent must discard 1 card or their spell has no effect. This creature then gains Tired 1.
+Flavor Text: "That innovative idea you have? We patented something vaguely similar in 1998. Pay up."
 
-Effect: Target friendly creature gains Concealed 1. If that creature is destroyed by an opponent's action this turn or next turn, return it to your hand instead of the Discard Pile.
+Card Name: Content Moderator Bot
+Type: Creature
+Faction: Digital Society
+Stats: 1 Attack / 2 Health / 4 Speed / Deployment Time: 0
+Ability (Passive): OnEnemyCreatureGainConcealed: Apply Revealed 1 to that creature.
+Flavor Text: "Violation of Community Guideline 3.4.7b: 'Attempting to be mysterious in a clearly designated public forum'. Revealing..."
 
-Flavor Text: "The Secretary disavows any knowledge of this meme. Or this operation. Or Tuesdays."
+Card Name: Sock Puppet Army
+Type: Spell
+Faction: Digital Society
+Effect: For each empty friendly slot, summon a "Fake User Profile" (0 Attack / 1 Health / 1 Speed / DT:0, Passive: OnDied: Opponent draws 1 fewer card next turn).
+Flavor Text: "My opinions are incredibly popular. Just ask my 500 identical friends."
 
-Card Name: Honeypot Agent
+Card Name: DDoS Specialist
+Type: Creature
+Faction: Digital Society
+Stats: 2 Attack / 1 Health / 5 Speed / Deployment Time: 1
+Ability (Passive): OnAttack: Apply Delayed 1 to the attacked creature. If this creature is destroyed, apply Delayed 1 to all enemy creatures.
+Flavor Text: "Their servers can't handle this much... 'enthusiasm'."
 
-Type: Creature / Faction: Shadow Operations
+Card Name: Banned Troll
+Type: Creature
+Faction: Zeitgeist
+Stats: 3 Attack / 2 Health / 3 Speed / Deployment Time: 1
+Ability (Passive): This creature cannot be targeted by Spells. OnTurnStart: If this creature is Ostracized, it gains +2 Attack this turn.
+Flavor Text: "They can't silence me! They can only make me shout louder from increasingly obscure corners of the internet."
 
-Stats: 1 Attack / 4 Health / 2 Speed / Deployment Time: 2
+Card Name: Keeper of Sacred Texts
+Type: Creature
+Faction: Myth
+Stats: 0 Attack / 4 Health / 2 Speed / Deployment Time: 2
+Ability (Passive): OnBeingTargetedByEnemyIntelligence: The enemy creature that targeted this creature gains Cursed 1.
+Flavor Text: "The scrolls say... 'Do not read these scrolls.' How delightfully paradoxical."
 
-Ability (Passive): This creature permanently has Compromised. If this Compromised status is triggered by an opponent's effect: Apply Suppressed 1 to the enemy creature that triggered it.
-
-Flavor Text: "They thought they were getting secrets. They got a system crash and a very awkward explanation."
-
-Card Name: Oracle of Delphi's Ambiguous Warning (Revised)
-
-Type: Spell / Faction: Myths & Mysteries
-
-Effect: Look at the top 3 cards of your deck. Choose one card to place back on top of your deck. Choose one of the remaining two cards to put into your Discard Pile. Banish the last card. Apply Cursed 1 to a random creature (friendly or enemy).
-
-Flavor Text: "The threads of fate show... choices! Definitely choices. With consequences. Probably involving Tuesdays."
+Card Name: Middle Manager
+Type: Creature
+Faction: Corporate
+Stats: 1 Attack / 3 Health / 2 Speed / Deployment Time: 1
+Ability (Passive): OnFriendlyTurnStart: If there are friendly creatures in both adjacent slots, this creature gains +1 Attack this turn. Otherwise, it gains Tired 1.
+Flavor Text: "My primary function is to delegate the delegation of tasks. And attend meetings. So many meetings."
 
 Card Name: Influencer Apology Video
-
-Type: Spell / Faction: Zeitgeist & Archetypes
-
+Type: Spell
+Faction: Zeitgeist
 Effect: Target friendly creature gains Blessed. Your opponent schedules 1 additional card draw for their next turn. Apply Revealed 1 to the target creature.
-
 Flavor Text: "I'm taking accountability... by reading this statement my PR team wrote. Link in bio to my merch store!"
 
-Card Name: Keyboard Warrior
+Card Name: Plausible Deniability Protocol
+Type: Spell
+Faction: Shadow Ops.
+Effect: Target friendly creature gains Concealed 1. If that creature is destroyed by an opponent's action this turn or next turn, return it to your hand instead of the Discard Pile.
+Flavor Text: "The Secretary disavows any knowledge of this meme. Or this operation. Or Tuesdays."
 
-Type: Creature / Faction: Zeitgeist & Archetypes
-
-Stats: 2 Attack / 1 Health / 3 Speed / Deployment Time: 0
-
-Ability (Passive): OnAttack: Gains Concealed 1. End of Turn: If this creature did not attack this turn, it gains Bored 1.
-
-Flavor Text: "U MAD BRO? XD"
-
-Card Name: The Grind™ Mindset
-
-Type: Spell / Faction: Zeitgeist & Archetypes
-
-Effect: Target friendly creature gains Caffeinated 3. Apply Depressed 1 to ALL other friendly creatures.
-
-Flavor Text: "Sleep is for the weak! Synergy is for people who like their coworkers! CRUSH IT! (Sponsored by energy drinks)."
+Card Name: Sleeper Cell Activation
+Type: Spell
+Faction: Shadow Ops.
+Effect: Choose a friendly creature with Deployment Time 1 or more. Its Deployment Time becomes 0. It gains Doomed 2.
+Flavor Text: "Code phrase 'Mockingbird's Lament'. Your quiet time is over."
