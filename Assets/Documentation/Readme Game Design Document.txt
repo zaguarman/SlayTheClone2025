@@ -1,10 +1,3 @@
-DOCUMENT USAGE GUIDELINES:
-
-1.  Preservation of Existing Content: All existing thematic elements (card names, ability names, flavor text, factions, specific examples) are stable and must be preserved unless the user explicitly requests a change to a specific element.
-2.  Mechanical Alignment: Mechanical changes must align with existing flavor.
-3.  No Simplification/Condensation: No part of this document (concepts, mechanics, rules, status definitions, examples, principles) should be simplified, shortened, condensed, or significantly rephrased unless explicitly instructed by the user. Maintain existing detail, nuance, and phrasing in all other sections when implementing user requests.
-4.  Example Card List Integrity: The "Illustrative Card Examples List" (a separate document) is fixed. The number of cards on that list cannot be modified (no additions or unsolicited removals) unless explicitly requested by the user. If an existing card example needs mechanical adjustment to fit a new rule, its core concept and flavor must be preserved.
-
 Game Design Document
 
 I. Core Concept & Vision
@@ -45,7 +38,7 @@ Movement & Blocking: Placement dictates movement paths and potential targets (ba
 
 Key Mechanic: Fog of War
 
-Default State of Pending Actions: During a player's planning phase, their opponent gets a limited preview of actions being queued. For standard (non-concealed) actions, this might indicate an action is planned by a specific creature, but full details like targets may remain obscured until resolution. Actions queued by creatures that are "Undercover" or have the `Concealed` status effect (see Section IV.B) will appear as "hidden/obscured actions" in this preview, offering even less information.
+The "Fog of War" in this game revolves around the fact that players do not have a real-time preview of the specific actions their opponents are queuing during their planning phase. Opponents cannot see what Spells are being prepared or which abilities are being activated until those actions resolve and are recorded. Information about an opponent's specific plans for the current turn is primarily gleaned *after the fact* through the Turn History, or by using specialized Intelligence abilities that might offer limited insights under specific conditions.
 
 End of Turn Action Revelation & Turn History: At the End of each Turn, after all queued actions for that turn have resolved, they are recorded in the **Turn History**. This history, envisioned with an "old newspaper" flavor for the UI, serves as a log.
     *   Standard resolved actions become fully visible to both players in the Turn History.
@@ -132,18 +125,20 @@ A turn consists of the following general phases:
 
 1. Queue Manipulation (General): Beyond the specific Pre-Resolution Interference effects, other actions might interact with queue visibility (e.g., Intelligence revealing details of pending actions) or apply effects that modify how opponents perceive or plan around the queue. Direct destruction or unsolicited removal of actions from the queue by card effects during the Action Resolution Phase is not a feature.
 2. Priority Enhancement: Granting actions a higher Priority value causes them to resolve earlier, regardless of creature Speed. This is similar to priority mechanics in Pokémon. Priority enhancement can be an innate quality of a creature's action (e.g., "Priority Attack: +1 Priority"). Pre-Resolution Interference effects can also modify Priority.
-3. Global Priority Modifiers: These are effects that impact the Priority of all actions for a specified duration.
-Example ("Coordinated Advance"): Friendly actions this turn and for the next 3 turns get +1 Priority.
-Example ("Temporal Distortion"): For X turns, the normal action resolution order based on Speed is inverted. This is similar to Pokémon's "Trick Room" effect. Actions with higher Priority still resolve before actions with lower Priority, following their normal Speed order (or subsequent tie-breakers if Speed is tied for these Priority actions). However, among actions that share the same Priority level (including actions with no inherent Priority modifiers), creatures with lower Speed will act before creatures with higher Speed.
-4. Normal Tie-Breaking: If actions are tied in both Priority and creature Speed, the resolution order is determined as follows:
-The action associated with the creature having the lowest current (Health + Armor) total resolves first.
-If the (Health + Armor) total is also tied, the action associated with the creature having the lowest base Attack resolves first.
-If Attack is also tied, the resolution order is determined randomly (with potential minor influence from the Karma System, if implemented and active, to mitigate extreme luck streaks).
-5. Tie-Breaking During Temporal Distortion: If actions subject to the inverted Speed order (i.e., they have the same Priority level) also have tied Speed values, the resolution order is determined as follows:
-The action associated with the creature having the lowest current (Health + Armor) total resolves first.
-If the (Health + Armor) total is also tied, the action associated with the creature having the lowest base Attack resolves first.
-If Attack is also tied, the resolution order is determined randomly (with potential minor influence from the Karma System, if implemented and active, to mitigate extreme luck streaks).
-6. Priority Reduction: Actions or effects can assign a negative modifier to an action's base Priority (e.g., Priority -1). This causes the affected action to resolve later in the turn's queue, after actions with higher (or the default 0) Priority. Pre-Resolution Interference effects can also modify Priority. If the reduction is significant, the action might resolve even after actions from slower creatures that possess a higher effective Priority.
+3.  Global Priority Modifiers: These are effects that impact the Priority of all actions for a specified duration.
+    Example ("Coordinated Advance"): Friendly actions this turn and for the next 3 turns get +1 Priority.
+    Example ("Temporal Distortion"): For X turns, the normal action resolution order based on Speed is inverted.
+    *   **Priority Resolution during Temporal Distortion:** Actions are first grouped and resolved by Priority level (actions in higher Priority groups resolve before actions in lower Priority groups).
+    *   **Speed Resolution during Temporal Distortion:** Within each Priority level, actions from creatures with lower Speed will act before creatures with higher Speed. If Speed is tied for these actions, the resolution order is determined by the **Standard Tie-Breaking Protocol** (defined in Section II.F.4).
+
+4.  **Standard Tie-Breaking Protocol:** This protocol is used when actions are tied in both Priority and creature Speed (during normal resolution) or when actions within the same Priority level have tied Speed during Temporal Distortion. The resolution order is as follows:
+    *   The action associated with the creature having the lowest current (Health + Armor) total resolves first.
+    *   If the (Health + Armor) total is also tied, the action associated with the creature having the lowest base Attack resolves first.
+    *   If Attack is also tied, the resolution order is determined randomly (with potential minor influence from the Karma System, if implemented and active, to mitigate extreme luck streaks).
+
+5.  Tie-Breaking During Temporal Distortion: If actions subject to the inverted Speed order (i.e., they have the same Priority level and Temporal Distortion is active) also have tied Speed values, the resolution order is determined by the **Standard Tie-Breaking Protocol** (defined in Section II.F.4).
+
+6.  Priority Reduction: Actions or effects can assign a negative modifier to an action's base Priority (e.g., Priority -1). This causes the affected action to resolve later in the turn's queue, after actions with higher (or the default 0) Priority. Pre-Resolution Interference effects can also modify Priority. If the reduction is significant, the action might resolve even after actions from slower creatures that possess a higher effective Priority.
 
 G. Universal Action Queuing (New Section)
 A fundamental principle of gameplay is that no card effect resolves instantaneously upon the card being played or its ability conditions being met. This principle means that every effect generated by a Spell or a creature ability (whether active or passive) becomes an action for the queue. Similarly, every player-initiated creature attack is treated as such an action. Furthermore, every triggered trap effect, which includes Strategic Disclosure effects as detailed in Section IV.A.1, is also formulated as an action and placed into the Action Queue. These actions are then resolved in sequence during the Action Resolution phase of the turn, according to the rules outlined in Section II.F (Action Queue & Turn Flow Mechanics).
@@ -157,7 +152,12 @@ This involves constant interaction between revealing an opponent's hidden plans 
 B. Board Manipulation & Control
 1. Logistics (Movement): Using abilities or Spells to reposition creatures (self, allies, or enemies) or to swap their positions. This optimizes attacks, blocks, and adjacency benefits, while also disrupting opponents' formations. Tactics include Post-Action Repositioning ("Hit and Run") and Positional Relays (buffs triggered by moving into a vacated slot).
 2. Movement Restriction: Using the Heavy status, specific abilities, or Slot Effects to lock down enemy creatures or protect allied creatures.
-3. Slot Effects / Environmental Hazards: These are persistent or triggered effects on battlefield slots. A key rule is that only one such effect can be active per slot; a new effect replaces any old one. Slot Effects can be visible or hidden traps. Their triggers vary (e.g., On Move In/Out, Continuous Turn Start/End, Reactive, One-Time). They can also block actions (e.g., a "Movement Jammer" slot effect).
+3.  Slot Effects / Environmental Hazards: These are persistent or triggered effects on battlefield slots.
+    *   **Exclusivity & Replacement:** Only one such effect can be active per slot. If a new Slot Effect is applied to a slot that already has one, the **new Slot Effect replaces the old one**, regardless of compatibility. (For example, if a slot has "Sanctified Ground" and an effect attempts to apply "Desecrated Ground," the "Sanctified Ground" is removed and "Desecrated Ground" becomes active.)
+    *   **Nature:** Slot Effects can be visible or hidden traps.
+    *   **Triggers:** Their triggers vary (e.g., On Move In/Out, Continuous Turn Start/End, Reactive, One-Time).
+    *   **Functionality:** They can also block actions (e.g., a "Movement Jammer" slot effect).
+    *   **Damage to Slots & Occupants:** When a slot is the target of damage, or when damage is redirected to a slot, that damage is applied to any creature currently occupying that slot. If the slot is empty at the moment of damage resolution, or if the creature in the slot is destroyed by this damage and there is excess damage, any such damage (initial or excess) is dealt to the player controlling that slot.
 4. Hazard Removal / Decontamination: Actions or abilities designed to cleanse negative Slot Effects. This might reset them to a neutral state or replace them with neutral or beneficial effects.
 5. Location (Weather): Cards that impose global modifiers on the entire battlefield. These effects can last for a set duration or until changed by another Location card. Locations can restrict actions (e.g., preventing certain card types from being played), provide buffs (e.g., +1 Armor per turn to all creatures), trigger global effects (e.g., heal all creatures), or enable specific strategies.
 6. Flooding: Overwhelming the board with many weak or token creatures ("junk"). This tactic aims to obstruct movement, dilute the effectiveness of single-target effects, and enable strategies based on creature quantity.
@@ -173,12 +173,15 @@ D. Disruption & Control
 1. Status Effects Application: A core mechanic involving the application of defined status effects (see Section IV.B for definitions) to enemy creatures or slots. The goal is to hinder, expose, or control them.
 2. Red Tape: Effects that delay an opponent's actions, lower their Priority (causing them to resolve later – see also III.D.4 for triggered reordering/priority changes), or add turns to a creature's Deployment Time. These tactics slow the opponent's tempo.
 3. Disable Archetype: Strategies focused on disabling key enemy functions. This can be granular (affecting only passive abilities or only Attacks) or significant (such as the Suppressed status, which blocks most actions but still allows ability-initiated Move actions).
-4. **Interference (Triggered Queue Modification):** Certain abilities or effects allow players to set up "Interference" conditions in advance, akin to booby traps for the Action Queue. These are not played in direct response but are pre-set. During the **Pre-Resolution Interference Phase** (see Section II.F Turn Structure), the game checks all pending actions in the queue against any active, set-up Interference effects. If an action meets the trigger conditions specified by an Interference effect, that action is modified *before* the normal Action Resolution Phase begins. This ensures these modifications happen deterministically and avoid race conditions. Types of Interference include:
-    *   **Nullify:** A set-up effect triggers, causing a specific opponent's pending action to be marked as "Nullified." When this action's turn comes during the Action Resolution Phase, it resolves with no game effect.
-    *   **Reorder (Priority/Position Modification):** A set-up effect triggers, altering a pending action's Priority (e.g., increasing or decreasing it) or potentially other properties that influence its resolution order relative to other actions. This mechanically changes its place in the upcoming resolution sequence.
-    *   **Redirect:** A set-up effect triggers, changing the target of a specific opponent's pending action to a new valid target, as defined by the Interference effect.
+4.  **Interference (Triggered Queue Modification):** Certain abilities or effects allow players to set up "Interference" conditions in advance, akin to booby traps for the Action Queue. These are not played in direct response but are pre-set. During the **Pre-Resolution Interference Phase** (see Section II.F Turn Structure), the game checks all pending actions in the queue against any active, set-up Interference effects. If an action meets the trigger conditions specified by an Interference effect, that action is modified *before* the normal Action Resolution Phase begins. This ensures these modifications happen deterministically and avoid race conditions. All forms of direct modification to an opponent's pending actions in the queue (Nullify, Reorder, Redirect) operate exclusively through this pre-set Interference system.
+    *   **UI Notification:** When an Interference effect modifies an action (Nullifies, Reorders, or Redirects it), the game's UI should clearly indicate to both players that the modification occurred and display the name or source of the Interference effect that caused it. This provides context for the changed execution.
+    *   Types of Interference include:
+        *   **Nullify:** A set-up effect triggers, causing a specific opponent's pending action to be marked as "Nullified." When this action's turn comes during the Action Resolution Phase, it resolves with no game effect.
+        *   **Reorder (Priority/Position Modification):** A set-up effect triggers, altering a pending action's Priority (e.g., increasing or decreasing it) or potentially other properties that influence its resolution order relative to other actions. This mechanically changes its place in the upcoming resolution sequence.
+        *   **Redirect:** A set-up effect triggers, changing the target of a specific opponent's pending action to a new valid target, as defined by the Interference effect.
     The trigger conditions for these Interference effects are defined on the cards that create them (e.g., "Set-up: The next time an opponent queues a Spell action targeting your 'Slot 1' creature, that Spell action is Nullified.").
-5. Attack/Effect Redirection: Beyond the triggered Redirection described above, some creature abilities or Spells might, as part of *their own queued action's resolution*, change the target of an opponent's *already queued and not-yet-resolved* action if specific conditions on the game state are met at the moment the redirection Spell/ability resolves. This is distinct from the pre-set triggered Redirection. (This point is preserved for now but may need review for consistency with the "pre-set only" approach if that's the strict intent. For now, it assumes two types of redirection: pre-set, and "as an effect of a resolving action modifying another pending action" IF that latter one doesn't create race conditions – this might need to be exclusively pre-set).
+
+5.  Attack/Effect Redirection: All redirection of an opponent's queued actions is handled exclusively by pre-set "Redirect" Interference effects, as detailed in Section III.D.4. There are no game mechanics that allow a player's resolving action to dynamically redirect another opponent's action that is still pending in the queue during the Action Resolution Phase.
 6. Recruitment / Conversion / Mind Control: Effects that allow a player to take control of an opponent's creature, either temporarily or permanently. This disrupts the opponent's board state and plans. Full details are in Section IV.D.
 
 E. Recursion & Recovery
@@ -187,11 +190,24 @@ E. Recursion & Recovery
 3. Return to Hand (from Discard): An ability or Spell that selects a card (Creature or Spell) from a player's Discard Pile and puts it directly into that player's hand. The card is then available to be played again.
 
 F. Combat, Damage & Targeting
-1. Direct Damage: Reducing a target's Health.
-2. Chain/Spread Damage: Damage that hits multiple distinct targets, either sequentially or simultaneously.
-3. Armor: A temporary HP pool on creatures. Damage is applied to Armor first, then to Health. Armor can be removed by specific effects. Recoil damage also hits Armor first.
-4. Life Drain / Siphoning: Dealing damage also heals the source of the damage or its controller. This healing is often based on the amount of damage dealt to Health or Armor. This is typically a passive ability.
-5. Targeting Nuances: Many effects have specific restrictions or patterns for targeting. Examples include: only the slot directly in front; any slot except the front one; geometric patterns like 'V' or '+'; random selection among a valid pool of targets; or condition-based targeting, such as only creatures whose actions are Concealed, Depressed creatures, or creatures with high Attack.
+0.  **Active Engagement for Combat Damage:** Creatures only deal combat damage as a result of performing an Attack action that they have actively queued and which targets an enemy creature or slot. There is no inherent "retaliation" damage dealt by a creature merely for being the target of an attack, unless a specific passive ability explicitly grants such a reaction (e.g., "Thorns: OnAttacked, deal 1 damage to the attacker").
+1.  Direct Damage: Reducing a target's Health.
+2.  Chain/Spread Damage: Damage that hits multiple distinct targets, either sequentially or simultaneously.
+3.  Armor: A temporary HP pool on creatures. Damage is applied to Armor first, then to Health. Armor can be removed by specific effects. Recoil damage also hits Armor first.
+4.  Life Drain / Siphoning: Dealing damage also heals the source of the damage or its controller. This healing is often based on the amount of damage dealt to Health or Armor. This is typically a passive ability.
+5.  Targeting Nuances:
+    *   **Targeting Types:** Effects and actions in the game utilize two primary forms of targeting:
+        *   **Creature-Targeting:** The effect or action targets a specific creature. If the targeted creature moves to a different slot before the action resolves, the action will still affect that same creature in its new location (akin to a "homing" effect).
+            *   **If Targeted Creature Dies:** If a creature targeted by a Creature-Targeting effect is destroyed and moved to the Discard Pile *before* the effect resolves, the effect will **redirect to target the slot** the destroyed creature last occupied.
+                1.  The effect resolves on that specific slot.
+                2.  Any creature currently in that slot when the effect resolves will be affected by this slot-targeted effect (e.g., take damage if the effect is damaging).
+                3.  If the slot is empty when the effect resolves, any damage component of the effect is applied directly to the player who controls that slot. Other non-damage effects might be negated or apply to the slot itself if appropriate for the effect's nature and there's no creature.
+        *   **Slot-Targeting:** The effect or action targets a specific battlefield slot. If the creature occupying that slot moves before the action resolves, the action will affect whatever creature is currently in the targeted slot at the moment of resolution. If the slot is empty, the action may have no effect or may affect the slot itself (e.g., applying a Slot Effect).
+    *   **Damage to Slots & Occupants (General Rule):** When a slot is the target of damage (e.g., through Slot-Targeting or redirection as per the Creature-Targeting death contingency):
+        *   That damage is first applied to any creature currently occupying that slot.
+        *   If the slot is empty at the moment of damage resolution, the damage is dealt to the player controlling that slot.
+        *   If a creature in the slot is destroyed by this damage, any excess damage is also dealt to the player controlling that slot.
+    *   **Targeting Restrictions & Patterns:** Many effects have specific restrictions or patterns for targeting beyond the general type. Examples include: only the slot directly in front; any slot except the front one; geometric patterns like 'V' or '+'; random selection among a valid pool of targets; or condition-based targeting, such as only creatures whose actions are Concealed, Depressed creatures, or creatures with high Attack. The card text will specify these.
 
 IV. Detailed Mechanics & Specific Systems
 
@@ -228,7 +244,7 @@ Bored (X turns): At the beginning of its controller's turn, if not targeted last
 Caffeinated (X turns): Actions +1 Priority. +1 Attack. Takes 1 damage End of Turn. Lasts X turns. Cannot be cleansed. Stacks duration. Cleanses Tired. Theme: Stimulant, hyperactive, burn out.
 
 **Concealed (X turns):** Status Effect. For X turns, all actions queued by this creature are `Concealed Actions`.
-    *   **`Concealed Actions` in Pending Queue:** Appear as "hidden/obscured actions" in the opponent's preview of the current Action Queue.
+    *   **`Concealed Actions` and Fog of War:** `Concealed Actions` are not visible to the opponent in any pre-resolution preview.
     *   **`Concealed Actions` in Turn History:** When a `Concealed Action` resolves, its entry appears as '???' in the opponent's Turn History. The controller sees it normally.
     *   This status can be negated by the `Revealed` status effect. If a creature has both, `Revealed` takes precedence.
     *   Creatures with a native "Undercover" passive ability inherently produce `Concealed Actions` without needing this status, but are affected by `Revealed` status similarly.
@@ -238,8 +254,8 @@ Caffeinated (X turns): Actions +1 Priority. +1 Attack. Takes 1 damage End of Tur
     *   **Targeting:** Typically applied to an opponent's creature that is currently "Undercover" or has the `Concealed` status effect.
     *   **Effect on Visibility (for the Handler):** For the player who applied `Compromised` (the "handler"):
         *   All past '???' entries in the Turn History from this creature become fully visible to the handler.
-        *   All future actions queued by this creature, even if they would normally be `Concealed Actions` (due to "Undercover" ability or ongoing `Concealed` status), are fully visible to the handler in their preview of the pending Action Queue and subsequently in their Turn History.
-    *   **Effect on Visibility (for others):** The original controller of the `Compromised` creature, and any other opponents, still see its `Concealed Actions` as "hidden/obscured" in pending previews and as '???' in the Turn History, as per normal concealment rules.
+        *   All future actions queued by this creature, even if they would normally be `Concealed Actions` (due to "Undercover" ability or ongoing `Concealed` status), are fully visible to the handler in their Turn History after resolution (and potentially in any limited previews if such a mechanic exists for specific Intelligence tools targeting pending actions).
+    *   **Effect on Visibility (for others):** The original controller of the `Compromised` creature, and any other opponents, still see its `Concealed Actions` as '???' in the Turn History, as per normal concealment rules.
     *   **"On Being Revealed" Triggers:** Critically, the passive information leakage to the handler due to the `Compromised` status does *not* automatically trigger any `OnRevealedByIntelligence` effects associated with the creature or its actions.
     *   **Optional Intelligence Action:** The handler can *still choose* to use a separate Intelligence action targeting a (now visible to them) past concealed action of the `Compromised` creature in the Turn History. If they do so, any associated `OnRevealedByIntelligence` Traps or Strategic Disclosures *will* trigger as per their normal conditions, with effects queued for the handler.
     *   Theme: Double agent, leaky information, controlled opposition.
@@ -253,7 +269,7 @@ Heavy (X turns): Cannot perform Move actions, cannot be moved. Gains 1 Armor End
 Ostracized (X turns): Cannot be targeted by actions/abilities. Cannot gain new status effects. Existing effects remain. Can still act. Lasts X turns. Stacks duration. Theme: Isolation, untouchable, phased out.
 
 **Revealed (X turns):** Status Effect. For X turns, this status actively counters concealment for the affected creature.
-    *   **Effect:** If a creature with an "Undercover" ability or the `Concealed` status effect gains the `Revealed` status, its actions are *not* `Concealed Actions` for the duration of `Revealed`. They are treated as normal actions regarding visibility in pending queue previews and the Turn History.
+    *   **Effect:** If a creature with an "Undercover" ability or the `Concealed` status effect gains the `Revealed` status, its actions are *not* `Concealed Actions` for the duration of `Revealed`. They are treated as normal actions regarding visibility in the Turn History.
     *   **Triggering "On Being Revealed" Effects:** If applying the `Revealed` status causes a creature to stop producing `Concealed Actions` (i.e., it was "Undercover" or `Concealed`), and that creature or its actions have any `OnRevealedByIntelligence` triggers (Traps or Strategic Disclosures as defined in Section IV.C), those triggers activate *at the moment the `Revealed` status is applied*. The resulting trap/disclosure effects are queued, affecting the player who applied the `Revealed` status (detrimentally for traps, beneficially for disclosures).
     *   `Revealed` status overrides the `Concealed` status and the "Undercover" ability's inherent concealment.
     *   Theme: Exposed, under surveillance, public knowledge.
@@ -452,9 +468,18 @@ This section details mechanics for taking control of an opponent's creature.
     *   Its base stats (Attack, Health, Speed as printed on the card) remain unchanged.
     *   Its current Deployment Time (if any) continues to count down under the new controller.
 7.  Action Queue & Fog of War:
-    *   When a creature is Recruited/Converted, any actions queued by its previous controller for the current turn are immediately cancelled. (Note: This cancellation happens before the Pre-Resolution Interference Phase if the recruitment itself resolves before that phase, or during it if the recruitment is a pre-set interference modifying control).
-    *   The new controller may queue actions for it starting from their next turn's planning phase, or as otherwise specified by the recruiting effect.
-    *   Its visibility status concerning concealment (e.g., if it was `Concealed` or "Undercover") is maintained unless the recruiting effect states otherwise or is overridden by another status like `Revealed` or `Compromised`.
+    *   **Cancellation of Previous Controller's Queued Actions:** When a creature is Recruited/Converted, any actions queued by its *previous controller* for the current turn are **immediately cancelled** and removed from the Action Queue. The new controller does not inherit these actions, and they do not resolve.
+    *   **New Controller's Actions:** The new controller may queue new actions for the recruited/converted creature starting from their *next* planning phase, or as otherwise specified by the recruiting effect (e.g., an effect might state "Recruit target creature. It may act this turn."). This provides the new controller an opportunity to integrate the creature into their strategy or react to its state.
+    *   **"Time Bomb" Archetype:** The "time bomb" strategy, where a player gives a creature detrimental attributes and then passes it to an opponent, is achieved through persistent means such as:
+        *   Negative status effects (e.g., Bleeding, Doomed, Cursed) that remain on the creature.
+        *   Inherent passive abilities on the creature that are detrimental to its controller (e.g., "OnTurnEnd: Your controller takes 1 damage").
+        *   Effects that trigger upon the creature entering a new slot (e.g., "OnEnterSlot: Apply Suppressed 1 to adjacent friendly creatures").
+        The cancellation of previously queued actions means the "time bomb" relies on the creature's inherent state and abilities, not on lingering commands from its old master.
+    *   **Concealment Status After Control Change:** If the recruited/converted creature has the `Concealed` status effect or an inherent "Undercover" ability:
+        *   These attributes are maintained on the creature.
+        *   However, the concealment now benefits the *new controller*. Actions queued for this creature by its new controller will appear as `Concealed Actions` (i.e., "hidden/obscured" or '???') to the new controller's opponents (including the creature's original owner). The new controller sees their own queued actions for this creature normally.
+        *   Essentially, the creature's clandestine nature now serves its current master. Any `Revealed` or `Compromised` status effects also continue to apply relative to the creature's new controller and their opponents.
+    *   **Important Note on Action Persistence:** All actions queued during a turn must resolve within that turn. Actions are never carried over from one turn to the next in the Action Queue.
 
 V. Game Design Philosophy & Balancing
 
@@ -516,4 +541,3 @@ Ninja Step (ignores slot effects), Resolute (survive lethal once), Adrenal Surge
 
 C. Example Card Concepts
 (Refer to the separate document: "Illustrative Card Examples List" for specific card details. This list is maintained as per the Document Usage Guidelines.)
-

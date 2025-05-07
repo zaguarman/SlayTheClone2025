@@ -1,15 +1,3 @@
-DOCUMENT USAGE GUIDELINES:
-
-Comprehensive List: This document contains the definitive list of standardized game events that can serve as triggers for abilities and game effects.
-
-Stability of Definitions: The names and core definitions (including primary parameters) of these trigger events are stable and should not be altered, removed, or significantly rephrased without explicit instruction. This ensures consistent interpretation across all game mechanics.
-
-Adding New Triggers: New trigger events should only be added if a fundamentally new type of game interaction occurs that cannot be adequately represented by existing triggers, even with flexible ability conditions.
-
-Parameter Expansion: Parameters for existing triggers may be expanded if new mechanics require additional contextual information, but the original parameters must be maintained.
-
-Distinction from Ability Conditions: This list defines what event occurs (e.g., OnDamaged). The specific conditions under which a card's ability reacts to this event (e.g., 'OnDamaged by a Spell while Concealed') are defined on individual cards and are highly flexible, as per the main Game Design Document (Section V.B.5 - Creature Ability Design Principle).
-
 Trigger Events List
 
 This section defines common game events that can trigger passive abilities or other effects. Many triggers provide contextual information (e.g., source of damage, specific status applied) that can be used by the ability's logic.
@@ -19,7 +7,7 @@ Combat & Creature State Changes:
 OnDamaged(damageSource, damageAmount, damageType): Triggers when this creature (or entity with this trigger) takes damage.
     damageSource: The entity or effect (e.g., creature, spell, status) that caused the damage.
     damageAmount: The numerical value of Health and/or Armor damage taken.
-    damageType: Category of damage (e.g., 'Attack', 'Spell', 'AbilityEffect', 'StatusEffect', 'Recoil', 'LocationEffect', 'SlotEffect').
+    damageType: Category of damage (e.g., 'Attack', 'Spell', 'AbilityEffect', 'StatusEffect', 'Recoil', 'LocationEffect', 'SlotEffect', 'PlayerDamageFromSlot').
 
 OnDealDamage(damagedTarget, damageAmount, damageType): Triggers when this creature deals damage.
     damagedTarget: The entity that received the damage.
@@ -64,10 +52,14 @@ OnTurnStart: Triggers at the beginning of this creature's controller's turn, typ
 OnTurnEnd: Triggers at the end of this creature's controller's turn, after all queued actions for the turn have resolved.
 
 OnActionQueued(actionDetails): Triggers when an action involving this creature (either as the source or a target) is added to the action queue.
-    actionDetails: Information about the queued action (e.g., type, source, target).
+    actionDetails: Information about the queued action (e.g., type, source, target, original controller if different from current).
 
 OnActionResolved(actionDetails): Triggers when an action involving this creature (as source or target) resolves from the queue.
     actionDetails: Information about the resolved action.
+
+OnActionCancelled(cancelledActionDetails, cancellationSource): Triggers when a previously queued action is cancelled and removed from the Action Queue before it could resolve.
+    cancelledActionDetails: Information about the action that was cancelled (e.g., type, original source, original target, original controller).
+    cancellationSource: The game rule or effect that caused the cancellation (e.g., 'Recruitment', 'SpecificSpellEffect', 'InterferenceNullify').
 
 OnDeploymentTimeComplete: Triggers specifically when this creature's Deployment Time counter reaches zero and it becomes fully operational.
 
@@ -143,12 +135,12 @@ OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based
     trapDetails: Information about the trap that was triggered.
     activatingEntity: The creature, action, or effect that triggered the trap.
 
-OnSlotEffectApplied(slot, slotEffect): Triggers if this creature is on a slot when a new Slot Effect is applied to it.
-    slot: The slot this creature occupies.
+OnSlotEffectApplied(slot, slotEffect): Triggers if this creature is on a slot when a new Slot Effect is applied to it. Can also be a global or player-level trigger if an ability needs to react to any slot effect being applied.
+    slot: The slot the effect was applied to.
     slotEffect: The Slot Effect that was applied.
 
-OnSlotEffectRemoved(slot, slotEffect): Triggers if this creature is on a slot when a Slot Effect is removed from it.
-    slot: The slot this creature occupies.
+OnSlotEffectRemoved(slot, slotEffect): Triggers if this creature is on a slot when a Slot Effect is removed from it. Can also be a global or player-level trigger.
+    slot: The slot the effect was removed from.
     slotEffect: The Slot Effect that was removed.
 
 OnOpponentPlaysSpell(playedSpell, spellTarget): Player-level trigger. Triggers when the opponent plays a Spell card.
