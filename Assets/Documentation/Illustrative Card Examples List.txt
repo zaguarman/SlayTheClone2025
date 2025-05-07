@@ -17,7 +17,7 @@ Card Name: Patent Troll Firm
 Type: Creature
 Faction: Corporate
 Stats: 0 Attack / 5 Health / 1 Speed / Deployment Time: 3
-Ability (Passive): OnOpponentPlaysSpell: If this creature is not Suppressed, your opponent must discard 1 card or their spell has no effect. This creature then gains Tired 1.
+Ability (Passive): OnOpponentPlaysSpell: Your opponent must discard 1 card or their spell has no effect. This creature then gains Tired 1.
 Flavor Text: "That innovative idea you have? We patented something vaguely similar in 1998. Pay up."
 
 Card Name: Content Moderator Bot
@@ -83,14 +83,14 @@ Card Name: Legacy Code Maintainer
 Type: Creature
 Faction: Tech
 Stats: 0 Attack / 6 Health / 1 Speed / Deployment Time: 3
-Ability (Passive): Friendly Tech creatures cannot have their base stats reduced by enemy effects. OnTurnStart: If this creature is not Suppressed, remove 1 turn duration from a negative status effect on an adjacent friendly Tech creature. This creature then gains Tired 1.
+Ability (Passive): Friendly Tech creatures cannot have their base stats reduced by enemy effects. OnTurnStart: Remove 1 turn duration from a negative status effect on an adjacent friendly Tech creature. This creature then gains Tired 1.
 Flavor Text: "Don't touch that! It's load-bearing spaghetti code. I just keep it from completely collapsing... most of the time."
 
 Card Name: Socratic Interlocutor
 Type: Creature
 Faction: Mind
 Stats: 1 Attack / 3 Health / 3 Speed / Deployment Time: 1
-Ability (Passive): When an opponent queues an Attack action: If this creature is not Suppressed and is a valid target for that Attack, the Attack automatically targets this creature instead. If it does, the attacking creature gains Delayed 1. (This redirection is automatic if conditions are met; no player choice at trigger time.)
+Ability (Passive): When an opponent queues an Attack action: If this creature is a valid target for that Attack, the Attack automatically targets this creature instead. If it does, the attacking creature gains Delayed 1.
 Flavor Text: "But why do you wish to attack him? Have you considered the alternatives? Let's explore your motivations... slowly."
 
 Card Name: Thought Experiment Chamber
