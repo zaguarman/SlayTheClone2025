@@ -1,5 +1,3 @@
---- START OF FILE Game Design Document.txt ---
-
 Game Design Document
 
 **DOCUMENT USAGE GUIDELINES (for this GDD and associated documents):**
@@ -120,7 +118,7 @@ These modifiers accumulate additively during a turn. They are resolved together 
         *   **Cost Fulfillment Nuance:** Some costs might be framed as achieving a certain game state (e.g., "ensure you have fewer than X cards in hand," "control a creature of X faction") rather than a direct payment of specific resources. The player must meet these state-based conditions during the planning phase as part of successfully playing the card or queuing the ability. The preemptive check also applies to these state-based conditions.
     b.  **Discard as a Resolving Effect - Prohibition and Alternative:** Game effects (originating from Spells, creature abilities, traps, etc.) that resolve from the action queue *cannot* cause a player to discard cards directly from their hand. Consider an effect traditionally designed to force an opponent (or oneself) to discard a card from hand as part of its resolution (e.g., an effect that might read "Target player discards 1 card"). In this game, such an effect must instead be implemented differently: it becomes an effect that reduces the number of cards that player will draw on their next turn. This is further detailed in Section II.E.2 (Draw Manipulation) with phrasing like "Target player draws 1 fewer card next turn." This design ensures that all hand manipulation related to card effects focuses on future resources (next turn's draw) rather than immediate hand reduction during the action resolution phase. This, in turn, maintains the uninterrupted flow of action resolution.
     c.  **Distinction from Draw Manipulation:** Discarding from hand as an additional cost is an immediate action taken by the player during their planning phase. It affects the current hand size by player choice to enable another action. In contrast, Draw Manipulation, which includes effects that reduce the next turn's draw (now serving as the mechanical replacement for forced discard effects), is a delayed consequence that impacts the future resources available to a player.
-5. ***Banish***: This action permanently removes a card from the game. (See 'Keyword Glossary').
+5.  ***Banish***: This action permanently removes a card (from hand, board, discard pile, or deck) from the game. Banished cards are outside all game zones and are irretrievable. A creature that is Banished is not considered "Destroyed" for the purpose of triggering abilities that specifically react to a creature being Destroyed (e.g., `OnDied` triggers as defined in the 'Trigger Events List', or other abilities worded as "when an enemy creature is Destroyed..."). While `OnDied` does not trigger, effects that trigger `OnLeaveBattlefield` (see 'Trigger Events List') will still trigger if their conditions are met, with 'Banish' being the destination zone. (See 'Keyword Glossary' for the standalone keyword definition).
 6. Card Lifecycle & Reshuffling:
 A Spell is played -> its effect resolves -> the Spell card goes to the Discard Pile.
 A Creature is destroyed (due to reaching 0 HP or by a "destroy" effect) -> the Creature card goes from the battlefield to the Discard Pile.
@@ -132,6 +130,14 @@ Reshuffle Process:
 7. Creature Reset: When creature cards are reshuffled from the Discard Pile back into the Deck, any temporary modifications (such as current HP changes, temporary stat alterations, and some status effects) are reset to their printed base values.
 8. ***Requisites***: Some powerful cards have conditions that must be met before they can be played or their abilities activated. These are treated as additional costs and follow the universal rules outlined in II.E.4.a, including preemptive checks and payment during the planning phase. Failure to meet a Requisite prevents the card from being played/ability from being queued, returning the card to hand if applicable, with feedback provided. (See 'Keyword Glossary').
 9. Opponent Hand Size Checks: Due to the simultaneous nature of player turns and action resolution, any game effects or abilities that need to check the number of cards in an opponent's hand (e.g., for conditional effects, targeting, or information gathering) will perform this check at the End of the current Turn. This check occurs after all other actions for the turn have resolved, ensuring a stable and definitive hand state for such evaluations.
+10. **Revealing Cards from Hand**
+    Some effects make a player show ("reveal") cards from their hand to their opponent.
+
+    a.  **Instant & Temporary View:** When an effect reveals a card, your opponent instantly sees all its details (text, stats, etc.). This is a one-time look when the effect resolves; the card isn't continuously visible.
+    b.  **Stays in Hand:** The revealed card remains in its owner's hand.
+    c.  **Choosing Which Card(s) (from Opponent's Hand):**
+        i.  **Filtering by Type:** An effect might specify a card type (e.g., "reveal a Creature"). Only cards of that type are eligible to be revealed.
+        ii. **Random Pick:** If multiple cards match the filter (or if there's no filter and multiple cards are in hand), the game randomly selects which card(s) to reveal. The effect also states how many cards will be revealed.
 
 F. Action Queue & Turn Flow Mechanics
 **Turn Structure Overview:**
@@ -303,4 +309,3 @@ Ninja Step (ignores slot effects), Resolute (survive lethal once), Adrenal Surge
 
 C. Example Card Concepts
 (Refer to the separate document: "Illustrative Card Examples List" for specific card details. All card examples must adhere to the principles outlined in this GDD, including use of defined status effects, notation, and mechanics for costs, interference, and action resolution. Placeholder mechanics in examples should be mapped to existing defined GDD mechanics or clarified with design approval if ambiguity exists.)
---- END OF FILE Game Design Document.txt ---

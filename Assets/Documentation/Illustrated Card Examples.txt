@@ -90,3 +90,61 @@ Flavor Text: "Productivity's up across the board! Shame the paycheck, uh, 'card 
 Meetings About Meetings (Corporate) - Spell
 Effect: Apply a global effect for the next 2 turns. While this global effect is active: All actions resolving from the Action Queue that have a ***Priority (Action)*** greater than 0, resolve as if their ***Priority (Action)*** is 0.
 Flavor Text: "We need to schedule a pre-meeting to discuss the agenda for the meeting about the previous meeting's durations."
+
+Password Sticky Note (Tech) - Spell
+
+Effect: Target enemy creature. It gains Compromised. If that creature was already Compromised or had the Revealed (X turns) status effect, instead, its controller schedules 1 fewer card draw for their next turn.
+
+Flavor Text: "User: 'Password123!' Admin: 'Security is our top priority.' The note: 'admin123'."
+
+Rubber Duck Debugging (Tech) - Spell
+
+Effect: Target friendly creature. If that creature has any negative status effects that are removable by Cleanse (as defined by the Cleanse effect or card text), remove one such status effect at random. Then, look at the top card of your deck. You may place it on the bottom of your deck.
+
+Flavor Text: "So, the flux capacitor is clearly misaligned with the quantum intake, and... Oh. OH! The power cord wasn't plugged in. Thanks, Quackers!"
+
+Whine Menu (Corporate) - Spell
+
+Effect: Target an enemy creature. Choose one:
+
+The target gains Impatient (1 turn).
+
+The target gains Muted (1 turn).
+
+The target gains Exposed (2 turns).
+
+Flavor Text: "My creature's dissatisfaction is immeasurable, and its day is ruined. I demand a full debuff on you."
+
+Cameras Off Suicide (Shadow Operations) - Spell
+
+Effect: Target one friendly creature. Banish it. This creature is not considered "Destroyed," and this action does not trigger any OnDied abilities the banished creature might have. Opponent's abilities that trigger on an enemy creature being "Destroyed" also do not trigger.
+
+Flavor Text: "He was never here. The paperwork confirms it. Any questions?"
+
+Ah, I see you're a man of culture as well (Internet Culture) - Spell
+
+Effect: Card must be played on a creature, if the enemy has a creature of the same faction in its battlefield all creatures of that faction gains +1 Attack and +1 Speed for 3 turns.
+
+Flavor Text: "Ah, a fellow connoisseur of obscure 20th-century cat videos. Remarkable."
+
+
+
+Giant Laserthrowing Futuristic Titanium Lizard (Myths & Mysteries) - Creature
+
+Stats: 7 Attack / 7 Health / 1 Speed
+
+Deployment Time (3 turns).
+
+Passive: This creature cannot be the target of Spell actions originating from the 'Corporate' or 'Statecraft' Factions.
+
+Passive Ability: OnAttack if there are fewer than three enemy creatures on the battlefield, deal 3 damage to each available enemy creature.
+
+Flavor Text: "Initial funding proposal: Denied. Revised funding proposal: A city block mysteriously vaporized. Proposal: Approved."
+
+
+
+Drunken Sincerity (Mind & Paradox) - Spell
+
+Effect: Target an enemy creature. It gains Revealed (1 turn). Then, a random card from that creature's controller's hand is revealed to you.
+
+Flavor Text: "Look, I hic shouldn't tell you this, but your plan for next turn? It's hic TERRIBLE. Also, nice 'Secret Weapon' card you got there."
