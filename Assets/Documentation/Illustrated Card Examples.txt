@@ -1,0 +1,92 @@
+Existential Dread (Mind) - Creature
+Stats: 0/6/1
+***Deployment Time (1 turn)***.
+Passive: **OnTurnEnd**: Each creature on the battlefield (friend and foe, including this one if it survives) with current Health greater than 1 loses 1 Health.
+Flavor Text: "Oh, you thought you were special? The abyss gazes back at everyone, darling."
+
+Schrödinger's Cat (Mind) - Creature
+Stats: 1/1/2
+***Deployment Time (1 turn)***. ***Undercover***.
+Passive: If this creature is targeted by an opponent's Intelligence action OR if an opponent applies the Revealed status to this creature while this creature's ***Deployment Time*** is active, Banish this creature.
+Passive: **OnDeploymentTimeComplete**: If this creature was not Banished, it gains +3/+3, its Speed becomes 3, and it loses the ***Undercover*** ability.
+Flavor Text: "You looked! Now it's... well, it's definitely something. Or nothing. Probably."
+
+I don't want to be this kind of animal anymore (Zeitgeist) - Spell
+Effect: Target friendly creature. For the rest of the game, that creature's printed passive abilities no longer function. It gains Doomed (2 turns). While it has Doomed, its base Attack becomes 5 and it gains: "Passive: This creature MUST queue an Attack action each turn if able. This Attack action gains +1 ***Priority (Action)***."
+Flavor Text: "Right, that's IT. Time for a new, extremely aggressive, and tragically short-lived persona!"
+
+Wojak Living The Dream (Zeitgeist) - Creature
+Stats: 1/5/1
+***Deployment Time (0 turns)***.
+Passive: **OnTurnStart**: This creature gains Burnout (1 stack). For each Burnout stack on this creature, it has +1 Attack.
+Flavor Text: "It's fine. Everything's fine. My eye just twitches like this sometimes."
+
+Mental Breakdown (Mind) - Spell
+Effect: Target enemy creature. For the rest of this turn, any Attack action queued by that creature targets a random valid creature on the battlefield (friend or foe, excluding itself). If no other valid targets exist, the Attack action is Nullified.
+Flavor Text: "My therapist said to embrace my inner chaos. I think this is what they meant?"
+
+System Glitch (Matrix Glitch) (Tech) - Spell
+Effect: Randomly select one of the following effects. The selected effect is then queued as an action:
+* Swap the positions of two random creatures on the battlefield.
+* One random creature gains Exhausted.
+* One random creature gains +2/+2.
+Flavor Text: "Did you see that? Yeah, that black cat again. Or maybe it was a dog this time. Who cares, free stats!"
+
+Tinfoil Hat (Zeitgeist) - Spell
+Effect: Target friendly creature. For 2 turns, that creature cannot be the target of enemy Spell actions or enemy Active Abilities that apply status effects. For those 2 turns, its Speed is also reduced by 1 (to a minimum of 1).
+Flavor Text: "They can't read your thoughts if your thoughts are too slow and wrapped in shiny metal!"
+
+Sudoku (Zeitgeist) - Spell
+Effect: Target creature gains Muted (1 turn). That creature's controller schedules 1 additional card draw for their next turn.
+Flavor Text: "Shhh. Thinking. So much thinking. Here, have a card, I'm busy."
+
+Pastafarian God (Myth) - Creature
+Stats: 3/4/2
+***Deployment Time (1 turn)***.
+Passive: **OnTurnStart**: All friendly creatures with "Meatball" or "Noodle" in their name gain +1 Health this turn. If there are no such creatures, you schedule 1 additional card draw for your next turn.
+Flavor Text: "May you be touched by His Noodly Appendage. Or at least draw an extra card, y'arr."
+
+Sentient Dentures (Myth) - Creature
+Stats: 2/3/1
+***Deployment Time (0 turns)***.
+Passive: **OnDealDamage(damagedTarget, damageAmount, damageType)**: If this creature dealt damage with an Attack, damagedTarget gains Earworm (1 turn).
+Flavor Text: "They've got a bite, and a surprisingly catchy tune stuck in their teeth."
+
+Unicorn (Enterprise) (Corporate) - Creature
+Stats: 1/10/1
+***Deployment Time (2 turns)***.
+Passive: **OnDied(deathSource)**: If this creature is destroyed, its controller schedules 3 additional card draws for their next turn.
+Flavor Text: "It looked amazing on paper, and its inevitable collapse will fuel our next three fiscal quarters!"
+
+Banana Gun (Digital Society) - Spell
+Effect: Target enemy creature. Randomly apply one of the following:
+* It gains Anchored (1 turn).
+* It gains Muted (1 turn).
+* It takes 1 damage and its controller schedules 1 fewer card draw next turn.
+Flavor Text: "This fruit is packed with potassium... and unpredictable tactical disadvantages!"
+
+Pastafarian God (Digital Society) - Creature
+Stats: 3/4/2
+***Deployment Time (1 turn)***.
+Passive: **OnTurnStart**: All friendly creatures with "Meatball" or "Noodle" in their name gain +1 Health this turn. If there are no such creatures, you schedule 1 additional card draw for your next turn.
+Flavor Text: "May you be touched by His Noodly Appendage. Or at least draw an extra card, y'arr."
+
+DOGE (Digital Society) - Creature
+Stats: 1/2/4
+***Deployment Time (0 turns)***.
+Passive: **OnTurnEnd**: This creature's Attack randomly becomes 0, 1, or 5 until the start of your next turn.
+Flavor Text: "Much attack. Very Bonk! Wow."
+
+Mandela Effect (Mind) - Spell
+Effect: For the rest of this turn, all creatures have their base Attack swapped with their base Health. (e.g., a creature that was X Attack / Y Health becomes Y Attack / X Health).
+Flavor Text: "Wait, didn't Fruit of the Loom have a cornucopia on the logo? Oh well, guess all the stats are swapped now too."
+
+WTF Happened In 1971 (Zeitgeist) - Spell
+Effect: Apply a global effect for the next 3 turns. While this global effect is active, at the **OnTurnStart** trigger for each player:
+*player: All their creatures gain +1 Attack for this turn.
+*opponent: Their base ***Scheduled Draw*** is reduced by 1 this turn.
+Flavor Text: "Productivity's up across the board! Shame the paycheck, uh, 'card draw' for some people didn't get the memo."
+
+Meetings About Meetings (Corporate) - Spell
+Effect: Apply a global effect for the next 2 turns. While this global effect is active: All actions resolving from the Action Queue that have a ***Priority (Action)*** greater than 0, resolve as if their ***Priority (Action)*** is 0.
+Flavor Text: "We need to schedule a pre-meeting to discuss the agenda for the meeting about the previous meeting's durations."
