@@ -1,3 +1,15 @@
+DOCUMENT USAGE GUIDELINES:
+
+Comprehensive List: This document contains the definitive list of standardized game events that can serve as triggers for abilities and game effects.
+
+Stability of Definitions: The names and core definitions (including primary parameters) of these trigger events are stable and should not be altered, removed, or significantly rephrased without explicit instruction. This ensures consistent interpretation across all game mechanics.
+
+Adding New Triggers: New trigger events should only be added if a fundamentally new type of game interaction occurs that cannot be adequately represented by existing triggers, even with flexible ability conditions.
+
+Parameter Expansion: Parameters for existing triggers may be expanded if new mechanics require additional contextual information, but the original parameters must be maintained.
+
+Distinction from Ability Conditions: This list defines what event occurs (e.g., OnDamaged). The specific conditions under which a card's ability reacts to this event (e.g., 'OnDamaged by a Spell while `Concealed`') are defined on individual cards and are highly flexible, as per the main Game Design Document (Section V.B.5 - Creature Ability Design Principle).
+
 Trigger Events List
 
 This section defines common game events that can trigger passive abilities or other effects. Many triggers provide contextual information (e.g., source of damage, specific status applied) that can be used by the ability's logic.
@@ -61,7 +73,7 @@ OnActionCancelled(cancelledActionDetails, cancellationSource): Triggers when a p
     cancelledActionDetails: Information about the action that was cancelled (e.g., type, original source, original target, original controller).
     cancellationSource: The game rule or effect that caused the cancellation (e.g., 'Recruitment', 'SpecificSpellEffect', 'InterferenceNullify').
 
-OnDeploymentTimeComplete: Triggers specifically when this creature's Deployment Time counter reaches zero and it becomes fully operational.
+OnDeploymentTimeComplete: Triggers specifically when this creature's `Deployment Time` counter reaches zero and it becomes fully operational.
 
 Movement & Positioning:
 
@@ -77,7 +89,7 @@ OnLeaveSlot(leftSlot, method): Triggers when this creature leaves a slot.
     leftSlot: The slot the creature has left.
     method: How the creature left (e.g., 'Moved', 'Swapped', 'ReturnedToHand', 'Destroyed', 'Recruited', 'Converted', 'ReturnedToOwner').
 
-OnEnterBattlefield: Triggers when this creature card enters the battlefield from any zone (Hand, Discard Pile via Revive). Occurs after Deployment Time is applied, but before OnDeploymentTimeComplete. (Note: Generally does not re-trigger if a temporarily recruited creature returns to its owner, unless specified by an effect).
+OnEnterBattlefield: Triggers when this creature card enters the battlefield from any zone (Hand, Discard Pile via Revive). Occurs after `Deployment Time` is applied, but before OnDeploymentTimeComplete. (Note: Generally does not re-trigger if a temporarily recruited creature returns to its owner, unless specified by an effect).
 
 OnLeaveBattlefield(destinationZone): Triggers when this creature is removed from the battlefield.
     destinationZone: The zone the creature card is moving to (e.g., 'Hand', 'DiscardPile', 'Banish', 'Owner'sHand' if returned from temporary recruitment when board is full).
@@ -85,28 +97,28 @@ OnLeaveBattlefield(destinationZone): Triggers when this creature is removed from
 Status Effects & Information Warfare:
 
 OnStatusEffectApplied(statusEffect, effectSource): Triggers when any status effect is applied to this creature.
-    statusEffect: The specific status (e.g., Blessed, Depressed, including its duration/intensity if applicable).
+    statusEffect: The specific status (e.g., `Blessed`, `Chill`, including its duration/intensity if applicable).
     effectSource: The entity or card that applied the status.
 
 OnStatusEffectRemoved(statusEffect, reason): Triggers when any status effect is removed from this creature.
     statusEffect: The specific status that was removed.
     reason: Why it was removed (e.g., 'Expired', 'Cleansed', 'Consumed').
 
-OnGainSpecificStatus: A more specific trigger for when a particular status is gained (e.g., OnGainConcealed, OnGainBlessed).
+OnGainSpecificStatus: A more specific trigger for when a particular status is gained (e.g., `OnGainConcealed`, `OnGainBlessed`).
     effectSource: The entity or card that applied the status.
 
-OnLoseSpecificStatus: A more specific trigger for when a particular status is lost/removed (e.g., OnLoseRevealed, OnLoseCaffeinated).
+OnLoseSpecificStatus: A more specific trigger for when a particular status is lost/removed (e.g., `OnLoseRevealed`, `OnLoseCoffeinated`).
     reason: Why it was removed.
 
-OnRevealedByIntelligence(revealingSource, revealedActionDetails): Triggers when an opponent's action causes the reveal of this creature's concealed nature or its past Concealed Action. This can occur when:
-    1) An opponent's Intelligence action successfully reveals a '???' entry (representing this creature's past Concealed Action) from the Turn History.
-    2) An opponent applies the 'Revealed' status effect to this creature, if this creature was "Undercover" or possessed the 'Concealed' status effect.
+OnRevealedByIntelligence(revealingSource, revealedActionDetails): Triggers when an opponent's action causes the reveal of this creature's concealed nature or its past `Concealed Action`. This can occur when:
+    1) An opponent's Intelligence action successfully reveals a '???' entry (representing this creature's past `Concealed Action`) from the Turn History.
+    2) An opponent applies the '`Revealed`' status effect to this creature, if this creature was "Undercover" or possessed the '`Concealed`' status effect.
     revealingSource: The enemy card, effect, or Intelligence action that caused the reveal.
     revealedActionDetails: Optional. If the reveal was of a past '???' action from the Turn History, this provides details about that specific past action.
 
-OnBecomeTargetable: Triggers when this creature transitions from an untargetable state (e.g., Ostracized ends) to a targetable state.
+OnBecomeTargetable: Triggers when this creature transitions from an untargetable state (e.g., `Ostracised` ends) to a targetable state.
 
-OnBecomeUntargetable: Triggers when this creature transitions from a targetable state to an untargetable state (e.g., Ostracized applied).
+OnBecomeUntargetable: Triggers when this creature transitions from a targetable state to an untargetable state (e.g., `Ostracised` applied).
 
 Card & Resource Management (Primarily Player/Controller Level):
 
@@ -131,7 +143,7 @@ OnLocationChange(oldLocation, newLocation): Global trigger, can affect all creat
     oldLocation: The previous Location effect.
     newLocation: The new Location effect now active.
 
-OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based or slot-based) is sprung.
+OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based or slot-based) is sprung. (This is a generic trap trigger; specific Interference effects in III.D.4 and Counter-Intelligence Traps in IV.A are more specialized interactions with the queue or reveals).
     trapDetails: Information about the trap that was triggered.
     activatingEntity: The creature, action, or effect that triggered the trap.
 
@@ -147,9 +159,9 @@ OnOpponentPlaysSpell(playedSpell, spellTarget): Player-level trigger. Triggers w
     playedSpell: The Spell card played by the opponent.
     spellTarget: The target of the opponent's spell, if any.
 
-OnEnemyCreatureGainConcealed(creature, source): Player-level or specific creature trigger. Triggers when an enemy creature gains the Concealed status effect or has an inherent "Undercover" ability making its actions concealed.
+OnEnemyCreatureGainConcealed(creature, source): Player-level or specific creature trigger. Triggers when an enemy creature gains the `Concealed` status effect or has an inherent "Undercover" ability making its actions concealed.
     creature: The enemy creature that became concealed.
-    source: The source of the Concealed status or the "Undercover" ability.
+    source: The source of the `Concealed` status or the "Undercover" ability.
 
 OnBeingTargetedByEnemyIntelligence(targetingSource): Triggers when this creature is specifically targeted by an enemy's Intelligence effect (e.g., an effect attempting to reveal a pending action or a '???' in the Turn History associated with this creature).
     targetingSource: The enemy creature or spell that is the source of the Intelligence effect.

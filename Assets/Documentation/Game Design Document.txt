@@ -1,0 +1,299 @@
+Game Design Document
+
+**DOCUMENT USAGE GUIDELINES (for this GDD and associated documents):**
+
+*   **Central Document:** This Game Design Document (GDD) is the primary source for core game concepts, systems, rules, and design philosophy.
+*   **External References:** This GDD refers to external companion documents for detailed definitions. These external documents are the single source of truth for their respective elements.
+*   **Stability of Definitions:** Names and core definitions within external documents are stable and require explicit design approval for alteration.
+*   **GDD Context:** This GDD explains how elements defined externally interact within the broader game systems.
+*   **Maintainability:** This modular structure aids clarity and long-term updates. Ensure consistency between this GDD and its companion documents.
+
+**0.A. External References**
+For detailed definitions of specific elements, this GDD refers to the following external companion documents:
+*   **'Keyword Glossary'**: Defines recurring game mechanics and terms.
+*   **'Status Effects Compendium'**: Provides detailed definitions for all status effects.
+*   **'Illustrative Card Examples List'**: Provides examples of cards.
+*   **Stability of Definitions in External Docs:** The names and core definitions within the external documents are considered stable and should not be altered without explicit design approval. This ensures consistent interpretation.
+*   **GDD Context:** While external documents provide precise definitions, this GDD explains how these elements interact within the broader game systems.
+*   **Maintainability:** This modular structure is intended to improve clarity and long-term maintainability. Ensure that when an external document is updated, relevant sections of this GDD are reviewed for continued consistency.
+
+**0.A. Game Terminology & External References**
+This Game Design Document (GDD) outlines the core concepts, systems, and rules for the game. It utilizes core game terms, keywords, and status effects. For exhaustive definitions, please refer to the external documents listed in the "DOCUMENT USAGE GUIDELINES" above. Key terms may be briefly explained in context within this GDD for readability, but the external documents serve as the single source of truth for their precise definitions.
+
+I. Core Concept & Vision
+
+Premise: A card game focused on outsmarting opponents via strategic planning, information control, and tactical positioning on a constrained battlefield.
+
+Genre: Roguelite Deckbuilder. Players build and modify their deck during a run. Consequently, card choices and adapting to challenges are crucial.
+
+Central Conflict: The core tension revolves around Intelligence versus Counter-Intelligence. Thematically, this is mirrored by a multifaceted conflict:
+
+Established pyramidal powers (Statecraft, Myth, Corporate) strive to impose and maintain their specific paradigms of order and control. They often achieve this by manipulating information, enforcing dogma, and preserving hierarchical structures.
+
+In contrast, decentralized, emergent forces (Digital Society, Zeitgeist, Mind) challenge these established norms. These forces thrive on fluidity, the free flow of (and sometimes weaponized) information, and the unpredictable power of collective or individual consciousness.
+
+Navigating and exploiting this dynamic are clandestine networks and transformative systems (Shadow Ops., Tech, Applied Sci-Fi). These entities wield sophisticated tools of intelligence, counter-intelligence, disruption, and innovation. They may serve various masters, subvert existing powers, or pursue their own distinct agendas within this complex web of influence.
+
+Primary Goal: Outsmart opponents by:
+
+Gathering info on opponent's hidden plans.
+
+Denying info to the opponent.
+
+Controlling the global 'Location' effect (currently prototyped as 'Weather,' but will encompass various environmental or zone-wide states that fulfill the same role).
+
+Creating/manipulating status effects on creatures and slots. (See 'Status Effects Compendium').
+
+Strategically moving creatures (friendly or enemy) for advantage.
+
+Key Interaction: Tactical Positioning
+
+Battlefield: Each player controls one row of 5 creature slots, facing each other symmetrically.
+
+Slot Occupation: A maximum of one creature can occupy each slot. Placement is therefore key.
+
+Adjacency: Non-edge slots have two adjacent friendly slots (left and right) and one opposing enemy slot. Edge slots have one adjacent friendly slot and one opposing enemy slot.
+
+Movement & Blocking: Placement dictates movement paths and potential targets (based on adjacency or position). It also triggers passive effects and generally controls the board. Creatures inherently block the slot they occupy; other creatures cannot move into or through an occupied slot unless an ability specifically allows for crossing, swapping, or pushing/pulling. Crucially, creatures cannot move freely. All movement requires specific Spells or creature abilities. If a creature changes sides (for instance, due to ***Recruitment*** or ***Conversion*** effects - see 'Keyword Glossary' and Section IV.D), it moves to an available slot on the new controller's side of the battlefield. A creature cannot be voluntarily moved into an opponent's slot by its current controller. Friendly creatures cannot move into enemy slots unless explicitly recruited or converted by an enemy effect. At that point, they effectively become enemy creatures under the opponent's control.
+
+Key Mechanic: Fog of War
+
+The "Fog of War" in this game revolves around the fact that players do not have a real-time preview of the specific actions their opponents are queuing during their planning phase. Opponents cannot see what Spells are being prepared or which abilities are being activated until those actions resolve and are recorded. Information about an opponent's specific plans for the current turn is primarily gleaned *after the fact* through the Turn History, or by using specialized Intelligence abilities that might offer limited insights under specific conditions.
+
+End of Turn Action Revelation & Turn History: At the End of each Turn, after all queued actions for that turn have resolved, they are recorded in the **Turn History**. This history, envisioned with an "old newspaper" flavor for the UI, serves as a log.
+    *   Standard resolved actions become fully visible to both players in the Turn History.
+    *   Resolved ***Concealed Actions*** (actions hidden from the opponent until resolution) will appear as obscured entries (e.g., '???') in the Turn History for the opponent. The player who performed the ***Concealed Action*** sees it normally. (See 'Keyword Glossary' for `Concealed Action`; see 'Status Effects Compendium' for `Concealed`, `Revealed`, `Compromised` statuses and 'Keyword Glossary' for the `Undercover` ability which also generates `Concealed Actions`).
+
+Intelligence & Investigating the Past: Players can use "Intelligence" actions. A primary use of these is to target specific '???' entries in the opponent's Turn History from previous turns or earlier in the current turn.
+    *   Successfully revealing a '???' entry via an Intelligence action makes that past action's details permanently visible to the investigating player.
+    *   This act of revelation is an action itself that is queued. When it resolves, if the original concealed action had any "On Being Revealed by Intelligence" trigger effects (like ***Traps (Counter-Intelligence)*** or ***Strategic Disclosures*** - see 'Keyword Glossary' and Section IV.A), those effects are immediately formulated as new actions and added to the current Action Queue, resolving in sequence after the Intelligence reveal action.
+
+Counter-Intelligence: These are actions or effects that might further obscure information, or more commonly, represent the risks of prying too deep (e.g., ***Traps (Counter-Intelligence)*** triggered by Intelligence reveals). The `Compromised` status (which leaks information from an enemy agent - see 'Status Effects Compendium') is also a key Intelligence/Counter-Intelligence tool. Pre-set ***Interference*** effects (actions that disrupt the opponent's queue - see 'Keyword Glossary' and Section III.D.4) also form a core part of counter-intelligence strategies.
+
+The `Revealed` Status Effect (see 'Status Effects Compendium') actively counters concealment. Applying it to a creature that is otherwise "Undercover" or `Concealed` (and thus producing ***Concealed Actions***) will cause its actions to no longer be concealed. This application can itself trigger any "On Being Revealed" effects (defined in Section IV.C).
+
+The `Compromised` Status Effect (see 'Status Effects Compendium') makes an opponent's otherwise concealed creature's actions (past, present, and future) visible to the player who applied `Compromised`, without initially triggering "On Being Revealed" effects. The handler can then choose to use a separate Intelligence action to trigger those effects if desired.
+
+II. Foundational Game Systems & Rules
+
+A. Faction System
+All cards are categorized into distinct factions. The primary factions include: Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, and Applied Sci-Fi. (Detailed faction themes and relationships are intended for a separate 'Faction Compendium' - see Section II.B placeholder).
+Deckbuilding allows and encourages combinations of factions within a single deck, similar to how color pairs or shards function in Magic: The Gathering. This system promotes diverse deck archetypes, which are built around combined faction strategies and identities.
+(Placeholder - Idea for Future Development): Faction-based interactions exist as a soft, granular version of type matchups. These interactions provide subtle advantages or disadvantages rather than hard counters. This can manifest in various ways. For instance, creatures might receive modified outcomes when targeted by actions that originate from specific factions, thereby reflecting the thematic relationships and conflicts between these groups. The design intends for these benefits or drawbacks to be minor. Examples include a 1-point damage reduction when an attack is resisted, a slight increase or decrease in the duration of an applied status effect, or immunity to specific, less impactful status effects (such as a minor debuff). The goal is to avoid creating hard counters or overwhelming advantages through these faction-based interactions.
+
+B. Detailed Faction Themes & Relationships
+(This section is a placeholder. Detailed descriptions of faction themes, embodying concepts, structures, and inter-faction relationships will be maintained in a separate 'Faction Compendium' document for clarity and ease of update.)
+Example Factions (for context, full details in Compendium): Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, Applied Sci-Fi.
+
+C. Action Economy & Tempo
+No resource cost (mana/energy) is required to play cards from hand. Instead, play is limited by hand size and timing considerations.
+Tempo is managed primarily by ***Deployment Time*** (X), an initial period where a creature is inactive after entering play. Its duration can be manipulated by game effects. (See 'Status Effects Compendium' or 'Keyword Glossary' for full definition).
+
+D. Action Types & Triggering
+1. Creature Stats: Attack, Health, and Speed (which influences action order in conjunction with ***Priority (Action)*** - see 'Keyword Glossary'). Stats can be modified.
+2. Creature Abilities (Passive): These abilities are inherently passive. **Crucially, whenever their specified game event conditions are met (as defined in Section IV.C Trigger Events), they ALWAYS trigger automatically. This triggering requires no player decision or intervention at the moment it occurs.** This automatic triggering happens unless the creature is under an effect (such as `Exhausted`, `Muted`, `Ostracised`, or `Brainwashed` - see 'Status Effects Compendium') or affected by ***Deployment Time*** that explicitly prevents its passive abilities from functioning. When a passive ability triggers, its effect is formulated as an action. This action is then added to the Action Queue to be resolved in sequence, as detailed in Section II.G (Universal Action Queuing). Targeting for the effects of these queued actions is predetermined by the card's text (e.g., "target the attacker," "adjacent creatures," "the creature that triggered this") or is resolved randomly if specified by the card. Players do not choose targets for passive abilities when they trigger.
+3. Special Creature Archetypes:
+Support/Specialists: These may lack a standard Attack. They might possess an Active Ability (e.g., deal damage, heal, apply status) that the player queues during their planning phase each turn. The player selects any required targets at the time of queuing, according to the ability's rules. These abilities are subject to ***Deployment Time*** and queue mechanics.
+Automated Units: These may lack an Attack. They typically have powerful passive abilities that trigger automatically each turn (e.g., "OnTurnStart: deal 1 damage randomly"; "OnTurnEnd: grant 1 ***Armor*** adjacently"). The target for such abilities is predetermined by the ability itself.
+4. Creature Attacks: Players actively queue these during their planning phase. **These attacks are added as actions to the Action Queue.** Target selection for attacks might be restricted by rules (e.g., can only target the slot directly in front, cannot target a creature whose actions are ***Concealed*** or a creature with `Ghosted` - see 'Status Effects Compendium'). Targets are chosen at the time the attack is queued.
+5. Spells: These are active actions. The player plays them from hand (e.g., by dragging and dropping onto a target, if applicable). When a Spell is played, any costs (including ***Requisites*** - see 'Keyword Glossary') are paid, and any targets are chosen by the player at that time. The Spell's effect is then formulated as an action and added to the action queue. This action resolves according to standard queue mechanics (***Priority (Action)***, Speed, etc.). Spells can cause various game state changes, including movement, status effects, damage, healing, or card draw modification.
+6. Determinism: Game effects are deterministic. There is no percentage-based randomness for success or failure (except in cases of explicitly random targeting). Outcomes are predictable based on the current game state and the interactions of active effects.
+
+E. Card Management
+1. Drawing Cards (***Scheduled Draw*** - see 'Keyword Glossary'):
+Players draw a base number of cards (e.g., 1) only at the Start of their Turn. This is the sole occasion when cards naturally enter a player's hand from their deck.
+The number of cards drawn is calculated as: Base Draw + Sum of all positive/negative draw modifiers accumulated during the previous turn.
+No effect allows a player to draw cards immediately from their deck mid-turn.
+2. Draw Manipulation (Next Turn Draw Modification): This affects future card draws.
+Card advantage effects state: "Schedule X additional card draws for your next turn." This increments a counter that applies to the next turn's draw.
+Card disadvantage effects state: "Draw X fewer cards next turn" or "Scheduled draw reduced by X." This decrements the counter (to a minimum of 0 cards drawn).
+These modifiers accumulate additively during a turn. They are resolved together for the calculation of the next turn's Start of Turn draw.
+3. Discard Pile: This is the zone for used Spells and destroyed Creatures.
+4. Discarding from Hand:
+    This refers to the act of a player moving cards from their hand to their Discard Pile. All actions related to playing cards, including the payment of discard costs, are performed during the player's planning phase. The resulting card effects are then added to the action queue. The action queue subsequently resolves step-by-step, without further player intervention.
+    a.  As an Additional Cost: The only way cards are discarded from a player's hand is as an additional cost to play another card. When a player decides to play a card that has such a cost (e.g., "As an additional cost to play this card, discard 2 cards"), they select the specific card(s) to be discarded from their hand during their planning phase, at that very moment. These selected cards are moved to the Discard Pile immediately as part of fulfilling the cost. The card being played, along with its effect, is then added to the action queue.
+    b.  Discard as a Resolving Effect - Prohibition and Alternative: Game effects (originating from Spells, creature abilities, traps, etc.) that resolve from the action queue *cannot* cause a player to discard cards directly from their hand. Consider an effect traditionally designed to force an opponent (or oneself) to discard a card from hand as part of its resolution (e.g., an effect that might read "Target player discards 1 card"). In this game, such an effect must instead be implemented differently: it becomes an effect that reduces the number of cards that player will draw on their next turn. This is further detailed in Section II.E.2 (Draw Manipulation) with phrasing like "Target player draws 1 fewer card next turn." This design ensures that all hand manipulation related to card effects focuses on future resources (next turn's draw) rather than immediate hand reduction during the action resolution phase. This, in turn, maintains the uninterrupted flow of action resolution.
+    c.  Distinction from Draw Manipulation: Discarding from hand as an additional cost is an immediate action taken by the player during their planning phase. It affects the current hand size by player choice to enable another action. In contrast, Draw Manipulation, which includes effects that reduce the next turn's draw (now serving as the mechanical replacement for forced discard effects), is a delayed consequence that impacts the future resources available to a player.
+5. ***Banish***: This action permanently removes a card from the game. (See 'Keyword Glossary').
+6. Card Lifecycle & Reshuffling:
+A Spell is played -> its effect resolves -> the Spell card goes to the Discard Pile.
+A Creature is destroyed (due to reaching 0 HP or by a "destroy" effect) -> the Creature card goes from the battlefield to the Discard Pile.
+Reshuffle Trigger: This activates only when a player is required to draw cards at the Start of their Turn, but their Draw Deck contains fewer cards than the number scheduled to be drawn.
+Reshuffle Process:
+    The player attempts to draw the scheduled number of cards. Any cards remaining in the Draw Deck are drawn first (this could be 0 cards).
+    If the Draw Deck becomes empty and the draw requirement has not yet been met, the player's entire Discard Pile is shuffled. This shuffled pile becomes their new Draw Deck.
+    Immediately following the reshuffle, the player continues drawing cards from this new Draw Deck until the total number of cards drawn matches the number scheduled for that Start of Turn phase.
+7. Creature Reset: When creature cards are reshuffled from the Discard Pile back into the Deck, any temporary modifications (such as current HP changes, temporary stat alterations, and some status effects) are reset to their printed base values.
+8. ***Requisites***: Some powerful cards have conditions that must be met before they can be played or their abilities activated (e.g., sacrificing a creature, discarding cards). (See 'Keyword Glossary').
+9. Opponent Hand Size Checks: Due to the simultaneous nature of player turns and action resolution, any game effects or abilities that need to check the number of cards in an opponent's hand (e.g., for conditional effects, targeting, or information gathering) will perform this check at the End of the current Turn. This check occurs after all other actions for the turn have resolved, ensuring a stable and definitive hand state for such evaluations.
+
+F. Action Queue & Turn Flow Mechanics
+**Turn Structure Overview:**
+A turn consists of the following general phases:
+1.  Start of Turn Phase (***Scheduled Draw***, OnTurnStart triggers resolve from queue).
+2.  Planning Phase (Players queue their Spells, Creature Attacks, and Active Abilities for the turn).
+3.  **Pre-Resolution Interference Phase:** Before the main Action Queue resolves, the game checks for any active "Set-up" ***Interference*** effects (`Nullify`, `Reorder`, `Redirect` - see Section III.D.4 and 'Keyword Glossary'). If an action in the pending queue meets the trigger conditions of such an effect, that action is modified directly within the pending queue. This phase ensures these specific modifications occur before standard resolution.
+4.  Action Resolution Phase (The (potentially modified) Action Queue resolves action by action based on ***Priority (Action)***, Speed, and tie-breakers. Passive abilities triggering during resolution add their effects to this queue).
+5.  End of Turn Phase (Turn History updated, OnTurnEnd triggers resolve from queue, Hand Size checks for effects occur).
+
+1. Queue Manipulation (General): Beyond the specific Pre-Resolution ***Interference*** effects, other actions might interact with queue visibility (e.g., Intelligence revealing details of pending actions) or apply effects that modify how opponents perceive or plan around the queue. Direct destruction or unsolicited removal of actions from the queue by card effects during the Action Resolution Phase is not a feature.
+2. ***Priority (Action)*** Enhancement: Granting actions a higher ***Priority (Action)*** value causes them to resolve earlier, regardless of creature Speed. This is similar to priority mechanics in Pokémon. ***Priority (Action)*** enhancement can be an innate quality of a creature's action (e.g., "Priority Attack: +1 Priority"). Pre-Resolution ***Interference*** effects can also modify ***Priority (Action)***. (See 'Keyword Glossary').
+3.  Global ***Priority (Action)*** Modifiers: These are effects that impact the ***Priority (Action)*** of all actions for a specified duration.
+    Example ("Coordinated Advance"): Friendly actions this turn and for the next 3 turns get +1 ***Priority (Action)***.
+    Example ("Temporal Distortion"): For X turns, the normal action resolution order based on Speed is inverted.
+    *   **Priority Resolution during Temporal Distortion:** Actions are first grouped and resolved by ***Priority (Action)*** level.
+    *   **Speed Resolution during Temporal Distortion:** Within each ***Priority (Action)*** level, actions from creatures with lower Speed will act before creatures with higher Speed. If Speed is tied, use **Standard Tie-Breaking Protocol**.
+
+4.  **Standard Tie-Breaking Protocol:** Used when actions are tied in both ***Priority (Action)*** and creature Speed (or Speed during Temporal Distortion).
+    *   Lowest current (Health + ***Armor***) total resolves first.
+    *   If tied, lowest base Attack resolves first.
+    *   If still tied, resolve randomly (potential Karma System influence).
+
+5.  Tie-Breaking During Temporal Distortion: If actions subject to inverted Speed order (same ***Priority (Action)*** level, Temporal Distortion active) have tied Speed, use **Standard Tie-Breaking Protocol**.
+
+6.  ***Priority (Action)*** Reduction: Actions or effects can assign a negative modifier to an action's base ***Priority (Action)*** (e.g., Priority -1), causing later resolution. Pre-Resolution ***Interference*** effects can also modify ***Priority (Action)***.
+
+G. Universal Action Queuing (New Section)
+A fundamental principle of gameplay is that no card effect resolves instantaneously upon the card being played or its ability conditions being met. This principle means that every effect generated by a Spell or a creature ability (whether active or passive) becomes an action for the queue. Similarly, every player-initiated creature attack is treated as such an action. Furthermore, every triggered trap effect, which includes ***Strategic Disclosure*** effects as detailed in Section IV.A.1, is also formulated as an action and placed into the Action Queue. These actions are then resolved in sequence during the Action Resolution phase of the turn, according to the rules outlined in Section II.F (Action Queue & Turn Flow Mechanics).
+It's important to distinguish these card-generated queued actions from other player-initiated processes. For example, paying costs, such as discarding a card from hand as an additional cost (defined in II.E.4.a), is handled as described in that section. The mechanical process of drawing cards at the start of a turn (***Scheduled Draw***, per II.E.1) also follows its specific rules. Likewise, moving cards between zones as a direct consequence of a game rule – for instance, a creature being destroyed due to 0 Health and thus sent to the Discard Pile – is managed as detailed elsewhere. These types of processes are not "queued actions" generated by cards in the specific sense meant by this Universal Action Queuing principle.
+
+III. Core Gameplay Loops & Mechanics
+
+A. Information Warfare
+This involves constant interaction between revealing an opponent's hidden plans (Intelligence) and concealing your own plans or setting traps (Counter-Intelligence). This also includes using Intelligence actions to investigate obscured '???' entries in the Turn History, potentially revealing past enemy plans or triggering residual effects, such as ***Traps (Counter-Intelligence)*** or ***Strategic Disclosure*** benefits. Setting up ***Interference*** effects is also a key part of this loop.
+
+B. Board Manipulation & Control
+1. Logistics (Movement): Using abilities or Spells to reposition creatures (self, allies, or enemies) or to swap their positions. This optimizes attacks, blocks, and adjacency benefits, while also disrupting opponents' formations. Tactics include Post-Action Repositioning ("Hit and Run") and Positional Relays (buffs triggered by moving into a vacated slot).
+2. Movement Restriction: Using the `Heavy` status (see 'Status Effects Compendium'), specific abilities, or Slot Effects to lock down enemy creatures or protect allied creatures.
+3.  Slot Effects / Environmental Hazards: These are persistent or triggered effects on battlefield slots.
+    *   **Exclusivity & Replacement:** Only one such effect can be active per slot. If a new Slot Effect is applied to a slot that already has one, the **new Slot Effect replaces the old one**.
+    *   **Nature:** Slot Effects can be visible or hidden traps.
+    *   **Triggers:** Their triggers vary (e.g., On Move In/Out, Continuous Turn Start/End, Reactive, One-Time).
+    *   **Functionality:** They can also block actions (e.g., a "Movement Jammer" slot effect).
+    *   **Damage to Slots & Occupants:** When a slot is the target of damage, or when damage is redirected to a slot, that damage is applied to any creature currently occupying that slot. If the slot is empty, or if the creature is destroyed with excess damage, such damage is dealt to the player controlling that slot.
+4. Hazard Removal / Decontamination: Actions or abilities designed to ***Cleanse*** negative Slot Effects (see 'Keyword Glossary').
+5. Location (Weather): Cards that impose global modifiers on the entire battlefield. These effects can last for a set duration or until changed by another Location card.
+6. Flooding: Overwhelming the board with many weak or token creatures ("junk").
+7. ***Recruitment*** / ***Conversion***: Taking control of enemy creatures. (See 'Keyword Glossary' and Section IV.D).
+
+C. Creature Enhancement & Protection
+1. Setup: Actions or abilities that increase the core stats (Attack, Health, Speed) of a player's own creatures or allied creatures.
+2. Survivability: Actions like Heal (restoring HP), Add ***Armor***, or abilities that redirect attacks.
+3. Immunity/Protection: Granular immunity that negates specific negative effects.
+4. ***Cleanse***-ing: Actively removing negative status effects from friendly creatures or slots. (See 'Keyword Glossary').
+
+D. Disruption & Control
+1. Status Effects Application: A core mechanic involving the application of defined status effects (see 'Status Effects Compendium') to enemy creatures or slots.
+2. Red Tape: Effects that delay an opponent's actions, lower their ***Priority (Action)***, or add turns to a creature's ***Deployment Time***.
+3. Disable Archetype: Strategies focused on disabling key enemy functions, potentially via the `Exhausted` status (see 'Status Effects Compendium').
+4.  **Interference (Triggered Queue Modification):** Certain abilities or effects allow players to set up ***Interference*** conditions (pre-set queue modifications like `Nullify`, `Reorder`, `Redirect` - see 'Keyword Glossary') in advance. These trigger during the **Pre-Resolution Interference Phase**.
+    *   **UI Notification:** When an ***Interference*** effect modifies an action, the UI should clearly indicate this.
+    *   Types of ***Interference*** include: `Nullify (Interference)`, `Reorder (Interference)`, `Redirect (Interference)`.
+    The trigger conditions for these ***Interference*** effects are defined on the cards that create them.
+
+5.  Attack/Effect Redirection: All redirection of an opponent's queued actions is handled exclusively by pre-set `Redirect (Interference)` effects.
+6. ***Recruitment*** / ***Conversion*** / Mind Control: Effects that allow a player to take control of an opponent's creature. (See Section IV.D).
+
+E. Recursion & Recovery
+1. ***Revive***: An ability or Spell that returns a creature from Discard to battlefield, subject to ***Deployment Time***. (See 'Keyword Glossary').
+2. Return to Hand (from Battlefield): An ability or Spell that removes a creature from its slot and puts the card into its owner's hand.
+3. Return to Hand (from Discard): An ability or Spell that selects a card from a player's Discard Pile and puts it into that player's hand.
+
+F. Combat, Damage & Targeting
+0.  **Active Engagement for Combat Damage:** Creatures only deal combat damage as a result of performing an Attack action. No inherent "retaliation" damage unless by a specific ability.
+1.  Direct Damage: Reducing a target's Health.
+2.  Chain/Spread Damage: Damage that hits multiple distinct targets.
+3.  ***Armor***: A temporary HP pool. Damage hits ***Armor*** first. Recoil damage also hits ***Armor*** first. (See 'Keyword Glossary').
+4.  Life Drain / Siphoning: Dealing damage also heals the source or controller.
+5.  Targeting Nuances:
+    *   **Targeting Types:** Effects and actions utilize two primary forms: ***Creature-Targeting*** (homing on a creature) and ***Slot-Targeting*** (targets the slot itself). (See 'Keyword Glossary').
+        *   **If Targeted Creature Dies (under ***Creature-Targeting***):** The effect redirects to target the slot the creature last occupied.
+    *   **Damage to Slots & Occupants (General Rule):** Damage to a slot hits its occupant. If empty or occupant is overkilled, damage goes to the player controlling the slot.
+    *   **Targeting Restrictions & Patterns:** Many effects have specific restrictions (e.g., only front slot, only `Exhausted` creatures).
+
+IV. Detailed Mechanics & Specific Systems
+
+A. Traps & Strategic Disclosures
+These are effects tied to specific actions or creatures that trigger under particular conditions, often related to information warfare. When a trap's or strategic disclosure's trigger condition is met (as defined by the `OnRevealedByIntelligence` trigger in Section IV.C), its effect is formulated as an action and added to the Action Queue. This includes ***Traps (Counter-Intelligence)*** which are detrimental to the revealer, and ***Strategic Disclosures*** which are beneficial. (See 'Keyword Glossary' for definitions, and IV.A.1 for Strategic Disclosure mechanics).
+
+**Triggering Conditions for "On Being Revealed" Effects (Traps/Strategic Disclosures):**
+Defined by the `OnRevealedByIntelligence` trigger (Section IV.C). Primarily:
+1.  Intelligence Action on Turn History successfully reveals a '???' entry.
+2.  Application of `Revealed` status (see 'Status Effects Compendium') to an "Undercover" / `Concealed` creature.
+
+Type 1: ***Trap (Counter-Intelligence)*** ("On Being Revealed"): A passive ability that triggers a detrimental effect for the opponent who caused the reveal.
+Type 2: ***Trap (Counter-Intelligence)*** (Rider on a Queued Action): A hidden rider on a queued action. If that action is modified by an opponent's ***Interference*** effect, the rider triggers.
+
+Slot-based traps also queue their effect as an action when triggered.
+
+A.1. Strategic Disclosure Effects ("On Being Revealed" - Beneficial for Investigator/Revealer)
+Distinct from detrimental ***Traps (Counter-Intelligence)***, '***Strategic Disclosure***' effects are beneficial outcomes for the player who successfully causes the reveal of an opponent's concealed information.
+*   Flavor: Represents the investigating player gaining an advantage from exposing secrets.
+*   Mechanism: A player's reveal action (Intelligence on '???' or applying `Revealed` status) on an opponent's concealed information (that has a 'Strategic Disclosure' characteristic) triggers a beneficial effect for the revealing player, queued as an action.
+*   Purpose: Incentivizes Intelligence capabilities and adds risk for players using concealment.
+*   Triggering: Automatic when conditions are met.
+
+B. Status Effects
+Status effects are temporary or persistent conditions that modify creature behavior or stats. They are a core mechanic for creature enhancement, disruption, and control.
+**For a comprehensive list and detailed definitions of all status effects, please refer to the 'Status Effects Compendium' document.**
+The interaction of these status effects with game rules, abilities, and other mechanics is detailed throughout this GDD. Key statuses frequently referenced include `Exhausted`, `Muted`, `Ostracised`, `Brainwashed`, `Heavy`, `Doomed (X turns)`, `Concealed`, `Revealed`, `Compromised`, and `Deployment Time`.
+
+C. Trigger Events
+(This section remains as previously defined, outlining OnDamaged, OnTurnStart, etc. For brevity in this GDD example, it's assumed this section is fully detailed here or potentially extracted to its own 'Trigger Event Definitions' document in the future.)
+DOCUMENT USAGE GUIDELINES: [Included as per previous version]
+Trigger Events List: [Included as per previous version]
+
+D. Recruitment / Conversion Effects
+This section details mechanics for taking control of an opponent's creature via ***Recruitment*** (temporary) or ***Conversion*** (permanent). (See 'Keyword Glossary').
+1.  Definition: Effects allowing a player to gain control of an opponent's creature.
+2.  Targeting: Targets an enemy creature, chosen when the Spell is played or ability queued.
+3.  Control Change: Creature comes under the new player's control; original card ownership doesn't change. (Destroyed creatures go to owner's Discard; returned-to-hand creatures go to owner's hand).
+4.  Positioning & Movement: Creature moves to an empty friendly slot. Card effect specifies behavior if no empty slot.
+5.  Duration:
+    *   Temporary ***Recruitment***: Lasts X turns. Creature attempts to return to owner's side (or hand if no slot, or discard if hand full). Does not re-trigger 'OnEnterBattlefield' or reapply ***Deployment Time***.
+    *   Permanent ***Conversion***: Lasts until creature leaves play or is re-converted.
+6.  State Preservation: Creature retains current Health, ***Armor***, status effects (unless `Doomed (X turns)` is involved), base stats, and current ***Deployment Time***.
+7.  Action Queue & Fog of War:
+    *   **Cancellation of Previous Controller's Queued Actions:** When Recruited/Converted, previous controller's queued actions are cancelled.
+    *   **New Controller's Actions:** New controller can queue actions from next planning phase.
+    *   **"Time Bomb" Archetype:** Achieved through persistent negative status effects (e.g., `Earworm`, `Doomed (X turns)`, `Pandora` - see 'Status Effects Compendium') or detrimental passive abilities, not lingering actions.
+    *   **Concealment Status After Control Change:** `Concealed` status or `Undercover` ability benefits the new controller.
+    *   **Important Note on Action Persistence:** Actions resolve within the current turn.
+
+V. Game Design Philosophy & Balancing
+
+A. Game Tone
+Intentionally cynical, funny, lighthearted, with satire of modern absurdities, bureaucracy, internet culture, myth tropes.
+
+B. Balancing Focus
+Paramount goal, requiring ongoing playtesting, data analysis, iteration.
+1. Numerical Balance: Conservative initial numbers for stats, damage, healing, ***Armor***, durations.
+2. ***Priority (Action)*** Modifier Rarity: Cards granting direct ***Priority (Action)*** enhancements are less common or have higher costs due to their impact.
+3. ***Deployment Time*** Manipulation: Abilities reducing/bypassing ***Deployment Time*** are rare and carefully balanced.
+4. Status Effect Design Principle: Prioritize using existing, defined status effects (see 'Status Effects Compendium').
+5. Creature Ability Design Principle: Prioritize reusing established core mechanics and defined trigger types (Section IV.C). Trigger conditions are flexible.
+6. Faction Synergy & Strategic Versatility Principle: Optimal decks often blend factions to cover weaknesses.
+7. Underdog Affinity & Comeback Potential: Game aims for possible comebacks; tie-breaking can subtly favor weaker board states.
+8. Embracing and Leveraging Chaos for Strategic Depth: Winning involves creating complex, challenging scenarios for opponents.
+9. Rewarding Emergent and 'Game-Breaking' Synergies: Design embraces discovery of powerful, unconventional strategies, rewarding system knowledge and creativity, if balanced and thematic.
+10. ***Recruitment***/***Conversion*** Power Level: Permanent ***Conversion*** is rare/high-cost. Temporary ***Recruitment*** balanced by duration/impact.
+11. Balancing Levers: Opportunity cost, additional resource costs, space limitations, domino effects.
+12. Development Goals & Player Experience: Reward strategic planning, creative deckbuilding, adaptation, comebacks. Avoid complicated math, unfair luck.
+13. Prototype Karma System (Future Consideration): Subtle background mechanic to mitigate extreme "bad luck" streaks.
+14. Core Design Tenet - Double-Edged Sword: Significant positive effects often have drawbacks; significant negatives ideally offer an upside. (e.g., `Doomed (X turns)` gives +Attack before death - see 'Status Effects Compendium').
+
+VI. Illustrative Content Examples
+
+A. Example Status Groupings
+This section provides thematic groupings of status effects to illustrate their roles. For detailed definitions, always refer to the 'Status Effects Compendium'.
+*   **Core Mechanics / Initial State:** `Deployment Time`.
+*   **Information Warfare & Visibility:** `Concealed (X turns)`, `Revealed (X turns)`, `Compromised`, `Exposed`, `Heat Signature`, `Ghosted`, `Hipster`, `Invisible status effect`.
+*   **Debuffs & Major Impairments:** `Addicted`, `Exhausted`, `Chill`, `Earworm`, `Ostracised`, `Anchored`, `Bored`, `Impatient`, `Doomed (X turns)`, `Paranoid`, `Resurrected`, `Brainwashed`, `Muted`, `Burnout`, `Heavy`.
+*   **Buffs & Conditional Advantages:** `Coffeinated`, `Take Cover`, `Slacking Off`, `Bloodthirst`, `Blessed`, `Doomed (X turns)` (stat gain aspect), `Keep Calm`, `Cognitive Dissonance`, `Heavy` (attack double aspect).
+*   **Unique/Systemic Interactions:** `Diplomatic Immunity`, `Imposter Syndrome`, `Pandora`, `Honeypot`.
+
+B. Example Passive Ability Concepts
+Ninja Step (ignores slot effects), Resolute (survive lethal once), Adrenal Surge (heals low HP once), Overcharge/Reckless Assault (bonus damage + recoil), Kinetic Backlash (recoil based on damage dealt), Essence Tap/Vampiric Strike (life drain), ***Undercover*** (All actions this creature queues are ***Concealed Actions*** - see 'Keyword Glossary'). **Set-up Interference:** (e.g., "Pre-emptive Scramble: Set-up. If an opponent queues 3 or more Spell actions this turn, the opponent's Spell action with the highest base ***Priority (Action)*** ... is modified by this ***Interference*** effect.").
+
+C. Example Card Concepts
+(Refer to the separate document: "Illustrative Card Examples List" for specific card details.)
