@@ -141,10 +141,57 @@ Passive Ability: OnAttack if there are fewer than three enemy creatures on the b
 
 Flavor Text: "Initial funding proposal: Denied. Revised funding proposal: A city block mysteriously vaporized. Proposal: Approved."
 
-
-
 Drunken Sincerity (Mind & Paradox) - Spell
 
 Effect: Target an enemy creature. It gains Revealed (1 turn). Then, a random card from that creature's controller's hand is revealed to you.
 
 Flavor Text: "Look, I hic shouldn't tell you this, but your plan for next turn? It's hic TERRIBLE. Also, nice 'Secret Weapon' card you got there."
+
+
+Shitposting (Internet Culture) - Spell
+Effect: Target enemy creature. It gains Muted (1 turn). Its controller schedules 1 fewer card draw for their next turn.
+Flavor Text: "Quality content? Never heard of it. Enjoy this wall of text instead of your next card."
+
+Monkey Clicking (Internet Culture) - Creature
+Stats: 1/2/3
+Deployment Time (0 turns).
+Passive: OnTurnStart: Deal 1 damage to a random enemy creature.
+Flavor Text: "Witness the pinnacle of user testing. It's not smart, but it sure is persistent"
+
+Brainlet Watermill (Wojak meme) (Internet Culture) - Creature
+Stats: 0/4/1
+Deployment Time (2 turns). Starts with Burnout (1 stack) and Muted (2 turns).
+Passive: OnTurnStart: This creature gains Burnout (1 stack). If this creature has 2 or more Burnout stacks, its controller schedules 1 additional card draw for their next turn.
+Flavor Text: "Two turns of profound silence, one pre-existing existential crisis, and then... maybe a card. Progress!"
+
+Dead Man's Switch (Shadow Operations) - Creature
+Stats: 7/2/3
+Deployment Time (0 turns).
+Passive: OnDied(deathSource): If deathSource is an enemy creature, that creature gains Burnout (2 stack) and Exhausted. If deathSource is an enemy Spell, deal 5 damage to player owning the spell.
+Flavor Text: "This is from... Matilda"
+
+Creepypasta (Internet Culture) - Spell
+Effect: Target enemy creature. It gains Paranoid (2 turns) and Bloodthirst (2 turns).
+Flavor Text: "They say if you read its card text three times in a dark room, your opponent's creature gets really antsy. And maybe a little bit stabby."
+
+Body Positivity (Internet Culture) - Spell
+Effect: Target enemy creature. Half its current health rounding down.
+Flavor Text: "We're all 10's :)"
+
+Pigmalion Effect (Mind & Paradox) - Spell
+Effect: Target enemy creature. Apply Ghosted.
+Flavor Text: "Lookin' good Susan!"
+
+Roko's Basilisk (Mind & Paradox) - Creature
+Stats: 0/7/1
+Deployment Time (3 turns).
+Passive: OnDeploymentTimeComplete: All other creatures on the battlefield (friend and foe) gain Doomed (1 turn).
+Flavor Text: "You knew the risks of contemplating its existence. Now, contemplate your imminent non-existence."
+
+Trolley Problem (Mind & Paradox) - Spell
+Effect: Target one creature enemy creatures. The selected takes 3 damage. Other random creature (friend or foe) gains Anchored (2 turns).
+Flavor Text: "The ethics are debatable, but the outcome is efficient. For me, anyway."
+
+Sacrificial Ritual (Myths & Mysteries) - Spell
+Effect: Banish one target friendly creature. All other friendly creatures gain Blessed (1 stack).
+Flavor Text: "One soul for the pyre, a dozen blessings returned. As the tradition dictates."
