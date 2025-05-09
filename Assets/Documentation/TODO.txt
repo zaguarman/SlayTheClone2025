@@ -1,0 +1,40 @@
+Slot status effect archetypes (some slot status effects are invisible to the player until triggered, only one active at a time, some cant be overriden)
+** Scorched Earth: creature on this slot cant trigger passive abilities
+** Landmine: onEnter apply Damage to the first creature entering it.
+** onLeave: Creature cant leave slot for x turns (this triggers when trying to leave)
+** onEnter: creature gets one of the minor creature status effects (predetermined or random, long lasting or just once) Make all variants of this.
+** TurnEnd: creature gets damage over time when staying in a slot. (like a hazardous environment)
+** onDeployCreature(spawn): return creature to owners hand 
+** Force Field: Negate all damage done to the creature or slot for x Turns.
+** OnEnter: cleanse or deny next status effect (blessed)
+** Creature Damage output increased by 1 while active 
+** Creature Damage received reduced by 1 while active
+** Develop some more options
+
+Abilities that synergyze with status effects
+** Strong Leadership: Speeds deployment time from friendly creatures but deals damage to nearby creatures.
+** Hangry: If any attack drop by any mean is applied to this creature ignore it and double its attack instead. Only once, doesnt reset on ressurect. Ability disabled if attack is no longer dropped.
+** Heretic: +1 attack when damage received, -1 attack when healed 
+** Swap ability with enemy creature. Always single target.
+** Cant be status affected, neither raise stats
+** OnDeployed: Remove all status effects from friendly creatures
+** Feathered: Dont trigger on enter slot status effects
+** Defuser: Disable all traps and remove status effects on enter.
+** Minesweeper: Can't be targeted by homing attacks. Homing attacks damage is negated.
+** Zealot: Adjacent friendly creatures are damaged for 1 health every turn. Damages player owning it for 2 health every turn. 
+** Pusher: When moving towards a slot with a friendly creature can push them and occupy the slot (if the next slot is available) Triggers slot effects.
+
+Audited (X turns): This creature cannot have its base stats (Attack, Health, Speed as printed on the card) increased by friendly effects. If a friendly effect attempts to increase one of its base stats, its controller must discard 1 random card from their hand instead. If they cannot discard, this creature takes 2 damage. Lasts X turns.
+
+
+
+Update document to include:
+- Karma accounts for positive or negative roundings
+
+- Spell that gives a creature to the enemy (stragegizes with adding a plethora of bad status effects, poisoned gift)
+
+- Multi hit attacks
+
+- Ability to prevent queue triggered reactions (queue traps)
+
+- Creatures that trigger effects on deploy
