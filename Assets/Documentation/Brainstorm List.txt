@@ -20,8 +20,8 @@ Card Game Factions Overview
 			First Aid Kit
 			Flamethrower
 			GPS Tracker
-			Graffiti
 			Graphene
+			Graffiti
 			Hologram Projector
 			Hourglass
 			Hovercraft
@@ -42,13 +42,12 @@ Card Game Factions Overview
 			Office Plant
 			Passport
 			Phone
-			Piranha Plant
 			Plasma Rifle
 			Portal Gun
 			Portable Console
 			Power Armor
-			Protein Shake
 			Private Jet
+			Protein Shake
 			Real Cash
 			Robot
 			Semiconductors
@@ -59,10 +58,10 @@ Card Game Factions Overview
 			Suit
 			Sugar Substitutes
 			Supercomputer
+			Superglue
 			Surveillance Drone
 			Survival Kit
 			Synthesizer
-			Superglue
 			Tailored Suit
 			Tailored Uniform
 			Taser
@@ -71,6 +70,7 @@ Card Game Factions Overview
 			Teleporter
 			USB Stick
 			VR Headset
+			Venus Flytrap (Piranha Plant)
 			Water Bottle Filter
 			Workout Supplement
 			Yoga Mat
@@ -79,11 +79,11 @@ Card Game Factions Overview
 			Air Fryer
 			Air Purifier
 			Chinese Food
-			Mexican Food
 			Condom
 			Creatine
 			Freeze Dry Food
 			Japanese Curry
+			Mexican Food
 			Mocktail
 			Nicotine
 			Soy Milk
@@ -217,7 +217,6 @@ Card Game Factions Overview
 			CCTV Camera
 			Cold Storage Backup
 			Common Vulnerabilities and Exposures
-			Someone else's Computer (Cloud)
 			Crypto Wallet
 			Ctrl + Enter
 			Data Leak
@@ -228,8 +227,10 @@ Card Game Factions Overview
 			End-to-End Encryption
 			Feedback
 			Feedback Loop
+			Fingerprinting
 			Intellectual Property (Software/Data)
 			IOT
+			It's just pixels and static now
 			Key Card
 			Legacy Code
 			Logic Bomb
@@ -247,6 +248,7 @@ Card Game Factions Overview
 			Satellite Phone
 			Secure Channel
 			Solid State Drive
+			Someone else's Computer (Cloud)
 			Stable Connection
 			Subdermic Computer
 			System Crash
@@ -270,8 +272,8 @@ Card Game Factions Overview
 			Context Poisoning
 			Cryptographer
 			Cypher
-			Decypher
 			Data Mining
+			Decypher
 			Digital Editing
 			Disruptor
 			Email
@@ -284,6 +286,7 @@ Card Game Factions Overview
 			Linked Lunatics
 			Malinformation
 			Minimum Viable Product
+			Modal Dialog
 			Pair Programming
 			Pen-Testing
 			Promt Injection
@@ -294,8 +297,8 @@ Card Game Factions Overview
 			Rubber Duck Debugging
 			Scalability
 			Scope Creep
-			Search Engine Optimization
 			Scrum Master
+			Search Engine Optimization
 			Software "Engineer"
 			SOLID
 			SQL Injection
@@ -405,12 +408,13 @@ Card Game Factions Overview
 			Birb (Meme)
 			Bonk! (Meme)
 			Brainlet Watermill (Wojak meme)
+			Calm Your Tits
 			Caturday
 			Copypasta
 			Deep Fried Meme
 			DOGE
-			Doomer (meme)
 			dont dead open inside
+			Doomer (meme)
 			Expanding Brain (meme)
 			Hide the Pain Harold
 			I Guess We Doin Meta Commentary Now
@@ -424,10 +428,11 @@ Card Game Factions Overview
 			OMG
 			Pastafari
 			Pastafarian God
+			RL: good graphics but long tutorial
 			Stay Hydrated
 			Task Failed Successfully
-			Woman Yelling at Cat (meme)
 			WTF
+			Woman Yelling at Cat (meme)
 			XD
 			Yoink
 		Archetypes & Roles
@@ -457,9 +462,11 @@ Card Game Factions Overview
 			Astroturfing
 			Backroom Deal
 			Binding Contract
+			Blame Socialism (Gracias Socialismo, meme de derechuzos)
 			Broken Social Elevator
 			Business To Business
 			Business To Customer
+			Capitalism Made me Free
 			Cascade
 			Cashcow
 			Corporate Espionage
@@ -495,14 +502,16 @@ Card Game Factions Overview
 			Meritocratic Inheritance
 			Money As Only Ideology
 			Monopoly
-			Oligopoly
 			Non-Profit
+			Off App Fee
+			Oligopoly
 			Opt-In
 			Opt-Out
 			Opportunity Cost
 			Patent Pending
 			Patent Troll
 			Patented
+			Payback
 			Performance Improvement Plan
 			Performance Review
 			Personal Brand
@@ -524,6 +533,7 @@ Card Game Factions Overview
 			Short Squeeze
 			SICAV
 			Software As A Service
+			Sold Soul
 			Special Purpose Entities
 			Speculation
 			Stakeholder
@@ -541,13 +551,14 @@ Card Game Factions Overview
 			Usury
 			Vendor Lock-In
 			Venture Capital
-			White Collar Crime
 			Whine Menu
+			White Collar Crime
 			Window Dressing
 			Zero-Sum Game
 		Finance & Economics
 			American Dream
 			Arabic Investor
+			Buy Now, Pay Later
 			Capital Gains Tax
 			Car Insurance
 			Creative Accounting
@@ -574,6 +585,7 @@ Card Game Factions Overview
 			Multilevel Marketing Seller
 			Negative Growth
 			Notary
+			Payday
 			Pharma Lobby
 			Political Donations
 			Stock Market
@@ -587,12 +599,13 @@ Card Game Factions Overview
 			Bribery
 			Burnout (Workplace)
 			Butler
-			Carbon Copy (CC)
 			C-Suite
+			Carbon Copy (CC)
 			Chain Reaction
 			Charter Flight
 			Container Ship
 			Cooking The Books
+			Employment Application
 			English Teacher
 			False Meritocracy
 			Financial Advisor
@@ -605,13 +618,14 @@ Card Game Factions Overview
 			Mass Document Destruction
 			Mass Layoffs
 			Meetings About Meetings
-			Middle Manager
 			Micromanager
+			Middle Manager
 			Mortician
 			Multimillionaire Philanthropist
 			Overachieving Intern
 			Overtime
 			Personal Shopper
+			Pluriemployed Hustler
 			Salaryman
 			Slave Factory
 			Sommelier
@@ -653,9 +667,9 @@ Card Game Factions Overview
 			Fake Data Leak
 			Fake Fake News
 			Fake News
-			Falsified Documents
 			False Flag Operation
 			False Report
+			Falsified Documents
 			Frame Job
 			Ghost Guns
 			Guerrilla Tactics
@@ -674,7 +688,6 @@ Card Game Factions Overview
 			Invisibility Cloak
 			It Wasn't Me
 			Known Unknown
-			Unknown Unknown
 			Laser Microphone
 			Lawyer (The Fixer)
 			Lie Detector
@@ -687,6 +700,7 @@ Card Game Factions Overview
 			Mole (Spy)
 			Natural Death
 			Nonchalant Agent
+			Not On My Watch
 			Panic Button
 			Persuasion Vs Coercion
 			Plausible Deniability
@@ -694,6 +708,7 @@ Card Game Factions Overview
 			Political Decoy
 			Political Police
 			Polonium Umbrella
+			Preemptive Strike
 			Private Investigator
 			Protocol Enforcers (Men In Black)
 			Puppeteer
@@ -725,6 +740,7 @@ Card Game Factions Overview
 			Traceability
 			Tracking Beacon
 			Undercover Agent
+			Unknown Unknown
 			Wet Work
 			Whistle
 			Whistleblower
@@ -753,65 +769,63 @@ Card Game Factions Overview
 		Governance & Politics
 			Alegal
 			Alien Body (Area51)
-			Apex
 			Anti Homeless Architecture
+			Apex
 			Authoritarianism
 			Ban Hammer
 			Behavioral Sink
+			Big Brother
+			Blackwhite
 			Border Crossing
-			Naturalization
 			Bribery
 			Constitution
 			Controlled Dissidence
 			Coup D'Etat
 			Cyber Cop
+			Deeply Concerned
 			Demagogue
 			Demonstration
-			Public Protest
 			Diplomata
 			Disruptor
 			Domestic Security Agency (DSA, NSA Parodia)
+			Doublethink
+			Dystopian Present
 			Embargo
 			Emergency Broadcast
-			Everybody Is Equal Before The Law
 			Eunuch
+			Everybody Is Equal Before The Law
 			Exodus
 			Expropriate
+			Facecrime
 			Filibuster
 			Gerontocracy
-			Kakistocracy
 			Globalization
 			Great Depression
 			Gun Control
 			Hacker
 			Illuminati
 			Internal Revenue Service (IRS)
+			Kakistocracy
 			King's Jester
 			Kleptocracy
 			Lawyer (State)
-			Local Police
 			Limited Resources
+			Local Police
 			Mass Emigration
 			Mass Inmigration
-			Ministry Of Truth
+			Ministry Of Equality
 			Ministry Of Love
 			Ministry Of Peace
 			Ministry Of Plenty
-			Big Brother
-			Newspeak
-			Facecrime
-			Thoughtcrime
-			Oldthink
-			Blackwhite
-			Vaporize
-			Purge
-			Doublethink
-			Ministry Of Equality
 			Ministry Of Propaganda
+			Ministry Of Truth
 			Modus Operandi
 			National Treasury
+			Naturalization
 			Negative Priming
+			Newspeak
 			Nobel Peace Price
+			Oldthink
 			OPEP+
 			OVNI
 			Panem Et Circenses
@@ -831,12 +845,13 @@ Card Game Factions Overview
 			Praegustator
 			President
 			Prince
-			The King
 			Privatization
 			Professors
 			Propaganda
 			Protección Diplomática
+			Public Protest
 			Pullitzer Prize
+			Purge
 			Purge Day
 			Quid Pro Quo
 			Radar Camera
@@ -861,18 +876,21 @@ Card Game Factions Overview
 			Tax Season
 			Terrorist Attack
 			The Fifth Amendment
+			The King
+			Thoughtcrime
 			Tower Of Babel
 			Trade War
 			Traffic Jam
 			Universal Healthcare
 			Utopia
-			Dystopian Present
+			Vaporize
 			Veni Vidi Vici
 			Vernacular Information Dissemination
 			WWIII
 		Warfare & Military
 			Anthrax Laboratory
 			Asymmetric Warfare
+			Blitzkrieg
 			Breaking News
 			Ceasefire
 			Chronos Feast Order
@@ -885,25 +903,24 @@ Card Game Factions Overview
 			Lost Landmine
 			Manhattan Project
 			Martial Law
-			Militar Salute
 			Mercenaries
+			Militar Salute
 			Misile Crisis
 			Mutually Assured Destruction
 			Navy Soldier
-			Nuclear Summer
-			Samurai
 			Ninja
 			Nuclear Disaster
 			Nuclear Submarine
-			Police Line Do Not Cross
+			Nuclear Summer
 			Peace Force
 			Peace Treaty
+			Police Line Do Not Cross
 			Retaliation
+			Samurai
 			Si Vis Pacem, Para Bellum
 			Soft Landing
 	Faction: Myths & Mysteries
 		Mythic Beings & Deities
-			Horsemen Of Apocalypse
 			Ancient Greece Gods
 			Ancient Rome Gods
 			Baphomet
@@ -926,6 +943,7 @@ Card Game Factions Overview
 			Head Of Medusa
 			Hermit
 			High Priestess
+			Horsemen Of Apocalypse
 			Justice
 			Lilith
 			Living Dead
@@ -936,8 +954,8 @@ Card Game Factions Overview
 			Minotaur Guardian
 			Modern Gods, Typical
 			Monk
-			Mummy
 			Mulo (Romani Folk Creature)
+			Mummy
 			Ness Monster
 			Norne
 			Omniscient Space-Time Bending Bearded Wizard
@@ -946,8 +964,8 @@ Card Game Factions Overview
 			Pleiades
 			Celaeno, Electra, Maia, Merope, Pleione, Taygeta, Atlas
 			Pope
-			Preacher
 			Praegustator
+			Preacher
 			Robinhood
 			Siren
 			Sorcerer
@@ -979,6 +997,7 @@ Card Game Factions Overview
 			Yeti
 			Zealot
 		Ancient & Mythic Concepts
+			7 Sins
 			Acting In Bad Faith
 			Aeon
 			Afterlife
@@ -1004,7 +1023,6 @@ Card Game Factions Overview
 			Exodus
 			Fire Stolen From The Gods
 			Free Will
-			Predestination
 			God's Grace
 			Harmony
 			Hero's Journey
@@ -1015,7 +1033,6 @@ Card Game Factions Overview
 			Lucid Dreaming
 			Lucky Clover
 			Luna
-			Sol
 			Masonry
 			Memento Mori
 			Midas Hand
@@ -1027,6 +1044,7 @@ Card Game Factions Overview
 			Poetic Justice
 			Portal To Hell
 			Potion
+			Predestination
 			Prophecy
 			Quintessence
 			Rebirth
@@ -1035,8 +1053,8 @@ Card Game Factions Overview
 			Rigor Mortis
 			Sacrificial Ritual
 			Second Opportunity
-			7 Sins
 			Sisyphus
+			Sol
 			Stupid Mysticism
 			Sunrise
 			Sunset
@@ -1053,7 +1071,6 @@ Card Game Factions Overview
 			Anthology
 			Astrolabe
 			Constellation
-			Night Sky
 			Crystal Ball
 			Dancing Crabs Island
 			Dead Sea Scrolls
@@ -1074,6 +1091,7 @@ Card Game Factions Overview
 			Monkey Hand
 			Nacre
 			Necronomicon
+			Night Sky
 			Omamori
 			Phoenix Feather
 			Red Cross
@@ -1121,8 +1139,8 @@ Card Game Factions Overview
 			Ionosphere
 			Kardashev Zenith
 			Lambda
-			Magnetosphere
 			Magnetic Field
+			Magnetosphere
 			Mathematician
 			Metastudy
 			Meteor Strike
@@ -1136,9 +1154,9 @@ Card Game Factions Overview
 			Philosophy Phd
 			Pioneer
 			Prion Disease
+			Quark
 			Quantum Entanglement
 			Quantum Physicist
-			Quark
 			Scientific Method
 			Sea Star
 			Sigma
@@ -1147,14 +1165,17 @@ Card Game Factions Overview
 			String Theory
 			Summa Cum Laude
 			T-Rex Bone
+			Tetration
 			Traceability
 			Wave Particle Duality
 			White Dwarf (Star)
 			Wormhole
 		Medicine & Biology
 			Alzheimer Cure
+			Ankylorhiza
 			Anti-Radiation Cactus
 			Artificial Womb
+			Bioengineered Meat
 			Biohacking
 			Bioweapon
 			Black Box
@@ -1162,8 +1183,6 @@ Card Game Factions Overview
 			Clone
 			Cold Fusion
 			Contagious Disease
-			Viral Outbreak
-			Pandemy
 			DNA Test
 			Energy Transition
 			Epigenetics
@@ -1177,16 +1196,17 @@ Card Game Factions Overview
 			Hyperion (Tree)
 			Incision
 			Insulin
-			Bioengineered Meat
 			Malady
 			Medical Records
 			Microdosing
 			Morbid Obesity
+			Pandemy
 			Pidgeon Experiments
 			Placebo
 			Radiation Sickness
 			State Of The Art
 			Vaccine
+			Viral Outbreak
 		Futurism & Sci-Fi Concepts
 			Asteroid Mining Colony
 			Biodegradable Plastic
@@ -1216,14 +1236,13 @@ Card Game Factions Overview
 			Cognitive Maneuver
 			Compartmentalization
 			Confirmation Bias
-			Controlled Chaos
 			Contradiction
+			Controlled Chaos
 			Coping Mechanism
 			Copium
 			Damocles Sword
 			Daydreaming
 			Depression
-			Mental Breakdown
 			Designated Scapegoat
 			Dissociation
 			Domino Effect
@@ -1243,6 +1262,7 @@ Card Game Factions Overview
 			Halo Effect
 			Herd Mentality
 			Heuristics
+			Hold That Thought
 			Hypnosis
 			Imposter Syndrome
 			Information Asymmetry
@@ -1255,14 +1275,16 @@ Card Game Factions Overview
 			Loss Aversion
 			Main Character Energy
 			Main Character Syndrome
+			Mandelbrot
 			Maslow's Pyramid
 			Mens Sana In Corpore Sano
+			Mental Breakdown
 			Momentum
 			Murphy's Law
 			Narcissist
+			Neurodiversity
 			Nonchalant
 			Normalcy Bias
-			Neurodiversity
 			Optimist
 			Ostracism
 			Oxymoron
@@ -1295,6 +1317,7 @@ Card Game Factions Overview
 			The Human Factor
 			Thought Experiment
 			Tourette
+			Trick Question
 			Trolley Problem
 			Uncanny Valley
 			Unity
@@ -1302,10 +1325,10 @@ Card Game Factions Overview
 			YOLO
 			Zeno's Paradoxes
 		Philosophy & Logic
-			Aesthetic (Philosophy Of Beauty)
 			Ad Hoc
 			Ad Hominem
 			Ad Nauseam
+			Aesthetic (Philosophy Of Beauty)
 			Appeal To Authority
 			Appeal To Nature
 			Appeal To Tradition
@@ -1319,9 +1342,11 @@ Card Game Factions Overview
 			Cogito, Ergo Sum
 			Duality
 			Errare Humanum Est
+			Exempli Gratia
 			False Dichotomy
 			Gambler's Fallacy
 			Hanlon's Razor
+			Id Est
 			Introspection
 			Ipso Facto
 			Law Of Attraction
@@ -1338,6 +1363,7 @@ Card Game Factions Overview
 			Quid Pro Quo
 			Reductio Ad Absurdum
 			Roko's Basilisk
+			Shakespeare, written by a Monkey
 			Slippery Slope
 			Status Quo
 			Tempus Fugit
@@ -1345,6 +1371,7 @@ Card Game Factions Overview
 			Whataboutism
 	Faction: Zeitgeist & Archetypes
 		Social Trends & Commentary
+			14% of all statistics are made up on the spot (Simpsons reference)
 			Agnosticism
 			All Along The Watchtower
 			Amuse Bouche
@@ -1355,20 +1382,22 @@ Card Game Factions Overview
 			Body Positivity
 			Body Shaming
 			Burn The Candle At Both Ends
+			Camper Van
 			Canon
 			Child Support
 			Color Theory
 			Consumism
 			Deja Vu
 			Designed In California, Assembled In China
+			Desperation Operation
 			Duelo A Garrotazos
 			Dunning Kruger Effect
+			E-Girl Bath Water
 			Earworm
 			Ecological Anxiety
 			Edgar's Fall
 			Euthanasia
 			Fatphobic
-			Weight Loss Drug
 			Feminine Power Fantasy
 			Feminist Dance
 			Gaslight
@@ -1377,14 +1406,21 @@ Card Game Factions Overview
 			Grazie Signore
 			Grown In Argentina, Packed In Thailand
 			I don't want to be this kind of animal anymore (disco elysium reference) (zeitgeist)
+			IQ's Bell Curve
+			If paying for a game doesn't make it yours, pirating isn't stealing
 			In This House We Obey The Laws Of Thermodynamics!
 			Industrial Society and Its Future
 			In-group/Out-group Ethnophaulism
 			Inverted Population Pyramid
 			It's All Disco, Baby (disco elysium reference) (zeitgeist)
+			It's a terrible day for rain. (Roy Mustang Fullmetal Alchemist reference)
+			Its vision is based on movement (Jurassic Park T-Rex reference)
 			Jet Lag
 			Junk Mail
+			LOCAL MAN THINKS WRESTLING IS REAL
 			Ladies First
+			Lead Paint (simpsons reference)
+			Leave the Multi-Billion Dollar Company Alone!
 			Left Hand Free
 			Listen Kid (I Dont Have Much Time)
 			Loneliness Epidemic
@@ -1402,19 +1438,23 @@ Card Game Factions Overview
 			Modern Art
 			Morning Commute
 			New Rich
-			Old Money Style
 			Night Shift
 			Nihilism
 			No Masters
 			Nocturne In F Minor, Op. 55, No. 1
+			OLD MAN YELLS AT CLOUD
+			Old Money Style
+			One for the road
 			Operation Mayhem
 			Overton Window
+			Pa que haiga lujo
 			Paella
 			Paradise Circus
 			Parasite
 			Passive Smoker
 			Chain Smoker
 			Performative Allyship
+			Pixelart
 			Political Correctness
 			Pro-Choice
 			Pro-Life
@@ -1432,6 +1472,7 @@ Card Game Factions Overview
 			Slack Off
 			Snake Oil
 			Soap
+			Squeak (Rat Race video)
 			Stepstone
 			Stonewalling
 			Strike (Huelga)
@@ -1439,8 +1480,10 @@ Card Game Factions Overview
 			Tax The Rich
 			Tessellate
 			Texting while Driving
+			The future is coming on
 			The Great Replacement Theory
 			The Grind (Meme)
+			The Rat Race
 			This Is Fine
 			This Is From Matilda
 			Tiger Parenting
@@ -1450,22 +1493,25 @@ Card Game Factions Overview
 			Virtue Signaling
 			Wasted Potential
 			Weaponized Incompetence
+			Weight Loss Drug
 			What is reality anyway? A collective delusion? (disco elysium reference) (zeitgeist)
+			Whistle (Silbar)
 			White Russian
 			White Woman Missing Syndrome
-			Whistle (Silbar)
 			Wishful Thinking
 			Work Life Balance
 			World's Smallest Violin
-			Yvan Eht Nio (aniram atsila, Uncle Joe Poster)
+			Yesn't (Yes & No)
 			You Cannot Eat Money
+			Yvan Eht Nio (aniram atsila, Uncle Joe Poster)
 			Zeitgeist
+			that it's all in your head (gorillaz)
 		Archetypes & Roles
 			Annoying Customer
 			Antihero
+			Blue Haired Woman
 			Bodybuilder
 			Boomer
-			Blue Haired Woman
 			Construction Worker
 			Copycat
 			Culturist

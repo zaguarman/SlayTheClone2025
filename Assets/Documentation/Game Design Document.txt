@@ -12,6 +12,8 @@ Game Design Document
 For detailed definitions of specific elements, this GDD refers to the following external companion documents:
 *   **'Keyword Glossary'**: Defines recurring game mechanics and terms.
 *   **'Status Effects Compendium'**: Provides detailed definitions for all status effects. All status effects used in card design **must** be from this Compendium, and card text **must** use the full, precise notation as defined therein (e.g., `Chill (1 turn)`). New status effects can be proposed but require design approval and addition to the Compendium before use.
+*   **'Slot Effects Compendium'**: Provides detailed definitions for all slot-based status effects.
+*   **'Trigger Events List'**: Defines common game events that can trigger passive abilities or other effects.
 *   **'Illustrative Card Examples List'**: Provides examples of cards. These examples must adhere to defined mechanics and status effects; placeholder terms should be mapped to existing GDD mechanics or clarified with design approval.
 *   **Stability of Definitions in External Docs:** The names and core definitions within the external documents are considered stable and should not be altered without explicit design approval. This ensures consistent interpretation.
 *   **GDD Context:** While external documents provide precise definitions, this GDD explains how these elements interact within the broader game systems.
@@ -42,7 +44,7 @@ Denying info to the opponent.
 
 Controlling the global 'Location' effect (currently prototyped as 'Weather,' but will encompass various environmental or zone-wide states that fulfill the same role).
 
-Creating/manipulating status effects on creatures and slots. (See 'Status Effects Compendium').
+Creating/manipulating status effects on creatures and slots. (See 'Status Effects Compendium' and 'Slot Effects Compendium').
 
 Strategically moving creatures (friendly or enemy) for advantage.
 
@@ -50,7 +52,7 @@ Key Interaction: Tactical Positioning
 
 Battlefield: Each player controls one row of 5 creature slots, facing each other symmetrically.
 
-Slot Occupation: A maximum of one creature can occupy each slot. Placement is therefore key.
+Slot Occupation: A maximum of one creature can occupy each slot. Placement is therefore key. **A player's slots can only be occupied by creatures they control. If an opponent's creature moves to a player's slot via an effect like *Recruitment* or *Conversion*, control of that creature changes to that player (see Section IV.D for *Recruitment* / *Conversion*). Thus, any creature occupying a player's slot is considered friendly to that player and under their control.**
 
 Adjacency: Non-edge slots have two adjacent friendly slots (left and right) and one opposing enemy slot. Edge slots have one adjacent friendly slot and one opposing enemy slot.
 
@@ -141,7 +143,6 @@ Reshuffle Process:
 
 F. Action Queue & Turn Flow Mechanics
 **Turn Structure Overview:**
-A turn consists of the following general phases:
 1.  Start of Turn Phase (***Scheduled Draw***, OnTurnStart triggers resolve from queue).
 2.  Planning Phase (Players queue their Spells, Creature Attacks, and Active Abilities for the turn, paying any additional costs as per Section II.E.4.a).
 3.  **Pre-Resolution Interference Phase:** Before the main Action Queue resolves, the game checks for any active "Set-up" ***Interference*** effects (`Nullify`, `Reorder`, `Redirect` - see Section III.D.4 and 'Keyword Glossary'). If an action in the pending queue meets the trigger conditions of such an effect, that action is modified directly within the pending queue. This phase ensures these specific modifications occur before standard resolution.
@@ -176,13 +177,24 @@ This involves constant interaction between revealing an opponent's hidden plans 
 
 B. Board Manipulation & Control
 1. Logistics (Movement): Using abilities or Spells to reposition creatures (self, allies, or enemies) or to swap their positions. This optimizes attacks, blocks, and adjacency benefits, while also disrupting opponents' formations. Tactics include Post-Action Repositioning ("Hit and Run") and Positional Relays (buffs triggered by moving into a vacated slot).
-2. Movement Restriction: Using the `Heavy` status (see 'Status Effects Compendium'), specific abilities, or Slot Effects to lock down enemy creatures or protect allied creatures.
-3.  Slot Effects / Environmental Hazards: These are persistent or triggered effects on battlefield slots.
-    *   **Exclusivity & Replacement:** Only one such effect can be active per slot. If a new Slot Effect is applied to a slot that already has one, the **new Slot Effect replaces the old one**.
-    *   **Nature:** Slot Effects can be visible or hidden traps.
-    *   **Triggers:** Their triggers vary (e.g., On Move In/Out, Continuous Turn Start/End, Reactive, One-Time).
-    *   **Functionality:** They can also block actions (e.g., a "Movement Jammer" slot effect).
-    *   **Damage to Slots & Occupants:** When a slot is the target of damage, or when damage is redirected to a slot, that damage is applied to any creature currently occupying that slot. If the slot is empty, or if the creature is destroyed with excess damage, such damage is dealt to the player controlling that slot.
+2. Movement Restriction: Using the `Heavy` status (see 'Status Effects Compendium'), specific abilities, or Slot Effects (see 'Slot Effects Compendium') to lock down enemy creatures or protect allied creatures.
+3.  Slot Effects / Environmental Hazards: These are persistent or triggered conditions applied to specific battlefield slots that affect creatures or actions related to those slots.
+
+    *   **Single Source of Truth:** For detailed definitions of individual Slot Effects (e.g., Landmine, Scorched Earth), refer to the external companion document: **'Slot Effects Compendium'**.
+    *   **Exclusivity & Replacement:** Only one Slot Effect can be active per slot at any given time. If a new Slot Effect is applied to a slot that already has an active Slot Effect, the **new Slot Effect replaces the old one**. The old effect is immediately removed, and its ongoing influences cease.
+    *   **Visibility:**
+        *   **Visible Slot Effects:** These are openly displayed on the slot, and both players are aware of their presence and type.
+        *   **Hidden Slot Effects:** These are not visible to the opponent on the slot. The opponent is unaware of their presence or type until the Slot Effect is triggered by a game event (e.g., a creature entering a slot with a hidden 'Landmine') or revealed by a specific game mechanic (e.g., an "Inspect Slot" Intelligence action, if such a mechanic is implemented). Once triggered, a Hidden Slot Effect typically reveals itself as part of its resolution.
+    *   **Triggers:** Slot Effects are activated by specific game events, as defined by the `Trigger Events List` and detailed in the effect's description in the 'Slot Effects Compendium'. Common triggers include `OnEnterSlot`, `OnBeforeLeaveSlot`, `OnTurnStart` (when occupied), `OnTurnEnd` (when occupied), or continuous effects while a creature occupies the slot. The specific trigger logic (e.g., checking if the slot is occupied by an enemy/friendly creature) is part of the individual Slot Effect's definition.
+    *   **Functionality:** Slot Effects can cause a wide range of outcomes, including:
+        *   Dealing damage to creatures.
+        *   Applying creature status effects.
+        *   Modifying creature stats while on the slot.
+        *   Altering movement rules or costs.
+        *   Restricting or enabling certain actions (e.g., a "Jamming Field" might prevent Spells from targeting the slot).
+        *   Affecting the controller of the slot (e.g., dealing damage if the slot is empty and targeted).
+    *   **Damage to Slots & Occupants (General Rule):** When a slot is the target of damage, or when damage is redirected to a slot (e.g., from a creature-targeted effect whose target died), that damage is applied to any creature currently occupying that slot. If the slot is empty, or if the creature occupying the slot is destroyed and there is excess damage, such damage is dealt to the player who controls that slot.
+    *   **Cleansing Slot Effects:** Specific game actions or abilities, often denoted by the `Cleanse (SlotEffect)` keyword (see 'Keyword Glossary'), can remove Slot Effects from a slot. If a Hidden Slot Effect is cleansed before it triggers, it is removed without its effect occurring and without being revealed to the opponent (unless the cleanse action itself reveals it).
 4. Hazard Removal / Decontamination: Actions or abilities designed to ***Cleanse*** negative Slot Effects (see 'Keyword Glossary').
 5. Location (Weather): Cards that impose global modifiers on the entire battlefield. These effects can last for a set duration or until changed by another Location card.
 6. Flooding: Overwhelming the board with many weak or token creatures ("junk").
@@ -236,7 +248,7 @@ Defined by the `OnRevealedByIntelligence` trigger (Section IV.C). Primarily:
 Type 1: ***Trap (Counter-Intelligence)*** ("On Being Revealed"): A passive ability that triggers a detrimental effect for the opponent who caused the reveal.
 Type 2: ***Trap (Counter-Intelligence)*** (Rider on a Queued Action): A hidden rider on a queued action. If that action is modified by an opponent's ***Interference*** effect, the rider triggers.
 
-Slot-based traps also queue their effect as an action when triggered.
+Slot-based traps (defined in 'Slot Effects Compendium') also queue their effect as an action when triggered.
 
 A.1. Strategic Disclosure Effects ("On Being Revealed" - Beneficial for Investigator/Revealer)
 Distinct from detrimental ***Traps (Counter-Intelligence)***, '***Strategic Disclosure***' effects are beneficial outcomes for the player who successfully causes the reveal of an opponent's concealed information.
@@ -251,22 +263,20 @@ Status effects are temporary or persistent conditions that modify creature behav
 The interaction of these status effects with game rules, abilities, and other mechanics is detailed throughout this GDD. Key statuses frequently referenced include `Exhausted`, `Muted`, `Ostracised`, `Brainwashed`, `Heavy`, `Doomed (X turns)`, `Concealed`, `Revealed`, `Compromised`, and `Deployment Time`.
 
 C. Trigger Events
-(This section remains as previously defined, outlining OnDamaged, OnTurnStart, etc. For brevity in this GDD example, it's assumed this section is fully detailed here or potentially extracted to its own 'Trigger Event Definitions' document in the future.)
-DOCUMENT USAGE GUIDELINES: [Included as per previous version]
-Trigger Events List: [Included as per previous version]
+This section outlines common game events that can trigger passive abilities or other effects. These events are defined in the external document **'Trigger Events List'**. Many triggers provide contextual information (e.g., source of damage, specific status applied) that can be used by an ability's logic.
 
 D. Recruitment / Conversion Effects
 This section details mechanics for taking control of an opponent's creature via ***Recruitment*** (temporary) or ***Conversion*** (permanent). (See 'Keyword Glossary').
 1.  Definition: Effects allowing a player to gain control of an opponent's creature.
 2.  Targeting: Targets an enemy creature, chosen when the Spell is played or ability queued.
 3.  Control Change: Creature comes under the new player's control; original card ownership doesn't change. (Destroyed creatures go to owner's Discard; returned-to-hand creatures go to owner's hand).
-4.  Positioning & Movement: Creature moves to an empty friendly slot. Card effect specifies behavior if no empty slot.
+4.  Positioning & Movement: Creature moves to an empty friendly slot on the new controller's side. Card effect specifies behavior if no empty slot. (See Section I - Slot Occupation for rules on slot control).
 5.  Duration:
     *   Temporary ***Recruitment***: Lasts X turns. Creature attempts to return to owner's side (or hand if no slot, or discard if hand full). Does not re-trigger 'OnEnterBattlefield' or reapply ***Deployment Time***.
     *   Permanent ***Conversion***: Lasts until creature leaves play or is re-converted.
 6.  State Preservation: Creature retains current Health, ***Armor***, status effects (unless `Doomed (X turns)` is involved), base stats, and current ***Deployment Time***.
 7.  Action Queue & Fog of War:
-    *   **Cancellation of Previous Controller's Queued Actions:** When Recruited/Converted, previous controller's queued actions are cancelled.
+    *   **Cancellation of Previous Controller's Queued Actions:** When Recruited/Converted, previous controller's queued actions from that creature are cancelled.
     *   **New Controller's Actions:** New controller can queue actions from next planning phase.
     *   **"Time Bomb" Archetype:** Achieved through persistent negative status effects (e.g., `Earworm`, `Doomed (X turns)`, `Pandora` - see 'Status Effects Compendium') or detrimental passive abilities, not lingering actions.
     *   **Concealment Status After Control Change:** `Concealed` status or `Undercover` ability benefits the new controller.
@@ -283,7 +293,7 @@ Paramount goal, requiring ongoing playtesting, data analysis, iteration.
 2. ***Priority (Action)*** Modifier Rarity: Cards granting direct ***Priority (Action)*** enhancements are less common or have higher costs due to their impact.
 3. ***Deployment Time*** Manipulation: Abilities reducing/bypassing ***Deployment Time*** are rare and carefully balanced.
 4. Status Effect Design Principle: Prioritize using existing, defined status effects from the 'Status Effects Compendium'. If a new status effect concept arises, it must be for a fundamentally new type of condition and undergo design approval before being added to the Compendium and used.
-5. Creature Ability Design Principle: Prioritize reusing established core mechanics and defined trigger types (Section IV.C). Trigger conditions are flexible. **Effects that give an opponent a choice during resolution are to be avoided; outcomes should be deterministic or conditional on game state.**
+5. Creature Ability Design Principle: Prioritize reusing established core mechanics and defined trigger types (from 'Trigger Events List'). Trigger conditions are flexible. **Effects that give an opponent a choice during resolution are to be avoided; outcomes should be deterministic or conditional on game state.**
 6. Faction Synergy & Strategic Versatility Principle: Optimal decks often blend factions to cover weaknesses.
 7. Underdog Affinity & Comeback Potential: Game aims for possible comebacks; tie-breaking can subtly favor weaker board states.
 8. Embracing and Leveraging Chaos for Strategic Depth: Winning involves creating complex, challenging scenarios for opponents.
