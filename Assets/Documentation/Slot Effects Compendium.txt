@@ -3,7 +3,7 @@ Slot Effects Compendium
 **DOCUMENT USAGE GUIDELINES (for this Slot Effects Compendium):**
 
 *   **Definitive List:** This document contains the definitive list and specific definitions of all standardized Slot Effects in the game.
-*   **Core Mechanics in GDD:** For general rules on how Slot Effects function (e.g., exclusivity, replacement, visibility, cleansing), refer to the main Game Design Document (GDD), specifically Section III.B.3.
+*   **Core Mechanics in GDD:** For general rules on how Slot Effects function (e.g., exclusivity, replacement, visibility, cleansing, controller, consumption of "1 Trigger" effects), refer to the main Game Design Document (GDD), specifically Section III.B.3 and Section II.H (Meta-Actions). The controller of a Slot Effect is the player who applied it.
 *   **Individual Effect Details:** Each entry below specifies the individual Slot Effect's name, its default visibility, its specific trigger event(s) from the 'Trigger Events List', its game effect, any parameters, its duration, and whether it is cleansable.
 
 ---
@@ -11,9 +11,9 @@ Slot Effects Compendium
 **Surveillance Post**
     *   **Visibility:** Hidden
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot and `movingCreature` is an enemy to the controller of this Slot Effect).
-    *   **Effect:** The `movingCreature` gains `Revealed (2 turns)`. The Surveillance Post is then consumed (removed from the slot).
+    *   **Effect:** The `movingCreature` gains `Revealed (2 turns)`. The Surveillance Post is then consumed.
     *   **Parameters:** None.
-    *   **Duration of Slot Effect:** 1 Trigger (consumed after activation by an enemy).
+    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
 
 **Temporal Shield**
@@ -28,17 +28,17 @@ Slot Effects Compendium
 **Landmine**
     *   **Visibility:** Hidden
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
-    *   **Effect:** The `movingCreature` takes X damage. The Landmine is then consumed (removed from the slot).
+    *   **Effect:** The `movingCreature` takes X damage. The Landmine is then consumed.
     *   **Parameters:** Damage: X (e.g., 2).
-    *   **Duration of Slot Effect:** 1 Trigger (consumed after activation).
+    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
 
 **Binding Chains**
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnBeforeLeaveSlot(movingCreature, originSlot, intendedDestinationSlot)` (Slot effect logic checks: if `originSlot` is this slot).
-    *   **Effect:** The `movingCreature` gains `Anchored`. The Binding Chains is then consumed (removed from the slot).
+    *   **Effect:** The `movingCreature` gains `Anchored`. The Binding Chains is then consumed.
     *   **Parameters:** None.
-    *   **Duration of Slot Effect:** 1 Trigger (consumed after activation).
+    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
 
 **Rejection Field**
@@ -70,7 +70,7 @@ Slot Effects Compendium
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** The `movingCreature` is immediately pushed one slot directly backward (towards its controller's edge of the board) if the destination slot is empty and valid. If it cannot be pushed (e.g., at edge of board, next slot occupied), it instead takes 2 damage. The Slippery Floor is then consumed.
     *   **Parameters:** Damage if not pushed: 2.
-    *   **Duration of Slot Effect:** 1 Trigger.
+    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes.
 
 **Jamming Field**
@@ -94,7 +94,7 @@ Slot Effects Compendium
     *   **Trigger Event(s):** `OnActionQueued(actionDetails)` (Slot effect logic checks: if `actionDetails.sourceCreature` is on this slot and if the action is a 'PassiveAbilityEffect').
     *   **Effect:** If a creature on this slot triggers a passive ability, that passive ability's resulting action is duplicated in the Action Queue with the same targets and `Priority (Action)`. This effect triggers once, then Echoing Cave is removed.
     *   **Parameters:** None.
-    *   **Duration of Slot Effect:** 1 Trigger.
+    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
 
 **Sacrifice Lair**
@@ -102,7 +102,7 @@ Slot Effects Compendium
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** The `movingCreature` is Banished. The Sacrifice Lair is then consumed.
     *   **Parameters:** None
-    *   **Duration of Slot Effect:** 1 Trigger.
+    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
 
 **Barbed Snare**
@@ -110,7 +110,7 @@ Slot Effects Compendium
     *   **Trigger Event(s):** `OnBeforeLeaveSlot(movingCreature, originSlot, intendedDestinationSlot)` (Slot effect logic checks: if `originSlot` is this slot).
     *   **Effect:** The `movingCreature` takes X damage. The movement is still allowed (unless prevented by another effect). The Barbed Snare is then consumed.
     *   **Parameters:** Damage: X (e.g., 1).
-    *   **Duration of Slot Effect:** 1 Trigger.
+    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
 
 **Magnetic Pulse**
@@ -139,4 +139,4 @@ Slot Effects Compendium
     *   **Parameters:** Duration: X turns (e.g., 2, as set by the applying card).
     *   **Duration of Slot Effect:** X turns of the controller of this Slot Effect (the player who applied it), then removed.
     *   **Cleansable:** Yes
-    *   **Notes:** The `Anchored` status applied by this effect persists as per its own rules (i.e., until the creature is successfully moved by another effect, or the status is cleansed), even if 'Threshold of Liminality' expires or is cleansed. `Exposed` status includes applying `Revealed` to the creature.
+    *   **Notes:** The `Anchored` status applied by this effect persists as per its own rules (i.e., until the creature is successfully moved by another effect, or the status is cleansed), even if 'Threshold of Liminality' expires or is cleansed. `Exposed` status includes applying `Revealed` to the creature for the same duration.

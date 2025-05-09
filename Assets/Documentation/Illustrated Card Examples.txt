@@ -1,3 +1,15 @@
+**DOCUMENT USAGE GUIDELINES (for this Illustrative Card Examples List):**
+
+*   **Illustrative Purpose:** This document provides examples of cards to demonstrate how game mechanics, keywords, status effects, and faction themes can be realized. These are not exhaustive or final card lists but serve as design aids and points of reference.
+*   **Adherence to GDD:** All card examples **must** adhere to the principles, keywords, status effect definitions (and their precise notation), faction list, and mechanics (including Meta-Actions, action resolution, targeting, etc.) outlined in the main Game Design Document (GDD) and its associated compendia (Status Effects, Slot Effects, Trigger Events).
+*   **Faction Alignment:** Each card must belong to one of the definitive factions listed in GDD Section II.A (Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, Utopia). Cards are strictly single-faction.
+*   **Clarity over Brevity (in Examples):** Card text in these examples may sometimes include parenthetical notes (e.g., "(Mechanics: ...)") to clarify the underlying GDD rule being demonstrated. Final in-game card text would aim for conciseness while maintaining mechanical clarity based on established player knowledge of GDD rules.
+*   **Placeholder Mechanics:** Any card concepts with "TODO" or placeholder mechanics must be resolved by mapping them to existing GDD mechanics or by proposing new mechanics for design approval and integration into the GDD before the card is considered viable.
+*   **Flavor Text:** Flavor text is illustrative and aims to match the game's tone.
+*   **Stability:** While specific card stats and effects here are illustrative, the *way* they use defined game elements (keywords, status effects, triggers) should be consistent with the GDD.
+
+---
+
 Existential Dread (Mind) - Creature
 Stats: 0/6/1
 Deployment Time (1 turn).
@@ -12,8 +24,8 @@ Passive: OnDeploymentTimeComplete: If this creature was not Banished, it gains +
 Flavor Text: "You looked! Now it's... well, it's definitely something. Or nothing. Probably."
 
 I don't want to be this kind of animal anymore (Zeitgeist) - Spell
-Effect: Target friendly creature. For the rest of the game, that creature's printed passive abilities no longer function. It gains Doomed (2 turns). While it has Doomed, its base Attack becomes 5 and it gains: "Passive: This creature MUST queue an Attack action each turn if able. This Attack action gains +1 Priority (Action)."
-Flavor Text: "Right, that's IT. Time for a new, extremely aggressive, and tragically short-lived persona!"
+Effect: TODO (Reworking design: e.g., cleanse addiction, expose random enemies, Disco Elysium style)
+Flavor Text: TODO
 
 Wojak Living The Dream (Zeitgeist) - Creature
 Stats: 1/5/1
@@ -22,10 +34,10 @@ Passive: OnTurnStart: This creature gains Burnout (1 stack). For each Burnout st
 Flavor Text: "It's fine. Everything's fine. My eye just twitches like this sometimes."
 
 Mental Breakdown (Mind) - Spell
-Effect: Target enemy creature. For the rest of this turn, any Attack action queued by that creature targets a random valid creature on the battlefield (friend or foe, excluding itself). If no other valid targets exist, the Attack action is Nullified.
+Effect: Target enemy creature. For the rest of this turn, any Attack action queued by that creature targets a random valid creature on the battlefield (friend or foe, excluding itself). If no other valid targets exist, the Attack action is Nullified. (Mechanics: Applies a temporary "Watchdog" Meta-Action that modifies targets of the creature's attacks as they are queued, as per GDD II.H.5).
 Flavor Text: "My therapist said to embrace my inner chaos. I think this is what they meant?"
 
-System Glitch (Matrix Glitch) (Tech) - Spell
+System Glitch (Tech) - Spell
 Effect: Randomly select one of the following effects. The selected effect is then queued as an action:
 
 Swap the positions of two random creatures on the battlefield.
@@ -36,14 +48,14 @@ One random creature gains +2/+2.
 Flavor Text: "Did you see that? Yeah, that black cat again. Or maybe it was a dog this time. Who cares, free stats!"
 
 Tinfoil Hat (Zeitgeist) - Spell
-Effect: Target friendly creature. For 2 turns, that creature cannot be the target of enemy Spell actions or enemy Active Abilities that apply status effects. For those 2 turns, its Speed is also reduced by 1 (to a minimum of 1).
-Flavor Text: "They can't read your thoughts if your thoughts are too slow and wrapped in shiny metal!"
+Effect: Target friendly creature. For 2 turns: This creature is unaffected by Spells and Creature Abilities (from any source) that target it. Its Speed is also reduced by 1 (to a minimum of 1).
+Flavor Text: "They can't read your thoughts if your thoughts are too slow and wrapped in shiny metal! And apparently, nothing else can affect you either."
 
 Sudoku (Zeitgeist) - Spell
 Effect: Target creature gains Muted (1 turn). That creature's controller schedules 1 additional card draw for their next turn.
 Flavor Text: "Shhh. Thinking. So much thinking. Here, have a card, I'm busy."
 
-Pastafarian God (Myth) - Creature
+Pastafarian God (Digital Society) - Creature
 Stats: 3/4/2
 Deployment Time (1 turn).
 Passive: OnTurnStart: All friendly creatures with "Meatball" or "Noodle" in their name gain +1 Health this turn. If there are no such creatures, you schedule 1 additional card draw for your next turn.
@@ -71,12 +83,6 @@ It gains Muted (1 turn).
 It takes 1 damage and its controller schedules 1 fewer card draw next turn.
 Flavor Text: "This fruit is packed with potassium... and unpredictable tactical disadvantages!"
 
-Pastafarian God (Digital Society) - Creature
-Stats: 3/4/2
-Deployment Time (1 turn).
-Passive: OnTurnStart: All friendly creatures with "Meatball" or "Noodle" in their name gain +1 Health this turn. If there are no such creatures, you schedule 1 additional card draw for your next turn.
-Flavor Text: "May you be touched by His Noodly Appendage. Or at least draw an extra card, y'arr."
-
 DOGE (Digital Society) - Creature
 Stats: 1/2/4
 Deployment Time (0 turns).
@@ -84,8 +90,8 @@ Passive: OnTurnEnd: This creature's Attack randomly becomes 0, 1, or 5 until the
 Flavor Text: "Much attack. Very Bonk! Wow."
 
 Mandela Effect (Mind) - Spell
-Effect: For the rest of this turn, all creatures have their base Attack swapped with their base Health. (e.g., a creature that was X Attack / Y Health becomes Y Attack / X Health).
-Flavor Text: "Wait, didn't Fruit of the Loom have a cornucopia on the logo? Oh well, guess all the stats are swapped now too."
+Effect: All creatures on the battlefield permanently have their base Attack swapped with their base Health. (e.g., a creature that was X Attack / Y (Max) Health becomes Y Attack / X (Max) Health).
+Flavor Text: "Wait, didn't Fruit of the Loom have a cornucopia on the logo? Oh well, guess all the stats are swapped now too. Forever."
 
 WTF Happened In 1971 (Zeitgeist) - Spell
 Effect: Apply a global effect for the next 3 turns. While this global effect is active, at the OnTurnStart trigger for each player:
@@ -102,84 +108,83 @@ Effect: Target enemy creature. It gains Compromised. If that creature was alread
 Flavor Text: "User: 'Password123!' Admin: 'Security is our top priority.' The note: 'admin123'."
 
 Rubber Duck Debugging (Tech) - Spell
-Effect: Target friendly creature. If that creature has any negative status effects that are removable by Cleanse (as defined by the Cleanse effect or card text), remove one such status effect at random. Then, look at the top card of your deck. You may place it on the bottom of your deck.
+Effect: Target friendly creature. If that creature has any negative status effects that are removable by Cleanse, remove one such status effect at random. Then, look at the top card of your deck. You may place it on the bottom of your deck.
 Flavor Text: "So, the flux capacitor is clearly misaligned with the quantum intake, and... Oh. OH! The power cord wasn't plugged in. Thanks, Quackers!"
 
 Whine Menu (Corporate) - Spell
 Effect: TODO
 Flavor Text: "My player's dissatisfaction is immeasurable, and its day is ruined. I demand a full debuff on you."
 
-Cameras Off Suicide (Shadow Operations) - Spell
+Cameras Off Suicide (Shadow Ops.) - Spell
 Effect: Target one friendly creature. Banish it. This creature is not considered "Destroyed," and this action does not trigger any OnDied abilities the banished creature might have. Opponent's abilities that trigger on an enemy creature being "Destroyed" also do not trigger.
 Flavor Text: "He was never here. The paperwork confirms it. Any questions?"
 
-Ah, I see you're a man of culture as well (Internet Culture) - Spell
-Effect: Card must be played on a creature, if the enemy has a creature of the same faction in its battlefield all creatures of that faction gains +1 Attack and +1 Speed for 3 turns.
+Ah, I see you're a man of culture as well (Zeitgeist) - Spell
+Effect: Target a creature. If an opponent controls a creature of the same faction as your target, all creatures of that faction currently on the battlefield (both friendly and enemy) gain +1 Attack and +1 Speed for 3 turns.
 Flavor Text: "Ah, a fellow connoisseur of obscure 20th-century cat videos. Remarkable."
 
-Giant Laserthrowing Futuristic Titanium Lizard (Myths & Mysteries) - Creature
+Giant Laserthrowing Futuristic Titanium Lizard (Myth) - Creature
 Stats: 7 Attack / 7 Health / 1 Speed
 Deployment Time (3 turns).
 Passive: This creature cannot be the target of Spell actions originating from the 'Corporate' or 'Statecraft' Factions.
-Passive Ability: OnAttack if there are fewer than three enemy creatures on the battlefield, deal 3 damage to each available enemy creature.
+Passive Ability: OnAttack: If there are fewer than three enemy creatures on the battlefield, deal 3 damage to each available enemy creature.
 Flavor Text: "Initial funding proposal: Denied. Revised funding proposal: A city block mysteriously vaporized. Proposal: Approved."
 
-Drunken Sincerity (Mind & Paradox) - Spell
+Drunken Sincerity (Mind) - Spell
 Effect: Target an enemy creature. It gains Revealed (1 turn). Then, a random card from that creature's controller's hand is revealed to you.
 Flavor Text: "Look, I hic shouldn't tell you this, but your plan for next turn? It's hic TERRIBLE. Also, nice 'Secret Weapon' card you got there."
 
-Shitposting (Internet Culture) - Spell
+Shitposting (Digital Society) - Spell
 Effect: Target enemy creature. It gains Muted (1 turn). Its controller schedules 1 fewer card draw for their next turn.
 Flavor Text: "Quality content? Never heard of it. Enjoy this wall of text instead of your next card."
 
-Monkey Clicking (Internet Culture) - Creature
+Monkey Clicking (Digital Society) - Creature
 Stats: 1/2/3
 Deployment Time (0 turns).
 Passive: OnTurnStart: Deal 1 damage to a random enemy creature.
 Flavor Text: "Witness the pinnacle of user testing. It's not smart, but it sure is persistent"
 
-Brainlet Watermill (Wojak meme) (Internet Culture) - Creature
+Brainlet Watermill (Zeitgeist) - Creature
 Stats: 0/4/1
 Deployment Time (2 turns). Starts with Burnout (1 stack) and Muted (2 turns).
 Passive: OnTurnStart: This creature gains Burnout (1 stack). If this creature has 2 or more Burnout stacks, its controller schedules 1 additional card draw for their next turn.
 Flavor Text: "Two turns of profound silence, one pre-existing existential crisis, and then... maybe a card. Progress!"
 
-Dead Man's Switch (Shadow Operations) - Creature
+Dead Man's Switch (Shadow Ops.) - Creature
 Stats: 7/2/3
 Deployment Time (0 turns).
 Passive: OnDied(deathSource): If deathSource is an enemy creature, that creature gains Burnout (2 stack) and Exhausted. If deathSource is an enemy Spell, deal 5 damage to player owning the spell.
 Flavor Text: "This is from... Matilda"
 
-Creepypasta (Internet Culture) - Spell
+Creepypasta (Mind) - Spell
 Effect: Target enemy creature. It gains Paranoid (2 turns) and Bloodthirst (2 turns).
 Flavor Text: "They say if you read its card text three times in a dark room, your opponent's creature gets really antsy. And maybe a little bit stabby."
 
-Body Positivity (Internet Culture) - Spell
-Effect: Target enemy creature. Half its current health rounding down.
+Body Positivity (Zeitgeist) - Spell
+Effect: Target enemy creature. Its current Health is halved (rounding down).
 Flavor Text: "We're all 10's :)"
 
-Pigmalion Effect (Mind & Paradox) - Spell
+Pigmalion Effect (Mind) - Spell
 Effect: Target enemy creature. Apply Ghosted.
 Flavor Text: "Lookin' good Susan!"
 
-Roko's Basilisk (Mind & Paradox) - Creature
+Roko's Basilisk (Mind) - Creature
 Stats: 0/7/1
 Deployment Time (3 turns).
 Passive: OnDeploymentTimeComplete: All other creatures on the battlefield (friend and foe) gain Doomed (1 turn).
 Flavor Text: "You knew the risks of contemplating its existence. Now, contemplate your imminent non-existence."
 
-Trolley Problem (Mind & Paradox) - Spell
-Effect: Target one creature enemy creatures. The selected takes 3 damage. Other random creature (friend or foe) gains Anchored (2 turns).
+Trolley Problem (Mind) - Spell
+Effect: Target one enemy creature. The selected creature takes 3 damage. Another random creature on the battlefield (friend or foe, excluding the initial target if it survived) gains Anchored (2 turns).
 Flavor Text: "The ethics are debatable, but the outcome is efficient. For me, anyway."
 
-Sacrificial Ritual (Myths & Mysteries) - Spell
-Effect: Banish one target friendly creature. All other friendly creatures gain Blessed (1 stack).
+Sacrificial Ritual (Myth) - Spell
+Effect: Target one friendly creature and Banish it. All other friendly creatures gain Blessed (1 stack).
 Flavor Text: "One soul for the pyre, a dozen blessings returned. As the tradition dictates."
 
-Reflexive Control (Shadow Operations) - Spell
+Reflexive Control (Shadow Ops.) - Spell
 Effect: Set-up Redirect (Interference): The next Attack action queued this turn by an opponent's creature with current Attack 3 or less, if it targets one of your creatures, instead targets a random enemy creature (excluding the attacker itself). If no other enemy creature exists, this Interference effect is consumed with no change to the original target. This Interference triggers once.
 Flavor Text: They'll call it 'tactics'. You'll call it 'Tuesday'.
-Flavor Text: The best manipulations are the ones they perform themselves, ideally on each other.
 
 YOLO (Zeitgeist) - Spell
 Effect: Target friendly creature. For the rest of this turn, it gains +4 Attack and its Attack actions gain +1 Priority (Action). At the End of this Turn, that creature is Banished.
@@ -197,13 +202,12 @@ Effect: Target friendly creature. Return it to its owner's hand. If that creatur
 Flavor Text: PANIC! But like, a strategic panic, with potential upsides.
 
 Taqiyya Infiltrator (Myth) - Creature
-Requisite: Target a friendly creature you control. Banish the targeted creature, then deploy Taqiyya Infiltrator into the slot previously occupied by the banished creature. (This card cannot be played if you cannot target a friendly creature).
+Requisite: Target a friendly creature you control. Banish the targeted creature, then play Taqiyya Infiltrator into the slot previously occupied by the banished creature. (This card cannot be played if you cannot target a friendly creature).
 Stats: 1/3/1
 Deployment Time (2 turns).
-Passive: OnDeploymentTimeComplete: This creature moves to a random available slot on the opponent's side of the battlefield. If no slot is available, it is Banished instead. If it successfully moves, control of this creature changes to the opponent. Upon gaining control, this creature immediately gains Paranoid (2 turns), Exposed (Indefinite duration, until cleansed or creature leaves play), and Pandora (3 turns).
+Passive: OnDeploymentTimeComplete: This creature moves to a random available slot on the opponent's side of the battlefield. If no slot is available, it is Banished instead. If it successfully moves, control of this creature changes to the opponent. Upon gaining control, this creature (via a Linked Meta-Action, as per GDD II.H.6) gains Paranoid (2 turns), Exposed (Indefinite duration), and Pandora (3 turns).
 Passive: OnDied(deathSource): Apply Scorched Earth to the slot this creature last occupied.
 Flavor Text: "A whisper planted, a seed of discord. It will bloom in their ranks, a glorious, self-consuming paranoia."
-Flavor Text: "The gift is given. Let them nurture the serpent in their bosom until it turns, as all such gifts eventually do."
 
 Soylent Rations (Corporate) - Spell
 Effect: Target friendly creature. Permanently reduce its base Attack by 2 and permanently increase its base Health by 2.
@@ -211,7 +215,6 @@ Flavor Text: "Nutritionally complete! Psychological impact is outside of this qu
 
 Liminality (Mind) - Spell
 Targeting: Target an empty slot.
-
 Effect: Apply the 'Threshold of Liminality' Slot Effect (Duration: 2 turns) to the target slot.
 Requisite: The spell needs an empty slot. If the slot is filled by the time the action is executed, it will fail.
 Flavor Text: Trapped in the 'in-between,' where every instinct screams of unseen threats and escape feels impossible.

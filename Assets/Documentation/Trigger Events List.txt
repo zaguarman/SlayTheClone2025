@@ -69,9 +69,9 @@ OnActionQueued(actionDetails): Triggers when an action involving this creature (
 OnActionResolved(actionDetails): Triggers when an action involving this creature (as source or target) resolves from the queue.
     actionDetails: Information about the resolved action.
 
-OnActionCancelled(cancelledActionDetails, cancellationSource): Triggers when a previously queued action is cancelled and removed from the Action Queue before it could resolve.
-    cancelledActionDetails: Information about the action that was cancelled (e.g., type, original source, original target, original controller).
-    cancellationSource: The game rule or effect that caused the cancellation (e.g., 'Recruitment', 'SpecificSpellEffect', 'InterferenceNullify').
+OnActionCancelled(cancelledActionDetails, cancellationSource): Triggers when a previously queued action is cancelled (e.g., by Recruitment) or Nullified (e.g., by `Nullify (Interference)` or other game effects) and removed from the Action Queue or resolves with no game effect.
+    cancelledActionDetails: Information about the action that was cancelled/nullified (e.g., type, original source, original target, original controller).
+    cancellationSource: The game rule or effect that caused the cancellation/nullification (e.g., 'Recruitment', 'SpecificSpellEffect', 'InterferenceNullify', 'EffectNullification').
 
 OnDeploymentTimeComplete: Triggers specifically when this creature's `Deployment Time` counter reaches zero and it becomes fully operational.
 
