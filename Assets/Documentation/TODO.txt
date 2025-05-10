@@ -1,3 +1,4 @@
+*** Implemented but interesting for ideas ***
 Slot status effect archetypes (some slot status effects are invisible to the player until triggered, only one active at a time, some cant be overriden)
 ** Scorched Earth: creature on this slot cant trigger passive abilities
 ** Landmine: onEnter apply Damage to the first creature entering it.
