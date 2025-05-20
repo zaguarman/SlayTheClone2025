@@ -1,4 +1,5 @@
-*** Implemented but interesting for ideas ***
+Already Implemented but keep for history:
+
 Slot status effect archetypes (some slot status effects are invisible to the player until triggered, only one active at a time, some cant be overriden)
 ** Scorched Earth: creature on this slot cant trigger passive abilities
 ** Landmine: onEnter apply Damage to the first creature entering it.
@@ -11,6 +12,11 @@ Slot status effect archetypes (some slot status effects are invisible to the pla
 ** Creature Damage output increased by 1 while active 
 ** Creature Damage received reduced by 1 while active
 ** Develop some more options
+
+
+
+Not Implemented yet:
+
 
 Abilities:
 ** Strong Leadership: Speeds deployment time from friendly creatures but deals damage to nearby creatures.
@@ -26,7 +32,7 @@ Abilities:
 ** Pusher: When moving towards a slot with a friendly creature can push them and occupy the slot (if the next slot is available) Triggers slot effects.
 
 
-Status Effect:
+Status Effects:
 Audited (X turns): This creature cannot have its base stats (Attack, Health, Speed as printed on the card) increased by friendly effects. If a friendly effect attempts to increase one of its base stats, its controller must discard 1 random card from their hand instead. If they cannot discard, this creature takes 2 damage. Lasts X turns.
 
 
@@ -44,4 +50,14 @@ Update document to include:
 
 
 
+
+- Ability: Discard card to draw a new one
+- Cards that come back at hand if condition is met
+- Clank: When 2 creatures attack eachother simultaneously and the damage difference is 3 or less both attacks are discarded.
+- Intelligence-Link: When creature attacks player draw +1 card next turn
+- Creature OnSummon counter: When it comes into the game removes all actions that meet a condition.
+
+
+Cards:
+- Spell that removes all cards left on the deck. You will be using the discard shuffled back into the deck after this for drawing. This is intended to reduce the number of cards on purpose to keep the best ones and cycle through only that ones.
 

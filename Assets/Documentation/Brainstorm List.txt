@@ -17,6 +17,7 @@ Card Game Factions Overview
 			E-Scooter
 			Eject Button
 			Exoskeleton
+			Femtosecond Laser
 			First Aid Kit
 			Flamethrower
 			GPS Tracker
@@ -36,6 +37,7 @@ Card Game Factions Overview
 			Magnet
 			Memo Note
 			Microchip
+			Multi Passport (Multiple passports)
 			Muscle Building Drug
 			Nanobots
 			Notepad
@@ -202,6 +204,7 @@ Card Game Factions Overview
 		Volcanic Lair
 		Waiting Room
 		Weather Station
+		World Trade Center
 		Yacht
 		Zebra Crossing
 	Faction: Tech & Cyber
@@ -353,6 +356,7 @@ Card Game Factions Overview
 			Ghosting
 			Girl Math
 			Hive Mentality
+			If paying for something doesn't make it yours, pirating it, isn't stealing
 			Internet Beggar
 			Internet Stalker
 			Its A Trap
@@ -385,6 +389,7 @@ Card Game Factions Overview
 			Steampunk
 			Streisand Effect
 			Stream Sniping
+			Stunlock
 			Subreddit
 			System Glitch (Matrix Glitch)
 			The Simulation (The Matrix)
@@ -411,6 +416,7 @@ Card Game Factions Overview
 			Calm Your Tits
 			Caturday
 			Copypasta
+			Dangit
 			Deep Fried Meme
 			DOGE
 			dont dead open inside
@@ -419,6 +425,7 @@ Card Game Factions Overview
 			Hide the Pain Harold
 			I Guess We Doin Meta Commentary Now
 			I Know That Feel Bro
+			Its a Trap (meme)
 			Its Been 84 Years...
 			Meme
 			Modern Problems Require Modern Solutions
@@ -431,6 +438,7 @@ Card Game Factions Overview
 			RL: good graphics but long tutorial
 			Stay Hydrated
 			Task Failed Successfully
+			Too Bad So Sad
 			WTF
 			Woman Yelling at Cat (meme)
 			XD
@@ -469,7 +477,9 @@ Card Game Factions Overview
 			Capitalism Made me Free
 			Cascade
 			Cashcow
+			Charles Ponzi
 			Corporate Espionage
+			Counterfeit (corpo, business, mafia)
 			Crane
 			Dark Pattern (UI/UX)
 			Dogfooding
@@ -562,6 +572,7 @@ Card Game Factions Overview
 			Capital Gains Tax
 			Car Insurance
 			Creative Accounting
+			Credit Card (corpo)
 			Dark Money Donation
 			Dark Pools
 			Dead Cat Bounce
@@ -575,17 +586,21 @@ Card Game Factions Overview
 			Great Depression
 			Housing Crisis
 			Inflation
+			Inter-Generational Short Squeeze
 			Interest Rate Change
 			Investment Trusts
 			Invisible Hand
 			Loan
 			Long Term Investment
 			Market Crash
+			Market Equilibrium (mock, this card should show the inequality the market drives us towards) (corpo)
 			Mortgagae Papers
 			Multilevel Marketing Seller
 			Negative Growth
 			Notary
 			Payday
+			Perfect Competition
+			Perfect Information
 			Pharma Lobby
 			Political Donations
 			Stock Market
@@ -896,6 +911,7 @@ Card Game Factions Overview
 			Chronos Feast Order
 			Cold War
 			Collateral Damage
+			Congruent use of Force (mock, this card should be overkill flavoured) (statecraft)
 			Conquer
 			Friendly Fire
 			I Am Become Death, The Destroyer Of Worlds
@@ -998,6 +1014,7 @@ Card Game Factions Overview
 			Zealot
 		Ancient & Mythic Concepts
 			7 Sins
+			10 Commandments
 			Acting In Bad Faith
 			Aeon
 			Afterlife
@@ -1011,6 +1028,7 @@ Card Game Factions Overview
 			Broken Mirror
 			Canibalism
 			Celibacy
+			Crysopoeya
 			Cult
 			Curse Of Hubris
 			Curse of Sisyphus
@@ -1023,6 +1041,7 @@ Card Game Factions Overview
 			Exodus
 			Fire Stolen From The Gods
 			Free Will
+			Genesis
 			God's Grace
 			Harmony
 			Hero's Journey
@@ -1232,6 +1251,7 @@ Card Game Factions Overview
 			Broken Telephone (Game)
 			Burnout (Psychological State)
 			Choice Overload
+			Chose Your Poison
 			Cognitive Dissonance
 			Cognitive Maneuver
 			Compartmentalization
@@ -1365,6 +1385,7 @@ Card Game Factions Overview
 			Roko's Basilisk
 			Shakespeare, written by a Monkey
 			Slippery Slope
+			Socrates (Mind)
 			Status Quo
 			Tempus Fugit
 			Vice Versa
@@ -1390,6 +1411,7 @@ Card Game Factions Overview
 			Deja Vu
 			Designed In California, Assembled In China
 			Desperation Operation
+			Dubaification of Females
 			Duelo A Garrotazos
 			Dunning Kruger Effect
 			E-Girl Bath Water
@@ -1400,6 +1422,7 @@ Card Game Factions Overview
 			Fatphobic
 			Feminine Power Fantasy
 			Feminist Dance
+			For society would be better that some people would not have children
 			Gaslight
 			Gerontofication
 			Goy
@@ -1413,6 +1436,7 @@ Card Game Factions Overview
 			In-group/Out-group Ethnophaulism
 			Inverted Population Pyramid
 			It's All Disco, Baby (disco elysium reference) (zeitgeist)
+			It's about sending a message (joker) (zeitgeist)
 			It's a terrible day for rain. (Roy Mustang Fullmetal Alchemist reference)
 			Its vision is based on movement (Jurassic Park T-Rex reference)
 			Jet Lag
@@ -1520,6 +1544,7 @@ Card Game Factions Overview
 			Dogsitter
 			Drug Smuggler
 			Drunken Sincerity
+			Football hooligans
 			Freelancer
 			Geopolitical Yapper
 			Good Boi (Dog Meme)
@@ -1561,13 +1586,17 @@ Card Game Factions Overview
 			Anti Nuclear Refrigerator (Indiana Jones)
 			Birthday Party
 			BYOBBB
+			Camper Van
+			Canon
+			Cleaning Robot (zeitgeist)
 			Cyberpunk
 			Fidget Spinner
 			Jetpack
 			Kimono
-			Massive Song Contest
 			Matsuri
+			Mexican Telenovela
 			Misho The Fish
 			Nevermind (Nirvana)
 			Plot Armor
 			Plot Twist
+			Political Song Contest
