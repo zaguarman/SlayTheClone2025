@@ -61,3 +61,28 @@ Update document to include:
 Cards:
 - Spell that removes all cards left on the deck. You will be using the discard shuffled back into the deck after this for drawing. This is intended to reduce the number of cards on purpose to keep the best ones and cycle through only that ones.
 
+
+
+Gameplay:
+
+Creatures evolve over time in the board, the deployment time tells how much turns do you need to go to the next step
+On every evolution the creature unlocks more abilities
+this abilities can have side effects like, get status effect X or gain +5/+5/+0 
+
+Example would be Snail; 0/1/1; Deployment time 2 (2 turns for each step); Step 1: Creature gains Spikes (Return x damage to attacker); Step 2: creature cleanses status effects; creature gains status effect Doomed.
+
+Inspired by the card urzas saga (MTG)
+
+
+Continuous effects: Use layering (MTG) for actions priority determination
+1 Copy effects
+2 Control changing effects
+3 Type changing effects
+4 Color changing effects (find out what is the equivalent)
+5 Ability granting/removing effects
+6 Power/Speed/Toughness changing effects
+	A Set P/S/T to a specific value
+	B Modify P/S/T using variables/conditions
+	C Switch P/S/T effects
+	
+
