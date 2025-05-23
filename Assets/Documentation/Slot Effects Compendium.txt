@@ -1,17 +1,16 @@
-Slot Effects Compendium
-
 **DOCUMENT USAGE GUIDELINES (for this Slot Effects Compendium):**
 
 *   **Definitive List:** This document contains the definitive list and specific definitions of all standardized Slot Effects in the game.
 *   **Core Mechanics in GDD:** For general rules on how Slot Effects function (e.g., exclusivity, replacement, visibility, cleansing, controller, consumption of "1 Trigger" effects), refer to the main Game Design Document (GDD), specifically Section III.B.3 and Section II.H (Meta-Actions). The controller of a Slot Effect is the player who applied it.
 *   **Individual Effect Details:** Each entry below specifies the individual Slot Effect's name, its default visibility, its specific trigger event(s) from the 'Trigger Events List', its game effect, any parameters, its duration, and whether it is cleansable.
+*   **Turn Structure:** All "Turns" referenced in this document are global Turns, experienced simultaneously by all players, as defined in the GDD.
 
 ---
 
 **Surveillance Post**
     *   **Visibility:** Hidden
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot and `movingCreature` is an enemy to the controller of this Slot Effect).
-    *   **Effect:** The `movingCreature` gains `Revealed (2 turns)`. The Surveillance Post is then consumed.
+    *   **Effect:** The `movingCreature` gains `Revealed (2 Turns)`. The Surveillance Post is then consumed.
     *   **Parameters:** None.
     *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
@@ -20,8 +19,8 @@ Slot Effects Compendium
     *   **Visibility:** Visible
     *   **Trigger Event(s):** Continuous while active.
     *   **Effect:** Any creature on this slot is immune to combat damage.
-    *   **Parameters:** Duration: X turns (e.g., 1).
-    *   **Duration of Slot Effect:** X controller's turns (of the player who applied the slot effect), then removed.
+    *   **Parameters:** Duration: X (e.g., 1).
+    *   **Duration of Slot Effect:** X global Turns, then removed.
     *   **Cleansable:** Yes
     *   **Notes:** Does not prevent other effects like status applications or damage from Spells/abilities unless the damage itself was the carrier and specified as combat damage.
 
@@ -60,7 +59,7 @@ Slot Effects Compendium
 **Rally Point**
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnTurnStart` (Slot effect logic checks if its slot is occupied by a creature controlled by the same player who controls this Rally Point).
-    *   **Effect:** If a creature controlled by this slot effect's controller is on this slot at the start of its controller's turn, its controller Schedules 1 additional card draw for their next turn.
+    *   **Effect:** If a creature controlled by this slot effect's controller is on this slot at the Start of a Turn, its controller Schedules 1 additional card draw for their next Turn.
     *   **Parameters:** None.
     *   **Duration of Slot Effect:** Persistent until replaced.
     *   **Cleansable:** Yes
@@ -76,7 +75,7 @@ Slot Effects Compendium
 **Jamming Field**
     *   **Visibility:** Visible
     *   **Trigger Event(s):** Continuous while active.
-    *   **Effect:** Spells cannot be played targeting this slot or any creature occupying it. Additionally, active and passive abilities of any creature occupying this slot are disabled (do not trigger and cannot be activated).
+    *   **Effect:** Spells cannot be played targeting this slot or any creature occupying it. Additionally, active and passive abilities of any creature occupying this slot are `Abilities Disabled`.
     *   **Parameters:** None.
     *   **Duration of Slot Effect:** Persistent until replaced.
     *   **Cleansable:** Yes
@@ -84,7 +83,7 @@ Slot Effects Compendium
 **Unstable Terrain**
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnTurnEnd` (Slot effect logic checks if its slot is occupied).
-    *   **Effect:** If this is the 2nd consecutive turn the *same* creature ends its turn on this slot, that creature is moved to a random available adjacent friendly slot (if multiple, chosen randomly). If no such slot is available, nothing happens. The "consecutive turn" counter resets if a different creature occupies the slot, the slot becomes empty, or the creature is successfully moved by this effect or any other means.
+    *   **Effect:** If this is the 2nd consecutive Turn the *same* creature ends its Turn on this slot, that creature is moved to a random available adjacent friendly slot (if multiple, chosen randomly). If no such slot is available, nothing happens. The "consecutive turn" counter resets if a different creature occupies the slot, the slot becomes empty, or the creature is successfully moved by this effect or any other means.
     *   **Parameters:** None.
     *   **Duration of Slot Effect:** Persistent until replaced.
     *   **Cleansable:** Yes
@@ -116,7 +115,7 @@ Slot Effects Compendium
 **Magnetic Pulse**
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnTurnStart` (Slot effect logic checks if its slot is occupied by a creature controlled by the player who applied Magnetic Pulse).
-    *   **Effect:** At the start of this slot effect controller's turn, if their creature is on this slot, pull one random adjacent enemy creature one slot towards this Magnetic Pulse slot, if the intervening slot is empty and the target creature can be moved.
+    *   **Effect:** At the Start of the Turn, if their creature is on this slot, pull one random adjacent enemy creature one slot towards this Magnetic Pulse slot, if the intervening slot is empty and the target creature can be moved.
     *   **Parameters:** None.
     *   **Duration of Slot Effect:** Persistent until replaced.
     *   **Cleansable:** Yes
@@ -134,9 +133,9 @@ Slot Effects Compendium
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** When a creature enters this slot:
         *   The `movingCreature` gains `Anchored`.
-        *   The `movingCreature` gains `Exposed (1 turn)`.
-        *   The controller of the `movingCreature` schedules 1 fewer card draw for their next turn.
-    *   **Parameters:** Duration: X turns (e.g., 2, as set by the applying card).
-    *   **Duration of Slot Effect:** X turns of the controller of this Slot Effect (the player who applied it), then removed.
+        *   The `movingCreature` gains `Exposed (1 Turn)`.
+        *   The controller of the `movingCreature` schedules 1 fewer card draw for their next Turn.
+    *   **Parameters:** Duration: X (e.g., 2, as set by the applying card).
+    *   **Duration of Slot Effect:** X global Turns, then removed.
     *   **Cleansable:** Yes
     *   **Notes:** The `Anchored` status applied by this effect persists as per its own rules (i.e., until the creature is successfully moved by another effect, or the status is cleansed), even if 'Threshold of Liminality' expires or is cleansed. `Exposed` status includes applying `Revealed` to the creature for the same duration.

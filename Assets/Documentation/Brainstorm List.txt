@@ -491,6 +491,7 @@ Card Game Factions Overview
 			Employee Stock Ownership Plan (ESOP)
 			Enterprise Resource Planning (ERP)
 			Excavator
+			Fat Tony (corpo)
 			Flagship
 			Follow The Money
 			Forced Upselling
@@ -620,6 +621,7 @@ Card Game Factions Overview
 			Stock Market Rally
 			Stocks
 			Swiss Bank Account
+			The Enron Ledger Fantasy (corpo)
 			Tax-Exempt Corruption
 		Workplace & Labor
 			Auditor
@@ -880,6 +882,7 @@ Card Game Factions Overview
 			Sewers (Statecraft)
 			Social Distancing
 			Social Mobility
+			Spite-Elected President (statecraft)
 			Sparta
 			Speed Limit
 			State Controlled Digital Money
@@ -1574,6 +1577,7 @@ Card Game Factions Overview
 			Sassy
 			Scam Artist
 			Single Mom
+			Spite Voter (zeitgeist)
 			Surrogate pregnancy
 			Trad Wife
 			Transhumanistic Human
