@@ -1,14 +1,21 @@
-**DOCUMENT USAGE GUIDELINES (for this Illustrative Card Examples List):**
+**DOCUMENT USAGE GUIDELINES:**
+	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
+    *   This document **shall** possess a clearly demarcated subject matter.
+    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
 
-*   **Illustrative Purpose:** This document provides examples of cards to demonstrate how game mechanics, keywords, status effects, and faction themes can be realized. These are not exhaustive or final card lists but serve as design aids and points of reference.
-*   **Adherence to GDD:** All card examples **must** adhere to the principles, keywords, status effect definitions (and their precise notation), faction list, and mechanics (including Meta-Actions, action resolution, targeting, etc.) outlined in the main Game Design Document (GDD) and its associated compendia (Status Effects, Slot Effects, Trigger Events).
-*   **Faction Alignment:** Each card must belong to one of the definitive factions listed in GDD Section II.A (Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, Utopia). Cards are strictly single-faction.
-*   **Clarity over Brevity (in Examples):** Card text in these examples may sometimes include parenthetical notes (e.g., "(Mechanics: ...)") to clarify the underlying GDD rule being demonstrated. Final in-game card text would aim for conciseness while maintaining mechanical clarity based on established player knowledge of GDD rules.
-*   **Placeholder Mechanics:** Any card concepts with "TODO" or placeholder mechanics must be resolved by mapping them to existing GDD mechanics or by proposing new mechanics for design approval and integration into the GDD before the card is considered viable.
-*   **Flavor Text:** Flavor text is illustrative and aims to match the game's tone.
-*   **Stability:** While specific card stats and effects here are illustrative, the *way* they use defined game elements (keywords, status effects, triggers) should be consistent with the GDD.
+	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
+    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
+    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
+    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
 
----
+	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
+    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
+
+	**STANDARDIZED CONTENT BOUNDARIES:**
+    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
+    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
+
+**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
 
 Existential Dread (Mind) - Creature
 Stats: 0/6/1
@@ -48,8 +55,8 @@ One random creature gains +2/+2.
 Flavor Text: "Did you see that? Yeah, that black cat again. Or maybe it was a dog this time. Who cares, free stats!"
 
 Tinfoil Hat (Zeitgeist) - Spell
-Effect: Target friendly creature. For 2 turns: This creature is unaffected by Spells and Creature Abilities (from any source) that target it. Its Speed is also reduced by 1 (to a minimum of 1).
-Flavor Text: "They can't read your thoughts if your thoughts are too slow and wrapped in shiny metal! And apparently, nothing else can affect you either."
+Effect: Target friendly creature. It gains `Tin Foiled (2 Turns)`.
+Flavor Text: "They can't read your thoughts if your thoughts are too slow and wrapped in shiny metal! And apparently, new spells can't mess with you either."
 
 Sudoku (Zeitgeist) - Spell
 Effect: Target creature gains Muted (1 turn). That creature's controller schedules 1 additional card draw for their next turn.
@@ -58,13 +65,13 @@ Flavor Text: "Shhh. Thinking. So much thinking. Here, have a card, I'm busy."
 Pastafarian God (Digital Society) - Creature
 Stats: 3/4/2
 Deployment Time (1 turn).
-Passive: OnTurnStart: All friendly creatures with "Meatball" or "Noodle" in their name gain +1 Health this turn. If there are no such creatures, you schedule 1 additional card draw for your next turn.
+Passive: OnTurnStart: All friendly creatures with "Meatball" or "Noodle" in their name gain +1 Health this turn. If there are no such creatures, its controller schedules 1 additional card draw for their next turn.
 Flavor Text: "May you be touched by His Noodly Appendage. Or at least draw an extra card, y'arr."
 
 Sentient Dentures (Myth) - Creature
 Stats: 2/3/1
 Deployment Time (0 turns).
-Passive: OnDealDamage(damagedTarget, damageAmount, damageType): If this creature dealt damage with an Attack, damagedTarget gains Earworm (1 turn).
+Passive: OnDealDamage(damagedTarget, damageAmount, damageType): If this creature dealt damage with an Attack, damagedTarget gains Earworm.
 Flavor Text: "They've got a bite, and a surprisingly catchy tune stuck in their teeth."
 
 Unicorn (Enterprise) (Corporate) - Creature
@@ -76,11 +83,11 @@ Flavor Text: "It looked amazing on paper, and its inevitable collapse will fuel 
 Banana Gun (Digital Society) - Spell
 Effect: Target enemy creature. Randomly apply one of the following:
 
-It gains Anchored (1 turn).
+It gains Anchored.
 
 It gains Muted (1 turn).
 
-It takes 1 damage and its controller schedules 1 fewer card draw next turn.
+It takes 1 damage and its controller schedules 1 fewer card draw for their next turn.
 Flavor Text: "This fruit is packed with potassium... and unpredictable tactical disadvantages!"
 
 DOGE (Digital Society) - Creature
@@ -95,8 +102,8 @@ Flavor Text: "Wait, didn't Fruit of the Loom have a cornucopia on the logo? Oh w
 
 WTF Happened In 1971 (Zeitgeist) - Spell
 Effect: Apply a global effect for the next 3 turns. While this global effect is active, at the OnTurnStart trigger for each player:
-*player: All their creatures gain +1 Attack for this turn.
-*opponent: Their base Scheduled Draw is reduced by 1 this turn.
+*If it is your turn: All your creatures gain +1 Attack for this turn.
+*If it is the opponent's turn: Their controller schedules 1 fewer card draw for their next Scheduled Draw phase occurring while this global effect is active.
 Flavor Text: "Productivity's up across the board! Shame the paycheck, uh, 'card draw' for some people didn't get the memo."
 
 Meetings About Meetings (Corporate) - Spell
@@ -157,7 +164,7 @@ Passive: OnDied(deathSource): If deathSource is an enemy creature, that creature
 Flavor Text: "This is from... Matilda"
 
 Creepypasta (Mind) - Spell
-Effect: Target enemy creature. It gains Paranoid (2 turns) and Bloodthirst (2 turns).
+Effect: Target enemy creature. It gains Paranoid and Bloodthirst. (Durations are per Status Effects Compendium defaults if not specified, e.g., Paranoid removes itself after check, Bloodthirst is persistent).
 Flavor Text: "They say if you read its card text three times in a dark room, your opponent's creature gets really antsy. And maybe a little bit stabby."
 
 Body Positivity (Zeitgeist) - Spell
@@ -165,7 +172,7 @@ Effect: Target enemy creature. Its current Health is halved (rounding down).
 Flavor Text: "We're all 10's :)"
 
 Pigmalion Effect (Mind) - Spell
-Effect: Target enemy creature. Apply Ghosted.
+Effect: Target enemy creature. Apply `Ghosted`. (Reminder: `Ghosted` transforms to `Doomed` after 3 Turns as per Status Effects Compendium).
 Flavor Text: "Lookin' good Susan!"
 
 Roko's Basilisk (Mind) - Creature
@@ -175,7 +182,7 @@ Passive: OnDeploymentTimeComplete: All other creatures on the battlefield (frien
 Flavor Text: "You knew the risks of contemplating its existence. Now, contemplate your imminent non-existence."
 
 Trolley Problem (Mind) - Spell
-Effect: Target one enemy creature. The selected creature takes 3 damage. Another random creature on the battlefield (friend or foe, excluding the initial target if it survived) gains Anchored (2 turns).
+Effect: Target one enemy creature. The selected creature takes 3 damage. Another random creature on the battlefield (friend or foe, excluding the initial target if it survived) gains Anchored.
 Flavor Text: "The ethics are debatable, but the outcome is efficient. For me, anyway."
 
 Sacrificial Ritual (Myth) - Spell
@@ -205,7 +212,7 @@ Taqiyya Infiltrator (Myth) - Creature
 Requisite: Target a friendly creature you control. Banish the targeted creature, then play Taqiyya Infiltrator into the slot previously occupied by the banished creature. (This card cannot be played if you cannot target a friendly creature).
 Stats: 1/3/1
 Deployment Time (2 turns).
-Passive: OnDeploymentTimeComplete: This creature moves to a random available slot on the opponent's side of the battlefield. If no slot is available, it is Banished instead. If it successfully moves, control of this creature changes to the opponent. Upon gaining control, this creature (via a Linked Meta-Action, as per GDD II.H.6) gains Paranoid (2 turns), Exposed (Indefinite duration), and Pandora (3 turns).
+Passive: OnDeploymentTimeComplete: This creature moves to a random available slot on the opponent's side of the battlefield. If no slot is available, it is Banished instead. If it successfully moves, control of this creature changes to the opponent. Upon gaining control, this creature (via a Linked Meta-Action, as per GDD II.H.6) gains Paranoid, Exposed (Indefinite duration), and Pandora (3 turns).
 Passive: OnDied(deathSource): Apply Scorched Earth to the slot this creature last occupied.
 Flavor Text: "A whisper planted, a seed of discord. It will bloom in their ranks, a glorious, self-consuming paranoia."
 

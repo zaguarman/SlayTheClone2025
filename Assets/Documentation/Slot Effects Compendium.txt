@@ -1,11 +1,21 @@
-**DOCUMENT USAGE GUIDELINES (for this Slot Effects Compendium):**
+**DOCUMENT USAGE GUIDELINES:**
+	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
+    *   This document **shall** possess a clearly demarcated subject matter.
+    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
 
-*   **Definitive List:** This document contains the definitive list and specific definitions of all standardized Slot Effects in the game.
-*   **Core Mechanics in GDD:** For general rules on how Slot Effects function (e.g., exclusivity, replacement, visibility, cleansing, controller, consumption of "1 Trigger" effects), refer to the main Game Design Document (GDD), specifically Section III.B.3 and Section II.H (Meta-Actions). The controller of a Slot Effect is the player who applied it.
-*   **Individual Effect Details:** Each entry below specifies the individual Slot Effect's name, its default visibility, its specific trigger event(s) from the 'Trigger Events List', its game effect, any parameters, its duration, and whether it is cleansable.
-*   **Turn Structure:** All "Turns" referenced in this document are global Turns, experienced simultaneously by all players, as defined in the GDD.
+	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
+    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
+    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
+    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
 
----
+	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
+    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
+
+	**STANDARDIZED CONTENT BOUNDARIES:**
+    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
+    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
+
+**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
 
 **Surveillance Post**
     *   **Visibility:** Hidden
@@ -19,8 +29,8 @@
     *   **Visibility:** Visible
     *   **Trigger Event(s):** Continuous while active.
     *   **Effect:** Any creature on this slot is immune to combat damage.
-    *   **Parameters:** Duration: X (e.g., 1).
-    *   **Duration of Slot Effect:** X global Turns, then removed.
+    *   **Parameters:** Duration: X (e.g., 1 global Turn, set by applying card).
+    *   **Duration of Slot Effect:** X global **Turns**, then removed.
     *   **Cleansable:** Yes
     *   **Notes:** Does not prevent other effects like status applications or damage from Spells/abilities unless the damage itself was the carrier and specified as combat damage.
 
@@ -28,17 +38,18 @@
     *   **Visibility:** Hidden
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** The `movingCreature` takes X damage. The Landmine is then consumed.
-    *   **Parameters:** Damage: X (e.g., 2).
+    *   **Parameters:** Damage: X (e.g., 2, set by applying card).
     *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
 
 **Binding Chains**
     *   **Visibility:** Visible
-    *   **Trigger Event(s):** `OnBeforeLeaveSlot(movingCreature, originSlot, intendedDestinationSlot)` (Slot effect logic checks: if `originSlot` is this slot).
-    *   **Effect:** The `movingCreature` gains `Anchored`. The Binding Chains is then consumed.
+    *   **Trigger Event(s):** `OnLeaveSlot(leftSlot, method)` (Slot effect logic checks: if `leftSlot` is this slot, and the creature is attempting to leave). This trigger should perhaps be `OnBeforeLeaveSlot` if the intent is to apply `Anchored` *before* the move resolves to potentially prevent it. If it's `OnLeaveSlot` (after move), then `Anchored` applies after the creature has already moved. Assuming `OnBeforeLeaveSlot` for preventative intent.
+    *   **Effect:** The creature attempting to leave this slot gains `Anchored`. The Binding Chains is then consumed.
     *   **Parameters:** None.
     *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
+    *   **Note:** Changed trigger to `OnBeforeLeaveSlot` for typical "trap" functionality. Please confirm if `OnLeaveSlot` (post-move) was intended.
 
 **Rejection Field**
     *   **Visibility:** Visible
@@ -51,7 +62,7 @@
 **Scorched Earth**
     *   **Visibility:** Visible
     *   **Trigger Event(s):** Continuous while active and slot is occupied.
-    *   **Effect:** Passive abilities of any creature occupying this slot do not trigger.
+    *   **Effect:** Passive abilities of any creature occupying this slot do not trigger. (Does not use the full `Abilities Disabled` keyword, so active abilities are not affected by this specific slot effect).
     *   **Parameters:** None.
     *   **Duration of Slot Effect:** Persistent until replaced.
     *   **Cleansable:** Yes
@@ -59,7 +70,7 @@
 **Rally Point**
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnTurnStart` (Slot effect logic checks if its slot is occupied by a creature controlled by the same player who controls this Rally Point).
-    *   **Effect:** If a creature controlled by this slot effect's controller is on this slot at the Start of a Turn, its controller Schedules 1 additional card draw for their next Turn.
+    *   **Effect:** If a creature controlled by this slot effect's controller is on this slot at the Start of their Turn, its controller Schedules 1 additional card draw for their next **Turn**.
     *   **Parameters:** None.
     *   **Duration of Slot Effect:** Persistent until replaced.
     *   **Cleansable:** Yes
@@ -68,7 +79,7 @@
     *   **Visibility:** Hidden
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** The `movingCreature` is immediately pushed one slot directly backward (towards its controller's edge of the board) if the destination slot is empty and valid. If it cannot be pushed (e.g., at edge of board, next slot occupied), it instead takes 2 damage. The Slippery Floor is then consumed.
-    *   **Parameters:** Damage if not pushed: 2.
+    *   **Parameters:** Damage if not pushed: 2 (set by applying card).
     *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes.
 
@@ -83,7 +94,7 @@
 **Unstable Terrain**
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnTurnEnd` (Slot effect logic checks if its slot is occupied).
-    *   **Effect:** If this is the 2nd consecutive Turn the *same* creature ends its Turn on this slot, that creature is moved to a random available adjacent friendly slot (if multiple, chosen randomly). If no such slot is available, nothing happens. The "consecutive turn" counter resets if a different creature occupies the slot, the slot becomes empty, or the creature is successfully moved by this effect or any other means.
+    *   **Effect:** If this is the 2nd consecutive **Turn** the *same* creature ends its **Turn** on this slot, that creature is moved to a random available adjacent friendly slot (if multiple, chosen randomly). If no such slot is available, nothing happens. The "consecutive turn" counter resets if a different creature occupies the slot, the slot becomes empty, or the creature is successfully moved by this effect or any other means.
     *   **Parameters:** None.
     *   **Duration of Slot Effect:** Persistent until replaced.
     *   **Cleansable:** Yes
@@ -106,11 +117,12 @@
 
 **Barbed Snare**
     *   **Visibility:** Hidden
-    *   **Trigger Event(s):** `OnBeforeLeaveSlot(movingCreature, originSlot, intendedDestinationSlot)` (Slot effect logic checks: if `originSlot` is this slot).
-    *   **Effect:** The `movingCreature` takes X damage. The movement is still allowed (unless prevented by another effect). The Barbed Snare is then consumed.
-    *   **Parameters:** Damage: X (e.g., 1).
+    *   **Trigger Event(s):** `OnLeaveSlot(leftSlot, method)` (Slot effect logic checks: if `leftSlot` is this slot). Similar to Binding Chains, `OnBeforeLeaveSlot` might be more thematically appropriate if damage is meant to occur *as* they try to leave, potentially influencing decisions or other triggers. If damage occurs *after* leaving, `OnLeaveSlot` is fine.
+    *   **Effect:** The creature that left this slot takes X damage. The Barbed Snare is then consumed.
+    *   **Parameters:** Damage: X (e.g., 1, set by applying card).
     *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD II.H.4).
     *   **Cleansable:** Yes
+    *   **Note:** Please confirm trigger timing preference (`OnLeaveSlot` vs. `OnBeforeLeaveSlot`).
 
 **Magnetic Pulse**
     *   **Visibility:** Visible
@@ -134,8 +146,8 @@
     *   **Effect:** When a creature enters this slot:
         *   The `movingCreature` gains `Anchored`.
         *   The `movingCreature` gains `Exposed (1 Turn)`.
-        *   The controller of the `movingCreature` schedules 1 fewer card draw for their next Turn.
-    *   **Parameters:** Duration: X (e.g., 2, as set by the applying card).
-    *   **Duration of Slot Effect:** X global Turns, then removed.
+        *   The controller of the `movingCreature` schedules 1 fewer card draw for their next **Turn**.
+    *   **Parameters:** Duration of Slot Effect: X (e.g., 2 global **Turns**, as set by the applying card).
+    *   **Duration of Slot Effect:** X global **Turns**, then removed.
     *   **Cleansable:** Yes
-    *   **Notes:** The `Anchored` status applied by this effect persists as per its own rules (i.e., until the creature is successfully moved by another effect, or the status is cleansed), even if 'Threshold of Liminality' expires or is cleansed. `Exposed` status includes applying `Revealed` to the creature for the same duration.
+    *   **Notes:** The `Anchored` status applied by this effect persists as per its own rules. `Exposed` status includes applying `Revealed` to the creature for the same duration. The draw reduction applies to the next Scheduled Draw.

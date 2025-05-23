@@ -1,23 +1,28 @@
-DOCUMENT USAGE GUIDELINES:
+**DOCUMENT USAGE GUIDELINES:**
+	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
+    *   This document **shall** possess a clearly demarcated subject matter.
+    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
 
-Comprehensive List: This document contains the definitive list of standardized game events that can serve as triggers for abilities and game effects.
+	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
+    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
+    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
+    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
 
-Stability of Definitions: The names and core definitions (including primary parameters) of these trigger events are stable and should not be altered, removed, or significantly rephrased without explicit instruction. This ensures consistent interpretation across all game mechanics.
+	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
+    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
 
-Adding New Triggers: New trigger events should only be added if a fundamentally new type of game interaction occurs that cannot be adequately represented by existing triggers, even with flexible ability conditions.
+	**STANDARDIZED CONTENT BOUNDARIES:**
+    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
+    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
 
-Parameter Expansion: Parameters for existing triggers may be expanded if new mechanics require additional contextual information, but the original parameters must be maintained.
-
-Distinction from Ability Conditions: This list defines what event occurs (e.g., OnDamaged). The specific conditions under which a card's ability reacts to this event (e.g., 'OnDamaged by a Spell while `Concealed`') are defined on individual cards and are highly flexible, as per the main Game Design Document (Section V.B.5 - Creature Ability Design Principle).
-
-Trigger Events List
+**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
 
 This section defines common game events that can trigger passive abilities or other effects. Many triggers provide contextual information (e.g., source of damage, specific status applied) that can be used by the ability's logic.
 
 Combat & Creature State Changes:
 
 OnDamaged(damageSource, damageAmount, damageType): Triggers when this creature (or entity with this trigger) takes damage.
-    damageSource: The entity or effect (e.g., creature, spell, status) that caused the damage.
+    damageSource: The entity or effect (e.g., creature, spell, ability) that caused the damage.
     damageAmount: The numerical value of Health and/or Armor damage taken.
     damageType: Category of damage (e.g., 'Attack', 'Spell', 'AbilityEffect', 'StatusEffect', 'Recoil', 'LocationEffect', 'SlotEffect', 'PlayerDamageFromSlot').
 
@@ -59,7 +64,7 @@ OnStatChange(statChanged, oldValue, newValue): Triggers when one of this creatur
 
 Turn Structure & Action Flow:
 
-OnTurnStart: Triggers at the beginning of this creature's controller's turn, typically before the Scheduled Draw phase.
+OnTurnStart: Triggers at the beginning of this creature's controller's turn, typically before the Scheduled Draw phase. (As per GDD II.F, Start of Turn Phase includes Scheduled Draw *then* OnTurnStart triggers).
 
 OnTurnEnd: Triggers at the end of this creature's controller's turn, after all queued actions for the turn have resolved.
 
@@ -87,7 +92,7 @@ OnEnterSlot(enteredSlot, method): Triggers when this creature enters a slot.
 
 OnLeaveSlot(leftSlot, method): Triggers when this creature leaves a slot.
     leftSlot: The slot the creature has left.
-    method: How the creature left (e.g., 'Moved', 'Swapped', 'ReturnedToHand', 'Destroyed', 'Recruited', 'Converted', 'ReturnedToOwner').
+    method: How the creature left (e.g., 'Moved', 'Swapped', 'ReturnedToHand', 'Destroyed', 'Recruited', 'Converted', 'ReturnedToOwner', 'Banished').
 
 OnEnterBattlefield: Triggers when this creature card enters the battlefield from any zone (Hand, Discard Pile via Revive). Occurs after `Deployment Time` is applied, but before OnDeploymentTimeComplete. (Note: Generally does not re-trigger if a temporarily recruited creature returns to its owner, unless specified by an effect).
 
@@ -122,7 +127,7 @@ OnBecomeUntargetable: Triggers when this creature transitions from a targetable 
 
 Card & Resource Management (Primarily Player/Controller Level):
 
-OnCardDrawn(drawnCard): Player-level trigger. Triggers when the player controlling this ability draws one or more cards.
+OnCardDrawn(drawnCard): Player-level trigger. Triggers when the player controlling this ability draws one or more cards (typically via Scheduled Draw).
     drawnCard: The card(s) that were drawn.
 
 OnCardDiscardedFromHand(discardedCard): Player-level trigger. Triggers when the player discards one or more cards from their hand (as an additional cost).
