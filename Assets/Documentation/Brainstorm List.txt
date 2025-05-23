@@ -11,6 +11,7 @@ Card Game Factions Overview
 			Coin
 			Compass
 			Concealed Weapon
+			Construction Sign
 			Credit Card
 			Dumbbell
 			E-Bike
@@ -68,18 +69,19 @@ Card Game Factions Overview
 			Tailored Uniform
 			Taser
 			Teflon
-			Teleportation
 			Teleporter
 			USB Stick
 			VR Headset
 			Venus Flytrap (Piranha Plant)
 			Water Bottle Filter
 			Workout Supplement
+			YIELD
 			Yoga Mat
 			Zweihander
 		Food & Consumables
 			Air Fryer
 			Air Purifier
+			Baguette
 			Chinese Food
 			Condom
 			Creatine
@@ -183,20 +185,16 @@ Card Game Factions Overview
 		Sauna
 		Secret Laboratory
 		Server Farm
-		Sewers
 		Shibuya
 		Skyscraper
 		Skyscraper Rooftop
-		Space Elevator
 		Space Station
 		Speakeasy
 		Stairwells
 		Stonehenge
 		Subway Platform
 		Supply Depot
-		Tax Haven
 		Theme Park
-		Tourist Trap
 		Toxic Waste Dump
 		Trading Floor
 		Unfinished Construction Site
@@ -252,12 +250,12 @@ Card Game Factions Overview
 			Secure Channel
 			Solid State Drive
 			Someone else's Computer (Cloud)
+			Space Elevator
 			Stable Connection
 			Subdermic Computer
-			System Crash
-			System Glitch
 			System Update
 			Technical Debt
+			Teleportation Device
 			Transhumanism
 			Turbo
 			Two-Factor Authentication
@@ -278,16 +276,13 @@ Card Game Factions Overview
 			Data Mining
 			Decypher
 			Digital Editing
-			Disruptor
 			Email
 			Fork (Software Project)
 			Growth Hacking
 			Here Be Dragons
 			Infinite Loop
-			Insider Job
 			Jailbreak
 			Linked Lunatics
-			Malinformation
 			Minimum Viable Product
 			Modal Dialog
 			Pair Programming
@@ -353,6 +348,7 @@ Card Game Factions Overview
 			Friendzone
 			Frutiger Aero
 			Furnies
+			GAWKER
 			Ghosting
 			Girl Math
 			Hive Mentality
@@ -380,6 +376,7 @@ Card Game Factions Overview
 			Rupee (Zelda)
 			Screen Time
 			Sealioning
+			Selfie Esteem
 			Shitposting
 			Sleepy Cat
 			Snowflake
@@ -391,7 +388,6 @@ Card Game Factions Overview
 			Stream Sniping
 			Stunlock
 			Subreddit
-			System Glitch (Matrix Glitch)
 			The Simulation (The Matrix)
 			Thirst Trap
 			Tinfoil Hat
@@ -448,17 +444,20 @@ Card Game Factions Overview
 			Attwhore
 			Buy My Course
 			Catfish
+			Crypto "Enterpreneur"
 			Cryptobro
 			Digital Nomad
 			E-Girl
+			E-Girl Thirst Trap Entrepreneur
 			Ghost (Incel)
 			Influencer
 			Keyboard Warrior
+			Link-In-Bio Babe
 			MGTOW
 			Overly Attached Girlfriend
+			Simp Summoner
 			Startup Bro
 			Tech Bro
-			Trad Wife
 			V-Tuber
 			Zoomer
 	Faction: Corporate Machine
@@ -471,6 +470,7 @@ Card Game Factions Overview
 			Backroom Deal
 			Binding Contract
 			Blame Socialism (Gracias Socialismo, meme de derechuzos)
+			Bonwit Teller Building Demolition
 			Broken Social Elevator
 			Business To Business
 			Business To Customer
@@ -478,8 +478,10 @@ Card Game Factions Overview
 			Cascade
 			Cashcow
 			Charles Ponzi
+			Cleaning Robot (corpo)
 			Corporate Espionage
 			Counterfeit (corpo, business, mafia)
+			Cozy Loft in "Exclusive" Location (Business)
 			Crane
 			Dark Pattern (UI/UX)
 			Dogfooding
@@ -491,10 +493,12 @@ Card Game Factions Overview
 			Excavator
 			Flagship
 			Follow The Money
+			Forced Upselling
 			Forklift
 			Free Dismissal
 			Game Theory
 			Greenwashing
+			High-Pressure Sales Tactics
 			Hostile Takeover
 			Impossible Initial Investment
 			Insider Information
@@ -531,7 +535,6 @@ Card Game Factions Overview
 			Ponzi Scheme
 			Power Hoarding
 			Price Gouging
-			Privatization
 			Pyramid Scheme
 			Recycling
 			Relaxed Monopoly Enforcement
@@ -540,6 +543,7 @@ Card Game Factions Overview
 			Screening
 			Securities And Exchange Commission (SEC)
 			Shareholder Meeting
+			Shell Company
 			Short Squeeze
 			SICAV
 			Software As A Service
@@ -554,8 +558,13 @@ Card Game Factions Overview
 			Supply Chain Disruption
 			Synergy Meeting
 			Targeted Advertisement
+			Taxpayer Funds Venture Capital Profits (corpo)
 			Team Building Exercise
+			The Art of Selling: Involuntary Product Bundling
+			The Impartial Intermediary, Inc. (A Subsidiary of Monopolies United)
 			Titanic
+			Tourist Trap (corpo)
+			Traceability
 			Trade Offer
 			Unicorn (Enterprise)
 			Usury
@@ -564,6 +573,7 @@ Card Game Factions Overview
 			Whine Menu
 			White Collar Crime
 			Window Dressing
+			Zero Grace Operational Policy
 			Zero-Sum Game
 		Finance & Economics
 			American Dream
@@ -594,6 +604,7 @@ Card Game Factions Overview
 			Long Term Investment
 			Market Crash
 			Market Equilibrium (mock, this card should show the inequality the market drives us towards) (corpo)
+			Moral Bankruptcy (Finance world individuals with 0 sense of moral)
 			Mortgagae Papers
 			Multilevel Marketing Seller
 			Negative Growth
@@ -603,15 +614,16 @@ Card Game Factions Overview
 			Perfect Information
 			Pharma Lobby
 			Political Donations
+			Private Equity
+			Roth IRA Trading
 			Stock Market
 			Stock Market Rally
 			Stocks
 			Swiss Bank Account
-			Tax Haven
+			Tax-Exempt Corruption
 		Workplace & Labor
 			Auditor
 			Barista
-			Bribery
 			Burnout (Workplace)
 			Butler
 			C-Suite
@@ -620,6 +632,7 @@ Card Game Factions Overview
 			Charter Flight
 			Container Ship
 			Cooking The Books
+			Day Trader
 			Employment Application
 			English Teacher
 			False Meritocracy
@@ -627,10 +640,11 @@ Card Game Factions Overview
 			FIRE Movement
 			Glass Ceiling
 			Human Resources Person
+			Internal Protocol: Quota Crusher Mindset
 			Janitor
 			Just A Number In The Spreadsheet
 			Lawyer (Corporate)
-			Mass Document Destruction
+			Mass Destruction of Incriminatory Documents
 			Mass Layoffs
 			Meetings About Meetings
 			Micromanager
@@ -652,11 +666,9 @@ Card Game Factions Overview
 			Alibi
 			Arms Dealer
 			Asset Recruitment
-			Asymmetric Warfare
 			Baiting USB Stick
 			Black Bag Job
 			Black Box
-			Bribery
 			Brush Pass
 			Burn Notice
 			Burner Phone
@@ -695,19 +707,15 @@ Card Game Factions Overview
 			If I Told You, I'd Have To Kill You
 			Implant (Tracking/Control)
 			Informant
-			Insider Information
 			Insider Job
 			Intentional Leaks
 			Internal Betrayal
 			Internet Censored Encyclopedia
 			Invisibility Cloak
 			It Wasn't Me
-			Known Unknown
 			Laser Microphone
 			Lawyer (The Fixer)
 			Lie Detector
-			Malinformation
-			Mass Document Destruction
 			Memory Wipe
 			Mind Control Device
 			Misinformation
@@ -752,7 +760,6 @@ Card Game Factions Overview
 			Subverting Expectations
 			Tapped Communications
 			Telescreen
-			Traceability
 			Tracking Beacon
 			Undercover Agent
 			Unknown Unknown
@@ -761,11 +768,9 @@ Card Game Factions Overview
 			Whistleblower
 			Witness Protection Program
 		Conspiracy & Control Systems
-			Alien Body (Area51)
 			Blackout
 			Conspiracy Theorist
 			Control
-			Dark Money Donation
 			Deep State
 			Designed Narrative
 			Epistemic Security
@@ -775,7 +780,6 @@ Card Game Factions Overview
 			Mandela Effect
 			Masonic Salute
 			Mass Hysteria
-			Mental Breakdown
 			Political Prisoner
 			Power Vacuum
 		Psychological Warfare & Tactics
@@ -788,11 +792,9 @@ Card Game Factions Overview
 			Apex
 			Authoritarianism
 			Ban Hammer
-			Behavioral Sink
 			Big Brother
 			Blackwhite
 			Border Crossing
-			Bribery
 			Constitution
 			Controlled Dissidence
 			Coup D'Etat
@@ -801,7 +803,6 @@ Card Game Factions Overview
 			Demagogue
 			Demonstration
 			Diplomata
-			Disruptor
 			Domestic Security Agency (DSA, NSA Parodia)
 			Doublethink
 			Dystopian Present
@@ -809,13 +810,11 @@ Card Game Factions Overview
 			Emergency Broadcast
 			Eunuch
 			Everybody Is Equal Before The Law
-			Exodus
 			Expropriate
 			Facecrime
 			Filibuster
 			Gerontocracy
 			Globalization
-			Great Depression
 			Gun Control
 			Hacker
 			Illuminati
@@ -826,6 +825,7 @@ Card Game Factions Overview
 			Lawyer (State)
 			Limited Resources
 			Local Police
+			Malinformation
 			Mass Emigration
 			Mass Inmigration
 			Ministry Of Equality
@@ -849,18 +849,15 @@ Card Game Factions Overview
 			Pegasus (Statecraft)
 			Persona Non Grata
 			Pledge (Political)
+			Police Officer Productivity Target
 			Political Agenda
 			Political Campaign Donations
-			Political Correctness
 			Political Pledge
 			Populism
 			Post-Truth
 			Power Grid Failure
-			Power Vacuum
-			Praegustator
 			President
 			Prince
-			Privatization
 			Professors
 			Propaganda
 			Protección Diplomática
@@ -880,6 +877,7 @@ Card Game Factions Overview
 			Secret Handshake
 			Security Guard
 			Security Level
+			Sewers (Statecraft)
 			Social Distancing
 			Social Mobility
 			Sparta
@@ -888,6 +886,7 @@ Card Game Factions Overview
 			State Controlled Media
 			Status Quo
 			Supreme Court
+			Tax Haven
 			Tax Season
 			Terrorist Attack
 			The Fifth Amendment
@@ -903,6 +902,8 @@ Card Game Factions Overview
 			Vernacular Information Dissemination
 			WWIII
 		Warfare & Military
+			"Peace" Operation
+			"Smart" Weapon
 			Anthrax Laboratory
 			Asymmetric Warfare
 			Blitzkrieg
@@ -917,6 +918,7 @@ Card Game Factions Overview
 			I Am Become Death, The Destroyer Of Worlds
 			Loaded Language
 			Lost Landmine
+			Man o' War
 			Manhattan Project
 			Martial Law
 			Mercenaries
@@ -980,7 +982,6 @@ Card Game Factions Overview
 			Pleiades
 			Celaeno, Electra, Maia, Merope, Pleione, Taygeta, Atlas
 			Pope
-			Praegustator
 			Preacher
 			Robinhood
 			Siren
@@ -1036,6 +1037,7 @@ Card Game Factions Overview
 			Death
 			Destiny Bond
 			Deus Ex Machina
+			Die by the Sword
 			Die For It
 			Duplicating Fish
 			Exodus
@@ -1087,6 +1089,7 @@ Card Game Factions Overview
 			Ying-Yang
 		Legendary Objects & Places
 			Albino Silverback Gorilla
+			Ambrosia
 			Anthology
 			Astrolabe
 			Constellation
@@ -1099,7 +1102,6 @@ Card Game Factions Overview
 			Frankenstein
 			Gungnir
 			Hex
-			Holy Grail
 			Holy Quest
 			Homing Pidgeon
 			Jade Monkey
@@ -1107,6 +1109,7 @@ Card Game Factions Overview
 			Library of Alexandria
 			Magic Beans
 			Mimic (Chest)
+			Mithril
 			Monkey Hand
 			Nacre
 			Necronomicon
@@ -1126,8 +1129,10 @@ Card Game Factions Overview
 			Venecian Mask
 			Vitruvian Man
 		Practices & Phenomena
+			Entheogenic Sacrament
 			Exorcism
 			Omen Reading
+			Publicly Funded Faith Schools
 			Spontaneous Combustion
 	Faction: Applied Science & Futurism
 		Core Sciences & Math
@@ -1152,7 +1157,6 @@ Card Game Factions Overview
 			Force Field
 			Gamma
 			Giraffe
-			HAARP
 			Hexagons
 			Hydroponics
 			Ionosphere
@@ -1166,7 +1170,6 @@ Card Game Factions Overview
 			Mutation
 			Nautical Charts
 			Omega
-			Origin Of The Universe
 			Overpopulation
 			Particle Accelerator
 			Perpetual Motion Machine
@@ -1185,7 +1188,6 @@ Card Game Factions Overview
 			Summa Cum Laude
 			T-Rex Bone
 			Tetration
-			Traceability
 			Wave Particle Duality
 			White Dwarf (Star)
 			Wormhole
@@ -1197,7 +1199,6 @@ Card Game Factions Overview
 			Bioengineered Meat
 			Biohacking
 			Bioweapon
-			Black Box
 			Blood Transfusion
 			Clone
 			Cold Fusion
@@ -1231,8 +1232,9 @@ Card Game Factions Overview
 			Biodegradable Plastic
 			Cherenkov Radiation
 			Exoplanet
+			Longevity Hub
 			Science Fiction
-			Space Elevator
+			Seasteading
 			Space Mining
 			Space Satellites
 			Tidal Wave
@@ -1245,6 +1247,7 @@ Card Game Factions Overview
 			Balance
 			Behavioral Sink
 			Better Late Than Never
+			Blessing in Disguise
 			Blissful Ignorance
 			Brain Drain
 			Brainstorm
@@ -1254,7 +1257,6 @@ Card Game Factions Overview
 			Chose Your Poison
 			Cognitive Dissonance
 			Cognitive Maneuver
-			Compartmentalization
 			Confirmation Bias
 			Contradiction
 			Controlled Chaos
@@ -1282,6 +1284,7 @@ Card Game Factions Overview
 			Halo Effect
 			Herd Mentality
 			Heuristics
+			Hiatus
 			Hold That Thought
 			Hypnosis
 			Imposter Syndrome
@@ -1297,6 +1300,7 @@ Card Game Factions Overview
 			Main Character Syndrome
 			Mandelbrot
 			Maslow's Pyramid
+			Melancholy
 			Mens Sana In Corpore Sano
 			Mental Breakdown
 			Momentum
@@ -1314,6 +1318,7 @@ Card Game Factions Overview
 			Pessimist
 			Placebo Effect
 			Poe's Law
+			Praegustator
 			Precognition
 			Projection (Psychology)
 			Psychiatrists
@@ -1322,6 +1327,7 @@ Card Game Factions Overview
 			Red Herring
 			Reflect
 			Resonate
+			Scapegoating
 			Schrodinger's Cat
 			Selective Perception
 			Self-Fulfilling Prophecy
@@ -1331,7 +1337,6 @@ Card Game Factions Overview
 			Survivorship Bias
 			Synergy
 			Tabula Rasa
-			Teleportation
 			Terminal Lucidity
 			The Eliza Effect
 			The Human Factor
@@ -1348,14 +1353,12 @@ Card Game Factions Overview
 			Ad Hoc
 			Ad Hominem
 			Ad Nauseam
-			Aesthetic (Philosophy Of Beauty)
 			Appeal To Authority
 			Appeal To Nature
 			Appeal To Tradition
 			Bona Fide
 			Carpe Diem
 			Carpe Noctem
-			Cascade
 			Cheap Philosophy
 			Cherry Picking
 			Circular Reasoning
@@ -1372,7 +1375,7 @@ Card Game Factions Overview
 			Law Of Attraction
 			Mea Culpa
 			Metaphor
-			Modus Operandi
+			Mimetic Theory
 			No True Scotsman
 			Non Sequitur
 			Occam's Razor
@@ -1380,13 +1383,11 @@ Card Game Factions Overview
 			Pascal's Wager
 			Post Hoc Ergo Propter Hoc (False Cause)
 			Post Mortem
-			Quid Pro Quo
 			Reductio Ad Absurdum
 			Roko's Basilisk
 			Shakespeare, written by a Monkey
 			Slippery Slope
 			Socrates (Mind)
-			Status Quo
 			Tempus Fugit
 			Vice Versa
 			Whataboutism
@@ -1403,8 +1404,6 @@ Card Game Factions Overview
 			Body Positivity
 			Body Shaming
 			Burn The Candle At Both Ends
-			Camper Van
-			Canon
 			Child Support
 			Color Theory
 			Consumism
@@ -1501,6 +1500,7 @@ Card Game Factions Overview
 			Stonewalling
 			Strike (Huelga)
 			Sudoku
+			System Glitch (Matrix Glitch)
 			Tax The Rich
 			Tessellate
 			Texting while Driving
@@ -1508,6 +1508,7 @@ Card Game Factions Overview
 			The Great Replacement Theory
 			The Grind (Meme)
 			The Rat Race
+			There is a considerable overlap between the smartest bears and the dumbest humans
 			This Is Fine
 			This Is From Matilda
 			Tiger Parenting
@@ -1518,6 +1519,7 @@ Card Game Factions Overview
 			Wasted Potential
 			Weaponized Incompetence
 			Weight Loss Drug
+			Welcome to Fear City
 			What is reality anyway? A collective delusion? (disco elysium reference) (zeitgeist)
 			Whistle (Silbar)
 			White Russian
@@ -1543,11 +1545,11 @@ Card Game Factions Overview
 			Dogmatic Approach
 			Dogsitter
 			Drug Smuggler
-			Drunken Sincerity
 			Football hooligans
 			Freelancer
 			Geopolitical Yapper
 			Good Boi (Dog Meme)
+			hedonistic treadmillionaire
 			Hipster
 			Hobo
 			Janitor
@@ -1588,7 +1590,6 @@ Card Game Factions Overview
 			BYOBBB
 			Camper Van
 			Canon
-			Cleaning Robot (zeitgeist)
 			Cyberpunk
 			Fidget Spinner
 			Jetpack
