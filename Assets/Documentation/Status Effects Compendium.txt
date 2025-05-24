@@ -17,227 +17,487 @@
 
 **FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
 
-**STATUS EFFECT KEYWORDS:**
+**Name:** Addicted
+**Type:** Statistic, Evolving, Persistent
+**Persistent:** Yes
+**Description:** "Speed +1. Evolves into Exhausted at Dusk if stats were not changed this Day."
+**Core Impact:** Provides Speed bonus but carries risk of evolving into Exhausted.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Ignore
+**Statistic Modification:**
+    **Target Statistic:** Speed
+    **Modification Method:** +1
+    **Modification Scope:** While Active
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** If this creature's stats were not changed by any effect during this Day, it evolves into `Exhausted`.
+**Evolution:**
+    **Evolves Into:** Exhausted
+    **Evolution Trigger:** At Dusk, if stats were not changed during the Day.
+**Cleansable:** No
 
-*   **`Addicted`**
-    *   **Core Effect:** Creature gains Speed +1. If the creature's stats were not changed by any effect during a **Turn**, it transforms into `Exhausted` at the **End of that Turn**. *(This status is typically applied by `Coffeinated` expiring).*
-    *   **Stacking/Refresh:** Does not stack. Duration is persistent until transformation. Applying again has no effect.
-    *   **Tick/Duration:** Persistent. Checks for stat changes and potential transformation at the **End of each Turn**.
-    *   **Cleansable:** No.
+**Name:** Anchored
+**Type:** Control, Persistent
+**Persistent:** Yes
+**Description:** "Cannot use own Move actions. Persists until moved or Cleansed."
+**Core Impact:** Restricts self-initiated movement.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Refresh Stacks (remains Anchored)
+    **On Consumed:** (Special: Removed if creature is successfully moved by any means).
+**Cleansable:** Yes (Also removed by successful movement).
 
-*   **`Anchored`**
-    *   **Core Effect:** Creature cannot move using its own created move actions. It can still be moved by other creatures or spells.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its condition (i.e., it remains `Anchored`).
-    *   **Tick/Duration:** Persistent. Removed if the creature is successfully moved by any means, or by a Cleanse effect.
-    *   **Cleansable:** Yes (Removed by successful movement, or by standard Cleanse actions).
+**Name:** Blessed
+**Type:** Protective, Stacking, Consumable, Persistent
+**Persistent:** Yes
+**Description:** "Persistent. Consumes 1 stack to negate an incoming status effect. Up to 3 stacks. Re-applying adds stacks."
+**Core Impact:** Consumable protection against status effects.
+**Stacking & Duration:**
+    **Initial Stacks:** 1 (typically, or X from source)
+    **Max Stacks:** 3
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Add Stacks
+**Consumable Effect (Stack-Spending Trigger):**
+    **Trigger Event:** A status effect (that Blessed can negate) would be applied to this creature.
+    **Stacks Spent:** 1
+    **Resulting Impact:** Negate the incoming status effect.
+**Cleansable:** Yes (Removes all current stacks).
 
-*   **`Blessed`**
-    *   **Core Effect:** Negates the next status effect that would be applied to this creature. After negating an effect, one stack of `Blessed` is removed.
-    *   **Stacking/Refresh:** Can stack up to 3 times. Applying further instances of `Blessed` adds a stack up to the maximum of 3. Applying `Blessed` when at 3 stacks has no additional effect.
-    *   **Tick/Duration:** Persists until all stacks are consumed by negating effects. No **Turn**-based decay.
-    *   **Cleansable:** Yes (Removes all current stacks of `Blessed`).
+**Name:** Bloodthirst
+**Type:** Control, Damage, Heal, Persistent
+**Persistent:** Yes
+**Description:** "Must Attack each Day or halve current HP at Dusk. Dealing damage heals for half the damage dealt (rounded up)."
+**Core Impact:** Forces aggressive action, provides lifesteal.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Refresh Stacks
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** If no Attack action by this creature resolved this Day, its current HP is halved (rounded down).
+**Notes:** Healing occurs whenever this creature deals damage of any kind.
 
-*   **`Bloodthirst`**
-    *   **Core Effect:** Creature must have an Attack action queued for it each **Turn**. If no Attack action by this creature resolves during a **Turn**, its current HP is halved (rounded down) at the **End of that Turn** (e.g., 10 -> 5 -> 2 -> 1 -> 0). When this creature deals damage of any kind, it is healed for half the damage dealt (rounded up).
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its presence (no separate duration to track).
-    *   **Tick/Duration:** Persistent condition checked at the **End of each Turn**. Healing is on damage instances.
-    *   **Cleansable:** Yes.
+**Name:** Bored
+**Type:** Control, Damage, Persistent
+**Persistent:** Yes
+**Description:** "Must Move or be moved each Day, or take X damage at Dusk."
+**Core Impact:** Forces movement to avoid damage.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Refresh Stacks (X damage value set by most recent application).
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** If this creature was not moved during this Day, it takes X damage (X specified by the source of `Bored`).
+**Cleansable:** Yes
 
-*   **`Bored`**
-    *   **Core Effect:** Creature must perform a Move action or be moved by an effect each **Turn**. If it is not moved during a **Turn**, it receives X damage (specified by the source of `Bored`) at the **End of that Turn**.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its presence. The X damage value is set by the most recent application if it can vary.
-    *   **Tick/Duration:** Persistent condition checked at the **End of each Turn**.
-    *   **Cleansable:** Yes.
+**Name:** Brainwashed
+**Type:** Control, Disabling, Delayed
+**Description:** "At Dusk of the 2nd Day, changes owner to the status applier; Abilities Disabled. Re-applying resets countdown."
+**Core Impact:** Delayed, permanent control change with ability disable.
+**Stacking & Duration:**
+    **Initial Stacks:** 2 (from source)
+    **Re-application Behavior:** Refresh Stacks
+    **On Consumed:** Control of this creature changes to the player who applied `Brainwashed`. This creature's `Abilities Disabled`. Other status effects on the creature are kept.
+**Cleansable:** No
 
-*   **`Brainwashed`**
-    *   **Core Effect:** At the **End of the 2nd Turn** after application, the creature changes owner to the player who applied `Brainwashed`. All its `Abilities Disabled`. Other status effects on the creature are kept.
-    *   **Stacking/Refresh:** Does not stack. Applying again while the 2-**Turn** countdown is active resets the 2-**Turn** countdown.
-    *   **Tick/Duration:** Effect triggers at the **End of the 2nd Turn** after application. If not cleansed before then, the change is permanent until the creature **Leaves Play** or is affected by another control-change effect.
-    *   **Cleansable:** No.
+**Name:** Burnout
+**Type:** Damage, Stacking, Volatile, Persistent
+**Persistent:** Yes
+**Description:** "Persistent. When any creature reaches 3 stacks, all creatures with Burnout take 3 damage, then Burnout is removed from those damaged. Attempting to Cleanse applies Burnout to adjacent friendly creatures and triggers this creature's max stacks effect."
+**Core Impact:** Accumulates globally, explodes, special Cleanse interaction.
+**Stacking & Duration:**
+    **Initial Stacks:** 1 (typically, or X from source)
+    **Max Stacks:** 3
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Add Stacks
+    **On Max Stacks:** All creatures on the battlefield with any `Burnout` stacks take 3 damage; all `Burnout` stacks on those damaged creatures are then removed.
+**Cleansable:** Special: Attempting to Cleanse `Burnout` from this creature causes its `Burnout` stacks to become 3 (triggering the `On Max Stacks` effect if not already at 3). Each adjacent friendly creature gains 1 `Burnout` stack.
 
-*   **`Burnout`**
-    *   **Core Effect:** Creature gains a stack of `Burnout`. When a creature accumulates 3 stacks of `Burnout`, it and all other creatures on the battlefield with any `Burnout` stacks immediately receive 3 damage, and all `Burnout` stacks on all affected creatures are then removed.
-    *   **Stacking/Refresh:** Stacks up to 3 times. Applying a new instance adds 1 stack. If applying a stack would exceed 3, it triggers the 3-stack effect. Stacks do not decrease over time naturally.
-    *   **Tick/Duration:** Stacks are persistent. The 3-damage effect triggers immediately upon reaching 3 stacks on any creature.
-    *   **Cleansable:** Special. Attempting to Cleanse `Burnout` from a creature causes it to immediately "explode": the creature with `Burnout` takes 3 damage, and friendly creatures adjacent to it gain 1 stack of `Burnout`. This explosion happens instead of normal cleansing. Otherwise not removed by standard Cleanse.
+**Name:** Chill
+**Type:** Statistic, Heal
+**Description:** "Halves Attack (min 1). Each Dusk, restores 1 Health. Re-applying sets stacks to the new amount."
+**Core Impact:** Reduces Attack temporarily, provides healing over time.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Statistic Modification:**
+    **Target Statistic:** Attack
+    **Modification Method:** /2 (rounded down, min 1)
+    **Modification Scope:** While Active
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** This creature restores 1 Health.
+**Cleansable:** Yes
 
-*   **`Chill` (X Turns)**
-    *   **Core Effect:** Creature's Attack is halved (rounded down, min 1). Creature restores 1 Health at the **End of each Turn**.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its duration to the new X value.
-    *   **Tick/Duration:** Lasts X **Turns**. Duration decreases by 1 at the **End of each Turn**. Health restoration occurs at the **End of each Turn** while active.
-    *   **Cleansable:** Yes.
+**Name:** Coffeinated
+**Type:** Statistic, Damage, Evolving
+**Description:** "+1 Attack, +1 Speed. Loses 1 Health Each Dusk. After 2 Days, evolves into Addicted. Re-applying refreshes countdown."
+**Core Impact:** Temporary offensive boost with health drain, evolves into Addicted.
+**Stacking & Duration:**
+    **Initial Stacks:** 2 (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Statistic Modification:**
+    **Target Statistic:** Attack, Speed
+    **Modification Method:** +1 (for each)
+    **Modification Scope:** While Active
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** This creature loses 1 Health.
+**Evolution:**
+    **Evolves Into:** Addicted
+    **Evolution Trigger:** On Consumed (reaches 0 stacks).
+**Cleansable:** Yes (If cleansed, `Addicted` is not applied).
 
-*   **`Coffeinated`**
-    *   **Core Effect:** Creature gains +1 Attack and +1 Speed. It loses 1 Health at the **End of each Turn**. After 2 **Turns** from application, `Coffeinated` is removed, and the creature gains `Addicted`.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes the 2-**Turn** duration before it converts to `Addicted`.
-    *   **Tick/Duration:** Lasts 2 **Turns**. Health loss occurs at the **End of each Turn**. Converts to `Addicted` at the **End of the 2nd Turn**.
-    *   **Cleansable:** Yes (If cleansed, `Addicted` is not applied).
+**Name:** Cognitive Dissonance
+**Type:** Protective, Statistic, Persistent
+**Persistent:** Yes
+**Description:** "Immune to positive stat changes. Damage taken reduced by 1 (min 0)."
+**Core Impact:** Prevents friendly stat buffs, provides minor damage reduction.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Ignore
+**Statistic Modification:**
+    **Target Statistic:** (Implicit: All stats for immunity)
+    **Modification Method:** Immune to positive changes from any source.
+    **Modification Scope:** While Active
+**Notes:** Reduce damage taken by this creature from all sources by 1 (to a minimum of 0).
+**Cleansable:** No
 
-*   **`Cognitive Dissonance`**
-    *   **Core Effect:** Creature is immune to all positive stat changes from any source. Reduce damage taken by this creature from all sources by 1 (to a minimum of 0).
-    *   **Stacking/Refresh:** Does not stack. Applying again has no effect.
-    *   **Tick/Duration:** Persistent as long as the creature is in play.
-    *   **Cleansable:** No.
+**Name:** Compromised
+**Type:** Unique, Information, Persistent
+**Persistent:** Yes
+**Description:** "Handler sees this creature's past and future Concealed Actions. Does not trigger 'On Revealed' effects unless handler uses a separate Intelligence action."
+**Core Impact:** Provides ongoing intelligence to the status applier.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Ignore
+**Notes:**
+    *   For the player who applied `Compromised` ("handler"): All past '???' entries in the Turn History from this creature become fully visible. All future actions queued by this creature are fully visible to the handler in their Turn History after resolution, even if normally `Concealed`.
+    *   Original controller and other opponents still see its `Concealed Actions` as '???'.
+    *   Passive information leakage does *not* trigger `OnRevealedByIntelligence` effects. Handler can *still choose* to use a separate Intelligence action to trigger them.
+**Cleansable:** Yes
 
-*   **`Compromised`**
-    *   **Core Effect:** Flavor: An agent captured and converted into a double agent.
-        *   **Targeting:** Typically applied to an opponent's creature that is currently "Undercover" or has the `Concealed` status effect keyword.
-        *   **Effect on Visibility (for the Handler):** For the player who applied `Compromised` (the "handler"):
-            *   All past '???' entries in the Turn History from this creature become fully visible to the handler.
-            *   All future actions queued by this creature, even if they would normally be `Concealed Actions` (due to "Undercover" ability or ongoing `Concealed` status), are fully visible to the handler in their Turn History after resolution.
-        *   **Effect on Visibility (for others):** The original controller of the `Compromised` creature, and any other opponents, still see its `Concealed Actions` as '???' in the Turn History.
-        *   **"On Being Revealed" Triggers:** Passive information leakage to the handler due to `Compromised` status does *not* automatically trigger any `OnRevealedByIntelligence` effects.
-        *   **Optional Intelligence Action:** The handler can *still choose* to use a separate Intelligence action targeting a past concealed action. If they do so, associated `OnRevealedByIntelligence` Traps or Strategic Disclosures *will* trigger.
-    *   **Stacking/Refresh:** Does not stack. Applying again has no effect.
-    *   **Tick/Duration:** Persists until cleansed or the creature **Leaves Play**.
-    *   **Cleansable:** Yes.
+**Name:** Concealed
+**Type:** Unique, Information
+**Description:** "Actions queued are Concealed Actions (appear as '???' to opponent). Negated by Revealed status. Re-applying sets stacks to new amount."
+**Core Impact:** Hides actions from the opponent.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Notes:** This effect is negated if the creature also has the `Revealed` status effect.
+**Cleansable:** Yes
 
-*   **`Concealed` (X Turns)**
-    *   **Core Effect:** For X **Turns**, all actions queued by this creature are `Concealed Actions`. `Concealed Actions` are not visible to the opponent pre-resolution and appear as '???' in their Turn History. This effect is negated if the creature also has the `Revealed` status effect keyword.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its duration to the new X value.
-    *   **Tick/Duration:** Lasts X **Turns**. Duration decreases by 1 at the **End of each Turn**.
-    *   **Cleansable:** Yes.
+**Name:** Deployment Time
+**Type:** Control, Disabling
+**Description:** "Cannot Act and passive abilities don't trigger. Stacks are Days remaining. Re-applying sets stacks to new amount."
+**Core Impact:** Initial period of inactivity for newly played creatures.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source)
+    **Decay Rule:** Each Dawn: -1 stack
+    **Re-application Behavior:** Refresh Stacks
+**Notes:** Exceptions to passive abilities not triggering are possible if specified by an ability. Removed when stacks reach 0.
+**Cleansable:** No (by general Cleanse; specific effects might reduce stacks but this is not "cleansing").
 
-*   **`Deployment Time` (X Turns)**
-    *   **Core Effect:** Applied to a creature upon entering the battlefield. For X **Turns**, this creature `Cannot Act` and its passive abilities do not trigger (exceptions possible if specified by an ability).
-    *   **Stacking/Refresh:** Does not stack. Duration is set upon entry. Effects can modify (reduce/increase) the remaining duration. Applying a new `Deployment Time` effect (e.g. from being returned to hand and replayed) would set a new duration.
-    *   **Tick/Duration:** Lasts X **Turns**. Duration decreases by 1 at the **Start of each Turn**. Removed when duration reaches 0.
-    *   **Cleansable:** No (by general Cleanse; specific effects might reduce its duration but this is not "cleansing").
+**Name:** Diplomatic Immunity
+**Type:** Protective, Persistent
+**Persistent:** Yes
+**Description:** "Immune to Spells (friendly and unfriendly)."
+**Core Impact:** Protects from spell effects.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Ignore
+**Notes:** Creature abilities, combat damage, and other status effects still apply.
+**Cleansable:** Yes
 
-*   **`Diplomatic Immunity`**
-    *   **Core Effect:** Creature is immune to Spells (friendly and unfriendly). Creature abilities, combat damage, and other status effects still apply.
-    *   **Stacking/Refresh:** Does not stack. Applying again has no effect.
-    *   **Tick/Duration:** Persistent as long as the creature is in play or until cleansed.
-    *   **Cleansable:** Yes.
+**Name:** Doomed
+**Type:** Disabling, Delayed, Unique, Damage, Statistic, Fixed_Stacks
+**Fixed_Stacks:** Yes
+**Description:** "Removes other statuses and grants immunity to incoming status effects. Each Dawn, gains 1 permanent Attack. Destroyed when Consumed. Stacks are fixed and cannot be modified by external effects."
+**Core Impact:** Immunity, eventual self-destruction, ramping permanent Attack.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source)
+    **Re-application Behavior:** Ignore
+    **On Consumed:** This creature is destroyed. (This is the "End of the Xth Day" effect).
+**Statistic Modification:**
+    **Target Statistic:** Attack
+    **Modification Method:** +1 (cumulative per Each Dawn)
+    **Modification Scope:** Permanent
+**Turn-Based Effects:**
+    **Trigger:** Each Dawn
+    **Effect:** Apply linked Statistic Modification (+1 Attack). This creature is immune to gaining any other status effects.
+**Notes:** Upon application, all other status effects (positive and negative, regardless of cleansability) are removed from this creature. The `Doomed` status itself and its associated effects cannot be disabled or prevented by other effects.
+**Cleansable:** No
 
-*   **`Doomed` (X Turns)**
-    *   **Core Effect:** Upon application, all other status effects (positive and negative, regardless of cleansability) are removed from this creature. While `Doomed`, this creature is immune to gaining any other status effects. It gains +1 Attack at the **Start of each Turn**. The creature is destroyed at the **End of the Xth Turn** after `Doomed` was applied. The `Doomed` status itself and its associated effects (immunity, stat gain, eventual destruction) cannot be disabled or prevented by other effects.
-    *   **Stacking/Refresh:** Does not stack. Applying `Doomed` to a creature that is already `Doomed` has no effect; the original duration and accumulated Attack bonus continue.
-    *   **Tick/Duration:** Lasts X **Turns**. Attack bonus is applied at the **Start of each Turn**. Destruction occurs at the **End of the Xth Turn**. Duration does not refresh.
-    *   **Cleansable:** No.
+**Name:** Earworm
+**Type:** Damage, Unique
+**Description:** "Takes 1 damage Each Dusk. After 2 Days, spreads to adjacent friendlies if still present, then continues. Re-applying refreshes spread timer."
+**Core Impact:** Persistent damage that can spread.
+**Stacking & Duration:**
+    **Initial Stacks:** 2 (acts as spread timer, actual damage is persistent until cleansed)
+    **Re-application Behavior:** Refresh Stacks (refreshes the 2-Day spread timer)
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** This creature takes 1 damage. If this status has 0 stacks remaining (i.e., after two instances of damage and check since last refresh/application), it spreads to adjacent friendly creatures (they gain `Earworm` with 2 stacks). The original `Earworm` then has its stacks reset to 2 (to continue the 2-Day spread cycle) and remains on the creature.
+**Cleansable:** Yes (Cleansing prevents current instance from spreading if done before its stacks reach 0).
 
-*   **`Earworm`**
-    *   **Core Effect:** Creature takes 1 damage at the **End of each Turn**.
-    *   **Stacking/Refresh:** Does not stack. Applying again refreshes its 2-**Turn** duration for spreading.
-    *   **Tick/Duration:** Takes damage at **End of Turn**. If `Earworm` is still present on this creature at the **End of the 2nd Turn** after its application (i.e., after two instances of damage and check), it spreads to adjacent friendly creatures (they gain `Earworm`). The original `Earworm` then remains on the creature and continues to deal damage and check for spreading every 2 **Turns** unless cleansed.
-    *   **Cleansable:** Yes (Cleansing prevents current instance from spreading if done before the 2-**Turn** check).
+**Name:** Exhausted
+**Type:** Control, Disabling, Unique, Persistent
+**Persistent:** Yes
+**Description:** "Cannot Act, Abilities Disabled. Gains Exposed (Indefinite, unless specified otherwise by source). Persists until specifically removed."
+**Core Impact:** Complete disable with visibility penalty.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Ignore
+**Notes:** Also gains `Exposed` (Indefinite duration, unless specified otherwise by the source of `Exhausted`). Not removed by time.
+**Cleansable:** No
 
-*   **`Exhausted`**
-    *   **Core Effect:** Creature is completely disabled: it `Cannot Act`, its `Abilities Disabled` (including passive triggers). It also gains `Exposed` (Indefinite duration, unless specified otherwise by the source of `Exhausted`). *(This status can be triggered by `Addicted`.)*
-    *   **Stacking/Refresh:** Does not stack. Applying again has no effect.
-    *   **Tick/Duration:** Persistent until removed by very specific effects (if any exist in the game design), not by time.
-    *   **Cleansable:** No.
+**Name:** Exposed
+**Type:** Unique, Information, Damage
+**Description:** "Takes +1 damage from all sources. Gains Revealed for the same duration. Re-applying sets stacks to new amount, unless Indefinite."
+**Core Impact:** Increased damage vulnerability and visibility.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source, or 1 if Indefinite)
+    **Decay Rule:** Each Dusk: -1 stack (unless Indefinite, then Persistent)
+    **Re-application Behavior:** Refresh Stacks (If an Indefinite `Exposed` is active, applying a timed `Exposed` will not override it to be timed. Applying Indefinite to timed makes it Indefinite).
+**Notes:** Creature also gains `Revealed` for the same duration/stacks as `Exposed`.
+**Cleansable:** Yes (unless it's a component of an uncleansable status like `Exhausted`, then lasts as long as `Exhausted` or as specified. If `Exhausted` is removed by non-Cleanse, component `Exposed` also removed).
 
-*   **`Exposed` (X Turns / Indefinite duration)**
-    *   **Core Effect:** Creature takes +1 damage from all sources. Creature also gains `Revealed` for the same duration as `Exposed`.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its duration to the new X value (if X is specified, otherwise Indefinite remains Indefinite). If an Indefinite `Exposed` is active, applying a timed `Exposed` will not override it to be timed.
-    *   **Tick/Duration:** Lasts X **Turns** (decreases by 1 at **End of Turn**) or is Indefinite as specified by the applying effect.
-    *   **Cleansable:** Yes (unless it's a component of an uncleansable status like `Exhausted`, in which case it lasts as long as `Exhausted` or as specified by the source of `Exhausted`. If `Exhausted` is somehow removed by a non-Cleanse effect, its component `Exposed` would also be removed).
+**Name:** Ghosted
+**Type:** Unique, Control, Damage, Evolving
+**Description:** "Doesn't block friendly movement. Loses 1 Health Each Dusk. Ignores slot effects on move. Cannot be targeted by direct Attacks. After 3 Days, evolves into Doomed (2 Days). Re-applying refreshes countdown."
+**Core Impact:** Ethereal state with unique interactions, evolves into Doomed.
+**Stacking & Duration:**
+    **Initial Stacks:** 3 (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** This creature loses 1 Health.
+**Evolution:**
+    **Evolves Into:** Doomed (with 2 initial stacks/Days)
+    **Evolution Trigger:** On Consumed (reaches 0 stacks).
+**Cleansable:** Yes (If cleansed, `Doomed` is not applied).
 
-*   **`Ghosted`**
-    *   **Core Effect:** Creature does not block friendly movement through its slot. It loses 1 Health at the **End of each Turn**. It cannot trigger slot effects when moving onto or off a slot. It cannot be targeted by direct attacks.
-    *   **Stacking/Refresh:** Does not stack. Applying again refreshes the 3-**Turn** duration before it converts to `Doomed`.
-    *   **Tick/Duration:** Loses Health at **End of Turn**. After 3 **Turns** from application, `Ghosted` is removed, and the creature gains `Doomed (X Turns)` (X is a fixed value, e.g., 2 Turns, defined by game balance).
-    *   **Cleansable:** Yes (If cleansed, `Doomed` is not applied).
+**Name:** Heat Signature
+**Type:** Unique, Control, Persistent (or timed by source)
+**Persistent:** Yes (unless source specifies stacks/duration)
+**Description:** "All homing attacks (friend or foe) target this creature if valid. Re-applying refreshes duration if timed."
+**Core Impact:** Makes creature a magnet for homing attacks.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source, or 1 if Persistent by default)
+    **Decay Rule:** (Defaults to Each Dusk: -1 stack if X > 1, otherwise Persistent if X=1 from source and no duration specified)
+    **Re-application Behavior:** Refresh Stacks (if timed)
+**Notes:** If multiple creatures have `Heat Signature`, the homing attack may choose one randomly or based on other targeting priorities of the attack.
+**Cleansable:** Yes
 
-*   **`Heat Signature`**
-    *   **Core Effect:** All homing attacks (from any creature, friendly or unfriendly) will target this creature if it is a valid target for those attacks, overriding their original targets, while this status effect is active. If multiple creatures have `Heat Signature`, the homing attack may choose one randomly or based on other targeting priorities of the attack.
-    *   **Stacking/Refresh:** Does not stack. Applying again refreshes its duration if it has one (assume it's persistent unless a duration is given by source).
-    *   **Tick/Duration:** Persistent or timed, as per the source of the effect. If timed, duration decreases at **End of Turn**.
-    *   **Cleansable:** Yes.
+**Name:** Heavy
+**Type:** Control, Statistic
+**Description:** "Cannot Move or be moved. Attack stat doubled. Can only Attack opposing slot. Re-applying sets stacks to new amount."
+**Core Impact:** Immobilizes but empowers for direct confrontation.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Statistic Modification:**
+    **Target Statistic:** Attack
+    **Modification Method:** x2
+    **Modification Scope:** While Active
+**Notes:** Creature `Cannot Act` regarding Move actions and cannot be moved by other effects. It can only Attack the slot directly opposing its current slot (overrides other targeting rules for its Attack).
+**Cleansable:** Yes
 
-*   **`Heavy` (X Turns)**
-    *   **Core Effect:** For X **Turns**, the creature `Cannot Act` regarding Move actions and cannot be moved by other effects. It can only Attack the slot directly opposing its current slot (this overrides all other targeting rules for its Attack). Its Attack stat is doubled for the duration.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its duration to the new X value.
-    *   **Tick/Duration:** Lasts X **Turns**. Duration decreases by 1 at the **End of each Turn**.
-    *   **Cleansable:** Yes.
+**Name:** Hipster
+**Type:** Unique, Statistic, Evolving
+**Description:** "Ignores enemy stat changes for its own abilities/attacks. After 2 Days, evolves into Ostracised. Re-applying refreshes countdown."
+**Core Impact:** Ignores enemy stat changes, evolves into Ostracised.
+**Stacking & Duration:**
+    **Initial Stacks:** 2 (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Evolution:**
+    **Evolves Into:** Ostracised
+    **Evolution Trigger:** On Consumed (reaches 0 stacks).
+**Cleansable:** Yes (If cleansed, `Ostracised` is not applied).
 
-*   **`Hipster`**
-    *   **Core Effect:** Creature ignores stat changes on enemy creatures (positive or negative) for the purpose of its own abilities or attack calculations that might reference enemy stats. After 2 **Turns** from application, `Hipster` is removed, and the creature gains `Ostracised`.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes the 2-**Turn** duration before it converts to `Ostracised`.
-    *   **Tick/Duration:** Lasts 2 **Turns**. Converts to `Ostracised` at the **End of the 2nd Turn**.
-    *   **Cleansable:** Yes (If cleansed, `Ostracised` is not applied).
+**Name:** Honeypot
+**Type:** Unique, Damage, Persistent (or Consumable by source)
+**Persistent:** Yes (unless source specifies "1 Trigger")
+**Description:** "If targeted by an opponent's Intelligence action, retaliates (effect defined by source). Re-applying has no effect."
+**Core Impact:** Punishes intelligence gathering attempts.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent (or "1 Trigger then Consumed" if specified by source)
+    **Re-application Behavior:** Ignore
+**Consumable Effect (Stack-Spending Trigger):**
+    **Trigger Event:** This creature, or actions created/queued by this creature, are targeted by an opponent's Intelligence action.
+    **Stacks Spent:** 1 (if consumable type)
+    **Resulting Impact:** Retaliation effect defined by the source of `Honeypot`.
+**Cleansable:** Yes
 
-*   **`Honeypot`**
-    *   **Core Effect:** If this creature, or actions created/queued by this creature, are targeted by an opponent's Intelligence action (e.g., to reveal a `Concealed Action`), this creature immediately retaliates. The form of retaliation (e.g., deal damage to the investigating player, apply a status to their creature) is defined by the source of `Honeypot`.
-    *   **Stacking/Refresh:** Does not stack. Applying again has no effect.
-    *   **Tick/Duration:** Persistent until triggered or cleansed. Some versions might be "1 Trigger then consumed." Assume persistent unless specified.
-    *   **Cleansable:** Yes.
+**Name:** Impatient
+**Type:** Control, Damage, Persistent
+**Persistent:** Yes
+**Description:** "Must Attack each Day, or take X damage at Dusk."
+**Core Impact:** Forces attacks to avoid damage.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Refresh Stacks (X damage value set by most recent application).
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** If no Attack action by this creature resolved this Day, it takes X damage (X specified by the source of `Impatient`).
+**Cleansable:** Yes
 
-*   **`Impatient`**
-    *   **Core Effect:** Creature must have an Attack action queued for it each **Turn**. If no Attack action by this creature resolves during a **Turn**, it receives X damage (specified by the source of `Impatient`) at the **End of that Turn**.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its presence. The X damage value is set by the most recent application if it can vary.
-    *   **Tick/Duration:** Persistent condition checked at the **End of each Turn**.
-    *   **Cleansable:** Yes.
+**Name:** Imposter Syndrome
+**Type:** Unique, Statistic, Damage, Persistent
+**Persistent:** Yes
+**Description:** "Base stats cannot be increased by friendly effects; if attempted, controller takes 1 damage."
+**Core Impact:** Prevents friendly stat buffs, penalizes attempts.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Ignore
+**Notes:** If a friendly effect attempts to increase its base stats, the effect fails on this creature, and the controller of this creature takes 1 damage.
+**Cleansable:** Yes
 
-*   **`Imposter Syndrome`**
-    *   **Core Effect:** This creature's base stats (Attack, Health, Speed) cannot be increased by friendly effects. If a friendly effect attempts to increase its base stats, the effect fails on this creature, and the controller of this creature takes 1 damage.
-    *   **Stacking/Refresh:** Does not stack. Applying again has no effect.
-    *   **Tick/Duration:** Persistent as long as the creature is in play or until cleansed.
-    *   **Cleansable:** Yes.
+**Name:** Invisible status effect
+**Type:** Placeholder
+**Description:** "(Conceptual placeholder) A status that shows subtle signs and evolves into a worse status if not addressed. This is not a functional status effect until fully designed and approved."
+**Core Impact:** To be defined.
+**Stacking & Duration:** To be defined.
+**Cleansable:** To be defined.
 
-*   **`Invisible status effect`**
-    *   **Core Effect:** (Conceptual placeholder) A status that shows subtle signs and evolves into a worse status if not addressed. This is not a functional status effect until fully designed and approved.
-    *   **Stacking/Refresh:** To be defined.
-    *   **Tick/Duration:** To be defined.
-    *   **Cleansable:** To be defined.
+**Name:** Keep Calm
+**Type:** Control, Unique, Persistent (or timed by source)
+**Persistent:** Yes (unless source specifies stacks/duration)
+**Description:** "Action Priority cannot be changed; all actions use default Priority. Re-applying refreshes duration if timed."
+**Core Impact:** Stabilizes action priority.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source, or 1 if Persistent by default)
+    **Decay Rule:** (Defaults to Each Dusk: -1 stack if X > 1, otherwise Persistent if X=1 from source and no duration specified)
+    **Re-application Behavior:** Refresh Stacks (if timed)
+**Cleansable:** Yes
 
-*   **`Keep Calm`**
-    *   **Core Effect:** Changes to this creature's `Priority (Action)` for its actions are disabled. All its actions use their default `Priority (Action)` (typically 0), ignoring any positive or negative modifiers from other effects or abilities.
-    *   **Stacking/Refresh:** Does not stack. Applying again has no effect.
-    *   **Tick/Duration:** Persistent or timed, as per the source of the effect. If timed, duration decreases at **End of Turn**.
-    *   **Cleansable:** Yes.
+**Name:** Muted
+**Type:** Control, Disabling
+**Description:** "Abilities Disabled. Re-applying sets stacks to new amount."
+**Core Impact:** Disables creature abilities.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Cleansable:** Yes
 
-*   **`Muted` (X Turns)**
-    *   **Core Effect:** For X **Turns**, this creature's `Abilities Disabled`.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its duration to the new X value.
-    *   **Tick/Duration:** Lasts X **Turns**. Duration decreases by 1 at the **End of each Turn**.
-    *   **Cleansable:** Yes.
+**Name:** Ostracised
+**Type:** Control, Disabling, Unique, Damage
+**Description:** "Untargetable by ALL, Cannot Act or be Attacked, Abilities Disabled. Loses 1 Health Each Dusk. Fades after 2 Days. Re-applying refreshes countdown."
+**Core Impact:** Complete isolation and temporary shutdown, then fades.
+**Stacking & Duration:**
+    **Initial Stacks:** 2 (from source)
+    **Re-application Behavior:** Refresh Stacks
+    **On Consumed:** This status is removed (fades).
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** This creature loses 1 Health.
+**Notes:** Other status effects can still be applied by non-targeting means, and existing ones continue.
+**Cleansable:** Yes (but typically fades on its own).
 
-*   **`Ostracised`**
-    *   **Core Effect:** Creature cannot be targeted by any Spells, actions, or abilities (friendly or unfriendly). It `Cannot Act` (cannot attack) and cannot be attacked. Its `Abilities Disabled`. However, other status effects can still be applied to it by non-targeting means, and existing ones continue to affect it. The creature loses 1 Health at the **End of each Turn**. *(This status can be triggered by `Hipster`.)*
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its 2-**Turn** fade duration.
-    *   **Tick/Duration:** Lasts for 2 **Turns** from application, then fades (is removed). Health loss occurs at the **End of each Turn** it is active. Duration decreases by 1 at the **End of each Turn**.
-    *   **Cleansable:** Yes (but typically fades on its own after 2 **Turns**).
+**Name:** Pandora
+**Type:** Unique, Volatile
+**Description:** "Each Dawn, randomly applies 1 minor, cleansable status (positive or negative) to a random friendly creature (can be self). Re-applying sets stacks to new amount (3 Days max)."
+**Core Impact:** Unpredictable status generation for its controller's team.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source, typically up to 3)
+    **Max Stacks:** 3 (if source allows variable application up to this)
+    **Re-application Behavior:** Refresh Stacks (to X from source, up to max)
+**Turn-Based Effects:**
+    **Trigger:** Each Dawn
+    **Effect:** Randomly applies 1 minor, cleansable status effect to a random friendly creature controlled by Pandora's controller (including potentially itself).
+**Notes:** The `Pandora` status itself has stacks representing its duration. Statuses it applies are subject to their own rules.
+**Cleansable:** No (the `Pandora` status itself cannot be cleansed).
 
-*   **`Pandora`**
-    *   **Core Effect:** At the **Start of each Turn**, randomly applies 1 minor, cleansable status effect to a random friendly creature controlled by Pandora's controller (including potentially itself). The applied status can be positive or negative.
-    *   **Stacking/Refresh:** Does not stack. Applying again refreshes its 3-**Turn** duration.
-    *   **Tick/Duration:** The `Pandora` status itself lasts for 3 **Turns**. Its effect triggers at the **Start of each Turn**. Duration of `Pandora` decreases by 1 at the **End of each Turn**. Statuses it applies are subject to their own rules.
-    *   **Cleansable:** No (the `Pandora` status itself cannot be cleansed). The statuses it applies are cleansable based on their own properties.
+**Name:** Paranoid
+**Type:** Control, Damage, Unique
+**Description:** "Next Dawn, forced to Attack a random friendly creature (or self); if unable, takes 2 damage. Then removed. Re-applying means it triggers next Dawn unless Cleansed this Day."
+**Core Impact:** Forces friendly fire or self-damage.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Each Dawn: -1 stack (after effect check described below)
+    **Re-application Behavior:** Refresh Stacks
+**Turn-Based Effects:**
+    **Trigger:** Each Dawn
+    **Effect:** If this status has 1 stack (i.e., is active before decay): This creature is forced to queue an Attack action targeting a random friendly creature (including itself, if it's the only friendly creature). If it cannot (e.g., no other friendly creatures, or cannot attack itself), it takes 2 damage. This status is then Consumed (stacks become 0).
+**Cleansable:** Yes (must be cleansed before the next Dawn to prevent the effect).
 
-*   **`Paranoid`**
-    *   **Core Effect:** If this status is active on a creature at the **Start of the next Turn's** Planning Phase, that creature will be forced to queue an Attack action targeting a random friendly creature (including itself, if it's the only friendly creature). If it cannot (e.g., no other friendly creatures, or cannot attack itself), it takes 2 damage.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active essentially means it will trigger on the next **Turn** unless cleansed this **Turn**.
-    *   **Tick/Duration:** One-time check at the start of the next **Turn's** Planning Phase. If not cleansed before then, the effect occurs, and `Paranoid` is removed.
-    *   **Cleansable:** Yes (must be cleansed before the next **Turn's** Planning Phase to prevent the effect).
+**Name:** Resurrected
+**Type:** Unique, Heal (inverted), Statistic, Persistent
+**Persistent:** Yes
+**Description:** "Damaged by healing effects. Speed -1 (min 1)."
+**Core Impact:** Inverts healing, reduces speed.
+**Stacking & Duration:**
+    **Initial Stacks:** 1
+    **Decay Rule:** Persistent
+    **Re-application Behavior:** Ignore
+**Statistic Modification:**
+    **Target Statistic:** Speed
+    **Modification Method:** -1 (to a minimum of 1)
+    **Modification Scope:** Permanent (while status is active)
+**Cleansable:** No
 
-*   **`Resurrected`**
-    *   **Core Effect:** Creature is damaged by healing effects instead of being healed (e.g., Heal 2 becomes Take 2 damage). Its Speed is decreased by 1 (to a minimum of 1).
-    *   **Stacking/Refresh:** Does not stack. Applying again has no effect.
-    *   **Tick/Duration:** Persistent as long as the creature is in play.
-    *   **Cleansable:** No.
+**Name:** Revealed
+**Type:** Unique, Information
+**Description:** "Counters Concealed status and Undercover ability; actions are not Concealed. Applying can trigger 'OnRevealedByIntelligence' effects. Re-applying sets stacks to new amount."
+**Core Impact:** Negates enemy concealment, potentially triggering reveal effects.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Notes:** Overrides `Concealed` status and "Undercover" ability's concealment.
+**Cleansable:** Yes
 
-*   **`Revealed` (X Turns)**
-    *   **Core Effect:** For X **Turns**, actively counters concealment. If a creature with an "Undercover" ability or `Concealed` status gains `Revealed`, its actions are *not* `Concealed Actions`. Applying `Revealed` can trigger `OnRevealedByIntelligence` effects if it causes a creature to stop producing `Concealed Actions`. Overrides `Concealed` status and "Undercover" ability's concealment.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its duration to the new X value.
-    *   **Tick/Duration:** Lasts X **Turns**. Duration decreases by 1 at the **End of each Turn**.
-    *   **Cleansable:** Yes.
+**Name:** Slacking Off
+**Type:** Control, Heal, Persistent (or timed by source)
+**Persistent:** Yes (unless source specifies stacks/duration)
+**Description:** "Action Priority -2. Heals 2 Health Each Dusk. Re-applying refreshes duration if timed."
+**Core Impact:** Reduces action priority but provides healing.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source, or 1 if Persistent by default)
+    **Decay Rule:** (Defaults to Each Dusk: -1 stack if X > 1, otherwise Persistent if X=1 from source and no duration specified)
+    **Re-application Behavior:** Refresh Stacks (if timed)
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** This creature heals 2 Health.
+**Notes:** `Priority (Action)` for all its actions is lowered by 2.
+**Cleansable:** Yes
 
-*   **`Slacking Off`**
-    *   **Core Effect:** Creature's `Priority (Action)` for all its actions is lowered by 2. It heals 2 Health at the **End of each Turn**.
-    *   **Stacking/Refresh:** Does not stack. Applying again refreshes its duration if it has one (assume persistent unless a duration is given by source).
-    *   **Tick/Duration:** Healing occurs at **End of Turn**. Priority modification is continuous while active. If timed, duration decreases at **End of Turn**.
-    *   **Cleansable:** Yes.
+**Name:** Take Cover
+**Type:** Control, Statistic, Protective
+**Description:** "Speed halved (min 1). Gains 1 Armor Each Dusk. Cannot Attack. Re-applying sets stacks to new amount."
+**Core Impact:** Defensive posture trading offense for survivability.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Statistic Modification:**
+    **Target Statistic:** Speed
+    **Modification Method:** /2 (rounded down, min 1)
+    **Modification Scope:** While Active
+**Turn-Based Effects:**
+    **Trigger:** Each Dusk
+    **Effect:** This creature gains 1 Armor.
+**Notes:** Creature `Cannot Act` regarding Attacks.
+**Cleansable:** Yes
 
-*   **`Take Cover` (X Turns)**
-    *   **Core Effect:** For X **Turns**, creature's Speed is halved (rounded down, min 1). It gains 1 **Armor** at the **End of each Turn**. Creature `Cannot Act` regarding Attacks.
-    *   **Stacking/Refresh:** Does not stack. Applying again while active refreshes its duration to the new X value.
-    *   **Tick/Duration:** Lasts X **Turns**. Armor gain occurs at **End of Turn**. Speed reduction and inability to attack are continuous. Duration decreases by 1 at the **End of each Turn**.
-    *   **Cleansable:** Yes.
-
-*   **`Tin Foiled` (X Turns)**
-    *   **Core Effect:** (Placeholder Definition - Awaiting Design Approval) For X **Turns**, this creature cannot have new status effects applied to it by Spells. Existing status effects remain. Its Speed is reduced by 1 (to a minimum of 1).
-    *   **Stacking/Refresh:** To be defined. (Likely: Does not stack. Applying again while active refreshes its duration to the new X value).
-    *   **Tick/Duration:** To be defined. (Likely: Lasts X **Turns**. Duration decreases by 1 at the **End of each Turn**. Speed reduction is continuous while active).
-    *   **Cleansable:** To be defined. (Likely: Yes).
+**Name:** Tin Foiled
+**Type:** Protective, Statistic (Placeholder - Awaiting Design Approval)
+**Description:** "(Placeholder) Cannot have new status effects applied by Spells. Speed -1 (min 1). Re-applying sets stacks to new amount."
+**Core Impact:** (Placeholder) Spell-based status immunity with speed penalty.
+**Stacking & Duration:**
+    **Initial Stacks:** X (from source)
+    **Re-application Behavior:** Refresh Stacks
+**Statistic Modification:**
+    **Target Statistic:** Speed
+    **Modification Method:** -1 (to a minimum of 1)
+    **Modification Scope:** While Active
+**Cleansable:** Yes (Likely)

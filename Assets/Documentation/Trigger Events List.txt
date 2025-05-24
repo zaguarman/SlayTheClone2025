@@ -62,11 +62,11 @@ OnStatChange(statChanged, oldValue, newValue): Triggers when one of this creatur
     oldValue: The value of the stat before the change.
     newValue: The value of the stat after the change.
 
-Turn Structure & Action Flow:
+Turn Structure & Action Flow (Day Structure & Action Flow):
 
-OnTurnStart: Triggers at the beginning of this creature's controller's turn, typically before the Scheduled Draw phase. (As per GDD II.F, Start of Turn Phase includes Scheduled Draw *then* OnTurnStart triggers).
+OnTurnStart: Triggers at **Dawn (Start of Day)** of this creature's controller's **Day**, typically before the Scheduled Draw phase. (As per GDD III.F, Dawn Phase (Start of Day) includes Scheduled Draw *then* `OnTurnStart` triggers). Player-facing text will typically use "Each Dawn".
 
-OnTurnEnd: Triggers at the end of this creature's controller's turn, after all queued actions for the turn have resolved.
+OnTurnEnd: Triggers at **Dusk (End of Day)** of this creature's controller's **Day**, after all queued actions for the **Day** have resolved. Player-facing text will typically use "Each Dusk".
 
 OnActionQueued(actionDetails): Triggers when an action involving this creature (either as the source or a target) is added to the action queue.
     actionDetails: Information about the queued action (e.g., type, source, target, original controller if different from current).
@@ -127,7 +127,7 @@ OnBecomeUntargetable: Triggers when this creature transitions from a targetable 
 
 Card & Resource Management (Primarily Player/Controller Level):
 
-OnCardDrawn(drawnCard): Player-level trigger. Triggers when the player controlling this ability draws one or more cards (typically via Scheduled Draw).
+OnCardDrawn(drawnCard): Player-level trigger. Triggers when the player controlling this ability draws one or more cards (typically via Scheduled Draw at **Dawn**).
     drawnCard: The card(s) that were drawn.
 
 OnCardDiscardedFromHand(discardedCard): Player-level trigger. Triggers when the player discards one or more cards from their hand (as an additional cost).
@@ -171,4 +171,4 @@ OnEnemyCreatureGainConcealed(creature, source): Player-level or specific creatur
 OnBeingTargetedByEnemyIntelligence(targetingSource): Triggers when this creature is specifically targeted by an enemy's Intelligence effect (e.g., an effect attempting to reveal a pending action or a '???' in the Turn History associated with this creature).
     targetingSource: The enemy creature or spell that is the source of the Intelligence effect.
 
-OnFriendlyTurnStart: (Can be considered a more specific version of OnTurnStart for abilities concerned with friendly context, though OnTurnStart usually implies current controller's turn). Triggers at the start of the turn of the player who controls this creature.
+OnFriendlyTurnStart: (Can be considered a more specific version of OnTurnStart for abilities concerned with friendly context, though OnTurnStart usually implies current controller's **Day**). Triggers at **Dawn (Start of Day)** of the player who controls this creature.
