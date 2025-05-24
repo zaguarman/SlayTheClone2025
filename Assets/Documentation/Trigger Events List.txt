@@ -64,7 +64,7 @@ OnStatChange(statChanged, oldValue, newValue): Triggers when one of this creatur
 
 Turn Structure & Action Flow (Day Structure & Action Flow):
 
-OnTurnStart: Triggers at **Dawn (Start of Day)** of this creature's controller's **Day**, typically before the Scheduled Draw phase. (As per GDD III.F, Dawn Phase (Start of Day) includes Scheduled Draw *then* `OnTurnStart` triggers). Player-facing text will typically use "Each Dawn".
+OnTurnStart: Triggers during the Dawn Phase (Start of Day) of this creature's controller's Day. As per GDD III.F.1, this occurs after Scheduled Draw for all players. Player-facing text will typically use "Each Dawn".
 
 OnTurnEnd: Triggers at **Dusk (End of Day)** of this creature's controller's **Day**, after all queued actions for the **Day** have resolved. Player-facing text will typically use "Each Dusk".
 

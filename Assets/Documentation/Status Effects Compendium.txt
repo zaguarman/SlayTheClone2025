@@ -17,6 +17,8 @@
 
 **FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
 
+**Note on Default Decay:** For statuses with 'Initial Stacks: X' and no explicit 'Decay Rule' stated in their "Stacking & Duration" section, stacks typically represent duration in Days and decay by 1 Each Dusk (as per GDD Section V.B. Core Status Effect Principles - Natural Stack Decay), unless specified otherwise by the status definition or the effect applying it.
+
 **Name:** Addicted
 **Type:** Statistic, Evolving, Persistent
 **Persistent:** Yes
