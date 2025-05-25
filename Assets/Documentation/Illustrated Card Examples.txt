@@ -17,211 +17,635 @@
 
 **FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
 
-Existential Dread (Mind) - Creature
-Stats: 0/6/1
-Deployment Time (1 Day).
+**Card Name:** Existential Dread
+**Faction:** Mind
+**Type:** Creature
+**Stats:** 0/6/1
+**Deployment Time:** 1 Day
+**Ability Text:**
 Passive: Each Dusk: Each creature on the battlefield (friend and foe, including this one if it survives) with current Health greater than 1 loses 1 Health.
-Flavor Text: "Oh, you thought you were special? The abyss gazes back at everyone, darling."
+**Flavor Text:** "Oh, you thought you were special? The abyss gazes back at everyone, darling."
 
-Schrödinger's Cat (Mind) - Creature
-Stats: 1/1/2
-Deployment Time (1 Day). Undercover.
+**Card Name:** Schrödinger's Cat
+**Faction:** Mind
+**Type:** Creature
+**Stats:** 1/1/2
+**Deployment Time:** 1 Day
+**Ability Text:**
+Undercover.
 Passive: If this creature is targeted by an opponent's Intelligence action OR if an opponent applies the Revealed status to this creature while this creature's Deployment Time is active, Banish this creature.
 Passive: OnDeploymentTimeComplete: If this creature was not Banished, it gains +3/+3, its Speed becomes 3, and it loses the Undercover ability.
-Flavor Text: "You looked! Now it's... well, it's definitely something. Or nothing. Probably."
+**Flavor Text:** "You looked! Now it's... well, it's definitely something. Or nothing. Probably."
 
-I don't want to be this kind of animal anymore (Zeitgeist) - Spell
-Effect: TODO (Reworking design: e.g., cleanse addiction, expose random enemies, Disco Elysium style)
-Flavor Text: TODO
+**Card Name:** I don't want to be this kind of animal anymore
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+TODO (Reworking design: e.g., cleanse addiction, expose random enemies, Disco Elysium style)
+**Flavor Text:** "TODO"
 
-Wojak Living The Dream (Zeitgeist) - Creature
-Stats: 1/5/1
-Deployment Time (0 Days).
+**Card Name:** Wojak Living The Dream
+**Faction:** Zeitgeist
+**Type:** Creature
+**Stats:** 1/5/1
+**Deployment Time:** 0 Days
+**Ability Text:**
 Passive: Each Dawn: This creature gains Burnout (1 stack). For each Burnout stack on this creature, it has +1 Attack.
-Flavor Text: "It's fine. Everything's fine. My eye just twitches like this sometimes."
+**Flavor Text:** "It's fine. Everything's fine. My eye just twitches like this sometimes."
 
-Mental Breakdown (Mind) - Spell
-Effect: Target enemy creature. For the rest of this Day, any Attack action queued by that creature targets a random valid creature on the battlefield (friend or foe, excluding itself). If no other valid targets exist, the Attack action is Nullified. (Mechanics: Applies a temporary "Watchdog" Meta-Action that modifies targets of the creature's attacks as they are queued, as per GDD III.H.5).
-Flavor Text: "My therapist said to embrace my inner chaos. I think this is what they meant?"
+**Card Name:** Mental Breakdown
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. For the rest of this Day, any Attack action queued by that creature targets a random valid creature on the battlefield (friend or foe, excluding itself). If no other valid targets exist, the Attack action is Nullified. (Mechanics: Applies a temporary "Watchdog" Meta-Action that modifies targets of the creature's attacks as they are queued, as per GDD III.H.5).
+**Flavor Text:** "My therapist said to embrace my inner chaos. I think this is what they meant?"
 
-System Glitch (Tech) - Spell
-Effect: Randomly select one of the following effects. The selected effect is then queued as an action:
+**Card Name:** System Glitch
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+Randomly select one of the following effects. The selected effect is then queued as an action:
+*   Swap the positions of two random creatures on the battlefield.
+*   One random creature gains Exhausted.
+*   One random creature gains +2/+2.
+**Flavor Text:** "Did you see that? Yeah, that black cat again. Or maybe it was a dog this time. Who cares, free stats!"
 
-Swap the positions of two random creatures on the battlefield.
+**Card Name:** Tinfoil Hat
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Target friendly creature. It gains `Tin Foiled (2 Days)`. (Note: `Tin Foiled` status duration set to 2 Days/stacks).
+**Flavor Text:** "They can't read your thoughts if your thoughts are too slow and wrapped in shiny metal! And apparently, new spells can't mess with you either."
 
-One random creature gains Exhausted.
+**Card Name:** Sudoku
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Target creature gains `Muted (1 Day)`. That creature's controller schedules 1 additional card draw for their next Day. (Note: `Muted` status duration set to 1 Day/stack).
+**Flavor Text:** "Shhh. Thinking. So much thinking. Here, have a card, I'm busy."
 
-One random creature gains +2/+2.
-Flavor Text: "Did you see that? Yeah, that black cat again. Or maybe it was a dog this time. Who cares, free stats!"
-
-Tinfoil Hat (Zeitgeist) - Spell
-Effect: Target friendly creature. It gains `Tin Foiled (2 Days)`. (Note: `Tin Foiled` status duration set to 2 Days/stacks).
-Flavor Text: "They can't read your thoughts if your thoughts are too slow and wrapped in shiny metal! And apparently, new spells can't mess with you either."
-
-Sudoku (Zeitgeist) - Spell
-Effect: Target creature gains `Muted (1 Day)`. That creature's controller schedules 1 additional card draw for their next Day. (Note: `Muted` status duration set to 1 Day/stack).
-Flavor Text: "Shhh. Thinking. So much thinking. Here, have a card, I'm busy."
-
-Pastafarian God (Digital Society) - Creature
-Stats: 3/4/2
-Deployment Time (1 Day).
+**Card Name:** Pastafarian God
+**Faction:** Digital Society
+**Type:** Creature
+**Stats:** 3/4/2
+**Deployment Time:** 1 Day
+**Ability Text:**
 Passive: Each Dawn: All friendly creatures with "Meatball" or "Noodle" in their name gain +1 Health this Day. If there are no such creatures, its controller schedules 1 additional card draw for their next Day.
-Flavor Text: "May you be touched by His Noodly Appendage. Or at least draw an extra card, y'arr."
+**Flavor Text:** "May you be touched by His Noodly Appendage. Or at least draw an extra card, y'arr."
 
-Sentient Dentures (Myth) - Creature
-Stats: 2/3/1
-Deployment Time (0 Days).
+**Card Name:** Sentient Dentures
+**Faction:** Myth
+**Type:** Creature
+**Stats:** 2/3/1
+**Deployment Time:** 0 Days
+**Ability Text:**
 Passive: OnDealDamage(damagedTarget, damageAmount, damageType): If this creature dealt damage with an Attack, damagedTarget gains Earworm.
-Flavor Text: "They've got a bite, and a surprisingly catchy tune stuck in their teeth."
+**Flavor Text:** "They've got a bite, and a surprisingly catchy tune stuck in their teeth."
 
-Unicorn (Enterprise) (Corporate) - Creature
-Stats: 1/10/1
-Deployment Time (2 Days).
+**Card Name:** Unicorn (Enterprise)
+**Faction:** Corporate
+**Type:** Creature
+**Stats:** 1/10/1
+**Deployment Time:** 2 Days
+**Ability Text:**
 Passive: OnDied(deathSource): If this creature is destroyed, its controller schedules 3 additional card draws for their next Day.
-Flavor Text: "It looked amazing on paper, and its inevitable collapse will fuel our next three fiscal quarters!"
+**Flavor Text:** "It looked amazing on paper, and its inevitable collapse will fuel our next three fiscal quarters!"
 
-Banana Gun (Digital Society) - Spell
-Effect: Target enemy creature. Randomly apply one of the following:
+**Card Name:** Banana Gun
+**Faction:** Digital Society
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. Randomly apply one of the following:
+*   It gains Anchored.
+*   It gains `Muted (1 Day)`. (Note: `Muted` status duration set to 1 Day/stack).
+*   It takes 1 damage and its controller schedules 1 fewer card draw for their next Day.
+**Flavor Text:** "This fruit is packed with potassium... and unpredictable tactical disadvantages!"
 
-It gains Anchored.
-
-It gains `Muted (1 Day)`. (Note: `Muted` status duration set to 1 Day/stack).
-
-It takes 1 damage and its controller schedules 1 fewer card draw for their next Day.
-Flavor Text: "This fruit is packed with potassium... and unpredictable tactical disadvantages!"
-
-DOGE (Digital Society) - Creature
-Stats: 1/2/4
-Deployment Time (0 Days).
+**Card Name:** DOGE
+**Faction:** Digital Society
+**Type:** Creature
+**Stats:** 1/2/4
+**Deployment Time:** 0 Days
+**Ability Text:**
 Passive: Each Dusk: This creature's Attack randomly becomes 0, 1, or 5 until Dawn of your next Day.
-Flavor Text: "Much attack. Very Bonk! Wow."
+**Flavor Text:** "Much attack. Very Bonk! Wow."
 
-Mandela Effect (Mind) - Spell
-Effect: All creatures on the battlefield permanently have their base Attack swapped with their base Health. (e.g., a creature that was X Attack / Y (Max) Health becomes Y Attack / X (Max) Health).
-Flavor Text: "Wait, didn't Fruit of the Loom have a cornucopia on the logo? Oh well, guess all the stats are swapped now too. Forever."
+**Card Name:** Mandela Effect
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+All creatures on the battlefield permanently have their base Attack swapped with their base Health. (e.g., a creature that was X Attack / Y (Max) Health becomes Y Attack / X (Max) Health).
+**Flavor Text:** "Wait, didn't Fruit of the Loom have a cornucopia on the logo? Oh well, guess all the stats are swapped now too. Forever."
 
-WTF Happened In 1971 (Zeitgeist) - Spell
-Effect: Apply a global effect for the next 3 Days. While this global effect is active, at the Each Dawn trigger for each player:
-*If it is your Day: All your creatures gain +1 Attack for this Day.
-*If it is the opponent's Day: Their controller schedules 1 fewer card draw for their next Scheduled Draw phase occurring while this global effect is active.
-Flavor Text: "Productivity's up across the board! Shame the paycheck, uh, 'card draw' for some people didn't get the memo."
+**Card Name:** WTF Happened In 1971
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Apply a global effect for the next 3 Days. While this global effect is active, at the Each Dawn trigger for each player:
+*   If it is your Day: All your creatures gain +1 Attack for this Day.
+*   If it is the opponent's Day: Their controller schedules 1 fewer card draw for their next Scheduled Draw phase occurring while this global effect is active.
+**Flavor Text:** "Productivity's up across the board! Shame the paycheck, uh, 'card draw' for some people didn't get the memo."
 
-Meetings About Meetings (Corporate) - Spell
-Effect: Apply a global effect for the next 2 Days. While this global effect is active: All actions resolving from the Action Queue that have a Priority (Action) greater than 0, resolve as if their Priority (Action) is 0.
-Flavor Text: "We need to schedule a pre-meeting to discuss the agenda for the meeting about the previous meeting's durations."
+**Card Name:** Meetings About Meetings
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+Apply a global effect for the next 2 Days. While this global effect is active: All actions resolving from the Action Queue that have a Priority (Action) greater than 0, resolve as if their Priority (Action) is 0.
+**Flavor Text:** "We need to schedule a pre-meeting to discuss the agenda for the meeting about the previous meeting's durations."
 
-Password Sticky Note (Tech) - Spell
-Effect: Target enemy creature. It gains Compromised. If that creature was already Compromised or had the `Revealed` status effect (with any stacks), instead, its controller schedules 1 fewer card draw for their next Day.
-Flavor Text: "User: 'Password123!' Admin: 'Security is our top priority.' The note: 'admin123'."
+**Card Name:** Password Sticky Note
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. It gains Compromised. If that creature was already Compromised or had the `Revealed` status effect (with any stacks), instead, its controller schedules 1 fewer card draw for their next Day.
+**Flavor Text:** "User: 'admin' Password: 'Password123!'."
 
-Rubber Duck Debugging (Tech) - Spell
-Effect: Target friendly creature. If that creature has any negative status effects that are removable by Cleanse, remove one such status effect at random. Then, look at the top card of your deck. You may place it on the bottom of your deck.
-Flavor Text: "So, the flux capacitor is clearly misaligned with the quantum intake, and... Oh. OH! The power cord wasn't plugged in. Thanks, Quackers!"
+**Card Name:** Rubber Duck Debugging
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+Target friendly creature. If that creature has any negative status effects that are removable by Cleanse, remove one such status effect at random. Then, look at the top card of your deck. You may place it on the bottom of your deck.
+**Flavor Text:** "So, the flux capacitor is clearly misaligned with the quantum intake, and... Oh. OH! The power cord wasn't plugged in. Thanks, Quackers!"
 
-Whine Menu (Corporate) - Spell
-Effect: TODO
-Flavor Text: "My player's dissatisfaction is immeasurable, and its day is ruined. I demand a full debuff on you."
+**Card Name:** Whine Menu
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+TODO
+**Flavor Text:** "My player's dissatisfaction is immeasurable, and its day is ruined. I demand a full debuff on you."
 
-Cameras Off Suicide (Shadow Ops.) - Spell
-Effect: Target one friendly creature. Banish it. This creature is not considered "Destroyed," and this action does not trigger any OnDied abilities the banished creature might have. Opponent's abilities that trigger on an enemy creature being "Destroyed" also do not trigger.
-Flavor Text: "He was never here. The paperwork confirms it. Any questions?"
+**Card Name:** Cameras Off Suicide
+**Faction:** Shadow Ops.
+**Type:** Spell
+**Ability Text:**
+Target one friendly creature. Banish it. This creature is not considered "Destroyed," and this action does not trigger any OnDied abilities the banished creature might have. Opponent's abilities that trigger on an enemy creature being "Destroyed" also do not trigger.
+**Flavor Text:** "He was never here. The paperwork confirms it. Any questions?"
 
-Ah, I see you're a man of culture as well (Zeitgeist) - Spell
-Effect: Target a creature. If an opponent controls a creature of the same faction as your target, all creatures of that faction currently on the battlefield (both friendly and enemy) gain +1 Attack and +1 Speed for 3 Days. (Note: This is a temporary stat buff, not a status effect, lasting 3 Days).
-Flavor Text: "Ah, a fellow connoisseur of obscure 20th-century cat videos. Remarkable."
+**Card Name:** Ah, I see you're a man of culture as well
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Target a creature. If an opponent controls a creature of the same faction as your target, all creatures of that faction currently on the battlefield (both friendly and enemy) gain +1 Attack and +1 Speed for 3 Days. (Note: This is a temporary stat buff, not a status effect, lasting 3 Days).
+**Flavor Text:** "Ah, a fellow connoisseur of obscure 20th-century cat videos. Remarkable."
 
-Giant Laserthrowing Futuristic Titanium Lizard (Myth) - Creature
-Stats: 7 Attack / 7 Health / 1 Speed
-Deployment Time (3 Days).
+**Card Name:** Giant Laserthrowing Futuristic Titanium Lizard
+**Faction:** Myth
+**Type:** Creature
+**Stats:** 7/7/1
+**Deployment Time:** 3 Days
+**Ability Text:**
 Passive: This creature cannot be the target of Spell actions originating from the 'Corporate' or 'Statecraft' Factions.
 Passive Ability: OnAttack: If there are fewer than three enemy creatures on the battlefield, deal 3 damage to each available enemy creature.
-Flavor Text: "Initial funding proposal: Denied. Revised funding proposal: A city block mysteriously vaporized. Proposal: Approved."
+**Flavor Text:** "Initial funding proposal: Denied. Revised funding proposal: A city block mysteriously vaporized. Proposal: Approved."
 
-Drunken Sincerity (Mind) - Spell
-Effect: Target an enemy creature. It gains `Revealed (1 Day)`. Then, a random card from that creature's controller's hand is revealed to you. (Note: `Revealed` status duration set to 1 Day/stack).
-Flavor Text: "Look, I hic shouldn't tell you this, but your plan for next turn? It's hic TERRIBLE. Also, nice 'Secret Weapon' card you got there."
+**Card Name:** Drunken Sincerity
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+Target an enemy creature. It gains `Revealed (1 Day)`. Then, a random card from that creature's controller's hand is revealed to you. (Note: `Revealed` status duration set to 1 Day/stack).
+**Flavor Text:** "Look, I hic shouldn't tell you this, but your plan for next turn? It's hic TERRIBLE. Also, nice 'Secret Weapon' card you got there."
 
-Shitposting (Digital Society) - Spell
-Effect: Target enemy creature. It gains `Muted (1 Day)`. Its controller schedules 1 fewer card draw for their next Day. (Note: `Muted` status duration set to 1 Day/stack).
-Flavor Text: "Quality content? Never heard of it. Enjoy this wall of text instead of your next card."
+**Card Name:** Shitposting
+**Faction:** Digital Society
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. It gains `Muted (1 Day)`. Its controller schedules 1 fewer card draw for their next Day. (Note: `Muted` status duration set to 1 Day/stack).
+**Flavor Text:** "Quality content? Never heard of it. Enjoy this wall of text instead of your next card."
 
-Monkey Clicking (Digital Society) - Creature
-Stats: 1/2/3
-Deployment Time (0 Days).
+**Card Name:** Monkey Clicking
+**Faction:** Digital Society
+**Type:** Creature
+**Stats:** 1/2/3
+**Deployment Time:** 0 Days
+**Ability Text:**
 Passive: Each Dawn: Deal 1 damage to a random enemy creature.
-Flavor Text: "Witness the pinnacle of user testing. It's not smart, but it sure is persistent"
+**Flavor Text:** "Witness the pinnacle of user testing. It's not smart, but it sure is persistent"
 
-Brainlet Watermill (Zeitgeist) - Creature
-Stats: 0/4/1
-Deployment Time (2 Days). Starts with Burnout (1 stack) and `Muted (2 Days)`.
+**Card Name:** Brainlet Watermill
+**Faction:** Zeitgeist
+**Type:** Creature
+**Stats:** 0/4/1
+**Deployment Time:** 2 Days
+**Ability Text:**
+Starts with Burnout (1 stack) and `Muted (2 Days)`.
 Passive: Each Dawn: This creature gains Burnout (1 stack). If this creature has 2 or more Burnout stacks, its controller schedules 1 additional card draw for their next Day.
-Flavor Text: "Two Days of profound silence, one pre-existing existential crisis, and then... maybe a card. Progress!"
+**Flavor Text:** "Two Days of profound silence, one pre-existing existential crisis, and then... maybe a card. Progress!"
 
-Dead Man's Switch (Shadow Ops.) - Creature
-Stats: 7/2/3
-Deployment Time (0 Days).
+**Card Name:** Dead Man's Switch
+**Faction:** Shadow Ops.
+**Type:** Creature
+**Stats:** 7/2/3
+**Deployment Time:** 0 Days
+**Ability Text:**
 Passive: OnDied(deathSource): If deathSource is an enemy creature, that creature gains Burnout (2 stack) and Exhausted. If deathSource is an enemy Spell, deal 5 damage to player owning the spell.
-Flavor Text: "This is from... Matilda"
+**Flavor Text:** "This is from... Matilda"
 
-Creepypasta (Mind) - Spell
-Effect: Target enemy creature. It gains Paranoid and Bloodthirst. (Durations/stacks are per Status Effects Compendium defaults).
-Flavor Text: "They say if you read its card text three times in a dark room, your opponent's creature gets really antsy. And maybe a little bit stabby."
+**Card Name:** Creepypasta
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. It gains Paranoid and Bloodthirst. (Durations/stacks are per Status Effects Compendium defaults).
+**Flavor Text:** "They say if you read its card text three times in a dark room, your opponent's creature gets really antsy. And maybe a little bit stabby."
 
-Body Positivity (Zeitgeist) - Spell
-Effect: Target enemy creature. Its current Health is halved (rounding down).
-Flavor Text: "We're all 10's :)"
+**Card Name:** Body Positivity
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. Its current Health is halved (rounding down).
+**Flavor Text:** "We're all 10's :)"
 
-Pigmalion Effect (Mind) - Spell
-Effect: Target enemy creature. Apply `Ghosted`. (Reminder: `Ghosted` transforms to `Doomed` after 3 Days as per Status Effects Compendium).
-Flavor Text: "Lookin' good Susan!"
+**Card Name:** Pigmalion Effect
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. Apply `Ghosted`. (Reminder: `Ghosted` transforms to `Doomed` after 3 Days as per Status Effects Compendium).
+**Flavor Text:** "Lookin' good Susan!"
 
-Roko's Basilisk (Mind) - Creature
-Stats: 0/7/1
-Deployment Time (3 Days).
+**Card Name:** Roko's Basilisk
+**Faction:** Mind
+**Type:** Creature
+**Stats:** 0/7/1
+**Deployment Time:** 3 Days
+**Ability Text:**
 Passive: OnDeploymentTimeComplete: All other creatures on the battlefield (friend and foe) gain `Doomed (1 Day)`. (Note: `Doomed` status duration set to 1 Day/stack).
-Flavor Text: "You knew the risks of contemplating its existence. Now, contemplate your imminent non-existence."
+**Flavor Text:** "You knew the risks of contemplating its existence. Now, contemplate your imminent non-existence."
 
-Trolley Problem (Mind) - Spell
-Effect: Target one enemy creature. The selected creature takes 3 damage. Another random creature on the battlefield (friend or foe, excluding the initial target if it survived) gains Anchored.
-Flavor Text: "The ethics are debatable, but the outcome is efficient. For me, anyway."
+**Card Name:** Trolley Problem
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+Target one enemy creature. The selected creature takes 3 damage. Another random creature on the battlefield (friend or foe, excluding the initial target if it survived) gains Anchored.
+**Flavor Text:** "The ethics are debatable, but the outcome is efficient. For me, anyway."
 
-Sacrificial Ritual (Myth) - Spell
-Effect: Target one friendly creature and Banish it. All other friendly creatures gain Blessed (1 stack).
-Flavor Text: "One soul for the pyre, a dozen blessings returned. As the tradition dictates."
+**Card Name:** Sacrificial Ritual
+**Faction:** Myth
+**Type:** Spell
+**Ability Text:**
+Target one friendly creature and Banish it. All other friendly creatures gain Blessed (1 stack).
+**Flavor Text:** "One soul for the pyre, a dozen blessings returned. As the tradition dictates."
 
-Reflexive Control (Shadow Ops.) - Spell
-Effect: Set-up Redirect (Interference): The next Attack action queued this Day by an opponent's creature with current Attack 3 or less, if it targets one of your creatures, instead targets a random enemy creature (excluding the attacker itself). If no other enemy creature exists, this Interference effect is consumed with no change to the original target. This Interference triggers once.
-Flavor Text: They'll call it 'tactics'. You'll call it 'Tuesday'.
+**Card Name:** Reflexive Control
+**Faction:** Shadow Ops.
+**Type:** Spell
+**Ability Text:**
+Set-up Redirect (Interference): The next Attack action queued this Day by an opponent's creature with current Attack 3 or less, if it targets one of your creatures, instead targets a random enemy creature (excluding the attacker itself). If no other enemy creature exists, this Interference effect is consumed with no change to the original target. This Interference triggers once.
+**Flavor Text:** "They'll call it 'tactics'. You'll call it 'Tuesday'."
 
-YOLO (Zeitgeist) - Spell
-Effect: Target friendly creature. For the rest of this Day, it gains +4 Attack and its Attack actions gain +1 Priority (Action). At Dusk of this Day, that creature is Banished.
-Flavor Text: Look Mom, no hands... Look Mom, no teef!
+**Card Name:** YOLO
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Target friendly creature. For the rest of this Day, it gains +4 Attack and its Attack actions gain +1 Priority (Action). At Dusk of this Day, that creature is Banished.
+**Flavor Text:** "Look Mom, no hands... Look Mom, no teef!"
 
-Venus Flytrap (Zeitgeist) - Creature
-Stats: 2/3/1
-Deployment Time (1 Day).
+**Card Name:** Venus Flytrap
+**Faction:** Zeitgeist
+**Type:** Creature
+**Stats:** 2/3/1
+**Deployment Time:** 1 Day
+**Ability Text:**
 Passive: This creature cannot Move.
 Passive: OnOpponentPlaysSpell(playedSpell, spellTarget): If spellTarget is this Venus Flytrap OR the slot this Venus Flytrap occupies, this Venus Flytrap gains +1 Attack.
-Flavor Text: "Feed me, Seymour!
+**Flavor Text:** "Feed me, Seymour!"
 
-Eject Button (Tech) - Spell
-Effect: Target friendly creature. Return it to its owner's hand. If that creature had 2 or more negative status effects on it (excluding Deployment Time), its owner schedules 1 additional card draw for their next Day.
-Flavor Text: PANIC! But like, a strategic panic, with potential upsides.
+**Card Name:** Eject Button
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+Target friendly creature. Return it to its owner's hand. If that creature had 2 or more negative status effects on it (excluding Deployment Time), its owner schedules 1 additional card draw for their next Day.
+**Flavor Text:** "PANIC! But like, a strategic panic, with potential upsides."
 
-Taqiyya Infiltrator (Myth) - Creature
-Requisite: Target a friendly creature you control. Banish the targeted creature, then play Taqiyya Infiltrator into the slot previously occupied by the banished creature. (This card cannot be played if you cannot target a friendly creature).
-Stats: 1/3/1
-Deployment Time (2 Days).
+**Card Name:** Taqiyya Infiltrator
+**Faction:** Myth
+**Type:** Creature
+**Stats:** 1/3/1
+**Deployment Time:** 2 Days
+**Requisite:** Target a friendly creature you control. Banish the targeted creature, then play Taqiyya Infiltrator into the slot previously occupied by the banished creature. (This card cannot be played if you cannot target a friendly creature).
+**Ability Text:**
 Passive: OnDeploymentTimeComplete: This creature moves to a random available slot on the opponent's side of the battlefield. If no slot is available, it is Banished instead. If it successfully moves, control of this creature changes to the opponent. Upon gaining control, this creature (via a Linked Meta-Action, as per GDD III.H.6) gains Paranoid, Exposed (Indefinite duration), and `Pandora (3 Days)`. (Note: `Pandora` status duration set to 3 Days/stacks).
 Passive: OnDied(deathSource): Apply Scorched Earth to the slot this creature last occupied.
-Flavor Text: "A whisper planted, a seed of discord. It will bloom in their ranks, a glorious, self-consuming paranoia."
+**Flavor Text:** "A whisper planted, a seed of discord. It will bloom in their ranks, a glorious, self-consuming paranoia."
 
-Soylent Rations (Corporate) - Spell
-Effect: Target friendly creature. Permanently reduce its base Attack by 2 and permanently increase its base Health by 2.
-Flavor Text: "Nutritionally complete! Psychological impact is outside of this quarter's performance metrics."
+**Card Name:** Soylent Rations
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+Target friendly creature. Permanently reduce its base Attack by 2 and permanently increase its base Health by 2.
+**Flavor Text:** "Nutritionally complete! Psychological impact is outside of this quarter's performance metrics."
 
-Liminality (Mind) - Spell
-Targeting: Target an empty slot.
-Effect: Apply the 'Threshold of Liminality' Slot Effect (Duration: 2 Days) to the target slot.
-Requisite: The spell needs an empty slot. If the slot is filled by the time the action is executed, it will fail.
-Flavor Text: Trapped in the 'in-between,' where every instinct screams of unseen threats and escape feels impossible.
+**Card Name:** Liminality
+**Faction:** Mind
+**Type:** Spell
+**Targeting:** Target an empty slot.
+**Requisite:** The spell needs an empty slot. If the slot is filled by the time the action is executed, it will fail.
+**Ability Text:**
+Apply the 'Threshold of Liminality' Slot Effect (Duration: 2 Days) to the target slot.
+**Flavor Text:** "Trapped in the 'in-between,' where every instinct screams of unseen threats and escape feels impossible."
+
+**Card Name:** Code Review
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. If that creature queued at least one action this Day, its controller draws 1 fewer card next Day. If it queued 2 or more actions this Day, its controller draws 2 fewer cards next Day instead.
+**Flavor Text:** "Looks like spaghetti code. And is that a security flaw, or a feature?"
+
+**Card Name:** Mind Control Device
+**Faction:** Shadow Operations
+**Type:** Spell
+**Additional Cost:** Your active creature with the highest Attack gains Exhausted.
+**Ability Text:**
+Target enemy creature with current Health 3 or less. Apply Brainwashed to it.
+(Reminder: Brainwashed: At Dusk of 2nd Day, changes owner to status applier; Abilities Disabled. Re-applying resets. Not Cleansable.)
+**Flavor Text:** "Their will is now... an implementation detail."
+
+**Card Name:** System Administrator (SysAdmin)
+**Faction:** Tech
+**Type:** Creature
+**Stats:** 1/4/2
+**Deployment Time:** 1 Day
+**Ability Text:**
+Each Dawn: Target friendly creature. Cleanse 1, if cleanseable status effect, if possible apply Blessed to it.
+(Reminder: Blessed: Persistent. Consumes 1 stack to negate an incoming status. Max 3. Cleansable.)
+**Flavor Text:** "System check: Debuffs detected? Purge. System clean? Apply protective protocols. Coffee level: Critically low."
+
+**Card Name:** Burner Phone
+**Faction:** Shadow Operations
+**Type:** Spell
+**Requisite:** Discard 1 card from your hand.
+**Ability Text:**
+Target creature you control gains Concealed (2 Days).
+(Reminder: Concealed (X Days): Actions are Concealed Actions. Negated by Revealed. Cleansable.)
+**Flavor Text:** "Untraceable calls. Untraceable plans."
+
+**Card Name:** Planned Obsolescence
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. If it has 2 or more Armor, it loses 2 Armor. Then, it gains Doomed (3 Days).
+(Reminder: Doomed (X Days): Removes other statuses, status immunity. Each Dawn: +1 permanent Attack. Destroyed when Consumed. Fixed Stacks. Not Cleansable.)
+**Flavor Text:** "Engineered to fail, right on schedule."
+
+**Card Name:** Contagion of Cretinism
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Target enemy creature gains Paranoid. If that creature is adjacent to other enemy creatures, one random adjacent enemy creature also gains Paranoid.
+(Reminder: Paranoid: Next Dawn, forced Attack on friendly/self; if unable, 2 damage. Then removed. Cleansable.)
+**Flavor Text:** "It's true because enough people believe it."
+
+**Card Name:** Consulting Psychiatrist
+**Faction:** Mind
+**Type:** Creature
+**Stats:** 1/3/2
+**Deployment Time:** 1 Day
+**Ability Text:**
+Active Ability: Target creature loses all Burnout stacks. If it does, it gains Chill (1 Day) and its controller schedules 1 additional card draw for their next Day.
+(Reminder: Chill (X Days): Halves Attack, +1 Health Each Dusk. Cleansable.)
+**Flavor Text:** "Let's talk about that explosive anger... and then cool down."
+
+**Card Name:** Quantum Entanglement Link
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+Choose two friendly creatures. For the next 2 Days, they share all non-Doomed status effects applied to either of them (if one gains a status, the other gains it too, with the same duration/stacks). This effect ends if either creature Leaves Play.
+**Flavor Text:** "Spooky action at a distance... and shared debuffs."
+
+**Card Name:** Recursive Loop Error
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+Target creature gains Exhausted. Each Dawn, if that creature is still Exhausted from this effect, its controller draws 1 fewer card that Day, and this creature (the one with Exhausted) takes 1 damage.
+(Reminder: Exhausted: Cannot Act, Abilities Disabled, Gains Exposed. Persistent. Not Cleansable.)
+**Flavor Text:** "It's not a bug, it's an infinite negative feedback feature."
+
+**Card Name:** Whistleblower's Gambit
+**Faction:** Corporate
+**Type:** Creature
+**Stats:** 1/2/3
+**Deployment Time:** 1 Day
+**Ability Text:**
+OnDied(deathSource): If deathSource was an enemy creature or Spell from the 'Corporate' or 'Statecraft' faction, its controller reveals their hand and draws 2 fewer cards next Day.
+**Flavor Text:** "They can kill me, but not the truth..."
+
+**Card Name:** Memento Mori
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+All creatures on the battlefield with current Health 1 gain Doomed (1 Day). Controller of each creature affected this way schedules 1 additional card draw for their next Day.
+**Flavor Text:** "Remember death."
+
+**Card Name:** Bureaucratic Wall
+**Faction:** Statecraft
+**Type:** Spell
+**Ability Text:**
+Target enemy creature gains Muted (2 Days). Its Deployment Time is increased by 1 Day (if its Deployment Time was 0, it gains Deployment Time (1 Day)). If it already had Deployment Time, it also gains Anchored.
+(Reminder: Muted (X Days): Abilities Disabled. Cleansable. Anchored: Cannot use own Move. Persists. Cleansable.)
+**Flavor Text:** "Your request is being processed. Please wait indefinitely."
+
+**Card Name:** Megachurch Mogul
+**Faction:** Myth
+**Type:** Creature
+**Stats:** 1/3/2
+**Deployment Time:** 1 Day
+**Ability Text:**
+Each Dawn: If there are 3 or more friendly creatures on the battlefield, this creature and adjacent friendly creatures gain +1 Attack until end of Day.
+Active Ability: Target friendly creature gains Bloodthirst. This creature then gains Exhausted.
+(Reminder: Bloodthirst: Must Attack or halve HP at Dusk. Lifesteal. Persistent. Cleansable. Exhausted: Cannot Act, Abilities Disabled, Gains Exposed. Persistent. Not Cleansable.)
+**Flavor Text:** "Believe! And fight! And bleed for the cause!"
+
+**Card Name:** Kakistocracy Now!
+**Faction:** Statecraft
+**Type:** Spell (Location)
+**Ability Text:**
+Global Effect: For 3 Days, whenever a creature enters the battlefield, if its base Attack is 3 or more, it gains -1 Attack. If its base Health is 3 or more, it gains -1 Health (Max Health and current Health).
+**Flavor Text:** "Elect the least competent! What could go wrong?"
+
+**Card Name:** Pasiflora Bloom
+**Faction:** Myth
+**Type:** Spell
+**Ability Text:**
+Target enemy creature gains Chill (2 Days). If it is already Chilled, it also gains Muted (1 Day).
+(Reminder: Chill (X Days): Halves Attack, +1 Health Each Dusk. Cleansable. Muted (X Days): Abilities Disabled. Cleansable.)
+**Flavor Text:** "Such serenity, it's almost... debilitating."
+
+**Card Name:** Chronos Feast
+**Faction:** Statecraft
+**Type:** Spell
+**Ability Text:**
+All creatures that have Deployment Time (0 Days) (i.e., fully deployed) and have been on the battlefield for 3 or more Days gain Doomed (2 Days).
+(Reminder: Doomed (X Days): Removes other statuses, status immunity. Each Dawn: +1 permanent Attack. Destroyed when Consumed. Fixed Stacks. Not Cleansable.)
+**Flavor Text:** "Time devours all, especially the overstaying."
+
+**Card Name:** Chrysopoeia Ritual
+**Faction:** Myth
+**Type:** Spell
+**Additional Cost:** Target creature you control with Attack 2 or more gains Doomed (1 Day).
+**Ability Text:**
+Schedule additional card draws for your next Day equal to half the target creature's Attack (rounded up).
+**Flavor Text:** "Turning power into... well, more power, eventually. For a price."
+
+**Card Name:** Gerontocratic Decree
+**Faction:** Statecraft
+**Type:** Creature
+**Stats:** 1/3/1
+**Deployment Time:** 2 Days
+**Ability Text:**
+Each Dawn: This creature gains +1 Health (Max and current).
+Each Dusk: If this creature's Health is 6 or more, all other friendly creatures gain +1 Attack until end of next Day.
+**Flavor Text:** "Wisdom comes with age. So does an unwillingness to change the channel."
+
+**Card Name:** Reductio Ad Absurdum
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+Target enemy creature. If its Attack is 5 or more, it gains Exhausted. If its current Health is 1, it gains Doomed (1 Day). (These effects can both apply).
+(Reminder: Exhausted: Cannot Act, Abilities Disabled, Gains Exposed. Persistent. Not Cleansable.)
+**Flavor Text:** "If your argument is that strong..." (TODO find a better flavour that is more specific)
+
+**Card Name:** Pareidolia Projector
+**Faction:** Mind
+**Type:** Creature
+**Stats:** 2/2/3
+**Deployment Time:** 1 Day
+**Ability Text:**
+OnRevealedByIntelligence(revealingSource, revealedActionDetails): If revealedActionDetails concerned an action queued by an enemy creature, this creature gains Concealed (1 Day).
+**Flavor Text:** "You see what you want to see. Or what I want you to see that I see."
+
+**Card Name:** Agnostic Field
+**Faction:** Zeitgeist
+**Type:** Spell (Location)
+**Ability Text:**
+Global Effect: For 2 Days, Blessed and Doomed status effects cannot be applied to any creature. At the end of this duration, all creatures with Blessed lose 1 stack of it.
+**Flavor Text:** "Maybe there are blessings, maybe there's doom. For now, let's just be uncertain."
+
+**Card Name:** Mea Culpa Plea
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+Target creature you control takes damage equal to its base Attack. Schedule 2 additional card draws for your next Day.
+**Flavor Text:** "My bad. But hey, lessons learned, cards drawn."
+
+**Card Name:** Yvan Eht Nioj
+**Faction:** Shadow Operations
+**Type:** Spell
+**Additional Cost:** Banish 1 card from your hand.
+**Ability Text:**
+Target enemy creature. Until the end of the opponent's next Day, if that creature is destroyed, you gain control of it (it is Revived on your side with Deployment Time (1 Day) and Brainwashed).
+**Flavor Text:** "They won't even realize they're signing up." (TODO: find a better flavour text from the simpsons)
+
+**Card Name:** Duelo A Garrotazos
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Target an enemy creature. It and one random adjacent enemy creature (if any) both gain Bloodthirst and Paranoid.
+(Reminder: Bloodthirst: Must Attack or halve HP. Lifesteal. Paranoid: Forced friendly Attack/self-damage.)
+**Flavor Text:** "A savage dance of mutual self-destruction, now with more paranoia!"
+
+**Card Name:** Nocturne Chillout
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+All creatures gain Slacking Off for 1 Day. All creatures also gain Muted (1 Day).
+(Reminder: Slacking Off: Priority -2, Heals 2 Each Dusk. Cleansable.)
+**Flavor Text:** "The music is so soothing... so... demotivating..."
+
+**Card Name:** Sacrificial Praegustator
+**Faction:** Statecraft
+**Type:** Creature
+**Stats:** 1/2/3
+**Deployment Time:** 0 Days
+**Ability Text:**
+When an adjacent friendly creature with current Health 3 or more would be affected by an enemy Spell that applies a negative status effect for the first time each Day, this creature is Banished, and that Spell's status effect application is negated for that one creature.
+**Flavor Text:** "Tastes like... treason. And my swift exit." (TODO: Do a more cynical funny text rooted in reality)
+
+**Card Name:** Ankylorhiza
+**Faction:** Myth
+**Type:** Creature
+**Stats:** 4/6/1
+**Deployment Time:** 2 Days
+**Ability Text:**
+Heavy.
+OnDamaged(damageSource, damageAmount, damageType): If damageSource was an Attack, the attacking creature gains Anchored.
+(Reminder: Heavy: Cannot Move/be moved, ATKx2, Attack opposing slot. Anchored: Cannot use own Move.)
+**Flavor Text:** "Disturb my slumber, and you'll find the depths have a strong grip."
+
+**Card Name:** Ghost Protocol
+**Faction:** Shadow Operations
+**Type:** Spell
+**Ability Text:**
+Target creature you control gains Diplomatic Immunity for 1 Day. If it is damaged by an enemy Attack this Day, it then gains Concealed (1 Day).
+(Reminder: Diplomatic Immunity: Immune to Spells. Persistent. Cleansable.)
+**Flavor Text:** "Deny everything. Blend in. Strike when they're not looking."
+
+**Card Name:** Saturn's Devouring
+**Faction:** Zeitgeist
+**Type:** Creature
+**Stats:** 3/7/1
+**Deployment Time:** 3 Days
+**Ability Text:**
+Each Dawn: Target friendly creature with the lowest current Health that is not this creature. Destroy it. If a creature is destroyed this way, Saturn's Devouring gains +2 permanent Attack and 2 Armor.
+**Flavor Text:** "The future is a fearsome meal, but a nourishing one."
+
+**Card Name:** Veil of Taqiyya
+**Faction:** Myth
+**Type:** Spell
+**Ability Text:**
+Target friendly 'Myth' creature gains Concealed (2 Days). While it is Concealed by this effect, if an opponent targets it with an Intelligence action or applies Revealed to it, the source of that action/effect gains Paranoid and your targeted creature gains Blessed.
+(Reminder: Paranoid: Next Dawn, forced Attack on friendly/self; if unable, 2 damage. Then removed. Cleansable. Blessed: Consumes stack to negate status. Cleansable.)
+**Flavor Text:** "To the unbeliever, a simple guise. To the prying eye, a vexing truth."
+
+Card Name: Oneiric Intrusion
+* Faction: Shadow Operations
+* Type: Spell
+* Ability Text: Target enemy creature with Deployment Time 1 or more Days remaining. It gains Paranoid. Its Deployment Time is increased by 1 Day.
+* Flavor Text: "Sweet dreams are made of this..."
+
+18. Card Name: Solipsistic Echo
+* Faction: Mind
+* Type: Spell
+* Ability Text: Target friendly creature. It gains "OnDamaged(damageSource, damageAmount, damageType): Reflect damageAmount back to it." for 1 Day.
+* Flavor Text: "If I am the only reality, then your pain is merely my own, redirected."
+
+14. Card Name: Entryphy
+* Faction: Zeitgeist
+* Type: Creature
+* Stats: Attack X, Health X, Speed X (by default X is 2)
+* Deployment Time: 1 Day
+* Ability Text: Each Dawn: This creature's base Attack and Speed are each randomly set from 1 to 5 for the Day.
+* Flavor Text: "Embrace me!"
+
+13. Card Name: Apophatic Monk
+* Faction: Myth
+* Type: Creature
+* Stats: Attack 0, Health 4, Speed 2
+* Deployment Time: 2 Days
+* Ability Text: This creature cannot be targeted by Spells from Factions other than 'Myth'. Each Dusk, if this creature was not targeted by any Spells this Day, target adjacent friendly creature gains Blessed.
+* Flavor Text: "This rules are not for me."
+
+10. Card Name: Noosphere Tap
+* Faction: Mind
+* Type: Spell
+* Ability Text: For each creature on the battlefield with Brainwashed or Paranoid, schedule 1 additional card draw for your next Day. Then, Cleanse Brainwashed and Paranoid from all creatures.
+* Flavor Text: "Tuning into the collective consciousness..."
+
+4. Card Name: Oneiric Catalyst
+* Faction: Mind
+* Type: Creature
+* Stats: Attack 1, Health 3, Speed 3
+* Deployment Time: 1 Day
+* Ability Text: Undercover. OnDeploymentTimeComplete: If this creature is still Concealed, all other friendly creatures gain +2 Speed for 2 Days.
+* Flavor Text: "The dream shapes reality, once it fully awakens."
+
+2. Card Name: Ethnomethodological Weed
+* Faction: Zeitgeist
+* Type: Spell
+* Ability Text: Target enemy creature, it gains Ostracised until next Dawn. The controller of that creature schedules 1 additional card draw for your next Day.
+(Reminder: Ostracised: Untargetable, Cannot Act/be Attacked, Abilities Disabled. Fades.)
+* Flavor Text: "Dude, what do the clouds taste like?"
+
+1. Card Name: Abilene's Restaurant
+* Faction: Mind
+* Type: Spell
+* Ability Text: All creatures with current Health 3 or more gain Impatient and Muted (1 Day). All creatures with current Health 2 or less gain Slacking Off for 1 Day.
+(Reminder: Impatient: Must Attack or take X damage. Muted: Abilities Disabled. Slacking Off: Priority -2, Heals 2.)
+* Flavor Text: "Nobody wanted to come here, yet here we are, unanimously."

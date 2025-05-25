@@ -86,3 +86,7 @@ Continuous effects: Use layering (MTG) for actions priority determination
 	C Switch P/S/T effects
 	
 
+Arquetipo para criatura:
+Una criatura con un temporizador para detonar una accion negativa para su controlador
+El temporizador es muted, la criatura empieza con 3 stacks de muted
+Cuando se le termina activa su habilidad que es negativa para el usuario controlando la criatura
