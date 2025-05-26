@@ -71,7 +71,7 @@
 **Name:** Bloodthirst
 **Type:** Control, Damage, Heal, Persistent
 **Persistent:** Yes
-**Description:** "Must Attack each Day or halve current HP at Dusk. Dealing damage heals for half the damage dealt (rounded up)."
+**Description:** "Must Attack a creature each Day or halve current HP round down at Dusk. Dealing damage to creatures heals for half the damage dealt (rounded up)."
 **Core Impact:** Forces aggressive action, provides lifesteal.
 **Stacking & Duration:**
     **Initial Stacks:** 1
