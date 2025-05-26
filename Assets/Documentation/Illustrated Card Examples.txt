@@ -336,9 +336,9 @@ Target friendly creature. Permanently reduce its base Attack by 2 and permanentl
 **Card Name:** Liminality
 **Faction:** Mind
 **Type:** Spell
-**Targeting:** Target an empty slot.
-**Requisite:** The spell needs an empty slot. If the slot is filled by the time the action is executed, it will fail.
 **Ability Text:**
+Targeting: Target an empty slot.
+Requisite: The spell needs an empty slot. If the slot is filled by the time the action is executed, it will fail.
 Apply the 'Threshold of Liminality' Slot Effect (Duration: 2 Days) to the target slot.
 **Flavor Text:** "Trapped in the 'in-between,' where every instinct screams of unseen threats and escape feels impossible."
 
@@ -352,8 +352,8 @@ Target enemy creature. If that creature queued at least one action this Day, its
 **Card Name:** Mind Control Device
 **Faction:** Shadow Operations
 **Type:** Spell
-**Additional Cost:** Your active creature with the highest Attack gains Exhausted.
 **Ability Text:**
+Additional Cost: Your active creature with the highest Attack gains Exhausted.
 Target enemy creature with current Health 3 or less. Apply Brainwashed to it.
 (Reminder: Brainwashed: At Dusk of 2nd Day, changes owner to status applier; Abilities Disabled. Re-applying resets. Not Cleansable.)
 **Flavor Text:** "Their will is now... an implementation detail."
@@ -371,8 +371,8 @@ Each Dawn: Target friendly creature. Cleanse 1, if cleanseable status effect, if
 **Card Name:** Burner Phone
 **Faction:** Shadow Operations
 **Type:** Spell
-**Requisite:** Discard 1 card from your hand.
 **Ability Text:**
+Requisite: Discard 1 card from your hand.
 Target creature you control gains Concealed (2 Days).
 (Reminder: Concealed (X Days): Actions are Concealed Actions. Negated by Revealed. Cleansable.)
 **Flavor Text:** "Untraceable calls. Untraceable plans."
@@ -479,8 +479,8 @@ All creatures that have Deployment Time (0 Days) (i.e., fully deployed) and have
 **Card Name:** Chrysopoeia Ritual
 **Faction:** Myth
 **Type:** Spell
-**Additional Cost:** Target creature you control with Attack 2 or more gains Doomed (1 Day).
 **Ability Text:**
+Additional Cost: Target creature you control with Attack 2 or more gains Doomed (1 Day).
 Schedule additional card draws for your next Day equal to half the target creature's Attack (rounded up).
 **Flavor Text:** "Turning power into... well, more power, eventually. For a price."
 
@@ -528,8 +528,8 @@ Target creature you control takes damage equal to its base Attack. Schedule 2 ad
 **Card Name:** Yvan Eht Nioj
 **Faction:** Shadow Operations
 **Type:** Spell
-**Additional Cost:** Banish 1 card from your hand.
 **Ability Text:**
+Additional Cost: Banish 1 card from your hand.
 Target enemy creature. Until the end of the opponent's next Day, if that creature is destroyed, you gain control of it (it is Revived on your side with Deployment Time (1 Day) and Brainwashed).
 **Flavor Text:** "They won't even realize they're signing up." (TODO: find a better flavour text from the simpsons)
 
@@ -594,58 +594,509 @@ Target friendly 'Myth' creature gains Concealed (2 Days). While it is Concealed 
 (Reminder: Paranoid: Next Dawn, forced Attack on friendly/self; if unable, 2 damage. Then removed. Cleansable. Blessed: Consumes stack to negate status. Cleansable.)
 **Flavor Text:** "To the unbeliever, a simple guise. To the prying eye, a vexing truth."
 
-Card Name: Oneiric Intrusion
-* Faction: Shadow Operations
-* Type: Spell
-* Ability Text: Target enemy creature with Deployment Time 1 or more Days remaining. It gains Paranoid. Its Deployment Time is increased by 1 Day.
-* Flavor Text: "Sweet dreams are made of this..."
+**Card Name:** Oneiric Intrusion
+**Faction:** Shadow Operations
+**Type:** Spell
+**Ability Text:**
+Target enemy creature with Deployment Time 1 or more Days remaining. It gains Paranoid. Its Deployment Time is increased by 1 Day.
+**Flavor Text:** "Sweet dreams are made of this..."
 
-18. Card Name: Solipsistic Echo
-* Faction: Mind
-* Type: Spell
-* Ability Text: Target friendly creature. It gains "OnDamaged(damageSource, damageAmount, damageType): Reflect damageAmount back to it." for 1 Day.
-* Flavor Text: "If I am the only reality, then your pain is merely my own, redirected."
+**Card Name:** Solipsistic Echo
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+Target friendly creature. It gains "OnDamaged(damageSource, damageAmount, damageType): Reflect damageAmount back to damageSource." for 1 Day.
+**Flavor Text:** "If I am the only reality, then your pain is merely my own, redirected."
 
-14. Card Name: Entryphy
-* Faction: Zeitgeist
-* Type: Creature
-* Stats: Attack X, Health X, Speed X (by default X is 2)
-* Deployment Time: 1 Day
-* Ability Text: Each Dawn: This creature's base Attack and Speed are each randomly set from 1 to 5 for the Day.
-* Flavor Text: "Embrace me!"
+**Card Name:** Entryphy
+**Faction:** Zeitgeist
+**Type:** Creature
+**Stats:** X/X/X (by default X is 2)
+**Deployment Time:** 1 Day
+**Ability Text:**
+Each Dawn: This creature's base Attack and Speed are each randomly set from 1 to 5 for the Day.
+**Flavor Text:** "Embrace me!"
 
-13. Card Name: Apophatic Monk
-* Faction: Myth
-* Type: Creature
-* Stats: Attack 0, Health 4, Speed 2
-* Deployment Time: 2 Days
-* Ability Text: This creature cannot be targeted by Spells from Factions other than 'Myth'. Each Dusk, if this creature was not targeted by any Spells this Day, target adjacent friendly creature gains Blessed.
-* Flavor Text: "This rules are not for me."
+**Card Name:** Apophatic Monk
+**Faction:** Myth
+**Type:** Creature
+**Stats:** 0/4/2
+**Deployment Time:** 2 Days
+**Ability Text:**
+This creature cannot be targeted by Spells from Factions other than 'Myth'. Each Dusk, if this creature was not targeted by any Spells this Day, target adjacent friendly creature gains Blessed.
+**Flavor Text:** "This rules are not for me."
 
-10. Card Name: Noosphere Tap
-* Faction: Mind
-* Type: Spell
-* Ability Text: For each creature on the battlefield with Brainwashed or Paranoid, schedule 1 additional card draw for your next Day. Then, Cleanse Brainwashed and Paranoid from all creatures.
-* Flavor Text: "Tuning into the collective consciousness..."
+**Card Name:** Noosphere Tap
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+For each creature on the battlefield with Brainwashed or Paranoid, schedule 1 additional card draw for your next Day. Then, Cleanse Brainwashed and Paranoid from all creatures.
+**Flavor Text:** "Tuning into the collective consciousness..."
 
-4. Card Name: Oneiric Catalyst
-* Faction: Mind
-* Type: Creature
-* Stats: Attack 1, Health 3, Speed 3
-* Deployment Time: 1 Day
-* Ability Text: Undercover. OnDeploymentTimeComplete: If this creature is still Concealed, all other friendly creatures gain +2 Speed for 2 Days.
-* Flavor Text: "The dream shapes reality, once it fully awakens."
+**Card Name:** Oneiric Catalyst
+**Faction:** Mind
+**Type:** Creature
+**Stats:** 1/3/3
+**Deployment Time:** 1 Day
+**Ability Text:**
+Undercover. OnDeploymentTimeComplete: If this creature is still Concealed, all other friendly creatures gain +2 Speed for 2 Days.
+**Flavor Text:** "The dream shapes reality, once it fully awakens."
 
-2. Card Name: Ethnomethodological Weed
-* Faction: Zeitgeist
-* Type: Spell
-* Ability Text: Target enemy creature, it gains Ostracised until next Dawn. The controller of that creature schedules 1 additional card draw for your next Day.
+**Card Name:** Ethnomethodological Weed
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Target enemy creature, it gains Ostracised until next Dawn. The controller of that creature schedules 1 additional card draw for your next Day.
 (Reminder: Ostracised: Untargetable, Cannot Act/be Attacked, Abilities Disabled. Fades.)
-* Flavor Text: "Dude, what do the clouds taste like?"
+**Flavor Text:** "Dude, what do the clouds taste like?"
 
-1. Card Name: Abilene's Restaurant
-* Faction: Mind
-* Type: Spell
-* Ability Text: All creatures with current Health 3 or more gain Impatient and Muted (1 Day). All creatures with current Health 2 or less gain Slacking Off for 1 Day.
+**Card Name:** Abilene's Restaurant
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+All creatures with current Health 3 or more gain Impatient and Muted (1 Day). All creatures with current Health 2 or less gain Slacking Off for 1 Day.
 (Reminder: Impatient: Must Attack or take X damage. Muted: Abilities Disabled. Slacking Off: Priority -2, Heals 2.)
-* Flavor Text: "Nobody wanted to come here, yet here we are, unanimously."
+**Flavor Text:** "Nobody wanted to come here, yet here we are, unanimously."
+
+**Card Name:** Lyre
+**Faction:** Myth
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. It gains `Regeneration (7 Days, 1 Heal Amount)`.
+*(Reminder: Regeneration (X Days, Y Heal Amount): Each Dawn, heal Y HP. Lasts X Days. Cleansable.)*
+**Flavor Text:** "A soothing melody that mends wounds, one dawn at a time."
+
+**Card Name:** Katana
+**Faction:** Shadow Ops
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. Permanently increase its base Attack by 2 and base Speed by 1.
+**Flavor Text:** "Swift, precise, and permanently altering."
+
+**Card Name:** Laser Pointer
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+All enemy creatures gain `Revealed (1 Day)`.
+**Flavor Text:** "Nowhere to hide when the red dot is everywhere."
+
+**Card Name:** Creatine
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. Permanently increase its base Max Health by 3 (current Health also increases by 3) and permanently increase its base Attack by 2.
+**Flavor Text:** "Max gains, bro. Max gains."
+
+**Card Name:** Stealth Suit
+**Faction:** Shadow Ops
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. Cleanse `Revealed` from it. Then, it gains `Concealed (2 Days)`.
+**Flavor Text:** "Now you see me... now you really don't."
+
+**Card Name:** Zweihander
+**Faction:** Statecraft
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. Permanently increase its base Attack by 3 and permanently decrease its base Speed by 1 (to a minimum of 1).
+**Flavor Text:** "It lacks finesse, but the impact is undeniable."
+
+**Card Name:** Chinese Food
+**Faction:** Digital Society
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. Heal it for 4 HP. It then gains `Indigestion (1 Day, 1 Damage Amount)`.
+*(Reminder: Indigestion (X Days, Y Damage Amount): Each Dawn, take Y damage. Lasts X Days.)*
+**Flavor Text:** "Deliciously satisfying now, surprisingly regrettable later."
+
+**Card Name:** Shift Gear
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. For the rest of this Day, and for the next Day, Attack actions and Active Ability actions queued by this creature gain +1 `Priority (Action)`.
+**Flavor Text:** "Overclocking sequence initiated. Expect expedited results."
+
+**Card Name:** Sanctum Omnium
+**Faction:** Utopia
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target creature. Cleanse all status effects from it, including `Doomed`.
+**Flavor Text:** "Within these walls, all afflictions are rendered null. Even fate itself may be unwritten."
+
+**Card Name:** Here Be Dragons
+**Faction:** Myth
+**Type:** Spell
+**Ability Text:**
+**Homing:** Deal 5 damage to target creature. If it survives this damage, permanently increase its base Attack by 3.
+**Flavor Text:** "Venture into the unknown, and return stronger... or not at all."
+
+**Card Name:** Jailbreak
+**Faction:** Shadow Ops
+**Type:** Spell
+**Ability Text:**
+**Fixed:** Target an enemy slot. If a creature occupies that slot at resolution, gain permanent control of it (this is a `Conversion` effect). If the slot is empty at resolution, this effect fizzles.
+**Flavor Text:** "The bars couldn't hold it. Neither will your control."
+
+**Card Name:** Suit
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. It gains `Diplomatic Immunity`.
+**Flavor Text:** "Certain... individuals operate above the usual regulations."
+
+**Card Name:** Girl Math
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target creature. If it currently has `Deployment Time`, increase its remaining `Deployment Time` by 3 Days. Then, at the Dawn of the next Day, if that creature still has `Deployment Time`, decrease its remaining `Deployment Time` by 5 Days (to a minimum of 0). If the target has no `Deployment Time` when this spell resolves, this spell has no effect.
+**Flavor Text:** "It's practically free after you factor in the future discount... which is like, an investment."
+
+**Card Name:** Remove Dislike Button
+**Faction:** Digital Society
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. It gains 5 `Armor`.
+**Flavor Text:** "I like it, what else can I do?"
+
+**Card Name:** Too Bad So Sad
+**Faction:** Mind
+**Type:** Spell
+**Ability Text:**
+**Static:** Deal 5 damage to target slot. (If a creature occupies the slot, it takes the damage. If the slot is empty, the player controlling the slot takes 5 Player Damage, as per GDD rule IV.F.5.)
+**Flavor Text:** "Wait, could that also happen to me?"
+
+**Card Name:** Binding Contract
+**Faction:** Shadow Ops
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. It gains `Binding Vow (1 Day)`.
+*(Reminder: Binding Vow (1 Day): If this creature is destroyed this Day, Banish a random enemy creature.)*
+**Flavor Text:** "A pact sealed in potential blood. Theirs, preferably."
+
+**Card Name:** Corporate Espionage
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+Apply `Exposed` to up to two random enemy creatures. Then, all friendly creatures you control take 1 damage.
+**Flavor Text:** "Information is power. Collateral damage is... budgeted."
+
+**Card Name:** Limited Liability
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. It gains `Damage Cap (1 Day, 1 Cap Amount)`.
+*(Reminder: Damage Cap (1 Day, 1 Cap Amount): For this Day, each instance of damage this creature would take from a single source is reduced to 1 if it was greater than 1.)*
+**Flavor Text:** "We've minimized your exposure. Legally speaking."
+
+**Card Name:** Patent Pending
+**Faction:** Tech
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. Reduce its `Deployment Time` by 2 Days (to a minimum of 0).
+**Flavor Text:** "Expediting innovation, one bypassed delay at a time."
+
+**Card Name:** Buy Now Pay Later
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. Reduce its `Deployment Time` by 3 Days (to a minimum of 0). Then, that creature takes 5 damage.
+**Flavor Text:** "Instant gratification! The bill comes due eventually."
+
+**Card Name:** Creative Accounting
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target creature. Permanently swap its base Attack and base Health. Then, permanently increase its base Attack by 1, and permanently decrease its base Max Health by 1 (current Health is also reduced if it exceeds the new Max Health, to a minimum of 1 Max Health).
+**Flavor Text:** "The numbers say what we want them to say. And look, a bonus!"
+
+**Card Name:** Digital Millennium Copyright Act
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+**Homing:** Banish target creature. You (the controller of this spell) take 4 Player Damage.
+**Flavor Text:** "Content ID match found. Cease and desist... and pay the processing fee."
+
+**Card Name:** Inter-Generational Short Squeeze
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+Choose your friendly creature currently on the battlefield with the lowest base Attack (if tied, choose one randomly). Record its current base Attack, then permanently set its base Attack to 0. Choose your friendly creature currently on the battlefield with the highest base Attack (if tied, choose one randomly; can be the same creature if it was the only one or met both criteria before modification). Permanently increase its base Max Health by the recorded amount (current Health also increases by this amount). If no valid targets exist for either step, that step is skipped.
+**Flavor Text:** "Liquidating the future to prop up the present. What could go wrong?"
+
+**Card Name:** Extraction
+**Faction:** Shadow Ops
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. Return it to its owner's hand.
+**Flavor Text:** "Mission accomplished. Or aborted. Details are classified."
+
+**Card Name:** Persona Non Grata
+**Faction:** Statecraft
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target enemy creature. Return it to its owner's hand.
+**Flavor Text:** "Your presence is no longer required. Or tolerated."
+
+**Card Name:** Purge Day
+**Faction:** Statecraft
+**Type:** Spell
+**Ability Text:**
+If you control at least one creature and your opponent controls at least one creature: you Banish one random friendly creature you control, and your opponent Banishes one random creature they control.
+**Flavor Text:** "To ensure continued stability, certain... adjustments are necessary."
+
+**Card Name:** "Peace" Operation
+**Faction:** Statecraft
+**Type:** Spell
+**Ability Text:**
+**Fixed:** Target an enemy slot. If a creature occupies that slot at resolution, deal 1 damage to it. If the slot is empty at resolution, deal 4 damage to the opponent player.
+**Flavor Text:** "We are merely restoring order. The methods are... robust."
+
+**Card Name:** Pasiflora Blooming
+**Faction:** Myth
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target friendly creature. It gains `Honeypot`.
+*(Reminder: Honeypot: Status, specific trigger/effect in Status Compendium)*
+**Flavor Text:** "Such an alluring bloom, drawing all attention..."
+
+**Card Name:** Cannibalism
+**Faction:** Myth
+**Type:** Spell
+**Ability Text:**
+**Homing:** Target one friendly creature you control. Banish all other friendly creatures you control. For each creature Banished this way, heal the targeted friendly creature for 2 HP.
+**Flavor Text:** "Survival demands sacrifice. The flesh of our own, a bitter sustenance."
+
+**Card Name:** Die by the Sword
+**Faction:** Zeitgeist
+**Type:** Spell
+**Ability Text:**
+**Static:** Target an enemy slot. If a creature occupies that slot at resolution, deal damage to it equal to its current Attack. If the slot is empty at resolution, this effect fizzles.
+**Flavor Text:** "Live by it, die by it. Simple as."
+
+---
+**Creatures:**
+
+**Card Name:** Man-In-The-Middle
+**Faction:** Tech
+**Type:** Creature
+**Stats:** 2/3/2
+**Deployment Time:** 1 Day
+**Ability Text:**
+Passive: `OnDealDamage(damagedTarget, damageAmount, damageType)`: If this creature dealt damage with an Attack to an enemy creature, `damagedTarget` gains `Revealed (3 Days)`.
+**Flavor Text:** "I see everything that passes through here. Everything."
+
+**Card Name:** Script Kiddie
+**Faction:** Tech
+**Type:** Creature
+**Stats:** 2/1/7
+**Deployment Time:** 0 Days
+**Ability Text:**
+Passive: Each Dawn: The enemy creature currently on the battlefield with the highest base Speed has its Speed reduced by 2 (to a minimum of 1) for this Day. If multiple enemy creatures are tied for highest Speed, select one randomly.
+**Flavor Text:** "LOL. Lulz. Pwned. My l33t skillz are undeniable. What's a firewall?"
+
+**Card Name:** Full Stack Developer
+**Faction:** Tech
+**Type:** Creature
+**Stats:** 1/7/3
+**Deployment Time:** 0 Days
+**Ability Text:**
+Passive: Each Dawn: Heal 1 HP for a random friendly creature. Then, deal 1 damage to a random creature on the battlefield (friend or foe).
+**Flavor Text:** "Yeah, I can do that. And that. And a bit of that. Just don't expect any of it to be... optimal."
+
+**Card Name:** NPC Streamer
+**Faction:** Mind
+**Type:** Creature
+**Stats:** 0/3/1
+**Deployment Time:** 1 Day
+**Ability Text:**
+Starts with `Doomed (3 Days)`.
+Passive: `OnDealDamage(damagedTarget, damageAmount, damageType)`: If this creature dealt damage with an Attack, `damagedTarget` (if a creature) gains `Earworm`.
+**Flavor Text:** "Hey guys! Smash that like button! Don't forget to subscribe! Can I get a pog in the chat?! LET'S GOOOO!"
+
+**Card Name:** Positive Body
+**Faction:** Zeitgeist
+**Type:** Creature
+**Stats:** 10/10/1
+**Deployment Time:** 3 Days
+**Ability Text:**
+**Special:** This creature occupies 2 adjacent friendly slots. When this creature's 'Play Creature Action' resolves, any creatures occupying the two chosen target slots are Banished. This creature has `Anchored` and cannot perform Attack actions.
+Passive: `OnDamaged(damageSource, damageAmount, damageType)`: If `damageSource` is a creature, it gains `Doomed (2 Days)`.
+**Flavor Text:** "I'm beautiful in every single way. Words can't bring me down... but they might bring YOU down."
+
+**Card Name:** 420
+**Faction:** Zeitgeist
+**Type:** Creature
+**Stats:** 4/2/1
+**Deployment Time:** 1 Day
+**Ability Text:**
+Starts with `Addicted` and `Blessed (1 stack)`.
+**Flavor Text:** "Dude. Woah."
+
+**Card Name:** Enslaved Moisture
+**Faction:** Utopia
+**Type:** Creature
+**Stats:** 0/10/1
+**Deployment Time:** 0 Days
+**Ability Text:**
+Passive: Each Dawn: Heal all adjacent friendly creatures for 2 HP.
+**Flavor Text:** "My purpose is to hydrate. The terms of my service are... non-negotiable."
+
+**Card Name:** Expanding Brain
+**Faction:** Mind
+**Type:** Creature
+**Stats:** 1/10/1
+**Deployment Time:** 2 Days
+**Ability Text:**
+Passive: Each Dawn: Permanently increase this creature's base Attack by 1.
+**Flavor Text:** "Galaxy brain unlocked. Next level: Universe brain."
+
+**Card Name:** Dubai "Enterpreneur"
+**Faction:** Corporate
+**Type:** Creature
+**Stats:** 4/6/2
+**Deployment Time:** 0 Days
+**Ability Text:**
+Passive: `OnEnterBattlefield`: This creature gains `Diplomatic Immunity` (Persistent), `Bored (2 Days)`, `Anchored` (Persistent), and `Exposed` (Persistent).
+**Flavor Text:** "Hustle. Grind. Influence. My assistant handles the details. And the work."
+
+**Card Name:** Digital Nomad
+**Faction:** Zeitgeist
+**Type:** Creature
+**Stats:** 3/3/3
+**Deployment Time:** 1 Day
+**Ability Text:**
+Starts with `Bored (Persistent)`, `Slacking Off (Persistent)`, and `Exposed` (Persistent). (Note: "Persistent" for Bored/Slacking Off implies they don't decay or have max duration/stacks as per Status Compendium).
+**Flavor Text:** "Working from paradise. Mostly staring at the ocean. Wi-Fi's kinda spotty."
+
+**Card Name:** Link-In-Bio Babe
+**Faction:** Digital Society
+**Type:** Creature
+**Stats:** 1/3/1
+**Deployment Time:** 1 Day
+**Ability Text:**
+Starts with `Exposed` (Persistent).
+Passive: `OnAttack`: Deal 1 damage to all enemy creatures.
+**Flavor Text:** "Don't forget to check out my other platforms! Swipe up for my discount code!"
+
+**Card Name:** Fat Tony
+**Faction:** Shadow Ops
+**Type:** Creature
+**Stats:** 6/10/1
+**Deployment Time:** 3 Days
+**Ability Text:**
+Starts with `Diplomatic Immunity` (Persistent).
+Passive: `OnDamaged(damageSource, damageAmount, damageType)`: Deal 2 damage back to `damageSource` (if a creature; if a Spell, deal 2 damage to the opponent player).
+**Flavor Text:** "You come to me, on the day of my daughter's deployment, and you ask me to do murder? For money?"
+
+**Card Name:** Carbon Copy (CC)
+**Faction:** Tech
+**Type:** Creature
+**Stats:** 1/1/1 (Initial)
+**Deployment Time:** 0 Days
+**Requisite:** When playing Carbon Copy, target an enemy creature.
+**Ability Text:**
+Passive: `OnEnterBattlefield`: This creature's base Attack, base Health, base Speed, and all its Passive Abilities become a copy of the enemy creature targeted by this card's Requisite. This creature does not copy `Deployment Time` or current status effects from the target.
+**Flavor Text:** "Ctrl+C, Ctrl+V. Originality is overrated."
+
+**Card Name:** OPEP+
+**Faction:** Corporate
+**Type:** Creature
+**Stats:** X/6/1 (Base Attack 0 before effect)
+**Deployment Time:** 3 Days
+**Ability Text:**
+Passive: `OnEnterBattlefield`: For each other creature currently on the battlefield (friend and foe), permanently reduce its base Attack by 1 (to a minimum of 0). This creature's base Attack becomes equal to the total amount of Attack reduced from all creatures this way.
+**Flavor Text:** "We've decided to adjust production. For market stability, of course."
+
+**Card Name:** Cyclops
+**Faction:** Myth
+**Type:** Creature
+**Stats:** 2/6/1
+**Deployment Time:** 1 Day
+**Ability Text:**
+Starts with `Heavy` and 3 `Armor`.
+**Flavor Text:** "My eye is on the prize. And on you. Mostly on you."
+
+**Card Name:** Fenix
+**Faction:** Myth
+**Type:** Creature
+**Stats:** 5/5/5
+**Deployment Time:** 3 Days
+**Ability Text:**
+Passive: `OnDied(deathSource)`: If this creature is destroyed, and it has not used this ability before this game, return it to the battlefield in the slot it last occupied (if available, otherwise a random empty friendly slot). Its base stats permanently become 1/1/1, and its current Health becomes 1. This ability can only trigger once per game.
+**Flavor Text:** "From the ashes, a new beginning. Slightly smaller, much angrier."
+
+**Card Name:** High Priestess
+**Faction:** Utopia
+**Type:** Creature
+**Stats:** 4/2/1
+**Deployment Time:** 1 Day
+**Ability Text:**
+Passive: `OnEnterBattlefield`: `Cleanse` 1 cleansable status effect from up to two random friendly creatures.
+**Flavor Text:** "Let the light purify you. Or at least remove that nasty debuff."
+
+**Card Name:** Stripper Magician
+**Faction:** Zeitgeist
+**Type:** Creature
+**Stats:** 3/3/3
+**Deployment Time:** 1 Day
+**Ability Text:**
+Starts with `Exposed` (Persistent), `Heat Signature` (Persistent), and `Taunting (Persistent)`.
+*(Reminder: Taunting (Persistent): Enemy creatures capable of attacking must target this creature if they Attack.)*
+**Flavor Text:** "Now you see it, now you... still see quite a lot, actually. And you can't look away."
+
+**Card Name:** Minotaur
+**Faction:** Myth
+**Type:** Creature
+**Stats:** 7/7/2
+**Deployment Time:** 3 Days
+**Ability Text:**
+Starts with `Heavy` and 5 `Armor`.
+**Flavor Text:** "Lost in the maze of your impending doom."
+
+**Card Name:** Witcher
+**Faction:** Shadow Ops
+**Type:** Creature
+**Stats:** 4/4/4
+**Deployment Time:** 1 Day
+**Ability Text:**
+Passive: When this creature deals damage with an Attack to a creature of the 'Myth' Faction, it deals double that damage instead.
+**Flavor Text:** "Silver for monsters, steel for humans. Sometimes the lines blur."
+
+**Card Name:** Deus Ex Machina
+**Faction:** Utopia
+**Type:** Creature
+**Stats:** 0/5/1
+**Deployment Time:** 7 Days
+**Ability Text:**
+Passive: `OnDeploymentTimeComplete`: You win the game.
+**Flavor Text:** "Just when all hope seemed lost... the plot contrivance arrives."
+
+**Card Name:** Karma
+**Faction:** Mind
+**Type:** Creature
+**Stats:** 0/10/1
+**Deployment Time:** 1 Day
+**Ability Text:**
+`Undercover`.
+Passive: `OnDamaged(damageSource, damageAmount, damageType)`: If `damageSource` is a creature, it takes `damageAmount` damage. If `damageSource` is a Spell, its controller takes `damageAmount` Player Damage.
+Passive: `OnHealed(healingSource, healAmount)`: If `healingSource` is a creature, it is healed for `healAmount` (up to its max Health). If `healingSource` is a Spell, its controller is healed for `healAmount` Player Health.
+**Flavor Text:** "What goes around, comes around. Instantly."
+
+---
+**Traps (as Spells applying Slot Effects):**
+
+**Card Name:** Workplace Hazard
+**Faction:** Corporate
+**Type:** Spell
+**Ability Text:**
+**Static:** Target an empty enemy slot. Apply 'Landmine Trap (3 Damage)' Slot Effect to it.
+*(Reminder: Landmine Trap (3 Damage): Hidden. OnEnterSlot by enemy: Deal 3 damage to entering creature. Consumed.)*
+**Flavor Text:** "Watch your step. Or don't. HR has forms for that."
+
+**Card Name:** Anti Homeless Architecture
+**Faction:** Statecraft
+**Type:** Spell
+**Ability Text:**
+**Static:** Target an empty enemy slot. Apply 'Sacrifice Lair Trap' Slot Effect to it.
+*(Reminder: Sacrifice Lair Trap: Hidden. OnEnterSlot by enemy: Entering creature takes 3 damage and gains Anchored. Consumed.)*
+**Flavor Text:** "Designed for optimal discomfort and discouragement. It's very effective."

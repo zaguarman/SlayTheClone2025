@@ -18,7 +18,6 @@
 **FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
 
 **Surveillance Post**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Hidden
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot and `movingCreature` is an enemy to the controller of this Slot Effect).
     *   **Effect:** The `movingCreature` gains `Revealed (2 Days)`. The Surveillance Post is then **revealed and** consumed. (Note: `Revealed` status duration set to 2 Days/stacks).
@@ -27,7 +26,6 @@
     *   **Cleansable:** Yes
 
 **Temporal Shield**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** Continuous while active.
     *   **Effect:** Any creature on this slot is immune to combat damage.
@@ -37,7 +35,6 @@
     *   **Notes:** Does not prevent other effects like status applications or damage from Spells/abilities unless the damage itself was the carrier and specified as combat damage.
 
 **Landmine**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Hidden
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** The `movingCreature` takes X damage. The Landmine is then **revealed and** consumed.
@@ -46,7 +43,6 @@
     *   **Cleansable:** Yes
 
 **Binding Chains**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnBeforeLeaveSlot(leftSlot, method)` (Slot effect logic checks: if `leftSlot` is this slot, and the creature is attempting to leave).
     *   **Effect:** The creature attempting to leave this slot gains `Anchored`. The Binding Chains is then consumed.
@@ -55,7 +51,6 @@
     *   **Cleansable:** Yes
 
 **Rejection Field**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** The `movingCreature` entering this slot is returned to its owner's hand.
@@ -64,7 +59,6 @@
     *   **Cleansable:** Yes
 
 **Scorched Earth**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** Continuous while active and slot is occupied.
     *   **Effect:** Passive abilities of any creature occupying this slot do not trigger. (Does not use the full `Abilities Disabled` keyword, so active abilities are not affected by this specific slot effect).
@@ -73,7 +67,6 @@
     *   **Cleansable:** Yes
 
 **Rally Point**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnTurnStart` (Slot effect logic checks if its slot is occupied by a creature controlled by the same player who controls this Rally Point).
     *   **Effect:** If a creature controlled by this slot effect's controller is on this slot at **Dawn (Start of their Day)**, its controller Schedules 1 additional card draw for their next **Day**.
@@ -82,7 +75,6 @@
     *   **Cleansable:** Yes
 
 **Slippery Floor**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Hidden
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** The `movingCreature` is immediately pushed one slot directly backward (towards its controller's edge of the board) if the destination slot is empty and valid. If it cannot be pushed (e.g., at edge of board, next slot occupied), it instead takes 2 damage. The Slippery Floor is then **revealed and** consumed.
@@ -91,7 +83,6 @@
     *   **Cleansable:** Yes.
 
 **Jamming Field**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** Continuous while active.
     *   **Effect:** Spells cannot be played targeting this slot or any creature occupying it. Additionally, active and passive abilities of any creature occupying this slot are `Abilities Disabled`.
@@ -100,7 +91,6 @@
     *   **Cleansable:** Yes
 
 **Unstable Terrain**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnTurnEnd` (Slot effect logic checks if its slot is occupied).
     *   **Effect:** If this is the 2nd consecutive **Day** the *same* creature ends its **Day** on this slot, that creature is moved to a random available adjacent friendly slot (if multiple, chosen randomly). If no such slot is available, nothing happens. The "consecutive Day" counter resets if a different creature occupies the slot, the slot becomes empty, or the creature is successfully moved by this effect or any other means.
@@ -109,7 +99,6 @@
     *   **Cleansable:** Yes
 
 **Echoing Cave**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnActionQueued(actionDetails)` (Slot effect logic checks: if `actionDetails.sourceCreature` is on this slot and if the action is a 'PassiveAbilityEffect').
     *   **Effect:** If a creature on this slot triggers a passive ability, that passive ability's resulting action is duplicated in the Action Queue with the same targets and `Priority (Action)`. This effect triggers once, then Echoing Cave is removed.
@@ -118,7 +107,6 @@
     *   **Cleansable:** Yes
 
 **Sacrifice Lair**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** The `movingCreature` is Banished. The Sacrifice Lair is then consumed.
@@ -127,7 +115,6 @@
     *   **Cleansable:** Yes
 
 **Barbed Snare**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Hidden
     *   **Trigger Event(s):** `OnLeaveSlot(leftSlot, method)` (Slot effect logic checks: if `leftSlot` is this slot).
     *   **Effect:** The creature that left this slot takes X damage. The Barbed Snare is then **revealed and** consumed.
@@ -136,7 +123,6 @@
     *   **Cleansable:** Yes
 
 **Magnetic Pulse**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnTurnStart` (Slot effect logic checks if its slot is occupied by a creature controlled by the player who applied Magnetic Pulse).
     *   **Effect:** At **Dawn (Start of the Day)**, if their creature is on this slot, pull one random adjacent enemy creature one slot towards this Magnetic Pulse slot, if the intervening slot is empty and the target creature can be moved.
@@ -145,7 +131,6 @@
     *   **Cleansable:** Yes
 
 **Sanctuary**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** Continuous while active.
     *   **Effect:** Creatures on this slot cannot be targeted by enemy Spells or enemy creature abilities.
@@ -154,7 +139,6 @@
     *   **Cleansable:** Yes
 
 **Threshold of Liminality**
-    *   **Controller:** Player who applied this effect.
     *   **Visibility:** Visible
     *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
     *   **Effect:** When a creature enters this slot:

@@ -1,3 +1,22 @@
+**DOCUMENT USAGE GUIDELINES:**
+	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
+    *   This document **shall** possess a clearly demarcated subject matter.
+    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
+
+	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
+    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
+    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
+    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
+
+	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
+    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
+
+	**STANDARDIZED CONTENT BOUNDARIES:**
+    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
+    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
+
+**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
+
 **I. INTRODUCTION AND CORE DEFINITIONS**
 
 **I.A. General Gameplay Keywords:**
@@ -361,6 +380,18 @@ This section details mechanics for taking control of an opponent's creature via 
     *   **"Time Bomb" Archetype:** Achieved through persistent negative Status Effects (e.g., `Earworm`, `Doomed` (X **Days**), `Pandora` - see 'Status Effects Compendium' for definitions) or detrimental passive abilities, not lingering actions.
     *   **Concealment Status After Control Change:** `Concealed` status (see 'Status Effects Compendium') or `Undercover` ability benefits the new controller.
     *   **Important Note on Action Persistence:** Actions resolve within the current global **Day**.
+
+**V.E. Multi-Slot Creatures**
+1.  **Definition:** Certain creatures are designated as occupying two adjacent friendly slots upon entering the battlefield. These creatures are typically indicated on their card text.
+2.  **Summoning:**
+    *   To play a multi-slot creature, its controller must be able to target two valid adjacent friendly slots.
+    *   When the 'Play Creature Action' for a multi-slot creature resolves, if either of the two designated target slots is occupied by another creature, that occupying creature(s) is **Banished**. The multi-slot creature then enters play, occupying both slots.
+    *   If two valid adjacent friendly slots cannot be made available (e.g., insufficient empty/clearable slots, or board edge prevents adjacency for the second slot), the multi-slot creature cannot be played, and its card remains in hand (or the effect attempting to summon it fizzles).
+3.  **Movement & Characteristics:**
+    *   Multi-slot creatures inherently possess the `Anchored` status effect (see 'Status Effects Compendium') from the moment they enter play, meaning they cannot perform Movement Actions and typically cannot be moved by external effects, unless their card text or another effect specifically overrides this for multi-slot creatures.
+    *   They are treated as a single entity for the purpose of being targeted by Spells or abilities, for having status effects applied, and for originating actions.
+    *   They occupy two slots for adjacency calculations (e.g., for abilities affecting adjacent creatures) and for blocking movement paths. Damage or effects that target one of the slots they occupy affect the creature itself.
+4.  **Leaving Play:** If a multi-slot creature Leaves Play, both slots it occupied become empty.
 
 **VI. Game Design Philosophy & Balancing**
 
