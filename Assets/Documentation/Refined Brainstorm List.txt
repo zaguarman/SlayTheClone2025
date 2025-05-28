@@ -289,7 +289,7 @@ Tracking Beacon
 Unknown Unknown
 Whistleblower
 
-Control:
+Distopia:
 72-hour bag
 Alien Body (Area51)
 Arisaka Rifle
@@ -373,7 +373,7 @@ War Censorship Law
 Weaponized Refugee
 Witness Protection Program
 
-Zeitgeist:
+Utopia:
 404 Not Found
 AdBlocker
 Ah, I see you're a man of culture as well
@@ -458,6 +458,7 @@ Woman Yelling at Cat (meme)
 WTF Happened In 1971
 YOLO
 Yoink
+Zeitgeist
 
 Cognito:
 Absolute Power Corrupts Absolutely
@@ -533,7 +534,6 @@ Tourette
 Trick Question
 Trolley Problem
 Uncanny Valley
-Utopia
 Whataboutism
 
 Myth:
