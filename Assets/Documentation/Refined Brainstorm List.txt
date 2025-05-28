@@ -1,0 +1,614 @@
+**DOCUMENT USAGE GUIDELINES:**
+	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
+    *   This document **shall** possess a clearly demarcated subject matter.
+    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
+
+	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
+    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
+    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
+    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
+
+	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
+    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
+
+	**STANDARDIZED CONTENT BOUNDARIES:**
+    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
+    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
+
+**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
+
+Locations:
+Abandoned Mall
+Airport Lounge
+Arctic Research Station
+Area 51
+Bonwit Teller
+Casino
+Co-working Space
+Confessionary
+Crime Scene
+Duty Free Shop
+Eden
+Embassy
+Gigafactory
+Island Nation
+Kindergarten
+Las Vegas
+Lunar Base
+Michelin Star Restaurant
+Nuclear Silo
+Orphanage
+Pantheon
+Pentagon
+Police Station
+Post Office
+Public Library
+Pyramids
+Roman Circus Arena
+Rooftop Garden
+Roundabout
+Sanctum Omnium
+Sewers
+Subway
+Theme Park
+Toxic Waste Dump
+Trading Floor
+Unfinished Construction Site
+University Campus
+Volcanic Lair
+Waiting Room
+
+Digital:
+Abandonware
+Absolute Zero
+Antivirus
+Biometric Data
+Bloatware
+Blood Transfusion
+Bug Fix
+Chain Reaction
+Cherenkov Radiation
+Clone
+Cloud Computing (Someone else's Computer)
+Code Review
+Cold Fusion
+Cold Fusion
+Ctrl + Enter
+Cursed Problem
+Data Leak
+DDOS Attack
+Decypher
+Effect 2000
+Eject Button
+End-to-End Encryption
+Feedback Loop
+Hazmat Suit
+Here Be Dragons
+Heuristic Analysis
+Hexagons
+Honeypot
+Hypermetamorphosis
+Incubator
+It's just pixels and static now
+Kardashev Zenith
+Legacy Code
+Malware
+Man-in-the-Middle
+Memory Wipe
+Metadata
+Metastudy
+Modal Dialog
+Monkey Clicking
+Motherboard
+Mutation
+Particle Accelerator
+Password Sticky Note
+Perpetual Motion Machine
+Planned Obsolescence
+Quantum Entanglement
+Radiation Sickness
+Ransomware Attack
+Rubber Duck
+Script Kiddie
+Search Engine Deoptimization
+Shift Gear
+Software As A Service
+Splitting The Atom
+State Of The Art
+String Theory
+Subdermic Control Unit
+SysAdmin
+Syntax Error
+System Update
+Technical Debt
+Template
+Two-Factor Authentication
+User Engagement Metrics
+User Friendly
+Wave Particle Duality
+WYSIWYG
+Zero-Day
+
+Capital:
+120 Year Long Mickey Mouse Copyright
+Afiliate Marketing
+Alegal Business
+American Dream
+An Offer You Can't Refuse
+Anti Homeless Architecture
+Astroturfing
+B2B
+Behind Closed Door Deal
+Bilderberg Membership
+Binding Contract
+Blame Socialism
+Cancel Subscription Button (Nope)
+Capitalism Made me Free
+Carbon Copy
+Circuit Breaker
+Corporate Espionage
+Credit Card
+Dark Money Donation
+Day Trader
+Dead Cat Bounce
+Dental Insurance
+DMCA (Digital Millennium Copyright Act)
+Double Headed Coin
+Drop Shipping
+Dump It
+Enterprise Resource Planning
+Fake Fake News
+Fake Meritocracy
+Fat Tony
+Flagship
+Flash Crash
+Follow The Money
+Forced Upselling
+Free Dismissal
+Front Running (Market Manipulation)
+Futures Market
+Globalization is Good
+Great Depression
+Greenwashing
+Growth Hacking
+High Frequency Trading Scam
+Hostile Takeover
+Housing Crisis
+Inhuman Resources
+Initial Investment
+Intellectual Property
+Interest Rate
+Its How The Market Works!
+Just A Number In The Spreadsheet
+Just In Time
+Key Performance Indicator
+Limited Cover Insurance
+Limited Liability
+Marketing Funnel
+Meetings About Meetings
+Micromanager
+Multilevel Marketing Seller
+Multimillionaire Philanthropist
+Non Disclosure Agreement
+Oligopoly
+OPEP+
+Open Closed Shell Corporation
+Opportunity Cost
+Opt-In
+Opt-Out
+Patent Pending
+Paywall
+Perfect Information
+Phishing Email
+Play To Earn
+Pluriemployed Hustler
+Ponzi Scheme
+Power Hoarding
+Price Gouging
+Pyramidal Scheme
+Quid Pro Quo
+Rage Bait
+Remove Dislike Button
+Return On Investment
+Salaryman
+Scapegoat
+Shark Mindset
+Shareholder Meeting
+Short Squeeze
+SICAV
+Slave Factory
+Social Elevator (out of business)
+Supply Chain Disruption
+Swiss Bank Account
+Tailored Suit
+Targeted Advertisement
+Tax Auditor
+Tax-Exempt Corruption
+Taxpayer Funds Venture Capital Profits
+Team Building Exercise
+Titanic
+Unicorn
+Unpaid Intern
+Vendor Lock-In
+Work Shift Rotation
+Workplace Hazard
+Yesnon-Profit
+Zero-Sum Game
+
+Shadow:
+"Peace" Operation
+Black Box
+Burn Notice
+Burner Phone
+Cameras Off Suicide
+Cleaner
+Collateral Damages
+Compromised Agent
+Counter-Intelligence
+Coup D'Etat
+Covert Operation
+Dead Man's Switch
+Death By "Natural Causes"
+Election Interference
+Enigma Machine
+Epistemic Security
+Extraction
+Fake Data Leak
+Falsified Documents
+Frame Job
+Ghost Gun
+HUMINT
+If I Told You, I'd Have To Kill You
+Informant
+Information Asymmetry
+Insider Job
+Invisibility Cloak
+Laser Microphone
+Mind Control Device
+Mk Ultra Agent
+Mole (Spy)
+Nonchalant Agent
+Persuasion Vs Coercion
+Plausible Deniability
+Polonium Umbrella
+Psyop
+Sabotage
+Sanitize
+Secret Anthrax Laboratory
+Secret Handshake
+Secret Service Bodyguard
+Secure Deletion
+Self Destruct Button
+Shaken Martini (synergic buff nonchalant agent)
+Signal Jammer
+Sleeper Agent
+Smoke And Mirrors
+Spontaneous Combustion
+Steganography
+Tracking Beacon
+Unknown Unknown
+Whistleblower
+
+Control:
+72-hour bag
+Alien Body (Area51)
+Arisaka Rifle
+Asymmetric Warfare
+Blackwhite
+Blitzkrieg
+Bomber Drone
+Breaking News
+Capital Gains Tax
+Cold War
+Constitutional Power
+Controlled Dissidence
+Cyber Thoughts Cop
+Deep State
+Deeply Concerned
+Designed Narrative
+Diplomat Assasin
+Domestic Security Agency
+Emergency Broadcast
+Everybody Is Equal Before The Law
+Extreme Patriotism
+False Flag Operation
+Friendly Fire
+Gerontocracy
+Gun Control
+Hidden Political Agenda
+Illuminati
+Internal Revenue Service (IRS)
+Kakistocracy
+King Emeritus
+King's Jester
+Lawyer
+Loaded Language
+Man o' War
+Manhattan Project (I Am Become Death, The Destroyer Of Worlds)
+Masonic Salute
+Mercenaries
+Militar Salute
+Ministry Of Love
+Multi Passport (Multiple passports)
+Mutually Assured Destruction
+National Treasury
+Negative Priming
+Nobel Peace Price
+Nuclear Submarine
+Original Copy
+Panem Et Circenses
+Panic Button
+Panopticon
+Peace Treaty
+Pegasus
+Police Line Do Not Cross
+Police Officer Productivity Target
+Political Decoy
+Political Prisoner
+Post-Truth
+Power Vacuum
+Preemptive Strike
+Presidential Pardon
+Protocol Enforcers
+Raised Security Level
+Red Tape
+Red Telephone
+Regime Change
+Relaxed Monopoly Enforcement
+Securities And Exchange Commission
+Si Vis Pacem, Para Bellum
+Social Engineering
+Speed Limit Radar Camera
+Spite-Elected President
+State Controlled Digital Money
+Statal Surveillance
+Status Quo
+Supreme Court
+Tax Haven
+The Fifth Amendment
+Trade War
+UFO
+Veni Vidi Vici
+War Censorship Law
+Weaponized Refugee
+Witness Protection Program
+
+Zeitgeist:
+404 Not Found
+AdBlocker
+Ah, I see you're a man of culture as well
+Baguette
+Ban Hammer
+Banana Gun
+Bermuda Triangle
+Birb (Meme)
+Bonk! (Meme)
+Broken Condom
+Cancelled
+Catfish
+Caturday
+Chinese Food
+Clickbait
+Conspiracy Theorist
+Copium
+Copypasta
+Creatine
+Daily Traffic Jam
+Deus Ex Machina
+Dont Dead Open Inside
+Doxxing
+Driving Test
+Dystopian Present
+Enslaved Moisture.
+Eunuch
+Expanding Brain (meme)
+Frutiger Aero
+Gifted Subs
+Girl Math
+Good Graphics but Extremely Long Tutorial
+Gracias Jesus (Meme)
+Hero's Journey
+Hide the Pain
+Hive Mentality
+I Know That Feel Bro
+Inuit Senilicide
+Inter-Generational Short Squeeze
+Internet Heavily Censored Encyclopedia
+It Wasn't Me
+Its A Trap
+Its Been 84 Years...
+Joker Card
+Keyboard Warrior
+Link-In-Bio Babe
+Lucky Clover
+Menu Of The Day
+Microtransaction
+Modern Problems Require Modern Solutions
+Moral Bankruptcy
+Morbidly Accepted Obesity
+Never Let Them Know Your Next Move
+No U (Counter And Redirect)
+Nothing Personal Kid
+NPC Streamer
+Pastafarian God
+Pirated Content (If paying for something doesn't make it yours, pirating it, isn't stealing)
+Plot Armor
+Poe's Law
+Positive Body
+Purge Day
+Quack'd
+Refresh Feed
+Return to Sender
+Rule 34
+Selfie Esteem
+Short King
+Sommelier
+Speedrunning
+Stay Hydrated
+Streisand Effect
+Task Failed Successfully
+Tinfoil Hat
+Too Bad So Sad
+Tourist Trap
+Urban Dictionary Definition
+Vaporwave
+Vegan Substitute
+Wojak Living The Dream
+Woman Yelling at Cat (meme)
+WTF Happened In 1971
+YOLO
+Yoink
+
+Cognito:
+Absolute Power Corrupts Absolutely
+Ad Hoc
+Ad Hominem
+Ad Nauseam
+Alea iacta est
+Amnesia
+Appeal To Authority
+Appeal To Nature
+Appeal To Tradition
+Blessing in Disguise
+Blissful Ignorance
+Carpe Diem
+Carpe Noctem
+Cherry Picking
+Chose Your Poison
+Circular Reasoning
+Cogito, Ergo Sum
+Cognitive Dissonance
+Confirmation Bias
+Coping Mechanism
+Damocles Sword
+Double Edged Sword
+Dyslexia
+Educated Guess
+Ethical Dilemma
+Fear Of Missing Out
+False Dichotomy
+Free Will
+Freudian Slip
+Gambler's Fallacy
+Game Theory
+Hanlon's Razor
+Herd Mentality
+Hiatus
+Hold That Thought
+Hypnosis
+Imposter Syndrome
+Ipso Facto
+Liar Paradox
+Loss Aversion
+Mandela Effect
+Maslow's Pyramid
+Murphy's Law
+Occam's Razor
+Oxymoron
+Pareidolia
+Pascal's Wager
+Pavlovian Conditioning
+Projection (Psychology)
+Puppeteer
+Pygmalion Effect
+Red Herring
+Reflect
+Reflexive Control
+Roko's Basilisk
+Schrodinger's Cat
+Self-Fulfilling Prophecy
+Shakespeare, Written by a Random Monkey
+Slippery Slope
+Stockholm Syndrome
+Straw Man Argument
+Subliminal Message
+Subverting Expectations
+Survivorship Bias
+Tabula Rasa
+Terminal Lucidity
+The Eliza Effect
+The Simulation Theory
+Tolerance Paradox
+Tourette
+Trick Question
+Trolley Problem
+Uncanny Valley
+Utopia
+Whataboutism
+
+Myth:
+10 Commandments
+7 Sins
+Abiogenesis
+Afterlife
+Ambrosia
+Ascend to Heaven
+Baphomet
+Birth Of Venus
+Calypso
+Canibalism
+Chimera
+Crisopeya (Transmutation to gold)
+Crystal Ball
+Cultist
+Curse of Sisyphus
+Cyclop
+David (Michelangelo)
+Destiny Bond
+Divine Justice
+Doppelganger
+Entheogenic Sacrament (drogas)
+Evolution Theory
+Excalibur
+Excess of Bread and Wine
+Exodus
+Fenix
+Fire Stolen From The Gods
+Flickering Candle
+Genesis
+Ghandi
+God's Grace
+Head Of Medusa
+High Priestess
+Holy Quest
+Horsemen Of Apocalypse
+Hyperion
+Lance Of Longinus
+Library of Alexandria
+Lilith
+Lyre
+Mens Sana In Corpore Sano
+Meritocratic Rebirth
+Meteor Prophecy
+Mimic
+Monkey Hand
+Necronomicon
+Omen Reading
+Omniscient Space-Time Bending Bearded Wizard
+Oracle of Delphi
+Pandora Box
+Pasiflora Blooming
+Philosopher's Stone
+Phoenix Feather
+Pleiades
+Post Mortem
+Publicly Funded Faith Schools
+Quaternity
+Rigor Mortis
+Robinhood
+Rosetta Stone
+Sacrificial Ritual
+Succubus
+Taqiyya
+Tarot Cards
+Templar Knight
+The Egg
+The Sacred Land
+Tower Of Babel
+Valkyrie
+Venecian Mask
+Vitruvian Man
+Wheel of Fortune
+Witcher
+Ying-Yang
+Zweihander
