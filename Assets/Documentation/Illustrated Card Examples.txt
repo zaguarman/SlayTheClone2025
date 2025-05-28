@@ -234,7 +234,7 @@ Passive: Each Dawn: This creature gains Burnout (1 stack). If this creature has 
 **Card Name:** Dead Man's Switch
 **Faction:** Shadow Ops.
 **Type:** Creature
-**Stats:** 7/2/3
+**Stats:** 6/2/3
 **Deployment Time:** 0 Days
 **Ability Text:**
 Passive: OnDied(deathSource): If deathSource is an enemy creature, that creature gains Burnout (2 stack) and Exhausted. If deathSource is an enemy Spell, deal 5 damage to player owning the spell.
@@ -258,14 +258,14 @@ Target enemy creature. Its current Health is halved (rounding down).
 **Faction:** Mind
 **Type:** Spell
 **Ability Text:**
-Target enemy creature. Apply `Ghosted`. (Reminder: `Ghosted` transforms to `Doomed` after 3 Days as per Status Effects Compendium).
+Target enemy creature. Apply `Ghosted`.
 **Flavor Text:** "Lookin' good Susan!"
 
 **Card Name:** Roko's Basilisk
 **Faction:** Mind
 **Type:** Creature
 **Stats:** 0/7/1
-**Deployment Time:** 3 Days
+**Deployment Time:** 4 Days
 **Ability Text:**
 Passive: OnDeploymentTimeComplete: All other creatures on the battlefield (friend and foe) gain `Doomed (1 Day)`. (Note: `Doomed` status duration set to 1 Day/stack).
 **Flavor Text:** "You knew the risks of contemplating its existence. Now, contemplate your imminent non-existence."
@@ -320,7 +320,7 @@ Target friendly creature. Return it to its owner's hand. If that creature had 2 
 **Type:** Creature
 **Stats:** 1/3/1
 **Deployment Time:** 2 Days
-**Requisite:** Target a friendly creature you control. Banish the targeted creature, then play Taqiyya Infiltrator into the slot previously occupied by the banished creature. (This card cannot be played if you cannot target a friendly creature).
+**Requisite:** Next turn draw 1 card less. Play on top of a friendly creature you control. Banish that creature, Taqiyya Infiltrator comes into play into the slot previously occupied by the banished creature. (This card cannot be played if you cannot target a friendly creature).
 **Ability Text:**
 Passive: OnDeploymentTimeComplete: This creature moves to a random available slot on the opponent's side of the battlefield. If no slot is available, it is Banished instead. If it successfully moves, control of this creature changes to the opponent. Upon gaining control, this creature (via a Linked Meta-Action, as per GDD III.H.6) gains Paranoid, Exposed (Indefinite duration), and `Pandora (3 Days)`. (Note: `Pandora` status duration set to 3 Days/stacks).
 Passive: OnDied(deathSource): Apply Scorched Earth to the slot this creature last occupied.
@@ -355,7 +355,6 @@ Target enemy creature. If that creature queued at least one action this Day, its
 **Ability Text:**
 Additional Cost: Your active creature with the highest Attack gains Exhausted.
 Target enemy creature with current Health 3 or less. Apply Brainwashed to it.
-(Reminder: Brainwashed: At Dusk of 2nd Day, changes owner to status applier; Abilities Disabled. Re-applying resets. Not Cleansable.)
 **Flavor Text:** "Their will is now... an implementation detail."
 
 **Card Name:** System Administrator (SysAdmin)
@@ -365,7 +364,6 @@ Target enemy creature with current Health 3 or less. Apply Brainwashed to it.
 **Deployment Time:** 1 Day
 **Ability Text:**
 Each Dawn: Target friendly creature. Cleanse 1, if cleanseable status effect, if possible apply Blessed to it.
-(Reminder: Blessed: Persistent. Consumes 1 stack to negate an incoming status. Max 3. Cleansable.)
 **Flavor Text:** "System check: Debuffs detected? Purge. System clean? Apply protective protocols. Coffee level: Critically low."
 
 **Card Name:** Burner Phone
@@ -374,7 +372,6 @@ Each Dawn: Target friendly creature. Cleanse 1, if cleanseable status effect, if
 **Ability Text:**
 Requisite: Discard 1 card from your hand.
 Target creature you control gains Concealed (2 Days).
-(Reminder: Concealed (X Days): Actions are Concealed Actions. Negated by Revealed. Cleansable.)
 **Flavor Text:** "Untraceable calls. Untraceable plans."
 
 **Card Name:** Planned Obsolescence
@@ -382,7 +379,6 @@ Target creature you control gains Concealed (2 Days).
 **Type:** Spell
 **Ability Text:**
 Target enemy creature. If it has 2 or more Armor, it loses 2 Armor. Then, it gains Doomed (3 Days).
-(Reminder: Doomed (X Days): Removes other statuses, status immunity. Each Dawn: +1 permanent Attack. Destroyed when Consumed. Fixed Stacks. Not Cleansable.)
 **Flavor Text:** "Engineered to fail, right on schedule."
 
 **Card Name:** Contagion of Cretinism
@@ -390,7 +386,6 @@ Target enemy creature. If it has 2 or more Armor, it loses 2 Armor. Then, it gai
 **Type:** Spell
 **Ability Text:**
 Target enemy creature gains Paranoid. If that creature is adjacent to other enemy creatures, one random adjacent enemy creature also gains Paranoid.
-(Reminder: Paranoid: Next Dawn, forced Attack on friendly/self; if unable, 2 damage. Then removed. Cleansable.)
 **Flavor Text:** "It's true because enough people believe it."
 
 **Card Name:** Consulting Psychiatrist
@@ -400,7 +395,6 @@ Target enemy creature gains Paranoid. If that creature is adjacent to other enem
 **Deployment Time:** 1 Day
 **Ability Text:**
 Active Ability: Target creature loses all Burnout stacks. If it does, it gains Chill (1 Day) and its controller schedules 1 additional card draw for their next Day.
-(Reminder: Chill (X Days): Halves Attack, +1 Health Each Dusk. Cleansable.)
 **Flavor Text:** "Let's talk about that explosive anger... and then cool down."
 
 **Card Name:** Quantum Entanglement Link
@@ -415,7 +409,6 @@ Choose two friendly creatures. For the next 2 Days, they share all non-Doomed st
 **Type:** Spell
 **Ability Text:**
 Target creature gains Exhausted. Each Dawn, if that creature is still Exhausted from this effect, its controller draws 1 fewer card that Day, and this creature (the one with Exhausted) takes 1 damage.
-(Reminder: Exhausted: Cannot Act, Abilities Disabled, Gains Exposed. Persistent. Not Cleansable.)
 **Flavor Text:** "It's not a bug, it's an infinite negative feedback feature."
 
 **Card Name:** Whistleblower's Gambit
@@ -439,7 +432,6 @@ All creatures on the battlefield with current Health 1 gain Doomed (1 Day). Cont
 **Type:** Spell
 **Ability Text:**
 Target enemy creature gains Muted (2 Days). Its Deployment Time is increased by 1 Day (if its Deployment Time was 0, it gains Deployment Time (1 Day)). If it already had Deployment Time, it also gains Anchored.
-(Reminder: Muted (X Days): Abilities Disabled. Cleansable. Anchored: Cannot use own Move. Persists. Cleansable.)
 **Flavor Text:** "Your request is being processed. Please wait indefinitely."
 
 **Card Name:** Megachurch Mogul
@@ -450,7 +442,6 @@ Target enemy creature gains Muted (2 Days). Its Deployment Time is increased by 
 **Ability Text:**
 Each Dawn: If there are 3 or more friendly creatures on the battlefield, this creature and adjacent friendly creatures gain +1 Attack until end of Day.
 Active Ability: Target friendly creature gains Bloodthirst. This creature then gains Exhausted.
-(Reminder: Bloodthirst: Must Attack or halve HP at Dusk. Lifesteal. Persistent. Cleansable. Exhausted: Cannot Act, Abilities Disabled, Gains Exposed. Persistent. Not Cleansable.)
 **Flavor Text:** "Believe! And fight! And bleed for the cause!"
 
 **Card Name:** Kakistocracy Now!
@@ -465,7 +456,6 @@ Global Effect: For 3 Days, whenever a creature enters the battlefield, if its ba
 **Type:** Spell
 **Ability Text:**
 Target enemy creature gains Chill (2 Days). If it is already Chilled, it also gains Muted (1 Day).
-(Reminder: Chill (X Days): Halves Attack, +1 Health Each Dusk. Cleansable. Muted (X Days): Abilities Disabled. Cleansable.)
 **Flavor Text:** "Such serenity, it's almost... debilitating."
 
 **Card Name:** Chronos Feast
@@ -473,7 +463,6 @@ Target enemy creature gains Chill (2 Days). If it is already Chilled, it also ga
 **Type:** Spell
 **Ability Text:**
 All creatures that have Deployment Time (0 Days) (i.e., fully deployed) and have been on the battlefield for 3 or more Days gain Doomed (2 Days).
-(Reminder: Doomed (X Days): Removes other statuses, status immunity. Each Dawn: +1 permanent Attack. Destroyed when Consumed. Fixed Stacks. Not Cleansable.)
 **Flavor Text:** "Time devours all, especially the overstaying."
 
 **Card Name:** Chrysopoeia Ritual
@@ -499,7 +488,6 @@ Each Dusk: If this creature's Health is 6 or more, all other friendly creatures 
 **Type:** Spell
 **Ability Text:**
 Target enemy creature. If its Attack is 5 or more, it gains Exhausted. If its current Health is 1, it gains Doomed (1 Day). (These effects can both apply).
-(Reminder: Exhausted: Cannot Act, Abilities Disabled, Gains Exposed. Persistent. Not Cleansable.)
 **Flavor Text:** "If your argument is that strong..." (TODO find a better flavour that is more specific)
 
 **Card Name:** Pareidolia Projector
@@ -538,7 +526,6 @@ Target enemy creature. Until the end of the opponent's next Day, if that creatur
 **Type:** Spell
 **Ability Text:**
 Target an enemy creature. It and one random adjacent enemy creature (if any) both gain Bloodthirst and Paranoid.
-(Reminder: Bloodthirst: Must Attack or halve HP. Lifesteal. Paranoid: Forced friendly Attack/self-damage.)
 **Flavor Text:** "A savage dance of mutual self-destruction, now with more paranoia!"
 
 **Card Name:** Nocturne Chillout
@@ -546,7 +533,6 @@ Target an enemy creature. It and one random adjacent enemy creature (if any) bot
 **Type:** Spell
 **Ability Text:**
 All creatures gain Slacking Off for 1 Day. All creatures also gain Muted (1 Day).
-(Reminder: Slacking Off: Priority -2, Heals 2 Each Dusk. Cleansable.)
 **Flavor Text:** "The music is so soothing... so... demotivating..."
 
 **Card Name:** Sacrificial Praegustator
@@ -566,7 +552,6 @@ When an adjacent friendly creature with current Health 3 or more would be affect
 **Ability Text:**
 Heavy.
 OnDamaged(damageSource, damageAmount, damageType): If damageSource was an Attack, the attacking creature gains Anchored.
-(Reminder: Heavy: Cannot Move/be moved, ATKx2, Attack opposing slot. Anchored: Cannot use own Move.)
 **Flavor Text:** "Disturb my slumber, and you'll find the depths have a strong grip."
 
 **Card Name:** Ghost Protocol
@@ -574,7 +559,6 @@ OnDamaged(damageSource, damageAmount, damageType): If damageSource was an Attack
 **Type:** Spell
 **Ability Text:**
 Target creature you control gains Diplomatic Immunity for 1 Day. If it is damaged by an enemy Attack this Day, it then gains Concealed (1 Day).
-(Reminder: Diplomatic Immunity: Immune to Spells. Persistent. Cleansable.)
 **Flavor Text:** "Deny everything. Blend in. Strike when they're not looking."
 
 **Card Name:** Saturn's Devouring
@@ -591,7 +575,6 @@ Each Dawn: Target friendly creature with the lowest current Health that is not t
 **Type:** Spell
 **Ability Text:**
 Target friendly 'Myth' creature gains Concealed (2 Days). While it is Concealed by this effect, if an opponent targets it with an Intelligence action or applies Revealed to it, the source of that action/effect gains Paranoid and your targeted creature gains Blessed.
-(Reminder: Paranoid: Next Dawn, forced Attack on friendly/self; if unable, 2 damage. Then removed. Cleansable. Blessed: Consumes stack to negate status. Cleansable.)
 **Flavor Text:** "To the unbeliever, a simple guise. To the prying eye, a vexing truth."
 
 **Card Name:** Oneiric Intrusion
@@ -647,7 +630,6 @@ Undercover. OnDeploymentTimeComplete: If this creature is still Concealed, all o
 **Type:** Spell
 **Ability Text:**
 Target enemy creature, it gains Ostracised until next Dawn. The controller of that creature schedules 1 additional card draw for your next Day.
-(Reminder: Ostracised: Untargetable, Cannot Act/be Attacked, Abilities Disabled. Fades.)
 **Flavor Text:** "Dude, what do the clouds taste like?"
 
 **Card Name:** Abilene's Restaurant
@@ -655,7 +637,6 @@ Target enemy creature, it gains Ostracised until next Dawn. The controller of th
 **Type:** Spell
 **Ability Text:**
 All creatures with current Health 3 or more gain Impatient and Muted (1 Day). All creatures with current Health 2 or less gain Slacking Off for 1 Day.
-(Reminder: Impatient: Must Attack or take X damage. Muted: Abilities Disabled. Slacking Off: Priority -2, Heals 2.)
 **Flavor Text:** "Nobody wanted to come here, yet here we are, unanimously."
 
 **Card Name:** Lyre
@@ -663,7 +644,6 @@ All creatures with current Health 3 or more gain Impatient and Muted (1 Day). Al
 **Type:** Spell
 **Ability Text:**
 **Homing:** Target friendly creature. It gains `Regeneration (7 Days, 1 Heal Amount)`.
-*(Reminder: Regeneration (X Days, Y Heal Amount): Each Dawn, heal Y HP. Lasts X Days. Cleansable.)*
 **Flavor Text:** "A soothing melody that mends wounds, one dawn at a time."
 
 **Card Name:** Katana
@@ -706,7 +686,6 @@ All enemy creatures gain `Revealed (1 Day)`.
 **Type:** Spell
 **Ability Text:**
 **Homing:** Target friendly creature. Heal it for 4 HP. It then gains `Indigestion (1 Day, 1 Damage Amount)`.
-*(Reminder: Indigestion (X Days, Y Damage Amount): Each Dawn, take Y damage. Lasts X Days.)*
 **Flavor Text:** "Deliciously satisfying now, surprisingly regrettable later."
 
 **Card Name:** Shift Gear
@@ -735,7 +714,7 @@ All enemy creatures gain `Revealed (1 Day)`.
 **Type:** Spell
 **Ability Text:**
 **Fixed:** Target an enemy slot. If a creature occupies that slot at resolution, gain permanent control of it (this is a `Conversion` effect). If the slot is empty at resolution, this effect fizzles.
-**Flavor Text:** "The bars couldn't hold it. Neither will your control."
+**Flavor Text:** "You didn't wanted it to be free, now it belongs to me."
 
 **Card Name:** Suit
 **Faction:** Corporate
@@ -762,7 +741,7 @@ All enemy creatures gain `Revealed (1 Day)`.
 **Faction:** Mind
 **Type:** Spell
 **Ability Text:**
-**Static:** Deal 5 damage to target slot. (If a creature occupies the slot, it takes the damage. If the slot is empty, the player controlling the slot takes 5 Player Damage, as per GDD rule IV.F.5.)
+**Static:** If a creature occupies the slot, it takes 4 damage. If the slot is empty, the player who played it takes the 4 damage instead.
 **Flavor Text:** "Wait, could that also happen to me?"
 
 **Card Name:** Binding Contract
@@ -770,7 +749,6 @@ All enemy creatures gain `Revealed (1 Day)`.
 **Type:** Spell
 **Ability Text:**
 **Homing:** Target friendly creature. It gains `Binding Vow (1 Day)`.
-*(Reminder: Binding Vow (1 Day): If this creature is destroyed this Day, Banish a random enemy creature.)*
 **Flavor Text:** "A pact sealed in potential blood. Theirs, preferably."
 
 **Card Name:** Corporate Espionage
@@ -785,7 +763,6 @@ Apply `Exposed` to up to two random enemy creatures. Then, all friendly creature
 **Type:** Spell
 **Ability Text:**
 **Homing:** Target friendly creature. It gains `Damage Cap (1 Day, 1 Cap Amount)`.
-*(Reminder: Damage Cap (1 Day, 1 Cap Amount): For this Day, each instance of damage this creature would take from a single source is reduced to 1 if it was greater than 1.)*
 **Flavor Text:** "We've minimized your exposure. Legally speaking."
 
 **Card Name:** Patent Pending
@@ -856,7 +833,6 @@ If you control at least one creature and your opponent controls at least one cre
 **Type:** Spell
 **Ability Text:**
 **Homing:** Target friendly creature. It gains `Honeypot`.
-*(Reminder: Honeypot: Status, specific trigger/effect in Status Compendium)*
 **Flavor Text:** "Such an alluring bloom, drawing all attention..."
 
 **Card Name:** Cannibalism
@@ -872,9 +848,6 @@ If you control at least one creature and your opponent controls at least one cre
 **Ability Text:**
 **Static:** Target an enemy slot. If a creature occupies that slot at resolution, deal damage to it equal to its current Attack. If the slot is empty at resolution, this effect fizzles.
 **Flavor Text:** "Live by it, die by it. Simple as."
-
----
-**Creatures:**
 
 **Card Name:** Man-In-The-Middle
 **Faction:** Tech
@@ -919,9 +892,9 @@ Passive: `OnDealDamage(damagedTarget, damageAmount, damageType)`: If this creatu
 **Stats:** 10/10/1
 **Deployment Time:** 3 Days
 **Ability Text:**
-**Special:** This creature occupies 2 adjacent friendly slots. When this creature's 'Play Creature Action' resolves, any creatures occupying the two chosen target slots are Banished. This creature has `Anchored` and cannot perform Attack actions.
-Passive: `OnDamaged(damageSource, damageAmount, damageType)`: If `damageSource` is a creature, it gains `Doomed (2 Days)`.
-**Flavor Text:** "I'm beautiful in every single way. Words can't bring me down... but they might bring YOU down."
+**Special:** This creature occupies 2 adjacent friendly slots. This creature has `Anchored`, Armor 5, `Taunting (Persistent)` and `Can't Attack`.
+Passive: `OnDamaged(damageSource, damageAmount, damageType)`: If `damageSource` is a creature, it gains `Doomed`.
+**Flavor Text:** "I'm beautiful in every single way..."
 
 **Card Name:** 420
 **Faction:** Zeitgeist
@@ -995,7 +968,7 @@ Passive: `OnDamaged(damageSource, damageAmount, damageType)`: Deal 2 damage back
 **Deployment Time:** 0 Days
 **Requisite:** When playing Carbon Copy, target an enemy creature.
 **Ability Text:**
-Passive: `OnEnterBattlefield`: This creature's base Attack, base Health, base Speed, and all its Passive Abilities become a copy of the enemy creature targeted by this card's Requisite. This creature does not copy `Deployment Time` or current status effects from the target.
+Passive: `OnEnterBattlefield`: This creature's base Attack, base Health, base Speed, and all its Passive Abilities become a copy of the enemy creature targeted by this card's Requisite.
 **Flavor Text:** "Ctrl+C, Ctrl+V. Originality is overrated."
 
 **Card Name:** OPEP+
@@ -1037,18 +1010,17 @@ Passive: `OnEnterBattlefield`: `Cleanse` 1 cleansable status effect from up to t
 **Card Name:** Stripper Magician
 **Faction:** Zeitgeist
 **Type:** Creature
-**Stats:** 3/3/3
+**Stats:** 2/3/3
 **Deployment Time:** 1 Day
 **Ability Text:**
 Starts with `Exposed` (Persistent), `Heat Signature` (Persistent), and `Taunting (Persistent)`.
-*(Reminder: Taunting (Persistent): Enemy creatures capable of attacking must target this creature if they Attack.)*
-**Flavor Text:** "Now you see it, now you... still see quite a lot, actually. And you can't look away."
+**Flavor Text:** "On a musical mission!"
 
 **Card Name:** Minotaur
 **Faction:** Myth
 **Type:** Creature
-**Stats:** 7/7/2
-**Deployment Time:** 3 Days
+**Stats:** 3/7/2
+**Deployment Time:** 2 Days
 **Ability Text:**
 Starts with `Heavy` and 5 `Armor`.
 **Flavor Text:** "Lost in the maze of your impending doom."
@@ -1082,15 +1054,11 @@ Passive: `OnDamaged(damageSource, damageAmount, damageType)`: If `damageSource` 
 Passive: `OnHealed(healingSource, healAmount)`: If `healingSource` is a creature, it is healed for `healAmount` (up to its max Health). If `healingSource` is a Spell, its controller is healed for `healAmount` Player Health.
 **Flavor Text:** "What goes around, comes around. Instantly."
 
----
-**Traps (as Spells applying Slot Effects):**
-
 **Card Name:** Workplace Hazard
 **Faction:** Corporate
 **Type:** Spell
 **Ability Text:**
 **Static:** Target an empty enemy slot. Apply 'Landmine Trap (3 Damage)' Slot Effect to it.
-*(Reminder: Landmine Trap (3 Damage): Hidden. OnEnterSlot by enemy: Deal 3 damage to entering creature. Consumed.)*
 **Flavor Text:** "Watch your step. Or don't. HR has forms for that."
 
 **Card Name:** Anti Homeless Architecture
@@ -1098,5 +1066,4 @@ Passive: `OnHealed(healingSource, healAmount)`: If `healingSource` is a creature
 **Type:** Spell
 **Ability Text:**
 **Static:** Target an empty enemy slot. Apply 'Sacrifice Lair Trap' Slot Effect to it.
-*(Reminder: Sacrifice Lair Trap: Hidden. OnEnterSlot by enemy: Entering creature takes 3 damage and gains Anchored. Consumed.)*
 **Flavor Text:** "Designed for optimal discomfort and discouragement. It's very effective."

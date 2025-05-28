@@ -94,3 +94,7 @@ Cuando se le termina activa su habilidad que es negativa para el usuario control
 
 
 Rename Digital Society -> DigiSoc
+
+
+
+Contrary Pokemon ability
