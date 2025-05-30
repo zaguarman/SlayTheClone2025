@@ -95,6 +95,29 @@ Cuando se le termina activa su habilidad que es negativa para el usuario control
 
 Rename Digital Society -> DigiSoc
 
-
+Magic bounce ability
 
 Contrary Pokemon ability
+
+Some status effects are healed on move, or make the return to hand more prominent.
+
+Reduce the number of weird status effects
+
+Keep Doomed, Heavy, 
+
+Add/Create Burning, Anxious
+
+Rework Bored
+
+Add status effect that denies sacrificing a creature (empowered)
+
+
+The main strategy has to be something like create a creature powerhouse by sacrificing and using other creatures to heal/raise stats from the powerhouse. 
+
+The enemy has to do the same while sabotaging your plans, by targeting that creatures you want to sacrifice and kill them first, maybe adding a status effect to your powerhouse creature.
+
+Make the game have limited resources making it impossible to create 2 powerhouses at the same time making the player decide what he wants to do next. 
+
+The sacrifice power giving potential can be depending on the sacrificed creature stats.
+
+Add a sacrifice value stat or abilities that add up to the sacrificial value for a cheaper price.
