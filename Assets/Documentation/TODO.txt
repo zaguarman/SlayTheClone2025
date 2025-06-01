@@ -121,3 +121,61 @@ Make the game have limited resources making it impossible to create 2 powerhouse
 The sacrifice power giving potential can be depending on the sacrificed creature stats.
 
 Add a sacrifice value stat or abilities that add up to the sacrificial value for a cheaper price.
+
+Cards that can only be played after certain type of card
+
+
+
+
+Destruction is mostly tempo negative. You use resources to deny something.
+The more reactive the higher the cost or the less it can target.
+Destruction card archetypes:
+Damaging/Health reducing: They can be used to damage a player, slot or creature.
+Counter: Predefined triger to act upon certain conditions. It destroys what it was made to destroy.
+Equalizer: Symetrical destruction that tries to even out the battlefield.
+Burst: Destroy everything, useful against decks that have a high tempo at the beginning and put more than you on the table.
+
+
+
+
+
+Draw card archetypes:
+Raw: Just draw cards, no side effects, only cost. 
+Impulse: Draw cards for 1 turn, those cards will be discarded automatically next turn.
+Filtering: Draw X and discard the same cards. Improves the quality of the hand.
+Trigger-based: When something predetermined happens draw X cards.
+Burst: Kind of a mulligan, high cost high reward reshuffle of cards.
+
+
+
+
+
+
+
+
+
+The endgame is trying to create a sacrifice, power-up, draw loop that overwhelms the enemy.
+
+The reactivity comes from getting intelligence and building accordingly to kill their momentum.
+
+There are two major archetypes, the ones that buildup on sacrifice included the enemy creatures.
+The one that have a numbers/ability/logistic advantage but cant be sacrificed.
+
+The cant be sacrificed (neither destroyed) creatures belong into the powerhouse creatures, they start being underwhelming but they are very scalable and/or have abilities that synergize with the scaling of their stats.
+
+Some spells can make a creature non sacrifizable and ramp it up with some interesting skill.
+
+Cost of spells is sometimes having/tapping/sacrificing X number of creatures deployed (not even tap them).
+
+This means low deployment creatures are valuable to develop your game.
+
+Killing or stealing those creatures are key to stop the enemy plans.
+
+Intelligence will give you the hints to know what creatures to prioritize when developing and killing/sacrificing.
+
+Creatures that on sacrifice return to players hand.
+Creatures that can be ressurrected.
+Creatures that have multiple lifes (like mimikyu disguise)
+
+
+Creatures can attack, use active ability or move, only one
