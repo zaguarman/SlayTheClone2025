@@ -182,3 +182,9 @@ Creatures can attack, use active ability or move, only one
 
 
 Creatures that have the swap active ability, that lets the creature move and change position with another.
+
+
+Trap creature in front ability (cant move until this creature dies or moves somewhere else), some creatures can ignore this trapping
+
+
+Taunt alike ability/status effect that negates stats changes for the targeted creature
