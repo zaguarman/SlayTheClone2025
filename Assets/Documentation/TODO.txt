@@ -188,3 +188,25 @@ Trap creature in front ability (cant move until this creature dies or moves some
 
 
 Taunt alike ability/status effect that negates stats changes for the targeted creature
+
+
+
+
+
+
+Change the damage to be like a tug of war, when damaging the opponent you win a better position 
+Use the mechanic like in supersmash bros where you have second chances before you die, you have to do a fatal blow to your opponent to cash in the victory
+
+
+
+Rename slots to tiles
+
+
+Use a layout of tiles that by default 2 are on the front and 3 on the back. Only the tiles in the front can be attacked.
+
+The creatures on the back tiles can be brought up to the front with some spells or abilities.
+
+
+Some characters have 3 tiles on the front and only 2 on the back.
+
+Some characters do have 3 tiles on the front and 3 on the back.
