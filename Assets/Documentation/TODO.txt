@@ -233,3 +233,4 @@ Something: A living vector for every ailment imaginable. The more unique Status 
 Flesh Wall: Death is not an end, but a resource. This creature gains power each time a friendly creature is brought back from the Discard Pile via a Revive effect, building its strength upon recycled life.
 Void Eater: A rift in reality that feeds on nonexistence. This creature gains immense, permanent power each time any card is Banished from the game, growing stronger as it erases its foes from the run entirely.
 The Juggernaut: Its power is its impenetrable defense. This creature's Attack and other abilities scale based on the total amount of Armor currently on it or on all friendly creatures.
+Meteorite: The direct damage done on any creature powers up this creature.
