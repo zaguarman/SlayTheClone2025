@@ -229,7 +229,7 @@ You are what you eat: You get a portion of the power of attacked creatures.
 Less is more: Buffs and Debuffs affect this creature on the opposite, the less creatures you have in play the stronger it is.
 Shattered Mind: It becomes more powerful each time a card is discarded from any player's hand or when draw is reduced.
 The Unseen Hand: A master of sabotage and indirect control. It grows in power whenever an action in the queue is affected by Interference (Nullify, Reorder, or Redirect), mastering the art of disruption from the shadows.
-Something: A living vector for every ailment imaginable. The more unique Status Effects are active on the battlefield (on any creature, friend or foe), the stronger this creature becomes.
+Chaos: A living vector for every ailment imaginable. The more unique Status Effects are active on the battlefield (on any creature, friend or foe), the stronger this creature becomes.
 Flesh Wall: Death is not an end, but a resource. This creature gains power each time a friendly creature is brought back from the Discard Pile via a Revive effect, building its strength upon recycled life.
 Void Eater: A rift in reality that feeds on nonexistence. This creature gains immense, permanent power each time any card is Banished from the game, growing stronger as it erases its foes from the run entirely.
 The Juggernaut: Its power is its impenetrable defense. This creature's Attack and other abilities scale based on the total amount of Armor currently on it or on all friendly creatures.
