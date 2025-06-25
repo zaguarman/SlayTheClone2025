@@ -213,6 +213,23 @@ Some characters do have 3 tiles on the front and 3 on the back.
 
 
 
+The game stages of a match should have the following structure
+
+Develop
+
+Damage
+
+Lock In (Ensure win)
+
+
+The tug of war mechanic should ensure constant shifting of the stage you are in
+
+Some cards will be given only at the Develop stage, some at the Damage, and some at the lock in
+
+
+Some cards are compatible with more than one game state
+
+
 
 Legendary Creatures: 
 
