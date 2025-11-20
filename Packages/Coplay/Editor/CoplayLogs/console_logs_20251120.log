@@ -1,0 +1,89 @@
+2025-11-20 16:27:16.187 +01:00 [INF] Initializing Coplay services
+2025-11-20 16:27:16.638 +01:00 [INF] Added GLTFAST_FORCE_DEFAULT_IMPORTER_OFF define to prevent glTF importer conflicts with other packages
+2025-11-20 16:27:16.641 +01:00 [INF] Initializing EditorThreadHelper
+2025-11-20 16:27:16.641 +01:00 [INF] EditorThreadHelper initialized successfully
+2025-11-20 16:27:16.665 +01:00 [INF] Enabling console error detection
+2025-11-20 16:27:16.675 +01:00 [INF] ConsoleDebugButtonService initializing
+2025-11-20 16:27:16.682 +01:00 [INF] ConsoleDebugButtonService initialized
+2025-11-20 16:27:59.038 +01:00 [DBG] Compilation finished, refreshing error state
+2025-11-20 16:27:59.079 +01:00 [INF] Deinitializing Coplay services
+2025-11-20 16:27:59.080 +01:00 [INF] ConsoleDebugButtonService disposing
+2025-11-20 16:27:59.107 +01:00 [INF] EditorThreadHelper disposed
+2025-11-20 16:28:06.656 +01:00 [INF] Initializing Coplay services
+2025-11-20 16:28:06.676 +01:00 [INF] Initializing EditorThreadHelper
+2025-11-20 16:28:06.676 +01:00 [INF] EditorThreadHelper initialized successfully
+2025-11-20 16:28:06.723 +01:00 [INF] Enabling console error detection
+2025-11-20 16:28:06.746 +01:00 [INF] ConsoleDebugButtonService initializing
+2025-11-20 16:28:06.756 +01:00 [INF] ConsoleDebugButtonService initialized
+2025-11-20 16:28:29.370 +01:00 [INF] No existing action records JSON file found.
+2025-11-20 16:28:33.464 +01:00 [INF] Coplay container created
+2025-11-20 16:28:33.475 +01:00 [INF] Debug button created, initial visibility: hidden
+2025-11-20 16:28:33.477 +01:00 [INF] Copy button created
+2025-11-20 16:28:33.477 +01:00 [INF] Debug With AI button successfully injected into console
+2025-11-20 16:28:33.479 +01:00 [INF] Subscribed to error detection
+2025-11-20 16:28:48.305 +01:00 [INF] No startup errors found after delayed check
+2025-11-20 16:29:54.833 +01:00 [INF] Initializing Coplay services
+2025-11-20 16:29:54.854 +01:00 [INF] Initializing EditorThreadHelper
+2025-11-20 16:29:54.854 +01:00 [INF] EditorThreadHelper initialized successfully
+2025-11-20 16:29:54.901 +01:00 [INF] Enabling console error detection
+2025-11-20 16:29:54.916 +01:00 [INF] ConsoleDebugButtonService initializing
+2025-11-20 16:29:54.925 +01:00 [INF] ConsoleDebugButtonService initialized
+2025-11-20 16:30:02.574 +01:00 [INF] Coplay container created
+2025-11-20 16:30:02.577 +01:00 [INF] Debug button created, initial visibility: hidden
+2025-11-20 16:30:02.579 +01:00 [INF] Copy button created
+2025-11-20 16:30:02.580 +01:00 [INF] Debug With AI button successfully injected into console
+2025-11-20 16:30:02.580 +01:00 [INF] Subscribed to error detection
+2025-11-20 16:43:40.323 +01:00 [INF] No existing action records JSON file found.
+2025-11-20 16:43:40.401 +01:00 [INF] No startup errors found after delayed check
+2025-11-20 16:44:04.640 +01:00 [INF] Found git repository in parent at D:\Git\SlayTheClone2025
+2025-11-20 16:44:04.672 +01:00 [INF] No state file found, maintaining Initialized state for fresh installation
+2025-11-20 16:44:04.690 +01:00 [INF] No request found, returning empty.
+2025-11-20 16:44:04.707 +01:00 [INF] No MCP servers configuration found
+2025-11-20 16:44:04.707 +01:00 [INF] MCP host initialized
+2025-11-20 16:44:04.737 +01:00 [INF] Context file not found: D:\Git\SlayTheClone2025\Packages\Coplay\Editor\CoplayLogs\context_items.json
+2025-11-20 16:44:04.738 +01:00 [INF] Checking for dependencies in: D:\Git\SlayTheClone2025\Packages\Coplay\Editor\Binaries
+2025-11-20 16:44:04.738 +01:00 [INF] Ripgrep directory not found
+2025-11-20 16:44:04.738 +01:00 [INF] RunInBackgroundStartupTask initialized - will enable background execution in play mode
+2025-11-20 16:44:04.781 +01:00 [INF] Checking for dependencies in: D:\Git\SlayTheClone2025\Packages\Coplay\Editor\Binaries
+2025-11-20 16:44:04.781 +01:00 [INF] Ripgrep directory not found
+2025-11-20 16:44:04.785 +01:00 [INF] Showing dependency download screen
+2025-11-20 16:44:08.313 +01:00 [INF] Creating Binaries directory at: D:\Git\SlayTheClone2025\Packages\Coplay\Editor\Binaries
+2025-11-20 16:44:55.597 +01:00 [INF] Checking for executable in: D:\Git\SlayTheClone2025\Packages\Coplay\Editor\Binaries\ripgrep\x86_64
+2025-11-20 16:44:55.598 +01:00 [INF] Looking for executable at: D:\Git\SlayTheClone2025\Packages\Coplay\Editor\Binaries\ripgrep\x86_64\rg.exe
+2025-11-20 16:44:55.599 +01:00 [INF] Set executable permissions successfully
+2025-11-20 16:46:21.637 +01:00 [INF] Dependency installation completed successfully
+2025-11-20 16:46:24.023 +01:00 [INF] Successfully got device ID: cpl-device-a4cac0ee-d306-451a-bd07-10be4203d196
+2025-11-20 16:47:43.337 +01:00 [ERR] CoplayError - Login failed
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+  at Coplay.Common.CoplayApi.CoplayApiClient.CheckForTokens (System.Threading.CancellationToken cancellationToken) [0x00169] in <c5154154e5fe431a957d18469842598f>:0 
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+  at Coplay.Common.CoplayApi.CoplayApiClient.CheckForTokens (System.Threading.CancellationToken cancellationToken) [0x0025f] in <c5154154e5fe431a957d18469842598f>:0 
+2025-11-20 16:47:43.338 +01:00 [INF] Login attempt cancelled
+2025-11-20 16:47:53.435 +01:00 [INF] Placeholder text would be: What can I help with?
+2025-11-20 16:47:53.447 +01:00 [INF] Loading threads
+2025-11-20 16:47:53.453 +01:00 [INF] Successfully logged in
+2025-11-20 16:47:54.054 +01:00 [INF] Creating thread
+2025-11-20 16:47:54.054 +01:00 [INF] No current thread to save checkpoint hashes from
+2025-11-20 16:47:54.390 +01:00 [INF] Loading thread messages for thread cpl_thread_9e934ae5_bbdf_45e3_8826_9bf9f52cd21a
+2025-11-20 16:47:54.393 +01:00 [INF] Saving state
+2025-11-20 16:47:54.440 +01:00 [INF] Clearing state model
+2025-11-20 16:47:54.440 +01:00 [WRN] You are setting to the same state: Initialized
+2025-11-20 16:47:54.447 +01:00 [INF] OnThreadChanged
+2025-11-20 16:47:54.447 +01:00 [INF] Handling state change: Initialized
+2025-11-20 16:48:30.744 +01:00 [INF] Clearing All
+2025-11-20 16:48:30.745 +01:00 [INF] Clearing state model
+2025-11-20 16:48:30.745 +01:00 [WRN] You are setting to the same state: Initialized
+2025-11-20 16:48:30.757 +01:00 [INF] Cleaned up all thumbnail textures
+2025-11-20 16:48:30.759 +01:00 [INF] AssistantController: Dispose called
+2025-11-20 16:48:30.759 +01:00 [INF] FunctionExecutionController: Dispose called
+2025-11-20 16:48:30.760 +01:00 [INF] Saving state
+2025-11-20 16:48:30.763 +01:00 [WRN] Failed to save state: System.Exception: Failed to save state atomically: No se puede quitar el archivo para ser reemplazado
+  at Coplay.Services.Chat.ChatThreads.SaveStateAtomically (Coplay.Services.Chat.ChatThreadsState state) [0x00156] in <c5154154e5fe431a957d18469842598f>:0 
+  at Coplay.Services.Chat.ChatThreads.SaveState (System.Boolean force) [0x00150] in <c5154154e5fe431a957d18469842598f>:0 
+
+Caused by: System.IO.IOException: No se puede quitar el archivo para ser reemplazado
+  at System.IO.FileSystem.ReplaceFile (System.String sourceFullPath, System.String destFullPath, System.String destBackupFullPath, System.Boolean ignoreMetadataErrors) [0x0002c] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.IO.File.Replace (System.String sourceFileName, System.String destinationFileName, System.String destinationBackupFileName, System.Boolean ignoreMetadataErrors) [0x00034] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.IO.File.Replace (System.String sourceFileName, System.String destinationFileName, System.String destinationBackupFileName) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.IO.Abstractions.<276793ac-c3aa-4890-8887-1ac11b4b2485>FileWrapper.Replace (System.String sourceFileName, System.String destinationFileName, System.String destinationBackupFileName) [0x00000] in <c5154154e5fe431a957d18469842598f>:0 
+  at Coplay.Services.Chat.ChatThreads.SaveStateAtomically (Coplay.Services.Chat.ChatThreadsState state) [0x000dd] in <c5154154e5fe431a957d18469842598f>:0 
