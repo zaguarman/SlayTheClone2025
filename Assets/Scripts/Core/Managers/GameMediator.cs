@@ -26,6 +26,9 @@ public class GameMediator : MonoBehaviour, IGameMediator {
         public readonly UnityEvent<IPlayer> HandStateChanged = new UnityEvent<IPlayer>();
         public readonly UnityEvent<IPlayer> BattlefieldStateChanged = new UnityEvent<IPlayer>();
         public readonly UnityEvent<int> TurnEnded = new UnityEvent<int>();
+        public readonly UnityEvent<ICreature, int> CreatureHealed = new UnityEvent<ICreature, int>();
+        public readonly UnityEvent<IPlayer, int> PlayerHealed = new UnityEvent<IPlayer, int>();
+        public readonly UnityEvent<ICreature, Enums.StatusEffectType, bool> CreatureStatusChanged = new UnityEvent<ICreature, Enums.StatusEffectType, bool>();
 
         public void ClearAllListeners() {
             PlayerDamaged.RemoveAllListeners();
@@ -42,6 +45,9 @@ public class GameMediator : MonoBehaviour, IGameMediator {
             HandStateChanged.RemoveAllListeners();
             BattlefieldStateChanged.RemoveAllListeners();
             TurnEnded.RemoveAllListeners();
+            CreatureHealed.RemoveAllListeners();
+            PlayerHealed.RemoveAllListeners();
+            CreatureStatusChanged.RemoveAllListeners();
         }
     }
     #endregion
@@ -188,6 +194,33 @@ public class GameMediator : MonoBehaviour, IGameMediator {
     public void RemoveBattlefieldStateChangedListener(UnityAction<IPlayer> listener) {
         events.BattlefieldStateChanged.RemoveListener(listener);
     }
+
+    public void AddCreatureHealedListener(UnityAction<ICreature, int> listener) {
+        ValidateInitialization();
+        events.CreatureHealed.AddListener(listener);
+    }
+
+    public void RemoveCreatureHealedListener(UnityAction<ICreature, int> listener) {
+        events.CreatureHealed.RemoveListener(listener);
+    }
+
+    public void AddPlayerHealedListener(UnityAction<IPlayer, int> listener) {
+        ValidateInitialization();
+        events.PlayerHealed.AddListener(listener);
+    }
+
+    public void RemovePlayerHealedListener(UnityAction<IPlayer, int> listener) {
+        events.PlayerHealed.RemoveListener(listener);
+    }
+
+    public void AddCreatureStatusChangedListener(UnityAction<ICreature, Enums.StatusEffectType, bool> listener) {
+        ValidateInitialization();
+        events.CreatureStatusChanged.AddListener(listener);
+    }
+
+    public void RemoveCreatureStatusChangedListener(UnityAction<ICreature, Enums.StatusEffectType, bool> listener) {
+        events.CreatureStatusChanged.RemoveListener(listener);
+    }
     #endregion
 
     #region Player Registration
@@ -242,10 +275,7 @@ public class GameMediator : MonoBehaviour, IGameMediator {
 
         events.CreatureDamaged.Invoke(creature, damage);
         Log($"{damage} damage to {creature.Name}", LogTag.Creatures | LogTag.Combat);
-
-        if (creature.Health <= 0) {
-            NotifyCreatureDied(creature);
-        }
+        // Death is announced separately by DamageCreatureActionExecutor via NotifyCreatureDied
     }
 
     public void NotifyCreatureDied(ICreature creature) {
@@ -261,8 +291,7 @@ public class GameMediator : MonoBehaviour, IGameMediator {
         ValidateInitialization();
         if (creature == null) throw new System.ArgumentNullException(nameof(creature));
 
-        // If we had a CreatureHealed event, we would invoke it here
-        // events.CreatureHealed.Invoke(creature, amount);
+        events.CreatureHealed.Invoke(creature, amount);
         Log($"{creature.Name} healed for {amount}, health now: {creature.Health}", LogTag.Creatures | LogTag.Effects);
         NotifyGameStateChanged();
     }
@@ -271,8 +300,7 @@ public class GameMediator : MonoBehaviour, IGameMediator {
         ValidateInitialization();
         if (player == null) throw new System.ArgumentNullException(nameof(player));
 
-        // If we had a PlayerHealed event, we would invoke it here
-        // events.PlayerHealed.Invoke(player, amount);
+        events.PlayerHealed.Invoke(player, amount);
         Log($"{(player.IsPlayer1 ? "Player 1" : "Player 2")} healed for {amount}, health now: {player.Health}", LogTag.Players | LogTag.Effects);
         NotifyGameStateChanged();
     }
@@ -321,6 +349,14 @@ public class GameMediator : MonoBehaviour, IGameMediator {
         events.CreatureStatsChanged.Invoke(creature);
         Log($"Stats changed for {creature.Name} (TargetID: {creature.TargetId.ToUpper()})", LogTag.Creatures | LogTag.Effects);
         NotifyGameStateChanged(); // Still notify general state change for broader updates if needed
+    }
+
+    public void NotifyCreatureStatusChanged(ICreature creature, Enums.StatusEffectType status, bool applied) {
+        ValidateInitialization();
+        if (creature == null) throw new System.ArgumentNullException(nameof(creature));
+
+        events.CreatureStatusChanged.Invoke(creature, status, applied);
+        Log($"{creature.Name} {(applied ? "gained" : "lost")} status {status}", LogTag.Creatures | LogTag.Effects);
     }
 
     public void NotifyActionsQueueChanged() {

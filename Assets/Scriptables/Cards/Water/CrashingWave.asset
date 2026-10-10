@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Crashing Wave
   description: A powerful wave that crashes onto enemies.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: b8722d9c21d6f4343a5a0b5fc1753cc5, type: 3}
   effects:
   - effectType: 0
     trigger: 0

@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Royal Falcon
   description: A noble bird trained for hunting, with exceptional speed.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 3f1c266c21dd5de46ba0c932be634c16, type: 3}
   effects:
   - effectType: 0
     trigger: 0

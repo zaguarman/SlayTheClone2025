@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Mischievous Raven
   description: Steals valuable items to aid its allies.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 7442b428fbaaa7543a2a9f929077a966, type: 3}
   effects:
   - effectType: 0
     trigger: 0

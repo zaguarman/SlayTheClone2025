@@ -17,9 +17,10 @@ MonoBehaviour:
   description: When attacking, zaps the primary target and chains lightning to 2
     additional targets in a random direction.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: fceb6c1c64f0d0a498e57e06da298d91, type: 3}
   effects:
-  - effectType: 0
-    trigger: 1
+  - effectType: 1
+    trigger: 2
     actions:
     - actionType: 0
       value: 4

@@ -26,6 +26,11 @@ public class DamageCreatureActionExecutor : IActionExecutor
              return;
         }
 
+        if (damageAction.IsCombatDamage() && context.IsCombatDamageCancelled(attacker)) {
+            Log($"Executor: {attacker.Name} was killed by faster damage; its attack on {targetCreature.Name} is cancelled.", LogTag.Actions | LogTag.Combat);
+            return;
+        }
+
         // Get Dependencies from Context
         var mediator = context.GameMediator;
         var modifierManager = context.ModifierManager;
@@ -43,11 +48,11 @@ public class DamageCreatureActionExecutor : IActionExecutor
         int damageToArmor = Math.Min(damage, targetCreature.CurrentArmorPool);
         int remainingDamage = damage - damageToArmor;
 
-        // Apply damage to armor pool (Use ModifyArmorAction for consistency and potential triggers)
+        // Armor is spent immediately so the next hit in the same resolution sees what is left
         if (damageToArmor > 0)
         {
-            actionsQueue.AddAction(new ModifyArmorAction(targetCreature, -damageToArmor));
-            // Log($"Executor: Queued ModifyArmorAction: {-damageToArmor} damage to armor. {targetCreature.Name} armor remaining (before action resolves): {targetCreature.CurrentArmorPool}", LogTag.Actions | LogTag.Effects | LogTag.Combat);
+            targetCreature.ModifyArmorPool(-damageToArmor);
+            mediator.NotifyCreatureArmorChanged(targetCreature, targetCreature.CurrentArmorPool);
         }
 
         // Apply remaining damage to health
@@ -80,6 +85,8 @@ public class DamageCreatureActionExecutor : IActionExecutor
         {
             Log($"Executor: {targetCreature.Name} died as a result of damage.", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
             targetCreature.MarkAsDead(); // Mark internally first
+            // Same speed the queue used to order this action (see ActionsQueue.GetActionSpeed)
+            context.KillingSpeedByCreatureId[targetCreature.TargetId] = attacker?.Speed ?? 1;
 
             // Notify Mediator
             mediator.NotifyCreatureDied(targetCreature);
@@ -95,8 +102,7 @@ public class DamageCreatureActionExecutor : IActionExecutor
             // Unregister from ModifierManager - NO CAST NEEDED
             modifierManager.UnregisterCreature(targetCreature);
 
-            // Remove from Battlefield (let Player handle this)
-            targetCreature.Owner?.RemoveFromBattlefield(targetCreature, false); // destroyCard = false (already handled by Died event?) - Keep false for now
+            targetCreature.Owner?.DiscardCard(targetCreature);
         }
 
         Log($"Executed DamageCreatureAction via Executor for {targetCreature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);

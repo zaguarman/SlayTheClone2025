@@ -92,6 +92,9 @@ public class ModifierManager : IModifierManager {
                 _activeModifiers[targetId].Add(modifier);
                 modifier.Apply(target, _mediator);
                 Log($"ModifierManager: Applied modifier '{modifier.Name}' to {creatureTarget.Name} (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
+                if (modifier is StatusEffectModifier status) {
+                    _mediator.NotifyCreatureStatusChanged(creatureTarget, status.EffectType, true);
+                }
 
                 if (modifier.TryGetStatModification(ModifiableStat.Attack, out _, out _) ||
                     modifier.TryGetStatModification(ModifiableStat.Health, out _, out _) ||
@@ -123,6 +126,9 @@ public class ModifierManager : IModifierManager {
                     if (removed) {
                         existingModifier.Remove(target, _mediator);
                         Log($"ModifierManager: Removed modifier '{existingModifier.Name}' from {creatureTarget.Name} (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
+                        if (existingModifier is StatusEffectModifier status) {
+                            _mediator.NotifyCreatureStatusChanged(creatureTarget, status.EffectType, false);
+                        }
 
                         if (existingModifier.TryGetStatModification(ModifiableStat.Attack, out _, out _) ||
                             existingModifier.TryGetStatModification(ModifiableStat.Health, out _, out _) ||

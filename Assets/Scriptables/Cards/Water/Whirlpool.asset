@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Whirlpool
   description: Trap enemies in a spinning vortex, paralyzing them for 2 turns.
   cardType: 1
+  artwork: {fileID: 3286163911610860551, guid: e68a287106ac4124db96b77aaacd20cc, type: 3}
   effects:
   - effectType: 1
     trigger: 0

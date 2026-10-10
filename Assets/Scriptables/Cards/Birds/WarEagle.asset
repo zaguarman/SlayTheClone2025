@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: War Eagle
   description: A battle-hardened bird that leads the charge in combat.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 5cb5c14a79042dc4da086a0f8d35d035, type: 3}
   effects:
   - effectType: 0
     trigger: 1

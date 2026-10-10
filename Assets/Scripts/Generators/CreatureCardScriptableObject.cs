@@ -12,13 +12,9 @@ public class CreatureCardScriptableObject : CardDataScriptableObject {
 
     public override CardData ToCardData() {
         CreatureData data = ScriptableObject.CreateInstance<CreatureData>();
-        data.cardId = cardId; // Copy the cardId
-        data.cardName = cardName;
-        data.description = description;
-        data.cardType = cardType;
+        CopyCommonFieldsTo(data);
         data.attack = attack;
         data.health = health;
-        data.effects = CopyEffects();
         return data;
     }
 }

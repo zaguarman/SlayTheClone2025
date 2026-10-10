@@ -131,6 +131,9 @@ public class Player : Entity, IPlayer {
         }
         Battlefield.Clear();
         Battlefield.AddRange(slots);
+        foreach (var slot in slots) {
+            slot.Owner = this;
+        }
         Log($"Initialized battlefield with {slots.Count} slots", LogTag.Initialization);
     }
 
@@ -224,17 +227,15 @@ public class Player : Entity, IPlayer {
         }
     }
 
+    // Single exit point for a card leaving play, whatever its type: a resolved spell, a creature that
+    // died or was replaced, or a card discarded from hand. Pulls it out of its current zone and discards it.
     public void DiscardCard(ICard card) {
         if (card == null) return;
 
-        if (Hand.Contains(card)) {
-            RemoveFromHand(card);
-
-            if (Deck is Deck deck) {
-                deck.AddToDiscardPile(card);
-                Log($"Discarded card {card.Name} from hand to discard pile", LogTag.Cards);
-            }
-        }
+        RemoveFromHand(card);
+        RemoveFromBattlefield(card);
+        Deck.AddToDiscardPile(card);
+        Log($"Discarded {card.Name}", LogTag.Cards);
     }
 
     public void DiscardHand() {
@@ -392,16 +393,7 @@ public class Player : Entity, IPlayer {
 
         var slot = Battlefield.FirstOrDefault(s => s.OccupyingCreature == creature as ICreature);
         if (slot != null) {
-            // Note: We no longer need to reset modifiers here as the ModifierManager handles this
-            // when the creature is unregistered in Creature.Die()
-
-            // If we're not destroying the card, add it to the discard pile
-            if (!destroyCard && Deck is Deck deck && creature is ICreature) {
-                // When a creature is removed from battlefield without being destroyed, add it to discard pile
-                deck.AddToDiscardPile(creature);
-                Log($"Added creature {creature.Name} to discard pile after removing from battlefield", LogTag.Cards | LogTag.Creatures);
-            }
-
+            // Only frees the slot; DiscardCard is responsible for sending the card to the discard pile
             slot.ClearSlot(destroyCard);
             Log($"Removed creature {creature.Name} from battlefield", LogTag.Creatures);
             gameMediator?.NotifyBattlefieldStateChanged(this);

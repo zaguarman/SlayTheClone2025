@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Tsunami Turtle
   description: Creates massive waves when attacking.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 984ce7c63955b7941b9f3400ef301d8f, type: 3}
   effects:
   - effectType: 0
     trigger: 1

@@ -11,12 +11,8 @@ public class SpellCardScriptableObject : CardDataScriptableObject {
 
     public override CardData ToCardData() {
         SpellData data = ScriptableObject.CreateInstance<SpellData>();
-        data.cardId = cardId; // Copy the cardId
-        data.cardName = cardName;
-        data.description = description;
-        data.cardType = cardType;
+        CopyCommonFieldsTo(data);
         data.defaultTargetType = defaultTargetType;
-        data.effects = CopyEffects();
         return data;
     }
 }

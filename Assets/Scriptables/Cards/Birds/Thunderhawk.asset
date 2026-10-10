@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Thunderhawk
   description: Calls lightning down upon enemies.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: d84feb8b71371744ea8f9f89bd1a615f, type: 3}
   effects:
   - effectType: 0
     trigger: 0

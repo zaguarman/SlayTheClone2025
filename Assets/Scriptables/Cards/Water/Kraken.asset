@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Kraken
   description: Massive sea monster that terrifies enemies.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 283ba86ce1fb28144abfcf5039b984e2, type: 3}
   effects:
   - effectType: 0
     trigger: 2

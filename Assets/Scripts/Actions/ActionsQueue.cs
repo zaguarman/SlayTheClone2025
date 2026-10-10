@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using static DebugLogger;
@@ -12,6 +13,7 @@ public class ActionsQueue : IActionsQueue {
     private readonly HashSet<(string, EffectTrigger)> processedEffects = new HashSet<(string, EffectTrigger)>();
     private readonly Dictionary<string, IGameAction> activeCreatureActions = new Dictionary<string, IGameAction>();
     private int currentIterationDepth = 0;
+    private bool resolvedAnyAction;
     private readonly int maxIterationDepth = 3;
 
     private readonly IGameMediator gameMediator;
@@ -46,6 +48,7 @@ public class ActionsQueue : IActionsQueue {
     #region Events
     public UnityEvent OnActionsQueued { get; } = new UnityEvent();
     public UnityEvent OnActionsResolved { get; } = new UnityEvent();
+    public UnityEvent<IGameAction> OnActionExecuting { get; } = new UnityEvent<IGameAction>(); // Raised just before an action runs
     #endregion
 
     #region Constructor
@@ -106,6 +109,7 @@ public class ActionsQueue : IActionsQueue {
         ICreature creature = action switch {
             BattlefieldCombatAction combatAction => combatAction.GetAttacker(),
             DamageCreatureAction damageAction => damageAction.GetAttacker(),
+            DamagePlayerAction damagePlayerAction => damagePlayerAction.GetAttacker(),
             ModifyAction modifyAction => modifyAction.GetTarget() as ICreature,
             _ => null
         };
@@ -117,9 +121,11 @@ public class ActionsQueue : IActionsQueue {
         return speed;
     }
 
+    // Only a creature's declared action (one per creature, replaceable by re-declaring) is tracked here.
+    // Damage and effect actions must never be keyed by their source, or multiple hits from the same
+    // creature (AoE effects, spread/chain, retaliation) would replace each other.
     private string GetActiveCreatureId(IGameAction action) {
         return action switch {
-            DamageCreatureAction damageAction => damageAction.GetAttacker()?.TargetId,
             SwapCreaturesAction swapAction => swapAction.GetCreature1()?.TargetId,
             BattlefieldCombatAction combatAction => combatAction.GetAttacker()?.TargetId,
             _ => null
@@ -195,52 +201,73 @@ public class ActionsQueue : IActionsQueue {
         Log($"Marked effect {trigger} for creature (TargetID: {sourceId.ToUpper()}) as processed (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Effects);
     }
 
+    /// <summary>Resolves every queued action immediately.</summary>
     public void ResolveActions() {
-        currentIterationDepth++;
+        BeginResolution();
+        while (ExecuteNextAction()) { }
+        EndResolution();
+    }
 
-        int initialActionCount = actionsList.Count;
-        Log($"Resolving actions. Initial queue size: {initialActionCount} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
+    /// <summary>
+    /// Resolves the queued actions one at a time, running <paramref name="afterEachAction"/>
+    /// (e.g. waiting for its animations) before moving on to the next one.
+    /// </summary>
+    public IEnumerator ResolveActionsStepByStep(Func<IEnumerator> afterEachAction) {
+        BeginResolution();
+        while (ExecuteNextAction()) {
+            yield return afterEachAction();
+        }
+        EndResolution();
+    }
+
+    private void BeginResolution() {
+        currentIterationDepth++;
+        Log($"Resolving actions. Initial queue size: {actionsList.Count} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
 
         processedEffects.Clear();
-        Log("Cleared processed effects for new resolution chain (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Effects);
+        if (currentIterationDepth == 1) {
+            _executionContext.KillingSpeedByCreatureId.Clear();
+        }
+        resolvedAnyAction = false;
+    }
 
-        bool queueChanged = actionsList.Count > 0;
+    /// <returns>False once the queue is empty.</returns>
+    private bool ExecuteNextAction() {
+        if (actionsList.Count == 0) return false;
 
-        while (actionsList.Count > 0) {
-            var action = actionsList[0];
-            actionsList.RemoveAt(0);
+        var action = actionsList[0];
+        actionsList.RemoveAt(0);
+        resolvedAnyAction = true;
 
-            string activeCreatureId = GetActiveCreatureId(action);
-            if (activeCreatureId != null) {
-                activeCreatureActions.Remove(activeCreatureId);
-            }
-
-            Log($"Processing action: {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
-
-            // --- UPDATED Executor Lookup ---
-            if (!_actionExecutors.TryGetValue(action.GetType(), out var executor))
-            {
-                // This case should *not* happen if all actions have registered executors
-                LogError($"No executor registered for action type {action.GetType().Name}. Skipping action. (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
-                continue; // Skip this action
-            }
-            // --- End Update ---
-
-            Log($"Using Executor: {executor.GetType().Name}", LogTag.Actions);
-
-            try {
-                executor.Execute(action, _executionContext);
-            }
-            catch (Exception ex) {
-                LogError($"Error executing action {action.GetType().Name} via {executor.GetType().Name}: {ex.Message}\n{ex.StackTrace}", LogTag.Actions);
-            }
+        string activeCreatureId = GetActiveCreatureId(action);
+        if (activeCreatureId != null) {
+            activeCreatureActions.Remove(activeCreatureId);
         }
 
+        if (!_actionExecutors.TryGetValue(action.GetType(), out var executor)) {
+            LogError($"No executor registered for action type {action.GetType().Name}. Skipping action. (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
+            return true;
+        }
+
+        Log($"Processing action: {action.GetType().Name} via {executor.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
+        OnActionExecuting.Invoke(action);
+        try {
+            executor.Execute(action, _executionContext);
+        }
+        catch (Exception ex) {
+            LogError($"Error executing action {action.GetType().Name} via {executor.GetType().Name}: {ex.Message}\n{ex.StackTrace}", LogTag.Actions);
+        }
+
+        gameMediator.NotifyActionsQueueChanged();
+        return true;
+    }
+
+    private void EndResolution() {
         currentIterationDepth--;
         activeCreatureActions.Clear();
         combatHandler?.ResetAttackingCreatures();
 
-        if (queueChanged) {
+        if (resolvedAnyAction) {
             OnActionsResolved.Invoke();
             gameMediator.NotifyActionsQueueChanged();
             gameMediator.NotifyGameStateChanged();
@@ -250,6 +277,17 @@ public class ActionsQueue : IActionsQueue {
 
     public bool HasActiveAction(string creatureId) {
         return activeCreatureActions.ContainsKey(creatureId);
+    }
+
+    public bool CancelDeclaredAction(string creatureId) {
+        if (creatureId == null || !activeCreatureActions.TryGetValue(creatureId, out var action)) return false;
+
+        activeCreatureActions.Remove(creatureId);
+        actionsList.Remove(action);
+        Log($"Cancelled declared action {action.GetType().Name} (Queue ID: {GetHashCode().ToString().ToUpper()})", LogTag.Actions);
+        OnActionsQueued.Invoke();
+        gameMediator.NotifyActionsQueueChanged();
+        return true;
     }
 
     public IGameAction GetActiveAction(string creatureId) {
@@ -267,6 +305,7 @@ public class ActionsQueue : IActionsQueue {
             processedEffects.Clear();
             OnActionsQueued.RemoveAllListeners();
             OnActionsResolved.RemoveAllListeners();
+            OnActionExecuting.RemoveAllListeners();
             Log("Actions queue cleaned up (Queue ID: " + GetHashCode().ToString().ToUpper() + ")", LogTag.Actions);
         }
     }

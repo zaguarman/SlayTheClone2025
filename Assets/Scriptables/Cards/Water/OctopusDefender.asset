@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Octopus Defender
   description: Uses tentacles to create permanent armor for itself when damaged.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 8be2c633465c5e6418d79e4fbf70f3ed, type: 3}
   effects:
   - effectType: 0
     trigger: 1

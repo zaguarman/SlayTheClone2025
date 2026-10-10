@@ -51,37 +51,21 @@ public class SummonCreatureActionExecutor : IActionExecutor
         // --- Execute Logic ---
         creature.SetOwner(owner); // Set owner BEFORE adding to battlefield/registering
 
-        // If summoning from hand, remove from hand data
-        if (!fromDeck && owner.Hand.Contains(creature))
+        // Summoning onto an occupied slot replaces its creature (no death effects); it goes to its owner's discard pile
+        var replacedCreature = slot.OccupyingCreature;
+        if (replacedCreature != null)
         {
-            owner.DiscardCard(creature); // Use DiscardCard to potentially trigger discard effects later if needed
-            // owner.RemoveFromHand(creature); // Alternative: just remove visually
+            Log($"Executor: {creature.Name} replaces {replacedCreature.Name}", LogTag.Actions | LogTag.Creatures);
+            modifierManager.UnregisterCreature(replacedCreature);
+            (replacedCreature.Owner ?? owner).DiscardCard(replacedCreature);
         }
-
-        // Handle slot occupation
-        if (slot.IsOccupied())
+        else if (slot.IsOccupied())
         {
-            LogWarning($"Target slot {slot.TargetId} for {creature.Name} is already occupied by {slot.OccupyingCreature?.Name}. Replacing...", LogTag.Actions | LogTag.Creatures);
-            // Directly remove the old creature without triggering its death effects here.
-            // Death should be handled by damage or specific removal actions.
-             var oldCreature = slot.OccupyingCreature;
-             if (oldCreature != null)
-             {
-                 owner.RemoveFromBattlefield(oldCreature, true); // destroyCard = true
-                 modifierManager.UnregisterCreature(oldCreature); // Unregister replaced creature
-             }
-             else
-             {
-                 slot.ClearSlot(true); // Clear slot if creature was null but card existed
-             }
+            slot.ClearSlot(true); // Card without a creature; just clear it
         }
 
         // Find original CardData (important for UI and potential resets)
-        CardData originalData = null;
-        if (owner.Deck != null)
-        {
-             originalData = owner.Deck.FindOriginalCardDataById(creature.CardId);
-        }
+        CardData originalData = creature.SourceData ?? owner.Deck?.FindOriginalCardDataById(creature.CardId);
         // Fallback if not found in deck (e.g., token or special summon)
         if (originalData == null && creature is ICreature creatureInstance)
         {

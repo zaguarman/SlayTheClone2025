@@ -51,6 +51,15 @@ public interface IGameMediator
 
     void AddTurnEndedListener(UnityAction<int> listener);
     void RemoveTurnEndedListener(UnityAction<int> listener);
+
+    void AddCreatureHealedListener(UnityAction<ICreature, int> listener);
+    void RemoveCreatureHealedListener(UnityAction<ICreature, int> listener);
+
+    void AddPlayerHealedListener(UnityAction<IPlayer, int> listener);
+    void RemovePlayerHealedListener(UnityAction<IPlayer, int> listener);
+
+    void AddCreatureStatusChangedListener(UnityAction<ICreature, Enums.StatusEffectType, bool> listener);
+    void RemoveCreatureStatusChangedListener(UnityAction<ICreature, Enums.StatusEffectType, bool> listener);
     #endregion
 
     #region Player Registration
@@ -71,6 +80,7 @@ public interface IGameMediator
     void NotifyCreatureSummoned(ICreature creature, IPlayer owner);
     void NotifyCreatureArmorChanged(ICreature creature, int newArmor);
     void NotifyCreatureStatsChanged(ICreature creature); // NEW
+    void NotifyCreatureStatusChanged(ICreature creature, Enums.StatusEffectType status, bool applied);
     void NotifyActionsQueueChanged();
     void NotifyHandStateChanged(IPlayer player);
     void NotifyBattlefieldStateChanged(IPlayer player);

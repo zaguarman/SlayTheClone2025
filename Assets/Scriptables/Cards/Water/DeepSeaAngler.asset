@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Deep Sea Angler
   description: Lures enemies with bioluminescent bait, paralyzing them.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: d6ff75eb9713dae48b915e80c7136b34, type: 3}
   effects:
   - effectType: 0
     trigger: 1

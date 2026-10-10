@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Dancing Dolphin
   description: Playful movements boost ally morale.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 39782cc778b24ce4ab4d805aee6eb36e, type: 3}
   effects:
   - effectType: 0
     trigger: 0

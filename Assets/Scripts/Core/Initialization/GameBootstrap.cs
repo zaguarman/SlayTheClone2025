@@ -97,6 +97,12 @@ public class GameBootstrap : MonoBehaviour
         }
         Log("GameUI initialized", LogTag.Initialization);
 
+        // 6. Resolution playback: the turn waits on it so effects play one after another
+        var presenter = ResolutionPresenter.Create(gameReferences.transform);
+        presenter.Initialize(gameMediator, gameReferences, gameManager);
+        turnManager.SetPresenter(presenter);
+        Log("ResolutionPresenter initialized", LogTag.Initialization);
+
         Log("--- Game Initialization Sequence Complete ---", LogTag.Initialization);
     }
 }

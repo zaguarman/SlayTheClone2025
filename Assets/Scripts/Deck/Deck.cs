@@ -92,59 +92,26 @@ public class Deck : IDeck {
         Log($"Added card to bottom: {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
     }
 
+    // Every card that leaves play (played spell, dead or replaced creature, discarded hand) ends up here.
+    // It is stored as a fresh copy of its definition, so damage, buffs and death state never carry over.
     public void AddToDiscardPile(ICard card) {
         if (card == null) {
             LogError($"Attempted to add null card to discard pile (DeckID: {deckId.ToUpper()})", LogTag.Cards);
             return;
         }
 
-        // Check if the card is a creature that needs restoration
-        if (card is ICreature creature) {
-            ICard restoredCard = RestoreToOriginalValues(creature);
-
-            // If restoration (based on ID) was successful, add the restored card
-            if (restoredCard != null) {
-                 discardPile.Add(restoredCard);
-                 Log($"Added restored creature card to discard pile: {restoredCard.Name} (CardID: {restoredCard.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
-                 return; // <- Important: return after adding restored card
-            }
-            // If RestoreToOriginalValues returned null (ID lookup failed), fall through to add the original 'card' instance
-            // This covers the case where original data is missing but we still need to discard *something*.
-             LogWarning($"Restoration by ID failed for {creature.Name}. Adding original instance to discard.", LogTag.Cards | LogTag.Creatures);
-        }
-
-        // Add the original card instance if not a creature or if restoration failed
-        discardPile.Add(card);
-        Log($"Added card (original instance) to discard pile: {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
+        var resetCard = CreateFreshCopy(card);
+        discardPile.Add(resetCard);
+        Log($"Added {resetCard.Name} to discard pile (DeckID: {deckId.ToUpper()})", LogTag.Cards);
     }
 
-    private ICard RestoreToOriginalValues(ICreature creature) {
-        if (creature == null || string.IsNullOrEmpty(creature.CardId)) {
-             LogWarning($"Cannot restore creature with null reference or missing CardId.", LogTag.Cards | LogTag.Creatures);
-             return null; // Return null if creature or ID is invalid
+    private ICard CreateFreshCopy(ICard card) {
+        var data = card.SourceData ?? FindOriginalCardDataById(card.CardId);
+        if (data == null) {
+            LogWarning($"No card data for {card.Name}; discarding the used instance as-is.", LogTag.Cards);
+            return card;
         }
-
-        Log($"Attempting to restore creature {creature.Name} (CreatureID: {creature.TargetId.ToUpper()}, CardID: {creature.CardId.ToUpper()}) for deck (DeckID: {deckId.ToUpper()})",
-            LogTag.Cards | LogTag.Creatures);
-
-        // Find the original card data by ID
-        CardData originalData = FindOriginalCardDataById(creature.CardId); // Use existing helper
-
-        if (originalData != null) {
-            ICard restoredCard = CardFactory.CreateCard(originalData);
-            Log($"Successfully restored {creature.Name} using CardID {creature.CardId.ToUpper()} for deck (DeckID: {deckId.ToUpper()})",
-                LogTag.Cards | LogTag.Creatures);
-            return restoredCard; // Return the successfully restored card
-        }
-
-        // If original data not found by ID, log error and return null
-        // Do NOT fall back to name matching.
-        LogError($"Could not find original data for {creature.Name} with CardID {creature.CardId.ToUpper()}. Cannot restore by ID. Fallback to name matching removed.",
-                 LogTag.Cards | LogTag.Creatures);
-
-        // Return null indicating restoration by ID failed.
-        // The calling method (AddToDiscardPile) will handle adding the original instance.
-        return null;
+        return CardFactory.CreateCard(data) ?? card;
     }
 
     public void ClearDiscardPile() {

@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Seahorse Scout
   description: Quickly discovers new resources.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: b5fa216f7eb03134c8ab453dc3b018ca, type: 3}
   effects:
   - effectType: 0
     trigger: 0

@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Shadow Lurker
   description: A stealthy spider that ambushes from the shadows.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 57001a8e9abd5954c85a01406f0662ad, type: 3}
   effects:
   - effectType: 0
     trigger: 0

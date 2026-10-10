@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Wise Owl
   description: Its wisdom allows allies to find new strategies.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 25cc54a44ac5043409ca816ff4399e49, type: 3}
   effects:
   - effectType: 0
     trigger: 3

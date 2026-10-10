@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Silk Spinner
   description: Its valuable silk can heal allies.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 1b8a8ae459e2bb4469c94a3595e0fd65, type: 3}
   effects:
   - effectType: 0
     trigger: 2

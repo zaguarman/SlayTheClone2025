@@ -42,6 +42,18 @@ public class BattlefieldCombatActionExecutor : IActionExecutor
             return;
         }
 
+        // The attack was declared earlier; re-check the attacker can still act now that it resolves
+        if (attacker.IsDead)
+        {
+            Log($"BattlefieldCombatActionExecutor: {attacker.Name} died before its attack resolved. Attack cancelled.", LogTag.Actions | LogTag.Combat);
+            return;
+        }
+        if (attacker is Creature concreteAttacker && context.ModifierManager != null && context.ModifierManager.AreActionsPrevented(concreteAttacker))
+        {
+            Log($"BattlefieldCombatActionExecutor: {attacker.Name} cannot act due to a status effect. Attack cancelled.", LogTag.Actions | LogTag.Combat | LogTag.Effects);
+            return;
+        }
+
         // --- Execute Logic ---
         ITarget primaryTarget = null;
         int primaryDamage = attacker.Attack; // Store base attack damage
@@ -56,7 +68,7 @@ public class BattlefieldCombatActionExecutor : IActionExecutor
                 {
                     primaryTarget = targetCreature;
                     Log($"Executor: Creature {attacker.Name} attacking creature {targetCreature.Name}", LogTag.Combat);
-                    actionsQueue.AddAction(new DamageCreatureAction(targetCreature, primaryDamage, attacker));
+                    actionsQueue.AddAction(new DamageCreatureAction(targetCreature, primaryDamage, attacker, isCombatDamage: true));
                 }
             }
             else
@@ -66,7 +78,7 @@ public class BattlefieldCombatActionExecutor : IActionExecutor
                 {
                     primaryTarget = targetPlayer;
                     Log($"Executor: Creature {attacker.Name} attacking player {(targetPlayer.IsPlayer1 ? "1" : "2")}", LogTag.Combat);
-                    actionsQueue.AddAction(new DamagePlayerAction(targetPlayer, primaryDamage));
+                    actionsQueue.AddAction(new DamagePlayerAction(targetPlayer, primaryDamage, attacker, isCombatDamage: true));
                 }
             }
         } // <<< End of targetSlot null check
@@ -115,7 +127,7 @@ public class BattlefieldCombatActionExecutor : IActionExecutor
                             if (currentDamage <= 0) break;
 
                             Log($"Executor: Queueing Chained DamageAction: Target={chainTarget.Name}, Damage={currentDamage}, Attacker={attacker.Name}", LogTag.Effects | LogTag.Combat | LogTag.Actions);
-                            actionsQueue.AddAction(new DamageCreatureAction(chainTarget, currentDamage, attacker));
+                            actionsQueue.AddAction(new DamageCreatureAction(chainTarget, currentDamage, attacker, isCombatDamage: true));
                             currentDamage /= 2; // Halve damage for the next jump
                         }
                     }
@@ -145,12 +157,12 @@ public class BattlefieldCombatActionExecutor : IActionExecutor
                              if(spreadTarget is ICreature creatureTarget)
                              {
                                  Log($"Executor: Queueing Spread DamageAction: Target={creatureTarget.Name}, Damage={spreadDamage}, Attacker={attacker.Name}", LogTag.Effects | LogTag.Combat | LogTag.Actions);
-                                 actionsQueue.AddAction(new DamageCreatureAction(creatureTarget, spreadDamage, attacker));
+                                 actionsQueue.AddAction(new DamageCreatureAction(creatureTarget, spreadDamage, attacker, isCombatDamage: true));
                              }
                              else if (spreadTarget is IPlayer playerTarget)
                              {
                                  Log($"Executor: Queueing Spread DamagePlayerAction: Target={(playerTarget.IsPlayer1 ? "P1" : "P2")}, Damage={spreadDamage}, Attacker={attacker.Name}", LogTag.Effects | LogTag.Combat | LogTag.Actions);
-                                 actionsQueue.AddAction(new DamagePlayerAction(playerTarget, spreadDamage));
+                                 actionsQueue.AddAction(new DamagePlayerAction(playerTarget, spreadDamage, attacker, isCombatDamage: true));
                              }
                          }
                     }

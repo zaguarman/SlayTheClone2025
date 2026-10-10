@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Venomous Spider
   description: A small but deadly spider whose poison weakens enemies over time.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 206d28ab706534c4b9f98a198609a45d, type: 3}
   effects:
   - effectType: 0
     trigger: 1

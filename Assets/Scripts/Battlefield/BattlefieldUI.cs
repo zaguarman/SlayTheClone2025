@@ -7,6 +7,7 @@ using static DebugLogger;
 public class BattlefieldUI : CardContainer {
     private const int MAX_SLOTS = 5;
     private const float SummonStagger = 0.15f;
+    private const float ReplacingGhostRaise = 0.3f; // Fraction of card height a ghost is raised when it will replace a creature
     private readonly List<BattlefieldSlot> BattlefieldSlotsList = new List<BattlefieldSlot>();
 
     // Translucent previews of creatures queued to be summoned into this battlefield
@@ -14,6 +15,7 @@ public class BattlefieldUI : CardContainer {
     private float nextSummonTime;
 
     private BattlefieldArrowManager arrowManager;
+    private CardController draggedCard; // Creature of this board currently being dragged
 
     #region Initialization
     private void InitializeManagers(IPlayer player) {
@@ -24,7 +26,7 @@ public class BattlefieldUI : CardContainer {
             LogError("Cannot initialize BattlefieldArrowManager - ActionsQueue is null via gameManager", LogTag.Initialization);
             return;
         }
-        arrowManager = new BattlefieldArrowManager(transform, gameMediator, gameReferences, actionsQueue);
+        arrowManager = new BattlefieldArrowManager(transform, gameMediator, actionsQueue, player);
     }
 
     private void CreateSlots() {
@@ -100,53 +102,23 @@ public class BattlefieldUI : CardContainer {
         return false;
     }
 
-    private void HandleCardFromHand(CardController card, ITarget target) {
-        var cardData = card.GetBaseCardData();
-        if (cardData != null) {
-            var newCard = CardFactory.CreateCard(cardData);
-            if (newCard != null) {
-                // Determine if the target is valid based on card type
-                ITarget validTarget = target;
-
-                // For creatures, we need a slot
-                if (cardData is CreatureData) {
-                    if (target is BattlefieldSlot ghostSlot && queuedGhosts.ContainsKey(ghostSlot)) {
-                        Log($"Slot already has a creature queued; ignoring drop of {cardData.cardName}", LogTag.Actions | LogTag.Cards);
-                        return;
-                    }
-                    Log($"Adding PlayCardAction for creature {cardData.cardName} (TargetID: {cardData.cardId.ToUpper()}) to slot (TargetID: {target.TargetId.ToUpper()})",
-                        LogTag.Actions | LogTag.Cards);
-                }
-                // For spells, we might need a different target (creature in slot or player)
-                else if (cardData is SpellData) {
-                    // If the slot is occupied, target the creature
-                    if (target is BattlefieldSlot slot && slot.IsOccupied()) {
-                        validTarget = slot.OccupyingCreature;
-                        Log($"Adding PlayCardAction for spell {cardData.cardName} (TargetID: {cardData.cardId.ToUpper()}) targeting creature (TargetID: {validTarget.TargetId.ToUpper()})",
-                            LogTag.Actions | LogTag.Cards);
-                    }
-                    // Otherwise target the opponent player
-                    else {
-                        validTarget = Player.Opponent;
-                        Log($"Adding PlayCardAction for spell {cardData.cardName} (TargetID: {cardData.cardId.ToUpper()}) targeting player (TargetID: {validTarget.TargetId.ToUpper()})",
-                            LogTag.Actions | LogTag.Cards);
-                    }
-                }
-
-                // Play the exact instance that was dragged; fall back to a name match
-                ICard cardToPlay = card.GetLinkedCardInstance();
-                if (cardToPlay == null || !Player.Hand.Contains(cardToPlay)) {
-                    cardToPlay = Player.Hand.FirstOrDefault(handCard => handCard.Name == cardData.cardName);
-                }
-
-                // If we found the card, use it; otherwise use the newly created one
-                if (cardToPlay != null) {
-                    gameManager.ActionsQueue.AddAction(new PlayCardAction(cardToPlay, Player, validTarget));
-                } else {
-                    gameManager.ActionsQueue.AddAction(new PlayCardAction(newCard, Player, validTarget));
-                }
-            }
+    // The card is always played by the player whose hand it came from; the slot only decides where it lands:
+    // creatures are summoned into it, spells resolve against its creature or its owner (see Spell.ResolveTarget).
+    private void HandleCardFromHand(CardController card, BattlefieldSlot targetSlot) {
+        var caster = card.Player;
+        var cardToPlay = card.GetLinkedCardInstance();
+        if (caster == null || cardToPlay == null || !caster.Hand.Contains(cardToPlay)) {
+            LogWarning($"Dropped card {card.GetBaseCardData()?.cardName} is not in its player's hand; ignoring drop.", LogTag.Actions | LogTag.Cards);
+            return;
         }
+
+        if (cardToPlay is ICreature && queuedGhosts.ContainsKey(targetSlot)) {
+            Log($"Slot already has a creature queued; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
+            return;
+        }
+
+        Log($"Adding PlayCardAction for {cardToPlay.Name} on slot (TargetID: {targetSlot.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
+        gameManager.ActionsQueue.AddAction(new PlayCardAction(cardToPlay, caster, targetSlot));
     }
 
     private void HandleCardFromBattlefield(CardController card, ITarget target) {
@@ -164,13 +136,13 @@ public class BattlefieldUI : CardContainer {
         if (creature == null) return;
 
         var sourceSlot = BattlefieldSlotsList.FirstOrDefault(s => s.OccupyingCard == card);
-        if (sourceSlot != null) {
+        if (sourceSlot != null && sourceSlot != (BattlefieldSlot)targetSlot) {
             var moveAction = new MoveCreatureAction(creature, (ITarget)sourceSlot, targetSlot, Player);
             gameManager.ActionsQueue.AddAction(moveAction);
         }
     }
 
-    private ITarget GetTargetSlot() {
+    private BattlefieldSlot GetTargetSlot() {
         var pointerEventData = new PointerEventData(EventSystem.current) {
             position = Input.mousePosition
         };
@@ -180,7 +152,7 @@ public class BattlefieldUI : CardContainer {
 
         foreach (var result in raycastResults) {
             var slot = result.gameObject.GetComponent<BattlefieldSlot>();
-            if (slot != null) return (ITarget)slot;
+            if (slot != null) return slot;
         }
 
         return null;
@@ -192,12 +164,12 @@ public class BattlefieldUI : CardContainer {
         if (!IsInitialized || Player == null) return;
         if (player != Player) return;
 
-        // Clear orphaned cards
+        // Clear orphaned cards (cards leaving play destroy themselves once their exit animation ends)
         foreach (var card in cards.ToList()) {
             bool existsInSlot = player.Battlefield.Any(s => s.OccupyingCard == card);
             if (!existsInSlot) {
                 RemoveCard(card);
-                Destroy(card.gameObject);
+                if (card != null && !card.IsLeavingPlay) Destroy(card.gameObject);
             }
         }
 
@@ -251,7 +223,6 @@ public class BattlefieldUI : CardContainer {
         if (gameMediator != null) {
             gameMediator.AddCreatureSummonedListener(OnCreatureSummoned);
             gameMediator.AddBattlefieldStateChangedListener(UpdateUI);
-            gameMediator.AddCreatureDiedListener(OnCreatureDied);
             gameMediator.AddActionsQueueChangedListener(RefreshQueuedGhosts);
         }
     }
@@ -259,7 +230,7 @@ public class BattlefieldUI : CardContainer {
     protected override void UnregisterEvents() {
         if (gameMediator != null) {
             gameMediator.RemoveCreatureSummonedListener(OnCreatureSummoned);
-            gameMediator.RemoveCreatureDiedListener(OnCreatureDied);
+            gameMediator.RemoveBattlefieldStateChangedListener(UpdateUI);
             gameMediator.RemoveActionsQueueChangedListener(RefreshQueuedGhosts);
         }
     }
@@ -275,10 +246,10 @@ public class BattlefieldUI : CardContainer {
             // A played creature stays previewed until its follow-up summon actually executes
             ICard card;
             ITarget target;
-            if (action is PlayCardAction playAction && playAction.GetOwner() == Player) {
+            if (action is PlayCardAction playAction) {
                 card = playAction.GetCard();
                 target = playAction.GetTarget();
-            } else if (action is SummonCreatureAction summonAction && summonAction.GetOwner() == Player) {
+            } else if (action is SummonCreatureAction summonAction) {
                 card = summonAction.GetCreature();
                 target = summonAction.GetTargetSlot();
             } else {
@@ -288,23 +259,30 @@ public class BattlefieldUI : CardContainer {
             if (!(card is ICreature) || !(target is BattlefieldSlot slot)) continue;
             if (!BattlefieldSlotsList.Contains(slot) || queuedGhosts.ContainsKey(slot)) continue;
 
-            var data = Player.Deck?.FindOriginalCardDataById(card.CardId);
+            var data = card.SourceData ?? Player.Deck?.FindOriginalCardDataById(card.CardId);
             if (data == null) continue;
 
             var ghost = CardFactory.CreateCardController(card, data, Player, slot.transform, gameMediator, gameReferences, gameManager);
             if (ghost == null) continue;
 
             ghost.name = $"QueuedGhost_{card.Name}";
-            ghost.transform.localPosition = Vector3.zero;
             ghost.transform.localRotation = Quaternion.identity;
             ghost.SetQueued(true, blockRaycasts: false); // Let drops and hovers reach the slot
             queuedGhosts[slot] = ghost;
+
+            // The creature currently in the slot will be replaced when the summon resolves:
+            // raise the ghost so both cards and the occupant's REPLACE badge stay visible
+            var occupant = slot.OccupyingCard;
+            float raise = occupant != null ? ((RectTransform)ghost.transform).rect.height * ReplacingGhostRaise : 0f;
+            ghost.transform.localPosition = new Vector3(0f, raise, 0f);
+            occupant?.SetMarkedForReplacement(true);
         }
     }
 
     private void ClearQueuedGhosts() {
-        foreach (var ghost in queuedGhosts.Values) {
-            if (ghost != null) Destroy(ghost.gameObject);
+        foreach (var entry in queuedGhosts) {
+            if (entry.Value != null) Destroy(entry.Value.gameObject);
+            if (entry.Key != null) entry.Key.OccupyingCard?.SetMarkedForReplacement(false);
         }
         queuedGhosts.Clear();
     }
@@ -313,6 +291,13 @@ public class BattlefieldUI : CardContainer {
         controller.OnBeginDragEvent.AddListener(OnCardBeginDrag);
         controller.OnEndDragEvent.AddListener(OnCardEndDrag);
         controller.OnCardDropped.AddListener(OnCardDropped);
+        controller.OnCardClicked.AddListener(OnCardClicked);
+    }
+
+    // Clicking a creature withdraws its queued attack
+    private void OnCardClicked(CardController card) {
+        if (gameManager.TurnManager.IsResolving) return;
+        gameManager.CombatHandler.CancelAttack(card.GetLinkedCreature());
     }
 
     private void OnCreatureSummoned(ICreature creature, IPlayer player) {
@@ -327,37 +312,42 @@ public class BattlefieldUI : CardContainer {
         }
     }
 
-    private void OnCreatureDied(ICreature creature) {
-        if (!IsInitialized) return;
-        var slot = GetSlot(creature);
-
-        if (slot != null) {
-            slot.ClearSlot();
-            UpdateUI(creature.Owner);
-        }
-    }
     #endregion
 
     #region Drag Handling
     protected override void OnCardBeginDrag(CardController card) {
         if (card == null) return;
 
-        var startSlot = BattlefieldSlotsList.FirstOrDefault(s => s.OccupyingCard == card);
-        if (startSlot != null) {
-            arrowManager.ShowDragArrow(startSlot.transform.position);
-        } else {
-            arrowManager.ShowDragArrow(card.transform.position);
-        }
+        var startSlot = GetSlot(card);
+        arrowManager.ShowDragArrow(startSlot != null ? startSlot.transform.position : card.transform.position);
+        draggedCard = card;
         card.transform.SetAsLastSibling();
     }
 
-    public void OnCardDrag(PointerEventData eventData) {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
-        arrowManager.UpdateDragArrow(worldPos);
+    // The drag arrow follows the pointer and shows what releasing there would do
+    private void Update() {
+        if (draggedCard == null) return;
+
+        var rootCanvas = GetComponentInParent<Canvas>().rootCanvas;
+        var eventCamera = rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : rootCanvas.worldCamera;
+        if (RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)transform, Input.mousePosition, eventCamera, out var pointer)) {
+            arrowManager.UpdateDragArrow(pointer, GetDragIntent(draggedCard, GetTargetSlot()));
+        }
+    }
+
+    private BattlefieldArrowManager.DragIntent GetDragIntent(CardController card, BattlefieldSlot slotUnderPointer) {
+        if (slotUnderPointer == null || slotUnderPointer == GetSlot(card)) return BattlefieldArrowManager.DragIntent.None;
+        return slotUnderPointer.Owner == Player ? BattlefieldArrowManager.DragIntent.Move : BattlefieldArrowManager.DragIntent.Attack;
     }
 
     protected override void OnCardEndDrag(CardController card) {
         arrowManager.HideDragArrow();
+        draggedCard = null;
+
+        // Released anywhere but another slot (including back on its own): the creature stands down
+        if (GetDragIntent(card, GetTargetSlot()) == BattlefieldArrowManager.DragIntent.None && !gameManager.TurnManager.IsResolving) {
+            gameManager.CombatHandler.CancelAttack(card.GetLinkedCreature());
+        }
         UpdateUI(Player);
     }
     #endregion

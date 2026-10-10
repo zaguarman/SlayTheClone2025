@@ -16,9 +16,10 @@ MonoBehaviour:
   cardName: Jellyfish Swarm
   description: Paralyzes enemies with gentle pulses when destroyed.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 5c96e0e6b6c7d014cb730f3fe7da3db2, type: 3}
   effects:
-  - effectType: 0
-    trigger: 4
+  - effectType: 1
+    trigger: 1
     actions:
     - actionType: 7
       value: 0

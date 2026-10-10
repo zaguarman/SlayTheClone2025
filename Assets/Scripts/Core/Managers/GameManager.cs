@@ -35,6 +35,7 @@ public interface IGameManager {
 
 public interface ITurnManager {
     bool IsInitialized { get; }
+    bool IsResolving { get; } // True while an end of turn is being resolved and played back
     int TurnNumber { get; }
     void EndTurn();
 }
@@ -63,22 +64,26 @@ public interface IModifierManager {
 public interface IActionsQueue {
     void AddAction(IGameAction action);
     void ResolveActions();
+    System.Collections.IEnumerator ResolveActionsStepByStep(Func<System.Collections.IEnumerator> afterEachAction);
     int GetPendingActionsCount();
     IReadOnlyCollection<IGameAction> GetPendingActions();
     bool IsEffectProcessed(string sourceId, EffectTrigger trigger);
     void MarkEffectProcessed(string sourceId, EffectTrigger trigger);
     bool HasActiveAction(string creatureId);
     IGameAction GetActiveAction(string creatureId);
+    bool CancelDeclaredAction(string creatureId); // Removes the creature's declared attack/swap from the queue
     void Cleanup();
     // Events
     UnityEngine.Events.UnityEvent OnActionsQueued { get; }
     UnityEngine.Events.UnityEvent OnActionsResolved { get; }
+    UnityEngine.Events.UnityEvent<IGameAction> OnActionExecuting { get; }
 }
 
 public interface IBattlefieldCombatHandler {
     void HandleCreatureCombat(CardController attackingCard, ITarget targetSlot);
     void ResetAttackingCreatures();
     bool HasCreatureAttacked(ITarget creature);
+    bool CancelAttack(ICreature attacker);
     BattlefieldSlot GetTargetedSlot(ITarget attacker);
 }
 

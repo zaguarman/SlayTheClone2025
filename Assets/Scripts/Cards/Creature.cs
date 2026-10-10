@@ -290,20 +290,12 @@ public class Creature : Card, ICreature {
         var modifierManager = context.ModifierManager;
         var factory = context.ModifierFactory;
         var turnManager = context.TurnManager;
-        var cardDealingService = context.CardDealingService; // Extract card dealing service
         var gameManagerContext = context.GameManager; // Also get GameManager if needed by effects
 
         // Adjusted null check: Core dependencies must be present
         if (actionsQueue == null || modifierManager == null || factory == null || turnManager == null) {
             LogError($"Internal Error: Missing core dependencies in context for ProcessEffectsInternal for {Name} ({trigger}).", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
             return;
-        }
-
-        // Check for Summon effects which need cardDealingService
-        if (Effects.Any(e => e.trigger == trigger && e.actions.Any(a => a.actionType == ActionType.Summon)) && cardDealingService == null)
-        {
-            LogError($"Internal Error: CardDealingService is null but required for Summon effect processing for {Name} ({trigger}).", LogTag.Effects | LogTag.Creatures | LogTag.Initialization);
-            // We'll continue and let the ProcessSummonEffect method handle the null check
         }
 
         foreach (var effect in Effects.Where(e => e.trigger == trigger).ToList()) {
@@ -465,25 +457,11 @@ public class Creature : Card, ICreature {
         }
     }
 
-    // Updated to use context.CardDealingService
     private void ProcessSummonEffect(EffectAction action, ActionExecutionContext context) {
         if (Owner == null) {
              LogError($"Summon Effect: Cannot process for {Name} - Owner is null.", LogTag.Effects);
              return;
         }
-
-        // Get dependencies from context
-        var cardDealingService = context.CardDealingService;
-        var actionsQueue = context.ActionsQueue; // Get queue from context too
-
-        if (cardDealingService == null || actionsQueue == null)
-        {
-             LogError($"Summon Effect failed for {Name}: CardDealingService or ActionsQueue missing from context.", LogTag.Effects | LogTag.Initialization);
-             return;
-        }
-
-        Log($"Processing summon effect for {Name} (TargetID: {TargetId.ToUpper()}). TargetType: {action.targetType}, Value: {action.value}",
-           LogTag.Creatures | LogTag.Actions);
 
         IPlayer targetPlayer = Owner;
         if (action.targetType == TargetType.Enemy) {
@@ -493,44 +471,7 @@ public class Creature : Card, ICreature {
             return;
         }
 
-        var deckCards = cardDealingService.GetDeckPreview(targetPlayer);
-        var creaturesInDeck = deckCards.Where(c => c is ICreature).ToList();
-
-        if (creaturesInDeck.Count == 0) {
-            Log($"No creatures available in {(targetPlayer.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {targetPlayer.TargetId.ToUpper()})'s deck to summon",
-                LogTag.Creatures | LogTag.Cards);
-            return;
-        }
-
-        var validSlots = targetPlayer.Battlefield.Where(s => !s.IsOccupied()).ToList();
-        if (validSlots.Count == 0) {
-            Log($"No valid slots available for {(targetPlayer.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {targetPlayer.TargetId.ToUpper()}) to summon creatures",
-                LogTag.Creatures | LogTag.Cards);
-            return;
-        }
-
-        int countToSummon = Math.Min(action.value, Math.Min(validSlots.Count, creaturesInDeck.Count));
-        var random = new System.Random();
-
-        for (int i = 0; i < countToSummon; i++) {
-            int creatureIndex = random.Next(creaturesInDeck.Count);
-            var creatureToSummon = creaturesInDeck[creatureIndex] as ICreature;
-            if (creatureToSummon == null) continue;
-
-            creaturesInDeck.RemoveAt(creatureIndex); // Remove the selected creature from the temp list
-
-            // IMPORTANT: Also remove the card from the actual deck using the service
-            cardDealingService.RemoveCardFromDeck(targetPlayer, creatureToSummon);
-
-            int slotIndex = random.Next(validSlots.Count);
-            var slot = validSlots[slotIndex];
-            validSlots.RemoveAt(slotIndex); // Remove the selected slot from the temp list
-
-            actionsQueue.AddAction(new SummonCreatureAction(creatureToSummon, targetPlayer, slot, true));
-
-             Log($"Queued summon effect for {creatureToSummon.Name} (TargetID: {creatureToSummon.TargetId.ToUpper()}) to slot (TargetID: {slot.TargetId.ToUpper()})",
-                LogTag.Creatures | LogTag.Effects | LogTag.Actions);
-        }
+        SummonFromDeckEffect.QueueRandomSummons(targetPlayer, action.value, context.ActionsQueue);
     }
 
     // --- NEW: Methods to apply modifiers ---

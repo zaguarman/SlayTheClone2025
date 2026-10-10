@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Healing Dove
   description: Its gentle presence mends wounds.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 7a16d736636ce7f47a05daba96a6c8d5, type: 3}
   effects:
   - effectType: 0
     trigger: 2

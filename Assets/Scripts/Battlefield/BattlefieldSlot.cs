@@ -8,6 +8,7 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     private Image backgroundImage;
 
     public string TargetId { get; private set; }
+    public IPlayer Owner { get; set; } // Player whose battlefield this slot belongs to
     public CardController OccupyingCard { get; private set; }
     public ICreature OccupyingCreature { get; private set; }
 
@@ -68,9 +69,9 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     }
 
     public void ClearSlot(bool destroyCard = true) {
-        // Check if OccupyingCard and its GameObject exist before destroying
-        if (OccupyingCard != null && OccupyingCard.gameObject != null && destroyCard) {
-            Destroy(OccupyingCard.gameObject);
+        if (OccupyingCard != null) {
+            OccupyingCard.SetReplacementPreview(false);
+            if (destroyCard) OccupyingCard.PlayLeavePlayAnimation(); // Fades out, then destroys itself
         }
         // Always clear the references
         OccupyingCard = null;
@@ -101,6 +102,10 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
+        if (IsCreatureFromHandDraggedOver(eventData)) {
+            OccupyingCard.SetReplacementPreview(true);
+        }
+
         // --- Dependency Check ---
         if (gameReferences == null) {
             LogError($"Cannot handle PointerEnter for slot {name} (TargetID: {TargetId}) - gameReferences is null. Check BattlefieldUI initialization.", LogTag.Initialization | LogTag.UI);
@@ -130,6 +135,10 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
     }
 
     public void OnPointerExit(PointerEventData eventData) {
+        if (OccupyingCard != null) {
+            OccupyingCard.SetReplacementPreview(false);
+        }
+
          // --- Dependency Check ---
          if (gameReferences == null) {
             // No need to log again if logged in Enter, but check is crucial
@@ -142,6 +151,17 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
         if (tooltip != null && tooltip.gameObject != null) {
             tooltip.HideTooltip();
         }
+    }
+
+    // True while a creature card from a hand is dragged over this occupied slot (dropping it replaces the occupant)
+    private bool IsCreatureFromHandDraggedOver(PointerEventData eventData) {
+        if (OccupyingCard == null || eventData?.pointerDrag == null) return false;
+
+        var draggedCard = eventData.pointerDrag.GetComponent<CardController>();
+        return draggedCard != null
+            && draggedCard != OccupyingCard
+            && draggedCard.GetBaseCardData() is CreatureData
+            && draggedCard.GetComponentInParent<HandUI>() != null;
     }
 
     public void MarkForCombat() {

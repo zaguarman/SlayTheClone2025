@@ -95,7 +95,7 @@ public class HandUI : CardContainer {
             if (isQueued && handCard is ICreature) continue;
 
             // Find the original CardData using the player's deck
-            CardData originalData = player.Deck?.FindOriginalCardDataById(handCard.CardId);
+            CardData originalData = handCard.SourceData ?? player.Deck?.FindOriginalCardDataById(handCard.CardId);
 
             if (originalData == null) {
                 LogWarning($"HandUI: Could not find original CardData for {handCard.Name} (ID: {handCard.CardId}) in Player {player.Name}'s deck. Display might be inaccurate.", LogTag.UI | LogTag.Cards);

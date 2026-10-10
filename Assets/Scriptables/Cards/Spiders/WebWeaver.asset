@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Web Weaver
   description: Spins strong webs that immobilize attackers.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 008369140a5422d49ad63684c1816007, type: 3}
   effects:
   - effectType: 0
     trigger: 0

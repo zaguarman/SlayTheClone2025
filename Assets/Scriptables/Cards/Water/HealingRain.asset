@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Healing Rain
   description: Restore health to all friendly creatures.
   cardType: 1
+  artwork: {fileID: 3286163911610860551, guid: 8ee1f547b4a879a449105caec6fc55bc, type: 3}
   effects:
   - effectType: 1
     trigger: 0

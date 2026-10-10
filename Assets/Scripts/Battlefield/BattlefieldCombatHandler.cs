@@ -47,7 +47,7 @@ public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
             if (isValidTarget) {
                 UpdateAttackAction(attackerCreature, targetBattlefieldSlot);
             } else {
-                CancelAttackAction(attackerCreature);
+                CancelAttack(attackerCreature);
             }
         } else {
             // First time attacking, register if target is valid
@@ -78,20 +78,21 @@ public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
         QueueCombatAction(attackerCreature, newTargetSlot);
     }
 
-    private void CancelAttackAction(ICreature attackerCreature) {
-         string attackerId = attackerCreature.TargetId;
-        Log($"Cancelling attack for {attackerCreature.Name} (ID: {attackerId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
+    /// <summary>Withdraws the creature's queued attack, if it has one.</summary>
+    /// <returns>True if an attack was cancelled.</returns>
+    public bool CancelAttack(ICreature attackerCreature) {
+        if (attackerCreature == null) return false;
 
-        // Remove from tracking
+        string attackerId = attackerCreature.TargetId;
         attackingCreatureIds.Remove(attackerId);
         targetedSlotsById.Remove(attackerId);
 
-        // Remove from action queue by adding a new action that replaces it (ActionsQueue handles this)
-        // We need to ensure the ActionsQueue knows this creature is no longer taking an action.
-        // If ActionsQueue doesn't have a specific "Cancel", adding a new action might be the way.
-        // OR rely on ResetAttackingCreatures at end of resolution.
-        // Let's rely on ResetAttackingCreatures for now. The visual arrow removal is handled by ActionsQueue changes.
-         _gameManager.ActionsQueue?.AddAction(new BattlefieldCombatAction(attackerCreature, null)); // Queueing with null target effectively cancels
+        var queue = _gameManager.ActionsQueue;
+        if (!(queue?.GetActiveAction(attackerId) is BattlefieldCombatAction)) return false;
+
+        queue.CancelDeclaredAction(attackerId);
+        Log($"Cancelled attack for {attackerCreature.Name} (ID: {attackerId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
+        return true;
     }
 
     // Removed RemoveCombatAction - ActionsQueue AddAction handles replacement

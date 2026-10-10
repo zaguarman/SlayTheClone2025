@@ -78,7 +78,12 @@ public class Spell : Card {
             targetsToProcess.AddRange(TargetingSystem.GetValidTargets(owner, spellAction.TargetType, targetModifier));
             Log($"Spell action resolved to {targetsToProcess.Count} targets for {spellAction.TargetType}/{targetModifier}.", LogTag.Actions | LogTag.Effects);
         } else {
-            targetsToProcess.Add(target);
+            var resolvedTarget = ResolveTarget(target, spellAction.ActionType);
+            if (resolvedTarget == null) {
+                Log($"Spell {Name}: {spellAction.ActionType} cannot apply to {target.GetType().Name}; it does nothing.", LogTag.Actions | LogTag.Effects);
+                return;
+            }
+            targetsToProcess.Add(resolvedTarget);
         }
 
         foreach(var currentTarget in targetsToProcess) {
@@ -90,10 +95,9 @@ public class Spell : Card {
                     CreateHealAction(spellAction.Value, currentTarget, context);
                     break;
                 case ActionType.Draw:
-                    IPlayer drawTargetPlayer = currentTarget as IPlayer ?? owner;
-                    if(spellAction.TargetType == TargetType.Enemy && owner.Opponent != null) drawTargetPlayer = owner.Opponent;
-                    if(spellAction.TargetType == TargetType.Player) drawTargetPlayer = owner;
-                    CreateDrawAction(spellAction.Value, drawTargetPlayer, context);
+                    if (currentTarget is IPlayer drawingPlayer) {
+                        CreateDrawAction(spellAction.Value, drawingPlayer, context);
+                    }
                     break;
                 case ActionType.ModifyStat:
                     CreatemodifyAction(spellAction.Value, currentTarget, context, modifyAttack, modifyHealth, modifySpeed);
@@ -109,11 +113,36 @@ public class Spell : Card {
                      CreateApplyStatusAction(currentTarget, context, StatusEffectType.Paralyzed, spellAction.Value, 0);
                      break;
                 case ActionType.Summon:
-                    LogWarning($"Summon action for spells not implemented yet.", LogTag.Actions);
+                    if (currentTarget is IPlayer summoningPlayer) {
+                        SummonFromDeckEffect.QueueRandomSummons(summoningPlayer, spellAction.Value, context);
+                    }
                     break;
             }
         }
     }
+
+    // A spell dropped on a battlefield slot hits the slot's creature when the action can affect creatures,
+    // otherwise the player who owns the slot. Returns null when the action applies to neither (the spell does nothing).
+    private static ITarget ResolveTarget(ITarget target, ActionType actionType) {
+        switch (target) {
+            case BattlefieldSlot slot:
+                if (slot.OccupyingCreature != null && CanAffectCreatures(actionType)) return slot.OccupyingCreature;
+                return CanAffectPlayers(actionType) ? slot.Owner : null;
+            case ICreature:
+                return CanAffectCreatures(actionType) ? target : null;
+            case IPlayer:
+                return CanAffectPlayers(actionType) ? target : null;
+            default:
+                return null;
+        }
+    }
+
+    private static bool CanAffectCreatures(ActionType actionType) =>
+        actionType is ActionType.Damage or ActionType.Heal or ActionType.ModifyStat
+            or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun;
+
+    private static bool CanAffectPlayers(ActionType actionType) =>
+        actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon;
 
     private void CreateDamageAction(int value, ITarget target, IActionsQueue context) {
         if (target is ICreature creature) {

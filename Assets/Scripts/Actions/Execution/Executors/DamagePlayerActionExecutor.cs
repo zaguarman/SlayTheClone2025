@@ -26,6 +26,12 @@ public class DamagePlayerActionExecutor : IActionExecutor {
              return;
         }
 
+        var attacker = damagePlayerAction.GetAttacker();
+        if (damagePlayerAction.IsCombatDamage() && context.IsCombatDamageCancelled(attacker)) {
+            Log($"Executor: {attacker.Name} was killed by faster damage; its attack on {(targetPlayer.IsPlayer1 ? "P1" : "P2")} is cancelled.", LogTag.Actions | LogTag.Combat);
+            return;
+        }
+
         // --- Get Dependencies from Context (Optional, but good practice) ---
         var mediator = context.GameMediator;
         if (mediator == null) {

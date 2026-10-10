@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Guardian Whale
   description: Massive presence provides permanent protection to allies.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: e10d02aa160d57540825d0c2df6a2563, type: 3}
   effects:
   - effectType: 0
     trigger: 1

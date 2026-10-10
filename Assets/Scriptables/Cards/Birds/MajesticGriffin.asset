@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Majestic Griffin
   description: Half eagle, half lion, all power.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: e27aebd41fd9e3c41ae512f22f9226d5, type: 3}
   effects:
   - effectType: 0
     trigger: 0

@@ -67,6 +67,10 @@ public static class CardFactory {
                 break;
         }
 
+        if (card is Card concreteCard) {
+            concreteCard.SourceData = cardData;
+        }
+
         return card;
     }
 

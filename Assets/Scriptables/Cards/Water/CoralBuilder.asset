@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Coral Builder
   description: Constructs permanent protective barriers for allies.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: a47a60b68144a6146b4beb6ed0ecae6a, type: 3}
   effects:
   - effectType: 0
     trigger: 0

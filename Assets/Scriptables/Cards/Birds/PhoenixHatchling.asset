@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Phoenix Hatchling
   description: Though young, it carries the flame of rebirth.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: e108fced4df4db04b9c5f8f93cdb7f8b, type: 3}
   effects:
   - effectType: 0
     trigger: 4

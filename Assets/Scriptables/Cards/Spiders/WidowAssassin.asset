@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Widow Assassin
   description: Its deadly venom can take down creatures many times its size.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 7bf2f4ad1a51caf4a8e31fc5671b08f9, type: 3}
   effects:
   - effectType: 0
     trigger: 0

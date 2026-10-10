@@ -1,290 +1,118 @@
 using UnityEngine;
 using System.Collections.Generic;
-using static DebugLogger;
 using System.Linq;
 using System;
 
+/// <summary>
+/// Draws one board's intent arrows: the attacks, moves and pending damage of its player's creatures,
+/// plus the arrow that follows a creature being dragged. Arrows persist across queue changes,
+/// drawing in when an action is queued and fading out when it is cancelled or resolved.
+/// </summary>
 public class BattlefieldArrowManager {
+    public enum DragIntent { None, Attack, Move }
+
+    private static readonly Color AttackColor = new Color(0.93f, 0.22f, 0.2f);
+    private static readonly Color DamageColor = new Color(1f, 0.55f, 0.15f);
+    private static readonly Color MoveColor = new Color(0.3f, 0.85f, 0.45f);
+    private static readonly Color NeutralColor = new Color(0.75f, 0.75f, 0.8f);
+
     private readonly Transform parentTransform;
-    private readonly IGameReferences gameReferences;
     private readonly IGameMediator gameMediator;
-    private readonly IActionsQueue actionsQueue; // Use injected interface
-    private ArrowIndicator dragArrowIndicator;
-    private Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
-    private bool isUpdating = false;
-    private int lastProcessedActionCount = 0;
-    private HashSet<string> lastProcessedActionKeys = new HashSet<string>();
+    private readonly IActionsQueue actionsQueue;
+    private readonly IPlayer owner; // Only actions started by this player's creatures are drawn here
+    private readonly Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
+    private ArrowIndicator dragArrow;
 
-    // Updated Constructor to accept IActionsQueue
-    public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IGameReferences references, IActionsQueue actionsQueue) {
-        this.parentTransform = parent ?? throw new ArgumentNullException(nameof(parent));
-        this.gameReferences = references ?? throw new ArgumentNullException(nameof(references));
-        this.gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue)); // Store injected ActionsQueue
-        SetupDragArrow();
-        RegisterEvents();
-    }
+    public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IActionsQueue actionsQueue, IPlayer owner) {
+        parentTransform = parent ?? throw new ArgumentNullException(nameof(parent));
+        gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
+        this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
 
-    private void RegisterEvents() {
-        gameMediator.AddActionsQueueChangedListener(OnActionsQueueChanged);
+        dragArrow = ArrowIndicator.Create(parentTransform);
+        gameMediator.AddActionsQueueChangedListener(RefreshArrows);
         gameMediator.AddBattlefieldStateChangedListener(OnBattlefieldStateChanged);
     }
 
-    private void OnActionsQueueChanged() {
-        if (actionsQueue == null) return; // Use injected actionsQueue
+    #region Drag arrow
+    public void ShowDragArrow(Vector3 startPos) {
+        dragArrow.SetColor(NeutralColor);
+        dragArrow.Show(startPos, startPos);
+    }
 
-        var pendingActions = actionsQueue.GetPendingActions(); // Use injected actionsQueue
-        int currentActionCount = pendingActions.Count();
+    public void UpdateDragArrow(Vector3 worldPos, DragIntent intent) {
+        if (!dragArrow.IsVisible()) return;
+        dragArrow.SetColor(intent == DragIntent.Attack ? AttackColor : intent == DragIntent.Move ? MoveColor : NeutralColor);
+        dragArrow.UpdateEndPosition(worldPos);
+    }
 
-        // Get the keys of all current actions
-        HashSet<string> currentActionKeys = new HashSet<string>();
-        foreach (var action in pendingActions) {
-            string actionKey = GetActionKey(action);
-            if (actionKey != null) {
-                currentActionKeys.Add(actionKey);
+    public void HideDragArrow() => dragArrow.Hide();
+    #endregion
+
+    #region Queued action arrows
+    private void OnBattlefieldStateChanged(IPlayer player) => RefreshArrows();
+
+    private void RefreshArrows() {
+        var wanted = new Dictionary<string, (Vector3 start, Vector3 end, Color color)>();
+        foreach (var action in actionsQueue.GetPendingActions()) {
+            if (TryDescribeArrow(action, out string key, out var arrow)) {
+                wanted[key] = arrow;
             }
         }
 
-        // Update if the count changed OR if the action keys changed
-        if (currentActionCount != lastProcessedActionCount || !SetEquals(currentActionKeys, lastProcessedActionKeys)) {
-            lastProcessedActionCount = currentActionCount;
-            lastProcessedActionKeys = currentActionKeys;
-            UpdateArrowsFromActionsQueue();
+        foreach (var key in activeArrows.Keys.Where(k => !wanted.ContainsKey(k)).ToList()) {
+            if (activeArrows[key] != null) activeArrows[key].FadeOutAndDestroy();
+            activeArrows.Remove(key);
+        }
+
+        foreach (var entry in wanted) {
+            var (start, end, color) = entry.Value;
+            if (activeArrows.TryGetValue(entry.Key, out var existing) && existing != null) {
+                existing.Show(start, end); // Endpoints can move when creatures change slots
+                continue;
+            }
+
+            var arrow = ArrowIndicator.Create(parentTransform);
+            arrow.SetColor(color);
+            arrow.Show(start, end, drawIn: true);
+            activeArrows[entry.Key] = arrow;
         }
     }
 
-    // Helper method to check if two sets are equal
-    private bool SetEquals(HashSet<string> set1, HashSet<string> set2) {
-        if (set1.Count != set2.Count)
-            return false;
+    private bool TryDescribeArrow(IGameAction action, out string key, out (Vector3 start, Vector3 end, Color color) arrow) {
+        key = null;
+        arrow = default;
 
-        foreach (var item in set1) {
-            if (!set2.Contains(item))
+        switch (action) {
+            case BattlefieldCombatAction attack when IsOwn(attack.GetAttacker()) && attack.GetTargetSlot() != null:
+                key = $"combat_{attack.GetAttacker().TargetId}_{attack.GetTargetSlot().TargetId}";
+                arrow = (CreaturePosition(attack.GetAttacker()), attack.GetTargetSlot().transform.position, AttackColor);
+                return true;
+            case DamageCreatureAction damage when IsOwn(damage.GetAttacker()) && damage.GetTarget()?.Slot != null:
+                key = $"damage_{damage.GetAttacker().TargetId}_{damage.GetTarget().TargetId}";
+                arrow = (CreaturePosition(damage.GetAttacker()), CreaturePosition(damage.GetTarget()), DamageColor);
+                return true;
+            case MoveCreatureAction move when move.GetPlayer() == owner && move.GetFromSlot() is BattlefieldSlot from && move.GetToSlot() is BattlefieldSlot to:
+                key = $"move_{move.GetCreature()?.TargetId}_{to.TargetId}";
+                arrow = (from.transform.position, to.transform.position, MoveColor);
+                return true;
+            default:
                 return false;
         }
-
-        return true;
     }
 
-    private void OnBattlefieldStateChanged(IPlayer player) {
-        UpdateArrowsFromActionsQueue();
-    }
+    private bool IsOwn(ICreature creature) => creature != null && creature.Owner == owner && creature.Slot != null;
 
-    private void SetupDragArrow() {
-        dragArrowIndicator = ArrowIndicator.Create(parentTransform);
-        dragArrowIndicator.Hide();
-    }
-
-    public void ShowDragArrow(Vector3 startPos) {
-        startPos.z = 0;
-        dragArrowIndicator.Show(startPos, startPos);
-    }
-
-    public void UpdateDragArrow(Vector3 worldPos) {
-        if (dragArrowIndicator != null && dragArrowIndicator.IsVisible()) {
-            worldPos.z = 0;
-            dragArrowIndicator.UpdateEndPosition(worldPos);
-        }
-    }
-
-    public void HideDragArrow() {
-        if (dragArrowIndicator != null) {
-            dragArrowIndicator.Hide();
-        }
-    }
-
-    private void UpdateArrowsFromActionsQueue() {
-        if (isUpdating) return;
-
-        isUpdating = true;
-        Log("Starting update of arrows from actions queue", LogTag.Actions);
-
-        ClearExistingArrows();
-
-        if (actionsQueue == null) { // Use injected actionsQueue
-            LogWarning("ActionsQueue is null!", LogTag.Actions);
-            isUpdating = false;
-            return;
-        }
-
-        var pendingActions = actionsQueue.GetPendingActions(); // Use injected actionsQueue
-        Log($"Number of pending actions: {pendingActions.Count()}", LogTag.Actions);
-
-        ProcessQueuedActions(pendingActions);
-
-        isUpdating = false;
-    }
-
-    private void ClearExistingArrows() {
-        foreach (var arrow in activeArrows.Values) {
-            if (arrow != null) {
-                GameObject.Destroy(arrow.gameObject);
-            }
-        }
-        activeArrows.Clear();
-    }
-
-    private void ProcessQueuedActions(IReadOnlyCollection<IGameAction> actions) {
-        foreach (var action in actions) {
-            string actionKey = GetActionKey(action);
-            if (actionKey == null) continue;
-
-            if (!activeArrows.ContainsKey(actionKey)) {
-                CreateArrowForAction(action, actionKey);
-            }
-        }
-    }
-
-    private string GetActionKey(IGameAction action) {
-        return action switch {
-            BattlefieldCombatAction markCombatAction => $"combat_{markCombatAction.GetAttacker()?.TargetId}_{markCombatAction.GetTargetSlot()?.TargetId}",
-            DamageCreatureAction damageAction => $"damage_{damageAction.GetAttacker()?.TargetId}_{damageAction.GetTarget()?.TargetId}",
-            MoveCreatureAction moveAction => $"move_{moveAction.GetCreature()?.TargetId}_{moveAction.GetToSlot()?.TargetId}",
-            _ => null
-        };
-    }
-
-    private void CreateArrowForAction(IGameAction action, string actionKey) {
-        switch (action) {
-            case BattlefieldCombatAction markCombatAction:
-                CreateArrowForMarkCombatAction(markCombatAction, actionKey);
-                break;
-            case DamageCreatureAction damageAction:
-                CreateArrowForDamageAction(damageAction, actionKey);
-                break;
-            case MoveCreatureAction moveAction:
-                CreateArrowForMoveAction(moveAction, actionKey);
-                break;
-        }
-    }
-
-    private void CreateArrowForMarkCombatAction(BattlefieldCombatAction action, string actionKey) {
-        var attacker = action.GetAttacker();
-        var targetSlot = action.GetTargetSlot();
-
-        if (attacker == null || targetSlot == null) return;
-
-        var arrow = ArrowIndicator.Create(parentTransform);
-        Vector3 startPos = GetCreaturePosition(attacker);
-        Vector3 endPos = targetSlot.transform.position;
-
-        startPos.z = 0;
-        endPos.z = 0;
-
-        arrow.Show(startPos, endPos);
-        arrow.SetColor(Color.red);
-        activeArrows[actionKey] = arrow;
-
-        Log($"Created combat targeting arrow from {attacker.Name} to slot {targetSlot.TargetId}", LogTag.Actions | LogTag.UI);
-    }
-
-    private void CreateArrowForDamageAction(DamageCreatureAction damageAction, string actionKey) {
-        var attacker = damageAction.GetAttacker();
-        var target = damageAction.GetTarget();
-
-        if (attacker == null || target == null) return;
-
-        var arrow = ArrowIndicator.Create(parentTransform);
-        Vector3 startPos = GetCreaturePosition(attacker);
-        Vector3 endPos = GetCreaturePosition(target);
-
-        startPos.z = 0;
-        endPos.z = 0;
-
-        arrow.Show(startPos, endPos);
-        arrow.SetColor(Color.red);
-        activeArrows[actionKey] = arrow;
-
-        Log($"Created damage arrow from {attacker.Name} to {target.Name}", LogTag.Actions | LogTag.UI);
-    }
-
-    private void CreateArrowForMoveAction(MoveCreatureAction moveAction, string actionKey) {
-        var creature = moveAction.GetCreature();
-        if (creature == null) return;
-
-        var arrow = ArrowIndicator.Create(parentTransform);
-        Vector3 startPos = GetSlotPosition(moveAction.GetFromSlot());
-        Vector3 endPos = GetSlotPosition(moveAction.GetToSlot());
-
-        startPos.z = 0;
-        endPos.z = 0;
-
-        arrow.Show(startPos, endPos);
-        arrow.SetColor(Color.green);
-        activeArrows[actionKey] = arrow;
-
-        Log($"Created move arrow for {creature.Name} to slot {moveAction.GetToSlot()}", LogTag.Actions | LogTag.UI);
-    }
-
-    private Vector3 GetCreaturePosition(ICreature creature) {
-        if (creature == null) return Vector3.zero;
-
-        // Get position from the creature's slot if available
-        if (creature.Slot != null) {
-            var slotPos = creature.Slot.transform.position;
-            Log($"Getting position from slot {creature.Slot.TargetId} for {creature.Name}", LogTag.UI);
-            return slotPos;
-        }
-
-        // Fallback to card controller position
-        var cardController = gameReferences.GetPlayer1BattlefieldUI().GetCardController(creature) ??
-                            gameReferences.GetPlayer2BattlefieldUI().GetCardController(creature);
-
-        if (cardController != null) {
-            return cardController.transform.position;
-        }
-
-        LogWarning($"Could not find position for creature {creature.Name}", LogTag.UI);
-        return Vector3.zero;
-    }
-
-    private Vector3 GetPlayerTargetPosition(IPlayer player) {
-        var playerUI = player.IsPlayer1 ?
-            gameReferences.GetPlayer1UI() :
-            gameReferences.GetPlayer2UI();
-
-        if (playerUI != null) {
-            return playerUI.transform.position;
-        }
-
-        LogWarning($"Could not find UI for Player {(player.IsPlayer1 ? "1" : "2")}", LogTag.Actions);
-        return Vector3.zero;
-    }
-
-    private Vector3 GetSlotPosition(ITarget slotIndex) {
-        var player1Battlefield = gameReferences.GetPlayer1BattlefieldUI();
-        var player2Battlefield = gameReferences.GetPlayer2BattlefieldUI();
-
-        Transform slotTransform = null;
-
-        // Check player1's battlefield first
-        if (player1Battlefield != null) {
-            var slots = player1Battlefield.GetComponentsInChildren<BattlefieldSlot>();
-            var slot = slots.FirstOrDefault(s => s.TargetId == slotIndex.TargetId);
-            if (slot != null) {
-                slotTransform = slot.transform;
-            }
-        }
-
-        // If not found, check player2's battlefield
-        if (slotTransform == null && player2Battlefield != null) {
-            var slots = player2Battlefield.GetComponentsInChildren<BattlefieldSlot>();
-            var slot = slots.FirstOrDefault(s => s.TargetId == slotIndex.TargetId);
-            if (slot != null) {
-                slotTransform = slot.transform;
-            }
-        }
-
-        return slotTransform != null ? slotTransform.position : Vector3.zero;
-    }
+    private static Vector3 CreaturePosition(ICreature creature) => creature.Slot.transform.position;
+    #endregion
 
     public void Cleanup() {
-        gameMediator.RemoveActionsQueueChangedListener(OnActionsQueueChanged);
-        ClearExistingArrows();
-        if (dragArrowIndicator != null && dragArrowIndicator.gameObject != null) { // Check if gameObject exists
-            GameObject.Destroy(dragArrowIndicator.gameObject);
+        gameMediator.RemoveActionsQueueChangedListener(RefreshArrows);
+        gameMediator.RemoveBattlefieldStateChangedListener(OnBattlefieldStateChanged);
+        foreach (var arrow in activeArrows.Values) {
+            if (arrow != null) GameObject.Destroy(arrow.gameObject);
         }
-        lastProcessedActionCount = 0;
-        lastProcessedActionKeys.Clear();
+        activeArrows.Clear();
+        if (dragArrow != null) GameObject.Destroy(dragArrow.gameObject);
     }
 }

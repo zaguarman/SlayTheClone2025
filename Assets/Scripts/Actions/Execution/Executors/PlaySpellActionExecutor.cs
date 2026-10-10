@@ -25,14 +25,10 @@ public class PlaySpellActionExecutor : IActionExecutor {
             return;
         }
 
-        // Execute Logic
-        if (owner.Hand.Contains(spell)) {
-            owner.DiscardCard(spell); // Ensure it's removed from hand
-        }
-
         // Process spell effects by calling the spell's Play method
         // The spell itself will queue the specific game actions
         spell.Play(owner, actionsQueue, target);
+        owner.DiscardCard(spell);
 
         Log($"Executed PlaySpellAction via Executor for {spell.Name}", LogTag.Actions | LogTag.Cards);
     }

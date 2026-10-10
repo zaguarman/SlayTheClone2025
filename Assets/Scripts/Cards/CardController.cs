@@ -7,18 +7,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.Serialization;
 using static DebugLogger;
 using static Enums;
 
 [Serializable]
 public class CardUnityEvent : UnityEvent<CardController> { }
 
-public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler {
+public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler {
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI nameText;
-    [SerializeField] private TextMeshProUGUI statsText;
-    [SerializeField] private TextMeshProUGUI descriptionText;
+    [SerializeField] private TextMeshProUGUI typeText;
+    [FormerlySerializedAs("descriptionText")]
+    [SerializeField] private TextMeshProUGUI rulesText;
+    [SerializeField] private TextMeshProUGUI statsText; // Inside the attack/health box
+    [SerializeField] private TextMeshProUGUI speedText; // In the title bar, where Magic prints the mana cost
+    [SerializeField] private GameObject statsBox;
+    [SerializeField] private GameObject speedPip;
+    [SerializeField] private Image artImage;
+    [SerializeField] private TextMeshProUGUI statusText; // Icons of the statuses currently on the creature
     [SerializeField] private Image cardImage;
+
+    // Like Magic cards, flavor text is only printed when the whole text box still fits at this size or larger
+    private const float MinFlavorFontSize = 8f;
 
     private RectTransform rectTransform;
     private Canvas parentCanvas;
@@ -39,9 +50,20 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     private Tween queuedPulse;
     public bool IsQueued { get; private set; }
 
+    // Battlefield card about to be replaced by a summon (queued, or previewed while a creature is dragged over it)
+    private const float ReplacedAlpha = 0.45f;
+    private static readonly Color ReplaceLabelColor = new Color(1f, 0.45f, 0.35f);
+    private GameObject replaceBadge;
+    private bool isMarkedForReplacement;
+    private bool isReplacementPreviewed;
+
+    // Set once the card has left the battlefield and is fading out before being destroyed
+    public bool IsLeavingPlay { get; private set; }
+
     public CardUnityEvent OnBeginDragEvent = new CardUnityEvent();
     public CardUnityEvent OnEndDragEvent = new CardUnityEvent();
     public CardUnityEvent OnCardDropped = new CardUnityEvent();
+    public CardUnityEvent OnCardClicked = new CardUnityEvent(); // Pressed and released without dragging
     public Action OnPointerEnterHandler;
     public Action OnPointerExitHandler;
 
@@ -87,6 +109,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             gameMediator.AddCreatureArmorChangedListener(OnCreatureArmorChanged);
             // gameMediator.AddGameStateChangedListener(OnGameStateChanged); // Keep if needed for other reasons
             gameMediator.AddCreatureStatsChangedListener(OnCreatureStatsChanged); // <<< ADD LISTENER
+            gameMediator.AddCreatureStatusChangedListener(OnCreatureStatusChanged);
         }
     }
 
@@ -97,6 +120,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             gameMediator.RemoveCreatureArmorChangedListener(OnCreatureArmorChanged);
             // gameMediator.RemoveGameStateChangedListener(OnGameStateChanged);
             gameMediator.RemoveCreatureStatsChangedListener(OnCreatureStatsChanged); // <<< REMOVE LISTENER
+            gameMediator.RemoveCreatureStatusChangedListener(OnCreatureStatusChanged);
         }
     }
 
@@ -152,6 +176,12 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         }
     }
 
+    private void OnCreatureStatusChanged(ICreature creature, StatusEffectType status, bool applied) {
+        if (linkedCreature != null && creature.TargetId == linkedCreature.TargetId) {
+            UpdateStatusIcons();
+        }
+    }
+
     private void OnCreatureDied(ICreature creature) {
         if (linkedCreature != null && creature.TargetId == linkedCreature.TargetId) {
             Log($"Creature {creature.Name} died, updating UI (TargetID: {creature.TargetId.ToUpper()}) (Card TargetID: {GetInstanceID().ToString().ToUpper()})", LogTag.Creatures | LogTag.UI);
@@ -189,10 +219,11 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         // Use baseCardData as the primary source, override with linkedCardInstance if available
         if (baseCardData == null) {
             LogWarning($"CardController {gameObject.name} has no baseCardData! Cannot update UI.", LogTag.UI | LogTag.Cards);
-            // Optionally hide or show placeholder visuals
-            if(nameText) nameText.text = "No Data";
-            if(statsText) statsText.text = "";
-            if(descriptionText) descriptionText.text = "";
+            nameText.text = "No Data";
+            typeText.text = "";
+            rulesText.text = "";
+            statsBox.SetActive(false);
+            speedPip.SetActive(false);
             return;
         }
 
@@ -201,76 +232,91 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     }
 
     private void UpdateCardText() {
-        if (nameText == null || statsText == null) { return; } // Basic check
-
         nameText.text = baseCardData.cardName;
+        typeText.text = CardTextFormatter.GetTypeLine(baseCardData);
+        rulesText.text = ComposeTextBox(CardTextFormatter.GetRulesText(baseCardData), baseCardData.description);
 
-        // Optional on-card description
-        if (descriptionText != null) {
-            // Show base description, could potentially show modified description later
-            string desc = baseCardData.description ?? "";
-            // Simple truncate logic
-            if (desc.Length > 30) desc = desc.Substring(0, 27) + "...";
-            descriptionText.text = desc;
-        }
-
-        // --- Determine Stats to Display ---
         bool isCreature = baseCardData is CreatureData;
-        bool isSpell = baseCardData is SpellData;
-
+        statsBox.SetActive(isCreature);
+        speedPip.SetActive(isCreature);
         if (isCreature) {
-            statsText.gameObject.SetActive(true);
-            string atk, health, speed, healthArmorPart;
-            int armor = 0;
-
-            // Prioritize LIVE creature state if linked and alive
-            if (linkedCreature != null && linkedCreature.Health > 0) {
-                atk = linkedCreature.Attack.ToString();
-                health = linkedCreature.Health.ToString(); // Current Health
-                speed = linkedCreature.Speed.ToString();
-                armor = linkedCreature.CurrentArmorPool; // Current Armor Pool
-            }
-            // Otherwise, show BASE stats from CardData
-            else if (baseCardData is CreatureData creatureData) {
-                atk = creatureData.attack.ToString();
-                health = creatureData.health.ToString(); // Base Health
-                speed = creatureData.speed.ToString();
-                // No armor shown for base stats or dead creatures
-            }
-            else { // Should not happen if isCreature is true
-                atk = "?"; health = "?"; speed = "?";
-            }
-
-            // Format: A / H(+Arm) / S
-            healthArmorPart = health;
-            if (armor > 0) {
-                healthArmorPart += $"<color=#ADD8E6>+{armor}</color>"; // Light blue for armor
-            }
-            statsText.text = $"{atk} / {healthArmorPart} / {speed}";
-        } else if (isSpell) {
-            statsText.gameObject.SetActive(true);
-            statsText.text = "Spell";
-        } else {
-            statsText.gameObject.SetActive(false); // Hide for unknown types
+            UpdateCreatureStats((CreatureData)baseCardData);
         }
+        UpdateStatusIcons();
+    }
+
+    private void UpdateStatusIcons() {
+        var creature = linkedCreature as Creature;
+        if (creature == null || gameManager?.ModifierManager == null) {
+            statusText.text = "";
+            return;
+        }
+
+        var icons = gameManager.ModifierManager.GetActiveModifiersFor(creature)
+            .OfType<StatusEffectModifier>()
+            .Select(status => EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType)));
+        statusText.text = string.Concat(icons);
+    }
+
+    // Live stats while the creature is alive on the board, printed stats otherwise
+    private void UpdateCreatureStats(CreatureData data) {
+        bool isLive = linkedCreature != null && linkedCreature.Health > 0;
+        int attack = isLive ? linkedCreature.Attack : data.attack;
+        int health = isLive ? linkedCreature.Health : data.health;
+        int speed = isLive ? linkedCreature.Speed : data.speed;
+        int armor = isLive ? linkedCreature.CurrentArmorPool : 0;
+
+        string armorPart = armor > 0 ? $"<color=#2f7fc1>+{armor}</color>" : "";
+        statsText.text = $"{attack}/{health}{armorPart}";
+        speedText.text = speed.ToString();
+    }
+
+    // Rules text always fits: the text box auto-sizes its font down to its minimum.
+    // Flavor text is extra and is left out when it would make the text too small to read.
+    private string ComposeTextBox(string rules, string flavor) {
+        if (string.IsNullOrEmpty(flavor)) return rules;
+
+        string flavorLine = $"<i><color=#5a5146>{flavor}</color></i>";
+        string withFlavor = string.IsNullOrEmpty(rules) ? flavorLine : $"{rules}\n<size=90%>{flavorLine}</size>";
+        if (FitsInTextBox(withFlavor, MinFlavorFontSize)) return withFlavor;
+        return string.IsNullOrEmpty(rules) ? flavorLine : rules;
+    }
+
+    private bool FitsInTextBox(string text, float fontSize) {
+        float originalSize = rulesText.fontSize;
+        bool originalAutoSize = rulesText.enableAutoSizing;
+        rulesText.enableAutoSizing = false;
+        rulesText.fontSize = fontSize;
+
+        var box = rulesText.rectTransform.rect;
+        var margin = rulesText.margin; // left, top, right, bottom
+        float width = box.width - margin.x - margin.z;
+        float height = box.height - margin.y - margin.w;
+        bool fits = rulesText.GetPreferredValues(text, width, 0f).y <= height;
+
+        rulesText.fontSize = originalSize;
+        rulesText.enableAutoSizing = originalAutoSize;
+        return fits;
     }
 
     private void UpdateCardVisuals() {
-        // Update color based on owner
+        // The outer border shows who owns the card
         if (cardImage != null && Player != null && gameReferences != null) {
             cardImage.color = Player.IsPlayer1
                 ? gameReferences.GetPlayer1CardColor()
                 : gameReferences.GetPlayer2CardColor();
         }
-        // Update frame, art etc. based on baseCardData if needed
-        // e.g., if (frameImage != null && baseCardData.frameSprite != null) frameImage.sprite = baseCardData.frameSprite;
+
+        artImage.sprite = baseCardData.artwork;
+        artImage.color = baseCardData.artwork != null ? Color.white : new Color(0.25f, 0.25f, 0.3f);
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        // Queued cards are already committed; cancel the drag so no drop zone receives them
-        if (IsQueued) {
+        // Queued cards are already committed, and nothing can be played while a turn resolves;
+        // cancel the drag so no drop zone receives the card
+        if (IsQueued || (gameManager?.TurnManager?.IsResolving ?? false)) {
             eventData.pointerDrag = null;
             return;
         }
@@ -316,6 +362,11 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         gameMediator?.NotifyGameStateChanged();
     }
 
+    public void OnPointerClick(PointerEventData eventData) {
+        if (eventData.button != PointerEventData.InputButton.Left || eventData.dragging) return;
+        OnCardClicked.Invoke(this);
+    }
+
     public void OnPointerEnter(PointerEventData eventData) {
         if (!isDragging) {
             // Always show tooltip on hover
@@ -351,7 +402,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
                 .SetEase(Ease.InOutSine)
                 .SetLoops(-1, LoopType.Yoyo)
                 .SetTarget(transform);
-            if (queuedBadge == null) queuedBadge = CreateQueuedBadge();
+            if (queuedBadge == null) queuedBadge = CreateBadge("QueuedBadge", "QUEUED", new Color(0.95f, 0.78f, 0.35f), 0.4f, 0.6f);
             queuedBadge.SetActive(true);
         } else {
             canvasGroup.alpha = 1f;
@@ -360,13 +411,39 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         }
     }
 
-    private GameObject CreateQueuedBadge() {
-        var badge = new GameObject("QueuedBadge", typeof(RectTransform), typeof(Image));
+    /// <summary>
+    /// Marks this battlefield card as replaced by a queued summon into its slot.
+    /// </summary>
+    public void SetMarkedForReplacement(bool marked) {
+        isMarkedForReplacement = marked;
+        RefreshReplacementVisual();
+    }
+
+    /// <summary>
+    /// Previews the replacement while a creature from hand is dragged over this card's slot.
+    /// </summary>
+    public void SetReplacementPreview(bool previewed) {
+        isReplacementPreviewed = previewed;
+        RefreshReplacementVisual();
+    }
+
+    private void RefreshReplacementVisual() {
+        if (IsLeavingPlay) return;
+
+        bool show = isMarkedForReplacement || isReplacementPreviewed;
+        canvasGroup.alpha = show ? ReplacedAlpha : 1f;
+        // Bottom strip, so it stays visible under the raised ghost of the incoming creature
+        if (show && replaceBadge == null) replaceBadge = CreateBadge("ReplaceBadge", "REPLACE", ReplaceLabelColor, 0.02f, 0.22f);
+        if (replaceBadge != null) replaceBadge.SetActive(show);
+    }
+
+    private GameObject CreateBadge(string objectName, string text, Color textColor, float anchorMinY, float anchorMaxY) {
+        var badge = new GameObject(objectName, typeof(RectTransform), typeof(Image));
         badge.layer = gameObject.layer;
         badge.transform.SetParent(transform, false);
         var badgeRect = (RectTransform)badge.transform;
-        badgeRect.anchorMin = new Vector2(0f, 0.4f);
-        badgeRect.anchorMax = new Vector2(1f, 0.6f);
+        badgeRect.anchorMin = new Vector2(0f, anchorMinY);
+        badgeRect.anchorMax = new Vector2(1f, anchorMaxY);
         badgeRect.offsetMin = badgeRect.offsetMax = Vector2.zero;
         var badgeImage = badge.GetComponent<Image>();
         badgeImage.color = new Color(0.08f, 0.06f, 0.1f, 0.9f);
@@ -378,10 +455,10 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         label.rectTransform.anchorMin = Vector2.zero;
         label.rectTransform.anchorMax = Vector2.one;
         label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
-        label.text = "QUEUED";
+        label.text = text;
         label.fontStyle = FontStyles.Bold;
         label.alignment = TextAlignmentOptions.Center;
-        label.color = new Color(0.95f, 0.78f, 0.35f);
+        label.color = textColor;
         label.enableAutoSizing = true;
         label.fontSizeMin = 4;
         label.fontSizeMax = 24;
@@ -402,6 +479,24 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             .Append(DOTween.To(() => canvasGroup.alpha, a => canvasGroup.alpha = a, 1f, 0.15f))
             .Join(transform.DOScale(endScale * 1.15f, 0.2f).SetEase(Ease.OutQuad))
             .Append(transform.DOScale(endScale, 0.15f).SetEase(Ease.InOutQuad));
+    }
+
+    /// <summary>
+    /// Shrinks and fades the card out, then destroys it. Used when a creature leaves the battlefield.
+    /// </summary>
+    public void PlayLeavePlayAnimation() {
+        if (IsLeavingPlay) return;
+        IsLeavingPlay = true;
+
+        if (replaceBadge != null) replaceBadge.SetActive(false);
+        canvasGroup.blocksRaycasts = false;
+        GetTooltip()?.HideTooltip();
+        DOTween.Kill(transform);
+
+        DOTween.Sequence().SetTarget(transform)
+            .Append(DOTween.To(() => canvasGroup.alpha, a => canvasGroup.alpha = a, 0f, 0.3f))
+            .Join(transform.DOScale(transform.localScale * 0.6f, 0.3f).SetEase(Ease.InBack))
+            .OnComplete(() => Destroy(gameObject));
     }
 
     /// <summary>
@@ -455,126 +550,41 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
         base.OnDestroy(); // base.OnDestroy handles UnregisterEvents etc.
     }
 
-    // --- Tooltip Content Generation ---
-    public string GetFormattedTooltipText() {
-        if (baseCardData == null) return "Error: No Card Data";
+    // --- Hover preview ---
+    /// <summary>
+    /// A non-interactive copy of this card, linked to the same live instance so it shows current stats.
+    /// Used for the enlarged preview shown while hovering.
+    /// </summary>
+    public CardController CreatePreview(Transform parent) {
+        var preview = CardFactory.CreateCardController(linkedCardInstance, baseCardData, Player, parent, gameMediator, gameReferences, gameManager);
+        if (preview == null) return null;
 
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-        sb.AppendLine($"<b>{baseCardData.cardName}</b>");
-
-        string statsLine = "";
-        int maxHealth = 0;
-
-        if (baseCardData is CreatureData baseCreatureData) {
-             string atk, health, speed, armorStr = "";
-
-            // Prioritize LIVE creature state
-            if (linkedCreature != null && linkedCreature.Health > 0) {
-                atk = linkedCreature.Attack.ToString();
-                health = linkedCreature.Health.ToString();
-                speed = linkedCreature.Speed.ToString();
-                maxHealth = linkedCreature.MaxHealth; // Get live max health
-                int armor = linkedCreature.CurrentArmorPool;
-                if (armor > 0) armorStr = $" + <color=#ADD8E6>{armor} Armor</color>";
-
-                 // Show comparison to base if different
-                 if (linkedCreature.Attack != baseCreatureData.attack) atk = $"{atk} ({baseCreatureData.attack})";
-                 if (linkedCreature.MaxHealth != baseCreatureData.health) health = $"{health}/{maxHealth} ({baseCreatureData.health})"; else health = $"{health}/{maxHealth}";
-                 if (linkedCreature.Speed != baseCreatureData.speed) speed = $"{speed} ({baseCreatureData.speed})";
-            }
-            // Show BASE stats
-            else {
-                atk = baseCreatureData.attack.ToString();
-                health = baseCreatureData.health.ToString();
-                speed = baseCreatureData.speed.ToString();
-                maxHealth = baseCreatureData.health; // Base max health
-                health = $"{health}/{maxHealth}"; // Format as current/max
-            }
-            statsLine = $"<i>Stats:</i> {atk} Atk / {health} HP{armorStr} / {speed} Spd";
-        } else if (baseCardData is SpellData) {
-            statsLine = "<i>Type:</i> Spell";
-        }
-
-        if (!string.IsNullOrEmpty(statsLine)) {
-            sb.AppendLine(statsLine);
-            sb.AppendLine("---");
-        }
-
-        // Description
-        if (!string.IsNullOrEmpty(baseCardData.description)) {
-            sb.AppendLine(baseCardData.description);
-        }
-
-        // Effects (Show effects from LIVE creature if available, else from BASE data)
-        List<CardEffect> effectsToShow = null;
-        if (linkedCreature != null && linkedCreature.Health > 0) {
-            effectsToShow = linkedCreature.Effects;
-        } else {
-            effectsToShow = baseCardData.effects;
-        }
-
-        if (effectsToShow != null && effectsToShow.Count > 0) {
-            sb.AppendLine("---");
-            sb.AppendLine("<b>Effects:</b>");
-            foreach (var effect in effectsToShow) {
-                sb.AppendLine($"<i>[{effect.trigger}]</i> {FormatEffectActions(effect.actions)}");
-            }
-        }
-
-        // Add current modifiers from ModifierManager if linked creature exists
-         if (linkedCreature != null && linkedCreature.Health > 0 && gameManager?.ModifierManager != null) {
-             var activeModifiers = gameManager.ModifierManager.GetActiveModifiersFor(linkedCreature as Creature); // Need concrete type
-             if (activeModifiers.Any()) {
-                 sb.AppendLine("---");
-                 sb.AppendLine("<b>Active Modifiers:</b>");
-                 foreach(var mod in activeModifiers) {
-                     sb.AppendLine($"- {mod.Description}"); // Use modifier's description
-                 }
-             }
-         }
-
-        return sb.ToString();
+        var group = preview.GetComponent<CanvasGroup>();
+        group.blocksRaycasts = false;
+        group.interactable = false;
+        return preview;
     }
 
-    private string FormatEffectActions(List<EffectAction> actions) {
-        if (actions == null || actions.Count == 0) return "No actions.";
+    /// <summary>What the card face can't show: the modifiers currently affecting this creature. Empty if none.</summary>
+    public string GetActiveModifiersText() {
+        var creature = linkedCreature as Creature;
+        if (creature == null || creature.Health <= 0 || gameManager?.ModifierManager == null) return "";
 
-        List<string> actionDescriptions = new List<string>();
-        foreach(var action in actions) {
-            string targetDesc = action.targetType.ToString();
-            if (action.targetModifier != TargetModifier.None) {
-                targetDesc += $" ({action.targetModifier})";
-            }
-            string desc = $"Target {targetDesc}: ";
+        var modifiers = gameManager.ModifierManager.GetActiveModifiersFor(creature).ToList();
+        if (modifiers.Count == 0) return "";
 
-            switch (action.actionType) {
-                case ActionType.Damage: desc += $"Deal {action.value} damage."; break;
-                case ActionType.Heal: desc += $"Heal {action.value}."; break;
-                case ActionType.Draw: desc += $"Draw {action.value} card(s)."; break;
-                case ActionType.Armor: desc += $"Modify Armor by {action.value}."; break;
-                case ActionType.Stun: desc += $"Stun for {action.value} turn(s)."; break;
-                case ActionType.ModifyStat:
-                    List<string> mods = new List<string>();
-                    if (action.modifyAttack) mods.Add("Attack");
-                    if (action.modifyHealth) mods.Add("Health");
-                    if (action.modifySpeed) mods.Add("Speed");
-                    desc += $"Modify {string.Join(", ", mods)} by {action.value}.";
-                    break;
-                case ActionType.ApplyStatus:
-                     desc += $"Apply {action.statusEffectToApply} (Dur: {action.statusDuration}, Pot: {action.statusPotency}).";
-                     break;
-                case ActionType.Summon: desc += $"Summon {action.value} creature(s)."; break;
-                default: desc += $"Unknown action ({action.actionType})"; break;
-            }
-            actionDescriptions.Add(desc);
-        }
-        return string.Join(" ", actionDescriptions); // Join multiple actions for the same trigger
+        var lines = modifiers.Select(m => {
+            string icon = m is StatusEffectModifier status ? EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType)) : "";
+            return $"{icon}{m.Description}";
+        });
+        return "<b>Active effects</b>\n" + string.Join("\n", lines);
     }
 
     private void CleanupEvents() {
         OnBeginDragEvent.RemoveAllListeners();
         OnEndDragEvent.RemoveAllListeners();
         OnCardDropped.RemoveAllListeners();
+        OnCardClicked.RemoveAllListeners();
         OnPointerEnterHandler = null;
         OnPointerExitHandler = null;
     }

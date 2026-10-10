@@ -77,15 +77,20 @@ public class Tooltip : MonoBehaviour {
         return tooltip;
     }
 
-    // References to tooltip components
+    // Card hover preview: an enlarged live copy of the hovered card, placed next to it
+    private const float PreviewScale = 2f;
+    private const float PreviewGap = 10f;      // Screen pixels between the card and its preview
+    private const float DetailsWidth = 300f;
+
     // References to tooltip components
     private TextMeshProUGUI tooltipText;
     private RectTransform tooltipRect;
     private CanvasGroup canvasGroup;
+    private Vector2 textPivot;
 
     // Tracking the active card
     private CardController activeCard;
-    private string currentContent;
+    private CardController preview;
 
     private void Awake() {
         // Try to get references if not already assigned
@@ -98,6 +103,8 @@ public class Tooltip : MonoBehaviour {
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
+        textPivot = tooltipRect.pivot;
+
         // Ensure tooltip starts hidden
         HideTooltip();
     }
@@ -109,30 +116,30 @@ public class Tooltip : MonoBehaviour {
         tooltipText = text;
         tooltipRect = rect;
         canvasGroup = group;
+        textPivot = rect.pivot;
     }
 
     /// <summary>
-    /// Shows the tooltip for the specified card
+    /// Shows the hovered card enlarged next to it, plus its active effects when it has any
     /// </summary>
     public void ShowTooltip(CardController card) {
         if (card == null || card.GetBaseCardData() == null) return;
+        if (card == activeCard && preview != null) {
+            UpdateTooltipContent(card);
+            return;
+        }
 
-        // Store active card
+        HideTooltip();
         activeCard = card;
-
-        // Always update tooltip content when showing it
-        UpdateTooltipContent(card);
-
-        // Position at mouse with offset
-        Vector2 mousePos = Input.mousePosition;
-        tooltipRect.position = new Vector2(mousePos.x, mousePos.y + 40);
-
-        // Make sure it's on screen
-        AdjustPosition();
-
-        // Show the tooltip
         canvasGroup.alpha = 1;
         gameObject.SetActive(true);
+
+        preview = card.CreatePreview(transform);
+        if (preview != null) {
+            preview.transform.localScale = Vector3.one * PreviewScale;
+            PlacePreview(card, (RectTransform)preview.transform);
+        }
+        UpdateTooltipContent(card);
     }
 
     /// <summary>
@@ -141,40 +148,31 @@ public class Tooltip : MonoBehaviour {
     public void ShowTooltip(string content) {
         if (string.IsNullOrEmpty(content)) return;
 
-        // Clear active card
-        activeCard = null;
-        currentContent = content;
+        HideTooltip();
+        tooltipRect.gameObject.SetActive(true);
+        tooltipRect.pivot = textPivot;
         tooltipText.text = content;
+        FollowMouse();
 
-        // Position at mouse with offset
-        Vector2 mousePos = Input.mousePosition;
-        tooltipRect.position = new Vector2(mousePos.x, mousePos.y + 40);
-
-        // Make sure it's on screen
-        AdjustPosition();
-
-        // Show the tooltip
         canvasGroup.alpha = 1;
         gameObject.SetActive(true);
     }
 
     /// <summary>
-    /// Updates the tooltip content for the specified card
+    /// Refreshes the details shown next to the preview (the preview itself updates live)
     /// </summary>
     public void UpdateTooltipContent(CardController card) {
-        if (card == null || card.GetBaseCardData() == null) return;
+        if (card == null || card != activeCard) return;
 
-        // Get formatted text directly from the CardController
-        string content = card.GetFormattedTooltipText();
-        currentContent = content;
-        tooltipText.text = content;
+        string details = card.GetActiveModifiersText();
+        bool hasDetails = !string.IsNullOrEmpty(details) && preview != null;
+        tooltipRect.gameObject.SetActive(hasDetails);
+        if (!hasDetails) return;
 
-        // Use a fixed size for all tooltips regardless of content
-        tooltipText.ForceMeshUpdate();
-        // Set fixed size for all tooltip types
-        float width = 350;
-        float height = 280; // Increased from 250 to ensure there's enough space for target ID
-        tooltipRect.sizeDelta = new Vector2(width, height);
+        tooltipText.text = details;
+        float textHeight = tooltipText.GetPreferredValues(details, DetailsWidth - 20f, 0f).y;
+        tooltipRect.sizeDelta = new Vector2(DetailsWidth, textHeight + 20f);
+        PlaceDetailsBesidePreview();
     }
 
     /// <summary>
@@ -182,64 +180,68 @@ public class Tooltip : MonoBehaviour {
     /// </summary>
     public void HideTooltip() {
         activeCard = null;
+        if (preview != null) {
+            Destroy(preview.gameObject);
+            preview = null;
+        }
         canvasGroup.alpha = 0;
         gameObject.SetActive(false);
     }
 
-    // Removed GenerateTooltipContent, TruncateId, and DescribeEffect methods
-    // Now using CardController.GetFormattedTooltipText() instead
+    // Above the card when it is in the lower half of the screen, below it otherwise; always fully on screen
+    private void PlacePreview(CardController card, RectTransform previewRect) {
+        var corners = new Vector3[4];
+        ((RectTransform)card.transform).GetWorldCorners(corners);
+        var rootCanvas = card.GetComponentInParent<Canvas>().rootCanvas;
+        var eventCamera = rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : rootCanvas.worldCamera;
+        Vector2 cardMin = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[0]);
+        Vector2 cardMax = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
 
-    /// <summary>
-    /// Keeps the tooltip on screen by adjusting position
-    /// </summary>
-    private void AdjustPosition() {
-        if (tooltipRect == null) return;
+        bool showAbove = (cardMin.y + cardMax.y) * 0.5f < Screen.height * 0.5f;
+        previewRect.pivot = new Vector2(0.5f, showAbove ? 0f : 1f);
+        previewRect.position = new Vector2((cardMin.x + cardMax.x) * 0.5f, showAbove ? cardMax.y + PreviewGap : cardMin.y - PreviewGap);
+        KeepOnScreen(previewRect);
+    }
 
-        // Get dimensions
-        Vector3[] corners = new Vector3[4];
+    // To the right of the preview, or to its left when there is no room
+    private void PlaceDetailsBesidePreview() {
+        var corners = new Vector3[4];
+        ((RectTransform)preview.transform).GetWorldCorners(corners); // Overlay canvas: world space is screen pixels
+        tooltipRect.pivot = new Vector2(0f, 1f);
+        tooltipRect.position = new Vector2(corners[2].x + PreviewGap, corners[2].y);
+
         tooltipRect.GetWorldCorners(corners);
-        float tooltipWidth = corners[3].x - corners[0].x;
-        float tooltipHeight = corners[1].y - corners[0].y;
-
-        // Get current position
-        Vector2 pos = tooltipRect.position;
-
-        // Adjust for right edge of screen
-        float rightEdgeScreen = Screen.width;
-        if (pos.x + tooltipWidth / 2 > rightEdgeScreen) {
-            pos.x = rightEdgeScreen - tooltipWidth / 2;
+        if (corners[2].x > Screen.width) {
+            ((RectTransform)preview.transform).GetWorldCorners(corners);
+            tooltipRect.pivot = new Vector2(1f, 1f);
+            tooltipRect.position = new Vector2(corners[0].x - PreviewGap, corners[1].y);
         }
+        KeepOnScreen(tooltipRect);
+    }
 
-        // Adjust for left edge of screen
-        if (pos.x - tooltipWidth / 2 < 0) {
-            pos.x = tooltipWidth / 2;
-        }
+    private static void KeepOnScreen(RectTransform rect) {
+        var corners = new Vector3[4];
+        rect.GetWorldCorners(corners);
+        var shift = Vector3.zero;
+        if (corners[0].x < 0) shift.x = -corners[0].x;
+        else if (corners[2].x > Screen.width) shift.x = Screen.width - corners[2].x;
+        if (corners[0].y < 0) shift.y = -corners[0].y;
+        else if (corners[2].y > Screen.height) shift.y = Screen.height - corners[2].y;
+        rect.position += shift;
+    }
 
-        // Adjust for top edge of screen
-        float topEdgeScreen = Screen.height;
-        if (pos.y + tooltipHeight > topEdgeScreen) {
-            // If tooltip would go off top edge, place it below the cursor instead
-            pos.y = Input.mousePosition.y - 20 - tooltipHeight;
-        }
-
-        // Ensure the tooltip doesn't go below the bottom edge of the screen
-        if (pos.y - tooltipHeight < 0) {
-            pos.y = tooltipHeight;
-        }
-
-        // Set the adjusted position
-        tooltipRect.position = pos;
+    private void FollowMouse() {
+        Vector2 mousePos = Input.mousePosition;
+        tooltipRect.position = new Vector2(mousePos.x, mousePos.y + 40);
+        KeepOnScreen(tooltipRect);
     }
 
     /// <summary>
-    /// Updates tooltip position when needed in LateUpdate
+    /// Text tooltips follow the mouse; card previews stay next to their card
     /// </summary>
     private void LateUpdate() {
-        // Only update position if tooltip is active
-        if (gameObject.activeSelf && activeCard != null) {
-            Vector2 mousePos = Input.mousePosition;
-            tooltipRect.position = new Vector2(mousePos.x, mousePos.y + 40);
-            AdjustPosition();
+        if (gameObject.activeSelf && activeCard == null) {
+            FollowMouse();
         }
     }
 

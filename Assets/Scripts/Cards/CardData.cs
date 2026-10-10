@@ -7,6 +7,7 @@ public abstract class CardData : ScriptableObject {
     public string cardName;
     public string description;
     public CardType cardType;
+    public Sprite artwork;
     public List<CardEffect> effects = new List<CardEffect>();
 
     // OnEnable can be used to initialize cardId if null

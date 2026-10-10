@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Tidal Surge
   description: Wash away enemy defenses.
   cardType: 1
+  artwork: {fileID: 3286163911610860551, guid: f320f1517c3dc4144a009b0c4c1d6e20, type: 3}
   effects:
   - effectType: 1
     trigger: 0

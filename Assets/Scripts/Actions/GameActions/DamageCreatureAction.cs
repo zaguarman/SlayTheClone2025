@@ -9,19 +9,22 @@ public class DamageCreatureAction : IGameAction {
     private readonly ICreature target;
     private readonly int damage;
     private readonly ICreature attacker; // Renamed from source for clarity in combat context
+    private readonly bool isCombatDamage; // True when dealt by a creature's attack (not by an effect)
     // Removed isDirectDamage flag
 
     public ICreature GetTarget() => target;
     public ICreature GetAttacker() => attacker; // Changed getter name
     public int GetDamage() => damage;
+    public bool IsCombatDamage() => isCombatDamage;
     #endregion
 
     #region Constructor
     // Simplified constructor
-    public DamageCreatureAction(ICreature target, int damage, ICreature attacker = null) {
+    public DamageCreatureAction(ICreature target, int damage, ICreature attacker = null, bool isCombatDamage = false) {
         this.target = target;
         this.damage = damage;
         this.attacker = attacker; // Use attacker field
+        this.isCombatDamage = isCombatDamage;
         Log($"Created DamageCreatureAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper().Substring(0, 8)}) with {damage} damage from {attacker?.Name ?? "source"}",
             LogTag.Actions | LogTag.Creatures);
     }

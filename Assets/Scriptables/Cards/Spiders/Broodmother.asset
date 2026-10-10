@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Broodmother
   description: Spawns smaller spiders when threatened.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 6716ef03da1846d48b36e142bd293f54, type: 3}
   effects:
   - effectType: 0
     trigger: 3

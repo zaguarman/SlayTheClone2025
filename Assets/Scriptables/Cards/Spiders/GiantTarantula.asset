@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Giant Tarantula
   description: This massive spider crushes opponents with brute force.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: cec006ae83c4728498be1379adc749d6, type: 3}
   effects:
   - effectType: 0
     trigger: 1

@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Tidepool Star
   description: Regenerates during low tide.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: a152faa88d2df034da3aeba56703babb, type: 3}
   effects:
   - effectType: 0
     trigger: 3

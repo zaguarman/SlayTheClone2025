@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Tunnel Spider
   description: Creates elaborate tunnel networks to ambush prey.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 95bb1c092701e6f469ade312379b2a9e, type: 3}
   effects:
   - effectType: 0
     trigger: 2

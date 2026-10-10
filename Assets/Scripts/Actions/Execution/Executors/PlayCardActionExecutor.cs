@@ -41,7 +41,8 @@ public class PlayCardActionExecutor : IActionExecutor
             return;
         }
 
-        owner.DiscardCard(card); // Remove the card from hand
+        // The card leaves the hand now and is discarded once it leaves play (see Player.DiscardCard)
+        owner.RemoveFromHand(card);
 
         // Queue the appropriate next action
         if (card is Spell spell)
@@ -50,7 +51,9 @@ public class PlayCardActionExecutor : IActionExecutor
         }
         else if (card is ICreature creature)
         {
-            actionsQueue.AddAction(new SummonCreatureAction(creature, owner, target));
+            // A creature joins the battlefield it was dropped on, under that battlefield's player
+            var summoner = (target as BattlefieldSlot)?.Owner ?? owner;
+            actionsQueue.AddAction(new SummonCreatureAction(creature, summoner, target));
         }
 
         Log($"Executed PlayCardAction via Executor for {card.Name}", LogTag.Actions | LogTag.Cards);

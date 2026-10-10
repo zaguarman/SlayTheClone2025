@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Mermaid Healer
   description: Restores health to damaged allies at the start of your turn.
   cardType: 0
+  artwork: {fileID: 3286163911610860551, guid: 91c88ce93c2fcac4a8db7cbac042f0a1, type: 3}
   effects:
   - effectType: 0
     trigger: 2

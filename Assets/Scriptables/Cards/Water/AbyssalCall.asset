@@ -16,6 +16,7 @@ MonoBehaviour:
   cardName: Abyssal Call
   description: Summon a powerful deep sea creature.
   cardType: 1
+  artwork: {fileID: 3286163911610860551, guid: de9b809bdf2e078489eddde1505bead7, type: 3}
   effects:
   - effectType: 1
     trigger: 0
