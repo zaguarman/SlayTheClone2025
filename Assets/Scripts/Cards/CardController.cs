@@ -32,6 +32,13 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     private ICard linkedCardInstance; // General ICard instance (could be Spell or Creature)
     private Tooltip tooltip;
 
+    // Queued (played but not yet resolved) visuals
+    private const float QueuedAlphaHigh = 0.75f;
+    private const float QueuedAlphaLow = 0.4f;
+    private GameObject queuedBadge;
+    private Tween queuedPulse;
+    public bool IsQueued { get; private set; }
+
     public CardUnityEvent OnBeginDragEvent = new CardUnityEvent();
     public CardUnityEvent OnEndDragEvent = new CardUnityEvent();
     public CardUnityEvent OnCardDropped = new CardUnityEvent();
@@ -262,6 +269,12 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
     public void OnBeginDrag(PointerEventData eventData) {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
+        // Queued cards are already committed; cancel the drag so no drop zone receives them
+        if (IsQueued) {
+            eventData.pointerDrag = null;
+            return;
+        }
+
         if (canvasGroup == null) {
             LogWarning("CanvasGroup is missing, adding it now (Card TargetID: " + GetInstanceID().ToString().ToUpper() + ")", LogTag.UI);
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
@@ -321,6 +334,99 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             OnPointerExitHandler?.Invoke();
         }
     }
+
+    #region Play Visuals
+    /// <summary>
+    /// Shows the card as played-but-unresolved: translucent, pulsing, with a "QUEUED" badge.
+    /// </summary>
+    public void SetQueued(bool queued, bool blockRaycasts = true) {
+        IsQueued = queued;
+        queuedPulse?.Kill();
+        queuedPulse = null;
+
+        if (queued) {
+            canvasGroup.alpha = QueuedAlphaHigh;
+            canvasGroup.blocksRaycasts = blockRaycasts;
+            queuedPulse = DOTween.To(() => canvasGroup.alpha, a => canvasGroup.alpha = a, QueuedAlphaLow, 0.8f)
+                .SetEase(Ease.InOutSine)
+                .SetLoops(-1, LoopType.Yoyo)
+                .SetTarget(transform);
+            if (queuedBadge == null) queuedBadge = CreateQueuedBadge();
+            queuedBadge.SetActive(true);
+        } else {
+            canvasGroup.alpha = 1f;
+            canvasGroup.blocksRaycasts = true;
+            if (queuedBadge != null) queuedBadge.SetActive(false);
+        }
+    }
+
+    private GameObject CreateQueuedBadge() {
+        var badge = new GameObject("QueuedBadge", typeof(RectTransform), typeof(Image));
+        badge.layer = gameObject.layer;
+        badge.transform.SetParent(transform, false);
+        var badgeRect = (RectTransform)badge.transform;
+        badgeRect.anchorMin = new Vector2(0f, 0.4f);
+        badgeRect.anchorMax = new Vector2(1f, 0.6f);
+        badgeRect.offsetMin = badgeRect.offsetMax = Vector2.zero;
+        var badgeImage = badge.GetComponent<Image>();
+        badgeImage.color = new Color(0.08f, 0.06f, 0.1f, 0.9f);
+        badgeImage.raycastTarget = false;
+
+        var label = new GameObject("Label", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
+        label.gameObject.layer = gameObject.layer;
+        label.transform.SetParent(badge.transform, false);
+        label.rectTransform.anchorMin = Vector2.zero;
+        label.rectTransform.anchorMax = Vector2.one;
+        label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
+        label.text = "QUEUED";
+        label.fontStyle = FontStyles.Bold;
+        label.alignment = TextAlignmentOptions.Center;
+        label.color = new Color(0.95f, 0.78f, 0.35f);
+        label.enableAutoSizing = true;
+        label.fontSizeMin = 4;
+        label.fontSizeMax = 24;
+        label.raycastTarget = false;
+        return badge;
+    }
+
+    /// <summary>
+    /// Pops the card into place when its creature is summoned.
+    /// </summary>
+    public void PlaySummonAnimation(float delay = 0f) {
+        Vector3 endScale = transform.localScale;
+        transform.localScale = endScale * 0.5f;
+        canvasGroup.alpha = 0f;
+
+        DOTween.Sequence().SetTarget(transform)
+            .AppendInterval(delay)
+            .Append(DOTween.To(() => canvasGroup.alpha, a => canvasGroup.alpha = a, 1f, 0.15f))
+            .Join(transform.DOScale(endScale * 1.15f, 0.2f).SetEase(Ease.OutQuad))
+            .Append(transform.DOScale(endScale, 0.15f).SetEase(Ease.InOutQuad));
+    }
+
+    /// <summary>
+    /// Detaches the card, flies it to a point, flashes it and destroys it. Used when a spell resolves.
+    /// </summary>
+    public void PlayCastAnimation(Transform flyRoot, Vector3 worldTarget, float delay = 0f) {
+        SetQueued(false);
+        canvasGroup.blocksRaycasts = false;
+        GetTooltip()?.HideTooltip();
+
+        transform.SetParent(flyRoot, true);
+        transform.SetAsLastSibling();
+        worldTarget.z = transform.position.z;
+        Vector3 baseScale = transform.localScale;
+
+        DOTween.Sequence().SetTarget(transform)
+            .AppendInterval(delay)
+            .Append(transform.DOMove(worldTarget, 0.35f).SetEase(Ease.OutCubic))
+            .Join(transform.DOScale(baseScale * 1.35f, 0.35f).SetEase(Ease.OutBack))
+            .AppendInterval(0.25f)
+            .Append(DOTween.To(() => canvasGroup.alpha, a => canvasGroup.alpha = a, 0f, 0.25f))
+            .Join(transform.DOScale(baseScale * 1.6f, 0.25f))
+            .OnComplete(() => Destroy(gameObject));
+    }
+    #endregion
 
     // Make sure to clean up when the card is destroyed
     protected override void OnDestroy() {

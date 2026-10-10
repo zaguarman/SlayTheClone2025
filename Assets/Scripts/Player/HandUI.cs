@@ -1,8 +1,15 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static DebugLogger;
 
 public class HandUI : CardContainer {
+    private const float CastStagger = 0.2f;
+
+    // Cards of this player with a pending PlayCardAction
+    private readonly HashSet<ICard> queuedCards = new HashSet<ICard>();
+    private float nextCastTime;
+
     public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
         // Call base CardContainer Initialize FIRST
         base.Initialize(player, mediator, references, manager);
@@ -12,6 +19,7 @@ public class HandUI : CardContainer {
         if (gameMediator != null) {
             gameMediator.AddHandStateChangedListener(UpdateUI);
             gameMediator.AddGameInitializedListener(OnGameInitialized);
+            gameMediator.AddActionsQueueChangedListener(OnActionsQueueChanged);
         }
     }
 
@@ -19,11 +27,40 @@ public class HandUI : CardContainer {
         if (gameMediator != null) {
             gameMediator.RemoveHandStateChangedListener(UpdateUI);
             gameMediator.RemoveGameInitializedListener(OnGameInitialized);
+            gameMediator.RemoveActionsQueueChangedListener(OnActionsQueueChanged);
         }
     }
 
     private void OnGameInitialized() {
         UpdateUI(Player);
+    }
+
+    private void OnActionsQueueChanged() {
+        if (!IsInitialized || Player == null) return;
+
+        queuedCards.Clear();
+        var pendingActions = gameManager?.ActionsQueue?.GetPendingActions();
+        if (pendingActions != null) {
+            foreach (var action in pendingActions) {
+                if (action is PlayCardAction playAction && playAction.GetOwner() == Player) {
+                    queuedCards.Add(playAction.GetCard());
+                }
+            }
+        }
+
+        UpdateUI(Player);
+    }
+
+    private void PlayCastAnimation(CardController card) {
+        var rootCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
+        if (rootCanvas == null) {
+            Destroy(card.gameObject);
+            return;
+        }
+
+        float delay = Mathf.Max(0f, nextCastTime - Time.time);
+        nextCastTime = Time.time + delay + CastStagger;
+        card.PlayCastAnimation(rootCanvas.transform, rootCanvas.transform.position, delay);
     }
 
     public override void UpdateUI(IPlayer player) {
@@ -34,7 +71,15 @@ public class HandUI : CardContainer {
         // Clear all current cards
         foreach (var card in cards.ToList()) {
             RemoveCard(card);
-            if (card != null) {
+            if (card == null) continue;
+
+            // A queued spell that just left the hand was cast: animate it instead of popping it out
+            var instance = card.GetLinkedCardInstance();
+            bool wasCast = instance != null && !(instance is ICreature)
+                && queuedCards.Contains(instance) && !player.Hand.Contains(instance);
+            if (wasCast) {
+                PlayCastAnimation(card);
+            } else {
                 Destroy(card.gameObject);
             }
         }
@@ -44,6 +89,10 @@ public class HandUI : CardContainer {
         foreach (var cardData in player.Hand) {
             // Get the ICard instance from the player's hand
             ICard handCard = cardData; // cardData is actually an ICard instance here
+
+            // Queued creatures are shown as ghosts in their target slot (see BattlefieldUI)
+            bool isQueued = queuedCards.Contains(handCard);
+            if (isQueued && handCard is ICreature) continue;
 
             // Find the original CardData using the player's deck
             CardData originalData = player.Deck?.FindOriginalCardDataById(handCard.CardId);
@@ -59,6 +108,7 @@ public class HandUI : CardContainer {
             var controller = CardFactory.CreateCardController(handCard, originalData, Player, transform, gameMediator, gameReferences, gameManager);
             if (controller != null) {
                 AddCard(controller);
+                if (isQueued) controller.SetQueued(true);
             }
         }
 
