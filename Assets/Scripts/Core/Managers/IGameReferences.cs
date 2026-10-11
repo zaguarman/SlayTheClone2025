@@ -17,8 +17,6 @@ namespace SlayTheClone {
 
         // Cards
         Button GetCardPrefab();
-        Color Player1CardColor { get; }
-        Color Player2CardColor { get; }
 
         // Controls
         Button GetResolveActionsButton();

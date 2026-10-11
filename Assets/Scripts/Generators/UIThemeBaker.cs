@@ -5,12 +5,13 @@ using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SlayTheClone {
     /// <summary>
     /// Makes the <see cref="UITheme"/> show in the editor, without playing: bakes the theme's sprites and heading material
-    /// into Resources/UITheme as assets, then styles the scenes the way the game does when it starts (the table and its
-    /// controls, the title screen, the pause menu) and saves them. Running it again restyles in place.
+    /// into Resources/UITheme as assets, restyles the card prefab, then styles the scenes the way the game does when it
+    /// starts (the table and its controls, the title screen, the pause menu) and saves them. Running it again restyles in place.
     /// </summary>
     public static class UIThemeBaker {
         private const string AssetFolder = "Assets/Resources/" + UITheme.ResourcesFolder;
@@ -28,6 +29,7 @@ namespace SlayTheClone {
             }
 
             BakeAssets();
+            StyleCardPrefab();
             string returnTo = EditorSceneManager.GetActiveScene().path;
             foreach (var buildScene in EditorBuildSettings.scenes.Where(s => s.enabled)) {
                 var scene = EditorSceneManager.OpenScene(buildScene.path, OpenSceneMode.Single);
@@ -41,6 +43,7 @@ namespace SlayTheClone {
         [MenuItem("UI/Apply Theme To Open Scene")]
         public static void ApplyToOpenScene() {
             BakeAssets();
+            StyleCardPrefab();
             ApplyToOpenScenes();
         }
 
@@ -56,6 +59,96 @@ namespace SlayTheClone {
             foreach (var menu in Object.FindObjectsByType<PauseMenu>(FindObjectsInactive.Include, FindObjectsSortMode.None)) menu.ApplyTheme();
 
             for (int i = 0; i < EditorSceneManager.sceneCount; i++) EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetSceneAt(i));
+        }
+
+        /// <summary>
+        /// Restyles the card face: a dark rim around a frame in the card's faction color (set per card by CardController),
+        /// parchment title and text boxes, a brass-edged art window, the type line on a band of the faction's color,
+        /// and brass plates for the turns-until-operative pip and the stats.
+        /// </summary>
+        public static void StyleCardPrefab() {
+            var root = PrefabUtility.LoadPrefabContents(CardPrefabPath);
+            try {
+                var card = root.GetComponent<CardController>();
+                var parchment = UITheme.Parchment;
+                var rim = UITheme.Hex(0x0B101C);
+
+                UITheme.Round(root.GetComponent<Image>(), rim, 2.5f);
+                var shadow = root.GetComponent<Shadow>();
+                if (shadow != null) {
+                    shadow.effectColor = UITheme.HardShadow;
+                    shadow.effectDistance = new Vector2(0f, -6f);
+                }
+
+                var frame = Part(root, "Frame");
+                UITheme.Round(frame, UITheme.CardFrameColor(Enums.Faction.None), 3f);
+                EnsureTrim(frame.transform, UITheme.WithAlpha(UITheme.Gold, 0.55f), 3f, 0f);
+
+                var titleBar = Part(root, "TitleBar");
+                UITheme.Round(titleBar, parchment, 5f);
+                EnsureTrim(titleBar.transform, UITheme.GoldDim, 5f, 0f);
+
+                var pip = Part(root, "TitleBar/ReadyPip");
+                UITheme.Round(pip, UITheme.Gold, 1.9f); // Corners half its size: a coin
+                EnsureTrim(pip.transform, UITheme.Ink, 1.9f, 0f);
+
+                var artFrame = Part(root, "ArtFrame");
+                UITheme.Round(artFrame, UITheme.Ink, 8f);
+                EnsureTrim(artFrame.transform, UITheme.GoldDim, 8f, 0f).transform.SetAsLastSibling();
+
+                var typeBar = Part(root, "TypeBar");
+                UITheme.Round(typeBar, UITheme.FactionColor(Enums.Faction.None), 5f);
+                EnsureTrim(typeBar.transform, UITheme.WithAlpha(UITheme.Ink, 0.6f), 5f, 0f);
+                var typeText = Part<TextMeshProUGUI>(root, "TypeBar/TypeText");
+                typeText.fontStyle = FontStyles.Bold | FontStyles.SmallCaps;
+                typeText.color = UITheme.Ink;
+
+                var textBox = Part(root, "TextBox");
+                UITheme.Round(textBox, parchment, 5f);
+                EnsureTrim(textBox.transform, UITheme.WithAlpha(UITheme.GoldDim, 0.6f), 5f, 0f);
+
+                var statsBox = Part(root, "StatsBox");
+                UITheme.Round(statsBox, UITheme.Gold, 3f);
+                var outline = statsBox.GetComponent<Outline>();
+                if (outline != null) Object.DestroyImmediate(outline, true);
+                EnsureTrim(statsBox.transform, UITheme.Ink, 3f, 0f);
+                UITheme.AddHardShadow(statsBox, 2f);
+
+                foreach (var path in new[] { "TitleBar/NameText", "TitleBar/ReadyPip/ReadyText", "TypeBar/TypeText", "TextBox/RulesText", "StatsBox/StatsText" }) {
+                    var text = Part<TextMeshProUGUI>(root, path);
+                    text.color = UITheme.Ink;
+                    text.transform.SetAsLastSibling(); // Above the trims
+                }
+
+                var serialized = new SerializedObject(card);
+                serialized.FindProperty("frameImage").objectReferenceValue = frame;
+                serialized.FindProperty("typeBarImage").objectReferenceValue = typeBar;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+
+                PrefabUtility.SaveAsPrefabAsset(root, CardPrefabPath);
+            }
+            finally {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+        }
+
+        private const string CardPrefabPath = "Assets/Prefabs/CardPrefab.prefab";
+
+        private static Image Part(GameObject root, string path) => Part<Image>(root, path);
+
+        private static T Part<T>(GameObject root, string path) where T : Component {
+            var part = root.transform.Find(path);
+            if (part == null || !part.TryGetComponent(out T component)) throw new System.InvalidOperationException($"The card prefab has no {typeof(T).Name} at {path}");
+            return component;
+        }
+
+        // A brass (or other) border over the part, made once and recolored on later runs
+        private static Image EnsureTrim(Transform part, Color color, float cornerScale, float inset) {
+            var existing = part.Find("Trim");
+            var trim = existing != null ? existing.GetComponent<Image>() : UITheme.AddTrim(part, color, cornerScale, inset);
+            trim.color = color;
+            trim.pixelsPerUnitMultiplier = cornerScale;
+            return trim;
         }
 
         /// <summary>Writes the theme's sprites as PNG sprite assets and its heading material, then has the theme use them.</summary>

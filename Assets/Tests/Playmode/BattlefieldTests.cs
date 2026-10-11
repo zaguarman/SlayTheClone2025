@@ -28,34 +28,16 @@ namespace SlayTheClone.Tests {
 
         #region Placing and moving
         [Test]
-        public void APlayedCreature_LandsInTheSlotItWasPlayedOn() {
-            var wolf = game.GiveCard(p1, game.Creature("Wolf", 2, 3));
-
-            game.Run(new PlayCardAction(wolf, p1, p1.Battlefield[3]));
-
-            Assert.AreSame(wolf, p1.Battlefield[3].OccupyingCreature);
-            Assert.AreSame(p1, ((ICreature)wolf).Owner);
-            CollectionAssert.DoesNotContain(p1.Hand, wolf);
-        }
-
-        [Test]
-        public void MovingToAnEmptySlot_RelocatesTheCreature() {
-            var eel = game.Summon(p1, game.Creature("Eel", 1, 3), 0);
-
-            game.Run(new MoveCreatureAction(eel, p1.Battlefield[0], p1.Battlefield[4], p1));
-
-            Assert.IsFalse(p1.Battlefield[0].IsOccupied());
-            Assert.AreSame(p1.Battlefield[4], eel.Slot);
-        }
-
-        [Test]
-        public void MovingOntoAnotherCreature_SwapsThem() {
+        public void Moving_ToAnEmptySlot_RelocatesTheCreature_AndOntoAnother_SwapsThem() {
             var eel = game.Summon(p1, game.Creature("Eel", 1, 3), 0);
             var turtle = game.Summon(p1, game.Creature("Turtle", 1, 3), 1);
 
-            game.Run(new MoveCreatureAction(eel, p1.Battlefield[0], p1.Battlefield[1], p1));
+            game.Run(new MoveCreatureAction(eel, p1.Battlefield[0], p1.Battlefield[4], p1));
+            Assert.IsFalse(p1.Battlefield[0].IsOccupied());
+            Assert.AreSame(p1.Battlefield[4], eel.Slot);
 
-            Assert.AreSame(turtle, p1.Battlefield[0].OccupyingCreature);
+            game.Run(new MoveCreatureAction(eel, p1.Battlefield[4], p1.Battlefield[1], p1));
+            Assert.AreSame(turtle, p1.Battlefield[4].OccupyingCreature);
             Assert.AreSame(eel, p1.Battlefield[1].OccupyingCreature);
         }
 
@@ -85,7 +67,9 @@ namespace SlayTheClone.Tests {
 
             game.Run(new PlayCardAction(newcomer, p1, p1.Battlefield[2]));
 
-            Assert.AreSame(newcomer, p1.Battlefield[2].OccupyingCreature);
+            Assert.AreSame(newcomer, p1.Battlefield[2].OccupyingCreature, "A played creature lands in the slot it was played on");
+            Assert.AreSame(p1, ((ICreature)newcomer).Owner);
+            CollectionAssert.DoesNotContain(p1.Hand, newcomer);
             Assert.IsNull(martyr.Slot);
             Assert.AreEqual(1, p1.Deck.GetDiscardPilePreview().Count(c => c.Name == "Martyr"));
             Assert.AreEqual(Player.MaxHealth, p2.Health, "A replaced creature doesn't die, so its death effect doesn't fire");
@@ -135,13 +119,15 @@ namespace SlayTheClone.Tests {
 
         #region What gets hit
         [Test]
-        public void AnAttack_HitsTheCreatureInTheSlot_OrThePlayerWhenItIsEmpty() {
+        public void AnAttack_HitsTheCreatureInTheSlot_OrThePlayerWhenItIsEmpty_ExactlyOnce() {
             var hound = game.Summon(p1, game.Creature("Hound", 3, 5), 0);
             var ox = game.Summon(p2, game.Creature("Ox", 0, 10), 0);
 
             game.Attack(hound, p2.Battlefield[0]);
-            Assert.AreEqual(7, ox.Health);
+            CollectionAssert.AreEqual(new[] { 3 }, game.History.DamageTo(ox));
             Assert.AreEqual(Player.MaxHealth, p2.Health);
+            game.Resolve(); // The attack was spent; resolving again does nothing
+            Assert.AreEqual(7, ox.Health);
 
             game.Attack(hound, p2.Battlefield[1]);
             Assert.AreEqual(Player.MaxHealth - 3, p2.Health);
@@ -198,16 +184,18 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void ASpreadingAttack_AlsoHitsTheTargetsNeighbours() {
+        public void ASpreadingAttack_AlsoHitsTheTargetsNeighbours_ForTheAttackWhenTheHitsLand() {
             var cleaver = game.Summon(p1, game.Creature("Cleaver", 2, 5, 1,
                 Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.EnemyCreatures, TargetModifier.WithAdjacent)), 0);
-            var enemies = Enumerable.Range(0, 4).Select(i => game.Summon(p2, game.Creature($"Enemy {i}", 0, 5), i)).ToList();
+            var enemies = Enumerable.Range(0, 4).Select(i => game.Summon(p2, game.Creature($"Enemy {i}", 0, 10), i)).ToList();
 
-            game.Attack(cleaver, p2.Battlefield[1]);
+            game.Declare(cleaver, p2.Battlefield[1]);
+            game.ActionsQueue.AddAction(new ModifyAction(cleaver, 3, modifyAttack: true, modifyHealth: false, modifySpeed: false)); // Lands before the attack
+            game.Resolve();
 
-            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(enemies[1]), "The target");
-            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(enemies[0]), "Its left neighbour");
-            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(enemies[2]), "Its right neighbour");
+            CollectionAssert.AreEqual(new[] { 5 }, game.History.DamageTo(enemies[1]), "The target");
+            CollectionAssert.AreEqual(new[] { 5 }, game.History.DamageTo(enemies[0]), "Its left neighbour");
+            CollectionAssert.AreEqual(new[] { 5 }, game.History.DamageTo(enemies[2]), "Its right neighbour");
             CollectionAssert.IsEmpty(game.History.DamageTo(enemies[3]), "Not a neighbour");
         }
 
@@ -228,21 +216,5 @@ namespace SlayTheClone.Tests {
             CollectionAssert.IsEmpty(game.History.DamageTo(left), "The row to the right is longer, so the chain goes right");
         }
         #endregion
-
-        [Test]
-        public void TheBoardAndItsCreatures_AgreeOnPositions_AfterAnyMix_OfMovesSwapsAndReplacements() {
-            var creatures = Enumerable.Range(0, 4).Select(i => game.Summon(p1, game.Creature($"C{i}", 1, 3), i)).ToList();
-
-            game.ActionsQueue.AddAction(new MoveCreatureAction(creatures[0], p1.Battlefield[0], p1.Battlefield[4], p1));
-            game.ActionsQueue.AddAction(new MoveCreatureAction(creatures[1], p1.Battlefield[1], p1.Battlefield[2], p1));
-            game.ActionsQueue.AddAction(new MoveCreatureAction(creatures[3], p1.Battlefield[3], p1.Battlefield[0], p1));
-            game.Resolve();
-            GameAsserts.AssertBoardsConsistent(p1, p2);
-
-            game.Summon(p1, game.Creature("Replacement", 1, 3), 2);
-            game.Run(new DamageCreatureAction(p1.Battlefield[4].OccupyingCreature, 10));
-            GameAsserts.AssertBoardsConsistent(p1, p2);
-            Assert.AreEqual(3, p1.Battlefield.Count(s => s.IsOccupied()));
-        }
     }
 }

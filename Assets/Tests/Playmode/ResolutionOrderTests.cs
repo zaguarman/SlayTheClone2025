@@ -68,50 +68,45 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void AFasterCreature_KillsASlowerOneBeforeItCanStrike() {
+        public void AFasterCreature_KillsASlowerOneBeforeItCanStrike_WhileEqualSpeedsStrikeTogether() {
             var boar = game.Summon(p2, game.Creature("Boar", 4, 2, speed: 1), 0);
             var falcon = game.Summon(p1, game.Creature("Falcon", 4, 2, speed: 3), 0);
+            var knightA = game.Summon(p1, game.Creature("Knight A", 4, 2, speed: 2), 1);
+            var knightB = game.Summon(p2, game.Creature("Knight B", 4, 2, speed: 2), 1);
 
             // The slow one declares first: speed decides, not the order of declaring
             game.Declare(boar, p1.Battlefield[0]);
             game.Declare(falcon, p2.Battlefield[0]);
+            game.Declare(knightA, p2.Battlefield[1]);
+            game.Declare(knightB, p1.Battlefield[1]);
             game.Resolve();
 
             Assert.IsTrue(boar.IsDead);
             Assert.IsFalse(falcon.IsDead);
             CollectionAssert.IsEmpty(game.History.DamageTo(falcon), "The boar died before it could strike");
+            Assert.IsTrue(knightA.IsDead && knightB.IsDead, "Equal speeds hit at the same time, so both knights should die");
         }
 
+        /// <summary>A 2-health guard is attacked for 2 the same turn its side gets +2 attack or armor, from a creature entering or a spell.</summary>
         [Test]
-        public void CreaturesOfEqualSpeed_StrikeEachOtherAtTheSameTime() {
-            var knightA = game.Summon(p1, game.Creature("Knight A", 4, 2, speed: 2), 0);
-            var knightB = game.Summon(p2, game.Creature("Knight B", 4, 2, speed: 2), 0);
+        public void HelpPlayedThisTurn_LandsBeforeThisTurnsAttacks() {
+            var buff = Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures);
+            var armor = Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures);
+            foreach (var (help, isSpell, what) in new[] { (buff, false, "attack"), (armor, false, "armor"), (armor, true, "armor") }) {
+                using (var g = new TestGame()) {
+                    var guard = g.Summon(g.Player1, g.Creature("Guard", 0, 2), 0);
+                    var brute = g.Summon(g.Player2, g.Creature("Brute", 2, 3), 0);
+                    var helper = g.GiveCard(g.Player1, isSpell
+                        ? g.Spell("Shield", TargetType.FriendlyCreatures, help)
+                        : g.Creature("Helper", 0, 3, 1, help));
 
-            game.Declare(knightA, p2.Battlefield[0]);
-            game.Declare(knightB, p1.Battlefield[0]);
-            game.Resolve();
+                    g.Declare(brute, g.Player1.Battlefield[0]);
+                    g.ActionsQueue.AddAction(new PlayCardAction(helper, g.Player1, g.Player1.Battlefield[isSpell ? 0 : 1]));
+                    g.Resolve();
 
-            Assert.IsTrue(knightA.IsDead, "Equal speeds hit at the same time, so both should die");
-            Assert.IsTrue(knightB.IsDead, "Equal speeds hit at the same time, so both should die");
-        }
-
-        [Test]
-        public void OnPlayBuffs_LandBeforeThisTurnsAttacks() => AssertOnPlayHelpLandsBeforeAttacks(ActionType.ModifyStat);
-
-        [Test]
-        public void OnPlayArmor_LandsBeforeThisTurnsAttacks_LikeBuffs() => AssertOnPlayHelpLandsBeforeAttacks(ActionType.Armor);
-
-        [Test]
-        public void ASpellCastThisTurn_LandsBeforeThisTurnsAttacks() {
-            var guard = game.Summon(p1, game.Creature("Guard", 0, 2), 0);
-            var brute = game.Summon(p2, game.Creature("Brute", 2, 3), 0);
-            var shield = game.GiveCard(p1, game.Spell("Shield", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures)));
-
-            game.Declare(brute, p1.Battlefield[0]);
-            game.ActionsQueue.AddAction(new PlayCardAction(shield, p1, p1.Battlefield[0]));
-            game.Resolve();
-
-            Assert.IsFalse(guard.IsDead, "The spell's armor should land before the brute's attack");
+                    Assert.IsFalse(guard.IsDead, $"The {(isSpell ? "spell" : "entering creature")}'s +2 {what} should land before the brute's attack");
+                }
+            }
         }
 
         [Test]
@@ -122,19 +117,6 @@ namespace SlayTheClone.Tests {
             foreach (var type in actionTypes) {
                 Assert.DoesNotThrow(() => ActionsQueue.PriorityOf(type), $"{type.Name} would be queued with no priority");
             }
-        }
-
-        // A 2-health guard is attacked for 2 the same turn a creature that gives its friends +2 enters
-        private void AssertOnPlayHelpLandsBeforeAttacks(ActionType help) {
-            var guard = game.Summon(p1, game.Creature("Guard", 0, 2), 0);
-            var brute = game.Summon(p2, game.Creature("Brute", 2, 3), 0);
-            var helper = game.GiveCard(p1, game.Creature("Helper", 0, 3, 1, Effect(EffectTrigger.OnPlay, help, 2, TargetType.FriendlyCreatures)));
-
-            game.Declare(brute, p1.Battlefield[0]);
-            game.ActionsQueue.AddAction(new PlayCardAction(helper, p1, p1.Battlefield[1]));
-            game.Resolve();
-
-            Assert.IsFalse(guard.IsDead, $"The helper's +2 {help} should land before the brute's attack");
         }
 
         [Test]
@@ -149,29 +131,22 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void RedeclaringAnAttack_ReplacesTheFirstOne() {
+        public void RedeclaringAnAttack_ReplacesTheFirstOne_AndACancelledAttackDoesNotResolve() {
             var hound = game.Summon(p1, game.Creature("Hound", 2, 5), 0);
+            var deserter = game.Summon(p1, game.Creature("Deserter", 2, 5), 4);
             var first = game.Summon(p2, game.Creature("First", 0, 5), 0);
             var second = game.Summon(p2, game.Creature("Second", 0, 5), 1);
 
             game.Declare(hound, p2.Battlefield[0]);
             game.Declare(hound, p2.Battlefield[1]);
+            game.Declare(deserter, p2.Battlefield[4]);
+            Assert.IsTrue(game.CombatHandler.CancelAttack(deserter));
             game.Resolve();
 
             CollectionAssert.IsEmpty(game.History.DamageTo(first));
             CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(second));
-        }
-
-        [Test]
-        public void ACancelledAttack_DoesNotResolve() {
-            var hound = game.Summon(p1, game.Creature("Hound", 2, 5), 0);
-
-            game.Declare(hound, p2.Battlefield[0]);
-            Assert.IsTrue(game.CombatHandler.CancelAttack(hound));
-            game.Resolve();
-
-            Assert.AreEqual(Player.MaxHealth, p2.Health);
-            CollectionAssert.IsEmpty(game.History.ExecutedOf<BattlefieldCombatAction>());
+            Assert.AreEqual(Player.MaxHealth, p2.Health, "The cancelled attack on the empty slot shouldn't land");
+            Assert.AreEqual(1, game.History.ExecutedOf<BattlefieldCombatAction>().Count());
         }
 
         [Test]

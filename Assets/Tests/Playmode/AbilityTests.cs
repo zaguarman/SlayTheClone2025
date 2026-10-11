@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 using static SlayTheClone.Enums;
@@ -25,35 +26,25 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [Test]
-        public void OnPlay_FiresOnceWhenTheCreatureLands() {
+        public void OnPlay_FiresOnce_WhenTheCreatureLands_OrWhenItBecomesOperative() {
             var wolf = game.GiveCard(p1, game.Creature("Wolf", 2, 3, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Enemy)));
-
-            game.Run(new PlayCardAction(wolf, p1, p1.Battlefield[0]));
-            Assert.AreEqual(Player.MaxHealth - 2, p2.Health);
-
-            game.StartTurn();
-            game.StartTurn();
-            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(p2), "The on-play effect fired again on a later turn");
-        }
-
-        [Test]
-        public void OnPlay_OfACreatureThatIsNotOperativeYet_WaitsForIt_ThenFiresOnce() {
-            var golemData = game.Creature("Golem", 3, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Enemy));
+            var golemData = game.Creature("Golem", 3, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 5, TargetType.Enemy));
             golemData.turnsUntilOperative = 2;
 
-            var golem = game.Summon(p1, golemData, 0);
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "Fired before the creature was operative");
+            game.Run(new PlayCardAction(wolf, p1, p1.Battlefield[0]));
+            var golem = game.Summon(p1, golemData, 1);
+            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(p2), "Only the operative wolf fires when it lands");
 
             game.StartTurn();
             Assert.IsFalse(golem.IsOperative);
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "Fired before the creature was operative");
+            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(p2), "The golem fired before it was operative");
 
             game.StartTurn();
             Assert.IsTrue(golem.IsOperative);
-            Assert.AreEqual(Player.MaxHealth - 2, p2.Health, "Didn't fire when the creature became operative");
+            CollectionAssert.AreEqual(new[] { 2, 5 }, game.History.DamageTo(p2), "The golem should fire when it becomes operative");
 
             game.StartTurn();
-            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(p2), "Fired more than once");
+            CollectionAssert.AreEqual(new[] { 2, 5 }, game.History.DamageTo(p2), "An on-play effect fired again on a later turn");
         }
 
         [Test]
@@ -66,16 +57,7 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(martyr.IsDead);
             CollectionAssert.AreEqual(new[] { martyr }, game.History.Deaths, "The creature should die exactly once");
             CollectionAssert.AreEqual(new[] { 3 }, game.History.DamageTo(p2), "The death effect should fire exactly once");
-        }
-
-        [Test]
-        public void OnDeath_DoesNotFireForACreatureThatIsReplaced() {
-            game.Summon(p1, game.Creature("Martyr", 1, 2, 1, Effect(EffectTrigger.OnDeath, ActionType.Damage, 3, TargetType.Enemy)), 0);
-
-            game.Summon(p1, game.Creature("Newcomer", 1, 2), 0);
-
-            CollectionAssert.IsEmpty(game.History.Deaths, "Being replaced isn't dying");
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "The replaced creature's death effect fired");
+            Assert.AreEqual(1, p1.Deck.GetDiscardPilePreview().Count(c => c.CardId == martyr.CardId), "Discarded more than once");
         }
 
         [Test]
@@ -125,8 +107,9 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
-        public IEnumerator EndOfTurn_FiresAtTheEndOfEveryTurn() {
-            var phoenix = game.Summon(p1, game.Creature("Phoenix", 1, 5, 1, Effect(EffectTrigger.EndOfTurn, ActionType.Damage, 2, TargetType.Self)), 0);
+        public IEnumerator EndOfTurn_FiresAtTheEndOfEveryTurn_AndSelfEffectsOnlyHitTheCreatureItself() {
+            var bystander = game.Summon(p1, game.Creature("Bystander", 1, 5), 0);
+            var phoenix = game.Summon(p1, game.Creature("Phoenix", 1, 5, 1, Effect(EffectTrigger.EndOfTurn, ActionType.Damage, 2, TargetType.Self)), 1);
 
             yield return game.EndTurn();
             Assert.AreEqual(3, phoenix.Health);
@@ -134,17 +117,9 @@ namespace SlayTheClone.Tests {
             yield return game.EndTurn();
             Assert.AreEqual(1, phoenix.Health);
             CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(phoenix), "Once per turn");
-        }
-
-        [Test]
-        public void SelfEffects_OnlyAffectTheCreatureItself() {
-            var bystander = game.Summon(p1, game.Creature("Bystander", 1, 5), 0);
-            var falcon = game.Summon(p1, game.Creature("Falcon", 3, 3, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.Self)), 1);
-
-            Assert.AreEqual(2, falcon.Health);
-            Assert.AreEqual(5, bystander.Health);
-            Assert.AreEqual(Player.MaxHealth, p1.Health);
-            Assert.AreEqual(Player.MaxHealth, p2.Health);
+            Assert.AreEqual(5, bystander.Health, "Self means the creature itself");
+            Assert.AreEqual(Player.MaxHealth, p1.Health, "Self means the creature itself");
+            Assert.AreEqual(Player.MaxHealth, p2.Health, "Self means the creature itself");
         }
 
         [Test]

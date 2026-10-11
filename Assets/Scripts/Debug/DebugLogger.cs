@@ -145,10 +145,17 @@ namespace SlayTheClone {
             return color;
         }
 
+        /// <summary>
+        /// Drops plain logs (warnings and errors still go through). Tests that play whole turns turn it on: the game
+        /// logs thousands of lines a turn, and writing them to the console is most of what a turn costs.
+        /// </summary>
+        public static bool MuteInfo { get; set; }
+
         public static void Log(
             object message,
             LogTag tags,
             [CallerFilePath] string sourceFilePath = "") {
+            if (MuteInfo) return;
             instance?.LogWithType(LogType.Log, message, tags, sourceFilePath);
         }
 

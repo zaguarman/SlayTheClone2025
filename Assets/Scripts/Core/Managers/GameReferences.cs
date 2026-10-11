@@ -61,10 +61,6 @@ namespace SlayTheClone {
         [Header("Card Components")]
         [SerializeField] private Button cardPrefab;
 
-        [Header("Card Style")]
-        [SerializeField] private Color player1CardColor = new Color(0.8f, 0.9f, 1f);
-        [SerializeField] private Color player2CardColor = new Color(1f, 0.8f, 0.8f);
-
         [Header("Decks (used when the main menu didn't choose a match)")]
         [SerializeField] private DeckScriptableObject player1Deck;
         [SerializeField] private DeckScriptableObject player2Deck;
@@ -74,8 +70,6 @@ namespace SlayTheClone {
 
         public PlayerUIReferences Player1References => player1References;
         public PlayerUIReferences Player2References => player2References;
-        public Color Player1CardColor => player1CardColor;
-        public Color Player2CardColor => player2CardColor;
 
         #region Unity Lifecycle
         private void OnEnable() {

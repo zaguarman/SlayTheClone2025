@@ -73,7 +73,7 @@ namespace SlayTheClone {
             player1Plaque.Show(player1Name, player1Faction, references.Player1Deck);
             player2Plaque = PlayerPlaque.Ensure(p2.PlayerUI.transform, p2.HealthText);
             player2Plaque.Show(player2Name, player2Faction, references.Player2Deck);
-            StyleTurnBanner(FindObjectOfType<TurnUI>(true));
+            StyleTurnBanner(FindFirstObjectByType<TurnUI>(FindObjectsInactive.Include));
             StyleEndTurn(references.GetResolveActionsButton());
             StyleWeather(references.GetWeatherText(), references.GetWeatherCycleButton());
             deckButton = StylePileButton(references.GetDeckViewButton(), flip: true);

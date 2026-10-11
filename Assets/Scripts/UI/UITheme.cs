@@ -49,6 +49,9 @@ namespace SlayTheClone {
             _ => Gold
         };
 
+        /// <summary>The body of a card's frame: its faction's color, deepened toward the table's navy.</summary>
+        public static Color CardFrameColor(Faction faction) => Color.Lerp(Hex(0x101828), FactionColor(faction), 0.5f);
+
         /// <summary>A one-glyph emblem for a faction, shown on the player's plaque.</summary>
         public static string FactionGlyph(Faction faction) => faction switch {
             Faction.Corporate => "$",
@@ -264,7 +267,7 @@ namespace SlayTheClone {
                 label.color = primary ? Ink : Parchment;
                 label.fontStyle |= FontStyles.Bold;
                 label.raycastTarget = false;
-                label.enableWordWrapping = false;
+                label.textWrappingMode = TextWrappingModes.NoWrap;
                 label.transform.SetAsLastSibling(); // Above the trim
             }
         }
@@ -359,7 +362,7 @@ namespace SlayTheClone {
             label.color = color;
             label.alignment = alignment;
             label.raycastTarget = false;
-            label.enableWordWrapping = false;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
             return label;
         }
 

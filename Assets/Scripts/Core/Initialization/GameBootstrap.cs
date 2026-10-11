@@ -43,8 +43,7 @@ namespace SlayTheClone {
             Log("GameManager initialized", LogTag.Initialization);
 
             // 4. GameUI, with what every card face needs and the views of both sides of the table
-            var cardViews = new CardViews(gameReferences.GetCardPrefab().GetComponent<CardController>(),
-                gameReferences.Player1CardColor, gameReferences.Player2CardColor, gameMediator, gameManager);
+            var cardViews = new CardViews(gameReferences.GetCardPrefab().GetComponent<CardController>(), gameMediator, gameManager);
             var tableViews = new TableViews(gameReferences.Player1References, gameReferences.Player2References);
             if (!TryFind(out GameUI gameUI)) yield break;
             if (!gameUI.IsInitialized) {

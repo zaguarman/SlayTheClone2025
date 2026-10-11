@@ -28,6 +28,8 @@ namespace SlayTheClone {
         [SerializeField] private Image artImage;
         [SerializeField] private TextMeshProUGUI statusText; // Icons of the statuses currently on the creature
         [SerializeField] private Image cardImage;
+        [SerializeField] private Image frameImage;   // Takes the card's faction color, like a Magic frame
+        [SerializeField] private Image typeBarImage; // The type line's band, in the faction's full color
 
         // Like Magic cards, flavor text is only printed when the whole text box still fits at this size or larger
         private const float MinFlavorFontSize = 8f;
@@ -53,7 +55,7 @@ namespace SlayTheClone {
 
         // Battlefield card about to be replaced by a summon (queued, or previewed while a creature is dragged over it)
         private const float ReplacedAlpha = 0.45f;
-        private static readonly Color ReplaceLabelColor = new Color(1f, 0.45f, 0.35f);
+        private static readonly Color ReplaceLabelColor = UITheme.HealthLow;
         private GameObject replaceBadge;
         private bool isMarkedForReplacement;
         private bool isReplacementPreviewed;
@@ -216,10 +218,8 @@ namespace SlayTheClone {
         }
 
         private void UpdateCardVisuals() {
-            // The outer border shows who owns the card
-            if (cardImage != null && Player != null) {
-                cardImage.color = cardViews.GetColor(Player);
-            }
+            if (frameImage != null) frameImage.color = UITheme.CardFrameColor(baseCardData.faction);
+            if (typeBarImage != null) typeBarImage.color = UITheme.FactionColor(baseCardData.faction);
 
             artImage.sprite = baseCardData.artwork;
             artImage.color = baseCardData.artwork != null ? Color.white : new Color(0.25f, 0.25f, 0.3f);
@@ -310,7 +310,7 @@ namespace SlayTheClone {
                     .SetEase(Ease.InOutSine)
                     .SetLoops(-1, LoopType.Yoyo)
                     .SetTarget(transform);
-                if (queuedBadge == null) queuedBadge = CreateBadge("QueuedBadge", "QUEUED", new Color(0.95f, 0.78f, 0.35f), 0.4f, 0.6f);
+                if (queuedBadge == null) queuedBadge = CreateBadge("QueuedBadge", "Queued", UITheme.Gold, 0.4f, 0.6f);
                 queuedBadge.SetActive(true);
             }
             else {
@@ -342,10 +342,11 @@ namespace SlayTheClone {
             bool show = isMarkedForReplacement || isReplacementPreviewed;
             canvasGroup.alpha = show ? ReplacedAlpha : 1f;
             // Bottom strip, so it stays visible under the raised ghost of the incoming creature
-            if (show && replaceBadge == null) replaceBadge = CreateBadge("ReplaceBadge", "REPLACE", ReplaceLabelColor, 0.02f, 0.22f);
+            if (show && replaceBadge == null) replaceBadge = CreateBadge("ReplaceBadge", "Replace", ReplaceLabelColor, 0.02f, 0.22f);
             if (replaceBadge != null) replaceBadge.SetActive(show);
         }
 
+        // A navy band across the card with brass edges and a word on it
         private GameObject CreateBadge(string objectName, string text, Color textColor, float anchorMinY, float anchorMaxY) {
             var badge = new GameObject(objectName, typeof(RectTransform), typeof(Image));
             badge.layer = gameObject.layer;
@@ -355,8 +356,14 @@ namespace SlayTheClone {
             badgeRect.anchorMax = new Vector2(1f, anchorMaxY);
             badgeRect.offsetMin = badgeRect.offsetMax = Vector2.zero;
             var badgeImage = badge.GetComponent<Image>();
-            badgeImage.color = new Color(0.08f, 0.06f, 0.1f, 0.9f);
+            badgeImage.color = UITheme.WithAlpha(UITheme.TableDark, 0.92f);
             badgeImage.raycastTarget = false;
+            foreach (float edge in new[] { 0f, 1f }) {
+                var line = UITheme.NewImage("Edge", badge.transform, UITheme.Gold);
+                line.rectTransform.anchorMin = new Vector2(0f, edge);
+                line.rectTransform.anchorMax = new Vector2(1f, edge);
+                line.rectTransform.sizeDelta = new Vector2(0f, 2f);
+            }
 
             var label = new GameObject("Label", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
             label.gameObject.layer = gameObject.layer;
@@ -365,7 +372,8 @@ namespace SlayTheClone {
             label.rectTransform.anchorMax = Vector2.one;
             label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
             label.text = text;
-            label.fontStyle = FontStyles.Bold;
+            label.fontStyle = FontStyles.Bold | FontStyles.SmallCaps;
+            label.characterSpacing = 6f;
             label.alignment = TextAlignmentOptions.Center;
             label.color = textColor;
             label.enableAutoSizing = true;

@@ -5520,8 +5520,6 @@ MonoBehaviour:
     handUI: {fileID: 1707401508}
     battlefieldUI: {fileID: 1270125520}
   cardPrefab: {fileID: 5464925446207512663, guid: 9164b01cda78bc545b913d180247e537, type: 3}
-  player1CardColor: {r: 0.8, g: 0.9, b: 1, a: 1}
-  player2CardColor: {r: 1, g: 0.8, b: 0.8, a: 1}
   player1Deck: {fileID: 11400000, guid: 07aa431b8e0f1f8418ce31ee74c28f22, type: 2}
   player2Deck: {fileID: 11400000, guid: e51066c80da8d2d4a813dbb0973d34e3, type: 2}
 --- !u!1 &995158398
@@ -6853,7 +6851,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 1
+  m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
@@ -10319,7 +10317,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 1
+  m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0

@@ -66,7 +66,7 @@ namespace SlayTheClone {
             nameText.enableAutoSizing = true;
             nameText.fontSizeMin = 16;
             nameText.fontSizeMax = 26;
-            nameText.overflowMode = TextOverflowModes.Ellipsis;
+            nameText.overflowMode = TextOverflowModes.Truncate; // The font has no ellipsis character
             PlaceTopLeft(nameText.rectTransform, 128f, 12f, 200f, 32f);
 
             factionText = UITheme.NewText("Faction", transform, "", 17f, UITheme.Gold, TextAlignmentOptions.Left);
@@ -101,7 +101,7 @@ namespace SlayTheClone {
                 healthText.fontSize = 22;
                 healthText.fontStyle = FontStyles.Bold;
                 healthText.color = UITheme.Parchment;
-                healthText.enableWordWrapping = false;
+                healthText.textWrappingMode = TextWrappingModes.NoWrap;
                 healthText.raycastTarget = false;
             }
 
@@ -125,6 +125,7 @@ namespace SlayTheClone {
             if (emblemTrim != null) emblemTrim.GetComponent<Image>().pixelsPerUnitMultiplier = EmblemCornerScale;
             glyphText.text = UITheme.FactionGlyph(faction);
             nameText.text = playerName;
+            nameText.overflowMode = TextOverflowModes.Truncate; // Also for plaques baked before the font's missing ellipsis was noticed
             factionText.text = faction == Faction.None ? "Unaligned" : CardTextFormatter.FactionName(faction);
             factionText.color = factionColor;
 

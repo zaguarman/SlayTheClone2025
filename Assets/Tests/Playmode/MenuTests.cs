@@ -39,7 +39,7 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [UnityTest]
-        public IEnumerator Play_OpensTheMatchSetup_WithAButtonForEveryDeckAndOpponent() {
+        public IEnumerator Play_OpensTheMatchSetup_WithEveryChoice_StartingWithTheFirstOpponentAgainstAnotherDeck() {
             yield return OpenSetup();
 
             Assert.AreEqual(MenuSceneName, SceneManager.GetActiveScene().name, "Play started the game without asking for a match");
@@ -51,11 +51,6 @@ namespace SlayTheClone.Tests {
             foreach (var opponent in catalog.Opponents) {
                 Assert.IsNotNull(SetupButton(MatchSetupMenu.OpponentButton + opponent.name));
             }
-        }
-
-        [UnityTest]
-        public IEnumerator TheSetup_StartsWithTheFirstOpponentAndTheirDeck_AgainstAnotherDeck() {
-            yield return OpenSetup();
 
             Assert.AreSame(catalog.Opponents[0], setup.Opponent);
             Assert.AreSame(catalog.Opponents[0].deck, setup.OpponentDeck, "An opponent brings their own deck");
@@ -65,7 +60,7 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
-        public IEnumerator PickingAnOpponent_BringsTheirDeck_WhichCanThenBeSwapped() {
+        public IEnumerator PickingAnOpponent_BringsTheirDeck_WhichCanBeSwapped_AndBackKeepsTheChoices() {
             yield return OpenSetup();
 
             foreach (var opponent in catalog.Opponents) {
@@ -81,16 +76,9 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(otherDeck, setup.OpponentDeck);
             Assert.AreSame(chosenOpponent, setup.Opponent, "Swapping their deck keeps the opponent");
             AssertOnlyChoicesHighlighted();
-        }
 
-        [UnityTest]
-        public IEnumerator Back_ReturnsToTheTitleScreen_AndPlayReopensTheSameChoices() {
-            yield return OpenSetup();
             var yourDeck = catalog.Decks.Last();
-            var opponent = catalog.Opponents.Last();
             Click(SetupButton(MatchSetupMenu.PlayerDeckButton + yourDeck.GetDeckName()));
-            Click(SetupButton(MatchSetupMenu.OpponentButton + opponent.name));
-
             Click(SetupButton(MatchSetupMenu.BackButtonName));
             yield return null;
             Assert.IsFalse(setup.IsOpen);
@@ -98,8 +86,9 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(MatchSetup.IsChosen, "Going back doesn't choose a match");
 
             yield return OpenSetup();
-            Assert.AreSame(yourDeck, setup.PlayerDeck);
-            Assert.AreSame(opponent, setup.Opponent);
+            Assert.AreSame(yourDeck, setup.PlayerDeck, "Play should reopen the setup with the same choices");
+            Assert.AreSame(chosenOpponent, setup.Opponent);
+            Assert.AreSame(otherDeck, setup.OpponentDeck);
             AssertOnlyChoicesHighlighted();
         }
 
@@ -127,11 +116,15 @@ namespace SlayTheClone.Tests {
             game.AssertViewsMatchRules();
         }
 
-        /// <summary>Each deck on offer, against the next one, plays its creatures and spells for a few turns without an error.</summary>
+        /// <summary>
+        /// Every deck on offer plays all its creatures, spells and attacks for several turns without an error, while
+        /// the screen keeps showing what the rules hold and no card is lost, duplicated or in two places.
+        /// Each game pits two decks against each other, so half as many games as decks cover them all.
+        /// </summary>
         [UnityTest]
-        public IEnumerator EveryDeckOnOffer_PlaysAFewTurns_WithoutErrors() {
+        public IEnumerator EveryDeckOnOffer_PlaysSeveralTurns_WithTheScreenInStepWithTheRules() {
             var decks = catalog.Decks;
-            for (int i = 0; i < decks.Count; i++) {
+            for (int i = 0; i < decks.Count; i += 2) {
                 var yourDeck = decks[i];
                 var theirDeck = decks[(i + 1) % decks.Count];
                 yield return game.Load(Seed, yourDeck, "Test Opponent", theirDeck);
@@ -141,6 +134,9 @@ namespace SlayTheClone.Tests {
                 var cardCounts = game.Players.ToDictionary(p => p, GameAsserts.CountCards);
                 for (int turn = 1; turn <= 3; turn++) {
                     foreach (var player in game.Players) PlayEverything(player);
+                    yield return null;
+                    game.AssertViewsMatchRules(); // Queued plays: ghosts on the boards, spells marked in the hands
+
                     yield return game.EndTurn();
 
                     string match = $"{yourDeck.GetDeckName()} vs {theirDeck.GetDeckName()}, turn {turn}";

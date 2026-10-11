@@ -14,12 +14,16 @@ using Object = UnityEngine.Object;
 namespace SlayTheClone.Tests {
     /// <summary>
     /// The real game scene, started the way a player gets it, for tests that drive the whole game: rules, turn flow,
-    /// resolution playback and the views. Time runs faster so the playback beats don't slow the tests down.
+    /// resolution playback and the views. Time runs faster, frames aren't capped and plain logs are muted, so the playback
+    /// beats (which last at least a frame each) don't slow the tests down.
     /// Moves are made the way the views make them (queueing plays, declaring attacks) and turns end by clicking End Turn.
     /// </summary>
     public sealed class SceneGame : IDisposable {
         public const string SceneName = "InitialTestScene";
-        private const float TimeScale = 20f;
+        private const float TimeScale = 100f; // Unity's maximum
+        private int savedVSyncCount;
+        private int savedTargetFrameRate;
+        private bool framesUncapped;
         private static readonly Regex StatsLine = new Regex(@"^(\d+)/(\d+)/(\d+)(?:<color=[^>]*>\+(\d+)</color>)?$");
 
         public TestCards Cards { get; } = new TestCards();
@@ -48,6 +52,7 @@ namespace SlayTheClone.Tests {
 
         /// <summary>Runs whatever loads the game scene (the main menu's Start button, say) and waits for the game to start.</summary>
         public IEnumerator Start(int seed, Action loadGameScene) {
+            DebugLogger.MuteInfo = true; // The game logs thousands of lines a turn; writing them is what slows playback down most
             // Set after the scene's objects wake up and before GameBootstrap starts the game
             bool loaded = false; // The game scene being replaced may still look started
             void SetSeed(Scene scene, LoadSceneMode mode) {
@@ -68,6 +73,7 @@ namespace SlayTheClone.Tests {
             Manager = Object.FindFirstObjectByType<GameManager>();
             References = Object.FindFirstObjectByType<GameReferences>();
             Time.timeScale = TimeScale; // After the scene's pause menu has reset it
+            UncapFrames();
             yield return null;
         }
 
@@ -76,8 +82,23 @@ namespace SlayTheClone.Tests {
             return ui != null && ui.IsInitialized && Object.FindFirstObjectByType<ResolutionPresenter>() != null;
         }
 
+        private void UncapFrames() {
+            if (framesUncapped) return;
+            savedVSyncCount = QualitySettings.vSyncCount;
+            savedTargetFrameRate = Application.targetFrameRate;
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = -1;
+            framesUncapped = true;
+        }
+
         public void Dispose() {
             Time.timeScale = 1f;
+            DebugLogger.MuteInfo = false;
+            if (framesUncapped) {
+                QualitySettings.vSyncCount = savedVSyncCount;
+                Application.targetFrameRate = savedTargetFrameRate;
+                framesUncapped = false;
+            }
             MatchSetup.Clear(); // A chosen match would otherwise carry over to the next test
             Cards.Dispose();
         }

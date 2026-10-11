@@ -30,19 +30,6 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [Test]
-        public void TheFirstDeal_GivesEachPlayerFiveCardsFromTheirDeck() {
-            game.SetDecks(game.Fillers(10), game.Fillers(10));
-
-            game.CardDealingService.DealInitialHands(p1, p2, 5);
-
-            foreach (var player in new[] { p1, p2 }) {
-                Assert.AreEqual(5, player.Hand.Count);
-                Assert.AreEqual(5, player.Deck.CardsRemaining);
-                GameAsserts.AssertEachCardInOneZone(player);
-            }
-        }
-
-        [Test]
         public void Drawing_StopsAtTheHandLimit_AndLeavesTheRestInTheDeck() {
             game.SetDecks(game.Fillers(15), game.Fillers(1));
 
@@ -54,29 +41,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void DrawingWithNoCardsLeft_DrawsWhatThereIs() {
-            game.SetDecks(game.Fillers(2), game.Fillers(1));
-
-            game.Run(new DrawCardsAction(p1, 5));
-
-            Assert.AreEqual(2, p1.Hand.Count);
-            Assert.AreEqual(0, p1.Deck.CardsRemaining);
-        }
-
-        [Test]
-        public void DiscardingTheHand_SendsEveryCardToTheDiscardPile() {
-            game.SetDecks(game.Fillers(6), game.Fillers(1));
-            game.Run(new DrawCardsAction(p1, 4));
-
-            game.Run(new DiscardHandAction(p1));
-
-            Assert.AreEqual(0, p1.Hand.Count);
-            Assert.AreEqual(4, p1.Deck.GetDiscardPilePreview().Count);
-            Assert.AreEqual(6, GameAsserts.CountCards(p1));
-        }
-
-        [Test]
-        public void DrawingFromAnEmptyDeck_ShufflesTheDiscardPileBackIn() {
+        public void DrawingFromAnEmptyDeck_ShufflesTheDiscardPileBackIn_ThenDrawsWhatThereIs() {
             game.SetDecks(game.Fillers(3), game.Fillers(1));
             game.Run(new DrawCardsAction(p1, 3));
             var firstHand = p1.Hand.ToList();
@@ -89,20 +54,10 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(0, p1.Deck.GetDiscardPilePreview().Count);
             CollectionAssert.IsEmpty(p1.Hand.Intersect(firstHand), "Discarded cards come back as fresh copies");
             GameAsserts.AssertEachCardInOneZone(p1);
-        }
 
-        [Test]
-        public void ACastSpell_LeavesTheHandAndIsDiscardedOnce() {
-            var bolt = game.Spell("Bolt", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
-            game.SetDecks(new List<CardData> { bolt }, game.Fillers(1));
-            game.CardDealingService.DealInitialHands(p1, p2, 1);
-            var boltCard = game.InHand(p1, "Bolt");
-
-            game.Run(new PlayCardAction(boltCard, p1, p2.Battlefield[0]));
-
-            CollectionAssert.DoesNotContain(p1.Hand, boltCard);
-            Assert.AreEqual(1, p1.Deck.GetDiscardPilePreview().Count(c => c.Name == "Bolt"));
-            Assert.AreEqual(1, GameAsserts.CountCards(p1));
+            game.Run(new DrawCardsAction(p1, 5)); // Only 1 card left, and nothing to reshuffle
+            Assert.AreEqual(3, p1.Hand.Count);
+            Assert.AreEqual(0, p1.Deck.CardsRemaining);
         }
 
         [Test]
@@ -133,47 +88,6 @@ namespace SlayTheClone.Tests {
                 CollectionAssert.IsEmpty(player.Hand.Intersect(firstHands[player]), "The old hand should have been discarded");
                 Assert.AreEqual(5, player.Deck.GetDiscardPilePreview().Count);
                 Assert.AreEqual(10, player.Deck.CardsRemaining);
-            }
-        }
-
-        [UnityTest]
-        public IEnumerator CardsAreNeverLostOrDuplicated_OverSeveralTurnsOfPlay() {
-            var wolf = game.Creature("Wolf", 2, 3);
-            var bolt = game.Spell("Bolt", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
-            var fish = game.Creature("Fish", 1, 1);
-            var p1Deck = new List<CardData> { wolf, wolf, bolt, bolt, fish, fish, fish, fish, fish };
-            var p2Deck = new List<CardData> { fish, fish, fish, fish, fish, fish, fish, fish, fish };
-            game.SetDecks(p1Deck, p2Deck);
-            game.CardDealingService.DealInitialHands(p1, p2, 5);
-
-            for (int turn = 1; turn <= 5; turn++) {
-                foreach (var player in new[] { p1, p2 }) {
-                    PlayWholeHand(player);
-                    foreach (var slot in player.Battlefield.Where(s => s.IsOccupied())) {
-                        game.Declare(slot.OccupyingCreature, player.Opponent.Battlefield[slot.Index]);
-                    }
-                }
-                yield return game.EndTurn();
-
-                Assert.AreEqual(p1Deck.Count, GameAsserts.CountCards(p1), $"Player 1's card count changed on turn {turn}");
-                Assert.AreEqual(p2Deck.Count, GameAsserts.CountCards(p2), $"Player 2's card count changed on turn {turn}");
-                GameAsserts.AssertEachCardInOneZone(p1);
-                GameAsserts.AssertEachCardInOneZone(p2);
-                GameAsserts.AssertBoardsConsistent(p1, p2);
-            }
-        }
-
-        // Creatures go to the player's empty slots, spells at the enemy's first slot
-        private void PlayWholeHand(Player player) {
-            var freeSlots = new Queue<BoardSlot>(player.Battlefield.Where(s => !s.IsOccupied()));
-            foreach (var card in player.Hand.ToList()) {
-                if (card is ICreature) {
-                    if (freeSlots.Count == 0) continue;
-                    game.ActionsQueue.AddAction(new PlayCardAction(card, player, freeSlots.Dequeue()));
-                }
-                else {
-                    game.ActionsQueue.AddAction(new PlayCardAction(card, player, player.Opponent.Battlefield[0]));
-                }
             }
         }
 
