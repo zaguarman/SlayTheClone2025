@@ -204,7 +204,6 @@ Some details live in separate documents. This GDD refers to them by name:
 • 'Player Character Compendium': Starting Player Characters, their unique traits, and starter decks.
 • 'Faction Compendium': Faction themes and how they relate to each other.
 
-• Definitions in Companion Documents Are Stable: The names and main definitions in these documents and in the Glossary above are final. Don't change them without design approval.
 • This GDD Explains How Things Fit Together: The companion documents give precise definitions; this GDD explains how the pieces work together.
 • Keeping Them in Sync: When a companion document changes, check this GDD to make sure everything still lines up.
 
@@ -679,7 +678,7 @@ What Triggers "On Being Revealed" Effects (the OnRevealedByIntelligence trigger)
 
 5.2 Status Effects
 
-Status effects are temporary or ongoing conditions on creatures that change their behavior or stats. (Conditions on slots are Slot Effects, not status effects.) Every status effect is defined in the 'Status Effects Compendium', which says whether it can be cleansed, how it interacts with Dawn and Dusk, how it decays, and which faction owns it. Each faction owns at most 3 statuses; a small Neutral set (Deployment Time, Revealed, Concealed, Exposed, Muted, Anchored) is open to every faction. This GDD always uses their exact names. New status effects need design approval and must be added to the compendium before use.
+Status effects are temporary or ongoing conditions on creatures that change their behavior or stats. (Conditions on slots are Slot Effects, not status effects.) Every status effect is defined in the 'Status Effects Compendium', which says whether it can be cleansed, how it interacts with Dawn and Dusk, how it decays, and which faction owns it. Each faction owns at most 3 statuses; a small Neutral set (Deployment Time, Revealed, Concealed, Exposed, Muted, Anchored) is open to every faction. This GDD always uses their exact names. New status effects must be added to the compendium before use.
 
 Core Principles:
 
