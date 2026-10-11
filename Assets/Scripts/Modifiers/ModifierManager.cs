@@ -13,7 +13,7 @@ namespace SlayTheClone {
         public IModifierFactory ModifierFactory => modifierFactory;
 
         private readonly Dictionary<string, List<IModifier>> activeModifiers = new Dictionary<string, List<IModifier>>();
-        private readonly Dictionary<string, Creature> creatures = new Dictionary<string, Creature>();
+        private readonly Dictionary<string, ICreature> creatures = new Dictionary<string, ICreature>();
         #endregion
 
         #region Constructor
@@ -26,7 +26,7 @@ namespace SlayTheClone {
         #endregion
 
         #region Creature Registration
-        public void RegisterCreature(Creature creature) {
+        public void RegisterCreature(ICreature creature) {
             if (creature == null) return;
             if (!creatures.ContainsKey(creature.TargetId)) {
                 creatures.Add(creature.TargetId, creature);
@@ -36,18 +36,15 @@ namespace SlayTheClone {
             }
         }
 
-        // Method signature now accepts ICreature
         public void UnregisterCreature(ICreature creature) {
             if (creature == null) return;
 
-            // Use TargetId directly from ICreature
             if (creatures.Remove(creature.TargetId)) {
                 Log($"ModifierManager: Unregistered Creature '{creature.Name}' (TargetID: {creature.TargetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
 
                 if (activeModifiers.TryGetValue(creature.TargetId, out var mods)) {
                     var modifiersToRemove = mods.ToList();
                     foreach (var mod in modifiersToRemove) {
-                        // RemoveModifier takes object, so ICreature is fine here
                         RemoveModifier(creature, mod);
                     }
                     activeModifiers.Remove(creature.TargetId);
@@ -57,7 +54,7 @@ namespace SlayTheClone {
         #endregion
 
         #region Modifier Management
-        public IEnumerable<IModifier> GetActiveModifiersFor(Creature creature) {
+        public IEnumerable<IModifier> GetActiveModifiersFor(ICreature creature) {
             if (creature == null) return Enumerable.Empty<IModifier>();
 
             if (activeModifiers.TryGetValue(creature.TargetId, out var creatureMods)) {
@@ -67,77 +64,63 @@ namespace SlayTheClone {
             return Enumerable.Empty<IModifier>();
         }
 
-        public void ApplyModifier(object target, IModifier modifier) {
-            if (target == null || modifier == null) return;
+        public void ApplyModifier(ICreature creatureTarget, IModifier modifier) {
+            if (creatureTarget == null || modifier == null) return;
 
-            Creature creatureTarget = target as Creature;
+            string targetId = creatureTarget.TargetId;
+            if (!creatures.ContainsKey(targetId)) {
+                LogWarning($"ModifierManager: Cannot apply modifier '{modifier.Name}' to unregistered creature '{creatureTarget.Name}' (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
+                return;
+            }
 
-            if (creatureTarget != null) {
-                string targetId = creatureTarget.TargetId;
-                if (!creatures.ContainsKey(targetId)) {
-                    LogWarning($"ModifierManager: Cannot apply modifier '{modifier.Name}' to unregistered creature '{creatureTarget.Name}' (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
-                    return;
+            if (!activeModifiers.ContainsKey(targetId)) {
+                activeModifiers[targetId] = new List<IModifier>();
+                LogWarning($"ModifierManager: Modifier list was missing for creature '{creatureTarget.Name}', re-initialized.", LogTag.Effects | LogTag.Creatures);
+            }
+
+            if (!activeModifiers[targetId].Any(m => m.Id == modifier.Id)) {
+                activeModifiers[targetId].Add(modifier);
+                modifier.Apply(creatureTarget, mediator);
+                Log($"ModifierManager: Applied modifier '{modifier.Name}' to {creatureTarget.Name} (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
+                if (modifier is StatusEffectModifier status) {
+                    mediator.NotifyCreatureStatusChanged(creatureTarget, status.EffectType, true);
                 }
 
-                if (!activeModifiers.ContainsKey(targetId)) {
-                    activeModifiers[targetId] = new List<IModifier>();
-                    LogWarning($"ModifierManager: Modifier list was missing for creature '{creatureTarget.Name}', re-initialized.", LogTag.Effects | LogTag.Creatures);
-                }
-
-                if (!activeModifiers[targetId].Any(m => m.Id == modifier.Id)) {
-                    activeModifiers[targetId].Add(modifier);
-                    modifier.Apply(target, mediator);
-                    Log($"ModifierManager: Applied modifier '{modifier.Name}' to {creatureTarget.Name} (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
-                    if (modifier is StatusEffectModifier status) {
-                        mediator.NotifyCreatureStatusChanged(creatureTarget, status.EffectType, true);
-                    }
-
-                    if (AffectsStats(modifier)) {
-                        RecalculateStats(creatureTarget);
-                    }
-                }
-                else {
-                    Log($"ModifierManager: Modifier '{modifier.Name}' (ID: {modifier.Id.ToString().ShortId()}) is already applied to {creatureTarget.Name}.", LogTag.Effects | LogTag.Creatures);
+                if (AffectsStats(modifier)) {
+                    RecalculateStats(creatureTarget);
                 }
             }
             else {
-                LogWarning($"ModifierManager: Cannot apply modifier to target of type {target.GetType().Name}. Only Creature currently supported.", LogTag.Effects);
+                Log($"ModifierManager: Modifier '{modifier.Name}' (ID: {modifier.Id.ToString().ShortId()}) is already applied to {creatureTarget.Name}.", LogTag.Effects | LogTag.Creatures);
             }
         }
 
-        public void RemoveModifier(object target, IModifier modifier) {
-            if (target == null || modifier == null) return;
+        public void RemoveModifier(ICreature creatureTarget, IModifier modifier) {
+            if (creatureTarget == null || modifier == null) return;
 
-            Creature creatureTarget = target as Creature;
-
-            if (creatureTarget != null) {
-                string targetId = creatureTarget.TargetId;
-                if (activeModifiers.TryGetValue(targetId, out var modifierList)) {
-                    IModifier existingModifier = modifierList.FirstOrDefault(m => m.Id == modifier.Id);
-                    if (existingModifier != null) {
-                        bool removed = modifierList.Remove(existingModifier);
-                        if (removed) {
-                            existingModifier.Remove(target, mediator);
-                            Log($"ModifierManager: Removed modifier '{existingModifier.Name}' from {creatureTarget.Name} (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
-                            if (existingModifier is StatusEffectModifier status) {
-                                mediator.NotifyCreatureStatusChanged(creatureTarget, status.EffectType, false);
-                            }
-
-                            if (AffectsStats(existingModifier) && creatures.ContainsKey(targetId)) {
-                                RecalculateStats(creatureTarget);
-                            }
+            string targetId = creatureTarget.TargetId;
+            if (activeModifiers.TryGetValue(targetId, out var modifierList)) {
+                IModifier existingModifier = modifierList.FirstOrDefault(m => m.Id == modifier.Id);
+                if (existingModifier != null) {
+                    bool removed = modifierList.Remove(existingModifier);
+                    if (removed) {
+                        existingModifier.Remove(creatureTarget, mediator);
+                        Log($"ModifierManager: Removed modifier '{existingModifier.Name}' from {creatureTarget.Name} (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
+                        if (existingModifier is StatusEffectModifier status) {
+                            mediator.NotifyCreatureStatusChanged(creatureTarget, status.EffectType, false);
                         }
-                    }
-                    else {
-                        LogWarning($"ModifierManager: Modifier '{modifier.Name}' (ID: {modifier.Id.ToString().ShortId()}) not found on {creatureTarget.Name}.", LogTag.Effects | LogTag.Creatures);
+
+                        if (AffectsStats(existingModifier) && creatures.ContainsKey(targetId)) {
+                            RecalculateStats(creatureTarget);
+                        }
                     }
                 }
                 else {
-                    LogWarning($"ModifierManager: No modifier list found for {creatureTarget.Name} when trying to remove '{modifier.Name}'.", LogTag.Effects | LogTag.Creatures);
+                    LogWarning($"ModifierManager: Modifier '{modifier.Name}' (ID: {modifier.Id.ToString().ShortId()}) not found on {creatureTarget.Name}.", LogTag.Effects | LogTag.Creatures);
                 }
             }
             else {
-                LogWarning($"ModifierManager: Cannot remove modifier from target of type {target.GetType().Name}. Only Creature currently supported.", LogTag.Effects);
+                LogWarning($"ModifierManager: No modifier list found for {creatureTarget.Name} when trying to remove '{modifier.Name}'.", LogTag.Effects | LogTag.Creatures);
             }
         }
 
@@ -151,7 +134,7 @@ namespace SlayTheClone {
         #endregion
 
         #region Status Effect Queries
-        public bool HasModifier(Creature creature, Predicate<IModifier> predicate) {
+        public bool HasModifier(ICreature creature, Predicate<IModifier> predicate) {
             if (creature == null || predicate == null) return false;
             if (activeModifiers.TryGetValue(creature.TargetId, out var mods)) {
                 return mods.Any(m => predicate(m));
@@ -159,7 +142,7 @@ namespace SlayTheClone {
             return false;
         }
 
-        public bool HasStatusEffect(Creature creature, StatusEffectType statusType) {
+        public bool HasStatusEffect(ICreature creature, StatusEffectType statusType) {
             if (creature == null || statusType == StatusEffectType.None) return false;
 
             if (activeModifiers.TryGetValue(creature.TargetId, out var mods)) {
@@ -168,18 +151,20 @@ namespace SlayTheClone {
             return false;
         }
 
-        public bool AreActionsPrevented(Creature creature) {
-            if (creature == null) return false;
+        public bool CanAct(ICreature creature) {
+            if (creature == null || creature.IsDead) return false;
 
-            if (activeModifiers.TryGetValue(creature.TargetId, out var mods)) {
-                foreach (var mod in mods.OfType<StatusEffectModifier>()) {
-                    if (mod.PreventsActions()) {
-                        Log($"Actions for {creature.Name} prevented by StatusEffect '{mod.Name}' ({mod.EffectType})", LogTag.Effects | LogTag.Creatures | LogTag.Combat);
-                        return true;
-                    }
-                }
+            if (!creature.IsOperative) {
+                Log($"{creature.Name} can't act yet: operative in {creature.TurnsUntilOperative} turn(s).", LogTag.Creatures | LogTag.Actions);
+                return false;
             }
-            return false;
+
+            var preventing = GetActiveModifiersFor(creature).OfType<StatusEffectModifier>().FirstOrDefault(s => s.PreventsActions());
+            if (preventing != null) {
+                Log($"{creature.Name} can't act: {preventing.EffectType} (StatusEffect '{preventing.Name}').", LogTag.Creatures | LogTag.Actions | LogTag.Effects);
+                return false;
+            }
+            return true;
         }
         #endregion
 
@@ -194,12 +179,14 @@ namespace SlayTheClone {
 
             Log($"ModifierManager: Processing start of turn {startingTurnNumber}", LogTag.Effects | LogTag.Turns);
 
-            // Iterate through all registered creatures
             // ToList: a creature can be unregistered while its effects run
             foreach (var creature in creatures.Values.ToList()) {
-                if (creature == null || creature.IsDead) continue; // Skip dead creatures
+                if (creature == null || creature.IsDead) continue;
 
-                // Trigger StartOfTurn effects for the creature
+                // Creatures get a turn closer to operative first, so one that just became operative takes part in this turn
+                if (creature.AdvanceReadiness(startingTurnNumber, actionsQueue)) {
+                    mediator.NotifyCreatureStatsChanged(creature);
+                }
                 creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
@@ -217,7 +204,7 @@ namespace SlayTheClone {
 
             // Use ToList on dictionary keys to avoid modification during iteration issues
             foreach (var targetId in activeModifiers.Keys.ToList()) {
-                if (!creatures.TryGetValue(targetId, out Creature creature) || creature.IsDead) {
+                if (!creatures.TryGetValue(targetId, out ICreature creature) || creature.IsDead) {
                     continue;
                 }
 
@@ -248,7 +235,7 @@ namespace SlayTheClone {
         #endregion
 
         #region Stat Calculation
-        public void RecalculateStats(Creature creature) {
+        public void RecalculateStats(ICreature creature) {
             if (creature == null || !creatures.ContainsKey(creature.TargetId)) {
                 return;
             }

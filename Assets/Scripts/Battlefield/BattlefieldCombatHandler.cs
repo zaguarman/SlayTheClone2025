@@ -26,11 +26,7 @@ namespace SlayTheClone {
                 return;
             }
 
-            if (attackerCreature is Creature concreteAttacker && modifierManager.AreActionsPrevented(concreteAttacker)) {
-                Log($"Creature {attackerCreature.Name} cannot attack due to status effect (e.g., Paralyzed).", LogTag.Combat | LogTag.Effects);
-                // Optionally provide feedback to the player here
-                return; // Prevent combat action
-            }
+            if (!modifierManager.CanAct(attackerCreature)) return;
 
             // Check if the target is valid (basic check, can be expanded)
             bool isValidTarget = targetSlot != null; // Basic check

@@ -11,6 +11,10 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Only the creature that starts the swap has to be able to act; the other one is moved passively
+            var initiator = swapAction.GetCreature1();
+            if (initiator != null && !context.ModifierManager.CanAct(initiator)) return;
+
             // Either slot may be empty: swapping with an empty slot moves the creature
             BoardSlot.Swap(fromSlot, toSlot);
             NotifyBattlefieldsChanged(context, fromSlot.Owner, toSlot.Owner);

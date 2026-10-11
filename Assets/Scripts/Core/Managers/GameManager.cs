@@ -31,23 +31,23 @@ namespace SlayTheClone {
     }
 
     public interface IModifierManager {
-        // Add essential public methods needed by other systems
-        void RegisterCreature(Creature creature); // Register still takes concrete for simplicity if needed internally
-        void UnregisterCreature(ICreature creature); // Changed from Creature to ICreature
-        void ApplyModifier(object target, IModifier modifier);
-        void RemoveModifier(object target, IModifier modifier);
-        IEnumerable<IModifier> GetActiveModifiersFor(Creature creature);
-        bool HasStatusEffect(Creature creature, StatusEffectType statusType);
-        bool AreActionsPrevented(Creature creature);
-        void RecalculateStats(Creature creature);
+        void RegisterCreature(ICreature creature);
+        void UnregisterCreature(ICreature creature);
+        void ApplyModifier(ICreature target, IModifier modifier);
+        void RemoveModifier(ICreature target, IModifier modifier);
+        IEnumerable<IModifier> GetActiveModifiersFor(ICreature creature);
+        bool HasStatusEffect(ICreature creature, StatusEffectType statusType);
+        bool HasModifier(ICreature creature, Predicate<IModifier> predicate);
+        /// <summary>
+        /// Whether the creature can attack or move by itself: it has to be alive, operative and free of statuses that
+        /// prevent actions. Logs why not. Being swapped by another creature doesn't need this.
+        /// </summary>
+        bool CanAct(ICreature creature);
+        void RecalculateStats(ICreature creature);
         void ProcessEndOfTurn(int endedTurnNumber, IActionsQueue actionsQueue);
         void ProcessStartOfTurn(int startingTurnNumber, IActionsQueue actionsQueue);
         void Cleanup();
 
-        // Add missing methods needed by other classes
-        bool HasModifier(Creature creature, Predicate<IModifier> predicate);
-
-        // Expose the ModifierFactory for creating modifiers
         IModifierFactory ModifierFactory { get; }
     }
 

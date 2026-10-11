@@ -13,11 +13,8 @@ namespace SlayTheClone {
                 return;
             }
 
-            var modManager = context.ModifierManager;
-            if (modManager != null && creature is Creature concreteCreature && modManager.AreActionsPrevented(concreteCreature)) {
-                Log($"Executor: Creature {creature.Name} cannot move due to status effect.", LogTag.Actions | LogTag.Effects);
-                return;
-            }
+            // Only the creature that moves has to be able to act; the one it swaps with is moved passively
+            if (!context.ModifierManager.CanAct(creature)) return;
 
             // Moving onto an occupied slot swaps the two creatures
             bool isSwap = toSlot.IsOccupied();

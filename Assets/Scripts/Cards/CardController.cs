@@ -20,10 +20,12 @@ namespace SlayTheClone {
         [SerializeField] private TextMeshProUGUI typeText;
         [FormerlySerializedAs("descriptionText")]
         [SerializeField] private TextMeshProUGUI rulesText;
-        [SerializeField] private TextMeshProUGUI statsText; // Inside the attack/health box
-        [SerializeField] private TextMeshProUGUI speedText; // In the title bar, where Magic prints the mana cost
+        [SerializeField] private TextMeshProUGUI statsText; // Attack / speed / health, in the box at the bottom
+        [FormerlySerializedAs("speedText")]
+        [SerializeField] private TextMeshProUGUI readyText; // Turns until operative, in the title bar where Magic prints the mana cost
         [SerializeField] private GameObject statsBox;
-        [SerializeField] private GameObject speedPip;
+        [FormerlySerializedAs("speedPip")]
+        [SerializeField] private GameObject readyPip;
         [SerializeField] private Image artImage;
         [SerializeField] private TextMeshProUGUI statusText; // Icons of the statuses currently on the creature
         [SerializeField] private Image cardImage;
@@ -180,7 +182,7 @@ namespace SlayTheClone {
                 typeText.text = "";
                 rulesText.text = "";
                 statsBox.SetActive(false);
-                speedPip.SetActive(false);
+                readyPip.SetActive(false);
                 return;
             }
 
@@ -195,7 +197,7 @@ namespace SlayTheClone {
 
             bool isCreature = baseCardData is CreatureData;
             statsBox.SetActive(isCreature);
-            speedPip.SetActive(isCreature);
+            readyPip.SetActive(isCreature);
             if (isCreature) {
                 UpdateCreatureStats((CreatureData)baseCardData);
             }
@@ -203,13 +205,12 @@ namespace SlayTheClone {
         }
 
         private void UpdateStatusIcons() {
-            var creature = linkedCreature as Creature;
-            if (creature == null || GameManager?.ModifierManager == null) {
+            if (linkedCreature == null || GameManager?.ModifierManager == null) {
                 statusText.text = "";
                 return;
             }
 
-            var icons = GameManager.ModifierManager.GetActiveModifiersFor(creature)
+            var icons = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature)
                 .OfType<StatusEffectModifier>()
                 .Select(status => EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType)));
             statusText.text = string.Concat(icons);
@@ -222,10 +223,11 @@ namespace SlayTheClone {
             int health = isLive ? linkedCreature.Health : data.health;
             int speed = isLive ? linkedCreature.Speed : data.speed;
             int armor = isLive ? linkedCreature.CurrentArmorPool : 0;
+            int turnsUntilOperative = isLive ? linkedCreature.TurnsUntilOperative : data.turnsUntilOperative;
 
             string armorPart = armor > 0 ? $"<color=#2f7fc1>+{armor}</color>" : "";
-            statsText.text = $"{attack}/{health}{armorPart}";
-            speedText.text = speed.ToString();
+            statsText.text = $"{attack}/{speed}/{health}{armorPart}";
+            readyText.text = turnsUntilOperative.ToString();
         }
 
         // Rules text always fits: the text box auto-sizes its font down to its minimum.
@@ -507,10 +509,9 @@ namespace SlayTheClone {
 
         /// <summary>What the card face can't show: the modifiers currently affecting this creature. Empty if none.</summary>
         public string GetActiveModifiersText() {
-            var creature = linkedCreature as Creature;
-            if (creature == null || creature.Health <= 0 || GameManager?.ModifierManager == null) return "";
+            if (linkedCreature == null || linkedCreature.Health <= 0 || GameManager?.ModifierManager == null) return "";
 
-            var modifiers = GameManager.ModifierManager.GetActiveModifiersFor(creature).ToList();
+            var modifiers = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature).ToList();
             if (modifiers.Count == 0) return "";
 
             var lines = modifiers.Select(m => {

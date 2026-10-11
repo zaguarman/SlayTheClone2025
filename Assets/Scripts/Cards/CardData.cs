@@ -24,6 +24,7 @@ namespace SlayTheClone {
         public int attack;
         public int health;
         public int speed = 1; // Default speed to 1
+        public int turnsUntilOperative; // Turns it spends on the board before it can act (0 = from the next turn)
 
         public override void OnEnable() {
             base.OnEnable();

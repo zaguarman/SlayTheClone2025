@@ -814,7 +814,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -5, y: 3}
-  m_SizeDelta: {x: 46, y: 18}
+  m_SizeDelta: {x: 62, y: 18}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &3946213993979862858
 CanvasRenderer:
@@ -1145,16 +1145,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46818e4244ced5c43a2799038b34d9ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInitialized:
+  OnInitialized:
     m_PersistentCalls:
       m_Calls: []
   nameText: {fileID: 6126945190555111977}
   typeText: {fileID: 1019714852199230303}
   rulesText: {fileID: 5545036809265582614}
   statsText: {fileID: 6139627389734958828}
-  speedText: {fileID: 3126652560238486606}
+  readyText: {fileID: 3126652560238486606}
   statsBox: {fileID: 5426536885405808188}
-  speedPip: {fileID: 9097393444587411508}
+  readyPip: {fileID: 9097393444587411508}
   artImage: {fileID: 6170393222726132669}
   statusText: {fileID: 7553417068993619229}
   cardImage: {fileID: 7117100706685536281}
@@ -1165,6 +1165,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnCardDropped:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCardClicked:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &7105165416816610328
@@ -1329,7 +1332,7 @@ GameObject:
   - component: {fileID: 5013787283940326063}
   - component: {fileID: 3126652560238486606}
   m_Layer: 5
-  m_Name: SpeedText
+  m_Name: ReadyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1543,7 +1546,7 @@ GameObject:
   - component: {fileID: 1726444465409221354}
   - component: {fileID: 3805057589969152807}
   m_Layer: 5
-  m_Name: SpeedPip
+  m_Name: ReadyPip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

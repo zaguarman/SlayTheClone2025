@@ -41,8 +41,9 @@ namespace SlayTheClone {
             Log($"Summoned {creature.Name} to slot {slot.TargetId.ShortId()}", LogTag.Actions | LogTag.Creatures);
             mediator.NotifyBattlefieldStateChanged(slot.Owner ?? owner); // Views create the creature's card
 
-            // Register after placement, then trigger OnPlay, then announce the finished summon
-            modifierManager.RegisterCreature(creature as Creature);
+            // Register after placement, then trigger OnPlay (a creature that isn't operative yet fires it later), then announce the summon
+            modifierManager.RegisterCreature(creature);
+            creature.EnterPlay(context.TurnClock.TurnNumber);
             Log($"Executor: Triggering OnPlay effects for {creature.Name}", LogTag.Effects | LogTag.Actions);
             creature.HandleEffect(EffectTrigger.OnPlay, context.ActionsQueue);
             mediator.NotifyCreatureSummoned(creature, owner);

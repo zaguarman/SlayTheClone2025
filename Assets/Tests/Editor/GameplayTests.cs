@@ -176,11 +176,40 @@ namespace SlayTheClone.Tests {
             Assert.IsNull(eel.Slot);
             AssertDiscarded(p1, eel);
 
-            // A paralyzed creature can't move
+            // A paralyzed creature can't move or attack
             game.Run(new ApplyStatusEffectAction(turtle, StatusEffectType.Paralyzed, 1, 0));
             game.Run(new MoveCreatureAction(turtle, p1.Battlefield[4], p1.Battlefield[0], p1));
             Assert.AreSame(turtle, p1.Battlefield[4].OccupyingCreature);
             Assert.IsFalse(p1.Battlefield[0].IsOccupied());
+            int healthBeforeParalyzedAttack = p2.Health;
+            Attack(turtle, p2.Battlefield[4]); // An empty slot: the attack would hit the player
+            Assert.AreEqual(healthBeforeParalyzedAttack, p2.Health);
+
+            // A creature that needs time to become operative can't attack or move by itself and its effects are off;
+            // its on-play effect (2 damage to the enemy player) waits until it is operative
+            var golemData = game.Creature("Golem", 3, 5, 1, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Enemy));
+            golemData.turnsUntilOperative = 1;
+            int p2Health = p2.Health;
+            var golem = game.Summon(p1, golemData, 0);
+            Assert.IsFalse(golem.IsOperative);
+            Assert.AreEqual(p2Health, p2.Health);
+
+            Attack(golem, p2.Battlefield[0]);
+            Assert.AreEqual(p2Health, p2.Health);
+            game.Run(new MoveCreatureAction(golem, p1.Battlefield[0], p1.Battlefield[1], p1));
+            Assert.AreSame(golem, p1.Battlefield[0].OccupyingCreature);
+
+            // ...but an operative creature can still swap places with it
+            game.Run(new MoveCreatureAction(shark, p1.Battlefield[3], p1.Battlefield[0], p1));
+            Assert.AreSame(golem, p1.Battlefield[3].OccupyingCreature);
+            Assert.AreSame(shark, p1.Battlefield[0].OccupyingCreature);
+
+            // Once its turns have passed it is operative: the on-play effect fires and it can attack
+            game.StartTurn();
+            Assert.IsTrue(golem.IsOperative);
+            Assert.AreEqual(p2Health - 2, p2.Health);
+            Attack(golem, p2.Battlefield[0]);
+            Assert.AreEqual(p2Health - 2 - golem.Attack, p2.Health);
         }
 
         // A card that leaves play goes to its owner's discard pile as a fresh copy: damage, buffs and death don't carry over

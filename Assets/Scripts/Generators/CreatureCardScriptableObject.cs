@@ -6,6 +6,7 @@ namespace SlayTheClone {
         public int attack;
         public int health;
         [Min(1)] public int speed = 1; // Faster creatures strike first
+        [Min(0)] public int turnsUntilOperative; // Turns on the board before it can attack, move or use its effects
 
         protected override void OnEnable() {
             base.OnEnable(); // Call base implementation to handle cardId
@@ -18,6 +19,7 @@ namespace SlayTheClone {
             data.attack = attack;
             data.health = health;
             data.speed = speed;
+            data.turnsUntilOperative = turnsUntilOperative;
             return data;
         }
     }

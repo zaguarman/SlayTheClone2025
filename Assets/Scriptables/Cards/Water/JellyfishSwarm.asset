@@ -34,3 +34,4 @@ MonoBehaviour:
   attack: 1
   health: 3
   speed: 1
+  turnsUntilOperative: 0

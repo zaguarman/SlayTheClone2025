@@ -104,6 +104,13 @@ namespace SlayTheClone.Tests {
 
         public void Resolve() => ActionsQueue.ResolveActions();
 
+        /// <summary>Starts the next turn as the turn flow does: creatures get closer to operative, then start-of-turn effects run.</summary>
+        public void StartTurn() {
+            TurnClock.Advance();
+            ModifierManager.ProcessStartOfTurn(TurnClock.TurnNumber, ActionsQueue);
+            Resolve();
+        }
+
         /// <summary>Puts a new creature straight onto a player's board, as a summon effect would.</summary>
         public ICreature Summon(Player owner, CreatureData data, int slot) {
             var creature = (ICreature)CardFactory.CreateCard(data);

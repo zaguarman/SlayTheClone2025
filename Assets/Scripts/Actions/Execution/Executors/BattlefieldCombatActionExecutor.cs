@@ -22,12 +22,8 @@ namespace SlayTheClone {
             }
 
             // The attack was declared earlier; re-check the attacker can still act now that it resolves
-            if (attacker.IsDead) {
-                Log($"BattlefieldCombatActionExecutor: {attacker.Name} died before its attack resolved. Attack cancelled.", LogTag.Actions | LogTag.Combat);
-                return;
-            }
-            if (attacker is Creature concreteAttacker && context.ModifierManager != null && context.ModifierManager.AreActionsPrevented(concreteAttacker)) {
-                Log($"BattlefieldCombatActionExecutor: {attacker.Name} cannot act due to a status effect. Attack cancelled.", LogTag.Actions | LogTag.Combat | LogTag.Effects);
+            if (!context.ModifierManager.CanAct(attacker)) {
+                Log($"BattlefieldCombatActionExecutor: {attacker.Name}'s attack cancelled.", LogTag.Actions | LogTag.Combat);
                 return;
             }
 

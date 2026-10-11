@@ -25,7 +25,19 @@ namespace SlayTheClone {
         bool IsDead { get; }
         void MarkAsDead();
 
-        /// <summary>Queues what this creature's effects with the trigger do, at most once per resolution.</summary>
+        /// <summary>
+        /// Turns left before the creature is operative. Until then it can't attack or move by itself (another creature
+        /// can still swap with it) and its effects are off; its on-play effect waits for the moment it becomes operative.
+        /// </summary>
+        int TurnsUntilOperative { get; }
+        bool IsOperative { get; }
+        /// <summary>Called when the creature lands on the board; its countdown starts from this turn.</summary>
+        void EnterPlay(int turn);
+        /// <summary>Counts down at the start of each turn after the one it landed in.</summary>
+        /// <returns>True when the countdown changed.</returns>
+        bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue);
+
+        /// <summary>Queues what this creature's effects with the trigger do, if it is operative.</summary>
         /// <param name="triggeringAttacker">Whoever damaged or killed it, for retaliation.</param>
         void HandleEffect(EffectTrigger trigger, IActionsQueue actionsQueue, ICreature triggeringAttacker = null);
 
@@ -58,7 +70,11 @@ namespace SlayTheClone {
         public IPlayer Owner { get; private set; }
         public BoardSlot Slot { get; set; }
 
-        public Creature(string name, int attack, int health, int speed, string cardId) : base(name, cardId) {
+        public int TurnsUntilOperative { get; private set; }
+        public bool IsOperative => TurnsUntilOperative == 0;
+        private int landedOnTurn;
+
+        public Creature(string name, int attack, int health, int speed, string cardId, int turnsUntilOperative = 0) : base(name, cardId) {
             BaseAttack = attack;
             BaseHealth = health;
             BaseSpeed = Math.Max(1, speed);
@@ -68,6 +84,22 @@ namespace SlayTheClone {
             effectiveSpeed = BaseSpeed;
             CurrentArmorPool = 0;
             IsDead = false;
+            TurnsUntilOperative = Math.Max(0, turnsUntilOperative);
+        }
+
+        public void EnterPlay(int turn) {
+            landedOnTurn = turn;
+        }
+
+        public bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue) {
+            if (IsOperative || IsDead || startingTurn <= landedOnTurn) return false;
+
+            TurnsUntilOperative--;
+            Log($"{Name} is {(IsOperative ? "now operative" : $"operative in {TurnsUntilOperative} turn(s)")}", LogTag.Creatures | LogTag.Turns);
+            if (IsOperative) {
+                HandleEffect(EffectTrigger.OnPlay, actionsQueue); // Its on-play effect waited for this moment
+            }
+            return true;
         }
 
         public void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed) {
@@ -142,6 +174,7 @@ namespace SlayTheClone {
 
         // Fires every time the trigger happens; ActionsQueue.MaxActionsPerResolution stops effects that trigger each other endlessly
         public void HandleEffect(EffectTrigger trigger, IActionsQueue actionsQueue, ICreature triggeringAttacker = null) {
+            if (!IsOperative) return; // Its effects are off until it is operative
             if (IsDead && trigger != EffectTrigger.OnDeath) return;
             if (actionsQueue == null) {
                 LogError($"Cannot handle effect {trigger} for {Name} - no ActionsQueue.", LogTag.Effects | LogTag.Creatures);

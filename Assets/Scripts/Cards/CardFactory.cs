@@ -18,7 +18,8 @@ namespace SlayTheClone {
                         creatureData.attack,
                         creatureData.health,
                         creatureData.speed,
-                        creatureData.cardId);
+                        creatureData.cardId,
+                        creatureData.turnsUntilOperative);
                     card = creature;
                     break;
 

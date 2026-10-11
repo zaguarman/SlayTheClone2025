@@ -135,6 +135,8 @@ namespace SlayTheClone {
         }
 
         private void HandleCreatureMove(ICreature creature, BoardSlot targetSlot) {
+            if (!GameManager.ModifierManager.CanAct(creature)) return;
+
             var sourceSlot = creature.Slot;
             if (sourceSlot != null && sourceSlot != targetSlot) {
                 GameManager.ActionsQueue.AddAction(new MoveCreatureAction(creature, sourceSlot, targetSlot, Player));
