@@ -201,7 +201,7 @@ namespace SlayTheClone.Tests {
         public void AssertViewsMatchRules() {
             var pending = Queue.GetPendingActions();
             foreach (var player in Players) {
-                Assert.AreEqual($"Health: {player.Health}", ViewsOf(player).HealthText.text, $"{player.Name}'s health text");
+                Assert.AreEqual($"{player.Health}/{Player.MaxHealth}", ViewsOf(player).HealthText.text, $"{player.Name}'s health text");
 
                 var queuedCreatures = pending.OfType<PlayCardAction>().Where(a => a.GetOwner() == player && a.GetCard() is ICreature).Select(a => a.GetCard());
                 CollectionAssert.AreEquivalent(player.Hand.Except(queuedCreatures), HandCards(player).Select(c => c.GetLinkedCardInstance()),
@@ -226,7 +226,7 @@ namespace SlayTheClone.Tests {
             }
 
             var turnText = (TMP_Text)GetField(Object.FindFirstObjectByType<TurnUI>(), "turnText");
-            Assert.AreEqual($"Turn: {Turns.TurnNumber}", turnText.text);
+            Assert.AreEqual($"Turn {Turns.TurnNumber}", turnText.text);
         }
 
         /// <summary>The card's attack/speed/health line, armor and turns-until-operative pip match the creature.</summary>

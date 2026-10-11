@@ -9,28 +9,32 @@ namespace SlayTheClone {
         [SerializeField] protected ContainerSettings settings = new ContainerSettings();
         [SerializeField] protected bool acceptPlayer1Cards = true;
         [SerializeField] protected bool acceptPlayer2Cards = true;
-        [SerializeField] protected Color defaultColor = new Color(0.8f, 0.8f, 0.8f, 0.5f);
-        [SerializeField] protected Color validDropColor = new Color(0f, 1f, 0f, 0.5f);
-        [SerializeField] protected Color invalidDropColor = new Color(1f, 0f, 0f, 0.5f);
-        [SerializeField] protected Color hoverColor = new Color(1f, 1f, 0f, 0.5f);
 
         protected List<CardController> cards = new List<CardController>();
 
         protected RectTransform containerRect;
         protected CardDropZone dropZoneHandler;
 
+        /// <summary>The zone's tint at rest, under a hovering pointer, and while a card is dragged over it (see <see cref="UITheme"/>).</summary>
+        protected abstract DropZoneColors ZoneColors { get; }
+
+        /// <summary>Lets a zone give its own image a shape; the image always stays a raycast target, so drops land.</summary>
+        protected virtual void StyleZone(Image zoneImage) { }
+
         protected virtual void SetupDropZone() {
             var dropZoneImage = GetComponent<Image>();
             if (dropZoneImage == null) {
                 dropZoneImage = gameObject.AddComponent<Image>();
             }
+            StyleZone(dropZoneImage);
 
+            var colors = ZoneColors;
             dropZoneHandler = new CardDropZone(
                 dropZoneImage,
-                defaultColor,
-                validDropColor,
-                invalidDropColor,
-                hoverColor,
+                colors.Default,
+                colors.Valid,
+                colors.Invalid,
+                colors.Hover,
                 acceptPlayer1Cards,
                 acceptPlayer2Cards
             );

@@ -4,6 +4,20 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SlayTheClone {
+    public struct DropZoneColors {
+        public Color Default;
+        public Color Valid;
+        public Color Invalid;
+        public Color Hover;
+
+        public DropZoneColors(Color @default, Color valid, Color invalid, Color hover) {
+            Default = @default;
+            Valid = valid;
+            Invalid = invalid;
+            Hover = hover;
+        }
+    }
+
     public class CardDropZone {
         private readonly Image dropZoneImage;
         private bool isDraggingOverZone;

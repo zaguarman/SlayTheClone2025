@@ -7,6 +7,17 @@ namespace SlayTheClone {
     public class HandUI : CardContainer {
         private const float CastStagger = 0.2f;
 
+        // The hand is held as a fan, like in Slay the Spire and Hearthstone: cards tilt and dip away from the middle,
+        // and squeeze together (overlapping) rather than spread past MaxFanWidth
+        private const float MaxFanWidth = 1300f;
+        private const float FanReach = 700f;   // Distance from the middle at which a card gets the full tilt and dip
+        private const float FanTilt = 8f;      // Degrees
+        private const float FanDip = 28f;
+
+        // The hand area itself is invisible; it only shows a faint glow while a card is dragged over it
+        protected override DropZoneColors ZoneColors => new DropZoneColors(
+            Color.clear, new Color(1f, 1f, 1f, 0.04f), new Color(1f, 0.3f, 0.3f, 0.05f), Color.clear);
+
         // Cards of this player with a pending PlayCardAction
         private readonly HashSet<ICard> queuedCards = new HashSet<ICard>();
         private float nextCastTime;
@@ -92,8 +103,26 @@ namespace SlayTheClone {
             UpdateLayout();
         }
 
+        protected override void UpdateLayout() {
+            int count = cards.Count;
+            float spacing = count > 1 ? Mathf.Min(settings.spacing, MaxFanWidth / (count - 1)) : 0f;
+            float facing = Player == null || Player.IsPlayer1 ? 1f : -1f; // The top hand fans the other way, toward the table
+
+            for (int i = 0; i < count; i++) {
+                var card = cards[i];
+                if (card == null) continue;
+
+                float x = (i - (count - 1) / 2f) * spacing;
+                float reach = x / FanReach;
+                SetupCardTransform(card, new Vector2(x, -facing * FanDip * reach * reach));
+                card.transform.localRotation = Quaternion.Euler(0f, 0f, -facing * FanTilt * reach);
+                card.transform.SetSiblingIndex(i); // Right-hand cards overlap left-hand ones
+            }
+        }
+
         protected override void OnCardBeginDrag(CardController card) {
             if (card == null) return;
+            card.transform.localRotation = Quaternion.identity;
             card.transform.SetAsLastSibling();
             Log($"Begin dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
         }

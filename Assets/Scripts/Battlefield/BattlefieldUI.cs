@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
@@ -12,6 +13,7 @@ namespace SlayTheClone {
     /// </summary>
     public class BattlefieldUI : CardContainer {
         private const float SummonStagger = 0.15f;
+        private const float MatPadding = 14f; // Between the slots and the edge of the mat
         private const float ReplacingGhostRaise = 0.3f; // Fraction of card height a ghost is raised when it will replace a creature
         private readonly List<BattlefieldSlot> battlefieldSlots = new List<BattlefieldSlot>();
 
@@ -41,7 +43,7 @@ namespace SlayTheClone {
                 slotObj.transform.SetParent(transform, false);
 
                 var slot = slotObj.AddComponent<BattlefieldSlot>();
-                slot.Initialize(model, defaultColor, validDropColor, invalidDropColor, hoverColor);
+                slot.Initialize(model);
 
                 battlefieldSlots.Add(slot);
             }
@@ -59,6 +61,15 @@ namespace SlayTheClone {
 
             // Update UI based on initial state
             UpdateUI(Player);
+        }
+
+        protected override DropZoneColors ZoneColors => new DropZoneColors(UITheme.Mat, UITheme.MatValid, UITheme.MatInvalid, UITheme.MatHover);
+
+        // A rounded mat just big enough for its row of slots
+        protected override void StyleZone(Image zoneImage) {
+            UITheme.Round(zoneImage, UITheme.Mat);
+            int slotCount = Player?.Battlefield.Count ?? 5;
+            ((RectTransform)transform).sizeDelta = new Vector2((slotCount - 1) * settings.spacing + BattlefieldSlot.Size.x + 2 * MatPadding, BattlefieldSlot.Size.y + 2 * MatPadding);
         }
 
         private void UpdateSlotPositions() {

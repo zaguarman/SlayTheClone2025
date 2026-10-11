@@ -47,7 +47,7 @@ namespace SlayTheClone {
 
             // Add Image component to background
             Image background = bgPanel.AddComponent<Image>();
-            background.color = new Color(0.1f, 0.1f, 0.1f, 0.9f);
+            UITheme.StylePanel(background);
 
             // Configure the RectTransform for proper sizing and positioning
             RectTransform bgRect = background.rectTransform;
@@ -64,7 +64,7 @@ namespace SlayTheClone {
             TextMeshProUGUI tooltipText = textObj.AddComponent<TextMeshProUGUI>();
             tooltipText.alignment = TextAlignmentOptions.Center;
             tooltipText.fontSize = 16;
-            tooltipText.color = Color.white;
+            tooltipText.color = UITheme.Parchment;
             tooltipText.enableWordWrapping = true;
 
             // Configure text RectTransform

@@ -26,11 +26,16 @@ namespace SlayTheClone {
 
         /// <summary>"17 cards · Corporate": the size of the deck, and its faction when every card shares one.</summary>
         public static string Describe(DeckScriptableObject deck) {
-            var factions = deck.Cards.Where(c => c != null).Select(c => c.faction).Distinct().ToList();
+            var faction = FactionOf(deck);
             string summary = $"{deck.Cards.Count} cards";
-            return factions.Count == 1 && factions[0] != Faction.None
-                ? $"{summary} · {CardTextFormatter.FactionName(factions[0])}"
-                : summary;
+            return faction != Faction.None ? $"{summary} · {CardTextFormatter.FactionName(faction)}" : summary;
+        }
+
+        /// <summary>The faction every card of the deck shares; None for a mixed or missing deck.</summary>
+        public static Faction FactionOf(DeckScriptableObject deck) {
+            if (deck == null) return Faction.None;
+            var factions = deck.Cards.Where(c => c != null).Select(c => c.faction).Distinct().ToList();
+            return factions.Count == 1 ? factions[0] : Faction.None;
         }
     }
 }

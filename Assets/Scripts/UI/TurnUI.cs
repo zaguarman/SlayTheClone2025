@@ -56,7 +56,7 @@ namespace SlayTheClone {
 
             // Get turn number from GameManager (temporary) or store from event
             int turnNumber = turnManager?.TurnNumber ?? 0;
-            turnText.text = $"Turn: {turnNumber}";
+            turnText.text = $"Turn {turnNumber}";
         }
     }
 }

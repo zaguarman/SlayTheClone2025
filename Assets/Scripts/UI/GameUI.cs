@@ -44,6 +44,7 @@ namespace SlayTheClone {
             InitializeChildUI();
             InitializeControllers();
             SetupResolveButton();
+            GetOrAddComponent<BoardSkin>().Apply(gameReferences, gameManager, gameMediator);
 
             IsInitialized = true;
             Log("GameUI initialized successfully", LogTag.UI | LogTag.Initialization);

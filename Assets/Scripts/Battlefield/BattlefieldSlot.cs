@@ -17,26 +17,27 @@ namespace SlayTheClone {
         public ICreature OccupyingCreature => Model?.OccupyingCreature;
         public CardController OccupyingCard { get; private set; } // The card currently shown here
 
-        private Color defaultColor;
-        private Color validDropColor;
-        private Color invalidDropColor;
-        private Color hoverColor;
-        private Color combatMarkColor;
+        // A card-shaped space on the mat; it lights up under the pointer, and glows gold under a dragged card
+        public static readonly Vector2 Size = new Vector2(172f, 212f);
+        private static readonly Color HoverColor = UITheme.Hex(0xE8D8B0, 0.18f);
+        private static readonly Color DragTargetColor = UITheme.Hex(0xE8B84A, 0.35f);
+        private static readonly Color TrimColor = UITheme.Hex(0xE8B84A, 0.35f);
+        private static readonly Color DragTargetTrimColor = UITheme.Hex(0xFFE08A, 0.95f);
+
+        private Image trim;
+        private bool isMarkedForCombat;
 
         private void Awake() {
             rectTransform = GetComponent<RectTransform>() ?? gameObject.AddComponent<RectTransform>();
             backgroundImage = GetComponent<Image>() ?? gameObject.AddComponent<Image>();
         }
 
-        public void Initialize(BoardSlot model, Color defaultColor, Color validDropColor, Color invalidDropColor, Color hoverColor) {
+        public void Initialize(BoardSlot model) {
             Model = model;
-            this.defaultColor = defaultColor;
-            this.validDropColor = validDropColor;
-            this.invalidDropColor = invalidDropColor;
-            this.hoverColor = hoverColor;
-            this.combatMarkColor = new Color(1f, 0.5f, 0.5f, 0.5f); // Light red with transparency
-
-            backgroundImage.color = defaultColor;
+            rectTransform.sizeDelta = Size;
+            UITheme.Round(backgroundImage, UITheme.SlotEmpty, 1.6f);
+            trim = UITheme.AddTrim(transform, TrimColor, 1.6f);
+            ResetVisuals();
         }
 
         public void SetPosition(Vector2 position) {
@@ -64,15 +65,24 @@ namespace SlayTheClone {
         }
 
         public void ResetVisuals() {
-            if (backgroundImage != null) {
-                backgroundImage.color = defaultColor;
-            }
+            isMarkedForCombat = false;
+            ShowHighlight(null);
+        }
+
+        // Null for the resting look
+        private void ShowHighlight(Color? fill, Color? trimColor = null) {
+            if (backgroundImage != null) backgroundImage.color = fill ?? (isMarkedForCombat ? UITheme.SlotCombat : UITheme.SlotEmpty);
+            if (trim != null) trim.color = trimColor ?? TrimColor;
         }
 
         public void OnPointerEnter(PointerEventData eventData) {
             if (IsCreatureFromHandDraggedOver(eventData)) {
                 OccupyingCard.SetReplacementPreview(true);
             }
+            bool isCardDraggedOver = eventData?.pointerDrag != null && eventData.pointerDrag.GetComponent<CardController>() != null;
+            if (isCardDraggedOver) ShowHighlight(DragTargetColor, DragTargetTrimColor);
+            else ShowHighlight(HoverColor);
+
             if (IsOverQueuedGhost(eventData)) return; // The ghost of a creature queued here shows its own preview
 
             var tooltip = Tooltip.Shared;
@@ -90,6 +100,7 @@ namespace SlayTheClone {
             if (OccupyingCard != null) {
                 OccupyingCard.SetReplacementPreview(false);
             }
+            ShowHighlight(null);
 
             Tooltip.Existing?.HideTooltip();
         }
@@ -112,9 +123,8 @@ namespace SlayTheClone {
         }
 
         public void MarkForCombat() {
-            if (backgroundImage != null) {
-                backgroundImage.color = combatMarkColor;
-            }
+            isMarkedForCombat = true;
+            ShowHighlight(null);
         }
     }
 }
