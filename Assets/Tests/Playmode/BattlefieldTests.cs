@@ -91,7 +91,7 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Player.MaxHealth, p2.Health, "A replaced creature doesn't die, so its death effect doesn't fire");
         }
 
-        [Test, Category(TestCategories.KnownBug), Description("#47: moves aren't one per creature, and the move takes whatever is in its starting slot")]
+        [Test]
         public void ASecondMoveForTheSameCreature_NeverMovesAnotherCreature() {
             var walker = game.Summon(p1, game.Creature("Walker", 1, 3), 0);
             var bystander = game.Summon(p1, game.Creature("Bystander", 1, 3), 1);
@@ -102,6 +102,34 @@ namespace SlayTheClone.Tests {
             game.Resolve();
 
             Assert.AreNotEqual(2, bystander.Slot?.Index, "The walker's second move carried the bystander off to slot 2");
+            Assert.AreEqual(2, walker.Slot.Index, "The second move replaces the first");
+            Assert.AreEqual(1, bystander.Slot.Index);
+        }
+
+        [Test]
+        public void AMove_StartsFromWhereTheCreatureIsWhenItResolves() {
+            var walker = game.Summon(p1, game.Creature("Walker", 1, 3), 0);
+            var pusher = game.Summon(p1, game.Creature("Pusher", 1, 3), 1);
+
+            // The pusher's move resolves first and swaps it into the walker's slot, so the walker's move starts from slot 1
+            game.ActionsQueue.AddAction(new MoveCreatureAction(pusher, p1.Battlefield[1], p1.Battlefield[0], p1));
+            game.ActionsQueue.AddAction(new MoveCreatureAction(walker, p1.Battlefield[0], p1.Battlefield[2], p1));
+            game.Resolve();
+
+            Assert.AreEqual(0, pusher.Slot.Index, "The pusher shouldn't be carried along by the walker's move");
+            Assert.AreEqual(2, walker.Slot.Index);
+        }
+
+        [Test]
+        public void ACreature_CanMoveAndAttackInTheSameTurn() {
+            var walker = game.Summon(p1, game.Creature("Walker", 2, 3), 0);
+
+            game.ActionsQueue.AddAction(new MoveCreatureAction(walker, p1.Battlefield[0], p1.Battlefield[1], p1));
+            game.Declare(walker, p2.Battlefield[3]);
+            game.Resolve();
+
+            Assert.AreEqual(1, walker.Slot.Index);
+            Assert.AreEqual(Player.MaxHealth - 2, p2.Health);
         }
         #endregion
 

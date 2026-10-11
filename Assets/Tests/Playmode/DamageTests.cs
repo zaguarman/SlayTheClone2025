@@ -174,7 +174,7 @@ namespace SlayTheClone.Tests {
             foreach (var enemy in enemies) CollectionAssert.AreEqual(new[] { 5 }, game.History.DamageTo(enemy), enemy.Name);
         }
 
-        [Test, Category(TestCategories.KnownBug), Description("#43: CanAct doesn't check that the creature is still on the board")]
+        [Test]
         public void ACreatureReplacedBeforeItsAttackResolves_DoesNotAttack() {
             var veteran = game.Summon(p1, game.Creature("Veteran", 3, 3), 0);
             var recruit = game.GiveCard(p1, game.Creature("Recruit", 1, 1));

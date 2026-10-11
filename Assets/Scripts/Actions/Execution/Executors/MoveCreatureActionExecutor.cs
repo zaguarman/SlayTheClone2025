@@ -5,16 +5,20 @@ namespace SlayTheClone {
         protected override void ExecuteAction(MoveCreatureAction moveAction, ActionExecutionContext context) {
             var creature = moveAction.GetCreature();
             var player = moveAction.GetPlayer();
-            var fromSlot = moveAction.GetFromSlot();
             var toSlot = moveAction.GetToSlot();
 
-            if (creature == null || fromSlot == null || toSlot == null || player == null) {
+            if (creature == null || toSlot == null || player == null) {
                 LogError("MoveCreatureActionExecutor: One or more required components are null", LogTag.Actions);
                 return;
             }
 
             // Only the creature that moves has to be able to act; the one it swaps with is moved passively
             if (!context.ModifierManager.CanAct(creature)) return;
+
+            // The creature moves from wherever it is now: something earlier this turn may have moved it,
+            // and whatever took its starting slot must not be carried off in its place
+            var fromSlot = creature.Slot;
+            if (fromSlot == toSlot) return;
 
             // Moving onto an occupied slot swaps the two creatures
             bool isSwap = toSlot.IsOccupied();

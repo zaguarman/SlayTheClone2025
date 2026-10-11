@@ -1,150 +1,131 @@
-**DOCUMENT USAGE GUIDELINES:**
-	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
-    *   This document **shall** possess a clearly demarcated subject matter.
-    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
+Surveillance Post
+    Visibility: Hidden
+    Trigger Event(s): OnEnterSlot(movingCreature, enteredSlot, method) (Slot effect logic checks: if enteredSlot is this slot and movingCreature is an enemy to the controller of this Slot Effect).
+    Effect: The movingCreature gains Revealed (2 Days). The Surveillance Post is then revealed and consumed. (Note: Revealed status duration set to 2 Days/stacks).
+    Parameters: None.
+    Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
+    Cleansable: Yes
 
-	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
-    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
-    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
-    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
+Temporal Shield
+    Visibility: Visible
+    Trigger Event(s): Continuous while active.
+    Effect: Any creature on this slot is immune to combat damage.
+    Parameters: Duration: X (e.g., 1 global Day, set by applying card).
+    Duration of Slot Effect: X global Days, then removed.
+    Cleansable: Yes
+    Notes: Does not prevent other effects like status applications or damage from Spells/abilities unless the damage itself was the carrier and specified as combat damage.
 
-	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
-    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
+Landmine
+    Visibility: Hidden
+    Trigger Event(s): OnEnterSlot(movingCreature, enteredSlot, method) (Slot effect logic checks: if enteredSlot is this slot).
+    Effect: The movingCreature takes X damage. The Landmine is then revealed and consumed.
+    Parameters: Damage: X (e.g., 2, set by applying card).
+    Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
+    Cleansable: Yes
 
-	**STANDARDIZED CONTENT BOUNDARIES:**
-    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
-    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
+Binding Chains
+    Visibility: Visible
+    Trigger Event(s): OnBeforeLeaveSlot(leftSlot, method) (Slot effect logic checks: if leftSlot is this slot, and the creature is attempting to leave).
+    Effect: The creature attempting to leave this slot gains Anchored. The Binding Chains is then consumed.
+    Parameters: None.
+    Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
+    Cleansable: Yes
 
-**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
+Rejection Field
+    Visibility: Visible
+    Trigger Event(s): OnEnterSlot(movingCreature, enteredSlot, method) (Slot effect logic checks: if enteredSlot is this slot).
+    Effect: The movingCreature entering this slot is returned to its owner's hand.
+    Parameters: None.
+    Duration of Slot Effect: Persistent until replaced.
+    Cleansable: Yes
 
-**Surveillance Post**
-    *   **Visibility:** Hidden
-    *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot and `movingCreature` is an enemy to the controller of this Slot Effect).
-    *   **Effect:** The `movingCreature` gains `Revealed (2 Days)`. The Surveillance Post is then **revealed and** consumed. (Note: `Revealed` status duration set to 2 Days/stacks).
-    *   **Parameters:** None.
-    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD III.H.4).
-    *   **Cleansable:** Yes
+Scorched Earth
+    Visibility: Visible
+    Trigger Event(s): Continuous while active and slot is occupied.
+    Effect: Passive abilities of any creature occupying this slot do not trigger. (Does not use the full Abilities Disabled keyword, so active abilities are not affected by this specific slot effect).
+    Parameters: None.
+    Duration of Slot Effect: Persistent until replaced.
+    Cleansable: Yes
 
-**Temporal Shield**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** Continuous while active.
-    *   **Effect:** Any creature on this slot is immune to combat damage.
-    *   **Parameters:** Duration: X (e.g., 1 global Day, set by applying card).
-    *   **Duration of Slot Effect:** X global **Days**, then removed.
-    *   **Cleansable:** Yes
-    *   **Notes:** Does not prevent other effects like status applications or damage from Spells/abilities unless the damage itself was the carrier and specified as combat damage.
+Rally Point
+    Visibility: Visible
+    Trigger Event(s): OnTurnStart (Slot effect logic checks if its slot is occupied by a creature controlled by the same player who controls this Rally Point).
+    Effect: If a creature controlled by this slot effect's controller is on this slot at Dawn (Start of their Day), its controller Schedules 1 additional card draw for their next Day.
+    Parameters: None.
+    Duration of Slot Effect: Persistent until replaced.
+    Cleansable: Yes
 
-**Landmine**
-    *   **Visibility:** Hidden
-    *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
-    *   **Effect:** The `movingCreature` takes X damage. The Landmine is then **revealed and** consumed.
-    *   **Parameters:** Damage: X (e.g., 2, set by applying card).
-    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD III.H.4).
-    *   **Cleansable:** Yes
+Slippery Floor
+    Visibility: Hidden
+    Trigger Event(s): OnEnterSlot(movingCreature, enteredSlot, method) (Slot effect logic checks: if enteredSlot is this slot).
+    Effect: The movingCreature is immediately pushed one slot directly backward (towards its controller's edge of the board) if the destination slot is empty and valid. If it cannot be pushed (e.g., at edge of board, next slot occupied), it instead takes 2 damage. The Slippery Floor is then revealed and consumed.
+    Parameters: Damage if not pushed: 2 (set by applying card).
+    Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
+    Cleansable: Yes.
 
-**Binding Chains**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** `OnBeforeLeaveSlot(leftSlot, method)` (Slot effect logic checks: if `leftSlot` is this slot, and the creature is attempting to leave).
-    *   **Effect:** The creature attempting to leave this slot gains `Anchored`. The Binding Chains is then consumed.
-    *   **Parameters:** None.
-    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD III.H.4).
-    *   **Cleansable:** Yes
+Jamming Field
+    Visibility: Visible
+    Trigger Event(s): Continuous while active.
+    Effect: Spells cannot be played targeting this slot or any creature occupying it. Additionally, active and passive abilities of any creature occupying this slot are Abilities Disabled.
+    Parameters: None.
+    Duration of Slot Effect: Persistent until replaced.
+    Cleansable: Yes
 
-**Rejection Field**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
-    *   **Effect:** The `movingCreature` entering this slot is returned to its owner's hand.
-    *   **Parameters:** None.
-    *   **Duration of Slot Effect:** Persistent until replaced.
-    *   **Cleansable:** Yes
+Unstable Terrain
+    Visibility: Visible
+    Trigger Event(s): OnTurnEnd (Slot effect logic checks if its slot is occupied).
+    Effect: If this is the 2nd consecutive Day the same creature ends its Day on this slot, that creature is moved to a random available adjacent friendly slot (if multiple, chosen randomly). If no such slot is available, nothing happens. The "consecutive Day" counter resets if a different creature occupies the slot, the slot becomes empty, or the creature is successfully moved by this effect or any other means.
+    Parameters: None.
+    Duration of Slot Effect: Persistent until replaced.
+    Cleansable: Yes
 
-**Scorched Earth**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** Continuous while active and slot is occupied.
-    *   **Effect:** Passive abilities of any creature occupying this slot do not trigger. (Does not use the full `Abilities Disabled` keyword, so active abilities are not affected by this specific slot effect).
-    *   **Parameters:** None.
-    *   **Duration of Slot Effect:** Persistent until replaced.
-    *   **Cleansable:** Yes
+Echoing Cave
+    Visibility: Visible
+    Trigger Event(s): OnActionQueued(actionDetails) (Slot effect logic checks: if actionDetails.sourceCreature is on this slot and if the action is a 'PassiveAbilityEffect').
+    Effect: If a creature on this slot triggers a passive ability, that passive ability's resulting action is duplicated in the Action Queue with the same targets and Priority (Action). This effect triggers once, then Echoing Cave is removed.
+    Parameters: None.
+    Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
+    Cleansable: Yes
 
-**Rally Point**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** `OnTurnStart` (Slot effect logic checks if its slot is occupied by a creature controlled by the same player who controls this Rally Point).
-    *   **Effect:** If a creature controlled by this slot effect's controller is on this slot at **Dawn (Start of their Day)**, its controller Schedules 1 additional card draw for their next **Day**.
-    *   **Parameters:** None.
-    *   **Duration of Slot Effect:** Persistent until replaced.
-    *   **Cleansable:** Yes
+Sacrifice Lair
+    Visibility: Visible
+    Trigger Event(s): OnEnterSlot(movingCreature, enteredSlot, method) (Slot effect logic checks: if enteredSlot is this slot).
+    Effect: The movingCreature is Banished. The Sacrifice Lair is then consumed.
+    Parameters: None
+    Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
+    Cleansable: Yes
 
-**Slippery Floor**
-    *   **Visibility:** Hidden
-    *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
-    *   **Effect:** The `movingCreature` is immediately pushed one slot directly backward (towards its controller's edge of the board) if the destination slot is empty and valid. If it cannot be pushed (e.g., at edge of board, next slot occupied), it instead takes 2 damage. The Slippery Floor is then **revealed and** consumed.
-    *   **Parameters:** Damage if not pushed: 2 (set by applying card).
-    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD III.H.4).
-    *   **Cleansable:** Yes.
+Barbed Snare
+    Visibility: Hidden
+    Trigger Event(s): OnLeaveSlot(leftSlot, method) (Slot effect logic checks: if leftSlot is this slot).
+    Effect: The creature that left this slot takes X damage. The Barbed Snare is then revealed and consumed.
+    Parameters: Damage: X (e.g., 1, set by applying card).
+    Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
+    Cleansable: Yes
 
-**Jamming Field**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** Continuous while active.
-    *   **Effect:** Spells cannot be played targeting this slot or any creature occupying it. Additionally, active and passive abilities of any creature occupying this slot are `Abilities Disabled`.
-    *   **Parameters:** None.
-    *   **Duration of Slot Effect:** Persistent until replaced.
-    *   **Cleansable:** Yes
+Magnetic Pulse
+    Visibility: Visible
+    Trigger Event(s): OnTurnStart (Slot effect logic checks if its slot is occupied by a creature controlled by the player who applied Magnetic Pulse).
+    Effect: At Dawn (Start of the Day), if their creature is on this slot, pull one random adjacent enemy creature one slot towards this Magnetic Pulse slot, if the intervening slot is empty and the target creature can be moved.
+    Parameters: None.
+    Duration of Slot Effect: Persistent until replaced.
+    Cleansable: Yes
 
-**Unstable Terrain**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** `OnTurnEnd` (Slot effect logic checks if its slot is occupied).
-    *   **Effect:** If this is the 2nd consecutive **Day** the *same* creature ends its **Day** on this slot, that creature is moved to a random available adjacent friendly slot (if multiple, chosen randomly). If no such slot is available, nothing happens. The "consecutive Day" counter resets if a different creature occupies the slot, the slot becomes empty, or the creature is successfully moved by this effect or any other means.
-    *   **Parameters:** None.
-    *   **Duration of Slot Effect:** Persistent until replaced.
-    *   **Cleansable:** Yes
+Sanctuary
+    Visibility: Visible
+    Trigger Event(s): Continuous while active.
+    Effect: Creatures on this slot cannot be targeted by enemy Spells or enemy creature abilities.
+    Parameters: None
+    Duration of Slot Effect: Persistent until replaced.
+    Cleansable: Yes
 
-**Echoing Cave**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** `OnActionQueued(actionDetails)` (Slot effect logic checks: if `actionDetails.sourceCreature` is on this slot and if the action is a 'PassiveAbilityEffect').
-    *   **Effect:** If a creature on this slot triggers a passive ability, that passive ability's resulting action is duplicated in the Action Queue with the same targets and `Priority (Action)`. This effect triggers once, then Echoing Cave is removed.
-    *   **Parameters:** None.
-    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD III.H.4).
-    *   **Cleansable:** Yes
-
-**Sacrifice Lair**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
-    *   **Effect:** The `movingCreature` is Banished. The Sacrifice Lair is then consumed.
-    *   **Parameters:** None
-    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD III.H.4).
-    *   **Cleansable:** Yes
-
-**Barbed Snare**
-    *   **Visibility:** Hidden
-    *   **Trigger Event(s):** `OnLeaveSlot(leftSlot, method)` (Slot effect logic checks: if `leftSlot` is this slot).
-    *   **Effect:** The creature that left this slot takes X damage. The Barbed Snare is then **revealed and** consumed.
-    *   **Parameters:** Damage: X (e.g., 1, set by applying card).
-    *   **Duration of Slot Effect:** 1 Trigger (consumed immediately after its effect is queued, as per GDD III.H.4).
-    *   **Cleansable:** Yes
-
-**Magnetic Pulse**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** `OnTurnStart` (Slot effect logic checks if its slot is occupied by a creature controlled by the player who applied Magnetic Pulse).
-    *   **Effect:** At **Dawn (Start of the Day)**, if their creature is on this slot, pull one random adjacent enemy creature one slot towards this Magnetic Pulse slot, if the intervening slot is empty and the target creature can be moved.
-    *   **Parameters:** None.
-    *   **Duration of Slot Effect:** Persistent until replaced.
-    *   **Cleansable:** Yes
-
-**Sanctuary**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** Continuous while active.
-    *   **Effect:** Creatures on this slot cannot be targeted by enemy Spells or enemy creature abilities.
-    *   **Parameters:** None
-    *   **Duration of Slot Effect:** Persistent until replaced.
-    *   **Cleansable:** Yes
-
-**Threshold of Liminality**
-    *   **Visibility:** Visible
-    *   **Trigger Event(s):** `OnEnterSlot(movingCreature, enteredSlot, method)` (Slot effect logic checks: if `enteredSlot` is this slot).
-    *   **Effect:** When a creature enters this slot:
-        *   The `movingCreature` gains `Anchored`.
-        *   The `movingCreature` gains `Exposed (1 Day)`. (Note: `Exposed` status duration set to 1 Day/stack).
-        *   The controller of the `movingCreature` schedules 1 fewer card draw for their next **Day**.
-    *   **Parameters:** Duration of Slot Effect: X (e.g., 2 global **Days**, as set by the applying card).
-    *   **Duration of Slot Effect:** X global **Days**, then removed.
-    *   **Cleansable:** Yes
+Threshold of Liminality
+    Visibility: Visible
+    Trigger Event(s): OnEnterSlot(movingCreature, enteredSlot, method) (Slot effect logic checks: if enteredSlot is this slot).
+    Effect: When a creature enters this slot:
+        • The movingCreature gains Anchored.
+        • The movingCreature gains Exposed (1 Day). (Note: Exposed status duration set to 1 Day/stack).
+        • The controller of the movingCreature schedules 1 fewer card draw for their next Day.
+    Parameters: Duration of Slot Effect: X (e.g., 2 global Days, as set by the applying card).
+    Duration of Slot Effect: X global Days, then removed.
+    Cleansable: Yes

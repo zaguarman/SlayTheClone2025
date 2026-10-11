@@ -1,22 +1,3 @@
-**DOCUMENT USAGE GUIDELINES:**
-	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
-    *   This document **shall** possess a clearly demarcated subject matter.
-    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
-
-	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
-    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
-    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
-    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
-
-	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
-    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
-
-	**STANDARDIZED CONTENT BOUNDARIES:**
-    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
-    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
-
-**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
-
 Card Game Factions Overview
 	Neutral Resources
 		Tools & Objects
@@ -212,7 +193,7 @@ Card Game Factions Overview
 		World Trade Center
 		Yacht
 		Zebra Crossing
-	Faction: Tech & Cyber
+	Faction: Tech
 		Core Technologies & Infrastructure
 			AI Assistant
 			Antivirus
@@ -322,7 +303,7 @@ Card Game Factions Overview
 			Script Kiddie
 			System Administrator (SysAdmin)
 			Threat Hunter
-	Faction: Internet Culture
+	Faction: Digital Society
 		Online Life & Phenomena
 			404 Not Found
 			AdBlocker
@@ -460,7 +441,7 @@ Card Game Factions Overview
 			Tech Bro
 			V-Tuber
 			Zoomer
-	Faction: Corporate Machine
+	Faction: Corporate
 		Business Models & Strategy
 			120 Year Mickey Mouse Copyright
 			An Offer You Can't Refuse
@@ -662,7 +643,7 @@ Card Game Factions Overview
 			Unpaid Intern
 			Work Shift Rotation
 			Workplace Hazard
-	Faction: Shadow Operations
+	Faction: Shadow Ops.
 		Espionage & Covert Actions
 			Alibi
 			Arms Dealer
@@ -776,7 +757,7 @@ Card Game Factions Overview
 			Power Vacuum
 		Psychological Warfare & Tactics
 			Psyop
-	Faction: Statecraft & Conflict
+	Faction: Statecraft
 		Governance & Politics
 			Absolute Power Corrupts Absolutely
 			Alegal
@@ -887,7 +868,6 @@ Card Game Factions Overview
 			Trade War
 			Traffic Jam
 			Universal Healthcare
-			Utopia
 			Vaporize
 			Veni Vidi Vici
 			Vernacular Information Dissemination
@@ -931,7 +911,7 @@ Card Game Factions Overview
 			Si Vis Pacem, Para Bellum
 			Soft Landing
 			Yokosuka MXY-7 Ohka
-	Faction: Myths & Mysteries
+	Faction: Myth
 		Mythic Beings & Deities
 			Ancient Greece Gods
 			Ancient Rome Gods
@@ -1126,7 +1106,7 @@ Card Game Factions Overview
 			Omen Reading
 			Publicly Funded Faith Schools
 			Spontaneous Combustion
-	Faction: Applied Science & Futurism
+	Faction: Utopia
 		Core Sciences & Math
 			Absolute Zero
 			Abiogenesis
@@ -1233,7 +1213,7 @@ Card Game Factions Overview
 			Space Mining
 			Space Satellites
 			Tidal Wave
-	Faction: Mind & Paradox
+	Faction: Mind
 		Psychology & Cognition
 			Abilene Paradox
 			Amnesia
@@ -1379,7 +1359,7 @@ Card Game Factions Overview
 			Tolerance Paradox
 			Vice Versa
 			Whataboutism
-	Faction: Zeitgeist & Archetypes
+	Faction: Zeitgeist
 		Social Trends & Commentary
 			14% of all statistics are made up on the spot (Simpsons reference)
 			Absentee Parents

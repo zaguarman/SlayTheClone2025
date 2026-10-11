@@ -98,8 +98,31 @@ namespace SlayTheClone.Tests {
         [Test]
         public void OnPlayBuffs_LandBeforeThisTurnsAttacks() => AssertOnPlayHelpLandsBeforeAttacks(ActionType.ModifyStat);
 
-        [Test, Category(TestCategories.KnownBug), Description("#48: armor isn't in the priority list, so it lands after combat")]
+        [Test]
         public void OnPlayArmor_LandsBeforeThisTurnsAttacks_LikeBuffs() => AssertOnPlayHelpLandsBeforeAttacks(ActionType.Armor);
+
+        [Test]
+        public void ASpellCastThisTurn_LandsBeforeThisTurnsAttacks() {
+            var guard = game.Summon(p1, game.Creature("Guard", 0, 2), 0);
+            var brute = game.Summon(p2, game.Creature("Brute", 2, 3), 0);
+            var shield = game.GiveCard(p1, game.Spell("Shield", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures)));
+
+            game.Declare(brute, p1.Battlefield[0]);
+            game.ActionsQueue.AddAction(new PlayCardAction(shield, p1, p1.Battlefield[0]));
+            game.Resolve();
+
+            Assert.IsFalse(guard.IsDead, "The spell's armor should land before the brute's attack");
+        }
+
+        [Test]
+        public void EveryKindOfAction_HasAPlaceInTheResolutionOrder() {
+            var actionTypes = typeof(IGameAction).Assembly.GetTypes()
+                .Where(t => typeof(IGameAction).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+
+            foreach (var type in actionTypes) {
+                Assert.DoesNotThrow(() => ActionsQueue.PriorityOf(type), $"{type.Name} would be queued with no priority");
+            }
+        }
 
         // A 2-health guard is attacked for 2 the same turn a creature that gives its friends +2 enters
         private void AssertOnPlayHelpLandsBeforeAttacks(ActionType help) {

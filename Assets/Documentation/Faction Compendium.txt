@@ -1,0 +1,183 @@
+CONTENTS
+
+1. How Factions Work
+2. The Nine Factions
+3. Mechanic Ownership
+4. Counters
+5. Example Two-Faction Decks
+6. PvE Notes
+
+
+1. HOW FACTIONS WORK
+
+• Every Mechanic Has an Owner: One faction has it as primary (cheap and common). One or two others have it as secondary (rarer, costlier, or with a drawback). Nobody else gets it.
+• Every Status Has an Owner: Each faction owns at most 3 statuses. A Neutral set (Deployment Time, Revealed, Concealed, Exposed, Muted, Anchored) is open to everyone. Ownership is listed in the 'Status Effects Compendium'.
+• Every Faction Has a Cost: There's no mana. Besides Deployment Time, each faction pays for its power in its own way, and that cost is part of its personality. Some costs are additional costs paid during Planning; others are drawbacks built into the card's effect.
+• Every Faction Has a Hole: One thing it can't do at all. You cover it by combining factions.
+• Every Faction Has a Tempo: How fast its creatures usually come online, set by its typical Deployment Time.
+• Every Strong Strategy Has Counters: At least two factions have tools against it.
+
+
+2. THE NINE FACTIONS
+
+Myth: Faith, Death & Prophecy
+    • Theme: Legends, religion, monsters, tarot, the afterlife.
+    • Play Style: Slow and inevitable. Creatures die and come back; prophecies pay off later.
+    • Signature Mechanics: Conversion, Revive, OnDied payoffs, sacrifice costs, Prophecy (GDD 5.7 Prophecy).
+    • Statuses: Doomed, Blessed, Bloodthirst.
+    • Pays With: Sacrifice. As an additional cost, destroy one of your own creatures.
+    • Can't: Move creatures.
+    • Tempo: Slow (Deployment Time 2–3).
+    • Strong Against: Mind (Blessed and Doomed ignore its statuses); Utopia (Doomed and Conversion answer a single evolving threat).
+    • Weak Against: Shadow Ops. and Statecraft (Banish stops Revive).
+
+Statecraft: Order, Law & War
+    • Theme: Government, bureaucracy, military, propaganda.
+    • Play Style: Fortify the line, slow everyone down with paperwork, then strike first.
+    • Signature Mechanics: Recruitment (conscription), Red Tape (adds Deployment Time to enemies or lowers their Priority), Priority strikes (Blitzkrieg, Preemptive Strike), Laws (Location cards that change rules for X Days), multi-slot war machines (tanks, submarines, Man o' War), exile (Banish).
+    • Statuses: Heavy, Diplomatic Immunity, Keep Calm.
+    • Pays With: Bureaucracy. Its creatures have higher Deployment Time than similar creatures, and its spells often add Deployment Time to your own creatures as a drawback.
+    • Can't: Hide anything. All its plans are public.
+    • Tempo: Slow to medium (Deployment Time 1–3, plus bureaucracy).
+    • Strong Against: Corporate (Red Tape and taxes), Digital Society (area damage), Tech (Keep Calm), Mind (Diplomatic Immunity), Myth (exile).
+    • Weak Against: Utopia (repositioning breaks the line), Shadow Ops. (flipping control), Zeitgeist (Underdog).
+
+Shadow Ops.: Secrets & Sabotage
+    • Theme: Espionage, covert operations, conspiracies.
+    • Play Style: Fragile agents, hidden plans and traps. Wins the information war, loses fair fights.
+    • Signature Mechanics: Concealed and Undercover, Interference (queue traps set up in advance), hidden Slot Effects, sleeper agents (delayed control changes such as Brainwashed), Banish (Cleaner, Secure Deletion), Dead Man's Switch (OnDied).
+    • Statuses: Brainwashed, Compromised, Honeypot.
+    • Pays With: Burning. As an additional cost, Banish a card from your own hand or discard pile.
+    • Can't: Heal or gain Armor.
+    • Tempo: Fast (Deployment Time 0–1).
+    • Strong Against: Myth (Banish), Statecraft (flipping control), Tech (its hooks can't target what they can't see).
+    • Weak Against: Tech and Digital Society (reveals).
+
+Corporate: Money, Growth & Exploitation
+    • Theme: Business, finance, labor.
+    • Play Style: An engine deck: invest now, cash out later, spend cheap workers as fuel.
+    • Signature Mechanics: Investments (pay now, get draws or Persistent Stat Modifications on later Days), worker tokens (Unpaid Intern) and Layoffs (sacrifice them for value), Contracts (both sides gain something, theirs arrives late), Paywall (taxes on cheap enemy plays).
+    • Statuses: Burnout, Coffeinated, Addicted.
+    • Pays With: Capital. As an additional cost, discard cards from your hand.
+    • Can't: Heal. The insurance never pays out.
+    • Tempo: Medium (Deployment Time 1–2), strong late.
+    • Strong Against: Digital Society (Paywall).
+    • Weak Against: Statecraft (Red Tape and taxes), Zeitgeist (Strikes).
+
+Tech: Systems & the Queue
+    • Theme: Software, hacking, infrastructure.
+    • Play Style: Rewires the queue with hooks, copies and overrides; runs automated units.
+    • Signature Mechanics: Watchdogs (Firewall, Man-in-the-Middle), Priority boosts (Turbo), copied actions (Fork, Feedback Loop), Automated Units, Cleanse (Antivirus, Bug Fix), surveillance reveals (CCTV, Data Mining).
+    • Statuses: Heat Signature, Exhausted.
+    • Pays With: Technical Debt. As an additional cost, schedule fewer card draws for your next Day.
+    • Can't: Bring anything back from the discard pile. Deleted is deleted.
+    • Tempo: Medium (Deployment Time 1–2).
+    • Strong Against: Shadow Ops. (reveals), Mind and Zeitgeist (Cleanse).
+    • Weak Against: Shadow Ops. (concealment), Statecraft (Keep Calm).
+    • Note: Tech and Shadow Ops. counter each other; whoever wins the information war wins the matchup.
+
+Digital Society: Virality & the Mob
+    • Theme: Social media, memes, influencers, cancel culture.
+    • Play Style: A swarm of cheap Deployment Time 0 tokens, effects that spread, and many creatures piling onto one target.
+    • Signature Mechanics: Flooding the board (bots, NPCs, Spam), "goes viral" (effects that spread to adjacent creatures), Dogpile (a bonus when several creatures attack the same target), Doxxing (reveals), Clickbait (taunts), Streisand Effect (anything hidden near it backfires on its owner).
+    • Statuses: Ostracised, Ghosted, Earworm.
+    • Pays With: Exposure. Its own creatures gain Revealed or Heat Signature.
+    • Can't: Have big creatures, Heavy, or Persistent Stat Modifications.
+    • Tempo: Fastest (Deployment Time 0).
+    • Strong Against: Shadow Ops. (Doxxing).
+    • Weak Against: Statecraft (area damage), Corporate (Paywall).
+
+Zeitgeist: Moods of Modern Life
+    • Theme: Social trends, archetypes, modern malaise.
+    • Play Style: Momentum and comebacks. Moods that buff a creature but burn it out; stronger when losing.
+    • Signature Mechanics: Underdog (a bonus when you have fewer creatures or less Health), Plot Armor (survives a lethal hit once, using OnAboutToDie), Trends (Locations that reward a behavior for X Days), Strikes and Protests (shut down engines).
+    • Statuses: Hipster, Impatient, Slacking Off.
+    • Pays With: Self-harm. Damage or statuses on its own creatures.
+    • Can't: Use Intelligence. It lives in the moment.
+    • Tempo: Fast to medium (Deployment Time 0–1).
+    • Strong Against: Corporate (Strikes), Statecraft (Underdog).
+    • Weak Against: Myth (Blessed), Tech and Utopia (Cleanse).
+
+Mind: Perception & Paradox
+    • Theme: Psychology, cognitive biases, philosophy, paradoxes.
+    • Play Style: Wins without big stats by manipulating choices: forcing, inverting and faking them.
+    • Signature Mechanics: Misleading Watchdogs (Mental Breakdown, Red Herring), forced behavior (Hypnosis, Paranoid), rule inversion (Temporal Distortion, Vice Versa: swap Attack and Health), fake intents shown to the enemy, Mandela Effect, Precognition (see future enemy intents).
+    • Statuses: Paranoid, Imposter Syndrome, Cognitive Dissonance.
+    • Pays With: Double-edged effects that also hit its own side.
+    • Can't: Deal raw damage. Its creatures are weak.
+    • Tempo: Medium (Deployment Time 1).
+    • Strong Against: Utopia (disables a single evolving threat), Statecraft's rigid plans.
+    • Weak Against: Myth (Blessed), Statecraft (Diplomatic Immunity), Tech and Utopia (Cleanse).
+
+Utopia: Science & the Future
+    • Theme: Physics, biology, medicine, space, futurism.
+    • Play Style: Long-term experiments: creatures that evolve, mutate and get cured.
+    • Signature Mechanics: Evolution (each Deployment Time step unlocks an ability, using OnDeploymentTimeComplete), gene editing (Persistent Stat Modifications), healing and immunity (Vaccine, Placebo), Clone, field Slot Effects (Force Field, Stasis, Magnetic), Wormhole and Black Hole repositioning.
+    • Statuses: Chill, Resurrected, Mutation.
+    • Pays With: Side effects. Every experiment puts a negative status on the creature it targets.
+    • Can't: Conceal anything. Results get published.
+    • Tempo: Slow (Deployment Time 2–3), strongest late.
+    • Strong Against: Statecraft (repositioning), Mind and Zeitgeist (Cleanse).
+    • Weak Against: Myth (Doomed, Conversion), Shadow Ops. (Brainwashed), Mind (disables).
+
+
+3. MECHANIC OWNERSHIP
+
+• Control Change: Myth (Conversion), Statecraft (Recruitment), Shadow Ops. (Brainwashed). Nobody else; it's the most complex system, so it stays rare.
+• Interference (set up in advance): Primary Shadow Ops.; secondary Statecraft (Red Tape).
+• Watchdogs (during resolution): Primary Tech; secondary Mind.
+• Priority: Primary Statecraft; secondary Tech.
+• Revealing Information: Primary Shadow Ops.; secondary Tech, Digital Society.
+• Concealment and Fake Intents: Primary Shadow Ops.; secondary Mind.
+• Revive and Recursion: Primary Myth; secondary Utopia (Clone).
+• Banish: Primary Shadow Ops.; secondary Statecraft.
+• Tokens and Swarms: Primary Digital Society; secondary Corporate.
+• Sacrifice Payoffs: Primary Myth; secondary Corporate.
+• Persistent Stat Growth: Primary Utopia; secondary Corporate.
+• Healing and Armor: Primary Utopia; secondary Statecraft.
+• Repositioning: Primary Utopia; secondary Shadow Ops., Digital Society.
+• Fortifying (Immobility): Primary Statecraft; secondary Myth.
+• Visible Slot Effects: Primary Statecraft, Utopia; secondary Myth (altars, sacred ground).
+• Hidden Slot Effects: Shadow Ops. only. (Statecraft's minefields are visible: everyone knows where the no-go zone is.)
+• Card Draw Economy: Primary Corporate; secondary Mind.
+• Global Rules (Locations): Primary Zeitgeist; secondary Statecraft, Utopia.
+• Spreading Damage-Over-Time: Primary Digital Society; secondary Zeitgeist.
+• Disables (Muted, Exhausted): Primary Tech; secondary Mind.
+• Comebacks: Primary Zeitgeist; secondary Myth.
+• Multi-Slot Creatures: Primary Statecraft; secondary Myth (giants), Corporate (Titanic).
+• Prophecy: Myth only.
+
+
+4. COUNTERS
+
+• Revive Loops (Myth): Banish (Shadow Ops., Statecraft).
+• Status Stacking (Mind, Zeitgeist): Blessed and Doomed immunity (Myth); Cleanse (Tech, Utopia).
+• Hidden Plans and Traps (Shadow Ops.): Reveals (Tech, Digital Society); Cleanse (SlotEffect).
+• Swarms (Digital Society): Area damage (Statecraft); Paywall (Corporate).
+• Economy Engines (Corporate): Red Tape and taxes (Statecraft); Strikes (Zeitgeist).
+• Fortified Lines (Statecraft): Repositioning (Utopia); flipping control (Shadow Ops.); Underdog (Zeitgeist).
+• Queue Tricks (Tech): Concealment (Shadow Ops.); Keep Calm (Statecraft).
+• One Big Evolving Threat (Utopia): Doomed and Conversion (Myth); Brainwashed (Shadow Ops.); disables (Mind).
+• Choice Manipulation (Mind): Blessed (Myth); Diplomatic Immunity (Statecraft).
+
+
+5. EXAMPLE TWO-FACTION DECKS
+
+• Prosperity Gospel (Myth + Corporate): Sacrifice workers, get paid in draws and stat growth.
+• Deep State (Shadow Ops. + Statecraft): Hidden minefields plus Red Tape: the enemy is slowed down and walks into traps.
+• The Algorithm (Tech + Digital Society): Token swarms whose actions get copied and boosted.
+• Frankenstein (Utopia + Myth): Revive creatures and mutate them stronger each time.
+• Hustle Culture (Corporate + Zeitgeist): Coffeinated workers burn out for big short-term power.
+• Psyop (Shadow Ops. + Mind): Hidden real intents, fake visible ones, and the enemy's attacks redirected.
+• Military-Industrial Complex (Statecraft + Corporate): Fortified Heavy lines paid for by investments.
+• Doomscrolling (Digital Society + Zeitgeist): Moods that spread across both boards.
+
+
+6. PVE NOTES
+
+• Enemy Groups: Mostly one faction plus a small splash of a second, so players learn which faction counters which.
+• Telegraph the Path: Show which factions are coming next on the path, so drafting a counter is a real choice. Recruitment and Conversion double as "steal their tools to beat the next fight."
+• Open Question: The AI Has No Hand or Draw. These need an AI version before they can be used by or against enemies:
+    • Effects that make the opponent draw fewer cards.
+    • The Corporate cost (discarding), the Shadow Ops. cost (Banishing from hand or discard pile), and the Tech cost (fewer draws), when an enemy uses those cards.
+    • Suggested rule: For the AI, any draw penalty or hand/discard cost becomes "its next scripted card play is delayed by 1 Day."

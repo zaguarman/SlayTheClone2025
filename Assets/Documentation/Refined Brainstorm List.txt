@@ -1,22 +1,3 @@
-**DOCUMENT USAGE GUIDELINES:**
-	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
-    *   This document **shall** possess a clearly demarcated subject matter.
-    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
-
-	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
-    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
-    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
-    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
-
-	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
-    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
-
-	**STANDARDIZED CONTENT BOUNDARIES:**
-    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
-    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
-
-**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
-
 Locations:
 Abandoned Mall
 Airport Lounge
@@ -58,21 +39,14 @@ University Campus
 Volcanic Lair
 Waiting Room
 
-Digital:
+Tech:
 Abandonware
-Absolute Zero
 Antivirus
 Biometric Data
 Bloatware
-Blood Transfusion
 Bug Fix
-Chain Reaction
-Cherenkov Radiation
-Clone
 Cloud Computing (Someone else's Computer)
 Code Review
-Cold Fusion
-Cold Fusion
 Ctrl + Enter
 Cursed Problem
 Data Leak
@@ -82,40 +56,26 @@ Effect 2000
 Eject Button
 End-to-End Encryption
 Feedback Loop
-Hazmat Suit
 Here Be Dragons
 Heuristic Analysis
-Hexagons
 Honeypot
-Hypermetamorphosis
-Incubator
 It's just pixels and static now
-Kardashev Zenith
 Legacy Code
 Malware
 Man-in-the-Middle
 Memory Wipe
 Metadata
-Metastudy
 Modal Dialog
 Monkey Clicking
 Motherboard
-Mutation
-Particle Accelerator
 Password Sticky Note
-Perpetual Motion Machine
 Planned Obsolescence
-Quantum Entanglement
-Radiation Sickness
 Ransomware Attack
 Rubber Duck
 Script Kiddie
 Search Engine Deoptimization
 Shift Gear
 Software As A Service
-Splitting The Atom
-State Of The Art
-String Theory
 Subdermic Control Unit
 SysAdmin
 Syntax Error
@@ -125,11 +85,34 @@ Template
 Two-Factor Authentication
 User Engagement Metrics
 User Friendly
-Wave Particle Duality
 WYSIWYG
 Zero-Day
 
-Capital:
+Utopia:
+Absolute Zero
+Blood Transfusion
+Chain Reaction
+Cherenkov Radiation
+Clone
+Cold Fusion
+Cold Fusion
+Hazmat Suit
+Hexagons
+Hypermetamorphosis
+Incubator
+Kardashev Zenith
+Metastudy
+Mutation
+Particle Accelerator
+Perpetual Motion Machine
+Quantum Entanglement
+Radiation Sickness
+Splitting The Atom
+State Of The Art
+String Theory
+Wave Particle Duality
+
+Corporate:
 120 Year Long Mickey Mouse Copyright
 Afiliate Marketing
 Alegal Business
@@ -235,7 +218,7 @@ Workplace Hazard
 Yesnon-Profit
 Zero-Sum Game
 
-Shadow:
+Shadow Ops.:
 "Peace" Operation
 Black Box
 Burn Notice
@@ -289,7 +272,7 @@ Tracking Beacon
 Unknown Unknown
 Whistleblower
 
-Distopia:
+Statecraft:
 72-hour bag
 Alien Body (Area51)
 Arisaka Rifle
@@ -373,7 +356,7 @@ War Censorship Law
 Weaponized Refugee
 Witness Protection Program
 
-Utopia:
+Digital Society:
 404 Not Found
 AdBlocker
 Ah, I see you're a man of culture as well
@@ -460,7 +443,7 @@ YOLO
 Yoink
 Zeitgeist
 
-Cognito:
+Mind:
 Absolute Power Corrupts Absolutely
 Ad Hoc
 Ad Hominem

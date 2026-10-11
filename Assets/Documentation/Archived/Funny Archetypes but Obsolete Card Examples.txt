@@ -1,10 +1,3 @@
-DOCUMENT USAGE GUIDELINES:
-
-1.  Preservation of Existing Content: All existing thematic elements (card names, ability names, flavor text, factions, specific examples) are stable and must be preserved unless the user explicitly requests a change to a specific element.
-2.  Mechanical Alignment: Mechanical changes must align with existing flavor.
-3.  No Simplification/Condensation: No part of this document (concepts, mechanics, rules, status definitions, examples, principles) should be simplified, shortened, condensed, or significantly rephrased unless explicitly instructed by the user. Maintain existing detail, nuance, and phrasing in all other sections when implementing user requests.
-4.  Example Card List Integrity: This "Illustrative Card Examples List" is fixed. The number of cards on this list cannot be modified (no additions or unsolicited removals) unless explicitly requested by the user. If an existing card example needs mechanical adjustment to fit a new rule, its core concept and flavor must be preserved.
-
 Illustrative Card Examples List
 
 Card Name: Aggressive Downsizing

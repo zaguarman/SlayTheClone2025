@@ -1,22 +1,3 @@
-**DOCUMENT USAGE GUIDELINES:**
-	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
-    *   This document **shall** possess a clearly demarcated subject matter.
-    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
-
-	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
-    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
-    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
-    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
-
-	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
-    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
-
-	**STANDARDIZED CONTENT BOUNDARIES:**
-    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
-    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
-
-**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
-
 This section defines common game events that can trigger passive abilities or other effects. Many triggers provide contextual information (e.g., source of damage, specific status applied) that can be used by the ability's logic.
 
 Combat & Creature State Changes:
@@ -64,9 +45,9 @@ OnStatChange(statChanged, oldValue, newValue): Triggers when one of this creatur
 
 Turn Structure & Action Flow (Day Structure & Action Flow):
 
-OnTurnStart: Triggers during the Dawn Phase (Start of Day) of this creature's controller's Day. As per GDD III.F.1, this occurs after Scheduled Draw for all players. Player-facing text will typically use "Each Dawn".
+OnTurnStart: Triggers during the Dawn Phase (Start of Day) of each Day. As per GDD 3.6 The Day, this occurs after the Scheduled Draw, and its effects resolve on the spot in the Dawn resolution pass. Player-facing text will typically use "Each Dawn".
 
-OnTurnEnd: Triggers at **Dusk (End of Day)** of this creature's controller's **Day**, after all queued actions for the **Day** have resolved. Player-facing text will typically use "Each Dusk".
+OnTurnEnd: Triggers at Dusk (End of Day) of each Day, after all queued actions for the Day have resolved. Its effects resolve on the spot in the Dusk resolution pass. Player-facing text will typically use "Each Dusk".
 
 OnActionQueued(actionDetails): Triggers when an action involving this creature (either as the source or a target) is added to the action queue.
     actionDetails: Information about the queued action (e.g., type, source, target, original controller if different from current).
@@ -74,11 +55,11 @@ OnActionQueued(actionDetails): Triggers when an action involving this creature (
 OnActionResolved(actionDetails): Triggers when an action involving this creature (as source or target) resolves from the queue.
     actionDetails: Information about the resolved action.
 
-OnActionCancelled(cancelledActionDetails, cancellationSource): Triggers when a previously queued action is cancelled (e.g., by Recruitment) or Nullified (e.g., by `Nullify (Interference)` or other game effects) and removed from the Action Queue or resolves with no game effect.
+OnActionCancelled(cancelledActionDetails, cancellationSource): Triggers when a previously queued action is cancelled (e.g., by Recruitment) or Nullified (e.g., by Nullify (Interference) or other game effects) and removed from the Action Queue or resolves with no game effect.
     cancelledActionDetails: Information about the action that was cancelled/nullified (e.g., type, original source, original target, original controller).
     cancellationSource: The game rule or effect that caused the cancellation/nullification (e.g., 'Recruitment', 'SpecificSpellEffect', 'InterferenceNullify', 'EffectNullification').
 
-OnDeploymentTimeComplete: Triggers specifically when this creature's `Deployment Time` counter reaches zero and it becomes fully operational.
+OnDeploymentTimeComplete: Triggers specifically when this creature's Deployment Time counter reaches zero and it becomes fully operational.
 
 Movement & Positioning:
 
@@ -94,7 +75,7 @@ OnLeaveSlot(leftSlot, method): Triggers when this creature leaves a slot.
     leftSlot: The slot the creature has left.
     method: How the creature left (e.g., 'Moved', 'Swapped', 'ReturnedToHand', 'Destroyed', 'Recruited', 'Converted', 'ReturnedToOwner', 'Banished').
 
-OnEnterBattlefield: Triggers when this creature card enters the battlefield from any zone (Hand, Discard Pile via Revive). Occurs after `Deployment Time` is applied, but before OnDeploymentTimeComplete. (Note: Generally does not re-trigger if a temporarily recruited creature returns to its owner, unless specified by an effect).
+OnEnterBattlefield: Triggers when this creature card enters the battlefield from any zone (Hand, Discard Pile via Revive). Occurs after Deployment Time is applied, but before OnDeploymentTimeComplete. (Note: Generally does not re-trigger if a temporarily recruited creature returns to its owner, unless specified by an effect).
 
 OnLeaveBattlefield(destinationZone): Triggers when this creature is removed from the battlefield.
     destinationZone: The zone the creature card is moving to (e.g., 'Hand', 'DiscardPile', 'Banish', 'Owner'sHand' if returned from temporary recruitment when board is full).
@@ -102,32 +83,32 @@ OnLeaveBattlefield(destinationZone): Triggers when this creature is removed from
 Status Effects & Information Warfare:
 
 OnStatusEffectApplied(statusEffect, effectSource): Triggers when any status effect is applied to this creature.
-    statusEffect: The specific status (e.g., `Blessed`, `Chill`, including its duration/intensity if applicable).
+    statusEffect: The specific status (e.g., Blessed, Chill, including its duration/intensity if applicable).
     effectSource: The entity or card that applied the status.
 
 OnStatusEffectRemoved(statusEffect, reason): Triggers when any status effect is removed from this creature.
     statusEffect: The specific status that was removed.
     reason: Why it was removed (e.g., 'Expired', 'Cleansed', 'Consumed').
 
-OnGainSpecificStatus: A more specific trigger for when a particular status is gained (e.g., `OnGainConcealed`, `OnGainBlessed`).
+OnGainSpecificStatus: A more specific trigger for when a particular status is gained (e.g., OnGainConcealed, OnGainBlessed).
     effectSource: The entity or card that applied the status.
 
-OnLoseSpecificStatus: A more specific trigger for when a particular status is lost/removed (e.g., `OnLoseRevealed`, `OnLoseCoffeinated`).
+OnLoseSpecificStatus: A more specific trigger for when a particular status is lost/removed (e.g., OnLoseRevealed, OnLoseCoffeinated).
     reason: Why it was removed.
 
-OnRevealedByIntelligence(revealingSource, revealedActionDetails): Triggers when an opponent's action causes the reveal of this creature's concealed nature or its past `Concealed Action`. This can occur when:
-    1) An opponent's Intelligence action successfully reveals a '???' entry (representing this creature's past `Concealed Action`) from the Turn History.
-    2) An opponent applies the '`Revealed`' status effect to this creature, if this creature was "Undercover" or possessed the '`Concealed`' status effect.
+OnRevealedByIntelligence(revealingSource, revealedActionDetails): Triggers when an opponent's action causes the reveal of this creature's concealed nature or its past Concealed Action. This can occur when:
+    1) An opponent's Intelligence action successfully reveals a '???' entry (representing this creature's past Concealed Action) from the Turn History.
+    2) An opponent applies the 'Revealed' status effect to this creature, if this creature was "Undercover" or possessed the 'Concealed' status effect.
     revealingSource: The enemy card, effect, or Intelligence action that caused the reveal.
     revealedActionDetails: Optional. If the reveal was of a past '???' action from the Turn History, this provides details about that specific past action.
 
-OnBecomeTargetable: Triggers when this creature transitions from an untargetable state (e.g., `Ostracised` ends) to a targetable state.
+OnBecomeTargetable: Triggers when this creature transitions from an untargetable state (e.g., Ostracised ends) to a targetable state.
 
-OnBecomeUntargetable: Triggers when this creature transitions from a targetable state to an untargetable state (e.g., `Ostracised` applied).
+OnBecomeUntargetable: Triggers when this creature transitions from a targetable state to an untargetable state (e.g., Ostracised applied).
 
 Card & Resource Management (Primarily Player/Controller Level):
 
-OnCardDrawn(drawnCard): Player-level trigger. Triggers when the player controlling this ability draws one or more cards (typically via Scheduled Draw at **Dawn**).
+OnCardDrawn(drawnCard): Player-level trigger. Triggers when the player controlling this ability draws one or more cards (typically via Scheduled Draw at Dawn).
     drawnCard: The card(s) that were drawn.
 
 OnCardDiscardedFromHand(discardedCard): Player-level trigger. Triggers when the player discards one or more cards from their hand (as an additional cost).
@@ -148,7 +129,7 @@ OnLocationChange(oldLocation, newLocation): Global trigger, can affect all creat
     oldLocation: The previous Location effect.
     newLocation: The new Location effect now active.
 
-OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based or slot-based) is sprung. (This is a generic trap trigger; specific Interference effects in III.D.4 and Counter-Intelligence Traps in IV.A are more specialized interactions with the queue or reveals).
+OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based or slot-based) is sprung. (This is a generic trap trigger; specific Interference effects (GDD 4.4 Disruption & Control) and Counter-Intelligence Traps (GDD 5.1 Traps & Strategic Disclosures) are more specialized interactions with the queue or reveals).
     trapDetails: Information about the trap that was triggered.
     activatingEntity: The creature, action, or effect that triggered the trap.
 
@@ -164,11 +145,11 @@ OnOpponentPlaysSpell(playedSpell, spellTarget): Player-level trigger. Triggers w
     playedSpell: The Spell card played by the opponent.
     spellTarget: The target of the opponent's spell, if any.
 
-OnEnemyCreatureGainConcealed(creature, source): Player-level or specific creature trigger. Triggers when an enemy creature gains the `Concealed` status effect or has an inherent "Undercover" ability making its actions concealed.
+OnEnemyCreatureGainConcealed(creature, source): Player-level or specific creature trigger. Triggers when an enemy creature gains the Concealed status effect or has an inherent "Undercover" ability making its actions concealed.
     creature: The enemy creature that became concealed.
-    source: The source of the `Concealed` status or the "Undercover" ability.
+    source: The source of the Concealed status or the "Undercover" ability.
 
 OnBeingTargetedByEnemyIntelligence(targetingSource): Triggers when this creature is specifically targeted by an enemy's Intelligence effect (e.g., an effect attempting to reveal a pending action or a '???' in the Turn History associated with this creature).
     targetingSource: The enemy creature or spell that is the source of the Intelligence effect.
 
-OnFriendlyTurnStart: (Can be considered a more specific version of OnTurnStart for abilities concerned with friendly context, though OnTurnStart usually implies current controller's **Day**). Triggers at **Dawn (Start of Day)** of the player who controls this creature.
+OnFriendlyTurnStart: (Can be considered a more specific version of OnTurnStart for abilities concerned with friendly context, though OnTurnStart usually implies current controller's Day). Triggers at Dawn (Start of Day) of the player who controls this creature.

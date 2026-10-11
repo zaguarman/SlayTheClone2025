@@ -234,7 +234,7 @@ namespace SlayTheClone.Tests {
             }
         }
 
-        [Test, Category(TestCategories.KnownBug), Description("#46: a slot on the enemy side stands for the enemy player")]
+        [Test]
         public void DrawAndSummonSpells_WorkForTheirCaster_WhereverTheyAreDropped() {
             game.SetDecks(game.Fillers(5), game.Fillers(5));
             var insight = game.GiveCard(p1, game.Spell("Insight", TargetType.Player, Effect(EffectTrigger.OnPlay, ActionType.Draw, 1, TargetType.Player)));

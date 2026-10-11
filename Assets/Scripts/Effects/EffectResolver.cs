@@ -77,9 +77,11 @@ namespace SlayTheClone {
                 return new List<ITarget>();
             }
 
-            // A chosen target is used as is, unless the effect picks its own targets (random or every one of a kind)
+            // A chosen target is used as is, unless the effect picks its own targets (random or every one of a kind).
+            // Only effects that can land on creatures are aimed by it: drawing and summoning always go to the player
+            // their target type names, wherever the card was dropped.
             bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
-            if (chosenTarget != null && !picksOwnTargets) {
+            if (chosenTarget != null && !picksOwnTargets && CanAffectCreatures(action.actionType)) {
                 var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
                 return resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
             }

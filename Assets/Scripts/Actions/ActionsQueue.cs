@@ -65,19 +65,35 @@ namespace SlayTheClone {
         #endregion
 
         #region Methods
-        private int GetActionPriority(IGameAction action) {
-            return action switch {
-                SummonCreatureAction => -1,
-                // Stat changes and statuses take effect before anything else waiting, as if applied on the spot
-                MoveCreatureAction or SwapCreaturesAction or ModifyAction or ApplyStatusEffectAction => 0,
-                PlayCardAction => 1,
-                BattlefieldCombatAction => 4,
-                DamageCreatureAction or DamagePlayerAction => 5,
-                DiscardHandAction => 6,
-                DrawCardsAction => 7,
-                _ => 8
-            };
+        // When each kind of action resolves, lowest first. Every action type needs a place here:
+        // a type that is missing is a mistake, so queueing it fails instead of quietly resolving last.
+        private static readonly Dictionary<Type, int> PriorityByActionType = new Dictionary<Type, int> {
+            [typeof(SummonCreatureAction)] = -1,
+            // Moves, stat changes, armor, healing, statuses and weather take effect before anything else waiting, as if applied on the spot
+            [typeof(MoveCreatureAction)] = 0,
+            [typeof(SwapCreaturesAction)] = 0,
+            [typeof(ModifyAction)] = 0,
+            [typeof(ModifyArmorAction)] = 0,
+            [typeof(HealCreatureAction)] = 0,
+            [typeof(HealPlayerAction)] = 0,
+            [typeof(ApplyStatusEffectAction)] = 0,
+            [typeof(ChangeWeatherAction)] = 0,
+            // A spell is cast as part of its play, so what it does lands before this turn's attacks
+            [typeof(PlayCardAction)] = 1,
+            [typeof(PlaySpellAction)] = 1,
+            [typeof(BattlefieldCombatAction)] = 4,
+            [typeof(DamageCreatureAction)] = 5,
+            [typeof(DamagePlayerAction)] = 5,
+            [typeof(DiscardHandAction)] = 6,
+            [typeof(DrawCardsAction)] = 7,
+        };
+
+        public static int PriorityOf(Type actionType) {
+            if (actionType != null && PriorityByActionType.TryGetValue(actionType, out int priority)) return priority;
+            throw new ArgumentException($"{actionType?.Name ?? "null"} has no place in the resolution order. Add it to ActionsQueue.PriorityByActionType.", nameof(actionType));
         }
+
+        private int GetActionPriority(IGameAction action) => PriorityOf(action.GetType());
 
         private int GetActionSpeed(IGameAction action) {
             int speed = 1;
@@ -97,16 +113,20 @@ namespace SlayTheClone {
             return speed;
         }
 
-        // Only a creature's declared action (one per creature, replaceable by re-declaring) is tracked here.
+        // Only a creature's declared action and its move (one of each per creature, replaceable by re-declaring) are tracked here.
         // Damage and effect actions must never be keyed by their source, or multiple hits from the same
         // creature (AoE effects, spread/chain, retaliation) would replace each other.
         private string GetActiveCreatureId(IGameAction action) {
             return action switch {
                 SwapCreaturesAction swapAction => swapAction.GetCreature1()?.TargetId,
                 BattlefieldCombatAction combatAction => combatAction.GetAttacker()?.TargetId,
+                // A creature also has one move a turn, kept apart from its declared action so it can move and attack
+                MoveCreatureAction moveAction => moveAction.GetCreature() != null ? MoveKey(moveAction.GetCreature().TargetId) : null,
                 _ => null
             };
         }
+
+        private static string MoveKey(string creatureId) => $"move:{creatureId}";
 
         public void AddAction(IGameAction action) {
             string activeCreatureId = GetActiveCreatureId(action);
@@ -218,7 +238,8 @@ namespace SlayTheClone {
                 executor.Execute(action, executionContext);
             }
             catch (Exception ex) {
-                LogError($"Error executing action {action.GetType().Name} via {executor.GetType().Name}: {ex.Message}\n{ex.StackTrace}", LogTag.Actions);
+                // The turn goes on, but the failure is reported in full: its type, the action, and the original stack trace
+                UnityEngine.Debug.LogException(new InvalidOperationException($"{executor.GetType().Name} failed on {action} (Queue ID: {QueueId})", ex));
             }
 
             gameMediator.NotifyActionsQueueChanged();

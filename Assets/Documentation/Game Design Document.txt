@@ -1,744 +1,767 @@
-**DOCUMENT USAGE GUIDELINES:**
-	**DEFINED SCOPE AND UNQUESTIONABLE AUTHORITY:**
-    *   This document **shall** possess a clearly demarcated subject matter.
-    *   For its defined subject, information within this document **is** the singular, authoritative source of truth. It **shall be maintained** as the accurate and current standard.
+CONTENTS
 
-	**INTEGRITY OF DEFINITIONS AND STRICT CHANGE CONTROL:**
-    *   All terms, names, and core definitions established within **this document** for its stated scope **are considered stable and definitive.**
-    *   Any modification to existing definitions herein, or the introduction of new core elements within the scope of **this document**, **requires explicit approval**.
-    *   Proposals for new elements within the scope of **this document** will only be considered if a fundamental, novel requirement arises that cannot be adequately addressed by existing, established project-wide elements or definitions. This prevents redundancy and maintains clarity.
+1. Key Terms
+    • 1.1 Glossary
+    • 1.2 Companion Documents
+2. Game Overview
+    • 2.1 Premise & Player Experience
+    • 2.2 Central Conflict
+    • 2.3 Goal of a Run
+    • 2.4 The Battlefield
+    • 2.5 Fog of War & Intelligence
+    • 2.6 Shared Card Pool
+3. Core Rules
+    • 3.1 Factions
+    • 3.2 Tempo & Deployment Time
+    • 3.3 Creatures & Action Types
+    • 3.4 Combats: Start, End & What Carries Over
+    • 3.5 Cards, Hand & Deck
+    • 3.6 The Day (Turn Structure)
+    • 3.7 Resolution Order
+    • 3.8 State Changes During Resolution
+    • 3.9 Creature Death Sequence
+    • 3.10 Everything Goes Through the Queue
+    • 3.11 Instant Effects (Meta-Actions)
+4. Gameplay Strategies
+    • 4.1 Information Warfare
+    • 4.2 Board Control
+    • 4.3 Buffs & Protection
+    • 4.4 Disruption & Control
+    • 4.5 Recursion & Recovery
+    • 4.6 Combat, Damage & Targeting
+5. Special Systems
+    • 5.1 Traps & Strategic Disclosures
+    • 5.2 Status Effects
+    • 5.3 Trigger Events
+    • 5.4 Recruitment & Conversion
+    • 5.5 Multi-Slot Creatures
+    • 5.6 Mandela Effect
+    • 5.7 Prophecy
+6. Design Philosophy & Balancing
+    • 6.1 Tone
+    • 6.2 Balancing
 
-	**MAINTENANCE OF INTERNAL CONSISTENCY AND ACCURACY:**
-    *   It **is the responsibility of all contributors** to ensure that information within **this document** remains internally consistent, accurate, and aligned with its defined scope and established project standards.
 
-	**STANDARDIZED CONTENT BOUNDARIES:**
-    *   **Prohibition of File Markers:** Under no circumstances **shall** "start of file," "end of file," or similar delimiting statements be embedded within the textual content of **this document**.
-    *   **Prohibition of Filename Inclusion:** The document's filename (e.g., "--- END OF Game Design Document.txt ---") **shall not** be included as part of its content. File identity is managed by the version control system and file system.
+1. KEY TERMS
 
-**FAILURE TO ADHERE TO THESE PROTOCOLS FOR THIS DOCUMENT WILL IMPEDE PROJECT DEVELOPMENT, INTRODUCE AMBIGUITY, AND UNDERMINE THE RELIABILITY OF OUR SHARED KNOWLEDGE BASE. COMPLIANCE IS EXPECTED AT ALL TIMES.**
+1.1 Glossary
 
-**I. INTRODUCTION AND CORE DEFINITIONS**
+Abilities Disabled
+    • What it is: A game state. A creature in this state can't use its passive abilities (the ones that trigger automatically from its card) or its active abilities (the ones its controller chooses to use from its card). Statuses such as Muted put a creature in this state.
+    • Duration: The effect that causes this will say how long it lasts.
+    • Immediate Effect: If a creature gets Abilities Disabled during resolution, it takes effect right away. Any of its pending actions that came from its abilities are cancelled and won't resolve. Its Attack Actions are not affected (that is what Cannot Act does). The creature also can't trigger new passive abilities or use active ones while this is on.
+    • Exception: Deployment Time and its OnDeploymentTimeComplete trigger follow their own rules (see 3.2 Tempo & Deployment Time).
 
-**I.A. Key Gameplay Terms:**
+Action Nullification (When a Creature is About to Die)
+    • What it is: A game rule. When a creature is marked for destruction, its pending non-retaliatory actions are cancelled.
+    • Exceptions: Retaliatory triggers (OnDamaged, OnAboutToDie, OnDied) still happen. The full order is in 3.9 Creature Death Sequence.
 
-*   **Abilities Disabled:**
-    *   **What it is:** A creature in this state can't use its passive abilities (the ones that trigger automatically from its card) or its active abilities (the ones its controller chooses to use from its card).
-    *   **Duration:** The effect that causes this will say how long it lasts.
-    *   **Immediate Effect:** If a creature gets `Abilities Disabled` during the Action Resolution Phase (when actions happen), it takes effect right away. Any actions from that creature still waiting to happen in the Action Queue are cancelled and won't resolve. The creature also can't trigger new passive abilities or use active ones while this is on.
-    *   **Special Note:** The `Deployment Time` status (and its `OnDeploymentTimeComplete` trigger) has its own rules (see Section III.C).
+Armor
+    • What it is: A temporary shield of Health points on a creature. Damage hits Armor before the creature's actual Health. Recoil damage (damage a creature deals to itself) also hits Armor first.
+    • Removal: Specific effects can remove Armor.
 
-*   **Action Nullification (When a Creature is About to Die):**
-    *   **What it is:** A game rule. If a creature is going to be destroyed during the Action Resolution Phase, most of its actions waiting in the queue are cancelled immediately.
-    *   **Exceptions:** "Retaliation" triggers like `OnDamaged` (when it takes damage) and `OnDied` (when it's destroyed) still happen. (More details in Section III.F.Y).
+Banish
+    • What it is: Permanently removes a card from the current run. This can happen to cards in hand, on the battlefield, in the discard pile, or in the deck.
+    • Consequence: Banished cards are completely out of play and can't be brought back during this run.
 
-*   **Armor:**
-    *   **What it is:** A temporary shield of Health points on a creature. Damage hits `Armor` before the creature's actual Health. Recoil damage (damage a creature deals to itself) also hits `Armor` first.
-    *   **Removal:** Specific effects can remove `Armor`.
+Cannot Act
+    • What it is: A game state. A creature in this state cannot be told to Attack, Move, or use its Active Abilities by its controller, nor can it perform them if they were already queued. Statuses such as Deployment Time and Ostracised put a creature in this state.
+    • Duration: The effect causing this will say how long it lasts.
+    • Immediate Effect: If a creature gets Cannot Act during resolution, any of its pending Attack, Movement, or Active Ability actions are cancelled.
 
-*   **Banish:**
-    *   **What it is:** Permanently removes a card from the current game. This can happen to cards in hand, on the battlefield, in the discard pile, or in the deck.
-    *   **Consequence:** Banished cards are completely out of play and can't be brought back during this game session (run).
+Cleanse
+    • What it is: An action or effect that removes one or more status effects or Temporary Stat Modifications from a creature.
+    • Specificity: The Cleanse effect will say what kind of things it can remove. The 'Status Effects Compendium' says whether each status can be cleansed.
+    • Slots: Slot Effects are not status effects. They are removed by the separate Cleanse (SlotEffect) keyword.
 
-*   **Cannot Act:**
-    *   **What it is:** A creature in this state cannot be told to Attack, Move, or use its Active Abilities by its controller, nor can it perform them if they were already queued.
-    *   **Duration:** The effect causing this will say how long it lasts.
-    *   **Immediate Effect:** If a creature gets `Cannot Act` during the Action Resolution Phase, any of its Attack, Movement, or Active Ability actions waiting in the queue are cancelled.
+Concealed Action
+    • What it is: An action planned by a creature with the Undercover ability or the Concealed status. The opposing side can't see it before it resolves, and it shows up as '???' in their Turn History afterwards. This works the same for both sides: concealed enemy actions are part of the "???" you see.
+    • Benefit: Enemy Homing effects aimed at a concealed creature behave like Fixed effects, and enemy Interference conditions can't react to actions they can't see.
 
-*   **Cleanse:**
-    *   **What it is:** An action or effect that removes one or more status effects or `Temporary Stat Modifications` from a creature or slot.
-    *   **Specificity:** The `Cleanse` effect will say what kind of things it can remove. (Check the 'Status Effects Compendium' to see if a specific status can be cleansed).
+Controller
+    • What it is: The player who controls a creature on the battlefield right now. It starts as the player who summoned it and changes with effects like Recruitment or Brainwashed.
+    • In card text: Abilities that affect or benefit "the player" of a creature (e.g., "its controller schedules 1 additional card draw") always mean its current controller.
+    • Difference from Owner: Control can change during a combat; ownership never does. See Owner.
 
-*   **Concealed Action:**
-    *   **What it is:** An action planned by a player's creature (usually because of an `Undercover` ability or `Concealed` status) that the enemy AI can't see beforehand. It shows up as '???' in the enemy's turn history after it happens.
-    *   **Benefit:** Mainly used to trick the AI's targeting or to avoid triggering specific enemy reactions.
+Conversion
+    • What it is: An effect (usually a rare/expensive Spell or ability) that targets an enemy creature.
+    • Outcome (player use): The enemy creature is immediately removed from the fight (Banished from the enemy side), and its card is "Captured": a copy is added to your discard pile, ready to use in the current run.
+    • Outcome (AI use): The AI takes control of your creature for the rest of the combat. Nothing is captured; your card stays in your deck. Full rules in 5.4 Recruitment & Conversion.
 
-*   **Conversion:**
-    *   **What it is:** A player effect (usually a rare/expensive Spell or ability) that targets an enemy creature.
-    *   **Outcome:** If successful, the enemy creature is immediately removed from the fight (e.g., Banished from the enemy's side), and its card is "Captured." A copy of that creature's card is then added to the player's discard pile, ready to be used in the current game session. (More details in Section V.D).
+Day
+    • What it is: The main unit of game time, shared by both sides. Each Day has five phases: Dawn, Planning, Pre-Resolution Interference, Action Resolution, and Dusk.
+    • Durations: When something says it lasts for "X Days," it means these Days.
 
-*   **Day:**
-    *   **What it is:** A main unit of game time. Each Day includes several phases: Dawn, Planning, Pre-Resolution Interference, Action Resolution, and Dusk. Everyone (player and AI) goes through these phases.
-    *   **Durations:** When something says it lasts for "X Days," it refers to these global Days.
+Dawn (Start of Day)
+    • What it is: The first phase of a Day.
+    • Events: You draw your scheduled cards. Then "Each Dawn" effects trigger and resolve on the spot.
 
-*   **Dawn (Start of Day):**
-    *   **What it is:** The first phase of a Day.
-    *   **Events:** The player draws their scheduled cards. Then, any "Each Dawn" effects on creatures trigger.
+Dusk (End of Day)
+    • What it is: The final phase of a Day.
+    • Events: "Each Dusk" effects trigger and resolve on the spot. Status effect durations and stacks decrease. You check whether you have too many cards in hand.
 
-*   **Dusk (End of Day):**
-    *   **What it is:** The final phase of a Day.
-    *   **Events:** "Each Dusk" effects trigger. Status effect durations and stacks decrease. The player checks if they have too many cards in hand.
+• Fixed Targeting / Fixed: (Targeting Keyword Prefix):
+    • What it is: Aims an effect at whatever creature is in a chosen slot when the action resolves.
+    • Behavior: It doesn't follow a creature that moves. If the slot is empty, or the creature there isn't a valid target, the effect fizzles (does nothing). Attack Actions are the exception: an attack into an empty enemy slot hits the defending player (see 4.6 Combat, Damage & Targeting).
+    • Difference from Static: Fixed only ever affects a creature. It can't affect the slot itself.
 
-*   **Fixed Targeting / Fixed: (Targeting Keyword Prefix):**
-    *   **What it is:** A way of aiming an action at a specific *battlefield slot*.
-    *   **Behavior:** The action affects whatever creature is in that slot when the action resolves. It *doesn't* follow a creature if it moves. If the slot is empty or the creature there isn't a valid target, the action might do nothing ("fizzle").
+• Homing Targeting / Homing: (Targeting Keyword Prefix):
+    • What it is: The standard way to target a specific creature. Effects that target creatures use Homing unless the card says otherwise.
+    • Behavior: The effect "locks on" to one creature and follows it if it moves. If the creature Leaves Play, the effect is aimed at the slot it was last in instead.
+    • Against Concealed creatures: If a Homing effect targets an enemy creature with Concealed (and the concealment isn't cancelled), it behaves like Fixed for that one time.
 
-*   **Homing Targeting / Homing: (Targeting Keyword Prefix):**
-    *   **What it is:** The standard way actions target a specific creature.
-    *   **Behavior:** The action "locks on" to a unique creature. If the creature moves, the action usually follows it. If the creature leaves the battlefield, the action tries to affect the slot it was last in.
-    *   **PvE & Concealment:** If a `Homing` action targets a `Concealed` creature (and the concealment isn't cancelled), it acts like `Fixed Targeting` for that one time.
+Interference (Nullify, Reorder, Redirect)
+    • What it is: A category of effects set up in advance. They trigger during the Pre-Resolution Interference Phase, before the main resolution starts, and change a queued action that matches their conditions (usually an opponent's).
 
-*   **Interference (Nullify, Reorder, Redirect):**
-    *   **What it is:** A category of pre-set effects. These effects trigger during the Pre-Resolution Interference Phase (before actions resolve) to change an action (player or enemy) that's already waiting in the Action Queue.
+Leaves Play
+    • What it means: A creature is removed from the battlefield (e.g., destroyed, discarded, Banished, returned to hand).
 
-*   **Leaves Play:**
-    *   **What it means:** A creature is removed from the battlefield (e.g., destroyed, Banished, returned to hand).
+Mandela Effect
+    • What it is: A rare, one-time game effect. When it resolves, it changes the base stats of every creature (both sides) currently on the battlefield, for as long as each of those creatures stays on the battlefield.
+    • Scope: Creatures summoned after this effect don't get changed. Full rules in 5.6 Mandela Effect.
 
-*   **Mandela Effect:**
-    *   **What it is:** A rare, one-time game effect. When it resolves, it permanently changes the base stats of all creatures (player and enemy) currently on the battlefield.
-    *   **Scope:** Creatures summoned *after* this effect don't get changed. (More details in Section V.F).
+Movement Action
+    • What it is: The action created whenever a creature moves itself.
+    • Restrictions: Can be stopped by effects like Cannot Act or Anchored.
 
-*   **Movement Action:**
-    *   **What it is:** A specific type of action created when a creature moves on its own initiative.
-    *   **Restrictions:** Can be stopped by effects like `Cannot Act`.
+Nullify (Interference)
+    • What it is: An Interference effect that makes a pending action resolve with no game effect (it does nothing).
 
-*   **Nullify (Interference):**
-    *   **What it is:** An `Interference` effect that makes a pending action resolve with no game effect (it does nothing).
+Owner
+    • What it is: The player whose deck a card was in at the start of the combat. (Captured copies you gain belong to you.)
+    • Card Zones: A card that leaves the battlefield always goes to its owner's hand, discard pile, or deck, even if another player controlled it at that moment.
+    • Never Changes: Effects change a creature's controller, never its owner.
 
-*   **Persistent Stat Modification:**
-    *   **What it is:** A change to a creature's base Attack, Health, or Speed that lasts for the rest of the current fight (combat).
-    *   **How it works:** These directly change the creature's "base" stats for that combat. This new base is then used if `Temporary Stat Modifications` are added.
-    *   **If a creature with these mods goes to the discard pile during combat, it keeps them.**
-    *   **Reset:** All `Persistent Stat Modifications` are removed, and stats go back to the card's original values when the combat ends (see Section III.E.7).
-    *   **Cleansing:** Usually *not* removable by standard `Cleanse` effects that target temporary buffs/debuffs.
+Persistent Stat Modification
+    • What it is: A change to a creature card's base Attack, Health, or Speed that lasts for the rest of the current combat.
+    • How it works: These directly change the creature's base stats. Temporary Stat Modifications are then added on top of this new base.
+    • Zones: The card keeps these mods while it moves between the battlefield, hand and discard pile.
+    • Reset: Removed when the card is reshuffled from the discard pile into the deck, and at the end of combat.
+    • Cleansing: Usually not removable by standard Cleanse effects.
 
-*   **Player Health:**
-    *   **What it is:** Your main health for the current roguelite run. It starts at a set value.
-    *   **Damage:** Reduced by effects that specifically say they target the "Player."
-    *   **Defeat:** If it reaches 0, your run ends.
+Player Health
+    • What it is: Each side (you and the enemy) has a Player Health total. Both start every combat at 20 (Relics, Stocks or specific encounters may change this).
+    • Damage: Reduced by effects that specifically target a "Player," and by Attack Actions that resolve into an empty slot on that player's side.
+    • Defeat: The combat ends when either side's Player Health reaches 0. If yours reaches 0, your run ends. (Other ways to win a combat may be added later.)
 
-*   **Priority (Action):**
-    *   **What it is:** A value given to an action that decides its order of resolution within its group in the Action Queue. Higher priority goes first, overriding a creature's Speed.
+Priority (Action)
+    • What it is: A number on an action that decides its order inside its resolution layer. Higher priority goes first, no matter the creature's Speed. The default is 0.
 
-*   **Recruitment:**
-    *   **What it is:** A player effect (Spell or ability) targeting an enemy creature.
-    *   **Outcome:** If successful, you gain temporary control of that enemy creature for the current fight only. If it survives the fight (and maybe meets other conditions), its card is "Captured." You'll then be guaranteed to see a copy of that creature's card as an option in the post-fight card rewards, which you can add to your deck for the run. (More details in Section V.D).
+Prophecy
+    • What it is: A Myth effect that is announced openly and happens a set number of Days later, at Dawn. Full rules in 5.7 Prophecy.
 
-*   **Reorder (Interference):**
-    *   **What it is:** An `Interference` effect that changes an action's `Priority (Action)` or its turn order.
+Recruitment
+    • What it is: An effect (Spell or ability) that targets an enemy creature.
+    • Outcome (player use): You control that creature for the rest of the current combat. If it survives the combat (and meets any extra conditions on the card), its card is "Captured": a copy is guaranteed to be one of your post-combat card reward options.
+    • Outcome (AI use): The AI controls your creature for the rest of the combat. Nothing is captured; your card stays in your deck. Full rules in 5.4 Recruitment & Conversion.
 
-*   **Redirect (Interference):**
-    *   **What it is:** An `Interference` effect that changes the target of a pending action.
+Redirect (Interference)
+    • What it is: An Interference effect that changes the target of a pending action.
 
-*   **Requisite:**
-    *   **What it is:** A condition (like discarding cards or sacrificing a creature) that you must meet during your Planning Phase (as a Meta-Action) to play certain cards or use certain abilities.
+Reorder (Interference)
+    • What it is: An Interference effect that changes an action's Priority (Action) or its turn order.
 
-*   **Revive:**
-    *   **What it is:** An ability or Spell that brings a creature card back from your Discard Pile to an empty friendly slot on the battlefield.
+Requisite
+    • What it is: A condition (like discarding cards or sacrificing a creature) that you must meet during the Planning Phase to play certain cards or use certain abilities. It is paid instantly, as an additional cost.
 
-*   **Scheduled Draw:**
-    *   **What it is:** The main way you draw cards, happening at **Dawn (Start of Day)**.
+Revive
+    • What it is: An ability or Spell that brings a creature card back from your discard pile to an empty friendly slot on the battlefield.
 
-*   **Slot Targeting / Static: (Targeting Keyword Prefix):**
-    *   **What it is:** A way of aiming an action at a specific battlefield *slot itself*.
-    *   **Behavior:** Affects the slot or whatever is in it when the action resolves. It *doesn't* follow creatures.
+Scheduled Draw
+    • What it is: The main way you draw cards, happening at Dawn.
 
-*   **Strategic Disclosure:**
-    *   **What it is:** In PvE, good things that happen for you (the player) when you successfully use an Intelligence action to uncover important hidden enemy information (like "???" intents or secret weaknesses on enemy cards).
+• Static Targeting / Static: (Targeting Keyword Prefix):
+    • What it is: Aims an effect at a slot itself.
+    • Behavior: The effect can change the slot (e.g., place a Slot Effect) and/or affect whatever creature is in it when the action resolves. It doesn't follow creatures. A creature-only part of the effect (like damage) fizzles if the slot is empty, except for Attack Actions (see 4.6 Combat, Damage & Targeting).
 
-*   **Temporary Stat Modification:**
-    *   **What it is:** A short-term change to a creature's Attack, Health, or Speed.
-    *   **Duration:** Usually lasts for a set number of Days, until something specific happens, or until it's cleansed.
-    *   **Tracking:** These are tracked separately from base stats (or persistently modified base stats). Often shown like `BaseStat + TemporaryModifierValue`.
-    *   **Cleansing:** Usually removable by `Cleanse` effects.
-    *   **Reset:** Removed if the creature leaves play or at the end of combat (see Section III.E.7).
+Strategic Disclosure
+    • What it is: A benefit you get when you use an Intelligence action to uncover important hidden enemy information (like "???" intents or secret weaknesses on enemy cards).
 
-*   **Trap (Counter-Intelligence):**
-    *   **What it is:** In PvE, something the player can set (like Slot Effects). Enemies (especially bosses) might also have "Traps" on their cards that trigger bad things for the player if they use Intelligence on certain sensitive info.
+Temporary Stat Modification
+    • What it is: A short-term change to a creature's Attack, Health, or Speed.
+    • Duration: Usually lasts for a set number of Days, until something specific happens, or until it's cleansed.
+    • Tracking: Tracked separately from base stats and shown like BaseStat + TemporaryModifierValue.
+    • Cleansing: Usually removable by Cleanse effects.
+    • Reset: Removed when the creature Leaves Play (unless the effect moving it says otherwise) and at the end of combat.
 
-*   **Undercover (Ability):**
-    *   **What it is:** A passive creature ability (printed on a card) that makes all actions planned by that creature `Concealed Actions`.
+Trap (Counter-Intelligence)
+    • What it is: A hidden effect that punishes the opposing side. You can set traps (e.g., hidden Slot Effects). Enemy cards (especially bosses) may have traps that hurt you if you use Intelligence on certain sensitive information.
 
-**I.B. Other External References**
+Undercover (Ability)
+    • What it is: A passive creature ability (printed on a card) that makes all actions planned by that creature Concealed Actions. It is an ability, not a status.
 
-To keep things organized, some specific details are in separate documents. This GDD refers to them:
-*   **'Status Effects Compendium'**: (Defines all status effects; will be updated with a PvE focus).
-*   **'Slot Effects Compendium'**: (Defines all effects that can be placed on battlefield slots).
-*   **'Trigger Events List'**: (Lists common game events that can trigger abilities).
-*   **'Illustrative Card Examples List'**: (Shows examples of cards that both players and enemies can use).
-*   **'Enemy Compendium'**: (Details enemy groups, AI behaviors using shared cards, and boss mechanics).
-*   **'Relic Compendium'**: (Details all Relics).
-*   **'Subscription Compendium'**: (Details all Subscriptions).
-*   **'Stock Compendium'**: (Details all Stocks and their effects).
-*   **'Player Character Compendium'**: (Details starting Player Characters, their unique traits, and starter decks).
-*   **'Faction Compendium'**: (Details Faction themes and how they relate to each other).
+1.2 Companion Documents
 
-*   **Definitions in Other Docs Are Stable:** The names and main definitions in these external documents (including the 'Status Effects Compendium') and the Key Gameplay Terms list above (Section I.A) are considered final. Don't change them without official design approval. This helps everyone understand things the same way.
-*   **This GDD Explains How Things Fit Together:** While other documents give precise definitions (like for Status Effects), this GDD explains how all these pieces work together in the bigger picture of the game.
-*   **Easier to Maintain:** This split (with general terms here and specifics like Status Effects in their own document) should make things clearer and easier to update. When an external document changes, we need to check this GDD to make sure everything still lines up.
+Some details live in separate documents. This GDD refers to them by name:
+• 'Status Effects Compendium': Defines all status effects.
+• 'Slot Effects Compendium': Defines all effects that can be placed on battlefield slots.
+• 'Trigger Events List': Lists the game events that can trigger abilities.
+• 'Illustrative Card Examples List': Example cards that both you and enemies can use.
+• 'Enemy Compendium': Enemy groups, AI behaviors using shared cards, and boss mechanics.
+• 'Relic Compendium': All Relics.
+• 'Subscription Compendium': All Subscriptions.
+• 'Stock Compendium': All Stocks and their effects.
+• 'Player Character Compendium': Starting Player Characters, their unique traits, and starter decks.
+• 'Faction Compendium': Faction themes and how they relate to each other.
 
----
+• Definitions in Companion Documents Are Stable: The names and main definitions in these documents and in the Glossary above are final. Don't change them without design approval.
+• This GDD Explains How Things Fit Together: The companion documents give precise definitions; this GDD explains how the pieces work together.
+• Keeping Them in Sync: When a companion document changes, check this GDD to make sure everything still lines up.
 
-**II. CORE CONCEPT & VISION (PVE ROGUELITE FOCUS)**
 
-**II.A. Premise & Player Experience**
+2. GAME OVERVIEW
 
-*   **What's the Game About?** It's a roguelite deckbuilder where you guide your character through a "path" that represents life's increasing challenges and weirdness in a chaotic, funny, modern world. You'll build a deck of creature and spell cards from different Factions (all cards come from one big shared pool). You'll need smart planning, information gathering (Intelligence), and good positioning to beat groups of AI-controlled enemy creatures.
-*   **What Kind of Game is It?** Roguelite Deckbuilder.
-*   **How Should It Feel to Play?** Like you're tactically outsmarting enemies (predicting and countering their scripted plans), uncovering risky secrets (using Intelligence to see hidden enemy moves and weaknesses), and solving combat puzzles created by unique enemy card combinations.
-*   **The Story's Journey:** The "path" you take is like an allegory for a life journey (e.g., "getting older"), with fights representing social, corporate, tech, and life's curveballs. The tone is cynical, funny, and satirical.
+2.1 Premise & Player Experience
 
-**II.B. Central Conflict: Your Brains vs. Scripted Mayhem**
+• What's the Game About? A roguelite deckbuilder where you guide your character through a "path" that represents life's increasing challenges and weirdness in a chaotic, funny, modern world. You build a deck of creature and spell cards from different Factions (all cards come from one big shared pool). You need smart planning, information gathering (Intelligence), and good positioning to beat groups of AI-controlled enemy creatures.
+• Genre: Roguelite Deckbuilder.
+• How Should It Feel to Play? Like you're tactically outsmarting enemies (predicting and countering their scripted plans), uncovering risky secrets (using Intelligence to see hidden enemy moves and weaknesses), and solving combat puzzles created by unique enemy card combinations.
+• The Story's Journey: The "path" is an allegory for a life journey (e.g., "getting older"), with fights representing social, corporate, tech, and life's curveballs. The tone is cynical, funny, and satirical.
 
-You'll use Intelligence to figure out and deal with threats from enemy Faction groups. These enemies follow pre-set scripts and use cards from the same universal pool you do. The challenge is to outsmart these rule-based systems and the built-in advantages of powerful enemies.
+2.2 Central Conflict: Your Brains vs. Scripted Mayhem
 
-**II.C. Main Goal (For One Game Session/Run)**
+You use Intelligence to figure out and deal with threats from enemy Faction groups. These enemies follow pre-set scripts and use cards from the same shared pool you do. The challenge is to outsmart these rule-based systems and the built-in advantages of powerful enemies.
 
-*   Successfully make it through the "path" by defeating enemy encounters and bosses.
-*   Build a flexible deck by getting new universal cards, Recruiting/Converting enemy creature cards, and using Relics, Stocks, and Subscriptions.
-*   Master the game's mechanics to beat increasingly harder challenges.
+2.3 Goal of a Run
 
-**II.D. Key Interaction: Tactical Positioning**
+• Make it through the "path" by defeating enemy encounters and bosses.
+• Build a flexible deck by getting new cards, Recruiting/Converting enemy creatures, and using Relics, Stocks, and Subscriptions.
+• Master the game's mechanics to beat increasingly harder challenges.
 
-*   **Battlefield Layout:** You control a row of 5 slots for your creatures. The AI-controlled enemies have an opposing row of 5 slots. It's a symmetrical setup.
-*   **Slot Occupation & Movement:**
-    *   Creatures block the slot they're in; other creatures can't normally move into or through an occupied slot, unless an ability specifically says they can (like swapping, pushing, or pulling).
-    *   **Important:** Creatures don't just move freely. Any time a creature moves on its own, it creates a **Movement Action** (see Section III.D.7). This action can be restricted.
-    *   Other effects might push, pull, or swap creatures without them using their own "turn" or action.
-    *   If a creature switches sides (like with `Recruitment` – see Section I.A for the definition and V.D for details), it moves to an available slot on its new controller's side.
-    *   You can't voluntarily move your creature into an enemy's slot. Friendly creatures only move to enemy slots if a player effect recruits them, at which point they become player-controlled.
+2.4 The Battlefield
 
-**II.E. Key Mechanic: Fog of War & Intelligence in PvE**
+• Layout: You control a row of 5 slots for your creatures. The enemy has an opposing row of 5 slots.
+Slot Occupation & Movement
+    • Creatures block the slot they're in; other creatures can't normally move into or through an occupied slot, unless an ability specifically says they can (like swapping, pushing, or pulling).
+    • Any time a creature moves itself, it creates a Movement Action, which can be restricted.
+    • Other effects can push, pull, or swap creatures without them using their own action.
+    • You can't move your own creatures into enemy slots. A creature only changes sides when an effect changes who controls it (e.g., Recruitment, Conversion used by the AI, Brainwashed). It is then placed on its new controller's side as part of that effect. Changing sides is not movement (placement rules in 5.4 Recruitment & Conversion).
+
+2.5 Fog of War & Intelligence
 
 The "Fog" is all the mystery around enemy encounters:
-*   Unrevealed "???" intents (you can't see full details of an enemy's planned action from their script).
-*   Hidden passive abilities on enemy cards.
-*   Boss phase-change triggers.
-*   Full scripted attack patterns.
-
-*   **How You Use Intelligence:** You'll use Spells or abilities (Intelligence Actions) to reveal this hidden enemy information: "???" intents, enemy card details, weaknesses. This is essential for playing well at higher levels. Some enemies might have "Trap" abilities on their cards that trigger if you use Intelligence on them.
-*   **Enemy "???" Intents:** Some enemy card abilities will have parts of their effects hidden as "???" before they resolve. Your Intelligence actions can clarify these.
-*   **Turn History:** This records actions that have already happened, helping you spot patterns.
-*   **Player Concealment vs. AI:** Using `Concealment` can trick the AI's targeting (which usually relies on visible info). The AI can't see through `Concealment` unless it has a specific card ability to do so.
-*   **Bestiary (Meta-Progression):** Using Intelligence helps fill out a "Bestiary," which reveals enemy card and mechanic info for your future game sessions.
-
-**II.F. Universal Card Pool Principle**
-
-All creature and spell cards come from one big, shared pool. Any card an enemy uses is a card you could potentially get. The strategy comes from how these shared tools are combined and used (your choices vs. enemy scripts). Factions and abilities are the same no matter who controls the card.
-
----
-
-**III. Foundational Game Systems & Rules**
-
-**III.A. Faction System**
-
-All cards belong to one of several distinct factions. The main factions are: Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, and Utopia. Every card belongs to exactly one faction. (This applies to all universal cards).
-When building your deck, you can (and should!) mix cards from different factions, similar to how color combinations work in games like Magic: The Gathering. This allows for many different deck types, built around combined faction strategies.
-
-**III.B. Detailed Faction Themes & Relationships**
-
-(This section is a placeholder. We'll keep detailed descriptions of faction themes, what they represent, their structures, and how they interact with each other in a separate 'Faction Compendium' document. This makes it easier to update.)
-Just for context, some example Factions are: Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, Utopia. (Full details will be in the Compendium).
-
-**III.C. Action Economy & Tempo**
-
-There's no mana or energy cost to play cards from your hand. Instead, what you can play is limited by:
-1.  **Hand Size** (see Section III.E.9).
-2.  **Timing** (when you can play things).
-3.  **Potential Additional Costs** (see Section III.E.4.a for how all extra costs are handled).
-
-The main way we control the pace of the game (tempo) is with `Deployment Time`.
-*   **`Deployment Time` (X Days):** When a creature enters play, it's usually inactive for a certain number of **Days** due to this status. Think of it as a "summoning sickness" that lasts for a bit. Its duration can be changed by game effects. (`Deployment Time` status is a key tempo mechanic).
-*   **`Deployment Time` is Special:**
-    *   The countdown of `Deployment Time` and its `OnDeploymentTimeComplete` trigger (when the countdown finishes) work independently of general `Abilities Disabled` states (like from `Muted` or `Exhausted`) or other normal status effect rules.
-    *   `Deployment Time` only cares about effects that *specifically say* they change or interact with `Deployment Time`.
-    *   The `OnDeploymentTimeComplete` ability will try to trigger once `Deployment Time` naturally ends. **This trigger is a special system event. It will usually happen, and its effects will be prepared and added to the Action Queue, even if the creature has a general `Abilities Disabled` status (like `Muted`) at that moment.** This is an exception to the rule that `Abilities Disabled` stops passive abilities.
-    *   To stop this process, an effect must *explicitly state* that it prevents or changes the `Deployment Time` countdown, its completion, the `OnDeploymentTimeComplete` trigger, or the actions that result from it.
-    *   (This special interaction needs to be clearly noted in the 'Status Effects Compendium' entry for `Deployment Time`).
-
-**III.D. Action Types & Triggering** (These apply to both player and enemy creatures/actions, all coming from universal card abilities).
-
-1.  **Creature Stats:** Creatures have base Attack, Health (their maximum Health), and Speed, printed on their card. Game effects can change these.
-    *   **Base Stats:** The original values on the card. These can be changed for a whole combat by `Persistent Stat Modifications` (see Section I.A), or for as long as that creature is on the battlefield by `Mandela Effects` (see Section V.F).
-    *   **Temporary Stat Modifications:** (see Section I.A) These are short-term changes that add to or subtract from the current base stats (which include any Persistent Modifications).
-    *   **Persistent Stat Modifications:** (see Section I.A) These change the base stats for the current combat.
-    *   **How Stats are Shown:** When a creature has `Temporary Stat Modifications`, its stats are usually shown with the final value and how it's calculated (e.g., Attack: `FinalValue (CurrentBaseAttack + SumOfTemporaryModifiers)`). `Persistent Stat Modifications` directly change the `CurrentBaseAttack` value in this math for the whole combat.
-        *   *Example:* A 3/3/3 creature gets a +1/+1/+1 Persistent Mod. It becomes a 4/4/4 base for that combat. If it then gets a +2/+2/+2 Temporary Mod, its stats would be 6(4+2) / 6(4+2) / 6(4+2).
-    *   **Current Health (HP):** Tracked separately. This shows how much damage a creature has taken from its current maximum Health (which includes all modifications).
-    *   **Stat Modification Stacking:** Multiple `Temporary Stat Modifications` add together. Multiple `Persistent Stat Modifications` also add together, changing the base stat. Both types contribute to the creature's final stats.
-    *   (Attack, Health, Speed come from the card, can be modified as described, and reset as per rules in III.E.7).
-
-2.  **Creature Abilities (Passive):** These abilities are always "on" in the background.
-    *   **Automatic Triggering:** **Crucially, whenever their specific conditions are met (as listed in Section V.C - Trigger Events), they ALWAYS trigger automatically. You, the player, don't decide or do anything at the moment they trigger.**
-    *   **When They Don't Trigger:** This automatic triggering happens unless the creature is affected by something that specifically stops its passive abilities. Examples include:
-        *   Status effects like `Exhausted`, `Muted`, `Ostracised`, or `Brainwashed` (see 'Status Effects Compendium').
-        *   The `Abilities Disabled` state (see Section I.A for how this can cancel already triggered effects).
-        *   `Deployment Time` (see 'Status Effects Compendium', remembering its special nature from III.C).
-    *   **What Happens When They Trigger:**
-        *   When a passive ability triggers, its effect is turned into an action (called a 'Creature Ability Effect Action').
-        *   This action is then added to the main Action Queue to be resolved when its turn comes (see Section III.F.4 for layers and Section III.G for the general queuing rule).
-    *   **Targeting:**
-        *   The targets for these passive ability effects are predetermined by the card's text (e.g., "**Homing:** target the attacker," "**Static:** adjacent creatures," "**Fixed:** the creature that triggered this").
-        *   If the card says to pick randomly, the game does that.
-        *   **Players do not choose targets for passive abilities when they trigger.**
-    *   **Enemy AI and Player Passives:** Furthermore, when one of your passive abilities resolves and affects an enemy, the enemy AI doesn't get to choose how that effect works on them. The outcome must be fixed or based on pre-set game conditions, not an AI choice at the moment of resolution.
-    *   (These abilities come from the card and trigger automatically unless disabled).
-
-3.  **Special Creature Archetypes:** (Defined by card roles, like Support, Automated Unit).
-    *   **Support/Specialists:** These might not have a standard Attack. Instead, they might have an Active Ability (like dealing damage, healing, or applying a status) that the player/AI queues up during their Planning Phase each **Day**.
-        *   If these abilities have extra costs, they are handled like any other additional cost (see Section III.E.4.a).
-        *   The player/AI chooses any needed targets when queuing the ability, using targeting keywords like `Homing:`, `Fixed:`, `Static:`.
-        *   Remember, a player can only give one "primary intent" to each creature per Day (details in III.F.2).
-        *   These abilities are affected by `Deployment Time` (see 'Status Effects Compendium') and queue mechanics (they resolve as 'Creature Ability Effect Actions' in the Ability & Attack Layer).
-    *   **Automated Units:** These also might not have an Attack. They usually have powerful passive abilities that trigger automatically each **Day** (e.g., "Each Dawn: **Static:** deal 1 damage randomly to an enemy slot"; "Each Dusk: grant 1 `Armor` adjacently"). The target for such abilities is set by the ability itself.
-    *   **"Must Act" Creatures:** Some creatures might have abilities or be affected by Status Effects (like `Bloodthirst` - see 'Status Effects Compendium') that give penalties if their controller doesn't queue certain actions (like an Attack) for them.
-        *   (Future Idea: We might add a "Compelled Action" mechanic that automatically queues a default action if the controller doesn't meet a "MUST queue" requirement. If we do this, it will be clearly defined.)
-
-4.  **Creature Attacks (Attack Actions):** The player/AI actively queues these during their Planning Phase (remembering the player's one primary intent per creature rule from III.F.2).
-    *   **These attacks become actions in the Action Queue and resolve in the Ability & Attack Layer.**
-    *   Target selection (using `Homing:`, `Fixed:`, or `Static:` rules) for attacks might be limited by rules (e.g., can only target the slot directly in front, can't target a creature with `Ghosted` - see 'Status Effects Compendium'), or they might target an empty opposing slot (see Section IV.F.6).
-    *   Targets are chosen when the attack is queued.
-    *   If a creature's Attack action has an additional cost on its card, this is handled as per Section III.E.4.a.
-    *   (Player/AI queues attacks based on the creature card's Attack stat and abilities).
-
-5.  **Spells (Spell Actions):** These are active actions. The player/AI plays them from their hand/script (e.g., by dragging and dropping onto a target, if applicable, using targeting keywords like `Homing:`, `Fixed:`, `Static:`).
-    *   When any card (Spell, Creature, etc.) is played, or an ability is activated that has additional costs, these costs (including `Requisites` - defined in Section I.A and detailed in III.E.8) are paid as per Section III.E.4.a.
-    *   Any targets are chosen by the controller at that time.
-    *   The Spell's effect then becomes a 'Spell Action' and is added to the action queue, resolving in the Spell Layer. This action resolves using standard queue rules within its layer (`Priority (Action)`, Speed/Tie-breaking, etc.).
-    *   Spells can do many things: cause movement, apply status effects, deal damage, heal, or change card draw.
-    *   (Player/AI plays spell cards from hand/script).
-    *   **Spell Action Tie-Breaking:** By default, Spell Actions have a `Priority (Action)` of 0 unless the card says otherwise. If multiple Spell Actions from the same controller are in the Spell Layer with the same `Priority (Action)`, and there's no 'Spell Speed' on the card or global rule, their order is decided randomly. Future cards *might* have Spells with their own Speed values or different default `Priority (Action)`.
-
-6.  **Determinism:** Game effects are predictable. There's no percentage chance for success or failure (unless a card specifically says targeting is random). Outcomes are based on the current game state and how active effects interact.
-    *   **Once an action is in the queue and starts to resolve, its outcome is determined by its text and the game state. Neither player nor AI gets to make more choices to influence its main effect resolution, unless that interaction is explicitly part of a pre-set system like Interference or a Meta-Action modifying resolution (as per Section III.F.X).**
-    *   (Game effects are deterministic, except for explicitly random targeting on a card).
-
-7.  **Movement Actions:** Moving creatures isn't a default action all creatures can queue (like Attacks).
-    *   Any time a creature moves on its own (whether from its own Active or Passive Ability, or an external Spell/Ability telling it to move itself), it generates a **Movement Action** for that creature.
-    *   This Movement Action is then added to the Action Queue (resolving in the Movement Layer) and follows standard queue rules and restrictions like `Cannot Act` or `Deployment Time`.
-    *   Remember the player's one primary intent per creature rule for self-initiated movement (detailed in III.F.2).
-    *   Effects that externally "push," "pull," or "swap" a creature without the creature using its own ability to move *do not* generate a Movement Action for the target creature in this way and bypass such restrictions on the target.
-    *   (Movement linked to Recruitment/Conversion has special rules, see Section V.D.4).
-    *   (These are generated by a creature's own card abilities or effects instructing self-movement).
-
-**III.E. Card Management (Player Focus)**
-
-1.  **Drawing Cards (Scheduled Draw - see Section I.A. for definition):**
-    *   **Start of Game:** Before the very first Day, each player draws an initial hand of **6 cards** from their Player Character's starter deck.
-    *   **Regular Draw:** After that, players draw a base of **2 cards** *only* at **Dawn (Start of each global Day)**. This is the only time cards normally enter a player's hand from their deck after the game starts. (Minimum 1 card).
-    *   **Calculating Draw Amount:** The number of cards drawn each Dawn is: Base Draw (2) + Sum of all positive/negative draw modifiers from the previous **Day**.
-    *   **Minimum Draw:** The total cards drawn (after all modifiers) can't be less than **1 card**, as long as there are cards in the deck or can be made available by reshuffling during that draw.
-    *   **No Mid-Day Draws:** No effect lets a player draw cards immediately from their deck in the middle of a **Day**.
-
-2.  **Draw Manipulation (Changing Next Day's Draw):** This affects future card draws.
-    *   Effects that give you more cards say: "Schedule X additional card draws for your next **Day**." This adds to a counter for the next **Day**'s draw.
-    *   Effects that give you fewer cards say: "Draw X fewer cards next **Day**" or "Scheduled draw reduced by X." This subtracts from the counter (down to a minimum draw of 1 card, as per III.E.1).
-    *   These modifiers add up during a **Day**. They are all applied together when calculating the next **Day**'s Dawn draw.
-
-3.  **Discard Pile:** This is where used Spells and destroyed Creatures go.
-
-4.  **Discarding from Hand:** (Mostly as an Additional Cost; resolving effects can't force discards from hand, they reduce next Day's draw instead).
-    *   This means a player moving cards from their hand to their Discard Pile.
-    *   **a. As an Additional Cost (Universal Rule):**
-        *   The main way cards are discarded from your hand is to pay an extra cost to play another card (like a Spell or Creature) or to use certain abilities. This rule applies to *any* card play or ability use that specifies such a cost.
-        *   "Additional costs" (including `Requisites` or things phrased like "As an additional cost...") are *always* handled during your Planning Phase when you try to play the card or queue the ability with such costs. This is a Meta-Action (see Section III.H.3 – basically, something that happens immediately). These costs are *never* paid as part of an effect resolving from the action queue.
-        *   **Pre-Check:** The game first checks if you *can* pay all mandatory additional costs at the moment you try to play the card/queue the ability.
-        *   **Payment:** If the pre-check confirms you can pay, you then pay them immediately as part of playing the card/queuing the ability. For discard costs, you choose the cards, and they move to the Discard Pile right away. The card being played, along with its effect, is then added to the action queue.
-        *   **If You Can't Pay:** If a mandatory additional cost *cannot* be paid (as determined by the pre-check), your attempt to play the card or queue the ability is cancelled. The card (if played from hand) goes back to your hand, and you'll get a message explaining why (e.g., "Insufficient cards to discard," "No valid creature to sacrifice").
-        *   **Other Cost Types:** Some costs might be about achieving a certain game state (e.g., "ensure you have fewer than X cards in hand," "control a creature of X faction") rather than directly paying resources. You must meet these conditions during the Planning Phase as part of successfully playing the card or queuing the ability. The pre-check also applies to these.
-    *   **b. Discard as a Resolving Effect – Not Allowed (And What Happens Instead):**
-        *   Game effects (from Spells, creature abilities, traps, etc.) that resolve from the action queue *cannot* cause a player to discard cards directly from their hand.
-        *   Think of an effect that might traditionally say "Target player discards 1 card." In this game, such an effect works differently: it becomes an effect that reduces the number of cards that player will draw on their *next Day*.
-        *   This is covered in Section III.E.2 (Draw Manipulation) with phrasing like "Target player draws 1 fewer card next **Day**."
-        *   This design ensures that hand changes from card effects focus on future resources (next **Day**'s draw) rather than immediate hand reduction during action resolution. This keeps the action resolution phase flowing smoothly.
-    *   **c. Difference from Draw Manipulation:**
-        *   Discarding from hand as an additional cost is an immediate action *you* take during your Planning Phase. It affects your current hand size by your choice to enable another action.
-        *   Draw Manipulation (which includes effects reducing the next **Day**'s draw – the replacement for forced discard effects) is a delayed consequence that impacts your future resources.
-
-5.  ***Banish***: This action permanently removes a card (from hand, board, discard pile, or deck) from the game.
-    *   Banished cards are outside all game zones and are gone for good for the current run.
-    *   A creature that is Banished is *not* considered "Destroyed" for abilities that specifically trigger when a creature is Destroyed (like `OnDied` triggers from the 'Trigger Events List', or abilities like "when an enemy creature is Destroyed...").
-    *   However, effects that trigger `OnLeaveBattlefield` (see 'Trigger Events List') *will* still trigger if their conditions are met, with 'Banish' being the reason it left.
-    *   (This means permanent removal for the current game session).
-
-6.  **Card Lifecycle & Reshuffling:** (Standard deck rules apply).
-    *   A Spell is played -> its effect resolves -> the Spell card goes to the Discard Pile.
-    *   A Creature is destroyed (hits 0 HP or by a "destroy" effect) -> the Creature card goes from the battlefield to the Discard Pile.
-    *   **When to Reshuffle:** This only happens when you need to draw cards at **Dawn (Start of your Day)**, but your Draw Deck has fewer cards than you're supposed to draw.
-    *   **How Reshuffling Works:**
-        *   You try to draw the scheduled number of cards. Any cards left in your Draw Deck are drawn first (this could be 0).
-        *   If your Draw Deck becomes empty and you still need to draw more, your entire Discard Pile is shuffled. This shuffled pile becomes your new Draw Deck.
-        *   Right after reshuffling, you continue drawing from this new Draw Deck until you've drawn the total number scheduled for that **Dawn (Start of Day)** phase.
-        *   If, even after reshuffling, your new Draw Deck still has fewer cards than you need to draw (even considering the minimum draw of 1 from III.E.1), you draw all available cards. The 'minimum draw 1' rule means you always draw at least one card *if one is available or if modifiers would have otherwise made you draw zero from a full enough deck*. It doesn't create cards if your deck and discard pile are both empty.
-        *   If drawing makes you exceed your maximum hand size, that's handled at the end of the Dusk phase (see III.E.9).
-
-7.  **Creature Stat Reset:**
-    *   **General Idea:** Creature cards should go back to their printed base stats when they move between game phases (like between combats) or when they're fully reset (like being reshuffled into a deck). Current HP also resets.
-    *   **During Combat - Moving to Battlefield/Hand/Discard:**
-        *   When a creature enters the battlefield (from hand, deck, or `Revive`), it arrives with its current full maximum Health (based on its stats, possibly including `Persistent Stat Modifications` if Revived in the same combat – see below).
-        *   `Temporary Stat Modifications` are usually lost when a creature leaves the battlefield, unless an effect (like returning to hand) says they stick around or are reapplied.
-        *   If a creature with `Persistent Stat Modifications` is destroyed or moved to the Discard Pile *during a combat*, it **keeps** those `Persistent Stat Modifications` on the card in the discard pile. If it's Revived or returned to hand and replayed *within the same combat*, it will come back with these combat-long stats (its base stats for that combat are considered changed), unless the reviving/replaying effect says otherwise.
-    *   **On Deck Reshuffle:** When your Discard Pile is shuffled to become your new Draw Deck, all `Temporary Stat Modifications` and `Persistent Stat Modifications` on those creature cards are removed. The stats on these cards go back to their original printed base values.
-    *   **End of Combat Reset:** When a combat ends, all active `Temporary Stat Modifications` and `Persistent Stat Modifications` on all creature cards (on the battlefield, in hand, in discard, or in deck) are removed. Stats on all cards go back to their original printed base values. This ensures a fresh start for the next encounter or if the run continues.
-    *   **Mandela Effect Interaction:** Changes from `Mandela Effects` (see V.F) have their own rules for how long they last. They affect the creature *instance* on the battlefield and reset if that instance leaves play. They are different from `Persistent Stat Modifications` and aren't automatically cleared by the End of Combat Reset unless the creature also leaves play then.
-    *   **Status Effects:** Generally, status effects are removed when a creature Leaves Play, unless the status or an ongoing effect says otherwise. `Deployment Time` is applied when a creature enters play.
-
-8.  ***Requisites*** (See Section I.A. for definition): Some powerful cards have conditions you must meet before you can play them or use their abilities.
-    *   These are treated as additional costs and follow the universal rules in Section III.E.4.a (Discarding from Hand as Additional Cost) and Section III.H.3 (Meta-Actions - Payment of Additional Costs).
-    *   This includes pre-checks and payment during the Planning Phase.
-    *   If you can't meet a Requisite, you can't play the card/use the ability. The card goes back to your hand if applicable, and you'll get feedback.
-    *   (These are additional costs handled as Meta-Actions).
-
-9.  **Maximum Hand Size:** You can hold a maximum of **10 cards** in your hand.
-    *   The check for this happens during the **Dusk Phase (End of Day)**, after all "Each Dusk" triggers and status effect processing for the Day are done.
-    *   If you have more than 10 cards at this point, you must immediately choose and discard cards from your hand down to 10. Discarded cards go to your Discard Pile.
-    *   It's okay if effects during other phases or earlier in Dusk temporarily put you over 10 cards, until this specific end-of-Dusk check.
-    *   (10 cards, checked at Dusk).
-
-10. **Enemy Hand Size Checks (Conceptual for AI):** If the AI needs to think about "resources," it would be based on its script or available actions, not a literal hand for most enemies. Bosses might have something like a hand mechanic.
-
-11. **Revealing Cards from Hand (Player)** (If you're forced to reveal):
-    *   Some effects make you show ("reveal") cards from your hand to your opponent.
-    *   **a. Instant & Temporary Look:** When an effect reveals a card, your opponent sees all its details (text, stats, etc.) right then. It's a one-time look when the effect resolves; the card isn't continuously visible.
-    *   **b. Stays in Hand:** The revealed card stays in its owner's hand.
-    *   **c. Choosing Which Card(s) (from Opponent's Hand):**
-        *   **i. Filtering by Type:** An effect might ask for a specific card type (e.g., "reveal a Creature"). Only cards of that type can be revealed.
-        *   **ii. Random Pick:** If multiple cards match the filter (or if there's no filter and multiple cards are in hand), the game randomly picks which card(s) to reveal. The effect also says how many cards will be revealed.
-
-12. **Other Deck/Card Interactions:** Effects on cards might allow other ways to manipulate cards, like looking at cards in a deck, reordering them, or moving them within the deck. The specifics are defined on the cards themselves and are different from Scheduled Draw or mandatory discards. (These are card-specific effects).
-
----
-
-**III.F. Action Queue & Turn Flow Mechanics (Shared by Player & AI)**
-
-**Overview of a Day (Global Day for everyone):**
-
-1.  **Dawn Phase (Start of Day)**
-    *   Player gets their `Scheduled Draw` (as per III.E.1).
-    *   `OnTurnStart` triggers (often written as "Each Dawn") are identified. Their effects are turned into actions and added to the main global Action Queue. They'll resolve in their proper layers and priority.
-    *   Any further actions created by these Dawn actions resolving (like a `Burnout` explosion) are also added to the main global Action Queue in turn.
-
-2.  **Planning Phase** (Players and AI (using its script) make decisions and queue actions for the current **Day**'s upcoming Action Resolution Phase.)
-    *   **Player Creature Intent:** For each creature you control on the battlefield, you can assign it **at most one** "primary" action to be queued:
-        *   A `Movement Action`,
-        *   An `Attack Action`, OR
-        *   An Active `Creature Ability Effect Action` (from the creature's card).
-    *   If you assign one of these actions, it replaces any previous primary action for that creature for this **Day**.
-    *   Whether these actions are available depends on the creature's card, stats, and current status (e.g., a creature with no Attack stat can't Attack; a creature with `Cannot Act` can't do these).
-    *   **Player Card Plays:** Separately from giving intents to creatures already on the board, you can also queue 'Play Creature Actions' (by playing creature cards from hand) and 'Spell Actions' (by playing spell cards from hand).
-    *   **AI Action Queuing:** The AI queues actions for its creatures based on its script. This includes 'Play Creature Actions', 'Movement Actions', 'Spell Actions', 'Attack Actions', and Active 'Creature Ability Effect Actions'.
-    *   **Cost Payment:** All additional costs (like from `Requisites` or card costs like discarding) for any actions queued by player or AI are paid during this Planning Phase as Meta-Actions (see Section III.E.4.a. and Section III.H.3.).
-    *   **Note on Passive Triggers:** Assigning primary intents or playing cards during Planning doesn't stop a creature's passive abilities from triggering if their conditions are met by other game events in this phase (though most passives trigger due to phase changes or resolving actions).
-
-3.  **Pre-Resolution Interference Phase:**
-    *   Before the main global Action Queue resolves layer by layer, the game checks for any active "Set-up" `Interference` effects (`Nullify`, `Reorder`, `Redirect` - see Section IV.D.4. and Section I.A.).
-    *   If an action in the pending global queue triggers such an effect, that action is changed directly within the queue.
-    *   This phase ensures these specific changes happen *before* normal resolution.
-
-4.  **Action Resolution Phase** (The (possibly changed) global Action Queue resolves action by action, going through different layers based on action type.)
-    *   "Watchdog" Meta-Actions (see Section III.H.5) might inspect and change actions *just as they are about to happen within their layer*.
-    *   Passive abilities triggering during resolution add their effects to this queue, which then resolve in their proper layer.
-    *   "Linked Meta-Actions" (see Section III.H.6) might resolve as part of or right after a primary action.
-    *   See Section III.F.X for how game state changes can affect things dynamically, and III.F.Y for how actions are handled for creatures about to be destroyed.
-    *   **Crucially, once an action starts to resolve, its effects are applied as written. No further player or AI choices influence its main outcome, unless that interaction is explicitly part of a pre-set mechanism like Interference, a Watchdog/Linked Meta-Action, or due to dynamic state changes (as per III.F.X).**
-    *   **Layered Resolution Order:** The global Action Queue resolves in distinct layers, in this strict order:
-        1.  **Movement Layer:** All 'Movement Actions' (creatures moving on their own).
-        2.  **Summon Layer:** All 'Play Creature Actions' (actions from playing a creature card to the battlefield).
-            *   **Playing Creatures onto Occupied Friendly Slots:** When a 'Play Creature Action' (for a standard, single-slot creature from hand) resolves, if the target friendly slot already has another friendly creature, the creature already there is **destroyed** (sent to its owner's Discard Pile). Then, the new creature enters play in that slot. This is different from the rule for multi-slot creatures (see Section V.E.2), which Banish occupants.
-        3.  **Spell Layer:** All 'Spell Actions' (actions from playing a Spell card).
-        4.  **Ability & Attack Layer:** All 'Creature Ability Effect Actions' (actions from triggered passive abilities or activated abilities that aren't summons, moves, or spells) AND all 'Attack Actions'.
-    *   **Sub-sorting within Layers:** Within each layer, actions are further sorted and resolved by:
-        1.  Their `Priority (Action)` (higher values first).
-        2.  Then, by the Speed of the creature that started the action (or a default Speed/tie-breaking rule for non-creature actions like Spells, see III.D.5).
-        3.  Finally, by the Standard Tie-Breaking Protocol (see III.F.4. below) if `Priority (Action)` and Speed are tied.
-    *   ***VERY IMPORTANT: EFFECTS ARE DELAYED BY THE QUEUE.***
-        *   *Just because you played a card from your hand, or an ability's trigger condition was met during the Planning Phase, doesn't mean its effect happens instantly.*
-        *   No creature appears on the battlefield, no status effect is applied, no damage is dealt, and no spell takes effect *merely because its card was played or its ability conditions were met.*
-        *   All these outcomes only happen when their corresponding action (e.g., `Play Creature Action`, `Movement Action`, `Spell Action`, `Creature Ability Effect Action`, `Attack Action`) successfully resolves from the global Action Queue during this Action Resolution Phase, according to its layer, priority, speed, and other ordering rules.
-        *   Costs are paid upfront in Planning, but the *benefits and effects* are delayed until that action resolves from the queue.
-
-5.  **Dusk Phase (End of Day)**
-    *   Turn History is updated for everyone.
-    *   `OnTurnEnd` triggers (often written as "Each Dusk") are identified. Their effects are queued and resolved similarly to Dawn Phase triggers, in their proper layers.
-    *   Durations of timed effects and Status Effects are processed (see 'Status Effects Compendium' and Section V.B. for when stacks decay). Natural decay of status effect stacks also happens at Dusk (as per Section V.B.).
-    *   Finally, the Maximum Hand Size check occurs (as per Section III.E.9.).
-
-**III.F.X. How Dynamic State Changes Affect the Current Turn** (Applies to all creatures)
-During the Action Resolution Phase, if a creature's status or active modifiers change (e.g., it gets `Muted`, `Cannot Act`, or a new Watchdog starts watching it), these changes can immediately impact that creature's other unresolved actions already in the queue for the current Day, or how other pending actions interact with it.
-
-*   **Impactful Status Application:** For statuses like `Muted`, `Cannot Act`, or `Abilities Disabled`, applying them might cause previously queued actions from that creature (or actions targeting it, if the status makes it untargetable like `Ostracised`) to be cancelled or re-evaluated right before they would resolve. Specific interactions are detailed in individual status definitions (e.g., `Muted` in Section I.A. and the 'Status Effects Compendium').
-*   **Modifier Application (Watchdogs):** As detailed in III.H.5, once Watchdogs are active, they will affect relevant actions as they come up for execution from the current Action Queue.
-*   **System Check:** The game system must be ready to check if an action about to resolve is still valid, if its target is still okay, and if it should be cancelled, based on the current, possibly just-changed, state of the creatures involved (due to effects that resolved earlier in the same Action Resolution Phase).
-
-**III.F.Y. How Actions Are Processed for Creatures About to Be Destroyed** (Applies to all creatures)
-If, during the Action Resolution Phase, a creature is marked to be destroyed (e.g., its Health hits 0 or less, or an effect targets it for destruction), here's what happens with its actions and triggered effects:
-
-*   **Step 1: Process `OnDamaged` Effects (if any):** If damage was what marked the creature for destruction, any `OnDamaged` abilities the creature has will trigger. The effects of these `OnDamaged` abilities become 'Creature Ability Effect Actions', are added to the Action Queue (Ability & Attack Layer), and resolve. These are considered "retaliatory" actions and will resolve even if the creature is ultimately destroyed by this damage, potentially affecting other things before the creature is removed.
-*   **Step 2: Cancel Other Pending Standard Actions:** After any `OnDamaged` effects from the destructive event have resolved (or if there weren't any), all *other* unresolved standard (non-retaliatory) actions currently left in the global Action Queue that *came from that specific creature BEFORE it was marked for destruction* are immediately cancelled. This includes its queued Attacks, Movement Actions, Active Abilities, and effects from previously triggered Passives or standard (non-retaliatory) Status Effects. These cancelled actions are removed from the Action Queue.
-*   **Step 3: Process `OnAboutToDie` Effects (if any):** If the creature has any `OnAboutToDie` abilities, these trigger now. Their effects become 'Creature Ability Effect Actions', are added to the Action Queue (Ability & Attack Layer), and resolve. These effects might potentially save the creature from destruction.
-*   **Step 4: Final Destruction & Process `OnDied` Effects:** If the creature is still marked for destruction after Step 3, it is now officially destroyed and moved to its owner's Discard Pile. Any abilities of that creature that trigger `OnDied` (or similar "when destroyed" triggers) are now processed. The effects of these `OnDied` abilities become new 'Creature Ability Effect Actions' (considered "retaliatory") and are added to the global Action Queue (Ability & Attack Layer).
-*   **Summary of Action Order:** Damaging Event Occurs -> `OnDamaged` effects from damaged creature trigger and resolve -> Creature Health is checked; if lethal, creature is marked for destruction -> Creature's *other* pending standard actions are cancelled -> `OnAboutToDie` effects from creature trigger and resolve -> If still dying, creature is moved to Discard Pile -> `OnDied` effects from creature trigger, and their resulting actions are queued.
-
-1.  **Queue Manipulation (General):** Besides specific Pre-Resolution `Interference` effects and "Watchdog" Meta-Actions, other actions might interact with queue visibility (like Intelligence revealing details of pending actions) or apply effects that change how controllers see or plan around the queue.
-2.  `Priority (Action)` **Enhancement (See Section I.A. for definition):** Giving actions a higher `Priority (Action)` value makes them resolve earlier within their layer, no matter the creature's Speed. This is like priority in games like Pokémon. `Priority (Action)` can be a built-in quality of a creature's action (e.g., "Priority Attack: +1 Priority"). Pre-Resolution `Interference` effects or "Watchdog" Meta-Actions can also change `Priority (Action)`.
-3.  **Global `Priority (Action)` Modifiers:** These are effects that change the `Priority (Action)` of all actions for a set time.
-    *   Example ("Coordinated Advance"): Actions by creatures you control this **Day** and for the next 3 **Days** get +1 `Priority (Action)`.
-    *   Example ("Temporal Distortion"): For X **Days**, the normal action resolution order based on Speed is flipped within each Priority (Action) level.
-        *   **Priority Resolution during Temporal Distortion:** Actions are first grouped and resolved by `Priority (Action)` level within their layers.
-        *   **Speed Resolution during Temporal Distortion:** Within each `Priority (Action)` level (in each layer), actions from creatures with lower Speed will act before creatures with higher Speed. If Speed is tied, use the **Standard Tie-Breaking Protocol**.
-4.  **Standard Tie-Breaking Protocol:** Used when actions in the same resolution layer are tied in both `Priority (Action)` and creature Speed (or Speed during Temporal Distortion).
-    *   Lowest current (Health + `Armor`) total resolves first.
-    *   If still tied, lowest base Attack resolves first.
-    *   If still tied, resolve randomly (a potential Karma System might influence this).
-5.  **Tie-Breaking During Temporal Distortion:** If actions with inverted Speed order (same layer, same `Priority (Action)` level, Temporal Distortion active) have tied Speed, use the **Standard Tie-Breaking Protocol**.
-6.  `Priority (Action)` **Reduction:** Actions or effects can give a negative modifier to an action's base `Priority (Action)` (e.g., Priority -1), making it resolve later in its layer. Pre-Resolution `Interference` effects or "Watchdog" Meta-Actions can also change `Priority (Action)`.
-
----
-
-**III.G. Universal Action Queuing** (All card effects resolve via the queue unless they are Meta-Actions)
-
-A core principle: no card effect happens instantly when the card is played or its ability conditions are met *unless it's explicitly defined as a Meta-Action (see Section III.H. Meta-Actions & Pre-Queue/Immediate Processing)*.
-This means every effect from a Spell or a creature ability (active or passive), including Movement Actions, becomes an action for the global Action Queue (categorized as `Play Creature Action`, `Movement Action`, `Spell Action`, `Creature Ability Effect Action`, or `Attack Action`).
-Similarly, every attack a controller initiates is treated as an `Attack Action`.
-Furthermore, every triggered trap effect, including `Strategic Disclosure` effects (see Section V.A.1. Traps & Strategic Disclosures - Strategic Disclosure Effects), is also turned into an action and placed into the global Action Queue (usually as a 'Creature Ability Effect Action' or 'Spell Action' equivalent, depending on what it does).
-These actions then resolve one by one during the Action Resolution phase of the **Day**, following the layered resolution rules in Section III.F (Action Queue & Turn Flow Mechanics).
-**Once an action starts to resolve from this queue, its effects are determined by its text and the current game state. There's no further intervention or choices from either controller, especially the opposing one, unless that interaction is explicitly part of a pre-set mechanism like Interference or specific Meta-Actions influencing resolution (like Watchdogs or Linked Meta-Actions), or due to dynamic state changes (as per Section III.F.X and III.F.Y).**
-It's important to separate these card-generated queued actions from Meta-Actions (see Section III.H.), like paying costs, immediately replacing slot effects, or the mechanical process of drawing cards at **Dawn (Start of a Day)**. Those types of processes are not "queued actions" from cards in the way this Universal Action Queuing principle means.
-*(Also see the VERY IMPORTANT note in Section III.F.4 about effects being delayed by the queue).*
-
----
-
-**III.H. Meta-Actions & Pre-Queue/Immediate Processing**
-
-While most game effects go through the Action Queue (as explained in Section III.G.), some things happen immediately or outside that normal sequence. We call these "Meta-Actions." They are key to how the game flows and how certain effects are handled.
-
-1.  **What's a Meta-Action?**
-    *   These are game state changes or processes that happen instantly. They might occur during the Planning Phase *before* actions are queued, or they might change actions right when they're being queued or are about to resolve. They don't go through the standard Action Queue like most primary actions. (Think: instant or pre-queue stuff).
-
-2.  **Slot Effect Replacement:** (As per Section IV.B.3. Board Manipulation & Control - Slot Effects / Environmental Hazards):
-    *   When a new Slot Effect is applied to a slot that already has one, the old Slot Effect is **immediately** removed. The new effect takes its place. This is a direct, instant state change.
-
-3.  **Payment of Additional Costs:** (As per Section III.E.4.a. Card Management - Discarding from Hand (As an Additional Cost)):
-    *   Costs like discarding cards, sacrificing creatures (e.g., for `Requisites`), or meeting other conditions to play a card or use an ability are handled **during the player's Planning Phase**. This happens *before* the main card effect or ability is added to the Action Queue. This is a player-initiated Meta-Action.
-
-4.  **"1 Trigger" Slot Effect Consumption:** (As per individual entries in 'Slot Effects Compendium'):
-    *   When a Slot Effect marked as "1 Trigger" has its trigger condition met, its game effect is prepared and added to the Action Queue. The Slot Effect itself is then **immediately** used up (removed from the slot). This stops the same "1 Trigger" Slot Effect from triggering multiple times before its effect resolves.
-
-5.  **"Watchdog" System for Modifying Queued Actions:**
-    *   **How it Works:** Certain game effects (e.g., from Spells like "Mental Breakdown") can set up a temporary "Watchdog" linked to a specific creature, condition, or action type.
-    *   **What it Does:** Once a 'Watchdog' effect is active (after the spell or ability creating it has resolved), it watches the Action Queue for specific actions that are **just about to be executed within their resolution layer**. Watchdogs effectively have high priority to check and possibly change actions *right before* those actions resolve.
-        *   **Activation:** A Watchdog becomes active when the effect that creates it (e.g., a Spell like 'Mental Breakdown') resolves from the Action Queue.
-        *   **Monitoring Scope:** From the moment it's active, a Watchdog observes actions (based on its trigger conditions, e.g., 'any Attack action by Creature X') that are next in line to execute from the global Action Queue *for the rest of the Watchdog's own duration (e.g., 'for the rest of this Day')*.
-        *   **Modification Timing:** If an action currently at the front of its resolution group within a layer in the Action Queue (i.e., about to resolve) meets the Watchdog's trigger conditions, the Watchdog **immediately changes** that action's properties (e.g., its target, Priority (Action), or even potentially cancels it if the Watchdog is designed to do so) *before* the original action proceeds to resolve in its (possibly changed) form.
-        *   **Impact on Already Queued Actions:** This means a Watchdog **can and will** affect actions that were put into the Action Queue *before* the Watchdog itself became active, as long as those actions haven't resolved yet and meet the Watchdog's criteria when they reach the front of the queue for execution. This fits with the Principle of Dynamic State Application (III.F.X).
-    *   **Difference from `Interference`:** `Interference` effects (see Section IV.D.4) are usually pre-set conditions that change actions *already pending* in the Action Queue during a specific **Pre-Resolution Interference Phase** (which happens before the main Action Resolution Phase starts). Watchdogs, under this updated definition, act more dynamically *during* the Action Resolution Phase, stepping in just as an action is about to execute.
-    *   **Example:**
-        1.  During Planning, Player queues an `Attack Action` from Creature C targeting Enemy Creature O.
-        2.  Enemy AI, in the same Planning Phase (via its script), queues a Spell S that applies a 'Redirect Attack Watchdog' to Player's Creature C, lasting for this Day.
-        3.  During Action Resolution:
-            *   Spell S resolves first (e.g., in the Spell Layer). The 'Redirect Attack Watchdog' is now active on Creature C.
-            *   Later, in the Ability & Attack Layer, Creature C's `Attack Action` (queued earlier) comes up for execution.
-            *   The active Watchdog on Creature C checks this `Attack Action`. If it meets the Watchdog's criteria (e.g., 'any Attack by Creature C'), the Watchdog changes its target according to its rules (e.g., redirects to a random creature).
-            *   Creature C's `Attack Action` then resolves against the new, changed target.
-
-6.  **"Linked Meta-Actions" for Dependent Follow-up Effects:**
-    *   **How it Works:** Some resolving actions from the Action Queue can have follow-up effects or Meta-Actions "linked" to their successful resolution. This is often used for effects like "immediately gains [Status X]" or "then [do Y]."
-    *   **What it Does:** If the main action resolves successfully from the queue, the linked follow-up effect (e.g., "Apply Status X to Target Creature") is processed as part of the same overall event. This could mean the linked effect is injected into the current resolving block of the main action or added to the Action Queue with very high priority to resolve next (maybe at the start of the next appropriate layer or immediately if in the same layer).
-    *   **Dependency:** Importantly, if the main action fails to resolve successfully (e.g., it's Nullified, or its target becomes invalid so its main effect can't happen), these linked follow-up effects usually don't occur.
-    *   **Example:** A card says, "**Homing:** Deal 2 damage to target creature. If this destroys the creature, its controller immediately draws 1 fewer card next **Day**." The draw reduction is a linked meta-effect that depends on the creature being destroyed by the damage. Phrases like "immediately gains [Status X]" after a control change (e.g., Taqiyya Infiltrator) mean the status application is a linked, high-priority follow-up part of the control change resolution.
-
-7.  **Subscription / Consumable Item Use:** If you use Subscriptions during your Planning Phase, they resolve immediately, affecting the game state "between" other planning choices. This doesn't use the Action Queue.
-
----
-
-**IV. Core Gameplay Loops & Mechanics (PVE CONTEXT)**
-
-**IV.A. Information Warfare (Player vs. System)**
-
-*   You use Intelligence to understand enemy card abilities, predict their scripted actions, reveal "???" intents, find weaknesses, and deal with designed enemy "Traps" (from enemy cards/scripts).
-*   You use `Interference` against enemy queued actions. Enemies might also have card-based `Interference`.
-
-**IV.B. Board Manipulation & Control**
-
-1.  **Logistics (Movement):**
-    *   Using abilities or Spells to move creatures (your own, allies, or enemies) or to swap their positions.
-    *   Self-initiated movement creates Movement Actions (see Section III.D.7).
-    *   External push/pull/swap effects don't use the target creature's own action.
-    *   This helps optimize attacks, blocks, and adjacency bonuses, while also messing up enemy formations.
-    *   Tactics include Post-Action Repositioning ("Hit and Run") and Positional Relays (buffs triggered by moving into a slot that just became empty).
-
-2.  **Movement Restriction:**
-    *   Using the `Heavy` Status Effect (see 'Status Effects Compendium'), specific abilities (e.g., that stop Movement Actions from being created), or Slot Effects (see 'Slot Effects Compendium') to lock down enemy creatures or protect your allied creatures.
-    *   The `Anchored` status stops a creature from making its own Movement Actions.
-
-3.  **Slot Effects / Environmental Hazards:** These are ongoing or triggered conditions on specific battlefield slots that affect creatures or actions related to those slots.
-    *   **Official Definitions:** For detailed definitions of individual Slot Effects (like Landmine, Scorched Earth), see the separate **'Slot Effects Compendium'**. The entity who applied the effect is its controller.
-    *   **Only One Per Slot & Replacement:** Only one Slot Effect can be active on a slot at a time. If a new Slot Effect is applied to a slot that already has one, the new one replaces the old one. The old effect is **immediately** removed (this is a Meta-Action, see Section III.H.2. - Slot Effect Replacement), and its effects stop.
-    *   **Visibility:**
-        *   **Visible Slot Effects:** These are shown openly on the slot. Both player and AI know they are there and what type they are.
-        *   **Hidden Slot Effects:** The opponent AI can't see these on the slot. The AI doesn't know they exist or what type they are until the Slot Effect is triggered (e.g., an enemy creature moves into a slot with a hidden 'Landmine') or revealed by a game mechanic (e.g., an "Inspect Slot" Intelligence action by you). Once triggered, a Hidden Slot Effect usually reveals itself as it resolves.
-    *   **Triggers:** Slot Effects are activated by specific game events, as defined in the `Trigger Events List` and detailed in the effect's description in the 'Slot Effects Compendium'. Common triggers include `OnEnterSlot`, `OnBeforeLeaveSlot`, `OnTurnStart` (when occupied, meaning "Each Dawn"), `OnTurnEnd` (when occupied, meaning "Each Dusk"), or continuous effects while a creature is in the slot. The specific trigger logic (like checking if the slot has an enemy/friendly creature) is part of each Slot Effect's definition.
-    *   **Consumption of "1 Trigger" Effects:** Slot Effects marked as "1 Trigger" are used up (removed from the slot) **immediately** when their effect is prepared and added to the Action Queue (this is a Meta-Action, see Section III.H.4. - "1 Trigger" Slot Effect Consumption). This stops them from triggering multiple times.
-    *   **What They Do:** Slot Effects can cause many outcomes:
-        *   Dealing damage to creatures.
-        *   Applying creature Status Effects (see 'Status Effects Compendium').
-        *   Changing creature stats while they're on the slot.
-        *   Altering movement rules or costs (e.g., making Movement Actions harder or impossible for creatures on the slot).
-        *   Restricting or enabling certain actions (e.g., a "Jamming Field" might stop Spells from targeting the slot).
-    *   **Damage to Slots & Occupants (General Rule):** When a slot is targeted by damage (e.g., via `Slot Targeting`), or when damage is redirected to a slot (e.g., from a `Homing Targeting` effect whose target died or Left Play), that damage hits any creature currently in that slot. If the creature in the slot is destroyed by this damage, any leftover damage from that specific hit is not transferred. If the slot is empty when the damage resolves (either it was targeted as empty, or an occupying creature is gone), the effect/damage does nothing (fizzles). Player Health is NOT damaged by attacks on empty friendly slots.
-    *   **Cleansing Slot Effects:** Specific game actions or abilities, often marked with the `Cleanse (SlotEffect)` keyword, can remove Slot Effects. If a Hidden Slot Effect is cleansed before it triggers, it's removed without its effect happening and without being revealed to the enemy AI (unless the cleanse action itself reveals it). Individual Slot Effects in the 'Slot Effects Compendium' say if they can be cleansed.
-
-4.  **Hazard Removal / Decontamination:** Actions or abilities designed to `Cleanse` negative Slot Effects.
-
-5.  **Location (Weather):** Cards that apply global modifiers to the entire battlefield. These effects can last for a set number of **Days** or until another Location card changes them.
-
-6.  **Flooding:** Overwhelming the board with many weak or token creatures ("junk"). (This means summoning many creatures).
-
-7.  ***Recruitment*** / ***Conversion***: Taking control of enemy creatures. (See Section I.A. for definitions and Section V.D. for how they work). (Getting the card is the main outcome).
-
-**IV.C. Creature Enhancement & Protection (Player Focus)**
-
-1.  **Setup:** Actions or abilities that increase the stats (Attack, Health, Speed) of your own creatures or allied creatures. These can apply `Temporary Stat Modifications` or, less often and usually at a higher cost, `Persistent Stat Modifications` (see Section I.A and III.D.1).
-2.  **Survivability:** Actions like Heal (restoring HP), Add `Armor`, or abilities that redirect attacks.
-3.  **Immunity/Protection:** Specific immunity that stops particular negative effects.
-4.  ***Cleanse***-ing (See Section I.A. for definition): Actively removing negative Status Effects or `Temporary Stat Modifications` from friendly creatures or slots. Standard `Cleanse` effects generally don't remove `Persistent Stat Modifications`.
-
-**IV.D. Disruption & Control (Player & Enemy via Universal Cards & Scripts)**
-
-1.  **Status Effects Application:** A core mechanic using defined Status Effects (see 'Status Effects Compendium') on enemy or friendly creatures or slots.
-2.  **Red Tape:** Effects that delay an opponent's actions, lower their `Priority (Action)`, or add **Days** to a creature's `Deployment Time` (see 'Status Effects Compendium').
-3.  **Disable Archetype:** Strategies focused on shutting down key enemy functions, possibly using the `Exhausted` Status Effect (see 'Status Effects Compendium').
-4.  **Interference (Triggered Queue Modification):**
-    *   Certain abilities or effects let controllers set up `Interference` conditions (pre-set queue changes like `Nullify`, `Reorder`, `Redirect` - see Section I.A.) in advance.
-    *   These trigger during the **Pre-Resolution Interference Phase** to change an opposing controller's actions that are *already waiting in the Action Queue*.
-    *   This is the *only* way to directly change an opponent's *already queued* actions with another effect like this before the main Action Resolution Phase.
-    *   **UI Notification:** When an `Interference` effect changes an action, the UI should clearly show this.
-    *   Types of `Interference` include: `Nullify (Interference)`, `Reorder (Interference)`, `Redirect (Interference)`.
-    *   The trigger conditions for these `Interference` effects are on the cards that create them.
-
-5.  **Attack/Effect Redirection:**
-    *   Directly redirecting an opponent's *already queued* actions is handled *only* by pre-set `Redirect (Interference)` effects, as described in Section IV.D.4.
-    *   Effects like "Mental Breakdown" (which uses a "Watchdog" Meta-Action as per III.H.5) change actions *as they are about to execute from the queue*. This can include actions queued earlier in the turn if the Watchdog becomes active before they resolve.
-
-6.  ***Recruitment*** / ***Conversion*** / **Mind Control:** Effects that let a player take control of an enemy creature or capture its card. (See Section V.D. for details).
-
-**IV.E. Recursion & Recovery (Player Focus)**
-
-1.  ***Revive*** (See Section I.A. for definition): An ability or Spell that returns a creature from a player's Discard Pile to their battlefield. It will be subject to `Deployment Time` (see 'Status Effects Compendium').
-    *   Currently, Revive needs to target an empty friendly battlefield slot.
-    *   (Note: Revived creatures keep `Persistent Stat Modifications` if revived in the same combat they were discarded, see III.E.7).
-2.  **Return to Hand (from Battlefield):** An ability or Spell that removes a creature from its slot and puts the card into its owner's hand. (Stat modifications usually reset unless specified, see III.E.7).
-3.  **Return to Hand (from Discard):** An ability or Spell that selects a card from a player's Discard Pile and puts it into that player's hand. (Stat modifications usually reset unless specified, see III.E.7).
-
-**IV.F. Combat, Damage & Targeting**
-
-0.  **Active Engagement for Combat Damage:** Creatures only deal combat damage by performing an Attack action. There's no automatic "retaliation" damage unless a specific ability grants it (though `OnDamaged` triggers play a similar role).
-1.  **Direct Damage:** Reducing a target's Health (creature or player - if specifically targeted).
-2.  **Chain/Spread Damage:** Damage that hits multiple different targets.
-3.  ***Armor*** (See Section I.A. for definition): A temporary HP pool. Damage hits `Armor` first. Recoil damage also hits `Armor` first.
-4.  **Life Drain / Siphoning:** Dealing damage also heals the source or controller.
-5.  **Targeting Nuances:**
-    *   **Targeting Types & Keywords:** Game actions say how they target using keywords on cards, or they default to `Homing Targeting` for effects that target creatures.
-        *   **`Homing Targeting` (Default for creature-specific effects; Keyword `Homing:` on cards):** Locks onto a specific creature when queued. If the creature moves, the effect follows. If the creature Leaves Play, the action tries to affect the slot the creature was last in. If the effect can't apply to a slot (e.g., 'target creature gains X status'), it fizzles (does nothing). If targeting an expected creature in an empty slot that stays empty and the effect can't apply to an empty slot, it may fizzle.
-            *   *PvE & Concealment:* If a `Homing Targeting` action is used against a `Concealed` creature (and concealment isn't negated), it acts like `Fixed Targeting` for that instance.
-        *   **`Fixed Targeting` (Keyword `Fixed:` on cards):** Targets a specific slot to affect the creature in that slot *when the action resolves*. It doesn't follow creatures if they move. If the slot is empty or the creature is an invalid target at resolution, the effect may fizzle.
-        *   **`Slot Targeting` (Keyword `Static:` on cards):** Targets a specific battlefield slot itself. The effect applies to the slot (e.g., applying a slot effect) or to its occupant at resolution (e.g., dealing damage to a creature in it). This doesn't follow creatures. If the slot is empty at resolution and the effect was for an occupant (like damage), it fizzles.
-    *   **Damage to Slots & Occupants (General Rule):** As mentioned in Section IV.B.3. Damage to a slot hits its creature occupant. If the creature in the slot is destroyed by this damage, any leftover damage from that specific hit is not transferred. If the slot is empty when the damage resolves (either targeted as such, or because an occupying creature is gone), the effect/damage fizzles. Player Health is NOT damaged by attacks on empty friendly slots. (This reflects the rule: empty slot = fizzle, no Player Health damage).
-    *   **Targeting Restrictions & Patterns:** Many effects have specific limits (e.g., only front slot, only `Exhausted` creatures - see 'Status Effects Compendium'). These are detailed on individual cards.
-6.  **Attacking Empty Slots:** If an Attack action targets an opposing empty slot, the Attack fizzles (does nothing). (Specific cards might define a minor alternative outcome, like creating a Slot Effect).
-
----
-
-**V. Detailed Mechanics & Specific Systems**
-
-**V.A. Traps & Strategic Disclosures (PvE Context)**
-
-These are effects linked to specific actions or creatures that trigger under certain conditions, often related to information warfare.
-When a trap's or strategic disclosure's trigger condition is met (like the `OnRevealedByIntelligence` trigger in Section V.C.), its effect is turned into an action (usually a 'Creature Ability Effect Action' or 'Spell Action' equivalent) and added to the Action Queue.
-This includes `Traps (Counter-Intelligence)` which are bad for the revealer, and `Strategic Disclosures` which are good.
-
-*   **Player Traps:** You use cards to create traps (e.g., hidden Slot Effects, abilities on your creatures that react to enemy AI actions).
-*   **Enemy "Traps":** These are defined abilities on enemy cards (especially bosses/elites) that trigger negative effects on you if you use specific Intelligence actions on them or interact with them in ways defined by the enemy card/script.
-*   **Strategic Disclosures:** Benefits for you (e.g., temporary combat advantage, bonus currency, info for the Bestiary) when you successfully reveal significant hidden enemy card information, "???" intents, or weaknesses using Intelligence actions.
-
-**Triggering Conditions for "On Being Revealed" Effects (Traps/Strategic Disclosures):**
-These are defined by the `OnRevealedByIntelligence` trigger (see Section V.C.). Mainly:
-1.  Your Intelligence Action successfully reveals a hidden "???" enemy intent or hidden enemy card detail.
-2.  You apply the `Revealed` Status Effect (see 'Status Effects Compendium') to an enemy creature that has `Undercover` / `Concealed` (see 'Status Effects Compendium') or a hidden ability with an "On Being Revealed" characteristic.
-
-**V.B. Status Effects**
-
-(Placeholder: Core ideas like stack decay (Dusk of Day X+1 for effects from Day X), Fixed_Stacks, "Upon Application" effects, how they interact with game state changes, and the special nature of Deployment Time are still the same. All status effects can be applied to any creature card. Specifics are in the 'Status Effects Compendium', which will be updated for PvE and the universal card pool.)
-
-Status effects are temporary or ongoing conditions that change creature behavior or stats. They are a core mechanic for boosting creatures, disrupting opponents, and controlling the board.
-**All status effects are officially defined as "Status Effects" in the separate 'Status Effects Compendium' (see Section I.B.).** This GDD uses their exact names when referring to them. New status effects can be proposed if a truly new condition is needed, but they require design approval and addition to the 'Status Effects Compendium' before use. Each Status Effect definition in the compendium states if it can be cleansed, how it interacts with the global **Day** structure (e.g., "Each Dawn" or "Each Dusk" effects), and its Decay Rule.
-
-**Core Status Effect Principles:**
-
-*   **Natural Stack Decay (Updated Timing):** By default, all status effects with stacks lose 1 stack **Each Dusk (End of Day)**. **A status effect applied or gained during Day X will have its first stack/duration decay occur at the Dusk phase of Day X+1**, unless its definition in the 'Status Effects Compendium' or the applying effect says it decays immediately or at a different time (e.g., 'Each Dawn'). This ensures the effect is active for the entire Day it's applied after it resolves.
-*   **`Fixed_Stacks` Property:** Some status effects might be marked with `Fixed_Stacks` in the 'Status Effects Compendium'. A status with `Fixed_Stacks` has a stack count that can only be set when applied (or refreshed) and changed by its defined natural decay or specific internal rules (like evolving/being consumed). Player actions or other card effects cannot directly add or subtract its current stacks, unless an effect specifically says it can change `Fixed_Stacks` statuses (this would be very rare).
-*   **"Upon Application" Implied in Descriptions:** The `Description` of a status effect in the 'Status Effects Compendium' inherently details its immediate effects when applied (i.e., when the action applying it resolves), followed by any ongoing or triggered behaviors. Phrases like "Upon application" are usually left out of the `Description` to keep it brief and clear for players.
-*   **Impact of Application on Queued Actions:** As per the Principle of Dynamic State Application (III.F.X), applying certain statuses (like `Muted`, `Cannot Act`) can immediately affect or cancel unresolved actions from that creature already in the Action Queue for the current Day. This should be clearly noted in the definition of such impactful statuses in the 'Status Effects Compendium'.
-*   **Status Application and Lethal Damage:** When a creature takes lethal damage, things happen in the order described in Section III.F.Y. `OnDamaged` and `OnAboutToDie` effects (which might include applying statuses) resolve *before* final destruction. A status effect that's part of the direct damaging action (not a separate retaliatory trigger) trying to apply at the same time as lethal damage will usually fail, as the creature is marked for destruction before the status can "stick," unless the effect specifically says otherwise or is part of an `OnDamaged` or `OnAboutToDie` trigger. Standard (non-retaliatory) status effects (like `Earworm`'s damage tick) that were already on the creature and trigger to deal lethal damage will have their own effect resolve (the damage). But any further effects from that status for that turn (like `Earworm`'s spread) would be cancelled if the creature is destroyed by that status's own damage tick, because the creature is no longer there to spread them.
-*   **`Deployment Time` is Special:** As detailed in Section III.C, `Deployment Time` is a unique state. Its countdown and the triggering of its `OnDeploymentTimeComplete` effects are not affected by general `Abilities Disabled` states (like from `Muted` or `Exhausted`) or other normal status effect rules, unless an ability or effect *explicitly* says it interacts with or changes `Deployment Time` directly. The `OnDeploymentTimeComplete` passive ability will try to trigger once `Deployment Time` naturally ends. **This trigger is a special system event. It will usually happen, and its effects will be prepared and added to the Action Queue, even if the creature has a general `Abilities Disabled` status (like `Muted`) at that moment.** This is an exception to the rule that `Abilities Disabled` stops passive abilities. An effect must *specifically state* that it prevents or changes the `Deployment Time` countdown, its completion, the `OnDeploymentTimeComplete` trigger, or the actions that result from it to stop this process.
-
-The way these Status Effects interact with game rules, abilities, and other mechanics is detailed throughout this GDD. Key Status Effects often mentioned include `Exhausted`, `Muted` (noting its I.A. clarification & III.F.X impact), `Ostracised`, `Brainwashed`, `Heavy`, `Doomed` (X **Days**), `Concealed` (noting its II.E. targeting clarification), `Revealed`, `Compromised`, and `Deployment Time`. (All are defined in the 'Status Effects Compendium').
-The `Exposed` status applied by `Exhausted` has a duration that is either set by the source applying `Exhausted` or defaults to an independent duration (e.g., Indefinite). It's not necessarily tied to `Exhausted`'s own duration (see 'Status Effects Compendium' for `Exposed` and `Exhausted` definitions).
-The `Brainwashed` status effect changes ownership at the **Dusk of the 2nd Day** after it's applied.
-
-**V.C. Trigger Events** (Applies to all creature cards and their abilities).
-This section lists common game events that can trigger passive abilities or other effects. These events are defined in the separate document: **'Trigger Events List'**. Many triggers give context (like who dealt damage, or which status was applied) that an ability's logic can use. When talking about ability triggers based on `OnTurnStart` or `OnTurnEnd` from this list, game text and this GDD will use the thematic terms 'Each Dawn' or 'Each Dusk' respectively. For example, an ability triggering "OnTurnStart" would be described as triggering "Each Dawn."
-
-**V.D. Recruitment / Conversion Effects (Focus on Card Capture)**
-This section explains how to take control of an opponent's creature using `Recruitment` (temporary control, potential card capture) or `Conversion` (direct card capture).
-
-1.  **Definitions & How They Work (Universal Cards):**
-    *   **Recruitment:** A player effect (Spell or ability card) targets an enemy creature (which is an instance of a universal card). If successful, you gain temporary control of that creature for the current combat only. If the recruited creature survives the combat (and maybe meets other minor conditions defined on the card, like dealing damage to an enemy), its universal card is "Captured." A copy of that universal creature card is then guaranteed to be offered as one of your choices in the post-combat card reward screen, which you can add to your deck for the current run.
-    *   **Conversion:** A player effect (Spell or ability card, usually rarer/more expensive than `Recruitment`) targets an enemy creature (an instance of a universal card). If successful, the enemy creature is immediately removed from combat (e.g., Banished from the enemy side), and its universal card is "Captured." A copy of the captured creature's universal card is immediately added to your discard pile to use in the current run.
-
-2.  **Who Can Be Captured?** Most standard enemy creature cards can be captured by `Recruitment` or `Conversion`. Specific "Boss" creatures or unique "Elite" creatures (as defined in the 'Enemy Compendium') might be immune to these effects or have special conditions for capture.
-
-3.  **The Captured Card:** You get a copy of the exact universal card the enemy creature was. This card has its normal base stats and abilities as defined for that universal card. (Remember: after combat, all cards go back to their printed stats as per III.E.7).
-
-4.  **Balancing:** `Recruitment` and `Conversion` are powerful because they let you get new cards. They are balanced by things like their cost, who they can target, or how rare the cards that grant these effects are.
-
-5.  **Positioning & Movement (for temporary control via Recruitment):**
-    *   When `Recruitment` successfully gives you temporary control, the creature moves to an empty friendly slot on your side of the board. The card effect that causes `Recruitment` will say what happens if no empty slot is available (e.g., it fizzles, or goes to a default slot).
-    *   This act of changing sides and moving to a new slot is part of the `Recruitment` effect itself and happens when the Spell or Ability causing the control change resolves (e.g., in the Spell Layer or Ability & Attack Layer). It does *not* create a separate 'Movement Action' for the creature that would be queued in the Movement Layer.
-    *   Because of this, this specific movement to change sides usually bypasses restrictions like `Cannot Act` that would stop a normal 'Movement Action'. It effectively overrides such temporary movement restrictions to complete the control change, unless the `Recruitment` effect itself says otherwise.
-    *   **Control Change & State:** The creature comes under your control. The original card ownership doesn't change (the enemy AI still "owns" the base card for its script if it were returned, though `Recruitment` is only for the current combat).
-    *   **State Preservation:** The creature keeps its current Health, `Armor`, status effects (unless `Doomed` (X **Days**) - see 'Status Effects Compendium' - is involved), its current base stats (including any `Persistent Stat Modifications` it had), and current `Deployment Time` (see 'Status Effects Compendium') when control shifts temporarily. `Temporary Stat Modifications` might be lost or kept based on their specific rules or the Recruitment effect.
-    *   **Action Queue & Fog of War (Temporary Control):**
-        *   **Enemy's Queued Actions Cancelled:** When Recruited, any actions the enemy AI had queued for that creature for the current Day are cancelled.
-        *   **Player's Actions:** You can queue actions from the Recruited creature starting from the next **Day**'s Planning Phase if the combat continues, or possibly immediately if the `Recruitment` effect allows for an immediate action (this would be rare).
-
-**V.E. Multi-Slot Creatures** (Defined by specific universal creature cards, usable by player or enemy).
-
-1.  **What Are They?** Certain creatures are designed to take up two adjacent friendly slots when they enter the battlefield. Their card text will usually indicate this.
-
-2.  **Summoning Them:**
-    *   To play a multi-slot creature, its controller must be able to target two valid adjacent friendly slots.
-    *   When the 'Play Creature Action' for a multi-slot creature resolves, if either of the two target slots is occupied by another creature, that occupying creature(s) is **Banished**. The multi-slot creature then enters play, taking up both slots.
-    *   This "Banish" rule is specific to multi-slot creatures and is different from the standard rule for single-slot creatures (see Section III.F.4, Summon Layer, which destroys occupants).
-    *   If two valid adjacent friendly slots can't be made available (e.g., not enough empty/clearable slots, or the board edge prevents two adjacent slots), the multi-slot creature cannot be played. Its card stays in hand (or the effect trying to summon it fizzles).
-
-3.  **Movement & Characteristics:**
-    *   Multi-slot creatures automatically have the `Anchored` status effect (see 'Status Effects Compendium') from the moment they enter play. This means they cannot perform Movement Actions and usually can't be moved by external effects, unless their card text or another effect specifically overrides this for multi-slot creatures.
-    *   They are treated as a single entity for being targeted by Spells or abilities, for having status effects applied, and for starting actions.
-    *   They take up two slots for adjacency calculations (e.g., for abilities affecting adjacent creatures) and for blocking movement paths. Damage or effects targeting one of the slots they occupy affect the creature itself.
-
-4.  **Leaving Play:** If a multi-slot creature Leaves Play, both slots it occupied become empty.
-
-**V.F. Mandela Effect** (A rare effect, from a universal card or unique boss ability).
-
-A **Mandela Effect** (defined in Section I.A.) is a unique, one-time global game event, usually triggered by a Spell or a powerful creature ability. When an action causing a Mandela Effect resolves from the Action Queue:
-
-1.  **Who it Affects:** It affects all creature *instances* (player and enemy) that are currently on the battlefield at that exact moment.
-2.  **Stat Change:** It permanently changes one or more base stats (like Attack, Health, or Speed) of these affected creature instances. The specific changes (e.g., +X Attack, set Health to Y) are determined by the card or ability that triggered the Mandela Effect. This directly alters the creature's base stats for that instance.
-3.  **How Long it Lasts (for that instance):** These changes to the creature's base stats are considered permanent for that specific *instance* of the creature as long as it stays on the battlefield. This change is tied to the creature *instance* on the board and is different from `Persistent Stat Modifications`, which are combat-long changes to the card's stats that reset after combat (see Section I.A and III.E.7).
-4.  **New Summons Not Affected:** Any creature summoned to the battlefield *after* the Mandela Effect has resolved enters play with its normal, printed stats (or stats changed by any active `Persistent Stat Modifications` if another effect applies them to new summons). It is not affected by the past Mandela Effect.
-5.  **Interaction with Leaving Play:** If a creature instance whose stats were changed by a Mandela Effect then **Leaves Play** (e.g., destroyed, returned to hand, Banished) and later comes back to the battlefield (e.g., Revived, replayed from hand), it is considered a new instance. As such, it will enter play with its original printed stats, following the Creature Stat Reset rule (see Section III.E.7), unless the specific card that created the Mandela Effect explicitly says there's an exception that lets the change stick across zones or apply to the card itself (this would be very rare and clearly stated).
-6.  **Queued Action:** Applying a Mandela Effect is an action that is added to the Action Queue and resolves in its proper layer (e.g., Spell Layer if from a Spell, Ability & Attack Layer if from a creature ability). It's not an instant Meta-Action.
-
----
-
-**VI. Game Design Philosophy & Balancing (PVE FOCUS)**
-
-**VI.A. Game Tone:** (Cynical, funny, satirical).
+• Unrevealed "???" intents (you can't see the full details of an enemy's planned action).
+• Hidden passive abilities on enemy cards.
+• Boss phase-change triggers.
+• Full scripted attack patterns.
+
+• Intelligence Actions: Spells or abilities that reveal hidden enemy information: "???" intents, enemy card details, weaknesses. Essential at higher difficulty. Some enemy cards have Traps that trigger when you use Intelligence on them.
+• Enemy "???" Intents: Some enemy actions have parts hidden as "???" until they resolve. Intelligence can reveal them.
+• Turn History: A record of actions that have already happened, to help you spot patterns.
+• Concealment vs. the AI: The AI only reacts to what it can see. It can't see through Concealed or Undercover unless a card ability lets it.
+• Bestiary (Meta-Progression): Using Intelligence fills out a Bestiary that keeps enemy card and mechanic info for future runs.
+
+2.6 Shared Card Pool
+
+All creature and spell cards come from one big shared pool, and abilities work the same no matter who controls the card. The strategy comes from how these shared tools are combined (your choices vs. enemy scripts). The only exceptions are bosses and some elites, which may use unique cards that can't be captured (listed in the 'Enemy Compendium').
+
+
+3. CORE RULES
+
+3.1 Factions
+
+Every card belongs to exactly one faction: Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, or Utopia.
+You can (and should!) mix cards from different factions when building your deck, similar to color combinations in Magic: The Gathering. Faction themes, mechanics and matchups are described in the 'Faction Compendium'.
+
+• Mechanic Ownership: Every mechanic and status belongs to a faction. Its owner uses it cheaply and often; one or two other factions get it rarely and at a higher cost; nobody else gets it. A few statuses are Neutral and open to everyone.
+• Faction Costs: Each faction pays for its power in its own way, on top of Deployment Time. Mixing factions means mixing cost types.
+• Faction Holes: Each faction has one thing it can't do at all. You cover it by combining factions.
+
+Myth · faith, death & prophecy
+    Pays with: sacrificing its own creatures
+    Can't: move creatures
+
+Statecraft · order, law & war
+    Pays with: bureaucracy (extra Deployment Time on its own creatures)
+    Can't: hide anything
+
+Shadow Ops. · secrets & sabotage
+    Pays with: burning (Banishing its own cards from hand or discard pile)
+    Can't: heal or gain Armor
+
+Corporate · money, growth & exploitation
+    Pays with: capital (discarding cards from hand)
+    Can't: heal
+
+Tech · systems & the queue
+    Pays with: Technical Debt (fewer draws next Day)
+    Can't: bring anything back from the discard pile
+
+Digital Society · virality & the mob
+    Pays with: exposure (its own creatures gain Revealed or Heat Signature)
+    Can't: have big creatures, Heavy, or Persistent Stat Modifications
+
+Zeitgeist · moods of modern life
+    Pays with: self-harm (damage or statuses on its own creatures)
+    Can't: use Intelligence
+
+Mind · perception & paradox
+    Pays with: double-edged effects that also hit its own side
+    Can't: deal raw damage
+
+Utopia · science & the future
+    Pays with: side effects (a negative status on the creature it experiments on)
+    Can't: conceal anything
+
+3.2 Tempo & Deployment Time
+
+There's no mana or energy cost to play cards. What you can play is limited by:
+• Hand Size.
+• Timing (when you can play things).
+• Additional Costs (discards, sacrifices, Banishing your own cards, scheduling fewer draws, Requisites), paid instantly during Planning.
+• Faction Costs (see 3.1 Factions). Some are additional costs paid during Planning (Myth, Shadow Ops., Corporate, Tech); the rest are drawbacks built into the card's effect.
+
+The main tempo control is Deployment Time.
+• Deployment Time (N Days): When a creature enters play it gets this status. While it has it, the creature Cannot Act and its passive abilities don't trigger. Effects can change N.
+• Countdown: Deployment Time loses 1 stack each Dawn, except the first Dawn after the creature entered play. So a creature with Deployment Time N sits out N full Days after the Day it arrived.
+    • Example: Two creatures enter play on Day 3. The one with Deployment Time 0 can be given an intent from Day 4, its first Day on the battlefield. The one with Deployment Time 1 waits through Day 4, reaches 0 at Dawn of Day 5, and can be given an intent from Day 5.
+Deployment Time Is Special
+    • Its countdown and its OnDeploymentTimeComplete trigger ignore general Abilities Disabled states (like Muted or Exhausted) and other normal status rules.
+    • When Deployment Time runs out, OnDeploymentTimeComplete triggers and its effects are queued, even if the creature is in the Abilities Disabled state at that moment. This is the one exception to Abilities Disabled stopping passive abilities.
+    • Only an effect that explicitly mentions Deployment Time (its countdown, its completion, the OnDeploymentTimeComplete trigger, or the resulting actions) can change or stop this process.
+
+3.3 Creatures & Action Types
+
+These rules apply to both sides.
+
+• Creature Stats: Creatures have base Attack, Health (their maximum Health), and Speed, printed on their card.
+    • Base Stats: The printed values. They can be changed for the rest of a combat by Persistent Stat Modifications, or for as long as that creature stays on the battlefield by a Mandela Effect.
+    • Temporary Stat Modifications: Short-term changes added on top of the current base stats.
+    • How Stats Are Shown: FinalValue (CurrentBase + SumOfTemporaryModifiers). Persistent mods change CurrentBase.
+        • Example: A 3/3/3 creature gets a +1/+1/+1 Persistent Mod. Its base becomes 4/4/4 for the combat. If it then gets a +2/+2/+2 Temporary Mod, its stats are 6(4+2) / 6(4+2) / 6(4+2).
+    • Current Health (HP): Tracked separately; shows how much damage the creature has taken from its current maximum Health.
+    • Stacking: Multiple Temporary mods add together. Multiple Persistent mods add together. Both count toward the final stats.
+
+• Passive Abilities: Always "on" in the background.
+    • Automatic Triggering: Whenever their conditions are met, they ALWAYS trigger automatically. You don't decide anything when they trigger.
+    • When They Don't Trigger: When the creature is in the Abilities Disabled state (e.g., from Exhausted, Muted, Ostracised, or a consumed Brainwashed), or has Deployment Time (except OnDeploymentTimeComplete).
+    • What Happens When They Trigger: The effect becomes a 'Creature Ability Effect Action' and is added to the Action Queue.
+    • Targeting: Targets are set by the card's text (e.g., "Homing: the attacker," "Static: adjacent slots," "Homing: the creature that triggered this"). If the card says random, the game picks randomly. Nobody chooses targets for passive abilities when they trigger.
+    • No Opponent Choices: When a passive ability affects an enemy, the enemy doesn't get to choose how it applies. The outcome is fixed by the card and the game state.
+
+Creature Roles
+    • Support/Specialists: May have no standard Attack. Instead they have an Active Ability (deal damage, heal, apply a status) that their controller queues during Planning.
+        • Additional costs are paid instantly during Planning, like any other additional cost.
+        • Targets are chosen when the ability is queued, using Homing:, Fixed:, or Static:.
+        • Using the ability is that creature's one primary intent for the Day.
+        • They resolve as 'Creature Ability Effect Actions' in the Ability & Attack Layer, and are blocked by Deployment Time.
+    • Automated Units: May have no Attack. They usually have strong passive abilities that trigger every Day (e.g., "Each Dawn: Static: deal 1 damage to a random enemy slot"; "Each Dusk: grant 1 Armor to adjacent creatures").
+    • "Must Act" Creatures: Some creatures, or statuses like Bloodthirst, give penalties if their controller doesn't queue a certain action (like an Attack) for them.
+        • (Future Idea: a "Compelled Action" mechanic that queues a default action automatically. Not part of the rules yet.)
+
+• Attack Actions: Queued by the controller during Planning, as the creature's one primary intent.
+    • They resolve in the Ability & Attack Layer.
+    • Targets are chosen when the attack is queued, using Homing:, Fixed:, or Static:. Cards may restrict targets (e.g., only the slot directly in front, can't target Ghosted creatures).
+    • Attacks may target an empty enemy slot. An attack that resolves into an empty enemy slot hits the defending player (see 4.6 Combat, Damage & Targeting).
+    • Additional costs on an Attack are paid instantly during Planning.
+
+• Spell Actions: Played from hand (or from the AI's script), e.g., by dragging onto a target.
+    • Additional costs (including Requisites) are paid when the card is played.
+    • Targets are chosen when the card is played.
+    • The effect becomes a 'Spell Action' and resolves in the Spell Layer.
+    • Spells can cause movement, apply status effects, deal damage, heal, or change card draw.
+    • Ordering: Spell Actions have Priority (Action) 0 unless the card says otherwise. Spells have no Speed, so Spell Actions with the same Priority resolve in random order (both sides mixed). Future cards might give Spells their own Speed.
+
+• Movement Actions: Moving isn't a default action every creature has.
+    • Whenever a creature moves itself (from its own Active or Passive Ability, or because a Spell or ability tells it to move), it creates a Movement Action.
+    • Movement Actions resolve in the Movement Layer and are blocked by Cannot Act, Anchored, and Deployment Time.
+    • A self-chosen move is the creature's one primary intent for the Day.
+    • Pushing, pulling, or swapping a creature with an outside effect does not create a Movement Action for that creature, and ignores those restrictions.
+    • Changing sides through Recruitment or Conversion doesn't create a Movement Action either (see 5.4 Recruitment & Conversion).
+
+• Determinism: There are no random success/failure rolls. Randomness only happens where it's stated: cards that pick random targets, deck shuffling, the last step of tie-breaking, ties between Spell Actions, and which cards get revealed from a hand.
+    • Once an action starts resolving, its outcome is decided by its text and the game state. Neither side makes further choices, unless an Interference effect, a Watchdog, a Linked Meta-Action, or a state change during resolution says otherwise.
+
+3.4 Combats: Start, End & What Carries Over
+
+• Start of Combat: Both sides start at 20 Player Health. Your whole deck is shuffled and you draw an opening hand of 6 cards before Day 1.
+• End of Combat: The combat ends as soon as either side's Player Health reaches 0. If yours reached 0, the run ends.
+• What Carries Over to the Next Combat: Only your deck (all cards you own for the run, including newly gained and captured cards).
+• What Does NOT Carry Over: Everything else is reset: your hand, discard pile and battlefield are gathered back into your deck; all status effects, Temporary Stat Modifications, Persistent Stat Modifications and Mandela Effect changes are removed; Slot Effects are cleared; Player Health resets to 20. Cards go back to their printed stats.
+
+3.5 Cards, Hand & Deck
+
+Drawing Cards (Scheduled Draw)
+    • Regular Draw: You draw a base of 2 cards at Dawn of each Day. Besides the opening hand, this is the only time cards move from your deck to your hand.
+    • Draw Amount: Base Draw (2) + all draw modifiers gained during the previous Day.
+    • Minimum Draw: You always draw at least 1 card, as long as your deck (or your discard pile, through reshuffling) has one.
+    • No Mid-Day Draws: No effect lets you draw from your deck in the middle of a Day.
+
+Draw Manipulation (Changing Next Day's Draw)
+    • More cards: "Schedule X additional card draws for your next Day." This adds to a counter for the next Day's draw.
+    • Fewer cards: "Draw X fewer cards next Day" or "Scheduled draw reduced by X." This subtracts from the counter (down to the minimum of 1).
+    • All modifiers gained during a Day are added together and applied at the next Dawn.
+
+• Discard Pile: Where used Spells, destroyed Creatures, and discarded cards go.
+
+Discarding from Hand
+    As an Additional Cost
+        • The main way you discard cards is to pay an additional cost to play a card or use an ability. This applies to any card or ability with such a cost.
+        • Additional costs (including Requisites and "As an additional cost..." text) are always paid during Planning, instantly, when you play the card or queue the ability. They are never paid while an action is resolving.
+        • Pre-Check: The game first checks whether you can pay every mandatory additional cost.
+        • Payment: If you can, you pay immediately. For discard costs, you choose the cards and they go to the discard pile right away. The card's effect is then added to the queue.
+        • If You Can't Pay: The play is cancelled, the card stays in your hand, and you get a message explaining why (e.g., "Insufficient cards to discard," "No valid creature to sacrifice").
+        • Condition Costs: Some costs are conditions instead of payments (e.g., "you have fewer than X cards in hand"). They're checked the same way.
+    • Forced Discards Don't Exist: Effects that resolve from the queue can never make a player discard from hand. An effect that would traditionally say "Target player discards 1 card" instead says "Target player draws 1 fewer card next Day." Card effects change future resources, not your current hand, which keeps resolution flowing smoothly.
+    • Hand Size: The end-of-Dusk hand size check (below) is the only other way cards are discarded from hand.
+
+• Banish: Permanently removes a card (from hand, board, discard pile, or deck) for the rest of the run.
+    • A Banished creature is not "Destroyed": OnDied and "when a creature is Destroyed..." abilities don't trigger.
+    • OnLeaveBattlefield effects do trigger, with Banish as the reason.
+
+Card Lifecycle & Reshuffling
+    • A Spell is played -> its effect resolves -> the Spell card goes to the discard pile.
+    • A Creature is destroyed (0 HP or a "destroy" effect) or discarded from the battlefield -> it goes to the discard pile.
+    • When to Reshuffle: Only at Dawn, when your deck has fewer cards than you need to draw.
+    • How It Works: Draw what's left in your deck. Then shuffle your entire discard pile to form your new deck, and keep drawing until you've drawn the scheduled amount. If there still aren't enough cards, draw everything available. No cards are created if both deck and discard pile are empty.
+    • Reshuffled cards lose all their stat modifications (both Temporary and Persistent) and go back to printed stats.
+    • Going over your maximum hand size is only checked at the end of Dusk.
+
+Creature Stat Reset
+    • Entering the Battlefield: A creature enters with full Health, based on its current base stats (including any Persistent Stat Modifications the card still has).
+    • Leaving the Battlefield: Temporary Stat Modifications are lost, unless the effect moving it says otherwise. Persistent Stat Modifications stay on the card in hand or in the discard pile, so a Revived or replayed creature comes back with them.
+    • Reshuffle: Removes all stat modifications from the reshuffled cards.
+    • End of Combat: Removes all stat modifications from every card.
+    • Mandela Effect: Belongs to the creature on the battlefield, not to the card. It ends when that creature Leaves Play, and at the latest at the end of combat.
+    • Status Effects: Removed when a creature Leaves Play, unless the status or another effect says otherwise. Deployment Time is applied every time a creature enters play.
+
+• Requisites: Some powerful cards have conditions you must meet to play them or use their abilities. They are additional costs: pre-checked and paid instantly during Planning. If you can't meet one, you can't play the card or use the ability, and you get feedback.
+
+• Maximum Hand Size: 10 cards.
+    • Checked at the very end of Dusk, after "Each Dusk" triggers and status processing.
+    • If you have more than 10 cards then, you choose cards to discard down to 10.
+    • Going over 10 at any other moment is fine.
+
+• Enemy Resources: Most enemies don't have a hand. They act from their script. Bosses may have a hand-like mechanic (see 'Enemy Compendium').
+
+Revealing Cards from Your Hand
+    • Some enemy effects make you show ("reveal") cards from your hand. Enemy scripts and abilities can react to what they see.
+    • One-Time Look: The enemy sees the card's full details when the effect resolves. It isn't continuously visible.
+    • Stays in Hand: The revealed card stays in your hand.
+    • Which Cards: The effect says how many cards and may require a type (e.g., "reveal a Creature"). The game picks randomly among the matching cards.
+
+• Other Deck Interactions: Cards may let you look at, reorder, or move cards within your deck. These are defined on the cards themselves and are separate from Scheduled Draw and discards.
+
+3.6 The Day (Turn Structure)
+
+Both sides go through the same five phases every Day.
+
+• 1. Dawn
+    • You get your Scheduled Draw.
+    • Deployment Time counts down (skipping each creature's first Dawn).
+    • "Each Dawn" triggers (OnTurnStart), including OnDeploymentTimeComplete, are queued and resolve right away in a Dawn resolution pass, using the normal resolution order. Anything they cause (like a Burnout explosion) also resolves in this pass. You see the results before you plan.
+
+• 2. Planning
+    • The AI plans first, following its script. It queues 'Play Creature Actions', 'Movement Actions', 'Spell Actions', 'Attack Actions', and Active 'Creature Ability Effect Actions'. Its intents are shown to you, except for "???" parts and Concealed Actions.
+    Then you plan. For each creature you control on the battlefield, you can assign at most one primary intent
+        • A Movement Action,
+        • An Attack Action, OR
+        • An Active Creature Ability Effect Action (from the creature's card).
+    • Assigning a new intent replaces that creature's previous one for this Day.
+    • What's available depends on the creature's card, stats, and current state (e.g., no Attack stat means no Attack; Cannot Act means no intents at all).
+    • Card Plays: Separately from intents, you can play creature cards ('Play Creature Actions') and spell cards ('Spell Actions') from your hand.
+    • Costs: All additional costs, for both sides, are paid instantly during this phase.
+    • Passive Triggers: Planning doesn't stop passives from triggering if something meets their conditions, though most passives trigger from phase changes or resolving actions.
+
+• 3. Pre-Resolution Interference
+    • Before resolution starts, active Interference effects (Nullify, Reorder, Redirect) check the queue.
+    • Each queued action that meets an Interference condition is changed directly in the queue.
+
+• 4. Action Resolution
+    • The queue resolves in a main resolution pass, following 3.7 Resolution Order.
+    • Watchdogs can change actions just before they resolve.
+    • Passives that trigger during resolution add their actions to the queue.
+    • Linked Meta-Actions are processed as part of the action they're linked to.
+    • IMPORTANT: EFFECTS ARE DELAYED BY THE QUEUE.
+        • Playing a card, or meeting an ability's trigger condition, doesn't make anything happen yet.
+        • No creature appears, no status is applied, no damage is dealt, and no spell takes effect until its action resolves in a resolution pass (Dawn, main, or Dusk).
+        • Costs are paid up front during Planning; the effects wait for the queue.
+
+• 5. Dusk
+    • Turn History is updated for both sides.
+    • "Each Dusk" triggers (OnTurnEnd) are queued and resolve right away in a Dusk resolution pass.
+    • Status effect durations and stacks decay (see 5.2 Status Effects).
+    • Finally, the maximum hand size check happens.
+
+3.7 Resolution Order
+
+• Layers: Every resolution pass goes through four layers, always in this order:
+    1. Movement Layer: All 'Movement Actions'.
+    2. Summon Layer: All 'Play Creature Actions'.
+        • Summoning onto an Occupied Slot: If the target friendly slot is occupied, the creature already there is discarded (moved to its owner's discard pile). It is not destroyed: OnLeaveBattlefield triggers, but OnAboutToDie and OnDied don't, so it can't be saved. Then the new creature enters the slot. The same rule applies to multi-slot creatures.
+    3. Spell Layer: All 'Spell Actions'.
+    4. Ability & Attack Layer: All 'Creature Ability Effect Actions' (from passive or active abilities, plus traps and Slot Effects) and all 'Attack Actions'.
+
+• New Actions During a Pass: An action created during a pass joins the queue in its layer.
+    • If its layer is the current one or a later one, it resolves in this pass.
+    • If its layer has already finished, it waits. After the Ability & Attack Layer, if any actions are still waiting, the layers run again from the Movement Layer. This repeats until the queue is empty.
+    • Example: A Spell tells an enemy creature to move itself. The Movement Action it creates waits until the Ability & Attack Layer is done, then resolves when the layers loop back to Movement.
+    • Exception: OnDamaged and OnAboutToDie effects resolve immediately (see 3.9 Creature Death Sequence).
+    • (Implementation note: the engine should cap the number of loops to prevent infinite chains.)
+
+Order Inside a Layer
+    1. Priority (Action): higher first.
+    2. Speed of the creature that created the action: higher first. For a 'Play Creature Action', use the stats the creature will enter with. Spell Actions have no Speed and go straight to a random order.
+    3. Standard Tie-Breaking.
+
+Standard Tie-Breaking (when Priority and Speed are tied)
+    • Lowest current (Health + Armor) resolves first.
+    • If still tied, lowest base Attack resolves first.
+    • If still tied, random (a possible future Karma System might influence this).
+
+Changing Priority
+    • Priority Boost: A higher Priority (Action) resolves earlier in its layer, no matter the creature's Speed (like priority moves in Pokémon). It can be built into an action (e.g., "Priority Attack: +1 Priority").
+    • Priority Penalty: Effects can lower an action's priority (e.g., Priority -1), making it resolve later in its layer.
+    • Interference effects and Watchdogs can also change Priority (Action).
+    • Global Modifiers: Effects that change priority or ordering for a set time.
+        • Example ("Coordinated Advance"): Actions by creatures you control this Day and the next 3 Days get +1 Priority (Action).
+        • Example ("Temporal Distortion"): For X Days, Speed order is flipped: within each Priority level, lower Speed acts first. Ties still use Standard Tie-Breaking.
+
+• Queue Visibility: Besides Interference and Watchdogs, some effects only affect what each side can see of the queue (e.g., Intelligence revealing pending actions).
+
+3.8 State Changes During Resolution
+
+When a creature's state changes during resolution (e.g., it gets Muted, Cannot Act, or a Watchdog starts watching it), the change immediately affects its pending actions and how other pending actions interact with it.
+
+• Disabling Statuses: States like Abilities Disabled (e.g., from Muted) or Cannot Act can cancel that creature's pending actions right before they would resolve. Statuses that make a creature untargetable (like Ostracised) can make actions aimed at it fizzle. Each status's exact behavior is in the 'Status Effects Compendium'.
+• Watchdogs: Once active, they check every matching action as it comes up to resolve.
+• Validity Check: Right before each action resolves, the game checks whether it is still valid, whether its target is still valid, and whether it should be cancelled, based on the current state.
+
+3.9 Creature Death Sequence
+
+• Retaliatory Triggers: OnDamaged, OnAboutToDie, and OnDied. They are never cancelled by their creature's death.
+    • OnDamaged and OnAboutToDie effects resolve immediately, interrupting the normal resolution order.
+    • OnDied effects are queued normally (Ability & Attack Layer).
+
+• The Sequence: When a creature takes damage, or an effect tries to destroy it:
+    1. Damage is applied (Armor first, then Health).
+    2. OnDamaged effects resolve, whether or not the damage was lethal. They can affect other things before the creature is removed. (Skipped if no damage was dealt.)
+    3. Lethal Check: If its Health is 0 or less, or a destroy effect targeted it, the creature is marked for destruction.
+    4. Cancel Pending Actions: All of its other pending actions that it created before being marked (Attacks, Movement Actions, Active Abilities, earlier passive triggers, and non-retaliatory status effects) are removed from the queue.
+    5. OnAboutToDie effects resolve. They might save the creature.
+    6. Destruction: If still marked, the creature is destroyed and moved to its owner's discard pile (even if another player controlled it). Its OnDied effects are queued.
+
+3.10 Everything Goes Through the Queue
+
+• No card effect happens instantly unless it is a Meta-Action (see 3.11 Instant Effects).
+• Every effect from a Spell or creature ability (active or passive), including movement, becomes an action in the queue: Play Creature Action, Movement Action, Spell Action, Creature Ability Effect Action, or Attack Action.
+• Every attack is an Attack Action.
+• Every triggered Trap, Strategic Disclosure, or Slot Effect is queued as a Creature Ability Effect Action.
+• Paying costs, replacing Slot Effects, and drawing at Dawn are not queued actions.
+
+3.11 Instant Effects (Meta-Actions)
+
+Meta-Actions are game state changes that happen instantly instead of going through the queue.
+
+• Slot Effect Replacement: When a new Slot Effect is applied to a slot that already has one, the old one is removed immediately and the new one takes its place.
+
+• Paying Additional Costs: Discards, sacrifices, Requisites, and condition costs are paid during Planning, before the card's effect is added to the queue.
+
+• "1 Trigger" Slot Effects: When a "1 Trigger" Slot Effect's condition is met, its effect is queued and the Slot Effect is immediately removed from the slot, so it can't trigger twice before its effect resolves.
+
+Watchdogs
+    • What They Are: Temporary watchers set up by certain effects (e.g., the Spell "Mental Breakdown"), linked to a creature, condition, or action type.
+    • Activation: A Watchdog becomes active when the effect that creates it resolves.
+    • What They Do: For the rest of its duration (e.g., "for the rest of this Day"), the Watchdog checks every action that is about to resolve. If the action matches its condition, the Watchdog immediately changes it (its target, its Priority (Action), or cancels it, depending on the Watchdog) before it resolves.
+    • Earlier Actions: A Watchdog also affects actions that were queued before it became active, as long as they haven't resolved yet.
+    • Difference from Interference: Interference changes actions before resolution starts, in the Pre-Resolution Interference Phase. Watchdogs change actions during resolution, just as each action is about to happen.
+    Example
+        1. During Planning, the AI queues Spell S, which puts a "Redirect Attack Watchdog" on your Creature C for this Day.
+        2. You queue an Attack Action from Creature C targeting Enemy Creature O.
+        3. During resolution, Spell S resolves in the Spell Layer. The Watchdog is now active on Creature C.
+        4. In the Ability & Attack Layer, Creature C's attack comes up. The Watchdog sees it and redirects it to a random creature.
+        5. Creature C's attack resolves against the new target.
+
+Linked Meta-Actions
+    • What They Are: Follow-up effects tied to an action's success, usually phrased "immediately gains [Status X]" or "then [do Y]".
+    • How They Work: If the main action resolves successfully, the follow-up is processed immediately as part of that same action. It doesn't go into the queue.
+    • Dependency: If the main action fails (e.g., it's Nullified, or its target became invalid), the follow-up doesn't happen.
+    • Example: "Homing: Deal 2 damage to target creature. If this destroys the creature, its controller draws 1 fewer card next Day." The draw reduction only happens if the damage destroys the creature. Likewise, "immediately gains [Status X]" after a control change (e.g., Taqiyya Infiltrator) is applied as part of the control change itself.
+
+• Subscriptions: Using a Subscription during Planning resolves immediately, without the queue.
+• Consumable Items: (Experimental, to be defined.)
+
+
+4. GAMEPLAY STRATEGIES
+
+4.1 Information Warfare
+
+• Use Intelligence to understand enemy card abilities, predict scripted actions, reveal "???" intents, find weaknesses, and avoid enemy Traps.
+• Use Interference against enemy queued actions. Enemies may have card-based Interference too.
+
+4.2 Board Control
+
+Movement (Logistics)
+    • Use abilities or Spells to move creatures (yours or the enemy's) or swap their positions.
+    • A creature moving itself creates a Movement Action; outside pushes, pulls, and swaps don't.
+    • Movement helps you line up attacks, blocks, and adjacency bonuses, and breaks enemy formations.
+    • Tactics include "Hit and Run" (attack, then reposition) and Positional Relays (buffs triggered by moving into a slot that just became empty).
+
+Movement Restriction
+    • Use Heavy, Anchored (the creature can't make its own Movement Actions), abilities that stop Movement Actions, or Slot Effects to lock down enemies or protect your creatures.
+
+• Slot Effects (Environmental Hazards): Ongoing or triggered conditions on battlefield slots. Each one is defined in the 'Slot Effects Compendium' (e.g., Landmine, Scorched Earth). Whoever applied a Slot Effect controls it.
+    • One Per Slot: A new Slot Effect immediately replaces the old one.
+    Visibility
+        • Visible Slot Effects: Both sides can see them and know what they are.
+        • Hidden Slot Effects: The AI doesn't know they exist until they trigger (e.g., an enemy creature moves onto a hidden Landmine) or are revealed (e.g., by an "Inspect Slot" Intelligence action). A hidden Slot Effect usually reveals itself when it triggers.
+    • Triggers: Defined per Slot Effect, using events from the 'Trigger Events List'. Common ones: OnEnterSlot, OnBeforeLeaveSlot, "Each Dawn" or "Each Dusk" while occupied, or a continuous effect while a creature is in the slot.
+    • "1 Trigger" Effects: Used up the moment their effect is queued.
+    • What They Do: Deal damage, apply status effects to creatures in the slot, change stats while on the slot, change movement rules (e.g., make moving out harder or impossible), or restrict actions (e.g., a "Jamming Field" stops Spells from targeting the slot).
+    • Removing Slot Effects: Effects with the Cleanse (SlotEffect) keyword remove them. A hidden Slot Effect cleansed before it triggers is removed without its effect and without being revealed to the AI (unless the cleanse itself reveals it). The 'Slot Effects Compendium' says which Slot Effects can be cleansed.
+
+• Location (Weather): Cards that apply global modifiers to the whole battlefield, for a set number of Days or until another Location card replaces them.
+
+• Flooding: Overwhelming the board with many weak or token creatures.
+
+• Recruitment / Conversion: Taking control of enemy creatures, mainly to capture their cards (see 5.4 Recruitment & Conversion).
+
+4.3 Buffs & Protection
+
+• Setup: Effects that raise Attack, Health, or Speed of your creatures. Usually Temporary Stat Modifications; less often, and at a higher cost, Persistent Stat Modifications.
+• Survivability: Healing, adding Armor, or redirecting attacks.
+• Immunity/Protection: Immunity to specific negative effects.
+• Cleansing: Removing negative status effects or Temporary Stat Modifications from your creatures (Cleanse), or Slot Effects from slots (Cleanse (SlotEffect)). Standard Cleanse effects don't remove Persistent Stat Modifications.
+
+4.4 Disruption & Control
+
+• Status Effects: Applying status effects (from the 'Status Effects Compendium') to enemy or friendly creatures.
+• Red Tape: Delaying an opponent's actions, lowering their Priority (Action), or adding Days to a creature's Deployment Time.
+• Disable: Shutting down key enemy functions, e.g., with Exhausted.
+• Changing Queued Actions: Two tools can change actions that are already queued:
+    Interference (before resolution)
+        • Set up in advance by abilities or effects. Types: Nullify, Reorder, Redirect. The trigger conditions are on the cards that create them.
+        • They trigger during the Pre-Resolution Interference Phase and change matching queued actions.
+        • UI: When Interference changes an action, the UI must clearly show it.
+    • Watchdogs (during resolution): Effects like "Mental Breakdown" change matching actions just as they're about to resolve, including actions queued earlier in the Day.
+• Recruitment / Conversion / Mind Control: Taking control of an enemy creature or capturing its card (see 5.4 Recruitment & Conversion).
+
+4.5 Recursion & Recovery
+
+• Revive: Returns a creature from your discard pile to an empty friendly slot. It gets Deployment Time like any creature entering play. It keeps any Persistent Stat Modifications the card still has.
+• Return to Hand (from Battlefield): Moves a creature from its slot to its owner's hand. It loses Temporary Stat Modifications (unless the effect says otherwise) and keeps Persistent Stat Modifications.
+• Return to Hand (from Discard): Moves a card from your discard pile to your hand. It keeps any Persistent Stat Modifications it has.
+
+4.6 Combat, Damage & Targeting
+
+• Combat Damage Requires an Attack: Creatures only deal combat damage with an Attack Action. There's no automatic counter-damage unless an ability grants it (OnDamaged triggers play a similar role).
+• Direct Damage: Reduces a creature's Health, or a Player's Health if the effect specifically targets a Player.
+• Chain/Spread Damage: Damage that hits several different targets.
+• Armor: Damage, including recoil damage, hits Armor first.
+• Life Drain / Siphoning: Dealing damage also heals the source or its controller.
+
+• Targeting Keywords: Cards say how they target. Effects that target creatures use Homing unless the card says otherwise.
+    • Homing: Locks onto a creature and follows it if it moves. If the creature Leaves Play, the effect is aimed at the slot it was last in. If the effect can only apply to a creature (e.g., "gains X status"), it fizzles when that slot is empty. Against a Concealed enemy creature, Homing behaves like Fixed that one time.
+    • Fixed: Aims at a slot, but only ever affects the creature in it when the action resolves. Doesn't follow creatures. Fizzles if the slot is empty or the creature is an invalid target.
+    • Static: Aims at the slot itself. Can change the slot (e.g., place a Slot Effect) and/or affect the creature in it when the action resolves. Doesn't follow creatures. The creature part fizzles if the slot is empty.
+
+• Damage to Slots & Occupants: Damage aimed at a slot hits the creature in it. If that creature is destroyed, leftover damage from that hit is lost. If the slot is empty, the damage fizzles, with one exception below.
+
+• Attacking Empty Slots: If an Attack Action resolves into an empty enemy slot (whatever its targeting keyword), the defending player loses Player Health equal to the attacker's current Attack. This works both ways: enemy attacks into your empty slots hit you. Only Attack Actions do this; damage from Spells and abilities into an empty slot still fizzles.
+
+• Targeting Restrictions: Many cards have limits (e.g., only the slot in front, only Exhausted creatures). These are on the individual cards.
+
+
+5. SPECIAL SYSTEMS
+
+5.1 Traps & Strategic Disclosures
+
+Effects tied to actions or creatures that trigger under certain conditions, usually around information warfare. When one triggers, its effect is queued as a 'Creature Ability Effect Action'.
+• Traps (Counter-Intelligence) are bad for whoever triggers them. Strategic Disclosures are good for you.
+
+• Your Traps: Cards that set traps, e.g., hidden Slot Effects or creature abilities that react to enemy actions.
+• Enemy Traps: Abilities on enemy cards (especially bosses and elites) that hurt you when you use certain Intelligence actions on them, or interact with them in ways their card or script defines.
+• Strategic Disclosures: Benefits for you (e.g., a temporary combat advantage, Bestiary info, bonus currency (experimental, to be defined)) when you reveal significant hidden enemy information, "???" intents, or weaknesses.
+
+What Triggers "On Being Revealed" Effects (the OnRevealedByIntelligence trigger):
+• Your Intelligence action reveals a hidden "???" enemy intent or a hidden enemy card detail.
+• You apply the Revealed status to an enemy creature that has the Undercover ability, the Concealed status, or a hidden ability with an "On Being Revealed" characteristic.
+
+5.2 Status Effects
+
+Status effects are temporary or ongoing conditions on creatures that change their behavior or stats. (Conditions on slots are Slot Effects, not status effects.) Every status effect is defined in the 'Status Effects Compendium', which says whether it can be cleansed, how it interacts with Dawn and Dusk, how it decays, and which faction owns it. Each faction owns at most 3 statuses; a small Neutral set (Deployment Time, Revealed, Concealed, Exposed, Muted, Anchored) is open to every faction. This GDD always uses their exact names. New status effects need design approval and must be added to the compendium before use.
+
+Core Principles:
+
+• Decay Timing: By default, statuses with stacks lose 1 stack Each Dusk. A status never decays at the first decay point after it's applied. So a status applied on Day X first decays at the Dusk of Day X+1, and a status that decays at Dawn (like Deployment Time) first decays at the Dawn of Day X+2. This keeps every status active for at least one full Day. A status's compendium entry or the effect applying it can override this.
+• Fixed_Stacks: A status marked Fixed_Stacks only gets its stack count set when applied or refreshed, and only changes through its own decay or internal rules (like evolving or being consumed). Other effects can't add or remove its stacks unless they specifically say they can (very rare).
+• "Upon Application" Is Implied: A status's description lists what it does immediately when applied (when the action applying it resolves), followed by ongoing behavior. "Upon application" is left out to keep descriptions short.
+• Effect on Queued Actions: Applying a disabling status (like Muted or one that causes Cannot Act) can immediately cancel that creature's pending actions (see 3.8 State Changes During Resolution). The compendium entry for each such status should say so.
+Statuses and Lethal Damage
+    • A status that is part of the same action as lethal damage usually fails to apply, because the creature is marked for destruction first. Statuses applied by OnDamaged or OnAboutToDie effects do apply, since those resolve before destruction.
+    • A status already on a creature that deals lethal damage to it (like Earworm's damage tick) still resolves that damage. Its follow-up effects that Day (like Earworm's spread) are cancelled, because the creature is gone.
+• Deployment Time Is Special: Its countdown and OnDeploymentTimeComplete trigger ignore Abilities Disabled and normal status rules (see 3.2 Tempo & Deployment Time).
+• Exposed from Exhausted: Its duration is set by the source applying Exhausted, or defaults to its own independent duration (e.g., Indefinite). It isn't tied to Exhausted's duration.
+• Brainwashed: Changes the creature's controller (never its owner) at the Dusk of Day X+2, when applied on Day X. The creature is placed on its new controller's side using the Changing Sides rules in 5.4 Recruitment & Conversion.
+
+5.3 Trigger Events
+
+The game events that can trigger passive abilities and other effects are defined in the 'Trigger Events List'. Many triggers carry context (like who dealt the damage, or which status was applied) that abilities can use. Card text and this GDD write OnTurnStart as "Each Dawn" and OnTurnEnd as "Each Dusk".
+
+5.4 Recruitment & Conversion
+
+Two ways to take an enemy creature: Recruitment (temporary control, possible card capture) and Conversion (immediate card capture). Both sides can use them, but only you capture cards.
+
+• Recruitment (used by you): You control the enemy creature for the rest of the combat. If it survives the combat (and meets any extra conditions on the card, like dealing damage to an enemy), its card is "Captured": a copy is guaranteed to be one of your post-combat card reward options.
+• Conversion (used by you): Usually rarer or more expensive than Recruitment. The enemy creature is immediately Banished from the enemy side, and a copy of its card is added to your discard pile for the rest of the run.
+• Used by the AI: Both effects make the AI take control of your creature for the rest of the combat. Nothing is captured or Banished; your card stays in your deck for the next combat.
+
+• Who Can Be Captured: Most standard enemy creatures. Bosses and some elites (listed in the 'Enemy Compendium') may be immune or have special capture conditions.
+• The Captured Card: An exact copy of the creature's card, with its printed stats and abilities.
+• Balancing: Recruitment and Conversion are powerful because they gain you cards. They're balanced through cost, targeting limits, and rarity.
+
+• Changing Sides: These rules apply to every control change: Recruitment, Conversion used by the AI, Brainwashed, and any card that changes control (unless the card says otherwise).
+    • Placement: The creature is always placed in the slot(s) directly opposite the slot(s) it occupied. Any creatures already there are discarded to their owners' discard piles, following the Summoning onto an Occupied Slot rule.
+    • Not Movement: Changing sides happens as part of the effect that changes control, when it resolves. It doesn't create a Movement Action, so it ignores movement restrictions like Cannot Act, Heavy, or the multi-slot immobility rule.
+    • Controller vs. Owner: The controller changes; the owner never does. If the creature leaves the battlefield later, its card goes to its owner's hand or discard pile.
+    • What the Creature Keeps: Current Health, Armor, status effects (Doomed follows its own compendium rules), current base stats (including Persistent Stat Modifications), and current Deployment Time. Temporary Stat Modifications are kept or lost according to their own rules or the Recruitment card.
+    • Queued Actions: All actions its previous controller had queued for it this Day are cancelled. Its new controller can give it intents from the next Day's Planning (or immediately, in the rare case the card allows it).
+
+5.5 Multi-Slot Creatures
+
+Some creatures (on either side) take up two adjacent friendly slots. Their card says so.
+
+Summoning
+    • Choose any two adjacent friendly slots.
+    • When the 'Play Creature Action' resolves, any creature in those slots is discarded, following the Summoning onto an Occupied Slot rule. The multi-slot creature then takes both slots.
+• Immovable: Multi-slot creatures can never move or be moved: no Movement Actions, pushes, pulls, swaps, or any other effect. This can't be removed or overridden. (This is only the immobility part of Heavy; they don't get its other effects.) Changing sides is not movement and still works.
+• One Creature: They count as a single creature for targeting, status effects, and actions.
+• Two Slots: They take up both slots for adjacency (e.g., "adjacent creatures" abilities) and for blocking movement. An effect aimed at either slot affects the creature.
+• Leaving Play: Both slots become empty.
+
+5.6 Mandela Effect
+
+A rare, one-time global event, from a Spell, a creature ability, or a unique boss ability. It is queued like any other action (Spell Layer if from a Spell, Ability & Attack Layer if from an ability). When it resolves:
+
+• Who It Affects: Every creature on the battlefield (both sides) at that exact moment.
+• Stat Change: Changes one or more base stats of those creatures (e.g., +X Attack, set Health to Y), as described by the card or ability.
+• How Long It Lasts: As long as that creature stays on the battlefield. It belongs to the creature on the board, not to its card, and is separate from Persistent Stat Modifications.
+• New Summons Aren't Affected: Creatures that enter play afterwards use their normal stats.
+• Leaving Play: If an affected creature Leaves Play and later comes back (e.g., Revived or replayed), it returns without the Mandela change. A card can override this only if it says so explicitly (very rare).
+• End of Combat: Since the battlefield doesn't carry over, every Mandela change ends with the combat.
+
+5.7 Prophecy
+
+A Myth mechanic: an effect announced now that happens later, in plain sight.
+
+• Creation: A Prophecy is created when the action that makes it resolves. It has a countdown in Days and an effect, both shown openly to both sides. Prophecies are never concealed.
+• Fulfillment: A Prophecy created on Day X with a countdown of N is fulfilled at Dawn of Day X+N. Its effect is then queued and resolves in the Dawn resolution pass, in the same layer as the action that created it.
+• Targets: Follow the card's targeting keyword when the Prophecy is fulfilled. A Homing target chosen at creation still follows that creature; if it has left play, the effect is aimed at the slot it was last in.
+• Independent: A Prophecy stays even if the creature that made it leaves play.
+• Stopping One: Only effects that explicitly mention Prophecies can delay, change or remove them. The usual counterplay is to see it coming and get out of the way.
+• Example: "Prophecy (2 Days): Static: deal 4 damage to the slot opposite this creature." Played on Day 3, it hits at Dawn of Day 5, so the opponent has a full Day to move the threatened creature.
+
+
+6. DESIGN PHILOSOPHY & BALANCING
+
+6.1 Tone
+
 The game is intentionally cynical, funny, and lighthearted. It satirizes modern absurdities, bureaucracy, internet culture, and common myth tropes.
 
-**VI.B. Balancing Focus**
-Getting the balance right is extremely important. This will require ongoing playtesting, looking at data, and making changes.
-1.  **Numerical Balance:**
-    *   We'll start with conservative numbers for stats, damage, healing, `Armor`, and durations.
-    *   Player Health will be set at a value that allows for meaningful gameplay before defeat (e.g., 10-20 HP, which can be changed by Relics/Stocks).
-    *   Stat modifications (`Temporary` and `Persistent`) should be costed appropriately. `Persistent Stat Modifications` should generally be more expensive or harder to get because they last for the whole combat and are harder to remove with standard cleanses.
+6.2 Balancing
+
+Getting the balance right is extremely important. It will need ongoing playtesting, data, and adjustments.
+Numerical Balance
+    • Start with conservative numbers for stats, damage, healing, Armor, and durations.
+    • Player Health starts at 20 for both sides by default (Relics, Stocks, or specific encounters may change it).
+    • Cost stat modifications appropriately. Persistent Stat Modifications should be more expensive or harder to get, because they last the whole combat and standard cleanses don't remove them.

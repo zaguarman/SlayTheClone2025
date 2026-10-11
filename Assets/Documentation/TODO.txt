@@ -1,40 +1,38 @@
 Already Implemented but keep for history:
 
 Slot status effect archetypes (some slot status effects are invisible to the player until triggered, only one active at a time, some cant be overriden)
-** Scorched Earth: creature on this slot cant trigger passive abilities
-** Landmine: onEnter apply Damage to the first creature entering it.
-** onLeave: Creature cant leave slot for x turns (this triggers when trying to leave)
-** onEnter: creature gets one of the minor creature status effects (predetermined or random, long lasting or just once) Make all variants of this.
-** TurnEnd: creature gets damage over time when staying in a slot. (like a hazardous environment)
-** onDeployCreature(spawn): return creature to owners hand 
-** Force Field: Negate all damage done to the creature or slot for x Turns.
-** OnEnter: cleanse or deny next status effect (blessed)
-** Creature Damage output increased by 1 while active 
-** Creature Damage received reduced by 1 while active
-** Develop some more options
-
+• Scorched Earth: creature on this slot cant trigger passive abilities
+• Landmine: onEnter apply Damage to the first creature entering it.
+• onLeave: Creature cant leave slot for x turns (this triggers when trying to leave)
+• onEnter: creature gets one of the minor creature status effects (predetermined or random, long lasting or just once) Make all variants of this.
+• TurnEnd: creature gets damage over time when staying in a slot. (like a hazardous environment)
+• onDeployCreature(spawn): return creature to owners hand
+• Force Field: Negate all damage done to the creature or slot for x Turns.
+• OnEnter: cleanse or deny next status effect (blessed)
+• Creature Damage output increased by 1 while active
+• Creature Damage received reduced by 1 while active
+• Develop some more options
 
 
 Not Implemented yet:
 
 
 Abilities:
-** Strong Leadership: Speeds deployment time from friendly creatures but deals damage to nearby creatures.
-** Hangry: If any attack drop by any mean is applied to this creature ignore it and double its attack instead. Only once, doesnt reset on ressurect. Ability disabled if attack is no longer dropped.
-** Heretic: +1 attack when damage received, -1 attack when healed 
-** Swap ability with enemy creature. Always single target.
-** Cant be status affected, neither raise stats
-** OnDeployed: Remove all status effects from friendly creatures
-** Feathered: Dont trigger on enter slot status effects
-** Defuser: Disable all traps and remove status effects on enter.
-** Minesweeper: Can't be targeted by homing attacks. Homing attacks damage is negated.
-** Zealot: Adjacent friendly creatures are damaged for 1 health every turn. Damages player owning it for 2 health every turn. 
-** Pusher: When moving towards a slot with a friendly creature can push them and occupy the slot (if the next slot is available) Triggers slot effects.
+• Strong Leadership: Speeds deployment time from friendly creatures but deals damage to nearby creatures.
+• Hangry: If any attack drop by any mean is applied to this creature ignore it and double its attack instead. Only once, doesnt reset on ressurect. Ability disabled if attack is no longer dropped.
+• Heretic: +1 attack when damage received, -1 attack when healed
+• Swap ability with enemy creature. Always single target.
+• Cant be status affected, neither raise stats
+• OnDeployed: Remove all status effects from friendly creatures
+• Feathered: Dont trigger on enter slot status effects
+• Defuser: Disable all traps and remove status effects on enter.
+• Minesweeper: Can't be targeted by homing attacks. Homing attacks damage is negated.
+• Zealot: Adjacent friendly creatures are damaged for 1 health every turn. Damages player owning it for 2 health every turn.
+• Pusher: When moving towards a slot with a friendly creature can push them and occupy the slot (if the next slot is available) Triggers slot effects.
 
 
 Status Effects:
 Audited (X turns): This creature cannot have its base stats (Attack, Health, Speed as printed on the card) increased by friendly effects. If a friendly effect attempts to increase one of its base stats, its controller must discard 1 random card from their hand instead. If they cannot discard, this creature takes 2 damage. Lasts X turns.
-
 
 
 Update document to include:
@@ -49,8 +47,6 @@ Update document to include:
 - Creatures that trigger effects on deploy
 
 
-
-
 - Ability: Discard card to draw a new one
 - Cards that come back at hand if condition is met
 - Clank: When 2 creatures attack eachother simultaneously and the damage difference is 3 or less both attacks are discarded.
@@ -62,12 +58,11 @@ Cards:
 - Spell that removes all cards left on the deck. You will be using the discard shuffled back into the deck after this for drawing. This is intended to reduce the number of cards on purpose to keep the best ones and cycle through only that ones.
 
 
-
 Gameplay:
 
 Creatures evolve over time in the board, the deployment time tells how much turns do you need to go to the next step
 On every evolution the creature unlocks more abilities
-this abilities can have side effects like, get status effect X or gain +5/+5/+0 
+this abilities can have side effects like, get status effect X or gain +5/+5/+0
 
 Example would be Snail; 0/1/1; Deployment time 2 (2 turns for each step); Step 1: Creature gains Spikes (Return x damage to attacker); Step 2: creature cleanses status effects; creature gains status effect Doomed.
 
@@ -84,16 +79,13 @@ Continuous effects: Use layering (MTG) for actions priority determination
 	A Set P/S/T to a specific value
 	B Modify P/S/T using variables/conditions
 	C Switch P/S/T effects
-	
+
 
 Arquetipo para criatura:
 Una criatura con un temporizador para detonar una accion negativa para su controlador
 El temporizador es muted, la criatura empieza con 3 stacks de muted
 Cuando se le termina activa su habilidad que es negativa para el usuario controlando la criatura
 
-
-
-Rename Digital Society -> DigiSoc
 
 Magic bounce ability
 
@@ -103,7 +95,7 @@ Some status effects are healed on move, or make the return to hand more prominen
 
 Reduce the number of weird status effects
 
-Keep Doomed, Heavy, 
+Keep Doomed, Heavy,
 
 Add/Create Burning, Anxious
 
@@ -112,19 +104,17 @@ Rework Bored
 Add status effect that denies sacrificing a creature (empowered)
 
 
-The main strategy has to be something like create a creature powerhouse by sacrificing and using other creatures to heal/raise stats from the powerhouse. 
+The main strategy has to be something like create a creature powerhouse by sacrificing and using other creatures to heal/raise stats from the powerhouse.
 
 The enemy has to do the same while sabotaging your plans, by targeting that creatures you want to sacrifice and kill them first, maybe adding a status effect to your powerhouse creature.
 
-Make the game have limited resources making it impossible to create 2 powerhouses at the same time making the player decide what he wants to do next. 
+Make the game have limited resources making it impossible to create 2 powerhouses at the same time making the player decide what he wants to do next.
 
 The sacrifice power giving potential can be depending on the sacrificed creature stats.
 
 Add a sacrifice value stat or abilities that add up to the sacrificial value for a cheaper price.
 
 Cards that can only be played after certain type of card
-
-
 
 
 Destruction is mostly tempo negative. You use resources to deny something.
@@ -136,22 +126,12 @@ Equalizer: Symetrical destruction that tries to even out the battlefield.
 Burst: Destroy everything, useful against decks that have a high tempo at the beginning and put more than you on the table.
 
 
-
-
-
 Draw card archetypes:
-Raw: Just draw cards, no side effects, only cost. 
+Raw: Just draw cards, no side effects, only cost.
 Impulse: Draw cards for 1 turn, those cards will be discarded automatically next turn.
 Filtering: Draw X and discard the same cards. Improves the quality of the hand.
 Trigger-based: When something predetermined happens draw X cards.
 Burst: Kind of a mulligan, high cost high reward reshuffle of cards.
-
-
-
-
-
-
-
 
 
 The endgame is trying to create a sacrifice, power-up, draw loop that overwhelms the enemy.
@@ -190,13 +170,8 @@ Trap creature in front ability (cant move until this creature dies or moves some
 Taunt alike ability/status effect that negates stats changes for the targeted creature
 
 
-
-
-
-
-Change the damage to be like a tug of war, when damaging the opponent you win a better position 
+Change the damage to be like a tug of war, when damaging the opponent you win a better position
 Use the mechanic like in supersmash bros where you have second chances before you die, you have to do a fatal blow to your opponent to cash in the victory
-
 
 
 Rename slots to tiles
@@ -210,7 +185,6 @@ The creatures on the back tiles can be brought up to the front with some spells 
 Some characters have 3 tiles on the front and only 2 on the back.
 
 Some characters do have 3 tiles on the front and 3 on the back.
-
 
 
 The game stages of a match should have the following structure
@@ -230,8 +204,7 @@ Some cards will be given only at the Develop stage, some at the Damage, and some
 Some cards are compatible with more than one game state
 
 
-
-Legendary Creatures: 
+Legendary Creatures:
 
 Information is power. The more information gathered while this creature is on play the stronger it becomes.
 Memento mori: The more creatures sacrificed the more power this creature becomes.
@@ -251,3 +224,7 @@ Flesh Wall: Death is not an end, but a resource. This creature gains power each 
 Void Eater: A rift in reality that feeds on nonexistence. This creature gains immense, permanent power each time any card is Banished from the game, growing stronger as it erases its foes from the run entirely.
 The Juggernaut: Its power is its impenetrable defense. This creature's Attack and other abilities scale based on the total amount of Armor currently on it or on all friendly creatures.
 Meteorite: The direct damage done on any creature powers up this creature.
+
+Code: Owner vs. Controller
+- The GDD now defines two terms: Owner (the player whose deck the card was in at the start of combat) and Controller (the player controlling the creature on the battlefield right now).
+- Creature.Owner in the scripts currently acts as the controller. When Recruitment / Brainwashed / AI Conversion are implemented, add a separate Controller: use Controller for targeting, combat and board side; use Owner for where the card goes when it leaves play (hand, discard pile).

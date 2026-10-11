@@ -154,6 +154,12 @@ namespace SlayTheClone {
         public bool CanAct(ICreature creature) {
             if (creature == null || creature.IsDead) return false;
 
+            // A creature that left the board (replaced, or killed and discarded) has nothing left to do this turn
+            if (creature.Slot == null) {
+                Log($"{creature.Name} can't act: it is no longer on the board.", LogTag.Creatures | LogTag.Actions);
+                return false;
+            }
+
             if (!creature.IsOperative) {
                 Log($"{creature.Name} can't act yet: operative in {creature.TurnsUntilOperative} turn(s).", LogTag.Creatures | LogTag.Actions);
                 return false;
