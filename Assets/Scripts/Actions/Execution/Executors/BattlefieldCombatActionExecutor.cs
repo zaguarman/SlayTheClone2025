@@ -28,7 +28,6 @@ namespace SlayTheClone {
             }
 
             // 1. Primary damage: the creature in the slot, or the opponent when the slot is empty
-            int primaryDamage = attacker.Attack;
             ITarget primaryTarget = null;
             if (targetSlot != null) {
                 primaryTarget = targetSlot.IsOccupied() ? (ITarget)targetSlot.OccupyingCreature : attacker.Owner?.Opponent;
@@ -39,7 +38,7 @@ namespace SlayTheClone {
             }
 
             Log($"Executor: Creature {attacker.Name} attacking {DescribeTarget(primaryTarget)}", LogTag.Combat);
-            QueueCombatDamage(actionsQueue, primaryTarget, primaryDamage, attacker);
+            QueueCombatDamage(actionsQueue, primaryTarget, attacker);
 
             // 2. The attacker's chain and spread add-ons
             EffectResolver.QueueAttackEffects(attacker, primaryTarget, actionsQueue);
@@ -47,11 +46,12 @@ namespace SlayTheClone {
             Log($"Executed BattlefieldCombatAction via Executor for {attacker.Name}", LogTag.Actions | LogTag.Combat);
         }
 
-        private static void QueueCombatDamage(IActionsQueue actionsQueue, ITarget target, int damage, ICreature attacker) {
-            var damageAction = TargetedActions.Damage(target, damage, attacker, isCombatDamage: true);
+        // The hit deals the attacker's attack as it is when the hit lands: a buff or debuff that lands in between counts
+        private static void QueueCombatDamage(IActionsQueue actionsQueue, ITarget target, ICreature attacker) {
+            var damageAction = TargetedActions.AttackersHit(target, attacker);
             if (damageAction == null) return;
 
-            Log($"Executor: Queueing {damageAction.GetType().Name}: Target={DescribeTarget(target)}, Damage={damage}, Attacker={attacker.Name}", LogTag.Effects | LogTag.Combat | LogTag.Actions);
+            Log($"Executor: Queueing {damageAction}", LogTag.Effects | LogTag.Combat | LogTag.Actions);
             actionsQueue.AddAction(damageAction);
         }
 

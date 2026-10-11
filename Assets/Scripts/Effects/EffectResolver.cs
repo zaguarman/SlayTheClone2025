@@ -50,9 +50,13 @@ namespace SlayTheClone {
                 if (action.targetModifier.HasFlag(TargetModifier.Chained)) {
                     QueueChain(attacker, primaryTarget, damage, queue);
                 }
-                else if (damage > 0) {
+                else {
                     foreach (var target in TargetingSystem.GetAdditionalTargets(attacker.Owner, primaryTarget, action.targetModifier)) {
-                        QueueCombatDamage(target, damage, attacker, queue);
+                        // Without a value the spread hits like the attack itself, for the attack the attacker has when it lands
+                        var hit = action.value > 0
+                            ? TargetedActions.Damage(target, action.value, attacker, isCombatDamage: true)
+                            : TargetedActions.AttackersHit(target, attacker);
+                        if (hit != null) queue.AddAction(hit);
                     }
                 }
             }

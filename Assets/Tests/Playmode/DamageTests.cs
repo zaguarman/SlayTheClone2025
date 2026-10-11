@@ -147,6 +147,33 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "The attack hits the now empty slot's player");
         }
 
+        [Test]
+        public void AnAttackHits_ForTheAttackersAttackWhenTheHitLands() {
+            // Like Abyssal Cucumber: it grows when damaged, and is damaged by a hit that lands before its own
+            var cucumber = game.Summon(p1, game.Creature("Cucumber", 1, 4, 1, Effect(EffectTrigger.OnDamage, ActionType.ModifyStat, 2, TargetType.Self)), 0);
+            var pebble = game.Summon(p2, game.Creature("Pebble", 1, 5), 0);
+
+            game.Declare(pebble, p1.Battlefield[0]);
+            game.Declare(cucumber, p2.Battlefield[1]); // An empty slot: the hit goes to player 2
+            game.Resolve();
+
+            Assert.AreEqual(3, cucumber.Attack);
+            CollectionAssert.AreEqual(new[] { 3 }, game.History.DamageTo(p2), "The hit should use the attack the cucumber had when it landed");
+        }
+
+        [Test]
+        public void ASpreadingAttack_HitsItsNeighboursForTheAttackersAttackWhenTheHitsLand() {
+            var cleaver = game.Summon(p1, game.Creature("Cleaver", 2, 6, 1,
+                Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.EnemyCreatures, TargetModifier.WithAdjacent)), 0);
+            var enemies = new[] { 0, 1, 2 }.Select(i => game.Summon(p2, game.Creature($"Enemy {i}", 0, 10), i)).ToList();
+
+            game.Declare(cleaver, p2.Battlefield[1]);
+            game.ActionsQueue.AddAction(new ModifyAction(cleaver, 3, modifyAttack: true, modifyHealth: false, modifySpeed: false));
+            game.Resolve();
+
+            foreach (var enemy in enemies) CollectionAssert.AreEqual(new[] { 5 }, game.History.DamageTo(enemy), enemy.Name);
+        }
+
         [Test, Category(TestCategories.KnownBug), Description("#43: CanAct doesn't check that the creature is still on the board")]
         public void ACreatureReplacedBeforeItsAttackResolves_DoesNotAttack() {
             var veteran = game.Summon(p1, game.Creature("Veteran", 3, 3), 0);
