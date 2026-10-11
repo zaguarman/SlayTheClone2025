@@ -25,6 +25,11 @@ namespace SlayTheClone {
 
             if (matchSetup != null) matchSetup.MatchChosen += LoadGame;
 
+            ApplyTheme();
+        }
+
+        /// <summary>The table backdrop and themed buttons (see <see cref="UITheme"/>). Also baked into the scene in the editor.</summary>
+        public void ApplyTheme() {
             var canvas = GetComponentInParent<Canvas>();
             if (canvas != null) UITheme.AddBackdrop(canvas.rootCanvas.transform);
             UITheme.StyleButton(playButton, UITheme.ButtonKind.Primary);

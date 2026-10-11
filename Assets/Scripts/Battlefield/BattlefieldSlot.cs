@@ -17,12 +17,14 @@ namespace SlayTheClone {
         public ICreature OccupyingCreature => Model?.OccupyingCreature;
         public CardController OccupyingCard { get; private set; } // The card currently shown here
 
-        // A card-shaped space on the mat marked by its corners; it lights up under the pointer, and turns brass under a dragged card
+        // A card-shaped space on the mat. At rest it is invisible over the slot marker the mat already draws there
+        // (see BoardSkin); it lights up under the pointer, and turns brass under a dragged card
         public static readonly Vector2 Size = new Vector2(172f, 212f);
+        public static readonly Color MarkerColor = UITheme.Hex(0xE2B04A, 0.6f); // The corner brackets of a slot marker
         private static readonly Color HoverColor = UITheme.Hex(0xFFFFFF, 0.06f);
+        private static readonly Color HoverTrimColor = UITheme.Hex(0xE2B04A, 0.95f);
         private static readonly Color DragTargetColor = UITheme.Hex(0xE2B04A, 0.3f);
-        private static readonly Color TrimColor = UITheme.Hex(0xE2B04A, 0.6f);
-        private static readonly Color DragTargetTrimColor = UITheme.Hex(0xFFE08A, 0.95f);
+        private static readonly Color DragTargetTrimColor = UITheme.Hex(0xFFE08A, 1f);
 
         private Image trim;
         private bool isMarkedForCombat;
@@ -35,8 +37,8 @@ namespace SlayTheClone {
         public void Initialize(BoardSlot model) {
             Model = model;
             rectTransform.sizeDelta = Size;
-            UITheme.Round(backgroundImage, UITheme.SlotEmpty, 1.6f);
-            trim = UITheme.AddTrim(transform, TrimColor, 1f, -3f);
+            UITheme.Round(backgroundImage, Color.clear, 1.6f);
+            trim = UITheme.AddTrim(transform, Color.clear, 1f, -3f);
             trim.sprite = UITheme.CornerBrackets; // Zone markers, like a playmat's
             ResetVisuals();
         }
@@ -72,8 +74,8 @@ namespace SlayTheClone {
 
         // Null for the resting look
         private void ShowHighlight(Color? fill, Color? trimColor = null) {
-            if (backgroundImage != null) backgroundImage.color = fill ?? (isMarkedForCombat ? UITheme.SlotCombat : UITheme.SlotEmpty);
-            if (trim != null) trim.color = trimColor ?? TrimColor;
+            if (backgroundImage != null) backgroundImage.color = fill ?? (isMarkedForCombat ? UITheme.SlotCombat : Color.clear);
+            if (trim != null) trim.color = trimColor ?? Color.clear;
         }
 
         public void OnPointerEnter(PointerEventData eventData) {
@@ -82,7 +84,7 @@ namespace SlayTheClone {
             }
             bool isCardDraggedOver = eventData?.pointerDrag != null && eventData.pointerDrag.GetComponent<CardController>() != null;
             if (isCardDraggedOver) ShowHighlight(DragTargetColor, DragTargetTrimColor);
-            else ShowHighlight(HoverColor);
+            else ShowHighlight(HoverColor, HoverTrimColor);
 
             if (IsOverQueuedGhost(eventData)) return; // The ghost of a creature queued here shows its own preview
 

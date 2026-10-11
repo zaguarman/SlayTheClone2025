@@ -70,26 +70,65 @@ namespace SlayTheClone {
         #region Sprites
         private const int CornerRadius = 16; // Pixels; a sliced sprite shows its corners at this many UI units
         private const int LatticeSize = 56;
+        private const int BracketArm = 22;
         private static Sprite rounded;
         private static Sprite roundedOutline;
         private static Sprite cornerBrackets;
         private static Sprite lattice;
 
+        // The sprites are drawn here, and baked into Resources/UITheme as assets (menu UI > Apply Theme To Scenes) so that
+        // scenes styled in the editor can keep them. Without the assets they are drawn when first needed.
+        public const string ResourcesFolder = "UITheme";
+        public const string HeadingMaterialName = "HeadingShadow";
+
         /// <summary>A white rounded rectangle, sliced. Corner size can be scaled with Image.pixelsPerUnitMultiplier.</summary>
-        public static Sprite Rounded => rounded != null ? rounded : rounded = MakeRounded(CornerRadius, 0);
+        public static Sprite Rounded => rounded != null ? rounded : rounded = LoadOrDraw(nameof(Rounded));
 
         /// <summary>The outline of <see cref="Rounded"/>, 3 pixels wide.</summary>
-        public static Sprite RoundedOutline => roundedOutline != null ? roundedOutline : roundedOutline = MakeRounded(CornerRadius, 3);
+        public static Sprite RoundedOutline => roundedOutline != null ? roundedOutline : roundedOutline = LoadOrDraw(nameof(RoundedOutline));
 
         /// <summary>Only the corners of <see cref="RoundedOutline"/>: the zone markers of a playmat.</summary>
-        public static Sprite CornerBrackets => cornerBrackets != null ? cornerBrackets : cornerBrackets = MakeBrackets(64, 22, 10, 3);
+        public static Sprite CornerBrackets => cornerBrackets != null ? cornerBrackets : cornerBrackets = LoadOrDraw(nameof(CornerBrackets));
 
         /// <summary>A tile of thin diagonal lines crossing into diamonds, for a patterned table.</summary>
-        public static Sprite Lattice => lattice != null ? lattice : lattice = MakeLattice(LatticeSize);
+        public static Sprite Lattice => lattice != null ? lattice : lattice = LoadOrDraw(nameof(Lattice));
+
+        /// <summary>The theme's sprites by name, with their slicing borders (in pixels) and whether they tile.</summary>
+        public static readonly (string name, int border, bool tiles)[] SpriteNames = {
+            (nameof(Rounded), CornerRadius + 2, false),
+            (nameof(RoundedOutline), CornerRadius + 2, false),
+            (nameof(CornerBrackets), BracketArm, false),
+            (nameof(Lattice), 0, true)
+        };
+
+        /// <summary>Draws one of the <see cref="SpriteNames"/>.</summary>
+        public static Texture2D Draw(string spriteName) => spriteName switch {
+            nameof(Rounded) => DrawRounded(CornerRadius, 0),
+            nameof(RoundedOutline) => DrawRounded(CornerRadius, 3),
+            nameof(CornerBrackets) => DrawBrackets(64, BracketArm, 10, 3),
+            nameof(Lattice) => DrawLattice(LatticeSize),
+            _ => throw new System.ArgumentException($"No theme sprite called {spriteName}")
+        };
+
+        /// <summary>Drops the sprites loaded or drawn so far, so the next use loads them again (after baking them).</summary>
+        public static void ForgetSprites() {
+            rounded = roundedOutline = cornerBrackets = lattice = null;
+        }
+
+        private static Sprite LoadOrDraw(string spriteName) {
+            var baked = Resources.Load<Sprite>($"{ResourcesFolder}/{spriteName}");
+            if (baked != null) return baked;
+
+            var texture = Draw(spriteName);
+            var (_, border, tiles) = System.Array.Find(SpriteNames, s => s.name == spriteName);
+            if (tiles) texture.wrapMode = TextureWrapMode.Repeat;
+            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f, 0,
+                SpriteMeshType.FullRect, new Vector4(border, border, border, border));
+        }
 
         // Same outline, but drawn only inside the corner squares of a bigger tile, whose middle (the part a sliced
         // sprite stretches) stays empty
-        private static Sprite MakeBrackets(int size, int arm, int radius, int outline) {
+        private static Texture2D DrawBrackets(int size, int arm, int radius, int outline) {
             var texture = NewTexture(size, size);
             var pixels = new Color32[size * size];
             float half = size / 2f;
@@ -106,16 +145,15 @@ namespace SlayTheClone {
             }
             texture.SetPixels32(pixels);
             texture.Apply();
-            return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, new Vector4(arm, arm, arm, arm));
+            return texture;
         }
 
-        private static Sprite MakeRounded(int radius, int outline) {
+        private static Texture2D DrawRounded(int radius, int outline) {
             int size = radius * 2 + 4;
             var texture = NewTexture(size, size);
             var pixels = new Color32[size * size];
             float half = size / 2f;
             float inner = half - 1f - radius; // Half-extent of the straight part
-            int border = radius + 2;
 
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
@@ -131,12 +169,11 @@ namespace SlayTheClone {
             }
             texture.SetPixels32(pixels);
             texture.Apply();
-            return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, new Vector4(border, border, border, border));
+            return texture;
         }
 
-        private static Sprite MakeLattice(int size) {
+        private static Texture2D DrawLattice(int size) {
             var texture = NewTexture(size, size);
-            texture.wrapMode = TextureWrapMode.Repeat;
             var pixels = new Color32[size * size];
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
@@ -150,7 +187,7 @@ namespace SlayTheClone {
             }
             texture.SetPixels32(pixels);
             texture.Apply();
-            return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
+            return texture;
         }
 
         private static Texture2D NewTexture(int width, int height) {
@@ -249,24 +286,38 @@ namespace SlayTheClone {
             AddDropShadow(text);
         }
 
-        /// <summary>A crisp shadow under the letters, so text reads on any background. Gives the text its own material.</summary>
-        public static void AddDropShadow(TMP_Text text, float offset = 0.7f) {
-            var material = text.fontMaterial;
+        /// <summary>
+        /// A crisp shadow under the letters, so text reads on any background. Uses the baked heading material when it
+        /// belongs to the text's font (so scenes styled in the editor keep it), otherwise gives the text its own.
+        /// </summary>
+        public static void AddDropShadow(TMP_Text text) {
+            var baked = Resources.Load<Material>($"{ResourcesFolder}/{HeadingMaterialName}");
+            if (baked != null && text.font != null && baked.GetTexture(ShaderUtilities.ID_MainTex) == text.font.atlasTexture) {
+                text.fontSharedMaterial = baked;
+                return;
+            }
+            SetDropShadow(text.fontMaterial);
+        }
+
+        /// <summary>Turns on the heading shadow in a TextMeshPro material.</summary>
+        public static void SetDropShadow(Material material, float offset = 0.7f) {
             material.EnableKeyword(ShaderUtilities.Keyword_Underlay);
             material.SetColor(ShaderUtilities.ID_UnderlayColor, new Color(0f, 0f, 0f, 0.8f));
             material.SetFloat(ShaderUtilities.ID_UnderlayOffsetX, 0f);
             material.SetFloat(ShaderUtilities.ID_UnderlayOffsetY, -offset);
             material.SetFloat(ShaderUtilities.ID_UnderlaySoftness, 0f);
-            text.fontMaterial = material;
         }
         #endregion
 
         #region Building
         /// <summary>
         /// The table: a flat navy field under a faint diamond lattice. Added under everything else in the parent and
-        /// stretched over it; the caller can resize it.
+        /// stretched over it (unless the parent already has it); the caller can resize it.
         /// </summary>
         public static RectTransform AddBackdrop(Transform parent, string name = "Backdrop") {
+            var existing = parent.Find(name);
+            if (existing != null) return (RectTransform)existing;
+
             var cloth = NewImage(name, parent, TableBase);
             var rect = cloth.rectTransform;
             rect.SetAsFirstSibling();

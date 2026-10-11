@@ -28,13 +28,18 @@ namespace SlayTheClone {
             if (mainMenuButton != null) mainMenuButton.onClick.AddListener(GoToMainMenu);
             if (quitButton != null) quitButton.onClick.AddListener(MainMenu.QuitGame);
 
+            ApplyTheme();
+
+            SetPaused(false);
+        }
+
+        /// <summary>Themed box and buttons (see <see cref="UITheme"/>). Also baked into the scene in the editor.</summary>
+        public void ApplyTheme() {
             UITheme.StyleButton(resumeButton, UITheme.ButtonKind.Primary);
             UITheme.StyleButton(mainMenuButton);
             UITheme.StyleButton(quitButton);
             var box = resumeButton != null ? resumeButton.transform.parent.GetComponent<Image>() : null;
             if (box != null) UITheme.StylePanel(box, trim: UITheme.Gold);
-
-            SetPaused(false);
         }
 
         private void Update() {

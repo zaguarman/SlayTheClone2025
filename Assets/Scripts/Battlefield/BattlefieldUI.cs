@@ -66,19 +66,29 @@ namespace SlayTheClone {
         protected override DropZoneColors ZoneColors => new DropZoneColors(UITheme.Mat, UITheme.MatValid, UITheme.MatInvalid, UITheme.MatHover);
 
         // A rounded mat just big enough for its row of slots
-        protected override void StyleZone(Image zoneImage) {
-            UITheme.Round(zoneImage, UITheme.Mat);
-            int slotCount = Player?.Battlefield.Count ?? 5;
+        protected override void StyleZone(Image zoneImage) => ApplyMatLook();
+
+        /// <summary>
+        /// Makes this battlefield's image a rounded mat just big enough for its row of slots.
+        /// Also used in the editor, before there are any slots (see <see cref="BoardSkin"/>).
+        /// </summary>
+        public void ApplyMatLook() {
+            var zoneImage = GetComponent<Image>();
+            if (zoneImage != null) UITheme.Round(zoneImage, UITheme.Mat, 1.2f);
+            int slotCount = Player?.Battlefield.Count ?? SlayTheClone.Player.BattlefieldSize;
             ((RectTransform)transform).sizeDelta = new Vector2((slotCount - 1) * settings.spacing + BattlefieldSlot.Size.x + 2 * MatPadding, BattlefieldSlot.Size.y + 2 * MatPadding);
         }
 
-        private void UpdateSlotPositions() {
-            float totalWidth = (battlefieldSlots.Count - 1) * settings.spacing;
-            float startX = -totalWidth / 2;
+        /// <summary>Where each of this many slots sits on the mat: a centered row.</summary>
+        public List<Vector2> SlotPositions(int slotCount) {
+            float startX = -(slotCount - 1) * settings.spacing / 2f;
+            return Enumerable.Range(0, slotCount).Select(i => new Vector2(startX + settings.spacing * i, 0f)).ToList();
+        }
 
+        private void UpdateSlotPositions() {
+            var positions = SlotPositions(battlefieldSlots.Count);
             for (int i = 0; i < battlefieldSlots.Count; i++) {
-                float xPos = startX + (settings.spacing * i);
-                battlefieldSlots[i].SetPosition(new Vector2(xPos, 0));
+                battlefieldSlots[i].SetPosition(positions[i]);
             }
         }
         #endregion

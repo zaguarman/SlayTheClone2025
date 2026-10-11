@@ -23,9 +23,9 @@ namespace SlayTheClone {
         public GameObject DeckViewPanel => deckViewPanel;
         public Button CloseButton => closeButton;
 
-        protected override void Awake() {
-            base.Awake();
-
+        // Set up when initialized rather than in Awake: the panel is saved hidden in the scene (so it doesn't cover
+        // the table in the editor), and a hidden panel only wakes up the first time it is shown
+        private void Setup() {
             if (deckViewPanel == null) {
                 LogError("DeckViewPanel is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
             }
@@ -81,7 +81,9 @@ namespace SlayTheClone {
         private CardViews cardViews;
 
         public void Initialize(IGameMediator mediator, IGameManager manager, CardViews views) {
+            if (IsInitialized) return;
             cardViews = views ?? throw new System.ArgumentNullException(nameof(views));
+            Setup();
             base.Initialize(mediator, manager);
             Log("DeckViewUI initialized", LogTag.UI | LogTag.Initialization);
         }

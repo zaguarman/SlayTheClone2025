@@ -9,50 +9,59 @@ namespace SlayTheClone {
     /// A player's nameplate, Pokémon style: faction emblem, name, an HP bar that drains green to yellow to red,
     /// the health numbers (the scene's health text, which <see cref="PlayerUI"/> keeps up to date), and how many
     /// cards are left in the deck and the discard pile. It flashes and shakes when the player is hurt.
+    /// Built once (in the editor too, see <see cref="BoardSkin"/>); <see cref="Bind"/> connects it to a player.
     /// </summary>
     public class PlayerPlaque : MonoBehaviour {
+        private const string ObjectName = "Plaque";
         private static readonly Vector2 Size = new Vector2(340f, 150f);
         private const float BarWidth = 160f;
+        private const float EmblemCornerScale = 0.32f; // Corners half the emblem's size: a circle
+
+        [SerializeField] private Image emblem;
+        [SerializeField] private TextMeshProUGUI glyphText;
+        [SerializeField] private TextMeshProUGUI nameText;
+        [SerializeField] private TextMeshProUGUI factionText;
+        [SerializeField] private RectTransform barFill;
+        [SerializeField] private Image barFillImage;
+        [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] private TextMeshProUGUI pilesText;
+        [SerializeField] private Image flash;
 
         private IPlayer player;
         private IGameMediator mediator;
-        private RectTransform barFill;
-        private Image barFillImage;
-        private Image flash;
-        private TextMeshProUGUI pilesText;
         private int shownHealth;
 
-        /// <summary>Builds the plaque under the player's UI and moves their health text into it.</summary>
-        public static PlayerPlaque Create(Transform parent, IPlayer player, Faction faction, TextMeshProUGUI healthText, IGameMediator mediator) {
-            var background = UITheme.NewImage($"Plaque {player.Name}", parent, UITheme.Panel);
+        /// <summary>The plaque under the player's UI, built (and given their health text) if it isn't there yet.</summary>
+        public static PlayerPlaque Ensure(Transform parent, TextMeshProUGUI health) {
+            var existing = parent.Find(ObjectName);
+            if (existing != null && existing.TryGetComponent(out PlayerPlaque found)) return found;
+
+            var background = UITheme.NewImage(ObjectName, parent, UITheme.Panel);
             UITheme.StylePanel(background, trim: UITheme.GoldDim);
             var rect = background.rectTransform;
             rect.sizeDelta = Size;
-            if (healthText != null) {
-                rect.localScale = healthText.transform.localScale;
-                rect.localPosition = healthText.transform.localPosition;
+            if (health != null) {
+                rect.localScale = health.transform.localScale;
+                rect.localPosition = health.transform.localPosition;
             }
 
             var plaque = background.gameObject.AddComponent<PlayerPlaque>();
-            plaque.Build(player, faction, healthText);
-            plaque.Bind(player, mediator);
+            plaque.Build(health);
             return plaque;
         }
 
-        private void Build(IPlayer owner, Faction faction, TextMeshProUGUI healthText) {
-            var factionColor = UITheme.FactionColor(faction);
-
+        private void Build(TextMeshProUGUI health) {
             // Emblem: a coin in the faction's color with its glyph
-            var emblem = UITheme.NewImage("Emblem", transform, factionColor);
-            UITheme.Round(emblem, factionColor, 0.5f);
+            emblem = UITheme.NewImage("Emblem", transform, UITheme.Gold);
+            UITheme.Round(emblem, UITheme.Gold, EmblemCornerScale);
             PlaceTopLeft(emblem.rectTransform, 16f, 25f, 100f, 100f);
-            UITheme.AddTrim(emblem.transform, UITheme.Gold, 0.5f);
+            UITheme.AddTrim(emblem.transform, UITheme.Gold, EmblemCornerScale);
             UITheme.AddHardShadow(emblem, 4f);
-            var glyph = UITheme.NewText("Glyph", emblem.transform, UITheme.FactionGlyph(faction), 60f, UITheme.Ink);
-            glyph.fontStyle = FontStyles.Bold;
-            UITheme.Stretch(glyph.rectTransform);
+            glyphText = UITheme.NewText("Glyph", emblem.transform, "", 60f, UITheme.Ink);
+            glyphText.fontStyle = FontStyles.Bold;
+            UITheme.Stretch(glyphText.rectTransform);
 
-            var nameText = UITheme.NewText("Name", transform, owner.Name, 26f, UITheme.Parchment, TextAlignmentOptions.Left);
+            nameText = UITheme.NewText("Name", transform, "", 26f, UITheme.Parchment, TextAlignmentOptions.Left);
             nameText.fontStyle = FontStyles.Bold;
             nameText.enableAutoSizing = true;
             nameText.fontSizeMin = 16;
@@ -60,7 +69,7 @@ namespace SlayTheClone {
             nameText.overflowMode = TextOverflowModes.Ellipsis;
             PlaceTopLeft(nameText.rectTransform, 128f, 12f, 200f, 32f);
 
-            var factionText = UITheme.NewText("Faction", transform, faction == Faction.None ? "Unaligned" : CardTextFormatter.FactionName(faction), 17f, factionColor, TextAlignmentOptions.Left);
+            factionText = UITheme.NewText("Faction", transform, "", 17f, UITheme.Gold, TextAlignmentOptions.Left);
             factionText.fontStyle = FontStyles.SmallCaps | FontStyles.Bold;
             factionText.characterSpacing = 2f;
             PlaceTopLeft(factionText.rectTransform, 128f, 44f, 200f, 22f);
@@ -69,7 +78,7 @@ namespace SlayTheClone {
             hpLabel.fontStyle = FontStyles.Bold;
             PlaceTopLeft(hpLabel.rectTransform, 128f, 70f, 36f, 24f);
 
-            var bar = UITheme.NewImage("HealthBar", transform, UITheme.Hex(0x0A070D));
+            var bar = UITheme.NewImage("HealthBar", transform, UITheme.Hex(0x060A14));
             UITheme.Round(bar, bar.color, 3f);
             PlaceTopLeft(bar.rectTransform, 166f, 74f, BarWidth, 18f);
             barFillImage = UITheme.NewImage("Fill", bar.transform, UITheme.HealthHigh);
@@ -81,6 +90,7 @@ namespace SlayTheClone {
             barFill.offsetMax = new Vector2(-2f, -2f);
             UITheme.AddTrim(bar.transform, UITheme.GoldDim, 3f);
 
+            healthText = health;
             if (healthText != null) {
                 healthText.transform.SetParent(transform, false);
                 healthText.transform.localScale = Vector3.one;
@@ -99,11 +109,35 @@ namespace SlayTheClone {
             PlaceTopLeft(pilesText.rectTransform, 128f, 120f, 200f, 22f);
 
             flash = UITheme.NewImage("Flash", transform, Color.clear);
-            UITheme.Round(flash, Color.clear);
+            UITheme.Round(flash, Color.clear, 1.5f);
             UITheme.Stretch(flash.rectTransform);
         }
 
-        private void Bind(IPlayer owner, IGameMediator gameMediator) {
+        /// <summary>
+        /// Labels the plaque: name, faction and its colors. Outside play it also shows full health and the deck's size,
+        /// as a preview of the game's start.
+        /// </summary>
+        public void Show(string playerName, Faction faction, DeckScriptableObject deck) {
+            var factionColor = UITheme.FactionColor(faction);
+            emblem.color = factionColor;
+            emblem.pixelsPerUnitMultiplier = EmblemCornerScale;
+            var emblemTrim = emblem.transform.Find("Trim");
+            if (emblemTrim != null) emblemTrim.GetComponent<Image>().pixelsPerUnitMultiplier = EmblemCornerScale;
+            glyphText.text = UITheme.FactionGlyph(faction);
+            nameText.text = playerName;
+            factionText.text = faction == Faction.None ? "Unaligned" : CardTextFormatter.FactionName(faction);
+            factionText.color = factionColor;
+
+            if (Application.isPlaying) return;
+            SetFill(1f);
+            barFillImage.color = UITheme.HealthHigh;
+            if (healthText != null) healthText.text = $"{Player.MaxHealth}/{Player.MaxHealth}";
+            pilesText.text = PilesLine(deck != null ? deck.Cards.Count : 0, 0);
+        }
+
+        /// <summary>Follows the player's health and piles from now on.</summary>
+        public void Bind(IPlayer owner, IGameMediator gameMediator) {
+            Unbind();
             player = owner;
             mediator = gameMediator;
             shownHealth = player.Health;
@@ -118,16 +152,22 @@ namespace SlayTheClone {
             }
         }
 
-        private void OnDestroy() {
-            DOTween.Kill(transform);
-            if (barFill != null) DOTween.Kill(barFill);
-            if (flash != null) DOTween.Kill(flash);
+        private void Unbind() {
             if (player != null) player.HealthChanged -= OnHealthChanged;
             if (mediator != null) {
                 mediator.HandStateChanged -= ShowPiles;
                 mediator.BattlefieldStateChanged -= ShowPiles;
                 mediator.TurnEnded -= OnTurnEnded;
             }
+            player = null;
+            mediator = null;
+        }
+
+        private void OnDestroy() {
+            DOTween.Kill(transform);
+            if (barFill != null) DOTween.Kill(barFill);
+            if (flash != null) DOTween.Kill(flash);
+            Unbind();
         }
 
         private void OnTurnEnded(int turn) => ShowPiles(player);
@@ -160,8 +200,8 @@ namespace SlayTheClone {
 
         private void Flash(Color color, bool shake) {
             DOTween.Kill(flash);
-            flash.color = new Color(color.r, color.g, color.b, 0.45f);
-            DOTween.To(() => flash.color.a, a => flash.color = new Color(color.r, color.g, color.b, a), 0f, 0.5f).SetTarget(flash);
+            flash.color = UITheme.WithAlpha(color, 0.45f);
+            DOTween.To(() => flash.color.a, a => flash.color = UITheme.WithAlpha(color, a), 0f, 0.5f).SetTarget(flash);
             if (shake) {
                 DOTween.Kill(transform, complete: true);
                 transform.DOPunchPosition(new Vector3(0.12f, 0f, 0f), 0.35f, 14, 0.8f).SetTarget(transform);
@@ -170,9 +210,10 @@ namespace SlayTheClone {
 
         private void ShowPiles(IPlayer changed) {
             if (changed != player || pilesText == null || player.Deck == null) return;
-            int discarded = player.Deck.GetDiscardPilePreview()?.Count ?? 0;
-            pilesText.text = $"Deck {player.Deck.CardsRemaining}   ·   Discard {discarded}";
+            pilesText.text = PilesLine(player.Deck.CardsRemaining, player.Deck.GetDiscardPilePreview()?.Count ?? 0);
         }
+
+        private static string PilesLine(int deck, int discard) => $"Deck {deck}   ·   Discard {discard}";
 
         // Positions from the plaque's top-left corner, in plaque units
         private static void PlaceTopLeft(RectTransform rect, float x, float y, float width, float height) {
