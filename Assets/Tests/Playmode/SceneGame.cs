@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
@@ -146,9 +147,52 @@ namespace SlayTheClone.Tests {
         /// <summary>The card shown in a board slot, if any.</summary>
         public CardController CardIn(BoardSlot slot) => BoardView(slot.Owner).FindSlotView(slot).OccupyingCard;
 
+        /// <summary>The translucent card of the creature queued to be summoned in a slot.</summary>
+        public CardController GhostIn(BoardSlot slot) {
+            var ghost = BoardView(slot.Owner).FindSlotView(slot).transform.Cast<Transform>()
+                .FirstOrDefault(t => t.name.StartsWith("QueuedGhost_"))?.GetComponent<CardController>();
+            Assert.IsNotNull(ghost, $"{slot} shows no queued creature");
+            return ghost;
+        }
+
         /// <summary>Whether a slot shows the translucent preview of a creature queued to be summoned there.</summary>
         public bool HasGhost(BoardSlot slot) =>
             BoardView(slot.Owner).FindSlotView(slot).transform.Cast<Transform>().Any(t => t.name.StartsWith("QueuedGhost_"));
+
+        /// <summary>
+        /// Moves the pointer onto a visible part of the card, the way the event system does: what's on top there
+        /// gets the enter event, then each of its parents. Returns everything under the pointer, top first.
+        /// </summary>
+        public static List<RaycastResult> Hover(CardController card) {
+            var corners = new Vector3[4];
+            ((RectTransform)card.transform).GetWorldCorners(corners);
+            var eventCamera = CanvasUtility.GetEventCamera(card);
+            Vector2 min = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[0]);
+            Vector2 max = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
+
+            // The center first; cards in a hand overlap, so other points of the card may be the visible ones
+            var points = new[] { 0.5f, 0.2f, 0.8f }.SelectMany(x => new[] { 0.5f, 0.2f, 0.8f }.Select(y => min + Vector2.Scale(max - min, new Vector2(x, y))));
+            foreach (var point in points) {
+                var eventData = new PointerEventData(EventSystem.current) { position = point };
+                var hits = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(eventData, hits);
+                if (hits.Count == 0 || hits[0].gameObject.GetComponentInParent<CardController>() != card) continue;
+
+                eventData.pointerEnter = hits[0].gameObject;
+                for (var t = hits[0].gameObject.transform; t != null; t = t.parent) {
+                    ExecuteEvents.Execute(t.gameObject, eventData, ExecuteEvents.pointerEnterHandler);
+                }
+                return hits;
+            }
+            Assert.Fail($"{card.name} can't be pointed at: it's covered, or doesn't take the pointer");
+            return null;
+        }
+
+        /// <summary>The enlarged copy shown while a card is hovered, if any.</summary>
+        public static CardController HoverPreview() {
+            var tooltip = Tooltip.Existing;
+            return tooltip != null && tooltip.gameObject.activeSelf ? tooltip.GetComponentInChildren<CardController>() : null;
+        }
 
         /// <summary>
         /// Everything on screen shows the game as the rules have it: health, hands (minus creatures queued to be played),

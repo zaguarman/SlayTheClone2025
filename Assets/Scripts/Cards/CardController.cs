@@ -438,7 +438,7 @@ namespace SlayTheClone {
 
         // Make sure to clean up when the card is destroyed
         protected override void OnDestroy() {
-            Tooltip.Existing?.HideTooltip();
+            Tooltip.Existing?.HideTooltipFor(this);
             DOTween.Kill(transform);
             CleanupEvents();
 

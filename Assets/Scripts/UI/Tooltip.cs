@@ -189,6 +189,11 @@ namespace SlayTheClone {
             PlaceDetailsBesidePreview();
         }
 
+        /// <summary>Hides the tooltip if it is showing this card (a destroyed preview must not hide the next card's).</summary>
+        public void HideTooltipFor(CardController card) {
+            if (card != null && card == activeCard) HideTooltip();
+        }
+
         /// <summary>
         /// Hides the tooltip
         /// </summary>

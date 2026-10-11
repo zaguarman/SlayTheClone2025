@@ -73,6 +73,7 @@ namespace SlayTheClone {
             if (IsCreatureFromHandDraggedOver(eventData)) {
                 OccupyingCard.SetReplacementPreview(true);
             }
+            if (IsOverQueuedGhost(eventData)) return; // The ghost of a creature queued here shows its own preview
 
             var tooltip = Tooltip.Shared;
             if (OccupyingCard != null) {
@@ -102,6 +103,12 @@ namespace SlayTheClone {
                 && draggedCard != OccupyingCard
                 && draggedCard.GetBaseCardData() is CreatureData
                 && draggedCard.GetComponentInParent<HandUI>() != null;
+        }
+
+        // The pointer entered this slot by entering the ghost card of a creature queued to be summoned here
+        private bool IsOverQueuedGhost(PointerEventData eventData) {
+            var hovered = eventData?.pointerEnter != null ? eventData.pointerEnter.GetComponentInParent<CardController>() : null;
+            return hovered != null && hovered != OccupyingCard && hovered.IsQueued;
         }
 
         public void MarkForCombat() {

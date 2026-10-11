@@ -265,7 +265,8 @@ namespace SlayTheClone {
 
                 ghost.name = $"QueuedGhost_{card.Name}";
                 ghost.transform.localRotation = Quaternion.identity;
-                ghost.SetQueued(true, blockRaycasts: false); // Let drops and hovers reach the slot
+                // Hoverable for its enlarged preview; drops still reach the slot (they bubble up, and targets come from a full raycast)
+                ghost.SetQueued(true);
                 queuedGhosts[slot] = ghost;
 
                 // The creature currently in the slot will be replaced when the summon resolves:

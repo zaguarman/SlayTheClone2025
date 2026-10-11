@@ -109,6 +109,52 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
+        public IEnumerator AQueuedCreature_CanBeHovered_ToShowItEnlarged_WhetherItsSlotIsEmptyOrNot() {
+            var occupant = game.Summon(p1, game.Cards.Creature("Test Ox", 0, 6), 3);
+            var wolf = game.GiveCard(p1, game.Cards.Creature("Test Wolf", 2, 3));
+            var hound = game.GiveCard(p1, game.Cards.Creature("Test Hound", 3, 1));
+            game.Play(wolf, p1, p1.Battlefield[1]);  // An empty slot
+            game.Play(hound, p1, p1.Battlefield[3]); // Replacing the ox
+            yield return null;
+
+            foreach (var (queued, slot) in new[] { (wolf, p1.Battlefield[1]), (hound, p1.Battlefield[3]) }) {
+                var hits = SceneGame.Hover(game.GhostIn(slot));
+                yield return null;
+
+                var preview = SceneGame.HoverPreview();
+                Assert.IsNotNull(preview, $"Hovering {queued.Name}'s ghost should show it enlarged");
+                Assert.AreSame(queued, preview.GetLinkedCardInstance(), $"The preview over {slot} shows another card");
+                Assert.Greater(preview.transform.localScale.x, 1f, "The preview should be enlarged");
+                if (queued == wolf) { // The ghost replacing a creature is drawn raised, mostly outside its slot
+                    Assert.IsTrue(hits.Any(h => h.gameObject.TryGetComponent(out BattlefieldSlot view) && view.Model == slot),
+                        $"A card dropped on {queued.Name}'s ghost must still find {slot}");
+                }
+            }
+
+            SceneGame.Hover(game.CardIn(p1.Battlefield[3]));
+            yield return null;
+            Assert.AreSame(occupant, SceneGame.HoverPreview()?.GetLinkedCardInstance(), "The creature about to be replaced can still be hovered");
+        }
+
+        [UnityTest]
+        public IEnumerator AQueuedSpell_CanBeHovered_ToShowItEnlarged() {
+            var bolt = game.GiveCard(p1, game.Cards.Spell("Test Bolt", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures)));
+            game.Play(bolt, p1, p2.Battlefield[0]);
+            yield return null;
+
+            var shown = game.HandCards(p1).Single(c => c.GetLinkedCardInstance() == bolt);
+            Assert.IsTrue(shown.IsQueued);
+            SceneGame.Hover(shown);
+            yield return null;
+
+            var preview = SceneGame.HoverPreview();
+            Assert.IsNotNull(preview, "Hovering a queued spell should show it enlarged");
+            Assert.AreSame(bolt, preview.GetLinkedCardInstance());
+            Assert.Greater(preview.transform.localScale.x, 1f);
+        }
+
+        [UnityTest]
         public IEnumerator AnAttackOnAnEmptySlot_DamagesThePlayer_AndTheHealthTextFollows() {
             var brute = game.Summon(p1, game.Cards.Creature("Test Brute", 4, 5), 0);
 
