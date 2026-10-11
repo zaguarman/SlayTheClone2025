@@ -47,6 +47,7 @@ namespace SlayTheClone {
             UITheme.Round(emblem, factionColor, 0.5f);
             PlaceTopLeft(emblem.rectTransform, 16f, 25f, 100f, 100f);
             UITheme.AddTrim(emblem.transform, UITheme.Gold, 0.5f);
+            UITheme.AddHardShadow(emblem, 4f);
             var glyph = UITheme.NewText("Glyph", emblem.transform, UITheme.FactionGlyph(faction), 60f, UITheme.Ink);
             glyph.fontStyle = FontStyles.Bold;
             UITheme.Stretch(glyph.rectTransform);
@@ -78,7 +79,6 @@ namespace SlayTheClone {
             barFill.anchorMax = Vector2.one;
             barFill.offsetMin = new Vector2(2f, 2f);
             barFill.offsetMax = new Vector2(-2f, -2f);
-            UITheme.AddShine(barFill, 0.35f).rectTransform.offsetMin = Vector2.zero;
             UITheme.AddTrim(bar.transform, UITheme.GoldDim, 3f);
 
             if (healthText != null) {

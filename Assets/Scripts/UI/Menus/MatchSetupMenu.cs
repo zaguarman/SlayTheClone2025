@@ -23,12 +23,12 @@ namespace SlayTheClone {
         [SerializeField] private DeckCatalog catalog;
         [SerializeField] private GameObject titleScreen; // Hidden while choosing
 
-        [Header("Style")]
-        [SerializeField] private Color panelColor = new Color(0.11f, 0.09f, 0.15f, 1f);
-        [SerializeField] private Color buttonColor = new Color(0.16f, 0.13f, 0.20f, 1f);
-        [SerializeField] private Color selectedColor = new Color(0.40f, 0.29f, 0.10f, 1f);
-        [SerializeField] private Color textColor = new Color(0.95f, 0.88f, 0.70f, 1f);
-        [SerializeField] private Color accentColor = new Color(0.95f, 0.78f, 0.35f, 1f);
+        // Colors come from the game's theme
+        private static Color panelColor => UITheme.Panel;
+        private static Color buttonColor => UITheme.PanelLight;
+        private static readonly Color selectedColor = UITheme.Hex(0x6B5222);
+        private static Color textColor => UITheme.Parchment;
+        private static Color accentColor => UITheme.Gold;
 
         /// <summary>Raised by Start once the choice is stored in <see cref="MatchSetup"/>.</summary>
         public event Action MatchChosen;
@@ -103,7 +103,10 @@ namespace SlayTheClone {
 
         private void Refresh() {
             foreach (var (button, isSelected) in choiceButtons) {
-                button.image.color = isSelected() ? selectedColor : buttonColor;
+                bool selected = isSelected();
+                button.image.color = selected ? selectedColor : buttonColor;
+                var trim = button.transform.Find("Trim");
+                if (trim != null) trim.GetComponent<Image>().color = selected ? accentColor : UITheme.GoldDim;
             }
             if (summaryText != null && PlayerDeck != null && OpponentDeck != null) {
                 summaryText.text = $"You, playing <color=#{ColorUtility.ToHtmlStringRGB(accentColor)}>{PlayerDeck.GetDeckName()}</color>"
@@ -121,7 +124,7 @@ namespace SlayTheClone {
             layout.spacing = 24;
             SetControls(layout, expandHeight: false);
 
-            AddText(panel.transform, "Choose your match", 64, accentColor, FontStyles.Bold, height: 80);
+            UITheme.StyleHeading(AddText(panel.transform, "Choose your match", 64, accentColor, FontStyles.Bold, height: 80), accentColor);
 
             var columns = NewObject("Columns", panel.transform);
             var columnsLayout = columns.AddComponent<HorizontalLayoutGroup>();
@@ -159,7 +162,9 @@ namespace SlayTheClone {
             footerLayout.childForceExpandWidth = footerLayout.childForceExpandHeight = false;
             footer.AddComponent<LayoutElement>().preferredHeight = 72;
             AddButton(footer.transform, BackButtonName, "Back", 260, Hide);
-            AddButton(footer.transform, StartButtonName, "<b>Start</b>", 360, StartMatch);
+            var start = AddButton(footer.transform, StartButtonName, "<b>Start</b>", 360, StartMatch);
+            UITheme.StyleButton(start, UITheme.ButtonKind.Primary);
+            start.GetComponentInChildren<TextMeshProUGUI>().fontStyle = FontStyles.Bold | FontStyles.SmallCaps;
         }
 
         private static string DeckLabel(DeckScriptableObject deck) =>
@@ -167,13 +172,13 @@ namespace SlayTheClone {
 
         private Transform AddColumn(Transform parent, string title) {
             var column = NewObject(title, parent);
-            column.AddComponent<Image>().color = panelColor;
+            UITheme.StylePanel(column.AddComponent<Image>(), panelColor);
             var layout = column.AddComponent<VerticalLayoutGroup>();
             layout.padding = new RectOffset(20, 20, 16, 20);
             layout.spacing = 10;
             layout.childAlignment = TextAnchor.UpperCenter;
             SetControls(layout, expandHeight: false);
-            AddText(column.transform, title, 36, textColor, FontStyles.Bold, height: 52);
+            UITheme.StyleHeading(AddText(column.transform, title, 36, textColor, FontStyles.Bold, height: 52), textColor);
             return column.transform;
         }
 
@@ -185,8 +190,9 @@ namespace SlayTheClone {
 
         private Button AddButton(Transform parent, string name, string label, float width, Action onClick) {
             var go = NewObject(name, parent);
-            var image = go.AddComponent<Image>();
-            image.color = buttonColor;
+            var image = UITheme.Round(go.AddComponent<Image>(), buttonColor, 1.5f);
+            UITheme.AddTrim(go.transform, UITheme.GoldDim, 1.5f);
+            UITheme.AddHardShadow(image);
             var button = go.AddComponent<Button>();
             button.targetGraphic = image;
             var colors = button.colors;

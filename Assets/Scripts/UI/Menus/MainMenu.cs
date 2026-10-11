@@ -24,6 +24,11 @@ namespace SlayTheClone {
             else LogWarning("Quit button not assigned on MainMenu", LogTag.UI);
 
             if (matchSetup != null) matchSetup.MatchChosen += LoadGame;
+
+            var canvas = GetComponentInParent<Canvas>();
+            if (canvas != null) UITheme.AddBackdrop(canvas.rootCanvas.transform);
+            UITheme.StyleButton(playButton, UITheme.ButtonKind.Primary);
+            UITheme.StyleButton(quitButton);
         }
 
         public void Play() {

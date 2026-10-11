@@ -5,42 +5,43 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
-    /// The game's look in one place: a dark card table with gold trim, like the title screen.
-    /// Colors, the procedurally drawn sprites every panel uses (so the project needs no UI texture assets),
-    /// and helpers that style buttons, panels and labels the same way everywhere.
+    /// The game's look in one place: a midnight-navy table with brass trim, drawn in flat colors and crisp lines
+    /// (no blurs or glows). Colors, the procedurally drawn sprites every panel uses (so the project needs no UI
+    /// texture assets), and helpers that style buttons, panels and labels the same way everywhere.
     /// </summary>
     public static class UITheme {
         #region Palette
-        public static readonly Color TableDark = Hex(0x120C18);
-        public static readonly Color TableFelt = Hex(0x2B1E36);
-        public static readonly Color Panel = Hex(0x1C1424, 0.96f);
-        public static readonly Color PanelLight = Hex(0x2C2138);
-        public static readonly Color Gold = Hex(0xE8B84A);
-        public static readonly Color GoldDim = Hex(0x8A6A2A);
-        public static readonly Color Parchment = Hex(0xF2E6C8);
-        public static readonly Color TextMuted = Hex(0xB9A98A);
-        public static readonly Color Ink = Hex(0x1C1A18);
+        public static readonly Color TableDark = Hex(0x0A0F1C);
+        public static readonly Color TableBase = Hex(0x111A2E);
+        public static readonly Color Panel = Hex(0x172137, 0.97f);
+        public static readonly Color PanelLight = Hex(0x223050);
+        public static readonly Color Gold = Hex(0xE2B04A);
+        public static readonly Color GoldDim = Hex(0x7D6430);
+        public static readonly Color Parchment = Hex(0xF3E9D2);
+        public static readonly Color TextMuted = Hex(0xA3ADC4);
+        public static readonly Color Ink = Hex(0x141414);
+        public static readonly Color HardShadow = new Color(0f, 0f, 0f, 0.5f);
 
         // Pokémon-style health bar: green, yellow below half, red below a quarter
-        public static readonly Color HealthHigh = Hex(0x4CD06A);
-        public static readonly Color HealthMid = Hex(0xF2C84B);
-        public static readonly Color HealthLow = Hex(0xE8503A);
+        public static readonly Color HealthHigh = Hex(0x4CC46A);
+        public static readonly Color HealthMid = Hex(0xF0C243);
+        public static readonly Color HealthLow = Hex(0xE04B3A);
 
         // Battlefield mats and their slots
-        public static readonly Color Mat = Hex(0x0E0A13, 0.55f);
-        public static readonly Color MatHover = Hex(0x2A2036, 0.6f);
-        public static readonly Color MatValid = Hex(0x1E4A2E, 0.65f);
-        public static readonly Color MatInvalid = Hex(0x4A1E22, 0.65f);
-        public static readonly Color SlotEmpty = Hex(0xE8D8B0, 0.06f);
-        public static readonly Color SlotCombat = Hex(0xE8503A, 0.45f);
+        public static readonly Color Mat = Hex(0x0A0F1C, 0.82f);
+        public static readonly Color MatHover = Hex(0x18223A, 0.88f);
+        public static readonly Color MatValid = Hex(0x15362A, 0.88f);
+        public static readonly Color MatInvalid = Hex(0x3A181C, 0.88f);
+        public static readonly Color SlotEmpty = Hex(0x000000, 0.28f); // Recessed into the mat
+        public static readonly Color SlotCombat = Hex(0xE04B3A, 0.4f);
 
-        /// <summary>Each faction's color, like a Magic color identity: mat trim, plaque emblem and deck accents.</summary>
+        /// <summary>Each faction's color, like a Magic color identity: its side of the table, mat trim and emblem.</summary>
         public static Color FactionColor(Faction faction) => faction switch {
-            Faction.Corporate => Hex(0x4FB38A),     // Money green
-            Faction.Statecraft => Hex(0xC9463D),    // Propaganda red
-            Faction.Zeitgeist => Hex(0xD65DD1),     // Vaporwave magenta
+            Faction.Corporate => Hex(0x3FBF8F),     // Money green
+            Faction.Statecraft => Hex(0xD9483B),    // Propaganda red
+            Faction.Zeitgeist => Hex(0xD95DD0),     // Vaporwave magenta
             Faction.Myth => Hex(0xC9A23D),
-            Faction.ShadowOps => Hex(0x6C7A89),
+            Faction.ShadowOps => Hex(0x7C8A99),
             Faction.Tech => Hex(0x3DA9D6),
             Faction.DigitalSociety => Hex(0x5D7BD6),
             Faction.Mind => Hex(0x9A6CD6),
@@ -62,16 +63,17 @@ namespace SlayTheClone {
 
         public static Color Hex(int rgb, float alpha = 1f) =>
             new Color(((rgb >> 16) & 0xFF) / 255f, ((rgb >> 8) & 0xFF) / 255f, (rgb & 0xFF) / 255f, alpha);
+
+        public static Color WithAlpha(Color color, float alpha) => new Color(color.r, color.g, color.b, alpha);
         #endregion
 
         #region Sprites
-        private const int CornerRadius = 24; // Pixels; a sliced sprite shows its corners at this many UI units
+        private const int CornerRadius = 16; // Pixels; a sliced sprite shows its corners at this many UI units
+        private const int LatticeSize = 56;
         private static Sprite rounded;
         private static Sprite roundedOutline;
-        private static Sprite softCircle;
-        private static Sprite vignette;
-        private static Sprite felt;
-        private static Sprite verticalShine;
+        private static Sprite cornerBrackets;
+        private static Sprite lattice;
 
         /// <summary>A white rounded rectangle, sliced. Corner size can be scaled with Image.pixelsPerUnitMultiplier.</summary>
         public static Sprite Rounded => rounded != null ? rounded : rounded = MakeRounded(CornerRadius, 0);
@@ -79,17 +81,33 @@ namespace SlayTheClone {
         /// <summary>The outline of <see cref="Rounded"/>, 3 pixels wide.</summary>
         public static Sprite RoundedOutline => roundedOutline != null ? roundedOutline : roundedOutline = MakeRounded(CornerRadius, 3);
 
-        /// <summary>A white disc fading out to its edge: glows, and round badges when drawn small.</summary>
-        public static Sprite SoftCircle => softCircle != null ? softCircle : softCircle = MakeRadial(64, (d) => Mathf.Clamp01(1f - d) * Mathf.Clamp01(1f - d));
+        /// <summary>Only the corners of <see cref="RoundedOutline"/>: the zone markers of a playmat.</summary>
+        public static Sprite CornerBrackets => cornerBrackets != null ? cornerBrackets : cornerBrackets = MakeBrackets(64, 22, 10, 3);
 
-        /// <summary>Transparent in the middle, darkening to the edges.</summary>
-        public static Sprite Vignette => vignette != null ? vignette : vignette = MakeRadial(128, (d) => Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.45f, 1.35f, d)));
+        /// <summary>A tile of thin diagonal lines crossing into diamonds, for a patterned table.</summary>
+        public static Sprite Lattice => lattice != null ? lattice : lattice = MakeLattice(LatticeSize);
 
-        /// <summary>Faint speckles to tile over a flat color so it reads as cloth.</summary>
-        public static Sprite Felt => felt != null ? felt : felt = MakeFelt(128);
-
-        /// <summary>Light at the top fading to nothing: a glossy highlight for buttons and bars.</summary>
-        public static Sprite VerticalShine => verticalShine != null ? verticalShine : verticalShine = MakeVerticalShine(32);
+        // Same outline, but drawn only inside the corner squares of a bigger tile, whose middle (the part a sliced
+        // sprite stretches) stays empty
+        private static Sprite MakeBrackets(int size, int arm, int radius, int outline) {
+            var texture = NewTexture(size, size);
+            var pixels = new Color32[size * size];
+            float half = size / 2f;
+            float inner = half - 1f - radius;
+            for (int y = 0; y < size; y++) {
+                for (int x = 0; x < size; x++) {
+                    float px = Mathf.Abs(x + 0.5f - half) - inner;
+                    float py = Mathf.Abs(y + 0.5f - half) - inner;
+                    float outside = new Vector2(Mathf.Max(px, 0f), Mathf.Max(py, 0f)).magnitude + Mathf.Min(Mathf.Max(px, py), 0f) - radius;
+                    float alpha = Mathf.Clamp01(0.5f - outside) * Mathf.Clamp01(outside + outline + 0.5f);
+                    bool inCorner = (x < arm || x >= size - arm) && (y < arm || y >= size - arm);
+                    pixels[y * size + x] = new Color32(255, 255, 255, (byte)(inCorner ? alpha * 255 : 0));
+                }
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply();
+            return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, new Vector4(arm, arm, arm, arm));
+        }
 
         private static Sprite MakeRounded(int radius, int outline) {
             int size = radius * 2 + 4;
@@ -97,6 +115,7 @@ namespace SlayTheClone {
             var pixels = new Color32[size * size];
             float half = size / 2f;
             float inner = half - 1f - radius; // Half-extent of the straight part
+            int border = radius + 2;
 
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
@@ -112,47 +131,26 @@ namespace SlayTheClone {
             }
             texture.SetPixels32(pixels);
             texture.Apply();
-            int border = radius + 2;
             return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, new Vector4(border, border, border, border));
         }
 
-        private static Sprite MakeRadial(int size, System.Func<float, float> alphaAtDistance) {
+        private static Sprite MakeLattice(int size) {
             var texture = NewTexture(size, size);
+            texture.wrapMode = TextureWrapMode.Repeat;
             var pixels = new Color32[size * size];
-            float half = size / 2f;
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
-                    float d = new Vector2(x + 0.5f - half, y + 0.5f - half).magnitude / half;
-                    pixels[y * size + x] = new Color32(255, 255, 255, (byte)(Mathf.Clamp01(alphaAtDistance(d)) * 255));
+                    // Distance to the nearest line of each diagonal; the lines cross the tile's corners, so tiles join up
+                    float a = Mathf.Repeat(x + y + 1f, size);
+                    float b = Mathf.Repeat(x - y, size);
+                    float distance = Mathf.Min(Mathf.Min(a, size - a), Mathf.Min(b, size - b)) / 1.414f;
+                    float alpha = Mathf.Clamp01(1f - distance / 0.8f);
+                    pixels[y * size + x] = new Color32(255, 255, 255, (byte)(alpha * 255));
                 }
             }
             texture.SetPixels32(pixels);
             texture.Apply();
             return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
-        }
-
-        private static Sprite MakeFelt(int size) {
-            var texture = NewTexture(size, size);
-            texture.wrapMode = TextureWrapMode.Repeat;
-            var random = new System.Random(7); // Same cloth every run
-            var pixels = new Color32[size * size];
-            for (int i = 0; i < pixels.Length; i++) {
-                byte shade = (byte)(random.Next(2) == 0 ? 0 : 255);
-                pixels[i] = new Color32(shade, shade, shade, (byte)random.Next(0, 14));
-            }
-            texture.SetPixels32(pixels);
-            texture.Apply();
-            return Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
-        }
-
-        private static Sprite MakeVerticalShine(int height) {
-            var texture = NewTexture(1, height);
-            for (int y = 0; y < height; y++) {
-                float t = y / (height - 1f); // 0 at the bottom
-                texture.SetPixel(0, y, new Color(1f, 1f, 1f, Mathf.Pow(t, 2.2f)));
-            }
-            texture.Apply();
-            return Sprite.Create(texture, new Rect(0, 0, 1, height), new Vector2(0.5f, 0.5f), 100f);
         }
 
         private static Texture2D NewTexture(int width, int height) {
@@ -185,23 +183,21 @@ namespace SlayTheClone {
             return trim;
         }
 
-        /// <summary>A glossy highlight over the top half of the image.</summary>
-        public static Image AddShine(Transform target, float alpha = 0.18f) {
-            var shine = NewImage("Shine", target, new Color(1f, 1f, 1f, alpha));
-            shine.sprite = VerticalShine;
-            var rect = shine.rectTransform;
-            rect.anchorMin = new Vector2(0f, 0.5f);
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(6f, 0f);
-            rect.offsetMax = new Vector2(-6f, -3f);
-            return shine;
+        /// <summary>A flat, hard-edged shadow straight below the graphic, like a printed sticker on the table.</summary>
+        public static void AddHardShadow(Graphic graphic, float depth = 5f) {
+            if (graphic == null) return;
+            var shadow = graphic.GetComponent<Shadow>();
+            if (shadow == null) shadow = graphic.gameObject.AddComponent<Shadow>();
+            shadow.effectColor = HardShadow;
+            shadow.effectDistance = new Vector2(0f, -depth);
+            shadow.useGraphicAlpha = true;
         }
 
         public enum ButtonKind { Normal, Primary }
 
         /// <summary>
-        /// A rounded, gold-trimmed button. Primary buttons (End Turn, Start) are gold with dark text;
-        /// the others are dark with parchment text. Hovering brightens, pressing darkens.
+        /// A flat, brass-trimmed button standing on a hard shadow. Primary buttons (End Turn, Start) are brass with
+        /// dark text; the others are navy with parchment text. Hovering brightens, pressing darkens.
         /// </summary>
         public static void StyleButton(Button button, ButtonKind kind = ButtonKind.Normal) {
             if (button == null) return;
@@ -211,10 +207,11 @@ namespace SlayTheClone {
             if (image == null) image = button.gameObject.AddComponent<Image>();
             Round(image, primary ? Gold : PanelLight, 1.5f);
             button.targetGraphic = image;
+            AddHardShadow(image);
 
             var colors = button.colors;
             // Rests a little dimmed so hovering can brighten it to its true color
-            colors.normalColor = new Color(0.86f, 0.86f, 0.86f);
+            colors.normalColor = new Color(0.88f, 0.88f, 0.88f);
             colors.highlightedColor = Color.white;
             colors.pressedColor = new Color(0.68f, 0.66f, 0.64f);
             colors.selectedColor = colors.normalColor;
@@ -222,28 +219,28 @@ namespace SlayTheClone {
             colors.colorMultiplier = 1f;
             button.colors = colors;
 
-            if (button.transform.Find("Trim") == null) {
-                AddTrim(button.transform, primary ? Hex(0xFFF0B8, 0.9f) : GoldDim, 1.5f);
-                AddShine(button.transform, primary ? 0.35f : 0.12f);
-            }
+            var trim = button.transform.Find("Trim");
+            if (trim == null) trim = AddTrim(button.transform, Color.white, 1.5f).transform;
+            trim.GetComponent<Image>().color = primary ? Hex(0xFFF0B8) : GoldDim;
 
             foreach (var label in button.GetComponentsInChildren<TextMeshProUGUI>(true)) {
                 label.color = primary ? Ink : Parchment;
                 label.fontStyle |= FontStyles.Bold;
                 label.raycastTarget = false;
                 label.enableWordWrapping = false;
-                label.transform.SetAsLastSibling(); // Above the trim and shine
+                label.transform.SetAsLastSibling(); // Above the trim
             }
         }
 
-        /// <summary>A rounded dark panel with a gold border.</summary>
+        /// <summary>A navy panel with a brass border, on a hard shadow.</summary>
         public static void StylePanel(Image image, Color? fill = null, Color? trim = null) {
             if (image == null) return;
-            Round(image, fill ?? Panel);
-            if (image.transform.Find("Trim") == null) AddTrim(image.transform, trim ?? GoldDim).transform.SetAsFirstSibling();
+            Round(image, fill ?? Panel, 1.5f);
+            AddHardShadow(image, 6f);
+            if (image.transform.Find("Trim") == null) AddTrim(image.transform, trim ?? GoldDim, 1.5f).transform.SetAsFirstSibling();
         }
 
-        /// <summary>Title-style lettering: small caps, spaced out, with a soft drop shadow.</summary>
+        /// <summary>Title-style lettering: small caps, spaced out, on a hard drop shadow.</summary>
         public static void StyleHeading(TMP_Text text, Color? color = null) {
             if (text == null) return;
             text.color = color ?? Gold;
@@ -252,19 +249,44 @@ namespace SlayTheClone {
             AddDropShadow(text);
         }
 
-        /// <summary>A soft shadow under the letters, so text reads on any background. Gives the text its own material.</summary>
-        public static void AddDropShadow(TMP_Text text, float offset = 0.6f) {
+        /// <summary>A crisp shadow under the letters, so text reads on any background. Gives the text its own material.</summary>
+        public static void AddDropShadow(TMP_Text text, float offset = 0.7f) {
             var material = text.fontMaterial;
             material.EnableKeyword(ShaderUtilities.Keyword_Underlay);
-            material.SetColor(ShaderUtilities.ID_UnderlayColor, new Color(0f, 0f, 0f, 0.75f));
-            material.SetFloat(ShaderUtilities.ID_UnderlayOffsetX, offset);
+            material.SetColor(ShaderUtilities.ID_UnderlayColor, new Color(0f, 0f, 0f, 0.8f));
+            material.SetFloat(ShaderUtilities.ID_UnderlayOffsetX, 0f);
             material.SetFloat(ShaderUtilities.ID_UnderlayOffsetY, -offset);
-            material.SetFloat(ShaderUtilities.ID_UnderlaySoftness, 0.4f);
+            material.SetFloat(ShaderUtilities.ID_UnderlaySoftness, 0f);
             text.fontMaterial = material;
         }
         #endregion
 
         #region Building
+        /// <summary>
+        /// The table: a flat navy field under a faint diamond lattice. Added under everything else in the parent and
+        /// stretched over it; the caller can resize it.
+        /// </summary>
+        public static RectTransform AddBackdrop(Transform parent, string name = "Backdrop") {
+            var cloth = NewImage(name, parent, TableBase);
+            var rect = cloth.rectTransform;
+            rect.SetAsFirstSibling();
+            Stretch(rect);
+
+            var pattern = NewImage("Lattice", rect, new Color(1f, 1f, 1f, 0.035f));
+            pattern.sprite = Lattice;
+            pattern.type = Image.Type.Tiled;
+            Stretch(pattern.rectTransform);
+            return rect;
+        }
+
+        /// <summary>A small square turned on its corner: the ornament at the ends of lines.</summary>
+        public static Image NewDiamond(string name, Transform parent, Color color, float size) {
+            var diamond = NewImage(name, parent, color);
+            diamond.rectTransform.sizeDelta = new Vector2(size, size);
+            diamond.rectTransform.localRotation = Quaternion.Euler(0f, 0f, 45f);
+            return diamond;
+        }
+
         public static Image NewImage(string name, Transform parent, Color color, bool raycastTarget = false) {
             var go = new GameObject(name, typeof(RectTransform), typeof(Image));
             go.layer = parent.gameObject.layer;

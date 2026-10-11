@@ -1,4 +1,3 @@
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +20,8 @@ namespace SlayTheClone {
         private RectTransform turnBanner;
         private RectTransform weatherPill;
         private RectTransform endTurnButton;
-        private RectTransform endTurnGlow;
+        private RectTransform player1Side;
+        private RectTransform player2Side;
         private RectTransform deckButton;
         private RectTransform discardButton;
         private PlayerPlaque player1Plaque;
@@ -49,7 +49,7 @@ namespace SlayTheClone {
             var player1Faction = DeckCatalog.FactionOf(references.Player1Deck);
             var player2Faction = DeckCatalog.FactionOf(references.Player2Deck);
 
-            BuildTable();
+            BuildTable(player1Faction, player2Faction);
             TrimMat(player1Battlefield, player1Faction);
             TrimMat(player2Battlefield, player2Faction);
             player1Plaque = PlayerPlaque.Create(p1.PlayerUI.transform, manager.Player1, player1Faction, p1.HealthText, mediator);
@@ -57,8 +57,8 @@ namespace SlayTheClone {
             StyleTurnBanner(FindObjectOfType<TurnUI>());
             StyleEndTurn(references.GetResolveActionsButton());
             StyleWeather(references.GetWeatherText(), references.GetWeatherCycleButton());
-            deckButton = StylePileButton(references.GetDeckViewButton(), flip: false);
-            discardButton = StylePileButton(references.GetDiscardViewButton(), flip: true);
+            deckButton = StylePileButton(references.GetDeckViewButton(), flip: true);
+            discardButton = StylePileButton(references.GetDiscardViewButton(), flip: false);
             StyleDeckView(references.GetDeckViewUI());
 
             IsApplied = true;
@@ -71,46 +71,54 @@ namespace SlayTheClone {
         }
 
         #region Table
-        private void BuildTable() {
-            var tableImage = UITheme.NewImage("Table", canvasRoot, UITheme.TableFelt);
-            table = tableImage.rectTransform;
-            table.SetAsFirstSibling(); // Under everything
+        // Like a two-player playmat: each half of the table takes its owner's faction color, with a solid band along
+        // its outer edge, and a brass double rule with diamond ends splits the two halves
+        private void BuildTable(Faction player1Faction, Faction player2Faction) {
+            table = UITheme.AddBackdrop(canvasRoot, "Table");
             table.localScale = player1Battlefield.transform.localScale;
 
-            var weave = UITheme.NewImage("Weave", table, Color.white);
-            weave.sprite = UITheme.Felt;
-            weave.type = Image.Type.Tiled;
-            UITheme.Stretch(weave.rectTransform);
+            player1Side = BuildSide("Player1Side", player1Faction, edgeAtTop: false);
+            player2Side = BuildSide("Player2Side", player2Faction, edgeAtTop: true);
 
-            var lamp = UITheme.NewImage("Lamp", table, UITheme.Hex(0xFFD98A, 0.07f));
-            lamp.sprite = UITheme.SoftCircle;
-            lamp.rectTransform.anchorMin = new Vector2(0.1f, 0f);
-            lamp.rectTransform.anchorMax = new Vector2(0.9f, 1f);
-            lamp.rectTransform.offsetMin = lamp.rectTransform.offsetMax = Vector2.zero;
-
-            var vignette = UITheme.NewImage("Vignette", table, new Color(0f, 0f, 0f, 0.85f));
-            vignette.sprite = UITheme.Vignette;
-            UITheme.Stretch(vignette.rectTransform);
-
-            // The line between the two sides of the table, fading at both ends
-            var river = UITheme.NewImage("River", canvasRoot, UITheme.Hex(0xE8B84A, 0.45f));
-            riverLine = river.rectTransform;
-            riverLine.SetSiblingIndex(1);
+            riverLine = new GameObject("River", typeof(RectTransform)).GetComponent<RectTransform>();
+            riverLine.gameObject.layer = canvasRoot.gameObject.layer;
+            riverLine.SetParent(canvasRoot, false);
+            riverLine.SetSiblingIndex(3);
             riverLine.localScale = table.localScale;
-            riverLine.sizeDelta = new Vector2(1500f, 2f);
-            foreach (float side in new[] { -1f, 1f }) {
-                var fade = UITheme.NewImage(side < 0 ? "FadeLeft" : "FadeRight", riverLine, UITheme.TableFelt);
-                fade.sprite = UITheme.SoftCircle;
-                UITheme.Place(fade.rectTransform, new Vector2(side < 0 ? 0f : 1f, 0.5f), Vector2.zero, new Vector2(500f, 60f));
+            riverLine.sizeDelta = new Vector2(1500f, 10f);
+            foreach (float y in new[] { 1f, 0f }) {
+                var line = UITheme.NewImage("Rule", riverLine, UITheme.WithAlpha(UITheme.Gold, 0.7f));
+                line.rectTransform.anchorMin = new Vector2(0f, y);
+                line.rectTransform.anchorMax = new Vector2(1f, y);
+                line.rectTransform.sizeDelta = new Vector2(-20f, 2f);
+            }
+            foreach (float x in new[] { 0f, 1f }) {
+                var diamond = UITheme.NewDiamond("Diamond", riverLine, UITheme.Gold, 14f);
+                diamond.rectTransform.anchorMin = diamond.rectTransform.anchorMax = new Vector2(x, 0.5f);
+                diamond.rectTransform.anchoredPosition = Vector2.zero;
             }
         }
 
-        private static void TrimMat(BattlefieldUI battlefield, Faction faction) {
+        private RectTransform BuildSide(string name, Faction faction, bool edgeAtTop) {
             var color = UITheme.FactionColor(faction);
-            var trim = UITheme.AddTrim(battlefield.transform, new Color(color.r, color.g, color.b, 0.85f), 1f, 0f, "MatTrim");
-            trim.transform.SetAsFirstSibling(); // Under the slots and their cards
-            var glow = UITheme.AddTrim(battlefield.transform, new Color(color.r, color.g, color.b, 0.25f), 0.6f, -6f, "MatGlow");
-            glow.transform.SetAsFirstSibling();
+            var side = UITheme.NewImage(name, canvasRoot, UITheme.WithAlpha(color, 0.025f));
+            side.transform.SetSiblingIndex(1);
+            side.rectTransform.localScale = table.localScale;
+
+            var edge = UITheme.NewImage("Edge", side.transform, UITheme.WithAlpha(color, 0.9f));
+            edge.rectTransform.anchorMin = new Vector2(0f, edgeAtTop ? 1f : 0f);
+            edge.rectTransform.anchorMax = new Vector2(1f, edgeAtTop ? 1f : 0f);
+            edge.rectTransform.pivot = new Vector2(0.5f, edgeAtTop ? 1f : 0f);
+            edge.rectTransform.sizeDelta = new Vector2(0f, 8f);
+            return side.rectTransform;
+        }
+
+        // A solid border in the faction's color with a thin brass line inside it
+        private static void TrimMat(BattlefieldUI battlefield, Faction faction) {
+            var inner = UITheme.AddTrim(battlefield.transform, UITheme.WithAlpha(UITheme.Gold, 0.45f), 2.5f, 7f, "MatInnerLine");
+            inner.transform.SetAsFirstSibling(); // Under the slots and their cards
+            var trim = UITheme.AddTrim(battlefield.transform, UITheme.FactionColor(faction), 1.2f, 0f, "MatTrim");
+            trim.transform.SetAsFirstSibling();
         }
         #endregion
 
@@ -147,16 +155,7 @@ namespace SlayTheClone {
                 label.fontStyle = FontStyles.Bold | FontStyles.SmallCaps;
                 label.characterSpacing = 3f;
             }
-
-            // A slow pulse of light behind it, so the next step is always obvious
-            var glow = UITheme.NewImage("EndTurnGlow", endTurnButton.parent, UITheme.Hex(0xFFC860, 0.45f));
-            glow.sprite = UITheme.SoftCircle;
-            endTurnGlow = glow.rectTransform;
-            endTurnGlow.localScale = endTurnButton.localScale;
-            endTurnGlow.sizeDelta = new Vector2(420f, 200f);
-            endTurnGlow.SetSiblingIndex(endTurnButton.GetSiblingIndex());
-            DOTween.To(() => glow.color.a, a => glow.color = new Color(glow.color.r, glow.color.g, glow.color.b, a), 0.15f, 1.4f)
-                .SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(glow);
+            UITheme.AddHardShadow(button.image, 7f);
         }
 
         private void StyleWeather(TextMeshProUGUI weatherText, Button cycleButton) {
@@ -197,7 +196,7 @@ namespace SlayTheClone {
             }
         }
 
-        // A little stack of card backs beside the label, like the draw and discard piles of Slay the Spire
+        // A little stack of card backs beside the label, on the outer side (flip puts it on the right)
         private static RectTransform StylePileButton(Button button, bool flip) {
             if (button == null) return null;
             var rect = (RectTransform)button.transform;
@@ -267,17 +266,26 @@ namespace SlayTheClone {
             float riverY = (mat1.yMax + mat2.yMin) / 2f;
             PlaceAt(riverLine, center.x, riverY);
             riverLine.sizeDelta = new Vector2((right - left) / riverLine.lossyScale.x, riverLine.sizeDelta.y);
+            FillBetween(player1Side, center.x, halfWidth, center.y - halfHeight, riverY);
+            FillBetween(player2Side, center.x, halfWidth, riverY, center.y + halfHeight);
 
             PlaceAtLeft(player1Plaque != null ? (RectTransform)player1Plaque.transform : null, left, mat1.center.y);
             PlaceAtLeft(player2Plaque != null ? (RectTransform)player2Plaque.transform : null, left, mat2.center.y);
             PlaceAtLeft(turnBanner, left, riverY);
             if (weatherPill != null) PlaceAt(weatherPill, center.x, riverY);
             PlaceAtRight(endTurnButton, right, riverY);
-            if (endTurnGlow != null && endTurnButton != null) PlaceAt(endTurnGlow, endTurnButton.position.x, endTurnButton.position.y);
 
             float handY = WorldBounds(player1Hand.transform).center.y;
-            PlaceAtLeft(deckButton, left, handY);
-            PlaceAtRight(discardButton, right, handY);
+            PlaceAtLeft(discardButton, left, handY);
+            PlaceAtRight(deckButton, right, handY);
+        }
+
+        // Stretches a band across the whole view, from bottom to top (world units)
+        private static void FillBetween(RectTransform band, float centerX, float halfWidth, float bottom, float top) {
+            if (band == null) return;
+            float scale = band.lossyScale.x;
+            band.sizeDelta = new Vector2(halfWidth * 2f, top - bottom) / scale;
+            PlaceAt(band, centerX, (bottom + top) / 2f);
         }
 
         private static Rect WorldBounds(Transform transform) {
@@ -302,9 +310,5 @@ namespace SlayTheClone {
             PlaceAt(rect, right - rect.rect.width * rect.lossyScale.x / 2f, y);
         }
         #endregion
-
-        private void OnDestroy() {
-            if (endTurnGlow != null) DOTween.Kill(endTurnGlow.GetComponent<Image>());
-        }
     }
 }

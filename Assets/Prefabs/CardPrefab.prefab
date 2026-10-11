@@ -1019,6 +1019,7 @@ GameObject:
   - component: {fileID: 7117100706685536281}
   - component: {fileID: 5464925446207512663}
   - component: {fileID: 4247672974874967921}
+  - component: {fileID: 7836740822291373777}
   m_Layer: 5
   m_Name: CardPrefab
   m_TagString: Untagged
@@ -1170,6 +1171,21 @@ MonoBehaviour:
   OnCardClicked:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7836740822291373777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6960793175562600131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.55}
+  m_EffectDistance: {x: 5, y: -7}
+  m_UseGraphicAlpha: 1
 --- !u!1 &7105165416816610328
 GameObject:
   m_ObjectHideFlags: 0

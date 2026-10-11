@@ -17,11 +17,11 @@ namespace SlayTheClone {
         public ICreature OccupyingCreature => Model?.OccupyingCreature;
         public CardController OccupyingCard { get; private set; } // The card currently shown here
 
-        // A card-shaped space on the mat; it lights up under the pointer, and glows gold under a dragged card
+        // A card-shaped space on the mat marked by its corners; it lights up under the pointer, and turns brass under a dragged card
         public static readonly Vector2 Size = new Vector2(172f, 212f);
-        private static readonly Color HoverColor = UITheme.Hex(0xE8D8B0, 0.18f);
-        private static readonly Color DragTargetColor = UITheme.Hex(0xE8B84A, 0.35f);
-        private static readonly Color TrimColor = UITheme.Hex(0xE8B84A, 0.35f);
+        private static readonly Color HoverColor = UITheme.Hex(0xFFFFFF, 0.06f);
+        private static readonly Color DragTargetColor = UITheme.Hex(0xE2B04A, 0.3f);
+        private static readonly Color TrimColor = UITheme.Hex(0xE2B04A, 0.6f);
         private static readonly Color DragTargetTrimColor = UITheme.Hex(0xFFE08A, 0.95f);
 
         private Image trim;
@@ -36,7 +36,8 @@ namespace SlayTheClone {
             Model = model;
             rectTransform.sizeDelta = Size;
             UITheme.Round(backgroundImage, UITheme.SlotEmpty, 1.6f);
-            trim = UITheme.AddTrim(transform, TrimColor, 1.6f);
+            trim = UITheme.AddTrim(transform, TrimColor, 1f, -3f);
+            trim.sprite = UITheme.CornerBrackets; // Zone markers, like a playmat's
             ResetVisuals();
         }
 
