@@ -111,7 +111,8 @@ namespace SlayTheClone {
             .Select((card, index) => $"Card {index + 1}: {card.Name}")
             .ToList() ?? new List<string>();
 
-        public void Initialize(IGameMediator mediator, List<CardData> player1Cards, List<CardData> player2Cards, TurnManager turnManager, IModifierFactory modifierFactory) {
+        public void Initialize(IGameMediator mediator, List<CardData> player1Cards, List<CardData> player2Cards, TurnManager turnManager, IModifierFactory modifierFactory,
+            string player2Name = MatchSetup.DefaultOpponentName) {
             if (IsInitialized) {
                 LogWarning("GameManager Initialize called but already initialized.", LogTag.Initialization);
                 return;
@@ -126,8 +127,8 @@ namespace SlayTheClone {
             GameRandom.Reset(seed);
             Log($"Random seed {seed} (set it on GameManager to replay this game)", LogTag.Initialization);
 
-            Player1 = new Player("Player 1", isPlayer1: true) { CardsToDraw = 5 };
-            Player2 = new Player("Player 2", isPlayer1: false) { CardsToDraw = 5 };
+            Player1 = new Player(MatchSetup.DefaultPlayerName, isPlayer1: true) { CardsToDraw = 5 };
+            Player2 = new Player(player2Name, isPlayer1: false) { CardsToDraw = 5 };
             Player1.Opponent = Player2;
             Player2.Opponent = Player1;
 
@@ -142,7 +143,7 @@ namespace SlayTheClone {
             Player2.Initialize(mediator, CardDealingService);
 
             CardDealingService.InitializeDecks(Player1, player1Cards, Player2, player2Cards);
-            Log($"Decks initialized with {player1Cards.Count} cards for Player 1 and {player2Cards.Count} cards for Player 2", LogTag.Cards | LogTag.Initialization);
+            Log($"Decks initialized with {player1Cards.Count} cards for {Player1.Name} and {player2Cards.Count} cards for {Player2.Name}", LogTag.Cards | LogTag.Initialization);
 
             // The turn flow drives the rules; it never needs this manager
             turnManager.Initialize(new IPlayer[] { Player1, Player2 }, ActionsQueue, ModifierManager, mediator, turnClock);

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: GrindsetBro
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: be43a540-ba55-4d90-afb5-4ab15d524adf
+  cardName: Grindset Bro
+  description: Sleep is a scam invented by Big Mattress.
+  cardType: 0
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: 8c8299f91462e924d939b3d8c83b2a42, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 4
+    actions:
+    - actionType: 0
+      value: 1
+      targetType: 5
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: Coffeinated, then Burnout (the Hustle Culture pairing with
+    Corporate).'
+  attack: 4
+  health: 2
+  speed: 3
+  turnsUntilOperative: 0

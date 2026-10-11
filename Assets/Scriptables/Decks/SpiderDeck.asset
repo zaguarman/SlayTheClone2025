@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: SpiderDeck
   m_EditorClassIdentifier: 
-  deckName: SpiderDeck
+  deckName: Spiders
   cards:
   - {fileID: 11400000, guid: 2f773ce5f1dcbd042944a8e74b1da9ca, type: 2}
   - {fileID: 11400000, guid: 9a6201be928dc5941a339479d2fad47a, type: 2}

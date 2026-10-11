@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: ArtilleryBarrage
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 171d74dd-7340-43b7-8261-763cdd6e4dbf
+  cardName: Artillery Barrage
+  description: Collateral damage within acceptable parameters.
+  cardType: 1
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: b42683a90c05e8847a27496dba78f037, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 0
+      value: 2
+      targetType: 4
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: Static area damage on 3 adjacent slots, the swarm counter.'
+  defaultTargetType: 4

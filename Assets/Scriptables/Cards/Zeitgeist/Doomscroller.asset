@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Doomscroller
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: a525a92a-9b97-4f09-b196-a7bfac3808ba
+  cardName: Doomscroller
+  description: Just one more post. Just one more. Just...
+  cardType: 0
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: d28d4cfdcc5c34a4296fae6247ec7bae, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 4
+    actions:
+    - actionType: 6
+      value: 1
+      targetType: 5
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+    - actionType: 0
+      value: 1
+      targetType: 5
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: Earworm-style mood. Gains Impatient once it runs out of Health
+    to spend.'
+  attack: 1
+  health: 3
+  speed: 2
+  turnsUntilOperative: 0

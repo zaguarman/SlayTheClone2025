@@ -30,23 +30,40 @@ namespace SlayTheClone.Tests {
         public ITurnManager Turns => Manager.TurnManager;
         public IActionsQueue Queue => Manager.ActionsQueue;
 
-        /// <summary>Loads the scene and waits for the game to start; the seed makes the shuffles the same every run.</summary>
+        /// <summary>
+        /// Loads the scene on its own, with the decks set on it, and waits for the game to start;
+        /// the seed makes the shuffles the same every run.
+        /// </summary>
         public IEnumerator Load(int seed) {
+            MatchSetup.Clear();
+            yield return Start(seed, () => SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single));
+        }
+
+        /// <summary>Loads the scene for a match as the main menu would have chosen it.</summary>
+        public IEnumerator Load(int seed, DeckScriptableObject playerDeck, string opponentName, DeckScriptableObject opponentDeck) {
+            MatchSetup.Choose(playerDeck, opponentName, opponentDeck);
+            yield return Start(seed, () => SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single));
+        }
+
+        /// <summary>Runs whatever loads the game scene (the main menu's Start button, say) and waits for the game to start.</summary>
+        public IEnumerator Start(int seed, Action loadGameScene) {
             // Set after the scene's objects wake up and before GameBootstrap starts the game
+            bool loaded = false; // The game scene being replaced may still look started
             void SetSeed(Scene scene, LoadSceneMode mode) {
+                if (scene.name != SceneName) return;
                 var manager = Object.FindFirstObjectByType<GameManager>();
                 if (manager != null) SetField(manager, "randomSeed", seed);
+                loaded = true;
             }
 
             SceneManager.sceneLoaded += SetSeed;
             try {
-                yield return SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single);
+                loadGameScene();
+                yield return Wait.For(() => loaded && HasStarted(), "the game to start");
             }
             finally {
                 SceneManager.sceneLoaded -= SetSeed;
             }
-
-            yield return Wait.For(HasStarted, "the game to start");
             Manager = Object.FindFirstObjectByType<GameManager>();
             References = Object.FindFirstObjectByType<GameReferences>();
             Time.timeScale = TimeScale; // After the scene's pause menu has reset it
@@ -60,7 +77,16 @@ namespace SlayTheClone.Tests {
 
         public void Dispose() {
             Time.timeScale = 1f;
+            MatchSetup.Clear(); // A chosen match would otherwise carry over to the next test
             Cards.Dispose();
+        }
+
+        /// <summary>Every card the player owns (deck, hand, board and discard pile) are the deck's cards, copies included.</summary>
+        public static void AssertPlays(Player player, DeckScriptableObject deck) {
+            var owned = player.Deck.GetDeckPreview().Concat(player.Hand).Concat(player.Deck.GetDiscardPilePreview())
+                .Concat(player.Battlefield.Where(s => s.IsOccupied()).Select(s => (ICard)s.OccupyingCreature));
+            CollectionAssert.AreEquivalent(deck.Cards.Select(c => c.cardId), owned.Select(c => c.CardId),
+                $"{player.Name} isn't playing {deck.GetDeckName()}");
         }
 
         #region Playing
@@ -82,6 +108,15 @@ namespace SlayTheClone.Tests {
 
         /// <summary>What dropping a card from the hand on a slot does: the play is queued until the turn ends.</summary>
         public void Play(ICard card, Player caster, BoardSlot slot) => Queue.AddAction(new PlayCardAction(card, caster, slot));
+
+        /// <summary>Every creature in the hand goes to an empty slot of its player's board.</summary>
+        public void PlayCreatures(Player player) {
+            var freeSlots = new Queue<BoardSlot>(player.Battlefield.Where(s => !s.IsOccupied()));
+            foreach (var creature in player.Hand.OfType<ICreature>().ToList()) {
+                if (freeSlots.Count == 0) break;
+                Play(creature, player, freeSlots.Dequeue());
+            }
+        }
 
         /// <summary>What dragging a creature onto an enemy slot does.</summary>
         public void Attack(ICreature attacker, BoardSlot target) => Manager.CombatHandler.HandleCreatureCombat(attacker, target);

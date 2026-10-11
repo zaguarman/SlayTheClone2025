@@ -28,7 +28,10 @@ namespace SlayTheClone {
         Button GetDeckViewButton();
         Button GetDiscardViewButton();
 
-        // Deck data
+        // Deck data: the match chosen in the main menu, or the scene's own decks
+        DeckScriptableObject Player1Deck { get; }
+        DeckScriptableObject Player2Deck { get; }
+        string Player2Name { get; }
         List<CardData> GetPlayer1DeckCards();
         List<CardData> GetPlayer2DeckCards();
     }

@@ -121,7 +121,13 @@ namespace SlayTheClone {
                 return false;
             }
 
-            // First try to find by CardId (more reliable than name)
+            // The instance itself first: copies of the same card share a CardId
+            if (cards.Remove(card)) {
+                Log($"Removed card {card.Name} (CardID: {card.CardId.ToUpper()}) from deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
+                return true;
+            }
+
+            // Then by CardId (more reliable than name)
             var cardToRemove = cards.FirstOrDefault(c => c.CardId == card.CardId);
 
             if (cardToRemove != null) {

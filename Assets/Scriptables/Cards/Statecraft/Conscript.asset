@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Conscript
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: e8acec24-655b-4f3d-b66f-e29d73e0eeb5
+  cardName: Conscript
+  description: Volunteered. The paperwork says so.
+  cardType: 0
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: 467c9cb68e789c546b30a6644a505136, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 0
+    actions:
+    - actionType: 4
+      value: 1
+      targetType: 5
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: Recruitment. Conscription takes enemy creatures, and this
+    is what they become.'
+  attack: 2
+  health: 3
+  speed: 1
+  turnsUntilOperative: 1

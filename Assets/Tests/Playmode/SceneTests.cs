@@ -30,7 +30,10 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [UnityTest]
-        public IEnumerator TheGameStarts_WithFullHealth_FiveCardsEach_AndEmptyBoards() {
+        public IEnumerator TheGameStarts_WithTheScenesDecks_FullHealth_FiveCardsEach_AndEmptyBoards() {
+            SceneGame.AssertPlays(p1, game.References.Player1Deck);
+            SceneGame.AssertPlays(p2, game.References.Player2Deck);
+            Assert.AreEqual(MatchSetup.DefaultOpponentName, p2.Name, "With no match chosen, the opponent keeps its default name");
             foreach (var player in game.Players) {
                 Assert.AreEqual(Player.MaxHealth, player.Health);
                 Assert.AreEqual(5, player.Hand.Count);
@@ -137,7 +140,7 @@ namespace SlayTheClone.Tests {
 
             for (int turn = 1; turn <= 6; turn++) {
                 foreach (var player in game.Players) {
-                    PlayCreatures(player);
+                    game.PlayCreatures(player);
                     foreach (var slot in player.Battlefield.Where(s => s.IsOccupied())) {
                         game.Attack(slot.OccupyingCreature, player.Opponent.Battlefield[slot.Index]);
                     }
@@ -152,15 +155,6 @@ namespace SlayTheClone.Tests {
                     GameAsserts.AssertEachCardInOneZone(player);
                 }
                 GameAsserts.AssertBoardsConsistent(p1, p2);
-            }
-        }
-
-        // Every creature in the hand goes to an empty slot of its player's board
-        private void PlayCreatures(Player player) {
-            var freeSlots = new Queue<BoardSlot>(player.Battlefield.Where(s => !s.IsOccupied()));
-            foreach (var creature in player.Hand.OfType<ICreature>().ToList()) {
-                if (freeSlots.Count == 0) break;
-                game.Play(creature, player, freeSlots.Dequeue());
             }
         }
     }

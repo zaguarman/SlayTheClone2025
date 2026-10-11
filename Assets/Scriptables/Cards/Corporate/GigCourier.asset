@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: GigCourier
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 4b51af47-1f25-4847-9e38-6f1b5031f9be
+  cardName: Gig Courier
+  description: Five stars. Zero benefits.
+  cardType: 0
+  faction: 4
+  artwork: {fileID: 3286163911610860551, guid: 5d0ee2d7063f9c04984cd5c123fb953b, type: 3}
+  effects: []
+  designNotes: 'Future: Contract worker. Leaves play on its own after 3 Days, the
+    gig is over.'
+  attack: 3
+  health: 1
+  speed: 3
+  turnsUntilOperative: 0

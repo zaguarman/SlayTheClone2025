@@ -150,10 +150,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 572416549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &59633206
 MonoBehaviour:
@@ -241,7 +241,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4289913074
   m_fontColor: {r: 0.95, g: 0.88, b: 0.7, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -449,10 +449,10 @@ RectTransform:
   - {fileID: 1309594654}
   m_Father: {fileID: 572416549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &462560246
 GameObject:
@@ -828,7 +828,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4289913074
   m_fontColor: {r: 0.95, g: 0.88, b: 0.7, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -841,7 +841,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -912,6 +912,7 @@ GameObject:
   - component: {fileID: 1356311570}
   - component: {fileID: 1356311569}
   - component: {fileID: 1356311568}
+  - component: {fileID: 1356311573}
   m_Layer: 5
   m_Name: MainMenuCanvas
   m_TagString: Untagged
@@ -934,6 +935,7 @@ MonoBehaviour:
   gameSceneName: InitialTestScene
   playButton: {fileID: 1851232298}
   quitButton: {fileID: 429446114}
+  matchSetup: {fileID: 1356311573}
 --- !u!114 &1356311569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -992,7 +994,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1018,6 +1020,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1356311573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356311567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b65185b4cd240ec4fb80268998568bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::SlayTheClone.MatchSetupMenu
+  catalog: {fileID: 11400000, guid: 7ca09b790d806964e871559f569b37da, type: 2}
+  titleScreen: {fileID: 572416548}
+  panelColor: {r: 0.11, g: 0.09, b: 0.15, a: 1}
+  buttonColor: {r: 0.16, g: 0.13, b: 0.2, a: 1}
+  selectedColor: {r: 0.4, g: 0.29, b: 0.1, a: 1}
+  textColor: {r: 0.95, g: 0.88, b: 0.7, a: 1}
+  accentColor: {r: 0.95, g: 0.78, b: 0.35, a: 1}
 --- !u!1 &1557471871
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,10 +1072,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 572416549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1557471873
 MonoBehaviour:
@@ -1105,7 +1126,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4284073970
   m_fontColor: {r: 0.95, g: 0.78, b: 0.35, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1118,7 +1139,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -1211,10 +1232,10 @@ RectTransform:
   - {fileID: 401039512}
   m_Father: {fileID: 572416549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1851232295
 MonoBehaviour:
@@ -1351,10 +1372,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 572416549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1889141420
 MonoBehaviour:

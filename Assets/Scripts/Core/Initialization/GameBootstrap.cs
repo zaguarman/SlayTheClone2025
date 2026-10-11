@@ -37,7 +37,7 @@ namespace SlayTheClone {
             if (!TryFind(out GameManager gameManager)) yield break;
             if (!gameManager.IsInitialized) {
                 gameManager.Initialize(gameMediator, gameReferences.GetPlayer1DeckCards(), gameReferences.GetPlayer2DeckCards(),
-                    turnManager, new SimpleModifierFactory());
+                    turnManager, new SimpleModifierFactory(), gameReferences.Player2Name);
                 yield return new WaitUntil(() => gameManager.IsInitialized);
             }
             Log("GameManager initialized", LogTag.Initialization);

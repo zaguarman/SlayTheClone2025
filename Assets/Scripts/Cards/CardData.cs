@@ -9,6 +9,7 @@ namespace SlayTheClone {
         public string cardName;
         public string description;
         public CardType cardType;
+        public Faction faction;
         public Sprite artwork;
         public List<CardEffect> effects = new List<CardEffect>();
 

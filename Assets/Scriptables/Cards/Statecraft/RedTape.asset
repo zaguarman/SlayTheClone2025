@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: RedTape
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 03254d03-dcbc-4866-926a-3de9b533cfdc
+  cardName: Red Tape
+  description: Your request is being processed. Please hold.
+  cardType: 1
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: cbed49b4d43ecb841b0d64035a6adfc2, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 5
+      value: 1
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: +1 Deployment Time on an enemy creature, or Priority -1 on
+    its action.'
+  defaultTargetType: 4

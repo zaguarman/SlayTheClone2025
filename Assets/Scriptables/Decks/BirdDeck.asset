@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: BirdDeck
   m_EditorClassIdentifier: 
-  deckName: BirdDeck
+  deckName: Birds
   cards:
   - {fileID: 11400000, guid: aafd2fda5a361424cbaab9bada6880f3, type: 2}
   - {fileID: 11400000, guid: e3f538d9b5f96634a8865535b5f280f8, type: 2}

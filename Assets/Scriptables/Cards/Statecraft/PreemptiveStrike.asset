@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: PreemptiveStrike
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 470b2a5a-1ba4-4a51-b6d9-217c1bf70ad1
+  cardName: Preemptive Strike
+  description: They were going to attack us. Probably. Eventually.
+  cardType: 1
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: 67f0943531212e746b7d3d34b572b71c, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 0
+      value: 3
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: resolves with +1 Priority (Action).'
+  defaultTargetType: 4

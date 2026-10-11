@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: StatecraftDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Statecraft - Order & Paperwork
+  cards:
+  - {fileID: 11400000, guid: 1925cc1dbd66c2d45b259a25074fb935, type: 2}
+  - {fileID: 11400000, guid: 1925cc1dbd66c2d45b259a25074fb935, type: 2}
+  - {fileID: 11400000, guid: 1925cc1dbd66c2d45b259a25074fb935, type: 2}
+  - {fileID: 11400000, guid: 2623af59600141c4396f6da17c75973a, type: 2}
+  - {fileID: 11400000, guid: cd904c357917ae144bad2fd39e181efc, type: 2}
+  - {fileID: 11400000, guid: 46365de1d43bae04da1d4e9e84d4711b, type: 2}
+  - {fileID: 11400000, guid: 8ff784dc019ea51458f6233c039e643c, type: 2}
+  - {fileID: 11400000, guid: 5b33e7e71103019489152f339ee3c999, type: 2}
+  - {fileID: 11400000, guid: c90d6f29d6c81024d9b961b4be57d278, type: 2}
+  - {fileID: 11400000, guid: 73624bb457f89004880667251e2d12c1, type: 2}
+  - {fileID: 11400000, guid: 0ce268d8b1e07c8478219cc232705c94, type: 2}
+  - {fileID: 11400000, guid: 3ad6f6a0e6aabe04a9ea4b47f33383c9, type: 2}
+  - {fileID: 11400000, guid: 22462a2399f51d7499e67770bc18a13d, type: 2}
+  - {fileID: 11400000, guid: c89aa0d1ca958724daa89ba4ab9c037b, type: 2}
+  - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
+  - {fileID: 11400000, guid: d82ef5f0fe3d6324abebbb8670e723d3, type: 2}
+  - {fileID: 11400000, guid: 27a6787d59d5cf445bf7199e270905bd, type: 2}

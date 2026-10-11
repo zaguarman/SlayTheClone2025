@@ -10,7 +10,18 @@ namespace SlayTheClone {
     /// </summary>
     public static class CardTextFormatter {
 
-        public static string GetTypeLine(CardData data) => data is SpellData ? "Spell" : "Creature";
+        public static string GetTypeLine(CardData data) {
+            string type = data is SpellData ? "Spell" : "Creature";
+            return data.faction == Faction.None ? type : $"{type} — {FactionName(data.faction)}";
+        }
+
+        public static string FactionName(Faction faction) {
+            switch (faction) {
+                case Faction.ShadowOps: return "Shadow Ops.";
+                case Faction.DigitalSociety: return "Digital Society";
+                default: return faction.ToString();
+            }
+        }
 
         public static string GetRulesText(CardData data) => GetRulesText(data.effects, data is SpellData);
 

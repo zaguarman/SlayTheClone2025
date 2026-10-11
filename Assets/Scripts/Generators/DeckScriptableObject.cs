@@ -35,5 +35,7 @@ namespace SlayTheClone {
         public string GetDeckName() {
             return deckName;
         }
+
+        public IReadOnlyList<CardDataScriptableObject> Cards => cards;
     }
 }

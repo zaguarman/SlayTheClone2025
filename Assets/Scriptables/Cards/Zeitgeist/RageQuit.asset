@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: RageQuit
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 6496ad80-2693-4a7e-bd67-32106e55d855
+  cardName: Rage Quit
+  description: gg ez. Uninstalling. Reinstalling.
+  cardType: 1
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: ba3f1f838efd03747b9fb848cd7f5c42, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 0
+      value: 4
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+    - actionType: 0
+      value: 2
+      targetType: 0
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: self-harm lands on a friendly creature (Impatient) instead
+    of on you.'
+  defaultTargetType: 4

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: BorderGuard
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 1969eb33-d837-4cf3-92b3-4d7c8a8e6dae
+  cardName: Border Guard
+  description: Papers, please. No, the other papers.
+  cardType: 0
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: ad8d4b435f0f67d4f961697ff4cd729f, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 0
+    actions:
+    - actionType: 4
+      value: 1
+      targetType: 3
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: Anchored on itself and Fortifying the slots next to it.'
+  attack: 1
+  health: 5
+  speed: 1
+  turnsUntilOperative: 1

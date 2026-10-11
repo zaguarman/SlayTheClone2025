@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: ExistentialDread
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 9e59fc12-94d2-43a4-822a-8106bbb14636
+  cardName: Existential Dread
+  description: Nothing matters. Equally, at least.
+  cardType: 1
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: 0af29cd8f7986c448b7553f0e08127b5, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 0
+      value: 2
+      targetType: 2
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: a Trend (Location) that rewards creatures with no intents
+    for X Days.'
+  defaultTargetType: 2

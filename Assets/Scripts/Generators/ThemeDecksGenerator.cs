@@ -24,16 +24,16 @@ namespace SlayTheClone {
             List<CardDataScriptableObject> birdCards = GenerateBirdCards();
 
             // Create Spider Deck
-            CreateDeck("SpiderDeck", spiderCards, "Assets/Scriptables/Decks/SpiderDeck.asset");
+            CreateDeck("Spiders", spiderCards, "Assets/Scriptables/Decks/SpiderDeck.asset");
 
             // Create Bird Deck
-            CreateDeck("BirdDeck", birdCards, "Assets/Scriptables/Decks/BirdDeck.asset");
+            CreateDeck("Birds", birdCards, "Assets/Scriptables/Decks/BirdDeck.asset");
 
             // Generate Water Cards
             List<CardDataScriptableObject> waterCards = GenerateWaterCards();
 
             // Create Water Deck
-            CreateDeck("WaterDeck", waterCards, "Assets/Scriptables/Decks/WaterDeck.asset");
+            CreateDeck("Water", waterCards, "Assets/Scriptables/Decks/WaterDeck.asset");
 
             AssetDatabase.SaveAssets();
             Debug.Log("Generated Spider, Bird, and Water decks successfully!");

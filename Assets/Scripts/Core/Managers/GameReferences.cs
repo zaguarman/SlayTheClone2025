@@ -65,7 +65,7 @@ namespace SlayTheClone {
         [SerializeField] private Color player1CardColor = new Color(0.8f, 0.9f, 1f);
         [SerializeField] private Color player2CardColor = new Color(1f, 0.8f, 0.8f);
 
-        [Header("Decks")]
+        [Header("Decks (used when the main menu didn't choose a match)")]
         [SerializeField] private DeckScriptableObject player1Deck;
         [SerializeField] private DeckScriptableObject player2Deck;
 
@@ -105,8 +105,8 @@ namespace SlayTheClone {
             isValid &= IsAssigned(deckViewUI, "DeckViewUI reference missing in GameReferences!");
             isValid &= IsAssigned(deckViewButton, "DeckViewButton reference missing in GameReferences!");
             isValid &= IsAssigned(discardViewButton, "DiscardViewButton reference missing in GameReferences!");
-            isValid &= IsAssigned(player1Deck, "Player 1 deck reference missing!");
-            isValid &= IsAssigned(player2Deck, "Player 2 deck reference missing!");
+            isValid &= IsAssigned(Player1Deck, "Player 1 deck reference missing!");
+            isValid &= IsAssigned(Player2Deck, "Player 2 deck reference missing!");
 
             isValid &= player1References.ValidateReferences("Player 1");
             isValid &= player2References.ValidateReferences("Player 2");
@@ -149,8 +149,13 @@ namespace SlayTheClone {
             return reference;
         }
 
-        public List<CardData> GetPlayer1DeckCards() => GetDeckCards(player1Deck, "Player1Deck");
-        public List<CardData> GetPlayer2DeckCards() => GetDeckCards(player2Deck, "Player2Deck");
+        // The match chosen in the main menu wins over the scene's own decks
+        public DeckScriptableObject Player1Deck => MatchSetup.IsChosen ? MatchSetup.PlayerDeck : player1Deck;
+        public DeckScriptableObject Player2Deck => MatchSetup.IsChosen ? MatchSetup.OpponentDeck : player2Deck;
+        public string Player2Name => MatchSetup.IsChosen ? MatchSetup.OpponentName : MatchSetup.DefaultOpponentName;
+
+        public List<CardData> GetPlayer1DeckCards() => GetDeckCards(Player1Deck, "Player1Deck");
+        public List<CardData> GetPlayer2DeckCards() => GetDeckCards(Player2Deck, "Player2Deck");
 
         private static List<CardData> GetDeckCards(DeckScriptableObject deck, string deckName) {
             if (deck == null) {
