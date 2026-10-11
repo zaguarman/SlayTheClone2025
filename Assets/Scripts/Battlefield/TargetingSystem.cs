@@ -9,8 +9,6 @@ namespace SlayTheClone {
     }
 
     public static class TargetingSystem {
-        private static System.Random random = new System.Random();
-
         public static List<ITarget> GetValidTargets(IPlayer controller, TargetType targetType, TargetModifier targetModifier = TargetModifier.None) {
             var validTargets = new List<ITarget>();
 
@@ -94,7 +92,7 @@ namespace SlayTheClone {
         private static void ApplyTargetModifiers(List<ITarget> targets, TargetModifier targetModifier) {
             // Apply Random modifier
             if (targetModifier.HasFlag(TargetModifier.Random) && targets.Count > 0) {
-                int randomIndex = random.Next(targets.Count);
+                int randomIndex = GameRandom.Next(targets.Count);
                 var randomTarget = targets[randomIndex];
                 targets.Clear();
                 targets.Add(randomTarget);
@@ -163,7 +161,7 @@ namespace SlayTheClone {
                 var slotIndex = creature.Slot.Index;
 
                 // Randomly pick a side to go first; the other side fills the chain if needed
-                int firstStep = random.Next(2) == 0 ? 1 : -1;
+                int firstStep = GameRandom.Next(2) == 0 ? 1 : -1;
                 AddCreaturesInDirection(owner.Battlefield, slotIndex, firstStep, chainedTargets, chainLength);
                 AddCreaturesInDirection(owner.Battlefield, slotIndex, -firstStep, chainedTargets, chainLength);
             }
@@ -217,7 +215,7 @@ namespace SlayTheClone {
                 return chainTargets; // No adjacent targets
             }
             else {
-                direction = random.Next(2) == 0 ? -1 : 1; // Random tie-breaker
+                direction = GameRandom.Next(2) == 0 ? -1 : 1; // Random tie-breaker
             }
 
             // Build the chain in the chosen direction

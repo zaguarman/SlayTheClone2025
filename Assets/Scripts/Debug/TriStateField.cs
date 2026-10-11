@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace SlayTheClone {
@@ -30,7 +32,8 @@ namespace SlayTheClone {
             };
         }
 
-        // Custom GUI for the TriStateField
+#if UNITY_EDITOR
+        // Inspector drawing for the TriStateField; editor-only, so player builds compile
         public static class CustomGUI {
             private static readonly GUIContent[] IconContents = {
                 EditorGUIUtility.IconContent("Toggle Icon"),         // None
@@ -52,5 +55,6 @@ namespace SlayTheClone {
                 return EditorGUIUtility.singleLineHeight;
             }
         }
+#endif
     }
 }

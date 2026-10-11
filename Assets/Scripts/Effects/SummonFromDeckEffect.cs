@@ -3,8 +3,6 @@ using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
     public static class SummonFromDeckEffect {
-        private static readonly System.Random Rng = new System.Random();
-
         /// <summary>
         /// Takes up to <paramref name="count"/> random creatures out of the player's draw pile
         /// and queues summoning each one into a random empty slot of that player's battlefield.
@@ -32,7 +30,7 @@ namespace SlayTheClone {
         }
 
         private static T TakeRandom<T>(System.Collections.Generic.List<T> items) {
-            int index = Rng.Next(items.Count);
+            int index = GameRandom.Next(items.Count);
             var item = items[index];
             items.RemoveAt(index);
             return item;

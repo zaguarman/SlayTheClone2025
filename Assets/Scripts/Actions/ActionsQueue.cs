@@ -18,12 +18,6 @@ namespace SlayTheClone {
         private readonly int maxIterationDepth = 3;
 
         private readonly IGameMediator gameMediator;
-        private readonly IBattlefieldCombatHandler combatHandler;
-        private readonly IWeatherSystem weatherSystem;
-        private readonly ICardDealingService cardDealingService;
-        private readonly IGameReferences gameReferences;
-        private readonly IModifierManager modifierManager;
-        private readonly ITurnManager turnManager;
 
         private readonly Dictionary<Type, IActionExecutor> actionExecutors;
         private readonly ActionExecutionContext executionContext;
@@ -57,36 +51,14 @@ namespace SlayTheClone {
         #region Constructor
         public ActionsQueue(
             IGameMediator gameMediator,
-            IBattlefieldCombatHandler combatHandler,
             IWeatherSystem weatherSystem,
             ICardDealingService cardDealingService,
-            IGameReferences gameReferences,
             IModifierManager modifierManager,
-            ITurnManager turnManager,
-            Dictionary<Type, IActionExecutor> actionExecutors,
-            IGameManager gameManager = null) {
+            ITurnClock turnClock,
+            Dictionary<Type, IActionExecutor> actionExecutors) {
             this.gameMediator = gameMediator ?? throw new ArgumentNullException(nameof(gameMediator));
-            this.combatHandler = combatHandler ?? throw new ArgumentNullException(nameof(combatHandler));
-            this.weatherSystem = weatherSystem ?? throw new ArgumentNullException(nameof(weatherSystem));
-            this.cardDealingService = cardDealingService ?? throw new ArgumentNullException(nameof(cardDealingService));
-            this.gameReferences = gameReferences ?? throw new ArgumentNullException(nameof(gameReferences));
-            this.modifierManager = modifierManager ?? throw new ArgumentNullException(nameof(modifierManager));
-            this.turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
-
             this.actionExecutors = actionExecutors ?? throw new ArgumentNullException(nameof(actionExecutors));
-
-            executionContext = new ActionExecutionContext(
-                gameMediator,
-                gameReferences,
-                cardDealingService,
-                weatherSystem,
-                modifierManager,
-                modifierManager.ModifierFactory,
-                this,
-                combatHandler,
-                turnManager,
-                gameManager // Pass the gameManager parameter
-            );
+            executionContext = new ActionExecutionContext(gameMediator, cardDealingService, weatherSystem, modifierManager, this, turnClock);
 
             Log("ActionsQueue initialized with Strategy Executors.", LogTag.Initialization);
         }
@@ -96,7 +68,8 @@ namespace SlayTheClone {
         private int GetActionPriority(IGameAction action) {
             return action switch {
                 SummonCreatureAction => -1,
-                MoveCreatureAction or SwapCreaturesAction => 0,
+                // Stat changes and statuses take effect before anything else waiting, as if applied on the spot
+                MoveCreatureAction or SwapCreaturesAction or ModifyAction or ApplyStatusEffectAction => 0,
                 PlayCardAction => 1,
                 BattlefieldCombatAction => 4,
                 DamageCreatureAction or DamagePlayerAction => 5,
@@ -268,7 +241,6 @@ namespace SlayTheClone {
         private void EndResolution() {
             currentIterationDepth--;
             activeCreatureActions.Clear();
-            combatHandler?.ResetAttackingCreatures();
 
             // ActionsQueueChanged was already raised after the last action ran; only the coarse state change is new here
             if (resolvedAnyAction) {
@@ -302,15 +274,13 @@ namespace SlayTheClone {
 
         #region Cleanup
         public void Cleanup() {
-            if (actionsList.Count > 0 || activeCreatureActions.Count > 0) {
-                actionsList.Clear();
-                activeCreatureActions.Clear();
-                processedEffects.Clear();
-                OnActionsQueued.RemoveAllListeners();
-                OnActionsResolved.RemoveAllListeners();
-                OnActionExecuting.RemoveAllListeners();
-                Log($"Actions queue cleaned up (Queue ID: {QueueId})", LogTag.Actions);
-            }
+            actionsList.Clear();
+            activeCreatureActions.Clear();
+            processedEffects.Clear();
+            OnActionsQueued.RemoveAllListeners();
+            OnActionsResolved.RemoveAllListeners();
+            OnActionExecuting.RemoveAllListeners();
+            Log($"Actions queue cleaned up (Queue ID: {QueueId})", LogTag.Actions);
         }
         #endregion
     }

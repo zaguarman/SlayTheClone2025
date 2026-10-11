@@ -20,7 +20,6 @@ namespace SlayTheClone {
     public class Deck : IDeck {
         private List<ICard> cards;
         private List<ICard> discardPile;
-        private System.Random random;
         private List<CardData> originalCardDataList;
         private string deckId;
 
@@ -29,7 +28,6 @@ namespace SlayTheClone {
         public Deck() {
             cards = new List<ICard>();
             discardPile = new List<ICard>();
-            random = new System.Random();
             deckId = System.Guid.NewGuid().ToString();
         }
 
@@ -114,7 +112,7 @@ namespace SlayTheClone {
 
             // Fisher-Yates shuffle algorithm
             for (int i = cards.Count - 1; i > 0; i--) {
-                int j = random.Next(0, i + 1);
+                int j = GameRandom.Next(i + 1);
                 var temp = cards[i];
                 cards[i] = cards[j];
                 cards[j] = temp;

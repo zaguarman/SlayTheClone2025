@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using static SlayTheClone.Enums;
 
@@ -28,12 +29,15 @@ namespace SlayTheClone.Tests {
             var bolt = game.Spell("Bolt", TargetType.EnemyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
             var fish = game.Creature("Fish", 1, 1);
             var bear = game.Creature("Bear", 1, 3);
-            game.SetDecks(new List<CardData> { wolf, bolt, fish, fish, fish }, new List<CardData> { bear });
+            var p1Deck = new List<CardData> { wolf, bolt, fish, fish, fish };
+            var p2Deck = new List<CardData> { bear };
+            game.SetDecks(p1Deck, p2Deck);
 
             // Dealing draws the shuffled deck into the hand
             game.CardDealingService.DealInitialHands(p1, p2, 5);
             Assert.AreEqual(5, p1.Hand.Count);
             Assert.AreEqual(0, p1.Deck.CardsRemaining);
+            var dealtOrder = p1.Hand.Select(c => c.Name).ToList();
 
             // A creature played on a slot joins that board
             var bearCard = (ICreature)game.InHand(p2, "Bear");
@@ -49,13 +53,14 @@ namespace SlayTheClone.Tests {
             CollectionAssert.DoesNotContain(p1.Hand, wolfCard);
             Assert.AreEqual(p2Health - 2, p2.Health);
 
-            // A spell dropped on an enemy slot hits the creature there; the dead creature and the spent spell are discarded
+            // A spell dropped on an enemy slot hits the creature there; the dead creature and the spent spell are discarded,
+            // as fresh copies (see AssertDiscarded)
             var boltCard = game.InHand(p1, "Bolt");
             game.Run(new PlayCardAction(boltCard, p1, p2.Battlefield[0]));
             Assert.IsTrue(bearCard.IsDead);
             Assert.IsFalse(p2.Battlefield[0].IsOccupied());
-            CollectionAssert.Contains(p2.Deck.GetDiscardPilePreview(), bearCard);
-            CollectionAssert.Contains(p1.Deck.GetDiscardPilePreview(), boltCard);
+            AssertDiscarded(p2, bearCard);
+            AssertDiscarded(p1, boltCard);
 
             // Discarding empties the hand; drawing from an empty deck shuffles the discard pile back in
             game.Run(new DiscardHandAction(p1));
@@ -66,20 +71,30 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(2, p1.Hand.Count);
             Assert.AreEqual(2, p1.Deck.CardsRemaining);
             Assert.AreEqual(0, p1.Deck.GetDiscardPilePreview().Count);
+
+            // The same random seed shuffles the same way, so a game can be replayed
+            using (var replay = new TestGame()) {
+                replay.SetDecks(p1Deck, p2Deck);
+                replay.CardDealingService.DealInitialHands(replay.Player1, replay.Player2, 5);
+                CollectionAssert.AreEqual(dealtOrder, replay.Player1.Hand.Select(c => c.Name).ToList());
+            }
         }
 
         [Test]
         public void Combat_HitsWhateverIsInTheTargetSlot() {
             var hound = game.Summon(p1, game.Creature("Hound", 3, 5), 0);
-            var sheep = game.Summon(p2, game.Creature("Sheep", 1, 3), 0);
+            var sheep = game.Summon(p2, game.Creature("Sheep", 1, 3, 1,
+                TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
             var porcupine = game.Summon(p2, game.Creature("Porcupine", 0, 10, 1,
                 TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 1);
 
-            // Attacking an occupied slot damages its creature; a creature that dies leaves the board for the discard pile
+            // Attacking an occupied slot damages its creature; a creature that dies leaves the board for the discard pile.
+            // A killing blow doesn't fire OnDamage effects, so the Sheep can't strike back.
             Attack(hound, p2.Battlefield[0]);
             Assert.IsTrue(sheep.IsDead);
+            Assert.AreEqual(hound.MaxHealth, hound.Health);
             Assert.IsFalse(p2.Battlefield[0].IsOccupied());
-            CollectionAssert.Contains(p2.Deck.GetDiscardPilePreview(), sheep);
+            AssertDiscarded(p2, sheep);
 
             // Attacking an empty slot damages the player who owns it
             int p2Health = p2.Health;
@@ -91,6 +106,13 @@ namespace SlayTheClone.Tests {
             Attack(hound, p2.Battlefield[1]);
             Assert.AreEqual(porcupine.MaxHealth - hound.Attack, porcupine.Health);
             Assert.AreEqual(houndHealth - 1, hound.Health);
+
+            // Effects that change stats go through the queue too, landing before anything else that waits
+            var cucumber = game.Summon(p2, game.Creature("Cucumber", 0, 4, 1,
+                TestGame.Effect(EffectTrigger.OnDamage, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures)), 3);
+            Attack(hound, p2.Battlefield[3]);
+            Assert.AreEqual(2, cucumber.Attack);
+            Assert.AreEqual(6 - hound.Attack, cucumber.Health); // Max health 4 + 2, minus the hit
 
             // Attacks declared in the same turn resolve by speed: a creature killed first never lands its hit
             var falcon = game.Summon(p1, game.Creature("Falcon", 4, 2, speed: 3), 2);
@@ -134,13 +156,24 @@ namespace SlayTheClone.Tests {
             var shark = game.Summon(p1, game.Creature("Shark", 4, 4), 3);
             Assert.AreSame(shark, p1.Battlefield[3].OccupyingCreature);
             Assert.IsNull(eel.Slot);
-            CollectionAssert.Contains(p1.Deck.GetDiscardPilePreview(), eel);
+            AssertDiscarded(p1, eel);
 
             // A paralyzed creature can't move
             game.Run(new ApplyStatusEffectAction(turtle, StatusEffectType.Paralyzed, 1, 0));
             game.Run(new MoveCreatureAction(turtle, p1.Battlefield[4], p1.Battlefield[0], p1));
             Assert.AreSame(turtle, p1.Battlefield[4].OccupyingCreature);
             Assert.IsFalse(p1.Battlefield[0].IsOccupied());
+        }
+
+        // A card that leaves play goes to its owner's discard pile as a fresh copy: damage, buffs and death don't carry over
+        private static void AssertDiscarded(Player owner, ICard card) {
+            var copy = owner.Deck.GetDiscardPilePreview().FirstOrDefault(c => c.CardId == card.CardId);
+            Assert.IsNotNull(copy, $"{card.Name} is not in {owner.Name}'s discard pile");
+            Assert.AreNotSame(card, copy);
+            if (copy is ICreature creature) {
+                Assert.IsFalse(creature.IsDead);
+                Assert.AreEqual(creature.MaxHealth, creature.Health);
+            }
         }
 
         // Declares an attack the way dragging a creature onto a slot does, then resolves it

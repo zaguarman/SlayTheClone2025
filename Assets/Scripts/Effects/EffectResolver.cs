@@ -1,0 +1,190 @@
+using System.Collections.Generic;
+using System.Linq;
+using static SlayTheClone.DebugLogger;
+using static SlayTheClone.Enums;
+
+namespace SlayTheClone {
+    /// <summary>
+    /// The one interpreter of card effects. Creatures (when a trigger fires), spells (when played) and attacks
+    /// (chain and spread add-ons) all turn their <see cref="EffectAction"/>s into queued game actions here,
+    /// so an effect means the same thing whatever card carries it. Nothing is applied directly.
+    /// </summary>
+    public static class EffectResolver {
+        private const int MaxChainJumps = 2;
+
+        /// <summary>Queues what the creature's effects with this trigger do.</summary>
+        /// <param name="triggeringAttacker">Whoever damaged or killed the creature, for retaliation; null otherwise.</param>
+        public static void QueueCreatureEffects(ICreature creature, EffectTrigger trigger, IActionsQueue queue, ICreature triggeringAttacker = null) {
+            foreach (var action in ActionsFor(creature, trigger)) {
+                List<ITarget> targets;
+                if (trigger == EffectTrigger.OnDamage && triggeringAttacker != null && action.targetType == TargetType.Enemy) {
+                    // Retaliation: an enemy-targeted OnDamage effect hits whoever damaged this creature
+                    targets = new List<ITarget> { triggeringAttacker };
+                }
+                else {
+                    targets = SelectTargets(creature, creature.Owner, action, chosenTarget: null);
+                }
+                QueueAction(creature, action, targets, queue);
+            }
+        }
+
+        /// <summary>Queues what the spell does. A spell has a single moment, being played, so every effect it has applies.</summary>
+        /// <param name="chosenTarget">What the spell was dropped on: a board slot, creature or player. Null picks its default target.</param>
+        public static void QueueSpellEffects(Spell spell, IPlayer caster, ITarget chosenTarget, IActionsQueue queue) {
+            chosenTarget ??= DefaultSpellTarget(spell, caster);
+            foreach (var action in spell.Effects.SelectMany(e => e.actions)) {
+                QueueAction(spell, action, SelectTargets(spell, caster, action, chosenTarget), queue);
+            }
+        }
+
+        /// <summary>
+        /// Queues the extra hits the attacker's OnDamage effects add to an attack on <paramref name="primaryTarget"/>:
+        /// chain damage jumps along the hit creature's neighbours, other target modifiers spread to more targets.
+        /// </summary>
+        public static void QueueAttackEffects(ICreature attacker, ITarget primaryTarget, IActionsQueue queue) {
+            foreach (var action in ActionsFor(attacker, EffectTrigger.OnDamage)) {
+                if (action.actionType != ActionType.Damage || action.targetModifier == TargetModifier.None) continue;
+
+                // The effect's value replaces the attack damage when it is set
+                int damage = action.value > 0 ? action.value : attacker.Attack;
+                if (action.targetModifier.HasFlag(TargetModifier.Chained)) {
+                    QueueChain(attacker, primaryTarget, damage, queue);
+                }
+                else if (damage > 0) {
+                    foreach (var target in TargetingSystem.GetAdditionalTargets(attacker.Owner, primaryTarget, action.targetModifier)) {
+                        QueueCombatDamage(target, damage, attacker, queue);
+                    }
+                }
+            }
+        }
+
+        private static IEnumerable<EffectAction> ActionsFor(ICard card, EffectTrigger trigger) {
+            // ToList: queueing can change the card's state while we iterate
+            return card.Effects.Where(e => e.trigger == trigger).SelectMany(e => e.actions).ToList();
+        }
+
+        #region Targets
+        private static List<ITarget> SelectTargets(ICard source, IPlayer controller, EffectAction action, ITarget chosenTarget) {
+            if (action.targetType == TargetType.Self) {
+                return source is ICreature self ? new List<ITarget> { self } : new List<ITarget>();
+            }
+            if (controller == null) {
+                LogError($"{source.Name}: cannot target {action.targetType} without an owner.", LogTag.Effects);
+                return new List<ITarget>();
+            }
+
+            // A chosen target is used as is, unless the effect picks its own targets (random or every one of a kind)
+            bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
+            if (chosenTarget != null && !picksOwnTargets) {
+                var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
+                return resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
+            }
+            return TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
+        }
+
+        // A board slot stands for its creature when the action can affect creatures, otherwise for the player who owns it.
+        // Null when the action applies to neither (it does nothing).
+        private static ITarget ResolveChosenTarget(ITarget target, ActionType actionType) {
+            switch (target) {
+                case BoardSlot slot:
+                    if (slot.OccupyingCreature != null && CanAffectCreatures(actionType)) return slot.OccupyingCreature;
+                    return CanAffectPlayers(actionType) ? slot.Owner : null;
+                case ICreature:
+                    return CanAffectCreatures(actionType) ? target : null;
+                case IPlayer:
+                    return CanAffectPlayers(actionType) ? target : null;
+                default:
+                    return null;
+            }
+        }
+
+        private static ITarget DefaultSpellTarget(Spell spell, IPlayer caster) {
+            switch (spell.DefaultTargetType) {
+                case TargetType.Player: return caster;
+                case TargetType.Enemy: return caster.Opponent;
+                default:
+                    var modifier = spell.Effects.SelectMany(e => e.actions).FirstOrDefault()?.targetModifier ?? TargetModifier.None;
+                    return TargetingSystem.GetValidTargets(caster, spell.DefaultTargetType, modifier).FirstOrDefault();
+            }
+        }
+
+        private static bool CanAffectCreatures(ActionType actionType) =>
+            actionType is ActionType.Damage or ActionType.Heal or ActionType.ModifyStat
+                or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun;
+
+        private static bool CanAffectPlayers(ActionType actionType) =>
+            actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon;
+        #endregion
+
+        #region Actions
+        private static void QueueAction(ICard source, EffectAction action, List<ITarget> targets, IActionsQueue queue) {
+            // Chain damage only exists as part of an attack (see QueueAttackEffects)
+            if (action.actionType == ActionType.Damage && action.targetModifier.HasFlag(TargetModifier.Chained)) return;
+
+            Log($"{source.Name}: {action.actionType} {action.value} on {targets.Count} target(s) ({action.targetType}/{action.targetModifier})", LogTag.Effects);
+            foreach (var target in targets) {
+                if (action.actionType == ActionType.Summon) {
+                    if (target is IPlayer summoner) SummonFromDeckEffect.QueueRandomSummons(summoner, action.value, queue);
+                    continue;
+                }
+
+                var gameAction = CreateAction(source, action, target);
+                if (gameAction == null) continue; // This kind of target can't receive this action
+
+                Log($"{source.Name}: queueing {gameAction}", LogTag.Effects | LogTag.Actions);
+                queue.AddAction(gameAction);
+            }
+        }
+
+        private static IGameAction CreateAction(ICard source, EffectAction action, ITarget target) {
+            var creature = target as ICreature;
+            switch (action.actionType) {
+                case ActionType.Damage:
+                    // Damage from a creature to a creature is ordered by that creature's speed; other damage has no source
+                    return TargetedActions.Damage(target, action.value, creature != null ? source as ICreature : null);
+                case ActionType.Heal:
+                    return TargetedActions.Heal(target, action.value);
+                case ActionType.Draw:
+                    return target is IPlayer player ? new DrawCardsAction(player, action.value) : null;
+                case ActionType.Armor:
+                    return creature != null && action.value != 0 ? new ModifyArmorAction(creature, action.value) : null;
+                case ActionType.ModifyStat:
+                    return creature != null && action.value != 0
+                        ? new ModifyAction(creature, action.value, action.modifyAttack, action.modifyHealth, action.modifySpeed)
+                        : null;
+                case ActionType.Stun: // A stun paralyzes for its value in turns
+                    return Status(creature, StatusEffectType.Paralyzed, action.value, 0, source);
+                case ActionType.ApplyStatus:
+                    return Status(creature, action.statusEffectToApply, action.statusDuration, action.statusPotency, source);
+                default:
+                    return null;
+            }
+        }
+
+        private static IGameAction Status(ICreature creature, StatusEffectType type, int duration, int potency, ICard source) {
+            if (creature == null) return null;
+            if (type == StatusEffectType.None || duration <= 0) {
+                LogWarning($"{source.Name}: invalid status {type} for {duration} turns; skipped.", LogTag.Effects);
+                return null;
+            }
+            return new ApplyStatusEffectAction(creature, type, duration, potency);
+        }
+
+        // Jumps from the creature that was hit to its neighbours, halving the damage on each jump
+        private static void QueueChain(ICreature attacker, ITarget primaryTarget, int damage, IActionsQueue queue) {
+            if (!(primaryTarget is ICreature hitCreature)) return; // Chains need a creature to jump from
+
+            foreach (var target in TargetingSystem.GetDirectionalChainTargets(hitCreature, MaxChainJumps)) {
+                if (damage <= 0) break;
+                QueueCombatDamage(target, damage, attacker, queue);
+                damage /= 2;
+            }
+        }
+
+        private static void QueueCombatDamage(ITarget target, int damage, ICreature attacker, IActionsQueue queue) {
+            var damageAction = TargetedActions.Damage(target, damage, attacker, isCombatDamage: true);
+            if (damageAction != null) queue.AddAction(damageAction);
+        }
+        #endregion
+    }
+}

@@ -14,18 +14,6 @@ namespace SlayTheClone {
                 return;
             }
 
-            var modifierManager = context.ModifierManager;
-            var factory = context.ModifierFactory;
-            var turnManager = context.TurnManager;
-
-            if (turnManager == null) {
-                LogError($"ApplyStatusEffectActionExecutor: TurnManager is null in context. Cannot apply {statusType} to {targetCreature.Name}.", LogTag.Actions | LogTag.Effects | LogTag.Initialization);
-                return;
-            }
-            if (modifierManager == null || factory == null) {
-                LogError($"ApplyStatusEffectActionExecutor: ModifierManager or Factory is null in context. Cannot apply {statusType} to {targetCreature.Name}.", LogTag.Actions | LogTag.Effects | LogTag.Initialization);
-                return;
-            }
 
             string effectName = $"{statusType} Effect";
             string effectDescription = $"Applies {statusType} for {duration} turns";
@@ -33,10 +21,10 @@ namespace SlayTheClone {
                 effectDescription += $" (Potency: {potency})";
             }
 
-            IModifier statusModifier = factory.CreateStatusEffectModifier(
-                effectName, effectDescription, statusType, duration, potency, turnManager.TurnNumber);
+            IModifier statusModifier = context.ModifierFactory.CreateStatusEffectModifier(
+                effectName, effectDescription, statusType, duration, potency, context.TurnClock.TurnNumber);
 
-            modifierManager.ApplyModifier(targetCreature, statusModifier);
+            context.ModifierManager.ApplyModifier(targetCreature, statusModifier);
             Log($"Executed ApplyStatusEffectAction via Executor: Applied {statusType} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
         }
     }

@@ -37,14 +37,6 @@ namespace SlayTheClone {
             Initialize(null, mediator, references, manager);
         }
 
-        /// <summary>
-        /// Initialize the component with dependencies but no GameManager.
-        /// For components that truly don't need GameManager.
-        /// </summary>
-        public virtual void Initialize(IGameMediator mediator, IGameReferences references) {
-            Bind(null, mediator, references, null);
-        }
-
         // Stores the dependencies and starts listening; only the first call has an effect
         private void Bind(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
             if (IsInitialized) return;

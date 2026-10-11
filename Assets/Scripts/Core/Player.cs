@@ -25,11 +25,6 @@ namespace SlayTheClone {
         // Raised with the new value whenever health changes, for whatever displays it
         event Action<int> HealthChanged;
         void DrawCard();
-        void SetHealth(int newHealth);
-        // Expose GameMediator for Creature to access
-        IGameMediator GameMediator { get; }
-        // Expose GameManager for dependency access
-        IGameManager GameManager { get; }
 
         /// <summary>
         /// Applies damage to the player, reducing their health.
@@ -48,8 +43,9 @@ namespace SlayTheClone {
     public class Player : Entity, IPlayer {
         public const int MaxHandSize = 10;
         public const int BattlefieldSize = 5;
+        public const int MaxHealth = 20; // Players start at full health and can't heal past it
 
-        public int Health { get; private set; } = 20;
+        public int Health { get; private set; } = MaxHealth;
         public IPlayer Opponent { get; set; }
         public List<ICard> Hand { get; private set; }
         public IDeck Deck { get; private set; }
@@ -61,15 +57,8 @@ namespace SlayTheClone {
 
         private readonly bool isPlayer1; // Add field to store identity
 
-        private IGameMediator gameMediator; // Changed to interface
-        private ICardDealingService cardDealingService; // Added reference
-        private IGameManager gameManager; // Added reference
-
-        // Expose GameMediator for Creature to access
-        public IGameMediator GameMediator => gameMediator;
-
-        // Expose GameManager for dependency access
-        public IGameManager GameManager => gameManager;
+        private IGameMediator gameMediator;
+        private ICardDealingService cardDealingService;
 
         // Modify constructor to accept identity
         public Player(string name = "Player", bool isPlayer1 = false) : base(name) {
@@ -84,27 +73,16 @@ namespace SlayTheClone {
         // Implement IsPlayer1 property from interface
         public bool IsPlayer1 => isPlayer1;
 
-        // New Initialize method to inject dependencies
-        public void Initialize(IGameMediator mediator, ICardDealingService dealer, IGameManager manager) {
-            if (mediator == null || dealer == null || manager == null) {
-                LogError($"Player ({Name}) initialization failed: Dependencies cannot be null.", LogTag.Initialization | LogTag.Players);
-                return; // Or throw exception
-            }
-            gameMediator = mediator;
-            cardDealingService = dealer;
-            gameManager = manager;
+        // The player reports hand and board changes to the mediator and draws through the dealer
+        public void Initialize(IGameMediator mediator, ICardDealingService dealer) {
+            gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            cardDealingService = dealer ?? throw new ArgumentNullException(nameof(dealer));
             Log($"Player ({Name}) initialized with dependencies.", LogTag.Initialization | LogTag.Players);
-            // Note: OnDamaged listener is already added in constructor
         }
 
         private void OnPlayerDamaged(int damage) {
             HealthChanged?.Invoke(Health);
             Log($"{Name} took {damage} damage, health: {Health}", LogTag.Players | LogTag.Combat);
-        }
-
-        public void SetHealth(int newHealth) {
-            Health = Math.Min(newHealth, 99);
-            HealthChanged?.Invoke(Health);
         }
 
         /// <summary>
@@ -143,7 +121,6 @@ namespace SlayTheClone {
                 return 0; // Cannot heal with non-positive amount
             }
 
-            const int MaxHealth = 20; // Define max health for players
             int previousHealth = Health;
             int maxPossibleHeal = MaxHealth - Health;
             int actualHealAmount = Math.Min(amount, maxPossibleHeal);

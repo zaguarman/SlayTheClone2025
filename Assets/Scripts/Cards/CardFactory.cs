@@ -19,9 +19,6 @@ namespace SlayTheClone {
                         creatureData.health,
                         creatureData.speed,
                         creatureData.cardId);
-                    foreach (var effect in cardData.effects) {
-                        creature.Effects.Add(effect.Clone());
-                    }
                     card = creature;
                     break;
 
@@ -30,50 +27,32 @@ namespace SlayTheClone {
                         spellData.cardName,
                         spellData.defaultTargetType,
                         spellData.cardId);
-                    ConfigureSpellActionsFromEffects(spell, spellData);
                     card = spell;
                     break;
             }
 
             if (card != null) {
+                // Each instance owns its effects, so changing them never touches the definition
+                foreach (var effect in cardData.effects) {
+                    card.Effects.Add(effect.Clone());
+                }
+                if (card is Spell && card.Effects.Count == 0) {
+                    card.Effects.Add(DrawOneCard()); // Without explicit effects a spell just draws a card
+                }
                 card.Description = cardData.description;
                 card.SourceData = cardData;
             }
             return card;
         }
 
-        private static void ConfigureSpellActionsFromEffects(Spell spell, SpellData spellData) {
-            // Without explicit effects a spell just draws a card
-            if (spellData.effects == null || spellData.effects.Count == 0) {
-                spell.Effects.Add(new CardEffect {
-                    effectType = EffectType.Immediate,
-                    trigger = EffectTrigger.OnPlay,
-                    actions = new List<EffectAction> {
-                        new EffectAction {
-                            actionType = ActionType.Draw,
-                            value = 1,
-                            targetType = TargetType.Player
-                        }
-                    }
-                });
-                return;
-            }
-
-            foreach (var effect in spellData.effects) {
-                // Also add each action to the spell's action list for direct execution
-                foreach (var action in effect.actions) {
-                    if (action.actionType == ActionType.ModifyStat) {
-                        spell.AddAction(action.actionType, action.value, action.targetType, action.modifyAttack, action.modifyHealth, action.modifySpeed, action.targetModifier);
-                    }
-                    else if (action.actionType == ActionType.ApplyStatus) {
-                        spell.AddAction(action.actionType, action.targetType, action.statusEffectToApply, action.statusDuration, action.statusPotency, action.targetModifier);
-                    }
-                    else {
-                        spell.AddAction(action.actionType, action.value, action.targetType, action.targetModifier);
-                    }
+        private static CardEffect DrawOneCard() {
+            return new CardEffect {
+                effectType = EffectType.Immediate,
+                trigger = EffectTrigger.OnPlay,
+                actions = new List<EffectAction> {
+                    new EffectAction { actionType = ActionType.Draw, value = 1, targetType = TargetType.Player }
                 }
-                spell.Effects.Add(effect.Clone());
-            }
+            };
         }
 
         /// <summary>The definition a card instance was created from, looked up in its owner's deck if the card doesn't carry it.</summary>

@@ -9,7 +9,6 @@ namespace SlayTheClone {
         #region Fields & Properties
         private readonly IGameMediator mediator;
         private readonly IModifierFactory modifierFactory;
-        private readonly ITurnManager turnManager;   // Added
 
         public IModifierFactory ModifierFactory => modifierFactory;
 
@@ -18,11 +17,9 @@ namespace SlayTheClone {
         #endregion
 
         #region Constructor
-        // Updated constructor to accept ITurnManager only (no longer needs IActionsQueue)
-        public ModifierManager(IGameMediator mediator, IModifierFactory factory, ITurnManager turnManager) {
+        public ModifierManager(IGameMediator mediator, IModifierFactory factory) {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             modifierFactory = factory ?? throw new ArgumentNullException(nameof(factory));
-            this.turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
 
             Log("ModifierManager initialized.", LogTag.Initialization | LogTag.Effects);
         }
@@ -203,7 +200,7 @@ namespace SlayTheClone {
                 if (creature == null || creature.IsDead) continue; // Skip dead creatures
 
                 // Trigger StartOfTurn effects for the creature
-                creature.HandleTurnBasedEffect(EffectTrigger.StartOfTurn, actionsQueue, this, turnManager);
+                creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
         }
@@ -243,7 +240,7 @@ namespace SlayTheClone {
 
                 // Trigger EndOfTurn effects AFTER handling expirations for the turn that just ended
                 Log($"Triggering EndOfTurn effects for {creature.Name} (End of Turn {endedTurnNumber})", LogTag.Effects | LogTag.Turns);
-                creature.HandleTurnBasedEffect(EffectTrigger.EndOfTurn, actionsQueue, this, turnManager);
+                creature.HandleEffect(EffectTrigger.EndOfTurn, actionsQueue);
             }
 
             Log($"ModifierManager: End of turn {endedTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);

@@ -44,7 +44,7 @@ namespace SlayTheClone {
             // Register after placement, then trigger OnPlay, then announce the finished summon
             modifierManager.RegisterCreature(creature as Creature);
             Log($"Executor: Triggering OnPlay effects for {creature.Name}", LogTag.Effects | LogTag.Actions);
-            creature.HandleEffect(EffectTrigger.OnPlay, context);
+            creature.HandleEffect(EffectTrigger.OnPlay, context.ActionsQueue);
             mediator.NotifyCreatureSummoned(creature, owner);
         }
     }

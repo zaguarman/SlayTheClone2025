@@ -37,11 +37,8 @@ namespace SlayTheClone {
             }
             Log("GameMediator initialized", LogTag.Initialization);
 
-            // 3. TurnManager: initialized after GameManager, which it depends on
+            // 3. GameManager builds the game and starts the turn flow
             if (!TryFind(out TurnManager turnManager)) yield break;
-            Log("TurnManager component found", LogTag.Initialization);
-
-            // 4. GameManager
             if (!TryFind(out GameManager gameManager)) yield break;
             if (!gameManager.IsInitialized) {
                 gameManager.Initialize(gameMediator, gameReferences, turnManager, new SimpleModifierFactory());
@@ -49,10 +46,7 @@ namespace SlayTheClone {
             }
             Log("GameManager initialized", LogTag.Initialization);
 
-            turnManager.Initialize(gameManager, gameMediator);
-            Log("TurnManager initialized with dependencies", LogTag.Initialization);
-
-            // 5. GameUI
+            // 4. GameUI
             if (!TryFind(out GameUI gameUI)) yield break;
             if (!gameUI.IsInitialized) {
                 gameUI.Initialize(gameMediator, gameReferences, gameManager);
@@ -60,7 +54,7 @@ namespace SlayTheClone {
             }
             Log("GameUI initialized", LogTag.Initialization);
 
-            // 6. Resolution playback: the turn waits on it so effects play one after another
+            // 5. Resolution playback: the turn waits on it so effects play one after another
             var presenter = ResolutionPresenter.Create(gameReferences.transform);
             presenter.Initialize(gameMediator, gameReferences, gameManager);
             turnManager.SetPresenter(presenter);

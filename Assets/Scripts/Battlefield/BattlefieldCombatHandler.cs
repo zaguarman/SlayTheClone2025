@@ -3,13 +3,16 @@ using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
     public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
-        private readonly IGameManager gameManager; // Use interface
+        private readonly IActionsQueue actionsQueue;
+        private readonly IModifierManager modifierManager;
         private HashSet<string> attackingCreatureIds = new HashSet<string>(); // Store IDs
         private readonly Dictionary<string, BoardSlot> targetedSlotsById = new Dictionary<string, BoardSlot>(); // Store by ID
 
-        // Constructor takes IGameManager
-        public BattlefieldCombatHandler(IGameManager gameManager) {
-            this.gameManager = gameManager ?? throw new System.ArgumentNullException(nameof(gameManager));
+        public BattlefieldCombatHandler(IActionsQueue actionsQueue, IModifierManager modifierManager) {
+            this.actionsQueue = actionsQueue ?? throw new System.ArgumentNullException(nameof(actionsQueue));
+            this.modifierManager = modifierManager ?? throw new System.ArgumentNullException(nameof(modifierManager));
+            // Declared attacks are spent once the queue has resolved them
+            actionsQueue.OnActionsResolved.AddListener(ResetAttackingCreatures);
         }
 
         public void HandleCreatureCombat(ICreature attackerCreature, BoardSlot targetSlot) {
@@ -23,10 +26,7 @@ namespace SlayTheClone {
                 return;
             }
 
-            // Use injected ModifierManager via IGameManager
-            if (gameManager.ModifierManager != null &&
-                attackerCreature is Creature concreteAttacker &&
-                gameManager.ModifierManager.AreActionsPrevented(concreteAttacker)) {
+            if (attackerCreature is Creature concreteAttacker && modifierManager.AreActionsPrevented(concreteAttacker)) {
                 Log($"Creature {attackerCreature.Name} cannot attack due to status effect (e.g., Paralyzed).", LogTag.Combat | LogTag.Effects);
                 // Optionally provide feedback to the player here
                 return; // Prevent combat action
@@ -84,10 +84,9 @@ namespace SlayTheClone {
             attackingCreatureIds.Remove(attackerId);
             targetedSlotsById.Remove(attackerId);
 
-            var queue = gameManager.ActionsQueue;
-            if (!(queue?.GetActiveAction(attackerId) is BattlefieldCombatAction)) return false;
+            if (!(actionsQueue.GetActiveAction(attackerId) is BattlefieldCombatAction)) return false;
 
-            queue.CancelDeclaredAction(attackerId);
+            actionsQueue.CancelDeclaredAction(attackerId);
             Log($"Cancelled attack for {attackerCreature.Name} (ID: {attackerId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
             return true;
         }
@@ -99,8 +98,7 @@ namespace SlayTheClone {
         }
 
         private void QueueCombatAction(ICreature attackerCreature, BoardSlot targetSlot) {
-            // Use injected ActionsQueue via IGameManager
-            gameManager.ActionsQueue?.AddAction(new BattlefieldCombatAction(attackerCreature, targetSlot));
+            actionsQueue.AddAction(new BattlefieldCombatAction(attackerCreature, targetSlot));
             // Mediator notification happens via ActionsQueue events
         }
 

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using UnityEditor;
 using UnityEngine;
 using static SlayTheClone.DebugLogger;
 
@@ -153,25 +152,30 @@ namespace SlayTheClone {
             instance?.LogWithType(LogType.Log, message, tags, sourceFilePath);
         }
 
+        // Warnings and errors still reach the console when there's no logger in the scene (in tests, for instance)
         public static void LogWarning(
             object message,
             LogTag tags,
             [CallerFilePath] string sourceFilePath = "") {
-            instance?.LogWithType(LogType.Warning, message, tags, sourceFilePath);
+            if (instance != null) instance.LogWithType(LogType.Warning, message, tags, sourceFilePath);
+            else Debug.LogWarning($"[{tags}] {message}");
         }
 
+        // Errors are never filtered out, so they can't go unnoticed
         public static void LogError(
             object message,
             LogTag tags,
             [CallerFilePath] string sourceFilePath = "") {
-            instance?.LogWithType(LogType.Error, message, tags, sourceFilePath);
+            if (instance != null) instance.LogWithType(LogType.Error, message, tags, sourceFilePath);
+            else Debug.LogError($"[{tags}] {message}");
         }
+
         private void LogWithType(
             LogType logType,
             object message,
             LogTag tags,
             string sourceFilePath) {
-            if (!ShouldLog(tags, sourceFilePath)) return;
+            if (logType != LogType.Error && !ShouldLog(tags, sourceFilePath)) return;
 
             string formattedMessage = FormatMessage(message, tags, sourceFilePath);
 
@@ -276,7 +280,7 @@ namespace SlayTheClone {
 
         private string ColorizeTags(LogTag tags) {
             return string.Join("|", GetActiveTags(tags).Select(tag =>
-                tagColorMap.TryGetValue(tag, out string color) ? $"<color={color}>{tag}</color>" : tag.ToString()));
+                tagColorMap != null && tagColorMap.TryGetValue(tag, out string color) ? $"<color={color}>{tag}</color>" : tag.ToString()));
         }
         #endregion
     }

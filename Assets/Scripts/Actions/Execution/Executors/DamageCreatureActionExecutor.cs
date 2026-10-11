@@ -44,8 +44,9 @@ namespace SlayTheClone {
                 mediator.NotifyCreatureDamaged(targetCreature, actualHealthDamage);
             }
 
-            // OnDamage effects only fire while the creature survives the hit
-            if (actualHealthDamage > 0 && !targetCreature.IsDead) {
+            // OnDamage effects only fire while the creature survives the hit; a killing blow fires OnDeath instead.
+            // (IsDead is only set below, so health is what tells whether this hit was lethal.)
+            if (actualHealthDamage > 0 && targetCreature.Health > 0) {
                 TriggerEffects(targetCreature, EffectTrigger.OnDamage, attacker, context);
             }
 
@@ -65,16 +66,10 @@ namespace SlayTheClone {
             Log($"Executed DamageCreatureAction via Executor for {targetCreature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
         }
 
-        // Effects can read the attacker from the context (e.g. to retaliate) only while they run
+        // The attacker is passed along so effects can retaliate against it
         private static void TriggerEffects(ICreature creature, EffectTrigger trigger, ICreature attacker, ActionExecutionContext context) {
             Log($"Executor: Triggering {trigger} effects for {creature.Name}", LogTag.Effects | LogTag.Actions);
-            context.TriggeringAttacker = attacker;
-            try {
-                creature.HandleEffect(trigger, context);
-            }
-            finally {
-                context.TriggeringAttacker = null;
-            }
+            creature.HandleEffect(trigger, context.ActionsQueue, attacker);
         }
     }
 }

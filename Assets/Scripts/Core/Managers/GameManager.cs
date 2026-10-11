@@ -7,34 +7,26 @@ using static SlayTheClone.DebugLogger;
 using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
+    /// <summary>
+    /// What the UI can reach of a running game: the players and the systems it shows or sends input to.
+    /// Rules code never gets this; each rules object is handed only the systems it uses (see GameManager.Initialize).
+    /// </summary>
     public interface IGameManager {
-        // Add IsInitialized property from former IInitializable interface
         bool IsInitialized { get; }
-        void Initialize(IGameMediator mediator, IGameReferences references, ITurnManager turnManager, IModifierFactory modFactory);
-        // Properties for accessing core systems via interfaces
-        IActionsQueue ActionsQueue { get; }
-        IWeatherSystem WeatherSystem { get; }
-        ITurnManager TurnManager { get; }
-        ICardDealingService CardDealingService { get; }
-        IModifierManager ModifierManager { get; }
-        IBattlefieldCombatHandler CombatHandler { get; }
-        // Expose GameReferences for dependency access
-        IGameReferences GameReferences { get; }
-        // Expose players via IPlayer interface
         IPlayer Player1 { get; }
         IPlayer Player2 { get; }
-
-        // Add any essential methods needed publicly
-        void DiscardHand(IPlayer player);
-        void DrawCardsForPlayer(IPlayer player, int count);
-        int TurnNumber { get; }
-        void EndTurn();
+        IActionsQueue ActionsQueue { get; }
+        IBattlefieldCombatHandler CombatHandler { get; }
+        IModifierManager ModifierManager { get; }
+        ICardDealingService CardDealingService { get; }
+        IWeatherSystem WeatherSystem { get; }
+        ITurnManager TurnManager { get; }
     }
 
-    public interface ITurnManager {
+    /// <summary>The turn flow, as the UI sees it.</summary>
+    public interface ITurnManager : ITurnClock {
         bool IsInitialized { get; }
         bool IsResolving { get; } // True while an end of turn is being resolved and played back
-        int TurnNumber { get; }
         void EndTurn();
     }
 
@@ -85,34 +77,29 @@ namespace SlayTheClone {
         BoardSlot GetTargetedSlot(ITarget attacker);
     }
 
+    /// <summary>
+    /// Builds the game at startup (players, decks, and the rules systems, each handed only what it uses),
+    /// then starts the turn flow. After that it is just the UI's way into the running game.
+    /// </summary>
     public class GameManager : MonoBehaviour, IGameManager {
-        // Implement IsInitialized property from IGameManager interface
+        [Tooltip("0 picks a new seed every game. Any other value replays the same shuffles and random picks.")]
+        [SerializeField] private int randomSeed;
+
         public bool IsInitialized { get; private set; }
 
-        #region Fields & Properties
-        // System References (using Interface Types)
-        [ShowInInspector]
-        public IActionsQueue ActionsQueue { get; private set; }
-        public IWeatherSystem WeatherSystem { get; private set; }
-        private IBattlefieldCombatHandler combatHandler;
-        private ITurnManager turnManager;
-
-        // Dependencies (to be injected)
-        private IGameMediator gameMediator;
-        private IGameReferences gameReferences;
-        public ICardDealingService cardDealingService; // Made public to fix access issues
-        public Player Player1 { get; private set; } // Keep concrete Player for internal use
-        public Player Player2 { get; private set; } // Keep concrete Player for internal use
-
-        // Interface Property Implementations (Exposing Players as IPlayer)
+        public Player Player1 { get; private set; }
+        public Player Player2 { get; private set; }
         IPlayer IGameManager.Player1 => Player1;
         IPlayer IGameManager.Player2 => Player2;
 
+        [ShowInInspector]
+        public IActionsQueue ActionsQueue { get; private set; }
+        public IBattlefieldCombatHandler CombatHandler { get; private set; }
         [ShowInInspector, BoxGroup("Systems")]
         public IModifierManager ModifierManager { get; private set; }
-
-        [ShowInInspector, BoxGroup("Systems")]
-        public IModifierFactory ModifierFactory { get; private set; }
+        public ICardDealingService CardDealingService { get; private set; }
+        public IWeatherSystem WeatherSystem { get; private set; }
+        public ITurnManager TurnManager { get; private set; }
 
         [ShowInInspector, BoxGroup("Hands"), PropertyOrder]
         [ListDrawerSettings]
@@ -126,163 +113,63 @@ namespace SlayTheClone {
             .Select((card, index) => $"Card {index + 1}: {card.Name}")
             .ToList() ?? new List<string>();
 
-        // Interface implementations
-        public ICardDealingService CardDealingService => cardDealingService;
-        public IBattlefieldCombatHandler CombatHandler => combatHandler;
-        public ITurnManager TurnManager => turnManager;
-        public IGameReferences GameReferences => gameReferences;
-
-        // Implement ITurnManager methods through delegation
-        public int TurnNumber => turnManager.TurnNumber;
-        public void EndTurn() => turnManager.EndTurn();
-        #endregion
-
-
-
-        #region Initialization
-
-        // NEW Initialize method accepting dependencies
-        public void Initialize(
-            IGameMediator mediator,
-            IGameReferences references,
-            ITurnManager turnManager,
-            IModifierFactory modFactory) {
+        public void Initialize(IGameMediator mediator, IGameReferences references, TurnManager turnManager, IModifierFactory modifierFactory) {
             if (IsInitialized) {
                 LogWarning("GameManager Initialize called but already initialized.", LogTag.Initialization);
                 return;
             }
-
-            // --- 1. Store Injected Dependencies ---
-            Log("GameManager Initializing with injected dependencies...", LogTag.Initialization);
-            gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            gameReferences = references ?? throw new ArgumentNullException(nameof(references));
-            this.turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager)); // Store injected TurnManager
-            IModifierFactory modifierFactory = modFactory ?? throw new ArgumentNullException(nameof(modFactory)); // Store injected factory
-
-            if (!gameReferences.AreReferencesValid()) {
+            if (mediator == null) throw new ArgumentNullException(nameof(mediator));
+            if (references == null) throw new ArgumentNullException(nameof(references));
+            if (turnManager == null) throw new ArgumentNullException(nameof(turnManager));
+            if (modifierFactory == null) throw new ArgumentNullException(nameof(modifierFactory));
+            if (!references.AreReferencesValid()) {
                 LogError("GameReferences are invalid during GameManager Initialize!", LogTag.Initialization);
-                // Optionally handle this more gracefully, e.g., disable the component
                 enabled = false;
                 return;
             }
 
-            // --- 2. Initialize Internal Systems (using stored dependencies) ---
-            cardDealingService = new CardDealingService(gameMediator); // Pass mediator
-            combatHandler = new BattlefieldCombatHandler(this); // Pass IGameManager (this)
+            int seed = randomSeed != 0 ? randomSeed : Environment.TickCount;
+            GameRandom.Reset(seed);
+            Log($"Random seed {seed} (set it on GameManager to replay this game)", LogTag.Initialization);
 
-            // Create WeatherSystem first (needed for ActionsQueue)
-            WeatherSystem = new WeatherSystem(gameMediator);
+            Player1 = new Player("Player 1", isPlayer1: true) { CardsToDraw = 5 };
+            Player2 = new Player("Player 2", isPlayer1: false) { CardsToDraw = 5 };
+            Player1.Opponent = Player2;
+            Player2.Opponent = Player1;
+            mediator.RegisterPlayer(Player1);
+            mediator.RegisterPlayer(Player2);
 
-            var executors = ActionExecutors.CreateRegistry();
+            // The rules systems, each given only what it uses
+            var turnClock = new TurnClock();
+            CardDealingService = new CardDealingService(mediator);
+            WeatherSystem = new WeatherSystem(mediator);
+            ModifierManager = new ModifierManager(mediator, modifierFactory);
+            ActionsQueue = new ActionsQueue(mediator, WeatherSystem, CardDealingService, ModifierManager, turnClock, ActionExecutors.CreateRegistry());
+            CombatHandler = new BattlefieldCombatHandler(ActionsQueue, ModifierManager);
+            Player1.Initialize(mediator, CardDealingService);
+            Player2.Initialize(mediator, CardDealingService);
 
-            // Create ModifierManager first (no longer needs ActionsQueue)
-            ModifierFactory = modifierFactory;
-            ModifierManager = new ModifierManager(gameMediator, modifierFactory, turnManager);
+            var player1Cards = references.GetPlayer1DeckCards();
+            var player2Cards = references.GetPlayer2DeckCards();
+            CardDealingService.InitializeDecks(Player1, player1Cards, Player2, player2Cards);
+            Log($"Decks initialized with {player1Cards.Count} cards for Player 1 and {player2Cards.Count} cards for Player 2", LogTag.Cards | LogTag.Initialization);
 
-            // Now create ActionsQueue with the ModifierManager
-            ActionsQueue = new ActionsQueue(
-                gameMediator,
-                combatHandler,
-                WeatherSystem,
-                cardDealingService,
-                gameReferences,
-                ModifierManager,
-                turnManager,
-                executors,
-                this // Pass this GameManager instance
-            );
+            // The turn flow drives the rules; it never needs this manager
+            turnManager.Initialize(new IPlayer[] { Player1, Player2 }, ActionsQueue, ModifierManager, mediator, turnClock);
+            TurnManager = turnManager;
 
-            // ActionsQueue already initialized above
-
-            // --- 3. Initialize Game State ---
-            InitializePlayers(); // Uses gameMediator
-            InitializeCards(); // Uses gameReferences, CardDealingService
-            InitializePlayerDependencies(); // Inject dependencies into Players
-
-            // --- 4. Mark as Initialized (MUST be before any calls that might rely on IsInitialized) ---
             IsInitialized = true;
 
-            // --- 5. Final Setup ---
-            // Setup initial game state directly (no need to wait for UI)
-            SetupInitialGameState(); // Deal hands
-
-            // Set initial weather after all systems are ready
+            CardDealingService.DealInitialHands(Player1, Player2, 5);
             WeatherSystem.SetWeather(WeatherType.Clear);
-            Log("Initial weather set to Clear", LogTag.Initialization | LogTag.Effects);
-
-            // Game initialization is now complete from GameManager's perspective
-            gameMediator.NotifyGameInitialized();
+            mediator.NotifyGameInitialized();
             Log("GameManager Initialization complete.", LogTag.Initialization);
         }
 
-        #endregion
-
-        #region Methods
-
-        private void InitializePlayers() {
-            // Pass the identity flag during construction
-            Player1 = new Player("Player 1", true);
-            Player2 = new Player("Player 2", false);
-            Player1.Opponent = Player2;
-            Player2.Opponent = Player1;
-
-            // Set default cards to draw
-            Player1.CardsToDraw = 5;
-            Player2.CardsToDraw = 5;
-
-            gameMediator.RegisterPlayer(Player1);
-            gameMediator.RegisterPlayer(Player2);
-        }
-
-        private void InitializePlayerDependencies() {
-            // Pass dependencies to players *after* GameManager has them
-            Player1?.Initialize(gameMediator, cardDealingService, this);
-            Player2?.Initialize(gameMediator, cardDealingService, this);
-            Log("Injected dependencies into Player instances.", LogTag.Initialization | LogTag.Players);
-        }
-
-        private void InitializeCards() {
-            // Get cards from GameReferences instead of TestSetup
-            var player1Cards = gameReferences.GetPlayer1DeckCards();
-            var player2Cards = gameReferences.GetPlayer2DeckCards();
-
-            // Pass Player1 and Player2 instances to InitializeDecks
-            cardDealingService.InitializeDecks(Player1, player1Cards, Player2, player2Cards);
-            Log($"Decks initialized with {player1Cards.Count} cards for Player 1 and {player2Cards.Count} cards for Player 2",
-                LogTag.Cards | LogTag.Initialization);
-        }
-
-
-
-        private void SetupInitialGameState() {
-            // Deal initial hands with fewer cards to ensure deck has cards remaining
-            cardDealingService.DealInitialHands(Player1, Player2, 5);
-            Log("Initial cards dealt to players", LogTag.Initialization);
-        }
-
-
-
-        public void DiscardHand(IPlayer player) {
-            if (player == null) return;
-            ActionsQueue?.AddAction(new DiscardHandAction(player));
-            Log($"Added discard hand action for {player.Name}", LogTag.Actions | LogTag.Cards);
-        }
-
-        public void DrawCardsForPlayer(IPlayer player, int count = 1) {
-            if (player == null) return;
-            ActionsQueue?.AddAction(new DrawCardsAction(player, count));
-            Log($"Added draw cards action for {player.Name} to draw {count} cards", LogTag.Actions | LogTag.Cards);
-        }
-
-        #endregion
-
-        #region Cleanup
         protected void OnDestroy() {
             ModifierManager?.Cleanup();
             ActionsQueue?.Cleanup();
-
             IsInitialized = false;
         }
-        #endregion
     }
 }

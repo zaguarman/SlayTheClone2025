@@ -1,55 +1,40 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
-    // Interface remains the same
-    // public interface ITurnManager { ... }
-
-    // TurnManager depends on GameManager for access to other systems
+    /// <summary>
+    /// The turn flow: ending a turn resolves end-of-turn effects, discards and redraws hands, then runs
+    /// start-of-turn effects, playing each action back through the presenter. Built by GameManager with
+    /// exactly the systems it drives.
+    /// </summary>
     public class TurnManager : MonoBehaviour, ITurnManager {
-        // Singleton pattern removed
-        // Implement IsInitialized property
         public bool IsInitialized { get; private set; }
 
         #region Fields & Properties
-        private int turnNumber = 0;
-        private IGameManager gameManager; // Store as interface
-        private IGameMediator gameMediator; // Store as interface
-        private IModifierManager modifierManager; // Store as interface
-        private IActionsQueue actionsQueue; // Store as interface
+        private IReadOnlyList<IPlayer> players;
+        private IGameMediator gameMediator;
+        private IModifierManager modifierManager;
+        private IActionsQueue actionsQueue;
+        private TurnClock clock;
         private IResolutionPresenter presenter; // Optional: plays each resolved action before the next one runs
 
-        public int TurnNumber => turnNumber;
+        public int TurnNumber => clock?.TurnNumber ?? 0;
         public bool IsResolving { get; private set; }
         #endregion
 
-        #region Unity Lifecycle
-
-        // No Start() method - Initialization driven by GameBootstrap calling Initialize
-        public void Initialize(IGameManager gameManager, IGameMediator mediator) {
-            if (gameManager == null || mediator == null) {
-                LogError("TurnManager initialization failed: GameManager or GameMediator is null.", LogTag.Initialization | LogTag.Turns);
-                enabled = false;
-                return;
-            }
-            this.gameManager = gameManager;
-            gameMediator = mediator;
-            // Get other systems from GameManager *after* it's initialized
-            modifierManager = gameManager.ModifierManager;
-            actionsQueue = gameManager.ActionsQueue;
-
-            if (modifierManager == null || actionsQueue == null) {
-                LogError("TurnManager initialization failed: ModifierManager or ActionsQueue not ready via GameManager.", LogTag.Initialization | LogTag.Turns);
-                enabled = false;
-                return;
-            }
-
-            turnNumber = 0; // Reset turn number on initialization
-            IsInitialized = true; // Mark as initialized
+        public void Initialize(IReadOnlyList<IPlayer> players, IActionsQueue actionsQueue, IModifierManager modifierManager,
+            IGameMediator mediator, TurnClock clock) {
+            this.players = players ?? throw new ArgumentNullException(nameof(players));
+            this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
+            this.modifierManager = modifierManager ?? throw new ArgumentNullException(nameof(modifierManager));
+            gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
+            IsInitialized = true;
             Log("TurnManager Initialized with dependencies.", LogTag.Initialization | LogTag.Turns);
         }
-        #endregion
 
         #region Methods
         public void SetPresenter(IResolutionPresenter presenter) {
@@ -62,8 +47,8 @@ namespace SlayTheClone {
         /// </summary>
         public void EndTurn() {
             if (IsResolving) return;
-            if (gameManager == null || gameMediator == null || modifierManager == null || actionsQueue == null) {
-                LogError("TurnManager.EndTurn called before fully initialized or dependencies lost!", LogTag.Turns | LogTag.Initialization);
+            if (!IsInitialized) {
+                LogError("TurnManager.EndTurn called before it was initialized.", LogTag.Turns | LogTag.Initialization);
                 return;
             }
             StartCoroutine(EndTurnRoutine());
@@ -72,8 +57,9 @@ namespace SlayTheClone {
         private IEnumerator EndTurnRoutine() {
             IsResolving = true;
             try {
-                int endedTurn = turnNumber; // Store the turn number that just ended
-                turnNumber++; // Increment turn number for the new turn
+                int endedTurn = clock.TurnNumber;
+                clock.Advance();
+                int turnNumber = clock.TurnNumber;
                 Log($"--- Ending Turn {endedTurn}, Starting Turn {turnNumber} ---", LogTag.Turns);
 
                 // --- Phase 1: End of Turn Processing (for the turn that just finished) ---
@@ -81,11 +67,11 @@ namespace SlayTheClone {
                 yield return ResolveQueuedActions();
 
                 // --- Phase 2: Turn Transition & Mandatory Actions ---
-                foreach (var player in new[] { gameManager.Player1, gameManager.Player2 }) {
-                    gameManager.DiscardHand(player);
+                foreach (var player in players) {
+                    actionsQueue.AddAction(new DiscardHandAction(player));
                 }
-                foreach (var player in new[] { gameManager.Player1, gameManager.Player2 }) {
-                    gameManager.DrawCardsForPlayer(player, player.CardsToDraw);
+                foreach (var player in players) {
+                    actionsQueue.AddAction(new DrawCardsAction(player, player.CardsToDraw));
                 }
                 yield return ResolveQueuedActions();
 

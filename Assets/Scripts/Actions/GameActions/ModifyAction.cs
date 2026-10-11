@@ -35,7 +35,7 @@ namespace SlayTheClone {
             }
 
             targetCreature = target;
-            this.value = (modifyAttack || modifyHealth || modifySpeed) ? Math.Max(0, value) : value;
+            this.value = value; // Negative values are debuffs
             this.modifyAttack = modifyAttack;
             this.modifyHealth = modifyHealth;
             this.modifySpeed = modifySpeed;

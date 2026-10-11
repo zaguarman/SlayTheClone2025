@@ -9,23 +9,9 @@ namespace SlayTheClone {
                 return;
             }
 
-            var modifierManager = context.ModifierManager;
-            var factory = context.ModifierFactory;
-            var turnManager = context.TurnManager;
-
-            if (modifierManager == null || factory == null) {
-                LogError("ModifyActionExecutor: ModifierManager or Factory is null in context.", LogTag.Actions | LogTag.Effects | LogTag.Initialization);
-                return;
-            }
-            // Timed modifiers need the current turn
-            if (turnManager == null) {
-                LogError("ModifyActionExecutor: TurnManager is null in context. Cannot process timed modifiers.", LogTag.Actions | LogTag.Effects | LogTag.Initialization);
-                return;
-            }
-
-            StatModifiers.Apply(modifierManager, factory, targetCreature, modifyAction.GetValue(),
+            StatModifiers.Apply(context.ModifierManager, context.ModifierFactory, targetCreature, modifyAction.GetValue(),
                 modifyAction.ShouldModifyAttack(), modifyAction.ShouldModifyHealth(), modifyAction.ShouldModifySpeed(),
-                modifyAction.GetCalculationType(), modifyAction.GetDuration(), turnManager.TurnNumber);
+                modifyAction.GetCalculationType(), modifyAction.GetDuration(), context.TurnClock.TurnNumber);
 
             Log($"Executed ModifyAction via Executor for {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
         }
