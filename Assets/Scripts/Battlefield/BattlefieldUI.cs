@@ -197,21 +197,6 @@ public class BattlefieldUI : CardContainer {
         card.transform.localRotation = Quaternion.identity;
     }
 
-    // Check if it is necessary
-    private void UpdateCreatureCards() {
-        foreach (var battlefieldSlot in Player.Battlefield) {
-            var creature = battlefieldSlot.OccupyingCreature;
-            if (creature == null) continue;
-
-            var creatureCard = battlefieldSlot.OccupyingCard;
-
-            if (creatureCard == null) {
-                battlefieldSlot.OccupySlot(creatureCard);
-                creatureCard.UpdateUI();
-            }
-        }
-    }
-
     protected override void UpdateLayout() {
         // Intentionally left empty to prevent CardContainer from repositioning cards
         // Slots handle card positioning instead

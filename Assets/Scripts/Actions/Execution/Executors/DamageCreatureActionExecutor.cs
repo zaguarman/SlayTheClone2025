@@ -22,7 +22,6 @@ public class DamageCreatureActionExecutor : IActionExecutor
 
         // Validate target
         if (targetCreature == null || targetCreature.IsDead) {
-             // LogWarning($"DamageCreatureActionExecutor: Target {targetCreature?.Name ?? "null"} is null or already dead.", LogTag.Actions | LogTag.Creatures);
              return;
         }
 

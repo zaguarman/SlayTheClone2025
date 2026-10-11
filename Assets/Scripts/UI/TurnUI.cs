@@ -36,14 +36,12 @@ public class TurnUI : UIComponent {
         if (gameMediator != null) {
             // Listen to TurnEnded event instead of GameStateChanged for turn updates
             gameMediator.AddTurnEndedListener(OnTurnEnded);
-            // gameMediator.AddGameStateChangedListener(OnGameStateChanged); // Remove this if TurnEnded is sufficient
         }
     }
 
     protected override void UnregisterEvents() {
         if (gameMediator != null) {
             gameMediator.RemoveTurnEndedListener(OnTurnEnded);
-            // gameMediator.RemoveGameStateChangedListener(OnGameStateChanged); // Remove this
         }
     }
 

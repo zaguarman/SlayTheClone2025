@@ -60,8 +60,6 @@ public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
         }
     }
 
-    // Removed IsValidTarget - basic check integrated above
-
     private void UpdateAttackAction(ICreature attackerCreature, BattlefieldSlot newTargetSlot) {
         string attackerId = attackerCreature.TargetId;
 
@@ -95,8 +93,6 @@ public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
         return true;
     }
 
-    // Removed RemoveCombatAction - ActionsQueue AddAction handles replacement
-
     private void RegisterAttack(ICreature attacker, BattlefieldSlot targetSlot) {
          string attackerId = attacker.TargetId;
         attackingCreatureIds.Add(attackerId);
@@ -106,13 +102,7 @@ public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
     private void QueueCombatAction(ICreature attackerCreature, ITarget targetSlot) {
         // Use injected ActionsQueue via IGameManager
         _gameManager.ActionsQueue?.AddAction(new BattlefieldCombatAction(attackerCreature, targetSlot));
-        // Log($"Queued BattlefieldCombatAction: {attackerCreature.Name} (ID: {attackerCreature.TargetId.ToUpper()}) targets slot {targetSlot?.TargetId.ToUpper()}", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
-
-        // Mark action attempted if needed (though this might be better in the action execution itself)
-        // _gameManager.ActionsQueue?.MarkEffectProcessed(attackerCreature.TargetId, EffectTrigger.ActionAttempted);
-
-        // Mediator notification happens via ActionsQueue events now
-        // _gameManager.GameMediator?.NotifyActionsQueueChanged(); // REMOVED
+        // Mediator notification happens via ActionsQueue events
     }
 
     public void ResetAttackingCreatures() {

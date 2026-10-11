@@ -28,9 +28,6 @@ public class PlayerUI : UIComponent {
             Log($"Health text set for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
         }
 
-        // Don't initialize HandUI here, let GameUI handle its children's initialization
-        // InitializeHandUI(player); // REMOVE THIS CALL
-
         // IsInitialized is set by base class
         Log($"PlayerUI initialized for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
     }
@@ -68,9 +65,6 @@ public class PlayerUI : UIComponent {
         // Force an update of the player's health UI
         player.UpdateHealthUI();
     }
-
-    // Remove InitializeHandUI - this should be managed by GameUI
-    // private void InitializeHandUI(IPlayer player) { ... } // REMOVED
 
     protected override void CleanupComponent() {
         // No need to clean up the health handler as it's now managed by the Player

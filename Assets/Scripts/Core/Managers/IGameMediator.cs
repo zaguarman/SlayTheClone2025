@@ -64,7 +64,6 @@ public interface IGameMediator
 
     #region Player Registration
     void RegisterPlayer(IPlayer player);
-    void UnregisterPlayer(IPlayer player);
     #endregion
 
     #region Notification Methods

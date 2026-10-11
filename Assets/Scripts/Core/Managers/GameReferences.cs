@@ -234,7 +234,6 @@ public class GameReferences : MonoBehaviour, IGameReferences {
     public Tooltip GetTooltip() {
         // Check if this instance has already been destroyed
         if (this == null || this.gameObject == null) {
-            // LogWarning("Attempting to get Tooltip from destroyed GameReferences.", LogTag.UI);
             return null; // Return null if GameReferences is destroyed
         }
 

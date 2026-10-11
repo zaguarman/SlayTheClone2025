@@ -59,7 +59,6 @@ public class Creature : Card, ICreature {
     public IPlayer Owner { get; private set; }
     public BattlefieldSlot Slot { get; set; }
 
-    private ICreature lastAttacker;
     private IGameMediator gameMediator; // Add field for gameMediator
 
     public Creature(string name, int attack, int health, int speed, string cardId) : base(name, cardId) {
@@ -96,11 +95,8 @@ public class Creature : Card, ICreature {
     }
 
     public void ModifyArmorPool(int amount) {
-        int previousArmor = CurrentArmorPool;
         CurrentArmorPool += amount;
         CurrentArmorPool = Math.Max(0, CurrentArmorPool);
-        // Log removed, notification handled by executor or mediator
-        // GameMediator.Instance?.NotifyCreatureArmorChanged(this, CurrentArmorPool); // REMOVED
     }
 
     public void SetOwner(IPlayer owner) {
@@ -133,11 +129,6 @@ public class Creature : Card, ICreature {
         damageLog += $"Health: {previousHealth} -> {Health}.";
         Log(damageLog, LogTag.Creatures | LogTag.Combat | LogTag.Effects);
 
-        // REMOVED external calls:
-        // HandleEffect(EffectTrigger.OnDamage, ...)
-        // GameMediator.Instance?.NotifyCreatureDamaged(...)
-        // if (Health <= 0 && !isDead) { Die(); }
-
         return actualDamageDealt; // Return how much damage was actually dealt
     }
 
@@ -148,12 +139,6 @@ public class Creature : Card, ICreature {
 
         IsDead = true;
         Log($"Creature marked as dead: {Name} (TargetID: {TargetId.ToUpper()})", LogTag.Creatures);
-
-        // REMOVED external calls:
-        // HandleEffect(EffectTrigger.OnDeath, ...)
-        // GameMediator.Instance?.NotifyCreatureDied(...)
-        // gameManager?.ModifierManager?.UnregisterCreature(this)
-        // Owner?.RemoveFromBattlefield(this, false);
     }
 
     /// <summary>
@@ -290,7 +275,6 @@ public class Creature : Card, ICreature {
         var modifierManager = context.ModifierManager;
         var factory = context.ModifierFactory;
         var turnManager = context.TurnManager;
-        var gameManagerContext = context.GameManager; // Also get GameManager if needed by effects
 
         // Adjusted null check: Core dependencies must be present
         if (actionsQueue == null || modifierManager == null || factory == null || turnManager == null) {
@@ -305,7 +289,6 @@ public class Creature : Card, ICreature {
 
                 switch (action.actionType) {
                     case ActionType.Damage:
-                        // Pass the full context instead of just actionsQueue and null lastAttacker
                         ProcessDamageEffect(action, context);
                         break;
                     case ActionType.Heal:
@@ -352,40 +335,6 @@ public class Creature : Card, ICreature {
         if (Owner == null && action.targetType != TargetType.Self) {
             LogError($"Damage Effect Error for {Name}: Cannot target others - Owner is null and target is not Self.", LogTag.Effects);
             return;
-        }
-
-        // --- Specific Logic for Chained Damage (e.g., Electric Eel) ---
-        // NOTE: Chain logic is now handled in BattlefieldCombatActionExecutor
-        // This code is kept for reference but disabled to prevent duplicate chain effects
-        if (false && context.GameMediator != null && Effects.Any(e => e.trigger == EffectTrigger.OnDamage) && action.targetModifier == TargetModifier.Chained)
-        {
-            // The creature THIS effect belongs to is the one that was *hit*
-            // The originalAttacker is the one who dealt the initial damage (e.g., the Eel)
-            if (originalAttacker == null)
-            {
-                LogWarning($"Chained Damage Effect Warning for {Name}: TriggeringAttacker is null in context. Cannot process chain.", LogTag.Effects | LogTag.Combat);
-                return; // Cannot process chain without knowing the original attacker
-            }
-
-            // Chain starts adjacent to THIS creature (the one hit)
-            var chainTargets = TargetingSystem.GetDirectionalChainTargets(this, 2); // Max 2 jumps
-            Log($"Chained Damage Effect ({originalAttacker.Name} -> {this.Name}): Found {chainTargets.Count} chain targets.", LogTag.Effects | LogTag.Combat);
-
-            int currentDamage = action.value; // Initial damage specified in the EffectAction (e.g., 4 for Eel)
-            foreach (var chainTarget in chainTargets)
-            {
-                if (currentDamage <= 0) break; // Stop if damage drops to 0 or below
-
-                Log($"Queueing Chained DamageAction: Target={chainTarget.Name}, Damage={currentDamage}, Attacker={originalAttacker.Name}", LogTag.Effects | LogTag.Combat | LogTag.Actions);
-
-                // Damage action source is the ORIGINAL attacker (the Eel)
-                actionsQueue.AddAction(new DamageCreatureAction(chainTarget, currentDamage, originalAttacker));
-
-                currentDamage /= 2; // Halve damage for the next jump (integer division floors)
-            }
-            // After handling the chain, we want to prevent the default damage logic below
-            // since the EffectAction for the Eel's OnDamage *is* the chain effect itself
-            return; // Exit after processing the chain for this specific action
         }
 
         // Skip chain effects since they're now handled in BattlefieldCombatActionExecutor
@@ -497,7 +446,6 @@ public class Creature : Card, ICreature {
               if (Owner == null) return; // Need owner for non-self targets
              targets = TargetingSystem.GetValidTargets(Owner, action.targetType, action.targetModifier);
          }
-         // Log($"ModifyStat Modifier: Found {targets.Count} targets for {action.targetType}/{action.targetModifier}.", LogTag.Effects);
 
         int currentTurn = turnManager.TurnNumber; // Get current turn from injected manager
 

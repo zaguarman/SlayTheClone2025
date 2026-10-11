@@ -234,12 +234,6 @@ public class GameMediator : MonoBehaviour, IGameMediator {
         }
     }
 
-    public void UnregisterPlayer(IPlayer player) {
-        if (player == null) return;
-        if (registeredPlayers.Remove(player)) {
-            Log($"Player unregistered: {(player.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Players);
-        }
-    }
     #endregion
 
     #region Notification Methods
@@ -336,8 +330,6 @@ public class GameMediator : MonoBehaviour, IGameMediator {
         if (creature == null) throw new System.ArgumentNullException(nameof(creature));
 
         events.CreatureArmorChanged.Invoke(creature, newArmor);
-        // Optional Log: Can be noisy if armor changes frequently
-        // Log($"Creature armor changed: {creature.Name} now has {newArmor} armor", LogTag.Creatures | LogTag.Effects);
         NotifyGameStateChanged(); // Ensure UI updates
     }
 

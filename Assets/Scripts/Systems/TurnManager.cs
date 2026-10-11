@@ -117,7 +117,5 @@ public class TurnManager : MonoBehaviour, ITurnManager {
             yield return _presenter.WaitUntilIdle();
         }
     }
-    // REMOVED TriggerEndOfTurnEffects and TriggerStartOfTurnEffects - Responsibility moved to ModifierManager
-    // REMOVED LogBattlefieldState, HasEffectWithTrigger, ReduceStunDuration - Not needed here anymore
     #endregion
 }

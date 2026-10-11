@@ -1,10 +1,6 @@
 using static DebugLogger;
-using System;
-using UnityEngine.Events;
 using UnityEngine;
 using static Enums;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 
 public static class CardFactory {
@@ -131,38 +127,6 @@ public static class CardFactory {
         }
     }
 
-    // Updated CreateCardControllerAsync to accept IGameManager
-    public static async Task<CardController> CreateCardControllerAsync(
-        ICard cardInstance,
-        CardData baseCardData,
-        IPlayer owner,
-        Transform parent,
-        IGameMediator mediator,
-        IGameReferences references,
-        IGameManager manager, // Added manager parameter
-        CancellationToken cancellationToken = default) {
-        if (baseCardData == null || parent == null || mediator == null || references == null) return null;
-
-        var cardPrefab = references.GetCardPrefab();
-        if (cardPrefab == null) {
-            LogError("Failed to get card prefab from game references", LogTag.Cards | LogTag.Initialization);
-            return null;
-        }
-
-        // Add small delay to spread out card creation
-        await Task.Delay(50, cancellationToken); // Reduced delay
-
-        var cardObj = GameObject.Instantiate(cardPrefab.gameObject, parent);
-        var controller = cardObj.GetComponent<CardController>();
-        if (controller != null) {
-            // Pass the base CardData and the potentially live ICard instance
-            // Pass manager to Setup
-            controller.Setup(baseCardData, owner, cardInstance, mediator, references, manager);
-            Log($"Created card controller for {baseCardData.cardName}", LogTag.Cards | LogTag.Initialization);
-        }
-        return controller;
-    }
-
     // Updated CreateCardController to accept IGameManager
     public static CardController CreateCardController(
         ICard cardInstance,
@@ -189,47 +153,5 @@ public static class CardFactory {
             Log($"Created card controller for {baseCardData.cardName}", LogTag.Cards | LogTag.Initialization);
         }
         return controller;
-    }
-
-    // TODO
-    public static void SetupCardEventHandlers(
-        CardController controller,
-        UnityAction<CardController> onBeginDrag = null,
-        UnityAction<CardController> onEndDrag = null,
-        UnityAction<CardController> onDrop = null,
-        Action onPointerEnter = null,
-        Action onPointerExit = null) {
-        if (controller == null) return;
-
-        CleanupCardEventHandlers(controller);
-
-        if (onBeginDrag != null)
-            controller.OnBeginDragEvent.AddListener(onBeginDrag);
-
-        if (onEndDrag != null)
-            controller.OnEndDragEvent.AddListener(onEndDrag);
-
-        if (onDrop != null)
-            controller.OnCardDropped.AddListener(onDrop);
-
-        if (onPointerEnter != null)
-            controller.OnPointerEnterHandler += onPointerEnter;
-
-        if (onPointerExit != null)
-            controller.OnPointerExitHandler += onPointerExit;
-
-        Log($"Set up event handlers for card {controller.name}", LogTag.Cards | LogTag.UI);
-    }
-
-    public static void CleanupCardEventHandlers(CardController controller) {
-        if (controller == null) return;
-
-        controller.OnBeginDragEvent.RemoveAllListeners();
-        controller.OnEndDragEvent.RemoveAllListeners();
-        controller.OnCardDropped.RemoveAllListeners();
-        controller.OnPointerEnterHandler = null;
-        controller.OnPointerExitHandler = null;
-
-        Log($"Cleaned up event handlers for card {controller.name}", LogTag.Cards | LogTag.UI);
     }
 }

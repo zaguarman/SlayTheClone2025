@@ -64,10 +64,6 @@ public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPo
         OccupyingCreature = controller.GetLinkedCreature();
     }
 
-    public void OccupySlot(CardController card) {
-        AssignCreature(card);
-    }
-
     public void ClearSlot(bool destroyCard = true) {
         if (OccupyingCard != null) {
             OccupyingCard.SetReplacementPreview(false);

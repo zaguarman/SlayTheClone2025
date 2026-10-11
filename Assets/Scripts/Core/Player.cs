@@ -5,8 +5,6 @@ using static DebugLogger;
 using System.Linq;
 using UnityEngine;
 using TMPro;
-using System.Threading.Tasks;
-using System.Threading;
 
 [Serializable]
 public class PlayerDamagedUnityEvent : UnityEvent<int> { }
@@ -21,7 +19,6 @@ public interface IPlayer : IEntity {
     int Health { get; }
     void AddToHand(ICard card);
     void RemoveFromHand(ICard card);
-    void AddToBattlefield(ICard creature, ITarget slotId = null);
     void RemoveFromBattlefield(ICard creature, bool destroyCard = true);
     void DiscardCard(ICard card);
     void DiscardHand();
@@ -63,11 +60,8 @@ public class Player : Entity, IPlayer {
     public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
 
     private readonly bool _isPlayer1; // Add field to store identity
-    // is player 1 prop using the isplayer1 method
-    public bool Is_Player1 => IsPlayer1;
 
     private IGameMediator gameMediator; // Changed to interface
-    private IGameReferences gameReferences; // Added reference
     private ICardDealingService cardDealingService; // Added reference
     private IGameManager gameManager; // Added reference
     private TextMeshProUGUI healthText;
@@ -83,7 +77,6 @@ public class Player : Entity, IPlayer {
         Hand = new List<ICard>();
         Battlefield = new List<BattlefieldSlot>();
         Deck = new Deck();
-        // --- REMOVED: gameMediator = GameMediator.Instance; ---
 
         OnDamaged.AddListener(OnPlayerDamaged);
         _isPlayer1 = isPlayer1;
@@ -93,13 +86,12 @@ public class Player : Entity, IPlayer {
     public bool IsPlayer1 => _isPlayer1;
 
     // New Initialize method to inject dependencies
-    public void Initialize(IGameMediator mediator, IGameReferences references, ICardDealingService dealer, IGameManager manager) {
-        if (mediator == null || references == null || dealer == null || manager == null) {
+    public void Initialize(IGameMediator mediator, ICardDealingService dealer, IGameManager manager) {
+        if (mediator == null || dealer == null || manager == null) {
              LogError($"Player ({Name}) initialization failed: Dependencies cannot be null.", LogTag.Initialization | LogTag.Players);
              return; // Or throw exception
         }
         gameMediator = mediator;
-        gameReferences = references;
         cardDealingService = dealer;
         gameManager = manager;
         Log($"Player ({Name}) initialized with dependencies.", LogTag.Initialization | LogTag.Players);
@@ -272,120 +264,6 @@ public class Player : Entity, IPlayer {
         if (cardDealingService.CanDrawCard(this)) {
             cardDealingService.DrawCardForPlayer(this);
         }
-    }
-
-    public async Task<bool> DrawCardAsync(CancellationToken cancellationToken = default) {
-        // Use injected cardDealingService
-        if (cardDealingService == null) {
-            LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
-            return false;
-        }
-
-        if (Hand.Count >= MAX_HAND_SIZE) {
-            Log($"Hand full ({MAX_HAND_SIZE} cards), cannot draw more cards", LogTag.Cards);
-            return false;
-        }
-
-        if (cardDealingService.CanDrawCard(this)) {
-            await cardDealingService.DrawCardForPlayerAsync(this, cancellationToken);
-            return true;
-        }
-        return false;
-    }
-
-    public void AddToBattlefield(ICard card, ITarget slot = null) {
-        if (card == null || slot is not BattlefieldSlot targetSlot) return;
-
-        // Use injected dependencies
-        if (gameMediator == null || gameReferences == null) {
-            LogError($"Mediator or References null when adding {card.Name} to battlefield.", LogTag.Players);
-            return;
-        }
-
-        // Clear existing card if needed
-        if (targetSlot.IsOccupied()) {
-            var oldCreature = targetSlot.OccupyingCreature;
-            RemoveFromBattlefield(oldCreature);
-        }
-
-        // Get the original CardData for this card
-        CardData originalData = null;
-
-        // Try to find the original card data in the deck using the new method
-        if (card.CardId != null && Deck != null) {
-            originalData = Deck.FindOriginalCardDataById(card.CardId);
-        }
-
-        // If we couldn't find the original data, create a temporary one from current state
-        if (originalData == null) {
-            LogWarning($"Could not find original CardData for {card.Name}, using current state", LogTag.Cards);
-            // This is a fallback that should rarely happen
-            if (card is ICreature creature) {
-                var tempData = ScriptableObject.CreateInstance<CreatureData>();
-                tempData.cardId = card.CardId;
-                tempData.cardName = card.Name;
-                tempData.description = card.Description;
-                tempData.attack = creature.BaseAttack;
-                tempData.health = creature.BaseHealth;
-                tempData.speed = creature.BaseSpeed;
-                originalData = tempData;
-            }
-        }
-
-        // Create controller, passing both the original data and the live instance
-        var cardController = CardFactory.CreateCardController(card, originalData, this, targetSlot.transform, gameMediator, gameReferences, gameManager); // Pass gameManager
-        if (cardController != null) {
-            targetSlot.AssignCreature(cardController);
-            gameMediator.NotifyBattlefieldStateChanged(this);
-        }
-    }
-
-    public async Task<bool> AddToBattlefieldAsync(ICard card, ITarget slot = null, CancellationToken cancellationToken = default) {
-        if (card == null || slot is not BattlefieldSlot targetSlot) return false;
-
-        // Use injected dependencies
-        if (gameMediator == null || gameReferences == null) {
-            LogError($"Mediator or References null when adding {card.Name} to battlefield async.", LogTag.Players);
-            return false;
-        }
-
-        // Clear existing card if needed
-        if (targetSlot.IsOccupied()) {
-            var oldCreature = targetSlot.OccupyingCreature;
-            RemoveFromBattlefield(oldCreature);
-        }
-
-        // Get the original CardData for this card (same logic as in AddToBattlefield)
-        CardData originalData = null;
-
-        // Try to find the original card data in the deck using the new method
-        if (card.CardId != null && Deck != null) {
-            originalData = Deck.FindOriginalCardDataById(card.CardId);
-        }
-
-        // If we couldn't find the original data, create a temporary one
-        if (originalData == null) {
-            LogWarning($"Could not find original CardData for {card.Name}, using current state", LogTag.Cards);
-            if (card is ICreature creature) {
-                var tempData = ScriptableObject.CreateInstance<CreatureData>();
-                tempData.cardId = card.CardId;
-                tempData.cardName = card.Name;
-                tempData.description = card.Description;
-                tempData.attack = creature.BaseAttack;
-                tempData.health = creature.BaseHealth;
-                tempData.speed = creature.BaseSpeed;
-                originalData = tempData;
-            }
-        }
-
-        // Create new card controller asynchronously with dependencies
-        var cardController = await CardFactory.CreateCardControllerAsync(card, originalData, this, targetSlot.transform, gameMediator, gameReferences, gameManager, cancellationToken); // Pass gameManager
-        if (cardController != null) {
-            targetSlot.AssignCreature(cardController);
-            gameMediator.NotifyBattlefieldStateChanged(this);
-            return true;
-        }
-        return false;
     }
 
     public void RemoveFromBattlefield(ICard creature, bool destroyCard = true) {

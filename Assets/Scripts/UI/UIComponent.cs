@@ -11,8 +11,6 @@ public abstract class UIComponent : MonoBehaviour {
     protected IGameReferences gameReferences { get; private set; }
     protected IGameManager gameManager { get; private set; }
 
-    private bool hasBeenDestroyed = false;
-
     public UnityEvent onInitialized = new UnityEvent();
 
     public IPlayer Player { get; private set; }
@@ -72,7 +70,7 @@ public abstract class UIComponent : MonoBehaviour {
 
 
     protected virtual void OnEnable() {
-        if (IsInitialized && !hasBeenDestroyed) {
+        if (IsInitialized) {
             RegisterEvents();
         }
     }

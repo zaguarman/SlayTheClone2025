@@ -23,8 +23,6 @@ public class ModifierManager : IModifierManager {
         _modifierFactory = factory ?? throw new ArgumentNullException(nameof(factory));
         _turnManager = turnManager ?? throw new ArgumentNullException(nameof(turnManager));
 
-        // REMOVED: No longer subscribes directly to TurnEnded. TurnManager will call ProcessEndOfTurn/ProcessStartOfTurn.
-        // _mediator.AddTurnEndedListener(ProcessEndOfTurn);
         Log("ModifierManager initialized.", LogTag.Initialization | LogTag.Effects);
     }
     #endregion
@@ -98,8 +96,7 @@ public class ModifierManager : IModifierManager {
 
                 if (modifier.TryGetStatModification(ModifiableStat.Attack, out _, out _) ||
                     modifier.TryGetStatModification(ModifiableStat.Health, out _, out _) ||
-                    modifier.TryGetStatModification(ModifiableStat.Speed, out _, out _) ||
-                    false) {
+                    modifier.TryGetStatModification(ModifiableStat.Speed, out _, out _)) {
                     RecalculateStats(creatureTarget);
                 }
             }
@@ -132,8 +129,7 @@ public class ModifierManager : IModifierManager {
 
                         if (existingModifier.TryGetStatModification(ModifiableStat.Attack, out _, out _) ||
                             existingModifier.TryGetStatModification(ModifiableStat.Health, out _, out _) ||
-                            existingModifier.TryGetStatModification(ModifiableStat.Speed, out _, out _) ||
-                            false) {
+                            existingModifier.TryGetStatModification(ModifiableStat.Speed, out _, out _)) {
                             if (_creatures.ContainsKey(targetId)) {
                                 RecalculateStats(creatureTarget);
                             }
@@ -156,14 +152,6 @@ public class ModifierManager : IModifierManager {
     #endregion
 
     #region Status Effect Queries
-    public bool HasModifier(Creature creature, Guid modifierId) {
-        if (creature == null) return false;
-        if (_activeModifiers.TryGetValue(creature.TargetId, out var mods)) {
-            return mods.Any(m => m.Id == modifierId);
-        }
-        return false;
-    }
-
     public bool HasModifier(Creature creature, Predicate<IModifier> predicate) {
         if (creature == null || predicate == null) return false;
         if (_activeModifiers.TryGetValue(creature.TargetId, out var mods)) {
@@ -234,11 +222,6 @@ public class ModifierManager : IModifierManager {
         // Use ToList on dictionary keys to avoid modification during iteration issues
         foreach (var targetId in _activeModifiers.Keys.ToList()) {
             if (!_creatures.TryGetValue(targetId, out Creature creature) || creature.IsDead) {
-                // If creature doesn't exist or is dead, clean up its modifiers
-                if (_activeModifiers.ContainsKey(targetId)) {
-                    // Log($"Cleaning up modifiers for dead/missing creature {targetId}", LogTag.Effects | LogTag.Turns);
-                    // RemoveModifier should handle the cleanup within the loop below if needed
-                }
                 continue;
             }
 
@@ -350,18 +333,12 @@ public class ModifierManager : IModifierManager {
 
         Log($"ModifierManager: Stats recalculated for '{creature.Name}' - Attack: {finalAttack}, MaxHealth: {finalMaxHealth}, Speed: {finalSpeed}", LogTag.Effects | LogTag.Creatures);
 
-        // --- USE NEW NOTIFICATION ---
         _mediator?.NotifyCreatureStatsChanged(creature);
-        // REMOVED: _mediator?.NotifyCreatureDamaged(creature, 0);
-        // --- END ---
     }
     #endregion
 
     #region Cleanup
     public void Cleanup() {
-        // REMOVED: No longer directly subscribes to Mediator
-        // _mediator?.RemoveTurnEndedListener(ProcessEndOfTurn);
-
         // Clear internal collections
         _activeModifiers.Clear();
         _creatures.Clear();

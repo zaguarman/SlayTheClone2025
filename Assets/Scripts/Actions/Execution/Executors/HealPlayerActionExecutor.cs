@@ -42,8 +42,6 @@ public class HealPlayerActionExecutor : IActionExecutor {
         if (actualHealAmount > 0) {
             // Notify AFTER the action is performed
             mediator.NotifyPlayerHealed(targetPlayer, actualHealAmount);
-            // Optionally notify general game state change if needed, but PlayerHealed might be sufficient
-            // mediator.NotifyGameStateChanged();
         }
 
         Log($"Executed HealPlayerAction via Executor for {(targetPlayer.IsPlayer1 ? "P1" : "P2")}. Healed for {amount} (Actual: {actualHealAmount}). Health: {targetPlayer.Health}", LogTag.Actions | LogTag.Players | LogTag.Effects);

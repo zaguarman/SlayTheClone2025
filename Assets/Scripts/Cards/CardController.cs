@@ -107,8 +107,7 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             gameMediator.AddCreatureDamagedListener(OnCreatureDamaged);
             gameMediator.AddCreatureDiedListener(OnCreatureDied);
             gameMediator.AddCreatureArmorChangedListener(OnCreatureArmorChanged);
-            // gameMediator.AddGameStateChangedListener(OnGameStateChanged); // Keep if needed for other reasons
-            gameMediator.AddCreatureStatsChangedListener(OnCreatureStatsChanged); // <<< ADD LISTENER
+            gameMediator.AddCreatureStatsChangedListener(OnCreatureStatsChanged);
             gameMediator.AddCreatureStatusChangedListener(OnCreatureStatusChanged);
         }
     }
@@ -118,22 +117,8 @@ public class CardController : UIComponent, IPointerEnterHandler, IPointerExitHan
             gameMediator.RemoveCreatureDamagedListener(OnCreatureDamaged);
             gameMediator.RemoveCreatureDiedListener(OnCreatureDied);
             gameMediator.RemoveCreatureArmorChangedListener(OnCreatureArmorChanged);
-            // gameMediator.RemoveGameStateChangedListener(OnGameStateChanged);
-            gameMediator.RemoveCreatureStatsChangedListener(OnCreatureStatsChanged); // <<< REMOVE LISTENER
+            gameMediator.RemoveCreatureStatsChangedListener(OnCreatureStatsChanged);
             gameMediator.RemoveCreatureStatusChangedListener(OnCreatureStatusChanged);
-        }
-    }
-
-    // Note: OnGameStateChanged might still be useful if other general state changes
-    // could affect the card's appearance indirectly, but for direct stat updates,
-    // OnCreatureStatsChanged is more specific. If OnGameStateChanged isn't needed
-    // for anything else in CardController, it can be removed along with its listener registration.
-    private void OnGameStateChanged() {
-        // If linkedCardInstance is not null, update UI.
-        // This can catch broader changes but might be less efficient.
-        // Keep if necessary, otherwise rely on specific events.
-        if (linkedCardInstance != null) {
-            // UpdateUI(); // Potentially redundant if specific listeners handle changes
         }
     }
 

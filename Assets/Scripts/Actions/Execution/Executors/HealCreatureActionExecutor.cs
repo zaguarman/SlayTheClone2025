@@ -29,7 +29,6 @@ public class HealCreatureActionExecutor : IActionExecutor
 
         // --- Validate Target ---
         if (targetCreature == null || targetCreature.IsDead) {
-            // LogWarning($"HealCreatureActionExecutor: Target creature {(targetCreature?.Name ?? "null")} is null or dead. Skipping heal.", LogTag.Actions | LogTag.Creatures);
             return;
         }
 
@@ -44,9 +43,6 @@ public class HealCreatureActionExecutor : IActionExecutor
             // Since health changed, notify that stats changed so CardController updates
             mediator.NotifyCreatureStatsChanged(targetCreature);
             Log($"HealCreatureActionExecutor: Notified CreatureStatsChanged for {targetCreature.Name} after healing.", LogTag.Actions | LogTag.Creatures | LogTag.Effects);
-
-            // Optionally notify general game state change if needed, but CreatureHealed might be sufficient
-            // mediator.NotifyGameStateChanged();
         }
 
         Log($"Executed HealCreatureAction via Executor: Healed {targetCreature.Name} for {amount} (Actual: {actualHealAmount}). Health: {targetCreature.Health}/{targetCreature.MaxHealth}", LogTag.Actions | LogTag.Creatures | LogTag.Effects);

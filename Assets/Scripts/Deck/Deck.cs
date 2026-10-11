@@ -6,7 +6,6 @@ public interface IDeck {
     int CardsRemaining { get; }
     void Initialize(List<CardData> cardDataList);
     ICard DrawCard();
-    void AddCardToTop(ICard card);
     void AddCardToBottom(ICard card);
     void AddToDiscardPile(ICard card);
     void ClearDiscardPile();
@@ -25,7 +24,6 @@ public class Deck : IDeck {
     private string deckId;
 
     public int CardsRemaining => cards?.Count ?? 0;
-    public int DiscardPileCount => discardPile?.Count ?? 0;
 
     public Deck() {
         cards = new List<ICard>();
@@ -70,16 +68,6 @@ public class Deck : IDeck {
         cards.RemoveAt(0);
         Log($"Drew card: {drawnCard.Name} (CardID: {drawnCard.TargetId.ToUpper()}) from deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
         return drawnCard;
-    }
-
-    public void AddCardToTop(ICard card) {
-        if (card == null) {
-            LogError($"Attempted to add null card to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
-            return;
-        }
-
-        cards.Insert(0, card);
-        Log($"Added card to top: {card.Name} (CardID: {card.TargetId.ToUpper()}) to deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
     }
 
     public void AddCardToBottom(ICard card) {

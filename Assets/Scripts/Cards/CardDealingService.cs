@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using static DebugLogger;
 
 public interface ICardDealingService {
@@ -8,14 +6,11 @@ public interface ICardDealingService {
     void DealInitialHands(IPlayer player1, IPlayer player2, int handSize = 6);
     bool CanDrawCard(IPlayer player);
     void DrawCardForPlayer(IPlayer player);
-    Task<bool> DrawCardForPlayerAsync(IPlayer player, CancellationToken cancellationToken = default);
-    void ShuffleDeck(IPlayer player);
     bool RecycleDiscardPile(IPlayer player);
     void DrawCards(IPlayer player, int count);
     List<ICard> GetDeckPreview(IPlayer player);
     List<ICard> GetDiscardPilePreview(IPlayer player);
     int GetDiscardPileCount(IPlayer player);
-    bool RemoveCardFromDeck(IPlayer player, ICard card);
 }
 
 public class CardDealingService : ICardDealingService {
@@ -92,45 +87,6 @@ public class CardDealingService : ICardDealingService {
 
         // Check both deck and hand size
         return deck != null && deck.CardsRemaining > 0 && player.Hand.Count < Player.MAX_HAND_SIZE;
-    }
-
-    public async Task<bool> DrawCardForPlayerAsync(IPlayer player, CancellationToken cancellationToken = default) {
-        if (player == null) {
-            LogError("Cannot draw card - player is null", LogTag.Cards | LogTag.Initialization);
-            return false;
-        }
-
-        if (player.Hand.Count >= Player.MAX_HAND_SIZE) {
-            Log($"Player {(player.IsPlayer1 ? "1" : "2")} (TargetID: {player.TargetId.ToUpper()}) has a full hand ({Player.MAX_HAND_SIZE} cards), skipping draw", LogTag.Cards);
-            return false;
-        }
-
-        if (!playerDecks.TryGetValue(player, out var deck)) {
-            LogError($"Could not find deck for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards | LogTag.Initialization);
-            return false;
-        }
-
-        // Check if deck is empty and needs recycling
-        if (deck.CardsRemaining == 0) {
-            bool recycled = RecycleDiscardPile(player);
-            if (!recycled) {
-                Log($"No cards left in deck or discard pile for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
-                return false;
-            }
-        }
-
-        // Add small delay to spread out card draws
-        await Task.Delay(100, cancellationToken);
-
-        // Draw the card now that we know there are cards available
-        var card = deck.DrawCard();
-        if (card != null) {
-            player.AddToHand(card);
-            gameMediator.NotifyHandStateChanged(player);
-            Log($"Drew card for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()}): {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
-            return true;
-        }
-        return false;
     }
 
     public void DrawCardForPlayer(IPlayer player) {
@@ -225,16 +181,6 @@ public class CardDealingService : ICardDealingService {
         return true;
     }
 
-    public void ShuffleDeck(IPlayer player) {
-        if (!playerDecks.TryGetValue(player, out var deck)) {
-            LogError($"Could not find deck for player (TargetID: {player.TargetId.ToUpper()}) to shuffle", LogTag.Cards);
-            return;
-        }
-
-        deck.Shuffle();
-        Log($"Shuffled deck for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
-    }
-
     // Get a preview of the player's deck cards
     public List<ICard> GetDeckPreview(IPlayer player) {
         if (player == null) {
@@ -273,26 +219,5 @@ public class CardDealingService : ICardDealingService {
         }
 
         return deck.GetDiscardPilePreview().Count;
-    }
-
-    public bool RemoveCardFromDeck(IPlayer player, ICard card) {
-        if (player == null || card == null) {
-            LogError("Cannot remove card from deck - player or card is null", LogTag.Cards);
-            return false;
-        }
-
-        if (!playerDecks.TryGetValue(player, out var deck)) {
-            LogError($"Could not find deck for player (TargetID: {player.TargetId.ToUpper()}) to remove card", LogTag.Cards);
-            return false;
-        }
-
-        // Call RemoveCard directly on IDeck
-        bool removed = deck.RemoveCard(card);
-        if (removed) {
-            Log($"Removed card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck", LogTag.Cards);
-        } else {
-            LogWarning($"Failed to remove card {card.Name} (TargetID: {card.TargetId.ToUpper()}) from {(player.IsPlayer1 ? "Player 1" : "Player 2")}'s (TargetID: {player.TargetId.ToUpper()}) deck - card not found", LogTag.Cards);
-        }
-        return removed;
     }
 }

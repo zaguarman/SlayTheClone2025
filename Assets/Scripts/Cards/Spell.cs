@@ -17,10 +17,6 @@ public class Spell : Card {
         this.defaultTargetType = defaultTargetType;
     }
 
-    public void AddAction(ActionType actionType, int value, TargetType targetType) {
-        actions.Add(new SpellAction(actionType, value, targetType));
-    }
-
     public void AddAction(ActionType actionType, int value, TargetType targetType, TargetModifier targetModifier = TargetModifier.None) {
         actions.Add(new SpellAction(actionType, value, targetType, targetModifier));
     }
@@ -31,10 +27,6 @@ public class Spell : Card {
 
     public void AddAction(ActionType actionType, TargetType targetType, StatusEffectType statusType, int duration, int potency, TargetModifier targetModifier = TargetModifier.None) {
         actions.Add(new SpellAction(actionType, targetType, statusType, duration, potency, targetModifier));
-    }
-
-    public void ClearActions() {
-        actions.Clear();
     }
 
     public override void Play(IPlayer owner, IActionsQueue context, ITarget target = null) {

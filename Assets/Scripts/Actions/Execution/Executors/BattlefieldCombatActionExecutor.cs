@@ -147,9 +147,6 @@ public class BattlefieldCombatActionExecutor : IActionExecutor
                          Log($"Executor: Entering Spread Logic for {attacker.Name} (Modifier: {effectAction.targetModifier})...", LogTag.Combat | LogTag.Effects);
                          // --- END DEBUG LOG ---
                         Log($"Executor: Attacker {attacker.Name} applying SPREAD effect (Modifier: {effectAction.targetModifier}, Value: {spreadDamage})", LogTag.Combat | LogTag.Effects);
-                        // SpreadDamageEffect.ApplySpreadDamage(primaryTarget, spreadDamage, attacker, effectAction.targetModifier, actionsQueue);
-                         // The above call might be redundant if GetAdditionalTargets handles everything. Let's test without it first.
-                         // Re-enable if needed, or integrate the logic directly.
                          var additionalSpreadTargets = TargetingSystem.GetAdditionalTargets(attacker.Owner, primaryTarget, effectAction.targetModifier);
                          Log($"Executor: Found {additionalSpreadTargets.Count} spread targets for modifier {effectAction.targetModifier}.", LogTag.Combat | LogTag.Effects);
                          foreach(var spreadTarget in additionalSpreadTargets)

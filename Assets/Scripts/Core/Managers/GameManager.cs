@@ -24,11 +24,8 @@ public interface IGameManager {
     IPlayer Player2 { get; }
 
     // Add any essential methods needed publicly
-    void SetCardsToDraw(IPlayer player, int count);
     void DiscardHand(IPlayer player);
-    void DiscardAllHands();
     void DrawCardsForPlayer(IPlayer player, int count);
-    void DrawCardForPlayer(IPlayer player);
     int TurnNumber { get; }
     void EndTurn();
 }
@@ -258,8 +255,8 @@ public class GameManager : MonoBehaviour, IGameManager {
 
     private void InitializePlayerDependencies() {
         // Pass dependencies to players *after* GameManager has them
-        Player1?.Initialize(gameMediator, gameReferences, cardDealingService, this);
-        Player2?.Initialize(gameMediator, gameReferences, cardDealingService, this);
+        Player1?.Initialize(gameMediator, cardDealingService, this);
+        Player2?.Initialize(gameMediator, cardDealingService, this);
         Log("Injected dependencies into Player instances.", LogTag.Initialization | LogTag.Players);
     }
 
@@ -284,35 +281,16 @@ public class GameManager : MonoBehaviour, IGameManager {
 
 
 
-    public void SetCardsToDraw(IPlayer player, int count) {
-        if (player == null) return;
-        if (player is Player p) // Need concrete Player to set property
-        {
-            p.CardsToDraw = count;
-            Log($"Set cards to draw for {(p.IsPlayer1 ? "Player 1" : "Player 2")} to {count}", LogTag.Players | LogTag.Cards);
-        }
-    }
-
     public void DiscardHand(IPlayer player) {
         if (player == null) return;
         ActionsQueue?.AddAction(new DiscardHandAction(player));
         Log($"Added discard hand action for {(player.IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Actions | LogTag.Cards);
     }
 
-    public void DiscardAllHands() {
-        if (Player1 != null) ActionsQueue?.AddAction(new DiscardHandAction(Player1));
-        if (Player2 != null) ActionsQueue?.AddAction(new DiscardHandAction(Player2));
-        Log("Added discard hand actions for all players", LogTag.Actions | LogTag.Cards);
-    }
-
     public void DrawCardsForPlayer(IPlayer player, int count = 1) {
         if (player == null) return;
         ActionsQueue?.AddAction(new DrawCardsAction(player, count));
         Log($"Added draw cards action for {(player.IsPlayer1 ? "Player 1" : "Player 2")} to draw {count} cards", LogTag.Actions | LogTag.Cards);
-    }
-
-    public void DrawCardForPlayer(IPlayer player) {
-        DrawCardsForPlayer(player, 1);
     }
 
     #endregion
