@@ -1,3 +1,49 @@
 [*.cs]
+indent_style = space
+indent_size = 4
+
+# Braces: opening brace on the same line; else/catch/finally start a new line
 csharp_new_line_before_open_brace = none
-csharp_new_line_before_close_brace = none
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+
+# Usings
+dotnet_sort_system_directives_first = false
+dotnet_diagnostic.IDE0005.severity = suggestion
+
+# Naming
+#   Types, methods, properties, events: PascalCase
+#   Constants and static readonly fields: PascalCase
+#   Private/protected fields (serialized or not): camelCase, no prefix
+#   Parameters and locals: camelCase
+#   Public fields on serialized data classes (CardData, ContainerSettings...) keep Unity's camelCase
+dotnet_diagnostic.IDE1006.severity = suggestion
+
+dotnet_naming_style.pascal.capitalization = pascal_case
+dotnet_naming_style.camel.capitalization = camel_case
+
+dotnet_naming_symbols.constants.applicable_kinds = field, local
+dotnet_naming_symbols.constants.required_modifiers = const
+dotnet_naming_symbols.static_readonly.applicable_kinds = field
+dotnet_naming_symbols.static_readonly.required_modifiers = static, readonly
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private, protected, internal, protected_internal, private_protected
+dotnet_naming_symbols.members.applicable_kinds = class, struct, interface, enum, method, property, event, delegate, namespace, type_parameter
+dotnet_naming_symbols.locals.applicable_kinds = parameter, local, local_function
+
+dotnet_naming_rule.constants.symbols = constants
+dotnet_naming_rule.constants.style = pascal
+dotnet_naming_rule.constants.severity = suggestion
+dotnet_naming_rule.static_readonly.symbols = static_readonly
+dotnet_naming_rule.static_readonly.style = pascal
+dotnet_naming_rule.static_readonly.severity = suggestion
+dotnet_naming_rule.private_fields.symbols = private_fields
+dotnet_naming_rule.private_fields.style = camel
+dotnet_naming_rule.private_fields.severity = suggestion
+dotnet_naming_rule.members.symbols = members
+dotnet_naming_rule.members.style = pascal
+dotnet_naming_rule.members.severity = suggestion
+dotnet_naming_rule.locals.symbols = locals
+dotnet_naming_rule.locals.style = camel
+dotnet_naming_rule.locals.severity = suggestion

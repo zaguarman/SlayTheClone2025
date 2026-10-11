@@ -1,31 +1,24 @@
-using static DebugLogger;
-using static Enums;
-using System;
+using static SlayTheClone.DebugLogger;
 
-public class ModifyArmorAction : IGameAction
-{
-    private readonly ICreature targetCreature;
-    private readonly int amount; // Positive to add armor, negative to remove
+namespace SlayTheClone {
+    public class ModifyArmorAction : IGameAction {
+        private readonly ICreature targetCreature;
+        private readonly int amount; // Positive to add armor, negative to remove
 
-    public ModifyArmorAction(ICreature target, int amount)
-    {
-        if (target == null)
-        {
-            LogWarning($"ModifyArmorAction: Target creature is null. Action cannot be created.", LogTag.Actions | LogTag.Effects);
-            // Optional: throw an exception or handle gracefully
+        public ICreature GetTargetCreature() => targetCreature;
+        public int GetAmount() => amount;
+
+        public ModifyArmorAction(ICreature target, int amount) {
+            if (target == null) {
+                LogWarning("ModifyArmorAction: Target creature is null. Action cannot be created.", LogTag.Actions | LogTag.Effects);
+            }
+            targetCreature = target;
+            this.amount = amount;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
         }
-        this.targetCreature = target;
-        this.amount = amount;
-        Log($"Created ModifyArmorAction: Target={target?.Name}, Amount={amount}", LogTag.Actions | LogTag.Effects);
-    }
 
-
-
-    // Getters for executor
-    public ICreature GetTargetCreature() => targetCreature;
-    public int GetAmount() => amount;
-
-     public override string ToString() {
-        return $"ModifyArmorAction: Target={targetCreature?.Name}, Amount={amount}";
+        public override string ToString() {
+            return $"ModifyArmorAction: Target={targetCreature?.Name}, Amount={amount}";
+        }
     }
 }

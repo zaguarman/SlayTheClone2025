@@ -1,18 +1,20 @@
 using UnityEngine;
-using static Enums;
+using static SlayTheClone.Enums;
 
-public class SpellCardScriptableObject : CardDataScriptableObject {
-    public TargetType defaultTargetType;
+namespace SlayTheClone {
+    public class SpellCardScriptableObject : CardDataScriptableObject {
+        public TargetType defaultTargetType;
 
-    protected override void OnEnable() {
-        base.OnEnable(); // Call base implementation to handle cardId
-        cardType = CardType.Spell;
-    }
+        protected override void OnEnable() {
+            base.OnEnable(); // Call base implementation to handle cardId
+            cardType = CardType.Spell;
+        }
 
-    public override CardData ToCardData() {
-        SpellData data = ScriptableObject.CreateInstance<SpellData>();
-        CopyCommonFieldsTo(data);
-        data.defaultTargetType = defaultTargetType;
-        return data;
+        public override CardData ToCardData() {
+            SpellData data = ScriptableObject.CreateInstance<SpellData>();
+            CopyCommonFieldsTo(data);
+            data.defaultTargetType = defaultTargetType;
+            return data;
+        }
     }
 }

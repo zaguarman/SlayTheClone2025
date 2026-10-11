@@ -1,18 +1,17 @@
 using UnityEngine;
 
-public abstract class InitializableComponent : MonoBehaviour
-{
-    public bool IsInitialized { get; protected set; }
+namespace SlayTheClone {
+    public abstract class InitializableComponent : MonoBehaviour {
+        public bool IsInitialized { get; protected set; }
 
-    protected virtual void Awake() { }
+        protected virtual void Awake() { }
 
-    public virtual void Initialize()
-    {
-        IsInitialized = true;
-    }
+        public virtual void Initialize() {
+            IsInitialized = true;
+        }
 
-    protected virtual void OnDestroy()
-    {
-        IsInitialized = false;
+        protected virtual void OnDestroy() {
+            IsInitialized = false;
+        }
     }
 }

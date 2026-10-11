@@ -1,57 +1,71 @@
-using UnityEngine;
 using System.Collections.Generic;
-using static Enums;
+using System.Linq;
+using UnityEngine;
+using static SlayTheClone.Enums;
 
-public abstract class CardData : ScriptableObject {
-    public string cardId; // Added unique ID field
-    public string cardName;
-    public string description;
-    public CardType cardType;
-    public Sprite artwork;
-    public List<CardEffect> effects = new List<CardEffect>();
+namespace SlayTheClone {
+    public abstract class CardData : ScriptableObject {
+        public string cardId; // Added unique ID field
+        public string cardName;
+        public string description;
+        public CardType cardType;
+        public Sprite artwork;
+        public List<CardEffect> effects = new List<CardEffect>();
 
-    // OnEnable can be used to initialize cardId if null
-    public virtual void OnEnable() {
-        if (string.IsNullOrEmpty(cardId)) {
-            cardId = System.Guid.NewGuid().ToString();
+        // OnEnable can be used to initialize cardId if null
+        public virtual void OnEnable() {
+            if (string.IsNullOrEmpty(cardId)) {
+                cardId = System.Guid.NewGuid().ToString();
+            }
         }
     }
-}
 
-public class CreatureData : CardData {
-    public int attack;
-    public int health;
-    public int speed = 1; // Default speed to 1
+    public class CreatureData : CardData {
+        public int attack;
+        public int health;
+        public int speed = 1; // Default speed to 1
 
-    public override void OnEnable() {
-        base.OnEnable();
-        cardType = CardType.Creature;
-        if (speed <= 0) speed = 1; // Ensure speed is at least 1 on enable
+        public override void OnEnable() {
+            base.OnEnable();
+            cardType = CardType.Creature;
+            if (speed <= 0) speed = 1; // Ensure speed is at least 1 on enable
+        }
     }
-}
 
-[System.Serializable]
-public class CardEffect {
-    public EffectType effectType;
-    public EffectTrigger trigger;
-    public List<EffectAction> actions = new List<EffectAction>();
-}
+    [System.Serializable]
+    public class CardEffect {
+        public EffectType effectType;
+        public EffectTrigger trigger;
+        public List<EffectAction> actions = new List<EffectAction>();
 
-[System.Serializable]
-public class EffectAction { // Add new fields here too
-    public ActionType actionType;
-    public int value;
-    public TargetType targetType;
-    public TargetModifier targetModifier = TargetModifier.None;
+        // Deep copy, so each card instance can own its effects without sharing them with its definition
+        public CardEffect Clone() {
+            return new CardEffect {
+                effectType = effectType,
+                trigger = trigger,
+                actions = actions.Select(action => action.Clone()).ToList()
+            };
+        }
+    }
 
-    // ModifyStat Specific
-    public bool modifyAttack = true;
-    public bool modifyHealth = true;
-    public bool modifySpeed = false; // Added flag for speed modification
-    // public ModifierCalculationType calculationType = ModifierCalculationType.Flat;
+    [System.Serializable]
+    public class EffectAction { // Add new fields here too
+        public ActionType actionType;
+        public int value;
+        public TargetType targetType;
+        public TargetModifier targetModifier = TargetModifier.None;
 
-    // ApplyStatus Specific
-    public StatusEffectType statusEffectToApply = StatusEffectType.None;
-    public int statusDuration = 0;
-    public int statusPotency = 0;
+        // ModifyStat Specific
+        public bool modifyAttack = true;
+        public bool modifyHealth = true;
+        public bool modifySpeed = false; // Added flag for speed modification
+        // public ModifierCalculationType calculationType = ModifierCalculationType.Flat;
+
+        // ApplyStatus Specific
+        public StatusEffectType statusEffectToApply = StatusEffectType.None;
+        public int statusDuration = 0;
+        public int statusPotency = 0;
+
+        public EffectAction Clone() => (EffectAction)MemberwiseClone(); // Value-type fields only
+    }
 }

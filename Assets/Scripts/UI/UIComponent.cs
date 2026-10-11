@@ -1,100 +1,92 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
-/// <summary>
-/// Base class for UI components that can be initialized with dependencies.
-/// </summary>
-public abstract class UIComponent : MonoBehaviour {
-    public bool IsInitialized { get; protected set; }
-    // Store injected references instead of directly accessing singletons
-    protected IGameMediator gameMediator { get; private set; }
-    protected IGameReferences gameReferences { get; private set; }
-    protected IGameManager gameManager { get; private set; }
-
-    public UnityEvent onInitialized = new UnityEvent();
-
-    public IPlayer Player { get; private set; }
-
-    protected virtual void Awake() {
-        // No base call needed anymore
-    }
-
+namespace SlayTheClone {
     /// <summary>
-    /// Initialize the component with a player and dependencies.
+    /// Base class for UI components that can be initialized with dependencies.
     /// </summary>
-    public virtual void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
-        // Only initialize once
-        if (IsInitialized) return;
+    public abstract class UIComponent : MonoBehaviour {
+        public bool IsInitialized { get; protected set; }
+        // Store injected references instead of directly accessing singletons
+        protected IGameMediator GameMediator { get; private set; }
+        protected IGameReferences GameReferences { get; private set; }
+        protected IGameManager GameManager { get; private set; }
 
-        // Store references
-        Player = player;
-        gameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
-        gameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
-        gameManager = manager ?? throw new System.ArgumentNullException(nameof(manager));
+        [FormerlySerializedAs("onInitialized")]
+        public UnityEvent OnInitialized = new UnityEvent();
 
-        RegisterEvents();
-        IsInitialized = true;
+        public IPlayer Player { get; private set; }
 
-        // Fire the UnityEvent when initialization is complete
-        onInitialized.Invoke();
-    }
+        protected virtual void Awake() {
+            // No base call needed anymore
+        }
 
-    /// <summary>
-    /// Initialize the component with dependencies but no player.
-    /// </summary>
-    public virtual void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
-        Initialize(null, mediator, references, manager);
-    }
+        /// <summary>
+        /// Initialize the component with a player and dependencies.
+        /// </summary>
+        public virtual void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
+            if (IsInitialized) return;
+            Bind(player, mediator, references, manager ?? throw new System.ArgumentNullException(nameof(manager)));
+        }
 
-    /// <summary>
-    /// Initialize the component with dependencies but no GameManager.
-    /// For components that truly don't need GameManager.
-    /// </summary>
-    public virtual void Initialize(IGameMediator mediator, IGameReferences references) {
-        // Only initialize once
-        if (IsInitialized) return;
+        /// <summary>
+        /// Initialize the component with dependencies but no player.
+        /// </summary>
+        public virtual void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
+            Initialize(null, mediator, references, manager);
+        }
 
-        // Store references
-        Player = null; // No player in this context
-        gameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
-        gameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
-        gameManager = null; // Explicitly null
+        /// <summary>
+        /// Initialize the component with dependencies but no GameManager.
+        /// For components that truly don't need GameManager.
+        /// </summary>
+        public virtual void Initialize(IGameMediator mediator, IGameReferences references) {
+            Bind(null, mediator, references, null);
+        }
 
-        RegisterEvents();
-        IsInitialized = true;
+        // Stores the dependencies and starts listening; only the first call has an effect
+        private void Bind(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
+            if (IsInitialized) return;
 
-        // Fire the UnityEvent when initialization is complete
-        onInitialized.Invoke();
-    }
+            Player = player;
+            GameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
+            GameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
+            GameManager = manager;
 
-
-
-    protected virtual void OnEnable() {
-        if (IsInitialized) {
             RegisterEvents();
+            IsInitialized = true;
+            OnInitialized.Invoke();
         }
-    }
 
-    protected virtual void OnDisable() {
-        if (IsInitialized) {
-            UnregisterEvents();
+
+        protected virtual void OnEnable() {
+            if (IsInitialized) {
+                RegisterEvents();
+            }
         }
-    }
 
-    protected virtual void OnDestroy() {
-        if (IsInitialized) {
-            onInitialized.RemoveAllListeners();
-            UnregisterEvents();
-            CleanupComponent();
+        protected virtual void OnDisable() {
+            if (IsInitialized) {
+                UnregisterEvents();
+            }
         }
-        IsInitialized = false;
-    }
 
-    protected virtual void CleanupComponent() {
-        // Override in derived classes to perform specific cleanup
-    }
+        protected virtual void OnDestroy() {
+            if (IsInitialized) {
+                OnInitialized.RemoveAllListeners();
+                UnregisterEvents();
+                CleanupComponent();
+            }
+            IsInitialized = false;
+        }
 
-    protected abstract void RegisterEvents();
-    protected abstract void UnregisterEvents();
-    public abstract void UpdateUI(IPlayer player = null);
+        protected virtual void CleanupComponent() {
+            // Override in derived classes to perform specific cleanup
+        }
+
+        protected abstract void RegisterEvents();
+        protected abstract void UnregisterEvents();
+        public abstract void UpdateUI(IPlayer player = null);
+    }
 }

@@ -1,493 +1,255 @@
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
-using static DebugLogger;
+using UnityEngine.UI;
+using static SlayTheClone.DebugLogger;
 
-public class DeckViewUI : UIComponent {
-    // Keep these serialized fields as they're required for editor setup
-    [SerializeField] public GameObject deckViewPanel;
-    [SerializeField] public Transform cardListContent;
-    [SerializeField] public Button closeButton;
-    [SerializeField] public TextMeshProUGUI titleText;
-    [SerializeField] public TextMeshProUGUI cardsCountText;
-    [SerializeField] public int columnsCount = 4;
-    [SerializeField] public float cardScale = 0.7f;
+namespace SlayTheClone {
+    public class DeckViewUI : UIComponent {
+        [SerializeField] private GameObject deckViewPanel;
+        [SerializeField] private Transform cardListContent;
+        [SerializeField] private Button closeButton;
+        [SerializeField] private TextMeshProUGUI titleText;
+        [SerializeField] private TextMeshProUGUI cardsCountText;
+        [SerializeField] private int columnsCount = 4;
+        [SerializeField] private float cardScale = 0.7f;
 
-    private List<CardController> cardEntries = new List<CardController>();
-    private GridLayoutGroup gridLayout;
-    private ScrollRect scrollRect;
-    private bool viewingDiscardPile = false;
-    private Tooltip cardTooltip;
+        private readonly List<CardController> cardEntries = new List<CardController>();
+        private GridLayoutGroup gridLayout;
+        private ScrollRect scrollRect;
+        private bool viewingDiscardPile = false;
+        private Tooltip cardTooltip;
 
-    protected override void Awake() {
-        base.Awake();
+        public GameObject DeckViewPanel => deckViewPanel;
+        public Button CloseButton => closeButton;
 
-        Log("DeckViewUI Awake called", LogTag.UI | LogTag.Initialization);
+        protected override void Awake() {
+            base.Awake();
 
-        // Verify essential components
-        if (deckViewPanel == null) {
-            LogError("DeckViewPanel is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
-        }
-
-        if (cardListContent == null) {
-            LogError("CardListContent is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
-        }
-
-        if (closeButton == null) {
-            LogError("CloseButton is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
-        } else {
-            closeButton.onClick.AddListener(HideDeckView);
-            Log("Close button listener attached in Awake", LogTag.UI | LogTag.Initialization);
-        }
-
-        if (titleText == null) {
-            LogWarning("TitleText is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
-        }
-
-        if (deckViewPanel != null) {
-            deckViewPanel.SetActive(false);
-            Log("DeckViewPanel set to inactive on start", LogTag.UI | LogTag.Initialization);
-        }
-
-        // Setup grid layout for cards
-        SetupCardGrid();
-    }
-
-    private void SetupCardGrid() {
-        if (cardListContent == null) {
-            LogError("Cannot setup card grid - cardListContent is null", LogTag.UI | LogTag.Initialization);
-            return;
-        }
-
-        // Remove any existing layout components
-        var existingLayouts = cardListContent.GetComponents<LayoutGroup>();
-        foreach (var layout in existingLayouts) {
-            DestroyImmediate(layout);
-        }
-
-        // Add grid layout
-        gridLayout = cardListContent.gameObject.AddComponent<GridLayoutGroup>();
-        gridLayout.cellSize = new Vector2(150, 200);
-        gridLayout.spacing = new Vector2(15, 15);
-        gridLayout.startCorner = GridLayoutGroup.Corner.UpperLeft;
-        gridLayout.startAxis = GridLayoutGroup.Axis.Horizontal;
-        gridLayout.childAlignment = TextAnchor.UpperCenter;
-        gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-        gridLayout.constraintCount = columnsCount;
-
-        // Make sure we have a content size fitter
-        ContentSizeFitter fitter = cardListContent.GetComponent<ContentSizeFitter>();
-        if (fitter == null) {
-            fitter = cardListContent.gameObject.AddComponent<ContentSizeFitter>();
-        }
-        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-
-        Log("Card grid setup complete", LogTag.UI | LogTag.Initialization);
-    }
-
-    public override void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
-        // Call base UIComponent Initialize FIRST
-        base.Initialize(mediator, references, manager);
-
-        Log("DeckViewUI Initialize called", LogTag.UI | LogTag.Initialization);
-
-        if (IsInitialized) {
-            Log("DeckViewUI already initialized, skipping", LogTag.UI | LogTag.Initialization);
-            return;
-        }
-
-        // Validate all required references
-        if (closeButton == null || deckViewPanel == null || cardListContent == null) {
-            LogError("Missing references for DeckViewUI", LogTag.UI | LogTag.Initialization);
-            return;
-        }
-
-        // Ensure the close button works
-        closeButton.onClick.RemoveAllListeners();
-        closeButton.onClick.AddListener(HideDeckView);
-        Log("Close button listener attached", LogTag.UI | LogTag.Initialization);
-
-        // IsInitialized is set by base class
-        Log("DeckViewUI initialized", LogTag.UI | LogTag.Initialization);
-    }
-
-    protected override void RegisterEvents() {
-        if (gameMediator != null) {
-            // Register for deck changes if needed
-            Log("DeckViewUI events registered", LogTag.UI | LogTag.Initialization);
-        }
-    }
-
-    protected override void UnregisterEvents() {
-        if (gameMediator != null) {
-            // Unregister events if needed
-            Log("DeckViewUI events unregistered", LogTag.UI);
-        }
-    }
-
-    public override void UpdateUI(IPlayer player = null) {
-        if (!IsInitialized) {
-            LogWarning("Cannot update UI - DeckViewUI not initialized", LogTag.UI);
-            return;
-        }
-
-        // We now require a valid player parameter - don't fall back to Player property
-        if (player == null) {
-            LogError("Cannot update UI - Player parameter is null", LogTag.UI);
-            // Clear the display if we have no player
-            ClearCardEntries();
-            if (titleText != null) titleText.text = "Error";
-            if (cardsCountText != null) cardsCountText.text = "No Player";
-            return;
-        }
-
-        if (viewingDiscardPile) {
-            UpdateDiscardPileDisplay(player);
-        } else {
-            UpdateDeckDisplay(player);
-        }
-    }
-
-    public void ShowDeckView(IPlayer player) {
-        Log("ShowDeckView called", LogTag.UI);
-
-        if (deckViewPanel == null) {
-            LogError("Cannot show deck view - deckViewPanel is null", LogTag.UI);
-            return;
-        }
-
-        if (!IsInitialized) {
-            LogWarning("DeckViewUI not initialized yet, attempting to initialize now", LogTag.UI);
-            Initialize(gameMediator, gameReferences, gameManager);
-        }
-
-        if (player == null) {
-            LogError("Cannot show deck view - player parameter is null", LogTag.UI);
-            return;
-        }
-
-        // Default to showing the deck
-        viewingDiscardPile = false;
-        UpdateUI(player);
-        deckViewPanel.SetActive(true);
-        Log($"Showing deck view for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI);
-    }
-
-    public void HideDeckView() {
-        Log("HideDeckView called", LogTag.UI);
-
-        if (deckViewPanel != null) {
-            // Hide tooltip when closing the panel
-            if (cardTooltip == null) {
-                cardTooltip = gameReferences.GetTooltip();
+            if (deckViewPanel == null) {
+                LogError("DeckViewPanel is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
             }
-            if (cardTooltip != null) {
-                cardTooltip.HideTooltip();
+            if (cardListContent == null) {
+                LogError("CardListContent is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
+            }
+            if (titleText == null) {
+                LogWarning("TitleText is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
             }
 
+            if (closeButton == null) {
+                LogError("CloseButton is not assigned in the inspector", LogTag.UI | LogTag.Initialization);
+            }
+            else {
+                closeButton.onClick.AddListener(HideDeckView);
+            }
+
+            if (deckViewPanel != null) {
+                deckViewPanel.SetActive(false);
+            }
+
+            SetupCardGrid();
+        }
+
+        private void SetupCardGrid() {
+            if (cardListContent == null) {
+                LogError("Cannot setup card grid - cardListContent is null", LogTag.UI | LogTag.Initialization);
+                return;
+            }
+
+            foreach (var layout in cardListContent.GetComponents<LayoutGroup>()) {
+                DestroyImmediate(layout);
+            }
+
+            gridLayout = cardListContent.gameObject.AddComponent<GridLayoutGroup>();
+            gridLayout.cellSize = new Vector2(150, 200);
+            gridLayout.spacing = new Vector2(15, 15);
+            gridLayout.startCorner = GridLayoutGroup.Corner.UpperLeft;
+            gridLayout.startAxis = GridLayoutGroup.Axis.Horizontal;
+            gridLayout.childAlignment = TextAnchor.UpperCenter;
+            gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            gridLayout.constraintCount = columnsCount;
+
+            var fitter = cardListContent.GetComponent<ContentSizeFitter>();
+            if (fitter == null) {
+                fitter = cardListContent.gameObject.AddComponent<ContentSizeFitter>();
+            }
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            Log("Card grid setup complete", LogTag.UI | LogTag.Initialization);
+        }
+
+        public override void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
+            base.Initialize(mediator, references, manager);
+            Log("DeckViewUI initialized", LogTag.UI | LogTag.Initialization);
+        }
+
+        protected override void RegisterEvents() { }
+        protected override void UnregisterEvents() { }
+
+        public override void UpdateUI(IPlayer player = null) {
+            if (!IsInitialized) {
+                LogWarning("Cannot update UI - DeckViewUI not initialized", LogTag.UI);
+                return;
+            }
+
+            if (player == null) {
+                LogError("Cannot update UI - Player parameter is null", LogTag.UI);
+                ClearCardEntries();
+                if (titleText != null) titleText.text = "Error";
+                if (cardsCountText != null) cardsCountText.text = "No Player";
+                return;
+            }
+
+            if (GameManager == null) {
+                ClearCardEntries();
+                LogError("Cannot update deck view - references missing", LogTag.UI);
+                return;
+            }
+
+            var dealingService = GameManager.CardDealingService;
+            if (viewingDiscardPile) {
+                ShowCards(player, "Discard Pile", "Discarded cards", dealingService.GetDiscardPilePreview(player));
+            }
+            else {
+                ShowCards(player, "Deck View", "Cards in deck", dealingService.GetDeckPreview(player));
+            }
+        }
+
+        public void HideDeckView() {
+            if (deckViewPanel == null) {
+                LogError("Cannot hide deck view - deckViewPanel is null", LogTag.UI);
+                return;
+            }
+
+            GetTooltip()?.HideTooltip();
             deckViewPanel.SetActive(false);
             Log("Hiding deck view", LogTag.UI);
-        } else {
-            LogError("Cannot hide deck view - deckViewPanel is null", LogTag.UI);
-        }
-    }
-
-    public void ShowDeckCards(IPlayer player) {
-        viewingDiscardPile = false;
-        UpdateUI(player);
-        Log($"Showing deck cards for player (TargetID: {player?.TargetId.ToUpper()})", LogTag.UI);
-    }
-
-    public void ShowDiscardPileCards(IPlayer player) {
-        viewingDiscardPile = true;
-        UpdateUI(player);
-        Log($"Showing discard pile cards for player (TargetID: {player?.TargetId.ToUpper()})", LogTag.UI);
-    }
-
-    public void UpdateDeckDisplay(IPlayer player) {
-        ClearCardEntries();
-
-        if (player == null || gameManager == null) {
-            LogError("Cannot update deck display - references missing", LogTag.UI);
-            return;
         }
 
-        // Update title
-        if (titleText != null) {
-            titleText.text = "Deck View";
+        public void ShowDeckCards(IPlayer player) {
+            viewingDiscardPile = false;
+            UpdateUI(player);
         }
 
-        var deckCards = GetPlayerDeckCards(player);
-        var discardCount = gameManager.CardDealingService.GetDiscardPileCount(player);
-
-        // Update count text
-        if (cardsCountText != null) {
-            cardsCountText.text = $"Cards in deck: {deckCards.Count}";
+        public void ShowDiscardPileCards(IPlayer player) {
+            viewingDiscardPile = true;
+            UpdateUI(player);
         }
 
-        foreach (var card in deckCards) {
-            CreateCardEntry(card, player);
-        }
+        private void ShowCards(IPlayer player, string title, string countLabel, List<ICard> cards) {
+            ClearCardEntries();
 
-        Log($"Updated deck display with {deckCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Cards);
+            if (titleText != null) titleText.text = title;
+            if (cardsCountText != null) cardsCountText.text = $"{countLabel}: {cards.Count}";
 
-        // Reset scroll position to top
-        if (scrollRect != null) {
-            scrollRect.normalizedPosition = new Vector2(0, 1);
-        }
-    }
+            foreach (var card in cards) {
+                CreateCardEntry(card, player);
+            }
+            Log($"Updated {title} with {cards.Count} cards for player (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Cards);
 
-    public void UpdateDiscardPileDisplay(IPlayer player) {
-        ClearCardEntries();
-
-        if (player == null || gameManager == null) {
-            LogError("Cannot update discard pile display - references missing", LogTag.UI);
-            return;
-        }
-
-        // Update title
-        if (titleText != null) {
-            titleText.text = "Discard Pile";
-        }
-
-        // Get the cards from the player's discard pile
-        var discardPileCards = GetPlayerDiscardPileCards(player);
-        var deckCount = gameManager.CardDealingService.GetDeckPreview(player).Count;
-
-        // Update count text for discard pile
-        if (cardsCountText != null) {
-            cardsCountText.text = $"Discarded cards: {discardPileCards.Count}";
-        }
-
-        foreach (var card in discardPileCards) {
-            CreateCardEntry(card, player);
-        }
-
-        Log($"Updated discard pile display with {discardPileCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Cards);
-
-        // Reset scroll position to top
-        if (scrollRect != null) {
-            scrollRect.normalizedPosition = new Vector2(0, 1);
-        }
-    }
-
-    private List<ICard> GetPlayerDeckCards(IPlayer player) {
-        // Get the cards from the player's deck directly
-        if (player != null && player.Deck != null) {
-            // Return a copy of the deck so we don't modify the actual deck
-            var deckCards = new List<ICard>();
-
-            // Get cards from the player's deck
-            if (gameManager?.CardDealingService != null) {
-                // Since we can't access the internal cards list directly from IDeck
-                // We need to peek at them through the CardDealingService
-                var cardDealingService = gameManager.CardDealingService;
-                deckCards = cardDealingService.GetDeckPreview(player);
-
-                Log($"Retrieved {deckCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()}) deck preview", LogTag.Cards);
-                return deckCards;
+            if (scrollRect != null) {
+                scrollRect.normalizedPosition = new Vector2(0, 1); // Back to the top
             }
         }
 
-        LogError($"Cannot get deck cards - Player (TargetID: {player?.TargetId.ToUpper()}) or Deck not available", LogTag.Cards | LogTag.UI);
-        return new List<ICard>();
-    }
-
-    private List<ICard> GetPlayerDiscardPileCards(IPlayer player) {
-        if (player != null && player.Deck != null) {
-            if (gameManager?.CardDealingService != null) {
-                var cardDealingService = gameManager.CardDealingService;
-                var discardCards = cardDealingService.GetDiscardPilePreview(player);
-
-                Log($"Retrieved {discardCards.Count} cards for player (TargetID: {player.TargetId.ToUpper()}) discard pile preview", LogTag.Cards);
-                return discardCards;
+        private void CreateCardEntry(ICard card, IPlayer owner) {
+            if (card == null || cardListContent == null) {
+                LogError("Cannot create card entry - card or content is null", LogTag.Cards);
+                return;
             }
-        }
 
-        LogError($"Cannot get discard pile cards - Player (TargetID: {player?.TargetId.ToUpper()}) or Deck not available", LogTag.Cards | LogTag.UI);
-        return new List<ICard>();
-    }
+            var cardData = CardFactory.FindCardData(card, owner) ?? CardFactory.CreateFallbackData(card);
+            var cardController = CardFactory.CreateCardController(card, cardData, owner, cardListContent, GameMediator, GameReferences, GameManager);
+            if (cardController == null) {
+                LogError($"Failed to create card controller for {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
+                return;
+            }
 
-    private void CreateCardEntry(ICard card, IPlayer owner) {
-        if (card == null || cardListContent == null) {
-            LogError($"Cannot create card entry - card or content is null", LogTag.Cards);
-            return;
-        }
-
-        // Create a CardData from the card's properties
-        CardData originalData = null;
-        if (card is ICreature creature) {
-            var tempData = ScriptableObject.CreateInstance<CreatureData>();
-            tempData.cardId = card.CardId;
-            tempData.cardName = card.Name;
-            tempData.description = card.Description;
-            tempData.attack = creature.BaseAttack;
-            tempData.health = creature.BaseHealth;
-            tempData.speed = creature.BaseSpeed;
-            originalData = tempData;
-        } else if (card is Spell spell) {
-            var tempData = ScriptableObject.CreateInstance<SpellData>();
-            tempData.cardId = card.CardId;
-            tempData.cardName = card.Name;
-            tempData.description = card.Description;
-            tempData.defaultTargetType = spell.DefaultTargetType;
-            originalData = tempData;
-        }
-
-        // Use CardFactory to create the card controller with the existing prefab and dependencies
-        var cardController = CardFactory.CreateCardController(card, originalData, owner, cardListContent, gameMediator, gameReferences, gameManager); // Pass gameManager
-
-        if (cardController != null) {
-            // Disable dragging but keep tooltip functionality
             DisableCardInteractions(cardController);
-
-            // Scale the card
             cardController.transform.localScale = new Vector3(cardScale, cardScale, cardScale);
-
-            // Add to our list for tracking
             cardEntries.Add(cardController);
-
-            Log($"Created card entry for {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
-        } else {
-            LogError($"Failed to create card controller for {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
-        }
-    }
-
-    private void DisableCardInteractions(CardController cardController) {
-        if (cardController == null) return;
-
-        // Get the tooltip from GameReferences
-        if (cardTooltip == null) {
-            cardTooltip = gameReferences.GetTooltip();
         }
 
-        // Use CardTooltip to enable tooltip-only functionality
-        if (cardTooltip != null) {
-            cardTooltip.EnableTooltipOnly(cardController);
-        }
+        // The cards only show tooltips: the CardController is disabled and an interceptor swallows drags
+        private void DisableCardInteractions(CardController cardController) {
+            var tooltip = GetTooltip();
+            tooltip?.EnableTooltipOnly(cardController);
 
-        // Completely replace the original CardController's drag handlers with our own
-        // by adding a component that will intercept dragging at a higher level
-        var interceptor = cardController.gameObject.AddComponent<DeckViewCardInterceptor>();
+            var interceptor = cardController.gameObject.AddComponent<DeckViewCardInterceptor>();
+            cardController.enabled = false;
+            interceptor.Initialize(cardController, tooltip);
 
-        // We'll get the component reference to the actual CardController
-        var cardComp = cardController.GetComponent<CardController>();
-        if (cardComp != null) {
-            // Disable the CardController component completely to prevent any drag behavior
-            cardComp.enabled = false;
-
-            // But keep track of it for tooltip functionality
-            interceptor.Initialize(cardController, cardTooltip);
-        }
-
-        // Make sure the canvas group is set up to allow tooltips but prevent dragging
-        var canvasGroup = cardController.GetComponent<CanvasGroup>();
-        if (canvasGroup != null) {
-            canvasGroup.blocksRaycasts = true;
-            canvasGroup.interactable = true;
-        }
-
-        Log($"Disabled drag interactions for card {cardController.name} (TargetID: {cardController.GetBaseCardData()?.cardId.ToUpper()})", LogTag.Cards | LogTag.UI);
-    }
-
-    // This method is no longer needed as we're replacing the entire drag handling approach
-    // Kept as a reference for now, but not used
-    private void DisableAllDragHandlers(CardController cardController) {
-        // We now completely disable the CardController component and replace it with our interceptor
-        // This is a more effective way to prevent drag behavior
-    }
-
-    // Helper to safely get tooltip within DeckViewUI
-    private Tooltip GetTooltipFromReferences() {
-        if (gameReferences != null && (UnityEngine.Object)gameReferences != null) {
-            return gameReferences.GetTooltip();
-        }
-        return null;
-    }
-
-    private void ClearCardEntries() {
-        // Hide the tooltip ONLY if references are still valid
-        if (gameReferences != null) // Use inherited field
-        {
-             // Check if the GameReferences object hasn't been destroyed
-             if((UnityEngine.Object)gameReferences != null)
-             {
-                // Get the tooltip (using the potentially safer GetTooltip method)
-                if (cardTooltip == null) {
-                    cardTooltip = GetTooltipFromReferences();
-                }
-                if (cardTooltip != null && cardTooltip.gameObject != null) { // Check tooltip validity
-                    cardTooltip.HideTooltip();
-                }
-             }
-        }
-
-        // Destroy card GameObjects (this part is safe)
-        foreach (var entry in cardEntries) {
-            if (entry != null && entry.gameObject != null) { // Add gameObject null check
-                Destroy(entry.gameObject);
+            var canvasGroup = cardController.GetComponent<CanvasGroup>();
+            if (canvasGroup != null) {
+                canvasGroup.blocksRaycasts = true;
+                canvasGroup.interactable = true;
             }
         }
-        cardEntries.Clear();
-    }
 
-    protected override void OnDestroy() {
-        if (closeButton != null) {
-            closeButton.onClick.RemoveListener(HideDeckView);
+        // Null once GameReferences has been destroyed
+        private Tooltip GetTooltip() {
+            if (cardTooltip == null && GameReferences is Object references && references != null) {
+                cardTooltip = GameReferences.GetTooltip();
+            }
+            return cardTooltip != null ? cardTooltip : null;
         }
 
-        ClearCardEntries();
-        base.OnDestroy();
-    }
-}
+        private void ClearCardEntries() {
+            GetTooltip()?.HideTooltip();
 
-// Special component for DeckView cards that completely prevents dragging
-// while still allowing tooltips to work
-public class DeckViewCardInterceptor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
-                                       IBeginDragHandler, IDragHandler, IEndDragHandler {
-    private CardController cardController;
-    private Tooltip tooltip;
+            foreach (var entry in cardEntries) {
+                if (entry != null) Destroy(entry.gameObject);
+            }
+            cardEntries.Clear();
+        }
 
-    public void Initialize(CardController controller, Tooltip tooltip) {
-        this.cardController = controller;
-        this.tooltip = tooltip;
-    }
+        protected override void OnDestroy() {
+            if (closeButton != null) {
+                closeButton.onClick.RemoveListener(HideDeckView);
+            }
 
-    public void OnPointerEnter(PointerEventData eventData) {
-        // Show tooltip on hover
-        if (tooltip != null && cardController != null) {
-            tooltip.ShowTooltip(cardController);
+            ClearCardEntries();
+            base.OnDestroy();
         }
     }
 
-    public void OnPointerExit(PointerEventData eventData) {
-        // Hide tooltip when mouse exits
-        if (tooltip != null) {
-            tooltip.HideTooltip();
+    // Lets deck view cards show their tooltip while preventing any drag
+    public class DeckViewCardInterceptor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
+                                           IBeginDragHandler, IDragHandler, IEndDragHandler {
+        private CardController cardController;
+        private Tooltip tooltip;
+
+        public void Initialize(CardController controller, Tooltip tooltip) {
+            cardController = controller;
+            this.tooltip = tooltip;
         }
-    }
 
-    public void OnBeginDrag(PointerEventData eventData) {
-        // Immediately set pointerDrag to null to prevent any drag behavior
-        eventData.pointerDrag = null;
+        public void OnPointerEnter(PointerEventData eventData) {
+            if (tooltip != null && cardController != null) {
+                tooltip.ShowTooltip(cardController);
+            }
+        }
 
-        // This will completely stop the drag from starting
-        eventData.Use();
+        public void OnPointerExit(PointerEventData eventData) {
+            if (tooltip != null) {
+                tooltip.HideTooltip();
+            }
+        }
 
-        // Extra safety: prevent selection too
-        eventData.eligibleForClick = false;
-    }
+        public void OnBeginDrag(PointerEventData eventData) {
+            eventData.pointerDrag = null;
+            eventData.Use();
+            eventData.eligibleForClick = false;
+        }
 
-    public void OnDrag(PointerEventData eventData) {
-        // Ensure drag doesn't continue
-        eventData.pointerDrag = null;
-        eventData.Use();
-    }
+        public void OnDrag(PointerEventData eventData) {
+            eventData.pointerDrag = null;
+            eventData.Use();
+        }
 
-    public void OnEndDrag(PointerEventData eventData) {
-        // Nothing needed here as we prevented the drag from starting
-        eventData.Use();
+        public void OnEndDrag(PointerEventData eventData) {
+            eventData.Use();
+        }
     }
 }

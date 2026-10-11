@@ -1,31 +1,21 @@
-using static Enums;
-using static DebugLogger;
-using UnityEngine;
-using System;
+using static SlayTheClone.DebugLogger;
 
-public class HealCreatureAction : IGameAction {
-    #region Fields & Properties
-    private readonly ICreature target;
-    private readonly int amount;
-    #endregion
+namespace SlayTheClone {
+    public class HealCreatureAction : IGameAction {
+        private readonly ICreature target;
+        private readonly int amount;
 
-    #region Constructor
-    public HealCreatureAction(ICreature target, int amount) {
-        this.target = target;
-        this.amount = amount;
-        Log($"Created HealCreatureAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper()}) with amount {amount}", LogTag.Actions | LogTag.Creatures);
+        public ICreature GetTarget() => target;
+        public int GetAmount() => amount;
+
+        public HealCreatureAction(ICreature target, int amount) {
+            this.target = target;
+            this.amount = amount;
+            Log($"Created {this}", LogTag.Actions | LogTag.Creatures);
+        }
+
+        public override string ToString() {
+            return $"HealCreatureAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Amount={amount}";
+        }
     }
-    #endregion
-
-    #region Methods
-
-
-    // Getters for executor
-    public ICreature GetTarget() => target;
-    public int GetAmount() => amount;
-
-    public override string ToString() {
-        return $"HealCreatureAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Amount={amount}";
-    }
-    #endregion
 }

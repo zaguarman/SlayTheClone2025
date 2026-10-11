@@ -1,29 +1,18 @@
-using static Enums;
-using static DebugLogger;
-using UnityEngine;
-using System;
+using static SlayTheClone.DebugLogger;
 
-public class DiscardHandAction : IGameAction {
-    #region Fields
-    private readonly IPlayer player;
-    #endregion
+namespace SlayTheClone {
+    public class DiscardHandAction : IGameAction {
+        private readonly IPlayer player;
 
-    #region Constructor
-    public DiscardHandAction(IPlayer player) {
-        this.player = player;
-        Log($"Created DiscardHandAction for {(player.IsPlayer1 ? "Player 1" : "Player 2")} (PlayerID: {player.TargetId.ToUpper()}) with {player.Hand.Count} cards",
-            LogTag.Actions | LogTag.Cards);
+        public IPlayer GetPlayer() => player;
+
+        public DiscardHandAction(IPlayer player) {
+            this.player = player;
+            Log($"Created {this}", LogTag.Actions | LogTag.Cards);
+        }
+
+        public override string ToString() {
+            return $"DiscardHandAction: Player={player?.Name} (PlayerID: {player?.TargetId.ToUpper() ?? "UNKNOWN"}) with {player?.Hand.Count ?? 0} cards";
+        }
     }
-    #endregion
-
-    #region Methods
-
-
-    // Getter for executor
-    public IPlayer GetPlayer() => player;
-
-    public override string ToString() {
-        return $"DiscardHandAction: Player={(player?.IsPlayer1 == true ? "1" : "2")} (PlayerID: {player?.TargetId.ToUpper() ?? "UNKNOWN"}) with {player?.Hand.Count ?? 0} cards";
-    }
-    #endregion
 }

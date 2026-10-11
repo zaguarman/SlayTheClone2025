@@ -1,32 +1,24 @@
-using static Enums;
-using static DebugLogger;
-using UnityEngine; // Needed for transform
+namespace SlayTheClone {
+    public class SummonCreatureAction : IGameAction {
+        private readonly ICreature creature;
+        private readonly IPlayer owner;
+        private readonly ITarget targetSlot; // Expected to be a BattlefieldSlot
+        private readonly bool fromDeck;
 
-public class SummonCreatureAction : IGameAction {
-    private readonly ICreature creature;
-    private readonly IPlayer owner;
-    private readonly ITarget targetSlot; // Target is expected to be a BattlefieldSlot
-    private readonly bool fromDeck;
+        public ICreature GetCreature() => creature;
+        public IPlayer GetOwner() => owner;
+        public ITarget GetTargetSlot() => targetSlot;
+        public bool IsFromDeck() => fromDeck;
 
-    // Getters for executor
-    public ICreature GetCreature() => creature;
-    public IPlayer GetOwner() => owner;
-    public ITarget GetTargetSlot() => targetSlot;
-    public bool IsFromDeck() => fromDeck;
+        public SummonCreatureAction(ICreature creature, IPlayer owner, ITarget target, bool fromDeck = false) {
+            this.creature = creature;
+            this.owner = owner;
+            targetSlot = target;
+            this.fromDeck = fromDeck;
+        }
 
-    public SummonCreatureAction(ICreature creature, IPlayer owner, ITarget target, bool fromDeck = false) {
-        this.creature = creature;
-        this.owner = owner;
-        this.targetSlot = target; // Keep ITarget for flexibility, but expect BattlefieldSlot
-        this.fromDeck = fromDeck;
-        // Log($"Created SummonCreatureAction for {creature?.Name} targeting slot {target?.TargetId} with {creature?.Effects.Count ?? 0} effects (fromDeck: {fromDeck})",
-        //     LogTag.Actions | LogTag.Creatures);
-    }
-
-
-
-    public override string ToString() {
-         string slotIdStr = (targetSlot is BattlefieldSlot s) ? s.TargetId.ToUpper().Substring(0,8) : targetSlot?.TargetId ?? "UNKNOWN";
-        return $"SummonCreatureAction: Cr={creature?.Name}({creature?.TargetId.ToUpper().Substring(0,8)}), Own={(owner?.IsPlayer1 == true ? "P1" : "P2")}, Slot={slotIdStr}, Deck={fromDeck}";
+        public override string ToString() {
+            return $"SummonCreatureAction: Cr={creature?.Name}({creature?.TargetId.ShortId()}), Own={owner?.Name}, Slot={targetSlot?.TargetId.ShortId()}, Deck={fromDeck}";
+        }
     }
 }

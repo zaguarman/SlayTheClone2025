@@ -1,40 +1,24 @@
-using static DebugLogger;
-using static Enums;
+using static SlayTheClone.DebugLogger;
 
-/// <summary>
-/// Executor for DrawCardsAction
-/// </summary>
-public class DrawCardsActionExecutor : IActionExecutor
-{
-    public void Execute(IGameAction action, ActionExecutionContext context)
-    {
-        if (!(action is DrawCardsAction drawAction))
-        {
-            LogError($"DrawCardsActionExecutor: Received incorrect action type {action?.GetType().Name}", LogTag.Actions);
-            return;
+namespace SlayTheClone {
+    public class DrawCardsActionExecutor : ActionExecutor<DrawCardsAction> {
+        protected override void ExecuteAction(DrawCardsAction drawAction, ActionExecutionContext context) {
+            var player = drawAction.GetPlayer();
+            var amount = drawAction.GetAmount();
+
+            if (player == null) {
+                LogError("DrawCardsActionExecutor: Player is null", LogTag.Actions | LogTag.Cards);
+                return;
+            }
+
+            var cardDealingService = context.CardDealingService;
+            if (cardDealingService == null) {
+                LogError("DrawCardsActionExecutor: CardDealingService is null in context", LogTag.Actions | LogTag.Cards);
+                return;
+            }
+
+            cardDealingService.DrawCards(player, amount);
+            Log($"Executed DrawCardsAction via Executor: Drew {amount} cards for {player.Name}", LogTag.Actions | LogTag.Cards);
         }
-
-        // Get data from Action
-        var player = drawAction.GetPlayer();
-        var amount = drawAction.GetAmount();
-
-        // Validate
-        if (player == null)
-        {
-            LogError("DrawCardsActionExecutor: Player is null", LogTag.Actions | LogTag.Cards);
-            return;
-        }
-
-        // Get dependencies from context
-        var cardDealingService = context.CardDealingService;
-        if (cardDealingService == null)
-        {
-            LogError("DrawCardsActionExecutor: CardDealingService is null in context", LogTag.Actions | LogTag.Cards);
-            return;
-        }
-
-        // Execute logic
-        cardDealingService.DrawCards(player, amount);
-        Log($"Executed DrawCardsAction via Executor: Drew {amount} cards for {(player.IsPlayer1 ? "P1" : "P2")}", LogTag.Actions | LogTag.Cards);
     }
 }

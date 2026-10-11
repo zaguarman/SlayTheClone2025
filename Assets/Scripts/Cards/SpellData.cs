@@ -1,9 +1,11 @@
-using static Enums;
+using static SlayTheClone.Enums;
 
-public class SpellData : CardData {
-    public TargetType defaultTargetType;
+namespace SlayTheClone {
+    public class SpellData : CardData {
+        public TargetType defaultTargetType;
 
-    public override void OnEnable() {
-        cardType = CardType.Spell;
+        public override void OnEnable() {
+            cardType = CardType.Spell;
+        }
     }
 }

@@ -1,99 +1,71 @@
 using System;
 using UnityEngine.Events;
-using static DebugLogger;
-using static Enums; // Assuming your Enums class is accessible
+using static SlayTheClone.DebugLogger;
+using static SlayTheClone.Enums;
 
-// Represents a modifier that listens to game events and executes an action
-// Note: This needs careful adaptation to your specific GameMediator events
-public class EventSubscriberModifier : BaseModifier
-{
-    public EffectTrigger EventToListenTo { get; }
-    private readonly object listenerAction; // Store the specific listener delegate
+namespace SlayTheClone {
+    // A modifier that listens to a GameMediator event while it is applied
+    public class EventSubscriberModifier : BaseModifier {
+        public EffectTrigger EventToListenTo { get; }
+        private readonly object listenerAction; // The listener delegate; its type depends on the event
 
-    // Example constructor for CreatureDamaged event
-    public EventSubscriberModifier(string name, string description, EffectTrigger trigger, UnityAction<ICreature, int> action)
-        : base(name, description)
-    {
-        if (trigger != EffectTrigger.OnDamage)
-            throw new ArgumentException("This constructor is for OnDamage trigger only.", nameof(trigger));
-        EventToListenTo = trigger;
-        listenerAction = action ?? throw new ArgumentNullException(nameof(action));
-         Log($"EventSubscriberModifier '{Name}' details: Listens for {trigger}", LogTag.Effects);
-    }
+        public EventSubscriberModifier(string name, string description, EffectTrigger trigger, UnityAction<ICreature, int> action)
+            : base(name, description) {
+            if (trigger != EffectTrigger.OnDamage)
+                throw new ArgumentException("This constructor is for OnDamage trigger only.", nameof(trigger));
+            EventToListenTo = trigger;
+            listenerAction = action ?? throw new ArgumentNullException(nameof(action));
+            Log($"EventSubscriberModifier '{Name}' details: Listens for {trigger}", LogTag.Effects);
+        }
 
-     // Add other constructors for different event types (e.g., TurnEnded, OnPlay)
-     // public EventSubscriberModifier(string name, string description, EffectTrigger trigger, UnityAction<int> turnEndAction) ...
-     // public EventSubscriberModifier(string name, string description, EffectTrigger trigger, UnityAction<ICreature, IPlayer> summonAction) ...
+        public override void Apply(object target, IGameMediator mediator) {
+            Log($"EventSubscriberModifier '{Name}' applying (subscribing) to {EventToListenTo} for target {target}", LogTag.Effects);
+            SubscribeToEvent(mediator, true);
+        }
 
-    public override void Apply(object target, IGameMediator mediator)
-    {
-        Log($"EventSubscriberModifier '{Name}' applying (subscribing) to {EventToListenTo} for target {target}", LogTag.Effects);
-        SubscribeToEvent(mediator, true);
-    }
+        public override void Remove(object target, IGameMediator mediator) {
+            Log($"EventSubscriberModifier '{Name}' removing (unsubscribing) from {EventToListenTo} for target {target}", LogTag.Effects);
+            SubscribeToEvent(mediator, false);
+        }
 
-    public override void Remove(object target, IGameMediator mediator)
-    {
-        Log($"EventSubscriberModifier '{Name}' removing (unsubscribing) from {EventToListenTo} for target {target}", LogTag.Effects);
-        SubscribeToEvent(mediator, false);
-    }
-
-    private void SubscribeToEvent(IGameMediator mediator, bool subscribe)
-    {
-        try
-        {
-            // Map EffectTrigger to the correct GameMediator event
-            switch (EventToListenTo)
-            {
-                case EffectTrigger.OnDamage:
-                    var creatureDamageAction = listenerAction as UnityAction<ICreature, int>;
-                    if (creatureDamageAction != null)
-                    {
-                        if (subscribe) mediator.AddCreatureDamagedListener(creatureDamageAction);
-                        else mediator.RemoveCreatureDamagedListener(creatureDamageAction);
-                    }
-                    else LogError($"Action type mismatch for {EventToListenTo} event.", LogTag.Effects);
-                    break;
-
-                // Add cases for other EffectTriggers mapped to GameMediator events
-                 case EffectTrigger.StartOfTurn:
-                 case EffectTrigger.EndOfTurn:
-                     // Example: Assuming TurnEnded covers both for now
-                     var turnEndAction = listenerAction as UnityAction<int>;
-                     if (turnEndAction != null) {
-                         if (subscribe) mediator.AddTurnEndedListener(turnEndAction);
-                         else mediator.RemoveTurnEndedListener(turnEndAction);
-                     } else LogError($"Action type mismatch for {EventToListenTo} event.", LogTag.Effects);
-                     break;
-
-                 case EffectTrigger.OnPlay: // Assuming OnPlay corresponds to CreatureSummoned
-                    var summonAction = listenerAction as UnityAction<ICreature, IPlayer>;
-                    if (summonAction != null) {
-                        if (subscribe) mediator.AddCreatureSummonedListener(summonAction);
-                        else mediator.RemoveCreatureSummonedListener(summonAction);
-                    } else LogError($"Action type mismatch for {EventToListenTo} event.", LogTag.Effects);
-                     break;
-
-                 case EffectTrigger.OnDeath:
-                    var deathAction = listenerAction as UnityAction<ICreature>;
-                     if (deathAction != null) {
-                         if (subscribe) mediator.AddCreatureDiedListener(deathAction);
-                         else mediator.RemoveCreatureDiedListener(deathAction);
-                     } else LogError($"Action type mismatch for {EventToListenTo} event.", LogTag.Effects);
-                     break;
-
-                default:
-                    LogWarning($"Event type {EventToListenTo} not mapped in EventSubscriberModifier.", LogTag.Effects);
-                    break;
+        private void SubscribeToEvent(IGameMediator mediator, bool subscribe) {
+            try {
+                switch (EventToListenTo) {
+                    case EffectTrigger.OnDamage:
+                        Toggle<UnityAction<ICreature, int>>(subscribe, mediator.AddCreatureDamagedListener, mediator.RemoveCreatureDamagedListener);
+                        break;
+                    case EffectTrigger.StartOfTurn:
+                    case EffectTrigger.EndOfTurn: // TurnEnded covers both for now
+                        Toggle<UnityAction<int>>(subscribe, mediator.AddTurnEndedListener, mediator.RemoveTurnEndedListener);
+                        break;
+                    case EffectTrigger.OnPlay: // A creature entering play
+                        Toggle<UnityAction<ICreature, IPlayer>>(subscribe, mediator.AddCreatureSummonedListener, mediator.RemoveCreatureSummonedListener);
+                        break;
+                    case EffectTrigger.OnDeath:
+                        Toggle<UnityAction<ICreature>>(subscribe, mediator.AddCreatureDiedListener, mediator.RemoveCreatureDiedListener);
+                        break;
+                    default:
+                        LogWarning($"Event type {EventToListenTo} not mapped in EventSubscriberModifier.", LogTag.Effects);
+                        break;
+                }
+            }
+            catch (Exception ex) {
+                LogError($"Error {(subscribe ? "subscribing" : "unsubscribing")} event {EventToListenTo}: {ex.Message}", LogTag.Effects);
             }
         }
-        catch (Exception ex)
-        {
-            LogError($"Error {(subscribe ? "subscribing" : "unsubscribing")} event {EventToListenTo}: {ex.Message}", LogTag.Effects);
-        }
-    }
 
-    public override bool HandlesEvent(EffectTrigger eventType)
-    {
-        return eventType == EventToListenTo;
+        private void Toggle<TListener>(bool subscribe, Action<TListener> add, Action<TListener> remove) where TListener : class {
+            if (!(listenerAction is TListener listener)) {
+                LogError($"Action type mismatch for {EventToListenTo} event.", LogTag.Effects);
+                return;
+            }
+
+            if (subscribe) add(listener);
+            else remove(listener);
+        }
+
+        public override bool HandlesEvent(EffectTrigger eventType) {
+            return eventType == EventToListenTo;
+        }
     }
 }

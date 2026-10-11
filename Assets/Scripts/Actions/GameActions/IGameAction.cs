@@ -1,7 +1,6 @@
-using UnityEngine;
-using System;
-
-public interface IGameAction {
-    // Execute() method removed - all actions are now executed through their specific IActionExecutor
-    string ToString(); // Keep ToString() for logging and debugging
+namespace SlayTheClone {
+    // Actions are plain data; each type is run by its IActionExecutor
+    public interface IGameAction {
+        string ToString(); // Used for logging and debugging
+    }
 }

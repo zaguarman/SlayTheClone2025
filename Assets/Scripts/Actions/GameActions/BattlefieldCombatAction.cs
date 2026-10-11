@@ -1,30 +1,22 @@
-using static DebugLogger;
-using static Enums;
+using static SlayTheClone.DebugLogger;
 
-public class BattlefieldCombatAction : IGameAction {
-    private readonly ICreature attacker;
-    private readonly BattlefieldSlot targetSlot;
-    public ICreature GetAttacker() => attacker;
-    public BattlefieldSlot GetTargetSlot() => targetSlot;
+namespace SlayTheClone {
+    public class BattlefieldCombatAction : IGameAction {
+        private readonly ICreature attacker;
+        private readonly BattlefieldSlot targetSlot;
 
-    public BattlefieldCombatAction(ICreature attacker, ITarget targetSlot) {
-        this.attacker = attacker;
-        this.targetSlot = (BattlefieldSlot)targetSlot;
+        public ICreature GetAttacker() => attacker;
+        public BattlefieldSlot GetTargetSlot() => targetSlot;
 
-        string attackerName = attacker != null ? attacker.Name : "Unknown";
-        string attackerId = attacker != null ? attacker.TargetId.ToUpper() : "UNKNOWN";
-        string slotId = targetSlot != null ? targetSlot.TargetId.ToUpper() : "UNKNOWN";
+        public BattlefieldCombatAction(ICreature attacker, ITarget targetSlot) {
+            this.attacker = attacker;
+            this.targetSlot = (BattlefieldSlot)targetSlot;
+            Log($"Created {this}", LogTag.Actions | LogTag.Combat);
+        }
 
-        Log($"Created MarkCombatTargetAction: {attackerName} (AttackerID: {attackerId}) targeting slot (SlotID: {slotId}) (ActionID: {GetHashCode().ToString().ToUpper()})",
-            LogTag.Actions | LogTag.Combat);
-    }
-
-
-
-    public override string ToString() {
-        string attackerName = attacker != null ? attacker.Name : "Unknown";
-        string attackerId = attacker != null ? attacker.TargetId.ToUpper() : "UNKNOWN";
-        string slotId = targetSlot != null ? targetSlot.TargetId.ToUpper() : "UNKNOWN";
-        return $"MarkCombatTargetAction: Attacker={attackerName} (AttackerID: {attackerId}), TargetSlot=(SlotID: {slotId}) (ActionID: {GetHashCode().ToString().ToUpper()})";
+        public override string ToString() {
+            return $"BattlefieldCombatAction: Attacker={attacker?.Name ?? "Unknown"} (AttackerID: {attacker?.TargetId.ToUpper() ?? "UNKNOWN"}), " +
+                   $"TargetSlot=(SlotID: {targetSlot?.TargetId.ToUpper() ?? "UNKNOWN"}) (ActionID: {GetHashCode()})";
+        }
     }
 }

@@ -1,6 +1,6 @@
 {
     "name": "Playmode",
-    "rootNamespace": "",
+    "rootNamespace": "SlayTheClone.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",

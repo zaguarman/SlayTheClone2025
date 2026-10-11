@@ -1,44 +1,40 @@
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
 using System.Collections;
 using TMPro;
+using UnityEngine.TestTools;
 
-public class PlayerUITests
-{
-    private GameManager _gameManager;
-    private GameReferences _gameReferences;
+namespace SlayTheClone.Tests {
+    public class PlayerUITests {
+        private GameManager gameManager;
+        private GameReferences gameReferences;
 
-    [UnitySetUp]
-    public IEnumerator Setup()
-    {
-        yield return TestSetupHelper.SetupSceneAndWait((gm, med, refs, tm, mm) =>
-        {
-            _gameManager = gm;
-            _gameReferences = refs;
-        });
-    }
+        [UnitySetUp]
+        public IEnumerator Setup() {
+            yield return TestSetupHelper.SetupSceneAndWait((gm, med, refs, tm, mm) => {
+                gameManager = gm;
+                gameReferences = refs;
+            });
+        }
 
-    [TearDown]
-    public void Teardown()
-    {
-        _gameManager = null;
-        _gameReferences = null;
-    }
+        [TearDown]
+        public void Teardown() {
+            gameManager = null;
+            gameReferences = null;
+        }
 
-    [UnityTest]
-    public IEnumerator PlayerUI_Initialization_UpdatesHealthText()
-    {
-        // Arrange - setup already done in Setup()
+        [UnityTest]
+        public IEnumerator PlayerUI_Initialization_UpdatesHealthText() {
+            // Arrange - setup already done in Setup()
 
-        // Act - initialization already happened in scene setup
+            // Act - initialization already happened in scene setup
 
-        // Assert
-        TextMeshProUGUI healthText = _gameReferences.player1References.healthText;
-        Assert.IsNotNull(healthText, "HealthText component not found in scene.");
-        Assert.AreEqual($"Health: {_gameManager.Player1.Health}", healthText.text,
-            "Initial health text is incorrect based on scene setup.");
+            // Assert
+            TextMeshProUGUI healthText = gameReferences.Player1References.HealthText;
+            Assert.IsNotNull(healthText, "HealthText component not found in scene.");
+            Assert.AreEqual($"Health: {gameManager.Player1.Health}", healthText.text,
+                "Initial health text is incorrect based on scene setup.");
 
-        yield return null;
+            yield return null;
+        }
     }
 }

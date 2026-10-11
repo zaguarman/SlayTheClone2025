@@ -1,32 +1,21 @@
-using static Enums;
-using static DebugLogger;
-using UnityEngine;
-using System;
+using static SlayTheClone.DebugLogger;
 
-public class HealPlayerAction : IGameAction {
-    #region Fields
-    private readonly IPlayer target;
-    private readonly int amount;
-    #endregion
+namespace SlayTheClone {
+    public class HealPlayerAction : IGameAction {
+        private readonly IPlayer target;
+        private readonly int amount;
 
-    #region Constructor
-    public HealPlayerAction(IPlayer target, int amount) {
-        this.target = target;
-        this.amount = amount;
-        Log($"Created HealPlayerAction for {(target?.IsPlayer1 == true ? "Player 1" : "Player 2")} (TargetID: {target?.TargetId.ToUpper()}) with amount {amount}",
-            LogTag.Actions | LogTag.Players);
+        public IPlayer GetTargetPlayer() => target;
+        public int GetAmount() => amount;
+
+        public HealPlayerAction(IPlayer target, int amount) {
+            this.target = target;
+            this.amount = amount;
+            Log($"Created {this}", LogTag.Actions | LogTag.Players);
+        }
+
+        public override string ToString() {
+            return $"HealPlayerAction: Target={target?.Name} (TargetID: {target?.TargetId.ToUpper()}), Amount={amount}";
+        }
     }
-    #endregion
-
-    #region Methods
-
-
-    // Getters for executor
-    public IPlayer GetTargetPlayer() => target;
-    public int GetAmount() => amount;
-
-    public override string ToString() {
-        return $"HealPlayerAction: Target={(target?.IsPlayer1 == true ? "Player 1" : "Player 2")} (TargetID: {target?.TargetId.ToUpper()}), Amount={amount}";
-    }
-    #endregion
 }

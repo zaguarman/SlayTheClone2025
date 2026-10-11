@@ -1,35 +1,27 @@
-using static DebugLogger;
+using static SlayTheClone.DebugLogger;
 
-public class PlaySpellActionExecutor : IActionExecutor {
-    public void Execute(IGameAction action, ActionExecutionContext context) {
-        if (!(action is PlaySpellAction spellAction)) {
-            LogError($"PlaySpellActionExecutor: Received incorrect action type {action?.GetType().Name}", LogTag.Actions);
-            return;
+namespace SlayTheClone {
+    public class PlaySpellActionExecutor : ActionExecutor<PlaySpellAction> {
+        protected override void ExecuteAction(PlaySpellAction spellAction, ActionExecutionContext context) {
+            var spell = spellAction.GetSpell();
+            var owner = spellAction.GetOwner();
+
+            if (spell == null || owner == null) {
+                LogError("PlaySpellActionExecutor: Spell or owner is null", LogTag.Actions);
+                return;
+            }
+
+            var actionsQueue = context.ActionsQueue;
+            if (actionsQueue == null) {
+                LogError($"PlaySpellActionExecutor: ActionsQueue is null in context. Cannot play spell {spell.Name}.", LogTag.Actions | LogTag.Cards);
+                return;
+            }
+
+            // The spell queues its own game actions
+            spell.Play(owner, actionsQueue, spellAction.GetTarget());
+            owner.DiscardCard(spell);
+
+            Log($"Executed PlaySpellAction via Executor for {spell.Name}", LogTag.Actions | LogTag.Cards);
         }
-
-        // Get data from Action
-        var spell = spellAction.GetSpell();
-        var owner = spellAction.GetOwner();
-        var target = spellAction.GetTarget();
-
-        // Validate
-        if (spell == null || owner == null) {
-            LogError("PlaySpellActionExecutor: Spell or owner is null", LogTag.Actions);
-            return;
-        }
-
-        // Get Dependencies from Context
-        var actionsQueue = context.ActionsQueue;
-        if (actionsQueue == null) {
-            LogError($"PlaySpellActionExecutor: ActionsQueue is null in context. Cannot play spell {spell.Name}.", LogTag.Actions | LogTag.Cards);
-            return;
-        }
-
-        // Process spell effects by calling the spell's Play method
-        // The spell itself will queue the specific game actions
-        spell.Play(owner, actionsQueue, target);
-        owner.DiscardCard(spell);
-
-        Log($"Executed PlaySpellAction via Executor for {spell.Name}", LogTag.Actions | LogTag.Cards);
     }
 }

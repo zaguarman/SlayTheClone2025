@@ -1,21 +1,19 @@
-using static Enums;
-using static DebugLogger;
-using UnityEngine;
-using System;
+using static SlayTheClone.DebugLogger;
+using static SlayTheClone.Enums;
 
-public class ChangeWeatherAction : IGameAction {
-    private readonly WeatherType targetWeather;
-    // Add a getter for the target weather
-    public WeatherType GetTargetWeather() => targetWeather;
+namespace SlayTheClone {
+    public class ChangeWeatherAction : IGameAction {
+        private readonly WeatherType targetWeather;
 
-    public ChangeWeatherAction(WeatherType targetWeather) {
-        this.targetWeather = targetWeather;
-        Log($"Created ChangeWeatherAction to {targetWeather}", LogTag.Actions | LogTag.Effects);
-    }
+        public WeatherType GetTargetWeather() => targetWeather;
 
+        public ChangeWeatherAction(WeatherType targetWeather) {
+            this.targetWeather = targetWeather;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
 
-
-    public override string ToString() {
-        return $"ChangeWeatherAction: TargetWeather={targetWeather}";
+        public override string ToString() {
+            return $"ChangeWeatherAction: TargetWeather={targetWeather}";
+        }
     }
 }

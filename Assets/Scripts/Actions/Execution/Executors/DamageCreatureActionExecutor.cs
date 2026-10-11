@@ -1,109 +1,80 @@
-using static DebugLogger;
-using static Enums;
 using System;
+using static SlayTheClone.DebugLogger;
+using static SlayTheClone.Enums;
 
-/// <summary>
-/// Executor for DamageCreatureAction
-/// </summary>
-public class DamageCreatureActionExecutor : IActionExecutor
-{
-    public void Execute(IGameAction action, ActionExecutionContext context)
-    {
-        if (!(action is DamageCreatureAction damageAction))
-        {
-            LogError($"DamageCreatureActionExecutor: Received incorrect action type {action?.GetType().Name}", LogTag.Actions);
-            return;
+namespace SlayTheClone {
+    public class DamageCreatureActionExecutor : ActionExecutor<DamageCreatureAction> {
+        protected override void ExecuteAction(DamageCreatureAction damageAction, ActionExecutionContext context) {
+            var targetCreature = damageAction.GetTarget();
+            var damage = damageAction.GetDamage();
+            var attacker = damageAction.GetAttacker(); // Can be null
+
+            if (targetCreature == null || targetCreature.IsDead) return;
+
+            if (damageAction.IsCombatDamage() && context.IsCombatDamageCancelled(attacker)) {
+                Log($"Executor: {attacker.Name} was killed by faster damage; its attack on {targetCreature.Name} is cancelled.", LogTag.Actions | LogTag.Combat);
+                return;
+            }
+
+            var mediator = context.GameMediator;
+            var modifierManager = context.ModifierManager;
+            if (mediator == null || modifierManager == null || context.ActionsQueue == null) {
+                LogError($"DamageCreatureActionExecutor: Missing dependencies in context for {targetCreature.Name}.", LogTag.Actions | LogTag.Creatures | LogTag.Initialization);
+                return;
+            }
+
+            Log($"Executor: Intent to deal {damage} damage to {targetCreature.Name} (Armor: {targetCreature.CurrentArmorPool}) from {attacker?.Name ?? "source"}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
+
+            int damageToArmor = Math.Min(damage, targetCreature.CurrentArmorPool);
+            int remainingDamage = damage - damageToArmor;
+
+            // Armor is spent immediately so the next hit in the same resolution sees what is left
+            if (damageToArmor > 0) {
+                targetCreature.ModifyArmorPool(-damageToArmor);
+                mediator.NotifyCreatureArmorChanged(targetCreature, targetCreature.CurrentArmorPool);
+            }
+
+            int actualHealthDamage = 0;
+            if (remainingDamage > 0 && !targetCreature.IsDead) {
+                Log($"Executor: Applying {remainingDamage} remaining damage to health.", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
+                actualHealthDamage = targetCreature.TakeHealthDamage(remainingDamage);
+            }
+
+            if (actualHealthDamage > 0) {
+                mediator.NotifyCreatureDamaged(targetCreature, actualHealthDamage);
+            }
+
+            // OnDamage effects only fire while the creature survives the hit
+            if (actualHealthDamage > 0 && !targetCreature.IsDead) {
+                TriggerEffects(targetCreature, EffectTrigger.OnDamage, attacker, context);
+            }
+
+            if (targetCreature.Health <= 0 && !targetCreature.IsDead) {
+                Log($"Executor: {targetCreature.Name} died as a result of damage.", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
+                targetCreature.MarkAsDead();
+                // Same speed the queue used to order this action (see ActionsQueue.GetActionSpeed)
+                context.KillingSpeedByCreatureId[targetCreature.TargetId] = attacker?.Speed ?? 1;
+
+                mediator.NotifyCreatureDied(targetCreature);
+                TriggerEffects(targetCreature, EffectTrigger.OnDeath, attacker, context);
+
+                modifierManager.UnregisterCreature(targetCreature);
+                targetCreature.Owner?.DiscardCard(targetCreature);
+            }
+
+            Log($"Executed DamageCreatureAction via Executor for {targetCreature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
         }
 
-        // Get data from Action
-        var targetCreature = damageAction.GetTarget();
-        var damage = damageAction.GetDamage();
-        var attacker = damageAction.GetAttacker(); // Can be null
-
-        // Validate target
-        if (targetCreature == null || targetCreature.IsDead) {
-             return;
-        }
-
-        if (damageAction.IsCombatDamage() && context.IsCombatDamageCancelled(attacker)) {
-            Log($"Executor: {attacker.Name} was killed by faster damage; its attack on {targetCreature.Name} is cancelled.", LogTag.Actions | LogTag.Combat);
-            return;
-        }
-
-        // Get Dependencies from Context
-        var mediator = context.GameMediator;
-        var modifierManager = context.ModifierManager;
-        var actionsQueue = context.ActionsQueue; // Get queue for potential effects
-
-        if (mediator == null || modifierManager == null || actionsQueue == null)
-        {
-             LogError($"DamageCreatureActionExecutor: Missing dependencies in context for {targetCreature.Name}.", LogTag.Actions | LogTag.Creatures | LogTag.Initialization);
-            return;
-        }
-
-        // --- Execute Logic ---
-        Log($"Executor: Intent to deal {damage} damage to {targetCreature.Name} (Armor: {targetCreature.CurrentArmorPool}) from {attacker?.Name ?? "source"}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
-
-        int damageToArmor = Math.Min(damage, targetCreature.CurrentArmorPool);
-        int remainingDamage = damage - damageToArmor;
-
-        // Armor is spent immediately so the next hit in the same resolution sees what is left
-        if (damageToArmor > 0)
-        {
-            targetCreature.ModifyArmorPool(-damageToArmor);
-            mediator.NotifyCreatureArmorChanged(targetCreature, targetCreature.CurrentArmorPool);
-        }
-
-        // Apply remaining damage to health
-        int actualHealthDamage = 0;
-        if (remainingDamage > 0 && !targetCreature.IsDead) // Check IsDead again after armor reduction potentially resolves
-        {
-            Log($"Executor: Applying {remainingDamage} remaining damage to health.", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
-            actualHealthDamage = targetCreature.TakeHealthDamage(remainingDamage); // Call internal method
-        }
-
-        // Notify Mediator AFTER damage is applied
-        if (actualHealthDamage > 0) {
-             mediator.NotifyCreatureDamaged(targetCreature, actualHealthDamage);
-        }
-
-        // Trigger OnDamage Effects AFTER damage calculation and notification
-        // Check IsDead before triggering OnDamage
-        if (actualHealthDamage > 0 && !targetCreature.IsDead)
-        {
-            Log($"Executor: Triggering OnDamage effects for {targetCreature.Name}", LogTag.Effects | LogTag.Actions);
-            // Set the attacker in the context before triggering effects
+        // Effects can read the attacker from the context (e.g. to retaliate) only while they run
+        private static void TriggerEffects(ICreature creature, EffectTrigger trigger, ICreature attacker, ActionExecutionContext context) {
+            Log($"Executor: Triggering {trigger} effects for {creature.Name}", LogTag.Effects | LogTag.Actions);
             context.TriggeringAttacker = attacker;
-            targetCreature.HandleEffect(EffectTrigger.OnDamage, context); // Pass context
-            // Reset attacker in context (good practice)
-            context.TriggeringAttacker = null;
+            try {
+                creature.HandleEffect(trigger, context);
+            }
+            finally {
+                context.TriggeringAttacker = null;
+            }
         }
-
-        // Check for Death AFTER applying damage and triggering OnDamage effects
-        if (targetCreature.Health <= 0 && !targetCreature.IsDead)
-        {
-            Log($"Executor: {targetCreature.Name} died as a result of damage.", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
-            targetCreature.MarkAsDead(); // Mark internally first
-            // Same speed the queue used to order this action (see ActionsQueue.GetActionSpeed)
-            context.KillingSpeedByCreatureId[targetCreature.TargetId] = attacker?.Speed ?? 1;
-
-            // Notify Mediator
-            mediator.NotifyCreatureDied(targetCreature);
-
-            // Trigger OnDeath Effects
-            Log($"Executor: Triggering OnDeath effects for {targetCreature.Name}", LogTag.Effects | LogTag.Actions);
-            // Set the attacker in the context before triggering effects (could be relevant for some OnDeath)
-            context.TriggeringAttacker = attacker;
-            targetCreature.HandleEffect(EffectTrigger.OnDeath, context); // Pass context
-            // Reset attacker in context
-            context.TriggeringAttacker = null;
-
-            // Unregister from ModifierManager - NO CAST NEEDED
-            modifierManager.UnregisterCreature(targetCreature);
-
-            targetCreature.Owner?.DiscardCard(targetCreature);
-        }
-
-        Log($"Executed DamageCreatureAction via Executor for {targetCreature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
     }
 }

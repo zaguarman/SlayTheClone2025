@@ -1,39 +1,27 @@
-using static Enums;
-using static DebugLogger;
-using UnityEngine;
-using System;
+using static SlayTheClone.DebugLogger;
 
-// Consolidated damage action for creatures
-public class DamageCreatureAction : IGameAction {
-    #region Fields & Properties
-    private readonly ICreature target;
-    private readonly int damage;
-    private readonly ICreature attacker; // Renamed from source for clarity in combat context
-    private readonly bool isCombatDamage; // True when dealt by a creature's attack (not by an effect)
-    // Removed isDirectDamage flag
+namespace SlayTheClone {
+    public class DamageCreatureAction : IGameAction {
+        private readonly ICreature target;
+        private readonly int damage;
+        private readonly ICreature attacker; // Creature dealing the damage, if any
+        private readonly bool isCombatDamage; // True when dealt by a creature's attack (not by an effect)
 
-    public ICreature GetTarget() => target;
-    public ICreature GetAttacker() => attacker; // Changed getter name
-    public int GetDamage() => damage;
-    public bool IsCombatDamage() => isCombatDamage;
-    #endregion
+        public ICreature GetTarget() => target;
+        public ICreature GetAttacker() => attacker;
+        public int GetDamage() => damage;
+        public bool IsCombatDamage() => isCombatDamage;
 
-    #region Constructor
-    // Simplified constructor
-    public DamageCreatureAction(ICreature target, int damage, ICreature attacker = null, bool isCombatDamage = false) {
-        this.target = target;
-        this.damage = damage;
-        this.attacker = attacker; // Use attacker field
-        this.isCombatDamage = isCombatDamage;
-        Log($"Created DamageCreatureAction for {target?.Name} (TargetID: {target?.TargetId.ToUpper().Substring(0, 8)}) with {damage} damage from {attacker?.Name ?? "source"}",
-            LogTag.Actions | LogTag.Creatures);
+        public DamageCreatureAction(ICreature target, int damage, ICreature attacker = null, bool isCombatDamage = false) {
+            this.target = target;
+            this.damage = damage;
+            this.attacker = attacker;
+            this.isCombatDamage = isCombatDamage;
+            Log($"Created {this}", LogTag.Actions | LogTag.Creatures);
+        }
+
+        public override string ToString() {
+            return $"DamageCreatureAction: Target={target?.Name}({target?.TargetId.ShortId()}), Dmg={damage}, Attacker={attacker?.Name ?? "Source"}";
+        }
     }
-    #endregion
-
-    #region Methods
-    public override string ToString() {
-        // Updated ToString
-        return $"DamageCreatureAction: Target={target?.Name}({target?.TargetId.ToUpper().Substring(0, 8)}), Dmg={damage}, Attacker={attacker?.Name ?? "Source"}";
-    }
-    #endregion
 }

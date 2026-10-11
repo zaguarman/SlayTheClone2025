@@ -1,287 +1,282 @@
-using UnityEngine.Events;
 using System;
 using System.Collections.Generic;
-using static DebugLogger;
 using System.Linq;
-using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
+using static SlayTheClone.DebugLogger;
 
-[Serializable]
-public class PlayerDamagedUnityEvent : UnityEvent<int> { }
+namespace SlayTheClone {
+    [Serializable]
+    public class PlayerDamagedUnityEvent : UnityEvent<int> { }
 
-public interface IPlayer : IEntity {
-    bool IsPlayer1 { get; } // Property to identify if this is Player 1
-    IPlayer Opponent { get; set; }
-    List<ICard> Hand { get; }
-    List<BattlefieldSlot> Battlefield { get; }
-    IDeck Deck { get; }
-    int CardsToDraw { get; set; }
-    int Health { get; }
-    void AddToHand(ICard card);
-    void RemoveFromHand(ICard card);
-    void RemoveFromBattlefield(ICard creature, bool destroyCard = true);
-    void DiscardCard(ICard card);
-    void DiscardHand();
-    PlayerDamagedUnityEvent OnDamaged { get; }
-    void InitializeBattlefield(List<BattlefieldSlot> battlefieldSlots);
-    void DrawCard();
-    void UpdateHealthUI();
-    void SetHealthText(TextMeshProUGUI healthText);
-    void SetHealth(int newHealth);
-    // Expose GameMediator for Creature to access
-    IGameMediator GameMediator { get; }
-    // Expose GameManager for dependency access
-    IGameManager GameManager { get; }
+    public interface IPlayer : IEntity {
+        bool IsPlayer1 { get; } // Property to identify if this is Player 1
+        IPlayer Opponent { get; set; }
+        List<ICard> Hand { get; }
+        List<BattlefieldSlot> Battlefield { get; }
+        IDeck Deck { get; }
+        int CardsToDraw { get; set; }
+        int Health { get; }
+        void AddToHand(ICard card);
+        void RemoveFromHand(ICard card);
+        void RemoveFromBattlefield(ICard creature, bool destroyCard = true);
+        void DiscardCard(ICard card);
+        void DiscardHand();
+        PlayerDamagedUnityEvent OnDamaged { get; }
+        void InitializeBattlefield(List<BattlefieldSlot> battlefieldSlots);
+        void DrawCard();
+        void UpdateHealthUI();
+        void SetHealthText(TextMeshProUGUI healthText);
+        void SetHealth(int newHealth);
+        // Expose GameMediator for Creature to access
+        IGameMediator GameMediator { get; }
+        // Expose GameManager for dependency access
+        IGameManager GameManager { get; }
 
-    /// <summary>
-    /// Applies damage to the player, reducing their health.
-    /// </summary>
-    /// <param name="amount">The amount of damage to apply.</param>
-    void TakeDamage(int amount);
+        /// <summary>
+        /// Applies damage to the player, reducing their health.
+        /// </summary>
+        /// <param name="amount">The amount of damage to apply.</param>
+        void TakeDamage(int amount);
 
-    /// <summary>
-    /// Heals the player by the specified amount, up to their maximum health.
-    /// </summary>
-    /// <param name="amount">The amount to heal.</param>
-    /// <returns>The actual amount the player was healed.</returns>
-    int Heal(int amount);
-}
-
-public class Player : Entity, IPlayer {
-    public const int MAX_HAND_SIZE = 10;
-
-    public int Health { get; private set; } = 20;
-    public IPlayer Opponent { get; set; }
-    public List<ICard> Hand { get; private set; }
-    public IDeck Deck { get; private set; }
-    public int CardsToDraw { get; set; } = 2; // Default to drawing 2 cards
-
-    public List<BattlefieldSlot> Battlefield { get; private set; }
-    public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
-
-    private readonly bool _isPlayer1; // Add field to store identity
-
-    private IGameMediator gameMediator; // Changed to interface
-    private ICardDealingService cardDealingService; // Added reference
-    private IGameManager gameManager; // Added reference
-    private TextMeshProUGUI healthText;
-
-    // Expose GameMediator for Creature to access
-    public IGameMediator GameMediator => gameMediator;
-
-    // Expose GameManager for dependency access
-    public IGameManager GameManager => gameManager;
-
-    // Modify constructor to accept identity
-    public Player(string name = "Player", bool isPlayer1 = false) : base(name) {
-        Hand = new List<ICard>();
-        Battlefield = new List<BattlefieldSlot>();
-        Deck = new Deck();
-
-        OnDamaged.AddListener(OnPlayerDamaged);
-        _isPlayer1 = isPlayer1;
+        /// <summary>
+        /// Heals the player by the specified amount, up to their maximum health.
+        /// </summary>
+        /// <param name="amount">The amount to heal.</param>
+        /// <returns>The actual amount the player was healed.</returns>
+        int Heal(int amount);
     }
 
-    // Implement IsPlayer1 property from interface
-    public bool IsPlayer1 => _isPlayer1;
+    public class Player : Entity, IPlayer {
+        public const int MaxHandSize = 10;
 
-    // New Initialize method to inject dependencies
-    public void Initialize(IGameMediator mediator, ICardDealingService dealer, IGameManager manager) {
-        if (mediator == null || dealer == null || manager == null) {
-             LogError($"Player ({Name}) initialization failed: Dependencies cannot be null.", LogTag.Initialization | LogTag.Players);
-             return; // Or throw exception
-        }
-        gameMediator = mediator;
-        cardDealingService = dealer;
-        gameManager = manager;
-        Log($"Player ({Name}) initialized with dependencies.", LogTag.Initialization | LogTag.Players);
-        // Note: OnDamaged listener is already added in constructor
-    }
+        public int Health { get; private set; } = 20;
+        public IPlayer Opponent { get; set; }
+        public List<ICard> Hand { get; private set; }
+        public IDeck Deck { get; private set; }
+        public int CardsToDraw { get; set; } = 2; // Default to drawing 2 cards
 
-    public void SetHealthText(TextMeshProUGUI healthText) {
-        this.healthText = healthText;
-        UpdateHealthUI(); // Update UI immediately after setting the reference
-    }
+        public List<BattlefieldSlot> Battlefield { get; private set; }
+        public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
 
-    private void OnPlayerDamaged(int damage) {
-        // This is called whenever this player takes damage
-        // Update our UI here
-        UpdateHealthUI();
-        Log($"{(IsPlayer1 ? "Player 1" : "Player 2")} took {damage} damage, health: {Health}", LogTag.Players | LogTag.Combat);
-    }
+        private readonly bool isPlayer1; // Add field to store identity
 
-    public void UpdateHealthUI() {
-        if (healthText != null) {
-            healthText.text = $"Health: {Health}";
-        }
-    }
+        private IGameMediator gameMediator; // Changed to interface
+        private ICardDealingService cardDealingService; // Added reference
+        private IGameManager gameManager; // Added reference
+        private TextMeshProUGUI healthText;
 
-    public void InitializeBattlefield(List<BattlefieldSlot> slots) {
-        if (slots == null || slots.Count == 0) {
-            LogError("Cannot initialize battlefield with null or empty slots", LogTag.Initialization);
-            return;
-        }
-        Battlefield.Clear();
-        Battlefield.AddRange(slots);
-        foreach (var slot in slots) {
-            slot.Owner = this;
-        }
-        Log($"Initialized battlefield with {slots.Count} slots", LogTag.Initialization);
-    }
+        // Expose GameMediator for Creature to access
+        public IGameMediator GameMediator => gameMediator;
 
-    public void SetHealth(int newHealth) {
-        Health = Math.Min(newHealth, 99);
+        // Expose GameManager for dependency access
+        public IGameManager GameManager => gameManager;
 
-        // Update UI
-        UpdateHealthUI();
-    }
+        // Modify constructor to accept identity
+        public Player(string name = "Player", bool isPlayer1 = false) : base(name) {
+            Hand = new List<ICard>();
+            Battlefield = new List<BattlefieldSlot>();
+            Deck = new Deck();
 
-    /// <summary>
-    /// Applies damage to the player, reducing their health.
-    /// </summary>
-    /// <param name="amount">The amount of damage to apply.</param>
-    public void TakeDamage(int amount)
-    {
-        if (amount <= 0) return; // No damage to take
-
-        int previousHealth = Health;
-        int actualDamage = Math.Min(Health, amount); // Can't take more damage than current health
-
-        Health -= actualDamage;
-        Health = Math.Max(0, Health); // Prevent health going below 0
-
-        Log($"Player {Name} took {actualDamage} damage. Health: {previousHealth} -> {Health}",
-            LogTag.Players | LogTag.Combat);
-
-        // Invoke the OnDamaged event. The GameMediator listens to this.
-        if (actualDamage > 0)
-        {
-            OnDamaged?.Invoke(actualDamage);
-            // No need to call mediator.NotifyPlayerDamaged here,
-            // as the mediator should be subscribed via RegisterPlayer.
+            OnDamaged.AddListener(OnPlayerDamaged);
+            this.isPlayer1 = isPlayer1;
         }
 
-        // Update UI is handled by the OnDamaged listener calling UpdateHealthUI
-    }
+        // Implement IsPlayer1 property from interface
+        public bool IsPlayer1 => isPlayer1;
 
-    /// <summary>
-    /// Heals the player by the specified amount, up to their maximum health.
-    /// </summary>
-    /// <param name="amount">The amount to heal.</param>
-    /// <returns>The actual amount the player was healed.</returns>
-    public int Heal(int amount)
-    {
-        if (amount <= 0)
-        {
-            return 0; // Cannot heal with non-positive amount
+        // New Initialize method to inject dependencies
+        public void Initialize(IGameMediator mediator, ICardDealingService dealer, IGameManager manager) {
+            if (mediator == null || dealer == null || manager == null) {
+                LogError($"Player ({Name}) initialization failed: Dependencies cannot be null.", LogTag.Initialization | LogTag.Players);
+                return; // Or throw exception
+            }
+            gameMediator = mediator;
+            cardDealingService = dealer;
+            gameManager = manager;
+            Log($"Player ({Name}) initialized with dependencies.", LogTag.Initialization | LogTag.Players);
+            // Note: OnDamaged listener is already added in constructor
         }
 
-        const int PLAYER_MAX_HEALTH = 20; // Define max health for players
-        int previousHealth = Health;
-        int maxPossibleHeal = PLAYER_MAX_HEALTH - Health;
-        int actualHealAmount = Math.Min(amount, maxPossibleHeal);
-
-        if (actualHealAmount <= 0)
-        {
-            return 0; // Already at full health
+        public void SetHealthText(TextMeshProUGUI healthText) {
+            this.healthText = healthText;
+            UpdateHealthUI(); // Update UI immediately after setting the reference
         }
 
-        Health += actualHealAmount;
-
-        Log($"Player {Name} healed for {actualHealAmount} (requested {amount}). Health: {previousHealth} -> {Health}/{PLAYER_MAX_HEALTH}",
-            LogTag.Players | LogTag.Effects);
-
-        // Update UI immediately after health changes
-        UpdateHealthUI();
-
-        // Note: Notification to GameMediator is handled by the HealPlayerActionExecutor
-
-        return actualHealAmount;
-    }
-
-    public void AddToHand(ICard card) {
-        if (card == null) return;
-
-        if (Hand.Count >= MAX_HAND_SIZE) {
-            Log($"Hand full ({MAX_HAND_SIZE} cards), cannot add more cards", LogTag.Cards);
-            return;
+        private void OnPlayerDamaged(int damage) {
+            // This is called whenever this player takes damage
+            // Update our UI here
+            UpdateHealthUI();
+            Log($"{Name} took {damage} damage, health: {Health}", LogTag.Players | LogTag.Combat);
         }
 
-        Hand.Add(card);
-        gameMediator?.NotifyHandStateChanged(this);
-    }
+        public void UpdateHealthUI() {
+            if (healthText != null) {
+                healthText.text = $"Health: {Health}";
+            }
+        }
 
-    public void RemoveFromHand(ICard card) {
-        if (card == null) return;
-        if (Hand.Remove(card)) {
-            Log($"Removed card {card.Name} from hand", LogTag.Cards);
+        public void InitializeBattlefield(List<BattlefieldSlot> slots) {
+            if (slots == null || slots.Count == 0) {
+                LogError("Cannot initialize battlefield with null or empty slots", LogTag.Initialization);
+                return;
+            }
+            Battlefield.Clear();
+            Battlefield.AddRange(slots);
+            foreach (var slot in slots) {
+                slot.Owner = this;
+            }
+            Log($"Initialized battlefield with {slots.Count} slots", LogTag.Initialization);
+        }
+
+        public void SetHealth(int newHealth) {
+            Health = Math.Min(newHealth, 99);
+
+            // Update UI
+            UpdateHealthUI();
+        }
+
+        /// <summary>
+        /// Applies damage to the player, reducing their health.
+        /// </summary>
+        /// <param name="amount">The amount of damage to apply.</param>
+        public void TakeDamage(int amount) {
+            if (amount <= 0) return; // No damage to take
+
+            int previousHealth = Health;
+            int actualDamage = Math.Min(Health, amount); // Can't take more damage than current health
+
+            Health -= actualDamage;
+            Health = Math.Max(0, Health); // Prevent health going below 0
+
+            Log($"{Name} took {actualDamage} damage. Health: {previousHealth} -> {Health}",
+                LogTag.Players | LogTag.Combat);
+
+            // Invoke the OnDamaged event. The GameMediator listens to this.
+            if (actualDamage > 0) {
+                OnDamaged?.Invoke(actualDamage);
+                // No need to call mediator.NotifyPlayerDamaged here,
+                // as the mediator should be subscribed via RegisterPlayer.
+            }
+
+            // Update UI is handled by the OnDamaged listener calling UpdateHealthUI
+        }
+
+        /// <summary>
+        /// Heals the player by the specified amount, up to their maximum health.
+        /// </summary>
+        /// <param name="amount">The amount to heal.</param>
+        /// <returns>The actual amount the player was healed.</returns>
+        public int Heal(int amount) {
+            if (amount <= 0) {
+                return 0; // Cannot heal with non-positive amount
+            }
+
+            const int MaxHealth = 20; // Define max health for players
+            int previousHealth = Health;
+            int maxPossibleHeal = MaxHealth - Health;
+            int actualHealAmount = Math.Min(amount, maxPossibleHeal);
+
+            if (actualHealAmount <= 0) {
+                return 0; // Already at full health
+            }
+
+            Health += actualHealAmount;
+
+            Log($"{Name} healed for {actualHealAmount} (requested {amount}). Health: {previousHealth} -> {Health}/{MaxHealth}",
+                LogTag.Players | LogTag.Effects);
+
+            // Update UI immediately after health changes
+            UpdateHealthUI();
+
+            // Note: Notification to GameMediator is handled by the HealPlayerActionExecutor
+
+            return actualHealAmount;
+        }
+
+        public void AddToHand(ICard card) {
+            if (card == null) return;
+
+            if (Hand.Count >= MaxHandSize) {
+                Log($"Hand full ({MaxHandSize} cards), cannot add more cards", LogTag.Cards);
+                return;
+            }
+
+            Hand.Add(card);
             gameMediator?.NotifyHandStateChanged(this);
         }
-    }
 
-    // Single exit point for a card leaving play, whatever its type: a resolved spell, a creature that
-    // died or was replaced, or a card discarded from hand. Pulls it out of its current zone and discards it.
-    public void DiscardCard(ICard card) {
-        if (card == null) return;
-
-        RemoveFromHand(card);
-        RemoveFromBattlefield(card);
-        Deck.AddToDiscardPile(card);
-        Log($"Discarded {card.Name}", LogTag.Cards);
-    }
-
-    public void DiscardHand() {
-        Log($"Discarding entire hand for {(IsPlayer1 ? "Player 1" : "Player 2")}: {Hand.Count} cards", LogTag.Cards);
-
-        // Create a copy of the hand to avoid modification during iteration
-        var cardsToDiscard = new List<ICard>(Hand);
-
-        // Discard each card
-        foreach (var card in cardsToDiscard) {
-            DiscardCard(card);
+        public void RemoveFromHand(ICard card) {
+            if (card == null) return;
+            if (Hand.Remove(card)) {
+                Log($"Removed card {card.Name} from hand", LogTag.Cards);
+                gameMediator?.NotifyHandStateChanged(this);
+            }
         }
 
-        // Hand should be empty now, but let's ensure that
-        Hand.Clear();
+        // Single exit point for a card leaving play, whatever its type: a resolved spell, a creature that
+        // died or was replaced, or a card discarded from hand. Pulls it out of its current zone and discards it.
+        public void DiscardCard(ICard card) {
+            if (card == null) return;
 
-        // Notify that the hand has changed
-        gameMediator?.NotifyHandStateChanged(this);
-        Log($"Hand discarded for {(IsPlayer1 ? "Player 1" : "Player 2")}", LogTag.Cards);
-    }
-
-    public void DrawCard() {
-        // Use injected cardDealingService
-        if (cardDealingService == null) {
-            LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
-            return;
+            RemoveFromHand(card);
+            RemoveFromBattlefield(card);
+            Deck.AddToDiscardPile(card);
+            Log($"Discarded {card.Name}", LogTag.Cards);
         }
 
-        if (Hand.Count >= MAX_HAND_SIZE) {
-            Log($"Hand full ({MAX_HAND_SIZE} cards), cannot draw more cards", LogTag.Cards);
-            return;
+        public void DiscardHand() {
+            Log($"Discarding entire hand for {Name}: {Hand.Count} cards", LogTag.Cards);
+
+            if (Hand.Count == 0) return;
+
+            // Empty the hand in one go so listeners get a single HandStateChanged instead of one per card
+            var cardsToDiscard = new List<ICard>(Hand);
+            Hand.Clear();
+
+            foreach (var card in cardsToDiscard) {
+                Deck.AddToDiscardPile(card);
+                Log($"Discarded {card.Name}", LogTag.Cards);
+            }
+
+            gameMediator?.NotifyHandStateChanged(this);
+            Log($"Hand discarded for {Name}", LogTag.Cards);
         }
 
-        if (cardDealingService.CanDrawCard(this)) {
-            cardDealingService.DrawCardForPlayer(this);
+        public void DrawCard() {
+            // Use injected cardDealingService
+            if (cardDealingService == null) {
+                LogError("Cannot draw card - card dealing service not available", LogTag.Cards);
+                return;
+            }
+
+            if (Hand.Count >= MaxHandSize) {
+                Log($"Hand full ({MaxHandSize} cards), cannot draw more cards", LogTag.Cards);
+                return;
+            }
+
+            if (cardDealingService.CanDrawCard(this)) {
+                cardDealingService.DrawCardForPlayer(this);
+            }
         }
-    }
 
-    public void RemoveFromBattlefield(ICard creature, bool destroyCard = true) {
-        if (creature == null) return;
+        public void RemoveFromBattlefield(ICard card, bool destroyCard = true) {
+            // Only creatures occupy slots; without this check a spell (null as ICreature) matched the first empty slot
+            if (card is not ICreature creature) return;
 
-        var slot = Battlefield.FirstOrDefault(s => s.OccupyingCreature == creature as ICreature);
-        if (slot != null) {
-            // Only frees the slot; DiscardCard is responsible for sending the card to the discard pile
-            slot.ClearSlot(destroyCard);
-            Log($"Removed creature {creature.Name} from battlefield", LogTag.Creatures);
-            gameMediator?.NotifyBattlefieldStateChanged(this);
-            gameMediator?.NotifyGameStateChanged();
+            var slot = Battlefield.FirstOrDefault(s => s.OccupyingCreature == creature);
+            if (slot != null) {
+                // Only frees the slot; DiscardCard is responsible for sending the card to the discard pile
+                slot.ClearSlot(destroyCard);
+                Log($"Removed creature {creature.Name} from battlefield", LogTag.Creatures);
+                gameMediator?.NotifyBattlefieldStateChanged(this);
+            }
         }
-    }
 
-    public override bool IsValidTarget() => true;
+        public override bool IsValidTarget() => true;
 
-    public override string ToString() {
-        return $"{Name} - Health: {Health}, Hand: {Hand.Count}, Battlefield: {Battlefield.Count()}";
+        public override string ToString() {
+            return $"{Name} - Health: {Health}, Hand: {Hand.Count}, Battlefield: {Battlefield.Count()}";
+        }
     }
 }

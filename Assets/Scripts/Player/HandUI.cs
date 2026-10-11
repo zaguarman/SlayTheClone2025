@@ -1,164 +1,149 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static DebugLogger;
+using static SlayTheClone.DebugLogger;
 
-public class HandUI : CardContainer {
-    private const float CastStagger = 0.2f;
+namespace SlayTheClone {
+    public class HandUI : CardContainer {
+        private const float CastStagger = 0.2f;
 
-    // Cards of this player with a pending PlayCardAction
-    private readonly HashSet<ICard> queuedCards = new HashSet<ICard>();
-    private float nextCastTime;
+        // Cards of this player with a pending PlayCardAction
+        private readonly HashSet<ICard> queuedCards = new HashSet<ICard>();
+        private float nextCastTime;
 
-    public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
-        // Call base CardContainer Initialize FIRST
-        base.Initialize(player, mediator, references, manager);
-    }
-
-    protected override void RegisterEvents() {
-        if (gameMediator != null) {
-            gameMediator.AddHandStateChangedListener(UpdateUI);
-            gameMediator.AddGameInitializedListener(OnGameInitialized);
-            gameMediator.AddActionsQueueChangedListener(OnActionsQueueChanged);
+        protected override void RegisterEvents() {
+            if (GameMediator != null) {
+                GameMediator.AddHandStateChangedListener(UpdateUI);
+                GameMediator.AddGameInitializedListener(OnGameInitialized);
+                GameMediator.AddActionsQueueChangedListener(OnActionsQueueChanged);
+            }
         }
-    }
 
-    protected override void UnregisterEvents() {
-        if (gameMediator != null) {
-            gameMediator.RemoveHandStateChangedListener(UpdateUI);
-            gameMediator.RemoveGameInitializedListener(OnGameInitialized);
-            gameMediator.RemoveActionsQueueChangedListener(OnActionsQueueChanged);
+        protected override void UnregisterEvents() {
+            if (GameMediator != null) {
+                GameMediator.RemoveHandStateChangedListener(UpdateUI);
+                GameMediator.RemoveGameInitializedListener(OnGameInitialized);
+                GameMediator.RemoveActionsQueueChangedListener(OnActionsQueueChanged);
+            }
         }
-    }
 
-    private void OnGameInitialized() {
-        UpdateUI(Player);
-    }
+        private void OnGameInitialized() {
+            UpdateUI(Player);
+        }
 
-    private void OnActionsQueueChanged() {
-        if (!IsInitialized || Player == null) return;
+        private void OnActionsQueueChanged() {
+            if (!IsInitialized || Player == null) return;
 
-        queuedCards.Clear();
-        var pendingActions = gameManager?.ActionsQueue?.GetPendingActions();
-        if (pendingActions != null) {
-            foreach (var action in pendingActions) {
-                if (action is PlayCardAction playAction && playAction.GetOwner() == Player) {
-                    queuedCards.Add(playAction.GetCard());
+            queuedCards.Clear();
+            var pendingActions = GameManager?.ActionsQueue?.GetPendingActions();
+            if (pendingActions != null) {
+                foreach (var action in pendingActions) {
+                    if (action is PlayCardAction playAction && playAction.GetOwner() == Player) {
+                        queuedCards.Add(playAction.GetCard());
+                    }
                 }
             }
+
+            UpdateUI(Player);
         }
 
-        UpdateUI(Player);
-    }
-
-    private void PlayCastAnimation(CardController card) {
-        var rootCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
-        if (rootCanvas == null) {
-            Destroy(card.gameObject);
-            return;
-        }
-
-        float delay = Mathf.Max(0f, nextCastTime - Time.time);
-        nextCastTime = Time.time + delay + CastStagger;
-        card.PlayCastAnimation(rootCanvas.transform, rootCanvas.transform.position, delay);
-    }
-
-    public override void UpdateUI(IPlayer player) {
-        if (!IsInitialized || Player == null) return;
-
-        if (player != Player) return;
-
-        // Clear all current cards
-        foreach (var card in cards.ToList()) {
-            RemoveCard(card);
-            if (card == null) continue;
-
-            // A queued spell that just left the hand was cast: animate it instead of popping it out
-            var instance = card.GetLinkedCardInstance();
-            bool wasCast = instance != null && !(instance is ICreature)
-                && queuedCards.Contains(instance) && !player.Hand.Contains(instance);
-            if (wasCast) {
-                PlayCastAnimation(card);
-            } else {
+        private void PlayCastAnimation(CardController card) {
+            var rootCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
+            if (rootCanvas == null) {
                 Destroy(card.gameObject);
-            }
-        }
-        cards.Clear();
-
-        // Create new card controllers for each card in hand
-        foreach (var cardData in player.Hand) {
-            // Get the ICard instance from the player's hand
-            ICard handCard = cardData; // cardData is actually an ICard instance here
-
-            // Queued creatures are shown as ghosts in their target slot (see BattlefieldUI)
-            bool isQueued = queuedCards.Contains(handCard);
-            if (isQueued && handCard is ICreature) continue;
-
-            // Find the original CardData using the player's deck
-            CardData originalData = handCard.SourceData ?? player.Deck?.FindOriginalCardDataById(handCard.CardId);
-
-            if (originalData == null) {
-                LogWarning($"HandUI: Could not find original CardData for {handCard.Name} (ID: {handCard.CardId}) in Player {player.Name}'s deck. Display might be inaccurate.", LogTag.UI | LogTag.Cards);
-                // As a fallback, you might create temporary data, but ideally, this shouldn't happen for cards dealt from a deck.
-                // For now, we'll skip creating a controller if original data is missing to highlight the issue.
-                continue;
+                return;
             }
 
-            // Use CardFactory to create the controller, passing the live ICard instance and the original CardData
-            var controller = CardFactory.CreateCardController(handCard, originalData, Player, transform, gameMediator, gameReferences, gameManager);
-            if (controller != null) {
-                AddCard(controller);
-                if (isQueued) controller.SetQueued(true);
-            }
+            float delay = Mathf.Max(0f, nextCastTime - Time.time);
+            nextCastTime = Time.time + delay + CastStagger;
+            card.PlayCastAnimation(rootCanvas.transform, rootCanvas.transform.position, delay);
         }
 
-        UpdateLayout();
+        public override void UpdateUI(IPlayer player) {
+            if (!IsInitialized || Player == null) return;
+
+            if (player != Player) return;
+
+            // Clear all current cards
+            foreach (var card in cards.ToList()) {
+                RemoveCard(card);
+                if (card == null) continue;
+
+                // A queued spell that just left the hand was cast: animate it instead of popping it out
+                var instance = card.GetLinkedCardInstance();
+                bool wasCast = instance != null && !(instance is ICreature)
+                    && queuedCards.Contains(instance) && !player.Hand.Contains(instance);
+                if (wasCast) {
+                    PlayCastAnimation(card);
+                }
+                else {
+                    Destroy(card.gameObject);
+                }
+            }
+            cards.Clear();
+
+            // Create new card controllers for each card in hand
+            foreach (var handCard in player.Hand) {
+                // Queued creatures are shown as ghosts in their target slot (see BattlefieldUI)
+                bool isQueued = queuedCards.Contains(handCard);
+                if (isQueued && handCard is ICreature) continue;
+
+                // Cards dealt from a deck always have data; a missing one is skipped so the problem shows
+                CardData originalData = CardFactory.FindCardData(handCard, player);
+                if (originalData == null) {
+                    LogWarning($"HandUI: Could not find original CardData for {handCard.Name} (ID: {handCard.CardId}) in {player.Name}'s deck. Display might be inaccurate.", LogTag.UI | LogTag.Cards);
+                    continue;
+                }
+
+                var controller = CardFactory.CreateCardController(handCard, originalData, Player, transform, GameMediator, GameReferences, GameManager);
+                if (controller != null) {
+                    AddCard(controller);
+                    if (isQueued) controller.SetQueued(true);
+                }
+            }
+
+            UpdateLayout();
+        }
+
+        protected override void OnCardBeginDrag(CardController card) {
+            if (card == null) return;
+            card.transform.SetAsLastSibling();
+            Log($"Begin dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
+        }
+
+        protected override void OnCardEndDrag(CardController card) {
+            Log($"End dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
+            UpdateLayout();
+        }
+
+        protected override void OnCardDropped(CardController card) {
+            Log($"Card dropped from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
+
+            // If the card was successfully dropped onto a valid target,
+            // it will be removed from the hand by the PlayCardAction
+            // We'll check if it's still in the player's hand after a short delay
+            StartCoroutine(CheckCardAfterDrop(card));
+
+            UpdateLayout();
+        }
+
+        private System.Collections.IEnumerator CheckCardAfterDrop(CardController card) {
+            // Wait a short time for other handlers to process
+            yield return new WaitForSeconds(0.1f);
+
+            // If the card controller is null or destroyed, we don't need to do anything
+            if (card == null) yield break;
+
+            // Find the matching card in the player's hand by name
+            var cardData = card.GetBaseCardData();
+            if (cardData == null) yield break;
+
+            // If the card is still in the hand, it wasn't handled by another component
+            // Just update layout again to ensure proper positioning
+            UpdateLayout();
+        }
+
+        protected override void OnCardHoverEnter(CardController card) { }
+        protected override void OnCardHoverExit(CardController card) { }
     }
-
-    protected override void SetupCardEventHandlers(CardController controller) {
-        controller.OnBeginDragEvent.AddListener(OnCardBeginDrag);
-        controller.OnEndDragEvent.AddListener(OnCardEndDrag);
-        controller.OnCardDropped.AddListener(OnCardDropped);
-    }
-
-    protected override void OnCardBeginDrag(CardController card) {
-        if (card == null) return;
-        card.transform.SetAsLastSibling();
-        Log($"Begin dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
-    }
-
-    protected override void OnCardEndDrag(CardController card) {
-        Log($"End dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
-        UpdateLayout();
-    }
-
-    protected override void OnCardDropped(CardController card) {
-        Log($"Card dropped from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
-
-        // If the card was successfully dropped onto a valid target,
-        // it will be removed from the hand by the PlayCardAction
-        // We'll check if it's still in the player's hand after a short delay
-        StartCoroutine(CheckCardAfterDrop(card));
-
-        UpdateLayout();
-    }
-
-    private System.Collections.IEnumerator CheckCardAfterDrop(CardController card) {
-        // Wait a short time for other handlers to process
-        yield return new WaitForSeconds(0.1f);
-
-        // If the card controller is null or destroyed, we don't need to do anything
-        if (card == null) yield break;
-
-        // Find the matching card in the player's hand by name
-        var cardData = card.GetBaseCardData();
-        if (cardData == null) yield break;
-
-        // If the card is still in the hand, it wasn't handled by another component
-        // Just update layout again to ensure proper positioning
-        UpdateLayout();
-    }
-
-    protected override void OnCardHoverEnter(CardController card) { }
-    protected override void OnCardHoverExit(CardController card) { }
 }
