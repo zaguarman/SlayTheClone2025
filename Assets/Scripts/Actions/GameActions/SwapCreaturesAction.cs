@@ -4,15 +4,15 @@ namespace SlayTheClone {
     public class SwapCreaturesAction : IGameAction {
         private readonly ICreature fromCreature;
         private readonly ICreature toCreature;
-        private readonly BattlefieldSlot fromSlot;
-        private readonly BattlefieldSlot toSlot;
+        private readonly BoardSlot fromSlot;
+        private readonly BoardSlot toSlot;
 
         public ICreature GetCreature1() => fromCreature;
         public ICreature GetCreature2() => toCreature;
-        public BattlefieldSlot GetFromSlot() => fromSlot;
-        public BattlefieldSlot GetToSlot() => toSlot;
+        public BoardSlot GetFromSlot() => fromSlot;
+        public BoardSlot GetToSlot() => toSlot;
 
-        public SwapCreaturesAction(ICreature fromCreature, ICreature toCreature, BattlefieldSlot fromSlot, BattlefieldSlot toSlot) {
+        public SwapCreaturesAction(ICreature fromCreature, ICreature toCreature, BoardSlot fromSlot, BoardSlot toSlot) {
             this.fromCreature = fromCreature;
             this.toCreature = toCreature;
             this.fromSlot = fromSlot;

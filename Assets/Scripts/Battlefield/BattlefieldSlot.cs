@@ -4,14 +4,19 @@ using UnityEngine.UI;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
-    public class BattlefieldSlot : MonoBehaviour, ITarget, IPointerEnterHandler, IPointerExitHandler {
+    /// <summary>
+    /// On-screen view of one <see cref="BoardSlot"/>: shows the card of the creature the rules placed there
+    /// and takes pointer input. Rules never touch it; <see cref="BattlefieldUI"/> keeps it in sync with the model.
+    /// </summary>
+    public class BattlefieldSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
         private RectTransform rectTransform;
         private Image backgroundImage;
 
-        public string TargetId { get; private set; }
-        public IPlayer Owner { get; set; } // Player whose battlefield this slot belongs to
-        public CardController OccupyingCard { get; private set; }
-        public ICreature OccupyingCreature { get; private set; }
+        public BoardSlot Model { get; private set; }
+        public string TargetId => Model?.TargetId;
+        public IPlayer Owner => Model?.Owner; // Player whose battlefield this slot belongs to
+        public ICreature OccupyingCreature => Model?.OccupyingCreature;
+        public CardController OccupyingCard { get; private set; } // The card currently shown here
 
         private Color defaultColor;
         private Color validDropColor;
@@ -25,11 +30,10 @@ namespace SlayTheClone {
         private void Awake() {
             rectTransform = GetComponent<RectTransform>() ?? gameObject.AddComponent<RectTransform>();
             backgroundImage = GetComponent<Image>() ?? gameObject.AddComponent<Image>();
-
-            TargetId = System.Guid.NewGuid().ToString();
         }
 
-        public void Initialize(Color defaultColor, Color validDropColor, Color invalidDropColor, Color hoverColor) {
+        public void Initialize(BoardSlot model, Color defaultColor, Color validDropColor, Color invalidDropColor, Color hoverColor) {
+            Model = model;
             this.defaultColor = defaultColor;
             this.validDropColor = validDropColor;
             this.invalidDropColor = invalidDropColor;
@@ -37,7 +41,6 @@ namespace SlayTheClone {
             this.combatMarkColor = new Color(1f, 0.5f, 0.5f, 0.5f); // Light red with transparency
 
             backgroundImage.color = defaultColor;
-            ClearSlot();
         }
 
         public void SetPosition(Vector2 position) {
@@ -46,50 +49,22 @@ namespace SlayTheClone {
             }
         }
 
-        public void AssignCreature(CardController controller) {
-            ClearSlot();
-            if (controller == null) return;
+        /// <summary>Shows the card here, centered and upright.</summary>
+        public void ShowCard(CardController card) {
+            OccupyingCard = card;
+            if (card == null) return;
 
-            var creature = controller.GetLinkedCreature();
-            if (creature != null) {
-                creature.Slot = this;
-            }
-
-            SnapToSlot(controller);
-            OccupyingCard = controller;
-            OccupyingCreature = creature;
-        }
-
-        // Parents the card to this slot, centered and upright
-        public void SnapToSlot(CardController card) {
             card.transform.SetParent(transform, false);
             card.transform.localPosition = Vector3.zero;
             card.transform.localRotation = Quaternion.identity;
         }
 
-        /// <summary>Exchanges the cards of two slots; with one slot empty this moves the other's card.</summary>
-        public static void SwapCards(BattlefieldSlot first, BattlefieldSlot second) {
-            var firstCard = first.OccupyingCard;
-            var secondCard = second.OccupyingCard;
-            first.ClearSlot(false);
-            second.ClearSlot(false);
-            if (firstCard != null) second.AssignCreature(firstCard);
-            if (secondCard != null) first.AssignCreature(secondCard);
-        }
-
-        public void ClearSlot(bool destroyCard = true) {
-            if (OccupyingCard != null) {
-                OccupyingCard.SetReplacementPreview(false);
-                if (destroyCard) OccupyingCard.PlayLeavePlayAnimation(); // Fades out, then destroys itself
-            }
-            // Always clear the references
+        /// <summary>Stops showing the current card and returns it; the caller decides what happens to it.</summary>
+        public CardController ReleaseCard() {
+            var card = OccupyingCard;
             OccupyingCard = null;
-            OccupyingCreature = null;
-        }
-
-        public bool IsOccupied() {
-            // Check if either the controller or creature reference is non-null
-            return OccupyingCard != null || OccupyingCreature != null;
+            if (card != null) card.SetReplacementPreview(false);
+            return card;
         }
 
         public void ResetVisuals() {
@@ -97,8 +72,6 @@ namespace SlayTheClone {
                 backgroundImage.color = defaultColor;
             }
         }
-
-        public bool IsValidTarget() => true;
 
         // Method to set the GameReferences dependency (called by BattlefieldUI)
         public void SetGameReferences(IGameReferences references) {
@@ -133,7 +106,7 @@ namespace SlayTheClone {
             }
 
             // --- Show Tooltip ---
-            if (IsOccupied() && OccupyingCard != null) {
+            if (OccupyingCard != null) {
                 tooltip.ShowTooltip(OccupyingCard); // Show card details
             }
             else {

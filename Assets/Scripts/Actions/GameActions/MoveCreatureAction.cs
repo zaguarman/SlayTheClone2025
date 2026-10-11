@@ -3,16 +3,16 @@ using static SlayTheClone.DebugLogger;
 namespace SlayTheClone {
     public class MoveCreatureAction : IGameAction {
         private readonly ICreature creature;
-        private readonly ITarget fromSlot;
-        private readonly ITarget toSlot;
+        private readonly BoardSlot fromSlot;
+        private readonly BoardSlot toSlot;
         private readonly IPlayer player;
 
         public ICreature GetCreature() => creature;
-        public ITarget GetFromSlot() => fromSlot;
-        public ITarget GetToSlot() => toSlot;
+        public BoardSlot GetFromSlot() => fromSlot;
+        public BoardSlot GetToSlot() => toSlot;
         public IPlayer GetPlayer() => player;
 
-        public MoveCreatureAction(ICreature creature, ITarget fromSlot, ITarget toSlot, IPlayer player) {
+        public MoveCreatureAction(ICreature creature, BoardSlot fromSlot, BoardSlot toSlot, IPlayer player) {
             this.creature = creature;
             this.fromSlot = fromSlot;
             this.toSlot = toSlot;

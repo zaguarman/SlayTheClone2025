@@ -13,7 +13,7 @@ namespace SlayTheClone {
             }
 
             var targetSlot = summonAction.GetTargetSlot();
-            if (!(targetSlot is BattlefieldSlot slot)) {
+            if (!(targetSlot is BoardSlot slot)) {
                 LogError($"SummonCreatureActionExecutor: Invalid target slot type: {targetSlot?.GetType().Name ?? "null"}", LogTag.Actions | LogTag.Creatures);
                 return;
             }
@@ -21,9 +21,8 @@ namespace SlayTheClone {
             Log($"Executor: Summoning Creature={creature.Name} (ID: {creature.TargetId.ShortId()}), Owner={owner.Name}, Slot={slot.TargetId.ShortId()}, FromDeck={summonAction.IsFromDeck()}", LogTag.Actions | LogTag.Creatures);
 
             var mediator = context.GameMediator;
-            var references = context.GameReferences;
             var modifierManager = context.ModifierManager;
-            if (mediator == null || references == null || modifierManager == null || context.ActionsQueue == null) {
+            if (mediator == null || modifierManager == null || context.ActionsQueue == null) {
                 LogError($"SummonCreatureActionExecutor: Missing dependencies in context for {creature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Initialization);
                 return;
             }
@@ -37,26 +36,10 @@ namespace SlayTheClone {
                 modifierManager.UnregisterCreature(replacedCreature);
                 (replacedCreature.Owner ?? owner).DiscardCard(replacedCreature);
             }
-            else if (slot.IsOccupied()) {
-                slot.ClearSlot(true); // Card without a creature; just clear it
-            }
 
-            // Tokens and other special summons have no definition to show
-            CardData cardData = CardFactory.FindCardData(creature, owner);
-            if (cardData == null) {
-                LogWarning($"Could not find original CardData for {creature.Name} (ID: {creature.CardId}). Creating temp data.", LogTag.Cards);
-                cardData = CardFactory.CreateFallbackData(creature);
-            }
-
-            var cardController = CardFactory.CreateCardController(creature, cardData, owner, slot.transform, mediator, references, context.GameManager);
-            if (cardController == null) {
-                LogError($"SummonCreatureActionExecutor: Failed to create card controller for {creature.Name}", LogTag.Actions | LogTag.Creatures);
-                modifierManager.UnregisterCreature(creature);
-                return;
-            }
-
-            slot.AssignCreature(cardController); // Assigns creature AND sets creature.Slot
+            slot.Place(creature);
             Log($"Summoned {creature.Name} to slot {slot.TargetId.ShortId()}", LogTag.Actions | LogTag.Creatures);
+            mediator.NotifyBattlefieldStateChanged(slot.Owner ?? owner); // Views create the creature's card
 
             // Register after placement, then trigger OnPlay, then announce the finished summon
             modifierManager.RegisterCreature(creature as Creature);

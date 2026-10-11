@@ -2,7 +2,7 @@ namespace SlayTheClone {
     public class SummonCreatureAction : IGameAction {
         private readonly ICreature creature;
         private readonly IPlayer owner;
-        private readonly ITarget targetSlot; // Expected to be a BattlefieldSlot
+        private readonly ITarget targetSlot; // Expected to be a BoardSlot
         private readonly bool fromDeck;
 
         public ICreature GetCreature() => creature;

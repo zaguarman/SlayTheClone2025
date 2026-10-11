@@ -3,14 +3,14 @@ using static SlayTheClone.DebugLogger;
 namespace SlayTheClone {
     public class BattlefieldCombatAction : IGameAction {
         private readonly ICreature attacker;
-        private readonly BattlefieldSlot targetSlot;
+        private readonly BoardSlot targetSlot;
 
         public ICreature GetAttacker() => attacker;
-        public BattlefieldSlot GetTargetSlot() => targetSlot;
+        public BoardSlot GetTargetSlot() => targetSlot;
 
-        public BattlefieldCombatAction(ICreature attacker, ITarget targetSlot) {
+        public BattlefieldCombatAction(ICreature attacker, BoardSlot targetSlot) {
             this.attacker = attacker;
-            this.targetSlot = (BattlefieldSlot)targetSlot;
+            this.targetSlot = targetSlot;
             Log($"Created {this}", LogTag.Actions | LogTag.Combat);
         }
 

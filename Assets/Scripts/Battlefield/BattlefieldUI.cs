@@ -5,8 +5,12 @@ using UnityEngine.EventSystems;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
+    /// <summary>
+    /// Shows one player's battlefield. The board itself lives in <see cref="IPlayer.Battlefield"/>; this view
+    /// mirrors it (one <see cref="BattlefieldSlot"/> per <see cref="BoardSlot"/>, one card per creature) and turns
+    /// drags and drops into actions.
+    /// </summary>
     public class BattlefieldUI : CardContainer {
-        private const int MaxSlots = 5;
         private const float SummonStagger = 0.15f;
         private const float ReplacingGhostRaise = 0.3f; // Fraction of card height a ghost is raised when it will replace a creature
         private readonly List<BattlefieldSlot> battlefieldSlots = new List<BattlefieldSlot>();
@@ -27,16 +31,16 @@ namespace SlayTheClone {
                 LogError("Cannot initialize BattlefieldArrowManager - ActionsQueue is null via GameManager", LogTag.Initialization);
                 return;
             }
-            arrowManager = new BattlefieldArrowManager(transform, GameMediator, actionsQueue, player);
+            arrowManager = new BattlefieldArrowManager(transform, GameMediator, actionsQueue, player, FindSlotView);
         }
 
-        private void CreateSlots() {
-            for (int i = 0; i < MaxSlots; i++) {
-                GameObject slotObj = new GameObject($"Slot_{i}", typeof(RectTransform));
+        private void CreateSlots(IPlayer player) {
+            foreach (var model in player.Battlefield) {
+                GameObject slotObj = new GameObject($"Slot_{model.Index}", typeof(RectTransform));
                 slotObj.transform.SetParent(transform, false);
 
                 var slot = slotObj.AddComponent<BattlefieldSlot>();
-                slot.Initialize(defaultColor, validDropColor, invalidDropColor, hoverColor);
+                slot.Initialize(model, defaultColor, validDropColor, invalidDropColor, hoverColor);
 
                 // Pass the GameReferences to the slot
                 if (GameReferences != null) {
@@ -54,18 +58,15 @@ namespace SlayTheClone {
 
             // Now initialize Battlefield specific things
             InitializeManagers(player); // Pass player
-            CreateSlots();
+            CreateSlots(player);
             Log($"BattlefieldUI initialized for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Initialization);
-
-            player.InitializeBattlefield(battlefieldSlots);
-            Log($"Player Battlefield initialized for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Initialization);
 
             // Update UI based on initial state
             UpdateUI(Player);
         }
 
         private void UpdateSlotPositions() {
-            float totalWidth = (MaxSlots - 1) * settings.spacing;
+            float totalWidth = (battlefieldSlots.Count - 1) * settings.spacing;
             float startX = -totalWidth / 2;
 
             for (int i = 0; i < battlefieldSlots.Count; i++) {
@@ -118,28 +119,25 @@ namespace SlayTheClone {
             }
 
             Log($"Adding PlayCardAction for {cardToPlay.Name} on slot (TargetID: {targetSlot.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
-            GameManager.ActionsQueue.AddAction(new PlayCardAction(cardToPlay, caster, targetSlot));
+            GameManager.ActionsQueue.AddAction(new PlayCardAction(cardToPlay, caster, targetSlot.Model));
         }
 
-        private void HandleCardFromBattlefield(CardController card, ITarget target) {
-            if (target != null) {
-                if (card.IsPlayer1Card() != Player.IsPlayer1) {
-                    GameManager.CombatHandler.HandleCreatureCombat(card, target);
-                }
-                else {
-                    HandleCreatureMove(card, target);
-                }
+        private void HandleCardFromBattlefield(CardController card, BattlefieldSlot targetSlot) {
+            var creature = card.GetLinkedCreature();
+            if (creature == null || targetSlot == null) return;
+
+            if (creature.Owner != Player) {
+                GameManager.CombatHandler.HandleCreatureCombat(creature, targetSlot.Model);
+            }
+            else {
+                HandleCreatureMove(creature, targetSlot.Model);
             }
         }
 
-        private void HandleCreatureMove(CardController card, ITarget targetSlot) {
-            var creature = card.GetLinkedCreature();
-            if (creature == null) return;
-
-            var sourceSlot = battlefieldSlots.FirstOrDefault(s => s.OccupyingCard == card);
-            if (sourceSlot != null && sourceSlot != (BattlefieldSlot)targetSlot) {
-                var moveAction = new MoveCreatureAction(creature, (ITarget)sourceSlot, targetSlot, Player);
-                GameManager.ActionsQueue.AddAction(moveAction);
+        private void HandleCreatureMove(ICreature creature, BoardSlot targetSlot) {
+            var sourceSlot = creature.Slot;
+            if (sourceSlot != null && sourceSlot != targetSlot) {
+                GameManager.ActionsQueue.AddAction(new MoveCreatureAction(creature, sourceSlot, targetSlot, Player));
             }
         }
 
@@ -161,31 +159,64 @@ namespace SlayTheClone {
         #endregion
 
         #region UI Updates
+        // Makes the slots show what the board model holds: cards follow their creatures between slots,
+        // creatures new to the board get a card, and cards whose creature left play their exit
         public override void UpdateUI(IPlayer player) {
             if (!IsInitialized || Player == null) return;
             if (player != Player) return;
 
-            // Clear orphaned cards (cards leaving play destroy themselves once their exit animation ends)
-            foreach (var card in cards.ToList()) {
-                bool existsInSlot = player.Battlefield.Any(s => s.OccupyingCard == card);
-                if (!existsInSlot) {
+            var creaturesOnBoard = new HashSet<ICreature>(battlefieldSlots.Select(s => s.OccupyingCreature).Where(c => c != null));
+            var reusableCards = new Dictionary<ICreature, CardController>();
+            foreach (var slot in battlefieldSlots) {
+                var card = slot.ReleaseCard();
+                if (card == null) continue;
+
+                var creature = card.GetLinkedCreature();
+                if (creature != null && creaturesOnBoard.Contains(creature)) {
+                    reusableCards[creature] = card;
+                }
+                else {
                     RemoveCard(card);
-                    if (card != null && !card.IsLeavingPlay) Destroy(card.gameObject);
+                    card.PlayLeavePlayAnimation(); // Fades out, then destroys itself
                 }
             }
 
-            // Add and position cards from slots
-            foreach (var slot in player.Battlefield) {
-                if (slot.OccupyingCard != null) {
-                    // Add card to the list if not already present
-                    if (!cards.Contains(slot.OccupyingCard)) {
-                        AddCard(slot.OccupyingCard);
-                    }
-                    slot.SnapToSlot(slot.OccupyingCard);
+            foreach (var slot in battlefieldSlots) {
+                var creature = slot.OccupyingCreature;
+                if (creature == null) continue;
+
+                if (!reusableCards.TryGetValue(creature, out var card)) {
+                    card = CreateCreatureCard(creature, slot);
+                    if (card == null) continue;
+                    AddCard(card);
                 }
+                slot.ShowCard(card);
+            }
+
+            // Anything else still tracked isn't shown anywhere (cards leaving play destroy themselves)
+            foreach (var card in cards.ToList()) {
+                if (battlefieldSlots.Any(s => s.OccupyingCard == card)) continue;
+                RemoveCard(card);
+                if (card != null && !card.IsLeavingPlay) Destroy(card.gameObject);
             }
 
             UpdateLayout();
+        }
+
+        private CardController CreateCreatureCard(ICreature creature, BattlefieldSlot slot) {
+            var owner = creature.Owner ?? Player;
+            CardData cardData = CardFactory.FindCardData(creature, owner);
+            if (cardData == null) {
+                // Tokens and other special summons have no definition to show
+                LogWarning($"Could not find original CardData for {creature.Name} (ID: {creature.CardId}). Creating temp data.", LogTag.Cards);
+                cardData = CardFactory.CreateFallbackData(creature);
+            }
+
+            var card = CardFactory.CreateCardController(creature, cardData, owner, slot.transform, GameMediator, GameReferences, GameManager);
+            if (card == null) {
+                LogError($"BattlefieldUI: Failed to create card for {creature.Name}", LogTag.UI | LogTag.Creatures);
+            }
+            return card;
         }
 
         protected override void UpdateLayout() {
@@ -234,8 +265,9 @@ namespace SlayTheClone {
                     continue;
                 }
 
-                if (!(card is ICreature) || !(target is BattlefieldSlot slot)) continue;
-                if (!battlefieldSlots.Contains(slot) || queuedGhosts.ContainsKey(slot)) continue;
+                if (!(card is ICreature) || !(target is BoardSlot model) || model.Owner != Player) continue;
+                var slot = battlefieldSlots[model.Index];
+                if (queuedGhosts.ContainsKey(slot)) continue;
 
                 var data = CardFactory.FindCardData(card, Player);
                 if (data == null) continue;
@@ -327,18 +359,22 @@ namespace SlayTheClone {
         }
         #endregion
 
-        public CardController GetCardController(ICreature creature) => FindOwnSlot(creature)?.OccupyingCard;
-
-        // Looks on this board, then on the opponent's
-        public BattlefieldSlot GetSlot(ICreature creature) => FindOwnSlot(creature) ?? GetOpponentBattlefield().FindOwnSlot(creature);
-
-        private BattlefieldSlot FindOwnSlot(ICreature creature) => battlefieldSlots.FirstOrDefault(s => s.OccupyingCreature == creature);
+        // The card shown for the creature on this board, if any
+        public CardController GetCardController(ICreature creature) {
+            if (creature == null) return null;
+            return battlefieldSlots.FirstOrDefault(s => s.OccupyingCard != null && s.OccupyingCard.GetLinkedCreature() == creature)?.OccupyingCard;
+        }
 
         public BattlefieldSlot GetSlot(CardController card) {
             return battlefieldSlots.FirstOrDefault(s => s.OccupyingCard == card);
         }
 
-        private BattlefieldUI GetOpponentBattlefield() => GameReferences.GetPlayerReferences(Player.Opponent).BattlefieldUI;
+        // The view of a board slot on either battlefield
+        public BattlefieldSlot FindSlotView(BoardSlot model) {
+            if (model == null) return null;
+            if (model.Owner == Player) return battlefieldSlots[model.Index];
+            return GameReferences.GetPlayerReferences(model.Owner)?.BattlefieldUI?.FindSlotView(model);
+        }
 
         protected override void OnCardDropped(CardController card) {
             Log($"Card dropped from Battlefield: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);

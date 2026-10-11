@@ -17,7 +17,7 @@ namespace SlayTheClone {
         int BaseAttack { get; }
         int BaseHealth { get; }
         int BaseSpeed { get; }
-        BattlefieldSlot Slot { get; set; }
+        BoardSlot Slot { get; set; }
         // Only changes health; death and its consequences are handled by the caller
         int TakeHealthDamage(int healthDamage); // Returns actual damage dealt
         void ModifyArmorPool(int amount);
@@ -57,7 +57,7 @@ namespace SlayTheClone {
         public int Health => currentHealth;
 
         public IPlayer Owner { get; private set; }
-        public BattlefieldSlot Slot { get; set; }
+        public BoardSlot Slot { get; set; }
 
         private IGameMediator gameMediator;
 

@@ -12,7 +12,7 @@ namespace SlayTheClone {
             }
 
             // Either slot may be empty: swapping with an empty slot moves the creature
-            BattlefieldSlot.SwapCards(fromSlot, toSlot);
+            BoardSlot.Swap(fromSlot, toSlot);
             NotifyBattlefieldsChanged(context, fromSlot.Owner, toSlot.Owner);
 
             Log($"Executed SwapCreaturesAction via Executor: {swapAction.GetCreature1()?.Name ?? "Slot"} swapped with {swapAction.GetCreature2()?.Name ?? "Slot"}", LogTag.Actions | LogTag.Creatures);

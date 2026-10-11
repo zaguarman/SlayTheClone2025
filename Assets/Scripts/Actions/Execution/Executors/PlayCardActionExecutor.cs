@@ -31,7 +31,7 @@ namespace SlayTheClone {
             }
             else if (card is ICreature creature) {
                 // A creature joins the battlefield it was dropped on, under that battlefield's player
-                var summoner = (target as BattlefieldSlot)?.Owner ?? owner;
+                var summoner = (target as BoardSlot)?.Owner ?? owner;
                 actionsQueue.AddAction(new SummonCreatureAction(creature, summoner, target));
             }
 

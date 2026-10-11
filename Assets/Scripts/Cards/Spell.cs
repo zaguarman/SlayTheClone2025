@@ -105,7 +105,7 @@ namespace SlayTheClone {
         // otherwise the player who owns the slot. Returns null when the action applies to neither (the spell does nothing).
         private static ITarget ResolveTarget(ITarget target, ActionType actionType) {
             switch (target) {
-                case BattlefieldSlot slot:
+                case BoardSlot slot:
                     if (slot.OccupyingCreature != null && CanAffectCreatures(actionType)) return slot.OccupyingCreature;
                     return CanAffectPlayers(actionType) ? slot.Owner : null;
                 case ICreature:

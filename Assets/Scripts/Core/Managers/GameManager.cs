@@ -78,11 +78,11 @@ namespace SlayTheClone {
     }
 
     public interface IBattlefieldCombatHandler {
-        void HandleCreatureCombat(CardController attackingCard, ITarget targetSlot);
+        void HandleCreatureCombat(ICreature attacker, BoardSlot targetSlot);
         void ResetAttackingCreatures();
         bool HasCreatureAttacked(ITarget creature);
         bool CancelAttack(ICreature attacker);
-        BattlefieldSlot GetTargetedSlot(ITarget attacker);
+        BoardSlot GetTargetedSlot(ITarget attacker);
     }
 
     public class GameManager : MonoBehaviour, IGameManager {
@@ -173,25 +173,7 @@ namespace SlayTheClone {
             // Create WeatherSystem first (needed for ActionsQueue)
             WeatherSystem = new WeatherSystem(gameMediator);
 
-            // One executor per action type, keyed by the type it runs
-            var executors = new IActionExecutor[] {
-                new DrawCardsActionExecutor(),
-                new ChangeWeatherActionExecutor(),
-                new SummonCreatureActionExecutor(),
-                new PlayCardActionExecutor(),
-                new PlaySpellActionExecutor(),
-                new BattlefieldCombatActionExecutor(),
-                new ModifyActionExecutor(),
-                new ApplyStatusEffectActionExecutor(),
-                new MoveCreatureActionExecutor(),
-                new DamageCreatureActionExecutor(),
-                new ModifyArmorActionExecutor(),
-                new DamagePlayerActionExecutor(),
-                new DiscardHandActionExecutor(),
-                new HealCreatureActionExecutor(),
-                new HealPlayerActionExecutor(),
-                new SwapCreaturesActionExecutor()
-            }.ToDictionary(executor => executor.ActionType);
+            var executors = ActionExecutors.CreateRegistry();
 
             // Create ModifierManager first (no longer needs ActionsQueue)
             ModifierFactory = modifierFactory;

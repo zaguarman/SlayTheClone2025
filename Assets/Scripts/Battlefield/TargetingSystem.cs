@@ -46,7 +46,7 @@ namespace SlayTheClone {
                 .Select(s => s.OccupyingCreature);
         }
 
-        private static ICreature CreatureAt(List<BattlefieldSlot> battlefield, int index) {
+        private static ICreature CreatureAt(IReadOnlyList<BoardSlot> battlefield, int index) {
             var slot = battlefield[index];
             return slot.IsOccupied() ? slot.OccupyingCreature : null;
         }
@@ -115,8 +115,7 @@ namespace SlayTheClone {
                 if (owner == null) return adjacentTargets;
 
                 // Get the index of the primary target's slot
-                var slotIndex = owner.Battlefield.IndexOf(creature.Slot);
-                if (slotIndex == -1) return adjacentTargets;
+                var slotIndex = creature.Slot.Index;
 
                 foreach (int index in new[] { slotIndex - 1, slotIndex + 1 }) {
                     if (index < 0 || index >= owner.Battlefield.Count) continue;
@@ -161,8 +160,7 @@ namespace SlayTheClone {
                 if (owner == null) return chainedTargets;
 
                 // Get the index of the primary target's slot
-                var slotIndex = owner.Battlefield.IndexOf(creature.Slot);
-                if (slotIndex == -1) return chainedTargets;
+                var slotIndex = creature.Slot.Index;
 
                 // Randomly pick a side to go first; the other side fills the chain if needed
                 int firstStep = random.Next(2) == 0 ? 1 : -1;
@@ -174,7 +172,7 @@ namespace SlayTheClone {
         }
 
         // Walks away from a slot, skipping empty slots, until the list holds maxCount targets
-        private static void AddCreaturesInDirection(List<BattlefieldSlot> battlefield, int fromIndex, int step, List<ITarget> targets, int maxCount) {
+        private static void AddCreaturesInDirection(IReadOnlyList<BoardSlot> battlefield, int fromIndex, int step, List<ITarget> targets, int maxCount) {
             for (int i = fromIndex + step; i >= 0 && i < battlefield.Count && targets.Count < maxCount; i += step) {
                 var creature = CreatureAt(battlefield, i);
                 if (creature != null) targets.Add(creature);
@@ -198,8 +196,7 @@ namespace SlayTheClone {
             }
 
             var ownerBattlefield = creature.Owner.Battlefield;
-            var slotIndex = ownerBattlefield.IndexOf(creature.Slot);
-            if (slotIndex == -1) return chainTargets; // Creature not found on battlefield?
+            var slotIndex = creature.Slot.Index;
 
             // Count potential chain targets to the left and right
             int leftCount = 0;

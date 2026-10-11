@@ -16,28 +16,24 @@ namespace SlayTheClone {
             if (healthText == null) {
                 LogWarning($"Health text reference missing for {player.Name} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
             }
-            else {
-                // The player updates its own health text
-                player.SetHealthText(healthText);
-                Log($"Health text set for {player.Name} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
-            }
+
+            ShowHealth(player.Health);
 
             Log($"PlayerUI initialized for {player.Name} (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Initialization);
         }
 
         protected override void RegisterEvents() {
-            GameMediator?.AddGameStateChangedListener(OnGameStateChanged);
+            if (Player == null) return;
+            Player.HealthChanged -= ShowHealth; // Never subscribe twice
+            Player.HealthChanged += ShowHealth;
         }
 
         protected override void UnregisterEvents() {
-            GameMediator?.RemoveGameStateChangedListener(OnGameStateChanged);
+            if (Player != null) Player.HealthChanged -= ShowHealth;
         }
 
-        // HandUI refreshes itself from hand/queue events; rebuilding it here on every state change destroyed and
-        // recreated all hand cards many times per action
-        private void OnGameStateChanged() {
-            if (!IsInitialized || Player == null) return;
-            Player.UpdateHealthUI();
+        private void ShowHealth(int health) {
+            if (healthText != null) healthText.text = $"Health: {health}";
         }
 
         public override void UpdateUI(IPlayer player) {
@@ -49,7 +45,7 @@ namespace SlayTheClone {
             }
             handUI?.UpdateUI(player);
 
-            player.UpdateHealthUI();
+            ShowHealth(player.Health);
         }
     }
 }

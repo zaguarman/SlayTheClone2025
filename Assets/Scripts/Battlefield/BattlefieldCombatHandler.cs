@@ -5,23 +5,21 @@ namespace SlayTheClone {
     public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
         private readonly IGameManager gameManager; // Use interface
         private HashSet<string> attackingCreatureIds = new HashSet<string>(); // Store IDs
-        private readonly Dictionary<string, BattlefieldSlot> targetedSlotsById = new Dictionary<string, BattlefieldSlot>(); // Store by ID
+        private readonly Dictionary<string, BoardSlot> targetedSlotsById = new Dictionary<string, BoardSlot>(); // Store by ID
 
         // Constructor takes IGameManager
         public BattlefieldCombatHandler(IGameManager gameManager) {
             this.gameManager = gameManager ?? throw new System.ArgumentNullException(nameof(gameManager));
         }
 
-        public void HandleCreatureCombat(CardController attackingCard, ITarget targetSlot) {
-            var attackerCreature = attackingCard?.GetLinkedCreature();
-
+        public void HandleCreatureCombat(ICreature attackerCreature, BoardSlot targetSlot) {
             if (attackerCreature == null) {
                 LogWarning("Attacker creature is null", LogTag.Creatures | LogTag.Combat);
                 return;
             }
 
-            if (targetSlot == null || !(targetSlot is BattlefieldSlot targetBattlefieldSlot)) {
-                LogWarning("Target slot is null or not a BattlefieldSlot", LogTag.Creatures | LogTag.Combat);
+            if (targetSlot == null) {
+                LogWarning("Target slot is null", LogTag.Creatures | LogTag.Combat);
                 return;
             }
 
@@ -35,7 +33,7 @@ namespace SlayTheClone {
             }
 
             // Check if the target is valid (basic check, can be expanded)
-            bool isValidTarget = targetBattlefieldSlot != null; // Basic check
+            bool isValidTarget = targetSlot != null; // Basic check
 
             string attackerId = attackerCreature.TargetId;
             bool hasAttacked = HasCreatureAttacked(attackerCreature); // Use interface method
@@ -43,7 +41,7 @@ namespace SlayTheClone {
             if (hasAttacked) {
                 // If the creature has already attacked, update or cancel the attack
                 if (isValidTarget) {
-                    UpdateAttackAction(attackerCreature, targetBattlefieldSlot);
+                    UpdateAttackAction(attackerCreature, targetSlot);
                 }
                 else {
                     CancelAttack(attackerCreature);
@@ -52,8 +50,8 @@ namespace SlayTheClone {
             else {
                 // First time attacking, register if target is valid
                 if (isValidTarget) {
-                    RegisterAttack(attackerCreature, targetBattlefieldSlot);
-                    QueueCombatAction(attackerCreature, targetBattlefieldSlot);
+                    RegisterAttack(attackerCreature, targetSlot);
+                    QueueCombatAction(attackerCreature, targetSlot);
                 }
                 else {
                     Log($"Invalid target selected for {attackerCreature.Name} (TargetID: {attackerId.ToUpper()})", LogTag.Creatures | LogTag.Combat);
@@ -61,7 +59,7 @@ namespace SlayTheClone {
             }
         }
 
-        private void UpdateAttackAction(ICreature attackerCreature, BattlefieldSlot newTargetSlot) {
+        private void UpdateAttackAction(ICreature attackerCreature, BoardSlot newTargetSlot) {
             string attackerId = attackerCreature.TargetId;
 
             // Log update intent
@@ -94,13 +92,13 @@ namespace SlayTheClone {
             return true;
         }
 
-        private void RegisterAttack(ICreature attacker, BattlefieldSlot targetSlot) {
+        private void RegisterAttack(ICreature attacker, BoardSlot targetSlot) {
             string attackerId = attacker.TargetId;
             attackingCreatureIds.Add(attackerId);
             targetedSlotsById[attackerId] = targetSlot;
         }
 
-        private void QueueCombatAction(ICreature attackerCreature, ITarget targetSlot) {
+        private void QueueCombatAction(ICreature attackerCreature, BoardSlot targetSlot) {
             // Use injected ActionsQueue via IGameManager
             gameManager.ActionsQueue?.AddAction(new BattlefieldCombatAction(attackerCreature, targetSlot));
             // Mediator notification happens via ActionsQueue events
@@ -118,7 +116,7 @@ namespace SlayTheClone {
         }
 
         // Updated to use ID
-        public BattlefieldSlot GetTargetedSlot(ITarget attacker) {
+        public BoardSlot GetTargetedSlot(ITarget attacker) {
             if (attacker == null) return null;
             return targetedSlotsById.TryGetValue(attacker.TargetId, out var slot) ? slot : null;
         }

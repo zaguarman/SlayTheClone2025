@@ -5,13 +5,11 @@ namespace SlayTheClone {
         protected override void ExecuteAction(MoveCreatureAction moveAction, ActionExecutionContext context) {
             var creature = moveAction.GetCreature();
             var player = moveAction.GetPlayer();
+            var fromSlot = moveAction.GetFromSlot();
+            var toSlot = moveAction.GetToSlot();
 
-            if (creature == null || moveAction.GetFromSlot() == null || moveAction.GetToSlot() == null || player == null) {
+            if (creature == null || fromSlot == null || toSlot == null || player == null) {
                 LogError("MoveCreatureActionExecutor: One or more required components are null", LogTag.Actions);
-                return;
-            }
-            if (!(moveAction.GetFromSlot() is BattlefieldSlot fromSlot) || !(moveAction.GetToSlot() is BattlefieldSlot toSlot)) {
-                LogError("MoveCreatureActionExecutor: Invalid slot types", LogTag.Actions);
                 return;
             }
 
@@ -23,7 +21,7 @@ namespace SlayTheClone {
 
             // Moving onto an occupied slot swaps the two creatures
             bool isSwap = toSlot.IsOccupied();
-            BattlefieldSlot.SwapCards(fromSlot, toSlot);
+            BoardSlot.Swap(fromSlot, toSlot);
             if (isSwap) {
                 Log($"Executor: Swapped {creature.Name} with {fromSlot.OccupyingCreature?.Name ?? "Unknown"}", LogTag.Actions | LogTag.Creatures);
             }

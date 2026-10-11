@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine.Events;
 using static SlayTheClone.DebugLogger;
 
@@ -13,20 +12,19 @@ namespace SlayTheClone {
         bool IsPlayer1 { get; } // Property to identify if this is Player 1
         IPlayer Opponent { get; set; }
         List<ICard> Hand { get; }
-        List<BattlefieldSlot> Battlefield { get; }
+        IReadOnlyList<BoardSlot> Battlefield { get; }
         IDeck Deck { get; }
         int CardsToDraw { get; set; }
         int Health { get; }
         void AddToHand(ICard card);
         void RemoveFromHand(ICard card);
-        void RemoveFromBattlefield(ICard creature, bool destroyCard = true);
+        void RemoveFromBattlefield(ICard creature);
         void DiscardCard(ICard card);
         void DiscardHand();
         PlayerDamagedUnityEvent OnDamaged { get; }
-        void InitializeBattlefield(List<BattlefieldSlot> battlefieldSlots);
+        // Raised with the new value whenever health changes, for whatever displays it
+        event Action<int> HealthChanged;
         void DrawCard();
-        void UpdateHealthUI();
-        void SetHealthText(TextMeshProUGUI healthText);
         void SetHealth(int newHealth);
         // Expose GameMediator for Creature to access
         IGameMediator GameMediator { get; }
@@ -49,6 +47,7 @@ namespace SlayTheClone {
 
     public class Player : Entity, IPlayer {
         public const int MaxHandSize = 10;
+        public const int BattlefieldSize = 5;
 
         public int Health { get; private set; } = 20;
         public IPlayer Opponent { get; set; }
@@ -56,15 +55,15 @@ namespace SlayTheClone {
         public IDeck Deck { get; private set; }
         public int CardsToDraw { get; set; } = 2; // Default to drawing 2 cards
 
-        public List<BattlefieldSlot> Battlefield { get; private set; }
+        public IReadOnlyList<BoardSlot> Battlefield { get; }
         public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
+        public event Action<int> HealthChanged;
 
         private readonly bool isPlayer1; // Add field to store identity
 
         private IGameMediator gameMediator; // Changed to interface
         private ICardDealingService cardDealingService; // Added reference
         private IGameManager gameManager; // Added reference
-        private TextMeshProUGUI healthText;
 
         // Expose GameMediator for Creature to access
         public IGameMediator GameMediator => gameMediator;
@@ -75,7 +74,7 @@ namespace SlayTheClone {
         // Modify constructor to accept identity
         public Player(string name = "Player", bool isPlayer1 = false) : base(name) {
             Hand = new List<ICard>();
-            Battlefield = new List<BattlefieldSlot>();
+            Battlefield = Enumerable.Range(0, BattlefieldSize).Select(i => new BoardSlot(this, i)).ToList();
             Deck = new Deck();
 
             OnDamaged.AddListener(OnPlayerDamaged);
@@ -98,42 +97,14 @@ namespace SlayTheClone {
             // Note: OnDamaged listener is already added in constructor
         }
 
-        public void SetHealthText(TextMeshProUGUI healthText) {
-            this.healthText = healthText;
-            UpdateHealthUI(); // Update UI immediately after setting the reference
-        }
-
         private void OnPlayerDamaged(int damage) {
-            // This is called whenever this player takes damage
-            // Update our UI here
-            UpdateHealthUI();
+            HealthChanged?.Invoke(Health);
             Log($"{Name} took {damage} damage, health: {Health}", LogTag.Players | LogTag.Combat);
-        }
-
-        public void UpdateHealthUI() {
-            if (healthText != null) {
-                healthText.text = $"Health: {Health}";
-            }
-        }
-
-        public void InitializeBattlefield(List<BattlefieldSlot> slots) {
-            if (slots == null || slots.Count == 0) {
-                LogError("Cannot initialize battlefield with null or empty slots", LogTag.Initialization);
-                return;
-            }
-            Battlefield.Clear();
-            Battlefield.AddRange(slots);
-            foreach (var slot in slots) {
-                slot.Owner = this;
-            }
-            Log($"Initialized battlefield with {slots.Count} slots", LogTag.Initialization);
         }
 
         public void SetHealth(int newHealth) {
             Health = Math.Min(newHealth, 99);
-
-            // Update UI
-            UpdateHealthUI();
+            HealthChanged?.Invoke(Health);
         }
 
         /// <summary>
@@ -159,7 +130,7 @@ namespace SlayTheClone {
                 // as the mediator should be subscribed via RegisterPlayer.
             }
 
-            // Update UI is handled by the OnDamaged listener calling UpdateHealthUI
+            // HealthChanged is raised by the OnDamaged listener
         }
 
         /// <summary>
@@ -186,8 +157,7 @@ namespace SlayTheClone {
             Log($"{Name} healed for {actualHealAmount} (requested {amount}). Health: {previousHealth} -> {Health}/{MaxHealth}",
                 LogTag.Players | LogTag.Effects);
 
-            // Update UI immediately after health changes
-            UpdateHealthUI();
+            HealthChanged?.Invoke(Health);
 
             // Note: Notification to GameMediator is handled by the HealPlayerActionExecutor
 
@@ -260,14 +230,15 @@ namespace SlayTheClone {
             }
         }
 
-        public void RemoveFromBattlefield(ICard card, bool destroyCard = true) {
+        public void RemoveFromBattlefield(ICard card) {
             // Only creatures occupy slots; without this check a spell (null as ICreature) matched the first empty slot
             if (card is not ICreature creature) return;
 
             var slot = Battlefield.FirstOrDefault(s => s.OccupyingCreature == creature);
             if (slot != null) {
-                // Only frees the slot; DiscardCard is responsible for sending the card to the discard pile
-                slot.ClearSlot(destroyCard);
+                // Only frees the slot; DiscardCard is responsible for sending the card to the discard pile.
+                // The battlefield view sees the creature leave and plays its exit.
+                slot.Clear();
                 Log($"Removed creature {creature.Name} from battlefield", LogTag.Creatures);
                 gameMediator?.NotifyBattlefieldStateChanged(this);
             }

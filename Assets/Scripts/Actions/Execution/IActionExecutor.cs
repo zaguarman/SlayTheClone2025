@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
@@ -37,6 +39,30 @@ namespace SlayTheClone {
         protected static void NotifyBattlefieldsChanged(ActionExecutionContext context, IPlayer firstOwner, IPlayer secondOwner) {
             if (firstOwner != null) context.GameMediator.NotifyBattlefieldStateChanged(firstOwner);
             if (secondOwner != null && secondOwner != firstOwner) context.GameMediator.NotifyBattlefieldStateChanged(secondOwner);
+        }
+    }
+
+    public static class ActionExecutors {
+        /// <summary>One executor per action type, keyed by the type it runs.</summary>
+        public static Dictionary<Type, IActionExecutor> CreateRegistry() {
+            return new IActionExecutor[] {
+                new DrawCardsActionExecutor(),
+                new ChangeWeatherActionExecutor(),
+                new SummonCreatureActionExecutor(),
+                new PlayCardActionExecutor(),
+                new PlaySpellActionExecutor(),
+                new BattlefieldCombatActionExecutor(),
+                new ModifyActionExecutor(),
+                new ApplyStatusEffectActionExecutor(),
+                new MoveCreatureActionExecutor(),
+                new DamageCreatureActionExecutor(),
+                new ModifyArmorActionExecutor(),
+                new DamagePlayerActionExecutor(),
+                new DiscardHandActionExecutor(),
+                new HealCreatureActionExecutor(),
+                new HealPlayerActionExecutor(),
+                new SwapCreaturesActionExecutor()
+            }.ToDictionary(executor => executor.ActionType);
         }
     }
 }

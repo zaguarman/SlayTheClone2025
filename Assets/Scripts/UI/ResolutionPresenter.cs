@@ -133,7 +133,7 @@ namespace SlayTheClone {
         private void PlayAttack(BattlefieldCombatAction attack) {
             var attacker = attack.GetAttacker();
             var attackerCard = FindCard(attacker);
-            var targetSlot = attack.GetTargetSlot();
+            var targetSlot = FindSlotView(attack.GetTargetSlot());
             if (attackerCard == null || targetSlot == null || attacker.IsDead) return;
             if (!TryGetOverlayPoint(attackerCard.transform, out var from) || !TryGetOverlayPoint(targetSlot.transform, out var to)) return;
 
@@ -291,6 +291,11 @@ namespace SlayTheClone {
         #endregion
 
         #region Visual helpers
+        private BattlefieldSlot FindSlotView(BoardSlot slot) {
+            if (slot?.Owner == null) return null;
+            return references.GetPlayerReferences(slot.Owner).BattlefieldUI?.FindSlotView(slot);
+        }
+
         private CardController FindCard(ICreature creature) {
             if (creature == null) return null;
             return references.GetPlayer1BattlefieldUI()?.GetCardController(creature)

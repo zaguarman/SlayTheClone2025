@@ -498,7 +498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 697457056e93ef943a4230cef84e817d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInitialized:
+  OnInitialized:
     m_PersistentCalls:
       m_Calls: []
   turnText: {fileID: 0}
@@ -2475,12 +2475,12 @@ MonoBehaviour:
   discardViewButton: {fileID: 1911068244}
   deckViewTitleText: {fileID: 1976086030}
   tooltip: {fileID: 0}
-  _player1References:
+  player1References:
     playerUI: {fileID: 1123533886}
     healthText: {fileID: 1544506893}
     handUI: {fileID: 1587845791}
     battlefieldUI: {fileID: 1445917820}
-  _player2References:
+  player2References:
     playerUI: {fileID: 1736996917}
     healthText: {fileID: 54383538}
     handUI: {fileID: 1707401508}
@@ -2799,7 +2799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28e210f160816e4db32fe504536cf22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInitialized:
+  OnInitialized:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1142591317
@@ -3010,7 +3010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 046776c3964b5394c974f3d601a346f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInitialized:
+  OnInitialized:
     m_PersistentCalls:
       m_Calls: []
   settings:
@@ -3121,7 +3121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 046776c3964b5394c974f3d601a346f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInitialized:
+  OnInitialized:
     m_PersistentCalls:
       m_Calls: []
   settings:
@@ -3340,7 +3340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a04b367baec4a6a4e9b03763698cc0ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInitialized:
+  OnInitialized:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &1458677301
@@ -3554,7 +3554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 363b628a9519fa8489a28e6c6223e373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInitialized:
+  OnInitialized:
     m_PersistentCalls:
       m_Calls: []
   settings:
@@ -3816,7 +3816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 363b628a9519fa8489a28e6c6223e373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInitialized:
+  OnInitialized:
     m_PersistentCalls:
       m_Calls: []
   settings:
@@ -3912,7 +3912,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28e210f160816e4db32fe504536cf22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onInitialized:
+  OnInitialized:
     m_PersistentCalls:
       m_Calls: []
 --- !u!224 &1757770558 stripped
