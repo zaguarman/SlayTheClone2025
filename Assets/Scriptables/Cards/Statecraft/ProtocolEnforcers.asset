@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: ProtocolEnforcers
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 6c227d7e-2aef-4e4d-831d-1891f0ab0bea
+  cardName: Protocol Enforcers
+  description: Please stand behind the line. Which line? This line. Now that line.
+  cardType: 0
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: 5eed2e7c7329c6440afcdca54f2ec5d8, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 2
+    actions:
+    - actionType: 4
+      value: 1
+      targetType: 3
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: Keep Calm on friendly creatures each time it''s hit.'
+  attack: 2
+  health: 4
+  speed: 1
+  turnsUntilOperative: 1

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: MultimillionairePhilanthropist
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 621c8878-6269-42df-8952-be9a6b483465
+  cardName: Multimillionaire Philanthropist
+  description: Gave away 0.01% of his fortune. Wrote off 100% of it.
+  cardType: 0
+  faction: 4
+  artwork: {fileID: 3286163911610860551, guid: 098a446649925ab468198997fa0da5a8, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 0
+    actions:
+    - actionType: 6
+      value: 1
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 0
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+    - actionType: 2
+      value: 2
+      targetType: 0
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: a Contract. The enemy gets the gift now, you get the tax
+    break on a later Day.'
+  attack: 2
+  health: 5
+  speed: 1
+  turnsUntilOperative: 2

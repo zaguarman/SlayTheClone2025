@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: FootballHooligans
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: f1043eb7-e419-4ea5-b423-1d4a06174634
+  cardName: Football Hooligans
+  description: Lost the match. Won the street.
+  cardType: 0
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: 285c2e90ad5111a4390f55682aef3166, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 1
+    actions:
+    - actionType: 0
+      value: 1
+      targetType: 2
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: a riot that spreads to adjacent creatures each Dusk.'
+  attack: 3
+  health: 2
+  speed: 2
+  turnsUntilOperative: 0

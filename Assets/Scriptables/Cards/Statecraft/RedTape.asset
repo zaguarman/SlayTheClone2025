@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
   cardId: 03254d03-dcbc-4866-926a-3de9b533cfdc
   cardName: Red Tape
-  description: Your request is being processed. Please hold.
+  description: Your request is being processed. Please hold. Forever.
   cardType: 1
   faction: 2
   artwork: {fileID: 3286163911610860551, guid: cbed49b4d43ecb841b0d64035a6adfc2, type: 3}

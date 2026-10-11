@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Micromanager
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 90a79396-7451-4ba7-b931-29fa1fac4ce4
+  cardName: Micromanager
+  description: Per my last email. And the one before. And the meeting about the emails.
+  cardType: 0
+  faction: 4
+  artwork: {fileID: 3286163911610860551, guid: f301f9fd4d6addd418a1df58de343813, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 3
+    actions:
+    - actionType: 6
+      value: 1
+      targetType: 3
+      targetModifier: 4
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: gives a friendly Worker Coffeinated instead of a plain attack
+    buff.'
+  attack: 2
+  health: 3
+  speed: 1
+  turnsUntilOperative: 1

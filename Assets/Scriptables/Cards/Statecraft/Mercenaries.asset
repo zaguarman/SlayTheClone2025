@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Mercenaries
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 206569cc-1506-4776-a74f-4fbb481893c6
+  cardName: Mercenaries
+  description: Loyal to whoever pays next.
+  cardType: 0
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: b07cb4eeb6a4b0e45b40ac8b3440e2b4, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 1
+    actions:
+    - actionType: 2
+      value: 1
+      targetType: 1
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: Recruitment bait. When it dies, the enemy may Recruit it
+    instead.'
+  attack: 4
+  health: 3
+  speed: 3
+  turnsUntilOperative: 1

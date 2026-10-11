@@ -33,7 +33,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: a Worker token created by other cards rather than drafted.
-    Fodder for Layoffs-style sacrifice costs.'
+    Fodder for sacrifice costs.'
   attack: 1
   health: 1
   speed: 3

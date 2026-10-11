@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Demagogue
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 245e0bcc-aeb1-4b71-960f-d31e950d49b2
+  cardName: Demagogue
+  description: Says what you think. Thinks what he's told.
+  cardType: 0
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: 6605e66bdc1a7634093f8de73dbdbe7a, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 0
+    actions:
+    - actionType: 6
+      value: 1
+      targetType: 3
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: Loaded Language. The buff only lasts while it stays on the
+    battlefield.'
+  attack: 2
+  health: 3
+  speed: 2
+  turnsUntilOperative: 1

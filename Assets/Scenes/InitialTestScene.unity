@@ -2463,8 +2463,8 @@ MonoBehaviour:
   cardPrefab: {fileID: 5464925446207512663, guid: 9164b01cda78bc545b913d180247e537, type: 3}
   player1CardColor: {r: 0.8, g: 0.9, b: 1, a: 1}
   player2CardColor: {r: 1, g: 0.8, b: 0.8, a: 1}
-  player1Deck: {fileID: 11400000, guid: f1eb9a7dc4855244690116d4eef6079a, type: 2}
-  player2Deck: {fileID: 11400000, guid: f1eb9a7dc4855244690116d4eef6079a, type: 2}
+  player1Deck: {fileID: 11400000, guid: 07aa431b8e0f1f8418ce31ee74c28f22, type: 2}
+  player2Deck: {fileID: 11400000, guid: e51066c80da8d2d4a813dbb0973d34e3, type: 2}
 --- !u!1 &995158398
 GameObject:
   m_ObjectHideFlags: 0

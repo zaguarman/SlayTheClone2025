@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Zeitgeist - Moods of Modern Life
   cards:
-  - {fileID: 11400000, guid: b27ef72333726764984a8a0ead89a867, type: 2}
-  - {fileID: 11400000, guid: b27ef72333726764984a8a0ead89a867, type: 2}
-  - {fileID: 11400000, guid: 2ce3750e52c34394fa8aeac94cca0c02, type: 2}
-  - {fileID: 11400000, guid: 5754a2a54d330a14c940dd635b8f3f0a, type: 2}
-  - {fileID: 11400000, guid: 5754a2a54d330a14c940dd635b8f3f0a, type: 2}
+  - {fileID: 11400000, guid: 0e6033fc5727d084c8d12457d775f0c2, type: 2}
+  - {fileID: 11400000, guid: 2a6b26d94bf0cc042948da6cabff0ec0, type: 2}
   - {fileID: 11400000, guid: abf1338d51ee38e4cb392755631df395, type: 2}
   - {fileID: 11400000, guid: 1354dc85d04090c438eaa57342c8da40, type: 2}
-  - {fileID: 11400000, guid: 1354dc85d04090c438eaa57342c8da40, type: 2}
-  - {fileID: 11400000, guid: 6a30fcc3d6832db439721d247bd42891, type: 2}
-  - {fileID: 11400000, guid: ae25c4611a829b14ab0ca4c34ef7afbc, type: 2}
+  - {fileID: 11400000, guid: 85079479fcdfae24c98f36d42238c74e, type: 2}
+  - {fileID: 11400000, guid: fce7a5f6eb6a25342804e4e2e1b082a9, type: 2}
+  - {fileID: 11400000, guid: cb57619ee4a28f049a2a8aedfbf22c54, type: 2}
+  - {fileID: 11400000, guid: e9645c92222d14c4d91f3b92d4663bc9, type: 2}
+  - {fileID: 11400000, guid: b6365f6bccdabc24693f4f591c0cecbb, type: 2}
+  - {fileID: 11400000, guid: 31609dab42e77df4f80649743431c21a, type: 2}
   - {fileID: 11400000, guid: 87790aac015e49d44a145d5838081313, type: 2}
-  - {fileID: 11400000, guid: 6f1848956245f88428a9c2d7fc1d86f6, type: 2}
-  - {fileID: 11400000, guid: 1309cba476c97bb4ba1ed94f3acef151, type: 2}
-  - {fileID: 11400000, guid: 2088f32f0edb47849a4f75d6dad4d5db, type: 2}
-  - {fileID: 11400000, guid: 08049b2de7039c24a9d6de518771379a, type: 2}
-  - {fileID: 11400000, guid: 57419f218543a294d911a7ef18978dfb, type: 2}
+  - {fileID: 11400000, guid: 912c75a7a317e164386de9d3b352da98, type: 2}
+  - {fileID: 11400000, guid: 7e468aeb21ac47d408932858d029bc05, type: 2}
+  - {fileID: 11400000, guid: 431fe523e651ea34d851194cde543871, type: 2}
+  - {fileID: 11400000, guid: 3b440b18a4ffb974a8ceb55af253254f, type: 2}
+  - {fileID: 11400000, guid: 17041c770f14ec64198ac60152117f6a, type: 2}

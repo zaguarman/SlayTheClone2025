@@ -16,9 +16,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 07aa431b8e0f1f8418ce31ee74c28f22, type: 2}
   - {fileID: 11400000, guid: e51066c80da8d2d4a813dbb0973d34e3, type: 2}
   - {fileID: 11400000, guid: df05ff4d8ab27d84cb2a2bc63757fc93, type: 2}
-  - {fileID: 11400000, guid: f1eb9a7dc4855244690116d4eef6079a, type: 2}
-  - {fileID: 11400000, guid: a4e908b424bc01f47a42eff4414ba490, type: 2}
-  - {fileID: 11400000, guid: 02cc4d72a1613fe4a9893246133d4161, type: 2}
   opponents:
   - name: Your Manager
     tagline: Has scheduled a quick sync about your attitude.
@@ -29,6 +26,3 @@ MonoBehaviour:
   - name: Your Group Chat
     tagline: 47 unread messages. All of them are about you.
     deck: {fileID: 11400000, guid: df05ff4d8ab27d84cb2a2bc63757fc93, type: 2}
-  - name: A Nature Documentary
-    tagline: Something with too many legs is narrating your demise.
-    deck: {fileID: 11400000, guid: a4e908b424bc01f47a42eff4414ba490, type: 2}

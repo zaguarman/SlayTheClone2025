@@ -15,19 +15,18 @@ MonoBehaviour:
   deckName: Corporate - Shareholder Value
   cards:
   - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
-  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
-  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
-  - {fileID: 11400000, guid: 5a34e2cccbb25f445a4ef5bd487fad84, type: 2}
-  - {fileID: 11400000, guid: 5a34e2cccbb25f445a4ef5bd487fad84, type: 2}
-  - {fileID: 11400000, guid: 6a8234ec6658def459a6df99f89f4872, type: 2}
-  - {fileID: 11400000, guid: 1eac69e0c5a154342b8ad3f95c524685, type: 2}
-  - {fileID: 11400000, guid: afb06b96bf366504a91d43bfc679ce1b, type: 2}
-  - {fileID: 11400000, guid: 6551ddf5e81de644ea12155bc8a6bbf6, type: 2}
-  - {fileID: 11400000, guid: 84a9f628aa1a8c84dbe3db7dde021e69, type: 2}
-  - {fileID: 11400000, guid: 515a86a88503bd54fa3fed274ef6c34d, type: 2}
-  - {fileID: 11400000, guid: 3587070818c50494a9414beed1a36dba, type: 2}
-  - {fileID: 11400000, guid: 96a37ca3d82e3594694273457d9dae6d, type: 2}
-  - {fileID: 11400000, guid: c916976f95fa6c840b7db3baba3668d1, type: 2}
-  - {fileID: 11400000, guid: 26c36f9346a053b44bb13e42845ded57, type: 2}
-  - {fileID: 11400000, guid: 2da8153114f922a4686c08018014a4b5, type: 2}
+  - {fileID: 11400000, guid: 8787b06cd5de4974989f7c3bcfcc9b2e, type: 2}
+  - {fileID: 11400000, guid: 885f0b3609889844ca95087ceb297672, type: 2}
+  - {fileID: 11400000, guid: 65207038c69d94840b68c43e9445d20d, type: 2}
+  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
+  - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
+  - {fileID: 11400000, guid: 136368a47c6c05e409600ed0c5d3b94e, type: 2}
+  - {fileID: 11400000, guid: e501123363d163a4092e2ad059abc29d, type: 2}
+  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
+  - {fileID: 11400000, guid: fee5f31226d0f6b49a15db74b37a2743, type: 2}
+  - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
+  - {fileID: 11400000, guid: 4d1b91992e3fa194f99ad5471cea7860, type: 2}
+  - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
+  - {fileID: 11400000, guid: 5b1b3dccdbb9e1348929cfb29cbfbc9d, type: 2}
+  - {fileID: 11400000, guid: 3ff8e29e684314f46bebf06737bc9000, type: 2}

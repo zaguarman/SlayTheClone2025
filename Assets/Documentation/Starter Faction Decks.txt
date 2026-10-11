@@ -10,20 +10,27 @@ CONTENTS
 
 1. PURPOSE
 
-• Three small monofaction decks (16–17 cards) that play today with the rules the engine already has: damage, healing, armor, draws, summoning from the deck, stat changes (ModifyStat), and the Paralyzed stun.
-• No faction statuses, Deployment Time tricks, Priority, Interference, Watchdogs, control changes or Locations are used.
+• Three monofaction decks, one per faction, 16 different cards each (10 creatures and 6 spells). No copies yet.
+• Every card name comes from the 'Brainstorm List' or the 'Refined Brainstorm List', picking the most cynical ones. Margin Call is the exception: a Corporate staple added on purpose.
+• Cards only use what the engine already does: damage, healing, armor, draws, summoning from the deck, stat changes (ModifyStat), and the Paralyzed stun.
+• No faction statuses, Deployment Time tricks, Priority, Interference, Watchdogs, control changes or Locations.
+• No card checks or rewards the presence of another faction (no "deals more damage to Corporate creatures").
 • Every card is a placeholder for a future GDD version. That version is stored on the card asset itself (the "Design Notes" field in the Inspector) and summarized below as "Future".
-• Source of truth: Assets/Scripts/Generators/FactionDecksGenerator.cs (menu: Cards > Generate Faction Decks). Change cards there and run it again: cards keep their ids and art.
-• Art: Tools/generate_card_art.py, then Cards > Assign Card Art. Corporate uses an office skyline with a stock line, Statecraft a propaganda poster, Zeitgeist a vaporwave sunset.
-• Decks: Assets/Scriptables/Decks/CorporateDeck, StatecraftDeck, ZeitgeistDeck. Assign one to Player 1 or Player 2 Deck on GameReferences to play it.
+
+Where things live
+    • Cards: Assets/Scripts/Generators/FactionDecksGenerator.cs (menu: Cards > Generate Faction Decks). Running it again updates the cards in place, keeps their ids and art, and deletes card assets no longer in the list.
+    • Art: Tools/generate_card_art.py, then Cards > Assign Card Art. Corporate uses an office skyline with a stock line, Statecraft a propaganda poster, Zeitgeist a vaporwave sunset.
+    • Decks: Assets/Scriptables/Decks/CorporateDeck, StatecraftDeck, ZeitgeistDeck.
+    • Main menu: Assets/Scriptables/Decks/DeckCatalog lists the decks you can pick and one opponent per deck. Play opens the match setup: your deck, your opponent, and their deck (they bring their own unless you swap it).
+    • Opening the game scene directly plays Corporate against Statecraft (the decks set on GameReferences).
 
 
 2. HOW THE PLACEHOLDERS MAP TO THE GDD
 
 Faction costs (Faction Compendium, "Pays With")
-    • Corporate (Capital, discard cards): Discarding as a cost doesn't exist yet. Its strongest spells give the enemy a card instead ("the enemy draws a card").
-    • Statecraft (Bureaucracy): Implemented as is. Its creatures take 1 turn longer to deploy than similar ones, and Curfew stuns your own side.
-    • Zeitgeist (Self-harm): Implemented as is. Damage to its own creatures and to you.
+    • Corporate (Capital, discard cards): Discarding as a cost doesn't exist yet. Some cards give the enemy a card or a buff instead (Day Trader, Hostile Takeover, Multimillionaire Philanthropist), or hurt you later (Charles Ponzi).
+    • Statecraft (Bureaucracy): Implemented as is. Its creatures take 1–2 turns to deploy, and Martial Law stuns your own side.
+    • Zeitgeist (Self-harm): Implemented as is. Damage to its own creatures and to you, and chaos that hits both sides.
 
 Faction holes (Faction Compendium, "Can't")
     • Corporate never heals. Statecraft never hides anything (nothing hides yet). Zeitgeist has no Intelligence (nothing reveals yet).
@@ -31,128 +38,140 @@ Faction holes (Faction Compendium, "Can't")
 Mechanic stand-ins
     • Red Tape (+Deployment Time) -> Stun 1 turn.
     • Priority strikes -> high Speed.
-    • Recruitment -> Summon random creatures from your own deck.
+    • Recruitment -> summon random creatures from your own deck.
     • Investments / Persistent Stat Modifications -> ModifyStat, which lasts while the creature stays on the battlefield.
-    • Worker tokens -> Unpaid Intern copies in the deck.
     • Burnout / Coffeinated -> "At the end of each turn, deal 1 damage to this."
-    • Strikes -> Stun each creature on both sides.
+    • Strikes -> stun every creature on both sides.
     • OnDeploymentTimeComplete -> "When this enters" on a creature with Deployment Time, which already fires when it becomes operative.
 
 
-3. CORPORATE: SHAREHOLDER VALUE (17 cards)
+3. CORPORATE: SHAREHOLDER VALUE (10 creatures, 6 spells)
 
-Play style: cheap workers that die usefully, card draw, and stat growth on whoever is lucky. Wins by out-drawing and out-growing.
+Play style: an engine that draws cards off everything, spends its own people as fuel and lets someone else pay the bill.
 
 Creatures (Attack/Health/Speed, Deployment Time)
-    • Unpaid Intern x3 (1/1/3, 0): When this dies, draw a card.
+    • Unpaid Intern (1/1/3, 0): When this dies, draw a card.
         • Future: a Worker token created by other cards; sacrifice fodder.
-    • Gig Courier x2 (3/1/3, 0): No ability.
-        • Future: leaves play on its own after 3 Days.
-    • Headhunter (1/2/2, 0): When this enters, summon a random creature from your deck.
-        • Future: summons an Unpaid Intern token.
-    • Middle Manager (2/3/1, 1): Each turn, a random friendly creature gets +1 Attack.
+    • Inhuman Resources (1/4/1, 1): Each turn, 1 damage to a random friendly creature and draw a card.
+        • Future: Layoffs as an additional cost.
+    • Micromanager (2/3/1, 1): Each turn, a random friendly creature gets +1 Attack.
         • Future: Coffeinated on a Worker.
-    • Venture Capitalist (1/4/1, 1): Each turn, a random friendly creature gets +1/+1.
-        • Future: an Investment that pays a Persistent buff on a later Day.
-    • Unicorn Startup (1/8/1, 2): Draws a card each turn, takes 1 damage each Dusk.
+    • Multilevel Marketing Seller (1/2/2, 0): When this enters, summon a random creature from your deck.
+        • Future: summons an Unpaid Intern token.
+    • Day Trader (3/1/3, 0): When this enters, draw a card. When this dies, the enemy draws a card.
+        • Future: an Investment that pays out or loses cards.
+    • Pluriemployed Hustler (2/3/2, 0): When this enters, draw 2. Takes 1 damage each Dusk.
+        • Future: Coffeinated, then Burnout.
+    • Unicorn (1/8/1, 2): Draws a card each turn, takes 1 damage each Dusk.
         • Future: Unicorn (Enterprise).
-    • Golden Parachute CEO (3/4/1, 2): When this dies, draw 2 cards.
-        • Future: also buffs a random friendly creature (failing upward).
+    • Multimillionaire Philanthropist (2/5/1, 2): When this enters, each enemy creature gets +1 Health and you draw 2.
+        • Future: a Contract; your tax break arrives on a later Day.
+    • Fat Tony (4/5/1, 2): When this enters, 2 damage to a random enemy creature.
+        • Future: An Offer You Can't Refuse (Recruitment).
+    • Charles Ponzi (1/3/2, 1): Draws a card each turn. When this dies, 3 damage to you.
+        • Future: pays draws until it collapses, then takes them back.
 
 Spells
-    • Layoffs: 2 damage to each friendly creature, draw 3.
-        • Future: sacrifice Workers as a cost, 1 draw per Worker.
-    • Team-Building Retreat: Each friendly creature gets +1 Attack.
-        • Future: Coffeinated, then Burnout.
-    • Trickle-Down Economics: A random friendly creature gets +3/+3.
-        • Future: always targets your strongest creature.
-    • Performance Review: Target creature gets -2 Attack.
-        • Future: Persistent.
-    • Paywall: 1 damage to each enemy creature.
-        • Future: Paywall tax on the enemy's Deployment Time 0 plays.
-    • Quarterly Earnings Call: Draw 2; the enemy draws 1.
-        • Future: discard a card as the cost instead.
+    • Margin Call: 2 damage to each creature (both sides), draw 2.
+        • Future: discard your hand as the cost; damage scales with it.
     • Hostile Takeover: 4 damage to any target; the enemy draws 1.
         • Future: discard 2 cards as the cost instead.
+    • Mass Layoffs: 2 damage to each friendly creature, draw 3.
+        • Future: sacrifice Workers as a cost, 1 draw per Worker.
+    • Team Building Exercise: Each friendly creature gets +1 Attack.
+        • Future: Coffeinated, then Burnout.
+    • Dead Cat Bounce: Target creature gets +3 Attack and -2 Health.
+        • Future: a Temporary buff followed by a Persistent loss.
+    • Taxpayer Funds Venture Capital Profits: Draw 2; 2 damage to the enemy player.
+        • Future: the enemy draws 1 fewer card instead.
 
 
-4. STATECRAFT: ORDER & PAPERWORK (17 cards)
+4. STATECRAFT: ORDER & PAPERWORK (10 creatures, 6 spells)
 
-Play style: slow to arrive, hard to remove. Armor, area damage and a long game backed by healing.
+Play style: slow to arrive, hard to remove. Armor, disables and area damage, with everyone paying for the war.
 
 Creatures
-    • Conscript x3 (2/3/1, 1): When this enters, gains 1 Armor.
-        • Future: what Recruitment turns enemy creatures into.
-    • Border Guard (1/5/1, 1): When this enters, each friendly creature gains 1 Armor.
-        • Future: Anchored, fortifies adjacent slots.
-    • Tax Collector (1/3/2, 1): Each turn, 1 damage to the enemy player.
+    • King Emeritus (1/6/1, 2): Each turn, heal you for 1.
+        • Future: Diplomatic Immunity.
+    • Spite-Elected President (3/4/2, 2): When this enters, 1 damage to each creature (both sides).
+        • Future: a Law that hurts both sides each Dawn.
+    • Police Officer Productivity Target (2/3/2, 1): Each turn, 1 damage to a random enemy creature.
+        • Future: Priority attacks on creatures that moved.
+    • Internal Revenue Service (1/4/1, 1): Each turn, 1 damage to the enemy player.
         • Future: taxes enemy card plays instead.
-    • Blitz Sergeant (3/2/3, 1): No ability; fast.
-        • Future: +1 Priority on its attacks.
-    • Propaganda Minister (1/3/2, 1): When this enters, each friendly creature gets +1 Attack.
-        • Future: Keep Calm.
-    • Public Hospital (0/4/1, 2): Each turn, heal each friendly creature for 1.
-        • Future: an Automated Unit.
-    • Eternal Senator (1/5/1, 2): Each turn, heal you for 1.
-        • Future: Gerontocratic Decree.
-    • Main Battle Tank (4/6/1, 2): When this enters, 1 damage to each enemy creature.
+    • Mercenaries (4/3/3, 1): When this dies, the enemy draws a card.
+        • Future: the enemy may Recruit it instead.
+    • Man o' War (4/7/1, 2): When this enters, 1 damage to each enemy creature.
         • Future: multi-slot, Heavy.
+    • Ministry Of Love (1/4/1, 2): Each turn, stun a random enemy creature for 1 turn.
+        • Future: Red Tape every Dawn.
+    • Supreme Court (0/6/1, 2): When this enters, each friendly creature gains 2 Armor.
+        • Future: Fortifying.
+    • Protocol Enforcers (2/4/1, 1): Whenever this is damaged, each friendly creature gains 1 Armor.
+        • Future: Keep Calm.
+    • Demagogue (2/3/2, 1): When this enters, each friendly creature gets +1 Attack.
+        • Future: Loaded Language.
 
 Spells
     • Red Tape: Stun target creature for 1 turn.
         • Future: +1 Deployment Time or Priority -1.
-    • Artillery Barrage: 2 damage to each enemy creature.
-        • Future: Static area damage on 3 slots.
-    • Curfew: Each friendly creature gains 3 Armor and is stunned for 1 turn.
-        • Future: a Law (Location) for 3 Days.
-    • Conscription: Summon 2 random creatures from your deck.
-        • Future: Recruitment.
     • Preemptive Strike: 3 damage to any target.
         • Future: +1 Priority.
-    • Austerity Measures: Each creature gets -1 Attack.
-        • Future: a Kakistocracy-style Law.
-    • State of Emergency: Heal you for 4; each friendly creature gains 1 Armor.
+    • Martial Law: Each friendly creature gains 3 Armor and is stunned for 1 turn.
+        • Future: a Law (Location) for 3 Days.
+    • Kakistocracy: Each creature gets -1 Attack.
+        • Future: the Kakistocracy Now! Law.
+    • Mutually Assured Destruction: 3 damage to each creature, to you and to the enemy player.
+        • Future: a countdown everyone can see coming.
+    • Panem Et Circenses: Heal you for 3; each friendly creature gets +1 Attack.
         • Future: a Law with a paperwork drawback.
 
 
-5. ZEITGEIST: MOODS OF MODERN LIFE (16 cards)
+5. ZEITGEIST: MOODS OF MODERN LIFE (10 creatures, 6 spells)
 
-Play style: fast, loud and self-destructive. Everything deploys immediately, spikes, and burns out.
+Play style: fast, loud and self-destructive. Everything deploys at once, spikes, burns out, and takes bystanders with it.
 
 Creatures
-    • Doomscroller x2 (1/3/2, 0): Each Dusk, gets +1 Attack and takes 1 damage.
-        • Future: Impatient once it runs out of Health.
-    • Wojak (1/5/1, 0): Whenever this is damaged, gets +1 Attack.
-        • Future: Wojak Living The Dream.
-    • Grindset Bro x2 (4/2/3, 0): Each Dusk, takes 1 damage.
-        • Future: Coffeinated, then Burnout.
+    • Karen (2/4/1, 0): Whenever this is damaged, gets +1 Attack.
+        • Future: Impatient.
+    • Boomer (2/5/1, 0): Each Dusk, 1 damage to a random creature (either side).
+        • Future: hits creatures that moved.
     • Hipster (2/2/2, 0): When this enters, 1 damage to each creature (itself included).
         • Future: Hipster status.
-    • Underdog x2 (1/1/3, 0): When this dies, each friendly creature gets +2 Attack.
-        • Future: Underdog bonus.
-    • Main Character (3/3/2, 1): When this enters, gets +2/+2 and deals 1 damage to each friendly creature.
-        • Future: Plot Armor.
-    • Quiet Quitter (2/6/1, 0): No ability.
+    • Underdog (1/1/3, 0): When this dies, each friendly creature gets +2 Attack.
+        • Future: the Underdog bonus.
+    • Hikikomori (1/7/1, 0): When this enters, it stuns itself for 2 turns.
         • Future: Slacking Off.
+    • Reality TV Star (3/3/2, 1): When this enters, gets +2/+2 and deals 1 damage to each friendly creature.
+        • Future: Plot Armor.
+    • Scam Artist (2/2/3, 0): When this enters, a random enemy creature gets -2 Attack.
+        • Future: steals a Temporary buff.
+    • Football Hooligans (3/2/2, 0): When this dies, 1 damage to each creature.
+        • Future: a riot that spreads each Dusk.
+    • Antihero (3/3/2, 1): When this enters, 2 damage to a random creature (either side).
+        • Future: targets whoever hurt you last.
+    • Bodybuilder (4/2/3, 0): Takes 1 damage each Dusk.
+        • Future: Coffeinated, then Burnout.
 
 Spells
     • YOLO: Target creature gets +4 Attack; 2 damage to you.
         • Future: +1 Priority, Banished at Dusk.
-    • Rage Quit: 4 damage to any target; 2 damage to you.
-        • Future: the self-harm lands on a friendly creature.
-    • Existential Dread: 2 damage to each creature.
+    • This Is Fine: Each friendly creature gets +2 Health, then 2 damage to each creature.
         • Future: a Trend (Location).
-    • Touch Grass: Each friendly creature gets +2 Health.
-        • Future: Cleanse a mood.
-    • General Strike: Stun every creature on both sides for 1 turn.
+    • Strike: Stun every creature on both sides for 1 turn.
         • Future: a Strike that stops Each Dawn engines.
-    • Retail Therapy: Target creature gets +2/+2; 2 damage to you.
-        • Future: Temporary buff.
+    • Russian Roulette: 4 damage to a random creature (either side).
+        • Future: a countdown that moves slot by slot.
+    • Toxic Positivity: Each friendly creature gets +2 Attack and takes 1 damage.
+        • Future: a Temporary buff that turns into Burnout.
+    • Mental Health Day: Target creature gets +3 Health and is stunned for 1 turn.
+        • Future: Cleanse its moods instead.
 
 
 6. NEXT STEPS
 
-• Card text has no Faction display yet beyond the type line ("Creature — Corporate"); a faction frame color or icon would help.
-• Balance is untested. Start by playing each deck against the others.
-• Known bug #45 (two summons from the deck in one turn can land in the same slot) affects Conscription and Headhunter.
+• Balance is untested. Start by playing each deck against the others from the main menu.
+• There is no computer opponent yet: both sides are played by you on the same screen.
+• Known bug #45 (two summons from the deck in one turn can land in the same slot) can affect Multilevel Marketing Seller.
 • When a GDD mechanic lands, update the matching cards in FactionDecksGenerator.cs and clear their Design Notes.
+• Names left out on purpose: brainstorm entries that mock groups of people rather than institutions or behaviours.

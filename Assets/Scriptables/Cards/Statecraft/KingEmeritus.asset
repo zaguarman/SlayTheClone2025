@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: KingEmeritus
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 3f500bf7-5c99-4414-8a22-a7f644494f7f
+  cardName: King Emeritus
+  description: Abdicated in disgrace. Kept the yacht, the pension and the Swiss account.
+  cardType: 0
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: 7d58017354481774d817295dc6e0c16d, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 3
+    actions:
+    - actionType: 1
+      value: 1
+      targetType: 0
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: Diplomatic Immunity. Can''t be targeted by enemy spells.'
+  attack: 1
+  health: 6
+  speed: 1
+  turnsUntilOperative: 2

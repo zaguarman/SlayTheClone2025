@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: MartialLaw
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: d5d74ea5-167c-4b5f-b3de-d63aa65a4cf1
+  cardName: Martial Law
+  description: For your safety, nobody moves. Ever.
+  cardType: 1
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: 1fbd9050498df5243a4f3204b32cc4a1, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 4
+      value: 3
+      targetType: 3
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+    - actionType: 5
+      value: 1
+      targetType: 3
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: a Law (Location) for 3 Days. The stun stands in for the bureaucracy
+    drawback.'
+  defaultTargetType: 3

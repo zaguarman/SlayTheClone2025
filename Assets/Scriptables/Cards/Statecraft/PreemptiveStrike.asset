@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
   cardId: 470b2a5a-1ba4-4a51-b6d9-217c1bf70ad1
   cardName: Preemptive Strike
-  description: They were going to attack us. Probably. Eventually.
+  description: They were going to attack us. Probably. Eventually. Somebody said
+    so.
   cardType: 1
   faction: 2
   artwork: {fileID: 3286163911610860551, guid: 67f0943531212e746b7d3d34b572b71c, type: 3}

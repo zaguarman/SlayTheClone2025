@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: ScamArtist
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: ffea8c0c-3182-446c-ae6d-351f3abfdb70
+  cardName: Scam Artist
+  description: Sells a course on how to sell courses.
+  cardType: 0
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: 4512db74ef220264cb45530fae41a66a, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 0
+    actions:
+    - actionType: 6
+      value: -2
+      targetType: 4
+      targetModifier: 4
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+  designNotes: 'Future: steals a Temporary buff from an enemy creature instead.'
+  attack: 2
+  health: 2
+  speed: 3
+  turnsUntilOperative: 0

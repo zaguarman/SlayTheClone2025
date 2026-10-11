@@ -14,20 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Statecraft - Order & Paperwork
   cards:
-  - {fileID: 11400000, guid: 1925cc1dbd66c2d45b259a25074fb935, type: 2}
-  - {fileID: 11400000, guid: 1925cc1dbd66c2d45b259a25074fb935, type: 2}
-  - {fileID: 11400000, guid: 1925cc1dbd66c2d45b259a25074fb935, type: 2}
-  - {fileID: 11400000, guid: 2623af59600141c4396f6da17c75973a, type: 2}
-  - {fileID: 11400000, guid: cd904c357917ae144bad2fd39e181efc, type: 2}
-  - {fileID: 11400000, guid: 46365de1d43bae04da1d4e9e84d4711b, type: 2}
-  - {fileID: 11400000, guid: 8ff784dc019ea51458f6233c039e643c, type: 2}
-  - {fileID: 11400000, guid: 5b33e7e71103019489152f339ee3c999, type: 2}
-  - {fileID: 11400000, guid: c90d6f29d6c81024d9b961b4be57d278, type: 2}
-  - {fileID: 11400000, guid: 73624bb457f89004880667251e2d12c1, type: 2}
+  - {fileID: 11400000, guid: 40653da7f44f64f4d87c617bc6080e3b, type: 2}
+  - {fileID: 11400000, guid: 00673e54f9dc0604ba0de7d5cec69515, type: 2}
+  - {fileID: 11400000, guid: 812d3392dbadd74459046284afc829d6, type: 2}
+  - {fileID: 11400000, guid: 89f8e5ce63f8dc74c85e7301170fc19c, type: 2}
+  - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
+  - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
+  - {fileID: 11400000, guid: 482ad101d51d61646a3cb666b2554ff9, type: 2}
+  - {fileID: 11400000, guid: 124d1e25656d85642a489f242baf5f9f, type: 2}
+  - {fileID: 11400000, guid: 31ae3f6441e246d4aa9b119659486fc6, type: 2}
+  - {fileID: 11400000, guid: 965d63b6d655a714a974a5b5c163ec4f, type: 2}
   - {fileID: 11400000, guid: 0ce268d8b1e07c8478219cc232705c94, type: 2}
-  - {fileID: 11400000, guid: 3ad6f6a0e6aabe04a9ea4b47f33383c9, type: 2}
-  - {fileID: 11400000, guid: 22462a2399f51d7499e67770bc18a13d, type: 2}
-  - {fileID: 11400000, guid: c89aa0d1ca958724daa89ba4ab9c037b, type: 2}
   - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
-  - {fileID: 11400000, guid: d82ef5f0fe3d6324abebbb8670e723d3, type: 2}
-  - {fileID: 11400000, guid: 27a6787d59d5cf445bf7199e270905bd, type: 2}
+  - {fileID: 11400000, guid: f551b8bf2603afc489de81dc57f7f48d, type: 2}
+  - {fileID: 11400000, guid: 8f9bf6a051505e4438e26be98111cd49, type: 2}
+  - {fileID: 11400000, guid: 96bf6003f2e24744182611126a47ec10, type: 2}
+  - {fileID: 11400000, guid: 7ec7af517addad648aab7504c6593165, type: 2}
