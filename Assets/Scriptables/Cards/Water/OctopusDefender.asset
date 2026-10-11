@@ -31,5 +31,5 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
-  attack: 0
-  health: 7
+  attack: 1
+  health: 6

@@ -32,4 +32,4 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   attack: 1
-  health: 6
+  health: 5

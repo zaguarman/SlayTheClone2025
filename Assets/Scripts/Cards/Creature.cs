@@ -233,7 +233,7 @@ namespace SlayTheClone {
 
                     switch (action.actionType) {
                         case ActionType.Damage:
-                            ProcessDamageEffect(action, context);
+                            ProcessDamageEffect(action, trigger, context);
                             break;
                         case ActionType.Heal:
                             ProcessHealEffect(action, actionsQueue);
@@ -273,7 +273,7 @@ namespace SlayTheClone {
             return false;
         }
 
-        private void ProcessDamageEffect(EffectAction action, ActionExecutionContext context) {
+        private void ProcessDamageEffect(EffectAction action, EffectTrigger trigger, ActionExecutionContext context) {
             if (!CanTargetOthers(action, "Damage Effect")) return;
 
             // Chain damage is dealt by BattlefieldCombatActionExecutor when this creature attacks
@@ -284,8 +284,8 @@ namespace SlayTheClone {
 
             List<ITarget> targets;
             ICreature originalAttacker = context.TriggeringAttacker;
-            // Retaliation: an enemy-targeted damage effect hits whoever attacked this creature
-            if (originalAttacker != null && action.targetType == TargetType.Enemy && Effects.Any(e => e.trigger == EffectTrigger.OnDamage)) {
+            // Retaliation: an enemy-targeted OnDamage effect hits whoever damaged this creature
+            if (trigger == EffectTrigger.OnDamage && originalAttacker != null && action.targetType == TargetType.Enemy) {
                 targets = new List<ITarget> { originalAttacker };
                 Log($"Retaliation Damage Effect: Targeting attacker {originalAttacker.Name}", LogTag.Effects | LogTag.Combat);
             }

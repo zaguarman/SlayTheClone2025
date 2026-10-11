@@ -22,7 +22,7 @@ MonoBehaviour:
     trigger: 0
     actions:
     - actionType: 0
-      value: 2
+      value: 1
       targetType: 4
       targetModifier: 0
       modifyAttack: 0
@@ -31,5 +31,5 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
-  attack: 4
+  attack: 3
   health: 3
