@@ -6,7 +6,7 @@ using static SlayTheClone.Enums;
 namespace SlayTheClone {
     // Base card scriptable object
     public abstract class CardDataScriptableObject : ScriptableObject {
-        public string cardId; // Added cardId field
+        public string cardId;
         public string cardName;
         public string description;
         public CardType cardType;

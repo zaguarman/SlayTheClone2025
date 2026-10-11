@@ -19,9 +19,8 @@ namespace SlayTheClone {
             }
         }
 
-        public override void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
-            // Call base UIComponent Initialize FIRST
-            base.Initialize(mediator, references, manager); // Pass dependencies
+        public override void Initialize(IGameMediator mediator, IGameManager manager) {
+            base.Initialize(mediator, manager);
 
             // Get TurnManager from GameManager
             turnManager = manager?.TurnManager;
@@ -36,13 +35,13 @@ namespace SlayTheClone {
         protected override void RegisterEvents() {
             if (GameMediator != null) {
                 // Listen to TurnEnded event instead of GameStateChanged for turn updates
-                GameMediator.AddTurnEndedListener(OnTurnEnded);
+                GameMediator.TurnEnded += OnTurnEnded;
             }
         }
 
         protected override void UnregisterEvents() {
             if (GameMediator != null) {
-                GameMediator.RemoveTurnEndedListener(OnTurnEnded);
+                GameMediator.TurnEnded -= OnTurnEnded;
             }
         }
 

@@ -1,88 +1,54 @@
-using UnityEngine.Events;
+using System;
+using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Interface for the GameMediator, providing event subscription and notification methods
-    /// for game state changes and events.
+    /// The game's event hub: rules code announces what happened through the Notify methods, and views listen to the
+    /// matching events (subscribe with +=, unsubscribe with -=). A card that only cares about its own creature listens
+    /// to <see cref="ICreature.Changed"/> instead, which the creature notifications also raise.
     /// </summary>
     public interface IGameMediator {
-        // Property to check if the mediator is initialized
-        bool IsInitialized { get; }
-
-        #region Event Subscription Methods
-        void AddGameStateChangedListener(UnityAction listener);
-        void RemoveGameStateChangedListener(UnityAction listener);
-
-        void AddPlayerDamagedListener(UnityAction<IPlayer, int> listener);
-        void RemovePlayerDamagedListener(UnityAction<IPlayer, int> listener);
-
-        void AddCreatureDamagedListener(UnityAction<ICreature, int> listener);
-        void RemoveCreatureDamagedListener(UnityAction<ICreature, int> listener);
-
-        void AddCreatureDiedListener(UnityAction<ICreature> listener);
-        void RemoveCreatureDiedListener(UnityAction<ICreature> listener);
-
-        void AddGameOverListener(UnityAction<IPlayer> listener);
-        void RemoveGameOverListener(UnityAction<IPlayer> listener);
-
-        void AddGameInitializedListener(UnityAction listener);
-        void RemoveGameInitializedListener(UnityAction listener);
-
-        void AddCreatureSummonedListener(UnityAction<ICreature, IPlayer> listener);
-        void RemoveCreatureSummonedListener(UnityAction<ICreature, IPlayer> listener);
-
-        void AddCreatureArmorChangedListener(UnityAction<ICreature, int> listener);
-        void RemoveCreatureArmorChangedListener(UnityAction<ICreature, int> listener);
-
-        void AddCreatureStatsChangedListener(UnityAction<ICreature> listener); // NEW
-        void RemoveCreatureStatsChangedListener(UnityAction<ICreature> listener); // NEW
-
-        void AddCreaturePreSummonListener(UnityAction<ICreature> listener);
-        void RemoveCreaturePreSummonListener(UnityAction<ICreature> listener);
-
-        void AddActionsQueueChangedListener(UnityAction listener);
-        void RemoveActionsQueueChangedListener(UnityAction listener);
-
-        void AddHandStateChangedListener(UnityAction<IPlayer> listener);
-        void RemoveHandStateChangedListener(UnityAction<IPlayer> listener);
-
-        void AddBattlefieldStateChangedListener(UnityAction<IPlayer> listener);
-        void RemoveBattlefieldStateChangedListener(UnityAction<IPlayer> listener);
-
-        void AddTurnEndedListener(UnityAction<int> listener);
-        void RemoveTurnEndedListener(UnityAction<int> listener);
-
-        void AddCreatureHealedListener(UnityAction<ICreature, int> listener);
-        void RemoveCreatureHealedListener(UnityAction<ICreature, int> listener);
-
-        void AddPlayerHealedListener(UnityAction<IPlayer, int> listener);
-        void RemovePlayerHealedListener(UnityAction<IPlayer, int> listener);
-
-        void AddCreatureStatusChangedListener(UnityAction<ICreature, Enums.StatusEffectType, bool> listener);
-        void RemoveCreatureStatusChangedListener(UnityAction<ICreature, Enums.StatusEffectType, bool> listener);
+        #region Players
+        event Action<IPlayer, int> PlayerDamaged;
+        event Action<IPlayer, int> PlayerHealed;
+        event Action<IPlayer> GameOver; // With the winner
         #endregion
 
-        #region Player Registration
-        void RegisterPlayer(IPlayer player);
+        #region Creatures
+        event Action<ICreature, IPlayer> CreatureSummoned;
+        event Action<ICreature, int> CreatureDamaged;
+        event Action<ICreature, int> CreatureHealed;
+        event Action<ICreature, int> CreatureArmorChanged; // With the new armor
+        event Action<ICreature> CreatureStatsChanged;
+        event Action<ICreature, StatusEffectType, bool> CreatureStatusChanged; // True when applied, false when removed
+        event Action<ICreature> CreatureDied;
         #endregion
 
-        #region Notification Methods
-        void NotifyGameStateChanged();
-        void NotifyGameInitialized();
+        #region Zones and turn flow
+        event Action<IPlayer> HandStateChanged;
+        event Action<IPlayer> BattlefieldStateChanged;
+        event Action ActionsQueueChanged;
+        event Action<int> TurnEnded;
+        #endregion
+
+        #region Notifications
+        /// <summary>Also ends the game when the player's health reaches 0.</summary>
         void NotifyPlayerDamaged(IPlayer player, int damage);
-        void NotifyCreatureDamaged(ICreature creature, int damage);
-        void NotifyCreatureDied(ICreature creature);
-        void NotifyCreatureHealed(ICreature creature, int amount);
         void NotifyPlayerHealed(IPlayer player, int amount);
+        /// <summary>The game ends once; later calls are ignored.</summary>
         void NotifyGameOver(IPlayer winner);
-        void NotifyCreaturePreSummon(ICreature creature);
+
         void NotifyCreatureSummoned(ICreature creature, IPlayer owner);
+        void NotifyCreatureDamaged(ICreature creature, int damage);
+        void NotifyCreatureHealed(ICreature creature, int amount);
         void NotifyCreatureArmorChanged(ICreature creature, int newArmor);
-        void NotifyCreatureStatsChanged(ICreature creature); // NEW
-        void NotifyCreatureStatusChanged(ICreature creature, Enums.StatusEffectType status, bool applied);
-        void NotifyActionsQueueChanged();
+        void NotifyCreatureStatsChanged(ICreature creature);
+        void NotifyCreatureStatusChanged(ICreature creature, StatusEffectType status, bool applied);
+        void NotifyCreatureDied(ICreature creature);
+
         void NotifyHandStateChanged(IPlayer player);
         void NotifyBattlefieldStateChanged(IPlayer player);
+        void NotifyActionsQueueChanged();
         void NotifyTurnEnded(int turnNumber);
         #endregion
     }

@@ -136,9 +136,7 @@ namespace SlayTheClone {
             string turns = Turns(action.statusDuration);
             switch (action.statusEffectToApply) {
                 case StatusEffectType.Paralyzed: return $"paralyze {target} for {turns}";
-                case StatusEffectType.Frozen: return $"freeze {target} for {turns}";
                 case StatusEffectType.Burned: return $"burn {target} for {action.statusPotency} each turn for {turns}";
-                case StatusEffectType.Poisoned: return $"poison {target} for {action.statusPotency} each turn for {turns}";
                 default: return null;
             }
         }

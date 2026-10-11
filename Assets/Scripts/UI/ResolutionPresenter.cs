@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,8 +37,9 @@ namespace SlayTheClone {
 
         private RectTransform overlay;
         private IGameMediator mediator;
-        private IGameReferences references;
         private IGameManager gameManager;
+        private CardViews cardViews;
+        private TableViews table;
         private float busyUntil;
 
         // Last known stats per creature, to show what a stat or armor change actually was
@@ -73,36 +75,37 @@ namespace SlayTheClone {
             return presenter;
         }
 
-        public void Initialize(IGameMediator gameMediator, IGameReferences gameReferences, IGameManager manager) {
+        public void Initialize(IGameMediator gameMediator, IGameManager manager, CardViews views, TableViews tableViews) {
             mediator = gameMediator;
-            references = gameReferences;
             gameManager = manager;
+            cardViews = views;
+            table = tableViews;
 
             gameManager.ActionsQueue.OnActionExecuting.AddListener(OnActionExecuting);
-            mediator.AddCreatureSummonedListener(OnCreatureSummoned);
-            mediator.AddCreatureDamagedListener(OnCreatureDamaged);
-            mediator.AddCreatureHealedListener(OnCreatureHealed);
-            mediator.AddCreatureArmorChangedListener(OnCreatureArmorChanged);
-            mediator.AddCreatureStatsChangedListener(OnCreatureStatsChanged);
-            mediator.AddCreatureStatusChangedListener(OnCreatureStatusChanged);
-            mediator.AddCreatureDiedListener(OnCreatureDied);
-            mediator.AddPlayerDamagedListener(OnPlayerDamaged);
-            mediator.AddPlayerHealedListener(OnPlayerHealed);
+            mediator.CreatureSummoned += OnCreatureSummoned;
+            mediator.CreatureDamaged += OnCreatureDamaged;
+            mediator.CreatureHealed += OnCreatureHealed;
+            mediator.CreatureArmorChanged += OnCreatureArmorChanged;
+            mediator.CreatureStatsChanged += OnCreatureStatsChanged;
+            mediator.CreatureStatusChanged += OnCreatureStatusChanged;
+            mediator.CreatureDied += OnCreatureDied;
+            mediator.PlayerDamaged += OnPlayerDamaged;
+            mediator.PlayerHealed += OnPlayerHealed;
         }
 
         private void OnDestroy() {
             if (mediator == null) return;
 
             gameManager?.ActionsQueue?.OnActionExecuting.RemoveListener(OnActionExecuting);
-            mediator.RemoveCreatureSummonedListener(OnCreatureSummoned);
-            mediator.RemoveCreatureDamagedListener(OnCreatureDamaged);
-            mediator.RemoveCreatureHealedListener(OnCreatureHealed);
-            mediator.RemoveCreatureArmorChangedListener(OnCreatureArmorChanged);
-            mediator.RemoveCreatureStatsChangedListener(OnCreatureStatsChanged);
-            mediator.RemoveCreatureStatusChangedListener(OnCreatureStatusChanged);
-            mediator.RemoveCreatureDiedListener(OnCreatureDied);
-            mediator.RemovePlayerDamagedListener(OnPlayerDamaged);
-            mediator.RemovePlayerHealedListener(OnPlayerHealed);
+            mediator.CreatureSummoned -= OnCreatureSummoned;
+            mediator.CreatureDamaged -= OnCreatureDamaged;
+            mediator.CreatureHealed -= OnCreatureHealed;
+            mediator.CreatureArmorChanged -= OnCreatureArmorChanged;
+            mediator.CreatureStatsChanged -= OnCreatureStatsChanged;
+            mediator.CreatureStatusChanged -= OnCreatureStatusChanged;
+            mediator.CreatureDied -= OnCreatureDied;
+            mediator.PlayerDamaged -= OnPlayerDamaged;
+            mediator.PlayerHealed -= OnPlayerHealed;
             DOTween.Kill(this);
         }
 
@@ -151,10 +154,7 @@ namespace SlayTheClone {
         }
 
         private void PlaySpellReveal(Spell spell, IPlayer caster) {
-            var data = spell?.SourceData;
-            if (data == null) return;
-
-            var reveal = CardFactory.CreateCardController(spell, data, caster, overlay, mediator, references, gameManager);
+            var reveal = cardViews.Create(spell, caster, overlay);
             if (reveal == null) return;
 
             var group = reveal.GetComponent<CanvasGroup>();
@@ -284,22 +284,18 @@ namespace SlayTheClone {
             Hold(PlayerBeat);
         }
 
-        private TextMeshProUGUI GetHealthText(IPlayer player) {
-            var playerUI = references.GetPlayerReferences(player).PlayerUI;
-            return playerUI != null ? playerUI.GetComponentInChildren<TextMeshProUGUI>() : null;
-        }
+        private TextMeshProUGUI GetHealthText(IPlayer player) => table.GetHealthText(player);
         #endregion
 
         #region Visual helpers
         private BattlefieldSlot FindSlotView(BoardSlot slot) {
             if (slot?.Owner == null) return null;
-            return references.GetPlayerReferences(slot.Owner).BattlefieldUI?.FindSlotView(slot);
+            return table.GetBattlefield(slot.Owner)?.FindSlotView(slot);
         }
 
         private CardController FindCard(ICreature creature) {
             if (creature == null) return null;
-            return references.GetPlayer1BattlefieldUI()?.GetCardController(creature)
-                ?? references.GetPlayer2BattlefieldUI()?.GetCardController(creature);
+            return table.Battlefields.Select(board => board?.GetCardController(creature)).FirstOrDefault(card => card != null);
         }
 
         private CreatureSnapshot GetSnapshot(ICreature creature) {

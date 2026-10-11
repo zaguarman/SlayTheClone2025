@@ -21,6 +21,7 @@ namespace SlayTheClone {
 
         private BattlefieldArrowManager arrowManager;
         private CardController draggedCard; // Creature of this board currently being dragged
+        private TableViews table; // For slots on the other side of the table
 
         #region Initialization
         private void InitializeManagers(IPlayer player) {
@@ -42,19 +43,14 @@ namespace SlayTheClone {
                 var slot = slotObj.AddComponent<BattlefieldSlot>();
                 slot.Initialize(model, defaultColor, validDropColor, invalidDropColor, hoverColor);
 
-                // Pass the GameReferences to the slot
-                if (GameReferences != null) {
-                    slot.SetGameReferences(GameReferences);
-                }
-
                 battlefieldSlots.Add(slot);
             }
             UpdateSlotPositions();
         }
 
-        public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
-            // Call base CardContainer Initialize FIRST
-            base.Initialize(player, mediator, references, manager);
+        public void Initialize(IPlayer player, IGameMediator mediator, IGameManager manager, CardViews cardViews, TableViews tableViews) {
+            table = tableViews ?? throw new System.ArgumentNullException(nameof(tableViews));
+            base.Initialize(player, mediator, manager, cardViews);
 
             // Now initialize Battlefield specific things
             InitializeManagers(player); // Pass player
@@ -207,14 +203,7 @@ namespace SlayTheClone {
 
         private CardController CreateCreatureCard(ICreature creature, BattlefieldSlot slot) {
             var owner = creature.Owner ?? Player;
-            CardData cardData = CardFactory.FindCardData(creature, owner);
-            if (cardData == null) {
-                // Tokens and other special summons have no definition to show
-                LogWarning($"Could not find original CardData for {creature.Name} (ID: {creature.CardId}). Creating temp data.", LogTag.Cards);
-                cardData = CardFactory.CreateFallbackData(creature);
-            }
-
-            var card = CardFactory.CreateCardController(creature, cardData, owner, slot.transform, GameMediator, GameReferences, GameManager);
+            var card = CardViews.Create(creature, owner, slot.transform);
             if (card == null) {
                 LogError($"BattlefieldUI: Failed to create card for {creature.Name}", LogTag.UI | LogTag.Creatures);
             }
@@ -230,17 +219,17 @@ namespace SlayTheClone {
         #region Event Handling
         protected override void RegisterEvents() {
             if (GameMediator != null) {
-                GameMediator.AddCreatureSummonedListener(OnCreatureSummoned);
-                GameMediator.AddBattlefieldStateChangedListener(UpdateUI);
-                GameMediator.AddActionsQueueChangedListener(RefreshQueuedGhosts);
+                GameMediator.CreatureSummoned += OnCreatureSummoned;
+                GameMediator.BattlefieldStateChanged += UpdateUI;
+                GameMediator.ActionsQueueChanged += RefreshQueuedGhosts;
             }
         }
 
         protected override void UnregisterEvents() {
             if (GameMediator != null) {
-                GameMediator.RemoveCreatureSummonedListener(OnCreatureSummoned);
-                GameMediator.RemoveBattlefieldStateChangedListener(UpdateUI);
-                GameMediator.RemoveActionsQueueChangedListener(RefreshQueuedGhosts);
+                GameMediator.CreatureSummoned -= OnCreatureSummoned;
+                GameMediator.BattlefieldStateChanged -= UpdateUI;
+                GameMediator.ActionsQueueChanged -= RefreshQueuedGhosts;
             }
         }
 
@@ -271,10 +260,7 @@ namespace SlayTheClone {
                 var slot = battlefieldSlots[model.Index];
                 if (queuedGhosts.ContainsKey(slot)) continue;
 
-                var data = CardFactory.FindCardData(card, Player);
-                if (data == null) continue;
-
-                var ghost = CardFactory.CreateCardController(card, data, Player, slot.transform, GameMediator, GameReferences, GameManager);
+                var ghost = CardViews.Create(card, Player, slot.transform);
                 if (ghost == null) continue;
 
                 ghost.name = $"QueuedGhost_{card.Name}";
@@ -375,7 +361,7 @@ namespace SlayTheClone {
         public BattlefieldSlot FindSlotView(BoardSlot model) {
             if (model == null) return null;
             if (model.Owner == Player) return battlefieldSlots[model.Index];
-            return GameReferences.GetPlayerReferences(model.Owner)?.BattlefieldUI?.FindSlotView(model);
+            return table.GetBattlefield(model.Owner)?.FindSlotView(model);
         }
 
         protected override void OnCardDropped(CardController card) {

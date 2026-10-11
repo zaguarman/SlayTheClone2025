@@ -15,25 +15,20 @@ namespace SlayTheClone {
 
         private OpenView openView = OpenView.None;
 
-        public override void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
+        // The deck view panel must already be initialized (GameUI does it)
+        public void Initialize(IGameMediator mediator, IGameManager manager, Button deckButton, Button discardButton, DeckViewUI view) {
             if (IsInitialized) return;
 
-            base.Initialize(mediator, references, manager);
+            deckViewButton = deckButton;
+            discardViewButton = discardButton;
+            deckViewUI = view;
+            base.Initialize(mediator, manager);
 
-            if (GameManager != null && GameReferences.AreReferencesValid()) {
-                if (GetUIReferences()) SetupButtons();
-                Log("DeckViewController initialized with dependencies", LogTag.Initialization);
-            }
-            else {
-                LogError("Cannot initialize DeckViewController - GameManager not ready or references invalid", LogTag.Initialization);
-                enabled = false;
-            }
+            if (SetupUIReferences()) SetupButtons();
+            Log("DeckViewController initialized with dependencies", LogTag.Initialization);
         }
 
-        private bool GetUIReferences() {
-            deckViewButton = GameReferences.GetDeckViewButton();
-            discardViewButton = GameReferences.GetDiscardViewButton();
-            deckViewUI = GameReferences.GetDeckViewUI();
+        private bool SetupUIReferences() {
             if (deckViewButton == null || discardViewButton == null || deckViewUI == null) {
                 LogError("Deck view button or DeckViewUI reference is null", LogTag.UI | LogTag.Initialization);
                 return false;
@@ -115,8 +110,8 @@ namespace SlayTheClone {
 
         /// <returns>False if the view could not be shown.</returns>
         private bool ShowDeckView(bool showDiscard) {
-            if (deckViewUI == null || deckViewUI.DeckViewPanel == null || GameMediator == null || GameReferences == null) {
-                LogError("Cannot show deck view - references missing (DeckViewUI, Mediator, or References)", LogTag.UI);
+            if (deckViewUI == null || deckViewUI.DeckViewPanel == null || !deckViewUI.IsInitialized) {
+                LogError("Cannot show deck view - DeckViewUI or its panel is missing, or it was not initialized", LogTag.UI);
                 return false;
             }
 
@@ -125,10 +120,6 @@ namespace SlayTheClone {
             if (player == null) {
                 LogError("Cannot show view - no active player found", LogTag.UI);
                 return false;
-            }
-
-            if (!deckViewUI.IsInitialized) {
-                deckViewUI.Initialize(GameMediator, GameReferences, GameManager);
             }
 
             try {

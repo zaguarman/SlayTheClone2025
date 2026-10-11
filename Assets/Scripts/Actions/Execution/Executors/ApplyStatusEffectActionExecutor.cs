@@ -17,7 +17,7 @@ namespace SlayTheClone {
 
             string effectName = $"{statusType} Effect";
             string effectDescription = $"Applies {statusType} for {duration} turns";
-            if (potency > 0 && (statusType == StatusEffectType.Burned || statusType == StatusEffectType.Poisoned)) {
+            if (potency > 0 && statusType == StatusEffectType.Burned) {
                 effectDescription += $" (Potency: {potency})";
             }
 

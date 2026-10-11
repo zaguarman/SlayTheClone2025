@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.Events;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
-    [Serializable]
-    public class PlayerDamagedUnityEvent : UnityEvent<int> { }
-
     public interface IPlayer : IEntity {
         bool IsPlayer1 { get; } // Property to identify if this is Player 1
         IPlayer Opponent { get; set; }
@@ -21,16 +17,13 @@ namespace SlayTheClone {
         void RemoveFromBattlefield(ICard creature);
         void DiscardCard(ICard card);
         void DiscardHand();
-        PlayerDamagedUnityEvent OnDamaged { get; }
         // Raised with the new value whenever health changes, for whatever displays it
         event Action<int> HealthChanged;
         void DrawCard();
 
-        /// <summary>
-        /// Applies damage to the player, reducing their health.
-        /// </summary>
-        /// <param name="amount">The amount of damage to apply.</param>
-        void TakeDamage(int amount);
+        /// <summary>Lowers the player's health; the caller announces the damage.</summary>
+        /// <returns>The damage actually taken: health doesn't go below 0.</returns>
+        int TakeDamage(int amount);
 
         /// <summary>
         /// Heals the player by the specified amount, up to their maximum health.
@@ -52,25 +45,20 @@ namespace SlayTheClone {
         public int CardsToDraw { get; set; } = 2; // Default to drawing 2 cards
 
         public IReadOnlyList<BoardSlot> Battlefield { get; }
-        public PlayerDamagedUnityEvent OnDamaged { get; } = new PlayerDamagedUnityEvent();
         public event Action<int> HealthChanged;
 
-        private readonly bool isPlayer1; // Add field to store identity
+        private readonly bool isPlayer1;
 
         private IGameMediator gameMediator;
         private ICardDealingService cardDealingService;
 
-        // Modify constructor to accept identity
         public Player(string name = "Player", bool isPlayer1 = false) : base(name) {
             Hand = new List<ICard>();
             Battlefield = Enumerable.Range(0, BattlefieldSize).Select(i => new BoardSlot(this, i)).ToList();
             Deck = new Deck();
-
-            OnDamaged.AddListener(OnPlayerDamaged);
             this.isPlayer1 = isPlayer1;
         }
 
-        // Implement IsPlayer1 property from interface
         public bool IsPlayer1 => isPlayer1;
 
         // The player reports hand and board changes to the mediator and draws through the dealer
@@ -80,35 +68,18 @@ namespace SlayTheClone {
             Log($"Player ({Name}) initialized with dependencies.", LogTag.Initialization | LogTag.Players);
         }
 
-        private void OnPlayerDamaged(int damage) {
-            HealthChanged?.Invoke(Health);
-            Log($"{Name} took {damage} damage, health: {Health}", LogTag.Players | LogTag.Combat);
-        }
-
-        /// <summary>
-        /// Applies damage to the player, reducing their health.
-        /// </summary>
-        /// <param name="amount">The amount of damage to apply.</param>
-        public void TakeDamage(int amount) {
-            if (amount <= 0) return; // No damage to take
+        public int TakeDamage(int amount) {
+            if (amount <= 0) return 0;
 
             int previousHealth = Health;
-            int actualDamage = Math.Min(Health, amount); // Can't take more damage than current health
+            int actualDamage = Math.Min(Health, amount); // Health doesn't go below 0
+            if (actualDamage == 0) return 0;
 
             Health -= actualDamage;
-            Health = Math.Max(0, Health); // Prevent health going below 0
-
-            Log($"{Name} took {actualDamage} damage. Health: {previousHealth} -> {Health}",
-                LogTag.Players | LogTag.Combat);
-
-            // Invoke the OnDamaged event. The GameMediator listens to this.
-            if (actualDamage > 0) {
-                OnDamaged?.Invoke(actualDamage);
-                // No need to call mediator.NotifyPlayerDamaged here,
-                // as the mediator should be subscribed via RegisterPlayer.
-            }
-
-            // HealthChanged is raised by the OnDamaged listener
+            Log($"{Name} took {actualDamage} damage. Health: {previousHealth} -> {Health}", LogTag.Players | LogTag.Combat);
+            HealthChanged?.Invoke(Health);
+            // DamagePlayerActionExecutor notifies the mediator
+            return actualDamage;
         }
 
         /// <summary>
@@ -135,9 +106,7 @@ namespace SlayTheClone {
                 LogTag.Players | LogTag.Effects);
 
             HealthChanged?.Invoke(Health);
-
-            // Note: Notification to GameMediator is handled by the HealPlayerActionExecutor
-
+            // HealPlayerActionExecutor notifies the mediator
             return actualHealAmount;
         }
 

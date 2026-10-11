@@ -170,7 +170,6 @@ namespace SlayTheClone {
 
         #region Turn Processing
 
-        // UPDATED: Process Start of Turn now accepts actionsQueue parameter
         public void ProcessStartOfTurn(int startingTurnNumber, IActionsQueue actionsQueue) {
             if (actionsQueue == null) {
                 LogError("ActionsQueue is null in ProcessStartOfTurn!", LogTag.Effects | LogTag.Turns);
@@ -192,7 +191,6 @@ namespace SlayTheClone {
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
         }
 
-        // UPDATED: Process End of Turn now accepts actionsQueue parameter
         public void ProcessEndOfTurn(int endedTurnNumber, IActionsQueue actionsQueue) {
             if (actionsQueue == null) {
                 LogError("ActionsQueue is null in ProcessEndOfTurn!", LogTag.Effects | LogTag.Turns);

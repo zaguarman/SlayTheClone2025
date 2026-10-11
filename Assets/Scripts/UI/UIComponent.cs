@@ -8,9 +8,7 @@ namespace SlayTheClone {
     /// </summary>
     public abstract class UIComponent : MonoBehaviour {
         public bool IsInitialized { get; protected set; }
-        // Store injected references instead of directly accessing singletons
         protected IGameMediator GameMediator { get; private set; }
-        protected IGameReferences GameReferences { get; private set; }
         protected IGameManager GameManager { get; private set; }
 
         [FormerlySerializedAs("onInitialized")]
@@ -25,25 +23,24 @@ namespace SlayTheClone {
         /// <summary>
         /// Initialize the component with a player and dependencies.
         /// </summary>
-        public virtual void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
+        public virtual void Initialize(IPlayer player, IGameMediator mediator, IGameManager manager) {
             if (IsInitialized) return;
-            Bind(player, mediator, references, manager ?? throw new System.ArgumentNullException(nameof(manager)));
+            Bind(player, mediator, manager ?? throw new System.ArgumentNullException(nameof(manager)));
         }
 
         /// <summary>
         /// Initialize the component with dependencies but no player.
         /// </summary>
-        public virtual void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
-            Initialize(null, mediator, references, manager);
+        public virtual void Initialize(IGameMediator mediator, IGameManager manager) {
+            Initialize(null, mediator, manager);
         }
 
         // Stores the dependencies and starts listening; only the first call has an effect
-        private void Bind(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
+        private void Bind(IPlayer player, IGameMediator mediator, IGameManager manager) {
             if (IsInitialized) return;
 
             Player = player;
             GameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
-            GameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
             GameManager = manager;
 
             RegisterEvents();

@@ -1,8 +1,6 @@
 using System;
 
 namespace SlayTheClone {
-    using static Enums; // Assuming your Enums class is accessible
-
     // Enum to define how a stat modifier calculates its effect
     public enum ModifierCalculationType {
         Flat,       // Adds a flat value (e.g., +5 Attack)
@@ -13,8 +11,7 @@ namespace SlayTheClone {
     public enum ModifiableStat {
         Attack,
         Health, // Represents Max Health modifications
-        Speed   // Added Speed stat
-        // Add other stats like Cost, etc. if needed
+        Speed
     }
 
     // Interface for all modifiers
@@ -23,17 +20,14 @@ namespace SlayTheClone {
         string Name { get; }
         string Description { get; }
 
-        // Called when the modifier is applied to a target (Creature, Slot, etc.)
-        void Apply(object target, IGameMediator mediator);
+        // Called when the modifier is applied to a creature
+        void Apply(ICreature target, IGameMediator mediator);
 
-        // Called when the modifier is removed from a target
-        void Remove(object target, IGameMediator mediator);
+        // Called when the modifier is removed from a creature
+        void Remove(ICreature target, IGameMediator mediator);
 
         // Method for StatModifiers to declare their effect without applying it
         // Returns true if this modifier affects the given stat
         bool TryGetStatModification(ModifiableStat stat, out ModifierCalculationType calcType, out int value);
-
-        // Method for EventSubscriberModifiers to declare their interest in an event
-        bool HandlesEvent(EffectTrigger eventType); // Using existing EffectTrigger for events
     }
 }

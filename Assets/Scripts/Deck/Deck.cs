@@ -14,13 +14,11 @@ namespace SlayTheClone {
         List<ICard> GetDeckPreview();
         List<ICard> GetDiscardPilePreview();
         bool RemoveCard(ICard card);
-        CardData FindOriginalCardDataById(string cardId);
     }
 
     public class Deck : IDeck {
         private List<ICard> cards;
         private List<ICard> discardPile;
-        private List<CardData> originalCardDataList;
         private string deckId;
 
         public int CardsRemaining => cards?.Count ?? 0;
@@ -37,9 +35,6 @@ namespace SlayTheClone {
                     LogTag.Cards | LogTag.Initialization);
                 return;
             }
-
-            // Store the original card data for restoration purposes
-            originalCardDataList = new List<CardData>(cardDataList);
 
             cards.Clear();
             discardPile.Clear();
@@ -93,12 +88,11 @@ namespace SlayTheClone {
         }
 
         private ICard CreateFreshCopy(ICard card) {
-            var data = card.SourceData ?? FindOriginalCardDataById(card.CardId);
-            if (data == null) {
-                LogWarning($"No card data for {card.Name}; discarding the used instance as-is.", LogTag.Cards);
+            if (card.SourceData == null) {
+                LogError($"{card.Name} has no card definition; discarding the used instance as-is. Cards must be made by CardFactory.CreateCard.", LogTag.Cards);
                 return card;
             }
-            return CardFactory.CreateCard(data) ?? card;
+            return CardFactory.CreateCard(card.SourceData);
         }
 
         public void ClearDiscardPile() {
@@ -166,24 +160,6 @@ namespace SlayTheClone {
             var previewCards = new List<ICard>(discardPile);
             Log($"Created discard pile preview with {previewCards.Count} cards for deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
             return previewCards;
-        }
-
-        // Find the original CardData by ID
-        public CardData FindOriginalCardDataById(string cardId) {
-            if (string.IsNullOrEmpty(cardId) || originalCardDataList == null) {
-                return null;
-            }
-
-            // Find the original card data by ID
-            CardData originalData = originalCardDataList.FirstOrDefault(c => c.cardId == cardId);
-
-            if (originalData != null) {
-                Log($"Found original CardData for card with ID {cardId.ToUpper()} in deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
-                return originalData;
-            }
-
-            LogWarning($"Could not find original CardData for card with ID {cardId.ToUpper()} in deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
-            return null;
         }
     }
 }

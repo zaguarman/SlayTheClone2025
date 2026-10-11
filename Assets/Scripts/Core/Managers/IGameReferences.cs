@@ -5,33 +5,28 @@ using UnityEngine.UI;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Interface for accessing game references and UI components.
+    /// What the scene holds: UI objects, the card prefab and colors, and the decks.
+    /// Only the startup code (GameBootstrap and GameUI) reads it; everything else is handed what it uses.
     /// </summary>
     public interface IGameReferences {
-        bool IsInitialized { get; }
         bool AreReferencesValid();
 
-        // Player UI references
+        // Each player's side of the table
         GameReferences.PlayerUIReferences Player1References { get; }
         GameReferences.PlayerUIReferences Player2References { get; }
-        GameReferences.PlayerUIReferences GetPlayerReferences(IPlayer player);
-        PlayerUI GetPlayer1UI();
-        PlayerUI GetPlayer2UI();
-        HandUI GetPlayer1HandUI();
-        HandUI GetPlayer2HandUI();
-        BattlefieldUI GetPlayer1BattlefieldUI();
-        BattlefieldUI GetPlayer2BattlefieldUI();
 
-        // UI components
+        // Cards
         Button GetCardPrefab();
+        Color Player1CardColor { get; }
+        Color Player2CardColor { get; }
+
+        // Controls
         Button GetResolveActionsButton();
-        Color GetCardColor(IPlayer player);
         Button GetWeatherCycleButton();
         TextMeshProUGUI GetWeatherText();
         DeckViewUI GetDeckViewUI();
         Button GetDeckViewButton();
         Button GetDiscardViewButton();
-        Tooltip GetTooltip();
 
         // Deck data
         List<CardData> GetPlayer1DeckCards();

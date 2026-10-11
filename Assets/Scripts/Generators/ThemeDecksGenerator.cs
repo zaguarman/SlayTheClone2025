@@ -770,7 +770,7 @@ namespace SlayTheClone {
             // ModifyStat Specific
             public bool modifyAttack = true;
             public bool modifyHealth = true;
-            public bool modifySpeed = false; // Added flag for speed modification
+            public bool modifySpeed = false;
             // --- ApplyStatus Specific ---
             public StatusEffectType statusEffectToApply = StatusEffectType.None;
             public int statusDuration = 0;

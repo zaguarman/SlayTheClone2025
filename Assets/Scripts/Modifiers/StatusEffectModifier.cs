@@ -30,21 +30,16 @@ namespace SlayTheClone {
 
         // Status effects hold no subscriptions: Burn damage is queued by ModifierManager.ProcessEndOfTurn
         // (which owns the actions queue) and action prevention is checked through PreventsActions().
-        public override void Apply(object target, IGameMediator mediator) {
+        public override void Apply(ICreature target, IGameMediator mediator) {
             Log($"Applying StatusEffect '{Name}' ({EffectType}) to {target}", LogTag.Effects);
         }
 
-        public override void Remove(object target, IGameMediator mediator) {
+        public override void Remove(ICreature target, IGameMediator mediator) {
             Log($"Removing StatusEffect '{Name}' ({EffectType}) from {target}", LogTag.Effects);
         }
 
         public bool PreventsActions() {
-            return EffectType == StatusEffectType.Paralyzed || EffectType == StatusEffectType.Frozen;
-        }
-
-        // Paralyzed/Frozen are checked externally through PreventsActions
-        public override bool HandlesEvent(EffectTrigger eventType) {
-            return EffectType == StatusEffectType.Burned && eventType == EffectTrigger.EndOfTurn; // Ticked by ModifierManager.ProcessEndOfTurn
+            return EffectType == StatusEffectType.Paralyzed;
         }
 
         public override string ToString() =>

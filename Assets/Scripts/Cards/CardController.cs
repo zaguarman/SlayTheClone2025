@@ -8,7 +8,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     [Serializable]
@@ -43,7 +42,7 @@ namespace SlayTheClone {
         private CardData baseCardData; // The original ScriptableObject definition
         private ICreature linkedCreature; // The live Creature instance (if applicable)
         private ICard linkedCardInstance; // General ICard instance (could be Spell or Creature)
-        private Tooltip tooltip;
+        private CardViews cardViews; // Made this card; gives its color and makes its previews
 
         // Queued (played but not yet resolved) visuals
         private const float QueuedAlphaHigh = 0.75f;
@@ -90,88 +89,46 @@ namespace SlayTheClone {
             cardImage = GetComponent<Image>();
         }
 
-        // Updated Setup method to accept ICard and store both base data and linked instance
-        public void Setup(CardData data, IPlayer owner, ICard cardInstance, IGameMediator mediator, IGameReferences references, IGameManager manager) {
-            // Call base Initialize with dependencies FIRST
-            // Pass all required dependencies, including the manager
-            base.Initialize(owner, mediator, references, manager);
-
-            // Now do CardController specific setup
-            baseCardData = data;
-            linkedCardInstance = cardInstance; // Store the passed instance
-            linkedCreature = cardInstance as ICreature; // Try casting to ICreature
+        // Called by CardViews.Create
+        public void Setup(ICard cardInstance, IPlayer owner, CardViews views) {
+            cardViews = views;
+            baseCardData = cardInstance.SourceData;
+            linkedCardInstance = cardInstance;
+            linkedCreature = cardInstance as ICreature;
+            base.Initialize(owner, views.Mediator, views.GameManager); // Starts listening to the linked creature
 
             UpdateUI();
         }
 
+        // Only this card's creature: a board full of cards doesn't hear about every other creature
         protected override void RegisterEvents() {
-            if (GameMediator != null) {
-                GameMediator.AddCreatureDamagedListener(OnCreatureDamaged);
-                GameMediator.AddCreatureHealedListener(OnCreatureHealed);
-                GameMediator.AddCreatureDiedListener(OnCreatureDied);
-                GameMediator.AddCreatureArmorChangedListener(OnCreatureArmorChanged);
-                GameMediator.AddCreatureStatsChangedListener(OnCreatureStatsChanged);
-                GameMediator.AddCreatureStatusChangedListener(OnCreatureStatusChanged);
-            }
+            if (linkedCreature == null) return;
+            linkedCreature.Changed -= OnLinkedCreatureChanged; // Never subscribe twice
+            linkedCreature.Changed += OnLinkedCreatureChanged;
         }
 
         protected override void UnregisterEvents() {
-            if (GameMediator != null) {
-                GameMediator.RemoveCreatureDamagedListener(OnCreatureDamaged);
-                GameMediator.RemoveCreatureHealedListener(OnCreatureHealed);
-                GameMediator.RemoveCreatureDiedListener(OnCreatureDied);
-                GameMediator.RemoveCreatureArmorChangedListener(OnCreatureArmorChanged);
-                GameMediator.RemoveCreatureStatsChangedListener(OnCreatureStatsChanged);
-                GameMediator.RemoveCreatureStatusChangedListener(OnCreatureStatusChanged);
-            }
+            if (linkedCreature != null) linkedCreature.Changed -= OnLinkedCreatureChanged;
         }
 
-        private bool IsLinkedTo(ICreature creature) => linkedCreature != null && creature != null && creature.TargetId == linkedCreature.TargetId;
-
-        private void OnCreatureDamaged(ICreature creature, int damage) => RefreshIfLinked(creature);
-
-        private void OnCreatureHealed(ICreature creature, int amount) => RefreshIfLinked(creature);
-
-        private void OnCreatureStatsChanged(ICreature creature) => RefreshIfLinked(creature);
-
-        // Health or stats changed: redraw the card and the tooltip if it is showing this card
-        private void RefreshIfLinked(ICreature creature) {
-            if (!IsLinkedTo(creature)) return;
+        // Health, armor, stats, statuses, readiness or death changed: redraw the card, and the tooltip if it shows this card
+        private void OnLinkedCreatureChanged(ICreature creature) {
+            if (creature.IsDead) {
+                // The card goes back to its printed values
+                Log($"Creature {creature.Name} died, updating UI (TargetID: {creature.TargetId.ToUpper()}) (Card TargetID: {GetInstanceID()})", LogTag.Creatures | LogTag.UI);
+                UnregisterEvents();
+                linkedCreature = null;
+                linkedCardInstance = null;
+                UpdateUI();
+                Tooltip.Existing?.HideTooltip();
+                return;
+            }
 
             UpdateUI();
-            var tooltip = GetTooltip();
+            var tooltip = Tooltip.Existing;
             if (tooltip != null && tooltip.gameObject.activeSelf) {
                 tooltip.UpdateTooltipContent(this);
             }
-        }
-
-        private void OnCreatureArmorChanged(ICreature creature, int newArmor) {
-            if (!IsLinkedTo(creature)) return;
-
-            Log($"Creature {creature.Name} armor changed to {newArmor}, updating UI (TargetID: {creature.TargetId.ToUpper()}) (Card TargetID: {GetInstanceID()})", LogTag.Creatures | LogTag.UI | LogTag.Effects);
-            UpdateUI();
-        }
-
-        private void OnCreatureStatusChanged(ICreature creature, StatusEffectType status, bool applied) {
-            if (IsLinkedTo(creature)) UpdateStatusIcons();
-        }
-
-        private void OnCreatureDied(ICreature creature) {
-            if (!IsLinkedTo(creature)) return;
-
-            Log($"Creature {creature.Name} died, updating UI (TargetID: {creature.TargetId.ToUpper()}) (Card TargetID: {GetInstanceID()})", LogTag.Creatures | LogTag.UI);
-            linkedCreature = null;
-            linkedCardInstance = null;
-            UpdateUI();
-            GetTooltip()?.HideTooltip();
-        }
-
-        // Null once GameReferences or the cached tooltip has been destroyed
-        private Tooltip GetTooltip() {
-            if (tooltip == null && GameReferences is UnityEngine.Object references && references != null) {
-                tooltip = GameReferences.GetTooltip();
-            }
-            return tooltip != null ? tooltip : null;
         }
 
         public override void UpdateUI(IPlayer player = null) {
@@ -260,8 +217,8 @@ namespace SlayTheClone {
 
         private void UpdateCardVisuals() {
             // The outer border shows who owns the card
-            if (cardImage != null && Player != null && GameReferences != null) {
-                cardImage.color = GameReferences.GetCardColor(Player);
+            if (cardImage != null && Player != null) {
+                cardImage.color = cardViews.GetColor(Player);
             }
 
             artImage.sprite = baseCardData.artwork;
@@ -290,7 +247,7 @@ namespace SlayTheClone {
             transform.SetAsLastSibling();
 
             // Hide tooltip when dragging starts
-            GetTooltip()?.HideTooltip();
+            Tooltip.Existing?.HideTooltip();
 
             OnBeginDragEvent.Invoke(this);
         }
@@ -324,11 +281,7 @@ namespace SlayTheClone {
 
         public void OnPointerEnter(PointerEventData eventData) {
             if (!isDragging) {
-                // Always show tooltip on hover
-                var tooltip = GetTooltip();
-                if (tooltip != null) {
-                    tooltip.ShowTooltip(this);
-                }
+                Tooltip.Shared.ShowTooltip(this);
 
                 OnPointerEnterHandler?.Invoke();
             }
@@ -336,7 +289,7 @@ namespace SlayTheClone {
 
         public void OnPointerExit(PointerEventData eventData) {
             if (!isDragging) {
-                GetTooltip()?.HideTooltip();
+                Tooltip.Existing?.HideTooltip();
                 OnPointerExitHandler?.Invoke();
             }
         }
@@ -446,7 +399,7 @@ namespace SlayTheClone {
 
             if (replaceBadge != null) replaceBadge.SetActive(false);
             canvasGroup.blocksRaycasts = false;
-            GetTooltip()?.HideTooltip();
+            Tooltip.Existing?.HideTooltip();
             DOTween.Kill(transform);
 
             DOTween.Sequence().SetTarget(transform)
@@ -461,7 +414,7 @@ namespace SlayTheClone {
         public void PlayCastAnimation(Transform flyRoot, Vector3 worldTarget, float delay = 0f) {
             SetQueued(false);
             canvasGroup.blocksRaycasts = false;
-            GetTooltip()?.HideTooltip();
+            Tooltip.Existing?.HideTooltip();
 
             transform.SetParent(flyRoot, true);
             transform.SetAsLastSibling();
@@ -485,7 +438,7 @@ namespace SlayTheClone {
 
         // Make sure to clean up when the card is destroyed
         protected override void OnDestroy() {
-            GetTooltip()?.HideTooltip();
+            Tooltip.Existing?.HideTooltip();
             DOTween.Kill(transform);
             CleanupEvents();
 
@@ -498,7 +451,7 @@ namespace SlayTheClone {
         /// Used for the enlarged preview shown while hovering.
         /// </summary>
         public CardController CreatePreview(Transform parent) {
-            var preview = CardFactory.CreateCardController(linkedCardInstance, baseCardData, Player, parent, GameMediator, GameReferences, GameManager);
+            var preview = cardViews.Create(linkedCardInstance, Player, parent);
             if (preview == null) return null;
 
             var group = preview.GetComponent<CanvasGroup>();

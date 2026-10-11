@@ -30,33 +30,32 @@ namespace SlayTheClone {
             }
 
             // 2. Mediator
-            if (!TryFind(out GameMediator gameMediator)) yield break;
-            if (!gameMediator.IsInitialized) {
-                gameMediator.Initialize();
-                yield return new WaitUntil(() => gameMediator.IsInitialized);
-            }
-            Log("GameMediator initialized", LogTag.Initialization);
+            var gameMediator = new GameMediator();
 
             // 3. GameManager builds the game and starts the turn flow
             if (!TryFind(out TurnManager turnManager)) yield break;
             if (!TryFind(out GameManager gameManager)) yield break;
             if (!gameManager.IsInitialized) {
-                gameManager.Initialize(gameMediator, gameReferences, turnManager, new SimpleModifierFactory());
+                gameManager.Initialize(gameMediator, gameReferences.GetPlayer1DeckCards(), gameReferences.GetPlayer2DeckCards(),
+                    turnManager, new SimpleModifierFactory());
                 yield return new WaitUntil(() => gameManager.IsInitialized);
             }
             Log("GameManager initialized", LogTag.Initialization);
 
-            // 4. GameUI
+            // 4. GameUI, with what every card face needs and the views of both sides of the table
+            var cardViews = new CardViews(gameReferences.GetCardPrefab().GetComponent<CardController>(),
+                gameReferences.Player1CardColor, gameReferences.Player2CardColor, gameMediator, gameManager);
+            var tableViews = new TableViews(gameReferences.Player1References, gameReferences.Player2References);
             if (!TryFind(out GameUI gameUI)) yield break;
             if (!gameUI.IsInitialized) {
-                gameUI.Initialize(gameMediator, gameReferences, gameManager);
+                gameUI.Initialize(gameMediator, gameReferences, gameManager, cardViews, tableViews);
                 yield return new WaitUntil(() => gameUI.IsInitialized);
             }
             Log("GameUI initialized", LogTag.Initialization);
 
             // 5. Resolution playback: the turn waits on it so effects play one after another
             var presenter = ResolutionPresenter.Create(gameReferences.transform);
-            presenter.Initialize(gameMediator, gameReferences, gameManager);
+            presenter.Initialize(gameMediator, gameManager, cardViews, tableViews);
             turnManager.SetPresenter(presenter);
             Log("ResolutionPresenter initialized", LogTag.Initialization);
 

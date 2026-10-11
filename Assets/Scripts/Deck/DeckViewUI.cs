@@ -19,7 +19,6 @@ namespace SlayTheClone {
         private GridLayoutGroup gridLayout;
         private ScrollRect scrollRect;
         private bool viewingDiscardPile = false;
-        private Tooltip cardTooltip;
 
         public GameObject DeckViewPanel => deckViewPanel;
         public Button CloseButton => closeButton;
@@ -79,8 +78,11 @@ namespace SlayTheClone {
             Log("Card grid setup complete", LogTag.UI | LogTag.Initialization);
         }
 
-        public override void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
-            base.Initialize(mediator, references, manager);
+        private CardViews cardViews;
+
+        public void Initialize(IGameMediator mediator, IGameManager manager, CardViews views) {
+            cardViews = views ?? throw new System.ArgumentNullException(nameof(views));
+            base.Initialize(mediator, manager);
             Log("DeckViewUI initialized", LogTag.UI | LogTag.Initialization);
         }
 
@@ -122,7 +124,7 @@ namespace SlayTheClone {
                 return;
             }
 
-            GetTooltip()?.HideTooltip();
+            Tooltip.Existing?.HideTooltip();
             deckViewPanel.SetActive(false);
             Log("Hiding deck view", LogTag.UI);
         }
@@ -159,8 +161,7 @@ namespace SlayTheClone {
                 return;
             }
 
-            var cardData = CardFactory.FindCardData(card, owner) ?? CardFactory.CreateFallbackData(card);
-            var cardController = CardFactory.CreateCardController(card, cardData, owner, cardListContent, GameMediator, GameReferences, GameManager);
+            var cardController = cardViews.Create(card, owner, cardListContent);
             if (cardController == null) {
                 LogError($"Failed to create card controller for {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
                 return;
@@ -173,8 +174,8 @@ namespace SlayTheClone {
 
         // The cards only show tooltips: the CardController is disabled and an interceptor swallows drags
         private void DisableCardInteractions(CardController cardController) {
-            var tooltip = GetTooltip();
-            tooltip?.EnableTooltipOnly(cardController);
+            var tooltip = Tooltip.Shared;
+            tooltip.EnableTooltipOnly(cardController);
 
             var interceptor = cardController.gameObject.AddComponent<DeckViewCardInterceptor>();
             cardController.enabled = false;
@@ -187,16 +188,8 @@ namespace SlayTheClone {
             }
         }
 
-        // Null once GameReferences has been destroyed
-        private Tooltip GetTooltip() {
-            if (cardTooltip == null && GameReferences is Object references && references != null) {
-                cardTooltip = GameReferences.GetTooltip();
-            }
-            return cardTooltip != null ? cardTooltip : null;
-        }
-
         private void ClearCardEntries() {
-            GetTooltip()?.HideTooltip();
+            Tooltip.Existing?.HideTooltip();
 
             foreach (var entry in cardEntries) {
                 if (entry != null) Destroy(entry.gameObject);

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
     /// <summary>
@@ -23,9 +22,6 @@ namespace SlayTheClone {
         private Color invalidDropColor;
         private Color hoverColor;
         private Color combatMarkColor;
-
-        // Reference to GameReferences for tooltip access - MUST be set via SetGameReferences
-        private IGameReferences gameReferences;
 
         private void Awake() {
             rectTransform = GetComponent<RectTransform>() ?? gameObject.AddComponent<RectTransform>();
@@ -73,39 +69,12 @@ namespace SlayTheClone {
             }
         }
 
-        // Method to set the GameReferences dependency (called by BattlefieldUI)
-        public void SetGameReferences(IGameReferences references) {
-            gameReferences = references;
-            if (gameReferences == null) {
-                // Log an error if null references are passed during setup
-                LogError($"SetGameReferences called with null references for slot {name} (TargetID: {TargetId})", LogTag.Initialization | LogTag.UI);
-            }
-        }
-
         public void OnPointerEnter(PointerEventData eventData) {
             if (IsCreatureFromHandDraggedOver(eventData)) {
                 OccupyingCard.SetReplacementPreview(true);
             }
 
-            // --- Dependency Check ---
-            if (gameReferences == null) {
-                LogError($"Cannot handle PointerEnter for slot {name} (TargetID: {TargetId}) - gameReferences is null. Check BattlefieldUI initialization.", LogTag.Initialization | LogTag.UI);
-                return;
-            }
-
-            Tooltip tooltip = gameReferences.GetTooltip();
-            // --- Tooltip System Check ---
-            if (tooltip == null) {
-                LogWarning($"Tooltip system (via gameReferences) not available when hovering over slot {name}", LogTag.UI);
-                return; // Cannot proceed without a valid tooltip instance
-            }
-            // Ensure the tooltip GameObject itself hasn't been destroyed
-            if (tooltip.gameObject == null) {
-                LogWarning($"Tooltip GameObject was destroyed. Cannot show tooltip for slot {name}", LogTag.UI);
-                return;
-            }
-
-            // --- Show Tooltip ---
+            var tooltip = Tooltip.Shared;
             if (OccupyingCard != null) {
                 tooltip.ShowTooltip(OccupyingCard); // Show card details
             }
@@ -121,18 +90,7 @@ namespace SlayTheClone {
                 OccupyingCard.SetReplacementPreview(false);
             }
 
-            // --- Dependency Check ---
-            if (gameReferences == null) {
-                // No need to log again if logged in Enter, but check is crucial
-                return;
-            }
-
-            Tooltip tooltip = gameReferences.GetTooltip();
-            // --- Tooltip System Check ---
-            // Check if tooltip instance and its GameObject exist before hiding
-            if (tooltip != null && tooltip.gameObject != null) {
-                tooltip.HideTooltip();
-            }
+            Tooltip.Existing?.HideTooltip();
         }
 
         // True while a creature card from a hand is dragged over this occupied slot (dropping it replaces the occupant)

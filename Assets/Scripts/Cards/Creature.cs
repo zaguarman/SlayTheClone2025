@@ -37,6 +37,13 @@ namespace SlayTheClone {
         /// <returns>True when the countdown changed.</returns>
         bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue);
 
+        /// <summary>
+        /// Raised after something its card shows changes: health, armor, stats, statuses, readiness or death.
+        /// The mediator raises it along with the matching game-wide event, so a card can listen to its own creature only.
+        /// </summary>
+        event Action<ICreature> Changed;
+        void NotifyChanged();
+
         /// <summary>Queues what this creature's effects with the trigger do, if it is operative.</summary>
         /// <param name="triggeringAttacker">Whoever damaged or killed it, for retaliation.</param>
         void HandleEffect(EffectTrigger trigger, IActionsQueue actionsQueue, ICreature triggeringAttacker = null);
@@ -73,6 +80,9 @@ namespace SlayTheClone {
         public int TurnsUntilOperative { get; private set; }
         public bool IsOperative => TurnsUntilOperative == 0;
         private int landedOnTurn;
+
+        public event Action<ICreature> Changed;
+        public void NotifyChanged() => Changed?.Invoke(this);
 
         public Creature(string name, int attack, int health, int speed, string cardId, int turnsUntilOperative = 0) : base(name, cardId) {
             BaseAttack = attack;

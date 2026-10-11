@@ -6,7 +6,6 @@ namespace SlayTheClone {
     public interface IWeatherSystem {
         WeatherType CurrentWeather { get; }
         void SetWeather(WeatherType weatherType);
-        // Removed bool isDirectDamage parameter
         float GetDamageModifier();
         UnityEvent<WeatherType> OnWeatherChanged { get; }
         string GetWeatherDescription(WeatherType weatherType);
@@ -15,16 +14,9 @@ namespace SlayTheClone {
     public class WeatherSystem : IWeatherSystem {
         #region Fields & Properties
         private WeatherType currentWeather = WeatherType.Clear;
-        private readonly IGameMediator gameMediator;
         private readonly UnityEvent<WeatherType> onWeatherChanged = new UnityEvent<WeatherType>();
         public WeatherType CurrentWeather => currentWeather;
         public UnityEvent<WeatherType> OnWeatherChanged => onWeatherChanged;
-        #endregion
-
-        #region Constructor
-        public WeatherSystem(IGameMediator gameMediator) {
-            this.gameMediator = gameMediator;
-        }
         #endregion
 
         #region Methods
@@ -33,11 +25,9 @@ namespace SlayTheClone {
                 currentWeather = weatherType;
                 OnWeatherChanged.Invoke(currentWeather);
                 Log($"Weather changed to {currentWeather}", LogTag.Effects);
-                gameMediator?.NotifyGameStateChanged();
             }
         }
 
-        // Updated GetDamageModifier
         public float GetDamageModifier() {
             // Simplification: Rainy affects combat (MarkCombatTargetAction processing), Sunny affects all damage actions.
             // A more complex system could check action type if needed.

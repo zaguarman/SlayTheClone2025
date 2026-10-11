@@ -15,16 +15,23 @@ namespace SlayTheClone {
         private IGameManager gameManager;
         private IGameMediator gameMediator;
         private IGameReferences gameReferences;
+        private CardViews cardViews;
+        private TableViews tableViews;
 
         [FormerlySerializedAs("onInitialized")]
         public UnityEvent OnInitialized = new UnityEvent();
 
-        public void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
+        /// <summary>
+        /// Puts the UI together: the scene's references are read here, and each view is handed only what it uses.
+        /// </summary>
+        public void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager, CardViews views, TableViews table) {
             if (IsInitialized) return;
 
             gameMediator = mediator ?? throw new System.ArgumentNullException(nameof(mediator));
             gameReferences = references ?? throw new System.ArgumentNullException(nameof(references));
             gameManager = manager ?? throw new System.ArgumentNullException(nameof(manager));
+            cardViews = views ?? throw new System.ArgumentNullException(nameof(views));
+            tableViews = table ?? throw new System.ArgumentNullException(nameof(table));
 
             // Also covers each player's PlayerUI, HandUI and BattlefieldUI
             if (!gameReferences.AreReferencesValid()) {
@@ -82,27 +89,28 @@ namespace SlayTheClone {
 
             InitializePlayerUI(gameManager.Player1);
             InitializePlayerUI(gameManager.Player2);
-            turnUI.Initialize(gameMediator, gameReferences, gameManager);
-            gameReferences.GetDeckViewUI()?.Initialize(gameMediator, gameReferences, gameManager);
+            turnUI.Initialize(gameMediator, gameManager);
+            gameReferences.GetDeckViewUI()?.Initialize(gameMediator, gameManager, cardViews);
 
             Log("All child UI components initialized", LogTag.UI | LogTag.Initialization);
         }
 
         private void InitializePlayerUI(IPlayer player) {
-            var playerReferences = gameReferences.GetPlayerReferences(player);
-            playerReferences.PlayerUI.Initialize(player, gameMediator, gameReferences, gameManager);
-            playerReferences.BattlefieldUI.Initialize(player, gameMediator, gameReferences, gameManager);
-            playerReferences.HandUI.Initialize(player, gameMediator, gameReferences, gameManager);
+            var playerReferences = player.IsPlayer1 ? gameReferences.Player1References : gameReferences.Player2References;
+            playerReferences.PlayerUI.Initialize(player, gameMediator, gameManager, playerReferences.HealthText);
+            playerReferences.BattlefieldUI.Initialize(player, gameMediator, gameManager, cardViews, tableViews);
+            playerReferences.HandUI.Initialize(player, gameMediator, gameManager, cardViews);
         }
 
         private void InitializeControllers() {
             weatherController = GetOrAddComponent<WeatherController>();
-            weatherController.Initialize(gameMediator, gameReferences, gameManager);
+            weatherController.Initialize(gameMediator, gameManager, gameReferences.GetWeatherCycleButton(), gameReferences.GetWeatherText());
             weatherSystemInitialized = weatherController.IsInitialized;
             LogControllerInitialized("Weather controller", weatherSystemInitialized);
 
             deckViewController = GetOrAddComponent<DeckViewController>();
-            deckViewController.Initialize(gameMediator, gameReferences, gameManager);
+            deckViewController.Initialize(gameMediator, gameManager,
+                gameReferences.GetDeckViewButton(), gameReferences.GetDiscardViewButton(), gameReferences.GetDeckViewUI());
             LogControllerInitialized("DeckViewController", deckViewController.IsInitialized);
         }
 
@@ -114,24 +122,6 @@ namespace SlayTheClone {
         private static void LogControllerInitialized(string controllerName, bool initialized) {
             if (initialized) Log($"{controllerName} initialized via GameUI", LogTag.UI | LogTag.Initialization);
             else LogError($"{controllerName} FAILED initialization via GameUI", LogTag.UI | LogTag.Initialization);
-        }
-
-        private void OnEnable() {
-            if (IsInitialized && gameMediator != null) {
-                gameMediator.AddGameInitializedListener(OnGameInitialized);
-                Log("GameUI events registered", LogTag.UI);
-            }
-        }
-
-        private void OnDisable() {
-            if (gameMediator != null) {
-                gameMediator.RemoveGameInitializedListener(OnGameInitialized);
-                Log("GameUI events unregistered", LogTag.UI);
-            }
-        }
-
-        private void OnGameInitialized() {
-            Log("GameUI notified of game initialization", LogTag.UI);
         }
 
         protected void OnDestroy() {

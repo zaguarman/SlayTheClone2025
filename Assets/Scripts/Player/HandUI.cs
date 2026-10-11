@@ -13,22 +13,16 @@ namespace SlayTheClone {
 
         protected override void RegisterEvents() {
             if (GameMediator != null) {
-                GameMediator.AddHandStateChangedListener(UpdateUI);
-                GameMediator.AddGameInitializedListener(OnGameInitialized);
-                GameMediator.AddActionsQueueChangedListener(OnActionsQueueChanged);
+                GameMediator.HandStateChanged += UpdateUI;
+                GameMediator.ActionsQueueChanged += OnActionsQueueChanged;
             }
         }
 
         protected override void UnregisterEvents() {
             if (GameMediator != null) {
-                GameMediator.RemoveHandStateChangedListener(UpdateUI);
-                GameMediator.RemoveGameInitializedListener(OnGameInitialized);
-                GameMediator.RemoveActionsQueueChangedListener(OnActionsQueueChanged);
+                GameMediator.HandStateChanged -= UpdateUI;
+                GameMediator.ActionsQueueChanged -= OnActionsQueueChanged;
             }
-        }
-
-        private void OnGameInitialized() {
-            UpdateUI(Player);
         }
 
         private void OnActionsQueueChanged() {
@@ -88,14 +82,7 @@ namespace SlayTheClone {
                 bool isQueued = queuedCards.Contains(handCard);
                 if (isQueued && handCard is ICreature) continue;
 
-                // Cards dealt from a deck always have data; a missing one is skipped so the problem shows
-                CardData originalData = CardFactory.FindCardData(handCard, player);
-                if (originalData == null) {
-                    LogWarning($"HandUI: Could not find original CardData for {handCard.Name} (ID: {handCard.CardId}) in {player.Name}'s deck. Display might be inaccurate.", LogTag.UI | LogTag.Cards);
-                    continue;
-                }
-
-                var controller = CardFactory.CreateCardController(handCard, originalData, Player, transform, GameMediator, GameReferences, GameManager);
+                var controller = CardViews.Create(handCard, Player, transform);
                 if (controller != null) {
                     AddCard(controller);
                     if (isQueued) controller.SetQueued(true);

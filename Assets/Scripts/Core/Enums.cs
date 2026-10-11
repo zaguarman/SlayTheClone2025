@@ -4,17 +4,15 @@ namespace SlayTheClone {
     public class Enums {
         // Card/Effect Enums
         public enum CardType { Creature, Spell, Enchantment }
-        public enum EffectType { Immediate, Triggered, Continuous, Timed, Status } // Added Status
-        public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted } // Added ActionAttempted
+        public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
+        public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted }
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus } // Renamed Buff to ModifyStat
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         public enum StatusEffectType {
             None,
             Burned,     // Takes damage at end of turn
-            Paralyzed,  // Cannot perform actions (attack/move)
-            Frozen,     // Similar to Paralyzed, potentially longer duration or different interactions
-            Poisoned    // Takes increasing damage over time (more complex, start simple)
+            Paralyzed   // Cannot perform actions (attack/move)
         }
 
         // Targeting Modifiers

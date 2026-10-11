@@ -72,9 +72,11 @@ namespace SlayTheClone {
             // Override in derived classes if needed
         }
 
-        public override void Initialize(IPlayer player, IGameMediator mediator, IGameReferences references, IGameManager manager) {
-            // Call base UIComponent Initialize FIRST
-            base.Initialize(player, mediator, references, manager);
+        protected CardViews CardViews { get; private set; }
+
+        public virtual void Initialize(IPlayer player, IGameMediator mediator, IGameManager manager, CardViews cardViews) {
+            CardViews = cardViews ?? throw new System.ArgumentNullException(nameof(cardViews));
+            base.Initialize(player, mediator, manager);
 
             // Now do CardContainer specific setup
             containerRect = GetComponent<RectTransform>();

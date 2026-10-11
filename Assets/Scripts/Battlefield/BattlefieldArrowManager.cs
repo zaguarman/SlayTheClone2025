@@ -34,8 +34,8 @@ namespace SlayTheClone {
             this.findSlotView = findSlotView ?? throw new ArgumentNullException(nameof(findSlotView));
 
             dragArrow = ArrowIndicator.Create(parentTransform);
-            gameMediator.AddActionsQueueChangedListener(RefreshArrows);
-            gameMediator.AddBattlefieldStateChangedListener(OnBattlefieldStateChanged);
+            gameMediator.ActionsQueueChanged += RefreshArrows;
+            gameMediator.BattlefieldStateChanged += OnBattlefieldStateChanged;
         }
 
         #region Drag arrow
@@ -118,8 +118,8 @@ namespace SlayTheClone {
         #endregion
 
         public void Cleanup() {
-            gameMediator.RemoveActionsQueueChangedListener(RefreshArrows);
-            gameMediator.RemoveBattlefieldStateChangedListener(OnBattlefieldStateChanged);
+            gameMediator.ActionsQueueChanged -= RefreshArrows;
+            gameMediator.BattlefieldStateChanged -= OnBattlefieldStateChanged;
             foreach (var arrow in activeArrows.Values) {
                 if (arrow != null) GameObject.Destroy(arrow.gameObject);
             }

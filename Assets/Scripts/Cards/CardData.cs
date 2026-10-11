@@ -5,7 +5,7 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     public abstract class CardData : ScriptableObject {
-        public string cardId; // Added unique ID field
+        public string cardId; // Unique per card definition
         public string cardName;
         public string description;
         public CardType cardType;
@@ -59,7 +59,7 @@ namespace SlayTheClone {
         // ModifyStat Specific
         public bool modifyAttack = true;
         public bool modifyHealth = true;
-        public bool modifySpeed = false; // Added flag for speed modification
+        public bool modifySpeed = false;
         // public ModifierCalculationType calculationType = ModifierCalculationType.Flat;
 
         // ApplyStatus Specific

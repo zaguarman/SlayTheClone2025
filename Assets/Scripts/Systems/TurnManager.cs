@@ -82,8 +82,6 @@ namespace SlayTheClone {
                 modifierManager.ProcessStartOfTurn(turnNumber, actionsQueue);
                 yield return ResolveQueuedActions();
 
-                // --- Phase 4: Finalize ---
-                gameMediator.NotifyGameStateChanged();
                 Log($"--- Turn {turnNumber} Started ---", LogTag.Turns);
             }
             finally {

@@ -5,7 +5,7 @@ namespace SlayTheClone {
         string CardId { get; }
         List<CardEffect> Effects { get; }
         string Description { get; set; }
-        CardData SourceData { get; } // Definition this instance was created from; used to reset it when discarded
+        CardData SourceData { get; } // Definition this instance was created from: what its card shows, and how it is reset when discarded
         void Play(IPlayer owner, IActionsQueue context, ITarget target = null);
     }
 

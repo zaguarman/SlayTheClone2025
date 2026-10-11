@@ -43,26 +43,23 @@ namespace SlayTheClone {
     }
 
     public static class ActionExecutors {
-        /// <summary>One executor per action type, keyed by the type it runs.</summary>
+        /// <summary>
+        /// One executor per action type, keyed by the type it runs. Every executor class is found automatically,
+        /// so a new one only has to exist; an action type nobody executes is reported.
+        /// </summary>
         public static Dictionary<Type, IActionExecutor> CreateRegistry() {
-            return new IActionExecutor[] {
-                new DrawCardsActionExecutor(),
-                new ChangeWeatherActionExecutor(),
-                new SummonCreatureActionExecutor(),
-                new PlayCardActionExecutor(),
-                new PlaySpellActionExecutor(),
-                new BattlefieldCombatActionExecutor(),
-                new ModifyActionExecutor(),
-                new ApplyStatusEffectActionExecutor(),
-                new MoveCreatureActionExecutor(),
-                new DamageCreatureActionExecutor(),
-                new ModifyArmorActionExecutor(),
-                new DamagePlayerActionExecutor(),
-                new DiscardHandActionExecutor(),
-                new HealCreatureActionExecutor(),
-                new HealPlayerActionExecutor(),
-                new SwapCreaturesActionExecutor()
-            }.ToDictionary(executor => executor.ActionType);
+            var types = typeof(IActionExecutor).Assembly.GetTypes();
+            var registry = types
+                .Where(t => typeof(IActionExecutor).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface)
+                .Select(t => (IActionExecutor)Activator.CreateInstance(t))
+                .ToDictionary(executor => executor.ActionType); // Throws if two executors claim the same action
+
+            foreach (var actionType in types.Where(t => typeof(IGameAction).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface)) {
+                if (!registry.ContainsKey(actionType)) {
+                    LogError($"No executor for {actionType.Name}: queued actions of that type would do nothing. Add an ActionExecutor<{actionType.Name}>.", LogTag.Actions | LogTag.Initialization);
+                }
+            }
+            return registry;
         }
     }
 }

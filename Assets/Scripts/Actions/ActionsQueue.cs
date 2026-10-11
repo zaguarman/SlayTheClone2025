@@ -228,10 +228,9 @@ namespace SlayTheClone {
         private void EndResolution() {
             activeCreatureActions.Clear();
 
-            // ActionsQueueChanged was already raised after the last action ran; only the coarse state change is new here
+            // ActionsQueueChanged was already raised after the last action ran
             if (actionsResolved > 0) {
                 OnActionsResolved.Invoke();
-                gameMediator.NotifyGameStateChanged();
             }
             Log($"Action resolution complete (Queue ID: {QueueId})", LogTag.Actions);
         }

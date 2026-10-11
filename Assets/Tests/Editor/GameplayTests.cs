@@ -99,10 +99,13 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(p2.Battlefield[0].IsOccupied());
             AssertDiscarded(p2, sheep);
 
-            // Attacking an empty slot damages the player who owns it
+            // Attacking an empty slot damages the player who owns it, announced once
             int p2Health = p2.Health;
+            var playerHits = new List<int>();
+            game.Mediator.PlayerDamaged += (player, damage) => playerHits.Add(damage);
             Attack(hound, p2.Battlefield[0]);
             Assert.AreEqual(p2Health - hound.Attack, p2.Health);
+            CollectionAssert.AreEqual(new[] { hound.Attack }, playerHits);
 
             // An enemy-targeted OnDamage effect strikes back at the attacker, on every hit
             var jackal = game.Summon(p1, game.Creature("Jackal", 1, 4), 1);
@@ -124,12 +127,19 @@ namespace SlayTheClone.Tests {
             // Attacks declared in the same turn resolve by speed: a creature killed first never lands its hit
             var falcon = game.Summon(p1, game.Creature("Falcon", 4, 2, speed: 3), 2);
             var boar = game.Summon(p2, game.Creature("Boar", 4, 2, speed: 1), 2);
+            int falconChanges = 0, boarChanges = 0;
+            falcon.Changed += _ => falconChanges++;
+            boar.Changed += _ => boarChanges++;
             game.CombatHandler.HandleCreatureCombat(falcon, p2.Battlefield[2]);
             game.CombatHandler.HandleCreatureCombat(boar, p1.Battlefield[2]);
             game.Resolve();
             Assert.IsTrue(boar.IsDead);
             Assert.IsFalse(falcon.IsDead);
             Assert.AreEqual(falcon.MaxHealth, falcon.Health);
+
+            // Each creature announces its own changes (what its card listens to): only the boar was hit and died
+            Assert.AreEqual(2, boarChanges);
+            Assert.AreEqual(0, falconChanges);
 
             // Effects can trigger each other forever: two Rams that grow from every hit and strike back.
             // The queue stops after a set number of actions, reports it as an error and drops the rest.

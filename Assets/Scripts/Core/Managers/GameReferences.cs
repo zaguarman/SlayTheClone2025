@@ -7,8 +7,7 @@ using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Provides access to game references and UI components.
-    /// Found and initialized by GameBootstrap.
+    /// The scene's references (see <see cref="IGameReferences"/>). Found and initialized by GameBootstrap.
     /// </summary>
     public class GameReferences : MonoBehaviour, IGameReferences {
         public bool IsInitialized { get; private set; }
@@ -52,8 +51,6 @@ namespace SlayTheClone {
         [SerializeField] private Button discardViewButton;
         [SerializeField] private TextMeshProUGUI deckViewTitleText;
 
-        [Header("Tooltip")]
-        [SerializeField] private Tooltip tooltip;
 
         [Header("Player References")]
         [FormerlySerializedAs("_player1References")]
@@ -77,20 +74,10 @@ namespace SlayTheClone {
 
         public PlayerUIReferences Player1References => player1References;
         public PlayerUIReferences Player2References => player2References;
+        public Color Player1CardColor => player1CardColor;
+        public Color Player2CardColor => player2CardColor;
 
         #region Unity Lifecycle
-        private void Start() {
-            if (GetComponent<DeckViewController>() == null) {
-                Log("Adding DeckViewController to GameReferences", LogTag.Initialization);
-                gameObject.AddComponent<DeckViewController>();
-            }
-
-            if (tooltip == null) {
-                Log("CardTooltip reference missing, creating one", LogTag.Initialization);
-                tooltip = Tooltip.Create(transform);
-            }
-        }
-
         private void OnEnable() {
             ValidateReferences();
         }
@@ -121,11 +108,6 @@ namespace SlayTheClone {
             isValid &= IsAssigned(player1Deck, "Player 1 deck reference missing!");
             isValid &= IsAssigned(player2Deck, "Player 2 deck reference missing!");
 
-            // Optional: created on demand
-            if (tooltip == null) {
-                Log("CardTooltip reference missing, will create one when needed", LogTag.Initialization);
-            }
-
             isValid &= player1References.ValidateReferences("Player 1");
             isValid &= player2References.ValidateReferences("Player 2");
 
@@ -152,17 +134,8 @@ namespace SlayTheClone {
         #endregion
 
         #region Methods
-        public PlayerUIReferences GetPlayerReferences(IPlayer player) => player.IsPlayer1 ? player1References : player2References;
-
-        public PlayerUI GetPlayer1UI() => player1References.PlayerUI;
-        public PlayerUI GetPlayer2UI() => player2References.PlayerUI;
-        public HandUI GetPlayer1HandUI() => player1References.HandUI;
-        public HandUI GetPlayer2HandUI() => player2References.HandUI;
-        public BattlefieldUI GetPlayer1BattlefieldUI() => player1References.BattlefieldUI;
-        public BattlefieldUI GetPlayer2BattlefieldUI() => player2References.BattlefieldUI;
         public Button GetCardPrefab() => cardPrefab;
         public Button GetResolveActionsButton() => resolveActionsButton;
-        public Color GetCardColor(IPlayer player) => player.IsPlayer1 ? player1CardColor : player2CardColor;
         public Button GetWeatherCycleButton() => weatherCycleButton;
         public TextMeshProUGUI GetWeatherText() => weatherText;
         public DeckViewUI GetDeckViewUI() => WarnIfMissing(deckViewUI, nameof(GetDeckViewUI));
@@ -174,17 +147,6 @@ namespace SlayTheClone {
                 LogWarning($"Reference is null when {getterName} was called", LogTag.UI);
             }
             return reference;
-        }
-
-        // Created on demand, and again if the cached tooltip was destroyed
-        public Tooltip GetTooltip() {
-            if (this == null) return null; // GameReferences itself was destroyed
-
-            if (tooltip == null) {
-                LogWarning("CardTooltip is missing or was destroyed when GetTooltip was called, creating one", LogTag.UI);
-                tooltip = Tooltip.Create(transform);
-            }
-            return tooltip;
         }
 
         public List<CardData> GetPlayer1DeckCards() => GetDeckCards(player1Deck, "Player1Deck");

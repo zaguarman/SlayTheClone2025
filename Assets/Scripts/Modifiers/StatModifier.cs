@@ -16,9 +16,9 @@ namespace SlayTheClone {
         }
 
         // Nothing to do on apply or remove: ModifierManager reads TryGetStatModification when it recalculates stats
-        public override void Apply(object target, IGameMediator mediator) { }
+        public override void Apply(ICreature target, IGameMediator mediator) { }
 
-        public override void Remove(object target, IGameMediator mediator) { }
+        public override void Remove(ICreature target, IGameMediator mediator) { }
 
         public override bool TryGetStatModification(ModifiableStat stat, out ModifierCalculationType calcType, out int value) {
             if (stat != StatToModify) return base.TryGetStatModification(stat, out calcType, out value);

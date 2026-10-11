@@ -111,20 +111,16 @@ namespace SlayTheClone {
             .Select((card, index) => $"Card {index + 1}: {card.Name}")
             .ToList() ?? new List<string>();
 
-        public void Initialize(IGameMediator mediator, IGameReferences references, TurnManager turnManager, IModifierFactory modifierFactory) {
+        public void Initialize(IGameMediator mediator, List<CardData> player1Cards, List<CardData> player2Cards, TurnManager turnManager, IModifierFactory modifierFactory) {
             if (IsInitialized) {
                 LogWarning("GameManager Initialize called but already initialized.", LogTag.Initialization);
                 return;
             }
             if (mediator == null) throw new ArgumentNullException(nameof(mediator));
-            if (references == null) throw new ArgumentNullException(nameof(references));
+            if (player1Cards == null) throw new ArgumentNullException(nameof(player1Cards));
+            if (player2Cards == null) throw new ArgumentNullException(nameof(player2Cards));
             if (turnManager == null) throw new ArgumentNullException(nameof(turnManager));
             if (modifierFactory == null) throw new ArgumentNullException(nameof(modifierFactory));
-            if (!references.AreReferencesValid()) {
-                LogError("GameReferences are invalid during GameManager Initialize!", LogTag.Initialization);
-                enabled = false;
-                return;
-            }
 
             int seed = randomSeed != 0 ? randomSeed : Environment.TickCount;
             GameRandom.Reset(seed);
@@ -134,21 +130,17 @@ namespace SlayTheClone {
             Player2 = new Player("Player 2", isPlayer1: false) { CardsToDraw = 5 };
             Player1.Opponent = Player2;
             Player2.Opponent = Player1;
-            mediator.RegisterPlayer(Player1);
-            mediator.RegisterPlayer(Player2);
 
             // The rules systems, each given only what it uses
             var turnClock = new TurnClock();
             CardDealingService = new CardDealingService(mediator);
-            WeatherSystem = new WeatherSystem(mediator);
+            WeatherSystem = new WeatherSystem();
             ModifierManager = new ModifierManager(mediator, modifierFactory);
             ActionsQueue = new ActionsQueue(mediator, WeatherSystem, CardDealingService, ModifierManager, turnClock, ActionExecutors.CreateRegistry());
             CombatHandler = new BattlefieldCombatHandler(ActionsQueue, ModifierManager);
             Player1.Initialize(mediator, CardDealingService);
             Player2.Initialize(mediator, CardDealingService);
 
-            var player1Cards = references.GetPlayer1DeckCards();
-            var player2Cards = references.GetPlayer2DeckCards();
             CardDealingService.InitializeDecks(Player1, player1Cards, Player2, player2Cards);
             Log($"Decks initialized with {player1Cards.Count} cards for Player 1 and {player2Cards.Count} cards for Player 2", LogTag.Cards | LogTag.Initialization);
 
@@ -160,7 +152,6 @@ namespace SlayTheClone {
 
             CardDealingService.DealInitialHands(Player1, Player2, 5);
             WeatherSystem.SetWeather(WeatherType.Clear);
-            mediator.NotifyGameInitialized();
             Log("GameManager Initialization complete.", LogTag.Initialization);
         }
 

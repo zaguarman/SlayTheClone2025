@@ -7,6 +7,19 @@ namespace SlayTheClone {
     /// Manages a single reusable card tooltip for the game.
     /// </summary>
     public class Tooltip : MonoBehaviour {
+        private static Tooltip shared;
+
+        /// <summary>The scene's one tooltip, created the first time it is shown (and again if it was destroyed).</summary>
+        public static Tooltip Shared {
+            get {
+                if (shared == null) shared = Create(null);
+                return shared;
+            }
+        }
+
+        /// <summary>The tooltip if it exists. Never creates one, so hiding is safe while the scene is torn down.</summary>
+        public static Tooltip Existing => shared != null ? shared : null;
+
         /// <summary>
         /// Creates and initializes a new tooltip instance
         /// </summary>

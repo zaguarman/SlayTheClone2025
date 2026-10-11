@@ -21,15 +21,18 @@ namespace SlayTheClone {
                 return;
             }
 
-            if (context.GameMediator == null) {
+            var mediator = context.GameMediator;
+            if (mediator == null) {
                 LogError("DamagePlayerActionExecutor: GameMediator is null in context.", LogTag.Actions | LogTag.Initialization);
                 return;
             }
 
             Log($"Executor: Intent to deal {damage} damage to {targetPlayer.Name}", LogTag.Actions | LogTag.Players | LogTag.Combat);
 
-            // Player.TakeDamage handles health reduction and notification via its OnDamaged event
-            targetPlayer.TakeDamage(damage);
+            int actualDamage = targetPlayer.TakeDamage(damage);
+            if (actualDamage > 0) {
+                mediator.NotifyPlayerDamaged(targetPlayer, actualDamage); // Also ends the game when health reaches 0
+            }
 
             Log($"Executed DamagePlayerAction via Executor for {targetPlayer.Name}", LogTag.Actions | LogTag.Players);
         }

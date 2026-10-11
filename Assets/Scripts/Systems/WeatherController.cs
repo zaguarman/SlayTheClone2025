@@ -13,16 +13,16 @@ namespace SlayTheClone {
 
         private IWeatherSystem Weather => GameManager.WeatherSystem;
 
-        public override void Initialize(IGameMediator mediator, IGameReferences references, IGameManager manager) {
+        public void Initialize(IGameMediator mediator, IGameManager manager, Button cycleButton, TextMeshProUGUI label) {
             if (IsInitialized) return;
 
-            cycleWeatherButton = references.GetWeatherCycleButton();
-            weatherText = references.GetWeatherText();
+            cycleWeatherButton = cycleButton;
+            weatherText = label;
             if (cycleWeatherButton == null || weatherText == null) {
                 LogError("Weather button or text is not assigned in GameReferences", LogTag.UI | LogTag.Initialization);
             }
 
-            base.Initialize(mediator, references, manager); // Registers the listeners below
+            base.Initialize(mediator, manager); // Registers the listeners below
             UpdateUI();
             Log("WeatherController initialized", LogTag.UI | LogTag.Initialization);
         }

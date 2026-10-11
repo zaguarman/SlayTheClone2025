@@ -24,8 +24,6 @@ namespace SlayTheClone {
         public const string Buff = "buff";
         public const string Debuff = "debuff";
         public const string Burn = "burn";
-        public const string Poison = "poison";
-        public const string Freeze = "freeze";
         public const string Chain = "chain";
 
         // Stats
@@ -38,9 +36,7 @@ namespace SlayTheClone {
         public static string ForStatus(StatusEffectType status) {
             switch (status) {
                 case StatusEffectType.Paralyzed: return Paralyze;
-                case StatusEffectType.Frozen: return Freeze;
                 case StatusEffectType.Burned: return Burn;
-                case StatusEffectType.Poisoned: return Poison;
                 default: return null;
             }
         }
