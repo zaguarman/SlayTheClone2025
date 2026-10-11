@@ -57,8 +57,6 @@ namespace SlayTheClone {
         System.Collections.IEnumerator ResolveActionsStepByStep(Func<System.Collections.IEnumerator> afterEachAction);
         int GetPendingActionsCount();
         IReadOnlyCollection<IGameAction> GetPendingActions();
-        bool IsEffectProcessed(string sourceId, EffectTrigger trigger);
-        void MarkEffectProcessed(string sourceId, EffectTrigger trigger);
         bool HasActiveAction(string creatureId);
         IGameAction GetActiveAction(string creatureId);
         bool CancelDeclaredAction(string creatureId); // Removes the creature's declared attack/swap from the queue

@@ -33,3 +33,4 @@ MonoBehaviour:
       statusPotency: 0
   attack: 3
   health: 5
+  speed: 1

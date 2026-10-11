@@ -4,18 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     public class ActionsQueue : IActionsQueue {
 
         #region Fields
+        // A safety net against effects that keep triggering each other forever (e.g. two creatures that retaliate
+        // and grow stronger from being hit). A normal turn resolves far fewer actions.
+        public const int MaxActionsPerResolution = 200;
+
         private readonly List<IGameAction> actionsList = new List<IGameAction>();
-        private readonly HashSet<(string, EffectTrigger)> processedEffects = new HashSet<(string, EffectTrigger)>();
         private readonly Dictionary<string, IGameAction> activeCreatureActions = new Dictionary<string, IGameAction>();
-        private int currentIterationDepth = 0;
-        private bool resolvedAnyAction;
-        private readonly int maxIterationDepth = 3;
+        private int actionsResolved; // In the current resolution
 
         private readonly IGameMediator gameMediator;
 
@@ -109,11 +109,6 @@ namespace SlayTheClone {
         }
 
         public void AddAction(IGameAction action) {
-            if (currentIterationDepth >= maxIterationDepth) {
-                LogWarning($"Maximum iteration depth reached, skipping action (Queue ID: {QueueId})", LogTag.Actions);
-                return;
-            }
-
             string activeCreatureId = GetActiveCreatureId(action);
 
             if (activeCreatureId != null) {
@@ -164,20 +159,9 @@ namespace SlayTheClone {
             Log($"Inserted action {action.GetType().Name} at priority {priority}, speed {speed}, position {insertIndex} (Queue ID: {QueueId})", LogTag.Actions);
         }
 
-        public bool IsEffectProcessed(string sourceId, EffectTrigger trigger) {
-            bool isProcessed = processedEffects.Contains((sourceId, trigger));
-            if (isProcessed) {
-                Log($"Effect {trigger} for creature (TargetID: {sourceId.ToUpper()}) has already been processed (Queue ID: {QueueId})", LogTag.Effects);
-            }
-            return isProcessed;
-        }
-
-        public void MarkEffectProcessed(string sourceId, EffectTrigger trigger) {
-            processedEffects.Add((sourceId, trigger));
-            Log($"Marked effect {trigger} for creature (TargetID: {sourceId.ToUpper()}) as processed (Queue ID: {QueueId})", LogTag.Effects);
-        }
-
-        /// <summary>Resolves every queued action immediately.</summary>
+        /// <summary>
+        /// Resolves every queued action immediately, including those the resolved actions queue in turn.
+        /// </summary>
         public void ResolveActions() {
             BeginResolution();
             while (ExecuteNextAction()) { }
@@ -197,23 +181,26 @@ namespace SlayTheClone {
         }
 
         private void BeginResolution() {
-            currentIterationDepth++;
+            actionsResolved = 0;
+            executionContext.KillingSpeedByCreatureId.Clear();
             Log($"Resolving actions. Initial queue size: {actionsList.Count} (Queue ID: {QueueId})", LogTag.Actions);
-
-            processedEffects.Clear();
-            if (currentIterationDepth == 1) {
-                executionContext.KillingSpeedByCreatureId.Clear();
-            }
-            resolvedAnyAction = false;
         }
 
         /// <returns>False once the queue is empty.</returns>
         private bool ExecuteNextAction() {
             if (actionsList.Count == 0) return false;
 
+            if (actionsResolved >= MaxActionsPerResolution) {
+                LogError($"Stopped resolving after {MaxActionsPerResolution} actions, probably effects triggering each other endlessly. " +
+                    $"Dropped the {actionsList.Count} actions still queued, starting with {actionsList[0]}. (Queue ID: {QueueId})", LogTag.Actions);
+                actionsList.Clear();
+                gameMediator.NotifyActionsQueueChanged();
+                return false;
+            }
+
             var action = actionsList[0];
             actionsList.RemoveAt(0);
-            resolvedAnyAction = true;
+            actionsResolved++;
 
             string activeCreatureId = GetActiveCreatureId(action);
             if (activeCreatureId != null) {
@@ -239,11 +226,10 @@ namespace SlayTheClone {
         }
 
         private void EndResolution() {
-            currentIterationDepth--;
             activeCreatureActions.Clear();
 
             // ActionsQueueChanged was already raised after the last action ran; only the coarse state change is new here
-            if (resolvedAnyAction) {
+            if (actionsResolved > 0) {
                 OnActionsResolved.Invoke();
                 gameMediator.NotifyGameStateChanged();
             }
@@ -276,7 +262,6 @@ namespace SlayTheClone {
         public void Cleanup() {
             actionsList.Clear();
             activeCreatureActions.Clear();
-            processedEffects.Clear();
             OnActionsQueued.RemoveAllListeners();
             OnActionsResolved.RemoveAllListeners();
             OnActionExecuting.RemoveAllListeners();

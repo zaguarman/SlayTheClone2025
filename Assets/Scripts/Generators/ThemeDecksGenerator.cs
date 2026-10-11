@@ -56,7 +56,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Venomous Spider",
                 "A small but deadly spider whose poison weakens enemies over time.",
-                2, 2,
+                2, 2, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDeath,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
@@ -69,7 +69,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Web Weaver",
                 "Spins strong webs that immobilize attackers.",
-                1, 3,
+                1, 3, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
@@ -82,7 +82,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Shadow Lurker",
                 "A stealthy spider that ambushes from the shadows.",
-                2, 2,
+                2, 2, speed: 3,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
@@ -95,7 +95,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Broodmother",
                 "Spawns smaller spiders when threatened.",
-                2, 4,
+                2, 4, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.StartOfTurn,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Draw, 1, TargetType.Player)
@@ -108,7 +108,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Tunnel Spider",
                 "Creates elaborate tunnel networks to ambush prey.",
-                3, 2,
+                3, 2, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDamage,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.Enemy)
@@ -121,7 +121,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Silk Spinner",
                 "Its valuable silk can heal allies.",
-                1, 2,
+                1, 2, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDamage,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Heal, 1, TargetType.FriendlyCreatures)
@@ -134,7 +134,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Giant Tarantula",
                 "This massive spider crushes opponents with brute force.",
-                4, 5,
+                4, 5, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDeath,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 2, TargetType.EnemyCreatures)
@@ -147,7 +147,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Widow Assassin",
                 "Its deadly venom can take down creatures many times its size.",
-                3, 2,
+                3, 2, speed: 3,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
@@ -169,7 +169,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Royal Falcon",
                 "A noble bird trained for hunting, with exceptional speed.",
-                3, 2,
+                3, 2, speed: 3,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.Self)
@@ -182,7 +182,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Wise Owl",
                 "Its wisdom allows allies to find new strategies.",
-                2, 3,
+                2, 3, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.StartOfTurn,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Draw, 1, TargetType.Player)
@@ -195,7 +195,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Thunderhawk",
                 "Calls lightning down upon enemies.",
-                3, 3,
+                3, 3, speed: 3,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
@@ -208,7 +208,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Healing Dove",
                 "Its gentle presence mends wounds.",
-                1, 2,
+                1, 2, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDamage,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Heal, 2, TargetType.Player)
@@ -221,7 +221,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "War Eagle",
                 "A battle-hardened bird that leads the charge in combat.",
-                4, 4,
+                4, 4, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDeath,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 2, TargetType.Enemy)
@@ -234,7 +234,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Mischievous Raven",
                 "Steals valuable items to aid its allies.",
-                2, 1,
+                2, 1, speed: 3,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Draw, 2, TargetType.Player)
@@ -247,7 +247,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Phoenix Hatchling",
                 "Though young, it carries the flame of rebirth.",
-                1, 3,
+                1, 3, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.EndOfTurn,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 2, TargetType.Self)
@@ -260,7 +260,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Majestic Griffin",
                 "Half eagle, half lion, all power.",
-                4, 4,
+                4, 4, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures),
@@ -281,7 +281,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Dancing Dolphin",
                 "Playful movements boost ally morale.",
-                2, 3,
+                2, 3, speed: 3,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Draw, 1, TargetType.Player)
@@ -294,7 +294,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Guardian Whale",
                 "Massive presence provides permanent protection to allies.",
-                1, 5,
+                1, 5, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDeath,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Armor, 2, TargetType.AllCreatures, 0) // Duration is ignored
@@ -307,7 +307,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Tidepool Star",
                 "Regenerates during low tide.",
-                1, 2,
+                1, 2, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.StartOfTurn,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Heal, 2, TargetType.AllCreatures)
@@ -320,7 +320,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Jellyfish Swarm",
                 "Paralyzes enemies with gentle pulses when destroyed.", // Updated description
-                1, 3,
+                1, 3, speed: 1,
                 new CardEffectData(EffectType.Triggered, EffectTrigger.OnDeath,
                     new List<EffectActionData> {
                         // Use the new ApplyStatus constructor
@@ -334,7 +334,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Coral Builder",
                 "Constructs permanent protective barriers for allies.",
-                1, 3,
+                1, 3, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Armor, 2, TargetType.AllCreatures, 0) // Duration is ignored
@@ -347,7 +347,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Abyssal Cucumber",
                 "Gives all friendly creatures +2 attack for 2 turns.",
-                1, 4,
+                1, 4, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDamage,
                     new List<EffectActionData> {
                         // Example: Use the constructor for ModifyStat actions
@@ -361,7 +361,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Crashing Wave",
                 "A powerful wave that crashes onto enemies.",
-                3, 3,
+                3, 3, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
@@ -374,7 +374,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Deep Sea Angler",
                 "Lures enemies with bioluminescent bait, paralyzing them.",
-                2, 5,
+                2, 5, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDeath,
                     new List<EffectActionData> {
                         // Use the new ApplyStatus constructor
@@ -388,7 +388,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Electric Eel",
                 "When attacking, zaps the primary target and chains lightning to 2 additional targets in a random direction.",
-                3, 3,
+                3, 3, speed: 3,
                 new CardEffectData(EffectType.Triggered, EffectTrigger.OnDamage,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 3, TargetType.EnemyCreatures, TargetModifier.Chained)
@@ -401,7 +401,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Kraken",
                 "Massive sea monster that terrifies enemies.",
-                5, 6,
+                5, 6, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDamage,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 2, TargetType.EnemyCreatures)
@@ -414,7 +414,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Mermaid Healer",
                 "Restores health to damaged allies at the start of your turn.",
-                1, 4,
+                1, 4, speed: 2,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDamage,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Heal, 2, TargetType.FriendlyCreatures)
@@ -427,7 +427,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Octopus Defender",
                 "Uses tentacles to create permanent armor for itself when damaged.",
-                1, 6,
+                1, 6, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDeath,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Armor, 2, TargetType.AllCreatures, 0) // Duration is ignored
@@ -440,7 +440,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Seahorse Scout",
                 "Quickly discovers new resources.",
-                1, 2,
+                1, 2, speed: 3,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnPlay,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Draw, 1, TargetType.Player)
@@ -453,7 +453,7 @@ namespace SlayTheClone {
             cards.Add(CreateCreatureCard(
                 "Tsunami Turtle",
                 "Creates massive waves when attacking.",
-                3, 5,
+                3, 5, speed: 1,
                 new CardEffectData(EffectType.Immediate, EffectTrigger.OnDeath,
                     new List<EffectActionData> {
                         new EffectActionData(ActionType.Damage, 1, TargetType.EnemyCreatures)
@@ -592,6 +592,7 @@ namespace SlayTheClone {
             string description,
             int attack,
             int health,
+            int speed,
             CardEffectData effectData,
             string path,
             string cardId) {
@@ -607,6 +608,7 @@ namespace SlayTheClone {
                     card.description = description;
                     card.attack = attack;
                     card.health = health;
+                    card.speed = speed;
 
                     // Keep the existing cardId if it exists, otherwise set the new one
                     if (string.IsNullOrEmpty(card.cardId)) {
@@ -633,6 +635,7 @@ namespace SlayTheClone {
             card.description = description;
             card.attack = attack;
             card.health = health;
+            card.speed = speed;
             card.cardId = cardId; // Set the card ID
 
             WriteEffects(card, effectData);

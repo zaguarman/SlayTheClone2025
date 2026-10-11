@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
 using static SlayTheClone.Enums;
 
 namespace SlayTheClone.Tests {
@@ -101,11 +104,15 @@ namespace SlayTheClone.Tests {
             Attack(hound, p2.Battlefield[0]);
             Assert.AreEqual(p2Health - hound.Attack, p2.Health);
 
-            // An enemy-targeted OnDamage effect strikes back at the attacker
+            // An enemy-targeted OnDamage effect strikes back at the attacker, on every hit
+            var jackal = game.Summon(p1, game.Creature("Jackal", 1, 4), 1);
             int houndHealth = hound.Health;
-            Attack(hound, p2.Battlefield[1]);
-            Assert.AreEqual(porcupine.MaxHealth - hound.Attack, porcupine.Health);
+            game.CombatHandler.HandleCreatureCombat(hound, p2.Battlefield[1]);
+            game.CombatHandler.HandleCreatureCombat(jackal, p2.Battlefield[1]);
+            game.Resolve();
+            Assert.AreEqual(porcupine.MaxHealth - hound.Attack - jackal.Attack, porcupine.Health);
             Assert.AreEqual(houndHealth - 1, hound.Health);
+            Assert.AreEqual(jackal.MaxHealth - 1, jackal.Health);
 
             // Effects that change stats go through the queue too, landing before anything else that waits
             var cucumber = game.Summon(p2, game.Creature("Cucumber", 0, 4, 1,
@@ -123,6 +130,17 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(boar.IsDead);
             Assert.IsFalse(falcon.IsDead);
             Assert.AreEqual(falcon.MaxHealth, falcon.Health);
+
+            // Effects can trigger each other forever: two Rams that grow from every hit and strike back.
+            // The queue stops after a set number of actions, reports it as an error and drops the rest.
+            var ram = game.Creature("Ram", 1, 5, 1,
+                TestGame.Effect(EffectTrigger.OnDamage, ActionType.ModifyStat, 1, TargetType.Self),
+                TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy));
+            var p1Ram = game.Summon(p1, ram, 3);
+            game.Summon(p2, ram, 4);
+            LogAssert.Expect(LogType.Error, new Regex("Stopped resolving after"));
+            Attack(p1Ram, p2.Battlefield[4]);
+            Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount());
         }
 
         [Test]

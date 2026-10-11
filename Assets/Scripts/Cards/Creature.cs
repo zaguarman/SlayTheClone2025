@@ -140,18 +140,15 @@ namespace SlayTheClone {
             return actualHealAmount;
         }
 
-        // Each trigger runs at most once per resolution (see ActionsQueue.IsEffectProcessed)
+        // Fires every time the trigger happens; ActionsQueue.MaxActionsPerResolution stops effects that trigger each other endlessly
         public void HandleEffect(EffectTrigger trigger, IActionsQueue actionsQueue, ICreature triggeringAttacker = null) {
             if (IsDead && trigger != EffectTrigger.OnDeath) return;
             if (actionsQueue == null) {
                 LogError($"Cannot handle effect {trigger} for {Name} - no ActionsQueue.", LogTag.Effects | LogTag.Creatures);
                 return;
             }
-            if (actionsQueue.IsEffectProcessed(TargetId, trigger)) return;
-
             Log($"Handling Effect: {trigger} for {Name} (TargetID: {TargetId.ShortId()})", LogTag.Creatures | LogTag.Effects);
             EffectResolver.QueueCreatureEffects(this, trigger, actionsQueue, triggeringAttacker);
-            actionsQueue.MarkEffectProcessed(TargetId, trigger);
         }
     }
 }
