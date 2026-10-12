@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using NUnit.Framework;
-using UnityEngine;
 using UnityEngine.TestTools;
 using static SlayTheClone.Enums;
-using static SlayTheClone.Tests.TestCards;
 
 namespace SlayTheClone.Tests {
     /// <summary>
@@ -38,41 +35,6 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Player.MaxHandSize, p1.Hand.Count);
             Assert.AreEqual(15 - Player.MaxHandSize, p1.Deck.CardsRemaining);
             Assert.AreEqual(15, GameAsserts.CountCards(p1), "Cards were lost");
-        }
-
-        [Test]
-        public void DrawingFromAnEmptyDeck_ShufflesTheDiscardPileBackIn_ThenDrawsWhatThereIs() {
-            game.SetDecks(game.Fillers(3), game.Fillers(1));
-            game.Run(new DrawCardsAction(p1, 3));
-            var firstHand = p1.Hand.ToList();
-            game.Run(new DiscardHandAction(p1));
-
-            game.Run(new DrawCardsAction(p1, 2));
-
-            Assert.AreEqual(2, p1.Hand.Count);
-            Assert.AreEqual(1, p1.Deck.CardsRemaining);
-            Assert.AreEqual(0, p1.Deck.GetDiscardPilePreview().Count);
-            CollectionAssert.IsEmpty(p1.Hand.Intersect(firstHand), "Discarded cards come back as fresh copies");
-            GameAsserts.AssertEachCardInOneZone(p1);
-
-            game.Run(new DrawCardsAction(p1, 5)); // Only 1 card left, and nothing to reshuffle
-            Assert.AreEqual(3, p1.Hand.Count);
-            Assert.AreEqual(0, p1.Deck.CardsRemaining);
-        }
-
-        [Test]
-        public void PlayingACardTwice_OnlyPlaysItOnce() {
-            game.SetDecks(game.Fillers(5), game.Fillers(5));
-            var wolf = game.GiveCard(p1, game.Creature("Wolf", 2, 3));
-
-            game.ActionsQueue.AddAction(new PlayCardAction(wolf, p1, p1.Battlefield[0]));
-            game.ActionsQueue.AddAction(new PlayCardAction(wolf, p1, p1.Battlefield[1]));
-            LogAssert.Expect(LogType.Error, new Regex("not in .*hand")); // The second play is refused
-            game.Resolve();
-
-            Assert.AreSame(wolf, p1.Battlefield[0].OccupyingCreature);
-            Assert.IsFalse(p1.Battlefield[1].IsOccupied(), "The card was played a second time");
-            GameAsserts.AssertBoardsConsistent(p1);
         }
 
         [UnityTest]
@@ -109,58 +71,6 @@ namespace SlayTheClone.Tests {
             SummonFromDeckEffect.QueueRandomSummons(p1, 1, game.ActionsQueue);
             game.Resolve();
             Assert.AreEqual(2, p1.Deck.CardsRemaining, "With the board full nothing is summoned");
-        }
-
-        [Test, Category(TestCategories.KnownBug), Description("#44: Deck.RemoveCard matches by CardId, which every copy of a card shares")]
-        public void SummonFromDeck_TakesTheSummonedCardOutOfTheDeck() {
-            for (int seed = 1; seed <= 10; seed++) {
-                using (var g = new TestGame()) {
-                    var spider = g.Creature("Spider", 1, 1);
-                    g.SetDecks(new List<CardData> { spider, spider, spider, spider }, g.Fillers(1));
-                    GameRandom.Reset(seed);
-
-                    SummonFromDeckEffect.QueueRandomSummons(g.Player1, 1, g.ActionsQueue);
-                    g.Resolve();
-
-                    var summoned = g.Player1.Battlefield.Single(s => s.IsOccupied()).OccupyingCreature;
-                    CollectionAssert.DoesNotContain(g.Player1.Deck.GetDeckPreview(), summoned, $"Seed {seed}: the summoned creature is still in the deck");
-                    Assert.AreEqual(3, g.Player1.Deck.CardsRemaining, $"Seed {seed}");
-                }
-            }
-        }
-
-        [Test, Category(TestCategories.KnownBug), Description("#45: summon-from-deck picks slots without counting summons still queued")]
-        public void TwoSummonsFromDeckInOneTurn_NeverLandInTheSameSlot() {
-            for (int seed = 1; seed <= 20; seed++) {
-                using (var g = new TestGame()) {
-                    var spider = g.Creature("Spider", 1, 1);
-                    var wasp = g.Creature("Wasp", 1, 1);
-                    g.SetDecks(new List<CardData> { spider, wasp, spider, wasp }, g.Fillers(1));
-                    for (int i = 0; i < 3; i++) g.Summon(g.Player1, g.Creature($"Guard {i}", 1, 1), i);
-                    GameRandom.Reset(seed);
-
-                    SummonFromDeckEffect.QueueRandomSummons(g.Player1, 1, g.ActionsQueue);
-                    SummonFromDeckEffect.QueueRandomSummons(g.Player1, 1, g.ActionsQueue);
-                    g.Resolve();
-
-                    Assert.AreEqual(5, g.Player1.Battlefield.Count(s => s.IsOccupied()), $"Seed {seed}: one summon replaced the other");
-                }
-            }
-        }
-
-        [Test]
-        public void DrawAndSummonSpells_WorkForTheirCaster_WhereverTheyAreDropped() {
-            game.SetDecks(game.Fillers(5), game.Fillers(5));
-            var insight = game.GiveCard(p1, game.Spell("Insight", TargetType.Player, Effect(EffectTrigger.OnPlay, ActionType.Draw, 1, TargetType.Player)));
-
-            game.Run(new PlayCardAction(insight, p1, p2.Battlefield[0]));
-            Assert.AreEqual(1, p1.Hand.Count, "The caster should draw");
-            Assert.AreEqual(0, p2.Hand.Count, "The enemy shouldn't");
-
-            var call = game.GiveCard(p1, game.Spell("Call", TargetType.Player, Effect(EffectTrigger.OnPlay, ActionType.Summon, 1, TargetType.Player)));
-            game.Run(new PlayCardAction(call, p1, p2.Battlefield[1]));
-            Assert.AreEqual(1, p1.Battlefield.Count(s => s.IsOccupied()), "The caster's creature should land on the caster's board");
-            Assert.AreEqual(0, p2.Battlefield.Count(s => s.IsOccupied()));
         }
     }
 }

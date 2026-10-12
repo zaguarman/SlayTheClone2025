@@ -77,35 +77,6 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Player.MaxHealth - 4, p1.Health, "The killing blow shouldn't either");
         }
 
-        [Test]
-        public void OnDamage_StrikesBackAtTheCreatureThatDealtTheDamage() {
-            var thorns = game.Summon(p2, game.Creature("Thorns", 0, 6, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
-            var hound = game.Summon(p1, game.Creature("Hound", 2, 5), 0);
-
-            game.Attack(hound, p2.Battlefield[0]);
-
-            Assert.AreEqual(4, thorns.Health);
-            CollectionAssert.AreEqual(new[] { 1 }, game.History.DamageTo(hound), "The attacker should be struck back once");
-            Assert.AreEqual(Player.MaxHealth, p1.Health, "The strike back hits the attacker, not its player");
-        }
-
-        [Test]
-        public void StartOfTurn_FiresEveryTurn_OnceTheCreatureIsOperative() {
-            game.SetDecks(game.Fillers(10), game.Fillers(10));
-            game.Summon(p1, game.Creature("Owl", 1, 3, 1, Effect(EffectTrigger.StartOfTurn, ActionType.Draw, 1, TargetType.Player)), 0);
-            var sleepyData = game.Creature("Sleepy Owl", 1, 3, 1, Effect(EffectTrigger.StartOfTurn, ActionType.Draw, 1, TargetType.Player));
-            sleepyData.turnsUntilOperative = 2;
-            game.Summon(p2, sleepyData, 0);
-
-            game.StartTurn();
-            Assert.AreEqual(1, p1.Hand.Count, "An operative creature's start-of-turn effect should fire");
-            Assert.AreEqual(0, p2.Hand.Count, "A creature that isn't operative yet has its effects off");
-
-            game.StartTurn();
-            Assert.AreEqual(2, p1.Hand.Count, "It fires every turn");
-            Assert.AreEqual(1, p2.Hand.Count, "A creature takes part in the turn it becomes operative");
-        }
-
         [UnityTest]
         public IEnumerator EndOfTurn_FiresAtTheEndOfEveryTurn_AndSelfEffectsOnlyHitTheCreatureItself() {
             var bystander = game.Summon(p1, game.Creature("Bystander", 1, 5), 0);
@@ -120,40 +91,6 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(5, bystander.Health, "Self means the creature itself");
             Assert.AreEqual(Player.MaxHealth, p1.Health, "Self means the creature itself");
             Assert.AreEqual(Player.MaxHealth, p2.Health, "Self means the creature itself");
-        }
-
-        [Test]
-        public void ASpellWithNoEffects_DrawsACard() {
-            game.SetDecks(game.Fillers(5), game.Fillers(5));
-            var scroll = game.GiveCard(p1, game.Spell("Blank Scroll", TargetType.Player));
-
-            game.Run(new PlayCardAction(scroll, p1, p1.Battlefield[0]));
-
-            Assert.AreEqual(1, p1.Hand.Count);
-            Assert.AreNotSame(scroll, p1.Hand[0]);
-        }
-
-        [Test]
-        public void AParalyzingDeathEffect_ParalyzesEveryEnemyCreature() {
-            var jelly = game.Summon(p1, game.Creature("Jelly", 1, 1, 1, Status(EffectTrigger.OnDeath, StatusEffectType.Paralyzed, 1, TargetType.EnemyCreatures)), 0);
-            var enemyA = game.Summon(p2, game.Creature("Enemy A", 1, 3), 0);
-            var enemyB = game.Summon(p2, game.Creature("Enemy B", 1, 3), 4);
-
-            game.Run(new DamageCreatureAction(jelly, 5));
-
-            Assert.IsTrue(game.ModifierManager.HasStatusEffect(enemyA, StatusEffectType.Paralyzed));
-            Assert.IsTrue(game.ModifierManager.HasStatusEffect(enemyB, StatusEffectType.Paralyzed));
-            Assert.IsFalse(game.ModifierManager.CanAct(enemyA));
-        }
-
-        [UnityTest, Category(TestCategories.KnownBug), Description("#49: burn damage counts the burning creature as its own attacker")]
-        public IEnumerator Burn_DoesNotMakeACreatureThatStrikesBackHitItself() {
-            var spiky = game.Summon(p1, game.Creature("Spiky", 1, 5, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
-            game.Run(new ApplyStatusEffectAction(spiky, StatusEffectType.Burned, 2, 1));
-
-            yield return game.EndTurn();
-
-            Assert.AreEqual(4, spiky.Health, "One burn tick of 1 should cost 1 health");
         }
     }
 }

@@ -42,18 +42,6 @@ namespace SlayTheClone.Tests {
             };
         }
 
-        public static CardEffect Status(EffectTrigger trigger, StatusEffectType status, int duration, TargetType target, int potency = 0) {
-            return new CardEffect {
-                trigger = trigger,
-                actions = new List<EffectAction> {
-                    new EffectAction {
-                        actionType = ActionType.ApplyStatus, targetType = target,
-                        statusEffectToApply = status, statusDuration = duration, statusPotency = potency
-                    }
-                }
-            };
-        }
-
         private T Track<T>(T data, string name, CardEffect[] effects) where T : CardData {
             data.name = name;
             data.cardName = name;

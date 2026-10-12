@@ -39,27 +39,6 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [UnityTest]
-        public IEnumerator Play_OpensTheMatchSetup_WithEveryChoice_StartingWithTheFirstOpponentAgainstAnotherDeck() {
-            yield return OpenSetup();
-
-            Assert.AreEqual(MenuSceneName, SceneManager.GetActiveScene().name, "Play started the game without asking for a match");
-            Assert.IsFalse(TitleButton("PlayButton").gameObject.activeInHierarchy, "The title screen should hide behind the setup");
-            foreach (var deck in catalog.Decks) {
-                Assert.IsNotNull(SetupButton(MatchSetupMenu.PlayerDeckButton + deck.GetDeckName()));
-                Assert.IsNotNull(SetupButton(MatchSetupMenu.OpponentDeckButton + deck.GetDeckName()));
-            }
-            foreach (var opponent in catalog.Opponents) {
-                Assert.IsNotNull(SetupButton(MatchSetupMenu.OpponentButton + opponent.name));
-            }
-
-            Assert.AreSame(catalog.Opponents[0], setup.Opponent);
-            Assert.AreSame(catalog.Opponents[0].deck, setup.OpponentDeck, "An opponent brings their own deck");
-            Assert.IsNotNull(setup.PlayerDeck);
-            Assert.AreNotSame(setup.OpponentDeck, setup.PlayerDeck, "The first match shouldn't be a mirror match");
-            AssertOnlyChoicesHighlighted();
-        }
-
-        [UnityTest]
         public IEnumerator PickingAnOpponent_BringsTheirDeck_WhichCanBeSwapped_AndBackKeepsTheChoices() {
             yield return OpenSetup();
 

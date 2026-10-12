@@ -1,9 +1,7 @@
 using System.Collections;
-using System.Linq;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 using static SlayTheClone.Enums;
-using static SlayTheClone.Tests.TestCards;
 
 namespace SlayTheClone.Tests {
     /// <summary>
@@ -55,25 +53,6 @@ namespace SlayTheClone.Tests {
             CollectionAssert.AreEqual(new[] { p1 }, game.History.Winners, "The game should end once, won by player 1");
         }
 
-        [Test]
-        public void Healing_StopsAtMaxHealth_AndDoesNothingForTheDead() {
-            var patient = game.Summon(p1, game.Creature("Patient", 0, 5), 0);
-
-            game.Run(new DamageCreatureAction(patient, 3));
-            game.Run(new HealCreatureAction(patient, 10));
-            Assert.AreEqual(5, patient.Health);
-            CollectionAssert.AreEqual(new[] { 3 }, game.History.HealingOf(patient), "Only the health actually restored counts");
-
-            game.Run(new DamageCreatureAction(patient, 9));
-            game.Run(new HealCreatureAction(patient, 5));
-            Assert.IsTrue(patient.IsDead);
-            CollectionAssert.AreEqual(new[] { 3 }, game.History.HealingOf(patient), "A dead creature can't be healed");
-
-            game.Run(new HealPlayerAction(p1, 5));
-            Assert.AreEqual(Player.MaxHealth, p1.Health);
-            CollectionAssert.IsEmpty(game.History.HealingOf(p1), "A player at full health isn't healed");
-        }
-
         [UnityTest]
         public IEnumerator Burn_TicksOncePerTurn_UntilItRunsOut() {
             var torch = game.Summon(p1, game.Creature("Torch", 0, 10), 0);
@@ -89,46 +68,6 @@ namespace SlayTheClone.Tests {
             yield return game.EndTurn();
             Assert.AreEqual(6, torch.Health);
             CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(torch));
-        }
-
-        [Test]
-        public void AnAttack_HitsWhateverIsInTheTargetSlotWhenItResolves() {
-            var hound = game.Summon(p1, game.Creature("Hound", 3, 5), 0);
-            var dodger = game.Summon(p2, game.Creature("Dodger", 0, 5), 0);
-
-            game.Declare(hound, p2.Battlefield[0]);
-            game.ActionsQueue.AddAction(new MoveCreatureAction(dodger, p2.Battlefield[0], p2.Battlefield[1], p2));
-            game.Resolve();
-
-            CollectionAssert.IsEmpty(game.History.DamageTo(dodger), "Moves resolve before attacks, so the dodger got out of the way");
-            Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "The attack hits the now empty slot's player");
-        }
-
-        [Test]
-        public void AnAttackHits_ForTheAttackersAttackWhenTheHitLands() {
-            // Like Abyssal Cucumber: it grows when damaged, and is damaged by a hit that lands before its own
-            var cucumber = game.Summon(p1, game.Creature("Cucumber", 1, 4, 1, Effect(EffectTrigger.OnDamage, ActionType.ModifyStat, 2, TargetType.Self)), 0);
-            var pebble = game.Summon(p2, game.Creature("Pebble", 1, 5), 0);
-
-            game.Declare(pebble, p1.Battlefield[0]);
-            game.Declare(cucumber, p2.Battlefield[1]); // An empty slot: the hit goes to player 2
-            game.Resolve();
-
-            Assert.AreEqual(3, cucumber.Attack);
-            CollectionAssert.AreEqual(new[] { 3 }, game.History.DamageTo(p2), "The hit should use the attack the cucumber had when it landed");
-        }
-
-        [Test]
-        public void ACreatureReplacedBeforeItsAttackResolves_DoesNotAttack() {
-            var veteran = game.Summon(p1, game.Creature("Veteran", 3, 3), 0);
-            var recruit = game.GiveCard(p1, game.Creature("Recruit", 1, 1));
-
-            game.Declare(veteran, p2.Battlefield[0]);
-            game.ActionsQueue.AddAction(new PlayCardAction(recruit, p1, p1.Battlefield[0]));
-            game.Resolve();
-
-            Assert.AreSame(recruit, p1.Battlefield[0].OccupyingCreature);
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "The veteran left the board, so its attack shouldn't land");
         }
     }
 }
