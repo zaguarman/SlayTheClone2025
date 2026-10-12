@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
-  m_Name: CleaningRobotPremium
+  m_Name: CleaningRobot
   m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
   cardId: 6cb0fe1d-179c-45b6-97c3-9b8d41c37de2
-  cardName: Cleaning Robot Premium
+  cardName: Cleaning Robot
   description: Cleans 30% of your floor. The other 70% is a Premium feature.
   cardType: 0
   faction: 4

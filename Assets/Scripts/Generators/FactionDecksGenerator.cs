@@ -131,7 +131,7 @@ namespace SlayTheClone {
                 "Privatize the gains. Socialize the bill.",
                 "Future: the enemy schedules 1 fewer draw instead of losing Health.",
                 Draw(2), Damage(2, TargetType.Enemy, Each)),
-            Creature("Cleaning Robot Premium", 2, 7, speed: 1, deploy: 1,
+            Creature("Cleaning Robot", 2, 7, speed: 1, deploy: 1,
                 "Cleans 30% of your floor. The other 70% is a Premium feature.",
                 "Mechanics test: a sturdy pusher. Pushing (every creature can), no chain pushes, blocked pushes (\"needs Swap\") and the automatic move order.")
                 .Picture("A sleek, glossy robot vacuum with a glowing megacorp logo, shoving a pile of tiny office workers and their desks into a corner. A \"Subscription expired: suction limited\" pop-up flashes on its screen."),

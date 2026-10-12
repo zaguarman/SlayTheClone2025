@@ -1632,7 +1632,7 @@ def inflation():
     return svg(defs, body)
 
 
-def cleaning_robot_premium():
+def cleaning_robot():
     defs = lin("bg", ["#e8e0d0", "#cfc4b0"])
     body = rect(0, 0, W, H, "url(#bg)") + rect(0, 120, W, 80, "#b08a5a")
     for k in range(8):
@@ -2130,7 +2130,7 @@ CARDS = {
         "MarginCall": margin_call, "HostileTakeover": hostile_takeover, "MassLayoffs": mass_layoffs,
         "TeamBuildingExercise": team_building_exercise, "DeadCatBounce": dead_cat_bounce,
         "TaxpayerFundsVentureCapitalProfits": taxpayer_funds_venture_capital_profits,
-        "CleaningRobotPremium": cleaning_robot_premium, "Inflation": inflation,
+        "CleaningRobot": cleaning_robot, "Inflation": inflation,
     },
     "Statecraft": {
         "KingEmeritus": king_emeritus, "SpiteElectedPresident": spite_elected_president,
