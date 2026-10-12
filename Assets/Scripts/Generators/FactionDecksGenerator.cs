@@ -7,7 +7,8 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Builds the starter faction decks (Corporate, Statecraft, Zeitgeist) from the card lists below.
+    /// Builds the starter faction decks (Corporate, Statecraft, Zeitgeist) from the card lists below, the cards of factions
+    /// that don't have a deck yet, and the Mechanics Test deck that mixes them to try every mechanic.
     /// They only use effects the rules already carry out; each card's designNotes say what it should become once the
     /// GDD mechanic it stands in for exists (overview in Assets/Documentation/Starter Faction Decks.txt).
     /// Cards go to Assets/Scriptables/Cards/&lt;Faction&gt;/, their art comes from Tools/generate_card_art.py.
@@ -23,12 +24,32 @@ namespace SlayTheClone {
 
         [MenuItem("Cards/Generate Faction Decks")]
         public static void GenerateFactionDecks() {
-            Build(Faction.Corporate, "Corporate - Shareholder Value", CorporateCards());
-            Build(Faction.Statecraft, "Statecraft - Order & Paperwork", StatecraftCards());
-            Build(Faction.Zeitgeist, "Zeitgeist - Moods of Modern Life", ZeitgeistCards());
+            var written = new Dictionary<string, CardDataScriptableObject>();
+            Build(Faction.Corporate, "Corporate - Shareholder Value", CorporateCards(), written);
+            Build(Faction.Statecraft, "Statecraft - Order & Paperwork", StatecraftCards(), written);
+            Build(Faction.Zeitgeist, "Zeitgeist - Moods of Modern Life", ZeitgeistCards(), written);
+
+            // Factions whose decks don't exist yet: their cards wait in their folders, and play in the Mechanics Test deck
+            WriteCards(Faction.DigitalSociety, DigitalSocietyCards(), written);
+            WriteCards(Faction.ShadowOps, ShadowOpsCards(), written);
+            WriteCards(Faction.Tech, TechCards(), written);
+            WriteCards(Faction.Myth, MythCards(), written);
+            WriteCards(Faction.Mind, MindCards(), written);
+
+            var testDeck = WriteDeck("Mechanics Test", MechanicsTestCards.Select(name => written[name]).ToList(), $"{DecksFolder}/MechanicsTestDeck.asset");
+            RegisterTestDeck(testDeck);
             AssetDatabase.SaveAssets();
-            Debug.Log("Generated the Corporate, Statecraft and Zeitgeist decks. Run Cards > Assign Card Art to link their art.");
+            Debug.Log("Generated the faction decks and the Mechanics Test deck. Run Cards > Assign Card Art to link their art.");
         }
+
+        // One or more cards for each mechanic the rules carry out (movement, Exhausted, Doomed, Health Loss, Armor, Homing,
+        // the death sequence, Status Timing, Deployment Time), from every faction: pick it to try them all in one match
+        private static readonly string[] MechanicsTestCards = {
+            "Delivery Cyclist", "Digital Nomad", "Political Decoy", "Cleaning Robot Premium",
+            "DDOS Attack", "Dogpile", "Memento Mori", "Martyr", "Inflation", "Generational Trauma",
+            "Raised Security Level", "Diplomat", "Keyboard Warrior", "Rage Bait",
+            "Hikikomori", "Karen", "Reality TV Star", "Fat Tony", "Martial Law", "Hostile Takeover",
+        };
 
         #region Corporate
         // Pays with capital (future: discard cards). Until discarding exists, its strongest cards leak value to the enemy.
@@ -102,6 +123,15 @@ namespace SlayTheClone {
                 "Privatize the gains. Socialize the bill.",
                 "Future: the enemy schedules 1 fewer draw instead of losing Health.",
                 Draw(2), Damage(2, TargetType.Enemy, Each)),
+            Creature("Cleaning Robot Premium", 2, 7, speed: 1, deploy: 1,
+                "Cleans 30% of your floor. The other 70% is a Premium feature.",
+                "Mechanics test: a sturdy pusher. Pushing (every creature can), no chain pushes, blocked pushes (\"needs Swap\") and the automatic move order.")
+                .Picture("A sleek, glossy robot vacuum with a glowing megacorp logo, shoving a pile of tiny office workers and their desks into a corner. A \"Subscription expired: suction limited\" pop-up flashes on its screen."),
+            Spell("Inflation", TargetType.EnemyCreatures,
+                "Same price. Less creature.",
+                "Mechanics test: Health Loss on every enemy. It ignores Armor, isn't damage (no OnDamaged), kills at 0 whatever the Armor, and lowers the Armor cap.",
+                Buff(-1, TargetType.EnemyCreatures, attack: false, health: true, Each))
+                .Picture("A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher."),
         };
         #endregion
 
@@ -173,6 +203,16 @@ namespace SlayTheClone {
                 "Free bread, free games, free of questions.",
                 "Future: a Law that also adds 1 Deployment Time to your next creature (the paperwork).",
                 Heal(3, TargetType.Player, Each), Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, Each)),
+            Creature("Diplomat", 3, 5, speed: 1, deploy: 2,
+                "Third-generation ambassador. Qualifications: his surname.",
+                "Mechanics test: Deployment Time 2 counts down at Dusk, never at the Dusk of the Day it arrived; its entry effect waits until it's ready. Armor fades by 1 each Dusk on every creature.",
+                On(EffectTrigger.OnPlay, Armor(2, TargetType.FriendlyCreatures, Each)))
+                .Picture("A young heir lounging in a leather chair at a summit table, feet up, a gold name plate reading \"AMBASSADOR (BY BIRTH)\". Behind him, a wall of portraits of his father and grandfather in the very same chair."),
+            Spell("Raised Security Level", TargetType.FriendlyCreatures,
+                "The threat level is now Orange. Nobody knows what Orange means.",
+                "Mechanics test: Armor is capped at twice max Health, fades by 1 each Dusk and is lost when the creature leaves play. Aimed at your own creature, it follows it if it moves first (Homing).",
+                Armor(6, TargetType.FriendlyCreatures))
+                .Picture("A bureaucrat solemnly flipping a color-coded threat sign from yellow to orange, while one guard in comically oversized armor blocks a door."),
         };
         #endregion
 
@@ -244,12 +284,86 @@ namespace SlayTheClone {
                 "Unpaid, unscheduled, unbelievably necessary.",
                 "Future: Cleanse every mood from the creature instead of the stun.",
                 Buff(3, TargetType.FriendlyCreatures, attack: false, health: true), Stun(1, TargetType.FriendlyCreatures)),
+            Creature("Delivery Cyclist", 1, 3, speed: 3, deploy: 0,
+                "Your food is 4 minutes away. It has been 4 minutes away for 40 minutes.",
+                "Mechanics test: Leapfrog jumps over creatures to an empty slot; if its landing slot is taken, it stops at the closest empty slot on the way.")
+                .With(MovementKeyword.Leapfrog)
+                .Picture("A rider with a huge square thermal backpack, mid-hop over a gridlocked row of cars, phone strapped to the handlebars showing a 1-star rating."),
+        };
+        #endregion
+
+        #region Factions without a deck yet
+        // Digital Society: a swarm of cheap bodies, effects that spread, many creatures piling on one target
+        private static List<CardDef> DigitalSocietyCards() => new List<CardDef> {
+            Creature("Digital Nomad", 2, 2, speed: 2, deploy: 0,
+                "Works from Bali. Works from Lisbon. Works, allegedly.",
+                "Mechanics test: Leapfrog on a cheap, fast creature.")
+                .With(MovementKeyword.Leapfrog)
+                .Picture("A laptop balanced on a surfboard on a white beach, a coconut beside it, the Wi-Fi icon showing a single bar."),
+            Creature("Keyboard Warrior", 1, 3, speed: 2, deploy: 0,
+                "Has never lost an argument. Has never left the house.",
+                "Mechanics test: OnDamaged fires on every hit, even one Armor absorbs or a killing blow, and still lands when it dies. Exhausted turns it off.",
+                On(EffectTrigger.OnDamage, Damage(1, TargetType.Enemy)))
+                .Picture("A heavyset warrior in a stained hoodie and a cape, holding a mechanical keyboard over his head like a greatsword, a gaming headset for a helmet and energy drinks hanging from his belt."),
+            Spell("Dogpile", TargetType.EnemyCreatures,
+                "Nobody read the post. Everybody has an opinion.",
+                "Mechanics test: several hits at once: Exposed adds +1 to each, retaliation fires once per hit, Armor takes hits first.",
+                Damage(1, TargetType.EnemyCreatures, TargetModifier.WithAdjacent))
+                .Picture("A huge, happy pile of dogs (corgis, labradors, a confused pug on top) burying one person, of whom only a waving hand sticks out."),
+            Spell("Rage Bait", TargetType.EnemyCreatures,
+                "You won't BELIEVE what they said about you.",
+                "Mechanics test: Status Timing. Burn does nothing at the Dusk of the Day it's applied, then ticks for 2 Days.",
+                Status(StatusEffectType.Burned, 2, TargetType.EnemyCreatures, potency: 2))
+                .Picture("A phone screen with a glowing red notification, reflected in the furious eyes of the person holding it."),
+        };
+
+        // Shadow Ops.: fragile agents, hidden plans, traps
+        private static List<CardDef> ShadowOpsCards() => new List<CardDef> {
+            Creature("Political Decoy", 0, 6, speed: 1, deploy: 1,
+                "The real one is in a bunker. Or is he?",
+                "Mechanics test: Swap trades places with a friendly creature at any distance, over the creatures in between, even one that can't act.")
+                .With(MovementKeyword.Swap)
+                .Picture("Two identical politicians in matching suits: one waves from a balcony, the other ducks behind the curtain."),
+        };
+
+        // Tech: rewires the queue
+        private static List<CardDef> TechCards() => new List<CardDef> {
+            Spell("DDOS Attack", TargetType.EnemyCreatures,
+                "Ten thousand requests a second. All of them from fridges.",
+                "Mechanics test: Exhausted cancels the target's planned actions (spells land before attacks), lasts the rest of the Day and all of the next, turns its abilities off and adds +1 to every hit (Exposed). Aimed at an enemy slot it's Fixed: the enemy can dodge by moving.",
+                Stun(1, TargetType.EnemyCreatures))
+                .Picture("A server rack melting under an avalanche of tiny envelope icons, smart fridges and toasters in the background, each with a red glowing eye."),
+        };
+
+        // Myth: slow and inevitable; creatures die and pay off
+        private static List<CardDef> MythCards() => new List<CardDef> {
+            Spell("Memento Mori", TargetType.AllCreatures,
+                "Remember that you will die. Preferably on schedule.",
+                "Mechanics test: Doomed on either side. It wipes other statuses and blocks new ones, gives +1 permanent Attack each Dawn (it stays on the card), then Last Rites strike the opposite slot even if the creature Cannot Act, and it dies for real.",
+                Status(StatusEffectType.Doomed, 3, TargetType.AllCreatures))
+                .Picture("A skull on an office desk beside an hourglass, and a wall calendar with three days crossed out in red."),
+            Creature("Martyr", 2, 4, speed: 1, deploy: 1,
+                "He died for your sins. Your sins are on backorder.",
+                "Mechanics test: its entry effect waits for Deployment Time; dooming itself makes a planned sacrifice that grows stronger; its OnDied effect fires when the sentence is carried out.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.Doomed, 2, TargetType.Self)),
+                On(EffectTrigger.OnDeath, Heal(3, TargetType.FriendlyCreatures, Each)))
+                .Picture("A long-haired, bearded Jesus-like figure in white robes, arms outstretched, a price sticker on his halo. An online-store banner beside him reads \"Salvation: Add to Cart (ships in 3 days)\"."),
+        };
+
+        // Mind: wins without raw damage
+        private static List<CardDef> MindCards() => new List<CardDef> {
+            Spell("Generational Trauma", TargetType.EnemyCreatures,
+                "Your grandfather's, your father's, and now yours. A family heirloom.",
+                "Mechanics test: Health Loss is permanent and stays on the card until it's reshuffled. It only affects creatures, so it fizzles on an empty slot. Not damage, which fits Mind.",
+                Buff(-2, TargetType.EnemyCreatures, attack: false, health: true))
+                .Picture("The swimming-pool meme: the Silent Generation stands in the pool holding a smiling Boomer high above the water, while on the bottom Gen X and the generations after them sit as skeletons, still waiting."),
         };
         #endregion
 
         #region Card definitions
         private class CardDef {
-            public string Name, Flavor, Notes;
+            public string Name, Flavor, Notes, ArtDescription;
+            public MovementKeyword Movement;
             public bool IsSpell;
             public int Attack, Health, Speed, DeploymentTime;
             public TargetType SpellTarget;
@@ -260,6 +374,16 @@ namespace SlayTheClone {
 
             public CardDef Copies(int count) {
                 CopyCount = count;
+                return this;
+            }
+
+            public CardDef Picture(string description) {
+                ArtDescription = description;
+                return this;
+            }
+
+            public CardDef With(MovementKeyword movement) {
+                Movement = movement;
                 return this;
             }
         }
@@ -292,6 +416,14 @@ namespace SlayTheClone {
         private static EffectAction Draw(int count, TargetType player = TargetType.Player) => Act(ActionType.Draw, count, player, TargetModifier.None);
         private static EffectAction Summon(int count) => Act(ActionType.Summon, count, TargetType.Player, TargetModifier.None);
 
+        private static EffectAction Status(StatusEffectType status, int days, TargetType target, int potency = 0, TargetModifier modifier = TargetModifier.None) {
+            var action = Act(ActionType.ApplyStatus, 0, target, modifier);
+            action.statusEffectToApply = status;
+            action.statusDuration = days;
+            action.statusPotency = potency;
+            return action;
+        }
+
         // Lasts while the creature stays on the battlefield; negative values are debuffs
         private static EffectAction Buff(int value, TargetType target, bool attack, bool health, TargetModifier modifier = TargetModifier.None) {
             var action = Act(ActionType.ModifyStat, value, target, modifier);
@@ -303,7 +435,13 @@ namespace SlayTheClone {
         #endregion
 
         #region Assets
-        private static void Build(Faction faction, string deckName, List<CardDef> cards) {
+        private static void Build(Faction faction, string deckName, List<CardDef> cards, Dictionary<string, CardDataScriptableObject> written) {
+            var deckCards = WriteCards(faction, cards, written);
+            WriteDeck(deckName, deckCards, $"{DecksFolder}/{faction}Deck.asset");
+        }
+
+        // Writes the faction's cards to its folder, which then holds exactly these
+        private static List<CardDataScriptableObject> WriteCards(Faction faction, List<CardDef> cards, Dictionary<string, CardDataScriptableObject> written) {
             string folder = $"{CardsRoot}/{faction}";
             CreateFolderIfNeeded(CardsRoot, faction.ToString());
             CreateFolderIfNeeded("Assets/Scriptables", "Decks");
@@ -311,10 +449,27 @@ namespace SlayTheClone {
             var deckCards = new List<CardDataScriptableObject>();
             foreach (var card in cards) {
                 var asset = WriteCard(card, faction, $"{folder}/{card.AssetName}.asset");
+                written[card.Name] = asset;
                 deckCards.AddRange(Enumerable.Repeat(asset, card.CopyCount));
             }
             RemoveCardsNotIn(folder, deckCards);
-            WriteDeck(deckName, deckCards, $"{DecksFolder}/{faction}Deck.asset");
+            return deckCards;
+        }
+
+        // The menu offers test decks next to the faction decks (see DeckCatalog.TestDecks)
+        private static void RegisterTestDeck(DeckScriptableObject deck) {
+            var guids = AssetDatabase.FindAssets("t:DeckCatalog");
+            if (guids.Length != 1) {
+                Debug.LogError($"Expected one deck catalog, found {guids.Length}; the Mechanics Test deck isn't offered in the menu.");
+                return;
+            }
+            var catalog = AssetDatabase.LoadAssetAtPath<DeckCatalog>(AssetDatabase.GUIDToAssetPath(guids[0]));
+            var serializedCatalog = new SerializedObject(catalog);
+            var testDecks = serializedCatalog.FindProperty("testDecks");
+            testDecks.arraySize = 1;
+            testDecks.GetArrayElementAtIndex(0).objectReferenceValue = deck;
+            serializedCatalog.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(catalog);
         }
 
         private static CardDataScriptableObject WriteCard(CardDef card, Faction faction, string path) {
@@ -330,6 +485,7 @@ namespace SlayTheClone {
             asset.cardName = card.Name;
             asset.description = card.Flavor;
             asset.designNotes = card.Notes;
+            asset.artDescription = card.ArtDescription;
             asset.faction = faction;
             asset.SetEffects(card.Effects);
             switch (asset) {
@@ -338,6 +494,7 @@ namespace SlayTheClone {
                     creature.health = card.Health;
                     creature.speed = card.Speed;
                     creature.turnsUntilOperative = card.DeploymentTime;
+                    creature.movement = card.Movement;
                     break;
                 case SpellCardScriptableObject spell:
                     spell.defaultTargetType = card.SpellTarget;
@@ -349,7 +506,7 @@ namespace SlayTheClone {
             return asset;
         }
 
-        private static void WriteDeck(string deckName, List<CardDataScriptableObject> cards, string path) {
+        private static DeckScriptableObject WriteDeck(string deckName, List<CardDataScriptableObject> cards, string path) {
             var deck = AssetDatabase.LoadAssetAtPath<DeckScriptableObject>(path);
             if (deck == null) {
                 deck = ScriptableObject.CreateInstance<DeckScriptableObject>();
@@ -366,6 +523,7 @@ namespace SlayTheClone {
             serializedDeck.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(deck);
             Debug.Log($"Deck '{deckName}': {cards.Count} cards ({cards.Distinct().Count()} different)");
+            return deck;
         }
 
         // Cards dropped from the list are deleted, so the folder holds exactly the faction's deck

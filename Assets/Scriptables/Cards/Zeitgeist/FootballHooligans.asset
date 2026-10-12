@@ -33,7 +33,9 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: a riot that spreads to adjacent creatures each Dusk.'
+  artDescription: 
   attack: 3
   health: 2
   speed: 2
   turnsUntilOperative: 0
+  movement: 0

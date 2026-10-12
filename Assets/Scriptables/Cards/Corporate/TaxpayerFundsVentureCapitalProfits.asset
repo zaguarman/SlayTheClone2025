@@ -43,4 +43,5 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: the enemy schedules 1 fewer draw instead of losing Health.'
+  artDescription: 
   defaultTargetType: 0

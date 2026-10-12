@@ -33,7 +33,9 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: steals a Temporary buff from an enemy creature instead.'
+  artDescription: 
   attack: 2
   health: 2
   speed: 3
   turnsUntilOperative: 0
+  movement: 0

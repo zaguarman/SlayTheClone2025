@@ -44,4 +44,5 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: +1 Priority on its attack this Day, then the creature is
     Banished at Dusk.'
+  artDescription: 
   defaultTargetType: 3

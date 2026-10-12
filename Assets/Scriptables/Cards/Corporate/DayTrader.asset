@@ -46,7 +46,9 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: Investment. Pays out or loses cards depending on the Day.'
+  artDescription: 
   attack: 3
   health: 1
   speed: 3
   turnsUntilOperative: 0
+  movement: 0

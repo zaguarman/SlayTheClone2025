@@ -33,7 +33,9 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: Keep Calm on friendly creatures each time it''s hit.'
+  artDescription: 
   attack: 2
   health: 4
   speed: 1
   turnsUntilOperative: 1
+  movement: 0

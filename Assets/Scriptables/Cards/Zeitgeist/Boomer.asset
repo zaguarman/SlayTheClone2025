@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: OLD MAN YELLS AT CLOUD. Hits a random creature that moved
     this Day.'
+  artDescription: 
   attack: 2
   health: 5
   speed: 1
   turnsUntilOperative: 0
+  movement: 0

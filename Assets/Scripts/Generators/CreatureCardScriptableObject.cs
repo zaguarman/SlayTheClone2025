@@ -7,6 +7,7 @@ namespace SlayTheClone {
         public int health;
         [Min(1)] public int speed = 1; // Faster creatures strike first
         [Min(0)] public int turnsUntilOperative; // Turns on the board before it can attack, move or use its effects
+        public MovementKeyword movement; // Leapfrog, Swap (GDD 2.4 Movement Keywords)
 
         protected override void OnEnable() {
             base.OnEnable(); // Call base implementation to handle cardId
@@ -20,6 +21,7 @@ namespace SlayTheClone {
             data.health = health;
             data.speed = speed;
             data.turnsUntilOperative = turnsUntilOperative;
+            data.movement = movement;
             return data;
         }
     }

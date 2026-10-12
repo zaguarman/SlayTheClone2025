@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: a Worker token created by other cards rather than drafted.
     Fodder for sacrifice costs.'
+  artDescription: 
   attack: 1
   health: 1
   speed: 3
   turnsUntilOperative: 0
+  movement: 0

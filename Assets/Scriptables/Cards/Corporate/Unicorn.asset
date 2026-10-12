@@ -48,7 +48,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Unicorn (Enterprise) from the card examples. Burn rate stays:
     Corporate can''t heal it.'
+  artDescription: 
   attack: 1
   health: 8
   speed: 1
   turnsUntilOperative: 2
+  movement: 0

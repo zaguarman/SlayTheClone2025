@@ -43,4 +43,5 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: a Temporary +3 Attack for 1 Day, then a Persistent -2 Health.'
+  artDescription: 
   defaultTargetType: 3

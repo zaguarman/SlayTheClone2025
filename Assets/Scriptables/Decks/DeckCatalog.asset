@@ -26,3 +26,5 @@ MonoBehaviour:
   - name: Your Group Chat
     tagline: 47 unread messages. All of them are about you.
     deck: {fileID: 11400000, guid: df05ff4d8ab27d84cb2a2bc63757fc93, type: 2}
+  testDecks:
+  - {fileID: 11400000, guid: 0f3ad3b977f753c4aa89694960c6b51b, type: 2}

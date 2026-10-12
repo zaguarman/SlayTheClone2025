@@ -14,6 +14,7 @@ namespace SlayTheClone {
         public Sprite artwork; // Shown in the card's art box; assigned by Tools > Cards > Assign Card Art
         [SerializeField] protected List<CardEffect> effects = new List<CardEffect>();
         [TextArea(2, 6)] public string designNotes; // Editor only: what the card should become once the GDD mechanics it stands in for exist
+        [TextArea(2, 6)] public string artDescription; // What the card's picture shows: the brief for its art
 
         // Initialize cardId if it's empty
         protected virtual void OnEnable() {

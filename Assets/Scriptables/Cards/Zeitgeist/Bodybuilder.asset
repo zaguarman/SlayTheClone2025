@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Coffeinated, then Burnout. Never skips leg day, skips every
     rest day.'
+  artDescription: 
   attack: 4
   health: 2
   speed: 3
   turnsUntilOperative: 0
+  movement: 0

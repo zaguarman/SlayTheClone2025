@@ -80,7 +80,9 @@ namespace SlayTheClone {
 
             if (chosenTarget != null && UsesChosenTarget(action)) {
                 var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
-                return resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
+                var targets = resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
+                if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) targets.AddRange(NeighboursOf(chosenTarget));
+                return targets;
             }
             return TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
         }
@@ -105,6 +107,21 @@ namespace SlayTheClone {
                 if (action is SummonCreatureAction summon && summon.GetTargetSlot() == slot) return summon.GetCreature();
             }
             return null;
+        }
+
+        // "...and the creatures next to it": the creatures beside the slot the effect lands on, when it resolves
+        private static IEnumerable<ITarget> NeighboursOf(ITarget chosenTarget) {
+            var slot = chosenTarget switch {
+                HomingTarget homing => homing.CurrentSlot,
+                BoardSlot boardSlot => boardSlot,
+                ICreature creature => creature.Slot,
+                _ => null
+            };
+            if (slot?.Owner == null) yield break;
+            var row = slot.Owner.Battlefield;
+            foreach (int i in new[] { slot.Index - 1, slot.Index + 1 }) {
+                if (i >= 0 && i < row.Count && row[i].OccupyingCreature != null) yield return row[i].OccupyingCreature;
+            }
         }
 
         /// <summary>Whether where the spell is dropped decides what at least one of its effects lands on.</summary>

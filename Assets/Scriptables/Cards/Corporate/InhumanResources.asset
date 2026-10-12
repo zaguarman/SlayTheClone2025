@@ -44,7 +44,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Layoffs. Destroy a friendly Worker as an additional cost;
     schedule 2 draws.'
+  artDescription: 
   attack: 1
   health: 4
   speed: 1
   turnsUntilOperative: 1
+  movement: 0

@@ -33,7 +33,9 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: a Law (Location) for 3 Days that hurts both sides each Dawn.'
+  artDescription: 
   attack: 3
   health: 4
   speed: 2
   turnsUntilOperative: 2
+  movement: 0

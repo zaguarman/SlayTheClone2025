@@ -44,4 +44,5 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Capital cost, discard 2 cards. Placeholder cost: the enemy
     draws a card.'
+  artDescription: 
   defaultTargetType: 4

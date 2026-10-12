@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Red Tape every Dawn: +1 Deployment Time on a random enemy
     creature.'
+  artDescription: 
   attack: 1
   health: 4
   speed: 1
   turnsUntilOperative: 2
+  movement: 0

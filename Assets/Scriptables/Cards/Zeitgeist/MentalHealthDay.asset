@@ -43,4 +43,5 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: Cleanse every mood from the creature instead of the stun.'
+  artDescription: 
   defaultTargetType: 3

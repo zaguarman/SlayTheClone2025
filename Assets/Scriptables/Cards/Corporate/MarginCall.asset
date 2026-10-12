@@ -44,4 +44,5 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Capital cost, discard your hand; each creature takes damage
     equal to the cards discarded.'
+  artDescription: 
   defaultTargetType: 2

@@ -44,4 +44,5 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: a Strike. Stops Each Dawn triggers (engines) on both sides
     for 2 Days.'
+  artDescription: 
   defaultTargetType: 4

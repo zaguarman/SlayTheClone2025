@@ -23,7 +23,19 @@ namespace SlayTheClone {
             }
         }
 
-        public static string GetRulesText(CardData data) => GetRulesText(data.effects, data is SpellData);
+        public static string GetRulesText(CardData data) {
+            string keywords = data is CreatureData creature ? KeywordLine(creature.movement) : "";
+            string effects = GetRulesText(data.effects, data is SpellData);
+            return string.Join("\n", new[] { keywords, effects }.Where(line => !string.IsNullOrEmpty(line)));
+        }
+
+        // Movement Keywords lead the text, like Magic's evergreen keywords ("Leapfrog.")
+        private static string KeywordLine(MovementKeyword movement) {
+            var words = new List<string>();
+            if (movement.HasFlag(MovementKeyword.Leapfrog)) words.Add("<b>Leapfrog</b>");
+            if (movement.HasFlag(MovementKeyword.Swap)) words.Add("<b>Swap</b>");
+            return words.Count == 0 ? "" : string.Join(", ", words) + ".";
+        }
 
         public static string GetRulesText(IEnumerable<CardEffect> effects, bool isSpell) {
             if (effects == null) return "";
@@ -149,7 +161,7 @@ namespace SlayTheClone {
             switch (action.statusEffectToApply) {
                 case StatusEffectType.Exhausted: return $"exhaust (stun) {target} for {turns}";
                 case StatusEffectType.Burned: return $"burn {target} for {action.statusPotency} each turn for {turns}";
-                case StatusEffectType.Doomed: return $"doom {target} ({turns})";
+                case StatusEffectType.Doomed: return $"doom {target} for {turns}";
                 default: return null;
             }
         }

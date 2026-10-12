@@ -47,7 +47,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Coffeinated, then Burnout (the Hustle Culture pairing with
     Zeitgeist).'
+  artDescription: 
   attack: 2
   health: 3
   speed: 2
   turnsUntilOperative: 0
+  movement: 0

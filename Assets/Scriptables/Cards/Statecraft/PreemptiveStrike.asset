@@ -34,4 +34,5 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: resolves with +1 Priority (Action).'
+  artDescription: 
   defaultTargetType: 4

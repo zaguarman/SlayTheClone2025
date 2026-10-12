@@ -34,4 +34,5 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: +1 Deployment Time on an enemy creature, or Priority -1 on
     its action.'
+  artDescription: 
   defaultTargetType: 4

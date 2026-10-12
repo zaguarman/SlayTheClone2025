@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Slacking Off. Can''t be given an intent, but can''t be targeted
     either.'
+  artDescription: 
   attack: 1
   health: 7
   speed: 1
   turnsUntilOperative: 0
+  movement: 0

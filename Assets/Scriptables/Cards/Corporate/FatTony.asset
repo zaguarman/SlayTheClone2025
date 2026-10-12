@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: An Offer You Can''t Refuse. Recruits a damaged enemy creature
     instead of hurting it.'
+  artDescription: 
   attack: 4
   health: 5
   speed: 1
   turnsUntilOperative: 2
+  movement: 0

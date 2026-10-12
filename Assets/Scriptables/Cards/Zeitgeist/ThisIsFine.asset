@@ -44,4 +44,5 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: a Trend (Location). Each Dusk, every creature takes 1 damage
     and yours shrug it off.'
+  artDescription: 
   defaultTargetType: 3

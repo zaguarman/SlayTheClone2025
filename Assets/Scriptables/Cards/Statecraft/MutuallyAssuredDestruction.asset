@@ -53,4 +53,5 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: a countdown everyone can see coming, like a Prophecy.'
+  artDescription: 
   defaultTargetType: 2

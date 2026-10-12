@@ -43,7 +43,9 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: Plot Armor. Survives a lethal hit once (OnAboutToDie).'
+  artDescription: 
   attack: 3
   health: 3
   speed: 2
   turnsUntilOperative: 1
+  movement: 0

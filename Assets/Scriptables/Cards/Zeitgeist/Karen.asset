@@ -33,7 +33,9 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: Impatient. Escalates every Day nobody gives it an intent.'
+  artDescription: 
   attack: 2
   health: 4
   speed: 1
   turnsUntilOperative: 0
+  movement: 0

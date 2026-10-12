@@ -132,7 +132,7 @@ namespace SlayTheClone {
             SetControls(columnsLayout, expandHeight: true);
             columns.AddComponent<LayoutElement>().flexibleHeight = 1;
 
-            var decks = catalog.Decks;
+            var decks = catalog.AllDecks;
             var yourDecks = AddColumn(columns.transform, "Your deck");
             foreach (var deck in decks) {
                 AddChoice(yourDecks, PlayerDeckButton + deck.GetDeckName(), DeckLabel(deck), 72,

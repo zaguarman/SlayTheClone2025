@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Fortifying. Adjacent friendly creatures can''t be moved by
     enemy effects.'
+  artDescription: 
   attack: 0
   health: 6
   speed: 1
   turnsUntilOperative: 2
+  movement: 0

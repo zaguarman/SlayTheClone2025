@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: CleaningRobotPremium
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 6cb0fe1d-179c-45b6-97c3-9b8d41c37de2
+  cardName: Cleaning Robot Premium
+  description: Cleans 30% of your floor. The other 70% is a Premium feature.
+  cardType: 0
+  faction: 4
+  artwork: {fileID: 0}
+  effects: []
+  designNotes: 'Mechanics test: a sturdy pusher. Pushing (every creature can), no
+    chain pushes, blocked pushes ("needs Swap") and the automatic move order.'
+  artDescription: 'A sleek, glossy robot vacuum with a glowing megacorp logo, shoving
+    a pile of tiny office workers and their desks into a corner. A "Subscription
+    expired: suction limited" pop-up flashes on its screen.'
+  attack: 2
+  health: 7
+  speed: 1
+  turnsUntilOperative: 1
+  movement: 0

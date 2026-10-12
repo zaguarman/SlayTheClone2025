@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: taxes enemy card plays instead of plain damage (Red Tape
     on the economy).'
+  artDescription: 
   attack: 1
   health: 4
   speed: 1
   turnsUntilOperative: 1
+  movement: 0

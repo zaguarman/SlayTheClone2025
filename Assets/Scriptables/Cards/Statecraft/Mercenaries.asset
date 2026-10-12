@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Recruitment bait. When it dies, the enemy may Recruit it
     instead.'
+  artDescription: 
   attack: 4
   health: 3
   speed: 3
   turnsUntilOperative: 1
+  movement: 0

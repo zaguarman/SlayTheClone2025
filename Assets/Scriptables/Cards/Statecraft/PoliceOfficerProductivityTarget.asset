@@ -33,7 +33,9 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
   designNotes: 'Future: Priority attacks against creatures that moved this Day.'
+  artDescription: 
   attack: 2
   health: 3
   speed: 2
   turnsUntilOperative: 1
+  movement: 0

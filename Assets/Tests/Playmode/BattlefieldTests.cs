@@ -116,6 +116,20 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
+        public void ASpellWithAdjacent_AlsoHitsTheCreaturesNextToWhereItLands() {
+            var dogpile = game.Spell("Dogpile", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures, TargetModifier.WithAdjacent));
+            var left = game.Summon(p2, game.Creature("Left", 0, 5), 0);
+            var middle = game.Summon(p2, game.Creature("Middle", 0, 5), 1);
+            var right = game.Summon(p2, game.Creature("Right", 0, 5), 2);
+            var far = game.Summon(p2, game.Creature("Far", 0, 5), 4);
+
+            game.Run(new PlayCardAction(game.GiveCard(p1, dogpile), p1, p2.Battlefield[1]));
+
+            Assert.AreEqual(new[] { 4, 4, 4, 5 }, new[] { left.Health, middle.Health, right.Health, far.Health });
+        }
+
+        [Test]
         public void GroupEffects_HitEveryCreatureOfTheirGroup_Once() {
             var mine = game.Summon(p1, game.Creature("Mine", 0, 5), 0);
             var theirsA = game.Summon(p2, game.Creature("Theirs A", 0, 5), 0);

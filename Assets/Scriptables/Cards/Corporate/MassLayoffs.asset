@@ -44,4 +44,5 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: as an additional cost, destroy any number of your Workers;
     draw 1 per Worker next Day.'
+  artDescription: 
   defaultTargetType: 3

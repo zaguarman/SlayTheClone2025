@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: RageBait
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: cfe2b507-4e47-4d8f-93a8-f6f6f5b95412
+  cardName: Rage Bait
+  description: You won't BELIEVE what they said about you.
+  cardType: 1
+  faction: 6
+  artwork: {fileID: 0}
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 1
+      statusDuration: 2
+      statusPotency: 2
+  designNotes: 'Mechanics test: Status Timing. Burn does nothing at the Dusk of the
+    Day it''s applied, then ticks for 2 Days.'
+  artDescription: A phone screen with a glowing red notification, reflected in the
+    furious eyes of the person holding it.
+  defaultTargetType: 4

@@ -102,7 +102,7 @@ namespace SlayTheClone.Tests {
         /// </summary>
         [UnityTest]
         public IEnumerator EveryDeckOnOffer_PlaysSeveralTurns_WithTheScreenInStepWithTheRules() {
-            var decks = catalog.Decks;
+            var decks = catalog.AllDecks; // The test decks too
             for (int i = 0; i < decks.Count; i += 2) {
                 var yourDeck = decks[i];
                 var theirDeck = decks[(i + 1) % decks.Count];

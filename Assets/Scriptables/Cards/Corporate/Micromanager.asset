@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: gives a friendly Worker Coffeinated instead of a plain attack
     buff.'
+  artDescription: 
   attack: 2
   health: 3
   speed: 1
   turnsUntilOperative: 1
+  movement: 0

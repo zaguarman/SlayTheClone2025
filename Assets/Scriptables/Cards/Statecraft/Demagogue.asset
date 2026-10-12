@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Loaded Language. The buff only lasts while it stays on the
     battlefield.'
+  artDescription: 
   attack: 2
   health: 3
   speed: 2
   turnsUntilOperative: 1
+  movement: 0

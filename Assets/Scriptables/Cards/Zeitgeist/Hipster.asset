@@ -34,7 +34,9 @@ MonoBehaviour:
       statusPotency: 0
   designNotes: 'Future: Hipster status. Hurts only creatures that share a name with
     another creature (too mainstream).'
+  artDescription: 
   attack: 2
   health: 2
   speed: 2
   turnsUntilOperative: 0
+  movement: 0
