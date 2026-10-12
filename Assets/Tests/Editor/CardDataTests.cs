@@ -29,8 +29,8 @@ namespace SlayTheClone.Tests {
             foreach (var asset in assets) {
                 var data = asset.ToCardData();
                 try {
-                    foreach (var action in data.effects.SelectMany(e => e.actions)) {
-                        string problem = FindProblem(action);
+                    foreach (var (effect, action) in data.effects.SelectMany(e => e.actions.Select(a => (e, a)))) {
+                        string problem = FindProblem(action, effect.trigger);
                         if (problem != null) problems.Add($"{data.cardName}: {problem}");
                     }
                 }
@@ -58,14 +58,16 @@ namespace SlayTheClone.Tests {
         private static readonly TargetType[] PlayerTargets = { TargetType.Player, TargetType.Enemy };
 
         // Null when the action can work
-        private static string FindProblem(EffectAction action) {
+        private static string FindProblem(EffectAction action, EffectTrigger trigger) {
+            // Retaliation: an enemy-targeted OnDamage effect lands on whoever damaged the creature
+            bool retaliates = trigger == EffectTrigger.OnDamage && action.targetType == TargetType.Enemy;
             switch (action.actionType) {
                 case ActionType.Armor:
                 case ActionType.ModifyStat:
                 case ActionType.Stun:
                 case ActionType.ApplyStatus:
                 case ActionType.Cleanse:
-                    if (!CreatureTargets.Contains(action.targetType)) return $"{action.actionType} only affects creatures but targets {action.targetType}";
+                    if (!CreatureTargets.Contains(action.targetType) && !retaliates) return $"{action.actionType} only affects creatures but targets {action.targetType}";
                     break;
                 case ActionType.Draw:
                 case ActionType.Summon:

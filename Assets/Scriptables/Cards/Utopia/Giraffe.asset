@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Giraffe
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: a1075707-0617-4e6e-9abe-488826ba1de4
+  cardName: Giraffe
+  description: Heart the size of a TV. Still can't reach its own feet.
+  cardType: 0
+  faction: 9
+  artwork: {fileID: 3286163911610860551, guid: 9b74dc0d4f7ee154d8fcff0a6a7e12af, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 13
+      value: 0
+      targetType: 4
+      targetModifier: 4
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+  designNotes: 'When it enters, Reveal a random enemy creature''s slot: it sees over
+    the fog.'
+  artDescription: A giraffe whose neck runs out of the top of the picture and comes
+    back in from the top further along, its head hanging upside down, peeking.
+  attack: 2
+  health: 7
+  speed: 1
+  turnsUntilOperative: 2
+  movement: 0
+  ability: 0

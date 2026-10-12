@@ -55,6 +55,10 @@ namespace SlayTheClone {
                 bool startsSentence = trigger.text == null;
                 var clauses = actions.Select((a, i) => {
                     string text = DescribeAction(a, isSpell);
+                    // Retaliation: an enemy-targeted OnDamage effect hits whoever damaged this creature (see EffectResolver)
+                    if (!isSpell && effect.trigger == EffectTrigger.OnDamage && a.targetType == TargetType.Enemy && a.targetModifier == TargetModifier.None) {
+                        text = text.Replace(DescribeTarget(a, isSpell), "whoever damaged it");
+                    }
                     return EffectIcons.Tag(ActionIcon(a)) + (i == 0 && startsSentence ? Capitalize(text) : text);
                 }).ToList();
 
@@ -138,8 +142,9 @@ namespace SlayTheClone {
                 case ActionType.CreateWatchdog:
                     return DescribeWatchdog(action, target);
                 case ActionType.Reveal: // Instant: it resolves as soon as it's played
-                    return action.targetType is TargetType.Player or TargetType.Enemy
-                        ? $"instantly see {target}'s Watchdog conditions"
+                    if (action.targetType is TargetType.Player or TargetType.Enemy) return $"instantly see {target}'s Watchdog conditions";
+                    return action.targetModifier.HasFlag(TargetModifier.Random)
+                        ? $"see what {target} plans this Day, and any hidden Slot Effect under it"
                         : $"instantly see the hidden Slot Effect on {SlotTarget(action, isSpell)} and what the creature there plans this Day";
                 case ActionType.Cleanse: // A Cleanse removes the bad; a Purge removes everything
                     string removed = action.cleanse switch {

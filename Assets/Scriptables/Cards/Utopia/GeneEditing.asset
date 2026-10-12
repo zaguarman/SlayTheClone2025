@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: GeneEditing
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 820c88aa-e5ef-4bf2-916f-babdf3ba3b37
+  cardName: Gene Editing
+  description: Bigger, stronger, slightly radioactive.
+  cardType: 1
+  faction: 9
+  artwork: {fileID: 3286163911610860551, guid: 88a94c6cd51323742b0a3312634be470, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 6
+      value: 2
+      targetType: 3
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+    - actionType: 7
+      value: 0
+      targetType: 3
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 1
+      statusDuration: 2
+      statusPotency: 1
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+  designNotes: '+2/+2 for good; side effect: Burned for 2 Days. Future: gene editing
+    as Persistent Stat Modifications.'
+  artDescription: A pair of scissors cutting a DNA double helix, a strip of tape
+    sticking a unicorn horn onto it.
+  defaultTargetType: 3

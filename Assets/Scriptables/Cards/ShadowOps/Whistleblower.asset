@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Whistleblower
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: d5a7f54a-c134-4c1c-b592-4bc863314411
+  cardName: Whistleblower
+  description: Leaked everything. Now lives in an embassy closet.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 3286163911610860551, guid: 490700d98a762cd43afacff324e2d603, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 1
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 7
+      statusDuration: 2
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+  designNotes: 'Dead Man''s Switch: when it dies, every enemy creature is Revealed
+    for 2 Days.'
+  artDescription: A man in a hoodie blowing a sports whistle, classified documents
+    spilling out of every pocket.
+  attack: 1
+  health: 2
+  speed: 3
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 0

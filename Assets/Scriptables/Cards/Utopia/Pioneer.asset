@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Pioneer
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 4eeff433-7a8f-4438-97bb-13664fcab817
+  cardName: Pioneer
+  description: First human on Mars. First eviction on Mars.
+  cardType: 0
+  faction: 9
+  artwork: {fileID: 3286163911610860551, guid: 95ab61a672bf73d4ab10ebd7cce9e765, type: 3}
+  effects: []
+  designNotes: 'Leapfrog: it jumps over creatures to an empty slot.'
+  artDescription: 'An astronaut planting a flag on a red desert next to a sign: FOR
+    RENT $9999.'
+  attack: 2
+  health: 2
+  speed: 3
+  turnsUntilOperative: 1
+  movement: 1
+  ability: 0

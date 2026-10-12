@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: RokosBasilisk
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: e56fa5fe-6232-449f-8b18-b59aaa76785d
+  cardName: Roko's Basilisk
+  description: It knows you didn't help build it. It's taking notes.
+  cardType: 0
+  faction: 8
+  artwork: {fileID: 3286163911610860551, guid: d37a84c981eac9b488c27d3b0529337b, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 3
+    oncePerCombat: 0
+    actions:
+    - actionType: 5
+      value: 1
+      targetType: 4
+      targetModifier: 4
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+  designNotes: 'Each Dawn a random enemy creature is Exhausted. No damage: Mind can''t
+    deal it.'
+  artDescription: A big green snake in headphones typing on a laptop, a sticky note
+    on the screen reading NAUGHTY LIST.
+  attack: 0
+  health: 5
+  speed: 1
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 0

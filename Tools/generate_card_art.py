@@ -2112,6 +2112,915 @@ def write_fog_faces():
             f.write(draw())
 
 
+# ---------------------------------------------------------------- More lettering: digits and a few signs
+
+STROKE_FONT.update({
+    "0": [[(1, 0), (3, 0), (4, 1), (4, 5), (3, 6), (1, 6), (0, 5), (0, 1), (1, 0)], [(0.6, 5), (3.4, 1)]],
+    "1": [[(1, 1.2), (2, 0), (2, 6)], [(1, 6), (3, 6)]],
+    "2": [[(0, 1), (1, 0), (3, 0), (4, 1), (4, 2.2), (0, 6), (4, 6)]],
+    "3": [[(0, 0), (4, 0), (2, 2.6), (3, 2.6), (4, 3.6), (4, 5), (3, 6), (1, 6), (0, 5)]],
+    "4": [[(3, 6), (3, 0), (0, 4.2), (4, 4.2)]],
+    "5": [[(4, 0), (0, 0), (0, 2.6), (3, 2.6), (4, 3.6), (4, 5), (3, 6), (0, 6)]],
+    "6": [[(3.4, 0), (1, 0), (0, 1), (0, 5), (1, 6), (3, 6), (4, 5), (4, 3.8), (3, 2.8), (0, 2.8)]],
+    "7": [[(0, 0), (4, 0), (1.4, 6)]],
+    "8": [[(1, 0), (3, 0), (4, 1), (4, 2), (3, 3), (1, 3), (0, 2), (0, 1), (1, 0)],
+          [(1, 3), (3, 3), (4, 4), (4, 5), (3, 6), (1, 6), (0, 5), (0, 4), (1, 3)]],
+    "9": [[(4, 3.2), (1, 3.2), (0, 2.2), (0, 1), (1, 0), (3, 0), (4, 1), (4, 5), (3, 6), (0.6, 6)]],
+    "$": [[(4, 1.2), (3, 0.6), (1, 0.6), (0, 1.6), (0.6, 2.6), (3.4, 3.4), (4, 4.4), (3, 5.4), (1, 5.4), (0, 4.8)], [(2, -0.4), (2, 6.4)]],
+    "-": [[(0.6, 3), (3.4, 3)]],
+    "=": [[(0.6, 2.2), (3.4, 2.2)], [(0.6, 3.8), (3.4, 3.8)]],
+    ".": [[(1.8, 5.6), (2.2, 6)]],
+    "/": [[(0, 6), (4, 0)]],
+    "?": [[(0, 1), (1, 0), (3, 0), (4, 1), (4, 2), (2, 3.4), (2, 4.4)], [(2, 5.6), (2, 6)]],
+    "+": [[(2, 1.5), (2, 4.5)], [(0.5, 3), (3.5, 3)]],
+    "'": [[(2, 0), (2, 1.6)]],
+})
+
+
+# ---------------------------------------------------------------- Utopia
+
+def bg_utopia():
+    """Utopia: a clean white lab, a mint glow and a faint honeycomb (Hexagons)."""
+    defs = lin("bg", ["#effcf8", "#9fd8cf"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for row in range(6):
+        for col in range(11):
+            cx, cy = 10 + col * 36 + (18 if row % 2 else 0), 10 + row * 31
+            pts = [(cx + 15 * math.cos(math.radians(a)), cy + 15 * math.sin(math.radians(a))) for a in range(30, 390, 60)]
+            body += poly(pts, "none", 'stroke="#ffffff" stroke-width="2" opacity="0.55"')
+    body += rect(0, 172, W, 28, "#c6e4de")
+    return defs, body
+
+
+def bg_space(top="#0b0f2a", bottom="#2a1450"):
+    defs = lin("bg", [top, bottom])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(40):
+        x, y = (i * 83) % W, (i * 47 + i * i) % H
+        body += circle(x, y, 0.8 + (i % 3) * 0.5, "#ffffff", f'opacity="{0.4 + (i % 4) * 0.15:.2f}"')
+    return defs, body
+
+
+def sheep(cx, cy, s=1.0, wool="#f7f7f2", face="#3a3a3a"):
+    out = ""
+    for dx in (-12, 10):
+        out += rect(cx + dx * s - 3 * s, cy + 8 * s, 6 * s, 18 * s, face, 'rx="2"')
+    for dx, dy in ((-16, 0), (0, -7), (14, -1), (-8, 8), (8, 8), (0, 2)):
+        out += circle(cx + dx * s, cy + dy * s, 12 * s, wool, 'stroke="#d6d6cc" stroke-width="1"')
+    out += ellipse(cx + 26 * s, cy - 6 * s, 9 * s, 11 * s, face)
+    out += ellipse(cx + 19 * s, cy - 14 * s, 6 * s, 3 * s, face)
+    out += circle(cx + 29 * s, cy - 9 * s, 2 * s, "#ffffff") + circle(cx + 29.5 * s, cy - 9 * s, 1 * s, "#111")
+    return out
+
+
+def clone():
+    defs, body = bg_utopia()
+    for x in (34, 84, 268, 318):
+        body += sheep(x, 108, 0.75)
+    body += sheep(150, 132, 1.6)
+    # Dolly's lab coat and goggles
+    body += path("M134 126 L160 126 L168 168 L126 168 Z", "#ffffff", 'stroke="#b8cfc9" stroke-width="2"')
+    body += stroke("M147 126 L147 168", "#b8cfc9", 1.5)
+    hx, hy = 150 + 26 * 1.6, 132 - 6 * 1.6
+    body += stroke(f"M{hx - 12} {hy - 8} L{hx + 14} {hy - 8}", "#2f7fa6", 3)
+    body += circle(hx + 5, hy - 5, 6, "#bfefff", 'stroke="#2f7fa6" stroke-width="2.5" opacity="0.9"')
+    body += eye(hx + 5, hy - 5, 2.6)
+    # A clipboard: she counts herself
+    body += rect(96, 120, 22, 30, "#c99a5a", 'rx="2"') + rect(99, 125, 16, 22, "#ffffff")
+    for y in (130, 135, 140):
+        body += stroke(f"M101 {y} L113 {y}", "#999", 1.2)
+    return svg(defs, body)
+
+
+def caterpillar(x, y, s=1.0):
+    out = ""
+    for i in range(5):
+        out += circle(x + i * 12 * s, y - (4 if i % 2 else 0) * s, 8 * s, "#7ac943", 'stroke="#4e8a2a" stroke-width="1.5"')
+    out += circle(x + 60 * s, y - 6 * s, 10 * s, "#8ad653", 'stroke="#4e8a2a" stroke-width="1.5"')
+    out += circle(x + 63 * s, y - 9 * s, 2 * s, "#111") + stroke(f"M{x + 60 * s:.1f} {y - 16 * s:.1f} l -3 -8 M{x + 66 * s:.1f} {y - 15 * s:.1f} l 3 -8", "#4e8a2a", 1.5)
+    return out
+
+
+def hypermetamorphosis():
+    defs, body = bg_utopia()
+    body += stroke("M0 34 L352 34", "#8a5a2a", 5)
+    body += caterpillar(16, 150, 0.9)
+    body += arrow(84, 120, 108, 104, "#5aa89a", 5)
+    body += stroke("M146 34 L146 54", "#bfae8a", 2)
+    body += ellipse(146, 92, 18, 38, "#b08a5a", 'stroke="#7a5a3a" stroke-width="2"')
+    for y in (70, 84, 98, 112):
+        body += stroke(f"M130 {y} Q 146 {y + 6} 162 {y}", "#7a5a3a", 1.5)
+    body += arrow(176, 104, 200, 120, "#5aa89a", 5)
+    # The butterfly that came out of it
+    for sx in (-1, 1):
+        body += ellipse(270 + sx * 44, 112, 36, 26, "#f2a23a", f'stroke="#5a3a1a" stroke-width="2" transform="rotate({sx * -20} {270 + sx * 44} 112)"')
+        body += ellipse(270 + sx * 38, 150, 22, 16, "#a46ad6", 'stroke="#5a3a1a" stroke-width="2"')
+        body += circle(270 + sx * 52, 106, 7, "#fff3c8")
+    body += person(270, 200, 1.05, SKIN[0], "#4a5568", face="flat", hair="#3a2a1a", tie="#c0392b", brows="sad")
+    body += rect(300, 160, 34, 24, "#5a3a22", 'rx="3"') + rect(310, 155, 14, 6, "none", 'stroke="#5a3a22" stroke-width="3"')
+    return svg(defs, body)
+
+
+def extremophile():
+    defs = lin("bg", ["#3a1408", "#8a2a10"]) + lin("lava", ["#ffd23a", "#ff6a10", "#c0280a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x, y in ((40, 40), (300, 30), (180, 20)):
+        body += circle(x, y, 3, "#ffb03a", 'opacity="0.6"')
+    cx, cy = 160, 128
+    body += ellipse(cx, cy, 70, 38, "#d6c2b8", 'stroke="#8a7066" stroke-width="2.5"')
+    for dx in (-36, -10, 16, 40):
+        body += stroke(f"M{cx + dx} {cy - 36} Q {cx + dx + 8} {cy} {cx + dx} {cy + 36}", "#a88c80", 2)
+    body += circle(cx + 66, cy - 10, 26, "#dcc8be", 'stroke="#8a7066" stroke-width="2.5"')
+    body += circle(cx + 90, cy - 6, 8, "#c4aca2", 'stroke="#8a7066" stroke-width="2"') + circle(cx + 92, cy - 6, 3, "#5a3a3a")
+    # Sunglasses
+    body += ellipse(cx + 58, cy - 18, 10, 7, "#111") + ellipse(cx + 80, cy - 18, 9, 7, "#111")
+    body += stroke(f"M{cx + 46} {cy - 20} L{cx + 89} {cy - 20}", "#111", 2.5)
+    # A tiny cocktail in a stubby claw
+    body += stroke(f"M{cx + 30} {cy + 2} Q {cx + 54} {cy + 6} {cx + 66} {cy - 6}", "#a88c80", 8)
+    body += poly([(cx + 60, cy - 40), (cx + 84, cy - 40), (cx + 72, cy - 24)], "#bff0ff", 'stroke="#fff" stroke-width="1.5" opacity="0.9"')
+    body += stroke(f"M{cx + 72} {cy - 24} L{cx + 72} {cy - 10}", "#ffffff", 2)
+    body += path(f"M{cx + 74} {cy - 40} L{cx + 84} {cy - 60} Q {cx + 96} {cy - 56} {cx + 98} {cy - 46} Z", "#ff5a8a")
+    # Lava up to its belly
+    body += path("M0 150 Q 40 140 80 150 T 160 150 T 240 150 T 320 150 L352 148 L352 200 L0 200 Z", "url(#lava)")
+    for x in (40, 120, 250, 320):
+        body += circle(x, 160, 5, "#ffe46a", 'opacity="0.8"')
+    return svg(defs, body)
+
+
+def mortarboard(hx, hy, r):
+    return (poly([(hx - r * 1.5, hy - r * 0.9), (hx, hy - r * 1.5), (hx + r * 1.5, hy - r * 0.9), (hx, hy - r * 0.4)], "#1a1a22")
+            + rect(hx - r * 0.7, hy - r * 0.95, r * 1.4, r * 0.45, "#1a1a22")
+            + stroke(f"M{hx} {hy - r * 0.95} L{hx + r * 1.2} {hy - r * 0.7} L{hx + r * 1.2} {hy - r * 0.1}", "#f2c94c", 2.5))
+
+
+def philosophy_phd():
+    defs = lin("bg", ["#f2d06a", "#d9822b"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += rect(20, 14, 150, 50, "#3a2a1a", 'rx="4"')
+    for i, y in enumerate((24, 36, 48)):
+        body += rect(30, y, 70, 5, "#f4e3b0") + rect(130, y, 26, 5, "#f2c94c")
+    # The diploma, pinned next to the menu
+    body += rect(196, 18, 62, 40, "#fffaf0", 'stroke="#c9a24a" stroke-width="2"') + lettering("PHD", 227, 28, 12, "#3a2a1a")
+    body += circle(246, 48, 6, "#c0392b")
+    body += person(130, 200, 1.4, SKIN[2], "#d0342c", face="flat", hair="#1a1a1a", brows="sad")
+    body += mortarboard(130, 200 - 64 * 1.4, 20 * 1.4)
+    # The grill and a spatula
+    body += rect(196, 150, 150, 24, "#3a3a3a") + rect(196, 174, 150, 26, "#2a2a2a")
+    for x in (220, 262, 304):
+        body += ellipse(x, 146, 18, 7, "#6a3a1a")
+    body += stroke("M168 150 L232 132", "#555", 5) + rect(228, 122, 26, 16, "#aaa", 'transform="rotate(-15 241 130)"')
+    body += stroke("M262 132 q 4 -10 0 -18 M306 132 q -4 -10 0 -18", "#ffffff", 2, 'opacity="0.6"')
+    return svg(defs, body)
+
+
+def mathematician():
+    defs, body = bg_mind()
+    body += person(176, 200, 1.6, SKIN[0], "#6a4a9a", face="flat", hat="bob", brows="sad")
+    body += poly([(40, 60), (90, 60), (40, 100)], "none", 'stroke="#ffffff" stroke-width="3"')
+    body += circle(300, 70, 22, "none", 'stroke="#ffffff" stroke-width="3"') + stroke("M300 70 L320 62", "#ffffff", 2)
+    body += stroke("M70 150 C 60 110 90 110 80 80", "#ffffff", 3)
+    body += lettering("E=MC2", 260, 120, 14, "#ffffff", outline="#6a4a9a")
+    body += lettering("A2+B2", 96, 14, 12, "#ffffff", outline="#6a4a9a")
+    body += lettering("X/0?", 290, 18, 14, "#ffffff", outline="#6a4a9a")
+    body += lettering("3.14", 60, 118, 11, "#ffffff", outline="#6a4a9a")
+    return svg(defs, body)
+
+
+def quantum_physicist():
+    defs, body = bg_utopia()
+    twin = person(0, 0, 1.3, SKIN[0], "#ffffff", face="smirk", hair=OLD_HAIR, glasses="round")
+    cup = rect(-48, -40, 16, 20, "#8a5a3a", 'rx="2"') + rect(-50, -44, 20, 5, "#ffffff")
+    body += group(twin + cup, "translate(120 200)")
+    body += group(twin + cup, "translate(240 200)", 0.35)
+    body += stroke("M180 10 L180 190", "#5aa89a", 2, 'stroke-dasharray="6 6"')
+    body += lettering("?", 180, 20, 18, "#5aa89a")
+    return svg(defs, body)
+
+
+def perpetual_motion_machine():
+    defs, body = bg_utopia()
+    cx, cy = 120, 104
+    body += circle(cx, cy, 64, "none", 'stroke="#8a9aa8" stroke-width="7"')
+    for a in range(0, 360, 45):
+        body += stroke(f"M{cx} {cy} L{cx + 62 * math.cos(math.radians(a)):.1f} {cy + 62 * math.sin(math.radians(a)):.1f}", "#a8b4c0", 2)
+    body += stroke(f"M{cx} {cy} L{cx - 30} 190 M{cx} {cy} L{cx + 30} 190", "#6a7a88", 5)
+    # The hamster, running
+    hx, hy = cx, cy + 40
+    body += ellipse(hx, hy, 24, 15, "#d99a5a", 'stroke="#8a5a2a" stroke-width="1.5"')
+    body += circle(hx + 20, hy - 6, 11, "#e2a86a", 'stroke="#8a5a2a" stroke-width="1.5"') + circle(hx + 16, hy - 16, 4, "#f2b8a0")
+    body += circle(hx + 24, hy - 8, 2, "#111") + circle(hx + 30, hy - 4, 2, "#e86a8a")
+    body += stroke(f"M{hx - 12} {hy + 12} l -6 6 M{hx + 10} {hy + 12} l 6 6", "#8a5a2a", 2.5)
+    body += speed_lines(hx - 30, hy - 6, 3, 18, "#8a5a2a")
+    # The wire to the fan, and the wind blowing back on the hamster
+    body += stroke(f"M{cx} {cy} C 190 150 220 150 260 150", "#333", 2.5)
+    fx, fy = 276, 96
+    body += stroke(f"M{fx} {fy + 30} L{fx} 150", "#555", 6) + ellipse(fx, 152, 24, 6, "#555")
+    body += circle(fx, fy, 34, "#e8eef2", 'stroke="#8a9aa8" stroke-width="3"')
+    for a in (0, 120, 240):
+        body += ellipse(fx + 14 * math.cos(math.radians(a)), fy + 14 * math.sin(math.radians(a)), 14, 7, "#5ab0d6",
+                        f'transform="rotate({a} {fx + 14 * math.cos(math.radians(a)):.1f} {fy + 14 * math.sin(math.radians(a)):.1f})"')
+    body += circle(fx, fy, 5, "#333")
+    for y in (80, 98, 116):
+        body += stroke(f"M236 {y} Q 214 {y - 6} 196 {y + 4}", "#5ab0d6", 2.5, 'opacity="0.8"')
+    return svg(defs, body)
+
+
+def particle_accelerator():
+    defs = lin("bg", ["#7ab85a", "#4a8a3a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x, y in ((30, 30), (320, 170), (40, 170), (316, 26)):
+        body += circle(x, y, 12, "#3a6a2a", 'opacity="0.7"')
+    body += ellipse(176, 100, 130, 80, "none", 'stroke="#c8ccd0" stroke-width="16"')
+    body += ellipse(176, 100, 130, 80, "none", 'stroke="#6a7078" stroke-width="3"')
+    gx, gy = 176 + 130 * math.cos(math.radians(-30)), 100 + 80 * math.sin(math.radians(-30))
+    body += circle(gx, gy, 14, "#fff7a0", 'opacity="0.5"') + circle(gx, gy, 6, "#ffe23a")
+    # The scientist on a bicycle, chasing it
+    bx, by = 176 + 130 * math.cos(math.radians(200)), 100 + 80 * math.sin(math.radians(200))
+    body += circle(bx - 8, by + 8, 6, "none", 'stroke="#222" stroke-width="2"') + circle(bx + 8, by + 8, 6, "none", 'stroke="#222" stroke-width="2"')
+    body += stroke(f"M{bx - 8} {by + 8} L{bx} {by} L{bx + 8} {by + 8} M{bx} {by} L{bx} {by - 10}", "#222", 2)
+    body += rect(bx - 4, by - 18, 9, 12, "#ffffff") + circle(bx, by - 22, 5, SKIN[0]) + circle(bx, by - 26, 4, OLD_HAIR)
+    body += speed_lines(bx - 14, by - 12, 2, 16, "#ffffff")
+    body += rect(150, 86, 52, 28, "#e8eaec", 'stroke="#6a7078" stroke-width="2"') + rect(170, 100, 12, 14, "#6a7078")
+    return svg(defs, body)
+
+
+def tomato_arm(x, y, flip):
+    f = flip
+    return path(f"M{x} {y} C {x + f * 24} {y + 4} {x + f * 40} {y - 4} {x + f * 44} {y - 26} C {x + f * 56} {y - 30} {x + f * 58} {y - 44} {x + f * 48} {y - 52} "
+                f"C {x + f * 40} {y - 46} {x + f * 30} {y - 34} {x + f * 30} {y - 22} C {x + f * 22} {y - 18} {x + f * 12} {y - 14} {x} {y - 14} Z",
+                "#e0402a", 'stroke="#9a2010" stroke-width="2"')
+
+
+def genetically_modified_organism():
+    defs, body = bg_utopia()
+    body += tomato_arm(130, 116, -1) + tomato_arm(222, 116, 1)
+    body += circle(176, 118, 54, "#e8462e", 'stroke="#9a2010" stroke-width="3"')
+    body += ellipse(156, 96, 14, 9, "#ff8a6a", 'opacity="0.7"')
+    body += poly(star_points(176, 66, 22, 8, 5), "#3a9a3a") + rect(173, 52, 6, 12, "#2a7a2a")
+    body += eye(160, 112, 7) + eye(192, 112, 7)
+    body += stroke("M158 102 L168 106 M194 102 L184 106", "#222", 3)
+    body += path("M160 132 L192 132 Q 176 148 160 132 Z", "#ffffff", 'stroke="#222" stroke-width="1.5"')
+    # The NON-GMO sticker, peeling off
+    body += circle(214, 146, 16, "#ffffff", 'stroke="#3a9a3a" stroke-width="2"')
+    body += lettering("NON", 214, 138, 6, "#3a9a3a", width=1.4) + lettering("GMO", 214, 147, 6, "#3a9a3a", width=1.4)
+    body += path("M222 158 Q 236 156 232 166 Z", "#e8e8e8")
+    return svg(defs, body)
+
+
+def giraffe():
+    defs, body = bg_sky("#9fd2f2", "#f4e6b8", sun=False)
+    body += cloud(240, 20, 1.0) + cloud(60, 30, 0.8)
+    spots = "#a8642a"
+    # Body and legs at the bottom left
+    for x in (40, 62, 110, 130):
+        body += rect(x, 168, 9, 40, "#e8b04a")
+    body += ellipse(88, 160, 62, 26, "#e8b04a")
+    # The neck: up and out of the picture...
+    body += path("M118 150 C 130 110 132 60 138 -5 L162 -5 C 158 60 154 112 146 156 Z", "#e8b04a")
+    # ...and back down from the top, the head hanging upside down
+    body += path("M236 -5 L262 -5 C 262 40 260 80 256 104 L238 104 C 236 80 236 40 236 -5 Z", "#e8b04a")
+    for x, y in ((70, 154), (98, 166), (118, 148), (140, 120), (145, 70), (148, 20), (246, 14), (250, 54), (246, 88)):
+        body += ellipse(x, y, 8, 6, spots)
+    body += ellipse(247, 124, 18, 28, "#eebb5a")
+    body += ellipse(247, 148, 12, 8, "#d89a4a")
+    body += stroke("M240 98 L236 86 M254 98 L258 86", "#a8642a", 3) + circle(236, 86, 3, "#a8642a") + circle(258, 86, 3, "#a8642a")
+    body += ellipse(228, 112, 9, 4, "#eebb5a") + ellipse(266, 112, 9, 4, "#eebb5a")
+    body += eye(240, 132, 4.5) + eye(254, 132, 4.5)
+    body += circle(244, 150, 1.6, "#5a3a1a") + circle(250, 150, 1.6, "#5a3a1a")
+    return svg(defs, body)
+
+
+def astronaut(cx, base, s=1.0):
+    out = path(f"M{cx - 34 * s:.1f} {base:.1f} C {cx - 34 * s:.1f} {base - 46 * s:.1f} {cx + 34 * s:.1f} {base - 46 * s:.1f} {cx + 34 * s:.1f} {base:.1f} Z", "#f2f2f2", 'stroke="#aab" stroke-width="2"')
+    out += rect(cx - 12 * s, base - 30 * s, 24 * s, 16 * s, "#c8d0d8", 'rx="3"')
+    out += circle(cx, base - 64 * s, 26 * s, "#f2f2f2", 'stroke="#aab" stroke-width="2"')
+    out += ellipse(cx + 2 * s, base - 64 * s, 18 * s, 14 * s, "#2a4a8a") + ellipse(cx + 8 * s, base - 70 * s, 6 * s, 3 * s, "#9fd8ff", 'opacity="0.8"')
+    return out
+
+
+def pioneer():
+    defs = lin("bg", ["#f0a060", "#c8501e"]) + lin("ground", ["#b8481a", "#7a2a10"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += circle(300, 30, 14, "#e8e0d0", 'opacity="0.8"') + circle(60, 24, 6, "#e8e0d0", 'opacity="0.7"')
+    body += path("M0 150 Q 90 130 180 150 T 352 146 L352 200 L0 200 Z", "url(#ground)")
+    body += circle(60, 170, 8, "#8a3a14") + circle(320, 176, 6, "#8a3a14")
+    body += astronaut(120, 200, 1.2)
+    body += stroke("M160 70 L160 170", "#ccc", 4) + rect(160, 70, 52, 34, "#ffffff", 'stroke="#aaa" stroke-width="1"')
+    body += circle(186, 87, 9, "#c0392b")
+    body += sign(280, 72, 110, 50)
+    body += lettering("FOR RENT", 280, 78, 11, "#c0392b") + lettering("$9999", 280, 96, 13, "#222")
+    return svg(defs, body)
+
+
+def placebo():
+    defs, body = bg_utopia()
+    body += ellipse(124, 126, 80, 46, "#ffffff", 'stroke="#c8d8d4" stroke-width="3"')
+    body += stroke("M60 126 L188 126", "#d8e4e0", 3)
+    body += lettering("MIRACLE", 124, 96, 14, "#2f9f8a")
+    body += person(270, 200, 1.2, SKIN[1], "#ffffff", face="grin", hair="#3a2a1a")
+    # A thin arm, flexed in triumph, and the sparkle of a bicep that isn't there
+    body += stroke("M290 170 Q 318 160 312 120 Q 300 106 296 96", SKIN[1], 7)
+    body += circle(312, 128, 4, SKIN[1])
+    for x, y in ((326, 112), (336, 132), (322, 92)):
+        body += poly(star_points(x, y, 7, 2.5, 4), "#ffd23a")
+    return svg(defs, body)
+
+
+def vaccine():
+    defs, body = bg_utopia()
+    syringe = (rect(-90, -16, 150, 32, "#e8f6ff", 'rx="5" stroke="#8aa8b8" stroke-width="3"')
+               + rect(-84, -10, 96, 20, "#6ad0a0", 'opacity="0.85"')
+               + rect(60, -6, 50, 12, "#c8d0d8") + rect(110, -24, 10, 48, "#8aa8b8", 'rx="2"')
+               + stroke("M-90 0 L-140 0", "#9aa8b0", 3)
+               + rect(-106, -22, 6, 44, "#8aa8b8"))
+    for x in (-60, -36, -12):
+        syringe += stroke(f"M{x} -16 L{x} -6", "#8aa8b8", 2)
+    body += group(syringe, "translate(170 112) rotate(-24)")
+    # The 5G antenna on the plunger, at full bars
+    ax, ay = 274, 58
+    body += stroke(f"M{ax} {ay + 18} L{ax} {ay - 12}", "#555", 3) + circle(ax, ay - 14, 4, "#d0342c")
+    for i in range(1, 4):
+        body += stroke(f"M{ax - 7 * i} {ay - 14 - 6 * i} A {9 * i} {9 * i} 0 0 1 {ax + 7 * i} {ay - 14 - 6 * i}", "#2f9f8a", 2.5)
+    for i, h in enumerate((8, 14, 20, 26)):
+        body += rect(300 + i * 10, 40 - h, 7, h, "#2f9f8a")
+    body += lettering("5G", 316, 48, 12, "#2f9f8a")
+    return svg(defs, body)
+
+
+def polar_bear(cx, cy, s=1.0):
+    out = ellipse(cx, cy, 26 * s, 16 * s, "#fbfbf6", 'stroke="#c8ccd0" stroke-width="1.5"')
+    for dx in (-16, -6, 8, 18):
+        out += rect(cx + dx * s - 4 * s, cy + 8 * s, 8 * s, 12 * s, "#fbfbf6", 'stroke="#c8ccd0" stroke-width="1"')
+    out += circle(cx + 26 * s, cy - 10 * s, 12 * s, "#fbfbf6", 'stroke="#c8ccd0" stroke-width="1.5"')
+    out += circle(cx + 20 * s, cy - 20 * s, 4 * s, "#fbfbf6", 'stroke="#c8ccd0" stroke-width="1"')
+    out += circle(cx + 30 * s, cy - 12 * s, 1.8 * s, "#111") + circle(cx + 37 * s, cy - 8 * s, 2.6 * s, "#111")
+    return out
+
+
+def climate_change():
+    defs, body = bg_sky("#ffb84a", "#ff6a3a")
+    body += circle(290, 40, 34, "#fff0a0") + circle(290, 40, 46, "#fff0a0", 'opacity="0.25"')
+    body += poly([(96, 60), (256, 60), (176, 150)], "#bff0ff", 'stroke="#ffffff" stroke-width="3" opacity="0.85"')
+    body += path("M110 74 L242 74 L176 146 Z", "#ff8aa8", 'opacity="0.55"')
+    body += stroke("M176 150 L176 186 M146 188 L206 188", "#ffffff", 5)
+    body += rect(150, 52, 40, 30, "#e8fbff", 'rx="5" stroke="#9fd8ef" stroke-width="2"')
+    body += polar_bear(162, 34, 0.7)
+    body += sweat(196, 18, 1.2)
+    body += stroke("M228 76 L250 20", "#8a5a2a", 2.5) + path("M228 26 Q 250 4 272 26 Z", "#3ab0d6")
+    return svg(defs, body)
+
+
+def overpopulation():
+    defs, body = bg_space()
+    body += circle(176, 168, 80, "#2a7ad0")
+    body += path("M120 120 C 140 100 170 110 160 130 C 150 150 120 140 120 120 Z", "#3aa04a")
+    body += path("M200 130 C 230 116 250 140 230 156 C 210 166 196 150 200 130 Z", "#3aa04a")
+    for row, (r, n) in enumerate(((86, 15), (96, 13), (106, 11))):
+        for i in range(n):
+            a = math.radians(-160 + i * 140 / (n - 1))
+            x, y = 176 + r * math.cos(a), 168 + r * math.sin(a)
+            body += circle(x, y, 7, SKIN[(i + row) % 4], 'stroke="#2a2a2a" stroke-width="1"')
+    # One man on top of everyone, on one foot
+    body += circle(176, 40, 7, SKIN[0], 'stroke="#2a2a2a" stroke-width="1"')
+    body += stroke("M176 47 L176 64 M176 64 L176 74 M176 64 L188 66 M176 52 L162 46 M176 52 L190 44", "#2a2a2a", 3)
+    return svg(defs, body)
+
+
+def cow(cx, cy, s=1.0):
+    out = ellipse(cx, cy, 20 * s, 12 * s, "#ffffff", 'stroke="#555" stroke-width="1"')
+    out += ellipse(cx - 6 * s, cy - 2 * s, 6 * s, 4 * s, "#222") + ellipse(cx + 8 * s, cy + 4 * s, 5 * s, 3 * s, "#222")
+    out += circle(cx + 22 * s, cy - 6 * s, 7 * s, "#ffffff", 'stroke="#555" stroke-width="1"') + ellipse(cx + 26 * s, cy - 3 * s, 4 * s, 3 * s, "#f2a8b8")
+    for dx in (-12, -4, 6, 14):
+        out += rect(cx + dx * s, cy + 9 * s, 3 * s, 8 * s, "#ffffff", 'stroke="#555" stroke-width="0.8"')
+    return out
+
+
+def black_hole():
+    defs, body = bg_space("#05030f", "#1a0a2a")
+    defs += rad("disk", [("#ffd23a", 0.9), ("#ff6a1a", 0.6), ("#5a1a8a", 0)])
+    body += ellipse(176, 100, 150, 46, "url(#disk)")
+    for r in (40, 70, 100, 130):
+        body += stroke(f"M{176 - r} 100 A {r} {r * 0.4} 0 0 1 {176 + r} 100", "#ffb03a", 1.5, 'opacity="0.5"')
+    body += circle(176, 100, 30, "#000000")
+    body += group(cow(0, 0, 1.0), "translate(70 52) rotate(-20)")
+    body += group(rect(-20, -8, 40, 14, "#c0392b", 'rx="4"') + rect(-22, -16, 10, 22, "#a8302a", 'rx="3"') + rect(12, -16, 10, 22, "#a8302a", 'rx="3"'), "translate(276 60) rotate(25) scale(0.8)")
+    body += group(path("M0 0 L8 0 L8 16 L16 20 L14 26 L0 22 Z", "#f2f2f2", 'stroke="#c0392b" stroke-width="2"'), "translate(110 150) rotate(-40)")
+    body += group(rect(0, 0, 18, 24, "#ffffff", 'stroke="#888" stroke-width="1"') + stroke("M3 6 L15 6 M3 11 L15 11 M3 16 L12 16", "#888", 1), "translate(236 136) rotate(30) scale(0.8)")
+    return svg(defs, body)
+
+
+def stasis_field():
+    defs, body = bg_utopia()
+    body += person(176, 200, 1.5, SKIN[0], "#5a7aa0", face="shout", hair="#6a4a2a")
+    body += path("M146 106 Q 150 96 160 100", "none", 'stroke="#222" stroke-width="2"') + path("M192 100 Q 200 96 206 106", "none", 'stroke="#222" stroke-width="2"')
+    for x, y, r in ((214, 110, 3), (228, 100, 2.5), (238, 116, 3.5), (222, 124, 2), (246, 104, 2)):
+        body += circle(x, y, r, "#7ac8ff")
+    body += rect(86, 28, 180, 172, "#5ad67a", 'rx="14" opacity="0.38"')
+    body += rect(86, 28, 180, 172, "none", 'rx="14" stroke="#2a9a4a" stroke-width="3" opacity="0.7"')
+    body += stroke("M100 44 L120 44 M100 56 L110 56", "#ffffff", 4, 'opacity="0.7"')
+    return svg(defs, body)
+
+
+def absolute_zero():
+    defs = lin("bg", ["#d8f0ff", "#8ac0e8"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(14):
+        x, y = (i * 61) % W, (i * 37) % 150
+        body += stroke(f"M{x - 5} {y} L{x + 5} {y} M{x} {y - 5} L{x} {y + 5}", "#ffffff", 1.5)
+    body += rect(250, 26, 70, 40, "#f4f8fb", 'rx="4" stroke="#8aa0b8" stroke-width="2"')
+    body += lettering("-273", 285, 36, 16, "#2a6ab0")
+    body += person(150, 190, 1.45, "#bfe0ff", "#9fc8e8", face="frown", hair="#e8f6ff", brows="sad")
+    hx, hy = 150, 190 - 64 * 1.45
+    for dx in (-6, 2, 9):
+        body += poly([(hx + dx - 3, hy + 16), (hx + dx + 3, hy + 16), (hx + dx, hy + 30)], "#ffffff", 'stroke="#9fd8ff" stroke-width="1"')
+    body += rect(60, 170, 250, 30, "#8a6a4a")
+    body += rect(216, 136, 38, 36, "#cdeeff", 'rx="4" opacity="0.9" stroke="#ffffff" stroke-width="2"')
+    body += rect(226, 146, 18, 20, "#6a4a3a", 'rx="2"')
+    return svg(defs, body)
+
+
+def atom(cx, cy, s=1.0):
+    out = ""
+    for a in (0, 60, 120):
+        out += ellipse(cx, cy, 34 * s, 12 * s, "none", f'stroke="#7ad6ff" stroke-width="2.5" transform="rotate({a} {cx} {cy})"')
+    out += circle(cx, cy, 10 * s, "#ffe23a", 'stroke="#ff9a1a" stroke-width="2"')
+    return out
+
+
+def splitting_the_atom():
+    defs, body = bg_sky("#9fc0d8", "#e8d8b0", sun=False)
+    # The mushroom cloud, already rising
+    body += rect(292, 70, 22, 110, "#b8a890") + ellipse(303, 64, 46, 28, "#c8b8a0") + ellipse(303, 52, 30, 18, "#d8c8b0")
+    body += rect(0, 172, W, 28, "#5a8a3a")
+    for x in (20, 60, 330):
+        body += poly([(x, 172), (x + 14, 120), (x + 28, 172)], "#2a6a2a")
+    body += ellipse(176, 160, 40, 10, "#c8a070") + rect(136, 160, 80, 26, "#8a5a2a") + ellipse(176, 160, 40, 10, "#d8b080", 'stroke="#8a5a2a" stroke-width="2"')
+    body += atom(176, 138, 1.0)
+    body += stroke("M176 112 L172 126 L180 132 L176 146", "#ffffff", 2.5)
+    body += person(90, 200, 1.25, SKIN[1], "#b8322a", face="grin", hair="#5a3a1a", beard="#6a4a2a", hat="beanie")
+    body += stroke("M86 138 L106 150", "#222", 2, 'opacity="0.6"')
+    body += stroke("M110 136 L162 96", "#8a5a2a", 6)
+    body += poly([(152, 88), (174, 94), (168, 112), (156, 106)], "#b8c0c8", 'stroke="#555" stroke-width="2"')
+    body += speed_lines(196, 92, 3, 22, "#ffffff")
+    return svg(defs, body)
+
+
+def dna(x0, y0, length, amp, color1, color2, gap=None):
+    out = ""
+    pts1, pts2 = [], []
+    for i in range(41):
+        t = i / 40
+        x = x0 + t * length
+        y1 = y0 + amp * math.sin(t * math.pi * 4)
+        y2 = y0 - amp * math.sin(t * math.pi * 4)
+        pts1.append((x, y1))
+        pts2.append((x, y2))
+        if i % 3 == 0 and not (gap and gap[0] <= x <= gap[1]):
+            out += stroke(f"M{x:.1f} {y1:.1f} L{x:.1f} {y2:.1f}", "#ffffff", 2.5, 'opacity="0.8"')
+    for pts, color in ((pts1, color1), (pts2, color2)):
+        segs = [[]]
+        for x, y in pts:
+            if gap and gap[0] <= x <= gap[1]:
+                if segs[-1]:
+                    segs.append([])
+                continue
+            segs[-1].append((x, y))
+        for seg in segs:
+            if len(seg) > 1:
+                out += stroke("M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in seg), color, 6)
+    return out
+
+
+def gene_editing():
+    defs, body = bg_utopia()
+    body += dna(20, 100, 312, 36, "#e8462e", "#2a7ad0", gap=(160, 196))
+    # Scissors, mid-snip
+    body += group(ellipse(-18, -6, 10, 7, "none", 'stroke="#d0342c" stroke-width="4"') + ellipse(-18, 10, 10, 7, "none", 'stroke="#d0342c" stroke-width="4"')
+                  + poly([(-8, -4), (40, 4), (-6, 2)], "#c8d0d8", 'stroke="#555" stroke-width="1"')
+                  + poly([(-8, 8), (40, 0), (-6, 2)], "#dce2e8", 'stroke="#555" stroke-width="1"'), "translate(132 40) rotate(20)")
+    # A unicorn horn taped into the gap
+    body += poly([(178, 66), (190, 128), (166, 128)], "#f6e8ff", 'stroke="#c08ad6" stroke-width="2"')
+    for y in (82, 98, 114):
+        body += stroke(f"M{178 - (y - 66) * 0.2:.1f} {y} L{178 + (y - 66) * 0.2:.1f} {y - 6}", "#c08ad6", 2)
+    body += rect(150, 120, 56, 12, "#f2e2b0", 'opacity="0.9" transform="rotate(-6 178 126)"')
+    return svg(defs, body)
+
+
+# ---------------------------------------------------------------- Digital Society additions
+
+def catfish():
+    defs, body = bg_digital()
+    # A blonde wig over a fish
+    body += path("M86 70 C 90 30 170 24 196 60 C 210 90 200 140 186 156 L170 120 L150 150 L120 120 L100 150 C 84 130 82 100 86 70 Z", "#f2d06a", 'stroke="#c8a040" stroke-width="2"')
+    body += ellipse(150, 110, 70, 36, "#8a9a8a", 'stroke="#5a6a5a" stroke-width="2"')
+    body += poly([(80, 110), (44, 84), (48, 136)], "#7a8a7a", 'stroke="#5a6a5a" stroke-width="2"')
+    body += path("M110 62 C 130 44 170 46 190 70 C 170 60 140 60 120 72 Z", "#f2d06a")
+    body += eye(186, 98, 9) + stroke("M178 86 L196 88", "#222", 2)
+    body += path("M206 116 Q 216 120 206 126", "none", 'stroke="#c0392b" stroke-width="3"')
+    for k in (-1, 1):
+        body += stroke(f"M212 {118 + k * 4} Q 240 {130 + k * 24} 250 {150 + k * 30}", "#3a4a3a", 2)
+    # The selfie, at fin's length
+    body += stroke("M150 132 Q 220 170 262 128", "#7a8a7a", 7)
+    body += phone(272, 110, 1.1, "#ffd6f0")
+    for x, y in ((240, 70), (300, 80), (290, 140)):
+        body += poly(star_points(x, y, 7, 2.5, 4), "#ffffff")
+    body += path("M288 26 C 280 14 262 20 270 34 L288 50 L306 34 C 314 20 296 14 288 26 Z", "#ff4a8a")
+    body += lettering("MATCH", 288, 54, 8, "#ffffff", outline="#ff4a8a")
+    return svg(defs, body)
+
+
+def conspiracy_theorist():
+    defs = lin("bg", ["#2a2030", "#151018"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += rect(150, 14, 192, 140, "#a8743a", 'stroke="#6a4a22" stroke-width="4"')
+    photos = ((166, 26), (232, 22), (296, 30), (172, 100), (300, 104))
+    for x, y in photos:
+        body += rect(x, y, 34, 28, "#f4f0e6", 'transform="rotate(-4 {0} {1})"'.format(x + 17, y + 14))
+        body += circle(x + 17, y + 2, 3, "#d0342c")
+    # The star exhibit: a pigeon
+    body += rect(222, 66, 58, 50, "#f4f0e6")
+    body += ellipse(250, 92, 16, 10, "#8a8aa0") + circle(262, 84, 6, "#8a8aa0") + poly([(267, 84), (274, 86), (267, 88)], "#e8a040")
+    body += lettering("DRONE", 251, 104, 7, "#d0342c", width=1.6)
+    for (x1, y1), (x2, y2) in (((183, 30), (251, 70)), ((249, 26), (251, 70)), ((313, 34), (251, 70)), ((189, 104), (251, 70)), ((317, 108), (251, 70)), ((183, 30), (313, 34))):
+        body += stroke(f"M{x1} {y1} L{x2} {y2}", "#d0342c", 2)
+    body += person(90, 200, 1.35, SKIN[0], "#5a6a3a", face="grin", glasses="round", brows="angry")
+    hx, hy = 90, 200 - 64 * 1.35
+    body += poly([(hx - 30, hy - 14), (hx + 30, hy - 14), (hx + 4, hy - 64)], "#d8dce0", 'stroke="#9aa0a8" stroke-width="2"')
+    body += stroke(f"M{hx - 14} {hy - 26} l 8 -4 l 6 6 l 8 -6 M{hx - 4} {hy - 44} l 6 4 l 6 -6", "#9aa0a8", 1.5)
+    body += stroke("M118 150 L196 104", SKIN[0], 8)
+    return svg(defs, body)
+
+
+def clickbait():
+    defs = lin("bg", ["#ffe23a", "#ff8a1a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += person(110, 210, 2.1, SKIN[0], "#2a6ad0", face="shout", hair="#3a2a1a", brows="sad")
+    body += stroke("M60 140 Q 66 120 74 112 M160 140 Q 154 120 146 112", SKIN[0], 12)
+    body += circle(276, 120, 40, "none", 'stroke="#ff1a1a" stroke-width="8"')
+    body += arrow(200, 34, 248, 88, "#ff1a1a", 10)
+    body += lettering("OMG!", 250, 20, 22, "#ffffff", outline="#ff1a1a")
+    return svg(defs, body)
+
+
+def cancelled():
+    defs = lin("bg", ["#1a1030", "#3a2040"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += person(176, 136, 1.2, SKIN[0], "#4a5a7a", face="frown", hair="#5a3a1a", brows="sad")
+    body += sweat(206, 46, 1.3)
+    body += poly([(136, 100), (216, 100), (206, 150), (146, 150)], "#6a4a2a", 'stroke="#3a2a1a" stroke-width="2"')
+    body += stroke("M176 100 L176 86", "#555", 3) + ellipse(176, 82, 5, 7, "#333")
+    for i, x in enumerate(range(10, 352, 38)):
+        body += circle(x, 172, 16, "#0c0812") + path(f"M{x - 26} 200 C {x - 26} 176 {x + 26} 176 {x + 26} 200 Z", "#0c0812")
+        if i % 3 == 0:
+            body += stroke(f"M{x + 14} 180 L{x + 22} 132", "#5a3a1a", 3) + flames(x + 22, 134, 1, 0, 18)
+        elif i % 3 == 1:
+            body += stroke(f"M{x - 12} 180 L{x - 18} 130 M{x - 26} 132 L{x - 10} 128 M{x - 26} 132 L{x - 28} 120 M{x - 18} 130 L{x - 19} 118 M{x - 10} 128 L{x - 9} 116", "#8a8a8a", 2.5)
+        else:
+            body += rect(x + 8, 136, 12, 20, "#1b1b22", 'rx="2"') + rect(x + 10, 139, 8, 14, "#9fe0ff")
+    return svg(defs, body)
+
+
+# ---------------------------------------------------------------- Tech additions
+
+def server_rack(x, y, w, h):
+    out = rect(x, y, w, h, "#1a1e24", 'stroke="#3a4048" stroke-width="2"')
+    for i, yy in enumerate(range(y + 8, y + h - 10, 16)):
+        out += rect(x + 6, yy, w - 12, 12, "#2a3038")
+        out += circle(x + w - 14, yy + 6, 2.5, "#3aff7a" if i % 3 else "#ff3a3a")
+    return out
+
+
+def sysadmin():
+    defs, body = bg_tech()
+    body += server_rack(220, 30, 90, 150)
+    body += cloud(262, 30, 0.9, "#8a8a8a", 0.8) + cloud(290, 14, 0.7, "#6a6a6a", 0.7)
+    body += person(110, 200, 1.4, SKIN[0], "#2a2a3a", face="flat", hair="#5a3a1a", beard="#6a4a2a", glasses="round")
+    # The cable, yanked out
+    body += stroke("M228 140 C 200 150 190 120 160 130", "#111", 4)
+    body += rect(150, 124, 14, 12, "#333") + stroke("M150 127 l -6 0 M150 133 l -6 0", "#c8c8c8", 2)
+    body += stroke("M140 160 L156 132", SKIN[0], 9)
+    body += rect(40, 140, 24, 30, "#ffffff", 'rx="3" stroke="#aaa" stroke-width="2"') + stroke("M64 148 q 10 4 0 14", "#aaa", 3)
+    body += lettering("IT", 52, 148, 9, "#2a6ad0")
+    return svg(defs, body)
+
+
+def software_as_a_service():
+    defs, body = bg_tech()
+    ham = (rect(-12, -10, 150, 20, "#a8743a", 'rx="6" stroke="#6a4a22" stroke-width="2"')
+           + rect(-52, -28, 46, 56, "#8a949c", 'rx="4" stroke="#4a5058" stroke-width="2"')
+           + rect(40, -16, 40, 32, "#222", 'rx="3"') + rect(44, -12, 32, 6, "#555") + circle(70, 6, 3, "#3aff7a")
+           + rect(30, -14, 6, 28, "#f2e2b0", 'opacity="0.9"') + rect(84, -14, 6, 28, "#f2e2b0", 'opacity="0.9"'))
+    body += group(ham, "translate(120 110) rotate(-20)")
+    body += stroke("M230 76 L262 92", "#ddd", 2)
+    body += path("M262 80 L330 80 L340 98 L330 116 L262 116 Z", "#fff7e0", 'stroke="#333" stroke-width="2"') + circle(270, 98, 4, "#333")
+    body += lettering("$9.99", 304, 84, 10, "#c0392b") + lettering("/MONTH", 302, 102, 7, "#333", width=1.4)
+    return svg(defs, body)
+
+
+def monitor(x, y, w, h, screen):
+    return (rect(x, y, w, h, "#2a2a30", 'rx="6"') + rect(x + 8, y + 8, w - 16, h - 16, screen, 'rx="3"')
+            + rect(x + w / 2 - 10, y + h, 20, 16, "#2a2a30") + rect(x + w / 2 - 30, y + h + 14, 60, 6, "#2a2a30", 'rx="3"'))
+
+
+def ransomware_attack():
+    defs = lin("bg", ["#2a1a1a", "#120a0a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += monitor(30, 20, 190, 130, "#a01a1a")
+    body += skull(100, 64, 1.3) + padlock(166, 70, 1.6, "#f2c94c")
+    body += lettering("PAY 1 BTC", 125, 112, 13, "#ffffff")
+    body += person(286, 200, 1.25, SKIN[0], "#9a6ab0", face="frown", hair=OLD_HAIR, glasses="round", brows="sad")
+    body += path("M266 112 Q 263 122 266 128 Q 269 122 266 112 Z", "#7ac8ff") + path("M306 112 Q 303 122 306 128 Q 309 122 306 112 Z", "#7ac8ff")
+    body += circle(286, 104, 10, OLD_HAIR, 'transform="translate(0 -22)"')
+    body += circle(250, 182, 12, "#e86a8a") + stroke("M240 160 L262 196 M262 160 L242 196", "#c8c8c8", 2.5)
+    return svg(defs, body)
+
+
+def man_in_the_middle():
+    defs, body = bg_sky("#a8dcf2", "#e8f4d0", sun=False)
+    body += rect(0, 168, W, 32, "#6aa84a")
+    body += rect(40, 150, 272, 10, "#8a5a2a") + rect(40, 128, 272, 10, "#8a5a2a")
+    for x in (56, 296):
+        body += rect(x, 160, 8, 30, "#5a3a1a")
+    body += person(80, 172, 1.05, SKIN[1], "#e86a8a", face="smile", hat="bob")
+    body += person(272, 172, 1.05, SKIN[2], "#3a6ab0", face="smile", hair="#1a1a1a")
+    body += person(176, 172, 1.2, SKIN[0], "#4a4a4a", face="smirk", hair="#3a2a1a", glasses="shades")
+    body += phone(150, 140, 0.8, "#9fe0ff") + phone(202, 140, 0.8, "#9fe0ff")
+    for x, y in ((112, 70), (244, 70)):
+        body += path(f"M{x} {y} C {x - 6} {y - 8} {x - 16} {y - 2} {x - 8} {y + 6} L{x} {y + 14} L{x + 8} {y + 6} C {x + 16} {y - 2} {x + 6} {y - 8} {x} {y} Z", "#ff4a6a")
+    return svg(defs, body)
+
+
+# ---------------------------------------------------------------- Shadow Ops additions
+
+def whistleblower():
+    defs, body = bg_shadow()
+    body += person(170, 200, 1.5, SKIN[1], "#3a3a44", face="flat", hat="hood")
+    body += ellipse(182, 110, 10, 6, "#c8ccd0", 'stroke="#777" stroke-width="1.5"') + circle(190, 110, 3, "#555")
+    body += stroke("M150 120 Q 170 150 190 116", "#d0342c", 2)
+    body += stroke("M200 104 l 14 -6 M202 112 l 16 0 M200 120 l 14 6", "#ffffff", 2)
+    for x, y, a in ((60, 60, -20), (90, 120, 15), (260, 50, 25), (290, 120, -10), (230, 160, 40), (40, 150, -35)):
+        page = rect(-14, -18, 28, 36, "#f4f0e6", 'stroke="#888" stroke-width="1"') + rect(-10, -12, 20, 3, "#d0342c")
+        page += stroke("M-10 -4 L10 -4 M-10 2 L10 2 M-10 8 L6 8", "#888", 1.2)
+        body += group(page, f"translate({x} {y}) rotate({a})")
+    body += lettering("SECRET", 260, 18, 9, "#d0342c", outline="#0b1020")
+    return svg(defs, body)
+
+
+def bowler(hx, hy, r):
+    return (ellipse(hx, hy - r * 0.7, r * 1.5, r * 0.25, "#1a1a1a")
+            + path(f"M{hx - r * 0.95:.1f} {hy - r * 0.7:.1f} C {hx - r:.1f} {hy - r * 1.9:.1f} {hx + r:.1f} {hy - r * 1.9:.1f} {hx + r * 0.95:.1f} {hy - r * 0.7:.1f} Z", "#1a1a1a"))
+
+
+def polonium_umbrella():
+    defs = lin("bg", ["#5a6470", "#2a3038"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(18):
+        x, y = (i * 47) % W, (i * 29) % 160
+        body += stroke(f"M{x} {y} l -4 12", "#aab4c0", 1.2, 'opacity="0.5"')
+    body += rect(0, 176, W, 24, "#3a3f46")
+    body += stroke("M300 40 L300 176", "#8a949c", 5) + rect(276, 30, 48, 30, "#2a6ad0", 'rx="4"') + lettering("BUS", 300, 38, 12, "#ffffff")
+    body += person(150, 200, 1.4, SKIN[0], "#2a2a2e", face="smirk", hair="#5a5a5a", brows="angry")
+    body += bowler(150, 200 - 64 * 1.4, 20 * 1.4)
+    body += stroke("M186 160 L246 168", "#111", 7) + path("M184 156 Q 172 150 176 162", "none", 'stroke="#111" stroke-width="4"')
+    body += poly([(246, 164), (262, 170), (246, 174)], "#888")
+    for x, y in ((266, 178), (262, 186), (270, 190)):
+        body += circle(x, y, 3, "#7aff4a")
+    body += ellipse(266, 194, 22, 5, "#5aff2a", 'opacity="0.7"')
+    body += stroke("M254 192 l -4 -8 M266 190 l 0 -10 M278 192 l 4 -8", "#9aff7a", 1.5)
+    return svg(defs, body)
+
+
+# ---------------------------------------------------------------- Mind additions
+
+def schrodingers_cat():
+    defs, body = bg_mind()
+    body += poly([(80, 110), (272, 110), (262, 196), (90, 196)], "#c8935a", 'stroke="#8a5a2a" stroke-width="3"')
+    body += poly([(80, 110), (60, 80), (150, 84), (176, 110)], "#d8a46a", 'stroke="#8a5a2a" stroke-width="2"')
+    body += poly([(272, 110), (296, 82), (210, 86), (176, 110)], "#d8a46a", 'stroke="#8a5a2a" stroke-width="2"')
+    # Left half alive, right half bones
+    body += path("M176 40 C 136 40 126 76 130 100 C 134 118 156 124 176 124 Z", "#f2a24a", 'stroke="#8a5a2a" stroke-width="2"')
+    body += poly([(136, 64), (140, 28), (162, 48)], "#f2a24a", 'stroke="#8a5a2a" stroke-width="2"')
+    body += path("M176 40 C 216 40 226 76 222 100 C 218 118 196 124 176 124 Z", "#f2efe6", 'stroke="#8a8a80" stroke-width="2"')
+    body += poly([(216, 64), (212, 28), (190, 48)], "#f2efe6", 'stroke="#8a8a80" stroke-width="2"')
+    body += ellipse(158, 80, 8, 7, "#9ad04a") + rect(150, 74, 16, 6, "#f2a24a")
+    body += ellipse(196, 80, 9, 8, "#222")
+    body += stroke("M150 102 l -24 -4 M150 108 l -24 2", "#8a5a2a", 1.5)
+    body += stroke("M176 98 L176 108 M166 112 Q 176 116 186 112", "#5a3a2a", 2)
+    body += stroke("M196 102 L206 102 M194 108 L210 108", "#8a8a80", 2)
+    body += stroke("M176 40 L176 124", "#8a5a2a", 1.5, 'stroke-dasharray="4 3"')
+    return svg(defs, body)
+
+
+def rokos_basilisk():
+    defs, body = bg_mind()
+    body += stroke("M30 190 C 40 120 120 170 140 120 C 160 70 220 90 236 70", "#3a8a3a", 30)
+    body += stroke("M30 190 C 40 120 120 170 140 120 C 160 70 220 90 236 70", "#5aaa4a", 18)
+    body += ellipse(252, 64, 30, 22, "#5aaa4a", 'stroke="#2a6a2a" stroke-width="3"')
+    body += eye(262, 56, 6, "#c0392b")
+    body += stroke("M280 70 l 14 2 l 4 -4 M294 72 l 4 4", "#c0392b", 2)
+    body += path("M222 50 A 32 32 0 0 1 284 40", "none", 'stroke="#222" stroke-width="5"')
+    body += ellipse(224, 58, 7, 11, "#222") + ellipse(282, 46, 7, 11, "#222")
+    body += poly([(170, 160), (290, 160), (300, 176), (160, 176)], "#8a949c") + rect(184, 104, 92, 58, "#2a2a30", 'rx="3"')
+    body += rect(190, 110, 80, 46, "#9fe0ff")
+    body += rect(214, 116, 42, 34, "#ffe26a", 'transform="rotate(-6 235 133)"')
+    body += lettering("NAUGHTY", 235, 122, 5, "#c0392b", width=1.2) + lettering("LIST", 235, 134, 7, "#c0392b", width=1.4)
+    return svg(defs, body)
+
+
+def trolley_problem():
+    defs = lin("bg", ["#8ac06a", "#6aa04a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for d in ("M0 104 L150 104 C 200 104 220 50 352 50", "M0 104 L150 104 C 200 104 220 158 352 158"):
+        body += stroke(d, "#8a6a4a", 22) + stroke(d, "#5a5a5a", 3, 'transform="translate(0 -7)"') + stroke(d, "#5a5a5a", 3, 'transform="translate(0 7)"')
+    body += rect(30, 84, 70, 40, "#d0342c", 'rx="6" stroke="#7a1a1a" stroke-width="2"')
+    for x in (40, 58, 76):
+        body += rect(x, 90, 12, 12, "#bfe8ff")
+    body += stroke("M150 132 L170 160", "#555", 5) + circle(150, 132, 6, "#d0342c") + rect(160, 156, 22, 8, "#555")
+    for i in range(5):
+        x = 260 + i * 16
+        body += circle(x, 42, 5, SKIN[i % 4]) + rect(x - 4, 47, 8, 14, "#4a6a9a", 'rx="2"')
+    body += stroke("M240 46 L340 46", "#c8a050", 2)
+    body += circle(282, 152, 6, SKIN[0]) + rect(288, 148, 30, 10, "#4a4a4a", 'rx="3"') + rect(274, 140, 10, 7, "#1b1b22") + rect(275, 141, 8, 5, "#9fe0ff")
+    return svg(defs, body)
+
+
+def red_herring():
+    defs, body = bg_shadow()
+    body += poly([(80, 110), (40, 80), (44, 140)], "#c0392b")
+    body += ellipse(150, 110, 80, 40, "#d84a3a", 'stroke="#8a1a1a" stroke-width="2"')
+    body += path("M104 90 L196 90 L210 150 L96 150 Z", "#c8a878", 'stroke="#7a5a3a" stroke-width="2"')
+    body += stroke("M150 90 L150 150 M104 90 L130 120 M196 90 L172 120", "#7a5a3a", 2)
+    body += circle(140, 110, 3, "#5a3a1a") + circle(140, 130, 3, "#5a3a1a")
+    body += eye(204, 98, 8)
+    body += ellipse(206, 72, 40, 6, "#8a7a62", 'stroke="#3a3020" stroke-width="2"') + path("M180 72 L184 46 Q 206 54 228 46 L232 72 Z", "#9a8a70", 'stroke="#3a3020" stroke-width="2"') + rect(182, 64, 50, 5, "#3a3020")
+    body += path("M226 116 Q 236 118 226 124", "none", 'stroke="#8a1a1a" stroke-width="2"')
+    body += path("M196 130 C 240 140 280 120 300 100 L306 110 C 290 132 250 152 200 144 Z", "#d84a3a", 'stroke="#8a1a1a" stroke-width="2"')
+    body += speed_lines(330, 84, 3, 16, "#fff7c8")
+    return svg(defs, body)
+
+
+def crewmate(cx, cy, s=1.0, color="#d0342c"):
+    out = rect(cx - 42 * s, cy - 20 * s, 18 * s, 50 * s, color, 'rx="6" stroke="#222" stroke-width="3"')
+    out += path(f"M{cx - 30 * s:.1f} {cy + 50 * s:.1f} L{cx - 30 * s:.1f} {cy - 20 * s:.1f} C {cx - 30 * s:.1f} {cy - 70 * s:.1f} {cx + 34 * s:.1f} {cy - 70 * s:.1f} {cx + 34 * s:.1f} {cy - 20 * s:.1f} L{cx + 34 * s:.1f} {cy + 50 * s:.1f} Z",
+                color, 'stroke="#222" stroke-width="3"')
+    out += rect(cx - 8 * s, cy - 40 * s, 48 * s, 26 * s, "#9fdcef", 'rx="12" stroke="#222" stroke-width="3"')
+    out += rect(cx + 6 * s, cy - 36 * s, 18 * s, 6 * s, "#ffffff", 'rx="3" opacity="0.8"')
+    return out
+
+
+def imposter_syndrome():
+    defs, body = bg_office()
+    body += crewmate(170, 120, 1.15)
+    body += sweat(222, 66, 1.4) + sweat(132, 58, 1.1)
+    body += rect(60, 150, 240, 50, "#6a4a2a")
+    body += rect(120, 132, 116, 30, "#2a2a2a", 'rx="2"') + rect(124, 136, 108, 22, "#c9a24a")
+    body += lettering("SENIOR", 178, 138, 6, "#2a2a2a", width=1.3) + lettering("ENGINEER", 178, 147, 6, "#2a2a2a", width=1.3)
+    return svg(defs, body)
+
+
+# ---------------------------------------------------------------- Myth additions
+
+def omniscient_space_time_bending_bearded_wizard():
+    defs, body = bg_myth()
+    body += cloud(176, 186, 3.2, "#ffffff", 0.95)
+    body += person(150, 180, 1.45, SKIN[0], "#9fc3e0", face="flat", hair=OLD_HAIR, beard="#ffffff", brows="sad")
+    body += stroke("M128 160 L150 180 L172 160", "#7aa0c0", 3)
+    body += stroke("M186 150 L236 120", SKIN[0], 9)
+    body += rect(232, 108, 14, 26, "#222", 'rx="3" transform="rotate(-30 239 121)"') + circle(240, 112, 3, "#d0342c")
+    # A tiny universe, spinning
+    body += stroke("M300 56 m-6 0 a6 6 0 1 1 12 0 a12 12 0 1 1 -24 0 a18 18 0 1 1 36 0", "#ffe9a0", 2.5)
+    for x, y in ((280, 36), (322, 40), (290, 80), (318, 72)):
+        body += poly(star_points(x, y, 5, 2, 4), "#ffffff")
+    body += stroke("M250 112 l 18 -20 M256 120 l 26 -14", "#ffe9a0", 1.5, 'opacity="0.7" stroke-dasharray="3 3"')
+    return svg(defs, body)
+
+
+def cultist():
+    defs, body = bg_myth()
+    body += person(166, 200, 1.5, SKIN[1], "#2a1a3a", face="closed", hat="hood")
+    body += stroke("M66 180 L66 66", "#8a5a2a", 6) + rect(4, 6, 124, 64, "#f4ecd8", 'stroke="#333" stroke-width="3"')
+    body += lettering("THE END", 66, 13, 19, "#c0392b", width=3.6) + lettering("IS NEAR", 66, 42, 19, "#c0392b", width=3.6)
+    # A pumpkin spice latte
+    body += path("M236 120 L272 120 L266 182 L242 182 Z", "#f4f0e6", 'stroke="#aaa" stroke-width="2"')
+    body += rect(240, 140, 30, 18, "#c87a3a") + ellipse(254, 118, 20, 6, "#ffffff") + rect(236, 112, 36, 7, "#ffffff", 'rx="3"')
+    body += stroke("M214 170 L240 160", SKIN[1], 9)
+    return svg(defs, body)
+
+
+def phoenix(cx, cy, s=1.0):
+    out = ""
+    for f in (-1, 1):
+        out += path(f"M{cx} {cy} C {cx + f * 40 * s} {cy - 10 * s} {cx + f * 80 * s} {cy - 50 * s} {cx + f * 96 * s} {cy - 70 * s} "
+                    f"C {cx + f * 70 * s} {cy - 40 * s} {cx + f * 70 * s} {cy - 20 * s} {cx + f * 60 * s} {cy} "
+                    f"C {cx + f * 50 * s} {cy + 10 * s} {cx + f * 20 * s} {cy + 10 * s} {cx} {cy + 6 * s} Z", "#ff7a1a", 'stroke="#ffd23a" stroke-width="2"')
+        out += path(f"M{cx} {cy} C {cx + f * 30 * s} {cy - 6 * s} {cx + f * 50 * s} {cy - 26 * s} {cx + f * 60 * s} {cy - 40 * s} C {cx + f * 40 * s} {cy - 20 * s} {cx + f * 30 * s} {cy} {cx} {cy + 4 * s} Z", "#ffd23a")
+    out += ellipse(cx, cy + 4 * s, 14 * s, 26 * s, "#ff5a1a")
+    out += circle(cx, cy - 26 * s, 10 * s, "#ff7a1a") + poly([(cx + 8 * s, cy - 28 * s), (cx + 20 * s, cy - 24 * s), (cx + 8 * s, cy - 20 * s)], "#ffd23a")
+    out += circle(cx + 3 * s, cy - 28 * s, 2 * s, "#222")
+    out += flames(cx, cy + 50 * s, 3, 10 * s, 26 * s)
+    return out
+
+
+def fenix():
+    defs = lin("bg", ["#3a1a10", "#1a0a08"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += ellipse(176, 190, 110, 16, "#4a4a4a")
+    body += rect(126, 148, 100, 42, "#2a2a2a", 'rx="10" stroke="#555" stroke-width="2"')
+    body += rect(146, 146, 22, 6, "#111") + rect(184, 146, 22, 6, "#111") + rect(226, 160, 10, 6, "#555")
+    for x, y in ((150, 120), (200, 110), (176, 96)):
+        body += cloud(x, y, 0.5, "#5a5a5a", 0.6)
+    body += phoenix(176, 80, 1.0)
+    return svg(defs, body)
+
+
+def excess_of_bread_and_wine():
+    defs, body = bg_myth()
+    for i, x in enumerate((40, 92, 260, 312)):
+        body += person(x, 150, 0.8, SKIN[i % 4], ("#6a8ac8", "#c86a6a", "#6ac88a", "#c8a86a")[i], face="grin", hair="#4a2a1a", beard="#4a2a1a")
+    body += circle(176, 52, 26, "#ffe46a", 'opacity="0.8"')
+    body += person(176, 150, 1.0, SKIN[1], "#f4f0e6", face="grin", hair="#6a4a2a", beard="#6a4a2a")
+    body += rect(10, 146, 332, 54, "#8a5a2a") + rect(10, 146, 332, 8, "#a8743a")
+    # The jug, pouring
+    body += path("M196 104 C 186 104 186 128 196 132 L222 132 C 232 128 232 104 222 104 Z", "#8a3a4a")
+    body += stroke("M224 112 Q 250 116 252 138", "#a0283a", 4)
+    body += rect(244, 134, 14, 14, "#d0342c")
+    # Beer pong
+    for x, y in ((40, 136), (56, 136), (72, 136), (48, 126), (64, 126), (56, 116)):
+        body += path(f"M{x - 7} {y} L{x + 7} {y} L{x + 5} {y + 14} L{x - 5} {y + 14} Z", "#d0342c", 'stroke="#ffffff" stroke-width="1.5"')
+    body += circle(110, 96, 4, "#ffffff") + stroke("M88 128 Q 98 90 110 96", "#ffffff", 1.5, 'stroke-dasharray="3 3"')
+    return svg(defs, body)
+
+
+def monkey_hand():
+    defs = lin("bg", ["#2a1a3a", "#0e0814"]) + rad("glow", [("#9aff7a", 0.35), ("#9aff7a", 0)])
+    body = rect(0, 0, W, H, "url(#bg)") + circle(176, 100, 100, "url(#glow)")
+    body += rect(140, 140, 72, 70, "#6a4a2a", 'rx="10"')
+    body += rect(132, 92, 88, 64, "#7a5a3a", 'rx="22" stroke="#4a2e1a" stroke-width="3"')
+    body += rect(196, 30, 26, 80, "#7a5a3a", 'rx="12" stroke="#4a2e1a" stroke-width="3"')
+    for i, (x, curl) in enumerate(((140, 0), (158, 0), (176, 0), (194, 1))):
+        if curl:
+            body += path(f"M{x} 100 C {x} 80 {x + 18} 76 {x + 20} 92", "none", 'stroke="#7a5a3a" stroke-width="16" stroke-linecap="round"')
+        else:
+            body += ellipse(x + 6, 100, 9, 13, "#7a5a3a", 'stroke="#4a2e1a" stroke-width="2"')
+    for y in (110, 124, 138):
+        body += stroke(f"M140 {y} q 20 -4 40 0 q 16 4 32 0", "#4a2e1a", 1.5)
+    body += stroke("M200 50 q 10 4 18 0 M200 66 q 10 4 18 0", "#4a2e1a", 1.5)
+    body += speed_lines(244, 90, 2, 14, "#9aff7a")
+    return svg(defs, body)
+
+
+def rubber_chicken(cx, cy, s=1.0):
+    out = ellipse(cx, cy, 34 * s, 12 * s, "#ffe23a", 'stroke="#c8a010" stroke-width="2"')
+    out += path(f"M{cx + 30 * s:.1f} {cy - 4 * s:.1f} C {cx + 50 * s:.1f} {cy - 10 * s:.1f} {cx + 54 * s:.1f} {cy - 30 * s:.1f} {cx + 50 * s:.1f} {cy - 40 * s:.1f}", "none", f'stroke="#ffe23a" stroke-width="{9 * s:.1f}" stroke-linecap="round"')
+    out += circle(cx + 50 * s, cy - 42 * s, 9 * s, "#ffe23a", 'stroke="#c8a010" stroke-width="2"')
+    out += poly([(cx + 44 * s, cy - 50 * s), (cx + 48 * s, cy - 58 * s), (cx + 54 * s, cy - 50 * s), (cx + 58 * s, cy - 56 * s), (cx + 58 * s, cy - 46 * s)], "#e8302a")
+    out += poly([(cx + 57 * s, cy - 44 * s), (cx + 70 * s, cy - 40 * s), (cx + 57 * s, cy - 36 * s)], "#ff8a1a")
+    out += stroke(f"M{cx + 46 * s:.1f} {cy - 46 * s:.1f} l 6 4 M{cx + 52 * s:.1f} {cy - 46 * s:.1f} l -6 4", "#222", 1.5)
+    out += stroke(f"M{cx - 20 * s:.1f} {cy + 10 * s:.1f} l -4 12 M{cx - 6 * s:.1f} {cy + 10 * s:.1f} l 2 12", "#ff8a1a", 3)
+    return out
+
+
+def sacrificial_ritual():
+    defs = lin("bg", ["#1a0a14", "#3a1420"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += poly(star_points(176, 168, 80, 30, 5), "none", 'stroke="#f2efe6" stroke-width="2.5" transform="translate(0 168) scale(1 0.35) translate(0 -168)"')
+    body += ellipse(176, 168, 92, 32, "none", 'stroke="#f2efe6" stroke-width="2.5"')
+    body += rect(126, 118, 100, 32, "#5a5a62", 'stroke="#2a2a30" stroke-width="2"')
+    body += rubber_chicken(158, 108, 0.9)
+    for x in (40, 312):
+        body += person(x, 200, 1.1, SKIN[2], "#2a0a1a", face="closed", hat="hood")
+    for x in (90, 262):
+        body += rect(x - 4, 150, 8, 22, "#f4ecd8") + flames(x, 150, 1, 0, 14)
+    return svg(defs, body)
+
+
+# ---------------------------------------------------------------- Corporate addition
+
+def jet(cx, cy, s=1.0):
+    out = ellipse(cx, cy, 70 * s, 12 * s, "#e8ecf0", 'stroke="#8a949c" stroke-width="2"')
+    out += poly([(cx - 10 * s, cy), (cx + 20 * s, cy), (cx - 20 * s, cy + 34 * s), (cx - 34 * s, cy + 34 * s)], "#c8d0d8", 'stroke="#8a949c" stroke-width="1.5"')
+    out += poly([(cx - 60 * s, cy - 6 * s), (cx - 74 * s, cy - 30 * s), (cx - 62 * s, cy - 30 * s), (cx - 46 * s, cy - 6 * s)], "#c8d0d8", 'stroke="#8a949c" stroke-width="1.5"')
+    for i in range(6):
+        out += circle(cx - 30 * s + i * 12 * s, cy - 3 * s, 2.6 * s, "#4a6a8a")
+    out += path(f"M{cx + 60 * s:.1f} {cy - 6 * s:.1f} Q {cx + 76 * s:.1f} {cy:.1f} {cx + 60 * s:.1f} {cy + 6 * s:.1f}", "#4a6a8a")
+    return out
+
+
+def tax_exempt_corruption():
+    defs, body = bg_office("up")
+    body += rect(60, 90, 150, 110, "#f4ecd8", 'stroke="#8a7a5a" stroke-width="2"')
+    body += poly([(50, 92), (135, 40), (220, 92)], "#c9a24a", 'stroke="#8a6a2a" stroke-width="2"')
+    body += rect(120, 140, 30, 60, "#6a4a2a", 'rx="12"')
+    for x in (78, 172):
+        body += rect(x, 110, 20, 30, "#9fd8ff", 'rx="10"')
+    body += stroke("M135 40 L135 24", "#c9a24a", 4)
+    body += lettering("$", 135, -4, 30, "#f2c94c", width=6, outline="#8a6a2a")
+    body += jet(272, 170, 0.9)
+    body += group(rect(-80, -16, 160, 32, "none", 'stroke="#e8302a" stroke-width="4" rx="4"') + lettering("TAX EXEMPT", 0, -9, 16, "#e8302a"),
+                  "translate(250 60) rotate(-12)", 0.9)
+    return svg(defs, body)
+
+
 CARDS = {
     "Water": {
         "AbyssalCall": abyssal_call, "AbyssalCucumber": abyssal_cucumber, "CoralBuilder": coral_builder,
@@ -2130,7 +3039,7 @@ CARDS = {
         "MarginCall": margin_call, "HostileTakeover": hostile_takeover, "MassLayoffs": mass_layoffs,
         "TeamBuildingExercise": team_building_exercise, "DeadCatBounce": dead_cat_bounce,
         "TaxpayerFundsVentureCapitalProfits": taxpayer_funds_venture_capital_profits,
-        "CleaningRobot": cleaning_robot, "Inflation": inflation,
+        "CleaningRobot": cleaning_robot, "Inflation": inflation, "TaxExemptCorruption": tax_exempt_corruption,
     },
     "Statecraft": {
         "KingEmeritus": king_emeritus, "SpiteElectedPresident": spite_elected_president,
@@ -2150,23 +3059,39 @@ CARDS = {
         "DeliveryCyclist": delivery_cyclist, "PlotArmor": plot_armor,
     },
     "DigitalSociety": {
+        "Catfish": catfish, "ConspiracyTheorist": conspiracy_theorist, "Clickbait": clickbait, "Cancelled": cancelled,
         "ChronicallyOnline": chronically_online, "DigitalNomad": digital_nomad, "Dogpile": dogpile, "ItsATrap": its_a_trap,
         "KeyboardWarrior": keyboard_warrior, "NPC": npc, "RageBait": rage_bait,
     },
     "Mind": {
+        "SchrodingersCat": schrodingers_cat, "RokosBasilisk": rokos_basilisk, "TrolleyProblem": trolley_problem,
+        "RedHerring": red_herring, "ImposterSyndrome": imposter_syndrome,
         "GenerationalTrauma": generational_trauma, "Introvert": introvert, "Pessimist": pessimist,
     },
     "Myth": {
+        "OmniscientSpaceTimeBendingBeardedWizard": omniscient_space_time_bending_bearded_wizard, "Cultist": cultist, "Fenix": fenix,
+        "ExcessofBreadandWine": excess_of_bread_and_wine, "MonkeyHand": monkey_hand, "SacrificialRitual": sacrificial_ritual,
         "Exorcism": exorcism, "Martyr": martyr, "MementoMori": memento_mori, "Mummy": mummy, "TheHolyGrail": the_holy_grail,
     },
     "ShadowOps": {
+        "Whistleblower": whistleblower, "PoloniumUmbrella": polonium_umbrella,
         "BurnNotice": burn_notice, "CounterIntelligence": counter_intelligence, "DeepCover": deep_cover, "Eavesdrop": eavesdrop,
         "Mole": mole, "PoliticalDecoy": political_decoy, "SignalJammer": signal_jammer, "SleeperAgent": sleeper_agent,
         "SmokeAndMirrors": smoke_and_mirrors, "TappedCommunications": tapped_communications,
     },
     "Tech": {
+        "SysAdmin": sysadmin, "SoftwareAsAService": software_as_a_service, "RansomwareAttack": ransomware_attack,
+        "ManintheMiddle": man_in_the_middle,
         "Antivirus": antivirus, "DDOSAttack": ddos_attack, "EndtoEndEncryption": end_to_end_encryption, "LegacyCode": legacy_code,
         "ScriptKiddie": script_kiddie,
+    },
+    "Utopia": {
+        "Clone": clone, "Hypermetamorphosis": hypermetamorphosis, "Extremophile": extremophile, "PhilosophyPhD": philosophy_phd,
+        "Mathematician": mathematician, "QuantumPhysicist": quantum_physicist, "PerpetualMotionMachine": perpetual_motion_machine,
+        "ParticleAccelerator": particle_accelerator, "GeneticallyModifiedOrganism": genetically_modified_organism, "Giraffe": giraffe,
+        "Pioneer": pioneer, "Placebo": placebo, "Vaccine": vaccine, "ClimateChange": climate_change, "Overpopulation": overpopulation,
+        "BlackHole": black_hole, "StasisField": stasis_field, "AbsoluteZero": absolute_zero, "SplittingTheAtom": splitting_the_atom,
+        "GeneEditing": gene_editing,
     },
 }
 

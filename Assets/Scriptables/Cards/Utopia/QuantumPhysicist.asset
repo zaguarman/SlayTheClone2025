@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: QuantumPhysicist
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 8b171ebe-d04e-4951-98da-a8057e707eef
+  cardName: Quantum Physicist
+  description: In two places at once. Late to both.
+  cardType: 0
+  faction: 9
+  artwork: {fileID: 3286163911610860551, guid: 1c0ea8610e2c44449ab5289165d49fb4, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 2
+    oncePerCombat: 0
+    actions:
+    - actionType: 5
+      value: 1
+      targetType: 1
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+  designNotes: 'Swap. Whoever hits it is Exhausted: observing it collapses them.'
+  artDescription: A physicist split down the middle, one half of him see-through,
+    holding two coffees and checking two watches.
+  attack: 2
+  health: 4
+  speed: 2
+  turnsUntilOperative: 2
+  movement: 2
+  ability: 0

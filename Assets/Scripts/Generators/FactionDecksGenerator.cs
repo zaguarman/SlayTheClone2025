@@ -34,6 +34,8 @@ namespace SlayTheClone {
                     "The Ministry of Forms", "Your existence is pending approval."),
                 Offer(Build(Faction.Zeitgeist, "Zeitgeist - Moods of Modern Life", ZeitgeistCards(), written),
                     "Your Group Chat", "47 unread messages. All of them are about you."),
+                Offer(Build(Faction.Utopia, "Utopia - Results May Vary", UtopiaCards(), written),
+                    "A Billionaire Bound For Mars", "Will save humanity. Shipping not included."),
             };
 
             // Factions too small for a deck of their own: their cards play in the two-faction decks below
@@ -55,22 +57,28 @@ namespace SlayTheClone {
         }
 
         // Two-faction decks (Faction Compendium 5, Example Two-Faction Decks) for the factions without a deck of their own.
-        // Between them they play every card of those factions.
+        // Between them they play every card of those factions, 20 cards each.
         private static readonly (string Name, string File, string Opponent, string Tagline, string[] Cards)[] PairDecks = {
             ("The Algorithm - Digital Society & Tech", "TheAlgorithmDeck",
                 "The Algorithm", "Thinks you'll love this loss. People like you also lost.", new[] {
-                "Digital Nomad", "Keyboard Warrior", "NPC", "Chronically Online", "Script Kiddie", "Legacy Code",
-                "Dogpile", "Rage Bait", "Its A Trap", "DDOS Attack", "Antivirus", "End-to-End Encryption",
+                "Digital Nomad", "Keyboard Warrior", "NPC", "Chronically Online", "Catfish", "Conspiracy Theorist",
+                "Script Kiddie", "Legacy Code", "SysAdmin", "Software As A Service",
+                "Dogpile", "Rage Bait", "Its A Trap", "Clickbait", "Cancelled",
+                "DDOS Attack", "Antivirus", "End-to-End Encryption", "Ransomware Attack", "Man-in-the-Middle",
             }),
             ("Psyop - Shadow Ops. & Mind", "PsyopDeck",
                 "Your Gaslighting Ex", "That attack never happened. You're imagining things.", new[] {
-                "Political Decoy", "Mole", "Signal Jammer", "Deep Cover", "Sleeper Agent", "Pessimist", "Introvert",
-                "Burn Notice", "Counter-Intelligence", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "Generational Trauma",
+                "Political Decoy", "Mole", "Signal Jammer", "Deep Cover", "Sleeper Agent", "Whistleblower",
+                "Pessimist", "Introvert", "Schrodinger's Cat", "Roko's Basilisk",
+                "Burn Notice", "Counter-Intelligence", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "Polonium Umbrella",
+                "Generational Trauma", "Trolley Problem", "Red Herring", "Imposter Syndrome",
             }),
-            ("Prosperity Gospel - Corporate & Myth", "ProsperityGospelDeck",
+            ("Prosperity Gospel - Myth & Corporate", "ProsperityGospelDeck",
                 "The Megachurch", "Pray, pay, repeat. Salvation renews monthly.", new[] {
-                "Martyr", "Mummy", "Unpaid Intern", "Inhuman Resources", "Multilevel Marketing Seller", "Charles Ponzi", "Unicorn",
-                "Multimillionaire Philanthropist", "Memento Mori", "The Holy Grail", "Exorcism", "Mass Layoffs", "Taxpayer Funds Venture Capital Profits",
+                "Martyr", "Mummy", "Omniscient Space-Time Bending Bearded Wizard", "Cultist", "Fenix",
+                "Unpaid Intern", "Inhuman Resources", "Multilevel Marketing Seller", "Charles Ponzi", "Unicorn", "Multimillionaire Philanthropist",
+                "Memento Mori", "The Holy Grail", "Exorcism", "Excess of Bread and Wine", "Monkey Hand", "Sacrificial Ritual",
+                "Mass Layoffs", "Taxpayer Funds Venture Capital Profits", "Tax-Exempt Corruption",
             }),
         };
 
@@ -167,6 +175,11 @@ namespace SlayTheClone {
                 "Cleans 30% of your floor. The other 70% is a Premium feature.",
                 "Mechanics test: a sturdy pusher. Pushing (every creature can), no chain pushes, blocked pushes (\"needs Swap\") and the automatic move order.")
                 .Picture("A sleek, glossy robot vacuum with a glowing megacorp logo, shoving a pile of tiny office workers and their desks into a corner. A \"Subscription expired: suction limited\" pop-up flashes on its screen."),
+            Spell("Tax-Exempt Corruption", TargetType.Player,
+                "Thou shalt not pay taxes.",
+                "Future: Capital cost (discard 2 cards). Placeholder cost: the enemy draws a card. Plays in Prosperity Gospel.",
+                Draw(3), Draw(1, TargetType.Enemy))
+                .Picture("A megachurch whose cross is a giant gold dollar sign, a private jet parked by the door and a big red TAX EXEMPT stamp across the sky."),
             Spell("Inflation", TargetType.EnemyCreatures,
                 "Same price. Less creature.",
                 "Mechanics test: Health Loss on every enemy. It ignores Armor, isn't damage (no OnDamaged), kills at 0 whatever the Armor, and lowers the Armor cap.",
@@ -392,6 +405,26 @@ namespace SlayTheClone {
                 "Mechanics test: Extremist. Stat changes on it are doubled, buffs and debuffs alike.")
                 .With(CreatureAbility.Extremist)
                 .Picture("A pale figure in a dark room lit only by three monitors, a cork board of red strings and printed memes behind them, an energy-drink pyramid on the desk."),
+            Creature("Catfish", 2, 1, speed: 3, deploy: 0,
+                "Six foot, a doctor, loves dogs. Is a fish.",
+                "Undercover: its plans are Concealed Actions, and it stays ??? to the other side until revealed.")
+                .With(CreatureAbility.Undercover)
+                .Picture("A catfish in a long blonde wig holding a phone at arm's length for a selfie, a beauty filter's sparkles around its face and an \"It's a match!\" heart floating above."),
+            Creature("Conspiracy Theorist", 1, 3, speed: 2, deploy: 0,
+                "Did his own research. For eleven minutes.",
+                "Unbothered: enemy effects can't lower its stats (the tinfoil works). Future: Doxxing, reveals.")
+                .With(CreatureAbility.Unbothered)
+                .Picture("A man in a tinfoil hat pointing at a cork board of photos joined by red string, the biggest photo a pigeon labelled DRONE."),
+            Spell("Clickbait", TargetType.EnemyCreatures,
+                "Number 7 will shock you. Number 8 is an ad.",
+                "Future: Clickbait taunts (enemy creatures must attack it).",
+                Damage(1, TargetType.EnemyCreatures, Each))
+                .Picture("A video thumbnail: a man with a hugely shocked face, a big red arrow and a red circle around absolutely nothing."),
+            Spell("Cancelled", TargetType.EnemyCreatures,
+                "One tweet from 2011. Career over by lunch.",
+                "Exhausted, and 2 Heat: random and redirected attacks find it first. Future: Ostracised.",
+                Stun(1, TargetType.EnemyCreatures), Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2))
+                .Picture("A man at a podium facing a crowd that holds torches, pitchforks and phones up to film him."),
         };
 
         // Shadow Ops.: fragile agents, hidden plans, traps
@@ -447,6 +480,16 @@ namespace SlayTheClone {
                 "Mechanics test: Revealed for 2 Days, instant. It cancels Concealed and Undercover: the creature's plans can be seen, and Watchdogs can match them.",
                 Status(StatusEffectType.Revealed, 2, TargetType.EnemyCreatures))
                 .Picture("A rotary phone on an embassy desk, its cord running out of the window, down the wall and into a van marked FLOWER DELIVERY full of headphones."),
+            Creature("Whistleblower", 1, 2, speed: 3, deploy: 0,
+                "Leaked everything. Now lives in an embassy closet.",
+                "Dead Man's Switch: when it dies, every enemy creature is Revealed for 2 Days.",
+                On(EffectTrigger.OnDeath, Status(StatusEffectType.Revealed, 2, TargetType.EnemyCreatures)))
+                .Picture("A man in a hoodie blowing a sports whistle, classified documents spilling out of every pocket."),
+            Spell("Polonium Umbrella", TargetType.EnemyCreatures,
+                "A gift from an old friend. Do not open indoors.",
+                "1 damage now, then Burned for 3 Days. Future: Spontaneous Combustion.",
+                Damage(1, TargetType.EnemyCreatures), Status(StatusEffectType.Burned, 3, TargetType.EnemyCreatures, potency: 1))
+                .Picture("A gentleman in a bowler hat at a bus stop, the tip of his black umbrella dripping glowing green drops that sizzle on the pavement."),
         };
 
         // Tech: rewires the queue
@@ -476,6 +519,26 @@ namespace SlayTheClone {
                 "Mechanics test: Encrypted for 2 Days on a friendly creature. Watchdogs ignore its actions and spend no charge on them.",
                 Status(StatusEffectType.Encrypted, 2, TargetType.FriendlyCreatures))
                 .Picture("Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a \"Backdoor Request\" form."),
+            Creature("SysAdmin", 1, 4, speed: 1, deploy: 1,
+                "Have you tried turning it off and on again?",
+                "Each Dawn it cleanses your creatures' harmful statuses (Tech owns Cleanse).",
+                On(EffectTrigger.StartOfTurn, Cleanse(CleanseTarget.Statuses, TargetType.FriendlyCreatures)))
+                .Picture("A bearded sysadmin in socks and sandals yanking the power cable out of a smoking server rack, a coffee mug in his other hand."),
+            Creature("Software As A Service", 0, 3, speed: 1, deploy: 1,
+                "You don't own it. You never did. Renews monthly.",
+                "A draw each Dawn, paid with 1 of your Health. Future: Technical Debt (fewer draws next Day).",
+                On(EffectTrigger.StartOfTurn, Draw(1), Damage(1, TargetType.Player)))
+                .Picture("A plain hammer with a card reader taped to its handle and a price tag: $9.99/MONTH."),
+            Spell("Ransomware Attack", TargetType.EnemyCreatures,
+                "Your files are safe. With us.",
+                "Exhausted, and you draw a card (the ransom).",
+                Stun(1, TargetType.EnemyCreatures), Draw(1))
+                .Picture("A computer screen with a grinning skull and a padlock demanding 1 BTC, while a grandma cries into her knitting."),
+            Spell("Man-in-the-Middle", TargetType.Player,
+                "Hi, it's your bank. Also, it's not.",
+                "A Watchdog (On Watch): the next enemy spell is redirected to a random creature. 1 charge.",
+                CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Spell, side = WatchdogSide.Enemy, effect = WatchdogEffect.Redirect, charges = 1 }, TargetType.Enemy))
+                .Picture("A man squeezed on a park bench between two lovers, holding both of their phones and reading their texts."),
         };
 
         // Myth: slow and inevitable; creatures die and pay off
@@ -506,6 +569,36 @@ namespace SlayTheClone {
                 "Mechanics test: Hive Mind. A creature that attacks it gains Hive Mind, replacing its own ability.")
                 .With(CreatureAbility.HiveMind)
                 .Picture("A museum mummy shaking hands with a smiling tourist, its bandages unravelling and winding up the tourist's arm, a \"Please Do Not Touch\" sign knocked to the floor."),
+            Creature("Omniscient Space-Time Bending Bearded Wizard", 3, 9, speed: 1, deploy: 3,
+                "Works in mysterious ways. Mostly late.",
+                "Each Dawn, Blessed on a random friendly creature. Future: Prophecy.",
+                On(EffectTrigger.StartOfTurn, Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: AtRandom)))
+                .Picture("An old bearded man on a cloud in a bathrobe and slippers, lazily pointing a TV remote at a tiny spinning universe."),
+            Creature("Cultist", 1, 1, speed: 2, deploy: 1,
+                "The end is near. Brunch is at eleven.",
+                "Fodder: when it dies, every friendly creature gets +1 Attack for good. Future: a sacrifice cost.",
+                On(EffectTrigger.OnDeath, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, Each)))
+                .Picture("A hooded cultist holding a THE END IS NEAR sign in one hand and a pumpkin spice latte in the other."),
+            Creature("Fenix", 2, 2, speed: 2, deploy: 2,
+                "Dies, comes back, posts about it.",
+                "When it dies, summon a random creature from your deck. Future: Revive (it comes back itself).",
+                On(EffectTrigger.OnDeath, Summon(1)))
+                .Picture("A flaming bird rising from the smoking ashes of a burnt toaster, wings spread wide."),
+            Spell("Excess of Bread and Wine", TargetType.FriendlyCreatures,
+                "Turned water into wine. Then wine into a hangover.",
+                "Heals your creatures; one of them is Exhausted (the hangover).",
+                Heal(2, TargetType.FriendlyCreatures, Each), Stun(1, TargetType.FriendlyCreatures, AtRandom))
+                .Picture("The Last Supper as a frat party: the apostles playing beer pong along the long table while Jesus refills everyone's cups from a jug."),
+            Spell("Monkey Hand", TargetType.Player,
+                "Your wish is granted. Read the fine print.",
+                "Draw 3, and a random friendly creature is Doomed.",
+                Draw(3), Status(StatusEffectType.Doomed, 3, TargetType.FriendlyCreatures, modifier: AtRandom))
+                .Picture("A shrivelled monkey's paw giving a thumbs up, one of its fingers slowly curling down."),
+            Spell("Sacrificial Ritual", TargetType.FriendlyCreatures,
+                "Somebody has to go. Ideally the intern.",
+                "5 damage to a random friendly creature, then draw 2. Future: Myth's sacrifice cost (destroy a friendly creature).",
+                Damage(5, TargetType.FriendlyCreatures, AtRandom), Draw(2))
+                .Picture("Hooded figures chanting around a chalk pentagram, offering a rubber chicken on the altar."),
         };
 
         // Mind: wins without raw damage
@@ -525,6 +618,143 @@ namespace SlayTheClone {
                 "Mechanics test: Unbothered. Enemy effects can't lower its stats.")
                 .With(CreatureAbility.Unbothered)
                 .Picture("A person in big headphones reading in a blanket fort while a loud party rages around them, the partygoers' shouted invitations bouncing off the blankets."),
+            Creature("Schrodinger's Cat", 1, 2, speed: 2, deploy: 1,
+                "Alive and dead. Mostly annoyed.",
+                "Once per combat, when it would die, it heals 1 and survives.",
+                OncePerCombat(On(EffectTrigger.OnAboutToDie, Heal(1, TargetType.Self))))
+                .Picture("A cat sitting in an open cardboard box, its left half fluffy and alive, its right half a skeleton, both halves unimpressed."),
+            Creature("Roko's Basilisk", 0, 5, speed: 1, deploy: 1,
+                "It knows you didn't help build it. It's taking notes.",
+                "Each Dawn a random enemy creature is Exhausted. No damage: Mind can't deal it.",
+                On(EffectTrigger.StartOfTurn, Stun(1, TargetType.EnemyCreatures, AtRandom)))
+                .Picture("A big green snake in headphones typing on a laptop, a sticky note on the screen reading NAUGHTY LIST."),
+            Spell("Trolley Problem", TargetType.EnemyCreatures,
+                "Pull the lever. Or don't. Either way, it's on you.",
+                "Health Loss (not damage, which fits Mind): 3 on a random enemy creature, 1 on a random friendly one.",
+                Buff(-3, TargetType.EnemyCreatures, attack: false, health: true, AtRandom), Buff(-1, TargetType.FriendlyCreatures, attack: false, health: true, AtRandom))
+                .Picture("The trolley problem from above: a lever, a trolley and a split track, with one bored man on a track scrolling his phone."),
+            Spell("Red Herring", TargetType.Player,
+                "Look over there. No, the fish.",
+                "A misleading Watchdog (On Watch): the next enemy attack is redirected to a random creature. 1 charge.",
+                CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Redirect, charges = 1 }, TargetType.Enemy))
+                .Picture("A red fish in a detective's trench coat and hat, pointing a fin dramatically off to the side."),
+            Spell("Imposter Syndrome", TargetType.EnemyCreatures,
+                "Twenty years of experience. Still waiting to be found out.",
+                "-2 Attack for good. Future: the Imposter Syndrome status.",
+                Buff(-2, TargetType.EnemyCreatures, attack: true, health: false))
+                .Picture("A little space crewmate in a spacesuit and visor sitting at an office desk under a SENIOR ENGINEER name plate, sweating."),
+        };
+        #endregion
+
+        #region Utopia
+        // Long-term experiments: slow creatures that evolve, heal and multiply. Pays with side effects on its own side.
+        // Can't conceal anything. Tempo: slow (Deployment Time 2-3).
+        private static List<CardDef> UtopiaCards() => new List<CardDef> {
+            Creature("Clone", 2, 3, speed: 2, deploy: 1,
+                "Twice the sheep. Half the soul.",
+                "When it enters, summon a random creature from your deck. Future: Clone (copies a friendly creature).",
+                On(EffectTrigger.OnPlay, Summon(1)))
+                .Picture("Dolly the sheep in a lab coat and goggles proudly presenting a row of identical sheep behind her."),
+            Creature("Hypermetamorphosis", 1, 3, speed: 1, deploy: 2,
+                "Caterpillar, cocoon, middle manager. Nature is healing.",
+                "+1/+1 for good each Dawn. Future: Evolution (each step unlocks an ability).",
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
+                .Picture("Left to right: a caterpillar, a cocoon, and a hatched office worker in a tie with butterfly wings, briefcase in hand, dead inside."),
+            Creature("Extremophile", 1, 4, speed: 1, deploy: 2,
+                "Survived five mass extinctions. Your opinion won't be the sixth.",
+                "Unbothered, and it heals 1 each Dusk.",
+                On(EffectTrigger.EndOfTurn, Heal(1, TargetType.Self)))
+                .With(CreatureAbility.Unbothered)
+                .Picture("A chubby tardigrade lounging in a pool of lava in sunglasses, a tiny cocktail in its claw."),
+            Creature("Philosophy PhD", 0, 4, speed: 1, deploy: 1,
+                "Eight years of Kant. Would you like fries with that?",
+                "A draw each Dawn; the student debt costs it 1 Health each Dusk.",
+                On(EffectTrigger.StartOfTurn, Draw(1)),
+                On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
+                .Picture("A graduate in cap and gown flipping burgers at a fast-food grill, the diploma pinned up next to the menu."),
+            Creature("Mathematician", 1, 3, speed: 1, deploy: 2,
+                "Showed her work. Nobody checked it.",
+                "Each Dawn a random enemy creature gets -1 Attack for good.",
+                On(EffectTrigger.StartOfTurn, Buff(-1, TargetType.EnemyCreatures, attack: true, health: false, AtRandom)))
+                .Picture("The confused math lady meme: a woman squinting while equations, triangles and integrals float around her head."),
+            Creature("Quantum Physicist", 2, 4, speed: 2, deploy: 2,
+                "In two places at once. Late to both.",
+                "Swap. Whoever hits it is Exhausted: observing it collapses them.",
+                On(EffectTrigger.OnDamage, Stun(1, TargetType.Enemy)))
+                .With(MovementKeyword.Swap)
+                .Picture("A physicist split down the middle, one half of him see-through, holding two coffees and checking two watches."),
+            Creature("Perpetual Motion Machine", 0, 6, speed: 1, deploy: 3,
+                "Runs forever. The patent office stopped answering in 1911.",
+                "A draw each Dawn, and it heals 1 each Dusk.",
+                On(EffectTrigger.StartOfTurn, Draw(1)),
+                On(EffectTrigger.EndOfTurn, Heal(1, TargetType.Self)))
+                .Picture("A hamster running in a wheel that powers a fan, which blows on the hamster, which keeps running."),
+            Creature("Particle Accelerator", 3, 7, speed: 1, deploy: 3,
+                "Found the God particle. Lost the car keys.",
+                "Each Dawn, 2 damage to a random creature on either side (side effects).",
+                On(EffectTrigger.StartOfTurn, Damage(2, TargetType.AllCreatures, AtRandom)))
+                .Picture("A huge ring-shaped tunnel seen from above, a tiny scientist on a bicycle racing around it after a glowing dot."),
+            Creature("Genetically Modified Organism", 3, 3, speed: 2, deploy: 2,
+                "Organic. Gluten-free. Bench-presses 200.",
+                "+2/+2 for good when it enters; the side effects cost it 1 Health each Dusk.",
+                On(EffectTrigger.OnPlay, Buff(2, TargetType.Self, attack: true, health: true)),
+                On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
+                .Picture("A ripe tomato with huge bodybuilder arms, flexing, a NON-GMO sticker peeling off its skin."),
+            Creature("Giraffe", 2, 7, speed: 1, deploy: 2,
+                "Heart the size of a TV. Still can't reach its own feet.",
+                "When it enters, Reveal a random enemy creature's slot: it sees over the fog.",
+                On(EffectTrigger.OnPlay, Reveal(TargetType.EnemyCreatures, AtRandom)))
+                .Picture("A giraffe whose neck runs out of the top of the picture and comes back in from the top further along, its head hanging upside down, peeking."),
+            Creature("Pioneer", 2, 2, speed: 3, deploy: 1,
+                "First human on Mars. First eviction on Mars.",
+                "Leapfrog: it jumps over creatures to an empty slot.")
+                .With(MovementKeyword.Leapfrog)
+                .Picture("An astronaut planting a flag on a red desert next to a sign: FOR RENT $9999."),
+            Spell("Placebo", TargetType.FriendlyCreatures,
+                "Clinically proven to work on people who believe it works.",
+                "+3 Health for this Day only.",
+                Buff(3, TargetType.FriendlyCreatures, attack: false, health: true, days: 1))
+                .Picture("A sugar pill the size of a melon labelled MIRACLE, and a skinny man next to it flexing a non-existent bicep, very proud."),
+            Spell("Vaccine", TargetType.FriendlyCreatures,
+                "Side effects include not dying, and 5G.",
+                "Cleanses its harmful statuses; side effect: -1 Attack for this Day (sore arm).",
+                Cleanse(CleanseTarget.Statuses, TargetType.FriendlyCreatures), Buff(-1, TargetType.FriendlyCreatures, attack: true, health: false, days: 1))
+                .Picture("A syringe with a tiny Wi-Fi antenna on its plunger and full signal bars above it."),
+            Spell("Climate Change", TargetType.AllCreatures,
+                "The scientists agreed. The weather didn't wait.",
+                "Every creature is Burned for 2 Days.",
+                Status(StatusEffectType.Burned, 2, TargetType.AllCreatures, potency: 1, modifier: Each))
+                .Picture("A polar bear standing on a single ice cube floating in a cocktail glass, a paper umbrella beside it."),
+            Spell("Overpopulation", TargetType.Player,
+                "Eight billion people and nobody to cover my shift.",
+                "Summon 2 random creatures from your deck.",
+                Summon(2))
+                .Picture("A tiny Earth with people crammed all over it like a full elevator, one man balancing on top on one foot."),
+            Spell("Black Hole", TargetType.EnemyCreatures,
+                "What goes in doesn't come out. Like your tax refund.",
+                "3 damage to the creature and its neighbors; 2 damage to you (side effects). Future: Black Hole repositioning.",
+                Damage(3, TargetType.EnemyCreatures, TargetModifier.WithAdjacent), Damage(2, TargetType.Player, Each))
+                .Picture("A swirling black hole sucking in a cow, a sofa, a single sock and a tax form."),
+            Spell("Stasis Field", TargetType.FriendlyCreatures,
+                "Frozen in time. Like your salary.",
+                "Temporal Shield for 3 Days on a slot: the creature there takes no combat damage. Stays with the slot.",
+                PlaceSlotEffect(SlotEffectType.TemporalShield, 0, 3, TargetType.FriendlyCreatures))
+                .Picture("A man frozen mid-sneeze inside a giant block of green jelly, the droplets hanging in the air."),
+            Spell("Absolute Zero", TargetType.AllCreatures,
+                "Minus 273. The office AC, as set by Gary.",
+                "Every creature is Exhausted.",
+                Stun(1, TargetType.AllCreatures, Each))
+                .Picture("A man frozen solid at his desk holding a frozen cup of coffee, the thermostat on the wall reading -273."),
+            Spell("Splitting The Atom", TargetType.EnemyCreatures,
+                "Science's greatest achievement: a really big bang.",
+                "6 damage to a random enemy creature; 2 damage to you (side effects).",
+                Damage(6, TargetType.EnemyCreatures, AtRandom), Damage(2, TargetType.Player, Each))
+                .Picture("A lumberjack in a flannel shirt splitting a glowing atom on a tree stump with an axe, a mushroom cloud rising behind him."),
+            Spell("Gene Editing", TargetType.FriendlyCreatures,
+                "Bigger, stronger, slightly radioactive.",
+                "+2/+2 for good; side effect: Burned for 2 Days. Future: gene editing as Persistent Stat Modifications.",
+                Buff(2, TargetType.FriendlyCreatures, attack: true, health: true), Status(StatusEffectType.Burned, 2, TargetType.FriendlyCreatures, potency: 1))
+                .Picture("A pair of scissors cutting a DNA double helix, a strip of tape sticking a unicorn horn onto it."),
         };
         #endregion
 
@@ -639,7 +869,7 @@ namespace SlayTheClone {
         private static EffectAction DelayDeployment(int days, TargetType target) => Act(ActionType.DelayDeployment, days, target, TargetModifier.None);
 
         // Instant: a slot (its hidden Slot Effect and its creature's plans), or a player (their Watchdog conditions)
-        private static EffectAction Reveal(TargetType target) => Act(ActionType.Reveal, 0, target, TargetModifier.None);
+        private static EffectAction Reveal(TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Reveal, 0, target, modifier);
         #endregion
 
         #region Assets

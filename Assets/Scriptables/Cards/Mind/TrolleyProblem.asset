@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: TrolleyProblem
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 3330c490-20ce-452d-bb3e-df11782fab6f
+  cardName: Trolley Problem
+  description: Pull the lever. Or don't. Either way, it's on you.
+  cardType: 1
+  faction: 8
+  artwork: {fileID: 3286163911610860551, guid: 82092fa7e04424846a1e76872831f47a, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 6
+      value: -3
+      targetType: 4
+      targetModifier: 4
+      modifyAttack: 0
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+    - actionType: 6
+      value: -1
+      targetType: 3
+      targetModifier: 4
+      modifyAttack: 0
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+  designNotes: 'Health Loss (not damage, which fits Mind): 3 on a random enemy creature,
+    1 on a random friendly one.'
+  artDescription: 'The trolley problem from above: a lever, a trolley and a split
+    track, with one bored man on a track scrolling his phone.'
+  defaultTargetType: 4

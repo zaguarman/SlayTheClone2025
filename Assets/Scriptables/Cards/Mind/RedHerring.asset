@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: RedHerring
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 78263eb3-3bcb-4a8a-afc4-09d0243443c7
+  cardName: Red Herring
+  description: Look over there. No, the fish.
+  cardType: 1
+  faction: 8
+  artwork: {fileID: 3286163911610860551, guid: 1f55a2e0a9a428643b1781fa427839d7, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 11
+      value: 0
+      targetType: 1
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 1
+        charges: 1
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+  designNotes: 'A misleading Watchdog (On Watch): the next enemy attack is redirected
+    to a random creature. 1 charge.'
+  artDescription: A red fish in a detective's trench coat and hat, pointing a fin
+    dramatically off to the side.
+  defaultTargetType: 0

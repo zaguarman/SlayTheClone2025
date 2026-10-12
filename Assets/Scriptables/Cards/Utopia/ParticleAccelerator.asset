@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: ParticleAccelerator
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 12c0dc73-3587-4153-b696-26b1000ce26f
+  cardName: Particle Accelerator
+  description: Found the God particle. Lost the car keys.
+  cardType: 0
+  faction: 9
+  artwork: {fileID: 3286163911610860551, guid: 70a10708044a4b9429f48c8a4ceac0ac, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 3
+    oncePerCombat: 0
+    actions:
+    - actionType: 0
+      value: 2
+      targetType: 2
+      targetModifier: 4
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+  designNotes: Each Dawn, 2 damage to a random creature on either side (side effects).
+  artDescription: A huge ring-shaped tunnel seen from above, a tiny scientist on
+    a bicycle racing around it after a glowing dot.
+  attack: 3
+  health: 7
+  speed: 1
+  turnsUntilOperative: 3
+  movement: 0
+  ability: 0
