@@ -25,8 +25,9 @@ Landmine
 
 Binding Chains
     Visibility: Visible
-    Trigger Event(s): OnBeforeLeaveSlot(leftSlot, method) (Slot effect logic checks: if leftSlot is this slot, and the creature is attempting to leave).
-    Effect: The creature attempting to leave this slot gains Anchored. The Binding Chains is then consumed.
+    Trigger Event(s): OnBeforeLeaveSlot(leavingCreature, slot, method) (Slot effect logic checks: if slot is this slot and the creature is starting a Movement Action of its own).
+    Effect: Before the creature leaves, it gains Anchored, so its move is cancelled. The Binding Chains is then consumed. It resolves immediately, like every environment action (GDD 3.7 Resolution Order).
+    Notes: Only the creature's own movement is stopped. A friendly Push or Swap still moves it out, and being moved removes Anchored.
     Parameters: None.
     Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
     Cleansable: Yes
@@ -58,7 +59,8 @@ Rally Point
 Slippery Floor
     Visibility: Hidden
     Trigger Event(s): OnEnterSlot(movingCreature, enteredSlot, method) (Slot effect logic checks: if enteredSlot is this slot).
-    Effect: The movingCreature is immediately pushed one slot directly backward (towards its controller's edge of the board) if the destination slot is empty and valid. If it cannot be pushed (e.g., at edge of board, next slot occupied), it instead takes 2 damage. The Slippery Floor is then revealed and consumed.
+    Effect: The movingCreature slides one extra slot in the direction it was moving, if that slot is empty and it can be moved. If it can't (the board's edge, an occupied slot, Heavy or multi-slot, or it entered without a direction, e.g., summoned), it takes 2 damage instead. The Slippery Floor is then revealed and consumed.
+    Notes: Being slid isn't the creature's own movement. The extra slot it lands on counts as entered (OnEnterSlot).
     Parameters: Damage if not pushed: 2 (set by applying card).
     Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
     Cleansable: Yes.
@@ -81,7 +83,7 @@ Unstable Terrain
 
 Echoing Cave
     Visibility: Visible
-    Trigger Event(s): OnActionQueued(actionDetails) (Slot effect logic checks: if actionDetails.sourceCreature is on this slot and if the action is a 'PassiveAbilityEffect').
+    Trigger Event(s): OnActionQueued(actionDetails) (Slot effect logic checks: if actionDetails.sourceCreature is on this slot and the action is a Creature Ability Effect Action created by one of its passive abilities).
     Effect: If a creature on this slot triggers a passive ability, that passive ability's resulting action is duplicated in the Action Queue with the same targets and Priority (Action). This effect triggers once, then Echoing Cave is removed.
     Parameters: None.
     Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
@@ -106,7 +108,8 @@ Barbed Snare
 Magnetic Pulse
     Visibility: Visible
     Trigger Event(s): OnTurnStart (Slot effect logic checks if its slot is occupied by a creature controlled by the player who applied Magnetic Pulse).
-    Effect: At Dawn (Start of the Day), if their creature is on this slot, pull one random adjacent enemy creature one slot towards this Magnetic Pulse slot, if the intervening slot is empty and the target creature can be moved.
+    Effect: At Dawn (Start of the Day), if their creature is on this slot, the enemy creature nearest to the slot opposite this one (ties broken randomly) is pulled one slot toward that opposite slot, if the slot it would move into is empty and it can be moved. Nothing happens if an enemy creature is already in the opposite slot.
+    Notes: Being pulled isn't the creature's own movement, so Anchored doesn't stop it; Heavy and multi-slot creatures can't be pulled. It lines enemies up in front of your creature, setting up slot-targeted attacks.
     Parameters: None.
     Duration of Slot Effect: Persistent until replaced.
     Cleansable: Yes

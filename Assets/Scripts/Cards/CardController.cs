@@ -187,6 +187,7 @@ namespace SlayTheClone {
             string armorPart = armor > 0 ? $"<color=#2f7fc1>+{armor}</color>" : "";
             statsText.text = $"{attack}/{speed}/{health}{armorPart}";
             readyText.text = turnsUntilOperative.ToString();
+            readyPip.SetActive(turnsUntilOperative > 0); // Deployment Time 0 is the default, so it isn't shown
         }
 
         // Rules text always fits: the text box auto-sizes its font down to its minimum.

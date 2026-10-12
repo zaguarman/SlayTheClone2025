@@ -263,17 +263,18 @@ namespace SlayTheClone {
             }
         }
 
-        // Flat modifiers are added first, then percentage modifiers multiply the result
+        // Flat modifiers are added first, then percentage modifiers multiply the result (GDD 3.3).
+        // Rounds down once at the end; decimal keeps x0.5 and x1.5 exact so no step drifts
         private static int CalculateStat(int baseValue, List<IModifier> mods, ModifiableStat stat) {
             int flatTotal = 0;
-            float multiplier = 1.0f;
+            decimal multiplier = 1m;
             foreach (var mod in mods) {
                 if (!mod.TryGetStatModification(stat, out var calcType, out var value)) continue;
 
                 if (calcType == ModifierCalculationType.Flat) flatTotal += value;
-                else if (calcType == ModifierCalculationType.Percentage) multiplier *= 1.0f + (value / 100.0f);
+                else if (calcType == ModifierCalculationType.Percentage) multiplier *= 1m + (value / 100m);
             }
-            return (int)Math.Round((baseValue + flatTotal) * multiplier);
+            return (int)Math.Floor((baseValue + flatTotal) * multiplier);
         }
         #endregion
 

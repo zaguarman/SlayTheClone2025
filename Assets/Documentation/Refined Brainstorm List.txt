@@ -595,3 +595,9 @@ Wheel of Fortune
 Witcher
 Ying-Yang
 Zweihander
+
+Hit and Run Abilities (attack and move in the same Day, each with a real cost):
+Strike & Fade (U-turn) - Attacks, then moves. Deals half damage, and the creature is Exposed for 1 Day after landing.
+Smash & Grab (Volt Switch) - Attacks, then returns to its owner's hand. Loses its Armor and temporary buffs, and pays its Deployment Time again when replayed.
+Reckless Charge (Flare Blitz / Wild Charge) - Moves first, then attacks from the new slot. Takes recoil damage equal to half the damage dealt, and is Exhausted the next Day.
+Parting Shot (Parting Shot) - Moves, and applies a status (e.g., Chill) to the creature opposite its old slot. Deals no damage.

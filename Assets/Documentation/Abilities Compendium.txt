@@ -1,0 +1,148 @@
+This compendium defines creature abilities that change how stat changes, effects and other abilities work. They are inspired by Pokémon abilities (Contrarian, Mold Breaker, Unaware...). Factions will be assigned once cards are rebalanced.
+
+General Rules:
+
+• One Ability per Creature: A creature has at most one ability. Gaining a new ability (copying, swapping, spreading) replaces the old one.
+• Ability Changes Last Until Reshuffle: There are no Day-based or status-based abilities. An ability a creature gains or loses stays on the card, even if it leaves play, until the card is reshuffled into the deck or the combat ends. Then it gets its printed ability back. This is the same rule as Persistent Stat Modifications.
+• Switched Off, Not Removed: Abilities Disabled effects (Muted, Exhausted, Deployment Time, a Jamming Field, Signal Jammer) switch an ability off while they last. The creature still has it.
+• Stat Changes vs. Statuses: Abilities that react to stat changes only affect stat modifications (Temporary and Persistent). A status's own stat change (Chill, Heavy, Addicted...) is part of the status and isn't affected, unless the ability says otherwise (Underground does).
+• Bouncing Effects: When an ability sends an effect back to "the creature that caused it" and there is no such creature (a Spell from hand, or it has left play), the effect goes to the caster's creature with the lowest current Health, ties broken randomly. If the caster has no creatures, the effect fails. Area effects bounce one creature at a time. An effect can only be bounced once (see GDD 5.2 Status Effects - Bounces and Chains).
+
+Resolution Order for a Stat Change:
+
+When a stat modification targets a creature, it goes through these steps in order:
+    1. Bypass: If the source has Zero-Day, the target's defensive abilities are ignored, except Unpatchable.
+    2. Block: Unbothered, Unpatchable, Too Mainstream, Cognitive Dissonance and Imposter Syndrome can stop it here.
+    3. Reflect: No U sends it back to its source, where it starts again from step 1.
+    4. Transform: Contrarian reverses it, then Extremist doubles it.
+    5. Apply.
+    6. React: Spite triggers.
+Underground works at a different moment: when damage is calculated, not when a stat change is applied.
+
+Defensive Abilities (the ones Zero-Day ignores): Contrarian, Extremist, Unbothered, No U, Spite, Underground (when it is attacked), Too Mainstream, Return to Sender, Hive Mind.
+
+
+Changing How Stat Changes Affect It
+
+Contrarian
+    Inspired by: Contrarian (Serperior)
+    Type: Passive, Defensive
+    Description: "Stat changes on this creature are reversed."
+    Notes: +2 becomes -2 and -2 becomes +2; x2 becomes /2 and /2 becomes x2. Applies to stat changes from any source, friendly or enemy.
+    Answers: Buff it to hurt it, or simply leave its stats alone. Zero-Day ignores it. Its owner can debuff it on purpose to make it stronger.
+
+Extremist
+    Inspired by: Simple (Bibarel)
+    Type: Passive, Defensive
+    Description: "Stat changes on this creature are doubled."
+    Notes: +2 becomes +4 and -1 becomes -2; x2 becomes x4.
+    Answers: Every debuff hits twice as hard, so one cheap debuff goes a long way. Its owner gets double value from every buff.
+
+Unbothered
+    Inspired by: Clear Body (Metagross)
+    Type: Passive, Defensive
+    Description: "Enemy effects can't lower this creature's stats."
+    Notes: Friendly effects can still lower them, and enemy buffs still apply.
+    Answers: Use damage, Health Loss or statuses instead of debuffs, or Zero-Day.
+
+No U
+    Inspired by: Mirror Armor (Corviknight)
+    Type: Passive, Defensive
+    Description: "Enemy effects that would lower this creature's stats bounce back to the creature that caused them."
+    Notes: A Spell from hand bounces to the caster's creature with the lowest current Health (see Bouncing Effects). A bounced effect can't bounce again.
+    Answers: Debuff it from a creature you don't mind weakening, or use damage instead of debuffs. Zero-Day ignores it.
+
+Spite
+    Inspired by: Defiant (Bisharp)
+    Type: Passive, Defensive
+    Description: "When an enemy effect lowers this creature's stats, it gains +2 Attack."
+    Notes: The +2 Attack is a Temporary Stat Modification that lasts until it leaves play. It triggers once per stat-lowering effect.
+    Answers: Don't debuff it: use damage or statuses. Its owner can bait debuffs into it.
+
+
+Ignoring Stat Changes in Combat
+
+Underground
+    Inspired by: Unaware (Clefable, Quagsire)
+    Type: Passive, Defensive
+    Description: "When this creature attacks or is attacked, the other creature's stat changes are ignored."
+    Notes: Ignores the other creature's Temporary Stat Modifications and stat changes from its statuses. Printed stats and Persistent Stat Modifications still count. Its own stat changes still apply.
+    Answers: Beat it with base stats and Persistent upgrades instead of temporary buffs. Zero-Day ignores it when Zero-Day attacks it.
+
+Too Mainstream
+    Inspired by: original
+    Type: Passive, Defensive
+    Description: "Immune to effects that affect more than one creature."
+    Notes: Area effects, "all creatures" effects, and spreads (Earworm, Burnout's explosion and cleanse spread) don't affect it. Effects that target only this creature still do.
+    Answers: Use single-target effects. Zero-Day ignores it.
+
+
+Breaking Other Abilities
+
+Zero-Day
+    Inspired by: Mold Breaker (Haxorus)
+    Type: Passive
+    Description: "This creature's attacks and effects ignore the target's defensive abilities."
+    Notes: Ignores every ability listed under Defensive Abilities. Doesn't bypass Unpatchable. Statuses aren't abilities, so it doesn't ignore them.
+    Answers: Unpatchable, Signal Jammer, or switching its ability off (Muted).
+
+Unpatchable
+    Inspired by: Full Metal Body (Solgaleo)
+    Type: Passive, Defensive
+    Description: "Enemy effects can't lower this creature's stats. Zero-Day can't bypass this."
+    Notes: The top of the bypass chain. It can still be switched off (Muted, Signal Jammer).
+    Answers: Switch its ability off, or use damage, Health Loss or statuses instead of debuffs.
+
+Signal Jammer
+    Inspired by: Neutralizing Gas (Weezing), limited to one lane
+    Type: Passive, Lane Control
+    Description: "The enemy creature directly opposite this creature has its ability switched off."
+    Notes: Lasts while both stay in place; moving either creature out of the lane switches the ability back on. It beats Unpatchable, because the ability is switched off, not bypassed.
+    Answers: Move your creature out of its lane, or move it out of yours.
+
+
+Copying and Spreading Abilities
+
+Copypasta
+    Inspired by: Trace (Gardevoir)
+    Type: Passive
+    Description: "When ready, and each Dawn after that while it still has Copypasta, this creature copies the ability of the creature opposite it."
+    Notes: Copying replaces Copypasta. If the slot opposite is empty, or that creature has no ability, nothing happens and it tries again next Dawn.
+    Answers: Keep the creature opposite it ability-less, or let it copy something that hurts its side (e.g., Contrarian).
+
+Identity Theft
+    Inspired by: Skill Swap
+    Type: Active
+    Description: "Active: swap abilities with target creature."
+    Notes: Lasts until each card is reshuffled. The target ends up with Identity Theft and can use it in turn.
+    Answers: Give it nothing worth stealing, or steal back with the Identity Theft it leaves you.
+
+Hive Mind
+    Inspired by: Mummy (Cofagrigus)
+    Type: Passive, Defensive
+    Description: "A creature that attacks this creature gains Hive Mind, replacing its own ability."
+    Notes: The attacker loses its ability until its card is reshuffled. Zero-Day attackers ignore it.
+    Answers: Attack it with ability-less creatures, slot attacks from far away, Spells, or Zero-Day.
+
+
+Other Abilities
+
+Insider Job
+    Inspired by: Infiltrator (Crobat)
+    Type: Passive
+    Description: "This creature's damage ignores Armor."
+    Answers: Health and positioning protect against it; Armor doesn't.
+
+Return to Sender
+    Inspired by: Magic Bounce (Espeon)
+    Type: Passive, Defensive
+    Description: "Statuses applied to this creature by enemy effects bounce back to the creature that sent them."
+    Notes: A Spell from hand bounces to the caster's creature with the lowest current Health (see Bouncing Effects). A bounced status can't bounce again. Friendly statuses apply normally.
+    Answers: Use damage or stat changes instead of statuses, or send the status from a creature that can take it. Zero-Day ignores it.
+
+Technician
+    Inspired by: Technician (Scizor)
+    Type: Passive
+    Description: "If this creature would deal 3 damage or less, it deals double instead."
+    Notes: Checked after the attacker's own stat calculation, before the target's modifiers (Exposed, Cognitive Dissonance) and Armor. 0 damage stays 0.
+    Answers: Armor and damage reduction still blunt it. Buffing its hit above 3 actually switches the doubling off.

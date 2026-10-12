@@ -1,8 +1,12 @@
-Note on Default Decay: For statuses with 'Initial Stacks: X' and no explicit 'Decay Rule' stated in their "Stacking & Duration" section, stacks typically represent duration in Days and decay by 1 Each Dusk (as per GDD 5.2 Status Effects - Decay Timing), unless specified otherwise by the status definition or the effect applying it. A status never decays at the first decay point after it's applied: applied on Day X, a Dusk-decaying status first decays at Dusk of Day X+1, and a Dawn-decaying status first decays at Dawn of Day X+2.
+Status Timing (GDD 5.2 Status Effects - Status Timing): Every status skips the Day it's applied. Unless an entry says otherwise, its stacks are Days: applied on Day X, it first acts and loses a stack at the Dusk of Day X+1 (or the Dawn of Day X+2 for a Dawn status). Each tick, its effect happens first, then it loses 1 stack. When the last stack goes, it ends and does whatever its entry says (evolve, spread, pay off).
+
+Cleansing: Every status is cleansable unless its entry says "Cleansable: No". Cleansing an uncleansable status has no effect, unless the entry defines what a cleanse attempt does instead (like Burnout).
+
+Stat Changes: A status's stat change applies only while the status is on the creature. It is independent from Temporary and Persistent Stat Modifications (see GDD 3.3 Creatures & Action Types). Stats can drop to 0, never below.
 
 Status Ownership: Every status belongs to one faction, or is Neutral. A faction's cards apply its own statuses freely; other factions apply them only rarely and at a higher cost (see 'Faction Compendium'). Each faction owns at most 3 statuses.
 
-• Neutral: Anchored, Concealed, Deployment Time, Exposed, Muted, Revealed
+• Neutral: Anchored, Concealed, Exposed, Muted, Revealed
 • Myth: Blessed, Bloodthirst, Doomed
 • Statecraft: Diplomatic Immunity, Heavy, Keep Calm
 • Shadow Ops.: Brainwashed, Compromised, Honeypot
@@ -30,9 +34,11 @@ Addicted
     Turn-Based Effects:
         Trigger: Each Dusk
         Effect: If this creature's stats were not changed by any effect during this Day, it evolves into Exhausted.
+        What Counts as a Change: Any stat modification gained or lost this Day, from any source (buffs, debuffs, Persistent changes, or a status that changes stats being applied or removed). Damage, healing and Armor don't count: current Health isn't a stat.
     Evolution:
         Evolves Into: Exhausted
         Evolution Trigger: At Dusk, if stats were not changed during the Day.
+    Answers: Change its stats every Day (any buff or debuff) and it never crashes into Exhausted. On an enemy, leave its stats alone and it stuns itself.
     Cleansable: No
 
 Anchored
@@ -46,30 +52,33 @@ Anchored
         Decay Rule: Persistent
         Re-application Behavior: Refresh Stacks (remains Anchored)
         On Consumed: (Special: Removed if creature is successfully moved by any means).
+    Answers: It only stops the creature's own movement: a friendly Push or Swap still moves it, and being moved removes Anchored. It can still attack.
     Cleansable: Yes (Also removed by successful movement).
 
 Blessed
     Faction: Myth
     Type: Protective, Stacking, Consumable, Persistent
     Persistent: Yes
-    Description: "Persistent. Consumes 1 stack to negate an incoming status effect. Up to 3 stacks. Re-applying adds stacks."
-    Core Impact: Consumable protection against status effects.
+    Description: "Persistent. Wards the creature: the next status effect that would be applied to it is negated, and Blessed loses 1 stack. Up to 3 stacks. Re-applying adds stacks."
+    Core Impact: Scarce, expensive protection against status effects, including Doomed.
     Stacking & Duration:
         Initial Stacks: 1 (typically, or X from source)
         Max Stacks: 3
         Decay Rule: Persistent
         Re-application Behavior: Add Stacks
     Consumable Effect (Stack-Spending Trigger):
-        Trigger Event: A status effect (that Blessed can negate) would be applied to this creature.
+        Trigger Event: Any status effect would be applied to this creature, from a friendly or an enemy effect.
         Stacks Spent: 1
         Resulting Impact: Negate the incoming status effect.
+    Notes: It blocks every status, Doomed included: Doomed can't be cured, but Blessed can prevent it from landing. It only blocks statuses; stat changes, damage and Health Loss aren't affected. Friendly statuses use up stacks too, so plan your own buffs around it.
+    Answers: Strip its stacks with cheap statuses first, then land the one that matters. Damage and Health Loss aren't statuses, so Blessed doesn't stop them.
     Cleansable: Yes (Removes all current stacks).
 
 Bloodthirst
     Faction: Myth
     Type: Control, Damage, Heal, Persistent
     Persistent: Yes
-    Description: "Must Attack a creature each Day or halve current HP round down at Dusk. Dealing damage to creatures heals for half the damage dealt (rounded up)."
+    Description: "Must Attack each Day or take damage equal to half its current Health (rounded down) at Dusk. Dealing damage to creatures heals for half the damage dealt (rounded up)."
     Core Impact: Forces aggressive action, provides lifesteal.
     Stacking & Duration:
         Initial Stacks: 1
@@ -77,18 +86,22 @@ Bloodthirst
         Re-application Behavior: Refresh Stacks
     Turn-Based Effects:
         Trigger: Each Dusk
-        Effect: If no Attack action by this creature resolved this Day, its current HP is halved (rounded down).
+        Effect: If no Attack action by this creature resolved this Day, it takes damage equal to half its current Health (rounded down). This is damage, so Armor and damage modifiers apply.
+        Counts as Attacking: Any Attack action this creature queued that reached resolution, even if it was Nullified or cancelled, or aimed at an empty slot (hitting the player).
     Notes: Healing occurs whenever this creature deals damage of any kind.
+    Answers: Give it something to attack every Day, even an empty slot; its lifesteal makes it a sturdy front-liner. Against an enemy one, make every hit costly (Armor, OnDamaged retaliation).
 
 Brainwashed
     Faction: Shadow Ops.
     Type: Control, Disabling, Delayed
-    Description: "At Dusk of the 2nd Day, changes controller to the status applier; Abilities Disabled. Re-applying resets countdown."
+    Description: "At Dusk of the 2nd Day after it's applied, changes controller to the status applier; Abilities Disabled. Re-applying resets countdown."
     Core Impact: Delayed control change for the rest of the combat, with ability disable. The owner never changes.
     Stacking & Duration:
         Initial Stacks: 2 (from source)
         Re-application Behavior: Refresh Stacks
-        On Consumed: The controller of this creature changes to the player who applied Brainwashed, and it is placed on that player's side (GDD 5.4 Recruitment & Conversion - Changing Sides). This creature's Abilities Disabled. Other status effects on the creature are kept.
+        On Consumed: The controller of this creature changes to the player who applied Brainwashed, and it is placed on that player's side (GDD 5.4 Recruitment & Conversion - Changing Sides). Other status effects on the creature are kept.
+        Ability Lock: From then on the creature's ability is switched off, even after it dies or leaves play, until its card is reshuffled into the deck (or the combat ends).
+    Answers: Before it defects, bounce it, sacrifice it (paying a Myth cost), or load it with Earworm or Burnout for its new side. It lands opposite its old slot and discards whatever stands there, so position it to knock out the enemy's best creature.
     Cleansable: No
 
 Burnout
@@ -103,29 +116,31 @@ Burnout
         Decay Rule: Persistent
         Re-application Behavior: Add Stacks
         On Max Stacks: All creatures on the battlefield with any Burnout stacks take 3 damage; all Burnout stacks on those damaged creatures are then removed.
+    Answers: Spread it to enemy creatures first, then detonate it on purpose (a cleanse attempt sets it to 3). Space your own creatures so the cleanse spread misses them.
     Cleansable: Special: Attempting to Cleanse Burnout from this creature causes its Burnout stacks to become 3 (triggering the On Max Stacks effect if not already at 3). Each adjacent friendly creature gains 1 Burnout stack.
 
 Chill
     Faction: Utopia
     Type: Statistic, Heal
-    Description: "Halves Attack (min 1). Each Dusk, restores 1 Health. Re-applying sets stacks to the new amount."
+    Description: "Halves Attack (rounded down, can reach 0). Each Dusk, restores 1 Health. Re-applying sets stacks to the new amount."
     Core Impact: Reduces Attack temporarily, provides healing over time.
     Stacking & Duration:
         Initial Stacks: X (from source)
         Re-application Behavior: Refresh Stacks
     Statistic Modification:
         Target Statistic: Attack
-        Modification Method: /2 (rounded down, min 1)
+        Modification Method: /2 (a multiplier, applied after flat changes; the total is rounded down once at the end, per GDD 3.3. Can reach 0)
         Modification Scope: While Active
     Turn-Based Effects:
         Trigger: Each Dusk
         Effect: This creature restores 1 Health.
+    Answers: Give the creature a defensive role: half Attack matters little on a tank, and it heals every Dusk.
     Cleansable: Yes
 
 Coffeinated
     Faction: Corporate
     Type: Statistic, Damage, Evolving
-    Description: "+1 Attack, +1 Speed. Loses 1 Health Each Dusk. After 2 Days, evolves into Addicted. Re-applying refreshes countdown."
+    Description: "+1 Attack, +1 Speed. Takes 1 damage Each Dusk. After 2 Days, evolves into Addicted. Re-applying refreshes countdown."
     Core Impact: Temporary offensive boost with health drain, evolves into Addicted.
     Stacking & Duration:
         Initial Stacks: 2 (from source)
@@ -136,10 +151,11 @@ Coffeinated
         Modification Scope: While Active
     Turn-Based Effects:
         Trigger: Each Dusk
-        Effect: This creature loses 1 Health.
+        Effect: This creature takes 1 damage.
     Evolution:
         Evolves Into: Addicted
         Evolution Trigger: On Consumed (reaches 0 stacks).
+    Answers: Cash in the +1 Attack and Speed while it lasts, then keep its stats changing so Addicted never crashes into Exhausted.
     Cleansable: Yes (If cleansed, Addicted is not applied).
 
 Cognitive Dissonance
@@ -157,6 +173,7 @@ Cognitive Dissonance
         Modification Method: Immune to positive changes from any source.
         Modification Scope: While Active
     Notes: Reduce damage taken by this creature from all sources by 1 (to a minimum of 0).
+    Answers: Against it, use fewer, bigger hits (it only shrugs off 1 per hit) or Health Loss. On your side, it's an unbuffable damage-reduction wall.
     Cleansable: No
 
 Compromised
@@ -173,6 +190,7 @@ Compromised
         • For the player who applied Compromised ("handler"): All past '???' entries in the Turn History from this creature become fully visible. All future actions queued by this creature are fully visible to the handler in their Turn History after resolution, even if normally Concealed.
         • Original controller and other opponents still see its Concealed Actions as '???'.
         • Passive information leakage does not trigger OnRevealedByIntelligence effects. Handler can still choose to use a separate Intelligence action to trigger them.
+    Answers: It only leaks actions after they resolve, so your plan for the Day stays hidden. Bounce the creature to shake off the handler.
     Cleansable: Yes
 
 Concealed
@@ -184,19 +202,8 @@ Concealed
         Initial Stacks: X (from source)
         Re-application Behavior: Refresh Stacks
     Notes: This effect is negated if the creature also has the Revealed status effect.
+    Answers: Use slot-based and area effects that don't care what it's planning, or apply Revealed to switch it off.
     Cleansable: Yes
-
-Deployment Time
-    Faction: Neutral
-    Type: Control, Disabling
-    Description: "Cannot Act and passive abilities don't trigger. Stacks are Days remaining. Re-applying sets stacks to new amount."
-    Core Impact: Initial period of inactivity for newly played creatures.
-    Stacking & Duration:
-        Initial Stacks: X (from source)
-        Decay Rule: Each Dawn: -1 stack, except the first Dawn after the creature entered play.
-        Re-application Behavior: Refresh Stacks
-    Notes: Deployment Time N means the creature sits out N full Days after the Day it entered play. Deployment Time 0: can be given intents from its first Day on the battlefield. Deployment Time 1: from its second Day. OnDeploymentTimeComplete triggers even while Abilities Disabled (see GDD 3.2 Tempo & Deployment Time); other exceptions to passive abilities not triggering are possible if specified by an ability. Removed when stacks reach 0.
-    Cleansable: No (by general Cleanse; specific effects might reduce stacks but this is not "cleansing").
 
 Diplomatic Immunity
     Faction: Statecraft
@@ -209,53 +216,64 @@ Diplomatic Immunity
         Decay Rule: Persistent
         Re-application Behavior: Ignore
     Notes: Creature abilities, combat damage, and other status effects still apply.
+    Answers: Only Spells bounce off: use attacks, creature abilities and statuses. Your own Spells can't help it either.
     Cleansable: Yes
 
 Doomed
     Faction: Myth
-    Type: Disabling, Delayed, Unique, Damage, Statistic, Fixed_Stacks
+    Type: Delayed, Unique, Damage, Statistic, Fixed_Stacks
     Fixed_Stacks: Yes
-    Description: "Removes other statuses and grants immunity to incoming status effects. Each Dawn, gains 1 permanent Attack. Destroyed when Consumed. Stacks are fixed and cannot be modified by external effects."
-    Core Impact: Immunity, eventual self-destruction, ramping permanent Attack.
+    Description: "Death Sentence. Removes other statuses and blocks new ones. Each Dawn, gains 1 permanent Attack. When Consumed: Last Rites, then destroyed. Can't be cleansed, only passed on."
+    Core Impact: A guaranteed death, usable as a weapon or as a calculated sacrifice. The creature grows stronger until it falls and strikes on its way out.
     Stacking & Duration:
         Initial Stacks: X (from source)
         Re-application Behavior: Ignore
-        On Consumed: This creature is destroyed. (This is the "End of the Xth Day" effect).
+        On Consumed: Last Rites, then this creature is destroyed. Both happen immediately, as part of the status being consumed.
     Statistic Modification:
         Target Statistic: Attack
-        Modification Method: +1 (cumulative per Each Dawn)
-        Modification Scope: Permanent
+        Modification Method: +1 (cumulative, Each Dawn)
+        Modification Scope: Permanent (a Persistent Stat Modification: it stays on the card, so a revived creature keeps it)
     Turn-Based Effects:
         Trigger: Each Dawn
-        Effect: Apply linked Statistic Modification (+1 Attack). This creature is immune to gaining any other status effects.
-    Notes: Upon application, all other status effects (positive and negative, regardless of cleansability) are removed from this creature. The Doomed status itself and its associated effects cannot be disabled or prevented by other effects.
-    Cleansable: No
+        Effect: Apply the linked Statistic Modification (+1 Attack).
+    Last Rites: The creature makes one final Attack against the slot opposite it, using its current Attack. It resolves even if the creature Cannot Act.
+    Notes:
+        • Upon application, all other status effects (positive and negative, regardless of cleansability) are removed from this creature, and it is immune to gaining new ones while Doomed.
+        • Blessed is the only thing that can stop Doomed from being applied. Once it's applied, the countdown can't be changed, delayed or cured by any effect; the sentence can only be passed on (see Heresy).
+        • Passing it onto a Blessed creature uses up a Blessed stack and the sentence is negated: a scarce, expensive way out.
+        • As a weapon: dooming an enemy guarantees it dies, but it grows every Dawn and strikes back with Last Rites.
+        • As a sacrifice: dooming your own creature gives a growing attacker with a parting blow, and the Attack it gained stays on the card.
+    Answers: Pass it to a vessel you meant to sacrifice anyway (Heresy), use the Attack it gains, and aim Last Rites at the enemy's best slot.
+    Cleansable: No. Heresy: a cleanse attempt passes Doomed on instead of removing it (GDD 5.2 Status Effects - Passing a Status). It moves, with its remaining stacks, to the creature with the lowest current Health on this creature's side; that vessel loses its other statuses as usual. This creature is freed and keeps the Attack it gained. If it has no other creature on its side, the sentence is carried out immediately: Last Rites, then it is destroyed.
 
 Earworm
     Faction: Digital Society
     Type: Damage, Unique
-    Description: "Takes 1 damage Each Dusk. After 2 Days, spreads to adjacent friendlies if still present, then continues. Re-applying refreshes spread timer."
-    Core Impact: Persistent damage that can spread.
+    Description: "Takes 1 damage Each Dusk. After 2 Days, spreads to adjacent friendly creatures and vanishes. Re-applying refreshes the countdown."
+    Core Impact: Short damage over time that jumps along a badly spaced line of creatures.
     Stacking & Duration:
-        Initial Stacks: 2 (acts as spread timer, actual damage is persistent until cleansed)
-        Re-application Behavior: Refresh Stacks (refreshes the 2-Day spread timer)
+        Initial Stacks: 2 (from source)
+        Re-application Behavior: Refresh Stacks (back to 2)
+        On Consumed (after its last stack): Each adjacent friendly creature gains Earworm (2). Then Earworm vanishes from this creature.
     Turn-Based Effects:
         Trigger: Each Dusk
-        Effect: This creature takes 1 damage. If this status has 0 stacks remaining (i.e., after two instances of damage and check since last refresh/application), it spreads to adjacent friendly creatures (they gain Earworm with 2 stacks). The original Earworm then has its stacks reset to 2 (to continue the 2-Day spread cycle) and remains on the creature.
-    Cleansable: Yes (Cleansing prevents current instance from spreading if done before its stacks reach 0).
+        Effect: This creature takes 1 damage.
+    Notes: Applied on Day 1: 1 damage at Dusk of Day 2, 1 damage at Dusk of Day 3, then it spreads and vanishes. It can spread back to a creature that had it before: an encore you can see coming and answer by spacing your creatures or cleansing.
+    Answers: Space your creatures, Push to open gaps, or leave the host with no neighbors. A Brainwashed or Recruited host carries it to the other side.
+    Cleansable: Yes (cleansing before its last stack prevents the spread).
 
 Exhausted
     Faction: Tech
-    Type: Control, Disabling, Unique, Persistent
-    Persistent: Yes
-    Description: "Cannot Act, Abilities Disabled. Gains Exposed (Indefinite, unless specified otherwise by source). Persists until specifically removed."
-    Core Impact: Complete disable with visibility penalty.
+    Type: Control, Disabling, Unique
+    Description: "Stunned for 1 Day: Cannot Act, Abilities Disabled, and Exposed while it lasts."
+    Core Impact: A short, complete shutdown with a vulnerability window. The game's 1-Day stun.
     Stacking & Duration:
         Initial Stacks: 1
-        Decay Rule: Persistent
-        Re-application Behavior: Ignore
-    Notes: Also gains Exposed (Indefinite duration, unless specified otherwise by the source of Exhausted). Not removed by time.
-    Cleansable: No
+        Decay Rule: Each Dusk: -1 stack (default). Applied on Day X, it lasts through Dusk of Day X+1: the rest of Day X and all of Day X+1.
+        Re-application Behavior: Refresh Stacks (re-stunning resets it to 1; it never stacks into a longer stun)
+    Notes: Applying it cancels the creature's pending Attack, Movement, Active Ability and ability actions (GDD 3.8 State Changes During Resolution). The creature also has Exposed for exactly as long as Exhausted lasts; when Exhausted ends, that Exposed ends with it.
+    Answers: A stunned creature still blocks its slot, so it soaks attacks aimed there for a Day. A friendly Swap or Push can reposition it.
+    Cleansable: Yes
 
 Exposed
     Faction: Neutral
@@ -267,35 +285,43 @@ Exposed
         Decay Rule: Each Dusk: -1 stack (unless Indefinite, then Persistent)
         Re-application Behavior: Refresh Stacks (If an Indefinite Exposed is active, applying a timed Exposed will not override it to be timed. Applying Indefinite to timed makes it Indefinite).
     Notes: Creature also gains Revealed for the same duration/stacks as Exposed.
-    Cleansable: Yes (unless it's a component of an uncleansable status like Exhausted, then lasts as long as Exhausted or as specified. If Exhausted is removed by non-Cleanse, component Exposed also removed).
+    Answers: Move it out of attack lines for a Day, or give it Armor to soak the extra damage. A well-armored Exposed creature makes good bait.
+    Cleansable: Yes (an Exposed that comes from Exhausted is part of Exhausted: it ends when Exhausted ends, and cleansing Exhausted removes it too).
 
 Ghosted
     Faction: Digital Society
     Type: Unique, Control, Damage, Evolving
-    Description: "Doesn't block friendly movement. Loses 1 Health Each Dusk. Ignores slot effects on move. Cannot be targeted by direct Attacks. After 3 Days, evolves into Doomed (2 Days). Re-applying refreshes countdown."
+    Description: "Doesn't block friendly movement. -1 Health Each Dusk (permanent). Ignores slot effects on move. Cannot be targeted by direct Attacks. After 3 Days, evolves into Doomed (2 Days). Re-applying refreshes countdown."
     Core Impact: Ethereal state with unique interactions, evolves into Doomed.
     Stacking & Duration:
         Initial Stacks: 3 (from source)
         Re-application Behavior: Refresh Stacks
     Turn-Based Effects:
         Trigger: Each Dusk
-        Effect: This creature loses 1 Health.
+        Effect: This creature gets -1 Health (Health Loss, not damage: maximum and current Health both drop by 1, Armor doesn't absorb it, and it is permanent. See GDD 1.1 Glossary - Health Loss).
     Evolution:
         Evolves Into: Doomed (with 2 initial stacks/Days)
         Evolution Trigger: On Consumed (reaches 0 stacks).
+    Notes: Attacks aimed at its slot pass through to its controller, as if the slot were empty (GDD 4.6 Combat, Damage & Targeting).
+    Answers: It can't be hit, but attacks aimed at its slot reach you instead: guard that lane or move it somewhere quiet while it fades, then plan its Doomed Last Rites.
     Cleansable: Yes (If cleansed, Doomed is not applied).
 
 Heat Signature
     Faction: Tech
-    Type: Unique, Control, Persistent (or timed by source)
-    Persistent: Yes (unless source specifies stacks/duration)
-    Description: "All homing attacks (friend or foe) target this creature if valid. Re-applying refreshes duration if timed."
-    Core Impact: Makes creature a magnet for homing attacks.
+    Type: Unique, Control, Stacking, Persistent
+    Persistent: Yes
+    Description: "Gains Heat. Draws every Homing or randomly targeted attack, from both sides, to the creature with the most Heat."
+    Core Impact: A cold war: both sides pile Heat on creatures to steer the other side's Homing attacks.
     Stacking & Duration:
-        Initial Stacks: X (from source, or 1 if Persistent by default)
-        Decay Rule: (Defaults to Each Dusk: -1 stack if X > 1, otherwise Persistent if X=1 from source and no duration specified)
-        Re-application Behavior: Refresh Stacks (if timed)
-    Notes: If multiple creatures have Heat Signature, the homing attack may choose one randomly or based on other targeting priorities of the attack.
+        Intensity: Heat stacks, X from the source ("gains X Heat"). They never decay; only cleansing removes them.
+        Re-application Behavior: Add Stacks
+        Max Stacks: None for now (99 is only the display limit; a real cap will come with balancing).
+    Notes:
+        • What it catches: every Homing attack and every attack with a randomly chosen target, from either player, including the controller's own. Attacks aimed at a slot (Fixed, Static) aren't affected.
+        • When: like a Watchdog, just before each such attack resolves, so it also pulls attacks that were queued before it was applied.
+        • Which one: the creature with the most Heat, on either side. If several are tied for the most, the nearest one: first in the attacker's own row, counted in slots; only if there is none in its row, in the other row, counted by column difference. Remaining ties are broken randomly.
+        • Example with equal Heat (columns 1-5): row 1 is A, X, H1, c, X and row 2 is Y, Y, B, C, H2. A's Homing attack lands on H1 (its own row). B's lands on H2 (its own row), even though H1 is directly opposite. C's attack aimed at the slot of c isn't affected. If H1 had more Heat than H2, both attacks would land on H1.
+    Answers: Out-heat the enemy: keep your armored tank as the hottest creature and it soaks every Homing attack, including your own, so switch to slot attacks. Heat an enemy creature above everything else and both sides' Homing attacks hit it. Cleansing resets the race.
     Cleansable: Yes
 
 Heavy
@@ -311,19 +337,22 @@ Heavy
         Modification Method: x2
         Modification Scope: While Active
     Notes: Creature Cannot Act regarding Move actions and cannot be moved by other effects. It can only Attack the slot directly opposing its current slot (overrides other targeting rules for its Attack).
+    Answers: It can't move and only attacks the slot opposite, so step out of its lane. On your side, plant it where enemies must come through.
     Cleansable: Yes
 
 Hipster
     Faction: Zeitgeist
     Type: Unique, Statistic, Evolving
-    Description: "Ignores enemy stat changes for its own abilities/attacks. After 2 Days, evolves into Ostracised. Re-applying refreshes countdown."
-    Core Impact: Ignores enemy stat changes, evolves into Ostracised.
+    Description: "Lives outside the rules: ignores every stat change on itself. After 2 Days, evolves into Ostracised. Re-applying refreshes countdown."
+    Core Impact: Neither buffs nor debuffs touch it, then it ends up shunned.
     Stacking & Duration:
         Initial Stacks: 2 (from source)
         Re-application Behavior: Refresh Stacks
     Evolution:
         Evolves Into: Ostracised
         Evolution Trigger: On Consumed (reaches 0 stacks).
+    Notes: It uses its printed stats plus Persistent Stat Modifications. Temporary Stat Modifications and stat changes from its other statuses are ignored while it has Hipster, whether they're positive or negative, existing or new. It doesn't get stronger; it just ignores things.
+    Answers: Your buffs are wasted on it, and so are the enemy's debuffs: use it as a steady, predictable piece for 2 Days, then plan around it becoming Ostracised.
     Cleansable: Yes (If cleansed, Ostracised is not applied).
 
 Honeypot
@@ -340,6 +369,7 @@ Honeypot
         Trigger Event: This creature, or actions created/queued by this creature, are targeted by an opponent's Intelligence action.
         Stacks Spent: 1 (if consumable type)
         Resulting Impact: Retaliation effect defined by the source of Honeypot.
+    Answers: Gather intelligence elsewhere: read the creatures around it, or force it out of play before spending Intelligence on it.
     Cleansable: Yes
 
 Impatient
@@ -355,37 +385,39 @@ Impatient
     Turn-Based Effects:
         Trigger: Each Dusk
         Effect: If no Attack action by this creature resolved this Day, it takes X damage (X specified by the source of Impatient).
+        Counts as Attacking: Any Attack action this creature queued that reached resolution, even if it was Nullified or cancelled, or aimed at an empty slot (hitting the player).
+    Answers: Any attack satisfies it, even one into an empty slot, which also damages the enemy player.
     Cleansable: Yes
 
 Imposter Syndrome
     Faction: Mind
     Type: Unique, Statistic, Damage, Persistent
     Persistent: Yes
-    Description: "Base stats cannot be increased by friendly effects; if attempted, controller takes 1 damage."
-    Core Impact: Prevents friendly stat buffs, penalizes attempts.
+    Description: "Stats can't be increased by friendly effects (base or temporary); if attempted, the effect fails and its controller takes 1 damage."
+    Core Impact: Prevents all friendly stat buffs, penalizes attempts.
     Stacking & Duration:
         Initial Stacks: 1
         Decay Rule: Persistent
         Re-application Behavior: Ignore
-    Notes: If a friendly effect attempts to increase its base stats, the effect fails on this creature, and the controller of this creature takes 1 damage.
+    Notes: If a friendly effect attempts to increase any of its stats (a Persistent or Temporary Stat Modification), the effect fails on this creature, and the controller of this creature takes 1 damage. Healing and Armor aren't stat increases.
+    Answers: Don't buff it: healing, Armor and movement aren't stat increases. On an enemy that relies on buffs, every buff costs its controller 1 damage.
     Cleansable: Yes
 
 Keep Calm
     Faction: Statecraft
-    Type: Control, Unique, Persistent (or timed by source)
-    Persistent: Yes (unless source specifies stacks/duration)
-    Description: "Action Priority cannot be changed; all actions use default Priority. Re-applying refreshes duration if timed."
+    Type: Control, Unique
+    Description: "Action Priority cannot be changed; all actions use default Priority."
     Core Impact: Stabilizes action priority.
     Stacking & Duration:
-        Initial Stacks: X (from source, or 1 if Persistent by default)
-        Decay Rule: (Defaults to Each Dusk: -1 stack if X > 1, otherwise Persistent if X=1 from source and no duration specified)
-        Re-application Behavior: Refresh Stacks (if timed)
+        Duration: "(N Days)" if the source says so; otherwise it lasts until removed (Duration and Intensity convention, GDD 5.2).
+        Re-application Behavior: Refresh duration (a version with no Days replaces a timed one)
+    Answers: Win with Speed and positioning instead of Priority. It also shields the creature from Priority penalties like Slacking Off.
     Cleansable: Yes
 
 Mutation
     Faction: Utopia
     Type: Statistic, Delayed, Evolving
-    Description: "Speed -1 (min 1) while mutating. When Consumed, gains the Persistent Stat Modification set by the source (e.g., +2/+2/+0). Re-applying refreshes countdown."
+    Description: "Speed -1 while mutating. When Consumed, gains the Persistent Stat Modification set by the source (e.g., +2/+2/+0). Re-applying refreshes countdown."
     Core Impact: Slows a creature now in exchange for permanent growth later.
     Stacking & Duration:
         Initial Stacks: X (from source)
@@ -393,9 +425,10 @@ Mutation
         On Consumed: This creature gains the Persistent Stat Modification specified by the source of Mutation.
     Statistic Modification:
         Target Statistic: Speed
-        Modification Method: -1 (to a minimum of 1)
+        Modification Method: -1
         Modification Scope: While Active
     Notes: If the creature leaves play before Mutation is consumed, the payoff is lost.
+    Answers: Keep the creature safe until it pays off, because leaving play loses the payoff. Against an enemy one, kill or bounce it before then.
     Cleansable: Yes (If cleansed, the payoff is not gained).
 
 Muted
@@ -406,12 +439,13 @@ Muted
     Stacking & Duration:
         Initial Stacks: X (from source)
         Re-application Behavior: Refresh Stacks
+    Answers: Its attacks still work, and it also switches off harmful passives: mute your own creature that has a costly passive.
     Cleansable: Yes
 
 Ostracised
     Faction: Digital Society
     Type: Control, Disabling, Unique, Damage
-    Description: "Untargetable by ALL, Cannot Act or be Attacked, Abilities Disabled. Loses 1 Health Each Dusk. Fades after 2 Days. Re-applying refreshes countdown."
+    Description: "Untargetable by ALL, Cannot Act or be Attacked, Abilities Disabled. Takes 1 damage Each Dusk. Fades after 2 Days. Re-applying refreshes countdown."
     Core Impact: Complete isolation and temporary shutdown, then fades.
     Stacking & Duration:
         Initial Stacks: 2 (from source)
@@ -419,29 +453,32 @@ Ostracised
         On Consumed: This status is removed (fades).
     Turn-Based Effects:
         Trigger: Each Dusk
-        Effect: This creature loses 1 Health.
-    Notes: Other status effects can still be applied by non-targeting means, and existing ones continue.
+        Effect: This creature takes 1 damage.
+    Notes: Other status effects can still be applied by non-targeting means, and existing ones continue. Attacks aimed at its slot pass through to its controller, as if the slot were empty (GDD 4.6 Combat, Damage & Targeting).
+    Answers: It can't act or be hit, but attacks aimed at its slot pass through to you, as if the slot were empty. It still blocks movement into its slot, so it can hold a position while you cover that lane.
     Cleansable: Yes (but typically fades on its own).
 
 Paranoid
     Faction: Mind
     Type: Control, Damage, Unique
-    Description: "Next Dawn, forced to Attack a random friendly creature (or self); if unable, takes 2 damage. Then removed. Re-applying means it triggers next Dawn unless Cleansed this Day."
-    Core Impact: Forces friendly fire or self-damage.
+    Description: "At the Dawn after next, attacks the friendly creature with the lowest current Health. If there's none, takes 2 damage instead. Then removed."
+    Core Impact: Forced friendly fire you can see coming a full Day ahead.
     Stacking & Duration:
         Initial Stacks: 1
-        Decay Rule: Each Dawn: -1 stack (after effect check described below)
+        Decay Rule: Each Dawn (default timing: applied on Day X, it acts at the Dawn of Day X+2)
         Re-application Behavior: Refresh Stacks
     Turn-Based Effects:
         Trigger: Each Dawn
-        Effect: If this status has 1 stack (i.e., is active before decay): This creature is forced to queue an Attack action targeting a random friendly creature (including itself, if it's the only friendly creature). If it cannot (e.g., no other friendly creatures, or cannot attack itself), it takes 2 damage. This status is then Consumed (stacks become 0).
-    Cleansable: Yes (must be cleansed before the next Dawn to prevent the effect).
+        Effect: This creature attacks the friendly creature with the lowest current Health, other than itself (ties broken randomly; the same targeting as GDD 5.2 Status Effects - Passing a Status). The attack resolves in the Dawn resolution pass and doesn't use the creature's intent for the Day. If it has no other friendly creature, it takes 2 damage instead; it never attacks itself. Then Paranoid ends.
+    Notes: Day X+1 is the window to answer it: cleanse it, or protect the creature that will be hit.
+    Answers: You choose its victim by choosing who has the lowest Health: a token as a lightning rod, Armor on the victim, or a victim whose OnDamaged effect helps you.
+    Cleansable: Yes (cleansing before the Dawn it acts prevents the attack).
 
 Resurrected
     Faction: Utopia
     Type: Unique, Heal (inverted), Statistic, Persistent
     Persistent: Yes
-    Description: "Damaged by healing effects. Speed -1 (min 1)."
+    Description: "Damaged by healing effects. Speed -1."
     Core Impact: Inverts healing, reduces speed.
     Stacking & Duration:
         Initial Stacks: 1
@@ -449,8 +486,9 @@ Resurrected
         Re-application Behavior: Ignore
     Statistic Modification:
         Target Statistic: Speed
-        Modification Method: -1 (to a minimum of 1)
+        Modification Method: -1
         Modification Scope: Permanent (while status is active)
+    Answers: Never heal it. On an enemy, their own healing hurts it.
     Cleansable: No
 
 Revealed
@@ -462,20 +500,20 @@ Revealed
         Initial Stacks: X (from source)
         Re-application Behavior: Refresh Stacks
     Notes: Overrides Concealed status and "Undercover" ability's concealment.
+    Answers: Plan in the open: use the revealed creature for the obvious play and hide the real one elsewhere.
     Cleansable: Yes
 
 Slacking Off
     Faction: Zeitgeist
-    Type: Control, Heal, Persistent (or timed by source)
-    Persistent: Yes (unless source specifies stacks/duration)
-    Description: "Action Priority -2. Heals 2 Health Each Dusk. Re-applying refreshes duration if timed."
+    Type: Control, Heal
+    Description: "Action Priority -2. Heals 2 Health Each Dusk."
     Core Impact: Reduces action priority but provides healing.
     Stacking & Duration:
-        Initial Stacks: X (from source, or 1 if Persistent by default)
-        Decay Rule: (Defaults to Each Dusk: -1 stack if X > 1, otherwise Persistent if X=1 from source and no duration specified)
-        Re-application Behavior: Refresh Stacks (if timed)
+        Duration: "(N Days)" if the source says so; otherwise it lasts until removed (Duration and Intensity convention, GDD 5.2).
+        Re-application Behavior: Refresh duration (a version with no Days replaces a timed one)
     Turn-Based Effects:
         Trigger: Each Dusk
         Effect: This creature heals 2 Health.
     Notes: Priority (Action) for all its actions is lowered by 2.
+    Answers: Its actions resolve last, so give it jobs that like going last, such as finishing blows. It also heals 2 every Dusk.
     Cleansable: Yes

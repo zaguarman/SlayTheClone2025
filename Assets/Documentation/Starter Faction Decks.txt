@@ -13,7 +13,7 @@ CONTENTS
 • Three monofaction decks, one per faction, 16 different cards each (10 creatures and 6 spells). No copies yet.
 • Every card name comes from the 'Brainstorm List' or the 'Refined Brainstorm List', picking the most cynical ones. Margin Call is the exception: a Corporate staple added on purpose.
 • Cards only use what the engine already does: damage, healing, armor, draws, summoning from the deck, stat changes (ModifyStat), and the Paralyzed stun.
-• No faction statuses, Deployment Time tricks, Priority, Interference, Watchdogs, control changes or Locations.
+• No faction statuses, Deployment Time tricks, Priority, Watchdogs, control changes or Locations.
 • No card checks or rewards the presence of another faction (no "deals more damage to Corporate creatures").
 • Every card is a placeholder for a future GDD version. That version is stored on the card asset itself (the "Design Notes" field in the Inspector) and summarized below as "Future".
 

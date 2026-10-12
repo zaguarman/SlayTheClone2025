@@ -45,7 +45,7 @@ Statecraft: Order, Law & War
 Shadow Ops.: Secrets & Sabotage
     • Theme: Espionage, covert operations, conspiracies.
     • Play Style: Fragile agents, hidden plans and traps. Wins the information war, loses fair fights.
-    • Signature Mechanics: Concealed and Undercover, Interference (queue traps set up in advance), hidden Slot Effects, sleeper agents (delayed control changes such as Brainwashed), Banish (Cleaner, Secure Deletion), Dead Man's Switch (OnDied).
+    • Signature Mechanics: Concealed and Undercover, Briefing Watchdogs (queue traps set up in advance), hidden Slot Effects, sleeper agents (delayed control changes such as Brainwashed), Banish (Cleaner, Secure Deletion), Dead Man's Switch (OnDied).
     • Statuses: Brainwashed, Compromised, Honeypot.
     • Pays With: Burning. As an additional cost, Banish a card from your own hand or discard pile.
     • Can't: Heal or gain Armor.
@@ -124,8 +124,8 @@ Utopia: Science & the Future
 3. MECHANIC OWNERSHIP
 
 • Control Change: Myth (Conversion), Statecraft (Recruitment), Shadow Ops. (Brainwashed). Nobody else; it's the most complex system, so it stays rare.
-• Interference (set up in advance): Primary Shadow Ops.; secondary Statecraft (Red Tape).
-• Watchdogs (during resolution): Primary Tech; secondary Mind.
+• Watchdogs, Briefing (set up in advance): Primary Shadow Ops.; secondary Statecraft (Red Tape).
+• Watchdogs, On Watch (during resolution): Primary Tech; secondary Mind.
 • Priority: Primary Statecraft; secondary Tech.
 • Revealing Information: Primary Shadow Ops.; secondary Tech, Digital Society.
 • Concealment and Fake Intents: Primary Shadow Ops.; secondary Mind.

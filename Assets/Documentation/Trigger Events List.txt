@@ -16,16 +16,16 @@ OnHeal(healingSource, healAmount): Triggers when this creature is healed.
     healingSource: The entity or effect that caused the healing.
     healAmount: The numerical value of Health restored.
 
-OnAttack(attackTarget): Triggers when this creature initiates/declares an Attack action. This typically resolves before damage calculation and before OnAttacked on the target.
+OnAttack(attackTarget): Triggers when this creature initiates/declares an Attack action. Its effects are queued normally, so they resolve after the attack, never before it.
     attackTarget: The creature or slot targeted by the attack.
 
-OnAttacked(attackingCreature): Triggers when this creature is targeted by an Attack action. This typically resolves before damage calculation.
+OnAttacked(attackingCreature): Triggers when this creature is targeted by an Attack action. Its effects are queued normally, so they resolve after the attack: they can retaliate, but never protect against the hit itself.
     attackingCreature: The creature performing the attack.
 
 OnKill(killedCreature): Triggers when this creature's action (e.g., Attack, ability) directly results in another creature being destroyed.
     killedCreature: The creature that was destroyed by this creature.
 
-OnAboutToDie(cause, source, details): Triggers when this creature is marked for imminent destruction (e.g., after lethal damage has been calculated but before Health is officially set to 0/negative, or when a "destroy" effect targeting it is about to resolve and move it to the Discard Pile). This occurs before OnDied.
+OnAboutToDie(cause, source, details): Triggers when this creature is marked for destruction (e.g., after lethal damage has been applied, or when a "destroy" effect targeting it resolves), before it is destroyed and moved to the Discard Pile (GDD 3.9 Creature Death Sequence). It resolves immediately and can save the creature. This occurs before OnDied.
     cause: The reason for impending death (e.g., 'LethalDamage', 'DestroyEffect', 'StatusEffectDoomed', 'GameRule').
     source: The entity or effect (e.g., creature, spell, status) that will cause the death.
     details: Optional. Contextual information. If cause is 'LethalDamage', details could include { damageAmount, damageType } representing the lethal portion of damage. If cause is 'DestroyEffect', details could include the specific spell or ability.
@@ -55,11 +55,11 @@ OnActionQueued(actionDetails): Triggers when an action involving this creature (
 OnActionResolved(actionDetails): Triggers when an action involving this creature (as source or target) resolves from the queue.
     actionDetails: Information about the resolved action.
 
-OnActionCancelled(cancelledActionDetails, cancellationSource): Triggers when a previously queued action is cancelled (e.g., by Recruitment) or Nullified (e.g., by Nullify (Interference) or other game effects) and removed from the Action Queue or resolves with no game effect.
+OnActionCancelled(cancelledActionDetails, cancellationSource): Triggers when a previously queued action is cancelled (e.g., by Recruitment) or Nullified (e.g., by a Watchdog's Nullify or other game effects) and removed from the Action Queue or resolves with no game effect.
     cancelledActionDetails: Information about the action that was cancelled/nullified (e.g., type, original source, original target, original controller).
-    cancellationSource: The game rule or effect that caused the cancellation/nullification (e.g., 'Recruitment', 'SpecificSpellEffect', 'InterferenceNullify', 'EffectNullification').
+    cancellationSource: The game rule or effect that caused the cancellation/nullification (e.g., 'Recruitment', 'SpecificSpellEffect', 'WatchdogNullify', 'EffectNullification').
 
-OnDeploymentTimeComplete: Triggers specifically when this creature's Deployment Time counter reaches zero and it becomes fully operational.
+OnDeploymentTimeComplete ("When Ready"): Triggers when this creature becomes ready. Deployment Time 0: when its Play Creature Action resolves. Deployment Time 1 or more: when the countdown reaches 0 at Dusk; its effects resolve in the next Dawn resolution pass. A creature's own "when this enters" abilities use this trigger (see GDD 3.2 Tempo & Deployment Time).
 
 Movement & Positioning:
 
@@ -69,16 +69,20 @@ OnMove(originSlot, destinationSlot): Triggers when this creature successfully co
 
 OnEnterSlot(enteredSlot, method): Triggers when this creature enters a slot.
     enteredSlot: The slot the creature has entered.
-    method: How the creature entered (e.g., 'Played', 'Moved', 'Swapped', 'Pulled', 'Pushed', 'Revived', 'Recruited', 'Converted', 'ReturnedToOwner').
+    method: How the creature entered (e.g., 'Played', 'Moved', 'Swapped', 'Pulled', 'Pushed', 'Revived', 'Recruited', 'Converted', 'Brainwashed', 'Flew', 'Slid').
+
+OnBeforeLeaveSlot(slot, method): Triggers when this creature starts a Movement Action of its own to leave a slot, before it moves. Effects that resolve immediately (like environment actions) can stop the move, e.g., by applying Anchored. Pushes, pulls and swaps by other effects don't trigger it.
+    slot: The slot the creature is about to leave.
+    method: How it's leaving (e.g., 'Moved', 'Flew', 'Swapped').
 
 OnLeaveSlot(leftSlot, method): Triggers when this creature leaves a slot.
     leftSlot: The slot the creature has left.
-    method: How the creature left (e.g., 'Moved', 'Swapped', 'ReturnedToHand', 'Destroyed', 'Recruited', 'Converted', 'ReturnedToOwner', 'Banished').
+    method: How the creature left (e.g., 'Moved', 'Swapped', 'ReturnedToHand', 'Destroyed', 'Discarded', 'Recruited', 'Converted', 'Brainwashed', 'Banished').
 
-OnEnterBattlefield: Triggers when this creature card enters the battlefield from any zone (Hand, Discard Pile via Revive). Occurs after Deployment Time is applied, but before OnDeploymentTimeComplete. (Note: Generally does not re-trigger if a temporarily recruited creature returns to its owner, unless specified by an effect).
+OnEnterBattlefield: Triggers when this creature card enters the battlefield from any zone (Hand, Discard Pile via Revive). Other creatures and slots react to it right away, whatever the entering creature's Deployment Time; the entering creature's own "when this enters" abilities use OnDeploymentTimeComplete instead. Changing sides (Recruitment, Conversion, Brainwashed) isn't entering the battlefield, so it doesn't trigger this.
 
 OnLeaveBattlefield(destinationZone): Triggers when this creature is removed from the battlefield.
-    destinationZone: The zone the creature card is moving to (e.g., 'Hand', 'DiscardPile', 'Banish', 'Owner'sHand' if returned from temporary recruitment when board is full).
+    destinationZone: The zone the creature card is moving to (e.g., 'Hand', 'DiscardPile', 'Banish'). The card always goes to its owner's zones, even if another player controlled it.
 
 Status Effects & Information Warfare:
 
@@ -129,7 +133,7 @@ OnLocationChange(oldLocation, newLocation): Global trigger, can affect all creat
     oldLocation: The previous Location effect.
     newLocation: The new Location effect now active.
 
-OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based or slot-based) is sprung. (This is a generic trap trigger; specific Interference effects (GDD 4.4 Disruption & Control) and Counter-Intelligence Traps (GDD 5.1 Traps & Strategic Disclosures) are more specialized interactions with the queue or reveals).
+OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based or slot-based) is sprung. (This is a generic trap trigger; Watchdogs (GDD 3.11 Instant Effects) and Counter-Intelligence Traps (GDD 5.1 Traps & Strategic Disclosures) are more specialized interactions with the queue or reveals).
     trapDetails: Information about the trap that was triggered.
     activatingEntity: The creature, action, or effect that triggered the trap.
 
@@ -151,5 +155,3 @@ OnEnemyCreatureGainConcealed(creature, source): Player-level or specific creatur
 
 OnBeingTargetedByEnemyIntelligence(targetingSource): Triggers when this creature is specifically targeted by an enemy's Intelligence effect (e.g., an effect attempting to reveal a pending action or a '???' in the Turn History associated with this creature).
     targetingSource: The enemy creature or spell that is the source of the Intelligence effect.
-
-OnFriendlyTurnStart: (Can be considered a more specific version of OnTurnStart for abilities concerned with friendly context, though OnTurnStart usually implies current controller's Day). Triggers at Dawn (Start of Day) of the player who controls this creature.
