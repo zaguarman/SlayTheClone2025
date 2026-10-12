@@ -46,7 +46,8 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
   designNotes: 'Mechanics test: OnDamaged fires on every hit, even one Armor absorbs
-    or a killing blow, and still lands when it dies. Exhausted turns it off.'
+    or a killing blow, and still lands when it dies. Exhausted turns it off. No U:
+    enemy effects that would lower its stats bounce back.'
   artDescription: A heavyset warrior in a stained hoodie and a cape, holding a mechanical
     keyboard over his head like a greatsword, a gaming headset for a helmet and energy
     drinks hanging from his belt.
@@ -55,4 +56,4 @@ MonoBehaviour:
   speed: 2
   turnsUntilOperative: 0
   movement: 0
-  ability: 0
+  ability: 4

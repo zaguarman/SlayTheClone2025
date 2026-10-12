@@ -97,6 +97,23 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
+        public void ABarbedSnare_IgnoresDyingOnTheSlot_AndTheNextCreatureThere() {
+            var doomed = game.Summon(p1, game.Creature("Doomed", 0, 2), 1);
+            Place(p1.Battlefield[1], SlotEffectType.BarbedSnare, 2);
+
+            game.Run(new DamageCreatureAction(doomed, 5));
+            Assert.IsTrue(doomed.IsDead);
+            Assert.IsNotNull(p1.Battlefield[1].Effect, "Dying isn't leaving");
+
+            var next = game.Summon(p1, game.Creature("Next", 0, 5), 1);
+            Assert.AreEqual(5, next.Health, "Taking the slot isn't leaving either");
+            Assert.IsNotNull(p1.Battlefield[1].Effect);
+
+            game.Run(new MoveCreatureAction(next, p1.Battlefield[1], p1.Battlefield[2], p1));
+            Assert.AreEqual(3, next.Health);
+        }
+
+        [Test]
         public void ATemporalShield_StopsCombatDamage_NotSpellDamage_ForItsDays() {
             var shielded = game.Summon(p1, game.Creature("Shielded", 0, 10), 0);
             var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 0);
@@ -116,7 +133,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void ScorchedEarth_StopsPassiveAbilities_OfTheCreatureOnIt() {
+        public void ScorchedEarth_StopsTheTriggeredEffects_OfTheCreatureOnIt() {
             var spiky = game.Summon(p1, game.Creature("Spiky", 0, 10, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
             var hitter = game.Summon(p2, game.Creature("Hitter", 2, 10), 0);
             Place(p1.Battlefield[0], SlotEffectType.ScorchedEarth);
@@ -127,6 +144,35 @@ namespace SlayTheClone.Tests {
             game.Run(new MoveCreatureAction(spiky, p1.Battlefield[0], p1.Battlefield[1], p1));
             game.Attack(hitter, p1.Battlefield[1]);
             Assert.AreEqual(9, hitter.Health, "Off the scorched slot, it works again");
+        }
+
+        [Test]
+        public void ScorchedEarth_StopsEntryEffects_TooAndTheyAreLost() {
+            Place(p1.Battlefield[0], SlotEffectType.ScorchedEarth);
+            game.Summon(p1, game.Creature("Arrival", 0, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Enemy)), 0);
+            CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Landing on Scorched Earth: no entry effect");
+
+            var lateData = game.Creature("Late", 0, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.Enemy));
+            lateData.turnsUntilOperative = 1;
+            Place(p1.Battlefield[2], SlotEffectType.ScorchedEarth);
+            var late = game.Summon(p1, lateData, 2);
+            game.StartTurn();
+            game.StartTurn();
+            Assert.IsTrue(late.IsOperative);
+            CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Becoming ready on it: no entry effect either");
+
+            game.Run(new MoveCreatureAction(late, p1.Battlefield[2], p1.Battlefield[3], p1));
+            game.StartTurn();
+            CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Lost, not delayed: moving off doesn't bring it back");
+        }
+
+        [Test]
+        public void ScorchedEarth_LeavesTheAbilityWorking() {
+            var spiteful = game.Summon(p1, game.Creature("Spiteful", 0, 10), 0);
+            spiteful.Ability = CreatureAbility.Spite;
+            Place(p1.Battlefield[0], SlotEffectType.ScorchedEarth);
+
+            Assert.IsTrue(Abilities.Has(spiteful, CreatureAbility.Spite), "Abilities aren't triggered effects");
         }
 
         [Test]

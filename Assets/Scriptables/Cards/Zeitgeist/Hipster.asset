@@ -45,12 +45,12 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-  designNotes: 'Future: Hipster status. Hurts only creatures that share a name with
-    another creature (too mainstream).'
+  designNotes: 'Too Mainstream: immune to effects that affect more than one creature.
+    Future: Hipster status. Hurts only creatures that share a name with another creature.'
   artDescription: 
   attack: 2
   health: 2
   speed: 2
   turnsUntilOperative: 0
   movement: 0
-  ability: 0
+  ability: 7

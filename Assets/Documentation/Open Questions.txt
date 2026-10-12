@@ -5,41 +5,29 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
-1. Scorched Earth (Slot Effect, visible, until replaced)
-    • What it does now: the creature standing on that slot can't trigger its triggered effects (retaliation, Dawn and Dusk effects, death effects). Its entry ("When Ready") effects still happen. Moving off the slot ends it.
-    • Question: with abilities and effects now separate, should it switch off the triggered effects (as now), the ability, or both? And should entry effects be stopped too?
-
-2. Barbed Snare (Slot Effect, hidden, 1 trigger)
-    • What it does now: the first creature to leave that slot, on its own, pushed or swapped, takes X damage; then the snare is used up and revealed.
-    • Question: should a creature dying on the slot, or being replaced by a summon, also count as leaving?
-
-3. Watchdog "N or less" for actions that aren't attacks
-    • A Watchdog condition can include a number: "attacks of 3 or less" only reacts to attacks by creatures with 3 Attack or less. For attacks the number is clearly the attacker's Attack.
-    • Question: what should the number compare when the Watchdog watches something else? Proposal: spells, their damage; statuses, their Days or stacks; moves, how many slots; summons, the creature's Attack. Or: the number only exists for attacks.
-
-4. Which statuses are positive (only removed by a Purge)?
+1. Which statuses are positive (only removed by a Purge)?
     • Answered in part: mixed ones count as bad. Only Blessed is marked positive so far; the rest is to be decided status by status.
 
-5. Ability assignments (proposal, nothing applied yet)
-    • Corporate: Insider Job (insider trading), Technician. E.g., Pluriemployed Hustler gets Technician.
-    • Statecraft: Spite (Spite-Elected President), Return to Sender (Supreme Court).
-    • Shadow Ops.: Underground (the Mole), Signal Jammer, Identity Theft.
-    • Tech: Zero-Day, Unpatchable.
-    • Digital Society: No U (Keyboard Warrior), Copypasta, Extremist (online radicalization).
-    • Myth: Hive Mind (it's the Mummy ability: a curse that spreads to whoever touches it).
-    • Mind: Contrarian, Unbothered.
-    • Zeitgeist: Too Mainstream (Hipster).
-    • Question: OK? Then the cards get them, and test cards follow.
-
-6. Move ghosts show a "Queued" badge
+2. Move ghosts show a "Queued" badge
     • The ghost of a creature in the slot it will move to reuses the queued-card look, badge included.
     • Question: keep it, or a different badge ("Moving") or none?
 
-7. New cards: stats and pictures (listed in 'Starter Faction Decks', section 6)
+3. The ability test creatures (Mole, Signal Jammer, Deep Cover, Script Kiddie, Legacy Code, NPC, Chronically Online, Mummy, Pessimist, Introvert)
+    • Names from the Brainstorm List, stats and pictures in 'Starter Faction Decks', section 6.
     • Question: OK as they are?
+
+4. Scorched Earth and an entry effect it stopped
+    • Done: the entry effect is lost. If the creature moves off the slot later, it doesn't happen then.
+    • Question: right, or should it wait and happen once the creature is off the scorched slot?
 
 
 ANSWERED (2026-10-12)
+
+• Scorched Earth: stops the creature's triggered effects, entry ("When Ready") effects included. Its ability still works.
+• Barbed Snare: only moving out counts as leaving; dying on the slot or being replaced doesn't.
+• Watchdog conditions: each Watchdog card gets its own filter (ad hoc); shared templates may come later for filters that repeat. The number filter stays an attack's Attack for now.
+• Abilities on cards: Day Trader (Insider Job), Pluriemployed Hustler (Technician), Spite-Elected President (Spite), Supreme Court (Return to Sender), Hipster (Too Mainstream), Keyboard Warrior (No U); ten new test creatures carry the rest.
+• Pictures: Its A Trap (Homer and the free-boat sting), Burn Notice (the Banksy self-shredding painting), Antivirus (a panda), Counter-Intelligence (the first Counter-Strike cover with accountants and calculators). Red Tape, YOLO and Preemptive Strike got briefs.
 
 • Action Priority: removed; order inside a layer is Speed. Red Tape now adds Deployment Time, YOLO gives +4 Attack for this Day, Preemptive Strike is plain damage. Docs use Speed where they used Priority.
 • Cleanse / Purge: Cleanse removes only what harms (bad statuses, stat decreases); Purge removes good and bad. Mixed statuses count as bad.

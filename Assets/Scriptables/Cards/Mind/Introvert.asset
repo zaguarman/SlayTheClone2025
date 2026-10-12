@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Introvert
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 770dba3c-2c11-432d-ad30-9b7cd026de21
+  cardName: Introvert
+  description: Didn't hear you. Didn't want to.
+  cardType: 0
+  faction: 8
+  artwork: {fileID: 0}
+  effects: []
+  designNotes: 'Mechanics test: Unbothered. Enemy effects can''t lower its stats.'
+  artDescription: A person in big headphones reading in a blanket fort while a loud
+    party rages around them, the partygoers' shouted invitations bouncing off the
+    blankets.
+  attack: 1
+  health: 5
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 3

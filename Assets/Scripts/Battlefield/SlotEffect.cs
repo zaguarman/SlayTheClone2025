@@ -40,7 +40,7 @@ namespace SlayTheClone {
             SlotEffectType.Landmine => $"Hidden. The first creature to enter takes {Value} damage.",
             SlotEffectType.BarbedSnare => $"Hidden. The first creature to leave takes {Value} damage.",
             SlotEffectType.TemporalShield => "The creature here is immune to combat damage.",
-            SlotEffectType.ScorchedEarth => "The passive abilities of the creature here don't trigger.",
+            SlotEffectType.ScorchedEarth => "The creature here can't trigger its effects, entry effects included.",
             _ => ""
         };
 

@@ -43,7 +43,7 @@ Rejection Field
 Scorched Earth
     Visibility: Visible
     Trigger Event(s): Continuous while active and slot is occupied.
-    Effect: Passive abilities of any creature occupying this slot do not trigger. (Does not use the full Abilities Disabled keyword, so active abilities are not affected by this specific slot effect).
+    Effect: The creature occupying this slot can't trigger its effects: entry ("When Ready"), retaliation, Dawn and Dusk, death effects. An entry effect stopped this way is lost; moving off later doesn't bring it back. (It isn't Abilities Disabled: the creature's ability still works, 'Abilities Compendium'.)
     Parameters: None.
     Duration of Slot Effect: Persistent until replaced.
     Cleansable: Yes
@@ -101,6 +101,7 @@ Barbed Snare
     Visibility: Hidden
     Trigger Event(s): OnLeaveSlot(leftSlot, method) (Slot effect logic checks: if leftSlot is this slot).
     Effect: The creature that left this slot takes X damage. The Barbed Snare is then revealed and consumed.
+    Notes: Leaving means moving out: on its own, pushed or swapped. Dying on the slot, or being replaced by a summon, isn't leaving.
     Parameters: Damage: X (e.g., 1, set by applying card).
     Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
     Cleansable: Yes

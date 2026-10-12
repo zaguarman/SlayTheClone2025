@@ -46,7 +46,7 @@ namespace SlayTheClone {
             Landmine,       // Hidden. The first creature to enter takes X damage, then it's consumed
             BarbedSnare,    // Hidden. The first creature to leave takes X damage, then it's consumed
             TemporalShield, // Visible. The creature here is immune to combat damage, for X Days
-            ScorchedEarth   // Visible. Passive abilities of the creature here don't trigger
+            ScorchedEarth   // Visible. The creature here can't trigger its effects, entry effects included (its ability still works)
         }
 
         // What a Cleanse removes (GDD Cleanse - Specificity): statuses and stat modifications are independent

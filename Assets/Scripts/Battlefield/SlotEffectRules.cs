@@ -32,7 +32,7 @@ namespace SlayTheClone {
             Trigger(slot, context, $"{creature.Name} steps on a Landmine", new DamageCreatureAction(creature, slot.Effect.Value));
         }
 
-        /// <summary>A creature left the slot by moving: on its own, pushed or swapped.</summary>
+        /// <summary>A creature left the slot by moving: on its own, pushed or swapped. Dying or being replaced isn't leaving.</summary>
         public static void OnLeave(ICreature creature, BoardSlot slot, ActionExecutionContext context) {
             if (creature == null || slot?.Effect?.Type != SlotEffectType.BarbedSnare) return;
             Trigger(slot, context, $"{creature.Name} tears free of a Barbed Snare", new DamageCreatureAction(creature, slot.Effect.Value));
@@ -50,8 +50,9 @@ namespace SlayTheClone {
         /// <summary>Temporal Shield: the creature standing on it takes no combat damage.</summary>
         public static bool BlocksCombatDamage(ICreature creature) => creature?.Slot?.Effect?.Type == SlotEffectType.TemporalShield;
 
-        /// <summary>Scorched Earth: the passive abilities of the creature standing on it don't trigger.</summary>
-        public static bool SuppressesPassiveAbilities(ICreature creature) => creature?.Slot?.Effect?.Type == SlotEffectType.ScorchedEarth;
+        /// <summary>Scorched Earth: the triggered effects of the creature standing on it don't happen, entry effects included.
+        /// Its ability isn't affected (abilities and effects are different things, 'Abilities Compendium').</summary>
+        public static bool SuppressesTriggeredEffects(ICreature creature) => creature?.Slot?.Effect?.Type == SlotEffectType.ScorchedEarth;
 
         /// <summary>At Dusk: Slot Effects whose Days ran out are removed.</summary>
         public static void ProcessEndOfTurn(IEnumerable<IPlayer> players, int endedTurn, IGameMediator mediator) {

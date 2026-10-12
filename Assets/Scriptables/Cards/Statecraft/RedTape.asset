@@ -48,5 +48,7 @@ MonoBehaviour:
   designNotes: 'Adds 1 Day to an enemy creature''s Deployment Time: it sits out the
     rest of this Day and all of the next, its planned action is cancelled, and its
     abilities are off until it''s ready again. Its entry effects don''t happen twice.'
-  artDescription: 
+  artDescription: 'A soldier at a deployment checkpoint wrapped head to toe in red
+    tape, while a bored clerk behind the window stamps "FORM 27-B MISSING" and a
+    take-a-number display reads "Now serving: 0001. Yours: 9847".'
   defaultTargetType: 4

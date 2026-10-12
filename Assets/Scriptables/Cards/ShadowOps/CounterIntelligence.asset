@@ -47,8 +47,10 @@ MonoBehaviour:
         moveEarlier: 0
   designNotes: 'Mechanics test: a Briefing Watchdog (GDD 3.11). From the Day after
     it''s created, before anything resolves, it redirects the strongest enemy attack
-    to another creature on the side it was aimed at. 2 charges, one per Day it triggers.'
-  artDescription: Two spies in trench coats peeking at each other through holes in
-    their newspapers on a park bench, while a third spy watches them both from inside
-    a potted plant.
+    to a random creature (the one with the most Heat first). 2 charges, one per attack
+    it redirects.'
+  artDescription: 'A remake of the first Counter-Strike box cover: a counter-terrorist
+    and a terrorist in a tense standoff in a dusty corridor, but both are accountants
+    in thick glasses, aiming pocket calculators at each other like rifles, ledgers
+    fluttering around them.'
   defaultTargetType: 0

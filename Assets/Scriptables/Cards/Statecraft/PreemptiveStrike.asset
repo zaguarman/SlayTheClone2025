@@ -48,5 +48,8 @@ MonoBehaviour:
         moveEarlier: 0
   designNotes: 'Future: an extra effect against creatures that planned an attack
     this Day.'
-  artDescription: 
+  artDescription: 'A general in a war room proudly pointing at a map where a missile
+    hits a quiet village labelled "Possible Future Threat", a MISSION ACCOMPLISHED
+    banner behind him and an intelligence report on the table: "Source: trust me
+    bro".'
   defaultTargetType: 4

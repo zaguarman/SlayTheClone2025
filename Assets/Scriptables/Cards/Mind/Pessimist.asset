@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Pessimist
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 2d2e274d-baf7-476b-9170-26fc8d3689b3
+  cardName: Pessimist
+  description: The glass is half empty. Also, it's poisoned.
+  cardType: 0
+  faction: 8
+  artwork: {fileID: 0}
+  effects: []
+  designNotes: 'Mechanics test: Contrarian. Stat changes on it are reversed: debuff
+    it and it grows, buff it and it shrinks.'
+  artDescription: A man in a raincoat under his own tiny raincloud on a sunny beach,
+    frowning at a winning lottery ticket.
+  attack: 2
+  health: 4
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 1

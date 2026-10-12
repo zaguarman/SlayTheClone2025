@@ -7,7 +7,7 @@ General Rules:
 • Abilities Aren't Effects: A creature has at most one ability (from this compendium), but can have many triggered effects ("When this dies, ...", "Each Dawn, ..."). They are different things. Whatever switches things off says which it affects: its ability, its effects, or both.
     • Both: Abilities Disabled (Exhausted, Muted, a Jamming Field) and Deployment Time.
     • Only the ability: Signal Jammer.
-    • Only the triggered effects: Scorched Earth (a creature's entry effects still happen).
+    • Only the triggered effects: Scorched Earth (entry effects included).
 • Switched Off, Not Removed: Abilities Disabled effects (Muted, Exhausted, Deployment Time, a Jamming Field, Signal Jammer) switch an ability off while they last. The creature still has it.
 • Stat Changes vs. Statuses: Abilities that react to stat changes only affect stat modifications (Temporary and Persistent). A status's own stat change (Chill, Heavy, Addicted...) is part of the status and isn't affected, unless the ability says otherwise (Underground does).
 • Bouncing Effects: When an ability sends an effect back to "the creature that caused it" and there is no such creature (a Spell from hand, or it has left play), the effect goes to the caster's creature with the lowest current Health, ties broken randomly. If the caster has no creatures, the effect fails. Area effects bounce one creature at a time. An effect can only be bounced once (see GDD 5.2 Status Effects - Bounces and Chains).

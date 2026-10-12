@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: SignalJammer
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 3b897c05-fd13-459e-ab41-61a7b4e01068
+  cardName: Signal Jammer
+  description: No bars. No calls. No witnesses.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 0}
+  effects: []
+  designNotes: 'Mechanics test: Signal Jammer. The enemy creature directly opposite
+    has its ability switched off (its triggered effects still work).'
+  artDescription: An agent in a black suit with a backpack bristling with antennas,
+    standing in a busy street where everyone stares in horror at phones showing "No
+    Service".
+  attack: 1
+  health: 5
+  speed: 1
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 10

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: DeepCover
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: b705ae8f-8504-415a-987f-9db36e5f3301
+  cardName: Deep Cover
+  description: Undercover so long he forgot whose side he's on. So did they.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 0}
+  effects: []
+  designNotes: 'Mechanics test: Identity Theft, an active ability: hold Shift while
+    dragging it onto a creature to swap abilities with it. It''s its action for the
+    Day.'
+  artDescription: Two men facing each other in front of a mirror, each peeling off
+    a latex mask of the other's face.
+  attack: 2
+  health: 2
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 12

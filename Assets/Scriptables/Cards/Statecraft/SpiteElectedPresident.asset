@@ -45,11 +45,12 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-  designNotes: 'Future: a Law (Location) for 3 Days that hurts both sides each Dawn.'
+  designNotes: 'Spite: when an enemy effect lowers its stats, it gains +2 Attack.
+    Future: a Law (Location) for 3 Days that hurts both sides each Dawn.'
   artDescription: 
   attack: 3
   health: 4
   speed: 2
   turnsUntilOperative: 2
   movement: 0
-  ability: 0
+  ability: 5

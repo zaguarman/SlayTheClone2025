@@ -159,9 +159,10 @@ namespace SlayTheClone {
             TurnsUntilOperative--;
             Log($"{Name} is {(IsOperative ? "now operative" : $"operative in {TurnsUntilOperative} turn(s)")}", LogTag.Creatures | LogTag.Turns);
             if (IsOperative && entryEffectsPending) {
-                // Its on-play effect waited for this moment; Deployment Time ignores Abilities Disabled (GDD 3.2)
+                // Its on-play effect waited for this moment; Deployment Time ignores Abilities Disabled (GDD 3.2). On Scorched
+                // Earth it's lost: moving off later doesn't bring it back
                 entryEffectsPending = false;
-                EffectResolver.QueueCreatureEffects(this, EffectTrigger.OnPlay, actionsQueue);
+                if (!SlotEffectRules.SuppressesTriggeredEffects(this)) EffectResolver.QueueCreatureEffects(this, EffectTrigger.OnPlay, actionsQueue);
             }
             return true;
         }
@@ -251,13 +252,16 @@ namespace SlayTheClone {
             if (!IsOperative) return; // Its effects are off until it is operative
             if (AbilitiesDisabled) return; // ...and while a status disables them, retaliation and death effects included (GDD 3.9)
             if (IsDead && trigger != EffectTrigger.OnDeath) return;
-            // Scorched Earth stops passive abilities; entry effects are part of the summon, not abilities (GDD 3.7)
-            if (trigger != EffectTrigger.OnPlay && SlotEffectRules.SuppressesPassiveAbilities(this)) return;
             if (actionsQueue == null) {
                 LogError($"Cannot handle effect {trigger} for {Name} - no ActionsQueue.", LogTag.Effects | LogTag.Creatures);
                 return;
             }
             if (trigger == EffectTrigger.OnPlay) entryEffectsPending = false;
+            // Scorched Earth stops all its triggered effects, entry ones included (and those are lost, not delayed)
+            if (SlotEffectRules.SuppressesTriggeredEffects(this)) {
+                Log($"{Name}'s {trigger} effects don't trigger on Scorched Earth", LogTag.Creatures | LogTag.Effects);
+                return;
+            }
             Log($"Handling Effect: {trigger} for {Name} (TargetID: {TargetId.ShortId()})", LogTag.Creatures | LogTag.Effects);
             EffectResolver.QueueCreatureEffects(this, trigger, actionsQueue, triggeringAttacker);
         }

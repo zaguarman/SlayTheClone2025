@@ -221,7 +221,7 @@ namespace SlayTheClone {
                 SlotEffectType.Landmine => $"a hidden Landmine ({action.value} damage to the next creature to enter)",
                 SlotEffectType.BarbedSnare => $"a hidden Barbed Snare ({action.value} damage to the next creature to leave)",
                 SlotEffectType.TemporalShield => $"a Temporal Shield (no combat damage to the creature there){days}",
-                SlotEffectType.ScorchedEarth => $"Scorched Earth (the creature there can't trigger passive abilities){days}",
+                SlotEffectType.ScorchedEarth => $"Scorched Earth (the creature there can't trigger its effects){days}",
                 _ => "nothing"
             };
         }

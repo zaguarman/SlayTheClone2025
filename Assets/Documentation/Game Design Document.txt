@@ -634,7 +634,7 @@ When a creature's state changes during resolution (e.g., it gets Muted, Cannot A
 • Retaliatory Triggers: Triggers that react to something being done to the creature: OnDamaged, OnAttacked, OnAboutToDie, OnDied, and any other "when this is targeted / hit / killed" trigger. They are never cancelled by their creature's death.
     • OnDamaged and OnAboutToDie effects resolve immediately, interrupting the normal resolution order.
     • OnDied effects are queued normally (Ability & Attack Layer).
-    • Retaliation Always Fires: A retaliatory trigger always fires when its event happens, unless the creature's abilities are disabled at that moment (e.g., Muted, Exhausted, Deployment Time, a Jamming Field or Scorched Earth slot) or an effect specifically blocks it. A creature killed before it's ready loses its death effect.
+    • Retaliation Always Fires: A retaliatory trigger always fires when its event happens, unless the creature's abilities are disabled at that moment (e.g., Muted, Exhausted, Deployment Time, a Jamming Field), it stands on a Scorched Earth slot (which stops its triggered effects), or an effect specifically blocks it. A creature killed before it's ready loses its death effect.
     • OnAttack and OnAttacked are not immediate: they're queued normally and resolve after the attack.
 
 • The Sequence: When a creature takes damage, or an effect tries to destroy it:
@@ -673,7 +673,7 @@ Watchdogs
     • What They Are: Intelligence assets that watch the action queue. They aren't creatures and never attack; they only change the queue when their condition is met.
     • Created Through the Queue: A Spell or creature ability creates a Watchdog when its action resolves. From then on the Watchdog is active.
     • Card Format: "Watchdog: [condition] -> [effect], N charges (timing)".
-        • Conditions (a small fixed list): action type (Attack, Spell, Move, Ability, Summon, Status), side (enemy or friendly), which creature or slot it comes from or targets, and an optional number (e.g., "Attack 3 or less").
+        • Conditions: each Watchdog card has its own, made for it (ad hoc): what it reacts to is part of the card's design, not a shared rule. The building blocks so far: action type (Attack, Spell, Move, Ability, Summon, Status), side (enemy or friendly), which creature or slot it comes from or targets, and, for attacks, a number ("Attack 3 or less"). Filters that keep coming back may later become shared templates.
         • Effects: Nullify (resolves with no effect, stays visible in the Turn History with the reason), Redirect (new target), Reorder (move within its layer), Create (queue a new action, which resolves immediately), Reveal (show the action, even if hidden).
     • Two Timings:
         • On Watch (default): Just before each action resolves, it checks whether that action matches. It also catches actions that were queued before the Watchdog existed, as long as they haven't resolved yet. It can only move an action later, never earlier.

@@ -47,7 +47,11 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
   designNotes: 'Mechanics test: a hidden Barbed Snare (2 damage) on a slot. The first
-    creature to leave it, on its own, pushed or swapped, takes the damage.'
-  artDescription: A glowing "FREE PHONE - CLICK HERE" banner set in the jaws of a
-    steel bear trap, a giant mouse cursor hovering over it.
+    creature to leave it, on its own, pushed or swapped, takes the damage. Dying
+    or being replaced isn''t leaving.'
+  artDescription: 'The free-boat sting: a bald, stubbled Homer Simpson strolls into
+    a police station waving a letter, "CONGRATULATIONS! YOU''VE WON A FREE BOAT!",
+    while the grinning police chief behind the counter slides him a pile of unpaid
+    fines instead. A "FREE BOAT PICKUP" banner hangs over the open door of a holding
+    cell.'
   defaultTargetType: 4

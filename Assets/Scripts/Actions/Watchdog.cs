@@ -104,7 +104,8 @@ namespace SlayTheClone {
             _ => ActorOf(action, source)?.Owner
         };
 
-        /// <summary>The number "N or less" compares: an attack's Attack. Other actions have none (0).</summary>
+        /// <summary>The number "N or less" compares: an attack's Attack. Other actions have none (0): each Watchdog card gets
+        /// its own filter, and a number for other actions waits until a card needs one.</summary>
         public static int StrengthOf(IGameAction action) => action is BattlefieldCombatAction attack ? attack.GetAttacker()?.Attack ?? 0 : 0;
 
         /// <summary>

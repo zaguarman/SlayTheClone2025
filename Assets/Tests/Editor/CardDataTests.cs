@@ -45,6 +45,14 @@ namespace SlayTheClone.Tests {
             CollectionAssert.IsEmpty(sharedIds, "Cards sharing an id");
         }
 
+        [Test]
+        public void EveryCreatureAbility_IsOnACard() {
+            var carried = LoadCardAssets().OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
+            var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()
+                .Where(a => a != CreatureAbility.None && !carried.Contains(a));
+            CollectionAssert.IsEmpty(missing, "Abilities no card has ('Abilities Compendium')");
+        }
+
         private static List<CardDataScriptableObject> LoadCardAssets() {
             return AssetDatabase.FindAssets("t:ScriptableObject", new[] { CardsFolder })
                 .Select(guid => AssetDatabase.LoadAssetAtPath<CardDataScriptableObject>(AssetDatabase.GUIDToAssetPath(guid)))

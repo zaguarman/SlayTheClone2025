@@ -48,7 +48,7 @@ MonoBehaviour:
   designNotes: 'Mechanics test: a Watchdog (GDD 3.11). It''s created when the spell
     resolves and, On Watch, nullifies the next enemy spell before it resolves, even
     one planned before it existed. 1 charge.'
-  artDescription: 'A knight in armor made of a shiny antivirus logo blocking a glowing
-    spell scroll at a castle gate, while the castle walls behind him are plastered
-    with his own pop-ups: "RENEW NOW - 60% OFF".'
+  artDescription: 'A panda in shining knight''s armor, an antivirus logo on its shield,
+    blocking a glowing spell scroll at a castle gate, while the castle walls behind
+    it are plastered with its own pop-ups: "RENEW NOW - 60% OFF".'
   defaultTargetType: 0

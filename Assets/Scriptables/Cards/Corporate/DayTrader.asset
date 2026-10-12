@@ -71,11 +71,12 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-  designNotes: 'Future: Investment. Pays out or loses cards depending on the Day.'
+  designNotes: 'Insider Job (insider trading): its damage ignores Armor. Future:
+    Investment. Pays out or loses cards depending on the Day.'
   artDescription: 
   attack: 3
   health: 1
   speed: 3
   turnsUntilOperative: 0
   movement: 0
-  ability: 0
+  ability: 14

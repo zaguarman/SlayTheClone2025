@@ -71,12 +71,12 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-  designNotes: 'Future: Coffeinated, then Burnout (the Hustle Culture pairing with
-    Zeitgeist).'
+  designNotes: 'Technician: it does a lot of small jobs, so hits of 3 or less are
+    doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).'
   artDescription: 
   attack: 2
   health: 3
   speed: 2
   turnsUntilOperative: 0
   movement: 0
-  ability: 0
+  ability: 16
