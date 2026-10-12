@@ -16,6 +16,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 07aa431b8e0f1f8418ce31ee74c28f22, type: 2}
   - {fileID: 11400000, guid: e51066c80da8d2d4a813dbb0973d34e3, type: 2}
   - {fileID: 11400000, guid: df05ff4d8ab27d84cb2a2bc63757fc93, type: 2}
+  - {fileID: 11400000, guid: 599dbb1f9567aa9449b2e3eea16476a1, type: 2}
+  - {fileID: 11400000, guid: 177e7386781509e41b6c9380535c0f47, type: 2}
+  - {fileID: 11400000, guid: 92d794a135f4d634e9cc893fd39d6915, type: 2}
   opponents:
   - name: Your Manager
     tagline: Has scheduled a quick sync about your attitude.
@@ -26,5 +29,14 @@ MonoBehaviour:
   - name: Your Group Chat
     tagline: 47 unread messages. All of them are about you.
     deck: {fileID: 11400000, guid: df05ff4d8ab27d84cb2a2bc63757fc93, type: 2}
+  - name: The Algorithm
+    tagline: Thinks you'll love this loss. People like you also lost.
+    deck: {fileID: 11400000, guid: 599dbb1f9567aa9449b2e3eea16476a1, type: 2}
+  - name: Your Gaslighting Ex
+    tagline: That attack never happened. You're imagining things.
+    deck: {fileID: 11400000, guid: 177e7386781509e41b6c9380535c0f47, type: 2}
+  - name: The Megachurch
+    tagline: Pray, pay, repeat. Salvation renews monthly.
+    deck: {fileID: 11400000, guid: 92d794a135f4d634e9cc893fd39d6915, type: 2}
   testDecks:
   - {fileID: 11400000, guid: 0f3ad3b977f753c4aa89694960c6b51b, type: 2}

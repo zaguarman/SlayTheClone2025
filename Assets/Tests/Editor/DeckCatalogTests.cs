@@ -5,7 +5,7 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone.Tests {
     /// <summary>
-    /// What the main menu offers: one deck per faction, each made of that faction's cards only, and one opponent bringing each deck.
+    /// What the main menu offers: decks of one faction or a pair of them (one deck each), and one opponent bringing each deck.
     /// </summary>
     public class DeckCatalogTests {
         private const int MinDeckSize = 12;
@@ -21,15 +21,15 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void EveryDeck_IsOneFactionsOwn_12To20DifferentCards_BroughtByOneOpponent() {
+        public void EveryDeck_IsOneOrTwoFactions_12To20DifferentCards_BroughtByOneOpponent() {
             Assert.IsNotEmpty(catalog.Decks);
             var factions = catalog.Decks.Select(deck => {
-                var deckFactions = deck.Cards.Select(card => card.faction).Distinct().ToList();
-                Assert.AreEqual(1, deckFactions.Count, $"{deck.GetDeckName()} mixes factions: {string.Join(", ", deckFactions)}");
-                Assert.AreNotEqual(Faction.None, deckFactions[0], $"{deck.GetDeckName()}'s cards have no faction");
-                return deckFactions[0];
+                var deckFactions = DeckCatalog.FactionsOf(deck);
+                Assert.That(deckFactions.Count, Is.InRange(1, 2), $"{deck.GetDeckName()} mixes too many factions: {string.Join(", ", deckFactions)}");
+                CollectionAssert.DoesNotContain(deckFactions, Faction.None, $"{deck.GetDeckName()} has cards without a faction");
+                return string.Join(" + ", deckFactions.OrderBy(f => f));
             }).ToList();
-            CollectionAssert.AllItemsAreUnique(factions, "Each faction has a single deck for now");
+            CollectionAssert.AllItemsAreUnique(factions, "Each faction, or pair of factions, has a single deck for now");
 
             foreach (var offered in catalog.Decks) {
                 string name = offered.GetDeckName();

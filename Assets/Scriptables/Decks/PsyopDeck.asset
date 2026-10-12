@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: PsyopDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Psyop - Shadow Ops. & Mind
+  cards:
+  - {fileID: 11400000, guid: f6b043e3ca8ec5b4bbacd81dfacc2458, type: 2}
+  - {fileID: 11400000, guid: 8aba5b6c983aeb747a02d69b28b0f4d3, type: 2}
+  - {fileID: 11400000, guid: f1151f787bcbaf94198836435fb77b0a, type: 2}
+  - {fileID: 11400000, guid: 852953fe670cca048bd2e4f2bcb6609f, type: 2}
+  - {fileID: 11400000, guid: 3848abb62f6aa18498632ae17cf10577, type: 2}
+  - {fileID: 11400000, guid: c5405e23f4cdaa747a169a990ebbf035, type: 2}
+  - {fileID: 11400000, guid: a6edde4600e9c334c808ed4a55c6e25e, type: 2}
+  - {fileID: 11400000, guid: b89196ebb9a527744841ad9893254aeb, type: 2}
+  - {fileID: 11400000, guid: 2fd9e148fb5a89c4187d088c486c4ac9, type: 2}
+  - {fileID: 11400000, guid: c4a9a8990224578428700b0e7be6e543, type: 2}
+  - {fileID: 11400000, guid: aa26842242b38a34eab1d206848233e6, type: 2}
+  - {fileID: 11400000, guid: 50bfa74d440511342817e82dda49c169, type: 2}
+  - {fileID: 11400000, guid: 763d55a98242f6545a8f7f97c9ce93b8, type: 2}

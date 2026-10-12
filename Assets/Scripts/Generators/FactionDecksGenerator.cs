@@ -8,7 +8,8 @@ using static SlayTheClone.Enums;
 namespace SlayTheClone {
     /// <summary>
     /// Builds the starter faction decks (Corporate, Statecraft, Zeitgeist) from the card lists below, the cards of factions
-    /// that don't have a deck yet, and the Mechanics Test deck that mixes them to try every mechanic.
+    /// too small for a deck of their own, the two-faction decks that play them, and the Mechanics Test deck that mixes
+    /// them all to try every mechanic. It also fills the menu's deck catalog: the decks, their opponents, the test deck.
     /// They only use effects the rules already carry out; each card's designNotes say what it should become once the
     /// GDD mechanic it stands in for exists (overview in Assets/Documentation/Starter Faction Decks.txt).
     /// Cards go to Assets/Scriptables/Cards/&lt;Faction&gt;/, their art comes from Tools/generate_card_art.py.
@@ -25,22 +26,52 @@ namespace SlayTheClone {
         [MenuItem("Cards/Generate Faction Decks")]
         public static void GenerateFactionDecks() {
             var written = new Dictionary<string, CardDataScriptableObject>();
-            Build(Faction.Corporate, "Corporate - Shareholder Value", CorporateCards(), written);
-            Build(Faction.Statecraft, "Statecraft - Order & Paperwork", StatecraftCards(), written);
-            Build(Faction.Zeitgeist, "Zeitgeist - Moods of Modern Life", ZeitgeistCards(), written);
+            var offered = new List<DeckCatalog.Opponent> {
+                Offer(Build(Faction.Corporate, "Corporate - Shareholder Value", CorporateCards(), written),
+                    "Your Manager", "Has scheduled a quick sync about your attitude."),
+                Offer(Build(Faction.Statecraft, "Statecraft - Order & Paperwork", StatecraftCards(), written),
+                    "The Ministry of Forms", "Your existence is pending approval."),
+                Offer(Build(Faction.Zeitgeist, "Zeitgeist - Moods of Modern Life", ZeitgeistCards(), written),
+                    "Your Group Chat", "47 unread messages. All of them are about you."),
+            };
 
-            // Factions whose decks don't exist yet: their cards wait in their folders, and play in the Mechanics Test deck
+            // Factions too small for a deck of their own: their cards play in the two-faction decks below
             WriteCards(Faction.DigitalSociety, DigitalSocietyCards(), written);
             WriteCards(Faction.ShadowOps, ShadowOpsCards(), written);
             WriteCards(Faction.Tech, TechCards(), written);
             WriteCards(Faction.Myth, MythCards(), written);
             WriteCards(Faction.Mind, MindCards(), written);
 
+            foreach (var pair in PairDecks) {
+                var deck = WriteDeck(pair.Name, pair.Cards.Select(name => written[name]).ToList(), $"{DecksFolder}/{pair.File}.asset");
+                offered.Add(Offer(deck, pair.Opponent, pair.Tagline));
+            }
+
             var testDeck = WriteDeck("Mechanics Test", MechanicsTestCards.Select(name => written[name]).ToList(), $"{DecksFolder}/MechanicsTestDeck.asset");
-            RegisterTestDeck(testDeck);
+            FillCatalog(offered, testDeck);
             AssetDatabase.SaveAssets();
-            Debug.Log("Generated the faction decks and the Mechanics Test deck. Run Cards > Assign Card Art to link their art.");
+            Debug.Log("Generated the faction decks, the two-faction decks and the Mechanics Test deck. Run Cards > Assign Card Art to link their art.");
         }
+
+        // Two-faction decks (Faction Compendium 5, Example Two-Faction Decks) for the factions without a deck of their own.
+        // Between them they play every card of those factions.
+        private static readonly (string Name, string File, string Opponent, string Tagline, string[] Cards)[] PairDecks = {
+            ("The Algorithm - Digital Society & Tech", "TheAlgorithmDeck",
+                "The Algorithm", "Thinks you'll love this loss. People like you also lost.", new[] {
+                "Digital Nomad", "Keyboard Warrior", "NPC", "Chronically Online", "Script Kiddie", "Legacy Code",
+                "Dogpile", "Rage Bait", "Its A Trap", "DDOS Attack", "Antivirus", "End-to-End Encryption",
+            }),
+            ("Psyop - Shadow Ops. & Mind", "PsyopDeck",
+                "Your Gaslighting Ex", "That attack never happened. You're imagining things.", new[] {
+                "Political Decoy", "Mole", "Signal Jammer", "Deep Cover", "Sleeper Agent", "Pessimist", "Introvert",
+                "Burn Notice", "Counter-Intelligence", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "Generational Trauma",
+            }),
+            ("Prosperity Gospel - Corporate & Myth", "ProsperityGospelDeck",
+                "The Megachurch", "Pray, pay, repeat. Salvation renews monthly.", new[] {
+                "Martyr", "Mummy", "Unpaid Intern", "Inhuman Resources", "Multilevel Marketing Seller", "Charles Ponzi", "Unicorn",
+                "Multimillionaire Philanthropist", "Memento Mori", "The Holy Grail", "Exorcism", "Mass Layoffs", "Taxpayer Funds Venture Capital Profits",
+            }),
+        };
 
         // One or more cards for each mechanic the rules carry out (movement, Exhausted, Doomed, Health Loss, Armor, Homing,
         // the death sequence, Status Timing, Deployment Time, Blessed, Cleanse and Heresy, Slot Effects, Watchdogs, abilities,
@@ -611,10 +642,13 @@ namespace SlayTheClone {
         #endregion
 
         #region Assets
-        private static void Build(Faction faction, string deckName, List<CardDef> cards, Dictionary<string, CardDataScriptableObject> written) {
+        private static DeckScriptableObject Build(Faction faction, string deckName, List<CardDef> cards, Dictionary<string, CardDataScriptableObject> written) {
             var deckCards = WriteCards(faction, cards, written);
-            WriteDeck(deckName, deckCards, $"{DecksFolder}/{faction}Deck.asset");
+            return WriteDeck(deckName, deckCards, $"{DecksFolder}/{faction}Deck.asset");
         }
+
+        private static DeckCatalog.Opponent Offer(DeckScriptableObject deck, string opponent, string tagline) =>
+            new DeckCatalog.Opponent { name = opponent, tagline = tagline, deck = deck };
 
         // Writes the faction's cards to its folder, which then holds exactly these
         private static List<CardDataScriptableObject> WriteCards(Faction faction, List<CardDef> cards, Dictionary<string, CardDataScriptableObject> written) {
@@ -632,18 +666,29 @@ namespace SlayTheClone {
             return deckCards;
         }
 
-        // The menu offers test decks next to the faction decks (see DeckCatalog.TestDecks)
-        private static void RegisterTestDeck(DeckScriptableObject deck) {
+        // What the menu offers: each deck with the opponent who brings it, then the test deck (see DeckCatalog)
+        private static void FillCatalog(List<DeckCatalog.Opponent> offered, DeckScriptableObject testDeck) {
             var guids = AssetDatabase.FindAssets("t:DeckCatalog");
             if (guids.Length != 1) {
-                Debug.LogError($"Expected one deck catalog, found {guids.Length}; the Mechanics Test deck isn't offered in the menu.");
+                Debug.LogError($"Expected one deck catalog, found {guids.Length}; the decks aren't offered in the menu.");
                 return;
             }
             var catalog = AssetDatabase.LoadAssetAtPath<DeckCatalog>(AssetDatabase.GUIDToAssetPath(guids[0]));
             var serializedCatalog = new SerializedObject(catalog);
+            var decks = serializedCatalog.FindProperty("decks");
+            var opponents = serializedCatalog.FindProperty("opponents");
+            decks.arraySize = offered.Count;
+            opponents.arraySize = offered.Count;
+            for (int i = 0; i < offered.Count; i++) {
+                decks.GetArrayElementAtIndex(i).objectReferenceValue = offered[i].deck;
+                var opponent = opponents.GetArrayElementAtIndex(i);
+                opponent.FindPropertyRelative("name").stringValue = offered[i].name;
+                opponent.FindPropertyRelative("tagline").stringValue = offered[i].tagline;
+                opponent.FindPropertyRelative("deck").objectReferenceValue = offered[i].deck;
+            }
             var testDecks = serializedCatalog.FindProperty("testDecks");
             testDecks.arraySize = 1;
-            testDecks.GetArrayElementAtIndex(0).objectReferenceValue = deck;
+            testDecks.GetArrayElementAtIndex(0).objectReferenceValue = testDeck;
             serializedCatalog.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(catalog);
         }

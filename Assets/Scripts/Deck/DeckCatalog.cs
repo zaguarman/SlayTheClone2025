@@ -29,18 +29,26 @@ namespace SlayTheClone {
         /// <summary>Everything a player can pick: the faction decks, then the test decks.</summary>
         public IReadOnlyList<DeckScriptableObject> AllDecks => Decks.Concat(TestDecks).ToList();
 
-        /// <summary>"17 cards · Corporate": the size of the deck, and its faction when every card shares one.</summary>
+        /// <summary>"17 cards · Corporate", "13 cards · Shadow Ops. + Mind": the size of the deck, and its faction or two.</summary>
         public static string Describe(DeckScriptableObject deck) {
-            var faction = FactionOf(deck);
+            var factions = FactionsOf(deck);
             string summary = $"{deck.Cards.Count} cards";
-            return faction != Faction.None ? $"{summary} · {CardTextFormatter.FactionName(faction)}" : summary;
+            return factions.Count is 1 or 2 ? $"{summary} · {string.Join(" + ", factions.Select(CardTextFormatter.FactionName))}" : summary;
         }
 
-        /// <summary>The faction every card of the deck shares; None for a mixed or missing deck.</summary>
+        /// <summary>The factions of the deck's cards, the one with the most cards first.</summary>
+        public static List<Faction> FactionsOf(DeckScriptableObject deck) {
+            if (deck == null) return new List<Faction>();
+            return deck.Cards.Where(c => c != null).GroupBy(c => c.faction).OrderByDescending(g => g.Count()).Select(g => g.Key).ToList();
+        }
+
+        /// <summary>
+        /// The deck's faction: the one every card shares, or the main one of a two-faction deck (it dresses the table).
+        /// None for a deck mixing more, or a missing one.
+        /// </summary>
         public static Faction FactionOf(DeckScriptableObject deck) {
-            if (deck == null) return Faction.None;
-            var factions = deck.Cards.Where(c => c != null).Select(c => c.faction).Distinct().ToList();
-            return factions.Count == 1 ? factions[0] : Faction.None;
+            var factions = FactionsOf(deck);
+            return factions.Count is 1 or 2 ? factions[0] : Faction.None;
         }
     }
 }

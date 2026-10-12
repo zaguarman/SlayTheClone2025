@@ -6,7 +6,8 @@ CONTENTS
 4. Statecraft: Order & Paperwork
 5. Zeitgeist: Moods of Modern Life
 6. Mechanics Test Cards & Deck
-7. Next Steps
+7. Two-Faction Decks
+8. Next Steps
 
 
 1. PURPOSE
@@ -225,7 +226,22 @@ Spells
     • Plot Armor (Zeitgeist, 2/2/2, 0): Once per combat, when this would die, heal it for 1 (it survives). The use is gone for the rest of the combat, even after a reshuffle.
 
 
-7. NEXT STEPS
+7. TWO-FACTION DECKS
+
+Digital Society, Shadow Ops., Tech, Myth and Mind don't have enough cards for a deck of their own yet (3 to 10 each), so they play in pairs taken from the Faction Compendium's Example Two-Faction Decks. Between them, these three decks play every card of those factions. Each has its own opponent in the main menu, and the deck's main faction (the one with more cards) dresses the table. When a faction reaches 12 cards it can get a deck of its own.
+
+• The Algorithm - Digital Society & Tech (12 cards; opponent: The Algorithm, "Thinks you'll love this loss. People like you also lost.")
+    • Digital Society: Digital Nomad, Keyboard Warrior, NPC, Chronically Online, Dogpile, Rage Bait, Its A Trap.
+    • Tech: Script Kiddie, Legacy Code, DDOS Attack, Antivirus, End-to-End Encryption.
+• Psyop - Shadow Ops. & Mind (13 cards; opponent: Your Gaslighting Ex, "That attack never happened. You're imagining things.")
+    • Shadow Ops.: Political Decoy, Mole, Signal Jammer, Deep Cover, Sleeper Agent, Burn Notice, Counter-Intelligence, Smoke And Mirrors, Eavesdrop, Tapped Communications.
+    • Mind: Pessimist, Introvert, Generational Trauma.
+• Prosperity Gospel - Corporate & Myth (13 cards; opponent: The Megachurch, "Pray, pay, repeat. Salvation renews monthly.")
+    • Corporate: Unpaid Intern, Inhuman Resources, Multilevel Marketing Seller, Charles Ponzi, Unicorn, Multimillionaire Philanthropist, Mass Layoffs, Taxpayer Funds Venture Capital Profits (the workers that die for draws, and the money).
+    • Myth: Martyr, Mummy, Memento Mori, The Holy Grail, Exorcism.
+
+
+8. NEXT STEPS
 
 • Balance is untested. Start by playing each deck against the others from the main menu.
 • There is no computer opponent yet: both sides are played by you on the same screen.
