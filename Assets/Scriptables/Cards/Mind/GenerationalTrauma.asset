@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Your grandfather's, your father's, and now yours. A family heirloom.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: f33253c25c4228c4ca8e6c0856e8df6f, type: 3}
   effects:
   - effectType: 1
     trigger: 0

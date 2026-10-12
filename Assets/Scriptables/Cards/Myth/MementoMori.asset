@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Remember that you will die. Preferably on schedule.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: c90c1c7371d7a1645ace9d2a6b1a476a, type: 3}
   effects:
   - effectType: 1
     trigger: 0

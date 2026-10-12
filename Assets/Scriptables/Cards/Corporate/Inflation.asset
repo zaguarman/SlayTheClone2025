@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Same price. Less creature.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 7135bb991ffae6a498c662ec83fe5ef6, type: 3}
   effects:
   - effectType: 1
     trigger: 0

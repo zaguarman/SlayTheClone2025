@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Nobody read the post. Everybody has an opinion.
   cardType: 1
   faction: 6
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 5a3ee31892fe5044289b9f98afbfd673, type: 3}
   effects:
   - effectType: 1
     trigger: 0

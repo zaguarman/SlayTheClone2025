@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'Third-generation ambassador. Qualifications: his surname.'
   cardType: 0
   faction: 2
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 6500ce5ad0e9628499d4206ecd489baa, type: 3}
   effects:
   - effectType: 0
     trigger: 0

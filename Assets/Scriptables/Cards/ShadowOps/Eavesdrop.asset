@@ -17,7 +17,7 @@ MonoBehaviour:
   description: We're not listening. We're just... hearing.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 74ae3a2025c19b7429c940ece17c938e, type: 3}
   effects:
   - effectType: 1
     trigger: 0

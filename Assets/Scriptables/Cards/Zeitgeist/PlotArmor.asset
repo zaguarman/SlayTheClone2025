@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The hero can't die. It's only the second act.
   cardType: 0
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 12a448acdda667e468af2e71e4a2485f, type: 3}
   effects:
   - effectType: 0
     trigger: 6

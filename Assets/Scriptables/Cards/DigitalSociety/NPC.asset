@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Has opinions. All of them yours.
   cardType: 0
   faction: 6
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: eb71a9689b7fea04b999ff1101a1624e, type: 3}
   effects: []
   designNotes: 'Mechanics test: Copypasta. When ready, and each Dawn after that,
     it copies the ability of the creature opposite it (and loses Copypasta).'

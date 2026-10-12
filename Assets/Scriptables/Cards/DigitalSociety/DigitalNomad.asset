@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Works from Bali. Works from Lisbon. Works, allegedly.
   cardType: 0
   faction: 6
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 055b65cab845be34da54600eb3b0d94f, type: 3}
   effects: []
   designNotes: 'Mechanics test: Leapfrog on a cheap, fast creature.'
   artDescription: A laptop balanced on a surfboard on a white beach, a coconut beside

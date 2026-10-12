@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Your call is important to us. Very important. We're recording it twice.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: a0251bdd4d894ee43a08835fb00e5ccb, type: 3}
   effects:
   - effectType: 1
     trigger: 0

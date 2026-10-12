@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Undercover so long he forgot whose side he's on. So did they.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 31ed4f675e1ad56498840a495ed8d8fb, type: 3}
   effects: []
   designNotes: 'Mechanics test: Identity Theft, an active ability: hold Shift while
     dragging it onto a creature to swap abilities with it. It''s its action for the

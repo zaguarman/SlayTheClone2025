@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Read one post. Now has a manifesto.
   cardType: 0
   faction: 6
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: b2bebcd286d045348970a9e71f4b5fa5, type: 3}
   effects: []
   designNotes: 'Mechanics test: Extremist. Stat changes on it are doubled, buffs
     and debuffs alike.'

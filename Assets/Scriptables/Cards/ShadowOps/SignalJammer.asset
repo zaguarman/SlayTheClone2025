@@ -17,7 +17,7 @@ MonoBehaviour:
   description: No bars. No calls. No witnesses.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: ee50c93bc06129947a1d5ad88265737d, type: 3}
   effects: []
   designNotes: 'Mechanics test: Signal Jammer. The enemy creature directly opposite
     has its ability switched off (its triggered effects still work).'

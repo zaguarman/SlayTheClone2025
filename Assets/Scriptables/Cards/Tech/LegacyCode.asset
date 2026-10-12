@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Written in 1987. Nobody knows how it works. Nobody dares touch it.
   cardType: 0
   faction: 5
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 81fa0861df810294ba861859be63b9d9, type: 3}
   effects: []
   designNotes: 'Mechanics test: Unpatchable. Enemy effects can''t lower its stats,
     and Zero-Day can''t get around it.'

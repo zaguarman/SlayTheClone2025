@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The threat level is now Orange. Nobody knows what Orange means.
   cardType: 1
   faction: 2
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 49a07542660854e4480aa52b3c215caa, type: 3}
   effects:
   - effectType: 1
     trigger: 0

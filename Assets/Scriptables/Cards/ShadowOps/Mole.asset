@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Twenty years with the company. Twenty-one with the other one.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 91bdf466b07215a4bbf503c8b327ab4f, type: 3}
   effects: []
   designNotes: 'Mechanics test: Underground (like Unaware, both ways). When it''s
     attacked, the attacker''s buffs and debuffs are ignored; when it attacks, the

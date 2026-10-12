@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The real one is in a bunker. Or is he?
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: d843712295e68934e854c84ed14b5f6a, type: 3}
   effects: []
   designNotes: 'Mechanics test: Swap trades places with a friendly creature at any
     distance, over the creatures in between, even one that can''t act.'

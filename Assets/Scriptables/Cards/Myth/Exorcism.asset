@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The power of Christ compels you. The invoice follows.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 040966449162d854eb4791f8c6f8fa9a, type: 3}
   effects:
   - effectType: 1
     trigger: 0

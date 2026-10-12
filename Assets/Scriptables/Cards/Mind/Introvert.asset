@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Didn't hear you. Didn't want to.
   cardType: 0
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 81170292ba0785946801cf00b75acfda, type: 3}
   effects: []
   designNotes: 'Mechanics test: Unbothered. Enemy effects can''t lower its stats.'
   artDescription: A person in big headphones reading in a blanket fort while a loud

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Doesn't know how it works. Doesn't need to.
   cardType: 0
   faction: 5
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 0f5d243527a4b4a46968af753009858b, type: 3}
   effects: []
   designNotes: 'Mechanics test: Zero-Day. Its attacks and effects ignore the target''s
     defensive abilities (Unbothered, No U, Return to Sender...), except Unpatchable.'

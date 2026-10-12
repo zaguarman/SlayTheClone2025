@@ -17,7 +17,7 @@ MonoBehaviour:
   description: He died for your sins. Your sins are on backorder.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 65987a0e09c01024d953e488c6b7f571, type: 3}
   effects:
   - effectType: 0
     trigger: 0

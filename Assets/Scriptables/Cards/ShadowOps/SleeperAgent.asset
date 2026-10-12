@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Eleven years next door. Waters your plants. Waiting for a phone call.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: a5b0909a5096cf8409b539a2af5df42f, type: 3}
   effects: []
   designNotes: 'Mechanics test: Undercover. Everything it plans is a Concealed Action:
     the other side sees ??? on its card instead of its arrows, and their Watchdogs
