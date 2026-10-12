@@ -1,7 +1,8 @@
 """Generates the card illustrations as SVG files.
 
 Output: Assets/Art/Cards/<Theme>/<CardAssetName>.svg (one per card asset in Assets/Scriptables/Cards)
-and Assets/Art/Icons/EffectIcons.svg (the icon sheet used inside card text).
+and Assets/Art/Icons/EffectIcons.svg (the icon sheet used inside card text), and the Fog of War card faces in
+Assets/Resources/FogOfWar/ (a creature you don't know, and the back of a card in the enemy's hand).
 After running, use the Unity menus "Cards > Assign Card Art" and "Cards > Build Effect Icons".
 
 Usage: python Tools/generate_card_art.py
@@ -1299,6 +1300,88 @@ def icon_sheet():
             f'{body}</svg>\n')
 
 
+# ---------------------------------------------------------------- Fog of War card faces
+# Whole cards (the card is 160 x 200), drawn at twice the size. Unity's SVG importer draws no text: the "???", "CLASSIFIED"
+# and stats lettering is laid over them in code (CardController.SetAnonymous).
+
+CW, CH = 320, 400
+BRASS = "#c9a24a"
+NAVY = "#1a1f30"
+INK = "#07080d"
+CREAM = "#efe6cf"
+
+
+def card_svg(defs, body):
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {CW} {CH}" width="{CW}" height="{CH}">'
+            f'<defs>{defs}</defs>{body}</svg>\n')
+
+
+def question_mark(cx, top, size, color, width_ratio=0.17):
+    s = size
+    curve = (f"M{cx - 0.36 * s:.1f} {top + 0.3 * s:.1f} C {cx - 0.36 * s:.1f} {top - 0.02 * s:.1f}, {cx + 0.4 * s:.1f} {top - 0.02 * s:.1f}, "
+             f"{cx + 0.38 * s:.1f} {top + 0.3 * s:.1f} C {cx + 0.36 * s:.1f} {top + 0.52 * s:.1f}, {cx:.1f} {top + 0.5 * s:.1f}, {cx:.1f} {top + 0.76 * s:.1f}")
+    return stroke(curve, color, s * width_ratio) + circle(cx, top + 1.0 * s, s * 0.1, color)
+
+
+def card_frame():
+    return (rect(3, 3, CW - 6, CH - 6, NAVY, f'rx="16" stroke="{BRASS}" stroke-width="6"')
+            + rect(12, 12, CW - 24, CH - 24, "none", f'rx="10" stroke="{BRASS}" stroke-width="1.5" opacity="0.6"'))
+
+
+def unknown_creature_svg():
+    defs = rad("spot", ["#56638f", "#2a3150", "#11141f"], cx=0.5, cy=0.15, r=0.75) + lin("bar", ["#a3202e", "#6e121c"])
+    # Title bar: redacted (the name is laid over it in code)
+    body = card_frame() + rect(18, 18, CW - 36, 40, INK, f'rx="4" stroke="{BRASS}" stroke-width="2"')
+    # Art window: a figure in a spotlight, hat brim over a face that's only a question mark
+    body += rect(18, 64, CW - 36, 172, "url(#spot)", f'rx="4" stroke="{BRASS}" stroke-width="2"')
+    body += path("M58 236 C 62 202 94 188 122 183 L 140 204 L 160 236 L 180 204 L 198 183 C 226 188 258 202 262 236 Z", INK)
+    body += stroke("M122 183 L 146 236 M198 183 L 174 236", "#262b3d", 4)
+    body += ellipse(160, 150, 33, 40, INK)
+    body += path("M120 118 C 121 86 134 72 160 74 C 186 72 199 86 200 118 Z", INK)
+    body += stroke("M128 108 L 192 108", "#2f3550", 6)
+    body += ellipse(160, 120, 70, 11, INK)
+    body += question_mark(160, 126, 44, "#ffd257")
+    # Type bar (CLASSIFIED is laid over it in code)
+    body += rect(18, 242, CW - 36, 30, "url(#bar)", f'rx="3" stroke="{BRASS}" stroke-width="2"')
+    # Text box: blacked-out lines and a red seal
+    body += rect(18, 278, CW - 36, 104, CREAM, f'rx="4" stroke="{BRASS}" stroke-width="2"')
+    for y, w in ((294, 214), (318, 248), (342, 150)):
+        body += rect(34, y, w, 14, INK, 'rx="2"')
+    seal = (circle(0, 0, 30, "none", 'stroke="#c0392b" stroke-width="5"') + circle(0, 0, 22, "none", 'stroke="#c0392b" stroke-width="2"')
+            + question_mark(0, -14, 24, "#c0392b", 0.2))
+    body += group(seal, "translate(238 330) rotate(-14)", 0.85)
+    # Stats pill (?/?/? is laid over it in code)
+    body += rect(226, 360, 78, 26, "#d9b24f", f'rx="13" stroke="{INK}" stroke-width="2"')
+    return card_svg(defs, body)
+
+
+def card_back_svg():
+    defs = rad("glow", ["#2c3557", NAVY], cx=0.5, cy=0.47, r=0.6)
+    body = card_frame() + rect(18, 18, CW - 36, CH - 36, "url(#glow)", f'rx="8" stroke="{BRASS}" stroke-width="2"')
+    # A faint diamond lattice, like the table
+    for row in range(9):
+        for col in range(7):
+            cx, cy = 40 + col * 40, 44 + row * 40
+            body += poly([(cx, cy - 14), (cx + 14, cy), (cx, cy + 14), (cx - 14, cy)], "none", f'stroke="{BRASS}" stroke-width="1.5" opacity="0.16"')
+    # Brass corner brackets
+    for x, y, sx, sy in ((26, 26, 1, 1), (CW - 26, 26, -1, 1), (26, CH - 26, 1, -1), (CW - 26, CH - 26, -1, -1)):
+        body += stroke(f"M{x} {y + 34 * sy} L{x} {y} L{x + 34 * sx} {y}", BRASS, 5)
+    # The seal: a keyhole in a ringed medallion, with four points around it
+    for angle in (0, 90, 180, 270):
+        body += group(poly([(0, -96), (8, -76), (0, -70), (-8, -76)], BRASS), f"translate(160 200) rotate({angle})")
+    body += circle(160, 200, 64, NAVY, f'stroke="{BRASS}" stroke-width="6"') + circle(160, 200, 52, "none", f'stroke="{BRASS}" stroke-width="2"')
+    body += circle(160, 188, 17, INK) + poly([(150, 196), (170, 196), (178, 236), (142, 236)], INK)
+    return card_svg(defs, body)
+
+
+def write_fog_faces():
+    folder = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "Assets", "Resources", "FogOfWar"))
+    os.makedirs(folder, exist_ok=True)
+    for name, draw in (("UnknownCreature", unknown_creature_svg), ("CardBack", card_back_svg)):
+        with open(os.path.join(folder, f"{name}.svg"), "w", encoding="utf-8", newline="\n") as f:
+            f.write(draw())
+
+
 CARDS = {
     "Water": {
         "AbyssalCall": abyssal_call, "AbyssalCucumber": abyssal_cucumber, "CoralBuilder": coral_builder,
@@ -1352,6 +1435,8 @@ def main():
     with open(os.path.join(icon_dir, "EffectIcons.svg"), "w", encoding="utf-8", newline="\n") as f:
         f.write(icon_sheet())
     print(f"Wrote effect icon sheet to {icon_dir}")
+    write_fog_faces()
+    print("Wrote the Fog of War card faces to Assets/Resources/FogOfWar")
 
 
 if __name__ == "__main__":

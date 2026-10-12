@@ -24,12 +24,13 @@ STILL OPEN
     • Done: Concealed, Revealed and Encrypted statuses, the Undercover ability, Reveal (instant), Watchdogs blind to Concealed actions and ignoring Encrypted ones, the '???' on screen, and a debug switch (Debug > Fog of War, F9 in play).
     • Encrypted isn't in the GDD's Neutral status set (Revealed, Concealed, Exposed, Muted, Anchored). Which faction owns it, or does it join the Neutral set?
     • Concealed and Encrypted are treated as good for the creature (a Cleanse leaves them, a Purge removes them). OK?
-    • Hot-seat: the screen is player 1's view, so player 2 can't see their own Concealed creature's arrows, or their own summons and stealthy creatures (all '???'). OK until there's an AI, or should the view follow whoever is planning?
-    • The enemy's hand is still shown face up (player 2 plays from it in hot-seat), so you can see a creature in it before it's summoned as '???'. Hide the enemy hand (card backs) while the fog is on?
     • Not done yet, waiting for other systems: the Turn History ('???' for resolved Concealed actions; there's no Turn History yet), Surveillance, OnRevealedByIntelligence effects and Strategic Disclosures, Honeypot-style traps for snoopers, hidden enemy abilities (bosses), Compromised, and enemy Homing (nothing aims Homing at enemies yet, so "Homing becomes Fixed against Concealed" has nothing to act on).
 
 
 ANSWERED (2026-10-12)
+
+• Fog of War views: the rules know everything; each player sees their own cards and what their cards revealed. The enemy's hand shows card backs and the enemy's cards can't be used. The screen plays player 1's side (Debug > Play As Player 2 / F10 switches, for testing).
+• Unknown cards: a "classified file" face (silhouette with a question mark for a face, redacted name and text, CLASSIFIED bar, red seal) and a card back with a keyhole seal.
 
 • Scorched Earth: stops the creature's triggered effects, entry ("When Ready") effects included. Its ability still works.
 • Barbed Snare: only moving out counts as leaving; dying on the slot or being replaced doesn't.

@@ -83,12 +83,29 @@ namespace SlayTheClone {
     }
 
     /// <summary>
-    /// What the screen hides from the player at it: player 1, in hot-seat (player 2 plays on the same screen, so their own
-    /// hidden things are hidden from them too). Switched off for debugging (Debug > Fog of War, or F9 in play), the screen shows
-    /// everything; the rules in <see cref="Intel"/> don't change.
+    /// What the screen shows: one player's view (player 1, the side you play, unless switched). The rules know everything
+    /// (<see cref="Intel"/>); the screen only shows what that player knows, and only their cards can be used. The other
+    /// side's hand shows card backs. For debugging: Debug > Fog of War (F9 in play) shows everything and lets you use both
+    /// sides' cards (hot-seat); Debug > Play As Player 2 (F10) switches whose view it is. Neither changes the rules.
     /// </summary>
     public static class FogOfWar {
         public const UnityEngine.KeyCode ToggleKey = UnityEngine.KeyCode.F9;
+        public const UnityEngine.KeyCode SwitchSidesKey = UnityEngine.KeyCode.F10;
+
+        private static bool playsAsPlayer1 = true;
+
+        /// <summary>Whose view the screen shows: player 1 (the side you chose in the menu) unless switched for debugging.</summary>
+        public static bool PlaysAsPlayer1 {
+            get => playsAsPlayer1;
+            set {
+                if (playsAsPlayer1 == value) return;
+                playsAsPlayer1 = value;
+                Log($"The screen now shows player {(value ? 1 : 2)}'s view", LogTag.UI);
+                Changed?.Invoke();
+            }
+        }
+
+        public static void SwitchSides() => PlaysAsPlayer1 = !PlaysAsPlayer1;
         private const string PrefKey = "SlayTheClone.FogOfWar";
 
         private static bool? enabled;
@@ -117,8 +134,14 @@ namespace SlayTheClone {
 
         public static void Toggle() => Enabled = !Enabled;
 
-        /// <summary>The player at the screen: player 1.</summary>
-        public static IPlayer ViewerOf(IPlayer anyPlayer) => anyPlayer == null || anyPlayer.IsPlayer1 ? anyPlayer : anyPlayer.Opponent;
+        /// <summary>The player whose view the screen shows.</summary>
+        public static IPlayer ViewerOf(IPlayer anyPlayer) => anyPlayer == null || anyPlayer.IsPlayer1 == PlaysAsPlayer1 ? anyPlayer : anyPlayer.Opponent;
+
+        /// <summary>Whether the screen may use this player's cards: only the viewer's, unless the fog is off (hot-seat debugging).</summary>
+        public static bool CanControl(IPlayer owner) => !Enabled || owner == null || owner.IsPlayer1 == PlaysAsPlayer1;
+
+        /// <summary>The other side's hand shows only card backs.</summary>
+        public static bool HidesHandOf(IPlayer owner) => Enabled && owner != null && owner.IsPlayer1 != PlaysAsPlayer1;
 
         public static bool Hides(IPlayer viewer, IGameAction action, IActionsQueue queue, IModifierManager modifiers) =>
             Enabled && !Intel.CanSee(viewer, action, queue, modifiers);

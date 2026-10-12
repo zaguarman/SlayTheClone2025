@@ -24,6 +24,7 @@ namespace SlayTheClone.Tests {
         public IEnumerator SetUp() {
             fogWasOn = FogOfWar.Enabled;
             FogOfWar.Enabled = true; // What the screen hides is part of what's tested
+            FogOfWar.PlaysAsPlayer1 = true;
             game = new SceneGame();
             yield return game.Load(Seed);
             p1 = game.Player1;
@@ -33,6 +34,7 @@ namespace SlayTheClone.Tests {
         [TearDown]
         public void TearDown() {
             FogOfWar.Enabled = fogWasOn; // Keep the debug choice made in the editor (while the scene can still redraw)
+            FogOfWar.PlaysAsPlayer1 = true;
             game.Dispose();
         }
 
@@ -113,6 +115,16 @@ namespace SlayTheClone.Tests {
             CollectionAssert.IsEmpty(game.QueuedArrows(p2), "...instead of its attack arrow");
             CollectionAssert.AreEquivalent(new ICard[] { sleeper, incoming }, game.BoardView(p2).AnonymousCards,
                 "An enemy summon shows as ??? until it finishes, and a stealthy creature stays ??? after");
+            Assert.IsNotEmpty(game.HandCards(p2));
+            Assert.IsTrue(game.HandCards(p2).All(c => c.IsFaceDown), "The enemy's hand shows only card backs");
+            Assert.IsFalse(game.HandCards(p1).Any(c => c.IsFaceDown));
+            Assert.IsFalse(FogOfWar.CanControl(p2), "...and its cards can't be used");
+            FogOfWar.PlaysAsPlayer1 = false;
+            yield return null;
+            Assert.IsTrue(game.HandCards(p1).All(c => c.IsFaceDown), "Player 2's view: now player 1's hand is the hidden one");
+            CollectionAssert.IsEmpty(game.BoardView(p2).AnonymousCards, "...and player 2 knows their own cards");
+            FogOfWar.PlaysAsPlayer1 = true;
+            yield return null;
             FogOfWar.Enabled = false;
             yield return null;
             CollectionAssert.IsEmpty(game.BoardView(p2).CreaturesWithHiddenPlans, "Debug: with the fog off the screen shows everything");

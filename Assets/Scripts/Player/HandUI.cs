@@ -117,6 +117,7 @@ namespace SlayTheClone {
                 if (controller != null) {
                     AddCard(controller);
                     if (isQueued) controller.SetQueued(true, canBeDragged: true);
+                    controller.SetFaceDown(FogOfWar.HidesHandOf(Player)); // The enemy's hand shows only card backs
                 }
             }
 

@@ -234,7 +234,7 @@ namespace SlayTheClone {
 
             // Queued cards are committed (except in the hand, where dragging re-aims or takes back the play),
             // and nothing can be played while a turn resolves; cancel the drag so no drop zone receives the card
-            if ((IsQueued && !canDragWhileQueued) || (GameManager?.TurnManager?.IsResolving ?? false)) {
+            if ((IsQueued && !canDragWhileQueued) || (GameManager?.TurnManager?.IsResolving ?? false) || !FogOfWar.CanControl(Player)) {
                 eventData.pointerDrag = null;
                 return;
             }
@@ -280,6 +280,7 @@ namespace SlayTheClone {
 
         public void OnPointerClick(PointerEventData eventData) {
             if (eventData.dragging) return;
+            if (!FogOfWar.CanControl(Player)) return; // The other side's cards aren't yours to use
             if (eventData.button == PointerEventData.InputButton.Left) OnCardClicked.Invoke(this);
             else if (eventData.button == PointerEventData.InputButton.Right) OnCardRightClicked.Invoke(this);
         }
@@ -362,39 +363,88 @@ namespace SlayTheClone {
         public bool ArePlansHidden { get; private set; }
         private GameObject hiddenPlansBadge;
 
+        #region Fog of War faces
         /// <summary>
         /// Fog of War: the player at the screen doesn't know what this creature is (being summoned by the other side, or stealthy).
-        /// Everything on the card is hidden behind a "???" cover, and hovering it tells nothing.
+        /// It shows as a classified file: "???" for a name, no stats, no art, no text, and hovering it tells nothing.
         /// </summary>
         public void SetAnonymous(bool anonymous) {
             if (anonymous == IsAnonymous) return;
             IsAnonymous = anonymous;
-            if (anonymous) {
-                // Hide the face rather than cover it: a queued card is translucent, and would show through
-                hiddenFace.Clear();
-                foreach (Transform child in transform) {
-                    if (!child.gameObject.activeSelf || child.gameObject == anonymousCover) continue;
-                    hiddenFace.Add(child.gameObject);
-                    child.gameObject.SetActive(false);
-                }
-                if (anonymousCover == null) {
-                    anonymousCover = CreateBadge("AnonymousCover", "???", UITheme.Gold, 0f, 1f);
-                    var label = anonymousCover.GetComponentInChildren<TextMeshProUGUI>();
-                    label.fontSizeMax = 72;
-                }
-                anonymousCover.SetActive(true);
-                anonymousCover.transform.SetAsLastSibling();
-            }
-            else {
-                foreach (var part in hiddenFace) if (part != null) part.SetActive(true);
-                hiddenFace.Clear();
-                if (anonymousCover != null) anonymousCover.SetActive(false);
-            }
+            if (anonymous && unknownFace == null) unknownFace = CreateFace("UnknownFace", "FogOfWar/UnknownCreature", withLettering: true);
+            ShowFace(anonymous ? unknownFace : null);
+        }
+
+        /// <summary>Fog of War: a card in the enemy's hand. Only its back shows, and hovering it tells nothing.</summary>
+        public void SetFaceDown(bool faceDown) {
+            if (faceDown == IsFaceDown) return;
+            IsFaceDown = faceDown;
+            if (faceDown && backFace == null) backFace = CreateFace("CardBack", "FogOfWar/CardBack", withLettering: false);
+            ShowFace(faceDown ? backFace : null);
         }
 
         public bool IsAnonymous { get; private set; }
-        private GameObject anonymousCover;
+        public bool IsFaceDown { get; private set; }
+        private GameObject unknownFace, backFace;
         private readonly List<GameObject> hiddenFace = new List<GameObject>();
+
+        // Shows one of the Fog of War faces instead of the card's own (or the card's own again, for null). The card's parts are
+        // switched off rather than covered: a queued card is translucent, and they would show through
+        private void ShowFace(GameObject face) {
+            foreach (var part in hiddenFace) if (part != null) part.SetActive(true);
+            hiddenFace.Clear();
+            if (unknownFace != null) unknownFace.SetActive(false);
+            if (backFace != null) backFace.SetActive(false);
+            if (face == null) return;
+
+            foreach (Transform child in transform) {
+                if (!child.gameObject.activeSelf) continue;
+                hiddenFace.Add(child.gameObject);
+                child.gameObject.SetActive(false);
+            }
+            face.SetActive(true);
+            face.transform.SetAsLastSibling();
+        }
+
+        // The whole card: art drawn by Tools/generate_card_art.py (Unity's SVG import draws no text, so the lettering is laid on here)
+        private GameObject CreateFace(string objectName, string spritePath, bool withLettering) {
+            var face = new GameObject(objectName, typeof(RectTransform), typeof(Image));
+            face.layer = gameObject.layer;
+            face.transform.SetParent(transform, false);
+            var rect = (RectTransform)face.transform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            var image = face.GetComponent<Image>();
+            image.sprite = Resources.Load<Sprite>(spritePath);
+            image.color = image.sprite != null ? Color.white : UITheme.TableDark;
+            image.raycastTarget = false;
+
+            if (withLettering) {
+                // Where the art leaves room for it, in fractions of the card (it's drawn at 320 x 400)
+                Letter(face.transform, "???", UITheme.Gold, new Vector2(0.06f, 0.855f), new Vector2(0.94f, 0.955f), 28f, FontStyles.Bold);
+                Letter(face.transform, "Classified", new Color(0.94f, 0.9f, 0.81f), new Vector2(0.06f, 0.32f), new Vector2(0.94f, 0.395f), 14f,
+                    FontStyles.Bold | FontStyles.SmallCaps, spacing: 12f);
+                Letter(face.transform, "?/?/?", UITheme.TableDark, new Vector2(0.706f, 0.035f), new Vector2(0.95f, 0.1f), 12f, FontStyles.Bold);
+            }
+            face.SetActive(false);
+            return face;
+        }
+
+        private static void Letter(Transform parent, string text, Color color, Vector2 anchorMin, Vector2 anchorMax, float size,
+            FontStyles style, float spacing = 0f) {
+            var label = UITheme.NewText(text, parent, text, size, color);
+            label.rectTransform.anchorMin = anchorMin;
+            label.rectTransform.anchorMax = anchorMax;
+            label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
+            label.fontStyle = style;
+            label.characterSpacing = spacing;
+            label.enableAutoSizing = true;
+            label.fontSizeMin = 4;
+            label.fontSizeMax = size;
+            label.raycastTarget = false;
+        }
+        #endregion
 
         // A navy band across the card with brass edges and a word on it
         private GameObject CreateBadge(string objectName, string text, Color textColor, float anchorMinY, float anchorMaxY) {

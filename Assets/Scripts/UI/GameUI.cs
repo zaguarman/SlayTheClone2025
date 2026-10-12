@@ -131,7 +131,9 @@ namespace SlayTheClone {
         private TMPro.TextMeshProUGUI fogOffLabel;
 
         private void Update() {
-            if (IsInitialized && Input.GetKeyDown(FogOfWar.ToggleKey)) FogOfWar.Toggle();
+            if (!IsInitialized) return;
+            if (Input.GetKeyDown(FogOfWar.ToggleKey)) FogOfWar.Toggle();
+            if (Input.GetKeyDown(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
         }
 
         // Every view redraws what it may show
@@ -142,9 +144,9 @@ namespace SlayTheClone {
             gameMediator.NotifyActionsQueueChanged();
         }
 
-        // While it's off, a reminder under the End Turn button says the screen shows everything
+        // While the fog is off, or the screen shows player 2's view, a reminder under the End Turn button says so
         private void ShowFogOfWarState() {
-            if (FogOfWar.Enabled) {
+            if (FogOfWar.Enabled && FogOfWar.PlaysAsPlayer1) {
                 if (fogOffLabel != null) fogOffLabel.gameObject.SetActive(false);
                 return;
             }
@@ -160,6 +162,10 @@ namespace SlayTheClone {
                 rect.anchoredPosition = new Vector2(0f, -6f);
                 fogOffLabel.raycastTarget = false;
             }
+            var notes = new System.Collections.Generic.List<string>();
+            if (!FogOfWar.Enabled) notes.Add($"FOG OF WAR OFF ({FogOfWar.ToggleKey})");
+            if (!FogOfWar.PlaysAsPlayer1) notes.Add($"PLAYING AS PLAYER 2 ({FogOfWar.SwitchSidesKey})");
+            fogOffLabel.text = string.Join("  ·  ", notes) + " (debug)";
             fogOffLabel.gameObject.SetActive(true);
         }
         #endregion

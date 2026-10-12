@@ -138,6 +138,10 @@ namespace SlayTheClone {
         /// </summary>
         public void ShowTooltip(CardController card) {
             if (card == null || card.GetBaseCardData() == null) return;
+            if (card.IsFaceDown) { // Fog of War: a card in the enemy's hand
+                ShowTooltip("<b>???</b>\nA card in the enemy's hand.");
+                return;
+            }
             if (card.IsAnonymous) { // Fog of War: nothing about what it is
                 ShowTooltip(card.IsQueued ? "<b>???</b>\nSomething is being summoned here." : "<b>???</b>\nAn enemy creature. You don't know what it is.");
                 return;
