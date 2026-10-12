@@ -26,7 +26,7 @@ namespace SlayTheClone {
         private readonly Func<ICard, CardController> findHandCard; // Where a card in the hand is on screen
         private readonly Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
         // Arrows that start at a card in the hand, which moves as the hand changes: they follow it every frame
-        private readonly Dictionary<string, (ICard card, BoardSlot target)> handArrows = new Dictionary<string, (ICard, BoardSlot)>();
+        private readonly Dictionary<string, (ICard card, ITarget target)> handArrows = new Dictionary<string, (ICard, ITarget)>();
         private ArrowIndicator dragArrow;
 
         public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IActionsQueue actionsQueue, IPlayer owner,
@@ -93,15 +93,16 @@ namespace SlayTheClone {
             key = null;
             arrow = default;
 
-            // A queued spell that is aimed at a slot points there from its card in the hand
+            // A queued spell that is aimed at a slot points there from its card in the hand;
+            // one homing on a creature points wherever that creature is
             if (action is PlayCardAction play && play.GetOwner() == owner && play.GetCard() is Spell spell
-                && play.GetTarget() is BoardSlot aim && EffectResolver.IsAimed(spell)) {
+                && SlotAimedAt(play.GetTarget()) != null && EffectResolver.IsAimed(spell)) {
                 var card = findHandCard(spell);
-                var aimView = findSlotView(aim);
+                var aimView = findSlotView(SlotAimedAt(play.GetTarget()));
                 if (card == null || aimView == null) return false;
 
-                key = $"spell_{spell.TargetId}_{aim.TargetId}";
-                handArrows[key] = (spell, aim);
+                key = $"spell_{spell.TargetId}_{play.GetTarget().TargetId}";
+                handArrows[key] = (spell, play.GetTarget());
                 arrow = (card.transform.position, aimView.transform.position, SpellColor);
                 return true;
             }
@@ -138,10 +139,13 @@ namespace SlayTheClone {
             foreach (var entry in handArrows) {
                 if (!activeArrows.TryGetValue(entry.Key, out var arrow) || arrow == null) continue;
                 var card = findHandCard(entry.Value.card);
-                var aimView = findSlotView(entry.Value.target);
+                var aimView = findSlotView(SlotAimedAt(entry.Value.target));
                 if (card != null && aimView != null) arrow.Show(card.transform.position, aimView.transform.position);
             }
         }
+
+        private static BoardSlot SlotAimedAt(ITarget target) =>
+            target is HomingTarget homing ? homing.CurrentSlot : target as BoardSlot;
 
         private bool IsOwn(ICreature creature) => creature != null && creature.Owner == owner && creature.Slot != null;
         #endregion

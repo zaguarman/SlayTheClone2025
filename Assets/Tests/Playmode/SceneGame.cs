@@ -129,7 +129,8 @@ namespace SlayTheClone.Tests {
         }
 
         /// <summary>What dropping a card from the hand on a slot does: the play is queued until the turn ends.</summary>
-        public void Play(ICard card, Player caster, BoardSlot slot) => Queue.AddAction(new PlayCardAction(card, caster, slot));
+        public void Play(ICard card, Player caster, BoardSlot slot) =>
+            Queue.AddAction(new PlayCardAction(card, caster, EffectResolver.AimAt(card, caster, slot, Queue)));
 
         /// <summary>Every creature in the hand goes to an empty slot of its player's board.</summary>
         public void PlayCreatures(Player player) {

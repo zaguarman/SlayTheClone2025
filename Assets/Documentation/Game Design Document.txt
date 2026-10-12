@@ -115,8 +115,8 @@ Encrypted (Counter-Intelligence)
     • What it is: Protection for a creature's actions. Watchdogs ignore actions from an Encrypted creature, and no charge is spent.
 
 • Fixed Targeting / Fixed: (Targeting Keyword Prefix):
-    • What it is: Aims an effect at whatever creature is in a chosen slot when the action resolves.
-    • Behavior: It doesn't follow a creature that moves. If the slot is empty, or the creature there isn't a valid target, the effect fizzles (does nothing). Attack Actions are the exception: an attack into an empty enemy slot hits the defending player (see 4.6 Combat, Damage & Targeting).
+    • What it is: Aims an effect at whatever creature is in a chosen slot when the action resolves. The default for effects aimed at an enemy slot.
+    • Behavior: It doesn't follow a creature that moves. If the creature there isn't a valid target, the effect fizzles (does nothing). If the slot is empty, a creature-only effect (stat changes, statuses, Armor) fizzles, but damage hits that side's player instead (see 4.6 Combat, Damage & Targeting).
     • Difference from Static: Fixed only ever affects a creature. It can't affect the slot itself.
 
 Health Loss (-X Health)
@@ -126,8 +126,9 @@ Health Loss (-X Health)
     • Death: If it drops maximum or current Health to 0, the creature dies (see 3.3 Creatures & Action Types - Minimum Values).
 
 • Homing Targeting / Homing: (Targeting Keyword Prefix):
-    • What it is: The standard way to target a specific creature. Effects that target creatures use Homing unless the card says otherwise.
+    • What it is: Targeting that locks onto a specific creature. Effects aimed at your own creatures use Homing unless the card says otherwise: there's no fog of war on your side, so you know where they'll be. Effects aimed at an enemy slot use Fixed unless the card says Homing.
     • Behavior: The effect "locks on" to one creature and follows it if it moves. If the creature Leaves Play, the effect is aimed at the slot it was last in instead.
+    • Creatures Being Summoned: Aiming at a slot where your creature is queued to be summoned locks on to that creature. If its summon is taken back, the effect is aimed at that slot instead.
     • Aimed at an Empty Slot: A Homing effect dropped on an empty slot has no creature to lock on to. Its target is that slot, so it behaves like Fixed.
     • Why It Matters: Movement resolves before Spells, Attacks and Abilities, so creatures can dodge anything aimed at a slot. Effects that target a specific creature (Homing) are the only reliable answers, which is why they're scarce.
     • Against Concealed creatures: If a Homing effect targets an enemy creature with Concealed (and the concealment isn't cancelled), it behaves like Fixed for that one time.
@@ -164,7 +165,7 @@ Persistent Stat Modification
 
 Player Health
     • What it is: Each side (you and the enemy) has a Player Health total. Both start every combat at 20 (Relics, Stocks or specific encounters may change this).
-    • Damage: Reduced by effects that specifically target a "Player," and by Attack Actions that resolve into an empty slot on that player's side.
+    • Damage: Reduced by effects that specifically target a "Player," and by Attack Actions or damage that resolve into an empty slot on that player's side.
     • Defeat: The combat ends when either side's Player Health reaches 0, checked after every action. If yours reaches 0 (even in a tie), your run ends. (Other ways to win a combat may be added later.)
 
 Priority (Action)
@@ -202,7 +203,7 @@ Scheduled Draw
 
 • Static Targeting / Static: (Targeting Keyword Prefix):
     • What it is: Aims an effect at a slot itself.
-    • Behavior: The effect can change the slot (e.g., place a Slot Effect) and/or affect whatever creature is in it when the action resolves. It doesn't follow creatures. A creature-only part of the effect (like damage) fizzles if the slot is empty, except for Attack Actions (see 4.6 Combat, Damage & Targeting).
+    • Behavior: The effect can change the slot (e.g., place a Slot Effect) and/or affect whatever creature is in it when the action resolves. It doesn't follow creatures. A creature-only part of the effect (like a status) fizzles if the slot is empty; damage hits that side's player instead (see 4.6 Combat, Damage & Targeting).
 
 Strategic Disclosure
     • What it is: A benefit you get when you use Intelligence to uncover important hidden enemy information (like "???" intents or secret weaknesses on enemy cards). The reveal is instant; the benefit is queued like any other effect.
@@ -771,14 +772,15 @@ Movement Restriction
 • No Minimum Damage: Damage can be reduced to 0 (e.g., an attacker with 0 Attack, or Cognitive Dissonance's -1). Damage is rounded down once, after all modifiers, like stats (see 3.3 Creatures & Action Types).
 • Life Drain / Siphoning: Dealing damage also heals the source or its controller.
 
-• Targeting Keywords: Cards say how they target. Effects that target creatures use Homing unless the card says otherwise.
-    • Homing: Locks onto a creature and follows it if it moves. If the creature Leaves Play, the effect is aimed at the slot it was last in. Dropped on an empty slot, it targets that slot and behaves like Fixed. If the effect can only apply to a creature (e.g., "gains X status"), it fizzles when that slot is empty. Against a Concealed enemy creature, Homing behaves like Fixed that one time.
-    • Fixed: Aims at a slot, but only ever affects the creature in it when the action resolves. Doesn't follow creatures. Fizzles if the slot is empty or the creature is an invalid target.
+• Targeting Keywords: Cards say how they target. Without a keyword, an effect aimed at your own creature uses Homing (your side has no fog of war, so you know where your creatures will be, including one queued to be summoned), and an effect aimed at an enemy slot uses Fixed. "Homing:" on a card makes it follow enemy creatures too, which is why it's scarce.
+    • Homing: Locks onto a creature and follows it if it moves. If the creature Leaves Play, the effect is aimed at the slot it was last in. Aimed at your creature that is queued to be summoned, it locks on to it; if the summon is taken back, it is aimed at that slot. Dropped on an empty slot, it targets that slot and behaves like Fixed. Against a Concealed enemy creature, Homing behaves like Fixed that one time.
+    • Fixed: Aims at a slot, but only ever affects the creature in it when the action resolves. Doesn't follow creatures. Fizzles if the creature is an invalid target. If the slot is empty, a creature-only effect fizzles and damage hits that side's player.
     • Static: Aims at the slot itself. Can change the slot (e.g., place a Slot Effect) and/or affect the creature in it when the action resolves. Doesn't follow creatures. The creature part fizzles if the slot is empty.
+    • Creature-Only Effects: Effects that can only apply to a creature (stat changes, statuses, Armor, e.g., "gains X status") fizzle when they resolve into an empty slot. Damage isn't creature-only: it hits the player whose slot it is.
 
-• Damage to Slots & Occupants: Damage aimed at a slot hits the creature in it. If that creature is destroyed, leftover damage from that hit is lost. If the slot is empty, the damage fizzles, with one exception below.
+• Damage to Slots & Occupants: Damage aimed at a slot hits the creature in it. If that creature is destroyed, leftover damage from that hit is lost. If the slot is empty, the damage hits the player whose slot it is.
 
-• Attacking Empty Slots: If an Attack Action resolves into an empty enemy slot (whatever its targeting keyword), the defending player loses Player Health equal to the attacker's current Attack. This works both ways: enemy attacks into your empty slots hit you. Only Attack Actions do this; damage from Spells and abilities into an empty slot still fizzles.
+• Attacking Empty Slots: If an Attack Action resolves into an empty enemy slot (whatever its targeting keyword), the defending player loses Player Health equal to the attacker's current Attack. This works both ways: enemy attacks into your empty slots hit you. Damage from Spells and abilities into an empty slot does the same, for its damage amount.
     • Creatures That Can't Be Attacked: If the creature in the slot can't be attacked (e.g., Ghosted or Ostracised), the attack treats the slot as empty and passes through to the defending player. The creature is "not really there".
 
 • Targeting Restrictions: Many cards have limits (e.g., only the slot in front, only Exhausted creatures). These are on the individual cards.

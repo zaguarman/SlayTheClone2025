@@ -87,6 +87,10 @@ namespace SlayTheClone.Tests {
 
         public void Resolve() => ActionsQueue.ResolveActions();
 
+        /// <summary>What dropping a card from the hand on a slot does: plans its play, aimed the way the board aims it.</summary>
+        public void Play(ICard card, Player caster, BoardSlot slot) =>
+            ActionsQueue.AddAction(new PlayCardAction(card, caster, EffectResolver.AimAt(card, caster, slot, ActionsQueue)));
+
         /// <summary>Starts the next turn as the turn flow does: creatures get closer to operative, then start-of-turn effects run.</summary>
         public void StartTurn() {
             TurnClock.Advance();

@@ -64,6 +64,58 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
+        public void ASpellOnYourOwnCreature_FollowsItWhenItMoves() {
+            var plating = game.Spell("Plating", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures));
+            var runner = game.Summon(p1, game.Creature("Runner", 1, 5), 0);
+
+            game.ActionsQueue.AddAction(new MoveCreatureAction(runner, p1.Battlefield[0], p1.Battlefield[1], p1));
+            game.Play(game.GiveCard(p1, plating), p1, p1.Battlefield[0]);
+            game.Resolve();
+
+            Assert.AreSame(runner, p1.Battlefield[1].OccupyingCreature, "Moves resolve before spells");
+            Assert.AreEqual(2, runner.CurrentArmorPool, "You know where your own creature will be: the spell follows it");
+        }
+
+        [Test]
+        public void ASpellOnACreatureBeingSummoned_LandsOnIt_OrOnItsSlotIfTheSummonIsTakenBack() {
+            var plating = game.Spell("Plating", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures));
+            var newcomer = (ICreature)game.GiveCard(p1, game.Creature("Newcomer", 1, 5));
+            var standing = game.Summon(p1, game.Creature("Standing", 1, 5), 2);
+
+            game.Play(newcomer, p1, p1.Battlefield[1]);
+            game.Play(game.GiveCard(p1, plating), p1, p1.Battlefield[1]); // Dropped on the queued creature
+            game.Resolve();
+            Assert.AreEqual(2, newcomer.CurrentArmorPool, "The spell homes on the creature queued there");
+
+            var late = (ICreature)game.GiveCard(p1, game.Creature("Late", 1, 5));
+            game.Play(late, p1, p1.Battlefield[3]);
+            game.Play(game.GiveCard(p1, plating), p1, p1.Battlefield[3]);
+            game.ActionsQueue.CancelPlay(late);
+            game.ActionsQueue.AddAction(new MoveCreatureAction(standing, p1.Battlefield[2], p1.Battlefield[3], p1));
+            game.Resolve();
+            Assert.AreEqual(0, late.CurrentArmorPool);
+            Assert.AreEqual(2, standing.CurrentArmorPool, "With the summon taken back, the spell lands on whatever is in the slot it was aimed at");
+        }
+
+        [Test]
+        public void ASpellOnAnEnemySlot_HitsWhateverIsThereWhenItResolves_OrFizzlesIfItNeedsACreature() {
+            var plating = game.Spell("Plating", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.EnemyCreatures));
+            var bolt = game.Spell("Bolt", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
+            var dodger = game.Summon(p2, game.Creature("Dodger", 1, 5), 0);
+            var stepper = game.Summon(p2, game.Creature("Stepper", 1, 5), 2);
+
+            game.ActionsQueue.AddAction(new MoveCreatureAction(dodger, p2.Battlefield[0], p2.Battlefield[1], p2));
+            game.ActionsQueue.AddAction(new MoveCreatureAction(stepper, p2.Battlefield[2], p2.Battlefield[3], p2));
+            game.Play(game.GiveCard(p1, plating), p1, p2.Battlefield[0]);
+            game.Play(game.GiveCard(p1, bolt), p1, p2.Battlefield[2]);
+            game.Resolve();
+
+            Assert.AreEqual(0, dodger.CurrentArmorPool, "Enemy creatures can dodge: the Armor needs a creature in the slot, so it fizzles");
+            Assert.AreEqual(5, stepper.Health);
+            Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "Damage doesn't need a creature: into an empty slot it hits that side's player");
+        }
+
+        [Test]
         public void GroupEffects_HitEveryCreatureOfTheirGroup_Once() {
             var mine = game.Summon(p1, game.Creature("Mine", 0, 5), 0);
             var theirsA = game.Summon(p2, game.Creature("Theirs A", 0, 5), 0);

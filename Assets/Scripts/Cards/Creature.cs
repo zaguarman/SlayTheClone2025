@@ -16,6 +16,10 @@ namespace SlayTheClone {
         int BaseHealth { get; }
         int BaseSpeed { get; }
         BoardSlot Slot { get; set; }
+        /// <summary>The slot it was last in, kept after it leaves play (where effects homing on it land then).</summary>
+        BoardSlot LastSlot { get; }
+        /// <summary>How many times it has landed on the board this combat.</summary>
+        int TimesEnteredPlay { get; }
         // Only changes health; death and its consequences are handled by the caller
         int TakeHealthDamage(int healthDamage); // Returns actual damage dealt
         void ModifyArmorPool(int amount);
@@ -75,7 +79,16 @@ namespace SlayTheClone {
         public int Health => currentHealth;
 
         public IPlayer Owner { get; private set; }
-        public BoardSlot Slot { get; set; }
+        private BoardSlot slot;
+        public BoardSlot Slot {
+            get => slot;
+            set {
+                slot = value;
+                if (value != null) LastSlot = value;
+            }
+        }
+        public BoardSlot LastSlot { get; private set; }
+        public int TimesEnteredPlay { get; private set; }
 
         public int TurnsUntilOperative { get; private set; }
         public bool IsOperative => TurnsUntilOperative == 0;
@@ -99,6 +112,7 @@ namespace SlayTheClone {
 
         public void EnterPlay(int turn) {
             landedOnTurn = turn;
+            TimesEnteredPlay++;
             CurrentArmorPool = 0; // Armor is lost when a creature leaves play (GDD 1.1 Armor), so it always enters without any
         }
 

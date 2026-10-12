@@ -85,6 +85,28 @@ namespace SlayTheClone {
             return TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
         }
 
+        /// <summary>
+        /// What a card dropped on a slot is aimed at. A spell aimed at one of the caster's own creatures, on the board or
+        /// queued to be summoned there, homes on it: there's no fog of war on your own side, so you know where it will be.
+        /// Aimed at an enemy slot (or an empty one), it's Fixed: it hits whatever is in that slot when it resolves (GDD 4.6).
+        /// </summary>
+        public static ITarget AimAt(ICard card, IPlayer caster, BoardSlot slot, IActionsQueue queue) {
+            if (!(card is Spell spell) || slot == null || slot.Owner != caster || !IsAimed(spell)) return slot;
+
+            // A creature queued to be summoned here replaces the one standing here before spells resolve
+            var creature = IncomingCreature(slot, queue) ?? slot.OccupyingCreature;
+            return creature != null ? new HomingTarget(creature, slot) : slot;
+        }
+
+        private static ICreature IncomingCreature(BoardSlot slot, IActionsQueue queue) {
+            if (queue == null) return null;
+            foreach (var action in queue.GetPendingActions()) {
+                if (action is PlayCardAction play && play.GetTarget() == slot && play.GetCard() is ICreature played) return played;
+                if (action is SummonCreatureAction summon && summon.GetTargetSlot() == slot) return summon.GetCreature();
+            }
+            return null;
+        }
+
         /// <summary>Whether where the spell is dropped decides what at least one of its effects lands on.</summary>
         public static bool IsAimed(Spell spell) =>
             spell != null && spell.Effects.SelectMany(e => e.actions).Any(a => a.targetType != TargetType.Self && UsesChosenTarget(a));
@@ -101,6 +123,9 @@ namespace SlayTheClone {
         // Null when the action applies to neither (it does nothing).
         private static ITarget ResolveChosenTarget(ITarget target, ActionType actionType) {
             switch (target) {
+                case HomingTarget homing:
+                    if (homing.CreatureInPlay != null) return CanAffectCreatures(actionType) ? homing.CreatureInPlay : null;
+                    return homing.CurrentSlot != null ? ResolveChosenTarget(homing.CurrentSlot, actionType) : null;
                 case BoardSlot slot:
                     if (slot.OccupyingCreature != null && CanAffectCreatures(actionType)) return slot.OccupyingCreature;
                     return CanAffectPlayers(actionType) ? slot.Owner : null;

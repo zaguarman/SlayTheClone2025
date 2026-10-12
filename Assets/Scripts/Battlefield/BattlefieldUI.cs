@@ -140,7 +140,8 @@ namespace SlayTheClone {
 
             Log($"Adding PlayCardAction for {cardToPlay.Name} on slot (TargetID: {targetSlot.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
             GameManager.ActionsQueue.CancelPlay(cardToPlay); // A queued card dragged to a new target replaces its play
-            GameManager.ActionsQueue.AddAction(new PlayCardAction(cardToPlay, caster, targetSlot.Model));
+            var aim = EffectResolver.AimAt(cardToPlay, caster, targetSlot.Model, GameManager.ActionsQueue);
+            GameManager.ActionsQueue.AddAction(new PlayCardAction(cardToPlay, caster, aim));
         }
 
         private void HandleCardFromBattlefield(CardController card, BattlefieldSlot targetSlot) {
