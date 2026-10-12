@@ -35,6 +35,15 @@ MonoBehaviour:
       statusPotency: 2
       cleanse: 0
       slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
   designNotes: 'Mechanics test: Blessed 2. Each stack negates the next status that
     would land, friendly or not, Doomed included. Persistent, up to 3 stacks.'
   artDescription: A gilded chalice on a velvet cushion behind museum glass. A queue

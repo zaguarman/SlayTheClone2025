@@ -105,3 +105,32 @@ CREATURE ABILITIES ('Abilities Compendium')
 
 22. What counts as "an effect on more than one creature" (Too Mainstream)
     • Done for now: effects on every creature of a group ("each enemy creature"), effects that also hit adjacent creatures, attack spreads and chains. An effect that picks one creature at random, or is aimed at it, still affects it.
+
+
+
+WATCHDOGS (GDD 3.11)
+
+23. What's done and what waits
+    • Done: Watchdogs created through the queue by a card effect, watching a creature (when the effect is aimed at one) or a whole side. Conditions: action type (Attack, Spell, Move, Ability, Summon, Status), side, creature, and "N or less" (an attack's Attack). Effects: Nullify, Redirect, Reorder, Reveal. On Watch and Briefing timings, charges, Days, the oldest-match rule, and catching actions queued before the Watchdog existed.
+    • Waiting: "Can't match the unseen" (Concealed, Undercover, Encrypted don't exist yet); Reveal does nothing yet, because everything is visible (no Fog of War); Create (queue a new action) needs a way to describe that action on a card; the Turn History entry ("nullified by ...") is only in the log for now.
+
+24. Redirect: to where?
+    • Done for now: to a random other creature on the side the action was aimed at (for attacks and aimed spells). If there's none, the action is unchanged. Moves and summons can't be redirected.
+    • Question: should the card say where it redirects (e.g., "to the enemy's weakest creature", "back at its own side")?
+
+25. "Every" at the Briefing
+    • Done for now: picking every matching action costs one charge in total, not one per action.
+    • Question: right, or one charge per action?
+
+26. "N or less" for non-attacks
+    • Done for now: the number only applies to attacks (their Attack). Spells, statuses and abilities have no strength to compare.
+    • Question: what should it measure for those (damage dealt, Days of a status)?
+
+27. Watchdog visibility in hot-seat
+    • Done for now: each side lists its Watchdogs at the end of its row. Player 1's show in full; player 2's show only what they watch, with the condition as "???".
+
+28. New test cards
+    • Antivirus (Tech, Brainstorm List > Tech > Core Technologies): Watchdog: enemy spells -> Nullify, 1 charge (On Watch).
+    • Counter-Intelligence (Shadow Ops., Brainstorm List > Shadow Ops. > Espionage): Watchdog: the strongest enemy attack -> Redirect, 2 charges (Briefing).
+    • They replaced Digital Nomad and Raised Security Level in the Mechanics Test deck (Delivery Cyclist and Diplomat still test Leapfrog and Armor).
+    • Question: are the stats and pictures right?

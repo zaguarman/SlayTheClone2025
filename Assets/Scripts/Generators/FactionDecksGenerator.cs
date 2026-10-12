@@ -46,9 +46,9 @@ namespace SlayTheClone {
         // the death sequence, Status Timing, Deployment Time, Priority, Blessed, Cleanse and Heresy), from every faction:
         // pick it to try them all in one match
         private static readonly string[] MechanicsTestCards = {
-            "Delivery Cyclist", "Digital Nomad", "Political Decoy", "Cleaning Robot Premium",
+            "Delivery Cyclist", "Political Decoy", "Cleaning Robot Premium",
             "DDOS Attack", "Dogpile", "Memento Mori", "Martyr", "Generational Trauma",
-            "Raised Security Level", "Diplomat", "Keyboard Warrior", "Rage Bait",
+            "Diplomat", "Keyboard Warrior", "Rage Bait", "Antivirus", "Counter-Intelligence",
             "The Holy Grail", "Exorcism", "Preemptive Strike",
             "Lost Landmine", "Its A Trap", "Ceasefire", "Burn Notice",
         };
@@ -346,6 +346,12 @@ namespace SlayTheClone {
                 "Mechanics test: Scorched Earth on a slot. The passive abilities of the creature there (retaliation, Dawn and Dusk effects, death effects) don't trigger while it stands on it. Entry effects still happen.",
                 PlaceSlotEffect(SlotEffectType.ScorchedEarth, 0, 0, TargetType.EnemyCreatures))
                 .Picture("A spy in a trench coat reading a letter stamped BURN NOTICE, while his gadgets go dark and, in the background, his handler feeds his file into a shredder."),
+            Spell("Counter-Intelligence", TargetType.Player,
+                "We knew you knew we knew.",
+                "Mechanics test: a Briefing Watchdog (GDD 3.11). From the Day after it's created, before anything resolves, it redirects the strongest enemy attack to another creature on the side it was aimed at. 2 charges, one per Day it triggers.",
+                CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Redirect,
+                    charges = 2, timing = WatchdogTiming.Briefing, pick = BriefingPick.Strongest }, TargetType.Enemy))
+                .Picture("Two spies in trench coats peeking at each other through holes in their newspapers on a park bench, while a third spy watches them both from inside a potted plant."),
         };
 
         // Tech: rewires the queue
@@ -355,6 +361,11 @@ namespace SlayTheClone {
                 "Mechanics test: Exhausted cancels the target's planned actions (spells land before attacks), lasts the rest of the Day and all of the next, turns its abilities off and adds +1 to every hit (Exposed). Aimed at an enemy slot it's Fixed: the enemy can dodge by moving.",
                 Stun(1, TargetType.EnemyCreatures))
                 .Picture("A server rack melting under an avalanche of tiny envelope icons, smart fridges and toasters in the background, each with a red glowing eye."),
+            Spell("Antivirus", TargetType.Player,
+                "1 threat blocked. 37 offers to upgrade to Premium.",
+                "Mechanics test: a Watchdog (GDD 3.11). It's created when the spell resolves and, On Watch, nullifies the next enemy spell before it resolves, even one planned before it existed. 1 charge.",
+                CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Spell, side = WatchdogSide.Enemy, effect = WatchdogEffect.Nullify, charges = 1 }, TargetType.Enemy))
+                .Picture("A knight in armor made of a shiny antivirus logo blocking a glowing spell scroll at a castle gate, while the castle walls behind him are plastered with his own pop-ups: \"RENEW NOW - 60% OFF\"."),
         };
 
         // Myth: slow and inevitable; creatures die and pay off
@@ -457,6 +468,13 @@ namespace SlayTheClone {
         private static EffectAction PlaceSlotEffect(SlotEffectType type, int value, int days, TargetType target) {
             var action = Act(ActionType.PlaceSlotEffect, value, target, TargetModifier.None);
             action.slotEffect = type;
+            action.statusDuration = days;
+            return action;
+        }
+
+        private static EffectAction CreateWatchdog(WatchdogSpec spec, TargetType target, int days = 0) {
+            var action = Act(ActionType.CreateWatchdog, 0, target, TargetModifier.None);
+            action.watchdog = spec;
             action.statusDuration = days;
             return action;
         }

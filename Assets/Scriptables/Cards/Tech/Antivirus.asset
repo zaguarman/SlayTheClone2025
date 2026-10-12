@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: Antivirus
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: fbaf7f33-5179-42ab-b445-ec5ecff26c68
+  cardName: Antivirus
+  description: 1 threat blocked. 37 offers to upgrade to Premium.
+  cardType: 1
+  faction: 5
+  artwork: {fileID: 0}
+  priority: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 12
+      value: 0
+      targetType: 1
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      slotEffect: 0
+      watchdog:
+        watches: 1
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 1
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+  designNotes: 'Mechanics test: a Watchdog (GDD 3.11). It''s created when the spell
+    resolves and, On Watch, nullifies the next enemy spell before it resolves, even
+    one planned before it existed. 1 charge.'
+  artDescription: 'A knight in armor made of a shiny antivirus logo blocking a glowing
+    spell scroll at a castle gate, while the castle walls behind him are plastered
+    with his own pop-ups: "RENEW NOW - 60% OFF".'
+  defaultTargetType: 0

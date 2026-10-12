@@ -36,6 +36,15 @@ MonoBehaviour:
       statusPotency: 0
       cleanse: 0
       slotEffect: 3
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
   designNotes: 'Mechanics test: Temporal Shield for 2 Days on a slot. The creature
     there takes no combat damage, but spells and abilities still hurt it. It stays
     with the slot, not the creature (Static).'

@@ -260,6 +260,7 @@ namespace SlayTheClone {
                 GameMediator.CreatureSummoned += OnCreatureSummoned;
                 GameMediator.BattlefieldStateChanged += UpdateUI;
                 GameMediator.ActionsQueueChanged += RefreshQueuedGhosts;
+                GameMediator.ActionsQueueChanged += RefreshWatchdogs;
             }
         }
 
@@ -268,7 +269,39 @@ namespace SlayTheClone {
                 GameMediator.CreatureSummoned -= OnCreatureSummoned;
                 GameMediator.BattlefieldStateChanged -= UpdateUI;
                 GameMediator.ActionsQueueChanged -= RefreshQueuedGhosts;
+                GameMediator.ActionsQueueChanged -= RefreshWatchdogs;
             }
+        }
+
+        // This side's active Watchdogs, listed at the end of its row. The local player is player 1: the other side's show
+        // only what they watch (GDD 3.11 Visibility)
+        private TMPro.TextMeshProUGUI watchdogList;
+
+        /// <summary>The Watchdog list shown at the end of this row, empty when there are none.</summary>
+        public string WatchdogText => watchdogList != null && watchdogList.gameObject.activeSelf ? watchdogList.text : "";
+
+        private void RefreshWatchdogs() {
+            if (!IsInitialized || Player == null || battlefieldSlots.Count == 0) return;
+            var mine = GameManager?.ActionsQueue?.Watchdogs.Where(w => w.Controller == Player).ToList();
+            if (mine == null || mine.Count == 0) {
+                if (watchdogList != null) watchdogList.gameObject.SetActive(false);
+                return;
+            }
+
+            if (watchdogList == null) {
+                var lastSlot = battlefieldSlots[battlefieldSlots.Count - 1].transform;
+                watchdogList = UITheme.NewText("Watchdogs", lastSlot, "", 15f, UITheme.Parchment, TMPro.TextAlignmentOptions.TopLeft);
+                watchdogList.textWrappingMode = TMPro.TextWrappingModes.Normal;
+                var rect = watchdogList.rectTransform;
+                rect.anchorMin = rect.anchorMax = new Vector2(1f, 1f);
+                rect.pivot = new Vector2(0f, 1f);
+                rect.sizeDelta = new Vector2(190f, BattlefieldSlot.Size.y);
+                rect.anchoredPosition = new Vector2(16f, 0f);
+                UITheme.AddDropShadow(watchdogList);
+            }
+            bool forController = Player.IsPlayer1;
+            watchdogList.text = "<b>Watchdogs</b>\n" + string.Join("\n", mine.Select(w => "- " + w.Describe(forController)));
+            watchdogList.gameObject.SetActive(true);
         }
 
         private void RefreshQueuedGhosts() {

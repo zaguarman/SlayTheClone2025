@@ -35,6 +35,15 @@ MonoBehaviour:
       statusPotency: 0
       cleanse: 0
       slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
     - actionType: 6
       value: 1
       targetType: 3
@@ -47,6 +56,15 @@ MonoBehaviour:
       statusPotency: 0
       cleanse: 0
       slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
   designNotes: 'Future: a Law that also adds 1 Deployment Time to your next creature
     (the paperwork).'
   artDescription: 

@@ -14,7 +14,7 @@ CONTENTS
 • Three monofaction decks, one per faction: Statecraft has 20 different cards, Corporate 18, Zeitgeist 17. No copies yet.
 • Every card name comes from the 'Brainstorm List' or the 'Refined Brainstorm List', picking the most cynical ones. Margin Call is the exception: a Corporate staple added on purpose.
 • Cards only use what the engine already does: damage, healing, armor, draws, summoning from the deck, stat changes (ModifyStat), the Exhausted stun, and, for the cards in section 6, Doomed, Burn, Health Loss, Leapfrog and Swap.
-• Priority (Action) is used by Preemptive Strike, Slot Effects by Lost Landmine and Ceasefire. No Watchdogs, control changes or Locations yet.
+• Priority (Action) is used by Preemptive Strike, Slot Effects by Lost Landmine and Ceasefire. Watchdogs only by the test cards in section 6. No control changes or Locations yet.
 • No card checks or rewards the presence of another faction (no "deals more damage to Corporate creatures").
 • Every card is a placeholder for a future GDD version. That version is stored on the card asset itself (the "Design Notes" field in the Inspector) and summarized below as "Future".
 
@@ -174,7 +174,7 @@ Spells
 Cards made on 2026-10-12 to try the mechanics built that day: movement (GDD 2.4), Exhausted, Doomed, Health Loss, Armor, Homing and Fixed aim (4.6), the Creature Death Sequence (3.9), Status Timing (5.2) and Deployment Time (3.2). Each card's Design Notes say what it tests; its Art Description holds the brief for its picture.
 • Corporate, Statecraft and Zeitgeist cards joined their faction decks.
 • Digital Society, Shadow Ops., Tech, Myth and Mind have no deck yet (a deck needs 12 cards). Their cards wait in Assets/Scriptables/Cards/<Faction>/ for those decks.
-• The Mechanics Test deck mixes them with Preemptive Strike (Priority), 20 in all (Inflation stays out: Generational Trauma already tests Health Loss). It's a test deck: the DeckCatalog offers it next to the faction decks, but no opponent brings it and the one-faction rule doesn't apply.
+• The Mechanics Test deck mixes them with Preemptive Strike (Priority), 20 in all (Inflation, Digital Nomad and Raised Security Level stay out: Generational Trauma, Delivery Cyclist and Diplomat already test Health Loss, Leapfrog and Armor). It's a test deck: the DeckCatalog offers it next to the faction decks, but no opponent brings it and the one-faction rule doesn't apply.
 
 Creatures (Attack/Health/Speed, Deployment Time)
     • Cleaning Robot Premium (Corporate, 2/7/1, 1): no ability. Tests pushing, blocked pushes and the automatic move order.
@@ -199,6 +199,8 @@ Spells
     • Ceasefire (Statecraft): A Temporal Shield on a slot for 2 Days: the creature there takes no combat damage.
     • Its A Trap (Digital Society): A hidden Barbed Snare (2 damage) on a slot: the first creature to leave it, even pushed or swapped, takes the damage.
     • Burn Notice (Shadow Ops.): Scorched Earth on a slot: the passive abilities of the creature there don't trigger.
+    • Antivirus (Tech): Watchdog: enemy spells -> Nullify, 1 charge (On Watch).
+    • Counter-Intelligence (Shadow Ops.): Watchdog: the strongest enemy attack -> Redirect, 2 charges (Briefing).
 
 Waiting on a decision
     • Plot Armor (Zeitgeist, 2/2/2, 0): survives a lethal hit once per combat. Cards can't say "once per combat" yet, so it isn't made.

@@ -29,3 +29,4 @@ MonoBehaviour:
   speed: 1
   turnsUntilOperative: 1
   movement: 2
+  ability: 0

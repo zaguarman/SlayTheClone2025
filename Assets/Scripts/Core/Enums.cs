@@ -8,7 +8,7 @@ namespace SlayTheClone {
         public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, Zeitgeist, Mind, Utopia }
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
         public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie } // New triggers go last: cards store them as numbers
-        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, ModifyPriority, Cleanse, PlaceSlotEffect, CleanseSlot } // Renamed Buff to ModifyStat
+        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, ModifyPriority, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog } // Renamed Buff to ModifyStat
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         // Movement Keywords printed on creatures (GDD 2.4): Leapfrog jumps over creatures, Swap trades places with a friendly one
@@ -20,6 +20,13 @@ namespace SlayTheClone {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
             SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, Technician
         }
+
+        // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look
+        public enum WatchedAction { Attack, Spell, Move, Ability, Summon, Status }
+        public enum WatchdogSide { Enemy, Friendly, Any }
+        public enum WatchdogEffect { Nullify, Redirect, Reorder, Reveal }
+        public enum WatchdogTiming { OnWatch, Briefing }
+        public enum BriefingPick { First, Strongest, Every }
 
         // What a planned move does (see MovementRules.KindOf)
         public enum MoveKind { Walk, Push, Leapfrog, Swap }

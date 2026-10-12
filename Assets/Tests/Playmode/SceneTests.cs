@@ -74,6 +74,20 @@ namespace SlayTheClone.Tests {
             game.AssertViewsMatchRules();
         }
 
+        /// <summary>Active Watchdogs are listed by their row: in full for their controller, "???" for the other side (GDD 3.11).</summary>
+        [UnityTest]
+        public IEnumerator Watchdogs_AreListedByTheirSide_TheEnemysConditionHidden() {
+            var nullify = new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Nullify, charges = 2 };
+            game.Queue.AddAction(new CreateWatchdogAction(nullify, p1, null, 0));
+            game.Queue.AddAction(new CreateWatchdogAction(nullify, p2, null, 0));
+            game.Queue.ResolveActions();
+            yield return null;
+
+            StringAssert.Contains("attacks by the enemy -> Nullify (2 left, On Watch)", game.BoardView(p1).WatchdogText);
+            StringAssert.Contains("???", game.BoardView(p2).WatchdogText, "The enemy's condition is hidden");
+            StringAssert.DoesNotContain("Nullify", game.BoardView(p2).WatchdogText);
+        }
+
         [UnityTest]
         public IEnumerator AQueuedCreature_CanBeHovered_ToShowItEnlarged_WhetherItsSlotIsEmptyOrNot() {
             var occupant = game.Summon(p1, game.Cards.Creature("Test Ox", 0, 6), 3);

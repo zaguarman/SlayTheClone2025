@@ -15,7 +15,6 @@ MonoBehaviour:
   deckName: Mechanics Test
   cards:
   - {fileID: 11400000, guid: 3a11754dcac21e64eb0d7e6461cc531c, type: 2}
-  - {fileID: 11400000, guid: 3f4f451c39d6daf4ea88007aa445281f, type: 2}
   - {fileID: 11400000, guid: f6b043e3ca8ec5b4bbacd81dfacc2458, type: 2}
   - {fileID: 11400000, guid: fc6b56691729fb84e8472bcba349d39a, type: 2}
   - {fileID: 11400000, guid: e9521c4f57c50354c9326fd03f310258, type: 2}
@@ -23,10 +22,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bdd673e358a34044aa6e898d05eed9f6, type: 2}
   - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
   - {fileID: 11400000, guid: 763d55a98242f6545a8f7f97c9ce93b8, type: 2}
-  - {fileID: 11400000, guid: 310b0094c8b008747aa5b3bd448a289d, type: 2}
   - {fileID: 11400000, guid: 6b312445addd586499f7311d8d3a4b70, type: 2}
   - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}
   - {fileID: 11400000, guid: b3d7fcfd7bb472d45ac0258083a97e24, type: 2}
+  - {fileID: 11400000, guid: 78d9222cb06de4149bbc255bc3cd051e, type: 2}
+  - {fileID: 11400000, guid: 2fd9e148fb5a89c4187d088c486c4ac9, type: 2}
   - {fileID: 11400000, guid: 53fb908cccff5704db8655bf6a50761e, type: 2}
   - {fileID: 11400000, guid: 16728698b2920904aafb4ecb88a5f09c, type: 2}
   - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}

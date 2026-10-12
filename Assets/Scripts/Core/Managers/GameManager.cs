@@ -63,6 +63,11 @@ namespace SlayTheClone {
         void AddAction(IGameAction action);
         IDisposable QueueingAbilityOf(ICreature creature, EffectTrigger trigger); // Actions queued inside are that ability's effects
         IDisposable QueueingEnvironment(); // Actions queued inside are triggered Slot Effects or Traps: they resolve before anything else
+        /// <summary>The active Watchdogs, oldest first (GDD 3.11).</summary>
+        IReadOnlyList<Watchdog> Watchdogs { get; }
+        void AddWatchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days);
+        /// <summary>The Briefing: before the actions of the Day resolve, Briefing Watchdogs look at the whole queue once.</summary>
+        void BriefWatchdogs();
         void CancelActionsOf(ICreature creature); // A creature marked for destruction loses its pending non-retaliatory actions
         void ResolveActions();
         System.Collections.IEnumerator ResolveActionsStepByStep(Func<System.Collections.IEnumerator> afterEachAction);

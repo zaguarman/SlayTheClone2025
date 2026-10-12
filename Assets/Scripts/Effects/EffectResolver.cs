@@ -189,14 +189,15 @@ namespace SlayTheClone {
 
         private static bool CanAffectCreatures(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.ModifyStat
-                or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.ModifyPriority or ActionType.Cleanse;
+                or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.ModifyPriority or ActionType.Cleanse
+                or ActionType.CreateWatchdog;
 
         // A Priority change aimed at a player covers every creature that player controls, now and later (GDD 3.7 Global Modifiers)
         private static bool IsSideWide(EffectAction action) =>
-            action.actionType == ActionType.ModifyPriority && action.targetType is TargetType.Player or TargetType.Enemy;
+            action.actionType is ActionType.ModifyPriority or ActionType.CreateWatchdog && action.targetType is TargetType.Player or TargetType.Enemy;
 
         private static bool CanAffectPlayers(ActionType actionType) =>
-            actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon;
+            actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog;
         #endregion
 
         #region Actions
@@ -248,6 +249,10 @@ namespace SlayTheClone {
                         : null;
                 case ActionType.CleanseSlot:
                     return SlotOf(target) is BoardSlot cleansed ? new CleanseSlotAction(cleansed) : null;
+                case ActionType.CreateWatchdog: // Aimed at a creature it watches that creature; at a player, that whole side
+                    return creature != null || target is IPlayer
+                        ? new CreateWatchdogAction(action.watchdog, controller, creature, action.statusDuration)
+                        : null;
                 case ActionType.ModifyPriority: // For statusDuration Days counting this one; 0 means this Day only
                     return action.value != 0 && (creature != null || target is IPlayer)
                         ? new ModifyPriorityAction(target, action.value, action.statusDuration)

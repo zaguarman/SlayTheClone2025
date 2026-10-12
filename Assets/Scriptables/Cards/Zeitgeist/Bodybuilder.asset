@@ -35,6 +35,15 @@ MonoBehaviour:
       statusPotency: 0
       cleanse: 0
       slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
   designNotes: 'Future: Coffeinated, then Burnout. Never skips leg day, skips every
     rest day.'
   artDescription: 
@@ -43,3 +52,4 @@ MonoBehaviour:
   speed: 3
   turnsUntilOperative: 0
   movement: 0
+  ability: 0

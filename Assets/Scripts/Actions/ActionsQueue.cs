@@ -33,6 +33,8 @@ namespace SlayTheClone {
             public int RandomKey;    // The last tie-breaker, drawn once so the order doesn't shift while it waits
             public bool Retaliatory; // A reaction to what was done to its creature: its death doesn't cancel it
             public bool Environment; // A triggered Slot Effect or Trap: resolves before anything else (GDD 3.7)
+            public bool Watched;     // A Watchdog already had its look at it (only one triggers per action)
+            public int Reordered;    // Moved by a Watchdog inside its layer: -1 earlier, +1 later
         }
 
         private class Scope : IDisposable {
@@ -57,6 +59,9 @@ namespace SlayTheClone {
         private Entry executing;
         private readonly Stack<AbilityScope> abilities = new Stack<AbilityScope>();
         private int environmentScopes; // Open QueueingEnvironment scopes
+        private readonly List<Watchdog> watchdogs = new List<Watchdog>(); // Oldest first
+        private int watchdogSequence;
+        private bool lastTakenWasPartOfAction; // TakeNextAction's pick came from resolvingNow
         private ResolutionLayer currentLayer;
         private int sequence;
 
@@ -145,6 +150,9 @@ namespace SlayTheClone {
         // and actions no creature made come after the creatures' of the same Priority, in the order they were queued.
         private int CompareInLayer(Entry a, Entry b) {
             if (a.Layer == ResolutionLayer.Movement) return a.Sequence.CompareTo(b.Sequence);
+
+            int byWatchdog = a.Reordered.CompareTo(b.Reordered); // Watchdog Reorder: before or after the rest of its layer
+            if (byWatchdog != 0) return byWatchdog;
 
             int byPriority = PriorityOf(b).CompareTo(PriorityOf(a));
             if (byPriority != 0) return byPriority;
@@ -281,6 +289,7 @@ namespace SlayTheClone {
         // What the action being resolved does comes first; otherwise the best action of the earliest layer not yet finished.
         // When only layers that already finished have actions left, the layers run again from Movement.
         private Entry TakeNextAction() {
+            lastTakenWasPartOfAction = resolvingNow.Count > 0;
             if (resolvingNow.Count > 0) {
                 var now = resolvingNow[0];
                 resolvingNow.RemoveAt(0);
@@ -334,8 +343,14 @@ namespace SlayTheClone {
             }
 
             var entry = TakeNextAction();
-            var action = entry.Action;
             actionsResolved++;
+
+            // On Watch Watchdogs look at each action just before it resolves; what an action does as part of itself isn't watched
+            if (!lastTakenWasPartOfAction && !entry.Watched && !entry.Environment && OnWatch(entry)) {
+                gameMediator.NotifyActionsQueueChanged();
+                return true;
+            }
+            var action = entry.Action;
 
             string activeCreatureId = GetActiveCreatureId(action);
             if (activeCreatureId != null && activeCreatureActions.TryGetValue(activeCreatureId, out var active) && active == entry) {
@@ -374,6 +389,99 @@ namespace SlayTheClone {
                 OnActionsResolved.Invoke();
             }
             Log($"Action resolution complete (Queue ID: {QueueId})", LogTag.Actions);
+        }
+        #endregion
+
+        #region Watchdogs
+        public IReadOnlyList<Watchdog> Watchdogs =>
+            watchdogs.Where(w => !w.IsSpent && !w.HasExpired(executionContext.TurnClock.TurnNumber)).ToList().AsReadOnly();
+
+        /// <summary>A Watchdog becomes active (GDD 3.11). From now on it watches; a Briefing one briefs from tomorrow.</summary>
+        public void AddWatchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days) {
+            var watchdog = new Watchdog(spec, controller, watchedCreature, executionContext.TurnClock.TurnNumber, days, watchdogSequence++);
+            watchdogs.Add(watchdog);
+            Log($"Active: {watchdog}", LogTag.Actions | LogTag.Effects);
+            gameMediator.NotifyActionsQueueChanged();
+        }
+
+        private void DropFinishedWatchdogs() {
+            int turn = executionContext.TurnClock.TurnNumber;
+            watchdogs.RemoveAll(w => w.IsSpent || w.HasExpired(turn));
+        }
+
+        // The oldest On Watch Watchdog that matches acts on the action. True if the action doesn't resolve now
+        private bool OnWatch(Entry entry) {
+            entry.Watched = true;
+            DropFinishedWatchdogs();
+            var watchdog = watchdogs.FirstOrDefault(w => w.Spec.timing == WatchdogTiming.OnWatch && w.Matches(entry.Action, entry.Source));
+            if (watchdog == null) return false;
+
+            watchdog.SpendCharge();
+            switch (watchdog.Spec.effect) {
+                case WatchdogEffect.Nullify:
+                    WatchdogRules.LogTrigger(watchdog, entry.Action, "nullified");
+                    return true; // It resolves with no effect
+                case WatchdogEffect.Reorder: // On Watch can only move an action later
+                    WatchdogRules.LogTrigger(watchdog, entry.Action, "moved to the end of its layer");
+                    entry.Reordered = 1;
+                    waiting.Add(entry);
+                    return true;
+                case WatchdogEffect.Redirect:
+                    entry.Action = WatchdogRules.Redirect(entry.Action);
+                    WatchdogRules.LogTrigger(watchdog, entry.Action, "redirected");
+                    return false;
+                default: // Reveal: everything is visible until Fog of War exists
+                    WatchdogRules.LogTrigger(watchdog, entry.Action, "revealed");
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// The Briefing (GDD 3.7): before the actions of the Day resolve, each Briefing Watchdog (active since an earlier Day)
+        /// looks at the whole queue once, picks the first, the strongest or every matching action, and changes them.
+        /// Each briefing uses 1 charge.
+        /// </summary>
+        public void BriefWatchdogs() {
+            DropFinishedWatchdogs();
+            int turn = executionContext.TurnClock.TurnNumber;
+            foreach (var watchdog in watchdogs.Where(w => w.CanBrief(turn)).ToList()) {
+                var matches = waiting.Where(e => !e.Watched && !e.Environment && watchdog.Matches(e.Action, e.Source))
+                    .OrderBy(e => e.Layer).ThenBy(e => e, InLayerOrder).ToList();
+                if (matches.Count == 0) continue;
+
+                var picked = watchdog.Spec.pick switch {
+                    BriefingPick.Every => matches,
+                    BriefingPick.Strongest => matches.OrderByDescending(e => WatchdogRules.StrengthOf(e.Action)).Take(1).ToList(),
+                    _ => matches.Take(1).ToList()
+                };
+                watchdog.SpendCharge();
+                foreach (var entry in picked) {
+                    entry.Watched = true;
+                    switch (watchdog.Spec.effect) {
+                        case WatchdogEffect.Nullify:
+                            WatchdogRules.LogTrigger(watchdog, entry.Action, "nullified at the Briefing");
+                            waiting.Remove(entry);
+                            string activeCreatureId = GetActiveCreatureId(entry.Action);
+                            if (activeCreatureId != null && activeCreatureActions.TryGetValue(activeCreatureId, out var active) && active == entry) {
+                                activeCreatureActions.Remove(activeCreatureId);
+                            }
+                            break;
+                        case WatchdogEffect.Reorder:
+                            entry.Reordered = watchdog.Spec.moveEarlier ? -1 : 1;
+                            WatchdogRules.LogTrigger(watchdog, entry.Action, watchdog.Spec.moveEarlier ? "moved first in its layer" : "moved last in its layer");
+                            break;
+                        case WatchdogEffect.Redirect:
+                            entry.Action = WatchdogRules.Redirect(entry.Action);
+                            WatchdogRules.LogTrigger(watchdog, entry.Action, "redirected at the Briefing");
+                            break;
+                        default:
+                            WatchdogRules.LogTrigger(watchdog, entry.Action, "revealed at the Briefing");
+                            break;
+                    }
+                }
+            }
+            DropFinishedWatchdogs();
+            gameMediator.NotifyActionsQueueChanged();
         }
         #endregion
 
@@ -441,6 +549,7 @@ namespace SlayTheClone {
             waiting.Clear();
             activeCreatureActions.Clear();
             abilities.Clear();
+            watchdogs.Clear();
             OnActionsQueued.RemoveAllListeners();
             OnActionsResolved.RemoveAllListeners();
             OnActionExecuting.RemoveAllListeners();

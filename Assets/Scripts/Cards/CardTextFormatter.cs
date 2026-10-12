@@ -97,6 +97,7 @@ namespace SlayTheClone {
                 case ActionType.Cleanse: return EffectIcons.Cleanse;
                 case ActionType.PlaceSlotEffect: return SlotEffectIcon(action.slotEffect);
                 case ActionType.CleanseSlot: return EffectIcons.Cleanse;
+                case ActionType.CreateWatchdog: return EffectIcons.Dusk;
                 default: return null;
             }
         }
@@ -132,6 +133,8 @@ namespace SlayTheClone {
                     return $"place {DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
                 case ActionType.CleanseSlot:
                     return $"remove the Slot Effect from {SlotTarget(action, isSpell)}";
+                case ActionType.CreateWatchdog:
+                    return DescribeWatchdog(action, target);
                 case ActionType.Cleanse:
                     return action.cleanse switch {
                         CleanseTarget.Statuses => $"cleanse {target}'s statuses",
@@ -187,6 +190,28 @@ namespace SlayTheClone {
                 case TargetType.Enemy: return $"actions by enemy creatures get {Signed(action.value)} Priority {days}";
                 default: return $"give {target}'s actions {Signed(action.value)} Priority {days}";
             }
+        }
+
+        // The GDD card format: "Watchdog: [condition] -> [effect], N charges (timing)"
+        private static string DescribeWatchdog(EffectAction action, string target) {
+            var spec = action.watchdog;
+            string whose = spec.side switch { WatchdogSide.Enemy => "enemy ", WatchdogSide.Friendly => "friendly ", _ => "" };
+            string what = spec.watches switch {
+                WatchedAction.Attack => "attacks", WatchedAction.Spell => "spells", WatchedAction.Move => "moves",
+                WatchedAction.Ability => "abilities", WatchedAction.Summon => "summons", _ => "statuses"
+            };
+            bool watchesCreature = action.targetType is not (TargetType.Player or TargetType.Enemy);
+            string by = watchesCreature ? $" by {target}" : "";
+            string atMost = spec.atMost > 0 ? $" of {spec.atMost} or less" : "";
+            string effect = spec.effect switch {
+                WatchdogEffect.Nullify => "Nullify", WatchdogEffect.Redirect => "Redirect", WatchdogEffect.Reveal => "Reveal",
+                _ => spec.moveEarlier ? "move it first" : "move it last"
+            };
+            int charges = System.Math.Max(1, spec.charges);
+            string pick = spec.timing == WatchdogTiming.Briefing && spec.pick != BriefingPick.First ? $"{spec.pick.ToString().ToLower()} " : "";
+            string timing = spec.timing == WatchdogTiming.Briefing ? "Briefing" : "On Watch";
+            string days = action.statusDuration > 0 ? $", {Turns(action.statusDuration).Replace("turn", "Day")}" : "";
+            return $"<b>Watchdog</b>: {pick}{whose}{what}{atMost}{by} -> {effect}, {charges} charge{(charges == 1 ? "" : "s")} ({timing}{days})";
         }
 
         // Slot Effects aim at the slot, whoever stands in it

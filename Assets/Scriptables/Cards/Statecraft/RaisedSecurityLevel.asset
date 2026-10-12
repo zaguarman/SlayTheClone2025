@@ -35,6 +35,15 @@ MonoBehaviour:
       statusPotency: 0
       cleanse: 0
       slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
   designNotes: 'Mechanics test: Armor is capped at twice max Health, fades by 1 each
     Dusk and is lost when the creature leaves play. Aimed at your own creature, it
     follows it if it moves first (Homing).'

@@ -35,6 +35,15 @@ MonoBehaviour:
       statusPotency: 2
       cleanse: 0
       slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
   designNotes: 'Mechanics test: Status Timing. Burn does nothing at the Dusk of the
     Day it''s applied, then ticks for 2 Days.'
   artDescription: A phone screen with a glowing red notification, reflected in the

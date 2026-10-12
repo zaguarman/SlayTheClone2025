@@ -35,6 +35,15 @@ MonoBehaviour:
       statusPotency: 0
       cleanse: 0
       slotEffect: 4
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
   designNotes: 'Mechanics test: Scorched Earth on a slot. The passive abilities of
     the creature there (retaliation, Dawn and Dusk effects, death effects) don''t
     trigger while it stands on it. Entry effects still happen.'

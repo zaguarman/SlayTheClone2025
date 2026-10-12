@@ -77,6 +77,22 @@ namespace SlayTheClone {
         // PlaceSlotEffect Specific: value is its damage (Landmine, Barbed Snare), statusDuration its Days (0 = until replaced)
         public SlotEffectType slotEffect = SlotEffectType.None;
 
+        // CreateWatchdog Specific: statusDuration is its Days (0 = until its charges are used)
+        public WatchdogSpec watchdog;
+
         public EffectAction Clone() => (EffectAction)MemberwiseClone(); // Value-type fields only
+    }
+
+    /// <summary>"Watchdog: [condition] -> [effect], N charges (timing)" (GDD 3.11). A struct, so cloning an effect copies it.</summary>
+    [System.Serializable]
+    public struct WatchdogSpec {
+        public WatchedAction watches;
+        public WatchdogSide side;
+        public int atMost;          // "Attack 3 or less"; 0 = any
+        public WatchdogEffect effect;
+        public int charges;         // 0 counts as 1
+        public WatchdogTiming timing;
+        public BriefingPick pick;   // Briefing only
+        public bool moveEarlier;    // Briefing Reorder only: earlier instead of later
     }
 }

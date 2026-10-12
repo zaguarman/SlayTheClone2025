@@ -62,6 +62,7 @@ namespace SlayTheClone {
 
                 // --- Phase 1: Resolution (GDD 3.6): what both sides planned this Day. It's still this Day,
                 // so what resolves now is dated today (statuses applied now skip this Day's Dusk) ---
+                actionsQueue.BriefWatchdogs(); // The Briefing (GDD 3.7), before anything resolves
                 yield return ResolveQueuedActions();
 
                 // --- Phase 2: Dusk, for the Day that just resolved: Armor fades, statuses tick, Deployment Time counts down ---

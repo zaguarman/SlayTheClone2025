@@ -76,7 +76,7 @@ namespace SlayTheClone.Tests {
                 bool persistent = action.statusEffectToApply == StatusEffectType.Blessed; // Counts stacks, not Days
                 if (!persistent && action.statusDuration <= 0) return $"applies {action.statusEffectToApply} for {action.statusDuration} turns";
             }
-            else if (action.actionType is ActionType.Cleanse or ActionType.CleanseSlot) {
+            else if (action.actionType is ActionType.Cleanse or ActionType.CleanseSlot or ActionType.CreateWatchdog) {
                 return null; // Says what it removes instead of a value
             }
             else if (action.actionType == ActionType.PlaceSlotEffect) {

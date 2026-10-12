@@ -35,6 +35,15 @@ MonoBehaviour:
       statusPotency: 0
       cleanse: 0
       slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
   designNotes: 'Mechanics test: Doomed on either side. It wipes other statuses and
     blocks new ones, gives +1 permanent Attack each Dawn (it stays on the card),
     then Last Rites strike the opposite slot even if the creature Cannot Act, and

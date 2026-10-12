@@ -1,0 +1,140 @@
+using System.Linq;
+using static SlayTheClone.DebugLogger;
+using static SlayTheClone.Enums;
+
+namespace SlayTheClone {
+    /// <summary>
+    /// An Intelligence asset that watches the action queue (GDD 3.11 Watchdogs). It isn't a creature and never attacks: when
+    /// an action matches its condition it nullifies, redirects, reorders or reveals it, using a charge.
+    /// </summary>
+    public class Watchdog {
+        public WatchdogSpec Spec { get; }
+        public IPlayer Controller { get; }
+        public ICreature WatchedCreature { get; } // "attacks by Creature C"; null: a whole side
+        public int TurnCreated { get; }
+        public int Days { get; }                  // 0: until its charges are used
+        public int Sequence { get; }              // The oldest triggers when several match
+        public int ChargesLeft { get; private set; }
+
+        public Watchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int turnCreated, int days, int sequence) {
+            Spec = spec;
+            Controller = controller;
+            WatchedCreature = watchedCreature;
+            TurnCreated = turnCreated;
+            Days = days;
+            Sequence = sequence;
+            ChargesLeft = System.Math.Max(1, spec.charges);
+        }
+
+        public bool IsSpent => ChargesLeft <= 0;
+        public bool HasExpired(int turn) => Days > 0 && turn >= TurnCreated + Days;
+
+        /// <summary>Briefing Watchdogs only brief from the Day after they were created.</summary>
+        public bool CanBrief(int turn) => Spec.timing == WatchdogTiming.Briefing && turn > TurnCreated;
+
+        public void SpendCharge() => ChargesLeft--;
+
+        /// <summary>Whether it watches this action: its kind, whose it is, from which creature, and how strong.</summary>
+        public bool Matches(IGameAction action, ICreature source) {
+            var kind = WatchdogRules.KindOf(action, source);
+            if (kind != Spec.watches) return false;
+
+            var owner = WatchdogRules.OwnerOf(action, source);
+            if (Spec.side == WatchdogSide.Enemy && (owner == null || owner == Controller)) return false;
+            if (Spec.side == WatchdogSide.Friendly && owner != Controller) return false;
+
+            var actor = WatchdogRules.ActorOf(action, source);
+            if (WatchedCreature != null && actor != WatchedCreature) return false;
+
+            if (Spec.atMost > 0 && WatchdogRules.StrengthOf(action) > Spec.atMost) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// What a player sees of it: its controller everything; the other side only what it watches, with the condition
+        /// as "???" (GDD 3.11 Visibility) until Intelligence reveals it.
+        /// </summary>
+        public string Describe(bool forController) {
+            string watched = WatchedCreature != null ? WatchedCreature.Name : Spec.side switch {
+                WatchdogSide.Enemy => forController ? "the enemy" : "your side",
+                WatchdogSide.Friendly => forController ? "your side" : "their side",
+                _ => "both sides"
+            };
+            if (!forController) return $"Watching {watched}: ???";
+            string what = Spec.watches.ToString().ToLower() + (Spec.watches == WatchedAction.Ability ? "" : "s");
+            string atMost = Spec.atMost > 0 ? $" of {Spec.atMost} or less" : "";
+            return $"{what}{atMost} by {watched} -> {Spec.effect} ({ChargesLeft} left, {(Spec.timing == WatchdogTiming.Briefing ? "Briefing" : "On Watch")})";
+        }
+
+        public override string ToString() =>
+            $"Watchdog ({Controller?.Name}): {Spec.side} {Spec.watches}{(Spec.atMost > 0 ? $" {Spec.atMost} or less" : "")}" +
+            $"{(WatchedCreature != null ? $" by {WatchedCreature.Name}" : "")} -> {Spec.effect}, {ChargesLeft} charge(s) ({Spec.timing})";
+    }
+
+    /// <summary>How Watchdogs read and change actions (GDD 3.11).</summary>
+    public static class WatchdogRules {
+        /// <summary>The kind of action a Watchdog condition names; null for actions none watches (draws, deaths...).</summary>
+        public static WatchedAction? KindOf(IGameAction action, ICreature source) => action switch {
+            BattlefieldCombatAction => WatchedAction.Attack,
+            PlayCardAction play => play.GetCard() is ICreature ? WatchedAction.Summon : WatchedAction.Spell,
+            PlaySpellAction => WatchedAction.Spell,
+            SummonCreatureAction => WatchedAction.Summon,
+            MoveCreatureAction => WatchedAction.Move,
+            ApplyStatusEffectAction => WatchedAction.Status,
+            _ => source != null ? WatchedAction.Ability : (WatchedAction?)null
+        };
+
+        /// <summary>The creature acting: the attacker, mover, the creature summoned, or the one whose ability it is.</summary>
+        public static ICreature ActorOf(IGameAction action, ICreature source) => action switch {
+            BattlefieldCombatAction attack => attack.GetAttacker(),
+            MoveCreatureAction move => move.GetCreature(),
+            PlayCardAction play => play.GetCard() as ICreature,
+            SummonCreatureAction summon => summon.GetCreature(),
+            ApplyStatusEffectAction status => status.Source ?? source,
+            _ => source
+        };
+
+        /// <summary>Whose action it is.</summary>
+        public static IPlayer OwnerOf(IGameAction action, ICreature source) => action switch {
+            PlayCardAction play => play.GetOwner(),
+            PlaySpellAction play => play.GetOwner(),
+            SummonCreatureAction summon => summon.GetOwner(),
+            MoveCreatureAction move => move.GetPlayer(),
+            ApplyStatusEffectAction status => status.Controller ?? ActorOf(action, source)?.Owner,
+            _ => ActorOf(action, source)?.Owner
+        };
+
+        /// <summary>The number "N or less" compares: an attack's Attack. Other actions have none (0).</summary>
+        public static int StrengthOf(IGameAction action) => action is BattlefieldCombatAction attack ? attack.GetAttacker()?.Attack ?? 0 : 0;
+
+        /// <summary>Redirect: the same action aimed at another creature on the side it was aimed at, at random. Itself if there's none.</summary>
+        public static IGameAction Redirect(IGameAction action) {
+            switch (action) {
+                case BattlefieldCombatAction attack when attack.GetTargetSlot() != null:
+                    var slot = OtherOccupiedSlot(attack.GetTargetSlot());
+                    return slot != null ? new BattlefieldCombatAction(attack.GetAttacker(), slot, attack.IsLastRites) : action;
+                case PlayCardAction play when play.GetCard() is Spell && AimedSlot(play.GetTarget()) is BoardSlot aimed:
+                    var newSlot = OtherOccupiedSlot(aimed);
+                    return newSlot != null ? new PlayCardAction(play.GetCard(), play.GetOwner(), newSlot) : action;
+                default:
+                    return action;
+            }
+        }
+
+        private static BoardSlot AimedSlot(ITarget target) => target switch {
+            HomingTarget homing => homing.CurrentSlot,
+            BoardSlot slot => slot,
+            ICreature creature => creature.Slot,
+            _ => null
+        };
+
+        private static BoardSlot OtherOccupiedSlot(BoardSlot from) {
+            var others = from.Owner?.Battlefield.Where(s => s != from && s.IsOccupied()).ToList();
+            if (others == null || others.Count == 0) return null;
+            return others[GameRandom.Next(others.Count)];
+        }
+
+        public static void LogTrigger(Watchdog watchdog, IGameAction action, string what) =>
+            Log($"{action.GetType().Name} {what} by {watchdog}", LogTag.Actions | LogTag.Effects);
+    }
+}
