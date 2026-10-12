@@ -169,15 +169,7 @@ namespace SlayTheClone {
 
             if (IsOverQueuedGhost(eventData)) return; // The ghost of a creature queued here shows its own preview
 
-            var tooltip = Tooltip.Shared;
-            if (OccupyingCard != null) {
-                tooltip.ShowTooltip(OccupyingCard); // Show card details
-            }
-            else {
-                // Show basic slot info
-                string tooltipText = $"<b>Slot: {name}</b>\nTargetID: {TargetId.ShortId()}";
-                tooltip.ShowTooltip(tooltipText);
-            }
+            if (OccupyingCard != null) Tooltip.Shared.ShowTooltip(OccupyingCard); // An empty slot has nothing to show
         }
 
         public void OnPointerExit(PointerEventData eventData) {
