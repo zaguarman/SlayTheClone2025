@@ -452,6 +452,7 @@ Creature Roles
 • Spell Actions: Played from hand (or from the AI's script), e.g., by dragging onto a target.
     • Additional costs (including Requisites) are paid when the card is played.
     • Targets are chosen when the card is played.
+    • Where It Lands: A spell aimed at a target is dropped on a slot, on either side. A spell that hits a whole side (its player, or every creature there) is dropped anywhere on that side's battlefield, and can't be played on a side it does nothing to. While a card is dragged, only where it can land lights up: the slot under it, or the whole battlefield. Nothing lights up under the pointer when no card is dragged.
     • The effect becomes a 'Spell Action' and resolves in the Spell Layer.
     • Spells can cause movement, apply status effects, deal damage, heal, or change card draw.
     • Ordering: Spells have no Speed, so Spell Actions resolve in random order (both sides mixed). Future cards might give Spells their own Speed.

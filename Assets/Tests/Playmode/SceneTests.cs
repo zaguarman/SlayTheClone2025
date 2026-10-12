@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TestTools;
+using UnityEngine.UI;
 using static SlayTheClone.Enums;
 using static SlayTheClone.Tests.TestCards;
 
@@ -216,11 +217,13 @@ namespace SlayTheClone.Tests {
         }
 
         /// <summary>
+        /// A dragged card lights up only where it can land: a slot for creatures and aimed spells, a whole battlefield for
+        /// spells that hit a side, and nothing on a side it can't be played on; hovering without a card lights up nothing.
         /// A queued spell stays in the hand marked queued: it can be hovered, shows an arrow to the slot it's aimed at, and is
         /// taken back by clicking it, right-clicking it, or dragging it where it can't be played.
         /// </summary>
         [UnityTest]
-        public IEnumerator AQueuedSpell_StaysInTheHand_ShowsItsAim_CanBeTakenBack_ThenHitsItsTarget() {
+        public IEnumerator ACardLightsUpWhereItLands_AQueuedSpellShowsItsAim_CanBeTakenBack_ThenHitsItsTarget() {
             var ox = game.Summon(p2, game.Cards.Creature("Test Ox", 0, 6), 0);
             game.Summon(p2, game.Cards.Creature("Test Calf", 0, 6), 1);
             var bolt = game.GiveCard(p1, game.Cards.Spell("Test Bolt", TargetType.EnemyCreatures,
@@ -235,6 +238,49 @@ namespace SlayTheClone.Tests {
             game.Play(storm, p1, aimedAt);
             yield return null;
             CollectionAssert.IsEmpty(game.QueuedArrows(p1), "A spell that hits every creature of a kind isn't aimed: no arrow");
+            SceneGame.Click(Shown(storm));
+            yield return null;
+
+            var pup = game.GiveCard(p1, game.Cards.Creature("Test Pup", 1, 1));
+            yield return null;
+            Color MatOf(IPlayer side) => game.BoardView(side).GetComponent<Image>().color;
+            bool IsLit(BoardSlot slot) => game.BoardView(slot.Owner).FindSlotView(slot).GetComponent<Image>().color.a > 0f;
+            GameObject SlotObject(BoardSlot slot) => game.BoardView(slot.Owner).FindSlotView(slot).gameObject;
+            void Enter(PointerEventData pointer, GameObject over) => ExecuteEvents.Execute(over, pointer, ExecuteEvents.pointerEnterHandler);
+            void Exit(PointerEventData pointer, GameObject over) => ExecuteEvents.Execute(over, pointer, ExecuteEvents.pointerExitHandler);
+            var cases = new (ICard card, bool litMat1, bool litMat2, bool litSlot1, bool litSlot2)[] {
+                (storm, false, true, false, false), // Hits every enemy creature: the enemy battlefield, no slot
+                (zap, false, false, true, true),    // Aimed: any slot, never a whole battlefield
+                (pup, false, false, true, false),   // Summoned: a slot of its own side only
+            };
+            foreach (var (card, litMat1, litMat2, litSlot1, litSlot2) in cases) {
+                var drag = SceneGame.BeginDrag(Shown(card));
+                foreach (var (side, litMat, slot, litSlot) in new[] { (p1, litMat1, p1.Battlefield[2], litSlot1), (p2, litMat2, p2.Battlefield[2], litSlot2) }) {
+                    var mat = game.BoardView(side).gameObject;
+                    Enter(drag, mat);
+                    Assert.AreEqual(litMat ? UITheme.MatValid : UITheme.Mat, MatOf(side), $"{card.Name} over {side.Name}'s battlefield");
+                    Enter(drag, SlotObject(slot));
+                    Assert.AreEqual(litSlot, IsLit(slot), $"{card.Name} over {slot}");
+                    Exit(drag, SlotObject(slot));
+                    Exit(drag, mat);
+                }
+                SceneGame.EndDrag(Shown(card), drag);
+                yield return null;
+            }
+            var idle = new PointerEventData(EventSystem.current);
+            Enter(idle, game.BoardView(p1).gameObject);
+            Enter(idle, SlotObject(p1.Battlefield[2]));
+            Assert.AreEqual(UITheme.Mat, MatOf(p1), "Hovering a battlefield without a card doesn't light it up");
+            Assert.IsFalse(IsLit(p1.Battlefield[2]), "...nor an empty slot");
+            Exit(idle, SlotObject(p1.Battlefield[2]));
+            Exit(idle, game.BoardView(p1).gameObject);
+
+            Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), game.BoardView(p1).gameObject));
+            yield return null;
+            Assert.IsFalse(Shown(storm).IsQueued, "A spell that only hits enemy creatures can't be played on your own battlefield");
+            Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), game.BoardView(p2).gameObject));
+            yield return null;
+            Assert.IsTrue(Shown(storm).IsQueued, "...it's played by dropping it anywhere on the enemy's");
             SceneGame.Click(Shown(storm));
             game.Play(zap, p1, aimedAt);
             yield return null;

@@ -167,6 +167,22 @@ namespace SlayTheClone {
         public static bool IsAimed(Spell spell) =>
             spell != null && spell.Effects.SelectMany(e => e.actions).Any(a => a.targetType != TargetType.Self && UsesChosenTarget(a));
 
+        /// <summary>
+        /// Whether a spell that isn't aimed does something to this side of the table (its player or the creatures there),
+        /// so dropping it on that battlefield plays it. One that only does things to itself plays on its caster's side.
+        /// </summary>
+        public static bool Reaches(Spell spell, IPlayer caster, IPlayer side) {
+            var sides = spell.Effects.SelectMany(e => e.actions).SelectMany(a => SidesOf(a.targetType, caster)).ToList();
+            return sides.Count == 0 ? side == caster : sides.Contains(side);
+        }
+
+        private static IEnumerable<IPlayer> SidesOf(TargetType targetType, IPlayer caster) => targetType switch {
+            TargetType.Player or TargetType.FriendlyCreatures => new[] { caster },
+            TargetType.Enemy or TargetType.EnemyCreatures => new[] { caster.Opponent },
+            TargetType.AllCreatures => new[] { caster, caster.Opponent },
+            _ => new IPlayer[0]
+        };
+
         // A chosen target is used as is, unless the effect picks its own targets (random or every one of a kind).
         // Only effects that can land on creatures are aimed by it: drawing and summoning always go to the player
         // their target type names, wherever the card was dropped.

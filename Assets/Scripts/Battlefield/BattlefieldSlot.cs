@@ -20,7 +20,8 @@ namespace SlayTheClone {
         public CardController OccupyingCard { get; private set; } // The card currently shown here
 
         // A card-shaped space on the mat. At rest it is invisible over the slot marker the mat already draws there
-        // (see BoardSkin); it lights up under the pointer, and turns brass under a dragged card
+        // (see BoardSkin); it lights up under the pointer when a creature stands here, and turns brass under a dragged
+        // card that can be dropped here
         public static readonly Vector2 Size = new Vector2(172f, 212f);
         public static readonly Color MarkerColor = UITheme.Hex(0xE2B04A, 0.6f); // The corner brackets of a slot marker
         private static readonly Color HoverColor = UITheme.Hex(0xFFFFFF, 0.06f);
@@ -160,12 +161,15 @@ namespace SlayTheClone {
         }
 
         public void OnPointerEnter(PointerEventData eventData) {
-            if (IsCreatureFromHandDraggedOver(eventData)) {
-                OccupyingCard.SetReplacementPreview(true);
+            var dragged = eventData?.pointerDrag != null ? eventData.pointerDrag.GetComponent<CardController>() : null;
+            if (dragged != null) {
+                // Only a card aimed at a slot of this side lights it up: not a creature summoned elsewhere, nor a spell for the whole side
+                if (GetComponentInParent<BattlefieldUI>()?.AimOf(dragged) == BattlefieldUI.DropAim.Slot) {
+                    ShowHighlight(DragTargetColor, DragTargetTrimColor);
+                    if (IsCreatureFromHandDraggedOver(eventData)) OccupyingCard.SetReplacementPreview(true);
+                }
             }
-            bool isCardDraggedOver = eventData?.pointerDrag != null && eventData.pointerDrag.GetComponent<CardController>() != null;
-            if (isCardDraggedOver) ShowHighlight(DragTargetColor, DragTargetTrimColor);
-            else if (OccupyingCard != null) ShowHighlight(HoverColor, HoverTrimColor); // An empty slot stays plain unless something's dragged over it
+            else if (OccupyingCard != null) ShowHighlight(HoverColor, HoverTrimColor); // An empty slot stays plain
 
             if (IsOverQueuedGhost(eventData)) return; // The ghost of a creature queued here shows its own preview
 

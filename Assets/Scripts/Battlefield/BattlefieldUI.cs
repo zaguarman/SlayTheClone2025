@@ -66,7 +66,8 @@ namespace SlayTheClone {
             UpdateUI(Player);
         }
 
-        protected override DropZoneColors ZoneColors => new DropZoneColors(UITheme.Mat, UITheme.MatValid, UITheme.MatInvalid, UITheme.MatHover);
+        // The mat only lights up under a card that plays on the whole side (see HandlePointerEnter)
+        protected override DropZoneColors ZoneColors => new DropZoneColors(UITheme.Mat, UITheme.Mat, UITheme.Mat, UITheme.Mat);
 
         // A rounded mat just big enough for its row of slots
         protected override void StyleZone(Image zoneImage) => ApplyMatLook();
@@ -97,14 +98,48 @@ namespace SlayTheClone {
         #endregion
 
         #region Card Handling
+        /// <summary>Where a dragged card lands on this battlefield: one of its slots, the whole side, or nowhere.</summary>
+        public enum DropAim { None, Slot, Side }
+
+        /// <summary>
+        /// What dropping this card here would aim at. Creatures on the board move or attack into a slot; creatures from the
+        /// hand are summoned into a slot of their own side; aimed spells hit a slot on either side; other spells play on a
+        /// side they do something to (see <see cref="EffectResolver.Reaches"/>). Only what it aims at lights up.
+        /// </summary>
+        public DropAim AimOf(CardController card) {
+            if (card == null || Player == null) return DropAim.None;
+            // A queued creature's ghost is still a card in the hand
+            if (!IsCardFromHand(card) && !card.IsQueued) return card.GetLinkedCreature() != null ? DropAim.Slot : DropAim.None;
+
+            switch (card.GetLinkedCardInstance()) {
+                case ICreature:
+                    return card.Player == Player ? DropAim.Slot : DropAim.None;
+                case Spell spell when EffectResolver.IsAimed(spell):
+                    return DropAim.Slot;
+                case Spell spell:
+                    return EffectResolver.Reaches(spell, card.Player, Player) ? DropAim.Side : DropAim.None;
+                default:
+                    return DropAim.None;
+            }
+        }
+
+        protected override void HandlePointerEnter(PointerEventData eventData) {
+            var dragged = eventData.pointerDrag != null ? eventData.pointerDrag.GetComponent<CardController>() : null;
+            if (AimOf(dragged) == DropAim.Side) GetComponent<Image>().color = UITheme.MatValid;
+        }
+
         protected override void HandleCardDropped(CardController card) {
             if (card == null || !CanAcceptCard(card)) return;
             if (GameManager == null) return;
 
-            var targetSlot = GetTargetSlot();
+            var aim = AimOf(card);
+            if (aim == DropAim.Side) {
+                PlayFromHand(card, Player);
+                return;
+            }
+            var targetSlot = aim == DropAim.Slot ? GetTargetSlot() : null;
             if (targetSlot == null) return;
 
-            // A queued creature's ghost is still a card in the hand: dropping it re-aims its play
             if (IsCardFromHand(card) || card.IsQueued) {
                 HandleCardFromHand(card, targetSlot);
             }
@@ -127,6 +162,16 @@ namespace SlayTheClone {
         // The card is always played by the player whose hand it came from; the slot only decides where it lands:
         // creatures are summoned into it, spells resolve against its creature or its owner (see Spell.ResolveTarget).
         private void HandleCardFromHand(CardController card, BattlefieldSlot targetSlot) {
+            var cardToPlay = card.GetLinkedCardInstance();
+            if (cardToPlay is ICreature && queuedGhosts.TryGetValue(targetSlot, out var ghost) && ghost.GetLinkedCardInstance() != cardToPlay) {
+                Log($"Slot already has a creature queued; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
+                return;
+            }
+            PlayFromHand(card, targetSlot.Model);
+        }
+
+        // Queues the play of a hand card at what it was dropped on: a slot, or the player of a side
+        private void PlayFromHand(CardController card, ITarget droppedOn) {
             var caster = card.Player;
             var cardToPlay = card.GetLinkedCardInstance();
             if (caster == null || cardToPlay == null || !caster.Hand.Contains(cardToPlay)) {
@@ -134,14 +179,9 @@ namespace SlayTheClone {
                 return;
             }
 
-            if (cardToPlay is ICreature && queuedGhosts.TryGetValue(targetSlot, out var ghost) && ghost.GetLinkedCardInstance() != cardToPlay) {
-                Log($"Slot already has a creature queued; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
-                return;
-            }
-
-            Log($"Adding PlayCardAction for {cardToPlay.Name} on slot (TargetID: {targetSlot.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
+            Log($"Adding PlayCardAction for {cardToPlay.Name} on {droppedOn.TargetId.ToUpper()}", LogTag.Actions | LogTag.Cards);
             GameManager.ActionsQueue.CancelPlay(cardToPlay); // A queued card dragged to a new target replaces its play
-            var aim = EffectResolver.AimAt(cardToPlay, caster, targetSlot.Model, GameManager.ActionsQueue);
+            var aim = droppedOn is BoardSlot slot ? EffectResolver.AimAt(cardToPlay, caster, slot, GameManager.ActionsQueue) : droppedOn;
             GameManager.ActionsQueue.AddAction(new PlayCardAction(cardToPlay, caster, aim));
         }
 
