@@ -1655,8 +1655,16 @@ def generational_trauma():
     body += person(96, 186, 1.1, SKIN[0], "#4a4a5a", face="frown", hair=OLD_HAIR)
     body += rect(0, 120, 200, 4, "#d8f4ff", 'opacity="0.6"')
     body += stroke("M74 136 L66 66 M118 136 L126 66", SKIN[0], 9)
-    body += person(96, 74, 0.72, SKIN[0], "#e86a4a", face="grin", hair=OLD_HAIR)
-    body += lettering("BOOMER", 172, 30, 14, "#ffffff", outline="#7a3a2a")
+    # The Boomer, held up high and dry, glances down at the skeletons and couldn't care less (smug, half-lidded, cocktail in hand)
+    body += person(96, 76, 0.86, SKIN[0], "#e86a4a", face="smirk", hair=OLD_HAIR)
+    hx, hy, s = 96, 76 - 64 * 0.86, 0.86
+    for ex in (hx - 7 * s, hx + 7 * s):
+        body += ellipse(ex, hy - 2 * s, 4.4 * s, 3.4 * s, "#ffffff") + circle(ex + 2.2 * s, hy - 0.6 * s, 2.3 * s, "#222")
+        body += stroke(f"M{ex - 4.5 * s:.1f} {hy - 3.6 * s:.1f} L{ex + 4.5 * s:.1f} {hy - 3 * s:.1f}", SKIN[0], 2.6 * s)
+    body += stroke("M116 66 L132 56", "#e86a4a", 6)
+    body += poly([(128, 40), (148, 40), (138, 52)], "#bfe8ff", 'stroke="#555" stroke-width="1"') + stroke("M138 52 L138 62 M132 62 L144 62", "#555", 1.5)
+    body += path("M140 38 C 142 26 156 26 158 34 Z", "#ff5a8a") + stroke("M149 32 L144 44", "#555", 1)
+    body += lettering("BOOMER", 230, 22, 14, "#ffffff", outline="#7a3a2a")
     body += lettering("SILENT", 160, 170, 11, "#ffffff", outline="#1a3a5a")
     for x, name in ((226, "GEN X"), (274, "GEN Y"), (322, "GEN Z")):
         body += skull(x, 164, 0.75) + stroke(f"M{x} 178 L{x} 194 M{x - 8} 183 L{x + 8} 183 M{x - 8} 189 L{x + 8} 189", "#f2efe6", 2)
