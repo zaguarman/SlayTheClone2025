@@ -50,7 +50,6 @@ Card Game Factions Overview
 			Private Jet
 			Protein Shake
 			Cash
-			Robot
 			Semiconductors
 			Smartwatch
 			Stealth Suit
@@ -63,14 +62,11 @@ Card Game Factions Overview
 			72-hour bag
 			Synthesizer
 			Taser
-			Teflon
 			Teleporter
 			USB Stick
 			VR Headset
 			Venus Flytrap (Piranha Plant)
-			Water Bottle Filter
 			YIELD
-			Yoga Mat
 			Zweihander
 		Food & Consumables
 			Air Fryer
@@ -79,9 +75,6 @@ Card Game Factions Overview
 			Chinese Food
 			Broken Condom
 			Creatine
-			Freeze Dry Food
-			Japanese Curry
-			Mocktail
 			Nicotine
 			Soy Milk
 			Soylent
@@ -245,7 +238,6 @@ Card Game Factions Overview
 			Turbo
 			Two-Factor Authentication
 			Unstable Connection
-			Unstable Wi-Fi
 			VPN
 			Worm
 			Trojan
@@ -377,13 +369,10 @@ Card Game Factions Overview
 			Urban Dictionary Definition
 			Vaporwave
 			Viral Challenge
-			Viral Trend
 			Wojak Living The Dream
 			WTF Happened In 1971
 		Memes & Language
 			241543903 (fridge meme)
-			42
-			420
 			Ah, I see you're a man of culture as well
 			Enslaved Moisture.
 			Birb (Meme)
@@ -392,7 +381,6 @@ Card Game Factions Overview
 			Calm Your Tits
 			Caturday
 			Copypasta
-			Dangit
 			Deep Fried Meme
 			DOGE
 			dont dead open inside
@@ -404,21 +392,16 @@ Card Game Factions Overview
 			I Guess We Doin Meta Commentary Now
 			I Know That Feel Bro
 			Its Been 84 Years...
-			Meme
 			Modern Problems Require Modern Solutions
 			Never Let Them Know Your Next Move
 			No U (Counter And Redirect)
 			NPC (Meme)
-			O RLY?
-			OMG
 			Pastafarian God
 			RL: good graphics but long tutorial
 			Stay Hydrated
 			Task Failed Successfully
 			Too Bad So Sad
-			WTF
 			Woman Yelling at Cat (meme)
-			XD
 			Yoink
 		Archetypes & Roles
 			Afiliate Marketing
@@ -562,7 +545,6 @@ Card Game Factions Overview
 			Capital Gains Tax
 			Car Insurance
 			Creative Accounting
-			Credit Card (corpo)
 			Dark Money Donation
 			Dark Pools
 			Dead Cat Bounce
@@ -736,7 +718,6 @@ Card Game Factions Overview
 			Tracking Beacon
 			Unknown Unknown
 			Wet Work
-			Whistle
 			Whistleblower
 			Witness Protection Program
 		Conspiracy & Control Systems
@@ -827,9 +808,7 @@ Card Game Factions Overview
 			Populism
 			Post-Truth
 			Power Grid Failure
-			President
 			Presidential Pardon
-			Prince
 			Professors
 			Propaganda
 			Protección Diplomática
@@ -862,7 +841,6 @@ Card Game Factions Overview
 			Tax Season
 			Terrorist Attack
 			The Fifth Amendment
-			The King
 			Thoughtcrime
 			Tower Of Babel
 			Trade War
@@ -897,8 +875,6 @@ Card Game Factions Overview
 			Militar Salute
 			Misile Crisis
 			Mutually Assured Destruction
-			Navy Soldier
-			Ninja
 			Nuclear Disaster
 			Nuclear Submarine
 			Nuclear Summer
@@ -906,7 +882,6 @@ Card Game Factions Overview
 			Peace Treaty
 			Police Line Do Not Cross
 			Retaliation
-			Samurai
 			Shinyo Boat
 			Si Vis Pacem, Para Bellum
 			Soft Landing
@@ -939,7 +914,6 @@ Card Game Factions Overview
 			Justice
 			Lilith
 			Living Dead
-			Magician
 			Martyr
 			Medusa
 			Minotaur
@@ -1291,7 +1265,6 @@ Card Game Factions Overview
 			Red Herring
 			Reflect
 			Resonate
-			Scapegoating
 			Schrodinger's Cat
 			Selective Perception
 			Self-Fulfilling Prophecy
@@ -1375,7 +1348,6 @@ Card Game Factions Overview
 			Body Shaming
 			Burn The Candle At Both Ends
 			Child Support
-			Color Theory
 			Consumism
 			Deja Vu
 			Designed In California, Assembled In China
@@ -1401,7 +1373,6 @@ Card Game Factions Overview
 			Hikikomori
 			I don't want to be this kind of animal anymore (disco elysium reference) (zeitgeist)
 			IQ's Bell Curve
-			If paying for a game doesn't make it yours, pirating isn't stealing
 			In This House We Obey The Laws Of Thermodynamics!
 			Industrial Society and Its Future
 			In-group/Out-group Ethnophaulism
@@ -1429,11 +1400,9 @@ Card Game Factions Overview
 			Metrosexual
 			Microagression
 			Mind the Gap
-			Minimalism
 			Mindfulness
 			Missed Call
 			Modern Art
-			Morning Commute
 			New Rich
 			Night Shift
 			Nihilism
@@ -1445,13 +1414,11 @@ Card Game Factions Overview
 			Operation Mayhem
 			Overton Window
 			Pa que haiga lujo
-			Paella
 			Paradise Circus
 			Parasite
 			Passive Smoker
 			Chain Smoker
 			Performative Allyship
-			Pixelart
 			Political Correctness
 			Prince Charles Paradox
 			Pro-Choice
@@ -1470,12 +1437,10 @@ Card Game Factions Overview
 			Side Hustle
 			Slack Off
 			Snake Oil
-			Soap
 			Squeak (Rat Race video)
 			Stepstone
 			Stonewalling
 			Strike (Huelga)
-			Sudoku
 			System Glitch (Matrix Glitch)
 			Tax The Rich
 			Tessellate
@@ -1535,7 +1500,6 @@ Card Game Factions Overview
 			hedonistic treadmillionaire
 			Hipster
 			Hobo
-			Janitor
 			Karen
 			Low IQ Individuals
 			Mail Bride
@@ -1546,7 +1510,6 @@ Card Game Factions Overview
 			Normie
 			Parking Attendant (Aparcacoches)
 			Passport Bro
-			Personal Shopper
 			Pickpocketer
 			Plague Medic
 			Postal Worker
@@ -1579,7 +1542,6 @@ Card Game Factions Overview
 			Dr. Deiman's Black Jack
 			Fidget Spinner
 			Jetpack
-			Kimono
 			Matsuri
 			Mexican Telenovela
 			Misho The Fish

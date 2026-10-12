@@ -1,0 +1,46 @@
+Removed Brainstorm Terms
+
+Terms taken out of the 'Brainstorm List' on 2026-10-12, kept here in case one is worth bringing back.
+Each one shows the category it was listed under.
+
+Too Plain (no satirical angle)
+	Water Bottle Filter (Neutral Resources > Tools & Objects)
+	Yoga Mat (Neutral Resources > Tools & Objects)
+	Robot (Neutral Resources > Tools & Objects)
+	Teflon (Neutral Resources > Tools & Objects)
+	Japanese Curry (Neutral Resources > Food & Consumables)
+	Freeze Dry Food (Neutral Resources > Food & Consumables)
+	Mocktail (Neutral Resources > Food & Consumables)
+	Paella (Faction: Zeitgeist > Social Trends & Commentary)
+	Soap (Faction: Zeitgeist > Social Trends & Commentary)
+	Sudoku (Faction: Zeitgeist > Social Trends & Commentary)
+	Kimono (Faction: Zeitgeist > Cultural Objects & Events)
+	Navy Soldier (Faction: Statecraft > Warfare & Military)
+	Ninja (Faction: Statecraft > Warfare & Military)
+	Samurai (Faction: Statecraft > Warfare & Military)
+	Prince (Faction: Statecraft > Governance & Politics)
+	The King (Faction: Statecraft > Governance & Politics)
+	President (Faction: Statecraft > Governance & Politics)
+	Pixelart (Faction: Zeitgeist > Social Trends & Commentary)
+	Color Theory (Faction: Zeitgeist > Social Trends & Commentary)
+	42 (Faction: Digital Society > Memes & Language)
+	420 (Faction: Digital Society > Memes & Language)
+	OMG (Faction: Digital Society > Memes & Language)
+	WTF (Faction: Digital Society > Memes & Language)
+	XD (Faction: Digital Society > Memes & Language)
+	Dangit (Faction: Digital Society > Memes & Language)
+	Meme (Faction: Digital Society > Memes & Language)
+	O RLY? (Faction: Digital Society > Memes & Language)
+
+Strict Duplicates (the entry kept in the Brainstorm List is named after it)
+	Janitor (Faction: Zeitgeist > Archetypes & Roles): kept Janitor (Corporate > Workplace & Labor)
+	Personal Shopper (Faction: Zeitgeist > Archetypes & Roles): kept Personal Shopper (Corporate > Workplace & Labor)
+	If paying for a game doesn't make it yours, pirating isn't stealing (Faction: Zeitgeist > Social Trends & Commentary): kept If paying for something doesn't make it yours, pirating it, isn't stealing
+	Whistle (Faction: Shadow Ops. > Espionage & Covert Actions): kept Whistle (Silbar)
+	Credit Card (corpo) (Faction: Corporate > Finance & Economics): kept Credit Card
+	Magician (Faction: Myth > Mythic Beings & Deities): kept The Magician
+	Scapegoating (Faction: Mind > Psychology & Cognition): kept Scapegoat
+	Viral Trend (Faction: Digital Society > Online Life & Phenomena): kept Viral Challenge
+	Minimalism (Faction: Zeitgeist > Social Trends & Commentary): kept Minimalist
+	Unstable Wi-Fi (Faction: Tech > Core Technologies & Infrastructure): kept Unstable Connection
+	Morning Commute (Faction: Zeitgeist > Social Trends & Commentary): kept Traffic Jam
