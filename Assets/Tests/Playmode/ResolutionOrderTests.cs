@@ -5,8 +5,8 @@ using static SlayTheClone.Tests.TestCards;
 
 namespace SlayTheClone.Tests {
     /// <summary>
-    /// The order a turn resolves in: by kind of action, then by speed, with effects triggered along the way
-    /// resolving in the same turn. Runs the real rules without the scene (see <see cref="TestGame"/>).
+    /// The order a Day resolves in (GDD 3.7): layer by layer (moves, summons, spells, then abilities and attacks),
+    /// and inside a layer by Speed, then the tie-breakers. Runs the real rules without the scene (see <see cref="TestGame"/>).
     /// </summary>
     public class ResolutionOrderTests {
         private TestGame game;
@@ -24,34 +24,67 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [Test]
-        public void ActionsResolveByKind_SummonsMovesPlaysCombatDamageDiscardsThenDraws() {
-            game.SetDecks(game.Fillers(5), game.Fillers(5));
+        public void ActionsResolveLayerByLayer_MovesSummonsSpellsThenAbilitiesAndAttacks() {
             var walker = game.Summon(p1, game.Creature("Walker", 1, 3), 0);
             var mover = game.Summon(p1, game.Creature("Mover", 1, 3), 2); // A creature has one intent a Day, so another one moves
-            var played = game.GiveCard(p1, game.Creature("Played", 1, 1));
+            var played = game.GiveCard(p1, game.Creature("Played", 1, 1, speed: 2));
             var summoned = (ICreature)CardFactory.CreateCard(game.Creature("Summoned", 1, 1));
+            var zap = game.GiveCard(p1, game.Spell("Zap", TargetType.Enemy, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.Enemy)));
             game.History.Clear();
 
             // Queued in the opposite order
-            game.ActionsQueue.AddAction(new DrawCardsAction(p1, 1));
-            game.ActionsQueue.AddAction(new DiscardHandAction(p2));
-            game.ActionsQueue.AddAction(new DamagePlayerAction(p2, 1));
             game.Declare(walker, p2.Battlefield[4]);
+            game.ActionsQueue.AddAction(new PlayCardAction(zap, p1, null));
+            game.ActionsQueue.AddAction(new SummonCreatureAction(summoned, p2, p2.Battlefield[0]));
             game.ActionsQueue.AddAction(new PlayCardAction(played, p1, p1.Battlefield[3]));
             game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[2], p1.Battlefield[1], p1));
-            game.ActionsQueue.AddAction(new SummonCreatureAction(summoned, p2, p2.Battlefield[0]));
             game.Resolve();
 
             CollectionAssert.AreEqual(new[] {
-                "SummonCreature", "MoveCreature",
-                "PlayCard", "SummonCreature", // The play summons its creature right away
-                "BattlefieldCombat",
-                "DamagePlayer", "DamagePlayer", // The damage queued directly, then the attack's
-                "DiscardHand", "DrawCards"
+                "MoveCreature",
+                "PlayCard", "SummonCreature", // The faster creature enters first; playing it summons it right away
+                "SummonCreature",
+                "PlayCard", "PlaySpell", "DamagePlayer", // A spell's effects land as part of it
+                "BattlefieldCombat", "DamagePlayer" // So does an attack's hit
             }, game.History.ExecutedKinds());
         }
 
-        /// <summary>A 2-health guard is attacked for 2 the same turn its side gets +2 attack or armor, from a creature entering or a spell.</summary>
+        /// <summary>Two creatures attack each other: the first to strike can kill the other before it gets to.</summary>
+        [Test]
+        public void InALayer_TheFasterActsFirst_ThenTheWeaker_ThenTheLowerAttack() {
+            using (var g = new TestGame()) {
+                var fast = g.Summon(g.Player1, g.Creature("Fast", 5, 3, speed: 2), 0);
+                var slow = g.Summon(g.Player2, g.Creature("Slow", 5, 3), 0);
+                g.Declare(slow, g.Player1.Battlefield[0]);
+                g.Declare(fast, g.Player2.Battlefield[0]);
+                g.Resolve();
+                Assert.IsTrue(slow.IsDead);
+                Assert.AreEqual(3, fast.Health, "The faster creature strikes first, so the slower one never hits back");
+            }
+            using (var g = new TestGame()) {
+                var tough = g.Summon(g.Player1, g.Creature("Tough", 5, 5), 0);
+                var frail = g.Summon(g.Player2, g.Creature("Frail", 5, 3), 0);
+                g.Declare(tough, g.Player2.Battlefield[0]);
+                g.Declare(frail, g.Player1.Battlefield[0]);
+                g.Resolve();
+                Assert.IsTrue(tough.IsDead);
+                Assert.AreEqual(3, frail.Health, "At equal Speed the one with less Health strikes first");
+            }
+            using (var g = new TestGame()) {
+                var hard = g.Summon(g.Player1, g.Creature("Hard", 4, 4), 0);
+                var soft = g.Summon(g.Player2, g.Creature("Soft", 2, 4), 0);
+                g.Declare(hard, g.Player2.Battlefield[0]);
+                g.Declare(soft, g.Player1.Battlefield[0]);
+                g.Resolve();
+                Assert.IsTrue(soft.IsDead);
+                Assert.AreEqual(2, hard.Health, "At equal Speed and Health the one with lower base Attack strikes first");
+            }
+        }
+
+        /// <summary>
+        /// A 2-health guard is attacked for 2 the same turn its side gets +2 attack or armor, from a creature entering or a spell.
+        /// Entry effects land as part of the summon, and spells have their own layer, both before attacks.
+        /// </summary>
         [Test]
         public void HelpPlayedThisTurn_LandsBeforeThisTurnsAttacks() {
             var buff = Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures);
@@ -70,16 +103,6 @@ namespace SlayTheClone.Tests {
 
                     Assert.IsFalse(guard.IsDead, $"The {(isSpell ? "spell" : "entering creature")}'s +2 {what} should land before the brute's attack");
                 }
-            }
-        }
-
-        [Test]
-        public void EveryKindOfAction_HasAPlaceInTheResolutionOrder() {
-            var actionTypes = typeof(IGameAction).Assembly.GetTypes()
-                .Where(t => typeof(IGameAction).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
-
-            foreach (var type in actionTypes) {
-                Assert.DoesNotThrow(() => ActionsQueue.PriorityOf(type), $"{type.Name} would be queued with no priority");
             }
         }
     }

@@ -53,6 +53,7 @@ namespace SlayTheClone {
 
     public interface IActionsQueue {
         void AddAction(IGameAction action);
+        IDisposable QueueingAbilityOf(ICreature creature, EffectTrigger trigger); // Actions queued inside are that ability's effects
         void ResolveActions();
         System.Collections.IEnumerator ResolveActionsStepByStep(Func<System.Collections.IEnumerator> afterEachAction);
         int GetPendingActionsCount();

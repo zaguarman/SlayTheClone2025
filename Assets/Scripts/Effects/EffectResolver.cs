@@ -15,6 +15,7 @@ namespace SlayTheClone {
         /// <summary>Queues what the creature's effects with this trigger do.</summary>
         /// <param name="triggeringAttacker">Whoever damaged or killed the creature, for retaliation; null otherwise.</param>
         public static void QueueCreatureEffects(ICreature creature, EffectTrigger trigger, IActionsQueue queue, ICreature triggeringAttacker = null) {
+            using var ability = queue.QueueingAbilityOf(creature, trigger); // Decides when they resolve (see ActionsQueue)
             foreach (var action in ActionsFor(creature, trigger)) {
                 List<ITarget> targets;
                 if (trigger == EffectTrigger.OnDamage && triggeringAttacker != null && action.targetType == TargetType.Enemy) {

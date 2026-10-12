@@ -123,7 +123,7 @@ namespace SlayTheClone.Tests {
 
             Assert.IsTrue(mouse.IsDead);
             Assert.IsNull(game.CardIn(p2.Battlefield[0]), "The dead creature's card is still on the board");
-            Assert.AreEqual(4, brute.Health, "Equal speeds strike at the same time, so the mouse hits back");
+            Assert.AreEqual(4, brute.Health, "At equal Speed the mouse, with less Health, strikes first");
             Assert.AreEqual(Player.MaxHealth - 3, p2.Health);
             game.AssertViewsMatchRules(); // Including the survivor's damage and player 2's health
         }

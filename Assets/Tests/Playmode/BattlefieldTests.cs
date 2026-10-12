@@ -93,8 +93,9 @@ namespace SlayTheClone.Tests {
                 Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.EnemyCreatures, TargetModifier.WithAdjacent)), 0);
             var enemies = Enumerable.Range(0, 4).Select(i => game.Summon(p2, game.Creature($"Enemy {i}", 0, 10), i)).ToList();
 
+            var rage = game.GiveCard(p1, game.Spell("Rage", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 3, TargetType.FriendlyCreatures)));
             game.Declare(cleaver, p2.Battlefield[1]);
-            game.ActionsQueue.AddAction(new ModifyAction(cleaver, 3, modifyAttack: true, modifyHealth: false, modifySpeed: false)); // Lands before the attack
+            game.ActionsQueue.AddAction(new PlayCardAction(rage, p1, p1.Battlefield[0])); // Spells land before attacks
             game.Resolve();
 
             CollectionAssert.AreEqual(new[] { 5 }, game.History.DamageTo(enemies[1]), "The target");

@@ -11,11 +11,6 @@ namespace SlayTheClone {
 
             if (targetCreature == null || targetCreature.IsDead) return;
 
-            if (damageAction.IsCombatDamage() && context.IsCombatDamageCancelled(attacker)) {
-                Log($"Executor: {attacker.Name} was killed by faster damage; its attack on {targetCreature.Name} is cancelled.", LogTag.Actions | LogTag.Combat);
-                return;
-            }
-
             var mediator = context.GameMediator;
             var modifierManager = context.ModifierManager;
             if (mediator == null || modifierManager == null || context.ActionsQueue == null) {
@@ -53,8 +48,6 @@ namespace SlayTheClone {
             if (targetCreature.Health <= 0 && !targetCreature.IsDead) {
                 Log($"Executor: {targetCreature.Name} died as a result of damage.", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
                 targetCreature.MarkAsDead();
-                // Same speed the queue used to order this action (see ActionsQueue.GetActionSpeed)
-                context.KillingSpeedByCreatureId[targetCreature.TargetId] = attacker?.Speed ?? 1;
 
                 mediator.NotifyCreatureDied(targetCreature);
                 TriggerEffects(targetCreature, EffectTrigger.OnDeath, attacker, context);

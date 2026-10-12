@@ -392,8 +392,8 @@ The main tempo control is Deployment Time.
 • Counterplay: The countdown is the opponent's window: kill or disrupt the creature before it's ready, since its "When Ready" effects wait too.
     • Example: Two creatures enter play on Day 3. The one with Deployment Time 0 never gets the status and can be given an intent from Day 4. The one with Deployment Time 1 skips the Dusk of Day 3, reaches 0 at the Dusk of Day 4, and can be given an intent from Day 5.
 • "When Ready" (OnDeploymentTimeComplete): A creature's own "when this enters" abilities wait until it's ready.
-    • Deployment Time 0: They trigger when its Play Creature Action resolves.
-    • Deployment Time 1 or more: They trigger when the countdown reaches 0 at Dusk, and are queued to resolve in the next Dawn resolution pass, before the first Planning in which the creature can act. Until then, the opponent has a window to answer it.
+    • Deployment Time 0: They resolve right away, as part of its Play Creature Action in the Summon layer, like Pokémon's Intimidate. The effect stays even if the creature dies to the next attack.
+    • Deployment Time 1 or more: They trigger when the countdown reaches 0 at Dusk, and resolve in the Summon layer of the next Dawn resolution pass, before the first Planning in which the creature can act. Until then, the opponent has a window to answer it.
     • Other cards still see it arrive right away: OnEnterBattlefield and OnEnterSlot effects on other creatures and slots (e.g., a Landmine, or "whenever an enemy enters") trigger when it lands, whatever its Deployment Time. Only the entering creature's own abilities wait.
 Deployment Time Is Special
     • Its countdown and its OnDeploymentTimeComplete trigger ignore general Abilities Disabled states (like Muted or Exhausted) and other normal status rules.
@@ -597,6 +597,7 @@ Timing Map
     • If its layer has already finished, it waits. After the Ability & Attack Layer, if any actions are still waiting, the layers run again from the Movement Layer. This repeats until the queue is empty.
     • Example: A Spell tells an enemy creature to move itself. The Movement Action it creates waits until the Ability & Attack Layer is done, then resolves when the layers loop back to Movement.
     • Exception: OnDamaged and OnAboutToDie effects resolve immediately (see 3.9 Creature Death Sequence).
+    • Part of the Action: What an action does resolves as part of it, right away: an attack's hit, a spell's effects, a creature's entry ("When Ready") effects. Only abilities that trigger along the way wait in their layer.
     • Exception: Environment actions (triggered Slot Effects and Traps) also resolve immediately, before the next action, whatever their layer or Priority. Stepping on a Landmine hits before anything else happens. If several trigger at once, they resolve in random order.
     • Chain Limit: If one action sets off more than 20 follow-up actions in the same resolution pass (triggers setting off triggers), the rest fizzle. This is a safety net for edge cases, not a strategy (see 5.2 Status Effects - Bounces and Chains).
 

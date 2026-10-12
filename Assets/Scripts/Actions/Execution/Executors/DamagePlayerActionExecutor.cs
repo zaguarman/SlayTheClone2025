@@ -15,12 +15,6 @@ namespace SlayTheClone {
                 return;
             }
 
-            var attacker = damagePlayerAction.GetAttacker();
-            if (damagePlayerAction.IsCombatDamage() && context.IsCombatDamageCancelled(attacker)) {
-                Log($"Executor: {attacker.Name} was killed by faster damage; its attack on {targetPlayer.Name} is cancelled.", LogTag.Actions | LogTag.Combat);
-                return;
-            }
-
             var mediator = context.GameMediator;
             if (mediator == null) {
                 LogError("DamagePlayerActionExecutor: GameMediator is null in context.", LogTag.Actions | LogTag.Initialization);
