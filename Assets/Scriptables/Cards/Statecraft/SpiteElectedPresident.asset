@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: a Law (Location) for 3 Days that hurts both sides each Dawn.'
   artDescription: 
   attack: 3

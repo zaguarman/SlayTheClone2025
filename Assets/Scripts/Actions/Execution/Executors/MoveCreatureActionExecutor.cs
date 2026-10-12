@@ -24,12 +24,23 @@ namespace SlayTheClone {
                 return;
             }
 
+            var partner = outcome.Partner;
+            var partnerFrom = outcome.End; // A pushed or swapped creature stood where the mover went
             MovementRules.Apply(creature, moveAction.Kind, outcome);
             Log($"Executor: {creature.Name} {moveAction.Kind} from {fromSlot} to {outcome.End}" +
                 (outcome.Partner != null ? $", moving {outcome.Partner.Name} to {outcome.PartnerEnd}" : "") +
                 (outcome.ReachesDestination ? "" : $" (blocked short of {toSlot})"), LogTag.Actions | LogTag.Creatures);
 
             NotifyBattlefieldsChanged(context, fromSlot.Owner ?? player, toSlot.Owner);
+
+            // Slot Effects: leaving, then entering, for the mover and then for whoever it moved. Only the slot it ends on
+            // counts as entered, not the ones it walks or leaps past
+            SlotEffectRules.OnLeave(creature, fromSlot, context);
+            SlotEffectRules.OnEnter(creature, creature.Slot, context);
+            if (partner != null) {
+                SlotEffectRules.OnLeave(partner, partnerFrom, context);
+                SlotEffectRules.OnEnter(partner, partner.Slot, context);
+            }
             Log($"Executed MoveCreatureAction via Executor for {creature.Name}", LogTag.Actions | LogTag.Creatures);
         }
     }

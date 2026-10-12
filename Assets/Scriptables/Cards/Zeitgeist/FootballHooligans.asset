@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: a riot that spreads to adjacent creatures each Dusk.'
   artDescription: 
   attack: 3

@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
     - actionType: 6
       value: -2
       targetType: 3
@@ -45,6 +46,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: a Temporary +3 Attack for 1 Day, then a Persistent -2 Health.'
   artDescription: 
   defaultTargetType: 3

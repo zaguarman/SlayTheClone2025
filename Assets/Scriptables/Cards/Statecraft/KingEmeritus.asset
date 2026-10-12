@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: Diplomatic Immunity. Can''t be targeted by enemy spells.'
   artDescription: 
   attack: 1

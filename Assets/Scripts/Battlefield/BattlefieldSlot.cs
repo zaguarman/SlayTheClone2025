@@ -41,6 +41,13 @@ namespace SlayTheClone {
         private Color? hintTrim;
         private TextMeshProUGUI hintLabel;
 
+        // The Slot Effect on this slot, as a badge just under the slot, clear of the card's stats
+        private TextMeshProUGUI effectBadge;
+        private static readonly Color EffectBadgeColor = UITheme.Hex(0x1B1B22, 0.82f);
+
+        /// <summary>The text of the Slot Effect badge, empty when none is shown.</summary>
+        public string SlotEffectText => effectBadge != null && effectBadge.transform.parent.gameObject.activeSelf ? effectBadge.text : "";
+
         /// <summary>The move hint shown here, if any: its kind and whether it's blocked.</summary>
         public (MoveKind kind, bool blocked)? MoveHint { get; private set; }
 
@@ -91,6 +98,33 @@ namespace SlayTheClone {
         private void ShowHighlight(Color? fill, Color? trimColor = null) {
             if (backgroundImage != null) backgroundImage.color = fill ?? hintFill ?? (isMarkedForCombat ? UITheme.SlotCombat : Color.clear);
             if (trim != null) trim.color = trimColor ?? hintTrim ?? Color.clear;
+        }
+
+        /// <summary>Shows the slot's Slot Effect, or nothing. Hidden ones are only shown to their controller, marked as hidden.</summary>
+        public void ShowSlotEffect(SlotEffect effect, bool isHiddenFromViewer) {
+            bool show = effect != null && !isHiddenFromViewer;
+            if (!show) {
+                if (effectBadge != null) effectBadge.transform.parent.gameObject.SetActive(false);
+                return;
+            }
+            if (effectBadge == null) {
+                var strip = new GameObject("SlotEffect", typeof(RectTransform), typeof(Image));
+                strip.transform.SetParent(transform, false);
+                var rect = (RectTransform)strip.transform;
+                rect.anchorMin = new Vector2(0f, 0f);
+                rect.anchorMax = new Vector2(1f, 0f);
+                rect.pivot = new Vector2(0.5f, 1f);
+                rect.sizeDelta = new Vector2(0f, 24f);
+                rect.anchoredPosition = new Vector2(0f, -2f);
+                UITheme.Round(strip.GetComponent<Image>(), EffectBadgeColor, 1.6f);
+                strip.GetComponent<Image>().raycastTarget = false;
+                effectBadge = UITheme.NewText("Label", strip.transform, "", 16f, UITheme.Parchment);
+                UITheme.Stretch(effectBadge.rectTransform, 2f);
+            }
+            string icon = EffectIcons.Tag(CardTextFormatter.SlotEffectIcon(effect.Type));
+            effectBadge.text = $"{icon}{effect.Name}{(effect.IsHidden ? " <i>(hidden)</i>" : "")}";
+            effectBadge.transform.parent.gameObject.SetActive(true);
+            effectBadge.transform.parent.SetAsLastSibling(); // Over the card standing here
         }
 
         /// <summary>Shows what dropping the dragged creature here would do: walk, push, Leapfrog, Swap, or blocked with a hint.</summary>

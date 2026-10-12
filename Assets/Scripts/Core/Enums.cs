@@ -8,7 +8,7 @@ namespace SlayTheClone {
         public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, Zeitgeist, Mind, Utopia }
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
         public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie } // New triggers go last: cards store them as numbers
-        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, ModifyPriority, Cleanse } // Renamed Buff to ModifyStat
+        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, ModifyPriority, Cleanse, PlaceSlotEffect, CleanseSlot } // Renamed Buff to ModifyStat
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         // Movement Keywords printed on creatures (GDD 2.4): Leapfrog jumps over creatures, Swap trades places with a friendly one
@@ -24,6 +24,15 @@ namespace SlayTheClone {
             Exhausted,  // The stun: Cannot Act, abilities disabled, and Exposed (+1 damage taken) while it lasts (Status Effects Compendium)
             Doomed,     // Death Sentence: blocks other statuses, +1 permanent Attack each Dawn, then Last Rites and destroyed
             Blessed     // Persistent ward: the next status that would land is negated and Blessed loses a stack (up to 3)
+        }
+
+        // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old
+        public enum SlotEffectType {
+            None,
+            Landmine,       // Hidden. The first creature to enter takes X damage, then it's consumed
+            BarbedSnare,    // Hidden. The first creature to leave takes X damage, then it's consumed
+            TemporalShield, // Visible. The creature here is immune to combat damage, for X Days
+            ScorchedEarth   // Visible. Passive abilities of the creature here don't trigger
         }
 
         // What a Cleanse removes (GDD Cleanse - Specificity): statuses and stat modifications are independent

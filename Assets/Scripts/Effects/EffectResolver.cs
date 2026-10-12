@@ -25,7 +25,7 @@ namespace SlayTheClone {
                 else {
                     targets = SelectTargets(creature, creature.Owner, action, chosenTarget: null);
                 }
-                QueueAction(creature, action, targets, queue);
+                QueueAction(creature, creature.Owner, action, targets, queue);
             }
         }
 
@@ -34,7 +34,7 @@ namespace SlayTheClone {
         public static void QueueSpellEffects(Spell spell, IPlayer caster, ITarget chosenTarget, IActionsQueue queue) {
             chosenTarget ??= DefaultSpellTarget(spell, caster);
             foreach (var action in spell.Effects.SelectMany(e => e.actions)) {
-                QueueAction(spell, action, SelectTargets(spell, caster, action, chosenTarget), queue);
+                QueueAction(spell, caster, action, SelectTargets(spell, caster, action, chosenTarget), queue);
             }
         }
 
@@ -78,6 +78,9 @@ namespace SlayTheClone {
                 return new List<ITarget>();
             }
 
+            if (chosenTarget != null && UsesChosenTarget(action) && IsSlotAction(action.actionType)) {
+                return new List<ITarget> { SlotOf(chosenTarget) }.Where(slot => slot != null).ToList();
+            }
             if (chosenTarget != null && UsesChosenTarget(action)) {
                 var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
                 var targets = resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
@@ -134,8 +137,18 @@ namespace SlayTheClone {
         private static bool UsesChosenTarget(EffectAction action) {
             if (IsSideWide(action)) return false;
             bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
-            return !picksOwnTargets && CanAffectCreatures(action.actionType);
+            return !picksOwnTargets && (CanAffectCreatures(action.actionType) || IsSlotAction(action.actionType));
         }
+
+        // Slot Effects aim at the slot itself (Static, GDD 4.6): they never follow a creature
+        private static bool IsSlotAction(ActionType actionType) => actionType is ActionType.PlaceSlotEffect or ActionType.CleanseSlot;
+
+        private static ITarget SlotOf(ITarget target) => target switch {
+            HomingTarget homing => homing.AimedSlot,
+            BoardSlot slot => slot,
+            ICreature creature => creature.Slot,
+            _ => null
+        };
 
         // A board slot stands for its creature when the action can affect creatures, otherwise for the player who owns it.
         // Null when the action applies to neither (it does nothing).
@@ -179,7 +192,7 @@ namespace SlayTheClone {
         #endregion
 
         #region Actions
-        private static void QueueAction(ICard source, EffectAction action, List<ITarget> targets, IActionsQueue queue) {
+        private static void QueueAction(ICard source, IPlayer controller, EffectAction action, List<ITarget> targets, IActionsQueue queue) {
             // Chain damage only exists as part of an attack (see QueueAttackEffects)
             if (action.actionType == ActionType.Damage && action.targetModifier.HasFlag(TargetModifier.Chained)) return;
 
@@ -190,7 +203,7 @@ namespace SlayTheClone {
                     continue;
                 }
 
-                var gameAction = CreateAction(source, action, target);
+                var gameAction = CreateAction(source, controller, action, target);
                 if (gameAction == null) continue; // This kind of target can't receive this action
 
                 Log($"{source.Name}: queueing {gameAction}", LogTag.Effects | LogTag.Actions);
@@ -198,7 +211,7 @@ namespace SlayTheClone {
             }
         }
 
-        private static IGameAction CreateAction(ICard source, EffectAction action, ITarget target) {
+        private static IGameAction CreateAction(ICard source, IPlayer controller, EffectAction action, ITarget target) {
             var creature = target as ICreature;
             switch (action.actionType) {
                 case ActionType.Damage:
@@ -220,6 +233,12 @@ namespace SlayTheClone {
                     return Status(creature, action.statusEffectToApply, action.statusDuration, action.statusPotency, source);
                 case ActionType.Cleanse:
                     return creature != null ? new CleanseAction(creature, action.cleanse) : null;
+                case ActionType.PlaceSlotEffect: // Static: the slot itself, whoever is in it (GDD 4.6)
+                    return SlotOf(target) is BoardSlot slot && action.slotEffect != SlotEffectType.None
+                        ? new PlaceSlotEffectAction(slot, action.slotEffect, action.value, action.statusDuration, controller)
+                        : null;
+                case ActionType.CleanseSlot:
+                    return SlotOf(target) is BoardSlot cleansed ? new CleanseSlotAction(cleansed) : null;
                 case ActionType.ModifyPriority: // For statusDuration Days counting this one; 0 means this Day only
                     return action.value != 0 && (creature != null || target is IPlayer)
                         ? new ModifyPriorityAction(target, action.value, action.statusDuration)

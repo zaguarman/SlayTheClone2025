@@ -18,6 +18,12 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Temporal Shield: the creature on it takes no combat damage
+            if (damageAction.IsCombatDamage() && SlotEffectRules.BlocksCombatDamage(targetCreature)) {
+                Log($"Executor: {targetCreature.Name} is on a Temporal Shield: no combat damage", LogTag.Actions | LogTag.Combat);
+                return;
+            }
+
             // Exposed (part of Exhausted): +1 damage from every source
             if (damage > 0 && modifierManager.IsExposed(targetCreature)) {
                 damage += 1;

@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Mechanics test: Deployment Time 2 counts down at Dusk, never at the
     Dusk of the Day it arrived; its entry effect waits until it''s ready. Armor fades
     by 1 each Dusk on every creature.'

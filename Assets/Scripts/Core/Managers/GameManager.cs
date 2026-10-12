@@ -62,6 +62,7 @@ namespace SlayTheClone {
     public interface IActionsQueue {
         void AddAction(IGameAction action);
         IDisposable QueueingAbilityOf(ICreature creature, EffectTrigger trigger); // Actions queued inside are that ability's effects
+        IDisposable QueueingEnvironment(); // Actions queued inside are triggered Slot Effects or Traps: they resolve before anything else
         void CancelActionsOf(ICreature creature); // A creature marked for destruction loses its pending non-retaliatory actions
         void ResolveActions();
         System.Collections.IEnumerator ResolveActionsStepByStep(Func<System.Collections.IEnumerator> afterEachAction);

@@ -97,6 +97,7 @@ namespace SlayTheClone.Tests {
         /// </summary>
         public void StartTurn() {
             ModifierManager.ProcessEndOfTurn(TurnClock.TurnNumber, ActionsQueue);
+            SlotEffectRules.ProcessEndOfTurn(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, Mediator);
             Resolve();
             TurnClock.Advance();
             ModifierManager.ProcessStartOfTurn(TurnClock.TurnNumber, ActionsQueue);

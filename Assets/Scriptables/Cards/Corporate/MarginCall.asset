@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
     - actionType: 2
       value: 2
       targetType: 0
@@ -45,6 +46,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: Capital cost, discard your hand; each creature takes damage
     equal to the cards discarded.'
   artDescription: 

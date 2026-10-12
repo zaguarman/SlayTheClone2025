@@ -89,6 +89,8 @@ namespace SlayTheClone {
                 case ActionType.ApplyStatus: return EffectIcons.ForStatus(action.statusEffectToApply);
                 case ActionType.ModifyPriority: return action.value >= 0 ? EffectIcons.Buff : EffectIcons.Debuff;
                 case ActionType.Cleanse: return EffectIcons.Cleanse;
+                case ActionType.PlaceSlotEffect: return SlotEffectIcon(action.slotEffect);
+                case ActionType.CleanseSlot: return EffectIcons.Cleanse;
                 default: return null;
             }
         }
@@ -120,6 +122,10 @@ namespace SlayTheClone {
                     return DescribeStatus(action, target);
                 case ActionType.ModifyPriority:
                     return DescribePriorityChange(action, target);
+                case ActionType.PlaceSlotEffect:
+                    return $"place {DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
+                case ActionType.CleanseSlot:
+                    return $"remove the Slot Effect from {SlotTarget(action, isSpell)}";
                 case ActionType.Cleanse:
                     return action.cleanse switch {
                         CleanseTarget.Statuses => $"cleanse {target}'s statuses",
@@ -176,6 +182,29 @@ namespace SlayTheClone {
                 default: return $"give {target}'s actions {Signed(action.value)} Priority {days}";
             }
         }
+
+        // Slot Effects aim at the slot, whoever stands in it
+        private static string SlotTarget(EffectAction action, bool isSpell) =>
+            isSpell || action.targetType != TargetType.Self ? "target slot" : "this creature's slot";
+
+        private static string DescribeSlotEffect(EffectAction action) {
+            string days = action.statusDuration > 0 ? $" for {Turns(action.statusDuration).Replace("turn", "Day")}" : "";
+            return action.slotEffect switch {
+                SlotEffectType.Landmine => $"a hidden Landmine ({action.value} damage to the next creature to enter)",
+                SlotEffectType.BarbedSnare => $"a hidden Barbed Snare ({action.value} damage to the next creature to leave)",
+                SlotEffectType.TemporalShield => $"a Temporal Shield (no combat damage to the creature there){days}",
+                SlotEffectType.ScorchedEarth => $"Scorched Earth (the creature there can't trigger passive abilities){days}",
+                _ => "nothing"
+            };
+        }
+
+        public static string SlotEffectIcon(SlotEffectType type) => type switch {
+            SlotEffectType.Landmine => EffectIcons.Damage,
+            SlotEffectType.BarbedSnare => EffectIcons.Hurt,
+            SlotEffectType.TemporalShield => EffectIcons.Armor,
+            SlotEffectType.ScorchedEarth => EffectIcons.Burn,
+            _ => null
+        };
 
         private static string Signed(int value) => value >= 0 ? $"+{value}" : value.ToString();
 

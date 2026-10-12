@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   - effectType: 0
     trigger: 1
     actions:
@@ -48,6 +49,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: pays draws from your next Days until it collapses, then takes
     them all back.'
   artDescription: 

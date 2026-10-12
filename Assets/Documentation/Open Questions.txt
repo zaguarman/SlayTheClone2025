@@ -52,3 +52,31 @@ MOVEMENT LEFTOVERS (GDD 2.4)
 
 10. AI move planning
     • There's no AI opponent in the game yet (both sides are played by hand), so there's nothing to teach about moves. It waits for the AI.
+
+
+SLOT EFFECTS & ENVIRONMENT ACTIONS (GDD 2.4, 3.7, 'Slot Effects Compendium')
+
+11. Which slots does a walking creature "enter"?
+    • Done for now: only the slot a move ends on counts as entered (and the one it started from as left). Walking past an empty slot with a Landmine doesn't set it off; neither does leaping over one.
+    • Question: should walking through a slot count as entering it?
+
+12. Who sees hidden Slot Effects in hot-seat play?
+    • Done for now: the screen is player 1's: player 1's hidden Slot Effects show (marked "hidden"), player 2's don't, until they trigger. With an AI opponent this becomes the real rule.
+    • Question: fine for now?
+
+13. Scorched Earth and entry effects
+    • Done for now: Scorched Earth stops every triggered ability of the creature on it (retaliation, Dawn, Dusk, death effects) but not its entry ("When Ready") effects, which the GDD treats as part of the summon. Moving off the slot ends it.
+    • Question: should entry effects also be stopped?
+
+14. How long a timed Slot Effect lasts
+    • Done for now: like Priority changes, its Days count the one it's placed: Ceasefire for 2 Days lasts this Day and the next, ending at that Dusk. Slot Effects aren't statuses, so Status Timing doesn't apply.
+    • Question: right?
+
+15. Barbed Snare and dying
+    • Done for now: only leaving by moving (on its own, pushed or swapped) sets it off. A creature that dies or is replaced on the slot doesn't.
+    • Question: should dying or being replaced also count as leaving?
+
+16. Slot Effects implemented so far
+    • Done: Landmine, Barbed Snare, Temporal Shield, Scorched Earth, Cleanse (SlotEffect), environment-first resolution.
+    • Waiting on other mechanics: Surveillance Post (Revealed), Binding Chains and Threshold of Liminality (Anchored, Exposed), Rejection Field (return to hand), Rally Point (scheduled draws), Slippery Floor (needs the move's direction), Jamming Field (blocks spell targeting), Unstable Terrain, Echoing Cave, Sacrifice Lair (Banish), Magnetic Pulse (pull), Sanctuary (untargetable).
+    • The four new cards (Lost Landmine, Ceasefire, Its A Trap, Burn Notice) have no art yet; their briefs are in their Art Description.

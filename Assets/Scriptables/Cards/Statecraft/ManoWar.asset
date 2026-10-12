@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: multi-slot (takes 2 slots) and Heavy.'
   artDescription: 
   attack: 4

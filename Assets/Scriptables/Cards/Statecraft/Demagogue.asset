@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: Loaded Language. The buff only lasts while it stays on the
     battlefield.'
   artDescription: 

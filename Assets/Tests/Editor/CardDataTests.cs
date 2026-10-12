@@ -76,8 +76,13 @@ namespace SlayTheClone.Tests {
                 bool persistent = action.statusEffectToApply == StatusEffectType.Blessed; // Counts stacks, not Days
                 if (!persistent && action.statusDuration <= 0) return $"applies {action.statusEffectToApply} for {action.statusDuration} turns";
             }
-            else if (action.actionType == ActionType.Cleanse) {
+            else if (action.actionType is ActionType.Cleanse or ActionType.CleanseSlot) {
                 return null; // Says what it removes instead of a value
+            }
+            else if (action.actionType == ActionType.PlaceSlotEffect) {
+                if (action.slotEffect == SlotEffectType.None) return "places no Slot Effect";
+                bool deals = action.slotEffect is SlotEffectType.Landmine or SlotEffectType.BarbedSnare;
+                if (deals && action.value <= 0) return $"{action.slotEffect} deals no damage";
             }
             else if (action.actionType == ActionType.ModifyStat) {
                 if (action.value == 0) return "changes stats by 0"; // Negative values are debuffs

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: Ceasefire
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: af6935b8-4c9a-4fb0-bfb6-18e26202bbe0
+  cardName: Ceasefire
+  description: Both sides agree to stop shooting. Starting right after this last
+    volley.
+  cardType: 1
+  faction: 2
+  artwork: {fileID: 0}
+  priority: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 10
+      value: 0
+      targetType: 3
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 2
+      statusPotency: 0
+      cleanse: 0
+      slotEffect: 3
+  designNotes: 'Mechanics test: Temporal Shield for 2 Days on a slot. The creature
+    there takes no combat damage, but spells and abilities still hurt it. It stays
+    with the slot, not the creature (Static).'
+  artDescription: Two generals shaking hands for the cameras in front of a CEASEFIRE
+    banner, each hiding a grenade behind his back.
+  defaultTargetType: 3

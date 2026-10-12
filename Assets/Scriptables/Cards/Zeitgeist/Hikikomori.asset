@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: Slacking Off. Can''t be given an intent, but can''t be targeted
     either.'
   artDescription: 

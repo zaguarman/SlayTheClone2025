@@ -32,6 +32,13 @@ namespace SlayTheClone {
             public int Sequence;     // When it was queued
             public int RandomKey;    // The last tie-breaker, drawn once so the order doesn't shift while it waits
             public bool Retaliatory; // A reaction to what was done to its creature: its death doesn't cancel it
+            public bool Environment; // A triggered Slot Effect or Trap: resolves before anything else (GDD 3.7)
+        }
+
+        private class Scope : IDisposable {
+            private readonly Action onDispose;
+            public Scope(Action onDispose) => this.onDispose = onDispose;
+            public void Dispose() => onDispose();
         }
 
         // A creature's ability queueing what it does when it triggers (see QueueingAbilityOf)
@@ -49,6 +56,7 @@ namespace SlayTheClone {
         private int nextResolvingNowIndex; // Keeps an action's effects in order, and their own effects right after each of them
         private Entry executing;
         private readonly Stack<AbilityScope> abilities = new Stack<AbilityScope>();
+        private int environmentScopes; // Open QueueingEnvironment scopes
         private ResolutionLayer currentLayer;
         private int sequence;
 
@@ -68,7 +76,7 @@ namespace SlayTheClone {
 
         /// <summary>The queued actions, in the order they are expected to resolve.</summary>
         public IReadOnlyCollection<IGameAction> GetPendingActions() =>
-            resolvingNow.Concat(waiting.OrderBy(e => e.Layer).ThenBy(e => e, InLayerOrder)).Select(e => e.Action).ToList().AsReadOnly();
+            resolvingNow.Concat(waiting.OrderBy(e => !e.Environment).ThenBy(e => e.Layer).ThenBy(e => e, InLayerOrder)).Select(e => e.Action).ToList().AsReadOnly();
 
         [ShowInInspector, ReadOnly]
         private List<string> Descriptions => GetPendingActions().Select(a => a.ToString()).ToList();
@@ -193,18 +201,29 @@ namespace SlayTheClone {
             return scope;
         }
 
+        /// <summary>
+        /// Everything queued until the scope is disposed is an environment action: a triggered Slot Effect or Trap (GDD 3.7).
+        /// It resolves immediately, right after the action that set it off (or first, if none is resolving), before anything else.
+        /// </summary>
+        public IDisposable QueueingEnvironment() {
+            environmentScopes++;
+            return new Scope(() => environmentScopes--);
+        }
+
         public void AddAction(IGameAction action) {
-            var ability = abilities.Count > 0 ? abilities.Peek() : null;
-            bool partOfExecutingAction = executing != null && (ability == null || ability.ResolvesWithItsTrigger);
+            bool environment = environmentScopes > 0;
+            var ability = environment ? null : abilities.Count > 0 ? abilities.Peek() : null;
+            bool partOfExecutingAction = executing != null && (environment || ability == null || ability.ResolvesWithItsTrigger);
 
             var entry = new Entry {
                 Action = action,
-                Layer = partOfExecutingAction ? executing.Layer : ability?.Layer ?? LayerOf(action),
-                Source = ability?.Creature ?? SourceOf(action),
+                Layer = partOfExecutingAction ? executing.Layer : environment ? ResolutionLayer.AbilityAndAttack : ability?.Layer ?? LayerOf(action),
+                Source = environment ? null : ability?.Creature ?? SourceOf(action),
                 PrintedPriority = PrintedPriorityOf(action),
                 Sequence = sequence++,
                 RandomKey = GameRandom.Next(int.MaxValue),
-                Retaliatory = ability?.Retaliatory ?? false
+                Retaliatory = ability?.Retaliatory ?? false,
+                Environment = environment
             };
 
             if (partOfExecutingAction) {
@@ -268,6 +287,13 @@ namespace SlayTheClone {
                 return now;
             }
             if (waiting.Count == 0) return null;
+
+            // Environment actions queued while nothing was resolving go before everything, in random order
+            var environment = waiting.Where(e => e.Environment).OrderBy(e => e.RandomKey).FirstOrDefault();
+            if (environment != null) {
+                waiting.Remove(environment);
+                return environment;
+            }
 
             if (!waiting.Any(e => e.Layer >= currentLayer)) {
                 Log($"Actions queued for layers that already resolved; running the layers again (Queue ID: {QueueId})", LogTag.Actions);

@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
     - actionType: 0
       value: 1
       targetType: 3
@@ -45,6 +46,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: a Temporary buff that turns into Burnout when it wears off.'
   artDescription: 
   defaultTargetType: 3

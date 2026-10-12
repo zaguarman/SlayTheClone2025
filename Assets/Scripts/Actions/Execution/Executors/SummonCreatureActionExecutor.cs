@@ -44,6 +44,7 @@ namespace SlayTheClone {
             // Register after placement, then trigger OnPlay (a creature that isn't operative yet fires it later), then announce the summon
             modifierManager.RegisterCreature(creature);
             creature.EnterPlay(context.TurnClock.TurnNumber);
+            SlotEffectRules.OnEnter(creature, slot, context); // A Landmine goes off before the creature's entry effects
             Log($"Executor: Triggering OnPlay effects for {creature.Name}", LogTag.Effects | LogTag.Actions);
             creature.HandleEffect(EffectTrigger.OnPlay, context.ActionsQueue);
             mediator.NotifyCreatureSummoned(creature, owner);

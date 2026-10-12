@@ -230,6 +230,12 @@ namespace SlayTheClone {
                 if (card != null && !card.IsLeavingPlay) Destroy(card.gameObject);
             }
 
+            // Slot Effects. Hidden ones are secret from the other side; the local player is player 1
+            foreach (var slot in battlefieldSlots) {
+                var effect = slot.Model?.Effect;
+                slot.ShowSlotEffect(effect, effect != null && effect.IsHidden && effect.Controller?.IsPlayer1 != true);
+            }
+
             UpdateLayout();
         }
 

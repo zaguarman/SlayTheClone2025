@@ -8,6 +8,8 @@ namespace SlayTheClone {
         public IPlayer Owner { get; }
         public int Index { get; } // Position on the owner's battlefield, left to right
         public ICreature OccupyingCreature { get; private set; }
+        /// <summary>The Slot Effect on this slot, if any (see <see cref="SlotEffectRules"/>). One per slot.</summary>
+        public SlotEffect Effect { get; internal set; }
 
         public BoardSlot(IPlayer owner, int index) {
             Owner = owner;

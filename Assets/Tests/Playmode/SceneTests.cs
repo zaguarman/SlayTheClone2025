@@ -53,6 +53,27 @@ namespace SlayTheClone.Tests {
             game.AssertViewsMatchRules(); // Including the new hands
         }
 
+        /// <summary>Slot Effects show on their slot. Hidden ones only for their controller: player 1 is the one at the screen.</summary>
+        [UnityTest]
+        public IEnumerator SlotEffects_ShowOnTheirSlot_HiddenOnesOnlyToTheirController() {
+            game.Queue.AddAction(new PlaceSlotEffectAction(p2.Battlefield[1], SlotEffectType.Landmine, 2, 0, p1));
+            game.Queue.AddAction(new PlaceSlotEffectAction(p1.Battlefield[1], SlotEffectType.Landmine, 2, 0, p2));
+            game.Queue.AddAction(new PlaceSlotEffectAction(p1.Battlefield[3], SlotEffectType.TemporalShield, 0, 2, p1));
+            game.Queue.ResolveActions();
+            yield return null;
+
+            string Badge(BoardSlot slot) => game.BoardView(slot.Owner).FindSlotView(slot).SlotEffectText;
+            StringAssert.Contains("Landmine", Badge(p2.Battlefield[1]), "Your own mine, on the enemy's side");
+            StringAssert.Contains("(hidden)", Badge(p2.Battlefield[1]));
+            Assert.AreEqual("", Badge(p1.Battlefield[1]), "The enemy's mine is secret");
+            StringAssert.Contains("Temporal Shield", Badge(p1.Battlefield[3]), "Visible ones show to everyone");
+
+            game.Summon(p2, game.Cards.Creature("Test Sapper", 1, 5), 1);
+            yield return null;
+            Assert.AreEqual("", Badge(p2.Battlefield[1]), "Used up: gone from the slot");
+            game.AssertViewsMatchRules();
+        }
+
         [UnityTest]
         public IEnumerator AQueuedCreature_CanBeHovered_ToShowItEnlarged_WhetherItsSlotIsEmptyOrNot() {
             var occupant = game.Summon(p1, game.Cards.Creature("Test Ox", 0, 6), 3);

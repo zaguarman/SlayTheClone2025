@@ -47,10 +47,10 @@ namespace SlayTheClone {
         // pick it to try them all in one match
         private static readonly string[] MechanicsTestCards = {
             "Delivery Cyclist", "Digital Nomad", "Political Decoy", "Cleaning Robot Premium",
-            "DDOS Attack", "Dogpile", "Memento Mori", "Martyr", "Inflation", "Generational Trauma",
+            "DDOS Attack", "Dogpile", "Memento Mori", "Martyr", "Generational Trauma",
             "Raised Security Level", "Diplomat", "Keyboard Warrior", "Rage Bait",
             "The Holy Grail", "Exorcism", "Preemptive Strike",
-            "Hikikomori", "Karen", "Reality TV Star",
+            "Lost Landmine", "Its A Trap", "Ceasefire", "Burn Notice",
         };
 
         #region Corporate
@@ -215,6 +215,16 @@ namespace SlayTheClone {
                 "Mechanics test: Armor is capped at twice max Health, fades by 1 each Dusk and is lost when the creature leaves play. Aimed at your own creature, it follows it if it moves first (Homing).",
                 Armor(6, TargetType.FriendlyCreatures))
                 .Picture("A bureaucrat solemnly flipping a color-coded threat sign from yellow to orange, while one guard in comically oversized armor blocks a door."),
+            Spell("Lost Landmine", TargetType.EnemyCreatures,
+                "The war ended decades ago. Nobody told the mine.",
+                "Mechanics test: a hidden Landmine (3 damage) on a slot. The first creature to enter it, summoned or moved in, sets it off; it resolves before anything else (environment action), then it's gone. Only its controller sees it.",
+                PlaceSlotEffect(SlotEffectType.Landmine, 3, 0, TargetType.EnemyCreatures))
+                .Picture("A rusty landmine half-buried in a children's sandbox, next to a faded government sign: \"AREA CLEARED. PROBABLY. - Ministry of Defence, 1998\"."),
+            Spell("Ceasefire", TargetType.FriendlyCreatures,
+                "Both sides agree to stop shooting. Starting right after this last volley.",
+                "Mechanics test: Temporal Shield for 2 Days on a slot. The creature there takes no combat damage, but spells and abilities still hurt it. It stays with the slot, not the creature (Static).",
+                PlaceSlotEffect(SlotEffectType.TemporalShield, 0, 2, TargetType.FriendlyCreatures))
+                .Picture("Two generals shaking hands for the cameras in front of a CEASEFIRE banner, each hiding a grenade behind his back."),
         };
         #endregion
 
@@ -317,6 +327,11 @@ namespace SlayTheClone {
                 "Mechanics test: Status Timing. Burn does nothing at the Dusk of the Day it's applied, then ticks for 2 Days.",
                 Status(StatusEffectType.Burned, 2, TargetType.EnemyCreatures, potency: 2))
                 .Picture("A phone screen with a glowing red notification, reflected in the furious eyes of the person holding it."),
+            Spell("Its A Trap", TargetType.EnemyCreatures,
+                "FREE PHONE! Just click here. And here. And give us your mother's maiden name.",
+                "Mechanics test: a hidden Barbed Snare (2 damage) on a slot. The first creature to leave it, on its own, pushed or swapped, takes the damage.",
+                PlaceSlotEffect(SlotEffectType.BarbedSnare, 2, 0, TargetType.EnemyCreatures))
+                .Picture("A glowing \"FREE PHONE - CLICK HERE\" banner set in the jaws of a steel bear trap, a giant mouse cursor hovering over it."),
         };
 
         // Shadow Ops.: fragile agents, hidden plans, traps
@@ -326,6 +341,11 @@ namespace SlayTheClone {
                 "Mechanics test: Swap trades places with a friendly creature at any distance, over the creatures in between, even one that can't act.")
                 .With(MovementKeyword.Swap)
                 .Picture("Two identical politicians in matching suits: one waves from a balcony, the other ducks behind the curtain."),
+            Spell("Burn Notice", TargetType.EnemyCreatures,
+                "You're no longer one of us. You never were.",
+                "Mechanics test: Scorched Earth on a slot. The passive abilities of the creature there (retaliation, Dawn and Dusk effects, death effects) don't trigger while it stands on it. Entry effects still happen.",
+                PlaceSlotEffect(SlotEffectType.ScorchedEarth, 0, 0, TargetType.EnemyCreatures))
+                .Picture("A spy in a trench coat reading a letter stamped BURN NOTICE, while his gadgets go dark and, in the background, his handler feeds his file into a shredder."),
         };
 
         // Tech: rewires the queue
@@ -433,6 +453,13 @@ namespace SlayTheClone {
         private static EffectAction Stun(int turns, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Stun, turns, target, modifier);
         private static EffectAction Draw(int count, TargetType player = TargetType.Player) => Act(ActionType.Draw, count, player, TargetModifier.None);
         private static EffectAction Summon(int count) => Act(ActionType.Summon, count, TargetType.Player, TargetModifier.None);
+
+        private static EffectAction PlaceSlotEffect(SlotEffectType type, int value, int days, TargetType target) {
+            var action = Act(ActionType.PlaceSlotEffect, value, target, TargetModifier.None);
+            action.slotEffect = type;
+            action.statusDuration = days;
+            return action;
+        }
 
         private static EffectAction Cleanse(CleanseTarget what, TargetType target) {
             var action = Act(ActionType.Cleanse, 0, target, TargetModifier.None);

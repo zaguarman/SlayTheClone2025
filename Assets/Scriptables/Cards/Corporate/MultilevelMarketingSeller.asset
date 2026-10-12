@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: summons an Unpaid Intern token. Each recruit pays a share
     of its draws upward.'
   artDescription: 

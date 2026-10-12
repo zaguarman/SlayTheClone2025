@@ -228,6 +228,8 @@ namespace SlayTheClone {
             if (!IsOperative) return; // Its effects are off until it is operative
             if (AbilitiesDisabled) return; // ...and while a status disables them, retaliation and death effects included (GDD 3.9)
             if (IsDead && trigger != EffectTrigger.OnDeath) return;
+            // Scorched Earth stops passive abilities; entry effects are part of the summon, not abilities (GDD 3.7)
+            if (trigger != EffectTrigger.OnPlay && SlotEffectRules.SuppressesPassiveAbilities(this)) return;
             if (actionsQueue == null) {
                 LogError($"Cannot handle effect {trigger} for {Name} - no ActionsQueue.", LogTag.Effects | LogTag.Creatures);
                 return;

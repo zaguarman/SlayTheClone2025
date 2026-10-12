@@ -73,6 +73,9 @@ namespace SlayTheClone {
         // Cleanse Specific
         public CleanseTarget cleanse = CleanseTarget.Statuses;
 
+        // PlaceSlotEffect Specific: value is its damage (Landmine, Barbed Snare), statusDuration its Days (0 = until replaced)
+        public SlotEffectType slotEffect = SlotEffectType.None;
+
         public EffectAction Clone() => (EffectAction)MemberwiseClone(); // Value-type fields only
     }
 }

@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: Impatient. Escalates every Day nobody gives it an intent.'
   artDescription: 
   attack: 2

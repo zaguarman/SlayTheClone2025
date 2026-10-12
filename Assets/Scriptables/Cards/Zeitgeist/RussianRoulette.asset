@@ -34,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      slotEffect: 0
   designNotes: 'Future: you pick the first slot; each Dawn it moves to the next one
     until it fires.'
   artDescription: 
