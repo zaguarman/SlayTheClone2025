@@ -27,6 +27,25 @@ namespace SlayTheClone.Tests {
         }
 
         #region Placing and moving
+        [Test]
+        public void ACreature_HasOneIntentADay_ANewOneReplacesTheOld() {
+            var runner = game.Summon(p1, game.Creature("Runner", 2, 5), 0);
+            var target = game.Summon(p2, game.Creature("Target", 0, 10), 0);
+
+            game.Declare(runner, p2.Battlefield[0]);
+            game.ActionsQueue.AddAction(new MoveCreatureAction(runner, p1.Battlefield[0], p1.Battlefield[2], p1));
+            Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "Moving after declaring an attack should replace the attack");
+            game.Resolve();
+            Assert.AreSame(runner, p1.Battlefield[2].OccupyingCreature, "The move happens");
+            CollectionAssert.IsEmpty(game.History.DamageTo(target), "The replaced attack doesn't");
+
+            game.ActionsQueue.AddAction(new MoveCreatureAction(runner, p1.Battlefield[2], p1.Battlefield[4], p1));
+            game.Declare(runner, p2.Battlefield[0]);
+            Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "Declaring an attack after moving should replace the move");
+            game.Resolve();
+            Assert.AreSame(runner, p1.Battlefield[2].OccupyingCreature, "The replaced move doesn't happen");
+            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(target), "The attack does");
+        }
         #endregion
 
         #region What gets hit

@@ -27,6 +27,7 @@ namespace SlayTheClone.Tests {
         public void ActionsResolveByKind_SummonsMovesPlaysCombatDamageDiscardsThenDraws() {
             game.SetDecks(game.Fillers(5), game.Fillers(5));
             var walker = game.Summon(p1, game.Creature("Walker", 1, 3), 0);
+            var mover = game.Summon(p1, game.Creature("Mover", 1, 3), 2); // A creature has one intent a Day, so another one moves
             var played = game.GiveCard(p1, game.Creature("Played", 1, 1));
             var summoned = (ICreature)CardFactory.CreateCard(game.Creature("Summoned", 1, 1));
             game.History.Clear();
@@ -37,7 +38,7 @@ namespace SlayTheClone.Tests {
             game.ActionsQueue.AddAction(new DamagePlayerAction(p2, 1));
             game.Declare(walker, p2.Battlefield[4]);
             game.ActionsQueue.AddAction(new PlayCardAction(played, p1, p1.Battlefield[3]));
-            game.ActionsQueue.AddAction(new MoveCreatureAction(walker, p1.Battlefield[0], p1.Battlefield[1], p1));
+            game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[2], p1.Battlefield[1], p1));
             game.ActionsQueue.AddAction(new SummonCreatureAction(summoned, p2, p2.Battlefield[0]));
             game.Resolve();
 

@@ -59,7 +59,7 @@ namespace SlayTheClone {
         IReadOnlyCollection<IGameAction> GetPendingActions();
         bool HasActiveAction(string creatureId);
         IGameAction GetActiveAction(string creatureId);
-        bool CancelDeclaredAction(string creatureId); // Removes the creature's declared attack/swap from the queue
+        bool CancelDeclaredAction(string creatureId); // Removes the creature's declared intent (move, attack or swap) from the queue
         void Cleanup();
         // Events
         UnityEngine.Events.UnityEvent OnActionsQueued { get; }

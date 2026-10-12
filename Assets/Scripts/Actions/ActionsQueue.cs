@@ -113,20 +113,18 @@ namespace SlayTheClone {
             return speed;
         }
 
-        // Only a creature's declared action and its move (one of each per creature, replaceable by re-declaring) are tracked here.
+        // A creature has one intent a Day (GDD 3.6): a move, an attack or a swap. They share its key,
+        // so declaring a new one replaces the old.
         // Damage and effect actions must never be keyed by their source, or multiple hits from the same
         // creature (AoE effects, spread/chain, retaliation) would replace each other.
         private string GetActiveCreatureId(IGameAction action) {
             return action switch {
                 SwapCreaturesAction swapAction => swapAction.GetCreature1()?.TargetId,
                 BattlefieldCombatAction combatAction => combatAction.GetAttacker()?.TargetId,
-                // A creature also has one move a turn, kept apart from its declared action so it can move and attack
-                MoveCreatureAction moveAction => moveAction.GetCreature() != null ? MoveKey(moveAction.GetCreature().TargetId) : null,
+                MoveCreatureAction moveAction => moveAction.GetCreature()?.TargetId,
                 _ => null
             };
         }
-
-        private static string MoveKey(string creatureId) => $"move:{creatureId}";
 
         public void AddAction(IGameAction action) {
             string activeCreatureId = GetActiveCreatureId(action);
