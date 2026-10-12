@@ -79,6 +79,48 @@ namespace SlayTheClone.Tests {
         }
         #endregion
 
+        #region Health Loss
+        [Test]
+        public void HealthLoss_LowersMaxAndCurrentHealth_IgnoresArmor_IsntDamage_AndStaysOnTheCard() {
+            var spiky = game.Summon(p1, game.Creature("Spiky", 0, 5, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
+            game.Run(new ModifyArmorAction(spiky, 3));
+
+            game.Run(new ModifyAction(spiky, -2, modifyAttack: false, modifyHealth: true, modifySpeed: false));
+
+            Assert.AreEqual(3, spiky.MaxHealth);
+            Assert.AreEqual(3, spiky.Health);
+            Assert.AreEqual(3, spiky.CurrentArmorPool, "Armor doesn't absorb Health Loss");
+            Assert.AreEqual(Player.MaxHealth, p2.Health, "It isn't damage: OnDamaged doesn't trigger");
+
+            game.Summon(p1, game.Creature("Replacement", 1, 1), 0); // Summoning over it discards it
+            var discarded = (ICreature)p1.Deck.GetDiscardPilePreview().Single(c => c.Name == "Spiky");
+            Assert.AreEqual(3, discarded.BaseHealth, "Permanent unless it says otherwise: it stays on the card");
+        }
+
+        [Test]
+        public void HealthLoss_KillsAt0_WhateverTheArmor() {
+            var wall = game.Summon(p1, game.Creature("Wall", 0, 1), 0);
+            game.Run(new ModifyArmorAction(wall, 2));
+
+            game.Run(new ModifyAction(wall, -1, modifyAttack: false, modifyHealth: true, modifySpeed: false));
+
+            Assert.IsTrue(wall.IsDead);
+        }
+
+        [Test]
+        public void ATimedHealthLoss_GivesTheHealthBackWhenItEnds_AndLeavesTheCardAlone() {
+            var target = game.Summon(p1, game.Creature("Target", 0, 5), 0);
+
+            game.Run(new ModifyAction(target, -2, modifyAttack: false, modifyHealth: true, modifySpeed: false, durationInTurns: 1));
+            Assert.AreEqual(3, target.Health);
+            Assert.AreEqual(5, target.BaseHealth, "A timed -X Health isn't a Persistent Stat Modification");
+
+            game.StartTurn();
+            Assert.AreEqual(5, target.MaxHealth);
+            Assert.AreEqual(5, target.Health, "When it ends, maximum and current Health both go back up");
+        }
+        #endregion
+
         [Test]
         public void Armor_TakesHitsFirst_AndIsUsedUpAcrossTheTurnsHits() {
             var wall = game.Summon(p2, game.Creature("Wall", 0, 5), 0);

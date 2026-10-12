@@ -9,11 +9,24 @@ namespace SlayTheClone {
                 return;
             }
 
-            StatModifiers.Apply(context.ModifierManager, context.ModifierFactory, targetCreature, modifyAction.GetValue(),
-                modifyAction.ShouldModifyAttack(), modifyAction.ShouldModifyHealth(), modifyAction.ShouldModifySpeed(),
-                modifyAction.GetCalculationType(), modifyAction.GetDuration(), context.TurnClock.TurnNumber);
+            int value = modifyAction.GetValue();
+            int duration = modifyAction.GetDuration();
 
-            // Losing Health this way isn't damage, but at 0 the creature still goes through the death sequence (GDD 3.3)
+            // Health Loss (-X Health, GDD glossary) is permanent unless the effect says otherwise: a Persistent Stat
+            // Modification of base Health, which stays on the card. Maximum and current Health both drop by X.
+            // A timed -X Health is a regular stat change instead, and gives the Health back when it ends.
+            bool isHealthLoss = modifyAction.ShouldModifyHealth() && value < 0 && duration <= 0
+                && modifyAction.GetCalculationType() == ModifierCalculationType.Flat;
+            if (isHealthLoss) {
+                context.ModifierManager.ChangeBaseStats(targetCreature, 0, value, 0);
+            }
+
+            StatModifiers.Apply(context.ModifierManager, context.ModifierFactory, targetCreature, value,
+                modifyAction.ShouldModifyAttack(), modifyAction.ShouldModifyHealth() && !isHealthLoss, modifyAction.ShouldModifySpeed(),
+                modifyAction.GetCalculationType(), duration, context.TurnClock.TurnNumber);
+
+            // Losing Health this way isn't damage (no Armor, no damage modifiers, no OnDamaged), but at 0 the creature
+            // still goes through the death sequence (GDD 3.3)
             if (targetCreature.Health <= 0 && !targetCreature.IsDead) {
                 context.ActionsQueue.AddAction(new CheckLethalAction(targetCreature));
             }
