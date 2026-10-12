@@ -52,7 +52,8 @@ namespace SlayTheClone {
                     QueueChain(attacker, primaryTarget, damage, queue);
                 }
                 else {
-                    foreach (var target in TargetingSystem.GetAdditionalTargets(attacker.Owner, primaryTarget, action.targetModifier)) {
+                    var spread = WithoutTooMainstream(TargetingSystem.GetAdditionalTargets(attacker.Owner, primaryTarget, action.targetModifier).ToList(), attacker);
+                    foreach (var target in spread) {
                         // Without a value the spread hits like the attack itself, for the attack the attacker has when it lands
                         var hit = action.value > 0
                             ? TargetedActions.Damage(target, action.value, attacker, isCombatDamage: true)
@@ -85,10 +86,17 @@ namespace SlayTheClone {
                 var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
                 var targets = resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
                 if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) targets.AddRange(NeighboursOf(chosenTarget));
-                return targets;
+                return action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? WithoutTooMainstream(targets, source) : targets;
             }
-            return TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
+            var valid = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
+            bool area = action.targetType is TargetType.AllCreatures or TargetType.FriendlyCreatures or TargetType.EnemyCreatures
+                && !action.targetModifier.HasFlag(TargetModifier.Random);
+            return area ? WithoutTooMainstream(valid, source) : valid;
         }
+
+        /// <summary>Too Mainstream: immune to effects that affect more than one creature (area, "each creature", spreads).</summary>
+        private static List<ITarget> WithoutTooMainstream(List<ITarget> targets, ICard source) =>
+            targets.Where(t => !(t is ICreature c && Abilities.Defends(c, CreatureAbility.TooMainstream, source as ICreature))).ToList();
 
         /// <summary>
         /// What a card dropped on a slot is aimed at. A spell aimed at one of the caster's own creatures, on the board or
@@ -225,12 +233,13 @@ namespace SlayTheClone {
                     return creature != null && action.value != 0 ? new ModifyArmorAction(creature, action.value) : null;
                 case ActionType.ModifyStat:
                     return creature != null && action.value != 0
-                        ? new ModifyAction(creature, action.value, action.modifyAttack, action.modifyHealth, action.modifySpeed)
+                        ? new ModifyAction(creature, action.value, action.modifyAttack, action.modifyHealth, action.modifySpeed,
+                            source: source as ICreature, controller: controller)
                         : null;
                 case ActionType.Stun: // A stun exhausts for its value in Days (1 is the usual stun)
-                    return Status(creature, StatusEffectType.Exhausted, action.value, 0, source);
+                    return Status(creature, StatusEffectType.Exhausted, action.value, 0, source, controller);
                 case ActionType.ApplyStatus:
-                    return Status(creature, action.statusEffectToApply, action.statusDuration, action.statusPotency, source);
+                    return Status(creature, action.statusEffectToApply, action.statusDuration, action.statusPotency, source, controller);
                 case ActionType.Cleanse:
                     return creature != null ? new CleanseAction(creature, action.cleanse) : null;
                 case ActionType.PlaceSlotEffect: // Static: the slot itself, whoever is in it (GDD 4.6)
@@ -248,21 +257,21 @@ namespace SlayTheClone {
             }
         }
 
-        private static IGameAction Status(ICreature creature, StatusEffectType type, int duration, int potency, ICard source) {
+        private static IGameAction Status(ICreature creature, StatusEffectType type, int duration, int potency, ICard source, IPlayer controller) {
             if (creature == null) return null;
             if (type == StatusEffectType.Blessed) duration = 1; // Persistent: its stacks (potency) count, not Days
             if (type == StatusEffectType.None || duration <= 0) {
                 LogWarning($"{source.Name}: invalid status {type} for {duration} turns; skipped.", LogTag.Effects);
                 return null;
             }
-            return new ApplyStatusEffectAction(creature, type, duration, potency);
+            return new ApplyStatusEffectAction(creature, type, duration, potency, source as ICreature, controller);
         }
 
         // Jumps from the creature that was hit to its neighbours, halving the damage on each jump
         private static void QueueChain(ICreature attacker, ITarget primaryTarget, int damage, IActionsQueue queue) {
             if (!(primaryTarget is ICreature hitCreature)) return; // Chains need a creature to jump from
 
-            foreach (var target in TargetingSystem.GetDirectionalChainTargets(hitCreature, MaxChainJumps)) {
+            foreach (var target in WithoutTooMainstream(TargetingSystem.GetDirectionalChainTargets(hitCreature, MaxChainJumps).Cast<ITarget>().ToList(), attacker)) {
                 if (damage <= 0) break;
                 QueueCombatDamage(target, damage, attacker, queue);
                 damage /= 2;

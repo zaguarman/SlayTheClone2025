@@ -220,6 +220,7 @@ namespace SlayTheClone {
                     ChangeBaseStats(creature, 1, 0, 0);
                 }
 
+                Abilities.TryCopypasta(creature, mediator); // Each Dawn while it still has Copypasta
                 creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
@@ -280,6 +281,7 @@ namespace SlayTheClone {
                 // Deployment Time counts down at Dusk, never at the Dusk of the Day it arrived (GDD 3.2)
                 if (creature.AdvanceReadiness(endedTurnNumber, actionsQueue)) {
                     mediator.NotifyCreatureStatsChanged(creature);
+                    Abilities.TryCopypasta(creature, mediator); // When ready
                 }
 
                 // Trigger EndOfTurn effects AFTER handling expirations for the turn that just ended

@@ -478,12 +478,24 @@ namespace SlayTheClone {
             if (linkedCreature == null || linkedCreature.Health <= 0 || GameManager?.ModifierManager == null) return "";
 
             var modifiers = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature).ToList();
-            if (modifiers.Count == 0) return "";
-
             var lines = modifiers.Select(m => {
                 string icon = m is StatusEffectModifier status ? EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType)) : "";
                 return $"{icon}{m.Description}";
-            });
+            }).ToList();
+
+            // What the card face can't show about its ability: one it gained or lost, or that it's switched off
+            var printed = (linkedCreature.SourceData as CreatureData)?.ability ?? Enums.CreatureAbility.None;
+            var ability = linkedCreature.Ability;
+            if (ability != printed) {
+                lines.Insert(0, ability == Enums.CreatureAbility.None
+                    ? $"Lost its ability ({Abilities.NameOf(printed)})"
+                    : $"Now has {CardTextFormatter.AbilityLine(ability)}");
+            }
+            if (ability != Enums.CreatureAbility.None && !Abilities.IsActive(linkedCreature)) {
+                lines.Insert(0, $"{Abilities.NameOf(ability)} is switched off");
+            }
+
+            if (lines.Count == 0) return "";
             return "<b>Active effects</b>\n" + string.Join("\n", lines);
         }
 

@@ -12,6 +12,8 @@ namespace SlayTheClone {
         public ICreature GetAttacker() => attacker;
         // A hit that deals the attacker's attack follows buffs and debuffs that land before it does
         public int GetDamage() => dealsAttackersAttack && attacker != null ? attacker.Attack : damage;
+        /// <summary>Whether it's the attacker's hit, dealing its Attack when it lands (Underground looks past the attacker's buffs).</summary>
+        public bool DealsAttackersAttack => dealsAttackersAttack && attacker != null;
         public bool IsCombatDamage() => isCombatDamage;
 
         public DamageCreatureAction(ICreature target, int damage, ICreature attacker = null, bool isCombatDamage = false)

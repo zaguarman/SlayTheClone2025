@@ -80,3 +80,28 @@ SLOT EFFECTS & ENVIRONMENT ACTIONS (GDD 2.4, 3.7, 'Slot Effects Compendium')
     • Done: Landmine, Barbed Snare, Temporal Shield, Scorched Earth, Cleanse (SlotEffect), environment-first resolution.
     • Waiting on other mechanics: Surveillance Post (Revealed), Binding Chains and Threshold of Liminality (Anchored, Exposed), Rejection Field (return to hand), Rally Point (scheduled draws), Slippery Floor (needs the move's direction), Jamming Field (blocks spell targeting), Unstable Terrain, Echoing Cave, Sacrifice Lair (Banish), Magnetic Pulse (pull), Sanctuary (untargetable).
     • The four new cards (Lost Landmine, Ceasefire, Its A Trap, Burn Notice) have no art yet; their briefs are in their Art Description.
+
+
+CREATURE ABILITIES ('Abilities Compendium')
+
+17. Abilities vs. card effects
+    • Done for now: the compendium's "one ability per creature" is a new slot on the creature card (printed in bold with reminder text), separate from its triggered card effects ("When this dies, ..."). Signal Jammer, Hive Mind, Copypasta and the rest only touch that slot. Exhausted (Abilities Disabled) and Deployment Time switch both off.
+    • Question: is that the intent, or should triggered card effects count as the creature's ability too?
+
+18. Which cards get abilities?
+    • Done for now: every ability works and is tested, but no card has one yet, because the compendium says factions are assigned once cards are rebalanced.
+    • Question: which factions and cards should get which abilities? Test cards for the Mechanics Test deck can follow.
+
+19. Identity Theft isn't implemented
+    • It's an Active ability ("swap abilities with target creature"), and there's no way yet to activate an ability (no active-ability action or UI).
+    • Question: how should a player activate it: as the creature's intent for the Day (instead of attacking or moving), by dragging it onto a target?
+
+20. Underground when it attacks
+    • Done for now: when Underground is attacked, the attacker hits with its base Attack (printed + Persistent changes; its buffs are ignored). When Underground attacks, the defender's stat changes would be its Health buffs, and ignoring a Health buff mid-combat isn't defined, so nothing changes yet.
+    • Question: what should "ignore the defender's stat changes" do when Underground attacks: deal extra damage equal to its temporary Health bonus?
+
+21. Two Signal Jammers facing each other
+    • Done for now: a jammer's own on/off state is judged without other jammers, so two facing jammers switch each other off.
+
+22. What counts as "an effect on more than one creature" (Too Mainstream)
+    • Done for now: effects on every creature of a group ("each enemy creature"), effects that also hit adjacent creatures, attack spreads and chains. An effect that picks one creature at random, or is aimed at it, still affects it.

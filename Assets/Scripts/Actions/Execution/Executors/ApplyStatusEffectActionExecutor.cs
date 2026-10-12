@@ -12,6 +12,16 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Return to Sender: an enemy status bounces back to the creature that sent it, once
+            var controller = statusAction.Controller;
+            bool enemy = controller != null && targetCreature.Owner != null && controller != targetCreature.Owner;
+            if (enemy && Abilities.Defends(targetCreature, CreatureAbility.ReturnToSender, statusAction.Source)) {
+                var bounceTo = Abilities.BounceTarget(statusAction.Source, controller);
+                Log($"{targetCreature.Name}'s Return to Sender sends {statusType} back to {bounceTo?.Name ?? "nobody (it fails)"}", LogTag.Effects);
+                if (bounceTo == null) return;
+                targetCreature = bounceTo;
+            }
+
             var landed = StatusRules.Land(context, targetCreature, statusType, statusAction.GetDuration(), statusAction.GetPotency(),
                 context.TurnClock.TurnNumber);
             if (landed != null) {

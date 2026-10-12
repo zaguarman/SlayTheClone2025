@@ -24,10 +24,16 @@ namespace SlayTheClone {
         }
 
         public static string GetRulesText(CardData data) {
-            string keywords = KeywordLine(data is CreatureData creature ? creature.movement : MovementKeyword.None, data.priority, data is SpellData);
+            var creature = data as CreatureData;
+            string keywords = KeywordLine(creature != null ? creature.movement : MovementKeyword.None, data.priority, data is SpellData);
+            string ability = creature != null ? AbilityLine(creature.ability) : "";
             string effects = GetRulesText(data.effects, data is SpellData);
-            return string.Join("\n", new[] { keywords, effects }.Where(line => !string.IsNullOrEmpty(line)));
+            return string.Join("\n", new[] { keywords, ability, effects }.Where(line => !string.IsNullOrEmpty(line)));
         }
+
+        /// <summary>A creature's ability, with its reminder text: "<b>Contrarian</b> (stat changes on it are reversed)."</summary>
+        public static string AbilityLine(CreatureAbility ability) =>
+            ability == CreatureAbility.None ? "" : $"<b>{Abilities.NameOf(ability)}</b> ({Abilities.ReminderOf(ability)}).";
 
         // Keywords lead the text, like Magic's evergreen keywords ("Leapfrog."): Movement Keywords and printed Priority (Action)
         private static string KeywordLine(MovementKeyword movement, int priority, bool isSpell) {

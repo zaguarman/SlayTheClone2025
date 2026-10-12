@@ -15,6 +15,12 @@ namespace SlayTheClone {
         [Flags]
         public enum MovementKeyword { None = 0, Leapfrog = 1 << 0, Swap = 1 << 1 }
 
+        // A creature's one ability ('Abilities Compendium'). New abilities go last: cards store them as numbers
+        public enum CreatureAbility {
+            None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
+            SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, Technician
+        }
+
         // What a planned move does (see MovementRules.KindOf)
         public enum MoveKind { Walk, Push, Leapfrog, Swap }
 

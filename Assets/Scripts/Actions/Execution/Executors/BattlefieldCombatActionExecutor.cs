@@ -42,6 +42,14 @@ namespace SlayTheClone {
             Log($"Executor: Creature {attacker.Name} attacking {DescribeTarget(primaryTarget)}", LogTag.Combat);
             QueueCombatDamage(actionsQueue, primaryTarget, attacker);
 
+            // Hive Mind: whoever attacks it catches it, losing its own ability until its card is reshuffled
+            if (primaryTarget is ICreature defender && Abilities.Defends(defender, Enums.CreatureAbility.HiveMind, attacker)
+                && attacker.Ability != Enums.CreatureAbility.HiveMind) {
+                Log($"{attacker.Name} attacked {defender.Name} and joins the Hive Mind (was {attacker.Ability})", LogTag.Combat | LogTag.Effects);
+                attacker.Ability = Enums.CreatureAbility.HiveMind;
+                context.GameMediator.NotifyCreatureStatsChanged(attacker);
+            }
+
             // 2. The attacker's chain and spread add-ons
             EffectResolver.QueueAttackEffects(attacker, primaryTarget, actionsQueue);
 

@@ -20,6 +20,7 @@ namespace SlayTheClone {
                         creatureData.cardId,
                         creatureData.turnsUntilOperative);
                     creature.Movement = creatureData.movement;
+                    creature.Ability = creatureData.ability;
                     card = creature;
                     break;
 

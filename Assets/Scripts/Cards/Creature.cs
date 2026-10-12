@@ -24,6 +24,11 @@ namespace SlayTheClone {
         BoardSlot Slot { get; set; }
         /// <summary>Its Movement Keywords (GDD 2.4): how it can move besides walking and pushing.</summary>
         MovementKeyword Movement { get; }
+        /// <summary>
+        /// Its one ability ('Abilities Compendium'). A gained or lost ability stays on the card, through the discard pile,
+        /// until it's reshuffled, like Persistent Stat Modifications. Whether it's switched on: see <see cref="Abilities.IsActive"/>.
+        /// </summary>
+        CreatureAbility Ability { get; set; }
         /// <summary>Set by the ModifierManager while a status (like Exhausted) disables its abilities: none of its effects trigger.</summary>
         bool AbilitiesDisabled { get; set; }
         /// <summary>The slot it was last in, kept after it leaves play (where effects homing on it land then).</summary>
@@ -109,6 +114,7 @@ namespace SlayTheClone {
         public BoardSlot LastSlot { get; private set; }
         public bool AbilitiesDisabled { get; set; }
         public MovementKeyword Movement { get; internal set; }
+        public CreatureAbility Ability { get; set; }
         public int TimesEnteredPlay { get; private set; }
 
         public int TurnsUntilOperative { get; private set; }

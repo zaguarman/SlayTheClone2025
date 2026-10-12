@@ -20,6 +20,10 @@ namespace SlayTheClone {
         public bool ShouldModifySpeed() => modifySpeed;
         public int GetDuration() => durationInTurns;
         public ModifierCalculationType GetCalculationType() => calculationType;
+        /// <summary>The creature whose effect it is, if any (where No U bounces it, and whether Zero-Day bypasses abilities).</summary>
+        public ICreature Source { get; }
+        /// <summary>Whose effect it is: an enemy's effect is the one Unbothered, No U and Spite react to. Null: nobody's.</summary>
+        public IPlayer Controller { get; }
 
         public ModifyAction(
             ICreature target,
@@ -28,7 +32,9 @@ namespace SlayTheClone {
             bool modifyHealth,
             bool modifySpeed,
             int durationInTurns = 0,
-            ModifierCalculationType calculationType = ModifierCalculationType.Flat) {
+            ModifierCalculationType calculationType = ModifierCalculationType.Flat,
+            ICreature source = null,
+            IPlayer controller = null) {
             if (target == null) {
                 // The action is still created; its executor skips it
                 LogWarning("ModifyAction: Target creature is null. Action cannot be created.", LogTag.Actions | LogTag.Effects);
@@ -41,6 +47,8 @@ namespace SlayTheClone {
             this.modifySpeed = modifySpeed;
             this.calculationType = calculationType;
             this.durationInTurns = Math.Max(0, durationInTurns);
+            Source = source;
+            Controller = controller;
 
             Log($"Created {this}", LogTag.Actions | LogTag.Creatures | LogTag.Effects);
         }

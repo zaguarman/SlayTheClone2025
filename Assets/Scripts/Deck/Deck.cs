@@ -87,6 +87,7 @@ namespace SlayTheClone {
             if (card is ICreature used && resetCard is ICreature copy && copy != used) {
                 var (attack, health, speed) = used.PersistentChanges;
                 copy.ChangeBaseStats(attack, health, speed);
+                copy.Ability = used.Ability; // A gained or lost ability also stays until the reshuffle
             }
             discardPile.Add(resetCard);
             Log($"Added {resetCard.Name} to discard pile (DeckID: {deckId.ToUpper()})", LogTag.Cards);

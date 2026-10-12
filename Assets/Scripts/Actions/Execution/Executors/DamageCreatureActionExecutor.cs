@@ -6,7 +6,7 @@ namespace SlayTheClone {
     public class DamageCreatureActionExecutor : ActionExecutor<DamageCreatureAction> {
         protected override void ExecuteAction(DamageCreatureAction damageAction, ActionExecutionContext context) {
             var targetCreature = damageAction.GetTarget();
-            var damage = damageAction.GetDamage();
+            var damage = Abilities.OutgoingDamage(damageAction); // Underground, Technician
             var attacker = damageAction.GetAttacker(); // Can be null
 
             if (targetCreature == null || targetCreature.IsDead) return;
@@ -31,7 +31,7 @@ namespace SlayTheClone {
 
             Log($"Executor: Intent to deal {damage} damage to {targetCreature.Name} (Armor: {targetCreature.CurrentArmorPool}) from {attacker?.Name ?? "source"}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
 
-            int damageToArmor = Math.Min(damage, targetCreature.CurrentArmorPool);
+            int damageToArmor = Abilities.IgnoresArmor(attacker) ? 0 : Math.Min(damage, targetCreature.CurrentArmorPool); // Insider Job
             int remainingDamage = damage - damageToArmor;
 
             // Armor is spent immediately so the next hit in the same resolution sees what is left
