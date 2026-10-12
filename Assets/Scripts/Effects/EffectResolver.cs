@@ -16,7 +16,7 @@ namespace SlayTheClone {
         /// <param name="triggeringAttacker">Whoever damaged or killed the creature, for retaliation; null otherwise.</param>
         public static void QueueCreatureEffects(ICreature creature, EffectTrigger trigger, IActionsQueue queue, ICreature triggeringAttacker = null) {
             using var ability = queue.QueueingAbilityOf(creature, trigger); // Decides when they resolve (see ActionsQueue)
-            foreach (var action in ActionsFor(creature, trigger)) {
+            foreach (var action in ActionsFor(creature, trigger, creature.Owner)) {
                 List<ITarget> targets;
                 if (trigger == EffectTrigger.OnDamage && triggeringAttacker != null && action.targetType == TargetType.Enemy) {
                     // Retaliation: an enemy-targeted OnDamage effect hits whoever damaged this creature
@@ -64,9 +64,22 @@ namespace SlayTheClone {
             }
         }
 
-        private static IEnumerable<EffectAction> ActionsFor(ICard card, EffectTrigger trigger) {
+        private static IEnumerable<EffectAction> ActionsFor(ICard card, EffectTrigger trigger, IPlayer owner = null) {
             // ToList: queueing can change the card's state while we iterate
-            return card.Effects.Where(e => e.trigger == trigger).SelectMany(e => e.actions).ToList();
+            var effects = card.Effects.Select((effect, index) => (effect, index)).Where(e => e.effect.trigger == trigger).ToList();
+            var actions = new List<EffectAction>();
+            foreach (var (effect, index) in effects) {
+                if (effect.oncePerCombat && owner != null) {
+                    // Once per combat: used up for this card, wherever it goes, until the combat ends
+                    string key = $"{card.CardId}#{index}";
+                    if (!owner.UsedOncePerCombat.Add(key)) {
+                        Log($"{card.Name}: its once-per-combat {trigger} effect is used up", LogTag.Effects);
+                        continue;
+                    }
+                }
+                actions.AddRange(effect.actions);
+            }
+            return actions;
         }
 
         #region Targets
@@ -89,6 +102,11 @@ namespace SlayTheClone {
                 return action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? WithoutTooMainstream(targets, source) : targets;
             }
             var valid = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
+            // Heat Signature: an attack on a randomly chosen target goes to the creature with the most Heat, on either side
+            if (action.actionType == ActionType.Damage && action.targetModifier.HasFlag(TargetModifier.Random)
+                && HeatRules.Hottest(source as ICreature, controller) is ICreature hottest) {
+                return new List<ITarget> { hottest };
+            }
             bool area = action.targetType is TargetType.AllCreatures or TargetType.FriendlyCreatures or TargetType.EnemyCreatures
                 && !action.targetModifier.HasFlag(TargetModifier.Random);
             return area ? WithoutTooMainstream(valid, source) : valid;
@@ -262,7 +280,7 @@ namespace SlayTheClone {
 
         private static IGameAction Status(ICreature creature, StatusEffectType type, int duration, int potency, ICard source, IPlayer controller) {
             if (creature == null) return null;
-            if (type == StatusEffectType.Blessed) duration = 1; // Persistent: its stacks (potency) count, not Days
+            if (type is StatusEffectType.Blessed or StatusEffectType.HeatSignature) duration = 1; // Persistent: its stacks (potency) count, not Days
             if (type == StatusEffectType.None || duration <= 0) {
                 LogWarning($"{source.Name}: invalid status {type} for {duration} turns; skipped.", LogTag.Effects);
                 return null;

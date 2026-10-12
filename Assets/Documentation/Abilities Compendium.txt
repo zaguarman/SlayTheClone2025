@@ -4,6 +4,10 @@ General Rules:
 
 • One Ability per Creature: A creature has at most one ability. Gaining a new ability (copying, swapping, spreading) replaces the old one.
 • Ability Changes Last Until Reshuffle: There are no Day-based or status-based abilities. An ability a creature gains or loses stays on the card, even if it leaves play, until the card is reshuffled into the deck or the combat ends. Then it gets its printed ability back. This is the same rule as Persistent Stat Modifications.
+• Abilities Aren't Effects: A creature has at most one ability (from this compendium), but can have many triggered effects ("When this dies, ...", "Each Dawn, ..."). They are different things. Whatever switches things off says which it affects: its ability, its effects, or both.
+    • Both: Abilities Disabled (Exhausted, Muted, a Jamming Field) and Deployment Time.
+    • Only the ability: Signal Jammer.
+    • Only the triggered effects: Scorched Earth (a creature's entry effects still happen).
 • Switched Off, Not Removed: Abilities Disabled effects (Muted, Exhausted, Deployment Time, a Jamming Field, Signal Jammer) switch an ability off while they last. The creature still has it.
 • Stat Changes vs. Statuses: Abilities that react to stat changes only affect stat modifications (Temporary and Persistent). A status's own stat change (Chill, Heavy, Addicted...) is part of the status and isn't affected, unless the ability says otherwise (Underground does).
 • Bouncing Effects: When an ability sends an effect back to "the creature that caused it" and there is no such creature (a Spell from hand, or it has left play), the effect goes to the caster's creature with the lowest current Health, ties broken randomly. If the caster has no creatures, the effect fails. Area effects bounce one creature at a time. An effect can only be bounced once (see GDD 5.2 Status Effects - Bounces and Chains).
@@ -66,7 +70,7 @@ Underground
     Inspired by: Unaware (Clefable, Quagsire)
     Type: Passive, Defensive
     Description: "When this creature attacks or is attacked, the other creature's stat changes are ignored."
-    Notes: Ignores the other creature's Temporary Stat Modifications and stat changes from its statuses. Printed stats and Persistent Stat Modifications still count. Its own stat changes still apply.
+    Notes: Like Unaware, both ways. When attacked, the attacker hits with its printed Attack plus Persistent Stat Modifications (its buffs and debuffs are ignored). When it attacks, the defender's temporary Health changes are ignored: a Health buff doesn't soak its hit, and a Health debuff doesn't add to it. Its own stat changes still apply.
     Answers: Beat it with base stats and Persistent upgrades instead of temporary buffs. Zero-Day ignores it when Zero-Day attacks it.
 
 Too Mainstream
@@ -115,6 +119,7 @@ Identity Theft
     Type: Active
     Description: "Active: swap abilities with target creature."
     Notes: Lasts until each card is reshuffled. The target ends up with Identity Theft and can use it in turn.
+    Using It: Active abilities are the creature's action for the Day, instead of attacking or moving (one intent a Day). Hold Shift while dragging the creature onto the target. It's aimed at the slot like an attack, and resolves in the Ability & Attack Layer; if no creature is there by then, it fizzles.
     Answers: Give it nothing worth stealing, or steal back with the Identity Theft it leaves you.
 
 Hive Mind

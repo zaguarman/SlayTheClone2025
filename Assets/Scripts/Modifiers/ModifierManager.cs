@@ -130,6 +130,8 @@ namespace SlayTheClone {
         // The creature checks this itself before any of its effects trigger (see Creature.HandleEffect)
         private void UpdateAbilitiesDisabled(ICreature creature) {
             creature.AbilitiesDisabled = HasModifier(creature, m => m is StatusEffectModifier s && s.DisablesAbilities());
+            creature.Heat = GetActiveModifiersFor(creature).OfType<StatusEffectModifier>()
+                .Where(s => s.EffectType == StatusEffectType.HeatSignature).Sum(s => s.Stacks);
         }
 
         private static bool AffectsStats(IModifier modifier) {

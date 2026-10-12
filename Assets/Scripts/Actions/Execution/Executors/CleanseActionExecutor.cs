@@ -35,10 +35,9 @@ namespace SlayTheClone {
 
         // Heresy ('Status Effects Compendium' - Doomed): the sentence moves, with its remaining Days, to the creature with the
         // lowest current Health on this creature's side (GDD 5.2 Passing a Status). This one is freed and keeps the Attack it
-        // gained. With nobody to pass it to, the sentence is carried out now.
+        // gained. With nobody to pass it to, the sentence is carried out now. If the vessel is Doomed already, Heresy fizzles:
+        // nothing happens and this creature stays Doomed.
         private static void PassOnDoomed(ICreature creature, StatusEffectModifier doomed, ActionExecutionContext context) {
-            context.ModifierManager.RemoveModifier(creature, doomed);
-
             var vessel = creature.Owner?.Battlefield
                 .Select(slot => slot.OccupyingCreature)
                 .Where(other => other != null && other != creature && !other.IsDead)
@@ -46,6 +45,12 @@ namespace SlayTheClone {
                 .ThenBy(_ => GameRandom.Next(int.MaxValue))
                 .FirstOrDefault();
 
+            if (vessel != null && context.ModifierManager.HasStatusEffect(vessel, StatusEffectType.Doomed)) {
+                Log($"Heresy fizzles: {vessel.Name} is Doomed already, so {creature.Name} stays Doomed", LogTag.Effects);
+                return;
+            }
+
+            context.ModifierManager.RemoveModifier(creature, doomed);
             if (vessel == null) {
                 Log($"Heresy: {creature.Name} has nobody to pass Doomed to, so the sentence is carried out", LogTag.Effects);
                 context.ActionsQueue.AddAction(new DoomedSentenceAction(creature));

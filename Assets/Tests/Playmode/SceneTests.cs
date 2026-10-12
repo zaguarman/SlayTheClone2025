@@ -193,6 +193,25 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
+        public IEnumerator PlannedMoves_ShowAGhostOfEachCreature_WhereItWillEndUp() {
+            var pusher = game.Summon(p1, game.Cards.Creature("Test Pusher", 1, 5), 0);
+            var pushed = game.Summon(p1, game.Cards.Creature("Test Pushed", 1, 5), 1);
+            yield return null;
+
+            game.Queue.AddAction(new MoveCreatureAction(pusher, p1.Battlefield[0], p1.Battlefield[1], p1));
+            yield return null;
+
+            var ghosts = game.BoardView(p1).MoveGhosts.ToList();
+            CollectionAssert.AreEquivalent(new[] { (pusher, p1.Battlefield[1]), (pushed, p1.Battlefield[2]) }, ghosts);
+            Assert.AreSame(p1.Battlefield[0], pusher.Slot, "Nothing has moved yet");
+            game.AssertViewsMatchRules();
+
+            game.Queue.ResolveActions();
+            yield return null;
+            Assert.IsEmpty(game.BoardView(p1).MoveGhosts, "The ghosts go once the moves are done");
+        }
+
+        [UnityTest]
         public IEnumerator MoveArrows_ShowTheFinalFormation_IncludingCreaturesThatGetPushed() {
             var pusher = game.Summon(p1, game.Cards.Creature("Test Pusher", 1, 5), 0);
             var pushed = game.Summon(p1, game.Cards.Creature("Test Pushed", 1, 5), 1);

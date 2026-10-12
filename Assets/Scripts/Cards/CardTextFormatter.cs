@@ -59,7 +59,9 @@ namespace SlayTheClone {
                 }).ToList();
 
                 string body = JoinClauses(clauses);
-                sentences.Add(startsSentence ? body + "." : $"{EffectIcons.Tag(trigger.icon)}{trigger.text}, {body}.");
+                string once = effect.oncePerCombat ? "Once per combat, " : "";
+                string triggerText = once.Length > 0 && trigger.text != null ? char.ToLower(trigger.text[0]) + trigger.text.Substring(1) : trigger.text;
+                sentences.Add(startsSentence ? once + body + "." : $"{EffectIcons.Tag(trigger.icon)}{once}{triggerText}, {body}.");
             }
             return string.Join("\n", sentences);
         }
@@ -239,6 +241,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Burned: return $"burn {target} for {action.statusPotency} each turn for {turns}";
                 case StatusEffectType.Doomed: return $"doom {target} for {turns}";
                 case StatusEffectType.Blessed: return $"bless {target}{(action.statusPotency > 1 ? $" {action.statusPotency} times" : "")}";
+                case StatusEffectType.HeatSignature: return $"{target} gains {System.Math.Max(1, action.statusPotency)} Heat";
                 default: return null;
             }
         }

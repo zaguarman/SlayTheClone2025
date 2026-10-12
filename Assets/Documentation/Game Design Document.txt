@@ -178,7 +178,7 @@ Recruitment
     • Outcome (AI use): The AI controls your creature for the rest of the combat. Nothing is captured; your card stays in your deck. Full rules in 5.4 Recruitment & Conversion.
 
 Redirect (Watchdog effect)
-    • What it is: A Watchdog effect that changes the target of a pending action.
+    • What it is: A Watchdog effect that changes the target of a pending action: to a random creature on either side, other than the one acting and the one it was aimed at. Heat Signature draws it first: if any creature has Heat, it goes to the one with the most.
 
 Reorder (Watchdog effect)
     • What it is: A Watchdog effect that moves a pending action within its layer. A Briefing Watchdog can move it earlier or later; an On Watch Watchdog can only move it later (it only sees the action when it's already up). Layers never change order.
@@ -678,7 +678,7 @@ Watchdogs
     • Two Timings:
         • On Watch (default): Just before each action resolves, it checks whether that action matches. It also catches actions that were queued before the Watchdog existed, as long as they haven't resolved yet. It can only move an action later, never earlier.
         • Briefing: Once per Day, in the Briefing phase, it looks at the whole queue before anything resolves. It can pick ("the strongest", "the first", "every"), move actions earlier or later within their layer, nullify or redirect. Only Watchdogs already active when the Day's resolution starts can brief; one created today can brief from tomorrow on.
-    • Charges: Each trigger uses 1 charge. A Watchdog can last several Days and disappears when its last charge is used (or when a duration on the card runs out).
+    • Charges: Each action it changes uses 1 charge: the condition says which actions it reacts to, the charges how many times it can. A Briefing Watchdog that picks "every" match changes as many as it has charges for. A Watchdog can last several Days and disappears when its last charge is used (or when a duration on the card runs out).
     • Several Matches: When several Watchdogs match the same action, only the oldest one triggers.
     • Can't Match the Unseen: A Watchdog can't match an action it can't see (Concealed, Undercover). Encrypted creatures' actions are ignored, and no charge is spent.
     • Visibility: The opponent sees that a Watchdog exists and what it watches (a creature or a side). Its condition shows as "???" until revealed by Intelligence.

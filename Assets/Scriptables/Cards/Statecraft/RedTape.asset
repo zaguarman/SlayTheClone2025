@@ -21,6 +21,7 @@ MonoBehaviour:
   effects:
   - effectType: 1
     trigger: 0
+    oncePerCombat: 0
     actions:
     - actionType: 12
       value: 1

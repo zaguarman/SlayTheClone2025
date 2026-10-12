@@ -27,6 +27,29 @@ namespace SlayTheClone.Tests {
 
         #region Death sequence (GDD 3.9)
         [Test]
+        public void AOncePerCombatSave_WorksOnce_EvenAfterTheCardIsReshuffled() {
+            game.SetDecks(game.Fillers(5), game.Fillers(5));
+            var save = Effect(EffectTrigger.OnAboutToDie, ActionType.Heal, 1, TargetType.Self);
+            save.oncePerCombat = true;
+            var plotArmorData = game.Creature("Plot Armor", 2, 2, 2, save);
+            var hero = game.Summon(p1, plotArmorData, 0);
+
+            game.Run(new DamageCreatureAction(hero, 5));
+            Assert.IsFalse(hero.IsDead, "Saved once");
+            Assert.AreEqual(1, hero.Health);
+
+            game.Run(new DamageCreatureAction(hero, 5));
+            Assert.IsTrue(hero.IsDead, "Not twice");
+
+            game.CardDealingService.RecycleDiscardPile(p1);
+            var again = (ICreature)p1.Deck.GetDeckPreview().Single(c => c.Name == "Plot Armor");
+            game.Run(new SummonCreatureAction(again, p1, p1.Battlefield[1], fromDeck: true));
+            game.Run(new DamageCreatureAction(again, 5));
+            Assert.IsTrue(again.IsDead, "Once per combat: reshuffling doesn't give it back");
+            StringAssert.Contains("Once per combat, when this would die", CardTextFormatter.GetRulesText(plotArmorData));
+        }
+
+        [Test]
         public void OnAboutToDie_CanSaveACreatureFromALethalHit() {
             var survivor = game.Summon(p1, game.Creature("Survivor", 1, 3, 1, Effect(EffectTrigger.OnAboutToDie, ActionType.Heal, 2, TargetType.Self)), 0);
 

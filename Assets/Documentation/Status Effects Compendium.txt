@@ -244,7 +244,7 @@ Doomed
         • As a weapon: dooming an enemy guarantees it dies, but it grows every Dawn and strikes back with Last Rites.
         • As a sacrifice: dooming your own creature gives a growing attacker with a parting blow, and the Attack it gained stays on the card.
     Answers: Pass it to a vessel you meant to sacrifice anyway (Heresy), use the Attack it gains, and aim Last Rites at the enemy's best slot.
-    Cleansable: No. Heresy: a cleanse attempt passes Doomed on instead of removing it (GDD 5.2 Status Effects - Passing a Status). It moves, with its remaining stacks, to the creature with the lowest current Health on this creature's side; that vessel loses its other statuses as usual. This creature is freed and keeps the Attack it gained. If it has no other creature on its side, the sentence is carried out immediately: Last Rites, then it is destroyed.
+    Cleansable: No. Heresy: a cleanse attempt passes Doomed on instead of removing it (GDD 5.2 Status Effects - Passing a Status). It moves, with its remaining stacks, to the creature with the lowest current Health on this creature's side; that vessel loses its other statuses as usual. This creature is freed and keeps the Attack it gained. If it has no other creature on its side, the sentence is carried out immediately: Last Rites, then it is destroyed. If that vessel is Doomed already, Heresy fizzles: nothing happens, and this creature stays Doomed.
 
 Earworm
     Faction: Digital Society
@@ -317,7 +317,7 @@ Heat Signature
         Re-application Behavior: Add Stacks
         Max Stacks: None for now (99 is only the display limit; a real cap will come with balancing).
     Notes:
-        • What it catches: every Homing attack and every attack with a randomly chosen target, from either player, including the controller's own. Attacks aimed at a slot (Fixed, Static) aren't affected.
+        • What it catches: every Homing attack, every attack with a randomly chosen target, and every action a Watchdog redirects, from either player, including the controller's own. Attacks aimed at a slot (Fixed, Static) aren't affected.
         • When: like a Watchdog, just before each such attack resolves, so it also pulls attacks that were queued before it was applied.
         • Which one: the creature with the most Heat, on either side. If several are tied for the most, the nearest one: first in the attacker's own row, counted in slots; only if there is none in its row, in the other row, counted by column difference. Remaining ties are broken randomly.
         • Example with equal Heat (columns 1-5): row 1 is A, X, H1, c, X and row 2 is Y, Y, B, C, H2. A's Homing attack lands on H1 (its own row). B's lands on H2 (its own row), even though H1 is directly opposite. C's attack aimed at the slot of c isn't affected. If H1 had more Heat than H2, both attacks would land on H1.

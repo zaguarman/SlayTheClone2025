@@ -107,14 +107,18 @@ namespace SlayTheClone {
         /// <summary>The number "N or less" compares: an attack's Attack. Other actions have none (0).</summary>
         public static int StrengthOf(IGameAction action) => action is BattlefieldCombatAction attack ? attack.GetAttacker()?.Attack ?? 0 : 0;
 
-        /// <summary>Redirect: the same action aimed at another creature on the side it was aimed at, at random. Itself if there's none.</summary>
-        public static IGameAction Redirect(IGameAction action) {
+        /// <summary>
+        /// Redirect: the same action aimed at another creature, on either side, chosen at random; Heat Signature draws it to
+        /// the creature with the most Heat first. Never at the creature acting or the one it was aimed at. Itself if there's none.
+        /// </summary>
+        public static IGameAction Redirect(IGameAction action, ICreature source) {
+            var actor = ActorOf(action, source);
             switch (action) {
                 case BattlefieldCombatAction attack when attack.GetTargetSlot() != null:
-                    var slot = OtherOccupiedSlot(attack.GetTargetSlot());
+                    var slot = NewTarget(attack.GetTargetSlot(), actor, attack.GetAttacker()?.Owner);
                     return slot != null ? new BattlefieldCombatAction(attack.GetAttacker(), slot, attack.IsLastRites) : action;
                 case PlayCardAction play when play.GetCard() is Spell && AimedSlot(play.GetTarget()) is BoardSlot aimed:
-                    var newSlot = OtherOccupiedSlot(aimed);
+                    var newSlot = NewTarget(aimed, actor, play.GetOwner());
                     return newSlot != null ? new PlayCardAction(play.GetCard(), play.GetOwner(), newSlot) : action;
                 default:
                     return action;
@@ -128,9 +132,14 @@ namespace SlayTheClone {
             _ => null
         };
 
-        private static BoardSlot OtherOccupiedSlot(BoardSlot from) {
-            var others = from.Owner?.Battlefield.Where(s => s != from && s.IsOccupied()).ToList();
-            if (others == null || others.Count == 0) return null;
+        private static BoardSlot NewTarget(BoardSlot from, ICreature actor, IPlayer side) {
+            var exclude = new[] { actor, from.OccupyingCreature };
+            var hottest = HeatRules.Hottest(actor, side, exclude);
+            if (hottest != null) return hottest.Slot;
+
+            var board = side != null ? side.Battlefield.Concat(side.Opponent?.Battlefield ?? Enumerable.Empty<BoardSlot>()) : from.Owner.Battlefield;
+            var others = board.Where(s => s.IsOccupied() && !exclude.Contains(s.OccupyingCreature)).ToList();
+            if (others.Count == 0) return null;
             return others[GameRandom.Next(others.Count)];
         }
 

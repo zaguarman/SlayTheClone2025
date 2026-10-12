@@ -28,6 +28,7 @@ namespace SlayTheClone {
         public const string Doom = "doom";
         public const string Bless = "bless";
         public const string Cleanse = "cleanse";
+        public const string Heat = "heat";
 
         // Stats
         public const string Speed = "speed";
@@ -42,6 +43,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Burned: return Burn;
                 case StatusEffectType.Doomed: return Doom;
                 case StatusEffectType.Blessed: return Bless;
+                case StatusEffectType.HeatSignature: return Heat;
                 default: return null;
             }
         }

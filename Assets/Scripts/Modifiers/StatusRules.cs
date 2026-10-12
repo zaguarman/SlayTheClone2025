@@ -39,6 +39,16 @@ namespace SlayTheClone {
                 return null;
             }
 
+            // More Heat on a creature that has some adds to it
+            var heat = Find(manager, target, StatusEffectType.HeatSignature);
+            if (type == StatusEffectType.HeatSignature && heat != null) {
+                heat.SetStacks(heat.Stacks + System.Math.Max(1, potency));
+                target.Heat = heat.Stacks;
+                Log($"{target.Name} is now at {heat.Description}", LogTag.Actions | LogTag.Effects);
+                context.GameMediator.NotifyCreatureStatusChanged(target, StatusEffectType.HeatSignature, true);
+                return heat;
+            }
+
             // Doomed wipes every other status on application, cleansable or not
             if (type == StatusEffectType.Doomed) {
                 foreach (var other in manager.GetActiveModifiersFor(target).OfType<StatusEffectModifier>().ToList()) {
@@ -70,7 +80,7 @@ namespace SlayTheClone {
                 StatusEffectType.Exhausted => $"Exhausted ({days}): can't act, abilities off, takes +1 damage",
                 StatusEffectType.Doomed => $"Doomed ({days}): +1 Attack each Dawn, then Last Rites and it dies",
                 StatusEffectType.Burned => $"Burned ({days})" + (potency > 0 ? $" (Potency: {potency})" : ""),
-                StatusEffectType.Blessed => "Blessed", // Its stacks are added to the text by the status itself
+                StatusEffectType.Blessed or StatusEffectType.HeatSignature => type.ToString(), // Its stacks are added by the status itself
                 _ => $"{type} ({days})"
             };
         }

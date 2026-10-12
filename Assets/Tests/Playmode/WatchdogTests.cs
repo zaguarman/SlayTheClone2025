@@ -63,7 +63,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void Redirect_SendsTheAttackToAnotherCreatureOnTheSideItWasAimedAt() {
+        public void Redirect_SendsTheAttackToAnotherCreature_AtRandom() {
             var aimedAt = game.Summon(p1, game.Creature("Aimed At", 0, 10), 0);
             var decoy = game.Summon(p1, game.Creature("Decoy", 0, 10), 3);
             var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 0);
@@ -72,7 +72,22 @@ namespace SlayTheClone.Tests {
             game.Attack(brute, p1.Battlefield[0]);
 
             Assert.AreEqual(10, aimedAt.Health);
-            Assert.AreEqual(7, decoy.Health, "The only other creature there");
+            Assert.AreEqual(7, decoy.Health, "The only creature that is neither the attacker nor its target");
+        }
+
+        [Test]
+        public void Redirect_GoesToTheCreatureWithTheMostHeat_OnEitherSide() {
+            var aimedAt = game.Summon(p1, game.Creature("Aimed At", 0, 10), 0);
+            game.Summon(p1, game.Creature("Bystander", 0, 10), 3);
+            var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 0);
+            var hot = game.Summon(p2, game.Creature("Hot Ally", 0, 10), 4);
+            game.Run(new ApplyStatusEffectAction(hot, StatusEffectType.HeatSignature, 1, 2));
+            Watch(Spec(WatchdogEffect.Redirect), p1);
+
+            game.Attack(brute, p1.Battlefield[0]);
+
+            Assert.AreEqual(10, aimedAt.Health);
+            Assert.AreEqual(7, hot.Health, "Heat draws it, even onto the attacker's own side");
         }
 
         [Test]
@@ -90,10 +105,11 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void Briefing_StartsTheDayAfter_AndCanPickEveryMatch_ForOneCharge() {
+        public void Briefing_StartsTheDayAfter_AndCanPickEveryMatch_OneChargePerAction() {
             var a = game.Summon(p2, game.Creature("A", 2, 10), 0);
             var b = game.Summon(p2, game.Creature("B", 3, 10), 1);
-            Watch(Spec(WatchdogEffect.Nullify, timing: WatchdogTiming.Briefing, pick: BriefingPick.Every, charges: 2), p1);
+            var c = game.Summon(p2, game.Creature("C", 4, 10), 2);
+            Watch(Spec(WatchdogEffect.Nullify, timing: WatchdogTiming.Briefing, pick: BriefingPick.Every, charges: 3), p1);
 
             game.Declare(a, p1.Battlefield[0]);
             game.ActionsQueue.BriefWatchdogs();
@@ -106,7 +122,15 @@ namespace SlayTheClone.Tests {
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
             Assert.AreEqual(Player.MaxHealth - 2, p1.Health, "Every enemy attack nullified");
-            Assert.AreEqual(1, game.ActionsQueue.Watchdogs.Single().ChargesLeft, "One briefing, one charge");
+            Assert.AreEqual(1, game.ActionsQueue.Watchdogs.Single().ChargesLeft, "One charge per action it changed");
+
+            game.StartTurn();
+            game.Declare(a, p1.Battlefield[0]);
+            game.Declare(c, p1.Battlefield[2]);
+            game.ActionsQueue.BriefWatchdogs();
+            game.Resolve();
+            Assert.AreEqual(Player.MaxHealth - 2 - 4, p1.Health, "Its last charge only stops the first: C's attack lands");
+            Assert.IsEmpty(game.ActionsQueue.Watchdogs);
         }
 
         [Test]

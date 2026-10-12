@@ -12,6 +12,11 @@ namespace SlayTheClone {
         IDeck Deck { get; }
         int CardsToDraw { get; set; }
         int Health { get; }
+        /// <summary>
+        /// "Once per combat" effects this player's cards have used (keyed by card and effect). It lasts the whole combat:
+        /// leaving play, the discard pile and reshuffles don't give the use back.
+        /// </summary>
+        ISet<string> UsedOncePerCombat { get; }
         void AddToHand(ICard card);
         void RemoveFromHand(ICard card);
         void RemoveFromBattlefield(ICard creature);
@@ -43,6 +48,7 @@ namespace SlayTheClone {
         public List<ICard> Hand { get; private set; }
         public IDeck Deck { get; private set; }
         public int CardsToDraw { get; set; } = 2; // Default to drawing 2 cards
+        public ISet<string> UsedOncePerCombat { get; } = new HashSet<string>();
 
         public IReadOnlyList<BoardSlot> Battlefield { get; }
         public event Action<int> HealthChanged;

@@ -36,7 +36,8 @@ namespace SlayTheClone {
             Burned,     // Takes damage at end of turn
             Exhausted,  // The stun: Cannot Act, abilities disabled, and Exposed (+1 damage taken) while it lasts (Status Effects Compendium)
             Doomed,     // Death Sentence: blocks other statuses, +1 permanent Attack each Dawn, then Last Rites and destroyed
-            Blessed     // Persistent ward: the next status that would land is negated and Blessed loses a stack (up to 3)
+            Blessed,    // Persistent ward: the next status that would land is negated and Blessed loses a stack (up to 3)
+            HeatSignature // Persistent Heat stacks: random and redirected attacks go to the creature with the most Heat
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old

@@ -236,6 +236,43 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
+        public void Heresy_Fizzles_WhenTheWeakestCreatureIsDoomedAlready() {
+            var heretic = game.Summon(p1, game.Creature("Heretic", 1, 9), 0);
+            var condemned = game.Summon(p1, game.Creature("Condemned", 0, 2), 1);
+            game.Run(new ApplyStatusEffectAction(condemned, StatusEffectType.Doomed, 3, 0));
+            game.Run(new ApplyStatusEffectAction(heretic, StatusEffectType.Doomed, 3, 0));
+
+            game.Run(new CleanseAction(heretic, CleanseTarget.Statuses));
+
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(heretic, StatusEffectType.Doomed), "Nothing happens: it stays Doomed");
+            Assert.IsFalse(heretic.IsDead);
+        }
+
+        [Test]
+        public void HeatSignature_DrawsRandomlyTargetedAttacks_ToTheHottestCreature() {
+            game.Summon(p2, game.Creature("Cold", 0, 10), 0);
+            var warm = game.Summon(p2, game.Creature("Warm", 0, 10), 1);
+            var hot = game.Summon(p2, game.Creature("Hot", 0, 10), 2);
+            game.Run(new ApplyStatusEffectAction(warm, StatusEffectType.HeatSignature, 1, 1));
+            game.Run(new ApplyStatusEffectAction(hot, StatusEffectType.HeatSignature, 1, 1));
+            game.Run(new ApplyStatusEffectAction(hot, StatusEffectType.HeatSignature, 1, 2));
+            Assert.AreEqual(3, hot.Heat, "Heat stacks add up");
+
+            var scatter = game.Spell("Scatter", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.Random));
+            for (int i = 0; i < 3; i++) {
+                game.Play(game.GiveCard(p1, scatter), p1, null);
+                game.Resolve();
+            }
+            Assert.AreEqual(4, hot.Health, "Every random hit lands on the most Heat");
+            Assert.AreEqual(10, warm.Health);
+
+            game.StartTurn();
+            game.StartTurn();
+            Assert.AreEqual(3, hot.Heat, "Persistent: it doesn't decay");
+        }
+
+        [Test]
         public void Heresy_WithNobodyToPassItTo_CarriesTheSentenceOutNow() {
             var heretic = game.Summon(p1, game.Creature("Heretic", 3, 5), 0);
             game.Run(new ApplyStatusEffectAction(heretic, StatusEffectType.Doomed, 3, 0));

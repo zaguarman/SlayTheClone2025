@@ -11,7 +11,7 @@ CONTENTS
 
 1. PURPOSE
 
-• Three monofaction decks, one per faction: Statecraft has 20 different cards, Corporate 18, Zeitgeist 17. No copies yet.
+• Three monofaction decks, one per faction: Statecraft has 20 different cards, Corporate 18, Zeitgeist 18. No copies yet.
 • Every card name comes from the 'Brainstorm List' or the 'Refined Brainstorm List', picking the most cynical ones. Margin Call is the exception: a Corporate staple added on purpose.
 • Cards only use what the engine already does: damage, healing, armor, draws, summoning from the deck, stat changes (ModifyStat), the Exhausted stun, and, for the cards in section 6, Doomed, Burn, Health Loss, Leapfrog and Swap.
 • Slot Effects are used by Lost Landmine and Ceasefire, Deployment Time delays by Red Tape. Watchdogs only by the test cards in section 6. No control changes or Locations yet.
@@ -128,7 +128,7 @@ Spells
         • Future: a Law with a paperwork drawback.
 
 
-5. ZEITGEIST: MOODS OF MODERN LIFE (11 creatures, 6 spells; the newest one is in section 6)
+5. ZEITGEIST: MOODS OF MODERN LIFE (12 creatures, 6 spells; the newest two are in section 6)
 
 Play style: fast, loud and self-destructive. Everything deploys at once, spikes, burns out, and takes bystanders with it.
 
@@ -144,7 +144,7 @@ Creatures
     • Hikikomori (1/7/1, 0): When this enters, it stuns itself for 2 turns.
         • Future: Slacking Off.
     • Reality TV Star (3/3/2, 1): When this enters, gets +2/+2 and deals 1 damage to each friendly creature.
-        • Future: Plot Armor.
+        • Plot Armor is now its own card (section 6).
     • Scam Artist (2/2/3, 0): When this enters, a random enemy creature gets -2 Attack.
         • Future: steals a Temporary buff.
     • Football Hooligans (3/2/2, 0): When this dies, 1 damage to each creature.
@@ -174,7 +174,7 @@ Spells
 Cards made on 2026-10-12 to try the mechanics built that day: movement (GDD 2.4), Exhausted, Doomed, Health Loss, Armor, Homing and Fixed aim (4.6), the Creature Death Sequence (3.9), Status Timing (5.2) and Deployment Time (3.2). Each card's Design Notes say what it tests; its Art Description holds the brief for its picture.
 • Corporate, Statecraft and Zeitgeist cards joined their faction decks.
 • Digital Society, Shadow Ops., Tech, Myth and Mind have no deck yet (a deck needs 12 cards). Their cards wait in Assets/Scriptables/Cards/<Faction>/ for those decks.
-• The Mechanics Test deck mixes them with Preemptive Strike, 20 in all (Inflation, Digital Nomad and Raised Security Level stay out: Generational Trauma, Delivery Cyclist and Diplomat already test Health Loss, Leapfrog and Armor). It's a test deck: the DeckCatalog offers it next to the faction decks, but no opponent brings it and the one-faction rule doesn't apply.
+• The Mechanics Test deck mixes them with Red Tape (Deployment Time delay) and Plot Armor (once per combat), 20 in all (Inflation, Digital Nomad, Raised Security Level and Cleaning Robot Premium stay out: other cards already test Health Loss, Leapfrog, Armor and pushing). It's a test deck: the DeckCatalog offers it next to the faction decks, but no opponent brings it and the one-faction rule doesn't apply.
 
 Creatures (Attack/Health/Speed, Deployment Time)
     • Cleaning Robot Premium (Corporate, 2/7/1, 1): no ability. Tests pushing, blocked pushes and the automatic move order.
@@ -202,8 +202,7 @@ Spells
     • Antivirus (Tech): Watchdog: enemy spells -> Nullify, 1 charge (On Watch).
     • Counter-Intelligence (Shadow Ops.): Watchdog: the strongest enemy attack -> Redirect, 2 charges (Briefing).
 
-Waiting on a decision
-    • Plot Armor (Zeitgeist, 2/2/2, 0): survives a lethal hit once per combat. Cards can't say "once per combat" yet, so it isn't made.
+    • Plot Armor (Zeitgeist, 2/2/2, 0): Once per combat, when this would die, heal it for 1 (it survives). The use is gone for the rest of the combat, even after a reshuffle.
 
 
 7. NEXT STEPS

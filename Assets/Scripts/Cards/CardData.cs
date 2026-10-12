@@ -40,6 +40,7 @@ namespace SlayTheClone {
     public class CardEffect {
         public EffectType effectType;
         public EffectTrigger trigger;
+        public bool oncePerCombat; // It can only happen once per combat for this card (GDD: effects that save a creature must be limited)
         public List<EffectAction> actions = new List<EffectAction>();
 
         // Deep copy, so each card instance can own its effects without sharing them with its definition
@@ -47,6 +48,7 @@ namespace SlayTheClone {
             return new CardEffect {
                 effectType = effectType,
                 trigger = trigger,
+                oncePerCombat = oncePerCombat,
                 actions = actions.Select(action => action.Clone()).ToList()
             };
         }

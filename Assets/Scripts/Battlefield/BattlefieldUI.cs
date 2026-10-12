@@ -19,6 +19,7 @@ namespace SlayTheClone {
 
         // Translucent previews of creatures queued to be summoned into this battlefield
         private readonly Dictionary<BattlefieldSlot, CardController> queuedGhosts = new Dictionary<BattlefieldSlot, CardController>();
+        private readonly List<CardController> moveGhosts = new List<CardController>(); // Where planned moves leave each creature
         private PlayCardAction draggedGhostPlay; // The play of the ghost being dragged, to tell whether the drop replaced it
         private float nextSummonTime;
 
@@ -148,6 +149,14 @@ namespace SlayTheClone {
             var creature = card.GetLinkedCreature();
             if (creature == null || targetSlot == null) return;
 
+            // Shift-drag: an Active ability (like Identity Theft) aimed at the creature there, as its action for the Day
+            if (UsingAbility() && Abilities.IsActiveAbility(creature.Ability)) {
+                if (GameManager.ModifierManager.CanAct(creature) && targetSlot.Model.OccupyingCreature != creature) {
+                    GameManager.ActionsQueue.AddAction(new UseAbilityAction(creature, targetSlot.Model));
+                }
+                return;
+            }
+
             if (creature.Owner != Player) {
                 GameManager.CombatHandler.HandleCreatureCombat(creature, targetSlot.Model);
             }
@@ -155,6 +164,9 @@ namespace SlayTheClone {
                 HandleCreatureMove(creature, targetSlot.Model);
             }
         }
+
+        /// <summary>Whether the drop uses the creature's Active ability instead of attacking or moving. Tests can replace it.</summary>
+        public static System.Func<bool> UsingAbility = () => Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 
         private void HandleCreatureMove(ICreature creature, BoardSlot targetSlot) {
             if (!GameManager.ModifierManager.CanAct(creature)) return;
@@ -352,7 +364,35 @@ namespace SlayTheClone {
                 ghost.transform.localPosition = new Vector3(0f, raise, 0f);
                 occupant?.SetMarkedForReplacement(true);
             }
+
+            ShowMoveGhosts();
         }
+
+        // A see-through copy of each creature planned to move (or be pushed or swapped) in the slot it will end in, with the
+        // formation arrows. Not interactive: the real card stays where it is and is still the one to drag
+        private void ShowMoveGhosts() {
+            var preview = MovementRules.Preview(Player.Battlefield, MovementRules.PlannedMovesOf(Player, GameManager.ActionsQueue));
+            foreach (var entry in preview.FinalSlots) {
+                var creature = entry.Key;
+                var finalSlot = entry.Value;
+                if (creature == null || finalSlot == null || creature.Slot == finalSlot || finalSlot.Owner != Player) continue;
+
+                var slot = battlefieldSlots[finalSlot.Index];
+                var ghost = CardViews.Create(creature, Player, slot.transform);
+                if (ghost == null) continue;
+                ghost.name = $"MoveGhost_{creature.Name}";
+                ghost.transform.localRotation = Quaternion.identity;
+                ghost.SetQueued(true, blockRaycasts: false);
+                // Someone stands there now (it leaves first): lift the ghost so both stay visible
+                float raise = slot.OccupyingCard != null || queuedGhosts.ContainsKey(slot) ? ((RectTransform)ghost.transform).rect.height * ReplacingGhostRaise : 0f;
+                ghost.transform.localPosition = new Vector3(0f, raise, 0f);
+                moveGhosts.Add(ghost);
+            }
+        }
+
+        /// <summary>The creatures shown as ghosts in the slot they're planned to end their move in.</summary>
+        public IEnumerable<(ICreature creature, BoardSlot slot)> MoveGhosts =>
+            moveGhosts.Where(g => g != null).Select(g => (g.GetLinkedCreature(), g.GetComponentInParent<BattlefieldSlot>()?.Model));
 
         private void TakeBackPlay(CardController ghost) {
             if (GameManager?.TurnManager?.IsResolving ?? true) return;
@@ -383,6 +423,10 @@ namespace SlayTheClone {
                 if (entry.Key != null) entry.Key.OccupyingCard?.SetMarkedForReplacement(false);
             }
             queuedGhosts.Clear();
+            foreach (var ghost in moveGhosts) {
+                if (ghost != null) Destroy(ghost.gameObject);
+            }
+            moveGhosts.Clear();
         }
 
         protected override void SetupCardEventHandlers(CardController controller) {

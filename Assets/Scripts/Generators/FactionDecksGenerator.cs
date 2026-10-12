@@ -46,10 +46,10 @@ namespace SlayTheClone {
         // the death sequence, Status Timing, Deployment Time, Blessed, Cleanse and Heresy, Slot Effects, Watchdogs), from every faction:
         // pick it to try them all in one match
         private static readonly string[] MechanicsTestCards = {
-            "Delivery Cyclist", "Political Decoy", "Cleaning Robot Premium",
+            "Delivery Cyclist", "Political Decoy",
             "DDOS Attack", "Dogpile", "Memento Mori", "Martyr", "Generational Trauma",
             "Diplomat", "Keyboard Warrior", "Rage Bait", "Antivirus", "Counter-Intelligence",
-            "The Holy Grail", "Exorcism", "Preemptive Strike",
+            "The Holy Grail", "Exorcism", "Plot Armor", "Red Tape",
             "Lost Landmine", "Its A Trap", "Ceasefire", "Burn Notice",
         };
 
@@ -272,6 +272,11 @@ namespace SlayTheClone {
                 "Natural. Definitely natural. Don't check.",
                 "Future: Coffeinated, then Burnout. Never skips leg day, skips every rest day.",
                 On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self))),
+            Creature("Plot Armor", 2, 2, speed: 2, deploy: 0,
+                "The hero can't die. It's only the second act.",
+                "Mechanics test: once per combat, when it would die (OnAboutToDie, resolving at once), it heals 1 and survives. The use is gone for the rest of the combat, even after the card is reshuffled.",
+                OncePerCombat(On(EffectTrigger.OnAboutToDie, Heal(1, TargetType.Self))))
+                .Picture("An action-movie hero strolling away from a huge explosion without a scratch, a hail of bullets bending politely around him, while a film crew in the corner holds up a clapperboard reading SEQUEL."),
             Spell("YOLO", TargetType.FriendlyCreatures,
                 "Look Mom, no hands... Look Mom, no teef!",
                 "+4 Attack for this Day only, paid with 2 of your Health. Future: the creature is Banished at Dusk.",
@@ -497,6 +502,11 @@ namespace SlayTheClone {
             action.modifySpeed = false;
             action.statusDuration = days;
             return action;
+        }
+
+        private static CardEffect OncePerCombat(CardEffect effect) {
+            effect.oncePerCombat = true;
+            return effect;
         }
 
         private static EffectAction DelayDeployment(int days, TargetType target) => Act(ActionType.DelayDeployment, days, target, TargetModifier.None);

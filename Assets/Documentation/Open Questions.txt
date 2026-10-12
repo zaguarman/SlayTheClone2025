@@ -3,117 +3,54 @@ Open Questions
 Questions that came up while implementing the GDD mechanics. Each says what was done in the meantime, so nothing waits on the answer.
 
 
-ACTION PRIORITY (answered 2026-10-12)
+STILL OPEN
 
-1-4. Removed: Action Priority made resolution too complicated on top of the layers. Order inside a layer is Speed, then the tie-breaks; Watchdogs can still reorder. The GDD, compendiums and example cards now use Speed instead (Keep Calm: Speed can't be changed; Slacking Off: Speed -2; Meetings About Meetings: every Speed counts as 1; Shift Gear: +2 Speed).
-    • Red Tape now adds 1 Day to an enemy creature's Deployment Time (it sits out the rest of the Day and the next, its planned action is cancelled, its entry effects don't happen again).
-    • YOLO now gives +4 Attack for this Day only, still costing you 2 Health (Banish at Dusk later).
-    • Preemptive Strike is back to 3 damage.
-    • Question: are these three reworks and the Speed replacements in the docs OK?
+1. Scorched Earth (Slot Effect, visible, until replaced)
+    • What it does now: the creature standing on that slot can't trigger its triggered effects (retaliation, Dawn and Dusk effects, death effects). Its entry ("When Ready") effects still happen. Moving off the slot ends it.
+    • Question: with abilities and effects now separate, should it switch off the triggered effects (as now), the ability, or both? And should entry effects be stopped too?
 
+2. Barbed Snare (Slot Effect, hidden, 1 trigger)
+    • What it does now: the first creature to leave that slot, on its own, pushed or swapped, takes X damage; then the snare is used up and revealed.
+    • Question: should a creature dying on the slot, or being replaced by a summon, also count as leaving?
 
-CLEANSE, BLESSED AND HERESY (Status Effects Compendium)
+3. Watchdog "N or less" for actions that aren't attacks
+    • A Watchdog condition can include a number: "attacks of 3 or less" only reacts to attacks by creatures with 3 Attack or less. For attacks the number is clearly the attacker's Attack.
+    • Question: what should the number compare when the Watchdog watches something else? Proposal: spells, their damage; statuses, their Days or stacks; moves, how many slots; summons, the creature's Attack. Or: the number only exists for attacks.
 
-5-6. Answered: two kinds. A Cleanse removes only what harms the creature (harmful statuses, stat decreases). A Purge removes good and bad alike (positive statuses like Blessed, and buffs). Neither touches Persistent Stat Modifications. Exorcism is a Cleanse.
-    • Question: is "Purge" a good name for the strong one?
-    • Question: which statuses are positive? Only Blessed is marked so far. The other candidates in the compendium: Coffeinated, Diplomatic Immunity, Keep Calm, Concealed, Encrypted (all would then need a Purge to remove).
+4. Which statuses are positive (only removed by a Purge)?
+    • Answered in part: mixed ones count as bad. Only Blessed is marked positive so far; the rest is to be decided status by status.
 
-7. Heresy onto a creature that's already Doomed
-    • Done for now: the vessel is the creature with the lowest current Health, even if it's Doomed already. A Doomed creature ignores new statuses, so the passed sentence is lost and the cleansed creature is freed anyway.
-    • Question: should Heresy skip creatures that are already Doomed, so the sentence always lands somewhere?
+5. Ability assignments (proposal, nothing applied yet)
+    • Corporate: Insider Job (insider trading), Technician. E.g., Pluriemployed Hustler gets Technician.
+    • Statecraft: Spite (Spite-Elected President), Return to Sender (Supreme Court).
+    • Shadow Ops.: Underground (the Mole), Signal Jammer, Identity Theft.
+    • Tech: Zero-Day, Unpatchable.
+    • Digital Society: No U (Keyboard Warrior), Copypasta, Extremist (online radicalization).
+    • Myth: Hive Mind (it's the Mummy ability: a curse that spreads to whoever touches it).
+    • Mind: Contrarian, Unbothered.
+    • Zeitgeist: Too Mainstream (Hipster).
+    • Question: OK? Then the cards get them, and test cards follow.
 
-8. New Myth test cards
-    • The Holy Grail (Blessed 2 on a friendly creature) and Exorcism (Cleanse statuses on any creature) were added to test these. Names from the Brainstorm List (Myth > Legendary Objects & Places, Practices & Phenomena). They replaced Fat Tony, Martial Law and Hostile Takeover in the Mechanics Test deck, together with Preemptive Strike.
-    • Question: are the stats and pictures right for them?
+6. Move ghosts show a "Queued" badge
+    • The ghost of a creature in the slot it will move to reuses the queued-card look, badge included.
+    • Question: keep it, or a different badge ("Moving") or none?
 
-
-MOVEMENT LEFTOVERS (GDD 2.4)
-
-9. Ghost cards at the final positions
-    • Done for now: nothing new. The formation arrows already show where every creature ends up, including the ones pushed or swapped. A ghost card at each destination would overlap the ghosts of creatures queued to be summoned there.
-    • Question: do you still want ghost cards for moves, or are the arrows enough?
-
-10. AI move planning
-    • There's no AI opponent in the game yet (both sides are played by hand), so there's nothing to teach about moves. It waits for the AI.
-
-
-SLOT EFFECTS & ENVIRONMENT ACTIONS (GDD 2.4, 3.7, 'Slot Effects Compendium')
-
-11. Which slots does a walking creature "enter"?
-    • Done for now: only the slot a move ends on counts as entered (and the one it started from as left). Walking past an empty slot with a Landmine doesn't set it off; neither does leaping over one.
-    • Question: should walking through a slot count as entering it?
-
-12. Who sees hidden Slot Effects in hot-seat play?
-    • Done for now: the screen is player 1's: player 1's hidden Slot Effects show (marked "hidden"), player 2's don't, until they trigger. With an AI opponent this becomes the real rule.
-    • Question: fine for now?
-
-13. Scorched Earth and entry effects
-    • Done for now: Scorched Earth stops every triggered ability of the creature on it (retaliation, Dawn, Dusk, death effects) but not its entry ("When Ready") effects, which the GDD treats as part of the summon. Moving off the slot ends it.
-    • Question: should entry effects also be stopped?
-
-14. How long a timed Slot Effect lasts
-    • Done for now: like Priority changes, its Days count the one it's placed: Ceasefire for 2 Days lasts this Day and the next, ending at that Dusk. Slot Effects aren't statuses, so Status Timing doesn't apply.
-    • Question: right?
-
-15. Barbed Snare and dying
-    • Done for now: only leaving by moving (on its own, pushed or swapped) sets it off. A creature that dies or is replaced on the slot doesn't.
-    • Question: should dying or being replaced also count as leaving?
-
-16. Slot Effects implemented so far
-    • Done: Landmine, Barbed Snare, Temporal Shield, Scorched Earth, Cleanse (SlotEffect), environment-first resolution.
-    • Waiting on other mechanics: Surveillance Post (Revealed), Binding Chains and Threshold of Liminality (Anchored, Exposed), Rejection Field (return to hand), Rally Point (scheduled draws), Slippery Floor (needs the move's direction), Jamming Field (blocks spell targeting), Unstable Terrain, Echoing Cave, Sacrifice Lair (Banish), Magnetic Pulse (pull), Sanctuary (untargetable).
-    • The four new cards (Lost Landmine, Ceasefire, Its A Trap, Burn Notice) have no art yet; their briefs are in their Art Description.
+7. New cards: stats and pictures (listed in 'Starter Faction Decks', section 6)
+    • Question: OK as they are?
 
 
-CREATURE ABILITIES ('Abilities Compendium')
+ANSWERED (2026-10-12)
 
-17. Abilities vs. card effects
-    • Done for now: the compendium's "one ability per creature" is a new slot on the creature card (printed in bold with reminder text), separate from its triggered card effects ("When this dies, ..."). Signal Jammer, Hive Mind, Copypasta and the rest only touch that slot. Exhausted (Abilities Disabled) and Deployment Time switch both off.
-    • Question: is that the intent, or should triggered card effects count as the creature's ability too?
-
-18. Which cards get abilities?
-    • Done for now: every ability works and is tested, but no card has one yet, because the compendium says factions are assigned once cards are rebalanced.
-    • Question: which factions and cards should get which abilities? Test cards for the Mechanics Test deck can follow.
-
-19. Identity Theft isn't implemented
-    • It's an Active ability ("swap abilities with target creature"), and there's no way yet to activate an ability (no active-ability action or UI).
-    • Question: how should a player activate it: as the creature's intent for the Day (instead of attacking or moving), by dragging it onto a target?
-
-20. Underground when it attacks
-    • Done for now: when Underground is attacked, the attacker hits with its base Attack (printed + Persistent changes; its buffs are ignored). When Underground attacks, the defender's stat changes would be its Health buffs, and ignoring a Health buff mid-combat isn't defined, so nothing changes yet.
-    • Question: what should "ignore the defender's stat changes" do when Underground attacks: deal extra damage equal to its temporary Health bonus?
-
-21. Two Signal Jammers facing each other
-    • Done for now: a jammer's own on/off state is judged without other jammers, so two facing jammers switch each other off.
-
-22. What counts as "an effect on more than one creature" (Too Mainstream)
-    • Done for now: effects on every creature of a group ("each enemy creature"), effects that also hit adjacent creatures, attack spreads and chains. An effect that picks one creature at random, or is aimed at it, still affects it.
-
-
-
-WATCHDOGS (GDD 3.11)
-
-23. What's done and what waits
-    • Done: Watchdogs created through the queue by a card effect, watching a creature (when the effect is aimed at one) or a whole side. Conditions: action type (Attack, Spell, Move, Ability, Summon, Status), side, creature, and "N or less" (an attack's Attack). Effects: Nullify, Redirect, Reorder, Reveal. On Watch and Briefing timings, charges, Days, the oldest-match rule, and catching actions queued before the Watchdog existed.
-    • Waiting: "Can't match the unseen" (Concealed, Undercover, Encrypted don't exist yet); Reveal does nothing yet, because everything is visible (no Fog of War); Create (queue a new action) needs a way to describe that action on a card; the Turn History entry ("nullified by ...") is only in the log for now.
-
-24. Redirect: to where?
-    • Done for now: to a random other creature on the side the action was aimed at (for attacks and aimed spells). If there's none, the action is unchanged. Moves and summons can't be redirected.
-    • Question: should the card say where it redirects (e.g., "to the enemy's weakest creature", "back at its own side")?
-
-25. "Every" at the Briefing
-    • Done for now: picking every matching action costs one charge in total, not one per action.
-    • Question: right, or one charge per action?
-
-26. "N or less" for non-attacks
-    • Done for now: the number only applies to attacks (their Attack). Spells, statuses and abilities have no strength to compare.
-    • Question: what should it measure for those (damage dealt, Days of a status)?
-
-27. Watchdog visibility in hot-seat
-    • Done for now: each side lists its Watchdogs at the end of its row. Player 1's show in full; player 2's show only what they watch, with the condition as "???".
-
-28. New test cards
-    • Antivirus (Tech, Brainstorm List > Tech > Core Technologies): Watchdog: enemy spells -> Nullify, 1 charge (On Watch).
-    • Counter-Intelligence (Shadow Ops., Brainstorm List > Shadow Ops. > Espionage): Watchdog: the strongest enemy attack -> Redirect, 2 charges (Briefing).
-    • They replaced Digital Nomad and Raised Security Level in the Mechanics Test deck (Delivery Cyclist and Diplomat still test Leapfrog and Armor).
-    • Question: are the stats and pictures right?
+• Action Priority: removed; order inside a layer is Speed. Red Tape now adds Deployment Time, YOLO gives +4 Attack for this Day, Preemptive Strike is plain damage. Docs use Speed where they used Priority.
+• Cleanse / Purge: Cleanse removes only what harms (bad statuses, stat decreases); Purge removes good and bad. Mixed statuses count as bad.
+• Heresy: if the vessel is Doomed already, it fizzles and the creature stays Doomed.
+• Moves: only the slot a creature lands on counts as entered. Planned moves show ghost cards where creatures will end up.
+• Hidden effects in hot-seat: player 1 (the screen) sees only their own.
+• Timed Slot Effects: "2 Days" is this Day and the next (used to stall).
+• Abilities vs. effects: separate things; one ability, many triggered effects; what switches them off says which (Abilities Compendium).
+• Identity Theft: the creature's action for the Day; hold Shift while dragging it onto the target.
+• Underground: like Unaware, both ways.
+• Watchdog Redirect: to a random creature; Heat Signature draws it first (most Heat).
+• Watchdog charges: one per action it changes.
+• Plot Armor: made, with a "once per combat" rule that lasts through reshuffles.
+• Waiting for other systems: Fog of War (Concealed, Encrypted, Reveal), Watchdog Create, an AI opponent, the remaining Slot Effects (Revealed, Anchored, Banish...).

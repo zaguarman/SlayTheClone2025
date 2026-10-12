@@ -122,6 +122,31 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
+        public void Underground_IgnoresTheDefendersStatChanges_WhenItAttacks_LikeUnaware() {
+            var mole = With(CreatureAbility.Underground, p1, 0, attack: 3);
+            var buffed = With(CreatureAbility.None, p2, 0, health: 10);
+            game.Run(new ModifyAction(buffed, 4, false, true, false, controller: p2)); // 14/14: the buff would soak the hit
+
+            game.Attack(mole, p2.Battlefield[0]);
+
+            Assert.AreEqual(7, buffed.Health, "3 damage, plus the 4 Health the buff added: as if it weren't there");
+        }
+
+        [Test]
+        public void IdentityTheft_IsUsedAsTheCreaturesAction_AndSwapsAbilities() {
+            var thief = With(CreatureAbility.IdentityTheft, p1, 0);
+            var mark = With(CreatureAbility.Unpatchable, p2, 2);
+            game.Declare(thief, p2.Battlefield[1]); // Planned an attack first
+
+            game.ActionsQueue.AddAction(new UseAbilityAction(thief, p2.Battlefield[2])); // Replaces it: one action a Day
+            game.Resolve();
+
+            Assert.AreEqual(CreatureAbility.Unpatchable, thief.Ability);
+            Assert.AreEqual(CreatureAbility.IdentityTheft, mark.Ability, "The target gets Identity Theft and can use it in turn");
+            Assert.AreEqual(Player.MaxHealth, p2.Health, "The attack was replaced");
+        }
+
+        [Test]
         public void Technician_DoublesHitsOf3OrLess() {
             var tech = With(CreatureAbility.Technician, p1, 0, attack: 3);
             var target = With(CreatureAbility.None, p2, 0, health: 20);

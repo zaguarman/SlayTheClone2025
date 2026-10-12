@@ -18,6 +18,9 @@ namespace SlayTheClone {
 
         public static bool IsDefensive(CreatureAbility ability) => Defensive.Contains(ability);
 
+        /// <summary>Active abilities are used as the creature's action for the Day (hold Shift while dragging it onto a creature).</summary>
+        public static bool IsActiveAbility(CreatureAbility ability) => ability == CreatureAbility.IdentityTheft;
+
         public static string NameOf(CreatureAbility ability) => ability switch {
             CreatureAbility.NoU => "No U",
             CreatureAbility.TooMainstream => "Too Mainstream",
@@ -37,13 +40,13 @@ namespace SlayTheClone {
             CreatureAbility.Unbothered => "enemy effects can't lower its stats",
             CreatureAbility.NoU => "enemy effects that would lower its stats bounce back",
             CreatureAbility.Spite => "when an enemy effect lowers its stats, +2 Attack",
-            CreatureAbility.Underground => "in combat, the other creature's stat changes are ignored",
+            CreatureAbility.Underground => "in combat, ignores the other creature's stat changes, like Unaware",
             CreatureAbility.TooMainstream => "immune to effects that affect more than one creature",
             CreatureAbility.ZeroDay => "its attacks and effects ignore defensive abilities",
             CreatureAbility.Unpatchable => "enemy effects can't lower its stats, not even with Zero-Day",
             CreatureAbility.SignalJammer => "the enemy creature opposite has its ability switched off",
             CreatureAbility.Copypasta => "when ready and each Dawn, copies the ability of the creature opposite",
-            CreatureAbility.IdentityTheft => "swap abilities with target creature",
+            CreatureAbility.IdentityTheft => "Active, instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it)",
             CreatureAbility.HiveMind => "a creature that attacks it gains Hive Mind",
             CreatureAbility.InsiderJob => "its damage ignores Armor",
             CreatureAbility.ReturnToSender => "enemy statuses bounce back to whoever sent them",
@@ -182,6 +185,10 @@ namespace SlayTheClone {
             var attacker = hit.GetAttacker();
             if (hit.DealsAttackersAttack && Defends(hit.GetTarget(), CreatureAbility.Underground, attacker)) {
                 damage = attacker.BaseAttack; // Printed Attack and Persistent Stat Modifications only
+            }
+            // Attacking, it ignores the defender's stat changes too: a Health buff doesn't soak its hit, a Health debuff doesn't add to it
+            if (hit.DealsAttackersAttack && Has(attacker, CreatureAbility.Underground) && hit.GetTarget() is ICreature defender) {
+                damage = Math.Max(0, damage + (defender.MaxHealth - defender.BaseHealth));
             }
             if (damage > 0 && damage <= 3 && Has(attacker, CreatureAbility.Technician)) damage *= 2;
             return damage;

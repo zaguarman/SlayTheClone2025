@@ -12,10 +12,11 @@ namespace SlayTheClone {
         public int TurnApplied { get; }
         public int Potency { get; } // e.g., Burn damage per turn
         public const int MaxBlessedStacks = 3;
-        /// <summary>Intensity, for statuses that count charges instead of Days (Blessed). Time doesn't reduce it.</summary>
+        public const int MaxHeat = 99; // Only the display limit for now
+        /// <summary>Intensity, for statuses that count it instead of Days (Blessed charges, Heat). Time doesn't reduce it.</summary>
         public int Stacks { get; private set; }
-        /// <summary>Lasts until removed or used up, whatever its Days (Blessed).</summary>
-        public bool IsPersistent => EffectType == StatusEffectType.Blessed;
+        /// <summary>Lasts until removed or used up, whatever its Days (Blessed, Heat Signature).</summary>
+        public bool IsPersistent => EffectType is StatusEffectType.Blessed or StatusEffectType.HeatSignature;
         /// <summary>Whether it harms its creature: what a Cleanse removes (a Purge removes the rest too). Blessed is the good one.</summary>
         public bool IsNegative => EffectType != StatusEffectType.Blessed;
 
@@ -28,7 +29,7 @@ namespace SlayTheClone {
             DurationInTurns = Math.Max(1, duration);
             TurnApplied = currentTurn;
             Potency = potency;
-            if (type == StatusEffectType.Blessed) SetStacks(potency);
+            if (IsPersistent) SetStacks(potency);
 
             Log($"StatusEffectModifier '{Name}' created: Type={EffectType}, Duration={DurationInTurns}, Potency={Potency}, AppliedTurn={TurnApplied}", LogTag.Effects);
         }
@@ -61,8 +62,13 @@ namespace SlayTheClone {
         public bool DisablesAbilities() => EffectType == StatusEffectType.Exhausted;
         public bool Exposes() => EffectType == StatusEffectType.Exhausted;
 
-        /// <summary>Sets the status's intensity, between 1 and its maximum. Blessed shows it as "Blessed 2".</summary>
+        /// <summary>Sets the status's intensity, between 1 and its maximum. Shown as "Blessed 2" or "Heat 3".</summary>
         public void SetStacks(int stacks) {
+            if (EffectType == StatusEffectType.HeatSignature) {
+                Stacks = Math.Max(1, Math.Min(MaxHeat, stacks));
+                Description = $"Heat {Stacks}: random and redirected attacks are drawn to the hottest creature";
+                return;
+            }
             Stacks = Math.Max(1, Math.Min(MaxBlessedStacks, stacks));
             Description = $"Blessed {Stacks}: the next status that would land is negated";
         }

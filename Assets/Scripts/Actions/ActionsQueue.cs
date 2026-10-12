@@ -124,6 +124,7 @@ namespace SlayTheClone {
             SummonCreatureAction summon => summon.GetCreature(),
             PlayCardAction play => play.GetCard() as ICreature,
             BattlefieldCombatAction attack => attack.GetAttacker(),
+            UseAbilityAction use => use.Creature,
             DamageCreatureAction damage => damage.GetAttacker(),
             DamagePlayerAction damage => damage.GetAttacker(),
             _ => null
@@ -170,6 +171,7 @@ namespace SlayTheClone {
         private string GetActiveCreatureId(IGameAction action) {
             return action switch {
                 BattlefieldCombatAction combatAction => combatAction.GetAttacker()?.TargetId,
+                UseAbilityAction use => use.Creature?.TargetId,
                 MoveCreatureAction moveAction => moveAction.GetCreature()?.TargetId,
                 _ => null
             };
@@ -412,7 +414,7 @@ namespace SlayTheClone {
                     waiting.Add(entry);
                     return true;
                 case WatchdogEffect.Redirect:
-                    entry.Action = WatchdogRules.Redirect(entry.Action);
+                    entry.Action = WatchdogRules.Redirect(entry.Action, entry.Source);
                     WatchdogRules.LogTrigger(watchdog, entry.Action, "redirected");
                     return false;
                 default: // Reveal: everything is visible until Fog of War exists
@@ -424,7 +426,7 @@ namespace SlayTheClone {
         /// <summary>
         /// The Briefing (GDD 3.7): before the actions of the Day resolve, each Briefing Watchdog (active since an earlier Day)
         /// looks at the whole queue once, picks the first, the strongest or every matching action, and changes them.
-        /// Each briefing uses 1 charge.
+        /// Each action it changes uses 1 charge.
         /// </summary>
         public void BriefWatchdogs() {
             DropFinishedWatchdogs();
@@ -434,13 +436,14 @@ namespace SlayTheClone {
                     .OrderBy(e => e.Layer).ThenBy(e => e, InLayerOrder).ToList();
                 if (matches.Count == 0) continue;
 
+                // Each action it changes uses a charge: "every" means every match it still has charges for
                 var picked = watchdog.Spec.pick switch {
-                    BriefingPick.Every => matches,
+                    BriefingPick.Every => matches.Take(watchdog.ChargesLeft).ToList(),
                     BriefingPick.Strongest => matches.OrderByDescending(e => WatchdogRules.StrengthOf(e.Action)).Take(1).ToList(),
                     _ => matches.Take(1).ToList()
                 };
-                watchdog.SpendCharge();
                 foreach (var entry in picked) {
+                    watchdog.SpendCharge();
                     entry.Watched = true;
                     switch (watchdog.Spec.effect) {
                         case WatchdogEffect.Nullify:
@@ -456,7 +459,7 @@ namespace SlayTheClone {
                             WatchdogRules.LogTrigger(watchdog, entry.Action, watchdog.Spec.moveEarlier ? "moved first in its layer" : "moved last in its layer");
                             break;
                         case WatchdogEffect.Redirect:
-                            entry.Action = WatchdogRules.Redirect(entry.Action);
+                            entry.Action = WatchdogRules.Redirect(entry.Action, entry.Source);
                             WatchdogRules.LogTrigger(watchdog, entry.Action, "redirected at the Briefing");
                             break;
                         default:
