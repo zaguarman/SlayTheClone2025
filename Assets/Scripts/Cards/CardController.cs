@@ -52,6 +52,7 @@ namespace SlayTheClone {
         private GameObject queuedBadge;
         private Tween queuedPulse;
         public bool IsQueued { get; private set; }
+        private bool canDragWhileQueued; // A queued card in the hand can be dragged again, to re-aim or take back its play
 
         // Battlefield card about to be replaced by a summon (queued, or previewed while a creature is dragged over it)
         private const float ReplacedAlpha = 0.45f;
@@ -67,6 +68,7 @@ namespace SlayTheClone {
         public CardUnityEvent OnEndDragEvent = new CardUnityEvent();
         public CardUnityEvent OnCardDropped = new CardUnityEvent();
         public CardUnityEvent OnCardClicked = new CardUnityEvent(); // Pressed and released without dragging
+        public CardUnityEvent OnCardRightClicked = new CardUnityEvent();
         public Action OnPointerEnterHandler;
         public Action OnPointerExitHandler;
 
@@ -229,9 +231,9 @@ namespace SlayTheClone {
         public void OnBeginDrag(PointerEventData eventData) {
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
-            // Queued cards are already committed, and nothing can be played while a turn resolves;
-            // cancel the drag so no drop zone receives the card
-            if (IsQueued || (GameManager?.TurnManager?.IsResolving ?? false)) {
+            // Queued cards are committed (except in the hand, where dragging re-aims or takes back the play),
+            // and nothing can be played while a turn resolves; cancel the drag so no drop zone receives the card
+            if ((IsQueued && !canDragWhileQueued) || (GameManager?.TurnManager?.IsResolving ?? false)) {
                 eventData.pointerDrag = null;
                 return;
             }
@@ -276,8 +278,9 @@ namespace SlayTheClone {
         }
 
         public void OnPointerClick(PointerEventData eventData) {
-            if (eventData.button != PointerEventData.InputButton.Left || eventData.dragging) return;
-            OnCardClicked.Invoke(this);
+            if (eventData.dragging) return;
+            if (eventData.button == PointerEventData.InputButton.Left) OnCardClicked.Invoke(this);
+            else if (eventData.button == PointerEventData.InputButton.Right) OnCardRightClicked.Invoke(this);
         }
 
         public void OnPointerEnter(PointerEventData eventData) {
@@ -299,8 +302,9 @@ namespace SlayTheClone {
         /// <summary>
         /// Shows the card as played-but-unresolved: translucent, pulsing, with a "QUEUED" badge.
         /// </summary>
-        public void SetQueued(bool queued, bool blockRaycasts = true) {
+        public void SetQueued(bool queued, bool blockRaycasts = true, bool canBeDragged = false) {
             IsQueued = queued;
+            canDragWhileQueued = queued && canBeDragged;
             queuedPulse?.Kill();
             queuedPulse = null;
 
@@ -488,6 +492,7 @@ namespace SlayTheClone {
             OnEndDragEvent.RemoveAllListeners();
             OnCardDropped.RemoveAllListeners();
             OnCardClicked.RemoveAllListeners();
+            OnCardRightClicked.RemoveAllListeners();
             OnPointerEnterHandler = null;
             OnPointerExitHandler = null;
         }

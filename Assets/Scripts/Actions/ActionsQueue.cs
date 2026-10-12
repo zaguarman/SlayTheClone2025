@@ -359,6 +359,20 @@ namespace SlayTheClone {
             return true;
         }
 
+        /// <summary>Takes back a card played this Day that hasn't resolved yet. It never left the hand, so nothing else changes.</summary>
+        public bool CancelPlay(ICard card) {
+            if (card == null) return false;
+
+            var entry = waiting.FirstOrDefault(e => e.Action is PlayCardAction play && play.GetCard() == card);
+            if (entry == null) return false;
+
+            waiting.Remove(entry);
+            Log($"Cancelled the play of {card.Name} (Queue ID: {QueueId})", LogTag.Actions | LogTag.Cards);
+            OnActionsQueued.Invoke();
+            gameMediator.NotifyActionsQueueChanged();
+            return true;
+        }
+
         public IGameAction GetActiveAction(string creatureId) {
             return activeCreatureActions.TryGetValue(creatureId, out var entry) ? entry.Action : null;
         }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using NUnit.Framework;
+using UnityEngine.EventSystems;
 using UnityEngine.TestTools;
 using static SlayTheClone.Enums;
 using static SlayTheClone.Tests.TestCards;
@@ -107,6 +108,36 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(3, ox.Health);
             var allOfP1sCards = p1.Deck.GetDeckPreview().Concat(p1.Deck.GetDiscardPilePreview()).Concat(p1.Hand);
             Assert.AreEqual(1, allOfP1sCards.Count(c => c.Name == "Test Bolt"), "The cast spell should be in player 1's cards exactly once");
+            game.AssertViewsMatchRules();
+        }
+
+        /// <summary>A queued spell is taken back by clicking it, right-clicking it, or dragging it where it can't be played.</summary>
+        [UnityTest]
+        public IEnumerator AQueuedSpell_CanBeTakenBack_ByClicking_RightClicking_OrDraggingItAway() {
+            var ox = game.Summon(p2, game.Cards.Creature("Test Ox", 0, 6), 0);
+            var bolt = game.GiveCard(p1, game.Cards.Spell("Test Bolt", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures)));
+            CardController Shown() => game.HandCards(p1).SingleOrDefault(c => c.GetLinkedCardInstance() == bolt);
+
+            var takeBacks = new (string how, System.Action<CardController> takeBack)[] {
+                ("Clicking", card => SceneGame.Click(card)),
+                ("Right-clicking", card => SceneGame.Click(card, PointerEventData.InputButton.Right)),
+                ("Dragging it where it can't be played", card => Assert.IsTrue(SceneGame.DragAndDrop(card, null), "A queued card in the hand can be dragged")),
+            };
+            foreach (var (how, takeBack) in takeBacks) {
+                game.Play(bolt, p1, p2.Battlefield[0]);
+                yield return null;
+                Assert.IsTrue(Shown().IsQueued);
+
+                takeBack(Shown());
+                yield return null;
+                Assert.IsNotNull(Shown(), $"{how}: the spell stays in the hand");
+                Assert.IsFalse(Shown().IsQueued, $"{how} the queued spell should take the play back");
+                Assert.IsFalse(game.Queue.GetPendingActions().OfType<PlayCardAction>().Any(), $"{how}: its play is no longer queued");
+            }
+
+            yield return game.EndTurn();
+            Assert.AreEqual(6, ox.Health, "The spell that was taken back isn't cast");
             game.AssertViewsMatchRules();
         }
 

@@ -209,6 +209,27 @@ namespace SlayTheClone.Tests {
             return null;
         }
 
+        /// <summary>Clicks a visible part of the card: the click goes to whatever handles it under the pointer.</summary>
+        public static void Click(CardController card, PointerEventData.InputButton button = PointerEventData.InputButton.Left) {
+            var hits = Hover(card);
+            var eventData = new PointerEventData(EventSystem.current) { position = hits[0].screenPosition, button = button };
+            ExecuteEvents.ExecuteHierarchy(hits[0].gameObject, eventData, ExecuteEvents.pointerClickHandler);
+        }
+
+        /// <summary>
+        /// Drags the card the way the event system does: begin drag, a drop on <paramref name="dropOn"/> (null: released
+        /// where nothing takes it), then end drag. Returns false if the card refused to be dragged.
+        /// </summary>
+        public static bool DragAndDrop(CardController card, GameObject dropOn) {
+            var eventData = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, pointerDrag = card.gameObject };
+            ExecuteEvents.Execute(card.gameObject, eventData, ExecuteEvents.beginDragHandler);
+            if (eventData.pointerDrag == null) return false;
+
+            if (dropOn != null) ExecuteEvents.ExecuteHierarchy(dropOn, eventData, ExecuteEvents.dropHandler);
+            ExecuteEvents.Execute(card.gameObject, eventData, ExecuteEvents.endDragHandler);
+            return true;
+        }
+
         /// <summary>The enlarged copy shown while a card is hovered, if any.</summary>
         public static CardController HoverPreview() {
             var tooltip = Tooltip.Existing;

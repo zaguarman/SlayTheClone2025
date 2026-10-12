@@ -136,6 +136,7 @@ namespace SlayTheClone {
             }
 
             Log($"Adding PlayCardAction for {cardToPlay.Name} on slot (TargetID: {targetSlot.TargetId.ToUpper()})", LogTag.Actions | LogTag.Cards);
+            GameManager.ActionsQueue.CancelPlay(cardToPlay); // A queued card dragged to a new target replaces its play
             GameManager.ActionsQueue.AddAction(new PlayCardAction(cardToPlay, caster, targetSlot.Model));
         }
 
@@ -310,9 +311,10 @@ namespace SlayTheClone {
         protected override void SetupCardEventHandlers(CardController controller) {
             base.SetupCardEventHandlers(controller);
             controller.OnCardClicked.AddListener(OnCardClicked);
+            controller.OnCardRightClicked.AddListener(OnCardClicked);
         }
 
-        // Clicking a creature withdraws its queued attack
+        // Clicking or right-clicking a creature withdraws its queued attack
         private void OnCardClicked(CardController card) {
             if (GameManager.TurnManager.IsResolving) return;
             GameManager.CombatHandler.CancelAttack(card.GetLinkedCreature());

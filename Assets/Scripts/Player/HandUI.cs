@@ -20,6 +20,7 @@ namespace SlayTheClone {
 
         // Cards of this player with a pending PlayCardAction
         private readonly HashSet<ICard> queuedCards = new HashSet<ICard>();
+        private PlayCardAction draggedPlay; // The play of the queued card being dragged, to tell whether the drop replaced it
         private float nextCastTime;
 
         protected override void RegisterEvents() {
@@ -51,6 +52,21 @@ namespace SlayTheClone {
 
             UpdateUI(Player);
         }
+
+        protected override void SetupCardEventHandlers(CardController controller) {
+            base.SetupCardEventHandlers(controller);
+            controller.OnCardClicked.AddListener(TakeBackPlay);
+            controller.OnCardRightClicked.AddListener(TakeBackPlay);
+        }
+
+        // Clicking or right-clicking a queued card takes the play back, like clicking a creature withdraws its attack
+        private void TakeBackPlay(CardController card) {
+            if (!card.IsQueued || (GameManager?.TurnManager?.IsResolving ?? true)) return;
+            GameManager.ActionsQueue.CancelPlay(card.GetLinkedCardInstance());
+        }
+
+        private PlayCardAction QueuedPlayOf(ICard card) =>
+            GameManager?.ActionsQueue?.GetPendingActions().OfType<PlayCardAction>().FirstOrDefault(p => p.GetCard() == card);
 
         private void PlayCastAnimation(CardController card) {
             var rootCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
@@ -96,7 +112,7 @@ namespace SlayTheClone {
                 var controller = CardViews.Create(handCard, Player, transform);
                 if (controller != null) {
                     AddCard(controller);
-                    if (isQueued) controller.SetQueued(true);
+                    if (isQueued) controller.SetQueued(true, canBeDragged: true);
                 }
             }
 
@@ -122,6 +138,7 @@ namespace SlayTheClone {
 
         protected override void OnCardBeginDrag(CardController card) {
             if (card == null) return;
+            draggedPlay = card.IsQueued ? QueuedPlayOf(card.GetLinkedCardInstance()) : null;
             card.transform.localRotation = Quaternion.identity;
             card.transform.SetAsLastSibling();
             Log($"Begin dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
@@ -129,6 +146,12 @@ namespace SlayTheClone {
 
         protected override void OnCardEndDrag(CardController card) {
             Log($"End dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
+
+            // A queued card dropped where it can't be played keeps its old play; take it back. A valid drop already replaced it.
+            if (draggedPlay != null && QueuedPlayOf(card.GetLinkedCardInstance()) == draggedPlay) {
+                GameManager.ActionsQueue.CancelPlay(card.GetLinkedCardInstance());
+            }
+            draggedPlay = null;
             UpdateLayout();
         }
 

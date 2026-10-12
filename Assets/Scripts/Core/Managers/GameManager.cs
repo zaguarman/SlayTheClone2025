@@ -62,6 +62,7 @@ namespace SlayTheClone {
         bool HasActiveAction(string creatureId);
         IGameAction GetActiveAction(string creatureId);
         bool CancelDeclaredAction(string creatureId); // Removes the creature's declared intent (move, attack or swap) from the queue
+        bool CancelPlay(ICard card); // Takes back a card played this Day that hasn't resolved yet; it stays in the hand
         void Cleanup();
         // Events
         UnityEngine.Events.UnityEvent OnActionsQueued { get; }
