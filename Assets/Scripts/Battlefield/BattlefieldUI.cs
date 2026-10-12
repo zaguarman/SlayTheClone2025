@@ -293,14 +293,21 @@ namespace SlayTheClone {
         private bool HiddenFromScreen(IGameAction action) =>
             FogOfWar.Hides(Viewer, action, GameManager?.ActionsQueue, GameManager?.ModifierManager);
 
-        // A creature whose plans are hidden from the screen shows "???" on its card instead of its arrows and move ghost
+        // A creature the screen doesn't know is covered with "???"; one whose plans are hidden shows "???" across its card
+        // instead of its arrows and move ghost
         private void RefreshHiddenPlans() {
             foreach (var slot in battlefieldSlots) {
                 var card = slot.OccupyingCard;
                 if (card == null) continue;
+                card.SetAnonymous(FogOfWar.HidesIdentity(Viewer, slot.OccupyingCreature));
                 card.SetPlansHidden(FogOfWar.HidesPlansOf(slot.OccupyingCreature, Viewer, GameManager?.ActionsQueue, GameManager?.ModifierManager));
             }
         }
+
+        /// <summary>The creatures of this row, and the queued summons, whose cards are covered with "???".</summary>
+        public IEnumerable<ICard> AnonymousCards =>
+            battlefieldSlots.Where(s => s.OccupyingCard != null && s.OccupyingCard.IsAnonymous).Select(s => (ICard)s.OccupyingCreature)
+                .Concat(queuedGhosts.Values.Where(g => g != null && g.IsAnonymous).Select(g => g.GetLinkedCardInstance()));
 
         /// <summary>The creatures of this row whose cards show "???": they plan something the screen can't show.</summary>
         public IEnumerable<ICreature> CreaturesWithHiddenPlans =>
@@ -376,6 +383,7 @@ namespace SlayTheClone {
                 ghost.OnCardRightClicked.AddListener(TakeBackPlay);
                 ghost.OnBeginDragEvent.AddListener(OnGhostBeginDrag);
                 ghost.OnEndDragEvent.AddListener(OnGhostEndDrag);
+                ghost.SetAnonymous(FogOfWar.HidesSummon(Viewer, action, GameManager.ActionsQueue)); // Something is coming, but what?
                 queuedGhosts[slot] = ghost;
 
                 // The creature currently in the slot will be replaced when the summon resolves:
@@ -405,6 +413,7 @@ namespace SlayTheClone {
                 ghost.name = $"MoveGhost_{creature.Name}";
                 ghost.transform.localRotation = Quaternion.identity;
                 ghost.SetQueued(true, blockRaycasts: false);
+                ghost.SetAnonymous(FogOfWar.HidesIdentity(Viewer, creature));
                 // Someone stands there now (it leaves first): lift the ghost so both stay visible
                 float raise = slot.OccupyingCard != null || queuedGhosts.ContainsKey(slot) ? ((RectTransform)ghost.transform).rect.height * ReplacingGhostRaise : 0f;
                 ghost.transform.localPosition = new Vector3(0f, raise, 0f);

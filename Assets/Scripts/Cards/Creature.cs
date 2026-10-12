@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using static SlayTheClone.DebugLogger;
 using static SlayTheClone.Enums;
@@ -31,6 +32,11 @@ namespace SlayTheClone {
         CreatureAbility Ability { get; set; }
         /// <summary>Its Heat Signature stacks, kept by the ModifierManager (0: none). Random and redirected attacks go to the hottest.</summary>
         int Heat { get; set; }
+        /// <summary>
+        /// Fog of War: the players besides its owner who know what it is. It enters play unknown; it shows itself when its
+        /// summon finishes, unless it's stealthy, and a reveal shows it. Forgotten when it leaves play.
+        /// </summary>
+        ISet<IPlayer> KnownTo { get; }
         /// <summary>Set by the ModifierManager while a status (like Exhausted) disables its abilities: none of its effects trigger.</summary>
         bool AbilitiesDisabled { get; set; }
         /// <summary>The slot it was last in, kept after it leaves play (where effects homing on it land then).</summary>
@@ -123,6 +129,7 @@ namespace SlayTheClone {
         public MovementKeyword Movement { get; internal set; }
         public CreatureAbility Ability { get; set; }
         public int Heat { get; set; }
+        public ISet<IPlayer> KnownTo { get; } = new HashSet<IPlayer>();
         public int TimesEnteredPlay { get; private set; }
 
         public int TurnsUntilOperative { get; private set; }
@@ -148,6 +155,7 @@ namespace SlayTheClone {
 
         public void EnterPlay(int turn) {
             landedOnTurn = turn;
+            KnownTo.Clear(); // A new entrance: nobody knows what it is until it shows itself
             TimesEnteredPlay++;
             entryEffectsPending = true;
             CurrentArmorPool = 0; // Armor is lost when a creature leaves play (GDD 1.1 Armor), so it always enters without any

@@ -32,8 +32,8 @@ namespace SlayTheClone.Tests {
 
         [TearDown]
         public void TearDown() {
+            FogOfWar.Enabled = fogWasOn; // Keep the debug choice made in the editor (while the scene can still redraw)
             game.Dispose();
-            FogOfWar.Enabled = fogWasOn; // Keep the debug choice made in the editor
         }
 
         [UnityTest]
@@ -100,15 +100,23 @@ namespace SlayTheClone.Tests {
             StringAssert.DoesNotContain("Nullify", game.BoardView(p2).WatchdogText);
 
             var sneak = game.Summon(p2, game.Cards.Creature("Test Sneak", 2, 5), 4);
+            var stealthy = game.Cards.Creature("Test Sleeper", 1, 5);
+            stealthy.ability = CreatureAbility.Undercover;
+            var sleeper = game.Summon(p2, stealthy, 2);
             game.Queue.AddAction(new ApplyStatusEffectAction(sneak, StatusEffectType.Concealed, 2, 0));
             game.Queue.ResolveActions();
             game.Attack(sneak, p1.Battlefield[4]);
+            var incoming = game.GiveCard(p2, game.Cards.Creature("Test Incoming", 1, 5));
+            game.Play(incoming, p2, p2.Battlefield[3]);
             yield return null;
             CollectionAssert.AreEqual(new[] { sneak }, game.BoardView(p2).CreaturesWithHiddenPlans, "A Concealed enemy's card shows ???...");
             CollectionAssert.IsEmpty(game.QueuedArrows(p2), "...instead of its attack arrow");
+            CollectionAssert.AreEquivalent(new ICard[] { sleeper, incoming }, game.BoardView(p2).AnonymousCards,
+                "An enemy summon shows as ??? until it finishes, and a stealthy creature stays ??? after");
             FogOfWar.Enabled = false;
             yield return null;
             CollectionAssert.IsEmpty(game.BoardView(p2).CreaturesWithHiddenPlans, "Debug: with the fog off the screen shows everything");
+            CollectionAssert.IsEmpty(game.BoardView(p2).AnonymousCards);
             Assert.AreEqual(1, game.QueuedArrows(p2).Count);
             StringAssert.Contains("Nullify", game.BoardView(p2).WatchdogText, "...the enemy's Watchdog conditions too");
             FogOfWar.Enabled = true;

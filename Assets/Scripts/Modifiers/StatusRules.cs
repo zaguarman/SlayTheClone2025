@@ -64,6 +64,9 @@ namespace SlayTheClone {
                 }
             }
 
+            // Revealed shows the creature to the other side for good, whatever it is
+            if (type == StatusEffectType.Revealed) Intel.MakeKnown(target, target.Owner?.Opponent);
+
             var status = (StatusEffectModifier)context.ModifierFactory.CreateStatusEffectModifier(
                 $"{type} Effect", Describe(type, duration, potency), type, duration, potency, turnApplied);
             manager.ApplyModifier(target, status);

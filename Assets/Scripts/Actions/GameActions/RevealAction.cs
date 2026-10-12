@@ -4,7 +4,8 @@ using static SlayTheClone.DebugLogger;
 namespace SlayTheClone {
     /// <summary>
     /// Reveal (GDD 2.5 Scan): a one-time look at hidden information, for the player who cast it. Aimed at a slot it shows the
-    /// slot's hidden Slot Effect and what the creature there plans to do this Day; aimed at a player, their Watchdog conditions.
+    /// slot's hidden Slot Effect, the creature there (what it is, for good, and what it plans this Day) and what is being
+    /// summoned there; aimed at a player, their Watchdog conditions.
     /// Information is instant: a card that only reveals resolves as soon as it's played, during Planning.
     /// </summary>
     public class RevealAction : IGameAction {
@@ -38,10 +39,10 @@ namespace SlayTheClone {
             if (reveal.Slot != null) {
                 reveal.Slot.Effect?.RevealedTo.Add(reveal.Viewer);
                 var creature = reveal.Slot.OccupyingCreature;
-                if (creature != null) {
-                    foreach (var planned in context.ActionsQueue.GetPendingActions().Where(a => Intel.PlannerOf(a) == creature)) {
-                        context.ActionsQueue.RevealTo(reveal.Viewer, planned);
-                    }
+                Intel.MakeKnown(creature, reveal.Viewer);
+                foreach (var pending in context.ActionsQueue.GetPendingActions()
+                             .Where(a => (creature != null && Intel.PlannerOf(a) == creature) || Intel.SummonInto(a) == reveal.Slot)) {
+                    context.ActionsQueue.RevealTo(reveal.Viewer, pending);
                 }
                 context.GameMediator.NotifyBattlefieldStateChanged(reveal.Slot.Owner);
             }

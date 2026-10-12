@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -355,11 +356,45 @@ namespace SlayTheClone {
         public void SetPlansHidden(bool hidden) {
             ArePlansHidden = hidden;
             if (hidden && hiddenPlansBadge == null) hiddenPlansBadge = CreateBadge("HiddenPlansBadge", "???", UITheme.Gold, 0.6f, 0.76f);
-            if (hiddenPlansBadge != null) hiddenPlansBadge.SetActive(hidden);
+            if (hiddenPlansBadge != null) hiddenPlansBadge.SetActive(hidden && !IsAnonymous); // A card already all ??? needs no band
         }
 
         public bool ArePlansHidden { get; private set; }
         private GameObject hiddenPlansBadge;
+
+        /// <summary>
+        /// Fog of War: the player at the screen doesn't know what this creature is (being summoned by the other side, or stealthy).
+        /// Everything on the card is hidden behind a "???" cover, and hovering it tells nothing.
+        /// </summary>
+        public void SetAnonymous(bool anonymous) {
+            if (anonymous == IsAnonymous) return;
+            IsAnonymous = anonymous;
+            if (anonymous) {
+                // Hide the face rather than cover it: a queued card is translucent, and would show through
+                hiddenFace.Clear();
+                foreach (Transform child in transform) {
+                    if (!child.gameObject.activeSelf || child.gameObject == anonymousCover) continue;
+                    hiddenFace.Add(child.gameObject);
+                    child.gameObject.SetActive(false);
+                }
+                if (anonymousCover == null) {
+                    anonymousCover = CreateBadge("AnonymousCover", "???", UITheme.Gold, 0f, 1f);
+                    var label = anonymousCover.GetComponentInChildren<TextMeshProUGUI>();
+                    label.fontSizeMax = 72;
+                }
+                anonymousCover.SetActive(true);
+                anonymousCover.transform.SetAsLastSibling();
+            }
+            else {
+                foreach (var part in hiddenFace) if (part != null) part.SetActive(true);
+                hiddenFace.Clear();
+                if (anonymousCover != null) anonymousCover.SetActive(false);
+            }
+        }
+
+        public bool IsAnonymous { get; private set; }
+        private GameObject anonymousCover;
+        private readonly List<GameObject> hiddenFace = new List<GameObject>();
 
         // A navy band across the card with brass edges and a word on it
         private GameObject CreateBadge(string objectName, string text, Color textColor, float anchorMinY, float anchorMaxY) {

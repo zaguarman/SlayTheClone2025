@@ -38,6 +38,7 @@ namespace SlayTheClone.Tests {
         [Test]
         public void ConcealedPlans_AreHidden_UntilRevealed_WatchdogsCantSeeThem_NorTouchEncryptedOnes() {
             var sneak = game.Summon(p2, game.Creature("Sneak", 2, 10), 0);
+            Assert.IsTrue(Intel.KnowsWhatItIs(p1, sneak), "A creature shows what it is when its summon finishes");
             game.Run(new ApplyStatusEffectAction(sneak, StatusEffectType.Concealed, 2, 0));
             game.Run(new CreateWatchdogAction(Nullify(1), p1, null, 0)); // Before anything is planned: Run resolves the queue
             game.Declare(sneak, p1.Battlefield[0]); // An empty slot: it would hit player 1
@@ -56,8 +57,9 @@ namespace SlayTheClone.Tests {
             var undercover = game.Creature("Mole Rat", 1, 10);
             undercover.ability = CreatureAbility.Undercover;
             var mole = game.Summon(p2, undercover, 1);
+            Assert.IsFalse(Intel.KnowsWhatItIs(p1, mole), "...unless it's stealthy: it stays ??? to the other side");
             game.Declare(mole, p1.Battlefield[1]);
-            Assert.IsFalse(P1Sees(PlanOf(mole)), "Undercover conceals too");
+            Assert.IsFalse(P1Sees(PlanOf(mole)), "Undercover conceals its plans too");
             var eavesdrop = game.GiveCard(p1, game.Spell("Eavesdrop", TargetType.EnemyCreatures, new CardEffect {
                 trigger = EffectTrigger.OnPlay,
                 actions = new List<EffectAction> { new EffectAction { actionType = ActionType.Reveal, targetType = TargetType.EnemyCreatures } }
@@ -65,6 +67,7 @@ namespace SlayTheClone.Tests {
             game.Play(eavesdrop, p1, p2.Battlefield[1]);
             CollectionAssert.DoesNotContain(p1.Hand, eavesdrop, "A Reveal is instant: it resolved as it was played, during Planning");
             Assert.IsTrue(P1Sees(PlanOf(mole)), "...and shows its caster what the creature there plans");
+            Assert.IsTrue(Intel.KnowsWhatItIs(p1, mole), "...and what it is, for good");
             Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "Nothing else resolved with it");
             game.Resolve();
             Assert.AreEqual(Player.MaxHealth - 2, p1.Health, "Revealed to the Watchdog's controller: it could match it");
@@ -81,7 +84,15 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Player.MaxHealth - 2 - 3, p1.Health, "The Revealed attack is nullified; Watchdogs ignore an Encrypted creature's actions...");
             Assert.AreEqual(1, game.ActionsQueue.Watchdogs.Single().ChargesLeft, "...and spend no charge on them");
 
+            var incoming = game.GiveCard(p2, game.Creature("Incoming", 1, 1));
+            game.Play(incoming, p2, p2.Battlefield[3]);
+            var summon = game.ActionsQueue.GetPendingActions().OfType<PlayCardAction>().Single();
+            Assert.IsFalse(Intel.CanSeeSummon(p1, summon, game.ActionsQueue), "The other side sees something is being summoned, not what");
+            Assert.IsTrue(Intel.CanSeeSummon(p2, summon, game.ActionsQueue));
+            Assert.IsTrue(FogOfWar.HidesSummon(p1, summon, game.ActionsQueue));
+
             game.Run(new PlaceSlotEffectAction(p2.Battlefield[4], SlotEffectType.Landmine, 2, 0, p2));
+            Assert.IsTrue(Intel.KnowsWhatItIs(p1, (ICreature)incoming), "Its summon finished: now it shows what it is");
             var mine = p2.Battlefield[4].Effect;
             var watchdog = game.ActionsQueue.Watchdogs.Single();
             Assert.IsTrue(Intel.CanSee(p2, mine));

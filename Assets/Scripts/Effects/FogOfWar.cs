@@ -7,7 +7,8 @@ namespace SlayTheClone {
     /// <summary>
     /// Who can see what (GDD 2.5 Fog of War & Intelligence). Your own side has no fog. Of the other side you see its planned
     /// actions, except the Concealed Actions of a creature that is Concealed or Undercover (and not Revealed); you don't see
-    /// its hidden Slot Effects or its Watchdog conditions. A Reveal shows one of them to whoever cast it.
+    /// its hidden Slot Effects or its Watchdog conditions. You see that it's summoning, not what: a creature shows what it is
+    /// when its summon finishes, unless it's stealthy. A Reveal shows one of them to whoever cast it.
     /// These are rules: Watchdogs can't match what their controller can't see, whatever the screen shows.
     /// </summary>
     public static class Intel {
@@ -40,6 +41,45 @@ namespace SlayTheClone {
 
         public static bool CanSeeCondition(IPlayer viewer, Watchdog watchdog) =>
             watchdog.Controller == viewer || watchdog.RevealedTo.Contains(viewer);
+
+        #region What a creature is
+        /// <summary>Stealthy: it keeps what it is hidden when it enters play. Undercover (printed, even before it's ready) or Concealed, and not Revealed.</summary>
+        public static bool IsStealthy(ICreature creature, IModifierManager modifiers) =>
+            creature != null && modifiers != null
+            && (creature.Ability == CreatureAbility.Undercover || modifiers.HasStatusEffect(creature, StatusEffectType.Concealed))
+            && !modifiers.HasStatusEffect(creature, StatusEffectType.Revealed);
+
+        /// <summary>Its summon finished: the other side sees what it is, unless it's stealthy.</summary>
+        public static void OnEnteredPlay(ICreature creature, IModifierManager modifiers) {
+            if (creature?.Owner == null || IsStealthy(creature, modifiers)) return;
+            MakeKnown(creature, creature.Owner.Opponent);
+        }
+
+        public static void MakeKnown(ICreature creature, IPlayer viewer) {
+            if (creature == null || viewer == null || viewer == creature.Owner) return;
+            if (creature.KnownTo.Add(viewer)) Log($"{viewer.Name} now knows what {creature.Name} is", LogTag.Effects);
+        }
+
+        public static bool KnowsWhatItIs(IPlayer viewer, ICreature creature) =>
+            creature == null || viewer == null || creature.Owner == viewer || creature.KnownTo.Contains(viewer);
+
+        /// <summary>The slot a creature is being summoned into, for a queued play or summon of a creature.</summary>
+        public static BoardSlot SummonInto(IGameAction action) => action switch {
+            PlayCardAction play when play.GetCard() is ICreature => play.GetTarget() as BoardSlot,
+            SummonCreatureAction summon => summon.GetTargetSlot() as BoardSlot,
+            _ => null
+        };
+
+        /// <summary>Whose summon it is: the other side knows something is coming, not what, unless a Reveal showed it.</summary>
+        public static bool CanSeeSummon(IPlayer viewer, IGameAction action, IActionsQueue queue) {
+            var owner = action switch {
+                PlayCardAction play => play.GetOwner(),
+                SummonCreatureAction summon => summon.GetOwner(),
+                _ => null
+            };
+            return owner == null || viewer == null || owner == viewer || (queue?.IsRevealedTo(viewer, action) ?? false);
+        }
+        #endregion
     }
 
     /// <summary>
@@ -86,6 +126,12 @@ namespace SlayTheClone {
         public static bool Hides(IPlayer viewer, SlotEffect effect) => Enabled && !Intel.CanSee(viewer, effect);
 
         public static bool HidesCondition(IPlayer viewer, Watchdog watchdog) => Enabled && !Intel.CanSeeCondition(viewer, watchdog);
+
+        /// <summary>The card shows as "???": the viewer doesn't know what this creature is.</summary>
+        public static bool HidesIdentity(IPlayer viewer, ICreature creature) => Enabled && !Intel.KnowsWhatItIs(viewer, creature);
+
+        /// <summary>A creature being summoned by the other side shows as "???" until its summon finishes.</summary>
+        public static bool HidesSummon(IPlayer viewer, IGameAction action, IActionsQueue queue) => Enabled && !Intel.CanSeeSummon(viewer, action, queue);
 
         /// <summary>Whether this creature has a planned action the viewer can't see: its card shows "???".</summary>
         public static bool HidesPlansOf(ICreature creature, IPlayer viewer, IActionsQueue queue, IModifierManager modifiers) =>
