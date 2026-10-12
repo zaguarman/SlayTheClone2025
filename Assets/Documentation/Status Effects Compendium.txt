@@ -201,8 +201,20 @@ Concealed
     Stacking & Duration:
         Initial Stacks: X (from source)
         Re-application Behavior: Refresh Stacks
-    Notes: This effect is negated if the creature also has the Revealed status effect.
+    Notes: This effect is negated if the creature also has the Revealed status effect. It's good for the creature: a Cleanse leaves it, a Purge removes it.
     Answers: Use slot-based and area effects that don't care what it's planning, or apply Revealed to switch it off.
+    Cleansable: Yes
+
+Encrypted
+    Faction: Neutral (to be decided)
+    Type: Unique, Information
+    Description: "Watchdogs ignore this creature's actions. Re-applying sets it to the new amount."
+    Core Impact: Protects its plans from being changed (Secure layer, GDD 2.5): Watchdogs can't nullify, redirect, reorder or reveal them, and spend no charge on them.
+    Stacking & Duration:
+        Initial Stacks: X Days (from source)
+        Re-application Behavior: Refresh
+    Notes: It doesn't hide anything: the other side still sees what it plans (that's Concealed). Good for the creature: a Cleanse leaves it, a Purge removes it.
+    Answers: Damage it before it acts, or answer it without Watchdogs.
     Cleansable: Yes
 
 Diplomatic Immunity

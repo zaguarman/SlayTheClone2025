@@ -16,6 +16,9 @@ namespace SlayTheClone {
         public int Sequence { get; }              // The oldest triggers when several match
         public int ChargesLeft { get; private set; }
 
+        /// <summary>Players who saw its condition through Intelligence (a Reveal), besides its controller.</summary>
+        public System.Collections.Generic.HashSet<IPlayer> RevealedTo { get; } = new System.Collections.Generic.HashSet<IPlayer>();
+
         public Watchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int turnCreated, int days, int sequence) {
             Spec = spec;
             Controller = controller;

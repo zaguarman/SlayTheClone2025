@@ -174,7 +174,7 @@ Spells
 Cards made on 2026-10-12 to try the mechanics built that day: movement (GDD 2.4), Exhausted, Doomed, Health Loss, Armor, Homing and Fixed aim (4.6), the Creature Death Sequence (3.9), Status Timing (5.2) and Deployment Time (3.2). Each card's Design Notes say what it tests; its Art Description holds the brief for its picture.
 • Corporate, Statecraft and Zeitgeist cards joined their faction decks.
 • Digital Society, Shadow Ops., Tech, Myth and Mind have no deck yet (a deck needs 12 cards). Their cards wait in Assets/Scriptables/Cards/<Faction>/ for those decks.
-• The Mechanics Test deck mixes them with Red Tape (Deployment Time delay), Plot Armor (once per combat) and the ability test creatures, 30 in all (Inflation, Digital Nomad, Raised Security Level and Cleaning Robot Premium stay out: other cards already test Health Loss, Leapfrog, Armor and pushing). It's a test deck: the DeckCatalog offers it next to the faction decks, but no opponent brings it and the one-faction rule doesn't apply.
+• The Mechanics Test deck mixes them with Red Tape (Deployment Time delay), Plot Armor (once per combat), the ability test creatures and the Fog of War cards, 35 in all (Inflation, Digital Nomad, Raised Security Level and Cleaning Robot Premium stay out: other cards already test Health Loss, Leapfrog, Armor and pushing). It's a test deck: the DeckCatalog offers it next to the faction decks, but no opponent brings it and the one-faction rule doesn't apply.
 
 Creatures (Attack/Health/Speed, Deployment Time)
     • Cleaning Robot Premium (Corporate, 2/7/1, 1): no ability. Tests pushing, blocked pushes and the automatic move order.
@@ -197,6 +197,13 @@ Ability Test Creatures (no other effects: each tests one ability from the 'Abili
     • Pessimist (Mind, 2/4/1, 0): Contrarian.
     • Introvert (Mind, 1/5/1, 0): Unbothered.
     • The other abilities are on faction cards: Insider Job (Day Trader), Technician (Pluriemployed Hustler), Spite (Spite-Elected President), Return to Sender (Supreme Court), Too Mainstream (Hipster), No U (Keyboard Warrior).
+
+Fog of War Test Cards (GDD 2.5)
+    • Sleeper Agent (Shadow Ops., 3/3/2, 1): Undercover (its plans show as ??? to the enemy).
+    • Smoke And Mirrors (Shadow Ops. spell): Concealed for 2 Days on a friendly creature.
+    • Eavesdrop (Shadow Ops. spell, instant): Reveal an enemy slot: its hidden Slot Effect and what the creature there plans this Day.
+    • Tapped Communications (Shadow Ops. spell, instant): Revealed for 2 Days on an enemy creature.
+    • End-to-End Encryption (Tech spell): Encrypted for 2 Days on a friendly creature (Watchdogs ignore its actions).
 
 Spells
     • Inflation (Corporate): Each enemy creature gets -1 Health (Health Loss).

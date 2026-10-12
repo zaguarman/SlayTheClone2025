@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static SlayTheClone.Enums;
@@ -192,9 +193,10 @@ namespace SlayTheClone {
         }
 
         /// <summary>The moves planned on this side, in the order they were planned.</summary>
-        public static List<PlannedMove> PlannedMovesOf(IPlayer side, IActionsQueue queue) =>
+        /// <param name="include">Which moves to count, e.g. only the ones the screen may show (Fog of War); all if null.</param>
+        public static List<PlannedMove> PlannedMovesOf(IPlayer side, IActionsQueue queue, Func<MoveCreatureAction, bool> include = null) =>
             queue?.GetPendingActions().OfType<MoveCreatureAction>()
-                .Where(m => m.GetCreature()?.Slot != null && m.GetCreature().Slot.Owner == side)
+                .Where(m => m.GetCreature()?.Slot != null && m.GetCreature().Slot.Owner == side && (include == null || include(m)))
                 .Select(m => new PlannedMove(m.GetCreature(), m.GetToSlot(), m.Kind))
                 .ToList() ?? new List<PlannedMove>();
 

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: SleeperAgent
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: d10d9ede-d17a-4d30-9572-1cca1ea3fa4c
+  cardName: Sleeper Agent
+  description: Eleven years next door. Waters your plants. Waiting for a phone call.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 0}
+  effects: []
+  designNotes: 'Mechanics test: Undercover. Everything it plans is a Concealed Action:
+    the other side sees ??? on its card instead of its arrows, and their Watchdogs
+    can''t match it.'
+  artDescription: A suburban dad mowing his lawn in a polo shirt, an earpiece coiled
+    behind his ear, while his shadow on the grass wears a trench coat and holds a
+    sniper rifle.
+  attack: 3
+  health: 3
+  speed: 2
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 17

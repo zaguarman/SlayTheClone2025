@@ -18,7 +18,7 @@ namespace SlayTheClone {
         /// <summary>Lasts until removed or used up, whatever its Days (Blessed, Heat Signature).</summary>
         public bool IsPersistent => EffectType is StatusEffectType.Blessed or StatusEffectType.HeatSignature;
         /// <summary>Whether it harms its creature: what a Cleanse removes (a Purge removes the rest too). Blessed is the good one.</summary>
-        public bool IsNegative => EffectType != StatusEffectType.Blessed;
+        public bool IsNegative => EffectType is not (StatusEffectType.Blessed or StatusEffectType.Concealed or StatusEffectType.Encrypted);
 
         /// <summary>Doomed can't be cleansed: a cleanse attempt passes it on instead (Heresy).</summary>
         public bool IsCleansable => EffectType != StatusEffectType.Doomed;

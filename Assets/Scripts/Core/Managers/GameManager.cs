@@ -65,6 +65,9 @@ namespace SlayTheClone {
         /// <summary>The Briefing: before the actions of the Day resolve, Briefing Watchdogs look at the whole queue once.</summary>
         void BriefWatchdogs();
         void CancelActionsOf(ICreature creature); // A creature marked for destruction loses its pending non-retaliatory actions
+        /// <summary>A Reveal showed this pending action to the viewer (GDD 2.5): it isn't hidden from them any more.</summary>
+        void RevealTo(IPlayer viewer, IGameAction action);
+        bool IsRevealedTo(IPlayer viewer, IGameAction action);
         void ResolveActions();
         System.Collections.IEnumerator ResolveActionsStepByStep(Func<System.Collections.IEnumerator> afterEachAction);
         int GetPendingActionsCount();

@@ -8,7 +8,7 @@ namespace SlayTheClone {
         public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, Zeitgeist, Mind, Utopia }
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
         public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie } // New triggers go last: cards store them as numbers
-        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment } // Renamed Buff to ModifyStat
+        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal } // Renamed Buff to ModifyStat
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         // Movement Keywords printed on creatures (GDD 2.4): Leapfrog jumps over creatures, Swap trades places with a friendly one
@@ -18,7 +18,7 @@ namespace SlayTheClone {
         // A creature's one ability ('Abilities Compendium'). New abilities go last: cards store them as numbers
         public enum CreatureAbility {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
-            SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, Technician
+            SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, Technician, Undercover
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look
@@ -37,7 +37,10 @@ namespace SlayTheClone {
             Exhausted,  // The stun: Cannot Act, abilities disabled, and Exposed (+1 damage taken) while it lasts (Status Effects Compendium)
             Doomed,     // Death Sentence: blocks other statuses, +1 permanent Attack each Dawn, then Last Rites and destroyed
             Blessed,    // Persistent ward: the next status that would land is negated and Blessed loses a stack (up to 3)
-            HeatSignature // Persistent Heat stacks: random and redirected attacks go to the creature with the most Heat
+            HeatSignature, // Persistent Heat stacks: random and redirected attacks go to the creature with the most Heat
+            Concealed,     // Its planned actions are Concealed Actions: '???' to the other side, and Watchdogs can't match them
+            Revealed,      // Cancels Concealed and Undercover: its planned actions can be seen
+            Encrypted      // Watchdogs ignore its actions (no charge is spent)
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old

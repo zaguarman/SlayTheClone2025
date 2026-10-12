@@ -37,7 +37,7 @@ namespace SlayTheClone {
                 return;
             }
             arrowManager = new BattlefieldArrowManager(transform, GameMediator, actionsQueue, player, FindSlotView,
-                card => table.GetHand(player)?.GetCardController(card));
+                card => table.GetHand(player)?.GetCardController(card), HiddenFromScreen);
         }
 
         private void CreateSlots(IPlayer player) {
@@ -242,11 +242,12 @@ namespace SlayTheClone {
                 if (card != null && !card.IsLeavingPlay) Destroy(card.gameObject);
             }
 
-            // Slot Effects. Hidden ones are secret from the other side; the local player is player 1
+            // Slot Effects. Hidden ones are secret from the other side, unless revealed (Fog of War)
             foreach (var slot in battlefieldSlots) {
                 var effect = slot.Model?.Effect;
-                slot.ShowSlotEffect(effect, effect != null && effect.IsHidden && effect.Controller?.IsPlayer1 != true);
+                slot.ShowSlotEffect(effect, FogOfWar.Hides(Viewer, effect));
             }
+            RefreshHiddenPlans();
 
             UpdateLayout();
         }
@@ -285,8 +286,29 @@ namespace SlayTheClone {
             }
         }
 
-        // This side's active Watchdogs, listed at the end of its row. The local player is player 1: the other side's show
-        // only what they watch (GDD 3.11 Visibility)
+        #region Fog of War
+        // The player at the screen (player 1). What their side can't see is hidden from the screen (GDD 2.5)
+        private IPlayer Viewer => FogOfWar.ViewerOf(Player);
+
+        private bool HiddenFromScreen(IGameAction action) =>
+            FogOfWar.Hides(Viewer, action, GameManager?.ActionsQueue, GameManager?.ModifierManager);
+
+        // A creature whose plans are hidden from the screen shows "???" on its card instead of its arrows and move ghost
+        private void RefreshHiddenPlans() {
+            foreach (var slot in battlefieldSlots) {
+                var card = slot.OccupyingCard;
+                if (card == null) continue;
+                card.SetPlansHidden(FogOfWar.HidesPlansOf(slot.OccupyingCreature, Viewer, GameManager?.ActionsQueue, GameManager?.ModifierManager));
+            }
+        }
+
+        /// <summary>The creatures of this row whose cards show "???": they plan something the screen can't show.</summary>
+        public IEnumerable<ICreature> CreaturesWithHiddenPlans =>
+            battlefieldSlots.Where(s => s.OccupyingCard != null && s.OccupyingCard.ArePlansHidden).Select(s => s.OccupyingCreature);
+        #endregion
+
+        // This side's active Watchdogs, listed at the end of its row. The player at the screen sees the other side's only as
+        // what they watch (GDD 3.11 Visibility), until revealed
         private TMPro.TextMeshProUGUI watchdogList;
 
         /// <summary>The Watchdog list shown at the end of this row, empty when there are none.</summary>
@@ -311,8 +333,7 @@ namespace SlayTheClone {
                 rect.anchoredPosition = new Vector2(16f, 0f);
                 UITheme.AddDropShadow(watchdogList);
             }
-            bool forController = Player.IsPlayer1;
-            watchdogList.text = "<b>Watchdogs</b>\n" + string.Join("\n", mine.Select(w => "- " + w.Describe(forController)));
+            watchdogList.text = "<b>Watchdogs</b>\n" + string.Join("\n", mine.Select(w => "- " + w.Describe(!FogOfWar.HidesCondition(Viewer, w))));
             watchdogList.gameObject.SetActive(true);
         }
 
@@ -366,12 +387,13 @@ namespace SlayTheClone {
             }
 
             ShowMoveGhosts();
+            RefreshHiddenPlans();
         }
 
         // A see-through copy of each creature planned to move (or be pushed or swapped) in the slot it will end in, with the
         // formation arrows. Not interactive: the real card stays where it is and is still the one to drag
         private void ShowMoveGhosts() {
-            var preview = MovementRules.Preview(Player.Battlefield, MovementRules.PlannedMovesOf(Player, GameManager.ActionsQueue));
+            var preview = MovementRules.Preview(Player.Battlefield, MovementRules.PlannedMovesOf(Player, GameManager.ActionsQueue, move => !HiddenFromScreen(move)));
             foreach (var entry in preview.FinalSlots) {
                 var creature = entry.Key;
                 var finalSlot = entry.Value;

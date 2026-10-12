@@ -18,9 +18,12 @@ namespace SlayTheClone.Tests {
         private SceneGame game;
         private Player p1;
         private Player p2;
+        private bool fogWasOn;
 
         [UnitySetUp]
         public IEnumerator SetUp() {
+            fogWasOn = FogOfWar.Enabled;
+            FogOfWar.Enabled = true; // What the screen hides is part of what's tested
             game = new SceneGame();
             yield return game.Load(Seed);
             p1 = game.Player1;
@@ -28,7 +31,10 @@ namespace SlayTheClone.Tests {
         }
 
         [TearDown]
-        public void TearDown() => game.Dispose();
+        public void TearDown() {
+            game.Dispose();
+            FogOfWar.Enabled = fogWasOn; // Keep the debug choice made in the editor
+        }
 
         [UnityTest]
         public IEnumerator TheGameStarts_EndTurnEndsOneTurn_EvenClickedTwice_AndCombatShowsOnScreen() {
@@ -66,7 +72,8 @@ namespace SlayTheClone.Tests {
 
         /// <summary>
         /// What the board shows besides the cards: Slot Effects (hidden ones only to their controller, player 1 at the screen),
-        /// Watchdogs by their row (the enemy's condition hidden), move hints while dragging, and planned moves as ghosts and arrows.
+        /// Watchdogs by their row (the enemy's condition hidden), "???" for the plans of a Concealed enemy (Fog of War, which
+        /// can be switched off for debugging), move hints while dragging, and planned moves as ghosts and arrows.
         /// </summary>
         [UnityTest]
         public IEnumerator TheBoardShows_SlotEffects_Watchdogs_MoveHints_AndPlannedMoves() {
@@ -91,6 +98,22 @@ namespace SlayTheClone.Tests {
             StringAssert.Contains("attacks by the enemy -> Nullify (2 left, On Watch)", game.BoardView(p1).WatchdogText);
             StringAssert.Contains("???", game.BoardView(p2).WatchdogText, "The enemy's Watchdog condition is hidden");
             StringAssert.DoesNotContain("Nullify", game.BoardView(p2).WatchdogText);
+
+            var sneak = game.Summon(p2, game.Cards.Creature("Test Sneak", 2, 5), 4);
+            game.Queue.AddAction(new ApplyStatusEffectAction(sneak, StatusEffectType.Concealed, 2, 0));
+            game.Queue.ResolveActions();
+            game.Attack(sneak, p1.Battlefield[4]);
+            yield return null;
+            CollectionAssert.AreEqual(new[] { sneak }, game.BoardView(p2).CreaturesWithHiddenPlans, "A Concealed enemy's card shows ???...");
+            CollectionAssert.IsEmpty(game.QueuedArrows(p2), "...instead of its attack arrow");
+            FogOfWar.Enabled = false;
+            yield return null;
+            CollectionAssert.IsEmpty(game.BoardView(p2).CreaturesWithHiddenPlans, "Debug: with the fog off the screen shows everything");
+            Assert.AreEqual(1, game.QueuedArrows(p2).Count);
+            StringAssert.Contains("Nullify", game.BoardView(p2).WatchdogText, "...the enemy's Watchdog conditions too");
+            FogOfWar.Enabled = true;
+            yield return null;
+            game.Queue.CancelDeclaredAction(sneak.TargetId);
 
             var mover = game.Summon(p1, game.Cards.Creature("Test Mover", 1, 5), 0);
             var wall = game.Summon(p1, game.Cards.Creature("Test Wall", 1, 5), 2);

@@ -60,6 +60,8 @@ namespace SlayTheClone {
         private int environmentScopes; // Open QueueingEnvironment scopes
         private readonly List<Watchdog> watchdogs = new List<Watchdog>(); // Oldest first
         private int watchdogSequence;
+        private readonly Dictionary<IPlayer, HashSet<IGameAction>> revealed = new Dictionary<IPlayer, HashSet<IGameAction>>(); // By viewer
+        private bool resolving;
         private bool lastTakenWasPartOfAction; // TakeNextAction's pick came from resolvingNow
         private ResolutionLayer currentLayer;
         private int sequence;
@@ -207,6 +209,11 @@ namespace SlayTheClone {
         }
 
         public void AddAction(IGameAction action) {
+            if (executing == null && !resolving && IsInstant(action)) {
+                ResolveInstantly(action);
+                return;
+            }
+
             bool environment = environmentScopes > 0;
             var ability = environment ? null : abilities.Count > 0 ? abilities.Peek() : null;
             bool partOfExecutingAction = executing != null && (environment || ability == null || ability.ResolvesWithItsTrigger);
@@ -246,6 +253,20 @@ namespace SlayTheClone {
         #endregion
 
         #region Resolution
+        // Information is instant (GDD 2.5): a card that only changes what its caster can see resolves when it's played,
+        // during Planning, outside the order of the Day
+        private static bool IsInstant(IGameAction action) =>
+            action is PlayCardAction play && play.GetCard() is Spell spell && EffectResolver.IsInstant(spell);
+
+        private void ResolveInstantly(IGameAction action) {
+            Log($"{action.GetType().Name} is instant: resolving it now (Queue ID: {QueueId})", LogTag.Actions);
+            var entry = new Entry { Action = action, Layer = LayerOf(action), Sequence = sequence++, Watched = true };
+            actionsResolved = 0;
+            Run(entry);
+            while (resolvingNow.Count > 0 && ExecuteNextAction()) { } // What it does, and nothing else queued
+            OnActionsQueued.Invoke();
+        }
+
         /// <summary>
         /// Resolves every queued action immediately, including those the resolved actions queue in turn.
         /// </summary>
@@ -268,6 +289,7 @@ namespace SlayTheClone {
         }
 
         private void BeginResolution() {
+            resolving = true;
             actionsResolved = 0;
             currentLayer = ResolutionLayer.Movement;
             Log($"Resolving actions. Initial queue size: {GetPendingActionsCount()} (Queue ID: {QueueId})", LogTag.Actions);
@@ -337,6 +359,11 @@ namespace SlayTheClone {
                 gameMediator.NotifyActionsQueueChanged();
                 return true;
             }
+            Run(entry);
+            return true;
+        }
+
+        private void Run(Entry entry) {
             var action = entry.Action;
 
             string activeCreatureId = GetActiveCreatureId(action);
@@ -346,7 +373,7 @@ namespace SlayTheClone {
 
             if (!actionExecutors.TryGetValue(action.GetType(), out var executor)) {
                 LogError($"No executor registered for action type {action.GetType().Name}. Skipping action. (Queue ID: {QueueId})", LogTag.Actions);
-                return true;
+                return;
             }
 
             Log($"Processing action: {action.GetType().Name} via {executor.GetType().Name} in the {entry.Layer} layer (Queue ID: {QueueId})", LogTag.Actions);
@@ -365,11 +392,12 @@ namespace SlayTheClone {
             }
 
             gameMediator.NotifyActionsQueueChanged();
-            return true;
         }
 
         private void EndResolution() {
+            resolving = false;
             activeCreatureActions.Clear();
+            revealed.Clear(); // What was revealed has resolved
 
             // ActionsQueueChanged was already raised after the last action ran
             if (actionsResolved > 0) {
@@ -396,11 +424,28 @@ namespace SlayTheClone {
             watchdogs.RemoveAll(w => w.IsSpent || w.HasExpired(turn));
         }
 
+        // GDD 3.11: a Watchdog can't match an action its controller can't see (Concealed), and ignores Encrypted creatures'
+        // actions without spending a charge
+        private bool Sees(Watchdog watchdog, Entry entry) {
+            var modifiers = executionContext.ModifierManager;
+            return !Intel.IsEncrypted(WatchdogRules.ActorOf(entry.Action, entry.Source), modifiers)
+                && Intel.CanSee(watchdog.Controller, entry.Action, this, modifiers);
+        }
+
+        public void RevealTo(IPlayer viewer, IGameAction action) {
+            if (viewer == null || action == null) return;
+            if (!revealed.TryGetValue(viewer, out var seen)) revealed[viewer] = seen = new HashSet<IGameAction>();
+            seen.Add(action);
+        }
+
+        public bool IsRevealedTo(IPlayer viewer, IGameAction action) =>
+            viewer != null && revealed.TryGetValue(viewer, out var seen) && seen.Contains(action);
+
         // The oldest On Watch Watchdog that matches acts on the action. True if the action doesn't resolve now
         private bool OnWatch(Entry entry) {
             entry.Watched = true;
             DropFinishedWatchdogs();
-            var watchdog = watchdogs.FirstOrDefault(w => w.Spec.timing == WatchdogTiming.OnWatch && w.Matches(entry.Action, entry.Source));
+            var watchdog = watchdogs.FirstOrDefault(w => w.Spec.timing == WatchdogTiming.OnWatch && Sees(w, entry) && w.Matches(entry.Action, entry.Source));
             if (watchdog == null) return false;
 
             watchdog.SpendCharge();
@@ -417,7 +462,8 @@ namespace SlayTheClone {
                     entry.Action = WatchdogRules.Redirect(entry.Action, entry.Source);
                     WatchdogRules.LogTrigger(watchdog, entry.Action, "redirected");
                     return false;
-                default: // Reveal: everything is visible until Fog of War exists
+                default: // Reveal: its controller sees it
+                    RevealTo(watchdog.Controller, entry.Action);
                     WatchdogRules.LogTrigger(watchdog, entry.Action, "revealed");
                     return false;
             }
@@ -432,7 +478,7 @@ namespace SlayTheClone {
             DropFinishedWatchdogs();
             int turn = executionContext.TurnClock.TurnNumber;
             foreach (var watchdog in watchdogs.Where(w => w.CanBrief(turn)).ToList()) {
-                var matches = waiting.Where(e => !e.Watched && !e.Environment && watchdog.Matches(e.Action, e.Source))
+                var matches = waiting.Where(e => !e.Watched && !e.Environment && Sees(watchdog, e) && watchdog.Matches(e.Action, e.Source))
                     .OrderBy(e => e.Layer).ThenBy(e => e, InLayerOrder).ToList();
                 if (matches.Count == 0) continue;
 
@@ -463,6 +509,7 @@ namespace SlayTheClone {
                             WatchdogRules.LogTrigger(watchdog, entry.Action, "redirected at the Briefing");
                             break;
                         default:
+                            RevealTo(watchdog.Controller, entry.Action);
                             WatchdogRules.LogTrigger(watchdog, entry.Action, "revealed at the Briefing");
                             break;
                     }
@@ -538,6 +585,7 @@ namespace SlayTheClone {
             activeCreatureActions.Clear();
             abilities.Clear();
             watchdogs.Clear();
+            revealed.Clear();
             OnActionsQueued.RemoveAllListeners();
             OnActionsResolved.RemoveAllListeners();
             OnActionExecuting.RemoveAllListeners();

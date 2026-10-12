@@ -351,6 +351,16 @@ namespace SlayTheClone {
             if (replaceBadge != null) replaceBadge.SetActive(show);
         }
 
+        /// <summary>Fog of War: this creature plans something the screen can't show. A "???" band across its art.</summary>
+        public void SetPlansHidden(bool hidden) {
+            ArePlansHidden = hidden;
+            if (hidden && hiddenPlansBadge == null) hiddenPlansBadge = CreateBadge("HiddenPlansBadge", "???", UITheme.Gold, 0.6f, 0.76f);
+            if (hiddenPlansBadge != null) hiddenPlansBadge.SetActive(hidden);
+        }
+
+        public bool ArePlansHidden { get; private set; }
+        private GameObject hiddenPlansBadge;
+
         // A navy band across the card with brass edges and a word on it
         private GameObject CreateBadge(string objectName, string text, Color textColor, float anchorMinY, float anchorMaxY) {
             var badge = new GameObject(objectName, typeof(RectTransform), typeof(Image));

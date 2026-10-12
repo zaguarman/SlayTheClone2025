@@ -153,6 +153,16 @@ namespace SlayTheClone {
             }
         }
 
+        /// <summary>
+        /// Information is instant (GDD 2.5): a spell that only changes what its caster can see (Reveal, Revealed) resolves as
+        /// soon as it's played, during Planning.
+        /// </summary>
+        public static bool IsInstant(Spell spell) {
+            var actions = spell?.Effects.SelectMany(e => e.actions).ToList();
+            return actions != null && actions.Count > 0 && actions.All(a => a.actionType == ActionType.Reveal
+                || (a.actionType == ActionType.ApplyStatus && a.statusEffectToApply == StatusEffectType.Revealed));
+        }
+
         /// <summary>Whether where the spell is dropped decides what at least one of its effects lands on.</summary>
         public static bool IsAimed(Spell spell) =>
             spell != null && spell.Effects.SelectMany(e => e.actions).Any(a => a.targetType != TargetType.Self && UsesChosenTarget(a));
@@ -167,7 +177,7 @@ namespace SlayTheClone {
         }
 
         // Slot Effects aim at the slot itself (Static, GDD 4.6): they never follow a creature
-        private static bool IsSlotAction(ActionType actionType) => actionType is ActionType.PlaceSlotEffect or ActionType.CleanseSlot;
+        private static bool IsSlotAction(ActionType actionType) => actionType is ActionType.PlaceSlotEffect or ActionType.CleanseSlot or ActionType.Reveal;
 
         private static ITarget SlotOf(ITarget target) => target switch {
             HomingTarget homing => homing.AimedSlot,
@@ -210,12 +220,12 @@ namespace SlayTheClone {
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
                 or ActionType.CreateWatchdog or ActionType.DelayDeployment;
 
-        // A Watchdog aimed at a player watches that whole side
+        // A Watchdog aimed at a player watches that whole side; a Reveal aimed at one shows their Watchdog conditions
         private static bool IsSideWide(EffectAction action) =>
-            action.actionType == ActionType.CreateWatchdog && action.targetType is TargetType.Player or TargetType.Enemy;
+            action.actionType is ActionType.CreateWatchdog or ActionType.Reveal && action.targetType is TargetType.Player or TargetType.Enemy;
 
         private static bool CanAffectPlayers(ActionType actionType) =>
-            actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog;
+            actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog or ActionType.Reveal;
         #endregion
 
         #region Actions
@@ -271,6 +281,9 @@ namespace SlayTheClone {
                     return creature != null || target is IPlayer
                         ? new CreateWatchdogAction(action.watchdog, controller, creature, action.statusDuration)
                         : null;
+                case ActionType.Reveal: // A slot: its hidden Slot Effect and its creature's plans; a player: their Watchdog conditions
+                    return target is IPlayer side ? new RevealAction(side, controller)
+                        : SlotOf(target) is BoardSlot revealed ? new RevealAction(revealed, controller) : null;
                 case ActionType.DelayDeployment: // Red Tape: value is the Days added
                     return creature != null && action.value > 0 ? new DelayDeploymentAction(creature, action.value) : null;
                 default:

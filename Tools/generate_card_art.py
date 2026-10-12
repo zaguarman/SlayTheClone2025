@@ -1227,6 +1227,11 @@ def icon_arrow(color, up=True):
     return poly(pts, color, OUTLINE)
 
 
+def icon_eye(iris):
+    return (path("M6 64 C 30 24 98 24 122 64 C 98 104 30 104 6 64 Z", "#f2efe6", OUTLINE)
+            + circle(64, 64, 24, iris, OUTLINE) + circle(64, 64, 10, "#1b1b22") + circle(56, 56, 5, "#ffffff"))
+
+
 def build_icons():
     return {
         "enter": icon_star4("#ffd257"),
@@ -1271,6 +1276,14 @@ def build_icons():
         # Heat Signature: a thermal-camera blob, hot core in cold surroundings
         "heat": rect(8, 8, 112, 112, "#2b2f6b", f'rx="18" {OUTLINE}') + ellipse(64, 66, 46, 50, "#d8434f")
                 + ellipse(64, 70, 32, 36, "#ff9a2e") + ellipse(64, 74, 18, 20, "#ffe14a") + ellipse(64, 76, 7, 8, "#ffffff"),
+        # Concealed: an eye struck through
+        "conceal": icon_eye("#8a93a8") + stroke("M18 110 L110 18", "#1b1b22", 16) + stroke("M18 110 L110 18", "#d8434f", 8),
+        # Revealed: a wide open eye
+        "reveal": icon_eye("#ffd257"),
+        # Encrypted: a padlock
+        "encrypt": path("M38 58 L38 40 C 38 20 52 10 64 10 C 76 10 90 20 90 40 L90 58", "none", 'stroke="#1b1b22" stroke-width="20"')
+                   + path("M38 58 L38 40 C 38 20 52 10 64 10 C 76 10 90 20 90 40 L90 58", "none", 'stroke="#b9c3d6" stroke-width="10"')
+                   + rect(22, 56, 84, 64, "#c9a24a", f'rx="10" {OUTLINE}') + circle(64, 82, 9, "#1b1b22") + rect(60, 86, 8, 20, "#1b1b22"),
     }
 
 

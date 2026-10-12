@@ -25,19 +25,21 @@ namespace SlayTheClone {
         private readonly IPlayer owner; // Only actions started by this player's creatures are drawn here
         private readonly Func<BoardSlot, BattlefieldSlot> findSlotView; // Where a board slot is on screen
         private readonly Func<ICard, CardController> findHandCard; // Where a card in the hand is on screen
+        private readonly Func<IGameAction, bool> isHidden; // Fog of War: planned actions the screen doesn't show
         private readonly Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
         // Arrows that start at a card in the hand, which moves as the hand changes: they follow it every frame
         private readonly Dictionary<string, (ICard card, ITarget target)> handArrows = new Dictionary<string, (ICard, ITarget)>();
         private ArrowIndicator dragArrow;
 
         public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IActionsQueue actionsQueue, IPlayer owner,
-            Func<BoardSlot, BattlefieldSlot> findSlotView, Func<ICard, CardController> findHandCard) {
+            Func<BoardSlot, BattlefieldSlot> findSlotView, Func<ICard, CardController> findHandCard, Func<IGameAction, bool> isHidden = null) {
             parentTransform = parent ?? throw new ArgumentNullException(nameof(parent));
             gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
             this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             this.findSlotView = findSlotView ?? throw new ArgumentNullException(nameof(findSlotView));
             this.findHandCard = findHandCard ?? throw new ArgumentNullException(nameof(findHandCard));
+            this.isHidden = isHidden ?? (_ => false);
 
             dragArrow = ArrowIndicator.Create(parentTransform);
             gameMediator.ActionsQueueChanged += RefreshArrows;
@@ -66,6 +68,7 @@ namespace SlayTheClone {
             var wanted = new Dictionary<string, (Vector3 start, Vector3 end, Color color)>();
             handArrows.Clear();
             foreach (var action in actionsQueue.GetPendingActions()) {
+                if (isHidden(action)) continue; // A Concealed Action: its creature's card shows ??? instead
                 if (TryDescribeArrow(action, out string key, out var arrow)) {
                     wanted[key] = arrow;
                 }
@@ -148,7 +151,7 @@ namespace SlayTheClone {
         // Live Preview (GDD 2.4): move arrows show the final formation, where every creature of this row ends up once the
         // planned moves resolve, including the ones they push or swap, rather than each move on its own
         private void AddFormationArrows(Dictionary<string, (Vector3 start, Vector3 end, Color color)> wanted) {
-            var moves = MovementRules.PlannedMovesOf(owner, actionsQueue);
+            var moves = MovementRules.PlannedMovesOf(owner, actionsQueue, move => !isHidden(move));
             if (moves.Count == 0) return;
 
             var movers = new HashSet<ICreature>(moves.Select(m => m.Creature));

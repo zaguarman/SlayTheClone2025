@@ -55,10 +55,11 @@ namespace SlayTheClone {
                     manager.RemoveModifier(target, other);
                 }
             }
-            // Re-stunning refreshes Exhausted instead of stacking it into a longer stun
-            if (type == StatusEffectType.Exhausted) {
+            // Re-stunning refreshes Exhausted instead of stacking it into a longer stun; the Intelligence statuses also refresh
+            // (re-applying sets them to the new amount)
+            if (type is StatusEffectType.Exhausted or StatusEffectType.Concealed or StatusEffectType.Revealed or StatusEffectType.Encrypted) {
                 foreach (var old in manager.GetActiveModifiersFor(target).OfType<StatusEffectModifier>()
-                             .Where(s => s.EffectType == StatusEffectType.Exhausted).ToList()) {
+                             .Where(s => s.EffectType == type).ToList()) {
                     manager.RemoveModifier(target, old);
                 }
             }
@@ -80,6 +81,9 @@ namespace SlayTheClone {
                 StatusEffectType.Exhausted => $"Exhausted ({days}): can't act, abilities off, takes +1 damage",
                 StatusEffectType.Doomed => $"Doomed ({days}): +1 Attack each Dawn, then Last Rites and it dies",
                 StatusEffectType.Burned => $"Burned ({days})" + (potency > 0 ? $" (Potency: {potency})" : ""),
+                StatusEffectType.Concealed => $"Concealed ({days}): its plans show as ??? to the enemy",
+                StatusEffectType.Revealed => $"Revealed ({days}): its plans can be seen",
+                StatusEffectType.Encrypted => $"Encrypted ({days}): Watchdogs ignore its actions",
                 StatusEffectType.Blessed or StatusEffectType.HeatSignature => type.ToString(), // Its stacks are added by the status itself
                 _ => $"{type} ({days})"
             };

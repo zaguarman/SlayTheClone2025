@@ -99,6 +99,7 @@ namespace SlayTheClone {
                 case ActionType.PlaceSlotEffect: return SlotEffectIcon(action.slotEffect);
                 case ActionType.CleanseSlot: return EffectIcons.Cleanse;
                 case ActionType.CreateWatchdog: return EffectIcons.Dusk;
+                case ActionType.Reveal: return EffectIcons.Reveal;
                 default: return null;
             }
         }
@@ -136,6 +137,10 @@ namespace SlayTheClone {
                     return $"remove the Slot Effect from {SlotTarget(action, isSpell)}";
                 case ActionType.CreateWatchdog:
                     return DescribeWatchdog(action, target);
+                case ActionType.Reveal: // Instant: it resolves as soon as it's played
+                    return action.targetType is TargetType.Player or TargetType.Enemy
+                        ? $"instantly see {target}'s Watchdog conditions"
+                        : $"instantly see the hidden Slot Effect on {SlotTarget(action, isSpell)} and what the creature there plans this Day";
                 case ActionType.Cleanse: // A Cleanse removes the bad; a Purge removes everything
                     string removed = action.cleanse switch {
                         CleanseTarget.Statuses => "statuses",
@@ -242,6 +247,9 @@ namespace SlayTheClone {
                 case StatusEffectType.Doomed: return $"doom {target} for {turns}";
                 case StatusEffectType.Blessed: return $"bless {target}{(action.statusPotency > 1 ? $" {action.statusPotency} times" : "")}";
                 case StatusEffectType.HeatSignature: return $"{target} gains {System.Math.Max(1, action.statusPotency)} Heat";
+                case StatusEffectType.Concealed: return $"conceal {target} for {turns} (its plans show as ??? to the enemy)";
+                case StatusEffectType.Revealed: return $"reveal {target} for {turns} (its plans can be seen)";
+                case StatusEffectType.Encrypted: return $"encrypt {target} for {turns} (Watchdogs ignore its actions)";
                 default: return null;
             }
         }

@@ -43,7 +43,8 @@ namespace SlayTheClone {
         }
 
         // One or more cards for each mechanic the rules carry out (movement, Exhausted, Doomed, Health Loss, Armor, Homing,
-        // the death sequence, Status Timing, Deployment Time, Blessed, Cleanse and Heresy, Slot Effects, Watchdogs, abilities), from every faction:
+        // the death sequence, Status Timing, Deployment Time, Blessed, Cleanse and Heresy, Slot Effects, Watchdogs, abilities,
+        // Fog of War), from every faction:
         // pick it to try them all in one match
         private static readonly string[] MechanicsTestCards = {
             "Delivery Cyclist", "Political Decoy",
@@ -53,6 +54,7 @@ namespace SlayTheClone {
             "Lost Landmine", "Its A Trap", "Ceasefire", "Burn Notice",
             "Mole", "Signal Jammer", "Deep Cover", "Script Kiddie", "Legacy Code",
             "NPC", "Chronically Online", "Mummy", "Pessimist", "Introvert",
+            "Sleeper Agent", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "End-to-End Encryption",
         };
 
         #region Corporate
@@ -393,6 +395,26 @@ namespace SlayTheClone {
                 "Mechanics test: Identity Theft, an active ability: hold Shift while dragging it onto a creature to swap abilities with it. It's its action for the Day.")
                 .With(CreatureAbility.IdentityTheft)
                 .Picture("Two men facing each other in front of a mirror, each peeling off a latex mask of the other's face."),
+            Creature("Sleeper Agent", 3, 3, speed: 2, deploy: 1,
+                "Eleven years next door. Waters your plants. Waiting for a phone call.",
+                "Mechanics test: Undercover. Everything it plans is a Concealed Action: the other side sees ??? on its card instead of its arrows, and their Watchdogs can't match it.")
+                .With(CreatureAbility.Undercover)
+                .Picture("A suburban dad mowing his lawn in a polo shirt, an earpiece coiled behind his ear, while his shadow on the grass wears a trench coat and holds a sniper rifle."),
+            Spell("Smoke And Mirrors", TargetType.FriendlyCreatures,
+                "Look over there. No, the other there.",
+                "Mechanics test: Concealed for 2 Days on a friendly creature. Its plans show as ??? to the other side until it's Revealed.",
+                Status(StatusEffectType.Concealed, 2, TargetType.FriendlyCreatures))
+                .Picture("A stage magician in a tuxedo vanishing a tank behind a cloud of smoke, while a row of mirrors shows a dozen identical tanks to a baffled general."),
+            Spell("Eavesdrop", TargetType.EnemyCreatures,
+                "We're not listening. We're just... hearing.",
+                "Mechanics test: Reveal, instant. Played on an enemy slot, it resolves at once (during Planning) and shows its caster the slot's hidden Slot Effect and what the creature there plans this Day.",
+                Reveal(TargetType.EnemyCreatures))
+                .Picture("A spy in the next diner booth pressing a drinking glass to the partition, a tower of empty glasses beside him and a waitress refilling his coffee without looking."),
+            Spell("Tapped Communications", TargetType.EnemyCreatures,
+                "Your call is important to us. Very important. We're recording it twice.",
+                "Mechanics test: Revealed for 2 Days, instant. It cancels Concealed and Undercover: the creature's plans can be seen, and Watchdogs can match them.",
+                Status(StatusEffectType.Revealed, 2, TargetType.EnemyCreatures))
+                .Picture("A rotary phone on an embassy desk, its cord running out of the window, down the wall and into a van marked FLOWER DELIVERY full of headphones."),
         };
 
         // Tech: rewires the queue
@@ -417,6 +439,11 @@ namespace SlayTheClone {
                 "Mechanics test: Unpatchable. Enemy effects can't lower its stats, and Zero-Day can't get around it.")
                 .With(CreatureAbility.Unpatchable)
                 .Picture("A beige mainframe held together with duct tape in a dusty basement, a yellowed sticky note on it: \"DO NOT TOUCH - Gary (retired 1999)\", and cobwebs over an \"Update available\" pop-up."),
+            Spell("End-to-End Encryption", TargetType.FriendlyCreatures,
+                "Not even we can read your messages. Pinky promise.",
+                "Mechanics test: Encrypted for 2 Days on a friendly creature. Watchdogs ignore its actions and spend no charge on them.",
+                Status(StatusEffectType.Encrypted, 2, TargetType.FriendlyCreatures))
+                .Picture("Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a \"Backdoor Request\" form."),
         };
 
         // Myth: slow and inevitable; creatures die and pay off
@@ -578,6 +605,9 @@ namespace SlayTheClone {
         }
 
         private static EffectAction DelayDeployment(int days, TargetType target) => Act(ActionType.DelayDeployment, days, target, TargetModifier.None);
+
+        // Instant: a slot (its hidden Slot Effect and its creature's plans), or a player (their Watchdog conditions)
+        private static EffectAction Reveal(TargetType target) => Act(ActionType.Reveal, 0, target, TargetModifier.None);
         #endregion
 
         #region Assets

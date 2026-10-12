@@ -45,6 +45,8 @@ namespace SlayTheClone {
             InitializeControllers();
             SetupResolveButton();
             GetOrAddComponent<BoardSkin>().Apply(gameReferences, gameManager, gameMediator);
+            FogOfWar.Changed += OnFogOfWarChanged;
+            ShowFogOfWarState();
 
             IsInitialized = true;
             Log("GameUI initialized successfully", LogTag.UI | LogTag.Initialization);
@@ -125,7 +127,45 @@ namespace SlayTheClone {
             else LogError($"{controllerName} FAILED initialization via GameUI", LogTag.UI | LogTag.Initialization);
         }
 
+        #region Fog of War (debug switch)
+        private TMPro.TextMeshProUGUI fogOffLabel;
+
+        private void Update() {
+            if (IsInitialized && Input.GetKeyDown(FogOfWar.ToggleKey)) FogOfWar.Toggle();
+        }
+
+        // Every view redraws what it may show
+        private void OnFogOfWarChanged() {
+            ShowFogOfWarState();
+            gameMediator.NotifyBattlefieldStateChanged(gameManager.Player1);
+            gameMediator.NotifyBattlefieldStateChanged(gameManager.Player2);
+            gameMediator.NotifyActionsQueueChanged();
+        }
+
+        // While it's off, a reminder under the End Turn button says the screen shows everything
+        private void ShowFogOfWarState() {
+            if (FogOfWar.Enabled) {
+                if (fogOffLabel != null) fogOffLabel.gameObject.SetActive(false);
+                return;
+            }
+            if (fogOffLabel == null) {
+                var endTurn = gameReferences.GetResolveActionsButton();
+                if (endTurn == null) return;
+                fogOffLabel = UITheme.NewText("FogOfWarOff", endTurn.transform, $"FOG OF WAR OFF (debug, {FogOfWar.ToggleKey})", 18f, UITheme.Gold,
+                    TMPro.TextAlignmentOptions.Top);
+                var rect = fogOffLabel.rectTransform;
+                rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0f);
+                rect.pivot = new Vector2(0.5f, 1f);
+                rect.sizeDelta = new Vector2(320f, 28f);
+                rect.anchoredPosition = new Vector2(0f, -6f);
+                fogOffLabel.raycastTarget = false;
+            }
+            fogOffLabel.gameObject.SetActive(true);
+        }
+        #endregion
+
         protected void OnDestroy() {
+            FogOfWar.Changed -= OnFogOfWarChanged;
             OnInitialized.RemoveAllListeners();
             Log("GameUI destroyed", LogTag.UI);
             IsInitialized = false;

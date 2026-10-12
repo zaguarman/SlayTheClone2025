@@ -302,6 +302,8 @@ The "Fog" is all the mystery around enemy encounters:
 • Enemy "???" Intents: Some enemy actions have parts hidden as "???" until they resolve. Intelligence can reveal them.
 • Turn History: A record of actions that have already happened, to help you spot patterns. Nullified actions stay in it, marked with what nullified them.
 • Concealment vs. the AI: The AI only reacts to what it can see. It can't see through Concealed or Undercover unless a card ability lets it.
+• On Screen (hot-seat, for now): The screen shows what player 1 can see. A Concealed enemy creature's card shows '???' instead of its arrows and move ghosts; hidden enemy Slot Effects aren't shown; enemy Watchdogs show only what they watch. Player 2 plays on the same screen, so their own hidden plans are hidden from them too. For debugging, Debug > Fog of War (or F9 in play) switches the screen's fog off; the rules don't change.
+• Reveal (implemented): aimed at a slot, it shows its caster the slot's hidden Slot Effect and what the creature there plans this Day; aimed at a player, their Watchdog conditions. A card that only reveals (Reveal, or applying Revealed) resolves the moment it's played.
 • Bestiary (Meta-Progression): Using Intelligence fills out a Bestiary that keeps enemy card and mechanic info for future runs.
 
 Intelligence: Scan, Alter, Secure

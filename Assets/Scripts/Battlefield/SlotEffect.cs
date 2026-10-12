@@ -23,6 +23,9 @@ namespace SlayTheClone {
         /// <summary>Only its controller knows it's there, until it triggers or is revealed.</summary>
         public bool IsHidden => Type is SlotEffectType.Landmine or SlotEffectType.BarbedSnare;
 
+        /// <summary>Players who saw a hidden one through Intelligence (a Reveal), besides its controller.</summary>
+        public System.Collections.Generic.HashSet<IPlayer> RevealedTo { get; } = new System.Collections.Generic.HashSet<IPlayer>();
+
         /// <summary>"1 Trigger": removed as soon as its condition is met, so it can't trigger twice.</summary>
         public bool IsOneTrigger => Type is SlotEffectType.Landmine or SlotEffectType.BarbedSnare;
 

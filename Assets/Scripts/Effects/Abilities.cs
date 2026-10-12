@@ -51,6 +51,7 @@ namespace SlayTheClone {
             CreatureAbility.InsiderJob => "its damage ignores Armor",
             CreatureAbility.ReturnToSender => "enemy statuses bounce back to whoever sent them",
             CreatureAbility.Technician => "its hits of 3 damage or less are doubled",
+            CreatureAbility.Undercover => "its plans show as ??? to the enemy",
             _ => ""
         };
 
