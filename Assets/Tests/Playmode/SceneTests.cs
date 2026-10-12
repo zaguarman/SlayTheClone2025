@@ -142,6 +142,33 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
+        public IEnumerator AQueuedCreature_CanBeTakenBack_ByClickingItsGhost_RightClickingIt_OrDraggingItAway() {
+            var pup = game.GiveCard(p1, game.Cards.Creature("Test Pup", 1, 2)) as ICreature;
+            var slot = p1.Battlefield[0];
+
+            var takeBacks = new (string how, System.Action<CardController> takeBack)[] {
+                ("Clicking", ghost => SceneGame.Click(ghost)),
+                ("Right-clicking", ghost => SceneGame.Click(ghost, PointerEventData.InputButton.Right)),
+                ("Dragging it where it can't be played", ghost => Assert.IsTrue(SceneGame.DragAndDrop(ghost, null), "A queued creature's ghost can be dragged")),
+            };
+            foreach (var (how, takeBack) in takeBacks) {
+                game.Play(pup, p1, slot);
+                yield return null;
+                Assert.IsFalse(game.HandCards(p1).Any(c => c.GetLinkedCardInstance() == pup), "A queued creature shows as a ghost on the board, not in the hand");
+
+                takeBack(game.GhostIn(slot));
+                yield return null;
+                Assert.IsFalse(game.HasGhost(slot), $"{how} its ghost should take the play back");
+                Assert.IsTrue(game.HandCards(p1).Any(c => c.GetLinkedCardInstance() == pup && !c.IsQueued), $"{how}: the creature is back in the hand");
+                Assert.IsFalse(game.Queue.GetPendingActions().OfType<PlayCardAction>().Any(), $"{how}: its play is no longer queued");
+            }
+
+            yield return game.EndTurn();
+            Assert.IsNull(slot.OccupyingCreature, "The creature that was taken back isn't summoned");
+            game.AssertViewsMatchRules();
+        }
+
+        [UnityTest]
         public IEnumerator Combat_KillsCreatures_HurtsPlayers_AndTheCardsAndHealthFollow() {
             var brute = game.Summon(p1, game.Cards.Creature("Test Brute", 4, 5), 0);
             var mouse = game.Summon(p2, game.Cards.Creature("Test Mouse", 1, 2), 0);

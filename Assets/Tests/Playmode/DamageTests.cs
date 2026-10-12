@@ -96,6 +96,45 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
+        public void Armor_IsCappedAtTwiceMaxHealth_AndALowerMaxLowersIt() {
+            var guard = game.Summon(p1, game.Creature("Guard", 0, 3), 0);
+
+            game.Run(new ModifyArmorAction(guard, 10));
+            Assert.AreEqual(6, guard.CurrentArmorPool, "Armor above twice the max Health is lost");
+
+            game.Run(new ModifyAction(guard, -2, modifyAttack: false, modifyHealth: true, modifySpeed: false));
+            Assert.AreEqual(1, guard.MaxHealth);
+            Assert.AreEqual(2, guard.CurrentArmorPool, "Losing max Health lowers the cap, and the Armor with it");
+        }
+
+        [UnityTest]
+        public IEnumerator Armor_FadesBy1AtDusk_AfterTheDaysHitsLand() {
+            var wall = game.Summon(p2, game.Creature("Wall", 0, 5), 0);
+            game.Run(new ModifyArmorAction(wall, 3));
+            var poker = game.Summon(p1, game.Creature("Poker", 1, 5), 0);
+
+            game.Declare(poker, p2.Battlefield[0]);
+            yield return game.EndTurn();
+
+            Assert.AreEqual(1, wall.CurrentArmorPool, "The hit takes 1 Armor during the Day, then Dusk fades 1 more");
+            Assert.AreEqual(5, wall.Health, "The hit landed on the full 3 Armor, before it faded");
+
+            yield return game.EndTurn();
+            yield return game.EndTurn();
+            Assert.AreEqual(0, wall.CurrentArmorPool, "Armor never fades below 0");
+        }
+
+        [Test]
+        public void Armor_IsLostWhenACreatureLeavesPlay() {
+            var bouncer = game.Summon(p1, game.Creature("Bouncer", 0, 5), 0);
+            game.Run(new ModifyArmorAction(bouncer, 4));
+
+            bouncer.EnterPlay(game.TurnClock.TurnNumber); // What landing on the board again does
+
+            Assert.AreEqual(0, bouncer.CurrentArmorPool, "A creature always enters play without Armor");
+        }
+
+        [Test]
         public void APlayersHealth_StopsAtZero_AndTheGameEndsOnce() {
             var giantA = game.Summon(p1, game.Creature("Giant A", 15, 5), 0);
             var giantB = game.Summon(p1, game.Creature("Giant B", 15, 5), 1);

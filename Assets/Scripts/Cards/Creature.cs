@@ -99,6 +99,7 @@ namespace SlayTheClone {
 
         public void EnterPlay(int turn) {
             landedOnTurn = turn;
+            CurrentArmorPool = 0; // Armor is lost when a creature leaves play (GDD 1.1 Armor), so it always enters without any
         }
 
         public bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue) {
@@ -126,10 +127,14 @@ namespace SlayTheClone {
             }
 
             currentHealth = Math.Clamp(currentHealth, 0, effectiveMaxHealth);
+            CurrentArmorPool = Math.Min(CurrentArmorPool, MaxArmor); // A lower maximum lowers the Armor cap too
         }
 
+        // Armor can't exceed twice the creature's maximum Health; Armor gained above that is lost (GDD 1.1 Armor)
+        public int MaxArmor => 2 * MaxHealth;
+
         public void ModifyArmorPool(int amount) {
-            CurrentArmorPool = Math.Max(0, CurrentArmorPool + amount);
+            CurrentArmorPool = Math.Clamp(CurrentArmorPool + amount, 0, MaxArmor);
         }
 
         public void SetOwner(IPlayer owner) {

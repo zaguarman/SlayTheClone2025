@@ -116,7 +116,7 @@ namespace SlayTheClone {
             return draggedCard != null
                 && draggedCard != OccupyingCard
                 && draggedCard.GetBaseCardData() is CreatureData
-                && draggedCard.GetComponentInParent<HandUI>() != null;
+                && (draggedCard.IsQueued || draggedCard.GetComponentInParent<HandUI>() != null); // A queued creature's ghost is a hand card too
         }
 
         // The pointer entered this slot by entering the ghost card of a creature queued to be summoned here

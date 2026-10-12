@@ -206,6 +206,13 @@ namespace SlayTheClone {
             Log($"ModifierManager: Processing end of turn {endedTurnNumber}", LogTag.Effects | LogTag.Turns);
             int nextTurnNumber = endedTurnNumber + 1; // The turn that is about to start
 
+            // Every creature's Armor fades by 1 at the start of Dusk, before "Each Dusk" effects (GDD 3.6)
+            foreach (var creature in creatures.Values.ToList()) {
+                if (creature == null || creature.IsDead || creature.CurrentArmorPool <= 0) continue;
+                creature.ModifyArmorPool(-1);
+                mediator.NotifyCreatureArmorChanged(creature, creature.CurrentArmorPool);
+            }
+
             // Use ToList on dictionary keys to avoid modification during iteration issues
             foreach (var targetId in activeModifiers.Keys.ToList()) {
                 if (!creatures.TryGetValue(targetId, out ICreature creature) || creature.IsDead) {

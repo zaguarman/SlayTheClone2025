@@ -19,6 +19,7 @@ namespace SlayTheClone {
 
         // Translucent previews of creatures queued to be summoned into this battlefield
         private readonly Dictionary<BattlefieldSlot, CardController> queuedGhosts = new Dictionary<BattlefieldSlot, CardController>();
+        private PlayCardAction draggedGhostPlay; // The play of the ghost being dragged, to tell whether the drop replaced it
         private float nextSummonTime;
 
         private BattlefieldArrowManager arrowManager;
@@ -101,7 +102,8 @@ namespace SlayTheClone {
             var targetSlot = GetTargetSlot();
             if (targetSlot == null) return;
 
-            if (IsCardFromHand(card)) {
+            // A queued creature's ghost is still a card in the hand: dropping it re-aims its play
+            if (IsCardFromHand(card) || card.IsQueued) {
                 HandleCardFromHand(card, targetSlot);
             }
             else {
@@ -130,7 +132,7 @@ namespace SlayTheClone {
                 return;
             }
 
-            if (cardToPlay is ICreature && queuedGhosts.ContainsKey(targetSlot)) {
+            if (cardToPlay is ICreature && queuedGhosts.TryGetValue(targetSlot, out var ghost) && ghost.GetLinkedCardInstance() != cardToPlay) {
                 Log($"Slot already has a creature queued; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
                 return;
             }
@@ -287,8 +289,13 @@ namespace SlayTheClone {
 
                 ghost.name = $"QueuedGhost_{card.Name}";
                 ghost.transform.localRotation = Quaternion.identity;
-                // Hoverable for its enlarged preview; drops still reach the slot (they bubble up, and targets come from a full raycast)
-                ghost.SetQueued(true);
+                // Hoverable for its enlarged preview; drops still reach the slot (they bubble up, and targets come from a full raycast).
+                // Like a queued card in the hand, clicking it or dragging it away takes the play back, and dragging it to a slot re-aims it.
+                ghost.SetQueued(true, canBeDragged: true);
+                ghost.OnCardClicked.AddListener(TakeBackPlay);
+                ghost.OnCardRightClicked.AddListener(TakeBackPlay);
+                ghost.OnBeginDragEvent.AddListener(OnGhostBeginDrag);
+                ghost.OnEndDragEvent.AddListener(OnGhostEndDrag);
                 queuedGhosts[slot] = ghost;
 
                 // The creature currently in the slot will be replaced when the summon resolves:
@@ -298,6 +305,29 @@ namespace SlayTheClone {
                 ghost.transform.localPosition = new Vector3(0f, raise, 0f);
                 occupant?.SetMarkedForReplacement(true);
             }
+        }
+
+        private void TakeBackPlay(CardController ghost) {
+            if (GameManager?.TurnManager?.IsResolving ?? true) return;
+            GameManager.ActionsQueue.CancelPlay(ghost.GetLinkedCardInstance());
+        }
+
+        private PlayCardAction QueuedPlayOf(ICard card) =>
+            GameManager?.ActionsQueue?.GetPendingActions().OfType<PlayCardAction>().FirstOrDefault(p => p.GetCard() == card);
+
+        private void OnGhostBeginDrag(CardController ghost) {
+            draggedGhostPlay = QueuedPlayOf(ghost.GetLinkedCardInstance());
+            var rootCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
+            if (rootCanvas != null) ghost.transform.SetParent(rootCanvas.transform, true); // Drawn over every slot while dragged
+        }
+
+        private void OnGhostEndDrag(CardController ghost) {
+            // Dropped where it can't be played, it keeps its old play: take it back. A valid drop already replaced it.
+            if (draggedGhostPlay != null && QueuedPlayOf(ghost.GetLinkedCardInstance()) == draggedGhostPlay) {
+                GameManager.ActionsQueue.CancelPlay(ghost.GetLinkedCardInstance());
+            }
+            draggedGhostPlay = null;
+            RefreshQueuedGhosts(); // Puts back any ghost left where it was released
         }
 
         private void ClearQueuedGhosts() {

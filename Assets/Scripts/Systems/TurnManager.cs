@@ -62,7 +62,10 @@ namespace SlayTheClone {
                 int turnNumber = clock.TurnNumber;
                 Log($"--- Ending Turn {endedTurn}, Starting Turn {turnNumber} ---", LogTag.Turns);
 
-                // --- Phase 1: End of Turn Processing (for the turn that just finished) ---
+                // --- Phase 1: Resolution (GDD 3.6): what both sides planned this Day ---
+                yield return ResolveQueuedActions();
+
+                // --- Phase 2: Dusk, for the Day that just resolved: Armor fades, statuses tick, "Each Dusk" effects ---
                 modifierManager.ProcessEndOfTurn(endedTurn, actionsQueue);
                 yield return ResolveQueuedActions();
 
