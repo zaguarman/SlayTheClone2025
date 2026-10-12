@@ -165,7 +165,7 @@ namespace SlayTheClone {
             }
             bool isCardDraggedOver = eventData?.pointerDrag != null && eventData.pointerDrag.GetComponent<CardController>() != null;
             if (isCardDraggedOver) ShowHighlight(DragTargetColor, DragTargetTrimColor);
-            else ShowHighlight(HoverColor, HoverTrimColor);
+            else if (OccupyingCard != null) ShowHighlight(HoverColor, HoverTrimColor); // An empty slot stays plain unless something's dragged over it
 
             if (IsOverQueuedGhost(eventData)) return; // The ghost of a creature queued here shows its own preview
 
