@@ -237,7 +237,10 @@ namespace SlayTheClone.Tests {
 
             game.Play(storm, p1, aimedAt);
             yield return null;
-            CollectionAssert.IsEmpty(game.QueuedArrows(p1), "A spell that hits every creature of a kind isn't aimed: no arrow");
+            var sideArrow = game.QueuedArrows(p1).SingleOrDefault();
+            Assert.IsNotNull(sideArrow, "A spell that hits a whole side shows one arrow too");
+            Assert.Less(Vector2.Distance(sideArrow.EndPosition, game.BoardView(p2).transform.position), 0.01f,
+                "It points at the battlefield it hits, not the slot it was dropped on");
             SceneGame.Click(Shown(storm));
             yield return null;
 

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace SlayTheClone {
     /// <summary>
     /// Draws one board's intent arrows: the attacks, moves and pending damage of its player's creatures,
-    /// the aim of its player's queued spells (from the card in the hand), plus the arrow that follows a creature being dragged. Arrows persist across queue changes,
+    /// the aim of its player's queued spells (from the card in the hand to a slot, or to a whole battlefield), plus the arrow that follows a creature being dragged. Arrows persist across queue changes,
     /// drawing in when an action is queued and fading out when it is cancelled or resolved.
     /// </summary>
     public class BattlefieldArrowManager {
@@ -24,6 +24,7 @@ namespace SlayTheClone {
         private readonly IActionsQueue actionsQueue;
         private readonly IPlayer owner; // Only actions started by this player's creatures are drawn here
         private readonly Func<BoardSlot, BattlefieldSlot> findSlotView; // Where a board slot is on screen
+        private readonly Func<IPlayer, Transform> findBoardView; // Where a player's battlefield is on screen
         private readonly Func<ICard, CardController> findHandCard; // Where a card in the hand is on screen
         private readonly Func<IGameAction, bool> isHidden; // Fog of War: planned actions the screen doesn't show
         private readonly Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
@@ -32,12 +33,14 @@ namespace SlayTheClone {
         private ArrowIndicator dragArrow;
 
         public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IActionsQueue actionsQueue, IPlayer owner,
-            Func<BoardSlot, BattlefieldSlot> findSlotView, Func<ICard, CardController> findHandCard, Func<IGameAction, bool> isHidden = null) {
+            Func<BoardSlot, BattlefieldSlot> findSlotView, Func<IPlayer, Transform> findBoardView, Func<ICard, CardController> findHandCard,
+            Func<IGameAction, bool> isHidden = null) {
             parentTransform = parent ?? throw new ArgumentNullException(nameof(parent));
             gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
             this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             this.findSlotView = findSlotView ?? throw new ArgumentNullException(nameof(findSlotView));
+            this.findBoardView = findBoardView ?? throw new ArgumentNullException(nameof(findBoardView));
             this.findHandCard = findHandCard ?? throw new ArgumentNullException(nameof(findHandCard));
             this.isHidden = isHidden ?? (_ => false);
 
@@ -98,17 +101,16 @@ namespace SlayTheClone {
             key = null;
             arrow = default;
 
-            // A queued spell that is aimed at a slot points there from its card in the hand;
-            // one homing on a creature points wherever that creature is
-            if (action is PlayCardAction play && play.GetOwner() == owner && play.GetCard() is Spell spell
-                && SlotAimedAt(play.GetTarget()) != null && EffectResolver.IsAimed(spell)) {
+            // A queued spell points from its card in the hand to where it's aimed: a slot, wherever the creature it homes on
+            // is, or the whole battlefield of the side it hits
+            if (action is PlayCardAction play && play.GetOwner() == owner && play.GetCard() is Spell spell) {
                 var card = findHandCard(spell);
-                var aimView = findSlotView(SlotAimedAt(play.GetTarget()));
+                var aimView = AimViewOf(spell, play.GetTarget());
                 if (card == null || aimView == null) return false;
 
-                key = $"spell_{spell.TargetId}_{play.GetTarget().TargetId}";
+                key = $"spell_{spell.TargetId}_{play.GetTarget()?.TargetId}";
                 handArrows[key] = (spell, play.GetTarget());
-                arrow = (card.transform.position, aimView.transform.position, SpellColor);
+                arrow = (card.transform.position, aimView.position, SpellColor);
                 return true;
             }
 
@@ -140,13 +142,28 @@ namespace SlayTheClone {
             foreach (var entry in handArrows) {
                 if (!activeArrows.TryGetValue(entry.Key, out var arrow) || arrow == null) continue;
                 var card = findHandCard(entry.Value.card);
-                var aimView = findSlotView(SlotAimedAt(entry.Value.target));
-                if (card != null && aimView != null) arrow.Show(card.transform.position, aimView.transform.position);
+                var aimView = AimViewOf((Spell)entry.Value.card, entry.Value.target);
+                if (card != null && aimView != null) arrow.Show(card.transform.position, aimView.position);
             }
         }
 
-        private static BoardSlot SlotAimedAt(ITarget target) =>
-            target is HomingTarget homing ? homing.CurrentSlot : target as BoardSlot;
+        private Transform AimViewOf(Spell spell, ITarget target) {
+            if (EffectResolver.IsAimed(spell)) {
+                var slot = target is HomingTarget homing ? homing.CurrentSlot : target as BoardSlot;
+                return slot != null ? findSlotView(slot)?.transform : null;
+            }
+            // Not aimed: it hits a side. The one it was dropped on, unless it does nothing there
+            var side = target switch {
+                IPlayer player => player,
+                BoardSlot slot => slot.Owner,
+                HomingTarget homing => homing.AimedSlot?.Owner,
+                _ => null
+            };
+            if (side == null || !EffectResolver.Reaches(spell, owner, side)) {
+                side = EffectResolver.Reaches(spell, owner, owner.Opponent) ? owner.Opponent : owner;
+            }
+            return findBoardView(side);
+        }
 
         // Live Preview (GDD 2.4): move arrows show the final formation, where every creature of this row ends up once the
         // planned moves resolve, including the ones they push or swap, rather than each move on its own

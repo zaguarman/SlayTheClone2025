@@ -37,7 +37,7 @@ namespace SlayTheClone {
                 return;
             }
             arrowManager = new BattlefieldArrowManager(transform, GameMediator, actionsQueue, player, FindSlotView,
-                card => table.GetHand(player)?.GetCardController(card), HiddenFromScreen);
+                side => table.GetBattlefield(side)?.transform, card => table.GetHand(player)?.GetCardController(card), HiddenFromScreen);
         }
 
         private void CreateSlots(IPlayer player) {
