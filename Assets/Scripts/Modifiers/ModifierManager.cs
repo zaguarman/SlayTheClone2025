@@ -14,7 +14,6 @@ namespace SlayTheClone {
 
         private readonly Dictionary<string, List<IModifier>> activeModifiers = new Dictionary<string, List<IModifier>>();
         private readonly Dictionary<string, ICreature> creatures = new Dictionary<string, ICreature>();
-        private readonly Dictionary<IPlayer, List<PriorityModifier>> sideModifiers = new Dictionary<IPlayer, List<PriorityModifier>>(); // Side-wide (GDD 3.7 Global Modifiers)
         #endregion
 
         #region Constructor
@@ -181,20 +180,6 @@ namespace SlayTheClone {
             return true;
         }
 
-        public void ApplySideModifier(IPlayer player, PriorityModifier modifier) {
-            if (player == null || modifier == null) return;
-            if (!sideModifiers.TryGetValue(player, out var list)) sideModifiers[player] = list = new List<PriorityModifier>();
-            list.Add(modifier);
-            Log($"ModifierManager: {modifier.Name} for every creature {player.Name} controls.", LogTag.Effects);
-        }
-
-        public int PriorityOf(ICreature creature) {
-            if (creature == null) return 0;
-            int onCreature = GetActiveModifiersFor(creature).OfType<PriorityModifier>().Sum(m => m.Value);
-            int onSide = creature.Owner != null && sideModifiers.TryGetValue(creature.Owner, out var list) ? list.Sum(m => m.Value) : 0;
-            return onCreature + onSide;
-        }
-
         public bool IsExposed(ICreature creature) =>
             HasModifier(creature, m => m is StatusEffectModifier s && s.Exposes());
         #endregion
@@ -240,10 +225,6 @@ namespace SlayTheClone {
                 if (creature == null || creature.IsDead || creature.CurrentArmorPool <= 0) continue;
                 creature.ModifyArmorPool(-1);
                 mediator.NotifyCreatureArmorChanged(creature, creature.CurrentArmorPool);
-            }
-
-            foreach (var list in sideModifiers.Values) {
-                list.RemoveAll(m => m.HasExpired(nextTurnNumber));
             }
 
             // Use ToList on dictionary keys to avoid modification during iteration issues
@@ -344,7 +325,6 @@ namespace SlayTheClone {
             // Clear internal collections
             activeModifiers.Clear();
             creatures.Clear();
-            sideModifiers.Clear();
 
             Log("ModifierManager cleaned up.", LogTag.Initialization | LogTag.Effects);
         }

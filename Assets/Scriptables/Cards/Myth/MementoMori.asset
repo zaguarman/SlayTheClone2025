@@ -18,7 +18,6 @@ MonoBehaviour:
   cardType: 1
   faction: 1
   artwork: {fileID: 0}
-  priority: 0
   effects:
   - effectType: 1
     trigger: 0
@@ -34,6 +33,7 @@ MonoBehaviour:
       statusDuration: 3
       statusPotency: 0
       cleanse: 0
+      purge: 0
       slotEffect: 0
       watchdog:
         watches: 0

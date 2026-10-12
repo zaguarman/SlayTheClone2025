@@ -19,7 +19,6 @@ MonoBehaviour:
   cardType: 0
   faction: 4
   artwork: {fileID: 3286163911610860551, guid: 682a60a8f4a164e489693186792136ca, type: 3}
-  priority: 0
   effects:
   - effectType: 0
     trigger: 3
@@ -35,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      purge: 0
       slotEffect: 0
       watchdog:
         watches: 0
@@ -59,6 +59,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      purge: 0
       slotEffect: 0
       watchdog:
         watches: 0

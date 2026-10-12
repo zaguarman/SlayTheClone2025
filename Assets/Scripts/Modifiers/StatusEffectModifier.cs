@@ -16,6 +16,9 @@ namespace SlayTheClone {
         public int Stacks { get; private set; }
         /// <summary>Lasts until removed or used up, whatever its Days (Blessed).</summary>
         public bool IsPersistent => EffectType == StatusEffectType.Blessed;
+        /// <summary>Whether it harms its creature: what a Cleanse removes (a Purge removes the rest too). Blessed is the good one.</summary>
+        public bool IsNegative => EffectType != StatusEffectType.Blessed;
+
         /// <summary>Doomed can't be cleansed: a cleanse attempt passes it on instead (Heresy).</summary>
         public bool IsCleansable => EffectType != StatusEffectType.Doomed;
 

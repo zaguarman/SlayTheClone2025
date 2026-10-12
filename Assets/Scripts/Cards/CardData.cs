@@ -11,7 +11,6 @@ namespace SlayTheClone {
         public CardType cardType;
         public Faction faction;
         public Sprite artwork;
-        public int priority; // Printed Priority (Action): a spell's Spell Action, a creature's attacks (GDD 3.7)
         public List<CardEffect> effects = new List<CardEffect>();
 
         // OnEnable can be used to initialize cardId if null
@@ -71,8 +70,9 @@ namespace SlayTheClone {
         public int statusDuration = 0;
         public int statusPotency = 0; // Burn's damage; Blessed's stacks
 
-        // Cleanse Specific
+        // Cleanse Specific: what it removes, and whether it's a Purge (good and bad) instead of a Cleanse (only the bad)
         public CleanseTarget cleanse = CleanseTarget.Statuses;
+        public bool purge;
 
         // PlaceSlotEffect Specific: value is its damage (Landmine, Barbed Snare), statusDuration its Days (0 = until replaced)
         public SlotEffectType slotEffect = SlotEffectType.None;

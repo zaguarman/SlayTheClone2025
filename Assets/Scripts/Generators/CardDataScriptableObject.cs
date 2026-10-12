@@ -12,7 +12,6 @@ namespace SlayTheClone {
         public CardType cardType;
         public Faction faction;
         public Sprite artwork; // Shown in the card's art box; assigned by Tools > Cards > Assign Card Art
-        public int priority; // Printed Priority (Action): a spell's Spell Action, a creature's attacks (GDD 3.7). Usually 0
         [SerializeField] protected List<CardEffect> effects = new List<CardEffect>();
         [TextArea(2, 6)] public string designNotes; // Editor only: what the card should become once the GDD mechanics it stands in for exist
         [TextArea(2, 6)] public string artDescription; // What the card's picture shows: the brief for its art
@@ -35,7 +34,6 @@ namespace SlayTheClone {
             data.cardType = cardType;
             data.faction = faction;
             data.artwork = artwork;
-            data.priority = priority;
             data.effects = CopyEffects();
         }
 

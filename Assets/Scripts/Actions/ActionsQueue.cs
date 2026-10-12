@@ -28,7 +28,6 @@ namespace SlayTheClone {
             public IGameAction Action;
             public ResolutionLayer Layer;
             public ICreature Source; // Orders the action by its Speed and stats; null for actions no creature made
-            public int PrintedPriority; // Built into the action by its card (GDD 3.7); modifiers add to it as it waits
             public int Sequence;     // When it was queued
             public int RandomKey;    // The last tie-breaker, drawn once so the order doesn't shift while it waits
             public bool Retaliatory; // A reaction to what was done to its creature: its death doesn't cancel it
@@ -130,32 +129,19 @@ namespace SlayTheClone {
             _ => null
         };
 
-        // Priority (Action) printed on the card that makes the action: a spell's Spell Action, a creature's attacks
-        private static int PrintedPriorityOf(IGameAction action) => action switch {
-            PlayCardAction play when play.GetCard() is Spell spell => spell.Priority,
-            PlaySpellAction play => play.GetSpell()?.Priority ?? 0,
-            BattlefieldCombatAction attack => attack.GetAttacker()?.Priority ?? 0,
-            _ => 0
-        };
-
-        // What it has now: its printed Priority plus the Boosts and Penalties on its creature and that creature's side
-        private int PriorityOf(Entry entry) =>
-            entry.PrintedPriority + (entry.Source != null ? executionContext.ModifierManager.PriorityOf(entry.Source) : 0);
-
         private Comparer<Entry> inLayerOrder;
         private Comparer<Entry> InLayerOrder => inLayerOrder ??= Comparer<Entry>.Create(CompareInLayer);
 
-        // GDD 3.7: higher Priority (Action) first, then higher Speed, then lowest Health + Armor, then lowest base Attack, then random.
-        // Moves resolve in the order they were planned, spells have no Speed and resolve in random order within their Priority,
-        // and actions no creature made come after the creatures' of the same Priority, in the order they were queued.
+        // GDD 3.7: higher Speed first, then lowest Health + Armor, then lowest base Attack, then random.
+        // Moves resolve in the order they were planned, spells have no Speed and resolve in random order,
+        // and actions no creature made come after the creatures', in the order they were queued.
+        // A Watchdog's Reorder moves an action before or after the rest of its layer.
         private int CompareInLayer(Entry a, Entry b) {
             if (a.Layer == ResolutionLayer.Movement) return a.Sequence.CompareTo(b.Sequence);
 
             int byWatchdog = a.Reordered.CompareTo(b.Reordered); // Watchdog Reorder: before or after the rest of its layer
             if (byWatchdog != 0) return byWatchdog;
 
-            int byPriority = PriorityOf(b).CompareTo(PriorityOf(a));
-            if (byPriority != 0) return byPriority;
             if (a.Layer == ResolutionLayer.Spell) return Tiebreak(a.RandomKey.CompareTo(b.RandomKey), a, b);
 
             if (a.Source == null || b.Source == null) {
@@ -227,7 +213,6 @@ namespace SlayTheClone {
                 Action = action,
                 Layer = partOfExecutingAction ? executing.Layer : environment ? ResolutionLayer.AbilityAndAttack : ability?.Layer ?? LayerOf(action),
                 Source = environment ? null : ability?.Creature ?? SourceOf(action),
-                PrintedPriority = PrintedPriorityOf(action),
                 Sequence = sequence++,
                 RandomKey = GameRandom.Next(int.MaxValue),
                 Retaliatory = ability?.Retaliatory ?? false,

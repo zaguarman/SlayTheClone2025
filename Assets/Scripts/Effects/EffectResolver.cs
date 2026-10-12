@@ -189,12 +189,12 @@ namespace SlayTheClone {
 
         private static bool CanAffectCreatures(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.ModifyStat
-                or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.ModifyPriority or ActionType.Cleanse
-                or ActionType.CreateWatchdog;
+                or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
+                or ActionType.CreateWatchdog or ActionType.DelayDeployment;
 
-        // A Priority change aimed at a player covers every creature that player controls, now and later (GDD 3.7 Global Modifiers)
+        // A Watchdog aimed at a player watches that whole side
         private static bool IsSideWide(EffectAction action) =>
-            action.actionType is ActionType.ModifyPriority or ActionType.CreateWatchdog && action.targetType is TargetType.Player or TargetType.Enemy;
+            action.actionType == ActionType.CreateWatchdog && action.targetType is TargetType.Player or TargetType.Enemy;
 
         private static bool CanAffectPlayers(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog;
@@ -235,14 +235,14 @@ namespace SlayTheClone {
                 case ActionType.ModifyStat:
                     return creature != null && action.value != 0
                         ? new ModifyAction(creature, action.value, action.modifyAttack, action.modifyHealth, action.modifySpeed,
-                            source: source as ICreature, controller: controller)
+                            durationInTurns: action.statusDuration, source: source as ICreature, controller: controller)
                         : null;
                 case ActionType.Stun: // A stun exhausts for its value in Days (1 is the usual stun)
                     return Status(creature, StatusEffectType.Exhausted, action.value, 0, source, controller);
                 case ActionType.ApplyStatus:
                     return Status(creature, action.statusEffectToApply, action.statusDuration, action.statusPotency, source, controller);
                 case ActionType.Cleanse:
-                    return creature != null ? new CleanseAction(creature, action.cleanse) : null;
+                    return creature != null ? new CleanseAction(creature, action.cleanse, action.purge) : null;
                 case ActionType.PlaceSlotEffect: // Static: the slot itself, whoever is in it (GDD 4.6)
                     return SlotOf(target) is BoardSlot slot && action.slotEffect != SlotEffectType.None
                         ? new PlaceSlotEffectAction(slot, action.slotEffect, action.value, action.statusDuration, controller)
@@ -253,10 +253,8 @@ namespace SlayTheClone {
                     return creature != null || target is IPlayer
                         ? new CreateWatchdogAction(action.watchdog, controller, creature, action.statusDuration)
                         : null;
-                case ActionType.ModifyPriority: // For statusDuration Days counting this one; 0 means this Day only
-                    return action.value != 0 && (creature != null || target is IPlayer)
-                        ? new ModifyPriorityAction(target, action.value, action.statusDuration)
-                        : null;
+                case ActionType.DelayDeployment: // Red Tape: value is the Days added
+                    return creature != null && action.value > 0 ? new DelayDeploymentAction(creature, action.value) : null;
                 default:
                     return null;
             }

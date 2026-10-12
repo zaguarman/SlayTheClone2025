@@ -131,7 +131,7 @@ Meetings About Meetings
     Faction: Corporate
     Type: Spell
     Ability Text:
-        Apply a global effect for the next 2 Days. While this global effect is active: All actions resolving from the Action Queue that have a Priority (Action) greater than 0, resolve as if their Priority (Action) is 0.
+        Apply a global effect for the next 2 Days. While this global effect is active: every creature's Speed counts as 1, so the order inside each layer falls to Standard Tie-Breaking.
     Flavor Text: "We need to schedule a pre-meeting to discuss the agenda for the meeting about the previous meeting's durations."
 
 Password Sticky Note
@@ -276,7 +276,7 @@ YOLO
     Faction: Zeitgeist
     Type: Spell
     Ability Text:
-        Target friendly creature. For the rest of this Day, it gains +4 Attack and its Attack actions gain +1 Priority (Action). At Dusk of this Day, that creature is Banished.
+        Target friendly creature gains +4 Attack for this Day. You take 2 damage. (Future: at Dusk of this Day, that creature is Banished.)
     Flavor Text: "Look Mom, no hands... Look Mom, no teef!"
 
 Venus Flytrap
@@ -673,7 +673,7 @@ Shift Gear
     Faction: Tech
     Type: Spell
     Ability Text:
-        Homing: Target friendly creature. For the rest of this Day, and for the next Day, Attack actions and Active Ability actions queued by this creature gain +1 Priority (Action).
+        Homing: Target friendly creature gains +2 Speed for this Day and the next.
     Flavor Text: "Overclocking sequence initiated. Expect expedited results."
 
 Sanctum Omnium

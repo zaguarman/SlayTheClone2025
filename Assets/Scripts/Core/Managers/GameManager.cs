@@ -45,10 +45,6 @@ namespace SlayTheClone {
         bool CanAct(ICreature creature);
         /// <summary>Whether the creature takes +1 damage from every hit (Exposed, also part of Exhausted).</summary>
         bool IsExposed(ICreature creature);
-        /// <summary>A Priority Boost or Penalty for every creature the player controls, now and later (GDD 3.7 Global Modifiers).</summary>
-        void ApplySideModifier(IPlayer player, PriorityModifier modifier);
-        /// <summary>The Priority (Action) the creature's modifiers and its side's add to each of its actions.</summary>
-        int PriorityOf(ICreature creature);
         void RecalculateStats(ICreature creature);
         /// <summary>A Persistent Stat Modification on a creature in play: its base stats change and stay on the card.</summary>
         void ChangeBaseStats(ICreature creature, int attack, int health, int speed);

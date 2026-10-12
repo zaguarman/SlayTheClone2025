@@ -43,7 +43,7 @@ namespace SlayTheClone {
         }
 
         // One or more cards for each mechanic the rules carry out (movement, Exhausted, Doomed, Health Loss, Armor, Homing,
-        // the death sequence, Status Timing, Deployment Time, Priority, Blessed, Cleanse and Heresy), from every faction:
+        // the death sequence, Status Timing, Deployment Time, Blessed, Cleanse and Heresy, Slot Effects, Watchdogs), from every faction:
         // pick it to try them all in one match
         private static readonly string[] MechanicsTestCards = {
             "Delivery Cyclist", "Political Decoy", "Cleaning Robot Premium",
@@ -151,7 +151,7 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Damage(1, TargetType.AllCreatures))),
             Creature("Police Officer Productivity Target", 2, 3, speed: 2, deploy: 1,
                 "Ten arrests a week. Guilt is optional.",
-                "Future: Priority attacks against creatures that moved this Day.",
+                "Future: double damage against creatures that moved this Day.",
                 On(EffectTrigger.StartOfTurn, Damage(1, TargetType.EnemyCreatures, AtRandom))),
             Creature("Internal Revenue Service", 1, 4, speed: 1, deploy: 1,
                 "We've noticed some irregularities. Specifically, you.",
@@ -183,12 +183,12 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false))),
             Spell("Red Tape", TargetType.EnemyCreatures,
                 "Your request is being processed. Please hold. Forever.",
-                "Future: +1 Deployment Time on an enemy creature, or Priority -1 on its action.",
-                Stun(1, TargetType.EnemyCreatures)),
+                "Adds 1 Day to an enemy creature's Deployment Time: it sits out the rest of this Day and all of the next, its planned action is cancelled, and its abilities are off until it's ready again. Its entry effects don't happen twice.",
+                DelayDeployment(1, TargetType.EnemyCreatures)),
             Spell("Preemptive Strike", TargetType.EnemyCreatures,
                 "They were going to attack us. Probably. Eventually. Somebody said so.",
-                "Priority +1: lands before the other spells of the Day.",
-                Damage(3, TargetType.EnemyCreatures)).WithPriority(1),
+                "Future: an extra effect against creatures that planned an attack this Day.",
+                Damage(3, TargetType.EnemyCreatures)),
             Spell("Martial Law", TargetType.FriendlyCreatures,
                 "For your safety, nobody moves. Ever.",
                 "Future: a Law (Location) for 3 Days. The stun stands in for the bureaucracy drawback.",
@@ -274,8 +274,8 @@ namespace SlayTheClone {
                 On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self))),
             Spell("YOLO", TargetType.FriendlyCreatures,
                 "Look Mom, no hands... Look Mom, no teef!",
-                "Future: +1 Priority on its attack this Day, then the creature is Banished at Dusk.",
-                Buff(4, TargetType.FriendlyCreatures, attack: true, health: false), Damage(2, TargetType.Player, Each)),
+                "+4 Attack for this Day only, paid with 2 of your Health. Future: the creature is Banished at Dusk.",
+                Buff(4, TargetType.FriendlyCreatures, attack: true, health: false, days: 1), Damage(2, TargetType.Player, Each)),
             Spell("This Is Fine", TargetType.FriendlyCreatures,
                 "Everything is on fire. The coffee is still warm, though.",
                 "Future: a Trend (Location). Each Dusk, every creature takes 1 damage and yours shrug it off.",
@@ -407,7 +407,6 @@ namespace SlayTheClone {
         private class CardDef {
             public string Name, Flavor, Notes, ArtDescription;
             public MovementKeyword Movement;
-            public int Priority; // Printed Priority (Action): the spell's, or the creature's attacks
             public bool IsSpell;
             public int Attack, Health, Speed, DeploymentTime;
             public TargetType SpellTarget;
@@ -431,10 +430,6 @@ namespace SlayTheClone {
                 return this;
             }
 
-            public CardDef WithPriority(int priority) {
-                Priority = priority;
-                return this;
-            }
         }
 
         private static CardDef Creature(string name, int attack, int health, int speed, int deploy, string flavor, string notes, params CardEffect[] effects) =>
@@ -494,13 +489,17 @@ namespace SlayTheClone {
         }
 
         // Lasts while the creature stays on the battlefield; negative values are debuffs
-        private static EffectAction Buff(int value, TargetType target, bool attack, bool health, TargetModifier modifier = TargetModifier.None) {
+        // days: how long it lasts, counting the Day it lands (1 = this Day only); 0 = until it leaves play
+        private static EffectAction Buff(int value, TargetType target, bool attack, bool health, TargetModifier modifier = TargetModifier.None, int days = 0) {
             var action = Act(ActionType.ModifyStat, value, target, modifier);
             action.modifyAttack = attack;
             action.modifyHealth = health;
             action.modifySpeed = false;
+            action.statusDuration = days;
             return action;
         }
+
+        private static EffectAction DelayDeployment(int days, TargetType target) => Act(ActionType.DelayDeployment, days, target, TargetModifier.None);
         #endregion
 
         #region Assets
@@ -555,7 +554,6 @@ namespace SlayTheClone {
             asset.description = card.Flavor;
             asset.designNotes = card.Notes;
             asset.artDescription = card.ArtDescription;
-            asset.priority = card.Priority;
             asset.faction = faction;
             asset.SetEffects(card.Effects);
             switch (asset) {

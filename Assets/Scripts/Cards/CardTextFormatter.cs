@@ -25,7 +25,7 @@ namespace SlayTheClone {
 
         public static string GetRulesText(CardData data) {
             var creature = data as CreatureData;
-            string keywords = KeywordLine(creature != null ? creature.movement : MovementKeyword.None, data.priority, data is SpellData);
+            string keywords = KeywordLine(creature != null ? creature.movement : MovementKeyword.None);
             string ability = creature != null ? AbilityLine(creature.ability) : "";
             string effects = GetRulesText(data.effects, data is SpellData);
             return string.Join("\n", new[] { keywords, ability, effects }.Where(line => !string.IsNullOrEmpty(line)));
@@ -35,10 +35,9 @@ namespace SlayTheClone {
         public static string AbilityLine(CreatureAbility ability) =>
             ability == CreatureAbility.None ? "" : $"<b>{Abilities.NameOf(ability)}</b> ({Abilities.ReminderOf(ability)}).";
 
-        // Keywords lead the text, like Magic's evergreen keywords ("Leapfrog."): Movement Keywords and printed Priority (Action)
-        private static string KeywordLine(MovementKeyword movement, int priority, bool isSpell) {
+        // Movement Keywords lead the text, like Magic's evergreen keywords ("Leapfrog.")
+        private static string KeywordLine(MovementKeyword movement) {
             var words = new List<string>();
-            if (priority != 0) words.Add($"<b>{(isSpell ? "Priority" : "Priority Attack")} {Signed(priority)}</b>");
             if (movement.HasFlag(MovementKeyword.Leapfrog)) words.Add("<b>Leapfrog</b>");
             if (movement.HasFlag(MovementKeyword.Swap)) words.Add("<b>Swap</b>");
             return words.Count == 0 ? "" : string.Join(", ", words) + ".";
@@ -93,7 +92,7 @@ namespace SlayTheClone {
                 case ActionType.Stun: return EffectIcons.Paralyze;
                 case ActionType.ModifyStat: return action.value >= 0 ? EffectIcons.Buff : EffectIcons.Debuff;
                 case ActionType.ApplyStatus: return EffectIcons.ForStatus(action.statusEffectToApply);
-                case ActionType.ModifyPriority: return action.value >= 0 ? EffectIcons.Buff : EffectIcons.Debuff;
+                case ActionType.DelayDeployment: return EffectIcons.Dusk;
                 case ActionType.Cleanse: return EffectIcons.Cleanse;
                 case ActionType.PlaceSlotEffect: return SlotEffectIcon(action.slotEffect);
                 case ActionType.CleanseSlot: return EffectIcons.Cleanse;
@@ -127,20 +126,21 @@ namespace SlayTheClone {
                     return $"give {target} {DescribeStatChange(action)}";
                 case ActionType.ApplyStatus:
                     return DescribeStatus(action, target);
-                case ActionType.ModifyPriority:
-                    return DescribePriorityChange(action, target);
+                case ActionType.DelayDeployment:
+                    return $"add {Turns(value).Replace("turn", "Day")} to {target}'s Deployment Time";
                 case ActionType.PlaceSlotEffect:
                     return $"place {DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
                 case ActionType.CleanseSlot:
                     return $"remove the Slot Effect from {SlotTarget(action, isSpell)}";
                 case ActionType.CreateWatchdog:
                     return DescribeWatchdog(action, target);
-                case ActionType.Cleanse:
-                    return action.cleanse switch {
-                        CleanseTarget.Statuses => $"cleanse {target}'s statuses",
-                        CleanseTarget.StatModifications => $"cleanse {target}'s temporary stat changes",
-                        _ => $"cleanse {target}'s statuses and temporary stat changes"
+                case ActionType.Cleanse: // A Cleanse removes the bad; a Purge removes everything
+                    string removed = action.cleanse switch {
+                        CleanseTarget.Statuses => "statuses",
+                        CleanseTarget.StatModifications => "temporary stat changes",
+                        _ => "statuses and temporary stat changes"
                     };
+                    return action.purge ? $"purge {target}'s {removed}, good and bad" : $"cleanse {target}'s harmful {removed}";
                 default:
                     return null;
             }
@@ -179,17 +179,12 @@ namespace SlayTheClone {
             if (action.modifyAttack) stats.Add("attack");
             if (action.modifyHealth) stats.Add("health");
             if (action.modifySpeed) stats.Add("speed");
-            return stats.Count == 0 ? "no change" : $"{sign}{action.value} {JoinClauses(stats)}";
-        }
-
-        // "+1 Priority": its actions resolve earlier in their layer. Counts this Day; 0 or 1 Day means this Day only
-        private static string DescribePriorityChange(EffectAction action, string target) {
-            string days = action.statusDuration <= 1 ? "this Day" : $"this Day and the next {Turns(action.statusDuration - 1).Replace("turn", "Day")}";
-            switch (action.targetType) {
-                case TargetType.Player: return $"actions by creatures you control get {Signed(action.value)} Priority {days}";
-                case TargetType.Enemy: return $"actions by enemy creatures get {Signed(action.value)} Priority {days}";
-                default: return $"give {target}'s actions {Signed(action.value)} Priority {days}";
-            }
+            string days = action.statusDuration switch {
+                <= 0 => "",
+                1 => " for this Day",
+                _ => $" for {action.statusDuration} Days"
+            };
+            return stats.Count == 0 ? "no change" : $"{sign}{action.value} {JoinClauses(stats)}{days}";
         }
 
         // The GDD card format: "Watchdog: [condition] -> [effect], N charges (timing)"
@@ -236,8 +231,6 @@ namespace SlayTheClone {
             SlotEffectType.ScorchedEarth => EffectIcons.Burn,
             _ => null
         };
-
-        private static string Signed(int value) => value >= 0 ? $"+{value}" : value.ToString();
 
         private static string DescribeStatus(EffectAction action, string target) {
             string turns = Turns(action.statusDuration);

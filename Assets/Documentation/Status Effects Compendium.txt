@@ -1,6 +1,6 @@
 Status Timing (GDD 5.2 Status Effects - Status Timing): Every status skips the Day it's applied. Unless an entry says otherwise, its stacks are Days: applied on Day X, it first acts and loses a stack at the Dusk of Day X+1 (or the Dawn of Day X+2 for a Dawn status). Each tick, its effect happens first, then it loses 1 stack. When the last stack goes, it ends and does whatever its entry says (evolve, spread, pay off).
 
-Cleansing: Every status is cleansable unless its entry says "Cleansable: No". Cleansing an uncleansable status has no effect, unless the entry defines what a cleanse attempt does instead (like Burnout).
+Cleansing: Every status is cleansable unless its entry says "Cleansable: No". Cleansing an uncleansable status has no effect, unless the entry defines what a cleanse attempt does instead (like Burnout). A Cleanse only removes harmful statuses; a Purge removes positive ones too (GDD Cleanse). Positive statuses so far: Blessed.
 
 Stat Changes: A status's stat change applies only while the status is on the creature. It is independent from Temporary and Persistent Stat Modifications (see GDD 3.3 Creatures & Action Types). Stats can drop to 0, never below.
 
@@ -72,7 +72,7 @@ Blessed
         Resulting Impact: Negate the incoming status effect.
     Notes: It blocks every status, Doomed included: Doomed can't be cured, but Blessed can prevent it from landing. It only blocks statuses; stat changes, damage and Health Loss aren't affected. Friendly statuses use up stacks too, so plan your own buffs around it.
     Answers: Strip its stacks with cheap statuses first, then land the one that matters. Damage and Health Loss aren't statuses, so Blessed doesn't stop them.
-    Cleansable: Yes (Removes all current stacks).
+    Cleansable: Yes, by a Purge only (it's positive, so a Cleanse leaves it). A Purge removes all its stacks.
 
 Bloodthirst
     Faction: Myth
@@ -406,12 +406,12 @@ Imposter Syndrome
 Keep Calm
     Faction: Statecraft
     Type: Control, Unique
-    Description: "Action Priority cannot be changed; all actions use default Priority."
-    Core Impact: Stabilizes action priority.
+    Description: "Its Speed can't be changed by any effect."
+    Core Impact: Keeps its place in the resolution order: nothing can make it act later (or earlier).
     Stacking & Duration:
         Duration: "(N Days)" if the source says so; otherwise it lasts until removed (Duration and Intensity convention, GDD 5.2).
         Re-application Behavior: Refresh duration (a version with no Days replaces a timed one)
-    Answers: Win with Speed and positioning instead of Priority. It also shields the creature from Priority penalties like Slacking Off.
+    Answers: Beat it with higher base Speed and positioning, since buffs can't help it either. It also shields the creature from Speed penalties like Slacking Off.
     Cleansable: Yes
 
 Mutation
@@ -506,14 +506,14 @@ Revealed
 Slacking Off
     Faction: Zeitgeist
     Type: Control, Heal
-    Description: "Action Priority -2. Heals 2 Health Each Dusk."
-    Core Impact: Reduces action priority but provides healing.
+    Description: "Speed -2. Heals 2 Health Each Dusk."
+    Core Impact: Makes it act later, but heals it.
     Stacking & Duration:
         Duration: "(N Days)" if the source says so; otherwise it lasts until removed (Duration and Intensity convention, GDD 5.2).
         Re-application Behavior: Refresh duration (a version with no Days replaces a timed one)
     Turn-Based Effects:
         Trigger: Each Dusk
         Effect: This creature heals 2 Health.
-    Notes: Priority (Action) for all its actions is lowered by 2.
+    Notes: Its Speed is lowered by 2 (to a minimum of 0) while the status lasts, so its actions resolve later in their layer.
     Answers: Its actions resolve last, so give it jobs that like going last, such as finishing blows. It also heals 2 every Dusk.
     Cleansable: Yes

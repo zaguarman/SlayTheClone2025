@@ -18,7 +18,6 @@ MonoBehaviour:
   cardType: 0
   faction: 4
   artwork: {fileID: 0}
-  priority: 0
   effects: []
   designNotes: 'Mechanics test: a sturdy pusher. Pushing (every creature can), no
     chain pushes, blocked pushes ("needs Swap") and the automatic move order.'

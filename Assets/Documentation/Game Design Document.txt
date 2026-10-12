@@ -74,7 +74,8 @@ Cannot Act
     • Immediate Effect: If a creature gets Cannot Act during resolution, any of its pending Attack, Movement, or Active Ability actions are cancelled.
 
 Cleanse
-    • What it is: An action or effect that removes one or more status effects or Temporary Stat Modifications from a creature.
+    • What it is: An action or effect that removes the harmful status effects or Temporary Stat Modifications (stat decreases) from a creature. Positive statuses (like Blessed) and buffs stay.
+    • Purge: The stronger version. It removes everything of the kind it names, good and bad alike: positive statuses and buffs too. Use it to strip an enemy's protection. Everything below about Cleanse applies to Purge as well.
     • Specificity: The Cleanse effect will say what it removes: status effects, Temporary Stat Modifications, or both. Statuses and stat modifications are independent (see 3.3 Creatures & Action Types), so cleansing one never removes the other.
     • Cleansable by Default: Every status can be cleansed unless its compendium entry says "Cleansable: No".
     • Not Cleansable: Cleansing such a status has no effect, unless its entry defines what a cleanse attempt does instead (e.g., Burnout explodes).
@@ -167,9 +168,6 @@ Player Health
     • What it is: Each side (you and the enemy) has a Player Health total. Both start every combat at 20 (Relics, Stocks or specific encounters may change this).
     • Damage: Reduced by effects that specifically target a "Player," and by Attack Actions or damage that resolve into an empty slot on that player's side.
     • Defeat: The combat ends when either side's Player Health reaches 0, checked after every action. If yours reaches 0 (even in a tie), your run ends. (Other ways to win a combat may be added later.)
-
-Priority (Action)
-    • What it is: A number on an action that decides its order inside its resolution layer. Higher priority goes first, no matter the creature's Speed. The default is 0.
 
 Prophecy
     • What it is: A Myth effect that is announced openly and happens a set number of Days later, at Dawn. Full rules in 5.7 Prophecy.
@@ -452,7 +450,7 @@ Creature Roles
     • Targets are chosen when the card is played.
     • The effect becomes a 'Spell Action' and resolves in the Spell Layer.
     • Spells can cause movement, apply status effects, deal damage, heal, or change card draw.
-    • Ordering: Spell Actions have Priority (Action) 0 unless the card says otherwise. Spells have no Speed, so Spell Actions with the same Priority resolve in random order (both sides mixed). Future cards might give Spells their own Speed.
+    • Ordering: Spells have no Speed, so Spell Actions resolve in random order (both sides mixed). Future cards might give Spells their own Speed.
 
 • Movement Actions: Moving isn't a default action every creature has.
     • Whenever a creature moves itself (from its own Active or Passive Ability, or because a Spell or ability tells it to move), it creates a Movement Action.
@@ -599,29 +597,27 @@ Timing Map
     • Example: A Spell tells an enemy creature to move itself. The Movement Action it creates waits until the Ability & Attack Layer is done, then resolves when the layers loop back to Movement.
     • Exception: OnDamaged and OnAboutToDie effects resolve immediately (see 3.9 Creature Death Sequence).
     • Part of the Action: What an action does resolves as part of it, right away: an attack's hit, a spell's effects, a creature's entry ("When Ready") effects. Only abilities that trigger along the way wait in their layer.
-    • Exception: Environment actions (triggered Slot Effects and Traps) also resolve immediately, before the next action, whatever their layer or Priority. Stepping on a Landmine hits before anything else happens. If several trigger at once, they resolve in random order.
+    • Exception: Environment actions (triggered Slot Effects and Traps) also resolve immediately, before the next action, whatever their layer. Stepping on a Landmine hits before anything else happens. If several trigger at once, they resolve in random order.
     • Chain Limit: If one action sets off more than 20 follow-up actions in the same resolution pass (triggers setting off triggers), the rest fizzle. This is a safety net for edge cases, not a strategy (see 5.2 Status Effects - Bounces and Chains).
 
 Order Inside a Layer
-    • Movement Layer exception: Movement Actions resolve in an order the game picks so every planned move works, not by Priority or Speed (see 2.4 The Battlefield - Automatic Move Order).
+    • Movement Layer exception: Movement Actions resolve in an order the game picks so every planned move works, not by Speed (see 2.4 The Battlefield - Automatic Move Order).
     0. Environment actions always go first (see the exception above).
-    1. Priority (Action): higher first.
-    2. Speed of the creature that created the action: higher first. For a 'Play Creature Action', use the stats the creature will enter with. Spell Actions have no Speed and go straight to a random order.
-    3. Standard Tie-Breaking.
+    1. Speed of the creature that created the action: higher first. For a 'Play Creature Action', use the stats the creature will enter with. Spell Actions have no Speed and go straight to a random order.
+    2. Standard Tie-Breaking.
+    • No Priority: There is no separate Priority number on actions. Order inside a layer comes from Speed only, so changing it means changing Speed (or a Watchdog's Reorder). This keeps the already layered resolution readable.
     • Actions Without a Living Creature: An action created by a creature that is no longer on the battlefield (e.g., OnDied effects, a Prophecy, a status ticking) uses that creature's last known stats for Speed and tie-breaking.
 
-Standard Tie-Breaking (when Priority and Speed are tied)
+Standard Tie-Breaking (when Speed is tied)
     • Lowest current (Health + Armor) resolves first.
     • If still tied, lowest base Attack resolves first.
     • If still tied, random (a possible future Karma System might influence this).
 
-Changing Priority
-    • Priority Boost: A higher Priority (Action) resolves earlier in its layer, no matter the creature's Speed (like priority moves in Pokémon). It can be built into an action (e.g., "Priority Attack: +1 Priority").
-    • Priority Penalty: Effects can lower an action's priority (e.g., Priority -1), making it resolve later in its layer.
+Changing the Order
+    • Speed changes: Raising or lowering a creature's Speed (a stat change) moves its actions earlier or later in their layer.
     • Watchdogs can also reorder actions within their layer (see 3.11 Instant Effects - Watchdogs).
-    • Global Modifiers: Effects that change priority or ordering for a set time.
-        • Example ("Coordinated Advance"): Actions by creatures you control this Day and the next 3 Days get +1 Priority (Action).
-        • Example ("Temporal Distortion"): For X Days, Speed order is flipped: within each Priority level, lower Speed acts first. Ties still use Standard Tie-Breaking.
+    • Global Modifiers: Effects that change ordering for a set time.
+        • Example ("Temporal Distortion"): For X Days, Speed order is flipped: lower Speed acts first. Ties still use Standard Tie-Breaking.
 
 • Queue Visibility: Besides Watchdogs, some effects only affect what each side can see of the queue (e.g., Intelligence revealing pending actions). Those resolve instantly (see 2.5 Fog of War & Intelligence).
 
@@ -744,12 +740,12 @@ Movement Restriction
 • Setup: Effects that raise Attack, Health, or Speed of your creatures. Usually Temporary Stat Modifications; less often, and at a higher cost, Persistent Stat Modifications.
 • Survivability: Healing, adding Armor, or redirecting attacks.
 • Immunity/Protection: Immunity to specific negative effects.
-• Cleansing: Removing negative status effects or Temporary Stat Modifications from your creatures (Cleanse), or Slot Effects from slots (Cleanse (SlotEffect)). Standard Cleanse effects don't remove Persistent Stat Modifications.
+• Cleansing: Removing negative status effects or stat decreases from your creatures (Cleanse), everything good and bad from a creature (Purge), or Slot Effects from slots (Cleanse (SlotEffect)). Neither removes Persistent Stat Modifications.
 
 4.4 Disruption & Control
 
 • Status Effects: Applying status effects (from the 'Status Effects Compendium') to enemy or friendly creatures.
-• Red Tape: Delaying an opponent's actions, lowering their Priority (Action), or adding Days to a creature's Deployment Time.
+• Red Tape: Delaying an opponent's actions, or adding Days to a creature's Deployment Time (a ready creature goes back to waiting, sitting out the rest of the Day and the added Days; its entry effects don't happen again).
 • Disable: Shutting down key enemy functions, e.g., with Muted, or stunning a creature for 1 Day with Exhausted.
 • Changing Queued Actions: Watchdogs are the only tool that changes actions already in the queue (see 3.11 Instant Effects - Watchdogs).
     • Briefing Watchdogs, set up on earlier Days, look at the whole queue before resolution.

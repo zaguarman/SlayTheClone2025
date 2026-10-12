@@ -19,7 +19,6 @@ MonoBehaviour:
   cardType: 1
   faction: 2
   artwork: {fileID: 3286163911610860551, guid: 67f0943531212e746b7d3d34b572b71c, type: 3}
-  priority: 1
   effects:
   - effectType: 1
     trigger: 0
@@ -35,6 +34,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      purge: 0
       slotEffect: 0
       watchdog:
         watches: 0
@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-  designNotes: 'Priority +1: lands before the other spells of the Day.'
+  designNotes: 'Future: an extra effect against creatures that planned an attack
+    this Day.'
   artDescription: 
   defaultTargetType: 4

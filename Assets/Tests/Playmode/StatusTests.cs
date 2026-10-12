@@ -181,23 +181,34 @@ namespace SlayTheClone.Tests {
 
         #region Cleanse
         [Test]
-        public void ACleanse_RemovesStatusesOrTemporaryStatChanges_AsItSays_ButNeverPersistentOnes() {
-            var patient = game.Summon(p1, game.Creature("Patient", 2, 5), 0);
+        public void ACleanse_RemovesOnlyWhatHarmsTheCreature_StatusesOrStatChangesAsItSays() {
+            var patient = game.Summon(p1, game.Creature("Patient", 4, 5), 0);
             game.Run(new ApplyStatusEffectAction(patient, StatusEffectType.Burned, 2, 1));
+            game.Run(new ApplyStatusEffectAction(patient, StatusEffectType.Blessed, 1, 3)); // After the Burn, so it blocks nothing
             game.Run(new ModifyAction(patient, 2, modifyAttack: true, modifyHealth: false, modifySpeed: false));
-            game.ModifierManager.ChangeBaseStats(patient, 1, 0, 0); // A Persistent Stat Modification
+            game.Run(new ModifyAction(patient, -1, modifyAttack: true, modifyHealth: false, modifySpeed: false));
+            Assert.AreEqual(5, patient.Attack);
 
             game.Run(new CleanseAction(patient, CleanseTarget.Statuses));
-            Assert.IsFalse(game.ModifierManager.HasStatusEffect(patient, StatusEffectType.Burned));
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(patient, StatusEffectType.Burned), "Harmful statuses go");
+            Assert.IsNotNull(BlessingOf(patient), "Blessed is good for it: a Cleanse leaves it");
             Assert.AreEqual(5, patient.Attack, "Statuses only: the stat changes stay");
 
-            game.Run(new ApplyStatusEffectAction(patient, StatusEffectType.Blessed, 1, 3));
             game.Run(new CleanseAction(patient, CleanseTarget.StatModifications));
-            Assert.AreEqual(3, patient.Attack, "The temporary +2 is gone, the persistent +1 stays");
-            Assert.IsNotNull(BlessingOf(patient), "Stat changes only: the statuses stay");
+            Assert.AreEqual(6, patient.Attack, "The -1 goes, the +2 stays");
+        }
 
-            game.Run(new CleanseAction(patient, CleanseTarget.Both));
-            Assert.IsNull(BlessingOf(patient), "Blessed is cleansable: all its stacks go");
+        [Test]
+        public void APurge_RemovesGoodAndBadAlike_ButNeverPersistentChanges() {
+            var target = game.Summon(p1, game.Creature("Target", 2, 5), 0);
+            game.Run(new ApplyStatusEffectAction(target, StatusEffectType.Blessed, 1, 3));
+            game.Run(new ModifyAction(target, 2, modifyAttack: true, modifyHealth: false, modifySpeed: false));
+            game.ModifierManager.ChangeBaseStats(target, 1, 0, 0); // A Persistent Stat Modification
+
+            game.Run(new CleanseAction(target, CleanseTarget.Both, purge: true));
+
+            Assert.IsNull(BlessingOf(target), "Blessed loses all its stacks");
+            Assert.AreEqual(3, target.Attack, "The temporary +2 is gone, the persistent +1 stays");
         }
 
         [Test]
@@ -250,6 +261,38 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             game.StartTurn();
             Assert.IsFalse(heretic.IsDead || saint.IsDead, "Nobody is doomed any more");
+        }
+        #endregion
+
+        #region Deployment Time and timed stat changes (the Red Tape and YOLO cards)
+        [Test]
+        public void RedTape_AddsDeploymentTime_TheCreatureSitsOutTheRestOfTheDayAndTheNext_WithoutRedoingItsEntry() {
+            var ready = game.Summon(p1, game.Creature("Clerk", 3, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.Enemy)), 0);
+            Assert.AreEqual(Player.MaxHealth - 1, p2.Health, "Its entry effect, once");
+            var redTape = game.GiveCard(p2, game.Spell("Red Tape", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.DelayDeployment, 1, TargetType.EnemyCreatures)));
+            game.Declare(ready, p2.Battlefield[0]);
+
+            game.Play(redTape, p2, p1.Battlefield[0]);
+            game.Resolve(); // Spells before attacks
+            Assert.AreEqual(Player.MaxHealth - 1, p2.Health, "Its planned attack is cancelled");
+            Assert.IsFalse(game.ModifierManager.CanAct(ready));
+
+            game.StartTurn();
+            Assert.IsFalse(ready.IsOperative, "Not counted down at the Dusk of the Day it was added");
+            game.StartTurn();
+            Assert.IsTrue(ready.IsOperative);
+            Assert.AreEqual(Player.MaxHealth - 1, p2.Health, "Its entry effect doesn't happen again");
+        }
+
+        [Test]
+        public void AStatChangeForThisDay_EndsAtThatDaysDusk() {
+            var hero = game.Summon(p1, game.Creature("Hero", 1, 5), 0);
+            game.Run(new ModifyAction(hero, 4, true, false, false, durationInTurns: 1));
+            Assert.AreEqual(5, hero.Attack);
+
+            game.StartTurn();
+            Assert.AreEqual(1, hero.Attack);
         }
         #endregion
     }

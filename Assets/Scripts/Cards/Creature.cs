@@ -52,6 +52,11 @@ namespace SlayTheClone {
         bool IsOperative { get; }
         /// <summary>Called when the creature lands on the board; its countdown starts from this turn.</summary>
         void EnterPlay(int turn);
+        /// <summary>
+        /// Red Tape: adds Days to its Deployment Time, counting down from the next Dusk after this one, like a fresh arrival.
+        /// Its entry effects already happened, so they don't happen again when it's ready.
+        /// </summary>
+        void AddDeploymentTime(int days, int currentTurn);
         /// <summary>Counts down at each Dusk after the Day it landed in (GDD 3.2): Deployment Time N sits out N full Days.</summary>
         /// <returns>True when the countdown changed.</returns>
         bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue);
@@ -120,6 +125,7 @@ namespace SlayTheClone {
         public int TurnsUntilOperative { get; private set; }
         public bool IsOperative => TurnsUntilOperative == 0;
         private int landedOnTurn;
+        private bool entryEffectsPending; // Its entry ("When Ready") effects haven't happened yet since it entered play
 
         public event Action<ICreature> Changed;
         public void NotifyChanged() => Changed?.Invoke(this);
@@ -140,6 +146,7 @@ namespace SlayTheClone {
         public void EnterPlay(int turn) {
             landedOnTurn = turn;
             TimesEnteredPlay++;
+            entryEffectsPending = true;
             CurrentArmorPool = 0; // Armor is lost when a creature leaves play (GDD 1.1 Armor), so it always enters without any
         }
 
@@ -148,11 +155,18 @@ namespace SlayTheClone {
 
             TurnsUntilOperative--;
             Log($"{Name} is {(IsOperative ? "now operative" : $"operative in {TurnsUntilOperative} turn(s)")}", LogTag.Creatures | LogTag.Turns);
-            if (IsOperative) {
+            if (IsOperative && entryEffectsPending) {
                 // Its on-play effect waited for this moment; Deployment Time ignores Abilities Disabled (GDD 3.2)
+                entryEffectsPending = false;
                 EffectResolver.QueueCreatureEffects(this, EffectTrigger.OnPlay, actionsQueue);
             }
             return true;
+        }
+
+        public void AddDeploymentTime(int days, int currentTurn) {
+            if (days <= 0) return;
+            TurnsUntilOperative += days;
+            landedOnTurn = Math.Max(landedOnTurn, currentTurn); // Not counted down at this Day's Dusk
         }
 
         public void UpdateEffectiveStats(int newEffectiveAttack, int newEffectiveMaxHealth, int newEffectiveSpeed) {
@@ -240,6 +254,7 @@ namespace SlayTheClone {
                 LogError($"Cannot handle effect {trigger} for {Name} - no ActionsQueue.", LogTag.Effects | LogTag.Creatures);
                 return;
             }
+            if (trigger == EffectTrigger.OnPlay) entryEffectsPending = false;
             Log($"Handling Effect: {trigger} for {Name} (TargetID: {TargetId.ShortId()})", LogTag.Creatures | LogTag.Effects);
             EffectResolver.QueueCreatureEffects(this, trigger, actionsQueue, triggeringAttacker);
         }

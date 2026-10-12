@@ -18,12 +18,11 @@ MonoBehaviour:
   cardType: 1
   faction: 3
   artwork: {fileID: 0}
-  priority: 0
   effects:
   - effectType: 1
     trigger: 0
     actions:
-    - actionType: 12
+    - actionType: 11
       value: 0
       targetType: 1
       targetModifier: 0
@@ -34,6 +33,7 @@ MonoBehaviour:
       statusDuration: 0
       statusPotency: 0
       cleanse: 0
+      purge: 0
       slotEffect: 0
       watchdog:
         watches: 0

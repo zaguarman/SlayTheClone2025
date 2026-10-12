@@ -34,7 +34,7 @@ Myth: Faith, Death & Prophecy
 Statecraft: Order, Law & War
     • Theme: Government, bureaucracy, military, propaganda.
     • Play Style: Fortify the line, slow everyone down with paperwork, then strike first.
-    • Signature Mechanics: Recruitment (conscription), Red Tape (adds Deployment Time to enemies or lowers their Priority), Priority strikes (Blitzkrieg, Preemptive Strike), Laws (Location cards that change rules for X Days), multi-slot war machines (tanks, submarines, Man o' War), exile (Banish).
+    • Signature Mechanics: Recruitment (conscription), Red Tape (adds Deployment Time to enemies), first strikes through Speed (Blitzkrieg, Preemptive Strike), Laws (Location cards that change rules for X Days), multi-slot war machines (tanks, submarines, Man o' War), exile (Banish).
     • Statuses: Heavy, Diplomatic Immunity, Keep Calm.
     • Pays With: Bureaucracy. Its creatures have higher Deployment Time than similar creatures, and its spells often add Deployment Time to your own creatures as a drawback.
     • Can't: Hide anything. All its plans are public.
@@ -67,7 +67,7 @@ Corporate: Money, Growth & Exploitation
 Tech: Systems & the Queue
     • Theme: Software, hacking, infrastructure.
     • Play Style: Rewires the queue with hooks, copies and overrides; runs automated units.
-    • Signature Mechanics: Watchdogs (Firewall, Man-in-the-Middle), Priority boosts (Turbo), copied actions (Fork, Feedback Loop), Automated Units, Cleanse (Antivirus, Bug Fix), surveillance reveals (CCTV, Data Mining).
+    • Signature Mechanics: Watchdogs (Firewall, Man-in-the-Middle), Speed boosts (Turbo), copied actions (Fork, Feedback Loop), Automated Units, Cleanse (Antivirus, Bug Fix), surveillance reveals (CCTV, Data Mining).
     • Statuses: Heat Signature, Exhausted.
     • Pays With: Technical Debt. As an additional cost, schedule fewer card draws for your next Day.
     • Can't: Bring anything back from the discard pile. Deleted is deleted.
@@ -126,7 +126,7 @@ Utopia: Science & the Future
 • Control Change: Myth (Conversion), Statecraft (Recruitment), Shadow Ops. (Brainwashed). Nobody else; it's the most complex system, so it stays rare.
 • Watchdogs, Briefing (set up in advance): Primary Shadow Ops.; secondary Statecraft (Red Tape).
 • Watchdogs, On Watch (during resolution): Primary Tech; secondary Mind.
-• Priority: Primary Statecraft; secondary Tech.
+• Speed boosts and first strikes: Primary Statecraft; secondary Tech.
 • Revealing Information: Primary Shadow Ops.; secondary Tech, Digital Society.
 • Concealment and Fake Intents: Primary Shadow Ops.; secondary Mind.
 • Revive and Recursion: Primary Myth; secondary Utopia (Clone).

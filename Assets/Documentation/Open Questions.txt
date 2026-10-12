@@ -3,37 +3,20 @@ Open Questions
 Questions that came up while implementing the GDD mechanics. Each says what was done in the meantime, so nothing waits on the answer.
 
 
-ACTION PRIORITY (GDD 3.7)
+ACTION PRIORITY (answered 2026-10-12)
 
-1. Printed Priority on a creature card
-    • Done for now: a creature's printed Priority applies to its attacks only ("Priority Attack +1"), as in the GDD example. Its abilities and its summon use 0 (plus Boosts and Penalties).
-    • Question: should a creature card also be able to print Priority on its summon or abilities?
-
-2. How long "for 1 Day" lasts on a Priority change
-    • Done for now: a Priority Boost or Penalty isn't a status, so it works from the moment it's applied and its Days count the current one: "for 1 Day" ends at this Day's Dusk; "this Day and the next 3 Days" is 4 Days.
-    • Question: is that right, or should Priority changes follow Status Timing (skip the Day they're applied)?
-
-3. Side-wide Priority and spells
-    • Done for now: "Actions by creatures you control get +1 Priority" only affects creatures' actions (moves aren't affected, they use the Automatic Move Order). Your spells keep their printed Priority.
-    • Question: should there also be effects that boost your spells' Priority?
-
-4. Cards waiting on a Priority design
-    • Done: Preemptive Strike now resolves with Priority +1, as its design notes said.
-    • Red Tape: its notes say "+1 Deployment Time on an enemy creature, or Priority -1 on its action". It still stuns. Should it become Priority -1 for 1 Day (instead of, or alongside, the stun)?
-    • YOLO: its notes say "+1 Priority on its attack this Day, then Banished at Dusk". Banish doesn't exist yet. Add the +1 Priority now and leave the Banish for later?
-    • Police Officer Productivity Target: "Priority attacks against creatures that moved this Day" needs a condition on the attack. Not done.
-    • Temporal Distortion (flip Speed order for X Days) isn't made; no card uses it yet.
+1-4. Removed: Action Priority made resolution too complicated on top of the layers. Order inside a layer is Speed, then the tie-breaks; Watchdogs can still reorder. The GDD, compendiums and example cards now use Speed instead (Keep Calm: Speed can't be changed; Slacking Off: Speed -2; Meetings About Meetings: every Speed counts as 1; Shift Gear: +2 Speed).
+    • Red Tape now adds 1 Day to an enemy creature's Deployment Time (it sits out the rest of the Day and the next, its planned action is cancelled, its entry effects don't happen again).
+    • YOLO now gives +4 Attack for this Day only, still costing you 2 Health (Banish at Dusk later).
+    • Preemptive Strike is back to 3 damage.
+    • Question: are these three reworks and the Speed replacements in the docs OK?
 
 
 CLEANSE, BLESSED AND HERESY (Status Effects Compendium)
 
-5. Does Cleanse remove positive statuses too?
-    • Done for now: yes. A Cleanse removes every cleansable status, friendly or not, because Blessed (a positive status) is listed as "Cleansable: Yes (Removes all current stacks)". The GDD's Cleansing glossary entry says "negative status effects" though.
-    • Question: should a Cleanse only remove negative statuses (and Blessed be removed only by an enemy "dispel")?
-
-6. Does "Temporary Stat Modifications" include buffs?
-    • Done for now: a Cleanse of stat changes removes every temporary one, buffs and debuffs alike. Base-stat (Persistent) changes stay. Priority Boosts and Penalties aren't stats, so they stay too.
-    • Question: buffs and debuffs both, or only debuffs on your own creatures? Should Priority changes count as cleansable?
+5-6. Answered: two kinds. A Cleanse removes only what harms the creature (harmful statuses, stat decreases). A Purge removes good and bad alike (positive statuses like Blessed, and buffs). Neither touches Persistent Stat Modifications. Exorcism is a Cleanse.
+    • Question: is "Purge" a good name for the strong one?
+    • Question: which statuses are positive? Only Blessed is marked so far. The other candidates in the compendium: Coffeinated, Diplomatic Immunity, Keep Calm, Concealed, Encrypted (all would then need a Purge to remove).
 
 7. Heresy onto a creature that's already Doomed
     • Done for now: the vessel is the creature with the lowest current Health, even if it's Doomed already. A Doomed creature ignores new statuses, so the passed sentence is lost and the cleansed creature is freed anyway.

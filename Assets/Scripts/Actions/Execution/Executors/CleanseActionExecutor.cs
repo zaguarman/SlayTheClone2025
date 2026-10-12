@@ -11,6 +11,7 @@ namespace SlayTheClone {
             var manager = context.ModifierManager;
             if (cleanse.GetWhat() != CleanseTarget.StatModifications) {
                 foreach (var status in manager.GetActiveModifiersFor(creature).OfType<StatusEffectModifier>().ToList()) {
+                    if (!cleanse.IsPurge && !status.IsNegative) continue; // A Cleanse leaves the good ones (Blessed)
                     if (status.IsCleansable) manager.RemoveModifier(creature, status); // Blessed loses all its stacks
                     else if (status.EffectType == StatusEffectType.Doomed) PassOnDoomed(creature, status, context);
                 }
@@ -19,6 +20,7 @@ namespace SlayTheClone {
             if (cleanse.GetWhat() != CleanseTarget.Statuses) {
                 // Temporary Stat Modifications only: base-stat (Persistent) changes stay on the card
                 foreach (var change in manager.GetActiveModifiersFor(creature).OfType<StatModifier>().ToList()) {
+                    if (!cleanse.IsPurge && !Lowers(change)) continue; // A Cleanse only removes decreases
                     manager.RemoveModifier(creature, change);
                 }
                 // Losing a Health buff takes its Health back, which can kill (GDD 3.3)
@@ -26,6 +28,10 @@ namespace SlayTheClone {
             }
             Log($"Executed {cleanse}", LogTag.Actions | LogTag.Effects);
         }
+
+        private static bool Lowers(StatModifier change) =>
+            new[] { ModifiableStat.Attack, ModifiableStat.Health, ModifiableStat.Speed }
+                .Any(stat => change.TryGetStatModification(stat, out _, out int value) && value < 0);
 
         // Heresy ('Status Effects Compendium' - Doomed): the sentence moves, with its remaining Days, to the creature with the
         // lowest current Health on this creature's side (GDD 5.2 Passing a Status). This one is freed and keeps the Attack it
