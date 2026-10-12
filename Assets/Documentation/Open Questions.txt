@@ -27,6 +27,23 @@ STILL OPEN
     • Not done yet, waiting for other systems: the Turn History ('???' for resolved Concealed actions; there's no Turn History yet), Surveillance, OnRevealedByIntelligence effects and Strategic Disclosures, Honeypot-style traps for snoopers, hidden enemy abilities (bosses), Compromised, and enemy Homing (nothing aims Homing at enemies yet, so "Homing becomes Fixed against Concealed" has nothing to act on).
 
 
+6. New decks (2026-10-13): own decks or pairs?
+    • Done: Utopia had no cards, so it got its own deck of 20. Digital Society, Shadow Ops., Tech, Myth and Mind now have 8 to 12 cards each; they stay in the three two-faction decks, which grew to 20 cards each (42 new cards in all, names from the Brainstorm Lists).
+    • Question: should each of those five get a deck of its own (about 8 to 12 more cards each), or are the pairs the way to go?
+
+7. Aimed spells can be dropped on either side
+    • Nothing says "target friendly creature" or "target enemy creature" yet, so a spell like Gene Editing can be aimed at an enemy too. Sacrificial Ritual was made to pick a random friendly creature so it can't be thrown at the enemy for 5 damage.
+    • Question: should aimed spells be limited to the side their text names (friendly or enemy)?
+
+8. Retaliation text
+    • An enemy-targeted "Whenever this is damaged" effect hits whoever damaged it (rules, since earlier); the card text now says "whoever damaged it" instead of "the enemy player" (Keyboard Warrior, Quantum Physicist). If a spell damages it, there's no attacker: damage then goes to the enemy player, and a stun does nothing.
+    • Question: OK, or should spell damage count the spell's caster as the one who damaged it?
+
+9. The Queue panel
+    • A Queue button at the right edge of the table, level with your mat; the panel fills the corner above End Turn. No hotkey.
+    • Question: OK where it is, and want a hotkey for it?
+
+
 ANSWERED (2026-10-12)
 
 • Fog of War views: the rules know everything; each player sees their own cards and what their cards revealed. The enemy's hand shows card backs and the enemy's cards can't be used. The screen plays player 1's side (Debug > Play As Player 2 / F10 switches, for testing).
