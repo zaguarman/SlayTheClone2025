@@ -271,23 +271,23 @@ Slot Occupation & Movement
     • Creatures block the slot they're in; other creatures can't normally move into or through an occupied slot, unless an ability specifically says they can (like swapping, pushing, or pulling).
     • Default Movement: A creature moving itself slides along its own row, any distance, to an empty slot. It can't enter or pass through an occupied slot. Exception: friendly Ghosted creatures don't block it.
     • Push (every creature): A moving creature can move into an occupied slot by pushing that creature one slot further along, only if the slot beyond it is empty. It never pushes two creatures in a chain. Being pushed isn't the pushed creature's own movement. Heavy and multi-slot creatures can't be pushed.
-    • Mobility Matters: Most attacks are aimed at a chosen slot or creature, and Homing is scarce, so repositioning is how you dodge threats and line up attacks. Moving past other creatures (e.g., flying, teleporting) or swapping with them is a special ability only some creatures have.
+    • Mobility Matters: Most attacks are aimed at a chosen slot or creature, and Homing is scarce, so repositioning is how you dodge threats and line up attacks. Moving past other creatures (Leapfrog) or swapping with them is a special ability only some creatures have.
     • Blocked Before It Resolves: If the path or destination gets blocked before the Movement Action resolves, the creature stops at the furthest empty slot it can still reach toward its destination. If it can't move at all, the move does nothing.
     • Entering Slots: Only the slot where a creature ends its move counts as entered (OnEnterSlot). Slots it passes don't trigger.
     • Automatic Move Order: Players choose where their creatures go, never in what order. Each side's Movement Actions resolve in an order the game picks so that every planned move works (see 3.7 Resolution Order). Moves on one side never affect the other side's row, so there's no race between sides.
         • Destinations, Not Steps: You drag each creature to the slot you want, in any order. The game moves first whoever needs to make room.
         • Example: A is in slot 3 and B in slot 1. Drag B to slot 3, then A to slot 5: the game moves A first, then B.
         • Push Only When Needed: A move pushes a creature only if that creature isn't leaving its slot. If it's planned to leave, the game lets it leave first.
-        • Impossible Plans: If no order can make a move work (e.g., two creatures that would have to pass each other), that move shows as blocked while you plan, with a hint (e.g., "needs Swap or Fly"), and can't be confirmed.
+        • Impossible Plans: If no order can make a move work (e.g., two creatures that would have to pass each other), that move shows as blocked while you plan, with a hint (e.g., "needs Swap or Leapfrog"), and can't be confirmed.
         • Live Preview: Ghosts and arrows always show the final formation. Editing or cancelling a move updates the whole preview at once.
         • Tie-Breaker: When several orders work, the game uses the order the moves were planned in.
         • The AI plans its moves the same way.
     Movement Keywords (abilities printed on specific creatures; each is still that creature's own Movement Action):
-        • Fly: Moves to any empty slot in its row, passing over occupied slots. (Flying and teleporting are the same keyword.)
+        • Leapfrog: Moves to any empty slot in its row, jumping over occupied slots.
         • Swap: Trades places with a friendly creature at any distance, ignoring creatures in between. Being swapped isn't the partner's own movement, so it works on Anchored partners. Heavy and multi-slot creatures can't be swapped.
         • Swap and Push only affect friendly creatures. Creatures never change sides by moving (see 5.4 Recruitment & Conversion).
     Choosing the Move Type
-        • Each destination has one meaning. The game always uses the best movement option the creature has: Fly over walking for an empty slot, Swap over Push for an occupied one.
+        • Each destination has one meaning. The game always uses the best movement option the creature has: Leapfrog over walking for an empty slot, Swap over Push for an occupied one.
         • The UI shows that meaning before you drop the creature (planned: color-coded reachable slots and a preview of where every creature ends up).
     • Any time a creature moves itself, it creates a Movement Action, which can be restricted.
     • Other effects can push, pull, or swap creatures without them using their own action.

@@ -174,22 +174,24 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(p1.Battlefield[0].IsOccupied());
             Assert.AreSame(p1.Battlefield[4], eel.Slot);
 
-            // Moving onto a friendly creature swaps the two
+            // Moving onto a friendly creature pushes it one slot further along
             var turtle = game.Summon(p1, game.Creature("Turtle", 1, 6), 3);
             game.Run(new MoveCreatureAction(eel, p1.Battlefield[4], p1.Battlefield[3], p1));
             Assert.AreSame(eel, p1.Battlefield[3].OccupyingCreature);
-            Assert.AreSame(turtle, p1.Battlefield[4].OccupyingCreature);
+            Assert.AreSame(turtle, p1.Battlefield[2].OccupyingCreature);
 
             // Summoning onto an occupied slot replaces its creature, which is discarded
-            var shark = game.Summon(p1, game.Creature("Shark", 4, 4), 3);
+            var sharkData = game.Creature("Shark", 4, 4);
+            sharkData.movement = MovementKeyword.Swap;
+            var shark = game.Summon(p1, sharkData, 3);
             Assert.AreSame(shark, p1.Battlefield[3].OccupyingCreature);
             Assert.IsNull(eel.Slot);
             AssertDiscarded(p1, eel);
 
             // An exhausted (stunned) creature can't move or attack
             game.Run(new ApplyStatusEffectAction(turtle, StatusEffectType.Exhausted, 1, 0));
-            game.Run(new MoveCreatureAction(turtle, p1.Battlefield[4], p1.Battlefield[0], p1));
-            Assert.AreSame(turtle, p1.Battlefield[4].OccupyingCreature);
+            game.Run(new MoveCreatureAction(turtle, p1.Battlefield[2], p1.Battlefield[0], p1));
+            Assert.AreSame(turtle, p1.Battlefield[2].OccupyingCreature);
             Assert.IsFalse(p1.Battlefield[0].IsOccupied());
             int healthBeforeStunnedAttack = p2.Health;
             Attack(turtle, p2.Battlefield[4]); // An empty slot: the attack would hit the player
@@ -209,7 +211,7 @@ namespace SlayTheClone.Tests {
             game.Run(new MoveCreatureAction(golem, p1.Battlefield[0], p1.Battlefield[1], p1));
             Assert.AreSame(golem, p1.Battlefield[0].OccupyingCreature);
 
-            // ...but an operative creature can still swap places with it
+            // ...but an operative creature with Swap can still trade places with it, over the turtle in between
             game.Run(new MoveCreatureAction(shark, p1.Battlefield[3], p1.Battlefield[0], p1));
             Assert.AreSame(golem, p1.Battlefield[3].OccupyingCreature);
             Assert.AreSame(shark, p1.Battlefield[0].OccupyingCreature);

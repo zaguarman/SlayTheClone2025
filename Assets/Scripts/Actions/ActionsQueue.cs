@@ -258,9 +258,27 @@ namespace SlayTheClone {
                 currentLayer = ResolutionLayer.Movement;
             }
             currentLayer = waiting.Where(e => e.Layer >= currentLayer).Min(e => e.Layer);
-            var next = waiting.Where(e => e.Layer == currentLayer).OrderBy(e => e, InLayerOrder).First();
+            var next = currentLayer == ResolutionLayer.Movement
+                ? NextMove()
+                : waiting.Where(e => e.Layer == currentLayer).OrderBy(e => e, InLayerOrder).First();
             waiting.Remove(next);
             return next;
+        }
+
+        // Automatic Move Order (GDD 2.4): players choose where their creatures go, never in what order. The first planned
+        // move that works right now goes next; a creature in the way that is planned to leave gets to leave first, and is
+        // never pushed or swapped while it still means to go. If no move works, the first planned goes (and stops short).
+        private Entry NextMove() {
+            var moves = waiting.Where(e => e.Layer == ResolutionLayer.Movement).OrderBy(e => e.Sequence).ToList();
+            var leaving = moves.Select(e => e.Action).OfType<MoveCreatureAction>().Select(m => m.GetCreature())
+                .Where(c => c != null && executionContext.ModifierManager.CanAct(c)).ToHashSet();
+
+            bool Works(Entry entry) {
+                if (!(entry.Action is MoveCreatureAction move)) return true;
+                var outcome = MovementRules.Resolve(move.GetCreature(), move.GetToSlot(), move.Kind);
+                return outcome.ReachesDestination && (outcome.Partner == null || !leaving.Contains(outcome.Partner));
+            }
+            return moves.FirstOrDefault(Works) ?? moves.First();
         }
 
         /// <returns>False once the queue is empty.</returns>

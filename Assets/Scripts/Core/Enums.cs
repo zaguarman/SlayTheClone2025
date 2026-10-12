@@ -11,6 +11,13 @@ namespace SlayTheClone {
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus } // Renamed Buff to ModifyStat
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
+        // Movement Keywords printed on creatures (GDD 2.4): Leapfrog jumps over creatures, Swap trades places with a friendly one
+        [Flags]
+        public enum MovementKeyword { None = 0, Leapfrog = 1 << 0, Swap = 1 << 1 }
+
+        // What a planned move does (see MovementRules.KindOf)
+        public enum MoveKind { Walk, Push, Leapfrog, Swap }
+
         public enum StatusEffectType {
             None,
             Burned,     // Takes damage at end of turn
