@@ -91,8 +91,13 @@ namespace SlayTheClone.Tests {
         public void Play(ICard card, Player caster, BoardSlot slot) =>
             ActionsQueue.AddAction(new PlayCardAction(card, caster, EffectResolver.AimAt(card, caster, slot, ActionsQueue)));
 
-        /// <summary>Starts the next turn as the turn flow does: creatures get closer to operative, then start-of-turn effects run.</summary>
+        /// <summary>
+        /// Ends the Day and starts the next as the turn flow does, without the hands: Dusk (Armor fades, statuses tick,
+        /// Deployment Time counts down), then the new Day's start-of-turn effects.
+        /// </summary>
         public void StartTurn() {
+            ModifierManager.ProcessEndOfTurn(TurnClock.TurnNumber, ActionsQueue);
+            Resolve();
             TurnClock.Advance();
             ModifierManager.ProcessStartOfTurn(TurnClock.TurnNumber, ActionsQueue);
             Resolve();

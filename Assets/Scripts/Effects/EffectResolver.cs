@@ -192,8 +192,8 @@ namespace SlayTheClone {
                     return creature != null && action.value != 0
                         ? new ModifyAction(creature, action.value, action.modifyAttack, action.modifyHealth, action.modifySpeed)
                         : null;
-                case ActionType.Stun: // A stun paralyzes for its value in turns
-                    return Status(creature, StatusEffectType.Paralyzed, action.value, 0, source);
+                case ActionType.Stun: // A stun exhausts for its value in Days (1 is the usual stun)
+                    return Status(creature, StatusEffectType.Exhausted, action.value, 0, source);
                 case ActionType.ApplyStatus:
                     return Status(creature, action.statusEffectToApply, action.statusDuration, action.statusPotency, source);
                 default:

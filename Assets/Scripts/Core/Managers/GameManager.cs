@@ -43,6 +43,8 @@ namespace SlayTheClone {
         /// prevent actions. Logs why not. Being swapped by another creature doesn't need this.
         /// </summary>
         bool CanAct(ICreature creature);
+        /// <summary>Whether the creature takes +1 damage from every hit (Exposed, also part of Exhausted).</summary>
+        bool IsExposed(ICreature creature);
         void RecalculateStats(ICreature creature);
         void ProcessEndOfTurn(int endedTurnNumber, IActionsQueue actionsQueue);
         void ProcessStartOfTurn(int startingTurnNumber, IActionsQueue actionsQueue);

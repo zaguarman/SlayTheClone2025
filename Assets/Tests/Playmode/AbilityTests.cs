@@ -35,11 +35,12 @@ namespace SlayTheClone.Tests {
             var golem = game.Summon(p1, golemData, 1);
             CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(p2), "Only the operative wolf fires when it lands");
 
+            game.StartTurn(); // Deployment Time skips the Dusk of the Day the creature arrived
             game.StartTurn();
             Assert.IsFalse(golem.IsOperative);
             CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(p2), "The golem fired before it was operative");
 
-            game.StartTurn();
+            game.StartTurn(); // Deployment Time 2: it sat out 2 full Days after the Day it arrived
             Assert.IsTrue(golem.IsOperative);
             CollectionAssert.AreEqual(new[] { 2, 5 }, game.History.DamageTo(p2), "The golem should fire when it becomes operative");
 

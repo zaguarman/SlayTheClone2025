@@ -58,16 +58,19 @@ namespace SlayTheClone {
             IsResolving = true;
             try {
                 int endedTurn = clock.TurnNumber;
-                clock.Advance();
-                int turnNumber = clock.TurnNumber;
-                Log($"--- Ending Turn {endedTurn}, Starting Turn {turnNumber} ---", LogTag.Turns);
+                Log($"--- Ending Turn {endedTurn} ---", LogTag.Turns);
 
-                // --- Phase 1: Resolution (GDD 3.6): what both sides planned this Day ---
+                // --- Phase 1: Resolution (GDD 3.6): what both sides planned this Day. It's still this Day,
+                // so what resolves now is dated today (statuses applied now skip this Day's Dusk) ---
                 yield return ResolveQueuedActions();
 
-                // --- Phase 2: Dusk, for the Day that just resolved: Armor fades, statuses tick, "Each Dusk" effects ---
+                // --- Phase 2: Dusk, for the Day that just resolved: Armor fades, statuses tick, Deployment Time counts down ---
                 modifierManager.ProcessEndOfTurn(endedTurn, actionsQueue);
                 yield return ResolveQueuedActions();
+
+                // The next Day begins
+                clock.Advance();
+                int turnNumber = clock.TurnNumber;
 
                 // --- Phase 2: Turn Transition & Mandatory Actions ---
                 foreach (var player in players) {

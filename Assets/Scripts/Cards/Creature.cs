@@ -16,6 +16,8 @@ namespace SlayTheClone {
         int BaseHealth { get; }
         int BaseSpeed { get; }
         BoardSlot Slot { get; set; }
+        /// <summary>Set by the ModifierManager while a status (like Exhausted) disables its abilities: none of its effects trigger.</summary>
+        bool AbilitiesDisabled { get; set; }
         /// <summary>The slot it was last in, kept after it leaves play (where effects homing on it land then).</summary>
         BoardSlot LastSlot { get; }
         /// <summary>How many times it has landed on the board this combat.</summary>
@@ -37,7 +39,7 @@ namespace SlayTheClone {
         bool IsOperative { get; }
         /// <summary>Called when the creature lands on the board; its countdown starts from this turn.</summary>
         void EnterPlay(int turn);
-        /// <summary>Counts down at the start of each turn after the one it landed in.</summary>
+        /// <summary>Counts down at each Dusk after the Day it landed in (GDD 3.2): Deployment Time N sits out N full Days.</summary>
         /// <returns>True when the countdown changed.</returns>
         bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue);
 
@@ -88,6 +90,7 @@ namespace SlayTheClone {
             }
         }
         public BoardSlot LastSlot { get; private set; }
+        public bool AbilitiesDisabled { get; set; }
         public int TimesEnteredPlay { get; private set; }
 
         public int TurnsUntilOperative { get; private set; }
@@ -116,13 +119,14 @@ namespace SlayTheClone {
             CurrentArmorPool = 0; // Armor is lost when a creature leaves play (GDD 1.1 Armor), so it always enters without any
         }
 
-        public bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue) {
-            if (IsOperative || IsDead || startingTurn <= landedOnTurn) return false;
+        public bool AdvanceReadiness(int endedTurn, IActionsQueue actionsQueue) {
+            if (IsOperative || IsDead || endedTurn <= landedOnTurn) return false;
 
             TurnsUntilOperative--;
             Log($"{Name} is {(IsOperative ? "now operative" : $"operative in {TurnsUntilOperative} turn(s)")}", LogTag.Creatures | LogTag.Turns);
             if (IsOperative) {
-                HandleEffect(EffectTrigger.OnPlay, actionsQueue); // Its on-play effect waited for this moment
+                // Its on-play effect waited for this moment; Deployment Time ignores Abilities Disabled (GDD 3.2)
+                EffectResolver.QueueCreatureEffects(this, EffectTrigger.OnPlay, actionsQueue);
             }
             return true;
         }
@@ -204,6 +208,7 @@ namespace SlayTheClone {
         // Fires every time the trigger happens; ActionsQueue.MaxActionsPerResolution stops effects that trigger each other endlessly
         public void HandleEffect(EffectTrigger trigger, IActionsQueue actionsQueue, ICreature triggeringAttacker = null) {
             if (!IsOperative) return; // Its effects are off until it is operative
+            if (AbilitiesDisabled) return; // ...and while a status disables them, retaliation and death effects included (GDD 3.9)
             if (IsDead && trigger != EffectTrigger.OnDeath) return;
             if (actionsQueue == null) {
                 LogError($"Cannot handle effect {trigger} for {Name} - no ActionsQueue.", LogTag.Effects | LogTag.Creatures);

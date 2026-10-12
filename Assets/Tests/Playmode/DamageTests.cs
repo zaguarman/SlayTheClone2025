@@ -149,16 +149,19 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
-        public IEnumerator Burn_TicksOncePerTurn_UntilItRunsOut() {
+        public IEnumerator Burn_TicksOnceADay_FromTheDayAfterItsApplied_UntilItRunsOut() {
             var torch = game.Summon(p1, game.Creature("Torch", 0, 10), 0);
             game.Run(new ApplyStatusEffectAction(torch, StatusEffectType.Burned, 2, 2));
+
+            yield return game.EndTurn();
+            Assert.AreEqual(10, torch.Health, "Every status skips the Day it's applied (Status Timing)");
 
             yield return game.EndTurn();
             Assert.AreEqual(8, torch.Health);
 
             yield return game.EndTurn();
             Assert.AreEqual(6, torch.Health);
-            Assert.IsFalse(game.ModifierManager.HasStatusEffect(torch, StatusEffectType.Burned), "The burn should have run out after 2 turns");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(torch, StatusEffectType.Burned), "The burn should have run out after 2 ticks");
 
             yield return game.EndTurn();
             Assert.AreEqual(6, torch.Health);

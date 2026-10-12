@@ -83,6 +83,7 @@ namespace SlayTheClone {
                 modifier.Apply(creatureTarget, mediator);
                 Log($"ModifierManager: Applied modifier '{modifier.Name}' to {creatureTarget.Name} (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
                 if (modifier is StatusEffectModifier status) {
+                    UpdateAbilitiesDisabled(creatureTarget);
                     mediator.NotifyCreatureStatusChanged(creatureTarget, status.EffectType, true);
                 }
 
@@ -107,6 +108,7 @@ namespace SlayTheClone {
                         existingModifier.Remove(creatureTarget, mediator);
                         Log($"ModifierManager: Removed modifier '{existingModifier.Name}' from {creatureTarget.Name} (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
                         if (existingModifier is StatusEffectModifier status) {
+                            UpdateAbilitiesDisabled(creatureTarget);
                             mediator.NotifyCreatureStatusChanged(creatureTarget, status.EffectType, false);
                         }
 
@@ -124,6 +126,11 @@ namespace SlayTheClone {
             }
         }
 
+
+        // The creature checks this itself before any of its effects trigger (see Creature.HandleEffect)
+        private void UpdateAbilitiesDisabled(ICreature creature) {
+            creature.AbilitiesDisabled = HasModifier(creature, m => m is StatusEffectModifier s && s.DisablesAbilities());
+        }
 
         private static bool AffectsStats(IModifier modifier) {
             foreach (ModifiableStat stat in Enum.GetValues(typeof(ModifiableStat))) {
@@ -172,6 +179,9 @@ namespace SlayTheClone {
             }
             return true;
         }
+
+        public bool IsExposed(ICreature creature) =>
+            HasModifier(creature, m => m is StatusEffectModifier s && s.Exposes());
         #endregion
 
         #region Turn Processing
@@ -188,10 +198,6 @@ namespace SlayTheClone {
             foreach (var creature in creatures.Values.ToList()) {
                 if (creature == null || creature.IsDead) continue;
 
-                // Creatures get a turn closer to operative first, so one that just became operative takes part in this turn
-                if (creature.AdvanceReadiness(startingTurnNumber, actionsQueue)) {
-                    mediator.NotifyCreatureStatsChanged(creature);
-                }
                 creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
@@ -221,9 +227,9 @@ namespace SlayTheClone {
 
                 var modifiers = activeModifiers[targetId];
 
-                // Burn ticks for every turn it was active, including the one in which it expires
+                // Burn ticks at every Dusk it is active, from the Day after it was applied (Status Timing), including its last
                 foreach (var burn in modifiers.OfType<StatusEffectModifier>()
-                             .Where(s => s.EffectType == StatusEffectType.Burned && s.Potency > 0)) {
+                             .Where(s => s.EffectType == StatusEffectType.Burned && s.Potency > 0 && s.ActsAtDuskOf(endedTurnNumber))) {
                     Log($"{creature.Name} burns for {burn.Potency} (StatusEffect '{burn.Name}')", LogTag.Effects | LogTag.Turns);
                     actionsQueue.AddAction(new DamageCreatureAction(creature, burn.Potency, creature));
                 }
@@ -239,6 +245,11 @@ namespace SlayTheClone {
                 // A Health buff wearing off takes its Health back, which can kill the creature
                 if (creature.Health <= 0) {
                     actionsQueue.AddAction(new CheckLethalAction(creature));
+                }
+
+                // Deployment Time counts down at Dusk, never at the Dusk of the Day it arrived (GDD 3.2)
+                if (creature.AdvanceReadiness(endedTurnNumber, actionsQueue)) {
+                    mediator.NotifyCreatureStatsChanged(creature);
                 }
 
                 // Trigger EndOfTurn effects AFTER handling expirations for the turn that just ended

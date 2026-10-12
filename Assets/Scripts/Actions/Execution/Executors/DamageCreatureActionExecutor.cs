@@ -18,6 +18,11 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Exposed (part of Exhausted): +1 damage from every source
+            if (damage > 0 && modifierManager.IsExposed(targetCreature)) {
+                damage += 1;
+            }
+
             Log($"Executor: Intent to deal {damage} damage to {targetCreature.Name} (Armor: {targetCreature.CurrentArmorPool}) from {attacker?.Name ?? "source"}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
 
             int damageToArmor = Math.Min(damage, targetCreature.CurrentArmorPool);

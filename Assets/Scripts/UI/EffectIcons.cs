@@ -35,7 +35,7 @@ namespace SlayTheClone {
 
         public static string ForStatus(StatusEffectType status) {
             switch (status) {
-                case StatusEffectType.Paralyzed: return Paralyze;
+                case StatusEffectType.Exhausted: return Paralyze;
                 case StatusEffectType.Burned: return Burn;
                 default: return null;
             }

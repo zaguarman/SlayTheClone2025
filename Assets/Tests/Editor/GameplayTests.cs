@@ -186,14 +186,14 @@ namespace SlayTheClone.Tests {
             Assert.IsNull(eel.Slot);
             AssertDiscarded(p1, eel);
 
-            // A paralyzed creature can't move or attack
-            game.Run(new ApplyStatusEffectAction(turtle, StatusEffectType.Paralyzed, 1, 0));
+            // An exhausted (stunned) creature can't move or attack
+            game.Run(new ApplyStatusEffectAction(turtle, StatusEffectType.Exhausted, 1, 0));
             game.Run(new MoveCreatureAction(turtle, p1.Battlefield[4], p1.Battlefield[0], p1));
             Assert.AreSame(turtle, p1.Battlefield[4].OccupyingCreature);
             Assert.IsFalse(p1.Battlefield[0].IsOccupied());
-            int healthBeforeParalyzedAttack = p2.Health;
+            int healthBeforeStunnedAttack = p2.Health;
             Attack(turtle, p2.Battlefield[4]); // An empty slot: the attack would hit the player
-            Assert.AreEqual(healthBeforeParalyzedAttack, p2.Health);
+            Assert.AreEqual(healthBeforeStunnedAttack, p2.Health);
 
             // A creature that needs time to become operative can't attack or move by itself and its effects are off;
             // its on-play effect (2 damage to the enemy player) waits until it is operative
@@ -214,7 +214,9 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(golem, p1.Battlefield[3].OccupyingCreature);
             Assert.AreSame(shark, p1.Battlefield[0].OccupyingCreature);
 
-            // Once its turns have passed it is operative: the on-play effect fires and it can attack
+            // Once it has sat out a full Day after the one it arrived in, it is operative: the on-play effect fires and it can attack
+            game.StartTurn();
+            Assert.IsFalse(golem.IsOperative, "Deployment Time never counts down at the Dusk of the Day the creature arrived");
             game.StartTurn();
             Assert.IsTrue(golem.IsOperative);
             Assert.AreEqual(p2Health - 2, p2.Health);
