@@ -36,6 +36,8 @@ namespace SlayTheClone {
         private BattlefieldUI player1Battlefield;
         private BattlefieldUI player2Battlefield;
         private HandUI player1Hand;
+        private HandUI player2Hand;
+        private bool player1AtBottom = true;
         private Vector2Int laidOutFor;
 
         public bool IsApplied { get; private set; }
@@ -60,6 +62,7 @@ namespace SlayTheClone {
             player1Battlefield = p1.BattlefieldUI;
             player2Battlefield = p2.BattlefieldUI;
             player1Hand = p1.HandUI;
+            player2Hand = p2.HandUI;
             var rootCanvas = player1Battlefield.GetComponentInParent<Canvas>().rootCanvas;
             canvasRoot = (RectTransform)rootCanvas.transform;
             tableCamera = rootCanvas.worldCamera != null ? rootCanvas.worldCamera : Camera.main;
@@ -90,6 +93,32 @@ namespace SlayTheClone {
             queueToggle = toggle;
             queuePanel = panel;
             Layout();
+        }
+
+        /// <summary>
+        /// The screen's player sits at the bottom of the table: switching sides (Debug > Play As Player 2, F10) swaps the
+        /// two halves, mats, hands, plaques and table colors included.
+        /// </summary>
+        public void PutAtBottom(bool player1) {
+            if (player1AtBottom == player1 || player2Hand == null) return;
+            player1AtBottom = player1;
+            Swap(player1Battlefield.transform, player2Battlefield.transform);
+            Swap(player1Hand.transform, player2Hand.transform);
+            SetEdge(player1Side, atTop: !player1);
+            SetEdge(player2Side, atTop: player1);
+            Layout();
+        }
+
+        private static void Swap(Transform a, Transform b) => (a.position, b.position) = (b.position, a.position);
+
+        // The solid band in the faction's color runs along the side's outer edge
+        private static void SetEdge(RectTransform side, bool atTop) {
+            var edge = side != null ? (RectTransform)side.Find("Edge") : null;
+            if (edge == null) return;
+            edge.anchorMin = new Vector2(0f, atTop ? 1f : 0f);
+            edge.anchorMax = new Vector2(1f, atTop ? 1f : 0f);
+            edge.pivot = new Vector2(0.5f, atTop ? 1f : 0f);
+            edge.anchoredPosition = Vector2.zero;
         }
 
         // The screen can change shape (window resized, another Game view aspect): keep the edges tidy
@@ -347,11 +376,13 @@ namespace SlayTheClone {
 
             var mat1 = WorldBounds(player1Battlefield.transform);
             var mat2 = WorldBounds(player2Battlefield.transform);
-            float riverY = (mat1.yMax + mat2.yMin) / 2f;
+            var bottomMat = player1AtBottom ? mat1 : mat2;
+            var topMat = player1AtBottom ? mat2 : mat1;
+            float riverY = (bottomMat.yMax + topMat.yMin) / 2f;
             PlaceAt(riverLine, center.x, riverY);
             riverLine.sizeDelta = new Vector2((right - left) / riverLine.lossyScale.x, riverLine.sizeDelta.y);
-            FillBetween(player1Side, center.x, halfWidth, center.y - halfHeight, riverY);
-            FillBetween(player2Side, center.x, halfWidth, riverY, center.y + halfHeight);
+            FillBetween(player1AtBottom ? player1Side : player2Side, center.x, halfWidth, center.y - halfHeight, riverY);
+            FillBetween(player1AtBottom ? player2Side : player1Side, center.x, halfWidth, riverY, center.y + halfHeight);
 
             PlaceAtLeft(player1Plaque != null ? (RectTransform)player1Plaque.transform : null, left, mat1.center.y);
             PlaceAtLeft(player2Plaque != null ? (RectTransform)player2Plaque.transform : null, left, mat2.center.y);
@@ -359,12 +390,12 @@ namespace SlayTheClone {
             if (weatherPill != null) PlaceAt(weatherPill, center.x, riverY);
             PlaceAtRight(endTurnButton, right, riverY);
 
-            float handY = WorldBounds(player1Hand.transform).center.y;
+            float handY = WorldBounds((player1AtBottom ? player1Hand : player2Hand).transform).center.y;
             PlaceAtLeft(discardButton, left, handY);
             PlaceAtRight(deckButton, right, handY);
 
             if (queueToggle != null && queuePanel != null && endTurnButton != null) {
-                PlaceAtRight(queueToggle, right, mat1.center.y);
+                PlaceAtRight(queueToggle, right, bottomMat.center.y);
                 float top = center.y + halfHeight - ScreenMargin;
                 float bottom = WorldBounds(endTurnButton).yMax + ScreenMargin;
                 queuePanel.sizeDelta = new Vector2(queuePanel.sizeDelta.x, (top - bottom) / queuePanel.lossyScale.y);

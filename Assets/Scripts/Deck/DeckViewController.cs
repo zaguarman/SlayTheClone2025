@@ -115,8 +115,8 @@ namespace SlayTheClone {
                 return false;
             }
 
-            // Player 1 is always the one whose cards are viewed
-            var player = GameManager?.Player1;
+            // The screen's player: player 1 unless the sides were switched (F10)
+            var player = FogOfWar.ViewerOf(GameManager?.Player1);
             if (player == null) {
                 LogError("Cannot show view - no active player found", LogTag.UI);
                 return false;

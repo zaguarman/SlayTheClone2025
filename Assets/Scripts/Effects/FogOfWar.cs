@@ -86,7 +86,8 @@ namespace SlayTheClone {
     /// What the screen shows: one player's view (player 1, the side you play, unless switched). The rules know everything
     /// (<see cref="Intel"/>); the screen only shows what that player knows, and only their cards can be used. The other
     /// side's hand shows card backs. For debugging: Debug > Fog of War (F9 in play) shows everything and lets you use both
-    /// sides' cards (hot-seat); Debug > Play As Player 2 (F10) switches whose view it is. Neither changes the rules.
+    /// sides' cards (hot-seat); Debug > Play As Player 2 (F10) switches whose view it is, and whose side sits at the bottom of
+    /// the table (see <see cref="BoardSkin.PutAtBottom"/>). Neither changes the rules.
     /// </summary>
     public static class FogOfWar {
         public const UnityEngine.KeyCode ToggleKey = UnityEngine.KeyCode.F9;

@@ -129,12 +129,18 @@ namespace SlayTheClone.Tests {
             StringAssert.Contains("Test Sneak", Listed());
             StringAssert.Contains("plans ???", Listed(), "The queue shows a Concealed plan as ???...");
             StringAssert.DoesNotContain("Test Incoming", Listed(), "...and what an enemy summons");
+            float Height(Component view) => view.transform.position.y;
             FogOfWar.PlaysAsPlayer1 = false;
             yield return null;
             Assert.IsTrue(game.HandCards(p1).All(c => c.IsFaceDown), "Player 2's view: now player 1's hand is the hidden one");
             CollectionAssert.IsEmpty(game.BoardView(p2).AnonymousCards, "...and player 2 knows their own cards");
+            Assert.Less(Height(game.BoardView(p2)), Height(game.BoardView(p1)), "...and their side of the table is at the bottom");
+            Assert.Less(Height(game.HandView(p2)), Height(game.BoardView(p2)), "...hand below their mat");
+            Assert.Greater(Height(game.HandView(p1)), Height(game.BoardView(p1)), "...and player 1's hand at the top");
             FogOfWar.PlaysAsPlayer1 = true;
             yield return null;
+            Assert.Less(Height(game.BoardView(p1)), Height(game.BoardView(p2)), "Switching back puts player 1 at the bottom again");
+            Assert.Less(Height(game.HandView(p1)), Height(game.BoardView(p1)));
             FogOfWar.Enabled = false;
             yield return null;
             CollectionAssert.IsEmpty(game.BoardView(p2).CreaturesWithHiddenPlans, "Debug: with the fog off the screen shows everything");

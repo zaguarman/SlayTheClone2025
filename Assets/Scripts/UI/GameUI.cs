@@ -46,6 +46,7 @@ namespace SlayTheClone {
             SetupResolveButton();
             var skin = GetOrAddComponent<BoardSkin>();
             skin.Apply(gameReferences, gameManager, gameMediator);
+            skin.PutAtBottom(FogOfWar.PlaysAsPlayer1);
             CreateQueuePanel(skin);
             FogOfWar.Changed += OnFogOfWarChanged;
             ShowFogOfWarState();
@@ -148,9 +149,10 @@ namespace SlayTheClone {
             if (Input.GetKeyDown(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
         }
 
-        // Every view redraws what it may show
+        // Every view redraws what it may show, and the screen's player sits at the bottom
         private void OnFogOfWarChanged() {
             ShowFogOfWarState();
+            GetComponent<BoardSkin>()?.PutAtBottom(FogOfWar.PlaysAsPlayer1);
             gameMediator.NotifyBattlefieldStateChanged(gameManager.Player1);
             gameMediator.NotifyBattlefieldStateChanged(gameManager.Player2);
             gameMediator.NotifyActionsQueueChanged();
