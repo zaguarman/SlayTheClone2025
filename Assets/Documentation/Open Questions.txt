@@ -1,0 +1,25 @@
+Open Questions
+
+Questions that came up while implementing the GDD mechanics. Each says what was done in the meantime, so nothing waits on the answer.
+
+
+ACTION PRIORITY (GDD 3.7)
+
+1. Printed Priority on a creature card
+    • Done for now: a creature's printed Priority applies to its attacks only ("Priority Attack +1"), as in the GDD example. Its abilities and its summon use 0 (plus Boosts and Penalties).
+    • Question: should a creature card also be able to print Priority on its summon or abilities?
+
+2. How long "for 1 Day" lasts on a Priority change
+    • Done for now: a Priority Boost or Penalty isn't a status, so it works from the moment it's applied and its Days count the current one: "for 1 Day" ends at this Day's Dusk; "this Day and the next 3 Days" is 4 Days.
+    • Question: is that right, or should Priority changes follow Status Timing (skip the Day they're applied)?
+
+3. Side-wide Priority and spells
+    • Done for now: "Actions by creatures you control get +1 Priority" only affects creatures' actions (moves aren't affected, they use the Automatic Move Order). Your spells keep their printed Priority.
+    • Question: should there also be effects that boost your spells' Priority?
+
+4. Cards waiting on a Priority design
+    • Done: Preemptive Strike now resolves with Priority +1, as its design notes said.
+    • Red Tape: its notes say "+1 Deployment Time on an enemy creature, or Priority -1 on its action". It still stuns. Should it become Priority -1 for 1 Day (instead of, or alongside, the stun)?
+    • YOLO: its notes say "+1 Priority on its attack this Day, then Banished at Dusk". Banish doesn't exist yet. Add the +1 Priority now and leave the Banish for later?
+    • Police Officer Productivity Target: "Priority attacks against creatures that moved this Day" needs a condition on the attack. Not done.
+    • Temporal Distortion (flip Speed order for X Days) isn't made; no card uses it yet.

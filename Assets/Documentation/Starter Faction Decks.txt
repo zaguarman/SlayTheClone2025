@@ -14,7 +14,7 @@ CONTENTS
 • Three monofaction decks, one per faction: Corporate and Statecraft have 18 different cards, Zeitgeist 17. No copies yet.
 • Every card name comes from the 'Brainstorm List' or the 'Refined Brainstorm List', picking the most cynical ones. Margin Call is the exception: a Corporate staple added on purpose.
 • Cards only use what the engine already does: damage, healing, armor, draws, summoning from the deck, stat changes (ModifyStat), the Exhausted stun, and, for the cards in section 6, Doomed, Burn, Health Loss, Leapfrog and Swap.
-• No Priority, Watchdogs, control changes or Locations yet.
+• Priority (Action) is used by Preemptive Strike. No Watchdogs, control changes or Locations yet.
 • No card checks or rewards the presence of another faction (no "deals more damage to Corporate creatures").
 • Every card is a placeholder for a future GDD version. That version is stored on the card asset itself (the "Design Notes" field in the Inspector) and summarized below as "Future".
 
@@ -117,8 +117,7 @@ Creatures
 Spells
     • Red Tape: Stun target creature for 1 turn.
         • Future: +1 Deployment Time or Priority -1.
-    • Preemptive Strike: 3 damage to any target.
-        • Future: +1 Priority.
+    • Preemptive Strike: Priority +1. 3 damage to any target.
     • Martial Law: Each friendly creature gains 3 Armor and is stunned for 1 turn.
         • Future: a Law (Location) for 3 Days.
     • Kakistocracy: Each creature gets -1 Attack.

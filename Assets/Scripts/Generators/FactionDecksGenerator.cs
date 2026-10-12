@@ -185,8 +185,8 @@ namespace SlayTheClone {
                 Stun(1, TargetType.EnemyCreatures)),
             Spell("Preemptive Strike", TargetType.EnemyCreatures,
                 "They were going to attack us. Probably. Eventually. Somebody said so.",
-                "Future: resolves with +1 Priority (Action).",
-                Damage(3, TargetType.EnemyCreatures)),
+                "Priority +1: lands before the other spells of the Day.",
+                Damage(3, TargetType.EnemyCreatures)).WithPriority(1),
             Spell("Martial Law", TargetType.FriendlyCreatures,
                 "For your safety, nobody moves. Ever.",
                 "Future: a Law (Location) for 3 Days. The stun stands in for the bureaucracy drawback.",
@@ -364,6 +364,7 @@ namespace SlayTheClone {
         private class CardDef {
             public string Name, Flavor, Notes, ArtDescription;
             public MovementKeyword Movement;
+            public int Priority; // Printed Priority (Action): the spell's, or the creature's attacks
             public bool IsSpell;
             public int Attack, Health, Speed, DeploymentTime;
             public TargetType SpellTarget;
@@ -384,6 +385,11 @@ namespace SlayTheClone {
 
             public CardDef With(MovementKeyword movement) {
                 Movement = movement;
+                return this;
+            }
+
+            public CardDef WithPriority(int priority) {
+                Priority = priority;
                 return this;
             }
         }
@@ -486,6 +492,7 @@ namespace SlayTheClone {
             asset.description = card.Flavor;
             asset.designNotes = card.Notes;
             asset.artDescription = card.ArtDescription;
+            asset.priority = card.Priority;
             asset.faction = faction;
             asset.SetEffects(card.Effects);
             switch (asset) {

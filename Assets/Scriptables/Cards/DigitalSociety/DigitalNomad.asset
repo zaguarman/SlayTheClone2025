@@ -18,6 +18,7 @@ MonoBehaviour:
   cardType: 0
   faction: 6
   artwork: {fileID: 0}
+  priority: 0
   effects: []
   designNotes: 'Mechanics test: Leapfrog on a cheap, fast creature.'
   artDescription: A laptop balanced on a surfboard on a white beach, a coconut beside

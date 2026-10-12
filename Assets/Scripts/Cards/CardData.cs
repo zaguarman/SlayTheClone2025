@@ -11,6 +11,7 @@ namespace SlayTheClone {
         public CardType cardType;
         public Faction faction;
         public Sprite artwork;
+        public int priority; // Printed Priority (Action): a spell's Spell Action, a creature's attacks (GDD 3.7)
         public List<CardEffect> effects = new List<CardEffect>();
 
         // OnEnable can be used to initialize cardId if null

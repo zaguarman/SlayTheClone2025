@@ -132,6 +132,7 @@ namespace SlayTheClone {
         // Only effects that can land on creatures are aimed by it: drawing and summoning always go to the player
         // their target type names, wherever the card was dropped.
         private static bool UsesChosenTarget(EffectAction action) {
+            if (IsSideWide(action)) return false;
             bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
             return !picksOwnTargets && CanAffectCreatures(action.actionType);
         }
@@ -167,7 +168,11 @@ namespace SlayTheClone {
 
         private static bool CanAffectCreatures(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.ModifyStat
-                or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun;
+                or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.ModifyPriority;
+
+        // A Priority change aimed at a player covers every creature that player controls, now and later (GDD 3.7 Global Modifiers)
+        private static bool IsSideWide(EffectAction action) =>
+            action.actionType == ActionType.ModifyPriority && action.targetType is TargetType.Player or TargetType.Enemy;
 
         private static bool CanAffectPlayers(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon;
@@ -213,6 +218,10 @@ namespace SlayTheClone {
                     return Status(creature, StatusEffectType.Exhausted, action.value, 0, source);
                 case ActionType.ApplyStatus:
                     return Status(creature, action.statusEffectToApply, action.statusDuration, action.statusPotency, source);
+                case ActionType.ModifyPriority: // For statusDuration Days counting this one; 0 means this Day only
+                    return action.value != 0 && (creature != null || target is IPlayer)
+                        ? new ModifyPriorityAction(target, action.value, action.statusDuration)
+                        : null;
                 default:
                     return null;
             }

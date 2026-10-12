@@ -18,6 +18,7 @@ MonoBehaviour:
   cardType: 0
   faction: 3
   artwork: {fileID: 0}
+  priority: 0
   effects: []
   designNotes: 'Mechanics test: Swap trades places with a friendly creature at any
     distance, over the creatures in between, even one that can''t act.'

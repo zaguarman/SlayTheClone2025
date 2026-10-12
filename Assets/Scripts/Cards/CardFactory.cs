@@ -42,6 +42,7 @@ namespace SlayTheClone {
                 }
                 card.Description = cardData.description;
                 card.SourceData = cardData;
+                card.Priority = cardData.priority;
             }
             return card;
         }

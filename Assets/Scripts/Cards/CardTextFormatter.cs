@@ -24,14 +24,15 @@ namespace SlayTheClone {
         }
 
         public static string GetRulesText(CardData data) {
-            string keywords = data is CreatureData creature ? KeywordLine(creature.movement) : "";
+            string keywords = KeywordLine(data is CreatureData creature ? creature.movement : MovementKeyword.None, data.priority, data is SpellData);
             string effects = GetRulesText(data.effects, data is SpellData);
             return string.Join("\n", new[] { keywords, effects }.Where(line => !string.IsNullOrEmpty(line)));
         }
 
-        // Movement Keywords lead the text, like Magic's evergreen keywords ("Leapfrog.")
-        private static string KeywordLine(MovementKeyword movement) {
+        // Keywords lead the text, like Magic's evergreen keywords ("Leapfrog."): Movement Keywords and printed Priority (Action)
+        private static string KeywordLine(MovementKeyword movement, int priority, bool isSpell) {
             var words = new List<string>();
+            if (priority != 0) words.Add($"<b>{(isSpell ? "Priority" : "Priority Attack")} {Signed(priority)}</b>");
             if (movement.HasFlag(MovementKeyword.Leapfrog)) words.Add("<b>Leapfrog</b>");
             if (movement.HasFlag(MovementKeyword.Swap)) words.Add("<b>Swap</b>");
             return words.Count == 0 ? "" : string.Join(", ", words) + ".";
@@ -86,6 +87,7 @@ namespace SlayTheClone {
                 case ActionType.Stun: return EffectIcons.Paralyze;
                 case ActionType.ModifyStat: return action.value >= 0 ? EffectIcons.Buff : EffectIcons.Debuff;
                 case ActionType.ApplyStatus: return EffectIcons.ForStatus(action.statusEffectToApply);
+                case ActionType.ModifyPriority: return action.value >= 0 ? EffectIcons.Buff : EffectIcons.Debuff;
                 default: return null;
             }
         }
@@ -115,6 +117,8 @@ namespace SlayTheClone {
                     return $"give {target} {DescribeStatChange(action)}";
                 case ActionType.ApplyStatus:
                     return DescribeStatus(action, target);
+                case ActionType.ModifyPriority:
+                    return DescribePriorityChange(action, target);
                 default:
                     return null;
             }
@@ -155,6 +159,18 @@ namespace SlayTheClone {
             if (action.modifySpeed) stats.Add("speed");
             return stats.Count == 0 ? "no change" : $"{sign}{action.value} {JoinClauses(stats)}";
         }
+
+        // "+1 Priority": its actions resolve earlier in their layer. Counts this Day; 0 or 1 Day means this Day only
+        private static string DescribePriorityChange(EffectAction action, string target) {
+            string days = action.statusDuration <= 1 ? "this Day" : $"this Day and the next {Turns(action.statusDuration - 1).Replace("turn", "Day")}";
+            switch (action.targetType) {
+                case TargetType.Player: return $"actions by creatures you control get {Signed(action.value)} Priority {days}";
+                case TargetType.Enemy: return $"actions by enemy creatures get {Signed(action.value)} Priority {days}";
+                default: return $"give {target}'s actions {Signed(action.value)} Priority {days}";
+            }
+        }
+
+        private static string Signed(int value) => value >= 0 ? $"+{value}" : value.ToString();
 
         private static string DescribeStatus(EffectAction action, string target) {
             string turns = Turns(action.statusDuration);
