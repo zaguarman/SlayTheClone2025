@@ -139,6 +139,42 @@ namespace SlayTheClone.Tests {
             CollectionAssert.IsEmpty(game.QueuedArrows(p1), "Taking the spell back removes its arrow");
         }
 
+        [UnityTest]
+        public IEnumerator DraggingACreature_ShowsWhatEachSlotOfItsRowWouldMean() {
+            var mover = game.Summon(p1, game.Cards.Creature("Test Mover", 1, 5), 0);
+            game.Summon(p1, game.Cards.Creature("Test Wall", 1, 5), 2);
+            yield return null;
+
+            var card = game.CardIn(p1.Battlefield[0]);
+            var drag = SceneGame.BeginDrag(card);
+            Assert.AreEqual((MoveKind.Walk, false), game.MoveHintIn(p1.Battlefield[1]));
+            Assert.AreEqual((MoveKind.Push, false), game.MoveHintIn(p1.Battlefield[2]), "The wall can be pushed into slot 3");
+            Assert.AreEqual((MoveKind.Walk, true), game.MoveHintIn(p1.Battlefield[4]), "The wall is in the way: blocked");
+            Assert.IsNull(game.MoveHintIn(p1.Battlefield[0]), "Its own slot");
+
+            SceneGame.EndDrag(card, drag);
+            Assert.IsNull(game.MoveHintIn(p1.Battlefield[1]), "The hints go when the drag ends");
+            Assert.AreSame(p1.Battlefield[0], mover.Slot);
+        }
+
+        [UnityTest]
+        public IEnumerator MoveArrows_ShowTheFinalFormation_IncludingCreaturesThatGetPushed() {
+            var pusher = game.Summon(p1, game.Cards.Creature("Test Pusher", 1, 5), 0);
+            var pushed = game.Summon(p1, game.Cards.Creature("Test Pushed", 1, 5), 1);
+            yield return null;
+
+            game.Queue.AddAction(new MoveCreatureAction(pusher, p1.Battlefield[0], p1.Battlefield[1], p1));
+            yield return null;
+
+            var arrows = game.QueuedArrows(p1);
+            Assert.AreEqual(2, arrows.Count, "One arrow for the mover, one for the creature it pushes");
+            Vector2 Slot(int i) => game.BoardView(p1).FindSlotView(p1.Battlefield[i]).transform.position;
+            Assert.IsTrue(arrows.Any(a => Vector2.Distance(a.StartPosition, Slot(0)) < 0.01f && Vector2.Distance(a.EndPosition, Slot(1)) < 0.01f));
+            Assert.IsTrue(arrows.Any(a => Vector2.Distance(a.StartPosition, Slot(1)) < 0.01f && Vector2.Distance(a.EndPosition, Slot(2)) < 0.01f),
+                "The pushed creature's arrow shows where it ends up");
+            Assert.AreSame(p1.Battlefield[1], pushed.Slot, "Nothing has moved yet");
+        }
+
         /// <summary>A queued spell is taken back by clicking it, right-clicking it, or dragging it where it can't be played.</summary>
         [UnityTest]
         public IEnumerator AQueuedSpell_CanBeTakenBack_ByClicking_RightClicking_OrDraggingItAway() {

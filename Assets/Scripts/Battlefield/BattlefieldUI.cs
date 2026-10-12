@@ -160,9 +160,15 @@ namespace SlayTheClone {
             if (!GameManager.ModifierManager.CanAct(creature)) return;
 
             var sourceSlot = creature.Slot;
-            if (sourceSlot != null && sourceSlot != targetSlot) {
-                GameManager.ActionsQueue.AddAction(new MoveCreatureAction(creature, sourceSlot, targetSlot, Player));
+            if (sourceSlot == null || sourceSlot == targetSlot) return;
+
+            // A move that can't work in any order can't be planned (GDD 2.4 Impossible Plans)
+            var (_, blocked, hint) = MovementRules.Evaluate(creature, targetSlot, GameManager.ActionsQueue);
+            if (blocked) {
+                Log($"{creature.Name} can't move to {targetSlot}: {hint}", LogTag.UI | LogTag.Creatures);
+                return;
             }
+            GameManager.ActionsQueue.AddAction(new MoveCreatureAction(creature, sourceSlot, targetSlot, Player));
         }
 
         private BattlefieldSlot GetTargetSlot() {
@@ -374,6 +380,21 @@ namespace SlayTheClone {
             arrowManager.ShowDragArrow(startSlot != null ? startSlot.transform.position : card.transform.position);
             draggedCard = card;
             card.transform.SetAsLastSibling();
+            ShowMoveHints(card.GetLinkedCreature());
+        }
+
+        // Every slot of the row says what dropping the creature there would do, given this side's other planned moves
+        private void ShowMoveHints(ICreature creature) {
+            if (creature?.Slot == null || creature.Owner != Player || !GameManager.ModifierManager.CanAct(creature)) return;
+            foreach (var slot in battlefieldSlots) {
+                if (slot.Model == creature.Slot) continue;
+                var (kind, blocked, hint) = MovementRules.Evaluate(creature, slot.Model, GameManager.ActionsQueue);
+                slot.ShowMoveHint(kind, blocked, hint);
+            }
+        }
+
+        private void ClearMoveHints() {
+            foreach (var slot in battlefieldSlots) slot.ClearMoveHint();
         }
 
         // The drag arrow follows the pointer and shows what releasing there would do
@@ -395,6 +416,7 @@ namespace SlayTheClone {
         protected override void OnCardEndDrag(CardController card) {
             arrowManager.HideDragArrow();
             draggedCard = null;
+            ClearMoveHints();
 
             // Released anywhere but another slot (including back on its own): the creature stands down
             if (GetDragIntent(card, GetTargetSlot()) == BattlefieldArrowManager.DragIntent.None && !GameManager.TurnManager.IsResolving) {

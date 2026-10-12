@@ -1,6 +1,8 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
@@ -28,6 +30,19 @@ namespace SlayTheClone {
 
         private Image trim;
         private bool isMarkedForCombat;
+
+        // While one of this side's creatures is dragged: what dropping it here would do (GDD 2.4 Choosing the Move Type)
+        private static readonly Color WalkHintColor = UITheme.Hex(0x4CC46A, 0.22f);
+        private static readonly Color PushHintColor = UITheme.Hex(0xF0A040, 0.24f);
+        private static readonly Color LeapfrogHintColor = UITheme.Hex(0x4FC3F7, 0.24f);
+        private static readonly Color SwapHintColor = UITheme.Hex(0xB388FF, 0.24f);
+        private static readonly Color BlockedHintColor = UITheme.Hex(0x3A181C, 0.55f);
+        private Color? hintFill;
+        private Color? hintTrim;
+        private TextMeshProUGUI hintLabel;
+
+        /// <summary>The move hint shown here, if any: its kind and whether it's blocked.</summary>
+        public (MoveKind kind, bool blocked)? MoveHint { get; private set; }
 
         private void Awake() {
             rectTransform = GetComponent<RectTransform>() ?? gameObject.AddComponent<RectTransform>();
@@ -72,10 +87,42 @@ namespace SlayTheClone {
             ShowHighlight(null);
         }
 
-        // Null for the resting look
+        // Null for the resting look: the move hint while there is one
         private void ShowHighlight(Color? fill, Color? trimColor = null) {
-            if (backgroundImage != null) backgroundImage.color = fill ?? (isMarkedForCombat ? UITheme.SlotCombat : Color.clear);
-            if (trim != null) trim.color = trimColor ?? Color.clear;
+            if (backgroundImage != null) backgroundImage.color = fill ?? hintFill ?? (isMarkedForCombat ? UITheme.SlotCombat : Color.clear);
+            if (trim != null) trim.color = trimColor ?? hintTrim ?? Color.clear;
+        }
+
+        /// <summary>Shows what dropping the dragged creature here would do: walk, push, Leapfrog, Swap, or blocked with a hint.</summary>
+        public void ShowMoveHint(MoveKind kind, bool blocked, string hint) {
+            MoveHint = (kind, blocked);
+            hintFill = blocked ? BlockedHintColor : kind switch {
+                MoveKind.Push => PushHintColor,
+                MoveKind.Leapfrog => LeapfrogHintColor,
+                MoveKind.Swap => SwapHintColor,
+                _ => WalkHintColor
+            };
+            hintTrim = UITheme.WithAlpha(hintFill.Value, blocked ? 0.5f : 0.9f);
+
+            string label = blocked ? $"Blocked\n<size=75%>{hint}</size>" : kind == MoveKind.Walk ? "" : kind.ToString();
+            if (hintLabel == null) {
+                hintLabel = UITheme.NewText("MoveHint", transform, "", 22f, UITheme.Parchment);
+                hintLabel.textWrappingMode = TextWrappingModes.Normal;
+                UITheme.Stretch(hintLabel.rectTransform, 8f);
+                UITheme.AddDropShadow(hintLabel);
+            }
+            hintLabel.text = label;
+            hintLabel.gameObject.SetActive(label.Length > 0);
+            hintLabel.transform.SetAsLastSibling(); // Over the card standing here
+            ShowHighlight(null);
+        }
+
+        public void ClearMoveHint() {
+            MoveHint = null;
+            hintFill = null;
+            hintTrim = null;
+            if (hintLabel != null) hintLabel.gameObject.SetActive(false);
+            ShowHighlight(null);
         }
 
         public void OnPointerEnter(PointerEventData eventData) {

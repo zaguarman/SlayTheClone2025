@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using static SlayTheClone.Enums;
 using Object = UnityEngine.Object;
 
 namespace SlayTheClone.Tests {
@@ -235,6 +236,19 @@ namespace SlayTheClone.Tests {
             ExecuteEvents.Execute(card.gameObject, eventData, ExecuteEvents.endDragHandler);
             return true;
         }
+
+        /// <summary>Starts dragging the card the way the event system does; finish with <see cref="EndDrag"/>.</summary>
+        public static PointerEventData BeginDrag(CardController card) {
+            var eventData = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, pointerDrag = card.gameObject };
+            ExecuteEvents.Execute(card.gameObject, eventData, ExecuteEvents.beginDragHandler);
+            return eventData;
+        }
+
+        public static void EndDrag(CardController card, PointerEventData eventData) =>
+            ExecuteEvents.Execute(card.gameObject, eventData, ExecuteEvents.endDragHandler);
+
+        /// <summary>The move hint a slot shows while one of its side's creatures is dragged.</summary>
+        public (MoveKind kind, bool blocked)? MoveHintIn(BoardSlot slot) => BoardView(slot.Owner).FindSlotView(slot).MoveHint;
 
         /// <summary>The enlarged copy shown while a card is hovered, if any.</summary>
         public static CardController HoverPreview() {

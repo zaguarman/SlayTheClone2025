@@ -101,5 +101,33 @@ namespace SlayTheClone.Tests {
             AssertAt(a, 4);
             AssertAt(b, 2, "A moved first to let B through");
         }
+
+        [Test]
+        public void ThePreview_ShowsTheFinalFormation_WithoutMovingAnything() {
+            var a = Place("A", 1);
+            var b = Place("B", 0);
+            Plan(b, 2);
+            Plan(a, 4);
+
+            var preview = MovementRules.Preview(p1.Battlefield, MovementRules.PlannedMovesOf(p1, game.ActionsQueue));
+
+            Assert.AreSame(p1.Battlefield[4], preview.FinalSlots[a]);
+            Assert.AreSame(p1.Battlefield[2], preview.FinalSlots[b]);
+            AssertAt(a, 1, "Previewing moves nothing");
+            CollectionAssert.IsEmpty(preview.Blocked);
+        }
+
+        [Test]
+        public void TwoCreaturesThatWouldHaveToPassEachOther_IsAnImpossiblePlan() {
+            var a = Place("A", 0);
+            var b = Place("B", 2);
+            Plan(b, 1);
+
+            var (kind, blocked, hint) = MovementRules.Evaluate(a, p1.Battlefield[4], game.ActionsQueue);
+
+            Assert.AreEqual(MoveKind.Walk, kind);
+            Assert.IsTrue(blocked, "A can't walk past B, who walks the other way");
+            Assert.AreEqual("needs Leapfrog", hint);
+        }
     }
 }

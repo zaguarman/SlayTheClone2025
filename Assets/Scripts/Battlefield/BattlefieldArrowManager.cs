@@ -15,6 +15,7 @@ namespace SlayTheClone {
         private static readonly Color AttackColor = new Color(0.93f, 0.22f, 0.2f);
         private static readonly Color DamageColor = new Color(1f, 0.55f, 0.15f);
         private static readonly Color MoveColor = new Color(0.3f, 0.85f, 0.45f);
+        private static readonly Color MovedColor = new Color(0.62f, 0.8f, 0.66f); // A creature pushed or swapped by another's move
         private static readonly Color SpellColor = new Color(0.62f, 0.45f, 1f);
         private static readonly Color NeutralColor = new Color(0.75f, 0.75f, 0.8f);
 
@@ -69,6 +70,7 @@ namespace SlayTheClone {
                     wanted[key] = arrow;
                 }
             }
+            AddFormationArrows(wanted);
 
             foreach (var key in activeArrows.Keys.Where(k => !wanted.ContainsKey(k)).ToList()) {
                 if (activeArrows[key] != null) activeArrows[key].FadeOutAndDestroy();
@@ -118,10 +120,6 @@ namespace SlayTheClone {
                     key = $"damage_{damage.GetAttacker().TargetId}_{damage.GetTarget().TargetId}";
                     (from, to, color) = (damage.GetAttacker().Slot, damage.GetTarget().Slot, DamageColor);
                     break;
-                case MoveCreatureAction move when move.GetPlayer() == owner && move.GetFromSlot() != null && move.GetToSlot() != null:
-                    key = $"move_{move.GetCreature()?.TargetId}_{move.GetToSlot().TargetId}";
-                    (from, to, color) = (move.GetFromSlot(), move.GetToSlot(), MoveColor);
-                    break;
                 default:
                     return false;
             }
@@ -146,6 +144,25 @@ namespace SlayTheClone {
 
         private static BoardSlot SlotAimedAt(ITarget target) =>
             target is HomingTarget homing ? homing.CurrentSlot : target as BoardSlot;
+
+        // Live Preview (GDD 2.4): move arrows show the final formation, where every creature of this row ends up once the
+        // planned moves resolve, including the ones they push or swap, rather than each move on its own
+        private void AddFormationArrows(Dictionary<string, (Vector3 start, Vector3 end, Color color)> wanted) {
+            var moves = MovementRules.PlannedMovesOf(owner, actionsQueue);
+            if (moves.Count == 0) return;
+
+            var movers = new HashSet<ICreature>(moves.Select(m => m.Creature));
+            var preview = MovementRules.Preview(owner.Battlefield, moves);
+            foreach (var entry in preview.FinalSlots) {
+                var creature = entry.Key;
+                if (creature.Slot == null || creature.Slot == entry.Value) continue;
+                var fromView = findSlotView(creature.Slot);
+                var toView = findSlotView(entry.Value);
+                if (fromView == null || toView == null) continue;
+                wanted[$"move_{creature.TargetId}_{entry.Value.TargetId}"] =
+                    (fromView.transform.position, toView.transform.position, movers.Contains(creature) ? MoveColor : MovedColor);
+            }
+        }
 
         private bool IsOwn(ICreature creature) => creature != null && creature.Owner == owner && creature.Slot != null;
         #endregion

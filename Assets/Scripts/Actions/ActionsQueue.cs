@@ -273,11 +273,8 @@ namespace SlayTheClone {
             var leaving = moves.Select(e => e.Action).OfType<MoveCreatureAction>().Select(m => m.GetCreature())
                 .Where(c => c != null && executionContext.ModifierManager.CanAct(c)).ToHashSet();
 
-            bool Works(Entry entry) {
-                if (!(entry.Action is MoveCreatureAction move)) return true;
-                var outcome = MovementRules.Resolve(move.GetCreature(), move.GetToSlot(), move.Kind);
-                return outcome.ReachesDestination && (outcome.Partner == null || !leaving.Contains(outcome.Partner));
-            }
+            bool Works(Entry entry) => !(entry.Action is MoveCreatureAction move)
+                || MovementRules.WorksNow(MovementRules.Resolve(move.GetCreature(), move.GetToSlot(), move.Kind), leaving);
             return moves.FirstOrDefault(Works) ?? moves.First();
         }
 
