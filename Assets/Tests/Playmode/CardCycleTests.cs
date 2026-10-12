@@ -26,8 +26,14 @@ namespace SlayTheClone.Tests {
         [TearDown]
         public void TearDown() => game.Dispose();
 
+        // An empty board for the next part of a test
+        private void Fresh() {
+            game.Dispose();
+            SetUp();
+        }
+
         [Test]
-        public void Drawing_StopsAtTheHandLimit_AndLeavesTheRestInTheDeck() {
+        public void Drawing_StopsAtTheHandLimit_AndSummoningFromTheDeck_TakesOnlyCreatures_IntoEmptySlots() {
             game.SetDecks(game.Fillers(15), game.Fillers(1));
 
             game.Run(new DrawCardsAction(p1, 12));
@@ -35,26 +41,8 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Player.MaxHandSize, p1.Hand.Count);
             Assert.AreEqual(15 - Player.MaxHandSize, p1.Deck.CardsRemaining);
             Assert.AreEqual(15, GameAsserts.CountCards(p1), "Cards were lost");
-        }
 
-        [UnityTest]
-        public IEnumerator EndingATurn_DiscardsBothHandsAndDrawsFiveEach() {
-            game.SetDecks(game.Fillers(20), game.Fillers(20));
-            game.CardDealingService.DealInitialHands(p1, p2, 5);
-            var firstHands = new[] { p1, p2 }.ToDictionary(p => p, p => p.Hand.ToList());
-
-            yield return game.EndTurn();
-
-            foreach (var player in new[] { p1, p2 }) {
-                Assert.AreEqual(5, player.Hand.Count);
-                CollectionAssert.IsEmpty(player.Hand.Intersect(firstHands[player]), "The old hand should have been discarded");
-                Assert.AreEqual(5, player.Deck.GetDiscardPilePreview().Count);
-                Assert.AreEqual(10, player.Deck.CardsRemaining);
-            }
-        }
-
-        [Test]
-        public void SummonFromDeck_OnlyTakesCreatures_IntoEmptySlots() {
+            Fresh();
             var rally = game.Spell("Rally", TargetType.Player);
             var cry = game.Spell("Cry", TargetType.Player);
             var bear = game.Creature("Bear", 2, 2);
@@ -71,6 +59,22 @@ namespace SlayTheClone.Tests {
             SummonFromDeckEffect.QueueRandomSummons(p1, 1, game.ActionsQueue);
             game.Resolve();
             Assert.AreEqual(2, p1.Deck.CardsRemaining, "With the board full nothing is summoned");
+        }
+
+        [UnityTest]
+        public IEnumerator EndingATurn_DiscardsBothHandsAndDrawsFiveEach() {
+            game.SetDecks(game.Fillers(20), game.Fillers(20));
+            game.CardDealingService.DealInitialHands(p1, p2, 5);
+            var firstHands = new[] { p1, p2 }.ToDictionary(p => p, p => p.Hand.ToList());
+
+            yield return game.EndTurn();
+
+            foreach (var player in new[] { p1, p2 }) {
+                Assert.AreEqual(5, player.Hand.Count);
+                CollectionAssert.IsEmpty(player.Hand.Intersect(firstHands[player]), "The old hand should have been discarded");
+                Assert.AreEqual(5, player.Deck.GetDiscardPilePreview().Count);
+                Assert.AreEqual(10, player.Deck.CardsRemaining);
+            }
         }
     }
 }

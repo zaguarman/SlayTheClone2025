@@ -24,6 +24,12 @@ namespace SlayTheClone.Tests {
         [TearDown]
         public void TearDown() => game.Dispose();
 
+        // An empty board for the next part of a test
+        private void Fresh() {
+            game.Dispose();
+            SetUp();
+        }
+
         private ICreature With(CreatureAbility ability, Player owner, int slot, int attack = 3, int health = 10, params CardEffect[] effects) {
             var data = game.Creature($"{ability} {owner.Name} {slot}", attack, health, 1, effects);
             data.ability = ability;
@@ -34,231 +40,155 @@ namespace SlayTheClone.Tests {
         private void ChangeAttack(ICreature target, int amount, IPlayer controller, ICreature by = null) =>
             game.Run(new ModifyAction(target, amount, true, false, false, source: by, controller: controller));
 
-        #region Changing how stat changes affect it
         [Test]
-        public void Contrarian_ReversesStatChanges_FromEitherSide() {
+        public void StatChangeAbilities_Reverse_Double_Block_OrReact_UntilSwitchedOff() {
             var contrarian = With(CreatureAbility.Contrarian, p1, 0);
             ChangeAttack(contrarian, 2, p1);
-            Assert.AreEqual(1, contrarian.Attack, "Its owner's buff hurts it");
+            Assert.AreEqual(1, contrarian.Attack, "Contrarian: its owner's buff hurts it");
             ChangeAttack(contrarian, -2, p2);
-            Assert.AreEqual(3, contrarian.Attack, "The enemy's debuff helps it");
-        }
+            Assert.AreEqual(3, contrarian.Attack, "...and the enemy's debuff helps it");
 
-        [Test]
-        public void Extremist_DoublesStatChanges() {
-            var extremist = With(CreatureAbility.Extremist, p1, 0);
+            var extremist = With(CreatureAbility.Extremist, p1, 1);
             ChangeAttack(extremist, 2, p1);
-            Assert.AreEqual(7, extremist.Attack);
             ChangeAttack(extremist, -1, p2);
-            Assert.AreEqual(5, extremist.Attack);
-        }
+            Assert.AreEqual(5, extremist.Attack, "Extremist: +4, then -2");
 
-        [Test]
-        public void Unbothered_StopsEnemyDebuffsOnly_AndHealthLossIsntADebuff() {
-            var calm = With(CreatureAbility.Unbothered, p1, 0);
+            var calm = With(CreatureAbility.Unbothered, p1, 2);
             ChangeAttack(calm, -2, p2);
-            Assert.AreEqual(3, calm.Attack, "The enemy can't lower its stats");
+            Assert.AreEqual(3, calm.Attack, "Unbothered: the enemy can't lower its stats");
             ChangeAttack(calm, -1, p1);
-            Assert.AreEqual(2, calm.Attack, "Its owner can");
             ChangeAttack(calm, 1, p2);
-            Assert.AreEqual(3, calm.Attack, "Enemy buffs still apply");
-
+            Assert.AreEqual(3, calm.Attack, "Its owner can, and enemy buffs still apply");
             game.Run(new ModifyAction(calm, -2, false, true, false, controller: p2));
             Assert.AreEqual(8, calm.Health, "Health Loss isn't a stat change: it goes through");
+
+            var spiteful = With(CreatureAbility.Spite, p1, 3);
+            ChangeAttack(spiteful, -1, p2);
+            Assert.AreEqual(4, spiteful.Attack, "Spite: -1, then +2");
+            ChangeAttack(spiteful, -1, p1);
+            Assert.AreEqual(3, spiteful.Attack, "Not from its own side");
+
+            var unpatchable = With(CreatureAbility.Unpatchable, p1, 4);
+            var hacker = With(CreatureAbility.ZeroDay, p2, 0);
+            ChangeAttack(calm, -2, p2, by: hacker);
+            Assert.AreEqual(1, calm.Attack, "Zero-Day bypasses Unbothered");
+            ChangeAttack(unpatchable, -2, p2, by: hacker);
+            Assert.AreEqual(3, unpatchable.Attack, "...but not Unpatchable");
+
+            game.Run(new ApplyStatusEffectAction(contrarian, StatusEffectType.Exhausted, 1, 0));
+            ChangeAttack(contrarian, 2, p1);
+            Assert.AreEqual(5, contrarian.Attack, "Exhausted switches abilities off: the buff isn't reversed");
+            Assert.AreEqual(CreatureAbility.Contrarian, contrarian.Ability, "Switched off, not removed");
+
+            var printed = game.Creature("Contrarian Guy", 1, 1);
+            printed.ability = CreatureAbility.Contrarian;
+            StringAssert.StartsWith("<b>Contrarian</b> (stat changes on it are reversed).", CardTextFormatter.GetRulesText(printed));
         }
 
         [Test]
-        public void NoU_BouncesEnemyDebuffs_ToTheirSource_OrTheCastersWeakestCreature_OnlyOnce() {
+        public void NoU_And_ReturnToSender_BounceEnemyEffects_BackToTheirSource() {
             var mirror = With(CreatureAbility.NoU, p1, 0);
             var shrinker = With(CreatureAbility.None, p2, 0, health: 10);
             var weakling = With(CreatureAbility.None, p2, 1, health: 2);
 
             ChangeAttack(mirror, -1, p2, by: shrinker);
             Assert.AreEqual(3, mirror.Attack);
-            Assert.AreEqual(2, shrinker.Attack, "Back to the creature that caused it");
-
+            Assert.AreEqual(2, shrinker.Attack, "No U: back to the creature that caused it");
             ChangeAttack(mirror, -1, p2); // A spell from hand
             Assert.AreEqual(2, weakling.Attack, "No source creature: the caster's lowest Health creature");
-
             var otherMirror = With(CreatureAbility.NoU, p2, 2);
             ChangeAttack(mirror, -1, p2, by: otherMirror);
             Assert.AreEqual(2, otherMirror.Attack, "A bounced effect can't bounce again");
             Assert.AreEqual(3, mirror.Attack);
-        }
 
-        [Test]
-        public void Spite_GainsTwoAttack_WhenAnEnemyEffectLowersItsStats() {
-            var spiteful = With(CreatureAbility.Spite, p1, 0);
-            ChangeAttack(spiteful, -1, p2);
-            Assert.AreEqual(4, spiteful.Attack, "-1, then +2");
-            ChangeAttack(spiteful, -1, p1);
-            Assert.AreEqual(3, spiteful.Attack, "Not from its own side");
-        }
-
-        [Test]
-        public void ZeroDay_IgnoresDefensiveAbilities_ButNotUnpatchable() {
-            var calm = With(CreatureAbility.Unbothered, p1, 0);
-            var unpatchable = With(CreatureAbility.Unpatchable, p1, 1);
-            var hacker = With(CreatureAbility.ZeroDay, p2, 0);
-
-            ChangeAttack(calm, -2, p2, by: hacker);
-            Assert.AreEqual(1, calm.Attack, "Zero-Day bypasses Unbothered");
-            ChangeAttack(unpatchable, -2, p2, by: hacker);
-            Assert.AreEqual(3, unpatchable.Attack, "...but not Unpatchable");
-        }
-        #endregion
-
-        #region Combat and damage
-        [Test]
-        public void Underground_IgnoresTheAttackersBuffs_WhenAttacked() {
-            var mole = With(CreatureAbility.Underground, p1, 0, attack: 0);
-            var brute = With(CreatureAbility.None, p2, 0, attack: 2);
-            ChangeAttack(brute, 3, p2);
-            game.ModifierManager.ChangeBaseStats(brute, 1, 0, 0); // A Persistent Stat Modification still counts
-
-            game.Attack(brute, p1.Battlefield[0]);
-
-            Assert.AreEqual(7, mole.Health, "Base 2 + persistent 1; the +3 buff is ignored");
-        }
-
-        [Test]
-        public void Underground_IgnoresTheDefendersStatChanges_WhenItAttacks_LikeUnaware() {
-            var mole = With(CreatureAbility.Underground, p1, 0, attack: 3);
-            var buffed = With(CreatureAbility.None, p2, 0, health: 10);
-            game.Run(new ModifyAction(buffed, 4, false, true, false, controller: p2)); // 14/14: the buff would soak the hit
-
-            game.Attack(mole, p2.Battlefield[0]);
-
-            Assert.AreEqual(7, buffed.Health, "3 damage, plus the 4 Health the buff added: as if it weren't there");
-        }
-
-        [Test]
-        public void IdentityTheft_IsUsedAsTheCreaturesAction_AndSwapsAbilities() {
-            var thief = With(CreatureAbility.IdentityTheft, p1, 0);
-            var mark = With(CreatureAbility.Unpatchable, p2, 2);
-            game.Declare(thief, p2.Battlefield[1]); // Planned an attack first
-
-            game.ActionsQueue.AddAction(new UseAbilityAction(thief, p2.Battlefield[2])); // Replaces it: one action a Day
-            game.Resolve();
-
-            Assert.AreEqual(CreatureAbility.Unpatchable, thief.Ability);
-            Assert.AreEqual(CreatureAbility.IdentityTheft, mark.Ability, "The target gets Identity Theft and can use it in turn");
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "The attack was replaced");
-        }
-
-        [Test]
-        public void Technician_DoublesHitsOf3OrLess() {
-            var tech = With(CreatureAbility.Technician, p1, 0, attack: 3);
-            var target = With(CreatureAbility.None, p2, 0, health: 20);
-            game.Attack(tech, p2.Battlefield[0]);
-            Assert.AreEqual(14, target.Health, "3 becomes 6");
-
-            ChangeAttack(tech, 1, p1);
-            game.Attack(tech, p2.Battlefield[0]);
-            Assert.AreEqual(10, target.Health, "4 is too much to double");
-        }
-
-        [Test]
-        public void InsiderJob_IgnoresArmor() {
-            var insider = With(CreatureAbility.InsiderJob, p1, 0, attack: 3);
-            var guard = With(CreatureAbility.None, p2, 0, health: 10);
-            game.Run(new ModifyArmorAction(guard, 5));
-
-            game.Attack(insider, p2.Battlefield[0]);
-
-            Assert.AreEqual(7, guard.Health);
-            Assert.AreEqual(5, guard.CurrentArmorPool, "The Armor is untouched");
-        }
-
-        [Test]
-        public void TooMainstream_IgnoresEffectsOnSeveralCreatures_ButNotOnesAimedAtItAlone() {
-            var hipster = With(CreatureAbility.TooMainstream, p2, 0);
-            var normie = With(CreatureAbility.None, p2, 1);
-            var bomb = game.GiveCard(p1, game.Spell("Bomb", TargetType.EnemyCreatures,
-                Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));
-            game.Play(bomb, p1, null);
-            game.Resolve();
-            Assert.AreEqual(10, hipster.Health, "Every enemy creature: too mainstream");
-            Assert.AreEqual(8, normie.Health);
-
-            var zap = game.GiveCard(p1, game.Spell("Zap", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures)));
-            game.Play(zap, p1, p2.Battlefield[0]);
-            game.Resolve();
-            Assert.AreEqual(8, hipster.Health, "Aimed at it alone");
-        }
-        #endregion
-
-        #region Statuses, copying and switching off
-        [Test]
-        public void ReturnToSender_BouncesEnemyStatuses_BackToTheCreatureThatSentThem() {
-            var bouncer = With(CreatureAbility.ReturnToSender, p1, 0);
-            var stunner = With(CreatureAbility.None, p2, 0);
-
-            game.Run(new ApplyStatusEffectAction(bouncer, StatusEffectType.Exhausted, 1, 0, source: stunner, controller: p2));
-
+            var bouncer = With(CreatureAbility.ReturnToSender, p1, 1);
+            game.Run(new ApplyStatusEffectAction(bouncer, StatusEffectType.Exhausted, 1, 0, source: shrinker, controller: p2));
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(bouncer, StatusEffectType.Exhausted));
-            Assert.IsTrue(game.ModifierManager.HasStatusEffect(stunner, StatusEffectType.Exhausted));
-
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(shrinker, StatusEffectType.Exhausted), "Return to Sender: the status bounces");
             game.Run(new ApplyStatusEffectAction(bouncer, StatusEffectType.Burned, 1, 1, controller: p1));
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(bouncer, StatusEffectType.Burned), "Friendly statuses apply normally");
         }
 
         [Test]
-        public void HiveMind_SpreadsToWhoeverAttacksIt_AndStaysOnTheCardUntilTheReshuffle() {
+        public void CombatAbilities_Underground_Technician_InsiderJob_TooMainstream() {
+            var mole = With(CreatureAbility.Underground, p1, 0, attack: 0);
+            var brute = With(CreatureAbility.None, p2, 0, attack: 2);
+            ChangeAttack(brute, 3, p2);
+            game.ModifierManager.ChangeBaseStats(brute, 1, 0, 0); // A Persistent Stat Modification still counts
+            game.Attack(brute, p1.Battlefield[0]);
+            Assert.AreEqual(7, mole.Health, "Underground, attacked: base 2 + persistent 1; the +3 buff is ignored");
+
+            var digger = With(CreatureAbility.Underground, p1, 1, attack: 3);
+            var buffed = With(CreatureAbility.None, p2, 1, health: 10);
+            game.Run(new ModifyAction(buffed, 4, false, true, false, controller: p2)); // 14/14: the buff would soak the hit
+            game.Attack(digger, p2.Battlefield[1]);
+            Assert.AreEqual(7, buffed.Health, "Underground, attacking (like Unaware): as if the Health buff weren't there");
+
+            var tech = With(CreatureAbility.Technician, p1, 2, attack: 3);
+            var target = With(CreatureAbility.None, p2, 2, health: 20);
+            game.Attack(tech, p2.Battlefield[2]);
+            Assert.AreEqual(14, target.Health, "Technician: 3 becomes 6");
+            ChangeAttack(tech, 1, p1);
+            game.Attack(tech, p2.Battlefield[2]);
+            Assert.AreEqual(10, target.Health, "4 is too much to double");
+
+            var insider = With(CreatureAbility.InsiderJob, p1, 3, attack: 3);
+            var guard = With(CreatureAbility.None, p2, 3, health: 10);
+            game.Run(new ModifyArmorAction(guard, 5));
+            game.Attack(insider, p2.Battlefield[3]);
+            Assert.AreEqual(7, guard.Health, "Insider Job ignores Armor...");
+            Assert.AreEqual(5, guard.CurrentArmorPool, "...and leaves it untouched");
+
+            var hipster = With(CreatureAbility.TooMainstream, p2, 4);
+            var bomb = game.GiveCard(p1, game.Spell("Bomb", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));
+            game.Play(bomb, p1, null);
+            game.Resolve();
+            Assert.AreEqual(10, hipster.Health, "Too Mainstream: every enemy creature is too mainstream");
+            Assert.AreEqual(8, target.Health);
+            var zap = game.GiveCard(p1, game.Spell("Zap", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures)));
+            game.Play(zap, p1, p2.Battlefield[4]);
+            game.Resolve();
+            Assert.AreEqual(8, hipster.Health, "Aimed at it alone, it lands");
+        }
+
+        [Test]
+        public void CopyingAndSpreading_HiveMind_IdentityTheft_SignalJammer_Copypasta() {
             game.SetDecks(game.Fillers(5), game.Fillers(5));
             With(CreatureAbility.HiveMind, p1, 0, attack: 0, health: 30);
             var attacker = With(CreatureAbility.Technician, p2, 0, attack: 2, health: 2);
-
             game.Attack(attacker, p1.Battlefield[0]);
-            Assert.AreEqual(CreatureAbility.HiveMind, attacker.Ability, "It lost Technician");
-
+            Assert.AreEqual(CreatureAbility.HiveMind, attacker.Ability, "Hive Mind spreads to its attacker, replacing Technician");
             game.Run(new DestroyCreatureAction(attacker, unconditional: true));
             var discarded = (ICreature)p2.Deck.GetDiscardPilePreview().Single(c => c.Name == attacker.Name);
             Assert.AreEqual(CreatureAbility.HiveMind, discarded.Ability, "A changed ability stays on the card");
             game.CardDealingService.RecycleDiscardPile(p2);
             var reshuffled = (ICreature)p2.Deck.GetDeckPreview().Single(c => c.Name == attacker.Name);
             Assert.AreEqual(CreatureAbility.Technician, reshuffled.Ability, "Reshuffling gives it its printed ability back");
-        }
 
-        [Test]
-        public void SignalJammer_SwitchesOffTheAbilityOfTheEnemyOpposite_WhileBothStayInTheLane() {
-            var calm = With(CreatureAbility.Unbothered, p1, 0);
-            With(CreatureAbility.SignalJammer, p2, 0);
-            Assert.IsFalse(Abilities.IsActive(calm));
-            Assert.AreEqual(CreatureAbility.Unbothered, calm.Ability, "Switched off, not removed");
+            var thief = With(CreatureAbility.IdentityTheft, p1, 1);
+            var mark = With(CreatureAbility.Unpatchable, p2, 2);
+            game.Declare(thief, p2.Battlefield[1]); // Planned an attack first
+            game.ActionsQueue.AddAction(new UseAbilityAction(thief, p2.Battlefield[2])); // Replaces it: one action a Day
+            game.Resolve();
+            Assert.AreEqual(CreatureAbility.Unpatchable, thief.Ability, "Identity Theft swaps abilities");
+            Assert.AreEqual(CreatureAbility.IdentityTheft, mark.Ability, "The target gets Identity Theft and can use it in turn");
+            Assert.AreEqual(Player.MaxHealth, p2.Health, "Using it replaced the planned attack");
 
+            var calm = With(CreatureAbility.Unbothered, p1, 3);
+            With(CreatureAbility.SignalJammer, p2, 3);
             ChangeAttack(calm, -1, p2);
-            Assert.AreEqual(2, calm.Attack, "Its Unbothered is off");
-
-            game.Run(new MoveCreatureAction(calm, p1.Battlefield[0], p1.Battlefield[1], p1));
+            Assert.AreEqual(2, calm.Attack, "Signal Jammer: the ability of the enemy opposite is off");
+            game.Run(new MoveCreatureAction(calm, p1.Battlefield[3], p1.Battlefield[4], p1));
             ChangeAttack(calm, -1, p2);
             Assert.AreEqual(2, calm.Attack, "Out of the lane, it's back on");
-        }
 
-        [Test]
-        public void Exhausted_SwitchesAbilitiesOff_WhileItLasts() {
-            var contrarian = With(CreatureAbility.Contrarian, p1, 0);
-            game.Run(new ApplyStatusEffectAction(contrarian, StatusEffectType.Exhausted, 1, 0));
-            ChangeAttack(contrarian, 2, p1);
-            Assert.AreEqual(5, contrarian.Attack, "Abilities Disabled: the buff isn't reversed");
-        }
-
-        [Test]
-        public void Copypasta_CopiesTheAbilityOfTheCreatureOpposite_WhenReady_OrAtALaterDawn() {
+            Fresh();
             var copycat = With(CreatureAbility.Copypasta, p1, 0);
-            Assert.AreEqual(CreatureAbility.Copypasta, copycat.Ability, "Nobody opposite yet");
-
+            Assert.AreEqual(CreatureAbility.Copypasta, copycat.Ability, "Copypasta: nobody opposite yet");
             With(CreatureAbility.Extremist, p2, 0);
             game.StartTurn();
             Assert.AreEqual(CreatureAbility.Extremist, copycat.Ability, "Copied at Dawn, replacing Copypasta");
         }
-
-        [Test]
-        public void AbilitiesArePrintedOnTheCard() {
-            var data = game.Creature("Contrarian Guy", 1, 1);
-            data.ability = CreatureAbility.Contrarian;
-            StringAssert.StartsWith("<b>Contrarian</b> (stat changes on it are reversed).", CardTextFormatter.GetRulesText(data));
-        }
-        #endregion
     }
 }

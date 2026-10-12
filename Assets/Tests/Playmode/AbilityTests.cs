@@ -26,7 +26,7 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [Test]
-        public void OnPlay_FiresOnce_WhenTheCreatureLands_OrWhenItBecomesOperative() {
+        public void OnPlay_OnDeath_OnDamage_FireExactlyWhenTheyShould() {
             var wolf = game.GiveCard(p1, game.Creature("Wolf", 2, 3, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Enemy)));
             var golemData = game.Creature("Golem", 3, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 5, TargetType.Enemy));
             golemData.turnsUntilOperative = 2;
@@ -46,24 +46,18 @@ namespace SlayTheClone.Tests {
 
             game.StartTurn();
             CollectionAssert.AreEqual(new[] { 2, 5 }, game.History.DamageTo(p2), "An on-play effect fired again on a later turn");
-        }
 
-        [Test]
-        public void OnDeath_FiresOnceWhenTheCreatureDies() {
-            var martyr = game.Summon(p1, game.Creature("Martyr", 1, 2, 1, Effect(EffectTrigger.OnDeath, ActionType.Damage, 3, TargetType.Enemy)), 0);
+            var martyr = game.Summon(p1, game.Creature("Martyr", 1, 2, 1, Effect(EffectTrigger.OnDeath, ActionType.Damage, 3, TargetType.Enemy)), 2);
 
             game.Run(new DamageCreatureAction(martyr, 5));
             game.Run(new DamageCreatureAction(martyr, 5)); // Hit again after it died
 
             Assert.IsTrue(martyr.IsDead);
             CollectionAssert.AreEqual(new[] { martyr }, game.History.Deaths, "The creature should die exactly once");
-            CollectionAssert.AreEqual(new[] { 3 }, game.History.DamageTo(p2), "The death effect should fire exactly once");
+            CollectionAssert.AreEqual(new[] { 2, 5, 3 }, game.History.DamageTo(p2), "The death effect should fire exactly once");
             Assert.AreEqual(1, p1.Deck.GetDiscardPilePreview().Count(c => c.CardId == martyr.CardId), "Discarded more than once");
-        }
 
-        [Test]
-        public void OnDamage_FiresOnEveryHit_EvenWhenArmorTakesIt_OrItKills() {
-            var medic = game.Summon(p1, game.Creature("Medic", 0, 5, 1, Effect(EffectTrigger.OnDamage, ActionType.Heal, 1, TargetType.Player)), 0);
+            var medic = game.Summon(p1, game.Creature("Medic", 0, 5, 1, Effect(EffectTrigger.OnDamage, ActionType.Heal, 1, TargetType.Player)), 3);
             game.Run(new DamagePlayerAction(p1, 5));
 
             game.Run(new DamageCreatureAction(medic, 1));

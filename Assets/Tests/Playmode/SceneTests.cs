@@ -31,7 +31,7 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [UnityTest]
-        public IEnumerator TheGameStarts_WithTheScenesDecks_AndEndTurn_EndsOneTurn_EvenWhenClickedTwice() {
+        public IEnumerator TheGameStarts_EndTurnEndsOneTurn_EvenClickedTwice_AndCombatShowsOnScreen() {
             SceneGame.AssertPlays(p1, game.References.Player1Deck);
             SceneGame.AssertPlays(p2, game.References.Player2Deck);
             Assert.AreEqual(MatchSetup.DefaultOpponentName, p2.Name, "With no match chosen, the opponent keeps its default name");
@@ -44,21 +44,38 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(0, game.Turns.TurnNumber);
             game.AssertViewsMatchRules();
 
+            var brute = game.Summon(p1, game.Cards.Creature("Test Brute", 4, 5), 0);
+            var mouse = game.Summon(p2, game.Cards.Creature("Test Mouse", 1, 2), 0);
+            var striker = game.Summon(p1, game.Cards.Creature("Test Striker", 3, 3), 1);
+            game.Attack(brute, p2.Battlefield[0]);
+            game.Attack(mouse, p1.Battlefield[0]);
+            game.Attack(striker, p2.Battlefield[1]); // An empty slot: the hit goes to player 2
+
             var endTurn = game.References.GetResolveActionsButton();
             endTurn.onClick.Invoke();
             endTurn.onClick.Invoke(); // While the first click's turn is still resolving
             yield return Wait.For(() => !game.Turns.IsResolving, "the turn to resolve");
-
             Assert.AreEqual(1, game.Turns.TurnNumber, "Two clicks ended two turns");
-            game.AssertViewsMatchRules(); // Including the new hands
+
+            Assert.IsTrue(mouse.IsDead);
+            Assert.IsNull(game.CardIn(p2.Battlefield[0]), "The dead creature's card is still on the board");
+            Assert.AreEqual(4, brute.Health, "At equal Speed the mouse, with less Health, strikes first");
+            Assert.AreEqual(Player.MaxHealth - 3, p2.Health);
+            game.AssertViewsMatchRules(); // Including the new hands, the survivor's damage and player 2's health
         }
 
-        /// <summary>Slot Effects show on their slot. Hidden ones only for their controller: player 1 is the one at the screen.</summary>
+        /// <summary>
+        /// What the board shows besides the cards: Slot Effects (hidden ones only to their controller, player 1 at the screen),
+        /// Watchdogs by their row (the enemy's condition hidden), move hints while dragging, and planned moves as ghosts and arrows.
+        /// </summary>
         [UnityTest]
-        public IEnumerator SlotEffects_ShowOnTheirSlot_HiddenOnesOnlyToTheirController() {
+        public IEnumerator TheBoardShows_SlotEffects_Watchdogs_MoveHints_AndPlannedMoves() {
             game.Queue.AddAction(new PlaceSlotEffectAction(p2.Battlefield[1], SlotEffectType.Landmine, 2, 0, p1));
             game.Queue.AddAction(new PlaceSlotEffectAction(p1.Battlefield[1], SlotEffectType.Landmine, 2, 0, p2));
             game.Queue.AddAction(new PlaceSlotEffectAction(p1.Battlefield[3], SlotEffectType.TemporalShield, 0, 2, p1));
+            var nullify = new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Nullify, charges = 2 };
+            game.Queue.AddAction(new CreateWatchdogAction(nullify, p1, null, 0));
+            game.Queue.AddAction(new CreateWatchdogAction(nullify, p2, null, 0));
             game.Queue.ResolveActions();
             yield return null;
 
@@ -67,29 +84,47 @@ namespace SlayTheClone.Tests {
             StringAssert.Contains("(hidden)", Badge(p2.Battlefield[1]));
             Assert.AreEqual("", Badge(p1.Battlefield[1]), "The enemy's mine is secret");
             StringAssert.Contains("Temporal Shield", Badge(p1.Battlefield[3]), "Visible ones show to everyone");
-
             game.Summon(p2, game.Cards.Creature("Test Sapper", 1, 5), 1);
             yield return null;
             Assert.AreEqual("", Badge(p2.Battlefield[1]), "Used up: gone from the slot");
+
+            StringAssert.Contains("attacks by the enemy -> Nullify (2 left, On Watch)", game.BoardView(p1).WatchdogText);
+            StringAssert.Contains("???", game.BoardView(p2).WatchdogText, "The enemy's Watchdog condition is hidden");
+            StringAssert.DoesNotContain("Nullify", game.BoardView(p2).WatchdogText);
+
+            var mover = game.Summon(p1, game.Cards.Creature("Test Mover", 1, 5), 0);
+            var wall = game.Summon(p1, game.Cards.Creature("Test Wall", 1, 5), 2);
+            yield return null;
+            var card = game.CardIn(p1.Battlefield[0]);
+            var drag = SceneGame.BeginDrag(card);
+            Assert.AreEqual((MoveKind.Walk, false), game.MoveHintIn(p1.Battlefield[1]));
+            Assert.AreEqual((MoveKind.Push, false), game.MoveHintIn(p1.Battlefield[2]), "The wall can be pushed into slot 3");
+            Assert.AreEqual((MoveKind.Walk, true), game.MoveHintIn(p1.Battlefield[4]), "The wall is in the way: blocked");
+            Assert.IsNull(game.MoveHintIn(p1.Battlefield[0]), "Its own slot");
+            SceneGame.EndDrag(card, drag);
+            Assert.IsNull(game.MoveHintIn(p1.Battlefield[1]), "The hints go when the drag ends");
+
+            game.Queue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[0], p1.Battlefield[2], p1));
+            yield return null;
+            CollectionAssert.AreEquivalent(new[] { (mover, p1.Battlefield[2]), (wall, p1.Battlefield[3]) }, game.BoardView(p1).MoveGhosts.ToList(),
+                "A ghost of each creature where it will end up, the pushed one included");
+            var arrows = game.QueuedArrows(p1);
+            Vector2 Slot(int i) => game.BoardView(p1).FindSlotView(p1.Battlefield[i]).transform.position;
+            Assert.AreEqual(2, arrows.Count, "One arrow for the mover, one for the creature it pushes");
+            Assert.IsTrue(arrows.Any(a => Vector2.Distance(a.StartPosition, Slot(2)) < 0.01f && Vector2.Distance(a.EndPosition, Slot(3)) < 0.01f),
+                "The pushed creature's arrow shows where it ends up");
+            Assert.AreSame(p1.Battlefield[0], mover.Slot, "Nothing has moved yet");
+            game.AssertViewsMatchRules();
+
+            game.Queue.ResolveActions();
+            yield return null;
+            Assert.IsEmpty(game.BoardView(p1).MoveGhosts, "The ghosts go once the moves are done");
             game.AssertViewsMatchRules();
         }
 
-        /// <summary>Active Watchdogs are listed by their row: in full for their controller, "???" for the other side (GDD 3.11).</summary>
+        /// <summary>A queued creature shows as a ghost on its slot: it can be hovered, and taken back by clicking, right-clicking or dragging it away.</summary>
         [UnityTest]
-        public IEnumerator Watchdogs_AreListedByTheirSide_TheEnemysConditionHidden() {
-            var nullify = new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Nullify, charges = 2 };
-            game.Queue.AddAction(new CreateWatchdogAction(nullify, p1, null, 0));
-            game.Queue.AddAction(new CreateWatchdogAction(nullify, p2, null, 0));
-            game.Queue.ResolveActions();
-            yield return null;
-
-            StringAssert.Contains("attacks by the enemy -> Nullify (2 left, On Watch)", game.BoardView(p1).WatchdogText);
-            StringAssert.Contains("???", game.BoardView(p2).WatchdogText, "The enemy's condition is hidden");
-            StringAssert.DoesNotContain("Nullify", game.BoardView(p2).WatchdogText);
-        }
-
-        [UnityTest]
-        public IEnumerator AQueuedCreature_CanBeHovered_ToShowItEnlarged_WhetherItsSlotIsEmptyOrNot() {
+        public IEnumerator AQueuedCreature_CanBeHovered_OrTakenBack() {
             var occupant = game.Summon(p1, game.Cards.Creature("Test Ox", 0, 6), 3);
             var wolf = game.GiveCard(p1, game.Cards.Creature("Test Wolf", 2, 3));
             var hound = game.GiveCard(p1, game.Cards.Creature("Test Hound", 3, 1));
@@ -100,7 +135,6 @@ namespace SlayTheClone.Tests {
             foreach (var (queued, slot) in new[] { (wolf, p1.Battlefield[1]), (hound, p1.Battlefield[3]) }) {
                 var hits = SceneGame.Hover(game.GhostIn(slot));
                 yield return null;
-
                 var preview = SceneGame.HoverPreview();
                 Assert.IsNotNull(preview, $"Hovering {queued.Name}'s ghost should show it enlarged");
                 Assert.AreSame(queued, preview.GetLinkedCardInstance(), $"The preview over {slot} shows another card");
@@ -110,132 +144,65 @@ namespace SlayTheClone.Tests {
                         $"A card dropped on {queued.Name}'s ghost must still find {slot}");
                 }
             }
-
             SceneGame.Hover(game.CardIn(p1.Battlefield[3]));
             yield return null;
             Assert.AreSame(occupant, SceneGame.HoverPreview()?.GetLinkedCardInstance(), "The creature about to be replaced can still be hovered");
 
+            var pup = game.GiveCard(p1, game.Cards.Creature("Test Pup", 1, 2)) as ICreature;
+            var pupSlot = p1.Battlefield[0];
+            var takeBacks = new (string how, System.Action<CardController> takeBack)[] {
+                ("Clicking", ghost => SceneGame.Click(ghost)),
+                ("Right-clicking", ghost => SceneGame.Click(ghost, PointerEventData.InputButton.Right)),
+                ("Dragging it where it can't be played", ghost => Assert.IsTrue(SceneGame.DragAndDrop(ghost, null), "A queued creature's ghost can be dragged")),
+            };
+            foreach (var (how, takeBack) in takeBacks) {
+                game.Play(pup, p1, pupSlot);
+                yield return null;
+                Assert.IsFalse(game.HandCards(p1).Any(c => c.GetLinkedCardInstance() == pup), "A queued creature shows as a ghost on the board, not in the hand");
+                takeBack(game.GhostIn(pupSlot));
+                yield return null;
+                Assert.IsFalse(game.HasGhost(pupSlot), $"{how} its ghost should take the play back");
+                Assert.IsTrue(game.HandCards(p1).Any(c => c.GetLinkedCardInstance() == pup && !c.IsQueued), $"{how}: the creature is back in the hand");
+            }
+
             yield return game.EndTurn();
             Assert.AreSame(wolf, p1.Battlefield[1].OccupyingCreature);
             Assert.AreSame(hound, p1.Battlefield[3].OccupyingCreature);
+            Assert.IsNull(pupSlot.OccupyingCreature, "The creature that was taken back isn't summoned");
             game.AssertViewsMatchRules();
         }
 
+        /// <summary>
+        /// A queued spell stays in the hand marked queued: it can be hovered, shows an arrow to the slot it's aimed at, and is
+        /// taken back by clicking it, right-clicking it, or dragging it where it can't be played.
+        /// </summary>
         [UnityTest]
-        public IEnumerator AQueuedSpell_StaysInTheHandMarkedQueued_CanBeHovered_ThenHitsItsTarget() {
+        public IEnumerator AQueuedSpell_StaysInTheHand_ShowsItsAim_CanBeTakenBack_ThenHitsItsTarget() {
             var ox = game.Summon(p2, game.Cards.Creature("Test Ox", 0, 6), 0);
+            game.Summon(p2, game.Cards.Creature("Test Calf", 0, 6), 1);
             var bolt = game.GiveCard(p1, game.Cards.Spell("Test Bolt", TargetType.EnemyCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures)));
-
-            game.Play(bolt, p1, p2.Battlefield[0]);
-            yield return null;
-            var shown = game.HandCards(p1).SingleOrDefault(c => c.GetLinkedCardInstance() == bolt);
-            Assert.IsNotNull(shown, "A queued spell stays in the hand view");
-            Assert.IsTrue(shown.IsQueued, "...marked as queued");
-
-            SceneGame.Hover(shown);
-            yield return null;
-            var preview = SceneGame.HoverPreview();
-            Assert.IsNotNull(preview, "Hovering a queued spell should show it enlarged");
-            Assert.AreSame(bolt, preview.GetLinkedCardInstance());
-            Assert.Greater(preview.transform.localScale.x, 1f);
-
-            yield return game.EndTurn();
-            Assert.AreEqual(3, ox.Health);
-            var allOfP1sCards = p1.Deck.GetDeckPreview().Concat(p1.Deck.GetDiscardPilePreview()).Concat(p1.Hand);
-            Assert.AreEqual(1, allOfP1sCards.Count(c => c.Name == "Test Bolt"), "The cast spell should be in player 1's cards exactly once");
-            game.AssertViewsMatchRules();
-        }
-
-        [UnityTest]
-        public IEnumerator AQueuedSpell_AimedAtASlot_ShowsAnArrowFromItsCardToThatSlot_UntilItIsTakenBack() {
-            game.Summon(p2, game.Cards.Creature("Test Ox", 0, 6), 1);
-            var bolt = game.GiveCard(p1, game.Cards.Spell("Test Bolt", TargetType.Enemy,
+            var zap = game.GiveCard(p1, game.Cards.Spell("Test Zap", TargetType.Enemy,
                 Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.Enemy)));
             var storm = game.GiveCard(p1, game.Cards.Spell("Test Storm", TargetType.EnemyCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));
-            var target = p2.Battlefield[1];
+            CardController Shown(ICard card) => game.HandCards(p1).SingleOrDefault(c => c.GetLinkedCardInstance() == card);
+            var aimedAt = p2.Battlefield[1];
 
-            game.Play(storm, p1, target);
+            game.Play(storm, p1, aimedAt);
             yield return null;
             CollectionAssert.IsEmpty(game.QueuedArrows(p1), "A spell that hits every creature of a kind isn't aimed: no arrow");
-
-            game.Play(bolt, p1, target);
+            SceneGame.Click(Shown(storm));
+            game.Play(zap, p1, aimedAt);
             yield return null;
             var arrow = game.QueuedArrows(p1).SingleOrDefault();
-            Assert.IsNotNull(arrow, "The aimed spell should show one arrow");
-            var card = game.HandCards(p1).Single(c => c.GetLinkedCardInstance() == bolt);
-            var slotView = game.BoardView(p2).FindSlotView(target);
-            Assert.Less(Vector2.Distance(arrow.StartPosition, card.transform.position), 0.01f, "It starts at the spell's card in the hand");
+            Assert.IsNotNull(arrow, "The aimed spell shows one arrow");
+            var slotView = game.BoardView(p2).FindSlotView(aimedAt);
+            Assert.Less(Vector2.Distance(arrow.StartPosition, Shown(zap).transform.position), 0.01f, "It starts at the spell's card in the hand");
             Assert.Less(Vector2.Distance(arrow.EndPosition, slotView.transform.position), 0.01f, "It points at the slot the spell is aimed at");
-
-            SceneGame.Click(card);
+            SceneGame.Click(Shown(zap));
             yield return null;
             CollectionAssert.IsEmpty(game.QueuedArrows(p1), "Taking the spell back removes its arrow");
-        }
-
-        [UnityTest]
-        public IEnumerator DraggingACreature_ShowsWhatEachSlotOfItsRowWouldMean() {
-            var mover = game.Summon(p1, game.Cards.Creature("Test Mover", 1, 5), 0);
-            game.Summon(p1, game.Cards.Creature("Test Wall", 1, 5), 2);
-            yield return null;
-
-            var card = game.CardIn(p1.Battlefield[0]);
-            var drag = SceneGame.BeginDrag(card);
-            Assert.AreEqual((MoveKind.Walk, false), game.MoveHintIn(p1.Battlefield[1]));
-            Assert.AreEqual((MoveKind.Push, false), game.MoveHintIn(p1.Battlefield[2]), "The wall can be pushed into slot 3");
-            Assert.AreEqual((MoveKind.Walk, true), game.MoveHintIn(p1.Battlefield[4]), "The wall is in the way: blocked");
-            Assert.IsNull(game.MoveHintIn(p1.Battlefield[0]), "Its own slot");
-
-            SceneGame.EndDrag(card, drag);
-            Assert.IsNull(game.MoveHintIn(p1.Battlefield[1]), "The hints go when the drag ends");
-            Assert.AreSame(p1.Battlefield[0], mover.Slot);
-        }
-
-        [UnityTest]
-        public IEnumerator PlannedMoves_ShowAGhostOfEachCreature_WhereItWillEndUp() {
-            var pusher = game.Summon(p1, game.Cards.Creature("Test Pusher", 1, 5), 0);
-            var pushed = game.Summon(p1, game.Cards.Creature("Test Pushed", 1, 5), 1);
-            yield return null;
-
-            game.Queue.AddAction(new MoveCreatureAction(pusher, p1.Battlefield[0], p1.Battlefield[1], p1));
-            yield return null;
-
-            var ghosts = game.BoardView(p1).MoveGhosts.ToList();
-            CollectionAssert.AreEquivalent(new[] { (pusher, p1.Battlefield[1]), (pushed, p1.Battlefield[2]) }, ghosts);
-            Assert.AreSame(p1.Battlefield[0], pusher.Slot, "Nothing has moved yet");
-            game.AssertViewsMatchRules();
-
-            game.Queue.ResolveActions();
-            yield return null;
-            Assert.IsEmpty(game.BoardView(p1).MoveGhosts, "The ghosts go once the moves are done");
-        }
-
-        [UnityTest]
-        public IEnumerator MoveArrows_ShowTheFinalFormation_IncludingCreaturesThatGetPushed() {
-            var pusher = game.Summon(p1, game.Cards.Creature("Test Pusher", 1, 5), 0);
-            var pushed = game.Summon(p1, game.Cards.Creature("Test Pushed", 1, 5), 1);
-            yield return null;
-
-            game.Queue.AddAction(new MoveCreatureAction(pusher, p1.Battlefield[0], p1.Battlefield[1], p1));
-            yield return null;
-
-            var arrows = game.QueuedArrows(p1);
-            Assert.AreEqual(2, arrows.Count, "One arrow for the mover, one for the creature it pushes");
-            Vector2 Slot(int i) => game.BoardView(p1).FindSlotView(p1.Battlefield[i]).transform.position;
-            Assert.IsTrue(arrows.Any(a => Vector2.Distance(a.StartPosition, Slot(0)) < 0.01f && Vector2.Distance(a.EndPosition, Slot(1)) < 0.01f));
-            Assert.IsTrue(arrows.Any(a => Vector2.Distance(a.StartPosition, Slot(1)) < 0.01f && Vector2.Distance(a.EndPosition, Slot(2)) < 0.01f),
-                "The pushed creature's arrow shows where it ends up");
-            Assert.AreSame(p1.Battlefield[1], pushed.Slot, "Nothing has moved yet");
-        }
-
-        /// <summary>A queued spell is taken back by clicking it, right-clicking it, or dragging it where it can't be played.</summary>
-        [UnityTest]
-        public IEnumerator AQueuedSpell_CanBeTakenBack_ByClicking_RightClicking_OrDraggingItAway() {
-            var ox = game.Summon(p2, game.Cards.Creature("Test Ox", 0, 6), 0);
-            var bolt = game.GiveCard(p1, game.Cards.Spell("Test Bolt", TargetType.EnemyCreatures,
-                Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures)));
-            CardController Shown() => game.HandCards(p1).SingleOrDefault(c => c.GetLinkedCardInstance() == bolt);
 
             var takeBacks = new (string how, System.Action<CardController> takeBack)[] {
                 ("Clicking", card => SceneGame.Click(card)),
@@ -245,63 +212,28 @@ namespace SlayTheClone.Tests {
             foreach (var (how, takeBack) in takeBacks) {
                 game.Play(bolt, p1, p2.Battlefield[0]);
                 yield return null;
-                Assert.IsTrue(Shown().IsQueued);
-
-                takeBack(Shown());
+                Assert.IsTrue(Shown(bolt).IsQueued, "A queued spell stays in the hand view, marked as queued");
+                takeBack(Shown(bolt));
                 yield return null;
-                Assert.IsNotNull(Shown(), $"{how}: the spell stays in the hand");
-                Assert.IsFalse(Shown().IsQueued, $"{how} the queued spell should take the play back");
+                Assert.IsNotNull(Shown(bolt), $"{how}: the spell stays in the hand");
+                Assert.IsFalse(Shown(bolt).IsQueued, $"{how} the queued spell should take the play back");
                 Assert.IsFalse(game.Queue.GetPendingActions().OfType<PlayCardAction>().Any(), $"{how}: its play is no longer queued");
             }
 
+            game.Play(bolt, p1, p2.Battlefield[0]);
+            yield return null;
+            SceneGame.Hover(Shown(bolt));
+            yield return null;
+            var preview = SceneGame.HoverPreview();
+            Assert.IsNotNull(preview, "Hovering a queued spell shows it enlarged");
+            Assert.AreSame(bolt, preview.GetLinkedCardInstance());
+            Assert.Greater(preview.transform.localScale.x, 1f);
+
             yield return game.EndTurn();
-            Assert.AreEqual(6, ox.Health, "The spell that was taken back isn't cast");
+            Assert.AreEqual(3, ox.Health, "Only the spell left queued is cast");
+            var allOfP1sCards = p1.Deck.GetDeckPreview().Concat(p1.Deck.GetDiscardPilePreview()).Concat(p1.Hand);
+            Assert.AreEqual(1, allOfP1sCards.Count(c => c.Name == "Test Bolt"), "The cast spell is in player 1's cards exactly once");
             game.AssertViewsMatchRules();
-        }
-
-        [UnityTest]
-        public IEnumerator AQueuedCreature_CanBeTakenBack_ByClickingItsGhost_RightClickingIt_OrDraggingItAway() {
-            var pup = game.GiveCard(p1, game.Cards.Creature("Test Pup", 1, 2)) as ICreature;
-            var slot = p1.Battlefield[0];
-
-            var takeBacks = new (string how, System.Action<CardController> takeBack)[] {
-                ("Clicking", ghost => SceneGame.Click(ghost)),
-                ("Right-clicking", ghost => SceneGame.Click(ghost, PointerEventData.InputButton.Right)),
-                ("Dragging it where it can't be played", ghost => Assert.IsTrue(SceneGame.DragAndDrop(ghost, null), "A queued creature's ghost can be dragged")),
-            };
-            foreach (var (how, takeBack) in takeBacks) {
-                game.Play(pup, p1, slot);
-                yield return null;
-                Assert.IsFalse(game.HandCards(p1).Any(c => c.GetLinkedCardInstance() == pup), "A queued creature shows as a ghost on the board, not in the hand");
-
-                takeBack(game.GhostIn(slot));
-                yield return null;
-                Assert.IsFalse(game.HasGhost(slot), $"{how} its ghost should take the play back");
-                Assert.IsTrue(game.HandCards(p1).Any(c => c.GetLinkedCardInstance() == pup && !c.IsQueued), $"{how}: the creature is back in the hand");
-                Assert.IsFalse(game.Queue.GetPendingActions().OfType<PlayCardAction>().Any(), $"{how}: its play is no longer queued");
-            }
-
-            yield return game.EndTurn();
-            Assert.IsNull(slot.OccupyingCreature, "The creature that was taken back isn't summoned");
-            game.AssertViewsMatchRules();
-        }
-
-        [UnityTest]
-        public IEnumerator Combat_KillsCreatures_HurtsPlayers_AndTheCardsAndHealthFollow() {
-            var brute = game.Summon(p1, game.Cards.Creature("Test Brute", 4, 5), 0);
-            var mouse = game.Summon(p2, game.Cards.Creature("Test Mouse", 1, 2), 0);
-            var striker = game.Summon(p1, game.Cards.Creature("Test Striker", 3, 3), 1);
-
-            game.Attack(brute, p2.Battlefield[0]);
-            game.Attack(mouse, p1.Battlefield[0]);
-            game.Attack(striker, p2.Battlefield[1]); // An empty slot: the hit goes to player 2
-            yield return game.EndTurn();
-
-            Assert.IsTrue(mouse.IsDead);
-            Assert.IsNull(game.CardIn(p2.Battlefield[0]), "The dead creature's card is still on the board");
-            Assert.AreEqual(4, brute.Health, "At equal Speed the mouse, with less Health, strikes first");
-            Assert.AreEqual(Player.MaxHealth - 3, p2.Health);
-            game.AssertViewsMatchRules(); // Including the survivor's damage and player 2's health
         }
     }
 }

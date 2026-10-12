@@ -23,8 +23,13 @@ namespace SlayTheClone.Tests {
         [TearDown]
         public void TearDown() => game.Dispose();
 
+        /// <summary>
+        /// Layer by layer, whatever the order things were queued in; inside a layer the faster first, then the weaker, then the
+        /// lower Attack (two creatures attacking each other: the first to strike can kill the other); and help played this Day
+        /// (an entering creature's effect, a spell) lands before this Day's attacks.
+        /// </summary>
         [Test]
-        public void ActionsResolveLayerByLayer_MovesSummonsSpellsThenAbilitiesAndAttacks() {
+        public void ADayResolvesLayerByLayer_ThenBySpeed_AndHelpLandsBeforeAttacks() {
             var walker = game.Summon(p1, game.Creature("Walker", 1, 3), 0);
             var mover = game.Summon(p1, game.Creature("Mover", 1, 3), 2); // A creature has one intent a Day, so another one moves
             var played = game.GiveCard(p1, game.Creature("Played", 1, 1, speed: 2));
@@ -47,11 +52,7 @@ namespace SlayTheClone.Tests {
                 "PlayCard", "PlaySpell", "DamagePlayer", // A spell's effects land as part of it
                 "BattlefieldCombat", "DamagePlayer" // So does an attack's hit
             }, game.History.ExecutedKinds());
-        }
 
-        /// <summary>Two creatures attack each other: the first to strike can kill the other before it gets to.</summary>
-        [Test]
-        public void InALayer_TheFasterActsFirst_ThenTheWeaker_ThenTheLowerAttack() {
             using (var g = new TestGame()) {
                 var fast = g.Summon(g.Player1, g.Creature("Fast", 5, 3, speed: 2), 0);
                 var slow = g.Summon(g.Player2, g.Creature("Slow", 5, 3), 0);
@@ -79,14 +80,7 @@ namespace SlayTheClone.Tests {
                 Assert.IsTrue(soft.IsDead);
                 Assert.AreEqual(2, hard.Health, "At equal Speed and Health the one with lower base Attack strikes first");
             }
-        }
 
-        /// <summary>
-        /// A 2-health guard is attacked for 2 the same turn its side gets +2 attack or armor, from a creature entering or a spell.
-        /// Entry effects land as part of the summon, and spells have their own layer, both before attacks.
-        /// </summary>
-        [Test]
-        public void HelpPlayedThisTurn_LandsBeforeThisTurnsAttacks() {
             var buff = Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures);
             var armor = Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures);
             foreach (var (help, isSpell, what) in new[] { (buff, false, "attack"), (armor, false, "armor"), (armor, true, "armor") }) {

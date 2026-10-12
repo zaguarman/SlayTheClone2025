@@ -21,7 +21,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void EveryDeck_IsOneFactionsOwn_AndNoFactionHasTwo() {
+        public void EveryDeck_IsOneFactionsOwn_12To20DifferentCards_BroughtByOneOpponent() {
             Assert.IsNotEmpty(catalog.Decks);
             var factions = catalog.Decks.Select(deck => {
                 var deckFactions = deck.Cards.Select(card => card.faction).Distinct().ToList();
@@ -30,21 +30,15 @@ namespace SlayTheClone.Tests {
                 return deckFactions[0];
             }).ToList();
             CollectionAssert.AllItemsAreUnique(factions, "Each faction has a single deck for now");
-        }
 
-        [Test]
-        public void EveryDeck_HasBetween12And20DifferentCards_CreaturesAndSpells() {
-            foreach (var deck in catalog.Decks) {
-                string name = deck.GetDeckName();
-                Assert.That(deck.Cards.Count, Is.InRange(MinDeckSize, MaxDeckSize), $"{name} has {deck.Cards.Count} cards");
-                CollectionAssert.AllItemsAreUnique(deck.Cards, $"{name} has copies of a card");
-                Assert.IsTrue(deck.Cards.Any(c => c is CreatureCardScriptableObject), $"{name} has no creatures");
-                Assert.IsTrue(deck.Cards.Any(c => c is SpellCardScriptableObject), $"{name} has no spells");
+            foreach (var offered in catalog.Decks) {
+                string name = offered.GetDeckName();
+                Assert.That(offered.Cards.Count, Is.InRange(MinDeckSize, MaxDeckSize), $"{name} has {offered.Cards.Count} cards");
+                CollectionAssert.AllItemsAreUnique(offered.Cards, $"{name} has copies of a card");
+                Assert.IsTrue(offered.Cards.Any(c => c is CreatureCardScriptableObject), $"{name} has no creatures");
+                Assert.IsTrue(offered.Cards.Any(c => c is SpellCardScriptableObject), $"{name} has no spells");
             }
-        }
 
-        [Test]
-        public void EachDeck_IsBroughtByExactlyOneOpponent() {
             CollectionAssert.AreEquivalent(catalog.Decks, catalog.Opponents.Select(o => o.deck),
                 "Every opponent should bring one of the decks on offer, and every deck should have its opponent");
             foreach (var opponent in catalog.Opponents) {

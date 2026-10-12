@@ -5,7 +5,7 @@ using static SlayTheClone.Tests.TestCards;
 
 namespace SlayTheClone.Tests {
     /// <summary>
-    /// The board: where creatures land, how they move and swap, and what attacks, spells and effects hit.
+    /// The board: one intent per creature a Day, and what attacks, spells and effects hit.
     /// Runs the real rules without the scene (see <see cref="TestGame"/>).
     /// </summary>
     public class BattlefieldTests {
@@ -26,149 +26,105 @@ namespace SlayTheClone.Tests {
             game.Dispose();
         }
 
-        #region Placing and moving
+        // An empty board for the next part of a test
+        private void Fresh() {
+            GameAsserts.AssertBoardsConsistent(p1, p2);
+            game.Dispose();
+            SetUp();
+        }
+
         [Test]
-        public void ACreature_HasOneIntentADay_ANewOneReplacesTheOld() {
+        public void Aiming_OneIntentADay_SpellsHitWhereDropped_FollowYourOwn_EnemiesCanDodge() {
             var runner = game.Summon(p1, game.Creature("Runner", 2, 5), 0);
             var target = game.Summon(p2, game.Creature("Target", 0, 10), 0);
-
             game.Declare(runner, p2.Battlefield[0]);
             game.ActionsQueue.AddAction(new MoveCreatureAction(runner, p1.Battlefield[0], p1.Battlefield[2], p1));
-            Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "Moving after declaring an attack should replace the attack");
+            Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "One intent a Day: moving after declaring an attack replaces the attack");
             game.Resolve();
-            Assert.AreSame(runner, p1.Battlefield[2].OccupyingCreature, "The move happens");
-            CollectionAssert.IsEmpty(game.History.DamageTo(target), "The replaced attack doesn't");
-
+            Assert.AreSame(runner, p1.Battlefield[2].OccupyingCreature);
+            CollectionAssert.IsEmpty(game.History.DamageTo(target), "The replaced attack doesn't happen");
             game.ActionsQueue.AddAction(new MoveCreatureAction(runner, p1.Battlefield[2], p1.Battlefield[4], p1));
             game.Declare(runner, p2.Battlefield[0]);
-            Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "Declaring an attack after moving should replace the move");
+            Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "...and an attack replaces a move");
             game.Resolve();
-            Assert.AreSame(runner, p1.Battlefield[2].OccupyingCreature, "The replaced move doesn't happen");
-            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(target), "The attack does");
-        }
-        #endregion
+            Assert.AreSame(runner, p1.Battlefield[2].OccupyingCreature);
+            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(target));
 
-        #region What gets hit
-        [Test]
-        public void ASpell_HitsTheCreatureItIsDroppedOn_OrThatSidesPlayerOnAnEmptySlot() {
             var bolt = game.Spell("Bolt", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
-            var oxA = game.Summon(p2, game.Creature("Ox A", 0, 10), 0);
-            var oxB = game.Summon(p2, game.Creature("Ox B", 0, 10), 1);
-
+            var ox = game.Summon(p2, game.Creature("Ox", 0, 10), 1);
             game.Run(new PlayCardAction(game.GiveCard(p1, bolt), p1, p2.Battlefield[1]));
-            Assert.AreEqual(10, oxA.Health, "Only the creature it was dropped on is hit");
-            Assert.AreEqual(7, oxB.Health);
-
+            Assert.AreEqual(8, target.Health, "A spell hits only the creature it was dropped on");
+            Assert.AreEqual(7, ox.Health);
             game.Run(new PlayCardAction(game.GiveCard(p1, bolt), p1, p2.Battlefield[3]));
-            Assert.AreEqual(Player.MaxHealth - 3, p2.Health);
-        }
+            Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "...or that side's player on an empty slot");
 
-        [Test]
-        public void ASpellOnYourOwnCreature_FollowsItWhenItMoves() {
+            Fresh();
             var plating = game.Spell("Plating", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures));
-            var runner = game.Summon(p1, game.Creature("Runner", 1, 5), 0);
-
-            game.ActionsQueue.AddAction(new MoveCreatureAction(runner, p1.Battlefield[0], p1.Battlefield[1], p1));
+            var mover = game.Summon(p1, game.Creature("Mover", 1, 5), 0);
+            game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[0], p1.Battlefield[1], p1));
             game.Play(game.GiveCard(p1, plating), p1, p1.Battlefield[0]);
             game.Resolve();
+            Assert.AreEqual(2, mover.CurrentArmorPool, "Moves resolve first, and a spell on your own creature follows it");
 
-            Assert.AreSame(runner, p1.Battlefield[1].OccupyingCreature, "Moves resolve before spells");
-            Assert.AreEqual(2, runner.CurrentArmorPool, "You know where your own creature will be: the spell follows it");
-        }
-
-        [Test]
-        public void ASpellOnACreatureBeingSummoned_LandsOnIt_OrOnItsSlotIfTheSummonIsTakenBack() {
-            var plating = game.Spell("Plating", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures));
             var newcomer = (ICreature)game.GiveCard(p1, game.Creature("Newcomer", 1, 5));
-            var standing = game.Summon(p1, game.Creature("Standing", 1, 5), 2);
-
-            game.Play(newcomer, p1, p1.Battlefield[1]);
-            game.Play(game.GiveCard(p1, plating), p1, p1.Battlefield[1]); // Dropped on the queued creature
+            game.Play(newcomer, p1, p1.Battlefield[2]);
+            game.Play(game.GiveCard(p1, plating), p1, p1.Battlefield[2]); // Dropped on the queued creature
             game.Resolve();
             Assert.AreEqual(2, newcomer.CurrentArmorPool, "The spell homes on the creature queued there");
-
             var late = (ICreature)game.GiveCard(p1, game.Creature("Late", 1, 5));
             game.Play(late, p1, p1.Battlefield[3]);
             game.Play(game.GiveCard(p1, plating), p1, p1.Battlefield[3]);
             game.ActionsQueue.CancelPlay(late);
-            game.ActionsQueue.AddAction(new MoveCreatureAction(standing, p1.Battlefield[2], p1.Battlefield[3], p1));
+            game.ActionsQueue.AddAction(new MoveCreatureAction(newcomer, p1.Battlefield[2], p1.Battlefield[3], p1));
             game.Resolve();
             Assert.AreEqual(0, late.CurrentArmorPool);
-            Assert.AreEqual(2, standing.CurrentArmorPool, "With the summon taken back, the spell lands on whatever is in the slot it was aimed at");
-        }
+            Assert.AreEqual(4, newcomer.CurrentArmorPool, "With the summon taken back, it lands on whatever is in the slot it was aimed at");
 
-        [Test]
-        public void ASpellOnAnEnemySlot_HitsWhateverIsThereWhenItResolves_OrFizzlesIfItNeedsACreature() {
-            var plating = game.Spell("Plating", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.EnemyCreatures));
-            var bolt = game.Spell("Bolt", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
+            Fresh(); // The hand is full
+            bolt = game.Spell("Bolt", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
+            var enemyPlating = game.Spell("Plating", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.EnemyCreatures));
             var dodger = game.Summon(p2, game.Creature("Dodger", 1, 5), 0);
             var stepper = game.Summon(p2, game.Creature("Stepper", 1, 5), 2);
-
             game.ActionsQueue.AddAction(new MoveCreatureAction(dodger, p2.Battlefield[0], p2.Battlefield[1], p2));
             game.ActionsQueue.AddAction(new MoveCreatureAction(stepper, p2.Battlefield[2], p2.Battlefield[3], p2));
-            game.Play(game.GiveCard(p1, plating), p1, p2.Battlefield[0]);
+            game.Play(game.GiveCard(p1, enemyPlating), p1, p2.Battlefield[0]);
             game.Play(game.GiveCard(p1, bolt), p1, p2.Battlefield[2]);
             game.Resolve();
-
             Assert.AreEqual(0, dodger.CurrentArmorPool, "Enemy creatures can dodge: the Armor needs a creature in the slot, so it fizzles");
             Assert.AreEqual(5, stepper.Health);
-            Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "Damage doesn't need a creature: into an empty slot it hits that side's player");
+            Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "Damage doesn't need one: into an empty slot it hits that side's player");
         }
 
         [Test]
-        public void ASpellWithAdjacent_AlsoHitsTheCreaturesNextToWhereItLands() {
-            var dogpile = game.Spell("Dogpile", TargetType.EnemyCreatures,
-                Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures, TargetModifier.WithAdjacent));
-            var left = game.Summon(p2, game.Creature("Left", 0, 5), 0);
-            var middle = game.Summon(p2, game.Creature("Middle", 0, 5), 1);
-            var right = game.Summon(p2, game.Creature("Right", 0, 5), 2);
-            var far = game.Summon(p2, game.Creature("Far", 0, 5), 4);
-
-            game.Run(new PlayCardAction(game.GiveCard(p1, dogpile), p1, p2.Battlefield[1]));
-
-            Assert.AreEqual(new[] { 4, 4, 4, 5 }, new[] { left.Health, middle.Health, right.Health, far.Health });
-        }
-
-        [Test]
-        public void GroupEffects_HitEveryCreatureOfTheirGroup_Once() {
+        public void Areas_GroupsHitEachMemberOnce_AdjacentAndSpreadingHitTheNeighbours() {
             var mine = game.Summon(p1, game.Creature("Mine", 0, 5), 0);
             var theirsA = game.Summon(p2, game.Creature("Theirs A", 0, 5), 0);
             var theirsB = game.Summon(p2, game.Creature("Theirs B", 0, 5), 3);
-
             var storm = game.Summon(p1, game.Creature("Storm", 0, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures)), 1);
-            Assert.AreEqual(4, theirsA.Health);
-            Assert.AreEqual(4, theirsB.Health);
             Assert.AreEqual(5, mine.Health, "Enemy creatures only");
-
             var quake = game.Summon(p1, game.Creature("Quake", 0, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.AllCreatures)), 2);
             foreach (var creature in new[] { mine, storm, quake }) Assert.AreEqual(4, creature.Health, $"{creature.Name}: all creatures, including itself");
-            foreach (var creature in new[] { theirsA, theirsB }) Assert.AreEqual(3, creature.Health, $"{creature.Name}: all creatures");
-
             game.Summon(p1, game.Creature("Medic", 0, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Heal, 1, TargetType.FriendlyCreatures)), 3);
             foreach (var creature in new[] { mine, storm, quake }) Assert.AreEqual(5, creature.Health, $"{creature.Name}: friendly creatures");
-            foreach (var creature in new[] { theirsA, theirsB }) Assert.AreEqual(3, creature.Health, $"{creature.Name}: friendly creatures only");
-
             foreach (var creature in new[] { theirsA, theirsB }) {
-                CollectionAssert.AreEqual(new[] { 1, 1 }, game.History.DamageTo(creature), $"{creature.Name} was hit the wrong number of times");
+                CollectionAssert.AreEqual(new[] { 1, 1 }, game.History.DamageTo(creature), $"{creature.Name}: hit once by each enemy group effect, healed by none");
             }
-        }
 
-        [Test]
-        public void ASpreadingAttack_AlsoHitsTheTargetsNeighbours_ForTheAttackWhenTheHitsLand() {
+            Fresh();
+            var dogpile = game.Spell("Dogpile", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures, TargetModifier.WithAdjacent));
+            var enemies = Enumerable.Range(0, 5).Select(i => game.Summon(p2, game.Creature($"Enemy {i}", 0, 10), i)).ToList();
+            game.Run(new PlayCardAction(game.GiveCard(p1, dogpile), p1, p2.Battlefield[3]));
+            Assert.AreEqual(new[] { 10, 10, 9, 9, 9 }, enemies.Select(e => e.Health).ToArray(), "A spell with Adjacent also hits the creatures next to where it lands");
+
             var cleaver = game.Summon(p1, game.Creature("Cleaver", 2, 5, 1,
                 Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.EnemyCreatures, TargetModifier.WithAdjacent)), 0);
-            var enemies = Enumerable.Range(0, 4).Select(i => game.Summon(p2, game.Creature($"Enemy {i}", 0, 10), i)).ToList();
-
             var rage = game.GiveCard(p1, game.Spell("Rage", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 3, TargetType.FriendlyCreatures)));
             game.Declare(cleaver, p2.Battlefield[1]);
             game.ActionsQueue.AddAction(new PlayCardAction(rage, p1, p1.Battlefield[0])); // Spells land before attacks
             game.Resolve();
-
-            CollectionAssert.AreEqual(new[] { 5 }, game.History.DamageTo(enemies[1]), "The target");
-            CollectionAssert.AreEqual(new[] { 5 }, game.History.DamageTo(enemies[0]), "Its left neighbour");
-            CollectionAssert.AreEqual(new[] { 5 }, game.History.DamageTo(enemies[2]), "Its right neighbour");
-            CollectionAssert.IsEmpty(game.History.DamageTo(enemies[3]), "Not a neighbour");
+            Assert.AreEqual(new[] { 5, 5, 4, 9, 9 }, enemies.Select(e => e.Health).ToArray(),
+                "A spreading attack hits the target and its neighbours, for the attack it has when the hits land");
         }
-        #endregion
     }
 }

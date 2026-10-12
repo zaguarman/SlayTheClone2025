@@ -24,6 +24,12 @@ namespace SlayTheClone.Tests {
         [TearDown]
         public void TearDown() => game.Dispose();
 
+        // An empty board for the next part of a test
+        private void Fresh() {
+            game.Dispose();
+            SetUp();
+        }
+
         private void Place(BoardSlot slot, SlotEffectType type, int value = 0, int days = 0, IPlayer controller = null) =>
             game.Run(new PlaceSlotEffectAction(slot, type, value, days, controller ?? slot.Owner.Opponent));
 
@@ -35,120 +41,106 @@ namespace SlayTheClone.Tests {
         };
 
         [Test]
-        public void ALandmine_HitsTheFirstCreatureToEnter_SummonedOrMoved_ThenIsGone() {
+        public void Traps_LandmineOnEntering_BarbedSnareOnMovingOut_GoOffBeforeAnythingElse() {
             Place(p2.Battlefield[1], SlotEffectType.Landmine, 2);
             Assert.IsTrue(p2.Battlefield[1].Effect.IsHidden);
-
             var summoned = game.Summon(p2, game.Creature("Summoned", 1, 5), 1);
-            Assert.AreEqual(3, summoned.Health, "Summoned onto it");
+            Assert.AreEqual(3, summoned.Health, "A Landmine hits the first creature summoned onto it...");
             Assert.IsNull(p2.Battlefield[1].Effect, "1 Trigger: used up");
-
             Place(p2.Battlefield[3], SlotEffectType.Landmine, 2);
             var walker = game.Summon(p2, game.Creature("Walker", 1, 5), 4);
             game.Run(new MoveCreatureAction(walker, p2.Battlefield[4], p2.Battlefield[3], p2));
-            Assert.AreEqual(3, walker.Health, "Moved onto it");
-        }
+            Assert.AreEqual(3, walker.Health, "...or moved onto it");
 
-        [Test]
-        public void ALandmine_GoesOffBeforeAnythingElse_EvenTheNextLayer() {
-            var walker = game.Summon(p1, game.Creature("Walker", 1, 2), 0);
+            var doomedWalker = game.Summon(p1, game.Creature("Doomed Walker", 1, 2), 0);
             var played = game.GiveCard(p1, game.Creature("Played", 1, 1));
             Place(p1.Battlefield[1], SlotEffectType.Landmine, 2);
             game.History.Clear();
-
             game.ActionsQueue.AddAction(new PlayCardAction(played, p1, p1.Battlefield[4]));
-            game.ActionsQueue.AddAction(new MoveCreatureAction(walker, p1.Battlefield[0], p1.Battlefield[1], p1));
+            game.ActionsQueue.AddAction(new MoveCreatureAction(doomedWalker, p1.Battlefield[0], p1.Battlefield[1], p1));
             game.Resolve();
-
             var kinds = game.History.ExecutedKinds();
-            Assert.AreEqual("MoveCreature", kinds[0]);
-            Assert.AreEqual("DamageCreature", kinds[1], "Stepping on it hits right away");
+            Assert.AreEqual("DamageCreature", kinds[1], "Stepping on it hits right away, after the move");
             Assert.Less(kinds.IndexOf("DestroyCreature"), kinds.IndexOf("PlayCard"), "...and it dies before the Summon layer");
-            Assert.IsTrue(walker.IsDead);
-        }
 
-        [Test]
-        public void EnvironmentActions_QueuedWhileNothingResolves_GoFirst_WhateverTheirLayer() {
-            var target = game.Summon(p1, game.Creature("Target", 0, 5), 0);
-            var mover = game.Summon(p2, game.Creature("Mover", 1, 5), 0);
-            game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p2.Battlefield[0], p2.Battlefield[2], p2));
+            Fresh();
+            var pusher = game.Summon(p1, game.Creature("Pusher", 1, 5), 0);
+            var snared = game.Summon(p1, game.Creature("Snared", 1, 5), 1);
+            var doomed = game.Summon(p1, game.Creature("Doomed", 0, 2), 3);
+            Place(p1.Battlefield[1], SlotEffectType.BarbedSnare, 2);
+            Place(p1.Battlefield[3], SlotEffectType.BarbedSnare, 2);
+            game.Run(new MoveCreatureAction(pusher, p1.Battlefield[0], p1.Battlefield[1], p1)); // Pushes Snared to slot 2
+            Assert.AreEqual(3, snared.Health, "A Barbed Snare hurts the creature that leaves, even one pushed out");
+            Assert.AreEqual(5, pusher.Health, "Entering isn't leaving");
+            Assert.IsNull(p1.Battlefield[1].Effect);
+
+            game.Run(new DamageCreatureAction(doomed, 5));
+            Assert.IsNotNull(p1.Battlefield[3].Effect, "Dying isn't leaving");
+            var next = game.Summon(p1, game.Creature("Next", 0, 5), 3);
+            Assert.AreEqual(5, next.Health, "Taking the slot isn't leaving either");
+            game.Run(new MoveCreatureAction(next, p1.Battlefield[3], p1.Battlefield[4], p1));
+            Assert.AreEqual(3, next.Health);
+
+            var target = game.Summon(p2, game.Creature("Target", 0, 5), 0);
+            var mover = game.Summon(p2, game.Creature("Mover", 1, 5), 1);
+            game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p2.Battlefield[1], p2.Battlefield[2], p2));
             using (game.ActionsQueue.QueueingEnvironment()) {
                 game.ActionsQueue.AddAction(new DamageCreatureAction(target, 1));
             }
             game.History.Clear();
-
             game.Resolve();
-
-            Assert.AreEqual("DamageCreature", game.History.ExecutedKinds()[0], "Before the Movement layer");
+            Assert.AreEqual("DamageCreature", game.History.ExecutedKinds()[0], "Environment actions go first, whatever their layer");
         }
 
         [Test]
-        public void ABarbedSnare_HurtsTheCreatureThatLeaves_EvenOnePushedOut() {
-            var pusher = game.Summon(p1, game.Creature("Pusher", 1, 5), 0);
-            var snared = game.Summon(p1, game.Creature("Snared", 1, 5), 1);
-            Place(p1.Battlefield[1], SlotEffectType.BarbedSnare, 2);
+        public void Placing_OnePerSlot_StaysWithTheSlot_Cleansable_AndTemporalShieldStopsCombatDamage() {
+            var mover = game.Summon(p1, game.Creature("Mover", 1, 10), 0);
+            var shield = game.GiveCard(p1, game.Spell("Shield Slot", TargetType.AllCreatures, PlaceEffect(SlotEffectType.TemporalShield, 0, 2)));
+            game.Play(shield, p1, p1.Battlefield[0]); // Aimed at its own creature's slot
+            game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[0], p1.Battlefield[2], p1));
+            game.Resolve();
+            Assert.AreSame(p1.Battlefield[2], mover.Slot, "Moves resolve before spells");
+            Assert.AreSame(p1, p1.Battlefield[0].Effect?.Controller, "Static: it lands on the slot it was aimed at");
+            Assert.IsNull(p1.Battlefield[2].Effect);
 
-            game.Run(new MoveCreatureAction(pusher, p1.Battlefield[0], p1.Battlefield[1], p1)); // Pushes Snared to slot 2
-
-            Assert.AreSame(p1.Battlefield[2], snared.Slot);
-            Assert.AreEqual(3, snared.Health, "Pushed out: it still left the slot");
-            Assert.AreEqual(5, pusher.Health, "Entering isn't leaving");
-            Assert.IsNull(p1.Battlefield[1].Effect);
-        }
-
-        [Test]
-        public void ABarbedSnare_IgnoresDyingOnTheSlot_AndTheNextCreatureThere() {
-            var doomed = game.Summon(p1, game.Creature("Doomed", 0, 2), 1);
-            Place(p1.Battlefield[1], SlotEffectType.BarbedSnare, 2);
-
-            game.Run(new DamageCreatureAction(doomed, 5));
-            Assert.IsTrue(doomed.IsDead);
-            Assert.IsNotNull(p1.Battlefield[1].Effect, "Dying isn't leaving");
-
-            var next = game.Summon(p1, game.Creature("Next", 0, 5), 1);
-            Assert.AreEqual(5, next.Health, "Taking the slot isn't leaving either");
-            Assert.IsNotNull(p1.Battlefield[1].Effect);
-
-            game.Run(new MoveCreatureAction(next, p1.Battlefield[1], p1.Battlefield[2], p1));
-            Assert.AreEqual(3, next.Health);
-        }
-
-        [Test]
-        public void ATemporalShield_StopsCombatDamage_NotSpellDamage_ForItsDays() {
             var shielded = game.Summon(p1, game.Creature("Shielded", 0, 10), 0);
             var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 0);
-            Place(p1.Battlefield[0], SlotEffectType.TemporalShield, days: 2, controller: p1);
-
             game.Attack(brute, p1.Battlefield[0]);
-            Assert.AreEqual(10, shielded.Health, "Combat damage is stopped");
+            Assert.AreEqual(10, shielded.Health, "A Temporal Shield stops combat damage");
             game.Run(new DamageCreatureAction(shielded, 2));
-            Assert.AreEqual(8, shielded.Health, "Other damage isn't");
-
+            Assert.AreEqual(8, shielded.Health, "...not other damage");
             game.StartTurn();
             Assert.IsNotNull(p1.Battlefield[0].Effect, "2 Days: this one and the next");
             game.StartTurn();
             Assert.IsNull(p1.Battlefield[0].Effect);
             game.Attack(brute, p1.Battlefield[0]);
             Assert.AreEqual(5, shielded.Health);
+
+            Place(p2.Battlefield[3], SlotEffectType.Landmine, 2);
+            Place(p2.Battlefield[3], SlotEffectType.ScorchedEarth);
+            Assert.AreEqual(SlotEffectType.ScorchedEarth, p2.Battlefield[3].Effect.Type, "One per slot: the new one replaces the old");
+            Place(p2.Battlefield[4], SlotEffectType.Landmine, 2);
+            game.Run(new CleanseSlotAction(p2.Battlefield[4]));
+            var safe = game.Summon(p2, game.Creature("Safe", 1, 5), 4);
+            Assert.AreEqual(5, safe.Health, "Cleansed before it went off");
+
+            var mine = game.Spell("Mine", TargetType.EnemyCreatures, PlaceEffect(SlotEffectType.Landmine, 3));
+            StringAssert.Contains("Place a hidden Landmine (3 damage to the next creature to enter) on target slot.", CardTextFormatter.GetRulesText(mine));
         }
 
         [Test]
-        public void ScorchedEarth_StopsTheTriggeredEffects_OfTheCreatureOnIt() {
+        public void ScorchedEarth_StopsTriggeredEffects_EntryOnesLost_TheAbilityStillWorks() {
             var spiky = game.Summon(p1, game.Creature("Spiky", 0, 10, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
+            spiky.Ability = CreatureAbility.Spite;
             var hitter = game.Summon(p2, game.Creature("Hitter", 2, 10), 0);
             Place(p1.Battlefield[0], SlotEffectType.ScorchedEarth);
-
             game.Attack(hitter, p1.Battlefield[0]);
             Assert.AreEqual(10, hitter.Health, "Its retaliation doesn't trigger");
-
+            Assert.IsTrue(Abilities.Has(spiky, CreatureAbility.Spite), "Abilities aren't triggered effects: Spite still works");
             game.Run(new MoveCreatureAction(spiky, p1.Battlefield[0], p1.Battlefield[1], p1));
             game.Attack(hitter, p1.Battlefield[1]);
             Assert.AreEqual(9, hitter.Health, "Off the scorched slot, it works again");
-        }
 
-        [Test]
-        public void ScorchedEarth_StopsEntryEffects_TooAndTheyAreLost() {
-            Place(p1.Battlefield[0], SlotEffectType.ScorchedEarth);
             game.Summon(p1, game.Creature("Arrival", 0, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Enemy)), 0);
             CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Landing on Scorched Earth: no entry effect");
 
@@ -160,52 +152,9 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             Assert.IsTrue(late.IsOperative);
             CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Becoming ready on it: no entry effect either");
-
             game.Run(new MoveCreatureAction(late, p1.Battlefield[2], p1.Battlefield[3], p1));
             game.StartTurn();
             CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Lost, not delayed: moving off doesn't bring it back");
-        }
-
-        [Test]
-        public void ScorchedEarth_LeavesTheAbilityWorking() {
-            var spiteful = game.Summon(p1, game.Creature("Spiteful", 0, 10), 0);
-            spiteful.Ability = CreatureAbility.Spite;
-            Place(p1.Battlefield[0], SlotEffectType.ScorchedEarth);
-
-            Assert.IsTrue(Abilities.Has(spiteful, CreatureAbility.Spite), "Abilities aren't triggered effects");
-        }
-
-        [Test]
-        public void ANewSlotEffect_ReplacesTheOld_AndCleansingRemovesOneWithoutSettingItOff() {
-            Place(p2.Battlefield[0], SlotEffectType.Landmine, 2);
-            Place(p2.Battlefield[0], SlotEffectType.ScorchedEarth);
-            Assert.AreEqual(SlotEffectType.ScorchedEarth, p2.Battlefield[0].Effect.Type, "One per slot");
-
-            Place(p2.Battlefield[1], SlotEffectType.Landmine, 2);
-            game.Run(new CleanseSlotAction(p2.Battlefield[1]));
-            var safe = game.Summon(p2, game.Creature("Safe", 1, 5), 1);
-            Assert.AreEqual(5, safe.Health, "Cleansed before it went off");
-        }
-
-        [Test]
-        public void ASpellPlacingASlotEffect_StaysOnTheSlot_EvenIfTheCreatureThereMoves() {
-            var mover = game.Summon(p1, game.Creature("Mover", 1, 5), 0);
-            var shield = game.GiveCard(p1, game.Spell("Shield Slot", TargetType.AllCreatures, PlaceEffect(SlotEffectType.TemporalShield, 0, 1)));
-
-            game.Play(shield, p1, p1.Battlefield[0]); // Aimed at its own creature's slot
-            game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[0], p1.Battlefield[2], p1));
-            game.Resolve();
-
-            Assert.AreSame(p1.Battlefield[2], mover.Slot, "Moves resolve before spells");
-            Assert.IsNotNull(p1.Battlefield[0].Effect, "Static: it lands on the slot it was aimed at");
-            Assert.IsNull(p1.Battlefield[2].Effect);
-            Assert.AreSame(p1, p1.Battlefield[0].Effect.Controller);
-        }
-
-        [Test]
-        public void SlotEffectsArePrintedOnTheCard() {
-            var mine = game.Spell("Mine", TargetType.EnemyCreatures, PlaceEffect(SlotEffectType.Landmine, 3));
-            StringAssert.Contains("Place a hidden Landmine (3 damage to the next creature to enter) on target slot.", CardTextFormatter.GetRulesText(mine));
         }
     }
 }

@@ -14,9 +14,19 @@ namespace SlayTheClone.Tests {
         private const string CardsFolder = "Assets/Scriptables/Cards";
 
         [Test]
-        public void EveryCardEffect_TargetsSomethingItCanAffect() {
+        public void EveryCardAsset_HasAUniqueIdAndAName_EffectsThatCanWork_AndEveryAbilityIsOnACard() {
+            var assets = LoadCardAssets();
+            Assert.IsNotEmpty(assets, $"No card assets found in {CardsFolder}");
+
+            foreach (var asset in assets) {
+                Assert.IsFalse(string.IsNullOrEmpty(asset.cardName), $"{asset.name} has no card name");
+                Assert.IsFalse(string.IsNullOrEmpty(asset.cardId), $"{asset.cardName} has no id");
+            }
+            var sharedIds = assets.GroupBy(a => a.cardId).Where(g => g.Count() > 1).Select(g => string.Join(", ", g.Select(a => a.cardName)));
+            CollectionAssert.IsEmpty(sharedIds, "Cards sharing an id");
+
             var problems = new List<string>();
-            foreach (var asset in LoadCardAssets()) {
+            foreach (var asset in assets) {
                 var data = asset.ToCardData();
                 try {
                     foreach (var action in data.effects.SelectMany(e => e.actions)) {
@@ -30,24 +40,8 @@ namespace SlayTheClone.Tests {
             }
 
             Assert.IsEmpty(problems, "Card effects that can't work:\n" + string.Join("\n", problems));
-        }
 
-        [Test]
-        public void EveryCardAsset_HasAUniqueIdAndAName() {
-            var assets = LoadCardAssets();
-            Assert.IsNotEmpty(assets, $"No card assets found in {CardsFolder}");
-
-            foreach (var asset in assets) {
-                Assert.IsFalse(string.IsNullOrEmpty(asset.cardName), $"{asset.name} has no card name");
-                Assert.IsFalse(string.IsNullOrEmpty(asset.cardId), $"{asset.cardName} has no id");
-            }
-            var sharedIds = assets.GroupBy(a => a.cardId).Where(g => g.Count() > 1).Select(g => string.Join(", ", g.Select(a => a.cardName)));
-            CollectionAssert.IsEmpty(sharedIds, "Cards sharing an id");
-        }
-
-        [Test]
-        public void EveryCreatureAbility_IsOnACard() {
-            var carried = LoadCardAssets().OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
+            var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
             var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()
                 .Where(a => a != CreatureAbility.None && !carried.Contains(a));
             CollectionAssert.IsEmpty(missing, "Abilities no card has ('Abilities Compendium')");
