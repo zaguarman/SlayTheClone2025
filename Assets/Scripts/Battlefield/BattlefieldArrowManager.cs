@@ -6,7 +6,7 @@ using UnityEngine;
 namespace SlayTheClone {
     /// <summary>
     /// Draws one board's intent arrows: the attacks, moves and pending damage of its player's creatures,
-    /// plus the arrow that follows a creature being dragged. Arrows persist across queue changes,
+    /// the aim of its player's queued spells (from the card in the hand), plus the arrow that follows a creature being dragged. Arrows persist across queue changes,
     /// drawing in when an action is queued and fading out when it is cancelled or resolved.
     /// </summary>
     public class BattlefieldArrowManager {
@@ -15,6 +15,7 @@ namespace SlayTheClone {
         private static readonly Color AttackColor = new Color(0.93f, 0.22f, 0.2f);
         private static readonly Color DamageColor = new Color(1f, 0.55f, 0.15f);
         private static readonly Color MoveColor = new Color(0.3f, 0.85f, 0.45f);
+        private static readonly Color SpellColor = new Color(0.62f, 0.45f, 1f);
         private static readonly Color NeutralColor = new Color(0.75f, 0.75f, 0.8f);
 
         private readonly Transform parentTransform;
@@ -22,16 +23,20 @@ namespace SlayTheClone {
         private readonly IActionsQueue actionsQueue;
         private readonly IPlayer owner; // Only actions started by this player's creatures are drawn here
         private readonly Func<BoardSlot, BattlefieldSlot> findSlotView; // Where a board slot is on screen
+        private readonly Func<ICard, CardController> findHandCard; // Where a card in the hand is on screen
         private readonly Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
+        // Arrows that start at a card in the hand, which moves as the hand changes: they follow it every frame
+        private readonly Dictionary<string, (ICard card, BoardSlot target)> handArrows = new Dictionary<string, (ICard, BoardSlot)>();
         private ArrowIndicator dragArrow;
 
         public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IActionsQueue actionsQueue, IPlayer owner,
-            Func<BoardSlot, BattlefieldSlot> findSlotView) {
+            Func<BoardSlot, BattlefieldSlot> findSlotView, Func<ICard, CardController> findHandCard) {
             parentTransform = parent ?? throw new ArgumentNullException(nameof(parent));
             gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
             this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             this.findSlotView = findSlotView ?? throw new ArgumentNullException(nameof(findSlotView));
+            this.findHandCard = findHandCard ?? throw new ArgumentNullException(nameof(findHandCard));
 
             dragArrow = ArrowIndicator.Create(parentTransform);
             gameMediator.ActionsQueueChanged += RefreshArrows;
@@ -58,6 +63,7 @@ namespace SlayTheClone {
 
         private void RefreshArrows() {
             var wanted = new Dictionary<string, (Vector3 start, Vector3 end, Color color)>();
+            handArrows.Clear();
             foreach (var action in actionsQueue.GetPendingActions()) {
                 if (TryDescribeArrow(action, out string key, out var arrow)) {
                     wanted[key] = arrow;
@@ -87,6 +93,19 @@ namespace SlayTheClone {
             key = null;
             arrow = default;
 
+            // A queued spell that is aimed at a slot points there from its card in the hand
+            if (action is PlayCardAction play && play.GetOwner() == owner && play.GetCard() is Spell spell
+                && play.GetTarget() is BoardSlot aim && EffectResolver.IsAimed(spell)) {
+                var card = findHandCard(spell);
+                var aimView = findSlotView(aim);
+                if (card == null || aimView == null) return false;
+
+                key = $"spell_{spell.TargetId}_{aim.TargetId}";
+                handArrows[key] = (spell, aim);
+                arrow = (card.transform.position, aimView.transform.position, SpellColor);
+                return true;
+            }
+
             BoardSlot from, to;
             Color color;
             switch (action) {
@@ -112,6 +131,16 @@ namespace SlayTheClone {
 
             arrow = (fromView.transform.position, toView.transform.position, color);
             return true;
+        }
+
+        /// <summary>Keeps the arrows of queued spells starting at their card, as the hand fans out, is rebuilt or is hovered.</summary>
+        public void FollowHandCards() {
+            foreach (var entry in handArrows) {
+                if (!activeArrows.TryGetValue(entry.Key, out var arrow) || arrow == null) continue;
+                var card = findHandCard(entry.Value.card);
+                var aimView = findSlotView(entry.Value.target);
+                if (card != null && aimView != null) arrow.Show(card.transform.position, aimView.transform.position);
+            }
         }
 
         private bool IsOwn(ICreature creature) => creature != null && creature.Owner == owner && creature.Slot != null;

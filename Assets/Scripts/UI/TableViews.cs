@@ -4,7 +4,7 @@ using TMPro;
 namespace SlayTheClone {
     /// <summary>
     /// Both sides of the table as the UI shows them, for views that work across sides:
-    /// the resolution playback and arrows that point at enemy slots.
+    /// the resolution playback, arrows that point at enemy slots and arrows from queued spells in the hand.
     /// </summary>
     public class TableViews {
         private readonly GameReferences.PlayerUIReferences player1Views;
@@ -17,6 +17,7 @@ namespace SlayTheClone {
 
         public IEnumerable<BattlefieldUI> Battlefields => new[] { player1Views.BattlefieldUI, player2Views.BattlefieldUI };
         public BattlefieldUI GetBattlefield(IPlayer player) => Get(player).BattlefieldUI;
+        public HandUI GetHand(IPlayer player) => Get(player).HandUI;
         public TextMeshProUGUI GetHealthText(IPlayer player) => Get(player).HealthText;
 
         private GameReferences.PlayerUIReferences Get(IPlayer player) => player.IsPlayer1 ? player1Views : player2Views;

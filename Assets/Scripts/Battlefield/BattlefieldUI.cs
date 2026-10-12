@@ -35,7 +35,8 @@ namespace SlayTheClone {
                 LogError("Cannot initialize BattlefieldArrowManager - ActionsQueue is null via GameManager", LogTag.Initialization);
                 return;
             }
-            arrowManager = new BattlefieldArrowManager(transform, GameMediator, actionsQueue, player, FindSlotView);
+            arrowManager = new BattlefieldArrowManager(transform, GameMediator, actionsQueue, player, FindSlotView,
+                card => table.GetHand(player)?.GetCardController(card));
         }
 
         private void CreateSlots(IPlayer player) {
@@ -376,6 +377,7 @@ namespace SlayTheClone {
 
         // The drag arrow follows the pointer and shows what releasing there would do
         private void Update() {
+            arrowManager?.FollowHandCards();
             if (draggedCard == null) return;
 
             var eventCamera = CanvasUtility.GetEventCamera(this);

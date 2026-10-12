@@ -78,15 +78,23 @@ namespace SlayTheClone {
                 return new List<ITarget>();
             }
 
-            // A chosen target is used as is, unless the effect picks its own targets (random or every one of a kind).
-            // Only effects that can land on creatures are aimed by it: drawing and summoning always go to the player
-            // their target type names, wherever the card was dropped.
-            bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
-            if (chosenTarget != null && !picksOwnTargets && CanAffectCreatures(action.actionType)) {
+            if (chosenTarget != null && UsesChosenTarget(action)) {
                 var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
                 return resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
             }
             return TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
+        }
+
+        /// <summary>Whether where the spell is dropped decides what at least one of its effects lands on.</summary>
+        public static bool IsAimed(Spell spell) =>
+            spell != null && spell.Effects.SelectMany(e => e.actions).Any(a => a.targetType != TargetType.Self && UsesChosenTarget(a));
+
+        // A chosen target is used as is, unless the effect picks its own targets (random or every one of a kind).
+        // Only effects that can land on creatures are aimed by it: drawing and summoning always go to the player
+        // their target type names, wherever the card was dropped.
+        private static bool UsesChosenTarget(EffectAction action) {
+            bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
+            return !picksOwnTargets && CanAffectCreatures(action.actionType);
         }
 
         // A board slot stands for its creature when the action can affect creatures, otherwise for the player who owns it.

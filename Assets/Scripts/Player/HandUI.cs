@@ -65,6 +65,10 @@ namespace SlayTheClone {
             GameManager.ActionsQueue.CancelPlay(card.GetLinkedCardInstance());
         }
 
+        /// <summary>The card shown in the hand for this card, if any.</summary>
+        public CardController GetCardController(ICard card) =>
+            card == null ? null : cards.FirstOrDefault(c => c != null && c.GetLinkedCardInstance() == card);
+
         private PlayCardAction QueuedPlayOf(ICard card) =>
             GameManager?.ActionsQueue?.GetPendingActions().OfType<PlayCardAction>().FirstOrDefault(p => p.GetCard() == card);
 

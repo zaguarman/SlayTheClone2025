@@ -176,6 +176,11 @@ namespace SlayTheClone.Tests {
             return ghost;
         }
 
+        /// <summary>The arrows a board shows for its player's queued actions, not counting ones fading out.</summary>
+        public List<ArrowIndicator> QueuedArrows(IPlayer player) =>
+            BoardView(player).GetComponentsInChildren<ArrowIndicator>()
+                .Where(a => a.IsVisible() && !a.IsFadingOut).ToList();
+
         /// <summary>Whether a slot shows the translucent preview of a creature queued to be summoned there.</summary>
         public bool HasGhost(BoardSlot slot) =>
             BoardView(slot.Owner).FindSlotView(slot).transform.Cast<Transform>().Any(t => t.name.StartsWith("QueuedGhost_"));

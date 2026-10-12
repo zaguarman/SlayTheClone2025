@@ -131,6 +131,9 @@ namespace SlayTheClone {
         }
 
         public bool IsVisible() => isVisible;
+        public bool IsFadingOut => isFadingOut;
+        public Vector3 StartPosition => startPosition;
+        public Vector3 EndPosition => endPosition;
 
         private void Update() {
             if (!isVisible) return;

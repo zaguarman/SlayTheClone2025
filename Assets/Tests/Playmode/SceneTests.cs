@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using NUnit.Framework;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.TestTools;
 using static SlayTheClone.Enums;
@@ -109,6 +110,33 @@ namespace SlayTheClone.Tests {
             var allOfP1sCards = p1.Deck.GetDeckPreview().Concat(p1.Deck.GetDiscardPilePreview()).Concat(p1.Hand);
             Assert.AreEqual(1, allOfP1sCards.Count(c => c.Name == "Test Bolt"), "The cast spell should be in player 1's cards exactly once");
             game.AssertViewsMatchRules();
+        }
+
+        [UnityTest]
+        public IEnumerator AQueuedSpell_AimedAtASlot_ShowsAnArrowFromItsCardToThatSlot_UntilItIsTakenBack() {
+            game.Summon(p2, game.Cards.Creature("Test Ox", 0, 6), 1);
+            var bolt = game.GiveCard(p1, game.Cards.Spell("Test Bolt", TargetType.Enemy,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.Enemy)));
+            var storm = game.GiveCard(p1, game.Cards.Spell("Test Storm", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));
+            var target = p2.Battlefield[1];
+
+            game.Play(storm, p1, target);
+            yield return null;
+            CollectionAssert.IsEmpty(game.QueuedArrows(p1), "A spell that hits every creature of a kind isn't aimed: no arrow");
+
+            game.Play(bolt, p1, target);
+            yield return null;
+            var arrow = game.QueuedArrows(p1).SingleOrDefault();
+            Assert.IsNotNull(arrow, "The aimed spell should show one arrow");
+            var card = game.HandCards(p1).Single(c => c.GetLinkedCardInstance() == bolt);
+            var slotView = game.BoardView(p2).FindSlotView(target);
+            Assert.Less(Vector2.Distance(arrow.StartPosition, card.transform.position), 0.01f, "It starts at the spell's card in the hand");
+            Assert.Less(Vector2.Distance(arrow.EndPosition, slotView.transform.position), 0.01f, "It points at the slot the spell is aimed at");
+
+            SceneGame.Click(card);
+            yield return null;
+            CollectionAssert.IsEmpty(game.QueuedArrows(p1), "Taking the spell back removes its arrow");
         }
 
         /// <summary>A queued spell is taken back by clicking it, right-clicking it, or dragging it where it can't be played.</summary>
