@@ -30,6 +30,7 @@ namespace SlayTheClone {
             public ICreature Source; // Orders the action by its Speed and stats; null for actions no creature made
             public int Sequence;     // When it was queued
             public int RandomKey;    // The last tie-breaker, drawn once so the order doesn't shift while it waits
+            public bool Retaliatory; // A reaction to what was done to its creature: its death doesn't cancel it
         }
 
         // A creature's ability queueing what it does when it triggers (see QueueingAbilityOf)
@@ -37,6 +38,7 @@ namespace SlayTheClone {
             public ICreature Creature;
             public ResolutionLayer Layer;
             public bool ResolvesWithItsTrigger; // Lands as part of the action that triggered it, like an entry effect
+            public bool Retaliatory;
             public Action OnDispose;
             public void Dispose() => OnDispose();
         }
@@ -159,14 +161,15 @@ namespace SlayTheClone {
         /// <summary>
         /// Everything queued until the scope is disposed is what <paramref name="creature"/>'s ability does on <paramref name="trigger"/>.
         /// Entry effects land at once, as part of the summon that triggered them (like Pokémon's Intimidate), or in the Summon layer
-        /// when the creature becomes ready at Dawn. Every other ability waits its turn in the Ability and Attack layer.
+        /// when the creature becomes ready at Dawn. OnDamage and OnAboutToDie also resolve right away (GDD 3.9).
+        /// Every other ability waits its turn in the Ability and Attack layer.
         /// </summary>
         public IDisposable QueueingAbilityOf(ICreature creature, EffectTrigger trigger) {
-            bool entry = trigger == EffectTrigger.OnPlay;
             var scope = new AbilityScope {
                 Creature = creature,
-                Layer = entry ? ResolutionLayer.Summon : ResolutionLayer.AbilityAndAttack,
-                ResolvesWithItsTrigger = entry
+                Layer = trigger == EffectTrigger.OnPlay ? ResolutionLayer.Summon : ResolutionLayer.AbilityAndAttack,
+                ResolvesWithItsTrigger = trigger is EffectTrigger.OnPlay or EffectTrigger.OnDamage or EffectTrigger.OnAboutToDie,
+                Retaliatory = trigger is EffectTrigger.OnDamage or EffectTrigger.OnAboutToDie or EffectTrigger.OnDeath
             };
             scope.OnDispose = () => {
                 if (abilities.Count > 0 && abilities.Peek() == scope) abilities.Pop();
@@ -184,7 +187,8 @@ namespace SlayTheClone {
                 Layer = partOfExecutingAction ? executing.Layer : ability?.Layer ?? LayerOf(action),
                 Source = ability?.Creature ?? SourceOf(action),
                 Sequence = sequence++,
-                RandomKey = GameRandom.Next(int.MaxValue)
+                RandomKey = GameRandom.Next(int.MaxValue),
+                Retaliatory = ability?.Retaliatory ?? false
             };
 
             if (partOfExecutingAction) {
@@ -313,6 +317,29 @@ namespace SlayTheClone {
                 OnActionsResolved.Invoke();
             }
             Log($"Action resolution complete (Queue ID: {QueueId})", LogTag.Actions);
+        }
+        #endregion
+
+        #region Dying creatures
+        /// <summary>
+        /// A creature marked for destruction loses its pending actions (GDD 3.9): its attack, move or ability, and earlier triggers.
+        /// Its retaliation (OnDamage, OnAboutToDie, OnDied) still happens.
+        /// </summary>
+        public void CancelActionsOf(ICreature creature) {
+            if (creature == null) return;
+
+            var cancelled = waiting.Where(e => e.Source == creature && !e.Retaliatory).ToList();
+            if (cancelled.Count == 0) return;
+
+            foreach (var entry in cancelled) {
+                waiting.Remove(entry);
+                string activeCreatureId = GetActiveCreatureId(entry.Action);
+                if (activeCreatureId != null && activeCreatureActions.TryGetValue(activeCreatureId, out var active) && active == entry) {
+                    activeCreatureActions.Remove(activeCreatureId);
+                }
+                Log($"Cancelled {entry.Action.GetType().Name}: {creature.Name} is about to die (Queue ID: {QueueId})", LogTag.Actions);
+            }
+            gameMediator.NotifyActionsQueueChanged();
         }
         #endregion
 

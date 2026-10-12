@@ -39,21 +39,13 @@ namespace SlayTheClone {
                 mediator.NotifyCreatureDamaged(targetCreature, actualHealthDamage);
             }
 
-            // OnDamage effects only fire while the creature survives the hit; a killing blow fires OnDeath instead.
-            // (IsDead is only set below, so health is what tells whether this hit was lethal.)
-            if (actualHealthDamage > 0 && targetCreature.Health > 0) {
+            // Creature Death Sequence (GDD 3.9): OnDamage fires on every hit that did damage, Armor included, even a killing one,
+            // and resolves right away. Then the lethal check, which may lead to the creature's destruction.
+            if (damageToArmor + actualHealthDamage > 0) {
                 TriggerEffects(targetCreature, EffectTrigger.OnDamage, attacker, context);
             }
-
-            if (targetCreature.Health <= 0 && !targetCreature.IsDead) {
-                Log($"Executor: {targetCreature.Name} died as a result of damage.", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
-                targetCreature.MarkAsDead();
-
-                mediator.NotifyCreatureDied(targetCreature);
-                TriggerEffects(targetCreature, EffectTrigger.OnDeath, attacker, context);
-
-                modifierManager.UnregisterCreature(targetCreature);
-                targetCreature.Owner?.DiscardCard(targetCreature);
+            if (targetCreature.Health <= 0) {
+                context.ActionsQueue.AddAction(new CheckLethalAction(targetCreature, attacker));
             }
 
             Log($"Executed DamageCreatureAction via Executor for {targetCreature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);

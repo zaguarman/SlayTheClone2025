@@ -92,10 +92,10 @@ namespace SlayTheClone.Tests {
                 TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 1);
 
             // Attacking an occupied slot damages its creature; a creature that dies leaves the board for the discard pile.
-            // A killing blow doesn't fire OnDamage effects, so the Sheep can't strike back.
+            // A killing blow still fires OnDamage effects (GDD 3.9), so the Sheep strikes back as it dies.
             Attack(hound, p2.Battlefield[0]);
             Assert.IsTrue(sheep.IsDead);
-            Assert.AreEqual(hound.MaxHealth, hound.Health);
+            Assert.AreEqual(hound.MaxHealth - 1, hound.Health);
             Assert.IsFalse(p2.Battlefield[0].IsOccupied());
             AssertDiscarded(p2, sheep);
 

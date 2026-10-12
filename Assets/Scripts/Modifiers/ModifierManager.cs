@@ -229,6 +229,11 @@ namespace SlayTheClone {
                     RemoveModifier(creature, expiredMod);
                 }
 
+                // A Health buff wearing off takes its Health back, which can kill the creature
+                if (creature.Health <= 0) {
+                    actionsQueue.AddAction(new CheckLethalAction(creature));
+                }
+
                 // Trigger EndOfTurn effects AFTER handling expirations for the turn that just ended
                 Log($"Triggering EndOfTurn effects for {creature.Name} (End of Turn {endedTurnNumber})", LogTag.Effects | LogTag.Turns);
                 creature.HandleEffect(EffectTrigger.EndOfTurn, actionsQueue);
@@ -247,7 +252,7 @@ namespace SlayTheClone {
             var mods = GetActiveModifiersFor(creature).ToList();
 
             int finalAttack = Math.Max(0, CalculateStat(creature.BaseAttack, mods, ModifiableStat.Attack));
-            int finalMaxHealth = Math.Max(1, CalculateStat(creature.BaseHealth, mods, ModifiableStat.Health)); // Keep health >= 1
+            int finalMaxHealth = Math.Max(0, CalculateStat(creature.BaseHealth, mods, ModifiableStat.Health)); // 0 means it dies (GDD 3.3)
             int finalSpeed = Math.Max(0, CalculateStat(creature.BaseSpeed, mods, ModifiableStat.Speed));
 
             var before = (creature.Attack, creature.MaxHealth, creature.Speed, creature.Health);

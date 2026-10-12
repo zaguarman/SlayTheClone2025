@@ -61,7 +61,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void OnDamage_FiresWhenTheCreatureSurvivesAHit_ButNotWhenArmorTakesItOrOnTheKillingBlow() {
+        public void OnDamage_FiresOnEveryHit_EvenWhenArmorTakesIt_OrItKills() {
             var medic = game.Summon(p1, game.Creature("Medic", 0, 5, 1, Effect(EffectTrigger.OnDamage, ActionType.Heal, 1, TargetType.Player)), 0);
             game.Run(new DamagePlayerAction(p1, 5));
 
@@ -70,11 +70,11 @@ namespace SlayTheClone.Tests {
 
             game.Run(new ModifyArmorAction(medic, 3));
             game.Run(new DamageCreatureAction(medic, 2));
-            Assert.AreEqual(Player.MaxHealth - 4, p1.Health, "A hit its armor takes shouldn't");
+            Assert.AreEqual(Player.MaxHealth - 3, p1.Health, "So should a hit its armor takes");
 
             game.Run(new DamageCreatureAction(medic, 10));
             Assert.IsTrue(medic.IsDead);
-            Assert.AreEqual(Player.MaxHealth - 4, p1.Health, "The killing blow shouldn't either");
+            Assert.AreEqual(Player.MaxHealth - 2, p1.Health, "And the killing blow: retaliation happens even as it dies");
         }
 
         [UnityTest]

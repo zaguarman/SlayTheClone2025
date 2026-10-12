@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 using static SlayTheClone.Enums;
+using static SlayTheClone.Tests.TestCards;
 
 namespace SlayTheClone.Tests {
     /// <summary>
@@ -22,6 +24,60 @@ namespace SlayTheClone.Tests {
 
         [TearDown]
         public void TearDown() => game.Dispose();
+
+        #region Death sequence (GDD 3.9)
+        [Test]
+        public void OnAboutToDie_CanSaveACreatureFromALethalHit() {
+            var survivor = game.Summon(p1, game.Creature("Survivor", 1, 3, 1, Effect(EffectTrigger.OnAboutToDie, ActionType.Heal, 2, TargetType.Self)), 0);
+
+            game.Run(new DamageCreatureAction(survivor, 5));
+
+            Assert.IsFalse(survivor.IsDead, "Its OnAboutToDie heal should save it");
+            Assert.AreEqual(2, survivor.Health);
+            Assert.AreSame(survivor, p1.Battlefield[0].OccupyingCreature);
+            CollectionAssert.IsEmpty(game.History.Deaths);
+        }
+
+        [Test]
+        public void ACreatureAboutToDie_LosesItsPendingAttack_ButStillRetaliates() {
+            var fast = game.Summon(p1, game.Creature("Fast", 5, 5, speed: 2), 0);
+            var spiky = game.Summon(p2, game.Creature("Spiky", 5, 3, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
+            game.History.Clear();
+
+            game.Declare(spiky, p1.Battlefield[0]);
+            game.Declare(fast, p2.Battlefield[0]);
+            game.Resolve();
+
+            Assert.IsTrue(spiky.IsDead);
+            Assert.AreEqual(1, game.History.ExecutedKinds().Count(kind => kind == "BattlefieldCombat"), "The dying creature's attack should be cancelled, not resolved");
+            Assert.AreEqual(4, fast.Health, "Its retaliation still hits the attacker");
+        }
+
+        [Test]
+        public void LosingMaxHealthToZero_KillsTheCreature_AndItsDeathEffectFires() {
+            var frail = game.Summon(p1, game.Creature("Frail", 1, 3, 1, Effect(EffectTrigger.OnDeath, ActionType.Damage, 2, TargetType.Enemy)), 0);
+
+            game.Run(new ModifyAction(frail, -3, modifyAttack: false, modifyHealth: true, modifySpeed: false));
+
+            Assert.IsTrue(frail.IsDead);
+            Assert.IsNull(p1.Battlefield[0].OccupyingCreature);
+            CollectionAssert.AreEqual(new[] { frail }, game.History.Deaths);
+            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(p2), "Its OnDied effect should fire");
+        }
+
+        [UnityTest]
+        public IEnumerator AHealthBuffWearingOff_TakesItsHealthBack_AndCanKill() {
+            var pumped = game.Summon(p1, game.Creature("Pumped", 1, 3), 0);
+            game.Run(new ModifyAction(pumped, 2, modifyAttack: false, modifyHealth: true, modifySpeed: false, durationInTurns: 1));
+            Assert.AreEqual(5, pumped.Health, "+2 Health raises current Health with the maximum");
+
+            game.Run(new DamageCreatureAction(pumped, 4));
+            Assert.AreEqual(1, pumped.Health);
+
+            yield return game.EndTurn(); // The buff wears off: 1 - 2 Health
+            Assert.IsTrue(pumped.IsDead, "The buff was all that kept it alive");
+        }
+        #endregion
 
         [Test]
         public void Armor_TakesHitsFirst_AndIsUsedUpAcrossTheTurnsHits() {

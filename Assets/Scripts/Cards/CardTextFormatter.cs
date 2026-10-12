@@ -50,6 +50,7 @@ namespace SlayTheClone {
             switch (effect.trigger) {
                 case EffectTrigger.OnPlay: return (EffectIcons.Enter, "When this enters");
                 case EffectTrigger.OnDeath: return (EffectIcons.Death, "When this dies");
+                case EffectTrigger.OnAboutToDie: return (EffectIcons.Death, "When this would die");
                 case EffectTrigger.OnDamage:
                     // Chain/spread effects fire when this creature deals combat damage; the rest when it is damaged
                     return effect.actions.Any(a => a.targetModifier != TargetModifier.None)

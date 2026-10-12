@@ -116,13 +116,13 @@ namespace SlayTheClone {
             int oldMaxHealth = effectiveMaxHealth;
 
             effectiveAttack = Math.Max(0, newEffectiveAttack);
-            effectiveMaxHealth = Math.Max(1, newEffectiveMaxHealth);
+            effectiveMaxHealth = Math.Max(0, newEffectiveMaxHealth);
             effectiveSpeed = Math.Max(0, newEffectiveSpeed);
 
-            // A living creature gains the extra max health as current health
-            int healthIncrease = effectiveMaxHealth - oldMaxHealth;
-            if (healthIncrease > 0 && !IsDead) {
-                currentHealth += healthIncrease;
+            // A Health change moves current Health with the maximum, both ways (GDD 3.3): +2 then losing it takes the 2 back,
+            // which can bring the creature to 0. Whoever changed the stat checks for that (see CheckLethalAction).
+            if (!IsDead) {
+                currentHealth += effectiveMaxHealth - oldMaxHealth;
             }
 
             currentHealth = Math.Clamp(currentHealth, 0, effectiveMaxHealth);
