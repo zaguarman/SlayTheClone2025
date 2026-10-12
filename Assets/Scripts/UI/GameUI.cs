@@ -44,7 +44,9 @@ namespace SlayTheClone {
             InitializeChildUI();
             InitializeControllers();
             SetupResolveButton();
-            GetOrAddComponent<BoardSkin>().Apply(gameReferences, gameManager, gameMediator);
+            var skin = GetOrAddComponent<BoardSkin>();
+            skin.Apply(gameReferences, gameManager, gameMediator);
+            CreateQueuePanel(skin);
             FogOfWar.Changed += OnFogOfWarChanged;
             ShowFogOfWarState();
 
@@ -115,6 +117,16 @@ namespace SlayTheClone {
             deckViewController.Initialize(gameMediator, gameManager,
                 gameReferences.GetDeckViewButton(), gameReferences.GetDiscardViewButton(), gameReferences.GetDeckViewUI());
             LogControllerInitialized("DeckViewController", deckViewController.IsInitialized);
+        }
+
+        /// <summary>The Queue button and panel: what will resolve, in order, as the screen's player sees it.</summary>
+        public QueuePanel QueuePanel { get; private set; }
+
+        private void CreateQueuePanel(BoardSkin skin) {
+            var endTurn = gameReferences.GetResolveActionsButton();
+            if (endTurn == null) return;
+            QueuePanel = QueuePanel.Create(endTurn.transform, gameManager, gameMediator);
+            skin.PlaceQueue(QueuePanel.Toggle, QueuePanel.Panel);
         }
 
         private T GetOrAddComponent<T>() where T : Component {

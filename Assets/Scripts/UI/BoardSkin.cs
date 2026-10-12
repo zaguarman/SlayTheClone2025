@@ -29,6 +29,8 @@ namespace SlayTheClone {
         private RectTransform endTurnButton;
         private RectTransform deckButton;
         private RectTransform discardButton;
+        private RectTransform queueToggle;
+        private RectTransform queuePanel;
         private PlayerPlaque player1Plaque;
         private PlayerPlaque player2Plaque;
         private BattlefieldUI player1Battlefield;
@@ -80,6 +82,13 @@ namespace SlayTheClone {
             discardButton = StylePileButton(references.GetDiscardViewButton(), flip: false);
             StyleDeckView(references.GetDeckViewUI());
 
+            Layout();
+        }
+
+        /// <summary>The Queue button goes at the right edge level with your mat; its panel fills the corner above End Turn.</summary>
+        public void PlaceQueue(RectTransform toggle, RectTransform panel) {
+            queueToggle = toggle;
+            queuePanel = panel;
             Layout();
         }
 
@@ -353,6 +362,14 @@ namespace SlayTheClone {
             float handY = WorldBounds(player1Hand.transform).center.y;
             PlaceAtLeft(discardButton, left, handY);
             PlaceAtRight(deckButton, right, handY);
+
+            if (queueToggle != null && queuePanel != null && endTurnButton != null) {
+                PlaceAtRight(queueToggle, right, mat1.center.y);
+                float top = center.y + halfHeight - ScreenMargin;
+                float bottom = WorldBounds(endTurnButton).yMax + ScreenMargin;
+                queuePanel.sizeDelta = new Vector2(queuePanel.sizeDelta.x, (top - bottom) / queuePanel.lossyScale.y);
+                PlaceAtRight(queuePanel, right, (top + bottom) / 2f);
+            }
         }
 
         // Stretches a band across the whole view, from bottom to top (world units)

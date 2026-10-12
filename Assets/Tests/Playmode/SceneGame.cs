@@ -160,6 +160,9 @@ namespace SlayTheClone.Tests {
 
         public BattlefieldUI BoardView(IPlayer player) => ViewsOf(player).BattlefieldUI;
 
+        /// <summary>The Queue button and the panel it opens.</summary>
+        public QueuePanel QueuePanel => Object.FindFirstObjectByType<GameUI>().QueuePanel;
+
         private GameReferences.PlayerUIReferences ViewsOf(IPlayer player) =>
             player.IsPlayer1 ? References.Player1References : References.Player2References;
 

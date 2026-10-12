@@ -76,10 +76,11 @@ namespace SlayTheClone.Tests {
         /// <summary>
         /// What the board shows besides the cards: Slot Effects (hidden ones only to their controller, player 1 at the screen),
         /// Watchdogs by their row (the enemy's condition hidden), "???" for the plans of a Concealed enemy (Fog of War, which
-        /// can be switched off for debugging), move hints while dragging, and planned moves as ghosts and arrows.
+        /// can be switched off for debugging), the Queue panel under the same fog, move hints while dragging, and planned moves
+        /// as ghosts and arrows.
         /// </summary>
         [UnityTest]
-        public IEnumerator TheBoardShows_SlotEffects_Watchdogs_MoveHints_AndPlannedMoves() {
+        public IEnumerator TheBoardShows_SlotEffects_Watchdogs_TheQueue_MoveHints_AndPlannedMoves() {
             game.Queue.AddAction(new PlaceSlotEffectAction(p2.Battlefield[1], SlotEffectType.Landmine, 2, 0, p1));
             game.Queue.AddAction(new PlaceSlotEffectAction(p1.Battlefield[1], SlotEffectType.Landmine, 2, 0, p2));
             game.Queue.AddAction(new PlaceSlotEffectAction(p1.Battlefield[3], SlotEffectType.TemporalShield, 0, 2, p1));
@@ -120,6 +121,14 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(game.HandCards(p2).All(c => c.IsFaceDown), "The enemy's hand shows only card backs");
             Assert.IsFalse(game.HandCards(p1).Any(c => c.IsFaceDown));
             Assert.IsFalse(FogOfWar.CanControl(p2), "...and its cards can't be used");
+            var queuePanel = game.QueuePanel;
+            string Listed() => string.Join("\n", queuePanel.Lines);
+            Assert.IsFalse(queuePanel.IsOpen, "The queue panel starts closed");
+            ExecuteEvents.Execute(queuePanel.Toggle.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+            Assert.IsTrue(queuePanel.IsOpen, "The Queue button opens it");
+            StringAssert.Contains("Test Sneak", Listed());
+            StringAssert.Contains("plans ???", Listed(), "The queue shows a Concealed plan as ???...");
+            StringAssert.DoesNotContain("Test Incoming", Listed(), "...and what an enemy summons");
             FogOfWar.PlaysAsPlayer1 = false;
             yield return null;
             Assert.IsTrue(game.HandCards(p1).All(c => c.IsFaceDown), "Player 2's view: now player 1's hand is the hidden one");
@@ -132,6 +141,10 @@ namespace SlayTheClone.Tests {
             CollectionAssert.IsEmpty(game.BoardView(p2).AnonymousCards);
             Assert.AreEqual(1, game.QueuedArrows(p2).Count);
             StringAssert.Contains("Nullify", game.BoardView(p2).WatchdogText, "...the enemy's Watchdog conditions too");
+            StringAssert.Contains("Test Sneak</color> attacks", Listed(), "...and the queue");
+            StringAssert.Contains("Test Incoming", Listed());
+            ExecuteEvents.Execute(queuePanel.Toggle.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+            Assert.IsFalse(queuePanel.IsOpen, "Clicking it again closes it");
             FogOfWar.Enabled = true;
             yield return null;
             game.Queue.CancelDeclaredAction(sneak.TargetId);

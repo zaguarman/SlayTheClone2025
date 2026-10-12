@@ -84,6 +84,10 @@ namespace SlayTheClone {
         public IReadOnlyCollection<IGameAction> GetPendingActions() =>
             resolvingNow.Concat(waiting.OrderBy(e => !e.Environment).ThenBy(e => e.Layer).ThenBy(e => e, InLayerOrder)).Select(e => e.Action).ToList().AsReadOnly();
 
+        /// <summary>The layer a pending action waits in (GDD 3.7), or the one it would take if it isn't queued.</summary>
+        public ResolutionLayer LayerOfPending(IGameAction action) =>
+            resolvingNow.Concat(waiting).FirstOrDefault(e => e.Action == action)?.Layer ?? LayerOf(action);
+
         [ShowInInspector, ReadOnly]
         private List<string> Descriptions => GetPendingActions().Select(a => a.ToString()).ToList();
         #endregion

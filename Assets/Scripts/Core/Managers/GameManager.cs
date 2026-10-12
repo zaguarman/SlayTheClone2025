@@ -72,6 +72,7 @@ namespace SlayTheClone {
         System.Collections.IEnumerator ResolveActionsStepByStep(Func<System.Collections.IEnumerator> afterEachAction);
         int GetPendingActionsCount();
         IReadOnlyCollection<IGameAction> GetPendingActions();
+        ResolutionLayer LayerOfPending(IGameAction action);
         bool HasActiveAction(string creatureId);
         IGameAction GetActiveAction(string creatureId);
         bool CancelDeclaredAction(string creatureId); // Removes the creature's declared intent (move, attack or swap) from the queue
