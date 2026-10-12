@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
     - actionType: 5
       value: 1
       targetType: 3
@@ -43,6 +44,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: a Law (Location) for 3 Days. The stun stands in for the bureaucracy
     drawback.'
   artDescription: 

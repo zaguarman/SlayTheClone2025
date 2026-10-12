@@ -43,12 +43,14 @@ namespace SlayTheClone {
         }
 
         // One or more cards for each mechanic the rules carry out (movement, Exhausted, Doomed, Health Loss, Armor, Homing,
-        // the death sequence, Status Timing, Deployment Time), from every faction: pick it to try them all in one match
+        // the death sequence, Status Timing, Deployment Time, Priority, Blessed, Cleanse and Heresy), from every faction:
+        // pick it to try them all in one match
         private static readonly string[] MechanicsTestCards = {
             "Delivery Cyclist", "Digital Nomad", "Political Decoy", "Cleaning Robot Premium",
             "DDOS Attack", "Dogpile", "Memento Mori", "Martyr", "Inflation", "Generational Trauma",
             "Raised Security Level", "Diplomat", "Keyboard Warrior", "Rage Bait",
-            "Hikikomori", "Karen", "Reality TV Star", "Fat Tony", "Martial Law", "Hostile Takeover",
+            "The Holy Grail", "Exorcism", "Preemptive Strike",
+            "Hikikomori", "Karen", "Reality TV Star",
         };
 
         #region Corporate
@@ -348,6 +350,16 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Status(StatusEffectType.Doomed, 2, TargetType.Self)),
                 On(EffectTrigger.OnDeath, Heal(3, TargetType.FriendlyCreatures, Each)))
                 .Picture("A long-haired, bearded Jesus-like figure in white robes, arms outstretched, a price sticker on his halo. An online-store banner beside him reads \"Salvation: Add to Cart (ships in 3 days)\"."),
+            Spell("The Holy Grail", TargetType.FriendlyCreatures,
+                "Drink from it and live forever. Terms and conditions apply.",
+                "Mechanics test: Blessed 2. Each stack negates the next status that would land, friendly or not, Doomed included. Persistent, up to 3 stacks.",
+                Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 2))
+                .Picture("A gilded chalice on a velvet cushion behind museum glass. A queue of knights in dented armor stretches out the door, each holding a numbered ticket, and a gift shop by the exit sells plastic replicas at 3 for 2."),
+            Spell("Exorcism", TargetType.AllCreatures,
+                "The power of Christ compels you. The invoice follows.",
+                "Mechanics test: Cleanse (statuses) on any creature. Blessed loses all its stacks. On a Doomed creature it's Heresy: the sentence passes to the weakest creature on its side, or is carried out if it's alone.",
+                Cleanse(CleanseTarget.Statuses, TargetType.AllCreatures))
+                .Picture("A priest in full vestments holding a crucifix over a teenager on a bed, whose smartphone floats above them, glowing red, demonic notification bubbles pouring out of it."),
         };
 
         // Mind: wins without raw damage
@@ -421,6 +433,12 @@ namespace SlayTheClone {
         private static EffectAction Stun(int turns, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Stun, turns, target, modifier);
         private static EffectAction Draw(int count, TargetType player = TargetType.Player) => Act(ActionType.Draw, count, player, TargetModifier.None);
         private static EffectAction Summon(int count) => Act(ActionType.Summon, count, TargetType.Player, TargetModifier.None);
+
+        private static EffectAction Cleanse(CleanseTarget what, TargetType target) {
+            var action = Act(ActionType.Cleanse, 0, target, TargetModifier.None);
+            action.cleanse = what;
+            return action;
+        }
 
         private static EffectAction Status(StatusEffectType status, int days, TargetType target, int potency = 0, TargetModifier modifier = TargetModifier.None) {
             var action = Act(ActionType.ApplyStatus, 0, target, modifier);

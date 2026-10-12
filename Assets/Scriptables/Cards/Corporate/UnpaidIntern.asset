@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: a Worker token created by other cards rather than drafted.
     Fodder for sacrifice costs.'
   artDescription: 

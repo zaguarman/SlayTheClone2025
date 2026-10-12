@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
     - actionType: 0
       value: 2
       targetType: 0
@@ -43,6 +44,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: +1 Priority on its attack this Day, then the creature is
     Banished at Dusk.'
   artDescription: 

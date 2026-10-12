@@ -23,3 +23,22 @@ ACTION PRIORITY (GDD 3.7)
     • YOLO: its notes say "+1 Priority on its attack this Day, then Banished at Dusk". Banish doesn't exist yet. Add the +1 Priority now and leave the Banish for later?
     • Police Officer Productivity Target: "Priority attacks against creatures that moved this Day" needs a condition on the attack. Not done.
     • Temporal Distortion (flip Speed order for X Days) isn't made; no card uses it yet.
+
+
+CLEANSE, BLESSED AND HERESY (Status Effects Compendium)
+
+5. Does Cleanse remove positive statuses too?
+    • Done for now: yes. A Cleanse removes every cleansable status, friendly or not, because Blessed (a positive status) is listed as "Cleansable: Yes (Removes all current stacks)". The GDD's Cleansing glossary entry says "negative status effects" though.
+    • Question: should a Cleanse only remove negative statuses (and Blessed be removed only by an enemy "dispel")?
+
+6. Does "Temporary Stat Modifications" include buffs?
+    • Done for now: a Cleanse of stat changes removes every temporary one, buffs and debuffs alike. Base-stat (Persistent) changes stay. Priority Boosts and Penalties aren't stats, so they stay too.
+    • Question: buffs and debuffs both, or only debuffs on your own creatures? Should Priority changes count as cleansable?
+
+7. Heresy onto a creature that's already Doomed
+    • Done for now: the vessel is the creature with the lowest current Health, even if it's Doomed already. A Doomed creature ignores new statuses, so the passed sentence is lost and the cleansed creature is freed anyway.
+    • Question: should Heresy skip creatures that are already Doomed, so the sentence always lands somewhere?
+
+8. New Myth test cards
+    • The Holy Grail (Blessed 2 on a friendly creature) and Exorcism (Cleanse statuses on any creature) were added to test these. Names from the Brainstorm List (Myth > Legendary Objects & Places, Practices & Phenomena). They replaced Fat Tony, Martial Law and Hostile Takeover in the Mechanics Test deck, together with Preemptive Strike.
+    • Question: are the stats and pictures right for them?

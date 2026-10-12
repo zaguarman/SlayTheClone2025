@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: Fortifying. Adjacent friendly creatures can''t be moved by
     enemy effects.'
   artDescription: 

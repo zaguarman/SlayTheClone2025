@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: Hipster status. Hurts only creatures that share a name with
     another creature (too mainstream).'
   artDescription: 

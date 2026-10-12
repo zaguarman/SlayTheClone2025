@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: Impatient. Escalates every Day nobody gives it an intent.'
   artDescription: 
   attack: 2

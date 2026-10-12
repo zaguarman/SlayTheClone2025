@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Mechanics test: Health Loss on every enemy. It ignores Armor, isn''t
     damage (no OnDamaged), kills at 0 whatever the Armor, and lowers the Armor cap.'
   artDescription: A chocolate bar in its old-size wrapper, the bar inside visibly

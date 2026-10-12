@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: taxes enemy card plays instead of plain damage (Red Tape
     on the economy).'
   artDescription: 

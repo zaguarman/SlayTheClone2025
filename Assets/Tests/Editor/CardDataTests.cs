@@ -62,6 +62,7 @@ namespace SlayTheClone.Tests {
                 case ActionType.ModifyStat:
                 case ActionType.Stun:
                 case ActionType.ApplyStatus:
+                case ActionType.Cleanse:
                     if (!CreatureTargets.Contains(action.targetType)) return $"{action.actionType} only affects creatures but targets {action.targetType}";
                     break;
                 case ActionType.Draw:
@@ -72,7 +73,11 @@ namespace SlayTheClone.Tests {
 
             if (action.actionType == ActionType.ApplyStatus) {
                 if (action.statusEffectToApply == StatusEffectType.None) return "applies no status";
-                if (action.statusDuration <= 0) return $"applies {action.statusEffectToApply} for {action.statusDuration} turns";
+                bool persistent = action.statusEffectToApply == StatusEffectType.Blessed; // Counts stacks, not Days
+                if (!persistent && action.statusDuration <= 0) return $"applies {action.statusEffectToApply} for {action.statusDuration} turns";
+            }
+            else if (action.actionType == ActionType.Cleanse) {
+                return null; // Says what it removes instead of a value
             }
             else if (action.actionType == ActionType.ModifyStat) {
                 if (action.value == 0) return "changes stats by 0"; // Negative values are debuffs

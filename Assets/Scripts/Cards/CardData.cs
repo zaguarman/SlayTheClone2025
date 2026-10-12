@@ -68,7 +68,10 @@ namespace SlayTheClone {
         // ApplyStatus Specific
         public StatusEffectType statusEffectToApply = StatusEffectType.None;
         public int statusDuration = 0;
-        public int statusPotency = 0;
+        public int statusPotency = 0; // Burn's damage; Blessed's stacks
+
+        // Cleanse Specific
+        public CleanseTarget cleanse = CleanseTarget.Statuses;
 
         public EffectAction Clone() => (EffectAction)MemberwiseClone(); // Value-type fields only
     }

@@ -8,7 +8,7 @@ namespace SlayTheClone {
         public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, Zeitgeist, Mind, Utopia }
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
         public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie } // New triggers go last: cards store them as numbers
-        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, ModifyPriority } // Renamed Buff to ModifyStat
+        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, ModifyPriority, Cleanse } // Renamed Buff to ModifyStat
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         // Movement Keywords printed on creatures (GDD 2.4): Leapfrog jumps over creatures, Swap trades places with a friendly one
@@ -22,8 +22,12 @@ namespace SlayTheClone {
             None,
             Burned,     // Takes damage at end of turn
             Exhausted,  // The stun: Cannot Act, abilities disabled, and Exposed (+1 damage taken) while it lasts (Status Effects Compendium)
-            Doomed      // Death Sentence: blocks other statuses, +1 permanent Attack each Dawn, then Last Rites and destroyed
+            Doomed,     // Death Sentence: blocks other statuses, +1 permanent Attack each Dawn, then Last Rites and destroyed
+            Blessed     // Persistent ward: the next status that would land is negated and Blessed loses a stack (up to 3)
         }
+
+        // What a Cleanse removes (GDD Cleanse - Specificity): statuses and stat modifications are independent
+        public enum CleanseTarget { Statuses, StatModifications, Both }
 
         // Targeting Modifiers
         [Flags] // Make sure System is imported

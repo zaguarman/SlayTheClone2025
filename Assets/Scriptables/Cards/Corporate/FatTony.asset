@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: An Offer You Can''t Refuse. Recruits a damaged enemy creature
     instead of hurting it.'
   artDescription: 

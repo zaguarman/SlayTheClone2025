@@ -34,6 +34,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Priority +1: lands before the other spells of the Day.'
   artDescription: 
   defaultTargetType: 4

@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   - effectType: 0
     trigger: 4
     actions:
@@ -46,6 +47,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: Coffeinated, then Burnout (the Hustle Culture pairing with
     Zeitgeist).'
   artDescription: 

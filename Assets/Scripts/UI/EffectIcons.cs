@@ -25,6 +25,9 @@ namespace SlayTheClone {
         public const string Debuff = "debuff";
         public const string Burn = "burn";
         public const string Chain = "chain";
+        public const string Doom = "doom";
+        public const string Bless = "bless";
+        public const string Cleanse = "cleanse";
 
         // Stats
         public const string Speed = "speed";
@@ -37,6 +40,8 @@ namespace SlayTheClone {
             switch (status) {
                 case StatusEffectType.Exhausted: return Paralyze;
                 case StatusEffectType.Burned: return Burn;
+                case StatusEffectType.Doomed: return Doom;
+                case StatusEffectType.Blessed: return Bless;
                 default: return null;
             }
         }

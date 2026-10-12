@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Mechanics test: OnDamaged fires on every hit, even one Armor absorbs
     or a killing blow, and still lands when it dies. Exhausted turns it off.'
   artDescription: A heavyset warrior in a stained hoodie and a cape, holding a mechanical

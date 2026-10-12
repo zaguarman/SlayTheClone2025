@@ -168,7 +168,7 @@ namespace SlayTheClone {
 
         private static bool CanAffectCreatures(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.ModifyStat
-                or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.ModifyPriority;
+                or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.ModifyPriority or ActionType.Cleanse;
 
         // A Priority change aimed at a player covers every creature that player controls, now and later (GDD 3.7 Global Modifiers)
         private static bool IsSideWide(EffectAction action) =>
@@ -218,6 +218,8 @@ namespace SlayTheClone {
                     return Status(creature, StatusEffectType.Exhausted, action.value, 0, source);
                 case ActionType.ApplyStatus:
                     return Status(creature, action.statusEffectToApply, action.statusDuration, action.statusPotency, source);
+                case ActionType.Cleanse:
+                    return creature != null ? new CleanseAction(creature, action.cleanse) : null;
                 case ActionType.ModifyPriority: // For statusDuration Days counting this one; 0 means this Day only
                     return action.value != 0 && (creature != null || target is IPlayer)
                         ? new ModifyPriorityAction(target, action.value, action.statusDuration)
@@ -229,6 +231,7 @@ namespace SlayTheClone {
 
         private static IGameAction Status(ICreature creature, StatusEffectType type, int duration, int potency, ICard source) {
             if (creature == null) return null;
+            if (type == StatusEffectType.Blessed) duration = 1; // Persistent: its stacks (potency) count, not Days
             if (type == StatusEffectType.None || duration <= 0) {
                 LogWarning($"{source.Name}: invalid status {type} for {duration} turns; skipped.", LogTag.Effects);
                 return null;

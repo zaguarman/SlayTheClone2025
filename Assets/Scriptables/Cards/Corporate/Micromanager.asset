@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: gives a friendly Worker Coffeinated instead of a plain attack
     buff.'
   artDescription: 

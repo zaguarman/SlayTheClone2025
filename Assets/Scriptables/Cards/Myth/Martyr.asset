@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 3
       statusDuration: 2
       statusPotency: 0
+      cleanse: 0
   - effectType: 0
     trigger: 1
     actions:
@@ -46,6 +47,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Mechanics test: its entry effect waits for Deployment Time; dooming
     itself makes a planned sacrifice that grows stronger; its OnDied effect fires
     when the sentence is carried out.'

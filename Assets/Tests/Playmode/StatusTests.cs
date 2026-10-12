@@ -139,5 +139,118 @@ namespace SlayTheClone.Tests {
             CollectionAssert.AreEqual(new[] { 4 }, game.History.DamageTo(p2), "Its Last Rites hit the empty slot opposite: player 2");
         }
         #endregion
+
+        #region Blessed
+        private StatusEffectModifier BlessingOf(ICreature creature) => StatusRules.Find(game.ModifierManager, creature, StatusEffectType.Blessed);
+
+        [Test]
+        public void Blessed_NegatesTheNextStatus_FriendlyOrNot_AndLosesAStackEachTime() {
+            var saint = game.Summon(p1, game.Creature("Saint", 1, 5), 0);
+            game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Blessed, 1, 2));
+            Assert.AreEqual(2, BlessingOf(saint).Stacks);
+
+            game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Exhausted, 1, 0));
+            Assert.IsFalse(IsExhausted(saint), "The first status is negated");
+            Assert.AreEqual(1, BlessingOf(saint).Stacks);
+
+            game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Burned, 2, 1));
+            Assert.IsNull(BlessingOf(saint), "Its last stack is used up");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(saint, StatusEffectType.Burned));
+
+            game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Exhausted, 1, 0));
+            Assert.IsTrue(IsExhausted(saint), "Unwarded now");
+        }
+
+        [Test]
+        public void Blessed_IsPersistent_StacksUpTo3_AndStopsDoomed() {
+            var saint = game.Summon(p1, game.Creature("Saint", 1, 5), 0);
+            game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Blessed, 1, 2));
+            game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Blessed, 1, 2));
+            Assert.AreEqual(3, BlessingOf(saint).Stacks, "Re-applying adds stacks, up to 3");
+
+            game.StartTurn();
+            game.StartTurn();
+            game.StartTurn();
+            Assert.AreEqual(3, BlessingOf(saint).Stacks, "Time doesn't wear it down");
+
+            game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Doomed, 1, 0));
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(saint, StatusEffectType.Doomed), "Blessed is the one thing that stops Doomed");
+            Assert.AreEqual(2, BlessingOf(saint).Stacks);
+        }
+        #endregion
+
+        #region Cleanse
+        [Test]
+        public void ACleanse_RemovesStatusesOrTemporaryStatChanges_AsItSays_ButNeverPersistentOnes() {
+            var patient = game.Summon(p1, game.Creature("Patient", 2, 5), 0);
+            game.Run(new ApplyStatusEffectAction(patient, StatusEffectType.Burned, 2, 1));
+            game.Run(new ModifyAction(patient, 2, modifyAttack: true, modifyHealth: false, modifySpeed: false));
+            game.ModifierManager.ChangeBaseStats(patient, 1, 0, 0); // A Persistent Stat Modification
+
+            game.Run(new CleanseAction(patient, CleanseTarget.Statuses));
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(patient, StatusEffectType.Burned));
+            Assert.AreEqual(5, patient.Attack, "Statuses only: the stat changes stay");
+
+            game.Run(new ApplyStatusEffectAction(patient, StatusEffectType.Blessed, 1, 3));
+            game.Run(new CleanseAction(patient, CleanseTarget.StatModifications));
+            Assert.AreEqual(3, patient.Attack, "The temporary +2 is gone, the persistent +1 stays");
+            Assert.IsNotNull(BlessingOf(patient), "Stat changes only: the statuses stay");
+
+            game.Run(new CleanseAction(patient, CleanseTarget.Both));
+            Assert.IsNull(BlessingOf(patient), "Blessed is cleansable: all its stacks go");
+        }
+
+        [Test]
+        public void Heresy_CleansingDoomed_PassesItToTheWeakestFriendlyCreature_WithItsCountdown() {
+            var heretic = game.Summon(p1, game.Creature("Heretic", 2, 5), 0);
+            var vessel = game.Summon(p1, game.Creature("Vessel", 0, 3), 1); // Its Burn takes 1 before the cleanse
+            game.Summon(p1, game.Creature("Sturdy", 0, 9), 2);
+            game.Run(new ApplyStatusEffectAction(vessel, StatusEffectType.Burned, 3, 1));
+            game.Run(new ApplyStatusEffectAction(heretic, StatusEffectType.Doomed, 3, 0));
+            game.StartTurn();
+            game.StartTurn();
+            Assert.AreEqual(3, heretic.Attack, "It grew once before being cleansed");
+
+            game.Run(new CleanseAction(heretic, CleanseTarget.Statuses));
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(heretic, StatusEffectType.Doomed), "The heretic is freed");
+            Assert.AreEqual(3, heretic.Attack, "...and keeps the Attack it gained");
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(vessel, StatusEffectType.Doomed), "The lowest Health creature on its side takes it");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(vessel, StatusEffectType.Burned), "The vessel loses its other statuses");
+
+            game.StartTurn();
+            Assert.IsFalse(vessel.IsDead, "One Day left");
+            game.StartTurn(); // The third Day after it was first applied ends: the original countdown runs out
+            Assert.IsTrue(vessel.IsDead, "The sentence kept its remaining Days");
+            Assert.IsFalse(heretic.IsDead);
+        }
+
+        [Test]
+        public void Heresy_WithNobodyToPassItTo_CarriesTheSentenceOutNow() {
+            var heretic = game.Summon(p1, game.Creature("Heretic", 3, 5), 0);
+            game.Run(new ApplyStatusEffectAction(heretic, StatusEffectType.Doomed, 3, 0));
+
+            game.Run(new CleanseAction(heretic, CleanseTarget.Statuses));
+
+            Assert.IsTrue(heretic.IsDead);
+            CollectionAssert.AreEqual(new[] { 3 }, game.History.DamageTo(p2), "Last Rites first, on the empty slot opposite");
+        }
+
+        [Test]
+        public void Heresy_OntoABlessedCreature_UsesAStack_AndTheSentenceIsNegated() {
+            var heretic = game.Summon(p1, game.Creature("Heretic", 1, 5), 0);
+            var saint = game.Summon(p1, game.Creature("Saint", 0, 2), 1);
+            game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Blessed, 1, 2));
+            game.Run(new ApplyStatusEffectAction(heretic, StatusEffectType.Doomed, 1, 0));
+
+            game.Run(new CleanseAction(heretic, CleanseTarget.Statuses));
+
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(heretic, StatusEffectType.Doomed));
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(saint, StatusEffectType.Doomed));
+            Assert.AreEqual(1, BlessingOf(saint).Stacks);
+            game.StartTurn();
+            game.StartTurn();
+            Assert.IsFalse(heretic.IsDead || saint.IsDead, "Nobody is doomed any more");
+        }
+        #endregion
     }
 }

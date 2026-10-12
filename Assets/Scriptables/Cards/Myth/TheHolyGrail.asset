@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: TheHolyGrail
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: d501b482-bdcc-47eb-9fd1-792a19574fba
+  cardName: The Holy Grail
+  description: Drink from it and live forever. Terms and conditions apply.
+  cardType: 1
+  faction: 1
+  artwork: {fileID: 0}
+  priority: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 3
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 4
+      statusDuration: 0
+      statusPotency: 2
+      cleanse: 0
+  designNotes: 'Mechanics test: Blessed 2. Each stack negates the next status that
+    would land, friendly or not, Doomed included. Persistent, up to 3 stacks.'
+  artDescription: A gilded chalice on a velvet cushion behind museum glass. A queue
+    of knights in dented armor stretches out the door, each holding a numbered ticket,
+    and a gift shop by the exit sells plastic replicas at 3 for 2.
+  defaultTargetType: 3

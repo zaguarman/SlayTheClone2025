@@ -174,7 +174,7 @@ Spells
 Cards made on 2026-10-12 to try the mechanics built that day: movement (GDD 2.4), Exhausted, Doomed, Health Loss, Armor, Homing and Fixed aim (4.6), the Creature Death Sequence (3.9), Status Timing (5.2) and Deployment Time (3.2). Each card's Design Notes say what it tests; its Art Description holds the brief for its picture.
 • Corporate, Statecraft and Zeitgeist cards joined their faction decks.
 • Digital Society, Shadow Ops., Tech, Myth and Mind have no deck yet (a deck needs 12 cards). Their cards wait in Assets/Scriptables/Cards/<Faction>/ for those decks.
-• The Mechanics Test deck mixes all 14 with six older cards (Hikikomori, Karen, Reality TV Star, Fat Tony, Martial Law, Hostile Takeover). It's a test deck: the DeckCatalog offers it next to the faction decks, but no opponent brings it and the one-faction rule doesn't apply.
+• The Mechanics Test deck mixes them with Preemptive Strike (Priority) and three older cards (Hikikomori, Karen, Reality TV Star), 20 in all. It's a test deck: the DeckCatalog offers it next to the faction decks, but no opponent brings it and the one-faction rule doesn't apply.
 
 Creatures (Attack/Health/Speed, Deployment Time)
     • Cleaning Robot Premium (Corporate, 2/7/1, 1): no ability. Tests pushing, blocked pushes and the automatic move order.
@@ -193,6 +193,8 @@ Spells
     • DDOS Attack (Tech): Exhaust (stun) an enemy creature for 1 Day.
     • Memento Mori (Myth): Doom a creature for 3 Days.
     • Generational Trauma (Mind): An enemy creature gets -2 Health, which stays on the card.
+    • The Holy Grail (Myth): Bless a friendly creature twice (Blessed 2: each stack negates the next status that would land).
+    • Exorcism (Myth): Cleanse a creature's statuses. On a Doomed creature it's Heresy: the sentence passes to the weakest creature on its side.
 
 Waiting on a decision
     • Plot Armor (Zeitgeist, 2/2/2, 0): survives a lethal hit once per combat. Cards can't say "once per combat" yet, so it isn't made.

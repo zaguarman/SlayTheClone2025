@@ -11,6 +11,13 @@ namespace SlayTheClone {
         public int DurationInTurns { get; }
         public int TurnApplied { get; }
         public int Potency { get; } // e.g., Burn damage per turn
+        public const int MaxBlessedStacks = 3;
+        /// <summary>Intensity, for statuses that count charges instead of Days (Blessed). Time doesn't reduce it.</summary>
+        public int Stacks { get; private set; }
+        /// <summary>Lasts until removed or used up, whatever its Days (Blessed).</summary>
+        public bool IsPersistent => EffectType == StatusEffectType.Blessed;
+        /// <summary>Doomed can't be cleansed: a cleanse attempt passes it on instead (Heresy).</summary>
+        public bool IsCleansable => EffectType != StatusEffectType.Doomed;
 
         public StatusEffectModifier(string name, string description, StatusEffectType type, int duration, int potency, int currentTurn)
             : base(name, description) {
@@ -18,6 +25,7 @@ namespace SlayTheClone {
             DurationInTurns = Math.Max(1, duration);
             TurnApplied = currentTurn;
             Potency = potency;
+            if (type == StatusEffectType.Blessed) SetStacks(potency);
 
             Log($"StatusEffectModifier '{Name}' created: Type={EffectType}, Duration={DurationInTurns}, Potency={Potency}, AppliedTurn={TurnApplied}", LogTag.Effects);
         }
@@ -27,6 +35,7 @@ namespace SlayTheClone {
 
         /// <summary>Checked with the turn about to start: its last Dusk was the one ending Day TurnApplied + Duration.</summary>
         public bool HasExpired(int currentTurn) {
+            if (IsPersistent) return false;
             bool expired = currentTurn > TurnApplied + DurationInTurns;
             if (expired) {
                 Log($"StatusEffect '{Name}' ({EffectType}) has expired on turn {currentTurn}.", LogTag.Effects | LogTag.Turns);
@@ -48,6 +57,12 @@ namespace SlayTheClone {
         public bool PreventsActions() => EffectType == StatusEffectType.Exhausted;
         public bool DisablesAbilities() => EffectType == StatusEffectType.Exhausted;
         public bool Exposes() => EffectType == StatusEffectType.Exhausted;
+
+        /// <summary>Sets the status's intensity, between 1 and its maximum. Blessed shows it as "Blessed 2".</summary>
+        public void SetStacks(int stacks) {
+            Stacks = Math.Max(1, Math.Min(MaxBlessedStacks, stacks));
+            Description = $"Blessed {Stacks}: the next status that would land is negated";
+        }
 
         /// <summary>A Dawn effect acts from the Dawn of Day X+2 when applied on Day X (Status Timing).</summary>
         public bool ActsAtDawnOf(int startingTurn) => startingTurn >= TurnApplied + 2;

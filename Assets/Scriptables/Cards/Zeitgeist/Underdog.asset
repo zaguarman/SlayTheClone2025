@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: Underdog. A bonus while you have fewer creatures or less
     Health than the enemy.'
   artDescription: 

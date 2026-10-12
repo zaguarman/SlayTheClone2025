@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
     - actionType: 0
       value: 2
       targetType: 1
@@ -43,6 +44,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: the enemy schedules 1 fewer draw instead of losing Health.'
   artDescription: 
   defaultTargetType: 0

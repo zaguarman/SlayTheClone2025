@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
     - actionType: 2
       value: 1
       targetType: 0
@@ -43,6 +44,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: Layoffs. Destroy a friendly Worker as an additional cost;
     schedule 2 draws.'
   artDescription: 

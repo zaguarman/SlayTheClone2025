@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: Coffeinated on each friendly creature, followed by Burnout.'
   artDescription: 
   defaultTargetType: 3

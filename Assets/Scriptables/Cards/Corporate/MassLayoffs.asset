@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
     - actionType: 2
       value: 3
       targetType: 0
@@ -43,6 +44,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: as an additional cost, destroy any number of your Workers;
     draw 1 per Worker next Day.'
   artDescription: 

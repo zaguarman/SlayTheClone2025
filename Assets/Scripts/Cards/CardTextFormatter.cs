@@ -88,6 +88,7 @@ namespace SlayTheClone {
                 case ActionType.ModifyStat: return action.value >= 0 ? EffectIcons.Buff : EffectIcons.Debuff;
                 case ActionType.ApplyStatus: return EffectIcons.ForStatus(action.statusEffectToApply);
                 case ActionType.ModifyPriority: return action.value >= 0 ? EffectIcons.Buff : EffectIcons.Debuff;
+                case ActionType.Cleanse: return EffectIcons.Cleanse;
                 default: return null;
             }
         }
@@ -119,6 +120,12 @@ namespace SlayTheClone {
                     return DescribeStatus(action, target);
                 case ActionType.ModifyPriority:
                     return DescribePriorityChange(action, target);
+                case ActionType.Cleanse:
+                    return action.cleanse switch {
+                        CleanseTarget.Statuses => $"cleanse {target}'s statuses",
+                        CleanseTarget.StatModifications => $"cleanse {target}'s temporary stat changes",
+                        _ => $"cleanse {target}'s statuses and temporary stat changes"
+                    };
                 default:
                     return null;
             }
@@ -178,6 +185,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Exhausted: return $"exhaust (stun) {target} for {turns}";
                 case StatusEffectType.Burned: return $"burn {target} for {action.statusPotency} each turn for {turns}";
                 case StatusEffectType.Doomed: return $"doom {target} for {turns}";
+                case StatusEffectType.Blessed: return $"bless {target}{(action.statusPotency > 1 ? $" {action.statusPotency} times" : "")}";
                 default: return null;
             }
         }

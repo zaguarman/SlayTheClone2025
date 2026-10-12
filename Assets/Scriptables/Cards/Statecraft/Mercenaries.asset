@@ -33,6 +33,7 @@ MonoBehaviour:
       statusEffectToApply: 0
       statusDuration: 0
       statusPotency: 0
+      cleanse: 0
   designNotes: 'Future: Recruitment bait. When it dies, the enemy may Recruit it
     instead.'
   artDescription: 
