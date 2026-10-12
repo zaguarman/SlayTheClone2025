@@ -179,7 +179,7 @@ namespace SlayTheClone {
 
         /// <summary>
         /// Gets targets in a chain starting *adjacent* to the primary target, following the longest path.
-        /// Specific logic for Electric Eel.
+        /// Used by damage with the Chained modifier.
         /// </summary>
         /// <param name="primaryTarget">The target that was initially hit (used to find the battlefield).</param>
         /// <param name="maxChainLength">The maximum number of additional targets in the chain.</param>

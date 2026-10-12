@@ -13,7 +13,7 @@ namespace SlayTheClone.Tests {
     public class CardDataTests {
         private const string CardsFolder = "Assets/Scriptables/Cards";
 
-        [Test, Category(TestCategories.KnownBug), Description("#52: Deep Sea Angler paralyzes the enemy player")]
+        [Test]
         public void EveryCardEffect_TargetsSomethingItCanAffect() {
             var problems = new List<string>();
             foreach (var asset in LoadCardAssets()) {
