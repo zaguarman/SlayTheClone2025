@@ -1301,8 +1301,7 @@ def icon_sheet():
 
 
 # ---------------------------------------------------------------- Fog of War card faces
-# Whole cards (the card is 160 x 200), drawn at twice the size. Unity's SVG importer draws no text: the "???", "CLASSIFIED"
-# and stats lettering is laid over them in code (CardController.SetAnonymous).
+# Whole cards (the card is 160 x 200), drawn at twice the size. Unity's SVG importer draws no text, so they have none.
 
 CW, CH = 320, 400
 BRASS = "#c9a24a"
@@ -1316,43 +1315,41 @@ def card_svg(defs, body):
             f'<defs>{defs}</defs>{body}</svg>\n')
 
 
-def question_mark(cx, top, size, color, width_ratio=0.17):
-    s = size
-    curve = (f"M{cx - 0.36 * s:.1f} {top + 0.3 * s:.1f} C {cx - 0.36 * s:.1f} {top - 0.02 * s:.1f}, {cx + 0.4 * s:.1f} {top - 0.02 * s:.1f}, "
-             f"{cx + 0.38 * s:.1f} {top + 0.3 * s:.1f} C {cx + 0.36 * s:.1f} {top + 0.52 * s:.1f}, {cx:.1f} {top + 0.5 * s:.1f}, {cx:.1f} {top + 0.76 * s:.1f}")
-    return stroke(curve, color, s * width_ratio) + circle(cx, top + 1.0 * s, s * 0.1, color)
+# A bold question mark (flat-cut hook end, tapering curve, round dot), traced from the reference the design was given,
+# in its 600 x 600 box. Drawn at `scale` with the top-left of that box at (x, y)
+QUESTION_MARK = ("M172 210 C 172 130 230 82 307 82 C 390 82 440 135 440 200 C 440 260 400 290 370 320 "
+                 "C 350 340 340 360 340 398 L 262 398 L 262 370 C 262 320 280 290 315 255 "
+                 "C 345 225 365 210 365 195 C 365 165 340 150 307 150 C 270 150 247 175 247 210 Z")
+
+
+def question_mark(x, y, scale, color):
+    return group(path(QUESTION_MARK, color) + circle(301, 481, 49, color), f"translate({x:.1f} {y:.1f}) scale({scale})")
+
+
+def unknown_creature_svg():
+    # Minimalist: a normal card's layout, every part of it empty, on black, with three question marks in the middle
+    line = 'stroke="#3a3a3a" stroke-width="2"'
+    body = rect(3, 3, CW - 6, CH - 6, "#000000", 'rx="16" stroke="#4a4a4a" stroke-width="4"')
+    body += rect(18, 18, CW - 36, 40, "none", f'rx="4" {line}')       # Name
+    body += rect(18, 64, CW - 36, 172, "none", f'rx="4" {line}')      # Art
+    body += rect(18, 242, CW - 36, 30, "none", f'rx="3" {line}')      # Type
+    body += rect(18, 278, CW - 36, 104, "none", f'rx="4" {line}')     # Text
+    body += rect(226, 360, 78, 26, "#000000", f'rx="13" {line}')      # Stats
+    # Each mark spans x 172-440 and y 82-530 of its box: centre the row of three in the art box, the middle of the card
+    # without crossing its empty parts
+    scale, gap, middle = 0.2, 70, 64 + 172 / 2
+    mark_w, mark_h = (440 - 172) * scale, (530 - 82) * scale
+    left = (CW - (3 * mark_w + 2 * (gap - mark_w))) / 2
+    for i in range(3):
+        x = left + i * gap - 172 * scale
+        y = middle - mark_h / 2 - 82 * scale
+        body += question_mark(x, y, scale, "#ffffff")
+    return card_svg("", body)
 
 
 def card_frame():
     return (rect(3, 3, CW - 6, CH - 6, NAVY, f'rx="16" stroke="{BRASS}" stroke-width="6"')
             + rect(12, 12, CW - 24, CH - 24, "none", f'rx="10" stroke="{BRASS}" stroke-width="1.5" opacity="0.6"'))
-
-
-def unknown_creature_svg():
-    defs = rad("spot", ["#56638f", "#2a3150", "#11141f"], cx=0.5, cy=0.15, r=0.75) + lin("bar", ["#a3202e", "#6e121c"])
-    # Title bar: redacted (the name is laid over it in code)
-    body = card_frame() + rect(18, 18, CW - 36, 40, INK, f'rx="4" stroke="{BRASS}" stroke-width="2"')
-    # Art window: a figure in a spotlight, hat brim over a face that's only a question mark
-    body += rect(18, 64, CW - 36, 172, "url(#spot)", f'rx="4" stroke="{BRASS}" stroke-width="2"')
-    body += path("M58 236 C 62 202 94 188 122 183 L 140 204 L 160 236 L 180 204 L 198 183 C 226 188 258 202 262 236 Z", INK)
-    body += stroke("M122 183 L 146 236 M198 183 L 174 236", "#262b3d", 4)
-    body += ellipse(160, 150, 33, 40, INK)
-    body += path("M120 118 C 121 86 134 72 160 74 C 186 72 199 86 200 118 Z", INK)
-    body += stroke("M128 108 L 192 108", "#2f3550", 6)
-    body += ellipse(160, 120, 70, 11, INK)
-    body += question_mark(160, 126, 44, "#ffd257")
-    # Type bar (CLASSIFIED is laid over it in code)
-    body += rect(18, 242, CW - 36, 30, "url(#bar)", f'rx="3" stroke="{BRASS}" stroke-width="2"')
-    # Text box: blacked-out lines and a red seal
-    body += rect(18, 278, CW - 36, 104, CREAM, f'rx="4" stroke="{BRASS}" stroke-width="2"')
-    for y, w in ((294, 214), (318, 248), (342, 150)):
-        body += rect(34, y, w, 14, INK, 'rx="2"')
-    seal = (circle(0, 0, 30, "none", 'stroke="#c0392b" stroke-width="5"') + circle(0, 0, 22, "none", 'stroke="#c0392b" stroke-width="2"')
-            + question_mark(0, -14, 24, "#c0392b", 0.2))
-    body += group(seal, "translate(238 330) rotate(-14)", 0.85)
-    # Stats pill (?/?/? is laid over it in code)
-    body += rect(226, 360, 78, 26, "#d9b24f", f'rx="13" stroke="{INK}" stroke-width="2"')
-    return card_svg(defs, body)
 
 
 def card_back_svg():

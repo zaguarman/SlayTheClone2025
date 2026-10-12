@@ -366,12 +366,12 @@ namespace SlayTheClone {
         #region Fog of War faces
         /// <summary>
         /// Fog of War: the player at the screen doesn't know what this creature is (being summoned by the other side, or stealthy).
-        /// It shows as a classified file: "???" for a name, no stats, no art, no text, and hovering it tells nothing.
+        /// It shows as an empty black card with three question marks, and hovering it tells nothing.
         /// </summary>
         public void SetAnonymous(bool anonymous) {
             if (anonymous == IsAnonymous) return;
             IsAnonymous = anonymous;
-            if (anonymous && unknownFace == null) unknownFace = CreateFace("UnknownFace", "FogOfWar/UnknownCreature", withLettering: true);
+            if (anonymous && unknownFace == null) unknownFace = CreateFace("UnknownFace", "FogOfWar/UnknownCreature");
             ShowFace(anonymous ? unknownFace : null);
         }
 
@@ -379,7 +379,7 @@ namespace SlayTheClone {
         public void SetFaceDown(bool faceDown) {
             if (faceDown == IsFaceDown) return;
             IsFaceDown = faceDown;
-            if (faceDown && backFace == null) backFace = CreateFace("CardBack", "FogOfWar/CardBack", withLettering: false);
+            if (faceDown && backFace == null) backFace = CreateFace("CardBack", "FogOfWar/CardBack");
             ShowFace(faceDown ? backFace : null);
         }
 
@@ -406,8 +406,8 @@ namespace SlayTheClone {
             face.transform.SetAsLastSibling();
         }
 
-        // The whole card: art drawn by Tools/generate_card_art.py (Unity's SVG import draws no text, so the lettering is laid on here)
-        private GameObject CreateFace(string objectName, string spritePath, bool withLettering) {
+        // The whole card, drawn by Tools/generate_card_art.py
+        private GameObject CreateFace(string objectName, string spritePath) {
             var face = new GameObject(objectName, typeof(RectTransform), typeof(Image));
             face.layer = gameObject.layer;
             face.transform.SetParent(transform, false);
@@ -419,30 +419,8 @@ namespace SlayTheClone {
             image.sprite = Resources.Load<Sprite>(spritePath);
             image.color = image.sprite != null ? Color.white : UITheme.TableDark;
             image.raycastTarget = false;
-
-            if (withLettering) {
-                // Where the art leaves room for it, in fractions of the card (it's drawn at 320 x 400)
-                Letter(face.transform, "???", UITheme.Gold, new Vector2(0.06f, 0.855f), new Vector2(0.94f, 0.955f), 28f, FontStyles.Bold);
-                Letter(face.transform, "Classified", new Color(0.94f, 0.9f, 0.81f), new Vector2(0.06f, 0.32f), new Vector2(0.94f, 0.395f), 14f,
-                    FontStyles.Bold | FontStyles.SmallCaps, spacing: 12f);
-                Letter(face.transform, "?/?/?", UITheme.TableDark, new Vector2(0.706f, 0.035f), new Vector2(0.95f, 0.1f), 12f, FontStyles.Bold);
-            }
             face.SetActive(false);
             return face;
-        }
-
-        private static void Letter(Transform parent, string text, Color color, Vector2 anchorMin, Vector2 anchorMax, float size,
-            FontStyles style, float spacing = 0f) {
-            var label = UITheme.NewText(text, parent, text, size, color);
-            label.rectTransform.anchorMin = anchorMin;
-            label.rectTransform.anchorMax = anchorMax;
-            label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
-            label.fontStyle = style;
-            label.characterSpacing = spacing;
-            label.enableAutoSizing = true;
-            label.fontSizeMin = 4;
-            label.fontSizeMax = size;
-            label.raycastTarget = false;
         }
         #endregion
 
