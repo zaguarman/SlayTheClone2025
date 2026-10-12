@@ -100,7 +100,7 @@ namespace SlayTheClone {
             baseCardData = cardInstance.SourceData;
             linkedCardInstance = cardInstance;
             linkedCreature = cardInstance as ICreature;
-            base.Initialize(owner, views.Mediator, views.GameManager); // Starts listening to the linked creature
+            if (!views.IsDisplayOnly) base.Initialize(owner, views.Mediator, views.GameManager); // Starts listening to the linked creature
 
             UpdateUI();
         }
@@ -234,7 +234,8 @@ namespace SlayTheClone {
 
             // Queued cards are committed (except in the hand, where dragging re-aims or takes back the play),
             // and nothing can be played while a turn resolves; cancel the drag so no drop zone receives the card
-            if ((IsQueued && !canDragWhileQueued) || (GameManager?.TurnManager?.IsResolving ?? false) || !FogOfWar.CanControl(Player)) {
+            if ((IsQueued && !canDragWhileQueued) || (GameManager?.TurnManager?.IsResolving ?? false) || !FogOfWar.CanControl(Player)
+                || (cardViews?.IsDisplayOnly ?? false)) {
                 eventData.pointerDrag = null;
                 return;
             }

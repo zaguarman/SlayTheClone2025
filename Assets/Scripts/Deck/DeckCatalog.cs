@@ -22,12 +22,20 @@ namespace SlayTheClone {
         [SerializeField] private List<Opponent> opponents = new List<Opponent>();
         // Decks for trying out mechanics, which can mix factions; offered next to the faction decks but brought by no opponent
         [SerializeField] private List<DeckScriptableObject> testDecks = new List<DeckScriptableObject>();
+        // How a card looks, for showing the cards outside a game (the menu's card gallery)
+        [SerializeField] private CardController cardPrefab;
+
+        public CardController CardPrefab => cardPrefab;
 
         public IReadOnlyList<DeckScriptableObject> Decks => decks.Where(d => d != null).ToList();
         public IReadOnlyList<Opponent> Opponents => opponents.Where(o => o != null && o.deck != null).ToList();
         public IReadOnlyList<DeckScriptableObject> TestDecks => testDecks.Where(d => d != null).ToList();
         /// <summary>Everything a player can pick: the faction decks, then the test decks.</summary>
         public IReadOnlyList<DeckScriptableObject> AllDecks => Decks.Concat(TestDecks).ToList();
+
+        /// <summary>Every different card in any deck on offer, by faction then name.</summary>
+        public IReadOnlyList<CardDataScriptableObject> AllCards => AllDecks.SelectMany(d => d.Cards).Where(c => c != null).Distinct()
+            .OrderBy(c => c.faction).ThenBy(c => c.cardName).ToList();
 
         /// <summary>"17 cards · Corporate", "13 cards · Shadow Ops. + Mind": the size of the deck, and its faction or two.</summary>
         public static string Describe(DeckScriptableObject deck) {

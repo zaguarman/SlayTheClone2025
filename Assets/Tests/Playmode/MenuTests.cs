@@ -12,7 +12,8 @@ using Object = UnityEngine.Object;
 namespace SlayTheClone.Tests {
     /// <summary>
     /// The main menu as a player uses it: Play opens the match setup, where you pick your deck, an opponent and their deck,
-    /// and Start begins a game with exactly that. Buttons are clicked the way the menu's own listeners expect.
+    /// and Start begins a game with exactly that; Cards opens the card gallery. Buttons are clicked the way the menu's own
+    /// listeners expect.
     /// </summary>
     public class MenuTests {
         private const string MenuSceneName = "MainMenu";
@@ -39,7 +40,20 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [UnityTest]
-        public IEnumerator PickingAnOpponent_BringsTheirDeck_WhichCanBeSwapped_AndBackKeepsTheChoices() {
+        public IEnumerator TheCardGallery_ShowsEveryDeck_AndPickingAnOpponent_BringsTheirDeck_WhichCanBeSwapped_AndBackKeepsTheChoices() {
+            Click(TitleButton(MainMenu.CardsButtonName));
+            var gallery = Object.FindFirstObjectByType<CardGalleryMenu>();
+            Assert.IsTrue(gallery.IsOpen, "Cards opens the card gallery");
+            Assert.IsFalse(TitleButton("PlayButton").gameObject.activeInHierarchy, "...in place of the title screen");
+            CollectionAssert.AreEqual(catalog.AllCards.Select(c => c.cardName), Shown(gallery), "It opens on every card on offer");
+            foreach (var deck in catalog.AllDecks) {
+                Click(GalleryButton(gallery, CardGalleryMenu.DeckButton + deck.GetDeckName()));
+                CollectionAssert.AreEquivalent(deck.Cards.Distinct().Select(c => c.cardName), Shown(gallery), $"{deck.GetDeckName()}: each of its cards once");
+            }
+            Click(GalleryButton(gallery, CardGalleryMenu.BackButtonName));
+            Assert.IsFalse(gallery.IsOpen);
+            Assert.IsTrue(TitleButton("PlayButton").gameObject.activeInHierarchy, "Back shows the title screen again");
+
             yield return OpenSetup();
 
             foreach (var opponent in catalog.Opponents) {
@@ -140,6 +154,14 @@ namespace SlayTheClone.Tests {
         private static Button TitleButton(string name) {
             var button = Object.FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None).SingleOrDefault(b => b.name == name);
             Assert.IsNotNull(button, $"The main menu has no {name}");
+            return button;
+        }
+
+        private static List<string> Shown(CardGalleryMenu gallery) => gallery.ShownCards.Select(c => c.GetBaseCardData().cardName).ToList();
+
+        private static Button GalleryButton(CardGalleryMenu gallery, string name) {
+            var button = gallery.GetComponentsInChildren<Button>(includeInactive: true).SingleOrDefault(b => b.name == name);
+            Assert.IsNotNull(button, $"The card gallery has no button '{name}'");
             return button;
         }
 

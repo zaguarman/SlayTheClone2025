@@ -218,6 +218,7 @@ namespace SlayTheClone {
             trim.type = Image.Type.Sliced;
             trim.pixelsPerUnitMultiplier = cornerScale;
             Stretch(trim.rectTransform, inset);
+            trim.gameObject.AddComponent<LayoutElement>().ignoreLayout = true; // Decoration: never a row in a layout group
             return trim;
         }
 

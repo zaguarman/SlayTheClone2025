@@ -5,7 +5,8 @@ using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Title screen: Play opens the match setup (decks and opponent), which then loads the game scene; or quits the application.
+    /// Title screen: Play opens the match setup (decks and opponent), which then loads the game scene; Cards opens the card
+    /// gallery (every deck's cards); Quit quits the application.
     /// </summary>
     public class MainMenu : MonoBehaviour {
         [SerializeField] private string gameSceneName = "InitialTestScene";
@@ -13,9 +14,13 @@ namespace SlayTheClone {
         [SerializeField] private Button quitButton;
         [SerializeField] private MatchSetupMenu matchSetup; // Without it, Play starts the game with the scene's own decks
 
+        public const string CardsButtonName = "CardsButton";
+        private CardGalleryMenu gallery;
+
         private void Awake() {
             // Make sure a previous pause doesn't leave the game frozen
             Time.timeScale = 1f;
+            AddCardsButton();
 
             if (playButton != null) playButton.onClick.AddListener(Play);
             else LogWarning("Play button not assigned on MainMenu", LogTag.UI);
@@ -34,6 +39,21 @@ namespace SlayTheClone {
             if (canvas != null) UITheme.AddBackdrop(canvas.rootCanvas.transform);
             UITheme.StyleButton(playButton, UITheme.ButtonKind.Primary);
             UITheme.StyleButton(quitButton);
+        }
+
+        // Cards, between Play and Quit: made from the Quit button, so it looks like the others
+        private void AddCardsButton() {
+            if (quitButton == null || matchSetup == null) return;
+            var cards = Instantiate(quitButton, quitButton.transform.parent);
+            cards.name = CardsButtonName;
+            cards.transform.SetSiblingIndex(quitButton.transform.GetSiblingIndex());
+            cards.onClick.RemoveAllListeners();
+            var label = cards.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (label != null) label.text = "Cards";
+
+            gallery = matchSetup.gameObject.AddComponent<CardGalleryMenu>();
+            gallery.Setup(matchSetup.Catalog, matchSetup.TitleScreen);
+            cards.onClick.AddListener(gallery.Show);
         }
 
         public void Play() {

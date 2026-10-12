@@ -18,6 +18,7 @@ namespace SlayTheClone {
     public static class FactionDecksGenerator {
         private const string CardsRoot = "Assets/Scriptables/Cards";
         private const string DecksFolder = "Assets/Scriptables/Decks";
+        private const string CardPrefabPath = "Assets/Prefabs/CardPrefab.prefab";
 
         // Spells aim at whatever they are dropped on; these make an action pick its own targets instead
         private const TargetModifier Each = TargetModifier.AllSameTypeTargets;
@@ -689,6 +690,7 @@ namespace SlayTheClone {
             var testDecks = serializedCatalog.FindProperty("testDecks");
             testDecks.arraySize = 1;
             testDecks.GetArrayElementAtIndex(0).objectReferenceValue = testDeck;
+            serializedCatalog.FindProperty("cardPrefab").objectReferenceValue = AssetDatabase.LoadAssetAtPath<CardController>(CardPrefabPath);
             serializedCatalog.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(catalog);
         }

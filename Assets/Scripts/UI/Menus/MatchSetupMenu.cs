@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static SlayTheClone.DebugLogger;
+using static SlayTheClone.MenuWidgets;
 
 namespace SlayTheClone {
     /// <summary>
@@ -23,17 +24,12 @@ namespace SlayTheClone {
         [SerializeField] private DeckCatalog catalog;
         [SerializeField] private GameObject titleScreen; // Hidden while choosing
 
-        // Colors come from the game's theme
-        private static Color panelColor => UITheme.Panel;
-        private static Color buttonColor => UITheme.PanelLight;
-        private static readonly Color selectedColor = UITheme.Hex(0x6B5222);
-        private static Color textColor => UITheme.Parchment;
-        private static Color accentColor => UITheme.Gold;
-
         /// <summary>Raised by Start once the choice is stored in <see cref="MatchSetup"/>.</summary>
         public event Action MatchChosen;
 
         public DeckCatalog Catalog => catalog;
+        /// <summary>The title screen's buttons, hidden while a menu screen is open.</summary>
+        public GameObject TitleScreen => titleScreen;
         public bool IsOpen => panel != null && panel.activeSelf;
         public DeckScriptableObject PlayerDeck { get; private set; }
         public DeckCatalog.Opponent Opponent { get; private set; }
@@ -102,15 +98,10 @@ namespace SlayTheClone {
         }
 
         private void Refresh() {
-            foreach (var (button, isSelected) in choiceButtons) {
-                bool selected = isSelected();
-                button.image.color = selected ? selectedColor : buttonColor;
-                var trim = button.transform.Find("Trim");
-                if (trim != null) trim.GetComponent<Image>().color = selected ? accentColor : UITheme.GoldDim;
-            }
+            foreach (var (button, isSelected) in choiceButtons) ShowChosen(button, isSelected());
             if (summaryText != null && PlayerDeck != null && OpponentDeck != null) {
-                summaryText.text = $"You, playing <color=#{ColorUtility.ToHtmlStringRGB(accentColor)}>{PlayerDeck.GetDeckName()}</color>"
-                    + $"   vs   {OpponentName}, playing <color=#{ColorUtility.ToHtmlStringRGB(accentColor)}>{OpponentDeck.GetDeckName()}</color>";
+                summaryText.text = $"You, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{PlayerDeck.GetDeckName()}</color>"
+                    + $"   vs   {OpponentName}, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{OpponentDeck.GetDeckName()}</color>";
             }
         }
         #endregion
@@ -124,7 +115,7 @@ namespace SlayTheClone {
             layout.spacing = 24;
             SetControls(layout, expandHeight: false);
 
-            UITheme.StyleHeading(AddText(panel.transform, "Choose your match", 64, accentColor, FontStyles.Bold, height: 80), accentColor);
+            UITheme.StyleHeading(AddText(panel.transform, "Choose your match", 64, AccentColor, FontStyles.Bold, height: 80), AccentColor);
 
             var columns = NewObject("Columns", panel.transform);
             var columnsLayout = columns.AddComponent<HorizontalLayoutGroup>();
@@ -152,7 +143,7 @@ namespace SlayTheClone {
                     () => SelectOpponentDeck(deck), () => OpponentDeck == deck);
             }
 
-            summaryText = AddText(panel.transform, "", 30, textColor, FontStyles.Normal, height: 44);
+            summaryText = AddText(panel.transform, "", 30, TextColor, FontStyles.Normal, height: 44);
 
             var footer = NewObject("Footer", panel.transform);
             var footerLayout = footer.AddComponent<HorizontalLayoutGroup>();
@@ -170,78 +161,12 @@ namespace SlayTheClone {
         private static string DeckLabel(DeckScriptableObject deck) =>
             $"<b>{deck.GetDeckName()}</b>\n<size=70%>{DeckCatalog.Describe(deck)}</size>";
 
-        private Transform AddColumn(Transform parent, string title) {
-            var column = NewObject(title, parent);
-            UITheme.StylePanel(column.AddComponent<Image>(), panelColor);
-            var layout = column.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(20, 20, 16, 20);
-            layout.spacing = 10;
-            layout.childAlignment = TextAnchor.UpperCenter;
-            SetControls(layout, expandHeight: false);
-            UITheme.StyleHeading(AddText(column.transform, title, 36, textColor, FontStyles.Bold, height: 52), textColor);
-            return column.transform;
-        }
-
         private void AddChoice(Transform parent, string name, string label, float height, Action onClick, Func<bool> isSelected) {
             var button = AddButton(parent, name, label, -1, onClick);
             button.GetComponent<LayoutElement>().preferredHeight = height;
             choiceButtons.Add((button, isSelected));
         }
 
-        private Button AddButton(Transform parent, string name, string label, float width, Action onClick) {
-            var go = NewObject(name, parent);
-            var image = UITheme.Round(go.AddComponent<Image>(), buttonColor, 1.5f);
-            UITheme.AddTrim(go.transform, UITheme.GoldDim, 1.5f);
-            UITheme.AddHardShadow(image);
-            var button = go.AddComponent<Button>();
-            button.targetGraphic = image;
-            var colors = button.colors;
-            colors.highlightedColor = new Color(1.4f, 1.3f, 1.1f, 1f); // Tints the button's own color, like the title screen buttons
-            colors.selectedColor = Color.white;
-            button.colors = colors;
-            button.onClick.AddListener(() => onClick());
-
-            var element = go.AddComponent<LayoutElement>();
-            element.preferredWidth = width;
-            element.preferredHeight = 72;
-
-            var text = AddText(go.transform, label, 28, textColor, FontStyles.Normal, height: -1);
-            Stretch(text.gameObject, margin: 12);
-            return button;
-        }
-
-        private static TextMeshProUGUI AddText(Transform parent, string text, float size, Color color, FontStyles style, float height) {
-            var go = NewObject("Text", parent);
-            var tmp = go.AddComponent<TextMeshProUGUI>();
-            tmp.text = text;
-            tmp.fontSize = size;
-            tmp.color = color;
-            tmp.fontStyle = style;
-            tmp.alignment = TextAlignmentOptions.Center;
-            tmp.raycastTarget = false;
-            if (height > 0) go.AddComponent<LayoutElement>().preferredHeight = height;
-            return tmp;
-        }
-
-        private static void SetControls(HorizontalOrVerticalLayoutGroup layout, bool expandHeight) {
-            layout.childControlWidth = layout.childControlHeight = true;
-            layout.childForceExpandWidth = true;
-            layout.childForceExpandHeight = expandHeight;
-        }
-
-        private static GameObject NewObject(string name, Transform parent) {
-            var go = new GameObject(name, typeof(RectTransform));
-            go.transform.SetParent(parent, false);
-            return go;
-        }
-
-        private static void Stretch(GameObject go, float margin = 0) {
-            var rect = (RectTransform)go.transform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(margin, margin);
-            rect.offsetMax = new Vector2(-margin, -margin);
-        }
         #endregion
     }
 }
