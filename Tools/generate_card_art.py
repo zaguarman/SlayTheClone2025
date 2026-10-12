@@ -1327,23 +1327,20 @@ def question_mark(x, y, scale, color):
 
 
 def unknown_creature_svg():
-    # Minimalist: a normal card's layout, every part of it empty, on black, with three question marks in the middle
-    line = 'stroke="#3a3a3a" stroke-width="2"'
-    body = rect(3, 3, CW - 6, CH - 6, "#000000", 'rx="16" stroke="#4a4a4a" stroke-width="4"')
+    # Minimalist: a spell card's layout (no stats), every part of it empty, in soft greys, with three question marks
+    # in the middle of the art box
+    line = 'stroke="#2c2c2c" stroke-width="1.5"'
+    body = rect(3, 3, CW - 6, CH - 6, "#161616", 'rx="16" stroke="#333333" stroke-width="3"')
     body += rect(18, 18, CW - 36, 40, "none", f'rx="4" {line}')       # Name
     body += rect(18, 64, CW - 36, 172, "none", f'rx="4" {line}')      # Art
     body += rect(18, 242, CW - 36, 30, "none", f'rx="3" {line}')      # Type
     body += rect(18, 278, CW - 36, 104, "none", f'rx="4" {line}')     # Text
-    body += rect(226, 360, 78, 26, "#000000", f'rx="13" {line}')      # Stats
-    # Each mark spans x 172-440 and y 82-530 of its box: centre the row of three in the art box, the middle of the card
-    # without crossing its empty parts
+    # Each mark spans x 172-440 and y 82-530 of its box
     scale, gap, middle = 0.2, 70, 64 + 172 / 2
     mark_w, mark_h = (440 - 172) * scale, (530 - 82) * scale
     left = (CW - (3 * mark_w + 2 * (gap - mark_w))) / 2
     for i in range(3):
-        x = left + i * gap - 172 * scale
-        y = middle - mark_h / 2 - 82 * scale
-        body += question_mark(x, y, scale, "#ffffff")
+        body += question_mark(left + i * gap - 172 * scale, middle - mark_h / 2 - 82 * scale, scale, "#9a9a9a")
     return card_svg("", body)
 
 
