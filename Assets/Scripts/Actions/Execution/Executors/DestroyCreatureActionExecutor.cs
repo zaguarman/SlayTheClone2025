@@ -7,7 +7,7 @@ namespace SlayTheClone {
             var creature = destroy.GetCreature();
             if (creature == null || creature.IsDead) return;
 
-            if (creature.Health > 0) {
+            if (creature.Health > 0 && !destroy.IsUnconditional) {
                 Log($"Executor: {creature.Name} was saved from destruction ({creature.Health} Health)", LogTag.Creatures | LogTag.Actions);
                 return;
             }

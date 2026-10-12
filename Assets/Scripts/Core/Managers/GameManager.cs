@@ -46,6 +46,8 @@ namespace SlayTheClone {
         /// <summary>Whether the creature takes +1 damage from every hit (Exposed, also part of Exhausted).</summary>
         bool IsExposed(ICreature creature);
         void RecalculateStats(ICreature creature);
+        /// <summary>A Persistent Stat Modification on a creature in play: its base stats change and stay on the card.</summary>
+        void ChangeBaseStats(ICreature creature, int attack, int health, int speed);
         void ProcessEndOfTurn(int endedTurnNumber, IActionsQueue actionsQueue);
         void ProcessStartOfTurn(int startingTurnNumber, IActionsQueue actionsQueue);
         void Cleanup();

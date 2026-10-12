@@ -15,6 +15,12 @@ namespace SlayTheClone {
         int BaseAttack { get; }
         int BaseHealth { get; }
         int BaseSpeed { get; }
+        /// <summary>
+        /// Persistent Stat Modifications (GDD glossary): base stat changes that stay on the card through the hand and the
+        /// discard pile, until it's reshuffled into the deck. Use ModifierManager.ChangeBaseStats on a creature in play.
+        /// </summary>
+        (int attack, int health, int speed) PersistentChanges { get; }
+        void ChangeBaseStats(int attack, int health, int speed);
         BoardSlot Slot { get; set; }
         /// <summary>Set by the ModifierManager while a status (like Exhausted) disables its abilities: none of its effects trigger.</summary>
         bool AbilitiesDisabled { get; set; }
@@ -66,6 +72,15 @@ namespace SlayTheClone {
         public int BaseAttack { get; private set; }
         public int BaseHealth { get; private set; }
         public int BaseSpeed { get; private set; }
+        public (int attack, int health, int speed) PersistentChanges { get; private set; }
+
+        // The effective stats follow once the ModifierManager recalculates them (it does when the creature enters play)
+        public void ChangeBaseStats(int attack, int health, int speed) {
+            BaseAttack = Math.Max(0, BaseAttack + attack);
+            BaseHealth = Math.Max(0, BaseHealth + health);
+            BaseSpeed = Math.Max(0, BaseSpeed + speed);
+            PersistentChanges = (PersistentChanges.attack + attack, PersistentChanges.health + health, PersistentChanges.speed + speed);
+        }
 
         private int effectiveAttack;
         private int effectiveMaxHealth;

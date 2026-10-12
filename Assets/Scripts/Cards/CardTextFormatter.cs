@@ -149,6 +149,7 @@ namespace SlayTheClone {
             switch (action.statusEffectToApply) {
                 case StatusEffectType.Exhausted: return $"exhaust (stun) {target} for {turns}";
                 case StatusEffectType.Burned: return $"burn {target} for {action.statusPotency} each turn for {turns}";
+                case StatusEffectType.Doomed: return $"doom {target} ({turns})";
                 default: return null;
             }
         }

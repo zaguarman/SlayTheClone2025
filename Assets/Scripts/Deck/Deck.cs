@@ -76,6 +76,7 @@ namespace SlayTheClone {
 
         // Every card that leaves play (played spell, dead or replaced creature, discarded hand) ends up here.
         // It is stored as a fresh copy of its definition, so damage, buffs and death state never carry over.
+        // Only Persistent Stat Modifications stay on the card, until it's reshuffled (see CardDealingService.RecycleDiscardPile).
         public void AddToDiscardPile(ICard card) {
             if (card == null) {
                 LogError($"Attempted to add null card to discard pile (DeckID: {deckId.ToUpper()})", LogTag.Cards);
@@ -83,6 +84,10 @@ namespace SlayTheClone {
             }
 
             var resetCard = CreateFreshCopy(card);
+            if (card is ICreature used && resetCard is ICreature copy && copy != used) {
+                var (attack, health, speed) = used.PersistentChanges;
+                copy.ChangeBaseStats(attack, health, speed);
+            }
             discardPile.Add(resetCard);
             Log($"Added {resetCard.Name} to discard pile (DeckID: {deckId.ToUpper()})", LogTag.Cards);
         }

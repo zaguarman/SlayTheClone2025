@@ -77,5 +77,67 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(game.ModifierManager.CanAct(target));
         }
         #endregion
+
+        #region Doomed
+        [Test]
+        public void Doomed_GrowsEachDawn_ThenLastRitesHitsTheOppositeSlot_AndItDies() {
+            game.SetDecks(game.Fillers(5), game.Fillers(5));
+            var condemned = game.Summon(p1, game.Creature("Condemned", 2, 5, 1,
+                Effect(EffectTrigger.OnAboutToDie, ActionType.Heal, 5, TargetType.Self),
+                Effect(EffectTrigger.OnDeath, ActionType.Damage, 1, TargetType.Enemy)), 1);
+            var opposite = game.Summon(p2, game.Creature("Opposite", 0, 10), 1);
+            game.Run(new ApplyStatusEffectAction(condemned, StatusEffectType.Doomed, 2, 0));
+
+            game.StartTurn();
+            Assert.AreEqual(2, condemned.Attack, "Like every status, it skips the Day it's applied");
+            game.StartTurn();
+            Assert.AreEqual(3, condemned.Attack, "+1 Attack at the Dawn of the Day after next");
+            Assert.IsFalse(condemned.IsDead);
+
+            game.StartTurn(); // Its 2 Days run out at this Dusk
+            Assert.AreEqual(7, opposite.Health, "Last Rites hits the slot opposite with its current Attack");
+            Assert.IsTrue(condemned.IsDead, "Nothing saves it, not even its own OnAboutToDie heal");
+            CollectionAssert.AreEqual(new[] { 1 }, game.History.DamageTo(p2), "It's a real death: its OnDied effect fires");
+
+            var discarded = (ICreature)p1.Deck.GetDiscardPilePreview().Single(c => c.Name == "Condemned");
+            Assert.AreEqual(3, discarded.BaseAttack, "The Attack it gained is a Persistent Stat Modification: it stays on the card");
+
+            game.CardDealingService.RecycleDiscardPile(p1);
+            var reshuffled = (ICreature)p1.Deck.GetDeckPreview().Single(c => c.Name == "Condemned");
+            Assert.AreEqual(2, reshuffled.BaseAttack, "Reshuffling resets the card");
+        }
+
+        [Test]
+        public void Doomed_WipesOtherStatuses_AndNothingNewLands_NotEvenAnotherDoomed() {
+            var vessel = game.Summon(p1, game.Creature("Vessel", 1, 10), 0);
+            game.Run(new ApplyStatusEffectAction(vessel, StatusEffectType.Burned, 3, 1));
+            game.Run(new ApplyStatusEffectAction(vessel, StatusEffectType.Doomed, 2, 0));
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(vessel, StatusEffectType.Burned), "Doomed removes every other status");
+
+            game.Run(new ApplyStatusEffectAction(vessel, StatusEffectType.Exhausted, 1, 0));
+            game.Run(new ApplyStatusEffectAction(vessel, StatusEffectType.Doomed, 9, 0));
+            Assert.IsFalse(IsExhausted(vessel), "A Doomed creature is immune to new statuses");
+            Assert.AreEqual(1, game.ModifierManager.GetActiveModifiersFor(vessel).Count(), "Only the first Doomed");
+
+            game.StartTurn();
+            game.StartTurn();
+            game.StartTurn();
+            Assert.IsTrue(vessel.IsDead, "The second Doomed didn't extend the sentence");
+        }
+
+        [Test]
+        public void LastRites_StrikesEvenIfTheCreatureCannotAct() {
+            var deploying = game.Creature("Deploying", 4, 5);
+            deploying.turnsUntilOperative = 9;
+            var condemned = game.Summon(p1, deploying, 0);
+            game.Run(new ApplyStatusEffectAction(condemned, StatusEffectType.Doomed, 1, 0));
+            Assert.IsFalse(game.ModifierManager.CanAct(condemned));
+
+            game.StartTurn();
+            game.StartTurn();
+            Assert.IsTrue(condemned.IsDead);
+            CollectionAssert.AreEqual(new[] { 4 }, game.History.DamageTo(p2), "Its Last Rites hit the empty slot opposite: player 2");
+        }
+        #endregion
     }
 }

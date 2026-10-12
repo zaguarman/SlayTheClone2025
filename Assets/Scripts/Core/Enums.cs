@@ -14,7 +14,8 @@ namespace SlayTheClone {
         public enum StatusEffectType {
             None,
             Burned,     // Takes damage at end of turn
-            Exhausted   // The stun: Cannot Act, abilities disabled, and Exposed (+1 damage taken) while it lasts (Status Effects Compendium)
+            Exhausted,  // The stun: Cannot Act, abilities disabled, and Exposed (+1 damage taken) while it lasts (Status Effects Compendium)
+            Doomed      // Death Sentence: blocks other statuses, +1 permanent Attack each Dawn, then Last Rites and destroyed
         }
 
         // Targeting Modifiers

@@ -21,8 +21,10 @@ namespace SlayTheClone {
                 return;
             }
 
-            // The attack was declared earlier; re-check the attacker can still act now that it resolves
-            if (!context.ModifierManager.CanAct(attacker)) {
+            // The attack was declared earlier; re-check the attacker can still act now that it resolves.
+            // Last Rites only needs the attacker alive on the board.
+            bool canAttack = combatAction.IsLastRites ? !attacker.IsDead && attacker.Slot != null : context.ModifierManager.CanAct(attacker);
+            if (!canAttack) {
                 Log($"BattlefieldCombatActionExecutor: {attacker.Name}'s attack cancelled.", LogTag.Actions | LogTag.Combat);
                 return;
             }

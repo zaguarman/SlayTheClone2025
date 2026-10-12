@@ -18,11 +18,26 @@ namespace SlayTheClone {
 
             string effectName = $"{statusType} Effect";
             string days = duration == 1 ? "1 Day" : $"{duration} Days";
-            string effectDescription = statusType == StatusEffectType.Exhausted
-                ? $"Exhausted ({days}): can't act, abilities off, takes +1 damage"
-                : $"{statusType} ({days})";
+            string effectDescription = statusType switch {
+                StatusEffectType.Exhausted => $"Exhausted ({days}): can't act, abilities off, takes +1 damage",
+                StatusEffectType.Doomed => $"Doomed ({days}): +1 Attack each Dawn, then Last Rites and it dies",
+                _ => $"{statusType} ({days})"
+            };
             if (potency > 0 && statusType == StatusEffectType.Burned) {
                 effectDescription += $" (Potency: {potency})";
+            }
+
+            var modifierManager = context.ModifierManager;
+            // A Doomed creature is immune to new statuses, and Doomed itself ignores re-application
+            if (modifierManager.HasStatusEffect(targetCreature, StatusEffectType.Doomed)) {
+                Log($"{targetCreature.Name} is Doomed: {statusType} doesn't land", LogTag.Actions | LogTag.Effects);
+                return;
+            }
+            // Doomed wipes every other status on application, cleansable or not
+            if (statusType == StatusEffectType.Doomed) {
+                foreach (var other in modifierManager.GetActiveModifiersFor(targetCreature).OfType<StatusEffectModifier>().ToList()) {
+                    modifierManager.RemoveModifier(targetCreature, other);
+                }
             }
 
             // Re-stunning refreshes Exhausted instead of stacking it into a longer stun (Status Effects Compendium)

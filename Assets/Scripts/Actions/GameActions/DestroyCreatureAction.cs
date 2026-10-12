@@ -9,10 +9,13 @@ namespace SlayTheClone {
 
         public ICreature GetCreature() => creature;
         public ICreature GetKiller() => killer;
+        /// <summary>Destroyed whatever its Health (like Doomed's sentence): nothing can save it.</summary>
+        public bool IsUnconditional { get; }
 
-        public DestroyCreatureAction(ICreature creature, ICreature killer = null) {
+        public DestroyCreatureAction(ICreature creature, ICreature killer = null, bool unconditional = false) {
             this.creature = creature;
             this.killer = killer;
+            IsUnconditional = unconditional;
         }
 
         public override string ToString() => $"DestroyCreatureAction: Cr={creature?.Name}({creature?.TargetId.ShortId()}), Killer={killer?.Name ?? "none"}";

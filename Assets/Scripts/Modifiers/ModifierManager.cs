@@ -198,6 +198,13 @@ namespace SlayTheClone {
             foreach (var creature in creatures.Values.ToList()) {
                 if (creature == null || creature.IsDead) continue;
 
+                // Doomed: +1 permanent Attack Each Dawn, from the Dawn of the Day after next (Status Timing)
+                foreach (var doomed in GetActiveModifiersFor(creature).OfType<StatusEffectModifier>()
+                             .Where(s => s.EffectType == StatusEffectType.Doomed && s.ActsAtDawnOf(startingTurnNumber)).ToList()) {
+                    Log($"{creature.Name} grows on its way out (StatusEffect '{doomed.Name}')", LogTag.Effects | LogTag.Turns);
+                    ChangeBaseStats(creature, 1, 0, 0);
+                }
+
                 creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
@@ -240,6 +247,10 @@ namespace SlayTheClone {
                     .ToList();
                 foreach (var expiredMod in expiredModifiers) {
                     RemoveModifier(creature, expiredMod);
+                    // Doomed's last stack is gone: the sentence is carried out
+                    if (expiredMod is StatusEffectModifier { EffectType: StatusEffectType.Doomed }) {
+                        actionsQueue.AddAction(new DoomedSentenceAction(creature));
+                    }
                 }
 
                 // A Health buff wearing off takes its Health back, which can kill the creature
@@ -284,6 +295,12 @@ namespace SlayTheClone {
             if (before != (creature.Attack, creature.MaxHealth, creature.Speed, creature.Health)) {
                 mediator?.NotifyCreatureStatsChanged(creature);
             }
+        }
+
+        public void ChangeBaseStats(ICreature creature, int attack, int health, int speed) {
+            if (creature == null) return;
+            creature.ChangeBaseStats(attack, health, speed);
+            RecalculateStats(creature);
         }
 
         // Flat modifiers are added first, then percentage modifiers multiply the result (GDD 3.3).

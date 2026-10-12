@@ -49,6 +49,9 @@ namespace SlayTheClone {
         public bool DisablesAbilities() => EffectType == StatusEffectType.Exhausted;
         public bool Exposes() => EffectType == StatusEffectType.Exhausted;
 
+        /// <summary>A Dawn effect acts from the Dawn of Day X+2 when applied on Day X (Status Timing).</summary>
+        public bool ActsAtDawnOf(int startingTurn) => startingTurn >= TurnApplied + 2;
+
         public override string ToString() =>
             $"{base.ToString()} - Type: {EffectType}, Duration: {DurationInTurns}, Potency: {Potency}";
     }
