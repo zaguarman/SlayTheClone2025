@@ -42,3 +42,13 @@ CLEANSE, BLESSED AND HERESY (Status Effects Compendium)
 8. New Myth test cards
     • The Holy Grail (Blessed 2 on a friendly creature) and Exorcism (Cleanse statuses on any creature) were added to test these. Names from the Brainstorm List (Myth > Legendary Objects & Places, Practices & Phenomena). They replaced Fat Tony, Martial Law and Hostile Takeover in the Mechanics Test deck, together with Preemptive Strike.
     • Question: are the stats and pictures right for them?
+
+
+MOVEMENT LEFTOVERS (GDD 2.4)
+
+9. Ghost cards at the final positions
+    • Done for now: nothing new. The formation arrows already show where every creature ends up, including the ones pushed or swapped. A ghost card at each destination would overlap the ghosts of creatures queued to be summoned there.
+    • Question: do you still want ghost cards for moves, or are the arrows enough?
+
+10. AI move planning
+    • There's no AI opponent in the game yet (both sides are played by hand), so there's nothing to teach about moves. It waits for the AI.

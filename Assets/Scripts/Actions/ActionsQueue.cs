@@ -99,7 +99,7 @@ namespace SlayTheClone {
         #region Layers and order
         /// <summary>The layer an action resolves in when it is queued on its own (GDD 3.7).</summary>
         public static ResolutionLayer LayerOf(IGameAction action) => action switch {
-            MoveCreatureAction or SwapCreaturesAction => ResolutionLayer.Movement,
+            MoveCreatureAction => ResolutionLayer.Movement,
             SummonCreatureAction => ResolutionLayer.Summon,
             PlayCardAction play => play.GetCard() is ICreature ? ResolutionLayer.Summon : ResolutionLayer.Spell,
             PlaySpellAction => ResolutionLayer.Spell,
@@ -109,7 +109,6 @@ namespace SlayTheClone {
         // The creature whose Speed and stats order the action: the one acting, entering or striking
         private static ICreature SourceOf(IGameAction action) => action switch {
             MoveCreatureAction move => move.GetCreature(),
-            SwapCreaturesAction swap => swap.GetCreature1(),
             SummonCreatureAction summon => summon.GetCreature(),
             PlayCardAction play => play.GetCard() as ICreature,
             BattlefieldCombatAction attack => attack.GetAttacker(),
@@ -168,7 +167,6 @@ namespace SlayTheClone {
         // creature (AoE effects, spread/chain, retaliation) would replace each other.
         private string GetActiveCreatureId(IGameAction action) {
             return action switch {
-                SwapCreaturesAction swapAction => swapAction.GetCreature1()?.TargetId,
                 BattlefieldCombatAction combatAction => combatAction.GetAttacker()?.TargetId,
                 MoveCreatureAction moveAction => moveAction.GetCreature()?.TargetId,
                 _ => null
