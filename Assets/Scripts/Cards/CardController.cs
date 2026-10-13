@@ -156,7 +156,7 @@ namespace SlayTheClone {
                 typeText.text = "";
                 rulesText.text = "";
                 statsBox.SetActive(false);
-                readyPip.SetActive(false);
+                ShowPip(false);
                 return;
             }
 
@@ -171,7 +171,7 @@ namespace SlayTheClone {
 
             bool isCreature = baseCardData is CreatureData;
             statsBox.SetActive(isCreature);
-            readyPip.SetActive(isCreature);
+            ShowPip(false);
             if (isCreature) {
                 UpdateCreatureStats((CreatureData)baseCardData);
             }
@@ -202,8 +202,21 @@ namespace SlayTheClone {
             string armorPart = armor > 0 ? $"<color=#2f7fc1>+{armor}</color>" : "";
             statsText.text = $"{attack}/{speed}/{health}{armorPart}";
             readyText.text = turnsUntilOperative.ToString();
-            // A card shows its Deployment Time, 0 included (the coin on its corner); a creature on the board only while it counts down
-            readyPip.SetActive(!isLive || turnsUntilOperative > 0);
+            ShowPip(turnsUntilOperative > 0);
+        }
+
+        /// <summary>The Deployment Time square's size and its distance from the card's top-left corner (card units).</summary>
+        public const float PipSize = 24f;
+        public const float PipInset = 5f;
+        private const float TitleBarLeft = 8f; // Where the title bar starts, from the card's left edge
+        private const float NamePadding = 4f;
+
+        // The Deployment Time square shows only when there is one; the name is centered in whatever room the bar has left
+        private void ShowPip(bool shown) {
+            readyPip.SetActive(shown);
+            var nameRect = nameText.rectTransform;
+            float left = shown ? PipInset + PipSize - TitleBarLeft + NamePadding : NamePadding;
+            nameRect.offsetMin = new Vector2(left, nameRect.offsetMin.y);
         }
 
         // Rules text always fits: the text box auto-sizes its font down to its minimum.
@@ -563,18 +576,20 @@ namespace SlayTheClone {
         /// <summary>
         /// Slay the Spire's cast: the card leaps out of the hand to the point, straightening and swelling with a little
         /// overshoot, holds a beat, then snaps shut into a burst of light and is gone. Used when a spell resolves.
+        /// It swells to a quarter more than its size, or to <paramref name="shownScale"/> (in the fly root's units) when
+        /// given, for a card that starts small, like a spell's ghost on the board.
         /// </summary>
-        public void PlayCastAnimation(Transform flyRoot, Vector3 worldTarget, float delay = 0f) {
+        public void PlayCastAnimation(Transform flyRoot, Vector3 worldTarget, float delay = 0f, float? shownScale = null) {
             SetQueued(false);
             canvasGroup.blocksRaycasts = false;
-            Tooltip.Existing?.HideTooltip();
+            Tooltip.Existing?.HideTooltipFor(this);
             DOTween.Kill(transform);
 
             float unit = CardFx.UnitOf(transform.parent, flyRoot);
             transform.SetParent(flyRoot, true);
             transform.SetAsLastSibling();
             worldTarget.z = transform.position.z;
-            Vector3 shown = transform.localScale * 1.25f;
+            Vector3 shown = shownScale.HasValue ? Vector3.one * shownScale.Value : transform.localScale * 1.25f;
 
             DOTween.Sequence().SetTarget(transform)
                 .AppendInterval(delay)

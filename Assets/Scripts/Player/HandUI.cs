@@ -11,9 +11,9 @@ namespace SlayTheClone {
         // The hand is held as a fan, like in Slay the Spire: the cards sit on a wide arc, overlapping, each tilted along it
         // and dipping away from the middle, and squeeze together rather than spread past MaxFanWidth. Your hand (at the
         // bottom) shows them big, sunk below the screen's edge so only their name and picture show (their Deployment Time
-        // is on their left edge, always in sight); the card under the pointer rises out of the fan, enlarged, straight and
-        // whole, its explanations beside it, and its neighbours make room. The other hand, at the top, keeps the cards at
-        // board size.
+        // is in their top-left corner, always in sight); the card under the pointer rises out of the fan, enlarged, straight
+        // and whole, its explanations beside it, and its neighbours make room. The other hand, at the top, keeps the cards at
+        // board size; while its cards are face up (Fog of War off) the one under the pointer comes down out of it the same way.
         public const float YourHandScale = 1.7f;
         public const float RaisedScale = 2.1f;      // The card under the pointer, risen out of your hand
         private const float CardWidth = 160f;       // A card's size at scale 1, in hand units
@@ -34,20 +34,22 @@ namespace SlayTheClone {
         private const float OverBoardReach = 260f; // ...and shrinks to board size as it's carried this far above the hand
         private const float DiscardStagger = 0.06f;
 
-        /// <summary>Where this hand's discards fly to (the discard pile's button); null: off the edge of the screen.</summary>
+        /// <summary>Where the bottom hand's discards fly to (the discard pile's button); the top hand's leave off the screen's edge.</summary>
         public Transform DiscardPile { get; set; }
         private readonly Dictionary<CardController, Sequence> slides = new Dictionary<CardController, Sequence>();
 
-        // The player at the bottom of the table: the hand you play from
-        private bool IsYourHand => Player == null || Player.IsPlayer1;
+        // The hand at the bottom of the screen: the screen's player's, the one you play from (player 2's after switching sides, F8)
+        private bool IsYourHand => Player == null || Player.IsPlayer1 == FogOfWar.PlaysAsPlayer1;
         private float CardScale => IsYourHand ? YourHandScale : 1f;
 
         // The hand area itself is invisible; it only shows a faint glow while a card is dragged over it
         protected override DropZoneColors ZoneColors => new DropZoneColors(
             Color.clear, new Color(1f, 1f, 1f, 0.04f), new Color(1f, 0.3f, 0.3f, 0.05f), Color.clear);
 
-        // Cards of this player with a pending PlayCardAction
+        // Cards of this player with a pending PlayCardAction, and those of them shown as ghosts on the board instead
+        // (creatures, and the spells the screen can see; see BattlefieldUI)
         private readonly HashSet<ICard> queuedCards = new HashSet<ICard>();
+        private readonly HashSet<ICard> onBoard = new HashSet<ICard>();
         private PlayCardAction draggedPlay; // The play of the queued card being dragged, to tell whether the drop replaced it
         private float nextCastTime;
 
@@ -69,11 +71,16 @@ namespace SlayTheClone {
             if (!IsInitialized || Player == null) return;
 
             queuedCards.Clear();
+            onBoard.Clear();
             var pendingActions = GameManager?.ActionsQueue?.GetPendingActions();
             if (pendingActions != null) {
+                var viewer = FogOfWar.ViewerOf(Player);
                 foreach (var action in pendingActions) {
                     if (action is PlayCardAction playAction && playAction.GetOwner() == Player) {
                         queuedCards.Add(playAction.GetCard());
+                        if (playAction.GetCard() is ICreature || !FogOfWar.Hides(viewer, action, GameManager.ActionsQueue, GameManager.ModifierManager)) {
+                            onBoard.Add(playAction.GetCard());
+                        }
                     }
                 }
             }
@@ -107,11 +114,12 @@ namespace SlayTheClone {
                 Destroy(card.gameObject);
                 return;
             }
-            var target = DiscardPile != null ? DiscardPile.position
+            var pile = IsYourHand ? DiscardPile : null;
+            var target = pile != null ? pile.position
                 : transform.TransformPoint(new Vector3(((RectTransform)transform).rect.xMin - 200f, 0f, 0f));
             float delay = Mathf.Max(0f, nextCastTime - Time.time);
             nextCastTime = Time.time + delay + DiscardStagger;
-            CardFx.Discard(card, rootCanvas.transform, target, DiscardPile, delay);
+            CardFx.Discard(card, rootCanvas.transform, target, pile, delay);
         }
 
         private void PlayCastAnimation(CardController card) {
@@ -156,9 +164,9 @@ namespace SlayTheClone {
 
             // Create new card controllers for each card in hand
             foreach (var handCard in player.Hand) {
-                // Queued creatures are shown as ghosts in their target slot (see BattlefieldUI)
+                // Queued cards are shown as ghosts where they're aimed (see BattlefieldUI)
                 bool isQueued = queuedCards.Contains(handCard);
-                if (isQueued && handCard is ICreature) continue;
+                if (onBoard.Contains(handCard)) continue;
 
                 var controller = CardViews.Create(handCard, Player, transform);
                 if (controller != null) {
@@ -195,9 +203,10 @@ namespace SlayTheClone {
                 float tilt = -facing * angle * Mathf.Rad2Deg;
                 float cardScale = scale;
                 if (hoveredIndex >= 0 && i != hoveredIndex) x += Mathf.Sign(i - hoveredIndex) * CardWidth * scale * HoverRoom;
-                if (i == hoveredIndex && IsYourHand) {
+                if (i == hoveredIndex && !card.IsFaceDown) {
+                    // Whole, just clear of the screen's edge: above the bottom one, below the top one
                     cardScale = RaisedScale;
-                    y = edge + CardHeight * RaisedScale * 0.5f + RaisedMargin; // Whole, its bottom just above the edge
+                    y = edge + facing * (CardHeight * RaisedScale * 0.5f + RaisedMargin);
                     tilt = 0f;
                 }
                 else if (i == hoveredIndex) tilt = 0f;
@@ -319,11 +328,11 @@ namespace SlayTheClone {
 
         protected override void OnCardHoverExit(CardController card) {
             if (card != hovered) return;
-            // Leaving through its bottom edge (toward the screen's edge) keeps it up: dropping back under the pointer
-            // would only raise it again
+            // Leaving through its edge toward the screen's edge keeps it up: dropping back under the pointer would only
+            // raise it again
             var rect = (RectTransform)card.transform;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, GameInput.PointerPosition, CanvasUtility.GetEventCamera(card), out var local)
-                && local.y < rect.rect.yMin && local.x > rect.rect.xMin && local.x < rect.rect.xMax) return;
+                && (IsYourHand ? local.y < rect.rect.yMin : local.y > rect.rect.yMax) && local.x > rect.rect.xMin && local.x < rect.rect.xMax) return;
             // On its way to its explanations: it stays up while they're open (see Update)
             if (Tooltip.Existing != null && Tooltip.Existing.ActiveCard == card && Tooltip.Existing.OpenKeywords.Count > 0) {
                 releasePending = true;

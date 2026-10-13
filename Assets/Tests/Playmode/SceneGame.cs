@@ -186,6 +186,13 @@ namespace SlayTheClone.Tests {
             BoardView(player).GetComponentsInChildren<ArrowIndicator>()
                 .Where(a => a.IsVisible() && !a.IsFadingOut).ToList();
 
+        /// <summary>The ghost of a queued spell, on whichever battlefield it's aimed at; null if it shows none.</summary>
+        public CardController SpellGhost(ICard spell) =>
+            Players.Select(p => BoardView(p).SpellGhosts.TryGetValue(spell, out var ghost) ? ghost : null).FirstOrDefault(g => g != null);
+
+        /// <summary>The table between the hands, where a card that plays on either side can be dropped.</summary>
+        public GameObject PlayArea => Object.FindFirstObjectByType<PlayArea>().gameObject;
+
         /// <summary>Whether a slot shows the translucent preview of a creature queued to be summoned there.</summary>
         public bool HasGhost(BoardSlot slot) =>
             BoardView(slot.Owner).FindSlotView(slot).transform.Cast<Transform>().Any(t => t.name.StartsWith("QueuedGhost_"));
@@ -273,16 +280,20 @@ namespace SlayTheClone.Tests {
 
         /// <summary>
         /// Everything on screen shows the game as the rules have it: health, hands (minus creatures queued to be played),
-        /// each creature's card with its live stats, queued summons as ghosts and nothing else, and the turn number.
+        /// each creature's card with its live stats, queued summons as ghosts and nothing else, queued spells as ghosts on
+        /// the board rather than in the hand, and the turn number.
         /// </summary>
         public void AssertViewsMatchRules() {
             var pending = Queue.GetPendingActions();
             foreach (var player in Players) {
                 Assert.AreEqual($"{player.Health}/{Player.MaxHealth}", ViewsOf(player).HealthText.text, $"{player.Name}'s health text");
 
-                var queuedCreatures = pending.OfType<PlayCardAction>().Where(a => a.GetOwner() == player && a.GetCard() is ICreature).Select(a => a.GetCard());
-                CollectionAssert.AreEquivalent(player.Hand.Except(queuedCreatures), HandCards(player).Select(c => c.GetLinkedCardInstance()),
+                // Queued creatures, and the queued spells the screen can see, show on the board; the rest stay in the hand
+                var onBoard = pending.OfType<PlayCardAction>().Where(a => a.GetOwner() == player
+                    && (a.GetCard() is ICreature || !FogOfWar.Hides(FogOfWar.ViewerOf(player), a, Queue, Manager.ModifierManager))).Select(a => a.GetCard()).ToList();
+                CollectionAssert.AreEquivalent(player.Hand.Except(onBoard), HandCards(player).Select(c => c.GetLinkedCardInstance()),
                     $"{player.Name}'s hand view shows different cards than the hand");
+                foreach (var spell in onBoard.OfType<Spell>()) Assert.IsNotNull(SpellGhost(spell), $"{spell.Name} is queued but shows no ghost");
 
                 foreach (var slot in player.Battlefield) {
                     var card = CardIn(slot);

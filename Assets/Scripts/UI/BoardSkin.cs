@@ -22,6 +22,7 @@ namespace SlayTheClone {
         private RectTransform canvasRoot;
         private RectTransform table;
         private RectTransform riverLine;
+        private RectTransform playArea;
         private RectTransform player1Side;
         private RectTransform player2Side;
         private RectTransform turnBanner;
@@ -72,6 +73,9 @@ namespace SlayTheClone {
             var player2Faction = DeckCatalog.FactionOf(references.Player2Deck);
 
             BuildTable(player1Faction, player2Faction);
+            playArea = (RectTransform)PlayArea.Ensure(canvasRoot, player1Battlefield, player2Battlefield).transform;
+            playArea.SetSiblingIndex(riverLine.GetSiblingIndex() + 1); // Under the battlefields: it only gets what lands between them
+            playArea.localScale = table.localScale;
             DressSide(p1, player1Faction);
             DressSide(p2, player2Faction);
             player1Plaque = PlayerPlaque.Ensure(p1.PlayerUI.transform, p1.HealthText);
@@ -368,6 +372,9 @@ namespace SlayTheClone {
             riverLine.sizeDelta = new Vector2((right - left) / riverLine.lossyScale.x, riverLine.sizeDelta.y);
             FillBetween(player1AtBottom ? player1Side : player2Side, center.x, halfWidth, center.y - halfHeight, riverY);
             FillBetween(player1AtBottom ? player2Side : player1Side, center.x, halfWidth, riverY, center.y + halfHeight);
+            // Both battlefields and the river between them
+            playArea.sizeDelta = new Vector2(Mathf.Max(mat1.width, mat2.width), topMat.yMax - bottomMat.yMin) / playArea.lossyScale.x;
+            PlaceAt(playArea, center.x, (topMat.yMax + bottomMat.yMin) / 2f);
 
             PlaceAtLeft(player1Plaque != null ? (RectTransform)player1Plaque.transform : null, left, mat1.center.y);
             PlaceAtLeft(player2Plaque != null ? (RectTransform)player2Plaque.transform : null, left, mat2.center.y);

@@ -8,12 +8,11 @@ using DG.Tweening;
 namespace SlayTheClone {
     /// <summary>
     /// Draws one board's battle arrows (see <see cref="ArrowIndicator"/>): its player's planned attacks and pending damage,
-    /// the moves of its row (where each creature ends up), the aim of its queued spells (from the card in the hand to a
-    /// slot, or to a whole battlefield), plus the arrow that follows a creature being dragged.
+    /// the moves of its row (where each creature ends up), plus the arrow that follows a creature being dragged.
     /// Everything aimed at the same target, the same way, is one arrow: creatures attacking the same slot flow into one
-    /// trunk and head, wider for each of them, as do spells aimed at the same place.
-    /// A spell for a whole side doesn't point into it (its middle is a slot, which reads as aiming at that slot): its arrow
-    /// stops at the edge of that battlefield, and the whole battlefield glows in the spell's color while it's queued.
+    /// trunk and head, wider for each of them.
+    /// Queued spells need no arrow: each shows as a ghost where it's aimed (see <see cref="BattlefieldUI"/>), and a whole
+    /// battlefield one of them plays on glows in the spell's color while it's queued.
     /// Arrows persist across queue changes, drawing in when an action is queued and fading out when it's cancelled or resolved.
     /// </summary>
     public class BattlefieldArrowManager {
@@ -32,11 +31,8 @@ namespace SlayTheClone {
         private readonly IPlayer owner; // Only actions started by this player's creatures are drawn here
         private readonly Func<BoardSlot, BattlefieldSlot> findSlotView; // Where a board slot is on screen
         private readonly Func<IPlayer, Transform> findBoardView; // Where a player's battlefield is on screen
-        private readonly Func<ICard, CardController> findHandCard; // Where a card in the hand is on screen
         private readonly Func<IGameAction, bool> isHidden; // Fog of War: planned actions the screen doesn't show
         private readonly Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
-        // Arrows that start at cards in the hand, which move as the hand changes: they follow them every frame
-        private readonly Dictionary<string, List<(ICard card, ITarget target)>> handArrows = new Dictionary<string, List<(ICard, ITarget)>>();
         private ArrowIndicator dragArrow;
         private readonly Dictionary<IPlayer, Image> sideGlows = new Dictionary<IPlayer, Image>(); // A side this player's queued spells play on
         private readonly HashSet<IPlayer> aimedSides = new HashSet<IPlayer>();
@@ -50,15 +46,13 @@ namespace SlayTheClone {
         }
 
         public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IActionsQueue actionsQueue, IPlayer owner,
-            Func<BoardSlot, BattlefieldSlot> findSlotView, Func<IPlayer, Transform> findBoardView, Func<ICard, CardController> findHandCard,
-            Func<IGameAction, bool> isHidden = null) {
+            Func<BoardSlot, BattlefieldSlot> findSlotView, Func<IPlayer, Transform> findBoardView, Func<IGameAction, bool> isHidden = null) {
             parentTransform = parent ?? throw new ArgumentNullException(nameof(parent));
             gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
             this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             this.findSlotView = findSlotView ?? throw new ArgumentNullException(nameof(findSlotView));
             this.findBoardView = findBoardView ?? throw new ArgumentNullException(nameof(findBoardView));
-            this.findHandCard = findHandCard ?? throw new ArgumentNullException(nameof(findHandCard));
             this.isHidden = isHidden ?? (_ => false);
 
             dragArrow = ArrowIndicator.Create(parentTransform);
@@ -87,7 +81,6 @@ namespace SlayTheClone {
 
         private void RefreshArrows() {
             var wanted = new Dictionary<string, ArrowPlan>();
-            handArrows.Clear();
             aimedSides.Clear();
             foreach (var action in actionsQueue.GetPendingActions()) {
                 if (isHidden(action)) continue; // A Concealed Action: its creature's card shows ??? instead
@@ -120,16 +113,10 @@ namespace SlayTheClone {
 
         // Adds the action's arrow to the plan, merged with any other arrow of the same kind aimed at the same target
         private void PlanArrow(IGameAction action, Dictionary<string, ArrowPlan> wanted) {
-            // A queued spell points from its card in the hand to where it's aimed: a slot, wherever the creature it homes on
-            // is, or the whole battlefield of the side it hits
-            // Each spell has its own arrow, from the edge of its card that faces the board, so arrows never run across the hand
+            // A queued spell shows as a ghost where it's aimed; the battlefield of a side it plays on as a whole glows
             if (action is PlayCardAction play && play.GetOwner() == owner && play.GetCard() is Spell spell) {
-                var card = findHandCard(spell);
-                if (card == null || !TryAim(spell, play.GetTarget(), out var end, out _, out bool wholeSide)) return;
-                string key = $"spell_{spell.TargetId}";
-                var plan = Plan(wanted, key, end, SpellColor, wholeSide ? ArrowIndicator.Style.Spell.ToEdge() : ArrowIndicator.Style.Spell);
-                plan.Starts.Add(EdgeToward(card, end));
-                handArrows[key] = new List<(ICard, ITarget)> { (spell, play.GetTarget()) };
+                var side = AimOf(spell, owner, play.GetTarget(), out var slot);
+                if (side != null && slot == null) aimedSides.Add(side);
                 return;
             }
 
@@ -158,70 +145,25 @@ namespace SlayTheClone {
             return plan;
         }
 
-        /// <summary>Keeps the arrows of queued spells starting at their cards, as the hand fans out, is rebuilt or is hovered.</summary>
-        public void FollowHandCards() {
-            foreach (var entry in handArrows) {
-                if (!activeArrows.TryGetValue(entry.Key, out var arrow) || arrow == null || entry.Value.Count == 0) continue;
-                var (card, target) = entry.Value[0];
-                var view = findHandCard(card);
-                if (view != null && TryAim((Spell)card, target, out var end, out _, out _)) arrow.Show(new List<Vector3> { EdgeToward(view, end) }, end);
-            }
-        }
-
         /// <summary>
-        /// Where a hand card's arrow starts: the middle of the card's edge that faces where the arrow goes, so the arrow
-        /// leaves the card instead of crossing it (or the cards beside it in the fan).
+        /// Where a queued spell is aimed: the slot it's aimed at (wherever the creature it homes on is now), or, for a
+        /// spell that plays on a whole side, no slot and that side: the one it was dropped on, unless it does nothing
+        /// there. Returns the side either way (null when the slot it was aimed at is gone).
         /// </summary>
-        public static Vector3 EdgeToward(CardController card, Vector3 target) {
-            var corners = new Vector3[4];
-            ((RectTransform)card.transform).GetWorldCorners(corners); // Bottom-left, top-left, top-right, bottom-right
-            var top = (corners[1] + corners[2]) * 0.5f;
-            var bottom = (corners[0] + corners[3]) * 0.5f;
-            return Vector2.Distance(top, target) <= Vector2.Distance(bottom, target) ? top : bottom;
-        }
-
-        // Where a queued spell's arrow ends: the slot it's aimed at, or the near edge of the side it plays on, straight
-        // across from its card (kept off the board's ends; the edge is never a slot)
-        private bool TryAim(Spell spell, ITarget target, out Vector3 point, out string aimKey, out bool wholeSide) {
-            point = default;
-            aimKey = null;
-            wholeSide = false;
+        public static IPlayer AimOf(Spell spell, IPlayer caster, ITarget target, out BoardSlot slot) {
+            slot = null;
             if (EffectResolver.IsAimed(spell)) {
-                var slot = target is HomingTarget homing ? homing.CurrentSlot : target as BoardSlot;
-                var slotView = slot != null ? findSlotView(slot) : null;
-                if (slotView == null) return false;
-                point = slotView.transform.position;
-                aimKey = slot.TargetId;
-                return true;
+                slot = target is HomingTarget homing ? homing.CurrentSlot : target as BoardSlot;
+                return slot?.Owner;
             }
-            var side = SideOf(spell, target);
-            if (!(findBoardView(side) is RectTransform board)) return false;
-            aimedSides.Add(side);
-            wholeSide = true;
-            aimKey = $"side_{side.TargetId}";
-
-            var corners = new Vector3[4];
-            board.GetWorldCorners(corners); // Bottom-left, top-left, top-right, bottom-right
-            var hand = findHandCard(spell);
-            float fromY = hand != null ? hand.transform.position.y : 0f;
-            bool below = fromY < (corners[0].y + corners[1].y) * 0.5f;
-            float boardWidth = corners[2].x - corners[0].x;
-            float fromX = hand != null ? hand.transform.position.x : (corners[0].x + corners[2].x) * 0.5f;
-            float x = Mathf.Clamp(fromX, corners[0].x + boardWidth * 0.1f, corners[2].x - boardWidth * 0.1f);
-            point = new Vector3(x, below ? corners[0].y : corners[1].y, corners[0].z);
-            return true;
-        }
-
-        // Not aimed: it plays on a side. The one it was dropped on, unless it does nothing there
-        private IPlayer SideOf(Spell spell, ITarget target) {
             var side = target switch {
                 IPlayer player => player,
-                BoardSlot slot => slot.Owner,
+                BoardSlot aimed => aimed.Owner,
                 HomingTarget homing => homing.AimedSlot?.Owner,
                 _ => null
             };
-            if (side == null || !EffectResolver.Reaches(spell, owner, side)) {
-                side = EffectResolver.Reaches(spell, owner, owner.Opponent) ? owner.Opponent : owner;
+            if (side == null || !EffectResolver.Reaches(spell, caster, side)) {
+                side = EffectResolver.Reaches(spell, caster, caster.Opponent) ? caster.Opponent : caster;
             }
             return side;
         }

@@ -23,6 +23,14 @@ namespace SlayTheClone {
         private PlayCardAction draggedGhostPlay; // The play of the ghost being dragged, to tell whether the drop replaced it
         private float nextSummonTime;
 
+        // Queued spells aimed here, each shown as a ghost where it's aimed (see RefreshSpellGhosts)
+        private readonly Dictionary<ICard, CardController> spellGhosts = new Dictionary<ICard, CardController>();
+        private const float SpellGhostScale = 0.5f;   // Small, on an edge, when something already stands where it's aimed
+        private const float SpellGhostSpread = 0.45f; // Ghosts at the same place fan out by this share of their width
+        private const float CastStagger = 0.2f;
+        private const float CastScale = 2.1f;         // How big a cast spell swells, of board size
+        private float nextCastTime;
+
         private BattlefieldArrowManager arrowManager;
         private CardController draggedCard; // Creature of this board currently being dragged
         private TableViews table; // For slots on the other side of the table
@@ -37,7 +45,7 @@ namespace SlayTheClone {
                 return;
             }
             arrowManager = new BattlefieldArrowManager(transform, GameMediator, actionsQueue, player, FindSlotView,
-                side => table.GetBattlefield(side)?.transform, card => table.GetHand(player)?.GetCardController(card), HiddenFromScreen);
+                side => table.GetBattlefield(side)?.transform, HiddenFromScreen);
         }
 
         private void CreateSlots(IPlayer player) {
@@ -125,7 +133,30 @@ namespace SlayTheClone {
 
         protected override void HandlePointerEnter(PointerEventData eventData) {
             var dragged = eventData.pointerDrag != null ? eventData.pointerDrag.GetComponent<CardController>() : null;
-            if (AimOf(dragged) == DropAim.Side) GetComponent<Image>().color = UITheme.MatValid;
+            if (AimOf(dragged) == DropAim.Side) LightUp(true);
+            if (PlaysAnywhere(dragged)) table.GetBattlefield(Player.Opponent)?.LightUp(true); // Either side will do: both light up
+        }
+
+        protected override void HandlePointerExit(PointerEventData eventData) {
+            var dragged = eventData.pointerDrag != null ? eventData.pointerDrag.GetComponent<CardController>() : null;
+            if (PlaysAnywhere(dragged)) table.GetBattlefield(Player.Opponent)?.LightUp(false);
+        }
+
+        /// <summary>Lights the mat up as where a carried card would play, or puts it back.</summary>
+        public void LightUp(bool lit) => GetComponent<Image>().color = lit ? UITheme.MatValid : UITheme.Mat;
+
+        /// <summary>
+        /// Whether this card plays on either side alike: a spell (a Trend, or one that does something to both sides) that
+        /// isn't aimed at a slot. It's played by dropping it anywhere on the table (see <see cref="PlayArea"/>).
+        /// </summary>
+        public bool PlaysAnywhere(CardController card) =>
+            card?.Player != null && (IsCardFromHand(card) || card.IsQueued) && card.GetLinkedCardInstance() is Spell spell && !EffectResolver.IsAimed(spell)
+            && EffectResolver.Reaches(spell, card.Player, card.Player) && EffectResolver.Reaches(spell, card.Player, card.Player.Opponent);
+
+        /// <summary>Plays a card that plays on either side, dropped somewhere on the table: on its caster's side.</summary>
+        public void PlayAnywhere(CardController card) {
+            if (!PlaysAnywhere(card) || GameManager == null) return;
+            PlayFromHand(card, card.Player);
         }
 
         protected override void HandleCardDropped(CardController card) {
@@ -290,6 +321,7 @@ namespace SlayTheClone {
                 slot.ShowSlotEffect(effect, FogOfWar.Hides(Viewer, effect));
             }
             RefreshHiddenPlans();
+            RefreshSpellGhosts(); // What stands in the slots decides where they go
 
             UpdateLayout();
         }
@@ -438,6 +470,100 @@ namespace SlayTheClone {
 
             ShowMoveGhosts();
             RefreshHiddenPlans();
+            RefreshSpellGhosts();
+        }
+
+        /// <summary>The ghosts of the queued spells aimed at this battlefield, by spell.</summary>
+        public IReadOnlyDictionary<ICard, CardController> SpellGhosts => spellGhosts;
+
+        // A queued spell leaves its caster's hand and shows as a ghost where it's aimed, so the board says what's coming:
+        // in its slot when nothing stands there, otherwise small on the slot's edge that faces the other side; a spell that
+        // plays on a whole side, small on the middle of that edge of the battlefield. Like a creature's ghost it's hovered
+        // for its enlarged view, clicked to take the play back, and dragged to aim it elsewhere. Cast, it flies off in the
+        // cast animation. An enemy's is a card back (Fog of War: where it's aimed is seen, not what it is); one the screen
+        // can't see at all stays a card back in its caster's hand
+        private void RefreshSpellGhosts() {
+            if (!IsInitialized || Player == null || GameManager?.ActionsQueue == null) return;
+            var aimed = new List<(Spell spell, IPlayer caster, BoardSlot slot)>();
+            foreach (var play in GameManager.ActionsQueue.GetPendingActions().OfType<PlayCardAction>()) {
+                if (!(play.GetCard() is Spell spell) || HiddenFromScreen(play)) continue;
+                var side = BattlefieldArrowManager.AimOf(spell, play.GetOwner(), play.GetTarget(), out var slot);
+                if (side == Player) aimed.Add((spell, play.GetOwner(), slot));
+            }
+
+            // Gone from the queue: cast (it left its caster's hand), or taken back
+            var stillAimed = new HashSet<ICard>(aimed.Select(a => (ICard)a.spell));
+            foreach (var entry in spellGhosts.Where(e => !stillAimed.Contains(e.Key)).ToList()) {
+                spellGhosts.Remove(entry.Key);
+                var ghost = entry.Value;
+                if (ghost == null) continue;
+                if (ghost.Player != null && !ghost.Player.Hand.Contains(entry.Key)) PlayCast(ghost);
+                else Destroy(ghost.gameObject);
+            }
+
+            foreach (var group in aimed.GroupBy(a => a.slot)) {
+                var together = group.ToList();
+                for (int i = 0; i < together.Count; i++) {
+                    var (spell, caster, slot) = together[i];
+                    if (!spellGhosts.TryGetValue(spell, out var ghost) || ghost == null) {
+                        ghost = CardViews.Create(spell, caster, transform); // The caster's card, wherever it's aimed
+                        if (ghost == null) continue;
+                        ghost.name = $"SpellGhost_{spell.Name}";
+                        ghost.SetQueued(true, canBeDragged: true);
+                        ghost.OnCardClicked.AddListener(TakeBackPlay);
+                        ghost.OnCardRightClicked.AddListener(TakeBackPlay);
+                        ghost.OnBeginDragEvent.AddListener(OnGhostBeginDrag);
+                        ghost.OnEndDragEvent.AddListener(OnGhostEndDrag);
+                        spellGhosts[spell] = ghost;
+                    }
+                    ghost.SetFaceDown(FogOfWar.HidesHandOf(caster));
+                    if (CardController.Dragged == ghost) continue;
+                    PlaceSpellGhost(ghost, slot, i, together.Count);
+                }
+            }
+        }
+
+        // In the empty slot it's aimed at (the first one there), or small on the edge facing the other side
+        private void PlaceSpellGhost(CardController ghost, BoardSlot slot, int index, int count) {
+            var slotView = slot != null ? battlefieldSlots[slot.Index] : null;
+            bool roomInSlot = slotView != null && index == 0 && slotView.OccupyingCard == null && !queuedGhosts.ContainsKey(slotView);
+            var rect = (RectTransform)ghost.transform;
+            rect.localRotation = Quaternion.identity;
+            if (roomInSlot) {
+                rect.SetParent(slotView.transform, false);
+                rect.localPosition = Vector3.zero;
+                rect.localScale = Vector3.one;
+                rect.SetAsLastSibling();
+                return;
+            }
+            rect.SetParent(transform, false);
+            rect.SetAsLastSibling();
+            rect.localScale = Vector3.one * SpellGhostScale;
+            var mat = ((RectTransform)transform).rect;
+            var other = table.GetBattlefield(Player.Opponent);
+            bool facesUp = other == null || other.transform.position.y > transform.position.y;
+            float x = slotView != null ? slotView.transform.localPosition.x : mat.center.x;
+            x += (index - (count - 1) / 2f) * rect.rect.width * SpellGhostScale * SpellGhostSpread;
+            rect.localPosition = new Vector3(x, facesUp ? mat.yMax : mat.yMin, 0f);
+        }
+
+        // The cast: the ghost leaps to the middle of the screen, swells and bursts, like a spell cast from the hand
+        private void PlayCast(CardController ghost) {
+            var root = GetComponentInParent<Canvas>()?.rootCanvas;
+            if (root == null) {
+                Destroy(ghost.gameObject);
+                return;
+            }
+            float delay = Mathf.Max(0f, nextCastTime - Time.time);
+            nextCastTime = Time.time + delay + CastStagger;
+            ghost.PlayCastAnimation(root.transform, root.transform.position, delay, CardFx.UnitOf(transform, root.transform) * CastScale);
+        }
+
+        private void ClearSpellGhosts() {
+            foreach (var ghost in spellGhosts.Values) {
+                if (ghost != null) Destroy(ghost.gameObject);
+            }
+            spellGhosts.Clear();
         }
 
         // A see-through copy of each creature planned to move (or be pushed or swapped) in the slot it will end in, with the
@@ -555,7 +681,6 @@ namespace SlayTheClone {
 
         // The drag arrow follows the pointer and shows what releasing there would do
         private void Update() {
-            arrowManager?.FollowHandCards();
             if (draggedCard == null) return;
 
             var eventCamera = CanvasUtility.GetEventCamera(this);
@@ -608,6 +733,7 @@ namespace SlayTheClone {
         protected override void OnDestroy() {
             base.OnDestroy();
             ClearQueuedGhosts();
+            ClearSpellGhosts();
             foreach (var slot in battlefieldSlots) {
                 if (slot != null) {
                     var cardController = slot.OccupyingCard;

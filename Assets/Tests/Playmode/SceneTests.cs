@@ -139,6 +139,14 @@ namespace SlayTheClone.Tests {
             Assert.IsNotEmpty(game.HandCards(p2));
             Assert.IsTrue(game.HandCards(p2).All(c => c.IsFaceDown), "The enemy's hand shows only card backs");
             Assert.IsFalse(game.HandCards(p1).Any(c => c.IsFaceDown));
+            var hex = game.GiveCard(p2, game.Cards.Spell("Test Hex", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures)));
+            game.Play(hex, p2, p1.Battlefield[1]);
+            yield return null;
+            Assert.IsTrue(game.SpellGhost(hex).IsFaceDown, "An enemy spell shows where it's aimed, as a card back: not what it is");
+            game.Queue.CancelPlay(hex);
+            p2.RemoveFromHand(hex); // A test card left in a hand outlives its definition into the next test
+            yield return null;
             Assert.IsFalse(FogOfWar.CanControl(p2), "...and its cards can't be used");
             var queuePanel = game.QueuePanel;
             string Listed() => string.Join("\n", queuePanel.Lines);
@@ -165,6 +173,8 @@ namespace SlayTheClone.Tests {
             Assert.Less(Height(game.BoardView(p2)), Height(game.BoardView(p1)), "...and their side of the table is at the bottom");
             Assert.Less(Height(game.HandView(p2)), Height(game.BoardView(p2)), "...hand below their mat");
             Assert.Greater(Height(game.HandView(p1)), Height(game.BoardView(p1)), "...and player 1's hand at the top");
+            Assert.AreEqual(HandUI.YourHandScale, game.HandCards(p2)[0].transform.localScale.x, 0.01f, "Player 2's hand is the big one now...");
+            Assert.AreEqual(1f, game.HandCards(p1)[0].transform.localScale.x, 0.01f, "...and player 1's is at board size");
             FogOfWar.PlaysAsPlayer1 = true;
             yield return null;
             Assert.Less(Height(game.BoardView(p1)), Height(game.BoardView(p2)), "Switching back puts player 1 at the bottom again");
@@ -174,6 +184,15 @@ namespace SlayTheClone.Tests {
             CollectionAssert.IsEmpty(game.BoardView(p2).CreaturesWithHiddenPlans, "Debug: with the fog off the screen shows everything");
             CollectionAssert.IsEmpty(game.BoardView(p2).AnonymousCards);
             Assert.AreEqual(1, game.QueuedArrows(p2).Count);
+            var enemyCard = game.HandCards(p2)[0];
+            Assert.IsFalse(enemyCard.IsFaceDown, "...the enemy's hand face up");
+            SceneGame.Hover(enemyCard);
+            yield return SceneGame.PreviewShows();
+            Assert.AreSame(enemyCard, SceneGame.HoverPreview(), "...whose cards come down out of their hand, enlarged, like yours rise out of yours");
+            Assert.AreEqual(HandUI.RaisedScale, enemyCard.transform.localScale.x, 0.01f);
+            Assert.Less(Height(enemyCard), Height(game.HandView(p2)));
+            ExecuteEvents.Execute(enemyCard.gameObject, new PointerEventData(EventSystem.current) { position = Vector2.zero }, ExecuteEvents.pointerExitHandler);
+            Tooltip.Existing.HideTooltip();
             StringAssert.Contains("Nullify", game.BoardView(p2).WatchdogText, "...the enemy's Watchdog conditions too");
             StringAssert.Contains("Test Sneak</color> attacks", Listed(), "...and the queue");
             StringAssert.Contains("Test Incoming", Listed());
@@ -269,13 +288,15 @@ namespace SlayTheClone.Tests {
 
         /// <summary>
         /// A dragged card lights up only where it can land: a slot for creatures and aimed spells, a whole battlefield for
-        /// spells that hit a side, and nothing on a side it can't be played on; hovering without a card lights up nothing.
-        /// A queued spell stays in the hand marked queued: it can be hovered, shows an arrow to the slot it's aimed at, and is
-        /// taken back by clicking it, right-clicking it, or dragging it where it can't be played. The keywords on an enlarged
-        /// card open their explanations when hovered, and the keywords in those can be followed in turn.
+        /// spells that hit a side, both for spells that play on either side (which can be dropped anywhere on the table),
+        /// and nothing on a side it can't be played on; hovering without a card lights up nothing.
+        /// A queued spell leaves the hand and shows as a ghost where it's aimed: in an empty slot, small on the edge of a
+        /// taken slot or of a whole side. The ghost can be hovered, and the play is taken back by clicking it, right-clicking
+        /// it, or dragging it where it can't be played. The keywords on an enlarged card open their explanations when
+        /// hovered, and the keywords in those can be followed in turn.
         /// </summary>
         [UnityTest]
-        public IEnumerator ACardLightsUpWhereItLands_AQueuedSpellShowsItsAim_CanBeTakenBack_ItsKeywordsExplainThemselves_ThenItHits() {
+        public IEnumerator ACardLightsUpWhereItLands_AQueuedSpellShowsAsAGhostWhereItsAimed_CanBeTakenBack_ItsKeywordsExplainThemselves_ThenItHits() {
             var ox = game.Summon(p2, game.Cards.Creature("Test Ox", 0, 6), 0);
             game.Summon(p2, game.Cards.Creature("Test Calf", 0, 6), 1);
             var bolt = game.GiveCard(p1, game.Cards.Spell("Test Bolt", TargetType.EnemyCreatures,
@@ -284,24 +305,33 @@ namespace SlayTheClone.Tests {
                 Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.Enemy)));
             var storm = game.GiveCard(p1, game.Cards.Spell("Test Storm", TargetType.EnemyCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));
+            var quake = game.GiveCard(p1, game.Cards.Spell("Test Quake", TargetType.AllCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Stun, 1, TargetType.AllCreatures, TargetModifier.Random)));
             CardController Shown(ICard card) => game.HandCards(p1).SingleOrDefault(c => c.GetLinkedCardInstance() == card);
             var aimedAt = p2.Battlefield[1];
+            float Height(Component view) => view.transform.position.y;
+            float X(Component view) => view.transform.position.x;
 
             game.Play(storm, p1, aimedAt);
             yield return null;
-            var sideArrow = game.QueuedArrows(p1).SingleOrDefault();
-            Assert.IsNotNull(sideArrow, "A spell that hits a whole side shows one arrow too");
+            var sideGhost = game.SpellGhost(storm);
+            Assert.IsNotNull(sideGhost, "A queued spell shows as a ghost on the board...");
+            Assert.IsNull(Shown(storm), "...instead of in the hand");
+            CollectionAssert.IsEmpty(game.QueuedArrows(p1), "It needs no arrow");
+            Assert.IsTrue(sideGhost.IsQueued, "The ghost is translucent, marked queued");
+            Assert.AreSame(game.BoardView(p2).transform, sideGhost.transform.parent, "One for a whole side sits on that battlefield...");
             var corners = new Vector3[4];
             ((RectTransform)game.BoardView(p2).transform).GetWorldCorners(corners);
-            Assert.AreEqual(corners[0].y, sideArrow.EndPosition.y, 0.01f, "It stops at the edge of the battlefield it hits...");
-            Assert.IsTrue(p2.Battlefield.All(s => Vector2.Distance(sideArrow.EndPosition, game.BoardView(p2).FindSlotView(s).transform.position) > 0.1f),
-                "...rather than pointing into a slot (the middle of a side is a slot)");
+            Assert.AreEqual(corners[0].y, Height(sideGhost), 0.01f, "...on its edge facing the other side, rather than in a slot");
+            Assert.Less(sideGhost.transform.lossyScale.x, game.CardIn(ox.Slot).transform.lossyScale.x, "...small");
             bool Glows(IPlayer side) => game.BoardView(side).transform.Cast<Transform>().Any(t => t.name.StartsWith("SpellAim_"));
             Assert.IsTrue(Glows(p2), "The whole battlefield it plays on glows while it's queued");
             Assert.IsFalse(Glows(p1));
-            SceneGame.Click(Shown(storm));
+            SceneGame.Click(sideGhost);
             yield return null;
             Assert.IsFalse(Glows(p2), "Taken back: no more glow");
+            Assert.IsNull(game.SpellGhost(storm), "...no more ghost");
+            Assert.IsNotNull(Shown(storm), "...and the card is back in the hand");
 
             var pup = game.GiveCard(p1, game.Cards.Creature("Test Pup", 1, 1));
             yield return null;
@@ -329,6 +359,13 @@ namespace SlayTheClone.Tests {
                 SceneGame.EndDrag(Shown(card), drag);
                 yield return null;
             }
+            var quakeDrag = SceneGame.BeginDrag(Shown(quake));
+            Enter(quakeDrag, game.PlayArea);
+            Assert.IsTrue(MatOf(p1) == UITheme.MatValid && MatOf(p2) == UITheme.MatValid, "A spell for either side lights both battlefields up over the table");
+            Exit(quakeDrag, game.PlayArea);
+            Assert.IsTrue(MatOf(p1) == UITheme.Mat && MatOf(p2) == UITheme.Mat);
+            SceneGame.EndDrag(Shown(quake), quakeDrag);
+            yield return null;
             var idle = new PointerEventData(EventSystem.current);
             Enter(idle, game.BoardView(p1).gameObject);
             Enter(idle, SlotObject(p1.Battlefield[2]));
@@ -337,49 +374,64 @@ namespace SlayTheClone.Tests {
             Exit(idle, SlotObject(p1.Battlefield[2]));
             Exit(idle, game.BoardView(p1).gameObject);
 
+            Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), game.PlayArea));
+            yield return null;
+            Assert.IsNull(game.SpellGhost(storm), "Between the battlefields: not for a spell that hits one side only");
             Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), game.BoardView(p1).gameObject));
             yield return null;
-            Assert.IsFalse(Shown(storm).IsQueued, "A spell that only hits enemy creatures can't be played on your own battlefield");
+            Assert.IsNull(game.SpellGhost(storm), "A spell that only hits enemy creatures can't be played on your own battlefield");
             Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), game.BoardView(p2).gameObject));
             yield return null;
-            Assert.IsTrue(Shown(storm).IsQueued, "...it's played by dropping it anywhere on the enemy's");
-            SceneGame.Click(Shown(storm));
+            Assert.IsNotNull(game.SpellGhost(storm), "...it's played by dropping it anywhere on the enemy's");
+            SceneGame.Click(game.SpellGhost(storm));
+            yield return null;
+            Assert.IsTrue(SceneGame.DragAndDrop(Shown(quake), game.PlayArea));
+            yield return null;
+            Assert.IsNotNull(game.SpellGhost(quake), "A spell for either side is played by dropping it anywhere on the table, even between the battlefields");
+            SceneGame.Click(game.SpellGhost(quake));
+            yield return null;
+
             game.Play(zap, p1, aimedAt);
             yield return null;
-            var arrow = game.QueuedArrows(p1).SingleOrDefault();
-            Assert.IsNotNull(arrow, "The aimed spell shows one arrow");
             var slotView = game.BoardView(p2).FindSlotView(aimedAt);
-            Assert.Less(Vector2.Distance(arrow.StartPosition, BattlefieldArrowManager.EdgeToward(Shown(zap), arrow.EndPosition)), 0.01f,
-                "It starts at the spell's card in the hand, at the edge facing the board");
-            Assert.Less(Vector2.Distance(arrow.EndPosition, slotView.transform.position), 0.01f, "It points at the slot the spell is aimed at");
-            SceneGame.Click(Shown(zap));
+            var zapGhost = game.SpellGhost(zap);
+            Assert.IsNotNull(zapGhost, "An aimed spell's ghost...");
+            Assert.AreEqual(X(slotView), X(zapGhost), 0.01f, "...is at the slot it's aimed at");
+            Assert.AreEqual(corners[0].y, Height(zapGhost), 0.01f, "...small on its edge, the creature there staying in sight");
+            SceneGame.Click(zapGhost);
             yield return null;
-            CollectionAssert.IsEmpty(game.QueuedArrows(p1), "Taking the spell back removes its arrow");
+            game.Play(zap, p1, p2.Battlefield[3]);
+            yield return null;
+            zapGhost = game.SpellGhost(zap);
+            Assert.AreSame(game.BoardView(p2).FindSlotView(p2.Battlefield[3]).transform, zapGhost.transform.parent, "In an empty slot it's in the slot...");
+            Assert.AreEqual(1f, zapGhost.transform.localScale.x, 0.01f, "...at full size");
+            SceneGame.Click(zapGhost);
+            yield return null;
+            Assert.IsNull(game.SpellGhost(zap), "Taking the spell back removes its ghost");
 
             var takeBacks = new (string how, System.Action<CardController> takeBack)[] {
                 ("Clicking", card => SceneGame.Click(card)),
                 ("Right-clicking", card => SceneGame.Click(card, PointerEventData.InputButton.Right)),
-                ("Dragging it where it can't be played", card => Assert.IsTrue(SceneGame.DragAndDrop(card, null), "A queued card in the hand can be dragged")),
+                ("Dragging it where it can't be played", card => Assert.IsTrue(SceneGame.DragAndDrop(card, null), "A spell's ghost can be dragged")),
             };
             foreach (var (how, takeBack) in takeBacks) {
                 game.Play(bolt, p1, p2.Battlefield[0]);
                 yield return null;
-                Assert.IsTrue(Shown(bolt).IsQueued, "A queued spell stays in the hand view, marked as queued");
-                takeBack(Shown(bolt));
+                Assert.IsNull(Shown(bolt));
+                takeBack(game.SpellGhost(bolt));
                 yield return null;
-                Assert.IsNotNull(Shown(bolt), $"{how}: the spell stays in the hand");
-                Assert.IsFalse(Shown(bolt).IsQueued, $"{how} the queued spell should take the play back");
+                Assert.IsNotNull(Shown(bolt), $"{how} the ghost: the spell is back in the hand");
+                Assert.IsFalse(Shown(bolt).IsQueued, $"{how}: not queued");
+                Assert.IsNull(game.SpellGhost(bolt), $"{how}: no ghost");
                 Assert.IsFalse(game.Queue.GetPendingActions().OfType<PlayCardAction>().Any(), $"{how}: its play is no longer queued");
             }
 
-            game.Play(bolt, p1, p2.Battlefield[0]);
-            yield return null;
             SceneGame.Hover(Shown(bolt));
             yield return null;
             Assert.IsNull(SceneGame.HoverPreview(), "Not at once: the pointer may only be passing over the card");
             yield return SceneGame.PreviewShows();
             var preview = SceneGame.HoverPreview();
-            Assert.IsNotNull(preview, "Hovering a queued spell shows it enlarged, once the pointer rests on it");
+            Assert.IsNotNull(preview, "Hovering a card in the hand shows it enlarged, once the pointer rests on it");
             Assert.AreSame(Shown(bolt), preview, "In your hand the card itself rises out of the fan, instead of a copy");
             Assert.AreEqual(HandUI.RaisedScale, preview.transform.localScale.x, 0.01f, "...enlarged...");
             Assert.AreEqual(0f, Mathf.DeltaAngle(0f, preview.transform.localEulerAngles.z), 0.01f, "...and straight");
@@ -387,13 +439,16 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(bolt, preview.GetLinkedCardInstance());
             Assert.IsTrue(preview.IsSpellShaped, "A spell is shaped as one: rounded, with an oval art window");
             Assert.IsFalse(game.HandCards(p1).First(c => c.GetBaseCardData() is CreatureData).IsSpellShaped, "...a creature isn't");
-            Assert.Greater(preview.transform.localScale.x, 1f);
+            Tooltip.Existing.HideTooltip();
+            game.Play(bolt, p1, p2.Battlefield[0]);
+            yield return null;
+            SceneGame.Hover(game.SpellGhost(bolt));
+            yield return SceneGame.PreviewShows();
+            Assert.AreSame(bolt, SceneGame.HoverPreview()?.GetLinkedCardInstance(), "Its ghost on the board shows it enlarged too");
 
             // Keywords: hovering one on the enlarged card explains it, and its explanation's keywords can be followed in turn
-            var nap = game.GiveCard(p1, game.Cards.Spell("Test Nap", TargetType.EnemyCreatures,
-                Effect(EffectTrigger.OnPlay, ActionType.Stun, 1, TargetType.EnemyCreatures, TargetModifier.Random)));
-            yield return null;
-            SceneGame.Hover(Shown(nap));
+            Tooltip.Existing.HideTooltip();
+            SceneGame.Hover(Shown(quake));
             yield return SceneGame.PreviewShows();
             var tooltip = Tooltip.Existing;
             Assert.IsTrue(tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Exhausted")));
@@ -414,6 +469,7 @@ namespace SlayTheClone.Tests {
 
             yield return game.EndTurn();
             Assert.AreEqual(3, ox.Health, "Only the spell left queued is cast");
+            Assert.IsNull(game.SpellGhost(bolt), "Cast: its ghost is gone");
             var allOfP1sCards = p1.Deck.GetDeckPreview().Concat(p1.Deck.GetDiscardPilePreview()).Concat(p1.Hand);
             Assert.AreEqual(1, allOfP1sCards.Count(c => c.Name == "Test Bolt"), "The cast spell is in player 1's cards exactly once");
             game.AssertViewsMatchRules();

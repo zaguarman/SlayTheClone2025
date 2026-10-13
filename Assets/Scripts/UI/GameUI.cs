@@ -105,8 +105,8 @@ namespace SlayTheClone {
             playerReferences.PlayerUI.Initialize(player, gameMediator, gameManager, playerReferences.HealthText);
             playerReferences.BattlefieldUI.Initialize(player, gameMediator, gameManager, cardViews, tableViews);
             playerReferences.HandUI.Initialize(player, gameMediator, gameManager, cardViews);
-            // Your hand's discards fly into the discard pile's button; the other side's off the screen
-            if (player.IsPlayer1) playerReferences.HandUI.DiscardPile = gameReferences.GetDiscardViewButton()?.transform;
+            // The bottom hand's discards fly into the discard pile's button; the top one's off the screen
+            playerReferences.HandUI.DiscardPile = gameReferences.GetDiscardViewButton()?.transform;
         }
 
         private void InitializeControllers() {
