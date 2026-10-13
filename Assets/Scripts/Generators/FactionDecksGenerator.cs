@@ -236,7 +236,7 @@ namespace SlayTheClone {
                 "Mechanics test: the swap as a spell. Target creature trades places with the one to its right (or to its left at the end of the row).",
                 SwapPositions(TargetType.EnemyCreatures))
                 .NotInStarterDeck()
-                .Picture("A news anchor dangling a shiny pocket watch at the camera while, behind him, soldiers quietly shuffle the enemy's tents around."),
+                .Picture("A giant public screen holds a crowd: on one half a blocky-game YouTuber screams at his pickaxe, on the other a grinning giveaway YouTuber in a hoodie waves a giant FREE check. Behind it, soldiers quietly shuffle the enemy's tents around."),
             Creature("King Emeritus", 1, 6, speed: 1, deploy: 2,
                 "Abdicated in disgrace. Kept the yacht, the pension and the Swiss account.",
                 "Future: Diplomatic Immunity. Can't be targeted by enemy spells.",

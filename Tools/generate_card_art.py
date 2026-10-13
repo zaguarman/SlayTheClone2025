@@ -1137,7 +1137,8 @@ def this_is_fine():
     body += flames(40, 200, 3, 26, 70) + flames(312, 200, 3, 26, 70) + flames(176, 60, 4, 30, 24)
     body += rect(108, 166, 150, 34, "#6a4a2a")
     # The dog, in its little hat, with its coffee
-    body += path("M130 200 C 130 150 222 150 222 200 Z", "#e8b45a", 'stroke="#8a5a2a" stroke-width="2"')
+    body += path("M126 200 C 126 132 226 132 226 200 Z", "#e8b45a", 'stroke="#8a5a2a" stroke-width="2"')
+    body += ellipse(176, 146, 22, 16, "#e8b45a")  # The neck: the head sits on the body
     body += ellipse(140, 112, 14, 30, "#8a5a2a", 'transform="rotate(20 140 112)"')
     body += ellipse(212, 112, 14, 30, "#8a5a2a", 'transform="rotate(-20 212 112)"')
     body += ellipse(176, 110, 38, 34, "#e8b45a", 'stroke="#8a5a2a" stroke-width="2"')
@@ -3282,21 +3283,44 @@ def congruent_use_of_force():
 
 
 def weapons_of_mass_distraction():
-    # A news anchor dangles a shiny pocket watch at the camera while soldiers behind him shuffle the enemy's tents
-    defs = lin("bg", ["#2a4a6a", "#14243a"]) + rad("shine", [("#fff6c0", 0.9), ("#fff6c0", 0)])
-    body = rect(0, 0, W, H, "url(#bg)")
-    for x, c in ((190, "#6a7a3a"), (250, "#7a6a3a"), (310, "#5a6a4a")):
-        body += poly([(x - 26, 120), (x, 84), (x + 26, 120)], c, 'stroke="#2a2a1a" stroke-width="2"')
-    body += stroke("M196 70 q 30 -20 54 0", "#ffffff", 2, 'marker-end="" opacity="0.7"') + stroke("M250 70 l -6 -6 M250 70 l -8 2", "#ffffff", 2)
-    for x in (220, 284):
-        body += person(x, 130, 0.5, SKIN[1], "#4a5a2a", face="flat", hat="helmet")
-    body += rect(0, 150, W, 50, "#3a2a2a") + rect(0, 150, W, 6, "#d4af37")
-    body += person(90, 190, 1.2, SKIN[0], "#1a2a4a", face="grin", hair="#3a2a1a", tie="#c0392b")
-    body += stroke("M118 120 L150 92", "#1a2a4a", 8) + stroke("M150 92 L150 110", "#d4af37", 1.5)
-    body += circle(150, 120, 22, "url(#shine)") + circle(150, 120, 11, "#d4af37", 'stroke="#8a6a1a" stroke-width="2"')
-    body += stroke("M150 120 L150 113 M150 120 L155 122", "#5a3a1a", 1.5)
+    # A giant stream on a public screen holds the crowd: a blocky-game YouTuber screaming at his pickaxe, and a grinning
+    # giveaway YouTuber in a hoodie waving a giant check. Behind it, soldiers quietly shuffle the enemy's tents around
+    defs = lin("bg", ["#1e3050", "#0a1222"]) + rad("glow", [("#8fd0ff", 0.35), ("#8fd0ff", 0)])
+    body = rect(0, 0, W, H, "url(#bg)") + circle(122, 92, 150, "url(#glow)")
+    # The enemy camp, being rearranged
+    for x, c in ((262, "#6a7a3a"), (300, "#7a6a3a"), (338, "#5a6a4a")):
+        body += poly([(x - 20, 96), (x, 66), (x + 20, 96)], c, 'stroke="#2a2a1a" stroke-width="2"')
+    body += stroke("M262 56 q 38 -22 76 0", "#ffffff", 2, 'opacity="0.7"') + stroke("M338 56 l -7 -6 M338 56 l -9 2", "#ffffff", 2)
+    for x in (282, 322):
+        body += person(x, 112, 0.42, SKIN[1], "#4a5a2a", face="flat", hat="helmet")
+    # The screen, two streams side by side
+    body += rect(8, 10, 230, 150, "#111", 'rx="6" stroke="#d4af37" stroke-width="4"')
+    body += stroke("M80 160 L70 200 M166 160 L176 200", "#3a3a3a", 6)
+    # Left: the blocky game, a grass-and-dirt world and a square-headed streamer mid-scream
+    body += rect(14, 16, 108, 138, "#7ec8f0")
+    for i, x in enumerate(range(14, 122, 18)):
+        body += rect(x, 118, 18, 12, "#5aa83a") + rect(x, 130, 18, 24, "#8a5a32") + rect(x + 4, 136 + (i % 2) * 6, 5, 5, "#6a4224")
+    body += rect(34, 42, 40, 40, "#e0a878", 'stroke="#5a3a20" stroke-width="2"') + rect(34, 42, 40, 12, "#4a2e18")
+    body += rect(40, 58, 8, 6, "#ffffff") + rect(60, 58, 8, 6, "#ffffff") + rect(43, 59, 4, 5, "#3a5ad0") + rect(63, 59, 4, 5, "#3a5ad0")
+    body += rect(46, 70, 16, 9, "#5a1a1a")  # Screaming
+    body += rect(30, 82, 48, 36, "#2ab0b0") + rect(22, 84, 10, 26, "#2ab0b0") + rect(76, 84, 10, 26, "#e0a878")
+    body += stroke("M86 98 L106 70", "#8a5a32", 5) + poly([(96, 64), (116, 68), (112, 76), (100, 72)], "#9aa0a8", 'stroke="#555" stroke-width="1.5"')
+    body += rect(18, 20, 28, 12, "#e02a2a", 'rx="2"') + lettering("LIVE", 32, 23, 6, "#ffffff", width=1.2)
+    # Right: the giveaway, a giant check in his hands
+    body += rect(126, 16, 106, 138, "#2a6ad0")
+    for i in range(6):
+        body += rect(126 + i * 18, 16, 9, 138, "#ffffff", 'opacity="0.06"')
+    body += person(170, 154, 1.0, SKIN[0], "#3a8ad8", face="grin", hair="#6a4a2a", beard="#6a4a2a")
+    body += path("M149 88 C 150 64 190 64 191 88 C 184 78 156 78 149 88 Z", "#6a4a2a")  # Short hair on top
+    body += rect(136, 104, 92, 40, "#ffffff", 'stroke="#2a6a3a" stroke-width="2" transform="rotate(-6 182 124)"')
+    body += stroke("M146 118 L196 114 M146 128 L210 122 M200 136 L222 133", "#2a8a4a", 2.5, 'transform="rotate(-6 182 124)"')
+    body += lettering("FREE", 212, 108, 8, "#2a8a4a", width=1.6)
+    for x, y in ((136, 30), (214, 40), (150, 60)):
+        body += rect(x, y, 14, 8, "#7ad07a", 'stroke="#2a6a3a" stroke-width="1" transform="rotate(20 {} {})"'.format(x, y))
+    # The crowd, watching instead of the camp
+    for i, x in enumerate(range(10, W, 34)):
+        body += ellipse(x, 196, 16, 18, "#0c0c14") + ellipse(x, 172, 10, 11, "#0c0c14")
     return svg(defs, body)
-
 
 def counterfeit():
     # A knockoff superhero in a cheap costume with a misspelled chest logo, flexing in a mirror that shows a real hero
