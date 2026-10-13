@@ -11,7 +11,8 @@ namespace SlayTheClone {
     /// <summary>
     /// The keyword glossary, opened from the title screen: every keyword by section on the left; the chosen one's explanation
     /// on the right, whose keywords can be clicked to read theirs, and the cards that print it (worked out from the cards
-    /// themselves each time, so it follows any change to them); hover a card's name to see the card.
+    /// themselves each time, so it follows any change to them); hover a card's name to see the card. Each tick of the mouse
+    /// wheel goes to the next keyword (down) or the previous one (up), and the list follows.
     /// </summary>
     public class KeywordGlossaryMenu : MonoBehaviour {
         public const string KeywordButton = "Keyword: ";
@@ -27,6 +28,8 @@ namespace SlayTheClone {
         private TextMeshProUGUI body;
         private TextMeshProUGUI usedBy;
         private readonly Dictionary<string, Button> buttons = new Dictionary<string, Button>();
+        private readonly List<string> order = new List<string>(); // The keywords as listed, top to bottom
+        private ScrollRect list;
         private CardViews cardViews;
         private CardController cardPreview;
         private string previewedCard;
@@ -72,6 +75,35 @@ namespace SlayTheClone {
                 : "";
             ShowCardPreview(null);
             foreach (var pair in buttons) ShowChosen(pair.Value, pair.Key == key);
+            KeepInView(key);
+        }
+
+        /// <summary>Goes to the keyword this many entries further down the list (up for negative steps), stopping at the ends.</summary>
+        public void Step(int steps) {
+            if (order.Count == 0) return;
+            int index = Mathf.Clamp(order.IndexOf(Shown) + steps, 0, order.Count - 1);
+            ShowKeyword(order[index]);
+        }
+
+        // Scrolls the list just enough for the chosen keyword's button to be fully visible
+        private void KeepInView(string key) {
+            if (list == null || !buttons.TryGetValue(key, out var button)) return;
+            Canvas.ForceUpdateCanvases();
+            var view = WorldRect(list.viewport);
+            var shown = WorldRect((RectTransform)button.transform);
+            float margin = shown.height * 0.5f;
+            float shift = shown.yMax > view.yMax ? view.yMax - shown.yMax - margin
+                        : shown.yMin < view.yMin ? view.yMin - shown.yMin + margin : 0f;
+            if (Mathf.Approximately(shift, 0f)) return;
+            list.StopMovement();
+            list.content.position += new Vector3(0f, shift, 0f);
+            list.verticalNormalizedPosition = Mathf.Clamp01(list.verticalNormalizedPosition);
+        }
+
+        private static Rect WorldRect(RectTransform rect) {
+            var corners = new Vector3[4];
+            rect.GetWorldCorners(corners);
+            return Rect.MinMaxRect(corners[0].x, corners[0].y, corners[2].x, corners[2].y);
         }
 
         /// <summary>The cards on offer whose printed text has the keyword, read from the cards as they are now.</summary>
@@ -87,6 +119,8 @@ namespace SlayTheClone {
 
         private void Update() {
             if (!IsOpen || usedBy == null) return;
+            float ticks = Input.mouseScrollDelta.y;
+            if (!Mathf.Approximately(ticks, 0f)) Step(ticks < 0f ? 1 : -1); // Wheel down: the next keyword
             int link = TMP_TextUtilities.FindIntersectingLink(usedBy, Input.mousePosition, null);
             string id = link >= 0 ? usedBy.textInfo.linkInfo[link].GetLinkID() : null;
             ShowCardPreview(id != null && id.StartsWith(CardLink) ? id.Substring(CardLink.Length) : null, Input.mousePosition);
@@ -181,6 +215,7 @@ namespace SlayTheClone {
                     button.GetComponent<LayoutElement>().preferredHeight = 46;
                     button.GetComponentInChildren<TextMeshProUGUI>().fontSize = 24;
                     buttons[key] = button;
+                    order.Add(key);
                 }
             }
 
@@ -189,7 +224,8 @@ namespace SlayTheClone {
             scroll.content = contentRect;
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
-            WheelScroll.AddTo(scroll);
+            scroll.scrollSensitivity = 0f; // The wheel steps through the keywords instead (see Update)
+            list = scroll;
         }
 
         // The chosen keyword: its name, its explanation (links click through), and the cards that print it

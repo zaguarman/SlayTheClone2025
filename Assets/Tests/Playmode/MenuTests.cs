@@ -72,9 +72,21 @@ namespace SlayTheClone.Tests {
             Click(listed.Single(b => b.name == KeywordGlossaryMenu.KeywordButton + "Random"));
             yield return null;
             Assert.AreEqual(width, ((RectTransform)list.transform).rect.width, 0.5f, "The keyword list keeps its width whatever is shown");
-            float top = list.verticalNormalizedPosition;
-            list.GetComponent<WheelScroll>().ScrollBy(-2);
-            Assert.Less(list.verticalNormalizedPosition, top, "The mouse wheel scrolls the keyword list");
+            string KeyOf(Button b) => b.name.Substring(KeywordGlossaryMenu.KeywordButton.Length);
+            glossary.ShowKeyword(KeyOf(listed[0]));
+            glossary.Step(1);
+            Assert.AreEqual(KeyOf(listed[1]), glossary.Shown, "A tick of the wheel down goes to the next keyword");
+            glossary.Step(-1);
+            Assert.AreEqual(KeyOf(listed[0]), glossary.Shown, "...up, to the previous one");
+            glossary.Step(-1);
+            Assert.AreEqual(KeyOf(listed[0]), glossary.Shown, "...and it stops at the ends");
+            glossary.Step(listed.Count);
+            Assert.AreEqual(KeyOf(listed.Last()), glossary.Shown);
+            yield return null;
+            var view = ((RectTransform)list.viewport).rect;
+            var last = (RectTransform)listed.Last().transform;
+            Vector2 lastCenter = list.viewport.InverseTransformPoint(last.TransformPoint(last.rect.center));
+            Assert.IsTrue(view.Contains(lastCenter), "The list follows, so the chosen keyword is always in view");
 
             Click(listed.Single(b => b.name == KeywordGlossaryMenu.KeywordButton + "Exhausted"));
             var exhausting = glossary.CardsWith("Exhausted").Select(c => c.cardName).ToList();
