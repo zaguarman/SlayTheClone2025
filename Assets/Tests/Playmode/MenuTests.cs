@@ -51,6 +51,11 @@ namespace SlayTheClone.Tests {
                 Click(GalleryButton(gallery, CardGalleryMenu.DeckButton + deck.GetDeckName()));
                 CollectionAssert.AreEquivalent(deck.Cards.Distinct().Select(c => c.cardName), Shown(gallery), $"{deck.GetDeckName()}: each of its cards once");
             }
+            Assert.IsNotNull(gallery.GetComponentInChildren<WheelStepper>(), "The mouse wheel steps through the deck list");
+            gallery.StepDeck(-99);
+            Assert.IsNull(gallery.ShownDeck, "Wheel up to the top: Every card");
+            gallery.StepDeck(1);
+            Assert.AreSame(catalog.AllDecks[0], gallery.ShownDeck, "One tick down: the first deck");
             Click(GalleryButton(gallery, CardGalleryMenu.BackButtonName));
             Assert.IsFalse(gallery.IsOpen);
             Assert.IsTrue(TitleButton("PlayButton").gameObject.activeInHierarchy, "Back shows the title screen again");
@@ -107,6 +112,16 @@ namespace SlayTheClone.Tests {
                 Assert.AreSame(opponent.deck, setup.OpponentDeck, $"{opponent.name} should bring their own deck");
                 AssertOnlyChoicesHighlighted();
             }
+
+            Assert.AreEqual(3, setup.GetComponentsInChildren<WheelStepper>().Length, "The mouse wheel steps through each column");
+            setup.StepOpponent(-99);
+            Assert.AreSame(catalog.Opponents[0], setup.Opponent, "Wheel up to the top of the opponents");
+            setup.StepOpponent(1);
+            Assert.AreSame(catalog.Opponents[1], setup.Opponent, "One tick down: the next opponent...");
+            Assert.AreSame(catalog.Opponents[1].deck, setup.OpponentDeck, "...who brings their deck");
+            setup.StepPlayerDeck(1);
+            setup.StepPlayerDeck(-1);
+            AssertOnlyChoicesHighlighted();
 
             var chosenOpponent = setup.Opponent;
             var otherDeck = catalog.Decks.First(d => d != chosenOpponent.deck);

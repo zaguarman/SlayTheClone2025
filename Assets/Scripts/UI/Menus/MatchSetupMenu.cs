@@ -12,6 +12,7 @@ namespace SlayTheClone {
     /// The screen between the title and the game: pick your deck, the opponent you face and the deck they bring.
     /// Picking an opponent also picks their own deck, which can then be swapped for any other.
     /// Its buttons are built from the <see cref="DeckCatalog"/>, so new decks and opponents only need adding there.
+    /// The mouse wheel over a column picks its next (wheel down) or previous (wheel up) choice.
     /// </summary>
     public class MatchSetupMenu : MonoBehaviour {
         // Button names, so tests can find the button for a choice
@@ -75,6 +76,11 @@ namespace SlayTheClone {
             Refresh();
         }
 
+        /// <summary>Picks the deck this many entries down your column (up for negative steps), stopping at the ends.</summary>
+        public void StepPlayerDeck(int steps) => SelectPlayerDeck(WheelStepper.Next(catalog.AllDecks, PlayerDeck, steps));
+        public void StepOpponent(int steps) => SelectOpponent(WheelStepper.Next(catalog.Opponents, Opponent, steps));
+        public void StepOpponentDeck(int steps) => SelectOpponentDeck(WheelStepper.Next(catalog.AllDecks, OpponentDeck, steps));
+
         public void StartMatch() {
             MatchSetup.Choose(PlayerDeck, OpponentName, OpponentDeck);
             Log($"Match chosen: {PlayerDeck.GetDeckName()} vs {MatchSetup.OpponentName} ({OpponentDeck.GetDeckName()})", LogTag.UI);
@@ -125,12 +131,14 @@ namespace SlayTheClone {
 
             var decks = catalog.AllDecks;
             var yourDecks = AddColumn(columns.transform, "Your deck");
+            WheelStepper.AddTo(yourDecks.gameObject, StepPlayerDeck);
             foreach (var deck in decks) {
                 AddChoice(yourDecks, PlayerDeckButton + deck.GetDeckName(), DeckLabel(deck), 72,
                     () => SelectPlayerDeck(deck), () => PlayerDeck == deck);
             }
 
             var opponents = AddColumn(columns.transform, "Your opponent");
+            WheelStepper.AddTo(opponents.gameObject, StepOpponent);
             foreach (var opponent in catalog.Opponents) {
                 string label = $"<b>{opponent.name}</b>\n<size=70%><i>{opponent.tagline}</i></size>";
                 AddChoice(opponents, OpponentButton + opponent.name, label, 96,
@@ -138,6 +146,7 @@ namespace SlayTheClone {
             }
 
             var theirDecks = AddColumn(columns.transform, "Their deck");
+            WheelStepper.AddTo(theirDecks.gameObject, StepOpponentDeck);
             foreach (var deck in decks) {
                 AddChoice(theirDecks, OpponentDeckButton + deck.GetDeckName(), DeckLabel(deck), 72,
                     () => SelectOpponentDeck(deck), () => OpponentDeck == deck);

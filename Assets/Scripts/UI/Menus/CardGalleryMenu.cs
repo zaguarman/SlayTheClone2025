@@ -9,6 +9,7 @@ namespace SlayTheClone {
     /// <summary>
     /// The card gallery, opened from the title screen: every card on offer, deck by deck (or all of them at once), shown as the
     /// printed cards. Hover a card to see it enlarged. Built from the <see cref="DeckCatalog"/>, like the match setup.
+    /// The mouse wheel over the deck list picks the next (wheel down) or previous (wheel up) deck; over the cards, it scrolls them.
     /// </summary>
     public class CardGalleryMenu : MonoBehaviour {
         public const string EveryCardButton = "Gallery: Every card";
@@ -55,6 +56,9 @@ namespace SlayTheClone {
         }
 
         /// <summary>Shows the deck's cards, each different card once; null shows every card on offer.</summary>
+        /// <summary>Shows the deck this many entries down the list (up for negative steps; Every card is first), stopping at the ends.</summary>
+        public void StepDeck(int steps) => ShowDeck(WheelStepper.Next(deckButtons.Select(b => b.deck).ToList(), ShownDeck, steps));
+
         public void ShowDeck(DeckScriptableObject deck) {
             ShownDeck = deck;
             Tooltip.Existing?.HideTooltip();
@@ -99,6 +103,7 @@ namespace SlayTheClone {
             columns.AddComponent<LayoutElement>().flexibleHeight = 1;
 
             var decks = AddColumn(columns.transform, "Decks");
+            WheelStepper.AddTo(decks.gameObject, StepDeck);
             var decksElement = decks.gameObject.AddComponent<LayoutElement>();
             decksElement.preferredWidth = 470;
             decksElement.flexibleWidth = 0;
