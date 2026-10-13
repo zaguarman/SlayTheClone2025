@@ -3464,6 +3464,58 @@ def mimetic_theory():
     return svg(defs, body)
 
 
+def business_expense():
+    # A CEO in a full three-piece suit, briefcase in hand, walked into a jail cell by a guard, handing him a receipt
+    # stamped BUSINESS EXPENSE
+    defs = lin("bg", ["#8a8f96", "#5a5f66"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for y in range(10, 150, 28):
+        body += stroke(f"M0 {y} L{W} {y}", "#6a6f76", 1, 'opacity="0.6"')
+    body += rect(0, 160, W, 40, "#4a4e54")
+    body += rect(196, 20, 150, 150, "#2a2d33", 'opacity="0.55"')  # The cell
+    for x in range(202, 346, 18):
+        body += rect(x, 14, 7, 156, "#3a3e44", 'stroke="#1f2226" stroke-width="1.5"')
+    body += rect(196, 14, 152, 8, "#3a3e44") + rect(196, 92, 152, 6, "#3a3e44")
+    body += person(84, H, 1.25, SKIN[2], "#2a3f6a", face="flat", hat="peaked")  # The guard
+    body += stroke("M108 150 L150 140", "#2a3f6a", 9)
+    body += person(170, H, 1.3, SKIN[0], "#1c1c22", face="grin", tie="#c0392b", hair="#9aa0a6")  # The CEO
+    body += poly([(156, 156), (166, 176), (170, 158)], "#ffffff") + poly([(184, 156), (174, 176), (170, 158)], "#ffffff")
+    body += rect(196, 150, 34, 26, "#5a3a1e", 'rx="3"') + rect(207, 145, 12, 6, "none", 'stroke="#3a2412" stroke-width="2"')
+    body += stroke("M146 160 L126 110", "#1c1c22", 8)  # The arm with the receipt, held up between them
+    body += group(rect(-22, -30, 44, 60, "#fbf8ee", 'stroke="#999" stroke-width="1"')
+                  + "".join(rect(-16, -22 + k * 8, 30 - (k % 2) * 10, 3, "#aaa") for k in range(4))
+                  + group(rect(-24, -8, 48, 14, "none", 'stroke="#c0392b" stroke-width="2"') + lettering("EXPENSE", 0, -5, 6, "#c0392b", width=1.3), "rotate(-14)"),
+                  "translate(124 66) rotate(-8)")
+    return svg(defs, body)
+
+
+def we_are_not_the_same():
+    # The meme: two identical masked heroes in red suits with web lines, pointing at each other in a dim warehouse
+    defs = lin("bg", ["#2a2620", "#4a4236"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x in range(0, W, 44):
+        body += rect(x, 0, 40, 120, "#3a342a", 'opacity="0.5"')
+    body += rect(0, 150, W, 50, "#2a2620")
+
+    def hero(cx, facing):
+        out = path(f"M{cx - 46} 200 C {cx - 46} 130 {cx + 46} 130 {cx + 46} 200 Z", "#c62828")  # Shoulders
+        out += path(f"M{cx - 20} 200 L{cx - 12} 150 L{cx + 12} 150 L{cx + 20} 200 Z", "#1e4fa0")
+        out += ellipse(cx, 104, 30, 36, "#c62828")  # The masked head
+        for k in range(-2, 3):
+            out += stroke(f"M{cx} 70 Q {cx + k * 14} 104 {cx + k * 10} 140", "#7a1414", 1.2)
+        out += stroke(f"M{cx - 30} 100 Q {cx} 92 {cx + 30} 100 M{cx - 26} 116 Q {cx} 110 {cx + 26} 116", "#7a1414", 1.2)
+        for side in (-1, 1):
+            out += path(f"M{cx + side * 4} 98 Q {cx + side * 20} 84 {cx + side * 24} 100 Q {cx + side * 14} 110 {cx + side * 4} 98 Z",
+                        "#ffffff", 'stroke="#111" stroke-width="2.5"')
+        hand = cx + facing * 56  # The pointing arm
+        out += stroke(f"M{cx + facing * 30} 162 L{hand} 132", "#c62828", 14)
+        out += circle(hand, 132, 9, "#c62828") + stroke(f"M{hand} 132 L{hand + facing * 16} 124", "#c62828", 6)
+        return out
+
+    body += hero(78, 1) + hero(274, -1)
+    return svg(defs, body)
+
+
 def meta_group_chat():
     # A phone showing a group chat named THE JURY, gavels and skulls piling up under a blurry photo of one guy, who sweats
     # alone in the corner, outside the phone
@@ -3636,7 +3688,8 @@ CARDS["ShadowOps"].update({"Cleaner": cleaner})
 CARDS["Mind"].update({"MimeticTheory": mimetic_theory})
 CARDS["DigitalSociety"].update({"MetaGroupChat": meta_group_chat, "SocialPanopticon": social_panopticon})
 CARDS["ShadowOps"].update({"ControlRoom": control_room, "HumanitarianTraffickingAction": humanitarian_trafficking_action})
-CARDS["Zeitgeist"].update({"NoGloveNoLove": no_glove_no_love})
+CARDS["Zeitgeist"].update({"NoGloveNoLove": no_glove_no_love, "WeAreNotTheSame": we_are_not_the_same})
+CARDS["Corporate"].update({"BusinessExpense": business_expense})
 
 
 def main():

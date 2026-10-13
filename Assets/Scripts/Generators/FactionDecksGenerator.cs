@@ -190,6 +190,12 @@ namespace SlayTheClone {
                 "It's recovering! It's recovering! It's... no.",
                 "Future: a Temporary +3 Attack for 1 Day, then a Persistent -2 Health.",
                 Buff(3, TargetType.FriendlyCreatures, attack: true, health: false), Buff(-2, TargetType.FriendlyCreatures, attack: false, health: true)),
+            Spell("Business Expense", TargetType.Player,
+                "The yacht was a business expense. So was the lawyer. So is the appeal.",
+                "Draw 2 next Day, and pay the fine now: 2 damage to you. Future: Capital cost, discard a card instead.",
+                Draw(2), Damage(2, TargetType.Player, Each))
+                .NotInStarterDeck()
+                .Picture("A CEO in a full three-piece suit, briefcase still in hand, being walked into a jail cell by a guard, while he hands the guard a receipt stamped BUSINESS EXPENSE."),
             Spell("Taxpayer Funds Venture Capital Profits", TargetType.Player,
                 "Privatize the gains. Socialize the bill.",
                 "Future: the enemy schedules 1 fewer draw instead of losing Health.",
@@ -444,6 +450,12 @@ namespace SlayTheClone {
                 Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1), Armor(2, TargetType.FriendlyCreatures))
                 .NotInStarterDeck()
                 .Picture("A knight in shining armor head to toe, a giant red heart on the shield, politely refusing a rose through the visor slit."),
+            Spell("We Are Not The Same", TargetType.FriendlyCreatures,
+                "I copy whoever's in front of me. You copy whoever's in front of you. We are not the same.",
+                "Your creature copies the Attack, Health and Speed of the enemy creature facing it, while it stays in play. Shrinks a giant into your nobody, or your nobody into a giant.",
+                CopyStats(TargetType.FriendlyCreatures))
+                .NotInStarterDeck()
+                .Picture("The meme: two identical masked heroes in red suits with web lines, pointing at each other in a dim warehouse."),
         };
         #endregion
 

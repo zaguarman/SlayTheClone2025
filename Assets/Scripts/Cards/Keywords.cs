@@ -80,7 +80,7 @@ namespace SlayTheClone {
             Add("Heat Signature", "Heat Signature X (no number: 1): [Random|random] effects and redirected attacks go to the creature with the most Heat Signature. It stays until cleansed.");
             Add("Concealed", "Conceal X (no number: 1): for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
             Add("Revealed", "Revealed X (no number: 1): for X [Days], it can't be [Concealed]: its plans can be seen.");
-            Add("Encrypted", "Encrypt X (no number: 1): for X [Days], [Watchdog|Watchdogs] ignore its actions.");
+            Add("Encrypted", "Encrypt X (no number: 1): for X [Days], its actions slip past every [Watchdog], the enemy's and yours: none reacts to them, and none spends a charge on them. Unlike [Concealed], everyone still sees what it plans.");
             Add("Untouchable", "Untouchable X (no number: 1): takes no damage at all for X [Days], counting the Day it lands: 1 is this Day only.");
             Add("Cooldown", "Cooldown X (no number: 1): its Active ability rests and can't be used for the next X [Days].");
             Add("Cleanse", "Removes harmful statuses.");
