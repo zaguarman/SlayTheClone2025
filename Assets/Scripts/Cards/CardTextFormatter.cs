@@ -74,7 +74,7 @@ namespace SlayTheClone {
 
             if (effect.oncePerCombat) {
                 return effect.trigger == EffectTrigger.OnAboutToDie && action.actionType == ActionType.Heal && action.targetType == TargetType.Self
-                    ? Keywords.Link("Second Wind") : null;
+                    ? Keywords.Link("Rebirth") : null;
             }
             switch (effect.trigger) {
                 // Hitting back for its Attack: the effect has no damage of its own (see EffectResolver)
@@ -87,7 +87,7 @@ namespace SlayTheClone {
                 case EffectTrigger.StartOfTurn when action.targetType == TargetType.Self && action.actionType == ActionType.ModifyStat
                                                     && action.modifyAttack && action.modifyHealth && !action.modifySpeed
                                                     && action.value > 0 && action.statusDuration <= 0:
-                    return $"{Keywords.Link("Grow")} {action.value}";
+                    return Keywords.Link("Grow") + Count(action.value);
                 default:
                     return null;
             }
@@ -238,7 +238,7 @@ namespace SlayTheClone {
                 case ActionType.Summon:
                     return Keywords.Link("Summon", "summon" + Count(value));
                 case ActionType.Armor:
-                    return $"{target} +{value}{Keywords.Link("Armor", EffectIcons.Tag(EffectIcons.Armor))}";
+                    return $"{target} +{(value == 1 ? "" : value.ToString())}{Keywords.Link("Armor", EffectIcons.Tag(EffectIcons.Armor))}";
                 case ActionType.Stun:
                     return $"{Keywords.Link("Exhausted", "exhaust")} {target}";
                 case ActionType.ModifyStat:

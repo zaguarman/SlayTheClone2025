@@ -206,7 +206,7 @@ Concealed
     Cleansable: Yes
 
 Encrypted
-    Faction: Neutral (to be decided)
+    Faction: Shadow Ops., Digital Society, Corporate, Statecraft, Zeitgeist (the factions that run on computers)
     Type: Unique, Information
     Description: "Watchdogs ignore this creature's actions. Re-applying sets it to the new amount."
     Core Impact: Protects its plans from being changed (Secure layer, GDD 2.5): Watchdogs can't nullify, redirect, reorder or reveal them, and spend no charge on them.

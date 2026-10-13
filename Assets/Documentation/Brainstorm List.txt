@@ -1683,9 +1683,7 @@ Card Game Factions Overview
 			FAANG
 			P(Doom)
 			Pair Programming
-			Scope Creep (art: a creep looking through a spyglass)
 			Suspicious USB Stick in the Parking Lot
-			Technical Debt (art: money missing)
 			Threat Hunter
 			Web Scraping (art: a cat scratching a laptop screen)
 		Digital Society
@@ -1769,8 +1767,6 @@ Card Game Factions Overview
 			Maslow's Pyramid
 			Ontology (the study of existence)
 			Phronetic (practical wisdom: knowledge in context)
-			Scapegoating
-			Ship of Theseus (tagged Mind)
 			Socrates (tagged Mind)
 			The ELIZA Effect
 			Tolerance Paradox

@@ -12,6 +12,6 @@ namespace SlayTheClone {
 
     public class CleanseSlotActionExecutor : ActionExecutor<CleanseSlotAction> {
         protected override void ExecuteAction(CleanseSlotAction cleanse, ActionExecutionContext context) =>
-            SlotEffectRules.Remove(cleanse.GetSlot(), context.GameMediator);
+            SlotEffectRules.Remove(cleanse.GetSlot(), context.GameMediator, context.ActionsQueue);
     }
 }

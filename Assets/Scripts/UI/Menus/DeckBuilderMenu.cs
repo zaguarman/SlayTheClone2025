@@ -9,15 +9,17 @@ using static SlayTheClone.MenuWidgets;
 namespace SlayTheClone {
     /// <summary>
     /// The deck builder, opened from the title screen: your own decks, mixing any cards on offer (see <see cref="PlayerDecks"/>).
-    /// On the left, your decks and New deck (which asks for its name at once); in the middle, the cards, faction by faction:
+    /// On the left, your decks and New deck (which asks for its name at once), then the starter decks: open one to see its
+    /// cards, and Copy it (or click a card) to make a deck of your own from it; in the middle, the cards, faction by faction:
     /// click one to add a copy to the open deck, right-click it to take one out; on the right, the open deck: its name (type to
     /// rename it, 20 characters at most), how full it is, and
     /// its cards, a click on one taking a copy out (hover it to see the card). Every change is saved at once. Clicking a
-    /// card with no deck open starts a new one. Once a deck has all its cards, the match setup offers it.
+    /// card with no deck open starts a new one. Once a deck has 20 cards (40 at most), the match setup offers it.
     /// </summary>
     public class DeckBuilderMenu : MenuScreen {
         public const string NewDeckButton = "Decks: + New deck";
         public const string DeckButton = "Decks: ";
+        public const string StarterDeckButton = "Decks: Starter: ";
         public const string EveryFactionTab = "DeckFaction: Every card";
         public const string FactionTab = "DeckFaction: ";
         public const string CardRow = "DeckCard: ";
@@ -38,14 +40,17 @@ namespace SlayTheClone {
         private Transform deckFactions;
         private Transform rows;
         private Button copyButton, deleteButton;
+        private GameObject starterHeading;
         private CardPeek cardPeek;
         private bool deleteArmed; // Delete was clicked once: a second click deletes
         private readonly List<(Button button, DeckScriptableObject deck)> deckButtons = new List<(Button, DeckScriptableObject)>();
         private readonly List<(Button button, Faction? faction)> factionTabs = new List<(Button, Faction?)>();
         private readonly Dictionary<CardController, CardDataScriptableObject> shownAssets = new Dictionary<CardController, CardDataScriptableObject>();
 
-        /// <summary>The deck being built; null when none is open.</summary>
+        /// <summary>The deck being built, or a starter deck being looked at; null when none is open.</summary>
         public DeckScriptableObject OpenDeck { get; private set; }
+        /// <summary>The open deck is a starter deck: it can't be changed, only copied.</summary>
+        public bool ShowsStarterDeck => OpenDeck != null && !PlayerDecks.IsPlayers(OpenDeck);
         /// <summary>The faction whose cards are offered; null when every card is.</summary>
         public Faction? ShownFaction { get; private set; }
         /// <summary>The cards offered, in order.</summary>
@@ -63,7 +68,7 @@ namespace SlayTheClone {
         }
 
         public void Open(DeckScriptableObject deck) {
-            OpenDeck = PlayerDecks.IsPlayers(deck) ? deck : null;
+            OpenDeck = PlayerDecks.IsPlayers(deck) || Catalog.Decks.Contains(deck) ? deck : null;
             Refresh();
         }
 
@@ -72,9 +77,10 @@ namespace SlayTheClone {
             if (Decks.Count > 0) Open(WheelStepper.Next(Decks, OpenDeck, steps));
         }
 
-        /// <summary>Adds a copy of the card to the open deck, starting a new deck if none is open.</summary>
+        /// <summary>Adds a copy of the card to the open deck, starting a new deck if none is open (a copy, if a starter deck is).</summary>
         public bool AddCard(CardDataScriptableObject card) {
             if (OpenDeck == null) OpenDeck = PlayerDecks.Create(Catalog);
+            else if (ShowsStarterDeck) OpenDeck = PlayerDecks.Create(Catalog, OpenDeck.GetDeckName(), OpenDeck.Cards);
             bool added = PlayerDecks.Add(OpenDeck, card);
             Refresh();
             return added;
@@ -145,8 +151,19 @@ namespace SlayTheClone {
         private void RefreshDeckList() {
             foreach (var (button, _) in deckButtons) Discard(button.gameObject);
             deckButtons.Clear();
+            if (starterHeading != null) Discard(starterHeading);
             foreach (var deck in Decks) {
                 var button = AddChoice(deckListContent, DeckButton + deck.GetDeckName(), deck.GetDeckName(), PlayerDecks.SizeText(deck), () => Open(deck), DeckCatalog.CoinsFor(deck));
+                ShowChosen(button, deck == OpenDeck);
+                deckButtons.Add((button, deck));
+            }
+            // The starter decks, to look at and copy
+            var heading = AddText(deckListContent, "Starter decks", 24, AccentColor, FontStyles.Bold | FontStyles.SmallCaps, height: 40);
+            heading.alignment = TextAlignmentOptions.BottomLeft;
+            starterHeading = heading.gameObject;
+            foreach (var deck in Catalog.Decks) {
+                var button = AddChoice(deckListContent, StarterDeckButton + deck.GetDeckName(), deck.GetDeckName(), $"{deck.Cards.Count} cards · copy it to make it yours",
+                    () => Open(deck), DeckCatalog.CoinsFor(deck));
                 ShowChosen(button, deck == OpenDeck);
                 deckButtons.Add((button, deck));
             }
@@ -156,13 +173,17 @@ namespace SlayTheClone {
 
         private void RefreshDeck() {
             bool open = OpenDeck != null;
-            copyButton.interactable = deleteButton.interactable = open;
+            copyButton.interactable = open;
+            deleteButton.interactable = nameField.interactable = open && !ShowsStarterDeck;
             nameField.SetTextWithoutNotify(open ? OpenDeck.GetDeckName() : "");
             ShowDeleteButton();
 
+            string accent = ColorUtility.ToHtmlStringRGB(AccentColor);
             if (!open) countText.text = "<i>Name a deck or click a card to start one.</i>";
-            else if (PlayerDecks.IsComplete(OpenDeck)) countText.text = $"{PlayerDecks.SizeText(OpenDeck)} · <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>ready to play</color>";
-            else countText.text = $"{PlayerDecks.SizeText(OpenDeck)} · <i>{CardGrid.Plural(PlayerDecks.DeckSize - OpenDeck.Cards.Count, "more card")} to play</i>";
+            else if (ShowsStarterDeck) countText.text = $"Starter deck, {OpenDeck.Cards.Count} cards · <i>Copy it to make it yours</i>";
+            else if (PlayerDecks.IsComplete(OpenDeck)) countText.text = $"{PlayerDecks.SizeText(OpenDeck)} · <color=#{accent}>ready to play</color>" +
+                (OpenDeck.Cards.Count < PlayerDecks.MaxDeckSize ? $" <i>(up to {PlayerDecks.MaxDeckSize})</i>" : "");
+            else countText.text = $"{PlayerDecks.SizeText(OpenDeck)} · <i>{CardGrid.Plural(PlayerDecks.MinDeckSize - OpenDeck.Cards.Count, "more card")} to play</i>";
             foreach (Transform coin in deckFactions.Cast<Transform>().ToList()) Discard(coin.gameObject);
             if (open) {
                 var coins = AddCoins(deckFactions, DeckCatalog.CoinsFor(OpenDeck), 30f, DeckWidth - 60f);
@@ -260,6 +281,7 @@ namespace SlayTheClone {
             countText = null;
             deckFactions = null;
             copyButton = deleteButton = null;
+            starterHeading = null;
             cardPeek = null;
             deleteArmed = false;
             deckButtons.Clear();
@@ -365,7 +387,7 @@ namespace SlayTheClone {
             WheelScroll.AddTo(scroll);
             rows = content.transform;
 
-            var hint = AddText(column, "Click a card to add a copy (two at most); click it here, or right-click it, to take one out.", 18, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 48);
+            var hint = AddText(column, "Click a card to add a copy (two at most, 20 to 40 cards); click it here, or right-click it, to take one out.", 18, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 48);
             hint.textWrappingMode = TextWrappingModes.Normal;
 
             var buttons = NewObject("Buttons", column);

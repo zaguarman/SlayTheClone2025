@@ -68,6 +68,9 @@ namespace SlayTheClone {
         /// <summary>Counts down at each Dusk after the Day it landed in (GDD 3.2): Deployment Time N sits out N full Days.</summary>
         /// <returns>True when the countdown changed.</returns>
         bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue);
+        /// <summary>Scorched Earth held its entry effects back: they happen now if it no longer stands on Scorched Earth
+        /// (it moved off, or the effect ended).</summary>
+        void ReleaseHeldEntryEffects(IActionsQueue actionsQueue);
 
         /// <summary>
         /// Raised after something its card shows changes: health, armor, stats, statuses, readiness or death.
@@ -136,6 +139,7 @@ namespace SlayTheClone {
         public bool IsOperative => TurnsUntilOperative == 0;
         private int landedOnTurn;
         private bool entryEffectsPending; // Its entry ("When Ready") effects haven't happened yet since it entered play
+        private bool entryEffectsHeld; // Scorched Earth stopped them: they wait until it's off the scorched slot
 
         public event Action<ICreature> Changed;
         public void NotifyChanged() => Changed?.Invoke(this);
@@ -158,6 +162,7 @@ namespace SlayTheClone {
             KnownTo.Clear(); // A new entrance: nobody knows what it is until it shows itself
             TimesEnteredPlay++;
             entryEffectsPending = true;
+            entryEffectsHeld = false;
             CurrentArmorPool = 0; // Armor is lost when a creature leaves play (GDD 1.1 Armor), so it always enters without any
         }
 
@@ -168,11 +173,24 @@ namespace SlayTheClone {
             Log($"{Name} is {(IsOperative ? "now operative" : $"operative in {TurnsUntilOperative} turn(s)")}", LogTag.Creatures | LogTag.Turns);
             if (IsOperative && entryEffectsPending) {
                 // Its on-play effect waited for this moment; Deployment Time ignores Abilities Disabled (GDD 3.2). On Scorched
-                // Earth it's lost: moving off later doesn't bring it back
+                // Earth it waits until the creature is off the scorched slot
                 entryEffectsPending = false;
-                if (!SlotEffectRules.SuppressesTriggeredEffects(this)) EffectResolver.QueueCreatureEffects(this, EffectTrigger.OnPlay, actionsQueue);
+                if (SlotEffectRules.SuppressesTriggeredEffects(this)) HoldEntryEffects();
+                else EffectResolver.QueueCreatureEffects(this, EffectTrigger.OnPlay, actionsQueue);
             }
             return true;
+        }
+
+        private void HoldEntryEffects() {
+            entryEffectsHeld = true;
+            Log($"{Name}'s entry effects wait until it's off Scorched Earth", LogTag.Creatures | LogTag.Effects);
+        }
+
+        public void ReleaseHeldEntryEffects(IActionsQueue actionsQueue) {
+            if (!entryEffectsHeld || IsDead || actionsQueue == null || SlotEffectRules.SuppressesTriggeredEffects(this)) return;
+            entryEffectsHeld = false;
+            Log($"{Name} is off Scorched Earth: its entry effects happen now", LogTag.Creatures | LogTag.Effects);
+            HandleEffect(EffectTrigger.OnPlay, actionsQueue);
         }
 
         public void AddDeploymentTime(int days, int currentTurn) {
@@ -265,9 +283,10 @@ namespace SlayTheClone {
                 return;
             }
             if (trigger == EffectTrigger.OnPlay) entryEffectsPending = false;
-            // Scorched Earth stops all its triggered effects, entry ones included (and those are lost, not delayed)
+            // Scorched Earth stops all its triggered effects; entry ones wait until it's off the scorched slot
             if (SlotEffectRules.SuppressesTriggeredEffects(this)) {
-                Log($"{Name}'s {trigger} effects don't trigger on Scorched Earth", LogTag.Creatures | LogTag.Effects);
+                if (trigger == EffectTrigger.OnPlay) HoldEntryEffects();
+                else Log($"{Name}'s {trigger} effects don't trigger on Scorched Earth", LogTag.Creatures | LogTag.Effects);
                 return;
             }
             Log($"Handling Effect: {trigger} for {Name} (TargetID: {TargetId.ShortId()})", LogTag.Creatures | LogTag.Effects);

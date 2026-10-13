@@ -13,10 +13,15 @@ namespace SlayTheClone {
             }
 
             // Return to Sender: an enemy status bounces back to the creature that sent it, once; one from a spell (or a creature
-            // no longer in play) to a random creature on the caster's side
+            // no longer in play) to a random creature on the caster's side. No U deflects it to a random one in any case
             var controller = statusAction.Controller;
             bool enemy = controller != null && targetCreature.Owner != null && controller != targetCreature.Owner;
-            if (enemy && Abilities.Defends(targetCreature, CreatureAbility.ReturnToSender, statusAction.Source)) {
+            if (enemy && Abilities.Defends(targetCreature, CreatureAbility.NoU, statusAction.Source)) {
+                var deflectTo = Abilities.BounceTarget(null, controller, atRandom: true);
+                Log($"{targetCreature.Name}'s No U deflects {statusType} to {deflectTo?.Name ?? "nobody (it fails)"}", LogTag.Effects);
+                if (deflectTo == null) return;
+                targetCreature = deflectTo;
+            } else if (enemy && Abilities.Defends(targetCreature, CreatureAbility.ReturnToSender, statusAction.Source)) {
                 var bounceTo = Abilities.BounceTarget(statusAction.Source, controller, atRandom: true);
                 Log($"{targetCreature.Name}'s Return to Sender sends {statusType} back to {bounceTo?.Name ?? "nobody (it fails)"}", LogTag.Effects);
                 if (bounceTo == null) return;

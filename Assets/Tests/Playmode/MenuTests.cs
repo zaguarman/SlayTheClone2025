@@ -113,6 +113,15 @@ namespace SlayTheClone.Tests {
             Vector2 lastCenter = list.viewport.InverseTransformPoint(last.TransformPoint(last.rect.center));
             Assert.IsTrue(view.Contains(lastCenter), "The list follows, so the chosen keyword is always in view");
 
+            glossary.Filter.text = "rEvEaL";
+            CollectionAssert.AreEquivalent(Keywords.All.Where(e => e.Title.ToLower().Contains("reveal")).Select(e => e.Key), glossary.Listed,
+                "Typing in the filter lists only the keywords whose name has it, any case");
+            Assert.AreEqual(glossary.Listed[0], glossary.Shown, "...and shows the first one, the one shown being filtered out");
+            glossary.Step(1);
+            Assert.AreEqual(glossary.Listed[1], glossary.Shown, "The wheel goes through the ones listed");
+            glossary.Filter.text = "";
+            Assert.AreEqual(listed.Count, glossary.Listed.Count, "Empty, it lists them all again");
+
             Click(listed.Single(b => b.name == KeywordGlossaryMenu.KeywordButton + "Exhausted"));
             var exhausting = glossary.CardsWith("Exhausted").Select(c => c.cardName).ToList();
             CollectionAssert.Contains(exhausting, "DDOS Attack", "The cards that print it are read from the cards themselves");
@@ -194,7 +203,7 @@ namespace SlayTheClone.Tests {
             foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
             Click(GalleryButton(builder, DeckBuilderMenu.EveryFactionTab));
             foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
-            Assert.AreEqual(PlayerDecks.DeckSize, yourDeck.Cards.Count, "Cards are added until the deck is full, not beyond");
+            Assert.AreEqual(PlayerDecks.MaxDeckSize, yourDeck.Cards.Count, "Cards are added until the deck has 40, not beyond");
             Assert.GreaterOrEqual(DeckCatalog.FactionsOf(yourDeck).Count, 2, "...whatever their faction");
             var name = builder.NameField;
             Assert.AreEqual(PlayerDecks.MaxNameLength, name.characterLimit, "A deck's name is 20 characters at most...");
@@ -205,7 +214,7 @@ namespace SlayTheClone.Tests {
             name.onEndEdit.Invoke(name.text);
             Assert.AreEqual("Mixtape", yourDeck.GetDeckName(), "Typing a name renames it");
             Click(GalleryButton(builder, DeckBuilderMenu.CardRow + firstName));
-            Assert.AreEqual(PlayerDecks.DeckSize - 1, yourDeck.Cards.Count, "Clicking a card in the deck takes a copy out");
+            Assert.AreEqual(PlayerDecks.MaxDeckSize - 1, yourDeck.Cards.Count, "Clicking a card in the deck takes a copy out");
 
             Click(GalleryButton(builder, DeckBuilderMenu.CopyButtonName));
             Assert.AreEqual("Mixtape 2", builder.OpenDeck.GetDeckName(), "Copy makes another deck, opened, with a name of its own");
@@ -213,10 +222,21 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(2, builder.Decks.Count, "Delete asks to be sure first...");
             Click(GalleryButton(builder, DeckBuilderMenu.DeleteButtonName));
             Assert.AreEqual(1, builder.Decks.Count, "...then deletes it");
+            var starter = catalog.Decks[0];
+            Click(GalleryButton(builder, DeckBuilderMenu.StarterDeckButton + starter.GetDeckName()));
+            Assert.AreSame(starter, builder.OpenDeck, "A starter deck can be looked at...");
+            Assert.IsFalse(builder.NameField.interactable, "...not changed...");
+            Click(GalleryButton(builder, DeckBuilderMenu.CopyButtonName));
+            Assert.AreEqual(2, builder.Decks.Count, "...and copied, to start a deck of your own from it");
+            CollectionAssert.AreEqual(starter.Cards, builder.OpenDeck.Cards);
+            Click(GalleryButton(builder, DeckBuilderMenu.DeleteButtonName));
+            Click(GalleryButton(builder, DeckBuilderMenu.DeleteButtonName));
+            Assert.AreSame(yourDeck, builder.OpenDeck);
+            while (yourDeck.Cards.Count >= PlayerDecks.MinDeckSize) builder.RemoveCard(yourDeck.Cards.Last(c => c.cardName != firstName));
             Click(GalleryButton(builder, DeckBuilderMenu.BackButtonName));
 
             yield return OpenSetup();
-            Assert.IsFalse(setup.Decks.Contains(yourDeck), "A deck with a card missing isn't offered");
+            Assert.IsFalse(setup.Decks.Contains(yourDeck), "A deck under 20 cards isn't offered");
             Click(SetupButton(MatchSetupMenu.BackButtonName));
             Click(TitleButton(MainMenu.DecksButtonName));
             Assert.AreSame(yourDeck, builder.OpenDeck, "The builder opens on your first deck");

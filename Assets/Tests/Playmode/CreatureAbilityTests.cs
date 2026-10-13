@@ -88,19 +88,26 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void NoU_And_ReturnToSender_BounceEnemyEffects_BackToTheirSource() {
+        public void NoU_DeflectsEnemyEffectsAtRandom_ReturnToSender_BouncesStatusesToTheirSource() {
             var mirror = With(CreatureAbility.NoU, p1, 0);
             var shrinker = With(CreatureAbility.None, p2, 0, health: 10);
             var weakling = With(CreatureAbility.None, p2, 1, health: 2);
+            game.Run(new ApplyStatusEffectAction(weakling, StatusEffectType.HeatSignature, 1, 1)); // Draws the random pick
 
             ChangeAttack(mirror, -1, p2, by: shrinker);
             Assert.AreEqual(3, mirror.Attack);
-            Assert.AreEqual(2, shrinker.Attack, "No U: back to the creature that caused it");
-            ChangeAttack(mirror, -1, p2); // A spell from hand
-            Assert.AreEqual(2, weakling.Attack, "No source creature: the caster's lowest Health creature");
+            Assert.AreEqual(3, shrinker.Attack, "No U deflects it to a random enemy creature, not to its source...");
+            Assert.AreEqual(2, weakling.Attack, "...the one with the most Heat Signature first");
+            ChangeAttack(mirror, 2, p2, by: shrinker);
+            Assert.AreEqual(3, mirror.Attack, "Raises too: every enemy stat change");
+            Assert.AreEqual(4, weakling.Attack);
+            game.Run(new ApplyStatusEffectAction(mirror, StatusEffectType.Exhausted, 1, 0, source: shrinker, controller: p2));
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(mirror, StatusEffectType.Exhausted));
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(weakling, StatusEffectType.Exhausted), "...and statuses");
             var otherMirror = With(CreatureAbility.NoU, p2, 2);
+            game.Run(new ApplyStatusEffectAction(otherMirror, StatusEffectType.HeatSignature, 1, 5));
             ChangeAttack(mirror, -1, p2, by: otherMirror);
-            Assert.AreEqual(2, otherMirror.Attack, "A bounced effect can't bounce again");
+            Assert.AreEqual(2, otherMirror.Attack, "A deflected effect can't be deflected again");
             Assert.AreEqual(3, mirror.Attack);
 
             var bouncer = With(CreatureAbility.ReturnToSender, p1, 1);

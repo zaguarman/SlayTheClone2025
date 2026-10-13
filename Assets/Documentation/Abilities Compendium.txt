@@ -7,7 +7,7 @@ General Rules:
 • Abilities Aren't Effects: A creature has at most one ability (from this compendium), but can have many triggered effects ("When this dies, ...", "Each Dawn, ..."). They are different things. Whatever switches things off says which it affects: its ability, its effects, or both.
     • Both: Abilities Disabled (Exhausted, Muted, a Jamming Field) and Deployment Time.
     • Only the ability: Signal Jammer.
-    • Both, by standing on it: Scorched Earth (entry effects included). The creature can still move and attack.
+    • Both, by standing on it: Scorched Earth (entry effects wait until it's off the slot). The creature can still move and attack.
 • Switched Off, Not Removed: Abilities Disabled effects (Muted, Exhausted, Deployment Time, a Jamming Field, Signal Jammer) switch an ability off while they last. The creature still has it.
 • Stat Changes vs. Statuses: Abilities that react to stat changes only affect stat modifications (Temporary and Persistent). A status's own stat change (Chill, Heavy, Addicted...) is part of the status and isn't affected, unless the ability says otherwise (Underground does).
 • Bouncing Effects: When an ability sends an effect back to "the creature that caused it" and there is no such creature (a Spell from hand, or it has left play), the effect goes to the caster's creature with the lowest current Health, ties broken randomly. If the caster has no creatures, the effect fails. Area effects bounce one creature at a time. An effect can only be bounced once (see GDD 5.2 Status Effects - Bounces and Chains).
@@ -17,7 +17,7 @@ Resolution Order for a Stat Change:
 When a stat modification targets a creature, it goes through these steps in order:
     1. Bypass: If the source has Zero-Day, the target's defensive abilities are ignored, except Cold Storage.
     2. Block: Unbothered, Cold Storage, Too Mainstream, Cognitive Dissonance and Imposter Syndrome can stop it here.
-    3. Reflect: No U sends it back to its source, where it starts again from step 1.
+    3. Reflect: No U deflects it to a random creature on the enemy's side, where it starts again from step 1.
     4. Transform: Contrarian reverses it, then Extremist doubles it.
     5. Apply.
     6. React: Spite triggers.
@@ -52,8 +52,8 @@ Unbothered
 No U
     Inspired by: Mirror Armor (Corviknight)
     Type: Passive, Defensive
-    Description: "Enemy effects that would lower this creature's stats bounce back to the creature that caused them."
-    Notes: A Spell from hand bounces to the caster's creature with the lowest current Health (see Bouncing Effects). A bounced effect can't bounce again.
+    Description: "Enemy stat changes and statuses that land on this creature bounce to a random enemy creature."
+    Notes: Every enemy stat change, raises included, and every enemy status. Deflected at random, picked like a Random effect (the one with the most Heat Signature first), never necessarily back to the one that sent it. A deflected effect lands on its sender's side, so it can't bounce again.
     Answers: Debuff it from a creature you don't mind weakening, or use damage instead of debuffs. Zero-Day ignores it.
 
 Spite
@@ -142,7 +142,7 @@ Return to Sender
     Inspired by: Magic Bounce (Espeon)
     Type: Passive, Defensive
     Description: "Statuses applied to this creature by enemy effects bounce back to the creature that sent them."
-    Notes: A Spell from hand (or a creature no longer in play) bounces to a random creature on the caster's side, picked like a Random effect: the one with the most Heat Signature first (No U still picks the lowest Health). A bounced status can't bounce again. Friendly statuses apply normally.
+    Notes: A Spell from hand (or a creature no longer in play) bounces to a random creature on the caster's side, picked like a Random effect: the one with the most Heat Signature first (No U deflects every enemy status at random, whoever sent it). A bounced status can't bounce again. Friendly statuses apply normally.
     Answers: Use damage or stat changes instead of statuses, or send the status from a creature that can take it. Zero-Day ignores it.
 
 Undercover

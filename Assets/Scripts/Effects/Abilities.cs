@@ -73,7 +73,7 @@ namespace SlayTheClone {
             CreatureAbility.Contrarian => "stat changes on it are reversed",
             CreatureAbility.Extremist => "stat changes on it are doubled",
             CreatureAbility.Unbothered => "enemy effects can't lower its stats",
-            CreatureAbility.NoU => "enemy effects that would lower its stats bounce back",
+            CreatureAbility.NoU => "enemy stat changes and statuses that land on it bounce to a random enemy creature",
             CreatureAbility.Spite => "when an effect lowers its stats, friendly or enemy, +2 Attack",
             CreatureAbility.Underground => "in combat, ignores the other creature's stat changes",
             CreatureAbility.TooMainstream => "immune to effects that affect more than one creature",
@@ -176,10 +176,11 @@ namespace SlayTheClone {
                     }
                 }
 
-                // 3. Reflect: No U sends it back to its source, where it starts again
-                if (change.IsEnemy && change.Lowers && !change.Bounced && Defends(target, CreatureAbility.NoU, change.Source)) {
-                    var bounceTo = BounceTarget(change.Source, change.Controller);
-                    Log($"{target.Name}'s No U sends the stat change back to {bounceTo?.Name ?? "nobody (it fails)"}", LogTag.Effects);
+                // 3. Reflect: No U deflects any enemy stat change to a random creature on the enemy's side (Heat first), where
+                // it starts again
+                if (change.IsEnemy && !change.Bounced && Defends(target, CreatureAbility.NoU, change.Source)) {
+                    var bounceTo = BounceTarget(null, change.Controller, atRandom: true);
+                    Log($"{target.Name}'s No U deflects the stat change to {bounceTo?.Name ?? "nobody (it fails)"}", LogTag.Effects);
                     if (bounceTo == null) return null;
                     change.Target = bounceTo;
                     change.Bounced = true;

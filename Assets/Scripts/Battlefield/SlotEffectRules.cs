@@ -19,15 +19,18 @@ namespace SlayTheClone {
             mediator?.NotifyBattlefieldStateChanged(slot.Owner);
         }
 
-        public static void Remove(BoardSlot slot, IGameMediator mediator) {
+        /// <summary>Takes the effect off. A creature whose entry effects Scorched Earth held back gets them now (with a queue).</summary>
+        public static void Remove(BoardSlot slot, IGameMediator mediator, IActionsQueue actionsQueue = null) {
             if (slot?.Effect == null) return;
             Log($"Removed {slot.Effect} from {slot}", LogTag.Effects);
             slot.Effect = null;
             mediator?.NotifyBattlefieldStateChanged(slot.Owner);
+            slot.OccupyingCreature?.ReleaseHeldEntryEffects(actionsQueue);
         }
 
         /// <summary>A creature entered the slot: summoned there, or moved in by any means.</summary>
         public static void OnEnter(ICreature creature, BoardSlot slot, ActionExecutionContext context) {
+            creature?.ReleaseHeldEntryEffects(context.ActionsQueue); // Moved off Scorched Earth: its entry effects happen now
             if (creature == null || slot?.Effect?.Type != SlotEffectType.Landmine) return;
             Trigger(slot, context, $"{creature.Name} steps on a Landmine", new DamageCreatureAction(creature, slot.Effect.Value));
         }
@@ -41,7 +44,7 @@ namespace SlayTheClone {
         // The effect is queued as an environment action, and a "1 Trigger" effect is removed (and so revealed) right away
         private static void Trigger(BoardSlot slot, ActionExecutionContext context, string what, IGameAction effect) {
             Log($"{what} ({slot})", LogTag.Effects);
-            if (slot.Effect.IsOneTrigger) Remove(slot, context.GameMediator);
+            if (slot.Effect.IsOneTrigger) Remove(slot, context.GameMediator, context.ActionsQueue);
             using (context.ActionsQueue.QueueingEnvironment()) {
                 context.ActionsQueue.AddAction(effect);
             }
@@ -50,14 +53,15 @@ namespace SlayTheClone {
         /// <summary>Temporal Shield: the creature standing on it takes no combat damage.</summary>
         public static bool BlocksCombatDamage(ICreature creature) => creature?.Slot?.Effect?.Type == SlotEffectType.TemporalShield;
 
-        /// <summary>Scorched Earth: the triggered effects of the creature standing on it don't happen, entry effects included,
-        /// and its ability is switched off (see Abilities). It can still move and attack.</summary>
+        /// <summary>Scorched Earth: the triggered effects of the creature standing on it don't happen, and its ability is
+        /// switched off (see Abilities). Its entry effects wait until it's off the slot (moved, or the effect ended). It can
+        /// still move and attack.</summary>
         public static bool SuppressesTriggeredEffects(ICreature creature) => creature?.Slot?.Effect?.Type == SlotEffectType.ScorchedEarth;
 
         /// <summary>At Dusk: Slot Effects whose Days ran out are removed.</summary>
-        public static void ProcessEndOfTurn(IEnumerable<IPlayer> players, int endedTurn, IGameMediator mediator) {
+        public static void ProcessEndOfTurn(IEnumerable<IPlayer> players, int endedTurn, IGameMediator mediator, IActionsQueue actionsQueue = null) {
             foreach (var slot in players.Where(p => p?.Battlefield != null).SelectMany(p => p.Battlefield)) {
-                if (slot.Effect != null && slot.Effect.HasExpired(endedTurn + 1)) Remove(slot, mediator);
+                if (slot.Effect != null && slot.Effect.HasExpired(endedTurn + 1)) Remove(slot, mediator, actionsQueue);
             }
         }
     }

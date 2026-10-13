@@ -114,6 +114,7 @@ Dusk (End of Day)
 
 Encrypted (Counter-Intelligence)
     • What it is: Protection for a creature's actions. Watchdogs ignore actions from an Encrypted creature, and no charge is spent.
+    • Who uses it: the factions that run on computers: Shadow Ops., Digital Society, Corporate, Statecraft and Zeitgeist. A good status: a Cleanse leaves it, a Purge removes it.
 
 • Fixed Targeting / Fixed: (Targeting Keyword Prefix):
     • What it is: Aims an effect at whatever creature is in a chosen slot when the action resolves. The default for effects aimed at an enemy slot.
@@ -341,7 +342,7 @@ All creature and spell cards come from one big shared pool, and abilities work t
 
 Every card belongs to exactly one faction: Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, or Utopia.
 You can (and should!) mix cards from different factions when building your deck, similar to color combinations in Magic: The Gathering. Faction themes, mechanics and matchups are described in the 'Faction Compendium'.
-• Deck Builder (until runs exist): the main menu's Decks screen makes decks from any cards on offer, mixing factions freely: 20 cards, at most 2 copies of each. Decks are saved as they change. Once complete, the match setup offers a deck to either side, next to the starter decks. The Card Gallery shows the cards faction by faction.
+• Deck Builder (until runs exist): the main menu's Decks screen makes decks from any cards on offer, mixing factions freely: 20 to 40 cards, at most 2 copies of each. The starter decks are listed there too, to look at and copy as a start. Decks are saved as they change. Once complete, the match setup offers a deck to either side, next to the starter decks. The Card Gallery shows the cards faction by faction.
 
 • Mechanic Ownership: Every mechanic and status belongs to a faction. Its owner uses it cheaply and often; one or two other factions get it rarely and at a higher cost; nobody else gets it. A few statuses are Neutral and open to everyone.
 • Faction Costs: Each faction pays for its power in its own way, on top of Deployment Time. Mixing factions means mixing cost types.
@@ -798,7 +799,7 @@ Movement Restriction
     • Clicking anywhere outside the open Queue panel closes it.
     • Input comes from the Input System package (GameInput reads the mouse and keyboard).
     • Card frames (like Slay the Spire's attack, skill and power frames): the art window's bottom tells the card type at a glance, with no icon. A creature's comes to a point (a pennant); a spell's is a shallow arch.
-    • Keyword abilities replace effects that keep coming back, written as one word and a number: Counterattack (a creature that attacks it is hit back for its Attack), Retaliate followed by a status ("Retaliate: Exhaust", "Retaliate: Burn 2 [sand watch]3": a creature that attacks it gets that status, with those numbers), Decay X (takes X damage each Dusk), Regenerate X (heals X each Dusk), Grow X (+X/+X for good each Dawn), Second Wind (once per combat, survives a lethal hit). Only an effect that is exactly the pattern becomes the keyword; anything more is written out.
+    • Keyword abilities replace effects that keep coming back, written as one word and a number: Counterattack (a creature that attacks it is hit back for its Attack), Retaliate followed by a status ("Retaliate: Exhaust", "Retaliate: Burn 2 [sand watch]3": a creature that attacks it gets that status, with those numbers), Decay X (takes X damage each Dusk), Regenerate X (heals X each Dusk), Grow X (+X/+X for good each Dawn), Rebirth (once per combat, survives a lethal hit with 1 Health: last life a worm, this life a dog). Only an effect that is exactly the pattern becomes the keyword; anything more is written out.
     • Statuses, Slot Effects, Watchdog terms, movement and creature abilities are keywords too, printed by name without reminder text.
     • Homing: Locks onto a creature and follows it if it moves. If the creature Leaves Play, the effect is aimed at the slot it was last in. Aimed at your creature that is queued to be summoned, it locks on to it; if the summon is taken back, it is aimed at that slot. Dropped on an empty slot, it targets that slot and behaves like Fixed. Against a Concealed enemy creature, Homing behaves like Fixed that one time.
     • Fixed: Aims at a slot, but only ever affects the creature in it when the action resolves. Doesn't follow creatures. Fizzles if the creature is an invalid target. If the slot is empty, a creature-only effect fizzles and damage hits that side's player.

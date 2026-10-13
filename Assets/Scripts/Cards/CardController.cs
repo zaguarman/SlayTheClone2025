@@ -381,9 +381,10 @@ namespace SlayTheClone {
 
         #region Play Visuals
         /// <summary>
-        /// Shows the card as played-but-unresolved: translucent, pulsing, with a "QUEUED" badge.
+        /// Shows the card as played-but-unresolved: translucent, pulsing, with a "QUEUED" badge (or another word, like
+        /// "MOVING" on a move ghost).
         /// </summary>
-        public void SetQueued(bool queued, bool blockRaycasts = true, bool canBeDragged = false) {
+        public void SetQueued(bool queued, bool blockRaycasts = true, bool canBeDragged = false, string badge = "Queued") {
             IsQueued = queued;
             canDragWhileQueued = queued && canBeDragged;
             queuedPulse?.Kill();
@@ -396,7 +397,8 @@ namespace SlayTheClone {
                     .SetEase(Ease.InOutSine)
                     .SetLoops(-1, LoopType.Yoyo)
                     .SetTarget(transform);
-                if (queuedBadge == null) queuedBadge = CreateBadge("QueuedBadge", "Queued", UITheme.Gold, 0.4f, 0.6f);
+                if (queuedBadge == null) queuedBadge = CreateBadge("QueuedBadge", badge, UITheme.Gold, 0.4f, 0.6f);
+                queuedBadge.GetComponentInChildren<TextMeshProUGUI>().text = badge;
                 queuedBadge.SetActive(true);
             }
             else {

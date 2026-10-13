@@ -7,9 +7,8 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Builds the starter faction decks (Corporate, Statecraft, Zeitgeist) from the card lists below, the cards of factions
-    /// too small for a deck of their own, the two-faction decks that play them, and the Mechanics Test deck that mixes
-    /// them all to try every mechanic. It also fills the menu's deck catalog: the decks, their opponents, the test deck.
+    /// Builds a starter deck for each faction from the card lists below (the smaller factions play some cards twice), two
+    /// example two-faction decks, and the Mechanics Test deck that mixes them all to try every mechanic. It also fills the menu's deck catalog: the decks, their opponents, the test deck.
     /// They only use effects the rules already carry out; each card's designNotes say what it should become once the
     /// GDD mechanic it stands in for exists (overview in Assets/Documentation/Starter Faction Decks.txt).
     /// Cards go to Assets/Scriptables/Cards/&lt;Faction&gt;/, their art comes from Tools/generate_card_art.py.
@@ -36,14 +35,26 @@ namespace SlayTheClone {
                     "Your Group Chat", "47 unread messages. All of them are about you."),
                 Offer(Build(Faction.Utopia, "Utopia - Results May Vary", UtopiaCards(), written),
                     "A Billionaire Bound For Mars", "Will save humanity. Shipping not included."),
+                // The smaller factions: 20 cards with some of them twice
+                Offer(Build(Faction.DigitalSociety, "Digital Society - Terminally Online", Doubled(DigitalSocietyCards(),
+                        "Keyboard Warrior", "NPC", "Dogpile", "Rage Bait", "Clickbait", "Digital Nomad"), written),
+                    "Your Feed", "Curated just for you. Every post is about how wrong you are."),
+                Offer(Build(Faction.ShadowOps, "Shadow Ops. - Plausible Deniability", Doubled(ShadowOpsCards(),
+                        "Mole", "Political Decoy", "Eavesdrop", "Smoke And Mirrors", "Burn Notice"), written),
+                    "A Man Who Was Never Here", "This match isn't happening. You'll lose it anyway."),
+                Offer(Build(Faction.Tech, "Tech - Move Fast and Break Things", Doubled(TechCards(),
+                        "DDOS Attack", "Antivirus", "Script Kiddie", "Legacy Code", "End-to-End Encryption", "SysAdmin",
+                        "Meatproxy As A Service", "Technical Debt", "Scope Creep"), written),
+                    "The IT Department", "Have you tried turning your strategy off and on again?"),
+                Offer(Build(Faction.Myth, "Myth - Old Gods, New Tricks", Doubled(MythCards(),
+                        "Memento Mori", "Martyr", "Mummy", "Cultist", "Exorcism", "Excess of Bread and Wine", "Monkey Hand",
+                        "Reincarnation"), written),
+                    "The Oracle", "Saw this loss coming. Didn't warn you."),
+                Offer(Build(Faction.Mind, "Mind - All in Your Head", Doubled(MindCards(),
+                        "Mimetic Theory", "Generational Trauma", "Pessimist", "Introvert", "Schrodinger's Cat", "Red Herring",
+                        "Imposter Syndrome", "Ship of Theseus", "Scapegoating"), written),
+                    "Your Inner Critic", "Knows exactly what to say. Always the worst thing."),
             };
-
-            // Factions too small for a deck of their own: their cards play in the two-faction decks below
-            WriteCards(Faction.DigitalSociety, DigitalSocietyCards(), written);
-            WriteCards(Faction.ShadowOps, ShadowOpsCards(), written);
-            WriteCards(Faction.Tech, TechCards(), written);
-            WriteCards(Faction.Myth, MythCards(), written);
-            WriteCards(Faction.Mind, MindCards(), written);
 
             foreach (var pair in PairDecks) {
                 var deck = WriteDeck(pair.Name, pair.Cards.Select(name => written[name]).ToList(), $"{DecksFolder}/{pair.File}.asset");
@@ -56,22 +67,16 @@ namespace SlayTheClone {
             Debug.Log("Generated the faction decks, the two-faction decks and the Mechanics Test deck. Run Cards > Assign Card Art to link their art.");
         }
 
-        // Two-faction decks (Faction Compendium 5, Example Two-Faction Decks) for the factions without a deck of their own.
-        // Between them they play every card of those factions, 20 cards each.
+        // Example two-faction decks (Faction Compendium 5, Example Two-Faction Decks): pairs that play well together, 20 cards each.
+        // Panopticon: Digital Society marks the enemy with Heat Signature and Shadow Ops. reveals them, so every random
+        // effect finds its target. Prosperity Gospel: Myth's sacrifices feed Corporate's draw engine.
         private static readonly (string Name, string File, string Opponent, string Tagline, string[] Cards)[] PairDecks = {
-            ("Digital Society & Tech - The Algorithm", "TheAlgorithmDeck",
-                "The Algorithm", "Thinks you'll love this loss. People like you also lost.", new[] {
-                "Digital Nomad", "Keyboard Warrior", "NPC", "Chronically Online", "Catfish", "Conspiracy Theorist",
-                "Script Kiddie", "Legacy Code", "SysAdmin", "Meatproxy As A Service",
-                "Dogpile", "Rage Bait", "Its A Trap", "Clickbait", "Cancelled",
-                "DDOS Attack", "Antivirus", "End-to-End Encryption", "Ransomware Attack", "Man-in-the-Middle",
-            }),
-            ("Shadow Ops. & Mind - Psyop", "PsyopDeck",
-                "Your Gaslighting Ex", "That attack never happened. You're imagining things.", new[] {
-                "Political Decoy", "Mole", "Signal Jammer", "Deep Cover", "Sleeper Agent", "Whistleblower",
-                "Pessimist", "Introvert", "Schrodinger's Cat", "Roko's Basilisk",
-                "Burn Notice", "Counter-Intelligence", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "Unvoluntary Free Polonium Giveaway",
-                "Generational Trauma", "Trolley Problem", "Red Herring", "Imposter Syndrome",
+            ("Digital Society & Shadow Ops. - Panopticon", "PanopticonDeck",
+                "Your Data Broker", "Knows where you were last night. Sold it by noon.", new[] {
+                "Meta Group Chat", "Keyboard Warrior", "NPC", "Chronically Online", "Catfish", "Conspiracy Theorist",
+                "Social Panopticon", "Rage Bait", "Dogpile", "Cancelled",
+                "Control Room", "Mole", "Signal Jammer", "Deep Cover", "Sleeper Agent", "Whistleblower",
+                "Humanitarian Trafficking Action", "Eavesdrop", "Tapped Communications", "Burn Notice",
             }),
             ("Myth & Corporate - Prosperity Gospel", "ProsperityGospelDeck",
                 "The Megachurch", "Pray, pay, repeat. Salvation renews monthly.", new[] {
@@ -601,7 +606,7 @@ namespace SlayTheClone {
                 "Dead Man's Switch: when it dies, every enemy creature is Revealed for 2 Days.",
                 On(EffectTrigger.OnDeath, Status(StatusEffectType.Revealed, 2, TargetType.EnemyCreatures)))
                 .Picture("A man in a hoodie blowing a sports whistle, classified documents spilling out of every pocket."),
-            Spell("Unvoluntary Free Polonium Giveaway", TargetType.EnemyCreatures,
+            Spell("Involuntary Free Polonium Giveaway", TargetType.EnemyCreatures,
                 "A gift from an old friend. Do not open indoors.",
                 "1 damage now, then Burned for 3 Days. Future: Spontaneous Combustion.",
                 Damage(1, TargetType.EnemyCreatures), Status(StatusEffectType.Burned, 3, TargetType.EnemyCreatures, potency: 1))
@@ -665,6 +670,16 @@ namespace SlayTheClone {
                 "A Monitored Watchdog: the next enemy spell is redirected to a random creature. 1 charge.",
                 CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Spell, side = WatchdogSide.Enemy, effect = WatchdogEffect.Redirect, charges = 1 }, TargetType.Enemy))
                 .Picture("A man squeezed on a park bench between two lovers, holding both of their phones and reading their texts."),
+            Creature("Technical Debt", 3, 4, speed: 2, deploy: 0,
+                "Ship it now. Someone will fix it later. You are someone.",
+                "Decay 1: strong today, it pays for it every Dusk.",
+                On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
+                .Picture("A laptop held together with duct tape and a TODO sticky note, beside an empty, cracked piggy bank, the dashed outlines of the missing banknotes floating above."),
+            Creature("Scope Creep", 1, 2, speed: 1, deploy: 1,
+                "Just one more small feature. And one more.",
+                "Grow 1: it gets bigger every Dawn, like the project.",
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
+                .Picture("A creep in a trench coat and a low hat peering through a brass spyglass at a SCOPE checklist whose lines keep getting longer."),
         };
 
         // Myth: slow and inevitable; creatures die and pay off
@@ -725,6 +740,12 @@ namespace SlayTheClone {
                 "5 damage to a random friendly creature, then draw 2. Future: Myth's sacrifice cost (destroy a friendly creature).",
                 Damage(5, TargetType.FriendlyCreatures, AtRandom), Draw(2))
                 .Picture("Hooded figures chanting around a chalk pentagram, offering a rubber chicken on the altar."),
+            Creature("Reincarnation", 1, 1, speed: 2, deploy: 0,
+                "Last life, a worm. This life, a good boy. Next life: depends how this one goes.",
+                "Rebirth (once per combat it survives death with 1 Health) and Grow 1: each life a little better.",
+                OncePerCombat(On(EffectTrigger.OnAboutToDie, Heal(1, TargetType.Self))),
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
+                .Picture("The Buddhist wheel of rebirth glowing in a temple: a pink worm on the left, a happy brown dog on the right, a dashed arrow arching from the worm's life to the dog's, a lotus between them."),
         };
 
         // Mind: wins without raw damage
@@ -774,6 +795,16 @@ namespace SlayTheClone {
                 "-2 Attack for good. Future: the Imposter Syndrome status.",
                 Buff(-2, TargetType.EnemyCreatures, attack: true, health: false))
                 .Picture("A little space crewmate in a spacesuit and visor sitting at an office desk under a SENIOR ENGINEER name plate, sweating."),
+            Creature("Ship of Theseus", 2, 3, speed: 1, deploy: 0,
+                "Every plank replaced. Still the same ship. Probably.",
+                "Regenerate 1: it repairs itself plank by plank.",
+                On(EffectTrigger.EndOfTurn, Heal(1, TargetType.Self)))
+                .Picture("A wooden ship on calm water, half its hull planks old and dark, half new and pale, its sail half patched and half new, a hammer still at work and a big question mark in the sky."),
+            Spell("Scapegoating", TargetType.EnemyCreatures,
+                "It wasn't us. It was the goat. Everyone agrees it was the goat.",
+                "Heat Signature 2 on target creature (random effects and redirected attacks go to it), and draw a card. Mind deals no damage: it makes someone else's damage find the goat.",
+                Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2), Draw(1))
+                .Picture("A bewildered white goat standing in the middle while pointing fingers close in on it from every side."),
         };
         #endregion
 
@@ -999,6 +1030,16 @@ namespace SlayTheClone {
             action.modifySpeed = false;
             action.statusDuration = days;
             return action;
+        }
+
+        // A faction's own deck of 20 from fewer cards: these go in twice (2 copies at most, as in the deck builder)
+        private static List<CardDef> Doubled(List<CardDef> cards, params string[] names) {
+            foreach (string name in names) {
+                var card = cards.SingleOrDefault(c => c.Name == name);
+                if (card == null) Debug.LogError($"No card named {name} to put in twice");
+                else card.Copies(2);
+            }
+            return cards;
         }
 
         private static CardEffect OncePerCombat(CardEffect effect) {

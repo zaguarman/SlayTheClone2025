@@ -55,8 +55,8 @@ namespace SlayTheClone {
             Add("Retaliate", "Retaliate followed by a status, like [Exhausted|exhaust] or [Burned|Burn] 2: when a creature attacks this one, that status lands on the attacker, with the numbers shown.");
             Add("Decay", "Decay X: takes X damage at each [Dusk].");
             Add("Regenerate", "Regenerate X: heals X at each [Dusk].");
-            Add("Grow", "Grow X: +X Attack and +X Health for good at each [Dawn].");
-            Add("Second Wind", "Once per combat, when this would die, it survives instead.");
+            Add("Grow", "Grow X (no number: 1): +X Attack and +X Health for good at each [Dawn].");
+            Add("Rebirth", "Once per combat, when this would die, it's reborn instead: it survives with 1 Health. The wheel turns: last life a worm, this life a dog.");
             Add("Summon", "Summon X (no number: 1): X random creatures from your deck enter your empty slots.");
 
             // ---------------------------------------------------------------- Movement
@@ -66,7 +66,7 @@ namespace SlayTheClone {
 
             // ---------------------------------------------------------------- Creature stats and states
             group = "Stats";
-            Add("Armor", "Absorbs damage before Health. Fades by 1 each [Dusk].");
+            Add("Armor", "Armor X (no number: 1): absorbs X damage before Health. Fades by 1 each [Dusk].");
             Add("Health Loss", "Lowers Health directly. It isn't damage, so [Armor] doesn't stop it.");
             Add("Exposed", "Takes +1 damage from each hit.");
 
@@ -102,7 +102,7 @@ namespace SlayTheClone {
             Add("Landmine", "Landmine X: hidden. The next creature to enter the slot takes X damage.");
             Add("Barbed Snare", "Barbed Snare X: hidden. The next creature to leave the slot takes X damage.");
             Add("Temporal Shield", "Temporal Shield X (no number: 1): for X [Days], the creature in the slot takes no combat damage.");
-            Add("Scorched Earth", "The creature in the slot can't use its ability or trigger its effects. It can still move and attack.");
+            Add("Scorched Earth", "The creature in the slot can't use its ability or trigger its effects. Its [Arrival] effects wait until it's off the slot. It can still move and attack.");
 
             // ---------------------------------------------------------------- Trends
             group = "Trends";

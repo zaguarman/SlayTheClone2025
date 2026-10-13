@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
-  m_Name: UnvoluntaryFreePoloniumGiveaway
+  m_Name: InvoluntaryFreePoloniumGiveaway
   m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
   cardId: 2e0bbb2e-3c67-4405-8a33-a0bdb972c456
-  cardName: Unvoluntary Free Polonium Giveaway
+  cardName: Involuntary Free Polonium Giveaway
   description: A gift from an old friend. Do not open indoors.
   cardType: 1
   faction: 3

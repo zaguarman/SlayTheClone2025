@@ -117,8 +117,9 @@ namespace SlayTheClone {
         }
 
         // Random: one of the creatures it can affect, picked when it happens. Heat Signature draws it: if any of them has
-        // Heat, it goes to the one with the most (see HeatRules); otherwise to any of them, equally likely. A random Reveal
-        // only picks among the creatures that still hide something from its caster. No creature to pick: it fizzles.
+        // Heat, it goes to the one with the most (see HeatRules); otherwise to any of them, equally likely. Random damage
+        // is drawn from both sides: the hottest creature anywhere takes it, even the caster's own. A random Reveal only
+        // picks among the creatures that still hide something from its caster. No creature to pick: it fizzles.
         private static List<ITarget> PickAtRandom(ICard source, IPlayer controller, EffectAction action, IActionsQueue queue) {
             var candidates = TargetingSystem.GetValidTargets(controller, action.targetType).ToList();
             if (action.actionType == ActionType.Reveal) {
@@ -128,7 +129,9 @@ namespace SlayTheClone {
                 Log($"{source.Name}: no creature to pick for its random {action.actionType}; it fizzles", LogTag.Effects);
                 return candidates;
             }
-            var hottest = HeatRules.Hottest(source as ICreature, candidates.OfType<ICreature>());
+            var hottest = action.actionType == ActionType.Damage
+                ? HeatRules.Hottest(source as ICreature, controller)
+                : HeatRules.Hottest(source as ICreature, candidates.OfType<ICreature>());
             return new List<ITarget> { hottest ?? candidates[GameRandom.Next(candidates.Count)] };
         }
 

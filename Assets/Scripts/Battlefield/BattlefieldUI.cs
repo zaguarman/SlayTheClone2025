@@ -590,7 +590,7 @@ namespace SlayTheClone {
                 if (ghost == null) continue;
                 ghost.name = $"MoveGhost_{creature.Name}";
                 ghost.transform.localRotation = Quaternion.identity;
-                ghost.SetQueued(true, blockRaycasts: false);
+                ghost.SetQueued(true, blockRaycasts: false, badge: "Moving");
                 ghost.SetAnonymous(FogOfWar.HidesIdentity(Viewer, creature));
                 // Someone stands there now (it leaves first): lift the ghost so both stay visible
                 float raise = slot.OccupyingCard != null || queuedGhosts.ContainsKey(slot) ? ((RectTransform)ghost.transform).rect.height * ReplacingGhostRaise : 0f;

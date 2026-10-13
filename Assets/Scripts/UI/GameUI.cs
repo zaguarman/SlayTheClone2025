@@ -141,7 +141,7 @@ namespace SlayTheClone {
         }
 
         #region Fog of War (debug switch)
-        private TMPro.TextMeshProUGUI fogOffLabel;
+        private TMPro.TextMeshProUGUI shortcutsLabel;
 
         private void Update() {
             if (!IsInitialized) return;
@@ -158,29 +158,27 @@ namespace SlayTheClone {
             gameMediator.NotifyActionsQueueChanged();
         }
 
-        // While the fog is off, or the screen shows player 2's view, a reminder under the End Turn button says so
+        /// <summary>The note under the End Turn button: the debug switches' state, and the keyboard shortcuts.</summary>
+        public string ShortcutsText =>
+            $"FOG OF WAR {(FogOfWar.Enabled ? "ON" : "OFF")} ({FogOfWar.ToggleKey})\n" +
+            (FogOfWar.PlaysAsPlayer1 ? $"{FogOfWar.SwitchSidesKey}: PLAY AS PLAYER 2" : $"PLAYING AS PLAYER 2 ({FogOfWar.SwitchSidesKey})") +
+            "\n<size=85%><color=#B8B0A0>Esc: menu  ·  Shift + drag: use an ability</color></size>";
+
+        // Always shown under the End Turn button: whether the fog is on, whose view it is, and the other shortcuts
         private void ShowFogOfWarState() {
-            if (FogOfWar.Enabled && FogOfWar.PlaysAsPlayer1) {
-                if (fogOffLabel != null) fogOffLabel.gameObject.SetActive(false);
-                return;
-            }
-            if (fogOffLabel == null) {
+            if (shortcutsLabel == null) {
                 var endTurn = gameReferences.GetResolveActionsButton();
                 if (endTurn == null) return;
-                fogOffLabel = UITheme.NewText("FogOfWarOff", endTurn.transform, $"FOG OF WAR OFF (debug, {FogOfWar.ToggleKey})", 18f, UITheme.Gold,
-                    TMPro.TextAlignmentOptions.Top);
-                var rect = fogOffLabel.rectTransform;
-                rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0f);
-                rect.pivot = new Vector2(0.5f, 1f);
-                rect.sizeDelta = new Vector2(320f, 28f);
+                shortcutsLabel = UITheme.NewText("Shortcuts", endTurn.transform, "", 20f, UITheme.Gold, TMPro.TextAlignmentOptions.TopRight);
+                var rect = shortcutsLabel.rectTransform;
+                rect.anchorMin = rect.anchorMax = new Vector2(1f, 0f); // Lined up with the button's right edge: it stays on screen
+                rect.pivot = new Vector2(1f, 1f);
+                rect.sizeDelta = new Vector2(420f, 80f);
                 rect.anchoredPosition = new Vector2(0f, -6f);
-                fogOffLabel.raycastTarget = false;
+                shortcutsLabel.raycastTarget = false;
             }
-            var notes = new System.Collections.Generic.List<string>();
-            if (!FogOfWar.Enabled) notes.Add($"FOG OF WAR OFF ({FogOfWar.ToggleKey})");
-            if (!FogOfWar.PlaysAsPlayer1) notes.Add($"PLAYING AS PLAYER 2 ({FogOfWar.SwitchSidesKey})");
-            fogOffLabel.text = string.Join("  ·  ", notes) + " (debug)";
-            fogOffLabel.gameObject.SetActive(true);
+            shortcutsLabel.text = ShortcutsText;
+            shortcutsLabel.gameObject.SetActive(true);
         }
         #endregion
 

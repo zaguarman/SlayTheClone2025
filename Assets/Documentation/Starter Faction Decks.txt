@@ -6,14 +6,14 @@ CONTENTS
 4. Statecraft: Order & Paperwork
 5. Zeitgeist: Moods of Modern Life
 6. Mechanics Test Cards & Deck
-7. Two-Faction Decks
+7. The Smaller Factions' Decks, and Two Example Pairs
 8. Utopia: Results May Vary
 9. Next Steps
 
 
 1. PURPOSE
 
-• Four monofaction decks: all four have 20 different cards. No copies yet. Three two-faction decks of 20 play the factions that don't have a deck of their own (section 7).
+• Nine monofaction decks of 20: Corporate, Statecraft, Zeitgeist and Utopia with 20 different cards; Digital Society, Shadow Ops., Tech, Myth and Mind with some cards twice (section 7). Two example two-faction decks of 20 (section 7).
 • Every card name comes from the 'Brainstorm List' or the 'Refined Brainstorm List', picking the most cynical ones. Margin Call is the exception: a Corporate staple added on purpose.
 • Cards only use what the engine already does: damage, healing, armor, draws, summoning from the deck, stat changes (ModifyStat), the Exhausted stun, and, for the cards in section 6, Doomed, Burn, Health Loss, Leapfrog and Swap.
 • Slot Effects are used by Lost Landmine and Ceasefire, Deployment Time delays by Red Tape. Watchdogs only by the test cards in section 6. No control changes or Locations yet.
@@ -253,9 +253,24 @@ Spells
     • Plot Armor (Zeitgeist, 2/2/2, 0): Once per combat, when this would die, heal it for 1 (it survives). The use is gone for the rest of the combat, even after a reshuffle.
 
 
-7. TWO-FACTION DECKS
+7. THE SMALLER FACTIONS' DECKS, AND TWO EXAMPLE PAIRS
 
-Digital Society, Shadow Ops., Tech, Myth and Mind don't have enough cards for a deck of their own yet (8 to 12 each), so they play in pairs taken from the Faction Compendium's Example Two-Faction Decks. Between them, these three decks play every card of those factions, 20 cards each. Each has its own opponent in the main menu, and the deck's main faction (the one with more cards) dresses the table. When a faction has enough cards it can get a deck of its own. Cards marked (new) were added on 2026-10-13; their Design Notes say what they do and what they should become.
+Since 2026-10-13 Digital Society, Shadow Ops., Tech, Myth and Mind each have a deck of their own: their 11 to 15 cards, some of them twice (2 copies at most, as in the deck builder), 20 in all. Each has its own opponent in the main menu:
+• Digital Society - Terminally Online (Your Feed, "Curated just for you. Every post is about how wrong you are."). Twice: Keyboard Warrior, NPC, Dogpile, Rage Bait, Clickbait, Digital Nomad.
+• Shadow Ops. - Plausible Deniability (A Man Who Was Never Here, "This match isn't happening. You'll lose it anyway."). Twice: Mole, Political Decoy, Eavesdrop, Smoke And Mirrors, Burn Notice.
+• Tech - Move Fast and Break Things (The IT Department, "Have you tried turning your strategy off and on again?"). Every card twice but Ransomware Attack and Man-in-the-Middle.
+    (new) Technical Debt (3/4/2, 0): Decay 1. Strong today, it pays every Dusk. Scope Creep (1/2/1, 1): Grow. It gets bigger every Dawn, like the project.
+• Myth - Old Gods, New Tricks (The Oracle, "Saw this loss coming. Didn't warn you."). Twice: Memento Mori, Martyr, Mummy, Cultist, Exorcism, Excess of Bread and Wine, Monkey Hand, Reincarnation.
+    (new) Reincarnation (1/1/2, 0): Rebirth and Grow. Last life a worm, this life a dog.
+• Mind - All in Your Head (Your Inner Critic, "Knows exactly what to say. Always the worst thing."). Every card twice but Roko's Basilisk and Trolley Problem.
+    (new) Ship of Theseus (2/3/1, 0): Regenerate 1. Scapegoating: Heat Signature 2 on target creature, draw a card (Mind makes someone else's damage find the goat).
+
+Two pairs stay as examples of factions that play well together (Faction Compendium, Example Two-Faction Decks). The deck's main faction (the one with more cards) dresses the table:
+• Digital Society & Shadow Ops. - Panopticon (opponent: Your Data Broker, "Knows where you were last night. Sold it by noon."): Digital Society marks the enemy with Heat Signature (Meta Group Chat, Social Panopticon, Cancelled), Shadow Ops. reveals them (Control Room, Eavesdrop, Whistleblower), and every random effect finds its target.
+    • Digital Society: Meta Group Chat, Keyboard Warrior, NPC, Chronically Online, Catfish, Conspiracy Theorist, Social Panopticon, Rage Bait, Dogpile, Cancelled.
+    • Shadow Ops.: Control Room, Mole, Signal Jammer, Deep Cover, Sleeper Agent, Whistleblower, Humanitarian Trafficking Action, Eavesdrop, Tapped Communications, Burn Notice.
+
+The cards of the earlier pairs (The Algorithm, Psyop), as they were added on 2026-10-13; their Design Notes say what they do and what they should become:
 
 • Digital Society & Tech - The Algorithm (opponent: The Algorithm, "Thinks you'll love this loss. People like you also lost.")
     • Digital Society: Digital Nomad, Keyboard Warrior, NPC, Chronically Online, Dogpile, Rage Bait, Its A Trap.
@@ -264,7 +279,7 @@ Digital Society, Shadow Ops., Tech, Myth and Mind don't have enough cards for a 
       (new) SysAdmin (1/4/1, 1): each Dawn, cleanses your creatures. Meatproxy As A Service (0/3/1, 1): each Dawn, draw a card and take 1 damage. Ransomware Attack: Exhausted, and you draw a card. Man-in-the-Middle: Watchdog, redirects the next enemy spell.
 • Shadow Ops. & Mind - Psyop (opponent: Your Gaslighting Ex, "That attack never happened. You're imagining things.")
     • Shadow Ops.: Political Decoy, Mole, Signal Jammer, Deep Cover, Sleeper Agent, Burn Notice, Counter-Intelligence, Smoke And Mirrors, Eavesdrop, Tapped Communications.
-      (new) Whistleblower (1/2/3, 0): when it dies, every enemy creature is Revealed. Unvoluntary Free Polonium Giveaway: 1 damage, then Burned for 3 Days.
+      (new) Whistleblower (1/2/3, 0): when it dies, every enemy creature is Revealed. Involuntary Free Polonium Giveaway: 1 damage, then Burned for 3 Days.
     • Mind: Pessimist, Introvert, Generational Trauma.
       (new) Schrodinger's Cat (1/2/2, 1): survives one lethal hit per combat. Roko's Basilisk (0/5/1, 1): each Dawn, Exhausts a random enemy creature. Trolley Problem: Health Loss 3 on a random enemy, 1 on a random friend. Red Herring: Watchdog, redirects the next enemy attack. Imposter Syndrome: -2 Attack for good.
 • Myth & Corporate - Prosperity Gospel (opponent: The Megachurch, "Pray, pay, repeat. Salvation renews monthly.")

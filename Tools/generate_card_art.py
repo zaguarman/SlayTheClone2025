@@ -3516,6 +3516,127 @@ def we_are_not_the_same():
     return svg(defs, body)
 
 
+def reincarnation():
+    # The wheel of rebirth: a worm on the left, a dog on the right, an arrow arching from one life to the next
+    defs, body = bg_myth()
+    wheel = circle(176, 92, 58, "none", 'stroke="#f2c84a" stroke-width="6" opacity="0.55"') + circle(176, 92, 12, "#f2c84a", 'opacity="0.55"')
+    for k in range(8):
+        a = k * math.pi / 4
+        x, y = 176 + 58 * math.cos(a), 92 + 58 * math.sin(a)
+        wheel += stroke(f"M176 92 L{x:.1f} {y:.1f}", "#f2c84a", 4, 'opacity="0.55"')
+        wheel += circle(176 + 70 * math.cos(a), 92 + 70 * math.sin(a), 6, "#f2c84a", 'opacity="0.55"')
+    body += wheel
+    body += rect(0, 168, W, 32, "#5a3e24") + ellipse(86, 170, 50, 8, "#3e2a18")
+    # The worm, last life
+    body += stroke("M50 166 C 58 146 74 146 80 160 C 86 172 100 172 106 156 C 110 146 120 146 124 152", "#e88aa0", 12)
+    body += stroke("M60 154 L62 160 M74 150 L76 157 M92 166 L93 160", "#c86a80", 2)
+    body += circle(124, 150, 7, "#e88aa0") + circle(126, 148, 1.8, "#222")
+    # The arrow from one life to the next
+    body += path("M110 112 C 140 40 220 40 244 98", "none", 'stroke="#fff3c8" stroke-width="5" stroke-dasharray="10 6"')
+    body += poly([(234, 96), (252, 108), (252, 88)], "#fff3c8")
+    # The dog, this life
+    dog = "#c8873e"
+    body += ellipse(270, 154, 36, 22, dog) + rect(246, 158, 12, 22, dog, 'rx="5"') + rect(282, 158, 12, 22, dog, 'rx="5"')
+    body += path("M302 150 C 322 140 326 120 318 112", "none", f'stroke="{dog}" stroke-width="8" stroke-linecap="round"')
+    body += circle(248, 124, 24, dog)
+    body += path("M228 110 C 218 120 220 142 230 146 C 236 132 236 118 228 110 Z", "#8a5424")
+    body += path("M268 110 C 278 120 276 142 266 146 C 260 132 260 118 268 110 Z", "#8a5424")
+    body += ellipse(240, 136, 12, 9, "#f2d2a0") + ellipse(238, 130, 5, 4, "#222")
+    body += circle(240, 118, 3.5, "#222") + circle(256, 118, 3.5, "#222") + circle(241, 117, 1.2, "#fff") + circle(257, 117, 1.2, "#fff")
+    body += path("M236 142 Q 240 158 246 142 Z", "#e8607a")
+    body += ellipse(176, 182, 26, 7, "#f4a8c0", 'opacity="0.85"') + path("M162 182 Q 176 160 190 182 Z", "#f8c8d8")  # A lotus between them
+    return svg(defs, body)
+
+
+def technical_debt():
+    # Ship it now, pay later: a duct-taped laptop beside an empty, cracked piggy bank and the dashed shapes of the
+    # banknotes that are missing, a sticky note reading TODO
+    defs, body = bg_tech()
+    body += rect(0, 170, W, 30, "#2a2f2c")
+    body += rect(40, 104, 120, 70, "#3a3f46", 'rx="5"') + rect(48, 112, 104, 54, "#0d1f1a")
+    for k in range(4):
+        body += rect(56, 120 + k * 11, 40 + (k * 23) % 44, 4, "#3fbf8a", 'opacity="0.8"')
+    body += rect(28, 172, 144, 8, "#2a2f36", 'rx="3"')
+    body += group(rect(-40, -6, 80, 12, "#b8b8b0", 'opacity="0.9"'), "translate(100 112) rotate(-28)")
+    body += group(rect(-40, -6, 80, 12, "#b8b8b0", 'opacity="0.9"'), "translate(100 150) rotate(22)")
+    body += rect(120, 86, 34, 30, "#ffe66a", 'transform="rotate(8 137 101)"') + lettering("TODO", 137, 96, 7, "#c0392b", width=1.4)
+    # The piggy bank, empty and cracked
+    body += ellipse(262, 140, 58, 40, "#f29ab0", 'stroke="#b8607a" stroke-width="3"')
+    body += circle(318, 140, 14, "#f29ab0", 'stroke="#b8607a" stroke-width="3"') + circle(314, 138, 2.5, "#7a2a40") + circle(322, 138, 2.5, "#7a2a40")
+    body += poly([(232, 104), (242, 86), (250, 104)], "#f29ab0") + circle(286, 126, 3, "#222")
+    body += rect(226, 172, 12, 18, "#f29ab0") + rect(286, 172, 12, 18, "#f29ab0")
+    body += rect(250, 102, 26, 5, "#7a2a40", 'rx="2"')
+    body += stroke("M236 150 L250 140 L244 130 L258 122", "#7a2a40", 2.5)
+    for x, y, r in ((190, 40, -8), (250, 30, 10), (300, 58, -14)):  # The banknotes that aren't there
+        body += group(rect(-24, -12, 48, 24, "none", 'stroke="#9af0c8" stroke-width="2" stroke-dasharray="5 4"')
+                      + lettering("$", 0, -6, 12, "#9af0c8", width=1.6), f"translate({x} {y}) rotate({r})")
+    return svg(defs, body)
+
+
+def scope_creep():
+    # A creep in a trench coat peering through a brass spyglass at a feature list that keeps growing
+    defs, body = bg_tech()
+    body += rect(196, 18, 140, 164, "#f4f1e6", 'rx="4" stroke="#8a8a80" stroke-width="2"')
+    body += lettering("SCOPE", 266, 26, 9, "#2a2f36", width=1.6)
+    for k, w in enumerate((40, 50, 62, 76, 92, 110)):
+        y = 50 + k * 21
+        body += rect(208, y, 8, 8, "none", 'stroke="#2a2f36" stroke-width="1.5"') + rect(222, y + 1, min(w, 104), 6, "#9aa4b0")
+    body += stroke("M300 160 L330 176 M314 154 L332 160", "#c0392b", 3)
+    body += lettering("+", 300, 150, 12, "#c0392b", width=2.4)
+    # The creep: hat brim low, collar up, eye to the spyglass
+    body += path("M40 200 C 40 140 130 140 130 200 Z", "#5a4a32")
+    body += poly([(70, 150), (86, 176), (100, 150)], "#3a2f20")
+    body += circle(86, 112, 24, SKIN[1]) + rect(56, 92, 60, 8, "#2a2418", 'rx="3"') + rect(66, 70, 40, 26, "#2a2418", 'rx="6"')
+    body += path("M62 122 C 70 140 102 140 110 122 L110 132 C 100 148 72 148 62 132 Z", "#5a4a32")
+    body += stroke("M78 114 L90 112", "#222", 3)
+    body += group(rect(0, -8, 70, 16, "#c8a040", 'rx="4" stroke="#7a5a1a" stroke-width="2"')
+                  + rect(70, -11, 28, 22, "#d8b450", 'rx="4" stroke="#7a5a1a" stroke-width="2"')
+                  + rect(-6, -6, 8, 12, "#7a5a1a"), "translate(96 110) rotate(-6)")
+    body += path("M110 160 C 120 140 140 128 150 116", "none", 'stroke="#5a4a32" stroke-width="12" stroke-linecap="round"')
+    return svg(defs, body)
+
+
+def ship_of_theseus():
+    # The same ship? Half its planks old and dark, half new and pale, a carpenter's hammer still at work
+    defs, body = bg_mind()
+    body += path("M0 170 Q 44 160 88 170 T 176 170 T 264 170 T 352 170 L352 200 L0 200 Z", "#7aa6d8", 'opacity="0.85"')
+    hull = "M60 128 L292 128 L262 176 L92 176 Z"
+    body += path(hull, "#8a5a2a", 'stroke="#4a2a12" stroke-width="3"')
+    for k in range(4):
+        y = 136 + k * 10
+        body += stroke(f"M{70 + k * 8} {y} L176 {y}", "#4a2a12", 1.5)
+        body += rect(176, y - 8, 104 - k * 8, 8, "#e8cfa0", 'stroke="#b89a6a" stroke-width="1"')
+    body += rect(172, 30, 8, 98, "#6a4a22")
+    body += path("M180 36 C 236 52 236 104 180 118 Z", "#f4ecd8", 'stroke="#b8a888" stroke-width="2"')
+    body += path("M172 40 C 120 56 120 100 172 112 Z", "#c8b48a", 'stroke="#8a7a58" stroke-width="2"')
+    body += stroke("M150 66 L162 72 M136 84 L152 86", "#8a7a58", 2)  # Patches on the old sail
+    body += group(rect(-3, 0, 6, 34, "#8a5a2a") + rect(-12, -8, 24, 10, "#555", 'rx="2"'), "translate(300 92) rotate(-30)")
+    body += lettering("?", 62, 30, 34, "#ffffff", width=4)
+    return svg(defs, body)
+
+
+def scapegoating():
+    # A bewildered goat in the middle, fingers pointing at it from every side
+    defs, body = bg_mind()
+    body += ellipse(176, 186, 70, 10, "#9a86c8", 'opacity="0.5"')
+    goat = "#f2efe6"
+    body += ellipse(176, 150, 46, 26, goat, 'stroke="#a8a090" stroke-width="2"')
+    for x in (146, 162, 190, 206):
+        body += rect(x - 4, 166, 8, 22, goat, 'stroke="#a8a090" stroke-width="1.5"')
+    body += path("M160 132 C 150 100 158 76 176 72 C 194 76 202 100 192 132 Z", goat, 'stroke="#a8a090" stroke-width="2"')
+    body += path("M162 80 C 150 60 138 58 132 66 C 142 66 150 74 158 86 Z", "#8a7a5a")
+    body += path("M190 80 C 202 60 214 58 220 66 C 210 66 202 74 194 86 Z", "#8a7a5a")
+    body += ellipse(150, 92, 12, 5, goat, 'stroke="#a8a090" stroke-width="1.5"') + ellipse(202, 92, 12, 5, goat, 'stroke="#a8a090" stroke-width="1.5"')
+    body += eye(168, 98, 6) + eye(186, 98, 6)
+    body += path("M170 126 Q 176 118 182 126", "none", 'stroke="#5a5040" stroke-width="2"')
+    body += path("M170 132 L176 150 L182 132 Z", "#d8d0c0")  # The beard
+    for x, y, a in ((28, 40, 20), (24, 120, -6), (330, 46, 160), (334, 126, 186), (90, 14, 60), (262, 14, 120)):
+        hand = (rect(-34, -8, 30, 16, SKIN[1], 'rx="6"') + rect(-6, -4, 30, 8, SKIN[1], 'rx="4"')
+                + rect(-60, -10, 28, 20, "#3d5a80"))
+        body += group(hand, f"translate({x} {y}) rotate({a})")
+    return svg(defs, body)
+
+
 def meta_group_chat():
     # A phone showing a group chat named THE JURY, gavels and skulls piling up under a blurry photo of one guy, who sweats
     # alone in the corner, outside the phone
@@ -3659,7 +3780,7 @@ CARDS = {
         "Exorcism": exorcism, "Martyr": martyr, "MementoMori": memento_mori, "Mummy": mummy, "TheHolyGrail": the_holy_grail,
     },
     "ShadowOps": {
-        "Whistleblower": whistleblower, "UnvoluntaryFreePoloniumGiveaway": polonium_umbrella,
+        "Whistleblower": whistleblower, "InvoluntaryFreePoloniumGiveaway": polonium_umbrella,
         "BurnNotice": burn_notice, "CounterIntelligence": counter_intelligence, "DeepCover": deep_cover, "Eavesdrop": eavesdrop,
         "Mole": mole, "PoliticalDecoy": political_decoy, "SignalJammer": signal_jammer, "SleeperAgent": sleeper_agent,
         "SmokeAndMirrors": smoke_and_mirrors, "TappedCommunications": tapped_communications,
@@ -3690,6 +3811,9 @@ CARDS["DigitalSociety"].update({"MetaGroupChat": meta_group_chat, "SocialPanopti
 CARDS["ShadowOps"].update({"ControlRoom": control_room, "HumanitarianTraffickingAction": humanitarian_trafficking_action})
 CARDS["Zeitgeist"].update({"NoGloveNoLove": no_glove_no_love, "WeAreNotTheSame": we_are_not_the_same})
 CARDS["Corporate"].update({"BusinessExpense": business_expense})
+CARDS["Myth"].update({"Reincarnation": reincarnation})
+CARDS["Tech"].update({"TechnicalDebt": technical_debt, "ScopeCreep": scope_creep})
+CARDS["Mind"].update({"ShipofTheseus": ship_of_theseus, "Scapegoating": scapegoating})
 
 
 def main():

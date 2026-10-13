@@ -13,10 +13,13 @@ namespace SlayTheClone {
     /// on the right, whose keywords can be clicked to read theirs, and the cards that print it (worked out from the cards
     /// themselves each time, so it follows any change to them); hover a card's name to see the card. Each tick of the mouse
     /// wheel goes to the next keyword (down) or the previous one (up), and the list follows. It opens on the first keyword.
+    /// The field above the list filters it: only the keywords whose name has what's typed stay listed (Enter shows the first).
     /// </summary>
     public class KeywordGlossaryMenu : MenuScreen {
         public const string KeywordButton = "Keyword: ";
         public const string BackButtonName = "GlossaryBackButton";
+        public const string FilterName = "KeywordFilter";
+        private const float FilterHeight = 52f;
         private const string CardLink = "card:";
         private const float ListWidth = CardGalleryMenu.SideColumnWidth; // The same as the gallery's faction list
 
@@ -26,6 +29,8 @@ namespace SlayTheClone {
         private readonly Dictionary<string, Button> buttons = new Dictionary<string, Button>();
         private readonly List<string> order = new List<string>(); // The keywords as listed, top to bottom
         private ScrollRect list;
+        private TMP_InputField filter;
+        private readonly Dictionary<string, GameObject> headings = new Dictionary<string, GameObject>();
         private CardPeek cardPeek;
         private string hoveredName; // The card whose name the pointer is on, and since when
         private float hoveredSince;
@@ -36,6 +41,10 @@ namespace SlayTheClone {
         public TMP_Text Body => body;
         /// <summary>The cards that print the keyword, as links that show the card when hovered.</summary>
         public TMP_Text UsedBy => usedBy;
+        /// <summary>The field that filters the list by name.</summary>
+        public TMP_InputField Filter => filter;
+        /// <summary>The keywords listed now, top to bottom: all of them, or those the filter leaves.</summary>
+        public List<string> Listed => order.Where(k => buttons[k].gameObject.activeSelf).ToList();
         /// <summary>The card shown while its name is hovered, if any.</summary>
         public CardController CardPreview => cardPeek?.Shown;
 
@@ -57,9 +66,26 @@ namespace SlayTheClone {
 
         /// <summary>Goes to the keyword this many entries further down the list (up for negative steps), stopping at the ends.</summary>
         public void Step(int steps) {
-            if (order.Count == 0) return;
-            int index = Mathf.Clamp(order.IndexOf(Shown) + steps, 0, order.Count - 1);
-            ShowKeyword(order[index]);
+            var listed = Listed;
+            if (listed.Count == 0) return;
+            int index = Mathf.Clamp(listed.IndexOf(Shown) + steps, 0, listed.Count - 1);
+            ShowKeyword(listed[index]);
+        }
+
+        /// <summary>Lists only the keywords whose name has the text (any case), and their sections; empty lists them all.
+        /// If the one shown is filtered out, the first one left is shown.</summary>
+        public void FilterBy(string text) {
+            text = text?.Trim() ?? "";
+            foreach (var pair in buttons) {
+                var entry = Keywords.Get(pair.Key);
+                pair.Value.gameObject.SetActive(text.Length == 0 || entry.Title.IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+            foreach (var pair in headings) {
+                pair.Value.SetActive(buttons.Any(b => b.Value.gameObject.activeSelf && Keywords.Get(b.Key).Group == pair.Key));
+            }
+            var listed = Listed;
+            if (listed.Count > 0 && !listed.Contains(Shown)) ShowKeyword(listed[0]);
+            else if (Shown != null) KeepInView(Shown);
         }
 
         // Scrolls the list just enough for the chosen keyword's button to be fully visible
@@ -124,8 +150,10 @@ namespace SlayTheClone {
             hoveredName = null;
             title = body = usedBy = null;
             buttons.Clear();
+            headings.Clear();
             order.Clear();
             list = null;
+            filter = null;
             Shown = null;
         }
 
@@ -138,8 +166,20 @@ namespace SlayTheClone {
             element.minWidth = element.preferredWidth = ListWidth;
             element.flexibleWidth = 0;
 
+            // The filter, at the top
+            filter = AddInputField(area.transform, FilterName, "Find a keyword...", FilterHeight);
+            var filterRect = (RectTransform)filter.transform;
+            filterRect.anchorMin = new Vector2(0f, 1f);
+            filterRect.anchorMax = Vector2.one;
+            filterRect.pivot = new Vector2(0.5f, 1f);
+            filterRect.offsetMin = new Vector2(14f, -14f - FilterHeight);
+            filterRect.offsetMax = new Vector2(-14f, -14f);
+            filter.onValueChanged.AddListener(FilterBy);
+            filter.onSubmit.AddListener(_ => { if (Listed.Count > 0) ShowKeyword(Listed[0]); });
+
             var viewport = NewObject("Viewport", area.transform);
             Stretch(viewport, 14);
+            ((RectTransform)viewport.transform).offsetMax = new Vector2(-14f, -14f - FilterHeight - 10f);
             viewport.AddComponent<RectMask2D>();
             viewport.AddComponent<Image>().color = Color.clear;
 
@@ -158,6 +198,7 @@ namespace SlayTheClone {
             foreach (var section in Keywords.Groups) {
                 var heading = AddText(content.transform, section, 30, AccentColor, FontStyles.Bold | FontStyles.SmallCaps, height: 44);
                 heading.alignment = TextAlignmentOptions.BottomLeft;
+                headings[section] = heading.gameObject;
                 foreach (var entry in Keywords.All.Where(e => e.Group == section)) {
                     string key = entry.Key;
                     var button = AddButton(content.transform, KeywordButton + key, entry.Title, -1, () => ShowKeyword(key));

@@ -242,6 +242,12 @@ namespace SlayTheClone.Tests {
             game.Resolve();
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(hot, StatusEffectType.Exhausted), "...and every other random effect too");
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(warm, StatusEffectType.Exhausted));
+            var mine = game.Summon(p1, game.Creature("Mine", 0, 10), 0);
+            game.Run(new ApplyStatusEffectAction(mine, StatusEffectType.HeatSignature, 1, 5));
+            game.Play(game.GiveCard(p1, scatter), p1, null);
+            game.Resolve();
+            Assert.AreEqual(8, mine.Health, "Random damage is drawn from both sides: the caster's own hotter creature takes it");
+            Assert.AreEqual(4, hot.Health);
             game.StartTurn();
             game.StartTurn();
             Assert.AreEqual(3, hot.Heat, "Persistent: it doesn't decay");

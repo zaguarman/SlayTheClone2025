@@ -129,7 +129,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void ScorchedEarth_StopsTriggeredEffects_AndTheAbility_EntryOnesLost_ItCanStillMove() {
+        public void ScorchedEarth_StopsTriggeredEffects_AndTheAbility_EntryOnesWaitTillItsOff_ItCanStillMove() {
             var spiky = game.Summon(p1, game.Creature("Spiky", 0, 10, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
             spiky.Ability = CreatureAbility.Spite;
             var hitter = game.Summon(p2, game.Creature("Hitter", 2, 10), 0);
@@ -143,7 +143,7 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(Abilities.Has(spiky, CreatureAbility.Spite), "...and so does its ability");
 
             game.Summon(p1, game.Creature("Arrival", 0, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Enemy)), 0);
-            CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Landing on Scorched Earth: no entry effect");
+            CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Landing on Scorched Earth: the entry effect waits");
 
             var lateData = game.Creature("Late", 0, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.Enemy));
             lateData.turnsUntilOperative = 1;
@@ -152,10 +152,14 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             game.StartTurn();
             Assert.IsTrue(late.IsOperative);
-            CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Becoming ready on it: no entry effect either");
+            CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Becoming ready on it: it waits too");
             game.Run(new MoveCreatureAction(late, p1.Battlefield[2], p1.Battlefield[3], p1));
-            game.StartTurn();
-            CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Lost, not delayed: moving off doesn't bring it back");
+            CollectionAssert.AreEqual(new[] { 3 }, game.History.DamageTo(p2), "Moved off the scorched slot: its entry effect happens");
+            game.Run(new CleanseSlotAction(p1.Battlefield[0]));
+            CollectionAssert.AreEqual(new[] { 3, 2 }, game.History.DamageTo(p2), "The Scorched Earth under it is gone: its entry effect happens");
+            game.Run(new MoveCreatureAction(late, p1.Battlefield[3], p1.Battlefield[2], p1));
+            game.Run(new MoveCreatureAction(late, p1.Battlefield[2], p1.Battlefield[3], p1));
+            CollectionAssert.AreEqual(new[] { 3, 2 }, game.History.DamageTo(p2), "Only once");
         }
     }
 }

@@ -176,7 +176,8 @@ Utopia: Science & the Future
 
 5. EXAMPLE TWO-FACTION DECKS
 
-• Prosperity Gospel (Myth + Corporate): Sacrifice workers, get paid in draws and stat growth.
+• Prosperity Gospel (Myth + Corporate): Sacrifice workers, get paid in draws and stat growth. (A starter deck.)
+• Panopticon (Digital Society + Shadow Ops.): Mark the enemy with Heat Signature, reveal them, and every random effect finds its target. (A starter deck.)
 • Deep State (Shadow Ops. + Statecraft): Hidden minefields plus Red Tape: the enemy is slowed down and walks into traps.
 • The Algorithm (Tech + Digital Society): Token swarms whose actions get copied and boosted.
 • Frankenstein (Utopia + Myth): Revive creatures and mutate them stronger each time.

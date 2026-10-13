@@ -17,8 +17,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e51066c80da8d2d4a813dbb0973d34e3, type: 2}
   - {fileID: 11400000, guid: df05ff4d8ab27d84cb2a2bc63757fc93, type: 2}
   - {fileID: 11400000, guid: 808aa0a871a392246a92ca31d6fc7736, type: 2}
-  - {fileID: 11400000, guid: 599dbb1f9567aa9449b2e3eea16476a1, type: 2}
-  - {fileID: 11400000, guid: 177e7386781509e41b6c9380535c0f47, type: 2}
+  - {fileID: 11400000, guid: 33bd3a1ed3d69a643b20e4d82005c25b, type: 2}
+  - {fileID: 11400000, guid: fc6d4252fcc8f9d4499a06cf7a2a95c0, type: 2}
+  - {fileID: 11400000, guid: 77e785c31491a134cba41678509c8849, type: 2}
+  - {fileID: 11400000, guid: c3522f8beee11f2458ea75e8e33bff76, type: 2}
+  - {fileID: 11400000, guid: 69b2a19a2eedb3446bd97bd846561b82, type: 2}
+  - {fileID: 11400000, guid: c07df190873e30d4dbddbc62a0322a4b, type: 2}
   - {fileID: 11400000, guid: 92d794a135f4d634e9cc893fd39d6915, type: 2}
   opponents:
   - name: Your Manager
@@ -33,12 +37,24 @@ MonoBehaviour:
   - name: A Billionaire Bound For Mars
     tagline: Will save humanity. Shipping not included.
     deck: {fileID: 11400000, guid: 808aa0a871a392246a92ca31d6fc7736, type: 2}
-  - name: The Algorithm
-    tagline: Thinks you'll love this loss. People like you also lost.
-    deck: {fileID: 11400000, guid: 599dbb1f9567aa9449b2e3eea16476a1, type: 2}
-  - name: Your Gaslighting Ex
-    tagline: That attack never happened. You're imagining things.
-    deck: {fileID: 11400000, guid: 177e7386781509e41b6c9380535c0f47, type: 2}
+  - name: Your Feed
+    tagline: Curated just for you. Every post is about how wrong you are.
+    deck: {fileID: 11400000, guid: 33bd3a1ed3d69a643b20e4d82005c25b, type: 2}
+  - name: A Man Who Was Never Here
+    tagline: This match isn't happening. You'll lose it anyway.
+    deck: {fileID: 11400000, guid: fc6d4252fcc8f9d4499a06cf7a2a95c0, type: 2}
+  - name: The IT Department
+    tagline: Have you tried turning your strategy off and on again?
+    deck: {fileID: 11400000, guid: 77e785c31491a134cba41678509c8849, type: 2}
+  - name: The Oracle
+    tagline: Saw this loss coming. Didn't warn you.
+    deck: {fileID: 11400000, guid: c3522f8beee11f2458ea75e8e33bff76, type: 2}
+  - name: Your Inner Critic
+    tagline: Knows exactly what to say. Always the worst thing.
+    deck: {fileID: 11400000, guid: 69b2a19a2eedb3446bd97bd846561b82, type: 2}
+  - name: Your Data Broker
+    tagline: Knows where you were last night. Sold it by noon.
+    deck: {fileID: 11400000, guid: c07df190873e30d4dbddbc62a0322a4b, type: 2}
   - name: The Megachurch
     tagline: Pray, pay, repeat. Salvation renews monthly.
     deck: {fileID: 11400000, guid: 92d794a135f4d634e9cc893fd39d6915, type: 2}

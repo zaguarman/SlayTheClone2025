@@ -5,13 +5,14 @@ using System.Linq;
 namespace SlayTheClone {
     /// <summary>
     /// Heat Signature ('Status Effects Compendium'): every effect with a randomly chosen target goes to the creature with the
-    /// most Heat among those it can affect, and redirected attacks to the one with the most Heat on either side. Ties: the
+    /// most Heat among those it can affect; random damage and redirected attacks to the one with the most Heat on either
+    /// side. Ties: the
     /// nearest, first in the source's own row counted in slots, then in the other row counted by column; then at random.
     /// </summary>
     public static class HeatRules {
         public static int HeatOf(ICreature creature) => creature?.Heat ?? 0;
 
-        /// <summary>The creature drawing a redirected attack, on either side, or null when no creature has Heat.</summary>
+        /// <summary>The creature drawing random damage or a redirected attack, on either side, or null when no creature has Heat.</summary>
         /// <param name="attacker">Measures "nearest"; may be null (a spell), then ties are random.</param>
         /// <param name="side">Any player in the match: both sides' creatures count.</param>
         public static ICreature Hottest(ICreature attacker, IPlayer side, IEnumerable<ICreature> exclude = null) {
