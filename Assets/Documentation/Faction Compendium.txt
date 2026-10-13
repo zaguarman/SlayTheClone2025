@@ -22,7 +22,7 @@ CONTENTS
 
 Myth: Faith, Death & Prophecy
     • Theme: Legends, religion, monsters, tarot, the afterlife.
-    • Emblem: an ankh, for life after death.
+    • Coin: M on a coin in its color.
     • Play Style: Slow and inevitable. Creatures die and come back; prophecies pay off later.
     • Signature Mechanics: Conversion, Revive, OnDied payoffs, sacrifice costs, Prophecy (GDD 5.7 Prophecy).
     • Statuses: Doomed, Blessed, Bloodthirst.
@@ -34,7 +34,7 @@ Myth: Faith, Death & Prophecy
 
 Statecraft: Order, Law & War
     • Theme: Government, bureaucracy, military, propaganda.
-    • Emblem: a hall of government, pediment and columns.
+    • Coin: § on a coin in its color.
     • Plans or Reacts: Plans. Governments, like corporations, plan several steps ahead: their strategies are powerful once set up but hard to change. Lots of muscle, little flexibility.
     • Play Style: Fortify the line, slow everyone down with paperwork, then strike first.
     • Signature Mechanics: Recruitment (conscription), Red Tape (adds Deployment Time to enemies), first strikes through Speed (Blitzkrieg, Preemptive Strike), Laws (Location cards that change rules for X Days), multi-slot war machines (tanks, submarines, Man o' War), exile (Banish).
@@ -47,7 +47,7 @@ Statecraft: Order, Law & War
 
 Shadow Ops.: Secrets & Sabotage
     • Theme: Espionage, covert operations, conspiracies.
-    • Emblem: a spy's fedora pulled low over dark glasses.
+    • Coin: S on a coin in its color.
     • Plans or Reacts: Disrupts. Spies sit halfway between planning and reacting: their own plans unfold in the shadows, or they manipulate everyone else's.
     • Play Style: Fragile agents, hidden plans and traps. Wins the information war, loses fair fights.
     • Signature Mechanics: Concealed and Undercover, Briefing Watchdogs (queue traps set up in advance), hidden Slot Effects, sleeper agents (delayed control changes such as Brainwashed), Banish (Cleaner, Secure Deletion), Dead Man's Switch (OnDied).
@@ -60,7 +60,7 @@ Shadow Ops.: Secrets & Sabotage
 
 Corporate: Money, Growth & Exploitation
     • Theme: Business, finance, labor.
-    • Emblem: a coin with a dollar sign.
+    • Coin: $ on a coin in its color.
     • Plans or Reacts: Plans. Corporations, like governments, plan several steps ahead: their strategies are powerful once set up but hard to change. Lots of muscle, little flexibility.
     • Play Style: An engine deck: invest now, cash out later, spend cheap workers as fuel.
     • Signature Mechanics: Investments (pay now, get draws or Persistent Stat Modifications on later Days), worker tokens (Unpaid Intern) and Layoffs (sacrifice them for value), Contracts (both sides gain something, theirs arrives late), Paywall (taxes on cheap enemy plays).
@@ -73,7 +73,7 @@ Corporate: Money, Growth & Exploitation
 
 Tech: Systems & the Queue
     • Theme: Software, hacking, infrastructure.
-    • Emblem: a microchip.
+    • Coin: T on a coin in its color.
     • Play Style: Rewires the queue with hooks, copies and overrides; runs automated units.
     • Signature Mechanics: Watchdogs (Firewall, Man-in-the-Middle), Speed boosts (Turbo), copied actions (Fork, Feedback Loop), Automated Units, Cleanse (Antivirus, Bug Fix), surveillance reveals (CCTV, Data Mining).
     • Statuses: Heat Signature, Exhausted.
@@ -86,7 +86,7 @@ Tech: Systems & the Queue
 
 Digital Society: Virality & the Mob
     • Theme: Social media, influencers, cancel culture (memes are Zeitgeist's).
-    • Emblem: a speech bubble with a like in it.
+    • Coin: D on a coin in its color.
     • Play Style: A swarm of cheap Deployment Time 0 tokens, effects that spread, and many creatures piling onto one target.
     • Signature Mechanics: Flooding the board (bots, NPCs, Spam), "goes viral" (effects that spread to adjacent creatures), Dogpile (a bonus when several creatures attack the same target), Doxxing (reveals), Clickbait (taunts), Streisand Effect (anything hidden near it backfires on its owner).
     • Statuses: Ostracised, Ghosted, Earworm.
@@ -98,7 +98,7 @@ Digital Society: Virality & the Mob
 
 Zeitgeist: Moods of Modern Life
     • Theme: Social trends, internet memes, archetypes, modern malaise.
-    • Emblem: a "meh" face, the mood of the times.
+    • Coin: # on a coin in its color.
     • Plans or Reacts: Reacts. Internet memes have all the flexibility in the world: they act on what the others have planned and break those plans. Their cards are weaker, but they draw many more cards and play more dynamic strategies.
     • Play Style: Momentum and comebacks. Moods that buff a creature but burn it out; stronger when losing.
     • Signature Mechanics: Underdog (a bonus when you have fewer creatures or less Health), Plot Armor (survives a lethal hit once, using OnAboutToDie), Trends (Locations that reward a behavior for X Days), Strikes and Protests (shut down engines).
@@ -111,7 +111,7 @@ Zeitgeist: Moods of Modern Life
 
 Mind: Perception & Paradox
     • Theme: Psychology, cognitive biases, philosophy, paradoxes.
-    • Emblem: a brain seen from above.
+    • Coin: M on a coin in its color.
     • Play Style: Wins without big stats by manipulating choices: forcing, inverting and faking them.
     • Signature Mechanics: Misleading Watchdogs (Mental Breakdown, Red Herring), forced behavior (Hypnosis, Paranoid), rule inversion (Temporal Distortion, Vice Versa: swap Attack and Health), fake intents shown to the enemy, Mandela Effect, Precognition (see future enemy intents).
     • Statuses: Paranoid, Imposter Syndrome, Cognitive Dissonance.
@@ -123,7 +123,7 @@ Mind: Perception & Paradox
 
 Utopia: Science & the Future
     • Theme: Physics, biology, medicine, space, futurism.
-    • Emblem: an atom.
+    • Coin: U on a coin in its color.
     • Play Style: Long-term experiments: creatures that evolve, mutate and get cured.
     • Signature Mechanics: Evolution (each Deployment Time step unlocks an ability, using OnDeploymentTimeComplete), gene editing (Persistent Stat Modifications), healing and immunity (Vaccine, Placebo), Clone, field Slot Effects (Force Field, Stasis, Magnetic), Wormhole and Black Hole repositioning.
     • Statuses: Chill, Resurrected, Mutation.

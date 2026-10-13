@@ -41,6 +41,7 @@ namespace SlayTheClone {
         public IReadOnlyList<DeckScriptableObject> Decks => catalog.AllDecks.Concat(PlayerDecks.Playable(catalog)).ToList();
 
         private GameObject panel;
+        private bool wasTyping;
         private TextMeshProUGUI summaryText;
         private readonly List<(Button button, Func<bool> isSelected, ScrollRect list)> choiceButtons = new List<(Button, Func<bool>, ScrollRect)>();
 
@@ -61,6 +62,10 @@ namespace SlayTheClone {
             if (!decks.Contains(PlayerDeck)) PlayerDeck = decks.FirstOrDefault(d => d != OpponentDeck) ?? decks[0];
             if (titleScreen != null) titleScreen.SetActive(false);
             Refresh();
+        }
+
+        private void Update() {
+            if (MenuWidgets.BackPressed(ref wasTyping) && IsOpen) Hide(); // Escape goes back, like Back
         }
 
         public void Hide() {
@@ -146,7 +151,7 @@ namespace SlayTheClone {
             var opponents = AddChoiceColumn(columns, "Your opponent", StepOpponent, out var opponentList);
             foreach (var opponent in catalog.Opponents) {
                 AddChoice(opponents, opponentList, OpponentButton + opponent.name, opponent.name, $"<i>{opponent.tagline}</i>",
-                    () => SelectOpponent(opponent), () => Opponent == opponent);
+                    () => SelectOpponent(opponent), () => Opponent == opponent, DeckCatalog.CoinsFor(opponent.deck));
             }
 
             var theirDecks = AddChoiceColumn(columns, "Their deck", StepOpponentDeck, out var theirList);
@@ -182,12 +187,14 @@ namespace SlayTheClone {
                     var heading = AddText(parent, "Made by you", 24, AccentColor, FontStyles.Bold | FontStyles.SmallCaps, height: 40);
                     heading.alignment = TextAlignmentOptions.BottomLeft;
                 }
-                AddChoice(parent, list, prefix + deck.GetDeckName(), deck.GetDeckName(), DeckCatalog.Describe(deck), () => select(deck), () => chosen() == deck);
+                string size = PlayerDecks.IsPlayers(deck) ? PlayerDecks.SizeText(deck) : $"{deck.Cards.Count} cards";
+                AddChoice(parent, list, prefix + deck.GetDeckName(), deck.GetDeckName(), size, () => select(deck), () => chosen() == deck, DeckCatalog.CoinsFor(deck));
             }
         }
 
-        private void AddChoice(Transform parent, ScrollRect list, string name, string title, string subtitle, Action onClick, Func<bool> isSelected) {
-            var button = MenuWidgets.AddChoice(parent, name, title, subtitle, onClick);
+        private void AddChoice(Transform parent, ScrollRect list, string name, string title, string subtitle, Action onClick, Func<bool> isSelected,
+            IReadOnlyList<Enums.Faction> factions) {
+            var button = MenuWidgets.AddChoice(parent, name, title, subtitle, onClick, factions);
             choiceButtons.Add((button, isSelected, list));
         }
 

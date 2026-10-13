@@ -59,21 +59,21 @@ namespace SlayTheClone {
         // Two-faction decks (Faction Compendium 5, Example Two-Faction Decks) for the factions without a deck of their own.
         // Between them they play every card of those factions, 20 cards each.
         private static readonly (string Name, string File, string Opponent, string Tagline, string[] Cards)[] PairDecks = {
-            ("The Algorithm - Digital Society & Tech", "TheAlgorithmDeck",
+            ("Digital Society & Tech - The Algorithm", "TheAlgorithmDeck",
                 "The Algorithm", "Thinks you'll love this loss. People like you also lost.", new[] {
                 "Digital Nomad", "Keyboard Warrior", "NPC", "Chronically Online", "Catfish", "Conspiracy Theorist",
                 "Script Kiddie", "Legacy Code", "SysAdmin", "Software As A Service",
                 "Dogpile", "Rage Bait", "Its A Trap", "Clickbait", "Cancelled",
                 "DDOS Attack", "Antivirus", "End-to-End Encryption", "Ransomware Attack", "Man-in-the-Middle",
             }),
-            ("Psyop - Shadow Ops. & Mind", "PsyopDeck",
+            ("Shadow Ops. & Mind - Psyop", "PsyopDeck",
                 "Your Gaslighting Ex", "That attack never happened. You're imagining things.", new[] {
                 "Political Decoy", "Mole", "Signal Jammer", "Deep Cover", "Sleeper Agent", "Whistleblower",
                 "Pessimist", "Introvert", "Schrodinger's Cat", "Roko's Basilisk",
                 "Burn Notice", "Counter-Intelligence", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "Unvoluntary Free Polonium Giveaway",
                 "Generational Trauma", "Trolley Problem", "Red Herring", "Imposter Syndrome",
             }),
-            ("Prosperity Gospel - Myth & Corporate", "ProsperityGospelDeck",
+            ("Myth & Corporate - Prosperity Gospel", "ProsperityGospelDeck",
                 "The Megachurch", "Pray, pay, repeat. Salvation renews monthly.", new[] {
                 "Martyr", "Mummy", "Omniscient Space-Time Bending Bearded Wizard", "Cultist", "Phoenix",
                 "Unpaid Intern", "Inhuman Resources", "Multilevel Marketing Seller", "Charles Ponzi", "Unicorn", "Multimillionaire Philanthropist",
@@ -95,12 +95,18 @@ namespace SlayTheClone {
             "Mole", "Signal Jammer", "Deep Cover", "Script Kiddie", "Legacy Code",
             "NPC", "Chronically Online", "Mummy", "Pessimist", "Introvert",
             "Sleeper Agent", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "End-to-End Encryption",
+            "Work Shift Rotation", "Chain Smoker",
         };
 
         #region Corporate
         // Pays with capital (future: discard cards). Until discarding exists, its strongest cards leak value to the enemy.
         // Can't heal. Engine: card draw, workers that die usefully, money that hurts someone else first.
         private static List<CardDef> CorporateCards() => new List<CardDef> {
+            Creature("Work Shift Rotation", 2, 3, speed: 1, deploy: 1,
+                "Same job, new face. The vest is still warm.",
+                "Baton Pass: when a summon replaces it, the newcomer takes over its stat changes and statuses. Buff it, then send in the next shift.")
+                .With(CreatureAbility.BatonPass)
+                .Picture("Two warehouse workers at the clocking-in machine: the exhausted one hands his hi-vis vest, still warm, to the fresh one."),
             Creature("Unpaid Intern", 1, 1, speed: 3, deploy: 0,
                 "Paid in experience. The experience is this.",
                 "Future: a Worker token created by other cards rather than drafted. Fodder for sacrifice costs.",
@@ -287,6 +293,11 @@ namespace SlayTheClone {
         // Pays with self-harm: damage to its own creatures and to you. Fast (Deployment Time 0-1), buffs that burn out.
         // Can't use Intelligence. Engine: cheap bodies that spike and fizzle, chaos that hits everyone.
         private static List<CardDef> ZeitgeistCards() => new List<CardDef> {
+            Creature("Chain Smoker", 2, 5, speed: 2, deploy: 1,
+                "Quitting tomorrow. Has said so since 1998.",
+                "Recoil: +2 damage on its attacks, and it takes 1 damage after each one. A mood that burns it out.")
+                .With(CreatureAbility.Recoil)
+                .Picture("A wiry man smoking a length of steel chain like a cigarette, the far end swinging like a flail, a cloud of smoke around his head."),
             Creature("Karen", 2, 4, speed: 1, deploy: 0,
                 "Would like to speak to your manager. And theirs. And God's.",
                 "Future: Impatient. Escalates every Day nobody gives it an intent.",

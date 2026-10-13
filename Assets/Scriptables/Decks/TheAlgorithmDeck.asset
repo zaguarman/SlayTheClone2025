@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: TheAlgorithmDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: The Algorithm - Digital Society & Tech
+  deckName: Digital Society & Tech - The Algorithm
   cards:
   - {fileID: 11400000, guid: 3f4f451c39d6daf4ea88007aa445281f, type: 2}
   - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}

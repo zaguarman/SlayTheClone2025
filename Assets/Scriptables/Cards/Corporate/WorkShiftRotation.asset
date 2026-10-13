@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: WorkShiftRotation
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: f968b117-10f6-4226-bce4-e3d6289ccb9b
+  cardName: Work Shift Rotation
+  description: Same job, new face. The vest is still warm.
+  cardType: 0
+  faction: 4
+  artwork: {fileID: 3286163911610860551, guid: 6ec3b36590c668a4f93910ebf60525d4, type: 3}
+  effects: []
+  designNotes: 'Baton Pass: when a summon replaces it, the newcomer takes over its
+    stat changes and statuses. Buff it, then send in the next shift.'
+  artDescription: 'Two warehouse workers at the clocking-in machine: the exhausted
+    one hands his hi-vis vest, still warm, to the fresh one.'
+  attack: 2
+  health: 3
+  speed: 1
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 18

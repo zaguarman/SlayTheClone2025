@@ -112,7 +112,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void CombatAbilities_Underground_Technician_InsiderJob_TooMainstream() {
+        public void CombatAbilities_Underground_Technician_InsiderJob_TooMainstream_Recoil_BatonPass() {
             var mole = With(CreatureAbility.Underground, p1, 0, attack: 0);
             var brute = With(CreatureAbility.None, p2, 0, attack: 2);
             ChangeAttack(brute, 3, p2);
@@ -152,6 +152,21 @@ namespace SlayTheClone.Tests {
             game.Play(zap, p1, p2.Battlefield[4]);
             game.Resolve();
             Assert.AreEqual(8, hipster.Health, "Aimed at it alone, it lands");
+
+            var smoker = With(CreatureAbility.Recoil, p1, 4, attack: 2, health: 5);
+            game.Attack(smoker, p2.Battlefield[4]);
+            Assert.AreEqual(4, hipster.Health, "Recoil: its attack hits for 2 more...");
+            Assert.AreEqual(4, smoker.Health, "...and costs it 1 damage");
+
+            var shift = With(CreatureAbility.BatonPass, p1, 4, attack: 1, health: 4);
+            ChangeAttack(shift, 2, p1);
+            game.ModifierManager.ChangeBaseStats(shift, 0, 1, 0);
+            game.Run(new ApplyStatusEffectAction(shift, StatusEffectType.Burned, 2, 1, controller: p2));
+            var nextShift = With(CreatureAbility.None, p1, 4, attack: 1, health: 4);
+            Assert.AreEqual(3, nextShift.Attack, "Baton Pass: the creature that replaces it takes over its stat changes...");
+            Assert.AreEqual(5, nextShift.MaxHealth, "...its Persistent Stat Modifications...");
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(nextShift, StatusEffectType.Burned), "...and its statuses");
+            Assert.AreEqual(4, shift.BaseHealth, "Passed on: its own card is back to what it prints");
         }
 
         [Test]

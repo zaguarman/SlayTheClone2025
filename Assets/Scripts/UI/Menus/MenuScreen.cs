@@ -4,10 +4,11 @@ namespace SlayTheClone {
     /// <summary>
     /// A screen opened from the title screen in its place (the card gallery, the deck builder, the keyword glossary). It's
     /// built anew each time it opens and thrown away when it closes, so it always opens as new: on its first entry,
-    /// scrolled to the top. Built with <see cref="MenuWidgets"/>.
+    /// scrolled to the top. Escape goes back to the title screen. Built with <see cref="MenuWidgets"/>.
     /// </summary>
     public abstract class MenuScreen : MonoBehaviour {
         private GameObject titleScreen;
+        private bool wasTyping;
 
         protected DeckCatalog Catalog { get; private set; }
         protected GameObject Panel { get; private set; }
@@ -32,6 +33,10 @@ namespace SlayTheClone {
         public void Hide() {
             Close();
             if (titleScreen != null) titleScreen.SetActive(true);
+        }
+
+        protected virtual void Update() {
+            if (MenuWidgets.BackPressed(ref wasTyping) && IsOpen) Hide();
         }
 
         /// <summary>Builds the screen's panel, under this object.</summary>

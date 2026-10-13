@@ -78,14 +78,19 @@ namespace SlayTheClone {
             return found;
         }
 
-        private void Update() {
+        protected override void Update() {
+            base.Update();
             if (!IsOpen || usedBy == null) return;
             float ticks = Input.mouseScrollDelta.y;
             if (!Mathf.Approximately(ticks, 0f)) Step(ticks < 0f ? 1 : -1); // Wheel down: the next keyword
             int link = TMP_TextUtilities.FindIntersectingLink(usedBy, Input.mousePosition, null);
             string id = link >= 0 ? usedBy.textInfo.linkInfo[link].GetLinkID() : null;
             string name = id != null && id.StartsWith(CardLink) ? id.Substring(CardLink.Length) : null;
-            // Shown once the pointer rests on the name, like a hovered card
+            // Shown once the pointer rests on the name, like a hovered card; the wheel hides it until it's still again
+            if (Tooltip.WheelMoved) {
+                hoveredSince = Time.unscaledTime;
+                ShowCardPreview(null);
+            }
             if (name != hoveredName) {
                 hoveredName = name;
                 hoveredSince = Time.unscaledTime;

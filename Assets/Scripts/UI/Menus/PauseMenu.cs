@@ -44,7 +44,10 @@ namespace SlayTheClone {
 
         private void Update() {
             if (Input.GetKeyDown(toggleKey)) {
-                SetPaused(!IsPaused);
+                // Escape goes back: an open deck or discard view closes first, then the game pauses or resumes
+                var view = IsPaused ? null : System.Array.Find(FindObjectsByType<DeckViewUI>(FindObjectsSortMode.None), v => v.IsOpen);
+                if (view != null) view.HideDeckView();
+                else SetPaused(!IsPaused);
             }
         }
 

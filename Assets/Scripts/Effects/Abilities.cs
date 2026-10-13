@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using static SlayTheClone.DebugLogger;
 using static SlayTheClone.Enums;
@@ -31,6 +32,7 @@ namespace SlayTheClone {
             CreatureAbility.InsiderJob => "Insider Job",
             CreatureAbility.ReturnToSender => "Return to Sender",
             CreatureAbility.Unpatchable => "Cold Storage",
+            CreatureAbility.BatonPass => "Baton Pass",
             _ => ability.ToString()
         };
 
@@ -53,6 +55,8 @@ namespace SlayTheClone {
             CreatureAbility.ReturnToSender => "enemy statuses bounce back to whoever sent them",
             CreatureAbility.Technician => "double damage when it hits for 3 or less",
             CreatureAbility.Undercover => "its plans show as ??? to the enemy",
+            CreatureAbility.BatonPass => "when a summon replaces it, the newcomer takes over its stat changes and statuses",
+            CreatureAbility.Recoil => "+2 damage on its attacks; it takes 1 damage after each attack",
             _ => ""
         };
 
@@ -196,6 +200,30 @@ namespace SlayTheClone {
             }
             if (damage > 0 && damage <= 3 && Has(attacker, CreatureAbility.Technician)) damage *= 2;
             return damage;
+        }
+
+        /// <summary>Recoil: its attacks hit 2 harder (it takes 1 damage after each, see BattlefieldCombatActionExecutor).</summary>
+        public static int AttackBonus(ICreature attacker) => Has(attacker, CreatureAbility.Recoil) ? 2 : 0;
+
+        /// <summary>
+        /// Baton Pass: the creature a summon replaces hands its stat changes (Persistent Stat Modifications, timed and
+        /// lasting modifiers) and its statuses to the newcomer, like Pokémon's Baton Pass. Call before the replaced creature
+        /// leaves the board; the returned hand-over is given with <see cref="CompleteBatonPass"/> once the newcomer is in play.
+        /// </summary>
+        public static (List<IModifier> modifiers, (int attack, int health, int speed) persistent)? StartBatonPass(ICreature replaced, IModifierManager modifiers) {
+            if (!Has(replaced, CreatureAbility.BatonPass) || modifiers == null) return null;
+            var handed = modifiers.GetActiveModifiersFor(replaced).ToList();
+            var persistent = replaced.PersistentChanges;
+            replaced.ChangeBaseStats(-persistent.attack, -persistent.health, -persistent.speed); // Passed on: its card goes back to printed
+            Log($"{replaced.Name} passes the baton: {handed.Count} modifiers and {persistent} in stat changes", LogTag.Effects | LogTag.Creatures);
+            return (handed, persistent);
+        }
+
+        public static void CompleteBatonPass(ICreature newcomer, (List<IModifier> modifiers, (int attack, int health, int speed) persistent)? pass, IModifierManager modifiers) {
+            if (pass == null || newcomer == null) return;
+            var (handed, persistent) = pass.Value;
+            modifiers.ChangeBaseStats(newcomer, persistent.attack, persistent.health, persistent.speed);
+            foreach (var modifier in handed) modifiers.ApplyModifier(newcomer, modifier);
         }
 
         /// <summary>Insider Job: the creature's damage ignores Armor.</summary>

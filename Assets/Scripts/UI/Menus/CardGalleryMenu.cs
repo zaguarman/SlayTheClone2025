@@ -38,7 +38,7 @@ namespace SlayTheClone {
             ShownFaction = faction;
             var shown = CardGrid.CardsOf(Catalog, faction);
             cards.Show(shown);
-            cards.Title.text = faction != null ? $"{CardTextFormatter.FactionLabel(faction.Value)}  <size=70%>{CardGrid.Count(shown)}</size>"
+            cards.Title.text = faction != null ? $"{CardTextFormatter.FactionName(faction.Value)}  <size=70%>{CardGrid.Count(shown)}</size>"
                 : $"Every card  <size=70%>{shown.Count} cards in {Factions.Count} factions</size>";
             foreach (var (button, listed) in factionButtons) {
                 ShowChosen(button, listed == faction);
@@ -56,11 +56,11 @@ namespace SlayTheClone {
             factionsElement.minWidth = factionsElement.preferredWidth = SideColumnWidth;
             factionsElement.flexibleWidth = 0;
             var list = AddList(factions, out factionList);
-            var every = AddChoice(list, EveryCardButton, "Every card", $"{Catalog.AllCards.Count} cards", () => ShowFaction(null));
+            var every = AddChoice(list, EveryCardButton, "Every card", $"{Catalog.AllCards.Count} cards", () => ShowFaction(null), new List<Faction>(), CoinSize);
             factionButtons.Add((every, null));
             foreach (var faction in CardGrid.FactionsIn(Catalog)) {
                 string name = CardTextFormatter.FactionName(faction);
-                var button = AddChoice(list, FactionButton + name, CardTextFormatter.FactionLabel(faction), CardGrid.Count(CardGrid.CardsOf(Catalog, faction)), () => ShowFaction(faction));
+                var button = AddChoice(list, FactionButton + name, name, CardGrid.Count(CardGrid.CardsOf(Catalog, faction)), () => ShowFaction(faction), new[] { faction }, CoinSize);
                 factionButtons.Add((button, faction));
             }
 

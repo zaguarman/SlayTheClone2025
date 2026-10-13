@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: PsyopDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Psyop - Shadow Ops. & Mind
+  deckName: Shadow Ops. & Mind - Psyop
   cards:
   - {fileID: 11400000, guid: f6b043e3ca8ec5b4bbacd81dfacc2458, type: 2}
   - {fileID: 11400000, guid: 8aba5b6c983aeb747a02d69b28b0f4d3, type: 2}

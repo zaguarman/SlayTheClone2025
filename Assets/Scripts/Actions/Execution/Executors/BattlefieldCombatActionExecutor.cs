@@ -53,6 +53,11 @@ namespace SlayTheClone {
             // 2. The attacker's chain and spread add-ons
             EffectResolver.QueueAttackEffects(attacker, primaryTarget, actionsQueue);
 
+            // 3. Recoil: the attack costs it 1 damage, after the hit (no attacker: nothing answers it)
+            if (Abilities.Has(attacker, Enums.CreatureAbility.Recoil)) {
+                actionsQueue.AddAction(new DamageCreatureAction(attacker, 1));
+            }
+
             Log($"Executed BattlefieldCombatAction via Executor for {attacker.Name}", LogTag.Actions | LogTag.Combat);
         }
 

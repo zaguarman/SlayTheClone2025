@@ -71,12 +71,8 @@ namespace SlayTheClone {
             IsPlayers(deck) && card != null && deck.Cards.Count < DeckSize && CopiesOf(deck, card) < MaxCopies;
         public static bool IsPlayers(DeckScriptableObject deck) => deck != null && decks != null && decks.Contains(deck);
 
-        /// <summary>"14 / 20 cards · Corporate + Myth": how full it is, and its faction or two.</summary>
-        public static string Describe(DeckScriptableObject deck) {
-            string factions = string.Join(" + ", DeckCatalog.FactionsOf(deck).Take(3).Select(CardTextFormatter.FactionLabel));
-            string size = IsComplete(deck) ? $"{DeckSize} cards" : $"{deck.Cards.Count} / {DeckSize} cards";
-            return factions.Length > 0 ? $"{size} · {factions}" : size;
-        }
+        /// <summary>"14 / 20 cards", or "20 cards" once complete. Its factions show as coins (see <see cref="DeckCatalog.CoinsFor"/>).</summary>
+        public static string SizeText(DeckScriptableObject deck) => IsComplete(deck) ? $"{DeckSize} cards" : $"{deck.Cards.Count} / {DeckSize} cards";
 
         /// <summary>A new deck, named after the given name (or "New deck") but never like another deck, with these cards.</summary>
         public static DeckScriptableObject Create(DeckCatalog cardsFrom, string name = null, IEnumerable<CardDataScriptableObject> cards = null) {

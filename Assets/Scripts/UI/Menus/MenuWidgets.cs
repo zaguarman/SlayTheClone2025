@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
@@ -130,11 +132,34 @@ namespace SlayTheClone {
             return Rect.MinMaxRect(corners[0].x, corners[0].y, corners[2].x, corners[2].y);
         }
 
+        public const float CoinSize = 44f;
+
+        /// <summary>Whether a text field has the keyboard: Escape then only leaves the field, not the screen.</summary>
+        public static bool IsTyping {
+            get {
+                var selected = UnityEngine.EventSystems.EventSystem.current != null ? UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject : null;
+                return selected != null && selected.TryGetComponent(out TMP_InputField field) && field.isFocused;
+            }
+        }
+
+        /// <summary>
+        /// Escape goes back, on every menu screen. Not while typing, nor on the press that leaves a text field: pass the
+        /// typing state of the frame before, and keep the one returned.
+        /// </summary>
+        public static bool BackPressed(ref bool wasTyping) {
+            bool typing = IsTyping;
+            bool back = !typing && !wasTyping && Input.GetKeyDown(KeyCode.Escape);
+            wasTyping = typing;
+            return back;
+        }
+
         /// <summary>
         /// A choice in a list: its name on one line and a smaller line under it (rich text). Both shrink to fit the button
-        /// rather than spill out of it; the line under the name wraps to two lines if it must.
+        /// rather than spill out of it; the line under the name wraps to two lines if it must. Given factions (even none), it
+        /// shows their coins at its left, centered, in an area as wide as <paramref name="coinArea"/>, and its text starts after them.
         /// </summary>
-        public static Button AddChoice(Transform parent, string name, string title, string subtitle, Action onClick) {
+        public static Button AddChoice(Transform parent, string name, string title, string subtitle, Action onClick,
+            IReadOnlyList<Faction> factions = null, float coinArea = CoinSize * 2 - 6) {
             var button = AddButton(parent, name, title, -1, onClick);
             button.GetComponent<LayoutElement>().preferredHeight = ChoiceHeight;
             var label = button.GetComponentInChildren<TextMeshProUGUI>();
@@ -144,21 +169,30 @@ namespace SlayTheClone {
             label.fontSizeMin = 14;
             label.fontSizeMax = 28;
             label.overflowMode = TextOverflowModes.Truncate;
+            float left = 14f;
+            if (factions != null) {
+                var coins = AddCoins(button.transform, factions, CoinSize, coinArea);
+                coins.anchorMin = coins.anchorMax = coins.pivot = new Vector2(0f, 0.5f);
+                coins.anchoredPosition = new Vector2(14f, 0f);
+                left = 14f + coinArea + 12f;
+                label.rectTransform.offsetMin = new Vector2(left, label.rectTransform.offsetMin.y);
+                label.alignment = TextAlignmentOptions.MidlineLeft;
+            }
             if (string.IsNullOrEmpty(subtitle)) return button;
 
             var labelRect = label.rectTransform;
             labelRect.anchorMin = new Vector2(0f, 0.5f);
-            labelRect.offsetMin = new Vector2(14f, 0f);
+            labelRect.offsetMin = new Vector2(left, 0f);
             labelRect.offsetMax = new Vector2(-14f, -6f);
-            label.alignment = TextAlignmentOptions.Bottom;
+            label.alignment = factions != null ? TextAlignmentOptions.BottomLeft : TextAlignmentOptions.Bottom;
 
             var under = AddText(button.transform, subtitle, 19, UITheme.Hex(0xC9C0AE), FontStyles.Normal, height: -1);
             var underRect = under.rectTransform;
             underRect.anchorMin = Vector2.zero;
             underRect.anchorMax = new Vector2(1f, 0.5f);
-            underRect.offsetMin = new Vector2(14f, 6f);
+            underRect.offsetMin = new Vector2(left, 6f);
             underRect.offsetMax = new Vector2(-14f, -2f);
-            under.alignment = TextAlignmentOptions.Top;
+            under.alignment = factions != null ? TextAlignmentOptions.TopLeft : TextAlignmentOptions.Top;
             under.textWrappingMode = TextWrappingModes.Normal;
             under.enableAutoSizing = true;
             under.fontSizeMin = 12;
@@ -166,6 +200,23 @@ namespace SlayTheClone {
             under.overflowMode = TextOverflowModes.Truncate;
             return button;
         }
+        /// <summary>
+        /// Faction coins side by side, the first (most cards) on top, overlapping when there's no room for them in the width.
+        /// Returns their area, to be placed by the caller.
+        /// </summary>
+        public static RectTransform AddCoins(Transform parent, IReadOnlyList<Faction> factions, float size, float width) {
+            var area = (RectTransform)NewObject("Factions", parent).transform;
+            area.sizeDelta = new Vector2(width, size);
+            int n = factions.Count;
+            float step = n > 1 ? Mathf.Min(size + 4f, (width - size) / (n - 1)) : 0f;
+            for (int i = n - 1; i >= 0; i--) { // The last first: the first is drawn on top
+                var coin = UITheme.AddFactionCoin(area, factions[i], size).rectTransform;
+                coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0f, 0.5f);
+                coin.anchoredPosition = new Vector2(i * step, 0f);
+            }
+            return area;
+        }
+
         public static Color PanelColor => UITheme.Panel;
         public static Color ButtonColor => UITheme.PanelLight;
         public static readonly Color SelectedColor = UITheme.Hex(0x6B5222);

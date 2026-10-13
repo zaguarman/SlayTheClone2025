@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Zeitgeist - Moods of Modern Life
   cards:
+  - {fileID: 11400000, guid: d15cf317060803f49a876036aec7f154, type: 2}
   - {fileID: 11400000, guid: 0e6033fc5727d084c8d12457d775f0c2, type: 2}
   - {fileID: 11400000, guid: 2a6b26d94bf0cc042948da6cabff0ec0, type: 2}
   - {fileID: 11400000, guid: abf1338d51ee38e4cb392755631df395, type: 2}

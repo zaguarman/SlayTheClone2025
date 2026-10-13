@@ -1677,7 +1677,6 @@ Card Game Factions Overview
 			The Rat Race
 			The Value of a Statistical Life (see Pinto Memo)
 			Usury
-			Work Shift Rotation
 			Yen Carry Trade
 		Tech
 			Bounty Program
@@ -1724,7 +1723,6 @@ Card Game Factions Overview
 			Banana Gun
 			Calm Your Tits
 			Camper Van
-			Chain Smoker (art: a guy smoking a chain)
 			Choose Your Poison
 			Dangit
 			Deeply Concerned

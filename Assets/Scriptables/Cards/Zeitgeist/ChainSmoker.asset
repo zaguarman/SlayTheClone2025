@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: ChainSmoker
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 58df2b94-69ed-4d03-a5d1-431d04ebb4ba
+  cardName: Chain Smoker
+  description: Quitting tomorrow. Has said so since 1998.
+  cardType: 0
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: 208a68ac69373cc4e996872880ed4c7d, type: 3}
+  effects: []
+  designNotes: 'Recoil: +2 damage on its attacks, and it takes 1 damage after each
+    one. A mood that burns it out.'
+  artDescription: A wiry man smoking a length of steel chain like a cigarette, the
+    far end swinging like a flail, a cloud of smoke around his head.
+  attack: 2
+  health: 5
+  speed: 2
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 19

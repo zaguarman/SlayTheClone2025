@@ -166,8 +166,16 @@ namespace SlayTheClone {
             pendingShow = card.StartCoroutine(ShowAfter(card, preview != null ? SwitchDelay : HoverDelay)); // Stops if the card goes
         }
 
+        /// <summary>The mouse wheel turned this frame: what's shown hides, and nothing shows until the wheel is still a moment.</summary>
+        public static bool WheelMoved => !Mathf.Approximately(Input.mouseScrollDelta.y, 0f);
+
+        // Waits the delay, starting over whenever the wheel turns, so nothing pops up while scrolling
         private IEnumerator ShowAfter(CardController card, float delay) {
-            yield return new WaitForSecondsRealtime(delay);
+            float ready = Time.unscaledTime + delay;
+            while (Time.unscaledTime < ready) {
+                if (WheelMoved) ready = Time.unscaledTime + HoverDelay;
+                yield return null;
+            }
             pendingCard = null;
             pendingShow = null;
             ShowNow(card);
@@ -382,6 +390,12 @@ namespace SlayTheClone {
         }
 
         private void Update() {
+            if (WheelMoved) { // Scrolling: hide for a moment; the card still under the pointer shows again once the wheel is still
+                var card = activeCard;
+                HideTooltip();
+                if (card != null && card.isActiveAndEnabled && CardScreenRect(card) is Rect rect && rect.Contains(Input.mousePosition)) ShowTooltip(card);
+                return;
+            }
             if (activeCard == null || preview == null) return;
             if (CardController.Dragged != null) { HideTooltip(); return; }
             Vector2 pointer = Input.mousePosition;

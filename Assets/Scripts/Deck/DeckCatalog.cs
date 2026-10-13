@@ -37,17 +37,24 @@ namespace SlayTheClone {
         public IReadOnlyList<CardDataScriptableObject> AllCards => AllDecks.SelectMany(d => d.Cards).Where(c => c != null).Distinct()
             .OrderBy(c => c.faction).ThenBy(c => c.cardName).ToList();
 
-        /// <summary>"17 cards · Corporate", "13 cards · Shadow Ops. + Mind": the size of the deck, and its faction or two, each with its emblem.</summary>
+        /// <summary>"17 cards · Corporate", "13 cards · Shadow Ops. + Mind": the size of the deck, and its faction or two.</summary>
         public static string Describe(DeckScriptableObject deck) {
             var factions = FactionsOf(deck);
             string summary = $"{deck.Cards.Count} cards";
-            return factions.Count is 1 or 2 ? $"{summary} · {string.Join(" + ", factions.Select(CardTextFormatter.FactionLabel))}" : summary;
+            return factions.Count is 1 or 2 ? $"{summary} · {string.Join(" + ", factions.Select(CardTextFormatter.FactionName))}" : summary;
         }
 
-        /// <summary>The factions of the deck's cards, the one with the most cards first.</summary>
+        /// <summary>The factions of the deck's cards, the one with the most cards first; as many cards: by name.</summary>
         public static List<Faction> FactionsOf(DeckScriptableObject deck) {
             if (deck == null) return new List<Faction>();
-            return deck.Cards.Where(c => c != null).GroupBy(c => c.faction).OrderByDescending(g => g.Count()).Select(g => g.Key).ToList();
+            return deck.Cards.Where(c => c != null).GroupBy(c => c.faction).OrderByDescending(g => g.Count())
+                .ThenBy(g => CardTextFormatter.FactionName(g.Key)).Select(g => g.Key).ToList();
+        }
+
+        /// <summary>The factions a menu shows a deck's coins for: one or two (a deck mixing more shows none), any number for your own decks.</summary>
+        public static List<Faction> CoinsFor(DeckScriptableObject deck) {
+            var factions = FactionsOf(deck).Where(f => f != Faction.None).ToList();
+            return factions.Count <= 2 || PlayerDecks.IsPlayers(deck) ? factions : new List<Faction>();
         }
 
         /// <summary>

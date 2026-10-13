@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: ProsperityGospelDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Prosperity Gospel - Myth & Corporate
+  deckName: Myth & Corporate - Prosperity Gospel
   cards:
   - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
   - {fileID: 11400000, guid: b9a2a0f9a9265ba4e91b1226a83e5b3d, type: 2}

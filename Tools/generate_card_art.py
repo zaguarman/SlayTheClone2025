@@ -2038,122 +2038,7 @@ def icon_eye(iris):
             + circle(64, 64, 24, iris, OUTLINE) + circle(64, 64, 10, "#1b1b22") + circle(56, 56, 5, "#ffffff"))
 
 
-# ---------------------------------------------------------------- Faction emblems
-# Each faction's symbol in its color (UITheme.FactionColor) on a dark medallion ringed in brass, so it reads on any
-# background: the faction-colored type bar of a card, the navy menus, the parchment text. Used inline as faction_<name>.
-
-FACTION_COLORS = {
-    "myth": "#c9a23d", "statecraft": "#d9483b", "shadowops": "#7c8a99", "corporate": "#3fbf8f", "tech": "#3da9d6",
-    "digitalsociety": "#5d7bd6", "zeitgeist": "#d95dd0", "mind": "#9a6cd6", "utopia": "#e8e0a0",
-}
-EMBLEM_INK = "#0b0f18"
-EMBLEM_LINE = f'stroke="{EMBLEM_INK}" stroke-width="4" stroke-linejoin="round"'
-
-
-def medallion(symbol):
-    return (circle(64, 64, 60, "#141a2a", 'stroke="#c9a24a" stroke-width="6"')
-            + circle(64, 64, 50, "none", 'stroke="#c9a24a" stroke-width="1.5" opacity="0.5"') + symbol)
-
-
-def outlined_stroke(d, color, width):
-    # A line in the faction color with a dark edge: the dark one under, a little wider
-    return stroke(d, EMBLEM_INK, width + 7) + stroke(d, color, width)
-
-
-def emblem_myth(c):
-    # An ankh: life after death
-    return medallion(outlined_stroke("M64 64 C 46 50 48 24 64 24 C 80 24 82 50 64 64 Z", c, 9)
-                     + outlined_stroke("M38 66 L90 66", c, 10)
-                     + poly([(57, 66), (71, 66), (75, 104), (53, 104)], c, EMBLEM_LINE))
-
-
-def emblem_statecraft(c):
-    # A hall of government: pediment, columns, steps
-    out = poly([(30, 50), (64, 26), (98, 50)], c, EMBLEM_LINE) + rect(32, 50, 64, 8, c, EMBLEM_LINE)
-    for x in (37, 51, 65, 79):
-        out += rect(x, 60, 12, 30, c, EMBLEM_LINE)
-    return medallion(out + rect(28, 90, 72, 8, c, EMBLEM_LINE) + rect(24, 98, 80, 7, c, EMBLEM_LINE))
-
-
-def emblem_shadowops(c):
-    # A spy: a fedora pulled low, with a pinched crown and a band, over dark glasses
-    crown = path("M42 74 C 40 54 44 36 52 30 C 58 38 70 38 76 30 C 84 36 88 54 86 74 Z", c, EMBLEM_LINE)
-    band = rect(42, 62, 44, 10, "#3a4250", EMBLEM_LINE)
-    brim = path("M16 76 C 30 66 98 66 112 76 C 98 88 30 88 16 76 Z", c, EMBLEM_LINE)
-    glasses = (ellipse(50, 96, 12, 8, EMBLEM_INK, 'stroke="#c9d3e0" stroke-width="3"') + ellipse(78, 96, 12, 8, EMBLEM_INK, 'stroke="#c9d3e0" stroke-width="3"')
-               + stroke("M62 95 L66 95", "#c9d3e0", 3) + stroke("M45 93 L50 91", "#ffffff", 2) + stroke("M73 93 L78 91", "#ffffff", 2))
-    return medallion(crown + band + brim + glasses)
-
-
-def emblem_corporate(c):
-    # A coin with a dollar sign
-    return medallion(circle(64, 64, 36, c, EMBLEM_LINE) + circle(64, 64, 28, "none", f'stroke="{EMBLEM_INK}" stroke-width="2" opacity="0.6"')
-                     + stroke("M76 52 C 70 44 52 44 52 55 C 52 66 76 62 76 74 C 76 86 56 86 50 78", EMBLEM_INK, 8)
-                     + stroke("M64 36 L64 92", EMBLEM_INK, 6))
-
-
-def emblem_tech(c):
-    # A microchip: a die with pins on every side
-    out = ""
-    for k in range(4):
-        p = 44 + k * 13
-        out += rect(p - 3, 26, 7, 14, c, EMBLEM_LINE) + rect(p - 3, 88, 7, 14, c, EMBLEM_LINE)
-        out += rect(26, p - 3, 14, 7, c, EMBLEM_LINE) + rect(88, p - 3, 14, 7, c, EMBLEM_LINE)
-    out += rect(36, 36, 56, 56, c, f'rx="7" {EMBLEM_LINE}') + rect(50, 50, 28, 28, EMBLEM_INK, 'rx="3"')
-    return medallion(out + rect(55, 55, 18, 18, c, 'rx="2" opacity="0.6"'))
-
-
-def emblem_digitalsociety(c):
-    # A speech bubble with a like in it
-    bubble = path("M30 34 L98 34 C 104 34 108 38 108 44 L108 80 C 108 86 104 90 98 90 L56 90 L36 106 L40 90 L30 90 C 24 90 20 86 20 80 L20 44 C 20 38 24 34 30 34 Z",
-                  c, EMBLEM_LINE)
-    heart = path("M64 82 C 50 72 42 64 44 54 C 46 46 58 44 64 54 C 70 44 82 46 84 54 C 86 64 78 72 64 82 Z", "#ffffff", EMBLEM_LINE)
-    return medallion(bubble + heart)
-
-
-def emblem_zeitgeist(c):
-    # A "meh" face: the mood of the times
-    face = circle(64, 64, 36, c, EMBLEM_LINE)
-    eyes = ellipse(51, 56, 5, 7, EMBLEM_INK) + ellipse(77, 56, 5, 7, EMBLEM_INK)
-    lids = path("M44 49 L58 49 L58 56 L44 56 Z M70 49 L84 49 L84 56 L70 56 Z", c) + stroke("M43 56 L59 56 M69 56 L85 56", EMBLEM_INK, 4)
-    return medallion(face + eyes + lids + stroke("M50 80 L78 78", EMBLEM_INK, 6))
-
-
-def emblem_mind(c):
-    # A brain seen from above: two lobes and their folds
-    out = path("M62 30 C 40 26 26 42 30 60 C 24 74 34 94 52 96 C 56 100 60 100 62 98 Z", c, EMBLEM_LINE)
-    out += path("M66 30 C 88 26 102 42 98 60 C 104 74 94 94 76 96 C 72 100 68 100 66 98 Z", c, EMBLEM_LINE)
-    for d in ("M38 50 C 46 48 50 56 56 52", "M36 72 C 44 66 50 76 56 70", "M44 88 C 48 82 54 86 56 82",
-              "M90 50 C 82 48 78 56 72 52", "M92 72 C 84 66 78 76 72 70", "M84 88 C 80 82 74 86 72 82"):
-        out += stroke(d, EMBLEM_INK, 3.5)
-    return medallion(out)
-
-
-def emblem_utopia(c):
-    # An atom: the future, built by science
-    out = ""
-    for angle in (0, 60, 120):
-        out += ellipse(64, 64, 42, 14, "none", f'stroke="{EMBLEM_INK}" stroke-width="12" transform="rotate({angle} 64 64)"')
-    for angle in (0, 60, 120):
-        out += ellipse(64, 64, 42, 14, "none", f'stroke="{c}" stroke-width="6" transform="rotate({angle} 64 64)"')
-    return medallion(out + circle(64, 64, 10, c, EMBLEM_LINE))
-
-
-EMBLEMS = {
-    "myth": emblem_myth, "statecraft": emblem_statecraft, "shadowops": emblem_shadowops, "corporate": emblem_corporate,
-    "tech": emblem_tech, "digitalsociety": emblem_digitalsociety, "zeitgeist": emblem_zeitgeist, "mind": emblem_mind,
-    "utopia": emblem_utopia,
-}
-
-
 def build_icons():
-    icons = dict(base_icons())
-    for name, draw in EMBLEMS.items():
-        icons[f"faction_{name}"] = draw(FACTION_COLORS[name])
-    return icons
-
-
-def base_icons():
     return {
         "enter": icon_star4("#ffd257"),
         "death": icon_skull(),
@@ -3156,6 +3041,37 @@ def excess_of_bread_and_wine():
     return svg(defs, body)
 
 
+def work_shift_rotation():
+    # Two warehouse workers at the clocking-in machine: the worn-out one hands his hi-vis vest to the fresh one
+    defs = lin("bg", ["#c9c2b0", "#8a8478"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 150, W, 50, "#6a645a")
+    for x in range(10, W, 60):  # Warehouse shelving
+        body += rect(x, 20, 46, 120, "none", 'stroke="#5a554c" stroke-width="3"') + rect(x + 6, 70, 34, 18, "#b08a5a")
+    body += rect(160, 54, 32, 52, "#3a3f48", 'rx="4"') + rect(166, 60, 20, 12, "#9fe0a0") + rect(170, 80, 12, 4, "#111")
+    body += person(96, 200, 1.25, SKIN[1], "#e8d24a", face="frown", brows="angry")  # The worn-out shift, bags under his eyes
+    body += stroke("M84 118 q 5 3 10 0 M100 118 q 5 3 10 0", "#6a4a5a", 2)
+    body += person(256, 200, 1.25, SKIN[2], "#4a6a8a", face="grin", hair="#2a1a10")
+    vest = poly([(140, 140), (176, 132), (212, 140), (206, 186), (146, 186)], "#ff9a1a", 'stroke="#8a4a10" stroke-width="2"')
+    body += vest + rect(148, 158, 56, 6, "#e8f0f0") + rect(148, 170, 56, 6, "#e8f0f0")
+    body += speed_lines(176, 120, 3, 12, "#ffffff")
+    return svg(defs, body)
+
+
+def chain_smoker():
+    # A wiry man smoking a length of steel chain like a cigarette, the far end swinging like a flail
+    defs = lin("bg", ["#3a3a46", "#16161c"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for cx, cy, r in ((230, 60, 26), (262, 40, 20), (290, 26, 16), (210, 34, 14)):
+        body += circle(cx, cy, r, "#9a9aa6", 'opacity="0.5"')
+    body += person(150, 200, 1.4, SKIN[0], "#5a4a3a", face="smirk", hair="#4a3a2a")
+    links = [(186, 118), (200, 110), (214, 104), (228, 102), (242, 106), (256, 116), (266, 130), (272, 146), (274, 162)]
+    for i, (x, y) in enumerate(links):
+        body += ellipse(x, y, 8, 5, "none", f'stroke="#b8bcc8" stroke-width="3" transform="rotate({30 if i % 2 else -20} {x} {y})"')
+    body += circle(186, 118, 4, "#ff6a1a") + circle(186, 118, 2, "#ffe14a")
+    body += speed_lines(290, 170, 3, 14, "#d8dce8")
+    return svg(defs, body)
+
+
 def monkey_hand():
     # A shriveled, mummified monkey's paw held up in a purple room: long knobbly fingers with pointed nails, a tuft of
     # black fur at the wrist. Three fingers still up (wishes left), the fourth already curled into the palm
@@ -3277,6 +3193,7 @@ CARDS = {
         "TeamBuildingExercise": team_building_exercise, "DeadCatBounce": dead_cat_bounce,
         "TaxpayerFundsVentureCapitalProfits": taxpayer_funds_venture_capital_profits,
         "CleaningRobot": cleaning_robot, "Inflation": inflation, "TaxExemptCorruption": tax_exempt_corruption,
+        "WorkShiftRotation": work_shift_rotation,
     },
     "Statecraft": {
         "KingEmeritus": king_emeritus, "SpiteElectedPresident": spite_elected_president,
@@ -3293,7 +3210,7 @@ CARDS = {
         "RealityTVStar": reality_tv_star, "ScamArtist": scam_artist, "FootballHooligans": football_hooligans,
         "Antihero": antihero, "Bodybuilder": bodybuilder, "YOLO": yolo, "ThisIsFine": this_is_fine, "Strike": strike,
         "RussianRoulette": russian_roulette, "ToxicPositivity": toxic_positivity, "MentalHealthDay": mental_health_day,
-        "DeliveryCyclist": delivery_cyclist, "PlotArmor": plot_armor,
+        "DeliveryCyclist": delivery_cyclist, "PlotArmor": plot_armor, "ChainSmoker": chain_smoker,
     },
     "DigitalSociety": {
         "Catfish": catfish, "ConspiracyTheorist": conspiracy_theorist, "Clickbait": clickbait, "Cancelled": cancelled,

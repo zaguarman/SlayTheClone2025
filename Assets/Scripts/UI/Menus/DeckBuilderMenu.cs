@@ -35,6 +35,7 @@ namespace SlayTheClone {
         private Transform deckListContent;
         private TMP_InputField nameField;
         private TextMeshProUGUI countText;
+        private Transform deckFactions;
         private Transform rows;
         private Button copyButton, deleteButton;
         private CardPeek cardPeek;
@@ -104,8 +105,10 @@ namespace SlayTheClone {
             Open(Decks.Count > 0 ? Decks[Mathf.Clamp(index, 0, Decks.Count - 1)] : null);
         }
 
+        // Typing a name with no deck open starts a new deck with that name
         private void Rename(string name) {
-            PlayerDecks.Rename(OpenDeck, name);
+            if (OpenDeck == null && !string.IsNullOrWhiteSpace(name)) OpenDeck = PlayerDecks.Create(Catalog, name);
+            else PlayerDecks.Rename(OpenDeck, name);
             Refresh();
         }
         #endregion
@@ -121,7 +124,7 @@ namespace SlayTheClone {
                 face.OnCardClicked.AddListener(_ => AddCard(asset));
                 face.OnCardRightClicked.AddListener(_ => RemoveCard(asset));
             });
-            string title = faction != null ? CardTextFormatter.FactionLabel(faction.Value) : "Every card";
+            string title = faction != null ? CardTextFormatter.FactionName(faction.Value) : "Every card";
             cards.Title.text = $"{title}  <size=70%>{CardGrid.Count(offered)}</size>";
             foreach (var (tab, listed) in factionTabs) ShowChosen(tab, listed == faction);
             Refresh();
@@ -143,7 +146,7 @@ namespace SlayTheClone {
             foreach (var (button, _) in deckButtons) Discard(button.gameObject);
             deckButtons.Clear();
             foreach (var deck in Decks) {
-                var button = AddChoice(deckListContent, DeckButton + deck.GetDeckName(), deck.GetDeckName(), PlayerDecks.Describe(deck), () => Open(deck));
+                var button = AddChoice(deckListContent, DeckButton + deck.GetDeckName(), deck.GetDeckName(), PlayerDecks.SizeText(deck), () => Open(deck), DeckCatalog.CoinsFor(deck));
                 ShowChosen(button, deck == OpenDeck);
                 deckButtons.Add((button, deck));
             }
@@ -153,13 +156,18 @@ namespace SlayTheClone {
 
         private void RefreshDeck() {
             bool open = OpenDeck != null;
-            nameField.interactable = copyButton.interactable = deleteButton.interactable = open;
+            copyButton.interactable = deleteButton.interactable = open;
             nameField.SetTextWithoutNotify(open ? OpenDeck.GetDeckName() : "");
             ShowDeleteButton();
 
-            if (!open) countText.text = "<i>Click a card to start a new deck, or open one of yours.</i>";
-            else if (PlayerDecks.IsComplete(OpenDeck)) countText.text = $"{PlayerDecks.Describe(OpenDeck)}\n<color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>Ready to play</color>";
-            else countText.text = $"{PlayerDecks.Describe(OpenDeck)}\n<i>{CardGrid.Plural(PlayerDecks.DeckSize - OpenDeck.Cards.Count, "more card")} to play</i>";
+            if (!open) countText.text = "<i>Name a deck or click a card to start one.</i>";
+            else if (PlayerDecks.IsComplete(OpenDeck)) countText.text = $"{PlayerDecks.SizeText(OpenDeck)} · <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>ready to play</color>";
+            else countText.text = $"{PlayerDecks.SizeText(OpenDeck)} · <i>{CardGrid.Plural(PlayerDecks.DeckSize - OpenDeck.Cards.Count, "more card")} to play</i>";
+            foreach (Transform coin in deckFactions.Cast<Transform>().ToList()) Discard(coin.gameObject);
+            if (open) {
+                var coins = AddCoins(deckFactions, DeckCatalog.CoinsFor(OpenDeck), 30f, DeckWidth - 60f);
+                coins.sizeDelta = new Vector2(DeckCatalog.CoinsFor(OpenDeck).Count * 34f, 30f); // Centered, side by side
+            }
 
             cardPeek.Hide();
             foreach (Transform row in rows.Cast<Transform>().ToList()) Discard(row.gameObject);
@@ -175,14 +183,17 @@ namespace SlayTheClone {
 
         // A card in the open deck: its faction's emblem, its name and copies. Clicking takes a copy out; hovering shows the card
         private void AddCardRow(CardDataScriptableObject card) {
-            var row = AddButton(rows, CardRow + card.cardName, $"{EffectIcons.Tag(EffectIcons.ForFaction(card.faction))} {card.cardName}", -1, () => RemoveCard(card));
+            var row = AddButton(rows, CardRow + card.cardName, card.cardName, -1, () => RemoveCard(card));
             row.GetComponent<LayoutElement>().preferredHeight = 40;
             var label = row.GetComponentInChildren<TextMeshProUGUI>();
+            var coin = UITheme.AddFactionCoin(row.transform, card.faction, 26f).rectTransform;
+            coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0f, 0.5f);
+            coin.anchoredPosition = new Vector2(8f, 0f);
             label.fontSize = 22;
             label.alignment = TextAlignmentOptions.MidlineLeft;
             label.textWrappingMode = TextWrappingModes.NoWrap;
             label.overflowMode = TextOverflowModes.Truncate;
-            label.rectTransform.offsetMin = new Vector2(10f, 0f);
+            label.rectTransform.offsetMin = new Vector2(42f, 0f);
             label.rectTransform.offsetMax = new Vector2(-48f, 0f);
             var copies = AddText(row.transform, $"×{PlayerDecks.CopiesOf(OpenDeck, card)}", 22, AccentColor, FontStyles.Bold, height: -1);
             var copiesRect = copies.rectTransform;
@@ -247,6 +258,7 @@ namespace SlayTheClone {
             deckListContent = rows = null;
             nameField = null;
             countText = null;
+            deckFactions = null;
             copyButton = deleteButton = null;
             cardPeek = null;
             deleteArmed = false;
@@ -287,7 +299,7 @@ namespace SlayTheClone {
                     SetControls(rowLayout, expandHeight: false);
                 }
                 var faction = factions[i];
-                string label = faction != null ? CardTextFormatter.FactionLabel(faction.Value) : "Every card";
+                string label = faction != null ? CardTextFormatter.FactionName(faction.Value) : "Every card";
                 string name = faction != null ? FactionTab + CardTextFormatter.FactionName(faction.Value) : EveryFactionTab;
                 var tab = AddButton(row, name, label, -1, () => ShowFaction(faction));
                 var tabElement = tab.GetComponent<LayoutElement>();
@@ -299,8 +311,13 @@ namespace SlayTheClone {
                 text.fontSizeMin = 14;
                 text.fontSizeMax = 22;
                 text.textWrappingMode = TextWrappingModes.NoWrap;
-                text.rectTransform.offsetMin = new Vector2(8f, 4f);
+                text.rectTransform.offsetMin = new Vector2(faction != null ? 40f : 8f, 4f);
                 text.rectTransform.offsetMax = new Vector2(-8f, -4f);
+                if (faction != null) {
+                    var coin = UITheme.AddFactionCoin(tab.transform, faction.Value, 28f).rectTransform;
+                    coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0f, 0.5f);
+                    coin.anchoredPosition = new Vector2(8f, 0f);
+                }
                 factionTabs.Add((tab, faction));
             }
         }
@@ -315,7 +332,9 @@ namespace SlayTheClone {
             nameField = AddInputField(column, "DeckName", "Name your deck", 56f);
             nameField.characterLimit = PlayerDecks.MaxNameLength;
             nameField.onEndEdit.AddListener(Rename);
-            countText = AddText(column, "", 22, TextColor, FontStyles.Normal, height: 60);
+            deckFactions = NewObject("Factions", column).transform; // The open deck's factions, as coins: most cards first
+            deckFactions.gameObject.AddComponent<LayoutElement>().preferredHeight = 34;
+            countText = AddText(column, "", 22, TextColor, FontStyles.Normal, height: 36);
             countText.textWrappingMode = TextWrappingModes.Normal;
             countText.enableAutoSizing = true; // Three factions' names on two lines
             countText.fontSizeMin = 14;

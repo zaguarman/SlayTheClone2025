@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Corporate - Shareholder Value
   cards:
+  - {fileID: 11400000, guid: 1dc6d856885b4dd44bbbf3c5ad02b9b2, type: 2}
   - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
   - {fileID: 11400000, guid: 8787b06cd5de4974989f7c3bcfcc9b2e, type: 2}
   - {fileID: 11400000, guid: 885f0b3609889844ca95087ceb297672, type: 2}

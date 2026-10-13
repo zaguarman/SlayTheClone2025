@@ -10,7 +10,7 @@ namespace SlayTheClone {
 
         public IPlayer GetTargetPlayer() => target;
         // A hit that deals the attacker's attack follows buffs and debuffs that land before it does
-        public int GetDamage() => dealsAttackersAttack && attacker != null ? attacker.Attack : damage;
+        public int GetDamage() => dealsAttackersAttack && attacker != null ? attacker.Attack + Abilities.AttackBonus(attacker) : damage;
         public ICreature GetAttacker() => attacker;
         public bool IsCombatDamage() => isCombatDamage;
 

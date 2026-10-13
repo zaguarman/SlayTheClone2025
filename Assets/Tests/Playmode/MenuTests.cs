@@ -134,6 +134,8 @@ namespace SlayTheClone.Tests {
             Click(GalleryButton(glossary, KeywordGlossaryMenu.BackButtonName));
 
             yield return OpenSetup();
+            var firstDeck = SetupButton(MatchSetupMenu.PlayerDeckButton + catalog.Decks[0].GetDeckName());
+            Assert.IsNotNull(firstDeck.transform.Find("Factions/FactionCoin"), "A deck shows its faction's coin at its left");
 
             foreach (var opponent in catalog.Opponents) {
                 Click(SetupButton(MatchSetupMenu.OpponentButton + opponent.name));

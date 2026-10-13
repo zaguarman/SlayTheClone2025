@@ -81,9 +81,22 @@ namespace SlayTheClone {
             StartCoroutine(ShowAfter(peek.Shown != null ? Tooltip.SwitchDelay : Tooltip.HoverDelay));
         }
 
+        // Waits the delay, starting over whenever the wheel turns, so nothing pops up while scrolling
         private IEnumerator ShowAfter(float delay) {
-            yield return new WaitForSecondsRealtime(delay);
+            float ready = Time.unscaledTime + delay;
+            while (Time.unscaledTime < ready) {
+                if (Tooltip.WheelMoved) ready = Time.unscaledTime + Tooltip.HoverDelay;
+                yield return null;
+            }
             peek.Show(card, Input.mousePosition);
+        }
+
+        // Scrolling hides the card for a moment
+        private void Update() {
+            if (!Tooltip.WheelMoved || peek == null || peek.ShownCard != card) return;
+            peek.Hide();
+            StopAllCoroutines();
+            StartCoroutine(ShowAfter(Tooltip.HoverDelay));
         }
 
         public void OnPointerExit(PointerEventData eventData) => Stop();

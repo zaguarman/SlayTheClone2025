@@ -15,12 +15,8 @@ namespace SlayTheClone {
 
         public static string GetTypeLine(CardData data) {
             string type = data is SpellData ? "Spell" : "Creature";
-            return data.faction == Faction.None ? type : $"{type} — {FactionLabel(data.faction)}";
+            return data.faction == Faction.None ? type : $"{type} — {FactionName(data.faction)}";
         }
-
-        /// <summary>The faction's emblem and name, as shown wherever a faction is named: "[emblem] Corporate".</summary>
-        public static string FactionLabel(Faction faction) =>
-            faction == Faction.None ? "Unaligned" : $"{EffectIcons.Tag(EffectIcons.ForFaction(faction))} {FactionName(faction)}";
 
         public static string FactionName(Faction faction) {
             switch (faction) {
