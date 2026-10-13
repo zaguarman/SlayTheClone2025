@@ -83,7 +83,7 @@ namespace SlayTheClone.Tests {
             var printed = game.Creature("Contrarian Guy", 1, 1);
             printed.ability = CreatureAbility.Contrarian;
             string text = CardTextFormatter.GetRulesText(printed);
-            StringAssert.StartsWith("Contrarian.", Keywords.Plain(text), "The card prints the ability's name...");
+            Assert.AreEqual("Contrarian", Keywords.Plain(text), "The card prints the ability's name...");
             CollectionAssert.Contains(Keywords.LinksIn(text), "Contrarian", "...as a keyword whose tooltip explains it");
         }
 

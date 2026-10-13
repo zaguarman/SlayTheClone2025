@@ -6,9 +6,10 @@ namespace SlayTheClone {
     /// <summary>
     /// Builds the printed text of a card from its data, in the style of Magic: The Gathering and Slay the Spire:
     /// a line of keywords first (movement, ability, and keyword abilities like Counterattack or Decay 1 for effects that
-    /// keep coming back), then the rest as short templated clauses led by a trigger keyword ("Dawn: draw a card."): what it
-    /// does, then whom it targets ("target", "all enemy creatures", "a random creature"). A keyword's number is left out
-    /// when it's 1 ("Summon", "Bless", "Doom"), except an amount of damage or healing, which always shows.
+    /// keep coming back), then the rest as short templated clauses led by a trigger keyword ("Dawn: draw a card"): what it
+    /// does, then whom it targets ("target", "all enemy creatures", "a random creature", "itself"). A keyword's number is
+    /// left out when it's 1 ("Summon", "Bless", "Doom"), except an amount of damage or healing, which always shows.
+    /// Lines don't end with a full stop: each line is one rule.
     /// Every keyword is a link to its explanation (<see cref="Keywords"/>), shown when it's hovered on an enlarged card.
     /// </summary>
     public static class CardTextFormatter {
@@ -46,7 +47,7 @@ namespace SlayTheClone {
                 }
             }
 
-            string keywordLine = keywords.Count > 0 ? string.Join(", ", keywords) + "." : "";
+            string keywordLine = keywords.Count > 0 ? string.Join(", ", keywords) : "";
             return string.Join("\n", new[] { keywordLine }.Concat(sentences).Where(line => !string.IsNullOrEmpty(line)));
         }
 
@@ -58,7 +59,7 @@ namespace SlayTheClone {
         }
 
         /// <summary>A creature's ability as printed: its name, a link to what it does.</summary>
-        public static string AbilityLine(CreatureAbility ability) => ability == CreatureAbility.None ? "" : AbilityName(ability) + ".";
+        public static string AbilityLine(CreatureAbility ability) => ability == CreatureAbility.None ? "" : AbilityName(ability);
 
         private static string AbilityName(CreatureAbility ability) => Keywords.Link(Abilities.NameOf(ability));
 
@@ -110,12 +111,13 @@ namespace SlayTheClone {
             string body = JoinClauses(retaliates ? actions.Select(RetaliationClause).ToList() : Clauses(actions, isSpell, atDawn));
             string once = effect.oncePerCombat ? "Once per combat, " : "";
 
-            if (trigger.text == null) return CapitalizeRich(once + body) + ".";
+            if (trigger.text == null) return CapitalizeRich(once + body);
             string lead = trigger.text.StartsWith("<") ? $"{trigger.text}:" : $"{trigger.text},";
-            return $"{EffectIcons.Tag(trigger.icon)}{(once.Length > 0 ? once + LowerFirst(lead) : lead)} {body}.";
+            return $"{EffectIcons.Tag(trigger.icon)}{(once.Length > 0 ? once + LowerFirst(lead) : lead)} {body}";
         }
 
         private const string Whom = "\u0001"; // Where the target goes in a clause, while clauses are merged
+        private const string Itself = "itself"; // The creature whose effect it is: "exhaust itself", "1 damage to itself"
 
         // What Retaliate does to the attacker, its numbers after it: "Retaliate: Burn 2 [sand watch]3", "Retaliate: Exhaust".
         // Only something other than a status names the attacker: "Retaliate: 1 damage to it"
@@ -160,6 +162,7 @@ namespace SlayTheClone {
                     continue;
                 }
                 if (pronoun != null) what = statFirst ? "give " + what : what; // "Cleanse target and give it -1 Attack"
+                else if (statFirst && whom.StartsWith(Itself)) what = "give " + what; // "Give itself +1 Attack"
                 clauses.Add(what.Replace(Whom, pronoun ?? whom));
                 named = whom;
             }
@@ -168,7 +171,8 @@ namespace SlayTheClone {
 
         // A target named again: "it" for one creature, "them" for a group. Random picks and players are named each time
         private static string PronounFor(string whom) {
-            if (whom == "target" || whom == "this") return "it";
+            if (whom == "target") return "it";
+            if (whom == Itself) return Itself;
             return whom.StartsWith("all ") || whom.Contains("everything") ? "them" : null;
         }
 
@@ -302,7 +306,7 @@ namespace SlayTheClone {
             }
 
             switch (action.targetType) {
-                case TargetType.Self: return "this" + adjacent;
+                case TargetType.Self: return Itself + adjacent;
                 case TargetType.Player: return "you";
                 case TargetType.Enemy: return "enemy player";
                 case TargetType.FriendlyCreatures: return "all friendly creatures";

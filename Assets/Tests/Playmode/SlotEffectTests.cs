@@ -125,7 +125,7 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(5, safe.Health, "Cleansed before it went off");
 
             var mine = game.Spell("Mine", TargetType.EnemyCreatures, PlaceEffect(SlotEffectType.Landmine, 3));
-            StringAssert.Contains("Landmine 3 on target slot.", Keywords.Plain(CardTextFormatter.GetRulesText(mine)));
+            StringAssert.Contains("Landmine 3 on target slot", Keywords.Plain(CardTextFormatter.GetRulesText(mine)));
         }
 
         [Test]

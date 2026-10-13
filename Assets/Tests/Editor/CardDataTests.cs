@@ -60,11 +60,12 @@ namespace SlayTheClone.Tests {
                 deadLinks.AddRange(mentioned.Where(k => !Keywords.Exists(k)).Select(k => $"{entry.Key}: {k}"));
             }
             CollectionAssert.IsEmpty(deadLinks, "Keywords without an explanation");
-            Assert.AreEqual("Exhaust all creatures.", printed["Strike"], "All enemy and all friendly creatures: all creatures");
-            Assert.AreEqual("Target +3 Attack and -2 Health.", printed["Dead Cat Bounce"], "One target, named once");
-            StringAssert.EndsWith("and Heat Signature on all creatures.", printed["Climate Change"], "Statuses on the same creatures share them, and a 1 goes without saying");
-            StringAssert.StartsWith("Swap.", printed["Quantum Physicist"]);
-            StringAssert.EndsWith("Retaliate: Exhaust.", printed["Quantum Physicist"], "Retaliate, then what it does to the attacker");
+            Assert.AreEqual("Exhaust all creatures", printed["Strike"], "All enemy and all friendly creatures: all creatures");
+            Assert.AreEqual("Target +3 Attack and -2 Health", printed["Dead Cat Bounce"], "One target, named once");
+            StringAssert.EndsWith("and Heat Signature on all creatures", printed["Climate Change"], "Statuses on the same creatures share them, and a 1 goes without saying");
+            StringAssert.StartsWith("Swap\n", printed["Quantum Physicist"], "No full stop: each line is one rule");
+            StringAssert.EndsWith("Retaliate: Exhaust", printed["Quantum Physicist"], "Retaliate, then what it does to the attacker");
+            Assert.AreEqual("Arrival: exhaust itself", printed["Hikikomori"], "Aimed at itself, it says so");
             StringAssert.Contains("Counterattack", printed["Keyboard Warrior"], "Hitting back for its Attack");
 
             var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
