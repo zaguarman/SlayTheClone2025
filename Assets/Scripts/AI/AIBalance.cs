@@ -215,9 +215,9 @@ namespace SlayTheClone {
         /// <summary>
         /// The balance study, three runs of AI games:
         /// <list type="number">
-        /// <item>Cards: each deck against itself with the Hard AI on both sides, so only luck and the cards played differ.</item>
+        /// <item>Cards: each deck against itself with the Very Hard AI on both sides, so only luck and the cards played differ.</item>
         /// <item>Strategies: the Hard styles (and Medium) against each other, each deck against itself.</item>
-        /// <item>Decks: every deck against every other, the Hard AI on both sides, both seats.</item>
+        /// <item>Decks: every deck against every other, the Very Hard AI on both sides, both seats.</item>
         /// </list>
         /// Returns the report.
         /// </summary>
@@ -226,7 +226,7 @@ namespace SlayTheClone {
             var cardLedger = new CardLedger();
             var styleLedger = new CardLedger();
             var deckLedger = new CardLedger();
-            var hard = new AIEntrant(AILevel.Hard);
+            var hard = new AIEntrant(AILevel.VeryHard); // The strongest AI: it plays the cards that pay off later too
             const int CardGamesPerDeck = 100, DeckGamesPerPairing = 3;
             var cards = Read(decks);
             List<Result> cardResults, styleResults, deckResults;
@@ -255,7 +255,7 @@ namespace SlayTheClone {
             var text = new StringBuilder();
             int games = cardResults.Count + styleResults.Count + deckResults.Count;
             text.AppendLine("BALANCE REPORT (AI games)");
-            text.AppendLine($"{games} games: {cardResults.Count} mirror games of the Hard AI (cards), {styleResults.Count} between the AI styles " +
+            text.AppendLine($"{games} games: {cardResults.Count} mirror games of the Very Hard AI (cards), {styleResults.Count} between the AI styles " +
                             $"(strategies), {deckResults.Count} deck against deck (decks). Called off after {MaxDays} Days.");
             text.AppendLine();
 
@@ -268,7 +268,7 @@ namespace SlayTheClone {
             text.AppendLine();
 
             // Decks and factions
-            text.AppendLine("2. DECKS: every deck against every other, Hard AI on both sides (win share of its games; draws count as not won)");
+            text.AppendLine("2. DECKS: every deck against every other, Very Hard AI on both sides (win share of its games; draws count as not won)");
             var deckNames = decks.Select(d => d.GetDeckName()).ToList();
             float DeckShare(string deck) {
                 var played = deckResults.Where(r => r.Deck == deck || r.Deck2 == deck).ToList();
@@ -300,7 +300,7 @@ namespace SlayTheClone {
 
             // Cards
             var playable = cardLedger.Cards.Where(c => c.Games >= 20).ToList();
-            text.AppendLine("3. CARDS (mirror games: same deck, same Hard AI on both sides)");
+            text.AppendLine("3. CARDS (mirror games: same deck, same Very Hard AI on both sides)");
             text.AppendLine("   Edge: when one side played the card more often than the other, how often that side won (50% = no effect).");
             text.AppendLine("   Win%: games won by the side that played it. Per play: damage to the other player, kills. Plays a game: how often it's played when it is.");
             text.AppendLine();

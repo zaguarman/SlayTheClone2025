@@ -151,6 +151,25 @@ namespace SlayTheClone.Tests {
                     CollectionAssert.AreNotEqual(plans, PlanWith(level, hiddenDiffers: true, revealed: true), $"{level}: it ignores what it does see");
                 }
             }
+
+            // Very Hard plays the long game: it extracts one of ours that's Doomed (lost, though not today), and leaves alone
+            // one of theirs it gave a Kill Order (dead already); Hard sees neither
+            foreach (var level in new[] { AILevel.Hard, AILevel.VeryHard }) {
+                using var g = new TestGame();
+                var (me, them) = (g.Player1, g.Player2);
+                var doomed = g.Summon(me, g.Creature("Doomed", 1, 9), 0);
+                g.Run(new ApplyStatusEffectAction(doomed, StatusEffectType.Doomed, 3, 0, controller: them));
+                g.Summon(me, g.Creature("Hitter", 3, 5), 1);
+                var marked = g.Summon(them, g.Creature("Marked", 4, 3), 1);
+                g.Run(new ApplyStatusEffectAction(marked, StatusEffectType.KillOrder, 2, 0, controller: me));
+                g.GiveCard(me, g.Spell("Extraction", TargetType.FriendlyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.ReturnToHand, 0, TargetType.FriendlyCreatures)));
+                new AIPlanner(g.ActionsQueue, g.CombatHandler, level, seed: 7).PlanDay(me);
+                var pending = g.ActionsQueue.GetPendingActions();
+                bool extracts = pending.OfType<PlayCardAction>().Any(p => p.GetCard().Name == "Extraction");
+                bool hitsMarked = pending.OfType<BattlefieldCombatAction>().Any(a => a.GetTargetSlot() == them.Battlefield[1]);
+                Assert.AreEqual(level == AILevel.VeryHard, extracts, $"{level}: extracting the Doomed creature");
+                Assert.AreEqual(level != AILevel.VeryHard, hitsMarked, $"{level}: attacking the creature it gave a Kill Order");
+            }
         }
 
         // Plans player 1's Day in a game of its own. The board and hand player 1 sees are always the same; with hiddenDiffers,

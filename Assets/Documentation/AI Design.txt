@@ -14,7 +14,7 @@ How the computer players are built (Scripts/AI). Last updated 2026-10-13.
       what an unknown creature really is.
 • AIPlanner (the decisions). PlanDay(player) queues the Day's plays, attacks, moves and abilities through the same calls
   dragging cards makes (PlayCardAction, the combat handler, MoveCreatureAction, UseAbilityAction), so the rules can't tell
-  it from a person. One class, three levels (AILevel: Easy, Medium, Hard), and for Hard a style (AIStyle).
+  it from a person. One class, four levels (AILevel: Easy, Medium, Hard, Very Hard), and for Hard a style (AIStyle).
 • AIStyle (a way to play). Weights on what Hard values: damage to the player, its own Health, removal, its board,
   statuses, cards, information, protection, and how eager it is to race.
 • AIEntrant (an AI that can take a seat): a level, and for Hard a style. AIEntrant.All lists them all.
@@ -105,6 +105,17 @@ Hard: Medium, plus:
       goes for the player and only stops real threats. If not, it kills the biggest threats, each with the smallest
       attacker (or pair) that does it, and sends the rest at the player.
     • Moves: a creature with nothing to do leaves a Scorched Earth slot, or takes cover on a free Temporal Shield.
+
+Very Hard: Hard, plus the long game (2026-10-14), the cards that pay off on a later Day. Only this level does it:
+    • Lost creatures: one of its own that's Doomed, Brainwashed, or on Borrowed Time at 0 Health counts as lost even
+      if nothing kills it today, so Extraction, Witness Protection Program and He Didn't Kill Himself rescue it (a fresh
+      card, its statuses gone), and Frame Job passes the Doom or the brainwashing to the creature facing it.
+    • Slow kills (Kill Order, Brainwashed) go where its attacks can't reach: worth the whole creature on one too tough
+      to kill today, a third of it on one it could kill anyway, nothing on one already on its way out.
+    • Condemned enemies: a creature of theirs it gave a Kill Order, or Brainwashed to come over, isn't attacked or hit
+      by its damage spells (unless it must defend): it's dead, or its own, already.
+    Very Hard beats Hard 65 - 51 (130 games, every deck against itself, both seats; 14 draws). The balance study plays
+    Very Hard on both sides; the tournaments keep their levels and styles.
 
 
 4. THE HARD STYLES (weights; 1 is the plain Hard AI)

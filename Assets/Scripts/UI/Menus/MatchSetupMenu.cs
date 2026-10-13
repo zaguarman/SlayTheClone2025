@@ -125,7 +125,7 @@ namespace SlayTheClone {
             Refresh();
         }
 
-        /// <summary>The next AI, in turn: Easy, Medium, then Hard in each of its styles.</summary>
+        /// <summary>The next AI, in turn: Easy, Medium, Hard in each of its styles, then Very Hard.</summary>
         public void StepLevel() {
             int index = AIEntrant.All.ToList().FindIndex(e => e.Name == AIPlayer.Name);
             AIPlayer = AIEntrant.All[(index + 1) % AIEntrant.All.Count];

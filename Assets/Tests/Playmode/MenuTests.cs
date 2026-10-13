@@ -313,8 +313,8 @@ namespace SlayTheClone.Tests {
                 var cardCounts = game.Players.ToDictionary(p => p, GameAsserts.CountCards);
                 // Each game two levels, so every level plays several decks
                 var ai = new Dictionary<Player, AIPlanner> {
-                    [game.Player1] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)(i / 2 % 3), i),
-                    [game.Player2] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)((i / 2 + 1) % 3), i + 1)
+                    [game.Player1] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)(i / 2 % 4), i),
+                    [game.Player2] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)((i / 2 + 1) % 4), i + 1)
                 };
                 var played = game.Players.ToDictionary(p => p, p => 0);
                 var attacked = game.Players.ToDictionary(p => p, p => 0);

@@ -5,7 +5,7 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>How well the AI plays (see <see cref="AIPlanner"/>).</summary>
-    public enum AILevel { Easy, Medium, Hard }
+    public enum AILevel { Easy, Medium, Hard, VeryHard }
 
     /// <summary>
     /// An AI that plans one side's Day (GDD 3.6 Planning) the way a player does: it queues the same plays, attacks, moves and
@@ -22,6 +22,11 @@ namespace SlayTheClone {
     /// out of bad slots. It plays combinations: it forecasts what its spells will have done by the time attacks land (see
     /// <see cref="Forecast"/>) and picks each next spell knowing the ones before. Its <see cref="AIStyle"/> says what it
     /// values most: the same planner goes face, controls, goes wide, hexes, turtles, spies or draws.</item>
+    /// <item>Very Hard is Hard that also plays the long game, the cards that pay off on a later Day: it saves the creatures
+    /// already lost to a slow death (Doomed, Brainwashed, Borrowed Time running out at 0 Health) with Extraction, Witness
+    /// Protection or a faked death, frames the enemy for them, keeps its slow kills (Kill Order, Brainwashed) for what its
+    /// attacks can't kill, and doesn't waste attacks or damage on enemy creatures already condemned (a Kill Order it gave,
+    /// one Brainwashed to come over to its side).</item>
     /// </list>
     /// </summary>
     public class AIPlanner {
@@ -33,7 +38,8 @@ namespace SlayTheClone {
         private readonly IBattlefieldCombatHandler combat;
         private readonly System.Random random; // Easy's choices; its own, so the game's shuffles stay the same
         private IModifierManager Modifiers => queue.Modifiers;
-        private bool Hard => Level == AILevel.Hard;
+        private bool Hard => Level >= AILevel.Hard;
+        private bool VeryHard => Level == AILevel.VeryHard; // Delayed strategies
 
         private AIView view;
         // Damage already planned today, so two hits don't both kill the same creature
@@ -59,11 +65,11 @@ namespace SlayTheClone {
             this.queue = queue ?? throw new System.ArgumentNullException(nameof(queue));
             this.combat = combat ?? throw new System.ArgumentNullException(nameof(combat));
             Level = level;
-            Style = level == AILevel.Hard ? style ?? AIStyle.Balanced : AIStyle.Balanced;
+            Style = level >= AILevel.Hard ? style ?? AIStyle.Balanced : AIStyle.Balanced;
             random = new System.Random(seed);
         }
 
-        public override string ToString() => Level == AILevel.Hard && Style != AIStyle.Balanced ? $"Hard {Style}" : Level.ToString();
+        public override string ToString() => new AIEntrant(Level, Style).Name;
 
         /// <summary>
         /// Plans the player's Day: creatures to slots, then the spells worth playing, then each creature's ability, attack or
@@ -344,7 +350,7 @@ namespace SlayTheClone {
             int theirs = System.Math.Max(1, TheirPotentialDamage());
             float daysToWin = (view.TheirHealth - plannedFace + ours - 1) / ours, daysToLose = (view.MyHealth + theirs - 1) / theirs;
             bool ahead = open != null && !defending && daysToWin < daysToLose * Style.Aggression;
-            foreach (var target in view.Theirs.Where(Hittable).OrderByDescending(Threat).ToList()) {
+            foreach (var target in view.Theirs.Where(t => Hittable(t) && (defending || !Condemned(t))).OrderByDescending(Threat).ToList()) {
                 var killer = left.Where(a => Hit(a, target) >= HealthLeft(target) && (!Assassin(a) || target.Worth >= 6 || Threat(target) >= 6))
                     .OrderBy(a => Assassin(a) ? 100 : DamageOf(a)).FirstOrDefault();
                 if (killer != null && open != null) {
@@ -371,7 +377,7 @@ namespace SlayTheClone {
 
             // The rest at the player; with no way through, at the creature where the damage counts most
             foreach (var attacker in left.ToList()) {
-                var chip = view.Theirs.Where(Hittable).OrderByDescending(t => ChipValue(attacker, t)).FirstOrDefault();
+                var chip = view.Theirs.Where(t => Hittable(t) && !Condemned(t)).OrderByDescending(t => ChipValue(attacker, t)).FirstOrDefault();
                 if (open != null) AttackSlot(attacker, open, DamageOf(attacker));
                 else if (chip != null && ChipValue(attacker, chip) > 0) AttackSlot(attacker, chip.Slot, Hit(attacker, chip));
                 else continue;
@@ -424,6 +430,24 @@ namespace SlayTheClone {
         }
 
         private bool WouldDie(SeenCreature ours) => ThreatOn(ours) >= HealthLeft(ours) && !IsUntouchable(ours);
+
+        // Very Hard: one of ours that's gone without help, now or on a later Day: it would die to their attacks, it's Doomed,
+        // Brainwashed (it goes over to them), or living on Borrowed Time at 0 Health
+        private bool Lost(SeenCreature ours) => WouldDie(ours) || (VeryHard && (ours.Has(StatusEffectType.Doomed)
+            || ours.Has(StatusEffectType.Brainwashed) || (ours.Has(StatusEffectType.BorrowedTime) && HealthLeft(ours) <= 0)));
+
+        // Very Hard: one of theirs already on its way out (a Kill Order we gave) or over to us (Brainwashed): attacks and
+        // damage on it are wasted
+        private bool Condemned(SeenCreature theirs) => VeryHard && !theirs.Ours
+            && (theirs.Has(StatusEffectType.KillOrder) || theirs.Has(StatusEffectType.Brainwashed));
+
+        // Very Hard: how much a slow kill (Kill Order, Brainwashed) on this one is worth, as a share of the creature: none if
+        // it's going already, little if today's attacks can kill it anyway, all of it if it's too tough for them
+        private float SlowKillShare(SeenCreature theirs) {
+            if (theirs.Has(StatusEffectType.Doomed) || theirs.Has(StatusEffectType.KillOrder) || theirs.Has(StatusEffectType.Brainwashed)) return 0;
+            int reach = view.Mine.Where(c => c.Operative && CanAttack(c)).Select(DamageOf).DefaultIfEmpty(0).Max();
+            return HealthLeft(theirs) <= reach ? 0.35f : 1f;
+        }
 
         private void AttackSlot(SeenCreature attacker, SeenSlot target, int damage) {
             Log($"AI: {attacker} attacks {target}", LogTag.Turns);
@@ -594,7 +618,9 @@ namespace SlayTheClone {
                 case ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish: {
                     // Off the board: worth it to save one that would die (and for its Last Will); otherwise a lost Day
                     if (!creature.Ours) return 0;
-                    float saved = WouldDie(creature) ? creature.Worth * 0.8f : -1.5f;
+                    float saved = Lost(creature) ? creature.Worth * 0.8f : -1.5f;
+                    // Very Hard: only a fresh start lifts a Doomed or Brainwashed creature's fate; Borrowed Time is lifted by leaving too
+                    if (VeryHard && action.actionType == ActionType.FakeDeath && creature.Has(StatusEffectType.Brainwashed)) saved += 0.5f;
                     if (action.actionType == ActionType.FakeDeath && Hard) saved += LastWillValue(creature);
                     if (action.actionType == ActionType.ReturnToHand && creature.Has(StatusEffectType.Revealed)) saved += 0.5f * Style.Intel;
                     return saved;
@@ -608,6 +634,8 @@ namespace SlayTheClone {
                     if (facing == null) return 0;
                     return action.actionType switch {
                         ActionType.StealStatChanges => 2 * System.Math.Max(0, facing.StatRaises), // They lose them, it gains them
+                        ActionType.PassHarmfulStatuses when VeryHard && (creature.Has(StatusEffectType.Doomed) || creature.Has(StatusEffectType.Brainwashed)) =>
+                            creature.Worth + facing.Worth, // Ours saved, theirs condemned
                         ActionType.PassHarmfulStatuses => 2 * HarmfulStatuses.Count(creature.Has),
                         _ => 2 * GoodStatuses.Count(facing.Has)
                     };
@@ -643,7 +671,7 @@ namespace SlayTheClone {
 
         private float DamageGoodness(SeenCreature creature, int damage) {
             int left = HealthLeft(creature);
-            if (left <= 0) return -0.1f; // Already dead to what's planned: wasted
+            if (left <= 0 || Condemned(creature)) return -0.1f; // Already dead to what's planned (or condemned): wasted
             return damage >= left ? -(creature.Worth + left) : -damage;
         }
 
@@ -727,8 +755,10 @@ namespace SlayTheClone {
                 StatusEffectType.Untouchable => Hard && creature.Ours ? Protection(creature, ActionType.Stun, 0) : 3,
                 StatusEffectType.Cooldown => -1,
                 // A delayed death they can't see coming, unless they happen to cleanse it
+                StatusEffectType.KillOrder when VeryHard && !creature.Ours => -(creature.Worth + HealthLeft(creature)) * 0.9f * SlowKillShare(creature),
                 StatusEffectType.KillOrder => creature.Has(StatusEffectType.KillOrder) ? 0 : -(creature.Worth + HealthLeft(creature)) * 0.7f,
                 // A defection: they lose it and we gain it, later; sooner when it's Revealed
+                StatusEffectType.Brainwashed when VeryHard && !creature.Ours => -(creature.Worth * 2) * (days <= 1 ? 0.85f : 0.7f) * SlowKillShare(creature),
                 StatusEffectType.Brainwashed => creature.Ours ? -creature.Worth : -(creature.Worth * 2) * (days <= 1 ? 0.75f : 0.6f),
                 // Can't die until tomorrow's Dusk: worth the creature when it would die now, a little otherwise
                 StatusEffectType.BorrowedTime => creature.Has(StatusEffectType.BorrowedTime) ? 0 : WouldDie(creature) ? creature.Worth * 0.7f : 0.3f,
