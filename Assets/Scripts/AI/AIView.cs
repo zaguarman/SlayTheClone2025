@@ -37,6 +37,8 @@ namespace SlayTheClone {
         public bool DealsDouble { get; }
         /// <summary>How far its Attack and Health are above its printed ones (what Credit Grab steals).</summary>
         public int StatRaises { get; }
+        /// <summary>Damage it deals whoever reveals it (When Revealed), from its card text.</summary>
+        public int RevealBacklash { get; }
         private readonly HashSet<StatusEffectType> statuses;
 
         /// <param name="ours">Ours even before it has an owner: a creature of ours queued to be summoned.</param>
@@ -67,6 +69,8 @@ namespace SlayTheClone {
             }
             StatRaises = creature.Attack - creature.BaseAttack + creature.Health - creature.BaseHealth;
             DealsDouble = slot != null && creature.Slot != null && Abilities.IsOffTheBooks(creature, modifiers);
+            RevealBacklash = creature.Effects.Where(e => e.trigger == EffectTrigger.OnRevealed).SelectMany(e => e.actions)
+                .Where(a => a.actionType == ActionType.Damage && a.targetType == TargetType.Enemy).Sum(a => a.value);
             Retaliation = creature.Effects.Where(e => e.trigger == EffectTrigger.OnDamage).SelectMany(e => e.actions)
                 .Where(a => a.actionType == ActionType.Damage && a.targetType == TargetType.Enemy && a.targetModifier == TargetModifier.None)
                 .Sum(a => a.value > 0 ? a.value : creature.Attack);

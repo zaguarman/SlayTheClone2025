@@ -28,7 +28,8 @@ namespace SlayTheClone {
         public enum CreatureAbility {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
             SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, PennyStock, Undercover, Handover, Recoil,
-            Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace, OffTheBooks, ExtremePrejudice
+            Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace, OffTheBooks, ExtremePrejudice,
+            AllergicToLight, FallGuy
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look

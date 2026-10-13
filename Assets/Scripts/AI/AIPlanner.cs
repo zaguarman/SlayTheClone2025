@@ -443,7 +443,8 @@ namespace SlayTheClone {
             if (action.actionType == ActionType.Reveal) {
                 if (!EffectResolver.UsesChosenTarget(action)) return 0.5f * Style.Intel; // A side's Watchdogs
                 var seen = CreatureAt(aim);
-                return (seen != null && !seen.Ours && !seen.Known ? 1 : 0.2f) * Style.Intel; // Or what may lie in the slot
+                float look = (seen != null && !seen.Ours && !seen.Known ? 1 : 0.2f) * Style.Intel; // Or what may lie in the slot
+                return seen != null && !seen.Ours ? look - RevealCost(seen) : look;
             }
 
             var targets = TargetsOf(action, aim);
@@ -538,6 +539,9 @@ namespace SlayTheClone {
                     return StatChangeGoodness(action, creature);
                 case ActionType.Destroy:
                     if (!Lands(action, creature)) return 0;
+                    // Hard: a Fall Guy of theirs takes it instead
+                    var patsy = Hard && !creature.Ours ? view.Theirs.FirstOrDefault(c => c != creature && c.Ability == CreatureAbility.FallGuy) : null;
+                    if (patsy != null) creature = patsy;
                     if (HealthLeft(creature) <= 0) return -0.1f; // Already dead to what's planned: wasted
                     // One of ours with a Last Will (Dead Man's Switch): its death does something for us
                     return -(creature.Worth + HealthLeft(creature)) + (Hard && creature.Ours ? LastWillValue(creature) : 0);
@@ -553,7 +557,9 @@ namespace SlayTheClone {
                     }
                     if (Hard && creature.Has(StatusEffectType.Blessed)) return -0.3f; // Negated, and it loses a stack of Blessed
                     if (Hard && creature.Has(StatusEffectType.Doomed)) return 0; // Blocks every other status
-                    return StatusGoodness(action, creature);
+                    // Revealing one that burns in the light, or strikes back at whoever reveals it
+                    float revealed = action.statusEffectToApply == StatusEffectType.Revealed && !creature.Ours ? RevealCost(creature) : 0;
+                    return StatusGoodness(action, creature) + revealed;
                 case ActionType.Cleanse:
                     return HarmfulStatuses.Any(creature.Has) ? 2 : 0;
                 case ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish: {
@@ -625,6 +631,10 @@ namespace SlayTheClone {
                 default: return true;
             }
         }
+
+        // Revealing one of theirs, for them: it strikes back at us (When Revealed), less what the light does to it (Allergic to Light)
+        private float RevealCost(SeenCreature theirs) =>
+            theirs.RevealBacklash * 0.8f * Style.OwnHealth - (theirs.Ability == CreatureAbility.AllergicToLight ? Abilities.LightDamage : 0);
 
         // Hard: what one of our creatures' Last Will does for us when it dies (Dead Man's Switch destroying their strongest)
         private float LastWillValue(SeenCreature ours) {

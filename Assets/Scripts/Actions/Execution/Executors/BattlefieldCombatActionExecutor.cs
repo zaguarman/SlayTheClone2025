@@ -49,7 +49,7 @@ namespace SlayTheClone {
                     return;
                 }
                 Log($"Executor: {attacker.Name} takes {victim.Name} out", LogTag.Combat);
-                actionsQueue.AddAction(new DestroyCreatureAction(victim, attacker, unconditional: true));
+                actionsQueue.AddAction(new DestroyCreatureAction(victim, attacker, unconditional: true, controller: attacker.Owner));
                 actionsQueue.AddAction(new DestroyCreatureAction(attacker, unconditional: true));
                 return;
             }

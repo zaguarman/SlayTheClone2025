@@ -74,6 +74,23 @@ namespace SlayTheClone.Tests {
             game.Play(firewall, p1, null);
             game.Resolve(); // The spell layer comes before attacks
             Assert.AreEqual(Player.MaxHealth, p1.Health, "A Watchdog made by a spell catches attacks queued before it");
+
+            // Intelligence (Glomar Response): an enemy reveal is nullified, even an instant one, and they learn nothing
+            Fresh();
+            var hidden = game.Summon(p2, game.Creature("Hidden", 1, 3), 0);
+            Watch(Spec(WatchdogEffect.Nullify, WatchedAction.Intelligence), p2);
+            var tapData = game.Spell("Tap", TargetType.EnemyCreatures, new CardEffect {
+                trigger = EffectTrigger.OnPlay,
+                actions = new List<EffectAction> {
+                    new EffectAction { actionType = ActionType.ApplyStatus, targetType = TargetType.EnemyCreatures, statusEffectToApply = StatusEffectType.Revealed, statusDuration = 2 }
+                }
+            });
+            var tap = game.GiveCard(p1, tapData);
+            game.Play(tap, p1, p2.Battlefield[0]); // Instant: it resolves at once
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(hidden, StatusEffectType.Revealed), "Neither confirmed nor denied");
+            CollectionAssert.DoesNotContain(p1.Hand, tap, "The spell is spent");
+            game.Play(game.GiveCard(p1, tapData), p1, p2.Battlefield[0]);
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(hidden, StatusEffectType.Revealed), "Its one charge is gone");
         }
 
         [Test]
@@ -141,6 +158,17 @@ namespace SlayTheClone.Tests {
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
             Assert.AreEqual(Player.MaxHealth - 2 - 4 - 2, p1.Health, "It picked the strongest: only A's attack lands");
+
+            // Backfire (Sabotage): the strongest attack doesn't happen, and its attacker takes its own Attack instead
+            Watch(Spec(WatchdogEffect.Backfire, timing: WatchdogTiming.Briefing, pick: BriefingPick.Strongest), p1);
+            game.StartTurn();
+            int health = p1.Health;
+            game.Declare(a, p1.Battlefield[0]);
+            game.Declare(c, p1.Battlefield[2]);
+            game.ActionsQueue.BriefWatchdogs();
+            game.Resolve();
+            Assert.AreEqual(health - 2, p1.Health, "Only A's attack lands...");
+            Assert.AreEqual(10 - 4, c.Health, "...C's backfires on C");
         }
     }
 }

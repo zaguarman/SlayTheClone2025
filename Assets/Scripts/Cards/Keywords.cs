@@ -49,6 +49,7 @@ namespace SlayTheClone {
             Add("Last Will", "Happens when this creature dies.");
             Add("Hurt", "Happens each time this creature takes damage.");
             Add("On Hit", "Happens when this creature's attack lands, on top of the attack.");
+            Add("When Revealed", "Happens when this creature becomes [Revealed], or a [Reveal] shows it to the other side. Against the enemy, it strikes whoever revealed it: the creature whose effect it was, or else its player.");
 
             // ---------------------------------------------------------------- Keyword abilities (recurring patterns)
             group = "Keyword Abilities";
@@ -102,6 +103,7 @@ namespace SlayTheClone {
             Add("Nullify", "The action is cancelled.");
             Add("Redirect", "The action hits another creature, picked at [Random|random].");
             Add("Reorder", "The action moves to the start or the end of its turn in the queue.");
+            Add("Backfire", "The attack doesn't happen: the attacker takes its own Attack as damage instead.");
 
             // ---------------------------------------------------------------- Slot Effects
             group = "Slot Effects";
@@ -148,6 +150,8 @@ namespace SlayTheClone {
             CreatureAbility.DoubleTap => "It attacks twice: a second hit on the same target right after the first.",
             CreatureAbility.ShellGame => "Instead of attacking or moving: target creature trades places with the one to its right, or to its left at the end of the row (hold Shift as you drag it).",
             CreatureAbility.SafeSpace => "Each [Dawn], it and the friendly creatures beside it gain [Blessed|Bless]: a ward that stops the next status.",
+            CreatureAbility.AllergicToLight => $"A drawback: each time it's [Revealed], or a [Reveal] shows it to the other side, it takes {Abilities.LightDamage} damage. Spies coming into the light; one day, vampires.",
+            CreatureAbility.FallGuy => "When an enemy effect would make another friendly creature [Revealed] or [Destroy|destroy] it, it lands on this one instead: it takes the fall.",
             _ => Capitalize(Abilities.ReminderOf(ability)) + "."
         };
 

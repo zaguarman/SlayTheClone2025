@@ -12,10 +12,12 @@ namespace SlayTheClone {
         public BoardSlot Slot { get; }   // What's in this slot...
         public IPlayer Side { get; }     // ...or this player's Watchdogs
         public IPlayer Viewer { get; }   // Who gets to see it
+        public ICreature Source { get; } // The creature whose effect it is, if any (Control Room)
 
-        public RevealAction(BoardSlot slot, IPlayer viewer) {
+        public RevealAction(BoardSlot slot, IPlayer viewer, ICreature source = null) {
             Slot = slot;
             Viewer = viewer;
+            Source = source;
             Log($"Created {this}", LogTag.Actions | LogTag.Effects);
         }
 
@@ -40,6 +42,7 @@ namespace SlayTheClone {
                 reveal.Slot.Effect?.RevealedTo.Add(reveal.Viewer);
                 var creature = reveal.Slot.OccupyingCreature;
                 Intel.MakeKnown(creature, reveal.Viewer);
+                if (creature != null && creature.Owner != reveal.Viewer) Intel.OnRevealed(creature, reveal.Source, context.ActionsQueue);
                 foreach (var pending in context.ActionsQueue.GetPendingActions()
                              .Where(a => (creature != null && Intel.PlannerOf(a) == creature) || Intel.SummonInto(a) == reveal.Slot)) {
                     context.ActionsQueue.RevealTo(reveal.Viewer, pending);

@@ -39,8 +39,10 @@ namespace SlayTheClone {
 
         /// <summary>Whether it watches this action: its kind, whose it is, from which creature, and how strong.</summary>
         public bool Matches(IGameAction action, ICreature source) {
-            var kind = WatchdogRules.KindOf(action, source);
-            if (kind != Spec.watches) return false;
+            if (Spec.watches == WatchedAction.Intelligence) {
+                if (!WatchdogRules.Reveals(action)) return false;
+            }
+            else if (WatchdogRules.KindOf(action, source) != Spec.watches) return false;
 
             var owner = WatchdogRules.OwnerOf(action, source);
             if (Spec.side == WatchdogSide.Enemy && (owner == null || owner == Controller)) return false;
@@ -104,8 +106,29 @@ namespace SlayTheClone {
             SummonCreatureAction summon => summon.GetOwner(),
             MoveCreatureAction move => move.GetPlayer(),
             ApplyStatusEffectAction status => status.Controller ?? ActorOf(action, source)?.Owner,
+            RevealAction reveal => reveal.Viewer,
             _ => ActorOf(action, source)?.Owner
         };
+
+        /// <summary>
+        /// Intelligence: what an Intelligence Watchdog watches (Glomar Response). A Reveal, Revealed landing, or the play of a
+        /// spell that does either.
+        /// </summary>
+        public static bool Reveals(IGameAction action) => action switch {
+            RevealAction => true,
+            ApplyStatusEffectAction status => status.GetStatusType() == StatusEffectType.Revealed,
+            PlayCardAction play => play.GetCard() is Spell spell && RevealsSomething(spell),
+            PlaySpellAction cast => RevealsSomething(cast.GetSpell()),
+            _ => false
+        };
+
+        private static bool RevealsSomething(Spell spell) => spell != null && spell.Effects.SelectMany(e => e.actions)
+            .Any(a => a.actionType == ActionType.Reveal || (a.actionType == ActionType.ApplyStatus && a.statusEffectToApply == StatusEffectType.Revealed));
+
+        /// <summary>Backfire: the attack is replaced by its own Attack as damage to the attacker. Other actions are just nullified (null).</summary>
+        public static IGameAction Backfire(IGameAction action) =>
+            action is BattlefieldCombatAction attack && attack.GetAttacker() is ICreature attacker && attacker.Attack > 0
+                ? new DamageCreatureAction(attacker, attacker.Attack) : null;
 
         /// <summary>The number "N or less" compares: an attack's Attack. Other actions have none (0): each Watchdog card gets
         /// its own filter, and a number for other actions waits until a card needs one.</summary>

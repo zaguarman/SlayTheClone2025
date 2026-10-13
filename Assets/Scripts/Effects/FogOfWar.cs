@@ -82,6 +82,19 @@ namespace SlayTheClone {
             MakeKnown(creature, creature.Owner.Opponent);
         }
 
+        /// <summary>
+        /// The creature was Revealed, or a Reveal showed it to the other side: Allergic to Light burns it, and its "When Revealed"
+        /// effects strike back at <paramref name="revealer"/> (the creature whose effect it was; none: its player).
+        /// </summary>
+        public static void OnRevealed(ICreature creature, ICreature revealer, IActionsQueue queue) {
+            if (creature == null || creature.IsDead || creature.Slot == null || queue == null) return;
+            if (Abilities.Has(creature, CreatureAbility.AllergicToLight)) {
+                Log($"{creature.Name} is Allergic to Light", LogTag.Effects);
+                queue.AddAction(new DamageCreatureAction(creature, Abilities.LightDamage));
+            }
+            creature.HandleEffect(EffectTrigger.OnRevealed, queue, revealer);
+        }
+
         public static void MakeKnown(ICreature creature, IPlayer viewer) {
             if (creature == null || viewer == null || viewer == creature.Owner) return;
             if (creature.KnownTo.Add(viewer)) Log($"{viewer.Name} now knows what {creature.Name} is", LogTag.Effects);

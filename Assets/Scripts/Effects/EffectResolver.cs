@@ -19,7 +19,10 @@ namespace SlayTheClone {
             foreach (var action in ActionsFor(creature, trigger, creature.Owner)) {
                 var queued = action;
                 List<ITarget> targets;
-                if (trigger == EffectTrigger.OnDamage && action.targetType == TargetType.Enemy && action.targetModifier == TargetModifier.None) {
+                if (trigger == EffectTrigger.OnRevealed && action.targetType == TargetType.Enemy && action.targetModifier == TargetModifier.None) {
+                    targets = new List<ITarget> { triggeringAttacker is { IsDead: false, Slot: not null } revealer ? revealer : creature.Owner?.Opponent };
+                }
+                else if (trigger == EffectTrigger.OnDamage && action.targetType == TargetType.Enemy && action.targetModifier == TargetModifier.None) {
                     // Counterattack and Retaliate: an enemy-targeted OnDamage effect answers an attack, on the attacker.
                     // Damage that isn't an attack (a spell, an ability) isn't answered
                     if (triggeringAttacker == null) continue;
@@ -348,7 +351,7 @@ namespace SlayTheClone {
                         Log($"{source.Name}: {creature.Name} is Untouchable: it isn't destroyed", LogTag.Effects);
                         return null;
                     }
-                    return new DestroyCreatureAction(creature, source as ICreature, unconditional: true);
+                    return new DestroyCreatureAction(creature, source as ICreature, unconditional: true, controller: controller);
                 case ActionType.Damage:
                     // Damage from a creature to a creature is ordered by that creature's speed; other damage has no source
                     return TargetedActions.Damage(target, action.value, creature != null ? source as ICreature : null);
@@ -381,7 +384,7 @@ namespace SlayTheClone {
                         : null;
                 case ActionType.Reveal: // A slot: its hidden Slot Effect and its creature's plans; a player: their Watchdog conditions
                     return target is IPlayer side ? new RevealAction(side, controller)
-                        : SlotOf(target) is BoardSlot revealed ? new RevealAction(revealed, controller) : null;
+                        : SlotOf(target) is BoardSlot revealed ? new RevealAction(revealed, controller, source as ICreature) : null;
                 // Two creatures: a creature's own effect works between it and its target; a spell's (or a creature's effect on
                 // itself), between the target and the creature facing it
                 case ActionType.CopyStats: { // The copier takes the model's stats

@@ -270,7 +270,7 @@ Since 2026-10-13 Digital Society, Shadow Ops., Tech, Myth and Mind each have a d
 • Myth - Old Gods, New Tricks (The Oracle, "Saw this loss coming. Didn't warn you."). Twice: Memento Mori, Martyr, Mummy, Cultist, Exorcism, Excess of Bread and Wine, Monkey Hand, Reincarnation.
     (new) Reincarnation (1/1/2, 0): Rebirth and Grow. Last life a worm, this life a dog.
 • Mind - All in Your Head (Your Inner Critic, "Knows exactly what to say. Always the worst thing."). Every card twice but Roko's Basilisk and Trolley Problem.
-    (new) Ship of Theseus (2/3/1, 0): Regenerate 1. Scapegoating: Heat Signature 2 on target creature, draw a card (Mind makes someone else's damage find the goat).
+    (new) Ship of Theseus (2/3/1, 0): Regenerate 1. Escape Goat (was Scapegoating; the name went to Shadow Ops.' Scapegoat): Heat Signature 2 on target creature, draw a card (Mind makes someone else's damage find the goat).
 
 Two pairs stay as examples of factions that play well together (Faction Compendium, Example Two-Faction Decks). The deck's main faction (the one with more cards) dresses the table:
 • Digital Society & Shadow Ops. - Panopticon (opponent: Your Data Broker, "Knows where you were last night. Sold it by noon."): Digital Society marks the enemy with Heat Signature (Meta Group Chat, Social Panopticon, Cancelled), Shadow Ops. reveals them (Control Room, Eavesdrop, Whistleblower), and every random effect finds its target.

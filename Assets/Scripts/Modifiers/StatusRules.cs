@@ -14,8 +14,9 @@ namespace SlayTheClone {
 
         /// <param name="turnApplied">The Day its countdown started: today, or the original Day for a status passed on.</param>
         /// <returns>The status now on the creature, or null if it didn't land.</returns>
+        /// <param name="revealer">For Revealed: the creature whose effect it is, if any (If I Told You strikes back at it).</param>
         public static StatusEffectModifier Land(ActionExecutionContext context, ICreature target, StatusEffectType type,
-            int duration, int potency, int turnApplied) {
+            int duration, int potency, int turnApplied, ICreature revealer = null) {
             var manager = context.ModifierManager;
 
             // A Doomed creature is immune to new statuses, and Doomed itself ignores re-application
@@ -66,7 +67,10 @@ namespace SlayTheClone {
             }
 
             // Revealed shows the creature to the other side for good, whatever it is
-            if (type == StatusEffectType.Revealed) Intel.MakeKnown(target, target.Owner?.Opponent);
+            if (type == StatusEffectType.Revealed) {
+                Intel.MakeKnown(target, target.Owner?.Opponent);
+                Intel.OnRevealed(target, revealer, context.ActionsQueue);
+            }
 
             var status = (StatusEffectModifier)context.ModifierFactory.CreateStatusEffectModifier(
                 $"{type} Effect", Describe(type, duration, potency), type, duration, potency, turnApplied);

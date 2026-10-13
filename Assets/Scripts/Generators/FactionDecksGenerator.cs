@@ -53,7 +53,7 @@ namespace SlayTheClone {
                     "The Oracle", "Saw this loss coming. Didn't warn you."),
                 Offer(Build(Faction.Mind, "Mind - All in Your Head", Doubled(MindCards(),
                         "Mimetic Theory", "Generational Trauma", "Pessimist", "Introvert", "Schrodinger's Cat", "Red Herring",
-                        "Imposter Syndrome", "Ship of Theseus", "Scapegoating"), written),
+                        "Imposter Syndrome", "Ship of Theseus", "Escape Goat"), written),
                     "Your Inner Critic", "Knows exactly what to say. Always the worst thing."),
             };
 
@@ -738,6 +738,32 @@ namespace SlayTheClone {
                 Requiring(Status(StatusEffectType.Brainwashed, 1, TargetType.EnemyCreatures), TargetRequisite.Revealed))
                 .NotInStarterDeck()
                 .Picture("A handler in a dim bar sliding a thick envelope and a photograph across the table to a nervous soldier; the photo shows the soldier with a woman who isn't his wife."),
+            Creature("If I Told You, I'd Have to Kill You", 3, 4, speed: 2, deploy: 0,
+                "It's classified. So are you, now.",
+                "When Revealed (Revealed, or a Reveal shows it): 4 damage to whoever revealed it, the creature whose effect it was or else its player. Allergic to Light: each time, it takes 2 damage itself.",
+                On(EffectTrigger.OnRevealed, Damage(4, TargetType.Enemy)))
+                .With(CreatureAbility.AllergicToLight)
+                .NotInStarterDeck()
+                .Picture("A spy in a dark suit leaning in at a cocktail party to whisper into an eager journalist's ear, while under the table his other hand quietly screws a silencer onto a pistol."),
+            Creature("Scapegoat", 1, 3, speed: 1, deploy: 0,
+                "Someone has to take the blame. He volunteered. Sort of.",
+                "Fall Guy: when an enemy effect would make another friendly creature Revealed or destroy it (Perfectly Timed Camera Malfunction, Extreme Prejudice...), it lands on the Scapegoat instead. (Mind's spell that used to be called Scapegoating is now Escape Goat.)")
+                .With(CreatureAbility.FallGuy)
+                .NotInStarterDeck()
+                .Picture("A bewildered goat in an orange jumpsuit holding up a mugshot placard under flashing cameras, a sign around its neck reading I DID IT, while two men in dark suits slip away behind it."),
+            Spell("Glomar Response", TargetType.Enemy,
+                "We can neither confirm nor deny the existence of this card.",
+                "A Watchdog: the next 2 enemy reveals (a Reveal, Revealed, or a spell that does either, even an instant one) are nullified, and they learn nothing. Monitored: it acts the moment they try.",
+                CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Intelligence, side = WatchdogSide.Enemy, effect = WatchdogEffect.Nullify, charges = 2 }, TargetType.Enemy))
+                .NotInStarterDeck()
+                .Picture("A press officer at a podium with a perfectly blank face, every line on his teleprompter blacked out with thick redaction bars, reporters raising their hands in vain."),
+            Spell("Sabotage", TargetType.Enemy,
+                "Someone filled the cannon with sand. Someone else lit it.",
+                "A Briefing Watchdog: from the Day after it's set, the strongest enemy attack backfires: it doesn't happen, and the attacker takes its own Attack as damage. 1 charge.",
+                CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Backfire,
+                    charges = 1, timing = WatchdogTiming.Briefing, pick = BriefingPick.Strongest }, TargetType.Enemy))
+                .NotInStarterDeck()
+                .Picture("A tank that has just fired, its barrel peeled back like a banana and the crew blackened and blinking, while a saboteur in coveralls tiptoes away with an empty sack marked SUGAR - FOR THE FUEL TANK."),
             Creature("MK Ultra Test Subject", 4, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
@@ -929,7 +955,7 @@ namespace SlayTheClone {
                 "Regenerate 1: it repairs itself plank by plank.",
                 On(EffectTrigger.EndOfTurn, Heal(1, TargetType.Self)))
                 .Picture("Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went."),
-            Spell("Scapegoating", TargetType.EnemyCreatures,
+            Spell("Escape Goat", TargetType.EnemyCreatures,
                 "It wasn't us. It was the goat. Everyone agrees it was the goat.",
                 "Heat Signature 2 on target creature (random effects and redirected attacks go to it), and draw a card. Mind deals no damage: it makes someone else's damage find the goat.",
                 Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2), Draw(1))

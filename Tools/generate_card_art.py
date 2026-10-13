@@ -3997,7 +3997,7 @@ CARDS["Corporate"].update({"SolidarityTowardsTheSmallBusinessman": solidarity_to
 CARDS["Statecraft"].update({"ViolenceMonopoly": violence_monopoly})
 CARDS["Myth"].update({"Reincarnation": reincarnation})
 CARDS["Tech"].update({"TechnicalDebt": technical_debt, "ScopeCreep": scope_creep, "SexClanker": sex_clanker})
-CARDS["Mind"].update({"ShipofTheseus": ship_of_theseus, "Scapegoating": scapegoating})
+CARDS["Mind"].update({"ShipofTheseus": ship_of_theseus, "EscapeGoat": scapegoating})
 
 
 def main():

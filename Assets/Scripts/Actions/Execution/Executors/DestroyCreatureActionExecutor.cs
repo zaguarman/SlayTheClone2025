@@ -6,6 +6,12 @@ namespace SlayTheClone {
         protected override void ExecuteAction(DestroyCreatureAction destroy, ActionExecutionContext context) {
             var creature = destroy.GetCreature();
             if (creature == null || creature.IsDead) return;
+            // Fall Guy: an enemy's destroy meant for one of its side lands on it instead
+            if (destroy.IsUnconditional && destroy.Controller != null && destroy.Controller != creature.Owner && creature.Slot != null
+                && Abilities.FallGuyFor(creature) is ICreature patsy) {
+                Log($"Executor: {patsy.Name} takes the fall for {creature.Name}", LogTag.Creatures | LogTag.Actions);
+                creature = patsy;
+            }
             if (creature.Slot == null) {
                 // It left play before this resolved (replaced by a summon, say): it was discarded then, and can't die now
                 Log($"Executor: {creature.Name} isn't in play any more: nothing to destroy", LogTag.Creatures | LogTag.Actions);

@@ -195,8 +195,8 @@ namespace SlayTheClone {
             var scope = new AbilityScope {
                 Creature = creature,
                 Layer = trigger == EffectTrigger.OnPlay ? ResolutionLayer.Summon : ResolutionLayer.AbilityAndAttack,
-                ResolvesWithItsTrigger = trigger is EffectTrigger.OnPlay or EffectTrigger.OnDamage or EffectTrigger.OnAboutToDie,
-                Retaliatory = trigger is EffectTrigger.OnDamage or EffectTrigger.OnAboutToDie or EffectTrigger.OnDeath
+                ResolvesWithItsTrigger = trigger is EffectTrigger.OnPlay or EffectTrigger.OnDamage or EffectTrigger.OnAboutToDie or EffectTrigger.OnRevealed,
+                Retaliatory = trigger is EffectTrigger.OnDamage or EffectTrigger.OnAboutToDie or EffectTrigger.OnDeath or EffectTrigger.OnRevealed
             };
             scope.OnDispose = () => {
                 if (abilities.Count > 0 && abilities.Peek() == scope) abilities.Pop();
@@ -267,6 +267,18 @@ namespace SlayTheClone {
         private void ResolveInstantly(IGameAction action) {
             Log($"{action.GetType().Name} is instant: resolving it now (Queue ID: {QueueId})", LogTag.Actions);
             var entry = new Entry { Action = action, Layer = LayerOf(action), Sequence = sequence++, Watched = true };
+            // Information is outside the order of the Day, but an Intelligence Watchdog still sees it (Glomar Response)
+            DropFinishedWatchdogs();
+            var glomar = watchdogs.FirstOrDefault(w => w.Spec.timing == WatchdogTiming.OnWatch && w.Spec.watches == WatchedAction.Intelligence
+                                                       && w.Spec.effect == WatchdogEffect.Nullify && Sees(w, entry) && w.Matches(action, null));
+            if (glomar != null) {
+                glomar.SpendCharge();
+                WatchdogRules.LogTrigger(glomar, action, "nullified: they learn nothing");
+                if (action is PlayCardAction play) play.GetOwner()?.DiscardCard(play.GetCard()); // Spent for nothing
+                OnActionsQueued.Invoke();
+                gameMediator.NotifyActionsQueueChanged();
+                return;
+            }
             actionsResolved = 0;
             Run(entry);
             while (resolvingNow.Count > 0 && ExecuteNextAction()) { } // What it does, and nothing else queued
@@ -461,6 +473,12 @@ namespace SlayTheClone {
                 case WatchdogEffect.Nullify:
                     WatchdogRules.LogTrigger(watchdog, entry.Action, "nullified");
                     return true; // It resolves with no effect
+                case WatchdogEffect.Backfire: // Nullified, and the attacker takes its own Attack instead, now
+                    var backfire = WatchdogRules.Backfire(entry.Action);
+                    WatchdogRules.LogTrigger(watchdog, entry.Action, "backfired");
+                    if (backfire == null) return true;
+                    entry.Action = backfire;
+                    return false;
                 case WatchdogEffect.Reorder: // On Watch can only move an action later
                     WatchdogRules.LogTrigger(watchdog, entry.Action, "moved to the end of its layer");
                     entry.Reordered = 1;
@@ -507,6 +525,17 @@ namespace SlayTheClone {
                             if (activeCreatureId != null && activeCreatureActions.TryGetValue(activeCreatureId, out var active) && active == entry) {
                                 activeCreatureActions.Remove(activeCreatureId);
                             }
+                            break;
+                        case WatchdogEffect.Backfire: // In its place, when it would have struck: its own Attack, to itself
+                            var backfire = WatchdogRules.Backfire(entry.Action);
+                            WatchdogRules.LogTrigger(watchdog, entry.Action, "backfires at the Briefing");
+                            if (backfire == null) {
+                                waiting.Remove(entry);
+                                break;
+                            }
+                            string attackerId = GetActiveCreatureId(entry.Action);
+                            if (attackerId != null && activeCreatureActions.TryGetValue(attackerId, out var planned) && planned == entry) activeCreatureActions.Remove(attackerId);
+                            entry.Action = backfire;
                             break;
                         case WatchdogEffect.Reorder:
                             entry.Reordered = watchdog.Spec.moveEarlier ? -1 : 1;

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
-  m_Name: Scapegoating
+  m_Name: EscapeGoat
   m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
   cardId: 2b892753-a559-4d34-96e1-ef444133764b
-  cardName: Scapegoating
+  cardName: Escape Goat
   description: It wasn't us. It was the goat. Everyone agrees it was the goat.
   cardType: 1
   faction: 8

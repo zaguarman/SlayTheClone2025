@@ -282,6 +282,29 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             Assert.AreEqual(4, (4 - buddy.Health) + (10 - small.Health), "At Dawn it hits one of the others for its Attack");
             Assert.AreEqual(3, subject.Health);
+
+            // When Revealed, it strikes back at whoever revealed it; Allergic to Light, it burns each time
+            Fresh();
+            var keeper = With(CreatureAbility.AllergicToLight, p2, 0, attack: 3, health: 4,
+                Effect(EffectTrigger.OnRevealed, ActionType.Damage, 4, TargetType.Enemy));
+            var snoop = With(CreatureAbility.None, p1, 0, attack: 1, health: 10);
+            game.Run(new ApplyStatusEffectAction(keeper, StatusEffectType.Revealed, 2, 0, snoop, p1));
+            Assert.AreEqual(2, keeper.Health, "Allergic to Light: Revealed, it takes 2 damage");
+            Assert.AreEqual(6, snoop.Health, "When Revealed: 4 damage to the creature that revealed it");
+            int p1Health = p1.Health;
+            game.Run(new RevealAction(p2.Battlefield[0], p1));
+            Assert.AreEqual(p1Health - 4, p1.Health, "A Reveal from a spell: its player takes it");
+            Assert.IsTrue(keeper.IsDead, "...and the light finishes it");
+
+            // Fall Guy: an enemy reveal or destroy meant for another of its side lands on it instead
+            var patsy = With(CreatureAbility.FallGuy, p2, 1, attack: 1, health: 3);
+            var boss = With(CreatureAbility.None, p2, 2, attack: 5);
+            game.Run(new ApplyStatusEffectAction(boss, StatusEffectType.Revealed, 2, 0, controller: p1));
+            Assert.IsTrue(HasStatus(patsy, StatusEffectType.Revealed) && !HasStatus(boss, StatusEffectType.Revealed), "The Scapegoat is Revealed instead");
+            var kill = game.GiveCard(p1, game.Spell("Kill", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures)));
+            game.Play(kill, p1, p2.Battlefield[2]);
+            game.Resolve();
+            Assert.IsTrue(patsy.IsDead && !boss.IsDead, "...and destroyed instead");
         }
 
         [Test]

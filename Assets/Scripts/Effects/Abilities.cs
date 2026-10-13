@@ -67,6 +67,8 @@ namespace SlayTheClone {
             CreatureAbility.SafeSpace => "Safe Space",
             CreatureAbility.OffTheBooks => "Off the Books",
             CreatureAbility.ExtremePrejudice => "Extreme Prejudice",
+            CreatureAbility.AllergicToLight => "Allergic to Light",
+            CreatureAbility.FallGuy => "Fall Guy",
             _ => ability.ToString()
         };
 
@@ -101,6 +103,8 @@ namespace SlayTheClone {
             CreatureAbility.DoubleTap => "it attacks twice",
             CreatureAbility.ShellGame => "Active: target creature trades places with the one to its right (hold Shift as you drag it)",
             CreatureAbility.SafeSpace => "each Dawn, it and the friendly creatures beside it gain Bless",
+            CreatureAbility.AllergicToLight => $"when it's Revealed, or a Reveal shows it, it takes {LightDamage} damage",
+            CreatureAbility.FallGuy => "when an enemy effect would Reveal or destroy another friendly creature, it lands on this one instead",
             _ => ""
         };
 
@@ -292,6 +296,15 @@ namespace SlayTheClone {
             var (handed, persistent) = pass.Value;
             modifiers.ChangeBaseStats(newcomer, persistent.attack, persistent.health, persistent.speed);
             foreach (var modifier in handed) modifiers.ApplyModifier(newcomer, modifier);
+        }
+
+        /// <summary>Allergic to Light: the damage it takes each time it's Revealed or a Reveal shows it.</summary>
+        public const int LightDamage = 2;
+
+        /// <summary>Fall Guy: the creature on this one's side that takes an enemy's Reveal or destroy meant for it; null if none.</summary>
+        public static ICreature FallGuyFor(ICreature creature) {
+            var row = creature?.Owner?.Battlefield;
+            return row?.Select(s => s.OccupyingCreature).FirstOrDefault(c => c != null && c != creature && !c.IsDead && Has(c, CreatureAbility.FallGuy));
         }
 
         /// <summary>Insider Job: the creature's damage ignores Armor.</summary>

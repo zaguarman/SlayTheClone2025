@@ -27,9 +27,14 @@ namespace SlayTheClone {
                 if (bounceTo == null) return;
                 targetCreature = bounceTo;
             }
+            // Fall Guy: an enemy reveal meant for one of its side lands on it instead
+            if (enemy && statusType == StatusEffectType.Revealed && Abilities.FallGuyFor(targetCreature) is ICreature patsy) {
+                Log($"{patsy.Name} takes the fall: it's Revealed instead of {targetCreature.Name}", LogTag.Effects);
+                targetCreature = patsy;
+            }
 
             var landed = StatusRules.Land(context, targetCreature, statusType, statusAction.GetDuration(), statusAction.GetPotency(),
-                context.TurnClock.TurnNumber);
+                context.TurnClock.TurnNumber, statusAction.Source);
             if (landed != null) {
                 Log($"Executed ApplyStatusEffectAction via Executor: Applied {statusType} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
             }

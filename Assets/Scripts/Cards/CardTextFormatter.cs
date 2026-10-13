@@ -110,6 +110,8 @@ namespace SlayTheClone {
                               && actions.All(a => a.targetType == TargetType.Enemy && a.targetModifier == TargetModifier.None);
             (string icon, string text) trigger = isSpell ? default : retaliates ? (EffectIcons.Hurt, Keywords.Link("Retaliate")) : DescribeTrigger(effect);
             string body = JoinClauses(retaliates ? actions.Select(RetaliationClause).ToList() : Clauses(actions, isSpell, atDawn));
+            // When Revealed against the enemy: it strikes whoever revealed it
+            if (!isSpell && effect.trigger == EffectTrigger.OnRevealed) body = body.Replace("enemy player", "whoever revealed it");
             string once = effect.oncePerCombat ? "Once per combat, " : "";
 
             if (trigger.text == null) return CapitalizeRich(once + body);
@@ -216,6 +218,7 @@ namespace SlayTheClone {
                 case EffectTrigger.StartOfTurn: return (EffectIcons.Dawn, Keywords.Link("Dawn"));
                 case EffectTrigger.EndOfTurn: return (EffectIcons.Dusk, Keywords.Link("Dusk"));
                 case EffectTrigger.ActionAttempted: return (EffectIcons.Attack, "Whenever this acts");
+                case EffectTrigger.OnRevealed: return (EffectIcons.Reveal, Keywords.Link("When Revealed"));
                 default: return (null, null);
             }
         }
@@ -401,7 +404,8 @@ namespace SlayTheClone {
             string whose = spec.side switch { WatchdogSide.Enemy => "enemy ", WatchdogSide.Friendly => "friendly ", _ => "" };
             string what = spec.watches switch {
                 WatchedAction.Attack => "attacks", WatchedAction.Spell => "spells", WatchedAction.Move => "moves",
-                WatchedAction.Ability => "abilities", WatchedAction.Summon => "summons", _ => "statuses"
+                WatchedAction.Ability => "abilities", WatchedAction.Summon => "summons",
+                WatchedAction.Intelligence => $"{Keywords.Link("Reveal", "reveals")}", _ => "statuses"
             };
             bool watchesCreature = action.targetType is not (TargetType.Player or TargetType.Enemy);
             string by = watchesCreature ? $" by {target}" : "";
@@ -409,6 +413,7 @@ namespace SlayTheClone {
             string effect = spec.effect switch {
                 WatchdogEffect.Nullify => Keywords.Link("Nullify"), WatchdogEffect.Redirect => Keywords.Link("Redirect"),
                 WatchdogEffect.Reveal => Keywords.Link("Reveal"),
+                WatchdogEffect.Backfire => Keywords.Link("Backfire"),
                 _ => Keywords.Link("Reorder", spec.moveEarlier ? "move it first" : "move it last")
             };
             int charges = System.Math.Max(1, spec.charges);
