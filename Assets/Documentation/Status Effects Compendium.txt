@@ -102,6 +102,7 @@ Brainwashed
         On Consumed: The controller of this creature changes to the player who applied Brainwashed, and it is placed on that player's side (GDD 5.4 Recruitment & Conversion - Changing Sides). Other status effects on the creature are kept.
         Ability Lock: From then on the creature's ability is switched off, even after it dies or leaves play, until its card is reshuffled into the deck (or the combat ends).
     Answers: Before it defects, bounce it, sacrifice it (paying a Myth cost), or load it with Earworm or Burnout for its new side. It lands opposite its old slot and discards whatever stands there, so position it to knock out the enemy's best creature.
+    In the game (2026-10-13): Asset Recruitment gives it (2 Days, 1 if the target is Revealed). Leaving the board (Extraction, Witness Protection Program) wipes it.
     Cleansable: No
 
 Burnout
@@ -541,6 +542,17 @@ Untouchable
     Notes: Health Loss isn't damage, so it still lands; so do statuses and stat changes. Given by Bodyguard and by Presidential Pardon. Good for the creature: a Cleanse leaves it, a Purge removes it.
     Answers: Purge, Health Loss, statuses, or wait a Day.
     Cleansable: Purge only
+
+Kill Order
+    Faction: Shadow Ops.
+    Type: Delayed, Secret, Destroy
+    Description: "Secret: only the side that gave it can see it. When it runs out, at Dusk, the creature is destroyed (Untouchable saves it)."
+    Core Impact: A death nobody sees coming. Its own side can't see it on the card, landing, or in the queue, and the spell that gives it (Death By "Natural Causes") is played unseen.
+    Stacking & Duration:
+        Initial Stacks: 2 (from source): applied on Day X, the creature dies at the Dusk of Day X+2
+        Re-application Behavior: Refresh
+    Answers: A Cleanse removes it, knowingly or not (SysAdmin's Dawn cleanse saves a lot of victims). Untouchable on the Dusk it runs out, a Blessing before it lands, or taking the creature off the board.
+    Cleansable: Yes
 
 Cooldown
     Faction: Neutral

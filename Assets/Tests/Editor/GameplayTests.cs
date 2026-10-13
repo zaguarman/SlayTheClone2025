@@ -108,6 +108,14 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(witness, p1.Battlefield[4].OccupyingCreature, "Back at Dawn, in its slot");
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(witness, StatusEffectType.Concealed) && !Intel.KnowsWhatItIs(p2, witness), "...as ???");
             Assert.AreEqual(cards, GameAsserts.CountCards(p1));
+            // Its stat changes stayed behind: a Health raise it was living on takes its Health back, and that can kill it
+            // (found by the AI games: a decoy came back at 0 Health and stayed on the board)
+            game.Run(new ModifyAction(witness, 3, false, true, false, controller: p1));
+            game.Run(TargetedActions.Damage(witness, 6));
+            game.Run(new VanishAction(witness));
+            game.StartTurn();
+            Assert.IsTrue(witness.IsDead, "Back without its +3 Health, 2 left minus 3: it dies");
+            GameAsserts.AssertBoardsConsistent(p1, p2);
 
             // The same random seed shuffles the same way, so a game can be replayed
             using (var replay = new TestGame()) {

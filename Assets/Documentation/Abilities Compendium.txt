@@ -166,6 +166,20 @@ Extreme Prejudice
     Notes: The hit is a Destroy, not damage: Health, Armor, Exposed and damage abilities don't matter. Untouchable or a Temporal Shield still stops the hit, and then the assassin survives to try again. Attacking an empty slot, it hits the player for its Attack and stays. One hit, one roadblock: meant for the walls and armored giants nothing else gets through.
     Answers: Kill it before it acts (it waits a Day like every creature), make the target Untouchable, or keep it on a Temporal Shield.
 
+Allergic to Light
+    Inspired by: vampires and sunlight; for now, spies coming into the light. On If I Told You, I'd Have to Kill You.
+    Type: Passive (a drawback)
+    Description: "When it's Revealed, or a Reveal shows it, it takes 2 damage."
+    Notes: Every time: Revealed landing (Tapped Communications, Social Panopticon, Whistleblower), a Reveal on its slot (Eavesdrop, Control Room), even a Revealed passed to it by Frame Job. It's an ability, so switched off (Exhausted, Signal Jammer) it doesn't burn. Meant for Myth's vampires later.
+    Answers: Reveal it. Twice.
+
+Fall Guy
+    Inspired by: the patsy who takes the blame. On Scapegoat.
+    Type: Passive
+    Description: "When an enemy effect would make another friendly creature Revealed or destroy it, it lands on this one instead."
+    Notes: Only enemy effects, and only Revealed (not a Reveal's look) and Destroy (Perfectly Timed Camera Malfunction, Fell Out of a Window, Extreme Prejudice, Dead Man's Switch): damage still goes where it was aimed. The leftmost Fall Guy on the side takes it. A Kill Order is secret, so nobody takes the fall for it.
+    Answers: Kill the Scapegoat first (it has 3 Health), or switch its ability off.
+
 Handover
     Inspired by: Baton Pass (Pokémon), renamed so it isn't the move's name
     Type: Passive

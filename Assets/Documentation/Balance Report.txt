@@ -21,6 +21,17 @@ CHANGES SINCE (2026-10-13)
     Shadow Ops. 20% -> 22%; Camera Malfunction kills 2.1 creatures a game against other decks, Wet Work 1, and Multi
     Passport is its best damage dealer (7.8 a game). It now beats Utopia 4 - 2, Myth 5 - 1, Prosperity Gospel 3 - 3, but
     still loses every game to Statecraft, Corporate, Digital Society and Tech: their board-wide damage is the real problem.
+  Then (same day, later): Black Budget, a second Shadow Ops. deck of 30 new cards (see Starter Faction Decks). A run of 3324
+  games, no rule broken (one bug found and fixed on the way: a creature back from Witness Protection Program at 0 Health
+  stayed on the board, its lost Health raise now kills it):
+    Black Budget wins 89% of its deck-against-deck games, the best deck (Statecraft 88%, Corporate 85%); it beats
+    Corporate 5 - 1 and Statecraft 4 - 2. Plausible Deniability stays at 23%.
+    Its engine: MK Ultra Test Subject (13 damage and 2.2 kills a game against other decks, edge 64%), False Flag
+    Operation (edge 85%), the information trades (Dead Drop 70%, Bilderberg Membership 65%, Social Engineering 60%),
+    Sabotage 67%, Coup d'État 63%. The saves are weak in the AI's hands: Witness Protection Program 31%, He Didn't Kill
+    Himself 33%, Extraction 36%, Death By "Natural Causes" 37%.
+    Suggestions (not applied, Open Questions 32): MK Ultra Test Subject 3/3, False Flag Operation +2/+2, Dead Drop
+    draws 4.
   The numbers below are from before these changes.
 
 1. THE SHORT VERSION

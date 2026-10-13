@@ -4010,10 +4010,17 @@ def mk_ultra_test_subject():
     # The blackboard, full of his equations
     body += rect(14, 12, 132, 76, "#2e4a3a", 'stroke="#7a5a32" stroke-width="5"')
     chalk = "#eeeee0"
-    body += stroke("M26 30 c 4 -10 8 10 12 0 M44 22 c -6 0 -6 16 0 16 M50 30 L62 30 M66 22 L66 38 M60 30 L72 30", chalk, 1.6)
-    body += stroke("M80 24 c 6 -6 10 6 4 10 c -6 4 -2 10 6 6 M96 30 L108 30 M112 22 q 8 8 0 16 M120 26 l 8 8 M128 26 l -8 8", chalk, 1.6)
-    body += stroke("M26 52 L140 52 M30 60 q 6 -8 12 0 t 12 0 M60 60 L70 70 M70 60 L60 70 M80 62 L96 62 M100 56 c 8 0 8 12 0 12", chalk, 1.4)
-    body += lettering("1959", 108, 68, 10, chalk, width=1.4)
+    body += lettering("SUBJECT", 80, 20, 9, chalk, width=1.5)
+    body += lettering("KACZYNSKI", 80, 36, 9, chalk, width=1.5)
+    body += stroke("M24 54 L136 54 M28 64 q 6 -8 12 0 t 12 0 M58 60 L66 68 M66 60 L58 68 M74 64 L86 64", chalk, 1.4)
+    body += lettering("1959", 112, 62, 9, chalk, width=1.4)
+    # A memo pinned to the wall: redacted, and stamped CLASSIFIED
+    memo = rect(0, 0, 82, 72, "#f6f2e6", 'stroke="#b8b0a0" stroke-width="1"') + circle(41, 5, 3, "#c0392b")
+    for i, w in enumerate((60, 46, 64, 38, 54, 44)):
+        memo += rect(9, 13 + i * 9, w, 5, "#1a1a1a")
+    memo += group(rect(3, 24, 76, 20, "#f6f2e6", 'stroke="#c0392b" stroke-width="2.5" fill-opacity="0.6"')
+                  + lettering("CLASSIFIED", 41, 30, 7, "#c0392b", width=1.6), "rotate(-12 41 34)")
+    body += group(memo, "translate(258 8) rotate(3)")
     # The machine, its dials and lights
     body += rect(262, 92, 74, 66, "#5a6470", 'rx="4" stroke="#2a3038" stroke-width="2"')
     for x in (282, 316):

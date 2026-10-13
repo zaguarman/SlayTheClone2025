@@ -5,6 +5,21 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+32. Black Budget, the second Shadow Ops. deck (2026-10-13)
+    • Built as designed (Starter Faction Decks, section 7): 23 new cards and new rules (GDD 5.4: requisites, Take Control, Back to the Hand, Gone Dark, secret statuses, tokens and decoys, Discard Cost, Intelligence Watchdogs, Backfire, When Revealed). Names: the backlog's where they fit (Dead Man's Switch, Extraction, Asset Recruitment, Glomar Response, If I Told You, I'd Have to Kill You, Never Let Them Know Your Next Move, Social Engineering, Bilderberg Membership); Dead Drop from the old Shadow Ops. list; the rest yours.
+    • Renamed, as you asked: the creature is Scapegoat; Mind's Scapegoating became Escape Goat (same card, same picture of the escape goat).
+    • Choices made, say if you want them otherwise:
+        - Allergic to Light (2 damage each time) went on If I Told You, I'd Have to Kill You (3/4), together with its When Revealed strike (4 damage to whoever revealed it).
+        - Dead Man's Switch destroys their strongest whatever killed it, so it combos with He Didn't Kill Himself and False Flag Operation.
+        - A discard cost picks the cards at random among those you aren't playing. Should the player choose them instead (a small picker when the card is played)?
+        - Witness Protection Program: gone until the next Dawn; its slot is empty meanwhile, so an attack there hits you.
+        - Extraction: the creature is in the next Day's hand (today's is discarded at Dusk); extracted while Revealed, it comes back Concealed.
+        - Brainwashed can't be cleansed (as the Status Effects Compendium says); leaving the board saves it.
+    • Balance (Balance Report): Black Budget wins 89%, the best deck. Suggested: MK Ultra Test Subject 3/3, False Flag Operation +2/+2, Dead Drop draws 4. Apply?
+    • Art: only MK Ultra Test Subject is drawn (your brief: Kaczynski before the woods; SUBJECT KACZYNSKI on the blackboard, a CLASSIFIED memo). Briefs waiting for your OK, in the cards' design notes: Dead Man's Switch, Fell Out of a Window, Coup d'État, Operation Paperclip, False Flag Operation, Never Let Them Know Your Next Move, Frame Job, Devil's Breath, He Didn't Kill Himself, Extraction, Witness Protection Program, Death By "Natural Causes", Asset Recruitment, If I Told You, I'd Have to Kill You, Scapegoat (a goat in an orange jumpsuit with a mugshot placard), Glomar Response, Sabotage, Ghost Army, Inflatable Tank, Sherman Tank, HAARP, Social Engineering, Bilderberg Membership, Dead Drop. Still waiting from item 31: Multi Passport, Wet Work, Perfectly Timed Camera Malfunction.
+    • Other factions (not built): NDA (Corporate?), Honey Pot (Tech, a cyber honeypot), Memory Wipe / Mandela Effect (Mind?). Which mechanics?
+    • James Bond options (Brainstorm List): which ones?
+
 31. New Shadow Ops. cards (2026-10-13)
     • Done: Sleeper Agent is now a poisoned Gift (0/3: planted in an empty enemy slot it joins their side, and each Dusk hurts every creature there, itself included). Its old Off the Books role went to Multi Passport (3/3). Two cards kill outright, whatever the Health or Armor: Wet Work (1/4, Extreme Prejudice: its attack destroys what it hits, then it's gone) and Perfectly Timed Camera Malfunction (destroy a Revealed creature). Names from the backlog. New keywords: Gift, Destroy.
     • Art (not drawn, waiting for your OK). Multi Passport: a man in a trench coat fanning out a dozen passports like a hand of cards, the same face in each photo in a different disguise. Wet Work: a hitman in a dripping raincoat under a black umbrella, stamping TERMINATED on a personnel file with a photo clipped to it. Perfectly Timed Camera Malfunction: a security monitor showing static and SIGNAL LOST at 02:13, a gloved hand pulling the camera's cable at the edge of the frame. Sleeper Agent keeps its picture (the suburban dad with a sniper's shadow); a new one for the Gift?

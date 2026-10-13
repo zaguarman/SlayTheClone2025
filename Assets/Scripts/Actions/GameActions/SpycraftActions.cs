@@ -354,6 +354,8 @@ namespace SlayTheClone {
             Log($"{creature.Name} is back, with a new identity", LogTag.Effects | LogTag.Creatures);
             context.GameMediator.NotifyBattlefieldStateChanged(side);
             SlotEffectRules.OnEnter(creature, slot, context);
+            // Its stat changes stayed behind: a Health raise it was living on took its Health back, which can kill it
+            if (creature.Health <= 0) context.ActionsQueue.AddAction(new CheckLethalAction(creature));
         }
     }
 }

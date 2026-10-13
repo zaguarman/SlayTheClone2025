@@ -1604,23 +1604,17 @@ Card Game Factions Overview
 			Zero Grace Operational Policy
 		Shadow Ops.
 			Arsonist
-			Asset Recruitment (tagged Shadow Ops.)
-			Bilderberg Membership
 			Counter-Surveillance (tagged Shadow Ops.)
-			Dead Man's Switch
 			Drug Pigeon
 			Embassy (tagged Shadow Ops.)
-			Extraction (tagged Shadow Ops.)
 			Fingerprinting
-			Glomar Response ("We can neither confirm nor deny the existence of the information requested")
-			Honey Pot (like the reference card: give the opponent two Treasures, then take control of them)
-			If I Told You, I'd Have to Kill You (strikes back at being Revealed)
-			NDA (Non-Disclosure Agreement)
-			Never Let Them Know Your Next Move
+			Honey Pot (like the reference card: give the opponent two Treasures, then take control of them). To move to Tech, as a cyber honeypot, with a new mechanic (2026-10-13)
+			NDA (Non-Disclosure Agreement). Better in another faction (Corporate?), with its mechanic changed (2026-10-13)
+			Memory Wipe / Mandela Effect (all your creatures become unknown again). Better in another faction (Mind?), with its mechanic changed (2026-10-13)
+			Spy-film gadgets (James Bond, 2026-10-13, options not decided): Exploding Pen, Ejector Seat, The Golden Gun, GoldenEye, Tank Chase, Bungee Jump off the Dam, Shaken Not Stirred, No Mr. Bond I Expect You to Die, Q Branch, Hollowed-Out Volcano Lair, Steel Teeth, Licence to Kill (see Open Questions 32)
 			Secret Anthrax Laboratory
 			Secure Deletion
 			Self-Destruct Message
-			Social Engineering (tagged Shadow Ops.)
 			Steganography (tagged Shadow Ops.)
 			Tracking Beacon (tagged Shadow Ops.)
 		Corporate

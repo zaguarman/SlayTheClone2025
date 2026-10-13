@@ -91,6 +91,14 @@ Hard: Medium, plus:
           revealing a big enemy creature as nearly killing it.
     • Gifts and assassins: it plants Gifts in empty enemy slots and never attacks its own planted Gift; given one, it
       summons over it first. Wet Work (Extreme Prejudice) is kept for the biggest threat nothing else can kill.
+    • Black Budget (2026-10-13): requisites as far as it can see (a free slot beside the target, outnumbered, Attack N or
+      less); "the strongest" as it sees them; taking control is worth the creature twice (they lose it, we gain it); its own
+      Last Wills count when it sacrifices a creature (False Flag Operation on Dead Man's Switch); Kill Order and Brainwashed
+      on theirs; buffs and statuses moved between two creatures (Funnel, Frame Job, Devil's Breath); back to the hand,
+      fake deaths and going dark save a creature that would die; reveals cost it what When Revealed strikes back with, less
+      what Allergic to Light burns; a Fall Guy takes its Destroys; decoys look like their fake card; Freak Weather is
+      worth its lightning. Cards with a discard cost go last, paid with what it wasn't going to play.
+    • Hidden from it: a Kill Order on its own creatures (tested: FogOfWarTests).
     • Protection: Armor, healing, Untouchable and Temporal Shields are worth the whole creature when they save one the
       other side could kill next Day; Bodyguard guards the one most at risk.
     • Attacks: lethal if it has it. Otherwise the race: if it would bring them to 0 in fewer Days than they would it, it
