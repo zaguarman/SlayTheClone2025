@@ -49,6 +49,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: Your creature copies the Attack, Health and Speed of the enemy creature
     facing it, while it stays in play. Shrinks a giant into your nobody, or your
     nobody into a giant.

@@ -129,6 +129,33 @@ namespace SlayTheClone {
         }
     }
 
+    /// <summary>Ghost Army: decoy tokens enter the caster's empty slots, left to right.</summary>
+    public class SummonDecoysAction : IGameAction {
+        public IPlayer Side { get; }
+        public CreatureData Decoy { get; }
+        public int Count { get; }
+
+        public SummonDecoysAction(IPlayer side, CreatureData decoy, int count) {
+            Side = side;
+            Decoy = decoy;
+            Count = count;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"SummonDecoysAction: {Count} {Decoy?.cardName} for {Side?.Name}";
+    }
+
+    // Each is a summon into its own free slot (no free slot: no more decoys), resolving right after this
+    public class SummonDecoysActionExecutor : ActionExecutor<SummonDecoysAction> {
+        protected override void ExecuteAction(SummonDecoysAction decoys, ActionExecutionContext context) {
+            if (decoys.Side == null || decoys.Decoy == null) return;
+            foreach (var slot in decoys.Side.Battlefield.Where(s => !s.IsOccupied() && EffectResolver.IncomingCreature(s, context.ActionsQueue) == null).Take(decoys.Count).ToList()) {
+                var decoy = (ICreature)CardFactory.CreateCard(decoys.Decoy);
+                context.ActionsQueue.AddAction(new SummonCreatureAction(decoy, decoys.Side, slot, true));
+            }
+        }
+    }
+
     /// <summary>A creature of one side, off the board for now (Witness Protection Program), and when it comes back.</summary>
     public class GoneDark {
         public ICreature Creature { get; }
@@ -198,6 +225,10 @@ namespace SlayTheClone {
             }
             var home = creature.DeckOwner ?? creature.Owner;
             GoneDark.LeavePlay(creature, context);
+            if (creature.IsToken) { // No card to go back to a hand: it's gone
+                home.DiscardCard(creature);
+                return;
+            }
             home.ReturnToHand(creature);
             if (wasRevealed && !back.FakesItsDeath && home.ComingBack.LastOrDefault() is ICreature copy) copy.ArrivesConcealed = NewIdentityDays;
             context.GameMediator.NotifyHandStateChanged(home);

@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
     - actionType: 0
       value: 2
       targetType: 1
@@ -73,6 +74,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Future: the enemy schedules 1 fewer draw instead of losing Health.'
   artDescription: 
   defaultTargetType: 0

@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
     - actionType: 7
       value: 0
       targetType: 4
@@ -73,6 +74,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 1
+      decoy: {fileID: 0}
   designNotes: 'Brainwashed 2 on target enemy creature: when it runs out, at Dusk,
     it changes sides for good, its ability lost. Revealed, it''s turned faster: Brainwashed
     1. Set it up with Tapped Communications.'

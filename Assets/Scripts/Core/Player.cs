@@ -157,6 +157,10 @@ namespace SlayTheClone {
 
             RemoveFromHand(card);
             RemoveFromBattlefield(card);
+            if (card is ICreature { IsToken: true }) {
+                Log($"{card.Name} is a token: it's gone", LogTag.Cards);
+                return;
+            }
             // A Gift goes back to the player whose card it is, not the side that held it
             var home = (card as ICreature)?.DeckOwner ?? this;
             home.Deck.AddToDiscardPile(card);

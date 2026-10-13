@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
     - actionType: 6
       value: 3
       targetType: 3
@@ -73,6 +74,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: Destroy target friendly creature (its Last Will happens); every other
     friendly creature gets +3 Attack and +3 Health while it stays in play. Funnel
     it all into one with Never Let Them Know Your Next Move.

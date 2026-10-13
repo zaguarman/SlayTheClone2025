@@ -105,6 +105,7 @@ namespace SlayTheClone.Tests {
                     break;
                 case ActionType.Draw:
                 case ActionType.Summon:
+                case ActionType.SummonDecoys:
                     if (!PlayerTargets.Contains(action.targetType)) return $"{action.actionType} only affects players but targets {action.targetType}";
                     break;
             }

@@ -284,7 +284,8 @@ namespace SlayTheClone {
 
         private static string Who(ICreature creature, IPlayer viewer) {
             if (creature == null) return Unknown;
-            return Painted(creature.Owner, viewer, FogOfWar.HidesIdentity(viewer, creature) ? Unknown : creature.Name);
+            var disguise = FogOfWar.DisguiseFor(viewer, creature);
+            return Painted(creature.Owner, viewer, disguise != null ? disguise.cardName : FogOfWar.HidesIdentity(viewer, creature) ? Unknown : creature.Name);
         }
 
         private static string PlayerName(IPlayer player, IPlayer viewer) =>

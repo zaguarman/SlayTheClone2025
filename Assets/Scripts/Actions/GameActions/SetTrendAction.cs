@@ -20,6 +20,6 @@ namespace SlayTheClone {
 
     public class SetTrendActionExecutor : ActionExecutor<SetTrendAction> {
         protected override void ExecuteAction(SetTrendAction action, ActionExecutionContext context) =>
-            context.TrendSystem.SetTrend(action.Trend, action.Days, context.TurnClock.TurnNumber);
+            context.TrendSystem.SetTrend(action.Trend, action.Days, context.TurnClock.TurnNumber, action.Controller);
     }
 }

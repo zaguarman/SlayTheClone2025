@@ -49,6 +49,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Mechanics test: Temporal Shield for 2 Days on a slot. The creature
     there takes no combat damage, but spells and abilities still hurt it. It stays
     with the slot, not the creature (Static).'

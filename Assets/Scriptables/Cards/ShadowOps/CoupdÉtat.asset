@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 3
+      decoy: {fileID: 0}
   designNotes: Take control of the strongest enemy creature if you have more creatures
     than they do. It changes sides for good, to the slot facing it.
   artDescription: A general in a peaked cap and mirrored sunglasses settling into

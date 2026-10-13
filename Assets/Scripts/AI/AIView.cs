@@ -51,8 +51,9 @@ namespace SlayTheClone {
             GiftFromThem = Ours && creature.DeckOwner != null && creature.DeckOwner != viewer;
             statuses = new HashSet<StatusEffectType>();
             if (!Known) {
-                Attack = GuessedAttack;
-                Health = MaxHealth = GuessedHealth;
+                var disguise = Ours ? null : creature.Disguise; // A decoy shows its fake card's printed numbers
+                Attack = disguise?.attack ?? GuessedAttack;
+                Health = MaxHealth = disguise?.health ?? GuessedHealth;
                 Operative = true;
                 return;
             }

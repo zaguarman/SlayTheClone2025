@@ -315,7 +315,8 @@ namespace SlayTheClone {
 
         /// <summary>Whether this kind of effect can land on a player (aimed at an empty slot, it lands on that side's player).</summary>
         public static bool CanAffectPlayers(ActionType actionType) =>
-            actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog or ActionType.Reveal;
+            actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog or ActionType.Reveal
+                or ActionType.SummonDecoys;
         #endregion
 
         #region Actions
@@ -419,6 +420,8 @@ namespace SlayTheClone {
                     return new SetTrendAction(action.trend, action.statusDuration, controller);
                 case ActionType.DelayDeployment: // Red Tape: value is the Days added
                     return creature != null && action.value > 0 ? new DelayDeploymentAction(creature, action.value) : null;
+                case ActionType.SummonDecoys: // Tokens into the player's empty slots (Ghost Army)
+                    return target is IPlayer decoysSide && action.decoyData != null && action.value > 0 ? new SummonDecoysAction(decoysSide, action.decoyData, action.value) : null;
                 case ActionType.TakeControl: // It changes sides, to the effect's controller (GDD 5.4)
                     return creature != null && creature.Owner != controller ? new ChangeSidesAction(creature, controller) : null;
                 case ActionType.Attack: // The creature whose effect it is attacks the target's slot, a real attack

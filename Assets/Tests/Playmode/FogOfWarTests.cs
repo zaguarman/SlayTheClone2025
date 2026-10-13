@@ -113,6 +113,28 @@ namespace SlayTheClone.Tests {
             var lookAround = game.GiveCard(p1, game.Spell("Look Around", TargetType.EnemyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Reveal, 0, TargetType.EnemyCreatures, TargetModifier.Random)));
             game.Play(lookAround, p1, p2.Battlefield[0]);
             Assert.IsTrue(Intel.CanSee(p1, p2.Battlefield[2].Effect), "...so it's the one picked, whatever the luck");
+
+            // A decoy (Ghost Army): until it's revealed, the other side sees its fake card, on the screen and in its AI's view.
+            // A token is nobody's card: it doesn't count, and it's gone when it dies
+            using var g = new TestGame();
+            var sherman = g.Creature("Sherman", 6, 6);
+            var balloonData = g.Creature("Balloon", 0, 1);
+            balloonData.token = true;
+            balloonData.disguise = sherman;
+            int cards = GameAsserts.CountCards(g.Player2);
+            g.Run(new SummonDecoysAction(g.Player2, balloonData, 2));
+            var balloons = g.Player2.Battlefield.Select(s => s.OccupyingCreature).Where(c => c?.Name == "Balloon").ToList();
+            Assert.AreEqual(2, balloons.Count, "Two decoys, each in its own slot");
+            var balloon = balloons[0];
+            Assert.AreSame(sherman, FogOfWar.DisguiseFor(g.Player1, balloon), "The other side sees a Sherman...");
+            Assert.AreEqual(6, new AIView(g.Player1, g.ActionsQueue).Of(balloon).Attack, "...and so does its AI");
+            Assert.IsNull(FogOfWar.DisguiseFor(g.Player2, balloon), "Its own side knows it's a balloon");
+            Assert.AreEqual(cards, GameAsserts.CountCards(g.Player2), "A token is nobody's card");
+            g.Run(new RevealAction(balloon.Slot, g.Player1));
+            Assert.IsNull(FogOfWar.DisguiseFor(g.Player1, balloon), "Revealed: the truth");
+            g.Run(TargetedActions.Damage(balloon, 1));
+            Assert.IsTrue(balloon.IsDead);
+            Assert.AreEqual(cards, GameAsserts.CountCards(g.Player2), "Gone: no discard pile for a balloon");
         }
 
         /// <summary>

@@ -37,8 +37,14 @@ namespace SlayTheClone {
             data.effects = CopyEffects();
         }
 
-        // Helper method to get a copy of the effects list
-        protected List<CardEffect> CopyEffects() => effects.Select(effect => effect.Clone()).ToList();
+        // A copy of the effects list; the tokens they summon get their runtime data now, on the thread that reads the card
+        protected List<CardEffect> CopyEffects() {
+            var copies = effects.Select(effect => effect.Clone()).ToList();
+            foreach (var action in copies.SelectMany(e => e.actions).Where(a => a.decoy != null)) {
+                action.decoyData = (CreatureData)action.decoy.ToCardData();
+            }
+            return copies;
+        }
 
 #if UNITY_EDITOR
         // For card generators: replaces the card's effects with copies of the given ones

@@ -52,6 +52,10 @@ namespace SlayTheClone {
         int TimesEnteredPlay { get; }
         /// <summary>Days of Concealed it arrives with the next time it's summoned (a new face after Extraction); 0: none.</summary>
         int ArrivesConcealed { get; set; }
+        /// <summary>A token: made by an effect, never a card in a deck. When it leaves play, it's gone.</summary>
+        bool IsToken { get; }
+        /// <summary>A decoy's fake card: what the other side sees until it knows what this creature is. Null: none.</summary>
+        CreatureData Disguise { get; }
         // Only changes health; death and its consequences are handled by the caller
         int TakeHealthDamage(int healthDamage); // Returns actual damage dealt
         void ModifyArmorPool(int amount);
@@ -146,6 +150,8 @@ namespace SlayTheClone {
         public ISet<IPlayer> KnownTo { get; } = new HashSet<IPlayer>();
         public int TimesEnteredPlay { get; private set; }
         public int ArrivesConcealed { get; set; }
+        public bool IsToken { get; internal set; }
+        public CreatureData Disguise { get; internal set; }
 
         public int TurnsUntilOperative { get; private set; }
         public bool IsOperative => TurnsUntilOperative == 0;

@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Mechanics test: Counterattack answers every attack that lands, even
     one Armor absorbs or a killing blow, for its Attack, and still lands when it
     dies; spells and abilities aren''t answered. Exhausted turns it off. No U: enemy
@@ -62,3 +63,5 @@ MonoBehaviour:
   movement: 0
   ability: 4
   gift: 0
+  token: 0
+  disguise: {fileID: 0}

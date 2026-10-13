@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Mechanics test: Identity Theft, an active ability: hold Shift while
     dragging it onto a creature to swap abilities with it. It''s its action for the
     Day. It arrives Concealed for 3 Days.'
@@ -60,3 +61,5 @@ MonoBehaviour:
   movement: 0
   ability: 12
   gift: 0
+  token: 0
+  disguise: {fileID: 0}

@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Mechanics test: Reveal, instant. Played on an enemy slot, it resolves
     at once (during Planning) and shows its caster the slot''s hidden Slot Effect
     and what the creature there plans this Day.'

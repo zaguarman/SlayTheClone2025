@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'A Briefing Watchdog: from the Day after it''s set, the strongest
     enemy attack backfires: it doesn''t happen, and the attacker takes its own Attack
     as damage. 1 charge.'

@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Mechanics test: the swap as a spell. Target creature trades places
     with the one to its right (or to its left at the end of the row).'
   artDescription: 'A giant public screen holds a crowd: on one half a blocky-game

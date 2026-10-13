@@ -26,6 +26,10 @@ namespace SlayTheClone {
         public int health;
         /// <summary>Gift: it's played into an empty enemy slot and joins their side; still your card, it comes back to your discard pile.</summary>
         public bool gift;
+        /// <summary>A token: made by an effect, never a card in a deck. When it leaves play, it's gone.</summary>
+        public bool token;
+        /// <summary>What the other side sees it as, until it's revealed (a decoy). Null: itself.</summary>
+        public CreatureData disguise;
         public int speed = 1; // Default speed to 1
         public int turnsUntilOperative; // Turns it spends on the board before it can act (0 = from the next turn)
         public MovementKeyword movement; // Leapfrog, Swap (GDD 2.4 Movement Keywords)
@@ -92,6 +96,11 @@ namespace SlayTheClone {
 
         // What the target must be for it to land (Destroy: "if it's Revealed")
         public TargetRequisite requires = TargetRequisite.None;
+
+        // SummonDecoys Specific: the token it summons (value is how many). The asset is kept for the card text; the runtime
+        // copy is made with the card's data (see CardDataScriptableObject), so games on other threads can create tokens
+        public CreatureCardScriptableObject decoy;
+        [System.NonSerialized] public CreatureData decoyData;
 
         public EffectAction Clone() => (EffectAction)MemberwiseClone(); // Value-type fields only
     }

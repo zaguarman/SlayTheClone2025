@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
     - actionType: 5
       value: 1
       targetType: 3
@@ -73,6 +74,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Future: a Strike. Stops Each Dawn triggers (engines) on both sides
     for 2 Days.'
   artDescription: 

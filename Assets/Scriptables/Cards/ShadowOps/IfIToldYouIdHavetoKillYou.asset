@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'When Revealed (Revealed, or a Reveal shows it): 4 damage to whoever
     revealed it, the creature whose effect it was or else its player. Allergic to
     Light: each time, it takes 2 damage itself.'
@@ -61,3 +62,5 @@ MonoBehaviour:
   movement: 0
   ability: 30
   gift: 0
+  token: 0
+  disguise: {fileID: 0}

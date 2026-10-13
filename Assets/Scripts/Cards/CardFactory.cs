@@ -22,6 +22,8 @@ namespace SlayTheClone {
                     creature.Movement = creatureData.movement;
                     creature.Ability = creatureData.ability;
                     creature.IsGift = creatureData.gift;
+                    creature.IsToken = creatureData.token;
+                    creature.Disguise = creatureData.disguise;
                     card = creature;
                     break;
 

@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Future: Coffeinated, then Burnout. Never skips leg day, skips every
     rest day.'
   artDescription: 
@@ -58,3 +59,5 @@ MonoBehaviour:
   movement: 0
   ability: 0
   gift: 0
+  token: 0
+  disguise: {fileID: 0}

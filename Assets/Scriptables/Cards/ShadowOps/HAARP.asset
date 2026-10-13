@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: HAARP
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 2883a84a-5132-4f31-a5f8-d5158935c9a3
+  cardName: HAARP
+  description: 'Weather forecast: 100% chance of lightning, localized, on purpose.'
+  cardType: 1
+  faction: 3
+  artwork: {fileID: 0}
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 14
+      value: 0
+      targetType: 0
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 3
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 3
+      ability: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Trend for 3 Days, Freak Weather: each Dusk, lightning strikes the
+    toughest creature on the other side (the most Health), for 2 damage. Nobody''s
+    attack: nothing answers it or redirects it.'
+  artDescription: A field of antennas in the Alaskan tundra under a purple sky, a
+    single bolt of lightning forking down onto one tiny enemy tent miles away, a
+    technician in a parka sipping coffee by the control panel.
+  defaultTargetType: 0

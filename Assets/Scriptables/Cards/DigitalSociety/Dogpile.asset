@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Mechanics test: several hits at once: Exposed adds +1 to each, retaliation
     fires once per hit, Armor takes hits first.'
   artDescription: A huge, happy pile of dogs (corgis, labradors, a confused pug on

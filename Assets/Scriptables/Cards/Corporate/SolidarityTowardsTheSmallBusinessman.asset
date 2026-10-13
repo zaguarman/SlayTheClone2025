@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
     - actionType: 0
       value: 1
       targetType: 3
@@ -73,6 +74,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Draw 2, paid for by your workers: 1 damage to each friendly creature.
     Future: Capital cost.'
   artDescription: 'A fan-subscription website called ONLYFUNDS: the board-game tycoon

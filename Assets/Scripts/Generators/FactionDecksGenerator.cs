@@ -764,6 +764,28 @@ namespace SlayTheClone {
                     charges = 1, timing = WatchdogTiming.Briefing, pick = BriefingPick.Strongest }, TargetType.Enemy))
                 .NotInStarterDeck()
                 .Picture("A tank that has just fired, its barrel peeled back like a banana and the crew blackened and blinking, while a saboteur in coveralls tiptoes away with an empty sack marked SUGAR - FOR THE FUEL TANK."),
+            Spell("Ghost Army", TargetType.Player,
+                "Ten thousand men, four hundred tanks. Some assembly required. Do not inflate near cacti.",
+                "Put 2 Inflatable Tanks (0/1 decoys) in your empty slots: until a Reveal or Revealed shows them, the enemy sees each as a Sherman Tank, 6/6. Big attacks and Destroys get wasted on balloons. Tokens: gone when they leave play.",
+                SummonDecoys(2, "Inflatable Tank"))
+                .NotInStarterDeck()
+                .Picture("Two soldiers carrying a full-size rubber tank over their heads like a canoe across a muddy field at dawn, a third pumping up another with a bicycle pump, while an enemy spotter plane circles above."),
+            Creature("Inflatable Tank", 0, 1, speed: 1, deploy: 0,
+                "Pressure: 2 bar. Threat level: classified.",
+                "A Ghost Army decoy (a token): to the enemy it's a Sherman Tank until it's revealed.")
+                .Token(disguise: "Sherman Tank")
+                .Picture("A rubber tank half-deflated on a field, its barrel drooping, a soldier patching a hole with a bicycle repair kit."),
+            Creature("Sherman Tank", 6, 6, speed: 1, deploy: 0,
+                "Thirty tons of steel. Allegedly.",
+                "Never a real card: the face a Ghost Army decoy shows the enemy until it's revealed.")
+                .FakeFace(Faction.Statecraft)
+                .Picture("A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks."),
+            Spell("HAARP", TargetType.Player,
+                "Weather forecast: 100% chance of lightning, localized, on purpose.",
+                "Trend for 3 Days, Freak Weather: each Dusk, lightning strikes the toughest creature on the other side (the most Health), for 2 damage. Nobody's attack: nothing answers it or redirects it.",
+                SetTrend(Trend.FreakWeather, 3))
+                .NotInStarterDeck()
+                .Picture("A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy tent miles away, a technician in a parka sipping coffee by the control panel."),
             Creature("MK Ultra Test Subject", 4, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
@@ -1088,6 +1110,9 @@ namespace SlayTheClone {
             public List<CardEffect> Effects;
             public int CopyCount = 1;
             public bool Extra; // Not in its faction's starter deck (it's full): in the Mechanics Test deck and the deck builder
+            public bool IsToken; // Made by an effect (Ghost Army's decoys), never in a deck
+            public string DisguiseName; // The card the other side sees it as, until it's revealed
+            public Faction? ShownFaction; // A fake card's frame: the faction it pretends to be from
 
             public CardDef NotInStarterDeck() {
                 Extra = true;
@@ -1114,6 +1139,21 @@ namespace SlayTheClone {
             // Its one ability ('Abilities Compendium')
             public CardDef With(CreatureAbility ability) {
                 Ability = ability;
+                return this;
+            }
+
+            // A token: summoned by an effect, never in a deck, gone when it leaves play. disguise: the card the enemy sees it as
+            public CardDef Token(string disguise = null) {
+                IsToken = true;
+                Extra = true;
+                DisguiseName = disguise;
+                return this;
+            }
+
+            // A fake card's face: only ever shown as a decoy's disguise, in another faction's frame
+            public CardDef FakeFace(Faction looksLike) {
+                Extra = true;
+                ShownFaction = looksLike;
                 return this;
             }
 
@@ -1172,6 +1212,14 @@ namespace SlayTheClone {
         // Only lands if the target is what it requires when it lands
         private static EffectAction Requiring(EffectAction action, TargetRequisite requires) {
             action.requires = requires;
+            return action;
+        }
+
+        // Decoy tokens into your empty slots; the token card is found by name when the cards are written
+        private static readonly Dictionary<EffectAction, string> DecoyNames = new Dictionary<EffectAction, string>();
+        private static EffectAction SummonDecoys(int count, string decoy) {
+            var action = Act(ActionType.SummonDecoys, count, TargetType.Player, TargetModifier.None);
+            DecoyNames[action] = decoy;
             return action;
         }
 
@@ -1273,8 +1321,17 @@ namespace SlayTheClone {
 
             var deckCards = new List<CardDataScriptableObject>();
             var all = new List<CardDataScriptableObject>();
-            foreach (var card in cards) {
+            // Fake faces first, then tokens, so the cards that point at them find them written
+            foreach (var card in cards.OrderBy(c => c.ShownFaction != null ? 0 : c.IsToken ? 1 : 2)) {
+                foreach (var action in card.Effects.SelectMany(e => e.actions)) {
+                    if (DecoyNames.TryGetValue(action, out string decoy)) action.decoy = (CreatureCardScriptableObject)written[decoy];
+                }
                 var asset = WriteCard(card, faction, $"{folder}/{card.AssetName}.asset");
+                if (asset is CreatureCardScriptableObject creatureAsset) {
+                    creatureAsset.token = card.IsToken;
+                    creatureAsset.disguise = card.DisguiseName != null ? (CreatureCardScriptableObject)written[card.DisguiseName] : null;
+                    EditorUtility.SetDirty(creatureAsset);
+                }
                 written[card.Name] = asset;
                 all.Add(asset);
                 if (!card.Extra) deckCards.AddRange(Enumerable.Repeat(asset, card.CopyCount));
@@ -1325,7 +1382,7 @@ namespace SlayTheClone {
             asset.description = card.Flavor;
             asset.designNotes = card.Notes;
             asset.artDescription = card.ArtDescription;
-            asset.faction = faction;
+            asset.faction = card.ShownFaction ?? faction;
             asset.SetEffects(card.Effects);
             switch (asset) {
                 case CreatureCardScriptableObject creature:

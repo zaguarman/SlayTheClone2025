@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
     - actionType: 24
       value: 0
       targetType: 3
@@ -73,6 +74,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: Target friendly creature takes the stat raises and the good statuses
     (Blessed, Concealed, Encrypted, Untouchable) of the enemy creature facing it.
     Its victims hand everything over, smiling.

@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
     - actionType: 2
       value: 1
       targetType: 0
@@ -73,6 +74,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Future: Layoffs. Destroy a friendly Worker as an additional cost;
     schedule 2 draws.'
   artDescription: 
@@ -83,3 +85,5 @@ MonoBehaviour:
   movement: 0
   ability: 0
   gift: 0
+  token: 0
+  disguise: {fileID: 0}

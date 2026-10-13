@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 1
+      decoy: {fileID: 0}
   designNotes: Destroy target enemy creature if it's Revealed, whatever its Health
     or Armor (Untouchable still saves it). Set it up with Tapped Communications,
     which Reveals at once.

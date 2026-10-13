@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
     - actionType: 0
       value: 2
       targetType: 2
@@ -73,6 +74,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Future: a Trend (Location). Each Dusk, every creature takes 1 damage
     and yours shrug it off.'
   artDescription: The meme dog in a little bowler hat at a table with his coffee,

@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Future: the Kakistocracy Now! Law. Creatures entering with 3+ Attack
     or Health get -1 of each for 3 Days.'
   artDescription: 

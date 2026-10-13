@@ -61,6 +61,7 @@ namespace SlayTheClone {
                 // --- Phase 2: Dusk, for the Day that just resolved: Armor fades, statuses tick, Deployment Time counts down ---
                 modifierManager.ProcessEndOfTurn(endedTurn, actionsQueue);
                 SlotEffectRules.ProcessEndOfTurn(players, endedTurn, gameMediator, actionsQueue);
+                trends.QueueDuskEffects(actionsQueue);
                 trends.ProcessDusk(endedTurn); // A Trend ends after its last Day
                 yield return ResolveQueuedActions();
 

@@ -158,6 +158,14 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(0, wall.CurrentArmorPool, "Armor never fades below 0");
             yield return game.EndTurn();
             CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(torch));
+
+            // Freak Weather (HAARP): each Dusk, lightning strikes the toughest creature on the other side of whoever set it
+            var rod = game.Summon(game.Player2, game.Creature("Lightning Rod", 0, 30), 4);
+            game.Run(new SetTrendAction(Trend.FreakWeather, 2, game.Player1));
+            yield return game.EndTurn();
+            yield return game.EndTurn();
+            yield return game.EndTurn();
+            CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(rod), "2 Days, 2 strikes of 2, then the Trend is over");
         }
     }
 }

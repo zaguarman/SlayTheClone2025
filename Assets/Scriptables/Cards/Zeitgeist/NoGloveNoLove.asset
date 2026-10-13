@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
     - actionType: 4
       value: 2
       targetType: 3
@@ -73,6 +74,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Protection: target friendly creature gets Blessed (the next status
     that would land is negated) and 2 Armor.'
   artDescription: 'A woman wagging her index finger: no, no. In her other hand, a

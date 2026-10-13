@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Temporal Shield for 3 Days on a slot: the creature there takes no
     combat damage. Stays with the slot.'
   artDescription: A man frozen mid-sneeze inside a giant block of green jelly, the

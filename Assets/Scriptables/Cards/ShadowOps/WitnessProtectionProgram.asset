@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Target friendly creature goes dark until the next Dawn: whatever
     lands this Day misses it (board-wide damage included), but its slot is empty
     meanwhile. It comes back with a new identity: Concealed for 2 Days, unknown to

@@ -194,7 +194,7 @@ namespace SlayTheClone {
 
         // Live stats while the creature is alive on the board, printed stats otherwise
         private void UpdateCreatureStats(CreatureData data) {
-            bool isLive = linkedCreature != null && linkedCreature.Health > 0;
+            bool isLive = linkedCreature != null && linkedCreature.Health > 0 && !IsDisguised; // A decoy shows its fake card's numbers
             int attack = isLive ? linkedCreature.Attack : data.attack;
             int health = isLive ? linkedCreature.Health : data.health;
             int speed = isLive ? linkedCreature.Speed : data.speed;
@@ -466,6 +466,21 @@ namespace SlayTheClone {
             ShowFace(faceDown ? backFace : null);
         }
 
+        /// <summary>
+        /// Fog of War: a decoy the player at the screen doesn't see through. The card shows the card it pretends to be, with
+        /// that card's printed stats, and nothing of its own (null: its own face again).
+        /// </summary>
+        public void SetDisguise(CardData fake) {
+            if (fake == disguise) return;
+            if (disguise == null) realCardData = baseCardData;
+            disguise = fake;
+            baseCardData = fake ?? realCardData ?? baseCardData;
+            UpdateUI();
+        }
+
+        public bool IsDisguised => disguise != null;
+        private CardData disguise, realCardData;
+
         public bool IsAnonymous { get; private set; }
         public bool IsFaceDown { get; private set; }
         private GameObject unknownFace, backFace;
@@ -631,6 +646,7 @@ namespace SlayTheClone {
         public CardController CreatePreview(Transform parent) {
             var preview = cardViews.Create(linkedCardInstance, Player, parent);
             if (preview == null) return null;
+            preview.SetDisguise(disguise); // Enlarged, a decoy still shows its fake card
 
             preview.IsHoverPreview = true;
             var group = preview.GetComponent<CanvasGroup>();
@@ -641,7 +657,7 @@ namespace SlayTheClone {
 
         /// <summary>What the card face can't show: the modifiers currently affecting this creature. Empty if none.</summary>
         public string GetActiveModifiersText() {
-            if (linkedCreature == null || linkedCreature.Health <= 0 || GameManager?.ModifierManager == null) return "";
+            if (linkedCreature == null || linkedCreature.Health <= 0 || GameManager?.ModifierManager == null || IsDisguised) return "";
 
             var viewer = FogOfWar.ViewerOf(linkedCreature.Owner);
             var modifiers = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature)

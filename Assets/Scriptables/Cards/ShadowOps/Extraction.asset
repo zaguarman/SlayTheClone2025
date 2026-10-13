@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Target friendly creature goes back to your hand, in the next Day''s
     hand. Extracted while Revealed, it comes back with a new face: played again,
     it arrives Concealed for 2 Days.'

@@ -49,6 +49,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Target friendly creature fakes its death: its Last Will happens (Dead
     Man''s Switch destroys their strongest), then it goes back to your hand, in the
     next Day''s hand.'

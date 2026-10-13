@@ -248,6 +248,13 @@ namespace SlayTheClone {
                     return action.targetType == TargetType.Enemy ? $"enemy draws {cards}{when}" : $"draw {cards}{when}";
                 case ActionType.Summon:
                     return Keywords.Link("Summon", "summon" + Count(value));
+                case ActionType.SummonDecoys: {
+                    string decoy = action.decoy?.cardName ?? action.decoyData?.cardName ?? "decoy";
+                    string shownAs = action.decoy?.disguise?.cardName ?? action.decoyData?.disguise?.cardName;
+                    string plural = value == 1 ? decoy : decoy + "s";
+                    return $"put {value} {Keywords.Link("Decoy", plural)} in your empty {Keywords.Link("Slot", "slots")}" +
+                           (shownAs != null ? $": the enemy sees {(value == 1 ? "it" : "each")} as a {shownAs} until it's revealed" : "");
+                }
                 case ActionType.Armor:
                     return $"{target} +{(value == 1 ? "" : value.ToString())}{Keywords.Link("Armor", EffectIcons.Tag(EffectIcons.Armor))}";
                 case ActionType.Stun:

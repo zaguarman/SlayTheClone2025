@@ -73,7 +73,8 @@ namespace SlayTheClone {
         /// <summary>Stealthy: it keeps what it is hidden when it enters play. Undercover or Off the Books (printed, even before it's ready) or Concealed, and not Revealed.</summary>
         public static bool IsStealthy(ICreature creature, IModifierManager modifiers) =>
             creature != null && modifiers != null
-            && (creature.Ability is CreatureAbility.Undercover or CreatureAbility.OffTheBooks || modifiers.HasStatusEffect(creature, StatusEffectType.Concealed))
+            && (creature.Ability is CreatureAbility.Undercover or CreatureAbility.OffTheBooks || creature.Disguise != null
+                || modifiers.HasStatusEffect(creature, StatusEffectType.Concealed))
             && !modifiers.HasStatusEffect(creature, StatusEffectType.Revealed);
 
         /// <summary>Its summon finished: the other side sees what it is, unless it's stealthy.</summary>
@@ -208,6 +209,10 @@ namespace SlayTheClone {
 
         /// <summary>A secret status (a Kill Order) on the viewer's own creature: the screen doesn't show it.</summary>
         public static bool HidesStatus(IPlayer viewer, ICreature creature, StatusEffectType status) => Enabled && !Intel.CanSeeStatus(viewer, creature, status);
+
+        /// <summary>A decoy the viewer doesn't see through: the screen shows its fake card. Null: none (or it's seen for what it is).</summary>
+        public static CreatureData DisguiseFor(IPlayer viewer, ICreature creature) =>
+            creature?.Disguise != null && HidesIdentity(viewer, creature) ? creature.Disguise : null;
 
         /// <summary>The card shows as "???": the viewer doesn't know what this creature is.</summary>
         public static bool HidesIdentity(IPlayer viewer, ICreature creature) => Enabled && !Intel.KnowsWhatItIs(viewer, creature);

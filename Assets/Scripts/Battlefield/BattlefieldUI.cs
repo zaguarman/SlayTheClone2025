@@ -381,7 +381,9 @@ namespace SlayTheClone {
             foreach (var slot in battlefieldSlots) {
                 var card = slot.OccupyingCard;
                 if (card == null) continue;
-                card.SetAnonymous(FogOfWar.HidesIdentity(Viewer, slot.OccupyingCreature));
+                var disguise = FogOfWar.DisguiseFor(Viewer, slot.OccupyingCreature); // A decoy shows its fake card instead of "???"
+                card.SetDisguise(disguise);
+                card.SetAnonymous(disguise == null && FogOfWar.HidesIdentity(Viewer, slot.OccupyingCreature));
                 card.SetPlansHidden(FogOfWar.HidesPlansOf(slot.OccupyingCreature, Viewer, GameManager?.ActionsQueue, GameManager?.ModifierManager));
             }
         }

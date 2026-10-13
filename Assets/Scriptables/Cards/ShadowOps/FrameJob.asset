@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Target friendly creature passes every harmful status it has (Revealed,
     Heat Signature, Burned, Doomed...) to the enemy creature facing it, with the
     Days they have left. Nothing faces it: nothing happens.'

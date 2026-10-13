@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Future: Coffeinated on each friendly creature, followed by Burnout.'
   artDescription: 
   defaultTargetType: 3

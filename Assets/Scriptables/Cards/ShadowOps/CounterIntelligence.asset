@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Mechanics test: a Briefing Watchdog (GDD 3.11). From the Day after
     it''s created, before anything resolves, it redirects the strongest enemy attack
     to a random creature (the one with the most Heat first). 2 charges, one per attack

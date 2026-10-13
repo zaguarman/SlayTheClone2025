@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Regenerate 1: it repairs itself plank by plank.'
   artDescription: 'Every plank replaced until nothing''s left: the ship is only a
     dotted outline on the water, and Theseus in his crested helmet scratches his
@@ -59,3 +60,5 @@ MonoBehaviour:
   movement: 0
   ability: 0
   gift: 0
+  token: 0
+  disguise: {fileID: 0}

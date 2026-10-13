@@ -65,7 +65,18 @@ namespace SlayTheClone {
 
         // The card definitions read for a run are made for it: let them go when it's over
         internal static void Release(IEnumerable<DeckCards> decks) {
-            foreach (var data in decks.SelectMany(d => d.Cards).Distinct()) Object.DestroyImmediate(data);
+            foreach (var data in decks.SelectMany(d => d.Cards).Distinct().SelectMany(WithNested).Distinct().ToList()) Object.DestroyImmediate(data);
+        }
+
+        // A card and the definitions made along with it: the tokens it summons, and their fake faces
+        private static IEnumerable<CardData> WithNested(CardData data) {
+            if (data == null) yield break;
+            yield return data;
+            if (data is CreatureData { disguise: not null } creature) yield return creature.disguise;
+            foreach (var decoy in data.effects.SelectMany(e => e.actions).Select(a => a.decoyData).Where(d => d != null)) {
+                yield return decoy;
+                if (decoy.disguise != null) yield return decoy.disguise;
+            }
         }
 
         /// <summary>

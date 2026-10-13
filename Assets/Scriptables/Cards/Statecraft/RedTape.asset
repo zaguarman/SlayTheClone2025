@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Adds 1 Day to an enemy creature''s Deployment Time: it sits out the
     rest of this Day and all of the next, its planned action is cancelled, and its
     abilities are off until it''s ready again. Its entry effects don''t happen twice.'

@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Kill Order 2 on target enemy creature: at the Dusk two Days later,
     it''s destroyed (Untouchable saves it). It''s secret: the other side doesn''t
     see the spell played nor the Kill Order on their creature. A Cleanse removes

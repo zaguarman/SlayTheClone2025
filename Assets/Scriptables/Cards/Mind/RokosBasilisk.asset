@@ -48,6 +48,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       requires: 0
+      decoy: {fileID: 0}
   designNotes: 'Each Dawn a random enemy creature is Exhausted. No damage: Mind can''t
     deal it.'
   artDescription: A big green snake in headphones typing on a laptop, a sticky note
@@ -59,3 +60,5 @@ MonoBehaviour:
   movement: 0
   ability: 0
   gift: 0
+  token: 0
+  disguise: {fileID: 0}

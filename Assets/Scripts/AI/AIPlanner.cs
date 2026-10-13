@@ -438,7 +438,11 @@ namespace SlayTheClone {
         /// </summary>
         private float Value(EffectAction action, Spell spell, ITarget aim) {
             // Good for whoever plays them, whichever side they look at
-            if (action.actionType == ActionType.SetTrend) return 1;
+            if (action.actionType == ActionType.SetTrend) {
+                // Freak Weather strikes their toughest each Dusk; other Trends are good for whoever plays them
+                if (action.trend == Trend.FreakWeather) return view.Theirs.Any() ? TrendSystem.LightningDamage * System.Math.Max(1, action.statusDuration) * 0.8f * Style.Removal : 0.2f;
+                return 1;
+            }
             if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;
             if (action.actionType == ActionType.Reveal) {
                 if (!EffectResolver.UsesChosenTarget(action)) return 0.5f * Style.Intel; // A side's Watchdogs
@@ -484,7 +488,7 @@ namespace SlayTheClone {
                     return ours && good > 0 ? Style.Protection : Style.Statuses;
                 case ActionType.Draw:
                     return Style.Cards;
-                case ActionType.Summon:
+                case ActionType.Summon or ActionType.SummonDecoys:
                     return Style.Board;
                 default:
                     return 1;
@@ -607,6 +611,7 @@ namespace SlayTheClone {
             ActionType.Heal => System.Math.Min(amount, Player.MaxHealth - player.Health),
             ActionType.Draw => amount,
             ActionType.Summon => 2 * amount,
+            ActionType.SummonDecoys => 2.5f * amount, // Bodies that soak their attacks and kills
             _ => 0
         };
 
