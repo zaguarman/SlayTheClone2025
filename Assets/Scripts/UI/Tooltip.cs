@@ -282,10 +282,12 @@ namespace SlayTheClone {
 
         #region Keyword popups
         // Slay the Spire style: hovering a keyword on the enlarged card opens its explanation beside it; keywords in that
-        // explanation open theirs, and so on. The pointer can leave the card for its preview and popups; the tooltip stays
-        // while it's over any of them and closes a moment after it's over none.
-        private const float ReleaseGrace = 0.35f; // Seconds to cross from the card to its preview
-        private const int MaxKeywordPopups = 6;
+        // explanation open theirs, stacked below it, and so on (5 deep). They never cover the preview or each other, so the
+        // pointer can always reach the next one. The tooltip stays while the pointer is over the card, its preview or a
+        // popup, and closes a moment after it's over none.
+        private const float ReleaseGrace = 0.6f; // Seconds to cross from the card to its preview, or between popups
+        private const int MaxKeywordPopups = 5;
+        private const float PopupGap = 6f;
         private const float PopupWidth = 340f;
         private const float PopupPadding = 14f;
 
@@ -355,16 +357,30 @@ namespace SlayTheClone {
             CloseKeywordsFrom(index);
             var popup = BuildKeywordPopup(key);
 
-            // Beside the text it was opened from, level with the keyword; on the left when there's no room on the right
+            // At the first free spot: below the text it was opened from, above it, or beside everything already shown,
+            // level with the keyword. It never covers the preview or another popup, so the pointer can always reach it
             var info = parentText.textInfo.linkInfo[linkIndex];
             var character = parentText.textInfo.characterInfo[info.linkTextfirstCharacterIndex];
-            float linkTop = parentText.transform.TransformPoint(character.topLeft).y;
-            var corners = new Vector3[4];
-            parent.GetWorldCorners(corners);
-            float width = popup.Rect.rect.width * popup.Rect.lossyScale.x;
-            bool right = corners[2].x + PreviewGap + width <= Screen.width;
-            popup.Rect.pivot = new Vector2(right ? 0f : 1f, 1f);
-            popup.Rect.position = new Vector2(right ? corners[2].x + PreviewGap : corners[0].x - PreviewGap, linkTop + 8f);
+            float linkTop = parentText.transform.TransformPoint(character.topLeft).y + 8f;
+            var size = new Vector2(popup.Rect.rect.width * popup.Rect.lossyScale.x, popup.Rect.rect.height * popup.Rect.lossyScale.y);
+            var shown = keywordPopups.Select(p => ScreenRect(p.Rect)).Append(ScreenRect((RectTransform)preview.transform)).ToList();
+            var from = ScreenRect(parent);
+            float level = Mathf.Clamp(linkTop, size.y, Screen.height);
+            float left = shown.Min(r => r.xMin), right = shown.Max(r => r.xMax);
+            var candidates = new List<Vector2>(); // Top-left corners
+            if (index > 0) {
+                candidates.Add(new Vector2(from.xMin, from.yMin - PopupGap));
+                candidates.Add(new Vector2(from.xMin, from.yMax + PopupGap + size.y));
+            }
+            candidates.Add(new Vector2(from.xMax + PreviewGap, level));
+            candidates.Add(new Vector2(from.xMin - PreviewGap - size.x, level));
+            candidates.Add(new Vector2(right + PreviewGap, level));
+            candidates.Add(new Vector2(left - PreviewGap - size.x, level));
+            Vector2 topLeft = candidates.FirstOrDefault(c => Fits(new Rect(c.x, c.y - size.y, size.x, size.y), shown));
+            if (topLeft == default) topLeft = candidates[0];
+
+            popup.Rect.pivot = new Vector2(0f, 1f);
+            popup.Rect.position = topLeft;
             KeepOnScreen(popup.Rect);
             keywordPopups.Add(popup);
         }
@@ -391,6 +407,16 @@ namespace SlayTheClone {
             body.ForceMeshUpdate(); // Its links can be found right away
             return new KeywordPopup { Key = key, Rect = rect, Body = body };
         }
+
+        // Overlay canvas: world space is screen pixels
+        private static Rect ScreenRect(RectTransform rect) {
+            var corners = new Vector3[4];
+            rect.GetWorldCorners(corners);
+            return Rect.MinMaxRect(corners[0].x, corners[0].y, corners[2].x, corners[2].y);
+        }
+
+        private static bool Fits(Rect rect, List<Rect> shown) =>
+            rect.xMin >= 0f && rect.yMin >= 0f && rect.xMax <= Screen.width && rect.yMax <= Screen.height && !shown.Any(r => r.Overlaps(rect));
 
         private static void PlaceInPopup(RectTransform child, float top, float height) {
             child.anchorMin = new Vector2(0f, 1f);

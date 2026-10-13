@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ using Object = UnityEngine.Object;
 namespace SlayTheClone.Tests {
     /// <summary>
     /// The main menu as a player uses it: Play opens the match setup, where you pick your deck, an opponent and their deck,
-    /// and Start begins a game with exactly that; Cards opens the card gallery. Buttons are clicked the way the menu's own
+    /// and Start begins a game with exactly that; Cards opens the card gallery, Keywords the keyword glossary. Buttons are clicked the way the menu's own
     /// listeners expect.
     /// </summary>
     public class MenuTests {
@@ -40,7 +41,7 @@ namespace SlayTheClone.Tests {
         public void TearDown() => game.Dispose();
 
         [UnityTest]
-        public IEnumerator TheCardGallery_ShowsEveryDeck_AndPickingAnOpponent_BringsTheirDeck_WhichCanBeSwapped_AndBackKeepsTheChoices() {
+        public IEnumerator TheCardGallery_ShowsEveryDeck_TheGlossaryEveryKeyword_AndPickingAnOpponent_BringsTheirDeck_WhichCanBeSwapped_AndBackKeepsTheChoices() {
             Click(TitleButton(MainMenu.CardsButtonName));
             var gallery = Object.FindFirstObjectByType<CardGalleryMenu>();
             Assert.IsTrue(gallery.IsOpen, "Cards opens the card gallery");
@@ -53,6 +54,20 @@ namespace SlayTheClone.Tests {
             Click(GalleryButton(gallery, CardGalleryMenu.BackButtonName));
             Assert.IsFalse(gallery.IsOpen);
             Assert.IsTrue(TitleButton("PlayButton").gameObject.activeInHierarchy, "Back shows the title screen again");
+
+            Click(TitleButton(MainMenu.KeywordsButtonName));
+            var glossary = Object.FindFirstObjectByType<KeywordGlossaryMenu>();
+            Assert.IsTrue(glossary.IsOpen, "Keywords opens the glossary");
+            var listed = glossary.GetComponentsInChildren<Button>().Where(b => b.name.StartsWith(KeywordGlossaryMenu.KeywordButton)).ToList();
+            Assert.AreEqual(Keywords.All.Count(), listed.Count, "It lists every keyword");
+            Click(listed.Single(b => b.name == KeywordGlossaryMenu.KeywordButton + "Exhausted"));
+            Assert.AreEqual("Exhausted", glossary.Shown);
+            yield return null;
+            var point = SceneGame.KeywordPoint(glossary.Body, "Exposed");
+            ExecuteEvents.Execute(glossary.Body.gameObject, new PointerEventData(EventSystem.current) { position = point }, ExecuteEvents.pointerClickHandler);
+            Assert.AreEqual("Exposed", glossary.Shown, "Clicking a keyword in an explanation shows that keyword");
+            Click(GalleryButton(glossary, KeywordGlossaryMenu.BackButtonName));
+            Assert.IsFalse(glossary.IsOpen);
 
             yield return OpenSetup();
 
@@ -159,7 +174,7 @@ namespace SlayTheClone.Tests {
 
         private static List<string> Shown(CardGalleryMenu gallery) => gallery.ShownCards.Select(c => c.GetBaseCardData().cardName).ToList();
 
-        private static Button GalleryButton(CardGalleryMenu gallery, string name) {
+        private static Button GalleryButton(Component gallery, string name) {
             var button = gallery.GetComponentsInChildren<Button>(includeInactive: true).SingleOrDefault(b => b.name == name);
             Assert.IsNotNull(button, $"The card gallery has no button '{name}'");
             return button;

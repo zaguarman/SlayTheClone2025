@@ -6,7 +6,7 @@ using static SlayTheClone.DebugLogger;
 namespace SlayTheClone {
     /// <summary>
     /// Title screen: Play opens the match setup (decks and opponent), which then loads the game scene; Cards opens the card
-    /// gallery (every deck's cards); Quit quits the application.
+    /// gallery (every deck's cards); Keywords opens the keyword glossary; Quit quits the application.
     /// </summary>
     public class MainMenu : MonoBehaviour {
         [SerializeField] private string gameSceneName = "InitialTestScene";
@@ -15,12 +15,14 @@ namespace SlayTheClone {
         [SerializeField] private MatchSetupMenu matchSetup; // Without it, Play starts the game with the scene's own decks
 
         public const string CardsButtonName = "CardsButton";
+        public const string KeywordsButtonName = "KeywordsButton";
         private CardGalleryMenu gallery;
+        private KeywordGlossaryMenu glossary;
 
         private void Awake() {
             // Make sure a previous pause doesn't leave the game frozen
             Time.timeScale = 1f;
-            AddCardsButton();
+            AddMenuButtons();
 
             if (playButton != null) playButton.onClick.AddListener(Play);
             else LogWarning("Play button not assigned on MainMenu", LogTag.UI);
@@ -41,19 +43,27 @@ namespace SlayTheClone {
             UITheme.StyleButton(quitButton);
         }
 
-        // Cards, between Play and Quit: made from the Quit button, so it looks like the others
-        private void AddCardsButton() {
+        // Cards and Keywords, between Play and Quit
+        private void AddMenuButtons() {
             if (quitButton == null || matchSetup == null) return;
-            var cards = Instantiate(quitButton, quitButton.transform.parent);
-            cards.name = CardsButtonName;
-            cards.transform.SetSiblingIndex(quitButton.transform.GetSiblingIndex());
-            cards.onClick.RemoveAllListeners();
-            var label = cards.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (label != null) label.text = "Cards";
-
             gallery = matchSetup.gameObject.AddComponent<CardGalleryMenu>();
             gallery.Setup(matchSetup.Catalog, matchSetup.TitleScreen);
-            cards.onClick.AddListener(gallery.Show);
+            AddTitleButton(CardsButtonName, "Cards", gallery.Show);
+
+            glossary = matchSetup.gameObject.AddComponent<KeywordGlossaryMenu>();
+            glossary.Setup(matchSetup.Catalog, matchSetup.TitleScreen);
+            AddTitleButton(KeywordsButtonName, "Keywords", glossary.Show);
+        }
+
+        // Made from the Quit button and placed just before it, so it looks like the others
+        private void AddTitleButton(string name, string label, UnityEngine.Events.UnityAction onClick) {
+            var button = Instantiate(quitButton, quitButton.transform.parent);
+            button.name = name;
+            button.transform.SetSiblingIndex(quitButton.transform.GetSiblingIndex());
+            button.onClick.RemoveAllListeners();
+            var text = button.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (text != null) text.text = label;
+            button.onClick.AddListener(onClick);
         }
 
         public void Play() {
