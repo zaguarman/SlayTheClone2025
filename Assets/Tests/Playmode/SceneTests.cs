@@ -358,6 +358,8 @@ namespace SlayTheClone.Tests {
             var preview = SceneGame.HoverPreview();
             Assert.IsNotNull(preview, "Hovering a queued spell shows it enlarged");
             Assert.AreSame(bolt, preview.GetLinkedCardInstance());
+            Assert.IsTrue(preview.IsSpellShaped, "A spell is shaped as one: rounded, with an oval art window");
+            Assert.IsFalse(game.HandCards(p1).First(c => c.GetBaseCardData() is CreatureData).IsSpellShaped, "...a creature isn't");
             Assert.Greater(preview.transform.localScale.x, 1f);
 
             // Keywords: hovering one on the enlarged card explains it, and its explanation's keywords can be followed in turn

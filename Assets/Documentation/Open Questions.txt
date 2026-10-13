@@ -49,6 +49,16 @@ STILL OPEN
     • Question: OK with these names? And should reminder text stay on cards for the rarer keywords (as Magic does on common cards)?
 
 
+11. Placebo (2026-10-13)
+    • It was +3 Health for one Day (the Health went away at Dusk). Following "+3 Health with duration 1 doesn't need the duration", it's now +3 Health for good, which is what "+3 Health" reads as.
+    • Question: OK as a lasting buff, or should it stay temporary (then the card needs to say so)?
+
+
+12. Card names (2026-10-13)
+    • "Unvoluntary Free Polonium Giveaway": kept as written. "Involuntary" is the dictionary word, if the misspelling wasn't the joke.
+    • Second Wind: name ideas in the chat (Nine Lives, Extra Life, 'Tis But a Scratch...). Not renamed yet.
+
+
 ANSWERED (2026-10-12)
 
 • Fog of War views: the rules know everything; each player sees their own cards and what their cards revealed. The enemy's hand shows card backs and the enemy's cards can't be used. The screen plays player 1's side (Debug > Play As Player 2 / F8 switches, for testing).

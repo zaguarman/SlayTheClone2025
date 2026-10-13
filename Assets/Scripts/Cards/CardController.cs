@@ -230,10 +230,42 @@ namespace SlayTheClone {
         private void UpdateCardVisuals() {
             if (frameImage != null) frameImage.color = UITheme.CardFrameColor(baseCardData.faction);
             if (typeBarImage != null) typeBarImage.color = UITheme.FactionColor(baseCardData.faction);
+            ApplyShape(baseCardData is SpellData);
 
             artImage.sprite = baseCardData.artwork;
             artImage.color = baseCardData.artwork != null ? Color.white : new Color(0.25f, 0.25f, 0.3f);
         }
+
+        #region Shape
+        // The card's shape says what it is, with no icon to read: a creature is a squared-off tablet with a rectangular
+        // portrait; a spell is a rounded card with a capsule-shaped art window and a rounded name bar. Corner sizes, in
+        // multiples of the rounded sprite's corner (larger is sharper).
+        private const float CreatureCorners = 9f, SpellCorners = 0.9f, SpellArtCorners = 0.5f, CreatureArtCorners = 8f;
+
+        /// <summary>Whether the card is shaped as a spell (rounded, with an oval art window) rather than a creature.</summary>
+        public bool IsSpellShaped { get; private set; }
+
+        private void ApplyShape(bool spell) {
+            IsSpellShaped = spell;
+            SetCorners(cardImage != null ? cardImage : GetComponent<Image>(), spell ? SpellCorners : CreatureCorners);
+            SetCorners(frameImage, spell ? SpellCorners * 1.1f : CreatureCorners);
+            SetCorners(nameText != null ? nameText.transform.parent.GetComponent<Image>() : null, spell ? 1f : CreatureCorners);
+
+            var artFrame = artImage != null ? artImage.transform.parent.GetComponent<Image>() : null;
+            SetCorners(artFrame, spell ? SpellArtCorners : CreatureArtCorners);
+            // The art is cut to the window's shape
+            if (artFrame != null && artFrame.GetComponent<Mask>() == null) artFrame.gameObject.AddComponent<Mask>().showMaskGraphic = true;
+        }
+
+        // A rounded part and its trim take the same corners
+        private static void SetCorners(Image image, float scale) {
+            if (image == null) return;
+            image.pixelsPerUnitMultiplier = scale;
+            var trim = image.transform.Find("Trim");
+            if (trim != null && trim.TryGetComponent<Image>(out var outline)) outline.pixelsPerUnitMultiplier = scale;
+            image.SetVerticesDirty();
+        }
+        #endregion
 
         public void OnBeginDrag(PointerEventData eventData) {
             if (IsHoverPreview) {
