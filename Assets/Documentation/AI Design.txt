@@ -1,0 +1,102 @@
+AI DESIGN
+How the computer players are built (Scripts/AI). Last updated 2026-10-13.
+
+
+1. THE PIECES
+
+• AIView (what one seat sees). Built at the start of each plan; the only way the AI looks at the game.
+    - Its own side in full: hand, board, the plans it already made, its creatures queued to arrive.
+    - The other side as their cards show it: SeenSlot (who's there, the Slot Effect if this seat can see it) and
+      SeenCreature (stats, ability, statuses, Heat, Counterattack from its card text). A creature this seat doesn't know
+      (Fog of War) is a card back: guessed at 2 Attack / 3 Health, no ability, no statuses.
+    - Both players' Health.
+    - Never: the other hand or deck, their plans (even the ones the screen shows), hidden traps, Watchdog conditions,
+      what an unknown creature really is.
+• AIPlanner (the decisions). PlanDay(player) queues the Day's plays, attacks, moves and abilities through the same calls
+  dragging cards makes (PlayCardAction, the combat handler, MoveCreatureAction, UseAbilityAction), so the rules can't tell
+  it from a person. One class, three levels (AILevel: Easy, Medium, Hard).
+• AIController (the plug in a game). Made at startup; at each Dawn it plans every seat the AI plays (MatchSetup.AI), at
+  the level chosen (MatchSetup.AILevel). With both seats it also ends the turn after a 1 second pause. F7 hands seats over.
+• AITournament (AI against AI, no screen). Plays whole combats with the real GameManager and TurnManager
+  (TurnManager.EndTurnImmediately skips the playback), about 20 games a second. Debug > AI Tournament writes the
+  results to 'AI Tournament.txt'.
+
+
+2. HOW A DAY IS PLANNED
+
+The AI plans at Dawn, before the other seat (GDD 3.6: its intents are on the table before yours). Steps, in order:
+1. Creatures: each creature in hand to a free slot.
+2. Spells: each spell where it does the most good.
+3. Abilities: Active abilities (Bodyguard, Wannabe, Identity Theft, Credit Grab) when worth more than attacking.
+4. Attacks.
+5. Moves (Hard only).
+Planning again the same Day only adds what's left.
+
+Scoring a spell ("Value"): the planner tries every place the card can be dropped (every slot for an aimed spell, the side
+it does something to otherwise) and adds up what each of its effects does to each target it would land on, as
+EffectResolver would pick them:
+    + for us on our side, - on theirs; a random target counts as a share of each one it may pick.
+    Damage: the damage, or the creature's whole worth (Attack + Health + Armor) plus its Health if it dies.
+    A player brought to 0: 100 (nothing counts more; for our own Health, -100).
+    Healing, Armor, stat changes, statuses (Burn by its Days, Exhausted by the Attack it stops, Doomed half the creature),
+    Slot Effects (a Landmine waits for the next creature, a Snare for one leaving), draws and summons.
+    Watchdogs and Trends count as good for whoever plays them; effects that are hard to weigh (copy, swap, grant) count as
+    good on the side the card names.
+It plays the card where the total is highest, and keeps it if nothing comes out above 0. No card has a rule of its own,
+so new cards made of existing effects are played without any AI work.
+
+
+3. THE THREE LEVELS
+
+Easy: plays everything, without judging.
+    • Creatures to random free slots.
+    • Spells at a random creature on the side the card names.
+    • Each creature attacks the slot in front of it.
+    • Bodyguard guards someone at random; no other abilities.
+Medium: the scoring above.
+    • Creatures (the strongest first) to the slot that suits them; a much better one replaces a weak one.
+    • Each spell at its best aim.
+    • Attacks, strongest first, each where it's worth most: a kill, else the player through an empty slot.
+    • It counts planned damage, so two hits don't kill the same creature, and it sees lethal.
+Hard: Medium, plus it reads what the cards it knows say.
+    • Abilities that bend effects: Contrarian reverses (it will weaken its own Contrarian on purpose), Extremist doubles,
+      Unbothered and Cold Storage block, No U and Return to Sender bounce back to us, Too Mainstream ignores areas,
+      Spite gains Attack.
+    • Statuses: Blessed negates (and loses a stack), Doomed blocks others, Untouchable takes no damage.
+    • Heat: random damage goes to the hottest creature it can see, on either side.
+    • A Temporal Shield stops combat damage; Counterattacks hit back; Hive Mind steals abilities.
+    • Its own attacks: Recoil, Penny Stock, Double Tap, Insider Job.
+    • Protection: Armor, healing, Untouchable and Temporal Shields are worth the whole creature when they save one the
+      other side could kill next Day; Bodyguard guards the one most at risk.
+    • Attacks: lethal if it has it. Otherwise the race: if it would bring them to 0 in fewer Days than they would it, it
+      goes for the player and only stops real threats. If not, it kills the biggest threats, each with the smallest
+      attacker (or pair) that does it, and sends the rest at the player.
+    • Moves: a creature with nothing to do leaves a Scorched Earth slot, or takes cover on a free Temporal Shield.
+
+
+4. HOW STRONG THEY ARE (Debug > AI Tournament, 660 games: each faction deck against itself, both seats)
+    Hard beats Medium 123 - 66 (31 draws); Medium beats Easy 154 - 32 (34 draws); Hard beats Easy 178 - 20 (22 draws).
+    Overall: Easy wins 12% of its games, Medium 50%, Hard 68%.
+    Seats are fair: Player 1 won 301, Player 2 won 272.
+    A draw is a combat called off after 40 Days, or both at 0 at once.
+    Deck by deck (see the report): Mind and Statecraft are closest. Their stuns and debuffs make games swingy, so
+    skill shows less.
+
+
+5. IMPERFECT INFORMATION: HOW IT'S KEPT
+• Built in: the planner only gets an AIView. Of the other side it gets SeenCreature/SeenSlot objects with nothing filled in
+  that the seat can't see. (They keep the real creature and slot only to aim at them; the planner reads nothing else.)
+• Tested (FogOfWarTests: TheAI_AtEveryLevel_PlansTheSame_WhateverItCantSee): two games look the same to player 1, but in
+  one, player 2 has a different hand and plans, hidden Landmines, and a 9/9 where the other has a 2/3, both unknown.
+  Every level must plan the same Day in both. Once the 9/9 is revealed, Medium and Hard must plan differently, so it
+  does use what it sees. Planting a leak on purpose (letting it see unknown creatures) makes this test fail.
+• Random choices (Easy) use the planner's own seeded random numbers, never the game's, so the shuffles stay the same.
+
+
+6. NOT YET
+• Holding cards back. There's little point today (the hand is discarded at Dusk), but there will be once costs arrive.
+• Reading the other side's visible plans: it plans first, so there are none to read against a person.
+• Watchdog play (when to keep them), Reveal for traps, Shell Game.
+• Looking further ahead than the next Day.
+• Personalities (aggressive, defensive, trap-heavy) as weights on the same scoring.
+• The GDD 6 "script of intents" for enemies.

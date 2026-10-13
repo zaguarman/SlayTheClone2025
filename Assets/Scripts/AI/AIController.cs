@@ -5,7 +5,7 @@ using static SlayTheClone.DebugLogger;
 namespace SlayTheClone {
     /// <summary>
     /// Plugs the <see cref="AIPlanner"/> into a running game. At the start of each Day it plans the Day of every seat the AI
-    /// plays (<see cref="MatchSetup.AI"/>), so its plans are on the table before you make yours (GDD 3.6: the AI plans first).
+    /// plays (<see cref="MatchSetup.AI"/>), at the level chosen (<see cref="MatchSetup.AILevel"/>), so its plans are on the table before you make yours (GDD 3.6: the AI plans first).
     /// When it plays both seats it also ends the turn, after a pause so its plans can be watched. Which seats it plays can
     /// change at any time (<see cref="SwitchSeats"/>, F7); it stops when the combat ends.
     /// </summary>
@@ -31,10 +31,10 @@ namespace SlayTheClone {
         public void Initialize(IGameManager gameManager, IGameMediator gameMediator) {
             game = gameManager ?? throw new System.ArgumentNullException(nameof(gameManager));
             mediator = gameMediator ?? throw new System.ArgumentNullException(nameof(gameMediator));
-            planner = new AIPlanner(game.ActionsQueue, game.CombatHandler);
+            planner = new AIPlanner(game.ActionsQueue, game.CombatHandler, MatchSetup.AILevel, System.Environment.TickCount);
             mediator.GameOver += OnGameOver;
             ShowHumanSeat();
-            Log($"AIController initialized: the AI plays {MatchSetup.AI}", LogTag.Initialization | LogTag.Turns);
+            Log($"AIController initialized: the AI ({MatchSetup.AILevel}) plays {MatchSetup.AI}", LogTag.Initialization | LogTag.Turns);
         }
 
         private void OnDestroy() {
@@ -77,12 +77,12 @@ namespace SlayTheClone {
             else if (MatchSetup.AI == AISeats.Player2) FogOfWar.PlaysAsPlayer1 = true;
         }
 
-        /// <summary>For the note under End Turn: which seats the AI plays.</summary>
+        /// <summary>For the note under End Turn: which seats the AI plays, and how well.</summary>
         public static string SeatsText => MatchSetup.AI switch {
             AISeats.None => "OFF",
-            AISeats.Both => "BOTH PLAYERS",
-            AISeats.Player1 => "PLAYER 1",
-            _ => "PLAYER 2"
+            AISeats.Both => $"BOTH PLAYERS, {MatchSetup.AILevel.ToString().ToUpper()}",
+            AISeats.Player1 => $"PLAYER 1, {MatchSetup.AILevel.ToString().ToUpper()}",
+            _ => $"PLAYER 2, {MatchSetup.AILevel.ToString().ToUpper()}"
         };
     }
 }

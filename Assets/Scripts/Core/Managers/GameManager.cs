@@ -104,6 +104,9 @@ namespace SlayTheClone {
 
         public bool IsInitialized { get; private set; }
 
+        /// <summary>The seed the next Initialize uses (0: a new one). Set before it, e.g. by a game played without a screen.</summary>
+        public int RandomSeed { get => randomSeed; set => randomSeed = value; }
+
         public Player Player1 { get; private set; }
         public Player Player2 { get; private set; }
         IPlayer IGameManager.Player1 => Player1;

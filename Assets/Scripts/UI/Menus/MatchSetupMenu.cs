@@ -25,6 +25,7 @@ namespace SlayTheClone {
         public const string StartButtonName = "StartButton";
         public const string BackButtonName = "BackButton";
         public const string SeatsButtonName = "SeatsButton";
+        public const string LevelButtonName = "AILevelButton";
 
         [SerializeField] private DeckCatalog catalog;
         [SerializeField] private GameObject titleScreen; // Hidden while choosing
@@ -41,6 +42,8 @@ namespace SlayTheClone {
         public DeckScriptableObject OpponentDeck { get; private set; }
         /// <summary>The seats the AI plays: your opponent's unless chosen otherwise.</summary>
         public AISeats AI { get; private set; } = AISeats.Player2;
+        /// <summary>How well the AI plays.</summary>
+        public AILevel Level { get; private set; } = AILevel.Medium;
         /// <summary>Every deck either side can play: the starter and test decks, then your own complete ones.</summary>
         public IReadOnlyList<DeckScriptableObject> Decks => catalog.AllDecks.Concat(PlayerDecks.Playable(catalog)).ToList();
 
@@ -48,6 +51,7 @@ namespace SlayTheClone {
         private bool wasTyping;
         private TextMeshProUGUI summaryText;
         private TextMeshProUGUI seatsLabel;
+        private Button levelButton;
         private readonly List<(Button button, Func<bool> isSelected, ScrollRect list)> choiceButtons = new List<(Button, Func<bool>, ScrollRect)>();
 
         #region Choosing
@@ -82,6 +86,7 @@ namespace SlayTheClone {
             choiceButtons.Clear();
             summaryText = null;
             seatsLabel = null;
+            levelButton = null;
             if (panel == null) return;
             panel.SetActive(false);
             panel.transform.SetParent(null, false); // Gone from the menu at once; destroyed at the end of the frame
@@ -120,6 +125,12 @@ namespace SlayTheClone {
             Refresh();
         }
 
+        /// <summary>How well the AI plays, in turn: Easy, Medium, Hard.</summary>
+        public void StepLevel() {
+            Level = (AILevel)(((int)Level + 1) % 3);
+            Refresh();
+        }
+
         private string SeatsName => AI switch {
             AISeats.None => "Hot seat",
             AISeats.Both => "AI vs AI",
@@ -128,6 +139,7 @@ namespace SlayTheClone {
 
         public void StartMatch() {
             MatchSetup.Choose(PlayerDeck, OpponentName, OpponentDeck, AI);
+            MatchSetup.AILevel = Level;
             Log($"Match chosen: {PlayerDeck.GetDeckName()} vs {MatchSetup.OpponentName} ({OpponentDeck.GetDeckName()})", LogTag.UI);
             MatchChosen?.Invoke();
         }
@@ -141,6 +153,7 @@ namespace SlayTheClone {
                 Opponent = catalog.Opponents.FirstOrDefault(o => o.name == MatchSetup.OpponentName);
                 OpponentDeck = MatchSetup.OpponentDeck;
                 AI = MatchSetup.AI;
+                Level = MatchSetup.AILevel;
                 return;
             }
 
@@ -162,6 +175,10 @@ namespace SlayTheClone {
                     + $"   vs   {them}, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{OpponentDeck.GetDeckName()}</color>";
             }
             if (seatsLabel != null) seatsLabel.text = SeatsName;
+            if (levelButton != null) {
+                levelButton.GetComponentInChildren<TextMeshProUGUI>(true).text = $"AI: {Level}";
+                levelButton.gameObject.SetActive(AI != AISeats.None); // Hot seat has no AI
+            }
         }
         #endregion
 
@@ -191,6 +208,7 @@ namespace SlayTheClone {
             var footer = AddFooter(panel.transform);
             AddButton(footer, BackButtonName, "Back", BackWidth, Hide);
             seatsLabel = AddButton(footer, SeatsButtonName, SeatsName, BackWidth, StepSeats).GetComponentInChildren<TextMeshProUGUI>();
+            levelButton = AddButton(footer, LevelButtonName, "", BackWidth, StepLevel);
             var start = AddButton(footer, StartButtonName, "<b>Start</b>", 360, StartMatch);
             UITheme.StyleButton(start, UITheme.ButtonKind.Primary);
             start.GetComponentInChildren<TextMeshProUGUI>().fontStyle = FontStyles.Bold | FontStyles.SmallCaps;

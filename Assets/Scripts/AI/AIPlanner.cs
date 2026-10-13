@@ -4,68 +4,93 @@ using static SlayTheClone.DebugLogger;
 using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
+    /// <summary>How well the AI plays (see <see cref="AIPlanner"/>).</summary>
+    public enum AILevel { Easy, Medium, Hard }
+
     /// <summary>
-    /// A simple AI that plans one side's Day (GDD 3.6 Planning) the way a player does: it queues the same plays, attacks and
-    /// Active abilities that dragging cards queues, so it can sit in either seat, or both. It plays under Fog of War: of the
-    /// other side it only uses what that side shows (a creature it doesn't know is guessed at), never their hand or plans.
-    /// A proof of concept: it doesn't move creatures or look ahead. Each choice is scored by a rough value of what it does
-    /// (see <see cref="Value"/>) and the best one is taken, so it plays any card made of the effects the game knows.
+    /// An AI that plans one side's Day (GDD 3.6 Planning) the way a player does: it queues the same plays, attacks, moves and
+    /// Active abilities that dragging cards queues, so it can sit in either seat, or both. It looks at the game only through
+    /// an <see cref="AIView"/>, so it knows what a player in that seat knows and nothing more (GDD 2.5 Fog of War).
+    /// <list type="bullet">
+    /// <item>Easy plays everything: creatures to random free slots, spells at a random target on the side the card names,
+    /// each creature attacking the slot in front of it.</item>
+    /// <item>Medium scores every choice by a rough value of what it does (see <see cref="Value"/>): each spell where it does the
+    /// most good, if anywhere; each attack where it kills the most, else at the player through an empty slot.</item>
+    /// <item>Hard also reads what the cards it knows say: abilities that bend effects (Contrarian, No U, Too Mainstream...),
+    /// Blessed, Doomed, Untouchable, Heat, Temporal Shields, Counterattacks; it protects the creatures the other side can kill,
+    /// kills the biggest threats with the smallest attacker that does it, defends when it could die next Day, and moves
+    /// idle creatures out of bad slots.</item>
+    /// </list>
     /// </summary>
     public class AIPlanner {
-        // What an unknown enemy creature is taken to be
-        private const int GuessedAttack = 2;
-        private const int GuessedHealth = 3;
         private const float Lethal = 100f; // A player at 0 ends the combat: nothing else counts as much
 
+        public AILevel Level { get; }
         private readonly IActionsQueue queue;
         private readonly IBattlefieldCombatHandler combat;
+        private readonly System.Random random; // Easy's choices; its own, so the game's shuffles stay the same
         private IModifierManager Modifiers => queue.Modifiers;
+        private bool Hard => Level == AILevel.Hard;
 
-        private IPlayer me;
-        // Damage already planned today, so two attackers don't both kill the same creature
-        private readonly Dictionary<ITarget, int> plannedDamage = new Dictionary<ITarget, int>();
+        private AIView view;
+        // Damage already planned today, so two hits don't both kill the same creature
+        private readonly Dictionary<SeenCreature, int> plannedDamage = new Dictionary<SeenCreature, int>();
+        private int plannedFace;
 
-        public AIPlanner(IActionsQueue queue, IBattlefieldCombatHandler combat) {
+        public AIPlanner(IActionsQueue queue, IBattlefieldCombatHandler combat, AILevel level = AILevel.Medium, int seed = 0) {
             this.queue = queue ?? throw new System.ArgumentNullException(nameof(queue));
             this.combat = combat ?? throw new System.ArgumentNullException(nameof(combat));
+            Level = level;
+            random = new System.Random(seed);
         }
 
         /// <summary>
-        /// Plans the player's Day: creatures to free slots, then the spells worth playing, then each creature's ability or
-        /// attack. What's already planned stays, so planning again the same Day only adds what's left.
+        /// Plans the player's Day: creatures to slots, then the spells worth playing, then each creature's ability, attack or
+        /// move. What's already planned stays, so planning again the same Day only adds what's left.
         /// </summary>
         public void PlanDay(IPlayer player) {
             if (player?.Opponent == null || player.Health <= 0 || player.Opponent.Health <= 0) return;
-            me = player;
+            view = new AIView(player, queue);
             plannedDamage.Clear();
-            Log($"AI plans {me.Name}'s Day", LogTag.Turns);
+            plannedFace = 0;
+            Log($"AI ({Level}) plans {player.Name}'s Day", LogTag.Turns);
+
             PlayCreatures();
             PlaySpells();
-            foreach (var creature in Creatures(me).OrderByDescending(c => c.Attack).ToList()) {
-                if (queue.HasActiveAction(creature.TargetId) || !Modifiers.CanAct(creature)) continue;
-                if (!UseAbility(creature)) Attack(creature);
-            }
+            var ready = view.Mine.Where(c => !queue.HasActiveAction(c.Creature.TargetId) && Modifiers.CanAct(c.Creature))
+                .OrderByDescending(c => c.Attack).ToList();
+            ready.RemoveAll(UseAbility);
+            var idle = Level switch {
+                AILevel.Easy => AttackInFront(ready),
+                AILevel.Medium => AttackGreedily(ready),
+                _ => AttackByThreat(ready)
+            };
+            if (Hard) idle.ForEach(MoveOutOfHarm);
         }
 
         #region Creatures
-        // The best creatures first, each to the free slot that suits it best; a much better one replaces a weak one when the row is full
+        // The best creatures first, each to the free slot that suits it best (Easy: any); a much better one replaces a weak one
         private void PlayCreatures() {
-            foreach (var creature in me.Hand.OfType<ICreature>().Where(c => !IsQueued(c)).OrderByDescending(Worth).ToList()) {
-                var slot = me.Battlefield.Where(IsFree).OrderByDescending(s => ValueOfEntering(s)).FirstOrDefault()
-                    ?? me.Battlefield.Where(s => s.IsOccupied() && EffectResolver.IncomingCreature(s, queue) == null
-                                                 && !queue.HasActiveAction(s.OccupyingCreature.TargetId)
-                                                 && Worth(creature) >= Worth(s.OccupyingCreature) + 4)
-                        .OrderBy(s => Worth(s.OccupyingCreature)).FirstOrDefault();
-                if (slot != null) Play(creature, slot);
+            var hand = view.Me.Hand.OfType<ICreature>().Where(c => !IsQueued(c)).ToList();
+            hand = Level == AILevel.Easy ? hand.OrderBy(_ => random.Next()).ToList() : hand.OrderByDescending(c => c.Attack + c.Health).ToList();
+            foreach (var creature in hand) {
+                var free = view.MySlots.Where(s => s.IsFree).ToList();
+                var slot = Level == AILevel.Easy
+                    ? free.Count > 0 ? free[random.Next(free.Count)] : null
+                    : free.OrderByDescending(ValueOfEntering).FirstOrDefault()
+                      ?? view.MySlots.Where(s => s.Creature != null && s.Incoming == null && !queue.HasActiveAction(s.Creature.Creature.TargetId)
+                                                 && creature.Attack + creature.Health >= s.Creature.Worth + 4)
+                          .OrderBy(s => s.Creature.Worth).FirstOrDefault();
+                if (slot == null) continue;
+                Play(creature, slot.Slot);
+                slot.Incoming = creature;
             }
         }
 
-        private bool IsFree(BoardSlot slot) => !slot.IsOccupied() && EffectResolver.IncomingCreature(slot, queue) == null;
-
         // What landing in this slot does to a creature, as far as this side can see
-        private float ValueOfEntering(BoardSlot slot) {
-            var effect = slot.Effect;
-            if (effect == null || !Intel.CanSee(me, effect)) return 0;
+        private static float ValueOfEntering(SeenSlot slot) {
+            var effect = slot.VisibleEffect;
+            if (effect == null) return 0;
             return effect.Type switch {
                 SlotEffectType.Landmine => -effect.Value,
                 SlotEffectType.BarbedSnare => -effect.Value / 2f,
@@ -77,69 +102,206 @@ namespace SlayTheClone {
         #endregion
 
         #region Spells
-        // Each spell goes where it does the most good, if anywhere it does some
+        // Each spell goes where it does the most good, if anywhere it does some. Easy plays each one somewhere on its side
         private void PlaySpells() {
-            foreach (var spell in me.Hand.OfType<Spell>().Where(s => !IsQueued(s)).ToList()) {
+            foreach (var spell in view.Me.Hand.OfType<Spell>().Where(s => !IsQueued(s)).ToList()) {
+                var aims = AimsFor(spell).ToList();
+                if (aims.Count == 0) continue;
+                if (Level == AILevel.Easy) {
+                    Play(spell, EasyAim(spell, aims));
+                    continue;
+                }
+
                 ITarget bestAim = null;
                 float best = 0;
-                foreach (var aim in AimsFor(spell)) {
+                foreach (var aim in aims) {
                     float value = spell.Effects.SelectMany(e => e.actions).Sum(a => Value(a, spell, aim));
                     if (value > best) (bestAim, best) = (aim, value);
                 }
                 if (bestAim == null) continue;
                 Play(spell, bestAim);
                 foreach (var damage in spell.Effects.SelectMany(e => e.actions).Where(a => a.actionType == ActionType.Damage && EffectResolver.UsesChosenTarget(a))) {
-                    if (CreatureAt(bestAim) is ICreature hit) AddDamage(hit, damage.value);
+                    if (CreatureAt(bestAim) is SeenCreature hit) AddDamage(hit, damage.value);
                 }
             }
         }
 
-        // Where it can be dropped: any slot for an aimed spell (on this side, homing on the creature that will be there),
-        // otherwise the side it does something to (its caster's when it does something to both)
+        // Where it can be dropped: any slot for an aimed spell (on our side, homing on the creature that will be there),
+        // otherwise the side it does something to (ours when it does something to both)
         private IEnumerable<ITarget> AimsFor(Spell spell) {
             if (EffectResolver.IsAimed(spell)) {
-                foreach (var slot in me.Battlefield) yield return EffectResolver.AimAt(spell, me, slot, queue);
-                foreach (var slot in me.Opponent.Battlefield) yield return slot;
+                foreach (var slot in view.MySlots) yield return EffectResolver.AimAt(spell, view.Me, slot.Slot, queue);
+                foreach (var slot in view.TheirSlots) yield return slot.Slot;
             }
-            else if (EffectResolver.Reaches(spell, me, me)) yield return me;
-            else if (EffectResolver.Reaches(spell, me, me.Opponent)) yield return me.Opponent;
+            else if (EffectResolver.Reaches(spell, view.Me, view.Me)) yield return view.Me;
+            else if (EffectResolver.Reaches(spell, view.Me, view.Them)) yield return view.Them;
+        }
+
+        // A creature on the side the card names, at random; a slot there if it has none
+        private ITarget EasyAim(Spell spell, List<ITarget> aims) {
+            if (aims.Count == 1) return aims[0];
+            var side = aims.Where(a => IsOurs(SlotOf(a)) == IntendedFor(spell, view.Me)).ToList();
+            var withCreature = side.Where(a => CreatureAt(a) != null).ToList();
+            var pick = withCreature.Count > 0 ? withCreature : side.Count > 0 ? side : aims;
+            return pick[random.Next(pick.Count)];
         }
         #endregion
 
-        #region Abilities and attacks
+        #region Abilities
         // An Active ability, when using it beats attacking: Bodyguard (which can't attack) always guards someone
-        private bool UseAbility(ICreature creature) {
-            if (!Abilities.CanUseActive(creature, Modifiers)) return false;
-            var others = AllCreatures().Where(c => c != creature).ToList();
-            ICreature target = creature.Ability switch {
-                CreatureAbility.Bodyguard => others.Where(c => c.Owner == me && !Modifiers.HasStatusEffect(c, StatusEffectType.Untouchable))
-                    .OrderByDescending(Worth).FirstOrDefault(),
-                CreatureAbility.Wannabe => others.Where(c => Worth(c) >= Worth(creature) + 2).OrderByDescending(Worth).FirstOrDefault(),
-                CreatureAbility.IdentityTheft => others.Where(c => c.Owner != me && Knows(c) && c.Ability != CreatureAbility.None && creature.Attack <= 2)
-                    .FirstOrDefault(),
-                CreatureAbility.CreditGrab => others.Where(c => c.Owner != me && Knows(c) && c.Attack - c.BaseAttack + c.Health - c.BaseHealth >= 2)
-                    .FirstOrDefault(),
+        private bool UseAbility(SeenCreature user) {
+            if (!Abilities.CanUseActive(user.Creature, Modifiers)) return false;
+            var others = view.All.Where(c => c != user).ToList();
+            var friends = others.Where(c => c.Ours && !c.Has(StatusEffectType.Untouchable)).ToList();
+            SeenCreature target = user.Creature.Ability switch {
+                CreatureAbility.Bodyguard when Level == AILevel.Easy => friends.Count > 0 ? friends[random.Next(friends.Count)] : null,
+                CreatureAbility.Bodyguard when Hard => friends.OrderByDescending(c => WouldDie(c) ? c.Worth + 10 : c.Worth).FirstOrDefault(),
+                CreatureAbility.Bodyguard => friends.OrderByDescending(c => c.Worth).FirstOrDefault(),
+                _ when Level == AILevel.Easy => null,
+                CreatureAbility.Wannabe => others.Where(c => c.Known && c.Worth >= user.Worth + 2).OrderByDescending(c => c.Worth).FirstOrDefault(),
+                CreatureAbility.IdentityTheft => others.Where(c => !c.Ours && c.Ability != CreatureAbility.None && user.Attack <= 2).FirstOrDefault(),
+                CreatureAbility.CreditGrab => others.Where(c => !c.Ours && c.StatRaises >= 2).OrderByDescending(c => c.StatRaises).FirstOrDefault(),
                 _ => null
             };
-            if (target?.Slot == null) return false;
-            Log($"AI: {creature.Name} uses {Abilities.NameOf(creature.Ability)} on {target.Name}", LogTag.Turns);
-            queue.AddAction(new UseAbilityAction(creature, target.Slot));
+            if (target == null) return false;
+            Log($"AI: {user} uses {Abilities.NameOf(user.Creature.Ability)} on {target}", LogTag.Turns);
+            queue.AddAction(new UseAbilityAction(user.Creature, target.Slot.Slot));
             return true;
         }
+        #endregion
 
-        // The enemy slot where its hit is worth the most: a kill, else the player through an empty slot, else the softest creature
-        private void Attack(ICreature attacker) {
-            if (!Abilities.CanAttack(attacker) || attacker.Attack <= 0) return;
-            int damage = attacker.Attack + Abilities.AttackBonus(attacker);
-            var target = me.Opponent.Battlefield.OrderByDescending(s => ValueOfHitting(s, damage)).First();
-            Log($"AI: {attacker.Name} attacks {target}", LogTag.Turns);
-            combat.HandleCreatureCombat(attacker, target);
-            AddDamage(target.OccupyingCreature ?? (ITarget)me.Opponent, damage);
+        #region Attacks
+        private bool CanAttack(SeenCreature attacker) => Abilities.CanAttack(attacker.Creature) && attacker.Attack > 0;
+
+        // Easy: the slot in front of it
+        private List<SeenCreature> AttackInFront(List<SeenCreature> ready) {
+            foreach (var attacker in ready.Where(CanAttack)) AttackSlot(attacker, view.TheirSlots[attacker.Slot.Index], attacker.Attack);
+            return ready.Where(c => !CanAttack(c)).ToList();
         }
 
-        private float ValueOfHitting(BoardSlot slot, int damage) {
-            if (slot.OccupyingCreature is ICreature creature) return -Goodness(ActionType.Damage, damage, creature) * 0.9f; // A tie goes to the player
-            return -Goodness(ActionType.Damage, damage, me.Opponent);
+        // Medium: the strongest first, each where its hit is worth the most: a kill, else the player through an empty slot
+        private List<SeenCreature> AttackGreedily(List<SeenCreature> ready) {
+            foreach (var attacker in ready.Where(CanAttack)) {
+                int damage = attacker.Attack + Abilities.AttackBonus(attacker.Creature);
+                var target = view.TheirSlots.OrderByDescending(s => ValueOfHitting(s, damage)).First();
+                AttackSlot(attacker, target, damage);
+            }
+            return ready.Where(c => !CanAttack(c)).ToList();
+        }
+
+        private float ValueOfHitting(SeenSlot slot, int damage) {
+            if (slot.Creature is SeenCreature creature) return -CreatureGoodness(creature, ActionType.Damage, damage) * 0.9f; // A tie goes to the player
+            return -PlayerGoodness(view.Them, ActionType.Damage, damage);
+        }
+
+        /// <summary>
+        /// Hard: lethal if it has it; otherwise the most threatening creatures it can kill, each with the smallest attacker
+        /// (or two, for a big threat or when it could die next Day) that does it, then the rest at the player. It doesn't
+        /// waste an attack on what can't be hurt (Untouchable, a Temporal Shield) and weighs Counterattacks.
+        /// </summary>
+        private List<SeenCreature> AttackByThreat(List<SeenCreature> ready) {
+            var left = ready.Where(CanAttack).ToList();
+            var open = view.TheirSlots.FirstOrDefault(s => s.IsEmpty);
+            if (open != null && left.Sum(a => DamageOf(a)) >= view.TheirHealth - plannedFace) {
+                foreach (var attacker in left) AttackSlot(attacker, open, DamageOf(attacker));
+                return ready.Where(c => !CanAttack(c)).ToList();
+            }
+
+            bool defending = TheirPotentialDamage() >= view.MyHealth;
+            // The race: winning it (we'd bring them to 0 in fewer Days than they would us), it only stops the big threats
+            int ours = System.Math.Max(1, view.Mine.Where(c => c.Operative && CanAttack(c)).Sum(DamageOf));
+            int theirs = System.Math.Max(1, TheirPotentialDamage());
+            bool ahead = open != null && !defending && (view.TheirHealth - plannedFace + ours - 1) / ours < (view.MyHealth + theirs - 1) / theirs;
+            foreach (var target in view.Theirs.Where(Hittable).OrderByDescending(Threat).ToList()) {
+                var killer = left.Where(a => Hit(a, target) >= HealthLeft(target)).OrderBy(DamageOf).FirstOrDefault();
+                // A harmless creature isn't worth an attack that could go at the player instead; racing, only a real threat is
+                if (killer != null && open != null && !defending && target.Worth + target.Attack < DamageOf(killer)) continue;
+                if (killer != null && ahead && target.Attack < DamageOf(killer)) continue;
+                if (killer != null) {
+                    AttackSlot(killer, target.Slot, Hit(killer, target));
+                    left.Remove(killer);
+                    continue;
+                }
+                if (Threat(target) < 6 && !defending) continue;
+                var pair = (from a in left from b in left
+                            where DamageOf(a) <= DamageOf(b) && a != b && Hit(a, target) + Hit(b, target) >= HealthLeft(target)
+                            orderby DamageOf(a) + DamageOf(b) select (a, b)).FirstOrDefault();
+                if (pair.a == null) continue;
+                foreach (var attacker in new[] { pair.a, pair.b }) {
+                    AttackSlot(attacker, target.Slot, Hit(attacker, target));
+                    left.Remove(attacker);
+                }
+            }
+
+            // The rest at the player; with no way through, at the creature where the damage counts most
+            foreach (var attacker in left.ToList()) {
+                var chip = view.Theirs.Where(Hittable).OrderByDescending(t => ChipValue(attacker, t)).FirstOrDefault();
+                if (open != null) AttackSlot(attacker, open, DamageOf(attacker));
+                else if (chip != null && ChipValue(attacker, chip) > 0) AttackSlot(attacker, chip.Slot, Hit(attacker, chip));
+                else continue;
+                left.Remove(attacker);
+            }
+            return ready.Where(c => !CanAttack(c)).Concat(left).ToList();
+        }
+
+        // What its attack deals: Recoil's +2, Penny Stock doubling small hits, Double Tap hitting twice
+        private static int DamageOf(SeenCreature attacker) {
+            int damage = attacker.Attack + (attacker.Ability == CreatureAbility.Recoil ? 2 : 0);
+            if (attacker.Ability == CreatureAbility.PennyStock && damage <= 3) damage *= 2;
+            return attacker.Ability == CreatureAbility.DoubleTap ? damage * 2 : damage;
+        }
+
+        // Its damage to this creature: Exposed adds 1 a hit; Insider Job goes through Armor
+        private static int Hit(SeenCreature attacker, SeenCreature target) =>
+            DamageOf(attacker) + (target.Exposed ? attacker.Ability == CreatureAbility.DoubleTap ? 2 : 1 : 0)
+            + (attacker.Ability == CreatureAbility.InsiderJob ? target.Armor : 0);
+
+        private static bool Hittable(SeenCreature target) =>
+            !target.Has(StatusEffectType.Untouchable) && !target.Slot.Shielded;
+
+        // A hit that doesn't kill: worth the damage to a threat, minus what answers it
+        private float ChipValue(SeenCreature attacker, SeenCreature target) {
+            float value = System.Math.Min(Hit(attacker, target), HealthLeft(target)) * (target.Attack > 0 ? 0.8f : 0.3f);
+            if (target.Retaliation > 0) value -= target.Retaliation >= attacker.Health + attacker.Armor ? attacker.Worth : target.Retaliation * 0.5f;
+            if (target.Ability == CreatureAbility.HiveMind && attacker.Ability != CreatureAbility.None) value -= 1;
+            return value;
+        }
+
+        // How dangerous a creature of theirs is: its Attack counts double when it can use it, a known ability adds
+        private static float Threat(SeenCreature creature) =>
+            creature.Attack * (creature.Operative ? 2 : 1) + creature.Health * 0.5f + (creature.Ability != CreatureAbility.None ? 1.5f : 0);
+
+        // All their creatures that can act could hit us for this much next Day, if nothing stopped them
+        private int TheirPotentialDamage() => view.Theirs.Where(c => c.Operative && HealthLeft(c) > 0).Sum(c => c.Attack);
+
+        // The biggest hit one of their creatures could land on this one of ours
+        private int ThreatOn(SeenCreature ours) {
+            int biggest = view.Theirs.Where(c => c.Operative && HealthLeft(c) > 0).Select(c => c.Attack).DefaultIfEmpty(0).Max();
+            return biggest > 0 && ours.Exposed ? biggest + 1 : biggest;
+        }
+
+        private bool WouldDie(SeenCreature ours) => ThreatOn(ours) >= ours.Health + ours.Armor && !ours.Has(StatusEffectType.Untouchable);
+
+        private void AttackSlot(SeenCreature attacker, SeenSlot target, int damage) {
+            Log($"AI: {attacker} attacks {target}", LogTag.Turns);
+            combat.HandleCreatureCombat(attacker.Creature, target.Slot);
+            if (target.Creature != null) AddDamage(target.Creature, damage);
+            else plannedFace += damage;
+        }
+        #endregion
+
+        #region Moves
+        // Hard: a creature with nothing to do leaves a slot that harms it, or takes cover on a Temporal Shield of ours
+        private void MoveOutOfHarm(SeenCreature creature) {
+            bool harmed = creature.Slot.VisibleEffect?.Type == SlotEffectType.ScorchedEarth;
+            bool exposed = WouldDie(creature) && !creature.Slot.Shielded;
+            if (!harmed && !exposed) return;
+            var to = view.MySlots.Where(s => s.IsFree && ValueOfEntering(s) >= 0 && (harmed || s.Shielded))
+                .OrderByDescending(ValueOfEntering).FirstOrDefault(s => !MovementRules.Evaluate(creature.Creature, s.Slot, queue).blocked);
+            if (to == null) return;
+            Log($"AI: {creature} moves to {to}", LogTag.Turns);
+            queue.AddAction(new MoveCreatureAction(creature.Creature, creature.Slot.Slot, to.Slot, view.Me));
+            to.Incoming = creature.Creature; // Taken
         }
         #endregion
 
@@ -152,88 +314,124 @@ namespace SlayTheClone {
             // Good for whoever plays them, whichever side they look at
             if (action.actionType is ActionType.CreateWatchdog or ActionType.SetTrend) return 1;
             if (action.actionType == ActionType.Reveal) {
-                return CreatureAt(aim) is ICreature hidden && Intel.HidesSomethingFrom(me, hidden, queue) ? 1 : 0;
+                if (!EffectResolver.UsesChosenTarget(action)) return 0.5f; // A side's Watchdogs
+                var seen = CreatureAt(aim);
+                return seen != null && !seen.Ours && !seen.Known ? 1 : 0.2f; // Or what may lie in the slot
             }
 
             var targets = TargetsOf(action, aim);
-            float share = action.targetModifier.HasFlag(TargetModifier.Random) && targets.Count > 0 ? 1f / targets.Count : 1f;
+            bool random = action.targetModifier.HasFlag(TargetModifier.Random);
+            float share = random && targets.Count > 0 ? 1f / targets.Count : 1f;
+            bool area = !random && targets.Count(t => t is SeenCreature) > 1;
             float value = 0;
             foreach (var target in targets) {
-                float good = target is BoardSlot slot ? GoodnessOfSlot(action, slot) : Goodness(action, target, spell);
+                float good = target switch {
+                    SeenSlot slot => SlotGoodness(action, slot),
+                    SeenCreature creature => Goodness(action, creature, spell, area),
+                    IPlayer player => PlayerGoodness(player, action.actionType, action.value),
+                    _ => 0
+                };
                 value += share * (IsOurs(target) ? good : -good);
             }
             return value;
         }
 
-        // What the effect lands on, as EffectResolver picks it (see its SelectTargets)
-        private List<ITarget> TargetsOf(EffectAction action, ITarget aim) {
-            if (action.targetType == TargetType.Self) return new List<ITarget>(); // A spell has no self
+        // What the effect lands on, as EffectResolver picks it (see its SelectTargets), as this side sees it
+        private List<object> TargetsOf(EffectAction action, ITarget aim) {
+            var targets = new List<object>();
+            if (action.targetType == TargetType.Self) return targets; // A spell has no self
             if (EffectResolver.UsesChosenTarget(action)) {
-                var slot = SlotOf(aim);
-                if (EffectResolver.IsSlotAction(action.actionType)) return slot != null ? new List<ITarget> { slot } : new List<ITarget>();
-                var targets = new List<ITarget>();
-                if (CreatureAt(aim) is ICreature creature) targets.Add(creature);
-                else if (EffectResolver.CanAffectPlayers(action.actionType) && slot != null) targets.Add(slot.Owner);
-                if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent) && slot != null) {
-                    var row = slot.Owner.Battlefield;
+                var slot = view.Of(SlotOf(aim));
+                if (slot == null) return targets;
+                if (EffectResolver.IsSlotAction(action.actionType)) {
+                    targets.Add(slot);
+                    return targets;
+                }
+                if (CreatureAt(aim) is SeenCreature creature) targets.Add(creature);
+                else if (EffectResolver.CanAffectPlayers(action.actionType)) targets.Add(slot.Ours ? view.Me : view.Them);
+                if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) {
+                    var row = slot.Ours ? view.MySlots : view.TheirSlots;
                     foreach (int i in new[] { slot.Index - 1, slot.Index + 1 }) {
-                        if (i >= 0 && i < row.Count && row[i].OccupyingCreature != null) targets.Add(row[i].OccupyingCreature);
+                        if (i >= 0 && i < row.Count && row[i].Creature != null) targets.Add(row[i].Creature);
                     }
                 }
                 return targets;
             }
-            return TargetingSystem.GetValidTargets(me, action.targetType);
-        }
 
-        // How good the effect is for whoever it lands on: a player or a creature
-        private float Goodness(EffectAction action, ITarget target, Spell spell) {
-            if (target is ICreature creature) {
-                switch (action.actionType) {
-                    case ActionType.ModifyStat when action.modifyHealth && action.value < 0 && -action.value >= HealthLeft(creature):
-                        return -(Worth(creature) + HealthLeft(creature)); // Its Health drops to 0
-                    case ActionType.ModifyStat:
-                        return action.value * ((action.modifyAttack ? 1 : 0) + (action.modifyHealth ? 1 : 0) + (action.modifySpeed ? 0.5f : 0));
-                    case ActionType.ApplyStatus:
-                        return GoodnessOfStatus(action, creature);
-                    case ActionType.Cleanse:
-                        return HarmfulStatuses.Any(s => Modifiers.HasStatusEffect(creature, s)) ? 2 : 0;
-                    case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility:
-                        return IntendedFor(spell, creature.Owner) ? 1 : -1; // Hard to weigh: done where the card means it
-                }
+            foreach (var target in TargetingSystem.GetValidTargets(view.Me, action.targetType)) {
+                if (target is IPlayer player) targets.Add(player);
+                else if (view.Of(target) is SeenCreature seen) targets.Add(seen);
             }
-            return Goodness(action.actionType, action.value, target);
+            // Hard knows Heat draws random effects: random damage goes to the hottest creature it can see, on either side
+            if (Hard && action.targetModifier.HasFlag(TargetModifier.Random)) {
+                var pool = action.actionType == ActionType.Damage ? view.All : targets.OfType<SeenCreature>();
+                var hottest = pool.Where(c => c.Heat > 0).OrderByDescending(c => c.Heat).FirstOrDefault();
+                if (hottest != null) return new List<object> { hottest };
+            }
+            return targets;
         }
 
-        private float Goodness(ActionType type, int amount, ITarget target) {
-            switch (target) {
-                case IPlayer player:
-                    return type switch {
-                        ActionType.Damage => amount + Planned(player) >= player.Health ? -Lethal : -amount,
-                        ActionType.Heal => System.Math.Min(amount, Player.MaxHealth - player.Health),
-                        ActionType.Draw => amount,
-                        ActionType.Summon => 2 * amount,
-                        _ => 0
-                    };
-                case ICreature creature:
-                    bool operative = creature.IsOperative;
-                    return type switch {
-                        ActionType.Damage when Modifiers.HasStatusEffect(creature, StatusEffectType.Untouchable) => 0,
-                        ActionType.Damage => DamageGoodness(creature, amount + (Modifiers.IsExposed(creature) ? 1 : 0)),
-                        ActionType.Heal => Knows(creature) ? System.Math.Min(amount, creature.MaxHealth - creature.Health) : 0,
-                        ActionType.Armor => amount * 0.75f,
-                        ActionType.Stun => operative ? -(AttackOf(creature) + 1) : -0.5f,
-                        ActionType.DelayDeployment => -1.5f * amount,
-                        _ => 0
-                    };
+        // How good the effect is for the creature it lands on (Hard: as its ability and statuses bend it)
+        private float Goodness(EffectAction action, SeenCreature creature, Spell spell, bool area) {
+            if (Hard && area && creature.Ability == CreatureAbility.TooMainstream) return 0;
+            switch (action.actionType) {
+                case ActionType.ModifyStat:
+                    return StatChangeGoodness(action, creature);
+                case ActionType.ApplyStatus:
+                    if (Hard && !creature.Ours && (creature.Ability is CreatureAbility.NoU or CreatureAbility.ReturnToSender)) {
+                        return -StatusGoodness(action, creature); // It comes back to one of ours
+                    }
+                    if (Hard && creature.Has(StatusEffectType.Blessed)) return -0.3f; // Negated, and it loses a stack of Blessed
+                    if (Hard && creature.Has(StatusEffectType.Doomed)) return 0; // Blocks every other status
+                    return StatusGoodness(action, creature);
+                case ActionType.Cleanse:
+                    return HarmfulStatuses.Any(creature.Has) ? 2 : 0;
+                case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility:
+                    return IntendedFor(spell, creature.Ours ? view.Me : view.Them) ? 1 : -1; // Hard to weigh: done where the card means it
+                case ActionType.Armor or ActionType.Heal when Hard && creature.Ours:
+                    return Protection(creature, action.actionType, action.value);
                 default:
-                    return 0;
+                    return CreatureGoodness(creature, action.actionType, action.value);
             }
         }
 
-        private float DamageGoodness(ICreature creature, int damage) {
+        private float CreatureGoodness(SeenCreature creature, ActionType type, int amount) => type switch {
+            ActionType.Damage when creature.Has(StatusEffectType.Untouchable) => 0,
+            ActionType.Damage => DamageGoodness(creature, amount + (creature.Exposed ? 1 : 0)),
+            ActionType.Heal => creature.Known ? System.Math.Min(amount, creature.MaxHealth - creature.Health) : 0,
+            ActionType.Armor => amount * 0.75f,
+            ActionType.Stun => creature.Operative ? -(creature.Attack + 1) : -0.5f,
+            ActionType.DelayDeployment => -1.5f * amount,
+            _ => 0
+        };
+
+        private float PlayerGoodness(IPlayer player, ActionType type, int amount) => type switch {
+            ActionType.Damage => amount + (player == view.Them ? plannedFace : 0) >= player.Health ? -Lethal : -amount,
+            ActionType.Heal => System.Math.Min(amount, Player.MaxHealth - player.Health),
+            ActionType.Draw => amount,
+            ActionType.Summon => 2 * amount,
+            _ => 0
+        };
+
+        private float DamageGoodness(SeenCreature creature, int damage) {
             int left = HealthLeft(creature);
             if (left <= 0) return -0.1f; // Already dead to what's planned: wasted
-            return damage >= left ? -(Worth(creature) + left) : -damage;
+            return damage >= left ? -(creature.Worth + left) : -damage;
+        }
+
+        private float StatChangeGoodness(EffectAction action, SeenCreature creature) {
+            int change = action.value;
+            if (Hard) {
+                bool enemyLowers = change < 0 && !creature.Ours;
+                if (enemyLowers && creature.Ability is CreatureAbility.Unbothered or CreatureAbility.Unpatchable) return 0;
+                if (enemyLowers && creature.Ability == CreatureAbility.NoU) return -change * 2; // Bounces to one of ours
+                if (creature.Ability == CreatureAbility.Contrarian) change = -change;
+                if (creature.Ability == CreatureAbility.Extremist) change *= 2;
+            }
+            if (action.modifyHealth && change < 0 && -change >= HealthLeft(creature)) return -(creature.Worth + HealthLeft(creature)); // Its Health drops to 0
+            float good = change * ((action.modifyAttack ? 1 : 0) + (action.modifyHealth ? 1 : 0) + (action.modifySpeed ? 0.5f : 0));
+            if (Hard && change < 0 && creature.Ability == CreatureAbility.Spite) good += 2; // It gets +2 Attack out of it
+            return good;
         }
 
         private static readonly StatusEffectType[] HarmfulStatuses = {
@@ -241,36 +439,53 @@ namespace SlayTheClone {
             StatusEffectType.Revealed, StatusEffectType.Cooldown
         };
 
-        private float GoodnessOfStatus(EffectAction action, ICreature creature) {
+        private float StatusGoodness(EffectAction action, SeenCreature creature) {
             int days = System.Math.Max(1, action.statusDuration);
             return action.statusEffectToApply switch {
                 StatusEffectType.Burned => -System.Math.Max(1, action.statusPotency) * days,
-                StatusEffectType.Exhausted => creature.IsOperative ? -(AttackOf(creature) + 1) : -0.5f,
-                StatusEffectType.Doomed => -Worth(creature) / 2f,
+                StatusEffectType.Exhausted => creature.Operative ? -(creature.Attack + 1) : -0.5f,
+                StatusEffectType.Doomed => -creature.Worth / 2f,
                 StatusEffectType.Blessed => System.Math.Max(1, action.statusPotency),
                 StatusEffectType.HeatSignature => -0.5f,
-                StatusEffectType.Revealed => Intel.IsConcealed(creature, Modifiers) ? -2 : -0.5f,
+                StatusEffectType.Revealed => creature.Has(StatusEffectType.Concealed) || creature.Ability == CreatureAbility.Undercover ? -2 : -0.5f,
                 StatusEffectType.Concealed or StatusEffectType.Encrypted => 1,
-                StatusEffectType.Untouchable => 3,
+                StatusEffectType.Untouchable => Hard && creature.Ours ? Protection(creature, ActionType.Stun, 0) : 3,
                 StatusEffectType.Cooldown => -1,
                 _ => 0
             };
         }
 
-        // A slot effect, for the side whose slot it is
-        private float GoodnessOfSlot(EffectAction action, BoardSlot slot) {
+        // Hard: help for one of ours is worth what it saves: the whole creature if it would otherwise die next Day
+        private float Protection(SeenCreature ours, ActionType type, int amount) {
+            int threat = ThreatOn(ours);
+            int toughness = ours.Health + ours.Armor;
+            switch (type) {
+                case ActionType.Armor:
+                    return threat >= toughness && threat < toughness + amount ? ours.Worth * 0.8f : amount * 0.4f;
+                case ActionType.Heal:
+                    int healed = ours.Known ? System.Math.Min(amount, ours.MaxHealth - ours.Health) : 0;
+                    return threat >= toughness && threat < toughness + healed ? ours.Worth * 0.6f : healed;
+                default: // Untouchable, or a Temporal Shield
+                    return threat <= 0 ? 0.3f : threat >= toughness ? ours.Worth : threat * 0.7f;
+            }
+        }
+
+        // A Slot Effect, for the side whose slot it is
+        private float SlotGoodness(EffectAction action, SeenSlot slot) {
             switch (action.actionType) {
                 case ActionType.PlaceSlotEffect:
-                    bool occupied = EffectResolver.IncomingCreature(slot, queue) != null || slot.IsOccupied();
+                    bool occupied = slot.Creature != null || slot.Incoming != null;
                     return action.slotEffect switch {
                         SlotEffectType.Landmine => occupied ? -0.5f : -action.value * 0.6f, // Waits for the next creature to enter
                         SlotEffectType.BarbedSnare => occupied ? -action.value * 0.6f : -0.5f, // Waits for one to leave
+                        SlotEffectType.TemporalShield when Hard && slot.Ours && (slot.Creature ?? view.IncomingTo(slot)) is SeenCreature ours =>
+                            Protection(ours, ActionType.Stun, 0),
                         SlotEffectType.TemporalShield => occupied ? 2 : 0.25f,
                         SlotEffectType.ScorchedEarth => occupied ? -1.5f : -0.5f,
                         _ => 0
                     };
                 case ActionType.CleanseSlot:
-                    return slot.Effect != null && Intel.CanSee(me, slot.Effect) ? -ValueOfEntering(slot) : 0;
+                    return -ValueOfEntering(slot);
                 default:
                     return 0;
             }
@@ -278,33 +493,23 @@ namespace SlayTheClone {
 
         // Which side the card is meant for: the one its default target names (all creatures: either)
         private bool IntendedFor(Spell spell, IPlayer side) => spell == null || spell.DefaultTargetType switch {
-            TargetType.Enemy or TargetType.EnemyCreatures => side != me,
-            TargetType.Player or TargetType.FriendlyCreatures or TargetType.Self => side == me,
+            TargetType.Enemy or TargetType.EnemyCreatures => side != view.Me,
+            TargetType.Player or TargetType.FriendlyCreatures or TargetType.Self => side == view.Me,
             _ => true
         };
         #endregion
 
-        #region What this side sees
-        private bool Knows(ICreature creature) => Intel.KnowsWhatItIs(me, creature);
-        private int AttackOf(ICreature creature) => Knows(creature) ? creature.Attack : GuessedAttack;
-        private int HealthOf(ICreature creature) => Knows(creature) ? creature.Health + creature.CurrentArmorPool : GuessedHealth;
-        private int HealthLeft(ICreature creature) => HealthOf(creature) - Planned(creature);
-        private float Worth(ICreature creature) => AttackOf(creature) + HealthOf(creature);
+        #region Helpers
+        private int HealthLeft(SeenCreature creature) => creature.Health + creature.Armor - (plannedDamage.TryGetValue(creature, out int damage) ? damage : 0);
+        private void AddDamage(SeenCreature creature, int damage) => plannedDamage[creature] = (plannedDamage.TryGetValue(creature, out int done) ? done : 0) + damage;
 
-        private int Planned(ITarget target) => plannedDamage.TryGetValue(target, out int damage) ? damage : 0;
-        private void AddDamage(ITarget target, int damage) => plannedDamage[target] = Planned(target) + damage;
-
-        private bool IsOurs(ITarget target) => target switch {
-            IPlayer player => player == me,
-            ICreature creature => creature.Owner == me,
-            BoardSlot slot => slot.Owner == me,
+        private bool IsOurs(object target) => target switch {
+            IPlayer player => player == view.Me,
+            SeenCreature creature => creature.Ours,
+            SeenSlot slot => slot.Ours,
+            BoardSlot slot => slot.Owner == view.Me,
             _ => false
         };
-
-        private static IEnumerable<ICreature> Creatures(IPlayer side) =>
-            side.Battlefield.Where(s => s.IsOccupied()).Select(s => s.OccupyingCreature);
-
-        private IEnumerable<ICreature> AllCreatures() => Creatures(me).Concat(Creatures(me.Opponent));
 
         private bool IsQueued(ICard card) => queue.GetPendingActions().OfType<PlayCardAction>().Any(p => p.GetCard() == card);
 
@@ -314,17 +519,16 @@ namespace SlayTheClone {
             _ => null
         };
 
-        // The creature the aim lands on: the one homed on, or the one in the slot
-        private static ICreature CreatureAt(ITarget aim) => aim switch {
-            HomingTarget homing => homing.Creature,
-            BoardSlot slot => slot.OccupyingCreature,
-            _ => null
-        };
-        #endregion
+        // The creature an aim lands on, as we see it: the one of ours it homes on (maybe on its way), or the one in the slot
+        private SeenCreature CreatureAt(ITarget aim) {
+            if (aim is HomingTarget homing) return view.Of(homing.Creature) ?? view.IncomingTo(view.Of(homing.AimedSlot));
+            return view.Of(SlotOf(aim))?.Creature;
+        }
 
         private void Play(ICard card, ITarget aim) {
-            Log($"AI: {me.Name} plays {card.Name} on {aim}", LogTag.Turns);
-            queue.AddAction(new PlayCardAction(card, me, aim));
+            Log($"AI: {view.Me.Name} plays {card.Name} on {aim}", LogTag.Turns);
+            queue.AddAction(new PlayCardAction(card, view.Me, aim));
         }
+        #endregion
     }
 }

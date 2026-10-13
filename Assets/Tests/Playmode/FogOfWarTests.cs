@@ -114,5 +114,63 @@ namespace SlayTheClone.Tests {
             game.Play(lookAround, p1, p2.Battlefield[0]);
             Assert.IsTrue(Intel.CanSee(p1, p2.Battlefield[2].Effect), "...so it's the one picked, whatever the luck");
         }
+
+        /// <summary>
+        /// The AI plays imperfect information too: at every level it plans exactly the same Day whatever it can't see (the
+        /// other hand, their plans, hidden traps, what an unknown creature really is), and differently once it can see it.
+        /// </summary>
+        [Test]
+        public void TheAI_AtEveryLevel_PlansTheSame_WhateverItCantSee() {
+            foreach (AILevel level in System.Enum.GetValues(typeof(AILevel))) {
+                var plans = PlanWith(level, hiddenDiffers: false, revealed: false);
+                CollectionAssert.IsNotEmpty(plans, $"{level}: it plans something");
+                CollectionAssert.AreEqual(plans, PlanWith(level, hiddenDiffers: true, revealed: false), $"{level}: its plans changed with what it can't see");
+                if (level != AILevel.Easy) {
+                    CollectionAssert.AreNotEqual(plans, PlanWith(level, hiddenDiffers: true, revealed: true), $"{level}: it ignores what it does see");
+                }
+            }
+        }
+
+        // Plans player 1's Day in a game of its own. The board and hand player 1 sees are always the same; with hiddenDiffers,
+        // all it can't see is different: player 2's hand and plans, traps they hid, and what their unknown creature is
+        private static List<string> PlanWith(AILevel level, bool hiddenDiffers, bool revealed) {
+            using var g = new TestGame();
+            var (me, them) = (g.Player1, g.Player2);
+            g.Summon(me, g.Creature("Brute", 3, 4), 0);
+            g.Summon(me, g.Creature("Squire", 1, 2), 1);
+            var guard = g.Summon(them, g.Creature("Guard", 1, 5), 0); // Zap can't kill it; the stranger it can, if it's what it seems
+            var stranger = g.Summon(them, hiddenDiffers
+                ? g.Creature("Titan", 9, 9, 1, TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.Enemy))
+                : g.Creature("Pawn", 2, 3), 2);
+            if (!revealed) stranger.KnownTo.Remove(me); // A card back to player 1
+            g.GiveCard(me, g.Spell("Zap", TargetType.EnemyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures)));
+            g.GiveCard(me, g.Spell("Pep Talk", TargetType.FriendlyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures)));
+            g.GiveCard(me, g.Creature("Recruit", 2, 2));
+
+            if (hiddenDiffers) {
+                g.Run(new PlaceSlotEffectAction(me.Battlefield[3], SlotEffectType.Landmine, 5, 0, them)); // Where player 1 would place a creature
+                g.Run(new PlaceSlotEffectAction(them.Battlefield[4], SlotEffectType.Landmine, 5, 0, them));
+                var nuke = g.GiveCard(them, g.Spell("Nuke", TargetType.EnemyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 9, TargetType.EnemyCreatures)));
+                g.GiveCard(them, g.Creature("Giant", 8, 8));
+                g.Play(nuke, them, me.Battlefield[0]);
+                g.Declare(guard, me.Battlefield[1]);
+            }
+
+            new AIPlanner(g.ActionsQueue, g.CombatHandler, level, seed: 7).PlanDay(me);
+
+            string Where(ITarget aim) => aim switch {
+                HomingTarget homing => homing.Creature.Name,
+                BoardSlot slot => $"{(slot.Owner == me ? "our" : "their")} slot {slot.Index}",
+                IPlayer player => player == me ? "us" : "them",
+                _ => "?"
+            };
+            return g.ActionsQueue.GetPendingActions().Select(action => action switch {
+                PlayCardAction play when play.GetOwner() == me => $"play {play.GetCard().Name} on {Where(play.GetTarget())}",
+                BattlefieldCombatAction attack when attack.GetAttacker().Owner == me => $"{attack.GetAttacker().Name} attacks {Where(attack.GetTargetSlot())}",
+                UseAbilityAction use when use.Creature.Owner == me => $"{use.Creature.Name} uses its ability on {Where(use.TargetSlot)}",
+                MoveCreatureAction move when move.GetCreature().Owner == me => $"{move.GetCreature().Name} moves to {Where(move.GetToSlot())}",
+                _ => null
+            }).Where(plan => plan != null).OrderBy(plan => plan).ToList();
+        }
     }
 }

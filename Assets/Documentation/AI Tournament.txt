@@ -1,0 +1,27 @@
+AI TOURNAMENT
+Each deck against itself, each pairing of levels, both seats. 660 games, called off after 40 Days.
+
+Wins by pairing (draws: both at 0 at once, or called off)
+  Easy vs Medium: 32 - 154, 34 draws (70% for Medium), 19,4 Days on average
+  Medium vs Hard: 66 - 123, 31 draws (56% for Hard), 19,4 Days on average
+  Easy vs Hard: 20 - 178, 22 draws (81% for Hard), 17,1 Days on average
+
+Overall, every game a level played
+  Easy: won 12% of 440
+  Medium: won 50% of 440
+  Hard: won 68% of 440
+
+By seat: Player 1 won 301, Player 2 won 272 (Player 1 plans first; neither looks at the other's plans)
+
+By deck: the better level's wins out of the games each pairing played with it
+  Corporate - Shareholder Value: Medium over Easy 13/20, Hard over Medium 10/20, Hard over Easy 16/20
+  Statecraft - Order & Paperwork: Medium over Easy 11/20, Hard over Medium 11/20, Hard over Easy 11/20
+  Zeitgeist - Moods of Modern Life: Medium over Easy 17/20, Hard over Medium 13/20, Hard over Easy 17/20
+  Utopia - Results May Vary: Medium over Easy 14/20, Hard over Medium 11/20, Hard over Easy 20/20
+  Digital Society - Terminally Online: Medium over Easy 12/20, Hard over Medium 8/20, Hard over Easy 15/20
+  Shadow Ops. - Plausible Deniability: Medium over Easy 8/20, Hard over Medium 12/20, Hard over Easy 11/20
+  Tech - Move Fast and Break Things: Medium over Easy 14/20, Hard over Medium 11/20, Hard over Easy 19/20
+  Myth - Old Gods, New Tricks: Medium over Easy 19/20, Hard over Medium 15/20, Hard over Easy 20/20
+  Mind - All in Your Head: Medium over Easy 8/20, Hard over Medium 6/20, Hard over Easy 11/20
+  Digital Society & Shadow Ops. - Panopticon: Medium over Easy 18/20, Hard over Medium 16/20, Hard over Easy 18/20
+  Myth & Corporate - Prosperity Gospel: Medium over Easy 20/20, Hard over Medium 10/20, Hard over Easy 20/20

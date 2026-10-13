@@ -311,13 +311,20 @@ namespace SlayTheClone.Tests {
                 SceneGame.AssertPlays(game.Player2, theirDeck);
 
                 var cardCounts = game.Players.ToDictionary(p => p, GameAsserts.CountCards);
-                var ai = new AIPlanner(game.Queue, game.Manager.CombatHandler);
+                // Each game two levels, so every level plays several decks
+                var ai = new Dictionary<Player, AIPlanner> {
+                    [game.Player1] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)(i / 2 % 3), i),
+                    [game.Player2] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)((i / 2 + 1) % 3), i + 1)
+                };
                 var played = game.Players.ToDictionary(p => p, p => 0);
                 var attacked = game.Players.ToDictionary(p => p, p => 0);
+                var couldAttack = game.Players.ToDictionary(p => p, p => 0);
                 for (int turn = 1; turn <= Turns; turn++) {
                     foreach (var player in game.Players) {
                         int discarded = player.Deck.GetDiscardPilePreview().Count;
-                        ai.PlanDay(player);
+                        couldAttack[player] += player.Battlefield.Count(s => s.OccupyingCreature is ICreature c && c.Attack > 0
+                            && Abilities.CanAttack(c) && game.Manager.ModifierManager.CanAct(c));
+                        ai[player].PlanDay(player);
                         var plans = game.Queue.GetPendingActions();
                         played[player] += plans.OfType<PlayCardAction>().Count(p => p.GetOwner() == player)
                             + player.Deck.GetDiscardPilePreview().Count - discarded; // Spells that only show something resolve at once
@@ -339,7 +346,7 @@ namespace SlayTheClone.Tests {
                 }
                 foreach (var player in game.Players) {
                     Assert.Greater(played[player], 0, $"{yourDeck.GetDeckName()} vs {theirDeck.GetDeckName()}: the AI played none of {player.Name}'s cards");
-                    Assert.Greater(attacked[player], 0, $"{yourDeck.GetDeckName()} vs {theirDeck.GetDeckName()}: the AI never attacked with {player.Name}'s creatures");
+                    if (couldAttack[player] > 0) Assert.Greater(attacked[player], 0, $"{yourDeck.GetDeckName()} vs {theirDeck.GetDeckName()}: the AI never attacked with {player.Name}'s creatures");
                 }
             }
         }

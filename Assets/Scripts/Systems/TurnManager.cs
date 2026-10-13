@@ -57,6 +57,20 @@ namespace SlayTheClone {
             StartCoroutine(EndTurnRoutine());
         }
 
+        /// <summary>
+        /// Ends the turn at once, without waiting for any playback: for games played without a screen (the AI tournament).
+        /// </summary>
+        public void EndTurnImmediately() {
+            if (IsResolving || !IsInitialized) return;
+            RunToEnd(EndTurnRoutine());
+        }
+
+        private static void RunToEnd(IEnumerator routine) {
+            while (routine.MoveNext()) {
+                if (routine.Current is IEnumerator inner) RunToEnd(inner);
+            }
+        }
+
         private IEnumerator EndTurnRoutine() {
             IsResolving = true;
             try {

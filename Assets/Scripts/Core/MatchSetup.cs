@@ -19,6 +19,8 @@ namespace SlayTheClone {
         public static string OpponentName { get; private set; }
         /// <summary>The seats the AI plays. It can change during the game (see <see cref="AIController"/>).</summary>
         public static AISeats AI { get; set; }
+        /// <summary>How well the AI plays its seats.</summary>
+        public static AILevel AILevel { get; set; } = AILevel.Medium;
 
         public static bool PlayedByAI(IPlayer player) =>
             player != null && (AI & (player.IsPlayer1 ? AISeats.Player1 : AISeats.Player2)) != 0;
@@ -39,6 +41,7 @@ namespace SlayTheClone {
             OpponentDeck = null;
             OpponentName = null;
             AI = AISeats.None;
+            AILevel = AILevel.Medium;
         }
     }
 }
