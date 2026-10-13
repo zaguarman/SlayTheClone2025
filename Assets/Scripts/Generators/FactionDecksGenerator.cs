@@ -438,6 +438,12 @@ namespace SlayTheClone {
                 SetTrend(Trend.RushHour, 3))
                 .NotInStarterDeck()
                 .Picture("Gridlocked traffic at dusk, every car honking, while a snail with a briefcase glides past in the empty bus lane."),
+            Spell("No Glove, No Love", TargetType.FriendlyCreatures,
+                "Protect yourself. Everyone else is.",
+                "Protection: target friendly creature gets Blessed (the next status that would land is negated) and 2 Armor.",
+                Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1), Armor(2, TargetType.FriendlyCreatures))
+                .NotInStarterDeck()
+                .Picture("A knight in shining armor head to toe, a giant red heart on the shield, politely refusing a rose through the visor slit."),
         };
         #endregion
 
@@ -505,6 +511,18 @@ namespace SlayTheClone {
                 "Exhausted, and Heat Signature 2: random and redirected attacks find it first. Future: Ostracised.",
                 Stun(1, TargetType.EnemyCreatures), Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2))
                 .Picture("A man at a podium facing a crowd that holds torches, pitchforks and phones up to film him."),
+            Creature("Meta Group Chat", 1, 4, speed: 2, deploy: 0,
+                "If you aren't in it, you're not on the jury, you're on trial.",
+                "Each Dawn the in-group gets louder (+1 Attack on a random friendly creature) and someone outside it gets a target on their back (Heat Signature 1 on a random enemy creature). Future: Ostracised.",
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom),
+                    Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 1, modifier: AtRandom)))
+                .Picture("A phone screen showing a group chat named THE JURY (47 members), everyone posting gavels and skull emojis under a blurry photo of one guy, while the guy himself sweats alone in a corner, outside the phone."),
+            Spell("Social Panopticon", TargetType.EnemyCreatures,
+                "Nobody is watching you. Everybody is.",
+                "Every enemy creature is Revealed for 2 Days (its plans can be seen, Watchdogs can match them) and gets Heat Signature 1. Future: a Trend where nothing can be Concealed.",
+                Status(StatusEffectType.Revealed, 2, TargetType.EnemyCreatures, modifier: Each),
+                Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 1, modifier: Each))
+                .Picture("A round prison tower made of giant smartphones all facing inward, and in the middle a tiny person trying very hard to look natural while every screen records them."),
         };
 
         // Shadow Ops.: fragile agents, hidden plans, traps
@@ -576,6 +594,16 @@ namespace SlayTheClone {
                 "1 damage now, then Burned for 3 Days. Future: Spontaneous Combustion.",
                 Damage(1, TargetType.EnemyCreatures), Status(StatusEffectType.Burned, 3, TargetType.EnemyCreatures, potency: 1))
                 .Picture("A gentleman in a bowler hat at a bus stop, the tip of his black umbrella dripping glowing green drops that sizzle on the pavement."),
+            Creature("Control Room", 0, 5, speed: 1, deploy: 1,
+                "Forty screens, all on. Nobody watching the one that matters.",
+                "Each Dawn it Reveals a random enemy slot: its hidden Slot Effect and what the creature there plans that Day. Future: chooses the slot.",
+                On(EffectTrigger.StartOfTurn, Reveal(TargetType.EnemyCreatures, AtRandom)))
+                .Picture("A dark room with a wall of surveillance monitors, two operators asleep in their chairs with headsets on, cold coffee, while on one small screen a burglar waves at the camera."),
+            Spell("Humanitarian Trafficking Action", TargetType.EnemyCreatures,
+                "The crates say MEDICINE. The crates say a lot of things.",
+                "An aid package with a tracker inside: heals an enemy creature 2, and gives it Heat Signature 2, so random and redirected attacks find it first.",
+                Heal(2, TargetType.EnemyCreatures), Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2))
+                .Picture("An aid convoy truck with a big red cross painted on it, one crate tipped open on the roadside showing rifles under a thin layer of bandages, and a smiling official waving at the cameras."),
         };
 
         // Tech: rewires the queue

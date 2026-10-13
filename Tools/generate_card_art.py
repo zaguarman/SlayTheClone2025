@@ -3450,6 +3450,94 @@ def mimetic_theory():
     return svg(defs, body)
 
 
+def meta_group_chat():
+    # A phone showing a group chat named THE JURY, gavels and skulls piling up under a blurry photo of one guy, who sweats
+    # alone in the corner, outside the phone
+    defs = lin("bg", ["#2a3a6a", "#141c38"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += rect(40, 6, 170, 190, "#1b1b22", 'rx="14"') + rect(48, 16, 154, 172, "#eef2f8", 'rx="6"')
+    body += rect(48, 16, 154, 26, "#3b5bdb", 'rx="6"') + lettering("THE JURY", 125, 23, 11, "#ffffff")
+    body += rect(60, 50, 74, 44, "#b8bcc8", 'rx="4"') + circle(97, 66, 10, "#8a8e9a", 'opacity="0.8"') + ellipse(97, 90, 18, 8, "#8a8e9a", 'opacity="0.8"')
+    for i, (x, y) in enumerate(((118, 104), (66, 124), (122, 144), (70, 164))):
+        body += rect(x, y, 70, 16, "#d0dcff" if i % 2 else "#ffffff", 'rx="7" stroke="#9aa6c8" stroke-width="1"')
+        if i % 2:
+            body += skull(x + 14, y + 7, 0.28) + skull(x + 30, y + 7, 0.28)
+        else:  # A gavel
+            body += rect(x + 8, y + 4, 14, 7, "#8a5a2a", 'rx="2"') + stroke(f"M{x + 15} {y + 8} L{x + 30} {y + 13}", "#8a5a2a", 2.5)
+    body += person(292, H, 1.15, SKIN[1], "#7a8a9a", face="frown", brows="sad", hair="#3a2a1a")
+    for x, y in ((266, 98), (318, 104), (262, 118)):
+        body += path(f"M{x} {y} q 3 6 0 9 q -3 -3 0 -9 Z", "#8ad0ff")
+    return svg(defs, body)
+
+
+def social_panopticon():
+    # A round prison tower made of giant smartphones all facing inward, a tiny person in the middle trying to look natural
+    defs = lin("bg", ["#0e1430", "#2a1a4a"]) + rad("glow", [("#8ad0ff", 0.5), ("#8ad0ff", 0)])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += ellipse(176, 150, 150, 42, "#2a2f45") + ellipse(176, 150, 120, 30, "#1a1e30")
+    body += ellipse(176, 132, 90, 60, "url(#glow)")
+    for k, x in enumerate((40, 82, 128, 176, 224, 270, 312)):
+        y = 92 + abs(k - 3) * -6
+        body += phone(x, y, 1.6, "#4fc3ff" if k % 2 else "#7ad8ff")
+        body += circle(x, y - 22, 3, "#d0342c")  # Recording
+    body += person(176, 178, 0.55, SKIN[2], "#e8a03a", face="smile", brows="sad")
+    return svg(defs, body)
+
+
+def control_room():
+    # A wall of surveillance monitors, two operators asleep in their headsets with cold coffee, while on one small screen a
+    # burglar waves at the camera
+    defs = lin("bg", ["#10141c", "#1c2430"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for row, y in enumerate((8, 58)):
+        for col, x in enumerate((20, 102, 184, 266)):
+            screen = "#2a6a4a" if (row + col) % 2 else "#2a4a6a"
+            body += rect(x, y, 70, 44, "#2a2a30", 'rx="4"') + rect(x + 5, y + 5, 60, 34, screen, 'rx="2"')
+    body += person(232, 56, 0.32, SKIN[0], "#222", face="grin", hat="beanie")  # The burglar, in the bottom row's third screen
+    body += stroke("M244 38 L252 28", SKIN[0], 3) + stroke("M244 38 L252 28", "#222", 1)
+    body += rect(0, 150, W, 50, "#3a3328")
+    for x, skin in ((110, SKIN[1]), (250, SKIN[3])):
+        body += person(x, H, 1.0, skin, "#3d4a5a", face="closed")
+        body += stroke(f"M{x - 22} {H - 64} C {x - 22} {H - 96} {x + 22} {H - 96} {x + 22} {H - 64}", "#111", 4)
+        body += rect(x - 27, H - 70, 9, 14, "#111", 'rx="3"')
+    body += rect(160, 160, 18, 22, "#f2efe6", 'rx="2"') + lettering("Z", 120, 98, 12, "#ffffff") + lettering("Z", 268, 92, 14, "#ffffff")
+    return svg(defs, body)
+
+
+def humanitarian_trafficking_action():
+    # An aid convoy truck with a big red cross, a crate tipped open by the road showing rifles under a thin layer of
+    # bandages, and a smiling official waving at the cameras
+    defs = lin("bg", ["#f2c88a", "#e8a85a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += rect(0, 150, W, 50, "#c8965a")
+    body += rect(150, 60, 150, 92, "#f2f2f2", 'stroke="#888" stroke-width="2"') + rect(300, 92, 46, 60, "#e0e0e0", 'stroke="#888" stroke-width="2"')
+    body += rect(306, 98, 30, 22, "#8ad0e8")
+    body += rect(213, 80, 24, 56, "#d0342c") + rect(197, 96, 56, 24, "#d0342c")
+    for x in (180, 270, 326):
+        body += circle(x, 154, 14, "#222") + circle(x, 154, 6, "#888")
+    body += poly([(30, 150), (110, 150), (120, 120), (40, 116)], "#a07a4a", 'stroke="#6a4a2a" stroke-width="2"')
+    for k in range(3):
+        body += stroke(f"M{46 + k * 22} 136 L{80 + k * 22} 124", "#2a2a2a", 5)
+    body += path("M40 128 Q 70 118 112 126 L110 132 Q 70 124 42 134 Z", "#fafafa")
+    body += person(140, H, 0.9, SKIN[0], "#2a3a5a", face="grin", tie="#d0342c", hair="#3a2a1a")
+    body += stroke("M166 150 L184 112", "#2a3a5a", 8) + circle(186, 108, 6, SKIN[0])
+    return svg(defs, body)
+
+
+def no_glove_no_love():
+    # A knight in shining armor head to toe, a big red heart on the shield, politely refusing a rose through the visor slit
+    defs = lin("bg", ["#ffd8e8", "#f2a8c8"]) + lin("steel", ["#f4f6fa", "#a8b0bc"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += path("M120 200 C 120 140 232 140 232 200 Z", "url(#steel)", 'stroke="#6a7280" stroke-width="2"')
+    body += path("M146 158 C 146 86 206 86 206 158 Z", "url(#steel)", 'stroke="#6a7280" stroke-width="2"')
+    body += rect(150, 118, 52, 6, "#2a2f3a", 'rx="2"') + path("M176 106 C 186 84 206 84 214 96", "none", 'stroke="#d0342c" stroke-width="6"')
+    body += path("M228 112 L298 112 L296 160 C 290 186 266 196 263 198 C 260 196 236 186 230 160 Z", "url(#steel)", 'stroke="#6a7280" stroke-width="3"')
+    body += path("M263 176 C 244 162 238 150 240 140 C 242 130 256 126 263 138 C 270 126 284 130 286 140 C 288 150 282 162 263 176 Z", "#d0342c")
+    body += stroke("M40 176 L106 124", "#3a7a3a", 3) + circle(110, 121, 9, "#d0342c") + circle(106, 117, 6, "#e85a5a")
+    body += stroke("M108 124 L148 121", "#a8b0bc", 6)  # The gauntlet held up: no
+    return svg(defs, body)
+
+
 CARDS = {
     "Water": {
         "AbyssalCall": abyssal_call, "AbyssalCucumber": abyssal_cucumber, "CoralBuilder": coral_builder,
@@ -3532,6 +3620,9 @@ CARDS["Zeitgeist"].update({"NotonMyWatch": not_on_my_watch, "OnefortheRoad": one
 CARDS["DigitalSociety"].update({"CryptoEntrepreneur": crypto_entrepreneur})
 CARDS["ShadowOps"].update({"Cleaner": cleaner})
 CARDS["Mind"].update({"MimeticTheory": mimetic_theory})
+CARDS["DigitalSociety"].update({"MetaGroupChat": meta_group_chat, "SocialPanopticon": social_panopticon})
+CARDS["ShadowOps"].update({"ControlRoom": control_room, "HumanitarianTraffickingAction": humanitarian_trafficking_action})
+CARDS["Zeitgeist"].update({"NoGloveNoLove": no_glove_no_love})
 
 
 def main():
