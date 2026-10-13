@@ -155,6 +155,6 @@ Undercover
 Technician
     Inspired by: Technician (Scizor)
     Type: Passive
-    Description: "If this creature would deal 3 damage or less, it deals double instead."
+    Description: "Double damage when it hits for 3 or less."
     Notes: Checked after the attacker's own stat calculation, before the target's modifiers (Exposed, Cognitive Dissonance) and Armor. 0 damage stays 0.
     Answers: Armor and damage reduction still blunt it. Buffing its hit above 3 actually switches the doubling off.

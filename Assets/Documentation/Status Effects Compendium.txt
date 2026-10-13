@@ -322,14 +322,14 @@ Heat Signature
     Faction: Tech
     Type: Unique, Control, Stacking, Persistent
     Persistent: Yes
-    Description: "Gains Heat. Draws every Homing or randomly targeted attack, from both sides, to the creature with the most Heat."
+    Description: "Random effects and redirected attacks go to the creature with the most Heat Signature."
     Core Impact: A cold war: both sides pile Heat on creatures to steer the other side's Homing attacks.
     Stacking & Duration:
         Intensity: Heat stacks, X from the source ("gains X Heat"). They never decay; only cleansing removes them.
         Re-application Behavior: Add Stacks
         Max Stacks: None for now (99 is only the display limit; a real cap will come with balancing).
     Notes:
-        • What it catches: every Homing attack, every attack with a randomly chosen target, and every action a Watchdog redirects, from either player, including the controller's own. Attacks aimed at a slot (Fixed, Static) aren't affected.
+        • What it catches: every effect with a randomly chosen target, of any kind (damage, statuses, stat changes, Reveal...), and every action a Watchdog redirects, from either player, including the controller's own. A random effect picks among the creatures it can affect ("a random enemy creature" among the enemy's), so Heat decides which of them; a redirected action can go to any creature. Attacks aimed at a slot (Fixed, Static) aren't affected. Future: Homing attacks too.
         • When: like a Watchdog, just before each such attack resolves, so it also pulls attacks that were queued before it was applied.
         • Which one: the creature with the most Heat, on either side. If several are tied for the most, the nearest one: first in the attacker's own row, counted in slots; only if there is none in its row, in the other row, counted by column difference. Remaining ties are broken randomly.
         • Example with equal Heat (columns 1-5): row 1 is A, X, H1, c, X and row 2 is Y, Y, B, C, H2. A's Homing attack lands on H1 (its own row). B's lands on H2 (its own row), even though H1 is directly opposite. C's attack aimed at the slot of c isn't affected. If H1 had more Heat than H2, both attacks would land on H1.

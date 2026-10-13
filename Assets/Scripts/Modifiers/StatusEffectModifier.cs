@@ -66,7 +66,7 @@ namespace SlayTheClone {
         public void SetStacks(int stacks) {
             if (EffectType == StatusEffectType.HeatSignature) {
                 Stacks = Math.Max(1, Math.Min(MaxHeat, stacks));
-                Description = $"Heat Signature {Stacks}: random and redirected attacks are drawn to the hottest creature";
+                Description = $"Heat Signature {Stacks}: random effects and redirected attacks go to the hottest creature";
                 return;
             }
             Stacks = Math.Max(1, Math.Min(MaxBlessedStacks, stacks));

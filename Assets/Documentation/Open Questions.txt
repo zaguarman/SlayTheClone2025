@@ -59,6 +59,12 @@ STILL OPEN
     • Second Wind: name ideas in the chat (Nine Lives, Extra Life, 'Tis But a Scratch...). Not renamed yet.
 
 
+13. Heat Signature and random effects (2026-10-13)
+    • Done: every random effect (not only damage) goes to the creature with the most Heat, among the creatures it can affect: "a random friendly creature +1 Attack" goes to your hottest creature, "a random enemy creature" to the enemy's hottest.
+    • Changed: random damage used to look for Heat on both sides, so your own hot creature could catch your own "random enemy" damage. Now it only picks among the creatures the effect can reach. Redirected attacks (Watchdog) still go to the hottest creature on either side.
+    • Question: OK, or should random damage keep pulling from both sides?
+
+
 ANSWERED (2026-10-12)
 
 • Fog of War views: the rules know everything; each player sees their own cards and what their cards revealed. The enemy's hand shows card backs and the enemy's cards can't be used. The screen plays player 1's side (Debug > Play As Player 2 / F8 switches, for testing).

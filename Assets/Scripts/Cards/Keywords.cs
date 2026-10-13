@@ -39,7 +39,7 @@ namespace SlayTheClone {
             // ---------------------------------------------------------------- Targets
             group = "Targets";
             Add("Slot", "One of the five places on each side of the table where a creature stands.");
-            Add("Random", "Picked by chance when the effect happens, among the creatures it can affect at that moment. Damage goes to the one with the most [Heat Signature] instead, if any has it. No creature to pick: nothing happens.");
+            Add("Random", "Picked by chance when the effect happens, among the creatures it can affect at that moment. The one with the most [Heat Signature] is picked first, if any has it. No creature to pick: nothing happens.");
             Add("Everything", "Every creature on both sides, and both players.");
 
             // ---------------------------------------------------------------- Triggers
@@ -76,7 +76,7 @@ namespace SlayTheClone {
             Add("Doomed", "Doom X: dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it.");
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
             Add("Blessed", "Bless X: the next X statuses that would land on it are stopped, good or bad.");
-            Add("Heat Signature", "Heat Signature X: damage to a random target, and redirected attacks, go to the creature with the most Heat Signature first. It stays until cleansed.");
+            Add("Heat Signature", "Heat Signature X: [Random|random] effects and redirected attacks go to the creature with the most Heat Signature. It stays until cleansed.");
             Add("Concealed", "Conceal X: for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
             Add("Revealed", "Revealed X: for X [Days], it can't be [Concealed]: its plans can be seen.");
             Add("Encrypted", "Encrypt X: for X [Days], [Watchdog|Watchdogs] ignore its actions.");

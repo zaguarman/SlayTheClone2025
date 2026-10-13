@@ -237,6 +237,11 @@ namespace SlayTheClone.Tests {
             }
             Assert.AreEqual(4, hot.Health, "Every random hit lands on the most Heat");
             Assert.AreEqual(10, warm.Health);
+            game.Play(game.GiveCard(p1, game.Spell("Nap", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Stun, 1, TargetType.EnemyCreatures, TargetModifier.Random))), p1, null);
+            game.Resolve();
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(hot, StatusEffectType.Exhausted), "...and every other random effect too");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(warm, StatusEffectType.Exhausted));
             game.StartTurn();
             game.StartTurn();
             Assert.AreEqual(3, hot.Heat, "Persistent: it doesn't decay");

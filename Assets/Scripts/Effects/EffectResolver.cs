@@ -101,22 +101,27 @@ namespace SlayTheClone {
                 if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) targets.AddRange(NeighboursOf(chosenTarget));
                 return action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? WithoutTooMainstream(targets, source) : targets;
             }
-            // A random Reveal picks among the creatures that still hide something from its caster; with none, it fizzles
-            if (action.actionType == ActionType.Reveal && action.targetModifier.HasFlag(TargetModifier.Random)) {
-                var hiding = TargetingSystem.GetValidTargets(controller, action.targetType)
-                    .Where(t => Intel.HidesSomethingFrom(controller, t as ICreature, queue)).ToList();
-                if (hiding.Count == 0) Log($"{source.Name}: no creature hides anything from {controller.Name}; the Reveal fizzles", LogTag.Effects);
-                return hiding.Count == 0 ? hiding : new List<ITarget> { hiding[GameRandom.Next(hiding.Count)] };
-            }
+            if (action.targetModifier.HasFlag(TargetModifier.Random)) return PickAtRandom(source, controller, action, queue);
             var valid = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
-            // Heat Signature: an attack on a randomly chosen target goes to the creature with the most Heat, on either side
-            if (action.actionType == ActionType.Damage && action.targetModifier.HasFlag(TargetModifier.Random)
-                && HeatRules.Hottest(source as ICreature, controller) is ICreature hottest) {
-                return new List<ITarget> { hottest };
-            }
             bool area = action.targetType is TargetType.AllCreatures or TargetType.FriendlyCreatures or TargetType.EnemyCreatures
                 && !action.targetModifier.HasFlag(TargetModifier.Random);
             return area ? WithoutTooMainstream(valid, source) : valid;
+        }
+
+        // Random: one of the creatures it can affect, picked when it happens. Heat Signature draws it: if any of them has
+        // Heat, it goes to the one with the most (see HeatRules); otherwise to any of them, equally likely. A random Reveal
+        // only picks among the creatures that still hide something from its caster. No creature to pick: it fizzles.
+        private static List<ITarget> PickAtRandom(ICard source, IPlayer controller, EffectAction action, IActionsQueue queue) {
+            var candidates = TargetingSystem.GetValidTargets(controller, action.targetType).ToList();
+            if (action.actionType == ActionType.Reveal) {
+                candidates = candidates.Where(t => Intel.HidesSomethingFrom(controller, t as ICreature, queue)).ToList();
+            }
+            if (candidates.Count == 0) {
+                Log($"{source.Name}: no creature to pick for its random {action.actionType}; it fizzles", LogTag.Effects);
+                return candidates;
+            }
+            var hottest = HeatRules.Hottest(source as ICreature, candidates.OfType<ICreature>());
+            return new List<ITarget> { hottest ?? candidates[GameRandom.Next(candidates.Count)] };
         }
 
         /// <summary>Too Mainstream: immune to effects that affect more than one creature (area, "each creature", spreads).</summary>

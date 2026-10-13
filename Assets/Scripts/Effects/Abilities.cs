@@ -51,7 +51,7 @@ namespace SlayTheClone {
             CreatureAbility.HiveMind => "a creature that attacks it gains Hive Mind",
             CreatureAbility.InsiderJob => "its damage ignores Armor",
             CreatureAbility.ReturnToSender => "enemy statuses bounce back to whoever sent them",
-            CreatureAbility.Technician => "its hits of 3 damage or less are doubled",
+            CreatureAbility.Technician => "double damage when it hits for 3 or less",
             CreatureAbility.Undercover => "its plans show as ??? to the enemy",
             _ => ""
         };
