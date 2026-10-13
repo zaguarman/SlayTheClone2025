@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
-  m_Name: FatTony
+  m_Name: MadeMan
   m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
   cardId: a78f44cc-07c2-4bfb-881f-7f87135276fc
-  cardName: Fat Tony
+  cardName: Made Man
   description: Nothing personal. It's just business. Mostly the personal kind.
   cardType: 0
   faction: 4

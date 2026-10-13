@@ -932,7 +932,7 @@ Link-In-Bio Babe
         Passive: OnAttack: Deal 1 damage to all enemy creatures.
     Flavor Text: "Don't forget to check out my other platforms! Swipe up for my discount code!"
 
-Fat Tony
+Made Man
     Faction: Shadow Ops.
     Type: Creature
     Stats: 6/10/1

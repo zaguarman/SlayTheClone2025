@@ -19,7 +19,7 @@ MonoBehaviour:
   faction: 4
   artwork: {fileID: 3286163911610860551, guid: 6ec3b36590c668a4f93910ebf60525d4, type: 3}
   effects: []
-  designNotes: 'Baton Pass: when a summon replaces it, the newcomer takes over its
+  designNotes: 'Handover: when a summon replaces it, the newcomer takes over its
     stat changes and statuses. Buff it, then send in the next shift.'
   artDescription: 'Two warehouse workers at the clocking-in machine: the exhausted
     one hands his hi-vis vest, still warm, to the fresh one.'

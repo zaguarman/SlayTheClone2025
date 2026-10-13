@@ -104,8 +104,8 @@ namespace SlayTheClone {
         private static List<CardDef> CorporateCards() => new List<CardDef> {
             Creature("Work Shift Rotation", 2, 3, speed: 1, deploy: 1,
                 "Same job, new face. The vest is still warm.",
-                "Baton Pass: when a summon replaces it, the newcomer takes over its stat changes and statuses. Buff it, then send in the next shift.")
-                .With(CreatureAbility.BatonPass)
+                "Handover: when a summon replaces it, the newcomer takes over its stat changes and statuses. Buff it, then send in the next shift.")
+                .With(CreatureAbility.Handover)
                 .Picture("Two warehouse workers at the clocking-in machine: the exhausted one hands his hi-vis vest, still warm, to the fresh one."),
             Creature("Unpaid Intern", 1, 1, speed: 3, deploy: 0,
                 "Paid in experience. The experience is this.",
@@ -131,10 +131,10 @@ namespace SlayTheClone {
                 .With(CreatureAbility.InsiderJob),
             Creature("Pluriemployed Hustler", 2, 3, speed: 2, deploy: 0,
                 "Three jobs, two side hustles, one kidney left.",
-                "Technician: it does a lot of small jobs, so hits of 3 or less are doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).",
+                "Nickel-and-Dime: it does a lot of small jobs, so hits of 3 or less are doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).",
                 On(EffectTrigger.OnPlay, Draw(2)),
                 On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
-                .With(CreatureAbility.Technician),
+                .With(CreatureAbility.NickelAndDime),
             Creature("Unicorn", 1, 8, speed: 1, deploy: 2,
                 "Valued at a billion. Burns a million a day. Profitable next year, every year.",
                 "Future: Unicorn (Enterprise) from the card examples. Burn rate stays: Corporate can't heal it.",
@@ -144,7 +144,7 @@ namespace SlayTheClone {
                 "Gave away 0.01% of his fortune. Wrote off 100% of it.",
                 "Future: a Contract. The enemy gets the gift now, you get the tax break on a later Day.",
                 On(EffectTrigger.OnPlay, Buff(1, TargetType.EnemyCreatures, attack: false, health: true), Draw(2))),
-            Creature("Fat Tony", 4, 5, speed: 1, deploy: 2,
+            Creature("Made Man", 4, 5, speed: 1, deploy: 2,
                 "Nothing personal. It's just business. Mostly the personal kind.",
                 "Future: An Offer You Can't Refuse. Recruits a damaged enemy creature instead of hurting it.",
                 On(EffectTrigger.OnPlay, Damage(2, TargetType.EnemyCreatures, AtRandom))),
@@ -460,7 +460,7 @@ namespace SlayTheClone {
                 .Picture("A remake of the first Counter-Strike box cover: a counter-terrorist and a terrorist in a tense standoff in a dusty corridor, but both are accountants in thick glasses, aiming pocket calculators at each other like rifles, ledgers fluttering around them."),
             Creature("Mole", 2, 3, speed: 2, deploy: 1,
                 "Twenty years with the company. Twenty-one with the other one.",
-                "Mechanics test: Underground (like Unaware, both ways). When it's attacked, the attacker's buffs and debuffs are ignored; when it attacks, the defender's temporary Health changes are.")
+                "Mechanics test: Underground (both ways). When it's attacked, the attacker's buffs and debuffs are ignored; when it attacks, the defender's temporary Health changes are.")
                 .With(CreatureAbility.Underground)
                 .Picture("A mild office clerk in a cardigan and lanyard at his desk, a mole's snout and claws poking out of his sleeves, a tunnel opening under his chair that leads to a foreign embassy's flag."),
             Creature("Signal Jammer", 1, 5, speed: 1, deploy: 1,

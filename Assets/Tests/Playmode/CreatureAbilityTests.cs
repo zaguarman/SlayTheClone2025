@@ -112,7 +112,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void CombatAbilities_Underground_Technician_InsiderJob_TooMainstream_Recoil_BatonPass() {
+        public void CombatAbilities_Underground_NickelAndDime_InsiderJob_TooMainstream_Recoil_Handover() {
             var mole = With(CreatureAbility.Underground, p1, 0, attack: 0);
             var brute = With(CreatureAbility.None, p2, 0, attack: 2);
             ChangeAttack(brute, 3, p2);
@@ -124,12 +124,12 @@ namespace SlayTheClone.Tests {
             var buffed = With(CreatureAbility.None, p2, 1, health: 10);
             game.Run(new ModifyAction(buffed, 4, false, true, false, controller: p2)); // 14/14: the buff would soak the hit
             game.Attack(digger, p2.Battlefield[1]);
-            Assert.AreEqual(7, buffed.Health, "Underground, attacking (like Unaware): as if the Health buff weren't there");
+            Assert.AreEqual(7, buffed.Health, "Underground, attacking: as if the Health buff weren't there");
 
-            var tech = With(CreatureAbility.Technician, p1, 2, attack: 3);
+            var tech = With(CreatureAbility.NickelAndDime, p1, 2, attack: 3);
             var target = With(CreatureAbility.None, p2, 2, health: 20);
             game.Attack(tech, p2.Battlefield[2]);
-            Assert.AreEqual(14, target.Health, "Technician: 3 becomes 6");
+            Assert.AreEqual(14, target.Health, "Nickel-and-Dime: 3 becomes 6");
             ChangeAttack(tech, 1, p1);
             game.Attack(tech, p2.Battlefield[2]);
             Assert.AreEqual(10, target.Health, "4 is too much to double");
@@ -158,12 +158,12 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(4, hipster.Health, "Recoil: its attack hits for 2 more...");
             Assert.AreEqual(4, smoker.Health, "...and costs it 1 damage");
 
-            var shift = With(CreatureAbility.BatonPass, p1, 4, attack: 1, health: 4);
+            var shift = With(CreatureAbility.Handover, p1, 4, attack: 1, health: 4);
             ChangeAttack(shift, 2, p1);
             game.ModifierManager.ChangeBaseStats(shift, 0, 1, 0);
             game.Run(new ApplyStatusEffectAction(shift, StatusEffectType.Burned, 2, 1, controller: p2));
             var nextShift = With(CreatureAbility.None, p1, 4, attack: 1, health: 4);
-            Assert.AreEqual(3, nextShift.Attack, "Baton Pass: the creature that replaces it takes over its stat changes...");
+            Assert.AreEqual(3, nextShift.Attack, "Handover: the creature that replaces it takes over its stat changes...");
             Assert.AreEqual(5, nextShift.MaxHealth, "...its Persistent Stat Modifications...");
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(nextShift, StatusEffectType.Burned), "...and its statuses");
             Assert.AreEqual(4, shift.BaseHealth, "Passed on: its own card is back to what it prints");
@@ -173,15 +173,15 @@ namespace SlayTheClone.Tests {
         public void CopyingAndSpreading_HiveMind_IdentityTheft_SignalJammer_Copypasta() {
             game.SetDecks(game.Fillers(5), game.Fillers(5));
             With(CreatureAbility.HiveMind, p1, 0, attack: 0, health: 30);
-            var attacker = With(CreatureAbility.Technician, p2, 0, attack: 2, health: 2);
+            var attacker = With(CreatureAbility.NickelAndDime, p2, 0, attack: 2, health: 2);
             game.Attack(attacker, p1.Battlefield[0]);
-            Assert.AreEqual(CreatureAbility.HiveMind, attacker.Ability, "Hive Mind spreads to its attacker, replacing Technician");
+            Assert.AreEqual(CreatureAbility.HiveMind, attacker.Ability, "Hive Mind spreads to its attacker, replacing Nickel-and-Dime");
             game.Run(new DestroyCreatureAction(attacker, unconditional: true));
             var discarded = (ICreature)p2.Deck.GetDiscardPilePreview().Single(c => c.Name == attacker.Name);
             Assert.AreEqual(CreatureAbility.HiveMind, discarded.Ability, "A changed ability stays on the card");
             game.CardDealingService.RecycleDiscardPile(p2);
             var reshuffled = (ICreature)p2.Deck.GetDeckPreview().Single(c => c.Name == attacker.Name);
-            Assert.AreEqual(CreatureAbility.Technician, reshuffled.Ability, "Reshuffling gives it its printed ability back");
+            Assert.AreEqual(CreatureAbility.NickelAndDime, reshuffled.Ability, "Reshuffling gives it its printed ability back");
 
             var thief = With(CreatureAbility.IdentityTheft, p1, 1);
             var mark = With(CreatureAbility.Unpatchable, p2, 2);

@@ -31,7 +31,7 @@ namespace SlayTheClone {
 
             // Summoning onto an occupied slot replaces its creature (no death effects); it goes to its owner's discard pile
             var replacedCreature = slot.OccupyingCreature;
-            var batonPass = Abilities.StartBatonPass(replacedCreature, modifierManager); // Before it leaves: its ability works on the board
+            var handover = Abilities.StartHandover(replacedCreature, modifierManager); // Before it leaves: its ability works on the board
             if (replacedCreature != null) {
                 Log($"Executor: {creature.Name} replaces {replacedCreature.Name}", LogTag.Actions | LogTag.Creatures);
                 modifierManager.UnregisterCreature(replacedCreature);
@@ -45,7 +45,7 @@ namespace SlayTheClone {
             // Register after placement, then trigger OnPlay (a creature that isn't operative yet fires it later), then announce the summon
             modifierManager.RegisterCreature(creature);
             creature.EnterPlay(context.TurnClock.TurnNumber);
-            Abilities.CompleteBatonPass(creature, batonPass, modifierManager);
+            Abilities.CompleteHandover(creature, handover, modifierManager);
             Intel.OnEnteredPlay(creature, context.ModifierManager);
             SlotEffectRules.OnEnter(creature, slot, context); // A Landmine goes off before the creature's entry effects
             Abilities.TryCopypasta(creature, mediator); // "When ready": only does something if it's ready now

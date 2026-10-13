@@ -152,8 +152,8 @@ Undercover
     Notes: Everything it plans (attacks, moves, active abilities) is a Concealed Action: the other side sees '???' on its card instead of its arrows, and their Watchdogs can't match it. Revealed cancels it, and a Reveal shows one Day's plans to whoever cast it. It's an ability, so whatever switches abilities off (Exhausted, Signal Jammer...) switches the concealment off too.
     Answers: Revealed, a Reveal, Signal Jammer, or effects that don't care what it plans (slot and area effects).
 
-Baton Pass
-    Inspired by: Baton Pass (Pokémon)
+Handover
+    Inspired by: Baton Pass (Pokémon), renamed so it isn't the move's name
     Type: Passive
     Description: "When a summon replaces it, the newcomer takes over its stat changes and statuses."
     Notes: Everything that makes it differ from its printed card moves to the creature summoned onto its slot: Persistent Stat Modifications, timed and lasting stat changes, and every status, good or bad (a Doom included). Its own card goes to the discard pile back to its printed stats. Like any ability, it does nothing while switched off (not ready, Exhausted, jammed).
@@ -163,11 +163,11 @@ Recoil
     Inspired by: Recoil (Pokémon's Double-Edge, Brave Bird)
     Type: Passive
     Description: "+2 damage on its attacks; it takes 1 damage after each attack."
-    Notes: The +2 is part of the attack (Technician then sees the bigger number), against a creature or a player. The 1 damage comes after the hit, with no attacker, so nothing answers it.
+    Notes: The +2 is part of the attack (Nickel-and-Dime then sees the bigger number), against a creature or a player. The 1 damage comes after the hit, with no attacker, so nothing answers it.
     Answers: Make it attack less, or let it wear itself down.
 
-Technician
-    Inspired by: Technician (Scizor)
+Nickel-and-Dime
+    Inspired by: Technician (Scizor), renamed so it isn't the ability's name
     Type: Passive
     Description: "Double damage when it hits for 3 or less."
     Notes: Checked after the attacker's own stat calculation, before the target's modifiers (Exposed, Cognitive Dissonance) and Armor. 0 damage stays 0.

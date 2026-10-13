@@ -736,7 +736,7 @@ def multimillionaire_philanthropist():
     return svg(defs, body)
 
 
-def fat_tony():
+def made_man():
     defs, body = bg_office()
     body += person(176, 200, 1.9, SKIN[1], "#2b2b3a", face="smirk", tie="#8a1e1e", brows="angry", hat="fedora")
     body += rect(196, 134, 30, 7, "#7a4a2a", 'rx="2"') + circle(228, 137, 3.5, "#ff7a1a")
@@ -3188,7 +3188,7 @@ CARDS = {
         "UnpaidIntern": unpaid_intern, "InhumanResources": inhuman_resources, "Micromanager": micromanager,
         "MultilevelMarketingSeller": multilevel_marketing_seller, "DayTrader": day_trader,
         "PluriemployedHustler": pluriemployed_hustler, "Unicorn": unicorn,
-        "MultimillionairePhilanthropist": multimillionaire_philanthropist, "FatTony": fat_tony, "CharlesPonzi": charles_ponzi,
+        "MultimillionairePhilanthropist": multimillionaire_philanthropist, "MadeMan": made_man, "CharlesPonzi": charles_ponzi,
         "MarginCall": margin_call, "HostileTakeover": hostile_takeover, "MassLayoffs": mass_layoffs,
         "TeamBuildingExercise": team_building_exercise, "DeadCatBounce": dead_cat_bounce,
         "TaxpayerFundsVentureCapitalProfits": taxpayer_funds_venture_capital_profits,

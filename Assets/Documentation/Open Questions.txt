@@ -80,8 +80,12 @@ STILL OPEN
     • Changed: Keyboard Warrior went from Retaliate 1 to Counterattack (same 1 damage, its Attack). A fixed-damage answer is still possible in the data and reads "Retaliate: 1 damage to it".
     • Question: should spells and abilities that damage it be answered too?
 
-19. Baton Pass and Recoil (2026-10-13)
-    • Done: Baton Pass on Work Shift Rotation (Corporate), Recoil on Chain Smoker (Zeitgeist), names from the card backlog. Baton Pass passes everything, statuses good and bad, and needs its ability switched on (an Exhausted creature can't pass).
+20. Names too close to someone else's (2026-10-13)
+    • Done: Baton Pass is now Handover, Technician is now Nickel-and-Dime (both were the exact Pokémon names, with the same effect), and the card Fat Tony (a Simpsons character) is now Made Man. Underground's reminder no longer says "like Unaware". Kept: Recoil (a plain word, and the name you asked for), Contrarian and Spite (plain words), quotes and phrases like Its A Trap and Ministry Of Love (titles and phrases aren't protected the way character names are).
+    • Question: any other name you'd like changed?
+
+19. Handover (was Baton Pass) and Recoil (2026-10-13)
+    • Done: Handover on Work Shift Rotation (Corporate), Recoil on Chain Smoker (Zeitgeist), names from the card backlog. Handover passes everything, statuses good and bad, and needs its ability switched on (an Exhausted creature can't pass).
     • Question: should it pass only good things, or work while Exhausted?
 
 17. Memes moved to Zeitgeist (2026-10-13)
@@ -97,7 +101,7 @@ ANSWERED (2026-10-12)
 • Scorched Earth: stops the creature's triggered effects, entry ("When Ready") effects included. Its ability still works.
 • Barbed Snare: only moving out counts as leaving; dying on the slot or being replaced doesn't.
 • Watchdog conditions: each Watchdog card gets its own filter (ad hoc); shared templates may come later for filters that repeat. The number filter stays an attack's Attack for now.
-• Abilities on cards: Day Trader (Insider Job), Pluriemployed Hustler (Technician), Spite-Elected President (Spite), Supreme Court (Return to Sender), Hipster (Too Mainstream), Keyboard Warrior (No U); ten new test creatures carry the rest.
+• Abilities on cards: Day Trader (Insider Job), Pluriemployed Hustler (Nickel-and-Dime), Spite-Elected President (Spite), Supreme Court (Return to Sender), Hipster (Too Mainstream), Keyboard Warrior (No U); ten new test creatures carry the rest.
 • Pictures: Its A Trap (Homer and the free-boat sting), Burn Notice (the Banksy self-shredding painting), Antivirus (a panda), Counter-Intelligence (the first Counter-Strike cover with accountants and calculators). Red Tape, YOLO and Preemptive Strike got briefs.
 
 • Action Priority: removed; order inside a layer is Speed. Red Tape now adds Deployment Time, YOLO gives +4 Attack for this Day, Preemptive Strike is plain damage. Docs use Speed where they used Priority.

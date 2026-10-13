@@ -32,7 +32,7 @@ namespace SlayTheClone {
             CreatureAbility.InsiderJob => "Insider Job",
             CreatureAbility.ReturnToSender => "Return to Sender",
             CreatureAbility.Unpatchable => "Cold Storage",
-            CreatureAbility.BatonPass => "Baton Pass",
+            CreatureAbility.NickelAndDime => "Nickel-and-Dime",
             _ => ability.ToString()
         };
 
@@ -43,7 +43,7 @@ namespace SlayTheClone {
             CreatureAbility.Unbothered => "enemy effects can't lower its stats",
             CreatureAbility.NoU => "enemy effects that would lower its stats bounce back",
             CreatureAbility.Spite => "when an effect lowers its stats, friendly or enemy, +2 Attack",
-            CreatureAbility.Underground => "in combat, ignores the other creature's stat changes, like Unaware",
+            CreatureAbility.Underground => "in combat, ignores the other creature's stat changes",
             CreatureAbility.TooMainstream => "immune to effects that affect more than one creature",
             CreatureAbility.ZeroDay => "its attacks and effects ignore defensive abilities",
             CreatureAbility.Unpatchable => "enemy effects can't lower its stats, not even with Zero-Day",
@@ -53,9 +53,9 @@ namespace SlayTheClone {
             CreatureAbility.HiveMind => "a creature that attacks it loses its ability and gains Hive Mind instead",
             CreatureAbility.InsiderJob => "its damage ignores Armor",
             CreatureAbility.ReturnToSender => "enemy statuses bounce back to whoever sent them",
-            CreatureAbility.Technician => "double damage when it hits for 3 or less",
+            CreatureAbility.NickelAndDime => "double damage when it hits for 3 or less",
             CreatureAbility.Undercover => "its plans show as ??? to the enemy",
-            CreatureAbility.BatonPass => "when a summon replaces it, the newcomer takes over its stat changes and statuses",
+            CreatureAbility.Handover => "when a summon replaces it, the newcomer takes over its stat changes and statuses",
             CreatureAbility.Recoil => "+2 damage on its attacks; it takes 1 damage after each attack",
             _ => ""
         };
@@ -186,7 +186,7 @@ namespace SlayTheClone {
         #region Damage
         /// <summary>
         /// The damage a hit deals before the target's modifiers (Exposed) and Armor: Underground ignores an attacker's
-        /// Temporary Stat Modifications, then Technician doubles hits of 3 or less.
+        /// Temporary Stat Modifications, then Nickel-and-Dime doubles hits of 3 or less.
         /// </summary>
         public static int OutgoingDamage(DamageCreatureAction hit) {
             int damage = hit.GetDamage();
@@ -198,7 +198,7 @@ namespace SlayTheClone {
             if (hit.DealsAttackersAttack && Has(attacker, CreatureAbility.Underground) && hit.GetTarget() is ICreature defender) {
                 damage = Math.Max(0, damage + (defender.MaxHealth - defender.BaseHealth));
             }
-            if (damage > 0 && damage <= 3 && Has(attacker, CreatureAbility.Technician)) damage *= 2;
+            if (damage > 0 && damage <= 3 && Has(attacker, CreatureAbility.NickelAndDime)) damage *= 2;
             return damage;
         }
 
@@ -206,20 +206,20 @@ namespace SlayTheClone {
         public static int AttackBonus(ICreature attacker) => Has(attacker, CreatureAbility.Recoil) ? 2 : 0;
 
         /// <summary>
-        /// Baton Pass: the creature a summon replaces hands its stat changes (Persistent Stat Modifications, timed and
-        /// lasting modifiers) and its statuses to the newcomer, like Pokémon's Baton Pass. Call before the replaced creature
-        /// leaves the board; the returned hand-over is given with <see cref="CompleteBatonPass"/> once the newcomer is in play.
+        /// Handover: the creature a summon replaces hands its stat changes (Persistent Stat Modifications, timed and
+        /// lasting modifiers) and its statuses to the newcomer. Call before the replaced creature
+        /// leaves the board; the returned hand-over is given with <see cref="CompleteHandover"/> once the newcomer is in play.
         /// </summary>
-        public static (List<IModifier> modifiers, (int attack, int health, int speed) persistent)? StartBatonPass(ICreature replaced, IModifierManager modifiers) {
-            if (!Has(replaced, CreatureAbility.BatonPass) || modifiers == null) return null;
+        public static (List<IModifier> modifiers, (int attack, int health, int speed) persistent)? StartHandover(ICreature replaced, IModifierManager modifiers) {
+            if (!Has(replaced, CreatureAbility.Handover) || modifiers == null) return null;
             var handed = modifiers.GetActiveModifiersFor(replaced).ToList();
             var persistent = replaced.PersistentChanges;
             replaced.ChangeBaseStats(-persistent.attack, -persistent.health, -persistent.speed); // Passed on: its card goes back to printed
-            Log($"{replaced.Name} passes the baton: {handed.Count} modifiers and {persistent} in stat changes", LogTag.Effects | LogTag.Creatures);
+            Log($"{replaced.Name} hands over {handed.Count} modifiers and {persistent} in stat changes", LogTag.Effects | LogTag.Creatures);
             return (handed, persistent);
         }
 
-        public static void CompleteBatonPass(ICreature newcomer, (List<IModifier> modifiers, (int attack, int health, int speed) persistent)? pass, IModifierManager modifiers) {
+        public static void CompleteHandover(ICreature newcomer, (List<IModifier> modifiers, (int attack, int health, int speed) persistent)? pass, IModifierManager modifiers) {
             if (pass == null || newcomer == null) return;
             var (handed, persistent) = pass.Value;
             modifiers.ChangeBaseStats(newcomer, persistent.attack, persistent.health, persistent.speed);

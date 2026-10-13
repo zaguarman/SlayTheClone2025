@@ -19,9 +19,9 @@ MonoBehaviour:
   faction: 3
   artwork: {fileID: 3286163911610860551, guid: 91bdf466b07215a4bbf503c8b327ab4f, type: 3}
   effects: []
-  designNotes: 'Mechanics test: Underground (like Unaware, both ways). When it''s
-    attacked, the attacker''s buffs and debuffs are ignored; when it attacks, the
-    defender''s temporary Health changes are.'
+  designNotes: 'Mechanics test: Underground (both ways). When it''s attacked, the
+    attacker''s buffs and debuffs are ignored; when it attacks, the defender''s temporary
+    Health changes are.'
   artDescription: A mild office clerk in a cardigan and lanyard at his desk, a mole's
     snout and claws poking out of his sleeves, a tunnel opening under his chair that
     leads to a foreign embassy's flag.

@@ -18,7 +18,7 @@ namespace SlayTheClone {
         // A creature's one ability ('Abilities Compendium'). New abilities go last: cards store them as numbers
         public enum CreatureAbility {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
-            SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, Technician, Undercover, BatonPass, Recoil
+            SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, NickelAndDime, Undercover, Handover, Recoil
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look
