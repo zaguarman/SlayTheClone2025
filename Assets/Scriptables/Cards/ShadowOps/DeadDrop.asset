@@ -27,7 +27,7 @@ MonoBehaviour:
     oncePerCombat: 0
     actions:
     - actionType: 2
-      value: 5
+      value: 4
       targetType: 0
       targetModifier: 0
       modifyAttack: 1
@@ -53,7 +53,7 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: Discard 3 (random other cards from your hand, given up to play this),
-    then draw 5 with the next Day's hand.
+    then draw 4 with the next Day's hand.
   artDescription: A park bench in autumn, a man in a trench coat feeding pigeons
     while sliding a hollowed-out brick behind him with his heel, another man on the
     next bench reading an upside-down newspaper.

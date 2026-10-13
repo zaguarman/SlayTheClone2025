@@ -710,13 +710,13 @@ namespace SlayTheClone {
                 .Picture("A giant paperclip hooking a bespectacled scientist in a lab coat by the collar and lifting him from one flag onto another, rocket blueprints fluttering out of his pockets."),
             Spell("False Flag Operation", TargetType.FriendlyCreatures,
                 "They attacked us. Well, someone did. Same thing.",
-                "Destroy target friendly creature (its Last Will happens); every other friendly creature gets +3 Attack and +3 Health while it stays in play. Funnel it all into one with Never Let Them Know Your Next Move.",
-                Destroy(TargetType.FriendlyCreatures), Buff(3, TargetType.FriendlyCreatures, attack: true, health: true, Each))
+                "Destroy target friendly creature (its Last Will happens); every other friendly creature gets +2 Attack and +2 Health while it stays in play. Funnel it all into one with Never Let Them Know Your Next Move.",
+                Destroy(TargetType.FriendlyCreatures), Buff(2, TargetType.FriendlyCreatures, attack: true, health: true, Each))
                 .NotInStarterDeck()
                 .Picture("A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost while a film crew records it and a general reads an outrage speech from a card."),
             Spell("Never Let Them Know Your Next Move", TargetType.FriendlyCreatures,
                 "Everyone gets a medal. He gets all of them.",
-                "Every other friendly creature hands its stat raises to target friendly creature (the timed, the lasting and the ones for good), and it's Concealed for 2 Days: the fatal blow nobody sees coming. After False Flag Operation, it's +3/+3 from each.",
+                "Every other friendly creature hands its stat raises to target friendly creature (the timed, the lasting and the ones for good), and it's Concealed for 2 Days: the fatal blow nobody sees coming. After False Flag Operation, it's +2/+2 from each.",
                 Act(ActionType.Funnel, 0, TargetType.FriendlyCreatures, TargetModifier.None), Status(StatusEffectType.Concealed, 2, TargetType.FriendlyCreatures))
                 .NotInStarterDeck()
                 .Picture("A row of agents in identical grey suits passing their pistols, knives and grenades down the line to one man at the end, who disappears under a mountain of weapons with only his sunglasses showing."),
@@ -829,8 +829,8 @@ namespace SlayTheClone {
                 .Picture("A candlelit dining hall in an alpine hotel, a long table of old men in dinner jackets trading sealed envelopes across the silverware, a doorman outside the window turning away the press."),
             Spell("Dead Drop", TargetType.Player,
                 "Leave the package under the third bench. Take the other one. Don't look inside either.",
-                "Discard 3 (random other cards from your hand, given up to play this), then draw 5 with the next Day's hand.",
-                Draw(5))
+                "Discard 3 (random other cards from your hand, given up to play this), then draw 4 with the next Day's hand.",
+                Draw(4))
                 .Discarding(3)
                 .NotInStarterDeck()
                 .Picture("A park bench in autumn, a man in a trench coat feeding pigeons while sliding a hollowed-out brick behind him with his heel, another man on the next bench reading an upside-down newspaper."),
@@ -885,7 +885,7 @@ namespace SlayTheClone {
                 On(EffectTrigger.EndOfTurn, Damage(2, TargetType.EnemyCreatures, Facing), Heal(1, TargetType.Self)))
                 .NotInStarterDeck()
                 .Picture("A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in the chair beside her is squeezed between her crossed legs, his medals popping off."),
-            Creature("MK Ultra Test Subject", 4, 3, speed: 1, deploy: 0,
+            Creature("MK Ultra Test Subject", 3, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
                 On(EffectTrigger.StartOfTurn, Strike(TargetType.AllCreatures, AtRandom)))
