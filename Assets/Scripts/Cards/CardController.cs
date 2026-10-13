@@ -41,6 +41,8 @@ namespace SlayTheClone {
         private Vector3 originalPosition;
         private Transform originalParent;
         private bool isDragging;
+        /// <summary>The card being dragged, if any: while the player is doing something, no tooltip opens.</summary>
+        public static CardController Dragged { get; private set; }
         // Store both the base definition and the live instance
         private CardData baseCardData; // The original ScriptableObject definition
         private ICreature linkedCreature; // The live Creature instance (if applicable)
@@ -256,6 +258,7 @@ namespace SlayTheClone {
             originalPosition = transform.position;
             originalParent = transform.parent;
             isDragging = true;
+            Dragged = this;
             canvasGroup.blocksRaycasts = false;
             transform.SetAsLastSibling();
 
@@ -281,6 +284,7 @@ namespace SlayTheClone {
             if (!isDragging) return;
 
             isDragging = false;
+            if (Dragged == this) Dragged = null;
             canvasGroup.blocksRaycasts = true;
 
             OnEndDragEvent.Invoke(this);
@@ -533,6 +537,7 @@ namespace SlayTheClone {
 
         // Make sure to clean up when the card is destroyed
         protected override void OnDestroy() {
+            if (Dragged == this) Dragged = null;
             Tooltip.Existing?.HideTooltipFor(this);
             DOTween.Kill(transform);
             CleanupEvents();

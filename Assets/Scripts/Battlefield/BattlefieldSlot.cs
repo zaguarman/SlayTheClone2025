@@ -182,8 +182,10 @@ namespace SlayTheClone {
             }
             ShowHighlight(null);
 
+            // Leaving a slot only lets go of what the tooltip shows: it closes once the pointer is away from it, not because
+            // a keyword explanation opened over this slot and took the pointer
             if (OccupyingCard != null) Tooltip.Existing?.ReleaseCard(OccupyingCard);
-            else Tooltip.Existing?.HideTooltip();
+            else Tooltip.Existing?.Release();
         }
 
         // True while a creature card from a hand is dragged over this occupied slot (dropping it replaces the occupant)

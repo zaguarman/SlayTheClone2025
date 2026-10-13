@@ -152,13 +152,15 @@ namespace SlayTheClone {
                 ShowTooltip(card.IsQueued ? "<b>???</b>\nSomething is being summoned here." : "<b>???</b>\nAn enemy creature. You don't know what it is.");
                 return;
             }
+            if (CardController.Dragged != null) return; // The player is doing something: no explanations in the way
             if (card == activeCard && preview != null) {
                 released = false;
                 UpdateTooltipContent(card);
                 return;
             }
-            // Reading keywords: passing over another card on the way to an explanation doesn't replace them
-            if (keywordPopups.Count > 0 && PointerInArea(Input.mousePosition)) return;
+            // Reading keywords: passing over another card on the way to an explanation doesn't replace them, nor does a
+            // card under the enlarged one or its explanations
+            if ((keywordPopups.Count > 0 && PointerInArea(Input.mousePosition)) || PointerOnTooltip(Input.mousePosition)) return;
 
             HideTooltip();
             activeCard = card;
@@ -286,8 +288,8 @@ namespace SlayTheClone {
         // Slay the Spire style: hovering a keyword on the enlarged card opens its explanation beside it; keywords in that
         // explanation open theirs, stacked below it, and so on (5 deep). They never cover the preview or each other, so the
         // pointer can always reach the next one. The tooltip stays while the pointer is over the card, its preview or a
-        // popup, and closes a moment after it's over none.
-        private const float ReleaseGrace = 0.6f; // Seconds to cross from the card to its preview, or between popups
+        // popup, and closes a moment after it's over none, or at a click anywhere else. Dragging a card closes it.
+        private const float ReleaseGrace = 0.4f; // Seconds to cross from the card to its preview, or between popups
         private const int MaxKeywordPopups = 5;
         private const float PopupGap = 6f;
         private const float PopupWidth = 340f;
@@ -315,20 +317,43 @@ namespace SlayTheClone {
         /// <summary>The pointer left the card: the tooltip stays while the pointer goes on to the preview or its popups.</summary>
         public void ReleaseCard(CardController card) {
             if (card == null || card != activeCard) return;
+            Release();
+        }
+
+        /// <summary>The pointer left something on the board: whatever is shown stays only while the pointer is around it.</summary>
+        public void Release() {
+            if (activeCard == null || released) return;
             released = true;
             lastHeldAt = Time.unscaledTime;
         }
 
         private void Update() {
             if (activeCard == null || preview == null) return;
+            if (CardController.Dragged != null) { HideTooltip(); return; }
             Vector2 pointer = Input.mousePosition;
+            if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && ClickAt(pointer)) return;
             TrackKeywords(pointer);
             if (!released || PointerInArea(pointer)) lastHeldAt = Time.unscaledTime;
             else if (Time.unscaledTime - lastHeldAt > ReleaseGrace) HideTooltip();
         }
 
-        // Generous margins: slipping a few pixels off a popup, or crossing the gap between two, keeps everything open
-        private const float AreaMargin = 48f;
+        /// <summary>A click away from the card, its preview and the explanations closes them all. Returns whether it did.</summary>
+        public bool ClickAt(Vector2 pointer) {
+            if (keywordPopups.Count == 0 || PointerOnTooltip(pointer, includeCard: true)) return false;
+            HideTooltip();
+            return true;
+        }
+
+        /// <summary>Whether the pointer is right on the preview or an open explanation (or the card itself), no margin.</summary>
+        public bool PointerOnTooltip(Vector2 pointer, bool includeCard = false) {
+            if (preview == null) return false;
+            if (keywordPopups.Any(p => ScreenRect(p.Rect).Contains(pointer)) || ScreenRect((RectTransform)preview.transform).Contains(pointer)) return true;
+            return includeCard && CardScreenRect(activeCard) is Rect card && card.Contains(pointer);
+        }
+
+        // A small margin: slipping a few pixels off a popup, or crossing the gap between two, keeps everything open, while
+        // moving back to the table closes it
+        private const float AreaMargin = 20f;
 
         /// <summary>
         /// Whether the pointer is anywhere around what the tooltip shows: the card, its preview and the open explanations,

@@ -358,7 +358,8 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(tooltip.PointerInArea(tooltip.Preview.transform.position + new Vector3(0f, 0f, 0f)), "The area includes the enlarged card...");
             tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Random"));
             CollectionAssert.AreEqual(new[] { "Random" }, tooltip.OpenKeywords, "...and another keyword on the card starts a new chain");
-            tooltip.HideTooltip();
+            Assert.IsFalse(tooltip.ClickAt(SceneGame.KeywordPoint(tooltip.KeywordText("Random"), "Heat Signature")), "A click on an explanation keeps it open");
+            Assert.IsTrue(tooltip.ClickAt(new Vector2(2f, 2f)), "A click anywhere else closes it all");
             CollectionAssert.IsEmpty(tooltip.OpenKeywords);
 
             yield return game.EndTurn();
