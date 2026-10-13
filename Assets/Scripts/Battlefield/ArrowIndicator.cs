@@ -25,7 +25,7 @@ namespace SlayTheClone {
             // Cards are 1.6 x 1.96 units, and the rows 1.26 apart
             public static Style Attack => new Style { Width = 0.2f, Lane = 0.22f, Bow = 0.08f, MaxBow = 0.35f, StartInset = 0.8f, EndInset = 0.99f };
             public static Style Damage => new Style { Width = 0.16f, Lane = 0f, Bow = 0.08f, MaxBow = 0.35f, StartInset = 0.8f, EndInset = 0.99f };
-            public static Style Spell => new Style { Width = 0.17f, Lane = 0.5f, Bow = 0.1f, MaxBow = 0.5f, StartInset = 0.45f, EndInset = 0.99f };
+            public static Style Spell => new Style { Width = 0.17f, Lane = 0.5f, Bow = 0.1f, MaxBow = 0.5f, StartInset = 0f, EndInset = 0.99f }; // Starts at its card's edge
             public static Style Move => new Style { Width = 0.14f, Lane = 0f, Bow = 0.2f, MaxBow = 0.42f, StartInset = 0.3f, EndInset = 0.42f };
             public static Style Drag => new Style { Width = 0.18f, Lane = 0f, Bow = 0.1f, MaxBow = 0.4f, StartInset = 0.3f, EndInset = 0f };
 

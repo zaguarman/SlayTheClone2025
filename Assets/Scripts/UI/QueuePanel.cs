@@ -9,7 +9,8 @@ namespace SlayTheClone {
     /// <summary>
     /// The Queue button and the panel it opens: the actions waiting to resolve, in order, as the screen's player sees them
     /// (see <see cref="QueueView"/>, Fog of War included). Each action is an item, edged in its side's color, with an icon for
-    /// what it is; hovering one tells more about it. It follows the queue as it changes, and the fog switch (F9).
+    /// what it is; hovering one tells more about it. It follows the queue as it changes, and the fog switch (F9). Clicking
+    /// anywhere else closes it.
     /// <see cref="BoardSkin"/> places both at the right edge of the table.
     /// </summary>
     public class QueuePanel : MonoBehaviour {
@@ -108,6 +109,15 @@ namespace SlayTheClone {
             empty.raycastTarget = false;
             panel.gameObject.SetActive(false);
         }
+
+        // Clicking anywhere else closes it, like a menu
+        private void Update() {
+            if (!IsOpen || !(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))) return;
+            if (!PointerOn(panel) && !PointerOn(Toggle)) SetOpen(false);
+        }
+
+        private static bool PointerOn(RectTransform rect) =>
+            rect != null && RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, CanvasUtility.GetEventCamera(rect));
 
         public void SetOpen(bool open) {
             panel.gameObject.SetActive(open);

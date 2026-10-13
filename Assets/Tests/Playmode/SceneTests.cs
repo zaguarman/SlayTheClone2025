@@ -349,7 +349,8 @@ namespace SlayTheClone.Tests {
             var arrow = game.QueuedArrows(p1).SingleOrDefault();
             Assert.IsNotNull(arrow, "The aimed spell shows one arrow");
             var slotView = game.BoardView(p2).FindSlotView(aimedAt);
-            Assert.Less(Vector2.Distance(arrow.StartPosition, Shown(zap).transform.position), 0.01f, "It starts at the spell's card in the hand");
+            Assert.Less(Vector2.Distance(arrow.StartPosition, BattlefieldArrowManager.EdgeToward(Shown(zap), arrow.EndPosition)), 0.01f,
+                "It starts at the spell's card in the hand, at the edge facing the board");
             Assert.Less(Vector2.Distance(arrow.EndPosition, slotView.transform.position), 0.01f, "It points at the slot the spell is aimed at");
             SceneGame.Click(Shown(zap));
             yield return null;

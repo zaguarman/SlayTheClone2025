@@ -122,14 +122,14 @@ namespace SlayTheClone {
         private void PlanArrow(IGameAction action, Dictionary<string, ArrowPlan> wanted) {
             // A queued spell points from its card in the hand to where it's aimed: a slot, wherever the creature it homes on
             // is, or the whole battlefield of the side it hits
+            // Each spell has its own arrow, from the edge of its card that faces the board, so arrows never run across the hand
             if (action is PlayCardAction play && play.GetOwner() == owner && play.GetCard() is Spell spell) {
                 var card = findHandCard(spell);
-                if (card == null || !TryAim(spell, play.GetTarget(), out var end, out string aimKey, out bool wholeSide)) return;
-                string key = $"spell_{aimKey}";
+                if (card == null || !TryAim(spell, play.GetTarget(), out var end, out _, out bool wholeSide)) return;
+                string key = $"spell_{spell.TargetId}";
                 var plan = Plan(wanted, key, end, SpellColor, wholeSide ? ArrowIndicator.Style.Spell.ToEdge() : ArrowIndicator.Style.Spell);
-                plan.Starts.Add(card.transform.position);
-                if (!handArrows.TryGetValue(key, out var cards)) handArrows[key] = cards = new List<(ICard, ITarget)>();
-                cards.Add((spell, play.GetTarget()));
+                plan.Starts.Add(EdgeToward(card, end));
+                handArrows[key] = new List<(ICard, ITarget)> { (spell, play.GetTarget()) };
                 return;
             }
 
@@ -162,18 +162,26 @@ namespace SlayTheClone {
         public void FollowHandCards() {
             foreach (var entry in handArrows) {
                 if (!activeArrows.TryGetValue(entry.Key, out var arrow) || arrow == null || entry.Value.Count == 0) continue;
-                var starts = new List<Vector3>();
-                foreach (var (card, _) in entry.Value) {
-                    var view = findHandCard(card);
-                    if (view != null) starts.Add(view.transform.position);
-                }
-                var (firstCard, firstTarget) = entry.Value[0];
-                if (starts.Count > 0 && TryAim((Spell)firstCard, firstTarget, out var end, out _, out _)) arrow.Show(starts, end);
+                var (card, target) = entry.Value[0];
+                var view = findHandCard(card);
+                if (view != null && TryAim((Spell)card, target, out var end, out _, out _)) arrow.Show(new List<Vector3> { EdgeToward(view, end) }, end);
             }
         }
 
-        // Where a queued spell's arrow ends: the slot it's aimed at, or the near edge of the side it plays on, level with
-        // the middle of that battlefield's near edge (not a slot)
+        /// <summary>
+        /// Where a hand card's arrow starts: the middle of the card's edge that faces where the arrow goes, so the arrow
+        /// leaves the card instead of crossing it (or the cards beside it in the fan).
+        /// </summary>
+        public static Vector3 EdgeToward(CardController card, Vector3 target) {
+            var corners = new Vector3[4];
+            ((RectTransform)card.transform).GetWorldCorners(corners); // Bottom-left, top-left, top-right, bottom-right
+            var top = (corners[1] + corners[2]) * 0.5f;
+            var bottom = (corners[0] + corners[3]) * 0.5f;
+            return Vector2.Distance(top, target) <= Vector2.Distance(bottom, target) ? top : bottom;
+        }
+
+        // Where a queued spell's arrow ends: the slot it's aimed at, or the near edge of the side it plays on, straight
+        // across from its card (kept off the board's ends; the edge is never a slot)
         private bool TryAim(Spell spell, ITarget target, out Vector3 point, out string aimKey, out bool wholeSide) {
             point = default;
             aimKey = null;
@@ -197,8 +205,9 @@ namespace SlayTheClone {
             var hand = findHandCard(spell);
             float fromY = hand != null ? hand.transform.position.y : 0f;
             bool below = fromY < (corners[0].y + corners[1].y) * 0.5f;
-            // Between the middle slot and the next one, so it can't be read as aiming at a slot
-            float x = (corners[0].x + corners[2].x) * 0.5f + (corners[2].x - corners[0].x) * 0.1f;
+            float boardWidth = corners[2].x - corners[0].x;
+            float fromX = hand != null ? hand.transform.position.x : (corners[0].x + corners[2].x) * 0.5f;
+            float x = Mathf.Clamp(fromX, corners[0].x + boardWidth * 0.1f, corners[2].x - boardWidth * 0.1f);
             point = new Vector3(x, below ? corners[0].y : corners[1].y, corners[0].z);
             return true;
         }
