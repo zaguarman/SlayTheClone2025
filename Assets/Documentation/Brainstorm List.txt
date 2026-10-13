@@ -1590,7 +1590,6 @@ Card Game Factions Overview
 			Fukuryu (stealth diver carrying explosives)
 			Kaiten (kamikaze submarine)
 			Manhattan Project
-			Ministry of Equality (tagged Statecraft; in place of Ministry of Love)
 			Patronage Network (clientelism)
 			Peace Operation
 			Regulatory Overreach

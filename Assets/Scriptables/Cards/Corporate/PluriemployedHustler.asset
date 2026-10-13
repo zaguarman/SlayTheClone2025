@@ -75,9 +75,8 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
-  designNotes: 'Nickel-and-Dime: it does a lot of small jobs, so hits of 3 or less
-    are doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with
-    Zeitgeist).'
+  designNotes: 'Penny Stock: small bets that pay double, so hits of 3 or less are
+    doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).'
   artDescription: 
   attack: 2
   health: 3

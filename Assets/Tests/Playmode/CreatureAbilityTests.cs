@@ -130,10 +130,10 @@ namespace SlayTheClone.Tests {
             game.Attack(digger, p2.Battlefield[1]);
             Assert.AreEqual(7, buffed.Health, "Underground, attacking: as if the Health buff weren't there");
 
-            var tech = With(CreatureAbility.NickelAndDime, p1, 2, attack: 3);
+            var tech = With(CreatureAbility.PennyStock, p1, 2, attack: 3);
             var target = With(CreatureAbility.None, p2, 2, health: 20);
             game.Attack(tech, p2.Battlefield[2]);
-            Assert.AreEqual(14, target.Health, "Nickel-and-Dime: 3 becomes 6");
+            Assert.AreEqual(14, target.Health, "Penny Stock: 3 becomes 6");
             ChangeAttack(tech, 1, p1);
             game.Attack(tech, p2.Battlefield[2]);
             Assert.AreEqual(10, target.Health, "4 is too much to double");
@@ -196,15 +196,15 @@ namespace SlayTheClone.Tests {
         public void OtherCreatures_Copied_Stolen_Swapped_Guarded_AndAbilitiesSpread() {
             game.SetDecks(game.Fillers(5), game.Fillers(5));
             With(CreatureAbility.HiveMind, p1, 0, attack: 0, health: 30);
-            var attacker = With(CreatureAbility.NickelAndDime, p2, 0, attack: 2, health: 2);
+            var attacker = With(CreatureAbility.PennyStock, p2, 0, attack: 2, health: 2);
             game.Attack(attacker, p1.Battlefield[0]);
-            Assert.AreEqual(CreatureAbility.HiveMind, attacker.Ability, "Hive Mind spreads to its attacker, replacing Nickel-and-Dime");
+            Assert.AreEqual(CreatureAbility.HiveMind, attacker.Ability, "Hive Mind spreads to its attacker, replacing Penny Stock");
             game.Run(new DestroyCreatureAction(attacker, unconditional: true));
             var discarded = (ICreature)p2.Deck.GetDiscardPilePreview().Single(c => c.Name == attacker.Name);
             Assert.AreEqual(CreatureAbility.HiveMind, discarded.Ability, "A changed ability stays on the card");
             game.CardDealingService.RecycleDiscardPile(p2);
             var reshuffled = (ICreature)p2.Deck.GetDeckPreview().Single(c => c.Name == attacker.Name);
-            Assert.AreEqual(CreatureAbility.NickelAndDime, reshuffled.Ability, "Reshuffling gives it its printed ability back");
+            Assert.AreEqual(CreatureAbility.PennyStock, reshuffled.Ability, "Reshuffling gives it its printed ability back");
 
             var thief = With(CreatureAbility.IdentityTheft, p1, 1);
             var mark = With(CreatureAbility.Unpatchable, p2, 2);

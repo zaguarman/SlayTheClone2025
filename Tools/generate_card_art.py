@@ -903,7 +903,7 @@ def man_o_war():
     return svg(defs, body)
 
 
-def ministry_of_love():
+def ministry_for_equality():
     defs, body = bg_state("#5a5a6a")
     body += rect(76, 40, 200, 140, "#8a8a96", 'stroke="#4a4a56" stroke-width="3"')
     for row in range(3):
@@ -3475,7 +3475,7 @@ CARDS = {
         "KingEmeritus": king_emeritus, "SpiteElectedPresident": spite_elected_president,
         "PoliceOfficerProductivityTarget": police_officer_productivity_target,
         "InternalRevenueService": internal_revenue_service, "Mercenaries": mercenaries, "ManoWar": man_o_war,
-        "MinistryOfLove": ministry_of_love, "SupremeCourt": supreme_court, "ProtocolEnforcers": protocol_enforcers,
+        "MinistryforEquality": ministry_for_equality, "SupremeCourt": supreme_court, "ProtocolEnforcers": protocol_enforcers,
         "Demagogue": demagogue, "RedTape": red_tape, "PreemptiveStrike": preemptive_strike, "MartialLaw": martial_law,
         "Kakistocracy": kakistocracy, "MutuallyAssuredDestruction": mutually_assured_destruction,
         "PanemEtCircenses": panem_et_circenses,

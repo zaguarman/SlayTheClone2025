@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
-  m_Name: MinistryOfLove
+  m_Name: MinistryforEquality
   m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
   cardId: 3dc323eb-8284-4094-a6ba-9d5d4813c723
-  cardName: Ministry Of Love
-  description: We love you. Please stop resisting the love.
+  cardName: Ministry for Equality
+  description: We love everybody. Please stop resisting our love.
   cardType: 0
   faction: 2
   artwork: {fileID: 3286163911610860551, guid: 8439edd9b580ccd4f958d38946a5128b, type: 3}

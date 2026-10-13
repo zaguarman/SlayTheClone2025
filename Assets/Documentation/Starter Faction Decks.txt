@@ -64,7 +64,7 @@ Creatures (Attack/Health/Speed, Deployment Time)
         • Future: summons an Unpaid Intern token.
     • Day Trader (3/1/3, 0): Insider Job (its damage ignores Armor). When this enters, draw a card. When this dies, the enemy draws a card.
         • Future: an Investment that pays out or loses cards.
-    • Pluriemployed Hustler (2/3/2, 0): Nickel-and-Dime (double damage when it hits for 3 or less). When this enters, draw 2. Takes 1 damage each Dusk.
+    • Pluriemployed Hustler (2/3/2, 0): Penny Stock (double damage when it hits for 3 or less). When this enters, draw 2. Takes 1 damage each Dusk.
         • Future: Coffeinated, then Burnout.
     • Unicorn (1/8/1, 2): Draws a card each turn, takes 1 damage each Dusk.
         • Future: Unicorn (Enterprise).
@@ -107,7 +107,7 @@ Creatures
         • Future: the enemy may Recruit it instead.
     • Man o' War (4/7/1, 2): When this enters, 1 damage to each enemy creature.
         • Future: multi-slot, Heavy.
-    • Ministry Of Love (1/4/1, 2): Each turn, stun a random enemy creature for 1 turn.
+    • Ministry for Equality (1/4/1, 2): Each turn, stun a random enemy creature for 1 turn.
         • Future: Red Tape every Dawn.
     • Supreme Court (0/6/1, 2): Return to Sender (enemy statuses bounce back). When this enters, each friendly creature gains 2 Armor.
         • Future: Fortifying.
@@ -216,7 +216,7 @@ Ability Test Creatures (no other effects: each tests one ability from the 'Abili
     • Mummy (Myth, 2/5/1, 1): Hive Mind.
     • Pessimist (Mind, 2/4/1, 0): Contrarian.
     • Introvert (Mind, 1/5/1, 0): Unbothered.
-    • The other abilities are on faction cards: Insider Job (Day Trader), Nickel-and-Dime (Pluriemployed Hustler), Spite (Spite-Elected President), Return to Sender (Supreme Court), Too Mainstream (Hipster), No U (Keyboard Warrior).
+    • The other abilities are on faction cards: Insider Job (Day Trader), Penny Stock (Pluriemployed Hustler), Spite (Spite-Elected President), Return to Sender (Supreme Court), Too Mainstream (Hipster), No U (Keyboard Warrior).
 
 Fog of War Test Cards (GDD 2.5)
     • Sleeper Agent (Shadow Ops., 3/3/2, 1): Undercover (its plans show as ??? to the enemy).
