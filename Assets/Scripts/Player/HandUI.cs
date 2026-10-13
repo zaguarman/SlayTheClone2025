@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using static SlayTheClone.DebugLogger;
 
@@ -7,12 +8,27 @@ namespace SlayTheClone {
     public class HandUI : CardContainer {
         private const float CastStagger = 0.2f;
 
-        // The hand is held as a fan, like in Slay the Spire and Hearthstone: cards tilt and dip away from the middle,
-        // and squeeze together (overlapping) rather than spread past MaxFanWidth
-        private const float MaxFanWidth = 1300f;
-        private const float FanReach = 700f;   // Distance from the middle at which a card gets the full tilt and dip
-        private const float FanTilt = 8f;      // Degrees
-        private const float FanDip = 28f;
+        // The hand is held as a fan, like in Slay the Spire: the cards sit on a wide arc, overlapping, each tilted along it
+        // and dipping away from the middle, and squeeze together rather than spread past MaxFanWidth. Your hand (at the
+        // bottom) shows them big, about Slay the Spire's size next to the board, sunk a little below the edge so the
+        // board's bottom row stays clear; the card under the pointer rises out of the fan, straight, and its neighbours
+        // make room. The other hand, at the top, keeps the cards at board size.
+        public const float YourHandScale = 1.5f;
+        private const float CardWidth = 160f;       // A card's width at scale 1, in hand units
+        private const float Overlap = 0.8f;         // Spacing between card centers, as a share of a card's width
+        private const float MaxFanWidth = 1250f;    // From the first card's center to the last's
+        private const float FanRadius = 2600f;      // The arc the cards sit on: smaller tilts and dips them more
+        private const float Sink = 32f;             // How far your hand sits below its area's middle
+        private const float HoverRise = 34f;        // Where the hovered card stands: fully in view
+        private const float HoverRoom = 0.35f;      // How far its neighbours move aside, as a share of a card's width
+        private const float Settle = 0.12f;         // Seconds for the other cards to slide to their places
+
+        private CardController hovered;
+        private readonly Dictionary<CardController, Sequence> slides = new Dictionary<CardController, Sequence>();
+
+        // The player at the bottom of the table: the hand you play from
+        private bool IsYourHand => Player == null || Player.IsPlayer1;
+        private float CardScale => IsYourHand ? YourHandScale : 1f;
 
         // The hand area itself is invisible; it only shows a faint glow while a card is dragged over it
         protected override DropZoneColors ZoneColors => new DropZoneColors(
@@ -124,28 +140,64 @@ namespace SlayTheClone {
             UpdateLayout();
         }
 
-        protected override void UpdateLayout() {
+        protected override void UpdateLayout() => Arrange(animate: false);
+
+        // Places every card on the fan: at once, or sliding there (when the hovered card changes)
+        private void Arrange(bool animate) {
             int count = cards.Count;
-            float spacing = count > 1 ? Mathf.Min(settings.spacing, MaxFanWidth / (count - 1)) : 0f;
-            float facing = Player == null || Player.IsPlayer1 ? 1f : -1f; // The top hand fans the other way, toward the table
+            float scale = CardScale;
+            float spacing = count > 1 ? Mathf.Min(CardWidth * scale * Overlap, MaxFanWidth / (count - 1)) : 0f;
+            float facing = IsYourHand ? 1f : -1f; // The top hand fans the other way, toward the table
+            int hoveredIndex = hovered != null ? cards.IndexOf(hovered) : -1;
 
             for (int i = 0; i < count; i++) {
                 var card = cards[i];
-                if (card == null) continue;
+                if (card == null || card == CardController.Dragged) continue;
 
                 float x = (i - (count - 1) / 2f) * spacing;
-                float reach = x / FanReach;
-                SetupCardTransform(card, new Vector2(x, -facing * FanDip * reach * reach));
-                card.transform.localRotation = Quaternion.Euler(0f, 0f, -facing * FanTilt * reach);
+                float angle = Mathf.Asin(Mathf.Clamp(x / FanRadius, -1f, 1f)); // Along the arc
+                float dip = FanRadius - Mathf.Sqrt(FanRadius * FanRadius - x * x);
+                float y = -dip - (IsYourHand ? Sink : 0f);
+                float tilt = -angle * Mathf.Rad2Deg;
+                if (hoveredIndex >= 0 && i != hoveredIndex) x += Mathf.Sign(i - hoveredIndex) * CardWidth * scale * HoverRoom;
+                if (i == hoveredIndex) {
+                    y = IsYourHand ? HoverRise : 0f;
+                    tilt = 0f;
+                }
                 card.transform.SetSiblingIndex(i); // Right-hand cards overlap left-hand ones
+                Place(card, new Vector2(x, facing * y), facing * tilt, scale, animate && i != hoveredIndex);
             }
+            if (hovered != null && hoveredIndex >= 0) hovered.transform.SetAsLastSibling(); // On top of its neighbours
+        }
+
+        // The hovered card jumps straight to its place, so the enlarged view next to it sees where it ends up
+        private void Place(CardController card, Vector2 position, float tilt, float scale, bool animate) {
+            if (slides.TryGetValue(card, out var running)) running.Kill();
+            slides.Remove(card);
+            var rect = (RectTransform)card.transform;
+            SetupCardTransform(card, rect.anchoredPosition);
+            if (!animate) {
+                rect.anchoredPosition = position;
+                rect.localRotation = Quaternion.Euler(0f, 0f, tilt);
+                rect.localScale = Vector3.one * scale;
+                return;
+            }
+            rect.localScale = Vector3.one * scale;
+            slides[card] = DOTween.Sequence()
+                .Join(DOTween.To(() => rect.anchoredPosition, p => rect.anchoredPosition = p, position, Settle).SetEase(Ease.OutQuad))
+                .Join(rect.DOLocalRotate(new Vector3(0f, 0f, tilt), Settle).SetEase(Ease.OutQuad))
+                .OnKill(() => slides.Remove(card));
         }
 
         protected override void OnCardBeginDrag(CardController card) {
             if (card == null) return;
             draggedPlay = card.IsQueued ? QueuedPlayOf(card.GetLinkedCardInstance()) : null;
+            if (slides.TryGetValue(card, out var running)) running.Kill();
+            hovered = null;
             card.transform.localRotation = Quaternion.identity;
+            card.transform.localScale = Vector3.one; // Dragged at board size, so it doesn't cover the slots it's aimed at
             card.transform.SetAsLastSibling();
+            Arrange(animate: true); // The others close the gap it leaves
             Log($"Begin dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
         }
 
@@ -187,7 +239,27 @@ namespace SlayTheClone {
             UpdateLayout();
         }
 
-        protected override void OnCardHoverEnter(CardController card) { }
-        protected override void OnCardHoverExit(CardController card) { }
+        protected override void OnCardHoverEnter(CardController card) {
+            if (card == null || CardController.Dragged != null || !cards.Contains(card)) return;
+            hovered = card;
+            Arrange(animate: true);
+        }
+
+        protected override void OnCardHoverExit(CardController card) {
+            if (card != hovered) return;
+            // Leaving through its bottom edge (toward the screen's edge) keeps it up: dropping back under the pointer
+            // would only raise it again
+            var rect = (RectTransform)card.transform;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, Input.mousePosition, CanvasUtility.GetEventCamera(card), out var local)
+                && local.y < rect.rect.yMin && local.x > rect.rect.xMin && local.x < rect.rect.xMax) return;
+            hovered = null;
+            Arrange(animate: true);
+        }
+
+        public override void RemoveCard(CardController card) {
+            if (card == hovered) hovered = null;
+            if (card != null && slides.TryGetValue(card, out var running)) running.Kill();
+            base.RemoveCard(card);
+        }
     }
 }

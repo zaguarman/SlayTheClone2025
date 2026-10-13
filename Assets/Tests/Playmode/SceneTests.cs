@@ -375,6 +375,8 @@ namespace SlayTheClone.Tests {
             yield return null;
             SceneGame.Hover(Shown(bolt));
             yield return null;
+            Assert.AreEqual(HandUI.YourHandScale, Shown(bolt).transform.localScale.x, 0.01f, "Your hand shows its cards big, Slay the Spire size");
+            Assert.AreEqual(0f, Mathf.DeltaAngle(0f, Shown(bolt).transform.localEulerAngles.z), 0.01f, "The hovered card rises out of the fan, straight");
             Assert.IsNull(SceneGame.HoverPreview(), "Not at once: the pointer may only be passing over the card");
             yield return SceneGame.PreviewShows();
             var preview = SceneGame.HoverPreview();
