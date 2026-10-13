@@ -10,20 +10,32 @@ namespace SlayTheClone {
 
         // The hand is held as a fan, like in Slay the Spire: the cards sit on a wide arc, overlapping, each tilted along it
         // and dipping away from the middle, and squeeze together rather than spread past MaxFanWidth. Your hand (at the
-        // bottom) shows them big, about Slay the Spire's size next to the board, sunk a little below the edge so the
-        // board's bottom row stays clear; the card under the pointer rises out of the fan, straight, and its neighbours
-        // make room. The other hand, at the top, keeps the cards at board size.
-        public const float YourHandScale = 1.5f;
-        private const float CardWidth = 160f;       // A card's width at scale 1, in hand units
-        private const float Overlap = 0.8f;         // Spacing between card centers, as a share of a card's width
+        // bottom) shows them big, sunk below the screen's edge so only their name and picture show (their Deployment Time
+        // is on their left edge, always in sight); the card under the pointer rises out of the fan, enlarged, straight and
+        // whole, its explanations beside it, and its neighbours make room. The other hand, at the top, keeps the cards at
+        // board size.
+        public const float YourHandScale = 1.7f;
+        public const float RaisedScale = 2.1f;      // The card under the pointer, risen out of your hand
+        private const float CardWidth = 160f;       // A card's size at scale 1, in hand units
+        private const float CardHeight = 200f;
+        private const float ShownShare = 0.6f;      // How much of a card in your hand shows above the screen's edge: name and picture
+        private const float RaisedMargin = 10f;     // Between the risen card and the screen's edge
+        private const float Overlap = 0.78f;        // Spacing between card centers, as a share of a card's width
         private const float MaxFanWidth = 1250f;    // From the first card's center to the last's
-        private const float FanRadius = 2600f;      // The arc the cards sit on: smaller tilts and dips them more
-        private const float Sink = 32f;             // How far your hand sits below its area's middle
-        private const float HoverRise = 34f;        // Where the hovered card stands: fully in view
-        private const float HoverRoom = 0.35f;      // How far its neighbours move aside, as a share of a card's width
-        private const float Settle = 0.12f;         // Seconds for the other cards to slide to their places
+        private const float FanRadius = 2400f;      // The arc the cards sit on: smaller tilts and dips them more
+        private const float HoverRoom = 0.4f;       // How far its neighbours move aside, as a share of a card's width
+        private const float Settle = 0.12f;         // Seconds for the cards to slide to their places
+        private const float Rise = 0.08f;           // Seconds for the card under the pointer to rise
 
         private CardController hovered;
+        private bool releasePending; // The pointer left the risen card for its explanations: it stays up while they're open
+        private CardController picked; // The card being dragged out of this hand
+        private const float PickedScale = 1.15f;  // Picked up, a card grows a little (of its size in the hand)...
+        private const float OverBoardReach = 260f; // ...and shrinks to board size as it's carried this far above the hand
+        private const float DiscardStagger = 0.06f;
+
+        /// <summary>Where this hand's discards fly to (the discard pile's button); null: off the edge of the screen.</summary>
+        public Transform DiscardPile { get; set; }
         private readonly Dictionary<CardController, Sequence> slides = new Dictionary<CardController, Sequence>();
 
         // The player at the bottom of the table: the hand you play from
@@ -88,6 +100,20 @@ namespace SlayTheClone {
         private PlayCardAction QueuedPlayOf(ICard card) =>
             GameManager?.ActionsQueue?.GetPendingActions().OfType<PlayCardAction>().FirstOrDefault(p => p.GetCard() == card);
 
+        // Fades into a dart that streaks into the discard pile (off the screen's edge for a hand without a pile button)
+        private void PlayDiscardAnimation(CardController card) {
+            var rootCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
+            if (rootCanvas == null) {
+                Destroy(card.gameObject);
+                return;
+            }
+            var target = DiscardPile != null ? DiscardPile.position
+                : transform.TransformPoint(new Vector3(((RectTransform)transform).rect.xMin - 200f, 0f, 0f));
+            float delay = Mathf.Max(0f, nextCastTime - Time.time);
+            nextCastTime = Time.time + delay + DiscardStagger;
+            CardFx.Discard(card, rootCanvas.transform, target, DiscardPile, delay);
+        }
+
         private void PlayCastAnimation(CardController card) {
             var rootCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
             if (rootCanvas == null) {
@@ -114,8 +140,13 @@ namespace SlayTheClone {
                 var instance = card.GetLinkedCardInstance();
                 bool wasCast = instance != null && !(instance is ICreature)
                     && queuedCards.Contains(instance) && !player.Hand.Contains(instance);
+                bool wasDiscarded = !wasCast && instance != null && !player.Hand.Contains(instance)
+                    && player.Deck.GetDiscardPilePreview().Contains(instance);
                 if (wasCast) {
                     PlayCastAnimation(card);
+                }
+                else if (wasDiscarded) {
+                    PlayDiscardAnimation(card);
                 }
                 else {
                     Destroy(card.gameObject);
@@ -149,6 +180,7 @@ namespace SlayTheClone {
             float spacing = count > 1 ? Mathf.Min(CardWidth * scale * Overlap, MaxFanWidth / (count - 1)) : 0f;
             float facing = IsYourHand ? 1f : -1f; // The top hand fans the other way, toward the table
             int hoveredIndex = hovered != null ? cards.IndexOf(hovered) : -1;
+            float edge = ScreenEdgeY();
 
             for (int i = 0; i < count; i++) {
                 var card = cards[i];
@@ -157,21 +189,32 @@ namespace SlayTheClone {
                 float x = (i - (count - 1) / 2f) * spacing;
                 float angle = Mathf.Asin(Mathf.Clamp(x / FanRadius, -1f, 1f)); // Along the arc
                 float dip = FanRadius - Mathf.Sqrt(FanRadius * FanRadius - x * x);
-                float y = -dip - (IsYourHand ? Sink : 0f);
-                float tilt = -angle * Mathf.Rad2Deg;
+                float height = CardHeight * scale;
+                // Your hand: the top ShownShare of each card above the screen's edge. The other hand: at its area's middle
+                float y = IsYourHand ? edge + height * (ShownShare - 0.5f) - dip : -facing * dip;
+                float tilt = -facing * angle * Mathf.Rad2Deg;
+                float cardScale = scale;
                 if (hoveredIndex >= 0 && i != hoveredIndex) x += Mathf.Sign(i - hoveredIndex) * CardWidth * scale * HoverRoom;
-                if (i == hoveredIndex) {
-                    y = IsYourHand ? HoverRise : 0f;
+                if (i == hoveredIndex && IsYourHand) {
+                    cardScale = RaisedScale;
+                    y = edge + CardHeight * RaisedScale * 0.5f + RaisedMargin; // Whole, its bottom just above the edge
                     tilt = 0f;
                 }
+                else if (i == hoveredIndex) tilt = 0f;
                 card.transform.SetSiblingIndex(i); // Right-hand cards overlap left-hand ones
-                Place(card, new Vector2(x, facing * y), facing * tilt, scale, animate && i != hoveredIndex);
+                Place(card, new Vector2(x, y), tilt, cardScale, animate, i == hoveredIndex ? Rise : Settle);
             }
             if (hovered != null && hoveredIndex >= 0) hovered.transform.SetAsLastSibling(); // On top of its neighbours
         }
 
-        // The hovered card jumps straight to its place, so the enlarged view next to it sees where it ends up
-        private void Place(CardController card, Vector2 position, float tilt, float scale, bool animate) {
+        // The screen's edge your hand sits on (its bottom; the top for the other hand), in this hand's own units
+        private float ScreenEdgeY() {
+            var screenPoint = new Vector2(Screen.width * 0.5f, IsYourHand ? 0f : Screen.height);
+            return RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)transform, screenPoint,
+                CanvasUtility.GetEventCamera(this), out var local) ? local.y : 0f;
+        }
+
+        private void Place(CardController card, Vector2 position, float tilt, float scale, bool animate, float seconds) {
             if (slides.TryGetValue(card, out var running)) running.Kill();
             slides.Remove(card);
             var rect = (RectTransform)card.transform;
@@ -182,11 +225,21 @@ namespace SlayTheClone {
                 rect.localScale = Vector3.one * scale;
                 return;
             }
-            rect.localScale = Vector3.one * scale;
             slides[card] = DOTween.Sequence()
-                .Join(DOTween.To(() => rect.anchoredPosition, p => rect.anchoredPosition = p, position, Settle).SetEase(Ease.OutQuad))
-                .Join(rect.DOLocalRotate(new Vector3(0f, 0f, tilt), Settle).SetEase(Ease.OutQuad))
+                .Join(DOTween.To(() => rect.anchoredPosition, p => rect.anchoredPosition = p, position, seconds).SetEase(Ease.OutQuad))
+                .Join(rect.DOLocalRotate(new Vector3(0f, 0f, tilt), seconds).SetEase(Ease.OutQuad))
+                .Join(rect.DOScale(scale, seconds).SetEase(Ease.OutBack))
                 .OnKill(() => slides.Remove(card));
+        }
+
+        private void Update() {
+            Carry();
+            if (!releasePending) return;
+            if (hovered != null && Tooltip.Existing != null && Tooltip.Existing.ActiveCard == hovered && Tooltip.Existing.Preview == hovered) return;
+            releasePending = false;
+            if (hovered == null) return;
+            hovered = null;
+            Arrange(animate: true);
         }
 
         protected override void OnCardBeginDrag(CardController card) {
@@ -194,8 +247,10 @@ namespace SlayTheClone {
             draggedPlay = card.IsQueued ? QueuedPlayOf(card.GetLinkedCardInstance()) : null;
             if (slides.TryGetValue(card, out var running)) running.Kill();
             hovered = null;
+            releasePending = false;
             card.transform.localRotation = Quaternion.identity;
-            card.transform.localScale = Vector3.one; // Dragged at board size, so it doesn't cover the slots it's aimed at
+            card.transform.localScale = Vector3.one * CardScale * PickedScale; // Picked up: it grows
+            picked = card;
             card.transform.SetAsLastSibling();
             Arrange(animate: true); // The others close the gap it leaves
             Log($"Begin dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
@@ -209,7 +264,23 @@ namespace SlayTheClone {
                 GameManager.ActionsQueue.CancelPlay(card.GetLinkedCardInstance());
             }
             draggedPlay = null;
-            UpdateLayout();
+            picked = null;
+            Arrange(animate: true); // Back into the fan, if it's still in the hand
+        }
+
+        // While a card is carried it keeps the picked-up size over the hand, and eases down to board size as it rises
+        // over the board, so the slot it's aimed at stays in view
+        private void Carry() {
+            if (picked == null || CardController.Dragged != picked) return;
+            float big = CardScale * PickedScale;
+            float scale = big;
+            var rect = (RectTransform)transform;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, GameInput.PointerPosition, CanvasUtility.GetEventCamera(this), out var local)) {
+                float away = IsYourHand ? local.y - rect.rect.yMax : rect.rect.yMin - local.y; // Toward the board
+                scale = Mathf.Lerp(big, 1f, Mathf.InverseLerp(0f, OverBoardReach, away));
+            }
+            float now = picked.transform.localScale.x;
+            picked.transform.localScale = Vector3.one * Mathf.Lerp(now, scale, 1f - Mathf.Exp(-16f * Time.unscaledDeltaTime));
         }
 
         protected override void OnCardDropped(CardController card) {
@@ -240,8 +311,9 @@ namespace SlayTheClone {
         }
 
         protected override void OnCardHoverEnter(CardController card) {
-            if (card == null || CardController.Dragged != null || !cards.Contains(card)) return;
+            if (card == null || CardController.Dragged != null || !cards.Contains(card) || card == hovered) return;
             hovered = card;
+            releasePending = false;
             Arrange(animate: true);
         }
 
@@ -252,12 +324,20 @@ namespace SlayTheClone {
             var rect = (RectTransform)card.transform;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, GameInput.PointerPosition, CanvasUtility.GetEventCamera(card), out var local)
                 && local.y < rect.rect.yMin && local.x > rect.rect.xMin && local.x < rect.rect.xMax) return;
+            // On its way to its explanations: it stays up while they're open (see Update)
+            if (Tooltip.Existing != null && Tooltip.Existing.ActiveCard == card && Tooltip.Existing.OpenKeywords.Count > 0) {
+                releasePending = true;
+                return;
+            }
             hovered = null;
             Arrange(animate: true);
         }
 
         public override void RemoveCard(CardController card) {
-            if (card == hovered) hovered = null;
+            if (card == hovered) {
+                hovered = null;
+                releasePending = false;
+            }
             if (card != null && slides.TryGetValue(card, out var running)) running.Kill();
             base.RemoveCard(card);
         }

@@ -259,16 +259,16 @@ namespace SlayTheClone.Tests {
             var link = text.textInfo.linkInfo.Take(text.textInfo.linkCount).FirstOrDefault(l => l.GetLinkID() == key);
             Assert.AreEqual(key, link.GetLinkID(), $"'{text.text}' has no keyword {key}");
             var character = text.textInfo.characterInfo[link.linkTextfirstCharacterIndex];
-            return text.transform.TransformPoint((character.bottomLeft + character.topRight) / 2f);
+            return RectTransformUtility.WorldToScreenPoint(CanvasUtility.GetEventCamera(text), text.transform.TransformPoint((character.bottomLeft + character.topRight) / 2f));
         }
 
         /// <summary>Long enough for a hovered card to show enlarged (it waits for the pointer to rest on it).</summary>
         public static WaitForSecondsRealtime PreviewShows() => new WaitForSecondsRealtime(Tooltip.HoverDelay + 0.05f);
 
-        /// <summary>The enlarged copy shown while a card is hovered, if any.</summary>
+        /// <summary>The enlarged card shown while a card is hovered, if any: a copy, or a hand card raised out of the fan.</summary>
         public static CardController HoverPreview() {
             var tooltip = Tooltip.Existing;
-            return tooltip != null && tooltip.gameObject.activeSelf ? tooltip.GetComponentInChildren<CardController>() : null;
+            return tooltip != null && tooltip.gameObject.activeSelf ? tooltip.Preview : null;
         }
 
         /// <summary>

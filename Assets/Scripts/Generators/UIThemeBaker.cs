@@ -64,7 +64,8 @@ namespace SlayTheClone {
         /// <summary>
         /// Restyles the card face: a dark rim around a frame in the card's faction color (set per card by CardController),
         /// parchment title and text boxes, a brass-edged art window, the type line on a band of the faction's color,
-        /// and brass plates for the turns-until-operative pip and the stats.
+        /// a brass coin for the turns-until-operative pip on the card's top-left corner (Slay the Spire's cost orb: it
+        /// stays in sight when the hand's cards overlap), and a brass plate for the stats.
         /// </summary>
         public static void StyleCardPrefab() {
             var root = PrefabUtility.LoadPrefabContents(CardPrefabPath);
@@ -88,9 +89,27 @@ namespace SlayTheClone {
                 UITheme.Round(titleBar, parchment, 5f);
                 EnsureTrim(titleBar.transform, UITheme.GoldDim, 5f, 0f);
 
-                var pip = Part(root, "TitleBar/ReadyPip");
-                UITheme.Round(pip, UITheme.Gold, 4.5f); // A square with softly rounded corners, a plate rather than a coin
-                EnsureTrim(pip.transform, UITheme.Ink, 4.5f, 0f);
+                // The Deployment Time coin, over the top-left corner: the hand's cards overlap from the right
+                var pip = root.transform.Find("ReadyPip") != null ? Part(root, "ReadyPip") : Part(root, "TitleBar/ReadyPip");
+                var pipRect = pip.rectTransform;
+                pipRect.SetParent(root.transform, false);
+                pipRect.anchorMin = pipRect.anchorMax = new Vector2(0f, 1f);
+                pipRect.pivot = new Vector2(0.5f, 0.5f);
+                pipRect.sizeDelta = new Vector2(30f, 30f);
+                pipRect.anchoredPosition = new Vector2(13f, -14f);
+                pipRect.SetAsLastSibling();
+                UITheme.Round(pip, UITheme.Gold, 32f / 30f); // Corners half its size: a coin
+                EnsureTrim(pip.transform, UITheme.Ink, 32f / 30f, 0f);
+                UITheme.AddHardShadow(pip, 2f);
+                var readyText = Part<TextMeshProUGUI>(root, "ReadyPip/ReadyText");
+                UITheme.Stretch(readyText.rectTransform, 0f);
+                readyText.alignment = TextAlignmentOptions.Center;
+                readyText.fontStyle = FontStyles.Bold;
+                readyText.enableAutoSizing = false;
+                readyText.fontSize = 19f;
+                var nameRect = Part<TextMeshProUGUI>(root, "TitleBar/NameText").rectTransform;
+                nameRect.offsetMin = new Vector2(20f, nameRect.offsetMin.y); // Clear of the coin
+                nameRect.offsetMax = new Vector2(-4f, nameRect.offsetMax.y);
 
                 var artFrame = Part(root, "ArtFrame");
                 UITheme.Round(artFrame, UITheme.Ink, 8f);
@@ -114,7 +133,7 @@ namespace SlayTheClone {
                 EnsureTrim(statsBox.transform, UITheme.Ink, 3f, 0f);
                 UITheme.AddHardShadow(statsBox, 2f);
 
-                foreach (var path in new[] { "TitleBar/NameText", "TitleBar/ReadyPip/ReadyText", "TypeBar/TypeText", "TextBox/RulesText", "StatsBox/StatsText" }) {
+                foreach (var path in new[] { "TitleBar/NameText", "ReadyPip/ReadyText", "TypeBar/TypeText", "TextBox/RulesText", "StatsBox/StatsText" }) {
                     var text = Part<TextMeshProUGUI>(root, path);
                     text.color = UITheme.Ink;
                     text.transform.SetAsLastSibling(); // Above the trims

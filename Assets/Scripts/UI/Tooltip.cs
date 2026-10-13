@@ -114,6 +114,7 @@ namespace SlayTheClone {
         // Tracking the active card
         private CardController activeCard;
         private CardController preview;
+        private bool previewIsCard; // A card in your hand is raised out of the fan instead (Slay the Spire): it's its own preview
 
         private void Awake() {
             // Try to get references if not already assigned
@@ -212,10 +213,16 @@ namespace SlayTheClone {
             canvasGroup.alpha = 1;
             gameObject.SetActive(true);
 
-            preview = card.CreatePreview(transform);
-            if (preview != null) {
-                preview.transform.localScale = Vector3.one * PreviewScale;
-                PlacePreview(card, (RectTransform)preview.transform);
+            if (card.GetComponentInParent<HandUI>() != null) {
+                preview = card; // The hand raises it, enlarged; its explanations open beside it
+                previewIsCard = true;
+            }
+            else {
+                preview = card.CreatePreview(transform);
+                if (preview != null) {
+                    preview.transform.localScale = Vector3.one * PreviewScale;
+                    PlacePreview(card, (RectTransform)preview.transform);
+                }
             }
             UpdateTooltipContent(card);
         }
@@ -281,10 +288,9 @@ namespace SlayTheClone {
             CloseKeywordsFrom(0);
             released = false;
             activeCard = null;
-            if (preview != null) {
-                Destroy(preview.gameObject);
-                preview = null;
-            }
+            if (preview != null && !previewIsCard) Destroy(preview.gameObject);
+            preview = null;
+            previewIsCard = false;
             canvasGroup.alpha = 0;
             gameObject.SetActive(false);
         }
@@ -305,19 +311,24 @@ namespace SlayTheClone {
 
         // To the right of the preview, or to its left when there is no room
         private void PlaceDetailsBesidePreview() {
-            var corners = new Vector3[4];
-            ((RectTransform)preview.transform).GetWorldCorners(corners); // Overlay canvas: world space is screen pixels
+            var shown = PreviewScreenRect();
             tooltipRect.pivot = new Vector2(0f, 1f);
-            tooltipRect.position = new Vector2(corners[2].x + PreviewGap, corners[2].y);
+            tooltipRect.position = new Vector2(shown.xMax + PreviewGap, shown.yMax);
 
+            var corners = new Vector3[4];
             tooltipRect.GetWorldCorners(corners);
             if (corners[2].x > Screen.width) {
-                ((RectTransform)preview.transform).GetWorldCorners(corners);
                 tooltipRect.pivot = new Vector2(1f, 1f);
-                tooltipRect.position = new Vector2(corners[0].x - PreviewGap, corners[1].y);
+                tooltipRect.position = new Vector2(shown.xMin - PreviewGap, shown.yMax);
             }
             KeepOnScreen(tooltipRect);
         }
+
+        // Where the enlarged card is on screen: the copy on this overlay, or the raised hand card on the table's canvas
+        private Rect PreviewScreenRect() =>
+            previewIsCard ? CardScreenRect(preview) ?? default : ScreenRect((RectTransform)preview.transform);
+
+        private Camera PreviewCamera => previewIsCard && preview != null ? CanvasUtility.GetEventCamera(preview) : null;
 
         private static void KeepOnScreen(RectTransform rect) {
             var corners = new Vector3[4];
@@ -369,8 +380,11 @@ namespace SlayTheClone {
         /// <summary>The keywords whose explanations are open, from the card outwards.</summary>
         public List<string> OpenKeywords => keywordPopups.Select(p => p.Key).ToList();
 
-        /// <summary>The enlarged card shown, if any.</summary>
+        /// <summary>The enlarged card shown, if any: a copy, or the hand card itself, raised out of the fan.</summary>
         public CardController Preview => preview;
+
+        /// <summary>The card whose explanation is shown, if any.</summary>
+        public CardController ActiveCard => activeCard;
 
         /// <summary>The explanation open for this keyword, if any: its text, whose keywords can be hovered in turn.</summary>
         public TMP_Text KeywordText(string key) => keywordPopups.FirstOrDefault(p => p.Key == key)?.Body;
@@ -415,7 +429,7 @@ namespace SlayTheClone {
         /// <summary>Whether the pointer is right on the preview or an open explanation (or the card itself), no margin.</summary>
         public bool PointerOnTooltip(Vector2 pointer, bool includeCard = false) {
             if (preview == null) return false;
-            if (keywordPopups.Any(p => ScreenRect(p.Rect).Contains(pointer)) || ScreenRect((RectTransform)preview.transform).Contains(pointer)) return true;
+            if (keywordPopups.Any(p => ScreenRect(p.Rect).Contains(pointer)) || PreviewScreenRect().Contains(pointer)) return true;
             return includeCard && CardScreenRect(activeCard) is Rect card && card.Contains(pointer);
         }
 
@@ -429,7 +443,7 @@ namespace SlayTheClone {
         /// </summary>
         public bool PointerInArea(Vector2 pointer) {
             if (activeCard == null || preview == null) return false;
-            var areas = keywordPopups.Select(p => ScreenRect(p.Rect)).Append(ScreenRect((RectTransform)preview.transform)).ToList();
+            var areas = keywordPopups.Select(p => ScreenRect(p.Rect)).Append(PreviewScreenRect()).ToList();
             var card = CardScreenRect(activeCard);
             if (card.HasValue) areas.Add(card.Value);
             return areas.Any(r => Rect.MinMaxRect(r.xMin - AreaMargin, r.yMin - AreaMargin, r.xMax + AreaMargin, r.yMax + AreaMargin).Contains(pointer));
@@ -457,12 +471,12 @@ namespace SlayTheClone {
                 if (RectTransformUtility.RectangleContainsScreenPoint(keywordPopups[i].Rect, pointer, null)) over = i;
             }
             var previewRect = (RectTransform)preview.transform;
-            if (over == -2 && RectTransformUtility.RectangleContainsScreenPoint(previewRect, pointer, null)) over = -1;
+            if (over == -2 && RectTransformUtility.RectangleContainsScreenPoint(previewRect, pointer, PreviewCamera)) over = -1;
             if (over == -2) return false;
 
             TMP_Text text = over == -1 ? preview.RulesText : keywordPopups[over].Body;
             RectTransform parent = over == -1 ? previewRect : keywordPopups[over].Rect;
-            int link = text != null ? TMP_TextUtilities.FindIntersectingLink(text, pointer, null) : -1;
+            int link = text != null ? TMP_TextUtilities.FindIntersectingLink(text, pointer, over == -1 ? PreviewCamera : null) : -1;
             if (link < 0) return true;
 
             string key = text.textInfo.linkInfo[link].GetLinkID();
@@ -480,10 +494,11 @@ namespace SlayTheClone {
             // level with the keyword. It never covers the preview or another popup, so the pointer can always reach it
             var info = parentText.textInfo.linkInfo[linkIndex];
             var character = parentText.textInfo.characterInfo[info.linkTextfirstCharacterIndex];
-            float linkTop = parentText.transform.TransformPoint(character.topLeft).y + 8f;
+            float linkTop = RectTransformUtility.WorldToScreenPoint(CanvasUtility.GetEventCamera(parentText),
+                parentText.transform.TransformPoint(character.topLeft)).y + 8f;
             var size = new Vector2(popup.Rect.rect.width * popup.Rect.lossyScale.x, popup.Rect.rect.height * popup.Rect.lossyScale.y);
-            var shown = keywordPopups.Select(p => ScreenRect(p.Rect)).Append(ScreenRect((RectTransform)preview.transform)).ToList();
-            var from = ScreenRect(parent);
+            var shown = keywordPopups.Select(p => ScreenRect(p.Rect)).Append(PreviewScreenRect()).ToList();
+            var from = index == 0 ? PreviewScreenRect() : ScreenRect(parent);
             float level = Mathf.Clamp(linkTop, size.y, Screen.height);
             float left = shown.Min(r => r.xMin), right = shown.Max(r => r.xMax);
             var candidates = new List<Vector2>(); // Top-left corners

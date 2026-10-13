@@ -39,6 +39,12 @@ namespace SlayTheClone {
         private Canvas parentCanvas;
         private CanvasGroup canvasGroup;
         private Vector3 originalPosition;
+        // Dragging, Slay the Spire style: the card trails the pointer a touch behind and leans into the way it's moving
+        private const float DragFollow = 24f;        // How fast it catches up (per second, exponential)
+        private const float DragLeanPerSpeed = 1.6f; // Degrees per world unit a second of sideways speed
+        private const float MaxDragLean = 16f;
+        private Vector3 dragTarget;
+        private float dragLean;
         private Transform originalParent;
         private bool isDragging;
         /// <summary>The card being dragged, if any: while the player is doing something, no tooltip opens.</summary>
@@ -196,7 +202,8 @@ namespace SlayTheClone {
             string armorPart = armor > 0 ? $"<color=#2f7fc1>+{armor}</color>" : "";
             statsText.text = $"{attack}/{speed}/{health}{armorPart}";
             readyText.text = turnsUntilOperative.ToString();
-            readyPip.SetActive(turnsUntilOperative > 0); // Deployment Time 0 is the default, so it isn't shown
+            // A card shows its Deployment Time, 0 included (the coin on its corner); a creature on the board only while it counts down
+            readyPip.SetActive(!isLive || turnsUntilOperative > 0);
         }
 
         // Rules text always fits: the text box auto-sizes its font down to its minimum.
@@ -288,6 +295,8 @@ namespace SlayTheClone {
 
             originalPosition = transform.position;
             originalParent = transform.parent;
+            dragTarget = transform.position;
+            dragLean = 0f;
             isDragging = true;
             Dragged = this;
             canvasGroup.blocksRaycasts = false;
@@ -307,14 +316,27 @@ namespace SlayTheClone {
                 eventData.position,
                 parentCanvas.worldCamera,
                 out Vector2 localPoint)) {
-                transform.position = parentCanvas.transform.TransformPoint(localPoint);
+                dragTarget = parentCanvas.transform.TransformPoint(localPoint); // It follows in Update
             }
+        }
+
+        private void Update() {
+            if (!isDragging) return;
+            float dt = Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
+            var before = transform.position;
+            transform.position = Vector3.Lerp(before, dragTarget, 1f - Mathf.Exp(-DragFollow * dt));
+            float speed = (transform.position.x - before.x) / dt;
+            float lean = Mathf.Clamp(-speed * DragLeanPerSpeed, -MaxDragLean, MaxDragLean);
+            dragLean = Mathf.Lerp(dragLean, lean, 1f - Mathf.Exp(-14f * dt));
+            transform.localRotation = Quaternion.Euler(0f, 0f, dragLean);
         }
 
         public void OnEndDrag(PointerEventData eventData) {
             if (!isDragging) return;
 
             isDragging = false;
+            transform.position = dragTarget; // Where the pointer let go
+            transform.localRotation = Quaternion.identity;
             if (Dragged == this) Dragged = null;
             canvasGroup.blocksRaycasts = true;
 
@@ -539,25 +561,31 @@ namespace SlayTheClone {
         }
 
         /// <summary>
-        /// Detaches the card, flies it to a point, flashes it and destroys it. Used when a spell resolves.
+        /// Slay the Spire's cast: the card leaps out of the hand to the point, straightening and swelling with a little
+        /// overshoot, holds a beat, then snaps shut into a burst of light and is gone. Used when a spell resolves.
         /// </summary>
         public void PlayCastAnimation(Transform flyRoot, Vector3 worldTarget, float delay = 0f) {
             SetQueued(false);
             canvasGroup.blocksRaycasts = false;
             Tooltip.Existing?.HideTooltip();
+            DOTween.Kill(transform);
 
+            float unit = CardFx.UnitOf(transform.parent, flyRoot);
             transform.SetParent(flyRoot, true);
             transform.SetAsLastSibling();
             worldTarget.z = transform.position.z;
-            Vector3 baseScale = transform.localScale;
+            Vector3 shown = transform.localScale * 1.25f;
 
             DOTween.Sequence().SetTarget(transform)
                 .AppendInterval(delay)
-                .Append(transform.DOMove(worldTarget, 0.35f).SetEase(Ease.OutCubic))
-                .Join(transform.DOScale(baseScale * 1.35f, 0.35f).SetEase(Ease.OutBack))
-                .AppendInterval(0.25f)
-                .Append(FadeTo(0f, 0.25f))
-                .Join(transform.DOScale(baseScale * 1.6f, 0.25f))
+                .Append(transform.DOMove(worldTarget, 0.3f).SetEase(Ease.OutCubic))
+                .Join(transform.DORotate(Vector3.zero, 0.3f).SetEase(Ease.OutCubic))
+                .Join(transform.DOScale(shown, 0.3f).SetEase(Ease.OutBack))
+                .Append(transform.DOPunchScale(shown * 0.08f, 0.22f, 6, 0.5f))
+                .AppendCallback(() => CardFx.Burst(flyRoot, transform.position, 0.12f, unit))
+                .Append(transform.DOScale(shown * 0.15f, 0.2f).SetEase(Ease.InBack))
+                .Join(transform.DORotate(new Vector3(0f, 0f, -30f), 0.2f))
+                .Join(FadeTo(0f, 0.2f).SetEase(Ease.InQuad))
                 .OnComplete(() => Destroy(gameObject));
         }
 

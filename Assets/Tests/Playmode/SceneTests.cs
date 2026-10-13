@@ -376,12 +376,14 @@ namespace SlayTheClone.Tests {
             yield return null;
             SceneGame.Hover(Shown(bolt));
             yield return null;
-            Assert.AreEqual(HandUI.YourHandScale, Shown(bolt).transform.localScale.x, 0.01f, "Your hand shows its cards big, Slay the Spire size");
-            Assert.AreEqual(0f, Mathf.DeltaAngle(0f, Shown(bolt).transform.localEulerAngles.z), 0.01f, "The hovered card rises out of the fan, straight");
             Assert.IsNull(SceneGame.HoverPreview(), "Not at once: the pointer may only be passing over the card");
             yield return SceneGame.PreviewShows();
             var preview = SceneGame.HoverPreview();
             Assert.IsNotNull(preview, "Hovering a queued spell shows it enlarged, once the pointer rests on it");
+            Assert.AreSame(Shown(bolt), preview, "In your hand the card itself rises out of the fan, instead of a copy");
+            Assert.AreEqual(HandUI.RaisedScale, preview.transform.localScale.x, 0.01f, "...enlarged...");
+            Assert.AreEqual(0f, Mathf.DeltaAngle(0f, preview.transform.localEulerAngles.z), 0.01f, "...and straight");
+            Assert.Greater(game.HandCards(p1).First(c => c != preview).transform.localScale.x, 1.5f, "The others are big too, Slay the Spire size");
             Assert.AreSame(bolt, preview.GetLinkedCardInstance());
             Assert.IsTrue(preview.IsSpellShaped, "A spell is shaped as one: rounded, with an oval art window");
             Assert.IsFalse(game.HandCards(p1).First(c => c.GetBaseCardData() is CreatureData).IsSpellShaped, "...a creature isn't");
@@ -402,7 +404,8 @@ namespace SlayTheClone.Tests {
             CollectionAssert.AreEqual(new[] { "Exhausted", "Day" }, tooltip.OpenKeywords, "Another keyword of the same explanation replaces it");
             tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Exhausted"));
             CollectionAssert.AreEqual(new[] { "Exhausted", "Day" }, tooltip.OpenKeywords, "Passing back over the same keyword keeps everything open");
-            Assert.IsTrue(tooltip.PointerInArea(tooltip.Preview.transform.position + new Vector3(0f, 0f, 0f)), "The area includes the enlarged card...");
+            var onCard = RectTransformUtility.WorldToScreenPoint(CanvasUtility.GetEventCamera(tooltip.Preview), tooltip.Preview.transform.position);
+            Assert.IsTrue(tooltip.PointerInArea(onCard), "The area includes the enlarged card...");
             tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Random"));
             CollectionAssert.AreEqual(new[] { "Random" }, tooltip.OpenKeywords, "...and another keyword on the card starts a new chain");
             Assert.IsFalse(tooltip.ClickAt(SceneGame.KeywordPoint(tooltip.KeywordText("Random"), "Heat Signature")), "A click on an explanation keeps it open");
