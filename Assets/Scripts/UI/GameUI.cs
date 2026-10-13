@@ -147,6 +147,10 @@ namespace SlayTheClone {
             if (!IsInitialized) return;
             if (GameInput.KeyPressed(FogOfWar.ToggleKey)) FogOfWar.Toggle();
             if (GameInput.KeyPressed(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
+            if (GameInput.KeyPressed(AIController.SwitchSeatsKey)) {
+                AIController.SwitchSeats();
+                ShowFogOfWarState();
+            }
         }
 
         // Every view redraws what it may show, and the screen's player sits at the bottom
@@ -158,10 +162,11 @@ namespace SlayTheClone {
             gameMediator.NotifyActionsQueueChanged();
         }
 
-        /// <summary>The note under the End Turn button: the debug switches' state, and the keyboard shortcuts.</summary>
+        /// <summary>The note under the End Turn button: the debug switches' state, the seats the AI plays, and the keyboard shortcuts.</summary>
         public string ShortcutsText =>
             $"FOG OF WAR {(FogOfWar.Enabled ? "ON" : "OFF")} ({FogOfWar.ToggleKey})\n" +
             (FogOfWar.PlaysAsPlayer1 ? $"{FogOfWar.SwitchSidesKey}: PLAY AS PLAYER 2" : $"PLAYING AS PLAYER 2 ({FogOfWar.SwitchSidesKey})") +
+            $"\nAI PLAYS: {AIController.SeatsText} ({AIController.SwitchSeatsKey})" +
             "\n<size=85%><color=#B8B0A0>Esc: menu  ·  Shift + drag: use an ability</color></size>";
 
         // Always shown under the End Turn button: whether the fog is on, whose view it is, and the other shortcuts
@@ -173,7 +178,7 @@ namespace SlayTheClone {
                 var rect = shortcutsLabel.rectTransform;
                 rect.anchorMin = rect.anchorMax = new Vector2(1f, 0f); // Lined up with the button's right edge: it stays on screen
                 rect.pivot = new Vector2(1f, 1f);
-                rect.sizeDelta = new Vector2(420f, 80f);
+                rect.sizeDelta = new Vector2(420f, 104f);
                 rect.anchoredPosition = new Vector2(0f, -6f);
                 shortcutsLabel.raycastTarget = false;
             }

@@ -149,8 +149,12 @@ namespace SlayTheClone {
         /// <summary>The player whose view the screen shows.</summary>
         public static IPlayer ViewerOf(IPlayer anyPlayer) => anyPlayer == null || anyPlayer.IsPlayer1 == PlaysAsPlayer1 ? anyPlayer : anyPlayer.Opponent;
 
-        /// <summary>Whether the screen may use this player's cards: only the viewer's, unless the fog is off (hot-seat debugging).</summary>
-        public static bool CanControl(IPlayer owner) => !Enabled || owner == null || owner.IsPlayer1 == PlaysAsPlayer1;
+        /// <summary>
+        /// Whether the screen may use this player's cards: only the viewer's, unless the fog is off (hot-seat debugging); never
+        /// those of a seat the AI plays.
+        /// </summary>
+        public static bool CanControl(IPlayer owner) =>
+            !MatchSetup.PlayedByAI(owner) && (!Enabled || owner == null || owner.IsPlayer1 == PlaysAsPlayer1);
 
         /// <summary>The other side's hand shows only card backs.</summary>
         public static bool HidesHandOf(IPlayer owner) => Enabled && owner != null && owner.IsPlayer1 != PlaysAsPlayer1;

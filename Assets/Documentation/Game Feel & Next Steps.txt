@@ -48,7 +48,10 @@ Humour as feel (the satire is our identity: make it talk)
 2. NEXT STEPS (roughly in order)
 
 A. An opponent that plays back [L] — the biggest blocker
-• Today the game is hot-seat. Most other features (balance, runs, onboarding) need an AI.
+• DONE (proof of concept, 2026-10-13): Scripts/AI. AIPlanner plans a side's Day through the same plays, attacks and Active abilities a drag queues: creatures to the best free slots (a much better one replaces a weak one), each spell where a rough value of its effects is highest (any slot for aimed spells, homing on your own incoming creatures; skipped when nothing gains), Bodyguard / Wannabe / Identity Theft / Credit Grab when worth it, then each attack where it kills the most, else at the player through an empty slot. It plays under Fog of War: unknown enemy creatures are guessed at (2/3), hidden Slot Effects ignored, no peeking at the other hand or plans.
+• AIController plugs it in: at each Dawn it plans every seat the AI plays (MatchSetup.AI), so its intents are on the table before yours; AI vs AI also ends the turns (1 s pause to watch). The match setup offers You vs AI (default), Hot seat, AI vs AI; F7 in game hands seats over (off, Player 2, both, Player 1) and the screen shows your seat. The AI's cards can't be dragged.
+• Tested: every deck on offer is played by the AI on both sides (4 Days in the suite; a 15-Day soak ended 5 of 6 games, Day 9-12, no errors).
+• Not yet: moving creatures, Shell Game, keeping Watchdogs for later, look-ahead, personalities (weights), the GDD 6 "script of intents" for enemies.
 • GDD 6 says the AI has no hand: it plays a script of intents. Start there: each opponent gets a deck + a simple scripted policy (play creatures in empty slots, aim spells at the biggest threat, attack the slot in front, keep Watchdogs for when it has 2+ creatures).
 • It must play under Fog of War (Intel already enforces this for Watchdogs): it reacts only to what it can see.
 • Then: personalities per opponent (aggressive, defensive, trap-heavy) via weights, not new code.
@@ -80,5 +83,5 @@ Open decisions that block some of this (see 'Open Questions'): own decks vs pair
 
 3. SUGGESTED NEXT 3 STEPS
 1. Sound + resolution playback pacing + floating numbers (one session; the biggest feel improvement for the effort).
-2. A scripted AI opponent good enough to lose to (unblocks everything else).
-3. The AI vs AI balance tournament, then fix the worst decks.
+2. A scripted AI opponent good enough to lose to: a first version is in (see A); next, moves and personalities.
+3. The AI vs AI balance tournament (the AI can now play every deck), then fix the worst decks.

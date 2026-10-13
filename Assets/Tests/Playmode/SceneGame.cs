@@ -101,6 +101,8 @@ namespace SlayTheClone.Tests {
                 framesUncapped = false;
             }
             MatchSetup.Clear(); // A chosen match would otherwise carry over to the next test
+            FogOfWar.PlaysAsPlayer1 = true; // Handing a seat to the AI may have switched the screen to the other one
+            AIController.TurnPause = 1f;
             Cards.Dispose();
         }
 

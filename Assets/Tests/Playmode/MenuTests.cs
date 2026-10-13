@@ -186,7 +186,7 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
-        public IEnumerator YourOwnDeck_MixingFactions_IsKept_OfferedOnceComplete_AndStartBeginsTheGame_WithIt_TheOpponentAndTheirDeck() {
+        public IEnumerator YourOwnDeck_MixingFactions_IsKept_OfferedOnceComplete_AndStartBeginsTheGame_WithIt_TheOpponentAndTheirDeck_TheAIPlayingTheSeatsChosen() {
             Click(TitleButton(MainMenu.DecksButtonName));
             var builder = Object.FindFirstObjectByType<DeckBuilderMenu>();
             Assert.IsTrue(builder.IsOpen, "Decks opens the deck builder");
@@ -250,8 +250,16 @@ namespace SlayTheClone.Tests {
             Click(SetupButton(MatchSetupMenu.PlayerDeckButton + yourDeck.GetDeckName()));
             Click(SetupButton(MatchSetupMenu.OpponentButton + opponent.name));
             Click(SetupButton(MatchSetupMenu.OpponentDeckButton + theirDeck.GetDeckName()));
+            Assert.AreEqual(AISeats.Player2, setup.AI, "You play against the AI unless you choose otherwise");
+            Click(SetupButton(MatchSetupMenu.SeatsButtonName));
+            Assert.AreEqual(AISeats.None, setup.AI, "...then hot seat...");
+            Click(SetupButton(MatchSetupMenu.SeatsButtonName));
+            Assert.AreEqual(AISeats.Both, setup.AI, "...then the AI against itself");
+            StringAssert.Contains("AI vs AI", SetupButton(MatchSetupMenu.SeatsButtonName).GetComponentInChildren<TMPro.TMP_Text>().text);
 
+            AIController.TurnPause = 0.1f;
             yield return game.Start(Seed, () => Click(SetupButton(MatchSetupMenu.StartButtonName)));
+            Assert.AreEqual(AISeats.Both, MatchSetup.AI);
 
             SceneGame.AssertPlays(game.Player1, yourDeck);
             SceneGame.AssertPlays(game.Player2, theirDeck);
@@ -259,9 +267,25 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(yourDeck, game.References.Player1Deck);
             Assert.AreSame(theirDeck, game.References.Player2Deck);
             foreach (var player in game.Players) {
-                Assert.AreEqual(5, player.Hand.Count, $"{player.Name} should start with a full hand");
+                // A spell that only shows something resolves as soon as the AI plays it
+                Assert.AreEqual(5, player.Hand.Count + player.Deck.GetDiscardPilePreview().Count, $"{player.Name} should start with a full hand");
                 GameAsserts.AssertEachCardInOneZone(player);
+                Assert.IsFalse(FogOfWar.CanControl(player), "The AI's cards aren't yours to use");
             }
+
+            int day = game.Turns.TurnNumber;
+            var cardCounts = game.Players.ToDictionary(p => p, GameAsserts.CountCards);
+            yield return Wait.For(() => game.Turns.TurnNumber >= day + 2 && !game.Turns.IsResolving, "the AI to play two Days by itself");
+
+            AIController.SwitchSeats(); // F7: you take Player 2 back
+            Assert.AreEqual(AISeats.Player1, MatchSetup.AI);
+            Assert.IsFalse(FogOfWar.PlaysAsPlayer1, "The screen shows your seat");
+            Assert.IsTrue(FogOfWar.CanControl(game.Player2) && !FogOfWar.CanControl(game.Player1));
+            day = game.Turns.TurnNumber;
+            yield return new WaitForSecondsRealtime(0.5f);
+            Assert.AreEqual(day, game.Turns.TurnNumber, "With a seat of yours, you end the turn");
+            foreach (var player in game.Players) Assert.AreEqual(cardCounts[player], GameAsserts.CountCards(player), $"{player.Name} lost or gained cards");
+            GameAsserts.AssertBoardsConsistent(game.Player1, game.Player2);
             game.AssertViewsMatchRules();
 
             var cards = yourDeck.Cards.Select(c => c.cardName).ToList();
@@ -272,12 +296,12 @@ namespace SlayTheClone.Tests {
         }
 
         /// <summary>
-        /// Every deck on offer plays all its creatures, spells and attacks for several turns without an error, while
-        /// the screen keeps showing what the rules hold and no card is lost, duplicated or in two places.
+        /// Every deck on offer is played by the AI on both sides for several turns without an error, while the screen keeps
+        /// showing what the rules hold and no card is lost, duplicated or in two places; the AI plays cards and attacks.
         /// Each game pits two decks against each other, so half as many games as decks cover them all.
         /// </summary>
         [UnityTest]
-        public IEnumerator EveryDeckOnOffer_PlaysSeveralTurns_WithTheScreenInStepWithTheRules() {
+        public IEnumerator EveryDeckOnOffer_PlayedByTheAI_ForSeveralTurns_WithTheScreenInStepWithTheRules() {
             var decks = catalog.AllDecks; // The test decks too
             for (int i = 0; i < decks.Count; i += 2) {
                 var yourDeck = decks[i];
@@ -287,8 +311,18 @@ namespace SlayTheClone.Tests {
                 SceneGame.AssertPlays(game.Player2, theirDeck);
 
                 var cardCounts = game.Players.ToDictionary(p => p, GameAsserts.CountCards);
-                for (int turn = 1; turn <= 3; turn++) {
-                    foreach (var player in game.Players) PlayEverything(player);
+                var ai = new AIPlanner(game.Queue, game.Manager.CombatHandler);
+                var played = game.Players.ToDictionary(p => p, p => 0);
+                var attacked = game.Players.ToDictionary(p => p, p => 0);
+                for (int turn = 1; turn <= Turns; turn++) {
+                    foreach (var player in game.Players) {
+                        int discarded = player.Deck.GetDiscardPilePreview().Count;
+                        ai.PlanDay(player);
+                        var plans = game.Queue.GetPendingActions();
+                        played[player] += plans.OfType<PlayCardAction>().Count(p => p.GetOwner() == player)
+                            + player.Deck.GetDiscardPilePreview().Count - discarded; // Spells that only show something resolve at once
+                        attacked[player] += plans.OfType<BattlefieldCombatAction>().Count(a => a.GetAttacker().Owner == player);
+                    }
                     yield return null;
                     game.AssertViewsMatchRules(); // Queued plays: ghosts on the boards, spells marked in the hands
 
@@ -303,8 +337,14 @@ namespace SlayTheClone.Tests {
                     game.AssertViewsMatchRules();
                     if (game.Players.Any(p => p.Health == 0)) break;
                 }
+                foreach (var player in game.Players) {
+                    Assert.Greater(played[player], 0, $"{yourDeck.GetDeckName()} vs {theirDeck.GetDeckName()}: the AI played none of {player.Name}'s cards");
+                    Assert.Greater(attacked[player], 0, $"{yourDeck.GetDeckName()} vs {theirDeck.GetDeckName()}: the AI never attacked with {player.Name}'s creatures");
+                }
             }
         }
+
+        private const int Turns = 4;
 
         #region Helpers
         private IEnumerator OpenSetup() {
@@ -361,17 +401,6 @@ namespace SlayTheClone.Tests {
             }
         }
 
-        // Creatures go to free slots; spells are dropped on the opponent's first slot, or on your own for spells that help you
-        private void PlayEverything(Player player) {
-            game.PlayCreatures(player);
-            foreach (var spell in player.Hand.OfType<Spell>().ToList()) {
-                bool helpsYou = spell.DefaultTargetType is TargetType.FriendlyCreatures or TargetType.Player;
-                game.Play(spell, player, (helpsYou ? player : player.Opponent).Battlefield[0]);
-            }
-            foreach (var slot in player.Battlefield.Where(s => s.IsOccupied())) {
-                game.Attack(slot.OccupyingCreature, player.Opponent.Battlefield[slot.Index]);
-            }
-        }
         #endregion
     }
 }

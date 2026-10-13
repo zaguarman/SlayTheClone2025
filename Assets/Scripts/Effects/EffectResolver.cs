@@ -152,7 +152,8 @@ namespace SlayTheClone {
             return creature != null ? new HomingTarget(creature, slot) : slot;
         }
 
-        private static ICreature IncomingCreature(BoardSlot slot, IActionsQueue queue) {
+        /// <summary>The creature queued to be summoned into this slot this Day, if any.</summary>
+        public static ICreature IncomingCreature(BoardSlot slot, IActionsQueue queue) {
             if (queue == null) return null;
             foreach (var action in queue.GetPendingActions()) {
                 if (action is PlayCardAction play && play.GetTarget() == slot && play.GetCard() is ICreature played) return played;
@@ -218,14 +219,14 @@ namespace SlayTheClone {
         // A chosen target is used as is, unless the effect picks its own targets (random or every one of a kind).
         // Only effects that can land on creatures are aimed by it: drawing and summoning always go to the player
         // their target type names, wherever the card was dropped.
-        private static bool UsesChosenTarget(EffectAction action) {
+        public static bool UsesChosenTarget(EffectAction action) {
             if (IsSideWide(action)) return false;
             bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
             return !picksOwnTargets && (CanAffectCreatures(action.actionType) || IsSlotAction(action.actionType));
         }
 
         // Slot Effects aim at the slot itself (Static, GDD 4.6): they never follow a creature
-        private static bool IsSlotAction(ActionType actionType) => actionType is ActionType.PlaceSlotEffect or ActionType.CleanseSlot or ActionType.Reveal;
+        public static bool IsSlotAction(ActionType actionType) => actionType is ActionType.PlaceSlotEffect or ActionType.CleanseSlot or ActionType.Reveal;
 
         private static ITarget SlotOf(ITarget target) => target switch {
             HomingTarget homing => homing.AimedSlot,
@@ -273,7 +274,8 @@ namespace SlayTheClone {
         private static bool IsSideWide(EffectAction action) =>
             action.actionType is ActionType.CreateWatchdog or ActionType.Reveal && action.targetType is TargetType.Player or TargetType.Enemy;
 
-        private static bool CanAffectPlayers(ActionType actionType) =>
+        /// <summary>Whether this kind of effect can land on a player (aimed at an empty slot, it lands on that side's player).</summary>
+        public static bool CanAffectPlayers(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog or ActionType.Reveal;
         #endregion
 

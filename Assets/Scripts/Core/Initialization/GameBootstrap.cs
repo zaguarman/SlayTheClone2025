@@ -58,6 +58,9 @@ namespace SlayTheClone {
             turnManager.SetPresenter(presenter);
             Log("ResolutionPresenter initialized", LogTag.Initialization);
 
+            // 6. The AI, for the seats it plays
+            AIController.Create(gameReferences.transform).Initialize(gameManager, gameMediator);
+
             Log("--- Game Initialization Sequence Complete ---", LogTag.Initialization);
         }
 

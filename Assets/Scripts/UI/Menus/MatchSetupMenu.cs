@@ -9,7 +9,8 @@ using static SlayTheClone.MenuWidgets;
 
 namespace SlayTheClone {
     /// <summary>
-    /// The screen between the title and the game: pick your deck, the opponent you face and the deck they bring.
+    /// The screen between the title and the game: pick your deck, the opponent you face and the deck they bring, and who
+    /// plays: you against the AI, both players on this screen (hot seat), or the AI against itself.
     /// Picking an opponent also picks their own deck, which can then be swapped for any other.
     /// Its buttons are built from the <see cref="DeckCatalog"/>, so new decks and opponents only need adding there, and the
     /// decks you made in the deck builder once complete (<see cref="PlayerDecks"/>), below the starter decks. It's built anew
@@ -23,6 +24,7 @@ namespace SlayTheClone {
         public const string OpponentDeckButton = "OpponentDeck: ";
         public const string StartButtonName = "StartButton";
         public const string BackButtonName = "BackButton";
+        public const string SeatsButtonName = "SeatsButton";
 
         [SerializeField] private DeckCatalog catalog;
         [SerializeField] private GameObject titleScreen; // Hidden while choosing
@@ -37,12 +39,15 @@ namespace SlayTheClone {
         public DeckScriptableObject PlayerDeck { get; private set; }
         public DeckCatalog.Opponent Opponent { get; private set; }
         public DeckScriptableObject OpponentDeck { get; private set; }
+        /// <summary>The seats the AI plays: your opponent's unless chosen otherwise.</summary>
+        public AISeats AI { get; private set; } = AISeats.Player2;
         /// <summary>Every deck either side can play: the starter and test decks, then your own complete ones.</summary>
         public IReadOnlyList<DeckScriptableObject> Decks => catalog.AllDecks.Concat(PlayerDecks.Playable(catalog)).ToList();
 
         private GameObject panel;
         private bool wasTyping;
         private TextMeshProUGUI summaryText;
+        private TextMeshProUGUI seatsLabel;
         private readonly List<(Button button, Func<bool> isSelected, ScrollRect list)> choiceButtons = new List<(Button, Func<bool>, ScrollRect)>();
 
         #region Choosing
@@ -76,6 +81,7 @@ namespace SlayTheClone {
         private void Close() {
             choiceButtons.Clear();
             summaryText = null;
+            seatsLabel = null;
             if (panel == null) return;
             panel.SetActive(false);
             panel.transform.SetParent(null, false); // Gone from the menu at once; destroyed at the end of the frame
@@ -104,8 +110,24 @@ namespace SlayTheClone {
         public void StepOpponent(int steps) => SelectOpponent(WheelStepper.Next(catalog.Opponents, Opponent, steps));
         public void StepOpponentDeck(int steps) => SelectOpponentDeck(WheelStepper.Next(Decks, OpponentDeck, steps));
 
+        /// <summary>Who plays, in turn: you against the AI, hot seat, the AI against itself.</summary>
+        public void StepSeats() {
+            AI = AI switch {
+                AISeats.Player2 => AISeats.None,
+                AISeats.None => AISeats.Both,
+                _ => AISeats.Player2
+            };
+            Refresh();
+        }
+
+        private string SeatsName => AI switch {
+            AISeats.None => "Hot seat",
+            AISeats.Both => "AI vs AI",
+            _ => "You vs AI"
+        };
+
         public void StartMatch() {
-            MatchSetup.Choose(PlayerDeck, OpponentName, OpponentDeck);
+            MatchSetup.Choose(PlayerDeck, OpponentName, OpponentDeck, AI);
             Log($"Match chosen: {PlayerDeck.GetDeckName()} vs {MatchSetup.OpponentName} ({OpponentDeck.GetDeckName()})", LogTag.UI);
             MatchChosen?.Invoke();
         }
@@ -118,6 +140,7 @@ namespace SlayTheClone {
                 PlayerDeck = MatchSetup.PlayerDeck;
                 Opponent = catalog.Opponents.FirstOrDefault(o => o.name == MatchSetup.OpponentName);
                 OpponentDeck = MatchSetup.OpponentDeck;
+                AI = MatchSetup.AI;
                 return;
             }
 
@@ -133,9 +156,12 @@ namespace SlayTheClone {
                 if (chosen) KeepInView(list, (RectTransform)button.transform); // A long column follows the choice
             }
             if (summaryText != null && PlayerDeck != null && OpponentDeck != null) {
-                summaryText.text = $"You, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{PlayerDeck.GetDeckName()}</color>"
-                    + $"   vs   {OpponentName}, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{OpponentDeck.GetDeckName()}</color>";
+                string you = AI.HasFlag(AISeats.Player1) ? "The AI" : "You";
+                string them = AI.HasFlag(AISeats.Player2) ? $"{OpponentName} (AI)" : OpponentName;
+                summaryText.text = $"{you}, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{PlayerDeck.GetDeckName()}</color>"
+                    + $"   vs   {them}, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{OpponentDeck.GetDeckName()}</color>";
             }
+            if (seatsLabel != null) seatsLabel.text = SeatsName;
         }
         #endregion
 
@@ -164,6 +190,7 @@ namespace SlayTheClone {
 
             var footer = AddFooter(panel.transform);
             AddButton(footer, BackButtonName, "Back", BackWidth, Hide);
+            seatsLabel = AddButton(footer, SeatsButtonName, SeatsName, BackWidth, StepSeats).GetComponentInChildren<TextMeshProUGUI>();
             var start = AddButton(footer, StartButtonName, "<b>Start</b>", 360, StartMatch);
             UITheme.StyleButton(start, UITheme.ButtonKind.Primary);
             start.GetComponentInChildren<TextMeshProUGUI>().fontStyle = FontStyles.Bold | FontStyles.SmallCaps;
