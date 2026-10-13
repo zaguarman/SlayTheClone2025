@@ -15,7 +15,7 @@ namespace SlayTheClone {
     public static class CardTextFormatter {
 
         public static string GetTypeLine(CardData data) {
-            string type = data is SpellData ? EffectResolver.IsWorld(data.effects) ? "World" : "Spell" : "Creature";
+            string type = data is SpellData ? EffectResolver.IsTrend(data.effects) ? "Trend" : "Spell" : "Creature";
             return data.faction == Faction.None ? type : $"{type} — {FactionName(data.faction)}";
         }
 
@@ -260,10 +260,10 @@ namespace SlayTheClone {
                     return $"{target} trades places with the creature to its right";
                 case ActionType.GrantAbility:
                     return $"{target} gains {AbilityName(action.ability)}";
-                case ActionType.SetWorld: // "The World becomes Rush Hour [sand watch]3"
-                    return action.world == World.None
-                        ? $"the {Keywords.Link("World")} ends"
-                        : $"the {Keywords.Link("World")} becomes {Keywords.Link(WorldSystem.NameOf(action.world))}{DaysTag(action.statusDuration)}";
+                case ActionType.SetTrend: // "Trending: Rush Hour [sand watch]3"
+                    return action.trend == Trend.None
+                        ? $"the {Keywords.Link("Trend")} ends"
+                        : $"{Keywords.Link("Trend", "trending")}: {Keywords.Link(TrendSystem.NameOf(action.trend))}{DaysTag(action.statusDuration)}";
                 case ActionType.PlaceSlotEffect:
                     return $"{DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
                 case ActionType.CleanseSlot:

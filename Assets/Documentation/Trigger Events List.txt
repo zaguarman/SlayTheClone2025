@@ -129,9 +129,9 @@ OnDeckReshuffle: Player-level trigger. Triggers when the player's draw deck is r
 
 Environment & Global State:
 
-OnWorldChange(oldWorld, newWorld): Global trigger, can affect all creatures or players. Triggers when the World in play changes (a new one, or the old one running out).
-    oldWorld: The previous World (or none).
-    newWorld: The World now in play (or none).
+OnTrendChange(oldTrend, newTrend): Global trigger, can affect all creatures or players. Triggers when the Trend changes (a new one, or the old one running out).
+    oldTrend: The previous Trend (or none).
+    newTrend: The Trend now in play (or none).
 
 OnTrapActivated(trapDetails, activatingEntity): Triggers when a trap (card-based or slot-based) is sprung. (This is a generic trap trigger; Watchdogs (GDD 3.11 Instant Effects) and Counter-Intelligence Traps (GDD 5.1 Traps & Strategic Disclosures) are more specialized interactions with the queue or reveals).
     trapDetails: Information about the trap that was triggered.

@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'Mechanics test: the stat copy as a spell. Target creature copies
     the Attack, Health and Speed of the creature facing it.'

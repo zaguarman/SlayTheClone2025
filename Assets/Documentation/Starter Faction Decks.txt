@@ -160,8 +160,8 @@ Spells
     • YOLO: Target creature gets +4 Attack for this Day; 2 damage to you.
         • Future: Banished at Dusk.
     • This Is Fine: Each friendly creature gets +2 Health, then 2 damage to each creature.
-        • Future: a World.
-    • Zeitgeist (World, 3 Days): each Day, whoever has fewer creatures draws 1 more card.
+        • Future: a Trend.
+    • Zeitgeist (Trend, 3 Days): each Day, whoever has fewer creatures draws 1 more card.
     • Strike: Stun every creature on both sides for 1 turn.
         • Future: a Strike that stops Each Dawn engines.
     • Russian Roulette: 4 damage to a random creature (either side).
@@ -186,8 +186,8 @@ Creatures (Attack/Health/Speed, Deployment Time)
     • Digital Nomad (Digital Society, 2/2/2, 0): Leapfrog.
     • Work Shift Rotation (Corporate, 2/3/1, 1): Handover. Buff it, then summon over it: the next shift keeps the buffs.
     • Chain Smoker (Zeitgeist, 2/5/2, 1): Recoil (+2 damage on its attacks, 1 damage to itself after each).
-    • Zeitgeist (Zeitgeist World, 3 Days): each Day, whoever has fewer creatures draws 1 more card.
-    • Rush Hour (Zeitgeist World, 3 Days): the slowest act first. Not in the Zeitgeist starter deck (it's full): only here and in the deck builder.
+    • Zeitgeist (Zeitgeist Trend, 3 Days): each Day, whoever has fewer creatures draws 1 more card.
+    • Rush Hour (Zeitgeist Trend, 3 Days): the slowest act first. Not in the Zeitgeist starter deck (it's full): only here and in the deck builder.
     • New mechanics (2026-10-13), each on one card. The faction ones aren't in their starter decks (full): only here and in the deck builder.
         • Golden Dome (Statecraft, 0/6/2, 1): Bodyguard. Can't attack; dragged onto another friendly creature, that one is Untouchable this Day, then a Day of Cooldown.
         • Presidential Pardon (Statecraft spell): Untouchable on target (this Day).

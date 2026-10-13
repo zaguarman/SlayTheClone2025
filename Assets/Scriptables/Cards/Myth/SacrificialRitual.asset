@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
     - actionType: 2
       value: 2
@@ -69,7 +69,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: '5 damage to a random friendly creature, then draw 2. Future: Myth''s
     sacrifice cost (destroy a friendly creature).'

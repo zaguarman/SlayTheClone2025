@@ -82,8 +82,8 @@ namespace SlayTheClone {
         // CreateWatchdog Specific: statusDuration is its Days (0 = until its charges are used)
         public WatchdogSpec watchdog;
 
-        // SetWorld Specific: the World it puts in play; statusDuration is its Days (0 = until another World replaces it)
-        public World world = World.None;
+        // SetTrend Specific: the Trend it makes trending; statusDuration is its Days (0 = until another Trend replaces it)
+        [UnityEngine.Serialization.FormerlySerializedAs("world")] public Trend trend = Trend.None;
 
         // GrantAbility Specific: the ability the target gains, replacing its own until its card is reshuffled
         public CreatureAbility ability = CreatureAbility.None;

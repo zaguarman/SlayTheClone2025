@@ -7,7 +7,7 @@ namespace SlayTheClone {
     public class GameUI : MonoBehaviour {
         public bool IsInitialized { get; private set; }
 
-        private WorldController worldController;
+        private TrendController trendController;
         private TurnUI turnUI;
         private DeckViewController deckViewController;
 
@@ -108,9 +108,9 @@ namespace SlayTheClone {
         }
 
         private void InitializeControllers() {
-            worldController = GetOrAddComponent<WorldController>();
-            worldController.Initialize(gameMediator, gameManager, gameReferences.GetWeatherCycleButton(), gameReferences.GetWeatherText());
-            LogControllerInitialized("World controller", worldController.IsInitialized);
+            trendController = GetOrAddComponent<TrendController>();
+            trendController.Initialize(gameMediator, gameManager, gameReferences.GetWeatherCycleButton(), gameReferences.GetWeatherText());
+            LogControllerInitialized("Trend controller", trendController.IsInitialized);
 
             deckViewController = GetOrAddComponent<DeckViewController>();
             deckViewController.Initialize(gameMediator, gameManager,

@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'Temporal Shield for 3 Days on a slot: the creature there takes no
     combat damage. Stays with the slot.'

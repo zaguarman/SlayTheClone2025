@@ -69,26 +69,26 @@ namespace SlayTheClone.Tests {
             game.Summon(p1, game.Creature("Crowd", 1, 1), 4);
             var sketchbook = game.GiveCard(p1, game.Spell("Sketchbook", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 2, TargetType.Player)));
             game.Play(sketchbook, p1, p1.Battlefield[0]);
-            // The Zeitgeist World: each Day whoever has fewer creatures draws 1 more card. Played on either side, it's everyone's
-            var zeitgeistCard = game.Spell("Zeitgeist", TargetType.Player, TestCards.WorldEffect(World.Zeitgeist, 2));
+            // The Zeitgeist Trend: each Day whoever has fewer creatures draws 1 more card. Played on either side, it's everyone's
+            var zeitgeistCard = game.Spell("Zeitgeist", TargetType.Player, TestCards.TrendEffect(Trend.Zeitgeist, 2));
             var zeitgeist = game.GiveCard(p2, zeitgeistCard);
             game.Play(zeitgeist, p2, p1.Battlefield[1]);
 
             yield return game.EndTurn();
 
-            Assert.AreEqual(World.Zeitgeist, game.WorldSystem.Current, "A World for 2 Days lasts this Day and the next");
-            Assert.AreEqual("World", CardTextFormatter.GetTypeLine(zeitgeistCard), "A card that only sets a World is a World");
+            Assert.AreEqual(Trend.Zeitgeist, game.TrendSystem.Current, "A Trend for 2 Days lasts this Day and the next");
+            Assert.AreEqual("Trend", CardTextFormatter.GetTypeLine(zeitgeistCard), "A card that only sets a Trend is a Trend");
             foreach (var player in new[] { p1, p2 }) {
                 int drawn = player == p1 ? 7 : 6; // The underdog (no creatures) draws 1 more
                 Assert.AreEqual(drawn, player.Hand.Count, "A draw resolved during the Day comes with the next Day's hand, not into the hand about to be discarded");
                 CollectionAssert.IsEmpty(player.Hand.Intersect(firstHands[player]), "The old hand should have been discarded");
                 Assert.AreEqual(20 - 5 - drawn, player.Deck.CardsRemaining);
             }
-            Assert.AreEqual(6, p2.Deck.GetDiscardPilePreview().Count, "Its 5 cards and the World it played");
+            Assert.AreEqual(6, p2.Deck.GetDiscardPilePreview().Count, "Its 5 cards and the Trend it played");
             Assert.AreEqual(0, p1.ExtraDraws, "The owed cards were drawn");
 
             yield return game.EndTurn();
-            Assert.AreEqual(World.None, game.WorldSystem.Current, "Over after its last Day's Dusk");
+            Assert.AreEqual(Trend.None, game.TrendSystem.Current, "Over after its last Day's Dusk");
             Assert.AreEqual(5, p2.Hand.Count, "No more extra card");
         }
     }

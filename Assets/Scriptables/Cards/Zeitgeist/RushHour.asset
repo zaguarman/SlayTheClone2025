@@ -45,9 +45,9 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 2
+      trend: 2
       ability: 0
-  designNotes: 'World for 3 Days: the slowest act first, wherever Speed decides the
+  designNotes: 'Trend for 3 Days: the slowest act first, wherever Speed decides the
     order (like a room where the order is flipped).'
   artDescription: Gridlocked traffic at dusk, every car honking, while a snail with
     a briefcase glides past in the empty bus lane.

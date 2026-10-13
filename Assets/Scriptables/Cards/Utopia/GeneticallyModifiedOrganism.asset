@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   - effectType: 0
     trigger: 4
@@ -73,7 +73,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: +2/+2 for good when it enters; the side effects cost it 1 Health each
     Dusk.

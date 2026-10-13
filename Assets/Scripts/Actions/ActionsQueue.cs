@@ -101,14 +101,14 @@ namespace SlayTheClone {
         #region Constructor
         public ActionsQueue(
             IGameMediator gameMediator,
-            IWorldSystem worldSystem,
+            ITrendSystem trendSystem,
             ICardDealingService cardDealingService,
             IModifierManager modifierManager,
             ITurnClock turnClock,
             Dictionary<Type, IActionExecutor> actionExecutors) {
             this.gameMediator = gameMediator ?? throw new ArgumentNullException(nameof(gameMediator));
             this.actionExecutors = actionExecutors ?? throw new ArgumentNullException(nameof(actionExecutors));
-            executionContext = new ActionExecutionContext(gameMediator, cardDealingService, worldSystem, modifierManager, this, turnClock);
+            executionContext = new ActionExecutionContext(gameMediator, cardDealingService, trendSystem, modifierManager, this, turnClock);
 
             Log("ActionsQueue initialized with Strategy Executors.", LogTag.Initialization);
         }
@@ -159,7 +159,7 @@ namespace SlayTheClone {
             if (a.Source == b.Source) return a.Sequence.CompareTo(b.Sequence); // A creature's actions keep their order
 
             int bySpeed = b.Source.Speed.CompareTo(a.Source.Speed);
-            if (executionContext.WorldSystem.SlowestFirst) bySpeed = -bySpeed; // Rush Hour
+            if (executionContext.TrendSystem.SlowestFirst) bySpeed = -bySpeed; // Rush Hour
             if (bySpeed != 0) return bySpeed;
             int byToughness = (a.Source.Health + a.Source.CurrentArmorPool).CompareTo(b.Source.Health + b.Source.CurrentArmorPool);
             if (byToughness != 0) return byToughness;

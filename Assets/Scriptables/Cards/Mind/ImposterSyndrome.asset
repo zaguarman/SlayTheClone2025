@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: '-2 Attack for good. Future: the Imposter Syndrome status.'
   artDescription: A little space crewmate in a spacesuit and visor sitting at an

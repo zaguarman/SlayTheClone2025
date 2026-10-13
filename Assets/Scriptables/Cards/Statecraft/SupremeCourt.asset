@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'Return to Sender: enemy statuses bounce back to whoever sent them.
     Future: Fortifying. Adjacent friendly creatures can''t be moved by enemy effects.'

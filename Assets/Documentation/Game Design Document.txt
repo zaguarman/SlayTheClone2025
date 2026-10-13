@@ -740,10 +740,10 @@ Movement Restriction
     • What They Do: Deal damage, apply status effects to creatures in the slot, change stats while on the slot, change movement rules (e.g., make moving out harder or impossible), or restrict actions (e.g., a "Jamming Field" stops Spells from targeting the slot).
     • Removing Slot Effects: Effects with the Cleanse (SlotEffect) keyword remove them. A hidden Slot Effect cleansed before it triggers is removed without its effect and without being revealed to the AI (unless the cleanse itself reveals it). The 'Slot Effects Compendium' says which Slot Effects can be cleansed.
 
-• Worlds: Cards that set one rule for the whole board, for the Days they print (no number: until another World replaces them). One World at a time: a new one replaces the old. A World card plays on either side of the table and resolves with the spells, so it already rules this Day's attacks. It's Zeitgeist's signature (the mood of the times changes the rules for everyone). A World sits in a banner in the middle of the table, with its Days left and its rule; the banner is hidden while there's none.
-    • Zeitgeist (World): each Day, whoever has fewer creatures draws 1 more card, on top of the Day's hand (a tie: nobody).
-    • Rush Hour (World): the slowest act first. Lower Speed goes first wherever Speed decides the order (summons, abilities and attacks); the other tie-breakers stay as they are.
-    • The effect that sets a World works on any card (a spell, a creature's trigger); a card that only sets a World is a "World" on its type line.
+• Trends: what the world is into right now. Cards that set one rule for the whole board (printed "Trending: Rush Hour"), for the Days they print (no number: until another Trend replaces them). One Trend at a time: a new one replaces the old. A Trend card plays on either side of the table and resolves with the spells, so it already rules this Day's attacks. It's Zeitgeist's signature (the mood of the times changes the rules for everyone). A Trend sits in a banner in the middle of the table, with its Days left and its rule; the banner is hidden while there's none.
+    • Zeitgeist (Trend): each Day, whoever has fewer creatures draws 1 more card, on top of the Day's hand (a tie: nobody).
+    • Rush Hour (Trend): the slowest act first. Lower Speed goes first wherever Speed decides the order (summons, abilities and attacks); the other tie-breakers stay as they are.
+    • The effect that sets a Trend works on any card (a spell, a creature's trigger); a card that only sets a Trend is a "Trend" on its type line.
 
 • Flooding: Overwhelming the board with many weak or token creatures.
 

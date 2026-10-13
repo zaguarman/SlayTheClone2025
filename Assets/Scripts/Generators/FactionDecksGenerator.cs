@@ -426,16 +426,16 @@ namespace SlayTheClone {
                 "Mechanics test: Leapfrog jumps over creatures to an empty slot; if its landing slot is taken, it stops at the closest empty slot on the way.")
                 .With(MovementKeyword.Leapfrog)
                 .Picture("A rider with a huge square thermal backpack, mid-hop over a gridlocked row of cars, phone strapped to the handlebars showing a 1-star rating."),
-            // Worlds (GDD 4.2) are Zeitgeist's signature: the mood of the times sets the rules for everyone
+            // Trends (GDD 4.2) are Zeitgeist's signature: the mood of the times sets the rules for everyone
             Spell("Zeitgeist", TargetType.Player,
                 "Everyone agrees. Nobody remembers deciding.",
-                "World for 3 Days: each Day, whoever has fewer creatures draws 1 more card. The mood of the times backs the underdog (Zeitgeist's comebacks).",
-                SetWorld(World.Zeitgeist, 3))
+                "Trend for 3 Days: each Day, whoever has fewer creatures draws 1 more card. The mood of the times backs the underdog (Zeitgeist's comebacks).",
+                SetTrend(Trend.Zeitgeist, 3))
                 .Picture("A huge friendly ghost made of hashtags and likes floating over a crowd whose faces are lit blue by their phones."),
             Spell("Rush Hour", TargetType.Player,
                 "Fastest way home: don't.",
-                "World for 3 Days: the slowest act first, wherever Speed decides the order (like a room where the order is flipped).",
-                SetWorld(World.RushHour, 3))
+                "Trend for 3 Days: the slowest act first, wherever Speed decides the order (like a room where the order is flipped).",
+                SetTrend(Trend.RushHour, 3))
                 .NotInStarterDeck()
                 .Picture("Gridlocked traffic at dusk, every car honking, while a snail with a briefcase glides past in the empty bus lane."),
         };
@@ -978,10 +978,10 @@ namespace SlayTheClone {
             return action;
         }
 
-        // A World card: the whole board's rule for this many Days (GDD 4.2)
-        private static EffectAction SetWorld(World world, int days) {
-            var action = Act(ActionType.SetWorld, 0, TargetType.Player, TargetModifier.None);
-            action.world = world;
+        // A Trend card: the whole board's rule for this many Days (GDD 4.2)
+        private static EffectAction SetTrend(Trend trend, int days) {
+            var action = Act(ActionType.SetTrend, 0, TargetType.Player, TargetModifier.None);
+            action.trend = trend;
             action.statusDuration = days;
             return action;
         }

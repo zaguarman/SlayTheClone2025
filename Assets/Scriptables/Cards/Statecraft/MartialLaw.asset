@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
     - actionType: 5
       value: 1
@@ -69,7 +69,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'Future: a Law (Location) for 3 Days. The stun stands in for the bureaucracy
     drawback.'

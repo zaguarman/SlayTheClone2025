@@ -8,7 +8,7 @@ namespace SlayTheClone {
         public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, Zeitgeist, Mind, Utopia }
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
         public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie } // New triggers go last: cards store them as numbers
-        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetWorld,
+        public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetTrend,
             CopyStats, StealStatChanges, SwapPositions, GrantAbility } // Renamed Buff to ModifyStat
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
@@ -69,8 +69,8 @@ namespace SlayTheClone {
             Chained = 1 << 3,
         }
 
-        // Worlds (GDD 4.2): one rule for the whole board, for some Days, until another World replaces it. New ones go last
-        public enum World {
+        // Trends (GDD 4.2): what the world is into right now, one rule for the whole board for some Days, until another Trend replaces it. New ones go last
+        public enum Trend {
             None,
             Zeitgeist, // Each Day, whoever has fewer creatures draws 1 more card
             RushHour   // The slowest act first

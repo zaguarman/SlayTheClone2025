@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
     - actionType: 2
       value: 1
@@ -69,7 +69,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'Future: Capital cost (discard 2 cards). Placeholder cost: the enemy
     draws a card. Plays in Prosperity Gospel.'

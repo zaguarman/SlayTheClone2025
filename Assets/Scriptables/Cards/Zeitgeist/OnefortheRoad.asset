@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 25
   designNotes: 'Mechanics test: an ability as a spell. Target creature gains Double
     Tap (it attacks twice), replacing its own until its card is reshuffled.'

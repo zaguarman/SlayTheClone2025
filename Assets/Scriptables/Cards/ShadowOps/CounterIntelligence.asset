@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 1
         pick: 1
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'Mechanics test: a Briefing Watchdog (GDD 3.11). From the Day after
     it''s created, before anything resolves, it redirects the strongest enemy attack

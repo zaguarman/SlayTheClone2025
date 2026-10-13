@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   - effectType: 0
     trigger: 1
@@ -73,7 +73,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'Mechanics test: its entry effect waits for Deployment Time; dooming
     itself makes a planned sacrifice that grows stronger; its OnDied effect fires

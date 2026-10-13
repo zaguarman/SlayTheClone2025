@@ -235,8 +235,8 @@ namespace SlayTheClone {
                 case RevealAction reveal:
                     return $"{PlayerName(reveal.Viewer, viewer)} {(reveal.Viewer == viewer ? "look" : "looks")} at " +
                            (reveal.Slot != null ? SlotName(reveal.Slot, viewer) : $"{PlayerName(reveal.Side, viewer)}'s Watchdogs");
-                case SetWorldAction world:
-                    return $"The World becomes {WorldSystem.NameOf(world.World)}";
+                case SetTrendAction trend:
+                    return $"Now trending: {TrendSystem.NameOf(trend.Trend)}";
                 default:
                     string name = action.GetType().Name;
                     return name.EndsWith("Action") ? name.Substring(0, name.Length - "Action".Length) : name;

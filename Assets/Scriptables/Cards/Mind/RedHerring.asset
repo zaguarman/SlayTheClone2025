@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'A misleading Monitored Watchdog: the next enemy attack is redirected
     to a random creature. 1 charge.'

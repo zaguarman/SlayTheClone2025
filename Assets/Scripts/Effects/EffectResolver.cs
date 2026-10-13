@@ -183,12 +183,12 @@ namespace SlayTheClone {
                 || (a.actionType == ActionType.ApplyStatus && a.statusEffectToApply == StatusEffectType.Revealed));
         }
 
-        /// <summary>A World card: all it does is put a World in play (GDD 4.2), so it plays on either side of the table.</summary>
-        public static bool IsWorld(Spell spell) => spell != null && IsWorld(spell.Effects);
+        /// <summary>A Trend card: all it does is set what's trending (GDD 4.2), so it plays on either side of the table.</summary>
+        public static bool IsTrend(Spell spell) => spell != null && IsTrend(spell.Effects);
 
-        public static bool IsWorld(IEnumerable<CardEffect> effects) {
+        public static bool IsTrend(IEnumerable<CardEffect> effects) {
             var actions = effects?.SelectMany(e => e.actions).ToList();
-            return actions != null && actions.Count > 0 && actions.All(a => a.actionType == ActionType.SetWorld);
+            return actions != null && actions.Count > 0 && actions.All(a => a.actionType == ActionType.SetTrend);
         }
 
         /// <summary>Whether where the spell is dropped decides what at least one of its effects lands on.</summary>
@@ -200,7 +200,7 @@ namespace SlayTheClone {
         /// so dropping it on that battlefield plays it. One that only does things to itself plays on its caster's side.
         /// </summary>
         public static bool Reaches(Spell spell, IPlayer caster, IPlayer side) {
-            if (IsWorld(spell)) return true; // A World is the whole board's: it plays on either side
+            if (IsTrend(spell)) return true; // A Trend is the whole board's: it plays on either side
             var sides = spell.Effects.SelectMany(e => e.actions).SelectMany(a => SidesOf(a.targetType, caster)).ToList();
             return sides.Count == 0 ? side == caster : sides.Contains(side);
         }
@@ -344,8 +344,8 @@ namespace SlayTheClone {
                     return creature != null ? new SwapPositionsAction(creature) : null;
                 case ActionType.GrantAbility:
                     return creature != null && action.ability != CreatureAbility.None ? new GrantAbilityAction(creature, action.ability) : null;
-                case ActionType.SetWorld: // The whole board's: it doesn't matter where it lands
-                    return new SetWorldAction(action.world, action.statusDuration, controller);
+                case ActionType.SetTrend: // The whole board's: it doesn't matter where it lands
+                    return new SetTrendAction(action.trend, action.statusDuration, controller);
                 case ActionType.DelayDeployment: // Red Tape: value is the Days added
                     return creature != null && action.value > 0 ? new DelayDeploymentAction(creature, action.value) : null;
                 default:

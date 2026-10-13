@@ -42,10 +42,10 @@ namespace SlayTheClone.Tests {
             };
         }
 
-        /// <summary>A World card's effect: puts the World in play for this many Days (GDD 4.2).</summary>
-        public static CardEffect WorldEffect(Enums.World world, int days) {
-            var effect = Effect(EffectTrigger.OnPlay, ActionType.SetWorld, 0, TargetType.Player);
-            effect.actions[0].world = world;
+        /// <summary>A Trend card's effect: sets what's trending for this many Days (GDD 4.2).</summary>
+        public static CardEffect TrendEffect(Enums.Trend trend, int days) {
+            var effect = Effect(EffectTrigger.OnPlay, ActionType.SetTrend, 0, TargetType.Player);
+            effect.actions[0].trend = trend;
             effect.actions[0].statusDuration = days;
             return effect;
         }

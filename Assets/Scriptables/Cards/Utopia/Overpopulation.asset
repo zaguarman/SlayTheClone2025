@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: Summon 2 random creatures from your deck.
   artDescription: A tiny Earth with people crammed all over it like a full elevator,

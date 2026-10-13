@@ -65,7 +65,7 @@ namespace SlayTheClone.Tests {
             using (var g = new TestGame()) {
                 var fast = g.Summon(g.Player1, g.Creature("Fast", 5, 3, speed: 2), 0);
                 var slow = g.Summon(g.Player2, g.Creature("Slow", 5, 3), 0);
-                var rushHour = g.GiveCard(g.Player2, g.Spell("Rush Hour", TargetType.Player, TestCards.WorldEffect(World.RushHour, 1)));
+                var rushHour = g.GiveCard(g.Player2, g.Spell("Rush Hour", TargetType.Player, TestCards.TrendEffect(Trend.RushHour, 1)));
                 g.Declare(fast, g.Player2.Battlefield[0]);
                 g.Declare(slow, g.Player1.Battlefield[0]);
                 g.ActionsQueue.AddAction(new PlayCardAction(rushHour, g.Player2, null)); // Spells land before attacks
@@ -73,7 +73,7 @@ namespace SlayTheClone.Tests {
                 Assert.IsTrue(fast.IsDead, "Rush Hour: the slowest act first");
                 Assert.AreEqual(3, slow.Health);
                 g.StartTurn();
-                Assert.AreEqual(Enums.World.None, g.WorldSystem.Current, "A World for 1 Day ends at its Dusk");
+                Assert.AreEqual(Enums.Trend.None, g.TrendSystem.Current, "A Trend for 1 Day ends at its Dusk");
             }
             using (var g = new TestGame()) {
                 var tough = g.Summon(g.Player1, g.Creature("Tough", 5, 5), 0);

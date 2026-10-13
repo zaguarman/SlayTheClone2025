@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'Mechanics test: Doomed on either side. It wipes other statuses and
     blocks new ones, gives +1 permanent Attack each Dawn (it stays on the card),

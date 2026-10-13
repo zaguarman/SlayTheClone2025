@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
     - actionType: 7
       value: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: Draw 3, and a random friendly creature is Doomed.
   artDescription: 'A shriveled, mummified monkey''s paw held up in a purple room,

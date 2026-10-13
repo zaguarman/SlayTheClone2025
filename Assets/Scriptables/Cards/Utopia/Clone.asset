@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: 'When it enters, summon a random creature from your deck. Future:
     Clone (copies a friendly creature).'

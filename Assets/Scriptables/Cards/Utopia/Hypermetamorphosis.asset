@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: '+1/+1 for good each Dawn. Future: Evolution (each step unlocks an
     ability).'

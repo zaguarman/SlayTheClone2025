@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
     - actionType: 0
       value: 2
@@ -69,7 +69,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      world: 0
+      trend: 0
       ability: 0
   designNotes: '3 damage to the creature and its neighbors; 2 damage to you (side
     effects). Future: Black Hole repositioning.'

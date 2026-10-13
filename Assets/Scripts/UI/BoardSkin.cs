@@ -7,7 +7,7 @@ namespace SlayTheClone {
     /// <summary>
     /// Dresses the game scene as a card table (see <see cref="UITheme"/>): a patterned table whose two halves take
     /// their owners' faction colors, a brass rule between them, each side's mat and slot markers, a plaque per player
-    /// with a health bar, and the turn, End Turn, World and pile controls placed around the edges of whatever screen
+    /// with a health bar, and the turn, End Turn, Trend and pile controls placed around the edges of whatever screen
     /// shape the camera shows. Only rearranges and decorates what the scene already has; the views keep doing the work.
     /// <para>
     /// Dressing finds what an earlier dressing made instead of making it again, so it is baked into the scene in the
@@ -25,7 +25,7 @@ namespace SlayTheClone {
         private RectTransform player1Side;
         private RectTransform player2Side;
         private RectTransform turnBanner;
-        private RectTransform worldBanner;
+        private RectTransform trendBanner;
         private RectTransform endTurnButton;
         private RectTransform deckButton;
         private RectTransform discardButton;
@@ -80,7 +80,7 @@ namespace SlayTheClone {
             player2Plaque.Show(player2Name, player2Faction, references.Player2Deck);
             StyleTurnBanner(FindFirstObjectByType<TurnUI>(FindObjectsInactive.Include));
             StyleEndTurn(references.GetResolveActionsButton());
-            StyleWorldBanner(references.GetWeatherText());
+            StyleTrendBanner(references.GetWeatherText());
             deckButton = StylePileButton(references.GetDeckViewButton(), flip: true);
             discardButton = StylePileButton(references.GetDiscardViewButton(), flip: false);
             StyleDeckView(references.GetDeckViewUI());
@@ -260,33 +260,33 @@ namespace SlayTheClone {
             }
         }
 
-        // The World banner (see WorldController), a pill in the middle of the table; it's hidden while no World is in play
-        private void StyleWorldBanner(TextMeshProUGUI worldText) {
-            if (worldText == null) return;
+        // The Trend banner (see TrendController), a pill in the middle of the table; it's hidden while nothing is trending
+        private void StyleTrendBanner(TextMeshProUGUI trendText) {
+            if (trendText == null) return;
 
-            worldBanner = FindOrCreate(canvasRoot, WorldController.BannerName, () => {
-                var pill = UITheme.NewImage(WorldController.BannerName, canvasRoot, UITheme.Panel);
-                pill.rectTransform.localScale = worldText.transform.lossyScale;
+            trendBanner = FindOrCreate(canvasRoot, TrendController.BannerName, () => {
+                var pill = UITheme.NewImage(TrendController.BannerName, canvasRoot, UITheme.Panel);
+                pill.rectTransform.localScale = trendText.transform.lossyScale;
                 return pill.rectTransform;
             });
-            worldBanner.sizeDelta = new Vector2(680f, 54f);
-            UITheme.StylePanel(worldBanner.GetComponent<Image>(), trim: UITheme.GoldDim);
+            trendBanner.sizeDelta = new Vector2(680f, 54f);
+            UITheme.StylePanel(trendBanner.GetComponent<Image>(), trim: UITheme.GoldDim);
 
-            if (worldText.transform.parent != worldBanner) {
-                worldText.transform.SetParent(worldBanner, false);
-                worldText.transform.localScale = Vector3.one;
-                worldText.transform.localPosition = Vector3.zero;
+            if (trendText.transform.parent != trendBanner) {
+                trendText.transform.SetParent(trendBanner, false);
+                trendText.transform.localScale = Vector3.one;
+                trendText.transform.localPosition = Vector3.zero;
             }
-            worldText.rectTransform.anchorMin = Vector2.zero;
-            worldText.rectTransform.anchorMax = Vector2.one;
-            worldText.rectTransform.offsetMin = new Vector2(18f, 2f);
-            worldText.rectTransform.offsetMax = new Vector2(-18f, -2f);
-            worldText.alignment = TextAlignmentOptions.Center;
-            worldText.enableAutoSizing = true;
-            worldText.fontSizeMin = 14;
-            worldText.fontSizeMax = 24;
-            worldText.color = UITheme.Parchment;
-            worldText.fontStyle = FontStyles.Italic;
+            trendText.rectTransform.anchorMin = Vector2.zero;
+            trendText.rectTransform.anchorMax = Vector2.one;
+            trendText.rectTransform.offsetMin = new Vector2(18f, 2f);
+            trendText.rectTransform.offsetMax = new Vector2(-18f, -2f);
+            trendText.alignment = TextAlignmentOptions.Center;
+            trendText.enableAutoSizing = true;
+            trendText.fontSizeMin = 14;
+            trendText.fontSizeMax = 24;
+            trendText.color = UITheme.Parchment;
+            trendText.fontStyle = FontStyles.Italic;
         }
 
         // A little stack of card backs beside the label, on the outer side (flip puts it on the right)
@@ -372,7 +372,7 @@ namespace SlayTheClone {
             PlaceAtLeft(player1Plaque != null ? (RectTransform)player1Plaque.transform : null, left, mat1.center.y);
             PlaceAtLeft(player2Plaque != null ? (RectTransform)player2Plaque.transform : null, left, mat2.center.y);
             PlaceAtLeft(turnBanner, left, riverY);
-            if (worldBanner != null) PlaceAt(worldBanner, center.x, riverY);
+            if (trendBanner != null) PlaceAt(trendBanner, center.x, riverY);
             PlaceAtRight(endTurnButton, right, riverY);
 
             float handY = WorldBounds((player1AtBottom ? player1Hand : player2Hand).transform).center.y;
