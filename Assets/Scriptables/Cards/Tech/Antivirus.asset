@@ -46,7 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
   designNotes: 'Mechanics test: a Watchdog (GDD 3.11). It''s created when the spell
-    resolves and, On Watch, nullifies the next enemy spell before it resolves, even
+    resolves and, Monitored, nullifies the next enemy spell before it resolves, even
     one planned before it existed. 1 charge.'
   artDescription: 'A panda in shining knight''s armor, an antivirus logo on its shield,
     blocking a glowing spell scroll at a castle gate, while the castle walls behind

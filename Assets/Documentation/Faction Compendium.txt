@@ -125,7 +125,7 @@ Utopia: Science & the Future
 
 • Control Change: Myth (Conversion), Statecraft (Recruitment), Shadow Ops. (Brainwashed). Nobody else; it's the most complex system, so it stays rare.
 • Watchdogs, Briefing (set up in advance): Primary Shadow Ops.; secondary Statecraft (Red Tape).
-• Watchdogs, On Watch (during resolution): Primary Tech; secondary Mind.
+• Watchdogs, Monitored (during resolution): Primary Tech; secondary Mind.
 • Speed boosts and first strikes: Primary Statecraft; secondary Tech.
 • Revealing Information: Primary Shadow Ops.; secondary Tech, Digital Society.
 • Concealment and Fake Intents: Primary Shadow Ops.; secondary Mind.

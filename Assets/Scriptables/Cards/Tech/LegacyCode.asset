@@ -19,7 +19,7 @@ MonoBehaviour:
   faction: 5
   artwork: {fileID: 3286163911610860551, guid: 81fa0861df810294ba861859be63b9d9, type: 3}
   effects: []
-  designNotes: 'Mechanics test: Unpatchable. Enemy effects can''t lower its stats,
+  designNotes: 'Mechanics test: Cold Storage. Enemy effects can''t lower its stats,
     and Zero-Day can''t get around it.'
   artDescription: 'A beige mainframe held together with duct tape in a dusty basement,
     a yellowed sticky note on it: "DO NOT TOUCH - Gary (retired 1999)", and cobwebs

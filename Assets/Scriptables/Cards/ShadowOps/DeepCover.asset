@@ -18,10 +18,36 @@ MonoBehaviour:
   cardType: 0
   faction: 3
   artwork: {fileID: 3286163911610860551, guid: 31ed4f675e1ad56498840a495ed8d8fb, type: 3}
-  effects: []
+  effects:
+  - effectType: 0
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 5
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 6
+      statusDuration: 3
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
   designNotes: 'Mechanics test: Identity Theft, an active ability: hold Shift while
     dragging it onto a creature to swap abilities with it. It''s its action for the
-    Day.'
+    Day. It arrives Concealed for 3 Days.'
   artDescription: Two men facing each other in front of a mirror, each peeling off
     a latex mask of the other's face.
   attack: 2

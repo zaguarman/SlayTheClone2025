@@ -20,7 +20,7 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: 0f5d243527a4b4a46968af753009858b, type: 3}
   effects: []
   designNotes: 'Mechanics test: Zero-Day. Its attacks and effects ignore the target''s
-    defensive abilities (Unbothered, No U, Return to Sender...), except Unpatchable.'
+    defensive abilities (Unbothered, No U, Return to Sender...), except Cold Storage.'
   artDescription: A twelve-year-old in an oversized gaming chair, hoodie up, double-clicking
     "H4CK3R T00L.exe" while a bank vault door swings open on his second monitor.
   attack: 2

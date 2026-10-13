@@ -50,8 +50,8 @@ namespace SlayTheClone {
         /// <summary>Temporal Shield: the creature standing on it takes no combat damage.</summary>
         public static bool BlocksCombatDamage(ICreature creature) => creature?.Slot?.Effect?.Type == SlotEffectType.TemporalShield;
 
-        /// <summary>Scorched Earth: the triggered effects of the creature standing on it don't happen, entry effects included.
-        /// Its ability isn't affected (abilities and effects are different things, 'Abilities Compendium').</summary>
+        /// <summary>Scorched Earth: the triggered effects of the creature standing on it don't happen, entry effects included,
+        /// and its ability is switched off (see Abilities). It can still move and attack.</summary>
         public static bool SuppressesTriggeredEffects(ICreature creature) => creature?.Slot?.Effect?.Type == SlotEffectType.ScorchedEarth;
 
         /// <summary>At Dusk: Slot Effects whose Days ran out are removed.</summary>

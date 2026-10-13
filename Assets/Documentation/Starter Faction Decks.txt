@@ -192,7 +192,7 @@ Ability Test Creatures (no other effects: each tests one ability from the 'Abili
     • Signal Jammer (Shadow Ops., 1/5/1, 1): Signal Jammer.
     • Deep Cover (Shadow Ops., 2/2/2, 0): Identity Theft (hold Shift while dragging it onto a creature).
     • Script Kiddie (Tech, 2/2/3, 0): Zero-Day.
-    • Legacy Code (Tech, 1/6/1, 1): Unpatchable.
+    • Legacy Code (Tech, 1/6/1, 1): Cold Storage.
     • NPC (Digital Society, 1/3/2, 0): Copypasta.
     • Chronically Online (Digital Society, 2/3/2, 0): Extremist.
     • Mummy (Myth, 2/5/1, 1): Hive Mind.
@@ -221,7 +221,7 @@ Spells
     • Ceasefire (Statecraft): A Temporal Shield on a slot for 2 Days: the creature there takes no combat damage.
     • Its A Trap (Digital Society): A hidden Barbed Snare (2 damage) on a slot: the first creature to leave it, even pushed or swapped, takes the damage (dying or being replaced isn't leaving).
     • Burn Notice (Shadow Ops.): Scorched Earth on a slot: the creature there can't trigger its effects, entry effects included.
-    • Antivirus (Tech): Watchdog: enemy spells -> Nullify, 1 charge (On Watch).
+    • Antivirus (Tech): Watchdog: enemy spells -> Nullify, 1 charge (Monitored).
     • Counter-Intelligence (Shadow Ops.): Watchdog: the strongest enemy attack -> Redirect, 2 charges (Briefing).
 
     • Plot Armor (Zeitgeist, 2/2/2, 0): Once per combat, when this would die, heal it for 1 (it survives). The use is gone for the rest of the combat, even after a reshuffle.
@@ -238,12 +238,12 @@ Digital Society, Shadow Ops., Tech, Myth and Mind don't have enough cards for a 
       (new) SysAdmin (1/4/1, 1): each Dawn, cleanses your creatures. Software As A Service (0/3/1, 1): each Dawn, draw a card and take 1 damage. Ransomware Attack: Exhausted, and you draw a card. Man-in-the-Middle: Watchdog, redirects the next enemy spell.
 • Psyop - Shadow Ops. & Mind (opponent: Your Gaslighting Ex, "That attack never happened. You're imagining things.")
     • Shadow Ops.: Political Decoy, Mole, Signal Jammer, Deep Cover, Sleeper Agent, Burn Notice, Counter-Intelligence, Smoke And Mirrors, Eavesdrop, Tapped Communications.
-      (new) Whistleblower (1/2/3, 0): when it dies, every enemy creature is Revealed. Polonium Umbrella: 1 damage, then Burned for 3 Days.
+      (new) Whistleblower (1/2/3, 0): when it dies, every enemy creature is Revealed. Unvoluntary Free Polonium Giveaway: 1 damage, then Burned for 3 Days.
     • Mind: Pessimist, Introvert, Generational Trauma.
       (new) Schrodinger's Cat (1/2/2, 1): survives one lethal hit per combat. Roko's Basilisk (0/5/1, 1): each Dawn, Exhausts a random enemy creature. Trolley Problem: Health Loss 3 on a random enemy, 1 on a random friend. Red Herring: Watchdog, redirects the next enemy attack. Imposter Syndrome: -2 Attack for good.
 • Prosperity Gospel - Myth & Corporate (opponent: The Megachurch, "Pray, pay, repeat. Salvation renews monthly.")
     • Myth: Martyr, Mummy, Memento Mori, The Holy Grail, Exorcism.
-      (new) Omniscient Space-Time Bending Bearded Wizard (3/9/1, 3): each Dawn, Blessed on a random friend. Cultist (1/1/2, 1): when it dies, your creatures get +1 Attack for good. Fenix (2/2/2, 2): when it dies, summon from your deck. Excess of Bread and Wine: heal each friendly creature 2, one gets the hangover (Exhausted). Monkey Hand: draw 3, a random friend is Doomed. Sacrificial Ritual: 5 damage to a random friend, draw 2.
+      (new) Omniscient Space-Time Bending Bearded Wizard (3/9/1, 3): each Dawn, Blessed on a random friend. Cultist (1/1/2, 1): when it dies, your creatures get +1 Attack for good. Phoenix (2/2/2, 2): when it dies, summon from your deck. Excess of Bread and Wine: heal each friendly creature 2, one gets the hangover (Exhausted). Monkey Hand: draw 3, a random friend is Doomed. Sacrificial Ritual: 5 damage to a random friend, draw 2.
     • Corporate: Unpaid Intern, Inhuman Resources, Multilevel Marketing Seller, Charles Ponzi, Unicorn, Multimillionaire Philanthropist, Mass Layoffs, Taxpayer Funds Venture Capital Profits (the workers that die for draws, and the money).
       (new, also in the Corporate deck) Tax-Exempt Corruption: draw 3, the enemy draws 1.
 

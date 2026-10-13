@@ -6,7 +6,8 @@ namespace SlayTheClone {
     /// <summary>
     /// Builds the printed text of a card from its data, in the style of Magic: The Gathering and Slay the Spire:
     /// a line of keywords first (movement, ability, and keyword abilities like Retaliate 1 or Decay 1 for effects that
-    /// keep coming back), then the rest as short templated sentences led by a trigger keyword ("Dawn: draw a card.").
+    /// keep coming back), then the rest as short templated clauses led by a trigger keyword ("Dawn: draw 1."): what it does,
+    /// then whom it targets, with the targeting keywords (target, all friendly, random enemy...).
     /// Every keyword is a link to its explanation (<see cref="Keywords"/>), shown when it's hovered on an enlarged card.
     /// </summary>
     public static class CardTextFormatter {
@@ -91,15 +92,18 @@ namespace SlayTheClone {
         #endregion
 
         #region Sentences
+        // Short templated clauses: what it does first, then whom ("3 damage to target", "Doom 3 on all enemy").
+        // A number after a status is its Days ("Doom 3"); a status with a strength shows the Days with the calendar
+        // ("Burn 2 [calendar]3": 2 damage, 3 Days). The rest of the meaning lives in the keywords' explanations.
         private static string DescribeEffect(CardEffect effect, bool isSpell) {
             var actions = effect.actions.Where(a => DescribeAction(a, isSpell) != null).ToList();
             if (actions.Count == 0) return null;
 
-            // Retaliation: an enemy-targeted When Hurt effect lands on whoever damaged this creature (see EffectResolver)
+            // Retaliation: an enemy-targeted Hurt effect lands on whoever damaged this creature (see EffectResolver)
             bool retaliates = !isSpell && effect.trigger == EffectTrigger.OnDamage
                               && actions.All(a => a.targetType == TargetType.Enemy && a.targetModifier == TargetModifier.None);
             (string icon, string text) trigger = isSpell ? default : retaliates ? (EffectIcons.Hurt, Keywords.Link("Retaliate")) : DescribeTrigger(effect);
-            var clauses = actions.Select(a => EffectIcons.Tag(ActionIcon(a)) + DescribeAction(a, isSpell, retaliates ? "it" : null)).ToList();
+            var clauses = actions.Select(a => DescribeAction(a, isSpell, retaliates ? "it" : null)).ToList();
             string body = JoinClauses(clauses);
             string once = effect.oncePerCombat ? "Once per combat, " : "";
 
@@ -117,32 +121,11 @@ namespace SlayTheClone {
                     // Chain/spread effects fire when this creature's attack lands; the rest when it is damaged
                     return effect.actions.Any(a => a.targetModifier != TargetModifier.None)
                         ? (EffectIcons.Attack, Keywords.Link("On Hit"))
-                        : (EffectIcons.Hurt, Keywords.Link("When Hurt"));
+                        : (EffectIcons.Hurt, Keywords.Link("Hurt"));
                 case EffectTrigger.StartOfTurn: return (EffectIcons.Dawn, Keywords.Link("Dawn"));
                 case EffectTrigger.EndOfTurn: return (EffectIcons.Dusk, Keywords.Link("Dusk"));
                 case EffectTrigger.ActionAttempted: return (EffectIcons.Attack, "Whenever this acts");
                 default: return (null, null);
-            }
-        }
-
-        private static string ActionIcon(EffectAction action) {
-            switch (action.actionType) {
-                case ActionType.Damage:
-                    return action.targetModifier.HasFlag(TargetModifier.Chained) ? EffectIcons.Chain : EffectIcons.Damage;
-                case ActionType.Heal: return EffectIcons.Heal;
-                case ActionType.Draw: return EffectIcons.Draw;
-                case ActionType.Summon: return EffectIcons.Summon;
-                case ActionType.Armor: return EffectIcons.Armor;
-                case ActionType.Stun: return EffectIcons.Paralyze;
-                case ActionType.ModifyStat: return action.value >= 0 ? EffectIcons.Buff : EffectIcons.Debuff;
-                case ActionType.ApplyStatus: return EffectIcons.ForStatus(action.statusEffectToApply);
-                case ActionType.DelayDeployment: return EffectIcons.Dusk;
-                case ActionType.Cleanse: return EffectIcons.Cleanse;
-                case ActionType.PlaceSlotEffect: return SlotEffectIcon(action.slotEffect);
-                case ActionType.CleanseSlot: return EffectIcons.Cleanse;
-                case ActionType.CreateWatchdog: return EffectIcons.Dusk;
-                case ActionType.Reveal: return EffectIcons.Reveal;
-                default: return null;
             }
         }
 
@@ -154,106 +137,108 @@ namespace SlayTheClone {
             switch (action.actionType) {
                 case ActionType.Damage:
                     if (action.targetModifier.HasFlag(TargetModifier.Chained))
-                        return $"deal {value} damage to its target and chain to 2 more, halving each jump";
-                    return $"deal {value} damage to {target}";
+                        return $"{value} damage to its target, chaining to 2 more at half each jump";
+                    return $"{value} damage to {target}";
                 case ActionType.Heal:
-                    return $"heal {target} for {value}";
+                    return $"heal {value} to {target}";
                 case ActionType.Draw:
-                    return action.targetType == TargetType.Enemy ? $"the enemy draws {Cards(value)}" : $"draw {Cards(value)}";
+                    return action.targetType == TargetType.Enemy ? $"enemy draws {value}" : $"draw {value}";
                 case ActionType.Summon:
-                    return $"{Keywords.Link("Summon", "summon")} {(value == 1 ? "a creature" : $"{value} creatures")}";
+                    return $"{Keywords.Link("Summon", "summon")} {value}";
                 case ActionType.Armor:
-                    return $"give {target} +{value} {Keywords.Link("Armor")}";
+                    return $"{target} +{value}{Keywords.Link("Armor", EffectIcons.Tag(EffectIcons.Armor))}";
                 case ActionType.Stun:
-                    return $"{Keywords.Link("Exhausted", "exhaust")} {target}{(value > 1 ? $" for {Days(value)}" : "")}";
+                    return $"{Keywords.Link("Exhausted", "exhaust")} {target}";
                 case ActionType.ModifyStat:
-                    return $"give {target} {DescribeStatChange(action)}";
+                    return $"{target} {DescribeStatChange(action)}";
                 case ActionType.ApplyStatus:
                     return DescribeStatus(action, target);
                 case ActionType.DelayDeployment:
-                    return $"add {Days(value)} to {target}'s {Keywords.Link("Deployment Time")}";
+                    return $"+{value} {Keywords.Link("Deployment Time")} to {target}";
                 case ActionType.PlaceSlotEffect:
-                    return $"place {DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
+                    return $"{DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
                 case ActionType.CleanseSlot:
-                    return $"remove the {Keywords.Link("Slot Effect")} from {SlotTarget(action, isSpell)}";
+                    return $"clear the {Keywords.Link("Slot Effect")} on {SlotTarget(action, isSpell)}";
                 case ActionType.CreateWatchdog:
                     return DescribeWatchdog(action, target);
                 case ActionType.Reveal: // Instant: it resolves as soon as it's played
                     if (action.targetType is TargetType.Player or TargetType.Enemy) return $"{Keywords.Link("Reveal", "reveal")} {target}'s {Keywords.Link("Watchdog")} conditions";
                     return action.targetModifier.HasFlag(TargetModifier.Random)
-                        ? $"{Keywords.Link("Reveal", "reveal")} the slot of {target}"
+                        ? $"{Keywords.Link("Reveal", "reveal")} {target}"
                         : $"{Keywords.Link("Reveal", "reveal")} {SlotTarget(action, isSpell)}";
                 case ActionType.Cleanse: // A Cleanse removes the bad; a Purge removes everything
-                    string removed = action.cleanse switch {
-                        CleanseTarget.Statuses => "statuses",
-                        CleanseTarget.StatModifications => "temporary stat changes",
-                        _ => "statuses and temporary stat changes"
+                    string what = action.cleanse switch {
+                        CleanseTarget.StatModifications => " stat changes on",
+                        CleanseTarget.Both => " statuses and stat changes on",
+                        _ => ""
                     };
-                    return action.purge ? $"{Keywords.Link("Purge", "purge")} {target}'s {removed}" : $"{Keywords.Link("Cleanse", "cleanse")} {target}'s harmful {removed}";
+                    return action.purge ? $"{Keywords.Link("Purge", "purge")}{what} {target}" : $"{Keywords.Link("Cleanse", "cleanse")}{what} {target}";
                 default:
                     return null;
             }
         }
 
+        // Targeting keywords: "target" (what it's dropped on, either side), all / all friendly / all enemy, random ones.
+        // Players and the creature itself are plain words.
         private static string DescribeTarget(EffectAction action, bool isSpell) {
             if (action.targetModifier.HasFlag(TargetModifier.Random)) {
                 switch (action.targetType) {
-                    case TargetType.EnemyCreatures: return "a random enemy creature";
-                    case TargetType.FriendlyCreatures: return "a random friendly creature";
-                    case TargetType.AllCreatures: return "a random creature";
+                    case TargetType.EnemyCreatures: return Keywords.Link("Random enemy", "random enemy");
+                    case TargetType.FriendlyCreatures: return Keywords.Link("Random friendly", "random friendly");
+                    case TargetType.AllCreatures: return Keywords.Link("Random", "random creature");
                 }
             }
 
             string adjacent = action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? " and its neighbors" : "";
             // Spells resolve against whatever they are dropped on unless they hit a whole group
             bool hitsGroup = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
-            if (isSpell && !hitsGroup) {
-                return (action.actionType is ActionType.Damage or ActionType.Heal ? "any target" : "target creature") + adjacent;
+            if (isSpell && !hitsGroup && action.targetType is not (TargetType.Player or TargetType.Enemy)) {
+                return Keywords.Link("Target", "target") + adjacent;
             }
 
             switch (action.targetType) {
                 case TargetType.Self: return "this" + adjacent;
                 case TargetType.Player: return "you";
-                case TargetType.Enemy: return "the enemy player";
-                case TargetType.FriendlyCreatures: return "each friendly creature";
-                case TargetType.EnemyCreatures: return "each enemy creature";
-                case TargetType.AllCreatures: return "each creature";
-                default: return "target";
+                case TargetType.Enemy: return "enemy player";
+                case TargetType.FriendlyCreatures: return Keywords.Link("All friendly", "all friendly");
+                case TargetType.EnemyCreatures: return Keywords.Link("All enemy", "all enemy");
+                case TargetType.AllCreatures: return Keywords.Link("All", "all");
+                default: return Keywords.Link("Target", "target");
             }
         }
 
-        // "+1 attack for this Day"; a Health decrease is Health Loss, so it's a link to that rule
+        // "+1 Attack", "+4 Attack [calendar]1" for a Day; a Health decrease is Health Loss, so it's a link to that rule
         private static string DescribeStatChange(EffectAction action) {
             string sign = action.value >= 0 ? "+" : "";
             var stats = new List<string>();
-            if (action.modifyAttack) stats.Add("attack");
-            if (action.modifyHealth) stats.Add("health");
-            if (action.modifySpeed) stats.Add("speed");
-            string days = action.statusDuration switch {
-                <= 0 => "",
-                1 => " for this Day",
-                _ => $" for {action.statusDuration} Days"
-            };
+            if (action.modifyAttack) stats.Add("Attack");
+            if (action.modifyHealth) stats.Add("Health");
+            if (action.modifySpeed) stats.Add("Speed");
             if (stats.Count == 0) return "no change";
-            string change = $"{sign}{action.value} {JoinClauses(stats)}";
+            string change = $"{sign}{action.value} {string.Join("/", stats)}";
             if (action.value < 0 && action.modifyHealth) change = Keywords.Link("Health Loss", change);
-            return change + days;
+            return change + DaysTag(action.statusDuration);
         }
 
+        // A status by its keyword: the number is its Days ("Doom 3"), or its strength and then its Days ("Burn 2 [calendar]3")
         private static string DescribeStatus(EffectAction action, string target) {
-            string days = Days(action.statusDuration);
+            int days = action.statusDuration;
+            int potency = System.Math.Max(1, action.statusPotency);
             switch (action.statusEffectToApply) {
                 case StatusEffectType.Exhausted: return $"{Keywords.Link("Exhausted", "exhaust")} {target}";
-                case StatusEffectType.Burned: return $"{Keywords.Link("Burned", "burn")} {target} ({action.statusPotency} damage each {Keywords.Link("Dusk")}, {days})";
-                case StatusEffectType.Doomed: return $"{Keywords.Link("Doomed", "doom")} {target} for {days}";
-                case StatusEffectType.Blessed: return $"{Keywords.Link("Blessed", "bless")} {target}{(action.statusPotency > 1 ? $" {action.statusPotency} times" : "")}";
-                case StatusEffectType.HeatSignature: return $"{target} gains {System.Math.Max(1, action.statusPotency)} {Keywords.Link("Heat")}";
-                case StatusEffectType.Concealed: return $"{Keywords.Link("Concealed", "conceal")} {target} for {days}";
-                case StatusEffectType.Revealed: return $"make {target} {Keywords.Link("Revealed")} for {days}";
-                case StatusEffectType.Encrypted: return $"{Keywords.Link("Encrypted", "encrypt")} {target} for {days}";
+                case StatusEffectType.Burned: return $"{Keywords.Link("Burned", $"Burn {potency}")}{DaysTag(days)} on {target}";
+                case StatusEffectType.Doomed: return $"{Keywords.Link("Doomed", $"Doom {days}")} on {target}";
+                case StatusEffectType.Blessed: return $"{Keywords.Link("Blessed", $"Bless {potency}")} on {target}";
+                case StatusEffectType.HeatSignature: return $"{Keywords.Link("Heat", $"Heat {potency}")} on {target}";
+                case StatusEffectType.Concealed: return $"{Keywords.Link("Concealed", $"Conceal {days}")} on {target}";
+                case StatusEffectType.Revealed: return $"{Keywords.Link("Revealed", $"Revealed {days}")} on {target}";
+                case StatusEffectType.Encrypted: return $"{Keywords.Link("Encrypted", $"Encrypt {days}")} on {target}";
                 default: return null;
             }
         }
+
+        // " [calendar]3": how many Days a timed change lasts. Nothing for a lasting one
+        private static string DaysTag(int days) => days > 0 ? " " + Keywords.Link("Days", $"{EffectIcons.Tag(EffectIcons.Days)}{days}") : "";
 
         // The GDD card format: "Watchdog: [condition] -> [effect], N charges (timing)"
         private static string DescribeWatchdog(EffectAction action, string target) {
@@ -273,22 +258,22 @@ namespace SlayTheClone {
             };
             int charges = System.Math.Max(1, spec.charges);
             string pick = spec.timing == WatchdogTiming.Briefing && spec.pick != BriefingPick.First ? $"{spec.pick.ToString().ToLower()} " : "";
-            string timing = spec.timing == WatchdogTiming.Briefing ? Keywords.Link("Briefing") : Keywords.Link("On Watch");
-            string days = action.statusDuration > 0 ? $", {Days(action.statusDuration)}" : "";
-            return $"{Keywords.Link("Watchdog")}: {pick}{whose}{what}{atMost}{by} -> {effect}, {charges} charge{(charges == 1 ? "" : "s")} ({timing}{days})";
+            string timing = spec.timing == WatchdogTiming.Briefing ? Keywords.Link("Briefing") : Keywords.Link("Monitored");
+            return $"{Keywords.Link("Watchdog")}: {pick}{whose}{what}{atMost}{by} -> {effect}, {charges} charge{(charges == 1 ? "" : "s")} ({timing}{DaysTag(action.statusDuration)})";
         }
 
         // Slot Effects aim at the slot, whoever stands in it
         private static string SlotTarget(EffectAction action, bool isSpell) =>
             isSpell || action.targetType != TargetType.Self ? "target slot" : "this creature's slot";
 
+        // "Landmine 3" (its damage), "Temporal Shield 2" (its Days)
         private static string DescribeSlotEffect(EffectAction action) {
-            string days = action.statusDuration > 0 ? $" for {Days(action.statusDuration)}" : "";
+            string days = action.statusDuration > 0 ? $" {action.statusDuration}" : "";
             return action.slotEffect switch {
-                SlotEffectType.Landmine => $"a hidden {Keywords.Link("Landmine")} ({action.value} damage)",
-                SlotEffectType.BarbedSnare => $"a hidden {Keywords.Link("Barbed Snare")} ({action.value} damage)",
-                SlotEffectType.TemporalShield => $"a {Keywords.Link("Temporal Shield")}{days}",
-                SlotEffectType.ScorchedEarth => $"{Keywords.Link("Scorched Earth")}{days}",
+                SlotEffectType.Landmine => Keywords.Link("Landmine", $"Landmine {action.value}"),
+                SlotEffectType.BarbedSnare => Keywords.Link("Barbed Snare", $"Barbed Snare {action.value}"),
+                SlotEffectType.TemporalShield => Keywords.Link("Temporal Shield", $"Temporal Shield{days}"),
+                SlotEffectType.ScorchedEarth => Keywords.Link("Scorched Earth") + DaysTag(action.statusDuration),
                 _ => "nothing"
             };
         }
@@ -307,8 +292,6 @@ namespace SlayTheClone {
             return string.Join(", ", clauses.Take(clauses.Count - 1)) + " and " + clauses[clauses.Count - 1];
         }
 
-        private static string Cards(int count) => count == 1 ? "a card" : $"{count} cards";
-        private static string Days(int count) => count == 1 ? "1 Day" : $"{count} Days";
 
         // Upper-cases the first letter that is read, skipping rich-text tags and icons in front of it
         private static string CapitalizeRich(string text) {
@@ -317,7 +300,10 @@ namespace SlayTheClone {
                 char c = text[i];
                 if (c == '<') inTag = true;
                 else if (c == '>') inTag = false;
-                else if (!inTag && char.IsLetter(c)) return text.Substring(0, i) + char.ToUpper(c) + text.Substring(i + 1);
+                else if (!inTag && !char.IsWhiteSpace(c)) {
+                    // "3 damage to target" starts with its number: nothing to capitalize
+                    return char.IsLetter(c) ? text.Substring(0, i) + char.ToUpper(c) + text.Substring(i + 1) : text;
+                }
             }
             return text;
         }

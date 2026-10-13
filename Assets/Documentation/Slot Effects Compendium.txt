@@ -43,7 +43,7 @@ Rejection Field
 Scorched Earth
     Visibility: Visible
     Trigger Event(s): Continuous while active and slot is occupied.
-    Effect: The creature occupying this slot can't trigger its effects: entry ("When Ready"), retaliation, Dawn and Dusk, death effects. An entry effect stopped this way is lost; moving off later doesn't bring it back. (It isn't Abilities Disabled: the creature's ability still works, 'Abilities Compendium'.)
+    Effect: The creature occupying this slot can't trigger its effects (entry, retaliation, Dawn and Dusk, death effects) and its ability is switched off. It can still move and attack: once its Deployment Time is over it's on the board like any creature. An entry effect stopped this way is lost; moving off later doesn't bring it back.
     Parameters: None.
     Duration of Slot Effect: Persistent until replaced.
     Cleansable: Yes

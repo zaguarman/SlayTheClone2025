@@ -27,62 +27,72 @@ namespace SlayTheClone {
 
         static Keywords() {
             // ---------------------------------------------------------------- Time
-            Add("Day", "One turn. Both sides plan their actions, then everything resolves in order: Moves, Summons, Spells, then Abilities & Attacks. It starts at [Dawn] and ends at [Dusk].");
-            Add("Dawn", "The start of a [Day], before anyone plans. Dawn effects of creatures in play happen then.");
-            Add("Dusk", "The end of a [Day], after everything resolved. Dusk effects happen; then [Deployment Time] counts down, [Armor] fades by 1 and timed statuses tick.");
+            Add("Day", "One turn: both sides plan, then everything resolves in order (moves, summons, spells, then abilities and attacks). It runs from [Dawn] to [Dusk].");
+            Add("Dawn", "The start of a [Day], before anyone plans.");
+            Add("Dusk", "The end of a [Day], after everything has resolved.");
+            Add("Days", "How long it lasts, counting the [Day] it lands: 1 is this Day only, 2 is this Day and the next.");
+
+            // ---------------------------------------------------------------- Targets
+            Add("Target", "What you drop the card on: a creature or a slot, on either side.");
+            Add("All", "Every creature on the board, both sides.");
+            Add("All friendly", "Every creature on your side.");
+            Add("All enemy", "Every creature on the enemy's side.");
+            Add("Random", "One creature picked at random, either side.");
+            Add("Random friendly", "One of your creatures, picked at random.");
+            Add("Random enemy", "One enemy creature, picked at random.");
 
             // ---------------------------------------------------------------- Triggers
-            Add("Arrival", "Happens when this creature enters play: once its summon finishes and its [Deployment Time] is over. A creature on [Scorched Earth] loses it.");
-            Add("Last Will", "Happens when this creature dies (killed, not discarded or returned to the hand).");
-            Add("When Hurt", "Happens each time this creature takes damage, even if [Armor] absorbs it or the hit kills it. [Health Loss] isn't damage.");
-            Add("On Hit", "Happens when this creature's attack lands, on top of the attack itself.");
+            Add("Arrival", "Happens when this creature lands: once its summon finishes and its [Deployment Time] is over.");
+            Add("Last Will", "Happens when this creature dies.");
+            Add("Hurt", "Happens each time this creature takes damage.");
+            Add("On Hit", "Happens when this creature's attack lands, on top of the attack.");
 
             // ---------------------------------------------------------------- Keyword abilities (recurring patterns)
-            Add("Retaliate", "When a creature damages this one, it strikes back at that creature: Retaliate X deals X damage to it; Retaliate: [Exhausted] exhausts it. If a spell damaged it, damage goes to the enemy player instead. Retaliation still happens if the hit kills it. A [When Hurt] effect.");
-            Add("Decay", "Decay X: at each [Dusk] this creature takes X damage. Its upkeep, side effects or bad habits.");
-            Add("Regenerate", "Regenerate X: at each [Dusk] this creature heals X, up to its max Health.");
-            Add("Grow", "Grow X: at each [Dawn] this creature gets +X Attack and +X Health for good.");
-            Add("Second Wind", "Once per combat, when this creature would die, it heals and survives instead. The use is gone until the combat ends, even if the card is reshuffled.");
-            Add("Summon", "A random creature from your deck enters an empty slot of yours, with its own [Deployment Time].");
+            Add("Retaliate", "When a creature damages this one, it strikes back: Retaliate X deals X damage to that creature. Retaliate: [Exhausted|exhaust] exhausts it instead.");
+            Add("Decay", "Decay X: takes X damage at each [Dusk].");
+            Add("Regenerate", "Regenerate X: heals X at each [Dusk].");
+            Add("Grow", "Grow X: +X Attack and +X Health for good at each [Dawn].");
+            Add("Second Wind", "Once per combat, when this would die, it survives instead.");
+            Add("Summon", "Summon X: X random creatures from your deck enter your empty slots.");
 
             // ---------------------------------------------------------------- Movement
-            Add("Leapfrog", "Moves by jumping over creatures to an empty slot. If its landing slot is taken, it stops at the closest empty slot on the way.");
-            Add("Swap", "Trades places with a friendly creature at any distance, over the creatures in between, even one that can't act.");
+            Add("Leapfrog", "Moves by jumping over creatures to an empty slot.");
+            Add("Swap", "Trades places with a friendly creature, however far.");
 
             // ---------------------------------------------------------------- Creature stats and states
-            Add("Armor", "Absorbs damage before Health. Capped at twice the creature's max Health, it fades by 1 each [Dusk] and is lost when the creature leaves play. [Health Loss] ignores it.");
-            Add("Health Loss", "Lowers Health directly: it ignores [Armor] and isn't damage, so [When Hurt] effects don't happen. At 0 Health the creature dies.");
-            Add("Deployment Time", "The Days a summoned creature needs to get ready. Until then it can't act, its ability is off and its [Arrival] effect waits. It counts down at [Dusk], not at the Dusk of the Day it arrived.");
+            Add("Armor", "Absorbs damage before Health. Fades by 1 each [Dusk].");
+            Add("Health Loss", "Lowers Health directly. It isn't damage, so [Armor] doesn't stop it.");
+            Add("Deployment Time", "The [Days] a creature needs to get ready after it's summoned. Until then it can't act and its ability is off.");
             Add("Exposed", "Takes +1 damage from each hit.");
 
             // ---------------------------------------------------------------- Statuses
-            Add("Exhausted", "Can't act, its ability is switched off and it's [Exposed]. Its planned action is cancelled. Lasts the rest of the [Day] and all of the next; exhausting it again refreshes it.");
-            Add("Burned", "Takes damage at each [Dusk] while it lasts. It does nothing at the Dusk of the Day it's applied.");
-            Add("Doomed", "A death sentence. It wipes and blocks other statuses and gives +1 Attack for good each [Dawn]. When it runs out, its [Last Rites] strike and the creature dies.");
-            Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act. Then it dies for real.");
-            Add("Blessed", "Each stack negates the next status that would land on this creature, good or bad, [Doomed] included. Up to 3 stacks; it lasts until used.");
-            Add("Heat", "Random and redirected attacks go to the creature with the most Heat first. Heat stays until cleansed.");
-            Add("Concealed", "Its planned actions are hidden from the other side (they show as ???), and [Watchdog|Watchdogs] can't match them. [Revealed] cancels it.");
-            Add("Revealed", "Cancels [Concealed] and [Undercover]: its planned actions can be seen and [Watchdog|Watchdogs] can match them.");
-            Add("Encrypted", "[Watchdog|Watchdogs] ignore its actions and spend no charges on them.");
-            Add("Cleanse", "Removes harmful statuses and stat decreases. A [Purge] removes the good ones too.");
-            Add("Purge", "Removes every status and temporary stat change, good and bad. Changes made for good stay.");
+            Add("Exhausted", "Can't act, its ability is off and it's [Exposed]. Its planned action is cancelled. Lasts the rest of the [Day] and all of the next.");
+            Add("Burned", "Burn X: takes X damage at each [Dusk] for the [Days] shown, starting the Dusk after it lands.");
+            Add("Doomed", "Doom X: dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it.");
+            Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
+            Add("Blessed", "Bless X: the next X statuses that would land on it are stopped, good or bad.");
+            Add("Heat", "Heat X: random and redirected attacks go to the creature with the most Heat first.");
+            Add("Concealed", "Conceal X: for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
+            Add("Revealed", "Revealed X: for X [Days], it can't be [Concealed]: its plans can be seen.");
+            Add("Encrypted", "Encrypt X: for X [Days], [Watchdog|Watchdogs] ignore its actions.");
+            Add("Cleanse", "Removes harmful statuses.");
+            Add("Purge", "Removes every status, good and bad.");
 
             // ---------------------------------------------------------------- Intelligence
-            Add("Reveal", "Instantly shows its caster a slot's hidden [Slot Effect] and what the creature there plans this [Day]; aimed at a player, their [Watchdog] conditions. Information is instant: it resolves as it's played.");
-            Add("Watchdog", "A trap in the action queue. When an action it watches comes up it can [Nullify] it, [Redirect] it, [Reorder] it or reveal it, one charge per action. It looks [On Watch] or at the [Briefing]. It can't see [Concealed] actions and ignores [Encrypted] creatures.");
-            Add("On Watch", "The [Watchdog] looks at each action right before it resolves, even ones planned before it existed.");
-            Add("Briefing", "From the [Day] after it's set, the [Watchdog] looks at the whole queue once, before anything resolves.");
+            Add("Reveal", "Shows you everything about a slot: its hidden [Slot Effect], the creature there and what it plans. Instant.");
+            Add("Watchdog", "A trap in the action queue: when an action it watches comes up, it acts on it. One charge per action.");
+            Add("Monitored", "The [Watchdog] checks every action right before it resolves.");
+            Add("Briefing", "The [Watchdog] checks the whole queue once, at the start of each [Day] after the one it was set.");
             Add("Nullify", "The action is cancelled.");
-            Add("Redirect", "The action is aimed at another creature at random, never the one acting or the one it was aimed at. [Heat] draws it first.");
-            Add("Reorder", "The action moves to the start or the end of its layer.");
+            Add("Redirect", "The action hits another creature, picked at random.");
+            Add("Reorder", "The action moves to the start or the end of its turn in the queue.");
 
             // ---------------------------------------------------------------- Slot Effects
-            Add("Slot Effect", "A condition on a battlefield slot, not on the creature: it stays with the slot. One per slot; a new one replaces the old. Hidden ones are known only to their controller until they trigger or are [Reveal|revealed].");
-            Add("Landmine", "A hidden [Slot Effect]: the first creature to enter the slot, summoned or moved in, takes its damage. It goes off before anything else, then it's gone.");
-            Add("Barbed Snare", "A hidden [Slot Effect]: the first creature to leave the slot, moving, pushed or swapped, takes its damage. Dying or being replaced isn't leaving.");
-            Add("Temporal Shield", "A [Slot Effect]: the creature in the slot takes no combat damage. Spells and abilities still hurt it.");
-            Add("Scorched Earth", "A [Slot Effect]: the creature in the slot can't trigger its effects, [Arrival] included (that one is lost). Its ability still works.");
+            Add("Slot Effect", "A condition on a slot, not on the creature: it stays with the slot. One per slot.");
+            Add("Landmine", "Landmine X: hidden. The next creature to enter the slot takes X damage.");
+            Add("Barbed Snare", "Barbed Snare X: hidden. The next creature to leave the slot takes X damage.");
+            Add("Temporal Shield", "Temporal Shield X: for X [Days], the creature in the slot takes no combat damage.");
+            Add("Scorched Earth", "The creature in the slot can't use its ability or trigger its effects. It can still move and attack.");
 
             // ---------------------------------------------------------------- Creature abilities (Abilities Compendium)
             foreach (CreatureAbility ability in System.Enum.GetValues(typeof(CreatureAbility))) {
@@ -94,14 +104,14 @@ namespace SlayTheClone {
         // An ability's reminder text, with the keywords it mentions as links
         private static string AbilityText(CreatureAbility ability) => ability switch {
             CreatureAbility.Unpatchable => "Enemy effects can't lower its stats, and [Zero-Day] can't get around it.",
-            CreatureAbility.Underground => "In combat it ignores the other creature's stat changes, both ways: when it's attacked, the attacker's buffs and debuffs; when it attacks, the defender's temporary Health changes.",
-            CreatureAbility.ZeroDay => "Its attacks and effects ignore the target's defensive abilities ([Unbothered], [No U], [Return to Sender]...), except [Unpatchable].",
-            CreatureAbility.Copypasta => "When it's ready, and each [Dawn] after that, it copies the ability of the creature opposite it (and loses Copypasta).",
-            CreatureAbility.Undercover => "Everything it plans is hidden from the other side, like [Concealed], and it stays ??? to them until [Revealed].",
-            CreatureAbility.HiveMind => "A creature that attacks it gains Hive Mind, replacing its own ability.",
-            CreatureAbility.IdentityTheft => "Active: instead of attacking or moving, swap abilities with target creature (hold Shift as you drag it).",
+            CreatureAbility.Underground => "In combat it ignores the other creature's stat changes.",
+            CreatureAbility.ZeroDay => "Its attacks and effects ignore defensive abilities, except [Cold Storage].",
+            CreatureAbility.Copypasta => "When it's ready and each [Dawn] after, it copies the ability of the creature opposite (once).",
+            CreatureAbility.Undercover => "It's always [Concealed] until [Revealed].",
+            CreatureAbility.HiveMind => "A creature that attacks it gets Hive Mind instead of its own ability.",
+            CreatureAbility.IdentityTheft => "Instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it).",
             CreatureAbility.InsiderJob => "Its damage ignores [Armor].",
-            CreatureAbility.SignalJammer => "The enemy creature directly opposite has its ability switched off. Its triggered effects still work.",
+            CreatureAbility.SignalJammer => "The enemy creature opposite has its ability switched off.",
             _ => Capitalize(Abilities.ReminderOf(ability)) + "."
         };
 

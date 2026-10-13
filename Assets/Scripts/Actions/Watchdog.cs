@@ -66,7 +66,7 @@ namespace SlayTheClone {
             if (!forController) return $"Watching {watched}: ???";
             string what = Spec.watches.ToString().ToLower() + (Spec.watches == WatchedAction.Ability ? "" : "s");
             string atMost = Spec.atMost > 0 ? $" of {Spec.atMost} or less" : "";
-            return $"{what}{atMost} by {watched} -> {Spec.effect} ({ChargesLeft} left, {(Spec.timing == WatchdogTiming.Briefing ? "Briefing" : "On Watch")})";
+            return $"{what}{atMost} by {watched} -> {Spec.effect} ({ChargesLeft} left, {(Spec.timing == WatchdogTiming.Briefing ? "Briefing" : "Monitored")})";
         }
 
         public override string ToString() =>

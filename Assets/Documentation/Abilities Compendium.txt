@@ -7,7 +7,7 @@ General Rules:
 • Abilities Aren't Effects: A creature has at most one ability (from this compendium), but can have many triggered effects ("When this dies, ...", "Each Dawn, ..."). They are different things. Whatever switches things off says which it affects: its ability, its effects, or both.
     • Both: Abilities Disabled (Exhausted, Muted, a Jamming Field) and Deployment Time.
     • Only the ability: Signal Jammer.
-    • Only the triggered effects: Scorched Earth (entry effects included).
+    • Both, by standing on it: Scorched Earth (entry effects included). The creature can still move and attack.
 • Switched Off, Not Removed: Abilities Disabled effects (Muted, Exhausted, Deployment Time, a Jamming Field, Signal Jammer) switch an ability off while they last. The creature still has it.
 • Stat Changes vs. Statuses: Abilities that react to stat changes only affect stat modifications (Temporary and Persistent). A status's own stat change (Chill, Heavy, Addicted...) is part of the status and isn't affected, unless the ability says otherwise (Underground does).
 • Bouncing Effects: When an ability sends an effect back to "the creature that caused it" and there is no such creature (a Spell from hand, or it has left play), the effect goes to the caster's creature with the lowest current Health, ties broken randomly. If the caster has no creatures, the effect fails. Area effects bounce one creature at a time. An effect can only be bounced once (see GDD 5.2 Status Effects - Bounces and Chains).
@@ -15,8 +15,8 @@ General Rules:
 Resolution Order for a Stat Change:
 
 When a stat modification targets a creature, it goes through these steps in order:
-    1. Bypass: If the source has Zero-Day, the target's defensive abilities are ignored, except Unpatchable.
-    2. Block: Unbothered, Unpatchable, Too Mainstream, Cognitive Dissonance and Imposter Syndrome can stop it here.
+    1. Bypass: If the source has Zero-Day, the target's defensive abilities are ignored, except Cold Storage.
+    2. Block: Unbothered, Cold Storage, Too Mainstream, Cognitive Dissonance and Imposter Syndrome can stop it here.
     3. Reflect: No U sends it back to its source, where it starts again from step 1.
     4. Transform: Contrarian reverses it, then Extremist doubles it.
     5. Apply.
@@ -87,10 +87,10 @@ Zero-Day
     Inspired by: Mold Breaker (Haxorus)
     Type: Passive
     Description: "This creature's attacks and effects ignore the target's defensive abilities."
-    Notes: Ignores every ability listed under Defensive Abilities. Doesn't bypass Unpatchable. Statuses aren't abilities, so it doesn't ignore them.
-    Answers: Unpatchable, Signal Jammer, or switching its ability off (Muted).
+    Notes: Ignores every ability listed under Defensive Abilities. Doesn't bypass Cold Storage. Statuses aren't abilities, so it doesn't ignore them.
+    Answers: Cold Storage, Signal Jammer, or switching its ability off (Muted).
 
-Unpatchable
+Cold Storage
     Inspired by: Full Metal Body (Solgaleo)
     Type: Passive, Defensive
     Description: "Enemy effects can't lower this creature's stats. Zero-Day can't bypass this."
@@ -101,7 +101,7 @@ Signal Jammer
     Inspired by: Neutralizing Gas (Weezing), limited to one lane
     Type: Passive, Lane Control
     Description: "The enemy creature directly opposite this creature has its ability switched off."
-    Notes: Lasts while both stay in place; moving either creature out of the lane switches the ability back on. It beats Unpatchable, because the ability is switched off, not bypassed.
+    Notes: Lasts while both stay in place; moving either creature out of the lane switches the ability back on. It beats Cold Storage, because the ability is switched off, not bypassed.
     Answers: Move your creature out of its lane, or move it out of yours.
 
 

@@ -70,12 +70,12 @@ namespace SlayTheClone {
                 "Your Gaslighting Ex", "That attack never happened. You're imagining things.", new[] {
                 "Political Decoy", "Mole", "Signal Jammer", "Deep Cover", "Sleeper Agent", "Whistleblower",
                 "Pessimist", "Introvert", "Schrodinger's Cat", "Roko's Basilisk",
-                "Burn Notice", "Counter-Intelligence", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "Polonium Umbrella",
+                "Burn Notice", "Counter-Intelligence", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "Unvoluntary Free Polonium Giveaway",
                 "Generational Trauma", "Trolley Problem", "Red Herring", "Imposter Syndrome",
             }),
             ("Prosperity Gospel - Myth & Corporate", "ProsperityGospelDeck",
                 "The Megachurch", "Pray, pay, repeat. Salvation renews monthly.", new[] {
-                "Martyr", "Mummy", "Omniscient Space-Time Bending Bearded Wizard", "Cultist", "Fenix",
+                "Martyr", "Mummy", "Omniscient Space-Time Bending Bearded Wizard", "Cultist", "Phoenix",
                 "Unpaid Intern", "Inhuman Resources", "Multilevel Marketing Seller", "Charles Ponzi", "Unicorn", "Multimillionaire Philanthropist",
                 "Memento Mori", "The Holy Grail", "Exorcism", "Excess of Bread and Wine", "Monkey Hand", "Sacrificial Ritual",
                 "Mass Layoffs", "Taxpayer Funds Venture Capital Profits", "Tax-Exempt Corruption",
@@ -436,7 +436,7 @@ namespace SlayTheClone {
                 .Picture("Two identical politicians in matching suits: one waves from a balcony, the other ducks behind the curtain."),
             Spell("Burn Notice", TargetType.EnemyCreatures,
                 "You're no longer one of us. You never were.",
-                "Mechanics test: Scorched Earth on a slot. The creature there can't trigger its effects (entry, retaliation, Dawn and Dusk, death) while it stands on it. Its ability still works.",
+                "Mechanics test: Scorched Earth on a slot. The creature there can't trigger its effects (entry, retaliation, Dawn and Dusk, death) or use its ability while it stands on it. It can still move and attack.",
                 PlaceSlotEffect(SlotEffectType.ScorchedEarth, 0, 0, TargetType.EnemyCreatures))
                 .Picture("The Banksy auction stunt: a spy's portrait, painted in the style of Girl with Balloon, has just sold at auction, and the canvas is sliding down through a shredder hidden in its gilded frame, the strips stamped BURN NOTICE. In the audience, the spy himself watches his face being shredded."),
             Spell("Counter-Intelligence", TargetType.Player,
@@ -457,7 +457,8 @@ namespace SlayTheClone {
                 .Picture("An agent in a black suit with a backpack bristling with antennas, standing in a busy street where everyone stares in horror at phones showing \"No Service\"."),
             Creature("Deep Cover", 2, 2, speed: 2, deploy: 0,
                 "Undercover so long he forgot whose side he's on. So did they.",
-                "Mechanics test: Identity Theft, an active ability: hold Shift while dragging it onto a creature to swap abilities with it. It's its action for the Day.")
+                "Mechanics test: Identity Theft, an active ability: hold Shift while dragging it onto a creature to swap abilities with it. It's its action for the Day. It arrives Concealed for 3 Days.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.Concealed, 3, TargetType.Self)))
                 .With(CreatureAbility.IdentityTheft)
                 .Picture("Two men facing each other in front of a mirror, each peeling off a latex mask of the other's face."),
             Creature("Sleeper Agent", 3, 3, speed: 2, deploy: 1,
@@ -485,7 +486,7 @@ namespace SlayTheClone {
                 "Dead Man's Switch: when it dies, every enemy creature is Revealed for 2 Days.",
                 On(EffectTrigger.OnDeath, Status(StatusEffectType.Revealed, 2, TargetType.EnemyCreatures)))
                 .Picture("A man in a hoodie blowing a sports whistle, classified documents spilling out of every pocket."),
-            Spell("Polonium Umbrella", TargetType.EnemyCreatures,
+            Spell("Unvoluntary Free Polonium Giveaway", TargetType.EnemyCreatures,
                 "A gift from an old friend. Do not open indoors.",
                 "1 damage now, then Burned for 3 Days. Future: Spontaneous Combustion.",
                 Damage(1, TargetType.EnemyCreatures), Status(StatusEffectType.Burned, 3, TargetType.EnemyCreatures, potency: 1))
@@ -501,17 +502,17 @@ namespace SlayTheClone {
                 .Picture("A server rack melting under an avalanche of tiny envelope icons, smart fridges and toasters in the background, each with a red glowing eye."),
             Spell("Antivirus", TargetType.Player,
                 "1 threat blocked. 37 offers to upgrade to Premium.",
-                "Mechanics test: a Watchdog (GDD 3.11). It's created when the spell resolves and, On Watch, nullifies the next enemy spell before it resolves, even one planned before it existed. 1 charge.",
+                "Mechanics test: a Watchdog (GDD 3.11). It's created when the spell resolves and, Monitored, nullifies the next enemy spell before it resolves, even one planned before it existed. 1 charge.",
                 CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Spell, side = WatchdogSide.Enemy, effect = WatchdogEffect.Nullify, charges = 1 }, TargetType.Enemy))
                 .Picture("A panda in shining knight's armor, an antivirus logo on its shield, blocking a glowing spell scroll at a castle gate, while the castle walls behind it are plastered with its own pop-ups: \"RENEW NOW - 60% OFF\"."),
             Creature("Script Kiddie", 2, 2, speed: 3, deploy: 0,
                 "Doesn't know how it works. Doesn't need to.",
-                "Mechanics test: Zero-Day. Its attacks and effects ignore the target's defensive abilities (Unbothered, No U, Return to Sender...), except Unpatchable.")
+                "Mechanics test: Zero-Day. Its attacks and effects ignore the target's defensive abilities (Unbothered, No U, Return to Sender...), except Cold Storage.")
                 .With(CreatureAbility.ZeroDay)
                 .Picture("A twelve-year-old in an oversized gaming chair, hoodie up, double-clicking \"H4CK3R T00L.exe\" while a bank vault door swings open on his second monitor."),
             Creature("Legacy Code", 1, 6, speed: 1, deploy: 1,
                 "Written in 1987. Nobody knows how it works. Nobody dares touch it.",
-                "Mechanics test: Unpatchable. Enemy effects can't lower its stats, and Zero-Day can't get around it.")
+                "Mechanics test: Cold Storage. Enemy effects can't lower its stats, and Zero-Day can't get around it.")
                 .With(CreatureAbility.Unpatchable)
                 .Picture("A beige mainframe held together with duct tape in a dusty basement, a yellowed sticky note on it: \"DO NOT TOUCH - Gary (retired 1999)\", and cobwebs over an \"Update available\" pop-up."),
             Spell("End-to-End Encryption", TargetType.FriendlyCreatures,
@@ -536,7 +537,7 @@ namespace SlayTheClone {
                 .Picture("A computer screen with a grinning skull and a padlock demanding 1 BTC, while a grandma cries into her knitting."),
             Spell("Man-in-the-Middle", TargetType.Player,
                 "Hi, it's your bank. Also, it's not.",
-                "A Watchdog (On Watch): the next enemy spell is redirected to a random creature. 1 charge.",
+                "A Monitored Watchdog: the next enemy spell is redirected to a random creature. 1 charge.",
                 CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Spell, side = WatchdogSide.Enemy, effect = WatchdogEffect.Redirect, charges = 1 }, TargetType.Enemy))
                 .Picture("A man squeezed on a park bench between two lovers, holding both of their phones and reading their texts."),
         };
@@ -579,7 +580,7 @@ namespace SlayTheClone {
                 "Fodder: when it dies, every friendly creature gets +1 Attack for good. Future: a sacrifice cost.",
                 On(EffectTrigger.OnDeath, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, Each)))
                 .Picture("A hooded cultist holding a THE END IS NEAR sign in one hand and a pumpkin spice latte in the other."),
-            Creature("Fenix", 2, 2, speed: 2, deploy: 2,
+            Creature("Phoenix", 2, 2, speed: 2, deploy: 2,
                 "Dies, comes back, posts about it.",
                 "When it dies, summon a random creature from your deck. Future: Revive (it comes back itself).",
                 On(EffectTrigger.OnDeath, Summon(1)))
@@ -635,7 +636,7 @@ namespace SlayTheClone {
                 .Picture("The trolley problem from above: a lever, a trolley and a split track, with one bored man on a track scrolling his phone."),
             Spell("Red Herring", TargetType.Player,
                 "Look over there. No, the fish.",
-                "A misleading Watchdog (On Watch): the next enemy attack is redirected to a random creature. 1 charge.",
+                "A misleading Monitored Watchdog: the next enemy attack is redirected to a random creature. 1 charge.",
                 CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Redirect, charges = 1 }, TargetType.Enemy))
                 .Picture("A red fish in a detective's trench coat and hat, pointing a fin dramatically off to the side."),
             Spell("Imposter Syndrome", TargetType.EnemyCreatures,

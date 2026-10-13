@@ -125,21 +125,22 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(5, safe.Health, "Cleansed before it went off");
 
             var mine = game.Spell("Mine", TargetType.EnemyCreatures, PlaceEffect(SlotEffectType.Landmine, 3));
-            StringAssert.Contains("Place a hidden Landmine (3 damage) on target slot.", Keywords.Plain(CardTextFormatter.GetRulesText(mine)));
+            StringAssert.Contains("Landmine 3 on target slot.", Keywords.Plain(CardTextFormatter.GetRulesText(mine)));
         }
 
         [Test]
-        public void ScorchedEarth_StopsTriggeredEffects_EntryOnesLost_TheAbilityStillWorks() {
+        public void ScorchedEarth_StopsTriggeredEffects_AndTheAbility_EntryOnesLost_ItCanStillMove() {
             var spiky = game.Summon(p1, game.Creature("Spiky", 0, 10, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
             spiky.Ability = CreatureAbility.Spite;
             var hitter = game.Summon(p2, game.Creature("Hitter", 2, 10), 0);
             Place(p1.Battlefield[0], SlotEffectType.ScorchedEarth);
             game.Attack(hitter, p1.Battlefield[0]);
             Assert.AreEqual(10, hitter.Health, "Its retaliation doesn't trigger");
-            Assert.IsTrue(Abilities.Has(spiky, CreatureAbility.Spite), "Abilities aren't triggered effects: Spite still works");
+            Assert.IsFalse(Abilities.Has(spiky, CreatureAbility.Spite), "Its ability is switched off too");
             game.Run(new MoveCreatureAction(spiky, p1.Battlefield[0], p1.Battlefield[1], p1));
             game.Attack(hitter, p1.Battlefield[1]);
-            Assert.AreEqual(9, hitter.Health, "Off the scorched slot, it works again");
+            Assert.AreEqual(9, hitter.Health, "It can still move; off the scorched slot, its effects work again...");
+            Assert.IsTrue(Abilities.Has(spiky, CreatureAbility.Spite), "...and so does its ability");
 
             game.Summon(p1, game.Creature("Arrival", 0, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Enemy)), 0);
             CollectionAssert.IsEmpty(game.History.DamageTo(p2), "Landing on Scorched Earth: no entry effect");

@@ -269,7 +269,7 @@ Reflexive Control
     Faction: Shadow Ops.
     Type: Spell
     Ability Text:
-        Watchdog (On Watch, 1 charge, this Day): enemy Attack by a creature with current Attack 3 or less that targets one of your creatures -> Redirect it to a random enemy creature (excluding the attacker itself). If no other enemy creature exists, the charge is used with no change to the original target.
+        Watchdog (Monitored, 1 charge, this Day): enemy Attack by a creature with current Attack 3 or less that targets one of your creatures -> Redirect it to a random enemy creature (excluding the attacker itself). If no other enemy creature exists, the charge is used with no change to the original target.
     Flavor Text: "They'll call it 'tactics'. You'll call it 'Tuesday'."
 
 YOLO

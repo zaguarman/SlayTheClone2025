@@ -2017,6 +2017,10 @@ def build_icons():
         "conceal": icon_eye("#8a93a8") + stroke("M18 110 L110 18", "#1b1b22", 16) + stroke("M18 110 L110 18", "#d8434f", 8),
         # Revealed: a wide open eye
         "reveal": icon_eye("#ffd257"),
+        # Days: a calendar page, for how long something lasts
+        "days": rect(14, 20, 100, 96, "#f2efe6", f'rx="12" {OUTLINE}') + rect(14, 20, 100, 30, "#d8434f", f'rx="12" {OUTLINE}')
+                + rect(36, 8, 12, 26, "#1b1b22", 'rx="5"') + rect(80, 8, 12, 26, "#1b1b22", 'rx="5"')
+                + "".join(rect(28 + c * 26, 62 + r * 24, 16, 14, "#9aa3b5", 'rx="3"') for r in range(2) for c in range(3)),
         # Encrypted: a padlock
         "encrypt": path("M38 58 L38 40 C 38 20 52 10 64 10 C 76 10 90 20 90 40 L90 58", "none", 'stroke="#1b1b22" stroke-width="20"')
                    + path("M38 58 L38 40 C 38 20 52 10 64 10 C 76 10 90 20 90 40 L90 58", "none", 'stroke="#b9c3d6" stroke-width="10"')
@@ -2921,7 +2925,7 @@ def phoenix(cx, cy, s=1.0):
     return out
 
 
-def fenix():
+def phoenix_card():
     defs = lin("bg", ["#3a1a10", "#1a0a08"])
     body = rect(0, 0, W, H, "url(#bg)")
     body += ellipse(176, 190, 110, 16, "#4a4a4a")
@@ -3069,12 +3073,12 @@ CARDS = {
         "GenerationalTrauma": generational_trauma, "Introvert": introvert, "Pessimist": pessimist,
     },
     "Myth": {
-        "OmniscientSpaceTimeBendingBeardedWizard": omniscient_space_time_bending_bearded_wizard, "Cultist": cultist, "Fenix": fenix,
+        "OmniscientSpaceTimeBendingBeardedWizard": omniscient_space_time_bending_bearded_wizard, "Cultist": cultist, "Phoenix": phoenix_card,
         "ExcessofBreadandWine": excess_of_bread_and_wine, "MonkeyHand": monkey_hand, "SacrificialRitual": sacrificial_ritual,
         "Exorcism": exorcism, "Martyr": martyr, "MementoMori": memento_mori, "Mummy": mummy, "TheHolyGrail": the_holy_grail,
     },
     "ShadowOps": {
-        "Whistleblower": whistleblower, "PoloniumUmbrella": polonium_umbrella,
+        "Whistleblower": whistleblower, "UnvoluntaryFreePoloniumGiveaway": polonium_umbrella,
         "BurnNotice": burn_notice, "CounterIntelligence": counter_intelligence, "DeepCover": deep_cover, "Eavesdrop": eavesdrop,
         "Mole": mole, "PoliticalDecoy": political_decoy, "SignalJammer": signal_jammer, "SleeperAgent": sleeper_agent,
         "SmokeAndMirrors": smoke_and_mirrors, "TappedCommunications": tapped_communications,

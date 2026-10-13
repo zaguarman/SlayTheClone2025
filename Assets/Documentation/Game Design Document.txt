@@ -181,7 +181,7 @@ Redirect (Watchdog effect)
     • What it is: A Watchdog effect that changes the target of a pending action: to a random creature on either side, other than the one acting and the one it was aimed at. Heat Signature draws it first: if any creature has Heat, it goes to the one with the most.
 
 Reorder (Watchdog effect)
-    • What it is: A Watchdog effect that moves a pending action within its layer. A Briefing Watchdog can move it earlier or later; an On Watch Watchdog can only move it later (it only sees the action when it's already up). Layers never change order.
+    • What it is: A Watchdog effect that moves a pending action within its layer. A Briefing Watchdog can move it earlier or later; an Monitored Watchdog can only move it later (it only sees the action when it's already up). Layers never change order.
 
 Requisite
     • What it is: A condition (like discarding cards or sacrificing a creature) that you must meet during the Planning Phase to play certain cards or use certain abilities. It is paid instantly, as an additional cost.
@@ -567,7 +567,7 @@ Both sides go through the same five phases every Day.
 
 • 4. Resolution
     • The queue resolves in a main resolution pass, following 3.7 Resolution Order.
-    • Just before each action resolves, On Watch Watchdogs and Traps that match it react first; anything they create resolves immediately, ahead of it.
+    • Just before each action resolves, Monitored Watchdogs and Traps that match it react first; anything they create resolves immediately, ahead of it.
     • Passives that trigger during resolution add their actions to the queue.
     • Linked Meta-Actions are processed as part of the action they're linked to.
     • IMPORTANT: EFFECTS ARE DELAYED BY THE QUEUE.
@@ -585,7 +585,7 @@ Both sides go through the same five phases every Day.
 Timing Map
     • Planning (instant): Scan layer. One-time reveals and Surveillance. E.g., Reveal, CCTV, Revealed.
     • Briefing (before resolution): Watchdogs set up on earlier Days that need the whole queue. E.g., "Nullify their strongest attack".
-    • Just before each action: Reactions. On Watch Watchdogs and Traps; what they create resolves immediately. E.g., Firewall, Landmine, Binding Chains.
+    • Just before each action: Reactions. Monitored Watchdogs and Traps; what they create resolves immediately. E.g., Firewall, Landmine, Binding Chains.
     • After each action: Retaliation and normal triggers, queued. E.g., OnAttacked, OnDied.
 
 3.7 Resolution Order
@@ -682,7 +682,7 @@ Watchdogs
         • Conditions: each Watchdog card has its own, made for it (ad hoc): what it reacts to is part of the card's design, not a shared rule. The building blocks so far: action type (Attack, Spell, Move, Ability, Summon, Status), side (enemy or friendly), which creature or slot it comes from or targets, and, for attacks, a number ("Attack 3 or less"). Filters that keep coming back may later become shared templates.
         • Effects: Nullify (resolves with no effect, stays visible in the Turn History with the reason), Redirect (new target), Reorder (move within its layer), Create (queue a new action, which resolves immediately), Reveal (show the action, even if hidden).
     • Two Timings:
-        • On Watch (default): Just before each action resolves, it checks whether that action matches. It also catches actions that were queued before the Watchdog existed, as long as they haven't resolved yet. It can only move an action later, never earlier.
+        • Monitored (default): Just before each action resolves, it checks whether that action matches. It also catches actions that were queued before the Watchdog existed, as long as they haven't resolved yet. It can only move an action later, never earlier.
         • Briefing: Once per Day, in the Briefing phase, it looks at the whole queue before anything resolves. It can pick ("the strongest", "the first", "every"), move actions earlier or later within their layer, nullify or redirect. Only Watchdogs already active when the Day's resolution starts can brief; one created today can brief from tomorrow on.
     • Charges: Each action it changes uses 1 charge: the condition says which actions it reacts to, the charges how many times it can. A Briefing Watchdog that picks "every" match changes as many as it has charges for. A Watchdog can last several Days and disappears when its last charge is used (or when a duration on the card runs out).
     • Several Matches: When several Watchdogs match the same action, only the oldest one triggers.
@@ -755,7 +755,7 @@ Movement Restriction
 • Disable: Shutting down key enemy functions, e.g., with Muted, or stunning a creature for 1 Day with Exhausted.
 • Changing Queued Actions: Watchdogs are the only tool that changes actions already in the queue (see 3.11 Instant Effects - Watchdogs).
     • Briefing Watchdogs, set up on earlier Days, look at the whole queue before resolution.
-    • On Watch Watchdogs (e.g., "Mental Breakdown") change matching actions just as they're about to resolve, including actions queued earlier in the Day.
+    • Monitored Watchdogs (e.g., "Mental Breakdown") change matching actions just as they're about to resolve, including actions queued earlier in the Day.
     • UI: When a Watchdog changes an action, the UI must clearly show it and its source.
 • Recruitment / Conversion / Mind Control: Taking control of an enemy creature or capturing its card (see 5.4 Recruitment & Conversion).
 
@@ -776,7 +776,9 @@ Movement Restriction
 
 • Targeting Keywords: Cards say how they target. Without a keyword, an effect aimed at your own creature uses Homing (your side has no fog of war, so you know where your creatures will be, including one queued to be summoned), and an effect aimed at an enemy slot uses Fixed. "Homing:" on a card makes it follow enemy creatures too, which is why it's scarce.
 • Card Keywords (like Magic's keyword abilities and Slay the Spire's keyword tooltips): card text is short and leans on keywords, each a highlighted word whose meaning is one hover away. Hovering a keyword on an enlarged card opens its explanation beside it; keywords inside that explanation can be hovered too, and so on, so players can follow a chain (Exhausted -> Exposed). The glossary lives in Keywords.cs.
-    • Trigger keywords lead a sentence: Arrival (enters play, after Deployment Time), Last Will (dies), Dawn, Dusk, When Hurt (takes damage), On Hit (its attack lands).
+    • Trigger keywords lead a sentence: Arrival (lands, after Deployment Time), Last Will (dies), Dawn, Dusk, Hurt (takes damage), On Hit (its attack lands).
+    • Text conventions: what it does first, then whom: "3 damage to target", "All friendly +1 [Armor]", "Exhaust all enemy". Targeting keywords: target (what the card is dropped on, either side; only a card limited to one side says so), all, all friendly, all enemy, random, random friendly, random enemy.
+    • Numbers: a status with one number counts its Days ("Doom 3", "Conceal 2"); Bless and Heat count stacks. A status with a strength shows its Days after a calendar icon ("Burn 2 [calendar]3": 2 damage a Dusk for 3 Days), and so do timed stat changes ("+4 Attack [calendar]1"). The calendar keeps them apart from Attack/Speed/Health and doesn't read as a countdown.
     • Keyword abilities replace effects that keep coming back, written as one word and a number: Retaliate X (a creature that damages it takes X damage; "Retaliate: exhaust it" for other effects), Decay X (takes X damage each Dusk), Regenerate X (heals X each Dusk), Grow X (+X/+X for good each Dawn), Second Wind (once per combat, survives a lethal hit). Only an effect that is exactly the pattern becomes the keyword; anything more is written out.
     • Statuses, Slot Effects, Watchdog terms, movement and creature abilities are keywords too, printed by name without reminder text.
     • Homing: Locks onto a creature and follows it if it moves. If the creature Leaves Play, the effect is aimed at the slot it was last in. Aimed at your creature that is queued to be summoned, it locks on to it; if the summon is taken back, it is aimed at that slot. Dropped on an empty slot, it targets that slot and behaves like Fixed. Against a Concealed enemy creature, Homing behaves like Fixed that one time.

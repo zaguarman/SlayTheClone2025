@@ -46,8 +46,8 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
   designNotes: 'Mechanics test: Scorched Earth on a slot. The creature there can''t
-    trigger its effects (entry, retaliation, Dawn and Dusk, death) while it stands
-    on it. Its ability still works.'
+    trigger its effects (entry, retaliation, Dawn and Dusk, death) or use its ability
+    while it stands on it. It can still move and attack.'
   artDescription: 'The Banksy auction stunt: a spy''s portrait, painted in the style
     of Girl with Balloon, has just sold at auction, and the canvas is sliding down
     through a shredder hidden in its gilded frame, the strips stamped BURN NOTICE.

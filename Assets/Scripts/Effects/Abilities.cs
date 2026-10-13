@@ -30,6 +30,7 @@ namespace SlayTheClone {
             CreatureAbility.HiveMind => "Hive Mind",
             CreatureAbility.InsiderJob => "Insider Job",
             CreatureAbility.ReturnToSender => "Return to Sender",
+            CreatureAbility.Unpatchable => "Cold Storage",
             _ => ability.ToString()
         };
 
@@ -62,8 +63,10 @@ namespace SlayTheClone {
         public static bool IsActive(ICreature creature) =>
             creature != null && creature.Ability != CreatureAbility.None && IsSwitchedOn(creature) && !IsJammed(creature);
 
-        // A Signal Jammer's own ability is judged without other jammers, so two facing each other switch each other off
-        private static bool IsSwitchedOn(ICreature creature) => creature.IsOperative && !creature.AbilitiesDisabled && !creature.IsDead;
+        // A Signal Jammer's own ability is judged without other jammers, so two facing each other switch each other off.
+        // Scorched Earth switches the ability of the creature standing on it off too.
+        private static bool IsSwitchedOn(ICreature creature) =>
+            creature.IsOperative && !creature.AbilitiesDisabled && !creature.IsDead && !SlotEffectRules.SuppressesTriggeredEffects(creature);
 
         /// <summary>Signal Jammer: the enemy creature directly opposite it has its ability switched off.</summary>
         public static bool IsJammed(ICreature creature) {
@@ -79,7 +82,7 @@ namespace SlayTheClone {
 
         /// <summary>
         /// Whether the target's defensive ability works against this source: Zero-Day ignores every defensive ability
-        /// (Unpatchable isn't one, so it still works).
+        /// (Cold Storage, the Unpatchable ability, isn't one, so it still works).
         /// </summary>
         public static bool Defends(ICreature target, CreatureAbility ability, ICreature source) =>
             Has(target, ability) && !(IsDefensive(ability) && Has(source, CreatureAbility.ZeroDay));
