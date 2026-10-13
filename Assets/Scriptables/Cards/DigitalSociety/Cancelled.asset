@@ -67,8 +67,8 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-  designNotes: 'Exhausted, and 2 Heat: random and redirected attacks find it first.
-    Future: Ostracised.'
+  designNotes: 'Exhausted, and Heat Signal 2: random and redirected attacks find
+    it first. Future: Ostracised.'
   artDescription: A man at a podium facing a crowd that holds torches, pitchforks
     and phones up to film him.
   defaultTargetType: 4

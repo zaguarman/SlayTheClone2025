@@ -66,6 +66,24 @@ namespace SlayTheClone.Tests {
             var point = SceneGame.KeywordPoint(glossary.Body, "Exposed");
             ExecuteEvents.Execute(glossary.Body.gameObject, new PointerEventData(EventSystem.current) { position = point }, ExecuteEvents.pointerClickHandler);
             Assert.AreEqual("Exposed", glossary.Shown, "Clicking a keyword in an explanation shows that keyword");
+
+            var list = glossary.GetComponentsInChildren<ScrollRect>().Single();
+            float width = ((RectTransform)list.transform).rect.width;
+            Click(listed.Single(b => b.name == KeywordGlossaryMenu.KeywordButton + "Random"));
+            yield return null;
+            Assert.AreEqual(width, ((RectTransform)list.transform).rect.width, 0.5f, "The keyword list keeps its width whatever is shown");
+            float top = list.verticalNormalizedPosition;
+            list.GetComponent<WheelScroll>().ScrollBy(-2);
+            Assert.Less(list.verticalNormalizedPosition, top, "The mouse wheel scrolls the keyword list");
+
+            Click(listed.Single(b => b.name == KeywordGlossaryMenu.KeywordButton + "Exhausted"));
+            var exhausting = glossary.CardsWith("Exhausted").Select(c => c.cardName).ToList();
+            CollectionAssert.Contains(exhausting, "DDOS Attack", "The cards that print it are read from the cards themselves");
+            CollectionAssert.IsSubsetOf(exhausting.Select(n => "card:" + n), Keywords.LinksIn(glossary.UsedBy.text), "...and listed as links");
+            glossary.ShowCardPreview("DDOS Attack", new Vector2(200f, 200f));
+            Assert.AreEqual("DDOS Attack", glossary.CardPreview?.GetBaseCardData().cardName, "Hovering a card's name shows the card");
+            glossary.ShowCardPreview(null);
+            Assert.IsNull(glossary.CardPreview);
             Click(GalleryButton(glossary, KeywordGlossaryMenu.BackButtonName));
             Assert.IsFalse(glossary.IsOpen);
 

@@ -164,7 +164,7 @@ namespace SlayTheClone {
             scroll.content = contentRect;
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
-            scroll.scrollSensitivity = 40f;
+            WheelScroll.AddTo(scroll).PixelsPerNotch = 140f;
         }
     }
 }

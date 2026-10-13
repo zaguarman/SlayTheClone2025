@@ -75,7 +75,7 @@ namespace SlayTheClone {
                 case ModifyArmorAction armor:
                     return $"{armor.GetAmount():+0;-0} Armor to {Who(armor.GetTargetCreature(), viewer)}";
                 case ApplyStatusEffectAction status:
-                    return $"{By(status.Source, viewer)}{status.GetStatusType()} on {Who(status.GetTargetCreature(), viewer)}";
+                    return $"{By(status.Source, viewer)}{StatusName(status.GetStatusType())} on {Who(status.GetTargetCreature(), viewer)}";
                 case CleanseAction cleanse:
                     return $"{(cleanse.IsPurge ? "Purge" : "Cleanse")} {Who(cleanse.GetTargetCreature(), viewer)}";
                 case DelayDeploymentAction delay:
@@ -130,6 +130,8 @@ namespace SlayTheClone {
             };
             return $"{PlayerName(caster, viewer)} {(caster == viewer ? "cast" : "casts")} {name}{aim}";
         }
+
+        private static string StatusName(StatusEffectType status) => status == StatusEffectType.HeatSignature ? "Heat Signal" : status.ToString();
 
         private static string MoveVerb(MoveKind kind) => kind switch {
             MoveKind.Push => "pushes into",

@@ -22,7 +22,7 @@ namespace SlayTheClone {
         public ModifierCalculationType GetCalculationType() => calculationType;
         /// <summary>The creature whose effect it is, if any (where No U bounces it, and whether Zero-Day bypasses abilities).</summary>
         public ICreature Source { get; }
-        /// <summary>Whose effect it is: an enemy's effect is the one Unbothered, No U and Spite react to. Null: nobody's.</summary>
+        /// <summary>Whose effect it is: an enemy's effect is the one Unbothered and No U react to. Null: nobody's.</summary>
         public IPlayer Controller { get; }
 
         public ModifyAction(

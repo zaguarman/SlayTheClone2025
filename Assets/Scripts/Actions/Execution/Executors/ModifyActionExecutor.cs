@@ -47,9 +47,9 @@ namespace SlayTheClone {
             Log($"Executed ModifyAction via Executor for {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
         }
 
-        // Spite: an enemy effect that lowered its stats gives it +2 Attack, until it leaves play
+        // Spite: an effect that lowered its stats, friendly or enemy, gives it +2 Attack, until it leaves play
         private static void ReactWithSpite(Abilities.StatChange change, ActionExecutionContext context) {
-            if (!change.IsEnemy || !change.Lowers || !Abilities.Defends(change.Target, CreatureAbility.Spite, change.Source)) return;
+            if (!change.Lowers || !Abilities.Defends(change.Target, CreatureAbility.Spite, change.Source)) return;
             Log($"{change.Target.Name}'s Spite: +{SpiteAttack} Attack", LogTag.Effects);
             StatModifiers.Apply(context.ModifierManager, context.ModifierFactory, change.Target, SpiteAttack,
                 true, false, false, ModifierCalculationType.Flat, 0, context.TurnClock.TurnNumber);

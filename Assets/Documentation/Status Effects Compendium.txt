@@ -11,7 +11,7 @@ Status Ownership: Every status belongs to one faction, or is Neutral. A faction'
 • Statecraft: Diplomatic Immunity, Heavy, Keep Calm
 • Shadow Ops.: Brainwashed, Compromised, Honeypot
 • Corporate: Addicted, Burnout, Coffeinated
-• Tech: Exhausted, Heat Signature
+• Tech: Exhausted, Heat Signal
 • Digital Society: Earworm, Ghosted, Ostracised
 • Zeitgeist: Hipster, Impatient, Slacking Off
 • Mind: Cognitive Dissonance, Imposter Syndrome, Paranoid
@@ -318,7 +318,7 @@ Ghosted
     Answers: It can't be hit, but attacks aimed at its slot reach you instead: guard that lane or move it somewhere quiet while it fades, then plan its Doomed Last Rites.
     Cleansable: Yes (If cleansed, Doomed is not applied).
 
-Heat Signature
+Heat Signal
     Faction: Tech
     Type: Unique, Control, Stacking, Persistent
     Persistent: Yes

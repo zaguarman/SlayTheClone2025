@@ -92,7 +92,8 @@ namespace SlayTheClone {
         #endregion
 
         #region Sentences
-        // Short templated clauses: what it does first, then whom ("3 damage to target", "Doom 3 on all enemy").
+        // Short templated clauses: what it does first, then whom ("3 damage to target", "Doom 3 on all enemy creatures").
+        // The same damage or healing to every creature and both players is "everything".
         // A number after a status is its Days ("Doom 3"); a status with a strength shows the Days with the calendar
         // ("Burn 2 [calendar]3": 2 damage, 3 Days). The rest of the meaning lives in the keywords' explanations.
         private static string DescribeEffect(CardEffect effect, bool isSpell) {
@@ -103,13 +104,36 @@ namespace SlayTheClone {
             bool retaliates = !isSpell && effect.trigger == EffectTrigger.OnDamage
                               && actions.All(a => a.targetType == TargetType.Enemy && a.targetModifier == TargetModifier.None);
             (string icon, string text) trigger = isSpell ? default : retaliates ? (EffectIcons.Hurt, Keywords.Link("Retaliate")) : DescribeTrigger(effect);
-            var clauses = actions.Select(a => DescribeAction(a, isSpell, retaliates ? "it" : null)).ToList();
+            var clauses = new List<string>();
+            foreach (var group in GroupForEverything(actions)) {
+                clauses.Add(group.Count > 1
+                    ? DescribeAction(group[0], isSpell, Keywords.Link("Everything", "everything"))
+                    : DescribeAction(group[0], isSpell, retaliates ? "it" : null));
+            }
             string body = JoinClauses(clauses);
             string once = effect.oncePerCombat ? "Once per combat, " : "";
 
             if (trigger.text == null) return CapitalizeRich(once + body) + ".";
             string lead = trigger.text.StartsWith("<") ? $"{trigger.text}:" : $"{trigger.text},";
             return $"{EffectIcons.Tag(trigger.icon)}{(once.Length > 0 ? once + LowerFirst(lead) : lead)} {body}.";
+        }
+
+        // Damage or healing of the same amount to all creatures, you and the enemy player reads as one clause: "everything"
+        private static List<List<EffectAction>> GroupForEverything(List<EffectAction> actions) {
+            var groups = actions.Select(a => new List<EffectAction> { a }).ToList();
+            foreach (var type in new[] { ActionType.Damage, ActionType.Heal }) {
+                foreach (int value in actions.Where(a => a.actionType == type).Select(a => a.value).Distinct().ToList()) {
+                    bool Each(EffectAction a, TargetType target) => a.actionType == type && a.value == value && a.targetType == target
+                                                                   && a.targetModifier == TargetModifier.AllSameTypeTargets;
+                    var parts = new[] { TargetType.AllCreatures, TargetType.Player, TargetType.Enemy }
+                        .Select(t => actions.FirstOrDefault(a => Each(a, t))).ToList();
+                    if (parts.Any(p => p == null)) continue;
+                    int first = groups.FindIndex(g => g.Count == 1 && parts.Contains(g[0]));
+                    groups.RemoveAll(g => g.Count == 1 && parts.Contains(g[0]));
+                    groups.Insert(first, parts);
+                }
+            }
+            return groups;
         }
 
         private static (string icon, string text) DescribeTrigger(CardEffect effect) {
@@ -178,14 +202,14 @@ namespace SlayTheClone {
             }
         }
 
-        // Targeting keywords: "target" (what it's dropped on, either side), all / all friendly / all enemy, random ones.
-        // Players and the creature itself are plain words.
+        // "target" (what it's dropped on, either side) and "random" are keywords; groups ("all enemy creatures"), players
+        // and the creature itself are plain words.
         private static string DescribeTarget(EffectAction action, bool isSpell) {
             if (action.targetModifier.HasFlag(TargetModifier.Random)) {
                 switch (action.targetType) {
-                    case TargetType.EnemyCreatures: return Keywords.Link("Random enemy", "random enemy");
-                    case TargetType.FriendlyCreatures: return Keywords.Link("Random friendly", "random friendly");
-                    case TargetType.AllCreatures: return Keywords.Link("Random", "random creature");
+                    case TargetType.EnemyCreatures: return "a " + Keywords.Link("Random", "random") + " enemy creature";
+                    case TargetType.FriendlyCreatures: return "a " + Keywords.Link("Random", "random") + " friendly creature";
+                    case TargetType.AllCreatures: return "a " + Keywords.Link("Random", "random") + " creature";
                 }
             }
 
@@ -200,9 +224,9 @@ namespace SlayTheClone {
                 case TargetType.Self: return "this" + adjacent;
                 case TargetType.Player: return "you";
                 case TargetType.Enemy: return "enemy player";
-                case TargetType.FriendlyCreatures: return Keywords.Link("All friendly", "all friendly");
-                case TargetType.EnemyCreatures: return Keywords.Link("All enemy", "all enemy");
-                case TargetType.AllCreatures: return Keywords.Link("All", "all");
+                case TargetType.FriendlyCreatures: return "all friendly creatures";
+                case TargetType.EnemyCreatures: return "all enemy creatures";
+                case TargetType.AllCreatures: return "all creatures";
                 default: return Keywords.Link("Target", "target");
             }
         }
@@ -229,7 +253,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Burned: return $"{Keywords.Link("Burned", $"Burn {potency}")}{DaysTag(days)} on {target}";
                 case StatusEffectType.Doomed: return $"{Keywords.Link("Doomed", $"Doom {days}")} on {target}";
                 case StatusEffectType.Blessed: return $"{Keywords.Link("Blessed", $"Bless {potency}")} on {target}";
-                case StatusEffectType.HeatSignature: return $"{Keywords.Link("Heat", $"Heat {potency}")} on {target}";
+                case StatusEffectType.HeatSignature: return $"{Keywords.Link("Heat Signal", $"Heat Signal {potency}")} on {target}";
                 case StatusEffectType.Concealed: return $"{Keywords.Link("Concealed", $"Conceal {days}")} on {target}";
                 case StatusEffectType.Revealed: return $"{Keywords.Link("Revealed", $"Revealed {days}")} on {target}";
                 case StatusEffectType.Encrypted: return $"{Keywords.Link("Encrypted", $"Encrypt {days}")} on {target}";

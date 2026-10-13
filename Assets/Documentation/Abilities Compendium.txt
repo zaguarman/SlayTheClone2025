@@ -59,9 +59,9 @@ No U
 Spite
     Inspired by: Defiant (Bisharp)
     Type: Passive, Defensive
-    Description: "When an enemy effect lowers this creature's stats, it gains +2 Attack."
+    Description: "When an effect lowers this creature's stats, friendly or enemy, it gains +2 Attack."
     Notes: The +2 Attack is a Temporary Stat Modification that lasts until it leaves play. It triggers once per stat-lowering effect.
-    Answers: Don't debuff it: use damage or statuses. Its owner can bait debuffs into it.
+    Answers: Don't debuff it: use damage or statuses. Its owner can debuff it on purpose to grow it.
 
 
 Ignoring Stat Changes in Combat

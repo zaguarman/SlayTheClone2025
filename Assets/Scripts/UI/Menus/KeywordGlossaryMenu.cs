@@ -10,11 +10,15 @@ using static SlayTheClone.MenuWidgets;
 namespace SlayTheClone {
     /// <summary>
     /// The keyword glossary, opened from the title screen: every keyword by section on the left; the chosen one's explanation
-    /// on the right, whose keywords can be clicked to read theirs, and the cards that print it.
+    /// on the right, whose keywords can be clicked to read theirs, and the cards that print it (worked out from the cards
+    /// themselves each time, so it follows any change to them); hover a card's name to see the card.
     /// </summary>
     public class KeywordGlossaryMenu : MonoBehaviour {
         public const string KeywordButton = "Keyword: ";
         public const string BackButtonName = "GlossaryBackButton";
+        private const string CardLink = "card:";
+        private const float ListWidth = 380f;
+        private const float CardPreviewScale = 1.8f;
 
         private DeckCatalog catalog;
         private GameObject titleScreen;
@@ -23,13 +27,19 @@ namespace SlayTheClone {
         private TextMeshProUGUI body;
         private TextMeshProUGUI usedBy;
         private readonly Dictionary<string, Button> buttons = new Dictionary<string, Button>();
-        private Dictionary<string, List<string>> cardsByKeyword;
+        private CardViews cardViews;
+        private CardController cardPreview;
+        private string previewedCard;
 
         public bool IsOpen => panel != null && panel.activeSelf;
         /// <summary>The keyword shown.</summary>
         public string Shown { get; private set; }
         /// <summary>The explanation shown: its keywords are links that can be clicked.</summary>
         public TMP_Text Body => body;
+        /// <summary>The cards that print the keyword, as links that show the card when hovered.</summary>
+        public TMP_Text UsedBy => usedBy;
+        /// <summary>The card shown while its name is hovered, if any.</summary>
+        public CardController CardPreview => cardPreview;
 
         public void Setup(DeckCatalog deckCatalog, GameObject title) {
             catalog = deckCatalog;
@@ -44,6 +54,7 @@ namespace SlayTheClone {
         }
 
         public void Hide() {
+            ShowCardPreview(null);
             if (panel != null) panel.SetActive(false);
             if (titleScreen != null) titleScreen.SetActive(true);
         }
@@ -56,24 +67,54 @@ namespace SlayTheClone {
             title.text = entry.Title;
             body.text = Keywords.Describe(key);
             var cards = CardsWith(key);
-            usedBy.text = cards.Count > 0 ? $"<b>On cards:</b> {string.Join(", ", cards)}" : "";
+            usedBy.text = cards.Count > 0
+                ? $"<b>On cards:</b> {string.Join(", ", cards.Select(c => $"<link=\"{CardLink}{c.cardName}\"><u>{c.cardName}</u></link>"))}"
+                : "";
+            ShowCardPreview(null);
             foreach (var pair in buttons) ShowChosen(pair.Value, pair.Key == key);
         }
 
-        // The cards on offer whose text prints the keyword
-        private List<string> CardsWith(string key) {
-            if (cardsByKeyword == null) {
-                cardsByKeyword = new Dictionary<string, List<string>>();
-                foreach (var asset in catalog != null ? catalog.AllCards : new List<CardDataScriptableObject>()) {
-                    var data = asset.ToCardData();
-                    foreach (var link in Keywords.LinksIn(CardTextFormatter.GetRulesText(data)).Distinct()) {
-                        if (!cardsByKeyword.TryGetValue(link, out var list)) cardsByKeyword[link] = list = new List<string>();
-                        list.Add(asset.cardName);
-                    }
-                    Destroy(data);
-                }
+        /// <summary>The cards on offer whose printed text has the keyword, read from the cards as they are now.</summary>
+        public List<CardDataScriptableObject> CardsWith(string key) {
+            var found = new List<CardDataScriptableObject>();
+            foreach (var asset in catalog != null ? catalog.AllCards : new List<CardDataScriptableObject>()) {
+                var data = asset.ToCardData();
+                if (Keywords.LinksIn(CardTextFormatter.GetRulesText(data)).Contains(key)) found.Add(asset);
+                Destroy(data);
             }
-            return cardsByKeyword.TryGetValue(key, out var names) ? names : new List<string>();
+            return found;
+        }
+
+        private void Update() {
+            if (!IsOpen || usedBy == null) return;
+            int link = TMP_TextUtilities.FindIntersectingLink(usedBy, Input.mousePosition, null);
+            string id = link >= 0 ? usedBy.textInfo.linkInfo[link].GetLinkID() : null;
+            ShowCardPreview(id != null && id.StartsWith(CardLink) ? id.Substring(CardLink.Length) : null, Input.mousePosition);
+        }
+
+        /// <summary>Shows the named card enlarged next to the pointer; null hides it.</summary>
+        public void ShowCardPreview(string cardName, Vector2 near = default) {
+            if (cardName == previewedCard) return;
+            previewedCard = cardName;
+            if (cardPreview != null) Destroy(cardPreview.gameObject);
+            cardPreview = null;
+            var asset = cardName != null && catalog != null ? catalog.AllCards.FirstOrDefault(c => c.cardName == cardName) : null;
+            if (asset == null || catalog.CardPrefab == null) return;
+
+            cardViews ??= CardViews.ForDisplay(catalog.CardPrefab);
+            cardPreview = cardViews.Create(CardFactory.CreateCard(asset.ToCardData()), null, panel.transform);
+            if (cardPreview == null) return;
+            var group = cardPreview.GetComponent<CanvasGroup>();
+            group.blocksRaycasts = false;
+            var rect = (RectTransform)cardPreview.transform;
+            rect.localScale = Vector3.one * CardPreviewScale;
+            rect.pivot = new Vector2(0f, 0f);
+            rect.position = near + new Vector2(24f, 24f);
+            // Keep it on screen: above the pointer, or below when there's no room
+            var corners = new Vector3[4];
+            rect.GetWorldCorners(corners);
+            if (corners[2].y > Screen.height) rect.position += new Vector3(0f, Screen.height - corners[2].y, 0f);
+            if (corners[2].x > Screen.width) rect.position += new Vector3(-(corners[2].x - near.x) - 24f, 0f, 0f);
         }
 
         private void Build() {
@@ -109,8 +150,9 @@ namespace SlayTheClone {
         private void BuildList(Transform parent) {
             var area = NewObject("List", parent);
             UITheme.StylePanel(area.AddComponent<Image>(), PanelColor);
+            // A fixed width: picking a keyword never resizes the list
             var element = area.AddComponent<LayoutElement>();
-            element.preferredWidth = 470;
+            element.minWidth = element.preferredWidth = ListWidth;
             element.flexibleWidth = 0;
 
             var viewport = NewObject("Viewport", area.transform);
@@ -147,7 +189,7 @@ namespace SlayTheClone {
             scroll.content = contentRect;
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
-            scroll.scrollSensitivity = 40f;
+            WheelScroll.AddTo(scroll);
         }
 
         // The chosen keyword: its name, its explanation (links click through), and the cards that print it
@@ -156,7 +198,9 @@ namespace SlayTheClone {
             var image = area.AddComponent<Image>();
             UITheme.Round(image, UITheme.Parchment, 1.5f);
             UITheme.AddTrim(area.transform, UITheme.Gold, 1.5f);
-            area.AddComponent<LayoutElement>().flexibleWidth = 1;
+            var element = area.AddComponent<LayoutElement>();
+            element.minWidth = element.preferredWidth = 0; // Takes what's left, whatever the text
+            element.flexibleWidth = 1;
             var layout = area.AddComponent<VerticalLayoutGroup>();
             layout.padding = new RectOffset(40, 40, 30, 30);
             layout.spacing = 18;
@@ -169,7 +213,7 @@ namespace SlayTheClone {
             body.textWrappingMode = TextWrappingModes.Normal;
             body.raycastTarget = true; // Its keywords are clicked
             body.gameObject.AddComponent<KeywordLinkClicks>().OnKeyword = ShowKeyword;
-            usedBy = AddText(area.transform, "", 24, UITheme.Hex(0x5a5146), FontStyles.Italic, height: -1);
+            usedBy = AddText(area.transform, "", 26, UITheme.Hex(0x5a5146), FontStyles.Italic, height: -1);
             usedBy.alignment = TextAlignmentOptions.TopLeft;
             usedBy.textWrappingMode = TextWrappingModes.Normal;
         }

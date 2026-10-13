@@ -157,6 +157,8 @@ namespace SlayTheClone {
                 UpdateTooltipContent(card);
                 return;
             }
+            // Reading keywords: passing over another card on the way to an explanation doesn't replace them
+            if (keywordPopups.Count > 0 && PointerInArea(Input.mousePosition)) return;
 
             HideTooltip();
             activeCard = card;
@@ -319,14 +321,41 @@ namespace SlayTheClone {
 
         private void Update() {
             if (activeCard == null || preview == null) return;
-            bool overTooltip = TrackKeywords(Input.mousePosition);
-            if (!released || overTooltip) lastHeldAt = Time.unscaledTime;
+            Vector2 pointer = Input.mousePosition;
+            TrackKeywords(pointer);
+            if (!released || PointerInArea(pointer)) lastHeldAt = Time.unscaledTime;
             else if (Time.unscaledTime - lastHeldAt > ReleaseGrace) HideTooltip();
         }
 
+        // Generous margins: slipping a few pixels off a popup, or crossing the gap between two, keeps everything open
+        private const float AreaMargin = 48f;
+
         /// <summary>
-        /// Follows the pointer: on a keyword of the preview or of a popup it opens that keyword's explanation next to it,
-        /// closing explanations opened further along. Returns whether the pointer is on the preview or a popup.
+        /// Whether the pointer is anywhere around what the tooltip shows: the card, its preview and the open explanations,
+        /// with a margin. Only leaving all of it closes the tooltip.
+        /// </summary>
+        public bool PointerInArea(Vector2 pointer) {
+            if (activeCard == null || preview == null) return false;
+            var areas = keywordPopups.Select(p => ScreenRect(p.Rect)).Append(ScreenRect((RectTransform)preview.transform)).ToList();
+            var card = CardScreenRect(activeCard);
+            if (card.HasValue) areas.Add(card.Value);
+            return areas.Any(r => Rect.MinMaxRect(r.xMin - AreaMargin, r.yMin - AreaMargin, r.xMax + AreaMargin, r.yMax + AreaMargin).Contains(pointer));
+        }
+
+        private static Rect? CardScreenRect(CardController card) {
+            if (card == null) return null;
+            var corners = new Vector3[4];
+            ((RectTransform)card.transform).GetWorldCorners(corners);
+            var camera = CanvasUtility.GetEventCamera(card);
+            Vector2 min = RectTransformUtility.WorldToScreenPoint(camera, corners[0]);
+            Vector2 max = RectTransformUtility.WorldToScreenPoint(camera, corners[2]);
+            return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+        }
+
+        /// <summary>
+        /// Follows the pointer: on a keyword of the preview or of a popup it opens that keyword's explanation next to it.
+        /// Only another keyword changes what's open: off a keyword, or between popups, everything stays, so the pointer can
+        /// wander on to the next explanation. Returns whether the pointer is on the preview or a popup.
         /// </summary>
         public bool TrackKeywords(Vector2 pointer) {
             if (preview == null) return false;
@@ -341,15 +370,12 @@ namespace SlayTheClone {
             TMP_Text text = over == -1 ? preview.RulesText : keywordPopups[over].Body;
             RectTransform parent = over == -1 ? previewRect : keywordPopups[over].Rect;
             int link = text != null ? TMP_TextUtilities.FindIntersectingLink(text, pointer, null) : -1;
-            if (link < 0) {
-                CloseKeywordsFrom(over + 2); // What it opened stays, so the pointer can go there
-                return true;
-            }
+            if (link < 0) return true;
 
             string key = text.textInfo.linkInfo[link].GetLinkID();
             int next = over + 1;
-            if (next < keywordPopups.Count && keywordPopups[next].Key == key) CloseKeywordsFrom(next + 1);
-            else if (Keywords.Exists(key) && next < MaxKeywordPopups) OpenKeyword(next, key, parent, text, link);
+            bool alreadyOpen = next < keywordPopups.Count && keywordPopups[next].Key == key;
+            if (!alreadyOpen && Keywords.Exists(key) && next < MaxKeywordPopups) OpenKeyword(next, key, parent, text, link);
             return true;
         }
 

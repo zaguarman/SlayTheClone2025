@@ -97,7 +97,7 @@ Play style: slow to arrive, hard to remove. Armor, disables and area damage, wit
 Creatures
     • King Emeritus (1/6/1, 2): Each turn, heal you for 1.
         • Future: Diplomatic Immunity.
-    • Spite-Elected President (3/4/2, 2): Spite (when an enemy effect lowers its stats, +2 Attack). When this enters, 1 damage to each creature (both sides).
+    • Spite-Elected President (3/4/2, 2): Spite (when an effect lowers its stats, friendly or enemy, +2 Attack). When this enters, 1 damage to each creature (both sides).
         • Future: a Law that hurts both sides each Dawn.
     • Police Officer Productivity Target (2/3/2, 1): Each turn, 1 damage to a random enemy creature.
         • Future: double damage against creatures that moved this Day.

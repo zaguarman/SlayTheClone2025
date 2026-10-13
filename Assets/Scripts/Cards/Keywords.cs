@@ -34,16 +34,13 @@ namespace SlayTheClone {
             Add("Dawn", "The start of a [Day], before anyone plans.");
             Add("Dusk", "The end of a [Day], after everything has resolved.");
             Add("Days", "How long it lasts, counting the [Day] it lands: 1 is this Day only, 2 is this Day and the next.");
+            Add("Deployment Time", "The [Days] a creature needs to get ready after it's summoned. Until then it can't act and its ability is off.");
 
             // ---------------------------------------------------------------- Targets
             group = "Targets";
             Add("Target", "What you drop the card on: a creature or a slot, on either side.");
-            Add("All", "Every creature on the board, both sides.");
-            Add("All friendly", "Every creature on your side.");
-            Add("All enemy", "Every creature on the enemy's side.");
-            Add("Random", "One creature picked at random, either side.");
-            Add("Random friendly", "One of your creatures, picked at random.");
-            Add("Random enemy", "One enemy creature, picked at random.");
+            Add("Random", "The target is picked when the effect happens, not when it's played: one creature in play, each equally likely. A random creature can be on either side; a random friendly creature is one of yours; a random enemy creature is one of the enemy's. Damage to a random target goes to the creature with the most [Heat Signal] first. If there's no creature to pick, nothing happens.");
+            Add("Everything", "Every creature on both sides, and both players.");
 
             // ---------------------------------------------------------------- Triggers
             group = "Triggers";
@@ -70,7 +67,6 @@ namespace SlayTheClone {
             group = "Stats";
             Add("Armor", "Absorbs damage before Health. Fades by 1 each [Dusk].");
             Add("Health Loss", "Lowers Health directly. It isn't damage, so [Armor] doesn't stop it.");
-            Add("Deployment Time", "The [Days] a creature needs to get ready after it's summoned. Until then it can't act and its ability is off.");
             Add("Exposed", "Takes +1 damage from each hit.");
 
             // ---------------------------------------------------------------- Statuses
@@ -80,7 +76,7 @@ namespace SlayTheClone {
             Add("Doomed", "Doom X: dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it.");
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
             Add("Blessed", "Bless X: the next X statuses that would land on it are stopped, good or bad.");
-            Add("Heat", "Heat X: random and redirected attacks go to the creature with the most Heat first.");
+            Add("Heat Signal", "Heat Signal X: damage to a random target, and redirected attacks, go to the creature with the most Heat Signal first. It stays until cleansed.");
             Add("Concealed", "Conceal X: for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
             Add("Revealed", "Revealed X: for X [Days], it can't be [Concealed]: its plans can be seen.");
             Add("Encrypted", "Encrypt X: for X [Days], [Watchdog|Watchdogs] ignore its actions.");
@@ -92,9 +88,9 @@ namespace SlayTheClone {
             Add("Reveal", "Shows you everything about a slot: its hidden [Slot Effect], the creature there and what it plans. Instant.");
             Add("Watchdog", "A trap in the action queue: when an action it watches comes up, it acts on it. One charge per action.");
             Add("Monitored", "The [Watchdog] checks every action right before it resolves.");
-            Add("Briefing", "The [Watchdog] checks the whole queue once, at the start of each [Day] after the one it was set.");
+            Add("Briefing", "Each [Day], once everyone has planned and before anything resolves, the [Watchdog] reads the whole queue and acts on what it watches. It starts the Day after it's set.");
             Add("Nullify", "The action is cancelled.");
-            Add("Redirect", "The action hits another creature, picked at random.");
+            Add("Redirect", "The action hits another creature, picked at [Random|random].");
             Add("Reorder", "The action moves to the start or the end of its turn in the queue.");
 
             // ---------------------------------------------------------------- Slot Effects

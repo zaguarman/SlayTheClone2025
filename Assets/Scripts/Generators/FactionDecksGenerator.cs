@@ -198,7 +198,7 @@ namespace SlayTheClone {
                 On(EffectTrigger.StartOfTurn, Heal(1, TargetType.Player))),
             Creature("Spite-Elected President", 3, 4, speed: 2, deploy: 2,
                 "Voted in to make everyone else miserable. Delivered on day one.",
-                "Spite: when an enemy effect lowers its stats, it gains +2 Attack. Future: a Law (Location) for 3 Days that hurts both sides each Dawn.",
+                "Spite: when an effect lowers its stats, friendly or enemy, it gains +2 Attack. Future: a Law (Location) for 3 Days that hurts both sides each Dawn.",
                 On(EffectTrigger.OnPlay, Damage(1, TargetType.AllCreatures)))
                 .With(CreatureAbility.Spite),
             Creature("Police Officer Productivity Target", 2, 3, speed: 2, deploy: 1,
@@ -424,7 +424,7 @@ namespace SlayTheClone {
                 .Picture("A video thumbnail: a man with a hugely shocked face, a big red arrow and a red circle around absolutely nothing."),
             Spell("Cancelled", TargetType.EnemyCreatures,
                 "One tweet from 2011. Career over by lunch.",
-                "Exhausted, and 2 Heat: random and redirected attacks find it first. Future: Ostracised.",
+                "Exhausted, and Heat Signal 2: random and redirected attacks find it first. Future: Ostracised.",
                 Stun(1, TargetType.EnemyCreatures), Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2))
                 .Picture("A man at a podium facing a crowd that holds torches, pitchforks and phones up to film him."),
         };

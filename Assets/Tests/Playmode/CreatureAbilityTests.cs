@@ -66,7 +66,7 @@ namespace SlayTheClone.Tests {
             ChangeAttack(spiteful, -1, p2);
             Assert.AreEqual(4, spiteful.Attack, "Spite: -1, then +2");
             ChangeAttack(spiteful, -1, p1);
-            Assert.AreEqual(3, spiteful.Attack, "Not from its own side");
+            Assert.AreEqual(5, spiteful.Attack, "From its own side too: -1, then +2");
 
             var unpatchable = With(CreatureAbility.Unpatchable, p1, 4);
             var hacker = With(CreatureAbility.ZeroDay, p2, 0);

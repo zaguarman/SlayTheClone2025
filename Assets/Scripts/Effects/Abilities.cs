@@ -40,7 +40,7 @@ namespace SlayTheClone {
             CreatureAbility.Extremist => "stat changes on it are doubled",
             CreatureAbility.Unbothered => "enemy effects can't lower its stats",
             CreatureAbility.NoU => "enemy effects that would lower its stats bounce back",
-            CreatureAbility.Spite => "when an enemy effect lowers its stats, +2 Attack",
+            CreatureAbility.Spite => "when an effect lowers its stats, friendly or enemy, +2 Attack",
             CreatureAbility.Underground => "in combat, ignores the other creature's stat changes, like Unaware",
             CreatureAbility.TooMainstream => "immune to effects that affect more than one creature",
             CreatureAbility.ZeroDay => "its attacks and effects ignore defensive abilities",

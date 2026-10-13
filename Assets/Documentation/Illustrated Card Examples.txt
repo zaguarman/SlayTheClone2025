@@ -994,7 +994,7 @@ Stripper Magician
     Stats: 2/3/3
     Deployment Time: 1 Day
     Ability Text:
-        Starts with Exposed (Persistent), Heat Signature (Persistent), and Taunting (Persistent).
+        Starts with Exposed (Persistent), Heat Signal (Persistent), and Taunting (Persistent).
     Flavor Text: "On a musical mission!"
 
 Minotaur

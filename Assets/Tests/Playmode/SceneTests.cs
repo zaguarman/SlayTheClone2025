@@ -354,7 +354,10 @@ namespace SlayTheClone.Tests {
             tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.KeywordText("Exhausted"), "Day"));
             CollectionAssert.AreEqual(new[] { "Exhausted", "Day" }, tooltip.OpenKeywords, "Another keyword of the same explanation replaces it");
             tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Exhausted"));
-            CollectionAssert.AreEqual(new[] { "Exhausted" }, tooltip.OpenKeywords, "Back on the card, what was opened further along closes");
+            CollectionAssert.AreEqual(new[] { "Exhausted", "Day" }, tooltip.OpenKeywords, "Passing back over the same keyword keeps everything open");
+            Assert.IsTrue(tooltip.PointerInArea(tooltip.Preview.transform.position + new Vector3(0f, 0f, 0f)), "The area includes the enlarged card...");
+            tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Target"));
+            CollectionAssert.AreEqual(new[] { "Target" }, tooltip.OpenKeywords, "...and another keyword on the card starts a new chain");
             tooltip.HideTooltip();
             CollectionAssert.IsEmpty(tooltip.OpenKeywords);
 
