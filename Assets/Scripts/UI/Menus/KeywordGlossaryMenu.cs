@@ -12,29 +12,22 @@ namespace SlayTheClone {
     /// The keyword glossary, opened from the title screen: every keyword by section on the left; the chosen one's explanation
     /// on the right, whose keywords can be clicked to read theirs, and the cards that print it (worked out from the cards
     /// themselves each time, so it follows any change to them); hover a card's name to see the card. Each tick of the mouse
-    /// wheel goes to the next keyword (down) or the previous one (up), and the list follows.
+    /// wheel goes to the next keyword (down) or the previous one (up), and the list follows. It opens on the first keyword.
     /// </summary>
-    public class KeywordGlossaryMenu : MonoBehaviour {
+    public class KeywordGlossaryMenu : MenuScreen {
         public const string KeywordButton = "Keyword: ";
         public const string BackButtonName = "GlossaryBackButton";
         private const string CardLink = "card:";
-        private const float ListWidth = CardGalleryMenu.SideColumnWidth; // The same as the gallery's deck list
-        private const float CardPreviewScale = 1.8f;
+        private const float ListWidth = CardGalleryMenu.SideColumnWidth; // The same as the gallery's faction list
 
-        private DeckCatalog catalog;
-        private GameObject titleScreen;
-        private GameObject panel;
         private TextMeshProUGUI title;
         private TextMeshProUGUI body;
         private TextMeshProUGUI usedBy;
         private readonly Dictionary<string, Button> buttons = new Dictionary<string, Button>();
         private readonly List<string> order = new List<string>(); // The keywords as listed, top to bottom
         private ScrollRect list;
-        private CardViews cardViews;
-        private CardController cardPreview;
-        private string previewedCard;
+        private CardPeek cardPeek;
 
-        public bool IsOpen => panel != null && panel.activeSelf;
         /// <summary>The keyword shown.</summary>
         public string Shown { get; private set; }
         /// <summary>The explanation shown: its keywords are links that can be clicked.</summary>
@@ -42,25 +35,7 @@ namespace SlayTheClone {
         /// <summary>The cards that print the keyword, as links that show the card when hovered.</summary>
         public TMP_Text UsedBy => usedBy;
         /// <summary>The card shown while its name is hovered, if any.</summary>
-        public CardController CardPreview => cardPreview;
-
-        public void Setup(DeckCatalog deckCatalog, GameObject title) {
-            catalog = deckCatalog;
-            titleScreen = title;
-        }
-
-        public void Show() {
-            if (panel == null) Build();
-            if (titleScreen != null) titleScreen.SetActive(false);
-            panel.SetActive(true);
-            ShowKeyword(Shown ?? Keywords.All.First().Key);
-        }
-
-        public void Hide() {
-            ShowCardPreview(null);
-            if (panel != null) panel.SetActive(false);
-            if (titleScreen != null) titleScreen.SetActive(true);
-        }
+        public CardController CardPreview => cardPeek?.Shown;
 
         /// <summary>Shows a keyword's explanation, and which cards print it.</summary>
         public void ShowKeyword(string key) {
@@ -93,7 +68,7 @@ namespace SlayTheClone {
         /// <summary>The cards on offer whose printed text has the keyword, read from the cards as they are now.</summary>
         public List<CardDataScriptableObject> CardsWith(string key) {
             var found = new List<CardDataScriptableObject>();
-            foreach (var asset in catalog != null ? catalog.AllCards : new List<CardDataScriptableObject>()) {
+            foreach (var asset in Catalog != null ? Catalog.AllCards : new List<CardDataScriptableObject>()) {
                 var data = asset.ToCardData();
                 if (Keywords.LinksIn(CardTextFormatter.GetRulesText(data)).Contains(key)) found.Add(asset);
                 Destroy(data);
@@ -112,36 +87,30 @@ namespace SlayTheClone {
 
         /// <summary>Shows the named card enlarged next to the pointer; null hides it.</summary>
         public void ShowCardPreview(string cardName, Vector2 near = default) {
-            if (cardName == previewedCard) return;
-            previewedCard = cardName;
-            if (cardPreview != null) Destroy(cardPreview.gameObject);
-            cardPreview = null;
-            var asset = cardName != null && catalog != null ? catalog.AllCards.FirstOrDefault(c => c.cardName == cardName) : null;
-            if (asset == null || catalog.CardPrefab == null) return;
-
-            cardViews ??= CardViews.ForDisplay(catalog.CardPrefab);
-            cardPreview = cardViews.Create(CardFactory.CreateCard(asset.ToCardData()), null, panel.transform);
-            if (cardPreview == null) return;
-            var group = cardPreview.GetComponent<CanvasGroup>();
-            group.blocksRaycasts = false;
-            var rect = (RectTransform)cardPreview.transform;
-            rect.localScale = Vector3.one * CardPreviewScale;
-            rect.pivot = new Vector2(0f, 0f);
-            rect.position = near + new Vector2(24f, 24f);
-            // Keep it on screen: above the pointer, or below when there's no room
-            var corners = new Vector3[4];
-            rect.GetWorldCorners(corners);
-            if (corners[2].y > Screen.height) rect.position += new Vector3(0f, Screen.height - corners[2].y, 0f);
-            if (corners[2].x > Screen.width) rect.position += new Vector3(-(corners[2].x - near.x) - 24f, 0f, 0f);
+            if (cardPeek == null) return;
+            cardPeek.Show(cardName != null ? Catalog.AllCards.FirstOrDefault(c => c.cardName == cardName) : null, near);
         }
 
-        private void Build() {
+        protected override GameObject Build() {
             var screen = AddScreen(transform, "KeywordGlossaryPanel", "Keywords");
-            panel = screen.panel;
             var columns = screen.columns;
             BuildList(columns);
             BuildEntry(columns);
-            AddButton(AddFooter(panel.transform), BackButtonName, "Back", BackWidth, Hide);
+            AddButton(AddFooter(screen.panel.transform), BackButtonName, "Back", BackWidth, Hide);
+            cardPeek = new CardPeek(screen.panel.transform, Catalog.CardPrefab);
+            return screen.panel;
+        }
+
+        protected override void Opened() => ShowKeyword(Keywords.All.First().Key);
+
+        protected override void Forget() {
+            cardPeek?.Hide();
+            cardPeek = null;
+            title = body = usedBy = null;
+            buttons.Clear();
+            order.Clear();
+            list = null;
+            Shown = null;
         }
 
         // Every keyword, section by section, in a scrolling column

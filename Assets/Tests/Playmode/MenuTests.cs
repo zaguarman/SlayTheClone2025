@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
@@ -13,8 +14,8 @@ using Object = UnityEngine.Object;
 namespace SlayTheClone.Tests {
     /// <summary>
     /// The main menu as a player uses it: Play opens the match setup, where you pick your deck, an opponent and their deck,
-    /// and Start begins a game with exactly that; Cards opens the card gallery, Keywords the keyword glossary. Buttons are clicked the way the menu's own
-    /// listeners expect.
+    /// and Start begins a game with exactly that; Cards opens the card gallery, Decks the deck builder, Keywords the keyword
+    /// glossary. Buttons are clicked the way the menu's own listeners expect. Your decks go to a file of the tests' own.
     /// </summary>
     public class MenuTests {
         private const string MenuSceneName = "MainMenu";
@@ -24,9 +25,13 @@ namespace SlayTheClone.Tests {
         private MatchSetupMenu setup;
         private DeckCatalog catalog;
 
+        private static string DecksFile => Path.Combine(Application.temporaryCachePath, "test-decks.json");
+
         [UnitySetUp]
         public IEnumerator SetUp() {
             MatchSetup.Clear();
+            if (File.Exists(DecksFile)) File.Delete(DecksFile);
+            PlayerDecks.FilePath = DecksFile;
             yield return SceneManager.LoadSceneAsync(MenuSceneName, LoadSceneMode.Single);
             setup = Object.FindFirstObjectByType<MatchSetupMenu>();
             Assert.IsNotNull(setup, "The main menu has no match setup");
@@ -38,27 +43,42 @@ namespace SlayTheClone.Tests {
         }
 
         [TearDown]
-        public void TearDown() => game.Dispose();
+        public void TearDown() {
+            game.Dispose();
+            if (File.Exists(DecksFile)) File.Delete(DecksFile);
+            PlayerDecks.Forget();
+        }
 
         [UnityTest]
-        public IEnumerator TheCardGallery_ShowsEveryDeck_TheGlossaryEveryKeyword_AndPickingAnOpponent_BringsTheirDeck_WhichCanBeSwapped_AndBackKeepsTheChoices() {
+        public IEnumerator TheCardGallery_ShowsEveryFaction_TheGlossaryEveryKeyword_BothOpeningAsNew_AndPickingAnOpponent_BringsTheirDeck_WhichCanBeSwapped_AndBackKeepsTheChoices() {
             Click(TitleButton(MainMenu.CardsButtonName));
             var gallery = Object.FindFirstObjectByType<CardGalleryMenu>();
             Assert.IsTrue(gallery.IsOpen, "Cards opens the card gallery");
             Assert.IsFalse(TitleButton("PlayButton").gameObject.activeInHierarchy, "...in place of the title screen");
-            CollectionAssert.AreEqual(catalog.AllCards.Select(c => c.cardName), Shown(gallery), "It opens on every card on offer");
-            foreach (var deck in catalog.AllDecks) {
-                Click(GalleryButton(gallery, CardGalleryMenu.DeckButton + deck.GetDeckName()));
-                CollectionAssert.AreEquivalent(deck.Cards.Distinct().Select(c => c.cardName), Shown(gallery), $"{deck.GetDeckName()}: each of its cards once");
+            CollectionAssert.AreEquivalent(catalog.AllCards.Select(c => c.cardName), Shown(gallery), "It opens on every card on offer");
+            CollectionAssert.AreEquivalent(catalog.AllCards.Select(c => c.faction).Distinct(), gallery.Factions, "...and lists their factions");
+            foreach (var faction in gallery.Factions) {
+                Click(GalleryButton(gallery, CardGalleryMenu.FactionButton + CardTextFormatter.FactionName(faction)));
+                var cards = catalog.AllCards.Where(c => c.faction == faction).ToList();
+                CollectionAssert.AreEquivalent(cards.Select(c => c.cardName), Shown(gallery), $"{faction}: each of its cards once");
+                CollectionAssert.AreEqual(cards.Select(c => c is CreatureCardScriptableObject).OrderByDescending(isCreature => isCreature),
+                    gallery.ShownCards.Select(c => c.GetBaseCardData() is CreatureData), "...creatures first, then spells");
             }
-            Assert.IsNotNull(gallery.GetComponentInChildren<WheelStepper>(), "The mouse wheel steps through the deck list");
-            gallery.StepDeck(-99);
-            Assert.IsNull(gallery.ShownDeck, "Wheel up to the top: Every card");
-            gallery.StepDeck(1);
-            Assert.AreSame(catalog.AllDecks[0], gallery.ShownDeck, "One tick down: the first deck");
+            Assert.IsNotNull(gallery.GetComponentInChildren<WheelStepper>(), "The mouse wheel steps through the faction list");
+            gallery.StepFaction(-99);
+            Assert.IsNull(gallery.ShownFaction, "Wheel up to the top: Every card");
+            gallery.StepFaction(1);
+            Assert.AreEqual(gallery.Factions[0], gallery.ShownFaction, "One tick down: the first faction");
+            yield return null;
+            CardsScroll(gallery).verticalNormalizedPosition = 0f;
             Click(GalleryButton(gallery, CardGalleryMenu.BackButtonName));
             Assert.IsFalse(gallery.IsOpen);
             Assert.IsTrue(TitleButton("PlayButton").gameObject.activeInHierarchy, "Back shows the title screen again");
+            Click(TitleButton(MainMenu.CardsButtonName));
+            yield return null;
+            Assert.IsNull(gallery.ShownFaction, "It opens as new each time: on every card...");
+            Assert.AreEqual(1f, CardsScroll(gallery).verticalNormalizedPosition, 0.01f, "...scrolled to the top");
+            Click(GalleryButton(gallery, CardGalleryMenu.BackButtonName));
 
             Click(TitleButton(MainMenu.KeywordsButtonName));
             var glossary = Object.FindFirstObjectByType<KeywordGlossaryMenu>();
@@ -99,10 +119,19 @@ namespace SlayTheClone.Tests {
             CollectionAssert.IsSubsetOf(exhausting.Select(n => "card:" + n), Keywords.LinksIn(glossary.UsedBy.text), "...and listed as links");
             glossary.ShowCardPreview("DDOS Attack", new Vector2(200f, 200f));
             Assert.AreEqual("DDOS Attack", glossary.CardPreview?.GetBaseCardData().cardName, "Hovering a card's name shows the card");
+            Canvas.ForceUpdateCanvases(); // Laid out now: the next frame, the pointer isn't on the name any more
+            var preview = (RectTransform)glossary.CardPreview.transform;
+            Assert.Greater(preview.rect.height, preview.rect.width * 1.2f, "...as a card, not stretched across the menu");
+            var corners = new Vector3[4];
+            preview.GetWorldCorners(corners);
+            Assert.IsTrue(corners.All(c => c.x >= 0 && c.y >= 0 && c.x <= Screen.width && c.y <= Screen.height), "...and all of it on screen");
             glossary.ShowCardPreview(null);
             Assert.IsNull(glossary.CardPreview);
             Click(GalleryButton(glossary, KeywordGlossaryMenu.BackButtonName));
             Assert.IsFalse(glossary.IsOpen);
+            Click(TitleButton(MainMenu.KeywordsButtonName));
+            Assert.AreEqual(Keywords.All.First().Key, glossary.Shown, "It opens as new each time: on the first keyword");
+            Click(GalleryButton(glossary, KeywordGlossaryMenu.BackButtonName));
 
             yield return OpenSetup();
 
@@ -146,9 +175,50 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
-        public IEnumerator Start_BeginsTheGame_WithYourDeck_TheOpponentAndTheirDeck() {
+        public IEnumerator YourOwnDeck_MixingFactions_IsKept_OfferedOnceComplete_AndStartBeginsTheGame_WithIt_TheOpponentAndTheirDeck() {
+            Click(TitleButton(MainMenu.DecksButtonName));
+            var builder = Object.FindFirstObjectByType<DeckBuilderMenu>();
+            Assert.IsTrue(builder.IsOpen, "Decks opens the deck builder");
+            Assert.IsNull(builder.OpenDeck, "No decks of yours yet");
+            var factions = catalog.AllCards.Select(c => c.faction).Distinct().ToList();
+            Click(GalleryButton(builder, DeckBuilderMenu.FactionTab + CardTextFormatter.FactionName(factions[0])));
+            var first = builder.ShownCards[0];
+            string firstName = first.GetBaseCardData().cardName;
+            for (int i = 0; i < 3; i++) ClickCard(first);
+            var yourDeck = builder.OpenDeck;
+            Assert.IsNotNull(yourDeck, "Clicking a card starts a deck with it");
+            Assert.AreEqual(PlayerDecks.MaxCopies, yourDeck.Cards.Count, "...and adds copies of it, two at most");
+            Click(GalleryButton(builder, DeckBuilderMenu.FactionTab + CardTextFormatter.FactionName(factions[1])));
+            foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
+            Click(GalleryButton(builder, DeckBuilderMenu.EveryFactionTab));
+            foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
+            Assert.AreEqual(PlayerDecks.DeckSize, yourDeck.Cards.Count, "Cards are added until the deck is full, not beyond");
+            Assert.GreaterOrEqual(DeckCatalog.FactionsOf(yourDeck).Count, 2, "...whatever their faction");
+            var name = builder.NameField;
+            name.text = "Mixtape";
+            name.onEndEdit.Invoke(name.text);
+            Assert.AreEqual("Mixtape", yourDeck.GetDeckName(), "Typing a name renames it");
+            Click(GalleryButton(builder, DeckBuilderMenu.CardRow + firstName));
+            Assert.AreEqual(PlayerDecks.DeckSize - 1, yourDeck.Cards.Count, "Clicking a card in the deck takes a copy out");
+
+            Click(GalleryButton(builder, DeckBuilderMenu.CopyButtonName));
+            Assert.AreEqual("Mixtape 2", builder.OpenDeck.GetDeckName(), "Copy makes another deck, opened, with a name of its own");
+            Click(GalleryButton(builder, DeckBuilderMenu.DeleteButtonName));
+            Assert.AreEqual(2, builder.Decks.Count, "Delete asks to be sure first...");
+            Click(GalleryButton(builder, DeckBuilderMenu.DeleteButtonName));
+            Assert.AreEqual(1, builder.Decks.Count, "...then deletes it");
+            Click(GalleryButton(builder, DeckBuilderMenu.BackButtonName));
+
             yield return OpenSetup();
-            var yourDeck = catalog.Decks.Last();
+            Assert.IsFalse(setup.Decks.Contains(yourDeck), "A deck with a card missing isn't offered");
+            Click(SetupButton(MatchSetupMenu.BackButtonName));
+            Click(TitleButton(MainMenu.DecksButtonName));
+            Assert.AreSame(yourDeck, builder.OpenDeck, "The builder opens on your first deck");
+            ClickCard(builder.ShownCards.First(c => c.GetBaseCardData().cardName == firstName));
+            Assert.IsTrue(PlayerDecks.IsComplete(yourDeck));
+            Click(GalleryButton(builder, DeckBuilderMenu.BackButtonName));
+
+            yield return OpenSetup();
             var opponent = catalog.Opponents.Last();
             var theirDeck = catalog.Decks.First(d => d != opponent.deck && d != yourDeck);
             Click(SetupButton(MatchSetupMenu.PlayerDeckButton + yourDeck.GetDeckName()));
@@ -167,6 +237,12 @@ namespace SlayTheClone.Tests {
                 GameAsserts.AssertEachCardInOneZone(player);
             }
             game.AssertViewsMatchRules();
+
+            var cards = yourDeck.Cards.Select(c => c.cardName).ToList();
+            PlayerDecks.FilePath = DecksFile; // Read again, as in the next session
+            var kept = PlayerDecks.All(catalog).Single();
+            Assert.AreEqual("Mixtape", kept.GetDeckName(), "Your decks are kept between sessions");
+            CollectionAssert.AreEquivalent(cards, kept.Cards.Select(c => c.cardName));
         }
 
         /// <summary>
@@ -218,6 +294,12 @@ namespace SlayTheClone.Tests {
         }
 
         private static List<string> Shown(CardGalleryMenu gallery) => gallery.ShownCards.Select(c => c.GetBaseCardData().cardName).ToList();
+
+        private static ScrollRect CardsScroll(Component screen) => screen.GetComponentsInChildren<ScrollRect>().Single(s => s.name == "Cards");
+
+        // A left click, the way the card itself hears it
+        private static void ClickCard(CardController card) =>
+            ExecuteEvents.Execute(card.gameObject, new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left }, ExecuteEvents.pointerClickHandler);
 
         private static Button GalleryButton(Component gallery, string name) {
             var button = gallery.GetComponentsInChildren<Button>(includeInactive: true).SingleOrDefault(b => b.name == name);

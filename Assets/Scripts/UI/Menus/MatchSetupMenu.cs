@@ -11,7 +11,9 @@ namespace SlayTheClone {
     /// <summary>
     /// The screen between the title and the game: pick your deck, the opponent you face and the deck they bring.
     /// Picking an opponent also picks their own deck, which can then be swapped for any other.
-    /// Its buttons are built from the <see cref="DeckCatalog"/>, so new decks and opponents only need adding there.
+    /// Its buttons are built from the <see cref="DeckCatalog"/>, so new decks and opponents only need adding there, and the
+    /// decks you made in the deck builder once complete (<see cref="PlayerDecks"/>), below the starter decks. It's built anew
+    /// each time it opens, so it offers the decks as they are now, but it keeps the last choices.
     /// The mouse wheel over a column picks its next (wheel down) or previous (wheel up) choice.
     /// </summary>
     public class MatchSetupMenu : MonoBehaviour {
@@ -35,6 +37,8 @@ namespace SlayTheClone {
         public DeckScriptableObject PlayerDeck { get; private set; }
         public DeckCatalog.Opponent Opponent { get; private set; }
         public DeckScriptableObject OpponentDeck { get; private set; }
+        /// <summary>Every deck either side can play: the starter and test decks, then your own complete ones.</summary>
+        public IReadOnlyList<DeckScriptableObject> Decks => catalog.AllDecks.Concat(PlayerDecks.Playable(catalog)).ToList();
 
         private GameObject panel;
         private TextMeshProUGUI summaryText;
@@ -48,16 +52,30 @@ namespace SlayTheClone {
                 return;
             }
 
-            if (panel == null) Build();
+            Close();
+            Build();
             if (PlayerDeck == null) PickDefaults();
+            // A deck of yours chosen before may have been deleted, or taken below its full size, since
+            var decks = Decks;
+            if (!decks.Contains(OpponentDeck)) OpponentDeck = Opponent?.deck ?? decks[0];
+            if (!decks.Contains(PlayerDeck)) PlayerDeck = decks.FirstOrDefault(d => d != OpponentDeck) ?? decks[0];
             if (titleScreen != null) titleScreen.SetActive(false);
-            panel.SetActive(true);
             Refresh();
         }
 
         public void Hide() {
-            if (panel != null) panel.SetActive(false);
+            Close();
             if (titleScreen != null) titleScreen.SetActive(true);
+        }
+
+        private void Close() {
+            choiceButtons.Clear();
+            summaryText = null;
+            if (panel == null) return;
+            panel.SetActive(false);
+            panel.transform.SetParent(null, false); // Gone from the menu at once; destroyed at the end of the frame
+            Destroy(panel);
+            panel = null;
         }
 
         public void SelectPlayerDeck(DeckScriptableObject deck) {
@@ -77,9 +95,9 @@ namespace SlayTheClone {
         }
 
         /// <summary>Picks the deck this many entries down your column (up for negative steps), stopping at the ends.</summary>
-        public void StepPlayerDeck(int steps) => SelectPlayerDeck(WheelStepper.Next(catalog.AllDecks, PlayerDeck, steps));
+        public void StepPlayerDeck(int steps) => SelectPlayerDeck(WheelStepper.Next(Decks, PlayerDeck, steps));
         public void StepOpponent(int steps) => SelectOpponent(WheelStepper.Next(catalog.Opponents, Opponent, steps));
-        public void StepOpponentDeck(int steps) => SelectOpponentDeck(WheelStepper.Next(catalog.AllDecks, OpponentDeck, steps));
+        public void StepOpponentDeck(int steps) => SelectOpponentDeck(WheelStepper.Next(Decks, OpponentDeck, steps));
 
         public void StartMatch() {
             MatchSetup.Choose(PlayerDeck, OpponentName, OpponentDeck);
@@ -122,12 +140,8 @@ namespace SlayTheClone {
             panel = screen.panel;
             var columns = screen.columns;
 
-            var decks = catalog.AllDecks;
             var yourDecks = AddChoiceColumn(columns, "Your deck", StepPlayerDeck, out var yourList);
-            foreach (var deck in decks) {
-                AddChoice(yourDecks, yourList, PlayerDeckButton + deck.GetDeckName(), deck.GetDeckName(), DeckCatalog.Describe(deck),
-                    () => SelectPlayerDeck(deck), () => PlayerDeck == deck);
-            }
+            AddDeckChoices(yourDecks, yourList, PlayerDeckButton, SelectPlayerDeck, () => PlayerDeck);
 
             var opponents = AddChoiceColumn(columns, "Your opponent", StepOpponent, out var opponentList);
             foreach (var opponent in catalog.Opponents) {
@@ -136,10 +150,7 @@ namespace SlayTheClone {
             }
 
             var theirDecks = AddChoiceColumn(columns, "Their deck", StepOpponentDeck, out var theirList);
-            foreach (var deck in decks) {
-                AddChoice(theirDecks, theirList, OpponentDeckButton + deck.GetDeckName(), deck.GetDeckName(), DeckCatalog.Describe(deck),
-                    () => SelectOpponentDeck(deck), () => OpponentDeck == deck);
-            }
+            AddDeckChoices(theirDecks, theirList, OpponentDeckButton, SelectOpponentDeck, () => OpponentDeck);
 
             summaryText = AddText(panel.transform, "", 30, TextColor, FontStyles.Normal, height: 44);
             summaryText.enableAutoSizing = true;
@@ -161,6 +172,18 @@ namespace SlayTheClone {
             element.minWidth = element.preferredWidth = 0; // Equal thirds, whatever their text
             WheelStepper.AddTo(column.gameObject, step);
             return AddList(column, out list);
+        }
+
+        // Every deck on offer; yours under a heading of their own
+        private void AddDeckChoices(Transform parent, ScrollRect list, string prefix, Action<DeckScriptableObject> select, Func<DeckScriptableObject> chosen) {
+            var yours = PlayerDecks.Playable(catalog);
+            foreach (var deck in Decks) {
+                if (deck == yours.FirstOrDefault()) {
+                    var heading = AddText(parent, "Made by you", 24, AccentColor, FontStyles.Bold | FontStyles.SmallCaps, height: 40);
+                    heading.alignment = TextAlignmentOptions.BottomLeft;
+                }
+                AddChoice(parent, list, prefix + deck.GetDeckName(), deck.GetDeckName(), DeckCatalog.Describe(deck), () => select(deck), () => chosen() == deck);
+            }
         }
 
         private void AddChoice(Transform parent, ScrollRect list, string name, string title, string subtitle, Action onClick, Func<bool> isSelected) {

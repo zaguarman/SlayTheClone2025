@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static SlayTheClone.DebugLogger;
 
@@ -37,5 +38,18 @@ namespace SlayTheClone {
         }
 
         public IReadOnlyList<CardDataScriptableObject> Cards => cards;
+
+        /// <summary>A deck made while the game runs, never saved as an asset: the player's own (see <see cref="PlayerDecks"/>).</summary>
+        public static DeckScriptableObject Make(string name, IEnumerable<CardDataScriptableObject> cards) {
+            var deck = CreateInstance<DeckScriptableObject>();
+            deck.hideFlags = HideFlags.DontUnloadUnusedAsset; // Loading the game scene doesn't unload it
+            deck.SetName(name);
+            deck.SetCards(cards);
+            return deck;
+        }
+
+        // Only PlayerDecks changes a deck: changing an asset's in play mode would change the asset itself
+        internal void SetName(string name) => deckName = this.name = name;
+        internal void SetCards(IEnumerable<CardDataScriptableObject> list) => cards = list.Where(c => c != null).ToList();
     }
 }

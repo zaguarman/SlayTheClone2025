@@ -341,6 +341,7 @@ All creature and spell cards come from one big shared pool, and abilities work t
 
 Every card belongs to exactly one faction: Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, or Utopia.
 You can (and should!) mix cards from different factions when building your deck, similar to color combinations in Magic: The Gathering. Faction themes, mechanics and matchups are described in the 'Faction Compendium'.
+• Deck Builder (until runs exist): the main menu's Decks screen makes decks from any cards on offer, mixing factions freely: 20 cards, at most 2 copies of each. Decks are saved as they change. Once complete, the match setup offers a deck to either side, next to the starter decks. The Card Gallery shows the cards faction by faction.
 
 • Mechanic Ownership: Every mechanic and status belongs to a faction. Its owner uses it cheaply and often; one or two other factions get it rarely and at a higher cost; nobody else gets it. A few statuses are Neutral and open to everyone.
 • Faction Costs: Each faction pays for its power in its own way, on top of Deployment Time. Mixing factions means mixing cost types.

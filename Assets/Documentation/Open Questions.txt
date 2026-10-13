@@ -64,6 +64,11 @@ STILL OPEN
     • Changed: random damage used to look for Heat on both sides, so your own hot creature could catch your own "random enemy" damage. Now it only picks among the creatures the effect can reach. Redirected attacks (Watchdog) still go to the hottest creature on either side.
     • Question: OK, or should random damage keep pulling from both sides?
 
+14. Deck builder rules (2026-10-13)
+    • Done: your own decks in the main menu (Decks), from any cards on offer: 20 cards (a starter deck's size), at most 2 copies of each. Only complete decks can be played; either side can play them. A new deck starts empty.
+    • Question: are 20 cards and 2 copies right? Should a new deck be able to start as a copy of a starter deck?
+    • Question: with copies in a deck, "once per combat" (Plot Armor, Second Wind) is tracked by the card, so two copies share one use. Should each copy get its own?
+
 
 ANSWERED (2026-10-12)
 

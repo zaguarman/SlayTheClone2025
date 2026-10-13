@@ -2,10 +2,11 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
-    /// The pieces the menu screens are built from (match setup, card gallery, keyword glossary), in the game's theme (see
+    /// The pieces the menu screens are built from (match setup, card gallery, deck builder, keyword glossary), in the game's theme (see
     /// <see cref="UITheme"/>). Every screen has the same frame: a title, columns that take the space left, and a footer.
     /// Lists scroll inside their column, and a choice's text shrinks to fit its button rather than spill out of it.
     /// </summary>
@@ -166,23 +167,70 @@ namespace SlayTheClone {
             under.overflowMode = TextOverflowModes.Truncate;
             return button;
         }
+        /// <summary>A strip of the faction's color down the button's left edge.</summary>
+        public static void AddFactionMark(Button button, Faction faction) {
+            var mark = NewObject("FactionMark", button.transform);
+            var rect = (RectTransform)mark.transform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.offsetMin = new Vector2(5f, 9f);
+            rect.offsetMax = new Vector2(11f, -9f);
+            UITheme.Round(mark.AddComponent<Image>(), UITheme.FactionColor(faction), 0.5f).raycastTarget = false;
+        }
+
         public static Color PanelColor => UITheme.Panel;
         public static Color ButtonColor => UITheme.PanelLight;
         public static readonly Color SelectedColor = UITheme.Hex(0x6B5222);
         public static Color TextColor => UITheme.Parchment;
         public static Color AccentColor => UITheme.Gold;
 
-        /// <summary>A navy panel with a title, stacking what's added to it from the top.</summary>
+        /// <summary>A navy panel with a title (none if null), stacking what's added to it from the top.</summary>
         public static Transform AddColumn(Transform parent, string title) {
-            var column = NewObject(title, parent);
+            var column = NewObject(title ?? "Column", parent);
             UITheme.StylePanel(column.AddComponent<Image>(), PanelColor);
             var layout = column.AddComponent<VerticalLayoutGroup>();
             layout.padding = new RectOffset(20, 20, 16, 20);
             layout.spacing = 10;
             layout.childAlignment = TextAnchor.UpperCenter;
             SetControls(layout, expandHeight: false);
-            UITheme.StyleHeading(AddText(column.transform, title, 36, TextColor, FontStyles.Bold, height: 52), TextColor);
+            if (title != null) UITheme.StyleHeading(AddText(column.transform, title, 36, TextColor, FontStyles.Bold, height: 52), TextColor);
             return column.transform;
+        }
+
+        /// <summary>A one-line text field: parchment text on a dark brass-trimmed well, and a faint hint while it's empty.</summary>
+        public static TMP_InputField AddInputField(Transform parent, string name, string hint, float height) {
+            var go = TMP_DefaultControls.CreateInputField(new TMP_DefaultControls.Resources());
+            go.name = name;
+            go.transform.SetParent(parent, false);
+            go.AddComponent<LayoutElement>().preferredHeight = height;
+            var field = go.GetComponent<TMP_InputField>();
+            var well = UITheme.Round(go.GetComponent<Image>(), UITheme.Hex(0x0B1220), 1.5f);
+            UITheme.AddTrim(go.transform, UITheme.GoldDim, 1.5f);
+            field.targetGraphic = well;
+            var colors = field.colors;
+            colors.highlightedColor = new Color(1.4f, 1.3f, 1.1f, 1f);
+            colors.disabledColor = new Color(0.7f, 0.7f, 0.7f, 0.6f);
+            field.colors = colors;
+            field.lineType = TMP_InputField.LineType.SingleLine;
+            field.customCaretColor = true;
+            field.caretColor = AccentColor;
+            field.caretWidth = 2;
+            field.selectionColor = UITheme.WithAlpha(AccentColor, 0.35f);
+            ((RectTransform)field.textViewport).offsetMin = new Vector2(16f, 6f);
+            ((RectTransform)field.textViewport).offsetMax = new Vector2(-16f, -6f);
+
+            var text = (TextMeshProUGUI)field.textComponent;
+            text.fontSize = height * 0.5f;
+            text.color = TextColor;
+            text.fontStyle = FontStyles.Bold;
+            text.alignment = TextAlignmentOptions.MidlineLeft;
+            var placeholder = (TextMeshProUGUI)field.placeholder;
+            placeholder.text = hint;
+            placeholder.fontSize = height * 0.5f;
+            placeholder.color = UITheme.WithAlpha(TextColor, 0.35f);
+            placeholder.fontStyle = FontStyles.Italic;
+            placeholder.alignment = TextAlignmentOptions.MidlineLeft;
+            return field;
         }
 
         public static Button AddButton(Transform parent, string name, string label, float width, Action onClick) {
