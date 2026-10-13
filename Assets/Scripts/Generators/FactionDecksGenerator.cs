@@ -22,6 +22,7 @@ namespace SlayTheClone {
         // Spells aim at whatever they are dropped on; these make an action pick its own targets instead
         private const TargetModifier Each = TargetModifier.AllSameTypeTargets;
         private const TargetModifier AtRandom = TargetModifier.Random;
+        private const TargetModifier StrongestOne = TargetModifier.Strongest;
 
         [MenuItem("Cards/Generate Faction Decks")]
         public static void GenerateFactionDecks() {
@@ -655,6 +656,44 @@ namespace SlayTheClone {
                 "An aid package with a tracker inside: heals an enemy creature 2, and gives it Heat Signature 2, so random and redirected attacks find it first.",
                 Heal(2, TargetType.EnemyCreatures), Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2))
                 .Picture("On a dusty airstrip, a crate stencilled MEDICINE with its lid slid open on rifles: the aid official waves at the camera flashes while, behind the crate, a man in sunglasses counts the cash."),
+
+            // Black Budget, the second Shadow Ops. deck: kills that leave no fingerprints, stolen assets, staged deaths
+            Creature("Dead Man's Switch", 1, 2, speed: 2, deploy: 0,
+                "If I stop checking in, the files go to every newspaper. So does the bomb.",
+                "Last Will: destroy the strongest enemy creature, whatever killed it, even itself (He Didn't Kill Himself, False Flag Operation).",
+                On(EffectTrigger.OnDeath, Destroy(TargetType.EnemyCreatures, modifier: StrongestOne)))
+                .NotInStarterDeck()
+                .Picture("A sweating man in a cheap hotel room, his thumb pressed down on a big red button wired to his wrist, a briefcase of documents and dynamite at his feet, a DO NOT DISTURB sign on the door."),
+            Spell("Fell Out of a Window", TargetType.EnemyCreatures,
+                "Tragic. Third one this month. Must be the windows.",
+                "Destroy the strongest enemy creature if a slot beside it is empty: it has a window. Make room first.",
+                Destroy(TargetType.EnemyCreatures, TargetRequisite.NextToEmptySlot, StrongestOne))
+                .NotInStarterDeck()
+                .Picture("A grand apartment window flung open, curtains billowing over onion domes in the snow, a tiny man in a suit falling past outside, while a man in a tracksuit inside calmly closes the window."),
+            Spell("Coup d'État", TargetType.EnemyCreatures,
+                "The General thanks the President for his service. Effective immediately.",
+                "Take control of the strongest enemy creature if you have more creatures than they do. It changes sides for good, to the slot facing it.",
+                TakeControl(TargetType.EnemyCreatures, StrongestOne, TargetRequisite.Outnumbered))
+                .NotInStarterDeck()
+                .Picture("A general in a peaked cap and mirrored sunglasses settling into the presidential chair, still warm, while two soldiers swap the president's portrait on the wall for his own; tanks through the window."),
+            Spell("Operation Paperclip", TargetType.EnemyCreatures,
+                "We didn't take their soldiers. We took their scientists. And their pensions.",
+                "Take control of target enemy creature with 2 Attack or less. It changes sides for good, to the slot facing it.",
+                TakeControl(TargetType.EnemyCreatures, TargetModifier.None, TargetRequisite.AttackAtMost, value: 2))
+                .NotInStarterDeck()
+                .Picture("A giant paperclip hooking a bespectacled scientist in a lab coat by the collar and lifting him from one flag onto another, rocket blueprints fluttering out of his pockets."),
+            Spell("False Flag Operation", TargetType.FriendlyCreatures,
+                "They attacked us. Well, someone did. Same thing.",
+                "Destroy target friendly creature (its Last Will happens); every other friendly creature gets +3 Attack and +3 Health while it stays in play. Funnel it all into one with Never Let Them Know Your Next Move.",
+                Destroy(TargetType.FriendlyCreatures), Buff(3, TargetType.FriendlyCreatures, attack: true, health: true, Each))
+                .NotInStarterDeck()
+                .Picture("A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost while a film crew records it and a general reads an outrage speech from a card."),
+            Creature("MK Ultra Test Subject", 4, 3, speed: 1, deploy: 0,
+                "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
+                "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
+                On(EffectTrigger.StartOfTurn, Strike(TargetType.AllCreatures, AtRandom)))
+                .NotInStarterDeck()
+                .Picture("Ted Kaczynski as the young Harvard math prodigy, before the woods: clean-cut, short neat hair, white shirt and narrow tie, strapped into a 1950s lab chair with electrodes taped to his temples, a blackboard of equations behind him and a psychologist with a clipboard in the corner."),
         };
 
         // Tech: rewires the queue
@@ -1041,11 +1080,21 @@ namespace SlayTheClone {
         private static EffectAction Summon(int count) => Act(ActionType.Summon, count, TargetType.Player, TargetModifier.None);
 
         // Kills outright, whatever its Health or Armor (Untouchable still saves it); requires: what the target must be when it lands
-        private static EffectAction Destroy(TargetType target, TargetRequisite requires = TargetRequisite.None) {
-            var action = Act(ActionType.Destroy, 0, target, TargetModifier.None);
+        private static EffectAction Destroy(TargetType target, TargetRequisite requires = TargetRequisite.None, TargetModifier modifier = TargetModifier.None) {
+            var action = Act(ActionType.Destroy, 0, target, modifier);
             action.requires = requires;
             return action;
         }
+
+        // It changes sides, to whoever's effect it is (GDD 5.4); value is the requisite's number (Attack 2 or less)
+        private static EffectAction TakeControl(TargetType target, TargetModifier modifier, TargetRequisite requires = TargetRequisite.None, int value = 0) {
+            var action = Act(ActionType.TakeControl, value, target, modifier);
+            action.requires = requires;
+            return action;
+        }
+
+        // The creature whose effect it is attacks the target: a real attack
+        private static EffectAction Strike(TargetType target, TargetModifier modifier) => Act(ActionType.Attack, 0, target, modifier);
 
         private static EffectAction PlaceSlotEffect(SlotEffectType type, int value, int days, TargetType target) {
             var action = Act(ActionType.PlaceSlotEffect, value, target, TargetModifier.None);

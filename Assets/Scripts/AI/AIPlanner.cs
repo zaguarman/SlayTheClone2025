@@ -198,9 +198,10 @@ namespace SlayTheClone {
                     if (instant && action.actionType == ActionType.ApplyStatus && action.statusEffectToApply == StatusEffectType.Revealed) {
                         revealedNow.Add(creature);
                     }
+                    bool gone = action.actionType is ActionType.Destroy or ActionType.TakeControl && Lands(action, creature);
                     if (!Hard) {
                         if (action.actionType == ActionType.Damage) AddDamage(creature, action.value);
-                        if (action.actionType == ActionType.Destroy && DestroyLands(action, creature)) AddDamage(creature, 999);
+                        if (gone) AddDamage(creature, 999);
                         continue;
                     }
                     var forecast = ForecastOf(creature);
@@ -208,8 +209,8 @@ namespace SlayTheClone {
                         case ActionType.Damage:
                             forecast.Damage += action.value;
                             break;
-                        case ActionType.Destroy:
-                            forecast.Damage += 999;
+                        case ActionType.Destroy or ActionType.TakeControl when gone:
+                            forecast.Damage += 999; // Gone from where it stood before the attacks
                             break;
                         case ActionType.ModifyStat:
                             int change = BentByAbility(action.value, creature);
@@ -515,6 +516,10 @@ namespace SlayTheClone {
                 if (target is IPlayer player) targets.Add(player);
                 else if (view.Of(target) is SeenCreature seen) targets.Add(seen);
             }
+            if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
+                var strongest = targets.OfType<SeenCreature>().OrderByDescending(AttackOf).FirstOrDefault();
+                return strongest != null ? new List<object> { strongest } : new List<object>();
+            }
             // Hard knows Heat draws random effects: random damage goes to the hottest creature it can see, on either side
             // (Heat it gives today counts too: a combo)
             if (Hard && action.targetModifier.HasFlag(TargetModifier.Random)) {
@@ -532,8 +537,16 @@ namespace SlayTheClone {
                 case ActionType.ModifyStat:
                     return StatChangeGoodness(action, creature);
                 case ActionType.Destroy:
-                    if (!DestroyLands(action, creature)) return 0;
-                    return HealthLeft(creature) <= 0 ? -0.1f : -(creature.Worth + HealthLeft(creature)); // Already dead to what's planned: wasted
+                    if (!Lands(action, creature)) return 0;
+                    if (HealthLeft(creature) <= 0) return -0.1f; // Already dead to what's planned: wasted
+                    // One of ours with a Last Will (Dead Man's Switch): its death does something for us
+                    return -(creature.Worth + HealthLeft(creature)) + (Hard && creature.Ours ? LastWillValue(creature) : 0);
+                case ActionType.TakeControl: {
+                    if (!Lands(action, creature) || creature.Ours || HealthLeft(creature) <= 0) return 0;
+                    // They lose it and we gain it; whatever of ours stands facing it is discarded
+                    var facing = view.MySlots[creature.Slot.Index].Creature;
+                    return -2 * creature.Worth + (facing?.Worth ?? 0);
+                }
                 case ActionType.ApplyStatus:
                     if (Hard && !creature.Ours && (creature.Ability is CreatureAbility.NoU or CreatureAbility.ReturnToSender)) {
                         return -StatusGoodness(action, creature); // It comes back to one of ours
@@ -576,9 +589,35 @@ namespace SlayTheClone {
             return damage >= left ? -(creature.Worth + left) : -damage;
         }
 
-        // Whether a Destroy would kill it: what it requires holds (as far as we can see), and nothing makes it Untouchable
-        private bool DestroyLands(EffectAction action, SeenCreature creature) =>
-            !IsUntouchable(creature) && (action.requires != TargetRequisite.Revealed || creature.Has(StatusEffectType.Revealed) || revealedNow.Contains(creature));
+        // Whether it lands: what it requires holds (as far as we can see), and nothing makes a Destroy's target Untouchable
+        private bool Lands(EffectAction action, SeenCreature creature) {
+            if (action.actionType == ActionType.Destroy && IsUntouchable(creature)) return false;
+            switch (action.requires) {
+                case TargetRequisite.Revealed: return creature.Has(StatusEffectType.Revealed) || revealedNow.Contains(creature);
+                case TargetRequisite.NextToEmptySlot:
+                    var row = creature.Slot.Ours ? view.MySlots : view.TheirSlots;
+                    return new[] { creature.Slot.Index - 1, creature.Slot.Index + 1 }.Any(i => i >= 0 && i < row.Count && row[i].IsEmpty);
+                case TargetRequisite.Outnumbered:
+                    int mine = view.Mine.Count(), theirs = view.Theirs.Count();
+                    return creature.Ours ? mine < theirs : theirs < mine;
+                case TargetRequisite.AttackAtMost: return AttackOf(creature) <= action.value;
+                default: return true;
+            }
+        }
+
+        // Hard: what one of our creatures' Last Will does for us when it dies (Dead Man's Switch destroying their strongest)
+        private float LastWillValue(SeenCreature ours) {
+            if (weighingLastWill) return 0; // A Last Will that kills another of ours with one: counted once
+            weighingLastWill = true;
+            try {
+                return ours.Creature.Effects.Where(e => e.trigger == EffectTrigger.OnDeath).SelectMany(e => e.actions)
+                    .Sum(a => a.targetType == TargetType.Self ? 0 : Value(a, null, view.Me));
+            }
+            finally {
+                weighingLastWill = false;
+            }
+        }
+        private bool weighingLastWill;
 
         // Hard: the change as the creature's ability bends it: Contrarian reverses it, Extremist doubles it
         private int BentByAbility(int change, SeenCreature creature) {

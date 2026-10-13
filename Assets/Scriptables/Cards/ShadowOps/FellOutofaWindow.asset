@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: FellOutofaWindow
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 8520ac9b-09fa-47a3-828f-381d717bb509
+  cardName: Fell Out of a Window
+  description: Tragic. Third one this month. Must be the windows.
+  cardType: 1
+  faction: 3
+  artwork: {fileID: 0}
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 19
+      value: 0
+      targetType: 4
+      targetModifier: 16
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 2
+  designNotes: 'Destroy the strongest enemy creature if a slot beside it is empty:
+    it has a window. Make room first.'
+  artDescription: A grand apartment window flung open, curtains billowing over onion
+    domes in the snow, a tiny man in a suit falling past outside, while a man in
+    a tracksuit inside calmly closes the window.
+  defaultTargetType: 4

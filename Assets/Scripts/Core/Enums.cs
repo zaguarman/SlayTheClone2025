@@ -7,12 +7,17 @@ namespace SlayTheClone {
         // The nine factions of the 'Faction Compendium'; None for cards made before factions existed
         public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, Zeitgeist, Mind, Utopia }
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
-        public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie } // New triggers go last: cards store them as numbers
+        public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie, OnRevealed } // New triggers go last: cards store them as numbers
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetTrend,
-            CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
+            CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy,
+            TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
 
-        /// <summary>What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.</summary>
-        public enum TargetRequisite { None, Revealed }
+        /// <summary>
+        /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
+        /// NextToEmptySlot: a slot beside it is empty. Outnumbered: its side has fewer creatures than the other. AttackAtMost:
+        /// its Attack is the effect's value or less. New ones go last
+        /// </summary>
+        public enum TargetRequisite { None, Revealed, NextToEmptySlot, Outnumbered, AttackAtMost }
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         // Movement Keywords printed on creatures (GDD 2.4): Leapfrog jumps over creatures, Swap trades places with a friendly one
@@ -27,9 +32,9 @@ namespace SlayTheClone {
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look
-        public enum WatchedAction { Attack, Spell, Move, Ability, Summon, Status }
+        public enum WatchedAction { Attack, Spell, Move, Ability, Summon, Status, Intelligence } // Intelligence: a Reveal, or Revealed landing
         public enum WatchdogSide { Enemy, Friendly, Any }
-        public enum WatchdogEffect { Nullify, Redirect, Reorder, Reveal }
+        public enum WatchdogEffect { Nullify, Redirect, Reorder, Reveal, Backfire } // Backfire: nullified, and the attacker takes its own Attack
         public enum WatchdogTiming { OnWatch, Briefing }
         public enum BriefingPick { First, Strongest, Every }
 
@@ -47,7 +52,9 @@ namespace SlayTheClone {
             Revealed,      // Cancels Concealed and Undercover: its planned actions can be seen
             Encrypted,     // Watchdogs ignore its actions (no charge is spent)
             Untouchable,   // Takes no damage, for its Days counting the one it lands (Bodyguard, Presidential Pardon)
-            Cooldown       // Its Active ability rests: it can't be used while this lasts
+            Cooldown,      // Its Active ability rests: it can't be used while this lasts
+            Brainwashed,   // When it runs out, the creature changes sides, for good, with its ability lost
+            KillOrder      // Hidden from its creature's side: when it runs out, the creature is destroyed
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old
@@ -70,13 +77,15 @@ namespace SlayTheClone {
             AllSameTypeTargets = 1 << 1,
             Random = 1 << 2,
             Chained = 1 << 3,
+            Strongest = 1 << 4, // The one with the highest Attack, picked when it happens (ties at random)
         }
 
         // Trends (GDD 4.2): what the world is into right now, one rule for the whole board for some Days, until another Trend replaces it. New ones go last
         public enum Trend {
             None,
             Zeitgeist, // Each Day, whoever has fewer creatures draws 1 more card
-            RushHour   // The slowest act first
+            RushHour,  // The slowest act first
+            FreakWeather // Each Dusk, lightning strikes the toughest creature on the other side of whoever set it
         }
     }
 }

@@ -41,6 +41,7 @@ namespace SlayTheClone {
             Add("Slot", "One of the five places on each side of the table where a creature stands.");
             Add("Random", "Picked by chance when the effect happens, among the creatures it can affect at that moment. The one with the most [Heat Signature] is picked first, if any has it. No creature to pick: nothing happens.");
             Add("Everything", "Every creature on both sides, and both players.");
+            Add("Strongest", "The creature with the highest Attack, picked when the effect happens. Ties: one of them at random. No creature: nothing happens.");
 
             // ---------------------------------------------------------------- Triggers
             group = "Triggers";
@@ -59,6 +60,7 @@ namespace SlayTheClone {
             Add("Rebirth", "Once per combat, when this would die, it's reborn instead: it survives with 1 Health. The wheel turns: last life a worm, this life a dog.");
             Add("Summon", "Summon X (no number: 1): X random creatures from your deck enter your empty slots.");
             Add("Destroy", "Kills it outright, whatever its Health or [Armor]. [Untouchable] still saves it.");
+            Add("Take Control", "It changes sides for good: it goes to the [Slot|slot] facing the one it stood in, under your control, and whatever stands there is discarded. It keeps its Health, statuses and stat changes, and loses what it planned. It's still its owner's card: when it leaves play, it goes back to them.");
             Add("Gift", "You play it into an empty enemy slot: it joins their side, and they control it. It's still your card: when it leaves play, it comes back to your discard pile. They can get rid of it by summoning over it.");
 
             // ---------------------------------------------------------------- Movement

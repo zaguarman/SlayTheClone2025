@@ -261,6 +261,36 @@ namespace SlayTheClone.Tests {
             game.Resolve();
             Assert.AreSame(crabs[0], p2.Battlefield[1].OccupyingCreature, "Given into a taken slot, a Gift fizzles: it never replaces their creature");
             Assert.AreEqual(2, p1.Deck.GetDiscardPilePreview().Count(c => c.CardId == apple.CardId), "...and goes back to the giver's discard pile");
+
+            // Taking control (GDD 5.4): the creature goes to the slot facing it, on its new controller's side, for good.
+            // Operation Paperclip only takes creatures with 2 Attack or less
+            var paperclip = game.Spell("Paperclip", TargetType.EnemyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.TakeControl, 2, TargetType.EnemyCreatures));
+            paperclip.effects[0].actions[0].requires = TargetRequisite.AttackAtMost;
+            var clip = game.GiveCard(p1, paperclip);
+            p1Cards = GameAsserts.CountCards(p1);
+            p2Cards = GameAsserts.CountCards(p2);
+            game.Play(clip, p1, p2.Battlefield[1]);
+            game.Resolve();
+            Assert.AreSame(crabs[0], p1.Battlefield[1].OccupyingCreature, "It changes sides, to the slot facing it...");
+            Assert.AreSame(p1, crabs[0].Owner, "...under its new controller");
+            Assert.AreEqual((p1Cards, p2Cards), (GameAsserts.CountCards(p1), GameAsserts.CountCards(p2)), "It's still its owner's card");
+            var brute = game.Summon(p2, game.Creature("Brute", 5, 5), 0);
+            game.Play(game.GiveCard(p1, paperclip), p1, p2.Battlefield[0]);
+            game.Resolve();
+            Assert.AreSame(p2, brute.Owner, "5 Attack: too strong to take");
+
+            // Coup d'État: their strongest, only if they have fewer creatures. It lands on the shark, which is discarded
+            var coup = game.Spell("Coup", TargetType.EnemyCreatures,
+                TestGame.Effect(EffectTrigger.OnPlay, ActionType.TakeControl, 0, TargetType.EnemyCreatures, TargetModifier.Strongest));
+            coup.effects[0].actions[0].requires = TargetRequisite.Outnumbered;
+            game.Play(game.GiveCard(p1, coup), p1, null);
+            game.Resolve();
+            Assert.AreSame(brute, p1.Battlefield[0].OccupyingCreature, "Coup d'État: 4 creatures against 3, their strongest comes over");
+            AssertDiscarded(p1, shark);
+            game.Run(new DestroyCreatureAction(crabs[0], unconditional: true));
+            AssertDiscarded(p2, crabs[0]);
+            Assert.AreEqual(p2Cards + 1, GameAsserts.CountCards(p2), "A stolen creature goes back to its owner's discard pile (the Brute was summoned)");
+            GameAsserts.AssertBoardsConsistent(p1, p2);
         }
 
         // A card that leaves play goes to its owner's discard pile as a fresh copy: damage, buffs and death don't carry over

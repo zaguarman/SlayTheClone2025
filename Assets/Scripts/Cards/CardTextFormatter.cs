@@ -181,7 +181,8 @@ namespace SlayTheClone {
 
         // Which whole group an action lands on; None when it's one target (chosen, random, or a creature and its neighbors)
         private static Reach ReachOf(EffectAction action) {
-            if (action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) return Reach.None;
+            if (action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.WithAdjacent)
+                || action.targetModifier.HasFlag(TargetModifier.Strongest)) return Reach.None;
             bool each = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
             return action.targetType switch {
                 TargetType.FriendlyCreatures when each => Reach.FriendlyCreatures,
@@ -233,8 +234,11 @@ namespace SlayTheClone {
                 case ActionType.Heal:
                     return $"heal {value} to {target}";
                 case ActionType.Destroy:
-                    string requisite = action.requires == TargetRequisite.Revealed ? $" if it's {Keywords.Link("Revealed")}" : "";
-                    return $"{Keywords.Link("Destroy", "destroy")} {target}{requisite}";
+                    return $"{Keywords.Link("Destroy", "destroy")} {target}{Requisite(action)}";
+                case ActionType.TakeControl:
+                    return $"{Keywords.Link("Take Control", "take control")} of {target}{Requisite(action)}";
+                case ActionType.Attack:
+                    return $"attack {target}";
                 case ActionType.Draw:
                     string when = atDawn ? "" : $" next {Keywords.Link("Day")}";
                     string cards = value == 1 ? "a card" : value.ToString();
@@ -291,9 +295,26 @@ namespace SlayTheClone {
             }
         }
 
+        // What the target must be for it to land: " if it's Revealed", " with 2 Attack or less"
+        private static string Requisite(EffectAction action) => action.requires switch {
+            TargetRequisite.Revealed => $" if it's {Keywords.Link("Revealed")}",
+            TargetRequisite.NextToEmptySlot => $" if a {Keywords.Link("Slot", "slot")} beside it is empty",
+            TargetRequisite.Outnumbered => " if you have more creatures than its side",
+            TargetRequisite.AttackAtMost => $" with {action.value} Attack or less",
+            _ => ""
+        };
+
         // Plain words: "target" (what it's dropped on, either side), groups ("all enemy creatures"), players and the
-        // creature itself. Only "random" is a keyword.
+        // creature itself. Only "random" and "strongest" are keywords.
         private static string DescribeTarget(EffectAction action, bool isSpell) {
+            if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
+                string strongest = "the " + Keywords.Link("Strongest", "strongest");
+                switch (action.targetType) {
+                    case TargetType.EnemyCreatures: return strongest + " enemy creature";
+                    case TargetType.FriendlyCreatures: return strongest + " friendly creature";
+                    case TargetType.AllCreatures: return strongest + " creature";
+                }
+            }
             if (action.targetModifier.HasFlag(TargetModifier.Random)) {
                 switch (action.targetType) {
                     case TargetType.EnemyCreatures: return "a " + Keywords.Link("Random", "random") + " enemy creature";

@@ -243,6 +243,45 @@ namespace SlayTheClone.Tests {
             game.Attack(chainer, p2.Battlefield[0]);
             Assert.AreEqual(new[] { 4, 6, 7 }, new[] { left.Health, middle.Health, right.Health },
                 "Chain Mail: 4, then the next creatures in line for half each jump (2, then 1)");
+
+            // False Flag Operation: one of yours dies, the rest grow. Its Last Will still happens: Dead Man's Switch destroys
+            // their strongest, whatever killed it
+            Fresh();
+            var deadMan = game.Summon(p1, game.Creature("Dead Man", 1, 2, 1,
+                Effect(EffectTrigger.OnDeath, ActionType.Destroy, 0, TargetType.EnemyCreatures, TargetModifier.Strongest)), 0);
+            var buddy = With(CreatureAbility.None, p1, 1, attack: 1, health: 1);
+            var small = With(CreatureAbility.None, p2, 0, attack: 2);
+            var big = With(CreatureAbility.None, p2, 1, attack: 6);
+            var flag = game.Spell("False Flag", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.FriendlyCreatures));
+            flag.effects[0].actions.Add(new EffectAction { actionType = ActionType.ModifyStat, value = 3, targetType = TargetType.FriendlyCreatures,
+                targetModifier = TargetModifier.AllSameTypeTargets, modifyAttack = true, modifyHealth = true });
+            game.Play(game.GiveCard(p1, flag), p1, p1.Battlefield[0]);
+            game.Resolve();
+            Assert.IsTrue(deadMan.IsDead, "False Flag: the target is destroyed...");
+            Assert.AreEqual((4, 4), (buddy.Attack, buddy.MaxHealth), "...and the others get +3/+3");
+            Assert.IsTrue(big.IsDead, "Dead Man's Switch: its Last Will destroys the strongest enemy creature");
+            Assert.IsFalse(small.IsDead);
+
+            // Fell Out of a Window: the strongest dies only if a slot beside it is empty
+            var wall = With(CreatureAbility.None, p2, 1, attack: 5);
+            var filler = With(CreatureAbility.None, p2, 2, attack: 1);
+            var window = game.Spell("Window", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures, TargetModifier.Strongest));
+            window.effects[0].actions[0].requires = TargetRequisite.NextToEmptySlot;
+            game.Play(game.GiveCard(p1, window), p1, null);
+            game.Resolve();
+            Assert.IsFalse(wall.IsDead, "No empty slot beside the strongest: no window");
+            game.Run(new DestroyCreatureAction(filler, unconditional: true));
+            game.Play(game.GiveCard(p1, window), p1, null);
+            game.Resolve();
+            Assert.IsTrue(wall.IsDead, "A slot beside it is free: out it goes");
+
+            // MK Ultra Test Subject: each Dawn it attacks a random creature, on either side, never itself
+            var subject = game.Summon(p1, game.Creature("Subject", 4, 3, 1,
+                Effect(EffectTrigger.StartOfTurn, ActionType.Attack, 0, TargetType.AllCreatures, TargetModifier.Random)), 2);
+            game.StartTurn();
+            Assert.AreEqual(4, (4 - buddy.Health) + (10 - small.Health), "At Dawn it hits one of the others for its Attack");
+            Assert.AreEqual(3, subject.Health);
         }
 
         [Test]

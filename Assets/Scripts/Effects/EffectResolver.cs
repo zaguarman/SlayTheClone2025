@@ -110,6 +110,10 @@ namespace SlayTheClone {
                 return action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? WithoutTooMainstream(targets, source) : targets;
             }
             if (action.targetModifier.HasFlag(TargetModifier.Random)) return PickAtRandom(source, controller, action, queue);
+            if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
+                var strongest = Strongest(TargetingSystem.GetValidTargets(controller, action.targetType).OfType<ICreature>());
+                return strongest != null ? new List<ITarget> { strongest } : new List<ITarget>();
+            }
             var valid = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
             bool area = action.targetType is TargetType.AllCreatures or TargetType.FriendlyCreatures or TargetType.EnemyCreatures
                 && !action.targetModifier.HasFlag(TargetModifier.Random);
@@ -122,6 +126,7 @@ namespace SlayTheClone {
         // picks among the creatures that still hide something from its caster. No creature to pick: it fizzles.
         private static List<ITarget> PickAtRandom(ICard source, IPlayer controller, EffectAction action, IActionsQueue queue) {
             var candidates = TargetingSystem.GetValidTargets(controller, action.targetType).ToList();
+            if (action.actionType == ActionType.Attack) candidates.Remove(source as ICreature); // It never attacks itself
             if (action.actionType == ActionType.Reveal) {
                 candidates = candidates.Where(t => Intel.HidesSomethingFrom(controller, t as ICreature, queue)).ToList();
             }
@@ -133,6 +138,15 @@ namespace SlayTheClone {
                 ? HeatRules.Hottest(source as ICreature, controller)
                 : HeatRules.Hottest(source as ICreature, candidates.OfType<ICreature>());
             return new List<ITarget> { hottest ?? candidates[GameRandom.Next(candidates.Count)] };
+        }
+
+        /// <summary>"The strongest": the creature with the highest Attack, ties at random; null if there's none.</summary>
+        public static ICreature Strongest(IEnumerable<ICreature> creatures) {
+            var list = creatures.Where(c => c != null && !c.IsDead).ToList();
+            if (list.Count == 0) return null;
+            int top = list.Max(c => c.Attack);
+            var tied = list.Where(c => c.Attack == top).ToList();
+            return tied[GameRandom.Next(tied.Count)];
         }
 
         /// <summary>Too Mainstream: immune to effects that affect more than one creature (area, "each creature", spreads).</summary>
@@ -221,7 +235,8 @@ namespace SlayTheClone {
         // their target type names, wherever the card was dropped.
         public static bool UsesChosenTarget(EffectAction action) {
             if (IsSideWide(action)) return false;
-            bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
+            bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets)
+                || action.targetModifier.HasFlag(TargetModifier.Strongest);
             return !picksOwnTargets && (CanAffectCreatures(action.actionType) || IsSlotAction(action.actionType));
         }
 
@@ -264,17 +279,32 @@ namespace SlayTheClone {
             }
         }
 
-        /// <summary>Whether the creature is what the effect requires of it, now.</summary>
-        public static bool Meets(ICreature creature, TargetRequisite requisite, IModifierManager modifiers) => requisite switch {
+        /// <summary>Whether the creature is what the effect requires of it, now. <paramref name="value"/>: the effect's number (Attack N or less).</summary>
+        public static bool Meets(ICreature creature, TargetRequisite requisite, IModifierManager modifiers, int value = 0) => requisite switch {
             TargetRequisite.Revealed => modifiers != null && modifiers.HasStatusEffect(creature, StatusEffectType.Revealed),
+            TargetRequisite.NextToEmptySlot => NextToEmptySlot(creature),
+            TargetRequisite.Outnumbered => creature?.Owner?.Opponent != null && CreatureCount(creature.Owner) < CreatureCount(creature.Owner.Opponent),
+            TargetRequisite.AttackAtMost => creature != null && creature.Attack <= value,
             _ => true
         };
+
+        /// <summary>A slot beside it, on its own side, is empty (the board's edge isn't a slot).</summary>
+        public static bool NextToEmptySlot(ICreature creature) {
+            var slot = creature?.Slot;
+            if (slot?.Owner == null) return false;
+            var row = slot.Owner.Battlefield;
+            return new[] { slot.Index - 1, slot.Index + 1 }.Any(i => i >= 0 && i < row.Count && !row[i].IsOccupied());
+        }
+
+        public static int CreatureCount(IPlayer side) => side?.Battlefield.Count(s => s.OccupyingCreature is { IsDead: false }) ?? 0;
 
         private static bool CanAffectCreatures(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Destroy or ActionType.Heal or ActionType.ModifyStat
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
                 or ActionType.CreateWatchdog or ActionType.DelayDeployment
-                or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility;
+                or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility
+                or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
+                or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish;
 
         // A Watchdog aimed at a player watches that whole side; a Reveal aimed at one shows their Watchdog conditions
         private static bool IsSideWide(EffectAction action) =>
@@ -307,9 +337,13 @@ namespace SlayTheClone {
 
         private static IGameAction CreateAction(ICard source, IPlayer controller, EffectAction action, ITarget target, IModifierManager modifiers) {
             var creature = target as ICreature;
+            if (creature != null && !Meets(creature, action.requires, modifiers, action.value)) {
+                Log($"{source.Name}: {creature.Name} isn't {action.requires}: its {action.actionType} doesn't land", LogTag.Effects);
+                return null;
+            }
             switch (action.actionType) {
                 case ActionType.Destroy: // Outright, whatever its Health or Armor; Untouchable still saves it
-                    if (creature == null || !Meets(creature, action.requires, modifiers)) return null;
+                    if (creature == null) return null;
                     if (modifiers != null && modifiers.HasStatusEffect(creature, StatusEffectType.Untouchable)) {
                         Log($"{source.Name}: {creature.Name} is Untouchable: it isn't destroyed", LogTag.Effects);
                         return null;
@@ -366,6 +400,11 @@ namespace SlayTheClone {
                     return new SetTrendAction(action.trend, action.statusDuration, controller);
                 case ActionType.DelayDeployment: // Red Tape: value is the Days added
                     return creature != null && action.value > 0 ? new DelayDeploymentAction(creature, action.value) : null;
+                case ActionType.TakeControl: // It changes sides, to the effect's controller (GDD 5.4)
+                    return creature != null && creature.Owner != controller ? new ChangeSidesAction(creature, controller) : null;
+                case ActionType.Attack: // The creature whose effect it is attacks the target's slot, a real attack
+                    return creature?.Slot != null && source is ICreature attacker && attacker != creature
+                        ? new BattlefieldCombatAction(attacker, creature.Slot) : null;
                 default:
                     return null;
             }
