@@ -77,6 +77,10 @@ namespace SlayTheClone {
         public ICreature GetLinkedCreature() => linkedCreature;
         public ICard GetLinkedCardInstance() => linkedCardInstance;
         public CardData GetBaseCardData() => baseCardData; // Expose base data if needed
+        /// <summary>The rules text box, where keyword links are hovered (see <see cref="Tooltip"/>).</summary>
+        public TMP_Text RulesText => rulesText;
+        /// <summary>The enlarged copy shown while a card is hovered: it only shows the card, it's never played or hovered itself.</summary>
+        public bool IsHoverPreview { get; private set; }
         public bool IsPlayer1Card() => Player?.IsPlayer1 ?? false;
 
         protected override void Awake() {
@@ -230,6 +234,10 @@ namespace SlayTheClone {
         }
 
         public void OnBeginDrag(PointerEventData eventData) {
+            if (IsHoverPreview) {
+                eventData.pointerDrag = null;
+                return;
+            }
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
             // Queued cards are committed (except in the hand, where dragging re-aims or takes back the play),
@@ -280,14 +288,14 @@ namespace SlayTheClone {
         }
 
         public void OnPointerClick(PointerEventData eventData) {
-            if (eventData.dragging) return;
+            if (eventData.dragging || IsHoverPreview) return;
             if (!FogOfWar.CanControl(Player)) return; // The other side's cards aren't yours to use
             if (eventData.button == PointerEventData.InputButton.Left) OnCardClicked.Invoke(this);
             else if (eventData.button == PointerEventData.InputButton.Right) OnCardRightClicked.Invoke(this);
         }
 
         public void OnPointerEnter(PointerEventData eventData) {
-            if (!isDragging) {
+            if (!isDragging && !IsHoverPreview) {
                 Tooltip.Shared.ShowTooltip(this);
 
                 OnPointerEnterHandler?.Invoke();
@@ -295,8 +303,8 @@ namespace SlayTheClone {
         }
 
         public void OnPointerExit(PointerEventData eventData) {
-            if (!isDragging) {
-                Tooltip.Existing?.HideTooltip();
+            if (!isDragging && !IsHoverPreview) {
+                Tooltip.Existing?.ReleaseCard(this); // The pointer may be on its way to the preview, to read its keywords
                 OnPointerExitHandler?.Invoke();
             }
         }
@@ -541,8 +549,9 @@ namespace SlayTheClone {
             var preview = cardViews.Create(linkedCardInstance, Player, parent);
             if (preview == null) return null;
 
+            preview.IsHoverPreview = true;
             var group = preview.GetComponent<CanvasGroup>();
-            group.blocksRaycasts = false;
+            group.blocksRaycasts = true; // The pointer can rest on it without hovering the board underneath
             group.interactable = false;
             return preview;
         }

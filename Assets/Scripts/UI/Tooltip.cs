@@ -1,10 +1,13 @@
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Manages a single reusable card tooltip for the game.
+    /// Manages a single reusable card tooltip for the game: an enlarged copy of the hovered card, its active effects, and the
+    /// explanations of its keywords, opened by hovering them and chained from keyword to keyword.
     /// </summary>
     public class Tooltip : MonoBehaviour {
         private static Tooltip shared;
@@ -37,6 +40,9 @@ namespace SlayTheClone {
             CanvasScaler scaler = tooltipObj.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1920, 1080);
+
+            // Takes the pointer where it shows (the preview, keyword popups), so the board under them isn't hovered
+            tooltipObj.AddComponent<GraphicRaycaster>();
 
             // Add CanvasGroup for fade control
             CanvasGroup canvasGroup = tooltipObj.AddComponent<CanvasGroup>();
@@ -147,6 +153,7 @@ namespace SlayTheClone {
                 return;
             }
             if (card == activeCard && preview != null) {
+                released = false;
                 UpdateTooltipContent(card);
                 return;
             }
@@ -206,6 +213,8 @@ namespace SlayTheClone {
         /// Hides the tooltip
         /// </summary>
         public void HideTooltip() {
+            CloseKeywordsFrom(0);
+            released = false;
             activeCard = null;
             if (preview != null) {
                 Destroy(preview.gameObject);
@@ -270,6 +279,134 @@ namespace SlayTheClone {
                 FollowMouse();
             }
         }
+
+        #region Keyword popups
+        // Slay the Spire style: hovering a keyword on the enlarged card opens its explanation beside it; keywords in that
+        // explanation open theirs, and so on. The pointer can leave the card for its preview and popups; the tooltip stays
+        // while it's over any of them and closes a moment after it's over none.
+        private const float ReleaseGrace = 0.35f; // Seconds to cross from the card to its preview
+        private const int MaxKeywordPopups = 6;
+        private const float PopupWidth = 340f;
+        private const float PopupPadding = 14f;
+
+        private class KeywordPopup {
+            public string Key;
+            public RectTransform Rect;
+            public TextMeshProUGUI Body;
+        }
+
+        private readonly List<KeywordPopup> keywordPopups = new List<KeywordPopup>();
+        private bool released;    // The pointer left the card
+        private float lastHeldAt; // When the pointer was last on the card, its preview or a popup
+
+        /// <summary>The keywords whose explanations are open, from the card outwards.</summary>
+        public List<string> OpenKeywords => keywordPopups.Select(p => p.Key).ToList();
+
+        /// <summary>The enlarged card shown, if any.</summary>
+        public CardController Preview => preview;
+
+        /// <summary>The explanation open for this keyword, if any: its text, whose keywords can be hovered in turn.</summary>
+        public TMP_Text KeywordText(string key) => keywordPopups.FirstOrDefault(p => p.Key == key)?.Body;
+
+        /// <summary>The pointer left the card: the tooltip stays while the pointer goes on to the preview or its popups.</summary>
+        public void ReleaseCard(CardController card) {
+            if (card == null || card != activeCard) return;
+            released = true;
+            lastHeldAt = Time.unscaledTime;
+        }
+
+        private void Update() {
+            if (activeCard == null || preview == null) return;
+            bool overTooltip = TrackKeywords(Input.mousePosition);
+            if (!released || overTooltip) lastHeldAt = Time.unscaledTime;
+            else if (Time.unscaledTime - lastHeldAt > ReleaseGrace) HideTooltip();
+        }
+
+        /// <summary>
+        /// Follows the pointer: on a keyword of the preview or of a popup it opens that keyword's explanation next to it,
+        /// closing explanations opened further along. Returns whether the pointer is on the preview or a popup.
+        /// </summary>
+        public bool TrackKeywords(Vector2 pointer) {
+            if (preview == null) return false;
+            int over = -2; // -1: the preview; 0 and up: a popup
+            for (int i = keywordPopups.Count - 1; i >= 0 && over == -2; i--) {
+                if (RectTransformUtility.RectangleContainsScreenPoint(keywordPopups[i].Rect, pointer, null)) over = i;
+            }
+            var previewRect = (RectTransform)preview.transform;
+            if (over == -2 && RectTransformUtility.RectangleContainsScreenPoint(previewRect, pointer, null)) over = -1;
+            if (over == -2) return false;
+
+            TMP_Text text = over == -1 ? preview.RulesText : keywordPopups[over].Body;
+            RectTransform parent = over == -1 ? previewRect : keywordPopups[over].Rect;
+            int link = text != null ? TMP_TextUtilities.FindIntersectingLink(text, pointer, null) : -1;
+            if (link < 0) {
+                CloseKeywordsFrom(over + 2); // What it opened stays, so the pointer can go there
+                return true;
+            }
+
+            string key = text.textInfo.linkInfo[link].GetLinkID();
+            int next = over + 1;
+            if (next < keywordPopups.Count && keywordPopups[next].Key == key) CloseKeywordsFrom(next + 1);
+            else if (Keywords.Exists(key) && next < MaxKeywordPopups) OpenKeyword(next, key, parent, text, link);
+            return true;
+        }
+
+        private void OpenKeyword(int index, string key, RectTransform parent, TMP_Text parentText, int linkIndex) {
+            CloseKeywordsFrom(index);
+            var popup = BuildKeywordPopup(key);
+
+            // Beside the text it was opened from, level with the keyword; on the left when there's no room on the right
+            var info = parentText.textInfo.linkInfo[linkIndex];
+            var character = parentText.textInfo.characterInfo[info.linkTextfirstCharacterIndex];
+            float linkTop = parentText.transform.TransformPoint(character.topLeft).y;
+            var corners = new Vector3[4];
+            parent.GetWorldCorners(corners);
+            float width = popup.Rect.rect.width * popup.Rect.lossyScale.x;
+            bool right = corners[2].x + PreviewGap + width <= Screen.width;
+            popup.Rect.pivot = new Vector2(right ? 0f : 1f, 1f);
+            popup.Rect.position = new Vector2(right ? corners[2].x + PreviewGap : corners[0].x - PreviewGap, linkTop + 8f);
+            KeepOnScreen(popup.Rect);
+            keywordPopups.Add(popup);
+        }
+
+        // A parchment note like the card's text box: the keyword's name, then its explanation with its own keywords as links
+        private KeywordPopup BuildKeywordPopup(string key) {
+            var entry = Keywords.Get(key);
+            var background = UITheme.NewImage($"Keyword: {key}", transform, UITheme.Parchment, raycastTarget: true);
+            UITheme.Round(background, UITheme.Parchment, 1.5f);
+            UITheme.AddTrim(background.transform, UITheme.Gold, 1.5f);
+            UITheme.AddHardShadow(background, 5f);
+            var rect = background.rectTransform;
+
+            float inner = PopupWidth - 2 * PopupPadding;
+            var title = UITheme.NewText("Title", rect, entry.Title, 24f, UITheme.Ink, TextAlignmentOptions.TopLeft);
+            title.fontStyle = FontStyles.Bold | FontStyles.SmallCaps;
+            var body = UITheme.NewText("Body", rect, Keywords.Describe(key), 19f, UITheme.Ink, TextAlignmentOptions.TopLeft);
+            body.textWrappingMode = TextWrappingModes.Normal;
+            float titleHeight = title.GetPreferredValues(entry.Title, inner, 0f).y;
+            float bodyHeight = body.GetPreferredValues(body.text, inner, 0f).y;
+            rect.sizeDelta = new Vector2(PopupWidth, PopupPadding * 2 + titleHeight + 6f + bodyHeight);
+            PlaceInPopup(title.rectTransform, PopupPadding, titleHeight);
+            PlaceInPopup(body.rectTransform, PopupPadding + titleHeight + 6f, bodyHeight);
+            body.ForceMeshUpdate(); // Its links can be found right away
+            return new KeywordPopup { Key = key, Rect = rect, Body = body };
+        }
+
+        private static void PlaceInPopup(RectTransform child, float top, float height) {
+            child.anchorMin = new Vector2(0f, 1f);
+            child.anchorMax = new Vector2(1f, 1f);
+            child.pivot = new Vector2(0.5f, 1f);
+            child.sizeDelta = new Vector2(-2 * PopupPadding, height);
+            child.anchoredPosition = new Vector2(0f, -top);
+        }
+
+        private void CloseKeywordsFrom(int index) {
+            for (int i = keywordPopups.Count - 1; i >= index && i >= 0; i--) {
+                if (keywordPopups[i].Rect != null) Destroy(keywordPopups[i].Rect.gameObject);
+                keywordPopups.RemoveAt(i);
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Enables tooltip functionality for a card while disabling dragging

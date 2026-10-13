@@ -50,7 +50,7 @@ namespace SlayTheClone.Tests {
             game.Run(new SummonCreatureAction(again, p1, p1.Battlefield[1], fromDeck: true));
             game.Run(new DamageCreatureAction(again, 5));
             Assert.IsTrue(again.IsDead, "Reshuffling doesn't give the use back");
-            StringAssert.Contains("Once per combat, when this would die", CardTextFormatter.GetRulesText(plotArmorData));
+            StringAssert.Contains("Second Wind", Keywords.Plain(CardTextFormatter.GetRulesText(plotArmorData)), "A recurring pattern is printed as its keyword");
 
             var frail = game.Summon(p1, game.Creature("Frail", 1, 3, 1, Effect(EffectTrigger.OnDeath, ActionType.Damage, 2, TargetType.Enemy)), 2);
             game.Run(LoseHealth(frail, 3));

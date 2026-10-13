@@ -239,10 +239,11 @@ namespace SlayTheClone.Tests {
         /// A dragged card lights up only where it can land: a slot for creatures and aimed spells, a whole battlefield for
         /// spells that hit a side, and nothing on a side it can't be played on; hovering without a card lights up nothing.
         /// A queued spell stays in the hand marked queued: it can be hovered, shows an arrow to the slot it's aimed at, and is
-        /// taken back by clicking it, right-clicking it, or dragging it where it can't be played.
+        /// taken back by clicking it, right-clicking it, or dragging it where it can't be played. The keywords on an enlarged
+        /// card open their explanations when hovered, and the keywords in those can be followed in turn.
         /// </summary>
         [UnityTest]
-        public IEnumerator ACardLightsUpWhereItLands_AQueuedSpellShowsItsAim_CanBeTakenBack_ThenHitsItsTarget() {
+        public IEnumerator ACardLightsUpWhereItLands_AQueuedSpellShowsItsAim_CanBeTakenBack_ItsKeywordsExplainThemselves_ThenItHits() {
             var ox = game.Summon(p2, game.Cards.Creature("Test Ox", 0, 6), 0);
             game.Summon(p2, game.Cards.Creature("Test Calf", 0, 6), 1);
             var bolt = game.GiveCard(p1, game.Cards.Spell("Test Bolt", TargetType.EnemyCreatures,
@@ -339,6 +340,23 @@ namespace SlayTheClone.Tests {
             Assert.IsNotNull(preview, "Hovering a queued spell shows it enlarged");
             Assert.AreSame(bolt, preview.GetLinkedCardInstance());
             Assert.Greater(preview.transform.localScale.x, 1f);
+
+            // Keywords: hovering one on the enlarged card explains it, and its explanation's keywords can be followed in turn
+            var nap = game.GiveCard(p1, game.Cards.Spell("Test Nap", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Stun, 1, TargetType.EnemyCreatures)));
+            yield return null;
+            SceneGame.Hover(Shown(nap));
+            var tooltip = Tooltip.Existing;
+            Assert.IsTrue(tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Exhausted")));
+            CollectionAssert.AreEqual(new[] { "Exhausted" }, tooltip.OpenKeywords, "Hovering Exhausted opens what it means");
+            tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.KeywordText("Exhausted"), "Exposed"));
+            CollectionAssert.AreEqual(new[] { "Exhausted", "Exposed" }, tooltip.OpenKeywords, "...and Exposed, from inside that explanation");
+            tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.KeywordText("Exhausted"), "Day"));
+            CollectionAssert.AreEqual(new[] { "Exhausted", "Day" }, tooltip.OpenKeywords, "Another keyword of the same explanation replaces it");
+            tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Exhausted"));
+            CollectionAssert.AreEqual(new[] { "Exhausted" }, tooltip.OpenKeywords, "Back on the card, what was opened further along closes");
+            tooltip.HideTooltip();
+            CollectionAssert.IsEmpty(tooltip.OpenKeywords);
 
             yield return game.EndTurn();
             Assert.AreEqual(3, ox.Health, "Only the spell left queued is cast");

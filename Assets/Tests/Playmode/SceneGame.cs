@@ -253,6 +253,15 @@ namespace SlayTheClone.Tests {
         /// <summary>The move hint a slot shows while one of its side's creatures is dragged.</summary>
         public (MoveKind kind, bool blocked)? MoveHintIn(BoardSlot slot) => BoardView(slot.Owner).FindSlotView(slot).MoveHint;
 
+        /// <summary>Where a keyword is on screen in a text (the enlarged card's, or a keyword explanation's).</summary>
+        public static Vector2 KeywordPoint(TMP_Text text, string key) {
+            text.ForceMeshUpdate();
+            var link = text.textInfo.linkInfo.Take(text.textInfo.linkCount).FirstOrDefault(l => l.GetLinkID() == key);
+            Assert.AreEqual(key, link.GetLinkID(), $"'{text.text}' has no keyword {key}");
+            var character = text.textInfo.characterInfo[link.linkTextfirstCharacterIndex];
+            return text.transform.TransformPoint((character.bottomLeft + character.topRight) / 2f);
+        }
+
         /// <summary>The enlarged copy shown while a card is hovered, if any.</summary>
         public static CardController HoverPreview() {
             var tooltip = Tooltip.Existing;

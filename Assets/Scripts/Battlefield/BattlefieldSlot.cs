@@ -182,7 +182,8 @@ namespace SlayTheClone {
             }
             ShowHighlight(null);
 
-            Tooltip.Existing?.HideTooltip();
+            if (OccupyingCard != null) Tooltip.Existing?.ReleaseCard(OccupyingCard);
+            else Tooltip.Existing?.HideTooltip();
         }
 
         // True while a creature card from a hand is dragged over this occupied slot (dropping it replaces the occupant)

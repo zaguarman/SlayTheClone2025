@@ -228,7 +228,7 @@ namespace SlayTheClone {
 
         public void OnPointerExit(PointerEventData eventData) {
             if (tooltip != null) {
-                tooltip.HideTooltip();
+                tooltip.ReleaseCard(cardController);
             }
         }
 

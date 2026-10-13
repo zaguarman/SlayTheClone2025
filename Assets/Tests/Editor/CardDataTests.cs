@@ -8,7 +8,7 @@ using static SlayTheClone.Enums;
 namespace SlayTheClone.Tests {
     /// <summary>
     /// Every card asset in the project describes effects the rules can carry out: an ability aimed at something it can't
-    /// affect (a paralyze aimed at a player, say) silently does nothing in play.
+    /// affect (a paralyze aimed at a player, say) silently does nothing in play. And every keyword it prints is explained.
     /// </summary>
     public class CardDataTests {
         private const string CardsFolder = "Assets/Scriptables/Cards";
@@ -40,6 +40,23 @@ namespace SlayTheClone.Tests {
             }
 
             Assert.IsEmpty(problems, "Card effects that can't work:\n" + string.Join("\n", problems));
+
+            // Every keyword printed on a card, or mentioned in another keyword's explanation, has an explanation
+            var deadLinks = new List<string>();
+            foreach (var asset in assets) {
+                var data = asset.ToCardData();
+                try {
+                    deadLinks.AddRange(Keywords.LinksIn(CardTextFormatter.GetRulesText(data)).Where(k => !Keywords.Exists(k)).Select(k => $"{data.cardName}: {k}"));
+                }
+                finally {
+                    Object.DestroyImmediate(data);
+                }
+            }
+            foreach (var entry in Keywords.All) {
+                var mentioned = System.Text.RegularExpressions.Regex.Matches(entry.Text, @"\[([^\]|]+)").Cast<System.Text.RegularExpressions.Match>().Select(m => m.Groups[1].Value);
+                deadLinks.AddRange(mentioned.Where(k => !Keywords.Exists(k)).Select(k => $"{entry.Key}: {k}"));
+            }
+            CollectionAssert.IsEmpty(deadLinks, "Keywords without an explanation");
 
             var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
             var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()

@@ -125,7 +125,7 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(5, safe.Health, "Cleansed before it went off");
 
             var mine = game.Spell("Mine", TargetType.EnemyCreatures, PlaceEffect(SlotEffectType.Landmine, 3));
-            StringAssert.Contains("Place a hidden Landmine (3 damage to the next creature to enter) on target slot.", CardTextFormatter.GetRulesText(mine));
+            StringAssert.Contains("Place a hidden Landmine (3 damage) on target slot.", Keywords.Plain(CardTextFormatter.GetRulesText(mine)));
         }
 
         [Test]
