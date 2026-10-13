@@ -96,12 +96,29 @@ namespace SlayTheClone {
             "NPC", "Chronically Online", "Mummy", "Pessimist", "Introvert",
             "Sleeper Agent", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "End-to-End Encryption",
             "Work Shift Rotation", "Chain Smoker", "Zeitgeist", "Rush Hour",
+            "Golden Dome", "Presidential Pardon", "Counterfeit", "Private Equity", "Congruent Use of Force", "Crypto \"Entrepreneur\"",
+            "Cleaner", "Shell Company", "Weapons of Mass Distraction", "Not on My Watch", "One for the Road", "Mimetic Theory",
         };
 
         #region Corporate
         // Pays with capital (future: discard cards). Until discarding exists, its strongest cards leak value to the enemy.
         // Can't heal. Engine: card draw, workers that die usefully, money that hurts someone else first.
         private static List<CardDef> CorporateCards() => new List<CardDef> {
+            Creature("Counterfeit", 1, 1, speed: 2, deploy: 0,
+                "Genuine replica. 100% authentic copy.",
+                "Mechanics test: Wannabe (Active, hold Shift as you drag it onto a creature): its Attack, Health and Speed become that creature's.")
+                .With(CreatureAbility.Wannabe).NotInStarterDeck()
+                .Picture("A knockoff superhero in a cheap costume with a misspelled logo on the chest, flexing proudly in front of a mirror that shows a real muscled hero."),
+            Creature("Private Equity", 2, 4, speed: 1, deploy: 1,
+                "We don't buy companies. We buy what they used to be worth.",
+                "Mechanics test: Credit Grab (Active, once per combat): steals target creature's stat raises. Buff an enemy, or let them, then take it.")
+                .With(CreatureAbility.CreditGrab).NotInStarterDeck()
+                .Picture("A vampire banker in a pinstripe suit sucking gold coins out of a little family shop through a long straw."),
+            Creature("Shell Company", 1, 4, speed: 2, deploy: 0,
+                "Registered in four countries. Exists in none.",
+                "Mechanics test: Shell Game (Active, hold Shift as you drag it onto a creature): that creature trades places with the one to its right. Moves an enemy into a planned attack, or out of the way of one.")
+                .With(CreatureAbility.ShellGame).NotInStarterDeck()
+                .Picture("A street hustler playing the shell game with three walnut shells, each stamped with a different tax haven's flag, a gold coin under one."),
             Creature("Work Shift Rotation", 2, 3, speed: 1, deploy: 1,
                 "Same job, new face. The vest is still warm.",
                 "Handover: when a summon replaces it, the newcomer takes over its stat changes and statuses. Buff it, then send in the next shift.")
@@ -198,6 +215,28 @@ namespace SlayTheClone {
         // Pays with bureaucracy: its creatures take longer to deploy than similar ones, and its spells tie up its own side.
         // Can't hide anything. Engine: armor, area damage, slow but sturdy bodies, disables.
         private static List<CardDef> StatecraftCards() => new List<CardDef> {
+            Creature("Golden Dome", 0, 6, speed: 2, deploy: 1,
+                "Protects everyone. Some of everyone more than others.",
+                "Mechanics test: Bodyguard. It can't attack; drag it onto another friendly creature and that one is Untouchable this Day (no damage at all), then it rests a Day (Cooldown).")
+                .With(CreatureAbility.Bodyguard).NotInStarterDeck()
+                .Picture("A shimmering golden dome of light over one fat senator on a deckchair, while missiles rain on the rest of the city outside it."),
+            Spell("Presidential Pardon", TargetType.FriendlyCreatures,
+                "Whatever it did, it didn't.",
+                "Mechanics test: the protection as a spell. Untouchable this Day: target creature takes no damage at all.",
+                Status(StatusEffectType.Untouchable, 1, TargetType.FriendlyCreatures))
+                .NotInStarterDeck()
+                .Picture("A smiling president signing a giant pardon with a huge flourish for a creature in an orange jumpsuit still holding a smoking gun."),
+            Creature("Congruent Use of Force", 2, 4, speed: 1, deploy: 1,
+                "Proportionate. To something, surely.",
+                "Mechanics test: Spray and Pray. Its attacks also hit the creatures beside its target, a cone of three slots.")
+                .With(CreatureAbility.SprayAndPray).NotInStarterDeck()
+                .Picture("A soldier firing a huge gatling gun at a single mosquito, the whole street behind it riddled with holes."),
+            Spell("Weapons of Mass Distraction", TargetType.EnemyCreatures,
+                "Look over there. No, over there.",
+                "Mechanics test: the swap as a spell. Target creature trades places with the one to its right (or to its left at the end of the row).",
+                SwapPositions(TargetType.EnemyCreatures))
+                .NotInStarterDeck()
+                .Picture("A news anchor dangling a shiny pocket watch at the camera while, behind him, soldiers quietly shuffle the enemy's tents around."),
             Creature("King Emeritus", 1, 6, speed: 1, deploy: 2,
                 "Abdicated in disgrace. Kept the yacht, the pension and the Swiss account.",
                 "Future: Diplomatic Immunity. Can't be targeted by enemy spells.",
@@ -293,6 +332,17 @@ namespace SlayTheClone {
         // Pays with self-harm: damage to its own creatures and to you. Fast (Deployment Time 0-1), buffs that burn out.
         // Can't use Intelligence. Engine: cheap bodies that spike and fizzle, chaos that hits everyone.
         private static List<CardDef> ZeitgeistCards() => new List<CardDef> {
+            Creature("Not on My Watch", 1, 5, speed: 1, deploy: 1,
+                "Feelings are valid. Statuses are not.",
+                "Mechanics test: Safe Space. Each Dawn, it and the friendly creatures beside it gain Bless (a ward that stops the next status).")
+                .With(CreatureAbility.SafeSpace).NotInStarterDeck()
+                .Picture("A fierce grandma in a crossing-guard vest holding up a stop sign, nervous creatures huddled behind her in a blanket fort."),
+            Spell("One for the Road", TargetType.FriendlyCreatures,
+                "Last one. Then one more.",
+                "Mechanics test: an ability as a spell. Target creature gains Double Tap (it attacks twice), replacing its own until its card is reshuffled.",
+                GrantAbility(CreatureAbility.DoubleTap, TargetType.FriendlyCreatures))
+                .NotInStarterDeck()
+                .Picture("A pub regular raising two pints at once under a CLOSING TIME sign, the barman already putting chairs on tables."),
             Creature("Chain Smoker", 2, 5, speed: 2, deploy: 1,
                 "Quitting tomorrow. Has said so since 1998.",
                 "Recoil: +2 damage on its attacks, and it takes 1 damage after each one. A mood that burns it out.")
@@ -394,6 +444,11 @@ namespace SlayTheClone {
         #region Factions without a deck yet
         // Digital Society: a swarm of cheap bodies, effects that spread, many creatures piling on one target
         private static List<CardDef> DigitalSocietyCards() => new List<CardDef> {
+            Creature("Crypto \"Entrepreneur\"", 2, 3, speed: 2, deploy: 0,
+                "It's not a pyramid. It's a triangle of opportunity.",
+                "Mechanics test: Chain Mail. Its attacks jump on to the next 2 creatures in line, half the damage each jump.")
+                .With(CreatureAbility.ChainMail)
+                .Picture("A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand."),
             Creature("Digital Nomad", 2, 2, speed: 2, deploy: 0,
                 "Works from Bali. Works from Lisbon. Works, allegedly.",
                 "Mechanics test: Leapfrog on a cheap, fast creature.")
@@ -454,6 +509,11 @@ namespace SlayTheClone {
 
         // Shadow Ops.: fragile agents, hidden plans, traps
         private static List<CardDef> ShadowOpsCards() => new List<CardDef> {
+            Creature("Cleaner", 2, 3, speed: 3, deploy: 1,
+                "Two shots. One invoice.",
+                "Mechanics test: Double Tap. It attacks twice: a second hit right after the first.")
+                .With(CreatureAbility.DoubleTap)
+                .Picture("A calm man in a cleaning company jumpsuit, a mop in one hand and a silenced pistol in the other, two neat holes in a target behind him."),
             Creature("Political Decoy", 0, 6, speed: 1, deploy: 1,
                 "The real one is in a bunker. Or is he?",
                 "Mechanics test: Swap trades places with a friendly creature at any distance, over the creatures in between, even one that can't act.")
@@ -629,6 +689,11 @@ namespace SlayTheClone {
 
         // Mind: wins without raw damage
         private static List<CardDef> MindCards() => new List<CardDef> {
+            Spell("Mimetic Theory", TargetType.AllCreatures,
+                "We want what they want. Then we become them.",
+                "Mechanics test: the stat copy as a spell. Target creature copies the Attack, Health and Speed of the creature facing it.",
+                CopyStats(TargetType.AllCreatures))
+                .Picture("Two people facing each other in identical poses, one of them slowly turning into the other's mirror image."),
             Spell("Generational Trauma", TargetType.EnemyCreatures,
                 "Your grandfather's, your father's, and now yours. A family heirloom.",
                 "Mechanics test: Health Loss is permanent and stays on the card until it's reshuffled. It only affects creatures, so it fizzles on an empty slot. Not damage, which fits Mind.",
@@ -902,6 +967,16 @@ namespace SlayTheClone {
         }
 
         private static EffectAction DelayDeployment(int days, TargetType target) => Act(ActionType.DelayDeployment, days, target, TargetModifier.None);
+
+        // Between two creatures: on a spell, the target and the creature facing it (see EffectResolver)
+        private static EffectAction CopyStats(TargetType target) => Act(ActionType.CopyStats, 0, target, TargetModifier.None);
+        private static EffectAction SwapPositions(TargetType target) => Act(ActionType.SwapPositions, 0, target, TargetModifier.None);
+
+        private static EffectAction GrantAbility(CreatureAbility ability, TargetType target) {
+            var action = Act(ActionType.GrantAbility, 0, target, TargetModifier.None);
+            action.ability = ability;
+            return action;
+        }
 
         // A World card: the whole board's rule for this many Days (GDD 4.2)
         private static EffectAction SetWorld(World world, int days) {

@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
     - actionType: 2
       value: 2
       targetType: 0
@@ -69,6 +70,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: '5 damage to a random friendly creature, then draw 2. Future: Myth''s
     sacrifice cost (destroy a friendly creature).'
   artDescription: Hooded figures chanting around a chalk pentagram, offering a rubber

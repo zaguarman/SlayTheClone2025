@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Each Dawn a random enemy creature is Exhausted. No damage: Mind can''t
     deal it.'
   artDescription: A big green snake in headphones typing on a laptop, a sticky note

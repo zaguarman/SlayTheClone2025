@@ -263,7 +263,8 @@ namespace SlayTheClone {
         private static bool CanAffectCreatures(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.ModifyStat
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
-                or ActionType.CreateWatchdog or ActionType.DelayDeployment;
+                or ActionType.CreateWatchdog or ActionType.DelayDeployment
+                or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility;
 
         // A Watchdog aimed at a player watches that whole side; a Reveal aimed at one shows their Watchdog conditions
         private static bool IsSideWide(EffectAction action) =>
@@ -329,6 +330,20 @@ namespace SlayTheClone {
                 case ActionType.Reveal: // A slot: its hidden Slot Effect and its creature's plans; a player: their Watchdog conditions
                     return target is IPlayer side ? new RevealAction(side, controller)
                         : SlotOf(target) is BoardSlot revealed ? new RevealAction(revealed, controller) : null;
+                // Two creatures: a creature's own effect works between it and its target; a spell's (or a creature's effect on
+                // itself), between the target and the creature facing it
+                case ActionType.CopyStats: { // The copier takes the model's stats
+                    var (copier, model) = Pair(source, creature);
+                    return copier != null && model != null ? new CopyStatsAction(copier, model) : null;
+                }
+                case ActionType.StealStatChanges: { // The thief takes the victim's stat raises
+                    var (thief, victim) = Pair(source, creature);
+                    return thief != null && victim != null ? new StealStatChangesAction(thief, victim) : null;
+                }
+                case ActionType.SwapPositions:
+                    return creature != null ? new SwapPositionsAction(creature) : null;
+                case ActionType.GrantAbility:
+                    return creature != null && action.ability != CreatureAbility.None ? new GrantAbilityAction(creature, action.ability) : null;
                 case ActionType.SetWorld: // The whole board's: it doesn't matter where it lands
                     return new SetWorldAction(action.world, action.statusDuration, controller);
                 case ActionType.DelayDeployment: // Red Tape: value is the Days added
@@ -336,6 +351,20 @@ namespace SlayTheClone {
                 default:
                     return null;
             }
+        }
+
+        // Who does it and to whom, for the effects between two creatures. Copy: (copier, model); steal: (thief, victim)
+        private static (ICreature doer, ICreature other) Pair(ICard source, ICreature target) {
+            if (target == null) return (null, null);
+            if (source is ICreature self && self != target) return (self, target);
+            return (target, Opposite(target));
+        }
+
+        /// <summary>The creature in the slot facing this one, on the other side of the table.</summary>
+        public static ICreature Opposite(ICreature creature) {
+            var slot = creature?.Slot;
+            var row = slot?.Owner?.Opponent?.Battlefield;
+            return row != null && slot.Index < row.Count ? row[slot.Index].OccupyingCreature : null;
         }
 
         private static IGameAction Status(ICreature creature, StatusEffectType type, int duration, int potency, ICard source, IPlayer controller) {
@@ -348,8 +377,8 @@ namespace SlayTheClone {
             return new ApplyStatusEffectAction(creature, type, duration, potency, source as ICreature, controller);
         }
 
-        // Jumps from the creature that was hit to its neighbours, halving the damage on each jump
-        private static void QueueChain(ICreature attacker, ITarget primaryTarget, int damage, IActionsQueue queue) {
+        /// <summary>Jumps from the creature that was hit to its neighbours, halving the damage on each jump (Chain Mail, chained effects).</summary>
+        public static void QueueChain(ICreature attacker, ITarget primaryTarget, int damage, IActionsQueue queue) {
             if (!(primaryTarget is ICreature hitCreature)) return; // Chains need a creature to jump from
 
             foreach (var target in WithoutTooMainstream(TargetingSystem.GetDirectionalChainTargets(hitCreature, MaxChainJumps).Cast<ITarget>().ToList(), attacker)) {

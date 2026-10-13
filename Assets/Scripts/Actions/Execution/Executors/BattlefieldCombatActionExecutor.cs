@@ -41,6 +41,20 @@ namespace SlayTheClone {
 
             Log($"Executor: Creature {attacker.Name} attacking {DescribeTarget(primaryTarget)}", LogTag.Combat);
             QueueCombatDamage(actionsQueue, primaryTarget, attacker);
+            // Double Tap: a second hit right after the first, on the same target
+            if (Abilities.Has(attacker, Enums.CreatureAbility.DoubleTap)) QueueCombatDamage(actionsQueue, primaryTarget, attacker);
+            // Spray and Pray: the creatures beside the target slot are hit too, each for its attack (a cone of three)
+            if (Abilities.Has(attacker, Enums.CreatureAbility.SprayAndPray) && targetSlot?.Owner != null) {
+                var row = targetSlot.Owner.Battlefield;
+                foreach (int i in new[] { targetSlot.Index - 1, targetSlot.Index + 1 }) {
+                    var beside = i >= 0 && i < row.Count ? row[i].OccupyingCreature : null;
+                    if (beside != null && !Abilities.Defends(beside, Enums.CreatureAbility.TooMainstream, attacker)) QueueCombatDamage(actionsQueue, beside, attacker);
+                }
+            }
+            // Chain Mail: the hit jumps on to the next creatures in line, at half the damage each jump
+            if (Abilities.Has(attacker, Enums.CreatureAbility.ChainMail)) {
+                EffectResolver.QueueChain(attacker, primaryTarget, (attacker.Attack + Abilities.AttackBonus(attacker)) / 2, actionsQueue);
+            }
 
             // Hive Mind: whoever attacks it catches it, losing its own ability until its card is reshuffled
             if (primaryTarget is ICreature defender && Abilities.Defends(defender, Enums.CreatureAbility.HiveMind, attacker)

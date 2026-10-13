@@ -121,6 +121,7 @@ namespace SlayTheClone {
             SummonCreatureAction => ResolutionLayer.Summon,
             PlayCardAction play => play.GetCard() is ICreature ? ResolutionLayer.Summon : ResolutionLayer.Spell,
             PlaySpellAction => ResolutionLayer.Spell,
+            UseAbilityAction use when Abilities.LandsWithSpells(use.Creature?.Ability ?? Enums.CreatureAbility.None) => ResolutionLayer.Spell,
             _ => ResolutionLayer.AbilityAndAttack
         };
 

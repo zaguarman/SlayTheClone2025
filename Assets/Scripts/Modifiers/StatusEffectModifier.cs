@@ -18,7 +18,9 @@ namespace SlayTheClone {
         /// <summary>Lasts until removed or used up, whatever its Days (Blessed, Heat Signature).</summary>
         public bool IsPersistent => EffectType is StatusEffectType.Blessed or StatusEffectType.HeatSignature;
         /// <summary>Whether it harms its creature: what a Cleanse removes (a Purge removes the rest too). Blessed is the good one.</summary>
-        public bool IsNegative => EffectType is not (StatusEffectType.Blessed or StatusEffectType.Concealed or StatusEffectType.Encrypted);
+        public bool IsNegative => EffectType is not (StatusEffectType.Blessed or StatusEffectType.Concealed or StatusEffectType.Encrypted or StatusEffectType.Untouchable);
+        /// <summary>Its Days count the Day it lands, like a Day-long buff (Untouchable 1 is this Day only), instead of skipping it.</summary>
+        public bool CountsTheDayItLands => EffectType == StatusEffectType.Untouchable;
 
         /// <summary>Doomed can't be cleansed: a cleanse attempt passes it on instead (Heresy).</summary>
         public bool IsCleansable => EffectType != StatusEffectType.Doomed;
@@ -40,7 +42,7 @@ namespace SlayTheClone {
         /// <summary>Checked with the turn about to start: its last Dusk was the one ending Day TurnApplied + Duration.</summary>
         public bool HasExpired(int currentTurn) {
             if (IsPersistent) return false;
-            bool expired = currentTurn > TurnApplied + DurationInTurns;
+            bool expired = currentTurn > TurnApplied + DurationInTurns - (CountsTheDayItLands ? 1 : 0);
             if (expired) {
                 Log($"StatusEffect '{Name}' ({EffectType}) has expired on turn {currentTurn}.", LogTag.Effects | LogTag.Turns);
             }

@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: Once per combat, when it would die, it heals 1 and survives.
   artDescription: A cat sitting in an open cardboard box, its left half fluffy and
     alive, its right half a skeleton, both halves unimpressed.

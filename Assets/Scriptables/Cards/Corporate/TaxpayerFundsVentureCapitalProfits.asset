@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
     - actionType: 0
       value: 2
       targetType: 1
@@ -69,6 +70,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Future: the enemy schedules 1 fewer draw instead of losing Health.'
   artDescription: 
   defaultTargetType: 0

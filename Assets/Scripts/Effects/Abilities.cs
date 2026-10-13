@@ -20,7 +20,33 @@ namespace SlayTheClone {
         public static bool IsDefensive(CreatureAbility ability) => Defensive.Contains(ability);
 
         /// <summary>Active abilities are used as the creature's action for the Day (hold Shift while dragging it onto a creature).</summary>
-        public static bool IsActiveAbility(CreatureAbility ability) => ability == CreatureAbility.IdentityTheft;
+        public static bool IsActiveAbility(CreatureAbility ability) => ability is CreatureAbility.IdentityTheft or CreatureAbility.Bodyguard
+            or CreatureAbility.Wannabe or CreatureAbility.CreditGrab or CreatureAbility.ShellGame;
+
+        /// <summary>Bodyguard can't attack: it only protects. It's printed on the creature, so it holds even while switched off.</summary>
+        public static bool CanAttack(ICreature creature) => creature != null && creature.Ability != CreatureAbility.Bodyguard;
+
+        /// <summary>
+        /// Abilities that only help a friendly creature land with the spells, before the Day's attacks, as help played this Day
+        /// does (GDD 3.7): a Bodyguard's protection is there before the hits it should stop.
+        /// </summary>
+        public static bool LandsWithSpells(CreatureAbility ability) => ability == CreatureAbility.Bodyguard;
+
+        /// <summary>Whether a plain drag onto this slot uses the ability (no Shift): a Bodyguard dragged onto another friendly creature.</summary>
+        public static bool UsedByPlainDrag(ICreature creature, BoardSlot slot) =>
+            creature?.Ability == CreatureAbility.Bodyguard && slot?.Owner == creature.Owner && slot.OccupyingCreature != null && slot.OccupyingCreature != creature;
+
+        /// <summary>
+        /// Whether its Active ability can be used now: switched on, not resting (Cooldown), and Credit Grab's once per combat
+        /// not spent yet.
+        /// </summary>
+        public static bool CanUseActive(ICreature creature, IModifierManager modifiers) =>
+            creature != null && IsActiveAbility(creature.Ability) && IsActive(creature)
+            && !(modifiers?.HasStatusEffect(creature, StatusEffectType.Cooldown) ?? false)
+            && !(creature.Ability == CreatureAbility.CreditGrab && (creature.Owner?.UsedOncePerCombat.Contains(OnceKey(creature)) ?? false));
+
+        /// <summary>The key a once-per-combat ability is spent under, for this card, until the combat ends.</summary>
+        public static string OnceKey(ICreature creature) => $"{creature.CardId}#ability";
 
         public static string NameOf(CreatureAbility ability) => ability switch {
             CreatureAbility.NoU => "No U",
@@ -33,6 +59,12 @@ namespace SlayTheClone {
             CreatureAbility.ReturnToSender => "Return to Sender",
             CreatureAbility.Unpatchable => "Cold Storage",
             CreatureAbility.NickelAndDime => "Nickel-and-Dime",
+            CreatureAbility.CreditGrab => "Credit Grab",
+            CreatureAbility.SprayAndPray => "Spray and Pray",
+            CreatureAbility.ChainMail => "Chain Mail",
+            CreatureAbility.DoubleTap => "Double Tap",
+            CreatureAbility.ShellGame => "Shell Game",
+            CreatureAbility.SafeSpace => "Safe Space",
             _ => ability.ToString()
         };
 
@@ -57,6 +89,14 @@ namespace SlayTheClone {
             CreatureAbility.Undercover => "its plans show as ??? to the enemy",
             CreatureAbility.Handover => "when a summon replaces it, the newcomer takes over its stat changes and statuses",
             CreatureAbility.Recoil => "+2 damage on its attacks; it takes 1 damage after each attack",
+            CreatureAbility.Bodyguard => "can't attack. Active: another friendly creature is Untouchable this Day, then a Day of Cooldown (drag it onto that creature)",
+            CreatureAbility.Wannabe => "Active: its Attack, Health and Speed become target creature's (hold Shift as you drag it)",
+            CreatureAbility.CreditGrab => "Active, once per combat: steals target creature's stat raises (hold Shift as you drag it)",
+            CreatureAbility.SprayAndPray => "its attacks also hit the creatures beside its target",
+            CreatureAbility.ChainMail => "its attacks jump to the next 2 creatures in line, half the damage each jump",
+            CreatureAbility.DoubleTap => "it attacks twice",
+            CreatureAbility.ShellGame => "Active: target creature trades places with the one to its right (hold Shift as you drag it)",
+            CreatureAbility.SafeSpace => "each Dawn, it and the friendly creatures beside it gain Bless",
             _ => ""
         };
 
@@ -180,6 +220,16 @@ namespace SlayTheClone {
             Log($"{creature.Name}'s Copypasta copies {model.Name}'s {model.Ability}", LogTag.Effects);
             creature.Ability = model.Ability;
             mediator?.NotifyCreatureStatsChanged(creature);
+        }
+
+        /// <summary>Safe Space: each Dawn, it and the friendly creatures beside it gain Bless 1 (a ward against the next status).</summary>
+        public static void TrySafeSpace(ICreature creature, IActionsQueue queue) {
+            if (!Has(creature, CreatureAbility.SafeSpace) || creature.Slot?.Owner == null) return;
+            var row = creature.Slot.Owner.Battlefield;
+            foreach (int i in new[] { creature.Slot.Index - 1, creature.Slot.Index, creature.Slot.Index + 1 }) {
+                var ward = i >= 0 && i < row.Count ? row[i].OccupyingCreature : null;
+                if (ward != null && !ward.IsDead) queue.AddAction(new ApplyStatusEffectAction(ward, StatusEffectType.Blessed, 1, 1, creature, creature.Owner));
+            }
         }
         #endregion
 

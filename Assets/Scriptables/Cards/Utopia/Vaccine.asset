@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
     - actionType: 6
       value: -1
       targetType: 3
@@ -69,6 +70,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Cleanses its harmful statuses; side effect: -1 Attack for this Day
     (sore arm).'
   artDescription: A syringe with a tiny Wi-Fi antenna on its plunger and full signal

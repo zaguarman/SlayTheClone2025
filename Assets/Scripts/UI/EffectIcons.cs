@@ -51,6 +51,8 @@ namespace SlayTheClone {
                 case StatusEffectType.Concealed: return Conceal;
                 case StatusEffectType.Revealed: return Reveal;
                 case StatusEffectType.Encrypted: return Encrypt;
+                case StatusEffectType.Untouchable: return Armor;
+                case StatusEffectType.Cooldown: return Days;
                 default: return null;
             }
         }

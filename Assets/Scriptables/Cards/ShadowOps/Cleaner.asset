@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Cleaner
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: fba4ae05-c96c-4f1e-8645-c5d4d78242f9
+  cardName: Cleaner
+  description: Two shots. One invoice.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 3286163911610860551, guid: cc27eb2ec3ef07d49a62618a4c6bc3bb, type: 3}
+  effects: []
+  designNotes: 'Mechanics test: Double Tap. It attacks twice: a second hit right
+    after the first.'
+  artDescription: A calm man in a cleaning company jumpsuit, a mop in one hand and
+    a silenced pistol in the other, two neat holes in a target behind him.
+  attack: 2
+  health: 3
+  speed: 3
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 25

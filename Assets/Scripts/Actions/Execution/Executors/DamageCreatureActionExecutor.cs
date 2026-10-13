@@ -24,6 +24,12 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Untouchable: no damage at all, from anything
+            if (modifierManager.HasStatusEffect(targetCreature, StatusEffectType.Untouchable)) {
+                Log($"Executor: {targetCreature.Name} is Untouchable: no damage", LogTag.Actions | LogTag.Combat);
+                return;
+            }
+
             // Exposed (part of Exhausted): +1 damage from every source
             if (damage > 0 && modifierManager.IsExposed(targetCreature)) {
                 damage += 1;

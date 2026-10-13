@@ -135,6 +135,8 @@ namespace SlayTheClone {
             MoveCreatureAction => EffectIcons.Speed,
             BattlefieldCombatAction attack => attack.IsLastRites ? EffectIcons.Doom : EffectIcons.Attack,
             UseAbilityAction => EffectIcons.Chain,
+            CopyStatsAction or StealStatChangesAction or GrantAbilityAction => EffectIcons.Buff,
+            SwapPositionsAction => EffectIcons.Speed,
             DamageCreatureAction or DamagePlayerAction => EffectIcons.Damage,
             HealCreatureAction or HealPlayerAction => EffectIcons.Heal,
             ModifyAction modify => modify.GetValue() >= 0 ? EffectIcons.Buff : EffectIcons.Debuff,
@@ -157,6 +159,8 @@ namespace SlayTheClone {
             StatusEffectType.Concealed => EffectIcons.Conceal,
             StatusEffectType.Revealed => EffectIcons.Reveal,
             StatusEffectType.Encrypted => EffectIcons.Encrypt,
+            StatusEffectType.Untouchable => EffectIcons.Armor,
+            StatusEffectType.Cooldown => EffectIcons.Days,
             _ => EffectIcons.Debuff
         };
 

@@ -112,7 +112,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void CombatAbilities_Underground_NickelAndDime_InsiderJob_TooMainstream_Recoil_Handover() {
+        public void CombatAbilities_BendTheDamage_SpreadTheHit_OrHandItOver() {
             var mole = With(CreatureAbility.Underground, p1, 0, attack: 0);
             var brute = With(CreatureAbility.None, p2, 0, attack: 2);
             ChangeAttack(brute, 3, p2);
@@ -167,10 +167,29 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(5, nextShift.MaxHealth, "...its Persistent Stat Modifications...");
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(nextShift, StatusEffectType.Burned), "...and its statuses");
             Assert.AreEqual(4, shift.BaseHealth, "Passed on: its own card is back to what it prints");
+
+            Fresh();
+            var sprayer = With(CreatureAbility.SprayAndPray, p1, 1, attack: 2);
+            var left = With(CreatureAbility.None, p2, 0);
+            var middle = With(CreatureAbility.None, p2, 1);
+            var right = With(CreatureAbility.None, p2, 2);
+            var far = With(CreatureAbility.None, p2, 3);
+            game.Attack(sprayer, p2.Battlefield[1]);
+            Assert.AreEqual(new[] { 8, 8, 8, 10 }, new[] { left.Health, middle.Health, right.Health, far.Health },
+                "Spray and Pray: the target and the creatures on both sides, a cone of three");
+
+            var tapper = With(CreatureAbility.DoubleTap, p1, 3, attack: 2);
+            game.Attack(tapper, p2.Battlefield[3]);
+            Assert.AreEqual(6, far.Health, "Double Tap: it hits twice");
+
+            var chainer = With(CreatureAbility.ChainMail, p1, 0, attack: 4);
+            game.Attack(chainer, p2.Battlefield[0]);
+            Assert.AreEqual(new[] { 4, 6, 7 }, new[] { left.Health, middle.Health, right.Health },
+                "Chain Mail: 4, then the next creatures in line for half each jump (2, then 1)");
         }
 
         [Test]
-        public void CopyingAndSpreading_HiveMind_IdentityTheft_SignalJammer_Copypasta() {
+        public void OtherCreatures_Copied_Stolen_Swapped_Guarded_AndAbilitiesSpread() {
             game.SetDecks(game.Fillers(5), game.Fillers(5));
             With(CreatureAbility.HiveMind, p1, 0, attack: 0, health: 30);
             var attacker = With(CreatureAbility.NickelAndDime, p2, 0, attack: 2, health: 2);
@@ -206,6 +225,66 @@ namespace SlayTheClone.Tests {
             With(CreatureAbility.Extremist, p2, 0);
             game.StartTurn();
             Assert.AreEqual(CreatureAbility.Extremist, copycat.Ability, "Copied at Dawn, replacing Copypasta");
+
+            Fresh();
+            var wannabe = With(CreatureAbility.Wannabe, p1, 0, attack: 1, health: 3);
+            var star = With(CreatureAbility.None, p2, 0, attack: 6, health: 9);
+            game.Run(new DamageCreatureAction(star, 2));
+            game.Run(new UseAbilityAction(wannabe, p2.Battlefield[0]));
+            Assert.AreEqual((6, 9, 7), (wannabe.Attack, wannabe.MaxHealth, wannabe.Health), "Wannabe: a copy of its Attack and Health, damage included");
+
+            var grabber = With(CreatureAbility.CreditGrab, p1, 1, attack: 1, health: 3);
+            var victim = With(CreatureAbility.None, p2, 1, attack: 2, health: 5);
+            ChangeAttack(victim, 3, p2);
+            game.ModifierManager.ChangeBaseStats(victim, 0, 2, 0);
+            ChangeAttack(victim, -1, p1);
+            game.Run(new UseAbilityAction(grabber, p2.Battlefield[1]));
+            Assert.AreEqual((4, 5), (grabber.Attack, grabber.MaxHealth), "Credit Grab: the +3 Attack and the +2 Health for good move over");
+            Assert.AreEqual((1, 5), (victim.Attack, victim.MaxHealth), "The victim keeps only its lowered stat");
+            ChangeAttack(victim, 2, p2);
+            game.Run(new UseAbilityAction(grabber, p2.Battlefield[1]));
+            Assert.AreEqual(4, grabber.Attack, "Once per combat");
+
+            var shell = With(CreatureAbility.ShellGame, p1, 2);
+            var first = With(CreatureAbility.None, p2, 2);
+            var second = With(CreatureAbility.None, p2, 3, attack: 5);
+            game.Run(new UseAbilityAction(shell, p2.Battlefield[2]));
+            Assert.AreEqual((second, first), (p2.Battlefield[2].OccupyingCreature, p2.Battlefield[3].OccupyingCreature),
+                "Shell Game: the target trades places with the one to its right");
+
+            // The same effects on spells: a spell works between its target and the creature facing it
+            var mimic = Effect(EffectTrigger.OnPlay, ActionType.CopyStats, 0, TargetType.AllCreatures);
+            game.Play(game.GiveCard(p1, game.Spell("Mimetic Theory", TargetType.AllCreatures, mimic)), p1, p1.Battlefield[2]);
+            var grant = Effect(EffectTrigger.OnPlay, ActionType.GrantAbility, 0, TargetType.FriendlyCreatures);
+            grant.actions[0].ability = CreatureAbility.DoubleTap;
+            game.Play(game.GiveCard(p1, game.Spell("One for the Road", TargetType.FriendlyCreatures, grant)), p1, p1.Battlefield[2]);
+            game.Resolve();
+            Assert.AreEqual(5, shell.Attack, "A spell copies the creature facing its target");
+            Assert.AreEqual(CreatureAbility.DoubleTap, shell.Ability, "Any ability can come from a spell");
+
+            Fresh();
+            var dome = With(CreatureAbility.Bodyguard, p1, 0);
+            var vip = With(CreatureAbility.None, p1, 1, health: 5);
+            var raider = With(CreatureAbility.None, p2, 1, attack: 4, health: 10);
+            var safe = With(CreatureAbility.SafeSpace, p1, 3);
+            var huddled = With(CreatureAbility.None, p1, 4);
+            game.Declare(dome, p2.Battlefield[0]);
+            Assert.IsNull(game.ActionsQueue.GetActiveAction(dome.TargetId), "Bodyguard: it can't attack");
+            game.Declare(raider, p1.Battlefield[1]);
+            game.ActionsQueue.AddAction(new UseAbilityAction(dome, p1.Battlefield[1]));
+            game.Resolve();
+            Assert.AreEqual(5, vip.Health, "Untouchable: no damage. The guard lands with the spells, before the attacks");
+            game.StartTurn();
+            Assert.IsFalse(HasStatus(vip, StatusEffectType.Untouchable), "Untouchable 1 is this Day only");
+            game.Run(new UseAbilityAction(dome, p1.Battlefield[1]));
+            Assert.IsFalse(HasStatus(vip, StatusEffectType.Untouchable), "Cooldown: it rests a Day");
+            Assert.IsTrue(HasStatus(safe, StatusEffectType.Blessed) && HasStatus(huddled, StatusEffectType.Blessed),
+                "Safe Space: at Dawn it and the friendly creatures beside it gain Bless");
+            game.StartTurn();
+            game.Run(new UseAbilityAction(dome, p1.Battlefield[1]));
+            Assert.IsTrue(HasStatus(vip, StatusEffectType.Untouchable), "Rested, it guards again");
         }
+
+        private bool HasStatus(ICreature creature, StatusEffectType status) => game.ModifierManager.HasStatusEffect(creature, status);
     }
 }

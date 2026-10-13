@@ -172,3 +172,63 @@ Nickel-and-Dime
     Description: "Double damage when it hits for 3 or less."
     Notes: Checked after the attacker's own stat calculation, before the target's modifiers (Exposed, Cognitive Dissonance) and Armor. 0 damage stays 0.
     Answers: Armor and damage reduction still blunt it. Buffing its hit above 3 actually switches the doubling off.
+
+Protecting, Copying and Moving Other Creatures
+
+Each of these also exists as an effect any card can carry (a spell, or a creature's trigger), so a card can do it without the ability: Untouchable (a status), copy stats, steal stat raises, swap places, and gain an ability (any ability below, or above, given by a spell or trigger, replacing the creature's own until its card is reshuffled). On a spell, the two-creature effects work between the target and the creature facing it.
+
+Bodyguard
+    Inspired by: Protect (Pokémon), given to another creature
+    Type: Active (no Shift needed)
+    Description: "Can't attack. Drag it onto another friendly creature: that one is Untouchable this Day. Then a Day of Cooldown."
+    Notes: It never attacks, even while its ability is off (it's printed on it). Its guard lands with the spells, before the Day's attacks, as help played this Day does (GDD 3.7), so it stops faster attackers too. Untouchable stops all damage, combat or not (Burn included). Cooldown 1 rests it the next Day: it guards every other Day. A Bless on the Bodyguard negates its own Cooldown.
+    Answers: Kill or Exhaust the Bodyguard, cleanse Untouchable, or hit with Health Loss and statuses (they aren't damage).
+
+Wannabe
+    Inspired by: Transform (Pokémon), stats only
+    Type: Active
+    Description: "Its Attack, Health and Speed become target creature's."
+    Notes: A copy, damage included: its maximum and current Health become the target's. It lasts while it stays in play, like a lasting stat change, but abilities that bend stat changes (Contrarian, Unbothered...) don't touch it. Its own ability stays.
+    Answers: Copy it while weak, or kill what it would copy first.
+
+Credit Grab
+    Inspired by: Spectral Thief (Pokémon)
+    Type: Active, once per combat
+    Description: "Steals target creature's stat raises."
+    Notes: Every raise moves over as it is: lasting and timed ones (with their Days left), and the raises in its Persistent Stat Modifications (those stay on the thief's card). Lowered stats stay on the victim. A victim held up by a Health raise can die of it.
+    Answers: Buff after it has used it, or keep buffs on creatures it can't reach.
+
+Spray and Pray
+    Inspired by: spread moves (Pokémon's Earthquake, Surf), aimed
+    Type: Passive
+    Description: "Its attacks also hit the creatures beside its target."
+    Notes: A cone of three slots on the other side: the target slot and its two neighbors, each hit for its Attack as combat damage (each hit can be answered). An empty target slot still hits the player, and the neighbors too. Too Mainstream creatures beside the target are skipped.
+    Answers: Spread out, or put Too Mainstream creatures beside the one it aims at.
+
+Chain Mail
+    Inspired by: chain lightning
+    Type: Passive
+    Description: "Its attacks jump to the next 2 creatures in line, half the damage each jump."
+    Notes: It jumps toward the side with more creatures in a row, from the creature it hit: 4 Attack hits for 4, then 2, then 1. Only from a creature: hitting a player doesn't chain.
+    Answers: Leave gaps in your line.
+
+Double Tap
+    Inspired by: two-hit moves (Pokémon's Double Kick)
+    Type: Passive
+    Description: "It attacks twice."
+    Notes: A second hit on the same target right after the first, each for its Attack as it is then. Armor, Counterattack and Retaliate see two hits. Recoil costs it 1 per attack, not per hit.
+    Answers: Armor, Untouchable, and creatures that answer every hit.
+
+Shell Game
+    Inspired by: Ally Switch (Pokémon), on anyone
+    Type: Active
+    Description: "Target creature trades places with the one to its right."
+    Notes: To its left at the end of the row; an empty slot just moves it. It isn't a move (nobody chose to move), so nothing stops it, but Slot Effects see both creatures leave and enter. Attacks aim at slots, so it can put an enemy into a planned attack, or a friend out of one.
+    Answers: Plan after you see it, or keep Slot Effects off your neighbours' slots.
+
+Safe Space
+    Inspired by: Safeguard (Pokémon)
+    Type: Passive
+    Description: "Each Dawn, it and the friendly creatures beside it gain Bless."
+    Notes: Bless 1 each Dawn, a ward that stops the next status, good or bad (Blessed stacks up to 3). Nothing at the Dawn it lands: it starts the Dawn after it's ready.
+    Answers: Spend the wards with weak statuses first, or use damage.

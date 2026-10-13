@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
     - actionType: 7
       value: 0
       targetType: 3
@@ -69,6 +70,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: '+2/+2 for good; side effect: Burned for 2 Days. Future: gene editing
     as Persistent Stat Modifications.'
   artDescription: A pair of scissors cutting a DNA double helix, a strip of tape

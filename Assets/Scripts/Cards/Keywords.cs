@@ -81,6 +81,8 @@ namespace SlayTheClone {
             Add("Concealed", "Conceal X (no number: 1): for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
             Add("Revealed", "Revealed X (no number: 1): for X [Days], it can't be [Concealed]: its plans can be seen.");
             Add("Encrypted", "Encrypt X (no number: 1): for X [Days], [Watchdog|Watchdogs] ignore its actions.");
+            Add("Untouchable", "Untouchable X (no number: 1): takes no damage at all for X [Days], counting the Day it lands: 1 is this Day only.");
+            Add("Cooldown", "Cooldown X (no number: 1): its Active ability rests and can't be used for the next X [Days].");
             Add("Cleanse", "Removes harmful statuses.");
             Add("Purge", "Removes every status, good and bad.");
 
@@ -129,6 +131,14 @@ namespace SlayTheClone {
             CreatureAbility.IdentityTheft => "Instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it).",
             CreatureAbility.InsiderJob => "Its damage ignores [Armor].",
             CreatureAbility.SignalJammer => "The enemy creature opposite has its ability switched off.",
+            CreatureAbility.Bodyguard => "Can't attack. Instead, drag it onto another friendly creature: that one is [Untouchable] this Day (it lands before the attacks, with the spells). Then a Day of [Cooldown].",
+            CreatureAbility.Wannabe => "Instead of attacking or moving: its Attack, Health and Speed become those of target creature, for as long as it stays in play (hold Shift as you drag it).",
+            CreatureAbility.CreditGrab => "Once per combat, instead of attacking or moving: steals target creature's stat raises, timed, lasting and for good. Its lowered stats stay (hold Shift as you drag it).",
+            CreatureAbility.SprayAndPray => "Its attacks also hit the creatures on both sides of its target, each for its Attack: three slots in a cone.",
+            CreatureAbility.ChainMail => "Its attacks jump on to the next 2 creatures in line, toward the side with more of them, at half the damage each jump.",
+            CreatureAbility.DoubleTap => "It attacks twice: a second hit on the same target right after the first.",
+            CreatureAbility.ShellGame => "Instead of attacking or moving: target creature trades places with the one to its right, or to its left at the end of the row (hold Shift as you drag it).",
+            CreatureAbility.SafeSpace => "Each [Dawn], it and the friendly creatures beside it gain [Blessed|Bless]: a ward that stops the next status.",
             _ => Capitalize(Abilities.ReminderOf(ability)) + "."
         };
 

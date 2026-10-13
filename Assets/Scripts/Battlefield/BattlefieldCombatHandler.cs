@@ -27,6 +27,10 @@ namespace SlayTheClone {
             }
 
             if (!modifierManager.CanAct(attackerCreature)) return;
+            if (!Abilities.CanAttack(attackerCreature)) {
+                Log($"{attackerCreature.Name} can't attack (Bodyguard)", LogTag.Creatures | LogTag.Combat);
+                return;
+            }
 
             // Check if the target is valid (basic check, can be expanded)
             bool isValidTarget = targetSlot != null; // Basic check

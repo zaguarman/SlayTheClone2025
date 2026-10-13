@@ -189,9 +189,11 @@ namespace SlayTheClone {
             var creature = card.GetLinkedCreature();
             if (creature == null || targetSlot == null) return;
 
-            // Shift-drag: an Active ability (like Identity Theft) aimed at the creature there, as its action for the Day
-            if (UsingAbility() && Abilities.IsActiveAbility(creature.Ability)) {
-                if (GameManager.ModifierManager.CanAct(creature) && targetSlot.Model.OccupyingCreature != creature) {
+            // Shift-drag: an Active ability (like Identity Theft) aimed at the creature there, as its action for the Day.
+            // A Bodyguard needs no Shift: dragged onto another friendly creature, it guards it
+            if (Abilities.IsActiveAbility(creature.Ability) && (UsingAbility() || Abilities.UsedByPlainDrag(creature, targetSlot.Model))) {
+                if (GameManager.ModifierManager.CanAct(creature) && Abilities.CanUseActive(creature, GameManager.ModifierManager)
+                    && targetSlot.Model.OccupyingCreature != creature) {
                     GameManager.ActionsQueue.AddAction(new UseAbilityAction(creature, targetSlot.Model));
                 }
                 return;

@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
     - actionType: 0
       value: 1
       targetType: 0
@@ -69,6 +70,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'A draw each Dawn, paid with 1 of your Health. Future: Technical Debt
     (fewer draws next Day).'
   artDescription: 'A plain hammer with a card reader taped to its handle and a price

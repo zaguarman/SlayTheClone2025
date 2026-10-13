@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Future: you pick the first slot; each Dawn it moves to the next one
     until it fires.'
   artDescription: A Russian woman in a fur ushanka spinning a roulette wheel of six

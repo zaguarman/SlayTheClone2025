@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Future: Clickbait taunts (enemy creatures must attack it).'
   artDescription: 'A video thumbnail: a man with a hugely shocked face, a big red
     arrow and a red circle around absolutely nothing.'

@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Future: a riot that spreads to adjacent creatures each Dusk.'
   artDescription: 
   attack: 3

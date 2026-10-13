@@ -208,6 +208,7 @@ namespace SlayTheClone {
                 }
 
                 Abilities.TryCopypasta(creature, mediator); // Each Dawn while it still has Copypasta
+                Abilities.TrySafeSpace(creature, actionsQueue);
                 creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);

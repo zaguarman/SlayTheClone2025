@@ -80,6 +80,17 @@ STILL OPEN
     • Changed: Keyboard Warrior went from Retaliate 1 to Counterattack (same 1 damage, its Attack). A fixed-damage answer is still possible in the data and reads "Retaliate: 1 damage to it".
     • Question: should spells and abilities that damage it be answered too?
 
+22. The new building blocks (2026-10-13)
+    • Done: each mechanic works as an ability, a trigger or a spell. Abilities: Bodyguard (protect), Wannabe (copy stats), Credit Grab (steal stat raises, once per combat), Spray and Pray (cone of three), Chain Mail (chained hits), Double Tap (attacks twice), Shell Game (switch places), Safe Space (status wards). Effects any card can use: the statuses Untouchable and Cooldown, copy stats, steal stat raises, swap places, gain an ability. One card each, in the Mechanics Test deck and the deck builder.
+    • Choices made, to check:
+        • Bodyguard's protection lasts this Day only (Untouchable 1) and lands before the attacks; with its Day of rest it guards every other Day. It can't attack even when its ability is off.
+        • Swapping moves the target with the creature to its right (left at the end of the row), not a pick of two creatures.
+        • The copy includes damage (its Health becomes the target's), and lasts while it stays in play.
+        • Credit Grab takes only raises (lowered stats stay), including raises for good, and statuses stay.
+        • Chain Mail halves from the first jump (4, then 2, then 1).
+        • "Ward" is Bless: the ward that stops the next status. Safe Space gives Bless 1 at each Dawn to itself and its neighbors.
+    • Question: any of these to change?
+
 21. Zeitgeist as a World (2026-10-13)
     • Done: read as "Zeitgeist is a World card", and Worlds (the GDD's Location/Weather cards) as Zeitgeist's signature, replacing its "Trends". The Zeitgeist World: for 3 Days, each Day whoever has fewer creatures draws 1 more card (Zeitgeist's comebacks and card draw). The "climate" with the turned-around order is the World Rush Hour (from the card backlog): for 3 Days, the slowest act first. Zeitgeist joined the Zeitgeist deck (now 20); Rush Hour is in the Mechanics Test deck and the deck builder. The old weather button that changed the weather by hand is hidden; the banner in the middle of the table shows the World.
     • Question: did you mean something else, like turning the whole Zeitgeist faction into Worlds, or "climate" being its own kind of card next to Worlds?

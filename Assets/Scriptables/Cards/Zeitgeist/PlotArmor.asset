@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Mechanics test: once per combat, when it would die (OnAboutToDie,
     resolving at once), it heals 1 and survives. The use is gone for the rest of
     the combat, even after the card is reshuffled.'

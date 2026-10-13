@@ -243,6 +243,19 @@ namespace SlayTheClone {
                     return DescribeStatus(action, target);
                 case ActionType.DelayDeployment:
                     return $"+{value} {Keywords.Link("Deployment Time")} to {target}";
+                // Between two creatures: this one and its target, or (on a spell, or aimed at itself) the target and the creature facing it
+                case ActionType.CopyStats:
+                    return isSpell || action.targetType == TargetType.Self
+                        ? $"{target} copies the Attack, Health and Speed of the creature facing it"
+                        : $"copy the Attack, Health and Speed of {target}";
+                case ActionType.StealStatChanges:
+                    return isSpell || action.targetType == TargetType.Self
+                        ? $"the creature facing {target} steals its stat raises"
+                        : $"steal the stat raises of {target}";
+                case ActionType.SwapPositions:
+                    return $"{target} trades places with the creature to its right";
+                case ActionType.GrantAbility:
+                    return $"{target} gains {AbilityName(action.ability)}";
                 case ActionType.SetWorld: // "The World becomes Rush Hour [sand watch]3"
                     return action.world == World.None
                         ? $"the {Keywords.Link("World")} ends"
@@ -326,6 +339,8 @@ namespace SlayTheClone {
                 case StatusEffectType.Concealed: return $"{Keywords.Link("Concealed", "Conceal" + Count(days))} on {target}";
                 case StatusEffectType.Revealed: return $"{Keywords.Link("Revealed", "Revealed" + Count(days))} on {target}";
                 case StatusEffectType.Encrypted: return $"{Keywords.Link("Encrypted", "Encrypt" + Count(days))} on {target}";
+                case StatusEffectType.Untouchable: return $"{Keywords.Link("Untouchable", "Untouchable" + Count(days))} on {target}";
+                case StatusEffectType.Cooldown: return $"{Keywords.Link("Cooldown", "Cooldown" + Count(days))} on {target}";
                 default: return null;
             }
         }

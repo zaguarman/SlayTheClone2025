@@ -438,6 +438,8 @@ These rules apply to both sides.
 
 Creature Roles
     • Support/Specialists: May have no standard Attack. Instead they have an Active Ability (deal damage, heal, apply a status) that their controller queues during Planning.
+    • Using an Active Ability: hold Shift and drag the creature onto the creature it's for; it replaces its attack or move for the Day. A creature that can't attack (Bodyguard) needs no Shift: dragged onto another friendly creature, it uses its ability. Abilities that only help a friendly creature land with the spells, before the attacks; the others in the Ability and Attack layer, by Speed. Cooldown X rests an Active Ability for X Days; "once per combat" spends it until the combat ends.
+    • Building blocks: every mechanic works as an ability, a trigger or a spell. Protection is the status Untouchable; copying stats, stealing stat raises, swapping places and gaining an ability are effects any card can carry; an ability given by a card replaces the creature's own until its card is reshuffled. On a spell, the effects between two creatures work on the target and the creature facing it.
         • Additional costs are paid instantly during Planning, like any other additional cost.
         • Targets are chosen when the ability is queued, using Homing:, Fixed:, or Static:.
         • Using the ability is that creature's one primary intent for the Day.

@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   - effectType: 0
     trigger: 1
     oncePerCombat: 0
@@ -73,6 +74,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Future: pays draws from your next Days until it collapses, then takes
     them all back.'
   artDescription: 

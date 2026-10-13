@@ -1581,19 +1581,16 @@ Card Game Factions Overview
 			Cardo and Decumanus (the two main roads of a Roman town)
 			Cloud Cover (a smoke screen, in war)
 			Concertina Wire
-			Congruent Use of Force (tagged Statecraft; a mock: the card should feel like overkill)
 			Crossing the Rubicon
 			Digital Money (state-controlled)
 			Enhanced Interrogation (torture under the Bush administration)
 			Everybody Is Equal Before the Law
 			Fukuryu (stealth diver carrying explosives)
-			Golden Dome
 			Kaiten (kamikaze submarine)
 			Manhattan Project
 			Ministry of Equality (tagged Statecraft; in place of Ministry of Love)
 			Patronage Network (clientelism)
 			Peace Operation
-			Presidential Pardon
 			Regulatory Overreach
 			Represented by Living Dinosaurs
 			Rome Does Not Pay Traitors
@@ -1601,7 +1598,6 @@ Card Game Factions Overview
 			The Great Replacement Law
 			The Gullible Judge
 			War Censorship Law
-			Weapons of Mass Distraction
 			Welcome to Fear City
 			Yokosuka (kamikaze plane)
 			Zero Grace Operational Policy
@@ -1609,7 +1605,6 @@ Card Game Factions Overview
 			Arsonist
 			Asset Recruitment (tagged Shadow Ops.)
 			Bilderberg Membership
-			Cleaner (tagged Shadow Ops.)
 			Counter-Surveillance (tagged Shadow Ops.)
 			Dead Man's Switch
 			Drug Pigeon
@@ -1637,7 +1632,6 @@ Card Game Factions Overview
 			Business Culture
 			Buy Now, Give Your Soul Later
 			Corporate Bailouts
-			Counterfeit (tagged Corporate; business, the mafia)
 			Cozy Loft in an "Exclusive" Location
 			Credit Card (tagged Corporate)
 			Deal with a Neutral Third Party That We Bought
@@ -1663,13 +1657,11 @@ Card Game Factions Overview
 			Phoebus Cartel (the light bulb cartel: planned obsolescence)
 			Pinto Memo (Ford's internal memo: fixing the fuel tank, $11 a car, cost more than paying for the burn deaths and injuries; it valued a human life at about $200,000 in 1970s dollars)
 			Plutocratic Amount of Wealth
-			Private Equity
 			Public Business
 			Regulatory Arbitrage
 			Roth IRA Trading
 			Round-Tripping (a tax fraud)
 			Sales Funnel
-			Shell Company
 			Spoofing
 			That Is Tomorrow's Problem
 			The Art of Selling: Involuntary Product Bundling
@@ -1697,7 +1689,6 @@ Card Game Factions Overview
 			Web Scraping (art: a cat scratching a laptop screen)
 		Digital Society
 			Content Creator
-			Crypto "Entrepreneur"
 			Dislike Button
 			Doomscrolling While Driving
 			Dubai Female "Entrepreneurs"
@@ -1747,13 +1738,10 @@ Card Game Factions Overview
 			Mexican Telenovela
 			Morning Routine
 			Nevermind (tagged Zeitgeist; Nirvana)
-			Not on My Watch
 			Nuclear Summer (the opposite of a nuclear winter)
-			One for the Road
 			Passive Smoker (art: a guy getting screwed from behind while smoking)
 			Prince Charles Paradox (the intergenerational wealth problem)
 			Real Life (good graphics, but a long tutorial)
-			Rush Hour (tagged Zeitgeist)
 			Second-Hand Embarrassment
 			Spite Voter (tagged Zeitgeist; someone who votes out of spite)
 			Stop Being Poor
@@ -1776,7 +1764,6 @@ Card Game Factions Overview
 			Legerdemain (sleight of hand)
 			Liminal Space (a Weather: Attack and Health swap for X turns)
 			Maslow's Pyramid
-			Mimetic Theory
 			Ontology (the study of existence)
 			Phronetic (practical wisdom: knowledge in context)
 			Scapegoating

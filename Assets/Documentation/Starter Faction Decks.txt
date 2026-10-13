@@ -188,6 +188,19 @@ Creatures (Attack/Health/Speed, Deployment Time)
     • Chain Smoker (Zeitgeist, 2/5/2, 1): Recoil (+2 damage on its attacks, 1 damage to itself after each).
     • Zeitgeist (Zeitgeist World, 3 Days): each Day, whoever has fewer creatures draws 1 more card.
     • Rush Hour (Zeitgeist World, 3 Days): the slowest act first. Not in the Zeitgeist starter deck (it's full): only here and in the deck builder.
+    • New mechanics (2026-10-13), each on one card. The faction ones aren't in their starter decks (full): only here and in the deck builder.
+        • Golden Dome (Statecraft, 0/6/2, 1): Bodyguard. Can't attack; dragged onto another friendly creature, that one is Untouchable this Day, then a Day of Cooldown.
+        • Presidential Pardon (Statecraft spell): Untouchable on target (this Day).
+        • Congruent Use of Force (Statecraft, 2/4/1, 1): Spray and Pray (its attacks also hit the creatures beside its target).
+        • Weapons of Mass Distraction (Statecraft spell): target trades places with the creature to its right.
+        • Counterfeit (Corporate, 1/1/2, 0): Wannabe (Active: its stats become target creature's).
+        • Private Equity (Corporate, 2/4/1, 1): Credit Grab (Active, once per combat: steals target creature's stat raises).
+        • Shell Company (Corporate, 1/4/2, 0): Shell Game (Active: target creature trades places with the one to its right).
+        • Not on My Watch (Zeitgeist, 1/5/1, 1): Safe Space (each Dawn, it and the friendly creatures beside it gain Bless).
+        • One for the Road (Zeitgeist spell): target gains Double Tap.
+        • Crypto "Entrepreneur" (Digital Society, 2/3/2, 0): Chain Mail (its attacks jump to the next 2 creatures in line, half each jump).
+        • Cleaner (Shadow Ops., 2/3/3, 1): Double Tap (it attacks twice).
+        • Mimetic Theory (Mind spell): target copies the Attack, Health and Speed of the creature facing it.
     • Keyboard Warrior (Digital Society, 1/3/2, 0): No U (enemy effects that would lower its stats bounce back), Counterattack (a creature that attacks it is hit back for its Attack). Tests answering every attack that lands, even killing ones.
     • Political Decoy (Shadow Ops., 0/6/1, 1): Swap.
     • Martyr (Myth, 2/4/1, 1): When ready, doom this for 2 Days. When it dies, heal each friendly creature by 3.

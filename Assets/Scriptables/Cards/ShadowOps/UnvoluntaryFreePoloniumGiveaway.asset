@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
     - actionType: 7
       value: 0
       targetType: 4
@@ -69,6 +70,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: '1 damage now, then Burned for 3 Days. Future: Spontaneous Combustion.'
   artDescription: A gentleman in a bowler hat at a bus stop, the tip of his black
     umbrella dripping glowing green drops that sizzle on the pavement.

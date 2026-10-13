@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
     - actionType: 0
       value: 1
       targetType: 3
@@ -69,6 +70,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Future: Plot Armor. Survives a lethal hit once (OnAboutToDie).'
   artDescription: 
   attack: 3

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: CryptoEntrepreneur
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: b772c078-2b42-420b-a33c-8ed55d03c6a8
+  cardName: Crypto "Entrepreneur"
+  description: It's not a pyramid. It's a triangle of opportunity.
+  cardType: 0
+  faction: 6
+  artwork: {fileID: 3286163911610860551, guid: e4bb8bfa17dbf0545a22455787a226f0, type: 3}
+  effects: []
+  designNotes: 'Mechanics test: Chain Mail. Its attacks jump on to the next 2 creatures
+    in line, half the damage each jump.'
+  artDescription: A guy in sunglasses and a hoodie on top of a human pyramid of recruits,
+    a glowing coin passed down from hand to hand.
+  attack: 2
+  health: 3
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 24

@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Mechanics test: Health Loss is permanent and stays on the card until
     it''s reshuffled. It only affects creatures, so it fizzles on an empty slot.
     Not damage, which fits Mind.'

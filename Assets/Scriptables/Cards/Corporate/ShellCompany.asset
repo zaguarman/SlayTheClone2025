@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: ShellCompany
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: fc6a2551-3a62-4d42-88b2-7f93e0d258fe
+  cardName: Shell Company
+  description: Registered in four countries. Exists in none.
+  cardType: 0
+  faction: 4
+  artwork: {fileID: 3286163911610860551, guid: 3446b5788cd094643a52008eb83d8ae8, type: 3}
+  effects: []
+  designNotes: 'Mechanics test: Shell Game (Active, hold Shift as you drag it onto
+    a creature): that creature trades places with the one to its right. Moves an
+    enemy into a planned attack, or out of the way of one.'
+  artDescription: A street hustler playing the shell game with three walnut shells,
+    each stamped with a different tax haven's flag, a gold coin under one.
+  attack: 1
+  health: 4
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 26

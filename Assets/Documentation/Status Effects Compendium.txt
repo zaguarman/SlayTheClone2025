@@ -1,6 +1,6 @@
 Status Timing (GDD 5.2 Status Effects - Status Timing): Every status skips the Day it's applied. Unless an entry says otherwise, its stacks are Days: applied on Day X, it first acts and loses a stack at the Dusk of Day X+1 (or the Dawn of Day X+2 for a Dawn status). Each tick, its effect happens first, then it loses 1 stack. When the last stack goes, it ends and does whatever its entry says (evolve, spread, pay off).
 
-Cleansing: Every status is cleansable unless its entry says "Cleansable: No". Cleansing an uncleansable status has no effect, unless the entry defines what a cleanse attempt does instead (like Burnout). A Cleanse only removes harmful statuses; a Purge removes positive ones too (GDD Cleanse). Positive statuses so far: Blessed.
+Cleansing: Every status is cleansable unless its entry says "Cleansable: No". Cleansing an uncleansable status has no effect, unless the entry defines what a cleanse attempt does instead (like Burnout). A Cleanse only removes harmful statuses; a Purge removes positive ones too (GDD Cleanse). Positive statuses so far: Blessed, Untouchable.
 
 Stat Changes: A status's stat change applies only while the status is on the creature. It is independent from Temporary and Persistent Stat Modifications (see GDD 3.3 Creatures & Action Types). Stats can drop to 0, never below.
 
@@ -528,4 +528,28 @@ Slacking Off
         Effect: This creature heals 2 Health.
     Notes: Its Speed is lowered by 2 (to a minimum of 0) while the status lasts, so its actions resolve later in their layer.
     Answers: Its actions resolve last, so give it jobs that like going last, such as finishing blows. It also heals 2 every Dusk.
+    Cleansable: Yes
+
+Untouchable
+    Faction: Statecraft (to be decided)
+    Type: Protective
+    Description: "Takes no damage at all."
+    Core Impact: Every hit does nothing: combat damage, effect damage, Burn.
+    Stacking & Duration:
+        Initial Stacks: X Days (from source), counting the Day it lands: Untouchable 1 is this Day only (an exception to Status Timing)
+        Re-application Behavior: Refresh
+    Notes: Health Loss isn't damage, so it still lands; so do statuses and stat changes. Given by Bodyguard and by Presidential Pardon. Good for the creature: a Cleanse leaves it, a Purge removes it.
+    Answers: Purge, Health Loss, statuses, or wait a Day.
+    Cleansable: Purge only
+
+Cooldown
+    Faction: Neutral
+    Type: Restriction
+    Description: "Its Active ability rests: it can't be used."
+    Core Impact: Planning or resolving its Active ability does nothing while it lasts. It can still attack and move.
+    Stacking & Duration:
+        Initial Stacks: X Days (from source), Status Timing as usual: Cooldown 1 after using it on a Day rests it the whole next Day
+        Re-application Behavior: Refresh
+    Notes: Bodyguard gives itself Cooldown 1 each time it guards. A Bless stops it, and a Cleanse removes it.
+    Answers: (It's the price of a strong ability.)
     Cleansable: Yes

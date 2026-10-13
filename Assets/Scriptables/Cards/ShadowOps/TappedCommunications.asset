@@ -46,6 +46,7 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
       world: 0
+      ability: 0
   designNotes: 'Mechanics test: Revealed for 2 Days, instant. It cancels Concealed
     and Undercover: the creature''s plans can be seen, and Watchdogs can match them.'
   artDescription: 'Split in two by a lightning bolt: on one side a man chatting happily

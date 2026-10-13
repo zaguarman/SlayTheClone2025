@@ -24,8 +24,8 @@ namespace SlayTheClone {
             var user = use.Creature;
             var target = use.TargetSlot?.OccupyingCreature;
             if (user == null || !context.ModifierManager.CanAct(user)) return;
-            if (!Abilities.IsActiveAbility(user.Ability) || !Abilities.IsActive(user)) {
-                Log($"{user.Name} can't use an ability now (it has {user.Ability}, switched {(Abilities.IsActive(user) ? "on" : "off")})", LogTag.Effects);
+            if (!Abilities.CanUseActive(user, context.ModifierManager)) {
+                Log($"{user.Name} can't use an ability now (it has {user.Ability}, switched {(Abilities.IsActive(user) ? "on" : "off")}, maybe resting or spent)", LogTag.Effects);
                 return;
             }
             if (target == null || target == user || target.IsDead) {
@@ -40,6 +40,25 @@ namespace SlayTheClone {
                     (user.Ability, target.Ability) = (target.Ability, user.Ability);
                     context.GameMediator.NotifyCreatureStatsChanged(user);
                     context.GameMediator.NotifyCreatureStatsChanged(target);
+                    break;
+                case CreatureAbility.Bodyguard:
+                    // Another friendly creature takes no damage this Day; then the Bodyguard rests a Day
+                    if (target.Owner != user.Owner) {
+                        Log($"{user.Name} only guards friendly creatures", LogTag.Effects);
+                        return;
+                    }
+                    context.ActionsQueue.AddAction(new ApplyStatusEffectAction(target, StatusEffectType.Untouchable, 1, 0, user, user.Owner));
+                    context.ActionsQueue.AddAction(new ApplyStatusEffectAction(user, StatusEffectType.Cooldown, 1, 0, user, user.Owner));
+                    break;
+                case CreatureAbility.Wannabe:
+                    context.ActionsQueue.AddAction(new CopyStatsAction(user, target));
+                    break;
+                case CreatureAbility.CreditGrab:
+                    user.Owner?.UsedOncePerCombat.Add(Abilities.OnceKey(user)); // Spent for the rest of the combat
+                    context.ActionsQueue.AddAction(new StealStatChangesAction(user, target));
+                    break;
+                case CreatureAbility.ShellGame:
+                    context.ActionsQueue.AddAction(new SwapPositionsAction(target));
                     break;
             }
         }

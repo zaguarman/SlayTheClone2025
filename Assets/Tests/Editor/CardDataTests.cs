@@ -93,6 +93,10 @@ namespace SlayTheClone.Tests {
                 case ActionType.Stun:
                 case ActionType.ApplyStatus:
                 case ActionType.Cleanse:
+                case ActionType.CopyStats:
+                case ActionType.StealStatChanges:
+                case ActionType.SwapPositions:
+                case ActionType.GrantAbility:
                     if (!CreatureTargets.Contains(action.targetType) && !retaliates) return $"{action.actionType} only affects creatures but targets {action.targetType}";
                     break;
                 case ActionType.Draw:
@@ -108,6 +112,12 @@ namespace SlayTheClone.Tests {
             }
             else if (action.actionType == ActionType.SetWorld) {
                 if (action.world == World.None) return "sets no World";
+            }
+            else if (action.actionType == ActionType.GrantAbility) {
+                if (action.ability == CreatureAbility.None) return "grants no ability";
+            }
+            else if (action.actionType is ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions) {
+                return null; // Says what it does instead of a value
             }
             else if (action.actionType is ActionType.Cleanse or ActionType.CleanseSlot or ActionType.CreateWatchdog or ActionType.Reveal) {
                 return null; // Says what it removes instead of a value

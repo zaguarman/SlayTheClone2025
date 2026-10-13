@@ -85,6 +85,9 @@ namespace SlayTheClone {
         // SetWorld Specific: the World it puts in play; statusDuration is its Days (0 = until another World replaces it)
         public World world = World.None;
 
+        // GrantAbility Specific: the ability the target gains, replacing its own until its card is reshuffled
+        public CreatureAbility ability = CreatureAbility.None;
+
         public EffectAction Clone() => (EffectAction)MemberwiseClone(); // Value-type fields only
     }
 
