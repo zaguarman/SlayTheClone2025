@@ -70,6 +70,20 @@ STILL OPEN
     • Question: are 20 cards and 2 copies right? Should a new deck be able to start as a copy of a starter deck?
     • Question: with copies in a deck, "once per combat" (Plot Armor, Second Wind) is tracked by the card, so two copies share one use. Should each copy get its own?
 
+15. Numbers that go without saying (2026-10-13)
+    • Done: a keyword's 1 isn't printed: Summon, Bless, Doom, Heat Signature, Conceal, Revealed, Encrypt, Temporal Shield; "draw a card" for draw 1.
+    • Kept, like damage and healing, because the number is an amount: Burn (damage each Dusk), Decay, Landmine, Barbed Snare (damage), Regenerate (healing), Armor, stat changes (+1 Attack), Grow (+1/+1 each Dawn), Deployment Time added, and the sand watch's Days (a sand watch alone wouldn't say how long).
+    • Question: should any of those drop their 1 too (Grow and Armor are the closest calls)?
+
+16. Counterattack and Retaliate answer attacks only (2026-10-13)
+    • Done: Counterattack hits back for the creature's Attack; Retaliate puts its status on the attacker. Both answer a creature's attack that lands (Armor included). A spell or an ability that damages the creature isn't answered, and hitting back isn't an attack, so two of them never trade blows forever.
+    • Changed: Keyboard Warrior went from Retaliate 1 to Counterattack (same 1 damage, its Attack). A fixed-damage answer is still possible in the data and reads "Retaliate: 1 damage to it".
+    • Question: should spells and abilities that damage it be answered too?
+
+17. Memes moved to Zeitgeist (2026-10-13)
+    • Done: "internet memes" is now in Zeitgeist's theme and out of Digital Society's (which keeps social media, influencers and cancel culture). Existing meme cards stay where they are (Its A Trap, This Is Fine, Rage Bait...).
+    • Question: should some of them move to Zeitgeist?
+
 
 ANSWERED (2026-10-12)
 

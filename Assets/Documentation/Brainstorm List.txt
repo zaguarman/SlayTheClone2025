@@ -1103,7 +1103,6 @@ Card Game Factions Overview
 			Extremophile
 			Force Field
 			Gamma
-			Giraffe
 			Hexagons
 			Hydroponics
 			Ionosphere
@@ -1133,6 +1132,7 @@ Card Game Factions Overview
 			Stasis Field
 			String Theory
 			Summa Cum Laude
+			Surveillance Giraffe
 			T-Rex Bone
 			Tetration
 			Wave Particle Duality
@@ -1549,3 +1549,269 @@ Card Game Factions Overview
 			Plot Armor
 			Plot Twist
 			Political Song Contest
+	Card Backlog (2026-10-13): names to make into cards later. Factions in tags are the ones given; the rest are suggestions.
+		Already cards, so left out: Charles Ponzi, Cleaning Robot, Counter-Intelligence, Day Trader, Fat Tony, Football Hooligans, Hikikomori, Hypermetamorphosis, Its A Trap, Man o' War, Man-in-the-Middle, Overpopulation, Police Officer Performance Indicators (as Police Officer Productivity Target), Signal Jammer, Spite-Elected President, Tax-Exempt Corruption, Taxpayer Funds Venture Capital Profits. Return to Sender is an ability.
+		Myth
+			Abrahamic Inheritance
+			Ambrosia
+			Bermuda Triangle
+			Blessing in Disguise
+			Confessional (tagged Myth)
+			Curse of Hubris
+			Die by the Sword
+			Drug-Induced Spirituality
+			Entheogenic Sacrament
+			Genesis
+			Gracias Jesús (meme: Jesus bringing in the food from the fields)
+			Grim Reaper
+			Gudea (the oldest known depicted person)
+			Here Be Dragons (art: an ASCII-art dragon, like the reference given)
+			Luxor
+			Mithril
+			Mox Nox (Latin: "soon it will be night")
+			Public Autopsy
+			Publicly Funded Faith Schools
+			Venus of Willendorf
+		Statecraft
+			Absolute Power Corrupts Absolutely
+			Affidavit
+			Alea Iacta Est
+			Arisaka (Japanese rifle)
+			Blitzkrieg
+			Cardo and Decumanus (the two main roads of a Roman town)
+			Cloud Cover (a smoke screen, in war)
+			Concertina Wire
+			Congruent Use of Force (tagged Statecraft; a mock: the card should feel like overkill)
+			Crossing the Rubicon
+			Digital Money (state-controlled)
+			Enhanced Interrogation (torture under the Bush administration)
+			Everybody Is Equal Before the Law
+			Fukuryu (stealth diver carrying explosives)
+			Golden Dome
+			Kaiten (kamikaze submarine)
+			Manhattan Project
+			Ministry of Equality (tagged Statecraft; in place of Ministry of Love)
+			Patronage Network (clientelism)
+			Peace Operation
+			Presidential Pardon
+			Regulatory Overreach
+			Represented by Living Dinosaurs
+			Rome Does Not Pay Traitors
+			Shinyo (kamikaze boat)
+			The Great Replacement Law
+			The Gullible Judge
+			War Censorship Law
+			Weapons of Mass Distraction
+			Welcome to Fear City
+			Yokosuka (kamikaze plane)
+			Zero Grace Operational Policy
+		Shadow Ops.
+			Arsonist
+			Asset Recruitment (tagged Shadow Ops.)
+			Bilderberg Membership
+			Cleaner (tagged Shadow Ops.)
+			Counter-Surveillance (tagged Shadow Ops.)
+			Dead Man's Switch
+			Drug Pigeon
+			Embassy (tagged Shadow Ops.)
+			Extraction (tagged Shadow Ops.)
+			Fingerprinting
+			Glomar Response ("We can neither confirm nor deny the existence of the information requested")
+			Honey Pot (like the reference card: give the opponent two Treasures, then take control of them)
+			If I Told You, I'd Have to Kill You (strikes back at being Revealed)
+			Multi Passport (several passports)
+			NDA (Non-Disclosure Agreement)
+			Never Let Them Know Your Next Move
+			Perfectly Timed Camera Malfunction
+			Secret Anthrax Laboratory
+			Secure Deletion
+			Self-Destruct Message
+			Social Engineering (tagged Shadow Ops.)
+			Steganography (tagged Shadow Ops.)
+			Tracking Beacon (tagged Shadow Ops.)
+		Corporate
+			120-Year Mickey Mouse Copyright
+			Big Four
+			Bloomberg Terminal
+			Bonwit Teller Building Demolition
+			Business Culture
+			Buy Now, Give Your Soul Later
+			Corporate Bailouts
+			Counterfeit (tagged Corporate; business, the mafia)
+			Cozy Loft in an "Exclusive" Location
+			Credit Card (tagged Corporate)
+			Deal with a Neutral Third Party That We Bought
+			EBITDA
+			Flash Crash
+			Forced Upselling
+			Front-Running
+			Hedonic Treadmillionaire (the hedonic treadmill, with a fortune)
+			High-Frequency Trading Scam
+			High-Pressure Sales Tactics
+			Intergenerational Short Squeeze
+			Internal Protocol: Quota Crusher Mindset
+			Just in Time (tagged Corporate)
+			Layering
+			Limited Liability Warranty
+			Live Better in a Home of Your Own
+			Market Equilibrium (tagged Corporate; a mock: the card should show the inequality the market drives us towards)
+			Meetings About Meetings
+			Moral Bankruptcy (people in finance with no moral sense at all)
+			Open Closed Shell Corporation
+			Perfect Competition
+			Perfect Information
+			Phoebus Cartel (the light bulb cartel: planned obsolescence)
+			Pinto Memo (Ford's internal memo: fixing the fuel tank, $11 a car, cost more than paying for the burn deaths and injuries; it valued a human life at about $200,000 in 1970s dollars)
+			Plutocratic Amount of Wealth
+			Private Equity
+			Public Business
+			Regulatory Arbitrage
+			Roth IRA Trading
+			Round-Tripping (a tax fraud)
+			Sales Funnel
+			Shell Company
+			Spoofing
+			That Is Tomorrow's Problem
+			The Art of Selling: Involuntary Product Bundling
+			The Enron Ledger Fantasy (tagged Corporate)
+			The Rat Race
+			The Value of a Statistical Life (see Pinto Memo)
+			Usury
+			Work Shift Rotation
+			Yen Carry Trade
+		Tech
+			Bounty Program
+			Code Review
+			Ctrl + Y
+			Ctrl + Z
+			Dialing Progress
+			DMCA
+			Effect 2000 (the Y2K bug)
+			End User (art: as if the user were being terminated)
+			FAANG
+			P(Doom)
+			Pair Programming
+			Scope Creep (art: a creep looking through a spyglass)
+			Suspicious USB Stick in the Parking Lot
+			Technical Debt (art: money missing)
+			Threat Hunter
+			Web Scraping (art: a cat scratching a laptop screen)
+		Digital Society
+			Content Creator
+			Crypto "Entrepreneur"
+			Dislike Button
+			Doomscrolling While Driving
+			Dubai Female "Entrepreneurs"
+			Dubaification of Females
+			E-Girl Bath Water
+			E-Girl Thirst Trap Entrepreneur
+			Ethnophaulism (an ethnic slur)
+			Gawker
+			Getting Misgendered
+			Gifted Subs
+			Internet Beggar
+			Link-in-Bio Babe
+			Monkey Clicking
+			Selfie Esteem
+			Short King
+			Simp Summoner
+			Thirst Trap
+			University of Life Degree
+		Zeitgeist
+			Absentee Parents
+			After-Sex Cigarette
+			All Along the Watchtower (tagged Zeitgeist; it puts up a watchtower)
+			Banana Gun
+			Calm Your Tits
+			Camper Van
+			Chain Smoker (art: a guy smoking a chain)
+			Choose Your Poison
+			Dangit
+			Deeply Concerned
+			Do It for Her (Simpsons; should hard-counter "Don't Forget. You're Here Forever.")
+			Don Juan
+			Don't Forget. You're Here Forever. (Simpsons; "Do It for Her" should hard-counter it)
+			Dont Dead Open Inside (the meme, misspelled on purpose)
+			Dr. Deiman's Black Jack
+			Enslaved Moisture
+			Fidget Spinner
+			For Society It Would Be Better If Some People Didn't Have Children
+			Glass Ceiling (art: a queue of women in careers that aren't STEM)
+			Harder Daddy (a creature that gains Attack and heals when it takes combat damage)
+			Hiatus
+			I Don't Want to Be This Kind of Animal Anymore (tagged Zeitgeist; Disco Elysium)
+			I Got Bombed at Harvey's
+			It's About Sending a Message (tagged Zeitgeist; the Joker)
+			It's All Disco, Baby (tagged Zeitgeist; Disco Elysium)
+			Ladies First
+			Lost Generation
+			Melancholy
+			Mexican Telenovela
+			Morning Routine
+			Nevermind (tagged Zeitgeist; Nirvana)
+			Not on My Watch
+			Nuclear Summer (the opposite of a nuclear winter)
+			One for the Road
+			Passive Smoker (art: a guy getting screwed from behind while smoking)
+			Prince Charles Paradox (the intergenerational wealth problem)
+			Real Life (good graphics, but a long tutorial)
+			Rush Hour (tagged Zeitgeist)
+			Second-Hand Embarrassment
+			Spite Voter (tagged Zeitgeist; someone who votes out of spite)
+			Stop Being Poor
+			Stunlock
+			Task Failed Successfully
+			The Friends We Made Along the Way
+			There Is a Considerable Overlap Between the Smartest Bears and the Dumbest Humans
+			This Is from Matilda
+			Too Bad, So Sad
+			Von hinten Lyzeum, von vorne Museum (German saying: a schoolgirl from behind, a museum piece from the front)
+			Weaponized Incompetence
+			What Is Reality Anyway? (tagged Zeitgeist; Disco Elysium)
+			Yesn't (yes and no at once)
+			You Can Kill the Man, but Not the Idea (tagged Zeitgeist)
+			Yvan Eht Nioj (tagged Zeitgeist; "join the navy" backwards, on an Uncle Sam-style poster)
+		Mind
+			Epistemology (the study of how knowledge is gained: ontology, then epistemology, methodology, methods)
+			Freudian Slip
+			Hyperbole
+			Legerdemain (sleight of hand)
+			Liminal Space (a Weather: Attack and Health swap for X turns)
+			Maslow's Pyramid
+			Mimetic Theory
+			Ontology (the study of existence)
+			Phronetic (practical wisdom: knowledge in context)
+			Scapegoating
+			Ship of Theseus (tagged Mind)
+			Socrates (tagged Mind)
+			The ELIZA Effect
+			Tolerance Paradox
+			You Can't Eat Your Cake and Have It Too (the Unabomber's phrasing)
+		Utopia
+			Ankylorhiza
+			Coprolite (fossilized poop)
+			Femtosecond Laser
+			Inverted Population Pyramid
+			Longevity Hub
+			Prion Disease
+			Quark
+			Seasteading
+			Tessellate
+			White Dwarf (art: a small, very white guy)
+		Faction to decide (plain items and places)
+			Baguette
+			Boulangerie
+			Construction Sign
+			Driving License
+			Driving Test
+			Gear Shift
+			Police Line: Do Not Cross
+			Safe Weapon
+			Sewers (a location)
+			Speed Limit
+			Tourist Trap
+			Valet (parking)
+			World Trade Center
+			Yield (the road sign)
+		Mechanic ideas
+			Cards that come back to the hand when a condition is met
