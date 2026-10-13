@@ -7,7 +7,7 @@ namespace SlayTheClone.Tests {
     /// they aren't part of the suite. Each writes its report; the games must break no rule and log no error.
     /// </summary>
     public class AITournamentTests {
-        [Test, Explicit("Plays several hundred games")]
+        [Test, Explicit("Plays several hundred games"), Timeout(1800000)]
         public void AITournament_EachLevelBeatsTheOnesBelow_AndNoGameBreaksARule() {
             var results = AITournamentMenu.RunLevels();
             TestContext.WriteLine(System.IO.File.ReadAllText(AITournamentMenu.LevelsReportPath));
@@ -18,7 +18,7 @@ namespace SlayTheClone.Tests {
             AssertNoBrokenRules();
         }
 
-        [Test, Explicit("Plays over a thousand games")]
+        [Test, Explicit("Plays over a thousand games"), Timeout(1800000)]
         public void AIStyleTournament_EveryStyleBeatsMedium_AndNoGameBreaksARule() {
             var results = AITournamentMenu.RunStyles();
             TestContext.WriteLine(System.IO.File.ReadAllText(AITournamentMenu.StylesReportPath));
@@ -26,6 +26,13 @@ namespace SlayTheClone.Tests {
                 var games = results.Where(r => r.Between(style.Name, "Medium")).ToList();
                 Assert.Greater(games.Count(r => r.WinnerName == style.Name), games.Count(r => r.WinnerName == "Medium"), $"{style} should beat Medium");
             }
+            AssertNoBrokenRules();
+        }
+
+        [Test, Explicit("Plays about three thousand games"), Timeout(1800000)]
+        public void AIBalanceReport_IsWritten_AndNoGameBreaksARule() {
+            AITournamentMenu.RunBalance();
+            TestContext.WriteLine(System.IO.File.ReadAllText(AITournamentMenu.BalanceReportPath));
             AssertNoBrokenRules();
         }
 

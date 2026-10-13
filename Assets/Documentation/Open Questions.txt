@@ -5,6 +5,10 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+30. Balance from the AI games (2026-10-13)
+    • Done: 'Balance Report' (3014 AI games). Statecraft and Corporate win 90%+ of their games, Shadow Ops. 7%; board-wide damage (Clickbait, Mutually Assured Destruction, Margin Call) decides most games, and Deployment Time creatures die before acting. Nothing was changed.
+    • Question: which of the report's suggestions (section 4) should be made, and should costs (GDD Faction Costs) come first?
+
 29. Choices made answering round 13 (2026-10-13)
     • Heat Signature "picks from both": random damage goes to the hottest creature on either side, even the caster's own. Random buffs and statuses still stay on the side they name (a "random friendly creature +1 Attack" never lands on an enemy). OK, or should those cross sides too?
     • No U deflects every enemy stat change, raises included ("all stats"), and every enemy status, to a random enemy creature (the hottest first), never back to the one that sent it. Return to Sender still sends statuses back to their sender. OK?

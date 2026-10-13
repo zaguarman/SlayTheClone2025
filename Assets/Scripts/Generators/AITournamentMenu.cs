@@ -8,16 +8,25 @@ namespace SlayTheClone {
     /// Debug > AI Tournament: the AI levels play each other with every faction deck; Debug > AI Style Tournament: the Hard
     /// styles do (see <see cref="AITournament"/>). The results, and the problems the games ran into, go to
     /// 'Documentation/AI Tournament.txt' and 'Documentation/AI Styles.txt'. A minute or two each; the editor waits for them.
+    /// Debug > AI Balance Report: which strategies, decks and cards win ('Documentation/Balance Report (AI games).txt').
     /// </summary>
     public static class AITournamentMenu {
         public const string LevelsReportPath = "Assets/Documentation/AI Tournament.txt";
         public const string StylesReportPath = "Assets/Documentation/AI Styles.txt";
+        public const string BalanceReportPath = "Assets/Documentation/Balance Report (AI games).txt";
 
         [MenuItem("Debug/AI Tournament")]
         private static void RunLevelsFromMenu() => RunLevels();
 
         [MenuItem("Debug/AI Style Tournament")]
         private static void RunStylesFromMenu() => RunStyles();
+
+        [MenuItem("Debug/AI Balance Report")]
+        private static void RunBalanceFromMenu() => RunBalance();
+
+        /// <summary>The balance study (see <see cref="AITournament.RunBalance"/>): two to three thousand games.</summary>
+        public static void RunBalance() =>
+            Run(BalanceReportPath, (decks, progress) => (new List<AITournament.Result>(), AITournament.RunBalance(decks, progress)));
 
         /// <summary>The levels, 10 games per seat for each deck and pairing.</summary>
         public static List<AITournament.Result> RunLevels() =>

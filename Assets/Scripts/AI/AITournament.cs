@@ -12,19 +12,19 @@ namespace SlayTheClone {
     /// Every game is audited (see <see cref="GameAudit"/>): what breaks the rules is reported with where it happened. Each
     /// game has its own seed, so a run replays exactly.
     /// </summary>
-    public static class AITournament {
+    public static partial class AITournament {
         /// <summary>A combat still going after this many Days is called off: nobody wins it.</summary>
         public const int MaxDays = 40;
 
         public readonly struct Result {
-            public readonly string Deck;
+            public readonly string Deck, Deck2; // Player 1's and player 2's
             public readonly AIEntrant First, Second;
             /// <summary>1 or 2; 0 when nobody won (both at 0 on the same action, or called off).</summary>
             public readonly int Winner;
             public readonly int Days;
 
-            public Result(string deck, AIEntrant first, AIEntrant second, int winner, int days) {
-                (Deck, First, Second, Winner, Days) = (deck, first, second, winner, days);
+            public Result(string deck, string deck2, AIEntrant first, AIEntrant second, int winner, int days) {
+                (Deck, Deck2, First, Second, Winner, Days) = (deck, deck2, first, second, winner, days);
             }
 
             public AILevel Level1 => First.Level;
@@ -36,7 +36,7 @@ namespace SlayTheClone {
 
         /// <summary>Plays one combat to its end (or <see cref="MaxDays"/>): each AI plans its seat each Day.</summary>
         public static Result Play(DeckScriptableObject deck1, AIEntrant first, DeckScriptableObject deck2, AIEntrant second, int seed,
-            GameAudit audit = null) {
+            GameAudit audit = null, CardLedger ledger = null) {
             var root = new GameObject("AI Match") { hideFlags = HideFlags.HideAndDontSave };
             var manager = root.AddComponent<GameManager>();
             var turns = root.AddComponent<TurnManager>();
@@ -49,6 +49,7 @@ namespace SlayTheClone {
                 manager.Initialize(mediator, deck1.GetCardDataList(), deck2.GetCardDataList(), turns, new SimpleModifierFactory());
                 var planners = new[] { first.Planner(manager, seed), second.Planner(manager, seed + 1) };
                 audit?.Begin(manager, where);
+                ledger?.Begin(manager, mediator, first, second, mirror: deck1 == deck2, deck1.GetDeckName(), deck2.GetDeckName());
 
                 while (!over && turns.TurnNumber < MaxDays) {
                     planners[0].PlanDay(manager.Player1);
@@ -61,14 +62,16 @@ namespace SlayTheClone {
 
                 bool firstDown = manager.Player1.Health <= 0, secondDown = manager.Player2.Health <= 0;
                 int winner = firstDown == secondDown ? 0 : firstDown ? 2 : 1;
-                return new Result(deck1.GetDeckName(), first, second, winner, turns.TurnNumber);
+                ledger?.End(winner);
+                return new Result(deck1.GetDeckName(), deck2.GetDeckName(), first, second, winner, turns.TurnNumber);
             }
             catch (System.Exception exception) {
                 audit?.Note("Exception", $"{exception.GetType().Name}: {exception.Message}", $"{where}, Day {turns.TurnNumber}\n{exception.StackTrace}");
-                return new Result(deck1.GetDeckName(), first, second, 0, turns.TurnNumber);
+                return new Result(deck1.GetDeckName(), deck2.GetDeckName(), first, second, 0, turns.TurnNumber);
             }
             finally {
                 audit?.End();
+                ledger?.Detach();
                 manager.ModifierManager?.Cleanup();
                 manager.ActionsQueue?.Cleanup();
                 Object.DestroyImmediate(root);
@@ -92,7 +95,7 @@ namespace SlayTheClone {
             Run("AI TOURNAMENT: THE HARD STYLES", Styles, decks, gamesPerSeat, out report, progress);
 
         private static List<Result> Run(string title, AIEntrant[] entrants, IReadOnlyList<DeckScriptableObject> decks, int gamesPerSeat,
-            out string report, System.Action<float> progress) {
+            out string report, System.Action<float> progress, CardLedger ledger = null) {
             bool muted = DebugLogger.MuteInfo;
             DebugLogger.MuteInfo = true; // Thousands of lines a Day otherwise
             var audit = new GameAudit();
@@ -104,8 +107,8 @@ namespace SlayTheClone {
                 foreach (var deck in decks) {
                     foreach (var (a, b) in pairings) {
                         for (int game = 0; game < gamesPerSeat; game++) {
-                            results.Add(Play(deck, a, deck, b, seed++, audit));
-                            results.Add(Play(deck, b, deck, a, seed++, audit));
+                            results.Add(Play(deck, a, deck, b, seed++, audit, ledger));
+                            results.Add(Play(deck, b, deck, a, seed++, audit, ledger));
                             progress?.Invoke(results.Count / (float)total);
                         }
                     }

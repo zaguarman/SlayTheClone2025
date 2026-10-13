@@ -1,0 +1,115 @@
+BALANCE REPORT
+From 3014 AI games played on 2026-10-13. The full tables are in 'Balance Report (AI games).txt' (Debug > AI Balance Report runs it again).
+How the games were played: the Hard AI (see 'AI Design').
+    • Cards: 1100 mirror games, each deck against itself with the same AI on both sides.
+    • Strategies: 1584 games between the eight Hard styles and Medium, each deck against itself.
+    • Decks: 330 deck-against-deck games, both seats, Hard on both sides.
+No rule broke in any of them.
+
+
+1. THE SHORT VERSION
+
+• The decks are far apart. Statecraft (95% of its games won) and Corporate (90%) beat everything except each other; Digital
+  Society (80%) beats everyone else and loses every game to those two. Shadow Ops. wins 7%, Prosperity Gospel 22%, Myth 23%.
+• The decks that win are the ones with the most board-wide damage. With no costs every card in hand is played each Day,
+  so a card is worth its raw effect, and "damage to every creature" cards outclass everything else.
+• The winning strategies value statuses, debuffs and information (Spymaster 50%, Hexer 47% of their games); aggro (Rusher
+  40%), going wide (Swarm 37%) and turtling (Bastion 39%) do worst.
+• The cards that carry the strongest decks: Mutually Assured Destruction, Margin Call, Hostile Takeover, Clickbait.
+  The cards that win mirror matches: Dogpile, Clickbait, Trolley Problem, Red Herring, Taxpayer Funds Venture Capital
+  Profits, This Is Fine.
+• Deployment Time is very expensive right now: Fat Tony (Deployment Time 2) died before acting in every game traced.
+
+
+2. THE MOST WINNING STRATEGIES
+
+By style (each deck against itself, so only the way of playing differs):
+    Spymaster 50%, Hexer 47%, Controller 42%, plain Hard 41%, Rusher 40%, Engine 40%, Bastion 39%, Swarm 37%, Medium 24%.
+• Spymaster and Hexer weigh statuses, debuffs and information two to three times as much as the plain AI. They win more,
+  so those effects are worth more than their face value suggests: a stun or -2 Attack at the right creature swings a Day.
+• Rusher (go face) loses: with the whole hand played every Day, the board refills fast, and ignoring it lets the other
+  side's creatures and removal take over. Swarm (go wide) loses to board-wide damage. Bastion (protect) can't stop it either.
+• The styles that do best play the "everyone gets it" spells (Climate Change, Kakistocracy, Absolute Zero) two to four
+  times as often as the plain AI. Those cards don't win by themselves (low edge, below); the styles win through their
+  targeted debuffs.
+
+By deck (deck against deck, Hard on both sides):
+    Statecraft 95%   Corporate 90%   Digital Society 80%   Tech 57%   Mind 52%   Zeitgeist 48%   Utopia 37%
+    Panopticon 27%   Myth 23%   Prosperity Gospel 22%   Shadow Ops. 7%
+• A rock-paper-scissors at the top:
+    - Statecraft and Corporate beat Digital Society 6 - 0: their 2 and 3 damage to every creature wipe its 2.7-Health board.
+    - Digital Society beats everyone else 6 - 0: Clickbait and Dogpile ping every enemy creature, every Day.
+    - Statecraft and Corporate split their games 3 - 3.
+• What the top decks are made of:
+    - Statecraft has the toughest creatures (2.1 Attack / 4.5 Health on average), and Mutually Assured Destruction
+      (3 to every creature and 3 to each player) kills the other side's board while its own survives.
+    - Corporate: Margin Call (2 to every creature, and draw 2) and Hostile Takeover (4 damage) remove a board a Day.
+• Why the bottom decks lose:
+    - Shadow Ops.: weak bodies (1.3/3.8) and spells that only show or hide things (Eavesdrop, Tapped Communications, Smoke
+      And Mirrors) or set traps; its best damage dealer does 5.7 a game, against 37 for Clickbait.
+    - Myth and Prosperity Gospel: slow creatures (Deployment Time 1.1 to 1.3 on average) that deal little (Mummy, Martyr:
+      about 6 a game).
+    - Utopia: the slowest deck (Deployment Time 1.9), saved somewhat by Black Hole.
+    - Panopticon wins less than Digital Society alone (27% against 80%): its Shadow Ops. half dilutes the pings.
+    - Caveat: the AI values information modestly. A player who uses Shadow Ops.' intel well will do better than 7%, but
+      not enough to close a gap this wide.
+
+
+3. THE CARDS THAT ADD THE MOST
+
+Edge: in a mirror game, when one side played a card more often than the other, how often that side won (50% = no effect).
+Creatures and spells are ranked apart: a side whose creatures keep dying plays more creatures, so creatures show less edge.
+
+Spells that win the most:
+    Dogpile (Digital Society) 75%          1 damage to a creature and those beside it
+    Clickbait (Digital Society) 74%        1 damage to each enemy creature; 6.5 kills a game, more than any card
+    Trolley Problem (Mind) 73%             -3 Health to a random enemy creature, -1 to a friendly one
+    Red Herring (Mind) 72%                 a Watchdog that redirects the next enemy attack
+    Taxpayer Funds V. C. Profits (Corp.) 70%  draw 2 and 2 damage to the enemy player, no drawback for you
+    This Is Fine (Zeitgeist) 67%           +2 Health to yours, then 2 damage to every creature: a one-sided wipe
+    Scapegoating 66%, Black Hole 65%, Eavesdrop 63%, Imposter Syndrome 63%, Inflation 60%, Ransomware Attack 60%
+Spells that carry the strongest decks (deck-against-deck games, a game they're played in):
+    Clickbait 37 damage and 6.5 kills; Black Hole 31 and 7.2; Mutually Assured Destruction 27 and 5.6 (and 2.9 to the
+    player each time); This Is Fine 27 and 5.1; Margin Call 21 and 4.2; Hostile Takeover 14 and 3.9.
+Creatures that deal the most over their life (per play):
+    Omniscient Space-Time Bending Bearded Wizard 2.4 to the player and 2.1 kills; Legacy Code 1.9 kills; Hipster 1.7;
+    SysAdmin 1.3; Signal Jammer 1.1.
+Cards that do least:
+    Spells: Kakistocracy and Martial Law (32% edge: they hurt your own side as much), Splitting The Atom 34%, Climate Change
+    35%, End-to-End Encryption 37%.
+    Creatures that deal nothing: Political Decoy and Meatproxy As A Service (0 Attack), Roko's Basilisk (0 Attack, a stun
+    a Dawn), Work Shift Rotation, Day Trader (3/1, dies to any ping), Fat Tony (dies while deploying), Underdog (1/1),
+    Pluriemployed Hustler (Decay eats it).
+By faction, the average edge of its cards: Zeitgeist 51%, Corporate 50%, Digital Society 49%, Mind 46%, Tech 45%,
+Myth 45%, Utopia 42%, Shadow Ops. 41%, Statecraft 36%. (Statecraft's cards are weak in the mirror but its bodies and
+Mutually Assured Destruction win against the other decks.)
+
+
+4. SUGGESTIONS (nothing changed yet: your call)
+
+The biggest lever: costs. With no mana every card in the hand is played every Day, so the only knob is each card's raw
+effect. The GDD's Faction Costs and additional costs (discards, sacrifices, Requisites) would give the strong cards a
+price. Until then, by card:
+• Clickbait: 1 to EACH enemy creature, every Day, is the best card in the game. Make it 1 damage to a random enemy creature
+  and the ones beside it, or 1 to each enemy creature with 2 Health or less.
+• Mutually Assured Destruction: the biggest swing (3 to every creature and each player), it also causes the double-KO draws.
+  Make it 2, or creatures only.
+• Margin Call: 2 to every creature AND draw 2. Drop the draw, or 1 damage.
+• This Is Fine: +2 Health to yours before 2 to everyone makes it one-sided. Swap the order, or +1.
+• Taxpayer Funds Venture Capital Profits: draw 2 and 2 to the enemy, no drawback. Give it one (2 damage to you, or the
+  enemy draws 1).
+• Statecraft's bodies (4.5 Health on average) are what make Mutually Assured Destruction one-sided: trim a few by 1.
+• Shadow Ops.: give its intel cards a direct effect (Eavesdrop draws 1, Tapped Communications also Exposes), and its spies
+  more teeth (Mole, Sleeper Agent: +1 Attack, or damage when revealed).
+• Deployment Time: Fat Tony (2) and the slow Utopia and Myth creatures die before acting. Either lower it, or protect
+  deploying creatures (Armor or Untouchable while they wait).
+• 0-Attack creatures (Political Decoy, Meatproxy As A Service, Roko's Basilisk) and Day Trader need a reason to be played:
+  more Health, or an effect that pays off.
+
+
+5. HOW SURE THESE NUMBERS ARE
+• The decks gap is certain: 6 - 0 results repeat across seeds and seats.
+• Card edges over about 65% or under 35% are clear; between those, treat them as hints (60 to 130 games each, about +/-6%).
+• The "what each style wins with" table in the data file is mostly noise (too few games per style and deck).
+• It's how the Hard AI plays. A human will play some cards better (Watchdogs, Reveals, traps) and some worse.
+• Player 1 won 171 games, Player 2 151: no meaningful seat advantage.
