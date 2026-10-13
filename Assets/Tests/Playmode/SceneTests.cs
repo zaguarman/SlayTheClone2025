@@ -259,10 +259,17 @@ namespace SlayTheClone.Tests {
             yield return null;
             var sideArrow = game.QueuedArrows(p1).SingleOrDefault();
             Assert.IsNotNull(sideArrow, "A spell that hits a whole side shows one arrow too");
-            Assert.Less(Vector2.Distance(sideArrow.EndPosition, game.BoardView(p2).transform.position), 0.01f,
-                "It points at the battlefield it hits, not the slot it was dropped on");
+            var corners = new Vector3[4];
+            ((RectTransform)game.BoardView(p2).transform).GetWorldCorners(corners);
+            Assert.AreEqual(corners[0].y, sideArrow.EndPosition.y, 0.01f, "It stops at the edge of the battlefield it hits...");
+            Assert.IsTrue(p2.Battlefield.All(s => Vector2.Distance(sideArrow.EndPosition, game.BoardView(p2).FindSlotView(s).transform.position) > 0.1f),
+                "...rather than pointing into a slot (the middle of a side is a slot)");
+            bool Glows(IPlayer side) => game.BoardView(side).transform.Cast<Transform>().Any(t => t.name.StartsWith("SpellAim_"));
+            Assert.IsTrue(Glows(p2), "The whole battlefield it plays on glows while it's queued");
+            Assert.IsFalse(Glows(p1));
             SceneGame.Click(Shown(storm));
             yield return null;
+            Assert.IsFalse(Glows(p2), "Taken back: no more glow");
 
             var pup = game.GiveCard(p1, game.Cards.Creature("Test Pup", 1, 1));
             yield return null;
