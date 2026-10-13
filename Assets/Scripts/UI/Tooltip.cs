@@ -54,6 +54,7 @@ namespace SlayTheClone {
             // Add Image component to background
             Image background = bgPanel.AddComponent<Image>();
             UITheme.StylePanel(background);
+            background.raycastTarget = false; // It follows the pointer: it must never take the hover from what's under it
 
             // Configure the RectTransform for proper sizing and positioning
             RectTransform bgRect = background.rectTransform;
@@ -101,6 +102,7 @@ namespace SlayTheClone {
         private const float PreviewScale = 2f;
         private const float PreviewGap = 10f;      // Screen pixels between the card and its preview
         private const float DetailsWidth = 300f;
+        private const float TextWidth = 420f; // A text tooltip, like a queued action's details
 
         // References to tooltip components
         private TextMeshProUGUI tooltipText;
@@ -185,6 +187,10 @@ namespace SlayTheClone {
             tooltipRect.gameObject.SetActive(true);
             tooltipRect.pivot = textPivot;
             tooltipText.text = content;
+            tooltipText.alignment = TextAlignmentOptions.TopLeft;
+            tooltipText.fontSize = 21;
+            float textHeight = tooltipText.GetPreferredValues(content, TextWidth - 20f, 0f).y;
+            tooltipRect.sizeDelta = new Vector2(TextWidth, textHeight + 20f);
             FollowMouse();
 
             canvasGroup.alpha = 1;
@@ -203,9 +209,19 @@ namespace SlayTheClone {
             if (!hasDetails) return;
 
             tooltipText.text = details;
+            tooltipText.alignment = TextAlignmentOptions.Center;
+            tooltipText.fontSize = 16;
             float textHeight = tooltipText.GetPreferredValues(details, DetailsWidth - 20f, 0f).y;
             tooltipRect.sizeDelta = new Vector2(DetailsWidth, textHeight + 20f);
             PlaceDetailsBesidePreview();
+        }
+
+        /// <summary>What a text tooltip says, while one shows.</summary>
+        public string ShownText => gameObject.activeSelf && activeCard == null ? tooltipText.text : null;
+
+        /// <summary>Hides a text tooltip; a card's preview stays.</summary>
+        public void HideText() {
+            if (activeCard == null) HideTooltip();
         }
 
         /// <summary>Hides the tooltip if it is showing this card (a destroyed preview must not hide the next card's).</summary>

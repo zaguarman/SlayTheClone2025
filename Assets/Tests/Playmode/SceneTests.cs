@@ -129,6 +129,15 @@ namespace SlayTheClone.Tests {
             StringAssert.Contains("Test Sneak", Listed());
             StringAssert.Contains("plans ???", Listed(), "The queue shows a Concealed plan as ???...");
             StringAssert.DoesNotContain("Test Incoming", Listed(), "...and what an enemy summons");
+            QueueItemHover Row(string text) => queuePanel.Panel.GetComponentsInChildren<QueueItemHover>().First(r => r.Details.Contains(text));
+            void Hover(QueueItemHover row, bool on) {
+                if (on) row.OnPointerEnter(new PointerEventData(EventSystem.current));
+                else row.OnPointerExit(new PointerEventData(EventSystem.current));
+            }
+            Hover(Row("plans ???"), true);
+            StringAssert.Contains("can't see what it plans", Tooltip.Existing.ShownText, "Each action is an item: hovering it tells more, as far as you can see");
+            Hover(Row("plans ???"), false);
+            Assert.IsNull(Tooltip.Existing.ShownText, "...until the pointer leaves it");
             float Height(Component view) => view.transform.position.y;
             FogOfWar.PlaysAsPlayer1 = false;
             yield return null;
@@ -149,6 +158,9 @@ namespace SlayTheClone.Tests {
             StringAssert.Contains("Nullify", game.BoardView(p2).WatchdogText, "...the enemy's Watchdog conditions too");
             StringAssert.Contains("Test Sneak</color> attacks", Listed(), "...and the queue");
             StringAssert.Contains("Test Incoming", Listed());
+            Hover(Row("Test Sneak</color> attacks"), true);
+            StringAssert.Contains($"Speed {sneak.Speed}", Tooltip.Existing.ShownText, "...who does it, with the Speed that orders its layer");
+            Hover(Row("Test Sneak</color> attacks"), false);
             ExecuteEvents.Execute(queuePanel.Toggle.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
             Assert.IsFalse(queuePanel.IsOpen, "Clicking it again closes it");
             FogOfWar.Enabled = true;

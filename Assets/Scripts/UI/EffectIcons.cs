@@ -32,7 +32,7 @@ namespace SlayTheClone {
         public const string Conceal = "conceal";
         public const string Reveal = "reveal";
         public const string Encrypt = "encrypt";
-        public const string Days = "days"; // A calendar: how many Days something lasts
+        public const string Days = "days"; // A sand watch: how many Days something lasts
 
         // Stats
         public const string Speed = "speed";

@@ -14,10 +14,20 @@ namespace SlayTheClone {
         private const string TheirsColor = "#F19A8B";
         private const string Unknown = "???";
 
-        /// <summary>One line per action, numbered in resolution order, under a heading for each layer.</summary>
-        public static List<string> Lines(IPlayer viewer, IActionsQueue queue, IModifierManager modifiers) {
-            var lines = new List<string>();
-            if (queue == null) return lines;
+        /// <summary>A row of the queue: a layer's heading, or an action with what it does and its details for hovering.</summary>
+        public class Item {
+            public string Heading;  // A layer's heading row; the rest is empty
+            public int Number;      // Its place in the resolution order
+            public string Text;     // What it does, in a line
+            public string Details;  // Shown when hovered: who, with what, on what, and when
+            public string Icon;     // An EffectIcons sprite for the kind of action
+            public bool Ours;       // Started by the viewer's side
+        }
+
+        /// <summary>The queue in resolution order, numbered, under a heading for each layer.</summary>
+        public static List<Item> Items(IPlayer viewer, IActionsQueue queue, IModifierManager modifiers) {
+            var items = new List<Item>();
+            if (queue == null) return items;
             ResolutionLayer? layer = null;
             int number = 0;
             foreach (var action in queue.GetPendingActions()) {
@@ -25,13 +35,130 @@ namespace SlayTheClone {
                 if (text == null) continue;
                 var actionLayer = queue.LayerOfPending(action);
                 if (actionLayer != layer) {
-                    lines.Add($"<b>{LayerName(actionLayer)}</b>");
+                    items.Add(new Item { Heading = LayerName(actionLayer) });
                     layer = actionLayer;
                 }
-                lines.Add($"{++number}. {text}");
+                bool hidden = FogOfWar.Hides(viewer, action, queue, modifiers);
+                items.Add(new Item {
+                    Number = ++number, Text = text, Icon = hidden ? EffectIcons.Conceal : IconOf(action), Ours = SideOf(action) == viewer,
+                    Details = Details(action, text, number, actionLayer, hidden, viewer, queue)
+                });
             }
-            return lines;
+            return items;
         }
+
+        /// <summary>One line per action, numbered in resolution order, under a heading for each layer.</summary>
+        public static List<string> Lines(IPlayer viewer, IActionsQueue queue, IModifierManager modifiers) =>
+            Items(viewer, queue, modifiers).Select(i => i.Heading != null ? $"<b>{i.Heading}</b>" : $"{i.Number}. {i.Text}").ToList();
+
+        // What hovering an action tells: its place in the order, who does it (and their Speed, which orders a layer), the card
+        // it comes from, and what's at the other end. Nothing the viewer can't see.
+        private static string Details(IGameAction action, string text, int number, ResolutionLayer layer, bool hidden, IPlayer viewer, IActionsQueue queue) {
+            var lines = new List<string> { $"<b>{number}. {text}</b>", $"<size=85%><color=#C9C0AE>{LayerName(layer)}: {LayerRule(layer)}</color></size>" };
+            if (hidden) {
+                lines.Add("Concealed: you can't see what it plans until it resolves, or a Reveal shows it.");
+                return string.Join("\n", lines);
+            }
+            var actor = ActorOf(action);
+            if (actor != null && !FogOfWar.HidesIdentity(viewer, actor)) {
+                lines.Add($"{Who(actor, viewer)}: {actor.Attack} Attack, {actor.Health} Health, Speed {actor.Speed}");
+            }
+            var card = CardOf(action);
+            bool cardHidden = card != null && FogOfWar.Enabled && OwnerOf(action) != viewer;
+            if (card?.SourceData != null && !cardHidden) {
+                string rules = CardTextFormatter.GetRulesText(card.SourceData);
+                lines.Add($"<b>{card.Name}</b>" + (string.IsNullOrEmpty(rules) ? "" : $": {rules.Replace("\n", " ")}"));
+            }
+            var target = TargetOf(action);
+            if (card is Spell spell && !EffectResolver.IsAimed(spell)) {
+                var side = target switch { IPlayer player => player, BoardSlot slot => slot.Owner, HomingTarget homing => homing.AimedSlot?.Owner, _ => null };
+                if (side != null) lines.Add($"On: {PlayerName(side, viewer)} side, as a whole");
+            }
+            else if (target != null) lines.Add($"On: {Target(target, viewer)}");
+            return string.Join("\n", lines);
+        }
+
+        private static string LayerRule(ResolutionLayer layer) => layer switch {
+            ResolutionLayer.Movement => "first, before anything else.",
+            ResolutionLayer.Summon => "after the moves.",
+            ResolutionLayer.Spell => "after the summons.",
+            _ => "last; the faster creature acts first."
+        };
+
+        // The creature doing it, if a creature does it
+        private static ICreature ActorOf(IGameAction action) => Intel.PlannerOf(action) ?? action switch {
+            BattlefieldCombatAction attack => attack.GetAttacker(),
+            DamageCreatureAction damage => damage.GetAttacker(),
+            DamagePlayerAction damage => damage.GetAttacker(),
+            ModifyAction modify => modify.Source,
+            ApplyStatusEffectAction status => status.Source,
+            _ => null
+        };
+
+        private static ICard CardOf(IGameAction action) => action switch {
+            PlayCardAction play => play.GetCard(),
+            PlaySpellAction cast => cast.GetSpell(),
+            SummonCreatureAction summon => summon.GetCreature(),
+            _ => null
+        };
+
+        private static IPlayer OwnerOf(IGameAction action) => action switch {
+            PlayCardAction play => play.GetOwner(),
+            PlaySpellAction cast => cast.GetOwner(),
+            SummonCreatureAction summon => summon.GetOwner(),
+            _ => null
+        };
+
+        // Whose side started it: the creature doing it, the player playing it, or the one it's for
+        private static IPlayer SideOf(IGameAction action) => ActorOf(action)?.Owner ?? OwnerOf(action) ?? action switch {
+            DrawCardsAction draw => draw.GetPlayer(),
+            DiscardHandAction discard => discard.GetPlayer(),
+            PlaceSlotEffectAction place => place.GetController(),
+            CreateWatchdogAction watchdog => watchdog.Controller,
+            RevealAction reveal => reveal.Viewer,
+            _ => null
+        };
+
+        private static ITarget TargetOf(IGameAction action) => action switch {
+            PlayCardAction play => play.GetTarget(),
+            PlaySpellAction cast => cast.GetTarget(),
+            BattlefieldCombatAction attack => attack.GetTargetSlot(),
+            UseAbilityAction use => use.TargetSlot,
+            MoveCreatureAction move => move.GetToSlot(),
+            _ => null
+        };
+
+        private static string IconOf(IGameAction action) => action switch {
+            PlayCardAction play when play.GetCard() is ICreature => EffectIcons.Summon,
+            SummonCreatureAction => EffectIcons.Summon,
+            PlayCardAction or PlaySpellAction => EffectIcons.Enter,
+            MoveCreatureAction => EffectIcons.Speed,
+            BattlefieldCombatAction attack => attack.IsLastRites ? EffectIcons.Doom : EffectIcons.Attack,
+            UseAbilityAction => EffectIcons.Chain,
+            DamageCreatureAction or DamagePlayerAction => EffectIcons.Damage,
+            HealCreatureAction or HealPlayerAction => EffectIcons.Heal,
+            ModifyAction modify => modify.GetValue() >= 0 ? EffectIcons.Buff : EffectIcons.Debuff,
+            ModifyArmorAction => EffectIcons.Armor,
+            ApplyStatusEffectAction status => StatusIcon(status.GetStatusType()),
+            CleanseAction or CleanseSlotAction => EffectIcons.Cleanse,
+            DelayDeploymentAction => EffectIcons.Days,
+            DestroyCreatureAction or DoomedSentenceAction => EffectIcons.Death,
+            DrawCardsAction or DiscardHandAction => EffectIcons.Draw,
+            RevealAction or CreateWatchdogAction => EffectIcons.Reveal,
+            _ => null
+        };
+
+        private static string StatusIcon(StatusEffectType status) => status switch {
+            StatusEffectType.Exhausted => EffectIcons.Paralyze,
+            StatusEffectType.Burned => EffectIcons.Burn,
+            StatusEffectType.Doomed => EffectIcons.Doom,
+            StatusEffectType.Blessed => EffectIcons.Bless,
+            StatusEffectType.HeatSignature => EffectIcons.Heat,
+            StatusEffectType.Concealed => EffectIcons.Conceal,
+            StatusEffectType.Revealed => EffectIcons.Reveal,
+            StatusEffectType.Encrypted => EffectIcons.Encrypt,
+            _ => EffectIcons.Debuff
+        };
 
         public static string LayerName(ResolutionLayer layer) => layer switch {
             ResolutionLayer.Movement => "Moves",
