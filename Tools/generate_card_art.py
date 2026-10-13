@@ -4000,6 +4000,54 @@ CARDS["Tech"].update({"TechnicalDebt": technical_debt, "ScopeCreep": scope_creep
 CARDS["Mind"].update({"ShipofTheseus": ship_of_theseus, "EscapeGoat": scapegoating})
 
 
+def mk_ultra_test_subject():
+    # Ted Kaczynski as the young Harvard math prodigy, before the woods: clean-cut, short neat hair, white shirt and narrow
+    # tie, strapped into a 1950s lab chair with electrodes taped to his temples, a blackboard of equations behind him and a
+    # psychologist with a clipboard in the corner
+    defs = lin("bg", ["#e8e0c8", "#bfb59a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += rect(0, 158, W, 42, "#8a7a62") + stroke("M0 158 L352 158", "#6a5a44", 2)
+    # The blackboard, full of his equations
+    body += rect(14, 12, 132, 76, "#2e4a3a", 'stroke="#7a5a32" stroke-width="5"')
+    chalk = "#eeeee0"
+    body += stroke("M26 30 c 4 -10 8 10 12 0 M44 22 c -6 0 -6 16 0 16 M50 30 L62 30 M66 22 L66 38 M60 30 L72 30", chalk, 1.6)
+    body += stroke("M80 24 c 6 -6 10 6 4 10 c -6 4 -2 10 6 6 M96 30 L108 30 M112 22 q 8 8 0 16 M120 26 l 8 8 M128 26 l -8 8", chalk, 1.6)
+    body += stroke("M26 52 L140 52 M30 60 q 6 -8 12 0 t 12 0 M60 60 L70 70 M70 60 L60 70 M80 62 L96 62 M100 56 c 8 0 8 12 0 12", chalk, 1.4)
+    body += lettering("1959", 108, 68, 10, chalk, width=1.4)
+    # The machine, its dials and lights
+    body += rect(262, 92, 74, 66, "#5a6470", 'rx="4" stroke="#2a3038" stroke-width="2"')
+    for x in (282, 316):
+        body += circle(x, 112, 12, "#f4f0e0", 'stroke="#222" stroke-width="2"') + stroke(f"M{x} 112 L{x + 7} 104", "#c0392b", 2)
+    for i, color in enumerate(("#3ad04a", "#f2c94c", "#d0342c")):
+        body += circle(278 + i * 14, 140, 4, color)
+    # The lab chair, high-backed, with straps on the arms
+    body += rect(130, 64, 92, 136, "#6a4628", 'rx="10" stroke="#3a2614" stroke-width="3"')
+    body += rect(116, 160, 120, 14, "#5a3a20", 'rx="4"')
+    body += person(176, 200, 1.3, SKIN[0], "#f4f4f0", face="flat", hair="#2a2018", tie="#1e2635")
+    hx, hy, r = 176, 200 - 64 * 1.3, 20 * 1.3
+    body += rect(122, 162, 16, 6, "#2a1a10") + rect(214, 162, 16, 6, "#2a1a10")  # The straps
+    # Short, neat, side-parted dark hair: a young man's, not yet the woods'
+    body += path(f"M{hx - r - 1} {hy - 6} C {hx - r - 2} {hy - r - 12} {hx + r + 2} {hy - r - 14} {hx + r + 1} {hy - 8} "
+                 f"C {hx + r - 6} {hy - r + 2} {hx - 8} {hy - r + 4} {hx - r - 1} {hy - 6} Z", "#2a2018")
+    body += stroke(f"M{hx - 8} {hy - r - 5} q 8 2 22 8", "#4a3a2a", 1.5)
+    # Electrodes taped to his temples, wired to the machine
+    for side in (-1, 1):
+        ex = hx + side * (r - 2)
+        body += circle(ex, hy - 6, 5, "#9aa2aa", 'stroke="#444" stroke-width="1.5"')
+        body += stroke(f"M{ex - 5} {hy - 11} L{ex + 5} {hy - 1} M{ex + 5} {hy - 11} L{ex - 5} {hy - 1}", "#ffffff", 2)
+    body += stroke(f"M{hx + r} {hy - 6} C {hx + 70} {hy - 60} 250 60 266 100", "#222", 2)
+    body += stroke(f"M{hx - r} {hy - 6} C {hx - 40} {hy - 70} {hx + 60} {hy - 90} 270 96", "#222", 2)
+    # The psychologist, taking notes in the corner
+    body += person(52, 200, 0.85, SKIN[1], "#ffffff", face="smirk", hair=OLD_HAIR, glasses="round", tie="#7a2a2a")
+    body += rect(66, 150, 26, 32, "#b08a5a", 'rx="2"') + rect(70, 154, 18, 24, "#ffffff")
+    for y in (158, 164, 170):
+        body += stroke(f"M72 {y} L86 {y}", "#888", 1)
+    return svg(defs, body)
+
+
+CARDS["ShadowOps"].update({"MKUltraTestSubject": mk_ultra_test_subject})
+
+
 def main():
     count = 0
     for theme, cards in CARDS.items():

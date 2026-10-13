@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Volunteered for a Harvard study in 1959. Doesn't remember the rest.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: f143c16d207d07d47b1af91db19a6862, type: 3}
   discardCost: 0
   effects:
   - effectType: 0
