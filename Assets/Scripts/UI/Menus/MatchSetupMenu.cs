@@ -38,7 +38,7 @@ namespace SlayTheClone {
 
         private GameObject panel;
         private TextMeshProUGUI summaryText;
-        private readonly List<(Button button, Func<bool> isSelected)> choiceButtons = new List<(Button, Func<bool>)>();
+        private readonly List<(Button button, Func<bool> isSelected, ScrollRect list)> choiceButtons = new List<(Button, Func<bool>, ScrollRect)>();
 
         #region Choosing
         public void Show() {
@@ -104,7 +104,11 @@ namespace SlayTheClone {
         }
 
         private void Refresh() {
-            foreach (var (button, isSelected) in choiceButtons) ShowChosen(button, isSelected());
+            foreach (var (button, isSelected, list) in choiceButtons) {
+                bool chosen = isSelected();
+                ShowChosen(button, chosen);
+                if (chosen) KeepInView(list, (RectTransform)button.transform); // A long column follows the choice
+            }
             if (summaryText != null && PlayerDeck != null && OpponentDeck != null) {
                 summaryText.text = $"You, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{PlayerDeck.GetDeckName()}</color>"
                     + $"   vs   {OpponentName}, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{OpponentDeck.GetDeckName()}</color>";
@@ -114,66 +118,54 @@ namespace SlayTheClone {
 
         #region Building
         private void Build() {
-            panel = NewObject("MatchSetupPanel", transform);
-            Stretch(panel);
-            var layout = panel.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(80, 80, 50, 50);
-            layout.spacing = 24;
-            SetControls(layout, expandHeight: false);
-
-            UITheme.StyleHeading(AddText(panel.transform, "Choose your match", 64, AccentColor, FontStyles.Bold, height: 80), AccentColor);
-
-            var columns = NewObject("Columns", panel.transform);
-            var columnsLayout = columns.AddComponent<HorizontalLayoutGroup>();
-            columnsLayout.spacing = 36;
-            SetControls(columnsLayout, expandHeight: true);
-            columns.AddComponent<LayoutElement>().flexibleHeight = 1;
+            var screen = AddScreen(transform, "MatchSetupPanel", "Choose your match");
+            panel = screen.panel;
+            var columns = screen.columns;
 
             var decks = catalog.AllDecks;
-            var yourDecks = AddColumn(columns.transform, "Your deck");
-            WheelStepper.AddTo(yourDecks.gameObject, StepPlayerDeck);
+            var yourDecks = AddChoiceColumn(columns, "Your deck", StepPlayerDeck, out var yourList);
             foreach (var deck in decks) {
-                AddChoice(yourDecks, PlayerDeckButton + deck.GetDeckName(), DeckLabel(deck), 72,
+                AddChoice(yourDecks, yourList, PlayerDeckButton + deck.GetDeckName(), deck.GetDeckName(), DeckCatalog.Describe(deck),
                     () => SelectPlayerDeck(deck), () => PlayerDeck == deck);
             }
 
-            var opponents = AddColumn(columns.transform, "Your opponent");
-            WheelStepper.AddTo(opponents.gameObject, StepOpponent);
+            var opponents = AddChoiceColumn(columns, "Your opponent", StepOpponent, out var opponentList);
             foreach (var opponent in catalog.Opponents) {
-                string label = $"<b>{opponent.name}</b>\n<size=70%><i>{opponent.tagline}</i></size>";
-                AddChoice(opponents, OpponentButton + opponent.name, label, 96,
+                AddChoice(opponents, opponentList, OpponentButton + opponent.name, opponent.name, $"<i>{opponent.tagline}</i>",
                     () => SelectOpponent(opponent), () => Opponent == opponent);
             }
 
-            var theirDecks = AddColumn(columns.transform, "Their deck");
-            WheelStepper.AddTo(theirDecks.gameObject, StepOpponentDeck);
+            var theirDecks = AddChoiceColumn(columns, "Their deck", StepOpponentDeck, out var theirList);
             foreach (var deck in decks) {
-                AddChoice(theirDecks, OpponentDeckButton + deck.GetDeckName(), DeckLabel(deck), 72,
+                AddChoice(theirDecks, theirList, OpponentDeckButton + deck.GetDeckName(), deck.GetDeckName(), DeckCatalog.Describe(deck),
                     () => SelectOpponentDeck(deck), () => OpponentDeck == deck);
             }
 
             summaryText = AddText(panel.transform, "", 30, TextColor, FontStyles.Normal, height: 44);
+            summaryText.enableAutoSizing = true;
+            summaryText.fontSizeMin = 16;
+            summaryText.fontSizeMax = 30;
 
-            var footer = NewObject("Footer", panel.transform);
-            var footerLayout = footer.AddComponent<HorizontalLayoutGroup>();
-            footerLayout.spacing = 40;
-            footerLayout.childAlignment = TextAnchor.MiddleCenter;
-            footerLayout.childControlWidth = footerLayout.childControlHeight = true;
-            footerLayout.childForceExpandWidth = footerLayout.childForceExpandHeight = false;
-            footer.AddComponent<LayoutElement>().preferredHeight = 72;
-            AddButton(footer.transform, BackButtonName, "Back", 260, Hide);
-            var start = AddButton(footer.transform, StartButtonName, "<b>Start</b>", 360, StartMatch);
+            var footer = AddFooter(panel.transform);
+            AddButton(footer, BackButtonName, "Back", BackWidth, Hide);
+            var start = AddButton(footer, StartButtonName, "<b>Start</b>", 360, StartMatch);
             UITheme.StyleButton(start, UITheme.ButtonKind.Primary);
             start.GetComponentInChildren<TextMeshProUGUI>().fontStyle = FontStyles.Bold | FontStyles.SmallCaps;
         }
 
-        private static string DeckLabel(DeckScriptableObject deck) =>
-            $"<b>{deck.GetDeckName()}</b>\n<size=70%>{DeckCatalog.Describe(deck)}</size>";
+        // A column of the same width as the others, its choices in a list that scrolls when it's long; the wheel picks
+        private static Transform AddChoiceColumn(Transform columns, string title, Action<int> step, out ScrollRect list) {
+            var column = AddColumn(columns, title);
+            var element = column.gameObject.AddComponent<LayoutElement>();
+            element.flexibleWidth = 1;
+            element.minWidth = element.preferredWidth = 0; // Equal thirds, whatever their text
+            WheelStepper.AddTo(column.gameObject, step);
+            return AddList(column, out list);
+        }
 
-        private void AddChoice(Transform parent, string name, string label, float height, Action onClick, Func<bool> isSelected) {
-            var button = AddButton(parent, name, label, -1, onClick);
-            button.GetComponent<LayoutElement>().preferredHeight = height;
-            choiceButtons.Add((button, isSelected));
+        private void AddChoice(Transform parent, ScrollRect list, string name, string title, string subtitle, Action onClick, Func<bool> isSelected) {
+            var button = MenuWidgets.AddChoice(parent, name, title, subtitle, onClick);
+            choiceButtons.Add((button, isSelected, list));
         }
 
         #endregion

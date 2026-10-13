@@ -18,7 +18,7 @@ namespace SlayTheClone {
         public const string KeywordButton = "Keyword: ";
         public const string BackButtonName = "GlossaryBackButton";
         private const string CardLink = "card:";
-        private const float ListWidth = 380f;
+        private const float ListWidth = CardGalleryMenu.SideColumnWidth; // The same as the gallery's deck list
         private const float CardPreviewScale = 1.8f;
 
         private DeckCatalog catalog;
@@ -87,23 +87,7 @@ namespace SlayTheClone {
 
         // Scrolls the list just enough for the chosen keyword's button to be fully visible
         private void KeepInView(string key) {
-            if (list == null || !buttons.TryGetValue(key, out var button)) return;
-            Canvas.ForceUpdateCanvases();
-            var view = WorldRect(list.viewport);
-            var shown = WorldRect((RectTransform)button.transform);
-            float margin = shown.height * 0.5f;
-            float shift = shown.yMax > view.yMax ? view.yMax - shown.yMax - margin
-                        : shown.yMin < view.yMin ? view.yMin - shown.yMin + margin : 0f;
-            if (Mathf.Approximately(shift, 0f)) return;
-            list.StopMovement();
-            list.content.position += new Vector3(0f, shift, 0f);
-            list.verticalNormalizedPosition = Mathf.Clamp01(list.verticalNormalizedPosition);
-        }
-
-        private static Rect WorldRect(RectTransform rect) {
-            var corners = new Vector3[4];
-            rect.GetWorldCorners(corners);
-            return Rect.MinMaxRect(corners[0].x, corners[0].y, corners[2].x, corners[2].y);
+            if (buttons.TryGetValue(key, out var button)) MenuWidgets.KeepInView(list, (RectTransform)button.transform);
         }
 
         /// <summary>The cards on offer whose printed text has the keyword, read from the cards as they are now.</summary>
@@ -152,32 +136,12 @@ namespace SlayTheClone {
         }
 
         private void Build() {
-            panel = NewObject("KeywordGlossaryPanel", transform);
-            Stretch(panel);
-            var layout = panel.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(60, 60, 40, 40);
-            layout.spacing = 20;
-            SetControls(layout, expandHeight: false);
-            UITheme.StyleHeading(AddText(panel.transform, "Keywords", 64, AccentColor, FontStyles.Bold, height: 80), AccentColor);
-
-            var columns = NewObject("Columns", panel.transform);
-            var columnsLayout = columns.AddComponent<HorizontalLayoutGroup>();
-            columnsLayout.spacing = 30;
-            columnsLayout.childControlWidth = columnsLayout.childControlHeight = true;
-            columnsLayout.childForceExpandWidth = false;
-            columnsLayout.childForceExpandHeight = true;
-            columns.AddComponent<LayoutElement>().flexibleHeight = 1;
-
-            BuildList(columns.transform);
-            BuildEntry(columns.transform);
-
-            var footer = NewObject("Footer", panel.transform);
-            var footerLayout = footer.AddComponent<HorizontalLayoutGroup>();
-            footerLayout.childAlignment = TextAnchor.MiddleCenter;
-            footerLayout.childControlWidth = footerLayout.childControlHeight = true;
-            footerLayout.childForceExpandWidth = footerLayout.childForceExpandHeight = false;
-            footer.AddComponent<LayoutElement>().preferredHeight = 72;
-            AddButton(footer.transform, BackButtonName, "Back", 260, Hide);
+            var screen = AddScreen(transform, "KeywordGlossaryPanel", "Keywords");
+            panel = screen.panel;
+            var columns = screen.columns;
+            BuildList(columns);
+            BuildEntry(columns);
+            AddButton(AddFooter(panel.transform), BackButtonName, "Back", BackWidth, Hide);
         }
 
         // Every keyword, section by section, in a scrolling column

@@ -17,6 +17,7 @@ namespace SlayTheClone {
         public const string BackButtonName = "GalleryBackButton";
         private const float CardScale = 1.25f;
         private static readonly Vector2 CellSize = new Vector2(215f, 268f);
+        public const float SideColumnWidth = 470f; // The list beside the main area, on the gallery and the glossary alike
 
         private DeckCatalog catalog;
         private GameObject titleScreen;
@@ -25,6 +26,7 @@ namespace SlayTheClone {
         private TextMeshProUGUI shownTitle;
         private Transform grid;
         private ScrollRect scroll;
+        private ScrollRect deckList;
         private readonly List<(Button button, DeckScriptableObject deck)> deckButtons = new List<(Button, DeckScriptableObject)>();
 
         public bool IsOpen => panel != null && panel.activeSelf;
@@ -79,58 +81,36 @@ namespace SlayTheClone {
 
             shownTitle.text = deck != null ? $"{deck.GetDeckName()}  <size=70%>{DeckCatalog.Describe(deck)}</size>"
                 : $"Every card  <size=70%>{cards.Count} cards in {catalog.AllDecks.Count} decks</size>";
-            foreach (var (button, shown) in deckButtons) ShowChosen(button, shown == deck);
+            foreach (var (button, shown) in deckButtons) {
+                ShowChosen(button, shown == deck);
+                if (shown == deck) KeepInView(deckList, (RectTransform)button.transform);
+            }
             scroll.verticalNormalizedPosition = 1f;
         }
 
         private void Build() {
             cardViews = CardViews.ForDisplay(catalog.CardPrefab);
 
-            panel = NewObject("CardGalleryPanel", transform);
-            Stretch(panel);
-            var layout = panel.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(60, 60, 40, 40);
-            layout.spacing = 20;
-            SetControls(layout, expandHeight: false);
-            UITheme.StyleHeading(AddText(panel.transform, "Card Gallery", 64, AccentColor, FontStyles.Bold, height: 80), AccentColor);
+            var screen = AddScreen(transform, "CardGalleryPanel", "Card Gallery");
+            panel = screen.panel;
+            var columns = screen.columns;
 
-            var columns = NewObject("Columns", panel.transform);
-            var columnsLayout = columns.AddComponent<HorizontalLayoutGroup>();
-            columnsLayout.spacing = 30;
-            columnsLayout.childControlWidth = columnsLayout.childControlHeight = true;
-            columnsLayout.childForceExpandWidth = false;
-            columnsLayout.childForceExpandHeight = true;
-            columns.AddComponent<LayoutElement>().flexibleHeight = 1;
-
-            var decks = AddColumn(columns.transform, "Decks");
+            var decks = AddColumn(columns, "Decks");
             WheelStepper.AddTo(decks.gameObject, StepDeck);
             var decksElement = decks.gameObject.AddComponent<LayoutElement>();
-            decksElement.preferredWidth = 470;
+            decksElement.minWidth = decksElement.preferredWidth = SideColumnWidth;
             decksElement.flexibleWidth = 0;
-            var every = AddButton(decks, EveryCardButton, "<b>Every card</b>", -1, () => ShowDeck(null));
-            every.GetComponent<LayoutElement>().preferredHeight = 60;
+            var list = AddList(decks, out deckList);
+            var every = AddChoice(list, EveryCardButton, "Every card", $"{catalog.AllCards.Count()} cards in {catalog.AllDecks.Count} decks", () => ShowDeck(null));
             deckButtons.Add((every, null));
             foreach (var deck in catalog.AllDecks) {
-                var button = AddButton(decks, DeckButton + deck.GetDeckName(),
-                    $"<b>{deck.GetDeckName()}</b>\n<size=70%>{DeckCatalog.Describe(deck)}</size>", -1, () => ShowDeck(deck));
-                button.GetComponent<LayoutElement>().preferredHeight = 72;
-                var label = button.GetComponentInChildren<TextMeshProUGUI>();
-                label.textWrappingMode = TextWrappingModes.NoWrap;
-                label.enableAutoSizing = true;
-                label.fontSizeMin = 16;
-                label.fontSizeMax = 26;
+                var button = AddChoice(list, DeckButton + deck.GetDeckName(), deck.GetDeckName(), DeckCatalog.Describe(deck), () => ShowDeck(deck));
                 deckButtons.Add((button, deck));
             }
 
-            BuildCardsArea(columns.transform);
+            BuildCardsArea(columns);
 
-            var footer = NewObject("Footer", panel.transform);
-            var footerLayout = footer.AddComponent<HorizontalLayoutGroup>();
-            footerLayout.childAlignment = TextAnchor.MiddleCenter;
-            footerLayout.childControlWidth = footerLayout.childControlHeight = true;
-            footerLayout.childForceExpandWidth = footerLayout.childForceExpandHeight = false;
-            footer.AddComponent<LayoutElement>().preferredHeight = 72;
-            AddButton(footer.transform, BackButtonName, "Back", 260, Hide);
+            AddButton(AddFooter(panel.transform), BackButtonName, "Back", BackWidth, Hide);
         }
 
         // A scrolling grid of cards, with the name of what's shown above it
