@@ -5,18 +5,30 @@ using UnityEditor;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Debug > AI Tournament: the AI levels play each other with every faction deck (see <see cref="AITournament"/>), and the
-    /// results go to 'Documentation/AI Tournament.txt'. Takes a few minutes; the editor waits for it.
+    /// Debug > AI Tournament: the AI levels play each other with every faction deck; Debug > AI Style Tournament: the Hard
+    /// styles do (see <see cref="AITournament"/>). The results, and the problems the games ran into, go to
+    /// 'Documentation/AI Tournament.txt' and 'Documentation/AI Styles.txt'. A minute or two each; the editor waits for them.
     /// </summary>
     public static class AITournamentMenu {
-        public const string ReportPath = "Assets/Documentation/AI Tournament.txt";
-        private const int GamesPerSeat = 10;
+        public const string LevelsReportPath = "Assets/Documentation/AI Tournament.txt";
+        public const string StylesReportPath = "Assets/Documentation/AI Styles.txt";
 
         [MenuItem("Debug/AI Tournament")]
-        private static void RunFromMenu() => Run();
+        private static void RunLevelsFromMenu() => RunLevels();
 
-        /// <summary>Runs the tournament on the catalog's faction decks and writes the report.</summary>
-        public static List<AITournament.Result> Run() {
+        [MenuItem("Debug/AI Style Tournament")]
+        private static void RunStylesFromMenu() => RunStyles();
+
+        /// <summary>The levels, 10 games per seat for each deck and pairing.</summary>
+        public static List<AITournament.Result> RunLevels() =>
+            Run(LevelsReportPath, (decks, progress) => (AITournament.RunLevels(decks, 10, out string report, progress), report));
+
+        /// <summary>The Hard styles and Medium, 2 games per seat for each deck and pairing.</summary>
+        public static List<AITournament.Result> RunStyles() =>
+            Run(StylesReportPath, (decks, progress) => (AITournament.RunStyles(decks, 2, out string report, progress), report));
+
+        private static List<AITournament.Result> Run(string reportPath,
+            System.Func<IReadOnlyList<DeckScriptableObject>, System.Action<float>, (List<AITournament.Result>, string)> run) {
             var guids = AssetDatabase.FindAssets("t:DeckCatalog");
             if (guids.Length == 0) {
                 UnityEngine.Debug.LogError("AI Tournament: no deck catalog found");
@@ -24,11 +36,11 @@ namespace SlayTheClone {
             }
             var catalog = AssetDatabase.LoadAssetAtPath<DeckCatalog>(AssetDatabase.GUIDToAssetPath(guids[0]));
             try {
-                var results = AITournament.Run(catalog.Decks, GamesPerSeat, out string report,
-                    done => EditorUtility.DisplayProgressBar("AI Tournament", "The AI levels are playing each other...", done));
-                File.WriteAllText(ReportPath, report);
-                AssetDatabase.ImportAsset(ReportPath);
-                UnityEngine.Debug.Log($"AI Tournament done, written to {ReportPath}:\n{report}");
+                var (results, report) = run(catalog.Decks,
+                    done => EditorUtility.DisplayProgressBar("AI Tournament", "The AIs are playing each other...", done));
+                File.WriteAllText(reportPath, report);
+                AssetDatabase.ImportAsset(reportPath);
+                UnityEngine.Debug.Log($"AI Tournament done, written to {reportPath}:\n{report}");
                 return results;
             }
             finally {

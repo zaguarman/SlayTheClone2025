@@ -1,27 +1,30 @@
-AI TOURNAMENT
-Each deck against itself, each pairing of levels, both seats. 660 games, called off after 40 Days.
+AI TOURNAMENT: THE LEVELS
+Each deck against itself, each pairing, both seats. 660 games, called off after 40 Days.
 
-Wins by pairing (draws: both at 0 at once, or called off)
-  Easy vs Medium: 32 - 154, 34 draws (70% for Medium), 19,4 Days on average
-  Medium vs Hard: 66 - 123, 31 draws (56% for Hard), 19,4 Days on average
-  Easy vs Hard: 20 - 178, 22 draws (81% for Hard), 17,1 Days on average
+Ranking: share of all its games won (draws count as not won)
+  Hard               65% of 440  Weighs everything the same: the plain Hard AI.
+  Medium             50% of 440
+  Easy               15% of 440
 
-Overall, every game a level played
-  Easy: won 12% of 440
-  Medium: won 50% of 440
-  Hard: won 68% of 440
+Head to head: the row's wins - the column's wins
+                          Easy      Medium        Hard
+  Easy                       -    39 - 155    27 - 176
+  Medium              155 - 39           -    66 - 112
+  Hard                176 - 27    112 - 66           -
 
-By seat: Player 1 won 301, Player 2 won 272 (Player 1 plans first; neither looks at the other's plans)
+Seats: Player 1 won 287, Player 2 won 288, 85 draws; 19,0 Days on average
 
-By deck: the better level's wins out of the games each pairing played with it
-  Corporate - Shareholder Value: Medium over Easy 13/20, Hard over Medium 10/20, Hard over Easy 16/20
-  Statecraft - Order & Paperwork: Medium over Easy 11/20, Hard over Medium 11/20, Hard over Easy 11/20
-  Zeitgeist - Moods of Modern Life: Medium over Easy 17/20, Hard over Medium 13/20, Hard over Easy 17/20
-  Utopia - Results May Vary: Medium over Easy 14/20, Hard over Medium 11/20, Hard over Easy 20/20
-  Digital Society - Terminally Online: Medium over Easy 12/20, Hard over Medium 8/20, Hard over Easy 15/20
-  Shadow Ops. - Plausible Deniability: Medium over Easy 8/20, Hard over Medium 12/20, Hard over Easy 11/20
-  Tech - Move Fast and Break Things: Medium over Easy 14/20, Hard over Medium 11/20, Hard over Easy 19/20
-  Myth - Old Gods, New Tricks: Medium over Easy 19/20, Hard over Medium 15/20, Hard over Easy 20/20
-  Mind - All in Your Head: Medium over Easy 8/20, Hard over Medium 6/20, Hard over Easy 11/20
-  Digital Society & Shadow Ops. - Panopticon: Medium over Easy 18/20, Hard over Medium 16/20, Hard over Easy 18/20
-  Myth & Corporate - Prosperity Gospel: Medium over Easy 20/20, Hard over Medium 10/20, Hard over Easy 20/20
+By deck: which AI won the most with it
+  Corporate - Shareholder Value: Hard 63%, Medium 53%, Easy 20%; last Easy 20%
+  Statecraft - Order & Paperwork: Hard 65%, Medium 35%, Easy 13%; last Easy 13%
+  Zeitgeist - Moods of Modern Life: Medium 58%, Hard 53%, Easy 25%; last Easy 25%
+  Utopia - Results May Vary: Hard 85%, Medium 45%, Easy 8%; last Easy 8%
+  Digital Society - Terminally Online: Hard 68%, Easy 43%, Medium 28%; last Medium 28%
+  Shadow Ops. - Plausible Deniability: Hard 68%, Medium 23%, Easy 8%; last Easy 8%
+  Tech - Move Fast and Break Things: Hard 83%, Medium 45%, Easy 5%; last Easy 5%
+  Myth - Old Gods, New Tricks: Hard 73%, Medium 70%, Easy 5%; last Easy 5%
+  Mind - All in Your Head: Medium 70%, Easy 40%, Hard 18%; last Hard 18%
+  Digital Society & Shadow Ops. - Panopticon: Hard 73%, Medium 53%, Easy 0%; last Easy 0%
+  Myth & Corporate - Prosperity Gospel: Medium 75%, Hard 75%, Easy 0%; last Easy 0%
+
+PROBLEMS: none found.

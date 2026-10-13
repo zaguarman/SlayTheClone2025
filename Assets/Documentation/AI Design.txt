@@ -14,12 +14,18 @@ How the computer players are built (Scripts/AI). Last updated 2026-10-13.
       what an unknown creature really is.
 • AIPlanner (the decisions). PlanDay(player) queues the Day's plays, attacks, moves and abilities through the same calls
   dragging cards makes (PlayCardAction, the combat handler, MoveCreatureAction, UseAbilityAction), so the rules can't tell
-  it from a person. One class, three levels (AILevel: Easy, Medium, Hard).
-• AIController (the plug in a game). Made at startup; at each Dawn it plans every seat the AI plays (MatchSetup.AI), at
-  the level chosen (MatchSetup.AILevel). With both seats it also ends the turn after a 1 second pause. F7 hands seats over.
+  it from a person. One class, three levels (AILevel: Easy, Medium, Hard), and for Hard a style (AIStyle).
+• AIStyle (a way to play). Weights on what Hard values: damage to the player, its own Health, removal, its board,
+  statuses, cards, information, protection, and how eager it is to race.
+• AIEntrant (an AI that can take a seat): a level, and for Hard a style. AIEntrant.All lists them all.
+• AIController (the plug in a game). Made at startup; at each Dawn it plans every seat the AI plays (MatchSetup.AI) with
+  the AI chosen (MatchSetup.AIPlayer). With both seats it also ends the turn after a 1 second pause. F7 hands seats over.
 • AITournament (AI against AI, no screen). Plays whole combats with the real GameManager and TurnManager
-  (TurnManager.EndTurnImmediately skips the playback), about 20 games a second. Debug > AI Tournament writes the
-  results to 'AI Tournament.txt'.
+  (TurnManager.EndTurnImmediately skips the playback), about 15 to 20 games a second.
+    - Debug > AI Tournament: the levels ('AI Tournament.txt').
+    - Debug > AI Style Tournament: the Hard styles and Medium ('AI Styles.txt').
+    - The same runs as on-demand tests: AITournamentTests.
+• GameAudit (the bug hunter). Watches every tournament game; see 6.
 
 
 2. HOW A DAY IS PLANNED
@@ -42,6 +48,7 @@ EffectResolver would pick them:
     Slot Effects (a Landmine waits for the next creature, a Snare for one leaving), draws and summons.
     Watchdogs and Trends count as good for whoever plays them; effects that are hard to weigh (copy, swap, grant) count as
     good on the side the card names.
+    Each kind of good is multiplied by the style's weight for it (see 4).
 It plays the card where the total is highest, and keeps it if nothing comes out above 0. No card has a rule of its own,
 so new cards made of existing effects are played without any AI work.
 
@@ -55,17 +62,24 @@ Easy: plays everything, without judging.
     • Bodyguard guards someone at random; no other abilities.
 Medium: the scoring above.
     • Creatures (the strongest first) to the slot that suits them; a much better one replaces a weak one.
-    • Each spell at its best aim.
+    • Spells in hand order, each at its best aim.
     • Attacks, strongest first, each where it's worth most: a kill, else the player through an empty slot.
     • It counts planned damage, so two hits don't kill the same creature, and it sees lethal.
-Hard: Medium, plus it reads what the cards it knows say.
-    • Abilities that bend effects: Contrarian reverses (it will weaken its own Contrarian on purpose), Extremist doubles,
-      Unbothered and Cold Storage block, No U and Return to Sender bounce back to us, Too Mainstream ignores areas,
-      Spite gains Attack.
-    • Statuses: Blessed negates (and loses a stack), Doomed blocks others, Untouchable takes no damage.
-    • Heat: random damage goes to the hottest creature it can see, on either side.
-    • A Temporal Shield stops combat damage; Counterattacks hit back; Hive Mind steals abilities.
-    • Its own attacks: Recoil, Penny Stock, Double Tap, Insider Job.
+Hard: Medium, plus:
+    • It reads what the cards it knows say:
+        - Abilities that bend effects: Contrarian reverses (it will weaken its own Contrarian on purpose), Extremist
+          doubles, Unbothered and Cold Storage block, No U and Return to Sender bounce back to us, Too Mainstream ignores
+          areas, Spite gains Attack.
+        - Statuses: Blessed negates (and loses a stack), Doomed blocks others, Untouchable takes no damage.
+        - Heat: random damage goes to the hottest creature it can see, on either side.
+        - A Temporal Shield stops combat damage; Counterattacks hit back; Hive Mind steals abilities.
+        - Its own attacks: Recoil, Penny Stock, Double Tap, Insider Job.
+    • Combinations: a forecast of what today's spells will have done when the attacks land (spells resolve before
+      attacks, GDD 3.7): stat changes, damage, stuns (a stunned enemy is no threat), Exposed (+1 a hit), Heat, Untouchable.
+        - Attacks are planned against the forecast: buff, then hit harder; stun or debuff, then kill.
+        - Spells are picked one at a time, best first, each weighed knowing the ones before. Among themselves spells
+          resolve in random order, so one spell counts on another only half the time (Heat, then random damage).
+        - Combos across Days need nothing special: Heat, Doomed, Burn and Blessed stay, and it reads them.
     • Protection: Armor, healing, Untouchable and Temporal Shields are worth the whole creature when they save one the
       other side could kill next Day; Bodyguard guards the one most at risk.
     • Attacks: lethal if it has it. Otherwise the race: if it would bring them to 0 in fewer Days than they would it, it
@@ -74,18 +88,57 @@ Hard: Medium, plus it reads what the cards it knows say.
     • Moves: a creature with nothing to do leaves a Scorched Earth slot, or takes cover on a free Temporal Shield.
 
 
-4. HOW STRONG THEY ARE (Debug > AI Tournament, 660 games: each faction deck against itself, both seats)
-    Hard beats Medium 123 - 66 (31 draws); Medium beats Easy 154 - 32 (34 draws); Hard beats Easy 178 - 20 (22 draws).
-    Overall: Easy wins 12% of its games, Medium 50%, Hard 68%.
-    Seats are fair: Player 1 won 301, Player 2 won 272.
-    A draw is a combat called off after 40 Days, or both at 0 at once.
-    Deck by deck (see the report): Mind and Statecraft are closest. Their stuns and debuffs make games swingy, so
-    skill shows less.
+4. THE HARD STYLES (weights; 1 is the plain Hard AI)
+
+    Balanced    1 everywhere.
+    Rusher      Aggro: player damage 1.5, own Health 0.8 (spent), removal 0.9, protection 0.8, races 1.5x as eagerly.
+    Controller  Control: removal 1.6, statuses 1.3, player damage 0.7, races late (0.6).
+    Swarm       Wide: its board 1.6, cards 1.2, removal 0.8, races a little early (1.2).
+    Hexer       Statuses and debuffs 2, removal 1.2, player damage 0.9.
+    Bastion     Defence: protection 2, own Health 2, its board 1.3, player damage 0.8, races late (0.7).
+    Spymaster   Intelligence 3 (Reveals, Watchdogs, Concealed, Encrypted), cards 1.3, statuses 1.2.
+    Engine      Cards 2, its board 1.2, own Health 0.5 (pays Health for cards).
+The same planner does it all: a new style is a new set of numbers. Rusher started at player damage 2 and races 2x; it
+tied Medium, so it was toned down.
 
 
-5. IMPERFECT INFORMATION: HOW IT'S KEPT
+5. HOW STRONG THEY ARE
+The levels (660 games: each faction deck against itself, both seats):
+    Hard beats Medium 112 - 66, Easy 176 - 27; Medium beats Easy 155 - 39.
+    Overall: Hard wins 65% of its games, Medium 50%, Easy 15%.
+The Hard styles and Medium (1584 games, every pairing):
+    Spymaster 50%, Hexer 47%, Controller 42%, Balanced 41%, Rusher 40%, Engine 40%, Bastion 39%, Swarm 37%, Medium 24%.
+    Every style beats Medium; Spymaster beats Engine 27 - 6, Hexer beats Spymaster 20 - 14.
+    Reading for balance: Watchdogs, Reveals and statuses win the most games when an AI values them highly, so they may be
+    strong for what they cost; Swarm (going wide) and Bastion (turtling) are the weakest plans.
+    Best AI per deck: Zeitgeist, Mind and Corporate with Spymaster; Digital Society with Hexer; Myth with Bastion;
+    Utopia and Shadow Ops. with Controller; Panopticon with Swarm (see the report).
+A draw is a combat called off after 40 Days (about 1 game in 5 between Hard styles), or both at 0 at once.
+
+
+6. BUGS FOUND BY THE AI GAMES (GameAudit)
+After every Day of every tournament game the audit checks:
+    • No card is lost, gained, or in two places.
+    • Slots and creatures agree on where each creature is, and no creature is in two slots.
+    • No dead or 0-Health creature is left on the board, and no creature has negative Attack.
+    • Health stays within bounds, and hands within the maximum.
+    • The queue is empty and the Day moved on.
+    • The AI only planned cards from its own hand.
+It also collects every error, exception and warning the game logs. Found so far:
+    • A card duplicated (fixed). A creature replaced by a summon left play while an effect that had already picked it
+      (Football Hooligans' death damage) was still waiting; the effect then destroyed it again and it was discarded twice.
+      Now a replaced creature's plans leave with it, and damage or destruction aimed at a creature no longer in play fizzles.
+      Covered in GameplayTests (Board_PositionsDecideMovesReplacementsAndChains).
+    • Warnings on almost every game (fixed). A status or stat change landing on a creature that died earlier in the same
+      action (Underdog's death buff on itself, Burn after the damage that killed) now fizzles quietly, as the GDD says.
+    • "0 damage to a player" warnings (fixed): an attacker brought to 0 Attack is a normal no-op, now a plain log.
+The latest runs: no problems in 2244 games.
+
+
+7. IMPERFECT INFORMATION: HOW IT'S KEPT
 • Built in: the planner only gets an AIView. Of the other side it gets SeenCreature/SeenSlot objects with nothing filled in
   that the seat can't see. (They keep the real creature and slot only to aim at them; the planner reads nothing else.)
+• The forecast only holds what this side's own spells will do.
 • Tested (FogOfWarTests: TheAI_AtEveryLevel_PlansTheSame_WhateverItCantSee): two games look the same to player 1, but in
   one, player 2 has a different hand and plans, hidden Landmines, and a 9/9 where the other has a 2/3, both unknown.
   Every level must plan the same Day in both. Once the 9/9 is revealed, Medium and Hard must plan differently, so it
@@ -93,10 +146,11 @@ Hard: Medium, plus it reads what the cards it knows say.
 • Random choices (Easy) use the planner's own seeded random numbers, never the game's, so the shuffles stay the same.
 
 
-6. NOT YET
+8. NOT YET
 • Holding cards back. There's little point today (the hand is discarded at Dusk), but there will be once costs arrive.
 • Reading the other side's visible plans: it plans first, so there are none to read against a person.
-• Watchdog play (when to keep them), Reveal for traps, Shell Game.
+• When to keep Watchdogs, Reveal for traps, Shell Game.
 • Looking further ahead than the next Day.
-• Personalities (aggressive, defensive, trap-heavy) as weights on the same scoring.
+• Styles chosen per deck automatically (the report says which suits which).
+• A deck-against-deck table with one style on both sides, for balance.
 • The GDD 6 "script of intents" for enemies.

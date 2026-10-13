@@ -68,6 +68,11 @@ namespace SlayTheClone {
             if (creatureTarget == null || modifier == null) return;
 
             string targetId = creatureTarget.TargetId;
+            if (creatureTarget.IsDead || creatureTarget.Slot == null) {
+                // It died or left play before this landed (an area effect picked it, then it was gone): the effect fizzles
+                Log($"ModifierManager: {creatureTarget.Name} isn't in play any more: '{modifier.Name}' fizzles", LogTag.Effects | LogTag.Creatures);
+                return;
+            }
             if (!creatures.ContainsKey(targetId)) {
                 LogWarning($"ModifierManager: Cannot apply modifier '{modifier.Name}' to unregistered creature '{creatureTarget.Name}' (TargetID: {targetId.ToUpper()}).", LogTag.Effects | LogTag.Creatures);
                 return;

@@ -42,8 +42,8 @@ namespace SlayTheClone {
         public DeckScriptableObject OpponentDeck { get; private set; }
         /// <summary>The seats the AI plays: your opponent's unless chosen otherwise.</summary>
         public AISeats AI { get; private set; } = AISeats.Player2;
-        /// <summary>How well the AI plays.</summary>
-        public AILevel Level { get; private set; } = AILevel.Medium;
+        /// <summary>The AI that plays: a level, and for Hard a style (see <see cref="AIEntrant.All"/>).</summary>
+        public AIEntrant AIPlayer { get; private set; } = new AIEntrant(AILevel.Medium);
         /// <summary>Every deck either side can play: the starter and test decks, then your own complete ones.</summary>
         public IReadOnlyList<DeckScriptableObject> Decks => catalog.AllDecks.Concat(PlayerDecks.Playable(catalog)).ToList();
 
@@ -125,9 +125,10 @@ namespace SlayTheClone {
             Refresh();
         }
 
-        /// <summary>How well the AI plays, in turn: Easy, Medium, Hard.</summary>
+        /// <summary>The next AI, in turn: Easy, Medium, then Hard in each of its styles.</summary>
         public void StepLevel() {
-            Level = (AILevel)(((int)Level + 1) % 3);
+            int index = AIEntrant.All.ToList().FindIndex(e => e.Name == AIPlayer.Name);
+            AIPlayer = AIEntrant.All[(index + 1) % AIEntrant.All.Count];
             Refresh();
         }
 
@@ -139,7 +140,8 @@ namespace SlayTheClone {
 
         public void StartMatch() {
             MatchSetup.Choose(PlayerDeck, OpponentName, OpponentDeck, AI);
-            MatchSetup.AILevel = Level;
+            MatchSetup.AILevel = AIPlayer.Level;
+            MatchSetup.AIStyle = AIPlayer.Style;
             Log($"Match chosen: {PlayerDeck.GetDeckName()} vs {MatchSetup.OpponentName} ({OpponentDeck.GetDeckName()})", LogTag.UI);
             MatchChosen?.Invoke();
         }
@@ -153,7 +155,7 @@ namespace SlayTheClone {
                 Opponent = catalog.Opponents.FirstOrDefault(o => o.name == MatchSetup.OpponentName);
                 OpponentDeck = MatchSetup.OpponentDeck;
                 AI = MatchSetup.AI;
-                Level = MatchSetup.AILevel;
+                AIPlayer = MatchSetup.AIPlayer;
                 return;
             }
 
@@ -176,7 +178,7 @@ namespace SlayTheClone {
             }
             if (seatsLabel != null) seatsLabel.text = SeatsName;
             if (levelButton != null) {
-                levelButton.GetComponentInChildren<TextMeshProUGUI>(true).text = $"AI: {Level}";
+                levelButton.GetComponentInChildren<TextMeshProUGUI>(true).text = $"AI: {AIPlayer}";
                 levelButton.gameObject.SetActive(AI != AISeats.None); // Hot seat has no AI
             }
         }

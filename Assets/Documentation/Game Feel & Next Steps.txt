@@ -48,7 +48,7 @@ Humour as feel (the satire is our identity: make it talk)
 2. NEXT STEPS (roughly in order)
 
 A. An opponent that plays back [L] — the biggest blocker
-• DONE (2026-10-13): three levels, Easy, Medium and Hard (Scripts/AI; how they work in 'AI Design'). They play under Fog of War through AIView, tested against leaks. They plug into either seat (match setup: You vs AI / Hot seat / AI vs AI, and the AI level; F7 in game). Debug > AI Tournament plays them against each other with every deck ('AI Tournament.txt'): Hard beats Medium about 2 to 1 and Easy 9 to 1.
+• DONE (2026-10-13): three levels, Easy, Medium and Hard (Scripts/AI; how they work in 'AI Design'). They play under Fog of War through AIView, tested against leaks. They plug into either seat (match setup: You vs AI / Hot seat / AI vs AI, and the AI level; F7 in game). Debug > AI Tournament plays them against each other with every deck ('AI Tournament.txt'): Hard beats Medium about 2 to 1 and Easy 9 to 1. Hard has eight styles (Rusher, Controller, Swarm, Hexer, Bastion, Spymaster, Engine, Balanced) and plays combinations (Debug > AI Style Tournament, 'AI Styles.txt'); every tournament game is audited for broken rules, which found and fixed a card-duplication bug.
 • Not yet: see 'AI Design' 6.
 • GDD 6 says the AI has no hand: it plays a script of intents. Start there: each opponent gets a deck + a simple scripted policy (play creatures in empty slots, aim spells at the biggest threat, attack the slot in front, keep Watchdogs for when it has 2+ creatures).
 • It must play under Fog of War (Intel already enforces this for Watchdogs): it reacts only to what it can see.

@@ -1,0 +1,42 @@
+AI TOURNAMENT: THE HARD STYLES
+Each deck against itself, each pairing, both seats. 1584 games, called off after 40 Days.
+
+Ranking: share of all its games won (draws count as not won)
+  Hard Spymaster     50% of 352  Intelligence: Reveals, Watchdogs, Concealed and Encrypted, and cards.
+  Hard Hexer         47% of 352  Statuses and debuffs: Burn, stuns, Doomed, Heat, then the hits that use them.
+  Hard Controller    42% of 352  Control: kills and disables their creatures, goes face only once the board is safe.
+  Hard               41% of 352  Weighs everything the same: the plain Hard AI.
+  Hard Rusher        40% of 352  Aggro: damage to the player first, its own Health spent freely, races early.
+  Hard Engine        40% of 352  Card advantage: draws whenever it can, paying with Health and creatures.
+  Hard Bastion       39% of 352  Defence: protects its creatures and its Health, wins late.
+  Hard Swarm         37% of 352  Goes wide: summons, buffs for its creatures and cards to keep the row full.
+  Medium             24% of 352
+
+Head to head: the row's wins - the column's wins
+                        Medium        Hard      Rusher  Controller       Swarm       Hexer     Bastion   Spymaster      Engine
+  Medium                     -     12 - 22     16 - 23      7 - 25     12 - 25      8 - 27     15 - 20      7 - 30      9 - 25
+  Hard                 22 - 12           -     18 - 19     16 - 22      22 - 9     15 - 20     16 - 16     14 - 26     20 - 20
+  Hard Rusher          23 - 16     19 - 18           -     14 - 22     18 - 21     16 - 21     18 - 16     15 - 19     19 - 18
+  Hard Controller       25 - 7     22 - 16     22 - 14           -     16 - 15     13 - 16     15 - 19     17 - 18     17 - 16
+  Hard Swarm           25 - 12      9 - 22     21 - 18     15 - 16           -     15 - 23     11 - 20     15 - 21     19 - 18
+  Hard Hexer            27 - 8     20 - 15     21 - 16     16 - 13     23 - 15           -     20 - 14     20 - 14     19 - 20
+  Hard Bastion         20 - 15     16 - 16     16 - 18     19 - 15     20 - 11     14 - 20           -     14 - 20     18 - 19
+  Hard Spymaster        30 - 7     26 - 14     19 - 15     18 - 17     21 - 15     14 - 20     20 - 14           -      27 - 6
+  Hard Engine           25 - 9     20 - 20     18 - 19     16 - 17     18 - 19     20 - 19     19 - 18      6 - 27           -
+
+Seats: Player 1 won 649, Player 2 won 619, 316 draws; 22,0 Days on average
+
+By deck: which AI won the most with it
+  Corporate - Shareholder Value: Hard Hexer 53%, Hard Controller 50%, Hard Spymaster 50%; last Medium 22%
+  Statecraft - Order & Paperwork: Hard Rusher 47%, Hard Hexer 47%, Hard Spymaster 47%; last Medium 16%
+  Zeitgeist - Moods of Modern Life: Hard Hexer 69%, Hard Spymaster 69%, Hard Engine 56%; last Hard Swarm 25%
+  Utopia - Results May Vary: Hard Controller 59%, Hard Spymaster 50%, Hard Rusher 47%; last Medium 19%
+  Digital Society - Terminally Online: Hard Bastion 63%, Hard Hexer 59%, Hard Swarm 56%; last Medium 13%
+  Shadow Ops. - Plausible Deniability: Hard Spymaster 34%, Hard Controller 31%, Hard Engine 31%; last Hard Swarm 13%
+  Tech - Move Fast and Break Things: Hard Spymaster 56%, Hard 47%, Hard Engine 47%; last Medium 16%
+  Myth - Old Gods, New Tricks: Hard Bastion 63%, Hard Spymaster 53%, Hard Controller 50%; last Medium 34%
+  Mind - All in Your Head: Hard Spymaster 75%, Medium 59%, Hard Hexer 56%; last Hard Bastion 28%
+  Digital Society & Shadow Ops. - Panopticon: Hard Swarm 44%, Hard Rusher 41%, Hard 28%; last Medium 6%
+  Myth & Corporate - Prosperity Gospel: Hard Controller 53%, Hard Hexer 53%, Hard Rusher 47%; last Medium 28%
+
+PROBLEMS: none found.

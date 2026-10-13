@@ -21,6 +21,9 @@ namespace SlayTheClone {
         public static AISeats AI { get; set; }
         /// <summary>How well the AI plays its seats.</summary>
         public static AILevel AILevel { get; set; } = AILevel.Medium;
+        /// <summary>For the Hard AI, the way it plays.</summary>
+        public static AIStyle AIStyle { get; set; } = AIStyle.Balanced;
+        public static AIEntrant AIPlayer => new AIEntrant(AILevel, AIStyle);
 
         public static bool PlayedByAI(IPlayer player) =>
             player != null && (AI & (player.IsPlayer1 ? AISeats.Player1 : AISeats.Player2)) != 0;
@@ -42,6 +45,7 @@ namespace SlayTheClone {
             OpponentName = null;
             AI = AISeats.None;
             AILevel = AILevel.Medium;
+            AIStyle = AIStyle.Balanced;
         }
     }
 }

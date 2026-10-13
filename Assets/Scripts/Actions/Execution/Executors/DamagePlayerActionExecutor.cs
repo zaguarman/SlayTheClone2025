@@ -11,7 +11,7 @@ namespace SlayTheClone {
                 return;
             }
             if (damage <= 0) {
-                LogWarning($"DamagePlayerActionExecutor: Damage amount ({damage}) is zero or negative. Skipping.", LogTag.Actions | LogTag.Players);
+                Log($"DamagePlayerActionExecutor: no damage to {targetPlayer.Name} (an attacker brought to 0 Attack, say)", LogTag.Actions | LogTag.Players);
                 return;
             }
 

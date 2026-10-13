@@ -10,6 +10,10 @@ namespace SlayTheClone {
             var attacker = damageAction.GetAttacker(); // Can be null
 
             if (targetCreature == null || targetCreature.IsDead) return;
+            if (targetCreature.Slot == null) {
+                Log($"Executor: {targetCreature.Name} isn't in play any more: the damage fizzles", LogTag.Actions | LogTag.Creatures);
+                return;
+            }
 
             var mediator = context.GameMediator;
             var modifierManager = context.ModifierManager;

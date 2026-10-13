@@ -180,13 +180,23 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(eel, p1.Battlefield[3].OccupyingCreature);
             Assert.AreSame(turtle, p1.Battlefield[2].OccupyingCreature);
 
-            // Summoning onto an occupied slot replaces its creature, which is discarded
+            // Summoning onto an occupied slot replaces its creature, which is discarded, and what it planned goes with it
             var sharkData = game.Creature("Shark", 4, 4);
             sharkData.movement = MovementKeyword.Swap;
+            int p2HealthBeforeReplacing = p2.Health;
+            game.Declare(eel, p2.Battlefield[0]); // An empty slot: the attack would hit the player
             var shark = game.Summon(p1, sharkData, 3);
             Assert.AreSame(shark, p1.Battlefield[3].OccupyingCreature);
             Assert.IsNull(eel.Slot);
             AssertDiscarded(p1, eel);
+            Assert.AreEqual(p2HealthBeforeReplacing, p2.Health, "A replaced creature's attack leaves with it");
+
+            // Effects that picked it before it left fizzle: it can't be hurt or destroyed again, nor discarded twice (found by the AI tournament)
+            int cards = GameAsserts.CountCards(p1);
+            game.Run(TargetedActions.Damage(eel, 9));
+            game.Run(new DestroyCreatureAction(eel, unconditional: true));
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1), "A creature that left play went to the discard pile again");
+            Assert.AreEqual(1, p1.Deck.GetDiscardPilePreview().Count(c => c.CardId == eel.CardId));
 
             // An exhausted (stunned) creature can't move or attack
             game.Run(new ApplyStatusEffectAction(turtle, StatusEffectType.Exhausted, 1, 0));

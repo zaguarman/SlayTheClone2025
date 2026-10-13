@@ -18,14 +18,17 @@ namespace SlayTheClone {
     /// most good, if anywhere; each attack where it kills the most, else at the player through an empty slot.</item>
     /// <item>Hard also reads what the cards it knows say: abilities that bend effects (Contrarian, No U, Too Mainstream...),
     /// Blessed, Doomed, Untouchable, Heat, Temporal Shields, Counterattacks; it protects the creatures the other side can kill,
-    /// kills the biggest threats with the smallest attacker that does it, defends when it could die next Day, and moves
-    /// idle creatures out of bad slots.</item>
+    /// races or holds the board, kills the biggest threats with the smallest attacker that does it, and moves idle creatures
+    /// out of bad slots. It plays combinations: it forecasts what its spells will have done by the time attacks land (see
+    /// <see cref="Forecast"/>) and picks each next spell knowing the ones before. Its <see cref="AIStyle"/> says what it
+    /// values most: the same planner goes face, controls, goes wide, hexes, turtles, spies or draws.</item>
     /// </list>
     /// </summary>
     public class AIPlanner {
         private const float Lethal = 100f; // A player at 0 ends the combat: nothing else counts as much
 
         public AILevel Level { get; }
+        public AIStyle Style { get; }
         private readonly IActionsQueue queue;
         private readonly IBattlefieldCombatHandler combat;
         private readonly System.Random random; // Easy's choices; its own, so the game's shuffles stay the same
@@ -37,12 +40,26 @@ namespace SlayTheClone {
         private readonly Dictionary<SeenCreature, int> plannedDamage = new Dictionary<SeenCreature, int>();
         private int plannedFace;
 
-        public AIPlanner(IActionsQueue queue, IBattlefieldCombatHandler combat, AILevel level = AILevel.Medium, int seed = 0) {
+        /// <summary>
+        /// Hard: what today's spells will have done to a creature by the time the attacks land (spells resolve before them,
+        /// GDD 3.7). Spells resolve among themselves in random order, so one spell counts on another only half the time.
+        /// </summary>
+        private sealed class Forecast {
+            public int Attack, Health, Damage, Heat;
+            public bool Exhausted, Untouchable;
+        }
+        private readonly Dictionary<SeenCreature, Forecast> forecasts = new Dictionary<SeenCreature, Forecast>();
+        private bool seeForecast; // Whether what's being weighed lands after today's spells
+
+        public AIPlanner(IActionsQueue queue, IBattlefieldCombatHandler combat, AILevel level = AILevel.Medium, int seed = 0, AIStyle style = null) {
             this.queue = queue ?? throw new System.ArgumentNullException(nameof(queue));
             this.combat = combat ?? throw new System.ArgumentNullException(nameof(combat));
             Level = level;
+            Style = level == AILevel.Hard ? style ?? AIStyle.Balanced : AIStyle.Balanced;
             random = new System.Random(seed);
         }
+
+        public override string ToString() => Level == AILevel.Hard && Style != AIStyle.Balanced ? $"Hard {Style}" : Level.ToString();
 
         /// <summary>
         /// Plans the player's Day: creatures to slots, then the spells worth playing, then each creature's ability, attack or
@@ -52,11 +69,14 @@ namespace SlayTheClone {
             if (player?.Opponent == null || player.Health <= 0 || player.Opponent.Health <= 0) return;
             view = new AIView(player, queue);
             plannedDamage.Clear();
+            forecasts.Clear();
             plannedFace = 0;
-            Log($"AI ({Level}) plans {player.Name}'s Day", LogTag.Turns);
+            seeForecast = false;
+            Log($"AI ({this}) plans {player.Name}'s Day", LogTag.Turns);
 
             PlayCreatures();
             PlaySpells();
+            seeForecast = true; // Abilities and attacks land after every spell
             var ready = view.Mine.Where(c => !queue.HasActiveAction(c.Creature.TargetId) && Modifiers.CanAct(c.Creature))
                 .OrderByDescending(c => c.Attack).ToList();
             ready.RemoveAll(UseAbility);
@@ -79,7 +99,7 @@ namespace SlayTheClone {
                     ? free.Count > 0 ? free[random.Next(free.Count)] : null
                     : free.OrderByDescending(ValueOfEntering).FirstOrDefault()
                       ?? view.MySlots.Where(s => s.Creature != null && s.Incoming == null && !queue.HasActiveAction(s.Creature.Creature.TargetId)
-                                                 && creature.Attack + creature.Health >= s.Creature.Worth + 4)
+                                                 && creature.Attack + creature.Health >= s.Creature.Worth + 4 / Style.Board)
                           .OrderBy(s => s.Creature.Worth).FirstOrDefault();
                 if (slot == null) continue;
                 Play(creature, slot.Slot);
@@ -102,26 +122,81 @@ namespace SlayTheClone {
         #endregion
 
         #region Spells
-        // Each spell goes where it does the most good, if anywhere it does some. Easy plays each one somewhere on its side
+        // Easy plays each spell somewhere on its side. Medium plays each one, in hand order, where it does the most good, if
+        // anywhere. Hard plays first whichever does the most now, then looks again: each spell is weighed knowing the ones before
         private void PlaySpells() {
-            foreach (var spell in view.Me.Hand.OfType<Spell>().Where(s => !IsQueued(s)).ToList()) {
-                var aims = AimsFor(spell).ToList();
-                if (aims.Count == 0) continue;
-                if (Level == AILevel.Easy) {
-                    Play(spell, EasyAim(spell, aims));
+            var spells = view.Me.Hand.OfType<Spell>().Where(s => !IsQueued(s)).ToList();
+            if (Level == AILevel.Easy) {
+                foreach (var spell in spells) {
+                    var aims = AimsFor(spell).ToList();
+                    if (aims.Count > 0) Play(spell, EasyAim(spell, aims));
+                }
+                return;
+            }
+
+            while (spells.Count > 0) {
+                (Spell spell, ITarget aim, float value) best = (null, null, 0);
+                foreach (var spell in Hard ? spells : spells.Take(1).ToList()) {
+                    foreach (var aim in AimsFor(spell)) {
+                        float value = SpellValue(spell, aim);
+                        if (value > best.value) best = (spell, aim, value);
+                    }
+                }
+                if (best.spell == null) {
+                    if (Hard) break; // Nothing left does any good
+                    spells.RemoveAt(0);
                     continue;
                 }
+                Play(best.spell, best.aim);
+                Expect(best.spell, best.aim);
+                spells.Remove(best.spell);
+            }
+        }
 
-                ITarget bestAim = null;
-                float best = 0;
-                foreach (var aim in aims) {
-                    float value = spell.Effects.SelectMany(e => e.actions).Sum(a => Value(a, spell, aim));
-                    if (value > best) (bestAim, best) = (aim, value);
-                }
-                if (bestAim == null) continue;
-                Play(spell, bestAim);
-                foreach (var damage in spell.Effects.SelectMany(e => e.actions).Where(a => a.actionType == ActionType.Damage && EffectResolver.UsesChosenTarget(a))) {
-                    if (CreatureAt(bestAim) is SeenCreature hit) AddDamage(hit, damage.value);
+        // What the spell does played there. Hard weighs it both ways when today's other spells could change it: they may
+        // resolve before it or after (random order), so each way counts half
+        private float SpellValue(Spell spell, ITarget aim) {
+            float ValueNow() => spell.Effects.SelectMany(e => e.actions).Sum(a => Value(a, spell, aim));
+            if (!Hard || forecasts.Count == 0) return ValueNow();
+            seeForecast = true;
+            float after = ValueNow();
+            seeForecast = false;
+            return (after + ValueNow()) / 2f;
+        }
+
+        // Remembers what a spell just planned will do: the damage it deals (so nothing is killed twice), and for Hard what it
+        // changes before the attacks: stats, stuns, Exposed, Heat, Untouchable
+        private void Expect(Spell spell, ITarget aim) {
+            foreach (var action in spell.Effects.SelectMany(e => e.actions)) {
+                if (action.targetModifier.HasFlag(TargetModifier.Random)) continue; // Where it lands is luck
+                foreach (var creature in TargetsOf(action, aim).OfType<SeenCreature>()) {
+                    if (!Hard) {
+                        if (action.actionType == ActionType.Damage) AddDamage(creature, action.value);
+                        continue;
+                    }
+                    var forecast = ForecastOf(creature);
+                    switch (action.actionType) {
+                        case ActionType.Damage:
+                            forecast.Damage += action.value;
+                            break;
+                        case ActionType.ModifyStat:
+                            int change = BentByAbility(action.value, creature);
+                            if (action.modifyAttack) forecast.Attack += change;
+                            if (action.modifyHealth) forecast.Health += change;
+                            break;
+                        case ActionType.Stun:
+                            forecast.Exhausted = true;
+                            break;
+                        case ActionType.ApplyStatus when action.statusEffectToApply == StatusEffectType.Exhausted:
+                            forecast.Exhausted = true;
+                            break;
+                        case ActionType.ApplyStatus when action.statusEffectToApply == StatusEffectType.HeatSignature:
+                            forecast.Heat += System.Math.Max(1, action.statusPotency);
+                            break;
+                        case ActionType.ApplyStatus when action.statusEffectToApply == StatusEffectType.Untouchable:
+                            forecast.Untouchable = true;
+                            break;
+                    }
                 }
             }
         }
@@ -152,7 +227,7 @@ namespace SlayTheClone {
         private bool UseAbility(SeenCreature user) {
             if (!Abilities.CanUseActive(user.Creature, Modifiers)) return false;
             var others = view.All.Where(c => c != user).ToList();
-            var friends = others.Where(c => c.Ours && !c.Has(StatusEffectType.Untouchable)).ToList();
+            var friends = others.Where(c => c.Ours && !IsUntouchable(c)).ToList();
             SeenCreature target = user.Creature.Ability switch {
                 CreatureAbility.Bodyguard when Level == AILevel.Easy => friends.Count > 0 ? friends[random.Next(friends.Count)] : null,
                 CreatureAbility.Bodyguard when Hard => friends.OrderByDescending(c => WouldDie(c) ? c.Worth + 10 : c.Worth).FirstOrDefault(),
@@ -171,7 +246,7 @@ namespace SlayTheClone {
         #endregion
 
         #region Attacks
-        private bool CanAttack(SeenCreature attacker) => Abilities.CanAttack(attacker.Creature) && attacker.Attack > 0;
+        private bool CanAttack(SeenCreature attacker) => Abilities.CanAttack(attacker.Creature) && AttackOf(attacker) > 0 && !IsStunned(attacker);
 
         // Easy: the slot in front of it
         private List<SeenCreature> AttackInFront(List<SeenCreature> ready) {
@@ -195,34 +270,38 @@ namespace SlayTheClone {
         }
 
         /// <summary>
-        /// Hard: lethal if it has it; otherwise the most threatening creatures it can kill, each with the smallest attacker
-        /// (or two, for a big threat or when it could die next Day) that does it, then the rest at the player. It doesn't
-        /// waste an attack on what can't be hurt (Untouchable, a Temporal Shield) and weighs Counterattacks.
+        /// Hard: lethal if it has it. Otherwise the race: ahead (we'd bring them to 0 in fewer Days than they would us, as
+        /// eager as its style is), it only stops real threats; behind, it kills the most threatening creatures, each with the
+        /// smallest attacker (or two, for a big threat or when it could die next Day) that does it. The rest go at the player.
+        /// It doesn't waste an attack on what can't be hurt (Untouchable, a Temporal Shield) and weighs Counterattacks.
         /// </summary>
         private List<SeenCreature> AttackByThreat(List<SeenCreature> ready) {
             var left = ready.Where(CanAttack).ToList();
             var open = view.TheirSlots.FirstOrDefault(s => s.IsEmpty);
-            if (open != null && left.Sum(a => DamageOf(a)) >= view.TheirHealth - plannedFace) {
+            if (open != null && left.Sum(DamageOf) >= view.TheirHealth - plannedFace) {
                 foreach (var attacker in left) AttackSlot(attacker, open, DamageOf(attacker));
                 return ready.Where(c => !CanAttack(c)).ToList();
             }
 
             bool defending = TheirPotentialDamage() >= view.MyHealth;
-            // The race: winning it (we'd bring them to 0 in fewer Days than they would us), it only stops the big threats
             int ours = System.Math.Max(1, view.Mine.Where(c => c.Operative && CanAttack(c)).Sum(DamageOf));
             int theirs = System.Math.Max(1, TheirPotentialDamage());
-            bool ahead = open != null && !defending && (view.TheirHealth - plannedFace + ours - 1) / ours < (view.MyHealth + theirs - 1) / theirs;
+            float daysToWin = (view.TheirHealth - plannedFace + ours - 1) / ours, daysToLose = (view.MyHealth + theirs - 1) / theirs;
+            bool ahead = open != null && !defending && daysToWin < daysToLose * Style.Aggression;
             foreach (var target in view.Theirs.Where(Hittable).OrderByDescending(Threat).ToList()) {
                 var killer = left.Where(a => Hit(a, target) >= HealthLeft(target)).OrderBy(DamageOf).FirstOrDefault();
-                // A harmless creature isn't worth an attack that could go at the player instead; racing, only a real threat is
-                if (killer != null && open != null && !defending && target.Worth + target.Attack < DamageOf(killer)) continue;
-                if (killer != null && ahead && target.Attack < DamageOf(killer)) continue;
+                if (killer != null && open != null) {
+                    float face = DamageOf(killer) * Style.Face;
+                    // A harmless creature isn't worth an attack that could go at the player instead; racing, only a real threat is
+                    if (!defending && (target.Worth + AttackOf(target)) * Style.Removal < face) continue;
+                    if (ahead && AttackOf(target) * Style.Removal < face) continue;
+                }
                 if (killer != null) {
                     AttackSlot(killer, target.Slot, Hit(killer, target));
                     left.Remove(killer);
                     continue;
                 }
-                if (Threat(target) < 6 && !defending) continue;
+                if (Threat(target) * Style.Removal < 6 && !defending) continue;
                 var pair = (from a in left from b in left
                             where DamageOf(a) <= DamageOf(b) && a != b && Hit(a, target) + Hit(b, target) >= HealthLeft(target)
                             orderby DamageOf(a) + DamageOf(b) select (a, b)).FirstOrDefault();
@@ -244,43 +323,46 @@ namespace SlayTheClone {
             return ready.Where(c => !CanAttack(c)).Concat(left).ToList();
         }
 
-        // What its attack deals: Recoil's +2, Penny Stock doubling small hits, Double Tap hitting twice
-        private static int DamageOf(SeenCreature attacker) {
-            int damage = attacker.Attack + (attacker.Ability == CreatureAbility.Recoil ? 2 : 0);
+        // What its attack deals, with today's buffs: Recoil's +2, Penny Stock doubling small hits, Double Tap hitting twice
+        private int DamageOf(SeenCreature attacker) {
+            int damage = AttackOf(attacker) + (attacker.Ability == CreatureAbility.Recoil ? 2 : 0);
             if (attacker.Ability == CreatureAbility.PennyStock && damage <= 3) damage *= 2;
             return attacker.Ability == CreatureAbility.DoubleTap ? damage * 2 : damage;
         }
 
         // Its damage to this creature: Exposed adds 1 a hit; Insider Job goes through Armor
-        private static int Hit(SeenCreature attacker, SeenCreature target) =>
-            DamageOf(attacker) + (target.Exposed ? attacker.Ability == CreatureAbility.DoubleTap ? 2 : 1 : 0)
+        private int Hit(SeenCreature attacker, SeenCreature target) =>
+            DamageOf(attacker) + (IsExposed(target) ? attacker.Ability == CreatureAbility.DoubleTap ? 2 : 1 : 0)
             + (attacker.Ability == CreatureAbility.InsiderJob ? target.Armor : 0);
 
-        private static bool Hittable(SeenCreature target) =>
-            !target.Has(StatusEffectType.Untouchable) && !target.Slot.Shielded;
+        private bool Hittable(SeenCreature target) => !IsUntouchable(target) && !target.Slot.Shielded;
 
         // A hit that doesn't kill: worth the damage to a threat, minus what answers it
         private float ChipValue(SeenCreature attacker, SeenCreature target) {
-            float value = System.Math.Min(Hit(attacker, target), HealthLeft(target)) * (target.Attack > 0 ? 0.8f : 0.3f);
+            float value = System.Math.Min(Hit(attacker, target), HealthLeft(target)) * (AttackOf(target) > 0 ? 0.8f : 0.3f) * Style.Removal;
             if (target.Retaliation > 0) value -= target.Retaliation >= attacker.Health + attacker.Armor ? attacker.Worth : target.Retaliation * 0.5f;
             if (target.Ability == CreatureAbility.HiveMind && attacker.Ability != CreatureAbility.None) value -= 1;
             return value;
         }
 
         // How dangerous a creature of theirs is: its Attack counts double when it can use it, a known ability adds
-        private static float Threat(SeenCreature creature) =>
-            creature.Attack * (creature.Operative ? 2 : 1) + creature.Health * 0.5f + (creature.Ability != CreatureAbility.None ? 1.5f : 0);
+        private float Threat(SeenCreature creature) =>
+            AttackOf(creature) * (creature.Operative && !IsStunned(creature) ? 2 : 1) + creature.Health * 0.5f
+            + (creature.Ability != CreatureAbility.None ? 1.5f : 0);
+
+        // Their creatures that can still hit us next Day, after what we planned today
+        private IEnumerable<SeenCreature> TheirAttackers() => view.Theirs.Where(c => c.Operative && !IsStunned(c) && HealthLeft(c) > 0);
 
         // All their creatures that can act could hit us for this much next Day, if nothing stopped them
-        private int TheirPotentialDamage() => view.Theirs.Where(c => c.Operative && HealthLeft(c) > 0).Sum(c => c.Attack);
+        private int TheirPotentialDamage() => TheirAttackers().Sum(AttackOf);
 
         // The biggest hit one of their creatures could land on this one of ours
         private int ThreatOn(SeenCreature ours) {
-            int biggest = view.Theirs.Where(c => c.Operative && HealthLeft(c) > 0).Select(c => c.Attack).DefaultIfEmpty(0).Max();
-            return biggest > 0 && ours.Exposed ? biggest + 1 : biggest;
+            int biggest = TheirAttackers().Select(AttackOf).DefaultIfEmpty(0).Max();
+            return biggest > 0 && IsExposed(ours) ? biggest + 1 : biggest;
         }
 
-        private bool WouldDie(SeenCreature ours) => ThreatOn(ours) >= ours.Health + ours.Armor && !ours.Has(StatusEffectType.Untouchable);
+        private bool WouldDie(SeenCreature ours) => ThreatOn(ours) >= HealthLeft(ours) && !IsUntouchable(ours);
 
         private void AttackSlot(SeenCreature attacker, SeenSlot target, int damage) {
             Log($"AI: {attacker} attacks {target}", LogTag.Turns);
@@ -308,15 +390,17 @@ namespace SlayTheClone {
         #region Values
         /// <summary>
         /// Roughly how much good one effect of a spell does for this side, played at this aim: what it does to each target it
-        /// lands on, counted for us on our side and against us on theirs (a random target counts as a share of each it may pick).
+        /// lands on, counted for us on our side and against us on theirs (a random target counts as a share of each it may
+        /// pick), each kind of good weighed by the style.
         /// </summary>
         private float Value(EffectAction action, Spell spell, ITarget aim) {
             // Good for whoever plays them, whichever side they look at
-            if (action.actionType is ActionType.CreateWatchdog or ActionType.SetTrend) return 1;
+            if (action.actionType == ActionType.SetTrend) return 1;
+            if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;
             if (action.actionType == ActionType.Reveal) {
-                if (!EffectResolver.UsesChosenTarget(action)) return 0.5f; // A side's Watchdogs
+                if (!EffectResolver.UsesChosenTarget(action)) return 0.5f * Style.Intel; // A side's Watchdogs
                 var seen = CreatureAt(aim);
-                return seen != null && !seen.Ours && !seen.Known ? 1 : 0.2f; // Or what may lie in the slot
+                return (seen != null && !seen.Ours && !seen.Known ? 1 : 0.2f) * Style.Intel; // Or what may lie in the slot
             }
 
             var targets = TargetsOf(action, aim);
@@ -331,9 +415,35 @@ namespace SlayTheClone {
                     IPlayer player => PlayerGoodness(player, action.actionType, action.value),
                     _ => 0
                 };
-                value += share * (IsOurs(target) ? good : -good);
+                bool ours = IsOurs(target);
+                value += share * Weight(action, target, ours, good) * (ours ? good : -good);
             }
             return value;
+        }
+
+        // How much the style cares for this kind of good (or harm) on this target
+        private float Weight(EffectAction action, object target, bool ours, float good) {
+            switch (action.actionType) {
+                case ActionType.Damage:
+                    return target is IPlayer ? ours ? Style.OwnHealth : Style.Face : ours ? Style.Board : Style.Removal;
+                case ActionType.Heal or ActionType.Armor or ActionType.Cleanse or ActionType.CleanseSlot:
+                    return ours ? Style.Protection : 1;
+                case ActionType.ModifyStat:
+                    return ours ? Style.Board : good < 0 ? Style.Statuses : 1;
+                case ActionType.ApplyStatus:
+                    if (action.statusEffectToApply is StatusEffectType.Concealed or StatusEffectType.Encrypted or StatusEffectType.Revealed) return Style.Intel;
+                    return ours ? good > 0 ? Style.Protection : Style.Board : Style.Statuses;
+                case ActionType.Stun or ActionType.DelayDeployment:
+                    return ours ? Style.Board : Style.Statuses;
+                case ActionType.PlaceSlotEffect:
+                    return ours && good > 0 ? Style.Protection : Style.Statuses;
+                case ActionType.Draw:
+                    return Style.Cards;
+                case ActionType.Summon:
+                    return Style.Board;
+                default:
+                    return 1;
+            }
         }
 
         // What the effect lands on, as EffectResolver picks it (see its SelectTargets), as this side sees it
@@ -363,9 +473,10 @@ namespace SlayTheClone {
                 else if (view.Of(target) is SeenCreature seen) targets.Add(seen);
             }
             // Hard knows Heat draws random effects: random damage goes to the hottest creature it can see, on either side
+            // (Heat it gives today counts too: a combo)
             if (Hard && action.targetModifier.HasFlag(TargetModifier.Random)) {
                 var pool = action.actionType == ActionType.Damage ? view.All : targets.OfType<SeenCreature>();
-                var hottest = pool.Where(c => c.Heat > 0).OrderByDescending(c => c.Heat).FirstOrDefault();
+                var hottest = pool.Where(c => HeatOf(c) > 0).OrderByDescending(HeatOf).FirstOrDefault();
                 if (hottest != null) return new List<object> { hottest };
             }
             return targets;
@@ -396,11 +507,11 @@ namespace SlayTheClone {
         }
 
         private float CreatureGoodness(SeenCreature creature, ActionType type, int amount) => type switch {
-            ActionType.Damage when creature.Has(StatusEffectType.Untouchable) => 0,
-            ActionType.Damage => DamageGoodness(creature, amount + (creature.Exposed ? 1 : 0)),
+            ActionType.Damage when IsUntouchable(creature) => 0,
+            ActionType.Damage => DamageGoodness(creature, amount + (IsExposed(creature) ? 1 : 0)),
             ActionType.Heal => creature.Known ? System.Math.Min(amount, creature.MaxHealth - creature.Health) : 0,
             ActionType.Armor => amount * 0.75f,
-            ActionType.Stun => creature.Operative ? -(creature.Attack + 1) : -0.5f,
+            ActionType.Stun => creature.Operative && !IsStunned(creature) ? -(AttackOf(creature) + 1) : -0.5f,
             ActionType.DelayDeployment => -1.5f * amount,
             _ => 0
         };
@@ -419,14 +530,19 @@ namespace SlayTheClone {
             return damage >= left ? -(creature.Worth + left) : -damage;
         }
 
+        // Hard: the change as the creature's ability bends it: Contrarian reverses it, Extremist doubles it
+        private int BentByAbility(int change, SeenCreature creature) {
+            if (creature.Ability == CreatureAbility.Contrarian) return -change;
+            return creature.Ability == CreatureAbility.Extremist ? change * 2 : change;
+        }
+
         private float StatChangeGoodness(EffectAction action, SeenCreature creature) {
             int change = action.value;
             if (Hard) {
                 bool enemyLowers = change < 0 && !creature.Ours;
                 if (enemyLowers && creature.Ability is CreatureAbility.Unbothered or CreatureAbility.Unpatchable) return 0;
                 if (enemyLowers && creature.Ability == CreatureAbility.NoU) return -change * 2; // Bounces to one of ours
-                if (creature.Ability == CreatureAbility.Contrarian) change = -change;
-                if (creature.Ability == CreatureAbility.Extremist) change *= 2;
+                change = BentByAbility(change, creature);
             }
             if (action.modifyHealth && change < 0 && -change >= HealthLeft(creature)) return -(creature.Worth + HealthLeft(creature)); // Its Health drops to 0
             float good = change * ((action.modifyAttack ? 1 : 0) + (action.modifyHealth ? 1 : 0) + (action.modifySpeed ? 0.5f : 0));
@@ -443,7 +559,7 @@ namespace SlayTheClone {
             int days = System.Math.Max(1, action.statusDuration);
             return action.statusEffectToApply switch {
                 StatusEffectType.Burned => -System.Math.Max(1, action.statusPotency) * days,
-                StatusEffectType.Exhausted => creature.Operative ? -(creature.Attack + 1) : -0.5f,
+                StatusEffectType.Exhausted => creature.Operative && !IsStunned(creature) ? -(AttackOf(creature) + 1) : -0.5f,
                 StatusEffectType.Doomed => -creature.Worth / 2f,
                 StatusEffectType.Blessed => System.Math.Max(1, action.statusPotency),
                 StatusEffectType.HeatSignature => -0.5f,
@@ -457,8 +573,9 @@ namespace SlayTheClone {
 
         // Hard: help for one of ours is worth what it saves: the whole creature if it would otherwise die next Day
         private float Protection(SeenCreature ours, ActionType type, int amount) {
+            if (IsUntouchable(ours)) return 0.1f; // Safe already
             int threat = ThreatOn(ours);
-            int toughness = ours.Health + ours.Armor;
+            int toughness = HealthLeft(ours);
             switch (type) {
                 case ActionType.Armor:
                     return threat >= toughness && threat < toughness + amount ? ours.Worth * 0.8f : amount * 0.4f;
@@ -499,8 +616,30 @@ namespace SlayTheClone {
         };
         #endregion
 
+        #region A creature as it will be when it counts (Hard: after today's spells)
+        private Forecast ForecastOf(SeenCreature creature) {
+            if (!forecasts.TryGetValue(creature, out var forecast)) forecasts[creature] = forecast = new Forecast();
+            return forecast;
+        }
+
+        // Today's spells change it, if what's weighed lands after them
+        private Forecast Expected(SeenCreature creature) => seeForecast && forecasts.TryGetValue(creature, out var forecast) ? forecast : null;
+
+        private int AttackOf(SeenCreature creature) => System.Math.Max(0, creature.Attack + (Expected(creature)?.Attack ?? 0));
+
+        private int HealthLeft(SeenCreature creature) {
+            var expected = Expected(creature);
+            return creature.Health + creature.Armor + (expected?.Health ?? 0) - (expected?.Damage ?? 0)
+                - (plannedDamage.TryGetValue(creature, out int damage) ? damage : 0);
+        }
+
+        private bool IsStunned(SeenCreature creature) => creature.Has(StatusEffectType.Exhausted) || (Expected(creature)?.Exhausted ?? false);
+        private bool IsExposed(SeenCreature creature) => creature.Exposed || (Expected(creature)?.Exhausted ?? false); // Exhausted exposes
+        private bool IsUntouchable(SeenCreature creature) => creature.Has(StatusEffectType.Untouchable) || (Expected(creature)?.Untouchable ?? false);
+        private int HeatOf(SeenCreature creature) => creature.Heat + (Expected(creature)?.Heat ?? 0);
+        #endregion
+
         #region Helpers
-        private int HealthLeft(SeenCreature creature) => creature.Health + creature.Armor - (plannedDamage.TryGetValue(creature, out int damage) ? damage : 0);
         private void AddDamage(SeenCreature creature, int damage) => plannedDamage[creature] = (plannedDamage.TryGetValue(creature, out int done) ? done : 0) + damage;
 
         private bool IsOurs(object target) => target switch {
