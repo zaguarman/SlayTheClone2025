@@ -44,6 +44,11 @@ STILL OPEN
     • Question: OK where it is, and want a hotkey for it?
 
 
+10. Keyword names and reminder text
+    • Done: triggers read Arrival, Last Will, Dawn, Dusk, When Hurt, On Hit; keyword abilities Retaliate X, Decay X, Regenerate X, Grow X, Second Wind. Abilities and statuses print their name only (no reminder text in parentheses), as Slay the Spire does; hovering explains them.
+    • Question: OK with these names? And should reminder text stay on cards for the rarer keywords (as Magic does on common cards)?
+
+
 ANSWERED (2026-10-12)
 
 • Fog of War views: the rules know everything; each player sees their own cards and what their cards revealed. The enemy's hand shows card backs and the enemy's cards can't be used. The screen plays player 1's side (Debug > Play As Player 2 / F10 switches, for testing).
