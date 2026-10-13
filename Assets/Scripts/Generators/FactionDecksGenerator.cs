@@ -332,7 +332,7 @@ namespace SlayTheClone {
                 "The hero can't die. It's only the second act.",
                 "Mechanics test: once per combat, when it would die (OnAboutToDie, resolving at once), it heals 1 and survives. The use is gone for the rest of the combat, even after the card is reshuffled.",
                 OncePerCombat(On(EffectTrigger.OnAboutToDie, Heal(1, TargetType.Self))))
-                .Picture("An action-movie hero strolling away from a huge explosion without a scratch, a hail of bullets bending politely around him, while a film crew in the corner holds up a clapperboard reading SEQUEL."),
+                .Picture("A close-up of a chest: two hands hold an open jacket wide, Superman style, showing a steel breastplate stamped PLOT."),
             Spell("YOLO", TargetType.FriendlyCreatures,
                 "Look Mom, no hands... Look Mom, no teef!",
                 "+4 Attack for this Day only, paid with 2 of your Health. Future: the creature is Banished at Dusk.",
@@ -341,7 +341,8 @@ namespace SlayTheClone {
             Spell("This Is Fine", TargetType.FriendlyCreatures,
                 "Everything is on fire. The coffee is still warm, though.",
                 "Future: a Trend (Location). Each Dusk, every creature takes 1 damage and yours shrug it off.",
-                Buff(2, TargetType.FriendlyCreatures, attack: false, health: true, Each), Damage(2, TargetType.AllCreatures, Each)),
+                Buff(2, TargetType.FriendlyCreatures, attack: false, health: true, Each), Damage(2, TargetType.AllCreatures, Each))
+                .Picture("The meme dog in a little bowler hat at a table with his coffee, the room on fire around him, saying THIS IS FINE."),
             Spell("Strike", TargetType.EnemyCreatures,
                 "Nobody works. Not them. Especially not us.",
                 "Future: a Strike. Stops Each Dawn triggers (engines) on both sides for 2 Days.",
@@ -349,7 +350,8 @@ namespace SlayTheClone {
             Spell("Russian Roulette", TargetType.AllCreatures,
                 "Five empty chambers. Your odds are great. Probably.",
                 "Future: you pick the first slot; each Dawn it moves to the next one until it fires.",
-                Damage(4, TargetType.AllCreatures, AtRandom)),
+                Damage(4, TargetType.AllCreatures, AtRandom))
+                .Picture("A Russian woman in a fur ushanka spinning a roulette wheel of six slices, one of them a skull, onion domes in the snow behind her."),
             Spell("Toxic Positivity", TargetType.FriendlyCreatures,
                 "Good vibes only. Bad vibes get one damage.",
                 "Future: a Temporary buff that turns into Burnout when it wears off.",
@@ -373,7 +375,7 @@ namespace SlayTheClone {
                 "Works from Bali. Works from Lisbon. Works, allegedly.",
                 "Mechanics test: Leapfrog on a cheap, fast creature.")
                 .With(MovementKeyword.Leapfrog)
-                .Picture("A laptop balanced on a surfboard on a white beach, a coconut beside it, the Wi-Fi icon showing a single bar."),
+                .Picture("A Tuareg nomad in a white turban and face veil, sitting cross-legged on a sand dune, typing on a laptop on his knees."),
             Creature("Keyboard Warrior", 1, 3, speed: 2, deploy: 0,
                 "Has never lost an argument. Has never left the house.",
                 "Mechanics test: OnDamaged fires on every hit, even one Armor absorbs or a killing blow, and still lands when it dies. Exhausted turns it off. No U: enemy effects that would lower its stats bounce back.",
@@ -409,7 +411,7 @@ namespace SlayTheClone {
                 "Six foot, a doctor, loves dogs. Is a fish.",
                 "Undercover: its plans are Concealed Actions, and it stays ??? to the other side until revealed.")
                 .With(CreatureAbility.Undercover)
-                .Picture("A catfish in a long blonde wig holding a phone at arm's length for a selfie, a beauty filter's sparkles around its face and an \"It's a match!\" heart floating above."),
+                .Picture("A cat and a goldfish in love: the cat presses its face to the fishbowl, the fish kisses the glass back, hearts all around."),
             Creature("Conspiracy Theorist", 1, 3, speed: 2, deploy: 0,
                 "Did his own research. For eleven minutes.",
                 "Unbothered: enemy effects can't lower its stats (the tinfoil works). Future: Doxxing, reveals.")
@@ -480,7 +482,7 @@ namespace SlayTheClone {
                 "Your call is important to us. Very important. We're recording it twice.",
                 "Mechanics test: Revealed for 2 Days, instant. It cancels Concealed and Undercover: the creature's plans can be seen, and Watchdogs can match them.",
                 Status(StatusEffectType.Revealed, 2, TargetType.EnemyCreatures))
-                .Picture("A rotary phone on an embassy desk, its cord running out of the window, down the wall and into a van marked FLOWER DELIVERY full of headphones."),
+                .Picture("Split in two by a lightning bolt: on one side a man chatting happily on his phone, on the other side of the call a blinking server."),
             Creature("Whistleblower", 1, 2, speed: 3, deploy: 0,
                 "Leaked everything. Now lives in an embassy closet.",
                 "Dead Man's Switch: when it dies, every enemy creature is Revealed for 2 Days.",
@@ -594,7 +596,7 @@ namespace SlayTheClone {
                 "Your wish is granted. Read the fine print.",
                 "Draw 3, and a random friendly creature is Doomed.",
                 Draw(3), Status(StatusEffectType.Doomed, 3, TargetType.FriendlyCreatures, modifier: AtRandom))
-                .Picture("A shrivelled monkey's paw giving a thumbs up, one of its fingers slowly curling down."),
+                .Picture("A shrivelled monkey's paw with three fingers still open, one already curled down: three wishes left."),
             Spell("Sacrificial Ritual", TargetType.FriendlyCreatures,
                 "Somebody has to go. Ideally the intern.",
                 "5 damage to a random friendly creature, then draw 2. Future: Myth's sacrifice cost (destroy a friendly creature).",

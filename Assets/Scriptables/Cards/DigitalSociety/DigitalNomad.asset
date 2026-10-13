@@ -20,8 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: 055b65cab845be34da54600eb3b0d94f, type: 3}
   effects: []
   designNotes: 'Mechanics test: Leapfrog on a cheap, fast creature.'
-  artDescription: A laptop balanced on a surfboard on a white beach, a coconut beside
-    it, the Wi-Fi icon showing a single bar.
+  artDescription: A Tuareg nomad in a white turban and face veil, sitting cross-legged
+    on a sand dune, typing on a laptop on his knees.
   attack: 2
   health: 2
   speed: 2

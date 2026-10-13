@@ -21,9 +21,8 @@ MonoBehaviour:
   effects: []
   designNotes: 'Undercover: its plans are Concealed Actions, and it stays ??? to
     the other side until revealed.'
-  artDescription: A catfish in a long blonde wig holding a phone at arm's length
-    for a selfie, a beauty filter's sparkles around its face and an "It's a match!"
-    heart floating above.
+  artDescription: 'A cat and a goldfish in love: the cat presses its face to the
+    fishbowl, the fish kisses the glass back, hearts all around.'
   attack: 2
   health: 1
   speed: 3

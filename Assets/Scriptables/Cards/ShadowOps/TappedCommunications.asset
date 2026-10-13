@@ -47,6 +47,6 @@ MonoBehaviour:
         moveEarlier: 0
   designNotes: 'Mechanics test: Revealed for 2 Days, instant. It cancels Concealed
     and Undercover: the creature''s plans can be seen, and Watchdogs can match them.'
-  artDescription: A rotary phone on an embassy desk, its cord running out of the
-    window, down the wall and into a van marked FLOWER DELIVERY full of headphones.
+  artDescription: 'Split in two by a lightning bolt: on one side a man chatting happily
+    on his phone, on the other side of the call a blinking server.'
   defaultTargetType: 4

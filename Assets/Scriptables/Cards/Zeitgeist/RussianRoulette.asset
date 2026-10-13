@@ -47,5 +47,6 @@ MonoBehaviour:
         moveEarlier: 0
   designNotes: 'Future: you pick the first slot; each Dawn it moves to the next one
     until it fires.'
-  artDescription: 
+  artDescription: A Russian woman in a fur ushanka spinning a roulette wheel of six
+    slices, one of them a skull, onion domes in the snow behind her.
   defaultTargetType: 2

@@ -48,9 +48,8 @@ MonoBehaviour:
   designNotes: 'Mechanics test: once per combat, when it would die (OnAboutToDie,
     resolving at once), it heals 1 and survives. The use is gone for the rest of
     the combat, even after the card is reshuffled.'
-  artDescription: An action-movie hero strolling away from a huge explosion without
-    a scratch, a hail of bullets bending politely around him, while a film crew in
-    the corner holds up a clapperboard reading SEQUEL.
+  artDescription: 'A close-up of a chest: two hands hold an open jacket wide, Superman
+    style, showing a steel breastplate stamped PLOT.'
   attack: 2
   health: 2
   speed: 2

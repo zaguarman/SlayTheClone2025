@@ -1129,14 +1129,28 @@ def yolo():
 
 
 def this_is_fine():
-    defs, body = bg_vapor()
-    body += flames(176, 200, 9, 40, 50)
-    body += path("M126 200 C 126 160 226 160 226 200 Z", "#3a3a3a")
-    body += ellipse(176, 104, 40, 50, "#f0f0f0", 'stroke="#222" stroke-width="2.5"')
-    body += stroke("M150 92 L166 98 M202 92 L186 98", "#222", 2.5)
-    body += circle(160, 104, 2.5, "#222") + circle(192, 104, 2.5, "#222")
-    body += stroke("M166 134 Q 176 138 186 132", "#222", 2)
-    body += path("M222 150 L246 150 L244 172 L224 172 Z", "#ffffff", 'stroke="#222" stroke-width="2"') + stroke("M246 156 q 8 4 0 10", "#ffffff", 3)
+    defs = lin("bg", ["#c8603a", "#7a2a1a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += rect(0, 0, W, 34, "#3a2a2a", 'opacity="0.8"')
+    for x in (40, 120, 220, 300):
+        body += cloud(x, 24, 0.9, "#2a2020", 0.8)
+    body += flames(40, 200, 3, 26, 70) + flames(312, 200, 3, 26, 70) + flames(176, 60, 4, 30, 24)
+    body += rect(108, 166, 150, 34, "#6a4a2a")
+    # The dog, in its little hat, with its coffee
+    body += path("M130 200 C 130 150 222 150 222 200 Z", "#e8b45a", 'stroke="#8a5a2a" stroke-width="2"')
+    body += ellipse(140, 112, 14, 30, "#8a5a2a", 'transform="rotate(20 140 112)"')
+    body += ellipse(212, 112, 14, 30, "#8a5a2a", 'transform="rotate(-20 212 112)"')
+    body += ellipse(176, 110, 38, 34, "#e8b45a", 'stroke="#8a5a2a" stroke-width="2"')
+    body += ellipse(176, 126, 20, 14, "#f6d8a0")
+    body += ellipse(176, 118, 7, 5, "#222")
+    body += circle(162, 102, 4, "#222") + circle(190, 102, 4, "#222")
+    body += stroke("M168 132 Q 176 138 184 132", "#222", 2)
+    body += ellipse(176, 78, 26, 5, "#1a1a1a") + path("M158 78 C 158 58 194 58 194 78 Z", "#1a1a1a")
+    body += path("M214 152 L238 152 L236 176 L216 176 Z", "#ffffff", 'stroke="#222" stroke-width="2"') + stroke("M238 158 q 8 4 0 10", "#ffffff", 3)
+    body += path("M196 168 C 204 160 214 160 218 166", "none", 'stroke="#e8b45a" stroke-width="10" stroke-linecap="round"')
+    # The speech bubble
+    body += path("M206 44 L326 44 L326 80 L248 80 L230 96 L234 80 L206 80 Z", "#ffffff", 'stroke="#222" stroke-width="2"')
+    body += lettering("THIS IS FINE", 266, 56, 11, "#222", width=1.8)
     return svg(defs, body)
 
 
@@ -1150,15 +1164,43 @@ def strike():
     return svg(defs, body)
 
 
+def ushanka(hx, hy, r):
+    # A big fluffy fur hat: a round crown, a thick folded-up front and ear flaps hanging down
+    fur, edge = "#8a6040", 'stroke="#4a301a" stroke-width="2"'
+    out = ellipse(hx - r * 1.1, hy + r * 0.35, r * 0.42, r * 0.8, fur, edge) + ellipse(hx + r * 1.1, hy + r * 0.35, r * 0.42, r * 0.8, fur, edge)
+    out += ellipse(hx, hy - r * 1.05, r * 1.25, r * 0.95, "#6a4428", edge)
+    for k in range(7):
+        out += circle(hx - r * 1.2 + k * r * 0.4, hy - r * 0.55, r * 0.3, fur, edge)
+    out += rect(hx - r * 1.25, hy - r * 0.8, r * 2.5, r * 0.5, fur)
+    out += poly(star_points(hx, hy - r * 0.6, r * 0.24, r * 0.1, 5), "#d0342c", 'stroke="#7a1a1a" stroke-width="1"')
+    return out
+
+
 def russian_roulette():
-    defs, body = bg_vapor()
-    body += circle(176, 100, 70, "#5a5a6a", 'stroke="#2a2a36" stroke-width="5"') + circle(176, 100, 14, "#2a2a36")
+    defs = lin("bg", ["#5a1a1a", "#1a0a0a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    # Onion domes in the snow
+    for x, h in ((26, 60), (60, 80), (326, 66)):
+        body += rect(x - 10, H - h, 20, h, "#2a1010") + path(f"M{x - 16} {H - h} C {x - 16} {H - h - 20} {x} {H - h - 24} {x} {H - h - 36} C {x} {H - h - 24} {x + 16} {H - h - 20} {x + 16} {H - h} Z", "#3a1414")
+    for i in range(20):
+        body += circle((i * 53) % W, (i * 37) % 170, 1.6, "#ffffff", 'opacity="0.6"')
+    # The wheel: six slices, one of them a skull
+    cx, cy, r = 236, 100, 74
     for i in range(6):
-        a = math.radians(-90 + i * 60)
-        x, y = 176 + 42 * math.cos(a), 100 + 42 * math.sin(a)
-        body += circle(x, y, 15, "#111")
-        if i == 0:
-            body += circle(x, y, 11, "#d4af37") + circle(x, y, 5, "#a87a1a")
+        a1, a2 = math.radians(-90 + i * 60), math.radians(-30 + i * 60)
+        color = "#c0392b" if i % 2 else "#1a1a1a"
+        body += path(f"M{cx} {cy} L{cx + r * math.cos(a1):.1f} {cy + r * math.sin(a1):.1f} A {r} {r} 0 0 1 {cx + r * math.cos(a2):.1f} {cy + r * math.sin(a2):.1f} Z", color, 'stroke="#d4af37" stroke-width="2"')
+    am = math.radians(-60)
+    body += skull(cx + 46 * math.cos(am), cy + 46 * math.sin(am) - 4, 0.9)
+    body += circle(cx, cy, r, "none", 'stroke="#d4af37" stroke-width="5"') + circle(cx, cy, 10, "#d4af37")
+    body += poly([(cx - 9, 14), (cx + 9, 14), (cx, 32)], "#f2efe6", 'stroke="#555" stroke-width="1.5"')
+    body += path(f"M{cx - 92} {cy + 30} A 96 96 0 0 1 {cx - 70} {cy - 66}", "none", 'stroke="#ffffff" stroke-width="3" opacity="0.6"')
+    # The lady who spins it
+    body += person(86, 200, 1.35, SKIN[0], "#2a4a8a", face="smirk", brows="angry")
+    hx, hy = 86, 200 - 64 * 1.35
+    body += ushanka(hx, hy, 20 * 1.35)
+    body += circle(hx - 9, hy + 6, 4, "#ff6a6a", 'opacity="0.6"') + circle(hx + 9, hy + 6, 4, "#ff6a6a", 'opacity="0.6"')
+    body += stroke("M112 160 C 132 140 150 132 166 128", SKIN[0], 9)
     return svg(defs, body)
 
 
@@ -1340,14 +1382,27 @@ def chronically_online():
 
 
 def digital_nomad():
-    defs, body = bg_sky(top="#5ac8f0", bottom="#fff0c0")
-    body += rect(0, 150, W, 50, "#f6e6b4") + path("M0 150 C 80 140 160 158 240 146 C 290 140 330 150 352 146 L352 150 L0 150 Z", "#3aa0d0")
-    body += group(ellipse(0, 0, 110, 16, "#ff7a5a", 'stroke="#c04a2a" stroke-width="3"') + stroke("M-100 0 L100 0", "#ffffff", 3), "translate(170 168) rotate(-6)")
-    body += rect(134, 124, 76, 38, "#c8ccd4", 'rx="3" stroke="#555" stroke-width="2"') + rect(140, 128, 64, 30, "#3a6ad0")
-    body += circle(266, 160, 16, "#7a4a22") + circle(262, 154, 3, "#3a2210")
-    for k, r in enumerate((10, 20, 30)):
-        body += path(f"M{290 - r} {70} A{r} {r} 0 0 1 {290 + r} 70", "none", f'stroke="{"#ffffff" if k == 0 else "#ffffff"}" stroke-width="5" opacity="{1 if k == 0 else 0.25}"')
-    body += circle(290, 74, 4, "#ffffff")
+    defs = lin("bg", ["#7ab8e8", "#cfe4f2"]) + lin("sand", ["#f0b070", "#d8884a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += path("M0 130 C 60 110 120 120 170 132 C 230 116 300 108 352 126 L352 200 L0 200 Z", "#e8a868")
+    body += path("M0 160 C 90 140 200 150 352 156 L352 200 L0 200 Z", "url(#sand)")
+    # A Tuareg in a white turban and veil, cross-legged on the dune, laptop on his knees
+    robe = "#e6dcc4"
+    body += path("M96 196 C 100 160 130 150 176 150 C 222 150 252 160 256 196 Z", robe, 'stroke="#a89878" stroke-width="2"')
+    body += path("M140 150 C 136 110 150 92 176 92 C 202 92 216 110 212 150 Z", robe, 'stroke="#a89878" stroke-width="2"')
+    for x in (156, 170, 184, 198):
+        body += stroke(f"M{x} 104 L{x - 4} 150", "#c8bca0", 1.5)
+    body += stroke("M176 96 L176 140", "#8a6a4a", 2)
+    body += circle(176, 70, 22, "#8a5a3a")
+    body += path("M150 66 C 150 34 202 34 202 66 C 196 52 156 52 150 66 Z", "#f6f2ea", 'stroke="#c8c0b0" stroke-width="2"')
+    body += path("M152 60 C 160 44 192 44 200 60 L200 66 L152 66 Z", "#f6f2ea")
+    body += path("M152 74 C 156 96 196 96 200 74 L200 90 C 190 104 162 104 152 90 Z", "#f6f2ea", 'stroke="#c8c0b0" stroke-width="2"')
+    body += stroke("M156 54 Q 176 48 196 54 M154 80 Q 176 88 198 80", "#d8d0c0", 1.5)
+    body += ellipse(167, 67, 3, 2, "#222") + ellipse(185, 67, 3, 2, "#222")
+    body += stroke("M162 62 L171 63 M181 63 L190 62", "#3a2a1a", 1.8)
+    body += rect(150, 160, 52, 4, "#9aa0a8") + path("M154 160 L148 128 L204 128 L198 160 Z", "#c8ccd4", 'stroke="#555" stroke-width="2"')
+    body += path("M156 156 L152 132 L200 132 L196 156 Z", "#3a6ad0")
+    body += stroke("M128 168 C 140 158 148 156 154 158 M224 168 C 212 158 204 156 198 158", "#8a5a3a", 6)
     return svg(defs, body)
 
 
@@ -1800,15 +1855,21 @@ def smoke_and_mirrors():
 
 
 def tapped_communications():
-    defs = lin("bg", ["#d8c8a0", "#a89870"])
+    defs = lin("bg", ["#e8d8b0", "#c8a870"])
     body = rect(0, 0, W, H, "url(#bg)")
-    body += path("M40 70 C 40 40 70 30 90 46 L104 58 C 110 64 104 72 96 70 C 86 66 74 66 68 80 C 64 90 70 104 80 112 L96 122 C 104 128 100 140 90 138 L76 134 C 50 128 40 100 40 70 Z", "#2a2a2a")
-    body += stroke("M92 134 C 120 160 140 100 170 120 C 196 136 200 80 226 92", "#2a2a2a", 3)
-    body += rect(222, 82, 30, 20, "#b8bcc4", 'rx="3" stroke="#555" stroke-width="2"') + path("M252 86 L282 86 C 294 86 294 98 294 108 L282 108 C 282 100 280 98 274 98 L252 98 Z", "#b8bcc4", 'stroke="#555" stroke-width="2"')
-    body += rect(228, 70, 18, 12, "#888") + rect(220, 64, 34, 8, "#d0342c", 'rx="3"')
-    for k, y in enumerate((122, 142, 160)):
-        body += path(f"M288 {y} C 284 {y + 8} 292 {y + 8} 288 {y} Z", "#4a8ad0")
-    body += path("M262 176 L314 176 L308 200 L268 200 Z", "#e8e8e8", 'stroke="#888" stroke-width="2"') + rect(268, 186, 40, 12, "#4a8ad0", 'opacity="0.7"')
+    # The other side of the call: a server, across a lightning split
+    body += poly([(200, 0), (W, 0), (W, H), (150, H)], "#0e1a24")
+    for i in range(6):
+        body += stroke(f"M{196 + i * 10} 0 L{146 + i * 10} 200", "#1a3a4a", 1, 'opacity="0.3"')
+    body += server_rack(240, 24, 84, 156)
+    body += circle(282, 14, 6, "#ff3a3a")
+    body += poly([(206, 0), (176, 70), (196, 74), (160, 140), (182, 142), (146, 200), (162, 200), (204, 132), (184, 128), (220, 62), (198, 58), (224, 0)], "#ffe23a", 'stroke="#ffffff" stroke-width="2"')
+    # A guy on the phone, chatting away
+    body += person(84, 200, 1.4, SKIN[1], "#5a7a3a", face="grin", hair="#3a2a1a")
+    body += rect(104, 88, 14, 30, "#1b1b22", 'rx="4" transform="rotate(15 111 103)"')
+    body += stroke("M118 150 L112 112", SKIN[1], 9)
+    for k in range(3):
+        body += path(f"M{126 + k * 8} {80 - k * 4} A {10 + k * 8} {10 + k * 8} 0 0 1 {126 + k * 8} {110 + k * 4}", "none", 'stroke="#3a2a1a" stroke-width="2.5"')
     return svg(defs, body)
 
 
@@ -1914,6 +1975,14 @@ def plot_armor():
     body += stroke("M118 28 L140 50", "#ffffff", 4, 'opacity="0.5"')
     body += path("M0 0 L90 0 L108 60 L80 200 L0 200 Z", "#1c1c28") + path("M352 0 L262 0 L244 60 L272 200 L352 200 Z", "#1c1c28")
     body += path("M90 0 L108 60 L96 66 L78 0 Z", "#2c2c3c") + path("M262 0 L244 60 L256 66 L274 0 Z", "#2c2c3c")
+    # The hands holding the jacket open, Superman style
+    for side in (-1, 1):
+        x = 176 + side * 84
+        fist = (rect(-16, -20, 32, 40, SKIN[1], 'rx="10" stroke="#8a5a3a" stroke-width="2"')
+                + stroke("M-14 -8 L6 -8 M-14 4 L6 4", "#8a5a3a", 1.8)
+                + rect(4 if side < 0 else -20, -26, 16, 16, SKIN[1], 'rx="7" stroke="#8a5a3a" stroke-width="2"'))
+        body += group(fist, f"translate({x} 96) rotate({side * 8})")
+        body += path(f"M{x + side * 14} 116 L{x + side * 40} 200 L{x + side * 74} 200 L{x + side * 30} 110 Z", "#1c1c28")
     return svg(defs, body)
 
 
@@ -2614,22 +2683,28 @@ def gene_editing():
 
 def catfish():
     defs, body = bg_digital()
-    # A blonde wig over a fish
-    body += path("M86 70 C 90 30 170 24 196 60 C 210 90 200 140 186 156 L170 120 L150 150 L120 120 L100 150 C 84 130 82 100 86 70 Z", "#f2d06a", 'stroke="#c8a040" stroke-width="2"')
-    body += ellipse(150, 110, 70, 36, "#8a9a8a", 'stroke="#5a6a5a" stroke-width="2"')
-    body += poly([(80, 110), (44, 84), (48, 136)], "#7a8a7a", 'stroke="#5a6a5a" stroke-width="2"')
-    body += path("M110 62 C 130 44 170 46 190 70 C 170 60 140 60 120 72 Z", "#f2d06a")
-    body += eye(186, 98, 9) + stroke("M178 86 L196 88", "#222", 2)
-    body += path("M206 116 Q 216 120 206 126", "none", 'stroke="#c0392b" stroke-width="3"')
-    for k in (-1, 1):
-        body += stroke(f"M212 {118 + k * 4} Q 240 {130 + k * 24} 250 {150 + k * 30}", "#3a4a3a", 2)
-    # The selfie, at fin's length
-    body += stroke("M150 132 Q 220 170 262 128", "#7a8a7a", 7)
-    body += phone(272, 110, 1.1, "#ffd6f0")
-    for x, y in ((240, 70), (300, 80), (290, 140)):
-        body += poly(star_points(x, y, 7, 2.5, 4), "#ffffff")
-    body += path("M288 26 C 280 14 262 20 270 34 L288 50 L306 34 C 314 20 296 14 288 26 Z", "#ff4a8a")
-    body += lettering("MATCH", 288, 54, 8, "#ffffff", outline="#ff4a8a")
+    # A goldfish in its bowl and a cat kissing it through the glass, hearts everywhere
+    body += ellipse(232, 120, 66, 60, "#bfe8ff", 'opacity="0.55" stroke="#ffffff" stroke-width="3"')
+    body += rect(186, 64, 92, 10, "#ffffff", 'rx="5" opacity="0.7"')
+    body += path("M168 150 Q 232 136 296 150 L292 170 Q 232 182 172 170 Z", "#5ab0e0", 'opacity="0.5"')
+    body += ellipse(226, 118, 30, 20, "#ff8a2a", 'stroke="#c0581a" stroke-width="2"')
+    body += poly([(254, 118), (276, 102), (276, 134)], "#ff8a2a", 'stroke="#c0581a" stroke-width="2"')
+    body += path("M222 100 Q 232 88 240 100 Z", "#ff8a2a")
+    body += circle(212, 114, 4, "#222") + circle(213, 113, 1.4, "#ffffff")
+    body += path("M196 120 Q 200 124 196 128", "none", 'stroke="#c0392b" stroke-width="2.5"')
+    body += ellipse(206, 124, 5, 3, "#ff6a8a", 'opacity="0.7"')
+    # The cat, pressed against the glass
+    body += path("M40 200 C 40 140 70 120 108 120 C 140 120 156 150 156 200 Z", "#f2a24a", 'stroke="#a86a2a" stroke-width="2"')
+    body += circle(118, 100, 40, "#f2a24a", 'stroke="#a86a2a" stroke-width="2"')
+    body += poly([(88, 76), (84, 42), (110, 64)], "#f2a24a", 'stroke="#a86a2a" stroke-width="2"')
+    body += poly([(136, 66), (152, 40), (156, 76)], "#f2a24a", 'stroke="#a86a2a" stroke-width="2"')
+    body += stroke("M100 96 q 6 -6 12 0 M128 96 q 6 -6 12 0", "#3a2a1a", 2.5)
+    body += path("M150 110 Q 160 106 166 112 Q 160 118 150 114 Z", "#ff6a8a")
+    body += ellipse(108, 112, 7, 4, "#ff8aa8", 'opacity="0.7"')
+    body += stroke("M150 104 l 22 -6 M150 112 l 22 2", "#a86a2a", 1.5)
+    body += path("M140 160 C 160 150 172 140 176 128", "none", 'stroke="#f2a24a" stroke-width="14" stroke-linecap="round"')
+    for x, y, k in ((176, 40, 1.0), (206, 22, 0.7), (150, 26, 0.6), (300, 40, 0.8)):
+        body += path(f"M{x} {y + 6 * k} C {x - 8 * k} {y - 4 * k} {x - 18 * k} {y + 4 * k} {x} {y + 18 * k} C {x + 18 * k} {y + 4 * k} {x + 8 * k} {y - 4 * k} {x} {y + 6 * k} Z", "#ff4a8a")
     return svg(defs, body)
 
 
@@ -2958,18 +3033,20 @@ def excess_of_bread_and_wine():
 def monkey_hand():
     defs = lin("bg", ["#2a1a3a", "#0e0814"]) + rad("glow", [("#9aff7a", 0.35), ("#9aff7a", 0)])
     body = rect(0, 0, W, H, "url(#bg)") + circle(176, 100, 100, "url(#glow)")
-    body += rect(140, 140, 72, 70, "#6a4a2a", 'rx="10"')
-    body += rect(132, 92, 88, 64, "#7a5a3a", 'rx="22" stroke="#4a2e1a" stroke-width="3"')
-    body += rect(196, 30, 26, 80, "#7a5a3a", 'rx="12" stroke="#4a2e1a" stroke-width="3"')
-    for i, (x, curl) in enumerate(((140, 0), (158, 0), (176, 0), (194, 1))):
-        if curl:
-            body += path(f"M{x} 100 C {x} 80 {x + 18} 76 {x + 20} 92", "none", 'stroke="#7a5a3a" stroke-width="16" stroke-linecap="round"')
-        else:
-            body += ellipse(x + 6, 100, 9, 13, "#7a5a3a", 'stroke="#4a2e1a" stroke-width="2"')
-    for y in (110, 124, 138):
-        body += stroke(f"M140 {y} q 20 -4 40 0 q 16 4 32 0", "#4a2e1a", 1.5)
-    body += stroke("M200 50 q 10 4 18 0 M200 66 q 10 4 18 0", "#4a2e1a", 1.5)
-    body += speed_lines(244, 90, 2, 14, "#9aff7a")
+    paw, line = "#7a5a3a", 'stroke="#4a2e1a" stroke-width="3"'
+    body += rect(148, 150, 60, 60, "#6a4a2a", 'rx="10"')
+    # Three fingers still open: three wishes left
+    for x, top in ((146, 34), (168, 22), (190, 30)):
+        body += rect(x, top, 18, 100 - top + 20, paw, f'rx="9" {line}')
+        for y in (top + 22, top + 46):
+            body += stroke(f"M{x + 3} {y} q 6 3 12 0", "#4a2e1a", 1.5)
+    # The fourth already curled down, and the thumb
+    body += ellipse(220, 104, 11, 14, paw, line)
+    body += rect(108, 96, 46, 18, paw, f'rx="9" {line} transform="rotate(-30 131 105)"')
+    body += rect(140, 92, 92, 66, paw, f'rx="22" {line}')
+    for y in (112, 126, 140):
+        body += stroke(f"M150 {y} q 20 -4 40 0 q 16 4 32 0", "#4a2e1a", 1.5)
+    body += speed_lines(260, 60, 2, 14, "#9aff7a")
     return svg(defs, body)
 
 
