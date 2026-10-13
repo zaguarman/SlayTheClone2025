@@ -15,6 +15,7 @@ namespace SlayTheClone {
     public static class PlayerDecks {
         public const int DeckSize = 20; // As many as a starter deck
         public const int MaxCopies = 2;
+        public const int MaxNameLength = 20;
         public const string NewDeckName = "New deck";
 
         [Serializable]
@@ -72,7 +73,7 @@ namespace SlayTheClone {
 
         /// <summary>"14 / 20 cards · Corporate + Myth": how full it is, and its faction or two.</summary>
         public static string Describe(DeckScriptableObject deck) {
-            string factions = string.Join(" + ", DeckCatalog.FactionsOf(deck).Take(3).Select(CardTextFormatter.FactionName));
+            string factions = string.Join(" + ", DeckCatalog.FactionsOf(deck).Take(3).Select(CardTextFormatter.FactionLabel));
             string size = IsComplete(deck) ? $"{DeckSize} cards" : $"{deck.Cards.Count} / {DeckSize} cards";
             return factions.Length > 0 ? $"{size} · {factions}" : size;
         }
@@ -105,7 +106,7 @@ namespace SlayTheClone {
             return true;
         }
 
-        /// <summary>Renames the deck; a blank name keeps the old one, and a name another deck has gets a number.</summary>
+        /// <summary>Renames the deck; a blank name keeps the old one, a long one is cut to 20 characters, and a name another deck has gets a number.</summary>
         public static void Rename(DeckScriptableObject deck, string name) {
             if (!IsPlayers(deck) || string.IsNullOrWhiteSpace(name) || name.Trim() == deck.GetDeckName()) return;
             deck.SetName(UniqueName(name.Trim(), deck));
@@ -118,14 +119,15 @@ namespace SlayTheClone {
             Save();
         }
 
-        // "New deck", then "New deck 2", "New deck 3"...: no two decks share a name, starter decks included
+        // "New deck", then "New deck 2", "New deck 3"...: no two decks share a name, starter decks included, and none is
+        // longer than 20 characters (the number included)
         private static string UniqueName(string name, DeckScriptableObject renamed) {
             var taken = new HashSet<string>(decks.Where(d => d != renamed).Select(d => d.GetDeckName())
                 .Concat(catalog != null ? catalog.AllDecks.Select(d => d.GetDeckName()) : Enumerable.Empty<string>()), StringComparer.OrdinalIgnoreCase);
-            if (!taken.Contains(name)) return name;
-            int number = 2;
-            while (taken.Contains($"{name} {number}")) number++;
-            return $"{name} {number}";
+            string Cut(string text, int room) => text.Length > room ? text.Substring(0, room).TrimEnd() : text;
+            string candidate = Cut(name, MaxNameLength);
+            for (int number = 2; taken.Contains(candidate); number++) candidate = $"{Cut(name, MaxNameLength - 1 - number.ToString().Length)} {number}";
+            return candidate;
         }
 
         private static void Load(DeckCatalog cardsFrom) {

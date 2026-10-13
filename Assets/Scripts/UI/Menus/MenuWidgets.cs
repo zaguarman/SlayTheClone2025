@@ -2,7 +2,6 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
@@ -167,17 +166,6 @@ namespace SlayTheClone {
             under.overflowMode = TextOverflowModes.Truncate;
             return button;
         }
-        /// <summary>A strip of the faction's color down the button's left edge.</summary>
-        public static void AddFactionMark(Button button, Faction faction) {
-            var mark = NewObject("FactionMark", button.transform);
-            var rect = (RectTransform)mark.transform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.offsetMin = new Vector2(5f, 9f);
-            rect.offsetMax = new Vector2(11f, -9f);
-            UITheme.Round(mark.AddComponent<Image>(), UITheme.FactionColor(faction), 0.5f).raycastTarget = false;
-        }
-
         public static Color PanelColor => UITheme.Panel;
         public static Color ButtonColor => UITheme.PanelLight;
         public static readonly Color SelectedColor = UITheme.Hex(0x6B5222);

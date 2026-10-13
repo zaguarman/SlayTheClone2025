@@ -52,14 +52,8 @@ namespace SlayTheClone {
         /// <summary>The body of a card's frame: its faction's color, deepened toward the table's navy.</summary>
         public static Color CardFrameColor(Faction faction) => Color.Lerp(Hex(0x101828), FactionColor(faction), 0.5f);
 
-        /// <summary>A one-glyph emblem for a faction, shown on the player's plaque.</summary>
-        public static string FactionGlyph(Faction faction) => faction switch {
-            Faction.Corporate => "$",
-            Faction.Statecraft => "§",
-            Faction.Zeitgeist => "#",
-            Faction.None => "~",
-            _ => CardTextFormatter.FactionName(faction).Substring(0, 1)
-        };
+        /// <summary>A faction's emblem as text (see <see cref="EffectIcons.ForFaction"/>), shown on the player's plaque; "~" for none.</summary>
+        public static string FactionGlyph(Faction faction) => faction == Faction.None ? "~" : EffectIcons.Tag(EffectIcons.ForFaction(faction));
 
         public static Color HealthColor(float fraction) =>
             fraction > 0.5f ? HealthHigh : fraction > 0.25f ? HealthMid : HealthLow;

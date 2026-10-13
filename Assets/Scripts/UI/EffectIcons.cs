@@ -41,6 +41,9 @@ namespace SlayTheClone {
 
         public static string Tag(string icon) => string.IsNullOrEmpty(icon) ? "" : $"<sprite name=\"{icon}\">";
 
+        /// <summary>The faction's emblem: its symbol in its color on a dark medallion ringed in brass. None has none.</summary>
+        public static string ForFaction(Faction faction) => faction == Faction.None ? null : "faction_" + faction.ToString().ToLowerInvariant();
+
         public static string ForStatus(StatusEffectType status) {
             switch (status) {
                 case StatusEffectType.Exhausted: return Paralyze;

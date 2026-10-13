@@ -195,6 +195,10 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(PlayerDecks.DeckSize, yourDeck.Cards.Count, "Cards are added until the deck is full, not beyond");
             Assert.GreaterOrEqual(DeckCatalog.FactionsOf(yourDeck).Count, 2, "...whatever their faction");
             var name = builder.NameField;
+            Assert.AreEqual(PlayerDecks.MaxNameLength, name.characterLimit, "A deck's name is 20 characters at most...");
+            name.text = "The Longest Deck Name Ever Typed";
+            name.onEndEdit.Invoke(name.text);
+            Assert.AreEqual("The Longest Deck Nam", yourDeck.GetDeckName(), "...even pasted");
             name.text = "Mixtape";
             name.onEndEdit.Invoke(name.text);
             Assert.AreEqual("Mixtape", yourDeck.GetDeckName(), "Typing a name renames it");

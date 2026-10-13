@@ -19,7 +19,7 @@ namespace SlayTheClone {
         private const float IconCellSize = 128f; // Size of one icon cell in the SVG's own units
 
         // Each icon is a <g id="name" transform="translate(x y)"> in the sheet
-        private static readonly Regex IconCell = new Regex("<g id=\"([a-z]+)\" transform=\"translate\\((\\d+) (\\d+)\\)\">");
+        private static readonly Regex IconCell = new Regex("<g id=\"([a-z_]+)\" transform=\"translate\\((\\d+) (\\d+)\\)\">");
         private static readonly Regex ViewBox = new Regex("viewBox=\"0 0 (\\d+) (\\d+)\"");
 
         [MenuItem("Cards/Build Effect Icons")]

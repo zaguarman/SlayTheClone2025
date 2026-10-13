@@ -37,11 +37,11 @@ namespace SlayTheClone {
         public IReadOnlyList<CardDataScriptableObject> AllCards => AllDecks.SelectMany(d => d.Cards).Where(c => c != null).Distinct()
             .OrderBy(c => c.faction).ThenBy(c => c.cardName).ToList();
 
-        /// <summary>"17 cards · Corporate", "13 cards · Shadow Ops. + Mind": the size of the deck, and its faction or two.</summary>
+        /// <summary>"17 cards · Corporate", "13 cards · Shadow Ops. + Mind": the size of the deck, and its faction or two, each with its emblem.</summary>
         public static string Describe(DeckScriptableObject deck) {
             var factions = FactionsOf(deck);
             string summary = $"{deck.Cards.Count} cards";
-            return factions.Count is 1 or 2 ? $"{summary} · {string.Join(" + ", factions.Select(CardTextFormatter.FactionName))}" : summary;
+            return factions.Count is 1 or 2 ? $"{summary} · {string.Join(" + ", factions.Select(CardTextFormatter.FactionLabel))}" : summary;
         }
 
         /// <summary>The factions of the deck's cards, the one with the most cards first.</summary>
