@@ -2086,10 +2086,13 @@ def build_icons():
         "conceal": icon_eye("#8a93a8") + stroke("M18 110 L110 18", "#1b1b22", 16) + stroke("M18 110 L110 18", "#d8434f", 8),
         # Revealed: a wide open eye
         "reveal": icon_eye("#ffd257"),
-        # Days: a calendar page, for how long something lasts
-        "days": rect(14, 20, 100, 96, "#f2efe6", f'rx="12" {OUTLINE}') + rect(14, 20, 100, 30, "#d8434f", f'rx="12" {OUTLINE}')
-                + rect(36, 8, 12, 26, "#1b1b22", 'rx="5"') + rect(80, 8, 12, 26, "#1b1b22", 'rx="5"')
-                + "".join(rect(28 + c * 26, 62 + r * 24, 16, 14, "#9aa3b5", 'rx="3"') for r in range(2) for c in range(3)),
+        # Days: a sand watch, for how long something lasts. Golden sand in a wooden frame (Doom's runs red)
+        "days": rect(22, 6, 84, 14, "#a8743a", f'rx="5" {OUTLINE}') + rect(22, 108, 84, 14, "#a8743a", f'rx="5" {OUTLINE}')
+                + stroke("M30 20 L30 108", "#1b1b22", 9) + stroke("M98 20 L98 108", "#1b1b22", 9)
+                + stroke("M30 20 L30 108", "#c48a48", 4) + stroke("M98 20 L98 108", "#c48a48", 4)
+                + path("M38 20 L90 20 C 90 44 72 54 67 64 C 72 74 90 84 90 108 L38 108 C 38 84 56 74 61 64 C 56 54 38 44 38 20 Z", "#dff1ff", OUTLINE)
+                + path("M46 104 L82 104 C 80 92 70 86 64 80 C 58 86 48 92 46 104 Z", "#ffc93a")
+                + poly([(50, 36), (78, 36), (64, 52)], "#ffc93a") + stroke("M64 54 L64 80", "#ffc93a", 3),
         # Encrypted: a padlock
         "encrypt": path("M38 58 L38 40 C 38 20 52 10 64 10 C 76 10 90 20 90 40 L90 58", "none", 'stroke="#1b1b22" stroke-width="20"')
                    + path("M38 58 L38 40 C 38 20 52 10 64 10 C 76 10 90 20 90 40 L90 58", "none", 'stroke="#b9c3d6" stroke-width="10"')
@@ -2490,6 +2493,14 @@ def placebo():
     body += ellipse(124, 126, 80, 46, "#ffffff", 'stroke="#c8d8d4" stroke-width="3"')
     body += stroke("M60 126 L188 126", "#d8e4e0", 3)
     body += lettering("MIRACLE", 124, 96, 14, "#2f9f8a")
+    # A spoonful of sugar helps the medicine go down
+    body += stroke("M96 182 L206 194", "#8a96a2", 11) + stroke("M96 182 L206 194", "#d6dde4", 6)
+    body += ellipse(70, 178, 32, 15, "#d6dde4", 'stroke="#8a96a2" stroke-width="3"')
+    body += path("M42 176 C 48 156 92 156 98 176 Z", "#ffffff", 'stroke="#c8d0d8" stroke-width="2"')
+    for x, y in ((52, 170), (64, 164), (78, 168), (88, 173), (60, 174)):
+        body += rect(x - 3, y - 3, 6, 6, "#eef3f7", 'stroke="#c8d0d8" stroke-width="1"')
+    for x, y in ((40, 152), (102, 156)):
+        body += poly(star_points(x, y, 6, 2, 4), "#ffffff")
     body += person(270, 200, 1.2, SKIN[1], "#ffffff", face="grin", hair="#3a2a1a")
     # A thin arm, flexed in triumph, and the sparkle of a bicep that isn't there
     body += stroke("M290 170 Q 318 160 312 120 Q 300 106 296 96", SKIN[1], 7)

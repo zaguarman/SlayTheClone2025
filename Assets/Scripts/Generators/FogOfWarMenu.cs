@@ -4,7 +4,7 @@ using UnityEditor;
 namespace SlayTheClone {
     /// <summary>
     /// Debug > Fog of War: switches off what the screen hides (ticked when it's on), F9 in play. Debug > Play As Player 2:
-    /// the screen shows player 2's view and uses their cards, F10 in play.
+    /// the screen shows player 2's view and uses their cards, F8 in play.
     /// </summary>
     public static class FogOfWarMenu {
         private const string Path = "Debug/Fog of War";

@@ -131,7 +131,7 @@ namespace SlayTheClone {
             return $"{PlayerName(caster, viewer)} {(caster == viewer ? "cast" : "casts")} {name}{aim}";
         }
 
-        private static string StatusName(StatusEffectType status) => status == StatusEffectType.HeatSignature ? "Heat Signal" : status.ToString();
+        private static string StatusName(StatusEffectType status) => status == StatusEffectType.HeatSignature ? "Heat Signature" : status.ToString();
 
         private static string MoveVerb(MoveKind kind) => kind switch {
             MoveKind.Push => "pushes into",

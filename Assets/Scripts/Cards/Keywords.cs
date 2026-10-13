@@ -38,8 +38,8 @@ namespace SlayTheClone {
 
             // ---------------------------------------------------------------- Targets
             group = "Targets";
-            Add("Target", "What you drop the card on: a creature or a slot, on either side.");
-            Add("Random", "The target is picked when the effect happens, not when it's played: one creature in play, each equally likely. A random creature can be on either side; a random friendly creature is one of yours; a random enemy creature is one of the enemy's. Damage to a random target goes to the creature with the most [Heat Signal] first. If there's no creature to pick, nothing happens.");
+            Add("Slot", "One of the five places on each side of the table where a creature stands.");
+            Add("Random", "Picked by chance when the effect happens, among the creatures it can affect at that moment. Damage goes to the one with the most [Heat Signature] instead, if any has it. No creature to pick: nothing happens.");
             Add("Everything", "Every creature on both sides, and both players.");
 
             // ---------------------------------------------------------------- Triggers
@@ -51,7 +51,7 @@ namespace SlayTheClone {
 
             // ---------------------------------------------------------------- Keyword abilities (recurring patterns)
             group = "Keyword Abilities";
-            Add("Retaliate", "When a creature damages this one, it strikes back: Retaliate X deals X damage to that creature. Retaliate: [Exhausted|exhaust] exhausts it instead.");
+            Add("Retaliate", "When a creature damages this one, it hits back. Retaliate X: X damage to the attacker. Retaliate followed by an effect, like [Exhausted|exhaust]: that effect on the attacker.");
             Add("Decay", "Decay X: takes X damage at each [Dusk].");
             Add("Regenerate", "Regenerate X: heals X at each [Dusk].");
             Add("Grow", "Grow X: +X Attack and +X Health for good at each [Dawn].");
@@ -76,7 +76,7 @@ namespace SlayTheClone {
             Add("Doomed", "Doom X: dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it.");
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
             Add("Blessed", "Bless X: the next X statuses that would land on it are stopped, good or bad.");
-            Add("Heat Signal", "Heat Signal X: damage to a random target, and redirected attacks, go to the creature with the most Heat Signal first. It stays until cleansed.");
+            Add("Heat Signature", "Heat Signature X: damage to a random target, and redirected attacks, go to the creature with the most Heat Signature first. It stays until cleansed.");
             Add("Concealed", "Conceal X: for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
             Add("Revealed", "Revealed X: for X [Days], it can't be [Concealed]: its plans can be seen.");
             Add("Encrypted", "Encrypt X: for X [Days], [Watchdog|Watchdogs] ignore its actions.");
@@ -95,7 +95,7 @@ namespace SlayTheClone {
 
             // ---------------------------------------------------------------- Slot Effects
             group = "Slot Effects";
-            Add("Slot Effect", "A condition on a slot, not on the creature: it stays with the slot. One per slot.");
+            Add("Slot Effect", "A condition on a [Slot|slot], not on the creature: it stays with the slot. One per slot.");
             Add("Landmine", "Landmine X: hidden. The next creature to enter the slot takes X damage.");
             Add("Barbed Snare", "Barbed Snare X: hidden. The next creature to leave the slot takes X damage.");
             Add("Temporal Shield", "Temporal Shield X: for X [Days], the creature in the slot takes no combat damage.");

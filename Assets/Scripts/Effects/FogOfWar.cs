@@ -60,6 +60,17 @@ namespace SlayTheClone {
             if (creature.KnownTo.Add(viewer)) Log($"{viewer.Name} now knows what {creature.Name} is", LogTag.Effects);
         }
 
+        /// <summary>
+        /// Whether a Reveal of its slot would show the viewer something new: what it is, a plan they can't see, that it's
+        /// Concealed, or a hidden Slot Effect under it.
+        /// </summary>
+        public static bool HidesSomethingFrom(IPlayer viewer, ICreature creature, IActionsQueue queue) {
+            if (creature == null || viewer == null || creature.Owner == viewer) return false;
+            if (!KnowsWhatItIs(viewer, creature) || IsConcealed(creature, queue?.Modifiers)) return true;
+            if (creature.Slot is BoardSlot slot && slot.Effect != null && !CanSee(viewer, slot.Effect)) return true;
+            return queue != null && queue.GetPendingActions().Any(a => PlannerOf(a) == creature && !CanSee(viewer, a, queue, queue.Modifiers));
+        }
+
         public static bool KnowsWhatItIs(IPlayer viewer, ICreature creature) =>
             creature == null || viewer == null || creature.Owner == viewer || creature.KnownTo.Contains(viewer);
 
@@ -86,12 +97,12 @@ namespace SlayTheClone {
     /// What the screen shows: one player's view (player 1, the side you play, unless switched). The rules know everything
     /// (<see cref="Intel"/>); the screen only shows what that player knows, and only their cards can be used. The other
     /// side's hand shows card backs. For debugging: Debug > Fog of War (F9 in play) shows everything and lets you use both
-    /// sides' cards (hot-seat); Debug > Play As Player 2 (F10) switches whose view it is, and whose side sits at the bottom of
+    /// sides' cards (hot-seat); Debug > Play As Player 2 (F8) switches whose view it is, and whose side sits at the bottom of
     /// the table (see <see cref="BoardSkin.PutAtBottom"/>). Neither changes the rules.
     /// </summary>
     public static class FogOfWar {
         public const UnityEngine.KeyCode ToggleKey = UnityEngine.KeyCode.F9;
-        public const UnityEngine.KeyCode SwitchSidesKey = UnityEngine.KeyCode.F10;
+        public const UnityEngine.KeyCode SwitchSidesKey = UnityEngine.KeyCode.F8;
 
         private static bool playsAsPlayer1 = true;
 

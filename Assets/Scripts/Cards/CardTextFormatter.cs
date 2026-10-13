@@ -7,7 +7,7 @@ namespace SlayTheClone {
     /// Builds the printed text of a card from its data, in the style of Magic: The Gathering and Slay the Spire:
     /// a line of keywords first (movement, ability, and keyword abilities like Retaliate 1 or Decay 1 for effects that
     /// keep coming back), then the rest as short templated clauses led by a trigger keyword ("Dawn: draw 1."): what it does,
-    /// then whom it targets, with the targeting keywords (target, all friendly, random enemy...).
+    /// then whom it targets ("target", "all enemy creatures", "a random creature").
     /// Every keyword is a link to its explanation (<see cref="Keywords"/>), shown when it's hovered on an enlarged card.
     /// </summary>
     public static class CardTextFormatter {
@@ -93,24 +93,19 @@ namespace SlayTheClone {
 
         #region Sentences
         // Short templated clauses: what it does first, then whom ("3 damage to target", "Doom 3 on all enemy creatures").
-        // The same damage or healing to every creature and both players is "everything".
-        // A number after a status is its Days ("Doom 3"); a status with a strength shows the Days with the calendar
-        // ("Burn 2 [calendar]3": 2 damage, 3 Days). The rest of the meaning lives in the keywords' explanations.
+        // The same thing done to several groups reads once, for the group they make up ("exhaust all creatures",
+        // "1 damage to everything"). A number after a status is its Days ("Doom 3"); a status with a strength shows the
+        // Days with the sand watch ("Burn 2 [sand watch]3": 2 damage, 3 Days). The rest lives in the keywords' explanations.
         private static string DescribeEffect(CardEffect effect, bool isSpell) {
-            var actions = effect.actions.Where(a => DescribeAction(a, isSpell) != null).ToList();
+            bool atDawn = !isSpell && effect.trigger == EffectTrigger.StartOfTurn;
+            var actions = effect.actions.Where(a => DescribeAction(a, isSpell, null, atDawn) != null).ToList();
             if (actions.Count == 0) return null;
 
             // Retaliation: an enemy-targeted Hurt effect lands on whoever damaged this creature (see EffectResolver)
             bool retaliates = !isSpell && effect.trigger == EffectTrigger.OnDamage
                               && actions.All(a => a.targetType == TargetType.Enemy && a.targetModifier == TargetModifier.None);
             (string icon, string text) trigger = isSpell ? default : retaliates ? (EffectIcons.Hurt, Keywords.Link("Retaliate")) : DescribeTrigger(effect);
-            var clauses = new List<string>();
-            foreach (var group in GroupForEverything(actions)) {
-                clauses.Add(group.Count > 1
-                    ? DescribeAction(group[0], isSpell, Keywords.Link("Everything", "everything"))
-                    : DescribeAction(group[0], isSpell, retaliates ? "it" : null));
-            }
-            string body = JoinClauses(clauses);
+            string body = JoinClauses(retaliates ? actions.Select(a => DescribeAction(a, isSpell, "it")).ToList() : Clauses(actions, isSpell, atDawn));
             string once = effect.oncePerCombat ? "Once per combat, " : "";
 
             if (trigger.text == null) return CapitalizeRich(once + body) + ".";
@@ -118,22 +113,76 @@ namespace SlayTheClone {
             return $"{EffectIcons.Tag(trigger.icon)}{(once.Length > 0 ? once + LowerFirst(lead) : lead)} {body}.";
         }
 
-        // Damage or healing of the same amount to all creatures, you and the enemy player reads as one clause: "everything"
-        private static List<List<EffectAction>> GroupForEverything(List<EffectAction> actions) {
-            var groups = actions.Select(a => new List<EffectAction> { a }).ToList();
-            foreach (var type in new[] { ActionType.Damage, ActionType.Heal }) {
-                foreach (int value in actions.Where(a => a.actionType == type).Select(a => a.value).Distinct().ToList()) {
-                    bool Each(EffectAction a, TargetType target) => a.actionType == type && a.value == value && a.targetType == target
-                                                                   && a.targetModifier == TargetModifier.AllSameTypeTargets;
-                    var parts = new[] { TargetType.AllCreatures, TargetType.Player, TargetType.Enemy }
-                        .Select(t => actions.FirstOrDefault(a => Each(a, t))).ToList();
-                    if (parts.Any(p => p == null)) continue;
-                    int first = groups.FindIndex(g => g.Count == 1 && parts.Contains(g[0]));
-                    groups.RemoveAll(g => g.Count == 1 && parts.Contains(g[0]));
-                    groups.Insert(first, parts);
-                }
+        private const string Whom = "\u0001"; // Where the target goes in a clause, while clauses are merged
+
+        // One clause per action, except that the same thing done to groups that together make a bigger one reads once
+        // ("exhaust all creatures" for all enemy and all friendly creatures; "everything" for all creatures and both
+        // players), and statuses landing on the same creatures share them ("Burn 1 [sand watch]2 and Heat Signature 1 on all creatures")
+        private static List<string> Clauses(List<EffectAction> actions, bool isSpell, bool atDawn) {
+            var parts = new List<(string what, string whom)>();
+            var done = new HashSet<EffectAction>();
+            foreach (var action in actions) {
+                if (done.Contains(action)) continue;
+                string what = DescribeAction(action, isSpell, Whom, atDawn);
+                var same = actions.Where(a => !done.Contains(a) && ReachOf(a) != Reach.None
+                                              && DescribeAction(a, isSpell, Whom, atDawn) == what).ToList();
+                string group = what.Contains(Whom) && same.Count > 1 && same.Contains(action) ? GroupOf(same.Select(ReachOf)) : null;
+                if (group != null) same.ForEach(a => done.Add(a));
+                else done.Add(action);
+                parts.Add((what, group ?? DescribeTarget(action, isSpell)));
             }
-            return groups;
+
+            const string onWhom = " on " + Whom;
+            var clauses = new List<string>();
+            string named = null; // Who the last clause named, so the next one can say "it" or "them"
+            for (int i = 0; i < parts.Count; i++) {
+                string what = parts[i].what, whom = parts[i].whom;
+                while (what.EndsWith(onWhom) && i + 1 < parts.Count && parts[i + 1].whom == whom && parts[i + 1].what.EndsWith(onWhom)) {
+                    what = what.Substring(0, what.Length - onWhom.Length) + " and " + parts[++i].what;
+                }
+                string pronoun = whom == named ? PronounFor(whom) : null;
+                bool statFirst = what.StartsWith(Whom + " ");
+                if (pronoun != null && statFirst && clauses.Count > 0 && parts[i - 1].what.StartsWith(Whom + " ")) {
+                    // "Target +3 Attack and -2 Health": the same creature's stats, one after the other
+                    clauses[clauses.Count - 1] += " and " + what.Substring(Whom.Length + 1);
+                    continue;
+                }
+                if (pronoun != null) what = statFirst ? "give " + what : what; // "Cleanse target and give it -1 Attack"
+                clauses.Add(what.Replace(Whom, pronoun ?? whom));
+                named = whom;
+            }
+            return clauses;
+        }
+
+        // A target named again: "it" for one creature, "them" for a group. Random picks and players are named each time
+        private static string PronounFor(string whom) {
+            if (whom == "target" || whom == "this") return "it";
+            return whom.StartsWith("all ") || whom.Contains("everything") ? "them" : null;
+        }
+
+        [System.Flags] private enum Reach { None = 0, FriendlyCreatures = 1, EnemyCreatures = 2, You = 4, EnemyPlayer = 8 }
+
+        // Which whole group an action lands on; None when it's one target (chosen, random, or a creature and its neighbors)
+        private static Reach ReachOf(EffectAction action) {
+            if (action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) return Reach.None;
+            bool each = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
+            return action.targetType switch {
+                TargetType.FriendlyCreatures when each => Reach.FriendlyCreatures,
+                TargetType.EnemyCreatures when each => Reach.EnemyCreatures,
+                TargetType.AllCreatures when each => Reach.FriendlyCreatures | Reach.EnemyCreatures,
+                TargetType.Player => Reach.You,
+                TargetType.Enemy => Reach.EnemyPlayer,
+                _ => Reach.None
+            };
+        }
+
+        private static string GroupOf(IEnumerable<Reach> reaches) {
+            var all = reaches.Aggregate(Reach.None, (sum, reach) => sum | reach);
+            const Reach creatures = Reach.FriendlyCreatures | Reach.EnemyCreatures, players = Reach.You | Reach.EnemyPlayer;
+            if (all == creatures) return "all creatures";
+            if (all == (creatures | players)) return Keywords.Link("Everything", "everything");
+            if (all == players) return "both players";
+            return null;
         }
 
         private static (string icon, string text) DescribeTrigger(CardEffect effect) {
@@ -154,7 +203,8 @@ namespace SlayTheClone {
         }
 
         // One clause; target overrides who it lands on ("it": whoever damaged this creature)
-        private static string DescribeAction(EffectAction action, bool isSpell, string targetOverride = null) {
+        // Drawn cards wait for the next Day's hand (a hand drawn now would be discarded at Dusk), except at Dawn
+        private static string DescribeAction(EffectAction action, bool isSpell, string targetOverride = null, bool atDawn = false) {
             string target = targetOverride ?? DescribeTarget(action, isSpell);
             int value = action.value;
 
@@ -166,7 +216,8 @@ namespace SlayTheClone {
                 case ActionType.Heal:
                     return $"heal {value} to {target}";
                 case ActionType.Draw:
-                    return action.targetType == TargetType.Enemy ? $"enemy draws {value}" : $"draw {value}";
+                    string when = atDawn ? "" : $" next {Keywords.Link("Day")}";
+                    return action.targetType == TargetType.Enemy ? $"enemy draws {value}{when}" : $"draw {value}{when}";
                 case ActionType.Summon:
                     return $"{Keywords.Link("Summon", "summon")} {value}";
                 case ActionType.Armor:
@@ -202,8 +253,8 @@ namespace SlayTheClone {
             }
         }
 
-        // "target" (what it's dropped on, either side) and "random" are keywords; groups ("all enemy creatures"), players
-        // and the creature itself are plain words.
+        // Plain words: "target" (what it's dropped on, either side), groups ("all enemy creatures"), players and the
+        // creature itself. Only "random" is a keyword.
         private static string DescribeTarget(EffectAction action, bool isSpell) {
             if (action.targetModifier.HasFlag(TargetModifier.Random)) {
                 switch (action.targetType) {
@@ -217,7 +268,7 @@ namespace SlayTheClone {
             // Spells resolve against whatever they are dropped on unless they hit a whole group
             bool hitsGroup = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
             if (isSpell && !hitsGroup && action.targetType is not (TargetType.Player or TargetType.Enemy)) {
-                return Keywords.Link("Target", "target") + adjacent;
+                return "target" + adjacent;
             }
 
             switch (action.targetType) {
@@ -227,11 +278,11 @@ namespace SlayTheClone {
                 case TargetType.FriendlyCreatures: return "all friendly creatures";
                 case TargetType.EnemyCreatures: return "all enemy creatures";
                 case TargetType.AllCreatures: return "all creatures";
-                default: return Keywords.Link("Target", "target");
+                default: return "target";
             }
         }
 
-        // "+1 Attack", "+4 Attack [calendar]1" for a Day; a Health decrease is Health Loss, so it's a link to that rule
+        // "+1 Attack", "+4 Attack [sand watch]1" for a Day; a Health decrease is Health Loss, so it's a link to that rule
         private static string DescribeStatChange(EffectAction action) {
             string sign = action.value >= 0 ? "+" : "";
             var stats = new List<string>();
@@ -244,7 +295,7 @@ namespace SlayTheClone {
             return change + DaysTag(action.statusDuration);
         }
 
-        // A status by its keyword: the number is its Days ("Doom 3"), or its strength and then its Days ("Burn 2 [calendar]3")
+        // A status by its keyword: the number is its Days ("Doom 3"), or its strength and then its Days ("Burn 2 [sand watch]3")
         private static string DescribeStatus(EffectAction action, string target) {
             int days = action.statusDuration;
             int potency = System.Math.Max(1, action.statusPotency);
@@ -253,7 +304,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Burned: return $"{Keywords.Link("Burned", $"Burn {potency}")}{DaysTag(days)} on {target}";
                 case StatusEffectType.Doomed: return $"{Keywords.Link("Doomed", $"Doom {days}")} on {target}";
                 case StatusEffectType.Blessed: return $"{Keywords.Link("Blessed", $"Bless {potency}")} on {target}";
-                case StatusEffectType.HeatSignature: return $"{Keywords.Link("Heat Signal", $"Heat Signal {potency}")} on {target}";
+                case StatusEffectType.HeatSignature: return $"{Keywords.Link("Heat Signature", $"Heat Signature {potency}")} on {target}";
                 case StatusEffectType.Concealed: return $"{Keywords.Link("Concealed", $"Conceal {days}")} on {target}";
                 case StatusEffectType.Revealed: return $"{Keywords.Link("Revealed", $"Revealed {days}")} on {target}";
                 case StatusEffectType.Encrypted: return $"{Keywords.Link("Encrypted", $"Encrypt {days}")} on {target}";
@@ -261,7 +312,7 @@ namespace SlayTheClone {
             }
         }
 
-        // " [calendar]3": how many Days a timed change lasts. Nothing for a lasting one
+        // " [sand watch]3": how many Days a timed change lasts. Nothing for a lasting one
         private static string DaysTag(int days) => days > 0 ? " " + Keywords.Link("Days", $"{EffectIcons.Tag(EffectIcons.Days)}{days}") : "";
 
         // The GDD card format: "Watchdog: [condition] -> [effect], N charges (timing)"
@@ -288,7 +339,7 @@ namespace SlayTheClone {
 
         // Slot Effects aim at the slot, whoever stands in it
         private static string SlotTarget(EffectAction action, bool isSpell) =>
-            isSpell || action.targetType != TargetType.Self ? "target slot" : "this creature's slot";
+            isSpell || action.targetType != TargetType.Self ? $"target {Keywords.Link("Slot", "slot")}" : $"its {Keywords.Link("Slot", "slot")}";
 
         // "Landmine 3" (its damage), "Temporal Shield 2" (its Days)
         private static string DescribeSlotEffect(EffectAction action) {

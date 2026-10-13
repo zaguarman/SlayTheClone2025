@@ -11,6 +11,8 @@ namespace SlayTheClone {
         IReadOnlyList<BoardSlot> Battlefield { get; }
         IDeck Deck { get; }
         int CardsToDraw { get; set; }
+        /// <summary>Cards owed by effects that resolved after this Day's hand was dealt: drawn with the next Day's hand.</summary>
+        int ExtraDraws { get; set; }
         int Health { get; }
         /// <summary>
         /// "Once per combat" effects this player's cards have used (keyed by card and effect). It lasts the whole combat:
@@ -48,6 +50,7 @@ namespace SlayTheClone {
         public List<ICard> Hand { get; private set; }
         public IDeck Deck { get; private set; }
         public int CardsToDraw { get; set; } = 2; // Default to drawing 2 cards
+        public int ExtraDraws { get; set; }
         public ISet<string> UsedOncePerCombat { get; } = new HashSet<string>();
 
         public IReadOnlyList<BoardSlot> Battlefield { get; }

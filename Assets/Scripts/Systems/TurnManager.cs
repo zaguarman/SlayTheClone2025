@@ -22,6 +22,7 @@ namespace SlayTheClone {
         private IResolutionPresenter presenter; // Optional: plays each resolved action before the next one runs
 
         public int TurnNumber => clock?.TurnNumber ?? 0;
+        public bool DrawsWaitForNextDay => clock?.DrawsWaitForNextDay ?? false;
         public bool IsResolving { get; private set; }
         #endregion
 
@@ -62,6 +63,7 @@ namespace SlayTheClone {
 
                 // --- Phase 1: Resolution (GDD 3.6): what both sides planned this Day. It's still this Day,
                 // so what resolves now is dated today (statuses applied now skip this Day's Dusk) ---
+                clock.DrawsWaitForNextDay = true; // This Day's hand is about to be discarded: cards drawn from now on come with the next one
                 actionsQueue.BriefWatchdogs(); // The Briefing (GDD 3.7), before anything resolves
                 yield return ResolveQueuedActions();
 
@@ -78,8 +80,10 @@ namespace SlayTheClone {
                 foreach (var player in players) {
                     actionsQueue.AddAction(new DiscardHandAction(player));
                 }
+                clock.DrawsWaitForNextDay = false;
                 foreach (var player in players) {
-                    actionsQueue.AddAction(new DrawCardsAction(player, player.CardsToDraw));
+                    actionsQueue.AddAction(new DrawCardsAction(player, player.CardsToDraw + player.ExtraDraws));
+                    player.ExtraDraws = 0;
                 }
                 yield return ResolveQueuedActions();
 

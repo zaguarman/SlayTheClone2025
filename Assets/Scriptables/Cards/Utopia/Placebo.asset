@@ -31,7 +31,7 @@ MonoBehaviour:
       modifyHealth: 1
       modifySpeed: 0
       statusEffectToApply: 0
-      statusDuration: 1
+      statusDuration: 0
       statusPotency: 0
       cleanse: 0
       purge: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-  designNotes: +3 Health for this Day only.
-  artDescription: A sugar pill the size of a melon labelled MIRACLE, and a skinny
-    man next to it flexing a non-existent bicep, very proud.
+  designNotes: +3 Health for good.
+  artDescription: A sugar pill the size of a melon labelled MIRACLE on a spoonful
+    of sugar, and a skinny man next to it flexing a non-existent bicep, very proud.
   defaultTargetType: 3

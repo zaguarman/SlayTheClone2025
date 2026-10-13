@@ -17,6 +17,12 @@ namespace SlayTheClone {
                 return;
             }
 
+            // The hand is discarded at the end of the Day: cards drawn while it resolves come with the next Day's hand
+            if (drawAction.FromEffect && context.TurnClock.DrawsWaitForNextDay) {
+                player.ExtraDraws += amount;
+                Log($"{player.Name} will draw {amount} more next Day", LogTag.Actions | LogTag.Cards);
+                return;
+            }
             cardDealingService.DrawCards(player, amount);
             Log($"Executed DrawCardsAction via Executor: Drew {amount} cards for {player.Name}", LogTag.Actions | LogTag.Cards);
         }

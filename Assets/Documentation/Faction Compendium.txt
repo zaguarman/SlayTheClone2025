@@ -68,7 +68,7 @@ Tech: Systems & the Queue
     • Theme: Software, hacking, infrastructure.
     • Play Style: Rewires the queue with hooks, copies and overrides; runs automated units.
     • Signature Mechanics: Watchdogs (Firewall, Man-in-the-Middle), Speed boosts (Turbo), copied actions (Fork, Feedback Loop), Automated Units, Cleanse (Antivirus, Bug Fix), surveillance reveals (CCTV, Data Mining).
-    • Statuses: Heat Signal, Exhausted.
+    • Statuses: Heat Signature, Exhausted.
     • Pays With: Technical Debt. As an additional cost, schedule fewer card draws for your next Day.
     • Can't: Bring anything back from the discard pile. Deleted is deleted.
     • Tempo: Medium (Deployment Time 1–2).
@@ -81,7 +81,7 @@ Digital Society: Virality & the Mob
     • Play Style: A swarm of cheap Deployment Time 0 tokens, effects that spread, and many creatures piling onto one target.
     • Signature Mechanics: Flooding the board (bots, NPCs, Spam), "goes viral" (effects that spread to adjacent creatures), Dogpile (a bonus when several creatures attack the same target), Doxxing (reveals), Clickbait (taunts), Streisand Effect (anything hidden near it backfires on its owner).
     • Statuses: Ostracised, Ghosted, Earworm.
-    • Pays With: Exposure. Its own creatures gain Revealed or Heat Signal.
+    • Pays With: Exposure. Its own creatures gain Revealed or Heat Signature.
     • Can't: Have big creatures, Heavy, or Persistent Stat Modifications.
     • Tempo: Fastest (Deployment Time 0).
     • Strong Against: Shadow Ops. (Doxxing).

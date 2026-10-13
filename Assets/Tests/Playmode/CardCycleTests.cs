@@ -66,15 +66,19 @@ namespace SlayTheClone.Tests {
             game.SetDecks(game.Fillers(20), game.Fillers(20));
             game.CardDealingService.DealInitialHands(p1, p2, 5);
             var firstHands = new[] { p1, p2 }.ToDictionary(p => p, p => p.Hand.ToList());
+            var sketchbook = game.GiveCard(p1, game.Spell("Sketchbook", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 2, TargetType.Player)));
+            game.Play(sketchbook, p1, p1.Battlefield[0]);
 
             yield return game.EndTurn();
 
             foreach (var player in new[] { p1, p2 }) {
-                Assert.AreEqual(5, player.Hand.Count);
+                int drawn = player == p1 ? 7 : 5;
+                Assert.AreEqual(drawn, player.Hand.Count, "A draw resolved during the Day comes with the next Day's hand, not into the hand about to be discarded");
                 CollectionAssert.IsEmpty(player.Hand.Intersect(firstHands[player]), "The old hand should have been discarded");
-                Assert.AreEqual(5, player.Deck.GetDiscardPilePreview().Count);
-                Assert.AreEqual(10, player.Deck.CardsRemaining);
+                Assert.AreEqual(20 - 5 - drawn, player.Deck.CardsRemaining);
             }
+            Assert.AreEqual(5, p2.Deck.GetDiscardPilePreview().Count);
+            Assert.AreEqual(0, p1.ExtraDraws, "The owed cards were drawn");
         }
     }
 }

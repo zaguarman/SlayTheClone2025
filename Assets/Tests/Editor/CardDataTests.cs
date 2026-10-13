@@ -42,10 +42,13 @@ namespace SlayTheClone.Tests {
             Assert.IsEmpty(problems, "Card effects that can't work:\n" + string.Join("\n", problems));
 
             // Every keyword printed on a card, or mentioned in another keyword's explanation, has an explanation
+            // ...and the text says each thing once: the same effect on groups that make up a bigger one reads as that group
             var deadLinks = new List<string>();
+            var printed = new Dictionary<string, string>();
             foreach (var asset in assets) {
                 var data = asset.ToCardData();
                 try {
+                    printed[data.cardName] = Keywords.Plain(CardTextFormatter.GetRulesText(data));
                     deadLinks.AddRange(Keywords.LinksIn(CardTextFormatter.GetRulesText(data)).Where(k => !Keywords.Exists(k)).Select(k => $"{data.cardName}: {k}"));
                 }
                 finally {
@@ -57,6 +60,9 @@ namespace SlayTheClone.Tests {
                 deadLinks.AddRange(mentioned.Where(k => !Keywords.Exists(k)).Select(k => $"{entry.Key}: {k}"));
             }
             CollectionAssert.IsEmpty(deadLinks, "Keywords without an explanation");
+            Assert.AreEqual("Exhaust all creatures.", printed["Strike"], "All enemy and all friendly creatures: all creatures");
+            Assert.AreEqual("Target +3 Attack and -2 Health.", printed["Dead Cat Bounce"], "One target, named once");
+            StringAssert.EndsWith("and Heat Signature 1 on all creatures.", printed["Climate Change"], "Statuses on the same creatures share them");
 
             var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
             var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()

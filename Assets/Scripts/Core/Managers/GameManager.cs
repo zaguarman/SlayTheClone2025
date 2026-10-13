@@ -61,6 +61,8 @@ namespace SlayTheClone {
         IDisposable QueueingEnvironment(); // Actions queued inside are triggered Slot Effects or Traps: they resolve before anything else
         /// <summary>The active Watchdogs, oldest first (GDD 3.11).</summary>
         IReadOnlyList<Watchdog> Watchdogs { get; }
+        /// <summary>The creatures' statuses and stat changes, for rules that ask what a creature is under.</summary>
+        IModifierManager Modifiers { get; }
         void AddWatchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days);
         /// <summary>The Briefing: before the actions of the Day resolve, Briefing Watchdogs look at the whole queue once.</summary>
         void BriefWatchdogs();

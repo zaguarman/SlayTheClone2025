@@ -424,7 +424,7 @@ namespace SlayTheClone {
                 .Picture("A video thumbnail: a man with a hugely shocked face, a big red arrow and a red circle around absolutely nothing."),
             Spell("Cancelled", TargetType.EnemyCreatures,
                 "One tweet from 2011. Career over by lunch.",
-                "Exhausted, and Heat Signal 2: random and redirected attacks find it first. Future: Ostracised.",
+                "Exhausted, and Heat Signature 2: random and redirected attacks find it first. Future: Ostracised.",
                 Stun(1, TargetType.EnemyCreatures), Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2))
                 .Picture("A man at a podium facing a crowd that holds torches, pitchforks and phones up to film him."),
         };
@@ -715,9 +715,9 @@ namespace SlayTheClone {
                 .Picture("An astronaut planting a flag on a red desert next to a sign: FOR RENT $9999."),
             Spell("Placebo", TargetType.FriendlyCreatures,
                 "Clinically proven to work on people who believe it works.",
-                "+3 Health for this Day only.",
-                Buff(3, TargetType.FriendlyCreatures, attack: false, health: true, days: 1))
-                .Picture("A sugar pill the size of a melon labelled MIRACLE, and a skinny man next to it flexing a non-existent bicep, very proud."),
+                "+3 Health for good.",
+                Buff(3, TargetType.FriendlyCreatures, attack: false, health: true))
+                .Picture("A sugar pill the size of a melon labelled MIRACLE on a spoonful of sugar, and a skinny man next to it flexing a non-existent bicep, very proud."),
             Spell("Vaccine", TargetType.FriendlyCreatures,
                 "Side effects include not dying, and 5G.",
                 "Cleanses its harmful statuses; side effect: -1 Attack for this Day (sore arm).",
@@ -725,8 +725,9 @@ namespace SlayTheClone {
                 .Picture("A syringe with a tiny Wi-Fi antenna on its plunger and full signal bars above it."),
             Spell("Climate Change", TargetType.AllCreatures,
                 "The scientists agreed. The weather didn't wait.",
-                "Every creature is Burned for 2 Days.",
-                Status(StatusEffectType.Burned, 2, TargetType.AllCreatures, potency: 1, modifier: Each))
+                "Every creature is Burned for 2 Days and gets Heat Signature 1.",
+                Status(StatusEffectType.Burned, 2, TargetType.AllCreatures, potency: 1, modifier: Each),
+                Status(StatusEffectType.HeatSignature, 1, TargetType.AllCreatures, potency: 1, modifier: Each))
                 .Picture("A polar bear standing on a single ice cube floating in a cocktail glass, a paper umbrella beside it."),
             Spell("Overpopulation", TargetType.Player,
                 "Eight billion people and nobody to cover my shift.",

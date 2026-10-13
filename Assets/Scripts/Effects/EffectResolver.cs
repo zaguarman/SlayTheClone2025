@@ -23,7 +23,7 @@ namespace SlayTheClone {
                     targets = new List<ITarget> { triggeringAttacker };
                 }
                 else {
-                    targets = SelectTargets(creature, creature.Owner, action, chosenTarget: null);
+                    targets = SelectTargets(creature, creature.Owner, action, chosenTarget: null, queue);
                 }
                 QueueAction(creature, creature.Owner, action, targets, queue);
             }
@@ -34,7 +34,7 @@ namespace SlayTheClone {
         public static void QueueSpellEffects(Spell spell, IPlayer caster, ITarget chosenTarget, IActionsQueue queue) {
             chosenTarget ??= DefaultSpellTarget(spell, caster);
             foreach (var action in spell.Effects.SelectMany(e => e.actions)) {
-                QueueAction(spell, caster, action, SelectTargets(spell, caster, action, chosenTarget), queue);
+                QueueAction(spell, caster, action, SelectTargets(spell, caster, action, chosenTarget, queue), queue);
             }
         }
 
@@ -83,7 +83,7 @@ namespace SlayTheClone {
         }
 
         #region Targets
-        private static List<ITarget> SelectTargets(ICard source, IPlayer controller, EffectAction action, ITarget chosenTarget) {
+        private static List<ITarget> SelectTargets(ICard source, IPlayer controller, EffectAction action, ITarget chosenTarget, IActionsQueue queue) {
             if (action.targetType == TargetType.Self) {
                 return source is ICreature self ? new List<ITarget> { self } : new List<ITarget>();
             }
@@ -100,6 +100,13 @@ namespace SlayTheClone {
                 var targets = resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
                 if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) targets.AddRange(NeighboursOf(chosenTarget));
                 return action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? WithoutTooMainstream(targets, source) : targets;
+            }
+            // A random Reveal picks among the creatures that still hide something from its caster; with none, it fizzles
+            if (action.actionType == ActionType.Reveal && action.targetModifier.HasFlag(TargetModifier.Random)) {
+                var hiding = TargetingSystem.GetValidTargets(controller, action.targetType)
+                    .Where(t => Intel.HidesSomethingFrom(controller, t as ICreature, queue)).ToList();
+                if (hiding.Count == 0) Log($"{source.Name}: no creature hides anything from {controller.Name}; the Reveal fizzles", LogTag.Effects);
+                return hiding.Count == 0 ? hiding : new List<ITarget> { hiding[GameRandom.Next(hiding.Count)] };
             }
             var valid = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
             // Heat Signature: an attack on a randomly chosen target goes to the creature with the most Heat, on either side
@@ -273,7 +280,7 @@ namespace SlayTheClone {
                 case ActionType.Heal:
                     return TargetedActions.Heal(target, action.value);
                 case ActionType.Draw:
-                    return target is IPlayer player ? new DrawCardsAction(player, action.value) : null;
+                    return target is IPlayer player ? new DrawCardsAction(player, action.value, fromEffect: true) : null;
                 case ActionType.Armor:
                     return creature != null && action.value != 0 ? new ModifyArmorAction(creature, action.value) : null;
                 case ActionType.ModifyStat:

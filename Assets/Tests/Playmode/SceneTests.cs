@@ -343,7 +343,7 @@ namespace SlayTheClone.Tests {
 
             // Keywords: hovering one on the enlarged card explains it, and its explanation's keywords can be followed in turn
             var nap = game.GiveCard(p1, game.Cards.Spell("Test Nap", TargetType.EnemyCreatures,
-                Effect(EffectTrigger.OnPlay, ActionType.Stun, 1, TargetType.EnemyCreatures)));
+                Effect(EffectTrigger.OnPlay, ActionType.Stun, 1, TargetType.EnemyCreatures, TargetModifier.Random)));
             yield return null;
             SceneGame.Hover(Shown(nap));
             var tooltip = Tooltip.Existing;
@@ -356,8 +356,8 @@ namespace SlayTheClone.Tests {
             tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Exhausted"));
             CollectionAssert.AreEqual(new[] { "Exhausted", "Day" }, tooltip.OpenKeywords, "Passing back over the same keyword keeps everything open");
             Assert.IsTrue(tooltip.PointerInArea(tooltip.Preview.transform.position + new Vector3(0f, 0f, 0f)), "The area includes the enlarged card...");
-            tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Target"));
-            CollectionAssert.AreEqual(new[] { "Target" }, tooltip.OpenKeywords, "...and another keyword on the card starts a new chain");
+            tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Random"));
+            CollectionAssert.AreEqual(new[] { "Random" }, tooltip.OpenKeywords, "...and another keyword on the card starts a new chain");
             tooltip.HideTooltip();
             CollectionAssert.IsEmpty(tooltip.OpenKeywords);
 

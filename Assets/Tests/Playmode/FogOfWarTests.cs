@@ -102,6 +102,17 @@ namespace SlayTheClone.Tests {
             game.Run(new RevealAction(p1, p2));
             Assert.IsTrue(Intel.CanSee(p1, mine), "Reveal on a slot shows its hidden Slot Effect");
             Assert.IsTrue(Intel.CanSeeCondition(p2, watchdog), "Reveal on a player shows their Watchdog conditions");
+
+            // A random Reveal picks among the creatures that still hide something from its caster
+            foreach (var creature in new[] { sneak, mole, cipher, (ICreature)incoming }) {
+                game.Run(new ApplyStatusEffectAction(creature, StatusEffectType.Revealed, 3, 0));
+            }
+            game.Run(new PlaceSlotEffectAction(p2.Battlefield[2], SlotEffectType.Landmine, 2, 0, p2));
+            Assert.IsFalse(Intel.HidesSomethingFrom(p1, mole, game.ActionsQueue), "Known and Revealed: nothing left to learn");
+            Assert.IsTrue(Intel.HidesSomethingFrom(p1, cipher, game.ActionsQueue), "A hidden Slot Effect under it is something to learn");
+            var lookAround = game.GiveCard(p1, game.Spell("Look Around", TargetType.EnemyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Reveal, 0, TargetType.EnemyCreatures, TargetModifier.Random)));
+            game.Play(lookAround, p1, p2.Battlefield[0]);
+            Assert.IsTrue(Intel.CanSee(p1, p2.Battlefield[2].Effect), "...so it's the one picked, whatever the luck");
         }
     }
 }

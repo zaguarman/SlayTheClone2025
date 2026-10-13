@@ -412,6 +412,8 @@ namespace SlayTheClone {
         #endregion
 
         #region Watchdogs
+        public IModifierManager Modifiers => executionContext.ModifierManager;
+
         public IReadOnlyList<Watchdog> Watchdogs =>
             watchdogs.Where(w => !w.IsSpent && !w.HasExpired(executionContext.TurnClock.TurnNumber)).ToList().AsReadOnly();
 

@@ -51,7 +51,7 @@ STILL OPEN
 
 ANSWERED (2026-10-12)
 
-• Fog of War views: the rules know everything; each player sees their own cards and what their cards revealed. The enemy's hand shows card backs and the enemy's cards can't be used. The screen plays player 1's side (Debug > Play As Player 2 / F10 switches, for testing).
+• Fog of War views: the rules know everything; each player sees their own cards and what their cards revealed. The enemy's hand shows card backs and the enemy's cards can't be used. The screen plays player 1's side (Debug > Play As Player 2 / F8 switches, for testing).
 • Unknown cards: minimalist, a normal card layout left empty on black, with three bold question marks in the middle; the enemy hand shows a card back with a keyhole seal.
 
 • Scorched Earth: stops the creature's triggered effects, entry ("When Ready") effects included. Its ability still works.
