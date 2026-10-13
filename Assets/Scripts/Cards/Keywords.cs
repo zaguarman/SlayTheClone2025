@@ -127,6 +127,7 @@ namespace SlayTheClone {
             CreatureAbility.ZeroDay => "Its attacks and effects ignore defensive abilities, except [Cold Storage].",
             CreatureAbility.Copypasta => "When it's ready and each [Dawn] after, it copies the ability of the creature opposite (once).",
             CreatureAbility.Undercover => "It's always [Concealed] until [Revealed].",
+            CreatureAbility.OffTheBooks => "It enters as ??? to the other side. While they don't know what it is, or it's [Concealed], everything it deals is doubled. A [Reveal] or [Revealed] shows it for good.",
             CreatureAbility.HiveMind => "A creature that attacks it loses its ability and gains Hive Mind instead.",
             CreatureAbility.IdentityTheft => "Instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it).",
             CreatureAbility.InsiderJob => "Its damage ignores [Armor].",

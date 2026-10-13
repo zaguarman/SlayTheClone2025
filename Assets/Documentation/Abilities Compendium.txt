@@ -152,6 +152,13 @@ Undercover
     Notes: Everything it plans (attacks, moves, active abilities) is a Concealed Action: the other side sees '???' on its card instead of its arrows, and their Watchdogs can't match it. Revealed cancels it, and a Reveal shows one Day's plans to whoever cast it. It's an ability, so whatever switches abilities off (Exhausted, Signal Jammer...) switches the concealment off too.
     Answers: Revealed, a Reveal, Signal Jammer, or effects that don't care what it plans (slot and area effects).
 
+Off the Books
+    Inspired by: the GDD's stealthy creatures (2.5, Unknown Creatures): a spy hits hardest before anyone knows who it is. On Sleeper Agent.
+    Type: Passive
+    Description: "Enters as ???. Double damage while the enemy doesn't know what it is, or it's Concealed."
+    Notes: It's stealthy, like Undercover: it stays '???' (name, stats, art, text) after its summon, though its plans can be seen. Everything it deals is doubled, attacks and effects, to creatures and to the player, while the other side doesn't know what it is or while it's Concealed. A Reveal on its slot or Revealed shows it for good, and the doubling stops; Concealed (Smoke And Mirrors) brings it back while it lasts, unless it's Revealed. Doubled after Penny Stock, before the target's Exposed and Armor. Like any ability, it's off while switched off (Exhausted, Signal Jammer).
+    Answers: Reveal it (Eavesdrop, Tapped Communications, Social Panopticon, Control Room), switch its ability off, or take the first hit with Armor.
+
 Handover
     Inspired by: Baton Pass (Pokémon), renamed so it isn't the move's name
     Type: Passive

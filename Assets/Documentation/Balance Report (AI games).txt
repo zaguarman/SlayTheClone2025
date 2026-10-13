@@ -2,53 +2,53 @@ BALANCE REPORT (AI games)
 3014 games: 1100 mirror games of the Hard AI (cards), 1584 between the AI styles (strategies), 330 deck against deck (decks). Called off after 40 Days.
 
 1. STRATEGIES: the AI styles, each deck against itself
+  Hard Hexer        50%  Statuses and debuffs: Burn, stuns, Doomed, Heat, then the hits that use them.
   Hard Spymaster    50%  Intelligence: Reveals, Watchdogs, Concealed and Encrypted, and cards.
-  Hard Hexer        47%  Statuses and debuffs: Burn, stuns, Doomed, Heat, then the hits that use them.
+  Hard              44%  Weighs everything the same: the plain Hard AI.
+  Hard Engine       43%  Card advantage: draws whenever it can, paying with Health and creatures.
+  Hard Rusher       42%  Aggro: damage to the player first, its own Health spent freely, races early.
   Hard Controller   42%  Control: kills and disables their creatures, goes face only once the board is safe.
-  Hard              41%  Weighs everything the same: the plain Hard AI.
-  Hard Rusher       40%  Aggro: damage to the player first, its own Health spent freely, races early.
-  Hard Engine       40%  Card advantage: draws whenever it can, paying with Health and creatures.
-  Hard Bastion      39%  Defence: protects its creatures and its Health, wins late.
-  Hard Swarm        37%  Goes wide: summons, buffs for its creatures and cards to keep the row full.
-  Medium            24%
+  Hard Bastion      40%  Defence: protects its creatures and its Health, wins late.
+  Hard Swarm        39%  Goes wide: summons, buffs for its creatures and cards to keep the row full.
+  Medium            26%
 
 2. DECKS: every deck against every other, Hard AI on both sides (win share of its games; draws count as not won)
   Statecraft - Order & Paperwork                  95%   worst against Corporate - Shareholder Value (50%), best against Myth & Corporate - Prosperity Gospel (100%)
   Corporate - Shareholder Value                   90%   worst against Statecraft - Order & Paperwork (50%), best against Myth & Corporate - Prosperity Gospel (100%)
   Digital Society - Terminally Online             80%   worst against Corporate - Shareholder Value (0%), best against Myth & Corporate - Prosperity Gospel (100%)
   Tech - Move Fast and Break Things               57%   worst against Statecraft - Order & Paperwork (0%), best against Digital Society & Shadow Ops. - Panopticon (100%)
-  Mind - All in Your Head                         52%   worst against Corporate - Shareholder Value (0%), best against Myth - Old Gods, New Tricks (100%)
-  Zeitgeist - Moods of Modern Life                48%   worst against Statecraft - Order & Paperwork (0%), best against Myth & Corporate - Prosperity Gospel (100%)
-  Utopia - Results May Vary                       37%   worst against Statecraft - Order & Paperwork (0%), best against Digital Society & Shadow Ops. - Panopticon (100%)
-  Digital Society & Shadow Ops. - Panopticon      27%   worst against Corporate - Shareholder Value (0%), best against Shadow Ops. - Plausible Deniability (100%)
-  Myth - Old Gods, New Tricks                     23%   worst against Corporate - Shareholder Value (0%), best against Myth & Corporate - Prosperity Gospel (83%)
-  Myth & Corporate - Prosperity Gospel            22%   worst against Corporate - Shareholder Value (0%), best against Shadow Ops. - Plausible Deniability (100%)
-  Shadow Ops. - Plausible Deniability              7%   worst against Corporate - Shareholder Value (0%), best against Myth - Old Gods, New Tricks (33%)
+  Mind - All in Your Head                         47%   worst against Corporate - Shareholder Value (0%), best against Myth - Old Gods, New Tricks (100%)
+  Zeitgeist - Moods of Modern Life                43%   worst against Statecraft - Order & Paperwork (0%), best against Myth & Corporate - Prosperity Gospel (100%)
+  Digital Society & Shadow Ops. - Panopticon      42%   worst against Corporate - Shareholder Value (0%), best against Myth - Old Gods, New Tricks (100%)
+  Utopia - Results May Vary                       33%   worst against Statecraft - Order & Paperwork (0%), best against Digital Society & Shadow Ops. - Panopticon (83%)
+  Shadow Ops. - Plausible Deniability             20%   worst against Corporate - Shareholder Value (0%), best against Myth - Old Gods, New Tricks (83%)
+  Myth - Old Gods, New Tricks                     15%   worst against Corporate - Shareholder Value (0%), best against Myth & Corporate - Prosperity Gospel (83%)
+  Myth & Corporate - Prosperity Gospel            12%   worst against Corporate - Shareholder Value (0%), best against Shadow Ops. - Plausible Deniability (33%)
 
   What the decks are made of, and their cards that hit hardest in these games (damage and kills a game they're played in)
     Statecra.  11 creatures (avg 2,1/4,5, speed 1,5, deploy 1,5), 9 spells
-               Mutually Assured Destruction 26,8 dmg, 5,6 kills; Man o' War 8,1 dmg, 1,0 kills; Preemptive Strike 6,7 dmg, 2,1 kills
+               Mutually Assured Destruction 27,7 dmg, 5,7 kills; Man o' War 8,1 dmg, 1,0 kills; Preemptive Strike 6,9 dmg, 2,2 kills
     Corporate  12 creatures (avg 1,8/3,8, speed 1,6, deploy 0,9), 8 spells
-               Margin Call 20,6 dmg, 4,2 kills; Hostile Takeover 13,6 dmg, 3,9 kills; Cleaning Robot 5,2 dmg, 0,8 kills
+               Margin Call 21,0 dmg, 4,3 kills; Hostile Takeover 13,6 dmg, 4,0 kills; Cleaning Robot 4,9 dmg, 0,6 kills
     Digital .  11 creatures (avg 1,5/2,7, speed 2,1, deploy 0,0), 9 spells
-               Clickbait 37,2 dmg, 6,5 kills; Dogpile 17,5 dmg, 3,0 kills; Keyboard Warrior 9,8 dmg, 2,0 kills
+               Clickbait 36,6 dmg, 6,4 kills; Dogpile 17,0 dmg, 2,9 kills; Keyboard Warrior 9,2 dmg, 1,9 kills
     Tech       12 creatures (avg 1,3/3,5, speed 1,5, deploy 0,7), 8 spells
-               Technical Debt 17,6 dmg, 3,2 kills; Legacy Code 16,7 dmg, 4,1 kills; Scope Creep 12,5 dmg, 2,2 kills
+               Technical Debt 18,3 dmg, 3,3 kills; Legacy Code 17,7 dmg, 4,5 kills; Scope Creep 12,0 dmg, 2,1 kills
     Mind       9 creatures (avg 1,3/3,7, speed 1,2, deploy 0,3), 11 spells
-               Ship of Theseus 17,0 dmg, 2,7 kills; Pessimist 14,9 dmg, 2,2 kills; Introvert 14,6 dmg, 2,3 kills
+               Ship of Theseus 17,0 dmg, 2,6 kills; Introvert 14,3 dmg, 2,3 kills; Pessimist 14,1 dmg, 2,3 kills
     Zeitgeist  13 creatures (avg 2,2/3,2, speed 2,1, deploy 0,2), 7 spells
-               This Is Fine 26,9 dmg, 5,1 kills; Football Hooligans 7,3 dmg, 1,4 kills; Hipster 7,3 dmg, 1,5 kills
+               This Is Fine 25,8 dmg, 4,7 kills; Hipster 7,6 dmg, 1,7 kills; Football Hooligans 7,2 dmg, 1,3 kills
+    Panoptic.  12 creatures (avg 1,4/3,1, speed 2,0, deploy 0,0), 8 spells
+               Dogpile 17,0 dmg, 2,9 kills; Sleeper Agent 9,3 dmg, 1,5 kills; Keyboard Warrior 9,2 dmg, 1,9 kills
     Utopia     11 creatures (avg 1,5/4,2, speed 1,5, deploy 1,9), 9 spells
-               Black Hole 30,7 dmg, 7,2 kills; Surveillance Giraffe 8,2 dmg, 1,2 kills; Splitting The Atom 7,8 dmg, 2,0 kills
-    Panoptic.  12 creatures (avg 1,4/3,1, speed 2,0, deploy 0,3), 8 spells
-               Dogpile 17,5 dmg, 3,0 kills; Keyboard Warrior 9,8 dmg, 2,0 kills; NPC 7,2 dmg, 1,4 kills
+               Black Hole 31,7 dmg, 7,4 kills; Splitting The Atom 7,7 dmg, 2,0 kills; Surveillance Giraffe 7,7 dmg, 1,1 kills
+    Shadow O.  10 creatures (avg 1,3/3,8, speed 1,8, deploy 0,0), 10 spells
+               Sleeper Agent 9,3 dmg, 1,5 kills; Cleaner 7,5 dmg, 1,4 kills; Mole 5,9 dmg, 1,3 kills
     Myth       10 creatures (avg 1,7/3,3, speed 1,5, deploy 1,1), 10 spells
-               Reincarnation 7,7 dmg, 1,2 kills; Mummy 6,6 dmg, 1,3 kills; Martyr 5,9 dmg, 1,1 kills
+               Mummy 6,5 dmg, 1,4 kills; Reincarnation 6,1 dmg, 0,9 kills; Martyr 5,7 dmg, 1,2 kills
     Prosperi.  11 creatures (avg 1,5/4,0, speed 1,5, deploy 1,3), 9 spells
-               Mummy 6,6 dmg, 1,3 kills; Martyr 5,9 dmg, 1,1 kills; Omniscient Space-Time Bending Bearded Wizard 5,2 dmg, 1,1 kills
-    Shadow O.  10 creatures (avg 1,3/3,8, speed 1,8, deploy 0,8), 10 spells
-               Sleeper Agent 5,7 dmg, 1,1 kills; Mole 4,3 dmg, 0,9 kills; Cleaner 3,8 dmg, 0,9 kills
-  First seat: Player 1 won 171, Player 2 151, draws 8; 12,9 Days on average
+               Mummy 6,5 dmg, 1,4 kills; Martyr 5,7 dmg, 1,2 kills; Omniscient Space-Time Bending Bearded Wizard 3,7 dmg, 0,7 kills
+  First seat: Player 1 won 171, Player 2 149, draws 10; 13,0 Days on average
 
 3. CARDS (mirror games: same deck, same Hard AI on both sides)
    Edge: when one side played the card more often than the other, how often that side won (50% = no effect).
@@ -59,16 +59,16 @@ BALANCE REPORT (AI games)
 
   Spells, strongest: the most edge
     Card                                     Faction          Edge  (of)  Win%  Face/pl  Kills/pl  Plays/g
-    Dogpile                                  Digital Society   75%   113   50%      0,1      0,71     12,4
     Clickbait                                Digital Society   74%    78   50%      0,0      1,18     15,1
     Trolley Problem                          Mind              73%    78   52%      0,0      0,61      5,7
     Red Herring                              Mind              72%    74   50%      0,0      0,00     16,0
+    Dogpile                                  Digital Society   71%   128   50%      0,1      0,72     12,1
     Taxpayer Funds Venture Capital Profits   Corporate         70%   125   50%      0,0      0,00      5,7
     This Is Fine                             Zeitgeist         67%    61   51%      0,0      2,10      3,8
     Scapegoating                             Mind              66%    74   50%      0,0      0,00     16,6
     Black Hole                               Utopia            65%    62   50%      0,0      1,60      4,7
-    Eavesdrop                                Shadow Ops.       63%    68   50%      0,0      0,00     14,6
     Imposter Syndrome                        Mind              63%    76   50%      0,0      0,00     15,7
+    Cancelled                                Digital Society   61%   132   50%      0,0      0,00      7,7
     Inflation                                Corporate         60%    60   50%      0,0      0,94      5,3
     Ransomware Attack                        Tech              60%    60   50%      0,0      0,00      8,3
 
@@ -79,9 +79,9 @@ BALANCE REPORT (AI games)
     Splitting The Atom                       Utopia            34%    61   49%      0,0      0,73      2,4
     Climate Change                           Utopia            35%    65   45%      0,0      0,00      1,9
     End-to-End Encryption                    Tech              37%    70   50%      0,0      0,00     16,4
-    Rage Bait                                Digital Society   41%   126   50%      0,0      0,00     11,1
-    Sacrificial Ritual                       Myth              43%    70   44%      0,0      0,00      1,0
-    Social Panopticon                        Digital Society   43%   121   50%      0,0      0,00      6,9
+    Social Panopticon                        Digital Society   38%   131   50%      0,0      0,00      6,6
+    Rage Bait                                Digital Society   39%   132   50%      0,0      0,00     10,9
+    Tapped Communications                    Shadow Ops.       41%    94   50%      0,0      0,00      8,8
 
   Creatures, most value: damage and kills over their life, per play
     Card                                     Faction          Edge  (of)  Win%  Face/pl  Kills/pl  Plays/g
@@ -89,18 +89,18 @@ BALANCE REPORT (AI games)
     Legacy Code                              Tech              49%    65   50%      0,9      1,92      5,0
     Hipster                                  Zeitgeist         54%    56   51%      1,0      1,67      1,8
     SysAdmin                                 Tech              33%    63   50%      0,7      1,28      4,5
-    Signal Jammer                            Shadow Ops.       29%    77   50%      1,0      1,12      3,3
-    Cleaner                                  Shadow Ops.        8%    39   50%      0,5      0,84      3,0
+    Signal Jammer                            Shadow Ops.       38%   115   50%      1,1      1,21      3,5
+    Cleaner                                  Shadow Ops.       49%    39   50%      0,5      0,95      3,3
     Reincarnation                            Myth              39%    72   50%      0,3      0,73      3,6
     Man o' War                               Statecraft        31%    48   50%      1,2      0,61      2,3
     Mummy                                    Myth              31%   127   50%      0,5      0,76      4,7
     Scope Creep                              Tech              57%    56   52%      0,5      0,69      3,2
-    Meta Group Chat                          Digital Society   40%   126   50%      0,6      0,74      4,4
-    Mole                                     Shadow Ops.       19%    94   50%      0,5      0,63      5,0
+    Sleeper Agent                            Shadow Ops.       26%   108   50%      0,6      0,69      5,2
+    Mole                                     Shadow Ops.       42%   117   50%      0,5      0,66      5,4
 
   Creatures, least value
     Card                                     Faction          Edge  (of)  Win%  Face/pl  Kills/pl  Plays/g
-    Political Decoy                          Shadow Ops.       34%    38   49%      0,0      0,00      4,9
+    Political Decoy                          Shadow Ops.       47%    47   50%      0,0      0,00      5,0
     Meatproxy As A Service                   Tech              32%    59   50%      0,0      0,00      3,2
     Work Shift Rotation                      Corporate         42%    67   51%      0,0      0,00      2,7
     Roko's Basilisk                          Mind              27%    67   49%      0,0      0,01      2,8
@@ -114,7 +114,7 @@ BALANCE REPORT (AI games)
     Mutually Assured Destruction             Statecraft        53%    64   50%      2,9      1,71      2,5
     Omniscient Space-Time Bending Bearded Wizard Myth              33%    89   50%      2,4      2,10      1,8
     Man o' War                               Statecraft        31%    48   50%      1,2      0,61      2,3
-    Signal Jammer                            Shadow Ops.       29%    77   50%      1,0      1,12      3,3
+    Signal Jammer                            Shadow Ops.       38%   115   50%      1,1      1,21      3,5
     Hipster                                  Zeitgeist         54%    56   51%      1,0      1,67      1,8
     Legacy Code                              Tech              49%    65   50%      0,9      1,92      5,0
     Diplomat                                 Statecraft        31%    48   49%      0,7      0,23      2,5
@@ -132,60 +132,60 @@ BALANCE REPORT (AI games)
     Black Hole                               Utopia            65%    62   50%      0,0      1,60      4,7
     Margin Call                              Corporate         60%    67   50%      0,0      1,53      3,1
     SysAdmin                                 Tech              33%    63   50%      0,7      1,28      4,5
+    Signal Jammer                            Shadow Ops.       38%   115   50%      1,1      1,21      3,5
     Clickbait                                Digital Society   74%    78   50%      0,0      1,18     15,1
-    Signal Jammer                            Shadow Ops.       29%    77   50%      1,0      1,12      3,3
 
   By faction: average edge of its cards (cards with 60+ edge games)
     Zeitgeist       51%   best This Is Fine (67%)
     Corporate       50%   best Taxpayer Funds Venture Capital Profits (70%)
-    Digital Society 49%   best Dogpile (75%)
+    Digital Society 49%   best Clickbait (74%)
     Mind            46%   best Trolley Problem (73%)
     Tech            45%   best Ransomware Attack (60%)
     Myth            45%   best Monkey Hand (59%)
+    Shadow Ops.     44%   best Eavesdrop (55%)
     Utopia          42%   best Black Hole (65%)
-    Shadow Ops.     41%   best Eavesdrop (63%)
     Statecraft      36%   best Mutually Assured Destruction (53%)
 
 4. WHAT EACH STRATEGY LEANS ON (style games)
    Signature: the cards it plays most often compared with the plain Hard AI, with the same deck (x times as often).
    Lift: in the games it played the card more than usual, how much more it won than its usual with that deck (15+ such games).
-  Hard Spymaster: Intelligence: Reveals, Watchdogs, Concealed and Encrypted, and cards.
-    signature: Climate Change x3,1, Absolute Zero x2,3, Unpaid Intern x2,0, Kakistocracy x1,9, Catfish x1,4
-    lift:      Football Hooligans +16% (Zeitgeist), Karen +9% (Zeitgeist), Chain Smoker +2% (Zeitgeist), Reincarnation -8% (Myth)
   Hard Hexer: Statuses and debuffs: Burn, stuns, Doomed, Heat, then the hits that use them.
     signature: Climate Change x4,3, Kakistocracy x3,0, Absolute Zero x2,5, Mutually Assured Destruction x1,7, Sacrificial Ritual x1,7
     lift:      Underdog +2% (Zeitgeist), Zeitgeist -4% (Zeitgeist)
-  Hard Controller: Control: kills and disables their creatures, goes face only once the board is safe.
-    signature: Climate Change x3,7, Kakistocracy x2,5, Sacrificial Ritual x2,0, Mutually Assured Destruction x1,9, Absolute Zero x1,9
-    lift:      Clickbait +15% (Digital .), Crypto "Entrepreneur" +1% (Digital .), Russian Roulette -5% (Zeitgeist)
+  Hard Spymaster: Intelligence: Reveals, Watchdogs, Concealed and Encrypted, and cards.
+    signature: Climate Change x3,1, Absolute Zero x2,3, Unpaid Intern x2,0, Kakistocracy x1,9, Catfish x1,5
+    lift:      Football Hooligans +16% (Zeitgeist), Karen +9% (Zeitgeist), Chain Smoker +2% (Zeitgeist), Reincarnation -8% (Myth)
   Hard: Weighs everything the same: the plain Hard AI.
     signature: -
     lift:      Rage Bait -2% (Digital .), Underdog -9% (Zeitgeist), Delivery Cyclist -9% (Zeitgeist), Bodybuilder -22% (Zeitgeist)
-  Hard Rusher: Aggro: damage to the player first, its own Health spent freely, races early.
-    signature: Reincarnation x1,5, Keyboard Warrior x1,4, Climate Change x1,3, Sacrificial Ritual x1,3, Control Room x1,3
-    lift:      Trolley Problem +8% (Mind), NPC +5% (Digital .), Keyboard Warrior +5% (Digital .), Social Panopticon +5% (Digital .), Omniscient Space-Time Bending Bearded Wizard +5% (Myth)
   Hard Engine: Card advantage: draws whenever it can, paying with Health and creatures.
-    signature: Mass Layoffs x1,5, Sacrificial Ritual x1,4, Keyboard Warrior x1,4, Reincarnation x1,4, Climate Change x1,3
+    signature: Mass Layoffs x1,5, Sacrificial Ritual x1,4, Reincarnation x1,4, Climate Change x1,3, Mutually Assured Destruction x1,3
     lift:      Reincarnation +15% (Myth), This Is Fine +10% (Zeitgeist), Monkey Hand +8% (Myth), Exorcism +8% (Myth), The Holy Grail +8% (Myth)
+  Hard Rusher: Aggro: damage to the player first, its own Health spent freely, races early.
+    signature: Reincarnation x1,5, Climate Change x1,3, Sacrificial Ritual x1,3, Absolute Zero x1,3
+    lift:      Trolley Problem +8% (Mind), NPC +5% (Digital .), Keyboard Warrior +5% (Digital .), Social Panopticon +5% (Digital .), Omniscient Space-Time Bending Bearded Wizard +5% (Myth)
+  Hard Controller: Control: kills and disables their creatures, goes face only once the board is safe.
+    signature: Climate Change x3,7, Kakistocracy x2,5, Sacrificial Ritual x2,0, Mutually Assured Destruction x1,9, Absolute Zero x1,9
+    lift:      Clickbait +15% (Digital .), Crypto "Entrepreneur" +1% (Digital .), Russian Roulette -5% (Zeitgeist)
   Hard Bastion: Defence: protects its creatures and its Health, wins late.
-    signature: Excess of Bread and Wine x2,0, Unpaid Intern x1,5, Martial Law x1,4, Reincarnation x1,4, Keyboard Warrior x1,4
+    signature: Excess of Bread and Wine x2,0, Unpaid Intern x1,5, Martial Law x1,4, Reincarnation x1,4, Quantum Physicist x1,3
     lift:      The Holy Grail +15% (Myth), Mummy +15% (Myth), Exorcism +9% (Myth), Monkey Hand +9% (Myth), Excess of Bread and Wine +9% (Myth)
   Hard Swarm: Goes wide: summons, buffs for its creatures and cards to keep the row full.
-    signature: Sacrificial Ritual x1,5, Unpaid Intern x1,5
+    signature: Sacrificial Ritual x1,5, Unpaid Intern x1,5, Mole x1,4
     lift:      Extremophile +12% (Utopia), Imposter Syndrome +11% (Mind), Scapegoating +5% (Mind), Reality TV Star +1% (Zeitgeist), Climate Change -2% (Utopia)
 
 5. DECK AGAINST DECK: the row deck's wins out of 6 against the column deck
                    Corporate Statecra. Zeitgeist    Utopia Digital . Shadow O.      Tech      Myth      Mind Panoptic. Prosperi.
   Corporate                -         3         5         5         6         6         5         6         6         6         6
   Statecra.                3         -         6         6         6         6         6         6         6         6         6
-  Zeitgeist                1         0         -         3         0         5         3         6         0         5         6
-  Utopia                   1         0         2         -         0         5         0         4         0         6         4
+  Zeitgeist                1         0         -         3         0         4         3         6         0         3         6
+  Utopia                   1         0         2         -         0         4         0         4         0         5         4
   Digital .                0         0         6         6         -         6         6         6         6         6         6
-  Shadow O.                0         0         1         1         0         -         0         2         0         0         0
+  Shadow O.                0         0         1         2         0         -         0         5         0         0         4
   Tech                     1         0         3         6         0         6         -         3         4         6         5
-  Myth                     0         0         0         0         0         4         3         -         0         2         5
-  Mind                     0         0         5         5         0         5         2         6         -         3         5
-  Panoptic.                0         0         1         0         0         6         0         4         2         -         3
-  Prosperi.                0         0         0         2         0         6         1         1         0         3         -
+  Myth                     0         0         0         0         0         1         3         -         0         0         5
+  Mind                     0         0         5         5         0         5         2         6         -         0         5
+  Panoptic.                0         0         3         1         0         6         0         6         5         -         4
+  Prosperi.                0         0         0         2         0         2         1         1         0         1         -
 
 PROBLEMS: none found.

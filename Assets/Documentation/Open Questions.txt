@@ -7,7 +7,8 @@ STILL OPEN
 
 30. Balance from the AI games (2026-10-13)
     • Done: 'Balance Report' (3014 AI games). Statecraft and Corporate win 90%+ of their games, Shadow Ops. 7%; board-wide damage (Clickbait, Mutually Assured Destruction, Margin Call) decides most games, and Deployment Time creatures die before acting. Nothing was changed.
-    • Question: which of the report's suggestions (section 4) should be made, and should costs (GDD Faction Costs) come first?
+    • Done since: Shadow Ops. creatures all deploy in 0, Sleeper Agent got Off the Books (new ability: double damage until identified). Shadow Ops. went from 7% to 20%.
+    • Question: which of the report's suggestions (section 4) should be made, and should costs (GDD Faction Costs) come first? Is "Off the Books" a good name, and is double damage until identified the right strength?
 
 29. Choices made answering round 13 (2026-10-13)
     • Heat Signature "picks from both": random damage goes to the hottest creature on either side, even the caster's own. Random buffs and statuses still stay on the side they name (a "random friendly creature +1 Attack" never lands on an enemy). OK, or should those cross sides too?

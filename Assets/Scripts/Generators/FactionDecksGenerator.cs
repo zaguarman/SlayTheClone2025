@@ -562,12 +562,12 @@ namespace SlayTheClone {
 
         // Shadow Ops.: fragile agents, hidden plans, traps
         private static List<CardDef> ShadowOpsCards() => new List<CardDef> {
-            Creature("Cleaner", 2, 3, speed: 3, deploy: 1,
+            Creature("Cleaner", 2, 3, speed: 3, deploy: 0,
                 "Two shots. One invoice.",
                 "Mechanics test: Double Tap. It attacks twice: a second hit right after the first.")
                 .With(CreatureAbility.DoubleTap)
                 .Picture("A calm man in a cleaning company jumpsuit, a mop in one hand and a silenced pistol in the other, two neat holes in a target behind him."),
-            Creature("Political Decoy", 0, 6, speed: 1, deploy: 1,
+            Creature("Political Decoy", 0, 6, speed: 1, deploy: 0,
                 "The real one is in a bunker. Or is he?",
                 "Mechanics test: Swap trades places with a friendly creature at any distance, over the creatures in between, even one that can't act.")
                 .With(MovementKeyword.Swap)
@@ -583,12 +583,12 @@ namespace SlayTheClone {
                 CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Redirect,
                     charges = 2, timing = WatchdogTiming.Briefing, pick = BriefingPick.Strongest }, TargetType.Enemy))
                 .Picture("A remake of the first Counter-Strike box cover: a counter-terrorist and a terrorist in a tense standoff in a dusty corridor, but both are accountants in thick glasses, aiming pocket calculators at each other like rifles, ledgers fluttering around them."),
-            Creature("Mole", 2, 3, speed: 2, deploy: 1,
+            Creature("Mole", 2, 3, speed: 2, deploy: 0,
                 "Twenty years with the company. Twenty-one with the other one.",
                 "Mechanics test: Underground (both ways). When it's attacked, the attacker's buffs and debuffs are ignored; when it attacks, the defender's temporary Health changes are.")
                 .With(CreatureAbility.Underground)
                 .Picture("A mild office clerk in a cardigan and lanyard at his desk, a mole's snout and claws poking out of his sleeves, a tunnel opening under his chair that leads to a foreign embassy's flag."),
-            Creature("Signal Jammer", 1, 5, speed: 1, deploy: 1,
+            Creature("Signal Jammer", 1, 5, speed: 1, deploy: 0,
                 "No bars. No calls. No witnesses.",
                 "Mechanics test: Signal Jammer. The enemy creature directly opposite has its ability switched off (its triggered effects still work).")
                 .With(CreatureAbility.SignalJammer)
@@ -599,10 +599,10 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Status(StatusEffectType.Concealed, 3, TargetType.Self)))
                 .With(CreatureAbility.IdentityTheft)
                 .Picture("Two men facing each other in front of a mirror, each peeling off a latex mask of the other's face."),
-            Creature("Sleeper Agent", 3, 3, speed: 2, deploy: 1,
+            Creature("Sleeper Agent", 3, 3, speed: 2, deploy: 0,
                 "Eleven years next door. Waters your plants. Waiting for a phone call.",
-                "Mechanics test: Undercover. Everything it plans is a Concealed Action: the other side sees ??? on its card instead of its arrows, and their Watchdogs can't match it.")
-                .With(CreatureAbility.Undercover)
+                "Off the Books: it arrives as ??? and hits twice as hard until someone works out who it is (a Reveal or Revealed). Concealing it again (Smoke And Mirrors) brings the double damage back.")
+                .With(CreatureAbility.OffTheBooks)
                 .Picture("A suburban dad mowing his lawn in a polo shirt, an earpiece coiled behind his ear, while his shadow on the grass wears a trench coat and holds a sniper rifle."),
             Spell("Smoke And Mirrors", TargetType.FriendlyCreatures,
                 "Look over there. No, the other there.",
@@ -629,7 +629,7 @@ namespace SlayTheClone {
                 "1 damage now, then Burned for 3 Days. Future: Spontaneous Combustion.",
                 Damage(1, TargetType.EnemyCreatures), Status(StatusEffectType.Burned, 3, TargetType.EnemyCreatures, potency: 1))
                 .Picture("A gentleman in a bowler hat at a bus stop, the tip of his black umbrella dripping glowing green drops that sizzle on the pavement."),
-            Creature("Control Room", 0, 5, speed: 1, deploy: 1,
+            Creature("Control Room", 0, 5, speed: 1, deploy: 0,
                 "Forty screens, all on. Nobody watching the one that matters.",
                 "Each Dawn it Reveals a random enemy slot: its hidden Slot Effect and what the creature there plans that Day. Future: chooses the slot.",
                 On(EffectTrigger.StartOfTurn, Reveal(TargetType.EnemyCreatures, AtRandom)))

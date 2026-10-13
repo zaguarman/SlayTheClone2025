@@ -152,6 +152,16 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(7, guard.Health, "Insider Job ignores Armor...");
             Assert.AreEqual(5, guard.CurrentArmorPool, "...and leaves it untouched");
 
+            // Off the Books: it arrives as ???, and hits double until the other side knows what it is
+            var sleeper = With(CreatureAbility.OffTheBooks, p1, 3, attack: 3);
+            var mark = With(CreatureAbility.None, p2, 3, health: 20);
+            Assert.IsFalse(Intel.KnowsWhatItIs(p2, sleeper), "Off the Books: it arrives unknown");
+            game.Attack(sleeper, p2.Battlefield[3]);
+            Assert.AreEqual(14, mark.Health, "...and while they don't know it, 3 becomes 6");
+            game.Run(new ApplyStatusEffectAction(sleeper, StatusEffectType.Revealed, 1, 0, controller: p2));
+            game.Attack(sleeper, p2.Battlefield[3]);
+            Assert.AreEqual(11, mark.Health, "Revealed, it's known for good: plain damage");
+
             var hipster = With(CreatureAbility.TooMainstream, p2, 4);
             var bomb = game.GiveCard(p1, game.Spell("Bomb", TargetType.EnemyCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));

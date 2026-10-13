@@ -199,12 +199,12 @@ Creatures (Attack/Health/Speed, Deployment Time)
         • Not on My Watch (Zeitgeist, 1/5/1, 1): Safe Space (each Dawn, it and the friendly creatures beside it gain Bless).
         • One for the Road (Zeitgeist spell): target gains Double Tap.
         • Crypto "Entrepreneur" (Digital Society, 2/3/2, 0): Chain Mail (its attacks jump to the next 2 creatures in line, half each jump).
-        • Cleaner (Shadow Ops., 2/3/3, 1): Double Tap (it attacks twice).
+        • Cleaner (Shadow Ops., 2/3/3, 0): Double Tap (it attacks twice).
         • Mimetic Theory (Mind spell): target copies the Attack, Health and Speed of the creature facing it.
     • More cards (2026-10-13), in the deck builder only (not in a starter deck or this one):
         • Meta Group Chat (Digital Society, 1/4/2, 0): each Dawn, +1 Attack on a random friendly creature and Heat Signature 1 on a random enemy creature.
         • Social Panopticon (Digital Society spell): every enemy creature is Revealed for 2 Days and gets Heat Signature 1.
-        • Control Room (Shadow Ops., 0/5/1, 1): each Dawn, Reveals a random enemy slot.
+        • Control Room (Shadow Ops., 0/5/1, 0): each Dawn, Reveals a random enemy slot.
         • Humanitarian Trafficking Action (Shadow Ops. spell): heals an enemy creature 2 and gives it Heat Signature 2.
         • No Glove, No Love (Zeitgeist spell): Blessed and 2 Armor on a friendly creature.
         • Business Expense (Corporate spell): draw 2 next Day, and 2 damage to you.
@@ -214,12 +214,12 @@ Creatures (Attack/Health/Speed, Deployment Time)
         • Sex Clanker (Tech, 1/6/1, 0): Arrival: Heat Signature 3 on itself, a decoy that draws random effects and redirected attacks.
         • We Are Not The Same (Zeitgeist spell): your creature copies the stats of the enemy creature facing it.
     • Keyboard Warrior (Digital Society, 1/3/2, 0): No U (enemy effects that would lower its stats bounce back), Counterattack (a creature that attacks it is hit back for its Attack). Tests answering every attack that lands, even killing ones.
-    • Political Decoy (Shadow Ops., 0/6/1, 1): Swap.
+    • Political Decoy (Shadow Ops., 0/6/1, 0): Swap.
     • Martyr (Myth, 2/4/1, 1): When ready, doom this for 2 Days. When it dies, heal each friendly creature by 3.
 
 Ability Test Creatures (no other effects: each tests one ability from the 'Abilities Compendium')
-    • Mole (Shadow Ops., 2/3/2, 1): Underground.
-    • Signal Jammer (Shadow Ops., 1/5/1, 1): Signal Jammer.
+    • Mole (Shadow Ops., 2/3/2, 0): Underground.
+    • Signal Jammer (Shadow Ops., 1/5/1, 0): Signal Jammer.
     • Deep Cover (Shadow Ops., 2/2/2, 0): Identity Theft (hold Shift while dragging it onto a creature).
     • Script Kiddie (Tech, 2/2/3, 0): Zero-Day.
     • Legacy Code (Tech, 1/6/1, 1): Cold Storage.
@@ -231,7 +231,7 @@ Ability Test Creatures (no other effects: each tests one ability from the 'Abili
     • The other abilities are on faction cards: Insider Job (Day Trader), Penny Stock (Pluriemployed Hustler), Spite (Spite-Elected President), Return to Sender (Supreme Court), Too Mainstream (Hipster), No U (Keyboard Warrior).
 
 Fog of War Test Cards (GDD 2.5)
-    • Sleeper Agent (Shadow Ops., 3/3/2, 1): Undercover (its plans show as ??? to the enemy).
+    • Sleeper Agent (Shadow Ops., 3/3/2, 0): Off the Books (enters as ???; double damage while the enemy doesn't know what it is, or it's Concealed).
     • Smoke And Mirrors (Shadow Ops. spell): Concealed for 2 Days on a friendly creature.
     • Eavesdrop (Shadow Ops. spell, instant): Reveal an enemy slot: its hidden Slot Effect and what the creature there plans this Day.
     • Tapped Communications (Shadow Ops. spell, instant): Revealed for 2 Days on an enemy creature.

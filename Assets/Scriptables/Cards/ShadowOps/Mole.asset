@@ -28,6 +28,6 @@ MonoBehaviour:
   attack: 2
   health: 3
   speed: 2
-  turnsUntilOperative: 1
+  turnsUntilOperative: 0
   movement: 0
   ability: 6

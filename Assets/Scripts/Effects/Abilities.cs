@@ -65,6 +65,7 @@ namespace SlayTheClone {
             CreatureAbility.DoubleTap => "Double Tap",
             CreatureAbility.ShellGame => "Shell Game",
             CreatureAbility.SafeSpace => "Safe Space",
+            CreatureAbility.OffTheBooks => "Off the Books",
             _ => ability.ToString()
         };
 
@@ -87,6 +88,7 @@ namespace SlayTheClone {
             CreatureAbility.ReturnToSender => "enemy statuses bounce back to the creature that sent them; from a spell, to a random enemy creature",
             CreatureAbility.PennyStock => "double damage when it hits for 3 or less",
             CreatureAbility.Undercover => "its plans show as ??? to the enemy",
+            CreatureAbility.OffTheBooks => "enters as ???; double damage while the enemy doesn't know what it is, or it's Concealed",
             CreatureAbility.Handover => "when a summon replaces it, the newcomer takes over its stat changes and statuses",
             CreatureAbility.Recoil => "+2 damage on its attacks; it takes 1 damage after each attack",
             CreatureAbility.Bodyguard => "can't attack. Active: another friendly creature is Untouchable this Day, then a Day of Cooldown (drag it onto that creature)",
@@ -243,7 +245,7 @@ namespace SlayTheClone {
         /// The damage a hit deals before the target's modifiers (Exposed) and Armor: Underground ignores an attacker's
         /// Temporary Stat Modifications, then Penny Stock doubles hits of 3 or less.
         /// </summary>
-        public static int OutgoingDamage(DamageCreatureAction hit) {
+        public static int OutgoingDamage(DamageCreatureAction hit, IModifierManager modifiers) {
             int damage = hit.GetDamage();
             var attacker = hit.GetAttacker();
             if (hit.DealsAttackersAttack && Defends(hit.GetTarget(), CreatureAbility.Underground, attacker)) {
@@ -254,8 +256,17 @@ namespace SlayTheClone {
                 damage = Math.Max(0, damage + (defender.MaxHealth - defender.BaseHealth));
             }
             if (damage > 0 && damage <= 3 && Has(attacker, CreatureAbility.PennyStock)) damage *= 2;
+            if (damage > 0 && IsOffTheBooks(attacker, modifiers)) damage *= 2;
             return damage;
         }
+
+        /// <summary>
+        /// Off the Books: everything it deals is doubled while the other side doesn't know what it is (it enters as ???, see
+        /// <see cref="Intel.IsStealthy"/>) or while it's Concealed. A Reveal or Revealed shows it for good, and ends that.
+        /// </summary>
+        public static bool IsOffTheBooks(ICreature creature, IModifierManager modifiers) =>
+            Has(creature, CreatureAbility.OffTheBooks)
+            && (!Intel.KnowsWhatItIs(creature.Owner?.Opponent, creature) || Intel.IsConcealed(creature, modifiers));
 
         /// <summary>Recoil: its attacks hit 2 harder (it takes 1 damage after each, see BattlefieldCombatActionExecutor).</summary>
         public static int AttackBonus(ICreature attacker) => Has(attacker, CreatureAbility.Recoil) ? 2 : 0;

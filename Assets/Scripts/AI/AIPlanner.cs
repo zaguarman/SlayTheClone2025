@@ -327,6 +327,7 @@ namespace SlayTheClone {
         private int DamageOf(SeenCreature attacker) {
             int damage = AttackOf(attacker) + (attacker.Ability == CreatureAbility.Recoil ? 2 : 0);
             if (attacker.Ability == CreatureAbility.PennyStock && damage <= 3) damage *= 2;
+            if (attacker.DealsDouble) damage *= 2; // Off the Books, still unseen
             return attacker.Ability == CreatureAbility.DoubleTap ? damage * 2 : damage;
         }
 
@@ -563,7 +564,7 @@ namespace SlayTheClone {
                 StatusEffectType.Doomed => -creature.Worth / 2f,
                 StatusEffectType.Blessed => System.Math.Max(1, action.statusPotency),
                 StatusEffectType.HeatSignature => -0.5f,
-                StatusEffectType.Revealed => creature.Has(StatusEffectType.Concealed) || creature.Ability == CreatureAbility.Undercover ? -2 : -0.5f,
+                StatusEffectType.Revealed => creature.Has(StatusEffectType.Concealed) || creature.Ability is CreatureAbility.Undercover or CreatureAbility.OffTheBooks ? -2 : -0.5f,
                 StatusEffectType.Concealed or StatusEffectType.Encrypted => 1,
                 StatusEffectType.Untouchable => Hard && creature.Ours ? Protection(creature, ActionType.Stun, 0) : 3,
                 StatusEffectType.Cooldown => -1,

@@ -19,15 +19,15 @@ MonoBehaviour:
   faction: 3
   artwork: {fileID: 3286163911610860551, guid: a5b0909a5096cf8409b539a2af5df42f, type: 3}
   effects: []
-  designNotes: 'Mechanics test: Undercover. Everything it plans is a Concealed Action:
-    the other side sees ??? on its card instead of its arrows, and their Watchdogs
-    can''t match it.'
+  designNotes: 'Off the Books: it arrives as ??? and hits twice as hard until someone
+    works out who it is (a Reveal or Revealed). Concealing it again (Smoke And Mirrors)
+    brings the double damage back.'
   artDescription: A suburban dad mowing his lawn in a polo shirt, an earpiece coiled
     behind his ear, while his shadow on the grass wears a trench coat and holds a
     sniper rifle.
   attack: 3
   health: 3
   speed: 2
-  turnsUntilOperative: 1
+  turnsUntilOperative: 0
   movement: 0
-  ability: 17
+  ability: 28

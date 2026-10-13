@@ -29,6 +29,8 @@ namespace SlayTheClone {
         public bool Exposed { get; }
         /// <summary>Damage it answers an attack with (Counterattack, Retaliate), from its card text.</summary>
         public int Retaliation { get; }
+        /// <summary>Off the Books and still unseen: its damage is doubled (known for ours, and for theirs once we know them).</summary>
+        public bool DealsDouble { get; }
         /// <summary>How far its Attack and Health are above its printed ones (what Credit Grab steals).</summary>
         public int StatRaises { get; }
         private readonly HashSet<StatusEffectType> statuses;
@@ -58,6 +60,7 @@ namespace SlayTheClone {
                 if (status != StatusEffectType.None && modifiers.HasStatusEffect(creature, status)) statuses.Add(status);
             }
             StatRaises = creature.Attack - creature.BaseAttack + creature.Health - creature.BaseHealth;
+            DealsDouble = slot != null && creature.Slot != null && Abilities.IsOffTheBooks(creature, modifiers);
             Retaliation = creature.Effects.Where(e => e.trigger == EffectTrigger.OnDamage).SelectMany(e => e.actions)
                 .Where(a => a.actionType == ActionType.Damage && a.targetType == TargetType.Enemy && a.targetModifier == TargetModifier.None)
                 .Sum(a => a.value > 0 ? a.value : creature.Attack);

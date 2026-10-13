@@ -7,6 +7,15 @@ How the games were played: the Hard AI (see 'AI Design').
 No rule broke in any of them.
 
 
+CHANGES SINCE (2026-10-13)
+• Shadow Ops.: every creature's Deployment Time is 0 (spies are already in place), and Sleeper Agent has the new Off the
+  Books ability (enters as ???, double damage until it's identified). A new run (Debug > AI Balance Report):
+    Shadow Ops. 7% -> 20% of its deck-against-deck games; Panopticon 27% -> 42%. Sleeper Agent is now its best damage
+    dealer (9.3 damage and 1.5 kills a game, against 5.7 for its best card before). It beats Myth 5 - 1 and Prosperity Gospel
+    4 - 2, but still loses every game to Statecraft, Corporate, Digital Society, Tech and Mind.
+    Myth (23% -> 15%) and Prosperity Gospel (22% -> 12%) fell: they were the decks Shadow Ops. could beat.
+  The numbers below are from before these changes.
+
 1. THE SHORT VERSION
 
 • The decks are far apart. Statecraft (95% of its games won) and Corporate (90%) beat everything except each other; Digital
