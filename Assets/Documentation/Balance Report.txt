@@ -30,9 +30,56 @@ CHANGES SINCE (2026-10-13)
     Operation (edge 85%), the information trades (Dead Drop 70%, Bilderberg Membership 65%, Social Engineering 60%),
     Sabotage 67%, Coup d'État 63%. The saves are weak in the AI's hands: Witness Protection Program 31%, He Didn't Kill
     Himself 33%, Extraction 36%, Death By "Natural Causes" 37%.
-    Suggestions (not applied, Open Questions 32): MK Ultra Test Subject 3/3, False Flag Operation +2/+2, Dead Drop
-    draws 4.
+    Suggestions (applied 2026-10-14): MK Ultra Test Subject 3/3, False Flag Operation +2/+2, Dead Drop draws 4.
   The numbers below are from before these changes.
+
+LATEST RUN (2026-10-14): 3640 games, the Very Hard AI on both sides, no rule broken
+After the Black Budget nerfs (MK Ultra Test Subject 3/3, False Flag Operation +2/+2, Dead Drop draws 4), the Double-O
+Section deck (22 cards, the spy-film cards), NDA (Corporate, deck builder only) and the Very Hard AI.
+    Double-O Section 92%   Statecraft 85%   Corporate 82%   Black Budget 75% (was 89%)   Digital Society 71%
+    Mind 44%   Zeitgeist 40%   Tech 35%   Panopticon 33%   Utopia 25%
+    Plausible Deniability 18%   Prosperity Gospel 15%   Myth 13%
+  Black Budget came down as hoped (MK Ultra Test Subject still deals 13.6 a game, False Flag Operation still has 88% edge).
+  Double-O Section is now the best deck: Femme Fatale (11.8 damage and 2.4 kills a game), Multi Passport, If I Told You and
+  The Golden Gun (71% edge, one kill a game). It loses to nobody: 3 - 3 with Statecraft, 4 - 2 with Corporate.
+
+WHY THE BOTTOM DECKS LOSE
+Three causes, the same as in the first report, and they stack:
+  a) No board-wide damage. The decks on top win with one or two cards that hit every creature on the other side:
+     Mutually Assured Destruction (30.5 damage a game), Clickbait (32.3), Margin Call (20.5), This Is Fine (26.9), Black
+     Hole (27.2). Myth, Prosperity Gospel and Plausible Deniability have none, so they trade one creature for one creature
+     against decks that wipe their whole row.
+  b) Slow creatures. Utopia's creatures need 1.9 Days on average before they act, Myth's 1.1, Prosperity Gospel's 1.3:
+     they're killed by those sweepers before they do anything. The best decks either deploy at 0 (the three Shadow Ops.
+     decks on top, Digital Society) or are sturdy enough to survive the wait (Statecraft: 4.5 Health on average).
+  c) Cards that don't touch the board. Plausible Deniability plays 12 to 14 information cards a game (Smoke And Mirrors,
+     Burn Notice, Eavesdrop) that change what's seen, not what's alive. Myth's spells (Exorcism, Memento Mori, Monkey Hand,
+     The Holy Grail, Excess of Bread and Wine) protect or heal, and deal no damage at all.
+
+DECK BY DECK
+  Myth (13%): beats only Prosperity Gospel and half of Tech. Its damage comes from Reincarnation (9.3 a game), Martyr and
+    Mummy (about 5 each). Omniscient Space-Time Bending Bearded Wizard kills 2.15 creatures a play, the most of any
+    creature, but it deploys late and its edge is 27%: it's usually played from behind. Sacrificial Ritual (36% edge) costs
+    more than it gives.
+  Prosperity Gospel (15%): Myth's sacrifices and Corporate's draws, without Corporate's damage spells (Margin Call, Hostile
+    Takeover, Inflation are in the Corporate deck, not this one). It draws a lot and has nothing to spend the cards on;
+    Martyr is its best damage dealer at 5.5 a game.
+  Plausible Deniability (18%): the oldest Shadow Ops. deck. Weak bodies (1.2 Attack on average), and the information
+    cards above. Its kills are Perfectly Timed Camera Malfunction and Wet Work; Signal Jammer is its best creature.
+  Utopia (25%): Black Hole does everything (27.2 damage, 6.8 kills a game); the rest is slow. Splitting The Atom and
+    Climate Change are among the weakest spells (34%, 35% edge).
+  Panopticon (33%) and Tech (35%): Tech has removal (Legacy Code, SysAdmin, Technical Debt) but Technical Debt is played
+    13 times a game with 26% edge, and End-to-End Encryption and Meatproxy As A Service do little. Panopticon has neither
+    Clickbait nor a sweeper of its own.
+
+SUGGESTIONS (not applied, Open Questions 33)
+  1. Give each bottom deck one sweeper of its theme: Myth a flood or a plague (2 damage to every enemy creature), Utopia a
+     second Black Hole-like spell, Plausible Deniability a gas attack (1 damage to every enemy creature, Revealed 1).
+  2. Prosperity Gospel: swap Mass Layoffs and Tax-Exempt Corruption for Margin Call and Hostile Takeover.
+  3. Faster bodies: Utopia's and Myth's creatures 1 Day less Deployment Time (as was done for Shadow Ops.: 7% -> 20%).
+  4. Plausible Deniability: let its information cards also draw a card (information is worth something), or take in a few
+     of the new Shadow Ops. bodies (Femme Fatale, If I Told You, I'd Have to Kill You).
+  5. Double-O Section, the new top: Femme Fatale 2/3 (its squeeze stays), or 1 copy of it instead of 2.
 
 1. THE SHORT VERSION
 

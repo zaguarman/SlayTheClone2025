@@ -5,6 +5,28 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+33. Double-O Section, the Very Hard AI and the bottom decks (2026-10-14)
+    • Built as asked: The Golden Gun (Single Use), Die Another Day (Borrowed Time), Licence to Kill (Licensed), Shaken, Not
+      Stirred (Composed), GoldenEye (Blackout, Watchdogs wiped), Femme Fatale, Supply Chain Attack (aimed at Statecraft's
+      slow bodies and Corporate's draws), Hollowed-Out Volcano Lair (a Trend), all in a new 22-card deck, Shadow Ops. -
+      Double-O Section (Your Quartermaster). NDA is in Corporate (Discard 1, Blackout 2), in the deck builder only.
+    • Renamed: Scapegoat is now Lone Gunman (Escape Goat stays as it was).
+    • Choices made, say if you want them otherwise:
+        - Die Another Day: it can't die at all until the next Day's Dusk, not even to a Destroy or a Kill Order; at that Dusk
+          it dies if its Health is 0. It keeps acting at 0 Health meanwhile.
+        - Licence to Kill keeps its licence until the creature attacks a creature (an attack on the player doesn't spend it).
+        - Shaken, Not Stirred also shakes off a stun the creature already has.
+        - GoldenEye's Blackout lasts until the next Day's Dusk and switches off the creatures' effects too (Last Will,
+          retaliation, Dawn and Dusk), not only their ability.
+        - Volcano Lair: the setter's strongest creature is Untouchable each Day while another of theirs stands (checked at
+          Dawn, and the Day it's set). The Watchdog charge from the first idea was left out: the Trend does one thing.
+        - Single Use cards are gone for the rest of the combat (there's no campaign yet to remove them from for good).
+        - Very Hard is a new level after Hard in the menu. The balance study now plays Very Hard; the tournaments don't.
+    • Balance (Balance Report, LATEST RUN): Black Budget 89% -> 75%. Double-O Section is the new top at 92%. At the bottom:
+      Myth 13%, Prosperity Gospel 15%, Plausible Deniability 18%, Utopia 25%. Which of the report's suggestions to make?
+    • Dead Drop (discard 3, draw 4) is now worse than Bilderberg Membership (discard 2, draw 4). Keep, or Dead Drop draws 5
+      with discard 3 and Bilderberg draws 3?
+
 32. Black Budget, the second Shadow Ops. deck (2026-10-13)
     • Built as designed (Starter Faction Decks, section 7): 23 new cards and new rules (GDD 5.4: requisites, Take Control, Back to the Hand, Gone Dark, secret statuses, tokens and decoys, Discard Cost, Intelligence Watchdogs, Backfire, When Revealed). Names: the backlog's where they fit (Dead Man's Switch, Extraction, Asset Recruitment, Glomar Response, If I Told You, I'd Have to Kill You, Never Let Them Know Your Next Move, Social Engineering, Bilderberg Membership); Dead Drop from the old Shadow Ops. list; the rest yours.
     • Renamed, as you asked: the creature is Scapegoat; Mind's Scapegoating became Escape Goat (same card, same picture of the escape goat).
