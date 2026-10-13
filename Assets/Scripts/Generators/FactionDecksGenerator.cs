@@ -77,7 +77,7 @@ namespace SlayTheClone {
         private static readonly (string Name, string File, string Opponent, string Tagline, string[] Cards)[] PairDecks = {
             ("Shadow Ops. - Black Budget", "ShadowOpsBlackBudgetDeck",
                 "Your Deep State Handler", "Officially, we don't exist. Unofficially, you lost.", new[] {
-                "Dead Man's Switch", "Dead Man's Switch", "MK Ultra Test Subject", "MK Ultra Test Subject", "Scapegoat",
+                "Dead Man's Switch", "Dead Man's Switch", "MK Ultra Test Subject", "MK Ultra Test Subject", "Lone Gunman",
                 "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Cleaner", "Multi Passport", "Wet Work", "Mole",
                 "False Flag Operation", "Never Let Them Know Your Next Move", "He Didn't Kill Himself", "Coup d'État", "Frame Job",
                 "Ghost Army", "Sabotage", "Witness Protection Program", "Extraction", "Fell Out of a Window", "Death By \"Natural Causes\"",
@@ -87,9 +87,9 @@ namespace SlayTheClone {
             ("Shadow Ops. - Double-O Section", "ShadowOpsDoubleODeck",
                 "Your Quartermaster", "Please return the car in one piece. You never do.", new[] {
                 "Cleaner", "Cleaner", "Multi Passport", "Multi Passport", "Wet Work", "Mole", "Femme Fatale", "Femme Fatale",
-                "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Dead Man's Switch", "Scapegoat",
+                "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Dead Man's Switch", "Lone Gunman",
                 "The Golden Gun", "Die Another Day", "Die Another Day", "Licence to Kill", "Licence to Kill",
-                "Shaken, Not Stirred", "Shaken, Not Stirred", "GoldenEye",
+                "Shaken, Not Stirred", "Shaken, Not Stirred", "GoldenEye", "Supply Chain Attack",
             }),
             ("Digital Society & Shadow Ops. - Panopticon", "PanopticonDeck",
                 "Your Data Broker", "Knows where you were last night. Sold it by noon.", new[] {
@@ -764,12 +764,12 @@ namespace SlayTheClone {
                 .With(CreatureAbility.AllergicToLight)
                 .NotInStarterDeck()
                 .Picture("A spy in a dark suit leaning in at a cocktail party to whisper into an eager journalist's ear, while under the table his other hand quietly screws a silencer onto a pistol."),
-            Creature("Scapegoat", 1, 3, speed: 1, deploy: 0,
-                "Someone has to take the blame. He volunteered. Sort of.",
-                "Fall Guy: when an enemy effect would make another friendly creature Revealed or destroy it (Perfectly Timed Camera Malfunction, Extreme Prejudice...), it lands on the Scapegoat instead. (Mind's spell that used to be called Scapegoating is now Escape Goat.)")
+            Creature("Lone Gunman", 1, 3, speed: 1, deploy: 0,
+                "Acted alone. Says he didn't. Officially, that settles it.",
+                "Fall Guy: when an enemy effect would make another friendly creature Revealed or destroy it (Perfectly Timed Camera Malfunction, Extreme Prejudice...), it lands on the Lone Gunman instead: the official story needs one man who did it all. (Was Scapegoat, too close to Mind's Escape Goat.)")
                 .With(CreatureAbility.FallGuy)
                 .NotInStarterDeck()
-                .Picture("A bewildered goat in an orange jumpsuit holding up a mugshot placard under flashing cameras, a sign around its neck reading I DID IT, while two men in dark suits slip away behind it."),
+                .Picture("A bewildered young man in a cheap suit shoved in front of flashing press cameras, holding a rifle he has clearly never seen before, a LONE GUNMAN placard hung round his neck, while two men in dark suits and hats slip away behind a picket fence on a grassy knoll."),
             Spell("Glomar Response", TargetType.Enemy,
                 "We can neither confirm nor deny the existence of this card.",
                 "A Watchdog: the next 2 enemy reveals (a Reveal, Revealed, or a spell that does either, even an instant one) are nullified, and they learn nothing. Monitored: it acts the moment they try.",
@@ -859,6 +859,13 @@ namespace SlayTheClone {
                 Status(StatusEffectType.Blackout, 1, TargetType.EnemyCreatures, modifier: Each), Act(ActionType.WipeWatchdogs, 0, TargetType.Enemy, TargetModifier.None))
                 .NotInStarterDeck()
                 .Picture("A satellite dish shaped like a golden eye in orbit firing a ripple of light at a city at night; below, every window goes dark at once and a man's toaster pops out smoking."),
+            Spell("Supply Chain Attack", TargetType.Enemy,
+                "Every router they bought this year came with a free extra. It phones home.",
+                "Disrupts the big organizations most: every enemy creature still deploying (Deployment Time left: Statecraft's slow bodies) waits 2 more Days, and the enemy draws 2 fewer cards with their next hand (Corporate's draw engine).",
+                Requiring(Act(ActionType.DelayDeployment, 2, TargetType.EnemyCreatures, Each), TargetRequisite.Deploying),
+                Act(ActionType.CutDraws, 2, TargetType.Enemy, TargetModifier.None))
+                .NotInStarterDeck()
+                .Picture("A cheerful delivery driver unloading crates of identical routers at a ministry's loading dock, each box with a tiny skull sticker under the barcode, while a line of bureaucrats in grey suits signs for them."),
             Creature("Femme Fatale", 2, 4, speed: 2, deploy: 0,
                 "She didn't kill him. She just held him very, very close.",
                 "Each Dusk she squeezes the enemy creature facing her: 2 damage to it, and she heals 1. Nothing facing her: nothing happens.",

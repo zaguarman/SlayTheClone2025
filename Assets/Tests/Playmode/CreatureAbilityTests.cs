@@ -300,7 +300,7 @@ namespace SlayTheClone.Tests {
             var patsy = With(CreatureAbility.FallGuy, p2, 1, attack: 1, health: 3);
             var boss = With(CreatureAbility.None, p2, 2, attack: 5);
             game.Run(new ApplyStatusEffectAction(boss, StatusEffectType.Revealed, 2, 0, controller: p1));
-            Assert.IsTrue(HasStatus(patsy, StatusEffectType.Revealed) && !HasStatus(boss, StatusEffectType.Revealed), "The Scapegoat is Revealed instead");
+            Assert.IsTrue(HasStatus(patsy, StatusEffectType.Revealed) && !HasStatus(boss, StatusEffectType.Revealed), "The Lone Gunman is Revealed instead");
             var kill = game.GiveCard(p1, game.Spell("Kill", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures)));
             game.Play(kill, p1, p2.Battlefield[2]);
             game.Resolve();

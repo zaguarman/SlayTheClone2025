@@ -286,6 +286,8 @@ namespace SlayTheClone {
                     return $"{target} fakes its death (its {Keywords.Link("Last Will")} happens) and goes back to your hand next {Keywords.Link("Day")}";
                 case ActionType.Vanish:
                     return $"{target} {Keywords.Link("Gone Dark", "goes dark")} until the next {Keywords.Link("Dawn")}";
+                case ActionType.CutDraws:
+                    return $"{target} draws {value} fewer card{(value == 1 ? "" : "s")} with the next hand";
                 case ActionType.WipeWatchdogs:
                     return $"wipe out the {target}'s {Keywords.Link("Watchdog", "Watchdogs")}";
                 case ActionType.Funnel:
@@ -331,6 +333,7 @@ namespace SlayTheClone {
             TargetRequisite.NextToEmptySlot => $" if a {Keywords.Link("Slot", "slot")} beside it is empty",
             TargetRequisite.Outnumbered => " if you have more creatures than its side",
             TargetRequisite.AttackAtMost => $" with {action.value} Attack or less",
+            TargetRequisite.Deploying => $" if it's still deploying ({Keywords.Link("Deployment Time")})",
             _ => ""
         };
 

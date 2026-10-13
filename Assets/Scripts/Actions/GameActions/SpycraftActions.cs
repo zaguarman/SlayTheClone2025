@@ -65,6 +65,28 @@ namespace SlayTheClone {
         }
     }
 
+    /// <summary>Supply Chain Attack: the player draws fewer cards with their next hand (never fewer than none).</summary>
+    public class CutDrawsAction : IGameAction {
+        public IPlayer Player { get; }
+        public int Cards { get; }
+
+        public CutDrawsAction(IPlayer player, int cards) {
+            Player = player;
+            Cards = cards;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"CutDrawsAction: {Player?.Name} draws {Cards} fewer next Day";
+    }
+
+    public class CutDrawsActionExecutor : ActionExecutor<CutDrawsAction> {
+        protected override void ExecuteAction(CutDrawsAction cut, ActionExecutionContext context) {
+            if (cut.Player == null) return;
+            cut.Player.ExtraDraws -= cut.Cards;
+            Log($"{cut.Player.Name} will draw {cut.Cards} fewer cards next Day", LogTag.Actions | LogTag.Cards);
+        }
+    }
+
     /// <summary>GoldenEye: every Watchdog a player controls is wiped out.</summary>
     public class WipeWatchdogsAction : IGameAction {
         public IPlayer Side { get; }

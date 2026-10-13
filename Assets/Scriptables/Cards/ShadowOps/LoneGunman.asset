@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
-  m_Name: Scapegoat
+  m_Name: LoneGunman
   m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
   cardId: 33ad1fde-977f-4a30-9635-34e8cff6cbdf
-  cardName: Scapegoat
-  description: Someone has to take the blame. He volunteered. Sort of.
+  cardName: Lone Gunman
+  description: Acted alone. Says he didn't. Officially, that settles it.
   cardType: 0
   faction: 3
   artwork: {fileID: 0}
@@ -23,11 +23,12 @@ MonoBehaviour:
   effects: []
   designNotes: 'Fall Guy: when an enemy effect would make another friendly creature
     Revealed or destroy it (Perfectly Timed Camera Malfunction, Extreme Prejudice...),
-    it lands on the Scapegoat instead. (Mind''s spell that used to be called Scapegoating
-    is now Escape Goat.)'
-  artDescription: A bewildered goat in an orange jumpsuit holding up a mugshot placard
-    under flashing cameras, a sign around its neck reading I DID IT, while two men
-    in dark suits slip away behind it.
+    it lands on the Lone Gunman instead: the official story needs one man who did
+    it all. (Was Scapegoat, too close to Mind''s Escape Goat.)'
+  artDescription: A bewildered young man in a cheap suit shoved in front of flashing
+    press cameras, holding a rifle he has clearly never seen before, a LONE GUNMAN
+    placard hung round his neck, while two men in dark suits and hats slip away behind
+    a picket fence on a grassy knoll.
   attack: 1
   health: 3
   speed: 1

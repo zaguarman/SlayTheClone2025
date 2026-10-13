@@ -12,7 +12,7 @@ namespace SlayTheClone {
         IDeck Deck { get; }
         int CardsToDraw { get; set; }
         /// <summary>Cards owed by effects that resolved after this Day's hand was dealt: drawn with the next Day's hand.</summary>
-        int ExtraDraws { get; set; }
+        int ExtraDraws { get; set; } // Cards added to (or, negative, cut from) the next Day's hand
         int Health { get; }
         /// <summary>
         /// "Once per combat" effects this player's cards have used (keyed by card and effect). It lasts the whole combat:

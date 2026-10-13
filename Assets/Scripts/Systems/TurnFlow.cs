@@ -75,7 +75,8 @@ namespace SlayTheClone {
                 }
                 clock.DrawsWaitForNextDay = false;
                 foreach (var player in players) {
-                    actionsQueue.AddAction(new DrawCardsAction(player, player.CardsToDraw + player.ExtraDraws + trends.ExtraDraws(player)));
+                    // ExtraDraws can be negative (Supply Chain Attack): a smaller hand, never less than none
+                    actionsQueue.AddAction(new DrawCardsAction(player, System.Math.Max(0, player.CardsToDraw + player.ExtraDraws + trends.ExtraDraws(player))));
                     player.ExtraDraws = 0;
                 }
                 yield return ResolveQueuedActions();

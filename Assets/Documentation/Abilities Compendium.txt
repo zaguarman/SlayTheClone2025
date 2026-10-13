@@ -174,11 +174,11 @@ Allergic to Light
     Answers: Reveal it. Twice.
 
 Fall Guy
-    Inspired by: the patsy who takes the blame. On Scapegoat.
+    Inspired by: the patsy who takes the blame, the lone gunman of the official story. On Lone Gunman (was Scapegoat).
     Type: Passive
     Description: "When an enemy effect would make another friendly creature Revealed or destroy it, it lands on this one instead."
     Notes: Only enemy effects, and only Revealed (not a Reveal's look) and Destroy (Perfectly Timed Camera Malfunction, Fell Out of a Window, Extreme Prejudice, Dead Man's Switch): damage still goes where it was aimed. The leftmost Fall Guy on the side takes it. A Kill Order is secret, so nobody takes the fall for it.
-    Answers: Kill the Scapegoat first (it has 3 Health), or switch its ability off.
+    Answers: Kill the Lone Gunman first (it has 3 Health), or switch its ability off.
 
 Handover
     Inspired by: Baton Pass (Pokémon), renamed so it isn't the move's name

@@ -122,6 +122,20 @@ namespace SlayTheClone.Tests {
             yield return game.EndTurn();
             Assert.AreEqual(Trend.None, game.TrendSystem.Current, "Over after its last Day's Dusk");
             Assert.AreEqual(5, p2.Hand.Count, "No more extra card");
+
+            // Supply Chain Attack: every enemy creature still deploying waits 2 more Days, and their next hand is 2 cards smaller
+            var slowData = game.Creature("Slow", 2, 2);
+            slowData.turnsUntilOperative = 2;
+            var slow = game.Summon(p2, slowData, 0);
+            var ready = game.Summon(p2, game.Creature("Ready", 2, 2), 1);
+            var delay = TestGame.Effect(EffectTrigger.OnPlay, ActionType.DelayDeployment, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets);
+            delay.actions[0].requires = TargetRequisite.Deploying;
+            var supplyChain = game.GiveCard(p1, game.Spell("Supply Chain", TargetType.Enemy, delay,
+                TestGame.Effect(EffectTrigger.OnPlay, ActionType.CutDraws, 2, TargetType.Enemy)));
+            game.Run(new PlayCardAction(supplyChain, p1, p2));
+            Assert.AreEqual((4, 0), (slow.TurnsUntilOperative, ready.TurnsUntilOperative), "Only the one still deploying waits longer");
+            yield return game.EndTurn();
+            Assert.AreEqual(3, p2.Hand.Count, "Their hand is 2 cards smaller");
         }
     }
 }

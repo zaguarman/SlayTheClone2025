@@ -292,6 +292,7 @@ namespace SlayTheClone {
             TargetRequisite.NextToEmptySlot => NextToEmptySlot(creature),
             TargetRequisite.Outnumbered => creature?.Owner?.Opponent != null && CreatureCount(creature.Owner) < CreatureCount(creature.Owner.Opponent),
             TargetRequisite.AttackAtMost => creature != null && creature.Attack <= value,
+            TargetRequisite.Deploying => creature != null && !creature.IsOperative,
             _ => true
         };
 
@@ -320,7 +321,7 @@ namespace SlayTheClone {
         /// <summary>Whether this kind of effect can land on a player (aimed at an empty slot, it lands on that side's player).</summary>
         public static bool CanAffectPlayers(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog or ActionType.Reveal
-                or ActionType.SummonDecoys or ActionType.WipeWatchdogs;
+                or ActionType.SummonDecoys or ActionType.WipeWatchdogs or ActionType.CutDraws;
         #endregion
 
         #region Actions
@@ -426,6 +427,8 @@ namespace SlayTheClone {
                     return creature != null && action.value > 0 ? new DelayDeploymentAction(creature, action.value) : null;
                 case ActionType.SummonDecoys: // Tokens into the player's empty slots (Ghost Army)
                     return target is IPlayer decoysSide && action.decoyData != null && action.value > 0 ? new SummonDecoysAction(decoysSide, action.decoyData, action.value) : null;
+                case ActionType.CutDraws: // Fewer cards in that player's next hand (Supply Chain Attack)
+                    return target is IPlayer cut && action.value > 0 ? new CutDrawsAction(cut, action.value) : null;
                 case ActionType.WipeWatchdogs: // Every Watchdog that player controls (GoldenEye)
                     return target is IPlayer wiped ? new WipeWatchdogsAction(wiped) : null;
                 case ActionType.TakeControl: // It changes sides, to the effect's controller (GDD 5.4)

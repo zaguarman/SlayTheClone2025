@@ -506,7 +506,7 @@ namespace SlayTheClone {
                     return ours ? Style.Board : Style.Statuses;
                 case ActionType.PlaceSlotEffect:
                     return ours && good > 0 ? Style.Protection : Style.Statuses;
-                case ActionType.Draw:
+                case ActionType.Draw or ActionType.CutDraws:
                     return Style.Cards;
                 case ActionType.Summon or ActionType.SummonDecoys:
                     return Style.Board;
@@ -632,6 +632,7 @@ namespace SlayTheClone {
             ActionType.Draw => amount,
             ActionType.Summon => 2 * amount,
             ActionType.SummonDecoys => 2.5f * amount, // Bodies that soak their attacks and kills
+            ActionType.CutDraws => -amount, // Cards they won't have
             _ => 0
         };
 
@@ -653,6 +654,7 @@ namespace SlayTheClone {
                     int mine = view.Mine.Count(), theirs = view.Theirs.Count();
                     return creature.Ours ? mine < theirs : theirs < mine;
                 case TargetRequisite.AttackAtMost: return AttackOf(creature) <= action.value;
+                case TargetRequisite.Deploying: return !creature.Operative;
                 default: return true;
             }
         }

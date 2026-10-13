@@ -11,14 +11,14 @@ namespace SlayTheClone {
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetTrend,
             CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy,
             TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys,
-            WipeWatchdogs } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
+            WipeWatchdogs, CutDraws } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
         /// NextToEmptySlot: a slot beside it is empty. Outnumbered: its side has fewer creatures than the other. AttackAtMost:
-        /// its Attack is the effect's value or less. New ones go last
+        /// its Attack is the effect's value or less. Deploying: it isn't ready yet (Deployment Time). New ones go last
         /// </summary>
-        public enum TargetRequisite { None, Revealed, NextToEmptySlot, Outnumbered, AttackAtMost }
+        public enum TargetRequisite { None, Revealed, NextToEmptySlot, Outnumbered, AttackAtMost, Deploying }
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         // Movement Keywords printed on creatures (GDD 2.4): Leapfrog jumps over creatures, Swap trades places with a friendly one

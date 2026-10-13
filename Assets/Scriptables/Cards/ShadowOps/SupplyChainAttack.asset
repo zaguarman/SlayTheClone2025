@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: SupplyChainAttack
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: ed6ae348-5024-4b80-918e-c36b11b3b3ad
+  cardName: Supply Chain Attack
+  description: Every router they bought this year came with a free extra. It phones
+    home.
+  cardType: 1
+  faction: 3
+  artwork: {fileID: 0}
+  discardCost: 0
+  singleUse: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 12
+      value: 2
+      targetType: 4
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 5
+      decoy: {fileID: 0}
+    - actionType: 30
+      value: 2
+      targetType: 1
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Disrupts the big organizations most: every enemy creature still deploying
+    (Deployment Time left: Statecraft''s slow bodies) waits 2 more Days, and the
+    enemy draws 2 fewer cards with their next hand (Corporate''s draw engine).'
+  artDescription: A cheerful delivery driver unloading crates of identical routers
+    at a ministry's loading dock, each box with a tiny skull sticker under the barcode,
+    while a line of bureaucrats in grey suits signs for them.
+  defaultTargetType: 1
