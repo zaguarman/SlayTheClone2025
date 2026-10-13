@@ -81,7 +81,7 @@ STILL OPEN
     • Question: should spells and abilities that damage it be answered too?
 
 17. Memes moved to Zeitgeist (2026-10-13)
-    • Done: "internet memes" is now in Zeitgeist's theme and out of Digital Society's (which keeps social media, influencers and cancel culture). Existing meme cards stay where they are (Its A Trap, This Is Fine, Rage Bait...).
+    • Done: "internet memes" is now in Zeitgeist's theme and out of Digital Society's (which keeps social media, influencers and cancel culture). Meme cards in Digital Society stay there for now (Its A Trap, Rage Bait); This Is Fine is already Zeitgeist.
     • Question: should some of them move to Zeitgeist?
 
 
