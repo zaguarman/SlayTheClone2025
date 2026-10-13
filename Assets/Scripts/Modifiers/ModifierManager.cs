@@ -260,6 +260,14 @@ namespace SlayTheClone {
                     if (expiredMod is StatusEffectModifier { EffectType: StatusEffectType.Doomed }) {
                         actionsQueue.AddAction(new DoomedSentenceAction(creature));
                     }
+                    // Brainwashed runs out: it goes over to the other side, its ability lost
+                    if (expiredMod is StatusEffectModifier { EffectType: StatusEffectType.Brainwashed } && creature.Owner?.Opponent != null) {
+                        actionsQueue.AddAction(new ChangeSidesAction(creature, creature.Owner.Opponent, losesAbility: true));
+                    }
+                    // A Kill Order runs out: the creature is destroyed, unless it's Untouchable
+                    if (expiredMod is StatusEffectModifier { EffectType: StatusEffectType.KillOrder } && !HasStatusEffect(creature, StatusEffectType.Untouchable)) {
+                        actionsQueue.AddAction(new DestroyCreatureAction(creature, unconditional: true));
+                    }
                 }
 
                 // A Health buff wearing off takes its Health back, which can kill the creature

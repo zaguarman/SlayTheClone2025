@@ -136,7 +136,7 @@ namespace SlayTheClone.Tests {
         private static List<string> PlanWith(AILevel level, bool hiddenDiffers, bool revealed) {
             using var g = new TestGame();
             var (me, them) = (g.Player1, g.Player2);
-            g.Summon(me, g.Creature("Brute", 3, 4), 0);
+            var brute = g.Summon(me, g.Creature("Brute", 3, 4), 0);
             g.Summon(me, g.Creature("Squire", 1, 2), 1);
             var guard = g.Summon(them, g.Creature("Guard", 1, 5), 0); // Zap can't kill it; the stranger it can, if it's what it seems
             var stranger = g.Summon(them, hiddenDiffers
@@ -148,6 +148,7 @@ namespace SlayTheClone.Tests {
             g.GiveCard(me, g.Creature("Recruit", 2, 2));
 
             if (hiddenDiffers) {
+                g.Run(new ApplyStatusEffectAction(brute, StatusEffectType.KillOrder, 2, 0, controller: them)); // Secret from player 1
                 g.Run(new PlaceSlotEffectAction(me.Battlefield[3], SlotEffectType.Landmine, 5, 0, them)); // Where player 1 would place a creature
                 g.Run(new PlaceSlotEffectAction(them.Battlefield[4], SlotEffectType.Landmine, 5, 0, them));
                 var nuke = g.GiveCard(them, g.Spell("Nuke", TargetType.EnemyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 9, TargetType.EnemyCreatures)));

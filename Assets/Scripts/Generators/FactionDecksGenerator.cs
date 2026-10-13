@@ -725,6 +725,19 @@ namespace SlayTheClone {
                 Act(ActionType.Vanish, 0, TargetType.FriendlyCreatures, TargetModifier.None))
                 .NotInStarterDeck()
                 .Picture("A man in a terrible fake moustache and a Hawaiian shirt mowing a lawn in a quiet cul-de-sac, his old mugshot pinned to a corkboard behind the window, a federal agent in a parked car pretending to read a newspaper."),
+            Spell("Death By \"Natural Causes\"", TargetType.EnemyCreatures,
+                "Heart attack. At 34. While jogging. Twice.",
+                "Kill Order 2 on target enemy creature: at the Dusk two Days later, it's destroyed (Untouchable saves it). It's secret: the other side doesn't see the spell played nor the Kill Order on their creature. A Cleanse removes it, knowingly or not.",
+                Status(StatusEffectType.KillOrder, 2, TargetType.EnemyCreatures))
+                .NotInStarterDeck()
+                .Picture("A coroner signing a death certificate marked NATURAL CAUSES with a flourish, while on the gurney beside him a tiny dart with a red feather sticks out of the dead man's neck."),
+            Spell("Asset Recruitment", TargetType.EnemyCreatures,
+                "We'll double your salary. Or tell your wife. Your choice.",
+                "Brainwashed 2 on target enemy creature: when it runs out, at Dusk, it changes sides for good, its ability lost. Revealed, it's turned faster: Brainwashed 1. Set it up with Tapped Communications.",
+                Status(StatusEffectType.Brainwashed, 2, TargetType.EnemyCreatures),
+                Requiring(Status(StatusEffectType.Brainwashed, 1, TargetType.EnemyCreatures), TargetRequisite.Revealed))
+                .NotInStarterDeck()
+                .Picture("A handler in a dim bar sliding a thick envelope and a photograph across the table to a nervous soldier; the photo shows the soldier with a woman who isn't his wife."),
             Creature("MK Ultra Test Subject", 4, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
@@ -1126,6 +1139,12 @@ namespace SlayTheClone {
         // It changes sides, to whoever's effect it is (GDD 5.4); value is the requisite's number (Attack 2 or less)
         private static EffectAction TakeControl(TargetType target, TargetModifier modifier, TargetRequisite requires = TargetRequisite.None, int value = 0) {
             var action = Act(ActionType.TakeControl, value, target, modifier);
+            action.requires = requires;
+            return action;
+        }
+
+        // Only lands if the target is what it requires when it lands
+        private static EffectAction Requiring(EffectAction action, TargetRequisite requires) {
             action.requires = requires;
             return action;
         }

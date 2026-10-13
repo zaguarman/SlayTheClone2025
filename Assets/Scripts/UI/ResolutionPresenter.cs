@@ -121,7 +121,7 @@ namespace SlayTheClone {
                 case BattlefieldCombatAction attack:
                     PlayAttack(attack);
                     break;
-                case PlaySpellAction spell:
+                case PlaySpellAction spell when !FogOfWar.Hides(FogOfWar.ViewerOf(spell.GetOwner()), spell, gameManager.ActionsQueue, gameManager.ModifierManager):
                     PlaySpellReveal(spell.GetSpell(), spell.GetOwner());
                     break;
                 case SummonCreatureAction _:
@@ -242,7 +242,7 @@ namespace SlayTheClone {
         private void OnCreatureStatusChanged(ICreature creature, StatusEffectType status, bool applied) {
             var card = FindCard(creature);
             string icon = EffectIcons.ForStatus(status);
-            if (!applied || card == null || icon == null) return;
+            if (!applied || card == null || icon == null || FogOfWar.HidesStatus(FogOfWar.ViewerOf(creature.Owner), creature, status)) return;
 
             FlashCard(card, StatusColor);
             PopIcon(card.transform, icon, 120f);

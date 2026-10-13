@@ -63,7 +63,7 @@ namespace SlayTheClone {
             Heat = creature.Heat;
             Exposed = modifiers.IsExposed(creature);
             foreach (StatusEffectType status in System.Enum.GetValues(typeof(StatusEffectType))) {
-                if (status != StatusEffectType.None && modifiers.HasStatusEffect(creature, status)) statuses.Add(status);
+                if (status != StatusEffectType.None && modifiers.HasStatusEffect(creature, status) && Intel.CanSeeStatus(viewer, creature, status)) statuses.Add(status);
             }
             StatRaises = creature.Attack - creature.BaseAttack + creature.Health - creature.BaseHealth;
             DealsDouble = slot != null && creature.Slot != null && Abilities.IsOffTheBooks(creature, modifiers);

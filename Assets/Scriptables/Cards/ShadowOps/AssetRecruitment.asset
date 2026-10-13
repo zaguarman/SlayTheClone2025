@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: AssetRecruitment
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 8b700eea-75a6-4975-8f61-df7ef621e69c
+  cardName: Asset Recruitment
+  description: We'll double your salary. Or tell your wife. Your choice.
+  cardType: 1
+  faction: 3
+  artwork: {fileID: 0}
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 11
+      statusDuration: 2
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+    - actionType: 7
+      value: 0
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 11
+      statusDuration: 1
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 1
+  designNotes: 'Brainwashed 2 on target enemy creature: when it runs out, at Dusk,
+    it changes sides for good, its ability lost. Revealed, it''s turned faster: Brainwashed
+    1. Set it up with Tapped Communications.'
+  artDescription: A handler in a dim bar sliding a thick envelope and a photograph
+    across the table to a nervous soldier; the photo shows the soldier with a woman
+    who isn't his wife.
+  defaultTargetType: 4

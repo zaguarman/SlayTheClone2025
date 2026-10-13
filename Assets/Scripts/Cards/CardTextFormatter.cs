@@ -252,7 +252,8 @@ namespace SlayTheClone {
                 case ActionType.ModifyStat:
                     return $"{target} {DescribeStatChange(action)}";
                 case ActionType.ApplyStatus:
-                    return DescribeStatus(action, target);
+                    string status = DescribeStatus(action, target);
+                    return status != null ? status + Requisite(action) : null;
                 case ActionType.DelayDeployment:
                     return $"+{value} {Keywords.Link("Deployment Time")} to {target}";
                 // Between two creatures: this one and its target, or (on a spell, or aimed at itself) the target and the creature facing it
@@ -382,6 +383,8 @@ namespace SlayTheClone {
                 case StatusEffectType.Encrypted: return $"{Keywords.Link("Encrypted", "Encrypt" + Count(days))} on {target}";
                 case StatusEffectType.Untouchable: return $"{Keywords.Link("Untouchable", "Untouchable" + Count(days))} on {target}";
                 case StatusEffectType.Cooldown: return $"{Keywords.Link("Cooldown", "Cooldown" + Count(days))} on {target}";
+                case StatusEffectType.Brainwashed: return $"{Keywords.Link("Brainwashed", "Brainwashed" + Count(days))} on {target}";
+                case StatusEffectType.KillOrder: return $"{Keywords.Link("Kill Order", "Kill Order" + Count(days))} on {target}";
                 default: return null;
             }
         }

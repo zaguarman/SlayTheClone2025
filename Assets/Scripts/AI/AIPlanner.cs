@@ -684,6 +684,10 @@ namespace SlayTheClone {
                 StatusEffectType.Concealed or StatusEffectType.Encrypted => 1,
                 StatusEffectType.Untouchable => Hard && creature.Ours ? Protection(creature, ActionType.Stun, 0) : 3,
                 StatusEffectType.Cooldown => -1,
+                // A delayed death they can't see coming, unless they happen to cleanse it
+                StatusEffectType.KillOrder => creature.Has(StatusEffectType.KillOrder) ? 0 : -(creature.Worth + HealthLeft(creature)) * 0.7f,
+                // A defection: they lose it and we gain it, later; sooner when it's Revealed
+                StatusEffectType.Brainwashed => creature.Ours ? -creature.Worth : -(creature.Worth * 2) * (days <= 1 ? 0.75f : 0.6f),
                 _ => 0
             };
         }

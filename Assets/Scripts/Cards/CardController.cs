@@ -184,8 +184,10 @@ namespace SlayTheClone {
                 return;
             }
 
+            var viewer = FogOfWar.ViewerOf(linkedCreature.Owner);
             var icons = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature)
                 .OfType<StatusEffectModifier>()
+                .Where(status => !FogOfWar.HidesStatus(viewer, linkedCreature, status.EffectType))
                 .Select(status => EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType)));
             statusText.text = string.Concat(icons);
         }
@@ -641,7 +643,9 @@ namespace SlayTheClone {
         public string GetActiveModifiersText() {
             if (linkedCreature == null || linkedCreature.Health <= 0 || GameManager?.ModifierManager == null) return "";
 
-            var modifiers = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature).ToList();
+            var viewer = FogOfWar.ViewerOf(linkedCreature.Owner);
+            var modifiers = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature)
+                .Where(m => !(m is StatusEffectModifier s && FogOfWar.HidesStatus(viewer, linkedCreature, s.EffectType))).ToList();
             var lines = modifiers.Select(m => {
                 string icon = m is StatusEffectModifier status ? EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType)) : "";
                 return $"{icon}{m.Description}";

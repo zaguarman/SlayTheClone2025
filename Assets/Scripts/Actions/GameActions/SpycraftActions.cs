@@ -11,10 +11,13 @@ namespace SlayTheClone {
     public class ChangeSidesAction : IGameAction {
         public ICreature Creature { get; }
         public IPlayer NewController { get; }
+        /// <summary>Brainwashed: it loses its ability (until its card is reshuffled).</summary>
+        public bool LosesAbility { get; }
 
-        public ChangeSidesAction(ICreature creature, IPlayer newController) {
+        public ChangeSidesAction(ICreature creature, IPlayer newController, bool losesAbility = false) {
             Creature = creature;
             NewController = newController;
+            LosesAbility = losesAbility;
             Log($"Created {this}", LogTag.Actions | LogTag.Effects);
         }
 
@@ -52,6 +55,7 @@ namespace SlayTheClone {
             var cardOwner = creature.DeckOwner ?? oldSide;
             creature.DeckOwner = cardOwner == newSide ? null : cardOwner;
             Intel.MakeKnown(creature, oldSide);
+            if (change.LosesAbility) creature.Ability = CreatureAbility.None;
             Log($"{creature.Name} goes over to {newSide.Name}", LogTag.Effects | LogTag.Creatures);
             NotifyBattlefieldsChanged(context, oldSide, newSide);
             context.GameMediator.NotifyCreatureStatsChanged(creature);

@@ -88,6 +88,8 @@ namespace SlayTheClone {
             Add("Encrypted", "Encrypt X (no number: 1): for X [Days], its actions slip past every [Watchdog], the enemy's and yours: none reacts to them, and none spends a charge on them. Unlike [Concealed], everyone still sees what it plans.");
             Add("Untouchable", "Untouchable X (no number: 1): takes no damage at all for X [Days], counting the Day it lands: 1 is this Day only.");
             Add("Cooldown", "Cooldown X (no number: 1): its Active ability rests and can't be used for the next X [Days].");
+            Add("Brainwashed", "Brainwashed X (no number: 1): when its X [Days] run out, at [Dusk], it changes sides for good ([Take Control|taken] by the other side) and loses its ability until its card is reshuffled. A [Cleanse] in time saves it.");
+            Add("Kill Order", "Kill Order X (no number: 1): secret, only the side that gave it can see it, and the spell that gives it is played unseen. When its X [Days] run out, at [Dusk], the creature is [Destroy|destroyed]; [Untouchable] still saves it. A [Cleanse] removes it, knowingly or not.");
             Add("Cleanse", "Removes harmful statuses.");
             Add("Purge", "Removes every status, good and bad.");
 

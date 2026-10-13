@@ -53,6 +53,8 @@ namespace SlayTheClone {
                 case StatusEffectType.Encrypted: return Encrypt;
                 case StatusEffectType.Untouchable: return Armor;
                 case StatusEffectType.Cooldown: return Days;
+                case StatusEffectType.Brainwashed: return Hurt;
+                case StatusEffectType.KillOrder: return Death;
                 default: return null;
             }
         }

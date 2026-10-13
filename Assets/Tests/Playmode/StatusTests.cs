@@ -107,6 +107,39 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             Assert.IsTrue(waiting.IsDead);
             CollectionAssert.AreEqual(new[] { 4 }, game.History.DamageTo(p2), "Last Rites strikes even if it Cannot Act: the empty slot opposite is player 2");
+
+            // A Kill Order: the creature is destroyed when it runs out, at the Dusk two Days later. It's secret: its own side
+            // doesn't see it, not on the card, not landing, not in what their AI sees; the side that gave it does
+            Fresh();
+            var mark = game.Summon(p2, game.Creature("Mark", 5, 30), 0);
+            var order = new ApplyStatusEffectAction(mark, StatusEffectType.KillOrder, 2, 0, controller: p1);
+            Assert.IsFalse(Intel.CanSee(p2, order, game.ActionsQueue, game.ModifierManager), "Its victim's side never sees it landing");
+            Assert.IsTrue(Intel.CanSee(p1, order, game.ActionsQueue, game.ModifierManager));
+            game.Run(order);
+            Assert.IsFalse(new AIView(p2, game.ActionsQueue).Mine.Single().Has(StatusEffectType.KillOrder), "Their AI can't see it on its own creature");
+            Assert.IsTrue(new AIView(p1, game.ActionsQueue).Theirs.Single().Has(StatusEffectType.KillOrder), "Whoever gave it can");
+            game.StartTurn();
+            game.StartTurn();
+            Assert.IsFalse(mark.IsDead, "Like every status, it skips the Day it lands");
+            game.StartTurn();
+            Assert.IsTrue(mark.IsDead, "At the Dusk two Days later: its 30 Health don't matter");
+            var spared = game.Summon(p2, game.Creature("Spared", 1, 3), 1);
+            game.Run(new ApplyStatusEffectAction(spared, StatusEffectType.KillOrder, 1, 0, controller: p1));
+            game.Run(new ApplyStatusEffectAction(spared, StatusEffectType.Untouchable, 3, 0, controller: p2));
+            game.StartTurn();
+            game.StartTurn();
+            Assert.IsFalse(spared.IsDead, "Untouchable when it runs out: it lives");
+
+            // Brainwashed: when it runs out, it changes sides for good and loses its ability
+            var turncoat = game.Summon(p2, game.Creature("Turncoat", 3, 4), 3);
+            turncoat.Ability = CreatureAbility.Recoil;
+            game.Run(new ApplyStatusEffectAction(turncoat, StatusEffectType.Brainwashed, 2, 0, controller: p1));
+            game.StartTurn();
+            game.StartTurn();
+            Assert.AreSame(p2, turncoat.Owner, "It skips the Day it lands...");
+            game.StartTurn();
+            Assert.AreSame(turncoat, p1.Battlefield[3].OccupyingCreature, "...then at the Dusk two Days later it comes over, to the slot facing it");
+            Assert.AreEqual(CreatureAbility.None, turncoat.Ability, "Its ability is lost");
         }
 
         [Test]

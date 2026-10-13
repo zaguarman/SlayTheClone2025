@@ -31,10 +31,37 @@ namespace SlayTheClone {
             creature != null && modifiers != null && modifiers.HasStatusEffect(creature, StatusEffectType.Encrypted);
 
         public static bool CanSee(IPlayer viewer, IGameAction action, IActionsQueue queue, IModifierManager modifiers) {
+            if (HiddenFrom(viewer, action, queue)) return false;
             var planner = PlannerOf(action);
             if (planner == null || viewer == null || planner.Owner == viewer) return true;
             return !IsConcealed(planner, modifiers) || (queue?.IsRevealedTo(viewer, action) ?? false);
         }
+
+        // Secret work: a covert spell (all it does is give a Kill Order) is played and cast unseen by the other side, and the
+        // Kill Order itself is never seen landing by the side whose creature gets it
+        private static bool HiddenFrom(IPlayer viewer, IGameAction action, IActionsQueue queue) {
+            if (viewer == null) return false;
+            return action switch {
+                PlayCardAction play when play.GetCard() is Spell spell && IsCovert(spell) => play.GetOwner() != viewer && !(queue?.IsRevealedTo(viewer, action) ?? false),
+                PlaySpellAction cast when IsCovert(cast.GetSpell()) => cast.GetOwner() != viewer,
+                ApplyStatusEffectAction status => !CanSeeStatus(viewer, status.GetTargetCreature(), status.GetStatusType()),
+                _ => false
+            };
+        }
+
+        /// <summary>A spell that only gives secret statuses (Death By "Natural Causes"): the other side never sees it played.</summary>
+        public static bool IsCovert(Spell spell) {
+            var actions = spell?.Effects.SelectMany(e => e.actions).ToList();
+            return actions != null && actions.Count > 0
+                   && actions.All(a => a.actionType == ActionType.ApplyStatus && IsSecret(a.statusEffectToApply));
+        }
+
+        /// <summary>A status the creature's own side can't see: a Kill Order.</summary>
+        public static bool IsSecret(StatusEffectType status) => status == StatusEffectType.KillOrder;
+
+        /// <summary>Whether the viewer can see that this status is on the creature: secret ones only the other side can.</summary>
+        public static bool CanSeeStatus(IPlayer viewer, ICreature creature, StatusEffectType status) =>
+            !IsSecret(status) || viewer == null || creature?.Owner == null || viewer != creature.Owner;
 
         public static bool CanSee(IPlayer viewer, SlotEffect effect) =>
             effect == null || !effect.IsHidden || effect.Controller == viewer || effect.RevealedTo.Contains(viewer);
@@ -165,6 +192,9 @@ namespace SlayTheClone {
         public static bool Hides(IPlayer viewer, SlotEffect effect) => Enabled && !Intel.CanSee(viewer, effect);
 
         public static bool HidesCondition(IPlayer viewer, Watchdog watchdog) => Enabled && !Intel.CanSeeCondition(viewer, watchdog);
+
+        /// <summary>A secret status (a Kill Order) on the viewer's own creature: the screen doesn't show it.</summary>
+        public static bool HidesStatus(IPlayer viewer, ICreature creature, StatusEffectType status) => Enabled && !Intel.CanSeeStatus(viewer, creature, status);
 
         /// <summary>The card shows as "???": the viewer doesn't know what this creature is.</summary>
         public static bool HidesIdentity(IPlayer viewer, ICreature creature) => Enabled && !Intel.KnowsWhatItIs(viewer, creature);
