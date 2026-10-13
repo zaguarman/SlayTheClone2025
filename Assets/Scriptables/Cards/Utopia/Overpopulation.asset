@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: Summon 2 random creatures from your deck.
   artDescription: A tiny Earth with people crammed all over it like a full elevator,
     one man balancing on top on one foot.

@@ -9,6 +9,7 @@ namespace SlayTheClone {
         [Min(0)] public int turnsUntilOperative; // Turns on the board before it can attack, move or use its effects
         public MovementKeyword movement; // Leapfrog, Swap (GDD 2.4 Movement Keywords)
         public CreatureAbility ability; // Its one ability ('Abilities Compendium')
+        public bool gift; // Played into an empty enemy slot, it joins their side (still your card)
 
         protected override void OnEnable() {
             base.OnEnable(); // Call base implementation to handle cardId
@@ -24,6 +25,7 @@ namespace SlayTheClone {
             data.turnsUntilOperative = turnsUntilOperative;
             data.movement = movement;
             data.ability = ability;
+            data.gift = gift;
             return data;
         }
     }

@@ -30,8 +30,10 @@ namespace SlayTheClone {
                 actionsQueue.AddAction(new PlaySpellAction(spell, owner, target));
             }
             else if (card is ICreature creature) {
-                // A creature joins the battlefield it was dropped on, under that battlefield's player
+                // A creature joins the battlefield it was dropped on, under that battlefield's player. A Gift on the other
+                // side stays its giver's card (see ICreature.DeckOwner)
                 var summoner = (target as BoardSlot)?.Owner ?? owner;
+                if (summoner != owner) creature.DeckOwner = owner;
                 actionsQueue.AddAction(new SummonCreatureAction(creature, summoner, target));
             }
 

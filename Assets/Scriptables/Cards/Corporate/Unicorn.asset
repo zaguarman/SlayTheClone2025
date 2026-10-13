@@ -48,6 +48,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   - effectType: 0
     trigger: 4
     oncePerCombat: 0
@@ -76,6 +77,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Future: Unicorn (Enterprise) from the card examples. Burn rate stays:
     Corporate can''t heal it.'
   artDescription: 
@@ -85,3 +87,4 @@ MonoBehaviour:
   turnsUntilOperative: 2
   movement: 0
   ability: 0
+  gift: 0

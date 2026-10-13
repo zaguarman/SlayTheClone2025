@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
     - actionType: 7
       value: 0
       targetType: 2
@@ -71,6 +72,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: Every creature is Burned for 2 Days and gets Heat Signature 1.
   artDescription: A polar bear standing on a single ice cube floating in a cocktail
     glass, a paper umbrella beside it.

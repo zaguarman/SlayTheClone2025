@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Mechanics test: Deployment Time 2 counts down at Dusk, never at the
     Dusk of the Day it arrived; its entry effect waits until it''s ready. Armor fades
     by 1 each Dusk on every creature.'
@@ -59,3 +60,4 @@ MonoBehaviour:
   turnsUntilOperative: 2
   movement: 0
   ability: 0
+  gift: 0

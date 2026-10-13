@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   - effectType: 0
     trigger: 1
     oncePerCombat: 0
@@ -75,6 +76,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Mechanics test: its entry effect waits for Deployment Time; dooming
     itself makes a planned sacrifice that grows stronger; its OnDied effect fires
     when the sentence is carried out.'
@@ -87,3 +89,4 @@ MonoBehaviour:
   turnsUntilOperative: 1
   movement: 0
   ability: 0
+  gift: 0

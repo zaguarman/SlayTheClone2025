@@ -162,6 +162,42 @@ namespace SlayTheClone.Tests {
             game.Attack(sleeper, p2.Battlefield[3]);
             Assert.AreEqual(11, mark.Health, "Revealed, it's known for good: plain damage");
 
+            // Destroy kills outright, Health and Armor or not; this one only a Revealed creature, and Untouchable saves it
+            game.Run(new ModifyArmorAction(mark, 5));
+            game.Run(new ApplyStatusEffectAction(mark, StatusEffectType.Revealed, 1, 0, controller: p1));
+            var hit = game.GiveCard(p1, game.Spell("Hit", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures)));
+            ((Spell)hit).Effects[0].actions[0].requires = TargetRequisite.Revealed;
+            game.Run(new ApplyStatusEffectAction(mark, StatusEffectType.Untouchable, 1, 0, controller: p2));
+            game.Play(hit, p1, p2.Battlefield[3]);
+            game.Resolve();
+            Assert.IsFalse(mark.IsDead, "Destroy: Untouchable saves it");
+            var another = game.Summon(p2, game.Creature("Wall", 0, 30), 3);
+            var hitAgain = game.GiveCard(p1, game.Spell("Hit", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures)));
+            ((Spell)hitAgain).Effects[0].actions[0].requires = TargetRequisite.Revealed;
+            game.Play(hitAgain, p1, p2.Battlefield[3]);
+            game.Resolve();
+            Assert.IsFalse(another.IsDead, "...and it needs its requisite: this one isn't Revealed");
+            game.Run(new ApplyStatusEffectAction(another, StatusEffectType.Revealed, 1, 0, controller: p1));
+            var hitThird = game.GiveCard(p1, game.Spell("Hit", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures)));
+            ((Spell)hitThird).Effects[0].actions[0].requires = TargetRequisite.Revealed;
+            game.Play(hitThird, p1, p2.Battlefield[3]);
+            game.Resolve();
+            Assert.IsTrue(another.IsDead, "Revealed, its 30 Health don't matter");
+
+            // Extreme Prejudice: its attack destroys what it hits, and then it's gone too
+            var hitman = With(CreatureAbility.ExtremePrejudice, p1, 3, attack: 1);
+            var bunker = With(CreatureAbility.None, p2, 3, health: 25);
+            game.Run(new ModifyArmorAction(bunker, 5));
+            game.Attack(hitman, p2.Battlefield[3]);
+            Assert.IsTrue(bunker.IsDead, "Extreme Prejudice: Health and Armor don't save it...");
+            Assert.IsTrue(hitman.IsDead, "...and the assassin is gone too");
+            var guarded = With(CreatureAbility.None, p2, 3, health: 2);
+            game.Run(new ApplyStatusEffectAction(guarded, StatusEffectType.Untouchable, 1, 0, controller: p2));
+            var second = With(CreatureAbility.ExtremePrejudice, p1, 3, attack: 1);
+            game.Attack(second, p2.Battlefield[3]);
+            Assert.IsFalse(guarded.IsDead, "Untouchable stops the hit");
+            Assert.IsFalse(second.IsDead, "...and the assassin lives to try again");
+
             var hipster = With(CreatureAbility.TooMainstream, p2, 4);
             var bomb = game.GiveCard(p1, game.Spell("Bomb", TargetType.EnemyCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));

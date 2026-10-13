@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
     - actionType: 7
       value: 0
       targetType: 4
@@ -71,6 +72,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'An aid package with a tracker inside: heals an enemy creature 2,
     and gives it Heat Signature 2, so random and redirected attacks find it first.'
   artDescription: 'On a dusty airstrip, a crate stencilled MEDICINE with its lid

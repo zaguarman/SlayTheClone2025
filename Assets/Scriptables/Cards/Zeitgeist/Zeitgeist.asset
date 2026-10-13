@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 1
       ability: 0
+      requires: 0
   designNotes: 'Trend for 3 Days: each Day, whoever has fewer creatures draws 1 more
     card. The mood of the times backs the underdog (Zeitgeist''s comebacks).'
   artDescription: A huge friendly ghost made of hashtags and likes floating over

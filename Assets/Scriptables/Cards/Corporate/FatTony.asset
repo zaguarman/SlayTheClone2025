@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Future: An Offer You Can''t Refuse. Recruits a damaged enemy creature
     instead of hurting it.'
   artDescription: 
@@ -56,3 +57,4 @@ MonoBehaviour:
   turnsUntilOperative: 2
   movement: 0
   ability: 0
+  gift: 0

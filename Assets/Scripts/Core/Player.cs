@@ -146,8 +146,10 @@ namespace SlayTheClone {
 
             RemoveFromHand(card);
             RemoveFromBattlefield(card);
-            Deck.AddToDiscardPile(card);
-            Log($"Discarded {card.Name}", LogTag.Cards);
+            // A Gift goes back to the player whose card it is, not the side that held it
+            var home = (card as ICreature)?.DeckOwner ?? this;
+            home.Deck.AddToDiscardPile(card);
+            Log($"Discarded {card.Name}{(home != this ? $" to {home.Name}'s discard pile" : "")}", LogTag.Cards);
         }
 
         public void DiscardHand() {

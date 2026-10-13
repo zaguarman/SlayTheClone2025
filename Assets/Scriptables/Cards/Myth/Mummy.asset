@@ -30,3 +30,4 @@ MonoBehaviour:
   turnsUntilOperative: 1
   movement: 0
   ability: 13
+  gift: 0

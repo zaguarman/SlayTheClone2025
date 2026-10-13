@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
     - actionType: 7
       value: 0
       targetType: 4
@@ -71,6 +72,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Each Dawn the in-group gets louder (+1 Attack on a random friendly
     creature) and someone outside it gets a target on their back (Heat Signature
     1 on a random enemy creature). Future: Ostracised.'
@@ -83,3 +85,4 @@ MonoBehaviour:
   turnsUntilOperative: 0
   movement: 0
   ability: 0
+  gift: 0

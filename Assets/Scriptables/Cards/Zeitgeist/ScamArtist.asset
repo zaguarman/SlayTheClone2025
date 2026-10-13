@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Future: steals a Temporary buff from an enemy creature instead.'
   artDescription: 
   attack: 2
@@ -55,3 +56,4 @@ MonoBehaviour:
   turnsUntilOperative: 0
   movement: 0
   ability: 0
+  gift: 0

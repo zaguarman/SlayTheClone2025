@@ -234,6 +234,33 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(p2Health - 2, p2.Health);
             Attack(golem, p2.Battlefield[0]);
             Assert.AreEqual(p2Health - 2 - golem.Attack, p2.Health);
+
+            // A Gift is played into an empty enemy slot and joins their side: each Dusk it hurts every creature there, itself
+            // included. It's still its giver's card, and goes back to the giver's discard pile
+            var giftData = game.Creature("Bad Apple", 0, 1, 1,
+                TestGame.Effect(EffectTrigger.EndOfTurn, ActionType.Damage, 1, TargetType.FriendlyCreatures, TargetModifier.AllSameTypeTargets));
+            giftData.gift = true;
+            var apple = (ICreature)game.GiveCard(p1, giftData);
+            int p1Cards = GameAsserts.CountCards(p1), p2Cards = GameAsserts.CountCards(p2);
+            game.Play(apple, p1, p2.Battlefield[4]);
+            game.Resolve();
+            Assert.AreSame(apple, p2.Battlefield[4].OccupyingCreature, "A Gift lands in the enemy slot it was given into...");
+            Assert.AreSame(p2, apple.Owner, "...on their side");
+            Assert.AreEqual(p1Cards, GameAsserts.CountCards(p1), "It's still the giver's card");
+            Assert.AreEqual(p2Cards, GameAsserts.CountCards(p2));
+            int crabHealth = crabs[0].Health;
+            game.StartTurn();
+            Assert.AreEqual(crabHealth - 1, crabs[0].Health, "At Dusk it hurts the creatures on its side...");
+            Assert.IsTrue(apple.IsDead, "...itself included");
+            AssertDiscarded(p1, apple);
+            Assert.AreEqual(p1Cards, GameAsserts.CountCards(p1), "Back in the giver's discard pile");
+            Assert.AreEqual(p2Cards, GameAsserts.CountCards(p2));
+
+            var secondApple = game.GiveCard(p1, giftData);
+            game.Play(secondApple, p1, p2.Battlefield[1]);
+            game.Resolve();
+            Assert.AreSame(crabs[0], p2.Battlefield[1].OccupyingCreature, "Given into a taken slot, a Gift fizzles: it never replaces their creature");
+            Assert.AreEqual(2, p1.Deck.GetDiscardPilePreview().Count(c => c.CardId == apple.CardId), "...and goes back to the giver's discard pile");
         }
 
         // A card that leaves play goes to its owner's discard pile as a fresh copy: damage, buffs and death don't carry over

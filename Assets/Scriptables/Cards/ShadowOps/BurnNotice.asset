@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Mechanics test: Scorched Earth on a slot. The creature there can''t
     trigger its effects (entry, retaliation, Dawn and Dusk, death) or use its ability
     while it stands on it. It can still move and attack.'

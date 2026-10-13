@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: WetWork
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 973350e6-53d1-47c9-bc00-9c28a1c13e45
+  cardName: Wet Work
+  description: Nothing personal. Strictly a line item.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 0}
+  effects: []
+  designNotes: 'Extreme Prejudice: its attack destroys the creature it hits, whatever
+    its Health or Armor, and then it''s gone too: one hit, one roadblock. Untouchable
+    or a Temporal Shield stops the hit; an empty slot, it just hits the player for
+    1.'
+  artDescription: A hitman in a dripping raincoat under a black umbrella in the rain,
+    pressing a red TERMINATED stamp onto a personnel file with a photo clipped to
+    it.
+  attack: 1
+  health: 4
+  speed: 3
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 29
+  gift: 0

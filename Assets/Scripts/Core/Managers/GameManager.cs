@@ -139,41 +139,26 @@ namespace SlayTheClone {
                 LogWarning("GameManager Initialize called but already initialized.", LogTag.Initialization);
                 return;
             }
-            if (mediator == null) throw new ArgumentNullException(nameof(mediator));
-            if (player1Cards == null) throw new ArgumentNullException(nameof(player1Cards));
-            if (player2Cards == null) throw new ArgumentNullException(nameof(player2Cards));
             if (turnManager == null) throw new ArgumentNullException(nameof(turnManager));
-            if (modifierFactory == null) throw new ArgumentNullException(nameof(modifierFactory));
 
+            // The players and the rules systems, each given only what it uses (see GameSession)
             int seed = randomSeed != 0 ? randomSeed : Environment.TickCount;
-            GameRandom.Reset(seed);
-            Log($"Random seed {seed} (set it on GameManager to replay this game)", LogTag.Initialization);
-
-            Player1 = new Player(MatchSetup.DefaultPlayerName, isPlayer1: true) { CardsToDraw = 5 };
-            Player2 = new Player(player2Name, isPlayer1: false) { CardsToDraw = 5 };
-            Player1.Opponent = Player2;
-            Player2.Opponent = Player1;
-
-            // The rules systems, each given only what it uses
-            var turnClock = new TurnClock();
-            CardDealingService = new CardDealingService(mediator);
-            TrendSystem = new TrendSystem();
-            ModifierManager = new ModifierManager(mediator, modifierFactory);
-            ActionsQueue = new ActionsQueue(mediator, TrendSystem, CardDealingService, ModifierManager, turnClock, ActionExecutors.CreateRegistry());
-            CombatHandler = new BattlefieldCombatHandler(ActionsQueue, ModifierManager);
-            Player1.Initialize(mediator, CardDealingService);
-            Player2.Initialize(mediator, CardDealingService);
-
-            CardDealingService.InitializeDecks(Player1, player1Cards, Player2, player2Cards);
-            Log($"Decks initialized with {player1Cards.Count} cards for {Player1.Name} and {player2Cards.Count} cards for {Player2.Name}", LogTag.Cards | LogTag.Initialization);
+            var session = new GameSession(mediator, player1Cards, player2Cards, modifierFactory, seed, player2Name);
+            Player1 = session.Player1;
+            Player2 = session.Player2;
+            CardDealingService = session.CardDealingService;
+            TrendSystem = session.TrendSystem;
+            ModifierManager = session.ModifierManager;
+            ActionsQueue = session.ActionsQueue;
+            CombatHandler = session.CombatHandler;
 
             // The turn flow drives the rules; it never needs this manager
-            turnManager.Initialize(new IPlayer[] { Player1, Player2 }, ActionsQueue, ModifierManager, mediator, turnClock, TrendSystem);
+            turnManager.Initialize(session.Players, ActionsQueue, ModifierManager, mediator, session.Clock, TrendSystem);
             TurnManager = turnManager;
 
             IsInitialized = true;
 
-            CardDealingService.DealInitialHands(Player1, Player2, 5);
+            session.DealOpeningHands();
             Log("GameManager Initialization complete.", LogTag.Initialization);
         }
 

@@ -25,6 +25,13 @@ namespace SlayTheClone {
         BoardSlot Slot { get; set; }
         /// <summary>Its Movement Keywords (GDD 2.4): how it can move besides walking and pushing.</summary>
         MovementKeyword Movement { get; }
+        /// <summary>Gift: played into an empty enemy slot, it joins their side (they control it, it's their Owner while in play).</summary>
+        bool IsGift { get; }
+        /// <summary>
+        /// The player whose card it is, when that isn't who controls it (a Gift on the other side): it goes back to their
+        /// discard pile when it leaves play. Null means its Owner's.
+        /// </summary>
+        IPlayer DeckOwner { get; set; }
         /// <summary>
         /// Its one ability ('Abilities Compendium'). A gained or lost ability stays on the card, through the discard pile,
         /// until it's reshuffled, like Persistent Stat Modifications. Whether it's switched on: see <see cref="Abilities.IsActive"/>.
@@ -130,6 +137,8 @@ namespace SlayTheClone {
         public BoardSlot LastSlot { get; private set; }
         public bool AbilitiesDisabled { get; set; }
         public MovementKeyword Movement { get; internal set; }
+        public bool IsGift { get; internal set; }
+        public IPlayer DeckOwner { get; set; }
         public CreatureAbility Ability { get; set; }
         public int Heat { get; set; }
         public ISet<IPlayer> KnownTo { get; } = new HashSet<IPlayer>();

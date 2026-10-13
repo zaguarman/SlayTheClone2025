@@ -5,6 +5,11 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+31. New Shadow Ops. cards (2026-10-13)
+    • Done: Sleeper Agent is now a poisoned Gift (0/3: planted in an empty enemy slot it joins their side, and each Dusk hurts every creature there, itself included). Its old Off the Books role went to Multi Passport (3/3). Two cards kill outright, whatever the Health or Armor: Wet Work (1/4, Extreme Prejudice: its attack destroys what it hits, then it's gone) and Perfectly Timed Camera Malfunction (destroy a Revealed creature). Names from the backlog. New keywords: Gift, Destroy.
+    • Art (not drawn, waiting for your OK). Multi Passport: a man in a trench coat fanning out a dozen passports like a hand of cards, the same face in each photo in a different disguise. Wet Work: a hitman in a dripping raincoat under a black umbrella, stamping TERMINATED on a personnel file with a photo clipped to it. Perfectly Timed Camera Malfunction: a security monitor showing static and SIGNAL LOST at 02:13, a gloved hand pulling the camera's cable at the edge of the frame. Sleeper Agent keeps its picture (the suburban dad with a sniper's shadow); a new one for the Gift?
+    • Question: OK with these, and the strengths (Shadow Ops. went from 20% to 22%)?
+
 30. Balance from the AI games (2026-10-13)
     • Done: 'Balance Report' (3014 AI games). Statecraft and Corporate win 90%+ of their games, Shadow Ops. 7%; board-wide damage (Clickbait, Mutually Assured Destruction, Margin Call) decides most games, and Deployment Time creatures die before acting. Nothing was changed.
     • Done since: Shadow Ops. creatures all deploy in 0, Sleeper Agent got Off the Books (new ability: double damage until identified). Shadow Ops. went from 7% to 20%.

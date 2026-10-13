@@ -48,6 +48,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Mechanics test: a hidden Barbed Snare (2 damage) on a slot. The first
     creature to leave it, on its own, pushed or swapped, takes the damage. Dying
     or being replaced isn''t leaving.'

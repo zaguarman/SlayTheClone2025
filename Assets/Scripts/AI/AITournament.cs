@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace SlayTheClone {
     /// <summary>
-    /// AI against AI, with no screen: whole combats played by the real rules (GameManager and TurnManager, as in a game) as
-    /// fast as they run. <see cref="RunLevels"/> pits the levels against each other, <see cref="RunStyles"/> the Hard styles
+    /// AI against AI, with no screen: whole combats played by the real rules (a GameSession and its TurnFlow, as in a game)
+    /// as fast as they run, many at once, one a CPU thread (see <see cref="Workers"/>). <see cref="RunLevels"/> pits the levels against each other, <see cref="RunStyles"/> the Hard styles
     /// (and Medium, as a yardstick), each deck on both sides (the same deck, so only the play differs) and in both seats.
     /// Every game is audited (see <see cref="GameAudit"/>): what breaks the rules is reported with where it happened. Each
     /// game has its own seed, so a run replays exactly.
@@ -34,48 +36,114 @@ namespace SlayTheClone {
             public bool Between(string a, string b) => (First.Name == a && Second.Name == b) || (First.Name == b && Second.Name == a);
         }
 
-        /// <summary>Plays one combat to its end (or <see cref="MaxDays"/>): each AI plans its seat each Day.</summary>
-        public static Result Play(DeckScriptableObject deck1, AIEntrant first, DeckScriptableObject deck2, AIEntrant second, int seed,
-            GameAudit audit = null, CardLedger ledger = null) {
-            var root = new GameObject("AI Match") { hideFlags = HideFlags.HideAndDontSave };
-            var manager = root.AddComponent<GameManager>();
-            var turns = root.AddComponent<TurnManager>();
-            string where = $"{deck1.GetDeckName()}{(deck2 != deck1 ? " vs " + deck2.GetDeckName() : "")}, {first} vs {second}, seed {seed}";
+        /// <summary>A deck's cards, read once on the main thread (Unity assets can't be read from others) and shared by its games.</summary>
+        internal sealed class DeckCards {
+            public string Name;
+            public List<CardData> Cards;
+        }
+
+        /// <summary>One game to play: the decks and AIs in each seat, and its seed.</summary>
+        internal readonly struct Game {
+            public readonly DeckCards Deck1, Deck2;
+            public readonly AIEntrant First, Second;
+            public readonly int Seed;
+
+            public Game(DeckCards deck1, AIEntrant first, DeckCards deck2, AIEntrant second, int seed) {
+                (Deck1, First, Deck2, Second, Seed) = (deck1, first, deck2, second, seed);
+            }
+        }
+
+        /// <summary>
+        /// How many games are played at once, one a thread. Measured on a 32-thread CPU: 1 thread 20 games a second, 3 27, 5 33,
+        /// 8 32, 16 13, 31 10. The editor's .NET runtime takes one global lock to allocate memory and the games allocate a lot,
+        /// so past about 5 the threads mostly wait for each other. Using every core would take separate processes.
+        /// </summary>
+        public static int Workers { get; set; } = System.Math.Max(1, System.Math.Min(5, System.Environment.ProcessorCount - 1));
+
+        internal static List<DeckCards> Read(IReadOnlyList<DeckScriptableObject> decks) =>
+            decks.Select(d => new DeckCards { Name = d.GetDeckName(), Cards = d.GetCardDataList() }).ToList();
+
+        // The card definitions read for a run are made for it: let them go when it's over
+        internal static void Release(IEnumerable<DeckCards> decks) {
+            foreach (var data in decks.SelectMany(d => d.Cards).Distinct()) Object.DestroyImmediate(data);
+        }
+
+        /// <summary>
+        /// Plays one combat to its end (or <see cref="MaxDays"/>): each AI plans its seat each Day. It touches nothing of
+        /// Unity's and nothing shared with other games, so many can run at once on other threads.
+        /// </summary>
+        internal static Result Play(Game game, GameAudit audit = null, CardLedger ledger = null) {
+            string where = $"{game.Deck1.Name}{(game.Deck2 != game.Deck1 ? " vs " + game.Deck2.Name : "")}, {game.First} vs {game.Second}, seed {game.Seed}";
+            var mediator = new GameMediator();
+            bool over = false;
+            mediator.GameOver += _ => over = true;
+            GameSession session = null;
+            TurnFlow turns = null;
+            GameAudit.Watch watch = null;
+            CardLedger.Watch tally = null;
             try {
-                manager.RandomSeed = seed;
-                var mediator = new GameMediator();
-                bool over = false;
-                mediator.GameOver += _ => over = true;
-                manager.Initialize(mediator, deck1.GetCardDataList(), deck2.GetCardDataList(), turns, new SimpleModifierFactory());
-                var planners = new[] { first.Planner(manager, seed), second.Planner(manager, seed + 1) };
-                audit?.Begin(manager, where);
-                ledger?.Begin(manager, mediator, first, second, mirror: deck1 == deck2, deck1.GetDeckName(), deck2.GetDeckName());
+                // Each game deals from its own copy of the deck lists: decks shuffle what they're given
+                session = new GameSession(mediator, new List<CardData>(game.Deck1.Cards), new List<CardData>(game.Deck2.Cards),
+                    new SimpleModifierFactory(), game.Seed);
+                turns = session.CreateTurnFlow(mediator);
+                session.DealOpeningHands();
+                var planners = new[] {
+                    game.First.Planner(session.ActionsQueue, session.CombatHandler, game.Seed),
+                    game.Second.Planner(session.ActionsQueue, session.CombatHandler, game.Seed + 1)
+                };
+                watch = audit?.Begin(session, where);
+                tally = ledger?.Begin(session, mediator, game.First, game.Second, mirror: game.Deck1 == game.Deck2, game.Deck1.Name, game.Deck2.Name);
 
                 while (!over && turns.TurnNumber < MaxDays) {
-                    planners[0].PlanDay(manager.Player1);
-                    planners[1].PlanDay(manager.Player2);
-                    audit?.CheckPlans(turns.TurnNumber);
+                    planners[0].PlanDay(session.Player1);
+                    planners[1].PlanDay(session.Player2);
+                    watch?.CheckPlans(turns.TurnNumber);
                     int day = turns.TurnNumber;
                     turns.EndTurnImmediately();
-                    audit?.CheckDay(day, advanced: turns.TurnNumber == day + 1, over);
+                    watch?.CheckDay(day, advanced: turns.TurnNumber == day + 1, over);
                 }
 
-                bool firstDown = manager.Player1.Health <= 0, secondDown = manager.Player2.Health <= 0;
+                bool firstDown = session.Player1.Health <= 0, secondDown = session.Player2.Health <= 0;
                 int winner = firstDown == secondDown ? 0 : firstDown ? 2 : 1;
-                ledger?.End(winner);
-                return new Result(deck1.GetDeckName(), deck2.GetDeckName(), first, second, winner, turns.TurnNumber);
+                tally?.End(winner);
+                return new Result(game.Deck1.Name, game.Deck2.Name, game.First, game.Second, winner, turns.TurnNumber);
             }
             catch (System.Exception exception) {
-                audit?.Note("Exception", $"{exception.GetType().Name}: {exception.Message}", $"{where}, Day {turns.TurnNumber}\n{exception.StackTrace}");
-                return new Result(deck1.GetDeckName(), deck2.GetDeckName(), first, second, 0, turns.TurnNumber);
+                audit?.Note("Exception", $"{exception.GetType().Name}: {exception.Message}", $"{where}, Day {turns?.TurnNumber ?? 0}\n{exception.StackTrace}");
+                return new Result(game.Deck1.Name, game.Deck2.Name, game.First, game.Second, 0, turns?.TurnNumber ?? 0);
             }
             finally {
-                audit?.End();
-                ledger?.Detach();
-                manager.ModifierManager?.Cleanup();
-                manager.ActionsQueue?.Cleanup();
-                Object.DestroyImmediate(root);
+                watch?.End();
+                tally?.Detach();
+                session?.Cleanup();
             }
+        }
+
+        /// <summary>
+        /// Plays the games side by side, <see cref="Workers"/> at a time, each on a thread of its own; returns the results
+        /// in the order of the games (each game's seed makes it play out the same whatever thread it's on). The calling
+        /// (main) thread reports the progress and listens for what the games log.
+        /// </summary>
+        internal static Result[] PlayAll(IReadOnlyList<Game> games, GameAudit audit, CardLedger ledger, System.Action<float> progress) {
+            var results = new Result[games.Count];
+            int done = 0;
+            bool muted = DebugLogger.MuteInfo;
+            DebugLogger.MuteInfo = true; // Thousands of lines a Day otherwise
+            audit?.Listen();
+            try {
+                var options = new ParallelOptions { MaxDegreeOfParallelism = Workers };
+                var work = Task.Run(() => Parallel.For(0, games.Count, options, i => {
+                    results[i] = Play(games[i], audit, ledger);
+                    Interlocked.Increment(ref done);
+                }));
+                while (!work.Wait(100)) progress?.Invoke(Volatile.Read(ref done) / (float)games.Count);
+                work.GetAwaiter().GetResult(); // What went wrong on a thread, here
+            }
+            finally {
+                audit?.StopListening();
+                DebugLogger.MuteInfo = muted;
+            }
+            return results;
         }
 
         public static readonly AIEntrant[] Levels = { new AIEntrant(AILevel.Easy), new AIEntrant(AILevel.Medium), new AIEntrant(AILevel.Hard) };
@@ -94,30 +162,37 @@ namespace SlayTheClone {
             System.Action<float> progress = null) =>
             Run("AI TOURNAMENT: THE HARD STYLES", Styles, decks, gamesPerSeat, out report, progress);
 
-        private static List<Result> Run(string title, AIEntrant[] entrants, IReadOnlyList<DeckScriptableObject> decks, int gamesPerSeat,
-            out string report, System.Action<float> progress, CardLedger ledger = null) {
-            bool muted = DebugLogger.MuteInfo;
-            DebugLogger.MuteInfo = true; // Thousands of lines a Day otherwise
-            var audit = new GameAudit();
-            var results = new List<Result>();
-            var pairings = (from i in Enumerable.Range(0, entrants.Length) from j in Enumerable.Range(i + 1, entrants.Length - i - 1)
-                            select (entrants[i], entrants[j])).ToList();
-            int total = decks.Count * pairings.Count * 2 * gamesPerSeat, seed = 1000;
-            try {
-                foreach (var deck in decks) {
-                    foreach (var (a, b) in pairings) {
-                        for (int game = 0; game < gamesPerSeat; game++) {
-                            results.Add(Play(deck, a, deck, b, seed++, audit, ledger));
-                            results.Add(Play(deck, b, deck, a, seed++, audit, ledger));
-                            progress?.Invoke(results.Count / (float)total);
-                        }
+        private static List<(AIEntrant, AIEntrant)> Pairings(AIEntrant[] entrants) =>
+            (from i in Enumerable.Range(0, entrants.Length) from j in Enumerable.Range(i + 1, entrants.Length - i - 1)
+             select (entrants[i], entrants[j])).ToList();
+
+        // Every pairing with each deck against itself, both seats, gamesPerSeat times each
+        internal static List<Game> PairingGames(AIEntrant[] entrants, IReadOnlyList<DeckCards> decks, int gamesPerSeat, ref int seed) {
+            var games = new List<Game>();
+            foreach (var deck in decks) {
+                foreach (var (a, b) in Pairings(entrants)) {
+                    for (int game = 0; game < gamesPerSeat; game++) {
+                        games.Add(new Game(deck, a, deck, b, seed++));
+                        games.Add(new Game(deck, b, deck, a, seed++));
                     }
                 }
             }
-            finally {
-                DebugLogger.MuteInfo = muted;
+            return games;
+        }
+
+        private static List<Result> Run(string title, AIEntrant[] entrants, IReadOnlyList<DeckScriptableObject> decks, int gamesPerSeat,
+            out string report, System.Action<float> progress) {
+            var audit = new GameAudit();
+            var cards = Read(decks);
+            List<Result> results;
+            try {
+                int seed = 1000;
+                results = PlayAll(PairingGames(entrants, cards, gamesPerSeat, ref seed), audit, null, progress).ToList();
             }
-            report = Report(title, results, entrants, pairings, decks) + "\n" + audit.Report();
+            finally {
+                Release(cards);
+            }
+            report = Report(title, results, entrants, Pairings(entrants), decks) + "\n" + audit.Report();
             Problems = audit.Problems;
             return results;
         }
@@ -189,37 +264,35 @@ namespace SlayTheClone {
             public int Count { get; internal set; }
         }
 
+        private readonly object gate = new object();
         private readonly Dictionary<string, Problem> problems = new Dictionary<string, Problem>();
-        private GameManager game;
-        private string where;
-        private int day;
-        private Dictionary<Player, int> cardCounts;
 
-        public IReadOnlyList<Problem> Problems => problems.Values.OrderBy(p => p.Kind == "Warning").ThenByDescending(p => p.Count).ToList();
-
-        internal void Begin(GameManager manager, string match) {
-            this.game = manager;
-            where = match;
-            day = 0;
-            cardCounts = Players.ToDictionary(p => p, CountCards);
-            Application.logMessageReceived += OnLog;
+        public IReadOnlyList<Problem> Problems {
+            get {
+                lock (gate) return problems.Values.OrderBy(p => p.Kind == "Warning").ThenByDescending(p => p.Count).ToList();
+            }
         }
 
-        internal void End() => Application.logMessageReceived -= OnLog;
+        // What a game logs goes to the game playing on the thread that logged it
+        [System.ThreadStatic] private static Watch current;
 
-        private IEnumerable<Player> Players => new[] { game.Player1, game.Player2 };
+        /// <summary>Starts hearing what games log (on the main thread, before they start).</summary>
+        internal void Listen() => Application.logMessageReceivedThreaded += OnAnyLog;
+        internal void StopListening() => Application.logMessageReceivedThreaded -= OnAnyLog;
 
-        private void OnLog(string message, string stackTrace, LogType type) {
+        private static void OnAnyLog(string message, string stackTrace, LogType type) {
             if (type == LogType.Log) return;
-            Note(type == LogType.Warning ? "Warning" : type.ToString(), message, $"{where}, Day {day}");
+            current?.Noticed(type == LogType.Warning ? "Warning" : type.ToString(), message);
         }
 
         public void Note(string kind, string message, string at) {
             string key = kind + ": " + Normalize(message);
-            if (!problems.TryGetValue(key, out var problem)) {
-                problems[key] = problem = new Problem { Kind = kind, Message = Normalize(message), FirstSeen = at };
+            lock (gate) {
+                if (!problems.TryGetValue(key, out var problem)) {
+                    problems[key] = problem = new Problem { Kind = kind, Message = Normalize(message), FirstSeen = at };
+                }
+                problem.Count++;
             }
-            problem.Count++;
         }
 
         // The same problem with other creatures' ids, colors and numbers is the same problem
@@ -230,47 +303,79 @@ namespace SlayTheClone {
             return message.Split('\n')[0].Trim();
         }
 
-        internal void CheckPlans(int today) {
-            day = today;
-            foreach (var play in game.ActionsQueue.GetPendingActions().OfType<PlayCardAction>()) {
-                if (!play.GetOwner().Hand.Contains(play.GetCard())) Note("Rules", "A card was planned that isn't in its player's hand", $"{where}, Day {day}: {play.GetCard().Name}");
+        /// <summary>Starts watching one game, on the thread that plays it.</summary>
+        internal Watch Begin(GameSession session, string match) => new Watch(this, session, match);
+
+        /// <summary>One game under watch: its checks, and what it logs.</summary>
+        internal sealed class Watch {
+            private readonly GameAudit audit;
+            private readonly GameSession game;
+            private readonly string where;
+            private readonly Dictionary<Player, int> cardCounts;
+            private int day;
+
+            public Watch(GameAudit audit, GameSession session, string match) {
+                this.audit = audit;
+                game = session;
+                where = match;
+                cardCounts = Players.ToDictionary(p => p, CountCards);
+                current = this;
+            }
+
+            public void End() {
+                if (current == this) current = null;
+            }
+
+            private IEnumerable<Player> Players => new[] { game.Player1, game.Player2 };
+
+            public void Noticed(string kind, string message) => audit.Note(kind, message, $"{where}, Day {day}");
+
+            private void Note(string kind, string message, string at) => audit.Note(kind, message, at);
+
+            public void CheckPlans(int today) {
+                day = today;
+                foreach (var play in game.ActionsQueue.GetPendingActions().OfType<PlayCardAction>()) {
+                    if (!play.GetOwner().Hand.Contains(play.GetCard())) Note("Rules", "A card was planned that isn't in its player's hand", $"{where}, Day {day}: {play.GetCard().Name}");
+                }
+            }
+
+            public void CheckDay(int endedDay, bool advanced, bool over) {
+                string at = $"{where}, Day {endedDay}";
+                if (!advanced && !over) Note("Rules", "Ending the turn didn't start the next Day", at);
+                if (game.ActionsQueue.GetPendingActionsCount() > 0) {
+                    Note("Rules", "Actions left in the queue after the turn", $"{at}: {string.Join(", ", game.ActionsQueue.GetPendingActions().Select(a => a.GetType().Name))}");
+                }
+                var placed = new HashSet<ICreature>();
+                foreach (var player in Players) {
+                    if (CountCards(player) != cardCounts[player]) {
+                        Note("Rules", "A player lost or gained cards", $"{at}: {player.Name} has {CountCards(player)}, had {cardCounts[player]}");
+                        cardCounts[player] = CountCards(player);
+                    }
+                    var seen = new HashSet<ICard>();
+                    foreach (var card in player.Deck.GetDeckPreview().Concat(player.Hand).Concat(player.Deck.GetDiscardPilePreview())
+                                 .Concat(player.Battlefield.Where(s => s.IsOccupied()).Select(s => (ICard)s.OccupyingCreature))) {
+                        if (!seen.Add(card)) Note("Rules", "A card is in two places at once", $"{at}: {card.Name} ({player.Name})");
+                    }
+                    if (player.Health < 0 || player.Health > Player.MaxHealth) Note("Rules", "A player's Health is out of bounds", $"{at}: {player.Name} at {player.Health}");
+                    if (player.Hand.Count > Player.MaxHandSize) Note("Rules", "A hand is over the maximum", $"{at}: {player.Name} holds {player.Hand.Count}");
+                    foreach (var slot in player.Battlefield) {
+                        var creature = slot.OccupyingCreature;
+                        if (creature == null) continue;
+                        if (creature.Slot != slot) Note("Rules", "A creature and its slot disagree on where it is", $"{at}: {creature.Name}");
+                        if (!placed.Add(creature)) Note("Rules", "A creature is in two slots", $"{at}: {creature.Name}");
+                        if (creature.IsDead) Note("Rules", "A dead creature is still on the board", $"{at}: {creature.Name}");
+                        else if (creature.Health <= 0) Note("Rules", "A creature at 0 Health is still alive on the board", $"{at}: {creature.Name} {creature.Attack}/{creature.Health}");
+                        if (creature.Attack < 0) Note("Rules", "A creature has negative Attack", $"{at}: {creature.Name} {creature.Attack}/{creature.Health}");
+                        if (creature.Owner != player) Note("Rules", "A creature is on a side that isn't its owner's", $"{at}: {creature.Name}");
+                    }
+                }
             }
         }
 
-        internal void CheckDay(int endedDay, bool advanced, bool over) {
-            string at = $"{where}, Day {endedDay}";
-            if (!advanced && !over) Note("Rules", "Ending the turn didn't start the next Day", at);
-            if (game.ActionsQueue.GetPendingActionsCount() > 0) {
-                Note("Rules", "Actions left in the queue after the turn", $"{at}: {string.Join(", ", game.ActionsQueue.GetPendingActions().Select(a => a.GetType().Name))}");
-            }
-            var placed = new HashSet<ICreature>();
-            foreach (var player in Players) {
-                if (CountCards(player) != cardCounts[player]) {
-                    Note("Rules", "A player lost or gained cards", $"{at}: {player.Name} has {CountCards(player)}, had {cardCounts[player]}");
-                    cardCounts[player] = CountCards(player);
-                }
-                var seen = new HashSet<ICard>();
-                foreach (var card in player.Deck.GetDeckPreview().Concat(player.Hand).Concat(player.Deck.GetDiscardPilePreview())
-                             .Concat(player.Battlefield.Where(s => s.IsOccupied()).Select(s => (ICard)s.OccupyingCreature))) {
-                    if (!seen.Add(card)) Note("Rules", "A card is in two places at once", $"{at}: {card.Name} ({player.Name})");
-                }
-                if (player.Health < 0 || player.Health > Player.MaxHealth) Note("Rules", "A player's Health is out of bounds", $"{at}: {player.Name} at {player.Health}");
-                if (player.Hand.Count > Player.MaxHandSize) Note("Rules", "A hand is over the maximum", $"{at}: {player.Name} holds {player.Hand.Count}");
-                foreach (var slot in player.Battlefield) {
-                    var creature = slot.OccupyingCreature;
-                    if (creature == null) continue;
-                    if (creature.Slot != slot) Note("Rules", "A creature and its slot disagree on where it is", $"{at}: {creature.Name}");
-                    if (!placed.Add(creature)) Note("Rules", "A creature is in two slots", $"{at}: {creature.Name}");
-                    if (creature.IsDead) Note("Rules", "A dead creature is still on the board", $"{at}: {creature.Name}");
-                    else if (creature.Health <= 0) Note("Rules", "A creature at 0 Health is still alive on the board", $"{at}: {creature.Name} {creature.Attack}/{creature.Health}");
-                    if (creature.Attack < 0) Note("Rules", "A creature has negative Attack", $"{at}: {creature.Name} {creature.Attack}/{creature.Health}");
-                    if (creature.Owner != player) Note("Rules", "A creature is on a side that isn't its owner's", $"{at}: {creature.Name}");
-                }
-            }
-        }
-
+        // Whose cards they are: a Gift on the other side is still its giver's
         private static int CountCards(Player player) =>
-            player.Deck.CardsRemaining + player.Hand.Count + player.Battlefield.Count(s => s.IsOccupied()) + player.Deck.GetDiscardPilePreview().Count;
+            player.Deck.CardsRemaining + player.Hand.Count + player.Deck.GetDiscardPilePreview().Count
+            + player.Battlefield.Concat(player.Opponent.Battlefield).Count(s => s.OccupyingCreature is ICreature c && (c.DeckOwner ?? c.Owner) == player);
 
         public string Report() {
             var text = new StringBuilder();

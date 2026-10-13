@@ -880,6 +880,8 @@ Two ways to take an enemy creature: Recruitment (temporary control, possible car
 • Balancing: Recruitment and Conversion are powerful because they gain you cards. They're balanced through cost, targeting limits, and rarity.
 
 • Changing Sides: These rules apply to every control change: Recruitment, Conversion used by the AI, Brainwashed, and any card that changes control (unless the card says otherwise).
+• Gift: A creature with Gift is played into an empty enemy slot and joins that side: they control it from then on (its "friendly" creatures are theirs). It stays its giver's card, and goes back to the giver's discard pile when it leaves play. Given into a slot that got taken in the meantime, it fizzles back to the giver's discard pile. Its new side can get rid of it by summoning over it. (Sleeper Agent, the poisoned gift.)
+• Destroy: Kills a creature outright, whatever its Health or Armor; Untouchable still saves it. Some Destroys have a requisite checked when they land (Perfectly Timed Camera Malfunction: only a Revealed creature).
     • Placement: The creature is always placed in the slot(s) directly opposite the slot(s) it occupied. Any creatures already there are discarded to their owners' discard piles, following the Summoning onto an Occupied Slot rule.
     • Not Movement: Changing sides happens as part of the effect that changes control, when it resolves. It doesn't create a Movement Action, so it ignores movement restrictions like Cannot Act, Heavy, or the multi-slot immobility rule.
     • Controller vs. Owner: The controller changes; the owner never does. If the creature leaves the battlefield later, its card goes to its owner's hand or discard pile.

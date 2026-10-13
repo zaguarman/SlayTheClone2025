@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
     - actionType: 6
       value: -1
       targetType: 3
@@ -71,6 +72,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Health Loss (not damage, which fits Mind): 3 on a random enemy creature,
     1 on a random friendly one.'
   artDescription: 'The trolley problem from above: a lever, a trolley and a split

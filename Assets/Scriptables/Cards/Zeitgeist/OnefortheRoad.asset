@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 25
+      requires: 0
   designNotes: 'Mechanics test: an ability as a spell. Target creature gains Double
     Tap (it attacks twice), replacing its own until its card is reshuffled.'
   artDescription: A pub regular raising two pints at once under a CLOSING TIME sign,

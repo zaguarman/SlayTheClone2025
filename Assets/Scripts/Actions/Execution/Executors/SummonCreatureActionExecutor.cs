@@ -29,6 +29,13 @@ namespace SlayTheClone {
 
             creature.SetOwner(owner); // Set owner BEFORE adding to battlefield/registering
 
+            // A Gift needs an empty slot: given into a taken one, it fizzles and goes back to its giver's discard pile
+            if (creature.IsGift && creature.DeckOwner != null && creature.DeckOwner != owner && slot.IsOccupied()) {
+                Log($"Executor: {creature.Name} can't be given into {slot}: it's taken. Back to {creature.DeckOwner.Name}'s discard pile", LogTag.Actions | LogTag.Creatures);
+                creature.DeckOwner.DiscardCard(creature);
+                return;
+            }
+
             // Summoning onto an occupied slot replaces its creature (no death effects); it goes to its owner's discard pile,
             // and what it planned for the Day goes with it
             var replacedCreature = slot.OccupyingCreature;
@@ -49,6 +56,7 @@ namespace SlayTheClone {
             creature.EnterPlay(context.TurnClock.TurnNumber);
             Abilities.CompleteHandover(creature, handover, modifierManager);
             Intel.OnEnteredPlay(creature, context.ModifierManager);
+            if (creature.DeckOwner != null) Intel.MakeKnown(creature, creature.DeckOwner); // Its giver knows what they gave
             SlotEffectRules.OnEnter(creature, slot, context); // A Landmine goes off before the creature's entry effects
             Abilities.TryCopypasta(creature, mediator); // "When ready": only does something if it's ready now
             Log($"Executor: Triggering OnPlay effects for {creature.Name}", LogTag.Effects | LogTag.Actions);

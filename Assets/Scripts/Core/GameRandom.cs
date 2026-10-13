@@ -1,21 +1,24 @@
 namespace SlayTheClone {
     /// <summary>
     /// The game's single source of randomness: deck shuffles, random targets, chain directions and random summons.
-    /// Resetting it with the same seed replays the same game, given the same moves.
+    /// Resetting it with the same seed replays the same game, given the same moves. Each thread has its own, so games
+    /// played side by side on other threads (the AI tournament) don't draw from each other's.
     /// </summary>
     public static class GameRandom {
-        private static System.Random random;
+        [System.ThreadStatic] private static System.Random random;
+        [System.ThreadStatic] private static int seed;
 
-        public static int Seed { get; private set; }
+        public static int Seed => seed;
 
-        static GameRandom() => Reset(System.Environment.TickCount);
-
-        public static void Reset(int seed) {
-            Seed = seed;
-            random = new System.Random(seed);
+        public static void Reset(int newSeed) {
+            seed = newSeed;
+            random = new System.Random(newSeed);
         }
 
         /// <summary>A random int from 0 up to, not including, <paramref name="maxExclusive"/>.</summary>
-        public static int Next(int maxExclusive) => random.Next(maxExclusive);
+        public static int Next(int maxExclusive) {
+            if (random == null) Reset(System.Environment.TickCount ^ System.Threading.Thread.CurrentThread.ManagedThreadId);
+            return random.Next(maxExclusive);
+        }
     }
 }

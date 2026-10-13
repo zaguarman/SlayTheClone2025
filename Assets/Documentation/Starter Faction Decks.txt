@@ -231,7 +231,10 @@ Ability Test Creatures (no other effects: each tests one ability from the 'Abili
     • The other abilities are on faction cards: Insider Job (Day Trader), Penny Stock (Pluriemployed Hustler), Spite (Spite-Elected President), Return to Sender (Supreme Court), Too Mainstream (Hipster), No U (Keyboard Warrior).
 
 Fog of War Test Cards (GDD 2.5)
-    • Sleeper Agent (Shadow Ops., 3/3/2, 0): Off the Books (enters as ???; double damage while the enemy doesn't know what it is, or it's Concealed).
+    • Sleeper Agent (Shadow Ops., 0/3/1, 0): Gift, a poisoned one: played into an empty enemy slot, it joins their side; each Dusk, 1 damage to every creature there, itself included (it lasts three Dusks). Still your card: it comes back to your discard pile.
+    • Multi Passport (Shadow Ops., 3/3/2, 0): Off the Books (enters as ???; double damage while the enemy doesn't know what it is, or it's Concealed). Sleeper Agent's old role.
+    • Wet Work (Shadow Ops., 1/4/3, 0): Extreme Prejudice (its attack destroys what it hits, whatever its Health or Armor; then it's gone too).
+    • Perfectly Timed Camera Malfunction (Shadow Ops. spell): Destroy target enemy creature if it's Revealed (Untouchable still saves it). Set it up with Tapped Communications.
     • Smoke And Mirrors (Shadow Ops. spell): Concealed for 2 Days on a friendly creature.
     • Eavesdrop (Shadow Ops. spell, instant): Reveal an enemy slot: its hidden Slot Effect and what the creature there plans this Day.
     • Tapped Communications (Shadow Ops. spell, instant): Revealed for 2 Days on an enemy creature.

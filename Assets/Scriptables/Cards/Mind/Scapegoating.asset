@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
     - actionType: 2
       value: 1
       targetType: 0
@@ -71,6 +72,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Heat Signature 2 on target creature (random effects and redirected
     attacks go to it), and draw a card. Mind deals no damage: it makes someone else''s
     damage find the goat.'

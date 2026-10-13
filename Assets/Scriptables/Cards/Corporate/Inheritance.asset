@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Old money: target friendly creature gets +2 Attack and +2 Health
     for good, for doing nothing. Future: when a friendly creature dies, another inherits
     its stats.'

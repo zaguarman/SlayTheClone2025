@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Each Dawn, Blessed on a random friendly creature. Future: Prophecy.'
   artDescription: An old bearded man on a cloud in a bathrobe and slippers, lazily
     pointing a TV remote at a tiny spinning universe.
@@ -56,3 +57,4 @@ MonoBehaviour:
   turnsUntilOperative: 3
   movement: 0
   ability: 0
+  gift: 0

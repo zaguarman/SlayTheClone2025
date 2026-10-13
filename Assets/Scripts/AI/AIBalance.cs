@@ -44,129 +44,169 @@ namespace SlayTheClone {
             public Dictionary<string, int> Plays { get; } = new Dictionary<string, int>();
         }
 
+        private readonly object gate = new object();
         private readonly List<Entry> entries = new List<Entry>();
-        public IReadOnlyList<Entry> Entries => entries;
         private readonly Dictionary<string, Record> cards = new Dictionary<string, Record>();
         private readonly Dictionary<(string ai, string card), Record> byAI = new Dictionary<(string, string), Record>();
+        public IReadOnlyList<Entry> Entries => entries;
         public IReadOnlyCollection<Record> Cards => cards.Values;
         public Record ForAI(string ai, string card) => byAI.TryGetValue((ai, card), out var record) ? record : null;
 
-        private GameManager game;
-        private GameMediator mediator;
-        private AIEntrant[] seats;
-        private string[] deckNames;
-        private bool sameOnBothSides;
-        private readonly Dictionary<ICard, int>[] plays = { new Dictionary<ICard, int>(), new Dictionary<ICard, int>() };
-        private (ICard card, IPlayer owner) context; // The card whose action is resolving: a spell, a summon, an attack
-        private (ICard card, IPlayer owner) credit;  // The card the action resolving now is credited to
+        /// <summary>Starts tallying one game, on the thread that plays it; its numbers join the others when it ends.</summary>
+        internal Watch Begin(GameSession session, GameMediator mediator, AIEntrant first, AIEntrant second, bool mirror, string deck1, string deck2) =>
+            new Watch(this, session, mediator, first, second, mirror, deck1, deck2);
 
-        internal void Begin(GameManager manager, GameMediator gameMediator, AIEntrant first, AIEntrant second, bool mirror, string deck1, string deck2) {
-            deckNames = new[] { deck1, deck2 };
-            game = manager;
-            mediator = gameMediator;
-            seats = new[] { first, second };
-            sameOnBothSides = mirror && first.Name == second.Name;
-            plays[0].Clear();
-            plays[1].Clear();
-            context = credit = default;
-            game.ActionsQueue.OnActionExecuting.AddListener(OnExecuting);
-            mediator.PlayerDamaged += OnPlayerDamaged;
-            mediator.CreatureDamaged += OnCreatureDamaged;
-            mediator.CreatureDied += OnCreatureDied;
-        }
-
-        internal void Detach() {
-            if (mediator == null) return;
-            game.ActionsQueue?.OnActionExecuting.RemoveListener(OnExecuting);
-            mediator.PlayerDamaged -= OnPlayerDamaged;
-            mediator.CreatureDamaged -= OnCreatureDamaged;
-            mediator.CreatureDied -= OnCreatureDied;
-            mediator = null;
-        }
-
-        private int SideOf(IPlayer player) => player == game.Player1 ? 0 : 1;
-
-        private void OnExecuting(IGameAction action) {
-            credit = default;
-            switch (action) {
-                case PlayCardAction play:
-                    var counts = plays[SideOf(play.GetOwner())];
-                    counts[play.GetCard()] = (counts.TryGetValue(play.GetCard(), out int n) ? n : 0) + 1;
-                    context = (play.GetCard(), play.GetOwner());
-                    break;
-                case PlaySpellAction spell: context = (spell.GetSpell(), spell.GetOwner()); break;
-                case SummonCreatureAction summon: context = (summon.GetCreature(), summon.GetOwner()); break;
-                case BattlefieldCombatAction attack: context = (attack.GetAttacker(), attack.GetAttacker()?.Owner); break;
-                case UseAbilityAction use: context = (use.Creature, use.Creature?.Owner); break;
-                case DamageCreatureAction hit: credit = hit.GetAttacker() != null ? (hit.GetAttacker(), hit.GetAttacker().Owner) : SpellContext(); break;
-                case DamagePlayerAction hit: credit = hit.GetAttacker() != null ? (hit.GetAttacker(), hit.GetAttacker().Owner) : SpellContext(); break;
-                case DestroyCreatureAction destroy: credit = destroy.GetKiller() != null ? (destroy.GetKiller(), destroy.GetKiller().Owner) : SpellContext(); break;
-                case DiscardHandAction or DrawCardsAction: context = default; break; // The Day is over
-            }
-        }
-
-        // Damage nobody dealt by hand (a spell's effects) is the spell's; other sources (Burn at Dusk) aren't credited
-        private (ICard, IPlayer) SpellContext() => context.card is Spell ? context : default;
-
-        private void OnPlayerDamaged(IPlayer player, int amount) {
-            if (credit.card == null) return;
-            foreach (var record in RecordsOf(credit)) {
-                if (player != credit.owner) record.FaceDamage += amount;
-                else record.FriendlyDamage += amount;
-            }
-        }
-
-        private void OnCreatureDamaged(ICreature creature, int amount) {
-            if (credit.card == null) return;
-            foreach (var record in RecordsOf(credit)) {
-                if (creature.Owner != credit.owner) record.CreatureDamage += amount;
-                else record.FriendlyDamage += amount;
-            }
-        }
-
-        private void OnCreatureDied(ICreature creature) {
-            if (credit.card == null || creature.Owner == credit.owner) return;
-            foreach (var record in RecordsOf(credit)) record.Kills++;
-        }
-
-        private IEnumerable<Record> RecordsOf((ICard card, IPlayer owner) source) {
-            if (source.owner == null) yield break;
-            yield return Get(cards, source.card.Name, source.card);
-            yield return Get(byAI, (seats[SideOf(source.owner)].Name, source.card.Name), source.card);
-        }
-
-        private static Record Get<TKey>(Dictionary<TKey, Record> table, TKey key, ICard card) {
+        private static Record Get<TKey>(Dictionary<TKey, Record> table, TKey key, string name, Faction faction, bool isCreature) {
             if (!table.TryGetValue(key, out var record)) {
-                table[key] = record = new Record { Name = card.Name, Faction = card.SourceData?.faction ?? Faction.None, IsCreature = card is ICreature };
+                table[key] = record = new Record { Name = name, Faction = faction, IsCreature = isCreature };
             }
             return record;
         }
 
-        internal void End(int winner) {
-            for (int side = 0; side < 2; side++) {
-                bool won = winner == side + 1, lost = winner != 0 && !won;
-                var entry = new Entry { AI = seats[side].Name, Deck = deckNames[side], Won = won, Decided = winner != 0 };
-                foreach (var group in plays[side].GroupBy(p => p.Key.Name)) entry.Plays[group.Key] = group.Sum(p => p.Value);
-                entries.Add(entry);
-                foreach (var (card, count) in plays[side].GroupBy(p => p.Key.Name).Select(g => (g.First().Key, g.Sum(p => p.Value)))) {
-                    foreach (var record in new[] { Get(cards, card.Name, card), Get(byAI, (seats[side].Name, card.Name), card) }) {
-                        record.Plays += count;
-                        record.Games++;
-                        if (won) record.Wins++;
-                        if (lost) record.Losses++;
-                    }
+        // One game's numbers join the totals: games end on many threads at once
+        private void Merge(Dictionary<string, Record> gameCards, Dictionary<(string, string), Record> gameByAI, List<Entry> gameEntries) {
+            lock (gate) {
+                foreach (var pair in gameCards) Add(Get(cards, pair.Key, pair.Value.Name, pair.Value.Faction, pair.Value.IsCreature), pair.Value);
+                foreach (var pair in gameByAI) Add(Get(byAI, pair.Key, pair.Value.Name, pair.Value.Faction, pair.Value.IsCreature), pair.Value);
+                entries.AddRange(gameEntries);
+            }
+        }
+
+        private static void Add(Record total, Record game) {
+            total.Plays += game.Plays;
+            total.Games += game.Games;
+            total.Wins += game.Wins;
+            total.Losses += game.Losses;
+            total.EdgeWins += game.EdgeWins;
+            total.EdgeLosses += game.EdgeLosses;
+            total.FaceDamage += game.FaceDamage;
+            total.CreatureDamage += game.CreatureDamage;
+            total.Kills += game.Kills;
+            total.FriendlyDamage += game.FriendlyDamage;
+        }
+
+        /// <summary>One game being tallied: what was played, and what each card dealt.</summary>
+        internal sealed class Watch {
+            private readonly CardLedger ledger;
+            private readonly GameSession game;
+            private GameMediator mediator;
+            private readonly AIEntrant[] seats;
+            private readonly string[] deckNames;
+            private readonly bool sameOnBothSides;
+            private readonly Dictionary<ICard, int>[] plays = { new Dictionary<ICard, int>(), new Dictionary<ICard, int>() };
+            private readonly Dictionary<string, Record> cards = new Dictionary<string, Record>();
+            private readonly Dictionary<(string ai, string card), Record> byAI = new Dictionary<(string, string), Record>();
+            private (ICard card, IPlayer owner) context; // The card whose action is resolving: a spell, a summon, an attack
+            private (ICard card, IPlayer owner) credit;  // The card the action resolving now is credited to
+
+            public Watch(CardLedger ledger, GameSession session, GameMediator gameMediator, AIEntrant first, AIEntrant second, bool mirror, string deck1, string deck2) {
+                this.ledger = ledger;
+                game = session;
+                mediator = gameMediator;
+                seats = new[] { first, second };
+                deckNames = new[] { deck1, deck2 };
+                sameOnBothSides = mirror && first.Name == second.Name;
+                game.ActionsQueue.OnActionExecuting.AddListener(OnExecuting);
+                mediator.PlayerDamaged += OnPlayerDamaged;
+                mediator.CreatureDamaged += OnCreatureDamaged;
+                mediator.CreatureDied += OnCreatureDied;
+            }
+
+            public void Detach() {
+                if (mediator == null) return;
+                game.ActionsQueue.OnActionExecuting.RemoveListener(OnExecuting);
+                mediator.PlayerDamaged -= OnPlayerDamaged;
+                mediator.CreatureDamaged -= OnCreatureDamaged;
+                mediator.CreatureDied -= OnCreatureDied;
+                mediator = null;
+            }
+
+            private int SideOf(IPlayer player) => player == game.Player1 ? 0 : 1;
+
+            private void OnExecuting(IGameAction action) {
+                credit = default;
+                switch (action) {
+                    case PlayCardAction play:
+                        var counts = plays[SideOf(play.GetOwner())];
+                        counts[play.GetCard()] = (counts.TryGetValue(play.GetCard(), out int n) ? n : 0) + 1;
+                        context = (play.GetCard(), play.GetOwner());
+                        break;
+                    case PlaySpellAction spell: context = (spell.GetSpell(), spell.GetOwner()); break;
+                    case SummonCreatureAction summon: context = (summon.GetCreature(), summon.GetOwner()); break;
+                    case BattlefieldCombatAction attack: context = (attack.GetAttacker(), Whose(attack.GetAttacker())); break;
+                    case UseAbilityAction use: context = (use.Creature, Whose(use.Creature)); break;
+                    case DamageCreatureAction hit: credit = hit.GetAttacker() != null ? (hit.GetAttacker(), Whose(hit.GetAttacker())) : SpellContext(); break;
+                    case DamagePlayerAction hit: credit = hit.GetAttacker() != null ? (hit.GetAttacker(), Whose(hit.GetAttacker())) : SpellContext(); break;
+                    case DestroyCreatureAction destroy: credit = destroy.GetKiller() != null ? (destroy.GetKiller(), Whose(destroy.GetKiller())) : SpellContext(); break;
+                    case DiscardHandAction or DrawCardsAction: context = default; break; // The Day is over
                 }
             }
-            // The same deck and AI on both sides: the side that played a card more often, and won or lost
-            if (!sameOnBothSides || winner == 0) return;
-            var names = plays.SelectMany(p => p.Keys).GroupBy(c => c.Name).Select(g => g.First()).ToList();
-            foreach (var card in names) {
-                int first = plays[0].Where(p => p.Key.Name == card.Name).Sum(p => p.Value);
-                int second = plays[1].Where(p => p.Key.Name == card.Name).Sum(p => p.Value);
-                if (first == second) continue;
-                var record = Get(cards, card.Name, card);
-                if ((first > second) == (winner == 1)) record.EdgeWins++;
-                else record.EdgeLosses++;
+
+            // A Gift on the other side still works for the player whose card it is
+            private static IPlayer Whose(ICreature creature) => creature == null ? null : creature.DeckOwner ?? creature.Owner;
+
+            // Damage nobody dealt by hand (a spell's effects) is the spell's; other sources (Burn at Dusk) aren't credited
+            private (ICard, IPlayer) SpellContext() => context.card is Spell ? context : default;
+
+            private void OnPlayerDamaged(IPlayer player, int amount) {
+                if (credit.card == null) return;
+                foreach (var record in RecordsOf(credit)) {
+                    if (player != credit.owner) record.FaceDamage += amount;
+                    else record.FriendlyDamage += amount;
+                }
+            }
+
+            private void OnCreatureDamaged(ICreature creature, int amount) {
+                if (credit.card == null || creature == credit.card) return;
+                foreach (var record in RecordsOf(credit)) {
+                    if (Whose(creature) != credit.owner) record.CreatureDamage += amount;
+                    else record.FriendlyDamage += amount;
+                }
+            }
+
+            private void OnCreatureDied(ICreature creature) {
+                if (credit.card == null || creature == credit.card || Whose(creature) == credit.owner) return;
+                foreach (var record in RecordsOf(credit)) record.Kills++;
+            }
+
+            private IEnumerable<Record> RecordsOf((ICard card, IPlayer owner) source) {
+                if (source.owner == null) yield break;
+                yield return Get(cards, source.card.Name, source.card);
+                yield return Get(byAI, (seats[SideOf(source.owner)].Name, source.card.Name), source.card);
+            }
+
+            private static Record Get<TKey>(Dictionary<TKey, Record> table, TKey key, ICard card) =>
+                CardLedger.Get(table, key, card.Name, card.SourceData?.faction ?? Faction.None, card is ICreature);
+
+            public void End(int winner) {
+                var entries = new List<Entry>();
+                for (int side = 0; side < 2; side++) {
+                    bool won = winner == side + 1, lost = winner != 0 && !won;
+                    var entry = new Entry { AI = seats[side].Name, Deck = deckNames[side], Won = won, Decided = winner != 0 };
+                    foreach (var group in plays[side].GroupBy(p => p.Key.Name)) entry.Plays[group.Key] = group.Sum(p => p.Value);
+                    entries.Add(entry);
+                    foreach (var (card, count) in plays[side].GroupBy(p => p.Key.Name).Select(g => (g.First().Key, g.Sum(p => p.Value)))) {
+                        foreach (var record in new[] { Get(cards, card.Name, card), Get(byAI, (seats[side].Name, card.Name), card) }) {
+                            record.Plays += count;
+                            record.Games++;
+                            if (won) record.Wins++;
+                            if (lost) record.Losses++;
+                        }
+                    }
+                }
+                // The same deck and AI on both sides: the side that played a card more often, and won or lost
+                if (sameOnBothSides && winner != 0) {
+                    var names = plays.SelectMany(p => p.Keys).GroupBy(c => c.Name).Select(g => g.First()).ToList();
+                    foreach (var card in names) {
+                        int first = plays[0].Where(p => p.Key.Name == card.Name).Sum(p => p.Value);
+                        int second = plays[1].Where(p => p.Key.Name == card.Name).Sum(p => p.Value);
+                        if (first == second) continue;
+                        var record = Get(cards, card.Name, card);
+                        if ((first > second) == (winner == 1)) record.EdgeWins++;
+                        else record.EdgeLosses++;
+                    }
+                }
+                ledger.Merge(cards, byAI, entries);
             }
         }
     }
@@ -182,34 +222,29 @@ namespace SlayTheClone {
         /// Returns the report.
         /// </summary>
         public static string RunBalance(IReadOnlyList<DeckScriptableObject> decks, System.Action<float> progress = null) {
-            bool muted = DebugLogger.MuteInfo;
-            DebugLogger.MuteInfo = true;
             var audit = new GameAudit();
             var cardLedger = new CardLedger();
             var styleLedger = new CardLedger();
+            var deckLedger = new CardLedger();
             var hard = new AIEntrant(AILevel.Hard);
             const int CardGamesPerDeck = 100, DeckGamesPerPairing = 3;
-            var cardResults = new List<Result>();
-            var deckResults = new List<Result>();
-            var deckLedger = new CardLedger();
-            List<Result> styleResults;
-            int seed = 50000;
+            var cards = Read(decks);
+            List<Result> cardResults, styleResults, deckResults;
             try {
-                foreach (var deck in decks) {
-                    for (int game = 0; game < CardGamesPerDeck; game++) cardResults.Add(Play(deck, hard, deck, hard, seed++, audit, cardLedger));
-                    progress?.Invoke(0.25f * cardResults.Count / (decks.Count * CardGamesPerDeck));
-                }
-                styleResults = Run("", Styles, decks, 2, out _, p => progress?.Invoke(0.25f + 0.5f * p), styleLedger);
-                foreach (var problem in Problems) audit.Note(problem.Kind, problem.Message, problem.FirstSeen);
-                foreach (var first in decks) {
-                    foreach (var second in decks.Where(d => d != first)) {
-                        for (int game = 0; game < DeckGamesPerPairing; game++) deckResults.Add(Play(first, hard, second, hard, seed++, audit, deckLedger));
-                    }
-                    progress?.Invoke(0.75f + 0.25f * deckResults.Count / (decks.Count * (decks.Count - 1) * DeckGamesPerPairing));
-                }
+                int seed = 50000;
+                var mirrors = cards.SelectMany(deck => Enumerable.Range(0, CardGamesPerDeck).Select(_ => new Game(deck, hard, deck, hard, seed++))).ToList();
+                cardResults = PlayAll(mirrors, audit, cardLedger, p => progress?.Invoke(0.25f * p)).ToList();
+
+                int styleSeed = 1000;
+                styleResults = PlayAll(PairingGames(Styles, cards, 2, ref styleSeed), audit, styleLedger, p => progress?.Invoke(0.25f + 0.5f * p)).ToList();
+
+                var versus = (from first in cards from second in cards where second != first
+                              from game in Enumerable.Range(0, DeckGamesPerPairing) select (first, second)).ToList();
+                var deckGames = versus.Select(v => new Game(v.first, hard, v.second, hard, seed++)).ToList();
+                deckResults = PlayAll(deckGames, audit, deckLedger, p => progress?.Invoke(0.75f + 0.25f * p)).ToList();
             }
             finally {
-                DebugLogger.MuteInfo = muted;
+                Release(cards);
             }
             Problems = audit.Problems;
             return BalanceReport(decks, cardResults, cardLedger, styleResults, styleLedger, deckResults, deckLedger) + "\n" + audit.Report();
@@ -342,6 +377,18 @@ namespace SlayTheClone {
                     var played = deckResults.Where(r => (r.Deck == row && r.Deck2 == column) || (r.Deck == column && r.Deck2 == row)).ToList();
                     return $"{played.Count(r => (r.Winner == 1 && r.Deck == row) || (r.Winner == 2 && r.Deck2 == row)),10}";
                 })));
+            }
+            text.AppendLine();
+
+            // Every card, so a new or changed one can be looked up whatever its rank
+            text.AppendLine("6. EVERY CARD (mirror games; deck-against-deck damage and kills a game it's played in)");
+            text.AppendLine($"    {"Card",-40} {"Faction",-15} {"Edge",5} {"(of)",5} {"Plays/g",8} {"Face/pl",8} {"Kills/pl",9} {"Dmg/g vs",9} {"Kills/g vs",11}");
+            foreach (var c in cardLedger.Cards.OrderBy(c => c.Faction).ThenBy(c => c.Name)) {
+                var versus = deckLedger.Cards.FirstOrDefault(d => d.Name == c.Name);
+                string dmg = versus == null || versus.Games == 0 ? "-" : $"{(versus.FaceDamage + versus.CreatureDamage) / (float)versus.Games:0.0}";
+                string kills = versus == null || versus.Games == 0 ? "-" : $"{versus.Kills / (float)versus.Games:0.0}";
+                string edge = c.EdgeGames == 0 ? "-" : $"{c.Edge:0%}";
+                text.AppendLine($"    {c.Name,-40} {CardTextFormatter.FactionName(c.Faction),-15} {edge,5} {c.EdgeGames,5} {c.PlaysPerGame,8:0.0} {c.FacePerPlay,8:0.0} {c.KillsPerPlay,9:0.00} {dmg,9} {kills,11}");
             }
             return text.ToString();
         }

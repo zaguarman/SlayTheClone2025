@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'A Monitored Watchdog: the next enemy spell is redirected to a random
     creature. 1 charge.'
   artDescription: A man squeezed on a park bench between two lovers, holding both

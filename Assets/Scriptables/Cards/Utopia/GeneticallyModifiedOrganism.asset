@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   - effectType: 0
     trigger: 4
     oncePerCombat: 0
@@ -75,6 +76,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: +2/+2 for good when it enters; the side effects cost it 1 Health each
     Dusk.
   artDescription: A ripe tomato with huge bodybuilder arms, flexing, a NON-GMO sticker
@@ -85,3 +87,4 @@ MonoBehaviour:
   turnsUntilOperative: 2
   movement: 0
   ability: 0
+  gift: 0

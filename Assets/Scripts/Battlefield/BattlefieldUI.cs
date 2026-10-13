@@ -113,7 +113,7 @@ namespace SlayTheClone {
 
         /// <summary>
         /// What dropping this card here would aim at. Creatures on the board move or attack into a slot; creatures from the
-        /// hand are summoned into a slot of their own side; aimed spells hit a slot on either side; other spells play on a
+        /// hand are summoned into a slot of their own side (a Gift into an empty one of the other side); aimed spells hit a slot on either side; other spells play on a
         /// side they do something to (see <see cref="EffectResolver.Reaches"/>). Only what it aims at lights up.
         /// </summary>
         public DropAim AimOf(CardController card) {
@@ -122,6 +122,8 @@ namespace SlayTheClone {
             if (!IsCardFromHand(card) && !card.IsQueued) return card.GetLinkedCreature() != null ? DropAim.Slot : DropAim.None;
 
             switch (card.GetLinkedCardInstance()) {
+                case ICreature gift when gift.IsGift:
+                    return card.Player != Player ? DropAim.Slot : DropAim.None;
                 case ICreature:
                     return card.Player == Player ? DropAim.Slot : DropAim.None;
                 case Spell spell when EffectResolver.IsAimed(spell):
@@ -198,6 +200,10 @@ namespace SlayTheClone {
             var cardToPlay = card.GetLinkedCardInstance();
             if (cardToPlay is ICreature && queuedGhosts.TryGetValue(targetSlot, out var ghost) && ghost.GetLinkedCardInstance() != cardToPlay) {
                 Log($"Slot already has a creature queued; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
+                return;
+            }
+            if (cardToPlay is ICreature { IsGift: true } && targetSlot.Model.IsOccupied()) {
+                Log($"A Gift needs an empty slot; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
                 return;
             }
             PlayFromHand(card, targetSlot.Model);

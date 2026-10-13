@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Arrival: Heat Signature 3 on itself. It draws every random effect
     and redirected attack: a decoy too attractive to ignore.'
   artDescription: 'Candlelight and satin: a figure in full shining plate reclines
@@ -58,3 +59,4 @@ MonoBehaviour:
   turnsUntilOperative: 0
   movement: 0
   ability: 0
+  gift: 0

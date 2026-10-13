@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: MultiPassport
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 6f9df10e-250f-421d-a74f-1f48208ac15d
+  cardName: Multi Passport
+  description: Seven names, four nationalities, one face. Mostly.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 0}
+  effects: []
+  designNotes: 'Off the Books: it arrives as ??? and hits twice as hard until someone
+    works out who it is (a Reveal or Revealed). Concealing it again (Smoke And Mirrors)
+    brings the double damage back. Was Sleeper Agent''s role.'
+  artDescription: 'A man in a trench coat fanning out a dozen passports like a hand
+    of cards, each photo the same face in a different disguise: moustache, glasses,
+    wig, fake beard.'
+  attack: 3
+  health: 3
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 28
+  gift: 0

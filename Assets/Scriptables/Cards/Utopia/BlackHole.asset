@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
     - actionType: 0
       value: 2
       targetType: 0
@@ -71,6 +72,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: '3 damage to the creature and its neighbors; 2 damage to you (side
     effects). Future: Black Hole repositioning.'
   artDescription: A swirling black hole sucking in a cow, a sofa, a single sock and

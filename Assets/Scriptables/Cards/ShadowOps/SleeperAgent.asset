@@ -18,16 +18,47 @@ MonoBehaviour:
   cardType: 0
   faction: 3
   artwork: {fileID: 3286163911610860551, guid: a5b0909a5096cf8409b539a2af5df42f, type: 3}
-  effects: []
-  designNotes: 'Off the Books: it arrives as ??? and hits twice as hard until someone
-    works out who it is (a Reveal or Revealed). Concealing it again (Smoke And Mirrors)
-    brings the double damage back.'
+  effects:
+  - effectType: 0
+    trigger: 4
+    oncePerCombat: 0
+    actions:
+    - actionType: 0
+      value: 1
+      targetType: 3
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+  designNotes: 'Gift, a poisoned one: you plant it in an empty enemy slot and it
+    joins their side. Each Dusk it sabotages: 1 damage to every creature on its side,
+    itself included, so it lasts three Dusks. It''s still your card: it comes back
+    to your discard pile. They can get rid of it sooner by summoning over it.'
   artDescription: A suburban dad mowing his lawn in a polo shirt, an earpiece coiled
     behind his ear, while his shadow on the grass wears a trench coat and holds a
     sniper rifle.
-  attack: 3
+  attack: 0
   health: 3
-  speed: 2
+  speed: 1
   turnsUntilOperative: 0
   movement: 0
-  ability: 28
+  ability: 0
+  gift: 1

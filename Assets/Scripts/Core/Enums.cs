@@ -9,7 +9,10 @@ namespace SlayTheClone {
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
         public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie } // New triggers go last: cards store them as numbers
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetTrend,
-            CopyStats, StealStatChanges, SwapPositions, GrantAbility } // Renamed Buff to ModifyStat
+            CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
+
+        /// <summary>What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.</summary>
+        public enum TargetRequisite { None, Revealed }
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         // Movement Keywords printed on creatures (GDD 2.4): Leapfrog jumps over creatures, Swap trades places with a friendly one
@@ -20,7 +23,7 @@ namespace SlayTheClone {
         public enum CreatureAbility {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
             SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, PennyStock, Undercover, Handover, Recoil,
-            Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace, OffTheBooks
+            Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace, OffTheBooks, ExtremePrejudice
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look

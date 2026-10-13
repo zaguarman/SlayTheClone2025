@@ -24,6 +24,8 @@ namespace SlayTheClone {
     public class CreatureData : CardData {
         public int attack;
         public int health;
+        /// <summary>Gift: it's played into an empty enemy slot and joins their side; still your card, it comes back to your discard pile.</summary>
+        public bool gift;
         public int speed = 1; // Default speed to 1
         public int turnsUntilOperative; // Turns it spends on the board before it can act (0 = from the next turn)
         public MovementKeyword movement; // Leapfrog, Swap (GDD 2.4 Movement Keywords)
@@ -87,6 +89,9 @@ namespace SlayTheClone {
 
         // GrantAbility Specific: the ability the target gains, replacing its own until its card is reshuffled
         public CreatureAbility ability = CreatureAbility.None;
+
+        // What the target must be for it to land (Destroy: "if it's Revealed")
+        public TargetRequisite requires = TargetRequisite.None;
 
         public EffectAction Clone() => (EffectAction)MemberwiseClone(); // Value-type fields only
     }

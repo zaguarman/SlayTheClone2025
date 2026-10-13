@@ -153,11 +153,18 @@ Undercover
     Answers: Revealed, a Reveal, Signal Jammer, or effects that don't care what it plans (slot and area effects).
 
 Off the Books
-    Inspired by: the GDD's stealthy creatures (2.5, Unknown Creatures): a spy hits hardest before anyone knows who it is. On Sleeper Agent.
+    Inspired by: the GDD's stealthy creatures (2.5, Unknown Creatures): a spy hits hardest before anyone knows who it is. On Multi Passport (it was Sleeper Agent's).
     Type: Passive
     Description: "Enters as ???. Double damage while the enemy doesn't know what it is, or it's Concealed."
     Notes: It's stealthy, like Undercover: it stays '???' (name, stats, art, text) after its summon, though its plans can be seen. Everything it deals is doubled, attacks and effects, to creatures and to the player, while the other side doesn't know what it is or while it's Concealed. A Reveal on its slot or Revealed shows it for good, and the doubling stops; Concealed (Smoke And Mirrors) brings it back while it lasts, unless it's Revealed. Doubled after Penny Stock, before the target's Exposed and Armor. Like any ability, it's off while switched off (Exhausted, Signal Jammer).
     Answers: Reveal it (Eavesdrop, Tapped Communications, Social Panopticon, Control Room), switch its ability off, or take the first hit with Armor.
+
+Extreme Prejudice
+    Inspired by: "terminate with extreme prejudice", the spy-world euphemism. Named on purpose not after another game's similar keyword. On Wet Work.
+    Type: Passive
+    Description: "Its attack destroys the creature it hits, whatever its Health or Armor; then it's gone too."
+    Notes: The hit is a Destroy, not damage: Health, Armor, Exposed and damage abilities don't matter. Untouchable or a Temporal Shield still stops the hit, and then the assassin survives to try again. Attacking an empty slot, it hits the player for its Attack and stays. One hit, one roadblock: meant for the walls and armored giants nothing else gets through.
+    Answers: Kill it before it acts (it waits a Day like every creature), make the target Untouchable, or keep it on a Temporal Shield.
 
 Handover
     Inspired by: Baton Pass (Pokémon), renamed so it isn't the move's name

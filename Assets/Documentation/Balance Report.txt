@@ -14,6 +14,13 @@ CHANGES SINCE (2026-10-13)
     dealer (9.3 damage and 1.5 kills a game, against 5.7 for its best card before). It beats Myth 5 - 1 and Prosperity Gospel
     4 - 2, but still loses every game to Statecraft, Corporate, Digital Society, Tech and Mind.
     Myth (23% -> 15%) and Prosperity Gospel (22% -> 12%) fell: they were the decks Shadow Ops. could beat.
+  Then (same day): Sleeper Agent became a poisoned Gift (planted on their side, it hurts every creature there at Dusk);
+  its Off the Books role went to the new Multi Passport; two cards kill outright, whatever the Health or Armor: Wet Work
+  (1/4, Extreme Prejudice: its attack destroys what it hits, then it's gone) and Perfectly Timed Camera Malfunction
+  (destroy a Revealed creature; the AI sets it up with Tapped Communications). A new run:
+    Shadow Ops. 20% -> 22%; Camera Malfunction kills 2.1 creatures a game against other decks, Wet Work 1, and Multi
+    Passport is its best damage dealer (7.8 a game). It now beats Utopia 4 - 2, Myth 5 - 1, Prosperity Gospel 3 - 3, but
+    still loses every game to Statecraft, Corporate, Digital Society and Tech: their board-wide damage is the real problem.
   The numbers below are from before these changes.
 
 1. THE SHORT VERSION

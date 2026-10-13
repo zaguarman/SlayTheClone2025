@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Each Dawn it Reveals a random enemy slot: its hidden Slot Effect
     and what the creature there plans that Day. Future: chooses the slot.'
   artDescription: A dark room with a wall of surveillance monitors, two operators
@@ -57,3 +58,4 @@ MonoBehaviour:
   turnsUntilOperative: 0
   movement: 0
   ability: 0
+  gift: 0

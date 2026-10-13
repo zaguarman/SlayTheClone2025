@@ -58,6 +58,8 @@ namespace SlayTheClone {
             Add("Grow", "Grow X (no number: 1): +X Attack and +X Health for good at each [Dawn].");
             Add("Rebirth", "Once per combat, when this would die, it's reborn instead: it survives with 1 Health. The wheel turns: last life a worm, this life a dog.");
             Add("Summon", "Summon X (no number: 1): X random creatures from your deck enter your empty slots.");
+            Add("Destroy", "Kills it outright, whatever its Health or [Armor]. [Untouchable] still saves it.");
+            Add("Gift", "You play it into an empty enemy slot: it joins their side, and they control it. It's still your card: when it leaves play, it comes back to your discard pile. They can get rid of it by summoning over it.");
 
             // ---------------------------------------------------------------- Movement
             group = "Movement";
@@ -127,6 +129,7 @@ namespace SlayTheClone {
             CreatureAbility.ZeroDay => "Its attacks and effects ignore defensive abilities, except [Cold Storage].",
             CreatureAbility.Copypasta => "When it's ready and each [Dawn] after, it copies the ability of the creature opposite (once).",
             CreatureAbility.Undercover => "It's always [Concealed] until [Revealed].",
+            CreatureAbility.ExtremePrejudice => "Its attack [Destroy|destroys] the creature it hits, whatever its Health or [Armor]; then it's gone too. [Untouchable] or a [Temporal Shield] stops the hit.",
             CreatureAbility.OffTheBooks => "It enters as ??? to the other side. While they don't know what it is, or it's [Concealed], everything it deals is doubled. A [Reveal] or [Revealed] shows it for good.",
             CreatureAbility.HiveMind => "A creature that attacks it loses its ability and gains Hive Mind instead.",
             CreatureAbility.IdentityTheft => "Instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it).",

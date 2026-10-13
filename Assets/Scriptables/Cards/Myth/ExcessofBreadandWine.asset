@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
     - actionType: 5
       value: 1
       targetType: 3
@@ -71,6 +72,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: Heals your creatures; one of them is Exhausted (the hangover).
   artDescription: 'The Last Supper as a frat party: the apostles playing beer pong
     along the long table while Jesus refills everyone''s cups from a jug.'

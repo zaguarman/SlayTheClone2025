@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Mechanics test: the protection as a spell. Untouchable this Day:
     target creature takes no damage at all.'
   artDescription: A smiling president signing a giant pardon with a huge flourish

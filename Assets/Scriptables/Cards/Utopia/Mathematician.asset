@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: Each Dawn a random enemy creature gets -1 Attack for good.
   artDescription: 'The confused math lady meme: a woman squinting while equations,
     triangles and integrals float around her head.'
@@ -56,3 +57,4 @@ MonoBehaviour:
   turnsUntilOperative: 2
   movement: 0
   ability: 0
+  gift: 0

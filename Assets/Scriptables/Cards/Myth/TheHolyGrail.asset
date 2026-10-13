@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Mechanics test: Blessed 2. Each stack negates the next status that
     would land, friendly or not, Doomed included. Persistent, up to 3 stacks.'
   artDescription: A gilded chalice on a velvet cushion behind museum glass. A queue

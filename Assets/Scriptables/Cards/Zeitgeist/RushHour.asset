@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 2
       ability: 0
+      requires: 0
   designNotes: 'Trend for 3 Days: the slowest act first, wherever Speed decides the
     order (like a room where the order is flipped).'
   artDescription: Gridlocked traffic at dusk, every car honking, while a snail with

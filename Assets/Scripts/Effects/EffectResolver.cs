@@ -264,8 +264,14 @@ namespace SlayTheClone {
             }
         }
 
+        /// <summary>Whether the creature is what the effect requires of it, now.</summary>
+        public static bool Meets(ICreature creature, TargetRequisite requisite, IModifierManager modifiers) => requisite switch {
+            TargetRequisite.Revealed => modifiers != null && modifiers.HasStatusEffect(creature, StatusEffectType.Revealed),
+            _ => true
+        };
+
         private static bool CanAffectCreatures(ActionType actionType) =>
-            actionType is ActionType.Damage or ActionType.Heal or ActionType.ModifyStat
+            actionType is ActionType.Damage or ActionType.Destroy or ActionType.Heal or ActionType.ModifyStat
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
                 or ActionType.CreateWatchdog or ActionType.DelayDeployment
                 or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility;
@@ -291,7 +297,7 @@ namespace SlayTheClone {
                     continue;
                 }
 
-                var gameAction = CreateAction(source, controller, action, target);
+                var gameAction = CreateAction(source, controller, action, target, queue.Modifiers);
                 if (gameAction == null) continue; // This kind of target can't receive this action
 
                 Log($"{source.Name}: queueing {gameAction}", LogTag.Effects | LogTag.Actions);
@@ -299,9 +305,16 @@ namespace SlayTheClone {
             }
         }
 
-        private static IGameAction CreateAction(ICard source, IPlayer controller, EffectAction action, ITarget target) {
+        private static IGameAction CreateAction(ICard source, IPlayer controller, EffectAction action, ITarget target, IModifierManager modifiers) {
             var creature = target as ICreature;
             switch (action.actionType) {
+                case ActionType.Destroy: // Outright, whatever its Health or Armor; Untouchable still saves it
+                    if (creature == null || !Meets(creature, action.requires, modifiers)) return null;
+                    if (modifiers != null && modifiers.HasStatusEffect(creature, StatusEffectType.Untouchable)) {
+                        Log($"{source.Name}: {creature.Name} is Untouchable: it isn't destroyed", LogTag.Effects);
+                        return null;
+                    }
+                    return new DestroyCreatureAction(creature, source as ICreature, unconditional: true);
                 case ActionType.Damage:
                     // Damage from a creature to a creature is ordered by that creature's speed; other damage has no source
                     return TargetedActions.Damage(target, action.value, creature != null ? source as ICreature : null);

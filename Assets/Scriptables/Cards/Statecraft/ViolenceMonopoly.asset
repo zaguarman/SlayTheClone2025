@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'The state''s monopoly on violence: a Monitored Watchdog nullifies
     the next 2 enemy attacks before they land.'
   artDescription: 'The board-game tycoon (top hat, white moustache, tailcoat) as

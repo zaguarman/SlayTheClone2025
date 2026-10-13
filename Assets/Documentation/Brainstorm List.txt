@@ -1615,10 +1615,8 @@ Card Game Factions Overview
 			Glomar Response ("We can neither confirm nor deny the existence of the information requested")
 			Honey Pot (like the reference card: give the opponent two Treasures, then take control of them)
 			If I Told You, I'd Have to Kill You (strikes back at being Revealed)
-			Multi Passport (several passports)
 			NDA (Non-Disclosure Agreement)
 			Never Let Them Know Your Next Move
-			Perfectly Timed Camera Malfunction
 			Secret Anthrax Laboratory
 			Secure Deletion
 			Self-Destruct Message

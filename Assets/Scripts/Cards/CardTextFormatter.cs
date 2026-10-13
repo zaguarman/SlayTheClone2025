@@ -34,6 +34,7 @@ namespace SlayTheClone {
             if (creature != null) {
                 if (creature.movement.HasFlag(MovementKeyword.Leapfrog)) keywords.Add(Keywords.Link("Leapfrog"));
                 if (creature.movement.HasFlag(MovementKeyword.Swap)) keywords.Add(Keywords.Link("Swap"));
+                if (creature.gift) keywords.Add(Keywords.Link("Gift"));
                 if (creature.ability != CreatureAbility.None) keywords.Add(AbilityName(creature.ability));
             }
 
@@ -231,6 +232,9 @@ namespace SlayTheClone {
                     return $"{value} damage to {target}";
                 case ActionType.Heal:
                     return $"heal {value} to {target}";
+                case ActionType.Destroy:
+                    string requisite = action.requires == TargetRequisite.Revealed ? $" if it's {Keywords.Link("Revealed")}" : "";
+                    return $"{Keywords.Link("Destroy", "destroy")} {target}{requisite}";
                 case ActionType.Draw:
                     string when = atDawn ? "" : $" next {Keywords.Link("Day")}";
                     string cards = value == 1 ? "a card" : value.ToString();

@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'When it enters, Reveal a random enemy creature''s slot: it sees over
     the fog.'
   artDescription: A giraffe whose neck runs out of the top of the picture and comes
@@ -57,3 +58,4 @@ MonoBehaviour:
   turnsUntilOperative: 2
   movement: 0
   ability: 0
+  gift: 0

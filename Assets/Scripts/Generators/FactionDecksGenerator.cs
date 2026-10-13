@@ -599,11 +599,27 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Status(StatusEffectType.Concealed, 3, TargetType.Self)))
                 .With(CreatureAbility.IdentityTheft)
                 .Picture("Two men facing each other in front of a mirror, each peeling off a latex mask of the other's face."),
-            Creature("Sleeper Agent", 3, 3, speed: 2, deploy: 0,
+            Creature("Sleeper Agent", 0, 3, speed: 1, deploy: 0,
                 "Eleven years next door. Waters your plants. Waiting for a phone call.",
-                "Off the Books: it arrives as ??? and hits twice as hard until someone works out who it is (a Reveal or Revealed). Concealing it again (Smoke And Mirrors) brings the double damage back.")
-                .With(CreatureAbility.OffTheBooks)
+                "Gift, a poisoned one: you plant it in an empty enemy slot and it joins their side. Each Dusk it sabotages: 1 damage to every creature on its side, itself included, so it lasts three Dusks. It's still your card: it comes back to your discard pile. They can get rid of it sooner by summoning over it.",
+                On(EffectTrigger.EndOfTurn, Damage(1, TargetType.FriendlyCreatures, Each)))
+                .Gift()
                 .Picture("A suburban dad mowing his lawn in a polo shirt, an earpiece coiled behind his ear, while his shadow on the grass wears a trench coat and holds a sniper rifle."),
+            Creature("Multi Passport", 3, 3, speed: 2, deploy: 0,
+                "Seven names, four nationalities, one face. Mostly.",
+                "Off the Books: it arrives as ??? and hits twice as hard until someone works out who it is (a Reveal or Revealed). Concealing it again (Smoke And Mirrors) brings the double damage back. Was Sleeper Agent's role.")
+                .With(CreatureAbility.OffTheBooks)
+                .Picture("A man in a trench coat fanning out a dozen passports like a hand of cards, each photo the same face in a different disguise: moustache, glasses, wig, fake beard."),
+            Creature("Wet Work", 1, 4, speed: 3, deploy: 0,
+                "Nothing personal. Strictly a line item.",
+                "Extreme Prejudice: its attack destroys the creature it hits, whatever its Health or Armor, and then it's gone too: one hit, one roadblock. Untouchable or a Temporal Shield stops the hit; an empty slot, it just hits the player for 1.")
+                .With(CreatureAbility.ExtremePrejudice)
+                .Picture("A hitman in a dripping raincoat under a black umbrella in the rain, pressing a red TERMINATED stamp onto a personnel file with a photo clipped to it."),
+            Spell("Perfectly Timed Camera Malfunction", TargetType.EnemyCreatures,
+                "Tragic. The one minute the cameras were down.",
+                "Destroy target enemy creature if it's Revealed, whatever its Health or Armor (Untouchable still saves it). Set it up with Tapped Communications, which Reveals at once.",
+                Destroy(TargetType.EnemyCreatures, TargetRequisite.Revealed))
+                .Picture("A security monitor showing static and SIGNAL LOST at 02:13, while at the edge of the frame a gloved hand pulls the camera's cable out of the wall."),
             Spell("Smoke And Mirrors", TargetType.FriendlyCreatures,
                 "Look over there. No, the other there.",
                 "Mechanics test: Concealed for 2 Days on a friendly creature. Its plans show as ??? to the other side until it's Revealed.",
@@ -951,6 +967,7 @@ namespace SlayTheClone {
             public MovementKeyword Movement;
             public CreatureAbility Ability;
             public bool IsSpell;
+            public bool IsGift; // Played into an empty enemy slot, it joins their side
             public int Attack, Health, Speed, DeploymentTime;
             public TargetType SpellTarget;
             public List<CardEffect> Effects;
@@ -985,6 +1002,12 @@ namespace SlayTheClone {
                 return this;
             }
 
+            // Gift: you play it into an empty enemy slot, where it joins their side
+            public CardDef Gift() {
+                IsGift = true;
+                return this;
+            }
+
         }
 
         private static CardDef Creature(string name, int attack, int health, int speed, int deploy, string flavor, string notes, params CardEffect[] effects) =>
@@ -1016,6 +1039,13 @@ namespace SlayTheClone {
         private static EffectAction Stun(int turns, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Stun, turns, target, modifier);
         private static EffectAction Draw(int count, TargetType player = TargetType.Player) => Act(ActionType.Draw, count, player, TargetModifier.None);
         private static EffectAction Summon(int count) => Act(ActionType.Summon, count, TargetType.Player, TargetModifier.None);
+
+        // Kills outright, whatever its Health or Armor (Untouchable still saves it); requires: what the target must be when it lands
+        private static EffectAction Destroy(TargetType target, TargetRequisite requires = TargetRequisite.None) {
+            var action = Act(ActionType.Destroy, 0, target, TargetModifier.None);
+            action.requires = requires;
+            return action;
+        }
 
         private static EffectAction PlaceSlotEffect(SlotEffectType type, int value, int days, TargetType target) {
             var action = Act(ActionType.PlaceSlotEffect, value, target, TargetModifier.None);
@@ -1174,6 +1204,7 @@ namespace SlayTheClone {
                     creature.turnsUntilOperative = card.DeploymentTime;
                     creature.movement = card.Movement;
                     creature.ability = card.Ability;
+                    creature.gift = card.IsGift;
                     break;
                 case SpellCardScriptableObject spell:
                     spell.defaultTargetType = card.SpellTarget;

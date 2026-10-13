@@ -40,6 +40,19 @@ namespace SlayTheClone {
             }
 
             Log($"Executor: Creature {attacker.Name} attacking {DescribeTarget(primaryTarget)}", LogTag.Combat);
+
+            // Extreme Prejudice: the hit destroys the creature outright, then the assassin is gone too. What stops a hit
+            // (Untouchable, a Temporal Shield) stops it; Health and Armor don't
+            if (Abilities.Has(attacker, Enums.CreatureAbility.ExtremePrejudice) && primaryTarget is ICreature victim) {
+                if (context.ModifierManager.HasStatusEffect(victim, Enums.StatusEffectType.Untouchable) || SlotEffectRules.BlocksCombatDamage(victim)) {
+                    Log($"Executor: {attacker.Name} can't touch {victim.Name}", LogTag.Combat);
+                    return;
+                }
+                Log($"Executor: {attacker.Name} takes {victim.Name} out", LogTag.Combat);
+                actionsQueue.AddAction(new DestroyCreatureAction(victim, attacker, unconditional: true));
+                actionsQueue.AddAction(new DestroyCreatureAction(attacker, unconditional: true));
+                return;
+            }
             QueueCombatDamage(actionsQueue, primaryTarget, attacker);
             // Double Tap: a second hit right after the first, on the same target
             if (Abilities.Has(attacker, Enums.CreatureAbility.DoubleTap)) QueueCombatDamage(actionsQueue, primaryTarget, attacker);

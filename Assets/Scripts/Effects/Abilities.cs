@@ -66,6 +66,7 @@ namespace SlayTheClone {
             CreatureAbility.ShellGame => "Shell Game",
             CreatureAbility.SafeSpace => "Safe Space",
             CreatureAbility.OffTheBooks => "Off the Books",
+            CreatureAbility.ExtremePrejudice => "Extreme Prejudice",
             _ => ability.ToString()
         };
 
@@ -89,6 +90,7 @@ namespace SlayTheClone {
             CreatureAbility.PennyStock => "double damage when it hits for 3 or less",
             CreatureAbility.Undercover => "its plans show as ??? to the enemy",
             CreatureAbility.OffTheBooks => "enters as ???; double damage while the enemy doesn't know what it is, or it's Concealed",
+            CreatureAbility.ExtremePrejudice => "its attack destroys the creature it hits, whatever its Health or Armor; then it's gone too",
             CreatureAbility.Handover => "when a summon replaces it, the newcomer takes over its stat changes and statuses",
             CreatureAbility.Recoil => "+2 damage on its attacks; it takes 1 damage after each attack",
             CreatureAbility.Bodyguard => "can't attack. Active: another friendly creature is Untouchable this Day, then a Day of Cooldown (drag it onto that creature)",

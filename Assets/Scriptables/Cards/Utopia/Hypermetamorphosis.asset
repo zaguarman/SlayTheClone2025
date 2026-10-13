@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: '+1/+1 for good each Dawn. Future: Evolution (each step unlocks an
     ability).'
   artDescription: 'Left to right: a caterpillar, a cocoon, and a hatched office worker
@@ -57,3 +58,4 @@ MonoBehaviour:
   turnsUntilOperative: 2
   movement: 0
   ability: 0
+  gift: 0

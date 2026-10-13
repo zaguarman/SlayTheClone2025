@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
     - actionType: 0
       value: 2
       targetType: 0
@@ -71,6 +72,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Draw 2 next Day, and pay the fine now: 2 damage to you. Future: Capital
     cost, discard a card instead.'
   artDescription: A CEO in a full three-piece suit, briefcase still in hand, being

@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: Each Dawn it cleanses your creatures' harmful statuses (Tech owns
     Cleanse).
   artDescription: A bearded sysadmin in socks and sandals yanking the power cable
@@ -57,3 +58,4 @@ MonoBehaviour:
   turnsUntilOperative: 1
   movement: 0
   ability: 0
+  gift: 0

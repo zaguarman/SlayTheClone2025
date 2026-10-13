@@ -18,6 +18,10 @@ namespace SlayTheClone {
         public SeenSlot Slot { get; }
         public bool Ours { get; }
         public bool Known { get; }
+        /// <summary>Our Gift, planted on their side: theirs to control, ours to keep.</summary>
+        public bool Planted { get; }
+        /// <summary>On our side, but a Gift from them: it works against us.</summary>
+        public bool GiftFromThem { get; }
         public int Attack { get; }
         public int Health { get; }
         public int MaxHealth { get; }
@@ -41,6 +45,8 @@ namespace SlayTheClone {
             Slot = slot;
             Ours = ours || creature.Owner == viewer;
             Known = Ours || Intel.KnowsWhatItIs(viewer, creature);
+            Planted = !Ours && creature.DeckOwner == viewer;
+            GiftFromThem = Ours && creature.DeckOwner != null && creature.DeckOwner != viewer;
             statuses = new HashSet<StatusEffectType>();
             if (!Known) {
                 Attack = GuessedAttack;

@@ -47,6 +47,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      requires: 0
   designNotes: 'Future: summons an Unpaid Intern token. Each recruit pays a share
     of its draws upward.'
   artDescription: 
@@ -56,3 +57,4 @@ MonoBehaviour:
   turnsUntilOperative: 0
   movement: 0
   ability: 0
+  gift: 0

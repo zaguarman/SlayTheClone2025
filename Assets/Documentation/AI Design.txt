@@ -26,6 +26,12 @@ How the computer players are built (Scripts/AI). Last updated 2026-10-13.
     - Debug > AI Style Tournament: the Hard styles and Medium ('AI Styles.txt').
     - The same runs as on-demand tests: AITournamentTests.
 • GameAudit (the bug hunter). Watches every tournament game; see 6.
+• Runs in parallel: each game is a GameSession (the rules without a scene) and its TurnFlow, with its own random numbers
+  (GameRandom is per thread), so games play side by side on worker threads and replay exactly by seed. AITournament.Workers
+  sets how many at once: 5 by default. Measured on a 32-thread CPU (games a second): 1 thread 20, 3 27, 5 33, 8 32, 16 13,
+  31 10. The editor's .NET runtime takes one global lock to allocate memory, and the games allocate a lot, so past about 5
+  the threads wait for each other. GPUs can't help: they run the same arithmetic on big arrays, while a game's rules branch
+  at every step. Every core at once would take separate processes (a headless build of the game, one process per core).
 
 
 2. HOW A DAY IS PLANNED
@@ -80,6 +86,11 @@ Hard: Medium, plus:
         - Spells are picked one at a time, best first, each weighed knowing the ones before. Among themselves spells
           resolve in random order, so one spell counts on another only half the time (Heat, then random damage).
         - Combos across Days need nothing special: Heat, Doomed, Burn and Blessed stay, and it reads them.
+        - Instant spells resolve as they're played: Revealed from Tapped Communications counts at once, so a "destroy it if
+          it's Revealed" spell (Perfectly Timed Camera Malfunction) can follow the same Day. Holding one, Hard values
+          revealing a big enemy creature as nearly killing it.
+    • Gifts and assassins: it plants Gifts in empty enemy slots and never attacks its own planted Gift; given one, it
+      summons over it first. Wet Work (Extreme Prejudice) is kept for the biggest threat nothing else can kill.
     • Protection: Armor, healing, Untouchable and Temporal Shields are worth the whole creature when they save one the
       other side could kill next Day; Bodyguard guards the one most at risk.
     • Attacks: lethal if it has it. Otherwise the race: if it would bring them to 0 in fewer Days than they would it, it
