@@ -27,6 +27,8 @@ namespace SlayTheClone {
         private readonly List<string> order = new List<string>(); // The keywords as listed, top to bottom
         private ScrollRect list;
         private CardPeek cardPeek;
+        private string hoveredName; // The card whose name the pointer is on, and since when
+        private float hoveredSince;
 
         /// <summary>The keyword shown.</summary>
         public string Shown { get; private set; }
@@ -82,7 +84,15 @@ namespace SlayTheClone {
             if (!Mathf.Approximately(ticks, 0f)) Step(ticks < 0f ? 1 : -1); // Wheel down: the next keyword
             int link = TMP_TextUtilities.FindIntersectingLink(usedBy, Input.mousePosition, null);
             string id = link >= 0 ? usedBy.textInfo.linkInfo[link].GetLinkID() : null;
-            ShowCardPreview(id != null && id.StartsWith(CardLink) ? id.Substring(CardLink.Length) : null, Input.mousePosition);
+            string name = id != null && id.StartsWith(CardLink) ? id.Substring(CardLink.Length) : null;
+            // Shown once the pointer rests on the name, like a hovered card
+            if (name != hoveredName) {
+                hoveredName = name;
+                hoveredSince = Time.unscaledTime;
+                if (name == null) ShowCardPreview(null);
+            }
+            float delay = CardPreview != null ? Tooltip.SwitchDelay : Tooltip.HoverDelay;
+            if (name != null && Time.unscaledTime - hoveredSince >= delay) ShowCardPreview(name, Input.mousePosition);
         }
 
         /// <summary>Shows the named card enlarged next to the pointer; null hides it.</summary>
@@ -106,6 +116,7 @@ namespace SlayTheClone {
         protected override void Forget() {
             cardPeek?.Hide();
             cardPeek = null;
+            hoveredName = null;
             title = body = usedBy = null;
             buttons.Clear();
             order.Clear();

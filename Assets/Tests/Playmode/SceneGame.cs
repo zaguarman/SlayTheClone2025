@@ -262,6 +262,9 @@ namespace SlayTheClone.Tests {
             return text.transform.TransformPoint((character.bottomLeft + character.topRight) / 2f);
         }
 
+        /// <summary>Long enough for a hovered card to show enlarged (it waits for the pointer to rest on it).</summary>
+        public static WaitForSecondsRealtime PreviewShows() => new WaitForSecondsRealtime(Tooltip.HoverDelay + 0.05f);
+
         /// <summary>The enlarged copy shown while a card is hovered, if any.</summary>
         public static CardController HoverPreview() {
             var tooltip = Tooltip.Existing;

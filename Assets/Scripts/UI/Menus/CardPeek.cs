@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -60,7 +61,10 @@ namespace SlayTheClone {
         }
     }
 
-    /// <summary>Shows a card with a <see cref="CardPeek"/> while the pointer is on this object.</summary>
+    /// <summary>
+    /// Shows a card with a <see cref="CardPeek"/> once the pointer rests on this object, after the same moment as a hovered
+    /// card (<see cref="Tooltip.HoverDelay"/>), until it leaves.
+    /// </summary>
     public class CardPeekOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
         private CardPeek peek;
         private CardDataScriptableObject card;
@@ -71,13 +75,23 @@ namespace SlayTheClone {
             hover.card = card;
         }
 
-        public void OnPointerEnter(PointerEventData eventData) => peek?.Show(card, eventData.position);
+        public void OnPointerEnter(PointerEventData eventData) {
+            if (peek == null) return;
+            StopAllCoroutines();
+            StartCoroutine(ShowAfter(peek.Shown != null ? Tooltip.SwitchDelay : Tooltip.HoverDelay));
+        }
+
+        private IEnumerator ShowAfter(float delay) {
+            yield return new WaitForSecondsRealtime(delay);
+            peek.Show(card, Input.mousePosition);
+        }
 
         public void OnPointerExit(PointerEventData eventData) => Stop();
 
         private void OnDisable() => Stop();
 
         private void Stop() {
+            StopAllCoroutines();
             if (peek != null && peek.ShownCard == card) peek.Hide();
         }
     }

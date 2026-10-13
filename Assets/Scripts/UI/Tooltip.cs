@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -141,10 +142,44 @@ namespace SlayTheClone {
             textPivot = rect.pivot;
         }
 
+        // A card is shown enlarged only once the pointer rests on it, never just passing over it on the way to something
+        // else. Going on from one enlarged card to the next is quicker, for reading a hand card by card.
+        public const float HoverDelay = 0.35f;
+        public const float SwitchDelay = 0.1f;
+        private CardController pendingCard;
+        private Coroutine pendingShow;
+
         /// <summary>
-        /// Shows the hovered card enlarged next to it, plus its active effects when it has any
+        /// Shows the hovered card enlarged next to it, plus its active effects when it has any, once the pointer has rested
+        /// on it for a moment (<see cref="HoverDelay"/>). Leaving the card before that shows nothing.
         /// </summary>
         public void ShowTooltip(CardController card) {
+            if (card == null || card.GetBaseCardData() == null || card == pendingCard) return;
+            if (card == activeCard && preview != null) {
+                released = false;
+                UpdateTooltipContent(card);
+                return;
+            }
+            if (CardController.Dragged != null || !card.isActiveAndEnabled) return;
+            CancelPending();
+            pendingCard = card;
+            pendingShow = card.StartCoroutine(ShowAfter(card, preview != null ? SwitchDelay : HoverDelay)); // Stops if the card goes
+        }
+
+        private IEnumerator ShowAfter(CardController card, float delay) {
+            yield return new WaitForSecondsRealtime(delay);
+            pendingCard = null;
+            pendingShow = null;
+            ShowNow(card);
+        }
+
+        private void CancelPending() {
+            if (pendingCard != null && pendingShow != null) pendingCard.StopCoroutine(pendingShow);
+            pendingCard = null;
+            pendingShow = null;
+        }
+
+        private void ShowNow(CardController card) {
             if (card == null || card.GetBaseCardData() == null) return;
             if (card.IsFaceDown) { // Fog of War: a card in the enemy's hand
                 ShowTooltip("<b>???</b>\nA card in the enemy's hand.");
@@ -226,6 +261,7 @@ namespace SlayTheClone {
 
         /// <summary>Hides the tooltip if it is showing this card (a destroyed preview must not hide the next card's).</summary>
         public void HideTooltipFor(CardController card) {
+            if (card != null && card == pendingCard) CancelPending();
             if (card != null && card == activeCard) HideTooltip();
         }
 
@@ -233,6 +269,7 @@ namespace SlayTheClone {
         /// Hides the tooltip
         /// </summary>
         public void HideTooltip() {
+            CancelPending();
             CloseKeywordsFrom(0);
             released = false;
             activeCard = null;
@@ -332,6 +369,7 @@ namespace SlayTheClone {
 
         /// <summary>The pointer left the card: the tooltip stays while the pointer goes on to the preview or its popups.</summary>
         public void ReleaseCard(CardController card) {
+            if (card != null && card == pendingCard) CancelPending(); // It was only passed over
             if (card == null || card != activeCard) return;
             Release();
         }

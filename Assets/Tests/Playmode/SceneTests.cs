@@ -228,7 +228,8 @@ namespace SlayTheClone.Tests {
 
             foreach (var (queued, slot) in new[] { (wolf, p1.Battlefield[1]), (hound, p1.Battlefield[3]) }) {
                 var hits = SceneGame.Hover(game.GhostIn(slot));
-                yield return null;
+                // Going on from one enlarged card to the next is quicker
+                yield return queued == wolf ? SceneGame.PreviewShows() : new WaitForSecondsRealtime(Tooltip.SwitchDelay + 0.05f);
                 var preview = SceneGame.HoverPreview();
                 Assert.IsNotNull(preview, $"Hovering {queued.Name}'s ghost should show it enlarged");
                 Assert.AreSame(queued, preview.GetLinkedCardInstance(), $"The preview over {slot} shows another card");
@@ -239,7 +240,7 @@ namespace SlayTheClone.Tests {
                 }
             }
             SceneGame.Hover(game.CardIn(p1.Battlefield[3]));
-            yield return null;
+            yield return SceneGame.PreviewShows();
             Assert.AreSame(occupant, SceneGame.HoverPreview()?.GetLinkedCardInstance(), "The creature about to be replaced can still be hovered");
 
             var pup = game.GiveCard(p1, game.Cards.Creature("Test Pup", 1, 2)) as ICreature;
@@ -374,8 +375,10 @@ namespace SlayTheClone.Tests {
             yield return null;
             SceneGame.Hover(Shown(bolt));
             yield return null;
+            Assert.IsNull(SceneGame.HoverPreview(), "Not at once: the pointer may only be passing over the card");
+            yield return SceneGame.PreviewShows();
             var preview = SceneGame.HoverPreview();
-            Assert.IsNotNull(preview, "Hovering a queued spell shows it enlarged");
+            Assert.IsNotNull(preview, "Hovering a queued spell shows it enlarged, once the pointer rests on it");
             Assert.AreSame(bolt, preview.GetLinkedCardInstance());
             Assert.IsTrue(preview.IsSpellShaped, "A spell is shaped as one: rounded, with an oval art window");
             Assert.IsFalse(game.HandCards(p1).First(c => c.GetBaseCardData() is CreatureData).IsSpellShaped, "...a creature isn't");
@@ -386,6 +389,7 @@ namespace SlayTheClone.Tests {
                 Effect(EffectTrigger.OnPlay, ActionType.Stun, 1, TargetType.EnemyCreatures, TargetModifier.Random)));
             yield return null;
             SceneGame.Hover(Shown(nap));
+            yield return SceneGame.PreviewShows();
             var tooltip = Tooltip.Existing;
             Assert.IsTrue(tooltip.TrackKeywords(SceneGame.KeywordPoint(tooltip.Preview.RulesText, "Exhausted")));
             CollectionAssert.AreEqual(new[] { "Exhausted" }, tooltip.OpenKeywords, "Hovering Exhausted opens what it means");
