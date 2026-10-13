@@ -1,0 +1,84 @@
+GAME FEEL & NEXT STEPS (brainstorm, 2026-10-13)
+
+Where we are: the rules engine is deep (layers, Speed, Watchdogs, Fog of War, Slot Effects, statuses, abilities, keywords),
+there are 8 decks and 128 cards with art, a menu, a gallery and a queue panel. What's missing is mostly what makes it FEEL
+like a game: an opponent that plays back, feedback when things happen, and a reason to play again (a run).
+Ideas are marked [S] small, [M] medium, [L] large.
+
+
+1. GAME FEEL: MAKE EVERY ACTION LAND
+
+The Day resolves as a list of actions. That's the show: each one should read, hit and leave a mark.
+
+Resolution playback
+• [M] Pace by importance: moves and buffs quick (0.2s), attacks and deaths slow (0.5s), a beat of silence before Last Rites. A "fast forward" button and hold-to-skip.
+• [S] Spotlight the actor: dim the table, light the creature acting and its target, then return. One thing on screen at a time.
+• [M] Impact frames: a 2-3 frame freeze on hits, the card squashes and shakes in proportion to the damage, a small screen shake on big hits and player damage only.
+• [S] Floating numbers: red damage, green heals, blue Armor absorbed, grey "0" when Temporal Shield or Armor eats it all. Crits... we don't have crits, so make Exposed's +1 a visible "+1".
+• [S] The queue panel as a timeline: a strip along the top showing the next 5 actions as icons, the current one highlighted, so the player sees "what's next" without opening anything.
+• [M] Watchdogs as a reveal moment: when one triggers, the action freezes, the Watchdog card flips up from the side ("NULLIFIED" stamp in red), then the action shatters or bends to its new target.
+
+Planning (the half of the game the player spends the most time in)
+• [M] Outcome preview: while dragging an attack, show predicted damage on the target ("-3, dies") and the counter-damage from Retaliate. Slay the Spire's intent numbers are the gold standard.
+• [S] Intent pips on enemy creatures (sword, boot, sparkle) with their numbers, and "???" for Concealed ones. The arrows are there, but pips are faster to read.
+• [S] Hover a queued action in the queue panel to highlight its arrow and cards on the board, and the other way round.
+• [M] Undo the last planning action (Ctrl+Z) until End Turn.
+• [S] End Turn warns when a creature has no plan ("2 creatures are idle. End anyway?") and can be turned off.
+
+Card handling
+• [S] Hand fan and lift: cards fan out, the hovered one rises and the neighbours slide aside (Hearthstone, Slay the Spire). Drag tilts the card toward the movement.
+• [S] Draw and discard animations at Dawn and Dusk: cards fly from the deck pile, the hand fans out one by one.
+• [S] Summon arrival: the creature drops into the slot with a dust puff; Deployment Time shown as a ticking clock that pops when ready.
+• [M] Deaths: Last Will effects flash their icon as the card burns away; Doomed creatures get a cracked frame that spreads each Dawn.
+
+Time of day
+• [M] Dawn and Dusk as lighting: the table warms at Dawn and turns blue-violet at Dusk, the river line glows. A banner "DAY 3 — DAWN" like Inscryption's chapter cards. It teaches the Dawn/Dusk keywords for free.
+
+Sound (none yet; cheap to add, huge effect)
+• [M] A small set: card pick/drop/hover, attack hit (light/heavy), heal chime, armor clank, status apply (one per status family), Watchdog alarm, death, Dawn rooster/Dusk bell, End Turn stamp.
+• [S] Faction stingers: a 2-second motif when a faction's creature arrives (Corporate cash register, Statecraft trumpet, Zeitgeist vaporwave chord, Myth choir, Tech modem...).
+
+Humour as feel (the satire is our identity: make it talk)
+• [M] Opponent barks: each menu opponent gets a few lines on events (Your Manager: "Per my last email." when it nullifies; Your Gaslighting Ex: "That never happened." on a Redirect; The Megachurch: "Your donation is appreciated." when it draws).
+• [S] Headlines: at Dusk, a newspaper-style ticker summarising the Day ("INTERN DIES, COMPANY DRAWS 1 CARD", "LOCAL GIRAFFE SEES EVERYTHING").
+• [S] Death quips: a one-liner from the card's flavour when it dies.
+• [S] The Card Gallery could show each card's art description and design notes on click (they're already on the assets).
+
+
+2. NEXT STEPS (roughly in order)
+
+A. An opponent that plays back [L] — the biggest blocker
+• Today the game is hot-seat. Most other features (balance, runs, onboarding) need an AI.
+• GDD 6 says the AI has no hand: it plays a script of intents. Start there: each opponent gets a deck + a simple scripted policy (play creatures in empty slots, aim spells at the biggest threat, attack the slot in front, keep Watchdogs for when it has 2+ creatures).
+• It must play under Fog of War (Intel already enforces this for Watchdogs): it reacts only to what it can see.
+• Then: personalities per opponent (aggressive, defensive, trap-heavy) via weights, not new code.
+
+B. Balance from simulation [M]
+• We already have a test that plays every deck for 3 turns. Turn it into an AI vs AI tournament (100 games per pair) that writes win rates, average game length and the cards that were played but never mattered.
+• Use it to tune the new two-faction decks and Utopia, which nobody has played yet.
+
+C. A run (the roguelike part) [L]
+• A map of encounters like Slay the Spire's: fights against faction groups (GDD 6: mostly one faction plus a splash), elites, a boss per act.
+• Rewards: pick 1 of 3 cards (biased to the factions you meet, so "steal their tools to beat the next fight" works), Health, gold.
+• The content docs still missing from the GDD review (#24): Enemy, Player Character, Relic / Stock / Subscription compendiums. Relics as "Stocks" (they gain or lose value with the Day) and "Subscriptions" (pay each act) fit the satire.
+• Events: short text encounters with choices, written in the same cynical voice (a TED talk, a team-building retreat, a crypto bro).
+
+D. The faction mechanics still waiting [M each]
+• Investments and Contracts (Corporate), Laws as Locations (Statecraft), Recruitment and Brainwashed (needs Owner vs Controller), Revive and Banish (Myth / Shadow Ops.), Evolution (Utopia), Prophecy (Myth), Trends and Strikes (Zeitgeist), Doxxing (Digital Society).
+• Each one turns a dozen "Future:" design notes into real cards. Pick by which decks feel flattest after B.
+
+E. Onboarding [M]
+• A first match against a scripted tutorial opponent that teaches: plan, the queue order, Speed, a Watchdog, Fog of War. One concept per Day.
+• Keywords already explain themselves; add a "?" on the queue panel and on the Dawn/Dusk banner.
+
+F. Polish and production [M]
+• Settings (volume, speed of playback, fog debug off for players), a save of the last run, a build that runs outside the editor.
+• Art pass: the SVG pipeline works; next is a consistent frame per faction and a few hand-drawn hero illustrations for bosses.
+
+Open decisions that block some of this (see 'Open Questions'): own decks vs pairs for the small factions, aimed spells limited to a side, keyword names, and Encrypted's faction.
+
+
+3. SUGGESTED NEXT 3 STEPS
+1. Sound + resolution playback pacing + floating numbers (one session; the biggest feel improvement for the effort).
+2. A scripted AI opponent good enough to lose to (unblocks everything else).
+3. The AI vs AI balance tournament, then fix the worst decks.
