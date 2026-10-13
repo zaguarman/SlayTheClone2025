@@ -19,7 +19,7 @@ namespace SlayTheClone {
         // A creature's one ability ('Abilities Compendium'). New abilities go last: cards store them as numbers
         public enum CreatureAbility {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
-            SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, Technician, Undercover, Handover, Recoil,
+            SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, PennyStock, Undercover, Handover, Recoil,
             Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace
         }
 

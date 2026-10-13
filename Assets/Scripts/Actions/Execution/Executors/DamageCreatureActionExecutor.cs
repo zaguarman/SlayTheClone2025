@@ -6,7 +6,7 @@ namespace SlayTheClone {
     public class DamageCreatureActionExecutor : ActionExecutor<DamageCreatureAction> {
         protected override void ExecuteAction(DamageCreatureAction damageAction, ActionExecutionContext context) {
             var targetCreature = damageAction.GetTarget();
-            var damage = Abilities.OutgoingDamage(damageAction); // Underground, Technician
+            var damage = Abilities.OutgoingDamage(damageAction); // Underground, PennyStock
             var attacker = damageAction.GetAttacker(); // Can be null
 
             if (targetCreature == null || targetCreature.IsDead) return;

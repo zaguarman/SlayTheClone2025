@@ -3778,6 +3778,28 @@ def star_points_poly(cx, cy):
 
 
 def no_glove_no_love():
+    # A woman wagging her index finger, no, no, motion lines around it; in her other hand a little foil packet held up
+    defs = lin("bg", ["#ffd8e8", "#f2a8c8"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x, y in ((40, 40), (300, 30), (60, 150), (320, 140)):
+        body += path(f"M{x} {y + 6} C {x - 10} {y - 6} {x - 2} {y - 14} {x} {y - 4} C {x + 2} {y - 14} {x + 10} {y - 6} {x} {y + 6} Z", "#ff6a8a", 'opacity="0.5"')
+    body += person(176, H, 1.5, SKIN[1], "#c0306a", face="smirk", brows="angry", hat="bob")
+    body += path("M160 120 Q 168 124 176 121", "none", 'stroke="#c0304a" stroke-width="3"')  # Lipstick
+    # The wagging hand, raised, index finger up
+    body += stroke("M118 200 C 108 170 100 140 96 118", "#c0306a", 18)
+    body += rect(84, 92, 26, 26, SKIN[1], 'rx="8"') + rect(90, 58, 9, 38, SKIN[1], 'rx="4"')
+    for k in range(3):
+        body += path(f"M{76 - k * 8} {70 - k * 2} q -6 10 0 20", "none", 'stroke="#7a3050" stroke-width="2"')
+        body += path(f"M{114 + k * 8} {70 - k * 2} q 6 10 0 20", "none", 'stroke="#7a3050" stroke-width="2"')
+    # The other hand, holding up the foil packet
+    body += stroke("M236 200 C 248 172 256 150 260 132", "#c0306a", 18)
+    body += rect(248, 112, 26, 24, SKIN[1], 'rx="8"')
+    body += group(rect(-18, -18, 36, 36, "#e8c040", 'stroke="#a8862a" stroke-width="2"') + circle(0, 0, 11, "none", 'stroke="#a8862a" stroke-width="2"'),
+                  "translate(262 96) rotate(12)")
+    return svg(defs, body)
+
+
+def sex_clanker():
     # Candlelight and satin: a knight in full shining armor reclines on a red heart-shaped bed, propped on one elbow, a rose
     # held in the visor, one knee up; the heart shield leans against the bed and rose petals are everywhere
     defs = lin("bg", ["#4a1430", "#1e0816"]) + lin("steel", ["#ffffff", "#9aa2b0"]) + rad("glow", [("#ffb070", 0.45), ("#ffb070", 0)])
@@ -3974,7 +3996,7 @@ CARDS["Corporate"].update({"BusinessExpense": business_expense})
 CARDS["Corporate"].update({"SolidarityTowardsTheSmallBusinessman": solidarity_towards_the_small_businessman, "Inheritance": inheritance})
 CARDS["Statecraft"].update({"ViolenceMonopoly": violence_monopoly})
 CARDS["Myth"].update({"Reincarnation": reincarnation})
-CARDS["Tech"].update({"TechnicalDebt": technical_debt, "ScopeCreep": scope_creep})
+CARDS["Tech"].update({"TechnicalDebt": technical_debt, "ScopeCreep": scope_creep, "SexClanker": sex_clanker})
 CARDS["Mind"].update({"ShipofTheseus": ship_of_theseus, "Scapegoating": scapegoating})
 
 

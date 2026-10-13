@@ -163,11 +163,11 @@ Recoil
     Inspired by: Recoil (Pokémon's Double-Edge, Brave Bird)
     Type: Passive
     Description: "+2 damage on its attacks; it takes 1 damage after each attack."
-    Notes: The +2 is part of the attack (Technician then sees the bigger number), against a creature or a player. The 1 damage comes after the hit, with no attacker, so nothing answers it.
+    Notes: The +2 is part of the attack (Penny Stock then sees the bigger number), against a creature or a player. The 1 damage comes after the hit, with no attacker, so nothing answers it.
     Answers: Make it attack less, or let it wear itself down.
 
-Technician
-    Inspired by: Technician (Scizor). A plain word, so it keeps its name (it was Nickel-and-Dime, then Penny Stock, for a while). On SysAdmin.
+Penny Stock
+    Inspired by: Technician (Scizor), renamed: a mechanic from another game doesn't keep that game's name (see GDD 6.1, Naming). On Pluriemployed Hustler.
     Type: Passive
     Description: "Double damage when it hits for 3 or less."
     Notes: Checked after the attacker's own stat calculation, before the target's modifiers (Exposed, Cognitive Dissonance) and Armor. 0 damage stays 0.

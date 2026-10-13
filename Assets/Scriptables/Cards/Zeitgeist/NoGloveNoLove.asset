@@ -73,7 +73,6 @@ MonoBehaviour:
       ability: 0
   designNotes: 'Protection: target friendly creature gets Blessed (the next status
     that would land is negated) and 2 Armor.'
-  artDescription: 'Candlelight and satin: a knight in full shining armor reclines
-    on a red heart-shaped bed, propped on one elbow, a rose in the visor and one
-    knee up, rose petals everywhere, the heart shield leaning against the bed.'
+  artDescription: 'A woman wagging her index finger: no, no. In her other hand, a
+    little foil packet held up: this first.'
   defaultTargetType: 3

@@ -47,8 +47,8 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
-  designNotes: 'Each Dawn it cleanses your creatures'' harmful statuses (Tech owns
-    Cleanse). Technician: its small hits (3 or less) are doubled.'
+  designNotes: Each Dawn it cleanses your creatures' harmful statuses (Tech owns
+    Cleanse).
   artDescription: A bearded sysadmin in socks and sandals yanking the power cable
     out of a smoking server rack, a coffee mug in his other hand.
   attack: 1
@@ -56,4 +56,4 @@ MonoBehaviour:
   speed: 1
   turnsUntilOperative: 1
   movement: 0
-  ability: 16
+  ability: 0

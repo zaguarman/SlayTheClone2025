@@ -153,9 +153,10 @@ namespace SlayTheClone {
                 .With(CreatureAbility.InsiderJob),
             Creature("Pluriemployed Hustler", 2, 3, speed: 2, deploy: 0,
                 "Three jobs, two side hustles, one kidney left.",
-                "Draws 2 on arrival, then works itself down 1 Health every Dusk (Decay 1). Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).",
+                "Penny Stock: small bets that pay double, so hits of 3 or less are doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).",
                 On(EffectTrigger.OnPlay, Draw(2)),
-                On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self))),
+                On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
+                .With(CreatureAbility.PennyStock),
             Creature("Unicorn", 1, 8, speed: 1, deploy: 2,
                 "Valued at a billion. Burns a million a day. Profitable next year, every year.",
                 "Future: Unicorn (Enterprise) from the card examples. Burn rate stays: Corporate can't heal it.",
@@ -471,7 +472,7 @@ namespace SlayTheClone {
                 "Protection: target friendly creature gets Blessed (the next status that would land is negated) and 2 Armor.",
                 Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1), Armor(2, TargetType.FriendlyCreatures))
                 .NotInStarterDeck()
-                .Picture("Candlelight and satin: a knight in full shining armor reclines on a red heart-shaped bed, propped on one elbow, a rose in the visor and one knee up, rose petals everywhere, the heart shield leaning against the bed."),
+                .Picture("A woman wagging her index finger: no, no. In her other hand, a little foil packet held up: this first."),
             Spell("We Are Not The Same", TargetType.FriendlyCreatures,
                 "I copy whoever's in front of me. You copy whoever's in front of you. We are not the same.",
                 "Your creature copies the Attack, Health and Speed of the enemy creature facing it, while it stays in play. Shrinks a giant into your nobody, or your nobody into a giant.",
@@ -669,9 +670,8 @@ namespace SlayTheClone {
                 .Picture("Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a \"Backdoor Request\" form."),
             Creature("SysAdmin", 1, 4, speed: 1, deploy: 1,
                 "Have you tried turning it off and on again?",
-                "Each Dawn it cleanses your creatures' harmful statuses (Tech owns Cleanse). Technician: its small hits (3 or less) are doubled.",
+                "Each Dawn it cleanses your creatures' harmful statuses (Tech owns Cleanse).",
                 On(EffectTrigger.StartOfTurn, Cleanse(CleanseTarget.Statuses, TargetType.FriendlyCreatures)))
-                .With(CreatureAbility.Technician)
                 .Picture("A bearded sysadmin in socks and sandals yanking the power cable out of a smoking server rack, a coffee mug in his other hand."),
             Creature("Meatproxy As A Service", 0, 3, speed: 1, deploy: 1,
                 "Powered by AI. The AI is Dave. Dave copies and pastes.",
@@ -698,6 +698,12 @@ namespace SlayTheClone {
                 "Grow 1: it gets bigger every Dawn, like the project.",
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
                 .Picture("A creep in a trench coat and a low hat peering through a brass spyglass at a couple kissing in a lit window."),
+            Creature("Sex Clanker", 1, 6, speed: 1, deploy: 0,
+                "Batteries not included. Feelings not included either.",
+                "Arrival: Heat Signature 3 on itself. It draws every random effect and redirected attack: a decoy too attractive to ignore.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.HeatSignature, 1, TargetType.Self, potency: 3)))
+                .NotInStarterDeck()
+                .Picture("Candlelight and satin: a figure in full shining plate reclines on a red heart-shaped bed, propped on one elbow, a rose in the visor and one knee up, rose petals everywhere, a heart shield leaning against the bed."),
         };
 
         // Myth: slow and inevitable; creatures die and pay off

@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: SexClanker
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 593782da-1bf1-4a26-a509-eb4072baa41a
+  cardName: Sex Clanker
+  description: Batteries not included. Feelings not included either.
+  cardType: 0
+  faction: 5
+  artwork: {fileID: 3286163911610860551, guid: 93847c1d36dd493449dd57865b883b20, type: 3}
+  effects:
+  - effectType: 0
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 5
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 5
+      statusDuration: 1
+      statusPotency: 3
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+  designNotes: 'Arrival: Heat Signature 3 on itself. It draws every random effect
+    and redirected attack: a decoy too attractive to ignore.'
+  artDescription: 'Candlelight and satin: a figure in full shining plate reclines
+    on a red heart-shaped bed, propped on one elbow, a rose in the visor and one
+    knee up, rose petals everywhere, a heart shield leaning against the bed.'
+  attack: 1
+  health: 6
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 0

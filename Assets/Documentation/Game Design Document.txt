@@ -927,6 +927,11 @@ A Myth mechanic: an effect announced now that happens later, in plain sight.
 
 The game is intentionally cynical, funny, and lighthearted. It satirizes modern absurdities, bureaucracy, internet culture, and common myth tropes.
 
+Naming: when to avoid a name and when not
+• Avoid: a game mechanic's name from another game, used for the same mechanic here. If our ability works like another game's ability, it must not also be called the same (Pokémon's Technician is our Penny Stock, Baton Pass our Handover). The problem is copying someone's mechanic and its name together.
+• Fine: anything that isn't another game's mechanic. Plain words and phrases used for what they mean ("Meta" Group Chat is a chat that is meta, not the company's), real people and historical figures (Fat Tony, a real mobster, is as fine as Cleopatra), quotes, titles and memes.
+• Art: pictures stay as drawn unless a change is asked for; quirky is part of the game's look.
+
 6.2 Balancing
 
 Getting the balance right is extremely important. It will need ongoing playtesting, data, and adjustments.
