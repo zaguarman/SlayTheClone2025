@@ -18,6 +18,12 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Borrowed Time (Die Another Day): it can't die while it lasts, not even outright
+            if (context.ModifierManager.HasStatusEffect(creature, StatusEffectType.BorrowedTime)) {
+                Log($"Executor: {creature.Name} is on Borrowed Time: it doesn't die today", LogTag.Creatures | LogTag.Actions);
+                return;
+            }
+
             if (creature.Health > 0 && !destroy.IsUnconditional) {
                 Log($"Executor: {creature.Name} was saved from destruction ({creature.Health} Health)", LogTag.Creatures | LogTag.Actions);
                 return;

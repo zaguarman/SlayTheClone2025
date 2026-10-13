@@ -14,6 +14,8 @@ namespace SlayTheClone {
         public List<CardEffect> effects = new List<CardEffect>();
         /// <summary>Additional cost: this many other cards from the hand, at random, are given up to play it (0: none).</summary>
         public int discardCost;
+        /// <summary>Single Use: once played, it's gone for the rest of the combat instead of going to the discard pile.</summary>
+        public bool singleUse;
 
         // OnEnable can be used to initialize cardId if null
         public virtual void OnEnable() {

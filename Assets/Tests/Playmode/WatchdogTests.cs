@@ -169,6 +169,12 @@ namespace SlayTheClone.Tests {
             game.Resolve();
             Assert.AreEqual(health - 2, p1.Health, "Only A's attack lands...");
             Assert.AreEqual(10 - 4, c.Health, "...C's backfires on C");
+
+            // GoldenEye wipes out a player's Watchdogs, and only theirs
+            Watch(Spec(WatchdogEffect.Nullify, charges: 3), p1);
+            Watch(Spec(WatchdogEffect.Nullify, charges: 3), p2);
+            game.Run(new WipeWatchdogsAction(p1));
+            Assert.AreSame(p2, game.ActionsQueue.Watchdogs.Single().Controller);
         }
     }
 }

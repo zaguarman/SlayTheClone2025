@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: ShadowOpsDoubleODeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Shadow Ops. - Double-O Section
+  cards:
+  - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
+  - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
+  - {fileID: 11400000, guid: e510acd731db3a64a9761da88b9a1996, type: 2}
+  - {fileID: 11400000, guid: e510acd731db3a64a9761da88b9a1996, type: 2}
+  - {fileID: 11400000, guid: 78cd5c5267fa0164db084db6099e1350, type: 2}
+  - {fileID: 11400000, guid: 8aba5b6c983aeb747a02d69b28b0f4d3, type: 2}
+  - {fileID: 11400000, guid: dc8822e884221714d88b9b0a7eadff4d, type: 2}
+  - {fileID: 11400000, guid: dc8822e884221714d88b9b0a7eadff4d, type: 2}
+  - {fileID: 11400000, guid: 9efb41643889f7d459d404c6e67e724a, type: 2}
+  - {fileID: 11400000, guid: 9efb41643889f7d459d404c6e67e724a, type: 2}
+  - {fileID: 11400000, guid: bb17e17b05843804b88c57f26d889238, type: 2}
+  - {fileID: 11400000, guid: d95a9b317522f784b847b20b4aa5b5ca, type: 2}
+  - {fileID: 11400000, guid: 0fc05be701e3249479b51b900492f8c4, type: 2}
+  - {fileID: 11400000, guid: a9e8d9a467600b74d92130a476a618c5, type: 2}
+  - {fileID: 11400000, guid: a9e8d9a467600b74d92130a476a618c5, type: 2}
+  - {fileID: 11400000, guid: 2123b22b1d703cd46b0ded74774b3583, type: 2}
+  - {fileID: 11400000, guid: 2123b22b1d703cd46b0ded74774b3583, type: 2}
+  - {fileID: 11400000, guid: 5dcf4b91dddeba94892200eb971e000d, type: 2}
+  - {fileID: 11400000, guid: 5dcf4b91dddeba94892200eb971e000d, type: 2}
+  - {fileID: 11400000, guid: 42466d199f9ea0446815cebbad87421e, type: 2}

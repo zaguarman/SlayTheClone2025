@@ -192,9 +192,12 @@ namespace SlayTheClone {
             statusText.text = string.Concat(icons);
         }
 
+        // Alive: with Health left, or on the board at 0 Health on Borrowed Time (Die Another Day)
+        private bool CreatureIsAlive => linkedCreature != null && (linkedCreature.Health > 0 || (!linkedCreature.IsDead && linkedCreature.Slot != null));
+
         // Live stats while the creature is alive on the board, printed stats otherwise
         private void UpdateCreatureStats(CreatureData data) {
-            bool isLive = linkedCreature != null && linkedCreature.Health > 0 && !IsDisguised; // A decoy shows its fake card's numbers
+            bool isLive = CreatureIsAlive && !IsDisguised; // A decoy shows its fake card's numbers
             int attack = isLive ? linkedCreature.Attack : data.attack;
             int health = isLive ? linkedCreature.Health : data.health;
             int speed = isLive ? linkedCreature.Speed : data.speed;
@@ -657,7 +660,7 @@ namespace SlayTheClone {
 
         /// <summary>What the card face can't show: the modifiers currently affecting this creature. Empty if none.</summary>
         public string GetActiveModifiersText() {
-            if (linkedCreature == null || linkedCreature.Health <= 0 || GameManager?.ModifierManager == null || IsDisguised) return "";
+            if (!CreatureIsAlive || GameManager?.ModifierManager == null || IsDisguised) return "";
 
             var viewer = FogOfWar.ViewerOf(linkedCreature.Owner);
             var modifiers = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature)

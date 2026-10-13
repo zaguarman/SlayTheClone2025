@@ -375,7 +375,7 @@ namespace SlayTheClone {
                         if (creature.Slot != slot) Note("Rules", "A creature and its slot disagree on where it is", $"{at}: {creature.Name}");
                         if (!placed.Add(creature)) Note("Rules", "A creature is in two slots", $"{at}: {creature.Name}");
                         if (creature.IsDead) Note("Rules", "A dead creature is still on the board", $"{at}: {creature.Name}");
-                        else if (creature.Health <= 0) Note("Rules", "A creature at 0 Health is still alive on the board", $"{at}: {creature.Name} {creature.Attack}/{creature.Health}");
+                        else if (creature.Health <= 0 && !game.ActionsQueue.Modifiers.HasStatusEffect(creature, Enums.StatusEffectType.BorrowedTime)) Note("Rules", "A creature at 0 Health is still alive on the board", $"{at}: {creature.Name} {creature.Attack}/{creature.Health}");
                         if (creature.Attack < 0) Note("Rules", "A creature has negative Attack", $"{at}: {creature.Name} {creature.Attack}/{creature.Health}");
                         if (creature.Owner != player) Note("Rules", "A creature is on a side that isn't its owner's", $"{at}: {creature.Name}");
                     }

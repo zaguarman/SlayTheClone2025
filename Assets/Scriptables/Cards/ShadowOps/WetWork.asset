@@ -19,6 +19,7 @@ MonoBehaviour:
   faction: 3
   artwork: {fileID: 0}
   discardCost: 0
+  singleUse: 0
   effects: []
   designNotes: 'Extreme Prejudice: its attack destroys the creature it hits, whatever
     its Health or Armor, and then it''s gone too: one hit, one roadblock. Untouchable

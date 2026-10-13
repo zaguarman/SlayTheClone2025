@@ -64,6 +64,8 @@ namespace SlayTheClone {
         /// <summary>The creatures' statuses and stat changes, for rules that ask what a creature is under.</summary>
         IModifierManager Modifiers { get; }
         void AddWatchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days);
+        /// <summary>Every Watchdog this player controls is gone (GoldenEye).</summary>
+        void WipeWatchdogs(IPlayer controller);
         /// <summary>The Briefing: before the actions of the Day resolve, Briefing Watchdogs look at the whole queue once.</summary>
         void BriefWatchdogs();
         void CancelActionsOf(ICreature creature); // A creature marked for destruction loses its pending non-retaliatory actions

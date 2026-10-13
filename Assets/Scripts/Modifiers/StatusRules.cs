@@ -25,6 +25,12 @@ namespace SlayTheClone {
                 return null;
             }
 
+            // Composed (Shaken, Not Stirred): stuns don't land on it
+            if (type == StatusEffectType.Exhausted && manager.HasStatusEffect(target, StatusEffectType.Composed)) {
+                Log($"{target.Name} is Composed: it isn't Exhausted", LogTag.Actions | LogTag.Effects);
+                return null;
+            }
+
             var blessed = Find(manager, target, StatusEffectType.Blessed);
             if (type == StatusEffectType.Blessed && blessed != null) {
                 blessed.SetStacks(blessed.Stacks + System.Math.Max(1, potency)); // Re-applying adds stacks, up to 3
@@ -59,10 +65,19 @@ namespace SlayTheClone {
             // Re-stunning refreshes Exhausted instead of stacking it into a longer stun; the Intelligence statuses also refresh
             // (re-applying sets them to the new amount)
             if (type is StatusEffectType.Exhausted or StatusEffectType.Concealed or StatusEffectType.Revealed or StatusEffectType.Encrypted
-                or StatusEffectType.Untouchable or StatusEffectType.Cooldown or StatusEffectType.Brainwashed or StatusEffectType.KillOrder) {
+                or StatusEffectType.Untouchable or StatusEffectType.Cooldown or StatusEffectType.Brainwashed or StatusEffectType.KillOrder
+                or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Blackout) {
                 foreach (var old in manager.GetActiveModifiersFor(target).OfType<StatusEffectModifier>()
                              .Where(s => s.EffectType == type).ToList()) {
                     manager.RemoveModifier(target, old);
+                }
+            }
+
+            // Composed shakes off a stun it already has
+            if (type == StatusEffectType.Composed) {
+                foreach (var stun in manager.GetActiveModifiersFor(target).OfType<StatusEffectModifier>()
+                             .Where(s => s.EffectType == StatusEffectType.Exhausted).ToList()) {
+                    manager.RemoveModifier(target, stun);
                 }
             }
 
@@ -96,6 +111,10 @@ namespace SlayTheClone {
                 StatusEffectType.Cooldown => $"Cooldown ({days}): its Active ability rests",
                 StatusEffectType.Brainwashed => $"Brainwashed ({days}): then it changes sides, its ability lost",
                 StatusEffectType.KillOrder => $"Kill Order ({days}): then it's destroyed",
+                StatusEffectType.BorrowedTime => $"Borrowed Time ({days}): it can't die; then it dies if it's at 0 Health",
+                StatusEffectType.Composed => $"Composed ({days}): it can't be Exhausted",
+                StatusEffectType.Blackout => $"Blackout ({days}): its ability and effects are off",
+                StatusEffectType.Licensed => "Licensed: its next attack on a creature destroys it",
                 StatusEffectType.Blessed or StatusEffectType.HeatSignature => type.ToString(), // Its stacks are added by the status itself
                 _ => $"{type} ({days})"
             };

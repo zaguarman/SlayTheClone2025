@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: LicencetoKill
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: e5ccd5d8-4ddb-4afa-8680-f7a94b28b8f9
+  cardName: Licence to Kill
+  description: Paperwork for murder, signed in triplicate. Valid until used.
+  cardType: 1
+  faction: 3
+  artwork: {fileID: 0}
+  discardCost: 0
+  singleUse: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 3
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 14
+      statusDuration: 1
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Licensed: target friendly creature''s next attack on a creature destroys
+    it, whatever its Health or Armor (Untouchable or a Temporal Shield stops the
+    hit, and spends the licence). It keeps it until it''s used.'
+  artDescription: A civil servant in sleeve garters at a cluttered desk stamping
+    a laminated LICENCE TO KILL card with a smirking agent's passport photo, a tray
+    of forms marked 00 beside him.
+  defaultTargetType: 3

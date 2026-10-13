@@ -112,6 +112,10 @@ namespace SlayTheClone {
                 if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) targets.AddRange(NeighboursOf(chosenTarget));
                 return action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? WithoutTooMainstream(targets, source) : targets;
             }
+            if (action.targetModifier.HasFlag(TargetModifier.Opposite)) {
+                var facing = Opposite(source as ICreature);
+                return facing != null && !facing.IsDead ? new List<ITarget> { facing } : new List<ITarget>();
+            }
             if (action.targetModifier.HasFlag(TargetModifier.Random)) return PickAtRandom(source, controller, action, queue);
             if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
                 var strongest = Strongest(TargetingSystem.GetValidTargets(controller, action.targetType).OfType<ICreature>());
@@ -239,7 +243,7 @@ namespace SlayTheClone {
         public static bool UsesChosenTarget(EffectAction action) {
             if (IsSideWide(action)) return false;
             bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets)
-                || action.targetModifier.HasFlag(TargetModifier.Strongest);
+                || action.targetModifier.HasFlag(TargetModifier.Strongest) || action.targetModifier.HasFlag(TargetModifier.Opposite);
             return !picksOwnTargets && (CanAffectCreatures(action.actionType) || IsSlotAction(action.actionType));
         }
 
@@ -316,7 +320,7 @@ namespace SlayTheClone {
         /// <summary>Whether this kind of effect can land on a player (aimed at an empty slot, it lands on that side's player).</summary>
         public static bool CanAffectPlayers(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog or ActionType.Reveal
-                or ActionType.SummonDecoys;
+                or ActionType.SummonDecoys or ActionType.WipeWatchdogs;
         #endregion
 
         #region Actions
@@ -422,6 +426,8 @@ namespace SlayTheClone {
                     return creature != null && action.value > 0 ? new DelayDeploymentAction(creature, action.value) : null;
                 case ActionType.SummonDecoys: // Tokens into the player's empty slots (Ghost Army)
                     return target is IPlayer decoysSide && action.decoyData != null && action.value > 0 ? new SummonDecoysAction(decoysSide, action.decoyData, action.value) : null;
+                case ActionType.WipeWatchdogs: // Every Watchdog that player controls (GoldenEye)
+                    return target is IPlayer wiped ? new WipeWatchdogsAction(wiped) : null;
                 case ActionType.TakeControl: // It changes sides, to the effect's controller (GDD 5.4)
                     return creature != null && creature.Owner != controller ? new ChangeSidesAction(creature, controller) : null;
                 case ActionType.Attack: // The creature whose effect it is attacks the target's slot, a real attack

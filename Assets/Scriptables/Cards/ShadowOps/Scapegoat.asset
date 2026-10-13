@@ -19,6 +19,7 @@ MonoBehaviour:
   faction: 3
   artwork: {fileID: 0}
   discardCost: 0
+  singleUse: 0
   effects: []
   designNotes: 'Fall Guy: when an enemy effect would make another friendly creature
     Revealed or destroy it (Perfectly Timed Camera Malfunction, Extreme Prejudice...),

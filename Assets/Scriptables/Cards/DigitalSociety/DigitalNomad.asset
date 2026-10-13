@@ -19,6 +19,7 @@ MonoBehaviour:
   faction: 6
   artwork: {fileID: 3286163911610860551, guid: 055b65cab845be34da54600eb3b0d94f, type: 3}
   discardCost: 0
+  singleUse: 0
   effects: []
   designNotes: 'Mechanics test: Leapfrog on a cheap, fast creature.'
   artDescription: A Tuareg nomad in a white turban and face veil, sitting cross-legged

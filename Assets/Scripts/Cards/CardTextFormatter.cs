@@ -37,6 +37,7 @@ namespace SlayTheClone {
                 if (creature.gift) keywords.Add(Keywords.Link("Gift"));
                 if (creature.ability != CreatureAbility.None) keywords.Add(AbilityName(creature.ability));
             }
+            if (data.singleUse) keywords.Add(Keywords.Link("Single Use"));
 
             var sentences = new List<string>();
             foreach (var effect in data.effects ?? new List<CardEffect>()) {
@@ -188,7 +189,7 @@ namespace SlayTheClone {
         // Which whole group an action lands on; None when it's one target (chosen, random, or a creature and its neighbors)
         private static Reach ReachOf(EffectAction action) {
             if (action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.WithAdjacent)
-                || action.targetModifier.HasFlag(TargetModifier.Strongest)) return Reach.None;
+                || action.targetModifier.HasFlag(TargetModifier.Strongest) || action.targetModifier.HasFlag(TargetModifier.Opposite)) return Reach.None;
             bool each = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
             return action.targetType switch {
                 TargetType.FriendlyCreatures when each => Reach.FriendlyCreatures,
@@ -285,6 +286,8 @@ namespace SlayTheClone {
                     return $"{target} fakes its death (its {Keywords.Link("Last Will")} happens) and goes back to your hand next {Keywords.Link("Day")}";
                 case ActionType.Vanish:
                     return $"{target} {Keywords.Link("Gone Dark", "goes dark")} until the next {Keywords.Link("Dawn")}";
+                case ActionType.WipeWatchdogs:
+                    return $"wipe out the {target}'s {Keywords.Link("Watchdog", "Watchdogs")}";
                 case ActionType.Funnel:
                     return $"every other creature on its side hands its stat raises to {target}";
                 case ActionType.PassHarmfulStatuses:
@@ -342,6 +345,7 @@ namespace SlayTheClone {
                     case TargetType.AllCreatures: return strongest + " creature";
                 }
             }
+            if (action.targetModifier.HasFlag(TargetModifier.Opposite)) return "the creature facing it";
             if (action.targetModifier.HasFlag(TargetModifier.Random)) {
                 switch (action.targetType) {
                     case TargetType.EnemyCreatures: return "a " + Keywords.Link("Random", "random") + " enemy creature";
@@ -399,6 +403,10 @@ namespace SlayTheClone {
                 case StatusEffectType.Cooldown: return $"{Keywords.Link("Cooldown", "Cooldown" + Count(days))} on {target}";
                 case StatusEffectType.Brainwashed: return $"{Keywords.Link("Brainwashed", "Brainwashed" + Count(days))} on {target}";
                 case StatusEffectType.KillOrder: return $"{Keywords.Link("Kill Order", "Kill Order" + Count(days))} on {target}";
+                case StatusEffectType.BorrowedTime: return $"{Keywords.Link("Borrowed Time", "Borrowed Time" + Count(days))} on {target}";
+                case StatusEffectType.Licensed: return $"{Keywords.Link("Licensed", "license")} {target}";
+                case StatusEffectType.Composed: return $"{Keywords.Link("Composed", "Composed" + Count(days))} on {target}";
+                case StatusEffectType.Blackout: return $"{Keywords.Link("Blackout", "Blackout" + Count(days))} on {target}";
                 default: return null;
             }
         }

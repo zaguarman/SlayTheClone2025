@@ -16,11 +16,12 @@ namespace SlayTheClone {
         /// <summary>Intensity, for statuses that count it instead of Days (Blessed charges, Heat). Time doesn't reduce it.</summary>
         public int Stacks { get; private set; }
         /// <summary>Lasts until removed or used up, whatever its Days (Blessed, Heat Signature).</summary>
-        public bool IsPersistent => EffectType is StatusEffectType.Blessed or StatusEffectType.HeatSignature;
+        public bool IsPersistent => EffectType is StatusEffectType.Blessed or StatusEffectType.HeatSignature or StatusEffectType.Licensed;
         /// <summary>Whether it harms its creature: what a Cleanse removes (a Purge removes the rest too). Blessed is the good one.</summary>
-        public bool IsNegative => EffectType is not (StatusEffectType.Blessed or StatusEffectType.Concealed or StatusEffectType.Encrypted or StatusEffectType.Untouchable);
+        public bool IsNegative => EffectType is not (StatusEffectType.Blessed or StatusEffectType.Concealed or StatusEffectType.Encrypted or StatusEffectType.Untouchable
+            or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed);
         /// <summary>Its Days count the Day it lands, like a Day-long buff (Untouchable 1 is this Day only), instead of skipping it.</summary>
-        public bool CountsTheDayItLands => EffectType == StatusEffectType.Untouchable;
+        public bool CountsTheDayItLands => EffectType is StatusEffectType.Untouchable or StatusEffectType.Composed;
 
         /// <summary>Doomed can't be cleansed: a cleanse attempt passes it on instead (Heresy). Nor can Brainwashed: only taking
         /// the creature off the board in time saves it.</summary>
@@ -62,7 +63,7 @@ namespace SlayTheClone {
 
         // Exhausted is a complete shutdown: Cannot Act, Abilities Disabled, and the Exposed that comes with it
         public bool PreventsActions() => EffectType == StatusEffectType.Exhausted;
-        public bool DisablesAbilities() => EffectType == StatusEffectType.Exhausted;
+        public bool DisablesAbilities() => EffectType is StatusEffectType.Exhausted or StatusEffectType.Blackout; // Blackout: GoldenEye's pulse, an NDA
         public bool Exposes() => EffectType == StatusEffectType.Exhausted;
 
         /// <summary>Sets the status's intensity, between 1 and its maximum. Shown as "Blessed 2" or "Heat 3".</summary>
@@ -70,6 +71,11 @@ namespace SlayTheClone {
             if (EffectType == StatusEffectType.HeatSignature) {
                 Stacks = Math.Max(1, Math.Min(MaxHeat, stacks));
                 Description = $"Heat Signature {Stacks}: random effects and redirected attacks go to the hottest creature";
+                return;
+            }
+            if (EffectType == StatusEffectType.Licensed) {
+                Stacks = 1;
+                Description = "Licensed: its next attack on a creature destroys it";
                 return;
             }
             Stacks = Math.Max(1, Math.Min(MaxBlessedStacks, stacks));

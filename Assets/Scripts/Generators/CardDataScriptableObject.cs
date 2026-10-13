@@ -13,6 +13,7 @@ namespace SlayTheClone {
         public Faction faction;
         public Sprite artwork; // Shown in the card's art box; assigned by Tools > Cards > Assign Card Art
         [Min(0)] public int discardCost; // Additional cost: other cards from the hand, at random, given up to play it
+        public bool singleUse; // Once played, gone for the rest of the combat (The Golden Gun's one bullet)
         [SerializeField] protected List<CardEffect> effects = new List<CardEffect>();
         [TextArea(2, 6)] public string designNotes; // Editor only: what the card should become once the GDD mechanics it stands in for exist
         [TextArea(2, 6)] public string artDescription; // What the card's picture shows: the brief for its art
@@ -36,6 +37,7 @@ namespace SlayTheClone {
             data.faction = faction;
             data.artwork = artwork;
             data.discardCost = discardCost;
+            data.singleUse = singleUse;
             data.effects = CopyEffects();
         }
 

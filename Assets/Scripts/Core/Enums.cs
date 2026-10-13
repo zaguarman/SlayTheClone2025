@@ -10,7 +10,8 @@ namespace SlayTheClone {
         public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie, OnRevealed } // New triggers go last: cards store them as numbers
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetTrend,
             CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy,
-            TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
+            TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys,
+            WipeWatchdogs } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
@@ -55,7 +56,11 @@ namespace SlayTheClone {
             Untouchable,   // Takes no damage, for its Days counting the one it lands (Bodyguard, Presidential Pardon)
             Cooldown,      // Its Active ability rests: it can't be used while this lasts
             Brainwashed,   // When it runs out, the creature changes sides, for good, with its ability lost
-            KillOrder      // Hidden from its creature's side: when it runs out, the creature is destroyed
+            KillOrder,     // Hidden from its creature's side: when it runs out, the creature is destroyed
+            BorrowedTime,  // It can't die while it lasts; when it runs out, it dies if it's at 0 Health
+            Licensed,      // Its next attack on a creature destroys it, then the licence is spent (lasts until used)
+            Composed,      // Exhausted can't land on it (this Day only, like Untouchable)
+            Blackout       // Its ability and effects are switched off
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old
@@ -79,6 +84,7 @@ namespace SlayTheClone {
             Random = 1 << 2,
             Chained = 1 << 3,
             Strongest = 1 << 4, // The one with the highest Attack, picked when it happens (ties at random)
+            Opposite = 1 << 5,  // A creature's effect: the creature facing it, on the other side (none there: nothing)
         }
 
         // Trends (GDD 4.2): what the world is into right now, one rule for the whole board for some Days, until another Trend replaces it. New ones go last

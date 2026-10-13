@@ -140,6 +140,44 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             Assert.AreSame(turncoat, p1.Battlefield[3].OccupyingCreature, "...then at the Dusk two Days later it comes over, to the slot facing it");
             Assert.AreEqual(CreatureAbility.None, turncoat.Ability, "Its ability is lost");
+
+            // Borrowed Time (Die Another Day): it can't die, not even destroyed, until the Dusk of the next Day; then it dies
+            // if it's at 0 Health
+            Fresh();
+            var spy = game.Summon(p1, game.Creature("Spy", 2, 3), 0);
+            var lucky = game.Summon(p1, game.Creature("Lucky", 2, 3), 1);
+            game.Run(new ApplyStatusEffectAction(spy, StatusEffectType.BorrowedTime, 1, 0));
+            game.Run(new ApplyStatusEffectAction(lucky, StatusEffectType.BorrowedTime, 1, 0));
+            game.Run(TargetedActions.Damage(spy, 5));
+            game.Run(new DestroyCreatureAction(lucky, unconditional: true));
+            Assert.IsFalse(spy.IsDead || lucky.IsDead, "At 0 Health, or destroyed: not today");
+            game.StartTurn();
+            Assert.IsFalse(spy.IsDead, "Nor the next Day, until its Dusk");
+            game.StartTurn();
+            Assert.IsTrue(spy.IsDead, "At the next Day's Dusk, still at 0 Health: it dies");
+            Assert.IsFalse(lucky.IsDead, "With Health left, it lives on");
+
+            // Composed (Shaken, Not Stirred): stuns don't land on it this Day, and it shakes off the one it has
+            var cool = game.Summon(p2, game.Creature("Cool", 2, 3), 2);
+            game.Run(new ApplyStatusEffectAction(cool, StatusEffectType.Exhausted, 1, 0));
+            game.Run(new ApplyStatusEffectAction(cool, StatusEffectType.Composed, 1, 0));
+            Assert.IsFalse(IsExhausted(cool), "It shakes off its stun");
+            game.Run(new ApplyStatusEffectAction(cool, StatusEffectType.Exhausted, 1, 0));
+            Assert.IsFalse(IsExhausted(cool), "Stuns don't land");
+            game.StartTurn();
+            game.Run(new ApplyStatusEffectAction(cool, StatusEffectType.Exhausted, 1, 0));
+            Assert.IsTrue(IsExhausted(cool), "This Day only");
+
+            // Blackout (GoldenEye): its ability and its effects are off, until the Dusk of the next Day
+            var gadget = game.Summon(p2, game.Creature("Gadget", 1, 9, 1, Effect(EffectTrigger.EndOfTurn, ActionType.Damage, 1, TargetType.Enemy)), 3);
+            gadget.Ability = CreatureAbility.Recoil;
+            game.Run(new ApplyStatusEffectAction(gadget, StatusEffectType.Blackout, 1, 0));
+            Assert.IsFalse(Abilities.IsActive(gadget), "Its ability is off");
+            int health = p1.Health;
+            game.StartTurn();
+            Assert.AreEqual(health, p1.Health, "...and its Dusk effect does nothing");
+            game.StartTurn();
+            Assert.AreEqual(health - 1, p1.Health, "Over at the next Day's Dusk: it works again");
         }
 
         [Test]

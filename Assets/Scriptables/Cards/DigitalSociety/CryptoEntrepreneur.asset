@@ -19,6 +19,7 @@ MonoBehaviour:
   faction: 6
   artwork: {fileID: 3286163911610860551, guid: e4bb8bfa17dbf0545a22455787a226f0, type: 3}
   discardCost: 0
+  singleUse: 0
   effects: []
   designNotes: 'Mechanics test: Chain Mail. Its attacks jump on to the next 2 creatures
     in line, half the damage each jump.'

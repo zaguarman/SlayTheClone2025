@@ -23,6 +23,7 @@ namespace SlayTheClone {
         private const TargetModifier Each = TargetModifier.AllSameTypeTargets;
         private const TargetModifier AtRandom = TargetModifier.Random;
         private const TargetModifier StrongestOne = TargetModifier.Strongest;
+        private const TargetModifier Facing = TargetModifier.Opposite;
 
         [MenuItem("Cards/Generate Faction Decks")]
         public static void GenerateFactionDecks() {
@@ -82,6 +83,13 @@ namespace SlayTheClone {
                 "Ghost Army", "Sabotage", "Witness Protection Program", "Extraction", "Fell Out of a Window", "Death By \"Natural Causes\"",
                 "Operation Paperclip", "HAARP", "Devil's Breath", "Asset Recruitment", "Glomar Response",
                 "Social Engineering", "Bilderberg Membership", "Dead Drop",
+            }),
+            ("Shadow Ops. - Double-O Section", "ShadowOpsDoubleODeck",
+                "Your Quartermaster", "Please return the car in one piece. You never do.", new[] {
+                "Cleaner", "Cleaner", "Multi Passport", "Multi Passport", "Wet Work", "Mole", "Femme Fatale", "Femme Fatale",
+                "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Dead Man's Switch", "Scapegoat",
+                "The Golden Gun", "Die Another Day", "Die Another Day", "Licence to Kill", "Licence to Kill",
+                "Shaken, Not Stirred", "Shaken, Not Stirred", "GoldenEye",
             }),
             ("Digital Society & Shadow Ops. - Panopticon", "PanopticonDeck",
                 "Your Data Broker", "Knows where you were last night. Sold it by noon.", new[] {
@@ -819,6 +827,44 @@ namespace SlayTheClone {
                 .Discarding(3)
                 .NotInStarterDeck()
                 .Picture("A park bench in autumn, a man in a trench coat feeding pigeons while sliding a hollowed-out brick behind him with his heel, another man on the next bench reading an upside-down newspaper."),
+            // Double-O Section, the spy-film Shadow Ops.: gadgets, licences and villains with very specific methods
+            Spell("The Golden Gun", TargetType.EnemyCreatures,
+                "A million a shot. He only ever needs the one.",
+                "Destroy target enemy creature, whatever its Health or Armor (Untouchable still saves it). Single Use: one golden bullet; once played, the card is gone for the rest of the combat.",
+                Destroy(TargetType.EnemyCreatures))
+                .SingleUse()
+                .NotInStarterDeck()
+                .Picture("A gold pistol pieced together from a cigarette case, a lighter, a cufflink and a fountain pen, lying on black velvet beside a single golden bullet engraved with a name."),
+            Spell("Die Another Day", TargetType.FriendlyCreatures,
+                "Not today. Probably not tomorrow. Ask again on Thursday.",
+                "Borrowed Time on target friendly creature: it can't die (damage leaves it at 0 Health, a Destroy fails) until the Dusk of the next Day; then, if it's at 0 Health, it dies. Heal it in time and it lives.",
+                Status(StatusEffectType.BorrowedTime, 1, TargetType.FriendlyCreatures))
+                .NotInStarterDeck()
+                .Picture("A spy in a torn tuxedo surfing a towering wave on a car door past a collapsing ice palace, checking his wristwatch."),
+            Spell("Licence to Kill", TargetType.FriendlyCreatures,
+                "Paperwork for murder, signed in triplicate. Valid until used.",
+                "Licensed: target friendly creature's next attack on a creature destroys it, whatever its Health or Armor (Untouchable or a Temporal Shield stops the hit, and spends the licence). It keeps it until it's used.",
+                Status(StatusEffectType.Licensed, 1, TargetType.FriendlyCreatures))
+                .NotInStarterDeck()
+                .Picture("A civil servant in sleeve garters at a cluttered desk stamping a laminated LICENCE TO KILL card with a smirking agent's passport photo, a tray of forms marked 00 beside him."),
+            Spell("Shaken, Not Stirred", TargetType.FriendlyCreatures,
+                "Three measures of gin, one of vodka, half of Kina Lillet. Nerves: none.",
+                "Target friendly creature gets +2 Attack this Day, and it's Composed this Day: stuns (Exhausted) don't land on it, and it shakes off one it has.",
+                Buff(2, TargetType.FriendlyCreatures, attack: true, health: false, days: 1), Status(StatusEffectType.Composed, 1, TargetType.FriendlyCreatures))
+                .NotInStarterDeck()
+                .Picture("A bartender shaking a cocktail shaker while explosions rock the casino behind him, an agent in a tuxedo calmly waiting at the bar for his martini, not a hair out of place."),
+            Spell("GoldenEye", TargetType.Enemy,
+                "One pulse. Every screen, every pacemaker, every smart fridge. Off.",
+                "An electromagnetic pulse on the enemy side: Blackout on every enemy creature (its ability and effects are off until the Dusk of the next Day), and every enemy Watchdog is wiped out.",
+                Status(StatusEffectType.Blackout, 1, TargetType.EnemyCreatures, modifier: Each), Act(ActionType.WipeWatchdogs, 0, TargetType.Enemy, TargetModifier.None))
+                .NotInStarterDeck()
+                .Picture("A satellite dish shaped like a golden eye in orbit firing a ripple of light at a city at night; below, every window goes dark at once and a man's toaster pops out smoking."),
+            Creature("Femme Fatale", 2, 4, speed: 2, deploy: 0,
+                "She didn't kill him. She just held him very, very close.",
+                "Each Dusk she squeezes the enemy creature facing her: 2 damage to it, and she heals 1. Nothing facing her: nothing happens.",
+                On(EffectTrigger.EndOfTurn, Damage(2, TargetType.EnemyCreatures, Facing), Heal(1, TargetType.Self)))
+                .NotInStarterDeck()
+                .Picture("A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in the chair beside her is squeezed between her crossed legs, his medals popping off."),
             Creature("MK Ultra Test Subject", 4, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
@@ -1145,6 +1191,7 @@ namespace SlayTheClone {
             public bool Extra; // Not in its faction's starter deck (it's full): in the Mechanics Test deck and the deck builder
             public bool IsToken; // Made by an effect (Ghost Army's decoys), never in a deck
             public int DiscardCost; // Additional cost: other cards from the hand, at random, given up to play it
+            public bool IsSingleUse; // Once played, gone for the rest of the combat
             public string DisguiseName; // The card the other side sees it as, until it's revealed
             public Faction? ShownFaction; // A fake card's frame: the faction it pretends to be from
 
@@ -1188,6 +1235,12 @@ namespace SlayTheClone {
             public CardDef FakeFace(Faction looksLike) {
                 Extra = true;
                 ShownFaction = looksLike;
+                return this;
+            }
+
+            // Single Use: once played, it's gone for the rest of the combat instead of discarded
+            public CardDef SingleUse() {
+                IsSingleUse = true;
                 return this;
             }
 
@@ -1424,6 +1477,7 @@ namespace SlayTheClone {
             asset.artDescription = card.ArtDescription;
             asset.faction = card.ShownFaction ?? faction;
             asset.discardCost = card.DiscardCost;
+            asset.singleUse = card.IsSingleUse;
             asset.SetEffects(card.Effects);
             switch (asset) {
                 case CreatureCardScriptableObject creature:

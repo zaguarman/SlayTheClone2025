@@ -19,6 +19,7 @@ MonoBehaviour:
   faction: 3
   artwork: {fileID: 3286163911610860551, guid: 91bdf466b07215a4bbf503c8b327ab4f, type: 3}
   discardCost: 0
+  singleUse: 0
   effects: []
   designNotes: 'Mechanics test: Underground (both ways). When it''s attacked, the
     attacker''s buffs and debuffs are ignored; when it attacks, the defender''s temporary

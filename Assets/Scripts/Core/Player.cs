@@ -26,6 +26,10 @@ namespace SlayTheClone {
         List<ICard> ComingBack { get; }
         /// <summary>Cards set aside from the hand to pay a discard cost, until the card they paid for resolves (or is taken back).</summary>
         List<ICard> SetAside { get; }
+        /// <summary>Single Use cards already played: out of the combat, still this player's cards.</summary>
+        List<ICard> Spent { get; }
+        /// <summary>A Single Use card that was played: gone for the rest of the combat, not to the discard pile.</summary>
+        void SpendForGood(ICard card);
         /// <summary>This player's creatures that are off the board for now (Witness Protection Program), and when they come back.</summary>
         List<GoneDark> GoneDark { get; }
         /// <summary>Puts a card that left play on its way back to the hand: it joins the next Day's hand.</summary>
@@ -65,6 +69,7 @@ namespace SlayTheClone {
         public ISet<string> UsedOncePerCombat { get; } = new HashSet<string>();
         public List<ICard> ComingBack { get; } = new List<ICard>();
         public List<ICard> SetAside { get; } = new List<ICard>();
+        public List<ICard> Spent { get; } = new List<ICard>();
         public List<GoneDark> GoneDark { get; } = new List<GoneDark>();
 
         public IReadOnlyList<BoardSlot> Battlefield { get; }
@@ -168,6 +173,13 @@ namespace SlayTheClone {
             var home = (card as ICreature)?.DeckOwner ?? this;
             home.Deck.AddToDiscardPile(card);
             Log($"Discarded {card.Name}{(home != this ? $" to {home.Name}'s discard pile" : "")}", LogTag.Cards);
+        }
+
+        public void SpendForGood(ICard card) {
+            if (card == null) return;
+            RemoveFromHand(card);
+            Spent.Add(card);
+            Log($"{card.Name} is Single Use: it's gone for the rest of the combat", LogTag.Cards);
         }
 
         public void ReturnToHand(ICard card) {

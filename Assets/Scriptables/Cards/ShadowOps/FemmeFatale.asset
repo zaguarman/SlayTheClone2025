@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: FemmeFatale
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 0c01eaf4-980b-4f3f-93f8-086d8cc6e43e
+  cardName: Femme Fatale
+  description: She didn't kill him. She just held him very, very close.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 0}
+  discardCost: 0
+  singleUse: 0
+  effects:
+  - effectType: 0
+    trigger: 4
+    oncePerCombat: 0
+    actions:
+    - actionType: 0
+      value: 2
+      targetType: 4
+      targetModifier: 32
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+      decoy: {fileID: 0}
+    - actionType: 1
+      value: 1
+      targetType: 5
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Each Dusk she squeezes the enemy creature facing her: 2 damage to
+    it, and she heals 1. Nothing facing her: nothing happens.'
+  artDescription: A glamorous woman in a black evening gown smiling over her cocktail
+    at a casino table, while the red-faced general in the chair beside her is squeezed
+    between her crossed legs, his medals popping off.
+  attack: 2
+  health: 4
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 0
+  gift: 0
+  token: 0
+  disguise: {fileID: 0}

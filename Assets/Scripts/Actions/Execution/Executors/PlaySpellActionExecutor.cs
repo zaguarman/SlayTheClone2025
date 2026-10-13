@@ -19,7 +19,8 @@ namespace SlayTheClone {
 
             // The spell queues its own game actions
             spell.Play(owner, actionsQueue, spellAction.GetTarget());
-            owner.DiscardCard(spell);
+            if (spell.SourceData?.singleUse == true) owner.SpendForGood(spell); // One bullet: gone for the rest of the combat
+            else owner.DiscardCard(spell);
 
             Log($"Executed PlaySpellAction via Executor for {spell.Name}", LogTag.Actions | LogTag.Cards);
         }

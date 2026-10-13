@@ -305,6 +305,28 @@ namespace SlayTheClone.Tests {
             game.Play(kill, p1, p2.Battlefield[2]);
             game.Resolve();
             Assert.IsTrue(patsy.IsDead && !boss.IsDead, "...and destroyed instead");
+
+            // Licensed (Licence to Kill): its next attack on a creature destroys it, and the licence is spent
+            Fresh();
+            var agent = With(CreatureAbility.None, p1, 0, attack: 1, health: 5);
+            var tank = With(CreatureAbility.None, p2, 0, attack: 1, health: 30);
+            var henchman = With(CreatureAbility.None, p2, 1, attack: 1, health: 30);
+            game.Run(new ApplyStatusEffectAction(agent, StatusEffectType.Licensed, 1, 0));
+            game.Attack(agent, p2.Battlefield[0]);
+            Assert.IsTrue(tank.IsDead, "Its 30 Health don't matter");
+            Assert.IsFalse(HasStatus(agent, StatusEffectType.Licensed), "The licence is spent");
+            game.StartTurn();
+            game.Attack(agent, p2.Battlefield[1]);
+            Assert.AreEqual(29, henchman.Health, "The next attack is a plain one");
+
+            // Femme Fatale: each Dusk, 2 damage to the creature facing her, and she heals 1
+            var fatale = game.Summon(p1, game.Creature("Fatale", 2, 4, 1,
+                Effect(EffectTrigger.EndOfTurn, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.Opposite),
+                Effect(EffectTrigger.EndOfTurn, ActionType.Heal, 1, TargetType.Self)), 1);
+            game.Run(TargetedActions.Damage(fatale, 2));
+            game.StartTurn();
+            Assert.AreEqual(27, henchman.Health, "Squeezed: the one facing her");
+            Assert.AreEqual(3, fatale.Health);
         }
 
         [Test]

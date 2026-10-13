@@ -19,6 +19,7 @@ MonoBehaviour:
   faction: 2
   artwork: {fileID: 0}
   discardCost: 0
+  singleUse: 0
   effects: []
   designNotes: 'Never a real card: the face a Ghost Army decoy shows the enemy until
     it''s revealed.'

@@ -80,6 +80,17 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(3, p1.Deck.GetDiscardPilePreview().Count, "Played: the two it cost and the spell itself are discarded...");
             Assert.AreEqual(4, p1.Hand.Count, "...and it draws 3 (the one card left and the 3 drawn)");
             Assert.AreEqual(cards, GameAsserts.CountCards(p1));
+
+            // Single Use (The Golden Gun): once played, it's gone for the rest of the combat, but still the player's card
+            var gunData = game.Spell("Gun", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 1, TargetType.Player));
+            gunData.singleUse = true;
+            var gun = game.GiveCard(p1, gunData);
+            cards = GameAsserts.CountCards(p1);
+            game.ActionsQueue.AddAction(new PlayCardAction(gun, p1, p1));
+            game.Resolve();
+            CollectionAssert.Contains(p1.Spent, gun);
+            CollectionAssert.DoesNotContain(p1.Deck.GetDiscardPilePreview(), gun);
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1));
         }
 
         [UnityTest]

@@ -62,6 +62,7 @@ namespace SlayTheClone {
             Add("Summon", "Summon X (no number: 1): X random creatures from your deck enter your empty slots.");
             Add("Destroy", "Kills it outright, whatever its Health or [Armor]. [Untouchable] still saves it.");
             Add("Gone Dark", "Off the board until the next [Dawn]: nothing reaches it, and its [Slot|slot] is empty meanwhile (an attack there hits its player). It comes back to its slot, or the first free one, with a new identity: [Concealed] for 2 Days, so the other side doesn't know what it is, and its old statuses are gone. No free slot: it never comes back.");
+            Add("Single Use", "Once played, the card is gone for the rest of the combat instead of going to your discard pile.");
             Add("Discard Cost", "Discard X: an additional cost. To play this card, X other cards from your hand, picked at random among those you aren't playing, are given up: set aside now, discarded when it resolves, back in your hand if you take the play back. With fewer cards left, you can't play it. Information has a price.");
             Add("Decoy", "A token that isn't what it looks like: until a [Reveal] or [Revealed] shows it, the other side sees the card it pretends to be, with that card's numbers. A token isn't a card in a deck: when it leaves play, it's gone.");
             Add("Take Control", "It changes sides for good: it goes to the [Slot|slot] facing the one it stood in, under your control, and whatever stands there is discarded. It keeps its Health, statuses and stat changes, and loses what it planned. It's still its owner's card: when it leaves play, it goes back to them.");
@@ -93,6 +94,10 @@ namespace SlayTheClone {
             Add("Cooldown", "Cooldown X (no number: 1): its Active ability rests and can't be used for the next X [Days].");
             Add("Brainwashed", "Brainwashed X (no number: 1): when its X [Days] run out, at [Dusk], it changes sides for good ([Take Control|taken] by the other side) and loses its ability until its card is reshuffled. A [Cleanse] can't remove it: only taking it off the board in time (back to a hand, or [Gone Dark|gone dark]) saves it.");
             Add("Kill Order", "Kill Order X (no number: 1): secret, only the side that gave it can see it, and the spell that gives it is played unseen. When its X [Days] run out, at [Dusk], the creature is [Destroy|destroyed]; [Untouchable] still saves it. A [Cleanse] removes it, knowingly or not.");
+            Add("Borrowed Time", "Borrowed Time X (no number: 1): it can't die, whatever its Health, not even [Destroy|destroyed], until its X [Days] run out at [Dusk]; then, if it's at 0 Health, it dies. Heal it in time and it lives.");
+            Add("Licensed", "Its next attack on a creature [Destroy|destroys] it, whatever its Health or [Armor], and the licence is spent ([Untouchable] or a [Temporal Shield] stops the hit, and spends it all the same). It lasts until used.");
+            Add("Composed", "Composed X (no number: 1): it can't be [Exhausted] for X [Days], counting the Day it lands (1 is this Day only), and it shakes off a stun it has.");
+            Add("Blackout", "Blackout X (no number: 1): its ability and its effects (arrival, Dawn and Dusk, retaliation, [Last Will]) are switched off for X [Days].");
             Add("Cleanse", "Removes harmful statuses.");
             Add("Purge", "Removes every status, good and bad.");
 

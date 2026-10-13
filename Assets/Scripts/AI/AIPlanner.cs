@@ -389,7 +389,7 @@ namespace SlayTheClone {
         }
 
         // Extreme Prejudice: its attack destroys whatever it hits (and then it's gone)
-        private static bool Assassin(SeenCreature attacker) => attacker.Ability == CreatureAbility.ExtremePrejudice;
+        private static bool Assassin(SeenCreature attacker) => attacker.Ability == CreatureAbility.ExtremePrejudice || attacker.Has(StatusEffectType.Licensed);
 
         // Its damage to this creature: Exposed adds 1 a hit; Insider Job goes through Armor; Extreme Prejudice kills
         private int Hit(SeenCreature attacker, SeenCreature target) => Assassin(attacker) ? 999 :
@@ -462,6 +462,8 @@ namespace SlayTheClone {
                 return 1;
             }
             if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;
+            // GoldenEye: each of their Watchdogs gone is a trap we no longer walk into
+            if (action.actionType == ActionType.WipeWatchdogs) return queue.Watchdogs.Count(w => w.Controller == view.Them) * 1.5f * Style.Intel;
             if (action.actionType == ActionType.Reveal) {
                 if (!EffectResolver.UsesChosenTarget(action)) return 0.5f * Style.Intel; // A side's Watchdogs
                 var seen = CreatureAt(aim);
@@ -721,6 +723,13 @@ namespace SlayTheClone {
                 StatusEffectType.KillOrder => creature.Has(StatusEffectType.KillOrder) ? 0 : -(creature.Worth + HealthLeft(creature)) * 0.7f,
                 // A defection: they lose it and we gain it, later; sooner when it's Revealed
                 StatusEffectType.Brainwashed => creature.Ours ? -creature.Worth : -(creature.Worth * 2) * (days <= 1 ? 0.75f : 0.6f),
+                // Can't die until tomorrow's Dusk: worth the creature when it would die now, a little otherwise
+                StatusEffectType.BorrowedTime => creature.Has(StatusEffectType.BorrowedTime) ? 0 : WouldDie(creature) ? creature.Worth * 0.7f : 0.3f,
+                // Its next attack kills: worth the best kill it can make
+                StatusEffectType.Licensed => creature.Has(StatusEffectType.Licensed) || !CanAttack(creature) ? 0
+                    : view.Theirs.Where(Hittable).Select(t => (t.Worth + HealthLeft(t)) * 0.6f).DefaultIfEmpty(0.5f).Max(),
+                StatusEffectType.Composed => creature.Has(StatusEffectType.Exhausted) ? AttackOf(creature) + 1 : 0.5f,
+                StatusEffectType.Blackout => creature.Ability != CreatureAbility.None || creature.Retaliation > 0 ? -1.5f : -0.5f,
                 _ => 0
             };
         }

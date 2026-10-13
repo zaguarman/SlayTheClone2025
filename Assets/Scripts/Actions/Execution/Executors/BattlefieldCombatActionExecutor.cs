@@ -41,6 +41,20 @@ namespace SlayTheClone {
 
             Log($"Executor: Creature {attacker.Name} attacking {DescribeTarget(primaryTarget)}", LogTag.Combat);
 
+            // Licensed (Licence to Kill): this attack destroys the creature it hits, whatever its Health or Armor, and the
+            // licence is spent. What stops a hit (Untouchable, a Temporal Shield) stops it, and spends it all the same
+            var licence = primaryTarget is ICreature ? StatusRules.Find(context.ModifierManager, attacker, Enums.StatusEffectType.Licensed) : null;
+            if (licence != null && primaryTarget is ICreature mark) {
+                context.ModifierManager.RemoveModifier(attacker, licence);
+                if (context.ModifierManager.HasStatusEffect(mark, Enums.StatusEffectType.Untouchable) || SlotEffectRules.BlocksCombatDamage(mark)) {
+                    Log($"Executor: {attacker.Name}'s licence is spent on {mark.Name}, who can't be touched", LogTag.Combat);
+                    return;
+                }
+                Log($"Executor: {attacker.Name} uses its licence to kill on {mark.Name}", LogTag.Combat);
+                actionsQueue.AddAction(new DestroyCreatureAction(mark, attacker, unconditional: true, controller: attacker.Owner));
+                return;
+            }
+
             // Extreme Prejudice: the hit destroys the creature outright, then the assassin is gone too. What stops a hit
             // (Untouchable, a Temporal Shield) stops it; Health and Armor don't
             if (Abilities.Has(attacker, Enums.CreatureAbility.ExtremePrejudice) && primaryTarget is ICreature victim) {

@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: TheGoldenGun
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 88c60485-2a4f-45ac-bdaa-a36487802d7d
+  cardName: The Golden Gun
+  description: A million a shot. He only ever needs the one.
+  cardType: 1
+  faction: 3
+  artwork: {fileID: 0}
+  discardCost: 0
+  singleUse: 1
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 19
+      value: 0
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Destroy target enemy creature, whatever its Health or Armor (Untouchable
+    still saves it). Single Use: one golden bullet; once played, the card is gone
+    for the rest of the combat.'
+  artDescription: A gold pistol pieced together from a cigarette case, a lighter,
+    a cufflink and a fountain pen, lying on black velvet beside a single golden bullet
+    engraved with a name.
+  defaultTargetType: 4

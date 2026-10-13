@@ -65,6 +65,23 @@ namespace SlayTheClone {
         }
     }
 
+    /// <summary>GoldenEye: every Watchdog a player controls is wiped out.</summary>
+    public class WipeWatchdogsAction : IGameAction {
+        public IPlayer Side { get; }
+
+        public WipeWatchdogsAction(IPlayer side) {
+            Side = side;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"WipeWatchdogsAction: {Side?.Name}'s Watchdogs";
+    }
+
+    public class WipeWatchdogsActionExecutor : ActionExecutor<WipeWatchdogsAction> {
+        protected override void ExecuteAction(WipeWatchdogsAction wipe, ActionExecutionContext context) =>
+            context.ActionsQueue.WipeWatchdogs(wipe.Side);
+    }
+
     /// <summary>Never Let Them Know Your Next Move: every other creature on its side hands its stat raises to this one.</summary>
     public class FunnelAction : IGameAction {
         public ICreature Creature { get; }

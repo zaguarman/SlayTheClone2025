@@ -19,6 +19,7 @@ MonoBehaviour:
   faction: 4
   artwork: {fileID: 3286163911610860551, guid: 8d4df07014a9d0f4cb227cce092b7326, type: 3}
   discardCost: 0
+  singleUse: 0
   effects: []
   designNotes: 'Mechanics test: Credit Grab (Active, once per combat): steals target
     creature''s stat raises. Buff an enemy, or let them, then take it.'

@@ -440,6 +440,12 @@ namespace SlayTheClone {
             gameMediator.NotifyActionsQueueChanged();
         }
 
+        public void WipeWatchdogs(IPlayer controller) {
+            int wiped = watchdogs.RemoveAll(w => w.Controller == controller);
+            Log($"{controller?.Name}'s Watchdogs are wiped out ({wiped})", LogTag.Actions | LogTag.Effects);
+            gameMediator.NotifyActionsQueueChanged();
+        }
+
         private void DropFinishedWatchdogs() {
             int turn = executionContext.TurnClock.TurnNumber;
             watchdogs.RemoveAll(w => w.IsSpent || w.HasExpired(turn));
