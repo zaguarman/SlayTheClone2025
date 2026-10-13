@@ -18,6 +18,7 @@ MonoBehaviour:
   cardType: 0
   faction: 9
   artwork: {fileID: 3286163911610860551, guid: 95ab61a672bf73d4ab10ebd7cce9e765, type: 3}
+  discardCost: 0
   effects: []
   designNotes: 'Leapfrog: it jumps over creatures to an empty slot.'
   artDescription: 'An astronaut planting a flag on a red desert next to a sign: FOR

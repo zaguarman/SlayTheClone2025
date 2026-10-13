@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: ShadowOpsBlackBudgetDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Shadow Ops. - Black Budget
+  cards:
+  - {fileID: 11400000, guid: bb17e17b05843804b88c57f26d889238, type: 2}
+  - {fileID: 11400000, guid: bb17e17b05843804b88c57f26d889238, type: 2}
+  - {fileID: 11400000, guid: 889ea9cf0d4f80248a5abe0ffcd4c681, type: 2}
+  - {fileID: 11400000, guid: 889ea9cf0d4f80248a5abe0ffcd4c681, type: 2}
+  - {fileID: 11400000, guid: d95a9b317522f784b847b20b4aa5b5ca, type: 2}
+  - {fileID: 11400000, guid: 9efb41643889f7d459d404c6e67e724a, type: 2}
+  - {fileID: 11400000, guid: 9efb41643889f7d459d404c6e67e724a, type: 2}
+  - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
+  - {fileID: 11400000, guid: e510acd731db3a64a9761da88b9a1996, type: 2}
+  - {fileID: 11400000, guid: 78cd5c5267fa0164db084db6099e1350, type: 2}
+  - {fileID: 11400000, guid: 8aba5b6c983aeb747a02d69b28b0f4d3, type: 2}
+  - {fileID: 11400000, guid: e2f194f866b25224abf509ebaa6889db, type: 2}
+  - {fileID: 11400000, guid: 1068c50f2a6568f438557a2f82611632, type: 2}
+  - {fileID: 11400000, guid: 278e106354652b446b568a5bd8bb0099, type: 2}
+  - {fileID: 11400000, guid: fa14642e6726e7f4188d5733b5852d62, type: 2}
+  - {fileID: 11400000, guid: 9913554af350944449db2f0ae43f94e5, type: 2}
+  - {fileID: 11400000, guid: 0811652e48f94024487b6bb9610bea5b, type: 2}
+  - {fileID: 11400000, guid: 86ca85e60e6fa004499621b6c6af95b3, type: 2}
+  - {fileID: 11400000, guid: 7865b26a822a16b46a48ac4f606cfaf5, type: 2}
+  - {fileID: 11400000, guid: 8d310d6716c1f9943a0ee190bac7071f, type: 2}
+  - {fileID: 11400000, guid: aa084a2a3a399fd41a4a063f6bb93add, type: 2}
+  - {fileID: 11400000, guid: f134ec3c68a18d74bb6e1d161c080065, type: 2}
+  - {fileID: 11400000, guid: 5d5387beccc62a449b9fc0eec2f16420, type: 2}
+  - {fileID: 11400000, guid: ba3d0878bb59945478cea1d58dd29779, type: 2}
+  - {fileID: 11400000, guid: 72e5515ac22718f4995c2b791e22237b, type: 2}
+  - {fileID: 11400000, guid: 3353b5fb85f36c14cb0b7cb68069c321, type: 2}
+  - {fileID: 11400000, guid: 2139cef075f3f0044b618ebcd6a548d9, type: 2}
+  - {fileID: 11400000, guid: 2c068a60d15cd564fab26d396c068e8e, type: 2}
+  - {fileID: 11400000, guid: fb610ba90b78d784d8af87fa2c5d5885, type: 2}
+  - {fileID: 11400000, guid: bf3b940db1754ec4cbd4602808ad2441, type: 2}

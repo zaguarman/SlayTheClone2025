@@ -59,6 +59,27 @@ namespace SlayTheClone.Tests {
             SummonFromDeckEffect.QueueRandomSummons(p1, 1, game.ActionsQueue);
             game.Resolve();
             Assert.AreEqual(2, p1.Deck.CardsRemaining, "With the board full nothing is summoned");
+
+            // A discard cost (Social Engineering): random other cards from the hand pay for the card; taken back, they return
+            Fresh();
+            game.SetDecks(game.Fillers(10), game.Fillers(1));
+            var tradeData = game.Spell("Trade", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 3, TargetType.Player));
+            tradeData.discardCost = 2;
+            var trade = game.GiveCard(p1, tradeData);
+            game.ActionsQueue.AddAction(new PlayCardAction(trade, p1, p1));
+            Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount(), "Nothing else in the hand to pay with: it can't be played");
+            game.Run(new DrawCardsAction(p1, 3));
+            int cards = GameAsserts.CountCards(p1);
+            game.ActionsQueue.AddAction(new PlayCardAction(trade, p1, p1));
+            Assert.AreEqual((2, 2), (p1.Hand.Count, p1.SetAside.Count), "Two of the three others are set aside to pay for it");
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1));
+            game.ActionsQueue.CancelPlay(trade);
+            Assert.AreEqual((4, 0), (p1.Hand.Count, p1.SetAside.Count), "Taken back: they come back");
+            game.ActionsQueue.AddAction(new PlayCardAction(trade, p1, p1));
+            game.Resolve();
+            Assert.AreEqual(3, p1.Deck.GetDiscardPilePreview().Count, "Played: the two it cost and the spell itself are discarded...");
+            Assert.AreEqual(4, p1.Hand.Count, "...and it draws 3 (the one card left and the 3 drawn)");
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1));
         }
 
         [UnityTest]

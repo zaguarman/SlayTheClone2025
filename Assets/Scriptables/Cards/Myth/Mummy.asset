@@ -18,6 +18,7 @@ MonoBehaviour:
   cardType: 0
   faction: 1
   artwork: {fileID: 3286163911610860551, guid: edaa295814818e241a7a8fcc1ed1184a, type: 3}
+  discardCost: 0
   effects: []
   designNotes: 'Mechanics test: Hive Mind. A creature that attacks it gains Hive
     Mind, replacing its own ability.'

@@ -18,6 +18,7 @@ MonoBehaviour:
   cardType: 0
   faction: 4
   artwork: {fileID: 3286163911610860551, guid: 3446b5788cd094643a52008eb83d8ae8, type: 3}
+  discardCost: 0
   effects: []
   designNotes: 'Mechanics test: Shell Game (Active, hold Shift as you drag it onto
     a creature): that creature trades places with the one to its right. Moves an

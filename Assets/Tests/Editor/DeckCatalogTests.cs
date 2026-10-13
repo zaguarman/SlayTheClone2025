@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
@@ -28,7 +29,9 @@ namespace SlayTheClone.Tests {
                 CollectionAssert.DoesNotContain(deckFactions, Faction.None, $"{deck.GetDeckName()} has cards without a faction");
                 return string.Join(" + ", deckFactions.OrderBy(f => f));
             }).ToList();
-            CollectionAssert.AllItemsAreUnique(factions, "Each faction, or pair of factions, has a single deck for now");
+            CollectionAssert.IsSubsetOf(Enum.GetValues(typeof(Faction)).Cast<Faction>().Where(f => f != Faction.None).Select(f => f.ToString()).ToList(), factions,
+                "Every faction has a deck of its own");
+            CollectionAssert.AllItemsAreUnique(catalog.Decks.Select(d => d.GetDeckName()).ToList(), "Every deck has its own name (a faction can have more than one: Shadow Ops. - Black Budget)");
 
             foreach (var offered in catalog.Decks) {
                 string name = offered.GetDeckName();

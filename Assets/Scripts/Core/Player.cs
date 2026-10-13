@@ -24,6 +24,8 @@ namespace SlayTheClone {
         /// the old one is discarded, as fresh copies (their Persistent Stat Modifications and ability stay).
         /// </summary>
         List<ICard> ComingBack { get; }
+        /// <summary>Cards set aside from the hand to pay a discard cost, until the card they paid for resolves (or is taken back).</summary>
+        List<ICard> SetAside { get; }
         /// <summary>This player's creatures that are off the board for now (Witness Protection Program), and when they come back.</summary>
         List<GoneDark> GoneDark { get; }
         /// <summary>Puts a card that left play on its way back to the hand: it joins the next Day's hand.</summary>
@@ -62,6 +64,7 @@ namespace SlayTheClone {
         public int ExtraDraws { get; set; }
         public ISet<string> UsedOncePerCombat { get; } = new HashSet<string>();
         public List<ICard> ComingBack { get; } = new List<ICard>();
+        public List<ICard> SetAside { get; } = new List<ICard>();
         public List<GoneDark> GoneDark { get; } = new List<GoneDark>();
 
         public IReadOnlyList<BoardSlot> Battlefield { get; }

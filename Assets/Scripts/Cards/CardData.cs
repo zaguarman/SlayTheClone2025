@@ -12,6 +12,8 @@ namespace SlayTheClone {
         public Faction faction;
         public Sprite artwork;
         public List<CardEffect> effects = new List<CardEffect>();
+        /// <summary>Additional cost: this many other cards from the hand, at random, are given up to play it (0: none).</summary>
+        public int discardCost;
 
         // OnEnable can be used to initialize cardId if null
         public virtual void OnEnable() {

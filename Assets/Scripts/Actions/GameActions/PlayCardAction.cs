@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
@@ -7,6 +8,8 @@ namespace SlayTheClone {
         private readonly ITarget target;
 
         public ICard GetCard() => card;
+        /// <summary>The cards set aside to pay its discard cost: discarded when it resolves, back to the hand if it's taken back.</summary>
+        public List<ICard> Paid { get; } = new List<ICard>();
         public IPlayer GetOwner() => owner;
         public ITarget GetTarget() => target;
 

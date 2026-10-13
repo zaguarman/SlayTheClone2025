@@ -129,6 +129,64 @@ namespace SlayTheClone {
         }
     }
 
+    /// <summary>
+    /// A discard cost (Social Engineering: you need to give information to get some): to play the card, that many other
+    /// cards from the hand, picked at random among those not being played, are set aside. They're discarded when it
+    /// resolves, and come back to the hand if it's taken back. Fewer cards left than the cost: it can't be played.
+    /// </summary>
+    public static class DiscardCost {
+        public static int Of(ICard card) => card?.SourceData?.discardCost ?? 0;
+
+        /// <summary>The cards that could pay for it now: the rest of the hand, minus the cards already being played.</summary>
+        public static List<ICard> Payable(ICard card, IPlayer owner, IActionsQueue queue) {
+            var playing = new HashSet<ICard>(queue?.GetPendingActions().OfType<PlayCardAction>().Select(p => p.GetCard()) ?? Enumerable.Empty<ICard>());
+            return owner?.Hand.Where(c => c != card && !playing.Contains(c)).ToList() ?? new List<ICard>();
+        }
+
+        public static bool CanPay(ICard card, IPlayer owner, IActionsQueue queue) => Payable(card, owner, queue).Count >= Of(card);
+
+        // Called when a play is queued; false: it can't be paid, so it isn't played
+        internal static bool TryPay(PlayCardAction play, IActionsQueue queue) {
+            var card = play.GetCard();
+            var owner = play.GetOwner();
+            int cost = Of(card);
+            if (cost <= 0 || play.Paid.Count > 0 || owner == null || !owner.Hand.Contains(card)) return true;
+            var payable = Payable(card, owner, queue);
+            if (payable.Count < cost) {
+                Log($"{card.Name} needs {cost} other cards from the hand to play; {owner.Name} has {payable.Count}", LogTag.Cards | LogTag.Actions);
+                return false;
+            }
+            for (int i = 0; i < cost; i++) {
+                var paid = payable[GameRandom.Next(payable.Count)];
+                payable.Remove(paid);
+                owner.RemoveFromHand(paid);
+                owner.SetAside.Add(paid);
+                play.Paid.Add(paid);
+            }
+            Log($"{owner.Name} gives up {string.Join(", ", play.Paid.Select(c => c.Name))} to play {card.Name}", LogTag.Cards | LogTag.Actions);
+            return true;
+        }
+
+        internal static void Refund(PlayCardAction play) {
+            var owner = play.GetOwner();
+            foreach (var card in play.Paid) {
+                owner.SetAside.Remove(card);
+                owner.AddToHand(card);
+            }
+            play.Paid.Clear();
+        }
+
+        internal static void Spend(PlayCardAction play) {
+            var owner = play.GetOwner();
+            foreach (var card in play.Paid) {
+                owner.SetAside.Remove(card);
+                owner.Deck.AddToDiscardPile(card);
+            }
+            play.Paid.Clear();
+            if (owner != null) Log($"{owner.Name}'s discard cost is spent", LogTag.Cards);
+        }
+    }
+
     /// <summary>Ghost Army: decoy tokens enter the caster's empty slots, left to right.</summary>
     public class SummonDecoysAction : IGameAction {
         public IPlayer Side { get; }

@@ -150,6 +150,24 @@ namespace SlayTheClone {
         // anywhere. Hard plays first whichever does the most now, then looks again: each spell is weighed knowing the ones before
         private void PlaySpells() {
             var spells = view.Me.Hand.OfType<Spell>().Where(s => !IsQueued(s)).ToList();
+            // A discard cost is paid at random from the rest of the hand: play those last, with what's left over
+            var costly = spells.Where(s => DiscardCost.Of(s) > 0).ToList();
+            if (Level != AILevel.Easy) spells.RemoveAll(costly.Contains);
+            PlayEachSpell(spells);
+            if (Level != AILevel.Easy) PlayCostly(costly);
+        }
+
+        // Each one whose value is worth it, if the leftovers can pay for it
+        private void PlayCostly(List<Spell> costly) {
+            foreach (var spell in costly.OrderByDescending(s => s.Effects.SelectMany(e => e.actions).Where(a => a.actionType == ActionType.Draw).Sum(a => a.value))) {
+                if (!view.Me.Hand.Contains(spell) || !DiscardCost.CanPay(spell, view.Me, queue)) continue; // Given up for another
+                var aim = AimsFor(spell).Select(a => (aim: a, value: SpellValue(spell, a))).OrderByDescending(a => a.value).FirstOrDefault();
+                if (aim.aim == null || aim.value <= 0) continue;
+                Play(spell, aim.aim);
+            }
+        }
+
+        private void PlayEachSpell(List<Spell> spells) {
             if (Level == AILevel.Easy) {
                 foreach (var spell in spells) {
                     var aims = AimsFor(spell).ToList();
@@ -801,6 +819,7 @@ namespace SlayTheClone {
         }
 
         private void Play(ICard card, ITarget aim) {
+            if (!view.Me.Hand.Contains(card)) return; // Given up to pay for another card
             Log($"AI: {view.Me.Name} plays {card.Name} on {aim}", LogTag.Turns);
             queue.AddAction(new PlayCardAction(card, view.Me, aim));
         }

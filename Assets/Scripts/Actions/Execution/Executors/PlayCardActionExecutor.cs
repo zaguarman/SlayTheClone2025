@@ -25,6 +25,7 @@ namespace SlayTheClone {
 
             // The card leaves the hand now and is discarded once it leaves play (see Player.DiscardCard)
             owner.RemoveFromHand(card);
+            DiscardCost.Spend(playAction); // What paid for it goes to the discard pile
 
             if (card is Spell spell) {
                 actionsQueue.AddAction(new PlaySpellAction(spell, owner, target));

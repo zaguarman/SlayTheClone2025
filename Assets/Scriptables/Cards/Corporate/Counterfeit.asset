@@ -18,6 +18,7 @@ MonoBehaviour:
   cardType: 0
   faction: 4
   artwork: {fileID: 3286163911610860551, guid: 6d482ac4afb0b84449d5260923a8ec14, type: 3}
+  discardCost: 0
   effects: []
   designNotes: 'Mechanics test: Wannabe (Active, hold Shift as you drag it onto a
     creature): its Attack, Health and Speed become that creature''s.'

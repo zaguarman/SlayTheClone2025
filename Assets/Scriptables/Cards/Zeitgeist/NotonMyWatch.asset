@@ -18,6 +18,7 @@ MonoBehaviour:
   cardType: 0
   faction: 7
   artwork: {fileID: 3286163911610860551, guid: 207ffaf4c7c12c541bf1311596f89ece, type: 3}
+  discardCost: 0
   effects: []
   designNotes: 'Mechanics test: Safe Space. Each Dawn, it and the friendly creatures
     beside it gain Bless (a ward that stops the next status).'

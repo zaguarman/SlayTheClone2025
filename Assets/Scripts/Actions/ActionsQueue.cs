@@ -215,6 +215,7 @@ namespace SlayTheClone {
         }
 
         public void AddAction(IGameAction action) {
+            if (action is PlayCardAction costly && !DiscardCost.TryPay(costly, this)) return; // Can't pay its discard cost: it isn't played
             if (executing == null && !resolving && IsInstant(action)) {
                 ResolveInstantly(action);
                 return;
@@ -604,6 +605,7 @@ namespace SlayTheClone {
             if (entry == null) return false;
 
             waiting.Remove(entry);
+            if (entry.Action is PlayCardAction taken) DiscardCost.Refund(taken);
             Log($"Cancelled the play of {card.Name} (Queue ID: {QueueId})", LogTag.Actions | LogTag.Cards);
             OnActionsQueued.Invoke();
             gameMediator.NotifyActionsQueueChanged();

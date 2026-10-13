@@ -18,6 +18,7 @@ MonoBehaviour:
   cardType: 0
   faction: 2
   artwork: {fileID: 3286163911610860551, guid: 09f1097cbbbe8ce458f3f3f511133868, type: 3}
+  discardCost: 0
   effects: []
   designNotes: 'Mechanics test: Spray and Pray. Its attacks also hit the creatures
     beside its target, a cone of three slots.'

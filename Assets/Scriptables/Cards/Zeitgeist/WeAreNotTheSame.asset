@@ -19,6 +19,7 @@ MonoBehaviour:
   cardType: 1
   faction: 7
   artwork: {fileID: 3286163911610860551, guid: 40904baf092952d409271ef38787d312, type: 3}
+  discardCost: 0
   effects:
   - effectType: 1
     trigger: 0

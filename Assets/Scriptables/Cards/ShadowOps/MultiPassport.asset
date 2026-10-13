@@ -18,6 +18,7 @@ MonoBehaviour:
   cardType: 0
   faction: 3
   artwork: {fileID: 0}
+  discardCost: 0
   effects: []
   designNotes: 'Off the Books: it arrives as ??? and hits twice as hard until someone
     works out who it is (a Reveal or Revealed). Concealing it again (Smoke And Mirrors)

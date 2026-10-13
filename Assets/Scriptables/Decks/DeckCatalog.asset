@@ -22,6 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 77e785c31491a134cba41678509c8849, type: 2}
   - {fileID: 11400000, guid: c3522f8beee11f2458ea75e8e33bff76, type: 2}
   - {fileID: 11400000, guid: 69b2a19a2eedb3446bd97bd846561b82, type: 2}
+  - {fileID: 11400000, guid: 113f8599b05a8bf429c47b01584700ae, type: 2}
   - {fileID: 11400000, guid: c07df190873e30d4dbddbc62a0322a4b, type: 2}
   - {fileID: 11400000, guid: 92d794a135f4d634e9cc893fd39d6915, type: 2}
   opponents:
@@ -52,6 +53,9 @@ MonoBehaviour:
   - name: Your Inner Critic
     tagline: Knows exactly what to say. Always the worst thing.
     deck: {fileID: 11400000, guid: 69b2a19a2eedb3446bd97bd846561b82, type: 2}
+  - name: Your Deep State Handler
+    tagline: Officially, we don't exist. Unofficially, you lost.
+    deck: {fileID: 11400000, guid: 113f8599b05a8bf429c47b01584700ae, type: 2}
   - name: Your Data Broker
     tagline: Knows where you were last night. Sold it by noon.
     deck: {fileID: 11400000, guid: c07df190873e30d4dbddbc62a0322a4b, type: 2}

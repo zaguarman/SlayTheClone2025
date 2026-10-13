@@ -69,9 +69,20 @@ namespace SlayTheClone {
         }
 
         // Example two-faction decks (Faction Compendium 5, Example Two-Faction Decks): pairs that play well together, 20 cards each.
+        // And Black Budget, a second Shadow Ops. deck made of its newer cards (kills without fingerprints, stolen assets,
+        // staged deaths, decoys, information trades).
         // Panopticon: Digital Society marks the enemy with Heat Signature and Shadow Ops. reveals them, so every random
         // effect finds its target. Prosperity Gospel: Myth's sacrifices feed Corporate's draw engine.
         private static readonly (string Name, string File, string Opponent, string Tagline, string[] Cards)[] PairDecks = {
+            ("Shadow Ops. - Black Budget", "ShadowOpsBlackBudgetDeck",
+                "Your Deep State Handler", "Officially, we don't exist. Unofficially, you lost.", new[] {
+                "Dead Man's Switch", "Dead Man's Switch", "MK Ultra Test Subject", "MK Ultra Test Subject", "Scapegoat",
+                "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Cleaner", "Multi Passport", "Wet Work", "Mole",
+                "False Flag Operation", "Never Let Them Know Your Next Move", "He Didn't Kill Himself", "Coup d'État", "Frame Job",
+                "Ghost Army", "Sabotage", "Witness Protection Program", "Extraction", "Fell Out of a Window", "Death By \"Natural Causes\"",
+                "Operation Paperclip", "HAARP", "Devil's Breath", "Asset Recruitment", "Glomar Response",
+                "Social Engineering", "Bilderberg Membership", "Dead Drop",
+            }),
             ("Digital Society & Shadow Ops. - Panopticon", "PanopticonDeck",
                 "Your Data Broker", "Knows where you were last night. Sold it by noon.", new[] {
                 "Meta Group Chat", "Keyboard Warrior", "NPC", "Chronically Online", "Catfish", "Conspiracy Theorist",
@@ -786,6 +797,28 @@ namespace SlayTheClone {
                 SetTrend(Trend.FreakWeather, 3))
                 .NotInStarterDeck()
                 .Picture("A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy tent miles away, a technician in a parka sipping coffee by the control panel."),
+            // Information trades: you need to give information to get some. Discard now, draw more with the next hand
+            Spell("Social Engineering", TargetType.Player,
+                "Tell them one secret and they'll tell you two.",
+                "Discard 1 (a random other card from your hand, given up to play this), then draw 2 with the next Day's hand.",
+                Draw(2))
+                .Discarding(1)
+                .NotInStarterDeck()
+                .Picture("A smiling man in a hi-vis vest with a clipboard and a fake lanyard holding a door open for a whole office of employees, each one handing him their badge and password on a sticky note as they pass."),
+            Spell("Bilderberg Membership", TargetType.Player,
+                "Membership fee: one secret a year. Benefits: all of theirs.",
+                "Discard 2 (random other cards from your hand, given up to play this), then draw 4 with the next Day's hand.",
+                Draw(4))
+                .Discarding(2)
+                .NotInStarterDeck()
+                .Picture("A candlelit dining hall in an alpine hotel, a long table of old men in dinner jackets trading sealed envelopes across the silverware, a doorman outside the window turning away the press."),
+            Spell("Dead Drop", TargetType.Player,
+                "Leave the package under the third bench. Take the other one. Don't look inside either.",
+                "Discard 3 (random other cards from your hand, given up to play this), then draw 5 with the next Day's hand.",
+                Draw(5))
+                .Discarding(3)
+                .NotInStarterDeck()
+                .Picture("A park bench in autumn, a man in a trench coat feeding pigeons while sliding a hollowed-out brick behind him with his heel, another man on the next bench reading an upside-down newspaper."),
             Creature("MK Ultra Test Subject", 4, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
@@ -1111,6 +1144,7 @@ namespace SlayTheClone {
             public int CopyCount = 1;
             public bool Extra; // Not in its faction's starter deck (it's full): in the Mechanics Test deck and the deck builder
             public bool IsToken; // Made by an effect (Ghost Army's decoys), never in a deck
+            public int DiscardCost; // Additional cost: other cards from the hand, at random, given up to play it
             public string DisguiseName; // The card the other side sees it as, until it's revealed
             public Faction? ShownFaction; // A fake card's frame: the faction it pretends to be from
 
@@ -1154,6 +1188,12 @@ namespace SlayTheClone {
             public CardDef FakeFace(Faction looksLike) {
                 Extra = true;
                 ShownFaction = looksLike;
+                return this;
+            }
+
+            // Discard N: an additional cost, N random other cards from the hand
+            public CardDef Discarding(int cards) {
+                DiscardCost = cards;
                 return this;
             }
 
@@ -1383,6 +1423,7 @@ namespace SlayTheClone {
             asset.designNotes = card.Notes;
             asset.artDescription = card.ArtDescription;
             asset.faction = card.ShownFaction ?? faction;
+            asset.discardCost = card.DiscardCost;
             asset.SetEffects(card.Effects);
             switch (asset) {
                 case CreatureCardScriptableObject creature:

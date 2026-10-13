@@ -49,7 +49,11 @@ namespace SlayTheClone {
             }
 
             string keywordLine = keywords.Count > 0 ? string.Join(", ", keywords) : "";
-            return string.Join("\n", new[] { keywordLine }.Concat(sentences).Where(line => !string.IsNullOrEmpty(line)));
+            // An additional cost comes first, like Magic's: "Discard 2: give up 2 random other cards from your hand to play this"
+            string cost = data.discardCost > 0
+                ? $"{Keywords.Link("Discard Cost", $"Discard {data.discardCost}")}: give up {data.discardCost} random other card{(data.discardCost == 1 ? "" : "s")} from your hand to play this"
+                : "";
+            return string.Join("\n", new[] { cost, keywordLine }.Concat(sentences).Where(line => !string.IsNullOrEmpty(line)));
         }
 
         /// <summary>The rules text of these effects alone (no keyword line for the card's movement or ability).</summary>

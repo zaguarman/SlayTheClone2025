@@ -12,6 +12,11 @@ namespace SlayTheClone {
 
             int initialHandCount = player.Hand.Count;
             player.DiscardHand();
+            // Paid for a card that never resolved (a Watchdog nullified it): spent all the same
+            foreach (var card in player.SetAside.ToList()) {
+                player.SetAside.Remove(card);
+                player.Deck.AddToDiscardPile(card);
+            }
 
             // Cards on their way back to the hand join the new one; past the hand limit they go to the discard pile
             foreach (var card in player.ComingBack.ToList()) {

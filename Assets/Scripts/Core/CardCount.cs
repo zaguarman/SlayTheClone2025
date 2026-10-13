@@ -10,7 +10,7 @@ namespace SlayTheClone {
         public static int Of(IPlayer player) {
             bool Mine(ICreature c) => c != null && !c.IsToken && (c.DeckOwner ?? c.Owner) == player; // A token is nobody's card
             var sides = new[] { player, player.Opponent }.Where(p => p != null).ToList();
-            return player.Deck.CardsRemaining + player.Hand.Count + player.Deck.GetDiscardPilePreview().Count + player.ComingBack.Count
+            return player.Deck.CardsRemaining + player.Hand.Count + player.Deck.GetDiscardPilePreview().Count + player.ComingBack.Count + player.SetAside.Count
                 + sides.SelectMany(p => p.Battlefield).Count(s => Mine(s.OccupyingCreature))
                 + sides.SelectMany(p => p.GoneDark).Count(g => Mine(g.Creature));
         }
