@@ -1566,6 +1566,7 @@ Card Game Factions Overview
 			Grim Reaper
 			Gudea (the oldest known depicted person)
 			Here Be Dragons (art: an ASCII-art dragon, like the reference given)
+			Holy War
 			Luxor
 			Mithril
 			Mox Nox (Latin: "soon it will be night")
@@ -1583,6 +1584,7 @@ Card Game Factions Overview
 			Concertina Wire
 			Crossing the Rubicon
 			Digital Money (state-controlled)
+			Economic War (sanctions and tariffs instead of tanks)
 			Enhanced Interrogation (torture under the Bush administration)
 			Everybody Is Equal Before the Law
 			Fukuryu (stealth diver carrying explosives)
@@ -1733,12 +1735,14 @@ Card Game Factions Overview
 			It's About Sending a Message (tagged Zeitgeist; the Joker)
 			It's All Disco, Baby (tagged Zeitgeist; Disco Elysium)
 			Ladies First
+			Listen Kid (an old-timer's unasked-for life advice)
 			Lost Generation
 			Melancholy
 			Mexican Telenovela
 			Morning Routine
 			Nevermind (tagged Zeitgeist; Nirvana)
 			Nuclear Summer (the opposite of a nuclear winter)
+			Ol' Reliable (the one thing that always works, used again)
 			Passive Smoker (art: a guy getting screwed from behind while smoking)
 			Prince Charles Paradox (the intergenerational wealth problem)
 			Real Life (good graphics, but a long tutorial)

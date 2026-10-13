@@ -80,6 +80,10 @@ STILL OPEN
     • Changed: Keyboard Warrior went from Retaliate 1 to Counterattack (same 1 damage, its Attack). A fixed-damage answer is still possible in the data and reads "Retaliate: 1 damage to it".
     • Question: should spells and abilities that damage it be answered too?
 
+23. Bouncing statuses back (2026-10-13)
+    • Done: the ability already existed as Return to Sender (on Supreme Court): enemy statuses bounce back to the creature that sent them. A status from a spell used to go to the caster's weakest creature; now it goes to a random enemy creature (the one with the most Heat Signature first), as you described. No U (stat changes) still bounces a spell's change to the caster's weakest creature.
+    • Question: should No U pick at random too, or should the status bounce be a separate new ability?
+
 22. The new building blocks (2026-10-13)
     • Done: each mechanic works as an ability, a trigger or a spell. Abilities: Bodyguard (protect), Wannabe (copy stats), Credit Grab (steal stat raises, once per combat), Spray and Pray (cone of three), Chain Mail (chained hits), Double Tap (attacks twice), Shell Game (switch places), Safe Space (status wards). Effects any card can use: the statuses Untouchable and Cooldown, copy stats, steal stat raises, swap places, gain an ability. One card each, in the Mechanics Test deck and the deck builder.
     • Choices made, to check:
