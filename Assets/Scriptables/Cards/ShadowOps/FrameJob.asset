@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The fingerprints were his. We checked. We put them there.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: e83a8cda28e49e445aa3ad21cd1094b1, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

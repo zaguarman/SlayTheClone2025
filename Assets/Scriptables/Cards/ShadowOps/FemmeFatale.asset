@@ -17,7 +17,7 @@ MonoBehaviour:
   description: She didn't kill him. She just held him very, very close.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 59ea1249d6c4d8b408c77753925b255a, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

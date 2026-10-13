@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Nothing personal. Strictly a line item.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 92d750823085e634ab00b1df5de8ab29, type: 3}
   discardCost: 0
   singleUse: 0
   effects: []

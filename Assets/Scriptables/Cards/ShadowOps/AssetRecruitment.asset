@@ -17,7 +17,7 @@ MonoBehaviour:
   description: We'll double your salary. Or tell your wife. Your choice.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 7c6b9039ee0a9fe49b822a81ba511b49, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

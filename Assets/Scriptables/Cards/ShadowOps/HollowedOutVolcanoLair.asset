@@ -18,7 +18,7 @@ MonoBehaviour:
     pending.'
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 53d947a9c4f671a4ba9fe74c72f8a5a7, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

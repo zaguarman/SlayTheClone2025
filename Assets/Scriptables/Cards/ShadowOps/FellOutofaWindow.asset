@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Tragic. Third one this month. Must be the windows.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 808833653e946bc4ab81bc14fdaa9cd3, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

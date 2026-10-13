@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Everyone gets a medal. He gets all of them.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 0f0563a1f1527ec4f89e593af1fdc0fa, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

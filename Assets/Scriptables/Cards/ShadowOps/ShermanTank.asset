@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Thirty tons of steel. Allegedly.
   cardType: 0
   faction: 2
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 38c2b26d5bddbb04ea516578cdcda61b, type: 3}
   discardCost: 0
   singleUse: 0
   effects: []

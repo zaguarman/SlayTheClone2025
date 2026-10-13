@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Not today. Probably not tomorrow. Ask again on Thursday.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 3ae8a45fd4e5d7942bd1049456d06df0, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

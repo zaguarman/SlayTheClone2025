@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Someone filled the cannon with sand. Someone else lit it.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 32f4fbc57bdfef645ba84da961589140, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

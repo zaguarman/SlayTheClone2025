@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'Weather forecast: 100% chance of lightning, localized, on purpose.'
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 75345cabd729baf49ac7735d0d16d6ec, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

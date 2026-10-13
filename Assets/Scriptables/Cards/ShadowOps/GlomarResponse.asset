@@ -17,7 +17,7 @@ MonoBehaviour:
   description: We can neither confirm nor deny the existence of this card.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 0d33ef70fb6626e4c88db266f3c71849, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

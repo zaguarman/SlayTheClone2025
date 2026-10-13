@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'Pressure: 2 bar. Threat level: classified.'
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 1a084ea72ab2bca4ab45bf60d9b9f9da, type: 3}
   discardCost: 0
   singleUse: 0
   effects: []

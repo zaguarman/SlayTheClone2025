@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Tell them one secret and they'll tell you two.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 023e609dd6f88704c986f845040e6ec2, type: 3}
   discardCost: 1
   singleUse: 0
   effects:

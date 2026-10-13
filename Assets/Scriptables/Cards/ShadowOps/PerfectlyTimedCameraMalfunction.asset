@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Tragic. The one minute the cameras were down.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 5211c77f12f9f9345ac10e4950340391, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

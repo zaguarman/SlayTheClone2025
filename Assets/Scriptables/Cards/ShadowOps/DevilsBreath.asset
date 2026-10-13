@@ -17,7 +17,7 @@ MonoBehaviour:
   description: One puff of scopolamine and he helped carry his own safe to our van.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: f034a2ab5a7bccd4aafc8fc49144518b, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: One pulse. Every screen, every pacemaker, every smart fridge. Off.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: ce5526c9414e48543ad8f086d6706a12, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

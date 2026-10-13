@@ -18,7 +18,7 @@ MonoBehaviour:
     bomb.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 276323cd1eee83142b371236b756edad, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

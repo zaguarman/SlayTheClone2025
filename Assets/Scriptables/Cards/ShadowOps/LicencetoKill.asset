@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Paperwork for murder, signed in triplicate. Valid until used.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 7f40f044aee7f734d8ec349b3297073c, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Mission accomplished. Or aborted. Details are classified.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: cfef557c369d9fa4dab6bea80382cb32, type: 3}
   discardCost: 0
   singleUse: 0
   effects:

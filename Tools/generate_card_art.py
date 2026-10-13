@@ -4055,6 +4055,764 @@ def mk_ultra_test_subject():
 CARDS["ShadowOps"].update({"MKUltraTestSubject": mk_ultra_test_subject})
 
 
+# ---------------------------------------------------------------- Shadow Ops.: Black Budget and Double-O Section (2026-10-14)
+
+def room(top, bottom, floor, floor_y=150):
+    """A plain room: a wall in a gradient and a floor from floor_y down."""
+    defs = lin("bg", [top, bottom])
+    return defs, rect(0, 0, W, H, "url(#bg)") + rect(0, floor_y, W, H - floor_y, floor)
+
+
+def stamp(text, cx, cy, size, color, angle=-12):
+    """A rubber stamp's mark: the word in a box, at an angle."""
+    w, h = len(text) * size * 0.95 + 10, size + 10
+    return group(rect(cx - w / 2, cy - h / 2, w, h, "none", f'stroke="{color}" stroke-width="2.5"')
+                 + lettering(text, cx, cy - size / 2, size, color, width=1.6), f"rotate({angle} {cx} {cy})")
+
+
+def paper(x, y, w, h, lines=4, color="#f6f2e6", ink="#8a8a8a"):
+    out = rect(x, y, w, h, color, 'stroke="#b8b0a0" stroke-width="1"')
+    for i in range(lines):
+        out += rect(x + 6, y + 8 + i * 7, max(4, w - 12 - (i % 2) * 10), 2.5, ink)
+    return out
+
+
+def agent(cx, base, s=1.0, skin=SKIN[0], face="flat", glasses="shades", hair="#1a1a1a", hat=None, suit="#22262e", tie="#111"):
+    """A man in a dark suit, white shirt and narrow tie (sunglasses unless told otherwise)."""
+    out = person(cx, base, s, skin, suit, face=face, hair=hair, hat=hat, glasses=glasses)
+    out += poly([(cx - 8 * s, base - 41 * s), (cx + 8 * s, base - 41 * s), (cx, base - 22 * s)], "#f4f4f4")
+    out += poly([(cx - 2.5 * s, base - 38 * s), (cx + 2.5 * s, base - 38 * s), (cx + 3.5 * s, base - 24 * s), (cx, base - 20 * s), (cx - 3.5 * s, base - 24 * s)], tie)
+    return out
+
+
+def pistol(x, y, s=1.0, color="#2a2a2e", silencer=False):
+    """A pistol pointing right, its grip's top left corner at (x, y)."""
+    out = rect(x, y - 6 * s, 30 * s, 8 * s, color, 'rx="2"') + poly([(x, y), (x + 9 * s, y), (x + 6 * s, y + 16 * s), (x - 3 * s, y + 16 * s)], color)
+    if silencer:
+        out += rect(x + 29 * s, y - 5 * s, 22 * s, 6 * s, "#4a4a50", 'rx="2"')
+    return out
+
+
+def dead_mans_switch():
+    # A sweating man in a cheap hotel room, his thumb on a big red button wired to his wrist, a briefcase of documents and
+    # dynamite at his feet, DO NOT DISTURB on the door
+    defs, body = room("#7a6a44", "#4a3e28", "#5a3a2a")
+    for x in range(0, W, 22):
+        body += rect(x, 0, 8, 150, "#6a5a38", 'opacity="0.6"')
+    body += rect(268, 30, 64, 124, "#8a5a32", 'stroke="#4a2e18" stroke-width="3"') + circle(322, 96, 3, "#d4af37")
+    body += rect(276, 58, 48, 26, "#f4f0e0", 'stroke="#333" stroke-width="1"')
+    body += lettering("DO NOT", 300, 62, 6, "#c0392b", width=1.2) + lettering("DISTURB", 300, 72, 6, "#c0392b", width=1.2)
+    body += paper(26, 128, 40, 30, 3) + rect(24, 150, 100, 40, "#3a2618", 'rx="4"') + rect(24, 144, 100, 10, "#4a3020", 'rx="3"')
+    for i in range(4):
+        body += rect(68 + i * 13, 122, 10, 30, "#c0392b", 'rx="2"') + stroke(f"M{73 + i * 13} 122 l 2 -6", "#ddd", 1.2)
+    body += rect(66, 132, 54, 4, "#222")
+    body += person(176, 200, 1.3, SKIN[0], "#d8d0b0", face="frown", hair="#4a3a2a", brows="sad", tie="#7a2a2a")
+    body += sweat(152, 98, 1.2) + sweat(202, 94, 1.0) + sweat(196, 112, 0.8)
+    body += stroke("M206 172 L240 120", "#d8d0b0", 15) + circle(244, 112, 10, SKIN[0])
+    body += rect(232, 116, 24, 6, "#555") + rect(230, 92, 28, 14, "#222", 'rx="3"') + ellipse(244, 92, 11, 6, "#e02a2a")
+    body += ellipse(246, 88, 6, 4, SKIN[0])
+    body += stroke("M232 118 C 200 170 150 110 118 132", "#d0342c", 2)
+    return svg(defs, body)
+
+
+def fell_out_of_a_window():
+    # A grand window flung open on onion domes in the snow, curtains billowing, a tiny man in a suit falling past outside,
+    # a man in a tracksuit calmly closing it
+    defs, body = room("#d8c08a", "#a88a58", "#6a4a2a", 176)
+    defs += lin("night", ["#1a2a5a", "#5a6a9a"])
+    body += rect(150, 14, 150, 156, "url(#night)", 'stroke="#f4ecd8" stroke-width="8"')
+    for x, h in ((166, 40), (206, 56), (250, 46), (284, 36)):
+        body += rect(x - 9, 170 - h, 18, h, "#2a3050") + ellipse(x, 170 - h, 11, 12, "#3a5a8a") + stroke(f"M{x} {158 - h} l 0 -10", "#d4af37", 2)
+    for i in range(26):
+        body += circle(156 + (i * 37) % 140, 20 + (i * 53) % 140, 1.4, "#ffffff", 'opacity="0.8"')
+    body += group(person(0, 0, 0.32, SKIN[0], "#22262e", face="shout", hair="#333", tie="#111"), "translate(250 70) rotate(160)")
+    body += stroke("M236 40 l -4 -10 M262 46 l 6 -8", "#ffffff", 1.5, 'opacity="0.7"')
+    body += path("M150 14 C 120 60 150 110 118 170 L150 170 Z", "#a01e2a") + path("M300 14 C 330 50 304 120 336 170 L300 170 Z", "#a01e2a")
+    body += poly([(150, 18), (200, 30), (200, 160), (150, 166)], "#c8d8e8", 'opacity="0.45" stroke="#f4ecd8" stroke-width="4"')
+    body += person(84, 200, 1.25, SKIN[0], "#1f3fa0", face="flat", hair="#2a2a2a")
+    body += stroke("M50 200 L58 160 M118 200 L110 160", "#ffffff", 3)
+    body += stroke("M112 168 L150 120", "#1f3fa0", 13) + circle(152, 116, 8, SKIN[0])
+    return svg(defs, body)
+
+
+def coup_detat():
+    # A general in a peaked cap and mirrored sunglasses settling into the still-warm presidential chair, two soldiers swapping
+    # the president's portrait for his own, tanks through the window
+    defs, body = room("#e8dcc0", "#c0a878", "#7a2a2a")
+    defs += lin("sky", ["#9ac8e8", "#e8e0c8"])
+    body += rect(250, 20, 86, 90, "url(#sky)", 'stroke="#f4ecd8" stroke-width="6"') + rect(250, 86, 86, 24, "#8a9a6a")
+    body += tank(276, 92, 0.45) + tank(316, 98, 0.35)
+    body += group(rect(-24, -30, 48, 60, "#d4af37") + rect(-18, -24, 36, 48, "#9ab0c8") + person(0, 24, 0.5, SKIN[0], "#22262e", face="smile", hair=OLD_HAIR, tie="#7a2a2a"),
+                  "translate(66 62) rotate(-18)")
+    body += rect(126, 22, 52, 64, "#d4af37") + rect(132, 28, 40, 52, "#c8b88a")
+    body += person(152, 80, 0.55, SKIN[1], "#4a5a3a", face="smirk", hat="peaked", glasses="shades")
+    body += person(30, 200, 0.9, SKIN[1], "#4a5a3a", face="flat", hat="helmet") + stroke("M50 150 L60 70", "#4a5a3a", 9)
+    body += person(220, 200, 0.9, SKIN[2], "#4a5a3a", face="flat", hat="helmet") + stroke("M200 150 L178 86", "#4a5a3a", 9)
+    body += rect(132, 92, 88, 108, "#5a1e1e", 'rx="12" stroke="#d4af37" stroke-width="3"')
+    body += person(176, 200, 1.15, SKIN[1], "#4a5a3a", face="smirk", hat="peaked", glasses="shades")
+    for i in range(3):
+        body += rect(154 + i * 8, 150, 6, 10, ["#c0392b", "#f2c94c", "#2a6aa0"][i])
+    body += rect(100, 176, 152, 24, "#6a3a1a")
+    return svg(defs, body)
+
+
+def operation_paperclip():
+    # A giant paperclip hooking a bespectacled scientist by the collar and lifting him from one flag onto another, rocket
+    # blueprints fluttering out of his pockets
+    defs = lin("bg", ["#c8dcec", "#f4ecd8"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    # Two made-up flags: a grey one with a gear, a blue one with stars
+    for x in (60, 292):
+        body += stroke(f"M{x - 34} 200 L{x - 34} 110", "#6a5a4a", 4)
+    body += rect(28, 112, 64, 42, "#5a5e66") + circle(60, 133, 11, "none", 'stroke="#d8d8d8" stroke-width="5" stroke-dasharray="4 3"')
+    body += rect(260, 112, 64, 42, "#2a4a8a")
+    for i in range(6):
+        body += poly(star_points(270 + (i % 3) * 22, 124 + (i // 3) * 18, 5, 2), "#ffffff")
+    body += stroke("M176 4 L176 34 M160 34 L160 92 C 160 104 192 104 192 92 L192 20 C 192 4 168 4 168 20 L168 84", "#b8c0c8", 6)
+    body += group(person(0, 0, 0.9, SKIN[0], "#f4f4f4", face="frown", hair=OLD_HAIR, glasses="round", brows="sad", tie="#333"),
+                  "translate(176 160) rotate(6)")
+    body += stroke("M160 104 L168 120", "#b8c0c8", 6)
+    body += stroke("M150 150 L120 176 M202 150 L232 176", "#f4f4f4", 9)
+    for x, y, a in ((96, 70, -20), (250, 56, 18), (230, 120, -8)):
+        bp = rect(-18, -12, 36, 24, "#2a5aa0", 'stroke="#ffffff" stroke-width="1"') + stroke("M-10 6 L0 -8 L10 6 Z M-4 6 l 0 4 M4 6 l 0 4", "#ffffff", 1.2)
+        body += group(bp, f"translate({x} {y}) rotate({a})")
+    return svg(defs, body)
+
+
+def false_flag_operation():
+    # A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost
+    # while a film crew records it and a general reads an outrage speech from a card
+    defs = lin("bg", ["#f0c890", "#c8885a"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 160, W, 40, "#8a6a42")
+    body += rect(196, 92, 92, 70, "#a88a5a", 'stroke="#5a4428" stroke-width="2"') + poly([(190, 94), (242, 60), (294, 94)], "#6a4a2a")
+    body += stroke("M300 162 L300 70", "#5a4428", 3) + rect(300, 70, 34, 20, "#2a7a3a")
+    body += flames(244, 96, 5, 18, 40)
+    body += person(150, 200, 0.95, SKIN[0], "#8a2a2a", face="smirk", hair="#333", hat="helmet")
+    body += rect(128, 152, 16, 10, "#f2c94c") + rect(128, 157, 16, 5, "#2a2a8a")
+    body += stroke("M176 172 L210 130", "#8a2a2a", 10) + rect(206, 118, 6, 16, "#6a4a2a") + flames(209, 120, 1, 0, 16)
+    body += rect(14, 104, 44, 30, "#222", 'rx="4"') + circle(28, 100, 9, "#333") + circle(46, 100, 9, "#333") + rect(56, 112, 14, 12, "#444")
+    body += stroke("M22 134 L10 192 M36 134 L36 192 M50 134 L62 192", "#333", 3)
+    body += person(96, 200, 0.75, SKIN[2], "#3a3a3a", face="flat", hat="cap")
+    body += person(330, 200, 0.85, SKIN[0], "#3e4f6a", face="shout", hat="peaked", brows="angry")
+    body += rect(296, 132, 22, 16, "#ffffff", 'stroke="#555" stroke-width="1"')
+    return svg(defs, body)
+
+
+def never_let_them_know_your_next_move():
+    # A row of agents in identical grey suits passing their pistols, knives and grenades down the line to one man at the
+    # end, who disappears under a mountain of weapons with only his sunglasses showing
+    defs, body = room("#3a4250", "#1e232c", "#14181f", 176)
+    for i in range(4):
+        cx = 36 + i * 52
+        body += agent(cx, 200, 0.75, SKIN[i % 3], face="flat", suit="#6a707a")
+        body += stroke(f"M{cx + 18} 168 L{cx + 40} 150", "#6a707a", 7)
+        body += pistol(cx + 34, 146, 0.45) if i % 2 == 0 else rect(cx + 34, 140, 14, 4, "#b8c0c8") + rect(cx + 30, 139, 6, 6, "#4a2a1a")
+    pile = [(252, 190, 0), (300, 188, 30), (276, 170, -20), (316, 166, 60), (246, 160, 90), (292, 150, -40), (270, 136, 10), (306, 132, 120)]
+    body += agent(286, 200, 1.0, SKIN[0], face="flat", suit="#6a707a")
+    for x, y, a in pile:
+        body += group(pistol(-15, 0, 0.8) if a % 20 == 0 else ellipse(0, 0, 9, 11, "#4a5a2a") + rect(-3, -14, 6, 5, "#888"), f"translate({x} {y}) rotate({a})")
+    body += rect(270, 112, 32, 9, "#111", 'rx="3"')
+    return svg(defs, body)
+
+
+def frame_job():
+    # A smiling agent pressing a sleeping man's thumb onto a smoking gun with tweezers, a police lineup board behind them
+    # already labelled with the sleeper's name
+    defs, body = room("#d8d4c8", "#a8a498", "#6a665c", 160)
+    for i, h in enumerate(("7", "6", "5", "4")):
+        y = 24 + i * 22
+        body += stroke(f"M150 {y} L340 {y}", "#555", 1.5) + lettering(h, 140, y - 4, 8, "#555", width=1.2)
+    body += rect(196, 40, 104, 22, "#222") + lettering("SUSPECT", 248, 46, 9, "#f4f4f4", width=1.5)
+    body += rect(0, 150, 170, 50, "#7a5a3a") + rect(4, 128, 92, 28, "#f4f4f4", 'rx="6"')
+    body += person(60, 170, 0.9, SKIN[0], "#5a7aa0", face="closed", hair="#6a4a2a") + zzz(84, 104, 0.7, "#555")
+    body += stroke("M78 156 L110 150", "#5a7aa0", 8) + circle(112, 149, 6, SKIN[0])
+    body += pistol(118, 152, 0.8) + stroke("M146 142 C 150 130 140 124 146 112 C 152 100 144 94 148 84", "#b8b8b8", 2, 'opacity="0.8"')
+    body += agent(250, 200, 1.1, SKIN[1], face="grin", glasses=None, hair="#2a2a2a")
+    body += stroke("M224 160 L150 146", "#22262e", 10) + stroke("M150 146 L116 146 M150 146 L118 152", "#b8c0c8", 2)
+    return svg(defs, body)
+
+
+def devils_breath():
+    # A woman blowing a puff of glittering white powder off her palm into a businessman's face; dazed and smiling, he hands
+    # her his watch, his wallet and the keys to an armored car
+    defs = lin("bg", ["#2a1a3a", "#6a3a5a"]) + rad("puff", [("#ffffff", 0.85), ("#ffffff", 0)])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(7):
+        body += circle(30 + i * 50, 30 + (i * 37) % 40, 3, "#f2c94c", 'opacity="0.6"')
+    body += person(84, 200, 1.15, SKIN[1], "#8a1a3a", face="smirk", hat="bob", brows=None)
+    body += stroke("M108 158 L140 120", "#8a1a3a", 11) + ellipse(146, 114, 12, 5, SKIN[1])
+    body += ellipse(196, 100, 40, 26, "url(#puff)")
+    for i in range(18):
+        body += circle(160 + (i * 29) % 80, 82 + (i * 17) % 38, 1.6, "#ffffff")
+    body += person(270, 200, 1.2, SKIN[0], "#2a3a5a", face="grin", hair="#555", tie="#a02a2a")
+    body += stroke(f"M248 116 q 6 -6 12 0 M264 116 q 6 -6 12 0", "#222", 1.5)
+    body += stroke("M244 164 L212 150", "#2a3a5a", 11)
+    body += circle(204, 150, 7, "#d4af37", 'stroke="#8a6a1a" stroke-width="2"') + rect(198, 156, 20, 14, "#5a3a1a", 'rx="2"')
+    body += circle(222, 170, 4, "none", 'stroke="#c8c8c8" stroke-width="2"') + rect(225, 168, 12, 3, "#c8c8c8") + rect(226, 172, 8, 3, "#c8c8c8")
+    return svg(defs, body)
+
+
+def he_didnt_kill_himself():
+    # A sheet pulled over a body on a morgue gurney, but the toes sticking out wear flip-flops with a fresh tan line, and the
+    # toe tag is a postcard from a tropical island
+    defs, body = room("#c8d4d8", "#98a8b0", "#6a7880", 168)
+    for x in range(0, W, 44):
+        body += rect(x, 0, 42, 100, "none", 'stroke="#aab8c0" stroke-width="1.5"')
+    body += rect(40, 112, 250, 10, "#a8b0b8") + stroke("M60 122 L60 180 M270 122 L270 180", "#8a929a", 4)
+    body += circle(60, 184, 6, "#333") + circle(270, 184, 6, "#333")
+    body += path("M40 112 C 60 70 120 76 160 88 C 200 98 240 88 270 92 L290 112 Z", "#f4f4f4", 'stroke="#c8c8c8" stroke-width="1.5"')
+    for dx in (0, 16):
+        body += ellipse(300 + dx, 98, 9, 16, SKIN[1]) + rect(290 + dx, 108, 22, 5, "#2ab0c0", 'rx="2"') + stroke(f"M{297 + dx} 92 l 5 8 l 5 -8", "#2ab0c0", 2.5)
+        body += ellipse(300 + dx, 94, 7, 3, SKIN[0], 'opacity="0.7"')
+    body += stroke("M312 108 L300 140", "#888", 1.2)
+    card = rect(0, 0, 50, 34, "#ffffff", 'stroke="#888" stroke-width="1"') + rect(3, 3, 44, 20, "#7ad0f0") + rect(3, 18, 44, 5, "#f2d88a")
+    card += stroke("M22 18 C 22 10 20 6 18 4 M22 10 q -8 -6 -12 -2 M22 10 q 6 -8 12 -4", "#2a7a3a", 2) + circle(38, 8, 4, "#ffe45c")
+    body += group(card, "translate(280 140) rotate(-8)")
+    return svg(defs, body)
+
+
+def helicopter(cx, cy, s=1.0, color="#1a1d24"):
+    """A helicopter facing left, its body centred on (cx, cy), the rotor a blur on top."""
+    out = ellipse(cx, cy, 40 * s, 18 * s, color) + rect(cx + 30 * s, cy - 5 * s, 50 * s, 8 * s, color)
+    out += rect(cx + 76 * s, cy - 16 * s, 6 * s, 20 * s, color) + ellipse(cx - 18 * s, cy - 4 * s, 16 * s, 10 * s, "#3a5a7a", 'opacity="0.8"')
+    out += stroke(f"M{cx:.1f} {cy - 18 * s:.1f} L{cx:.1f} {cy - 26 * s:.1f}", color, 4 * s)
+    out += ellipse(cx, cy - 27 * s, 70 * s, 3 * s, "#888", 'opacity="0.6"')
+    out += stroke(f"M{cx - 24 * s:.1f} {cy + 22 * s:.1f} L{cx + 20 * s:.1f} {cy + 22 * s:.1f}", color, 3 * s)
+    return out
+
+
+def extraction():
+    # A black helicopter at night hoisting an agent off a rooftop on a rope ladder, searchlights sweeping, his trench coat
+    # flapping and a briefcase handcuffed to his wrist
+    defs = lin("bg", ["#06080f", "#1d2740"]) + lin("beam", [("#fff7c8", 0.3), ("#fff7c8", 0)])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += poly([(40, 200), (70, 200), (230, 0), (170, 0)], "url(#beam)") + poly([(330, 200), (350, 200), (110, 0), (60, 0)], "url(#beam)")
+    for i in range(14):
+        body += circle((i * 71) % W, (i * 29) % 90, 1, "#ffffff", 'opacity="0.6"')
+    body += rect(0, 168, 200, 32, "#05070d") + rect(220, 150, 132, 50, "#05070d")
+    body += helicopter(190, 36, 1.1)
+    body += stroke("M176 62 L170 150 M186 62 L180 150", "#c8a86a", 2)
+    for y in range(72, 150, 10):
+        body += stroke(f"M{170 + (y - 62) * -0.07:.1f} {y} L{180 + (y - 62) * -0.07:.1f} {y}", "#c8a86a", 2)
+    body += path("M160 120 L148 168 L190 168 L186 118 Z", "#8a6a42")
+    body += person(172, 134, 0.6, SKIN[0], "#8a6a42", face="smirk", hair="#2a2a2a", hat="fedora")
+    body += stroke("M188 124 L202 140", "#8a6a42", 6) + stroke("M204 142 L210 150", "#c8c8c8", 1.5) + rect(200, 150, 22, 16, "#3a2a1a", 'rx="2"')
+    return svg(defs, body)
+
+
+def witness_protection_program():
+    # A man in a terrible fake moustache and a Hawaiian shirt mowing a lawn in a quiet cul-de-sac, his old mugshot pinned to a
+    # corkboard behind the window, a federal agent in a parked car pretending to read a newspaper
+    defs = lin("bg", ["#9ad0f0", "#e8f4f8"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 130, W, 70, "#6ab04a")
+    for x in range(0, W, 18):
+        body += stroke(f"M{x} 160 l 4 -8 l 4 8", "#4a903a", 2)
+    body += rect(20, 50, 130, 84, "#f4e8d0") + poly([(10, 54), (85, 14), (160, 54)], "#a0523a")
+    body += rect(36, 74, 48, 36, "#bfe0f0", 'stroke="#f4f4f4" stroke-width="3"') + rect(42, 80, 36, 24, "#b08a5a")
+    body += rect(48, 84, 14, 16, "#f4f4f4") + circle(55, 90, 4, SKIN[0]) + rect(64, 84, 10, 6, "#f6f2e6")
+    body += rect(100, 84, 30, 50, "#6a4a2a")
+    body += rect(250, 118, 96, 32, "#3a3a44", 'rx="8"') + rect(262, 102, 66, 24, "#3a3a44", 'rx="6"') + rect(268, 106, 54, 16, "#9ab8c8")
+    body += circle(270, 152, 9, "#111") + circle(326, 152, 9, "#111") + rect(282, 104, 28, 14, "#f6f2e6") + circle(300, 110, 4, "#111", 'opacity="0.0"')
+    body += person(196, 186, 0.95, SKIN[0], "#e8443a", face="flat", hair="#7a5a3a")
+    for x, y in ((180, 160), (204, 170), (214, 150), (188, 178)):
+        body += circle(x, y, 4, "#f2d84a") + circle(x + 1, y, 1.5, "#f4f4f4")
+    body += path("M182 129 C 186 124 206 124 210 129 C 204 134 188 134 182 129 Z", "#3a2a1a")
+    body += stroke("M220 168 L250 186", "#7a7a7a", 4) + rect(244, 178, 44, 18, "#c0392b", 'rx="3"') + circle(250, 198, 4, "#111") + circle(282, 198, 4, "#111")
+    return svg(defs, body)
+
+
+def death_by_natural_causes():
+    # A coroner signing a death certificate marked NATURAL CAUSES with a flourish, while on the gurney beside him a tiny dart
+    # with a red feather sticks out of the dead man's neck
+    defs, body = room("#c8d4d8", "#98a8b0", "#6a7880", 168)
+    body += rect(150, 120, 196, 10, "#a8b0b8") + stroke("M170 130 L170 184 M326 130 L326 184", "#8a929a", 4)
+    body += path("M190 120 C 210 96 300 96 340 108 L340 120 Z", "#f4f4f4")
+    body += circle(178, 108, 16, "#d8d0c8") + stroke("M170 104 l 6 0 M182 104 l 6 0", "#555", 1.5)
+    body += stroke("M190 112 L204 98", "#6a4a2a", 1.5) + poly([(204, 98), (212, 88), (214, 96)], "#d0342c")
+    body += person(76, 200, 1.2, SKIN[1], "#f4f4f4", face="smile", hair=OLD_HAIR, glasses="round")
+    body += rect(94, 120, 60, 44, "#f6f2e6", 'stroke="#888" stroke-width="1"')
+    body += lettering("NATURAL", 124, 126, 6, "#333", width=1.1) + lettering("CAUSES", 124, 136, 6, "#333", width=1.1)
+    body += stroke("M100 156 q 10 -8 18 0 t 18 -2 t 12 -4", "#1a3a8a", 1.5)
+    body += stroke("M104 168 L140 150", "#f4f4f4", 9) + stroke("M140 150 L150 138", "#222", 2.5)
+    return svg(defs, body)
+
+
+def asset_recruitment():
+    # A handler in a dim bar sliding a thick envelope and a photograph across the table to a nervous soldier; the photo shows
+    # the soldier with a woman who isn't his wife
+    defs, body = room("#3a2418", "#1a0e08", "#2a1a10", 140)
+    defs += rad("lamp", [("#ffd890", 0.6), ("#ffd890", 0)])
+    body += circle(176, 30, 120, "url(#lamp)") + stroke("M176 0 L176 20", "#222", 2) + path("M160 30 L192 30 L184 20 L168 20 Z", "#6a4a2a")
+    body += agent(70, 170, 1.0, SKIN[0], face="smirk", glasses=None, hat="fedora")
+    body += person(286, 170, 1.0, SKIN[2], "#4a5a3a", face="frown", hat="helmet", brows="sad") + sweat(306, 100)
+    body += rect(20, 150, 312, 50, "#5a3418")
+    body += group(rect(-20, -12, 40, 24, "#d8c8a0", 'stroke="#8a7a5a" stroke-width="1"'), "translate(170 166) rotate(-6)")
+    photo = rect(-18, -14, 36, 28, "#f4f4f4") + rect(-15, -11, 30, 19, "#8ab0c8")
+    photo += circle(-6, -2, 4, SKIN[2]) + circle(6, -3, 4, SKIN[0]) + path("M3 -4 C 2 -12 12 -12 10 -2 Z", "#c0392b")
+    body += group(photo, "translate(210 168) rotate(8)")
+    body += stroke("M96 150 L150 164", "#22262e", 9)
+    return svg(defs, body)
+
+
+def if_i_told_you_id_have_to_kill_you():
+    # A spy in a dark suit leaning in at a cocktail party to whisper into an eager journalist's ear, while under the table his
+    # other hand quietly screws a silencer onto a pistol
+    defs = lin("bg", ["#4a2a5a", "#1a1028"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(8):
+        body += circle(20 + i * 46, 18 + (i % 3) * 10, 3, "#ffe9a0", 'opacity="0.7"')
+    body += person(232, 170, 1.05, SKIN[0], "#7a8a9a", face="grin", hair="#a05a2a")
+    body += rect(250, 130, 30, 20, "#f6f2e6") + rect(254, 134, 22, 2, "#888") + rect(254, 140, 18, 2, "#888")
+    body += agent(150, 176, 1.05, SKIN[1], face="smirk", glasses=None)
+    body += stroke("M176 98 q 10 -4 18 2 M178 92 q 14 -6 24 2", "#ffffff", 1.2, 'opacity="0.6"')
+    # The tablecloth, and under it his hands screwing on the silencer
+    body += rect(60, 150, 232, 22, "#e8e0d0") + rect(60, 150, 232, 5, "#c8c0b0") + rect(60, 172, 232, 28, "#140c1e")
+    body += pistol(100, 186, 1.0, "#3a3a40") + rect(136, 177, 26, 8, "#a8a8b0", 'rx="2"')
+    body += circle(104, 190, 6, SKIN[1]) + circle(150, 182, 6, SKIN[1])
+    body += stroke("M150 182 q 6 -6 10 0", "#ffffff", 1, 'opacity="0.7"')
+    return svg(defs, body)
+
+
+def lone_gunman():
+    # A bewildered young man in a cheap suit shoved in front of flashing press cameras, holding a rifle he has clearly never
+    # seen before, a LONE GUNMAN placard round his neck, while two men in dark suits and hats slip away behind a picket fence
+    # on a grassy knoll
+    defs = lin("bg", ["#8ac0e0", "#d8ecf4"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += path("M190 120 C 240 90 300 92 352 104 L352 200 L190 200 Z", "#6aa04a")
+    for x in range(232, 352, 12):
+        body += rect(x, 92, 6, 26, "#f4f4f4") + poly([(x, 92), (x + 3, 86), (x + 6, 92)], "#f4f4f4")
+    body += rect(228, 100, 124, 4, "#f4f4f4") + rect(228, 110, 124, 4, "#f4f4f4")
+    body += group(agent(0, 0, 0.42, SKIN[0], hat="fedora") + agent(22, 0, 0.42, SKIN[0], hat="fedora"), "translate(300 90)")
+    body += person(120, 200, 1.15, SKIN[0], "#7a6a5a", face="frown", hair="#3a2a1a", brows="sad", tie="#3a3a3a")
+    body += stroke("M60 150 L176 112", "#5a3a1a", 6) + stroke("M150 121 L190 108", "#333", 3)
+    body += stroke("M104 112 L92 150 M136 112 L148 150", "#888", 1.2)
+    body += rect(76, 148, 88, 24, "#f6f2e6", 'stroke="#555" stroke-width="1"') + lettering("LONE GUNMAN", 120, 156, 7, "#c0392b", width=1.4)
+    for x, y in ((20, 60), (44, 100), (210, 150), (16, 140)):
+        body += rect(x, y, 24, 16, "#222", 'rx="3"') + circle(x + 12, y + 8, 5, "#555") + rect(x + 2, y - 5, 8, 5, "#333")
+        body += poly(star_points(x + 6, y - 8, 10, 3, 8), "#fff7b0", 'opacity="0.85"')
+    return svg(defs, body)
+
+
+def glomar_response():
+    # A press officer at a podium with a perfectly blank face, every line on his teleprompter blacked out with thick
+    # redaction bars, reporters raising their hands in vain
+    defs, body = room("#2a3a5a", "#14203a", "#10182a", 160)
+    body += rect(126, 24, 100, 6, "#d4af37")
+    body += agent(176, 150, 1.0, SKIN[0], face="flat", glasses=None, hair="#555")
+    body += rect(146, 124, 60, 76, "#5a3a22", 'stroke="#3a2412" stroke-width="2"') + circle(176, 150, 12, "#d4af37")
+    body += stroke("M160 124 L166 110 M190 124 L184 110", "#222", 2) + circle(166, 108, 3, "#222") + circle(184, 108, 3, "#222")
+    body += rect(250, 30, 86, 70, "#111", 'stroke="#555" stroke-width="3"')
+    for i in range(5):
+        body += rect(258, 40 + i * 11, 70 - (i % 2) * 18, 7, "#000") + rect(258, 40 + i * 11, 70 - (i % 2) * 18, 7, "none", 'stroke="#333" stroke-width="1"')
+    for i, x in enumerate((24, 70, 290, 330)):
+        body += person(x, 200, 0.7, SKIN[i % 4], ["#8a6a42", "#3a5a8a", "#6a3a5a", "#4a6a4a"][i], face="shout", hair="#333")
+        body += stroke(f"M{x + (10 if x < 176 else -10)} 172 L{x + (16 if x < 176 else -16)} 136", ["#8a6a42", "#3a5a8a", "#6a3a5a", "#4a6a4a"][i], 7)
+    return svg(defs, body)
+
+
+def sabotage():
+    # A tank that has just fired, its barrel peeled back like a banana and the crew blackened and blinking, while a saboteur
+    # in coveralls tiptoes away with an empty sack marked SUGAR - FOR THE FUEL TANK
+    defs = lin("bg", ["#c8b890", "#8a7a5a"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 160, W, 40, "#6a5a3a")
+    body += rect(60, 112, 140, 36, "#5a6a3a", 'rx="10"') + rect(96, 86, 72, 32, "#5a6a3a", 'rx="8"') + ellipse(130, 150, 76, 12, "#2a2a2a")
+    for i in range(5):
+        body += circle(76 + i * 28, 150, 9, "#3a3a3a")
+    body += rect(166, 96, 30, 10, "#5a6a3a")
+    for a in (-50, -10, 30, 70):
+        body += group(path("M0 0 C 10 -6 22 -10 30 -4 C 24 0 12 2 0 4 Z", "#6a7a4a"), f"translate(196 101) rotate({a})")
+    body += circle(212, 96, 16, "#555", 'opacity="0.6"') + circle(226, 84, 12, "#666", 'opacity="0.5"')
+    for dx in (0, 26):
+        body += circle(116 + dx, 80, 11, "#2a2a2a") + circle(112 + dx, 78, 3, "#fff") + circle(120 + dx, 78, 3, "#fff")
+    body += person(290, 200, 0.85, SKIN[0], "#2a5a8a", face="smirk", hat="beanie")
+    body += stroke("M306 156 L330 136", "#2a5a8a", 7) + path("M318 112 L344 112 L340 144 L322 144 Z", "#d8c8a0", 'stroke="#8a7a5a" stroke-width="1"')
+    body += lettering("SUGAR", 331, 120, 5, "#5a3a1a", width=1)
+    return svg(defs, body)
+
+
+def ghost_army():
+    # Two soldiers carrying a full-size rubber tank over their heads like a canoe across a muddy field at dawn, a third pumping
+    # up another with a bicycle pump, while an enemy spotter plane circles above
+    defs = lin("bg", ["#f0b080", "#a8c0d8"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 150, W, 50, "#6a5a3a")
+    body += group(tank(0, 0, 1.4, "#6a7a4a"), "translate(120 90)")
+    for x in (92, 148):
+        body += person(x, 200, 0.75, SKIN[0], "#5a6a3a", face="smile", hat="helmet") + stroke(f"M{x - 14} 160 L{x - 18} 108 M{x + 14} 160 L{x + 18} 108", "#5a6a3a", 6)
+    body += group(tank(0, 0, 0.9, "#7a8a5a"), "translate(268 150) scale(1 0.6)")
+    body += person(330, 200, 0.65, SKIN[1], "#5a6a3a", face="grin", hat="helmet") + stroke("M300 190 L300 158 M290 158 L310 158", "#555", 3)
+    body += stroke("M300 186 C 290 186 286 170 268 162", "#222", 2)
+    body += group(path("M-14 0 L14 0 L18 -3 L14 -6 L-12 -4 Z M-4 -4 L2 -14 L6 -4 Z M-4 0 L2 10 L6 0 Z", "#3a3a3a"), "translate(270 30)")
+    body += circle(270, 30, 40, "none", 'stroke="#ffffff" stroke-width="1" stroke-dasharray="3 5" opacity="0.6"')
+    return svg(defs, body)
+
+
+def inflatable_tank():
+    # A rubber tank half-deflated on a field, its barrel drooping, a soldier patching a hole with a bicycle repair kit
+    defs = lin("bg", ["#a8c8e0", "#e8ecd8"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 140, W, 60, "#7a9a4a")
+    body += path("M60 168 C 60 140 80 134 120 132 C 170 130 230 132 250 150 C 262 162 258 172 240 172 L70 174 Z", "#7a8a5a")
+    body += path("M110 134 C 112 112 130 104 160 106 C 186 108 196 118 194 134 Z", "#7a8a5a")
+    body += stroke("M190 120 C 220 122 240 136 252 162", "#7a8a5a", 9) + ellipse(254, 166, 6, 4, "#5a6a3a")
+    body += stroke("M80 160 q 20 -10 40 0 M150 150 q 20 -8 40 2 M130 118 q 14 -6 28 0", "#5a6a3a", 2)
+    body += circle(214, 150, 4, "#222") + rect(206, 142, 16, 10, "#e8d84a", 'rx="2" opacity="0.9"')
+    body += stroke("M214 142 l -10 -14 M218 142 l 6 -12", "#ffffff", 1.2, 'opacity="0.8"')
+    body += person(290, 200, 0.9, SKIN[0], "#5a6a3a", face="frown", hat="helmet", brows="sad")
+    body += stroke("M268 168 L230 152", "#5a6a3a", 8) + rect(250, 178, 26, 16, "#c0392b", 'rx="2"')
+    return svg(defs, body)
+
+
+def sherman_tank():
+    # A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks
+    defs = lin("bg", ["#c8ccd0", "#8a9098"]) + lin("fog", [("#e8ecf0", 0.9), ("#e8ecf0", 0)], 0, 0, 1, 0)
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 150, W, 50, "#5a4a32")
+    body += rect(70, 104, 170, 42, "#4a5a32", 'rx="10"') + rect(110, 72, 90, 40, "#4a5a32", 'rx="12"')
+    body += rect(196, 84, 120, 10, "#4a5a32") + rect(312, 82, 12, 14, "#3a4a28")
+    body += ellipse(155, 150, 96, 16, "#2a2a2a")
+    for i in range(7):
+        body += circle(80 + i * 25, 150, 11, "#3a3a3a", 'stroke="#555" stroke-width="2"')
+    body += poly(star_points(150, 124, 10, 4), "#f4f4f4")
+    for i in range(9):
+        body += circle(40 + (i * 13) % 40, 150 - (i * 11) % 34, 3 + i % 3, "#4a3a22")
+    body += rect(0, 0, 210, H, "url(#fog)")
+    return svg(defs, body)
+
+
+def haarp():
+    # A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy
+    # tent miles away, a technician in a parka sipping coffee by the control panel
+    defs = lin("bg", ["#2a1a4a", "#8a5aa0", "#e8b0c0"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 140, W, 60, "#d8e0e8")
+    for row in range(3):
+        for col in range(7):
+            x, y, s = 20 + col * 24 + row * 8, 108 + row * 14, 0.7 + row * 0.15
+            body += stroke(f"M{x} {y + 30 * s} L{x} {y} M{x - 8 * s} {y + 6 * s} L{x + 8 * s} {y + 6 * s} M{x - 6 * s} {y + 12 * s} L{x + 6 * s} {y + 12 * s}", "#5a5a6a", 1.5)
+    body += bolt(286, 30, 2.4) + stroke("M300 110 l 14 18 M296 112 l -8 14", "#ffe45c", 2)
+    body += poly([(290, 138), (300, 124), (310, 138)], "#c0392b")
+    body += rect(200, 140, 34, 28, "#5a6070", 'rx="3"') + circle(210, 150, 3, "#3ad04a") + circle(222, 150, 3, "#d0342c")
+    body += person(250, 200, 0.85, SKIN[0], "#c0563a", face="smile", hat="hood")
+    body += stroke("M270 172 L284 156", "#c0563a", 8) + rect(280, 144, 12, 14, "#f4f4f4", 'rx="2"') + stroke("M286 140 q 3 -6 0 -10", "#ffffff", 1.2)
+    return svg(defs, body)
+
+
+def social_engineering():
+    # A smiling man in a hi-vis vest with a clipboard and a fake lanyard holding a door open for a whole office of employees,
+    # each one handing him their badge and password on a sticky note as they pass
+    defs, body = room("#d8dce0", "#b0b8c0", "#8a9098", 164)
+    body += rect(20, 30, 90, 134, "#8ab0c8", 'stroke="#555" stroke-width="3"') + rect(30, 40, 70, 114, "#bcd8e8")
+    body += person(140, 200, 1.15, SKIN[1], "#f2d22a", face="grin", hair="#2a2a2a")
+    body += stroke("M116 148 L124 168 M164 148 L156 168", "#b0b0b0", 4) + rect(120, 166, 40, 4, "#c0c0c0")
+    body += badge(140, 168, 0.8)
+    body += stroke("M118 170 L76 140", "#f2d22a", 10) + rect(70, 126, 10, 24, "#888")
+    body += rect(160, 150, 24, 32, "#b08a5a") + rect(163, 154, 18, 24, "#ffffff")
+    for i in range(3):
+        x = 220 + i * 46
+        body += person(x, 200, 0.75, SKIN[(i + 2) % 4], ["#3d5a80", "#6a3a5a", "#2f6b5a"][i], face="smile", tie="#555")
+        body += rect(x - 30, 150, 14, 14, "#f2e84a") + badge(x - 14, 170, 0.5)
+    return svg(defs, body)
+
+
+def bilderberg_membership():
+    # A candlelit dining hall in an alpine hotel, a long table of old men in dinner jackets trading sealed envelopes across the
+    # silverware, a doorman outside the window turning away the press
+    defs, body = room("#5a2a1a", "#2a1208", "#3a1a0a", 150)
+    defs += rad("candle", [("#ffd890", 0.55), ("#ffd890", 0)])
+    body += rect(240, 14, 96, 70, "#9ac0e0", 'stroke="#d4af37" stroke-width="4"') + poly([(240, 84), (276, 40), (300, 70), (318, 50), (336, 84)], "#f4f4f4")
+    body += person(270, 84, 0.4, SKIN[1], "#1a1a1a", face="flat", hat="peaked") + person(318, 84, 0.35, SKIN[0], "#8a6a42", face="shout")
+    for i in range(4):
+        x = 40 + i * 62
+        body += person(x, 168, 0.75, SKIN[i % 2], "#111", face="smirk", hair=OLD_HAIR, tie="#111")
+        body += poly([(x - 6, 128), (x + 6, 128), (x, 136)], "#f4f4f4")
+    body += rect(0, 150, W, 50, "#f4ecd8") + rect(0, 150, W, 6, "#e0d8c0")
+    for x in (70, 170, 260):
+        body += circle(x, 120, 30, "url(#candle)") + rect(x - 3, 128, 6, 22, "#f4ecd8") + ellipse(x, 124, 3, 6, "#ffd84a")
+    for x, a in ((110, -10), (200, 8)):
+        body += group(envelope(0, 0, 1.2, "#f4ecd8") + circle(0, 1, 3, "#a01e2a"), f"translate({x} 162) rotate({a})")
+    for x in (40, 150, 230, 310):
+        body += stroke(f"M{x - 12} 176 l 0 14 M{x + 12} 176 l 0 14", "#c8c8c8", 2) + ellipse(x, 182, 9, 4, "#ffffff")
+    return svg(defs, body)
+
+
+def dead_drop():
+    # A park bench in autumn, a man in a trench coat feeding pigeons while sliding a hollowed-out brick behind him with his
+    # heel, another man on the next bench reading an upside-down newspaper
+    defs = lin("bg", ["#f0c890", "#d8a060"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 150, W, 50, "#8a7a5a")
+    for x, y in ((40, 40), (110, 20), (300, 34)):
+        body += circle(x, y, 26, "#c0562a", 'opacity="0.8"') + stroke(f"M{x} {y + 20} L{x} 150", "#5a3a1a", 5)
+    for i in range(12):
+        body += ellipse((i * 31) % W, 156 + (i * 13) % 40, 4, 2, ["#c0562a", "#d8a030", "#a03a1a"][i % 3])
+    for x0 in (30, 200):
+        body += rect(x0, 128, 120, 8, "#7a4a2a") + rect(x0, 112, 120, 6, "#7a4a2a") + stroke(f"M{x0 + 10} 136 L{x0 + 10} 156 M{x0 + 110} 136 L{x0 + 110} 156", "#333", 3)
+    body += person(90, 132, 0.8, SKIN[0], "#a08a5a", face="flat", hat="fedora")
+    body += stroke("M108 112 L128 124", "#a08a5a", 6) + circle(130, 126, 2, "#d8c890") + circle(134, 130, 2, "#d8c890")
+    for x in (40, 150, 168):
+        body += ellipse(x, 160, 7, 5, "#8a8a9a") + circle(x - 6, 156, 3, "#8a8a9a")
+    body += rect(70, 152, 22, 10, "#a8442a", 'stroke="#6a2a1a" stroke-width="1"') + stroke("M92 156 L104 140", "#3a3a3a", 4)
+    body += person(258, 132, 0.8, SKIN[1], "#3a3a44", face="flat", hat="fedora")
+    body += group(rect(-26, -16, 52, 34, "#f4f4f0", 'stroke="#888" stroke-width="1"') + lettering("SEMIT", 0, -12, 6, "#222", width=1.1)
+                  + rect(-20, 0, 18, 2, "#888") + rect(4, 0, 18, 2, "#888") + rect(-20, 6, 40, 2, "#888"), "translate(258 104) rotate(180)")
+    return svg(defs, body)
+
+
+def multi_passport():
+    # A man in a trench coat fanning out a dozen passports like a hand of cards, each photo the same face in a different
+    # disguise: moustache, glasses, wig, fake beard
+    defs = lin("bg", ["#3a4a5a", "#1a2028"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += person(176, 200, 1.2, SKIN[0], "#a08a5a", face="smirk", hat="fedora")
+    body += path("M150 200 L176 150 L202 200 Z", "#7a6a42")
+    disguises = ["moustache", "glasses", "wig", "beard", "plain", "shades", "moustache"]
+    for i, d in enumerate(disguises):
+        a = -54 + i * 18
+        card = rect(-15, -60, 30, 42, ["#7a1a2a", "#1a3a6a", "#2a5a2a", "#5a2a6a"][i % 4], 'rx="3" stroke="#d4af37" stroke-width="1"')
+        card += rect(-10, -54, 20, 18, "#f4f4f4") + circle(0, -45, 6, SKIN[0])
+        if d == "moustache":
+            card += rect(-4, -42, 8, 2, "#3a2a1a")
+        elif d == "glasses":
+            card += circle(-3, -46, 2.5, "none", 'stroke="#222" stroke-width="1"') + circle(3, -46, 2.5, "none", 'stroke="#222" stroke-width="1"')
+        elif d == "wig":
+            card += path("M-7 -46 C -8 -56 8 -56 7 -46 L7 -38 L4 -46 L-4 -46 L-7 -38 Z", "#e8c86a")
+        elif d == "beard":
+            card += path("M-6 -45 C -6 -36 6 -36 6 -45 C 3 -42 -3 -42 -6 -45 Z", "#4a3a2a")
+        elif d == "shades":
+            card += rect(-6, -48, 12, 3, "#111")
+        body += group(card, f"translate(176 196) rotate({a})")
+    body += circle(162, 150, 7, SKIN[0]) + circle(190, 150, 7, SKIN[0])
+    return svg(defs, body)
+
+
+def wet_work():
+    # A hitman in a dripping raincoat under a black umbrella in the rain, pressing a red TERMINATED stamp onto a personnel file
+    # with a photo clipped to it
+    defs = lin("bg", ["#2a3440", "#141a22"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(40):
+        x, y = (i * 53) % W, (i * 37) % H
+        body += stroke(f"M{x} {y} l -3 10", "#9ab0c8", 1, 'opacity="0.5"')
+    body += path("M70 70 C 80 20 220 20 230 70 Z", "#111") + stroke("M150 30 L150 140", "#333", 3)
+    body += person(150, 200, 1.15, SKIN[0], "#4a5040", face="flat", hat="fedora")
+    body += rect(210, 150, 120, 50, "#4a3020")
+    body += paper(226, 136, 80, 56, 5, "#e8dcc0") + rect(282, 140, 18, 22, "#f4f4f4") + circle(291, 149, 5, SKIN[1])
+    body += stamp("TERMINATED", 262, 168, 8, "#d0342c", -14)
+    body += stroke("M176 170 L228 150", "#4a5040", 10) + rect(222, 128, 14, 18, "#6a4a2a") + rect(218, 144, 22, 6, "#333")
+    for x in (80, 120, 210):
+        body += sweat(x, 76, 0.8)
+    return svg(defs, body)
+
+
+def perfectly_timed_camera_malfunction():
+    # A security monitor showing static and SIGNAL LOST at 02:13, while at the edge of the frame a gloved hand pulls the
+    # camera's cable out of the wall
+    defs, body = room("#2a2e34", "#16181c", "#101214", 176)
+    body += rect(60, 24, 200, 140, "#3a3e44", 'rx="10" stroke="#111" stroke-width="3"') + rect(74, 36, 172, 112, "#888")
+    for i in range(70):
+        x, y = 74 + (i * 37) % 168, 36 + (i * 23) % 108
+        body += rect(x, y, 4 + i % 5, 2, ["#ffffff", "#444", "#bbb"][i % 3])
+    body += rect(100, 74, 120, 34, "#000", 'opacity="0.75"') + lettering("SIGNAL LOST", 160, 80, 7, "#ffffff", width=1.4)
+    body += lettering("02", 140, 94, 6, "#ffffff", width=1.2) + circle(160, 96, 1, "#fff") + circle(160, 100, 1, "#fff") + lettering("13", 180, 94, 6, "#ffffff", width=1.2)
+    body += circle(232, 44, 3, "#d0342c")
+    body += rect(300, 60, 30, 40, "#c8c8c0", 'rx="3"') + rect(308, 70, 6, 10, "#222") + rect(318, 70, 6, 10, "#222")
+    body += stroke("M260 150 C 280 170 300 140 312 110", "#111", 4)
+    body += path("M290 90 C 300 84 318 86 322 96 L330 120 L300 126 Z", "#1a1a1a") + stroke("M300 126 L352 150", "#1a1a1a", 18)
+    return svg(defs, body)
+
+
+def the_golden_gun():
+    # A gold pistol pieced together from a cigarette case, a lighter, a cufflink and a fountain pen, lying on black velvet
+    # beside a single golden bullet engraved with a name
+    defs = rad("bg", [("#3a2a3a", 1), ("#0a060a", 1)], 0.5, 0.5, 0.7) + lin("gold", ["#fff0a0", "#d4af37", "#8a6a1a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(6):
+        body += stroke(f"M{i * 70} 200 C {i * 70 + 30} 140 {i * 70 + 10} 80 {i * 70 + 50} 0", "#2a1a2a", 18, 'opacity="0.5"')
+    gun = rect(0, 0, 76, 26, "url(#gold)", 'rx="5" stroke="#6a4a10" stroke-width="2"')  # The cigarette case
+    gun += rect(74, 6, 92, 12, "url(#gold)", 'rx="5" stroke="#6a4a10" stroke-width="2"') + circle(166, 12, 4, "#3a2a10")  # The pen
+    gun += rect(14, 24, 30, 54, "url(#gold)", 'rx="6" stroke="#6a4a10" stroke-width="2"')  # The lighter, the grip
+    gun += circle(58, 34, 10, "url(#gold)", 'stroke="#6a4a10" stroke-width="2"') + circle(58, 34, 4, "#3a2a10")  # The cufflink
+    gun += stroke("M50 26 C 50 44 64 46 66 30", "#6a4a10", 2)
+    body += group(gun, "translate(70 60) rotate(-6)")
+    body += group(rect(0, 0, 44, 14, "url(#gold)", 'rx="3"') + path("M44 0 C 58 2 58 12 44 14 Z", "url(#gold)") + stroke("M8 7 l 24 0", "#6a4a10", 1.2),
+                  "translate(250 150) rotate(-14)")
+    body += poly(star_points(120, 70, 8, 2), "#ffffff", 'opacity="0.9"') + poly(star_points(290, 146, 6, 1.5), "#ffffff", 'opacity="0.9"')
+    return svg(defs, body)
+
+
+def die_another_day():
+    # A spy in a torn tuxedo surfing a towering wave on a car door past a collapsing ice palace, checking his wristwatch
+    defs = lin("bg", ["#9ad0f0", "#e8f4fa"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x, h in ((240, 90), (270, 120), (300, 100), (330, 70)):
+        body += poly([(x - 18, 150), (x, 150 - h), (x + 18, 150)], "#d8f0ff", 'stroke="#9ac8e0" stroke-width="2"')
+    for x, y in ((262, 60), (298, 40), (316, 80)):
+        body += poly([(x, y), (x + 8, y + 4), (x + 4, y + 12)], "#bfe4f8")
+    body += path("M0 200 L0 110 C 40 60 120 30 180 60 C 140 60 110 80 120 110 C 160 100 200 120 230 150 L352 160 L352 200 Z", "#1a6aa0")
+    body += path("M120 110 C 110 80 140 60 180 60 C 160 70 150 90 160 104 Z", "#e8f8ff")
+    body += group(rect(-36, -6, 72, 12, "#7a8a9a", 'rx="4"') + rect(-30, -4, 20, 8, "#9ac8e0") + circle(24, 0, 2, "#333"), "translate(170 150) rotate(-10)")
+    body += person(170, 140, 0.75, SKIN[0], "#111", face="flat", hair="#2a2a2a", tie="#111")
+    body += poly([(156, 110), (164, 116), (158, 124)], "#f4f4f4") + stroke("M146 118 l 8 6 M188 114 l -6 8", "#f4f4f4", 2)
+    body += stroke("M190 112 L204 100", "#111", 7) + circle(206, 98, 5, SKIN[0]) + circle(200, 104, 3.5, "#d4af37")
+    body += stroke("M150 114 L132 126", "#111", 7)
+    for i in range(8):
+        body += circle(40 + i * 30, 140 + (i * 7) % 14, 3, "#ffffff", 'opacity="0.8"')
+    return svg(defs, body)
+
+
+def licence_to_kill():
+    # A civil servant in sleeve garters at a cluttered desk stamping a laminated LICENCE TO KILL card with a smirking agent's
+    # passport photo, a tray of forms marked 00 beside him
+    defs, body = room("#c8c0a0", "#9a9070", "#6a5a3a", 150)
+    body += rect(240, 20, 90, 60, "#f4f0e0", 'stroke="#555" stroke-width="2"') + lettering("00", 285, 36, 18, "#1a1a1a", width=3)
+    body += person(100, 160, 1.0, SKIN[0], "#f4f4f4", face="flat", hair=OLD_HAIR, glasses="round", tie="#4a5a6a")
+    body += rect(72, 132, 10, 6, "#c0392b") + rect(118, 132, 10, 6, "#c0392b")
+    body += rect(0, 150, W, 50, "#7a5a3a")
+    card = rect(0, 0, 96, 56, "#e8f0f8", 'rx="6" stroke="#9ab0c8" stroke-width="2"') + rect(6, 8, 26, 32, "#ffffff", 'stroke="#888" stroke-width="1"')
+    card += circle(19, 20, 7, SKIN[0]) + stroke("M14 23 q 6 3 10 -2", "#222", 1.2) + rect(12, 12, 14, 3, "#2a2a2a")
+    card += lettering("LICENCE", 64, 10, 6, "#1a3a6a", width=1.2) + lettering("TO KILL", 64, 22, 6, "#1a3a6a", width=1.2) + rect(40, 36, 48, 3, "#888")
+    body += group(card, "translate(150 150) rotate(-4)")
+    body += stroke("M124 140 L176 112", "#f4f4f4", 9) + rect(172, 92, 14, 18, "#6a4a2a") + rect(166, 108, 26, 8, "#333")
+    for i in range(4):
+        body += rect(262, 162 - i * 6, 64, 6, "#f4f0e0", 'stroke="#aaa" stroke-width="1"')
+    body += rect(258, 168, 72, 14, "#5a5a6a")
+    return svg(defs, body)
+
+
+def shaken_not_stirred():
+    # A bartender shaking a cocktail shaker while explosions rock the casino behind him, an agent in a tuxedo calmly waiting at
+    # the bar for his martini, not a hair out of place
+    defs = lin("bg", ["#5a1a1a", "#1a0a0a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for cx, cy, r in ((80, 60, 40), (270, 50, 34), (180, 30, 24)):
+        body += circle(cx, cy, r, "#ff8a2a", 'opacity="0.8"') + circle(cx, cy, r * 0.6, "#ffd84a") + poly(star_points(cx, cy, r * 1.3, r * 0.7, 9), "#ff5a1a", 'opacity="0.5"')
+    body += person(100, 160, 0.95, SKIN[1], "#f4f4f4", face="shout", hair="#333", brows="sad")
+    body += poly([(88, 124), (100, 130), (88, 136)], "#111") + poly([(112, 124), (100, 130), (112, 136)], "#111")  # His bow tie
+    for dx in (-30, 30):
+        body += stroke(f"M{100 + dx} 140 L{100 + dx * 1.1} 96", "#f4f4f4", 8)
+    body += rect(92, 70, 16, 30, "#c8c8d0", 'rx="4"') + stroke("M84 76 l -8 -4 M116 76 l 8 -4 M84 90 l -8 2 M116 90 l 8 2", "#ffffff", 1.5)
+    body += rect(0, 150, W, 50, "#3a1a0a") + rect(0, 146, W, 8, "#6a3a1a")
+    body += agent(260, 200, 1.1, SKIN[0], face="smirk", glasses=None, tie="#111")
+    body += poly([(250, 152), (262, 152), (256, 160)], "#111")
+    body += path("M196 120 L220 120 L208 134 Z", "#e8f4fa", 'opacity="0.8"') + stroke("M208 134 L208 148 M200 148 L216 148", "#c8d8e0", 2) + circle(212, 124, 3, "#6a9a3a")
+    return svg(defs, body)
+
+
+def golden_eye():
+    # A satellite dish shaped like a golden eye in orbit firing a ripple of light at a city at night; below, every window goes
+    # dark at once and a man's toaster pops out smoking
+    defs = lin("bg", ["#02040c", "#141a3a"]) + lin("gold", ["#fff0a0", "#d4af37", "#8a6a1a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(20):
+        body += circle((i * 83) % W, (i * 37) % 80, 1, "#ffffff", 'opacity="0.7"')
+    body += ellipse(80, 50, 46, 26, "url(#gold)", 'stroke="#6a4a10" stroke-width="2"') + circle(80, 50, 16, "#1a3a6a") + circle(80, 50, 7, "#000")
+    body += circle(76, 46, 3, "#ffffff") + rect(118, 44, 30, 12, "#888") + rect(148, 36, 36, 28, "#2a4a8a", 'stroke="#aaa" stroke-width="1"')
+    for r in (40, 70, 100, 130):
+        body += path(f"M{80 + r * 0.6:.0f} {50 + r * 0.6:.0f} A {r} {r} 0 0 0 {80 + r:.0f} {50 + r * 0.2:.0f}", "none", 'stroke="#9ad8ff" stroke-width="3" opacity="0.6"')
+    for x, w, h in ((150, 40, 70), (194, 30, 96), (228, 44, 60), (276, 36, 84), (316, 36, 50)):
+        body += rect(x, H - h, w, h, "#1a1e2a")
+        for wy in range(H - h + 8, H - 8, 14):
+            body += rect(x + 6, wy, 6, 7, "#2a2e3a") + rect(x + w - 12, wy, 6, 7, "#2a2e3a")
+    body += rect(20, 160, 60, 40, "#5a4a3a") + rect(30, 150, 36, 22, "#b8c0c8", 'rx="4"') + rect(38, 140, 8, 14, "#d8a060") + rect(50, 138, 8, 16, "#d8a060")
+    body += stroke("M44 136 q -6 -10 2 -18 M54 134 q 6 -12 -2 -20", "#888", 3, 'opacity="0.8"')
+    return svg(defs, body)
+
+
+def femme_fatale():
+    # A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in
+    # the chair beside her is squeezed between her crossed legs, his medals popping off
+    defs = lin("bg", ["#2a5a3a", "#0a1a10"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(6):
+        body += circle(20 + i * 64, 24, 4, "#ffe9a0", 'opacity="0.6"')
+    body += rect(0, 150, W, 50, "#1a6a3a") + rect(0, 146, W, 6, "#5a3a1a")
+    for x in (40, 60, 290, 310):
+        body += ellipse(x, 166, 10, 4, "#c0392b", 'stroke="#f4f4f4" stroke-width="1.5"')
+    body += person(120, 160, 1.05, SKIN[0], "#111", face="smirk", hat="bob")
+    body += stroke("M96 150 L76 118", "#111", 7) + path("M64 98 L84 98 L74 110 Z", "#e8f4fa", 'opacity="0.85"') + stroke("M74 110 L74 120", "#c8d8e0", 2)
+    body += person(236, 166, 1.0, "#e8746a", "#4a5a3a", face="shout", hat="peaked", brows="sad")
+    body += sweat(214, 104) + sweat(258, 100)
+    # Her leg, in a sheer stocking, wrapped round his waist; a stiletto at the end
+    body += stroke("M138 158 C 176 128 226 128 258 146", "#111", 17) + stroke("M138 158 C 176 128 226 128 258 146", "#e8c0a0", 13)
+    body += path("M256 140 L274 150 L270 156 L262 154 L262 164 L258 164 L256 152 Z", "#a01e2a")
+    for x, y in ((210, 128), (226, 118), (244, 124)):
+        body += circle(x, y, 4, "#d4af37") + stroke(f"M{x} {y - 4} l -2 -6", "#c0392b", 2)
+    return svg(defs, body)
+
+
+def router_box(x, y, s=1.0):
+    """A cardboard box with a router printed on it and a tiny skull sticker under the barcode."""
+    out = rect(x, y, 40 * s, 30 * s, "#c8a06a", 'stroke="#8a6a3a" stroke-width="1"') + rect(x + 6 * s, y + 8 * s, 28 * s, 8 * s, "#3a3a44", 'rx="2"')
+    out += stroke(f"M{x + 12 * s:.1f} {y + 8 * s:.1f} l -2 -6 M{x + 28 * s:.1f} {y + 8 * s:.1f} l 2 -6", "#3a3a44", 1.5)
+    out += rect(x + 6 * s, y + 20 * s, 14 * s, 6 * s, "#f4f4f4") + circle(x + 30 * s, y + 23 * s, 3 * s, "#f4f4f4") + circle(x + 30 * s, y + 23 * s, 1.2 * s, "#222")
+    return out
+
+
+def supply_chain_attack():
+    # A cheerful delivery driver unloading crates of identical routers at a ministry's loading dock, each box with a tiny skull
+    # sticker under the barcode, while a line of bureaucrats in grey suits signs for them
+    defs, body = room("#b8b0a0", "#8a8478", "#5a5650", 150)
+    body += rect(150, 20, 190, 40, "#e8e0d0", 'stroke="#555" stroke-width="2"') + lettering("MINISTRY", 245, 32, 10, "#3a3a3a", width=1.8)
+    body += rect(0, 70, 110, 80, "#f4f4f4", 'rx="4"') + rect(4, 76, 40, 30, "#9ab8c8") + circle(24, 152, 12, "#222") + circle(90, 152, 12, "#222")
+    body += person(100, 200, 0.95, SKIN[1], "#c0562a", face="grin", hat="cap")
+    for i, (x, y) in enumerate(((128, 160), (168, 160), (148, 132), (64, 166))):
+        body += router_box(x, y)
+    for i in range(3):
+        x = 236 + i * 42
+        body += agent(x, 200, 0.7, SKIN[(i + 1) % 4], face="flat", glasses=None, hair=OLD_HAIR if i == 1 else "#4a4a4a", suit="#7a7e86")
+    body += rect(222, 150, 22, 28, "#b08a5a") + rect(225, 154, 16, 20, "#ffffff") + stroke("M228 168 q 4 -6 8 0 t 6 -2", "#1a3a8a", 1.2)
+    return svg(defs, body)
+
+
+def hollowed_out_volcano_lair():
+    # A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching
+    # jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass
+    defs = lin("bg", ["#f0905a", "#6a2a4a"]) + lin("inside", ["#4a5058", "#2a2e34"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 186, W, 14, "#1a3a5a")
+    body += poly([(0, 200), (120, 30), (232, 30), (352, 200)], "#4a3a32") + ellipse(176, 30, 56, 8, "#ff6a2a", 'opacity="0.8"')
+    body += poly([(40, 196), (136, 56), (216, 56), (312, 196)], "url(#inside)")
+    body += stroke("M120 30 C 116 20 130 10 140 18 M232 30 C 238 18 222 8 212 18", "#8a8a8a", 6, 'opacity="0.6"')
+    body += rect(166, 70, 18, 70, "#e8e8e8", 'rx="8"') + poly([(166, 76), (175, 56), (184, 76)], "#c0392b") + poly([(162, 140), (166, 124), (166, 140)], "#c0392b") + poly([(188, 140), (184, 124), (184, 140)], "#c0392b")
+    body += rect(150, 140, 50, 6, "#888")
+    body += stroke("M60 170 L292 170", "#c8c8c8", 4) + rect(90, 156, 40, 14, "#f2c94c", 'rx="6"') + rect(96, 159, 8, 6, "#3a5a7a") + rect(108, 159, 8, 6, "#3a5a7a")
+    for x in (220, 246, 270):
+        body += person(x, 186, 0.36, SKIN[0], "#f2a01a", face="flat", hat="cap")
+    body += rect(112, 84, 46, 34, "#8ab8d8", 'opacity="0.5" stroke="#c8e0f0" stroke-width="2"')
+    body += rect(120, 100, 30, 18, "#5a1a1a") + person(135, 116, 0.42, SKIN[0], "#8a8a8a", face="smirk")
+    body += ellipse(146, 110, 6, 4, "#ffffff") + circle(150, 106, 3, "#ffffff")
+    return svg(defs, body)
+
+
+def nda():
+    # A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a
+    # towering stack of contracts between them stamped CONFIDENTIAL
+    defs, body = bg_office()
+    body += rect(140, 70, 70, 100, "#f6f2e6", 'stroke="#b8b0a0" stroke-width="1"')
+    for y in range(76, 170, 6):
+        body += stroke(f"M142 {y} L208 {y}", "#d8d0c0", 1)
+    body += stamp("CONFIDENTIAL", 175, 110, 6, "#c0392b", -16)
+    body += agent(70, 200, 1.1, SKIN[0], face="grin", glasses=None, hair="#2a2a2a", tie="#a01e2a")
+    body += stroke("M96 160 L134 134", "#22262e", 10) + stroke("M134 134 L156 120", "#d4af37", 4)
+    body += person(280, 200, 1.1, SKIN[2], "#7a9ab0", face="closed", hair="#1a1a1a", brows="sad") + sweat(256, 104) + sweat(304, 100)
+    hx, hy = 280, 200 - 64 * 1.1
+    body += rect(hx - 12, hy + 7, 24, 6, "#b8902a", 'rx="2"') + stroke(f"M{hx - 10} {hy + 10} L{hx + 10} {hy + 10}", "#6a4a10", 1.5, 'stroke-dasharray="2 2"')
+    body += rect(hx + 10, hy + 6, 5, 9, "#d4af37")
+    return svg(defs, body)
+
+CARDS["ShadowOps"].update({
+    "DeadMansSwitch": dead_mans_switch, "FellOutofaWindow": fell_out_of_a_window, "CoupdÉtat": coup_detat,
+    "OperationPaperclip": operation_paperclip, "FalseFlagOperation": false_flag_operation,
+    "NeverLetThemKnowYourNextMove": never_let_them_know_your_next_move, "FrameJob": frame_job, "DevilsBreath": devils_breath,
+    "HeDidntKillHimself": he_didnt_kill_himself, "Extraction": extraction, "WitnessProtectionProgram": witness_protection_program,
+    "DeathByNaturalCauses": death_by_natural_causes, "AssetRecruitment": asset_recruitment,
+    "IfIToldYouIdHavetoKillYou": if_i_told_you_id_have_to_kill_you, "LoneGunman": lone_gunman, "GlomarResponse": glomar_response,
+    "Sabotage": sabotage, "GhostArmy": ghost_army, "InflatableTank": inflatable_tank, "ShermanTank": sherman_tank, "HAARP": haarp,
+    "SocialEngineering": social_engineering, "BilderbergMembership": bilderberg_membership, "DeadDrop": dead_drop,
+    "MultiPassport": multi_passport, "WetWork": wet_work, "PerfectlyTimedCameraMalfunction": perfectly_timed_camera_malfunction,
+    "TheGoldenGun": the_golden_gun, "DieAnotherDay": die_another_day, "LicencetoKill": licence_to_kill,
+    "ShakenNotStirred": shaken_not_stirred, "GoldenEye": golden_eye, "FemmeFatale": femme_fatale,
+    "SupplyChainAttack": supply_chain_attack, "HollowedOutVolcanoLair": hollowed_out_volcano_lair,
+})
+CARDS["Corporate"].update({"NDA": nda})
+
+
 def main():
     count = 0
     for theme, cards in CARDS.items():

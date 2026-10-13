@@ -17,7 +17,7 @@ MonoBehaviour:
   description: You saw nothing. You'll say nothing. Initial here, here and here.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 8ae306f6eac15be4387685eb3dd505c0, type: 3}
   discardCost: 1
   singleUse: 0
   effects:

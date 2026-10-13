@@ -17,7 +17,7 @@ MonoBehaviour:
   description: New name, new town, new moustache. Same bad feeling.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 858afadf203860644a349438c3184010, type: 3}
   discardCost: 0
   singleUse: 0
   effects:
