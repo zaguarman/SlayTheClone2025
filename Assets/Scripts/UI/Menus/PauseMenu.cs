@@ -13,7 +13,7 @@ namespace SlayTheClone {
         [SerializeField] private Button mainMenuButton;
         [SerializeField] private Button quitButton;
         [SerializeField] private string mainMenuSceneName = "MainMenu";
-        [SerializeField] private KeyCode toggleKey = KeyCode.Escape;
+        private const UnityEngine.InputSystem.Key ToggleKey = UnityEngine.InputSystem.Key.Escape;
 
         public bool IsPaused { get; private set; }
 
@@ -43,7 +43,7 @@ namespace SlayTheClone {
         }
 
         private void Update() {
-            if (Input.GetKeyDown(toggleKey)) {
+            if (GameInput.KeyPressed(ToggleKey)) {
                 // Escape goes back: an open deck or discard view closes first, then the game pauses or resumes
                 var view = IsPaused ? null : System.Array.Find(FindObjectsByType<DeckViewUI>(FindObjectsSortMode.None), v => v.IsOpen);
                 if (view != null) view.HideDeckView();

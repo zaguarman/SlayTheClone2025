@@ -142,7 +142,7 @@ namespace SlayTheClone {
         // A click anywhere outside the window closes it, like the close button
         private void Update() {
             if (!IsOpen) return;
-            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) ClickAt(Input.mousePosition);
+            if (GameInput.ClickedThisFrame) ClickAt(GameInput.PointerPosition);
         }
 
         /// <summary>A click at this screen point: outside the window (and any card preview it shows), it closes. Returns whether it did.</summary>

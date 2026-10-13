@@ -88,7 +88,7 @@ namespace SlayTheClone {
                 if (Tooltip.WheelMoved) ready = Time.unscaledTime + Tooltip.HoverDelay;
                 yield return null;
             }
-            peek.Show(card, Input.mousePosition);
+            peek.Show(card, GameInput.PointerPosition);
         }
 
         // Scrolling hides the card for a moment

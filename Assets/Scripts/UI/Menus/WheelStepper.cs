@@ -16,11 +16,11 @@ namespace SlayTheClone {
         }
 
         private void Update() {
-            float ticks = Input.mouseScrollDelta.y;
+            float ticks = GameInput.WheelNotches;
             if (Mathf.Approximately(ticks, 0f) || OnStep == null) return;
             var canvas = GetComponentInParent<Canvas>();
             var eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
-            if (!RectTransformUtility.RectangleContainsScreenPoint((RectTransform)transform, Input.mousePosition, eventCamera)) return;
+            if (!RectTransformUtility.RectangleContainsScreenPoint((RectTransform)transform, GameInput.PointerPosition, eventCamera)) return;
             OnStep(ticks < 0f ? 1 : -1);
         }
 

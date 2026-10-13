@@ -148,7 +148,7 @@ namespace SlayTheClone {
         /// </summary>
         public static bool BackPressed(ref bool wasTyping) {
             bool typing = IsTyping;
-            bool back = !typing && !wasTyping && Input.GetKeyDown(KeyCode.Escape);
+            bool back = !typing && !wasTyping && GameInput.KeyPressed(UnityEngine.InputSystem.Key.Escape);
             wasTyping = typing;
             return back;
         }

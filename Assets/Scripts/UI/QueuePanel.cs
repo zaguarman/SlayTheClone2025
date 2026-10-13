@@ -112,12 +112,12 @@ namespace SlayTheClone {
 
         // Clicking anywhere else closes it, like a menu
         private void Update() {
-            if (!IsOpen || !(Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))) return;
+            if (!IsOpen || !GameInput.ClickedThisFrame) return;
             if (!PointerOn(panel) && !PointerOn(Toggle)) SetOpen(false);
         }
 
         private static bool PointerOn(RectTransform rect) =>
-            rect != null && RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, CanvasUtility.GetEventCamera(rect));
+            rect != null && RectTransformUtility.RectangleContainsScreenPoint(rect, GameInput.PointerPosition, CanvasUtility.GetEventCamera(rect));
 
         public void SetOpen(bool open) {
             panel.gameObject.SetActive(open);

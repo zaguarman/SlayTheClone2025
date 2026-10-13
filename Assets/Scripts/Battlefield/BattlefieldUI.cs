@@ -208,7 +208,7 @@ namespace SlayTheClone {
         }
 
         /// <summary>Whether the drop uses the creature's Active ability instead of attacking or moving. Tests can replace it.</summary>
-        public static System.Func<bool> UsingAbility = () => Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        public static System.Func<bool> UsingAbility = () => GameInput.ShiftHeld;
 
         private void HandleCreatureMove(ICreature creature, BoardSlot targetSlot) {
             if (!GameManager.ModifierManager.CanAct(creature)) return;
@@ -227,7 +227,7 @@ namespace SlayTheClone {
 
         private BattlefieldSlot GetTargetSlot() {
             var pointerEventData = new PointerEventData(EventSystem.current) {
-                position = Input.mousePosition
+                position = GameInput.PointerPosition
             };
 
             var raycastResults = new List<RaycastResult>();
@@ -559,7 +559,7 @@ namespace SlayTheClone {
             if (draggedCard == null) return;
 
             var eventCamera = CanvasUtility.GetEventCamera(this);
-            if (RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)transform, Input.mousePosition, eventCamera, out var pointer)) {
+            if (RectTransformUtility.ScreenPointToWorldPointInRectangle((RectTransform)transform, GameInput.PointerPosition, eventCamera, out var pointer)) {
                 arrowManager.UpdateDragArrow(pointer, GetDragIntent(draggedCard, GetTargetSlot()));
             }
         }

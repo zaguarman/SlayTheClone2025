@@ -167,7 +167,7 @@ namespace SlayTheClone {
         }
 
         /// <summary>The mouse wheel turned this frame: what's shown hides, and nothing shows until the wheel is still a moment.</summary>
-        public static bool WheelMoved => !Mathf.Approximately(Input.mouseScrollDelta.y, 0f);
+        public static bool WheelMoved => !Mathf.Approximately(GameInput.WheelNotches, 0f);
 
         // Waits the delay, starting over whenever the wheel turns, so nothing pops up while scrolling
         private IEnumerator ShowAfter(CardController card, float delay) {
@@ -205,7 +205,7 @@ namespace SlayTheClone {
             }
             // Reading keywords: passing over another card on the way to an explanation doesn't replace them, nor does a
             // card under the enlarged one or its explanations
-            if ((keywordPopups.Count > 0 && PointerInArea(Input.mousePosition)) || PointerOnTooltip(Input.mousePosition)) return;
+            if ((keywordPopups.Count > 0 && PointerInArea(GameInput.PointerPosition)) || PointerOnTooltip(GameInput.PointerPosition)) return;
 
             HideTooltip();
             activeCard = card;
@@ -331,7 +331,7 @@ namespace SlayTheClone {
         }
 
         private void FollowMouse() {
-            Vector2 mousePos = Input.mousePosition;
+            Vector2 mousePos = GameInput.PointerPosition;
             tooltipRect.position = new Vector2(mousePos.x, mousePos.y + 40);
             KeepOnScreen(tooltipRect);
         }
@@ -393,13 +393,13 @@ namespace SlayTheClone {
             if (WheelMoved) { // Scrolling: hide for a moment; the card still under the pointer shows again once the wheel is still
                 var card = activeCard;
                 HideTooltip();
-                if (card != null && card.isActiveAndEnabled && CardScreenRect(card) is Rect rect && rect.Contains(Input.mousePosition)) ShowTooltip(card);
+                if (card != null && card.isActiveAndEnabled && CardScreenRect(card) is Rect rect && rect.Contains(GameInput.PointerPosition)) ShowTooltip(card);
                 return;
             }
             if (activeCard == null || preview == null) return;
             if (CardController.Dragged != null) { HideTooltip(); return; }
-            Vector2 pointer = Input.mousePosition;
-            if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) && ClickAt(pointer)) return;
+            Vector2 pointer = GameInput.PointerPosition;
+            if (GameInput.ClickedThisFrame && ClickAt(pointer)) return;
             TrackKeywords(pointer);
             if (!released || PointerInArea(pointer)) lastHeldAt = Time.unscaledTime;
             else if (Time.unscaledTime - lastHeldAt > ReleaseGrace) HideTooltip();

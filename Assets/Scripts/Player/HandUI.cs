@@ -250,7 +250,7 @@ namespace SlayTheClone {
             // Leaving through its bottom edge (toward the screen's edge) keeps it up: dropping back under the pointer
             // would only raise it again
             var rect = (RectTransform)card.transform;
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, Input.mousePosition, CanvasUtility.GetEventCamera(card), out var local)
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, GameInput.PointerPosition, CanvasUtility.GetEventCamera(card), out var local)
                 && local.y < rect.rect.yMin && local.x > rect.rect.xMin && local.x < rect.rect.xMax) return;
             hovered = null;
             Arrange(animate: true);

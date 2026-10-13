@@ -101,8 +101,8 @@ namespace SlayTheClone {
     /// the table (see <see cref="BoardSkin.PutAtBottom"/>). Neither changes the rules.
     /// </summary>
     public static class FogOfWar {
-        public const UnityEngine.KeyCode ToggleKey = UnityEngine.KeyCode.F9;
-        public const UnityEngine.KeyCode SwitchSidesKey = UnityEngine.KeyCode.F8;
+        public const UnityEngine.InputSystem.Key ToggleKey = UnityEngine.InputSystem.Key.F9;
+        public const UnityEngine.InputSystem.Key SwitchSidesKey = UnityEngine.InputSystem.Key.F8;
 
         private static bool playsAsPlayer1 = true;
 

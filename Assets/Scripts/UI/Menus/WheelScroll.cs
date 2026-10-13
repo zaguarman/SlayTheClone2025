@@ -20,12 +20,12 @@ namespace SlayTheClone {
         private void Awake() => scroll = GetComponent<ScrollRect>();
 
         private void Update() {
-            float notches = Input.mouseScrollDelta.y;
+            float notches = GameInput.WheelNotches;
             if (Mathf.Approximately(notches, 0f) || scroll.content == null) return;
             var area = scroll.viewport != null ? scroll.viewport : (RectTransform)transform;
             var canvas = GetComponentInParent<Canvas>();
             var eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
-            if (!RectTransformUtility.RectangleContainsScreenPoint(area, Input.mousePosition, eventCamera)) return;
+            if (!RectTransformUtility.RectangleContainsScreenPoint(area, GameInput.PointerPosition, eventCamera)) return;
             ScrollBy(notches);
         }
 

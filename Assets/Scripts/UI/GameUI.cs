@@ -143,8 +143,8 @@ namespace SlayTheClone {
 
         private void Update() {
             if (!IsInitialized) return;
-            if (Input.GetKeyDown(FogOfWar.ToggleKey)) FogOfWar.Toggle();
-            if (Input.GetKeyDown(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
+            if (GameInput.KeyPressed(FogOfWar.ToggleKey)) FogOfWar.Toggle();
+            if (GameInput.KeyPressed(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
         }
 
         // Every view redraws what it may show, and the screen's player sits at the bottom
