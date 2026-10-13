@@ -278,6 +278,7 @@ Slot Occupation & Movement
         • Push Only When Needed: A move pushes a creature only if that creature isn't leaving its slot. If it's planned to leave, the game lets it leave first.
         • Impossible Plans: If no order can make a move work (e.g., two creatures that would have to pass each other), that move shows as blocked while you plan, with a hint (e.g., "needs Swap or Leapfrog"), and can't be confirmed.
         • Live Preview: Ghosts and arrows always show the final formation. Editing or cancelling a move updates the whole preview at once.
+        • Battle Arrows: planned actions show as campaign-map arrows, so the battle reads at a glance: translucent bands with a bright rim, faint at the tail and strongest at the head. Attacks are red, moves green, spells violet, other damage orange. Everything of one kind aimed at the same target is one arrow: creatures attacking the same slot flow into one trunk, wider for each of them, with one head. Arrows keep to the right of where they go, so two going opposite ways (two creatures attacking each other) pass side by side, and moves along a row bow aside so a swap's two arrows don't overlap. Heads stop at the target card's edge, clear of its stats.
         • Tie-Breaker: When several orders work, the game uses the order the moves were planned in.
         • The AI plans its moves the same way.
     Movement Keywords (abilities printed on specific creatures; each is still that creature's own Movement Action):

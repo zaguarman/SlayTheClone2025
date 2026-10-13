@@ -64,9 +64,20 @@ namespace SlayTheClone.Tests {
             var brute = game.Summon(p1, game.Cards.Creature("Test Brute", 4, 5), 0);
             var mouse = game.Summon(p2, game.Cards.Creature("Test Mouse", 1, 2), 0);
             var striker = game.Summon(p1, game.Cards.Creature("Test Striker", 3, 3), 1);
+            var flanker = game.Summon(p1, game.Cards.Creature("Test Flanker", 1, 3), 2);
             game.Attack(brute, p2.Battlefield[0]);
             game.Attack(mouse, p1.Battlefield[0]);
             game.Attack(striker, p2.Battlefield[1]); // An empty slot: the hit goes to player 2
+
+            // Battle arrows: creatures attacking the same slot share one arrow, their tails merging into one head
+            game.Attack(flanker, p2.Battlefield[0]);
+            yield return null;
+            Assert.AreEqual(2, game.QueuedArrows(p1).Count, "Three attacks, two targets: two arrows");
+            Assert.AreEqual(2, game.QueuedArrows(p1).Max(a => a.Branches), "The two attacks on the same slot merge into one arrow");
+            Assert.AreEqual(1, game.QueuedArrows(p2).Count, "The other side's attack has its own arrow");
+            game.Queue.CancelDeclaredAction(flanker.TargetId);
+            yield return null;
+            Assert.IsTrue(game.QueuedArrows(p1).All(a => a.Branches == 1), "Called off: that arrow loses its branch");
 
             var endTurn = game.References.GetResolveActionsButton();
             endTurn.onClick.Invoke();
