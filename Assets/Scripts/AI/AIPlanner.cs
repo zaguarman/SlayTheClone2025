@@ -556,6 +556,19 @@ namespace SlayTheClone {
                     return StatusGoodness(action, creature);
                 case ActionType.Cleanse:
                     return HarmfulStatuses.Any(creature.Has) ? 2 : 0;
+                case ActionType.Funnel: // Spread out raises gathered into one creature that can kill with them
+                    var others = (creature.Ours ? view.Mine : view.Theirs).Where(c => c != creature).Sum(c => System.Math.Max(0, c.StatRaises));
+                    return others * 0.5f;
+                case ActionType.StealStatChanges or ActionType.PassHarmfulStatuses or ActionType.StealGoodStatuses when spell != null: {
+                    // A spell works between its target and the creature facing it
+                    var facing = (creature.Ours ? view.TheirSlots : view.MySlots)[creature.Slot.Index].Creature;
+                    if (facing == null) return 0;
+                    return action.actionType switch {
+                        ActionType.StealStatChanges => 2 * System.Math.Max(0, facing.StatRaises), // They lose them, it gains them
+                        ActionType.PassHarmfulStatuses => 2 * HarmfulStatuses.Count(creature.Has),
+                        _ => 2 * GoodStatuses.Count(facing.Has)
+                    };
+                }
                 case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility:
                     return IntendedFor(spell, creature.Ours ? view.Me : view.Them) ? 1 : -1; // Hard to weigh: done where the card means it
                 case ActionType.Armor or ActionType.Heal when Hard && creature.Ours:
@@ -638,6 +651,10 @@ namespace SlayTheClone {
             if (Hard && change < 0 && creature.Ability == CreatureAbility.Spite) good += 2; // It gets +2 Attack out of it
             return good;
         }
+
+        private static readonly StatusEffectType[] GoodStatuses = {
+            StatusEffectType.Blessed, StatusEffectType.Concealed, StatusEffectType.Encrypted, StatusEffectType.Untouchable
+        };
 
         private static readonly StatusEffectType[] HarmfulStatuses = {
             StatusEffectType.Burned, StatusEffectType.Exhausted, StatusEffectType.Doomed, StatusEffectType.HeatSignature,

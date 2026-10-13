@@ -262,8 +262,14 @@ namespace SlayTheClone {
                         : $"copy the Attack, Health and Speed of {target}";
                 case ActionType.StealStatChanges:
                     return isSpell || action.targetType == TargetType.Self
-                        ? $"the creature facing {target} steals its stat raises"
+                        ? $"{target} steals the stat raises of the creature facing it"
                         : $"steal the stat raises of {target}";
+                case ActionType.Funnel:
+                    return $"every other creature on its side hands its stat raises to {target}";
+                case ActionType.PassHarmfulStatuses:
+                    return $"{target} passes its harmful statuses to the creature facing it";
+                case ActionType.StealGoodStatuses:
+                    return $"{target} takes the good statuses of the creature facing it";
                 case ActionType.SwapPositions:
                     return $"{target} trades places with the creature to its right";
                 case ActionType.GrantAbility:

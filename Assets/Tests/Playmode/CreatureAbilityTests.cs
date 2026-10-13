@@ -358,6 +358,39 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(5, shell.Attack, "A spell copies the creature facing its target");
             Assert.AreEqual(CreatureAbility.DoubleTap, shell.Ability, "Any ability can come from a spell");
 
+            // Never Let Them Know Your Next Move: the others' stat raises all go to the target
+            Fresh();
+            var hitman = With(CreatureAbility.None, p1, 0, attack: 1, health: 5);
+            var helperA = With(CreatureAbility.None, p1, 1, attack: 1, health: 5);
+            var helperB = With(CreatureAbility.None, p1, 2, attack: 1, health: 5);
+            ChangeAttack(helperA, 3, p1);
+            ChangeAttack(helperB, 2, p1);
+            game.Play(game.GiveCard(p1, game.Spell("Funnel", TargetType.FriendlyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Funnel, 0, TargetType.FriendlyCreatures))), p1, p1.Battlefield[0]);
+            game.Resolve();
+            Assert.AreEqual((6, 1, 1), (hitman.Attack, helperA.Attack, helperB.Attack), "Funnel: every raise on its side goes to the target");
+
+            // Frame Job: the target's harmful statuses go to the enemy creature facing it, with their Days
+            var patsy = With(CreatureAbility.None, p2, 0);
+            game.Run(new ApplyStatusEffectAction(hitman, StatusEffectType.Revealed, 2, 0, controller: p2));
+            game.Run(new ApplyStatusEffectAction(hitman, StatusEffectType.Burned, 2, 1, controller: p2));
+            game.Play(game.GiveCard(p1, game.Spell("Frame", TargetType.FriendlyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.PassHarmfulStatuses, 0, TargetType.FriendlyCreatures))), p1, p1.Battlefield[0]);
+            game.Resolve();
+            Assert.IsFalse(HasStatus(hitman, StatusEffectType.Revealed) || HasStatus(hitman, StatusEffectType.Burned), "Frame Job: the evidence leaves it...");
+            Assert.IsTrue(HasStatus(patsy, StatusEffectType.Revealed) && HasStatus(patsy, StatusEffectType.Burned), "...for the creature facing it");
+
+            // Devil's Breath: the target takes the stat raises and the good statuses of the creature facing it
+            game.Run(new ApplyStatusEffectAction(patsy, StatusEffectType.Blessed, 1, 2, controller: p2));
+            ChangeAttack(patsy, 2, p2);
+            var breath = game.Spell("Breath", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.StealStatChanges, 0, TargetType.FriendlyCreatures));
+            breath.effects[0].actions.Add(new EffectAction { actionType = ActionType.StealGoodStatuses, targetType = TargetType.FriendlyCreatures });
+            game.Play(game.GiveCard(p1, breath), p1, p1.Battlefield[0]);
+            game.Resolve();
+            Assert.AreEqual((8, 3), (hitman.Attack, patsy.Attack), "Devil's Breath: its raises...");
+            Assert.IsTrue(HasStatus(hitman, StatusEffectType.Blessed) && !HasStatus(patsy, StatusEffectType.Blessed), "...and its good statuses");
+            Assert.IsTrue(HasStatus(patsy, StatusEffectType.Burned), "The bad ones stay");
+
             Fresh();
             var dome = With(CreatureAbility.Bodyguard, p1, 0);
             var vip = With(CreatureAbility.None, p1, 1, health: 5);

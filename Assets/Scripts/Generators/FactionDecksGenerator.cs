@@ -688,6 +688,25 @@ namespace SlayTheClone {
                 Destroy(TargetType.FriendlyCreatures), Buff(3, TargetType.FriendlyCreatures, attack: true, health: true, Each))
                 .NotInStarterDeck()
                 .Picture("A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost while a film crew records it and a general reads an outrage speech from a card."),
+            Spell("Never Let Them Know Your Next Move", TargetType.FriendlyCreatures,
+                "Everyone gets a medal. He gets all of them.",
+                "Every other friendly creature hands its stat raises to target friendly creature (the timed, the lasting and the ones for good), and it's Concealed for 2 Days: the fatal blow nobody sees coming. After False Flag Operation, it's +3/+3 from each.",
+                Act(ActionType.Funnel, 0, TargetType.FriendlyCreatures, TargetModifier.None), Status(StatusEffectType.Concealed, 2, TargetType.FriendlyCreatures))
+                .NotInStarterDeck()
+                .Picture("A row of agents in identical grey suits passing their pistols, knives and grenades down the line to one man at the end, who disappears under a mountain of weapons with only his sunglasses showing."),
+            Spell("Frame Job", TargetType.FriendlyCreatures,
+                "The fingerprints were his. We checked. We put them there.",
+                "Target friendly creature passes every harmful status it has (Revealed, Heat Signature, Burned, Doomed...) to the enemy creature facing it, with the Days they have left. Nothing faces it: nothing happens.",
+                Act(ActionType.PassHarmfulStatuses, 0, TargetType.FriendlyCreatures, TargetModifier.None))
+                .NotInStarterDeck()
+                .Picture("A smiling agent pressing a sleeping man's thumb onto a smoking gun with tweezers, a police lineup board behind them already labelled with the sleeper's name."),
+            Spell("Devil's Breath", TargetType.FriendlyCreatures,
+                "One puff of scopolamine and he helped carry his own safe to our van.",
+                "Target friendly creature takes the stat raises and the good statuses (Blessed, Concealed, Encrypted, Untouchable) of the enemy creature facing it. Its victims hand everything over, smiling.",
+                Act(ActionType.StealStatChanges, 0, TargetType.FriendlyCreatures, TargetModifier.None),
+                Act(ActionType.StealGoodStatuses, 0, TargetType.FriendlyCreatures, TargetModifier.None))
+                .NotInStarterDeck()
+                .Picture("A woman blowing a puff of glittering white powder off her palm into a businessman's face; dazed and smiling, he hands her his watch, his wallet and the keys to an armored car."),
             Creature("MK Ultra Test Subject", 4, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",

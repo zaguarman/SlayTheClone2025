@@ -394,6 +394,16 @@ namespace SlayTheClone {
                 }
                 case ActionType.SwapPositions:
                     return creature != null ? new SwapPositionsAction(creature) : null;
+                case ActionType.Funnel: // The target takes the stat raises of every other creature on its side
+                    return creature != null ? new FunnelAction(creature) : null;
+                case ActionType.PassHarmfulStatuses: { // The target's harmful statuses go to the creature facing it (Frame Job)
+                    var (from, to) = Pair(source, creature);
+                    return from != null && to != null ? new PassStatusesAction(from, to, harmful: true) : null;
+                }
+                case ActionType.StealGoodStatuses: { // The target takes the good statuses of the creature facing it (Devil's Breath)
+                    var (thief, victim) = Pair(source, creature);
+                    return thief != null && victim != null ? new PassStatusesAction(victim, thief, harmful: false) : null;
+                }
                 case ActionType.GrantAbility:
                     return creature != null && action.ability != CreatureAbility.None ? new GrantAbilityAction(creature, action.ability) : null;
                 case ActionType.SetTrend: // The whole board's: it doesn't matter where it lands
