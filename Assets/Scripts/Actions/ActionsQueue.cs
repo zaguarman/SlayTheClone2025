@@ -101,14 +101,14 @@ namespace SlayTheClone {
         #region Constructor
         public ActionsQueue(
             IGameMediator gameMediator,
-            IWeatherSystem weatherSystem,
+            IWorldSystem worldSystem,
             ICardDealingService cardDealingService,
             IModifierManager modifierManager,
             ITurnClock turnClock,
             Dictionary<Type, IActionExecutor> actionExecutors) {
             this.gameMediator = gameMediator ?? throw new ArgumentNullException(nameof(gameMediator));
             this.actionExecutors = actionExecutors ?? throw new ArgumentNullException(nameof(actionExecutors));
-            executionContext = new ActionExecutionContext(gameMediator, cardDealingService, weatherSystem, modifierManager, this, turnClock);
+            executionContext = new ActionExecutionContext(gameMediator, cardDealingService, worldSystem, modifierManager, this, turnClock);
 
             Log("ActionsQueue initialized with Strategy Executors.", LogTag.Initialization);
         }
@@ -139,7 +139,7 @@ namespace SlayTheClone {
         private Comparer<Entry> inLayerOrder;
         private Comparer<Entry> InLayerOrder => inLayerOrder ??= Comparer<Entry>.Create(CompareInLayer);
 
-        // GDD 3.7: higher Speed first, then lowest Health + Armor, then lowest base Attack, then random.
+        // GDD 3.7: higher Speed first (lower first in Rush Hour), then lowest Health + Armor, then lowest base Attack, then random.
         // Moves resolve in the order they were planned, spells have no Speed and resolve in random order,
         // and actions no creature made come after the creatures', in the order they were queued.
         // A Watchdog's Reorder moves an action before or after the rest of its layer.
@@ -158,6 +158,7 @@ namespace SlayTheClone {
             if (a.Source == b.Source) return a.Sequence.CompareTo(b.Sequence); // A creature's actions keep their order
 
             int bySpeed = b.Source.Speed.CompareTo(a.Source.Speed);
+            if (executionContext.WorldSystem.SlowestFirst) bySpeed = -bySpeed; // Rush Hour
             if (bySpeed != 0) return bySpeed;
             int byToughness = (a.Source.Health + a.Source.CurrentArmorPool).CompareTo(b.Source.Health + b.Source.CurrentArmorPool);
             if (byToughness != 0) return byToughness;

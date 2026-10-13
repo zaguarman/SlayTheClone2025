@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: the Kakistocracy Now! Law. Creatures entering with 3+ Attack
     or Health get -1 of each for 3 Days.'
   artDescription: 

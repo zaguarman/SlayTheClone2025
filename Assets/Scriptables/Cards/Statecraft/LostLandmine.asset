@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Mechanics test: a hidden Landmine (3 damage) on a slot. The first
     creature to enter it, summoned or moved in, sets it off; it resolves before anything
     else (environment action), then it''s gone. Only its controller sees it.'

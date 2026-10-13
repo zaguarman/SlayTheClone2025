@@ -8,7 +8,7 @@ namespace SlayTheClone {
     public class ActionExecutionContext {
         public IGameMediator GameMediator { get; }
         public ICardDealingService CardDealingService { get; }
-        public IWeatherSystem WeatherSystem { get; }
+        public IWorldSystem WorldSystem { get; }
         public IModifierManager ModifierManager { get; }
         public IModifierFactory ModifierFactory => ModifierManager.ModifierFactory;
         public IActionsQueue ActionsQueue { get; } // Actions might need to queue more actions
@@ -17,13 +17,13 @@ namespace SlayTheClone {
         public ActionExecutionContext(
             IGameMediator mediator,
             ICardDealingService cardDealingService,
-            IWeatherSystem weatherSystem,
+            IWorldSystem worldSystem,
             IModifierManager modifierManager,
             IActionsQueue actionsQueue,
             ITurnClock turnClock) {
             GameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             CardDealingService = cardDealingService ?? throw new ArgumentNullException(nameof(cardDealingService));
-            WeatherSystem = weatherSystem ?? throw new ArgumentNullException(nameof(weatherSystem));
+            WorldSystem = worldSystem ?? throw new ArgumentNullException(nameof(worldSystem));
             ModifierManager = modifierManager ?? throw new ArgumentNullException(nameof(modifierManager));
             ActionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
             TurnClock = turnClock ?? throw new ArgumentNullException(nameof(turnClock));

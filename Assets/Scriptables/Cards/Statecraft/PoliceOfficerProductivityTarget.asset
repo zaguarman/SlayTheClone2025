@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: double damage against creatures that moved this Day.'
   artDescription: 
   attack: 2

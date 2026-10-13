@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
     - actionType: 0
       value: 3
       targetType: 0
@@ -67,6 +68,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
     - actionType: 0
       value: 3
       targetType: 1
@@ -89,6 +91,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: a countdown everyone can see coming, like a Prophecy.'
   artDescription: 
   defaultTargetType: 2

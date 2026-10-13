@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   - effectType: 0
     trigger: 4
     oncePerCombat: 0
@@ -71,6 +72,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Nickel-and-Dime: it does a lot of small jobs, so hits of 3 or less
     are doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with
     Zeitgeist).'

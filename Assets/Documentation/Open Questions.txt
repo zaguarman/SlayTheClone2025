@@ -80,6 +80,10 @@ STILL OPEN
     • Changed: Keyboard Warrior went from Retaliate 1 to Counterattack (same 1 damage, its Attack). A fixed-damage answer is still possible in the data and reads "Retaliate: 1 damage to it".
     • Question: should spells and abilities that damage it be answered too?
 
+21. Zeitgeist as a World (2026-10-13)
+    • Done: read as "Zeitgeist is a World card", and Worlds (the GDD's Location/Weather cards) as Zeitgeist's signature, replacing its "Trends". The Zeitgeist World: for 3 Days, each Day whoever has fewer creatures draws 1 more card (Zeitgeist's comebacks and card draw). The "climate" with the turned-around order is the World Rush Hour (from the card backlog): for 3 Days, the slowest act first. Zeitgeist joined the Zeitgeist deck (now 20); Rush Hour is in the Mechanics Test deck and the deck builder. The old weather button that changed the weather by hand is hidden; the banner in the middle of the table shows the World.
+    • Question: did you mean something else, like turning the whole Zeitgeist faction into Worlds, or "climate" being its own kind of card next to Worlds?
+
 20. Names too close to someone else's (2026-10-13)
     • Done: Baton Pass is now Handover, Technician is now Nickel-and-Dime (both were the exact Pokémon names, with the same effect), and the card Fat Tony (a Simpsons character) is now Made Man. Underground's reminder no longer says "like Unaware". Kept: Recoil (a plain word, and the name you asked for), Contrarian and Spite (plain words), quotes and phrases like Its A Trap and Ministry Of Love (titles and phrases aren't protected the way character names are).
     • Question: any other name you'd like changed?

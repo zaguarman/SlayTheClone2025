@@ -42,6 +42,14 @@ namespace SlayTheClone.Tests {
             };
         }
 
+        /// <summary>A World card's effect: puts the World in play for this many Days (GDD 4.2).</summary>
+        public static CardEffect WorldEffect(Enums.World world, int days) {
+            var effect = Effect(EffectTrigger.OnPlay, ActionType.SetWorld, 0, TargetType.Player);
+            effect.actions[0].world = world;
+            effect.actions[0].statusDuration = days;
+            return effect;
+        }
+
         private T Track<T>(T data, string name, CardEffect[] effects) where T : CardData {
             data.name = name;
             data.cardName = name;

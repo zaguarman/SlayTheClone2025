@@ -19,7 +19,7 @@ namespace SlayTheClone {
         IBattlefieldCombatHandler CombatHandler { get; }
         IModifierManager ModifierManager { get; }
         ICardDealingService CardDealingService { get; }
-        IWeatherSystem WeatherSystem { get; }
+        IWorldSystem WorldSystem { get; }
         ITurnManager TurnManager { get; }
     }
 
@@ -115,7 +115,7 @@ namespace SlayTheClone {
         [ShowInInspector, BoxGroup("Systems")]
         public IModifierManager ModifierManager { get; private set; }
         public ICardDealingService CardDealingService { get; private set; }
-        public IWeatherSystem WeatherSystem { get; private set; }
+        public IWorldSystem WorldSystem { get; private set; }
         public ITurnManager TurnManager { get; private set; }
 
         [ShowInInspector, BoxGroup("Hands"), PropertyOrder]
@@ -154,9 +154,9 @@ namespace SlayTheClone {
             // The rules systems, each given only what it uses
             var turnClock = new TurnClock();
             CardDealingService = new CardDealingService(mediator);
-            WeatherSystem = new WeatherSystem();
+            WorldSystem = new WorldSystem();
             ModifierManager = new ModifierManager(mediator, modifierFactory);
-            ActionsQueue = new ActionsQueue(mediator, WeatherSystem, CardDealingService, ModifierManager, turnClock, ActionExecutors.CreateRegistry());
+            ActionsQueue = new ActionsQueue(mediator, WorldSystem, CardDealingService, ModifierManager, turnClock, ActionExecutors.CreateRegistry());
             CombatHandler = new BattlefieldCombatHandler(ActionsQueue, ModifierManager);
             Player1.Initialize(mediator, CardDealingService);
             Player2.Initialize(mediator, CardDealingService);
@@ -165,13 +165,12 @@ namespace SlayTheClone {
             Log($"Decks initialized with {player1Cards.Count} cards for {Player1.Name} and {player2Cards.Count} cards for {Player2.Name}", LogTag.Cards | LogTag.Initialization);
 
             // The turn flow drives the rules; it never needs this manager
-            turnManager.Initialize(new IPlayer[] { Player1, Player2 }, ActionsQueue, ModifierManager, mediator, turnClock);
+            turnManager.Initialize(new IPlayer[] { Player1, Player2 }, ActionsQueue, ModifierManager, mediator, turnClock, WorldSystem);
             TurnManager = turnManager;
 
             IsInitialized = true;
 
             CardDealingService.DealInitialHands(Player1, Player2, 5);
-            WeatherSystem.SetWeather(WeatherType.Clear);
             Log("GameManager Initialization complete.", LogTag.Initialization);
         }
 

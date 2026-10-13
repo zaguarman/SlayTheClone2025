@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'When it dies, summon a random creature from your deck. Future: Revive
     (it comes back itself).'
   artDescription: A flaming bird rising from the smoking ashes of a burnt toaster,

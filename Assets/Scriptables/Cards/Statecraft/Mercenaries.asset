@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: Recruitment bait. When it dies, the enemy may Recruit it
     instead.'
   artDescription: 

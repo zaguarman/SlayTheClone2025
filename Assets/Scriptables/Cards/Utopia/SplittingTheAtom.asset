@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
     - actionType: 0
       value: 2
       targetType: 0
@@ -67,6 +68,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 6 damage to a random enemy creature; 2 damage to you (side effects).
   artDescription: A lumberjack in a flannel shirt splitting a glowing atom on a tree
     stump with an axe, a mushroom cloud rising behind him.

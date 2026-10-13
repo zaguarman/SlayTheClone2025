@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
     - actionType: 6
       value: -2
       targetType: 3
@@ -67,6 +68,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: a Temporary +3 Attack for 1 Day, then a Persistent -2 Health.'
   artDescription: 
   defaultTargetType: 3

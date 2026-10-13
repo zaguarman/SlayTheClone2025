@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Fodder: when it dies, every friendly creature gets +1 Attack for
     good. Future: a sacrifice cost.'
   artDescription: A hooded cultist holding a THE END IS NEAR sign in one hand and

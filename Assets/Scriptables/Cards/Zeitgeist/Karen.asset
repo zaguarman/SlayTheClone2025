@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: Impatient. Escalates every Day nobody gives it an intent.'
   artDescription: 
   attack: 2

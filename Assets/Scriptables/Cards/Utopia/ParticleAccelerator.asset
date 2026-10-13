@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: Each Dawn, 2 damage to a random creature on either side (side effects).
   artDescription: A huge ring-shaped tunnel seen from above, a tiny scientist on
     a bicycle racing around it after a glowing dot.

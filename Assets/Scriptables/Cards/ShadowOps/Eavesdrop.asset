@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Mechanics test: Reveal, instant. Played on an enemy slot, it resolves
     at once (during Planning) and shows its caster the slot''s hidden Slot Effect
     and what the creature there plans this Day.'

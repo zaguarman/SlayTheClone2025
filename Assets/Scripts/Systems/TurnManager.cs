@@ -19,6 +19,7 @@ namespace SlayTheClone {
         private IModifierManager modifierManager;
         private IActionsQueue actionsQueue;
         private TurnClock clock;
+        private IWorldSystem world;
         private IResolutionPresenter presenter; // Optional: plays each resolved action before the next one runs
 
         public int TurnNumber => clock?.TurnNumber ?? 0;
@@ -27,12 +28,13 @@ namespace SlayTheClone {
         #endregion
 
         public void Initialize(IReadOnlyList<IPlayer> players, IActionsQueue actionsQueue, IModifierManager modifierManager,
-            IGameMediator mediator, TurnClock clock) {
+            IGameMediator mediator, TurnClock clock, IWorldSystem world) {
             this.players = players ?? throw new ArgumentNullException(nameof(players));
             this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
             this.modifierManager = modifierManager ?? throw new ArgumentNullException(nameof(modifierManager));
             gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
+            this.world = world ?? throw new ArgumentNullException(nameof(world));
             IsInitialized = true;
             Log("TurnManager Initialized with dependencies.", LogTag.Initialization | LogTag.Turns);
         }
@@ -70,6 +72,7 @@ namespace SlayTheClone {
                 // --- Phase 2: Dusk, for the Day that just resolved: Armor fades, statuses tick, Deployment Time counts down ---
                 modifierManager.ProcessEndOfTurn(endedTurn, actionsQueue);
                 SlotEffectRules.ProcessEndOfTurn(players, endedTurn, gameMediator);
+                world.ProcessDusk(endedTurn); // A World ends after its last Day
                 yield return ResolveQueuedActions();
 
                 // The next Day begins
@@ -82,7 +85,7 @@ namespace SlayTheClone {
                 }
                 clock.DrawsWaitForNextDay = false;
                 foreach (var player in players) {
-                    actionsQueue.AddAction(new DrawCardsAction(player, player.CardsToDraw + player.ExtraDraws));
+                    actionsQueue.AddAction(new DrawCardsAction(player, player.CardsToDraw + player.ExtraDraws + world.ExtraDraws(player)));
                     player.ExtraDraws = 0;
                 }
                 yield return ResolveQueuedActions();

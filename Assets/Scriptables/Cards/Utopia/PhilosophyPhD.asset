@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   - effectType: 0
     trigger: 4
     oncePerCombat: 0
@@ -71,6 +72,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: A draw each Dawn; the student debt costs it 1 Health each Dusk.
   artDescription: A graduate in cap and gown flipping burgers at a fast-food grill,
     the diploma pinned up next to the menu.

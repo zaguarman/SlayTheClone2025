@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   - effectType: 0
     trigger: 4
     oncePerCombat: 0
@@ -71,6 +72,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: A draw each Dawn, and it heals 1 each Dusk.
   artDescription: A hamster running in a wheel that powers a fan, which blows on
     the hamster, which keeps running.

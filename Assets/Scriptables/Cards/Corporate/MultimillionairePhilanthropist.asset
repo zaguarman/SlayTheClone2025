@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
     - actionType: 2
       value: 2
       targetType: 0
@@ -67,6 +68,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: a Contract. The enemy gets the gift now, you get the tax
     break on a later Day.'
   artDescription: 

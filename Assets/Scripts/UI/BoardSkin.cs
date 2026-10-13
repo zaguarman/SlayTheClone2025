@@ -7,7 +7,7 @@ namespace SlayTheClone {
     /// <summary>
     /// Dresses the game scene as a card table (see <see cref="UITheme"/>): a patterned table whose two halves take
     /// their owners' faction colors, a brass rule between them, each side's mat and slot markers, a plaque per player
-    /// with a health bar, and the turn, End Turn, weather and pile controls placed around the edges of whatever screen
+    /// with a health bar, and the turn, End Turn, World and pile controls placed around the edges of whatever screen
     /// shape the camera shows. Only rearranges and decorates what the scene already has; the views keep doing the work.
     /// <para>
     /// Dressing finds what an earlier dressing made instead of making it again, so it is baked into the scene in the
@@ -25,7 +25,7 @@ namespace SlayTheClone {
         private RectTransform player1Side;
         private RectTransform player2Side;
         private RectTransform turnBanner;
-        private RectTransform weatherPill;
+        private RectTransform worldBanner;
         private RectTransform endTurnButton;
         private RectTransform deckButton;
         private RectTransform discardButton;
@@ -80,7 +80,7 @@ namespace SlayTheClone {
             player2Plaque.Show(player2Name, player2Faction, references.Player2Deck);
             StyleTurnBanner(FindFirstObjectByType<TurnUI>(FindObjectsInactive.Include));
             StyleEndTurn(references.GetResolveActionsButton());
-            StyleWeather(references.GetWeatherText(), references.GetWeatherCycleButton());
+            StyleWorldBanner(references.GetWeatherText());
             deckButton = StylePileButton(references.GetDeckViewButton(), flip: true);
             discardButton = StylePileButton(references.GetDiscardViewButton(), flip: false);
             StyleDeckView(references.GetDeckViewUI());
@@ -260,48 +260,33 @@ namespace SlayTheClone {
             }
         }
 
-        private void StyleWeather(TextMeshProUGUI weatherText, Button cycleButton) {
-            if (weatherText == null) return;
+        // The World banner (see WorldController), a pill in the middle of the table; it's hidden while no World is in play
+        private void StyleWorldBanner(TextMeshProUGUI worldText) {
+            if (worldText == null) return;
 
-            weatherPill = FindOrCreate(canvasRoot, "WeatherPill", () => {
-                var pill = UITheme.NewImage("WeatherPill", canvasRoot, UITheme.Panel);
-                pill.rectTransform.localScale = weatherText.transform.lossyScale;
+            worldBanner = FindOrCreate(canvasRoot, WorldController.BannerName, () => {
+                var pill = UITheme.NewImage(WorldController.BannerName, canvasRoot, UITheme.Panel);
+                pill.rectTransform.localScale = worldText.transform.lossyScale;
                 return pill.rectTransform;
             });
-            weatherPill.sizeDelta = new Vector2(cycleButton != null ? 520f : 420f, 54f);
-            UITheme.StylePanel(weatherPill.GetComponent<Image>(), trim: UITheme.GoldDim);
+            worldBanner.sizeDelta = new Vector2(680f, 54f);
+            UITheme.StylePanel(worldBanner.GetComponent<Image>(), trim: UITheme.GoldDim);
 
-            if (weatherText.transform.parent != weatherPill) {
-                weatherText.transform.SetParent(weatherPill, false);
-                weatherText.transform.localScale = Vector3.one;
-                weatherText.transform.localPosition = Vector3.zero;
+            if (worldText.transform.parent != worldBanner) {
+                worldText.transform.SetParent(worldBanner, false);
+                worldText.transform.localScale = Vector3.one;
+                worldText.transform.localPosition = Vector3.zero;
             }
-            weatherText.rectTransform.anchorMin = Vector2.zero;
-            weatherText.rectTransform.anchorMax = Vector2.one;
-            weatherText.rectTransform.offsetMin = new Vector2(18f, 2f);
-            weatherText.rectTransform.offsetMax = new Vector2(cycleButton != null ? -110f : -18f, -2f);
-            weatherText.alignment = TextAlignmentOptions.Center;
-            weatherText.enableAutoSizing = true;
-            weatherText.fontSizeMin = 14;
-            weatherText.fontSizeMax = 24;
-            weatherText.color = UITheme.Parchment;
-            weatherText.fontStyle = FontStyles.Italic;
-
-            if (cycleButton == null) return;
-            var buttonRect = (RectTransform)cycleButton.transform;
-            if (buttonRect.parent != weatherPill) {
-                buttonRect.SetParent(weatherPill, false);
-                buttonRect.localScale = Vector3.one;
-            }
-            UITheme.Place(buttonRect, new Vector2(1f, 0.5f), new Vector2(-54f, 0f), new Vector2(96f, 40f));
-            buttonRect.localPosition = new Vector3(buttonRect.localPosition.x, buttonRect.localPosition.y, 0f);
-            UITheme.StyleButton(cycleButton);
-            var label = cycleButton.GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null) {
-                label.text = "Change";
-                label.fontSize = 18;
-                label.enableAutoSizing = false;
-            }
+            worldText.rectTransform.anchorMin = Vector2.zero;
+            worldText.rectTransform.anchorMax = Vector2.one;
+            worldText.rectTransform.offsetMin = new Vector2(18f, 2f);
+            worldText.rectTransform.offsetMax = new Vector2(-18f, -2f);
+            worldText.alignment = TextAlignmentOptions.Center;
+            worldText.enableAutoSizing = true;
+            worldText.fontSizeMin = 14;
+            worldText.fontSizeMax = 24;
+            worldText.color = UITheme.Parchment;
+            worldText.fontStyle = FontStyles.Italic;
         }
 
         // A little stack of card backs beside the label, on the outer side (flip puts it on the right)
@@ -387,7 +372,7 @@ namespace SlayTheClone {
             PlaceAtLeft(player1Plaque != null ? (RectTransform)player1Plaque.transform : null, left, mat1.center.y);
             PlaceAtLeft(player2Plaque != null ? (RectTransform)player2Plaque.transform : null, left, mat2.center.y);
             PlaceAtLeft(turnBanner, left, riverY);
-            if (weatherPill != null) PlaceAt(weatherPill, center.x, riverY);
+            if (worldBanner != null) PlaceAt(worldBanner, center.x, riverY);
             PlaceAtRight(endTurnButton, right, riverY);
 
             float handY = WorldBounds((player1AtBottom ? player1Hand : player2Hand).transform).center.y;

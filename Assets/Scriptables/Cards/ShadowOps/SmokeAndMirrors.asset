@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Mechanics test: Concealed for 2 Days on a friendly creature. Its
     plans show as ??? to the other side until it''s Revealed.'
   artDescription: A stage magician in a tuxedo vanishing a tank behind a cloud of

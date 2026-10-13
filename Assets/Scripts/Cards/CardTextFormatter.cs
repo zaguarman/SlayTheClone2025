@@ -14,7 +14,7 @@ namespace SlayTheClone {
     public static class CardTextFormatter {
 
         public static string GetTypeLine(CardData data) {
-            string type = data is SpellData ? "Spell" : "Creature";
+            string type = data is SpellData ? EffectResolver.IsWorld(data.effects) ? "World" : "Spell" : "Creature";
             return data.faction == Faction.None ? type : $"{type} — {FactionName(data.faction)}";
         }
 
@@ -243,6 +243,10 @@ namespace SlayTheClone {
                     return DescribeStatus(action, target);
                 case ActionType.DelayDeployment:
                     return $"+{value} {Keywords.Link("Deployment Time")} to {target}";
+                case ActionType.SetWorld: // "The World becomes Rush Hour [sand watch]3"
+                    return action.world == World.None
+                        ? $"the {Keywords.Link("World")} ends"
+                        : $"the {Keywords.Link("World")} becomes {Keywords.Link(WorldSystem.NameOf(action.world))}{DaysTag(action.statusDuration)}";
                 case ActionType.PlaceSlotEffect:
                     return $"{DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
                 case ActionType.CleanseSlot:

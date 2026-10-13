@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: Slacking Off. Can''t be given an intent, but can''t be targeted
     either.'
   artDescription: 

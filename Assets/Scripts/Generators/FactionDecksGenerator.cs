@@ -95,7 +95,7 @@ namespace SlayTheClone {
             "Mole", "Signal Jammer", "Deep Cover", "Script Kiddie", "Legacy Code",
             "NPC", "Chronically Online", "Mummy", "Pessimist", "Introvert",
             "Sleeper Agent", "Smoke And Mirrors", "Eavesdrop", "Tapped Communications", "End-to-End Encryption",
-            "Work Shift Rotation", "Chain Smoker",
+            "Work Shift Rotation", "Chain Smoker", "Zeitgeist", "Rush Hour",
         };
 
         #region Corporate
@@ -376,6 +376,18 @@ namespace SlayTheClone {
                 "Mechanics test: Leapfrog jumps over creatures to an empty slot; if its landing slot is taken, it stops at the closest empty slot on the way.")
                 .With(MovementKeyword.Leapfrog)
                 .Picture("A rider with a huge square thermal backpack, mid-hop over a gridlocked row of cars, phone strapped to the handlebars showing a 1-star rating."),
+            // Worlds (GDD 4.2) are Zeitgeist's signature: the mood of the times sets the rules for everyone
+            Spell("Zeitgeist", TargetType.Player,
+                "Everyone agrees. Nobody remembers deciding.",
+                "World for 3 Days: each Day, whoever has fewer creatures draws 1 more card. The mood of the times backs the underdog (Zeitgeist's comebacks).",
+                SetWorld(World.Zeitgeist, 3))
+                .Picture("A huge friendly ghost made of hashtags and likes floating over a crowd whose faces are lit blue by their phones."),
+            Spell("Rush Hour", TargetType.Player,
+                "Fastest way home: don't.",
+                "World for 3 Days: the slowest act first, wherever Speed decides the order (like a room where the order is flipped).",
+                SetWorld(World.RushHour, 3))
+                .NotInStarterDeck()
+                .Picture("Gridlocked traffic at dusk, every car honking, while a snail with a briefcase glides past in the empty bus lane."),
         };
         #endregion
 
@@ -783,6 +795,12 @@ namespace SlayTheClone {
             public TargetType SpellTarget;
             public List<CardEffect> Effects;
             public int CopyCount = 1;
+            public bool Extra; // Not in its faction's starter deck (it's full): in the Mechanics Test deck and the deck builder
+
+            public CardDef NotInStarterDeck() {
+                Extra = true;
+                return this;
+            }
 
             public string AssetName => new string(Name.Where(char.IsLetterOrDigit).ToArray());
 
@@ -885,6 +903,14 @@ namespace SlayTheClone {
 
         private static EffectAction DelayDeployment(int days, TargetType target) => Act(ActionType.DelayDeployment, days, target, TargetModifier.None);
 
+        // A World card: the whole board's rule for this many Days (GDD 4.2)
+        private static EffectAction SetWorld(World world, int days) {
+            var action = Act(ActionType.SetWorld, 0, TargetType.Player, TargetModifier.None);
+            action.world = world;
+            action.statusDuration = days;
+            return action;
+        }
+
         // Instant: a slot (its hidden Slot Effect and its creature's plans), or a player (their Watchdog conditions)
         private static EffectAction Reveal(TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Reveal, 0, target, modifier);
         #endregion
@@ -898,19 +924,21 @@ namespace SlayTheClone {
         private static DeckCatalog.Opponent Offer(DeckScriptableObject deck, string opponent, string tagline) =>
             new DeckCatalog.Opponent { name = opponent, tagline = tagline, deck = deck };
 
-        // Writes the faction's cards to its folder, which then holds exactly these
+        // Writes the faction's cards to its folder, which then holds exactly these; returns its starter deck
         private static List<CardDataScriptableObject> WriteCards(Faction faction, List<CardDef> cards, Dictionary<string, CardDataScriptableObject> written) {
             string folder = $"{CardsRoot}/{faction}";
             CreateFolderIfNeeded(CardsRoot, faction.ToString());
             CreateFolderIfNeeded("Assets/Scriptables", "Decks");
 
             var deckCards = new List<CardDataScriptableObject>();
+            var all = new List<CardDataScriptableObject>();
             foreach (var card in cards) {
                 var asset = WriteCard(card, faction, $"{folder}/{card.AssetName}.asset");
                 written[card.Name] = asset;
-                deckCards.AddRange(Enumerable.Repeat(asset, card.CopyCount));
+                all.Add(asset);
+                if (!card.Extra) deckCards.AddRange(Enumerable.Repeat(asset, card.CopyCount));
             }
-            RemoveCardsNotIn(folder, deckCards);
+            RemoveCardsNotIn(folder, all);
             return deckCards;
         }
 

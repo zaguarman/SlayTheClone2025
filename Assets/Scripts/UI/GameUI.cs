@@ -7,10 +7,9 @@ namespace SlayTheClone {
     public class GameUI : MonoBehaviour {
         public bool IsInitialized { get; private set; }
 
-        private WeatherController weatherController;
+        private WorldController worldController;
         private TurnUI turnUI;
         private DeckViewController deckViewController;
-        private bool weatherSystemInitialized = false;
 
         private IGameManager gameManager;
         private IGameMediator gameMediator;
@@ -109,10 +108,9 @@ namespace SlayTheClone {
         }
 
         private void InitializeControllers() {
-            weatherController = GetOrAddComponent<WeatherController>();
-            weatherController.Initialize(gameMediator, gameManager, gameReferences.GetWeatherCycleButton(), gameReferences.GetWeatherText());
-            weatherSystemInitialized = weatherController.IsInitialized;
-            LogControllerInitialized("Weather controller", weatherSystemInitialized);
+            worldController = GetOrAddComponent<WorldController>();
+            worldController.Initialize(gameMediator, gameManager, gameReferences.GetWeatherCycleButton(), gameReferences.GetWeatherText());
+            LogControllerInitialized("World controller", worldController.IsInitialized);
 
             deckViewController = GetOrAddComponent<DeckViewController>();
             deckViewController.Initialize(gameMediator, gameManager,
@@ -189,10 +187,6 @@ namespace SlayTheClone {
             OnInitialized.RemoveAllListeners();
             Log("GameUI destroyed", LogTag.UI);
             IsInitialized = false;
-        }
-
-        public bool IsWeatherSystemInitialized() {
-            return weatherSystemInitialized && weatherController != null;
         }
 
         private void SetupResolveButton() {

@@ -102,6 +102,14 @@ namespace SlayTheClone {
             Add("Temporal Shield", "Temporal Shield X (no number: 1): for X [Days], the creature in the slot takes no combat damage.");
             Add("Scorched Earth", "The creature in the slot can't use its ability or trigger its effects. It can still move and attack.");
 
+            // ---------------------------------------------------------------- Worlds
+            group = "Worlds";
+            Add("World", "A rule for the whole board, for the [Days] shown (no number: until another World replaces it). One at a time: a new World replaces the old. A World card plays on either side of the table.");
+            foreach (World world in System.Enum.GetValues(typeof(World))) {
+                if (world == World.None) continue;
+                Add(WorldSystem.NameOf(world), $"A [World]: {WorldSystem.RuleOf(world)}." + (world == World.RushHour ? " Lower Speed goes first, wherever Speed decides the order." : ""));
+            }
+
             // ---------------------------------------------------------------- Creature abilities (Abilities Compendium)
             group = "Creature Abilities";
             foreach (CreatureAbility ability in System.Enum.GetValues(typeof(CreatureAbility))) {

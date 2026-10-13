@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Mechanics test: Status Timing. Burn does nothing at the Dusk of the
     Day it''s applied, then ticks for 2 Days.'
   artDescription: A phone screen with a glowing red notification, reflected in the

@@ -82,6 +82,9 @@ namespace SlayTheClone {
         // CreateWatchdog Specific: statusDuration is its Days (0 = until its charges are used)
         public WatchdogSpec watchdog;
 
+        // SetWorld Specific: the World it puts in play; statusDuration is its Days (0 = until another World replaces it)
+        public World world = World.None;
+
         public EffectAction Clone() => (EffectAction)MemberwiseClone(); // Value-type fields only
     }
 

@@ -46,6 +46,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: an extra effect against creatures that planned an attack
     this Day.'
   artDescription: 'A general in a war room proudly pointing at a map where a missile

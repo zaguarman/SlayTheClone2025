@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
     - actionType: 2
       value: 2
       targetType: 0
@@ -67,6 +68,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: Capital cost, discard your hand; each creature takes damage
     equal to the cards discarded.'
   artDescription: 

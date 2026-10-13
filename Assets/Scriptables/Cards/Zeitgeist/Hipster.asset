@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Too Mainstream: immune to effects that affect more than one creature.
     Future: Hipster status. Hurts only creatures that share a name with another creature.'
   artDescription: 

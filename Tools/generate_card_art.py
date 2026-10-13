@@ -3174,6 +3174,57 @@ def tax_exempt_corruption():
     return svg(defs, body)
 
 
+def zeitgeist_world():
+    # The spirit of the times: a huge pale ghost made of glowing hashtags and likes floats over a crowd lit by their phones
+    defs = lin("bg", ["#2a1650", "#0e0a24"]) + rad("aura", [("#ff7ad9", 0.55), ("#ff7ad9", 0)])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += circle(176, 70, 110, "url(#aura)")
+    # The ghost: a rounded head and a wavy tail
+    body += path("M120 120 C 116 40 236 40 232 120 L 232 150 Q 218 136 204 150 Q 190 164 176 150 Q 162 136 148 150 Q 134 164 120 150 Z",
+                 "#f4e9ff", 'opacity="0.92"')
+    body += circle(158, 92, 9, "#2a1650") + circle(194, 92, 9, "#2a1650") + circle(161, 89, 3, "#ffffff") + circle(197, 89, 3, "#ffffff")
+    body += path("M162 114 Q 176 126 190 114", "none", 'stroke="#2a1650" stroke-width="4" stroke-linecap="round"')
+    # Trends orbiting it: hashtags, hearts and thumbs
+    for x, y, c in ((84, 46, "#ffd23f"), (262, 40, "#4fc3ff"), (60, 104, "#7dff9a"), (292, 98, "#ff7ad9")):
+        body += stroke(f"M{x - 6} {y - 10} L{x - 9} {y + 10} M{x + 6} {y - 10} L{x + 3} {y + 10} M{x - 12} {y - 3} L{x + 10} {y - 3} M{x - 13} {y + 4} L{x + 9} {y + 4}", c, 3)
+    for x, y in ((112, 28), (240, 18)):
+        body += path(f"M{x} {y + 8} C {x - 12} {y - 2} {x - 4} {y - 12} {x} {y - 3} C {x + 4} {y - 12} {x + 12} {y - 2} {x} {y + 8} Z", "#ff4f6d")
+    # The crowd, faces lit blue by their phones
+    for i, cx in enumerate(range(26, W, 44)):
+        body += person(cx, H + 6, 0.8, SKIN[i % len(SKIN)], ["#3d5a80", "#5a3d80", "#2f6b5a", "#80503d"][i % 4], face="flat")
+        body += phone(cx + 8, H - 34, 0.45, "#7fdcff")
+    return svg(defs, body)
+
+
+def rush_hour():
+    # Gridlocked traffic at dusk, horns blaring, while a snail with a briefcase glides past in the empty bus lane
+    defs = lin("bg", ["#f39a5a", "#5a2e5a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x, h in ((10, 70), (52, 96), (98, 60), (140, 110), (196, 80), (244, 120), (300, 74)):
+        body += rect(x, 140 - h, 40, h, "#3a2440")
+        for wy in range(146 - h, 132, 14):
+            body += rect(x + 8, wy, 8, 6, "#ffd27a", 'opacity="0.7"') + rect(x + 24, wy, 8, 6, "#ffd27a", 'opacity="0.4"')
+    body += rect(0, 132, W, 68, "#2b2b33")
+    body += rect(0, 176, W, 24, "#8a3030") + stroke("M0 176 L352 176", "#f2f2f2", 2)  # The bus lane
+    for i in range(0, W, 30):
+        body += rect(i, 150, 16, 3, "#f2e27a")
+    for i, x in enumerate(range(-10, W, 62)):
+        color = ["#c0392b", "#2e86de", "#f1c40f", "#27ae60", "#8e44ad", "#e67e22"][i % 6]
+        body += rect(x, 136, 54, 22, color, 'rx="6"') + rect(x + 10, 128, 32, 14, color, 'rx="5"')
+        body += rect(x + 14, 131, 11, 8, "#bfe6ff") + rect(x + 28, 131, 11, 8, "#bfe6ff")
+        body += circle(x + 12, 160, 6, "#111") + circle(x + 42, 160, 6, "#111")
+        body += circle(x + 54, 144, 3, "#ffef9a")
+    for x, y in ((60, 112), (186, 106), (300, 114)):  # Honks
+        body += stroke(f"M{x} {y} l 8 -8 M{x + 6} {y + 4} l 10 -4 M{x + 2} {y - 4} l 2 -10", "#ffffff", 2.5)
+    # The snail, winning
+    body += ellipse(176, 192, 34, 6, "#7a5a3a") + path("M146 192 C 146 162 196 156 200 180 C 202 192 186 196 176 190", "#c98b3a", 'stroke="#6a4420" stroke-width="3"')
+    body += path("M160 186 C 160 172 186 170 186 182", "none", 'stroke="#6a4420" stroke-width="3"')
+    body += stroke("M210 190 L 214 172 M216 190 L 222 174", "#7a5a3a", 3) + circle(214, 170, 3, "#111") + circle(222, 172, 3, "#111")
+    body += rect(126, 178, 18, 12, "#3a2a1a", 'rx="2"') + stroke("M131 178 q 4 -6 8 0", "#3a2a1a", 2)
+    body += speed_lines(120, 186, 3, 18, "#ffffff")
+    return svg(defs, body)
+
+
 CARDS = {
     "Water": {
         "AbyssalCall": abyssal_call, "AbyssalCucumber": abyssal_cucumber, "CoralBuilder": coral_builder,
@@ -3211,6 +3262,7 @@ CARDS = {
         "Antihero": antihero, "Bodybuilder": bodybuilder, "YOLO": yolo, "ThisIsFine": this_is_fine, "Strike": strike,
         "RussianRoulette": russian_roulette, "ToxicPositivity": toxic_positivity, "MentalHealthDay": mental_health_day,
         "DeliveryCyclist": delivery_cyclist, "PlotArmor": plot_armor, "ChainSmoker": chain_smoker,
+        "Zeitgeist": zeitgeist_world, "RushHour": rush_hour,
     },
     "DigitalSociety": {
         "Catfish": catfish, "ConspiracyTheorist": conspiracy_theorist, "Clickbait": clickbait, "Cancelled": cancelled,

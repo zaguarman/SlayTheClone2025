@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: taxes enemy card plays instead of plain damage (Red Tape
     on the economy).'
   artDescription: 

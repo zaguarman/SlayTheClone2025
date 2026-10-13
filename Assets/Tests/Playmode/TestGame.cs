@@ -26,7 +26,7 @@ namespace SlayTheClone.Tests {
         public GameMediator Mediator { get; } = new GameMediator();
         public TurnClock TurnClock { get; } = new TurnClock();
         public IActionsQueue ActionsQueue { get; }
-        public IWeatherSystem WeatherSystem { get; }
+        public IWorldSystem WorldSystem { get; }
         public ICardDealingService CardDealingService { get; }
         public IModifierManager ModifierManager { get; }
         public IBattlefieldCombatHandler CombatHandler { get; }
@@ -42,9 +42,9 @@ namespace SlayTheClone.Tests {
             Player2.Opponent = Player1;
 
             CardDealingService = new CardDealingService(Mediator);
-            WeatherSystem = new WeatherSystem();
+            WorldSystem = new WorldSystem();
             ModifierManager = new ModifierManager(Mediator, new SimpleModifierFactory());
-            ActionsQueue = new ActionsQueue(Mediator, WeatherSystem, CardDealingService, ModifierManager, TurnClock, ActionExecutors.CreateRegistry());
+            ActionsQueue = new ActionsQueue(Mediator, WorldSystem, CardDealingService, ModifierManager, TurnClock, ActionExecutors.CreateRegistry());
             CombatHandler = new BattlefieldCombatHandler(ActionsQueue, ModifierManager);
             Player1.Initialize(Mediator, CardDealingService);
             Player2.Initialize(Mediator, CardDealingService);
@@ -98,6 +98,7 @@ namespace SlayTheClone.Tests {
         public void StartTurn() {
             ModifierManager.ProcessEndOfTurn(TurnClock.TurnNumber, ActionsQueue);
             SlotEffectRules.ProcessEndOfTurn(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, Mediator);
+            WorldSystem.ProcessDusk(TurnClock.TurnNumber);
             Resolve();
             TurnClock.Advance();
             ModifierManager.ProcessStartOfTurn(TurnClock.TurnNumber, ActionsQueue);
@@ -112,7 +113,7 @@ namespace SlayTheClone.Tests {
             if (!decksSet) SetDecks(Fillers(10), Fillers(10));
             if (turnManager == null) {
                 turnManager = new GameObject("Test TurnManager").AddComponent<TurnManager>();
-                turnManager.Initialize(new IPlayer[] { Player1, Player2 }, ActionsQueue, ModifierManager, Mediator, TurnClock);
+                turnManager.Initialize(new IPlayer[] { Player1, Player2 }, ActionsQueue, ModifierManager, Mediator, TurnClock, WorldSystem);
             }
 
             int turn = TurnClock.TurnNumber;

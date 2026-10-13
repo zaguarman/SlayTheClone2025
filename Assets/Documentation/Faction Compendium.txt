@@ -37,7 +37,7 @@ Statecraft: Order, Law & War
     • Coin: § (the law's section sign) on a coin in its color.
     • Plans or Reacts: Plans. Governments, like corporations, plan several steps ahead: their strategies are powerful once set up but hard to change. Lots of muscle, little flexibility.
     • Play Style: Fortify the line, slow everyone down with paperwork, then strike first.
-    • Signature Mechanics: Recruitment (conscription), Red Tape (adds Deployment Time to enemies), first strikes through Speed (Blitzkrieg, Preemptive Strike), Laws (Location cards that change rules for X Days), multi-slot war machines (tanks, submarines, Man o' War), exile (Banish).
+    • Signature Mechanics: Recruitment (conscription), Red Tape (adds Deployment Time to enemies), first strikes through Speed (Blitzkrieg, Preemptive Strike), Laws (Worlds that change rules for X Days), multi-slot war machines (tanks, submarines, Man o' War), exile (Banish).
     • Statuses: Heavy, Diplomatic Immunity, Keep Calm.
     • Pays With: Bureaucracy. Its creatures have higher Deployment Time than similar creatures, and its spells often add Deployment Time to your own creatures as a drawback.
     • Can't: Hide anything. All its plans are public.
@@ -101,7 +101,7 @@ Zeitgeist: Moods of Modern Life
     • Coin: ☺ (the mood of the times) on a coin in its color.
     • Plans or Reacts: Reacts. Internet memes have all the flexibility in the world: they act on what the others have planned and break those plans. Their cards are weaker, but they draw many more cards and play more dynamic strategies.
     • Play Style: Momentum and comebacks. Moods that buff a creature but burn it out; stronger when losing.
-    • Signature Mechanics: Underdog (a bonus when you have fewer creatures or less Health), Plot Armor (survives a lethal hit once, using OnAboutToDie), Trends (Locations that reward a behavior for X Days), Strikes and Protests (shut down engines).
+    • Signature Mechanics: Underdog (a bonus when you have fewer creatures or less Health), Plot Armor (survives a lethal hit once, using OnAboutToDie), Worlds (cards that set the rules for the whole board for X Days: Zeitgeist, Rush Hour), Strikes and Protests (shut down engines).
     • Statuses: Hipster, Impatient, Slacking Off.
     • Pays With: Self-harm. Damage or statuses on its own creatures.
     • Can't: Use Intelligence. It lives in the moment.
@@ -153,7 +153,7 @@ Utopia: Science & the Future
 • Visible Slot Effects: Primary Statecraft, Utopia; secondary Myth (altars, sacred ground).
 • Hidden Slot Effects: Shadow Ops. only. (Statecraft's minefields are visible: everyone knows where the no-go zone is.)
 • Card Draw Economy: Primary Corporate; secondary Mind.
-• Global Rules (Locations): Primary Zeitgeist; secondary Statecraft, Utopia.
+• Global Rules (Worlds): Primary Zeitgeist; secondary Statecraft, Utopia.
 • Spreading Damage-Over-Time: Primary Digital Society; secondary Zeitgeist.
 • Disables (Muted, Exhausted): Primary Tech; secondary Mind.
 • Comebacks: Primary Zeitgeist; secondary Myth.

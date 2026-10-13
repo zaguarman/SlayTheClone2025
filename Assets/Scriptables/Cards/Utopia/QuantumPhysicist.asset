@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Swap. Whoever hits it is Exhausted: observing it collapses them.'
   artDescription: A physicist split down the middle, one half of him see-through,
     holding two coffees and checking two watches.

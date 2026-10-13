@@ -45,6 +45,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+      world: 0
   designNotes: 'Future: a Worker token created by other cards rather than drafted.
     Fodder for sacrifice costs.'
   artDescription: 
