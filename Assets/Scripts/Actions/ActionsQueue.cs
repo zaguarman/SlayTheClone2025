@@ -118,7 +118,7 @@ namespace SlayTheClone {
         /// <summary>The layer an action resolves in when it is queued on its own (GDD 3.7).</summary>
         public static ResolutionLayer LayerOf(IGameAction action) => action switch {
             MoveCreatureAction => ResolutionLayer.Movement,
-            SummonCreatureAction => ResolutionLayer.Summon,
+            SummonCreatureAction or ReappearAction => ResolutionLayer.Summon,
             PlayCardAction play => play.GetCard() is ICreature ? ResolutionLayer.Summon : ResolutionLayer.Spell,
             PlaySpellAction => ResolutionLayer.Spell,
             UseAbilityAction use when Abilities.LandsWithSpells(use.Creature?.Ability ?? Enums.CreatureAbility.None) => ResolutionLayer.Spell,

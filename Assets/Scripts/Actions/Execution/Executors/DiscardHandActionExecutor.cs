@@ -1,3 +1,4 @@
+using System.Linq;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
@@ -11,6 +12,13 @@ namespace SlayTheClone {
 
             int initialHandCount = player.Hand.Count;
             player.DiscardHand();
+
+            // Cards on their way back to the hand join the new one; past the hand limit they go to the discard pile
+            foreach (var card in player.ComingBack.ToList()) {
+                player.ComingBack.Remove(card);
+                if (player.Hand.Count < Player.MaxHandSize) player.AddToHand(card);
+                else player.Deck.AddToDiscardPile(card);
+            }
 
             Log($"Executed DiscardHandAction via Executor for {player.Name} - discarded {initialHandCount} cards", LogTag.Actions | LogTag.Cards);
         }

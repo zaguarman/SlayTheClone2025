@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using static SlayTheClone.DebugLogger;
 using static SlayTheClone.Enums;
@@ -119,9 +120,147 @@ namespace SlayTheClone {
                 StatusRules.Land(context, to, status.EffectType, status.DurationInTurns, potency, status.TurnApplied);
                 Log($"{status.EffectType} passes from {from.Name} to {to.Name}", LogTag.Effects);
             }
-            from.Heat = manager.GetActiveModifiersFor(from).OfType<StatusEffectModifier>().Where(s => s.EffectType == StatusEffectType.HeatSignature).Sum(s => s.Stacks);
             context.GameMediator.NotifyCreatureStatsChanged(from);
             context.GameMediator.NotifyCreatureStatsChanged(to);
+        }
+    }
+
+    /// <summary>A creature of one side, off the board for now (Witness Protection Program), and when it comes back.</summary>
+    public class GoneDark {
+        public ICreature Creature { get; }
+        public int SlotIndex { get; }    // Where it stood: it comes back there if it's free
+        public int ReturnsOnTurn { get; } // The Day whose Dawn brings it back
+
+        public GoneDark(ICreature creature, int slotIndex, int returnsOnTurn) {
+            Creature = creature;
+            SlotIndex = slotIndex;
+            ReturnsOnTurn = returnsOnTurn;
+        }
+
+        /// <summary>At Dawn: the creatures due back today are queued to come back, ahead of the Day's Dawn effects.</summary>
+        public static void ProcessDawn(IEnumerable<IPlayer> players, int turn, IActionsQueue queue) {
+            foreach (var player in players) {
+                foreach (var hidden in player.GoneDark.Where(g => g.ReturnsOnTurn <= turn).ToList()) {
+                    queue.AddAction(new ReappearAction(player, hidden));
+                }
+            }
+        }
+
+        /// <summary>
+        /// A creature leaves the board without dying: what it planned is cancelled, its statuses and stat changes go (it's
+        /// out of play), and its slot is free.
+        /// </summary>
+        public static void LeavePlay(ICreature creature, ActionExecutionContext context) {
+            var slot = creature.Slot;
+            context.ActionsQueue.CancelActionsOf(creature);
+            context.ModifierManager.UnregisterCreature(creature);
+            slot?.Clear();
+            if (slot?.Owner != null) context.GameMediator.NotifyBattlefieldStateChanged(slot.Owner);
+        }
+    }
+
+    /// <summary>Extraction: the creature goes back to its owner's hand, with the next Day's hand.</summary>
+    public class ReturnToHandAction : IGameAction {
+        public ICreature Creature { get; }
+        /// <summary>He Didn't Kill Himself: it "dies" first, so its Last Will happens.</summary>
+        public bool FakesItsDeath { get; }
+
+        public ReturnToHandAction(ICreature creature, bool fakesItsDeath = false) {
+            Creature = creature;
+            FakesItsDeath = fakesItsDeath;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"ReturnToHandAction: {Creature?.Name}{(FakesItsDeath ? " fakes its death and" : "")} goes back to the hand";
+    }
+
+    // It leaves play (not a death: a hand isn't a grave) unless it fakes its death, which everybody believes: its Last Will
+    // happens and the death is announced. Either way its card comes back with the next Day's hand. Extracted while Revealed,
+    // it comes back with a new face: played again, it arrives Concealed
+    public class ReturnToHandActionExecutor : ActionExecutor<ReturnToHandAction> {
+        public const int NewIdentityDays = 2;
+
+        protected override void ExecuteAction(ReturnToHandAction back, ActionExecutionContext context) {
+            var creature = back.Creature;
+            if (creature == null || creature.IsDead || creature.Slot == null) {
+                Log($"Nothing goes back: {back}", LogTag.Effects);
+                return;
+            }
+            bool wasRevealed = context.ModifierManager.HasStatusEffect(creature, StatusEffectType.Revealed);
+            if (back.FakesItsDeath) {
+                Log($"{creature.Name} \"dies\"", LogTag.Effects | LogTag.Creatures);
+                context.GameMediator.NotifyCreatureDied(creature);
+                creature.HandleEffect(EffectTrigger.OnDeath, context.ActionsQueue); // A Last Will waits in its layer, like a real one
+            }
+            var home = creature.DeckOwner ?? creature.Owner;
+            GoneDark.LeavePlay(creature, context);
+            home.ReturnToHand(creature);
+            if (wasRevealed && !back.FakesItsDeath && home.ComingBack.LastOrDefault() is ICreature copy) copy.ArrivesConcealed = NewIdentityDays;
+            context.GameMediator.NotifyHandStateChanged(home);
+        }
+    }
+
+    /// <summary>Witness Protection Program: the creature leaves the board, and comes back at the next Dawn with a new identity.</summary>
+    public class VanishAction : IGameAction {
+        public ICreature Creature { get; }
+
+        public VanishAction(ICreature creature) {
+            Creature = creature;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"VanishAction: {Creature?.Name} goes dark";
+    }
+
+    // Off the board, nothing reaches it: no damage, no status. Its slot is empty meanwhile, so an attack there hits its player
+    public class VanishActionExecutor : ActionExecutor<VanishAction> {
+        protected override void ExecuteAction(VanishAction vanish, ActionExecutionContext context) {
+            var creature = vanish.Creature;
+            var side = creature?.Owner;
+            if (creature == null || creature.IsDead || creature.Slot == null || side == null) return;
+            int index = creature.Slot.Index;
+            GoneDark.LeavePlay(creature, context);
+            side.GoneDark.Add(new GoneDark(creature, index, context.TurnClock.TurnNumber + 1));
+            Log($"{creature.Name} goes dark until the next Dawn", LogTag.Effects | LogTag.Creatures);
+        }
+    }
+
+    /// <summary>A creature that went dark comes back: to its old slot if it's free, else the first free one on its side.</summary>
+    public class ReappearAction : IGameAction {
+        public IPlayer Side { get; }
+        public GoneDark Hidden { get; }
+
+        public ReappearAction(IPlayer side, GoneDark hidden) {
+            Side = side;
+            Hidden = hidden;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"ReappearAction: {Hidden?.Creature?.Name} comes back to {Side?.Name}'s side";
+    }
+
+    // A new identity: it enters as ??? (Concealed for 2 Days, so it stays unknown), its old statuses gone. It isn't a summon:
+    // its Arrival effects don't happen again. No free slot: it never comes back, and its card goes to the discard pile
+    public class ReappearActionExecutor : ActionExecutor<ReappearAction> {
+        protected override void ExecuteAction(ReappearAction back, ActionExecutionContext context) {
+            var side = back.Side;
+            var hidden = back.Hidden;
+            if (side == null || hidden == null || !side.GoneDark.Remove(hidden)) return;
+            var creature = hidden.Creature;
+            var slot = !side.Battlefield[hidden.SlotIndex].IsOccupied() ? side.Battlefield[hidden.SlotIndex] : side.Battlefield.FirstOrDefault(s => !s.IsOccupied());
+            if (slot == null) {
+                Log($"{creature.Name} has nowhere to come back to: its card goes to the discard pile", LogTag.Effects | LogTag.Creatures);
+                side.DiscardCard(creature);
+                return;
+            }
+            slot.Place(creature);
+            context.ModifierManager.RegisterCreature(creature);
+            creature.EnterPlay(context.TurnClock.TurnNumber);
+            StatusRules.Land(context, creature, StatusEffectType.Concealed, ReturnToHandActionExecutor.NewIdentityDays, 0, context.TurnClock.TurnNumber);
+            Intel.OnEnteredPlay(creature, context.ModifierManager);
+            Log($"{creature.Name} is back, with a new identity", LogTag.Effects | LogTag.Creatures);
+            context.GameMediator.NotifyBattlefieldStateChanged(side);
+            SlotEffectRules.OnEnter(creature, slot, context);
         }
     }
 }

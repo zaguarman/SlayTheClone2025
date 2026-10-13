@@ -707,6 +707,24 @@ namespace SlayTheClone {
                 Act(ActionType.StealGoodStatuses, 0, TargetType.FriendlyCreatures, TargetModifier.None))
                 .NotInStarterDeck()
                 .Picture("A woman blowing a puff of glittering white powder off her palm into a businessman's face; dazed and smiling, he hands her his watch, his wallet and the keys to an armored car."),
+            Spell("He Didn't Kill Himself", TargetType.FriendlyCreatures,
+                "Officially: suicide. Unofficially: on a beach in Belize, rereading the files.",
+                "Target friendly creature fakes its death: its Last Will happens (Dead Man's Switch destroys their strongest), then it goes back to your hand, in the next Day's hand.",
+                Act(ActionType.FakeDeath, 0, TargetType.FriendlyCreatures, TargetModifier.None))
+                .NotInStarterDeck()
+                .Picture("A sheet pulled over a body on a morgue gurney, but the toes sticking out wear flip-flops with a fresh tan line, and the toe tag is a postcard from a tropical island."),
+            Spell("Extraction", TargetType.FriendlyCreatures,
+                "Mission accomplished. Or aborted. Details are classified.",
+                "Target friendly creature goes back to your hand, in the next Day's hand. Extracted while Revealed, it comes back with a new face: played again, it arrives Concealed for 2 Days.",
+                Act(ActionType.ReturnToHand, 0, TargetType.FriendlyCreatures, TargetModifier.None))
+                .NotInStarterDeck()
+                .Picture("A black helicopter at night hoisting an agent off a rooftop on a rope ladder, searchlights sweeping, his trench coat flapping and a briefcase handcuffed to his wrist."),
+            Spell("Witness Protection Program", TargetType.FriendlyCreatures,
+                "New name, new town, new moustache. Same bad feeling.",
+                "Target friendly creature goes dark until the next Dawn: whatever lands this Day misses it (board-wide damage included), but its slot is empty meanwhile. It comes back with a new identity: Concealed for 2 Days, unknown to the enemy, its old statuses gone.",
+                Act(ActionType.Vanish, 0, TargetType.FriendlyCreatures, TargetModifier.None))
+                .NotInStarterDeck()
+                .Picture("A man in a terrible fake moustache and a Hawaiian shirt mowing a lawn in a quiet cul-de-sac, his old mugshot pinned to a corkboard behind the window, a federal agent in a parked car pretending to read a newspaper."),
             Creature("MK Ultra Test Subject", 4, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",

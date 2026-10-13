@@ -373,9 +373,7 @@ namespace SlayTheClone {
         }
 
         // Whose cards they are: a Gift on the other side is still its giver's
-        private static int CountCards(Player player) =>
-            player.Deck.CardsRemaining + player.Hand.Count + player.Deck.GetDiscardPilePreview().Count
-            + player.Battlefield.Concat(player.Opponent.Battlefield).Count(s => s.OccupyingCreature is ICreature c && (c.DeckOwner ?? c.Owner) == player);
+        private static int CountCards(Player player) => CardCount.Of(player);
 
         public string Report() {
             var text = new StringBuilder();

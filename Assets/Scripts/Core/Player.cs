@@ -19,6 +19,15 @@ namespace SlayTheClone {
         /// leaving play, the discard pile and reshuffles don't give the use back.
         /// </summary>
         ISet<string> UsedOncePerCombat { get; }
+        /// <summary>
+        /// Cards coming back to this player's hand (Extraction, He Didn't Kill Himself): they join the next Day's hand, after
+        /// the old one is discarded, as fresh copies (their Persistent Stat Modifications and ability stay).
+        /// </summary>
+        List<ICard> ComingBack { get; }
+        /// <summary>This player's creatures that are off the board for now (Witness Protection Program), and when they come back.</summary>
+        List<GoneDark> GoneDark { get; }
+        /// <summary>Puts a card that left play on its way back to the hand: it joins the next Day's hand.</summary>
+        void ReturnToHand(ICard card);
         void AddToHand(ICard card);
         void RemoveFromHand(ICard card);
         void RemoveFromBattlefield(ICard creature);
@@ -52,6 +61,8 @@ namespace SlayTheClone {
         public int CardsToDraw { get; set; } = 2; // Default to drawing 2 cards
         public int ExtraDraws { get; set; }
         public ISet<string> UsedOncePerCombat { get; } = new HashSet<string>();
+        public List<ICard> ComingBack { get; } = new List<ICard>();
+        public List<GoneDark> GoneDark { get; } = new List<GoneDark>();
 
         public IReadOnlyList<BoardSlot> Battlefield { get; }
         public event Action<int> HealthChanged;
@@ -150,6 +161,14 @@ namespace SlayTheClone {
             var home = (card as ICreature)?.DeckOwner ?? this;
             home.Deck.AddToDiscardPile(card);
             Log($"Discarded {card.Name}{(home != this ? $" to {home.Name}'s discard pile" : "")}", LogTag.Cards);
+        }
+
+        public void ReturnToHand(ICard card) {
+            if (card == null) return;
+            RemoveFromBattlefield(card);
+            var copy = SlayTheClone.Deck.FreshCopy(card);
+            ComingBack.Add(copy);
+            Log($"{card.Name} is on its way back to {Name}'s hand", LogTag.Cards);
         }
 
         public void DiscardHand() {

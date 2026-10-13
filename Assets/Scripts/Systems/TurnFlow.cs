@@ -83,6 +83,7 @@ namespace SlayTheClone {
                 gameMediator.NotifyTurnEnded(endedTurn); // Notify that the PREVIOUS turn number has ENDED
 
                 // --- Phase 3: Start of Turn Processing (for the new turn) ---
+                GoneDark.ProcessDawn(players, turnNumber, actionsQueue); // Creatures that went dark come back first
                 modifierManager.ProcessStartOfTurn(turnNumber, actionsQueue);
                 yield return ResolveQueuedActions();
 

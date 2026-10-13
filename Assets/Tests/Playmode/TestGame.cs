@@ -101,6 +101,7 @@ namespace SlayTheClone.Tests {
             TrendSystem.ProcessDusk(TurnClock.TurnNumber);
             Resolve();
             TurnClock.Advance();
+            GoneDark.ProcessDawn(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, ActionsQueue);
             ModifierManager.ProcessStartOfTurn(TurnClock.TurnNumber, ActionsQueue);
             Resolve();
         }

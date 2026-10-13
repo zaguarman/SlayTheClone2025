@@ -13,10 +13,8 @@ namespace SlayTheClone.Tests {
 
     /// <summary>Checks that hold in every game, whatever was played.</summary>
     public static class GameAsserts {
-        /// <summary>All of a player's cards: deck, hand, board and discard pile; a Gift on the other side is still its giver's.</summary>
-        public static int CountCards(Player player) =>
-            player.Deck.CardsRemaining + player.Hand.Count + player.Deck.GetDiscardPilePreview().Count
-            + player.Battlefield.Concat(player.Opponent.Battlefield).Count(s => s.OccupyingCreature is ICreature c && (c.DeckOwner ?? c.Owner) == player);
+        /// <summary>All of a player's cards, wherever they are (see <see cref="CardCount"/>).</summary>
+        public static int CountCards(Player player) => CardCount.Of(player);
 
         /// <summary>No card is in two places at once (in the deck and on the board, say).</summary>
         public static void AssertEachCardInOneZone(Player player) {

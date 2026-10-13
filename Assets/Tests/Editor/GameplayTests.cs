@@ -75,6 +75,40 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(2, p1.Deck.CardsRemaining);
             Assert.AreEqual(0, p1.Deck.GetDiscardPilePreview().Count);
 
+            // Extraction: a creature goes back to its owner's hand, with the next Day's hand. Extracted while Revealed, it
+            // comes back with a new face: played again, it arrives Concealed, unknown
+            var spy = game.Summon(p1, game.Creature("Spy", 2, 2), 2);
+            game.Run(new ApplyStatusEffectAction(spy, StatusEffectType.Revealed, 2, 0, controller: p2));
+            int cards = GameAsserts.CountCards(p1);
+            game.Run(new ReturnToHandAction(spy));
+            Assert.IsNull(spy.Slot, "Extracted: off the board...");
+            CollectionAssert.DoesNotContain(p1.Hand.Select(c => c.Name).ToList(), "Spy", "...not in this hand, which is discarded at Dusk...");
+            game.Run(new DiscardHandAction(p1));
+            var back = (ICreature)game.InHand(p1, "Spy");
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1), "...but in the next one");
+            game.Run(new PlayCardAction(back, p1, p1.Battlefield[2]));
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(back, StatusEffectType.Concealed) && !Intel.KnowsWhatItIs(p2, back), "A new face: Concealed, unknown");
+
+            // He Didn't Kill Himself: it "dies", so its Last Will happens, then it goes back to the hand
+            var martyr = game.Summon(p1, game.Creature("Martyr", 1, 1, 1, TestGame.Effect(EffectTrigger.OnDeath, ActionType.Damage, 3, TargetType.Enemy)), 3);
+            p2Health = p2.Health;
+            cards = GameAsserts.CountCards(p1);
+            game.Run(new ReturnToHandAction(martyr, fakesItsDeath: true));
+            Assert.AreEqual(p2Health - 3, p2.Health, "Its Last Will happens");
+            Assert.IsTrue(p1.ComingBack.Any(c => c.Name == "Martyr") && !martyr.IsDead, "...and it's on its way back to the hand, alive");
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1));
+
+            // Witness Protection Program: off the board until the next Dawn, then back with a new identity
+            var witness = game.Summon(p1, game.Creature("Witness", 2, 5), 4);
+            cards = GameAsserts.CountCards(p1);
+            game.Run(new VanishAction(witness));
+            Assert.IsNull(witness.Slot, "Gone dark");
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1), "Still one of the player's cards");
+            game.StartTurn();
+            Assert.AreSame(witness, p1.Battlefield[4].OccupyingCreature, "Back at Dawn, in its slot");
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(witness, StatusEffectType.Concealed) && !Intel.KnowsWhatItIs(p2, witness), "...as ???");
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1));
+
             // The same random seed shuffles the same way, so a game can be replayed
             using (var replay = new TestGame()) {
                 replay.SetDecks(p1Deck, p2Deck);

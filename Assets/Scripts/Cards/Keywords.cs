@@ -60,6 +60,7 @@ namespace SlayTheClone {
             Add("Rebirth", "Once per combat, when this would die, it's reborn instead: it survives with 1 Health. The wheel turns: last life a worm, this life a dog.");
             Add("Summon", "Summon X (no number: 1): X random creatures from your deck enter your empty slots.");
             Add("Destroy", "Kills it outright, whatever its Health or [Armor]. [Untouchable] still saves it.");
+            Add("Gone Dark", "Off the board until the next [Dawn]: nothing reaches it, and its [Slot|slot] is empty meanwhile (an attack there hits its player). It comes back to its slot, or the first free one, with a new identity: [Concealed] for 2 Days, so the other side doesn't know what it is, and its old statuses are gone. No free slot: it never comes back.");
             Add("Take Control", "It changes sides for good: it goes to the [Slot|slot] facing the one it stood in, under your control, and whatever stands there is discarded. It keeps its Health, statuses and stat changes, and loses what it planned. It's still its owner's card: when it leaves play, it goes back to them.");
             Add("Gift", "You play it into an empty enemy slot: it joins their side, and they control it. It's still your card: when it leaves play, it comes back to your discard pile. They can get rid of it by summoning over it.");
 

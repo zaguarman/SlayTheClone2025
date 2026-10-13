@@ -83,22 +83,27 @@ namespace SlayTheClone {
                 return;
             }
 
-            var resetCard = CreateFreshCopy(card);
-            if (card is ICreature used && resetCard is ICreature copy && copy != used) {
-                var (attack, health, speed) = used.PersistentChanges;
-                copy.ChangeBaseStats(attack, health, speed);
-                copy.Ability = used.Ability; // A gained or lost ability also stays until the reshuffle
-            }
+            var resetCard = FreshCopy(card);
             discardPile.Add(resetCard);
             Log($"Added {resetCard.Name} to discard pile (DeckID: {deckId.ToUpper()})", LogTag.Cards);
         }
 
-        private ICard CreateFreshCopy(ICard card) {
+        /// <summary>
+        /// A card that left play, as it goes back to a pile or the hand: a fresh copy of its definition, so damage, buffs and
+        /// death don't carry over. Its Persistent Stat Modifications and a gained or lost ability stay until it's reshuffled.
+        /// </summary>
+        public static ICard FreshCopy(ICard card) {
             if (card.SourceData == null) {
-                LogError($"{card.Name} has no card definition; discarding the used instance as-is. Cards must be made by CardFactory.CreateCard.", LogTag.Cards);
+                LogError($"{card.Name} has no card definition; using the instance as-is. Cards must be made by CardFactory.CreateCard.", LogTag.Cards);
                 return card;
             }
-            return CardFactory.CreateCard(card.SourceData);
+            var copy = CardFactory.CreateCard(card.SourceData);
+            if (card is ICreature used && copy is ICreature fresh) {
+                var (attack, health, speed) = used.PersistentChanges;
+                fresh.ChangeBaseStats(attack, health, speed);
+                fresh.Ability = used.Ability;
+            }
+            return copy;
         }
 
         public void ClearDiscardPile() {

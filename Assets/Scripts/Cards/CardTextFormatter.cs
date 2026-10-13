@@ -264,6 +264,12 @@ namespace SlayTheClone {
                     return isSpell || action.targetType == TargetType.Self
                         ? $"{target} steals the stat raises of the creature facing it"
                         : $"steal the stat raises of {target}";
+                case ActionType.ReturnToHand:
+                    return $"{target} goes back to its owner's hand next {Keywords.Link("Day")}";
+                case ActionType.FakeDeath:
+                    return $"{target} fakes its death (its {Keywords.Link("Last Will")} happens) and goes back to your hand next {Keywords.Link("Day")}";
+                case ActionType.Vanish:
+                    return $"{target} {Keywords.Link("Gone Dark", "goes dark")} until the next {Keywords.Link("Dawn")}";
                 case ActionType.Funnel:
                     return $"every other creature on its side hands its stat raises to {target}";
                 case ActionType.PassHarmfulStatuses:

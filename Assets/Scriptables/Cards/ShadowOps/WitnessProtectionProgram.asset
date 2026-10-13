@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: WitnessProtectionProgram
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: f495b435-e456-483b-958d-586df8c473a5
+  cardName: Witness Protection Program
+  description: New name, new town, new moustache. Same bad feeling.
+  cardType: 1
+  faction: 3
+  artwork: {fileID: 0}
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 27
+      value: 0
+      targetType: 3
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+  designNotes: 'Target friendly creature goes dark until the next Dawn: whatever
+    lands this Day misses it (board-wide damage included), but its slot is empty
+    meanwhile. It comes back with a new identity: Concealed for 2 Days, unknown to
+    the enemy, its old statuses gone.'
+  artDescription: A man in a terrible fake moustache and a Hawaiian shirt mowing
+    a lawn in a quiet cul-de-sac, his old mugshot pinned to a corkboard behind the
+    window, a federal agent in a parked car pretending to read a newspaper.
+  defaultTargetType: 3

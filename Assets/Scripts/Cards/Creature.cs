@@ -50,6 +50,8 @@ namespace SlayTheClone {
         BoardSlot LastSlot { get; }
         /// <summary>How many times it has landed on the board this combat.</summary>
         int TimesEnteredPlay { get; }
+        /// <summary>Days of Concealed it arrives with the next time it's summoned (a new face after Extraction); 0: none.</summary>
+        int ArrivesConcealed { get; set; }
         // Only changes health; death and its consequences are handled by the caller
         int TakeHealthDamage(int healthDamage); // Returns actual damage dealt
         void ModifyArmorPool(int amount);
@@ -143,6 +145,7 @@ namespace SlayTheClone {
         public int Heat { get; set; }
         public ISet<IPlayer> KnownTo { get; } = new HashSet<IPlayer>();
         public int TimesEnteredPlay { get; private set; }
+        public int ArrivesConcealed { get; set; }
 
         public int TurnsUntilOperative { get; private set; }
         public bool IsOperative => TurnsUntilOperative == 0;

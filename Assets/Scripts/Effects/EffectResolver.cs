@@ -394,6 +394,12 @@ namespace SlayTheClone {
                 }
                 case ActionType.SwapPositions:
                     return creature != null ? new SwapPositionsAction(creature) : null;
+                case ActionType.ReturnToHand: // Back to its owner's hand, with the next Day's hand (Extraction)
+                    return creature != null ? new ReturnToHandAction(creature) : null;
+                case ActionType.FakeDeath: // It "dies" (its Last Will happens), then back to the hand (He Didn't Kill Himself)
+                    return creature != null ? new ReturnToHandAction(creature, fakesItsDeath: true) : null;
+                case ActionType.Vanish: // Off the board until the next Dawn (Witness Protection Program)
+                    return creature != null ? new VanishAction(creature) : null;
                 case ActionType.Funnel: // The target takes the stat raises of every other creature on its side
                     return creature != null ? new FunnelAction(creature) : null;
                 case ActionType.PassHarmfulStatuses: { // The target's harmful statuses go to the creature facing it (Frame Job)

@@ -55,6 +55,10 @@ namespace SlayTheClone {
             modifierManager.RegisterCreature(creature);
             creature.EnterPlay(context.TurnClock.TurnNumber);
             Abilities.CompleteHandover(creature, handover, modifierManager);
+            if (creature.ArrivesConcealed > 0) { // A new face: it stays unknown
+                StatusRules.Land(context, creature, StatusEffectType.Concealed, creature.ArrivesConcealed, 0, context.TurnClock.TurnNumber);
+                creature.ArrivesConcealed = 0;
+            }
             Intel.OnEnteredPlay(creature, context.ModifierManager);
             if (creature.DeckOwner != null) Intel.MakeKnown(creature, creature.DeckOwner); // Its giver knows what they gave
             SlotEffectRules.OnEnter(creature, slot, context); // A Landmine goes off before the creature's entry effects

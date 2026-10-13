@@ -556,6 +556,14 @@ namespace SlayTheClone {
                     return StatusGoodness(action, creature);
                 case ActionType.Cleanse:
                     return HarmfulStatuses.Any(creature.Has) ? 2 : 0;
+                case ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish: {
+                    // Off the board: worth it to save one that would die (and for its Last Will); otherwise a lost Day
+                    if (!creature.Ours) return 0;
+                    float saved = WouldDie(creature) ? creature.Worth * 0.8f : -1.5f;
+                    if (action.actionType == ActionType.FakeDeath && Hard) saved += LastWillValue(creature);
+                    if (action.actionType == ActionType.ReturnToHand && creature.Has(StatusEffectType.Revealed)) saved += 0.5f * Style.Intel;
+                    return saved;
+                }
                 case ActionType.Funnel: // Spread out raises gathered into one creature that can kill with them
                     var others = (creature.Ours ? view.Mine : view.Theirs).Where(c => c != creature).Sum(c => System.Math.Max(0, c.StatRaises));
                     return others * 0.5f;
