@@ -1550,7 +1550,7 @@ Card Game Factions Overview
 			Plot Twist
 			Political Song Contest
 	Card Backlog (2026-10-13): names to make into cards later. Factions in tags are the ones given; the rest are suggestions.
-		Already cards, so left out: Charles Ponzi, Cleaning Robot, Counter-Intelligence, Day Trader, Fat Tony (as Made Man), Football Hooligans, Hikikomori, Hypermetamorphosis, Its A Trap, Man o' War, Man-in-the-Middle, Overpopulation, Police Officer Performance Indicators (as Police Officer Productivity Target), Signal Jammer, Spite-Elected President, Tax-Exempt Corruption, Taxpayer Funds Venture Capital Profits. Return to Sender is an ability.
+		Already cards, so left out: Charles Ponzi, Cleaning Robot, Counter-Intelligence, Day Trader, Fat Tony, Football Hooligans, Hikikomori, Hypermetamorphosis, Its A Trap, Man o' War, Man-in-the-Middle, Overpopulation, Police Officer Performance Indicators (as Police Officer Productivity Target), Signal Jammer, Spite-Elected President, Tax-Exempt Corruption, Taxpayer Funds Venture Capital Profits. Return to Sender is an ability.
 		Myth
 			Abrahamic Inheritance
 			Ambrosia

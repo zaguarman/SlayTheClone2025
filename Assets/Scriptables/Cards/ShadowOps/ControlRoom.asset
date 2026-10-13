@@ -50,8 +50,7 @@ MonoBehaviour:
   designNotes: 'Each Dawn it Reveals a random enemy slot: its hidden Slot Effect
     and what the creature there plans that Day. Future: chooses the slot.'
   artDescription: A dark room with a wall of surveillance monitors, two operators
-    asleep in their chairs with headsets on, cold coffee, while on one small screen
-    a burglar waves at the camera.
+    asleep in their chairs with headsets on, cold coffee.
   attack: 0
   health: 5
   speed: 1

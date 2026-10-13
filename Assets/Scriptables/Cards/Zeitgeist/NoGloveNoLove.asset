@@ -73,6 +73,7 @@ MonoBehaviour:
       ability: 0
   designNotes: 'Protection: target friendly creature gets Blessed (the next status
     that would land is negated) and 2 Armor.'
-  artDescription: A knight in shining armor head to toe, a giant red heart on the
-    shield, politely refusing a rose through the visor slit.
+  artDescription: 'Candlelight and satin: a knight in full shining armor reclines
+    on a red heart-shaped bed, propped on one elbow, a rose in the visor and one
+    knee up, rose petals everywhere, the heart shield leaning against the bed.'
   defaultTargetType: 3

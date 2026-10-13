@@ -64,13 +64,13 @@ Creatures (Attack/Health/Speed, Deployment Time)
         • Future: summons an Unpaid Intern token.
     • Day Trader (3/1/3, 0): Insider Job (its damage ignores Armor). When this enters, draw a card. When this dies, the enemy draws a card.
         • Future: an Investment that pays out or loses cards.
-    • Pluriemployed Hustler (2/3/2, 0): Penny Stock (double damage when it hits for 3 or less). When this enters, draw 2. Takes 1 damage each Dusk.
+    • Pluriemployed Hustler (2/3/2, 0): When this enters, draw 2. Takes 1 damage each Dusk.
         • Future: Coffeinated, then Burnout.
     • Unicorn (1/8/1, 2): Draws a card each turn, takes 1 damage each Dusk.
         • Future: Unicorn (Enterprise).
     • Multimillionaire Philanthropist (2/5/1, 2): When this enters, each enemy creature gets +1 Health and you draw 2.
         • Future: a Contract; your tax break arrives on a later Day.
-    • Made Man (4/5/1, 2): When this enters, 2 damage to a random enemy creature.
+    • Fat Tony (4/5/1, 2): When this enters, 2 damage to a random enemy creature.
         • Future: An Offer You Can't Refuse (Recruitment).
     • Charles Ponzi (1/3/2, 1): Draws a card each turn. When this dies, 3 damage to you.
         • Future: pays draws until it collapses, then takes them back.
@@ -208,6 +208,9 @@ Creatures (Attack/Health/Speed, Deployment Time)
         • Humanitarian Trafficking Action (Shadow Ops. spell): heals an enemy creature 2 and gives it Heat Signature 2.
         • No Glove, No Love (Zeitgeist spell): Blessed and 2 Armor on a friendly creature.
         • Business Expense (Corporate spell): draw 2 next Day, and 2 damage to you.
+        • Solidarity Towards The Small Businessman (Corporate spell): draw 2, and 1 damage to each friendly creature (your workers chip in).
+        • Inheritance (Corporate spell): +2 Attack and +2 Health for good on a friendly creature.
+        • Violence Monopoly (Statecraft spell): a Watchdog that nullifies the next 2 enemy attacks.
         • We Are Not The Same (Zeitgeist spell): your creature copies the stats of the enemy creature facing it.
     • Keyboard Warrior (Digital Society, 1/3/2, 0): No U (enemy effects that would lower its stats bounce back), Counterattack (a creature that attacks it is hit back for its Attack). Tests answering every attack that lands, even killing ones.
     • Political Decoy (Shadow Ops., 0/6/1, 1): Swap.
@@ -224,7 +227,7 @@ Ability Test Creatures (no other effects: each tests one ability from the 'Abili
     • Mummy (Myth, 2/5/1, 1): Hive Mind.
     • Pessimist (Mind, 2/4/1, 0): Contrarian.
     • Introvert (Mind, 1/5/1, 0): Unbothered.
-    • The other abilities are on faction cards: Insider Job (Day Trader), Penny Stock (Pluriemployed Hustler), Spite (Spite-Elected President), Return to Sender (Supreme Court), Too Mainstream (Hipster), No U (Keyboard Warrior).
+    • The other abilities are on faction cards: Insider Job (Day Trader), Technician (SysAdmin), Spite (Spite-Elected President), Return to Sender (Supreme Court), Too Mainstream (Hipster), No U (Keyboard Warrior).
 
 Fog of War Test Cards (GDD 2.5)
     • Sleeper Agent (Shadow Ops., 3/3/2, 1): Undercover (its plans show as ??? to the enemy).

@@ -48,7 +48,8 @@ ANSWERED (2026-10-13, round 13)
 • Decks: Digital Society, Shadow Ops., Tech, Myth and Mind each have a deck of their own (20 cards, some twice). Only two example pairs stay: Digital Society & Shadow Ops. (Panopticon: Heat Signature and Reveal) and Myth & Corporate (Prosperity Gospel).
 • Names: "Involuntary Free Polonium Giveaway" (spelling fixed). Second Wind is now Rebirth.
 • Handover: off while Exhausted; when it's on, it passes everything, good and bad. As it is.
-• Names too close to someone else's: the list (with the pictures) was given in the chat; nothing else to change.
+• Names too close to someone else's: only Handover stays renamed. Technician (a plain word) and Fat Tony (a historical figure) are back.
+• Art: pictures stay as they are unless you ask for a change (quirky is fine). Redrawn on request: Meta Group Chat, Social Panopticon, Control Room, Humanitarian Trafficking Action, No Glove, No Love, Scope Creep, Scapegoating (the escape goat), Ship of Theseus.
 • The new building blocks (Bodyguard, Wannabe, Credit Grab...): as they are.
 • No U: bounces stat changes and statuses, deflected at random (see 29).
 • Move ghosts show "Moving" instead of "Queued".
@@ -64,7 +65,7 @@ ANSWERED (2026-10-13, earlier)
 
 • Worlds are now Trends (what the world is into right now): Zeitgeist and Rush Hour are Trend cards.
 • Memes moved to Zeitgeist's theme; Its A Trap and Rage Bait stay in Digital Society until the factions are rebalanced (17).
-• Card names: Baton Pass is Handover, Technician is Penny Stock, Fat Tony is Made Man.
+• Card names: Baton Pass is Handover. Technician and Fat Tony keep their names (a plain word, and a historical figure).
 • Retaliation: Counterattack and Retaliate answer attacks only.
 • Placebo is a lasting +3 Health.
 • Every random effect goes to the creature with the most Heat it can reach (random damage from both sides, see above).
@@ -77,7 +78,7 @@ ANSWERED (2026-10-12)
 • Scorched Earth: stops the creature's triggered effects. Its ability is switched off too.
 • Barbed Snare: only moving out counts as leaving; dying on the slot or being replaced doesn't.
 • Watchdog conditions: each Watchdog card gets its own filter (ad hoc); shared templates may come later for filters that repeat. The number filter stays an attack's Attack for now.
-• Abilities on cards: Day Trader (Insider Job), Pluriemployed Hustler (Penny Stock), Spite-Elected President (Spite), Supreme Court (Return to Sender), Hipster (Too Mainstream), Keyboard Warrior (No U); ten new test creatures carry the rest.
+• Abilities on cards: Day Trader (Insider Job), SysAdmin (Technician; it was on Pluriemployed Hustler, which has nothing to do with it), Spite-Elected President (Spite), Supreme Court (Return to Sender), Hipster (Too Mainstream), Keyboard Warrior (No U); ten new test creatures carry the rest.
 • Pictures: Its A Trap (Homer and the free-boat sting), Burn Notice (the Banksy self-shredding painting), Antivirus (a panda), Counter-Intelligence (the first Counter-Strike cover with accountants and calculators). Red Tape, YOLO and Preemptive Strike got briefs.
 
 • Action Priority: removed; order inside a layer is Speed. Red Tape now adds Deployment Time, YOLO gives +4 Attack for this Day, Preemptive Strike is plain damage. Docs use Speed where they used Priority.

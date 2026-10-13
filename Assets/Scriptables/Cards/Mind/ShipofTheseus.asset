@@ -48,9 +48,9 @@ MonoBehaviour:
       trend: 0
       ability: 0
   designNotes: 'Regenerate 1: it repairs itself plank by plank.'
-  artDescription: A wooden ship on calm water, half its hull planks old and dark,
-    half new and pale, its sail half patched and half new, a hammer still at work
-    and a big question mark in the sky.
+  artDescription: 'Every plank replaced until nothing''s left: the ship is only a
+    dotted outline on the water, and Theseus in his crested helmet scratches his
+    head on the shore, wondering where his ship went.'
   attack: 2
   health: 3
   speed: 1

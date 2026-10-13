@@ -58,7 +58,7 @@ namespace SlayTheClone {
             CreatureAbility.InsiderJob => "Insider Job",
             CreatureAbility.ReturnToSender => "Return to Sender",
             CreatureAbility.Unpatchable => "Cold Storage",
-            CreatureAbility.PennyStock => "Penny Stock",
+            CreatureAbility.Technician => "Technician",
             CreatureAbility.CreditGrab => "Credit Grab",
             CreatureAbility.SprayAndPray => "Spray and Pray",
             CreatureAbility.ChainMail => "Chain Mail",
@@ -85,7 +85,7 @@ namespace SlayTheClone {
             CreatureAbility.HiveMind => "a creature that attacks it loses its ability and gains Hive Mind instead",
             CreatureAbility.InsiderJob => "its damage ignores Armor",
             CreatureAbility.ReturnToSender => "enemy statuses bounce back to the creature that sent them; from a spell, to a random enemy creature",
-            CreatureAbility.PennyStock => "double damage when it hits for 3 or less",
+            CreatureAbility.Technician => "double damage when it hits for 3 or less",
             CreatureAbility.Undercover => "its plans show as ??? to the enemy",
             CreatureAbility.Handover => "when a summon replaces it, the newcomer takes over its stat changes and statuses",
             CreatureAbility.Recoil => "+2 damage on its attacks; it takes 1 damage after each attack",
@@ -241,7 +241,7 @@ namespace SlayTheClone {
         #region Damage
         /// <summary>
         /// The damage a hit deals before the target's modifiers (Exposed) and Armor: Underground ignores an attacker's
-        /// Temporary Stat Modifications, then Penny Stock doubles hits of 3 or less.
+        /// Temporary Stat Modifications, then Technician doubles hits of 3 or less.
         /// </summary>
         public static int OutgoingDamage(DamageCreatureAction hit) {
             int damage = hit.GetDamage();
@@ -253,7 +253,7 @@ namespace SlayTheClone {
             if (hit.DealsAttackersAttack && Has(attacker, CreatureAbility.Underground) && hit.GetTarget() is ICreature defender) {
                 damage = Math.Max(0, damage + (defender.MaxHealth - defender.BaseHealth));
             }
-            if (damage > 0 && damage <= 3 && Has(attacker, CreatureAbility.PennyStock)) damage *= 2;
+            if (damage > 0 && damage <= 3 && Has(attacker, CreatureAbility.Technician)) damage *= 2;
             return damage;
         }
 

@@ -3574,15 +3574,18 @@ def technical_debt():
 
 
 def scope_creep():
-    # A creep in a trench coat peering through a brass spyglass at a feature list that keeps growing
+    # A creep in a trench coat and a low hat peering through a brass spyglass at a couple kissing in a lit window
     defs, body = bg_tech()
-    body += rect(196, 18, 140, 164, "#f4f1e6", 'rx="4" stroke="#8a8a80" stroke-width="2"')
-    body += lettering("SCOPE", 266, 26, 9, "#2a2f36", width=1.6)
-    for k, w in enumerate((40, 50, 62, 76, 92, 110)):
-        y = 50 + k * 21
-        body += rect(208, y, 8, 8, "none", 'stroke="#2a2f36" stroke-width="1.5"') + rect(222, y + 1, min(w, 104), 6, "#9aa4b0")
-    body += stroke("M300 160 L330 176 M314 154 L332 160", "#c0392b", 3)
-    body += lettering("+", 300, 150, 12, "#c0392b", width=2.4)
+    body += rect(196, 22, 136, 120, "#ffe9a8", 'stroke="#3a2f20" stroke-width="6"')  # The window
+    body += rect(196, 22, 136, 120, "none", 'stroke="#5a4a32" stroke-width="2"') + stroke("M264 22 L264 142", "#5a4a32", 3)
+    body += path("M196 22 L230 22 C 220 60 214 100 206 142 L196 142 Z", "#c0392b", 'opacity="0.85"')  # Curtains
+    body += path("M332 22 L298 22 C 308 60 314 100 322 142 L332 142 Z", "#c0392b", 'opacity="0.85"')
+    # The couple, in profile, kissing
+    body += path("M210 142 C 210 104 254 100 260 142 Z", "#3d5a80") + path("M268 142 C 274 100 318 104 318 142 Z", "#c05a8a")
+    body += circle(246, 82, 18, SKIN[0]) + path("M228 78 C 228 56 262 54 262 74 L254 70 C 246 66 236 70 232 84 Z", "#3a2a1a")
+    body += circle(282, 82, 18, SKIN[2]) + path("M300 70 C 300 52 266 52 266 72 C 268 96 296 112 304 120 C 302 100 300 84 300 70 Z", "#1a1a1a")
+    body += stroke("M248 80 q 4 3 8 0 M272 80 q 4 3 8 0", "#222", 1.6)
+    body += path("M264 70 C 258 58 244 62 252 72 C 256 76 264 82 264 82 C 264 82 272 76 276 72 C 284 62 270 58 264 70 Z", "#e8304a", 'transform="translate(0 -26)"')
     # The creep: hat brim low, collar up, eye to the spyglass
     body += path("M40 200 C 40 140 130 140 130 200 Z", "#5a4a32")
     body += poly([(70, 150), (86, 176), (100, 150)], "#3a2f20")
@@ -3591,97 +3594,146 @@ def scope_creep():
     body += stroke("M78 114 L90 112", "#222", 3)
     body += group(rect(0, -8, 70, 16, "#c8a040", 'rx="4" stroke="#7a5a1a" stroke-width="2"')
                   + rect(70, -11, 28, 22, "#d8b450", 'rx="4" stroke="#7a5a1a" stroke-width="2"')
-                  + rect(-6, -6, 8, 12, "#7a5a1a"), "translate(96 110) rotate(-6)")
+                  + rect(-6, -6, 8, 12, "#7a5a1a"), "translate(96 110) rotate(-12)")
     body += path("M110 160 C 120 140 140 128 150 116", "none", 'stroke="#5a4a32" stroke-width="12" stroke-linecap="round"')
     return svg(defs, body)
 
 
 def ship_of_theseus():
-    # The same ship? Half its planks old and dark, half new and pale, a carpenter's hammer still at work
+    # Every plank replaced until nothing's left of it: the ship is only a dotted outline on the water, and Theseus, in his
+    # crested helmet, scratches his head on the shore wondering where his ship went
     defs, body = bg_mind()
-    body += path("M0 170 Q 44 160 88 170 T 176 170 T 264 170 T 352 170 L352 200 L0 200 Z", "#7aa6d8", 'opacity="0.85"')
-    hull = "M60 128 L292 128 L262 176 L92 176 Z"
-    body += path(hull, "#8a5a2a", 'stroke="#4a2a12" stroke-width="3"')
-    for k in range(4):
-        y = 136 + k * 10
-        body += stroke(f"M{70 + k * 8} {y} L176 {y}", "#4a2a12", 1.5)
-        body += rect(176, y - 8, 104 - k * 8, 8, "#e8cfa0", 'stroke="#b89a6a" stroke-width="1"')
-    body += rect(172, 30, 8, 98, "#6a4a22")
-    body += path("M180 36 C 236 52 236 104 180 118 Z", "#f4ecd8", 'stroke="#b8a888" stroke-width="2"')
-    body += path("M172 40 C 120 56 120 100 172 112 Z", "#c8b48a", 'stroke="#8a7a58" stroke-width="2"')
-    body += stroke("M150 66 L162 72 M136 84 L152 86", "#8a7a58", 2)  # Patches on the old sail
-    body += group(rect(-3, 0, 6, 34, "#8a5a2a") + rect(-12, -8, 24, 10, "#555", 'rx="2"'), "translate(300 92) rotate(-30)")
-    body += lettering("?", 62, 30, 34, "#ffffff", width=4)
+    body += path("M0 160 Q 44 150 88 160 T 176 160 T 264 160 T 352 160 L352 200 L0 200 Z", "#7aa6d8", 'opacity="0.85"')
+    dots = 'stroke="#ffffff" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"'
+    body += path("M150 120 L332 120 L308 158 L172 158 Z", "none", dots)
+    body += path("M240 120 L240 30", "none", dots)
+    body += path("M244 36 C 300 52 300 100 244 112", "none", dots) + path("M236 40 C 190 56 190 98 236 108", "none", dots)
+    body += path("M0 170 C 30 150 110 150 130 172 L130 200 L0 200 Z", "#c8b48a")  # The shore
+    # Theseus
+    x, base = 70, 200
+    body += person(x, base, 1.15, SKIN[1], "#b8322a", face="frown", brows="sad")
+    hx, hy, r = x, base - 74, 23
+    body += path(f"M{hx - r - 3} {hy + 6} C {hx - r - 2} {hy - r * 1.5} {hx + r + 2} {hy - r * 1.5} {hx + r + 3} {hy + 6} L{hx + r - 4} {hy - 2} L{hx - r + 4} {hy - 2} Z", "#c8963a", 'stroke="#7a5a1a" stroke-width="2"')
+    body += path(f"M{hx - 7} {hy - 28} C {hx - 9} {hy - 52} {hx - 4} {hy - 60} {hx} {hy - 62} C {hx + 4} {hy - 60} {hx + 9} {hy - 52} {hx + 7} {hy - 28} Z", "#d0342c")  # The crest, front on
+    for k in (-4, 0, 4):
+        body += stroke(f"M{hx + k} {hy - 30} L{hx + k * 1.2} {hy - 56}", "#a82020", 1.2)
+    body += stroke(f"M{x + 26} {base - 30} L{x + 30} {base - 92}", SKIN[1], 9) + circle(x + 28, base - 96, 7, SKIN[1])  # Scratching
+    body += circle(126, 46, 22, "#ffffff", 'opacity="0.9"') + circle(106, 74, 6, "#ffffff", 'opacity="0.9"') + circle(98, 86, 3.5, "#ffffff", 'opacity="0.9"')
+    body += lettering("?", 126, 32, 26, "#5a4a8a", width=3.5)
     return svg(defs, body)
 
 
 def scapegoating():
-    # A bewildered goat in the middle, fingers pointing at it from every side
+    # The goat makes a break for it: front legs over the top rail of a wooden fence, back legs scrambling, looking back in a
+    # sweat
     defs, body = bg_mind()
-    body += ellipse(176, 186, 70, 10, "#9a86c8", 'opacity="0.5"')
-    goat = "#f2efe6"
-    body += ellipse(176, 150, 46, 26, goat, 'stroke="#a8a090" stroke-width="2"')
-    for x in (146, 162, 190, 206):
-        body += rect(x - 4, 166, 8, 22, goat, 'stroke="#a8a090" stroke-width="1.5"')
-    body += path("M160 132 C 150 100 158 76 176 72 C 194 76 202 100 192 132 Z", goat, 'stroke="#a8a090" stroke-width="2"')
-    body += path("M162 80 C 150 60 138 58 132 66 C 142 66 150 74 158 86 Z", "#8a7a5a")
-    body += path("M190 80 C 202 60 214 58 220 66 C 210 66 202 74 194 86 Z", "#8a7a5a")
-    body += ellipse(150, 92, 12, 5, goat, 'stroke="#a8a090" stroke-width="1.5"') + ellipse(202, 92, 12, 5, goat, 'stroke="#a8a090" stroke-width="1.5"')
-    body += eye(168, 98, 6) + eye(186, 98, 6)
-    body += path("M170 126 Q 176 118 182 126", "none", 'stroke="#5a5040" stroke-width="2"')
-    body += path("M170 132 L176 150 L182 132 Z", "#d8d0c0")  # The beard
-    for x, y, a in ((28, 40, 20), (24, 120, -6), (330, 46, 160), (334, 126, 186), (90, 14, 60), (262, 14, 120)):
-        hand = (rect(-34, -8, 30, 16, SKIN[1], 'rx="6"') + rect(-6, -4, 30, 8, SKIN[1], 'rx="4"')
-                + rect(-60, -10, 28, 20, "#3d5a80"))
-        body += group(hand, f"translate({x} {y}) rotate({a})")
+    body += rect(0, 170, W, 30, "#8ac078")
+    wood, dark = "#b08050", "#6a4a2a"
+    for x in (30, 120, 232, 322):  # The far posts and the rails
+        body += rect(x - 7, 92, 14, 98, wood, f'stroke="{dark}" stroke-width="2"')
+    for y in (104, 144):
+        body += rect(0, y, W, 12, wood, f'stroke="{dark}" stroke-width="2"')
+    goat, line = "#f2efe6", 'stroke="#a8a090" stroke-width="2"'
+    g = ""
+    g += rect(-40, 14, 9, 40, goat, line) + rect(-24, 16, 9, 38, goat, line)  # Back legs, scrambling on the near side
+    g += ellipse(0, 0, 48, 24, goat, line)
+    g += path("M-46 -8 l -12 -10 l 4 12 Z", goat, line)  # The tail
+    g += path("M34 -10 C 44 -30 54 -40 64 -42 L72 -26 C 62 -22 52 -10 46 4 Z", goat, line)  # The neck
+    g += ellipse(70, -40, 18, 12, goat, line)
+    g += path("M62 -50 C 54 -70 40 -72 34 -62 C 44 -64 50 -58 56 -48 Z", "#8a7a5a")  # Horns
+    g += path("M58 -40 C 46 -44 44 -34 54 -32 Z", goat, line)  # The ear
+    g += eye(64, -44, 5) + path("M80 -32 L76 -18 L86 -30 Z", "#d8d0c0")  # Eye looking back, beard
+    g += rect(30, 16, 9, 30, goat, line + ' transform="rotate(-60 34 16)"') + rect(42, 12, 9, 30, goat, line + ' transform="rotate(-70 46 12)"')
+    body += group(g, "translate(150 98) rotate(-18)")
+    for x in (176, 266):  # The near posts, in front of the goat
+        body += rect(x - 7, 92, 14, 98, wood, f'stroke="{dark}" stroke-width="2"')
+    for x, y in ((108, 70), (96, 86), (122, 60)):
+        body += path(f"M{x} {y} q 3 6 0 9 q -3 -3 0 -9 Z", "#8ad0ff")
     return svg(defs, body)
 
 
 def meta_group_chat():
-    # A phone showing a group chat named THE JURY, gavels and skulls piling up under a blurry photo of one guy, who sweats
-    # alone in the corner, outside the phone
-    defs = lin("bg", ["#2a3a6a", "#141c38"])
+    # A messenger group chat in the green-and-beige look everyone knows: THE JURY (47 members), gavels and skulls piling up
+    # under a blurry photo of one guy, double ticks everywhere; the guy himself sweats alone outside the phone
+    defs = lin("bg", ["#1f3a34", "#0e1c1a"])
     body = rect(0, 0, W, H, "url(#bg)")
-    body += rect(40, 6, 170, 190, "#1b1b22", 'rx="14"') + rect(48, 16, 154, 172, "#eef2f8", 'rx="6"')
-    body += rect(48, 16, 154, 26, "#3b5bdb", 'rx="6"') + lettering("THE JURY", 125, 23, 11, "#ffffff")
-    body += rect(60, 50, 74, 44, "#b8bcc8", 'rx="4"') + circle(97, 66, 10, "#8a8e9a", 'opacity="0.8"') + ellipse(97, 90, 18, 8, "#8a8e9a", 'opacity="0.8"')
-    for i, (x, y) in enumerate(((118, 104), (66, 124), (122, 144), (70, 164))):
-        body += rect(x, y, 70, 16, "#d0dcff" if i % 2 else "#ffffff", 'rx="7" stroke="#9aa6c8" stroke-width="1"')
-        if i % 2:
-            body += skull(x + 14, y + 7, 0.28) + skull(x + 30, y + 7, 0.28)
-        else:  # A gavel
-            body += rect(x + 8, y + 4, 14, 7, "#8a5a2a", 'rx="2"') + stroke(f"M{x + 15} {y + 8} L{x + 30} {y + 13}", "#8a5a2a", 2.5)
-    body += person(292, H, 1.15, SKIN[1], "#7a8a9a", face="frown", brows="sad", hair="#3a2a1a")
-    for x, y in ((266, 98), (318, 104), (262, 118)):
+    body += rect(34, 4, 180, 194, "#111", 'rx="16"') + rect(42, 14, 164, 176, "#ece5dd", 'rx="6"')
+    for x, y in ((60, 70), (150, 90), (90, 130), (180, 150), (70, 172), (170, 60)):  # The faint doodle wallpaper
+        body += circle(x, y, 6, "none", 'stroke="#d8cfc4" stroke-width="1.5"')
+    body += rect(42, 14, 164, 30, "#075e54", 'rx="6"') + rect(42, 34, 164, 10, "#075e54")
+    body += circle(60, 29, 9, "#cfd8dc") + lettering("THE JURY", 112, 20, 8, "#ffffff", width=1.4)
+    body += lettering("47 MEMBERS", 108, 32, 4, "#b2dfdb", width=0.9)
+    # The blurry photo, sent in
+    body += rect(52, 52, 82, 50, "#ffffff", 'rx="5"') + rect(56, 56, 74, 38, "#a8aeb8", 'rx="3"')
+    body += circle(93, 70, 9, "#7a808a", 'opacity="0.8"') + ellipse(93, 92, 16, 8, "#7a808a", 'opacity="0.8"')
+
+    def ticks(x, y):
+        return stroke(f"M{x} {y} l 3 3 l 6 -6 M{x + 5} {y + 3} l 2 0 l 6 -6", "#34b7f1", 1.4)
+
+    for i, y in enumerate((108, 128, 148)):
+        mine = i % 2 == 0
+        x, w = (118, 80) if mine else (52, 74)
+        fill = "#dcf8c6" if mine else "#ffffff"
+        body += rect(x, y, w, 16, fill, 'rx="6"')
+        body += poly([(x + w - 2, y), (x + w + 6, y), (x + w - 2, y + 6)] if mine else [(x + 2, y), (x - 6, y), (x + 2, y + 6)], fill)
+        if mine:  # Gavels, with read ticks
+            for k in range(3):
+                gx = x + 8 + k * 18
+                body += rect(gx, y + 4, 10, 6, "#8a5a2a", 'rx="2"') + stroke(f"M{gx + 5} {y + 8} L{gx + 14} {y + 12}", "#8a5a2a", 2)
+            body += ticks(x + w - 16, y + 9)
+        else:
+            body += skull(x + 14, y + 8, 0.28) + skull(x + 32, y + 8, 0.28) + skull(x + 50, y + 8, 0.28)
+    body += rect(46, 168, 128, 16, "#ffffff", 'rx="8"') + circle(190, 176, 9, "#128c7e")  # Typing bar and the mic
+    body += rect(187, 170, 6, 9, "#ffffff", 'rx="3"')
+    body += person(290, H, 1.15, SKIN[1], "#7a8a9a", face="frown", brows="sad", hair="#3a2a1a")
+    for x, y in ((264, 98), (316, 104), (260, 118)):
         body += path(f"M{x} {y} q 3 6 0 9 q -3 -3 0 -9 Z", "#8ad0ff")
     return svg(defs, body)
 
 
 def social_panopticon():
-    # A round prison tower made of giant smartphones all facing inward, a tiny person in the middle trying to look natural
-    defs = lin("bg", ["#0e1430", "#2a1a4a"]) + rad("glow", [("#8ad0ff", 0.5), ("#8ad0ff", 0)])
+    # A real panopticon seen from inside: a ring of cells on two floors around a central watchtower, every inmate lit by
+    # their own phone, the tower's single eye recording them all
+    defs = lin("bg", ["#0b0e1a", "#1e2236"]) + lin("tower", ["#5a5f70", "#2a2e3a"], 0, 0, 1, 0)
     body = rect(0, 0, W, H, "url(#bg)")
-    body += ellipse(176, 150, 150, 42, "#2a2f45") + ellipse(176, 150, 120, 30, "#1a1e30")
-    body += ellipse(176, 132, 90, 60, "url(#glow)")
-    for k, x in enumerate((40, 82, 128, 176, 224, 270, 312)):
-        y = 92 + abs(k - 3) * -6
-        body += phone(x, y, 1.6, "#4fc3ff" if k % 2 else "#7ad8ff")
-        body += circle(x, y - 22, 3, "#d0342c")  # Recording
-    body += person(176, 178, 0.55, SKIN[2], "#e8a03a", face="smile", brows="sad")
+
+    def cell(x, y, w, h, lit):
+        out = rect(x, y, w, h, "#14161f", 'stroke="#6a6f80" stroke-width="1.5"')
+        out += rect(x + w * 0.25, y + h * 0.35, w * 0.5, h * 0.65, "#2a2e3a")  # Someone in it
+        out += circle(x + w / 2, y + h * 0.3, w * 0.16, "#2a2e3a")
+        if lit:
+            out += rect(x + w * 0.42, y + h * 0.45, w * 0.18, h * 0.2, "#7ad8ff") + circle(x + w / 2, y + h * 0.3, w * 0.16, "#7ad8ff", 'opacity="0.35"')
+        for k in range(1, 4):  # The bars
+            out += stroke(f"M{x + w * k / 4:.1f} {y} L{x + w * k / 4:.1f} {y + h}", "#8a8fa0", 1)
+        return out
+
+    # The far side of the ring: small cells, two floors
+    for floor, y in enumerate((30, 66)):
+        body += rect(0, y - 4, W, 34, "#3a3e4c")
+        for k in range(10):
+            body += cell(8 + k * 34, y, 26, 26, (k + floor) % 3 != 1)
+    body += rect(0, 96, W, 6, "#4a4e5c")
+    # The tower in the middle, its eye on everyone
+    body += rect(146, 18, 60, 160, "url(#tower)") + poly([(138, 20), (176, -6), (214, 20)], "#3a3e4c")
+    for y in (60, 100, 140):
+        body += rect(152, y, 48, 6, "#0b0e1a")
+    body += ellipse(176, 40, 20, 11, "#f2efe6") + circle(176, 40, 8, "#2a3a6a") + circle(176, 40, 3.5, "#111") + circle(196, 28, 4, "#e03a3a")
+    # The near side: bigger cells, a walkway rail in front
+    for floor, y in enumerate((112, 152)):
+        for k, x in enumerate((4, 64, 238, 298)):
+            body += cell(x, y, 50, 40, (k + floor) % 2 == 0)
+    body += rect(0, 150, 140, 3, "#8a8fa0") + rect(212, 150, 140, 3, "#8a8fa0")
     return svg(defs, body)
 
 
 def control_room():
-    # A wall of surveillance monitors, two operators asleep in their headsets with cold coffee, while on one small screen a
-    # burglar waves at the camera
+    # A wall of surveillance monitors, two operators asleep in their headsets with cold coffee
     defs = lin("bg", ["#10141c", "#1c2430"])
     body = rect(0, 0, W, H, "url(#bg)")
     for row, y in enumerate((8, 58)):
         for col, x in enumerate((20, 102, 184, 266)):
             screen = "#2a6a4a" if (row + col) % 2 else "#2a4a6a"
             body += rect(x, y, 70, 44, "#2a2a30", 'rx="4"') + rect(x + 5, y + 5, 60, 34, screen, 'rx="2"')
-    body += person(232, 56, 0.32, SKIN[0], "#222", face="grin", hat="beanie")  # The burglar, in the bottom row's third screen
-    body += stroke("M244 38 L252 28", SKIN[0], 3) + stroke("M244 38 L252 28", "#222", 1)
     body += rect(0, 150, W, 50, "#3a3328")
     for x, skin in ((110, SKIN[1]), (250, SKIN[3])):
         body += person(x, H, 1.0, skin, "#3d4a5a", face="closed")
@@ -3692,36 +3744,144 @@ def control_room():
 
 
 def humanitarian_trafficking_action():
-    # An aid convoy truck with a big red cross, a crate tipped open by the road showing rifles under a thin layer of
-    # bandages, and a smiling official waving at the cameras
-    defs = lin("bg", ["#f2c88a", "#e8a85a"])
+    # On a dusty airstrip, a crate stencilled MEDICINE with its lid slid open on rifles; the aid official beams at the
+    # camera flashes while, behind the crate, a man in sunglasses counts the cash
+    defs = lin("bg", ["#f6d49a", "#e0a060"])
     body = rect(0, 0, W, H, "url(#bg)")
-    body += rect(0, 150, W, 50, "#c8965a")
-    body += rect(150, 60, 150, 92, "#f2f2f2", 'stroke="#888" stroke-width="2"') + rect(300, 92, 46, 60, "#e0e0e0", 'stroke="#888" stroke-width="2"')
-    body += rect(306, 98, 30, 22, "#8ad0e8")
-    body += rect(213, 80, 24, 56, "#d0342c") + rect(197, 96, 56, 24, "#d0342c")
-    for x in (180, 270, 326):
-        body += circle(x, 154, 14, "#222") + circle(x, 154, 6, "#888")
-    body += poly([(30, 150), (110, 150), (120, 120), (40, 116)], "#a07a4a", 'stroke="#6a4a2a" stroke-width="2"')
+    body += path("M0 60 L120 52 L180 40 L210 44 L180 58 L352 64 L352 72 L0 72 Z", "#b8a890", 'opacity="0.7"')  # A cargo plane
+    body += poly([(150, 44), (166, 22), (176, 22), (172, 46)], "#b8a890", 'opacity="0.7"')
+    body += rect(0, 150, W, 50, "#c89a62")
+    # The smuggler behind the crate
+    body += person(250, 150, 1.0, SKIN[2], "#3a3a32", face="smirk", glasses="shades", hair="#1a1a1a")
     for k in range(3):
-        body += stroke(f"M{46 + k * 22} 136 L{80 + k * 22} 124", "#2a2a2a", 5)
-    body += path("M40 128 Q 70 118 112 126 L110 132 Q 70 124 42 134 Z", "#fafafa")
-    body += person(140, H, 0.9, SKIN[0], "#2a3a5a", face="grin", tie="#d0342c", hair="#3a2a1a")
-    body += stroke("M166 150 L184 112", "#2a3a5a", 8) + circle(186, 108, 6, SKIN[0])
+        body += rect(268 + k * 6, 92 - k * 4, 26, 13, "#5aa05a", 'stroke="#2a6a2a" stroke-width="1" transform="rotate(-20 280 98)"')
+    # The crate: MEDICINE outside, rifles inside
+    body += rect(150, 112, 150, 78, "#b88a4a", 'stroke="#6a4a22" stroke-width="3"')
+    body += lettering("MEDICINE", 225, 156, 10, "#6a4a22", width=2)
+    body += rect(214, 168, 22, 6, "#d0342c") + rect(222, 160, 6, 22, "#d0342c")
+    body += rect(150, 112, 150, 30, "#2a2418")
+    for k in range(4):  # Rifle stocks and barrels
+        x = 162 + k * 32
+        body += stroke(f"M{x} 138 L{x + 22} 116", "#1a1a1a", 5) + rect(x - 6, 130, 14, 10, "#6a3a1a", 'rx="2" transform="rotate(-45 {} 135)"'.format(x))
+    body += poly([(142, 104), (300, 104), (308, 112), (150, 112)], "#c89a5a", 'stroke="#6a4a22" stroke-width="2" transform="rotate(-8 225 108)"')
+    # The aid official, waving to the cameras
+    body += person(84, H, 1.05, SKIN[0], "#2a6ad0", face="grin", hair="#6a4a2a")
+    body += lettering("AID", 84, 172, 9, "#ffffff", width=2)
+    body += stroke("M110 158 L132 112", "#2a6ad0", 10) + circle(134, 106, 7, SKIN[0])
+    for x, y in ((14, 30), (40, 14), (24, 92)):  # Camera flashes
+        body += star_points_poly(x, y)
     return svg(defs, body)
 
 
+def star_points_poly(cx, cy):
+    return poly(star_points(cx, cy, 12, 4, 4), "#ffffff", 'opacity="0.9"')
+
+
 def no_glove_no_love():
-    # A knight in shining armor head to toe, a big red heart on the shield, politely refusing a rose through the visor slit
-    defs = lin("bg", ["#ffd8e8", "#f2a8c8"]) + lin("steel", ["#f4f6fa", "#a8b0bc"])
+    # Candlelight and satin: a knight in full shining armor reclines on a red heart-shaped bed, propped on one elbow, a rose
+    # held in the visor, one knee up; the heart shield leans against the bed and rose petals are everywhere
+    defs = lin("bg", ["#4a1430", "#1e0816"]) + lin("steel", ["#ffffff", "#9aa2b0"]) + rad("glow", [("#ffb070", 0.45), ("#ffb070", 0)])
     body = rect(0, 0, W, H, "url(#bg)")
-    body += path("M120 200 C 120 140 232 140 232 200 Z", "url(#steel)", 'stroke="#6a7280" stroke-width="2"')
-    body += path("M146 158 C 146 86 206 86 206 158 Z", "url(#steel)", 'stroke="#6a7280" stroke-width="2"')
-    body += rect(150, 118, 52, 6, "#2a2f3a", 'rx="2"') + path("M176 106 C 186 84 206 84 214 96", "none", 'stroke="#d0342c" stroke-width="6"')
-    body += path("M228 112 L298 112 L296 160 C 290 186 266 196 263 198 C 260 196 236 186 230 160 Z", "url(#steel)", 'stroke="#6a7280" stroke-width="3"')
-    body += path("M263 176 C 244 162 238 150 240 140 C 242 130 256 126 263 138 C 270 126 284 130 286 140 C 288 150 282 162 263 176 Z", "#d0342c")
-    body += stroke("M40 176 L106 124", "#3a7a3a", 3) + circle(110, 121, 9, "#d0342c") + circle(106, 117, 6, "#e85a5a")
-    body += stroke("M108 124 L148 121", "#a8b0bc", 6)  # The gauntlet held up: no
+    for x in (34, 318):  # Candles
+        body += circle(x, 90, 46, "url(#glow)") + rect(x - 6, 92, 12, 40, "#f4ecd8") + path(f"M{x} 76 q 6 8 0 14 q -6 -6 0 -14 Z", "#ffcf5a")
+    body += path("M176 196 C 70 160 40 112 74 92 C 104 74 150 90 176 116 C 202 90 248 74 278 92 C 312 112 282 160 176 196 Z", "#a8122a")
+    body += path("M176 196 C 90 166 66 128 84 112 C 120 96 150 120 176 140 C 202 120 232 96 268 112 C 286 128 262 166 176 196 Z", "#c81e3a")
+    for x, y in ((120, 160), (210, 168), (150, 182), (246, 150), (100, 138), (230, 186), (190, 150)):
+        body += ellipse(x, y, 5, 3, "#ff4a6a", f'transform="rotate({x % 60} {x} {y})"')
+    # The knight: lying on its side, head on the left propped on a gauntlet
+    body += path("M118 126 C 120 106 200 104 226 120 C 236 134 220 146 196 146 L130 146 C 120 146 116 136 118 126 Z", "url(#steel)", 'stroke="#5a6270" stroke-width="2"')
+    body += path("M222 128 L286 112 L296 120 L232 142 Z", "url(#steel)", 'stroke="#5a6270" stroke-width="2"')  # The straight leg
+    body += path("M210 124 L252 84 L262 92 L236 132 Z", "url(#steel)", 'stroke="#5a6270" stroke-width="2"')  # The raised knee...
+    body += path("M252 84 L290 118 L282 124 L248 96 Z", "url(#steel)", 'stroke="#5a6270" stroke-width="2"')  # ...and its shin
+    body += path("M96 148 L106 112 L118 114 L112 150 Z", "url(#steel)", 'stroke="#5a6270" stroke-width="2"')  # The arm it leans on
+    body += path("M74 104 C 74 72 128 72 128 104 C 128 118 112 124 101 124 C 90 124 74 118 74 104 Z", "url(#steel)", 'stroke="#5a6270" stroke-width="2"')
+    body += rect(84, 98, 40, 5, "#2a2f3a", 'rx="2"') + path("M100 78 C 112 58 132 60 138 72", "none", 'stroke="#d0342c" stroke-width="6"')
+    body += stroke("M118 101 L156 92", "#3a7a3a", 2.5) + circle(160, 90, 7, "#d0342c") + circle(157, 87, 4, "#ff5a6a")  # The rose
+    body += path("M300 150 L340 150 L338 182 C 334 194 322 198 320 199 C 318 198 306 194 302 182 Z", "url(#steel)", 'stroke="#5a6270" stroke-width="2"')
+    body += path("M320 186 C 308 178 304 170 306 164 C 308 158 316 156 320 163 C 324 156 332 158 334 164 C 336 170 332 178 320 186 Z", "#d0342c")
+    return svg(defs, body)
+
+
+def tycoon(cx, base, s=1.0, face="smirk", brows=None, shirt="#1a1a1a", hat="tophat"):
+    """The board-game tycoon: bald with white tufts, a big white moustache, a top hat, a tailcoat with a bow tie."""
+    hx, hy = cx, base - 64 * s
+    out = person(cx, base, s, SKIN[0], shirt, face=face, hair=OLD_HAIR, hat=hat, brows=brows)
+    out += path(f"M{hx:.1f} {hy + 4 * s:.1f} C {hx - 8 * s:.1f} {hy + 1 * s:.1f} {hx - 18 * s:.1f} {hy + 4 * s:.1f} {hx - 20 * s:.1f} {hy + 10 * s:.1f} "
+                f"C {hx - 12 * s:.1f} {hy + 8 * s:.1f} {hx - 6 * s:.1f} {hy + 9 * s:.1f} {hx:.1f} {hy + 7 * s:.1f} "
+                f"C {hx + 6 * s:.1f} {hy + 9 * s:.1f} {hx + 12 * s:.1f} {hy + 8 * s:.1f} {hx + 20 * s:.1f} {hy + 10 * s:.1f} "
+                f"C {hx + 18 * s:.1f} {hy + 4 * s:.1f} {hx + 8 * s:.1f} {hy + 1 * s:.1f} {hx:.1f} {hy + 4 * s:.1f} Z", "#f4f4f4", 'stroke="#c8c8c8" stroke-width="1"')
+    out += circle(hx, hy + 2 * s, 3.5 * s, "#e8a888")  # The nose
+    out += poly([(cx - 9 * s, base - 40 * s), (cx, base - 36 * s), (cx - 9 * s, base - 32 * s)], "#d0342c")
+    out += poly([(cx + 9 * s, base - 40 * s), (cx, base - 36 * s), (cx + 9 * s, base - 32 * s)], "#d0342c")
+    out += poly([(cx - 10 * s, base - 42 * s), (cx, base - 4 * s), (cx + 10 * s, base - 42 * s)], "#ffffff", 'opacity="0.95"')  # Shirt front
+    return out
+
+
+def violence_monopoly():
+    # The board-game tycoon as the police: top hat, white moustache, a badge pinned to the tailcoat, a baton slapped into
+    # his palm, glaring straight at you from the GO TO JAIL corner
+    defs = lin("bg", ["#cfe6d0", "#9cc8a4"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for k, color in enumerate(("#d0342c", "#f2c94c", "#2a6ad0", "#2a9a4a", "#8a3a9a", "#e8803a", "#7ac8e8", "#d0342c")):
+        body += rect(k * 44, 0, 44, 30, "#fbf8ee", 'stroke="#2a2a2a" stroke-width="1.5"') + rect(k * 44, 0, 44, 9, color, 'stroke="#2a2a2a" stroke-width="1.5"')
+    body += rect(0, 30, 74, 74, "#fbf8ee", 'stroke="#2a2a2a" stroke-width="1.5"')
+    body += lettering("GO TO", 37, 44, 9, "#d0342c", width=1.8) + lettering("JAIL", 37, 64, 11, "#d0342c", width=2)
+    body += rect(278, 30, 74, 74, "#fbf8ee", 'stroke="#2a2a2a" stroke-width="1.5"')
+    for x in range(286, 346, 10):
+        body += rect(x, 40, 4, 56, "#2a2a2a")
+    body += tycoon(176, H, 1.75, face="frown", brows="angry", shirt="#14182a")
+    body += poly(star_points(214, 158, 11, 5, 6), "#f2c94c", 'stroke="#a87a1a" stroke-width="1.5"')  # The badge
+    body += stroke("M224 200 C 232 186 240 172 244 160", "#14182a", 22)  # His arm, raised
+    body += group(rect(-5, -70, 10, 76, "#1a1a1a", 'rx="4"') + rect(-7, 2, 14, 18, "#3a3a3a", 'rx="3"'), "translate(246 154) rotate(30)")
+    body += circle(246, 154, 12, "#ffffff", 'stroke="#c8c8c8" stroke-width="1.5"')  # The white glove on the baton
+    return svg(defs, body)
+
+
+def solidarity_towards_the_small_businessman():
+    # A fan-subscription website (ONLYFUNDS): the board-game tycoon poses in a pink bathrobe on webcam, and below, tired
+    # workers in hi-vis and scrubs send him their coins
+    defs = lin("bg", ["#eaf6fc", "#cfe8f4"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += rect(14, 6, 324, 130, "#ffffff", 'rx="6" stroke="#9ac8e0" stroke-width="2"')
+    body += rect(14, 6, 324, 22, "#00aff0", 'rx="6"') + rect(14, 20, 324, 8, "#00aff0")
+    body += lettering("ONLYFUNDS", 82, 11, 9, "#ffffff", width=1.8)
+    body += rect(24, 34, 186, 96, "#2a2a3a", 'rx="4"')  # The webcam frame
+    body += rect(24, 34, 186, 96, "#f0d8e0", 'rx="4" opacity="0.25"')
+    body += tycoon(117, 130, 0.95, face="smirk", shirt="#f29ab0")
+    body += path("M85 130 L104 96 L117 112 L130 96 L149 130 Z", "#e88aa8")  # The bathrobe's lapels
+    body += circle(36, 44, 4, "#e03a3a") + lettering("LIVE", 54, 41, 5, "#ffffff", width=1)
+    body += rect(222, 40, 106, 26, "#00aff0", 'rx="13"') + lettering("SUBSCRIBE", 275, 48, 6, "#ffffff", width=1.2)
+    body += lettering("TIPS", 252, 78, 7, "#2a2a3a", width=1.4)
+    for k in range(5):
+        body += coin(240 + (k % 3) * 22, 100 + (k // 3) * 18, 8)
+    for k, (x, shirt) in enumerate(((60, "#f2c94c"), (150, "#5ab8a8"), (236, "#e8803a"), (316, "#f2c94c"))):
+        body += person(x, H, 0.7, SKIN[k % 4], shirt, face="flat", brows="sad")
+        body += coin(x + 18, 150 - k % 2 * 8, 7) + stroke(f"M{x + 18} {140 - k % 2 * 8} l 0 -8", "#c8a040", 2, 'stroke-dasharray="2 3"')
+    return svg(defs, body)
+
+
+def inheritance():
+    # Grandma at peace in an open coffin, hands folded on lilies, while the grandson in his best suit grins over her and
+    # fans out the banknotes from her will
+    defs = lin("bg", ["#4a3a5a", "#2a2032"]) + rad("glow", [("#ffd890", 0.4), ("#ffd890", 0)])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x in (24, 330):
+        body += circle(x, 70, 40, "url(#glow)") + rect(x - 5, 72, 10, 40, "#f4ecd8") + path(f"M{x} 58 q 5 7 0 12 q -5 -5 0 -12 Z", "#ffcf5a")
+    body += poly([(10, 150), (40, 116), (232, 116), (252, 150), (232, 186), (40, 186)], "#6a3a1e", 'stroke="#3a1e0e" stroke-width="3"')
+    body += poly([(28, 150), (50, 126), (222, 126), (238, 150), (222, 176), (50, 176)], "#f4ecf4")  # The satin lining
+    body += ellipse(150, 150, 70, 18, "#d8c8e0")  # Her, under the lace
+    body += circle(70, 146, 18, "#f0d8c8") + circle(56, 140, 10, "#e8e8e8") + circle(60, 132, 8, "#e8e8e8")  # Hair in a bun
+    body += stroke("M64 144 q 3 2 6 0 M76 144 q 3 2 6 0", "#5a4a4a", 1.4) + path("M68 154 Q 74 157 80 154", "none", 'stroke="#5a4a4a" stroke-width="1.4"')
+    body += circle(67, 144, 5, "none", 'stroke="#8a7a6a" stroke-width="1.2"') + circle(80, 144, 5, "none", 'stroke="#8a7a6a" stroke-width="1.2"')
+    for x, y in ((128, 136), (140, 130), (152, 138)):
+        body += circle(x, y, 6, "#ffffff") + circle(x, y, 2, "#f2c94c")
+    body += ellipse(140, 146, 10, 6, "#f0d8c8")  # Folded hands
+    body += person(290, H, 1.15, SKIN[0], "#22222a", face="grin", tie="#2a2a2a", hair="#c8963a")
+    for k in range(5):
+        body += group(rect(-24, -9, 48, 18, "#5aa05a", 'stroke="#2a6a2a" stroke-width="1.5"') + lettering("$", 0, -5, 9, "#2a6a2a", width=1.4),
+                      f"translate(250 98) rotate({-40 + k * 14})")
+    body += circle(262, 104, 8, SKIN[0])
+    body += group(rect(-16, -20, 32, 40, "#fbf3dc", 'stroke="#a8986a" stroke-width="1.5"') + lettering("WILL", 0, -12, 6, "#5a4a2a", width=1.2), "translate(326 118) rotate(10)")
     return svg(defs, body)
 
 
@@ -3739,7 +3899,7 @@ CARDS = {
         "UnpaidIntern": unpaid_intern, "InhumanResources": inhuman_resources, "Micromanager": micromanager,
         "MultilevelMarketingSeller": multilevel_marketing_seller, "DayTrader": day_trader,
         "PluriemployedHustler": pluriemployed_hustler, "Unicorn": unicorn,
-        "MultimillionairePhilanthropist": multimillionaire_philanthropist, "MadeMan": made_man, "CharlesPonzi": charles_ponzi,
+        "MultimillionairePhilanthropist": multimillionaire_philanthropist, "FatTony": made_man, "CharlesPonzi": charles_ponzi,
         "MarginCall": margin_call, "HostileTakeover": hostile_takeover, "MassLayoffs": mass_layoffs,
         "TeamBuildingExercise": team_building_exercise, "DeadCatBounce": dead_cat_bounce,
         "TaxpayerFundsVentureCapitalProfits": taxpayer_funds_venture_capital_profits,
@@ -3811,6 +3971,8 @@ CARDS["DigitalSociety"].update({"MetaGroupChat": meta_group_chat, "SocialPanopti
 CARDS["ShadowOps"].update({"ControlRoom": control_room, "HumanitarianTraffickingAction": humanitarian_trafficking_action})
 CARDS["Zeitgeist"].update({"NoGloveNoLove": no_glove_no_love, "WeAreNotTheSame": we_are_not_the_same})
 CARDS["Corporate"].update({"BusinessExpense": business_expense})
+CARDS["Corporate"].update({"SolidarityTowardsTheSmallBusinessman": solidarity_towards_the_small_businessman, "Inheritance": inheritance})
+CARDS["Statecraft"].update({"ViolenceMonopoly": violence_monopoly})
 CARDS["Myth"].update({"Reincarnation": reincarnation})
 CARDS["Tech"].update({"TechnicalDebt": technical_debt, "ScopeCreep": scope_creep})
 CARDS["Mind"].update({"ShipofTheseus": ship_of_theseus, "Scapegoating": scapegoating})

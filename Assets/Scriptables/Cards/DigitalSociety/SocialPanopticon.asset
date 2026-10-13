@@ -74,7 +74,7 @@ MonoBehaviour:
   designNotes: 'Every enemy creature is Revealed for 2 Days (its plans can be seen,
     Watchdogs can match them) and gets Heat Signature 1. Future: a Trend where nothing
     can be Concealed.'
-  artDescription: A round prison tower made of giant smartphones all facing inward,
-    and in the middle a tiny person trying very hard to look natural while every
-    screen records them.
+  artDescription: 'A real panopticon seen from inside: a ring of barred cells on
+    two floors around a central watchtower with a single recording eye, every inmate
+    lit by their own phone.'
   defaultTargetType: 4

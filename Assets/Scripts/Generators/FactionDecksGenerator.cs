@@ -153,10 +153,9 @@ namespace SlayTheClone {
                 .With(CreatureAbility.InsiderJob),
             Creature("Pluriemployed Hustler", 2, 3, speed: 2, deploy: 0,
                 "Three jobs, two side hustles, one kidney left.",
-                "Penny Stock: small bets that pay double, so hits of 3 or less are doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).",
+                "Draws 2 on arrival, then works itself down 1 Health every Dusk (Decay 1). Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).",
                 On(EffectTrigger.OnPlay, Draw(2)),
-                On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
-                .With(CreatureAbility.PennyStock),
+                On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self))),
             Creature("Unicorn", 1, 8, speed: 1, deploy: 2,
                 "Valued at a billion. Burns a million a day. Profitable next year, every year.",
                 "Future: Unicorn (Enterprise) from the card examples. Burn rate stays: Corporate can't heal it.",
@@ -166,7 +165,7 @@ namespace SlayTheClone {
                 "Gave away 0.01% of his fortune. Wrote off 100% of it.",
                 "Future: a Contract. The enemy gets the gift now, you get the tax break on a later Day.",
                 On(EffectTrigger.OnPlay, Buff(1, TargetType.EnemyCreatures, attack: false, health: true), Draw(2))),
-            Creature("Made Man", 4, 5, speed: 1, deploy: 2,
+            Creature("Fat Tony", 4, 5, speed: 1, deploy: 2,
                 "Nothing personal. It's just business. Mostly the personal kind.",
                 "Future: An Offer You Can't Refuse. Recruits a damaged enemy creature instead of hurting it.",
                 On(EffectTrigger.OnPlay, Damage(2, TargetType.EnemyCreatures, AtRandom))),
@@ -214,6 +213,18 @@ namespace SlayTheClone {
                 "Future: Capital cost (discard 2 cards). Placeholder cost: the enemy draws a card. Plays in Prosperity Gospel.",
                 Draw(3), Draw(1, TargetType.Enemy))
                 .Picture("A megachurch whose cross is a giant gold dollar sign, a private jet parked by the door and a big red TAX EXEMPT stamp across the sky."),
+            Spell("Solidarity Towards The Small Businessman", TargetType.Player,
+                "He's just a little guy. With seven yachts. Every coin helps.",
+                "Draw 2, paid for by your workers: 1 damage to each friendly creature. Future: Capital cost.",
+                Draw(2), Damage(1, TargetType.FriendlyCreatures, Each))
+                .NotInStarterDeck()
+                .Picture("A fan-subscription website called ONLYFUNDS: the board-game tycoon (top hat, white moustache) poses in a pink bathrobe on a live webcam, a SUBSCRIBE button and a pile of tips beside him, while tired workers in hi-vis vests and scrubs send him their coins."),
+            Spell("Inheritance", TargetType.FriendlyCreatures,
+                "Self-made. Grandma did the making.",
+                "Old money: target friendly creature gets +2 Attack and +2 Health for good, for doing nothing. Future: when a friendly creature dies, another inherits its stats.",
+                Buff(2, TargetType.FriendlyCreatures, attack: true, health: true))
+                .NotInStarterDeck()
+                .Picture("Grandma at peace in an open coffin, hands folded on lilies, while her grandson in his best suit grins over her, fanning out the banknotes from her will."),
             Spell("Inflation", TargetType.EnemyCreatures,
                 "Same price. Less creature.",
                 "Mechanics test: Health Loss on every enemy. It ignores Armor, isn't damage (no OnDamaged), kills at 0 whatever the Armor, and lowers the Armor cap.",
@@ -336,6 +347,12 @@ namespace SlayTheClone {
                 "Mechanics test: Temporal Shield for 2 Days on a slot. The creature there takes no combat damage, but spells and abilities still hurt it. It stays with the slot, not the creature (Static).",
                 PlaceSlotEffect(SlotEffectType.TemporalShield, 0, 2, TargetType.FriendlyCreatures))
                 .Picture("Two generals shaking hands for the cameras in front of a CEASEFIRE banner, each hiding a grenade behind his back."),
+            Spell("Violence Monopoly", TargetType.Player,
+                "Only one of us is allowed to hit people. Guess which.",
+                "The state's monopoly on violence: a Monitored Watchdog nullifies the next 2 enemy attacks before they land.",
+                CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Nullify, charges = 2 }, TargetType.Enemy))
+                .NotInStarterDeck()
+                .Picture("The board-game tycoon (top hat, white moustache, tailcoat) as the police: a badge on his chest, a baton raised in his white glove, glaring straight at you from beside the GO TO JAIL corner."),
         };
         #endregion
 
@@ -454,7 +471,7 @@ namespace SlayTheClone {
                 "Protection: target friendly creature gets Blessed (the next status that would land is negated) and 2 Armor.",
                 Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1), Armor(2, TargetType.FriendlyCreatures))
                 .NotInStarterDeck()
-                .Picture("A knight in shining armor head to toe, a giant red heart on the shield, politely refusing a rose through the visor slit."),
+                .Picture("Candlelight and satin: a knight in full shining armor reclines on a red heart-shaped bed, propped on one elbow, a rose in the visor and one knee up, rose petals everywhere, the heart shield leaning against the bed."),
             Spell("We Are Not The Same", TargetType.FriendlyCreatures,
                 "I copy whoever's in front of me. You copy whoever's in front of you. We are not the same.",
                 "Your creature copies the Attack, Health and Speed of the enemy creature facing it, while it stays in play. Shrinks a giant into your nobody, or your nobody into a giant.",
@@ -533,13 +550,13 @@ namespace SlayTheClone {
                 "Each Dawn the in-group gets louder (+1 Attack on a random friendly creature) and someone outside it gets a target on their back (Heat Signature 1 on a random enemy creature). Future: Ostracised.",
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom),
                     Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 1, modifier: AtRandom)))
-                .Picture("A phone screen showing a group chat named THE JURY (47 members), everyone posting gavels and skull emojis under a blurry photo of one guy, while the guy himself sweats alone in a corner, outside the phone."),
+                .Picture("A messenger group chat in the familiar green-and-beige look: THE JURY (47 members), gavels and skulls with blue read ticks under a blurry photo of one guy, while the guy himself sweats alone outside the phone."),
             Spell("Social Panopticon", TargetType.EnemyCreatures,
                 "Nobody is watching you. Everybody is.",
                 "Every enemy creature is Revealed for 2 Days (its plans can be seen, Watchdogs can match them) and gets Heat Signature 1. Future: a Trend where nothing can be Concealed.",
                 Status(StatusEffectType.Revealed, 2, TargetType.EnemyCreatures, modifier: Each),
                 Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 1, modifier: Each))
-                .Picture("A round prison tower made of giant smartphones all facing inward, and in the middle a tiny person trying very hard to look natural while every screen records them."),
+                .Picture("A real panopticon seen from inside: a ring of barred cells on two floors around a central watchtower with a single recording eye, every inmate lit by their own phone."),
         };
 
         // Shadow Ops.: fragile agents, hidden plans, traps
@@ -615,12 +632,12 @@ namespace SlayTheClone {
                 "Forty screens, all on. Nobody watching the one that matters.",
                 "Each Dawn it Reveals a random enemy slot: its hidden Slot Effect and what the creature there plans that Day. Future: chooses the slot.",
                 On(EffectTrigger.StartOfTurn, Reveal(TargetType.EnemyCreatures, AtRandom)))
-                .Picture("A dark room with a wall of surveillance monitors, two operators asleep in their chairs with headsets on, cold coffee, while on one small screen a burglar waves at the camera."),
+                .Picture("A dark room with a wall of surveillance monitors, two operators asleep in their chairs with headsets on, cold coffee."),
             Spell("Humanitarian Trafficking Action", TargetType.EnemyCreatures,
                 "The crates say MEDICINE. The crates say a lot of things.",
                 "An aid package with a tracker inside: heals an enemy creature 2, and gives it Heat Signature 2, so random and redirected attacks find it first.",
                 Heal(2, TargetType.EnemyCreatures), Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2))
-                .Picture("An aid convoy truck with a big red cross painted on it, one crate tipped open on the roadside showing rifles under a thin layer of bandages, and a smiling official waving at the cameras."),
+                .Picture("On a dusty airstrip, a crate stencilled MEDICINE with its lid slid open on rifles: the aid official waves at the camera flashes while, behind the crate, a man in sunglasses counts the cash."),
         };
 
         // Tech: rewires the queue
@@ -652,8 +669,9 @@ namespace SlayTheClone {
                 .Picture("Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a \"Backdoor Request\" form."),
             Creature("SysAdmin", 1, 4, speed: 1, deploy: 1,
                 "Have you tried turning it off and on again?",
-                "Each Dawn it cleanses your creatures' harmful statuses (Tech owns Cleanse).",
+                "Each Dawn it cleanses your creatures' harmful statuses (Tech owns Cleanse). Technician: its small hits (3 or less) are doubled.",
                 On(EffectTrigger.StartOfTurn, Cleanse(CleanseTarget.Statuses, TargetType.FriendlyCreatures)))
+                .With(CreatureAbility.Technician)
                 .Picture("A bearded sysadmin in socks and sandals yanking the power cable out of a smoking server rack, a coffee mug in his other hand."),
             Creature("Meatproxy As A Service", 0, 3, speed: 1, deploy: 1,
                 "Powered by AI. The AI is Dave. Dave copies and pastes.",
@@ -679,7 +697,7 @@ namespace SlayTheClone {
                 "Just one more small feature. And one more.",
                 "Grow 1: it gets bigger every Dawn, like the project.",
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
-                .Picture("A creep in a trench coat and a low hat peering through a brass spyglass at a SCOPE checklist whose lines keep getting longer."),
+                .Picture("A creep in a trench coat and a low hat peering through a brass spyglass at a couple kissing in a lit window."),
         };
 
         // Myth: slow and inevitable; creatures die and pay off
@@ -799,12 +817,12 @@ namespace SlayTheClone {
                 "Every plank replaced. Still the same ship. Probably.",
                 "Regenerate 1: it repairs itself plank by plank.",
                 On(EffectTrigger.EndOfTurn, Heal(1, TargetType.Self)))
-                .Picture("A wooden ship on calm water, half its hull planks old and dark, half new and pale, its sail half patched and half new, a hammer still at work and a big question mark in the sky."),
+                .Picture("Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went."),
             Spell("Scapegoating", TargetType.EnemyCreatures,
                 "It wasn't us. It was the goat. Everyone agrees it was the goat.",
                 "Heat Signature 2 on target creature (random effects and redirected attacks go to it), and draw a card. Mind deals no damage: it makes someone else's damage find the goat.",
                 Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2), Draw(1))
-                .Picture("A bewildered white goat standing in the middle while pointing fingers close in on it from every side."),
+                .Picture("The escape goat: a white goat scrambling over a wooden fence, front legs over the top rail, looking back in a sweat."),
         };
         #endregion
 

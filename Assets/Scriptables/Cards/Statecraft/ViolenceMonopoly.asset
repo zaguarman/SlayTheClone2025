@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: ViolenceMonopoly
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: e7846ac3-ac45-455c-80b5-27958196c6fb
+  cardName: Violence Monopoly
+  description: Only one of us is allowed to hit people. Guess which.
+  cardType: 1
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: 5588d48d3603f6a48a4f01a840baa760, type: 3}
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 11
+      value: 0
+      targetType: 1
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 2
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+  designNotes: 'The state''s monopoly on violence: a Monitored Watchdog nullifies
+    the next 2 enemy attacks before they land.'
+  artDescription: 'The board-game tycoon (top hat, white moustache, tailcoat) as
+    the police: a badge on his chest, a baton raised in his white glove, glaring
+    straight at you from beside the GO TO JAIL corner.'
+  defaultTargetType: 0

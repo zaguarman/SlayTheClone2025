@@ -74,6 +74,6 @@ MonoBehaviour:
   designNotes: 'Heat Signature 2 on target creature (random effects and redirected
     attacks go to it), and draw a card. Mind deals no damage: it makes someone else''s
     damage find the goat.'
-  artDescription: A bewildered white goat standing in the middle while pointing fingers
-    close in on it from every side.
+  artDescription: 'The escape goat: a white goat scrambling over a wooden fence,
+    front legs over the top rail, looking back in a sweat.'
   defaultTargetType: 4

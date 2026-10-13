@@ -74,9 +74,9 @@ MonoBehaviour:
   designNotes: 'Each Dawn the in-group gets louder (+1 Attack on a random friendly
     creature) and someone outside it gets a target on their back (Heat Signature
     1 on a random enemy creature). Future: Ostracised.'
-  artDescription: A phone screen showing a group chat named THE JURY (47 members),
-    everyone posting gavels and skull emojis under a blurry photo of one guy, while
-    the guy himself sweats alone in a corner, outside the phone.
+  artDescription: 'A messenger group chat in the familiar green-and-beige look: THE
+    JURY (47 members), gavels and skulls with blue read ticks under a blurry photo
+    of one guy, while the guy himself sweats alone outside the phone.'
   attack: 1
   health: 4
   speed: 2
