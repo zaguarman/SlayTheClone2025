@@ -236,34 +236,33 @@ namespace SlayTheClone {
             artImage.color = baseCardData.artwork != null ? Color.white : new Color(0.25f, 0.25f, 0.3f);
         }
 
-        #region Shape
-        // The card's shape says what it is, with no icon to read: a creature is a squared-off tablet with a rectangular
-        // portrait; a spell is a rounded card with a capsule-shaped art window and a rounded name bar. Corner sizes, in
-        // multiples of the rounded sprite's corner (larger is sharper).
-        private const float CreatureCorners = 9f, SpellCorners = 0.9f, SpellArtCorners = 0.5f, CreatureArtCorners = 8f;
+        #region Art window
+        // Like Slay the Spire's attack, skill and power frames, the art window's shape says what the card is, with no icon to
+        // read: a creature's window comes to a point at the bottom, like a pennant; a spell's ends in a shallow arch.
+        // A cover in the frame's color hides the art outside the window, and a brass trim runs along its edge.
+        private Image windowCover, windowTrim;
 
-        /// <summary>Whether the card is shaped as a spell (rounded, with an oval art window) rather than a creature.</summary>
+        /// <summary>Whether the card shows a spell's art window (arched) rather than a creature's (pointed).</summary>
         public bool IsSpellShaped { get; private set; }
 
         private void ApplyShape(bool spell) {
             IsSpellShaped = spell;
-            SetCorners(cardImage != null ? cardImage : GetComponent<Image>(), spell ? SpellCorners : CreatureCorners);
-            SetCorners(frameImage, spell ? SpellCorners * 1.1f : CreatureCorners);
-            SetCorners(nameText != null ? nameText.transform.parent.GetComponent<Image>() : null, spell ? 1f : CreatureCorners);
-
-            var artFrame = artImage != null ? artImage.transform.parent.GetComponent<Image>() : null;
-            SetCorners(artFrame, spell ? SpellArtCorners : CreatureArtCorners);
-            // The art is cut to the window's shape
-            if (artFrame != null && artFrame.GetComponent<Mask>() == null) artFrame.gameObject.AddComponent<Mask>().showMaskGraphic = true;
-        }
-
-        // A rounded part and its trim take the same corners
-        private static void SetCorners(Image image, float scale) {
-            if (image == null) return;
-            image.pixelsPerUnitMultiplier = scale;
-            var trim = image.transform.Find("Trim");
-            if (trim != null && trim.TryGetComponent<Image>(out var outline)) outline.pixelsPerUnitMultiplier = scale;
-            image.SetVerticesDirty();
+            if (artImage == null) return;
+            var artFrame = artImage.transform.parent;
+            if (windowCover == null) {
+                windowCover = UITheme.NewImage("WindowCover", artFrame, Color.white);
+                windowTrim = UITheme.NewImage("WindowTrim", artFrame, UITheme.GoldDim);
+                foreach (var part in new[] { windowCover, windowTrim }) {
+                    UITheme.Stretch(part.rectTransform);
+                    part.transform.SetSiblingIndex(artImage.transform.GetSiblingIndex() + 1); // Over the art, under the status icons
+                }
+                windowTrim.transform.SetSiblingIndex(windowCover.transform.GetSiblingIndex() + 1);
+                var rectTrim = artFrame.Find("Trim");
+                if (rectTrim != null) rectTrim.gameObject.SetActive(false); // The window's own trim replaces it
+            }
+            windowCover.sprite = spell ? UITheme.SpellWindowCover : UITheme.CreatureWindowCover;
+            windowTrim.sprite = spell ? UITheme.SpellWindowTrim : UITheme.CreatureWindowTrim;
+            windowCover.color = UITheme.CardFrameColor(baseCardData.faction);
         }
         #endregion
 

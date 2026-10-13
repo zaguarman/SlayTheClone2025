@@ -131,6 +131,34 @@ namespace SlayTheClone {
             Log("Hiding deck view", LogTag.UI);
         }
 
+        public bool IsOpen => deckViewPanel != null && deckViewPanel.activeSelf;
+        private readonly List<RectTransform> toggles = new List<RectTransform>();
+
+        /// <summary>Buttons that open and close the window: clicking them isn't a click outside it.</summary>
+        public void AddToggle(Button button) {
+            if (button != null) toggles.Add((RectTransform)button.transform);
+        }
+
+        // A click anywhere outside the window closes it, like the close button
+        private void Update() {
+            if (!IsOpen) return;
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) ClickAt(Input.mousePosition);
+        }
+
+        /// <summary>A click at this screen point: outside the window (and any card preview it shows), it closes. Returns whether it did.</summary>
+        public bool ClickAt(Vector2 screenPoint) {
+            if (!IsOpen) return false;
+            var canvas = deckViewPanel.GetComponentInParent<Canvas>();
+            var eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.rootCanvas.worldCamera : null;
+            if (RectTransformUtility.RectangleContainsScreenPoint((RectTransform)deckViewPanel.transform, screenPoint, eventCamera)) return false;
+            if (Tooltip.Existing != null && Tooltip.Existing.PointerOnTooltip(screenPoint)) return false;
+            // The buttons that open and close it do that themselves
+            if (toggles.Exists(t => t != null && t.gameObject.activeInHierarchy
+                                    && RectTransformUtility.RectangleContainsScreenPoint(t, screenPoint, eventCamera))) return false;
+            HideDeckView();
+            return true;
+        }
+
         public void ShowDeckCards(IPlayer player) {
             viewingDiscardPile = false;
             UpdateUI(player);

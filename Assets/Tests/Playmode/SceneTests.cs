@@ -53,6 +53,14 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(0, game.Turns.TurnNumber);
             game.AssertViewsMatchRules();
 
+            Object.FindFirstObjectByType<DeckViewController>().ToggleDeckView();
+            var deckWindow = Object.FindFirstObjectByType<DeckViewUI>(FindObjectsInactive.Include);
+            Assert.IsTrue(deckWindow.IsOpen, "View Deck opens the deck");
+            Vector2 windowCenter = Camera.main.WorldToScreenPoint(deckWindow.DeckViewPanel.transform.position);
+            Assert.IsFalse(deckWindow.ClickAt(windowCenter), "A click inside it keeps it open...");
+            Assert.IsTrue(deckWindow.ClickAt(new Vector2(2f, Screen.height - 2f)), "...a click outside it closes it");
+            yield return null;
+
             var brute = game.Summon(p1, game.Cards.Creature("Test Brute", 4, 5), 0);
             var mouse = game.Summon(p2, game.Cards.Creature("Test Mouse", 1, 2), 0);
             var striker = game.Summon(p1, game.Cards.Creature("Test Striker", 3, 3), 1);

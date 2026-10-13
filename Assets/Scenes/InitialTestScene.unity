@@ -2583,7 +2583,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2471.707, y: 1187.9999}
+  m_SizeDelta: {x: 2300.1367, y: 1187.9999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &383945915
 MonoBehaviour:
@@ -3521,7 +3521,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0.04447934}
-  m_SizeDelta: {x: 2199.4863, y: 10}
+  m_SizeDelta: {x: 2043.5134, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &584788518
 GameObject:
@@ -3876,7 +3876,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Deck 16   \xB7   Discard 0"
+  m_text: "Deck 19   \xB7   Discard 0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3992,7 +3992,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -2.4777603}
-  m_SizeDelta: {x: 2247.0063, y: 544.8037}
+  m_SizeDelta: {x: 2091.0334, y: 544.8037}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &746083023
 MonoBehaviour:
@@ -9259,7 +9259,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Deck 16   \xB7   Discard 0"
+  m_text: "Deck 20   \xB7   Discard 0"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10719,7 +10719,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 2.5222397}
-  m_SizeDelta: {x: 2247.0063, y: 535.19617}
+  m_SizeDelta: {x: 2091.0334, y: 535.19617}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1890242451
 MonoBehaviour:

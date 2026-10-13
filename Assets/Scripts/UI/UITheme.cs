@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -94,12 +96,25 @@ namespace SlayTheClone {
         /// <summary>A tile of thin diagonal lines crossing into diamonds, for a patterned table.</summary>
         public static Sprite Lattice => lattice != null ? lattice : lattice = LoadOrDraw(nameof(Lattice));
 
+        // A card's art window says what the card is, like Slay the Spire's card frames: a creature's ends in a point at the
+        // bottom (a pennant), a spell's in a shallow arch. Each is a cover in the card's frame color for what's outside the
+        // window, and a trim along its edge, drawn over the (rectangular) art.
+        private static Sprite creatureWindowCover, creatureWindowTrim, spellWindowCover, spellWindowTrim;
+        public static Sprite CreatureWindowCover => creatureWindowCover != null ? creatureWindowCover : creatureWindowCover = LoadOrDraw(nameof(CreatureWindowCover));
+        public static Sprite CreatureWindowTrim => creatureWindowTrim != null ? creatureWindowTrim : creatureWindowTrim = LoadOrDraw(nameof(CreatureWindowTrim));
+        public static Sprite SpellWindowCover => spellWindowCover != null ? spellWindowCover : spellWindowCover = LoadOrDraw(nameof(SpellWindowCover));
+        public static Sprite SpellWindowTrim => spellWindowTrim != null ? spellWindowTrim : spellWindowTrim = LoadOrDraw(nameof(SpellWindowTrim));
+
         /// <summary>The theme's sprites by name, with their slicing borders (in pixels) and whether they tile.</summary>
         public static readonly (string name, int border, bool tiles)[] SpriteNames = {
             (nameof(Rounded), CornerRadius + 2, false),
             (nameof(RoundedOutline), CornerRadius + 2, false),
             (nameof(CornerBrackets), BracketArm, false),
-            (nameof(Lattice), 0, true)
+            (nameof(Lattice), 0, true),
+            (nameof(CreatureWindowCover), 0, false),
+            (nameof(CreatureWindowTrim), 0, false),
+            (nameof(SpellWindowCover), 0, false),
+            (nameof(SpellWindowTrim), 0, false),
         };
 
         /// <summary>Draws one of the <see cref="SpriteNames"/>.</summary>
@@ -108,13 +123,103 @@ namespace SlayTheClone {
             nameof(RoundedOutline) => DrawRounded(CornerRadius, 3),
             nameof(CornerBrackets) => DrawBrackets(64, BracketArm, 10, 3),
             nameof(Lattice) => DrawLattice(LatticeSize),
+            nameof(CreatureWindowCover) => DrawWindow(PennantWindow(), cover: true),
+            nameof(CreatureWindowTrim) => DrawWindow(PennantWindow(), cover: false),
+            nameof(SpellWindowCover) => DrawWindow(ArchWindow(), cover: true),
+            nameof(SpellWindowTrim) => DrawWindow(ArchWindow(), cover: false),
             _ => throw new System.ArgumentException($"No theme sprite called {spriteName}")
         };
 
         /// <summary>Drops the sprites loaded or drawn so far, so the next use loads them again (after baking them).</summary>
         public static void ForgetSprites() {
             rounded = roundedOutline = cornerBrackets = lattice = null;
+            creatureWindowCover = creatureWindowTrim = spellWindowCover = spellWindowTrim = null;
         }
+
+        #region Art windows
+        // In the art box's own units (144 x 82, the card prefab's art frame), drawn at 3 pixels per unit
+        private const float WindowWidth = 144f, WindowHeight = 82f, WindowScale = 3f;
+        private const float WindowCorner = 5f;   // The top corners' radius
+        private const float WindowFoot = 15f;    // How high the sides stop, above the pointed or arched bottom
+        private const float WindowTrimWidth = 3.5f; // Pixels
+
+        // Up the left side, across the rounded top, down the right side; the bottom closes the shape
+        private static List<Vector2> WindowSides() {
+            var points = new List<Vector2> { new Vector2(0f, WindowFoot) };
+            for (int i = 0; i <= 8; i++) {
+                float a = Mathf.PI - i * Mathf.PI / 16f; // Top-left corner, from the side to the top
+                points.Add(new Vector2(WindowCorner + Mathf.Cos(a) * WindowCorner, WindowHeight - WindowCorner + Mathf.Sin(a) * WindowCorner));
+            }
+            for (int i = 0; i <= 8; i++) {
+                float a = Mathf.PI / 2f - i * Mathf.PI / 16f; // Top-right corner, from the top to the side
+                points.Add(new Vector2(WindowWidth - WindowCorner + Mathf.Cos(a) * WindowCorner, WindowHeight - WindowCorner + Mathf.Sin(a) * WindowCorner));
+            }
+            points.Add(new Vector2(WindowWidth, WindowFoot));
+            return points;
+        }
+
+        // A creature: the bottom comes to a point, like a pennant
+        private static List<Vector2> PennantWindow() {
+            var points = WindowSides();
+            points.Add(new Vector2(WindowWidth / 2f, 1f));
+            return points;
+        }
+
+        // A spell: a shallow arch along the bottom, from the right side back to the left
+        private static List<Vector2> ArchWindow() {
+            var points = WindowSides();
+            float sag = WindowFoot - 1f, half = WindowWidth / 2f;
+            float radius = (half * half + sag * sag) / (2f * sag);
+            var center = new Vector2(half, 1f + radius);
+            float span = Mathf.Asin(half / radius);
+            for (int i = 1; i < 24; i++) {
+                float a = span - 2f * span * i / 24f;
+                points.Add(center + new Vector2(Mathf.Sin(a), -Mathf.Cos(a)) * radius);
+            }
+            return points;
+        }
+
+        // The cover is opaque outside the window; the trim is a line along its edge. Antialiased by the distance to the edge
+        private static Texture2D DrawWindow(List<Vector2> window, bool cover) {
+            int width = Mathf.RoundToInt(WindowWidth * WindowScale), height = Mathf.RoundToInt(WindowHeight * WindowScale);
+            var polygon = window.Select(p => p * WindowScale).ToArray();
+            var texture = NewTexture(width, height);
+            var pixels = new Color32[width * height];
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    var p = new Vector2(x + 0.5f, y + 0.5f);
+                    float distance = DistanceToEdge(polygon, p);
+                    float outside = Inside(polygon, p) ? -distance : distance;
+                    float alpha = cover ? Mathf.Clamp01(0.5f + outside) : Mathf.Clamp01(WindowTrimWidth / 2f + 0.5f - Mathf.Abs(outside));
+                    pixels[y * width + x] = new Color32(255, 255, 255, (byte)(alpha * 255));
+                }
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply();
+            return texture;
+        }
+
+        private static float DistanceToEdge(Vector2[] polygon, Vector2 p) {
+            float best = float.MaxValue;
+            for (int i = 0; i < polygon.Length; i++) {
+                Vector2 a = polygon[i], b = polygon[(i + 1) % polygon.Length], ab = b - a;
+                float t = Mathf.Clamp01(Vector2.Dot(p - a, ab) / ab.sqrMagnitude);
+                best = Mathf.Min(best, (a + ab * t - p).sqrMagnitude);
+            }
+            return Mathf.Sqrt(best);
+        }
+
+        private static bool Inside(Vector2[] polygon, Vector2 p) {
+            bool inside = false;
+            for (int i = 0, j = polygon.Length - 1; i < polygon.Length; j = i++) {
+                if ((polygon[i].y > p.y) != (polygon[j].y > p.y)
+                    && p.x < (polygon[j].x - polygon[i].x) * (p.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x) {
+                    inside = !inside;
+                }
+            }
+            return inside;
+        }
+        #endregion
 
         private static Sprite LoadOrDraw(string spriteName) {
             var baked = Resources.Load<Sprite>($"{ResourcesFolder}/{spriteName}");

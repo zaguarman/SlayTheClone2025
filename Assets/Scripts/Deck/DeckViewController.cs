@@ -40,6 +40,8 @@ namespace SlayTheClone {
 
             deckViewButton.gameObject.SetActive(true);
             discardViewButton.gameObject.SetActive(true);
+            deckViewUI.AddToggle(deckViewButton);
+            deckViewUI.AddToggle(discardViewButton);
 
             if (deckViewUI.DeckViewPanel != null) {
                 deckViewUI.DeckViewPanel.SetActive(false);

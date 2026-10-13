@@ -1402,6 +1402,9 @@ MonoBehaviour:
   OnCardClicked:
     m_PersistentCalls:
       m_Calls: []
+  OnCardRightClicked:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7836740822291373777
 MonoBehaviour:
   m_ObjectHideFlags: 0
