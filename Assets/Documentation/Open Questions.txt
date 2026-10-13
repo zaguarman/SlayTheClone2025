@@ -82,11 +82,12 @@ STILL OPEN
 
 25. Spell ghosts (2026-10-13)
     • Done: a queued spell leaves the hand and shows as a ghost where it lands: full size in an empty slot, small on the slot's edge facing the other side when a creature (or a queued summon) is there, small in the middle of that edge for a spell that plays on a whole side. The hand-to-target spell arrows are gone (the ghost is at the target). The enemy's queued spells are card backs where they're aimed.
-    • Question: is small-on-the-edge right for a taken slot, or would you rather have the ghost over the creature, or beside the card?
+    • Answered: the edge is right, and the sizes. Several spells at one place (expect up to 4): the newest in the middle, the older ones stepping left, partly hidden; any of them can be hovered to see it and clicked to take it back.
 
 24. The five new cards (2026-10-13)
     • Done: Meta Group Chat and Social Panopticon (Digital Society), Control Room and Humanitarian Trafficking Action (Shadow Ops.), No Glove, No Love (Zeitgeist), with the effects in 'Starter Faction Decks'. In the deck builder only, not in a starter deck.
-    • Question: "Meta" is a company name (see 20, names too close to someone else's): keep it, or something like "The Group Chat"? And are the factions and effects what you had in mind?
+    • Answered: keep "Meta": it's a plain word, the trademark doesn't matter here.
+    • Question: are the factions and effects what you had in mind?
 
 23. Bouncing statuses back (2026-10-13)
     • Done: the ability already existed as Return to Sender (on Supreme Court): enemy statuses bounce back to the creature that sent them. A status from a spell used to go to the caster's weakest creature; now it goes to a random enemy creature (the one with the most Heat Signature first), as you described. No U (stat changes) still bounces a spell's change to the caster's weakest creature.

@@ -26,7 +26,9 @@ namespace SlayTheClone {
         // Queued spells aimed here, each shown as a ghost where it's aimed (see RefreshSpellGhosts)
         private readonly Dictionary<ICard, CardController> spellGhosts = new Dictionary<ICard, CardController>();
         private const float SpellGhostScale = 0.5f;   // Small, on an edge, when something already stands where it's aimed
-        private const float SpellGhostSpread = 0.45f; // Ghosts at the same place fan out by this share of their width
+        private const float SpellGhostSpread = 0.45f; // Older ghosts at the same place step left by this share of their width
+        private readonly Dictionary<ICard, int> spellGhostOrder = new Dictionary<ICard, int>(); // When each ghost appeared
+        private int nextSpellGhost;
         private const float CastStagger = 0.2f;
         private const float CastScale = 2.1f;         // How big a cast spell swells, of board size
         private float nextCastTime;
@@ -501,32 +503,39 @@ namespace SlayTheClone {
                 else Destroy(ghost.gameObject);
             }
 
-            foreach (var group in aimed.GroupBy(a => a.slot)) {
-                var together = group.ToList();
+            foreach (var (spell, caster, _) in aimed) {
+                if (!spellGhosts.TryGetValue(spell, out var ghost) || ghost == null) {
+                    ghost = CardViews.Create(spell, caster, transform); // The caster's card, wherever it's aimed
+                    if (ghost == null) continue;
+                    ghost.name = $"SpellGhost_{spell.Name}";
+                    ghost.SetQueued(true, canBeDragged: true);
+                    ghost.OnCardClicked.AddListener(TakeBackPlay);
+                    ghost.OnCardRightClicked.AddListener(TakeBackPlay);
+                    ghost.OnBeginDragEvent.AddListener(OnGhostBeginDrag);
+                    ghost.OnEndDragEvent.AddListener(OnGhostEndDrag);
+                    spellGhosts[spell] = ghost;
+                    spellGhostOrder[spell] = nextSpellGhost++;
+                }
+                ghost.SetFaceDown(FogOfWar.HidesHandOf(caster));
+            }
+            foreach (var gone in spellGhostOrder.Keys.Where(k => !spellGhosts.ContainsKey(k)).ToList()) spellGhostOrder.Remove(gone);
+
+            // At one place, the newest in the middle and the older ones stepping left, each partly under the next
+            foreach (var group in aimed.Where(a => spellGhosts.ContainsKey(a.spell)).GroupBy(a => a.slot)) {
+                var together = group.OrderBy(a => spellGhostOrder[a.spell]).ToList();
                 for (int i = 0; i < together.Count; i++) {
-                    var (spell, caster, slot) = together[i];
-                    if (!spellGhosts.TryGetValue(spell, out var ghost) || ghost == null) {
-                        ghost = CardViews.Create(spell, caster, transform); // The caster's card, wherever it's aimed
-                        if (ghost == null) continue;
-                        ghost.name = $"SpellGhost_{spell.Name}";
-                        ghost.SetQueued(true, canBeDragged: true);
-                        ghost.OnCardClicked.AddListener(TakeBackPlay);
-                        ghost.OnCardRightClicked.AddListener(TakeBackPlay);
-                        ghost.OnBeginDragEvent.AddListener(OnGhostBeginDrag);
-                        ghost.OnEndDragEvent.AddListener(OnGhostEndDrag);
-                        spellGhosts[spell] = ghost;
-                    }
-                    ghost.SetFaceDown(FogOfWar.HidesHandOf(caster));
+                    var ghost = spellGhosts[together[i].spell];
                     if (CardController.Dragged == ghost) continue;
-                    PlaceSpellGhost(ghost, slot, i, together.Count);
+                    PlaceSpellGhost(ghost, together[i].slot, together.Count - 1 - i, together.Count);
                 }
             }
         }
 
-        // In the empty slot it's aimed at (the first one there), or small on the edge facing the other side
-        private void PlaceSpellGhost(CardController ghost, BoardSlot slot, int index, int count) {
+        // A lone spell aimed at an empty slot sits in it; otherwise small on the edge facing the other side, stepsLeft of
+        // the place (0: the newest, in the middle)
+        private void PlaceSpellGhost(CardController ghost, BoardSlot slot, int stepsLeft, int count) {
             var slotView = slot != null ? battlefieldSlots[slot.Index] : null;
-            bool roomInSlot = slotView != null && index == 0 && slotView.OccupyingCard == null && !queuedGhosts.ContainsKey(slotView);
+            bool roomInSlot = slotView != null && count == 1 && slotView.OccupyingCard == null && !queuedGhosts.ContainsKey(slotView);
             var rect = (RectTransform)ghost.transform;
             rect.localRotation = Quaternion.identity;
             if (roomInSlot) {
@@ -543,7 +552,7 @@ namespace SlayTheClone {
             var other = table.GetBattlefield(Player.Opponent);
             bool facesUp = other == null || other.transform.position.y > transform.position.y;
             float x = slotView != null ? slotView.transform.localPosition.x : mat.center.x;
-            x += (index - (count - 1) / 2f) * rect.rect.width * SpellGhostScale * SpellGhostSpread;
+            x -= stepsLeft * rect.rect.width * SpellGhostScale * SpellGhostSpread;
             rect.localPosition = new Vector3(x, facesUp ? mat.yMax : mat.yMin, 0f);
         }
 
@@ -564,6 +573,7 @@ namespace SlayTheClone {
                 if (ghost != null) Destroy(ghost.gameObject);
             }
             spellGhosts.Clear();
+            spellGhostOrder.Clear();
         }
 
         // A see-through copy of each creature planned to move (or be pushed or swapped) in the slot it will end in, with the

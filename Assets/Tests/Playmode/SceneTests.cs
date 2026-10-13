@@ -398,6 +398,15 @@ namespace SlayTheClone.Tests {
             Assert.IsNotNull(zapGhost, "An aimed spell's ghost...");
             Assert.AreEqual(X(slotView), X(zapGhost), 0.01f, "...is at the slot it's aimed at");
             Assert.AreEqual(corners[0].y, Height(zapGhost), 0.01f, "...small on its edge, the creature there staying in sight");
+            game.Play(bolt, p1, aimedAt);
+            yield return null;
+            var boltGhost = game.SpellGhost(bolt);
+            Assert.AreEqual(X(slotView), X(boltGhost), 0.01f, "A second spell there: the newest takes the middle...");
+            Assert.Less(X(zapGhost), X(slotView) - 0.01f, "...and the older one steps left");
+            Assert.Greater(boltGhost.transform.GetSiblingIndex(), zapGhost.transform.GetSiblingIndex(), "...under the newest");
+            SceneGame.Click(boltGhost);
+            yield return null;
+            Assert.AreEqual(X(slotView), X(zapGhost), 0.01f, "Taken back: the other one is in the middle again");
             SceneGame.Click(zapGhost);
             yield return null;
             game.Play(zap, p1, p2.Battlefield[3]);

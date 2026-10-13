@@ -62,7 +62,7 @@ namespace SlayTheClone {
             ("Digital Society & Tech - The Algorithm", "TheAlgorithmDeck",
                 "The Algorithm", "Thinks you'll love this loss. People like you also lost.", new[] {
                 "Digital Nomad", "Keyboard Warrior", "NPC", "Chronically Online", "Catfish", "Conspiracy Theorist",
-                "Script Kiddie", "Legacy Code", "SysAdmin", "Software As A Service",
+                "Script Kiddie", "Legacy Code", "SysAdmin", "Meatproxy As A Service",
                 "Dogpile", "Rage Bait", "Its A Trap", "Clickbait", "Cancelled",
                 "DDOS Attack", "Antivirus", "End-to-End Encryption", "Ransomware Attack", "Man-in-the-Middle",
             }),
@@ -638,11 +638,11 @@ namespace SlayTheClone {
                 "Each Dawn it cleanses your creatures' harmful statuses (Tech owns Cleanse).",
                 On(EffectTrigger.StartOfTurn, Cleanse(CleanseTarget.Statuses, TargetType.FriendlyCreatures)))
                 .Picture("A bearded sysadmin in socks and sandals yanking the power cable out of a smoking server rack, a coffee mug in his other hand."),
-            Creature("Software As A Service", 0, 3, speed: 1, deploy: 1,
-                "You don't own it. You never did. Renews monthly.",
+            Creature("Meatproxy As A Service", 0, 3, speed: 1, deploy: 1,
+                "Powered by AI. The AI is Dave. Dave copies and pastes.",
                 "A draw each Dawn, paid with 1 of your Health. Future: Technical Debt (fewer draws next Day).",
                 On(EffectTrigger.StartOfTurn, Draw(1), Damage(1, TargetType.Player)))
-                .Picture("A plain hammer with a card reader taped to its handle and a price tag: $9.99/MONTH."),
+                .Picture("A raw steak sitting at a desk, copy-pasting text from one window to another on a computer screen, a price tag on the monitor: $9.99/MONTH."),
             Spell("Ransomware Attack", TargetType.EnemyCreatures,
                 "Your files are safe. With us.",
                 "Exhausted, and you draw a card (the ransom).",

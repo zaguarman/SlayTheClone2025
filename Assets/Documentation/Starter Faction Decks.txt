@@ -259,7 +259,7 @@ Digital Society, Shadow Ops., Tech, Myth and Mind don't have enough cards for a 
     • Digital Society: Digital Nomad, Keyboard Warrior, NPC, Chronically Online, Dogpile, Rage Bait, Its A Trap.
       (new) Catfish (2/1/3, 0): Undercover. Conspiracy Theorist (1/3/2, 0): Unbothered. Clickbait: 1 damage to each enemy creature. Cancelled: Exhausted and 2 Heat on target creature.
     • Tech: Script Kiddie, Legacy Code, DDOS Attack, Antivirus, End-to-End Encryption.
-      (new) SysAdmin (1/4/1, 1): each Dawn, cleanses your creatures. Software As A Service (0/3/1, 1): each Dawn, draw a card and take 1 damage. Ransomware Attack: Exhausted, and you draw a card. Man-in-the-Middle: Watchdog, redirects the next enemy spell.
+      (new) SysAdmin (1/4/1, 1): each Dawn, cleanses your creatures. Meatproxy As A Service (0/3/1, 1): each Dawn, draw a card and take 1 damage. Ransomware Attack: Exhausted, and you draw a card. Man-in-the-Middle: Watchdog, redirects the next enemy spell.
 • Shadow Ops. & Mind - Psyop (opponent: Your Gaslighting Ex, "That attack never happened. You're imagining things.")
     • Shadow Ops.: Political Decoy, Mole, Signal Jammer, Deep Cover, Sleeper Agent, Burn Notice, Counter-Intelligence, Smoke And Mirrors, Eavesdrop, Tapped Communications.
       (new) Whistleblower (1/2/3, 0): when it dies, every enemy creature is Revealed. Unvoluntary Free Polonium Giveaway: 1 damage, then Burned for 3 Days.

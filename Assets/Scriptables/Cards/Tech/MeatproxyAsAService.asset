@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
-  m_Name: SoftwareAsAService
+  m_Name: MeatproxyAsAService
   m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
   cardId: a2f2327a-5b27-4889-ac8b-4ef8752e1153
-  cardName: Software As A Service
-  description: You don't own it. You never did. Renews monthly.
+  cardName: Meatproxy As A Service
+  description: Powered by AI. The AI is Dave. Dave copies and pastes.
   cardType: 0
   faction: 5
   artwork: {fileID: 3286163911610860551, guid: 0ab491ba02e89484085be61d2124d47c, type: 3}
@@ -73,8 +73,8 @@ MonoBehaviour:
       ability: 0
   designNotes: 'A draw each Dawn, paid with 1 of your Health. Future: Technical Debt
     (fewer draws next Day).'
-  artDescription: 'A plain hammer with a card reader taped to its handle and a price
-    tag: $9.99/MONTH.'
+  artDescription: 'A raw steak sitting at a desk, copy-pasting text from one window
+    to another on a computer screen, a price tag on the monitor: $9.99/MONTH.'
   attack: 0
   health: 3
   speed: 1

@@ -2795,16 +2795,30 @@ def sysadmin():
     return svg(defs, body)
 
 
-def software_as_a_service():
+def meatproxy_as_a_service():
+    # A raw steak at a desk copy-pasting text from one window to another, a $9.99/MONTH tag on the monitor
     defs, body = bg_tech()
-    ham = (rect(-12, -10, 150, 20, "#a8743a", 'rx="6" stroke="#6a4a22" stroke-width="2"')
-           + rect(-52, -28, 46, 56, "#8a949c", 'rx="4" stroke="#4a5058" stroke-width="2"')
-           + rect(40, -16, 40, 32, "#222", 'rx="3"') + rect(44, -12, 32, 6, "#555") + circle(70, 6, 3, "#3aff7a")
-           + rect(30, -14, 6, 28, "#f2e2b0", 'opacity="0.9"') + rect(84, -14, 6, 28, "#f2e2b0", 'opacity="0.9"'))
-    body += group(ham, "translate(120 110) rotate(-20)")
-    body += stroke("M230 76 L262 92", "#ddd", 2)
-    body += path("M262 80 L330 80 L340 98 L330 116 L262 116 Z", "#fff7e0", 'stroke="#333" stroke-width="2"') + circle(270, 98, 4, "#333")
-    body += lettering("$9.99", 304, 84, 10, "#c0392b") + lettering("/MONTH", 302, 102, 7, "#333", width=1.4)
+    body += rect(0, 168, W, 32, "#5a4632")  # The desk
+    body += rect(150, 8, 196, 128, "#2a2a30", 'rx="6"') + rect(158, 16, 180, 112, "#dfe6ee", 'rx="3"')
+    body += rect(240, 136, 16, 20, "#2a2a30") + rect(222, 154, 52, 6, "#2a2a30", 'rx="3"')
+    for x, bar in ((164, "#3b5bdb"), (252, "#2f9e44")):  # Two windows
+        body += rect(x, 24, 80, 96, "#ffffff", 'stroke="#8a94a0" stroke-width="1.5"') + rect(x, 24, 80, 10, bar)
+        for k in range(5):
+            body += rect(x + 6, 42 + k * 14, 60 - (k % 3) * 12, 5, "#9aa4b0")
+    body += rect(170, 54, 48, 7, "#4fa3ff", 'opacity="0.6"')  # The selected line...
+    body += path("M222 58 Q 240 40 258 58", "none", 'stroke="#d0342c" stroke-width="2.5" stroke-dasharray="4 3"')
+    body += poly([(258, 58), (250, 54), (254, 63)], "#d0342c")  # ...pasted into the other window
+    body += rect(258, 54, 48, 7, "#4fa3ff", 'opacity="0.6"')
+    body += path("M300 104 L336 104 L342 112 L336 120 L300 120 Z", "#fff7e0", 'stroke="#333" stroke-width="1.5"')
+    body += lettering("$9.99", 320, 108, 6, "#c0392b", width=1.2)
+    # The steak: a marbled slab with a bone, little arms on the keyboard
+    body += rect(110, 166, 120, 12, "#cfd4da", 'rx="3" stroke="#6a7280" stroke-width="1.5"')
+    steak = (path("M-56 0 C -60 -40 -10 -58 30 -46 C 66 -36 70 6 44 26 C 14 48 -50 40 -56 0 Z", "#b8323a", 'stroke="#6a1a1e" stroke-width="3"')
+             + path("M-40 -6 C -24 -20 0 -10 14 -24 M-30 14 C -10 4 10 18 34 2", "none", 'stroke="#f2d6c8" stroke-width="4" opacity="0.8"')
+             + circle(-6, 12, 10, "#f2efe6", 'stroke="#c8c0b0" stroke-width="2"'))
+    body += group(steak, "translate(84 130)")
+    body += circle(68, 112, 7, "#ffffff") + circle(92, 110, 7, "#ffffff") + circle(70, 113, 3, "#222") + circle(94, 111, 3, "#222")
+    body += stroke("M118 142 Q 134 156 146 166 M110 152 Q 150 170 196 168", "#8a2228", 4)
     return svg(defs, body)
 
 
@@ -3599,7 +3613,7 @@ CARDS = {
         "SmokeAndMirrors": smoke_and_mirrors, "TappedCommunications": tapped_communications,
     },
     "Tech": {
-        "SysAdmin": sysadmin, "SoftwareAsAService": software_as_a_service, "RansomwareAttack": ransomware_attack,
+        "SysAdmin": sysadmin, "MeatproxyAsAService": meatproxy_as_a_service, "RansomwareAttack": ransomware_attack,
         "ManintheMiddle": man_in_the_middle,
         "Antivirus": antivirus, "DDOSAttack": ddos_attack, "EndtoEndEncryption": end_to_end_encryption, "LegacyCode": legacy_code,
         "ScriptKiddie": script_kiddie,
