@@ -378,8 +378,8 @@ namespace SlayTheClone {
                 .Picture("A Tuareg nomad in a white turban and face veil, sitting cross-legged on a sand dune, typing on a laptop on his knees."),
             Creature("Keyboard Warrior", 1, 3, speed: 2, deploy: 0,
                 "Has never lost an argument. Has never left the house.",
-                "Mechanics test: OnDamaged fires on every hit, even one Armor absorbs or a killing blow, and still lands when it dies. Exhausted turns it off. No U: enemy effects that would lower its stats bounce back.",
-                On(EffectTrigger.OnDamage, Damage(1, TargetType.Enemy)))
+                "Mechanics test: Counterattack answers every attack that lands, even one Armor absorbs or a killing blow, for its Attack, and still lands when it dies; spells and abilities aren't answered. Exhausted turns it off. No U: enemy effects that would lower its stats bounce back.",
+                Counterattack())
                 .With(CreatureAbility.NoU)
                 .Picture("A heavyset warrior in a stained hoodie and a cape, holding a mechanical keyboard over his head like a greatsword, a gaming headset for a helmet and energy drinks hanging from his belt."),
             Spell("Dogpile", TargetType.EnemyCreatures,
@@ -596,7 +596,7 @@ namespace SlayTheClone {
                 "Your wish is granted. Read the fine print.",
                 "Draw 3, and a random friendly creature is Doomed.",
                 Draw(3), Status(StatusEffectType.Doomed, 3, TargetType.FriendlyCreatures, modifier: AtRandom))
-                .Picture("A shrivelled monkey's paw with three fingers still open, one already curled down: three wishes left."),
+                .Picture("A shriveled, mummified monkey's paw held up in a purple room, like the cursed paw of the old horror story: long knobbly grey-green fingers with pointed nails, a tuft of black fur at the wrist. Three fingers still up, one already curled into the palm: three wishes left."),
             Spell("Sacrificial Ritual", TargetType.FriendlyCreatures,
                 "Somebody has to go. Ideally the intern.",
                 "5 damage to a random friendly creature, then draw 2. Future: Myth's sacrifice cost (destroy a friendly creature).",
@@ -703,7 +703,7 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Buff(2, TargetType.Self, attack: true, health: true)),
                 On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
                 .Picture("A ripe tomato with huge bodybuilder arms, flexing, a NON-GMO sticker peeling off its skin."),
-            Creature("Giraffe", 2, 7, speed: 1, deploy: 2,
+            Creature("Surveillance Giraffe", 2, 7, speed: 1, deploy: 2,
                 "Heart the size of a TV. Still can't reach its own feet.",
                 "When it enters, Reveal a random enemy creature's slot: it sees over the fog.",
                 On(EffectTrigger.OnPlay, Reveal(TargetType.EnemyCreatures, AtRandom)))
@@ -820,6 +820,8 @@ namespace SlayTheClone {
             new EffectAction { actionType = type, value = value, targetType = target, targetModifier = modifier };
 
         private static EffectAction Damage(int value, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Damage, value, target, modifier);
+        // Hits back for its Attack whenever an attack lands on it: damage with no value of its own, on the attacker (see EffectResolver)
+        private static CardEffect Counterattack() => On(EffectTrigger.OnDamage, Damage(0, TargetType.Enemy));
         private static EffectAction Heal(int value, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Heal, value, target, modifier);
         private static EffectAction Armor(int value, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Armor, value, target, modifier);
         private static EffectAction Stun(int turns, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Stun, turns, target, modifier);

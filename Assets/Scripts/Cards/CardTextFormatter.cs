@@ -5,9 +5,10 @@ using static SlayTheClone.Enums;
 namespace SlayTheClone {
     /// <summary>
     /// Builds the printed text of a card from its data, in the style of Magic: The Gathering and Slay the Spire:
-    /// a line of keywords first (movement, ability, and keyword abilities like Retaliate 1 or Decay 1 for effects that
-    /// keep coming back), then the rest as short templated clauses led by a trigger keyword ("Dawn: draw 1."): what it does,
-    /// then whom it targets ("target", "all enemy creatures", "a random creature").
+    /// a line of keywords first (movement, ability, and keyword abilities like Counterattack or Decay 1 for effects that
+    /// keep coming back), then the rest as short templated clauses led by a trigger keyword ("Dawn: draw a card."): what it
+    /// does, then whom it targets ("target", "all enemy creatures", "a random creature"). A keyword's number is left out
+    /// when it's 1 ("Summon", "Bless", "Doom"), except an amount of damage or healing, which always shows.
     /// Every keyword is a link to its explanation (<see cref="Keywords"/>), shown when it's hovered on an enlarged card.
     /// </summary>
     public static class CardTextFormatter {
@@ -75,8 +76,9 @@ namespace SlayTheClone {
                     ? Keywords.Link("Second Wind") : null;
             }
             switch (effect.trigger) {
-                case EffectTrigger.OnDamage when action.actionType == ActionType.Damage && action.targetType == TargetType.Enemy:
-                    return $"{Keywords.Link("Retaliate")} {action.value}";
+                // Hitting back for its Attack: the effect has no damage of its own (see EffectResolver)
+                case EffectTrigger.OnDamage when action.actionType == ActionType.Damage && action.targetType == TargetType.Enemy && action.value <= 0:
+                    return Keywords.Link("Counterattack");
                 case EffectTrigger.EndOfTurn when action.targetType == TargetType.Self && action.actionType == ActionType.Damage:
                     return $"{Keywords.Link("Decay")} {action.value}";
                 case EffectTrigger.EndOfTurn when action.targetType == TargetType.Self && action.actionType == ActionType.Heal:
@@ -101,11 +103,11 @@ namespace SlayTheClone {
             var actions = effect.actions.Where(a => DescribeAction(a, isSpell, null, atDawn) != null).ToList();
             if (actions.Count == 0) return null;
 
-            // Retaliation: an enemy-targeted Hurt effect lands on whoever damaged this creature (see EffectResolver)
+            // Retaliation: an enemy-targeted Hurt effect lands on the creature whose attack hit this one (see EffectResolver)
             bool retaliates = !isSpell && effect.trigger == EffectTrigger.OnDamage
                               && actions.All(a => a.targetType == TargetType.Enemy && a.targetModifier == TargetModifier.None);
             (string icon, string text) trigger = isSpell ? default : retaliates ? (EffectIcons.Hurt, Keywords.Link("Retaliate")) : DescribeTrigger(effect);
-            string body = JoinClauses(retaliates ? actions.Select(a => DescribeAction(a, isSpell, "it")).ToList() : Clauses(actions, isSpell, atDawn));
+            string body = JoinClauses(retaliates ? actions.Select(RetaliationClause).ToList() : Clauses(actions, isSpell, atDawn));
             string once = effect.oncePerCombat ? "Once per combat, " : "";
 
             if (trigger.text == null) return CapitalizeRich(once + body) + ".";
@@ -114,6 +116,16 @@ namespace SlayTheClone {
         }
 
         private const string Whom = "\u0001"; // Where the target goes in a clause, while clauses are merged
+
+        // What Retaliate does to the attacker, its numbers after it: "Retaliate: Burn 2 [sand watch]3", "Retaliate: Exhaust".
+        // Only something other than a status names the attacker: "Retaliate: 1 damage to it"
+        private static string RetaliationClause(EffectAction action) {
+            string clause = DescribeAction(action, false, Whom);
+            const string onWhom = " on " + Whom;
+            if (clause.EndsWith(onWhom)) clause = clause.Substring(0, clause.Length - onWhom.Length);
+            else if (clause.EndsWith(" " + Whom) && action.actionType == ActionType.Stun) clause = clause.Substring(0, clause.Length - Whom.Length - 1);
+            return CapitalizeRich(clause.Replace(Whom, "it"));
+        }
 
         // One clause per action, except that the same thing done to groups that together make a bigger one reads once
         // ("exhaust all creatures" for all enemy and all friendly creatures; "everything" for all creatures and both
@@ -217,9 +229,10 @@ namespace SlayTheClone {
                     return $"heal {value} to {target}";
                 case ActionType.Draw:
                     string when = atDawn ? "" : $" next {Keywords.Link("Day")}";
-                    return action.targetType == TargetType.Enemy ? $"enemy draws {value}{when}" : $"draw {value}{when}";
+                    string cards = value == 1 ? "a card" : value.ToString();
+                    return action.targetType == TargetType.Enemy ? $"enemy draws {cards}{when}" : $"draw {cards}{when}";
                 case ActionType.Summon:
-                    return $"{Keywords.Link("Summon", "summon")} {value}";
+                    return Keywords.Link("Summon", "summon" + Count(value));
                 case ActionType.Armor:
                     return $"{target} +{value}{Keywords.Link("Armor", EffectIcons.Tag(EffectIcons.Armor))}";
                 case ActionType.Stun:
@@ -295,22 +308,26 @@ namespace SlayTheClone {
             return change + DaysTag(action.statusDuration);
         }
 
-        // A status by its keyword: the number is its Days ("Doom 3"), or its strength and then its Days ("Burn 2 [sand watch]3")
+        // A status by its keyword: the number is its Days ("Doom 3"), or its strength and then its Days ("Burn 2 [sand watch]3").
+        // A 1 goes without saying ("Doom", "Bless"), except Burn's, which is damage
         private static string DescribeStatus(EffectAction action, string target) {
             int days = action.statusDuration;
             int potency = System.Math.Max(1, action.statusPotency);
             switch (action.statusEffectToApply) {
                 case StatusEffectType.Exhausted: return $"{Keywords.Link("Exhausted", "exhaust")} {target}";
                 case StatusEffectType.Burned: return $"{Keywords.Link("Burned", $"Burn {potency}")}{DaysTag(days)} on {target}";
-                case StatusEffectType.Doomed: return $"{Keywords.Link("Doomed", $"Doom {days}")} on {target}";
-                case StatusEffectType.Blessed: return $"{Keywords.Link("Blessed", $"Bless {potency}")} on {target}";
-                case StatusEffectType.HeatSignature: return $"{Keywords.Link("Heat Signature", $"Heat Signature {potency}")} on {target}";
-                case StatusEffectType.Concealed: return $"{Keywords.Link("Concealed", $"Conceal {days}")} on {target}";
-                case StatusEffectType.Revealed: return $"{Keywords.Link("Revealed", $"Revealed {days}")} on {target}";
-                case StatusEffectType.Encrypted: return $"{Keywords.Link("Encrypted", $"Encrypt {days}")} on {target}";
+                case StatusEffectType.Doomed: return $"{Keywords.Link("Doomed", "Doom" + Count(days))} on {target}";
+                case StatusEffectType.Blessed: return $"{Keywords.Link("Blessed", "Bless" + Count(potency))} on {target}";
+                case StatusEffectType.HeatSignature: return $"{Keywords.Link("Heat Signature", "Heat Signature" + Count(potency))} on {target}";
+                case StatusEffectType.Concealed: return $"{Keywords.Link("Concealed", "Conceal" + Count(days))} on {target}";
+                case StatusEffectType.Revealed: return $"{Keywords.Link("Revealed", "Revealed" + Count(days))} on {target}";
+                case StatusEffectType.Encrypted: return $"{Keywords.Link("Encrypted", "Encrypt" + Count(days))} on {target}";
                 default: return null;
             }
         }
+
+        // A keyword's count after it, unless it's 1: "Summon", "Summon 2"
+        private static string Count(int number) => number == 1 ? "" : $" {number}";
 
         // " [sand watch]3": how many Days a timed change lasts. Nothing for a lasting one
         private static string DaysTag(int days) => days > 0 ? " " + Keywords.Link("Days", $"{EffectIcons.Tag(EffectIcons.Days)}{days}") : "";
@@ -341,9 +358,9 @@ namespace SlayTheClone {
         private static string SlotTarget(EffectAction action, bool isSpell) =>
             isSpell || action.targetType != TargetType.Self ? $"target {Keywords.Link("Slot", "slot")}" : $"its {Keywords.Link("Slot", "slot")}";
 
-        // "Landmine 3" (its damage), "Temporal Shield 2" (its Days)
+        // "Landmine 3" (its damage, always shown), "Temporal Shield 2" (its Days; just "Temporal Shield" for 1)
         private static string DescribeSlotEffect(EffectAction action) {
-            string days = action.statusDuration > 0 ? $" {action.statusDuration}" : "";
+            string days = action.statusDuration > 0 ? Count(action.statusDuration) : "";
             return action.slotEffect switch {
                 SlotEffectType.Landmine => Keywords.Link("Landmine", $"Landmine {action.value}"),
                 SlotEffectType.BarbedSnare => Keywords.Link("Barbed Snare", $"Barbed Snare {action.value}"),

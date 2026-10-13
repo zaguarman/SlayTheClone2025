@@ -60,13 +60,24 @@ namespace SlayTheClone.Tests {
 
             Fresh();
             var fast = game.Summon(p1, game.Creature("Fast", 5, 5, speed: 2), 0);
-            var spiky = game.Summon(p2, game.Creature("Spiky", 5, 3, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
+            var spiky = game.Summon(p2, game.Creature("Spiky", 1, 3, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.Enemy)), 0);
             game.Declare(spiky, p1.Battlefield[0]);
             game.Declare(fast, p2.Battlefield[0]);
             game.Resolve();
             Assert.IsTrue(spiky.IsDead);
             Assert.AreEqual(1, game.History.ExecutedKinds().Count(kind => kind == "BattlefieldCombat"), "The dying creature's attack is cancelled, not resolved");
-            Assert.AreEqual(4, fast.Health, "Its retaliation still hits the attacker");
+            Assert.AreEqual(4, fast.Health, "Its Counterattack still hits the attacker, for its Attack");
+
+            // Counterattack answers attacks only: hitting back isn't an attack (two of them never trade blows forever), nor is a spell
+            var counter = Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.Enemy);
+            var hedgehog = game.Summon(p1, game.Creature("Hedgehog", 2, 10, 1, counter), 4);
+            var porcupine = game.Summon(p2, game.Creature("Porcupine", 3, 10, 1, counter), 4);
+            game.Declare(hedgehog, p2.Battlefield[4]);
+            game.Resolve();
+            Assert.AreEqual(8, porcupine.Health);
+            Assert.AreEqual(7, hedgehog.Health, "Hit back once, for the Porcupine's Attack, and not answered");
+            game.Run(new DamageCreatureAction(porcupine, 1));
+            Assert.AreEqual(7, hedgehog.Health, "Damage that isn't an attack isn't answered");
 
             var giantA = game.Summon(p1, game.Creature("Giant A", 15, 5), 1);
             var giantB = game.Summon(p1, game.Creature("Giant B", 15, 5), 2);

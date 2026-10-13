@@ -52,8 +52,9 @@ namespace SlayTheClone {
 
             // Creature Death Sequence (GDD 3.9): OnDamage fires on every hit that did damage, Armor included, even a killing one,
             // and resolves right away. Then the lethal check, which may lead to the creature's destruction.
+            // Only an attack is answered (Counterattack, Retaliate): hitting back isn't an attack, so it's never answered in turn
             if (damageToArmor + actualHealthDamage > 0) {
-                TriggerEffects(targetCreature, EffectTrigger.OnDamage, attacker, context);
+                TriggerEffects(targetCreature, EffectTrigger.OnDamage, damageAction.IsCombatDamage() ? attacker : null, context);
             }
             if (targetCreature.Health <= 0) {
                 context.ActionsQueue.AddAction(new CheckLethalAction(targetCreature, attacker));
@@ -62,7 +63,7 @@ namespace SlayTheClone {
             Log($"Executed DamageCreatureAction via Executor for {targetCreature.Name}", LogTag.Actions | LogTag.Creatures | LogTag.Combat);
         }
 
-        // The attacker is passed along so effects can retaliate against it
+        // The attacker is passed along so effects can answer its attack
         private static void TriggerEffects(ICreature creature, EffectTrigger trigger, ICreature attacker, ActionExecutionContext context) {
             Log($"Executor: Triggering {trigger} effects for {creature.Name}", LogTag.Effects | LogTag.Actions);
             creature.HandleEffect(trigger, context.ActionsQueue, attacker);

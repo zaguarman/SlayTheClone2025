@@ -89,8 +89,8 @@ namespace SlayTheClone {
                 EnsureTrim(titleBar.transform, UITheme.GoldDim, 5f, 0f);
 
                 var pip = Part(root, "TitleBar/ReadyPip");
-                UITheme.Round(pip, UITheme.Gold, 1.9f); // Corners half its size: a coin
-                EnsureTrim(pip.transform, UITheme.Ink, 1.9f, 0f);
+                UITheme.Round(pip, UITheme.Gold, 4.5f); // A square with softly rounded corners, a plate rather than a coin
+                EnsureTrim(pip.transform, UITheme.Ink, 4.5f, 0f);
 
                 var artFrame = Part(root, "ArtFrame");
                 UITheme.Round(artFrame, UITheme.Ink, 8f);

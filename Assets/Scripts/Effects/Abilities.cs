@@ -48,7 +48,7 @@ namespace SlayTheClone {
             CreatureAbility.SignalJammer => "the enemy creature opposite has its ability switched off",
             CreatureAbility.Copypasta => "when ready and each Dawn, copies the ability of the creature opposite",
             CreatureAbility.IdentityTheft => "Active, instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it)",
-            CreatureAbility.HiveMind => "a creature that attacks it gains Hive Mind",
+            CreatureAbility.HiveMind => "a creature that attacks it loses its ability and gains Hive Mind instead",
             CreatureAbility.InsiderJob => "its damage ignores Armor",
             CreatureAbility.ReturnToSender => "enemy statuses bounce back to whoever sent them",
             CreatureAbility.Technician => "double damage when it hits for 3 or less",

@@ -51,12 +51,13 @@ namespace SlayTheClone {
 
             // ---------------------------------------------------------------- Keyword abilities (recurring patterns)
             group = "Keyword Abilities";
-            Add("Retaliate", "When a creature damages this one, it hits back. Retaliate X: X damage to the attacker. Retaliate followed by an effect, like [Exhausted|exhaust]: that effect on the attacker.");
+            Add("Counterattack", "When a creature attacks this one, this one hits it back for its own Attack. Hitting back isn't an attack, so it's never answered.");
+            Add("Retaliate", "Retaliate followed by a status, like [Exhausted|exhaust] or [Burned|Burn] 2: when a creature attacks this one, that status lands on the attacker, with the numbers shown.");
             Add("Decay", "Decay X: takes X damage at each [Dusk].");
             Add("Regenerate", "Regenerate X: heals X at each [Dusk].");
             Add("Grow", "Grow X: +X Attack and +X Health for good at each [Dawn].");
             Add("Second Wind", "Once per combat, when this would die, it survives instead.");
-            Add("Summon", "Summon X: X random creatures from your deck enter your empty slots.");
+            Add("Summon", "Summon X (no number: 1): X random creatures from your deck enter your empty slots.");
 
             // ---------------------------------------------------------------- Movement
             group = "Movement";
@@ -73,13 +74,13 @@ namespace SlayTheClone {
             group = "Statuses";
             Add("Exhausted", "Can't act, its ability is off and it's [Exposed]. Its planned action is cancelled. Lasts the rest of the [Day] and all of the next.");
             Add("Burned", "Burn X: takes X damage at each [Dusk] for the [Days] shown, starting the Dusk after it lands.");
-            Add("Doomed", "Doom X: dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it.");
+            Add("Doomed", "Doom X (no number: 1): dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it.");
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
-            Add("Blessed", "Bless X: the next X statuses that would land on it are stopped, good or bad.");
-            Add("Heat Signature", "Heat Signature X: [Random|random] effects and redirected attacks go to the creature with the most Heat Signature. It stays until cleansed.");
-            Add("Concealed", "Conceal X: for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
-            Add("Revealed", "Revealed X: for X [Days], it can't be [Concealed]: its plans can be seen.");
-            Add("Encrypted", "Encrypt X: for X [Days], [Watchdog|Watchdogs] ignore its actions.");
+            Add("Blessed", "Bless X (no number: 1): the next X statuses that would land on it are stopped, good or bad.");
+            Add("Heat Signature", "Heat Signature X (no number: 1): [Random|random] effects and redirected attacks go to the creature with the most Heat Signature. It stays until cleansed.");
+            Add("Concealed", "Conceal X (no number: 1): for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
+            Add("Revealed", "Revealed X (no number: 1): for X [Days], it can't be [Concealed]: its plans can be seen.");
+            Add("Encrypted", "Encrypt X (no number: 1): for X [Days], [Watchdog|Watchdogs] ignore its actions.");
             Add("Cleanse", "Removes harmful statuses.");
             Add("Purge", "Removes every status, good and bad.");
 
@@ -98,7 +99,7 @@ namespace SlayTheClone {
             Add("Slot Effect", "A condition on a [Slot|slot], not on the creature: it stays with the slot. One per slot.");
             Add("Landmine", "Landmine X: hidden. The next creature to enter the slot takes X damage.");
             Add("Barbed Snare", "Barbed Snare X: hidden. The next creature to leave the slot takes X damage.");
-            Add("Temporal Shield", "Temporal Shield X: for X [Days], the creature in the slot takes no combat damage.");
+            Add("Temporal Shield", "Temporal Shield X (no number: 1): for X [Days], the creature in the slot takes no combat damage.");
             Add("Scorched Earth", "The creature in the slot can't use its ability or trigger its effects. It can still move and attack.");
 
             // ---------------------------------------------------------------- Creature abilities (Abilities Compendium)
@@ -116,7 +117,7 @@ namespace SlayTheClone {
             CreatureAbility.ZeroDay => "Its attacks and effects ignore defensive abilities, except [Cold Storage].",
             CreatureAbility.Copypasta => "When it's ready and each [Dawn] after, it copies the ability of the creature opposite (once).",
             CreatureAbility.Undercover => "It's always [Concealed] until [Revealed].",
-            CreatureAbility.HiveMind => "A creature that attacks it gets Hive Mind instead of its own ability.",
+            CreatureAbility.HiveMind => "A creature that attacks it loses its ability and gains Hive Mind instead.",
             CreatureAbility.IdentityTheft => "Instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it).",
             CreatureAbility.InsiderJob => "Its damage ignores [Armor].",
             CreatureAbility.SignalJammer => "The enemy creature opposite has its ability switched off.",

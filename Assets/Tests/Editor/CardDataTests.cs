@@ -62,7 +62,10 @@ namespace SlayTheClone.Tests {
             CollectionAssert.IsEmpty(deadLinks, "Keywords without an explanation");
             Assert.AreEqual("Exhaust all creatures.", printed["Strike"], "All enemy and all friendly creatures: all creatures");
             Assert.AreEqual("Target +3 Attack and -2 Health.", printed["Dead Cat Bounce"], "One target, named once");
-            StringAssert.EndsWith("and Heat Signature 1 on all creatures.", printed["Climate Change"], "Statuses on the same creatures share them");
+            StringAssert.EndsWith("and Heat Signature on all creatures.", printed["Climate Change"], "Statuses on the same creatures share them, and a 1 goes without saying");
+            StringAssert.StartsWith("Swap.", printed["Quantum Physicist"]);
+            StringAssert.EndsWith("Retaliate: Exhaust.", printed["Quantum Physicist"], "Retaliate, then what it does to the attacker");
+            StringAssert.Contains("Counterattack", printed["Keyboard Warrior"], "Hitting back for its Attack");
 
             var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
             var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()
@@ -82,7 +85,7 @@ namespace SlayTheClone.Tests {
 
         // Null when the action can work
         private static string FindProblem(EffectAction action, EffectTrigger trigger) {
-            // Retaliation: an enemy-targeted OnDamage effect lands on whoever damaged the creature
+            // Counterattack and Retaliate: an enemy-targeted OnDamage effect lands on the creature whose attack hit this one
             bool retaliates = trigger == EffectTrigger.OnDamage && action.targetType == TargetType.Enemy;
             switch (action.actionType) {
                 case ActionType.Armor:
@@ -115,8 +118,8 @@ namespace SlayTheClone.Tests {
                 if (action.value == 0) return "changes stats by 0"; // Negative values are debuffs
             }
             else if (action.value <= 0) {
-                // Attack add-ons without a value use the attacker's attack
-                bool usesAttack = action.actionType == ActionType.Damage && action.targetModifier != TargetModifier.None;
+                // Attack add-ons without a value use the attacker's attack; Counterattack, the creature's own
+                bool usesAttack = action.actionType == ActionType.Damage && (action.targetModifier != TargetModifier.None || retaliates);
                 if (!usesAttack) return $"{action.actionType} has no value ({action.value})";
             }
             return null;

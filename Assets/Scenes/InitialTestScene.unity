@@ -342,6 +342,7 @@ GameObject:
   - component: {fileID: 40201970}
   - component: {fileID: 40201972}
   - component: {fileID: 40201971}
+  - component: {fileID: 40201973}
   m_Layer: 0
   m_Name: Trim
   m_TagString: Untagged
@@ -406,6 +407,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 40201969}
   m_CullTransparentMesh: 1
+--- !u!114 &40201973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 40201969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &42883053
 GameObject:
   m_ObjectHideFlags: 0
@@ -3755,6 +3776,7 @@ GameObject:
   - component: {fileID: 635813796}
   - component: {fileID: 635813798}
   - component: {fileID: 635813797}
+  - component: {fileID: 635813799}
   m_Layer: 0
   m_Name: Trim
   m_TagString: Untagged
@@ -3819,6 +3841,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 635813795}
   m_CullTransparentMesh: 1
+--- !u!114 &635813799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635813795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &674671613
 GameObject:
   m_ObjectHideFlags: 0
@@ -7366,6 +7408,7 @@ GameObject:
   - component: {fileID: 1350261300}
   - component: {fileID: 1350261302}
   - component: {fileID: 1350261301}
+  - component: {fileID: 1350261303}
   m_Layer: 0
   m_Name: Trim
   m_TagString: Untagged
@@ -7430,6 +7473,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1350261299}
   m_CullTransparentMesh: 1
+--- !u!114 &1350261303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350261299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &1353914347
 GameObject:
   m_ObjectHideFlags: 0
@@ -7517,6 +7580,7 @@ GameObject:
   - component: {fileID: 1412214058}
   - component: {fileID: 1412214060}
   - component: {fileID: 1412214059}
+  - component: {fileID: 1412214061}
   m_Layer: 5
   m_Name: Trim
   m_TagString: Untagged
@@ -7581,6 +7645,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1412214057}
   m_CullTransparentMesh: 1
+--- !u!114 &1412214061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412214057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &1423120832
 GameObject:
   m_ObjectHideFlags: 0

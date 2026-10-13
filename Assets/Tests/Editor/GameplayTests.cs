@@ -141,11 +141,11 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(2, boarChanges);
             Assert.AreEqual(0, falconChanges);
 
-            // Effects can trigger each other forever: two Rams that grow from every hit and strike back.
+            // Effects can trigger each other forever: two Rams that grow from every hit and hurt every enemy creature when hit.
             // The queue stops after a set number of actions, reports it as an error and drops the rest.
             var ram = game.Creature("Ram", 1, 5, 1,
                 TestGame.Effect(EffectTrigger.OnDamage, ActionType.ModifyStat, 1, TargetType.Self),
-                TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy));
+                TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets));
             var p1Ram = game.Summon(p1, ram, 3);
             game.Summon(p2, ram, 4);
             LogAssert.Expect(LogType.Error, new Regex("Stopped resolving after"));

@@ -37,6 +37,7 @@ STILL OPEN
 
 8. Retaliation text
     • An enemy-targeted "Whenever this is damaged" effect hits whoever damaged it (rules, since earlier); the card text now says "whoever damaged it" instead of "the enemy player" (Keyboard Warrior, Quantum Physicist). If a spell damages it, there's no attacker: damage then goes to the enemy player, and a stun does nothing.
+    • Since 2026-10-13: these are Counterattack and Retaliate, and they answer attacks only. A spell or an ability that damages the creature isn't answered at all, and hitting back isn't an attack, so two Counterattack creatures never trade blows forever.
     • Question: OK, or should spell damage count the spell's caster as the one who damaged it?
 
 9. The Queue panel

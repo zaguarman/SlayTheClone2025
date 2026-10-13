@@ -13,19 +13,27 @@ namespace SlayTheClone {
         private const int MaxChainJumps = 2;
 
         /// <summary>Queues what the creature's effects with this trigger do.</summary>
-        /// <param name="triggeringAttacker">Whoever damaged or killed the creature, for retaliation; null otherwise.</param>
+        /// <param name="triggeringAttacker">The creature whose attack hit this one, for Counterattack and Retaliate; null otherwise.</param>
         public static void QueueCreatureEffects(ICreature creature, EffectTrigger trigger, IActionsQueue queue, ICreature triggeringAttacker = null) {
             using var ability = queue.QueueingAbilityOf(creature, trigger); // Decides when they resolve (see ActionsQueue)
             foreach (var action in ActionsFor(creature, trigger, creature.Owner)) {
+                var queued = action;
                 List<ITarget> targets;
-                if (trigger == EffectTrigger.OnDamage && triggeringAttacker != null && action.targetType == TargetType.Enemy) {
-                    // Retaliation: an enemy-targeted OnDamage effect hits whoever damaged this creature
+                if (trigger == EffectTrigger.OnDamage && action.targetType == TargetType.Enemy && action.targetModifier == TargetModifier.None) {
+                    // Counterattack and Retaliate: an enemy-targeted OnDamage effect answers an attack, on the attacker.
+                    // Damage that isn't an attack (a spell, an ability) isn't answered
+                    if (triggeringAttacker == null) continue;
                     targets = new List<ITarget> { triggeringAttacker };
+                    if (action.actionType == ActionType.Damage && action.value <= 0) { // Counterattack: for its Attack
+                        if (creature.Attack <= 0) continue;
+                        queued = action.Clone();
+                        queued.value = creature.Attack;
+                    }
                 }
                 else {
                     targets = SelectTargets(creature, creature.Owner, action, chosenTarget: null, queue);
                 }
-                QueueAction(creature, creature.Owner, action, targets, queue);
+                QueueAction(creature, creature.Owner, queued, targets, queue);
             }
         }
 

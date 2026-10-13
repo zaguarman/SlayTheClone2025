@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
-  m_Name: Giraffe
+  m_Name: SurveillanceGiraffe
   m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
   cardId: a1075707-0617-4e6e-9abe-488826ba1de4
-  cardName: Giraffe
+  cardName: Surveillance Giraffe
   description: Heart the size of a TV. Still can't reach its own feet.
   cardType: 0
   faction: 9

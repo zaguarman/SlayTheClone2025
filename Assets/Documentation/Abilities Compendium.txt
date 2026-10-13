@@ -125,7 +125,7 @@ Identity Theft
 Hive Mind
     Inspired by: Mummy (Cofagrigus)
     Type: Passive, Defensive
-    Description: "A creature that attacks this creature gains Hive Mind, replacing its own ability."
+    Description: "A creature that attacks it loses its ability and gains Hive Mind instead."
     Notes: The attacker loses its ability until its card is reshuffled. Zero-Day attackers ignore it.
     Answers: Attack it with ability-less creatures, slot attacks from far away, Spells, or Zero-Day.
 

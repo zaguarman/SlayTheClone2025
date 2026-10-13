@@ -381,7 +381,10 @@ namespace SlayTheClone {
             if (image == null) return;
             Round(image, fill ?? Panel, 1.5f);
             AddHardShadow(image, 6f);
-            if (image.transform.Find("Trim") == null) AddTrim(image.transform, trim ?? GoldDim, 1.5f).transform.SetAsFirstSibling();
+            var existing = image.transform.Find("Trim");
+            if (existing == null) AddTrim(image.transform, trim ?? GoldDim, 1.5f).transform.SetAsFirstSibling();
+            else if (!existing.TryGetComponent(out LayoutElement element)) existing.gameObject.AddComponent<LayoutElement>().ignoreLayout = true; // Baked before trims stayed out of layouts
+            else element.ignoreLayout = true;
         }
 
         /// <summary>Title-style lettering: small caps, spaced out, on a hard drop shadow.</summary>

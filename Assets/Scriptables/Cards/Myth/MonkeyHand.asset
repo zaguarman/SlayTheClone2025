@@ -68,6 +68,8 @@ MonoBehaviour:
         pick: 0
         moveEarlier: 0
   designNotes: Draw 3, and a random friendly creature is Doomed.
-  artDescription: 'A shrivelled monkey''s paw with three fingers still open, one
-    already curled down: three wishes left.'
+  artDescription: 'A shriveled, mummified monkey''s paw held up in a purple room,
+    like the cursed paw of the old horror story: long knobbly grey-green fingers
+    with pointed nails, a tuft of black fur at the wrist. Three fingers still up,
+    one already curled into the palm: three wishes left.'
   defaultTargetType: 0

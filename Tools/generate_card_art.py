@@ -3042,24 +3042,54 @@ def excess_of_bread_and_wine():
 
 
 def monkey_hand():
-    defs = lin("bg", ["#2a1a3a", "#0e0814"]) + rad("glow", [("#9aff7a", 0.35), ("#9aff7a", 0)])
-    body = rect(0, 0, W, H, "url(#bg)") + circle(176, 100, 100, "url(#glow)")
-    paw, line = "#7a5a3a", 'stroke="#4a2e1a" stroke-width="3"'
-    body += rect(148, 150, 60, 60, "#6a4a2a", 'rx="10"')
-    # Three fingers still open: three wishes left
-    for x, top in ((146, 34), (168, 22), (190, 30)):
-        body += rect(x, top, 18, 100 - top + 20, paw, f'rx="9" {line}')
-        for y in (top + 22, top + 46):
-            body += stroke(f"M{x + 3} {y} q 6 3 12 0", "#4a2e1a", 1.5)
-    # The fourth already curled down, and the thumb
-    body += ellipse(220, 104, 11, 14, paw, line)
-    body += rect(108, 96, 46, 18, paw, f'rx="9" {line} transform="rotate(-30 131 105)"')
-    body += rect(140, 92, 92, 66, paw, f'rx="22" {line}')
-    for y in (112, 126, 140):
-        body += stroke(f"M150 {y} q 20 -4 40 0 q 16 4 32 0", "#4a2e1a", 1.5)
-    body += speed_lines(260, 60, 2, 14, "#9aff7a")
+    # A shriveled, mummified monkey's paw held up in a purple room: long knobbly fingers with pointed nails, a tuft of
+    # black fur at the wrist. Three fingers still up (wishes left), the fourth already curled into the palm
+    defs = lin("bg", ["#a27cc0", "#6a4288"]) + rad("glow", [("#b8ff8a", 0.45), ("#b8ff8a", 0)])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x in range(0, W, 22):  # Wallpaper stripes
+        body += rect(x, 0, 10, H, "#ffffff", 'opacity="0.05"')
+    body += rect(14, 0, 64, 74, "#6a3a1a") + rect(22, 0, 48, 66, "#3a6a4a") + stroke("M30 52 q 12 -20 30 -6", "#2a4a3a", 3)
+    body += circle(176, 84, 96, "url(#glow)")
+    skin, shade, line, nail = "#93a374", "#6f7d55", "#2b3320", "#ddd3a0"
+    # Wrist, palm and the wrinkles across it
+    body += path("M152 186 C 150 176 146 170 142 162 C 132 140 134 112 146 98 L 210 96 C 222 112 220 140 212 162 C 208 170 204 176 202 186 Z",
+                 skin, f'stroke="{line}" stroke-width="3"')
+    body += path("M150 150 C 160 160 196 160 206 148 L 204 160 C 194 170 162 170 152 160 Z", shade, 'opacity="0.7"')
+    for d in ("M154 118 q 22 6 50 -2", "M156 134 q 20 8 46 0", "M160 108 l 6 30", "M196 106 l -4 32", "M178 104 l 0 40"):
+        body += stroke(d, line, 1.4, 'opacity="0.7"')
+    # Fingers: bony segments with swollen knuckles, a pointed nail at the tip
+    fingers = [
+        [(152, 104), (148, 72), (145, 48), (146, 26)],
+        [(170, 100), (170, 64), (171, 38), (173, 14)],
+        [(188, 100), (191, 66), (194, 42), (197, 22)],
+        [(205, 106), (222, 94), (229, 108), (219, 120)],  # Curled: a wish already used
+        [(146, 132), (124, 120), (113, 100), (110, 82)],  # The thumb
+    ]
+    for width, color, knuckle in ((16, line, 8.5), (11, skin, 6.6)):
+        for pts in fingers:
+            d = "M" + " L ".join(f"{x} {y}" for x, y in pts)
+            body += stroke(d, color, width)
+            for x, y in pts[1:-1]:
+                body += circle(x, y, knuckle, color)
+    for pts in fingers:
+        (x1, y1), (x2, y2) = pts[-2], pts[-1]
+        length = math.hypot(x2 - x1, y2 - y1)
+        ux, uy = (x2 - x1) / length, (y2 - y1) / length
+        tip = (x2 + ux * 9, y2 + uy * 9)
+        body += poly([(x2 - uy * 5, y2 + ux * 5), tip, (x2 + uy * 5, y2 - ux * 5)], nail, f'stroke="{line}" stroke-width="1.5"')
+        for x, y in pts[1:-1]:  # Wrinkles over the knuckles
+            body += stroke(f"M{x - 4} {y - 1} q 4 2 8 0", line, 1.2)
+    # A tuft of black fur at the wrist, on a blue mount
+    body += ellipse(176, 198, 46, 9, "#3a5aa8", 'stroke="#1a2a5a" stroke-width="2"')
+    fur = [(124, 200)]
+    for k in range(13):
+        x = 128 + k * 8
+        fur += [(x, 180 + (k % 2) * 4), (x + 4, 166 + (k % 3) * 3)]
+    fur += [(232, 182), (228, 200)]
+    body += poly(fur, "#15121a", 'stroke="#000" stroke-width="1.5"')
+    for k in range(10):
+        body += stroke(f"M{134 + k * 9} 196 l 3 -12", "#3a3440", 1.2)
     return svg(defs, body)
-
 
 def rubber_chicken(cx, cy, s=1.0):
     out = ellipse(cx, cy, 34 * s, 12 * s, "#ffe23a", 'stroke="#c8a010" stroke-width="2"')
@@ -3180,7 +3210,7 @@ CARDS = {
     "Utopia": {
         "Clone": clone, "Hypermetamorphosis": hypermetamorphosis, "Extremophile": extremophile, "PhilosophyPhD": philosophy_phd,
         "Mathematician": mathematician, "QuantumPhysicist": quantum_physicist, "PerpetualMotionMachine": perpetual_motion_machine,
-        "ParticleAccelerator": particle_accelerator, "GeneticallyModifiedOrganism": genetically_modified_organism, "Giraffe": giraffe,
+        "ParticleAccelerator": particle_accelerator, "GeneticallyModifiedOrganism": genetically_modified_organism, "SurveillanceGiraffe": giraffe,
         "Pioneer": pioneer, "Placebo": placebo, "Vaccine": vaccine, "ClimateChange": climate_change, "Overpopulation": overpopulation,
         "BlackHole": black_hole, "StasisField": stasis_field, "AbsoluteZero": absolute_zero, "SplittingTheAtom": splitting_the_atom,
         "GeneEditing": gene_editing,

@@ -19,7 +19,7 @@ Resolution playback
 • [M] Watchdogs as a reveal moment: when one triggers, the action freezes, the Watchdog card flips up from the side ("NULLIFIED" stamp in red), then the action shatters or bends to its new target.
 
 Planning (the half of the game the player spends the most time in)
-• [M] Outcome preview: while dragging an attack, show predicted damage on the target ("-3, dies") and the counter-damage from Retaliate. Slay the Spire's intent numbers are the gold standard.
+• [M] Outcome preview: while dragging an attack, show predicted damage on the target ("-3, dies") and the counter-damage from Counterattack. Slay the Spire's intent numbers are the gold standard.
 • [S] Intent pips on enemy creatures (sword, boot, sparkle) with their numbers, and "???" for Concealed ones. The arrows are there, but pips are faster to read.
 • [S] Hover a queued action in the queue panel to highlight its arrow and cards on the board, and the other way round.
 • [M] Undo the last planning action (Ctrl+Z) until End Turn.
