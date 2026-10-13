@@ -80,10 +80,6 @@ STILL OPEN
     • Changed: Keyboard Warrior went from Retaliate 1 to Counterattack (same 1 damage, its Attack). A fixed-damage answer is still possible in the data and reads "Retaliate: 1 damage to it".
     • Question: should spells and abilities that damage it be answered too?
 
-18. Myth and Mind share the glyph M (2026-10-13)
-    • Done: the faction coins are back to the plaque style: $ Corporate, § Statecraft, # Zeitgeist, the first letter for the others. Myth (gold) and Mind (purple) both show M, told apart by color only.
-    • Question: should one of them get another glyph?
-
 19. Baton Pass and Recoil (2026-10-13)
     • Done: Baton Pass on Work Shift Rotation (Corporate), Recoil on Chain Smoker (Zeitgeist), names from the card backlog. Baton Pass passes everything, statuses good and bad, and needs its ability switched on (an Exhausted creature can't pass).
     • Question: should it pass only good things, or work while Exhausted?

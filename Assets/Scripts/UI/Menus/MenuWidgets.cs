@@ -236,7 +236,10 @@ namespace SlayTheClone {
             return column.transform;
         }
 
-        /// <summary>A one-line text field: parchment text on a dark brass-trimmed well, and a faint hint while it's empty.</summary>
+        /// <summary>
+        /// The game's one-line text field, for any text the player types (a deck's name...): parchment text on a dark
+        /// brass-trimmed well, a faint hint while it's empty, and a blinking brass cursor where the typing goes.
+        /// </summary>
         public static TMP_InputField AddInputField(Transform parent, string name, string hint, float height) {
             var go = TMP_DefaultControls.CreateInputField(new TMP_DefaultControls.Resources());
             go.name = name;
@@ -269,6 +272,9 @@ namespace SlayTheClone {
             placeholder.color = UITheme.WithAlpha(TextColor, 0.35f);
             placeholder.fontStyle = FontStyles.Italic;
             placeholder.alignment = TextAlignmentOptions.MidlineLeft;
+            // The field makes its cursor when it's switched on, and it was switched on before it had its text: again, now
+            field.enabled = false;
+            field.enabled = true;
             return field;
         }
 

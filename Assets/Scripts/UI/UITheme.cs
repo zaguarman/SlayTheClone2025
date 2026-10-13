@@ -52,13 +52,21 @@ namespace SlayTheClone {
         /// <summary>The body of a card's frame: its faction's color, deepened toward the table's navy.</summary>
         public static Color CardFrameColor(Faction faction) => Color.Lerp(Hex(0x101828), FactionColor(faction), 0.5f);
 
-        /// <summary>A one-glyph emblem for a faction, on its coin (the player's plaque, the menus).</summary>
+        /// <summary>
+        /// A one-glyph emblem for a faction, on its coin (the player's plaque, the menus): a typographic sign that says what
+        /// the faction is about, like $ for money and § for the law.
+        /// </summary>
         public static string FactionGlyph(Faction faction) => faction switch {
-            Faction.Corporate => "$",
-            Faction.Statecraft => "§",
-            Faction.Zeitgeist => "#",
-            Faction.None => "~",
-            _ => CardTextFormatter.FactionName(faction).Substring(0, 1)
+            Faction.Corporate => "$",       // Money
+            Faction.Statecraft => "§",      // The law's section sign
+            Faction.Myth => "†",            // The cross, and death
+            Faction.ShadowOps => "?",       // What it plans shows as ???
+            Faction.Tech => "λ",            // Code
+            Faction.DigitalSociety => "@",  // Your handle
+            Faction.Zeitgeist => "☺",       // The mood of the times
+            Faction.Mind => "Ψ",            // Psyche
+            Faction.Utopia => "∞",          // Endless progress
+            _ => "~"
         };
 
         /// <summary>A faction's coin, like the player plaque's: a disc in its color, ringed in brass, with its glyph in ink.</summary>
