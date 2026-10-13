@@ -89,7 +89,7 @@ namespace SlayTheClone {
                 "Cleaner", "Cleaner", "Multi Passport", "Multi Passport", "Wet Work", "Mole", "Femme Fatale", "Femme Fatale",
                 "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Dead Man's Switch", "Lone Gunman",
                 "The Golden Gun", "Die Another Day", "Die Another Day", "Licence to Kill", "Licence to Kill",
-                "Shaken, Not Stirred", "Shaken, Not Stirred", "GoldenEye", "Supply Chain Attack",
+                "Shaken, Not Stirred", "Shaken, Not Stirred", "GoldenEye", "Supply Chain Attack", "Hollowed-Out Volcano Lair",
             }),
             ("Digital Society & Shadow Ops. - Panopticon", "PanopticonDeck",
                 "Your Data Broker", "Knows where you were last night. Sold it by noon.", new[] {
@@ -246,6 +246,13 @@ namespace SlayTheClone {
                 Buff(2, TargetType.FriendlyCreatures, attack: true, health: true))
                 .NotInStarterDeck()
                 .Picture("Grandma at peace in an open coffin, hands folded on lilies, while her grandson in his best suit grins over her, fanning out the banknotes from her will."),
+            Spell("NDA", TargetType.EnemyCreatures,
+                "You saw nothing. You'll say nothing. Initial here, here and here.",
+                "Non-Disclosure Agreement. Discard 1 (Corporate pays with capital), then Blackout for 2 Days on target enemy creature: its ability and its effects (arrival, Dawn and Dusk, retaliation, Last Will) are switched off. Silences the Shadow Ops. tricks and the Myth sacrifices alike.",
+                Status(StatusEffectType.Blackout, 2, TargetType.EnemyCreatures))
+                .Discarding(1)
+                .NotInStarterDeck()
+                .Picture("A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a towering stack of contracts between them stamped CONFIDENTIAL."),
             Spell("Inflation", TargetType.EnemyCreatures,
                 "Same price. Less creature.",
                 "Mechanics test: Health Loss on every enemy. It ignores Armor, isn't damage (no OnDamaged), kills at 0 whatever the Armor, and lowers the Armor cap.",
@@ -866,6 +873,12 @@ namespace SlayTheClone {
                 Act(ActionType.CutDraws, 2, TargetType.Enemy, TargetModifier.None))
                 .NotInStarterDeck()
                 .Picture("A cheerful delivery driver unloading crates of identical routers at a ministry's loading dock, each box with a tiny skull sticker under the barcode, while a line of bureaucrats in grey suits signs for them."),
+            Spell("Hollowed-Out Volcano Lair", TargetType.Player,
+                "Monorail, piranha pool, self-destruct button. Planning permission: pending.",
+                "Trend for 3 Days, Volcano Lair: each Day (from the Day it's set), whoever set it hides their strongest creature in the lair: it's Untouchable that Day, as long as another of their creatures stands. Henchmen first.",
+                SetTrend(Trend.VolcanoLair, 3))
+                .NotInStarterDeck()
+                .Picture("A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass."),
             Creature("Femme Fatale", 2, 4, speed: 2, deploy: 0,
                 "She didn't kill him. She just held him very, very close.",
                 "Each Dusk she squeezes the enemy creature facing her: 2 damage to it, and she heals 1. Nothing facing her: nothing happens.",

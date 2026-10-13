@@ -459,6 +459,11 @@ namespace SlayTheClone {
             if (action.actionType == ActionType.SetTrend) {
                 // Freak Weather strikes their toughest each Dusk; other Trends are good for whoever plays them
                 if (action.trend == Trend.FreakWeather) return view.Theirs.Any() ? TrendSystem.LightningDamage * System.Math.Max(1, action.statusDuration) * 0.8f * Style.Removal : 0.2f;
+                // Volcano Lair: our best creature out of reach each Day, while it has company
+                if (action.trend == Trend.VolcanoLair) {
+                    var boss = view.Mine.OrderByDescending(c => c.Attack).FirstOrDefault();
+                    return view.Mine.Count() >= 2 && boss != null ? boss.Worth * 0.4f * System.Math.Max(1, action.statusDuration) * Style.Protection : 0.2f;
+                }
                 return 1;
             }
             if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;

@@ -19,7 +19,9 @@ namespace SlayTheClone {
     }
 
     public class SetTrendActionExecutor : ActionExecutor<SetTrendAction> {
-        protected override void ExecuteAction(SetTrendAction action, ActionExecutionContext context) =>
+        protected override void ExecuteAction(SetTrendAction action, ActionExecutionContext context) {
             context.TrendSystem.SetTrend(action.Trend, action.Days, context.TurnClock.TurnNumber, action.Controller);
+            context.TrendSystem.QueueDayEffects(context.ActionsQueue); // Its first Day is this one
+        }
     }
 }

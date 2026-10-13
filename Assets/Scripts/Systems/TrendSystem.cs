@@ -20,6 +20,8 @@ namespace SlayTheClone {
         IPlayer SetBy { get; }
         /// <summary>At Dusk, before the Trend can end: what it does each Dusk (Freak Weather's lightning).</summary>
         void QueueDuskEffects(IActionsQueue queue);
+        /// <summary>When it's set, and at each Dawn while it trends: what it does each Day (Volcano Lair hides the boss).</summary>
+        void QueueDayEffects(IActionsQueue queue);
         /// <summary>At Dusk: the Trend ends after its last Day.</summary>
         void ProcessDusk(int endedTurn);
         /// <summary>Rush Hour: the slowest act first. Speed orders everything the other way round.</summary>
@@ -63,6 +65,17 @@ namespace SlayTheClone {
             queue.AddAction(new DamageCreatureAction(struck, LightningDamage));
         }
 
+        // Volcano Lair: whoever set it hides their strongest creature (the most Attack) in the lair: Untouchable this Day,
+        // as long as another of their creatures stands to guard it. Checked when it's set and at each Dawn
+        public void QueueDayEffects(IActionsQueue queue) {
+            if (Current != Trend.VolcanoLair || SetBy == null || queue == null) return;
+            var side = SetBy.Battlefield.Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead).ToList();
+            if (side.Count < 2) return; // No henchmen: no lair
+            var boss = EffectResolver.Strongest(side);
+            Log($"Volcano Lair: {boss.Name} hides in the lair", LogTag.Effects);
+            queue.AddAction(new ApplyStatusEffectAction(boss, StatusEffectType.Untouchable, 1, 0, controller: SetBy));
+        }
+
         public int ExtraDraws(IPlayer player) {
             if (Current != Trend.Zeitgeist || player?.Opponent == null) return 0;
             return CreaturesOf(player) < CreaturesOf(player.Opponent) ? 1 : 0;
@@ -74,6 +87,7 @@ namespace SlayTheClone {
         public static string NameOf(Trend trend) => trend switch {
             Trend.RushHour => "Rush Hour",
             Trend.FreakWeather => "Freak Weather",
+            Trend.VolcanoLair => "Volcano Lair",
             Trend.None => "Nothing",
             _ => trend.ToString()
         };
@@ -83,6 +97,7 @@ namespace SlayTheClone {
             Trend.Zeitgeist => "each Day, whoever has fewer creatures draws 1 more card",
             Trend.RushHour => "the slowest act first",
             Trend.FreakWeather => $"each Dusk, lightning strikes the toughest creature on the other side of whoever set it, for {LightningDamage} damage",
+            Trend.VolcanoLair => "each Day, whoever set it hides their strongest creature in the lair: it's Untouchable that Day, as long as another of their creatures stands",
             _ => ""
         };
     }

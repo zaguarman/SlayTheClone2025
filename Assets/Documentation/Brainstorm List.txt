@@ -1609,7 +1609,7 @@ Card Game Factions Overview
 			Embassy (tagged Shadow Ops.)
 			Fingerprinting
 			Honey Pot (like the reference card: give the opponent two Treasures, then take control of them). To move to Tech, as a cyber honeypot, with a new mechanic (2026-10-13)
-			NDA (Non-Disclosure Agreement). Better in another faction (Corporate?), with its mechanic changed (2026-10-13)
+			NDA (Non-Disclosure Agreement): built in Corporate (2026-10-14), Discard 1 and Blackout 2
 			Memory Wipe / Mandela Effect (all your creatures become unknown again). Better in another faction (Mind?), with its mechanic changed (2026-10-13)
 			Spy-film gadgets (James Bond, 2026-10-13): built The Golden Gun, GoldenEye, Shaken Not Stirred, Licence to Kill, Die Another Day, Femme Fatale (Double-O Section deck, 2026-10-14). Still ideas: Exploding Pen, Ejector Seat, Tank Chase, Bungee Jump off the Dam, No Mr. Bond I Expect You to Die, Q Branch, Steel Teeth
 			Secret Anthrax Laboratory

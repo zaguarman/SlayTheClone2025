@@ -166,6 +166,18 @@ namespace SlayTheClone.Tests {
             yield return game.EndTurn();
             yield return game.EndTurn();
             CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(rod), "2 Days, 2 strikes of 2, then the Trend is over");
+
+            // Volcano Lair: each Day, its setter's strongest creature is Untouchable, as long as another of theirs stands
+            var boss = game.Summon(game.Player1, game.Creature("Boss", 5, 5), 0);
+            var henchman = game.Summon(game.Player1, game.Creature("Henchman", 1, 5), 1);
+            game.Run(new SetTrendAction(Trend.VolcanoLair, 2, game.Player1));
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(boss, StatusEffectType.Untouchable), "From the Day it's set");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(henchman, StatusEffectType.Untouchable));
+            yield return game.EndTurn();
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(boss, StatusEffectType.Untouchable), "Each Day");
+            game.Run(new DestroyCreatureAction(henchman, unconditional: true));
+            yield return game.EndTurn();
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(boss, StatusEffectType.Untouchable), "No henchmen left (and the Trend is over): no lair");
         }
     }
 }
