@@ -107,6 +107,10 @@ namespace SlayTheClone.Tests {
             game.Run(new ApplyStatusEffectAction(bouncer, StatusEffectType.Exhausted, 1, 0, source: shrinker, controller: p2));
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(bouncer, StatusEffectType.Exhausted));
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(shrinker, StatusEffectType.Exhausted), "Return to Sender: the status bounces");
+            game.Run(new ApplyStatusEffectAction(bouncer, StatusEffectType.Revealed, 1, 0, controller: p2)); // A spell from hand
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(bouncer, StatusEffectType.Revealed));
+            Assert.AreEqual(1, p2.Battlefield.Count(s => s.OccupyingCreature != null && game.ModifierManager.HasStatusEffect(s.OccupyingCreature, StatusEffectType.Revealed)),
+                "From a spell, it bounces to a random enemy creature");
             game.Run(new ApplyStatusEffectAction(bouncer, StatusEffectType.Burned, 1, 1, controller: p1));
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(bouncer, StatusEffectType.Burned), "Friendly statuses apply normally");
         }

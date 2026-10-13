@@ -142,7 +142,7 @@ Return to Sender
     Inspired by: Magic Bounce (Espeon)
     Type: Passive, Defensive
     Description: "Statuses applied to this creature by enemy effects bounce back to the creature that sent them."
-    Notes: A Spell from hand bounces to the caster's creature with the lowest current Health (see Bouncing Effects). A bounced status can't bounce again. Friendly statuses apply normally.
+    Notes: A Spell from hand (or a creature no longer in play) bounces to a random creature on the caster's side, picked like a Random effect: the one with the most Heat Signature first (No U still picks the lowest Health). A bounced status can't bounce again. Friendly statuses apply normally.
     Answers: Use damage or stat changes instead of statuses, or send the status from a creature that can take it. Zero-Day ignores it.
 
 Undercover

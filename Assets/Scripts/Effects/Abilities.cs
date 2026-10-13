@@ -84,7 +84,7 @@ namespace SlayTheClone {
             CreatureAbility.IdentityTheft => "Active, instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it)",
             CreatureAbility.HiveMind => "a creature that attacks it loses its ability and gains Hive Mind instead",
             CreatureAbility.InsiderJob => "its damage ignores Armor",
-            CreatureAbility.ReturnToSender => "enemy statuses bounce back to whoever sent them",
+            CreatureAbility.ReturnToSender => "enemy statuses bounce back to the creature that sent them; from a spell, to a random enemy creature",
             CreatureAbility.NickelAndDime => "double damage when it hits for 3 or less",
             CreatureAbility.Undercover => "its plans show as ??? to the enemy",
             CreatureAbility.Handover => "when a summon replaces it, the newcomer takes over its stat changes and statuses",
@@ -132,13 +132,17 @@ namespace SlayTheClone {
             Has(target, ability) && !(IsDefensive(ability) && Has(source, CreatureAbility.ZeroDay));
 
         /// <summary>
-        /// "The creature that caused it", for bounced effects: the source creature if it's still in play, otherwise the
-        /// caster's creature with the lowest current Health (ties at random). Null if the caster has none (the effect fails).
+        /// "The creature that caused it", for bounced effects: the source creature if it's still in play, otherwise (a spell)
+        /// the caster's creature with the lowest current Health (ties at random), or, <paramref name="atRandom"/>, any of the
+        /// caster's creatures picked like a Random effect (the one with the most Heat first). Null if the caster has none
+        /// (the effect fails).
         /// </summary>
-        public static ICreature BounceTarget(ICreature source, IPlayer caster) {
+        public static ICreature BounceTarget(ICreature source, IPlayer caster, bool atRandom = false) {
             if (source != null && !source.IsDead && source.Slot != null) return source;
-            return caster?.Battlefield.Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead)
-                .OrderBy(c => c.Health).ThenBy(_ => GameRandom.Next(int.MaxValue)).FirstOrDefault();
+            var candidates = caster?.Battlefield.Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead).ToList();
+            if (candidates == null || candidates.Count == 0) return null;
+            if (atRandom) return HeatRules.Hottest(source, candidates) ?? candidates[GameRandom.Next(candidates.Count)];
+            return candidates.OrderBy(c => c.Health).ThenBy(_ => GameRandom.Next(int.MaxValue)).First();
         }
 
         #region Stat changes
