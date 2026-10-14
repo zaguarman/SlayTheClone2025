@@ -60,7 +60,7 @@ MonoBehaviour:
     on the economy).'
   artDescription: 
   attack: 1
-  health: 4
+  health: 6
   speed: 1
   turnsUntilOperative: 0
   movement: 0

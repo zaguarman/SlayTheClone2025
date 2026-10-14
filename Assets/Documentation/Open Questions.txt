@@ -29,6 +29,13 @@ STILL OPEN
       Rhythm"), so they keep their speed and Corporate's raw values come down instead: Margin Call 1 damage to all (was 2),
       Hostile Takeover 3 (was 4), Taxpayer Funds Venture Capital Profits 1 to the enemy (was 2). Round robin after: Shadow
       Ops. 81%, Mind 65, Corporate 60, Myth 58, Utopia 54, Digital Society 48, Tech 48, Statecraft 31, Zeitgeist 29.
+    • Then, as asked: Shadow Ops.' numbers down, its speed kept (Femme Fatale 1/4 with a 1-damage squeeze at Dusk, Cleaner
+      1/3, If I Told You I'd Have to Kill You 2/4, MK Ultra Test Subject 2/3, False Flag Operation +1/+1); Statecraft
+      sturdier, as a status quo faction (+1 or +2 Health on its creatures, Ceasefire 3 Days). Round robin after: Statecraft
+      63%, Corporate 56, Mind 56, Shadow Ops. 50, Zeitgeist 46, Digital Society 46, Tech 42, Myth 42, Utopia 38: every
+      faction between 38% and 63% (48 games each, so a faction can swing 10-15 points from luck alone).
+    • Pictures drawn for Accelerationism, Cold Fusion, Antimatter, Biohacking and Blood Transfusion. The merge of Zeitgeist
+      and Digital Society is set aside for now.
     • The Statecraft deck I picked first did worse than its old list: the AI's card stats barely separate the cards of one
       deck (almost every card is played in almost every game), so picks lean on damage and kills per game.
 

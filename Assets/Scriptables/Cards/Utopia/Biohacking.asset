@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Ten thousand volts and a nootropic smoothie.
   cardType: 1
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: f9f21522aa5e6e44899753a8c35ef0ca, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

@@ -59,7 +59,7 @@ MonoBehaviour:
   designNotes: 'Future: Keep Calm on friendly creatures each time it''s hit.'
   artDescription: 
   attack: 2
-  health: 4
+  health: 5
   speed: 1
   turnsUntilOperative: 0
   movement: 0

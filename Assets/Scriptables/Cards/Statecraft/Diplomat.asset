@@ -63,7 +63,7 @@ MonoBehaviour:
     up, a gold name plate reading "AMBASSADOR (BY BIRTH)". Behind him, a wall of
     portraits of his father and grandfather in the very same chair.
   attack: 3
-  health: 5
+  health: 6
   speed: 1
   turnsUntilOperative: 1
   movement: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Whatever the problem, more technology. Whatever the cost, faster.
   cardType: 1
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: fff1ae37f8aabc445a0f64c86798609e, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

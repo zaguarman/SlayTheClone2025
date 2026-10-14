@@ -60,7 +60,7 @@ MonoBehaviour:
     +2 Attack. Future: a Law (Location) for 3 Days that hurts both sides each Dawn.'
   artDescription: 
   attack: 3
-  health: 4
+  health: 5
   speed: 2
   turnsUntilOperative: 1
   movement: 0

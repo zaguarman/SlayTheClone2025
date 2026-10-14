@@ -319,45 +319,45 @@ namespace SlayTheClone {
                 SwapPositions(TargetType.EnemyCreatures))
                 .NotInStarterDeck()
                 .Picture("A giant public screen holds a crowd: on one half a blocky-game YouTuber screams at his pickaxe, on the other a grinning giveaway YouTuber in a hoodie waves a giant FREE check. Behind it, soldiers quietly shuffle the enemy's tents around."),
-            Creature("King Emeritus", 1, 6, speed: 1, deploy: 1,
+            Creature("King Emeritus", 1, 7, speed: 1, deploy: 1,
                 "Abdicated in disgrace. Kept the yacht, the pension and the Swiss account.",
                 "Future: Diplomatic Immunity. Can't be targeted by enemy spells.",
                 On(EffectTrigger.StartOfTurn, Heal(1, TargetType.Player))),
-            Creature("Spite-Elected President", 3, 4, speed: 2, deploy: 1,
+            Creature("Spite-Elected President", 3, 5, speed: 2, deploy: 1,
                 "Voted in to make everyone else miserable. Delivered on day one.",
                 "Spite: when an effect lowers its stats, friendly or enemy, it gains +2 Attack. Future: a Law (Location) for 3 Days that hurts both sides each Dawn.",
                 On(EffectTrigger.OnPlay, Damage(1, TargetType.AllCreatures)))
                 .With(CreatureAbility.Spite),
-            Creature("Police Officer Productivity Target", 2, 3, speed: 2, deploy: 0,
+            Creature("Police Officer Productivity Target", 2, 4, speed: 2, deploy: 0,
                 "Ten arrests a week. Guilt is optional.",
                 "Future: double damage against creatures that moved this Day.",
                 On(EffectTrigger.StartOfTurn, Damage(1, TargetType.EnemyCreatures, AtRandom))),
-            Creature("Internal Revenue Service", 1, 4, speed: 1, deploy: 0,
+            Creature("Internal Revenue Service", 1, 6, speed: 1, deploy: 0,
                 "We've noticed some irregularities. Specifically, you.",
                 "Future: taxes enemy card plays instead of plain damage (Red Tape on the economy).",
                 On(EffectTrigger.StartOfTurn, Damage(1, TargetType.Enemy))),
-            Creature("Mercenaries", 4, 3, speed: 3, deploy: 0,
+            Creature("Mercenaries", 4, 4, speed: 3, deploy: 0,
                 "Loyal to whoever pays next.",
                 "Future: Recruitment bait. When it dies, the enemy may Recruit it instead.",
                 On(EffectTrigger.OnDeath, Draw(1, TargetType.Enemy))),
-            Creature("Man o' War", 4, 7, speed: 1, deploy: 1,
+            Creature("Man o' War", 4, 8, speed: 1, deploy: 1,
                 "Gunboat diplomacy, minus the diplomacy.",
                 "Future: multi-slot (takes 2 slots) and Heavy.",
                 On(EffectTrigger.OnPlay, Damage(1, TargetType.EnemyCreatures))),
-            Creature("Ministry for Equality", 1, 4, speed: 1, deploy: 1,
+            Creature("Ministry for Equality", 1, 6, speed: 1, deploy: 1,
                 "We love everybody. Please stop resisting our love.",
                 "Future: Red Tape every Dawn: +1 Deployment Time on a random enemy creature.",
                 On(EffectTrigger.StartOfTurn, Stun(1, TargetType.EnemyCreatures, AtRandom))),
-            Creature("Supreme Court", 0, 6, speed: 1, deploy: 1,
+            Creature("Supreme Court", 0, 7, speed: 1, deploy: 1,
                 "Appointed for life. Accountable for nothing.",
                 "Return to Sender: enemy statuses bounce back to whoever sent them. Future: Fortifying. Adjacent friendly creatures can't be moved by enemy effects.",
                 On(EffectTrigger.OnPlay, Armor(2, TargetType.FriendlyCreatures)))
                 .With(CreatureAbility.ReturnToSender),
-            Creature("Protocol Enforcers", 2, 4, speed: 1, deploy: 0,
+            Creature("Protocol Enforcers", 2, 5, speed: 1, deploy: 0,
                 "Please stand behind the line. Which line? This line. Now that line.",
                 "Future: Keep Calm on friendly creatures each time it's hit.",
                 On(EffectTrigger.OnDamage, Armor(1, TargetType.FriendlyCreatures))),
-            Creature("Demagogue", 2, 3, speed: 2, deploy: 0,
+            Creature("Demagogue", 2, 4, speed: 2, deploy: 0,
                 "Says what you think. Thinks what he's told.",
                 "Future: Loaded Language. The buff only lasts while it stays on the battlefield.",
                 On(EffectTrigger.OnPlay, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false))),
@@ -387,7 +387,7 @@ namespace SlayTheClone {
                 "Free bread, free games, free of questions.",
                 "Future: a Law that also adds 1 Deployment Time to your next creature (the paperwork).",
                 Heal(3, TargetType.Player, Each), Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, Each)),
-            Creature("Diplomat", 3, 5, speed: 1, deploy: 1,
+            Creature("Diplomat", 3, 6, speed: 1, deploy: 1,
                 "Third-generation ambassador. Qualifications: his surname.",
                 "Mechanics test: Deployment Time 2 counts down at Dusk, never at the Dusk of the Day it arrived; its entry effect waits until it's ready. Armor fades by 1 each Dusk on every creature.",
                 On(EffectTrigger.OnPlay, Armor(2, TargetType.FriendlyCreatures, Each)))
@@ -404,8 +404,8 @@ namespace SlayTheClone {
                 .Picture("A rusty landmine half-buried in a children's sandbox, next to a faded government sign: \"AREA CLEARED. PROBABLY. - Ministry of Defence, 1998\"."),
             Spell("Ceasefire", TargetType.FriendlyCreatures,
                 "Both sides agree to stop shooting. Starting right after this last volley.",
-                "Mechanics test: Temporal Shield for 2 Days on a slot. The creature there takes no combat damage, but spells and abilities still hurt it. It stays with the slot, not the creature (Static).",
-                PlaceSlotEffect(SlotEffectType.TemporalShield, 0, 2, TargetType.FriendlyCreatures))
+                "Mechanics test: Temporal Shield for 3 Days on a slot. The creature there takes no combat damage, but spells and abilities still hurt it. It stays with the slot, not the creature (Static).",
+                PlaceSlotEffect(SlotEffectType.TemporalShield, 0, 3, TargetType.FriendlyCreatures))
                 .Picture("Two generals shaking hands for the cameras in front of a CEASEFIRE banner, each hiding a grenade behind his back."),
             Spell("Violence Monopoly", TargetType.Player,
                 "Only one of us is allowed to hit people. Guess which.",
@@ -637,7 +637,7 @@ namespace SlayTheClone {
 
         // Shadow Ops.: fragile agents, hidden plans, traps
         private static List<CardDef> ShadowOpsCards() => new List<CardDef> {
-            Creature("Cleaner", 2, 3, speed: 3, deploy: 0,
+            Creature("Cleaner", 1, 3, speed: 3, deploy: 0,
                 "Two shots. One invoice.",
                 "Mechanics test: Double Tap. It attacks twice: a second hit right after the first.")
                 .With(CreatureAbility.DoubleTap)
@@ -758,8 +758,8 @@ namespace SlayTheClone {
                 .Picture("A giant paperclip hooking a bespectacled scientist in a lab coat by the collar and lifting him from one flag onto another, rocket blueprints fluttering out of his pockets."),
             Spell("False Flag Operation", TargetType.FriendlyCreatures,
                 "They attacked us. Well, someone did. Same thing.",
-                "Destroy target friendly creature (its Last Will happens); every other friendly creature gets +2 Attack and +2 Health while it stays in play. Funnel it all into one with Never Let Them Know Your Next Move.",
-                Destroy(TargetType.FriendlyCreatures), Buff(2, TargetType.FriendlyCreatures, attack: true, health: true, Each))
+                "Destroy target friendly creature (its Last Will happens); every other friendly creature gets +1 Attack and +1 Health while it stays in play. Funnel it all into one with Never Let Them Know Your Next Move.",
+                Destroy(TargetType.FriendlyCreatures), Buff(1, TargetType.FriendlyCreatures, attack: true, health: true, Each))
                 .NotInStarterDeck()
                 .Picture("A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost while a film crew records it and a general reads an outrage speech from a card."),
             Spell("Never Let Them Know Your Next Move", TargetType.FriendlyCreatures,
@@ -812,7 +812,7 @@ namespace SlayTheClone {
                 Requiring(Status(StatusEffectType.Brainwashed, 1, TargetType.EnemyCreatures), TargetRequisite.Revealed))
                 .NotInStarterDeck()
                 .Picture("A handler in a dim bar sliding a thick envelope and a photograph across the table to a nervous soldier; the photo shows the soldier with a woman who isn't his wife."),
-            Creature("If I Told You, I'd Have to Kill You", 3, 4, speed: 2, deploy: 0,
+            Creature("If I Told You, I'd Have to Kill You", 2, 4, speed: 2, deploy: 0,
                 "It's classified. So are you, now.",
                 "When Revealed (Revealed, or a Reveal shows it): 4 damage to whoever revealed it, the creature whose effect it was or else its player. Allergic to Light: each time, it takes 2 damage itself.",
                 On(EffectTrigger.OnRevealed, Damage(4, TargetType.Enemy)))
@@ -927,14 +927,14 @@ namespace SlayTheClone {
                 SetTrend(Trend.VolcanoLair, 3))
                 .NotInStarterDeck()
                 .Picture("A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass."),
-            Creature("Femme Fatale", 2, 4, speed: 2, deploy: 0,
+            Creature("Femme Fatale", 1, 4, speed: 2, deploy: 0,
                 "She didn't kill him. She just held him very, very close.",
-                "Each Dusk she squeezes the enemy creature facing her: 2 damage to it, and she heals 1. Nothing facing her: nothing happens. Ambush: she arrives as ??? and deals double while nobody knows who she is.",
-                On(EffectTrigger.EndOfTurn, Damage(2, TargetType.EnemyCreatures, Facing), Heal(1, TargetType.Self)))
+                "Each Dusk she squeezes the enemy creature facing her: 1 damage to it, and she heals 1. Nothing facing her: nothing happens. Ambush: she arrives as ??? and deals double while nobody knows who she is.",
+                On(EffectTrigger.EndOfTurn, Damage(1, TargetType.EnemyCreatures, Facing), Heal(1, TargetType.Self)))
                 .With(CreatureAbility.Ambush)
                 .NotInStarterDeck()
                 .Picture("A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in the chair beside her is squeezed between her crossed legs, his medals popping off."),
-            Creature("MK Ultra Test Subject", 3, 3, speed: 1, deploy: 0,
+            Creature("MK Ultra Test Subject", 2, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
                 On(EffectTrigger.StartOfTurn, Strike(TargetType.AllCreatures, AtRandom)))

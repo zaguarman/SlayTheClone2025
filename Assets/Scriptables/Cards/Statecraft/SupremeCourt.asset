@@ -60,7 +60,7 @@ MonoBehaviour:
     Future: Fortifying. Adjacent friendly creatures can''t be moved by enemy effects.'
   artDescription: 
   attack: 0
-  health: 6
+  health: 7
   speed: 1
   turnsUntilOperative: 1
   movement: 0

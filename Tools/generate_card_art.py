@@ -5901,6 +5901,144 @@ for _theme, _cards in CHUNK.items():
     CARDS[_theme].update(_cards)
 
 
+# ---------------------------------------------------------------- Utopia's accelerationism (2026-10-14)
+def circuit_piece(x, y, w, h, angle=0):
+    out = rect(x, y, w, h, "#1f7a4a", 'stroke="#0f4a2a" stroke-width="1.5" rx="2"')
+    out += stroke(f"M{x + 4} {y + h / 2} l {w * 0.4} 0 l 4 -4 l {w * 0.3} 0", "#f2c94c", 1.4)
+    out += circle(x + w - 6, y + h / 2 - 4, 2, "#f2c94c") + circle(x + 6, y + h / 2, 1.6, "#f2c94c")
+    return group(out, f"rotate({angle} {x + w / 2} {y + h / 2})") if angle else out
+
+
+def accelerationism():
+    # A tech founder in a hoodie flooring a rocket car toward a cliff edge, the road on fire behind him, a bridge of glowing
+    # circuit boards assembling itself in mid-air just ahead of the wheels
+    defs = lin("bg", ["#2a1030", "#e8602a"])
+    body = rect(0, 0, W, H, "url(#bg)") + circle(300, 60, 26, "#ffd84a", 'opacity="0.8"')
+    body += path("M0 150 L224 150 L232 200 L0 200 Z", "#4a3a3a") + rect(0, 146, 224, 6, "#2a2a2a")
+    body += path("M232 200 L240 172 L352 176 L352 200 Z", "#1a0a10")  # The chasm's far side, far below
+    body += flames(40, 148, 4, 22, 26)
+    # The bridge of circuit boards, the near pieces in place, the far ones still flying in
+    for i, (x, y, a) in enumerate([(224, 146, 0), (252, 146, 0), (280, 142, -8), (306, 128, -20), (322, 104, 25)]):
+        body += circuit_piece(x, y, 28, 10, a)
+        if i >= 2:
+            body += speed_lines(x + 30, y - 4, 2, 10, "#9affc0")
+    # The rocket car
+    body += rect(112, 116, 86, 26, "#d0342c", 'rx="8"') + path("M132 116 L146 96 L178 96 L190 116 Z", "#d0342c")
+    body += path("M150 100 L176 100 L184 114 L144 114 Z", "#9ad8ff", 'opacity="0.8"')
+    body += circle(132, 144, 10, "#1a1a1a") + circle(182, 144, 10, "#1a1a1a") + circle(132, 144, 4, "#8a8a8a") + circle(182, 144, 4, "#8a8a8a")
+    body += rect(96, 120, 18, 14, "#5a5a6a", 'rx="2"') + path("M96 122 L60 116 L72 127 L58 138 L96 132 Z", "#ffb03a") + path("M96 124 L76 122 L84 127 L76 132 L96 130 Z", "#fff2a0")
+    # The founder behind the wheel, in a grey hoodie, grinning
+    body += circle(164, 104, 9, SKIN[0]) + path("M154 104 C 154 88 174 88 174 104 L174 98 C 170 92 158 92 154 98 Z", "#8a8a96")
+    body += stroke("M160 108 q 4 3 8 0", "#222", 1.4) + circle(161, 102, 1.2, "#222") + circle(167, 102, 1.2, "#222")
+    return svg(defs, body)
+
+
+def cold_fusion():
+    # A tabletop fusion reactor glowing white-hot in a jar on a garage workbench, the warning gauge in the red, two engineers
+    # in sunglasses giving a thumbs-up
+    defs = lin("bg", ["#3a3a44", "#1e1e26"]) + rad("hot", [("#ffffff", 1), ("#fff2a0", 0.9), ("#ff8a1a", 0)])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x in range(10, 352, 40):  # Pegboard
+        for y in range(14, 120, 26):
+            body += circle(x, y, 2, "#2a2a32")
+    body += rect(0, 150, W, 50, "#7a5a3a") + rect(0, 150, W, 6, "#5a4028")
+    body += circle(176, 104, 70, "url(#hot)")
+    body += rect(150, 70, 52, 80, "#d8eef8", 'rx="10" opacity="0.35" stroke="#ffffff" stroke-width="2"')
+    body += rect(146, 64, 60, 10, "#8a8a96", 'rx="3"') + rect(146, 146, 60, 8, "#8a8a96", 'rx="3"')
+    body += circle(176, 108, 16, "#ffffff") + circle(176, 108, 26, "#fff2a0", 'opacity="0.6"')
+    for a in range(0, 360, 45):
+        r1, r2 = 20, 32
+        body += stroke(f"M{176 + r1 * math.cos(math.radians(a)):.1f} {108 + r1 * math.sin(math.radians(a)):.1f} L{176 + r2 * math.cos(math.radians(a)):.1f} {108 + r2 * math.sin(math.radians(a)):.1f}", "#ffffff", 2, 'opacity="0.8"')
+    # The gauge, needle in the red
+    body += circle(240, 118, 18, "#f4f4f4", 'stroke="#555" stroke-width="2"')
+    body += path("M226 118 A 14 14 0 0 1 254 118 L240 118 Z", "#e8e8e8") + path("M248 106 A 14 14 0 0 1 254 118 L240 118 Z", "#d0342c")
+    body += stroke("M240 118 L252 110", "#111", 2)
+    # Two engineers in sunglasses, thumbs up
+    for x, skin, shirt in [(56, SKIN[1], "#3d5a80"), (310, SKIN[2], "#c0563a")]:
+        body += person(x, 204, 0.9, skin, shirt, face="grin", glasses="shades")
+        body += rect(x + (24 if x < 176 else -34), 136, 10, 14, skin, 'rx="3"') + rect(x + (26 if x < 176 else -32), 128, 5, 10, skin, 'rx="2"')
+    return svg(defs, body)
+
+
+def antimatter():
+    # A tiny shimmering particle in a magnetic bottle, its mirror image annihilating the lab bench around it, a physicist
+    # ducking behind a clipboard
+    defs, body = bg_utopia()
+    defs += rad("flash", [("#ffffff", 1), ("#c0a0ff", 0.7), ("#c0a0ff", 0)])
+    body += rect(0, 146, W, 54, "#a8b8b8") + rect(0, 146, W, 5, "#889898")
+    # A jagged bite out of the bench into nothing, crackling violet
+    body += circle(220, 150, 40, "url(#flash)")
+    body += path("M186 146 L194 156 L190 166 L202 172 L214 168 L224 178 L236 168 L248 170 L246 158 L256 146 Z", "#1a0a2a")
+    for a in range(200, 340, 28):
+        body += stroke(f"M{220 + 34 * math.cos(math.radians(a)):.1f} {150 + 34 * math.sin(math.radians(a)):.1f} l {8 * math.cos(math.radians(a)):.1f} {8 * math.sin(math.radians(a)):.1f}", "#a070ff", 2)
+    # The magnetic bottle on the bench: a glass capsule between two coils, the particle glowing in the middle
+    body += rect(86, 96, 74, 40, "#d8eef8", 'rx="20" opacity="0.5" stroke="#ffffff" stroke-width="2"')
+    for x in (84, 152):
+        body += rect(x, 90, 10, 52, "#b8782a", 'rx="3"') + stroke(f"M{x} 98 l 10 0 M{x} 106 l 10 0 M{x} 114 l 10 0 M{x} 122 l 10 0 M{x} 130 l 10 0", "#8a5a1a", 1.2)
+    body += circle(123, 116, 9, "#c0a0ff", 'opacity="0.5"') + circle(123, 116, 4, "#ffffff")
+    body += rect(96, 136, 54, 10, "#5a6070")
+    # Its mirror image, a dark twin out on the bench, eating it
+    body += circle(220, 160, 4, "#ffffff") + circle(220, 160, 8, "none", 'stroke="#a070ff" stroke-width="1.5"')
+    # The physicist ducking behind his clipboard
+    body += person(312, 200, 0.9, SKIN[0], "#f4f4f4", face="shout", hair="#3a2a1a", glasses="round")
+    body += rect(276, 140, 42, 52, "#c89a5a", 'rx="3"') + rect(281, 146, 32, 40, "#ffffff") + stroke("M286 156 l 22 0 M286 164 l 18 0 M286 172 l 20 0", "#888", 1.2)
+    body += sweat(334, 116, 0.9)
+    return svg(defs, body)
+
+
+def biohacking():
+    # A shirtless tech bro in a garage strapped to car batteries, LED implants glowing under his skin, a smoothie in one hand
+    # and a soldering iron in the other
+    defs = lin("bg", ["#3a3a44", "#22222a"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 168, W, 32, "#5a5a60")
+    body += rect(20, 20, 90, 40, "#2a2a32", 'rx="3"') + lettering("NO LIMITS", 65, 33, 9, "#5affc8", width=1.6)
+    # Car batteries, cables clamped to him
+    for x in (40, 272):
+        body += rect(x, 132, 44, 36, "#1a1a1a", 'rx="3"') + rect(x + 6, 126, 8, 6, "#d0342c") + rect(x + 30, 126, 8, 6, "#3a3a3a")
+        body += lettering("12V", x + 22, 144, 8, "#f2c94c", width=1.4)
+    body += path("M50 126 C 60 80 120 110 140 128", "none", 'stroke="#d0342c" stroke-width="3"')
+    body += path("M306 126 C 300 80 240 110 214 128", "none", 'stroke="#2a2a2a" stroke-width="3"')
+    # The tech bro, shirtless, LEDs under his skin
+    body += person(176, 204, 1.3, SKIN[0], SKIN[0], face="grin", hair="#6a4a2a", glasses="shades")
+    body += stroke("M160 162 q 6 4 12 0 M180 162 q 6 4 12 0 M170 176 l 0 14 M182 176 l 0 14", "#c89a7a", 1.6)
+    for x, y in [(152, 150), (200, 150), (166, 184), (190, 184)]:
+        body += circle(x, y, 3, "#5affff") + circle(x, y, 7, "#5affff", 'opacity="0.3"')
+    body += stroke("M140 128 l -4 -4 M214 128 l 4 -4", "#f2c94c", 2)  # The clamps
+    # A green smoothie and a soldering iron, held up
+    body += stroke("M136 170 L110 120", SKIN[0], 10) + rect(98, 92, 22, 30, "#7ad86a", 'rx="3"') + rect(106, 80, 3, 14, "#f4f4f4")
+    body += stroke("M216 170 L246 118", SKIN[0], 10) + rect(240, 96, 12, 24, "#3a6aa8", 'rx="3"') + stroke("M246 96 L252 78", "#c8c8c8", 3)
+    body += circle(253, 76, 3, "#ffb03a") + stroke("M256 72 q 4 -6 0 -12", "#d8d8d8", 1.2)
+    return svg(defs, body)
+
+
+def blood_transfusion():
+    # An old billionaire in a recliner hooked up to an IV bag labelled TEEN, reading the stock prices, his skin twenty years
+    # younger
+    defs = lin("bg", ["#f4ecd8", "#d8c8a8"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 170, W, 30, "#8a5a3a")
+    body += rect(250, 18, 80, 60, "#d4af37", 'rx="2"') + rect(256, 24, 68, 48, "#6a8aa8")  # A painting of his yacht
+    body += path("M268 58 L312 58 L304 66 L276 66 Z", "#ffffff") + stroke("M290 58 L290 34", "#ffffff", 2)
+    # The IV stand and the bag
+    body += stroke("M96 186 L96 30 M80 30 L112 30", "#a8a8b0", 3) + stroke("M86 190 l 10 -6 l 10 6", "#a8a8b0", 3)
+    body += rect(78, 34, 30, 42, "#c0282a", 'rx="6" opacity="0.9"') + rect(82, 46, 22, 12, "#ffffff")
+    body += lettering("TEEN", 93, 48, 8, "#c0282a", width=1.4)
+    body += path("M93 76 C 92 110 120 120 150 128", "none", 'stroke="#c0282a" stroke-width="2"')
+    # The recliner and the old man in it, white hair, smooth young skin
+    body += path("M120 176 L130 104 C 134 92 154 92 156 104 L160 140 L250 140 C 262 140 266 152 256 160 L240 176 Z", "#5a3a6a")
+    body += person(182, 166, 1.0, SKIN[0], "#2a2a4a", face="smile", hair=OLD_HAIR)
+    body += stroke("M160 146 L148 128", "#2a2a4a", 8) + circle(147, 127, 4, SKIN[0])
+    # The stock prices on his tablet, up and up
+    body += rect(200, 108, 44, 30, "#1a1a1a", 'rx="3"') + stroke("M204 132 l 8 -6 l 8 3 l 8 -10 l 10 -6", "#3ad04a", 2)
+    body += stroke("M196 146 L206 130", "#2a2a4a", 7)
+    return svg(defs, body)
+
+
+CHUNK = {"Utopia": {"Accelerationism": accelerationism, "ColdFusion": cold_fusion, "Antimatter": antimatter,
+                    "Biohacking": biohacking, "BloodTransfusion": blood_transfusion}}
+for _theme, _cards in CHUNK.items():
+    CARDS[_theme].update(_cards)
+
+
 def main():
     count = 0
     for theme, cards in CARDS.items():

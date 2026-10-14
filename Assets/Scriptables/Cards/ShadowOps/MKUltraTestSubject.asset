@@ -62,7 +62,7 @@ MonoBehaviour:
     clean-cut, short neat hair, white shirt and narrow tie, strapped into a 1950s
     lab chair with electrodes taped to his temples, a blackboard of equations behind
     him and a psychologist with a clipboard in the corner.'
-  attack: 3
+  attack: 2
   health: 3
   speed: 1
   turnsUntilOperative: 0

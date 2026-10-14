@@ -57,7 +57,7 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
     - actionType: 6
-      value: 2
+      value: 1
       targetType: 3
       targetModifier: 2
       modifyAttack: 1
@@ -84,7 +84,7 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: Destroy target friendly creature (its Last Will happens); every other
-    friendly creature gets +2 Attack and +2 Health while it stays in play. Funnel
+    friendly creature gets +1 Attack and +1 Health while it stays in play. Funnel
     it all into one with Never Let Them Know Your Next Move.
   artDescription: A soldier in an enemy uniform two sizes too small, its flag sewn
     on upside down, setting fire to his own side's outpost while a film crew records

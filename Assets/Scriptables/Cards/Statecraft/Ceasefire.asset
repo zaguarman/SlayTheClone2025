@@ -38,7 +38,7 @@ MonoBehaviour:
       modifyHealth: 1
       modifySpeed: 0
       statusEffectToApply: 0
-      statusDuration: 2
+      statusDuration: 3
       statusPotency: 0
       cleanse: 0
       purge: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'Mechanics test: Temporal Shield for 2 Days on a slot. The creature
+  designNotes: 'Mechanics test: Temporal Shield for 3 Days on a slot. The creature
     there takes no combat damage, but spells and abilities still hurt it. It stays
     with the slot, not the creature (Static).'
   artDescription: Two generals shaking hands for the cameras in front of a CEASEFIRE

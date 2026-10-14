@@ -59,7 +59,7 @@ MonoBehaviour:
   designNotes: 'Future: multi-slot (takes 2 slots) and Heavy.'
   artDescription: 
   attack: 4
-  health: 7
+  health: 8
   speed: 1
   turnsUntilOperative: 1
   movement: 0

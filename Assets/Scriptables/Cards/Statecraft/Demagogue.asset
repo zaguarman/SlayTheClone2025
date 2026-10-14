@@ -60,7 +60,7 @@ MonoBehaviour:
     battlefield.'
   artDescription: 
   attack: 2
-  health: 3
+  health: 4
   speed: 2
   turnsUntilOperative: 0
   movement: 0
