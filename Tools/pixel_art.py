@@ -3681,64 +3681,70 @@ def private_equity():
 def sleeper_agent():
     img = layer()
     d = ImageDraw.Draw(img)
-    # The suburban house behind
-    shape(img, lambda dr, v: dr.rectangle([140, 46, 186, 78], fill=v), C["sand"], C["tan"], C["white"])
-    d.polygon([(136, 48), (163, 30), (190, 48)], fill=C["red"] + (255,))
-    d.rectangle([156, 60, 166, 78], fill=C["brown"] + (255,))
-    d.rectangle([144, 54, 152, 62], fill=C["sky"] + (255,))
-    d.rectangle([172, 54, 180, 62], fill=C["sky"] + (255,))
-    # His shadow on the grass: a trench coat, a hat, a sniper rifle
-    shadow = mask()
-    sd = ImageDraw.Draw(shadow)
-    S = lambda a, b: (60 - a, 99 - a * 0.06 + b)  # Along the shadow from his feet (a), across it (b)
-    sd.polygon([S(0, -3), S(18, -3), S(18, 3), S(0, 3)], fill=255)  # Legs
-    sd.polygon([S(14, -7), S(40, -4), S(40, 4), S(14, 7)], fill=255)  # The trench coat, flaring at the hem
-    sd.ellipse([S(46, 0)[0] - 3, S(46, 0)[1] - 3, S(46, 0)[0] + 3, S(46, 0)[1] + 3], fill=255)  # The head
-    sd.polygon([S(49, -6), S(51, -6), S(51, 6), S(49, 6)], fill=255)  # The hat's brim
-    sd.polygon([S(51, -3), S(55, -3), S(55, 3), S(51, 3)], fill=255)  # Its crown
-    sd.line([S(30, -6), S(60, -9)], fill=255, width=2)  # The sniper rifle, held across
-    sd.line([S(30, 5), S(36, -6)], fill=255, width=2)  # An arm to it
-    fill(img, shadow, C["forest"])
-    # The dad mowing the lawn: polo shirt, shorts, an earpiece coiled behind his ear
-    man(img, 64, 98, 1.5, C["skin"], C["green"], C["dark_brown"], face="smile", jacket=C["tan"])
-    for k in range(3):
-        d.arc([70, 36 + k * 3, 74, 40 + k * 3], 270, 90, fill=C["silver"] + (255,))
-    d.line([(72, 62), (90, 74)], fill=C["skin"] + (255,), width=3)
-    d.line([(90, 74), (102, 70), (104, 88)], fill=C["grey"] + (255,), width=2)  # The mower's handle
-    shape(img, lambda dr, v: dr.rectangle([98, 86, 124, 96], fill=v), C["red"], C["wine"], C["pink"])
-    for wx in (102, 120):
-        d.ellipse([wx - 3, 94, wx + 3, 100], fill=C["ink"] + (255,))
+    # The agent (the Matrix look: dark suit, slicked-back hair, slim black shades, a coiled earpiece) asleep at a table,
+    # his head down on his folded arms
+    shape(img, lambda dr, v: dr.ellipse([44, 30, 148, 110], fill=v), C["night"], C["ink"], C["forest"])  # His back and shoulders
+    shape(img, lambda dr, v: dr.rectangle([10, 74, 182, 82], fill=v), C["grey"], C["slate"], C["silver"])  # The table
+    shape(img, lambda dr, v: dr.rectangle([16, 82, 176, H + 2], fill=v), C["slate"], C["navy"])
+    for x0, x1 in ((50, 100), (92, 142)):  # Folded arms
+        shape(img, lambda dr, v: dr.ellipse([x0, 60, x1, 78], fill=v), C["night"], C["ink"], C["forest"])
+    # The head, tilted down onto the arms (every point turned, so the lines stay crisp)
+    a = math.radians(22)
+    ca, sa = math.cos(a), math.sin(a)
+    T = lambda x, y: (96 + x * ca - y * sa, 46 + x * sa + y * ca)
+    ell = lambda x0, y0, rx, ry, t0=0.0, t1=2 * math.pi, n=40: [T(x0 + rx * math.cos(t0 + (t1 - t0) * k / n), y0 + ry * math.sin(t0 + (t1 - t0) * k / n)) for k in range(n + 1)]
+    ink = C["ink"] + (255,)
+    d.polygon([T(-9, 12), T(9, 12), T(0, 22)], fill=C["white"] + (255,))  # The collar
+    d.polygon([T(-2, 13), T(2, 13), T(0, 21)], fill=C["night"] + (255,))
+    shape(img, lambda dr, v: dr.polygon(ell(-14, 1, 2.5, 4), fill=v), C["skin"], C["skin_dark"])  # An ear
+    shape(img, lambda dr, v: dr.polygon(ell(0, 0, 13, 16), fill=v), C["skin"], C["skin_dark"], C["white"])
+    d.polygon(ell(0, -1, 13.5, 16.5, math.pi * 1.05, math.pi * 1.95) + [T(9, -9), T(0, -12), T(-9, -9)], fill=C["dark_brown"] + (255,))  # Slicked back
+    for x in (-6, -1, 4):
+        d.line([T(x, -14), T(x + 3, -9)], fill=C["plum"] + (255,))
+    for x0, x1 in ((-10, -2), (2, 10)):  # The shades
+        d.polygon([T(x0, -3), T(x1, -3), T(x1 - 1, 2), T(x0 + 1, 2)], fill=ink)
+        d.line([T(x0 + 1, -2), T(x0 + 3, -2)], fill=C["slate"] + (255,))
+    d.line([T(-2, -2), T(2, -2)], fill=ink)
+    d.line([T(-10, -2), T(-13, -1)], fill=ink)
+    d.line([T(0, 3), T(1, 6)], fill=C["skin_dark"] + (255,))
+    d.line([T(-3, 10), T(3, 10)], fill=C["skin_dark"] + (255,))  # A slack mouth
+    for k in range(6):  # The earpiece cord coiling down into his collar
+        d.line([T(-15 + (k % 2) * 2, 4 + k * 2), T(-13 - (k % 2) * 2, 5 + k * 2)], fill=C["silver"] + (255,))
     img = outline(img)
-    for x in range(96, 128, 4):  # Grass flying
-        dot(img, x + 2, 84 - (x % 3) * 2, C["green"])
+    d = ImageDraw.Draw(img)
+    dx, dy = T(3, 12)
+    d.line([dx, dy, dx, dy + 4], fill=C["sky"] + (255,))  # A thread of drool
+    pixel_text(img, 118, 30, "Z", C["white"])
+    pixel_text(img, 126, 20, "Z", C["white"], 2)
+    pixel_text(img, 138, 6, "Z", C["white"], 3)
     return img
 
 
 def red_herring():
     img = layer()
     d = ImageDraw.Draw(img)
-    # A red herring in a detective's trench coat and hat, pointing a fin dramatically off to the side
+    # A red herring in a detective's fedora, its eye sliding shiftily aside
     shape(img, lambda dr, v: dr.polygon([(30, 50), (14, 36), (18, 56), (14, 76), (30, 62)], fill=v), C["red"], C["wine"], C["pink"])  # The tail
-    shape(img, lambda dr, v: dr.ellipse([24, 38, 120, 76], fill=v), C["red"], C["wine"], C["pink"])
-    shape(img, lambda dr, v: dr.polygon([(44, 44), (98, 42), (104, 74), (40, 76)], fill=v), C["tan"], C["brown"], C["sand"])  # The trench coat
-    d.line([(70, 42), (70, 76)], fill=C["brown"] + (255,))
-    d.rectangle([44, 58, 102, 61], fill=C["dark_brown"] + (255,))  # Its belt
-    d.rectangle([68, 58, 72, 61], fill=C["amber"] + (255,))
-    d.polygon([(94, 42), (104, 40), (100, 54)], fill=C["sand"] + (255,))  # The collar up
-    shape(img, lambda dr, v: dr.rectangle([96, 26, 122, 36], fill=v), C["brown"], C["dark_brown"], C["tan"])  # The fedora
-    shape(img, lambda dr, v: dr.rectangle([90, 34, 128, 38], fill=v), C["brown"], C["dark_brown"], C["tan"])
-    d.rectangle([97, 32, 121, 34], fill=C["ink"] + (255,))
-    d.ellipse([106, 44, 114, 52], fill=C["white"] + (255,), outline=C["ink"] + (255,))  # A shifty eye, glancing aside
-    d.rectangle([107, 47, 109, 49], fill=C["ink"] + (255,))
-    d.line([(116, 60), (120, 58)], fill=C["wine"] + (255,))
-    # The fin, flung out to point off to the side, back over its shoulder
-    shape(img, lambda dr, v: dr.polygon([(66, 48), (56, 40), (30, 18), (20, 12), (26, 22), (52, 50)], fill=v), C["red"], C["wine"], C["pink"])  # Pointing back the way it came
-    d.line([(56, 44), (28, 18)], fill=C["wine"] + (255,))
+    shape(img, lambda dr, v: dr.polygon([(50, 42), (60, 30), (74, 28), (80, 40)], fill=v), C["red"], C["wine"], C["pink"])  # The dorsal fin
+    body = shape(img, lambda dr, v: dr.ellipse([24, 38, 120, 76], fill=v), C["red"], C["wine"], C["pink"])
+    bm = body.load()
+    for row, y in enumerate(range(48, 70, 5)):  # Scales
+        for x in range(40 + (row % 2) * 3, 92, 6):
+            if bm[x, y] and bm[x + 4, y + 4] and bm[x, y + 5]:
+                d.arc([x, y, x + 6, y + 6], 90, 270, fill=C["wine"] + (255,))
+    d.line([(96, 44), (92, 58), (96, 72)], fill=C["wine"] + (255,))  # The gill
+    shape(img, lambda dr, v: dr.polygon([(74, 62), (86, 60), (82, 70), (72, 72)], fill=v), C["red"], C["wine"])  # A side fin
+    d.ellipse([104, 44, 114, 54], fill=C["white"] + (255,), outline=C["ink"] + (255,))  # The shifty eye
+    d.rectangle([105, 47, 107, 50], fill=C["ink"] + (255,))
+    d.line([(112, 62), (118, 60)], fill=C["wine"] + (255,))
+    # The fedora, sat square on its head
+    shape(img, lambda dr, v: dr.rectangle([96, 28, 116, 40], fill=v), C["brown"], C["dark_brown"], C["tan"])
+    shape(img, lambda dr, v: dr.rectangle([90, 38, 122, 42], fill=v), C["brown"], C["dark_brown"], C["tan"])
+    d.rectangle([96, 35, 116, 37], fill=C["ink"] + (255,))
+    d.line([105, 28, 107, 30], fill=C["dark_brown"] + (255,))
     img = outline(img)
     d = ImageDraw.Draw(img)
-    for k in range(3):  # "Over there!"
-        d.line([2 + k * 5, 4 + k * 2, 8 + k * 5, 6 + k * 2], fill=C["white"] + (255,))
-    for x, y in ((128, 24), (134, 16), (130, 8)):
+    for x, y in ((128, 30), (134, 22), (130, 14)):
         d.ellipse([x, y, x + 3, y + 3], outline=C["white"] + (255,))
     return img
 
@@ -3752,10 +3758,29 @@ CARDS += [
     ("Zealot", "street", zealot),
     ("WebScraping", "room_day", web_scraping),
     ("PrivateEquity", "street", private_equity),
-    ("SleeperAgent", "field", sleeper_agent),
+    ("SleeperAgent", "matrix", sleeper_agent),
     ("RedHerring", "underwater", red_herring),
 ]
 BACKGROUNDS.update({"bazaar": bg_bazaar, "street": bg_street})
+
+
+def bg_matrix():
+    """Falling green code on black."""
+    img = layer()
+    gradient(img, [C["ink"], C["night"]], 0, H)
+    rnd = random.Random(157)
+    glyphs = list("0123456789ABCDEFGHKMNRSTUXYZ")
+    for x in range(2, W, 6):
+        top, length = rnd.randint(-40, 60), rnd.randint(4, 12)
+        for k in range(length):
+            y = top + k * 7
+            if 0 <= y < H:
+                col = C["green"] if k == length - 1 else (C["dark_green"] if k > length - 4 else C["forest"])
+                pixel_text(img, x, y, rnd.choice(glyphs), col)
+    return img
+
+
+BACKGROUNDS["matrix"] = bg_matrix
 
 
 def main():

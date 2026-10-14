@@ -97,6 +97,9 @@ USER_NOTES = {
     "Monkey Hand": ["2026-10-14 (pixel art): remake it after the user's reference, the monkey's paw scene from a cartoon: in "
                     "a bazaar, a man in a red fez holding the shrivelled paw up at a cringing old merchant in a grey turban "
                     "(drawn as our own characters, not the cartoon's)."],
+    "Red Herring": ["2026-10-14 (pixel art): no suit and no fin pulling at it; keep the hat, centred on the head."],
+    "Sleeper Agent": ["2026-10-14 (pixel art): Agent Smith from The Matrix (the user's still) asleep on a table: drawn as the "
+                      "Matrix-agent look (dark suit, slicked hair, slim black shades, coiled earpiece), falling green code behind."],
     "Hollowed-Out Volcano Lair": ["2026-10-14 (pixel art): like the You Only Live Twice set (the user's still): inside the "
                                   "crater, the round opening to the sky, a helicopter, the rocket in its gantry, the helipad, "
                                   "the world map, the control room, the crew in their jumpsuits and white helmets."],

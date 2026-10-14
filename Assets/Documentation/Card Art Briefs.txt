@@ -273,6 +273,7 @@ Deep Cover (creature)
     Two men facing each other in front of a mirror, each peeling off a latex mask of the other's face.
 Sleeper Agent (creature)
     A suburban dad mowing his lawn in a polo shirt, an earpiece coiled behind his ear, while his shadow on the grass wears a trench coat and holds a sniper rifle.
+    USER: 2026-10-14 (pixel art): Agent Smith from The Matrix (the user's still) asleep on a table: drawn as the Matrix-agent look (dark suit, slicked hair, slim black shades, coiled earpiece), falling green code behind.
 Human Intelligence (spell)
     Two spies on a park bench back to back, one reading a newspaper with eye holes cut in it, the other slipping a card into his coat pocket behind the paper, pigeons watching.
 Wet Work (creature)
@@ -515,6 +516,7 @@ Trolley Problem (spell)
     USER: 2026-10-14: the man at the lever stands back from the tracks, beyond the split, never between them.
 Red Herring (spell)
     A red fish in a detective's trench coat and hat, pointing a fin dramatically off to the side.
+    USER: 2026-10-14 (pixel art): no suit and no fin pulling at it; keep the hat, centred on the head.
 Imposter Syndrome (spell)
     A little space crewmate in a spacesuit and visor sitting at an office desk under a SENIOR ENGINEER name plate, sweating.
 Ship of Theseus (creature)
