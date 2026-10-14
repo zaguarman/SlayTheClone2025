@@ -1,0 +1,560 @@
+Card Art Briefs
+
+Every card's picture: the brief it's drawn from, and the user's own notes where they gave some (those win when
+the picture is redrawn). Written by Tools/art_briefs.py from the deck generator's .Picture(...) briefs and the
+drawing comments in generate_card_art.py; the user's notes live in that script. Rerun it after any card or art
+change.
+
+RULES
+
+  Never redraw or tweak a card's art unless the user asks for that card; quirky is fine. Ask before drawing cards Claude proposes.
+  Keep the background apart from the subject (the character or thing portrayed): one background per faction or scene,
+    drawn once and reused, the subject on its own layer over it.
+  The user's notes (USER) win over the brief when a picture is redrawn.
+
+
+CORPORATE
+
+Headhunter (spell)
+    A slick recruiter in a sharp suit reeling in a startled employee from a rival's office tower with a fishing rod baited with a stock-options contract.
+Counterfeit (creature)
+    A knockoff superhero in a cheap costume with a misspelled logo on the chest, flexing proudly in front of a mirror that shows a real muscled hero.
+Private Equity (creature)
+    A vampire banker in a pinstripe suit sucking gold coins out of a little family shop through a long straw.
+Shell Company (creature)
+    A street hustler playing the shell game with three walnut shells, each stamped with a different tax haven's flag, a gold coin under one.
+Work Shift Rotation (creature)
+    Two warehouse workers at the clocking-in machine: the exhausted one hands his hi-vis vest, still warm, to the fresh one.
+Unpaid Intern (creature)
+    (from the drawing) A tray of coffees for everyone but them
+Inhuman Resources (creature)
+    (from the drawing) A stack of pink slips and the stamp that approves them
+Micromanager (creature)
+    (from the drawing) Magnifying glass over every little thing
+Multilevel Marketing Seller (creature)
+    (from the drawing) The pyramid of recruits behind the seller
+Day Trader (creature)
+    A sweating trader in a headset, worried, under three wall screens of stock charts, two up and one crashing; office towers behind.
+Pluriemployed Hustler (creature)
+    A delivery worker in a teal cap running past (speed lines) with a delivery box, a row of five rating stars above him; office towers behind.
+Unicorn (creature)
+    A white unicorn startup with a gold horn and a rainbow mane, standing on fire, a red chart line falling behind it; office towers behind.
+Multimillionaire Philanthropist (creature)
+    (from the drawing) A giant ceremonial cheque, mostly tax deduction
+Fat Tony (creature)
+    A mobster in a fedora, dark shirt and red tie, smirking with a smoking cigar; office towers behind.
+    USER: Keep it as it is (a historical figure).
+Charles Ponzi (creature)
+    A smiling little man in a suit beside a pyramid of champagne glasses, the top one overflowing with gold coins; office towers behind.
+Margin Call (spell)
+    (from the drawing) An old desk phone that won't stop ringing
+Hostile Takeover (spell)
+    A grey shark in a red tie swimming through the office towers, jaws open, a red chart line falling behind it.
+Mass Layoffs (spell)
+    A cardboard box of desk belongings (a plant, a mug) on its way to the exit door, a red chart line falling; office towers behind.
+Team Building Exercise (spell)
+    Three glum coworkers in party hats under bunting; office towers behind.
+Dead Cat Bounce (spell)
+    (from the drawing) The cat, mid-bounce, not enjoying it
+Business Expense (spell)
+    A CEO in a full three-piece suit, briefcase still in hand, being walked into a jail cell by a guard, while he hands the guard a receipt stamped BUSINESS EXPENSE.
+    USER: A guy who looks like a CEO, in a full suit, going to jail.
+Taxpayer Funds Venture Capital Profits (spell)
+    (from the drawing) The public pays in, one coin at a time ---------------------------------------------------------------- Statecraft cards
+Cleaning Robot (creature)
+    A sleek, glossy robot vacuum with a glowing megacorp logo, shoving a pile of tiny office workers and their desks into a corner. A "Subscription expired: suction limited" pop-up flashes on its screen.
+Tax-Exempt Corruption (spell)
+    A megachurch whose cross is a giant gold dollar sign, a private jet parked by the door and a big red TAX EXEMPT stamp across the sky.
+Solidarity Towards The Small Businessman (spell)
+    A fan-subscription website called ONLYFUNDS: the board-game tycoon (top hat, white moustache) poses in a pink bathrobe on a live webcam, a SUBSCRIBE button and a pile of tips beside him, while tired workers in hi-vis vests and scrubs send him their coins.
+Inheritance (spell)
+    Grandma at peace in an open coffin, hands folded on lilies, while her grandson in his best suit grins over her, fanning out the banknotes from her will.
+NDA (spell)
+    A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a towering stack of contracts between them stamped CONFIDENTIAL.
+Inflation (spell)
+    A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher.
+
+STATECRAFT
+
+Supply Depot (spell)
+    A huge military warehouse with endless shelves of crates, a forklift carrying a soldier in a crate labelled REINFORCEMENTS, a clerk stamping a form at the front desk.
+Golden Dome (creature)
+    A shimmering golden dome of light over one fat senator on a deckchair, while missiles rain on the rest of the city outside it.
+Presidential Pardon (spell)
+    A smiling president signing a giant pardon with a huge flourish for a creature in an orange jumpsuit still holding a smoking gun.
+Congruent Use of Force (creature)
+    A soldier firing a huge gatling gun at a single mosquito, the whole street behind it riddled with holes.
+Weapons of Mass Distraction (spell)
+    A giant public screen holds a crowd: on one half a blocky-game YouTuber screams at his pickaxe, on the other a grinning giveaway YouTuber in a hoodie waves a giant FREE check. Behind it, soldiers quietly shuffle the enemy's tents around.
+King Emeritus (creature)
+    (from the drawing) The yacht he kept
+Spite-Elected President (creature)
+    A shouting blond president at a podium with a gold star, an American flag behind him; sunburst.
+Police Officer Productivity Target (creature)
+    (from the drawing) The quota: tally marks, each a person
+Internal Revenue Service (creature)
+    A tax collector in a top hat and round glasses beside a money bag and gold coins; sunburst.
+Mercenaries (creature)
+    A soldier in a helmet and sunglasses carrying a rifle, running (speed lines), gold coins at his feet; sunburst.
+Man o' War (creature)
+    A three-masted wooden warship with white sails and a row of gun ports on the sea; sunburst.
+Ministry for Equality (creature)
+    (from the drawing) Barbed wire along the roof
+Supreme Court (creature)
+    A white columned courthouse with a judge's gavel beside it; sunburst.
+Protocol Enforcers (creature)
+    Two bodyguards in black suits and dark glasses with earpieces behind a gold velvet rope; sunburst.
+Demagogue (creature)
+    A grinning man in red shouting through a megaphone, sound waves spreading; sunburst.
+Red Tape (spell)
+    A soldier at a deployment checkpoint wrapped head to toe in red tape, while a bored clerk behind the window stamps "FORM 27-B MISSING" and a take-a-number display reads "Now serving: 0001. Yours: 9847".
+Preemptive Strike (spell)
+    A general in a war room proudly pointing at a map where a missile hits a quiet village labelled "Possible Future Threat", a MISSION ACCOMPLISHED banner behind him and an intelligence report on the table: "Source: trust me bro".
+Martial Law (spell)
+    A barred jail window under a crescent moon at night, searchlights sweeping.
+Kakistocracy (spell)
+    (from the drawing) A golden throne, and the least qualified occupant available
+Mutually Assured Destruction (spell)
+    A mushroom cloud on an orange sky, two missiles flying toward each other from opposite corners.
+Panem Et Circenses (spell)
+    (from the drawing) The arena in the back, free bread in front ---------------------------------------------------------------- Zeitgeist cards
+Diplomat (creature)
+    A young heir lounging in a leather chair at a summit table, feet up, a gold name plate reading "AMBASSADOR (BY BIRTH)". Behind him, a wall of portraits of his father and grandfather in the very same chair.
+Raised Security Level (spell)
+    A bureaucrat solemnly flipping a color-coded threat sign from yellow to orange, while one guard in comically oversized armor blocks a door.
+Lost Landmine (spell)
+    A rusty landmine half-buried in a children's sandbox, next to a faded government sign: "AREA CLEARED. PROBABLY. - Ministry of Defence, 1998".
+Ceasefire (spell)
+    Two generals shaking hands for the cameras in front of a CEASEFIRE banner, each hiding a grenade behind his back.
+Violence Monopoly (spell)
+    The board-game tycoon (top hat, white moustache, tailcoat) as the police: a badge on his chest, a baton raised in his white glove, glaring straight at you from beside the GO TO JAIL corner.
+
+ZEITGEIST
+
+Multipass (spell)
+    The Multipass shown to the camera, as in the film: on the left the cab driver with buzzed fair hair and stubble, an orange shirt under a dark vest; on the right the young woman with the bright orange bob and fringe, in a white top with orange suspenders, holding the Multipass up beside her face; a dim, crowded hall behind them.
+    USER: 2026-10-14: after the film still (The Fifth Element).
+Drug Smuggler (creature)
+    A sunburnt backpacker with dreadlocks grinning at an airport security gate, his enormous backpack bulging with cards poking out of every zip.
+Not on My Watch (creature)
+    A fierce grandma in a crossing-guard vest holding up a stop sign, nervous creatures huddled behind her in a blanket fort.
+One for the Road (spell)
+    A pub regular raising two pints at once under a CLOSING TIME sign, the barman already putting chairs on tables.
+Chain Smoker (creature)
+    A wiry man smoking a length of steel chain like a cigarette, the far end swinging like a flail, a cloud of smoke around his head.
+Karen (creature)
+    (from the drawing) The finger, pointed at the manager's office
+Boomer (creature)
+    An angry old man with white hair and glasses shaking his fist; a vaporwave sunset and grid behind him, a cloud.
+Hipster (creature)
+    A bearded man in a beanie and round glasses with a takeaway coffee; vaporwave sunset and grid.
+Underdog (creature)
+    A sad brown puppy with a bandage on its head; vaporwave sunset and grid.
+Hikikomori (creature)
+    A pale recluse in headphones lit by the glow of a tablet; vaporwave sunset and grid.
+Reality TV Star (creature)
+    A woman in sunglasses and a pink top under a spotlight and sparkles, faceless grey extras around her; vaporwave sunset and grid.
+Scam Artist (creature)
+    (from the drawing) The course: a book about selling books
+Football Hooligans (creature)
+    Three shouting fans in green with scarves, a flare burning behind them; vaporwave sunset and grid.
+Antihero (creature)
+    A scowling figure in a dark hood with a cigarette; vaporwave sunset and grid.
+Bodybuilder (creature)
+    A grinning bodybuilder in a headband lifting a barbell overhead, an energy drink can with a lightning bolt beside him; vaporwave sunset and grid.
+Plot Armor (creature)
+    A close-up of a chest: two hands hold an open jacket wide, Superman style, showing a steel breastplate stamped PLOT.
+YOLO (spell)
+    A shirtless guy mid-backflip off a garage roof toward a tiny inflatable pool, filming himself with a selfie stick, while his friends below are already dialing for an ambulance.
+This Is Fine (spell)
+    The meme dog in a little bowler hat at a table with his coffee, the room on fire around him, saying THIS IS FINE.
+Strike (spell)
+    (from the drawing) A big fluffy fur hat: a round crown, a thick folded-up front and ear flaps hanging down
+Russian Roulette (spell)
+    A Russian woman in a fur ushanka spinning a roulette wheel of six slices, one of them a skull, onion domes in the snow behind her.
+Toxic Positivity (spell)
+    A huge yellow smiley face with a crack running through it and a sticking plaster on its cheek; vaporwave background.
+Mental Health Day (spell)
+    (from the drawing) ---------------------------------------------------------------- Backgrounds of the factions without a deck yet
+Delivery Cyclist (creature)
+    A rider with a huge square thermal backpack, mid-hop over a gridlocked row of cars, phone strapped to the handlebars showing a 1-star rating.
+Zeitgeist (spell)
+    A huge friendly ghost made of hashtags and likes floating over a crowd whose faces are lit blue by their phones.
+Rush Hour (spell)
+    Gridlocked traffic at dusk, every car honking, while a snail with a briefcase glides past in the empty bus lane.
+No Glove, No Love (spell)
+    A woman wagging her index finger: no, no. In her other hand, a little foil packet held up: this first.
+We Are Not The Same (spell)
+    The meme: two identical masked heroes in red suits with web lines, pointing at each other in a dim warehouse.
+    USER: The Spider-Man meme, pointing at each other.
+
+DIGITAL SOCIETY
+
+Doomscrolling (spell)
+    The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed and expressionless at 3AM, holding up a phone (we see its black back) where the meme had a computer, its glow on his face, cards drifting up out of the feed.
+    USER: A guy like the wojak meme, but on a phone instead of a computer.
+Crypto "Entrepreneur" (creature)
+    A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand.
+Digital Nomad (creature)
+    A Tuareg nomad in a white turban and face veil, sitting cross-legged on a sand dune, typing on a laptop on his knees.
+Keyboard Warrior (creature)
+    A heavyset warrior in a stained hoodie and a cape, holding a mechanical keyboard over his head like a greatsword, a gaming headset for a helmet and energy drinks hanging from his belt.
+Dogpile (spell)
+    A huge, happy pile of dogs (corgis, labradors, a confused pug on top) burying one person, of whom only a waving hand sticks out.
+    USER: A big pile of dogs on top of someone.
+Rage Bait (spell)
+    A phone screen with a glowing red notification, reflected in the furious eyes of the person holding it.
+Its A Trap (spell)
+    The free-boat sting: a bald, stubbled Homer Simpson strolls into a police station waving a letter, "CONGRATULATIONS! YOU'VE WON A FREE BOAT!", while the grinning police chief behind the counter slides him a pile of unpaid fines instead. A "FREE BOAT PICKUP" banner hangs over the open door of a holding cell.
+    USER: Homer and the free boat: the trap where they want to get him to the police office to give him a fine.
+NPC (creature)
+    A crowd of identical grey, featureless NPC Wojak faces, every speech bubble repeating the same sentence, one of them proudly holding a "Think For Yourself" sign.
+Chronically Online (creature)
+    A pale figure in a dark room lit only by three monitors, a cork board of red strings and printed memes behind them, an energy-drink pyramid on the desk.
+Catfish (creature)
+    A cat and a goldfish in love: the cat presses its face to the fishbowl, the fish kisses the glass back, hearts all around.
+    USER: A cat and a fish loving each other.
+Conspiracy Theorist (creature)
+    A man in a tinfoil hat pointing at a cork board of photos joined by red string, the biggest photo a pigeon labelled DRONE.
+Clickbait (spell)
+    A video thumbnail: a man with a hugely shocked face, a big red arrow and a red circle around absolutely nothing.
+Cancelled (spell)
+    A man at a podium facing a crowd that holds torches, pitchforks and phones up to film him.
+Meta Group Chat (creature)
+    A messenger group chat in the familiar green-and-beige look: THE JURY (47 members), gavels and skulls with blue read ticks under a blurry photo of one guy, while the guy himself sweats alone outside the phone.
+    USER: Redo it with a WhatsApp-like feel.
+Social Panopticon (spell)
+    A real panopticon seen from inside: a ring of barred cells on two floors around a central watchtower with a single recording eye, every inmate lit by their own phone.
+
+SHADOW OPS.
+
+Cleaner (creature)
+    A calm man in a cleaning company jumpsuit, a mop in one hand and a silenced pistol in the other, two neat holes in a target behind him.
+Political Decoy (creature)
+    Two identical politicians in matching suits: one waves from a balcony, the other ducks behind the curtain.
+Burn Notice (spell)
+    The Banksy auction stunt: a spy's portrait, painted in the style of Girl with Balloon, has just sold at auction, and the canvas is sliding down through a shredder hidden in its gilded frame, the strips stamped BURN NOTICE. In the audience, the spy himself watches his face being shredded.
+    USER: A Banksy painting shredding itself.
+Counter-Intelligence (spell)
+    A remake of the first Counter-Strike box cover: a counter-terrorist and a terrorist in a tense standoff in a dusty corridor, but both are accountants in thick glasses, aiming pocket calculators at each other like rifles, ledgers fluttering around them.
+    USER: Like the first Counter-Strike cover, but instead of weapons they have thick glasses and calculators aimed at each other.
+Mole (creature)
+    A mild office clerk in a cardigan and lanyard at his desk, a mole's snout and claws poking out of his sleeves, a tunnel opening under his chair that leads to a foreign embassy's flag.
+Signal Jammer (creature)
+    An agent in a black suit with a backpack bristling with antennas, standing in a busy street where everyone stares in horror at phones showing "No Service".
+Deep Cover (creature)
+    Two men facing each other in front of a mirror, each peeling off a latex mask of the other's face.
+Sleeper Agent (creature)
+    A suburban dad mowing his lawn in a polo shirt, an earpiece coiled behind his ear, while his shadow on the grass wears a trench coat and holds a sniper rifle.
+Human Intelligence (spell)
+    Two spies on a park bench back to back, one reading a newspaper with eye holes cut in it, the other slipping a card into his coat pocket behind the paper, pigeons watching.
+Wet Work (creature)
+    A hitman in a dripping raincoat under a black umbrella in the rain, pressing a red TERMINATED stamp onto a personnel file with a photo clipped to it.
+Perfectly Timed Camera Malfunction (spell)
+    A security monitor showing static and SIGNAL LOST at 02:13, while at the edge of the frame a gloved hand pulls the camera's cable out of the wall.
+Smoke And Mirrors (spell)
+    A stage magician in a tuxedo vanishing a tank behind a cloud of smoke, while a row of mirrors shows a dozen identical tanks to a baffled general.
+Eavesdrop (spell)
+    A spy in the next diner booth pressing a drinking glass to the partition, a tower of empty glasses beside him and a waitress refilling his coffee without looking.
+Tapped Communications (spell)
+    Split in two by a lightning bolt: on one side a man chatting happily on his phone, on the other side of the call a blinking server.
+Whistleblower (creature)
+    A man in a hoodie blowing a sports whistle, classified documents spilling out of every pocket.
+Involuntary Free Polonium Giveaway (spell)
+    A gentleman in a bowler hat at a bus stop, the tip of his black umbrella dripping glowing green drops that sizzle on the pavement.
+Control Room (creature)
+    A dark room with a wall of surveillance monitors, two operators asleep in their chairs with headsets on, cold coffee.
+    USER: Delete the guy floating in the control room.
+Humanitarian Trafficking Action (spell)
+    On a dusty airstrip, a crate stencilled MEDICINE with its lid slid open on rifles: the aid official waves at the camera flashes while, behind the crate, a man in sunglasses counts the cash.
+Dead Man's Switch (creature)
+    A sweating man in a cheap hotel room, his thumb pressed down on a big red button wired to his wrist, a briefcase of documents and dynamite at his feet, a DO NOT DISTURB sign on the door.
+Fell Out of a Window (spell)
+    A grand apartment window flung open, curtains billowing over onion domes in the snow, a tiny man in a suit falling past outside, while a man in a tracksuit inside calmly closes the window.
+Coup d'État (spell)
+    A general in a peaked cap and mirrored sunglasses settling into the presidential chair, still warm, while two soldiers swap the president's portrait on the wall for his own; tanks through the window.
+Operation Paperclip (spell)
+    A giant paperclip hooking a bespectacled scientist in a lab coat by the collar and lifting him from one flag onto another, rocket blueprints fluttering out of his pockets.
+False Flag Operation (spell)
+    A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost while a film crew records it and a general reads an outrage speech from a card.
+Never Let Them Know Your Next Move (spell)
+    A row of agents in identical grey suits passing their pistols, knives and grenades down the line to one man at the end, who disappears under a mountain of weapons with only his sunglasses showing.
+Frame Job (spell)
+    A smiling agent pressing a sleeping man's thumb onto a smoking gun with tweezers, a police lineup board behind them already labelled with the sleeper's name.
+Devil's Breath (spell)
+    A woman blowing a puff of glittering white powder off her palm into a businessman's face; dazed and smiling, he hands her his watch, his wallet and the keys to an armored car.
+He Didn't Kill Himself (spell)
+    A sheet pulled over a body on a morgue gurney, but the toes sticking out wear flip-flops with a fresh tan line, and the toe tag is a postcard from a tropical island.
+Extraction (spell)
+    A black helicopter at night hoisting an agent off a rooftop on a rope ladder, searchlights sweeping, his trench coat flapping and a briefcase handcuffed to his wrist.
+Witness Protection Program (spell)
+    A man in a terrible fake moustache and a Hawaiian shirt mowing a lawn in a quiet cul-de-sac, his old mugshot pinned to a corkboard behind the window, a federal agent in a parked car pretending to read a newspaper.
+Death By "Natural Causes" (spell)
+    A coroner signing a death certificate marked NATURAL CAUSES with a flourish, while on the gurney beside him a tiny dart with a red feather sticks out of the dead man's neck.
+Asset Recruitment (spell)
+    A handler in a dim bar sliding a thick envelope and a photograph across the table to a nervous soldier; the photo shows the soldier with a woman who isn't his wife.
+If I Told You, I'd Have to Kill You (creature)
+    A spy in a dark suit leaning in at a cocktail party to whisper into an eager journalist's ear, while under the table his other hand quietly screws a silencer onto a pistol.
+Lone Gunman (creature)
+    A bewildered young man in a cheap suit shoved in front of flashing press cameras, holding a rifle he has clearly never seen before, a LONE GUNMAN placard hung round his neck, while two men in dark suits and hats slip away behind a picket fence on a grassy knoll.
+Glomar Response (spell)
+    A press officer at a podium with a perfectly blank face, every line on his teleprompter blacked out with thick redaction bars, reporters raising their hands in vain.
+Sabotage (spell)
+    A tank that has just fired, its barrel peeled back like a banana and the crew blackened and blinking, while a saboteur in coveralls tiptoes away with an empty sack marked SUGAR - FOR THE FUEL TANK.
+Ghost Army (spell)
+    Two soldiers carrying a full-size rubber tank over their heads like a canoe across a muddy field at dawn, a third pumping up another with a bicycle pump, while an enemy spotter plane circles above.
+Inflatable Tank (creature)
+    A rubber tank half-deflated on a field, its barrel drooping, a soldier patching a hole with a bicycle repair kit.
+Sherman Tank (creature)
+    A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks.
+HAARP (spell)
+    A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy tent miles away, a technician in a parka sipping coffee by the control panel.
+    USER: 2026-10-14: an underground installation with a device like a strong laser pointed at an immense hole in the ground, toward the Earth's center (an earthquake card).
+Social Engineering (spell)
+    A smiling man in a hi-vis vest with a clipboard and a fake lanyard holding a door open for a whole office of employees, each one handing him their badge and password on a sticky note as they pass.
+Bilderberg Membership (spell)
+    A candlelit dining hall in an alpine hotel, a long table of old men in dinner jackets trading sealed envelopes across the silverware, a doorman outside the window turning away the press.
+Dead Drop (spell)
+    A park bench in autumn, a man in a trench coat feeding pigeons while sliding a hollowed-out brick behind him with his heel, another man on the next bench reading an upside-down newspaper.
+The Golden Gun (spell)
+    A gold pistol pieced together from a cigarette case, a lighter, a cufflink and a fountain pen, lying on black velvet beside a single golden bullet engraved with a name.
+Die Another Day (spell)
+    A spy in a torn tuxedo surfing a towering wave on a car door past a collapsing ice palace, checking his wristwatch.
+Licence to Kill (spell)
+    A civil servant in sleeve garters at a cluttered desk stamping a laminated LICENCE TO KILL card with a smirking agent's passport photo, a tray of forms marked 00 beside him.
+Shaken, Not Stirred (spell)
+    A bartender shaking a cocktail shaker while explosions rock the casino behind him, an agent in a tuxedo calmly waiting at the bar for his martini, not a hair out of place.
+GoldenEye (spell)
+    A satellite dish shaped like a golden eye in orbit firing a ripple of light at a city at night; below, every window goes dark at once and a man's toaster pops out smoking.
+Supply Chain Attack (spell)
+    A cheerful delivery driver unloading crates of identical routers at a ministry's loading dock, each box with a tiny skull sticker under the barcode, while a line of bureaucrats in grey suits signs for them.
+Hollowed-Out Volcano Lair (spell)
+    A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass.
+Femme Fatale (creature)
+    A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in the chair beside her is squeezed between her crossed legs, his medals popping off.
+MK Ultra Test Subject (creature)
+    Ted Kaczynski as the young Harvard math prodigy, before the woods: clean-cut, short neat hair, white shirt and narrow tie, strapped into a 1950s lab chair with electrodes taped to his temples, a blackboard of equations behind him and a psychologist with a clipboard in the corner.
+    USER: Make it look like the Unabomber before going into the woods.
+
+TECH
+
+Web Scraping (spell)
+    A cat scratching at a laptop screen, claw marks tearing the web page open and spilling out cards and data.
+DDOS Attack (spell)
+    A server rack melting under an avalanche of tiny envelope icons, smart fridges and toasters in the background, each with a red glowing eye.
+Antivirus (spell)
+    A panda in shining knight's armor, an antivirus logo on its shield, blocking a glowing spell scroll at a castle gate, while the castle walls behind it are plastered with its own pop-ups: "RENEW NOW - 60% OFF".
+    USER: Put a panda on it.
+Script Kiddie (creature)
+    A twelve-year-old in an oversized gaming chair, hoodie up, double-clicking "H4CK3R T00L.exe" while a bank vault door swings open on his second monitor.
+Legacy Code (creature)
+    A beige mainframe held together with duct tape in a dusty basement, a yellowed sticky note on it: "DO NOT TOUCH - Gary (retired 1999)", and cobwebs over an "Update available" pop-up.
+End-to-End Encryption (spell)
+    Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a "Backdoor Request" form.
+SysAdmin (creature)
+    A bearded sysadmin in socks and sandals yanking the power cable out of a smoking server rack, a coffee mug in his other hand.
+Meatproxy As A Service (creature)
+    A raw steak sitting at a desk, copy-pasting text from one window to another on a computer screen, a price tag on the monitor: $9.99/MONTH.
+Ransomware Attack (spell)
+    A computer screen with a grinning skull and a padlock demanding 1 BTC, while a grandma cries into her knitting.
+Man-in-the-Middle (spell)
+    A man squeezed on a park bench between two lovers, holding both of their phones and reading their texts.
+Technical Debt (creature)
+    A laptop held together with duct tape and a TODO sticky note, beside an empty, cracked piggy bank, the dashed outlines of the missing banknotes floating above.
+Scope Creep (creature)
+    A creep in a trench coat and a low hat peering through a brass spyglass at a couple kissing in a lit window.
+Sex Clanker (creature)
+    Candlelight and satin: a figure in full shining plate reclines on a red heart-shaped bed, propped on one elbow, a rose in the visor and one knee up, rose petals everywhere, a heart shield leaning against the bed.
+    USER: Use the old No Glove No Love picture for it.
+
+MYTH
+
+Omen Reading (spell)
+    A robed augur reading the entrails of a goat on a stone altar by candlelight, squinting at a calendar pinned to the wall, an assistant taking notes.
+    USER: The reader more centered at the table, his body showing.
+Memento Mori (spell)
+    A skull on an office desk beside an hourglass, and a wall calendar with three days crossed out in red.
+Martyr (creature)
+    A long-haired, bearded Jesus-like figure in white robes, arms outstretched, a price sticker on his halo. An online-store banner beside him reads "Salvation: Add to Cart (ships in 3 days)".
+The Holy Grail (spell)
+    A gilded chalice on a velvet cushion behind museum glass. A queue of knights in dented armor stretches out the door, each holding a numbered ticket, and a gift shop by the exit sells plastic replicas at 3 for 2.
+    USER: Remove the pin.
+Exorcism (spell)
+    A priest in full vestments holding a crucifix over a teenager on a bed, whose smartphone floats above them, glowing red, demonic notification bubbles pouring out of it.
+Mummy (creature)
+    A museum mummy shaking hands with a smiling tourist, its bandages unravelling and winding up the tourist's arm, a "Please Do Not Touch" sign knocked to the floor.
+Omniscient Space-Time Bending Bearded Wizard (creature)
+    An old bearded man on a cloud in a bathrobe and slippers, lazily pointing a TV remote at a tiny spinning universe.
+Cultist (creature)
+    A hooded cultist holding a THE END IS NEAR sign in one hand and a pumpkin spice latte in the other.
+Phoenix (creature)
+    A flaming bird rising from the smoking ashes of a burnt toaster, wings spread wide.
+Excess of Bread and Wine (spell)
+    The Last Supper as a frat party: the apostles playing beer pong along the long table while Jesus refills everyone's cups from a jug.
+Monkey Hand (spell)
+    A shriveled, mummified monkey's paw held up in a purple room, like the cursed paw of the old horror story: long knobbly grey-green fingers with pointed nails, a tuft of black fur at the wrist. Three fingers still up, one already curled into the palm: three wishes left.
+Sacrificial Ritual (spell)
+    Hooded figures chanting around a chalk pentagram, offering a rubber chicken on the altar.
+Reincarnation (creature)
+    The Buddhist wheel of rebirth glowing in a temple: a pink worm on the left, a happy brown dog on the right, a dashed arrow arching from the worm's life to the dog's, a lotus between them.
+Holy War (spell)
+    Two armies of medieval knights charging each other across a field, both under identical banners with the same golden cross, a bewildered angel in the clouds above holding a scorecard.
+The Great Flood (spell)
+    A wooden ark riding a huge wave, the animals two by two waving from the deck, while a line of enemy soldiers on a hilltop holds umbrellas as the water reaches their chins.
+Mox Nox (spell)
+    An old sundial in a ruined cloister at dusk, the shadow of its gnomon falling across the Latin words MOX NOX carved in the stone, a black candle burning beside it.
+Holy Hand Grenade of Antioch (spell)
+    A golden orb with a jewelled cross on top, its pin pulled, held up by a monk reading from an enormous book, three fingers raised, knights ducking behind him.
+Lance Of Longinus (spell)
+    An ancient iron spearhead on a long wooden shaft, glowing faintly, pinned through a spy's trench coat to a brick wall, the spy wriggling out of the sleeves.
+Necronomicon (spell)
+    A heavy book bound in stitched leather with a screaming face on its cover, lying open on a stone altar, a hooded figure reading from it while a shadowy hand rises out of the pages.
+The Wicker Man (spell)
+    A giant wicker figure burning on a cliff at sunset, villagers in animal masks dancing around it and singing, a small policeman in uniform visible inside its chest.
+Thoughts and Prayers (spell)
+    A politician at a podium covered in microphones, eyes closed and hands pressed together in prayer, while behind him an aide quietly shreds a stack of papers labelled REFORM.
+Religious Instrumentalization (spell)
+    A politician in a suit posing for cameras in front of a church, holding a bible upside down over his head, while a confused small creature from the other side shuffles over to stand behind him.
+Deus Vult (spell)
+    A crusader in a bucket helmet and white tabard with a red cross shouting with a raised sword, a meme caption bar at the bottom of the picture.
+Curse Of Hubris (spell)
+    Icarus with melting wax wings falling past a mountain top, a crowd of Greek gods on a cloud filming him on their phones.
+Genesis (spell)
+    A huge bearded hand reaching out of the clouds and pointing at the ground, where two small creatures pop out of the earth blinking, a sun switching on above them like a lamp.
+    USER: Like the reference picture the user gave.
+The Lost Ark (spell)
+    A golden chest with two winged angels on its lid, opened in a desert camp, ghostly light pouring out and melting the faces of enemy officers while an adventurer in a fedora keeps his eyes shut.
+    USER: Make the guy look more like Indiana Jones.
+Templar Knight (creature)
+    A knight in chainmail and a white mantle with a red cross, sword raised, standing in front of a medieval bank counter piled with gold coins and promissory notes.
+Zealot (creature)
+    A wild-eyed hermit in sackcloth with a long beard, waving a burning torch and a hand-painted REPENT sign on a busy city sidewalk.
+Living Dead (creature)
+    A grey zombie in a business suit climbing out of a cemetery grave with its briefcase, a sunrise behind the tombstones.
+The Chosen One (creature)
+    Jesus in white robes and sandals with a halo, firing two golden submachine guns akimbo, doves scattering; nothing behind him but the temple light, he steals the show.
+    USER: 2026-10-14: delete the ball of fire; let Jesus with guns steal the show.
+Killer Rabbit of Caerbannog (creature)
+    A small fluffy white rabbit sitting innocently in front of a cave mouth littered with bones and dented helmets, a tiny drop of red on its whiskers, knights fleeing in the distance.
+Black Knight (creature)
+    A knight in black armor standing defiantly at a forest bridge with no arms left, sword on the ground, shouting at a bemused king who rides an invisible horse to the sound of coconuts.
+Buddy Christ (creature)
+    A smiling plastic Jesus statue winking and giving a big thumbs up and a finger point, on a church lawn next to a sign reading CATHOLICISM: WOW!
+Pope (creature)
+    The Pope waving from a glass-domed popemobile, sprinkling holy water from a garden hose over a crowd of creatures.
+The Lobster Professor (creature)
+    A gaunt professor in a three-piece suit lecturing tearfully at a lectern, pointing at a projected slide of a lobster sitting on a throne, the audience taking notes, a messy bedroom visible through a door behind him.
+Horsemen Of Apocalypse (creature)
+    Four horsemen galloping out of storm clouds, War, Famine, Pestilence and Death, one of them checking a smartphone map, a lightning bolt behind.
+God's Grace (spell)
+    A battered knight at 0 Health, a red health bar empty above his head, held upright by a beam of light from parted clouds, two cherubs propping him up by the armpits, a choir of angels singing behind.
+Phoenix Feather (spell)
+    Only the feather, watercolour on paper: red at the quill through orange to a yellow heart, its barbs licking out like flames, a glowing eye near the top, the tip burning out lilac, sparks all round.
+    USER: 2026-10-14: only the feather, in the colors of the reference (a watercolor feather: red at the quill, orange and yellow, flame-like barbs, a glowing eye near the top, the tip burning lilac).
+The Omen (creature)
+    A small boy in a neat suit on a tricycle in a long mansion hallway, staring straight at the viewer, a black dog sitting beside him and a 666 birthmark peeking from his hairline.
+
+MIND
+
+Lucid Dreaming (spell)
+    A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases.
+Mimetic Theory (spell)
+    Two people facing each other in identical poses, one of them slowly turning into the other's mirror image.
+Generational Trauma (spell)
+    The swimming-pool meme: the Silent Generation stands in the pool holding a smiling Boomer high above the water, while on the bottom Gen X and the generations after them sit as skeletons, still waiting.
+    USER: The meme of the woman holding something above water in a swimming pool with a skeleton at the bottom, with the generations: the one before the boomers holds the boomers above water, the next generations drowned underwater.
+Pessimist (creature)
+    A man in a raincoat under his own tiny raincloud on a sunny beach, frowning at a winning lottery ticket.
+Introvert (creature)
+    A person in big headphones reading in a blanket fort while a loud party rages around them, the partygoers' shouted invitations bouncing off the blankets.
+Schrodinger's Cat (creature)
+    A cat sitting in an open cardboard box, its left half fluffy and alive, its right half a skeleton, both halves unimpressed.
+Roko's Basilisk (creature)
+    A big green snake in headphones typing on a laptop, a sticky note on the screen reading NAUGHTY LIST.
+Trolley Problem (spell)
+    The trolley problem from above: a lever, a trolley and a split track, with one bored man on a track scrolling his phone.
+Red Herring (spell)
+    A red fish in a detective's trench coat and hat, pointing a fin dramatically off to the side.
+Imposter Syndrome (spell)
+    A little space crewmate in a spacesuit and visor sitting at an office desk under a SENIOR ENGINEER name plate, sweating.
+Ship of Theseus (creature)
+    Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went.
+Escape Goat (spell)
+    The escape goat: a white goat scrambling over a wooden fence, front legs over the top rail, looking back in a sweat.
+
+UTOPIA
+
+Research Lab (spell)
+    A gleaming laboratory with scientists in white coats pulling glowing cards out of test tubes and a centrifuge, a grant deadline clock ticking on the wall.
+Clone (creature)
+    Dolly the sheep in a lab coat and goggles proudly presenting a row of identical sheep behind her.
+Hypermetamorphosis (creature)
+    Left to right: a caterpillar, a cocoon, and a hatched office worker in a tie with butterfly wings, briefcase in hand, dead inside.
+Extremophile (creature)
+    A chubby tardigrade lounging in a pool of lava in sunglasses, a tiny cocktail in its claw.
+Philosophy PhD (creature)
+    A graduate in cap and gown flipping burgers at a fast-food grill, the diploma pinned up next to the menu.
+Mathematician (creature)
+    The confused math lady meme: a woman squinting while equations, triangles and integrals float around her head.
+Quantum Physicist (creature)
+    A physicist split down the middle, one half of him see-through, holding two coffees and checking two watches.
+Perpetual Motion Machine (creature)
+    A hamster running in a wheel that powers a fan, which blows on the hamster, which keeps running.
+Particle Accelerator (creature)
+    A huge ring-shaped tunnel seen from above, a tiny scientist on a bicycle racing around it after a glowing dot.
+Genetically Modified Organism (creature)
+    A ripe tomato with huge bodybuilder arms, flexing, a NON-GMO sticker peeling off its skin.
+Surveillance Giraffe (creature)
+    A giraffe whose neck runs out of the top of the picture and comes back in from the top further along, its head hanging upside down, peeking.
+Pioneer (creature)
+    An astronaut planting a flag on a red desert next to a sign: FOR RENT $9999.
+Placebo (spell)
+    A sugar pill the size of a melon labelled MIRACLE on a spoonful of sugar, and a skinny man next to it flexing a non-existent bicep, very proud.
+    USER: Put a spoon of sugar.
+Vaccine (spell)
+    A syringe with a tiny Wi-Fi antenna on its plunger and full signal bars above it.
+Climate Change (spell)
+    A polar bear standing on a single ice cube floating in a cocktail glass, a paper umbrella beside it.
+Overpopulation (spell)
+    A tiny Earth with people crammed all over it like a full elevator, one man balancing on top on one foot.
+Black Hole (spell)
+    A swirling black hole sucking in a cow, a sofa, a single sock and a tax form.
+Stasis Field (spell)
+    A man frozen mid-sneeze inside a giant block of green jelly, the droplets hanging in the air.
+Absolute Zero (spell)
+    A man frozen solid at his desk holding a frozen cup of coffee, the thermostat on the wall reading -273.
+Splitting The Atom (spell)
+    A lumberjack in a flannel shirt splitting a glowing atom on a tree stump with an axe, a mushroom cloud rising behind him.
+Gene Editing (spell)
+    A pair of scissors cutting a DNA double helix, a strip of tape sticking a unicorn horn onto it.
+Cold Fusion (creature)
+    A tabletop fusion reactor glowing white-hot in a jar on a garage workbench, the warning gauge in the red, two engineers in sunglasses giving a thumbs-up.
+Antimatter (creature)
+    A tiny shimmering particle in a magnetic bottle, its mirror image annihilating the lab bench around it, a physicist ducking behind a clipboard.
+Biohacking (spell)
+    A shirtless tech bro in a garage strapped to car batteries, LED implants glowing under his skin, a smoothie in one hand and a soldering iron in the other.
+Blood Transfusion (spell)
+    An old billionaire in a recliner hooked up to an IV bag labelled TEEN, reading the stock prices, his skin looking twenty years younger.
+Evolution Theory (spell)
+    Darwin in a lab coat at a chalkboard, the classic march of progress drawn on it from ape to man to a huge muscled lab-grown superman, and a tiny weak creature at the start of the line being crossed out.
+Mutation (spell)
+    A lab rat in a cage flexing three muscular arms, a scientist taking notes and quietly sliding a fourth arm onto the clipboard.
+Exponential Growth (spell)
+    A petri dish overflowing onto the lab bench, the colony spilling over the edge and climbing up the wall, a scientist backing away holding the lid.
+Scientific Method (creature)
+    A scientist in goggles carefully pouring a glowing liquid into a beaker on a bench crowded with labelled flasks, a whiteboard behind her reading HYPOTHESIS → EXPERIMENT → GRANT.
+Frankenstein (creature)
+    A towering stitched-together monster sitting up on a lab table under a lightning bolt, bolts in its neck smoking, the mad scientist cheering with both arms up.
+Chimera (creature)
+    A lion with a goat's head sprouting from its back and a snake for a tail, all three wearing hospital ID wristbands, in a lab enclosure with a sticky note: DO NOT FEED AFTER MIDNIGHT.
+Resurrected T-Rex (creature)
+    A T-Rex skeleton half covered in new flesh breaking out of a museum display, the DNA sequencer that brought it back still beeping, a guide pointing at the exit.
+
+IDEAS NOT YET CARDS (Brainstorm List)
+
+Conspiracies That Turned Out to Be True
+    USER: 2026-10-14: the conspiracy guy pointing at a wall of papers joined by red string (the Always Sunny meme).
+Here Be Dragons
+    USER: An ASCII-art dragon, like the reference given.
+No Glove No Love
+    USER: A woman saying no-no with her finger, a bit sensual (its old picture went to Sex Clanker).
