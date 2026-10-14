@@ -58,7 +58,7 @@ namespace SlayTheClone {
                 return;
             }
             arrowManager = new BattlefieldArrowManager(transform, GameMediator, actionsQueue, player, FindSlotView,
-                side => table.GetBattlefield(side)?.transform, HiddenFromScreen);
+                side => table.GetBattlefield(side)?.transform, HiddenFromScreen, () => GameManager?.TurnManager?.IsResolving ?? false);
         }
 
         private void CreateSlots(IPlayer player) {
@@ -732,6 +732,7 @@ namespace SlayTheClone {
             if (resolving != wasResolving) {
                 wasResolving = resolving;
                 RefreshIdle();
+                arrowManager?.RefreshArrows(); // The planned arrows go when the Day starts playing out, and the next Day's come back
             }
             // While an aimed spell is carried, the slots it can be played on glow: what it can be used on
             var dragged = CardController.Dragged;

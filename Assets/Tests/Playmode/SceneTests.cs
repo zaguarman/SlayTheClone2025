@@ -93,7 +93,12 @@ namespace SlayTheClone.Tests {
             var endTurn = game.References.GetResolveActionsButton();
             endTurn.onClick.Invoke();
             endTurn.onClick.Invoke(); // While the first click's turn is still resolving
-            yield return Wait.For(() => !game.Turns.IsResolving, "the turn to resolve");
+            int mostArrows = 0;
+            while (game.Turns.IsResolving) { // While the Day plays out, only the arrow of what's happening now shows
+                mostArrows = Mathf.Max(mostArrows, game.QueuedArrows(p1).Count + game.QueuedArrows(p2).Count);
+                yield return null;
+            }
+            Assert.LessOrEqual(mostArrows, 1, "Playing out, one arrow at a time: the action happening now");
             yield return null;
             Assert.AreEqual(1, game.Turns.TurnNumber, "Two clicks ended two turns");
             Assert.IsFalse(queuePanel.IsOpen, "The turn playing out closes the windows over the table, so it can be watched");

@@ -35,6 +35,8 @@ namespace SlayTheClone {
         private readonly Func<BoardSlot, BattlefieldSlot> findSlotView; // Where a board slot is on screen
         private readonly Func<IPlayer, Transform> findBoardView; // Where a player's battlefield is on screen
         private readonly Func<IGameAction, bool> isHidden; // Fog of War: planned actions the screen doesn't show
+        private readonly Func<bool> isResolving; // The Day is playing out: only the action happening now has its arrow
+        private IGameAction current; // While the Day plays out: the action that ran last, shown until the next one starts
         private readonly Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
         private ArrowIndicator dragArrow;
         private readonly Dictionary<IPlayer, Image> sideGlows = new Dictionary<IPlayer, Image>(); // A side this player's queued spells play on
@@ -50,7 +52,8 @@ namespace SlayTheClone {
         }
 
         public BattlefieldArrowManager(Transform parent, IGameMediator mediator, IActionsQueue actionsQueue, IPlayer owner,
-            Func<BoardSlot, BattlefieldSlot> findSlotView, Func<IPlayer, Transform> findBoardView, Func<IGameAction, bool> isHidden = null) {
+            Func<BoardSlot, BattlefieldSlot> findSlotView, Func<IPlayer, Transform> findBoardView, Func<IGameAction, bool> isHidden = null,
+            Func<bool> isResolving = null) {
             parentTransform = parent ?? throw new ArgumentNullException(nameof(parent));
             gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
@@ -58,8 +61,10 @@ namespace SlayTheClone {
             this.findSlotView = findSlotView ?? throw new ArgumentNullException(nameof(findSlotView));
             this.findBoardView = findBoardView ?? throw new ArgumentNullException(nameof(findBoardView));
             this.isHidden = isHidden ?? (_ => false);
+            this.isResolving = isResolving ?? (() => false);
 
             dragArrow = ArrowIndicator.Create(parentTransform);
+            actionsQueue.OnActionExecuting.AddListener(OnActionExecuting);
             dragArrow.SetStyle(ArrowIndicator.Style.Drag);
             gameMediator.ActionsQueueChanged += RefreshArrows;
             gameMediator.BattlefieldStateChanged += OnBattlefieldStateChanged;
@@ -83,15 +88,29 @@ namespace SlayTheClone {
         #region Queued action arrows
         private void OnBattlefieldStateChanged(IPlayer player) => RefreshArrows();
 
-        private void RefreshArrows() {
+        // While the Day plays out, the arrow of the action happening now replaces the rest: less to look at
+        private void OnActionExecuting(IGameAction action) {
+            if (!isResolving()) return;
+            current = action;
+            RefreshArrows();
+        }
+
+        /// <summary>Redraws the arrows: everything planned, or while the Day plays out, only what's happening now.</summary>
+        public void RefreshArrows() {
             var wanted = new Dictionary<string, ArrowPlan>();
             attackNumbers = AttackNumbers(actionsQueue, isHidden);
             aimedSides.Clear();
-            foreach (var action in actionsQueue.GetPendingActions()) {
-                if (isHidden(action)) continue; // A Concealed Action: its creature's card shows ??? instead
-                PlanArrow(action, wanted);
+            if (isResolving()) {
+                if (current != null && !isHidden(current)) PlanArrow(current, wanted);
             }
-            AddFormationArrows(wanted);
+            else {
+                current = null;
+                foreach (var action in actionsQueue.GetPendingActions()) {
+                    if (isHidden(action)) continue; // A Concealed Action: its creature's card shows ??? instead
+                    PlanArrow(action, wanted);
+                }
+                AddFormationArrows(wanted);
+            }
             ShowAimedSides();
 
             foreach (var key in activeArrows.Keys.Where(k => !wanted.ContainsKey(k)).ToList()) {
@@ -262,6 +281,7 @@ namespace SlayTheClone {
 
         public void Cleanup() {
             gameMediator.ActionsQueueChanged -= RefreshArrows;
+            actionsQueue.OnActionExecuting.RemoveListener(OnActionExecuting);
             gameMediator.BattlefieldStateChanged -= OnBattlefieldStateChanged;
             foreach (var arrow in activeArrows.Values) {
                 if (arrow != null) GameObject.Destroy(arrow.gameObject);
