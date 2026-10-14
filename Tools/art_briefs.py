@@ -26,6 +26,7 @@ USER_NOTES = {
                 "unicorn, so it looks like it's on fire.",
                 "2026-10-14: then: keep only the first, shorter fire on the ground around it; no fire climbing over it.",
                 "2026-10-14: then: that short fire in front of the unicorn."],
+    "Schrodinger's Cat": ["2026-10-14 (pixel art): no 50% printed on the box."],
     "Hostile Takeover": ["2026-10-14 (pixel art): the mouth a smile instead of an open box; the dorsal fin swept back, not a pyramid."],
     # From earlier sessions
     "Dogpile": ["A big pile of dogs on top of someone."],

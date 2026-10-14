@@ -477,6 +477,7 @@ Introvert (creature)
     A person in big headphones reading in a blanket fort while a loud party rages around them, the partygoers' shouted invitations bouncing off the blankets.
 Schrodinger's Cat (creature)
     A cat sitting in an open cardboard box, its left half fluffy and alive, its right half a skeleton, both halves unimpressed.
+    USER: 2026-10-14 (pixel art): no 50% printed on the box.
 Roko's Basilisk (creature)
     A big green snake in headphones typing on a laptop, a sticky note on the screen reading NAUGHTY LIST.
 Trolley Problem (spell)

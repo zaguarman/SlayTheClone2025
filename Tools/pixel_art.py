@@ -875,7 +875,6 @@ def schrodingers_cat():
     shape(img, lambda dr, v: dr.polygon([(60, 66), (44, 56), (52, 54), (66, 64)], fill=v), C["tan"], C["brown"], C["sand"])
     shape(img, lambda dr, v: dr.polygon([(132, 66), (148, 56), (140, 54), (126, 64)], fill=v), C["tan"], C["brown"], C["sand"])
     d.line([60, 84, 132, 84], fill=C["brown"] + (255,))
-    d.text((86, 88), "50%", fill=C["dark_brown"] + (255,))
     return outline(img)
 
 
