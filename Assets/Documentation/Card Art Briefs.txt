@@ -425,6 +425,7 @@ Excess of Bread and Wine (spell)
     The Last Supper as a frat party: the apostles playing beer pong along the long table while Jesus refills everyone's cups from a jug.
 Monkey Hand (spell)
     A shriveled, mummified monkey's paw held up in a purple room, like the cursed paw of the old horror story: long knobbly grey-green fingers with pointed nails, a tuft of black fur at the wrist. Three fingers still up, one already curled into the palm: three wishes left.
+    USER: 2026-10-14 (pixel art): remake it after the user's reference, the monkey's paw scene from a cartoon: in a bazaar, a man in a red fez holding the shrivelled paw up at a cringing old merchant in a grey turban (drawn as our own characters, not the cartoon's).
 Sacrificial Ritual (spell)
     Hooded figures chanting around a chalk pentagram, offering a rubber chicken on the altar.
 Reincarnation (creature)

@@ -3021,33 +3021,45 @@ def bg_beach():
 def monkey_hand():
     img = layer()
     d = ImageDraw.Draw(img)
-    # The cursed monkey's paw held up: shrivelled, grey-green, knobbly fingers, pointed nails, black fur at the wrist;
-    # three fingers still up, one already curled into the palm
-    skin, dark, light = C["grey"], C["teal_dark"], C["silver"]
-    shape(img, lambda dr, v: dr.rectangle([84, 80, 108, H + 4], fill=v), C["slate"], C["navy"], C["grey"])  # The withered wrist
-    for fx, top in ((82, 20), (94, 12), (106, 18)):  # Three fingers up
-        shape(img, lambda dr, v: dr.polygon([(fx - 3, 54), (fx - 2, top + 4), (fx + 2, top + 4), (fx + 3, 54)], fill=v), skin, dark, light)
-        for ky in (top + 14, top + 26):  # Knuckles
-            shape(img, lambda dr, v: dr.ellipse([fx - 4, ky - 2, fx + 4, ky + 3], fill=v), skin, dark, light)
-        d.polygon([(fx - 2, top + 5), (fx, top - 3), (fx + 2, top + 5)], fill=C["sand"] + (255,))  # The nail
-    shape(img, lambda dr, v: dr.ellipse([76, 48, 116, 86], fill=v), skin, dark, light)  # The palm
-    for y in (60, 68):
-        d.arc([84, y, 108, y + 8], 200, 340, fill=dark + (255,))
-    # The fourth finger, already folded down over the palm, its nail pointing at the wrist
-    shape(img, lambda dr, v: dr.ellipse([108, 46, 118, 56], fill=v), skin, dark, light)
-    shape(img, lambda dr, v: dr.polygon([(108, 52), (116, 52), (114, 70), (108, 70)], fill=v), skin, dark, light)
-    d.polygon([(109, 70), (111, 76), (113, 70)], fill=C["sand"] + (255,))
-    shape(img, lambda dr, v: dr.polygon([(80, 72), (70, 58), (68, 44), (74, 44), (76, 56), (84, 66)], fill=v), skin, dark, light)  # The thumb
-    d.polygon([(68, 45), (71, 38), (74, 45)], fill=C["sand"] + (255,))
-    rnd = random.Random(131)
-    for x in range(82, 112, 2):  # The tuft of black fur at the wrist
-        d.line([x, 82, x + rnd.choice((-2, 2)), 76 - rnd.randint(0, 4)], fill=C["ink"] + (255,), width=2)
-    img = outline(img)
-    d = ImageDraw.Draw(img)
-    for x, y in ((70, 20), (122, 16), (130, 40)):  # Three wishes left
-        d.line([x - 3, y, x + 3, y], fill=C["yellow"] + (255,))
-        d.line([x, y - 3, x, y + 3], fill=C["yellow"] + (255,))
-    return img
+    # After the user's reference: in the bazaar, a tourist in a red fez thrusts the shrivelled paw up at the old
+    # merchant, who flinches away clutching his robe
+    shape(img, lambda dr, v: dr.ellipse([4, 62, 76, 150], fill=v), C["night"], C["ink"], C["plum"])  # The merchant's robe
+    shape(img, lambda dr, v: dr.ellipse([22, 28, 60, 68], fill=v), C["skin_dark"], C["brown"], C["skin"])
+    shape(img, lambda dr, v: dr.polygon([(28, 56), (54, 56), (50, 74), (40, 80), (30, 72)], fill=v), C["white"], C["silver"])  # His beard
+    shape(img, lambda dr, v: dr.ellipse([14, 10, 62, 42], fill=v), C["silver"], C["grey"], C["white"])  # The turban
+    for y in (18, 26, 34):
+        d.arc([16, y - 8, 60, y + 4], 20, 160, fill=C["grey"] + (255,))
+    d.line([(30, 46), (38, 47)], fill=C["ink"] + (255,))  # One eye screwed shut
+    shape(img, lambda dr, v: dr.ellipse([42, 40, 54, 52], fill=v), C["white"], C["silver"])  # The other wide
+    d.rectangle([45, 45, 47, 47], fill=C["ink"] + (255,))
+    d.line([(28, 42), (38, 44)], fill=C["white"] + (255,), width=2)
+    d.line([(42, 37), (54, 39)], fill=C["white"] + (255,), width=2)
+    d.line([(34, 56), (48, 58)], fill=C["ink"] + (255,))  # A grimace
+    for hx, hy in ((30, 80), (44, 82)):  # Clutching his robe
+        shape(img, lambda dr, v: dr.ellipse([hx - 6, hy - 5, hx + 6, hy + 5], fill=v), C["skin_dark"], C["brown"])
+    # The tourist in the fez, wide-eyed, shouting, the paw held up in his fist
+    shape(img, lambda dr, v: dr.ellipse([100, 62, 184, 150], fill=v), C["white"], C["silver"])  # A white shirt
+    shape(img, lambda dr, v: dr.ellipse([114, 22, 154, 66], fill=v), C["skin"], C["skin_dark"], C["white"])
+    shape(img, lambda dr, v: dr.polygon([(120, 6), (142, 6), (146, 28), (116, 28)], fill=v), C["red"], C["wine"], C["pink"])  # The fez
+    d.line([(132, 6), (128, 4), (124, 14)], fill=C["ink"] + (255,))
+    d.rectangle([123, 14, 125, 18], fill=C["amber"] + (255,))
+    for ex in (124, 138):
+        shape(img, lambda dr, v: dr.ellipse([ex - 6, 32, ex + 6, 44], fill=v), C["white"], C["silver"])
+        d.rectangle([ex - 3, 36, ex - 1, 38], fill=C["ink"] + (255,))
+    d.ellipse([124, 50, 138, 60], fill=C["wine"] + (255,))  # Shouting
+    d.line([(112, 72), (90, 48)], fill=C["skin"] + (255,), width=7)  # His arm up
+    shape(img, lambda dr, v: dr.ellipse([82, 38, 96, 52], fill=v), C["skin"], C["skin_dark"], C["white"])
+    # The paw: shrivelled, grey, long knobbly fingers splayed, pointed nails, black fur where he grips it
+    paw, dark = C["grey"], C["teal_dark"]
+    for (x0, y0), (x1, y1) in (((84, 30), (70, 8)), ((88, 28), (82, 2)), ((92, 28), (96, 2)), ((95, 30), (108, 10))):
+        shape(img, lambda dr, v: dr.line([(x0, y0), (x1, y1)], fill=v, width=3), paw, dark)
+        mx, my = (x0 + x1) / 2, (y0 + y1) / 2
+        shape(img, lambda dr, v: dr.ellipse([mx - 2, my - 2, mx + 2, my + 2], fill=v), paw, dark)
+        d.polygon([(x1 - 1, y1 + 1), (x1 + (x1 - x0) * 0.12, y1 - 4), (x1 + 1, y1 + 1)], fill=C["sand"] + (255,))
+    shape(img, lambda dr, v: dr.ellipse([80, 24, 100, 40], fill=v), paw, dark, C["silver"])
+    for x in range(82, 98, 2):
+        d.line([x, 38, x + 1, 42], fill=C["ink"] + (255,), width=2)
+    return outline(img)
 
 
 def exorcism():
@@ -3333,7 +3345,7 @@ def pessimist():
 
 
 CARDS += [
-    ("MonkeyHand", "purple_room", monkey_hand),
+    ("MonkeyHand", "bazaar", monkey_hand),
     ("Exorcism", "room_night", exorcism),
     ("Pope", "plaza", pope),
     ("Inflation", "store", inflation),
@@ -3345,6 +3357,405 @@ CARDS += [
     ("Pessimist", "beach", pessimist),
 ]
 BACKGROUNDS.update({"purple_room": bg_purple_room, "plaza": bg_plaza, "beach": bg_beach})
+
+
+FONT3X5.update({"Z": ["111", "001", "010", "100", "111"]})
+
+
+def bg_bazaar():
+    """A bazaar: a sunbaked adobe wall, an arched doorway, a striped awning, lamps hanging."""
+    img = layer()
+    gradient(img, [C["tan"], C["orange_brown"], C["brown"]], 0, H)
+    d = ImageDraw.Draw(img)
+    d.chord([150, 30, 186, 70], 180, 360, fill=C["dark_brown"] + (255,))
+    d.rectangle([150, 50, 186, H], fill=C["dark_brown"] + (255,))
+    for k, x in enumerate(range(100, W, 10)):  # The awning
+        d.polygon([(x, 0), (x + 10, 0), (x + 10, 14), (x, 16)], fill=(C["red"] if k % 2 else C["sand"]) + (255,))
+    for x in (114, 136):  # Lamps
+        d.line([x, 14, x, 22], fill=C["ink"] + (255,))
+        d.polygon([(x - 3, 22), (x + 3, 22), (x + 2, 30), (x - 2, 30)], fill=C["amber"] + (255,))
+    return img
+
+
+def bg_street():
+    """A city street by day: brick fronts with windows, the pavement and the kerb."""
+    img = layer()
+    gradient(img, [C["sky"], C["cyan"]], 0, 20)
+    d = ImageDraw.Draw(img)
+    rnd = random.Random(139)
+    x = 0
+    while x < W:
+        w, top = rnd.randint(30, 50), rnd.randint(4, 18)
+        col = rnd.choice((C["rust"], C["brown"], C["tan"], C["slate"]))
+        d.rectangle([x, top, x + w, 84], fill=col + (255,))
+        for wy in range(top + 6, 76, 14):
+            for wx in range(x + 5, x + w - 6, 10):
+                d.rectangle([wx, wy, wx + 5, wy + 8], fill=C["navy"] + (255,))
+                d.line([wx, wy, wx + 5, wy], fill=C["sky"] + (255,))
+        x += w
+    d.rectangle([0, 84, W, H], fill=C["grey"] + (255,))
+    for x in range(0, W, 16):
+        d.line([x, 84, x - 6, H], fill=C["slate"] + (255,))
+    d.line([0, 84, W, 84], fill=C["silver"] + (255,))
+    return img
+
+
+def escape_goat():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    # The fence
+    for x in (24, 76, 128, 180):
+        shape(img, lambda dr, v: dr.rectangle([x - 3, 52, x + 3, 92], fill=v), C["brown"], C["dark_brown"], C["tan"])
+    for y in (58, 74):
+        shape(img, lambda dr, v: dr.rectangle([0, y, W, y + 5], fill=v), C["brown"], C["dark_brown"], C["tan"])
+    # The escape goat, scrambling over the top rail, looking back in a sweat
+    for lx, ly in ((86, 70), (94, 72)):  # Hind legs still on this side
+        d.line([(lx, 54), (lx - 2, ly + 14)], fill=C["white"] + (255,), width=3)
+        d.rectangle([lx - 4, ly + 13, lx, ly + 16], fill=C["ink"] + (255,))
+    for lx in (116, 122):  # Front legs over the rail, reaching down
+        d.line([(lx - 4, 50), (lx, 58), (lx + 4, 70)], fill=C["white"] + (255,), width=3)
+        d.rectangle([lx + 2, 69, lx + 6, 72], fill=C["ink"] + (255,))
+    shape(img, lambda dr, v: dr.polygon([(80, 52), (92, 38), (120, 36), (128, 48), (110, 58), (86, 60)], fill=v), C["white"], C["silver"])
+    shape(img, lambda dr, v: dr.polygon([(84, 50), (74, 34), (66, 34), (64, 42), (74, 52)], fill=v), C["white"], C["silver"])  # Neck and head, turned back
+    d.arc([68, 22, 80, 36], 160, 300, fill=C["grey"] + (255,), width=2)  # Horns
+    d.arc([72, 22, 84, 36], 160, 300, fill=C["grey"] + (255,), width=2)
+    d.polygon([(62, 40), (66, 48), (68, 42)], fill=C["white"] + (255,))  # Its beard
+    d.rectangle([69, 36, 71, 38], fill=C["ink"] + (255,))
+    d.line([(66, 34), (62, 30)], fill=C["white"] + (255,), width=2)  # An ear
+    shape(img, lambda dr, v: dr.polygon([(128, 44), (134, 40), (132, 46)], fill=v), C["white"], C["silver"])  # A stub of tail
+    img = outline(img)
+    for x, y in ((58, 30), (60, 38), (90, 30)):  # Sweat
+        shape(img, lambda dr, v: dr.ellipse([x - 2, y - 3, x + 2, y + 3], fill=v), C["sky"], C["blue"])
+    return img
+
+
+def shell_company():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    # The hustler behind his cardboard box: cap, gold chain, a sly grin, hands blurring over the shells
+    man(img, 96, 100, 1.5, C["skin"], C["red"], None, face="smile", jacket=C["navy"])
+    shape(img, lambda dr, v: dr.chord([86, 30, 106, 46], 180, 360, fill=v), C["green"], C["dark_green"])  # The cap
+    d.rectangle([100, 37, 112, 39], fill=C["dark_green"] + (255,))
+    d.arc([88, 50, 104, 66], 20, 160, fill=C["yellow"] + (255,), width=2)  # The chain
+    shape(img, lambda dr, v: dr.rectangle([56, 70, 136, 104], fill=v), C["tan"], C["brown"], C["sand"])  # The box
+    d.line([56, 76, 136, 76], fill=C["brown"] + (255,))
+    for hx in (76, 116):
+        shape(img, lambda dr, v: dr.ellipse([hx - 5, 56, hx + 5, 64], fill=v), C["skin"], C["skin_dark"])
+    # Three walnut shells, each with a tax haven's flag on it; one lifted, the gold coin under it
+    shape(img, lambda dr, v: dr.ellipse([88, 68, 98, 72], fill=v), C["yellow"], C["amber"])  # The coin
+    for sx, sy, flag in ((70, 66, "swiss"), (92, 60, "panama"), (114, 66, "cayman")):
+        shape(img, lambda dr, v: dr.chord([sx - 9, sy - 8, sx + 9, sy + 8], 180, 360, fill=v), C["brown"], C["dark_brown"], C["tan"])
+        d.line([sx - 9, sy, sx + 9, sy], fill=C["dark_brown"] + (255,))
+        fx, fy = sx - 4, sy - 6
+        if flag == "swiss":
+            d.rectangle([fx, fy, fx + 7, fy + 4], fill=C["red"] + (255,))
+            d.line([fx + 3, fy + 1, fx + 3, fy + 3], fill=C["white"] + (255,))
+            d.line([fx + 2, fy + 2, fx + 4, fy + 2], fill=C["white"] + (255,))
+        elif flag == "panama":
+            d.rectangle([fx, fy, fx + 7, fy + 4], fill=C["white"] + (255,))
+            d.rectangle([fx + 4, fy, fx + 7, fy + 1], fill=C["red"] + (255,))
+            d.rectangle([fx, fy + 3, fx + 3, fy + 4], fill=C["blue"] + (255,))
+        else:
+            d.rectangle([fx, fy, fx + 7, fy + 4], fill=C["navy"] + (255,))
+            d.rectangle([fx, fy, fx + 3, fy + 2], fill=C["red"] + (255,))
+            dot(img, fx + 5, fy + 2, C["white"])
+    img = outline(img)
+    d = ImageDraw.Draw(img)
+    for hx in (76, 116):  # Hands blurring over the shells
+        for k in range(3):
+            d.line([hx - 10 + k * 2, 52 - k * 2, hx - 6 + k * 2, 52 - k * 2], fill=C["white"] + (255,))
+    return img
+
+
+def ddos_attack():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    # The smart fridge and the toaster behind, each with a red glowing eye
+    shape(img, lambda dr, v: dr.rectangle([8, 20, 36, 96], fill=v), C["white"], C["silver"])
+    d.line([8, 46, 36, 46], fill=C["grey"] + (255,))
+    d.line([32, 28, 32, 40], fill=C["grey"] + (255,), width=2)
+    d.ellipse([18, 56, 26, 64], fill=C["hot"] + (255,))
+    shape(img, lambda dr, v: dr.rounded_rectangle([150, 70, 184, 96], 4, fill=v), C["silver"], C["grey"], C["white"])
+    d.rectangle([156, 70, 162, 72], fill=C["ink"] + (255,))
+    d.rectangle([170, 70, 176, 72], fill=C["ink"] + (255,))
+    d.ellipse([163, 80, 171, 88], fill=C["hot"] + (255,))
+    # The server rack, melting, under an avalanche of envelopes
+    shape(img, lambda dr, v: dr.polygon([(68, 30), (124, 26), (124, 92), (116, 100), (108, 94), (98, 102), (86, 94), (76, 100), (68, 92)], fill=v),
+          C["night"], C["ink"], C["slate"])
+    for y in range(36, 88, 8):
+        d.line([72, y, 120, y - 1], fill=C["slate"] + (255,))
+        for x in (76, 80, 84):
+            dot(img, x, y + 3, C["green"] if (x + y) % 3 else C["red"])
+    for x, h in ((78, 8), (92, 12), (112, 6)):  # Drips
+        d.line([x, 96, x, 96 + h], fill=C["slate"] + (255,), width=2)
+    rnd = random.Random(149)
+    env = layer()
+    for _ in range(40):  # The avalanche
+        x, y = rnd.randint(40, 150), rnd.randint(0, 40)
+        y += max(0, int(abs(x - 96) * -0.3 + 10))
+        ed = ImageDraw.Draw(env)
+        ed.rectangle([x, y, x + 7, y + 5], fill=C["white"] + (255,), outline=C["ink"] + (255,))
+        ed.line([(x, y), (x + 3, y + 3), (x + 7, y)], fill=C["ink"] + (255,))
+    img = outline(img)
+    img.alpha_composite(env)
+    return img
+
+
+def lucid_dreaming():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    # The bed below, empty
+    shape(img, lambda dr, v: dr.rectangle([40, 86, 152, 100], fill=v), C["brown"], C["dark_brown"], C["tan"])
+    shape(img, lambda dr, v: dr.rectangle([40, 82, 152, 88], fill=v), C["white"], C["silver"])
+    shape(img, lambda dr, v: dr.rectangle([36, 74, 42, 104], fill=v), C["brown"], C["dark_brown"])
+    shape(img, lambda dr, v: dr.rectangle([150, 78, 156, 104], fill=v), C["brown"], C["dark_brown"])
+    # The dreamscape: a melting clock, stairs to nowhere, cards drifting
+    shape(img, lambda dr, v: dr.polygon([(140, 10), (166, 10), (168, 22), (160, 30), (158, 40), (154, 28), (142, 22)], fill=v), C["amber"], C["orange_brown"], C["yellow"])
+    d.ellipse([146, 12, 160, 24], fill=C["white"] + (255,))
+    d.line([(153, 18), (153, 14)], fill=C["ink"] + (255,))
+    d.line([(153, 18), (157, 20)], fill=C["ink"] + (255,))
+    for k in range(5):
+        shape(img, lambda dr, v: dr.rectangle([12 + k * 7, 40 - k * 6, 20 + k * 7, 46 - k * 6], fill=v), C["grey"], C["slate"], C["silver"])
+    for x, y, a in ((60, 14, 12), (96, 8, -10), (120, 30, 20), (176, 50, -14)):
+        card = Image.new("RGBA", (12, 16), (0, 0, 0, 0))
+        cd = ImageDraw.Draw(card)
+        cd.rectangle([0, 0, 11, 15], fill=C["sand"] + (255,), outline=C["amber"] + (255,))
+        cd.rectangle([2, 2, 9, 7], fill=C["purple"] + (255,))
+        img.alpha_composite(card.rotate(a, expand=True, resample=Image.NEAREST), (x, y))
+    # The sleeper, floating flat above the bed in striped pyjamas, eyes shut, calm, reaching up for a card
+    shape(img, lambda dr, v: dr.rounded_rectangle([56, 54, 136, 68], 6, fill=v), C["sky"], C["blue"], C["cyan"])
+    for x in range(60, 134, 6):
+        d.line([x, 55, x, 67], fill=C["blue"] + (255,))
+    shape(img, lambda dr, v: dr.ellipse([132, 50, 150, 68], fill=v), C["skin"], C["skin_dark"])
+    d.chord([134, 48, 152, 62], 270, 90, fill=C["dark_brown"] + (255,))
+    d.arc([136, 56, 142, 60], 200, 340, fill=C["ink"] + (255,))
+    d.arc([136, 60, 144, 66], 20, 160, fill=C["ink"] + (255,))
+    d.line([(112, 56), (116, 38), (122, 36)], fill=C["sky"] + (255,), width=3)
+    shape(img, lambda dr, v: dr.ellipse([118, 32, 124, 38], fill=v), C["skin"], C["skin_dark"])
+    img = outline(img)
+    for x, y in ((80, 76), (100, 78), (120, 76)):  # Zz, the float
+        dot(img, x, y, C["white"])
+    pixel_text(img, 154, 40, "Z", C["white"])
+    return img
+
+
+def headhunter():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    # The rival's tower on the right, a window flung open
+    shape(img, lambda dr, v: dr.rectangle([140, 0, 192, H], fill=v), C["grey"], C["slate"], C["silver"])
+    for y in range(6, H, 14):
+        for x in range(146, 188, 12):
+            d.rectangle([x, y, x + 7, y + 8], fill=C["sky"] + (255,))
+    d.rectangle([146, 48, 153, 56], fill=C["ink"] + (255,))
+    # The recruiter on the roof ledge: sharp suit, slicked hair, fishing rod
+    shape(img, lambda dr, v: dr.rectangle([0, 92, 70, H], fill=v), C["grey"], C["slate"], C["silver"])
+    man(img, 34, 92, 1.4, C["skin"], C["white"], C["ink"], face="smile", tie=C["red"], jacket=C["navy"])
+    d.line([(44, 62), (52, 54)], fill=C["navy"] + (255,), width=3)
+    d.line([(50, 58), (110, 8)], fill=C["brown"] + (255,), width=2)  # The rod
+    d.line([(110, 8), (124, 36)], fill=C["white"] + (255,))  # The line, down to the hook in his collar
+    # The startled employee reeled out of the window, flailing; the bait, a stock-options contract
+    shape(img, lambda dr, v: dr.rectangle([104, 18, 118, 30], fill=v), C["sand"], C["tan"], C["white"])
+    pixel_text(img, 105, 21, "$$$", C["green"])
+    man(img, 124, 78, 1.0, C["skin"], C["white"], C["dark_brown"], face="shout", tie=C["blue"], jacket=C["slate"])
+    d.line([(118, 50), (110, 42)], fill=C["white"] + (255,), width=2)
+    d.line([(130, 50), (138, 42)], fill=C["white"] + (255,), width=2)
+    img = outline(img)
+    for k in range(3):  # Flailing
+        d2 = ImageDraw.Draw(img)
+        d2.line([108 - k * 3, 40 + k * 2, 104 - k * 3, 40 + k * 2], fill=C["white"] + (255,))
+    return img
+
+
+def zealot():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    rnd = random.Random(151)
+    # A passer-by on the right, not looking up from his phone
+    man(img, 170, 100, 1.2, C["skin"], C["sky"], C["dark_brown"], face="neutral", jacket=C["slate"])
+    d.rectangle([158, 56, 162, 62], fill=C["ink"] + (255,))
+    # The zealot: wild hair and a long beard, sackcloth, a burning torch and a hand-painted REPENT sign
+    man(img, 80, 100, 1.6, C["skin"], C["tan"], None, face="shout", jacket=C["tan"])
+    for k in range(9):  # Wild grey hair
+        a = math.radians(190 + k * 20)
+        d.line([80, 36, 80 + math.cos(a) * 14, 36 + math.sin(a) * 12], fill=C["silver"] + (255,), width=2)
+    beard = [(72, 44), (88, 44), (88, 54), (85, 62), (82, 58), (80, 66), (78, 58), (75, 62), (72, 54)]  # The long scraggly beard
+    shape(img, lambda dr, v: dr.polygon(beard, fill=v), C["silver"], C["grey"], C["white"])
+    for x in (75, 79, 83, 86):
+        d.line([x, 48, x, 56], fill=C["grey"] + (255,))
+    d.ellipse([77, 46, 83, 52], fill=C["wine"] + (255,))
+    for ex in (75, 85):  # Wild eyes
+        d.ellipse([ex - 3, 34, ex + 3, 40], fill=C["white"] + (255,), outline=C["ink"] + (255,))
+        dot(img, ex, 37, C["ink"])
+    for y in range(58, 98, 6):
+        d.line([70, y, 90, y + 1], fill=C["brown"] + (255,))
+    d.line([(68, 60), (52, 44)], fill=C["tan"] + (255,), width=4)  # The torch
+    d.line([(50, 50), (56, 24)], fill=C["brown"] + (255,), width=3)
+    flame(img, 56, 26, 16, 10, rnd)
+    d.line([(92, 60), (112, 52)], fill=C["tan"] + (255,), width=4)  # The sign
+    d.line([(116, 52), (116, 96)], fill=C["brown"] + (255,), width=2)
+    shape(img, lambda dr, v: dr.polygon([(98, 24), (138, 22), (136, 46), (100, 48)], fill=v), C["tan"], C["brown"], C["sand"])
+    pixel_text(img, 104, 30, "REPENT", C["red"], 1)
+    d.line([(104, 38), (130, 37)], fill=C["red"] + (255,))
+    return outline(img)
+
+
+def web_scraping():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    # The table, the laptop, its web page torn open by claws, cards and data spilling out
+    shape(img, lambda dr, v: dr.rectangle([10, 78, 182, 84], fill=v), C["brown"], C["dark_brown"], C["tan"])
+    shape(img, lambda dr, v: dr.polygon([(86, 78), (160, 78), (166, 82), (82, 82)], fill=v), C["grey"], C["slate"], C["silver"])
+    shape(img, lambda dr, v: dr.rectangle([92, 26, 156, 76], fill=v), C["slate"], C["navy"], C["grey"])
+    d.rectangle([96, 30, 152, 72], fill=C["white"] + (255,))
+    d.rectangle([96, 30, 152, 35], fill=C["blue"] + (255,))
+    for y in range(40, 70, 5):
+        d.line([100, y, 100 + (y * 7) % 40, y], fill=C["silver"] + (255,))
+    for k in range(3):  # The claw marks
+        x = 108 + k * 8
+        d.polygon([(x, 36), (x + 4, 36), (x + 12, 68), (x + 8, 68)], fill=C["ink"] + (255,))
+    for x, y, a in ((150, 58, -20), (160, 66, 15)):  # Cards spilling
+        card = Image.new("RGBA", (10, 14), (0, 0, 0, 0))
+        cd = ImageDraw.Draw(card)
+        cd.rectangle([0, 0, 9, 13], fill=C["sand"] + (255,), outline=C["amber"] + (255,))
+        cd.rectangle([2, 2, 7, 6], fill=C["sky"] + (255,))
+        img.alpha_composite(card.rotate(a, expand=True, resample=Image.NEAREST), (x, y))
+    for x, y, ch in ((132, 72, "1"), (140, 70, "0"), (148, 74, "1"), (170, 60, "0")):
+        pixel_text(img, x, y, ch, C["green"])
+    # The cat, up on its hind legs, paw raised to claw again
+    shape(img, lambda dr, v: dr.ellipse([46, 46, 76, 80], fill=v), C["orange"], C["rust"], C["amber"])
+    shape(img, lambda dr, v: dr.ellipse([52, 26, 76, 48], fill=v), C["orange"], C["rust"], C["amber"])
+    d.polygon([(54, 32), (56, 20), (62, 28)], fill=C["orange"] + (255,))
+    d.polygon([(68, 28), (74, 20), (76, 32)], fill=C["orange"] + (255,))
+    for x in range(50, 74, 6):
+        d.arc([x, 50, x + 4, 58], 200, 340, fill=C["rust"] + (255,))
+    for ex in (60, 70):
+        d.rectangle([ex - 1, 35, ex + 1, 37], fill=C["ink"] + (255,))
+    d.polygon([(64, 40), (66, 40), (65, 41)], fill=C["pink"] + (255,))
+    d.line([(74, 54), (90, 40), (96, 38)], fill=C["orange"] + (255,), width=4)
+    for k in range(3):  # Claws out
+        d.line([96, 36 + k * 2, 100, 34 + k * 3], fill=C["white"] + (255,))
+    d.line([(46, 74), (36, 66), (34, 54)], fill=C["orange"] + (255,), width=3)  # Its tail
+    return outline(img)
+
+
+def private_equity():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    # The little family shop
+    shape(img, lambda dr, v: dr.rectangle([108, 26, 188, 96], fill=v), C["sand"], C["tan"], C["white"])
+    for k, x in enumerate(range(104, 192, 8)):
+        d.polygon([(x, 24), (x + 8, 24), (x + 8, 36), (x, 38)], fill=(C["green"] if k % 2 else C["white"]) + (255,))
+    shape(img, lambda dr, v: dr.rectangle([116, 14, 180, 23], fill=v), C["wine"], C["plum"])
+    pixel_text(img, 136, 16, "FAMILY", C["yellow"])
+    d.rectangle([116, 44, 152, 80], fill=C["sky"] + (255,), outline=C["brown"] + (255,), width=2)  # The window
+    d.rectangle([160, 50, 178, 96], fill=C["brown"] + (255,))
+    for x, y in ((122, 66), (128, 70), (136, 64), (144, 72)):  # The till's coins
+        d.ellipse([x, y, x + 4, y + 3], fill=C["yellow"] + (255,), outline=C["amber"] + (255,))
+    # The vampire banker in a pinstripe suit, sipping the shop's gold through a very long straw
+    shape(img, lambda dr, v: dr.polygon([(20, H), (24, 60), (40, 50), (62, 50), (76, 60), (80, H)], fill=v), C["night"], C["ink"], C["navy"])
+    for x in range(28, 78, 6):
+        d.line([x, 54, x - 2, H], fill=C["slate"] + (255,))
+    d.polygon([(36, 50), (30, 36), (44, 50)], fill=C["red"] + (255,))  # The cape collar
+    d.polygon([(66, 50), (72, 36), (58, 50)], fill=C["red"] + (255,))
+    d.polygon([(44, 50), (51, 64), (58, 50)], fill=C["white"] + (255,))
+    shape(img, lambda dr, v: dr.ellipse([38, 20, 64, 52], fill=v), C["silver"], C["grey"], C["white"])  # Pale
+    shape(img, lambda dr, v: dr.polygon([(38, 30), (40, 18), (51, 14), (62, 18), (64, 30), (56, 24), (51, 30), (46, 24)], fill=v), C["ink"], C["night"])  # Widow's peak
+    for ex in (46, 56):
+        d.line([ex - 3, 34, ex + 3, 35 if ex < 50 else 33], fill=C["ink"] + (255,))
+        dot(img, ex, 36, C["red"])
+    d.line([48, 44, 56, 44], fill=C["ink"] + (255,))
+    d.polygon([(49, 44), (50, 47), (51, 44)], fill=C["white"] + (255,))  # Fangs
+    d.polygon([(53, 44), (54, 47), (55, 44)], fill=C["white"] + (255,))
+    img = outline(img)
+    d = ImageDraw.Draw(img)
+    d.line([(56, 44), (90, 40), (130, 62)], fill=C["white"] + (255,), width=2)  # The straw
+    d.line([(56, 45), (90, 41), (130, 63)], fill=C["red"] + (255,))
+    for k in range(6):  # Gold going up it
+        t = k / 6
+        x, y = 128 - t * 70, 62 - t * 20 + (abs(t - 0.6) * 6)
+        dot(img, x, y, C["yellow"])
+    return img
+
+
+def sleeper_agent():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    # The suburban house behind
+    shape(img, lambda dr, v: dr.rectangle([140, 46, 186, 78], fill=v), C["sand"], C["tan"], C["white"])
+    d.polygon([(136, 48), (163, 30), (190, 48)], fill=C["red"] + (255,))
+    d.rectangle([156, 60, 166, 78], fill=C["brown"] + (255,))
+    d.rectangle([144, 54, 152, 62], fill=C["sky"] + (255,))
+    d.rectangle([172, 54, 180, 62], fill=C["sky"] + (255,))
+    # His shadow on the grass: a trench coat, a hat, a sniper rifle
+    shadow = mask()
+    sd = ImageDraw.Draw(shadow)
+    S = lambda a, b: (60 - a, 99 - a * 0.06 + b)  # Along the shadow from his feet (a), across it (b)
+    sd.polygon([S(0, -3), S(18, -3), S(18, 3), S(0, 3)], fill=255)  # Legs
+    sd.polygon([S(14, -7), S(40, -4), S(40, 4), S(14, 7)], fill=255)  # The trench coat, flaring at the hem
+    sd.ellipse([S(46, 0)[0] - 3, S(46, 0)[1] - 3, S(46, 0)[0] + 3, S(46, 0)[1] + 3], fill=255)  # The head
+    sd.polygon([S(49, -6), S(51, -6), S(51, 6), S(49, 6)], fill=255)  # The hat's brim
+    sd.polygon([S(51, -3), S(55, -3), S(55, 3), S(51, 3)], fill=255)  # Its crown
+    sd.line([S(30, -6), S(60, -9)], fill=255, width=2)  # The sniper rifle, held across
+    sd.line([S(30, 5), S(36, -6)], fill=255, width=2)  # An arm to it
+    fill(img, shadow, C["forest"])
+    # The dad mowing the lawn: polo shirt, shorts, an earpiece coiled behind his ear
+    man(img, 64, 98, 1.5, C["skin"], C["green"], C["dark_brown"], face="smile", jacket=C["tan"])
+    for k in range(3):
+        d.arc([70, 36 + k * 3, 74, 40 + k * 3], 270, 90, fill=C["silver"] + (255,))
+    d.line([(72, 62), (90, 74)], fill=C["skin"] + (255,), width=3)
+    d.line([(90, 74), (102, 70), (104, 88)], fill=C["grey"] + (255,), width=2)  # The mower's handle
+    shape(img, lambda dr, v: dr.rectangle([98, 86, 124, 96], fill=v), C["red"], C["wine"], C["pink"])
+    for wx in (102, 120):
+        d.ellipse([wx - 3, 94, wx + 3, 100], fill=C["ink"] + (255,))
+    img = outline(img)
+    for x in range(96, 128, 4):  # Grass flying
+        dot(img, x + 2, 84 - (x % 3) * 2, C["green"])
+    return img
+
+
+def red_herring():
+    img = layer()
+    d = ImageDraw.Draw(img)
+    # A red herring in a detective's trench coat and hat, pointing a fin dramatically off to the side
+    shape(img, lambda dr, v: dr.polygon([(30, 50), (14, 36), (18, 56), (14, 76), (30, 62)], fill=v), C["red"], C["wine"], C["pink"])  # The tail
+    shape(img, lambda dr, v: dr.ellipse([24, 38, 120, 76], fill=v), C["red"], C["wine"], C["pink"])
+    shape(img, lambda dr, v: dr.polygon([(44, 44), (98, 42), (104, 74), (40, 76)], fill=v), C["tan"], C["brown"], C["sand"])  # The trench coat
+    d.line([(70, 42), (70, 76)], fill=C["brown"] + (255,))
+    d.rectangle([44, 58, 102, 61], fill=C["dark_brown"] + (255,))  # Its belt
+    d.rectangle([68, 58, 72, 61], fill=C["amber"] + (255,))
+    d.polygon([(94, 42), (104, 40), (100, 54)], fill=C["sand"] + (255,))  # The collar up
+    shape(img, lambda dr, v: dr.rectangle([96, 26, 122, 36], fill=v), C["brown"], C["dark_brown"], C["tan"])  # The fedora
+    shape(img, lambda dr, v: dr.rectangle([90, 34, 128, 38], fill=v), C["brown"], C["dark_brown"], C["tan"])
+    d.rectangle([97, 32, 121, 34], fill=C["ink"] + (255,))
+    d.ellipse([106, 44, 114, 52], fill=C["white"] + (255,), outline=C["ink"] + (255,))  # A shifty eye, glancing aside
+    d.rectangle([107, 47, 109, 49], fill=C["ink"] + (255,))
+    d.line([(116, 60), (120, 58)], fill=C["wine"] + (255,))
+    # The fin, flung out to point off to the side, back over its shoulder
+    shape(img, lambda dr, v: dr.polygon([(66, 48), (56, 40), (30, 18), (20, 12), (26, 22), (52, 50)], fill=v), C["red"], C["wine"], C["pink"])  # Pointing back the way it came
+    d.line([(56, 44), (28, 18)], fill=C["wine"] + (255,))
+    img = outline(img)
+    d = ImageDraw.Draw(img)
+    for k in range(3):  # "Over there!"
+        d.line([2 + k * 5, 4 + k * 2, 8 + k * 5, 6 + k * 2], fill=C["white"] + (255,))
+    for x, y in ((128, 24), (134, 16), (130, 8)):
+        d.ellipse([x, y, x + 3, y + 3], outline=C["white"] + (255,))
+    return img
+
+
+CARDS += [
+    ("EscapeGoat", "field", escape_goat),
+    ("ShellCompany", "street", shell_company),
+    ("DDOSAttack", "circuit", ddos_attack),
+    ("LucidDreaming", "mind", lucid_dreaming),
+    ("Headhunter", "office", headhunter),
+    ("Zealot", "street", zealot),
+    ("WebScraping", "room_day", web_scraping),
+    ("PrivateEquity", "street", private_equity),
+    ("SleeperAgent", "field", sleeper_agent),
+    ("RedHerring", "underwater", red_herring),
+]
+BACKGROUNDS.update({"bazaar": bg_bazaar, "street": bg_street})
 
 
 def main():
