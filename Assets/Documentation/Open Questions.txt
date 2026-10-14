@@ -20,8 +20,16 @@ STILL OPEN
           they end. The enemy's spells on its creatures show too, like their statuses do.
         - Science deck: 8 off-theme Utopia cards moved to the deck builder (Philosophy PhD, Mathematician, Quantum Physicist,
           Surveillance Giraffe, Pioneer, Climate Change, Overpopulation, Absolute Zero); the growers come in 1 Day sooner.
-    • No art yet for God's Grace, Phoenix Feather, Evolution Theory, Mutation, Exponential Growth, Scientific Method,
-      Frankenstein, Chimera and Resurrected T-Rex (each has its brief). Draw them?
+    • Answered: version B (queued spells only in the stack); the 9 pictures drawn and HAARP redrawn (an underground laser
+      fired down a shaft toward the Earth's core).
+    • Balance direction (memo): buff the other factions up to the top level instead of toning Double-O Section down; work on
+      factions, not decks (they'll be reorganized). Round robin of the one-faction decks, Hard, 48 games each: Statecraft
+      90%, Corporate 71%, Digital Society 60%, Myth 60%, Mind 50%, Utopia 42%, Tech 35%, Zeitgeist 21%, Shadow Ops.
+      (Plausible Deniability) 4%.
+    • Merge Zeitgeist into Digital Society (Zeitgeist would be the game's title)? Cards each faction could have if every
+      Brainstorm List and backlog idea were made (made cards included): Zeitgeist 242, Corporate 231, Myth 212, Statecraft
+      176, Mind 148, Shadow Ops. 143, Digital Society 142, Tech 116, Utopia 110. Merged: 371 (13 shared).
+    • Found: a Living Dead stayed on the board at 0 Health (Myth vs Mind, twice in 432 games). To fix.
 
 37. Doom as a cost, HAARP's earthquake, a clear table (2026-10-14)
     • Built as asked: Doomscrolling costs Doom 3 (Keyword "Doom Cost"); HAARP makes an earthquake; the deck, discard and
