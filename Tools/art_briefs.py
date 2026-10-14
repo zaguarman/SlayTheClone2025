@@ -41,7 +41,8 @@ USER_NOTES = {
                          "creases, a smug toothy grin, a neckbeard), in our own colors, not the reference's.",
                          "2026-10-14: the head exactly like the user's cropped soyjak: tilted back, three-quarters to the "
                          "right, glasses up on the face, the huge open mouth with its top teeth, the scraggly neckbeard; "
-                         "the body back as it was, only the arms redone.", "2026-10-14: redo the face (it came out rough)."],
+                         "the body back as it was, only the arms redone.", "2026-10-14: redo the face (it came out rough).",
+                         "2026-10-14: the redo was worse: keep the earlier soyjak head."],
     "Black Knight": ["2026-10-14 (pixel art): no speech bubble; like the older picture, with King Arthur and Patsy there; the "
                      "forest has no water."],
     "Particle Accelerator": ["2026-10-14 (pixel art): after the user's photo of the LHC tunnel: the blue magnet pipe running off "
@@ -81,11 +82,13 @@ USER_NOTES = {
                       "2026-10-14: the guy like Wojak: the doomer (the user's reference: a black beanie, purple bags under "
                       "tired eyes, stubble, a cigarette with its smoke, a black hoodie).",
                       "2026-10-14: the head in Wojak's shape (a dome over wide cheeks), not a box.",
-                      "2026-10-14: redo the Wojak face; it was completely off."],
+                      "2026-10-14: redo the Wojak face; it was completely off.",
+                      "2026-10-14: the redo was worse: keep the earlier one (the dome over wide cheeks)."],
     "This Is Fine": ["2026-10-14 (pixel art): no chair post (the 'log') behind the dog."],
     "Holy Hand Grenade of Antioch": ["2026-10-14 (pixel art): no pin; the priest holds up two fingers, not three."],
     "Trolley Problem": ["2026-10-14 (pixel art): like the classic drawing (the user's reference): side on, the trolley, the track "
-                        "splitting, a man at the lever, one person tied on one branch and five on the other."],
+                        "splitting, a man at the lever, one person tied on one branch and five on the other.",
+                        "2026-10-14: the man at the lever stands back from the tracks, beyond the split, never between them."],
     "Script Kiddie": ["2026-10-14 (pixel art): a baby sitting in that gaming chair, looking towards us; the rest as it was."],
     "Hollowed-Out Volcano Lair": ["2026-10-14 (pixel art): like the You Only Live Twice set (the user's still): inside the "
                                   "crater, the round opening to the sky, a helicopter, the rocket in its gantry, the helipad, "

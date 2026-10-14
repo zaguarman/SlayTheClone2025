@@ -209,6 +209,7 @@ Doomscrolling (spell)
     USER: 2026-10-14: the guy like Wojak: the doomer (the user's reference: a black beanie, purple bags under tired eyes, stubble, a cigarette with its smoke, a black hoodie).
     USER: 2026-10-14: the head in Wojak's shape (a dome over wide cheeks), not a box.
     USER: 2026-10-14: redo the Wojak face; it was completely off.
+    USER: 2026-10-14: the redo was worse: keep the earlier one (the dome over wide cheeks).
 Crypto "Entrepreneur" (creature)
     A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand.
 Digital Nomad (creature)
@@ -219,6 +220,7 @@ Keyboard Warrior (creature)
     USER: 2026-10-14: the arms in the belly's lighter skin tone, smooth where they meet the shoulders; the face the typical redditor meme face (the user's references: a tall bald dome, glasses, brow creases, a smug toothy grin, a neckbeard), in our own colors, not the reference's.
     USER: 2026-10-14: the head exactly like the user's cropped soyjak: tilted back, three-quarters to the right, glasses up on the face, the huge open mouth with its top teeth, the scraggly neckbeard; the body back as it was, only the arms redone.
     USER: 2026-10-14: redo the face (it came out rough).
+    USER: 2026-10-14: the redo was worse: keep the earlier soyjak head.
 Dogpile (spell)
     A huge, happy pile of dogs (corgis, labradors, a confused pug on top) burying one person, of whom only a waving hand sticks out.
     USER: A big pile of dogs on top of someone.
@@ -506,6 +508,7 @@ Roko's Basilisk (creature)
 Trolley Problem (spell)
     The trolley problem from above: a lever, a trolley and a split track, with one bored man on a track scrolling his phone.
     USER: 2026-10-14 (pixel art): like the classic drawing (the user's reference): side on, the trolley, the track splitting, a man at the lever, one person tied on one branch and five on the other.
+    USER: 2026-10-14: the man at the lever stands back from the tracks, beyond the split, never between them.
 Red Herring (spell)
     A red fish in a detective's trench coat and hat, pointing a fin dramatically off to the side.
 Imposter Syndrome (spell)
