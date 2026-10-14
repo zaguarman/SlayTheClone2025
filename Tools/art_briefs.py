@@ -33,9 +33,12 @@ USER_NOTES = {
     "Legacy Code": ["2026-10-14 (pixel art): a scroll with HERE BE DRAGONS in ASCII art (the user's reference: the dragon by snd).",
                     "2026-10-14: no cobweb (it read as a wifi signal) and no duct tape on the computer."],
     "Golden Dome": ["2026-10-14 (pixel art): redo it; Netanyahu as the man standing there (the user's reference photo: silver hair "
-                    "swept back, dark suit, white shirt, red tie, an Israeli flag pin, a smirk)."],
+                    "swept back, dark suit, white shirt, red tie, an Israeli flag pin, a smirk).", "2026-10-14: no flag pin."],
     "Surveillance Giraffe": ["2026-10-14 (pixel art): keep its shape; no blobs sticking out of it; no camera (the white thing) on its head."],
-    "Keyboard Warrior": ["2026-10-14 (pixel art): like Rambo but fat, holding the keyboard as if it were a sword."],
+    "Keyboard Warrior": ["2026-10-14 (pixel art): like Rambo but fat, holding the keyboard as if it were a sword.",
+                         "2026-10-14: the arms in the belly's lighter skin tone, smooth where they meet the shoulders; the "
+                         "face the typical redditor meme face (the user's references: a tall bald dome, glasses, brow "
+                         "creases, a smug toothy grin, a neckbeard), in our own colors, not the reference's."],
     "Black Knight": ["2026-10-14 (pixel art): no speech bubble; like the older picture, with King Arthur and Patsy there; the "
                      "forest has no water."],
     "Particle Accelerator": ["2026-10-14 (pixel art): after the user's photo of the LHC tunnel: the blue magnet pipe running off "
@@ -60,7 +63,8 @@ USER_NOTES = {
                 "cat's ears aligned with its head.", "2026-10-14: no round fin blob on top of the fish."],
     "Placebo": ["Put a spoon of sugar.",
                 "2026-10-14 (pixel art): only the spoon holding sugar, like the user's photo (a heaped spoonful, the handle "
-                "rising to the right); keep the pink background."],
+                "rising to the right); keep the pink background.",
+                "2026-10-14: more contrast between the spoon and the sugar; the end of the handle out of sight at this angle."],
     "Business Expense": ["A guy who looks like a CEO, in a full suit, going to jail."],
     "We Are Not The Same": ["The Spider-Man meme, pointing at each other."],
     "Meta Group Chat": ["Redo it with a WhatsApp-like feel."],
@@ -70,7 +74,9 @@ USER_NOTES = {
     "Genesis": ["Like the reference picture the user gave."],
     "Doomscrolling": ["A guy like the wojak meme, but on a phone instead of a computer.",
                       "2026-10-14 (pixel art): a clock showing 3:00 AM behind him.",
-                      "2026-10-14: no cards flying about; the guy like Bojak from the memes (the bald wojak)."],
+                      "2026-10-14: no cards flying about; the guy like Bojak from the memes (the bald wojak).",
+                      "2026-10-14: the guy like Wojak: the doomer (the user's reference: a black beanie, purple bags under "
+                      "tired eyes, stubble, a cigarette with its smoke, a black hoodie)."],
     "The Holy Grail": ["Remove the pin."],
     "The Lost Ark": ["Make the guy look more like Indiana Jones."],
     "Omen Reading": ["The reader more centered at the table, his body showing."],

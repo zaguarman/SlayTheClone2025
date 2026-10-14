@@ -938,29 +938,48 @@ def doomscrolling():
     pixel_text(clock, 34, 41, "AM", C["red"])
     img.alpha_composite(outline(clock))
     d = ImageDraw.Draw(img)
-    # Bojak: the bald wojak, a huge dome of a head with the face small at the bottom of it, lit blue by the phone
-    shape(img, lambda dr, v: dr.ellipse([50, 80, 142, 150], fill=v), C["slate"], C["navy"], C["grey"])  # Hunched, in a grey tee
-    for ex in (65, 127):  # Ears, low on the head
-        shape(img, lambda dr, v: dr.ellipse([ex - 4, 46, ex + 4, 60], fill=v), C["sand"], C["tan"])
-    shape(img, lambda dr, v: dr.ellipse([64, 2, 128, 84], fill=v), C["sand"], C["tan"], C["white"])
-    for y, (x0, x1) in ((22, (84, 108)), (27, (82, 110))):  # Forehead creases
-        d.arc([x0, y, x1, y + 6], 200, 340, fill=C["tan"] + (255,))
-    d.line([(78, 47), (90, 44)], fill=C["ink"] + (255,))  # Brows, sad
-    d.line([(102, 44), (114, 47)], fill=C["ink"] + (255,))
-    for ex in (85, 107):
-        d.arc([ex - 6, 48, ex + 6, 56], 200, 340, fill=C["ink"] + (255,))  # Heavy lids
-        d.rectangle([ex - 1, 51, ex, 52], fill=C["ink"] + (255,))
-        d.arc([ex - 6, 51, ex + 6, 59], 20, 160, fill=C["tan"] + (255,))  # Bags under them
-        d.arc([ex - 5, 54, ex + 5, 62], 30, 150, fill=C["tan"] + (255,))
-    d.line([(96, 50), (94, 61), (98, 62)], fill=C["ink"] + (255,))  # The nose
-    d.arc([90, 67, 102, 73], 200, 340, fill=C["ink"] + (255,))  # A small frown
-    d.arc([88, 73, 104, 81], 30, 150, fill=C["tan"] + (255,))  # The chin
+    # The doomer Wojak: black beanie, black hoodie, pale face, purple bags under tired eyes, stubble, a cigarette
+    shape(img, lambda dr, v: dr.ellipse([46, 78, 146, 150], fill=v), C["night"], C["ink"], C["navy"])  # The hoodie
+    d.line([(84, 84), (82, 100)], fill=C["grey"] + (255,))  # Its drawstrings
+    d.line([(108, 84), (110, 100)], fill=C["grey"] + (255,))
+    shape(img, lambda dr, v: dr.polygon([(80, 76), (112, 76), (106, 88), (86, 88)], fill=v), C["slate"], C["navy"])  # The tee under it
+    for ex in (68, 124):  # Ears
+        shape(img, lambda dr, v: dr.ellipse([ex - 4, 44, ex + 4, 60], fill=v), C["white"], C["silver"])
+    face = shape(img, lambda dr, v: dr.rounded_rectangle([68, 18, 124, 84], 20, fill=v), C["white"], C["silver"])
+    shape(img, lambda dr, v: dr.chord([64, 2, 128, 54], 180, 360, fill=v), C["night"], C["ink"], C["slate"])  # The beanie
+    shape(img, lambda dr, v: dr.rectangle([64, 26, 128, 37], fill=v), C["slate"], C["navy"], C["grey"])
+    for x in range(67, 127, 4):
+        d.line([x, 27, x, 36], fill=C["navy"] + (255,))
+    rnd = random.Random(67)
+    fm = face.load()
+    for _ in range(170):  # Stubble on the jaw and the lip
+        x, y = rnd.randint(70, 122), rnd.randint(60, 83)
+        if fm[x, y] and not (86 <= x <= 106 and 64 <= y <= 66):
+            dot(img, x, y, C["grey"])
+    for ex in (84, 108):
+        d.arc([ex - 8, 41, ex + 8, 53], 200, 340, fill=C["ink"] + (255,))  # Heavy, half-shut lids
+        d.line([ex - 6, 45, ex + 6, 45], fill=C["ink"] + (255,))
+        d.rectangle([ex - 2, 46, ex + 1, 47], fill=C["ink"] + (255,))
+        d.arc([ex - 8, 45, ex + 8, 55], 20, 160, fill=C["purple"] + (255,))  # The bags
+        d.arc([ex - 7, 47, ex + 7, 56], 30, 150, fill=C["plum"] + (255,))
+    d.line([(93, 46), (91, 60)], fill=C["ink"] + (255,))  # The long Wojak nose
+    d.line([(99, 46), (101, 60)], fill=C["ink"] + (255,))
+    d.arc([88, 57, 96, 63], 90, 270, fill=C["ink"] + (255,))
+    d.arc([96, 57, 104, 63], 270, 90, fill=C["ink"] + (255,))
+    d.line([88, 70, 104, 70], fill=C["ink"] + (255,))  # A flat mouth
     # The phone, its black back to us, held in both hands
-    shape(img, lambda dr, v: dr.rounded_rectangle([82, 78, 110, 106], 3, fill=v), C["night"], C["ink"], C["slate"])
-    d.ellipse([86, 81, 90, 85], fill=C["slate"] + (255,))
+    shape(img, lambda dr, v: dr.rounded_rectangle([82, 84, 110, 108], 3, fill=v), C["night"], C["ink"], C["slate"])
+    d.ellipse([86, 87, 90, 91], fill=C["slate"] + (255,))
     for hx in (80, 112):
-        shape(img, lambda dr, v: dr.ellipse([hx - 6, 86, hx + 6, 100], fill=v), C["sand"], C["tan"])
-    return outline(img)
+        shape(img, lambda dr, v: dr.ellipse([hx - 6, 90, hx + 6, 104], fill=v), C["white"], C["silver"])
+    img = outline(img)
+    d = ImageDraw.Draw(img)
+    d.polygon([(101, 68), (131, 73), (131, 77), (101, 72)], fill=C["white"] + (255,), outline=C["ink"] + (255,))  # The cigarette
+    d.polygon([(127, 73), (130, 74), (130, 76), (127, 75)], fill=C["orange"] + (255,))
+    for k in range(12):
+        dot(img, 133 + round(math.sin(k * 0.8) * 3), 72 - k * 3, C["silver"] if k < 5 else C["grey"])
+        dot(img, 134 + round(math.sin(k * 0.8) * 3), 71 - k * 3, C["grey"] if k < 6 else C["slate"])
+    return img
 
 
 def sherman_tank():
@@ -1335,13 +1354,13 @@ def man(img, x, y, scale, skin, shirt, hair=None, face="neutral", tie=None, jack
 def placebo():
     img = layer()
     d = ImageDraw.Draw(img)
-    # A spoonful of sugar and nothing else: the handle rising off to the top right, the bowl's tip to the left, heaped high
-    shape(img, lambda dr, v: dr.polygon([(128, 66), (180, 4), (188, 2), (190, 8), (138, 72)], fill=v), C["silver"], C["grey"], C["white"])
-    d.line([(134, 64), (184, 5)], fill=C["white"] + (255,))
+    # A spoonful of sugar and nothing else: dark steel against the white sugar, the handle running off past the top right
+    shape(img, lambda dr, v: dr.polygon([(128, 66), (196, -12), (204, -4), (138, 72)], fill=v), C["grey"], C["slate"], C["silver"])
+    d.line([(134, 64), (198, -8)], fill=C["silver"] + (255,))
     cx, cy, rx, ry = 84, 74, 58, 18
     bowl = [(cx + rx * math.cos(a), cy + ry * math.sin(a) * (0.7 + 0.3 * math.cos(a))) for a in (k * math.pi / 40 for k in range(80))]
-    shape(img, lambda dr, v: dr.polygon(bowl, fill=v), C["silver"], C["grey"], C["white"])
-    d.line([(x, y - 1) for x, y in bowl[6:36]], fill=C["white"] + (255,))  # The light along its lip
+    shape(img, lambda dr, v: dr.polygon(bowl, fill=v), C["grey"], C["slate"], C["silver"])
+    d.line([(x, y - 1) for x, y in bowl[6:36]], fill=C["silver"] + (255,))  # The light along its lip
     rnd = random.Random(43)
     top, bottom = [], []
     for x in range(cx - rx + 6, cx + rx - 3):
@@ -1350,6 +1369,7 @@ def placebo():
         top.append((x, cy - 4 - 30 * h ** 1.4 * (1 - 0.1 * f) + rnd.choice((-1, 0, 0, 1))))
         bottom.append((x, cy + 8 * h))
     sugar = shape(img, lambda dr, v: dr.polygon(top + bottom[::-1], fill=v), C["white"], C["silver"])
+    d.line(bottom, fill=C["slate"] + (255,))  # Where the sugar meets the steel
     sm = sugar.load()
     for _ in range(320):  # Grains, thicker on the shaded side
         x, y = rnd.randint(30, 140), rnd.randint(36, 84)
@@ -1416,7 +1436,7 @@ def golden_dome():
             d.ellipse([ex - r, ey - r, ex + r, ey + r], fill=col + (255,))
     d.line([10, 4, 18, 14], fill=C["silver"] + (255,), width=2)  # One more on its way
     d.polygon([(17, 14), (20, 13), (21, 18)], fill=C["red"] + (255,))
-    # Netanyahu in front of it, pleased with himself: silver hair swept back, dark suit, red tie, the flag pin
+    # Netanyahu in front of it, pleased with himself: silver hair swept back, dark suit, red tie
     shape(img, lambda dr, v: dr.polygon([(122, H), (126, 80), (138, 70), (174, 70), (186, 80), (190, H)], fill=v), C["night"], C["ink"], C["navy"])
     d.rectangle([150, 58, 162, 72], fill=C["skin_dark"] + (255,))  # The neck
     d.polygon([(146, 70), (166, 70), (156, 94)], fill=C["white"] + (255,))
@@ -1424,10 +1444,6 @@ def golden_dome():
     d.polygon([(154, 76), (158, 76), (160, 90), (156, 94), (152, 90)], fill=C["red"] + (255,))
     d.line([(146, 70), (156, 94)], fill=C["navy"] + (255,))
     d.line([(166, 70), (156, 94)], fill=C["navy"] + (255,))
-    d.rectangle([169, 80, 174, 84], fill=C["white"] + (255,))
-    d.line([169, 80, 174, 80], fill=C["blue"] + (255,))
-    d.line([169, 84, 174, 84], fill=C["blue"] + (255,))
-    dot(img, 171, 82, C["blue"])
     for ex in (138, 174):  # Ears
         shape(img, lambda dr, v: dr.ellipse([ex - 4, 32, ex + 4, 48], fill=v), C["skin"], C["skin_dark"])
     shape(img, lambda dr, v: dr.ellipse([140, 14, 172, 64], fill=v), C["skin"], C["skin_dark"])
@@ -1516,14 +1532,17 @@ def inflatable_tank():
 def keyboard_warrior():
     img = layer()
     d = ImageDraw.Draw(img)
-    # Rambo gone soft: long black hair, the red headband, shirtless, a belly, a bandolier, camo trousers
-    hair = [(74, 18), (106, 18), (114, 54), (104, 46), (98, 50), (82, 50), (76, 46), (66, 54)]
+    # Rambo gone soft, with a redditor's face: balding, long hair at the back, the red headband, glasses, a neckbeard,
+    # a smug toothy grin; shirtless, a belly, a bandolier, camo trousers
+    hair = [(74, 22), (106, 22), (114, 56), (104, 48), (98, 52), (82, 52), (76, 48), (66, 56)]
     shape(img, lambda dr, v: dr.polygon(hair, fill=v), C["night"], C["ink"], C["slate"])
     shape(img, lambda dr, v: dr.rectangle([56, 98, 124, H], fill=v), C["dark_green"], C["forest"], C["green"])
     rnd = random.Random(61)
     for _ in range(10):  # Camo blotches
         x, y = rnd.randint(58, 120), rnd.randint(100, H)
         d.ellipse([x - 3, y - 2, x + 3, y + 2], fill=rnd.choice((C["forest"], C["brown"])) + (255,))
+    for x0 in (50, 110):  # Fat upper arms, hanging at his sides
+        shape(img, lambda dr, v: dr.ellipse([x0, 46, x0 + 20, 80], fill=v), C["skin"], C["skin_dark"])
     shape(img, lambda dr, v: dr.ellipse([56, 40, 124, 82], fill=v), C["skin"], C["skin_dark"])  # Chest
     shape(img, lambda dr, v: dr.ellipse([54, 56, 126, 110], fill=v), C["skin"], C["skin_dark"])  # The belly
     for x0 in (66, 92):
@@ -1534,28 +1553,40 @@ def keyboard_warrior():
         x, y = 66 + k * 5.3, 48 + k * 6
         d.rectangle([x - 1, y - 2, x + 1, y + 1], fill=C["amber"] + (255,))
         dot(img, x, y - 3, C["silver"])
-    # The head: double chin, scowl, gritted teeth, sweating
-    shape(img, lambda dr, v: dr.ellipse([76, 14, 104, 48], fill=v), C["skin"], C["skin_dark"], C["white"])
-    d.arc([80, 38, 100, 50], 20, 160, fill=C["skin_dark"] + (255,))
-    d.chord([74, 10, 106, 30], 180, 360, fill=C["night"] + (255,))
-    shape(img, lambda dr, v: dr.rectangle([75, 21, 105, 25], fill=v), C["red"], C["wine"])  # The headband, its tails flying
-    shape(img, lambda dr, v: dr.polygon([(76, 22), (58, 18), (56, 24), (68, 26), (76, 25)], fill=v), C["red"], C["wine"])
-    shape(img, lambda dr, v: dr.polygon([(76, 24), (60, 30), (63, 33), (76, 26)], fill=v), C["red"], C["wine"])
-    d.line([(82, 28), (88, 30)], fill=C["ink"] + (255,))
-    d.line([(92, 30), (98, 28)], fill=C["ink"] + (255,))
-    for ex in (85, 94):
-        d.rectangle([ex, 31, ex + 1, 32], fill=C["ink"] + (255,))
-    d.line([(90, 32), (89, 37), (91, 38)], fill=C["skin_dark"] + (255,))
-    d.rectangle([86, 41, 94, 43], fill=C["white"] + (255,), outline=C["ink"] + (255,))
-    for x, y in ((80, 40), (83, 44), (97, 44), (100, 40), (88, 46), (92, 46)):
-        dot(img, x, y, C["skin_dark"])
-    shape(img, lambda dr, v: dr.ellipse([101, 28, 103, 32], fill=v), C["sky"], C["blue"])
+    # The redditor head: a tall bald dome, glasses, brow creases, the neckbeard
+    head = shape(img, lambda dr, v: (dr.ellipse([76, 0, 104, 34], fill=v), dr.ellipse([74, 18, 106, 50], fill=v)), C["skin"], C["skin_dark"])
+    hm = head.load()
+    for _ in range(140):  # The neckbeard: stubble round the jaw and under the chin
+        x, y = rnd.randint(74, 106), rnd.randint(36, 50)
+        if hm[x, y] and ((x - 90) ** 2 / 100 + (y - 37) ** 2 / 16 > 1):
+            dot(img, x, y, rnd.choice((C["dark_brown"], C["ink"])))
+    shape(img, lambda dr, v: dr.rectangle([75, 14, 105, 18], fill=v), C["red"], C["wine"])  # The headband, its tails flying
+    shape(img, lambda dr, v: dr.polygon([(76, 15), (58, 11), (56, 17), (68, 19), (76, 18)], fill=v), C["red"], C["wine"])
+    shape(img, lambda dr, v: dr.polygon([(76, 17), (60, 23), (63, 26), (76, 19)], fill=v), C["red"], C["wine"])
+    d.arc([82, 20, 92, 26], 200, 340, fill=C["skin_dark"] + (255,))  # Smug creases over the brows
+    d.arc([88, 21, 98, 27], 200, 340, fill=C["skin_dark"] + (255,))
+    d.line([(80, 27), (87, 29)], fill=C["ink"] + (255,))  # Brows, down at the middle
+    d.line([(93, 29), (100, 27)], fill=C["ink"] + (255,))
+    for x0 in (79, 91):  # The glasses
+        d.rectangle([x0, 30, x0 + 9, 35], outline=C["ink"] + (255,))
+        d.line([x0 + 1, 31, x0 + 8, 31], fill=C["skin_dark"] + (255,))  # Narrowed eyes
+        d.rectangle([x0 + 4, 32, x0 + 5, 33], fill=C["ink"] + (255,))
+    d.line([88, 31, 91, 31], fill=C["ink"] + (255,))
+    d.line([(76, 31), (79, 31)], fill=C["ink"] + (255,))
+    d.line([(100, 31), (104, 31)], fill=C["ink"] + (255,))
+    d.line([(90, 35), (89, 39), (91, 39)], fill=C["skin_dark"] + (255,))
+    d.polygon([(82, 41), (98, 41), (95, 45), (85, 45)], fill=C["white"] + (255,), outline=C["ink"] + (255,))  # The grin
+    for x in (86, 89, 92, 95):
+        d.line([x, 42, x, 44], fill=C["silver"] + (255,))
+    d.line([(80, 40), (82, 41)], fill=C["ink"] + (255,))
+    d.line([(98, 41), (100, 40)], fill=C["ink"] + (255,))
     img = outline(img)
-    # Fat arms, both fists on the keyboard's end, held up and forward like a sword (their own outline, over the body)
+    # Forearms, both fists on the keyboard's end, held up and forward like a sword (their own outline, over the body)
     body, img = img, layer()
     d = ImageDraw.Draw(img)
-    shape(img, lambda dr, v: dr.line([(62, 48), (62, 64), (84, 72)], fill=v, width=10, joint="curve"), C["skin_dark"], C["brown"], C["skin"], (0, 1), 2)
-    shape(img, lambda dr, v: dr.line([(118, 48), (118, 64), (98, 70)], fill=v, width=10, joint="curve"), C["skin_dark"], C["brown"], C["skin"], (0, 1), 2)
+    for (ex, ey), (wx, wy) in (((62, 78), (84, 72)), ((118, 78), (98, 70))):  # Elbow to wrist, rounded at the elbow
+        shape(img, lambda dr, v: (dr.line([(ex, ey), (wx, wy)], fill=v, width=9), dr.ellipse([ex - 5, ey - 5, ex + 5, ey + 5], fill=v)),
+              C["skin"], C["skin_dark"])
     a = math.radians(55)
     ux, uy, nx, ny = math.cos(a), -math.sin(a), math.sin(a), math.cos(a)
     p0x, p0y, L, w = 90 - ux * 4, 72 - uy * 4, 78, 7

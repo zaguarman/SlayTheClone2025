@@ -88,6 +88,7 @@ Supply Depot (spell)
 Golden Dome (creature)
     A shimmering golden dome of light over one fat senator on a deckchair, while missiles rain on the rest of the city outside it.
     USER: 2026-10-14 (pixel art): redo it; Netanyahu as the man standing there (the user's reference photo: silver hair swept back, dark suit, white shirt, red tie, an Israeli flag pin, a smirk).
+    USER: 2026-10-14: no flag pin.
 Presidential Pardon (spell)
     A smiling president signing a giant pardon with a huge flourish for a creature in an orange jumpsuit still holding a smoking gun.
 Congruent Use of Force (creature)
@@ -204,6 +205,7 @@ Doomscrolling (spell)
     USER: A guy like the wojak meme, but on a phone instead of a computer.
     USER: 2026-10-14 (pixel art): a clock showing 3:00 AM behind him.
     USER: 2026-10-14: no cards flying about; the guy like Bojak from the memes (the bald wojak).
+    USER: 2026-10-14: the guy like Wojak: the doomer (the user's reference: a black beanie, purple bags under tired eyes, stubble, a cigarette with its smoke, a black hoodie).
 Crypto "Entrepreneur" (creature)
     A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand.
 Digital Nomad (creature)
@@ -211,6 +213,7 @@ Digital Nomad (creature)
 Keyboard Warrior (creature)
     A heavyset warrior in a stained hoodie and a cape, holding a mechanical keyboard over his head like a greatsword, a gaming headset for a helmet and energy drinks hanging from his belt.
     USER: 2026-10-14 (pixel art): like Rambo but fat, holding the keyboard as if it were a sword.
+    USER: 2026-10-14: the arms in the belly's lighter skin tone, smooth where they meet the shoulders; the face the typical redditor meme face (the user's references: a tall bald dome, glasses, brow creases, a smug toothy grin, a neckbeard), in our own colors, not the reference's.
 Dogpile (spell)
     A huge, happy pile of dogs (corgis, labradors, a confused pug on top) burying one person, of whom only a waving hand sticks out.
     USER: A big pile of dogs on top of someone.
@@ -535,6 +538,7 @@ Placebo (spell)
     A sugar pill the size of a melon labelled MIRACLE on a spoonful of sugar, and a skinny man next to it flexing a non-existent bicep, very proud.
     USER: Put a spoon of sugar.
     USER: 2026-10-14 (pixel art): only the spoon holding sugar, like the user's photo (a heaped spoonful, the handle rising to the right); keep the pink background.
+    USER: 2026-10-14: more contrast between the spoon and the sugar; the end of the handle out of sight at this angle.
 Vaccine (spell)
     A syringe with a tiny Wi-Fi antenna on its plunger and full signal bars above it.
 Climate Change (spell)
