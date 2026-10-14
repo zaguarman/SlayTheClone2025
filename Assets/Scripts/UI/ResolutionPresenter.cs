@@ -226,7 +226,7 @@ namespace SlayTheClone {
             ring.raycastTarget = false;
             ring.transform.SetAsLastSibling();
             DOTween.To(() => ring.color.a, a => ring.color = UITheme.WithAlpha(AuraColor, a), 0.35f, 0.45f)
-                .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine).SetTarget(ring);
+                .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine).SetTarget(ring).SetLink(ring.gameObject); // Dies with the ring (a card destroyed under it)
             auras[target] = ring;
         }
 

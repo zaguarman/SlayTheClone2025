@@ -238,10 +238,10 @@ namespace SlayTheClone {
             seal.localScale = Vector3.one;
             graceSeal.color = SealDark;
             float beat = last ? 0.35f : 0.8f;
-            seal.DOScale(last ? 1.18f : 1.08f, beat).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(seal);
+            seal.DOScale(last ? 1.18f : 1.08f, beat).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(seal).SetLink(seal.gameObject);
             var image = graceSeal;
             DOTween.To(() => image.color, c => image.color = c, last ? SealBright : UITheme.Hex(0x6A0E0E), beat)
-                .SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(graceSeal);
+                .SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(graceSeal).SetLink(graceSeal.gameObject);
             if (last) seal.DOPunchPosition(new Vector3(0.08f, 0f, 0f), 0.6f, 20, 0.8f).SetTarget(seal);
         }
 

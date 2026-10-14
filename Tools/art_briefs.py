@@ -22,6 +22,11 @@ USER_NOTES = {
                         "quill, orange and yellow, flame-like barbs, a glowing eye near the top, the tip burning lilac)."],
     "The Chosen One": ["2026-10-14: delete the ball of fire; let Jesus with guns steal the show."],
     "Multipass": ["2026-10-14: after the film still (The Fifth Element)."],
+    "Unicorn": ["2026-10-14 (pixel art): rework the mane and the chart's downturn arrow behind; the fire layer on top of the "
+                "unicorn, so it looks like it's on fire.",
+                "2026-10-14: then: keep only the first, shorter fire on the ground around it; no fire climbing over it.",
+                "2026-10-14: then: that short fire in front of the unicorn."],
+    "Hostile Takeover": ["2026-10-14 (pixel art): the mouth a smile instead of an open box; the dorsal fin swept back, not a pyramid."],
     # From earlier sessions
     "Dogpile": ["A big pile of dogs on top of someone."],
     "Generational Trauma": ["The meme of the woman holding something above water in a swimming pool with a skeleton at the bottom, "
@@ -32,7 +37,9 @@ USER_NOTES = {
     "Antivirus": ["Put a panda on it."],
     "Counter-Intelligence": ["Like the first Counter-Strike cover, but instead of weapons they have thick glasses and "
                              "calculators aimed at each other."],
-    "Catfish": ["A cat and a fish loving each other."],
+    "Catfish": ["A cat and a fish loving each other.",
+                "2026-10-14 (pixel art): the fish less pointy, less like a shark, in its water container (a fishbowl); the "
+                "cat's ears aligned with its head.", "2026-10-14: no round fin blob on top of the fish."],
     "Placebo": ["Put a spoon of sugar."],
     "Business Expense": ["A guy who looks like a CEO, in a full suit, going to jail."],
     "We Are Not The Same": ["The Spider-Man meme, pointing at each other."],

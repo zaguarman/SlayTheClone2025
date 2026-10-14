@@ -41,6 +41,9 @@ Pluriemployed Hustler (creature)
     A delivery worker in a teal cap running past (speed lines) with a delivery box, a row of five rating stars above him; office towers behind.
 Unicorn (creature)
     A white unicorn startup with a gold horn and a rainbow mane, standing on fire, a red chart line falling behind it; office towers behind.
+    USER: 2026-10-14 (pixel art): rework the mane and the chart's downturn arrow behind; the fire layer on top of the unicorn, so it looks like it's on fire.
+    USER: 2026-10-14: then: keep only the first, shorter fire on the ground around it; no fire climbing over it.
+    USER: 2026-10-14: then: that short fire in front of the unicorn.
 Multimillionaire Philanthropist (creature)
     (from the drawing) A giant ceremonial cheque, mostly tax deduction
 Fat Tony (creature)
@@ -52,6 +55,7 @@ Margin Call (spell)
     (from the drawing) An old desk phone that won't stop ringing
 Hostile Takeover (spell)
     A grey shark in a red tie swimming through the office towers, jaws open, a red chart line falling behind it.
+    USER: 2026-10-14 (pixel art): the mouth a smile instead of an open box; the dorsal fin swept back, not a pyramid.
 Mass Layoffs (spell)
     A cardboard box of desk belongings (a plant, a mug) on its way to the exit door, a red chart line falling; office towers behind.
 Team Building Exercise (spell)
@@ -216,6 +220,8 @@ Chronically Online (creature)
 Catfish (creature)
     A cat and a goldfish in love: the cat presses its face to the fishbowl, the fish kisses the glass back, hearts all around.
     USER: A cat and a fish loving each other.
+    USER: 2026-10-14 (pixel art): the fish less pointy, less like a shark, in its water container (a fishbowl); the cat's ears aligned with its head.
+    USER: 2026-10-14: no round fin blob on top of the fish.
 Conspiracy Theorist (creature)
     A man in a tinfoil hat pointing at a cork board of photos joined by red string, the biggest photo a pigeon labelled DRONE.
 Clickbait (spell)

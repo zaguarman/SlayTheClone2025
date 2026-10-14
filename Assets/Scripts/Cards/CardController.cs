@@ -632,7 +632,7 @@ namespace SlayTheClone {
                 idleBadge = CreateBadge("IdleBadge", "Idle zZ", UITheme.Parchment, 0.66f, 0.77f); // On the art, under the name
                 var group = idleBadge.AddComponent<CanvasGroup>();
                 group.blocksRaycasts = false;
-                DOTween.To(() => group.alpha, a => group.alpha = a, 0.55f, 0.9f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(idleBadge);
+                DOTween.To(() => group.alpha, a => group.alpha = a, 0.55f, 0.9f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(idleBadge).SetLink(idleBadge);
             }
             if (idleBadge != null) idleBadge.SetActive(idle);
         }
