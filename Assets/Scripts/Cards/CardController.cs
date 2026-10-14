@@ -188,7 +188,7 @@ namespace SlayTheClone {
             var icons = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature)
                 .OfType<StatusEffectModifier>()
                 .Where(status => !FogOfWar.HidesStatus(viewer, linkedCreature, status.EffectType))
-                .Select(status => IconLink($"{StatusIconPrefix}{status.EffectType}", EffectIcons.ForStatus(status.EffectType)))
+                .Select(status => IconLink($"{StatusIconPrefix}{status.EffectType}", EffectIcons.ForStatus(status.EffectType), StatusNumber(status)))
                 .ToList();
             // Raised or lowered stats: an arrow up or down, before the statuses
             var changes = StatChanges();
@@ -201,7 +201,14 @@ namespace SlayTheClone {
         private const string StatusIconPrefix = "icon:status:";
         private const string StatsUpIcon = "icon:stats up";
         private const string StatsDownIcon = "icon:stats down";
-        private static string IconLink(string id, string icon) => string.IsNullOrEmpty(icon) ? "" : $"<link=\"{id}\">{EffectIcons.Tag(icon)}</link>";
+        // A small number at the icon's foot: the stacks of one that stacks (Blessed, Heat), otherwise the Dusks it has left
+        private static string IconLink(string id, string icon, int number = 0) => string.IsNullOrEmpty(icon) ? ""
+            : $"<link=\"{id}\">{EffectIcons.Tag(icon)}{(number > 0 ? $"<size=55%><voffset=-0.35em><b>{number}</b></voffset></size>" : "")}</link>";
+
+        private int StatusNumber(StatusEffectModifier status) {
+            if (status.EffectType is Enums.StatusEffectType.Blessed or Enums.StatusEffectType.HeatSignature) return status.Stacks;
+            return status.DusksLeft(GameManager?.TurnManager?.TurnNumber ?? status.TurnApplied);
+        }
 
         /// <summary>The icons above the art (statuses and stat changes); each is a link <see cref="DescribeIcon"/> explains.</summary>
         public TMP_Text StatusText => statusText;
@@ -262,10 +269,16 @@ namespace SlayTheClone {
             int turnsUntilOperative = isLive ? linkedCreature.TurnsUntilOperative : data.turnsUntilOperative;
 
             string armorPart = armor > 0 ? $"<color=#2f7fc1>+{armor}</color>" : "";
-            statsText.text = $"{attack}/{speed}/{health}{armorPart}";
+            // Against the printed numbers: green when better, red when worse (damage included)
+            statsText.text = $"{Compared(attack, data.attack)}/{Compared(speed, data.speed)}/{Compared(health, data.health)}{armorPart}";
             readyText.text = turnsUntilOperative.ToString();
             ShowPip(turnsUntilOperative > 0);
         }
+
+        private const string BetterColor = "#1d7a2f";
+        private const string WorseColor = "#b3261e";
+        private static string Compared(int now, int printed) =>
+            now > printed ? $"<color={BetterColor}>{now}</color>" : now < printed ? $"<color={WorseColor}>{now}</color>" : now.ToString();
 
         /// <summary>The Deployment Time square's size and its distance from the card's top-left corner (card units).</summary>
         public const float PipSize = 24f;

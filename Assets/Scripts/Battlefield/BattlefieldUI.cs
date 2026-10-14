@@ -539,8 +539,9 @@ namespace SlayTheClone {
             }
         }
 
-        // A lone spell aimed at an empty slot sits in it; otherwise small on the edge facing the other side, stepsLeft of
-        // the place (0: the newest, in the middle)
+        // A lone spell aimed at an empty slot sits in it; otherwise small in the slot's lower-left corner, on both sides of
+        // the table, so the card it's aimed at still shows its name and stats; older ones step further left (stepsLeft, 0:
+        // the newest). A spell on a whole side sits at the battlefield's lower-left end
         private void PlaceSpellGhost(CardController ghost, BoardSlot slot, int stepsLeft, int count) {
             var slotView = slot != null ? battlefieldSlots[slot.Index] : null;
             bool roomInSlot = slotView != null && count == 1 && slotView.OccupyingCard == null && !queuedGhosts.ContainsKey(slotView);
@@ -557,11 +558,12 @@ namespace SlayTheClone {
             rect.SetAsLastSibling();
             rect.localScale = Vector3.one * SpellGhostScale;
             var mat = ((RectTransform)transform).rect;
-            var other = table.GetBattlefield(Player.Opponent);
-            bool facesUp = other == null || other.transform.position.y > transform.position.y;
-            float x = slotView != null ? slotView.transform.localPosition.x : mat.center.x;
-            x -= stepsLeft * rect.rect.width * SpellGhostScale * SpellGhostSpread;
-            rect.localPosition = new Vector3(x, facesUp ? mat.yMax : mat.yMin, 0f);
+            float width = rect.rect.width * SpellGhostScale, height = rect.rect.height * SpellGhostScale;
+            float left = slotView != null
+                ? slotView.transform.localPosition.x - ((RectTransform)slotView.transform).rect.width * slotView.transform.localScale.x / 2f
+                : mat.xMin;
+            float x = left + width / 2f - stepsLeft * width * SpellGhostSpread;
+            rect.localPosition = new Vector3(x, mat.yMin + height / 2f, 0f);
         }
 
         // The cast: the ghost leaps to the middle of the screen, swells and bursts, like a spell cast from the hand

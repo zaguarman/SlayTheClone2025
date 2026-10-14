@@ -363,7 +363,10 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(game.BoardView(p2).transform, sideGhost.transform.parent, "One for a whole side sits on that battlefield...");
             var corners = new Vector3[4];
             ((RectTransform)game.BoardView(p2).transform).GetWorldCorners(corners);
-            Assert.AreEqual(corners[0].y, Height(sideGhost), 0.01f, "...on its edge facing the other side, rather than in a slot");
+            var ghostCorners = new Vector3[4];
+            ((RectTransform)sideGhost.transform).GetWorldCorners(ghostCorners);
+            Assert.AreEqual(corners[0].y, ghostCorners[0].y, 0.01f, "...in its lower-left corner, rather than in a slot...");
+            Assert.AreEqual(corners[0].x, ghostCorners[0].x, 0.01f, "...on both sides of the table, out of the way of the cards' names and stats");
             Assert.Less(sideGhost.transform.lossyScale.x, game.CardIn(ox.Slot).transform.lossyScale.x, "...small");
             bool Glows(IPlayer side) => game.BoardView(side).transform.Cast<Transform>().Any(t => t.name.StartsWith("SpellAim_"));
             Assert.IsTrue(Glows(p2), "The whole battlefield it plays on glows while it's queued");
@@ -437,17 +440,27 @@ namespace SlayTheClone.Tests {
             var slotView = game.BoardView(p2).FindSlotView(aimedAt);
             var zapGhost = game.SpellGhost(zap);
             Assert.IsNotNull(zapGhost, "An aimed spell's ghost...");
-            Assert.AreEqual(X(slotView), X(zapGhost), 0.01f, "...is at the slot it's aimed at");
-            Assert.AreEqual(corners[0].y, Height(zapGhost), 0.01f, "...small on its edge, the creature there staying in sight");
+            float LeftOf(Component view) {
+                var c = new Vector3[4];
+                ((RectTransform)view.transform).GetWorldCorners(c);
+                return c[0].x;
+            }
+            float BottomOf(Component view) {
+                var c = new Vector3[4];
+                ((RectTransform)view.transform).GetWorldCorners(c);
+                return c[0].y;
+            }
+            Assert.AreEqual(LeftOf(slotView), LeftOf(zapGhost), 0.01f, "...is small in the lower-left corner of the slot it's aimed at...");
+            Assert.AreEqual(corners[0].y, BottomOf(zapGhost), 0.01f, "...the creature's name and stats staying in sight");
             game.Play(bolt, p1, aimedAt);
             yield return null;
             var boltGhost = game.SpellGhost(bolt);
-            Assert.AreEqual(X(slotView), X(boltGhost), 0.01f, "A second spell there: the newest takes the middle...");
-            Assert.Less(X(zapGhost), X(slotView) - 0.01f, "...and the older one steps left");
+            Assert.AreEqual(LeftOf(slotView), LeftOf(boltGhost), 0.01f, "A second spell there: the newest takes the corner...");
+            Assert.Less(X(zapGhost), X(boltGhost) - 0.01f, "...and the older one steps left");
             Assert.Greater(boltGhost.transform.GetSiblingIndex(), zapGhost.transform.GetSiblingIndex(), "...under the newest");
             SceneGame.Click(boltGhost);
             yield return null;
-            Assert.AreEqual(X(slotView), X(zapGhost), 0.01f, "Taken back: the other one is in the middle again");
+            Assert.AreEqual(LeftOf(slotView), LeftOf(zapGhost), 0.01f, "Taken back: the other one is in the corner again");
             SceneGame.Click(zapGhost);
             yield return null;
             game.Play(zap, p1, p2.Battlefield[3]);

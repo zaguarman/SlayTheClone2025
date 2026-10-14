@@ -38,6 +38,9 @@ namespace SlayTheClone {
             Log($"StatusEffectModifier '{Name}' created: Type={EffectType}, Duration={DurationInTurns}, Potency={Potency}, AppliedTurn={TurnApplied}", LogTag.Effects);
         }
 
+        /// <summary>The Dusks it has left, today's included (what its icon shows); 0 for a persistent one.</summary>
+        public int DusksLeft(int today) => IsPersistent ? 0 : Math.Max(1, TurnApplied + DurationInTurns - (CountsTheDayItLands ? 1 : 0) - today + 1);
+
         /// <summary>Whether it ticks at the Dusk ending this turn: never on the Day it was applied.</summary>
         public bool ActsAtDuskOf(int endedTurn) => endedTurn > TurnApplied;
 

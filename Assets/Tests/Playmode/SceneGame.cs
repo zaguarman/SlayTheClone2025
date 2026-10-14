@@ -25,7 +25,9 @@ namespace SlayTheClone.Tests {
         private int savedVSyncCount;
         private int savedTargetFrameRate;
         private bool framesUncapped;
-        private static readonly Regex StatsLine = new Regex(@"^(\d+)/(\d+)/(\d+)(?:<color=[^>]*>\+(\d+)</color>)?$");
+        // Each number may be colored against the printed one (green better, red worse), then the armor
+        private const string Stat = @"(?:<color=(#\w+)>)?(\d+)(?:</color>)?";
+        private static readonly Regex StatsLine = new Regex($@"^{Stat}/{Stat}/{Stat}(?:<color=[^>]*>\+(\d+)</color>)?$");
 
         public TestCards Cards { get; } = new TestCards();
         public GameManager Manager { get; private set; }
@@ -325,10 +327,18 @@ namespace SlayTheClone.Tests {
             var match = StatsLine.Match(stats);
             Assert.IsTrue(match.Success, $"{creature.Name}'s card shows an unreadable stats line '{stats}'");
 
-            Assert.AreEqual(creature.Attack, int.Parse(match.Groups[1].Value), $"{creature.Name}'s card shows the wrong attack ({stats})");
-            Assert.AreEqual(creature.Speed, int.Parse(match.Groups[2].Value), $"{creature.Name}'s card shows the wrong speed ({stats})");
-            Assert.AreEqual(creature.Health, int.Parse(match.Groups[3].Value), $"{creature.Name}'s card shows the wrong health ({stats})");
-            int armor = match.Groups[4].Success ? int.Parse(match.Groups[4].Value) : 0;
+            Assert.AreEqual(creature.Attack, int.Parse(match.Groups[2].Value), $"{creature.Name}'s card shows the wrong attack ({stats})");
+            Assert.AreEqual(creature.Speed, int.Parse(match.Groups[4].Value), $"{creature.Name}'s card shows the wrong speed ({stats})");
+            Assert.AreEqual(creature.Health, int.Parse(match.Groups[6].Value), $"{creature.Name}'s card shows the wrong health ({stats})");
+            if (creature.SourceData is CreatureData printed) {
+                // Green above the printed number, red below it, plain when it's the same
+                void Colored(int now, int was, Group color, string what) =>
+                    Assert.AreEqual(now == was ? "" : now > was ? "better" : "worse", !color.Success ? "" : color.Value == "#1d7a2f" ? "better" : "worse",
+                        $"{creature.Name}'s {what} is {now}, printed {was}, shown as {stats}");
+                Colored(creature.Attack, printed.attack, match.Groups[1], "attack");
+                Colored(creature.Health, printed.health, match.Groups[5], "health");
+            }
+            int armor = match.Groups[7].Success ? int.Parse(match.Groups[7].Value) : 0;
             Assert.AreEqual(creature.CurrentArmorPool, armor, $"{creature.Name}'s card shows the wrong armor ({stats})");
 
             string ready = ((TMP_Text)GetField(card, "readyText")).text;
