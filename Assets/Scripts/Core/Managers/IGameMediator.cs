@@ -37,6 +37,8 @@ namespace SlayTheClone {
         void NotifyPlayerHealed(IPlayer player, int amount);
         /// <summary>The game ends once; later calls are ignored.</summary>
         void NotifyGameOver(IPlayer winner);
+        /// <summary>A player fell to 0 Health: the combat is over, and no more turns are played.</summary>
+        bool IsGameOver { get; }
 
         void NotifyCreatureSummoned(ICreature creature, IPlayer owner);
         void NotifyCreatureDamaged(ICreature creature, int damage);

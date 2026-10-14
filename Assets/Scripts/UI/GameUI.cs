@@ -48,6 +48,8 @@ namespace SlayTheClone {
             skin.PutAtBottom(FogOfWar.PlaysAsPlayer1);
             CreateQueuePanel(skin);
             CreateEnemyPileButtons(skin);
+            GameOver = GameOverScreen.Create(transform, gameManager, gameMediator);
+            gameMediator.GameOver += OnGameOver;
             FogOfWar.Changed += OnFogOfWarChanged;
             ShowFogOfWarState();
 
@@ -119,6 +121,15 @@ namespace SlayTheClone {
             deckViewController.Initialize(gameMediator, gameManager,
                 gameReferences.GetDeckViewButton(), gameReferences.GetDiscardViewButton(), gameReferences.GetDeckViewUI());
             LogControllerInitialized("DeckViewController", deckViewController.IsInitialized);
+        }
+
+        /// <summary>What covers the table when the combat is over.</summary>
+        public GameOverScreen GameOver { get; private set; }
+
+        // No more turns: End Turn goes grey
+        private void OnGameOver(IPlayer winner) {
+            var endTurn = gameReferences.GetResolveActionsButton();
+            if (endTurn != null) endTurn.interactable = false;
         }
 
         /// <summary>The Queue button and panel: what will resolve, in order, as the screen's player sees it.</summary>
@@ -209,6 +220,7 @@ namespace SlayTheClone {
 
         protected void OnDestroy() {
             FogOfWar.Changed -= OnFogOfWarChanged;
+            if (gameMediator != null) gameMediator.GameOver -= OnGameOver;
             OnInitialized.RemoveAllListeners();
             Log("GameUI destroyed", LogTag.UI);
             IsInitialized = false;

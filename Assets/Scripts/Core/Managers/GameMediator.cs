@@ -26,6 +26,7 @@ namespace SlayTheClone {
         public event Action<int> TurnEnded;
 
         private bool gameOver;
+        public bool IsGameOver => gameOver;
 
         #region Players
         public void NotifyPlayerDamaged(IPlayer player, int damage) {

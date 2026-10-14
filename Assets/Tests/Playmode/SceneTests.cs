@@ -101,6 +101,18 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(4, brute.Health, "At equal Speed the mouse, with less Health, strikes first");
             Assert.AreEqual(Player.MaxHealth - 3, p2.Health);
             game.AssertViewsMatchRules(); // Including the new hands, the survivor's damage and player 2's health
+
+            // At 0 Health the combat is over: a screen says who won, and no more turns are played
+            game.Queue.AddAction(new DamagePlayerAction(p2, p2.Health));
+            game.Queue.ResolveActions();
+            yield return null;
+            var over = Object.FindFirstObjectByType<GameUI>().GameOver;
+            Assert.IsTrue(over.IsShown, "Player 2 at 0 Health: the game over screen covers the table");
+            Assert.IsTrue(over.Title == "Victory" || over.Title == $"{p1.Name} wins", $"Player 1 won, the screen says {over.Title}");
+            Assert.IsFalse(endTurn.interactable, "End Turn goes grey");
+            endTurn.onClick.Invoke();
+            yield return null;
+            Assert.AreEqual(1, game.Turns.TurnNumber, "...and a turn ended anyway doesn't happen");
         }
 
         /// <summary>

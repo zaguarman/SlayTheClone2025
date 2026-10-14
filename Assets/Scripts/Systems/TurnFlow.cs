@@ -35,7 +35,7 @@ namespace SlayTheClone {
 
         /// <summary>Ends the turn at once, without waiting for any playback.</summary>
         public void EndTurnImmediately() {
-            if (IsResolving) return;
+            if (IsResolving || gameMediator.IsGameOver) return;
             RunToEnd(EndTurnRoutine());
         }
 
@@ -47,6 +47,7 @@ namespace SlayTheClone {
 
         /// <summary>Ends the turn one action at a time, waiting for the presenter after each; IsResolving stays true until it finishes.</summary>
         public IEnumerator EndTurnRoutine() {
+            if (gameMediator.IsGameOver) yield break; // The combat is over: no more turns
             IsResolving = true;
             try {
                 int endedTurn = clock.TurnNumber;
@@ -57,6 +58,7 @@ namespace SlayTheClone {
                 clock.DrawsWaitForNextDay = true; // This Day's hand is about to be discarded: cards drawn from now on come with the next one
                 actionsQueue.BriefWatchdogs(); // The Briefing (GDD 3.7), before anything resolves
                 yield return ResolveQueuedActions();
+                if (gameMediator.IsGameOver) yield break; // Someone fell: the combat ends here
 
                 // --- Phase 2: Dusk, for the Day that just resolved: Armor fades, statuses tick, Deployment Time counts down ---
                 modifierManager.ProcessEndOfTurn(endedTurn, actionsQueue);
@@ -64,6 +66,7 @@ namespace SlayTheClone {
                 trends.QueueDuskEffects(actionsQueue);
                 trends.ProcessDusk(endedTurn); // A Trend ends after its last Day
                 yield return ResolveQueuedActions();
+                if (gameMediator.IsGameOver) yield break;
 
                 // The next Day begins
                 clock.Advance();
