@@ -43,12 +43,6 @@ namespace SlayTheClone {
         public const float StripStep = 0.14f; // How much of a tucked card shows above the one in front: its name
         public const int MaxStrips = 4;       // Shown tucked; hovering the creature and scrolling goes through them all
 
-        /// <summary>
-        /// Where a queued spell aimed at a creature shows (F6). False: small in the slot's lower-left corner, and also tucked
-        /// under the creature with the cards already on it. True: only tucked under it.
-        /// </summary>
-        public static bool SpellsOnlyInStack { get; set; }
-
         private BattlefieldArrowManager arrowManager;
         private CardController draggedCard; // Creature of this board currently being dragged
         private TableViews table; // For slots on the other side of the table
@@ -587,8 +581,7 @@ namespace SlayTheClone {
         }
 
         // Above each creature, the cards whose effects are on it now (statuses and stat changes from other cards), then the
-        // spells queued on it as ghosts: a copy, or with SpellsOnlyInStack the spell's own ghost, which can still be dragged
-        // away or clicked to take the play back. Each shows through a strip just above the card in front of it, its name
+        // spells queued on it: their own ghosts, which can still be dragged away or clicked to take the play back. Each shows through a strip just above the card in front of it, its name
         // band only. Only so many show; the creature's card knows them all, for the preview
         private void RefreshAttachments() {
             if (!IsInitialized || Player == null) return;
@@ -621,21 +614,10 @@ namespace SlayTheClone {
                     Tuck(view, front, views.Count + 1);
                     views.Add(view);
                 }
-                foreach (var (spell, caster) in queued.Select(q => (q.Key, q.Value.caster))) {
+                foreach (var spell in queued.Select(q => q.Key)) {
                     if (views.Count >= MaxStrips + 2) break;
-                    CardController view;
-                    if (SpellsOnlyInStack) {
-                        view = spellGhosts[spell];
-                        if (view == null || CardController.Dragged == view) continue;
-                    }
-                    else {
-                        view = CardViews.Create(spell, caster, transform);
-                        if (view == null) continue;
-                        view.name = $"AttachedGhost_{spell.Name}";
-                        view.SetAttachment();
-                        view.SetQueued(true);
-                        view.SetFaceDown(FogOfWar.HidesHandOf(caster));
-                    }
+                    var view = spellGhosts[spell];
+                    if (view == null || CardController.Dragged == view) continue;
                     Tuck(view, front, views.Count + 1);
                     views.Add(view);
                 }
@@ -696,12 +678,12 @@ namespace SlayTheClone {
         private bool CanSee(Attachment attachment, ICreature creature) =>
             !(attachment.Modifier is StatusEffectModifier status) || Intel.CanSeeStatus(Viewer, creature, status.EffectType);
 
-        // A lone spell aimed at an empty slot sits in it; otherwise small in the slot's lower-left corner, on both sides of
-        // the table, so the card it's aimed at still shows its name and stats; older ones step further left (stepsLeft, 0:
-        // the newest). A spell on a whole side sits at the battlefield's lower-left end
+        // On a creature it's tucked under its card (RefreshAttachments). A lone spell aimed at an empty slot sits in it;
+        // several there, small in the slot's lower-left corner, older ones stepping further left (stepsLeft, 0: the newest).
+        // A spell on a whole side sits at the battlefield's lower-left end
         private void PlaceSpellGhost(CardController ghost, BoardSlot slot, int stepsLeft, int count) {
             var slotView = slot != null ? battlefieldSlots[slot.Index] : null;
-            if (SpellsOnlyInStack && slotView?.OccupyingCard != null) return; // Tucked under the creature (RefreshAttachments)
+            if (slotView?.OccupyingCard != null) return; // Tucked under the creature (RefreshAttachments)
             bool roomInSlot = slotView != null && count == 1 && slotView.OccupyingCard == null && !queuedGhosts.ContainsKey(slotView);
             var rect = (RectTransform)ghost.transform;
             rect.localRotation = Quaternion.identity;

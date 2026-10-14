@@ -200,11 +200,6 @@ namespace SlayTheClone {
             lastTurn = turn;
             if (GameInput.KeyPressed(FogOfWar.ToggleKey)) FogOfWar.Toggle();
             if (GameInput.KeyPressed(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
-            if (GameInput.KeyPressed(SpellsInStackKey)) {
-                BattlefieldUI.SpellsOnlyInStack = !BattlefieldUI.SpellsOnlyInStack;
-                gameMediator.NotifyActionsQueueChanged(); // The ghosts go where they now belong
-                ShowFogOfWarState();
-            }
             if (GameInput.KeyPressed(AIController.SwitchSeatsKey)) {
                 AIController.SwitchSeats();
                 ShowFogOfWarState();
@@ -226,10 +221,7 @@ namespace SlayTheClone {
             Shortcut(FogOfWar.ToggleKey.ToString(), $"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")}") + "\n" +
             Shortcut(FogOfWar.SwitchSidesKey.ToString(), $"Playing as: Player {(FogOfWar.PlaysAsPlayer1 ? 1 : 2)}") + "\n" +
             Shortcut(AIController.SwitchSeatsKey.ToString(), $"AI: {AIController.SeatsText}") + "\n" +
-            $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}\n{Shortcut("Right-drag", "Attack your own")}    {Shortcut("F6", BattlefieldUI.SpellsOnlyInStack ? "Spells: stack" : "Spells: corner")}</size>";
-
-        /// <summary>Where a queued spell on a creature shows: in the slot's corner too, or only tucked under the creature.</summary>
-        public const UnityEngine.InputSystem.Key SpellsInStackKey = UnityEngine.InputSystem.Key.F6;
+            $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}\n{Shortcut("Right-drag", "Attack your own")}</size>";
 
         private static string Shortcut(string key, string what) => $"<color=#B8B0A0>{key}</color>  {what}";
 
