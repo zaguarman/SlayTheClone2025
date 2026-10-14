@@ -21,8 +21,10 @@ STILL OPEN
           control list back; Digital Society's swarm +1 Attack, Dogpile and Clickbait deal 2; Zeitgeist's creatures +1 or +2,
           This Is Fine deals 3, Russian Roulette 5, Toxic Positivity in its deck; Utopia's Black Hole 4, Biohacking +4,
           Cold Fusion 5/6, Antimatter 4/4; Statecraft's Preemptive Strike 4.
-    • Shadow Ops. and Corporate win in 5-7 Days; everyone else takes 9-12. Raising seven factions to their level is a lot
-      of power creep. Keep buffing, or bring those two down a little after all?
+    • Answered: Shadow Ops. and Corporate are toned down a little with Deployment Time (to be rebalanced later): +1 Day on
+      Femme Fatale, If I Told You I'd Have to Kill You, MK Ultra Test Subject, Cleaner, Cleaning Robot, Day Trader,
+      Pluriemployed Hustler, Micromanager and Fat Tony. Then: Corporate 77%, Mind 63, Myth 52, Shadow Ops. 50, Zeitgeist 50,
+      Digital Society 46, Tech 46, Statecraft 33, Utopia 29. Corporate wins with its spells, so creature delays barely touch it.
     • The Statecraft deck I picked first did worse than its old list: the AI's card stats barely separate the cards of one
       deck (almost every card is played in almost every game), so picks lean on damage and kills per game.
 
