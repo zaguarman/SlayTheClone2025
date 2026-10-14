@@ -796,23 +796,26 @@ namespace SlayTheClone {
         }
 
         // Spells that aren't aimed wait in a pile past the right end of the mat, off the battlefields, the newest on top and
-        // the older ones peeking out behind: one on this whole side at the mat's outer edge, one on both sides by the river
-        // (on its caster's half: yours below the river, the other side's above)
-        private const float CastPileGap = 20f, CastPileStep = 12f, PileScale = 0.7f;
+        // the older ones peeking out behind. Where it sits says what it hits: one on this whole side, small, tucked into the
+        // mat's outer corner; one on both sides, bigger, on the mat's river edge reaching out over the river (on its caster's
+        // half: yours below the river, the other side's above)
+        private const float CastPileGap = 20f, CastPileStep = 12f, PileScale = 0.7f, SidePileScale = 0.5f;
+        private const float OverTheRiver = 0.3f; // How much of a both-sides card reaches past the mat's edge, over the river
         private void PlaceInPile(CardController ghost, bool byRiver, int stepsBack) {
             var rect = (RectTransform)ghost.transform;
             rect.SetParent(transform, false);
             rect.SetAsLastSibling();
             rect.localRotation = Quaternion.identity;
-            rect.localScale = Vector3.one * PileScale;
+            float scale = byRiver ? PileScale : SidePileScale;
+            rect.localScale = Vector3.one * scale;
             var mat = ((RectTransform)transform).rect;
-            float width = rect.rect.width * PileScale, height = rect.rect.height * PileScale;
+            float width = rect.rect.width * scale, height = rect.rect.height * scale;
             var other = table.GetBattlefield(Player.Opponent);
             bool riverAbove = other == null || other.transform.position.y > transform.position.y;
             float away = riverAbove ? -1f : 1f; // From the river toward this side
             float y = byRiver
-                ? (riverAbove ? mat.yMax : mat.yMin) + away * (height / 2f + 8f + stepsBack * CastPileStep)
-                : (riverAbove ? mat.yMin : mat.yMax) - away * (height / 2f + 8f + stepsBack * CastPileStep);
+                ? (riverAbove ? mat.yMax : mat.yMin) + away * (height * (0.5f - OverTheRiver) + stepsBack * CastPileStep)
+                : (riverAbove ? mat.yMin : mat.yMax) - away * (height / 2f + 4f + stepsBack * CastPileStep);
             float x = mat.xMax + CastPileGap + width / 2f + stepsBack * CastPileStep;
             rect.localPosition = new Vector3(x, y, 0f);
         }

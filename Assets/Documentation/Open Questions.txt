@@ -5,6 +5,25 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+42. Reach: a cone by default, Ranged and Artillery (an idea, 2026-10-14, not built)
+    • Now: a creature can attack any enemy slot. The idea: by default it only reaches a cone, the slot facing it and the two
+      beside that one (columns i-1, i, i+1). Ranged reaches any slot. Artillery (short range) reaches only the slots two
+      columns away (i-2 and i+2), never what's in front of it:
+          S A S S S          A S S S A
+          S S S C S          S S C S S
+    • What it would change: positioning starts to matter for attacks too (today it matters for moves, Bodyguard, Heat,
+      neighbours). A creature at the end of the row covers 2 slots, one in the middle 3. Moving becomes a way to reach a
+      target, and the empty slot in front of a creature is a hole it can't cover from afar. Artillery wants a wall in front:
+      it can't hit what faces it, so it pairs with a sturdy creature that can.
+    • Creatures that would fit Ranged: Lone Gunman (a sniper), Keyboard Warrior (reaches anyone online), Man o' War (naval
+      guns), Golden Dome (missile defence), Particle Accelerator (a beam), Omniscient Space-Time Bending Bearded Wizard,
+      Surveillance Giraffe (sees over everything). Artillery: Sherman Tank, Man o' War (a broadside, if not Ranged),
+      Mercenaries (mortars). The Chosen One's Spray and Pray already hits at random.
+    • To decide: whether the cone becomes the default for every creature (it changes every faction's balance, the AI's
+      attack choice and the drag hints: the slots out of reach would grey out while you drag), or only some creatures get
+      a limited reach. Recommended: the cone for everyone, Ranged and Artillery as keywords, built together, then a round
+      robin to rebalance by faction.
+
 41. Testing what we work on, the stack's wheel, gained abilities (2026-10-14)
     • Built as asked: a Workbench deck holds the cards being worked on now (God's Grace and Phoenix Feather, two of each,
       filled up to 20 with Myth's deck): the menus list it first, then the decks in focus (Myth now), then the rest by
