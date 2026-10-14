@@ -1785,5 +1785,7 @@ Card Game Factions Overview
 			Valet (parking)
 			World Trade Center
 			Yield (the road sign)
+		Faction to decide
+			Damage Control (added 2026-10-14)
 		Mechanic ideas
 			Cards that come back to the hand when a condition is met
