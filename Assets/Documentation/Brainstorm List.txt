@@ -1616,6 +1616,7 @@ Card Game Factions Overview
 			Secure Deletion
 			Self-Destruct Message
 			Steganography (tagged Shadow Ops.)
+			You Can't Eat Your Cake and Have It Too (the Unabomber's phrasing; moved from Mind 2026-10-14: a Unabomber theme would be Zeitgeist, but the experiments done on him make it Shadow Ops., next to MK Ultra Test Subject)
 			Tracking Beacon (tagged Shadow Ops.)
 		Corporate
 			120-Year Mickey Mouse Copyright
@@ -1627,6 +1628,7 @@ Card Game Factions Overview
 			Corporate Bailouts
 			Cozy Loft in an "Exclusive" Location
 			Credit Card (tagged Corporate)
+			DMCA (moved from Tech, 2026-10-14)
 			Deal with a Neutral Third Party That We Bought
 			EBITDA
 			Flash Crash
@@ -1671,7 +1673,6 @@ Card Game Factions Overview
 			Ctrl + Y
 			Ctrl + Z
 			Dialing Progress
-			DMCA
 			Effect 2000 (the Y2K bug)
 			End User (art: as if the user were being terminated)
 			FAANG
@@ -1698,6 +1699,7 @@ Card Game Factions Overview
 			Selfie Esteem
 			Short King
 			Simp Summoner
+			Task Failed Successfully (moved from Zeitgeist: an internet meme, 2026-10-14)
 			Thirst Trap
 			University of Life Degree
 		Zeitgeist
@@ -1741,7 +1743,6 @@ Card Game Factions Overview
 			Spite Voter (tagged Zeitgeist; someone who votes out of spite)
 			Stop Being Poor
 			Stunlock
-			Task Failed Successfully
 			The Friends We Made Along the Way
 			There Is a Considerable Overlap Between the Smartest Bears and the Dumbest Humans
 			This Is from Matilda
@@ -1751,7 +1752,7 @@ Card Game Factions Overview
 			What Is Reality Anyway? (tagged Zeitgeist; Disco Elysium)
 			Yesn't (yes and no at once)
 			You Can Kill the Man, but Not the Idea (tagged Zeitgeist)
-			Yvan Eht Nioj (tagged Zeitgeist; "join the navy" backwards, on an Uncle Sam-style poster)
+			Yvan Eht Nioj (tagged Zeitgeist; "join the navy" backwards, on an Uncle Sam-style poster, from The Simpsons)
 		Mind
 			Epistemology (the study of how knowledge is gained: ontology, then epistemology, methodology, methods)
 			Freudian Slip
@@ -1765,7 +1766,6 @@ Card Game Factions Overview
 			Socrates (tagged Mind)
 			The ELIZA Effect
 			Tolerance Paradox
-			You Can't Eat Your Cake and Have It Too (the Unabomber's phrasing)
 		Utopia
 			Ankylorhiza
 			Coprolite (fossilized poop)
@@ -1775,6 +1775,7 @@ Card Game Factions Overview
 			Prion Disease
 			Quark
 			Seasteading
+			The Line (Saudi Arabia's 170 km linear city; added 2026-10-14)
 			Tessellate
 			White Dwarf (art: a small, very white guy)
 		Faction to decide (plain items and places)

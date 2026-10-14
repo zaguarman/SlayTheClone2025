@@ -41,23 +41,148 @@ Each card:
 
 2. WHAT EACH FACTION MAKES FUN OF
 
-  Corporate        Late capitalism: the gig economy, tax havens, layoffs by email, philanthropy as a tax trick,
-                   startup hype, private equity, the boss who calls the company a family.
-  Statecraft       The state: bureaucracy, nepotism, war sold as defence, propaganda, Orwell's ministries, the
-                   monopoly on violence, the court that answers to nobody.
-  Zeitgeist        Modern life offline: archetypes (Karen, Boomer, Hipster), moods (burnout, toxic positivity, YOLO),
-                   the films and memes everyone quotes, the culture war at the pub.
-  Digital Society  Life online: doomscrolling, pile-ons, cancel culture, rage bait, catfish, conspiracy threads, the
-                   group chat as a jury.
-  Shadow Ops.      Spies and cover-ups: Bond, the CIA's real history (MKUltra, Paperclip, Glomar), Russian windows
-                   and polonium, Epstein's cameras, false flags, lone gunmen.
-  Tech             Software and its people: the sysadmin, legacy code, ransomware, "AI" that's a guy named Dave,
-                   antivirus that sells your data, the hacker who is twelve.
-  Myth             Religion and legend as business and spectacle: Monty Python's Grail, the televangelist, the
-                   crusade, the prophecy, the curse in the fine print.
-  Mind             The brain's bugs: biases, paradoxes, imposter syndrome, the trolley problem, the basilisk.
-  Utopia           Science and the tech-bro future: accelerationism, biohacking billionaires, de-extinction, the
-                   breakthrough that blows up the lab.
+What each faction's cards make fun of today, then the themes it can grow into (agreed with the user 2026-10-14). The
+names in brackets are already in the Brainstorm List's Card Backlog; "no backlog name yet" marks themes that still need
+one.
+
+CORPORATE
+  Today:  Late capitalism: the gig economy, tax havens, layoffs by email, philanthropy as a tax trick, startup hype,
+          private equity, the boss who calls the company a family.
+  Rule:   Every Mafia theme belongs here. Organised crime is just everyday business, and legality is only a business with
+          a high entry price (the user). Fat Tony is the model.
+  Grow:
+    - Planned obsolescence: the light-bulb cartel that limited bulb life to 1,000 hours, printers that stop at a page
+      count. (Phoebus Cartel)
+    - A human life as a line item: Ford's Pinto memo found fixing the fuel tank cost more than paying for the deaths.
+      (Pinto Memo, The Value of a Statistical Life)
+    - Accounting fraud and the auditors who sign it off: Enron, the Big Four. (The Enron Ledger Fantasy, Big Four,
+      Round-Tripping, Substance Over Form, EBITDA)
+    - Market manipulation by machine: high-frequency trading, the 2010 flash crash. (Flash Crash, Spoofing,
+      Front-Running, High-Frequency Trading Scam, Layering)
+    - Housing as an asset: a cupboard sold as a "cozy loft", generation rent. (Cozy Loft in an "Exclusive" Location,
+      Live Better in a Home of Your Own)
+    - Dark patterns and the hard sell. (Forced Upselling, Buy Now, Give Your Soul Later, The Art of Selling: Involuntary
+      Product Bundling, Sales Funnel)
+    - Copyright as eternal property, and the takedown as a weapon. (120-Year Mickey Mouse Copyright, DMCA)
+    - Trump the developer: in 1980 he demolished the Bonwit Teller building, promised its Art Deco friezes to a museum,
+      then had them jackhammered to save time. It joins the Trump thread. (Bonwit Teller Building Demolition)
+    - No backlog name yet: greenwashing, fast fashion, McKinsey-style consultancies.
+
+STATECRAFT
+  Today:  The state: bureaucracy, nepotism, war sold as defence, propaganda, Orwell's ministries, the monopoly on
+          violence, the court that answers to nobody.
+  Grow:
+    - Sanctions and tariff wars: war by spreadsheet. (Economic War)
+    - Torture with a legal memo: Guantanamo, waterboarding renamed "enhanced interrogation" by the Bush administration.
+      (Enhanced Interrogation)
+    - "Think of the children" as a reason to read everyone's messages. (To Protect the Children, Who Watches the
+      Watchers)
+    - Gerontocracy. (Represented by Living Dinosaurs)
+    - Clientelism: jobs for friends, votes for favours. (Patronage Network)
+    - Imperial Japan's suicide weapons as the peak of state madness. (Kaiten, Shinyo, Yokosuka, Fukuryu)
+    - Rome as the template every empire copies. (Alea Iacta Est, Crossing the Rubicon, Rome Does Not Pay Traitors)
+    - State money that can be switched off. (Digital Money)
+    - Censorship in wartime. (War Censorship Law)
+    - Learning to love the bomb (Dr. Strangelove's subtitle). (Manhattan Project)
+    - No backlog name yet: gerrymandering, lobbyists going through the revolving door, border-wall theatre.
+
+ZEITGEIST
+  Today:  Modern life offline: archetypes (Karen, Boomer, Hipster), moods (burnout, toxic positivity, YOLO), the films
+          and memes everyone quotes, the culture war at the pub.
+  Grow:
+    - The Simpsons' best pair: Homer's motivational sign covered by Maggie's photos. (Do It for Her, Don't Forget.
+      You're Here Forever.)
+    - Disco Elysium's despair. (It's All Disco, Baby, What Is Reality Anyway?, I Don't Want to Be This Kind of Animal
+      Anymore)
+    - Dating and sex, deadpan. (Don Juan, After-Sex Cigarette, Passive Smoker, Ladies First)
+    - Class contempt. (Stop Being Poor, Prince Charles Paradox, Lost Generation)
+    - Gender at home and at work. (Glass Ceiling, Weaponized Incompetence, Absentee Parents)
+    - Fads and self-optimisation. (Fidget Spinner, Morning Routine)
+    - Cringe and nihilism as moods. (Second-Hand Embarrassment, Melancholy, Yesn't)
+    - Propaganda posters turned inside out, from The Simpsons. (Yvan Eht Nioj)
+    - Overtourism. (Tourist Trap, from the plain items)
+
+DIGITAL SOCIETY
+  Today:  Life online: doomscrolling, pile-ons, cancel culture, rage bait, catfish, conspiracy threads, the group chat
+          as a jury.
+  Grow:
+    - The influencer economy. (Content Creator, Link-in-Bio Babe, Dubai Female "Entrepreneurs", Internet Beggar,
+      Selfie Esteem)
+    - Parasocial streaming and the money in it. (Gifted Subs, Simp Summoner, E-Girl Bath Water, Thirst Trap)
+    - The manosphere and looksmaxxing. (Short King, University of Life Degree)
+    - Outrage media. (Gawker, Dislike Button)
+    - Bots and click farms. (Monkey Clicking)
+    - The internet's own memes. (Task Failed Successfully)
+    - No backlog name yet: AI slop and deepfakes, doxxing (already in the faction's design notes), OnlyFans.
+
+SHADOW OPS.
+  Today:  Spies and cover-ups: Bond, the CIA's real history (MKUltra, Paperclip, Glomar), Russian windows and polonium,
+          Epstein's cameras, false flags, lone gunmen.
+  Grow:
+    - Conspiracies that turned out to be true, the modern ones above all: the NSA's PRISM (2013), Cambridge Analytica
+      (2018), Crypto AG (the Swiss encryption company the CIA secretly owned and sold to governments for decades,
+      revealed 2020), Pegasus (2021). (Conspiracies That Turned Out to Be True)
+    - Bio labs: the Soviet bioweapons test site on Vozrozhdeniya ("Rebirth") Island in the Aral Sea, abandoned in 1992
+      with anthrax buried on it, then joined to the mainland as the sea dried up. (Secret Anthrax Laboratory)
+    - Drug-carrying pigeons, an old prison-smuggling trick that still works. (Drug Pigeon)
+    - Embassies as spy nests and hiding places. (Embassy)
+    - Self-destructing messages, hidden data. (Self-Destruct Message, Steganography, Secure Deletion, Tracking Beacon)
+    - Stuxnet: it reportedly spread into Iran's nuclear plant on USB sticks. (Suspicious USB Stick in the Parking Lot)
+    - The Unabomber thread: Kaczynski as a subject of the Harvard experiments, next to MK Ultra Test Subject. A
+      Unabomber theme would be Zeitgeist, but what was done to him makes it Shadow Ops. (You Can't Eat Your Cake and
+      Have It Too)
+    - No backlog name yet: spyware sold to governments (NSO's Pegasus), private spy firms (Black Cube), the CIA and the
+      cocaine trade (Iran-Contra), Mossad.
+
+TECH
+  Today:  Software and its people: the sysadmin, legacy code, ransomware, "AI" that's a guy named Dave, antivirus that
+          sells your data, the hacker who is twelve.
+  Grow:
+    - Y2K: the apocalypse that didn't come. (Effect 2000)
+    - AI doom. (P(Doom), and Mind's The ELIZA Effect)
+    - Developer culture. (Code Review, Pair Programming, Ctrl + Z, Ctrl + Y, Bounty Program)
+    - Big Tech as a single landlord. (FAANG)
+    - The user as the problem, or the target. (End User)
+    - No backlog name yet: enshittification (Cory Doctorow's word for platforms rotting once they own you), cookie
+      banners, "the cloud is someone else's computer", AI hallucinating with 83% confidence.
+
+MYTH
+  Today:  Religion and legend as business and spectacle: Monty Python's Grail, the televangelist, the crusade, the
+          prophecy, the curse in the fine print.
+  Grow:
+    - Tech-bro spirituality: ayahuasca retreats, psilocybin as religion. (Entheogenic Sacrament, Drug-Induced
+      Spirituality)
+    - The Church's darker business: the confession box, faith schools on public money. (Confessional, Publicly Funded
+      Faith Schools)
+    - Death as a character. (Grim Reaper, Die by the Sword, Public Autopsy)
+    - Deep-history oddities. (Gudea, Venus of Willendorf, Luxor, Bermuda Triangle)
+    - Memes. (Gracias Jesús, Here Be Dragons, Blessing in Disguise)
+    - Ambrosia: a pun across factions. It's the food of the gods and the name of the young-blood startup. (Ambrosia)
+    - No backlog name yet: indulgences (forgiveness sold for cash, the original prosperity gospel), Scientology, the
+      trade in saints' relics.
+
+MIND
+  Today:  The brain's bugs: biases, paradoxes, imposter syndrome, the trolley problem, the basilisk.
+  Grow:
+    - Philosophy as a fight. (Socrates, God Is Dead, Ontology, Epistemology, Tolerance Paradox)
+    - The mind's slips and tricks. (Freudian Slip, Legerdemain, Hyperbole)
+    - Needs and their pyramid. (Maslow's Pyramid)
+    - Bonding with machines: ELIZA, a 1966 chatbot people confided in. (The ELIZA Effect)
+    - Unreality. (Liminal Space, plus Memory Wipe / Mandela Effect, which the backlog already suggests moving here)
+    - No backlog name yet: Dunning-Kruger, the sunk cost fallacy, gaslighting.
+
+UTOPIA
+  Today:  Science and the tech-bro future: accelerationism, biohacking billionaires, de-extinction, the breakthrough
+          that blows up the lab.
+  Grow:
+    - Billionaire city-states: libertarian charter cities, floating nations, Saudi Arabia's The Line. (Seasteading,
+      Longevity Hub, The Line)
+    - The ageing West. (Inverted Population Pyramid)
+    - Science's horrors: mad cow disease. (Prion Disease)
+    - Paleontology jokes. (Coprolite, Ankylorhiza)
+    - Physics puns. (White Dwarf, Quark, Femtosecond Laser)
+    - No backlog name yet: Big Pharma (the Sacklers and OxyContin), fusion that's always 30 years away, the billionaire
+      space race.
 
 
 3. THE CARDS
