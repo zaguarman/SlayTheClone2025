@@ -5,6 +5,24 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+38. Holy cards, cards under creatures, Science (2026-10-14)
+    • Built as asked: God's Grace (Myth: you survive at 0 Health until the next Day's Dusk; still at 0 then, you lose; both at
+      0, the one in Grace wins), Phoenix Feather (Myth: sacrifice a friendly creature, it rises 3 Days later), cards tucked
+      under the creatures they affect (hover + scroll to see them), queued spells in that stack too, smoother arrows, and
+      Utopia as the Science deck with Survival of the Fittest (13% to 38% against the other factions, Hard AI).
+    • Pick one: queued spells on a creature in the slot's corner AND in its stack (A, the default), or only in the stack (B).
+      F6 switches in game; both screenshots were sent.
+    • Choices made, say if you want them otherwise:
+        - God's Grace protects the player, as asked; there's no mark on the player's plaque yet while it lasts.
+        - A creature's own effects on itself don't show under it (it's the card already). Up to 4 tucked cards show (plus
+          the queued spells); the scroll goes through them all.
+        - Stat changes that last for good stay tucked until the creature leaves play; timed ones and statuses fall off when
+          they end. The enemy's spells on its creatures show too, like their statuses do.
+        - Science deck: 8 off-theme Utopia cards moved to the deck builder (Philosophy PhD, Mathematician, Quantum Physicist,
+          Surveillance Giraffe, Pioneer, Climate Change, Overpopulation, Absolute Zero); the growers come in 1 Day sooner.
+    • No art yet for God's Grace, Phoenix Feather, Evolution Theory, Mutation, Exponential Growth, Scientific Method,
+      Frankenstein, Chimera and Resurrected T-Rex (each has its brief). Draw them?
+
 37. Doom as a cost, HAARP's earthquake, a clear table (2026-10-14)
     • Built as asked: Doomscrolling costs Doom 3 (Keyword "Doom Cost"); HAARP makes an earthquake; the deck, discard and
       queue windows close when a turn starts playing out, and the scene tests close them as soon as they've checked them.

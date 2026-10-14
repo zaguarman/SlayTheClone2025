@@ -318,25 +318,34 @@ The cards of the earlier pairs (The Algorithm, Psyop), as they were added on 202
       (new, also in the Corporate deck) Tax-Exempt Corruption: draw 3, the enemy draws 1.
 
 
-8. UTOPIA: RESULTS MAY VARY (11 creatures, 9 spells; opponent: A Billionaire Bound For Mars, "Will save humanity. Shipping not included.")
+8. UTOPIA: RESULTS MAY VARY (10 creatures, 10 spells; opponent: A Billionaire Bound For Mars, "Will save humanity. Shipping not included.")
 
-Play style: slow experiments that grow, heal and multiply, paid for with side effects on your own side (damage to you, Burned, -Attack). Can't conceal anything. Made on 2026-10-13.
+Play style (Science, reworked 2026-10-14): its creatures grow. Science advancements raise their stats for good, the experiments
+that go too far are abominations, and Evolution Theory sets Survival of the Fittest, which culls the weakest creature on the
+board each Dusk: once Utopia has grown its own, that's the other side's. Pays with side effects on its own creatures (Burned,
+Health lost for good). Can't conceal anything. Against the other one-faction decks, Hard AI: 13% before, 38% after (48 games).
 
 Creatures (Attack/Health/Speed, Deployment Time)
 • Clone (2/3/2, 1): when it enters, summon from your deck. Future: copies a friendly creature.
-• Hypermetamorphosis (1/3/1, 2): +1/+1 each Dawn. Future: Evolution.
-• Extremophile (1/4/1, 2): Unbothered; heals 1 each Dusk.
-• Philosophy PhD (0/4/1, 1): draws each Dawn, loses 1 Health each Dusk (student debt).
-• Mathematician (1/3/1, 2): each Dawn, a random enemy gets -1 Attack for good.
-• Quantum Physicist (2/4/2, 2): Swap; Retaliate: Exhaust (a creature that attacks it is Exhausted).
+• Hypermetamorphosis (1/3/1, 1): +1/+1 for good each Dawn.
+• Extremophile (1/4/1, 1): Unbothered; heals 1 each Dusk.
+• Genetically Modified Organism (3/3/2, 1): +2/+2 for good when it enters, loses 1 Health each Dusk.
+• Scientific Method (1/4/1, 1): each Dawn, +1 Attack for good on a random friendly creature.
+• Chimera (4/4/2, 1), abomination: when ready, +2/+2 for good on a random friendly creature; it loses 2 Health for good.
+• Frankenstein (3/6/1, 2), abomination: +1/+1 for good each Dawn; arrives Burned for 2 Days.
+• Resurrected T-Rex (6/7/1, 2), abomination: loses 1 Health for good each Dusk.
 • Perpetual Motion Machine (0/6/1, 3): draws each Dawn, heals 1 each Dusk.
 • Particle Accelerator (3/7/1, 3): each Dawn, 2 damage to a random creature on either side.
-• Genetically Modified Organism (3/3/2, 2): +2/+2 when it enters, loses 1 Health each Dusk.
-• Surveillance Giraffe (2/7/1, 2): when it enters, Reveals a random enemy creature's slot.
-• Pioneer (2/2/3, 1): Leapfrog.
 
 Spells
-• Placebo: +3 Health this Day. Vaccine: cleanse, then -1 Attack this Day. Climate Change: every creature Burned for 2 Days. Overpopulation: summon 2 from your deck. Black Hole: 3 damage to the creature and its neighbors, 2 to you. Stasis Field: Temporal Shield for 3 Days. Absolute Zero: every creature Exhausted. Splitting The Atom: 6 damage to a random enemy, 2 to you. Gene Editing: +2/+2 for good, then Burned for 2 Days.
+• Evolution Theory: Trend for 3 Days, Survival of the Fittest. Mutation: +3 Attack for good, -1 Health for good. Exponential
+  Growth: +1/+1 for good on each of your creatures, all Burned for 2 Days. Gene Editing: +2/+2 for good, then Burned for 2 Days.
+  Placebo: +3 Health for good. Vaccine: cleanse, then -1 Attack this Day. Research Lab: send for a spell. Black Hole: 3 damage
+  to the creature and its neighbors, 2 to you. Stasis Field: Temporal Shield for 3 Days. Splitting The Atom: 6 damage to a
+  random enemy, 2 to you.
+
+Out of the deck, in the deck builder: Philosophy PhD, Mathematician, Quantum Physicist, Surveillance Giraffe, Pioneer, Climate
+Change, Overpopulation, Absolute Zero.
 
 
 9. NEXT STEPS

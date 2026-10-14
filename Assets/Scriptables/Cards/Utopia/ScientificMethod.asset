@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: ScientificMethod
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 6a73c5c8-ffbd-4484-8727-1c7187bb04e0
+  cardName: Scientific Method
+  description: Hypothesis, experiment, grant renewal.
+  cardType: 0
+  faction: 9
+  artwork: {fileID: 0}
+  discardCost: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  gamble: 0
+  effects:
+  - effectType: 0
+    trigger: 3
+    oncePerCombat: 0
+    actions:
+    - actionType: 6
+      value: 1
+      targetType: 3
+      targetModifier: 4
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: Each Dawn, +1 Attack for good on a random friendly creature (peer
+    reviewed).
+  artDescription: "A scientist in goggles carefully pouring a glowing liquid into
+    a beaker on a bench crowded with labelled flasks, a whiteboard behind her reading
+    HYPOTHESIS \u2192 EXPERIMENT \u2192 GRANT."
+  attack: 1
+  health: 4
+  speed: 1
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 0
+  gift: 0
+  token: 0
+  disguise: {fileID: 0}

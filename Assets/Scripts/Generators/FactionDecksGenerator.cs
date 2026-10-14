@@ -1304,8 +1304,10 @@ namespace SlayTheClone {
         #endregion
 
         #region Utopia
-        // Long-term experiments: slow creatures that evolve, heal and multiply. Pays with side effects on its own side.
-        // Can't conceal anything. Tempo: slow (Deployment Time 2-3).
+        // Science: its creatures grow. Advancements raise their stats for good (gene editing, mutations, exponential growth),
+        // the experiments that go too far become abominations (Frankenstein, the Chimera, the T-Rex), and Evolution Theory
+        // sets Survival of the Fittest, where the weakest on the board are culled: never Utopia's, once it has grown them.
+        // Pays with side effects on its own creatures. Can't conceal anything.
         private static List<CardDef> UtopiaCards() => new List<CardDef> {
             Spell("Research Lab", TargetType.Player,
                 "Results in five years. Funding for two.",
@@ -1317,12 +1319,12 @@ namespace SlayTheClone {
                 "When it enters, summon a random creature from your deck. Future: Clone (copies a friendly creature).",
                 On(EffectTrigger.OnPlay, Summon(1)))
                 .Picture("Dolly the sheep in a lab coat and goggles proudly presenting a row of identical sheep behind her."),
-            Creature("Hypermetamorphosis", 1, 3, speed: 1, deploy: 2,
+            Creature("Hypermetamorphosis", 1, 3, speed: 1, deploy: 1,
                 "Caterpillar, cocoon, middle manager. Nature is healing.",
                 "+1/+1 for good each Dawn. Future: Evolution (each step unlocks an ability).",
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
                 .Picture("Left to right: a caterpillar, a cocoon, and a hatched office worker in a tie with butterfly wings, briefcase in hand, dead inside."),
-            Creature("Extremophile", 1, 4, speed: 1, deploy: 2,
+            Creature("Extremophile", 1, 4, speed: 1, deploy: 1,
                 "Survived five mass extinctions. Your opinion won't be the sixth.",
                 "Unbothered, and it heals 1 each Dusk.",
                 On(EffectTrigger.EndOfTurn, Heal(1, TargetType.Self)))
@@ -1333,17 +1335,20 @@ namespace SlayTheClone {
                 "A draw each Dawn; the student debt costs it 1 Health each Dusk.",
                 On(EffectTrigger.StartOfTurn, Draw(1)),
                 On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
+                .NotInStarterDeck()
                 .Picture("A graduate in cap and gown flipping burgers at a fast-food grill, the diploma pinned up next to the menu."),
             Creature("Mathematician", 1, 3, speed: 1, deploy: 2,
                 "Showed her work. Nobody checked it.",
                 "Each Dawn a random enemy creature gets -1 Attack for good.",
                 On(EffectTrigger.StartOfTurn, Buff(-1, TargetType.EnemyCreatures, attack: true, health: false, AtRandom)))
+                .NotInStarterDeck()
                 .Picture("The confused math lady meme: a woman squinting while equations, triangles and integrals float around her head."),
             Creature("Quantum Physicist", 2, 4, speed: 2, deploy: 2,
                 "In two places at once. Late to both.",
                 "Swap. Whoever hits it is Exhausted: observing it collapses them.",
                 On(EffectTrigger.OnDamage, Stun(1, TargetType.Enemy)))
                 .With(MovementKeyword.Swap)
+                .NotInStarterDeck()
                 .Picture("A physicist split down the middle, one half of him see-through, holding two coffees and checking two watches."),
             Creature("Perpetual Motion Machine", 0, 6, speed: 1, deploy: 3,
                 "Runs forever. The patent office stopped answering in 1911.",
@@ -1356,7 +1361,7 @@ namespace SlayTheClone {
                 "Each Dawn, 2 damage to a random creature on either side (side effects).",
                 On(EffectTrigger.StartOfTurn, Damage(2, TargetType.AllCreatures, AtRandom)))
                 .Picture("A huge ring-shaped tunnel seen from above, a tiny scientist on a bicycle racing around it after a glowing dot."),
-            Creature("Genetically Modified Organism", 3, 3, speed: 2, deploy: 2,
+            Creature("Genetically Modified Organism", 3, 3, speed: 2, deploy: 1,
                 "Organic. Gluten-free. Bench-presses 200.",
                 "+2/+2 for good when it enters; the side effects cost it 1 Health each Dusk.",
                 On(EffectTrigger.OnPlay, Buff(2, TargetType.Self, attack: true, health: true)),
@@ -1366,11 +1371,13 @@ namespace SlayTheClone {
                 "Heart the size of a TV. Still can't reach its own feet.",
                 "When it enters, Reveal a random enemy creature's slot: it sees over the fog.",
                 On(EffectTrigger.OnPlay, Reveal(TargetType.EnemyCreatures, AtRandom)))
+                .NotInStarterDeck()
                 .Picture("A giraffe whose neck runs out of the top of the picture and comes back in from the top further along, its head hanging upside down, peeking."),
             Creature("Pioneer", 2, 2, speed: 3, deploy: 1,
                 "First human on Mars. First eviction on Mars.",
                 "Leapfrog: it jumps over creatures to an empty slot.")
                 .With(MovementKeyword.Leapfrog)
+                .NotInStarterDeck()
                 .Picture("An astronaut planting a flag on a red desert next to a sign: FOR RENT $9999."),
             Spell("Placebo", TargetType.FriendlyCreatures,
                 "Clinically proven to work on people who believe it works.",
@@ -1387,11 +1394,13 @@ namespace SlayTheClone {
                 "Every creature is Burned for 2 Days and gets Heat Signature 1.",
                 Status(StatusEffectType.Burned, 2, TargetType.AllCreatures, potency: 1, modifier: Each),
                 Status(StatusEffectType.HeatSignature, 1, TargetType.AllCreatures, potency: 1, modifier: Each))
+                .NotInStarterDeck()
                 .Picture("A polar bear standing on a single ice cube floating in a cocktail glass, a paper umbrella beside it."),
             Spell("Overpopulation", TargetType.Player,
                 "Eight billion people and nobody to cover my shift.",
                 "Summon 2 random creatures from your deck.",
                 Summon(2))
+                .NotInStarterDeck()
                 .Picture("A tiny Earth with people crammed all over it like a full elevator, one man balancing on top on one foot."),
             Spell("Black Hole", TargetType.EnemyCreatures,
                 "What goes in doesn't come out. Like your tax refund.",
@@ -1407,6 +1416,7 @@ namespace SlayTheClone {
                 "Minus 273. The office AC, as set by Gary.",
                 "Every creature is Exhausted.",
                 Stun(1, TargetType.AllCreatures, Each))
+                .NotInStarterDeck()
                 .Picture("A man frozen solid at his desk holding a frozen cup of coffee, the thermostat on the wall reading -273."),
             Spell("Splitting The Atom", TargetType.EnemyCreatures,
                 "Science's greatest achievement: a really big bang.",
@@ -1418,6 +1428,42 @@ namespace SlayTheClone {
                 "+2/+2 for good; side effect: Burned for 2 Days. Future: gene editing as Persistent Stat Modifications.",
                 Buff(2, TargetType.FriendlyCreatures, attack: true, health: true), Status(StatusEffectType.Burned, 2, TargetType.FriendlyCreatures, potency: 1))
                 .Picture("A pair of scissors cutting a DNA double helix, a strip of tape sticking a unicorn horn onto it."),
+            Spell("Evolution Theory", TargetType.Player,
+                "Only the fittest survive. We've been making ours fitter.",
+                "Trend for 3 Days, Survival of the Fittest: each Dusk the creature with the least Health on the board, either side, takes 3. Utopia's creatures are the ones that grow.",
+                SetTrend(Trend.SurvivalOfTheFittest, 3))
+                .Picture("Darwin in a lab coat at a chalkboard, the classic march of progress drawn on it from ape to man to a huge muscled lab-grown superman, and a tiny weak creature at the start of the line being crossed out."),
+            Spell("Mutation", TargetType.FriendlyCreatures,
+                "Three extra arms. One fewer kidney.",
+                "+3 Attack for good on target friendly creature; side effect: it loses 1 Health for good.",
+                Buff(3, TargetType.FriendlyCreatures, attack: true, health: false), Buff(-1, TargetType.FriendlyCreatures, attack: false, health: true))
+                .Picture("A lab rat in a cage flexing three muscular arms, a scientist taking notes and quietly sliding a fourth arm onto the clipboard."),
+            Spell("Exponential Growth", TargetType.Player,
+                "It doubles every day. That's what worries us.",
+                "+1/+1 for good on each of your creatures; side effect: they're Burned for 2 Days.",
+                Buff(1, TargetType.FriendlyCreatures, attack: true, health: true, Each), Status(StatusEffectType.Burned, 2, TargetType.FriendlyCreatures, potency: 1, modifier: Each))
+                .Picture("A petri dish overflowing onto the lab bench, the colony spilling over the edge and climbing up the wall, a scientist backing away holding the lid."),
+            Creature("Scientific Method", 1, 4, speed: 1, deploy: 1,
+                "Hypothesis, experiment, grant renewal.",
+                "Each Dawn, +1 Attack for good on a random friendly creature (peer reviewed).",
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom)))
+                .Picture("A scientist in goggles carefully pouring a glowing liquid into a beaker on a bench crowded with labelled flasks, a whiteboard behind her reading HYPOTHESIS → EXPERIMENT → GRANT."),
+            Creature("Frankenstein", 3, 6, speed: 1, deploy: 2,
+                "It's alive! It's ALIVE! It's suing.",
+                "An abomination that grows: +1/+1 for good each Dawn. Side effect: it arrives Burned for 2 Days (the lightning).",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.Burned, 2, TargetType.Self, potency: 1)),
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
+                .Picture("A towering stitched-together monster sitting up on a lab table under a lightning bolt, bolts in its neck smoking, the mad scientist cheering with both arms up."),
+            Creature("Chimera", 4, 4, speed: 2, deploy: 1,
+                "Lion, goat, snake. The ethics committee was on holiday.",
+                "When ready: +2/+2 for good on a random friendly creature, maybe itself (a graft); side effect: it loses 2 Health for good.",
+                On(EffectTrigger.OnPlay, Buff(2, TargetType.FriendlyCreatures, attack: true, health: true, AtRandom), Buff(-2, TargetType.Self, attack: false, health: true)))
+                .Picture("A lion with a goat's head sprouting from its back and a snake for a tail, all three wearing hospital ID wristbands, in a lab enclosure with a sticky note: DO NOT FEED AFTER MIDNIGHT."),
+            Creature("Resurrected T-Rex", 6, 7, speed: 1, deploy: 2,
+                "Sixty-six million years asleep. Woke up hungry.",
+                "A huge abomination. Side effect: its cloned DNA is unstable, it loses 1 Health for good each Dusk.",
+                On(EffectTrigger.EndOfTurn, Buff(-1, TargetType.Self, attack: false, health: true)))
+                .Picture("A T-Rex skeleton half covered in new flesh breaking out of a museum display, the DNA sequencer that brought it back still beeping, a guide pointing at the exit."),
         };
         #endregion
 
