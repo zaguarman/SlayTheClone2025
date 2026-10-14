@@ -178,6 +178,7 @@ YOLO (spell)
     A shirtless guy mid-backflip off a garage roof toward a tiny inflatable pool, filming himself with a selfie stick, while his friends below are already dialing for an ambulance.
 This Is Fine (spell)
     The meme dog in a little bowler hat at a table with his coffee, the room on fire around him, saying THIS IS FINE.
+    USER: 2026-10-14 (pixel art): no chair post (the 'log') behind the dog.
 Strike (spell)
     (from the drawing) A big fluffy fur hat: a round crown, a thick folded-up front and ear flaps hanging down
 Russian Roulette (spell)
@@ -207,6 +208,7 @@ Doomscrolling (spell)
     USER: 2026-10-14: no cards flying about; the guy like Bojak from the memes (the bald wojak).
     USER: 2026-10-14: the guy like Wojak: the doomer (the user's reference: a black beanie, purple bags under tired eyes, stubble, a cigarette with its smoke, a black hoodie).
     USER: 2026-10-14: the head in Wojak's shape (a dome over wide cheeks), not a box.
+    USER: 2026-10-14: redo the Wojak face; it was completely off.
 Crypto "Entrepreneur" (creature)
     A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand.
 Digital Nomad (creature)
@@ -216,6 +218,7 @@ Keyboard Warrior (creature)
     USER: 2026-10-14 (pixel art): like Rambo but fat, holding the keyboard as if it were a sword.
     USER: 2026-10-14: the arms in the belly's lighter skin tone, smooth where they meet the shoulders; the face the typical redditor meme face (the user's references: a tall bald dome, glasses, brow creases, a smug toothy grin, a neckbeard), in our own colors, not the reference's.
     USER: 2026-10-14: the head exactly like the user's cropped soyjak: tilted back, three-quarters to the right, glasses up on the face, the huge open mouth with its top teeth, the scraggly neckbeard; the body back as it was, only the arms redone.
+    USER: 2026-10-14: redo the face (it came out rough).
 Dogpile (spell)
     A huge, happy pile of dogs (corgis, labradors, a confused pug on top) burying one person, of whom only a waving hand sticks out.
     USER: A big pile of dogs on top of someone.
@@ -350,6 +353,7 @@ Supply Chain Attack (spell)
     A cheerful delivery driver unloading crates of identical routers at a ministry's loading dock, each box with a tiny skull sticker under the barcode, while a line of bureaucrats in grey suits signs for them.
 Hollowed-Out Volcano Lair (spell)
     A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass.
+    USER: 2026-10-14 (pixel art): like the You Only Live Twice set (the user's still): inside the crater, the round opening to the sky, a helicopter, the rocket in its gantry, the helipad, the world map, the control room, the crew in their jumpsuits and white helmets.
 Femme Fatale (creature)
     A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in the chair beside her is squeezed between her crossed legs, his medals popping off.
 MK Ultra Test Subject (creature)
@@ -367,6 +371,7 @@ Antivirus (spell)
     USER: Put a panda on it.
 Script Kiddie (creature)
     A twelve-year-old in an oversized gaming chair, hoodie up, double-clicking "H4CK3R T00L.exe" while a bank vault door swings open on his second monitor.
+    USER: 2026-10-14 (pixel art): a baby sitting in that gaming chair, looking towards us; the rest as it was.
 Legacy Code (creature)
     A beige mainframe held together with duct tape in a dusty basement, a yellowed sticky note on it: "DO NOT TOUCH - Gary (retired 1999)", and cobwebs over an "Update available" pop-up.
     USER: 2026-10-14 (pixel art): a scroll with HERE BE DRAGONS in ASCII art (the user's reference: the dragon by snd).
@@ -427,6 +432,7 @@ Mox Nox (spell)
     An old sundial in a ruined cloister at dusk, the shadow of its gnomon falling across the Latin words MOX NOX carved in the stone, a black candle burning beside it.
 Holy Hand Grenade of Antioch (spell)
     A golden orb with a jewelled cross on top, its pin pulled, held up by a monk reading from an enormous book, three fingers raised, knights ducking behind him.
+    USER: 2026-10-14 (pixel art): no pin; the priest holds up two fingers, not three.
 Lance Of Longinus (spell)
     An ancient iron spearhead on a long wooden shaft, glowing faintly, pinned through a spy's trench coat to a brick wall, the spy wriggling out of the sleeves.
 Necronomicon (spell)
@@ -499,6 +505,7 @@ Roko's Basilisk (creature)
     A big green snake in headphones typing on a laptop, a sticky note on the screen reading NAUGHTY LIST.
 Trolley Problem (spell)
     The trolley problem from above: a lever, a trolley and a split track, with one bored man on a track scrolling his phone.
+    USER: 2026-10-14 (pixel art): like the classic drawing (the user's reference): side on, the trolley, the track splitting, a man at the lever, one person tied on one branch and five on the other.
 Red Herring (spell)
     A red fish in a detective's trench coat and hat, pointing a fin dramatically off to the side.
 Imposter Syndrome (spell)

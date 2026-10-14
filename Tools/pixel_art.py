@@ -938,47 +938,58 @@ def doomscrolling():
     pixel_text(clock, 34, 41, "AM", C["red"])
     img.alpha_composite(outline(clock))
     d = ImageDraw.Draw(img)
-    # The doomer Wojak: black beanie, black hoodie, pale face, purple bags under tired eyes, stubble, a cigarette
-    shape(img, lambda dr, v: dr.ellipse([46, 78, 146, 150], fill=v), C["night"], C["ink"], C["navy"])  # The hoodie
-    d.line([(84, 84), (82, 100)], fill=C["grey"] + (255,))  # Its drawstrings
-    d.line([(108, 84), (110, 100)], fill=C["grey"] + (255,))
-    shape(img, lambda dr, v: dr.polygon([(80, 76), (112, 76), (106, 88), (86, 88)], fill=v), C["slate"], C["navy"])  # The tee under it
-    for ex in (68, 124):  # Ears
-        shape(img, lambda dr, v: dr.ellipse([ex - 4, 44, ex + 4, 60], fill=v), C["white"], C["silver"])
-    face = shape(img, lambda dr, v: (dr.ellipse([70, 14, 122, 70], fill=v), dr.ellipse([63, 40, 129, 90], fill=v)), C["white"], C["silver"])  # The Wojak head: a dome over wide cheeks
-    shape(img, lambda dr, v: dr.chord([64, 2, 128, 54], 180, 360, fill=v), C["night"], C["ink"], C["slate"])  # The beanie
-    shape(img, lambda dr, v: dr.rectangle([64, 26, 128, 37], fill=v), C["slate"], C["navy"], C["grey"])
-    for x in range(67, 127, 4):
-        d.line([x, 27, x, 36], fill=C["navy"] + (255,))
+    # The doomer Wojak (the user's reference): a black beanie down to the brows, a wide pale face with a square jaw, heavy
+    # lids over eyes looking aside, purple bags, the long Wojak nose, stubble, a cigarette, a black hoodie
+    shape(img, lambda dr, v: dr.ellipse([40, 88, 152, 160], fill=v), C["night"], C["ink"], C["navy"])  # The hoodie
+    shape(img, lambda dr, v: dr.rectangle([82, 82, 110, 98], fill=v), C["white"], C["silver"])  # The neck
+    d.line([(84, 88), (84, 98)], fill=C["ink"] + (255,))
+    d.line([(108, 88), (108, 98)], fill=C["ink"] + (255,))
+    d.arc([92, 90, 100, 96], 200, 340, fill=C["grey"] + (255,))
+    for ex in (65, 127):  # Ears
+        shape(img, lambda dr, v: dr.ellipse([ex - 4, 46, ex + 4, 62], fill=v), C["white"], C["silver"])
+    jaw = [(66, 34), (66, 56), (68, 66), (73, 76), (80, 84), (88, 89), (96, 90), (104, 89), (112, 84), (119, 76), (124, 66), (126, 56), (126, 34)]
+    face = shape(img, lambda dr, v: dr.polygon(jaw, fill=v), C["white"], C["silver"])
+    shape(img, lambda dr, v: dr.chord([62, 0, 130, 64], 180, 360, fill=v), C["night"], C["ink"], C["slate"])  # The beanie
+    shape(img, lambda dr, v: dr.rectangle([62, 24, 130, 38], fill=v), C["slate"], C["navy"], C["grey"])
+    for x in range(65, 129, 4):
+        d.line([x, 25, x, 37], fill=C["navy"] + (255,))
     rnd = random.Random(67)
     fm = face.load()
-    for _ in range(170):  # Stubble on the jaw and the lip
-        x, y = rnd.randint(64, 128), rnd.randint(60, 89)
-        if fm[x, y] and not (86 <= x <= 106 and 64 <= y <= 66):
+    for _ in range(150):  # Stubble on the cheeks, the chin and the upper lip
+        x, y = rnd.randint(66, 126), rnd.randint(64, 89)
+        if fm[x, y] and abs(y - 74) > 1:
             dot(img, x, y, C["grey"])
-    for ex in (84, 108):
-        d.arc([ex - 8, 41, ex + 8, 53], 200, 340, fill=C["ink"] + (255,))  # Heavy, half-shut lids
-        d.line([ex - 6, 45, ex + 6, 45], fill=C["ink"] + (255,))
-        d.rectangle([ex - 2, 46, ex + 1, 47], fill=C["ink"] + (255,))
-        d.arc([ex - 8, 45, ex + 8, 55], 20, 160, fill=C["purple"] + (255,))  # The bags
-        d.arc([ex - 7, 47, ex + 7, 56], 30, 150, fill=C["plum"] + (255,))
-    d.line([(93, 46), (91, 60)], fill=C["ink"] + (255,))  # The long Wojak nose
-    d.line([(99, 46), (101, 60)], fill=C["ink"] + (255,))
-    d.arc([88, 57, 96, 63], 90, 270, fill=C["ink"] + (255,))
-    d.arc([96, 57, 104, 63], 270, 90, fill=C["ink"] + (255,))
-    d.line([88, 70, 104, 70], fill=C["ink"] + (255,))  # A flat mouth
+    for ex in (82, 110):
+        d.line([(ex - 8, 47), (ex - 4, 45), (ex + 4, 45), (ex + 8, 47)], fill=C["ink"] + (255,))  # Heavy lids
+        d.line([(ex - 7, 46), (ex - 4, 44), (ex + 4, 44), (ex + 7, 46)], fill=C["ink"] + (255,))
+        d.chord([ex - 6, 43, ex, 50], 0, 180, fill=C["ink"] + (255,))  # Pupils half under the lids, looking aside
+        d.line([ex - 5, 51, ex + 4, 51], fill=C["grey"] + (255,))
+        d.arc([ex - 8, 49, ex + 8, 57], 20, 160, fill=C["purple"] + (255,))  # The bags
+        d.arc([ex - 7, 51, ex + 7, 59], 30, 150, fill=C["plum"] + (255,))
+    d.line([(93, 47), (92, 61)], fill=C["ink"] + (255,))  # The long nose
+    d.line([(99, 47), (100, 61)], fill=C["ink"] + (255,))
+    d.arc([88, 58, 104, 67], 20, 160, fill=C["ink"] + (255,))
+    d.arc([86, 57, 92, 65], 90, 270, fill=C["ink"] + (255,))
+    d.arc([100, 57, 106, 65], 270, 90, fill=C["ink"] + (255,))
+    d.rectangle([93, 63, 94, 63], fill=C["ink"] + (255,))
+    d.rectangle([98, 63, 99, 63], fill=C["ink"] + (255,))
+    d.line([(86, 66), (84, 74)], fill=C["silver"] + (255,))
+    d.line([(106, 66), (108, 74)], fill=C["silver"] + (255,))
+    d.line([89, 74, 103, 74], fill=C["ink"] + (255,))  # The mouth, the lower lip
+    d.arc([91, 74, 101, 79], 20, 160, fill=C["grey"] + (255,))
+    d.line([95, 85, 97, 85], fill=C["grey"] + (255,))
     # The phone, its black back to us, held in both hands
-    shape(img, lambda dr, v: dr.rounded_rectangle([82, 84, 110, 108], 3, fill=v), C["night"], C["ink"], C["slate"])
-    d.ellipse([86, 87, 90, 91], fill=C["slate"] + (255,))
+    shape(img, lambda dr, v: dr.rounded_rectangle([82, 96, 110, H + 4], 3, fill=v), C["night"], C["ink"], C["slate"])
+    d.ellipse([86, 99, 90, 103], fill=C["slate"] + (255,))
     for hx in (80, 112):
-        shape(img, lambda dr, v: dr.ellipse([hx - 6, 90, hx + 6, 104], fill=v), C["white"], C["silver"])
+        shape(img, lambda dr, v: dr.ellipse([hx - 6, 98, hx + 6, 110], fill=v), C["white"], C["silver"])
     img = outline(img)
     d = ImageDraw.Draw(img)
-    d.polygon([(101, 68), (131, 73), (131, 77), (101, 72)], fill=C["white"] + (255,), outline=C["ink"] + (255,))  # The cigarette
-    d.polygon([(127, 73), (130, 74), (130, 76), (127, 75)], fill=C["orange"] + (255,))
+    d.polygon([(102, 72), (130, 76), (130, 80), (102, 76)], fill=C["white"] + (255,), outline=C["ink"] + (255,))  # The cigarette
+    d.polygon([(126, 76), (129, 77), (129, 79), (126, 78)], fill=C["orange"] + (255,))
     for k in range(12):
-        dot(img, 133 + round(math.sin(k * 0.8) * 3), 72 - k * 3, C["silver"] if k < 5 else C["grey"])
-        dot(img, 134 + round(math.sin(k * 0.8) * 3), 71 - k * 3, C["grey"] if k < 6 else C["slate"])
+        dot(img, 132 + round(math.sin(k * 0.8) * 3), 75 - k * 3, C["silver"] if k < 5 else C["grey"])
+        dot(img, 133 + round(math.sin(k * 0.8) * 3), 74 - k * 3, C["grey"] if k < 6 else C["slate"])
     return img
 
 
@@ -1551,10 +1562,8 @@ def keyboard_warrior():
         x, y = 66 + k * 5.3, 48 + k * 6
         d.rectangle([x - 1, y - 2, x + 1, y + 1], fill=C["amber"] + (255,))
         dot(img, x, y - 3, C["silver"])
-    head = soyjak_head().rotate(12, resample=Image.NEAREST, expand=True)
-    x0, y0, x1, y1 = head.getbbox()
     face = layer()
-    face.alpha_composite(head.crop((x0, y0, x1, y1)), (82 - (x1 - x0) // 2, 1))
+    soyjak_head(face, 82, 30, 0.95)
     img = outline(img)
     img.alpha_composite(outline(face))  # The head gets its own outline, so the chin stands off the chest
     body = img
@@ -1849,50 +1858,51 @@ CARDS += [
 BACKGROUNDS.update({"jail": bg_jail, "field": bg_field, "forest": bg_forest, "tunnel": bg_tunnel, "pool": bg_pool})
 
 
-def soyjak_head():
-    """The redditor soyjak head (the user's reference), drawn upright on its own canvas: a bald dome, glasses pushed up on
-    the face as it turns three-quarters to the right, a bulb nose, the huge open mouth with its top row of teeth, a
-    scraggly neckbeard; the red headband round the dome, its tails flying left. Rotated back by the caller."""
-    img = Image.new("RGBA", (72, 66), (0, 0, 0, 0))
+def soyjak_head(img, cx, cy, s=1.0, deg=-14):
+    """The redditor soyjak head (the user's reference), drawn straight onto img already tilted back (every point turned
+    by deg about (cx, cy), so the lines stay crisp): a bald dome, glasses up on the face, a bulb nose seen from below,
+    the huge open mouth with its top row of teeth, a scraggly neckbeard, and Rambo's red headband round the dome."""
+    a = math.radians(deg)
+    ca, sa = math.cos(a), math.sin(a)
+    T = lambda x, y: (cx + (x * ca - y * sa) * s, cy + (x * sa + y * ca) * s)
+    ell = lambda x0, y0, rx, ry, t0=0.0, t1=2 * math.pi, n=48: [T(x0 + rx * math.cos(t0 + (t1 - t0) * k / n), y0 + ry * math.sin(t0 + (t1 - t0) * k / n)) for k in range(n + 1)]
     d = ImageDraw.Draw(img)
-    m = Image.new("L", img.size, 0)
-    md = ImageDraw.Draw(m)
-    md.ellipse([30, 4, 62, 40], fill=255)
-    md.ellipse([26, 20, 66, 58], fill=255)
-    img.paste(C["skin"] + (255,), (0, 0), m)
-    rim = ImageChops.subtract(m, ImageChops.offset(m, -2, -2))
-    img.paste(C["skin_dark"] + (255,), (0, 0), rim)
-    mp = m.load()
+    ink = C["ink"] + (255,)
+    shape(img, lambda dr, v: (dr.polygon(ell(0, -8, 17, 22), fill=v), dr.polygon(ell(2, 8, 20, 17), fill=v)), C["skin"], C["skin_dark"])
     rnd = random.Random(73)
-    for _ in range(110):  # The neckbeard: wiry strokes in a band round the jaw and chin, heavier on the left
-        x, y = rnd.randint(26, 66), rnd.randint(38, 57)
-        if mp[x, y] and mp[x, y + 2] and (x - 44) ** 2 / 120 + (y - 47) ** 2 / 120 > 1 and (x < 56 or rnd.random() < 0.3):
-            d.line([x, y, x + rnd.choice((-1, 1)), y + 2], fill=rnd.choice((C["dark_brown"], C["ink"])) + (255,))
-    for x in range(30, 62, 2):  # Wiry hairs past the jaw line
-        y = 56 + (2 if 36 < x < 56 else 0)
-        d.line([x, y, x + rnd.choice((-1, 0, 1)), y + rnd.randint(2, 4)], fill=C["ink"] + (255,))
-    d.arc([36, 8, 50, 13], 200, 340, fill=C["skin_dark"] + (255,))  # Creases on the dome
-    d.arc([38, 11, 54, 16], 200, 340, fill=C["skin_dark"] + (255,))
-    d.rectangle([28, 16, 64, 19], fill=C["red"] + (255,))  # The headband
-    d.line([28, 19, 64, 19], fill=C["wine"] + (255,))
-    d.polygon([(30, 17), (10, 12), (8, 18), (20, 21), (30, 19)], fill=C["red"] + (255,))
-    d.polygon([(30, 19), (12, 25), (15, 28), (30, 21)], fill=C["wine"] + (255,))
-    for x0, x1 in ((36, 47), (51, 62)):  # The glasses, up on the right of the face
-        d.rectangle([x0, 23, x1, 29], fill=C["skin"] + (255,), outline=C["ink"] + (255,))
-        d.line([x0 + 2, 25, x1 - 2, 25], fill=C["ink"] + (255,))
-        d.rectangle([x0 + 4, 26, x0 + 6, 27], fill=C["ink"] + (255,))
-    d.line([47, 25, 51, 25], fill=C["ink"] + (255,))
-    d.line([62, 25, 66, 24], fill=C["ink"] + (255,))
-    d.line([30, 25, 36, 25], fill=C["ink"] + (255,))
-    d.arc([46, 30, 56, 37], 0, 360, fill=C["skin_dark"] + (255,))  # The bulb nose
-    d.rectangle([48, 34, 49, 35], fill=C["ink"] + (255,))
-    d.rectangle([53, 34, 54, 35], fill=C["ink"] + (255,))
-    d.ellipse([34, 37, 54, 58], fill=C["ink"] + (255,))  # The open mouth
-    d.chord([36, 38, 52, 46], 180, 360, fill=C["white"] + (255,))
-    for x in (39, 42, 45, 48):
-        d.line([x, 39, x, 41], fill=C["silver"] + (255,))
-    d.arc([30, 34, 38, 50], 120, 240, fill=C["skin_dark"] + (255,))  # A cheek line
-    return img
+    for _ in range(90):  # The neckbeard: wiry strokes along the jaw and under the chin, thicker on the left
+        t = rnd.uniform(0.15, 0.95) * math.pi
+        r = rnd.uniform(0.72, 0.97)
+        x, y = 2 + 20 * r * math.cos(t), 8 + 17 * r * math.sin(t)
+        if y > 6 and (x < 14 or rnd.random() < 0.3):
+            d.line([T(x, y), T(x + rnd.choice((-1, 1)), y + 2)], fill=rnd.choice((C["dark_brown"], C["ink"])) + (255,))
+    for t in [math.pi * (0.2 + 0.6 * k / 14) for k in range(15)]:  # Wiry hairs past the jaw line
+        x, y = 2 + 20 * math.cos(t), 8 + 17 * math.sin(t)
+        d.line([T(x, y), T(x * 1.08, y + 3)], fill=ink)
+    for y0 in (-24, -21):  # Creases on the dome
+        d.line([T(x, y0 + 0.04 * x * x) for x in range(-6, 8, 2)], fill=C["skin_dark"] + (255,))
+    d.polygon([T(-16.5, -17), T(16, -17), T(16.6, -13), T(-17, -13)], fill=C["red"] + (255,))  # The headband
+    d.line([T(-17, -13), T(16.6, -13)], fill=C["wine"] + (255,))
+    d.polygon([T(-16, -16), T(-34, -21), T(-36, -15), T(-24, -13), T(-16, -14)], fill=C["red"] + (255,))
+    d.polygon([T(-16, -14), T(-32, -8), T(-29, -5), T(-16, -12)], fill=C["wine"] + (255,))
+    for x0, x1 in ((-9, 0), (4, 15)):  # The glasses, eyes looking up out of them
+        lens = [T(x0, -8), T(x1, -8), T(x1, -1), T(x0, -1)]
+        d.polygon(lens, fill=C["skin"] + (255,), outline=ink)
+        d.line([T(x0 + 1.5, -5), T(x1 - 1.5, -5)], fill=ink)
+        px, py = T((x0 + x1) / 2, -4)
+        d.rectangle([px - 1, py - 1, px, py], fill=ink)
+    d.line([T(0, -5), T(4, -5)], fill=ink)
+    d.line([T(-9, -5), T(-16, -4)], fill=ink)
+    d.line([T(15, -5), T(20, -4)], fill=ink)
+    d.line(ell(6, 4, 4, 3), fill=C["skin_dark"] + (255,))  # The bulb nose, its nostrils
+    for nx in (4, 8):
+        px, py = T(nx, 5)
+        d.rectangle([px - 1, py, px, py + 1], fill=ink)
+    d.polygon(ell(1, 16, 8, 9.5), fill=ink)  # The open mouth
+    d.polygon(ell(1, 16, 7, 8, math.pi * 1.15, math.pi * 1.85, 16), fill=C["white"] + (255,))
+    for tx in (-3, 0, 3, 6):
+        d.line([T(tx, 9.2), T(tx, 10.5)], fill=C["silver"] + (255,))
+    d.line([T(-10, 8), T(-11, 13), T(-9, 18)], fill=C["skin_dark"] + (255,))  # A cheek line
 
 
 FONT3X5.update({".": ["0", "0", "0", "0", "1"], "!": ["1", "1", "1", "0", "1"], "V": ["101", "101", "101", "101", "010"]})
@@ -1957,8 +1967,7 @@ def this_is_fine():
     # Flames up the walls and along the floor, the left and right of the room burning
     for cx, h in ((6, 60), (20, 40), (34, 28), (150, 30), (164, 46), (178, 64), (190, 50), (128, 20)):
         flame(img, cx, 90, h, 18, rnd)
-    # The chair, the table, the coffee
-    shape(img, lambda dr, v: dr.rectangle([50, 46, 56, 92], fill=v), C["brown"], C["dark_brown"], C["tan"])
+    # The table, the coffee
     shape(img, lambda dr, v: dr.rectangle([88, 68, 126, 72], fill=v), C["brown"], C["dark_brown"], C["tan"])
     for lx in (92, 120):
         d.rectangle([lx, 72, lx + 2, 92], fill=C["dark_brown"] + (255,))
@@ -1991,7 +2000,7 @@ def this_is_fine():
 def holy_hand_grenade():
     img = layer()
     d = ImageDraw.Draw(img)
-    # The Holy Hand Grenade: a golden orb, a band of jewels round it, a jewelled cross on top, its pin pulled
+    # The Holy Hand Grenade: a golden orb, a band of jewels round it, a jewelled cross on top
     shape(img, lambda dr, v: dr.ellipse([84, 40, 124, 80], fill=v), C["yellow"], C["amber"], C["white"], (1, 1), 3)
     d.rectangle([84, 57, 124, 62], fill=C["amber"] + (255,))
     for x, col in ((90, C["red"]), (98, C["sky"]), (106, C["green"]), (114, C["red"])):
@@ -1999,14 +2008,12 @@ def holy_hand_grenade():
     shape(img, lambda dr, v: dr.rectangle([101, 20, 107, 42], fill=v), C["yellow"], C["amber"], C["white"])
     shape(img, lambda dr, v: dr.rectangle([95, 26, 113, 31], fill=v), C["yellow"], C["amber"], C["white"])
     d.rectangle([103, 27, 105, 29], fill=C["red"] + (255,))
-    d.ellipse([124, 18, 132, 26], outline=C["silver"] + (255,), width=2)  # The pin, pulled, dangling on its chain
-    d.line([(113, 28), (124, 22)], fill=C["silver"] + (255,))
-    # Brother Maynard, reading from an enormous book, three fingers raised
+    # Brother Maynard, reading from an enormous book, two fingers raised
     man(img, 44, 100, 1.4, C["skin"], C["brown"], None, face="shout", jacket=C["brown"])
     d.arc([34, 36, 54, 52], 180, 360, fill=C["dark_brown"] + (255,), width=2)  # The tonsure
     d.line([(36, 62), (26, 46)], fill=C["brown"] + (255,), width=4)
     shape(img, lambda dr, v: dr.ellipse([22, 40, 30, 48], fill=v), C["skin"], C["skin_dark"])
-    for fx in (23, 26, 29):
+    for fx in (24, 28):
         d.line([fx, 40, fx, 35], fill=C["skin"] + (255,), width=2)
     shape(img, lambda dr, v: dr.polygon([(44, 64), (60, 60), (60, 78), (44, 82)], fill=v), C["sand"], C["tan"])  # The book
     shape(img, lambda dr, v: dr.polygon([(60, 60), (78, 64), (78, 82), (60, 78)], fill=v), C["sand"], C["tan"])
@@ -2048,30 +2055,53 @@ def track(d, points, sleeper=C["brown"], rail=C["silver"]):
 def trolley_problem():
     img = layer()
     d = ImageDraw.Draw(img)
-    # From above: the track splits at a lever; one bored man stands on one branch, scrolling his phone
-    track(d, [(-10, 54), (84, 54)])
-    track(d, [(84, 54), (120, 40), (202, 22)])
-    track(d, [(84, 54), (120, 68), (202, 88)])
-    shape(img, lambda dr, v: dr.rectangle([86, 72, 94, 80], fill=v), C["grey"], C["slate"], C["silver"])  # The lever
-    d.line([(90, 76), (96, 66)], fill=C["night"] + (255,), width=2)
-    d.ellipse([94, 63, 99, 68], fill=C["red"] + (255,))
-    # The trolley, roof seen from above, coming fast
-    shape(img, lambda dr, v: dr.rounded_rectangle([12, 45, 58, 63], 4, fill=v), C["red"], C["wine"], C["pink"])
-    d.rectangle([18, 49, 52, 59], fill=C["yellow"] + (255,))
-    for x in range(22, 52, 8):
-        d.line([x, 49, x, 59], fill=C["amber"] + (255,))
-    d.line([(58, 54), (64, 54)], fill=C["silver"] + (255,))
-    for k in range(3):  # Speed lines
-        d.line([2 - k * 4, 48 + k * 6, 8 - k * 4, 48 + k * 6], fill=C["white"] + (255,))
-    # The man, from above: his shoulders, the top of his head, the phone's light
-    mx, my = 150, 31
-    shape(img, lambda dr, v: dr.ellipse([mx - 9, my - 5, mx + 9, my + 5], fill=v), C["blue"], C["navy"], C["sky"])
-    shape(img, lambda dr, v: dr.ellipse([mx - 5, my - 5, mx + 5, my + 5], fill=v), C["dark_brown"], C["plum"], C["brown"])
-    shape(img, lambda dr, v: dr.ellipse([mx + 7, my - 2, mx + 11, my + 3], fill=v), C["skin"], C["skin_dark"])
-    d.rectangle([mx + 10, my - 2, mx + 13, my + 2], fill=C["cyan"] + (255,))
-    img = outline(img)
-    pixel_text(img, mx - 8, my - 16, "...", C["white"])
-    return img
+    # The classic drawing, side on: the trolley coming, the track splitting, a man at the lever; one person tied on the
+    # upper branch, five on the lower
+
+    def rails(top, bottom):
+        """Two rails (the near one lower) and the sleepers between them."""
+        for i in range(len(top) - 1):
+            (ax, ay), (bx, by), (cx2, cy2), (dx2, dy2) = top[i], top[i + 1], bottom[i], bottom[i + 1]
+            n = int(math.hypot(bx - ax, by - ay))
+            for s in range(0, n, 5):
+                f = s / n
+                d.line([ax + (bx - ax) * f - 1, ay + (by - ay) * f, cx2 + (dx2 - cx2) * f + 1, cy2 + (dy2 - cy2) * f + 1],
+                       fill=C["brown"] + (255,), width=2)
+        d.line(top, fill=C["silver"] + (255,))
+        d.line(bottom, fill=C["white"] + (255,))
+
+    rails([(0, 62), (80, 62)], [(0, 68), (80, 68)])
+    rails([(80, 62), (112, 52), (192, 46)], [(80, 68), (112, 57), (192, 51)])
+    rails([(80, 62), (112, 72), (192, 84)], [(80, 68), (112, 78), (192, 91)])
+    # The trolley, side on, its front three-quarters to us
+    shape(img, lambda dr, v: dr.rectangle([8, 34, 58, 62], fill=v), C["red"], C["wine"], C["pink"])
+    shape(img, lambda dr, v: dr.polygon([(58, 34), (66, 38), (66, 62), (58, 62)], fill=v), C["wine"], C["plum"])
+    shape(img, lambda dr, v: dr.rectangle([6, 29, 66, 34], fill=v), C["sand"], C["tan"], C["white"])
+    shape(img, lambda dr, v: dr.rectangle([16, 25, 54, 29], fill=v), C["sand"], C["tan"], C["white"])
+    for x in range(12, 56, 10):
+        d.rectangle([x, 38, x + 6, 46], fill=C["sky"] + (255,))
+    d.rectangle([60, 40, 64, 48], fill=C["sky"] + (255,))
+    for x in (16, 26, 40, 50):
+        d.ellipse([x - 3, 60, x + 3, 66], fill=C["ink"] + (255,))
+    # The man at the lever, standing back from the tracks beyond the split, as in the drawing
+    d.line([(96, 46), (101, 32)], fill=C["night"] + (255,), width=2)
+    d.ellipse([99, 29, 104, 34], fill=C["red"] + (255,))
+    shape(img, lambda dr, v: dr.rectangle([93, 44, 99, 48], fill=v), C["grey"], C["slate"])
+    man(img, 112, 46, 0.75, C["skin"], C["white"], C["dark_brown"], face="neutral", jacket=C["blue"])
+    d.line([(108, 26), (103, 32)], fill=C["blue"] + (255,), width=2)
+
+    def tied(x, y, h):
+        """Someone tied up and lying across the track, head at the far rail."""
+        shape(img, lambda dr, v: dr.rounded_rectangle([x - 3, y - h // 2, x + 3, y + h // 2], 2, fill=v), C["sand"], C["tan"])
+        for k in range(y - h // 2 + 2, y + h // 2, 3):
+            d.line([x - 3, k, x + 3, k], fill=C["brown"] + (255,))
+        shape(img, lambda dr, v: dr.ellipse([x - 3, y - h // 2 - 7, x + 3, y - h // 2 - 1], fill=v), C["skin"], C["skin_dark"])
+
+    tied(164, 50, 12)
+    for k in range(5):
+        x = 128 + k * 9
+        tied(x, round(80 + (x - 112) * 6 / 80), 12)
+    return outline(img)
 
 
 def resurrected_t_rex():
@@ -2152,19 +2182,39 @@ def script_kiddie():
         d.rectangle([gx, gy, gx + 6, gy + 3], fill=C["yellow"] + (255,), outline=C["amber"] + (255,))
     shape(img, lambda dr, v: dr.ellipse([150, 18, 166, 50], fill=v), C["silver"], C["grey"], C["white"])
     d.ellipse([155, 30, 161, 38], outline=C["grey"] + (255,))
-    # The kid, from behind: an enormous gaming chair, his hood just peeking over it, a hand on the mouse
-    shape(img, lambda dr, v: dr.chord([80, 36, 106, 60], 180, 360, fill=v), C["green"], C["dark_green"], C["yellow"])
-    shape(img, lambda dr, v: dr.rounded_rectangle([70, 44, 116, H + 6], 8, fill=v), C["red"], C["wine"], C["pink"])
-    shape(img, lambda dr, v: dr.rounded_rectangle([80, 50, 106, H + 6], 4, fill=v), C["night"], C["ink"], C["slate"])
-    for wx in (66, 112):  # Its wings
-        shape(img, lambda dr, v: dr.rounded_rectangle([wx, 40, wx + 8, 70], 3, fill=v), C["red"], C["wine"])
-    d.rectangle([88, 56, 98, 62], fill=C["red"] + (255,))
-    d.line([(116, 70), (130, 64)], fill=C["green"] + (255,), width=3)
-    shape(img, lambda dr, v: dr.ellipse([128, 60, 136, 66], fill=v), C["grey"], C["slate"], C["silver"])
     img = outline(img)
-    for k in range(3):  # Click, click
-        d2 = ImageDraw.Draw(img)
-        d2.line([138 + k * 3, 58 - k, 140 + k * 3, 55 - k * 2], fill=C["white"] + (255,))
+    # The script kiddie is a baby: turned round in the enormous gaming chair to look at us, smug, a dummy in his mouth,
+    # a green hoodie, the mouse still in his hand
+    kid = layer()
+    k = ImageDraw.Draw(kid)
+    for wx in (62, 122):  # The chair's wings
+        shape(kid, lambda dr, v: dr.rounded_rectangle([wx, 26, wx + 8, 70], 3, fill=v), C["red"], C["wine"])
+    shape(kid, lambda dr, v: dr.rounded_rectangle([68, 22, 124, H + 6], 8, fill=v), C["red"], C["wine"], C["pink"])
+    shape(kid, lambda dr, v: dr.rounded_rectangle([78, 28, 114, H + 6], 4, fill=v), C["night"], C["ink"], C["slate"])
+    shape(kid, lambda dr, v: dr.rectangle([60, 92, 132, 100], fill=v), C["night"], C["ink"], C["slate"])  # The seat's front
+    shape(kid, lambda dr, v: dr.ellipse([80, 64, 112, 98], fill=v), C["green"], C["dark_green"], C["yellow"])  # The hoodie
+    for fx in (86, 102):  # Little legs over the seat
+        shape(kid, lambda dr, v: dr.rounded_rectangle([fx - 4, 88, fx + 4, 104], 3, fill=v), C["green"], C["dark_green"])
+        shape(kid, lambda dr, v: dr.ellipse([fx - 4, 100, fx + 4, 106], fill=v), C["white"], C["silver"])
+    shape(kid, lambda dr, v: dr.chord([78, 54, 114, 76], 180, 360, fill=v), C["dark_green"], C["forest"])  # The hood, down
+    for ex in (79, 113):  # Ears
+        shape(kid, lambda dr, v: dr.ellipse([ex - 3, 46, ex + 3, 56], fill=v), C["skin"], C["skin_dark"])
+    shape(kid, lambda dr, v: dr.ellipse([80, 30, 112, 66], fill=v), C["skin"], C["skin_dark"], C["white"])  # A big baby head
+    k.arc([92, 26, 100, 34], 90, 360, fill=C["amber"] + (255,), width=2)  # One curl of hair
+    for ex in (89, 103):  # Smug, half-shut eyes
+        k.line([ex - 3, 47, ex + 3, 47], fill=C["ink"] + (255,))
+        k.rectangle([ex - 1, 48, ex + 1, 49], fill=C["ink"] + (255,))
+    k.line([(85, 44), (91, 45)], fill=C["skin_dark"] + (255,))
+    k.line([(101, 45), (107, 44)], fill=C["skin_dark"] + (255,))
+    for cx in (86, 106):
+        k.ellipse([cx - 3, 52, cx + 3, 56], fill=C["pink"] + (255,))
+    shape(kid, lambda dr, v: dr.ellipse([90, 54, 102, 62], fill=v), C["sky"], C["blue"], C["cyan"])  # The dummy
+    k.ellipse([94, 56, 98, 60], fill=C["white"] + (255,))
+    k.line([(110, 76), (122, 82)], fill=C["green"] + (255,), width=4)  # His arm, the mouse in his hand
+    shape(kid, lambda dr, v: dr.ellipse([120, 78, 130, 86], fill=v), C["skin"], C["skin_dark"])
+    shape(kid, lambda dr, v: dr.ellipse([124, 76, 134, 84], fill=v), C["grey"], C["slate"], C["silver"])
+    k.line([(134, 80), (142, 68)], fill=C["ink"] + (255,))
+    img.alpha_composite(outline(kid))
     return img
 
 
@@ -2202,46 +2252,55 @@ def karen():
 def volcano_lair():
     img = layer()
     d = ImageDraw.Draw(img)
-    # The volcano, cut away to show the lair inside
-    cone = [(0, H), (30, 82), (58, 46), (80, 18), (112, 18), (134, 46), (162, 82), (W, H)]
-    shape(img, lambda dr, v: dr.polygon(cone, fill=v), C["dark_brown"], C["plum"], C["brown"])
-    rnd = random.Random(89)
+    # The hollowed-out volcano from inside (You Only Live Twice): the great round floor, its tiers and a helipad, the
+    # silver rocket in its red gantry, a world map on the wall, a control room on stilts, the crew in their colours
+    shape(img, lambda dr, v: dr.ellipse([-30, 66, 222, 150], fill=v), C["slate"], C["navy"], C["grey"])  # The floor
+    for r in (0, 8, 16):  # Tiers round the back
+        d.arc([-20 + r, 58 + r // 2, 212 - r, 140 + r // 2], 190, 350, fill=C["grey"] + (255,))
+    shape(img, lambda dr, v: dr.rectangle([46, 34, 74, 48], fill=v), C["wine"], C["plum"])  # The world map
+    rnd = random.Random(101)
     for _ in range(30):
-        x, y = rnd.randint(40, 152), rnd.randint(40, 104)
-        d.line([x, y, x + 3, y + 1], fill=C["plum"] + (255,))
-    for x in range(82, 112, 5):  # Lava glowing round the crater
-        d.line([x, 18, x + 2, 21], fill=C["orange"] + (255,))
-    inside = [(36, H), (78, 38), (114, 38), (156, H)]
-    shape(img, lambda dr, v: dr.polygon(inside, fill=v), C["slate"], C["navy"], C["grey"])
-    for y in (60, 80, 100):  # Its floors
-        x0, x1 = 78 - (y - 38) * 42 / 70, 114 + (y - 38) * 42 / 70
-        d.rectangle([x0, y, x1, y + 2], fill=C["silver"] + (255,))
-    # The rocket on its pad, through two floors
-    shape(img, lambda dr, v: dr.rectangle([56, 70, 64, 100], fill=v), C["white"], C["silver"])
-    d.polygon([(56, 70), (60, 62), (64, 70)], fill=C["red"] + (255,))
-    d.polygon([(56, 94), (52, 100), (56, 100)], fill=C["red"] + (255,))
-    d.polygon([(64, 94), (68, 100), (64, 100)], fill=C["red"] + (255,))
-    # The monorail, a car on it
-    d.line([72, 76, 150, 76], fill=C["grey"] + (255,), width=2)
-    shape(img, lambda dr, v: dr.rounded_rectangle([110, 68, 132, 76], 3, fill=v), C["yellow"], C["amber"], C["white"])
-    d.rectangle([114, 70, 128, 72], fill=C["sky"] + (255,))
-    # Henchmen in matching jumpsuits
-    for hx, hy in ((80, 100), (92, 100), (140, 100), (84, 80), (100, 80)):
-        d.rectangle([hx - 1, hy - 7, hx + 1, hy], fill=C["orange"] + (255,))
-        dot(img, hx, hy - 8, C["skin"])
-    # At the top, behind armored glass: the bald villain on his throne, stroking a white cat
-    shape(img, lambda dr, v: dr.rectangle([88, 42, 106, 60], fill=v), C["red"], C["wine"])
-    shape(img, lambda dr, v: dr.rectangle([92, 50, 102, 60], fill=v), C["grey"], C["slate"])
-    shape(img, lambda dr, v: dr.ellipse([93, 42, 101, 50], fill=v), C["skin"], C["skin_dark"])
-    shape(img, lambda dr, v: dr.ellipse([94, 54, 102, 59], fill=v), C["white"], C["silver"])
-    d.polygon([(100, 54), (101, 52), (102, 54)], fill=C["white"] + (255,))
-    d.rectangle([80, 42, 114, 60], outline=C["cyan"] + (255,))
-    d.line([(84, 44), (88, 48)], fill=C["cyan"] + (255,))
-    d.line([(108, 44), (112, 48)], fill=C["cyan"] + (255,))
+        x, y = rnd.randint(48, 72), rnd.randint(36, 46)
+        if (x - 60) ** 2 / 100 + (y - 41) ** 2 / 30 < 1.3:
+            dot(img, x, y, C["amber"])
+    shape(img, lambda dr, v: dr.polygon([(28, 60), (68, 60), (72, 64), (24, 64)], fill=v), C["grey"], C["slate"], C["silver"])  # The helipad
+    d.ellipse([38, 60, 56, 63], outline=C["red"] + (255,))
+    d.line([(32, 64), (32, 74)], fill=C["slate"] + (255,), width=2)
+    d.line([(64, 64), (64, 74)], fill=C["slate"] + (255,), width=2)
+    shape(img, lambda dr, v: dr.rectangle([132, 40, 176, 48], fill=v), C["grey"], C["slate"], C["silver"])  # The control room
+    for x in range(135, 174, 5):
+        d.rectangle([x, 42, x + 2, 45], fill=C["yellow"] + (255,))
+    d.line([(140, 48), (140, 66)], fill=C["slate"] + (255,), width=2)
+    d.line([(170, 48), (170, 66)], fill=C["slate"] + (255,), width=2)
+    # The gantry, red figures climbing it, the rocket beside it
+    for x in (116, 130):
+        d.line([x, 24, x, 74], fill=C["night"] + (255,), width=2)
+    for y in range(26, 74, 6):
+        d.line([116, y, 130, y], fill=C["night"] + (255,))
+        d.line([116, y, 130, y + 6], fill=C["ink"] + (255,))
+    for y in (34, 46, 58):
+        d.rectangle([121, y, 123, y + 4], fill=C["red"] + (255,))
+    shape(img, lambda dr, v: dr.rectangle([104, 28, 114, 76], fill=v), C["silver"], C["grey"], C["white"])
+    d.polygon([(104, 28), (109, 16), (114, 28)], fill=C["silver"] + (255,))
+    d.polygon([(104, 70), (98, 78), (104, 76)], fill=C["grey"] + (255,))
+    d.polygon([(114, 70), (120, 78), (114, 76)], fill=C["grey"] + (255,))
+    d.polygon([(108, 44), (109, 42), (110, 44), (112, 44), (110, 45), (111, 47), (109, 46), (107, 47), (108, 45), (106, 44)], fill=C["red"] + (255,))
+    # The crew: orange and red jumpsuits on the floor, white-helmeted guards along the front rail
+    for x, y, col in ((70, 80, C["orange"]), (74, 80, C["orange"]), (78, 81, C["orange"]), (60, 84, C["red"]), (64, 85, C["red"]),
+                      (128, 80, C["orange"]), (132, 80, C["orange"]), (150, 72, C["white"]), (156, 72, C["white"])):
+        d.rectangle([x - 1, y - 6, x + 1, y], fill=col + (255,))
+        dot(img, x, y - 7, C["skin"])
+    d.arc([10, 88, 182, 130], 190, 350, fill=C["silver"] + (255,))  # The front rail
+    for k in range(9):
+        x = 40 + k * 14
+        y = 98 - round(math.sin(math.radians(20 + k * 17.5)) * 6)
+        d.rectangle([x - 1, y - 8, x + 1, y], fill=C["white"] + (255,))
+        d.rectangle([x - 1, y - 10, x + 1, y - 9], fill=C["silver"] + (255,))
     img = outline(img)
-    for k in range(4):  # Steam from the crater
-        d2 = ImageDraw.Draw(img)
-        d2.ellipse([86 + k * 6, 14 - k * 3, 94 + k * 6, 22 - k * 3], fill=C["silver"] + (255,))
+    heli = ImageDraw.Draw(img)  # A helicopter dropping in through the crater
+    heli.ellipse([90, 10, 96, 14], fill=C["ink"] + (255,))
+    heli.line([86, 9, 100, 9], fill=C["ink"] + (255,))
+    heli.line([96, 12, 101, 11], fill=C["ink"] + (255,))
     return img
 
 
@@ -2350,12 +2409,41 @@ CARDS += [
     ("ResurrectedTRex", "gallery", resurrected_t_rex),
     ("ScriptKiddie", "room_night", script_kiddie),
     ("Karen", "store", karen),
-    ("HollowedOutVolcanoLair", "state_sea", volcano_lair),
+    ("HollowedOutVolcanoLair", "cavern", volcano_lair),
     ("NPC", "vapor", npc),
     ("PresidentialPardon", "state", presidential_pardon),
     ("DeadCatBounce", "office", dead_cat_bounce),
 ]
 BACKGROUNDS.update({"room_day": bg_room_day, "lawn": bg_lawn, "store": bg_store})
+
+
+def bg_cavern():
+    """A villain's cavern: a dark rock dome, ceiling lights, a round opening onto the sky and the mountains."""
+    img = layer()
+    gradient(img, [C["ink"], C["night"], C["navy"], C["night"]], 0, H)
+    d = ImageDraw.Draw(img)
+    rnd = random.Random(97)
+    for _ in range(70):  # Rock
+        x, y = rnd.randrange(W), rnd.randrange(H)
+        d.polygon([(x, y), (x + rnd.randint(4, 12), y + rnd.randint(-3, 3)), (x + rnd.randint(2, 8), y + rnd.randint(3, 8))],
+                  fill=rnd.choice((C["night"], C["navy"], C["ink"])) + (255,))
+    m = mask()
+    ImageDraw.Draw(m).ellipse([62, 3, 124, 25], fill=255)
+    sky = layer()
+    gradient(sky, [C["white"], C["silver"]], 3, 25)
+    sd = ImageDraw.Draw(sky)
+    sd.polygon([(62, 25), (66, 18), (72, 20), (78, 14), (86, 19), (94, 13), (102, 18), (110, 14), (118, 19), (124, 25)], fill=C["grey"] + (255,))
+    img.paste(sky, (0, 0), m)
+    d.ellipse([62, 3, 124, 25], outline=C["grey"] + (255,))
+    d.line([66, 24, 120, 24], fill=C["slate"] + (255,), width=2)
+    for k in range(26):  # Ceiling lights in rings
+        a = math.radians(190 + k * 6.3)
+        for r, ry in ((70, 26), (92, 40)):
+            dot(img, 93 + math.cos(a) * r, 16 - math.sin(a) * ry * 0.6 + 20, C["amber"])
+    return img
+
+
+BACKGROUNDS["cavern"] = bg_cavern
 
 
 def main():
