@@ -38,7 +38,10 @@ USER_NOTES = {
     "Keyboard Warrior": ["2026-10-14 (pixel art): like Rambo but fat, holding the keyboard as if it were a sword.",
                          "2026-10-14: the arms in the belly's lighter skin tone, smooth where they meet the shoulders; the "
                          "face the typical redditor meme face (the user's references: a tall bald dome, glasses, brow "
-                         "creases, a smug toothy grin, a neckbeard), in our own colors, not the reference's."],
+                         "creases, a smug toothy grin, a neckbeard), in our own colors, not the reference's.",
+                         "2026-10-14: the head exactly like the user's cropped soyjak: tilted back, three-quarters to the "
+                         "right, glasses up on the face, the huge open mouth with its top teeth, the scraggly neckbeard; "
+                         "the body back as it was, only the arms redone."],
     "Black Knight": ["2026-10-14 (pixel art): no speech bubble; like the older picture, with King Arthur and Patsy there; the "
                      "forest has no water."],
     "Particle Accelerator": ["2026-10-14 (pixel art): after the user's photo of the LHC tunnel: the blue magnet pipe running off "
@@ -76,7 +79,8 @@ USER_NOTES = {
                       "2026-10-14 (pixel art): a clock showing 3:00 AM behind him.",
                       "2026-10-14: no cards flying about; the guy like Bojak from the memes (the bald wojak).",
                       "2026-10-14: the guy like Wojak: the doomer (the user's reference: a black beanie, purple bags under "
-                      "tired eyes, stubble, a cigarette with its smoke, a black hoodie)."],
+                      "tired eyes, stubble, a cigarette with its smoke, a black hoodie).",
+                      "2026-10-14: the head in Wojak's shape (a dome over wide cheeks), not a box."],
     "The Holy Grail": ["Remove the pin."],
     "The Lost Ark": ["Make the guy look more like Indiana Jones."],
     "Omen Reading": ["The reader more centered at the table, his body showing."],
