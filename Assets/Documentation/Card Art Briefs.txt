@@ -183,6 +183,7 @@ Strike (spell)
     (from the drawing) A big fluffy fur hat: a round crown, a thick folded-up front and ear flaps hanging down
 Russian Roulette (spell)
     A Russian woman in a fur ushanka spinning a roulette wheel of six slices, one of them a skull, onion domes in the snow behind her.
+    USER: 2026-10-14 (pixel art): the skull centred in its slice.
 Toxic Positivity (spell)
     A huge yellow smiley face with a crack running through it and a sticking plaster on its cheek; vaporwave background.
 Mental Health Day (spell)
@@ -226,6 +227,7 @@ Dogpile (spell)
     USER: A big pile of dogs on top of someone.
 Rage Bait (spell)
     A phone screen with a glowing red notification, reflected in the furious eyes of the person holding it.
+    USER: 2026-10-14 (pixel art): an angry fish going for a bait.
 Its A Trap (spell)
     The free-boat sting: a bald, stubbled Homer Simpson strolls into a police station waving a letter, "CONGRATULATIONS! YOU'VE WON A FREE BOAT!", while the grinning police chief behind the counter slides him a pile of unpaid fines instead. A "FREE BOAT PICKUP" banner hangs over the open door of a holding cell.
     USER: Homer and the free boat: the trap where they want to get him to the police office to give him a fine.
@@ -585,6 +587,7 @@ Scientific Method (creature)
     A scientist in goggles carefully pouring a glowing liquid into a beaker on a bench crowded with labelled flasks, a whiteboard behind her reading HYPOTHESIS → EXPERIMENT → GRANT.
 Frankenstein (creature)
     A towering stitched-together monster sitting up on a lab table under a lightning bolt, bolts in its neck smoking, the mad scientist cheering with both arms up.
+    USER: 2026-10-14 (pixel art): it was missing the monster's legs.
 Chimera (creature)
     A lion with a goat's head sprouting from its back and a snake for a tail, all three wearing hospital ID wristbands, in a lab enclosure with a sticky note: DO NOT FEED AFTER MIDNIGHT.
 Resurrected T-Rex (creature)

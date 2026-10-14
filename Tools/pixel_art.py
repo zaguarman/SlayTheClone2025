@@ -2606,35 +2606,37 @@ def ship_of_theseus():
 def rage_bait():
     img = layer()
     d = ImageDraw.Draw(img)
-    # A furious face lit red from below by the phone, the red notification reflected in both eyes
-    for ex in (40, 130):  # Ears
-        shape(img, lambda dr, v: dr.ellipse([ex - 6, 40, ex + 6, 62], fill=v), C["skin"], C["skin_dark"])
-    shape(img, lambda dr, v: dr.ellipse([40, 4, 130, 116], fill=v), C["skin"], C["red"], None, (0, 1), 3)
-    shape(img, lambda dr, v: dr.chord([40, 0, 130, 40], 180, 360, fill=v), C["dark_brown"], C["plum"])  # Hair
-    d.line([(98, 16), (102, 24), (98, 30)], fill=C["purple"] + (255,), width=2)  # A vein on the temple
-    d.line([(102, 24), (108, 26)], fill=C["purple"] + (255,), width=2)
-    d.polygon([(52, 32), (80, 40), (80, 44), (52, 37)], fill=C["ink"] + (255,))  # Brows in a hard V
-    d.polygon([(118, 32), (90, 40), (90, 44), (118, 37)], fill=C["ink"] + (255,))
-    for ex in (66, 104):  # Wide eyes, the red notification in each
-        d.ellipse([ex - 10, 44, ex + 10, 56], fill=C["white"] + (255,), outline=C["ink"] + (255,))
-        d.ellipse([ex - 4, 46, ex + 4, 54], fill=C["ink"] + (255,))
-        d.ellipse([ex - 2, 48, ex + 1, 51], fill=C["hot"] + (255,))
-    d.line([(85, 52), (82, 68), (88, 70)], fill=C["skin_dark"] + (255,))  # The nose, nostrils flared
-    d.arc([76, 64, 84, 72], 90, 270, fill=C["skin_dark"] + (255,))
-    d.arc([88, 64, 96, 72], 270, 90, fill=C["skin_dark"] + (255,))
-    d.rectangle([66, 80, 104, 92], fill=C["white"] + (255,), outline=C["ink"] + (255,))  # Gritted teeth
-    d.line([66, 86, 104, 86], fill=C["ink"] + (255,))
-    for x in range(72, 104, 6):
-        d.line([x, 80, x, 92], fill=C["silver"] + (255,))
-    d.line([(60, 82), (64, 76)], fill=C["skin_dark"] + (255,))
-    d.line([(110, 82), (106, 76)], fill=C["skin_dark"] + (255,))
-    # The phone in the corner, its back to us, its red glow spilling round it
-    shape(img, lambda dr, v: dr.rounded_rectangle([140, 58, 176, H + 6], 5, fill=v), C["night"], C["ink"], C["slate"])
-    d.ellipse([146, 64, 152, 70], fill=C["slate"] + (255,))
-    shape(img, lambda dr, v: dr.ellipse([132, 80, 146, 98], fill=v), C["skin"], C["skin_dark"])
+    # The bait: a fat worm on a hook, dangling from the line
+    d.line([(150, 0), (150, 52)], fill=C["white"] + (255,))
+    d.arc([144, 52, 156, 66], 0, 200, fill=C["silver"] + (255,), width=2)
+    d.line([(156, 58), (156, 52)], fill=C["silver"] + (255,), width=2)
+    for k, (x, y) in enumerate(((148, 54), (152, 58), (149, 62), (153, 66), (150, 70))):
+        shape(img, lambda dr, v: dr.ellipse([x - 3, y - 3, x + 3, y + 3], fill=v), C["pink"], C["magenta"])
+    # The fish, furious, lunging at it: brows down, eye bulging, jaws wide, a vein popping
+    shape(img, lambda dr, v: dr.polygon([(16, 38), (40, 58), (16, 80), (24, 58)], fill=v), C["orange"], C["rust"], C["amber"])  # The tail
+    shape(img, lambda dr, v: dr.polygon([(62, 40), (80, 22), (96, 40)], fill=v), C["orange"], C["rust"])  # The dorsal fin, up
+    shape(img, lambda dr, v: dr.ellipse([32, 34, 132, 86], fill=v), C["red"], C["wine"], C["orange"], (1, 1), 3)
+    shape(img, lambda dr, v: dr.polygon([(64, 68), (80, 66), (70, 82)], fill=v), C["orange"], C["rust"])  # A side fin
+    for x in range(52, 104, 9):  # Scales
+        d.arc([x, 50, x + 8, 60], 270, 90, fill=C["wine"] + (255,))
+        d.arc([x + 4, 60, x + 12, 70], 270, 90, fill=C["wine"] + (255,))
+    d.polygon([(112, 54), (138, 44), (134, 60), (138, 74), (112, 66)], fill=C["ink"] + (255,))  # The open jaws
+    for x in range(116, 136, 4):
+        d.polygon([(x, 48 + (x - 112) // 6), (x + 2, 48 + (x - 112) // 6), (x + 1, 52 + (x - 112) // 6)], fill=C["white"] + (255,))
+        d.polygon([(x, 70 - (x - 112) // 6), (x + 2, 70 - (x - 112) // 6), (x + 1, 66 - (x - 112) // 6)], fill=C["white"] + (255,))
+    d.ellipse([98, 40, 112, 52], fill=C["white"] + (255,), outline=C["ink"] + (255,))  # The bulging eye
+    d.ellipse([104, 43, 109, 48], fill=C["ink"] + (255,))
+    d.polygon([(94, 36), (114, 42), (114, 45), (94, 40)], fill=C["ink"] + (255,))  # Its brow, down hard
     img = outline(img)
     d = ImageDraw.Draw(img)
-    d.rounded_rectangle([138, 56, 178, H + 8], 6, outline=C["hot"] + (255,))
+    d.line([(84, 26), (88, 30)], fill=C["hot"] + (255,), width=2)  # The anger mark
+    d.line([(92, 26), (88, 30)], fill=C["hot"] + (255,), width=2)
+    d.line([(84, 34), (88, 30)], fill=C["hot"] + (255,), width=2)
+    d.line([(92, 34), (88, 30)], fill=C["hot"] + (255,), width=2)
+    for k in range(3):  # Lunging: speed lines behind it, bubbles
+        d.line([2, 48 + k * 10, 12, 48 + k * 10], fill=C["white"] + (255,))
+    for x, y in ((140, 82), (146, 88), (142, 94)):
+        d.ellipse([x, y, x + 3, y + 3], outline=C["white"] + (255,))
     return img
 
 
@@ -2722,11 +2724,14 @@ def mummy():
 def frankenstein():
     img = layer()
     d = ImageDraw.Draw(img)
-    # The slab, the sheet over the monster's legs
+    # The slab
     shape(img, lambda dr, v: dr.rectangle([30, 74, 130, 80], fill=v), C["grey"], C["slate"], C["silver"])
     for lx in (36, 120):
         d.rectangle([lx, 80, lx + 4, 96], fill=C["slate"] + (255,))
-    shape(img, lambda dr, v: dr.polygon([(64, 74), (124, 70), (128, 76), (62, 80)], fill=v), C["white"], C["silver"])
+    shape(img, lambda dr, v: dr.rectangle([70, 64, 116, 74], fill=v), C["slate"], C["navy"], C["grey"])  # His legs along the slab
+    d.line([72, 69, 114, 69], fill=C["navy"] + (255,))
+    shape(img, lambda dr, v: dr.rounded_rectangle([114, 54, 126, 74], 3, fill=v), C["night"], C["ink"], C["slate"])  # Big boots, toes up
+    d.line([114, 64, 126, 64], fill=C["ink"] + (255,))
     # The monster sitting up: flat-topped, green, stitched, smoking neck bolts, arms out
     shape(img, lambda dr, v: dr.rectangle([46, 44, 74, 76], fill=v), C["slate"], C["navy"], C["grey"])  # A dark jacket
     shape(img, lambda dr, v: dr.rectangle([50, 14, 72, 42], fill=v), C["green"], C["dark_green"], C["yellow"])
@@ -2776,7 +2781,7 @@ def russian_roulette():
     for k in range(6):
         col = C["night"] if k == 1 else (C["red"] if k % 2 == 0 else C["white"])
         d.pieslice([cx - r, cy - r, cx + r, cy + r], k * 60 - 90, k * 60 - 30, fill=col + (255,))
-    sx, sy = cx + 15, cy - 8  # The skull, in the dark slice
+    sx, sy = cx + 18, cy - 1  # The skull, centred in the dark slice
     d.ellipse([sx - 5, sy - 5, sx + 5, sy + 4], fill=C["white"] + (255,))
     d.rectangle([sx - 3, sy + 3, sx + 3, sy + 6], fill=C["white"] + (255,))
     for ex in (sx - 2, sx + 2):
@@ -2914,7 +2919,7 @@ def perpetual_motion():
 CARDS += [
     ("Boomer", "vapor", boomer),
     ("ShipofTheseus", "state_sea", ship_of_theseus),
-    ("RageBait", "room_night", rage_bait),
+    ("RageBait", "underwater", rage_bait),
     ("TheWickerMan", "sunset_cliff", wicker_man),
     ("Mummy", "gallery", mummy),
     ("Frankenstein", "lab", frankenstein),
@@ -2924,6 +2929,31 @@ CARDS += [
     ("PerpetualMotionMachine", "room_day", perpetual_motion),
 ]
 BACKGROUNDS.update({"sunset_cliff": bg_sunset_cliff, "lab": bg_lab, "snow_domes": bg_snow_domes, "storm": bg_storm, "thumbnail": bg_thumbnail})
+
+
+def bg_underwater():
+    """Under the sea: blue deepening downward, light shafts from the surface, bubbles, weed on the sand."""
+    img = layer()
+    gradient(img, [C["sky"], C["blue"], C["navy"]], 0, 96)
+    px = img.load()
+    for x0 in (30, 90, 150):  # Light shafts slanting down
+        for y in range(0, 90):
+            for x in range(x0 + y // 3, x0 + y // 3 + 10 - y // 12):
+                if 0 <= x < W and BAYER[y % 4][x % 4] < 4:
+                    px[x, y] = C["cyan"] + (255,)
+    d = ImageDraw.Draw(img)
+    gradient(img, [C["tan"], C["brown"]], 96, H)
+    rnd = random.Random(127)
+    for x in range(4, W, 16):  # Weed
+        h = rnd.randint(10, 26)
+        d.line([(x, H), (x + 3, H - h // 2), (x, H - h)], fill=rnd.choice((C["dark_green"], C["forest"])) + (255,), width=2)
+    for _ in range(14):
+        x, y = rnd.randrange(W), rnd.randrange(10, 90)
+        d.ellipse([x, y, x + 2, y + 2], outline=C["cyan"] + (255,))
+    return img
+
+
+BACKGROUNDS["underwater"] = bg_underwater
 
 
 def main():
