@@ -5,6 +5,23 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+34. Balance by faction, not by deck (2026-10-14)
+    • From now on win rates are read per faction (big and rough); decks only when fine-tuning cards.
+    • Factions (their one-faction decks, last run): Statecraft 85%, Corporate 82%, Digital Society 71%, Shadow Ops. 62%
+      (three decks: 92, 75, 18), Mind 44%, Zeitgeist 40%, Tech 35%, Utopia 25%, Myth 13%. Pairs: Panopticon (Digital
+      Society & Shadow Ops.) 33%, Prosperity Gospel (Myth & Corporate) 15%.
+    • A cliff, not a slope: Mind, Zeitgeist, Tech, Utopia and Myth won 1 of 90 games against Corporate, Statecraft and
+      Digital Society.
+    • Proposed, faction by faction (not applied, which ones?):
+        - Myth: build the signature mechanics it only has as "Future" notes (Revive, Prophecy, Conversion, the sacrifice
+          cost), and give it a wrath of its own (Holy War from the backlog). It's 12 cards; take it to about 20.
+        - Utopia: tempo 1-2 instead of 2-3 (1 Day less Deployment Time across the faction), and side effects on the
+          creature experimented on, as the Faction Compendium says, not on the player or on both boards (Black Hole,
+          Splitting The Atom, Climate Change, Absolute Zero). Build Evolution.
+        - Tech: make Technical Debt (fewer draws next Day) the cost it pays, and buy stronger effects with it; build the
+          copied actions (Fork, Feedback Loop); Watchdogs with more charges or a sting. 12 cards; take it to about 20.
+        - Mind and Zeitgeist: leave them until the three above are done; they're closer to the middle.
+
 33. Double-O Section, the Very Hard AI and the bottom decks (2026-10-14)
     • Built as asked: The Golden Gun (Single Use), Die Another Day (Borrowed Time), Licence to Kill (Licensed), Shaken, Not
       Stirred (Composed), GoldenEye (Blackout, Watchdogs wiped), Femme Fatale, Supply Chain Attack (aimed at Statecraft's
