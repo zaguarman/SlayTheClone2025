@@ -32,7 +32,7 @@ STILL OPEN
         - The earthquake starts at a random slot on a random side and zigzags out both ways, switching sides at each column:
           every column is hit once (1 damage), so two creatures facing each other never both take it. It's a one-off when
           HAARP resolves, not a Trend.
-        - Survival of the Fittest stays in the rules but no card sets it now. Give it to a card (a Utopia or Myth one)?
+        - Survival of the Fittest: answered, Utopia's Evolution Theory sets it (38).
     • HAARP's picture still shows a lightning bolt on a tent. Redraw it as an earthquake?
     • Still open from the last batch: This Is Fine, We Are Not The Same and YOLO are internet memes; move them from
       Zeitgeist to Digital Society?
