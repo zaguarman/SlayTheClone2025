@@ -17,7 +17,7 @@ MonoBehaviour:
   description: We respect your robots.txt. We read it, anyway.
   cardType: 1
   faction: 5
-  artwork: {fileID: 3286163911610860551, guid: 7439a06a275166c4293fe1e59976c8b9, type: 3}
+  artwork: {fileID: 21300000, guid: f1a6c54f8e12f424d8cd776ebd3a0fe0, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

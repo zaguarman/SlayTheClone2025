@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Cleans 30% of your floor. The other 70% is a Premium feature.
   cardType: 0
   faction: 4
-  artwork: {fileID: 3286163911610860551, guid: 42fdc1a04bd6bc84f8e4c2adac206889, type: 3}
+  artwork: {fileID: 21300000, guid: 89fabc114e81a834eb8e2ccdc270278d, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

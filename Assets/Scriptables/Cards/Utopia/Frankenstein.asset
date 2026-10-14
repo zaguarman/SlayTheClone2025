@@ -17,7 +17,7 @@ MonoBehaviour:
   description: It's alive! It's ALIVE! It's suing.
   cardType: 0
   faction: 9
-  artwork: {fileID: 3286163911610860551, guid: 015430495d02f8744a64c1690e16fe17, type: 3}
+  artwork: {fileID: 21300000, guid: 7081c64a5be705641ae1f18ec52d9a51, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

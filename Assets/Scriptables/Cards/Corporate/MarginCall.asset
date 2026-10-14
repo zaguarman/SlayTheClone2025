@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Your position has been liquidated. Everyone's has. Have a nice day.
   cardType: 1
   faction: 4
-  artwork: {fileID: 3286163911610860551, guid: f74362377eb7032459820f69d194bef6, type: 3}
+  artwork: {fileID: 21300000, guid: a51656649c3c58541bf603dc08fe9efb, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

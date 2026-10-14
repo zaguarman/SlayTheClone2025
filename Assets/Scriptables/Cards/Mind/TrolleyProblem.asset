@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Pull the lever. Or don't. Either way, it's on you.
   cardType: 1
   faction: 8
-  artwork: {fileID: 3286163911610860551, guid: 82092fa7e04424846a1e76872831f47a, type: 3}
+  artwork: {fileID: 21300000, guid: 6cf35e0dcbfee51448fff929e244e57a, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

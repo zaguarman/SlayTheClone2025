@@ -17,7 +17,7 @@ MonoBehaviour:
   description: We're not buying your company. We're buying its funeral.
   cardType: 1
   faction: 4
-  artwork: {fileID: 3286163911610860551, guid: e92fcbda61ecf4b48bc1b6393f619d24, type: 3}
+  artwork: {fileID: 21300000, guid: c6758cfa9665d3840b531d31475f1158, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

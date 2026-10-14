@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The glass is half empty. Also, it's poisoned.
   cardType: 0
   faction: 8
-  artwork: {fileID: 3286163911610860551, guid: bf8963a940b4b4b40829fe677f7aaa7c, type: 3}
+  artwork: {fileID: 21300000, guid: 14aeb0aee3b426942b6fa37ac531fde5, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

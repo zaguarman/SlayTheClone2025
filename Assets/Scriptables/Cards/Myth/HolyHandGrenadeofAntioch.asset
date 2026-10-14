@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Count to three. Not four. Not two. Five is right out.
   cardType: 1
   faction: 1
-  artwork: {fileID: 3286163911610860551, guid: aeae5fcdef139d949bbeaba487431c7d, type: 3}
+  artwork: {fileID: 21300000, guid: ef18569907468724a8fa06cadf06807a, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

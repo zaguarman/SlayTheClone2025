@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Touch the tomb, get the curse. It was in the fine print.
   cardType: 0
   faction: 1
-  artwork: {fileID: 3286163911610860551, guid: edaa295814818e241a7a8fcc1ed1184a, type: 3}
+  artwork: {fileID: 21300000, guid: dbb33949c96f72e44aeed85499cf873d, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

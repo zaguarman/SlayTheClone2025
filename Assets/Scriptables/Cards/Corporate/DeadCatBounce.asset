@@ -17,7 +17,7 @@ MonoBehaviour:
   description: It's recovering! It's recovering! It's... no.
   cardType: 1
   faction: 4
-  artwork: {fileID: 3286163911610860551, guid: cfcf779259f69314caa9ff0b9dd45ead, type: 3}
+  artwork: {fileID: 21300000, guid: fc01fe4a69d67934d836e5824f0b15cf, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

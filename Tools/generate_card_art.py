@@ -12,6 +12,9 @@ import os
 
 W, H = 352, 200  # Matches the card art box aspect ratio (144 x 82)
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "Assets", "Art", "Cards")
+# A card with pixel art (Tools/pixel_art.py) shows that instead: its vector art is written to the archive, outside Assets
+PIXEL_DIR = os.path.join(os.path.dirname(__file__), "..", "Assets", "Art", "PixelCards")
+ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), "..", "ArtArchive", "Cards")
 
 
 # ---------------------------------------------------------------- SVG helpers
@@ -6109,15 +6112,18 @@ for _theme, _cards in CHUNK.items():
 
 
 def main():
-    count = 0
+    count = archived = 0
     for theme, cards in CARDS.items():
-        folder = os.path.normpath(os.path.join(OUT_DIR, theme))
-        os.makedirs(folder, exist_ok=True)
         for name, draw in cards.items():
+            replaced = os.path.exists(os.path.join(PIXEL_DIR, f"{name}.png"))
+            folder = os.path.normpath(os.path.join(ARCHIVE_DIR if replaced else OUT_DIR, theme))
+            os.makedirs(folder, exist_ok=True)
             with open(os.path.join(folder, f"{name}.svg"), "w", encoding="utf-8", newline="\n") as f:
                 f.write(draw())
             count += 1
-    print(f"Wrote {count} card illustrations to {os.path.normpath(OUT_DIR)}")
+            archived += replaced
+    print(f"Wrote {count} card illustrations to {os.path.normpath(OUT_DIR)} ({archived} replaced by pixel art, archived "
+          f"in {os.path.normpath(ARCHIVE_DIR)})")
 
     icon_dir = os.path.normpath(os.path.join(OUT_DIR, "..", "Icons"))
     os.makedirs(icon_dir, exist_ok=True)

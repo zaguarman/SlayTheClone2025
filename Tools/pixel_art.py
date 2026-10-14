@@ -1,10 +1,11 @@
-"""Pixel art card illustrations (samples): each picture is a background layer (one per faction or scene, drawn once and
-reused) and a subject layer over it, drawn at 192 x 108 pixels in a fixed palette (Endesga 32), outlined and shaded,
-then scaled up 6x with hard edges so it stays crisp.
+"""Pixel art card illustrations: each picture is a background layer (one per faction or scene, drawn once and reused)
+and a subject layer over it, drawn at 192 x 108 pixels in a fixed palette (Endesga 32), outlined and shaded, then scaled
+up 6x with hard edges so it stays crisp.
 
-Output: Assets/Art/PixelSamples/<Card>.png (the card, scaled), and Layers/ with each background and subject at 1x. A
-picture a redraw replaces is kept in ArtArchive/PixelSamples/<Card>/<Card>_vN.png.
-Usage: python Tools/pixel_art.py
+Output: Assets/Art/PixelCards/<Card>.png (the card, scaled; named after its card asset), and Layers/ with each
+background and subject at 1x. A picture a redraw replaces is kept in ArtArchive/PixelCards/<Card>/<Card>_vN.png.
+Cards > Assign Card Art in Unity gives a card its pixel art when it has one, its old vector art otherwise.
+Usage: python Tools/pixel_art.py, then Cards > Assign Card Art
 """
 import math
 import os
@@ -14,8 +15,8 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 W, H = 192, 108
 SCALE = 6
-OUT = os.path.join(os.path.dirname(__file__), "..", "Assets", "Art", "PixelSamples")
-ARCHIVE = os.path.join(os.path.dirname(__file__), "..", "ArtArchive", "PixelSamples")
+OUT = os.path.join(os.path.dirname(__file__), "..", "Assets", "Art", "PixelCards")
+ARCHIVE = os.path.join(os.path.dirname(__file__), "..", "ArtArchive", "PixelCards")
 
 # Endesga 32
 HEX = ["be4a2f", "d77643", "ead4aa", "e4a672", "b86f50", "733e39", "3e2731", "a22633", "e43b44", "f77622", "feae34",
@@ -100,7 +101,7 @@ def dot(img, x, y, color):
 
 
 def archive_old(name, card):
-    """Keeps the picture a redraw replaces: the old one moves to ArtArchive/PixelSamples/<name>/<name>_vN.png (outside
+    """Keeps the picture a redraw replaces: the old one moves to ArtArchive/PixelCards/<name>/<name>_vN.png (outside
     Assets, so Unity doesn't import it), for reference."""
     path = os.path.join(OUT, f"{name}.png")
     if not os.path.exists(path):

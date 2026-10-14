@@ -17,7 +17,7 @@ MonoBehaviour:
   description: We don't buy companies. We buy what they used to be worth.
   cardType: 0
   faction: 4
-  artwork: {fileID: 3286163911610860551, guid: 8d4df07014a9d0f4cb227cce092b7326, type: 3}
+  artwork: {fileID: 21300000, guid: 21dee89beaff15f4e95d399cba19aba5, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

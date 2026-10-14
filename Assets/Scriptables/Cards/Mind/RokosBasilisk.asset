@@ -17,7 +17,7 @@ MonoBehaviour:
   description: It knows you didn't help build it. It's taking notes.
   cardType: 0
   faction: 8
-  artwork: {fileID: 3286163911610860551, guid: d37a84c981eac9b488c27d3b0529337b, type: 3}
+  artwork: {fileID: 21300000, guid: 273207149a8795f4084aa7c5cf90311e, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

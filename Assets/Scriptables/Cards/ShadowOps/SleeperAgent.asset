@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Eleven years next door. Waters your plants. Waiting for a phone call.
   cardType: 0
   faction: 3
-  artwork: {fileID: 3286163911610860551, guid: a5b0909a5096cf8409b539a2af5df42f, type: 3}
+  artwork: {fileID: 21300000, guid: 9597621fc0a709742a9ac40de36eb5ea, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

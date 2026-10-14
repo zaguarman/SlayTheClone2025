@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Six foot, a doctor, loves dogs. Is a fish.
   cardType: 0
   faction: 6
-  artwork: {fileID: 3286163911610860551, guid: 9dbf8fe8bc33aa048b678a09b9dbc103, type: 3}
+  artwork: {fileID: 21300000, guid: b63cf2f9fa14153429fe314ec59b1122, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

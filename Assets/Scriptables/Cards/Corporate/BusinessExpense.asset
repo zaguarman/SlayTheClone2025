@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The yacht was a business expense. So was the lawyer. So is the appeal.
   cardType: 1
   faction: 4
-  artwork: {fileID: 3286163911610860551, guid: 9238ffc2a0652d841b94d2d4206cde78, type: 3}
+  artwork: {fileID: 21300000, guid: a003c0b3654f51a46a92574e8556b7a2, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

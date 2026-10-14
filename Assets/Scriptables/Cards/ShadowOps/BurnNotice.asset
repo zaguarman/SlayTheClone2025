@@ -17,7 +17,7 @@ MonoBehaviour:
   description: You're no longer one of us. You never were.
   cardType: 1
   faction: 3
-  artwork: {fileID: 3286163911610860551, guid: c01e317dd5dc2274d913cb76a628cccf, type: 3}
+  artwork: {fileID: 21300000, guid: 947e6036ad23aff4f8baea23441000ab, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Took a vow of poverty. Owns half of Europe.
   cardType: 0
   faction: 1
-  artwork: {fileID: 3286163911610860551, guid: f29df880c1a9ef1479dfd69b0fc20c1a, type: 3}
+  artwork: {fileID: 21300000, guid: 1ee6ffd468ec43540acd2f7a3c77870d, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

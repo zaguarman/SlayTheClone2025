@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Appointed for life. Accountable for nothing.
   cardType: 0
   faction: 2
-  artwork: {fileID: 3286163911610860551, guid: f4b830c6b97a364489557d53874ed8fd, type: 3}
+  artwork: {fileID: 21300000, guid: 2dea6da112ad45440b54f4521bf0dd47, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

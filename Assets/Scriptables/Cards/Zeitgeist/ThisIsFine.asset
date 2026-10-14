@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Everything is on fire. The coffee is still warm, though.
   cardType: 1
   faction: 7
-  artwork: {fileID: 3286163911610860551, guid: 06d8777d8348f6440ae441ae852189c8, type: 3}
+  artwork: {fileID: 21300000, guid: 6b8498cdf4cd04649b7a75a3ee731491, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Ten thousand requests a second. All of them from fridges.
   cardType: 1
   faction: 5
-  artwork: {fileID: 3286163911610860551, guid: b4c343e929db63a43a66137db17ef7a0, type: 3}
+  artwork: {fileID: 21300000, guid: 9c00fe239c922f54d9b06748dfb742bd, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

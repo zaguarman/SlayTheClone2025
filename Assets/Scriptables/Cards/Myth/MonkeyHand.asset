@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Your wish is granted. Read the fine print.
   cardType: 1
   faction: 1
-  artwork: {fileID: 3286163911610860551, guid: 04294deecc8730842b1fd97899b15d6e, type: 3}
+  artwork: {fileID: 21300000, guid: 91e9e773298647f4b8eefce1cb80cf6d, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

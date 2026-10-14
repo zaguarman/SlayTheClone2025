@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Registered in four countries. Exists in none.
   cardType: 0
   faction: 4
-  artwork: {fileID: 3286163911610860551, guid: 3446b5788cd094643a52008eb83d8ae8, type: 3}
+  artwork: {fileID: 21300000, guid: 84fa87de090a57c48b5fa28fceab0f34, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

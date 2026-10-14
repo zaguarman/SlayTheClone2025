@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Twenty years of experience. Still waiting to be found out.
   cardType: 1
   faction: 8
-  artwork: {fileID: 3286163911610860551, guid: 8499e597a5deef94a825e124b5e7483d, type: 3}
+  artwork: {fileID: 21300000, guid: a92d2c31312e1634b837d594f84bd48d, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

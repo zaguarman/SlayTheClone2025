@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Clinically proven to work on people who believe it works.
   cardType: 1
   faction: 9
-  artwork: {fileID: 3286163911610860551, guid: 12fabe7d7f867404088c462a8ecce37d, type: 3}
+  artwork: {fileID: 21300000, guid: f5d647dae4ba7284eabac317805f9fe4, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

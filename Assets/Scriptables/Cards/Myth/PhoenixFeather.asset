@@ -17,7 +17,7 @@ MonoBehaviour:
   description: It burns. It rises. It invoices you for the ashes.
   cardType: 1
   faction: 1
-  artwork: {fileID: 3286163911610860551, guid: a99c2e4fbb4fecb41b96c1882181f1c8, type: 3}
+  artwork: {fileID: 21300000, guid: f2126a2f369756d4c885eef5caccc21f, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Side effects include not dying, and 5G.
   cardType: 1
   faction: 9
-  artwork: {fileID: 3286163911610860551, guid: 70e070fa13771684fbbd2a3a9553432f, type: 3}
+  artwork: {fileID: 21300000, guid: aff7b9087db1ed843baa2708944b4f4a, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0
