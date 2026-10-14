@@ -87,7 +87,8 @@ namespace SlayTheClone {
             string where = $"{game.Deck1.Name}{(game.Deck2 != game.Deck1 ? " vs " + game.Deck2.Name : "")}, {game.First} vs {game.Second}, seed {game.Seed}";
             var mediator = new GameMediator();
             bool over = false;
-            mediator.GameOver += _ => over = true;
+            IPlayer champion = null;
+            mediator.GameOver += winner => { over = true; champion = winner; };
             GameSession session = null;
             TurnFlow turns = null;
             GameAudit.Watch watch = null;
@@ -115,7 +116,7 @@ namespace SlayTheClone {
                 }
 
                 bool firstDown = session.Player1.Health <= 0, secondDown = session.Player2.Health <= 0;
-                int winner = firstDown == secondDown ? 0 : firstDown ? 2 : 1;
+                int winner = champion == session.Player1 ? 1 : champion == session.Player2 ? 2 : firstDown == secondDown ? 0 : firstDown ? 2 : 1;
                 tally?.End(winner);
                 return new Result(game.Deck1.Name, game.Deck2.Name, game.First, game.Second, winner, turns.TurnNumber);
             }

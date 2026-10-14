@@ -73,6 +73,18 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(cards, GameAsserts.CountCards(p1));
             StringAssert.Contains("Revive", Keywords.Plain(CardTextFormatter.GetRulesText(zombieData)));
 
+            // Resurrection (Phoenix Feather): sacrificed now, a Blessing can't stop it; it rises at the Dawn 3 Days on
+            var phoenix = game.Summon(p1, game.Creature("Phoenix", 2, 4), 4);
+            game.Run(new ApplyStatusEffectAction(phoenix, StatusEffectType.Blessed, 0, 1));
+            game.Run(new ResurrectionAction(phoenix, p1, 3));
+            Assert.IsTrue(phoenix.IsDead, "A sacrifice: the Blessing doesn't ward it off");
+            game.StartTurn();
+            game.StartTurn();
+            Assert.IsNull(p1.Battlefield[4].OccupyingCreature, "Not at the next Dawn, nor the one after...");
+            game.StartTurn();
+            Assert.AreEqual("Phoenix", p1.Battlefield[4].OccupyingCreature?.Name, "...but at the Dawn 3 Days on");
+            Assert.AreEqual(4, p1.Battlefield[4].OccupyingCreature.Health);
+
             var frail = game.Summon(p1, game.Creature("Frail", 1, 3, 1, Effect(EffectTrigger.OnDeath, ActionType.Damage, 2, TargetType.Enemy)), 2);
             game.Run(LoseHealth(frail, 3));
             Assert.IsTrue(frail.IsDead, "Losing max Health to 0 kills it");
@@ -108,6 +120,28 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(0, p2.Health);
             CollectionAssert.AreEqual(new[] { 15, 5 }, game.History.DamageTo(p2), "A player's Health stops at 0");
             CollectionAssert.AreEqual(new[] { p1 }, game.History.Winners, "The game ends once, won by player 1");
+
+            // God's Grace: at 0 Health a player in Grace holds on until the Dusk of the next Day; still at 0 then, they lose
+            Fresh();
+            game.Run(new GraceAction(p2, 1));
+            game.Run(new DamagePlayerAction(p2, 30));
+            CollectionAssert.IsEmpty(game.History.Winners, "In Grace, 0 Health isn't the end...");
+            game.StartTurn();
+            CollectionAssert.IsEmpty(game.History.Winners, "...through this Day's Dusk...");
+            game.StartTurn();
+            CollectionAssert.AreEqual(new[] { p1 }, game.History.Winners, "...but still at 0 at the next one, it is");
+            Fresh();
+            game.Run(new GraceAction(p2, 1));
+            game.Run(new DamagePlayerAction(p2, 30));
+            game.Run(new HealPlayerAction(p2, 4));
+            game.StartTurn();
+            game.StartTurn();
+            CollectionAssert.IsEmpty(game.History.Winners, "Healed in time, they live");
+            Fresh();
+            game.Run(new GraceAction(p2, 1));
+            game.Run(new DamagePlayerAction(p2, 30));
+            game.Run(new DamagePlayerAction(p1, 30));
+            CollectionAssert.AreEqual(new[] { p2 }, game.History.Winners, "Both at 0: Grace wins the tie");
         }
 
         [Test]

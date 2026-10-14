@@ -101,6 +101,7 @@ namespace SlayTheClone.Tests {
             TrendSystem.QueueDuskEffects(ActionsQueue);
             TrendSystem.ProcessDusk(TurnClock.TurnNumber);
             Resolve();
+            Grace.ProcessDusk(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, Mediator);
             TurnClock.Advance();
             GoneDark.ProcessDawn(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, ActionsQueue);
             Prophecy.ProcessDawn(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, ActionsQueue);

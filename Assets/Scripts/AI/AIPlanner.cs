@@ -76,7 +76,7 @@ namespace SlayTheClone {
         /// move. What's already planned stays, so planning again the same Day only adds what's left.
         /// </summary>
         public void PlanDay(IPlayer player) {
-            if (player?.Opponent == null || player.Health <= 0 || player.Opponent.Health <= 0) return;
+            if (player?.Opponent == null || Grace.IsDown(player) || Grace.IsDown(player.Opponent)) return;
             view = new AIView(player, queue);
             plannedDamage.Clear();
             forecasts.Clear();
@@ -525,6 +525,12 @@ namespace SlayTheClone {
                         return 1;
                 }
             }
+            // Grace: worth a lot when the next hits could finish us, little otherwise
+            if (action.actionType == ActionType.Grace) {
+                if (view.Me.GraceUntilDay != null) return 0;
+                int danger = view.Theirs.Sum(c => AttackOf(c));
+                return (view.Me.Health <= danger + 3 ? 6f : 0.3f) * Style.OwnHealth;
+            }
             // An Earthquake hits every other slot, on whichever side the zigzag puts it: each creature has an even chance
             if (action.actionType == ActionType.Earthquake) {
                 return view.All.Sum(c => 0.5f * (c.Ours ? -1 : 1) * (HealthLeft(c) <= action.value ? c.Worth + HealthLeft(c) : action.value)) * Style.Removal + 0.2f;
@@ -666,6 +672,11 @@ namespace SlayTheClone {
                     if (action.actionType == ActionType.FakeDeath && Hard) saved += LastWillValue(creature);
                     if (action.actionType == ActionType.ReturnToHand && creature.Has(StatusEffectType.Revealed)) saved += 0.5f * Style.Intel;
                     return saved;
+                }
+                case ActionType.Resurrect: { // Ours dies now and comes back Days later: worth it for one that's lost anyway
+                    if (!creature.Ours) return 0;
+                    float back = Lost(creature) ? creature.Worth * 0.7f : -creature.Worth * 0.5f;
+                    return back + (Hard ? LastWillValue(creature) : 0);
                 }
                 case ActionType.Funnel: // Spread out raises gathered into one creature that can kill with them
                     var others = (creature.Ours ? view.Mine : view.Theirs).Where(c => c != creature).Sum(c => System.Math.Max(0, c.StatRaises));

@@ -100,7 +100,8 @@ namespace SlayTheClone.Tests {
                 case ActionType.GrantAbility:
                 case ActionType.Destroy:
                 case ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
-                    or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Revive:
+                    or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Revive
+                    or ActionType.Resurrect:
                     if (!CreatureTargets.Contains(action.targetType) && !retaliates) return $"{action.actionType} only affects creatures but targets {action.targetType}";
                     break;
                 case ActionType.Draw:
@@ -109,6 +110,7 @@ namespace SlayTheClone.Tests {
                 case ActionType.WipeWatchdogs:
                 case ActionType.CutDraws:
                 case ActionType.SendFor:
+                case ActionType.Grace:
                     if (!PlayerTargets.Contains(action.targetType)) return $"{action.actionType} only affects players but targets {action.targetType}";
                     break;
             }

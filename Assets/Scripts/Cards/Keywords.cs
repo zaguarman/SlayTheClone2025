@@ -129,6 +129,7 @@ namespace SlayTheClone {
 
             // ---------------------------------------------------------------- Trends
             group = "Trends";
+            Add("Grace", "A player in Grace (God's Grace) can fall to 0 Health and not lose, until the [Dusk] its Grace ends: still at 0 then, they lose; healed above 0 in time, they live. If both players fall to 0, the one in Grace wins.");
             Add("Earthquake", "It starts at a random slot on either side and zigzags out across the whole board, crossing to the other side at each column: every column is hit once, the sides taking turns, so the creatures facing each other never both take it. Nobody's attack: nothing answers it or redirects it.");
             Add("Trend", "What the world is into right now: a rule for the whole board, for the [Days] shown (no number: until another Trend replaces it). One at a time: a new Trend replaces the old. A Trend card plays on either side of the table. Like the weather, it's the same for both sides: it helps whoever is built for it, and can turn against whoever set it.");
             foreach (Trend trend in System.Enum.GetValues(typeof(Trend))) {

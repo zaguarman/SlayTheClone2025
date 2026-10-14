@@ -36,7 +36,8 @@ namespace SlayTheClone {
             PlayerDamaged?.Invoke(player, damage);
 
             if (player.Health <= 0) {
-                NotifyGameOver(player.Opponent);
+                if (player.GraceUntilDay != null) Log($"{player.Name} is at 0 Health, held up by Grace", LogTag.Players); // Grace.ProcessDusk decides
+                else NotifyGameOver(player.Opponent); // Both at 0: whoever is in Grace wins, since only the other one loses here
             }
         }
 

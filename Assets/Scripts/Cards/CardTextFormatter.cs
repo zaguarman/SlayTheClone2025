@@ -303,6 +303,10 @@ namespace SlayTheClone {
                 }
                 case ActionType.Revive:
                     return $"{target} {Keywords.Link("Revive", "rises again")} at the next {Keywords.Link("Dawn")}";
+                case ActionType.Grace:
+                    return $"{Keywords.Link("Grace")} until the {Keywords.Link("Dusk")} of the next {Keywords.Link("Day")}: at 0 Health you don't lose yet; still at 0 then, you do. If both players fall to 0, you win";
+                case ActionType.Resurrect:
+                    return $"sacrifice {target} (its {Keywords.Link("Last Will")} happens): it {Keywords.Link("Revive", "rises again")} at the {Keywords.Link("Dawn")} {value} Day{(value == 1 ? "" : "s")} later";
                 case ActionType.CutDraws:
                     return $"{target} draws {value} fewer card{(value == 1 ? "" : "s")} with the next hand";
                 case ActionType.WipeWatchdogs:

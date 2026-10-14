@@ -12,14 +12,16 @@ namespace SlayTheClone {
     public class RevivalAction : IGameAction {
         public ICreature Creature { get; }
         public int SlotIndex { get; } // Where it fell
+        public int Days { get; } // It rises at the Dawn this many Days on (1: the next Dawn)
 
-        public RevivalAction(ICreature creature, int slotIndex) {
+        public RevivalAction(ICreature creature, int slotIndex, int days = 1) {
             Creature = creature;
             SlotIndex = slotIndex;
+            Days = System.Math.Max(1, days);
             Log($"Created {this}", LogTag.Actions | LogTag.Effects);
         }
 
-        public override string ToString() => $"RevivalAction: {Creature?.Name} will rise at the next Dawn";
+        public override string ToString() => $"RevivalAction: {Creature?.Name} will rise {(Days == 1 ? "at the next Dawn" : $"at the Dawn {Days} Days on")}";
     }
 
     public class RevivalActionExecutor : ActionExecutor<RevivalAction> {
@@ -32,8 +34,39 @@ namespace SlayTheClone {
                 return;
             }
             risen.SetOwner(home);
-            home.GoneDark.Add(new GoneDark(risen, System.Math.Max(0, revival.SlotIndex), context.TurnClock.TurnNumber + 1, reborn: true));
-            Log($"{dead.Name} will rise again at the next Dawn", LogTag.Effects | LogTag.Creatures);
+            home.GoneDark.Add(new GoneDark(risen, System.Math.Max(0, revival.SlotIndex), context.TurnClock.TurnNumber + revival.Days, reborn: true));
+            Log($"{dead.Name} will rise again in {revival.Days} Day(s)", LogTag.Effects | LogTag.Creatures);
+        }
+    }
+
+    /// <summary>
+    /// Resurrection (Phoenix Feather): the creature is sacrificed now, for real (its Last Will happens, a Blessing doesn't
+    /// stop it), and rises again at the Dawn so many Days on, like a Revive: its card back from the discard pile, full
+    /// Health, Deployment Time again. Something that keeps it from dying (Borrowed Time) keeps it from rising too.
+    /// </summary>
+    public class ResurrectionAction : IGameAction {
+        public ICreature Creature { get; }
+        public IPlayer Controller { get; }
+        public int Days { get; }
+
+        public ResurrectionAction(ICreature creature, IPlayer controller, int days) {
+            Creature = creature;
+            Controller = controller;
+            Days = days;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"ResurrectionAction: {Creature?.Name} dies, to rise in {Days} Days";
+    }
+
+    public class ResurrectionActionExecutor : ActionExecutor<ResurrectionAction> {
+        protected override void ExecuteAction(ResurrectionAction resurrection, ActionExecutionContext context) {
+            var creature = resurrection.Creature;
+            if (creature == null || creature.IsDead) return;
+            int slot = creature.Slot?.Index ?? 0;
+            Log($"{creature.Name} is sacrificed, to rise again in {resurrection.Days} Days", LogTag.Effects | LogTag.Creatures);
+            context.ActionsQueue.AddAction(new DestroyCreatureAction(creature, unconditional: true, controller: resurrection.Controller, sacrifice: true));
+            context.ActionsQueue.AddAction(new RevivalAction(creature, slot, resurrection.Days));
         }
     }
 
@@ -101,6 +134,47 @@ namespace SlayTheClone {
             Log($"{owner.Name} dooms {condemned.Name} to play {card.Name}", LogTag.Cards | LogTag.Actions);
             queue.AddAction(new ApplyStatusEffectAction(condemned, StatusEffectType.Doomed, Of(card), 0, controller: owner));
             return true;
+        }
+    }
+
+    /// <summary>
+    /// God's Grace (Myth): the player's Die Another Day. Until the Dusk of the next Day their Health can hit 0 and they don't
+    /// lose; at that Dusk, still at 0, they do. Healed above 0 in time, they live. If both players fall to 0, the one in
+    /// Grace wins: only the other one loses when they hit 0.
+    /// </summary>
+    public class GraceAction : IGameAction {
+        public IPlayer Player { get; }
+        public int Days { get; }
+
+        public GraceAction(IPlayer player, int days) {
+            Player = player;
+            Days = System.Math.Max(1, days);
+            Log($"Created {this}", LogTag.Actions | LogTag.Players);
+        }
+
+        public override string ToString() => $"GraceAction: {Player?.Name} is in Grace for {Days} Day(s)";
+    }
+
+    public class GraceActionExecutor : ActionExecutor<GraceAction> {
+        protected override void ExecuteAction(GraceAction grace, ActionExecutionContext context) {
+            if (grace.Player == null) return;
+            grace.Player.GraceUntilDay = context.TurnClock.TurnNumber + grace.Days;
+            Log($"{grace.Player.Name} is in Grace until the Dusk of Day {grace.Player.GraceUntilDay}", LogTag.Players | LogTag.Effects);
+        }
+    }
+
+    public static class Grace {
+        /// <summary>Out of the game: at 0 Health and not held up by Grace.</summary>
+        public static bool IsDown(IPlayer player) => player != null && player.Health <= 0 && player.GraceUntilDay == null;
+
+        /// <summary>At Dusk, after what Dusk does: a Grace whose last Day this was ends, and a player still at 0 loses.</summary>
+        public static void ProcessDusk(IEnumerable<IPlayer> players, int endedTurn, IGameMediator mediator) {
+            foreach (var player in players) {
+                if (player.GraceUntilDay == null || player.GraceUntilDay > endedTurn) continue;
+                player.GraceUntilDay = null;
+                Log($"{player.Name}'s Grace ends at {player.Health} Health", LogTag.Players);
+                if (player.Health <= 0 && !mediator.IsGameOver) mediator.NotifyGameOver(player.Opponent);
+            }
         }
     }
 

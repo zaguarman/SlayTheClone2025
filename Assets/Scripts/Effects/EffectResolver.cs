@@ -326,7 +326,7 @@ namespace SlayTheClone {
         /// <summary>Whether this kind of effect can land on a player (aimed at an empty slot, it lands on that side's player).</summary>
         public static bool CanAffectPlayers(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog or ActionType.Reveal
-                or ActionType.SummonDecoys or ActionType.WipeWatchdogs or ActionType.CutDraws or ActionType.SendFor;
+                or ActionType.SummonDecoys or ActionType.WipeWatchdogs or ActionType.CutDraws or ActionType.SendFor or ActionType.Grace;
         #endregion
 
         #region Actions
@@ -416,6 +416,10 @@ namespace SlayTheClone {
                     return creature != null ? new VanishAction(creature) : null;
                 case ActionType.Revive: // Its own Last Will: it rises at the next Dawn (queued as it dies, while it still has its slot)
                     return creature != null && source == creature ? new RevivalAction(creature, creature.Slot?.Index ?? 0) : null;
+                case ActionType.Grace: // The player's Die Another Day (God's Grace)
+                    return target is IPlayer graced ? new GraceAction(graced, action.value) : null;
+                case ActionType.Resurrect: // Sacrificed now, it rises at the Dawn so many Days on (Phoenix Feather)
+                    return creature != null ? new ResurrectionAction(creature, controller, System.Math.Max(1, action.value)) : null;
                 case ActionType.Funnel: // The target takes the stat raises of every other creature on its side
                     return creature != null ? new FunnelAction(creature) : null;
                 case ActionType.PassHarmfulStatuses: { // The target's harmful statuses go to the creature facing it (Frame Job)

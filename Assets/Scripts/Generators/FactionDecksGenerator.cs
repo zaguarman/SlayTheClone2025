@@ -1210,6 +1210,16 @@ namespace SlayTheClone {
                 "When ready (the end was foretold): every enemy creature takes 2 damage.",
                 On(EffectTrigger.OnPlay, Damage(2, TargetType.EnemyCreatures, Each)))
                 .Picture("Four horsemen galloping out of storm clouds, War, Famine, Pestilence and Death, one of them checking a smartphone map, a lightning bolt behind."),
+            Spell("God's Grace", TargetType.Player,
+                "Not today, my child. Thursday, maybe.",
+                "Die Another Day for the player, holy: Grace until the Dusk of the next Day, your Health can hit 0 and you don't lose. At that Dusk, still at 0 or less, you do. If both players fall to 0 at once, the one in Grace wins.",
+                Act(ActionType.Grace, 1, TargetType.Player, TargetModifier.None))
+                .Picture("A battered knight at 0 Health, a red health bar empty above his head, held upright by a beam of light from parted clouds, two cherubs propping him up by the armpits, a choir of angels singing behind."),
+            Spell("Phoenix Feather", TargetType.FriendlyCreatures,
+                "It burns. It rises. It invoices you for the ashes.",
+                "Target friendly creature is sacrificed (its Last Will happens; a Blessing can't stop it) and rises again at the Dawn 3 Days later, full Health, Deployment Time again. Three days, as the scripture says.",
+                Act(ActionType.Resurrect, 3, TargetType.FriendlyCreatures, TargetModifier.None))
+                .Picture("A glowing golden feather laid on a small pile of ashes on a stone altar, three tally marks scratched beside it, the shape of a bird rising out of the smoke."),
             Creature("The Omen", 1, 4, speed: 1, deploy: 2,
                 "He's not a bad kid. He's the Antichrist.",
                 "When ready: Doomed 2 on the strongest enemy creature.",

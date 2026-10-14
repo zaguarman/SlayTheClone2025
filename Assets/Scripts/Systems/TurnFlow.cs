@@ -66,6 +66,7 @@ namespace SlayTheClone {
                 trends.QueueDuskEffects(actionsQueue);
                 trends.ProcessDusk(endedTurn); // A Trend ends after its last Day
                 yield return ResolveQueuedActions();
+                Grace.ProcessDusk(players, endedTurn, gameMediator); // Still at 0 when Grace runs out: it's over
                 if (gameMediator.IsGameOver) yield break;
 
                 // The next Day begins
