@@ -184,7 +184,7 @@ namespace SlayTheClone {
         private readonly List<TMPro.TextMeshPro> labels = new List<TMPro.TextMeshPro>();
 
         /// <summary>The numbers shown by the arrow's starts (one per start; null or empty shows none).</summary>
-        public IReadOnlyList<string> Labels => labels.Where(l => l != null && l.gameObject.activeSelf).Select(l => l.text).ToList();
+        public IReadOnlyList<string> Labels => labels.Where(l => l != null && l.gameObject.activeSelf).Select(l => Keywords.Plain(l.text)).ToList();
 
         public void SetLabels(IReadOnlyList<string> texts) {
             for (int i = 0; i < Mathf.Max(texts?.Count ?? 0, labels.Count); i++) {
@@ -196,7 +196,7 @@ namespace SlayTheClone {
                 }
                 var label = labels[i] ?? (labels[i] = NewLabel());
                 label.gameObject.SetActive(true);
-                label.text = text;
+                label.text = $"<mark=#141420D0 padding=\"14,14,4,4\">{text}</mark>"; // A dark badge: it reads on art and parchment alike
                 var direction = (endPosition - starts[i]);
                 direction.z = 0f;
                 label.transform.position = starts[i] + (direction.sqrMagnitude > 0.0001f ? direction.normalized * LabelOffset : Vector3.zero) + new Vector3(0f, 0f, -0.01f);

@@ -201,7 +201,7 @@ namespace SlayTheClone {
             Shortcut(FogOfWar.ToggleKey.ToString(), $"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")}") + "\n" +
             Shortcut(FogOfWar.SwitchSidesKey.ToString(), $"Playing as: Player {(FogOfWar.PlaysAsPlayer1 ? 1 : 2)}") + "\n" +
             Shortcut(AIController.SwitchSeatsKey.ToString(), $"AI: {AIController.SeatsText}") + "\n" +
-            $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}    {Shortcut("Right-drag", "Attack your own")}</size>";
+            $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}\n{Shortcut("Right-drag", "Attack your own")}</size>";
 
         private static string Shortcut(string key, string what) => $"<color=#B8B0A0>{key}</color>  {what}";
 
@@ -210,11 +210,11 @@ namespace SlayTheClone {
             if (shortcutsLabel == null) {
                 var endTurn = gameReferences.GetResolveActionsButton();
                 if (endTurn == null) return;
-                shortcutsLabel = UITheme.NewText("Shortcuts", endTurn.transform, "", 20f, UITheme.Gold, TMPro.TextAlignmentOptions.TopRight);
+                shortcutsLabel = UITheme.NewText("Shortcuts", endTurn.transform, "", 16f, UITheme.Gold, TMPro.TextAlignmentOptions.TopRight);
                 var rect = shortcutsLabel.rectTransform;
                 rect.anchorMin = rect.anchorMax = new Vector2(1f, 0f); // Lined up with the button's right edge: it stays on screen
                 rect.pivot = new Vector2(1f, 1f);
-                rect.sizeDelta = new Vector2(420f, 104f);
+                rect.sizeDelta = new Vector2(420f, 124f);
                 rect.anchoredPosition = new Vector2(0f, -6f);
                 shortcutsLabel.raycastTarget = false;
             }
