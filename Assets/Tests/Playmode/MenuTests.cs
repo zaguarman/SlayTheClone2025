@@ -143,6 +143,9 @@ namespace SlayTheClone.Tests {
             Click(GalleryButton(glossary, KeywordGlossaryMenu.BackButtonName));
 
             yield return OpenSetup();
+            Assert.AreSame(setup.Decks[0], setup.PlayerDeck, "By default you play the deck being worked on (the Workbench)...");
+            Assert.AreSame(setup.Decks.Skip(1).First(d => catalog.Opponents.Any(o => o.deck == d)), setup.OpponentDeck, "...against the next one in focus");
+            Assert.AreSame(setup.OpponentDeck, setup.Opponent.deck, "...brought by its opponent");
             var firstDeck = SetupButton(MatchSetupMenu.PlayerDeckButton + catalog.Decks[0].GetDeckName());
             Assert.IsNotNull(firstDeck.transform.Find("Factions/FactionCoin"), "A deck shows its faction's coin at its left");
 

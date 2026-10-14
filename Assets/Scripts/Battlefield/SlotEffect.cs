@@ -32,6 +32,9 @@ namespace SlayTheClone {
         /// <summary>Checked with the Day about to start: lasting 1 Day, it ends at the Dusk of the Day it was placed.</summary>
         public bool HasExpired(int nextTurn) => Days > 0 && nextTurn >= TurnApplied + Days;
 
+        /// <summary>The Days it still lasts, today included (1: it ends at this Dusk); 0 when it lasts until replaced or used up.</summary>
+        public int DaysLeft(int today) => Days <= 0 ? 0 : System.Math.Max(1, TurnApplied + Days - today);
+
         public string Name => Type switch {
             SlotEffectType.BarbedSnare => "Barbed Snare",
             SlotEffectType.TemporalShield => "Temporal Shield",

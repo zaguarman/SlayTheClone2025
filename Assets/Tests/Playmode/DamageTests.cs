@@ -73,9 +73,13 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(cards, GameAsserts.CountCards(p1));
             StringAssert.Contains("Revive", Keywords.Plain(CardTextFormatter.GetRulesText(zombieData)));
 
-            // Resurrection (Phoenix Feather): sacrificed now, a Blessing can't stop it; it rises at the Dawn 3 Days on
-            var phoenix = game.Summon(p1, game.Creature("Phoenix", 2, 4), 4);
+            // Resurrection (Phoenix Feather): sacrificed now, a Blessing can't stop it; it rises at the Dawn 3 Days on, ready at
+            // once, full Health, with the stat changes it had, its statuses gone
+            var phoenixData = game.Creature("Phoenix", 2, 4);
+            phoenixData.turnsUntilOperative = 2;
+            var phoenix = game.Summon(p1, phoenixData, 4);
             game.Run(new ApplyStatusEffectAction(phoenix, StatusEffectType.Blessed, 0, 1));
+            game.Run(new ModifyAction(phoenix, 2, true, true, false, controller: p1)); // +2/+2
             var feather = game.Spell("Feather", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Resurrect, 3, TargetType.FriendlyCreatures));
             game.Play(game.GiveCard(p1, feather), p1, p1.Battlefield[4]); // Dropped on the creature it's for
             game.Resolve();
@@ -84,8 +88,11 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             Assert.IsNull(p1.Battlefield[4].OccupyingCreature, "Not at the next Dawn, nor the one after...");
             game.StartTurn();
-            Assert.AreEqual("Phoenix", p1.Battlefield[4].OccupyingCreature?.Name, "...but at the Dawn 3 Days on");
-            Assert.AreEqual(4, p1.Battlefield[4].OccupyingCreature.Health);
+            var reborn = p1.Battlefield[4].OccupyingCreature;
+            Assert.AreEqual("Phoenix", reborn?.Name, "...but at the Dawn 3 Days on");
+            Assert.IsTrue(reborn.IsOperative, "Ready at once: no Deployment Time");
+            Assert.AreEqual((4, 6, 6), (reborn.Attack, reborn.MaxHealth, reborn.Health), "Its +2/+2 kept, at full Health");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(reborn, StatusEffectType.Blessed), "Its statuses died with it");
 
             // Health lost for good stays on the card: one that lost it all rises at 0 and dies again
             var rot = Effect(EffectTrigger.OnDeath, ActionType.Revive, 0, TargetType.Self);

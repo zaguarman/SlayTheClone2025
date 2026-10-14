@@ -41,9 +41,11 @@ namespace SlayTheClone.Tests {
             game.Declare(walker, p2.Battlefield[4]);
             game.ActionsQueue.AddAction(new PlayCardAction(zap, p1, null));
             game.ActionsQueue.AddAction(new SummonCreatureAction(summoned, p2, p2.Battlefield[0]));
-            game.ActionsQueue.AddAction(new PlayCardAction(played, p1, p1.Battlefield[3]));
+            game.ActionsQueue.AddAction(new PlayCardAction(played, p1, p1.Battlefield[2])); // Where the mover stands now
             game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[2], p1.Battlefield[1], p1));
             game.Resolve();
+            Assert.AreSame(mover, p1.Battlefield[1].OccupyingCreature, "Moves come first: the mover steps aside...");
+            Assert.AreSame(played, p1.Battlefield[2].OccupyingCreature, "...and the creature summoned into its old slot lands there, replacing nobody");
 
             CollectionAssert.AreEqual(new[] {
                 "MoveCreature",

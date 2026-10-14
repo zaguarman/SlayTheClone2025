@@ -1655,6 +1655,7 @@ Card Game Factions Overview
 			Round-Tripping (a tax fraud)
 			Sales Funnel
 			Spoofing
+			Substance Over Form (the accounting principle: what a deal really is beats how it's dressed up) (added 2026-10-14)
 			That Is Tomorrow's Problem
 			The Art of Selling: Involuntary Product Bundling
 			The Enron Ledger Fantasy (tagged Corporate)
@@ -1795,3 +1796,4 @@ Card Game Factions Overview
 			Digital Breadcrumbs (added 2026-10-14)
 		Mechanic ideas
 			Cards that come back to the hand when a condition is met
+			More tempo-altering effects (2026-10-14): some that raise your creatures' Speed, others that cut Deployment Time

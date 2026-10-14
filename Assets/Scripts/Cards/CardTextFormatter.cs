@@ -315,7 +315,7 @@ namespace SlayTheClone {
                 case ActionType.Grace:
                     return $"{Keywords.Link("Grace")} until the {Keywords.Link("Dusk")} of the next {Keywords.Link("Day")}: at 0 Health you don't lose yet; still at 0 then, you do. If both players fall to 0, you win";
                 case ActionType.Resurrect:
-                    return $"sacrifice {target}: it {Keywords.Link("Revive", "rises again")} at the {Keywords.Link("Dawn")} {value} Day{(value == 1 ? "" : "s")} later";
+                    return $"sacrifice {target}: it {Keywords.Link("Revive", "rises again")} at the {Keywords.Link("Dawn")} {value} Day{(value == 1 ? "" : "s")} later, ready, as strong as it was";
                 case ActionType.CutDraws:
                     return $"{target} draws {value} fewer card{(value == 1 ? "" : "s")} with the next hand";
                 case ActionType.WipeWatchdogs:
@@ -393,7 +393,7 @@ namespace SlayTheClone {
             // Spells resolve against whatever they are dropped on unless they hit a whole group
             bool hitsGroup = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
             if (isSpell && !hitsGroup && action.targetType is not (TargetType.Player or TargetType.Enemy)) {
-                return "target" + adjacent;
+                return (EffectResolver.OwnSideOnly(action.actionType) ? "target friendly creature" : "target") + adjacent;
             }
 
             switch (action.targetType) {

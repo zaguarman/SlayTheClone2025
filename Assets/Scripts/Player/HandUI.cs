@@ -57,6 +57,7 @@ namespace SlayTheClone {
             if (GameMediator != null) {
                 GameMediator.HandStateChanged += UpdateUI;
                 GameMediator.ActionsQueueChanged += OnActionsQueueChanged;
+                GameMediator.PlayRefused += OnPlayRefused;
             }
         }
 
@@ -64,7 +65,33 @@ namespace SlayTheClone {
             if (GameMediator != null) {
                 GameMediator.HandStateChanged -= UpdateUI;
                 GameMediator.ActionsQueueChanged -= OnActionsQueueChanged;
+                GameMediator.PlayRefused -= OnPlayRefused;
             }
+        }
+
+        /// <summary>The last reason shown for a card that couldn't be played (for tests).</summary>
+        public string RefusedReason { get; private set; }
+
+        // A card that couldn't be played (its cost can't be paid) stays in the hand: it shakes, and why floats up from it
+        private void OnPlayRefused(ICard card, string reason) {
+            var view = cards.FirstOrDefault(c => c != null && c.GetLinkedCardInstance() == card);
+            if (view == null || !FogOfWar.CanControl(Player)) return;
+            RefusedReason = reason;
+            view.transform.DOPunchPosition(new Vector3(12f, 0f, 0f), 0.35f, 14, 0.8f);
+            var note = UITheme.NewText("Refused", transform, reason, 24f, UITheme.Hex(0xFF8A7A));
+            note.fontStyle = TMPro.FontStyles.Bold;
+            note.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+            note.raycastTarget = false;
+            UITheme.AddDropShadow(note);
+            var rect = note.rectTransform;
+            rect.sizeDelta = new Vector2(520f, 40f);
+            rect.position = view.transform.position;
+            rect.anchoredPosition += new Vector2(0f, ((RectTransform)view.transform).rect.height * 0.75f);
+            rect.SetAsLastSibling();
+            float from = rect.anchoredPosition.y;
+            DOTween.To(() => rect.anchoredPosition.y, y => rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, y), from + 60f, 1.8f)
+                .SetEase(Ease.OutCubic).SetTarget(note);
+            DOTween.To(() => note.alpha, a => note.alpha = a, 0f, 0.6f).SetDelay(1.3f).SetTarget(note).OnComplete(() => { if (note != null) Destroy(note.gameObject); });
         }
 
         private void OnActionsQueueChanged() {

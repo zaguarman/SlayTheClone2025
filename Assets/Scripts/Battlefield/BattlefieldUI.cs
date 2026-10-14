@@ -19,6 +19,7 @@ namespace SlayTheClone {
 
         // Translucent previews of creatures queued to be summoned into this battlefield
         private readonly Dictionary<BattlefieldSlot, CardController> queuedGhosts = new Dictionary<BattlefieldSlot, CardController>();
+        private readonly List<CardController> risingGhosts = new List<CardController>(); // Creatures that will rise (Revive, Phoenix Feather)
         private readonly List<CardController> moveGhosts = new List<CardController>(); // Where planned moves leave each creature
         private PlayCardAction draggedGhostPlay; // The play of the ghost being dragged, to tell whether the drop replaced it
         private float nextSummonTime;
@@ -192,7 +193,16 @@ namespace SlayTheClone {
         }
 
         /// <summary>The card released on this slot: played there from the hand, or a creature's attack or move (tests call it directly).</summary>
+        /// <summary>Whether this card, carried from the hand, can be played on this slot: for an aimed spell, only where it lands on something.</summary>
+        public bool CanAimAt(CardController card, BoardSlot slot) =>
+            !(card?.GetLinkedCardInstance() is Spell spell) || !EffectResolver.IsAimed(spell)
+            || EffectResolver.CanAimAt(spell, card.Player, slot, GameManager?.ActionsQueue);
+
         public void DropOn(CardController card, BattlefieldSlot targetSlot) {
+            if ((IsCardFromHand(card) || card.IsQueued) && !CanAimAt(card, targetSlot.Model)) {
+                Log($"{card.GetLinkedCardInstance()?.Name} can't be aimed at {targetSlot.Model}", LogTag.Actions | LogTag.Cards);
+                return;
+            }
             if (IsCardFromHand(card) || card.IsQueued) {
                 HandleCardFromHand(card, targetSlot);
             }
@@ -353,7 +363,7 @@ namespace SlayTheClone {
             // Slot Effects. Hidden ones are secret from the other side, unless revealed (Fog of War)
             foreach (var slot in battlefieldSlots) {
                 var effect = slot.Model?.Effect;
-                slot.ShowSlotEffect(effect, FogOfWar.Hides(Viewer, effect));
+                slot.ShowSlotEffect(effect, FogOfWar.Hides(Viewer, effect), GameManager?.TurnManager?.TurnNumber ?? 0);
             }
             RefreshHiddenPlans();
             RefreshSpellGhosts(); // What stands in the slots decides where they go
@@ -491,6 +501,8 @@ namespace SlayTheClone {
             if (pendingActions == null) return;
 
             int order = 0; // The queue lists them in the order they resolve: the side's creatures arrive in this order
+            // Moves resolve before summons: a creature planned to step out of a slot leaves it free for one summoned there
+            var afterMoves = MovementRules.Preview(Player.Battlefield, MovementRules.PlannedMovesOf(Player, GameManager.ActionsQueue)).FinalSlots;
             foreach (var action in pendingActions) {
                 // A played creature stays previewed until its follow-up summon actually executes
                 ICard card;
@@ -528,17 +540,44 @@ namespace SlayTheClone {
                 ghost.SetOrderNumber(ghost.IsAnonymous ? (int?)null : order); // Placed in order: arrivals happen in turn
                 queuedGhosts[slot] = ghost;
 
-                // The creature currently in the slot will be replaced when the summon resolves:
+                // The creature currently in the slot will be replaced when the summon resolves (unless it moves out first):
                 // raise the ghost so both cards and the occupant's REPLACE badge stay visible
                 var occupant = slot.OccupyingCard;
+                var standing = slot.OccupyingCreature;
+                if (standing != null && afterMoves.TryGetValue(standing, out var willStand) && willStand != slot.Model) occupant = null;
                 float raise = occupant != null ? ((RectTransform)ghost.transform).rect.height * ReplacingGhostRaise : 0f;
                 ghost.transform.localPosition = new Vector3(0f, raise, 0f);
                 occupant?.SetMarkedForReplacement(true);
             }
 
+            ShowRisingGhosts();
             ShowMoveGhosts();
             RefreshHiddenPlans();
             RefreshSpellGhosts();
+        }
+
+        /// <summary>The faded cards of creatures waiting to rise again (Revive, Phoenix Feather), by slot.</summary>
+        public IReadOnlyList<CardController> RisingGhosts => risingGhosts.Where(g => g != null).ToList();
+
+        // A creature that will rise again waits in its slot, faded like a summon on its way, counting the Days. If something
+        // stands there it rises in the first free slot instead, so it shows there
+        private void ShowRisingGhosts() {
+            int today = GameManager?.TurnManager?.TurnNumber ?? 0;
+            foreach (var waiting in Player.GoneDark.Where(g => g.Reborn && g.Creature != null)) {
+                int index = Mathf.Clamp(waiting.SlotIndex, 0, battlefieldSlots.Count - 1);
+                var slot = Free(battlefieldSlots[index]) ? battlefieldSlots[index] : battlefieldSlots.FirstOrDefault(Free);
+                if (slot == null) continue;
+                var ghost = CardViews.Create(waiting.Creature, Player, slot.transform);
+                if (ghost == null) continue;
+                ghost.name = $"RisingGhost_{waiting.Creature.Name}";
+                ghost.transform.localRotation = Quaternion.identity;
+                int days = waiting.ReturnsOnTurn - today;
+                ghost.SetQueued(true, badge: days <= 1 ? "Rises at Dawn" : $"Rises in {days} Days");
+                risingGhosts.Add(ghost);
+            }
+
+            bool Free(BattlefieldSlot slot) => slot.OccupyingCard == null && !queuedGhosts.ContainsKey(slot)
+                                               && !risingGhosts.Any(g => g != null && g.transform.parent == slot.transform);
         }
 
         /// <summary>The ghosts of the queued spells aimed at this battlefield, by spell.</summary>
@@ -694,8 +733,17 @@ namespace SlayTheClone {
                 wasResolving = resolving;
                 RefreshIdle();
             }
+            // While an aimed spell is carried, the slots it can be played on glow: what it can be used on
+            var dragged = CardController.Dragged;
+            if (dragged != glowingFor) {
+                glowingFor = dragged;
+                bool aimed = dragged != null && dragged.GetLinkedCardInstance() is Spell spell && EffectResolver.IsAimed(spell)
+                             && (IsCardFromHand(dragged) || dragged.IsQueued);
+                foreach (var slot in battlefieldSlots) slot.SetEligible(aimed && CanAimAt(dragged, slot.Model));
+            }
         }
         private bool wasResolving;
+        private CardController glowingFor;
 
         private RectTransform StripLayer() {
             if (stripLayer == null) {
@@ -817,6 +865,10 @@ namespace SlayTheClone {
                 if (entry.Key != null) entry.Key.OccupyingCard?.SetMarkedForReplacement(false);
             }
             queuedGhosts.Clear();
+            foreach (var ghost in risingGhosts) {
+                if (ghost != null) Destroy(ghost.gameObject);
+            }
+            risingGhosts.Clear();
             foreach (var ghost in moveGhosts) {
                 if (ghost != null) Destroy(ghost.gameObject);
             }

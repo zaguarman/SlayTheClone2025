@@ -113,6 +113,7 @@ namespace SlayTheClone {
             }
             if (chosenTarget != null && UsesChosenTarget(action)) {
                 var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
+                if (OwnSideOnly(action.actionType) && (resolved as ICreature)?.Owner != controller) resolved = null; // A sacrifice is yours to make
                 var targets = resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
                 if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) targets.AddRange(NeighboursOf(chosenTarget));
                 return action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? WithoutTooMainstream(targets, source) : targets;
@@ -250,6 +251,29 @@ namespace SlayTheClone {
             bool picksOwnTargets = action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets)
                 || action.targetModifier.HasFlag(TargetModifier.Strongest) || action.targetModifier.HasFlag(TargetModifier.Opposite);
             return !picksOwnTargets && (CanAffectCreatures(action.actionType) || IsSlotAction(action.actionType));
+        }
+
+        /// <summary>Effects only for your own creatures, whatever the card is dropped on: a sacrifice (Phoenix Feather), a faked death.</summary>
+        public static bool OwnSideOnly(ActionType actionType) => actionType is ActionType.Resurrect or ActionType.FakeDeath;
+
+        /// <summary>
+        /// Whether an aimed spell can be played on this slot: one of its aimed effects lands on something there (a creature
+        /// it can affect, the player behind an empty slot for damage and the like, the slot itself for a Slot Effect).
+        /// The board lights these slots up while the card is carried, and only takes it there.
+        /// </summary>
+        public static bool CanAimAt(Spell spell, IPlayer caster, BoardSlot slot, IActionsQueue queue) {
+            if (spell == null || caster == null || slot == null || !IsAimed(spell)) return false;
+            var aim = AimAt(spell, caster, slot, queue);
+            foreach (var action in spell.Effects.SelectMany(e => e.actions).Where(a => a.targetType != TargetType.Self && UsesChosenTarget(a))) {
+                if (IsSlotAction(action.actionType)) return true;
+                var resolved = aim is HomingTarget { CreatureInPlay: null } incoming // A creature on its way here
+                    ? (CanAffectCreatures(action.actionType) ? incoming.Creature : null)
+                    : ResolveChosenTarget(aim, action.actionType);
+                if (resolved == null) continue;
+                if (OwnSideOnly(action.actionType) && !(resolved is ICreature && slot.Owner == caster)) continue;
+                return true;
+            }
+            return false;
         }
 
         // Slot Effects aim at the slot itself (Static, GDD 4.6): they never follow a creature

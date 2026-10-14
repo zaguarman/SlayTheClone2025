@@ -217,13 +217,19 @@ namespace SlayTheClone {
         }
 
         public void AddAction(IGameAction action) {
-            if (action is PlayCardAction costly && !DiscardCost.TryPay(costly, this)) return; // Can't pay its discard cost: it isn't played
-            if (action is PlayCardAction offering && !Sacrifice.CanPay(offering.GetCard(), offering.GetOwner())) { // Nobody to sacrifice
-                Log($"{offering.GetCard()?.Name} needs {Sacrifice.Of(offering.GetCard())} creature(s) to sacrifice: it isn't played", LogTag.Actions | LogTag.Cards);
+            // A cost that can't be paid: it isn't played, it stays in the hand, and the screen says why
+            if (action is PlayCardAction costly && !DiscardCost.TryPay(costly, this)) {
+                int cards = DiscardCost.Of(costly.GetCard());
+                executionContext.GameMediator?.NotifyPlayRefused(costly.GetCard(), $"Needs {cards} other card{(cards == 1 ? "" : "s")} to give up");
                 return;
             }
-            if (action is PlayCardAction doomed && !DoomCost.CanPay(doomed.GetCard(), doomed.GetOwner(), Modifiers)) { // Nobody to doom
-                Log($"{doomed.GetCard()?.Name} needs a creature that isn't Doomed yet to doom: it isn't played", LogTag.Actions | LogTag.Cards);
+            if (action is PlayCardAction offering && !Sacrifice.CanPay(offering.GetCard(), offering.GetOwner(), this)) { // Nobody to sacrifice
+                int victims = Sacrifice.Of(offering.GetCard());
+                executionContext.GameMediator?.NotifyPlayRefused(offering.GetCard(), $"Needs {(victims == 1 ? "a creature" : $"{victims} creatures")} to sacrifice");
+                return;
+            }
+            if (action is PlayCardAction doomed && !DoomCost.CanPay(doomed.GetCard(), doomed.GetOwner(), Modifiers, this)) { // Nobody to doom
+                executionContext.GameMediator?.NotifyPlayRefused(doomed.GetCard(), "Needs a creature that isn't Doomed to doom");
                 return;
             }
             if (executing == null && !resolving && IsInstant(action)) {

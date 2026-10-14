@@ -294,12 +294,17 @@ namespace SlayTheClone {
         public int SlotIndex { get; }    // Where it stood: it comes back there if it's free
         public int ReturnsOnTurn { get; } // The Day whose Dawn brings it back
         public bool Reborn { get; } // It died and rises again (Revive): no new identity, a new arrival
+        public bool Ready { get; } // Rises ready, no Deployment Time (Phoenix Feather)
+        public (int attack, int health, int speed) Kept { get; } // Stat changes it had in play, back on it when it rises
 
-        public GoneDark(ICreature creature, int slotIndex, int returnsOnTurn, bool reborn = false) {
+        public GoneDark(ICreature creature, int slotIndex, int returnsOnTurn, bool reborn = false, bool ready = false,
+                        (int attack, int health, int speed) kept = default) {
             Creature = creature;
             SlotIndex = slotIndex;
             ReturnsOnTurn = returnsOnTurn;
             Reborn = reborn;
+            Ready = ready;
+            Kept = kept;
         }
 
         /// <summary>At Dawn: the creatures due back today are queued to come back, ahead of the Day's Dawn effects.</summary>
@@ -427,6 +432,12 @@ namespace SlayTheClone {
             creature.EnterPlay(context.TurnClock.TurnNumber);
             if (hidden.Reborn) { // Revive: back from the dead for all to see, a new arrival (its Arrival happens again)
                 Log($"{creature.Name} rises again", LogTag.Effects | LogTag.Creatures);
+                if (hidden.Ready) creature.MakeOperative(); // Phoenix Feather: ready at once
+                // The stat changes it had come back with it (its statuses don't: it died); full Health, raised ones included
+                int turn = context.TurnClock.TurnNumber;
+                StatModifiers.Apply(context.ModifierManager, context.ModifierFactory, creature, hidden.Kept.attack, true, false, false, ModifierCalculationType.Flat, 0, turn);
+                StatModifiers.Apply(context.ModifierManager, context.ModifierFactory, creature, hidden.Kept.health, false, true, false, ModifierCalculationType.Flat, 0, turn);
+                StatModifiers.Apply(context.ModifierManager, context.ModifierFactory, creature, hidden.Kept.speed, false, false, true, ModifierCalculationType.Flat, 0, turn);
                 Intel.OnEnteredPlay(creature, context.ModifierManager);
                 context.GameMediator.NotifyBattlefieldStateChanged(side);
                 SlotEffectRules.OnEnter(creature, slot, context);

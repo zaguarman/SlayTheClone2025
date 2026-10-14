@@ -161,9 +161,11 @@ namespace SlayTheClone {
                 return;
             }
 
-            Opponent = catalog.Opponents.FirstOrDefault();
-            OpponentDeck = Opponent?.deck ?? catalog.Decks[0];
-            PlayerDeck = catalog.Decks.FirstOrDefault(d => d != OpponentDeck) ?? catalog.Decks[0];
+            // What we're working on: you play the first deck in focus (the Workbench), against the next one and whoever brings it
+            var ordered = Decks;
+            PlayerDeck = ordered.FirstOrDefault() ?? catalog.Decks[0];
+            OpponentDeck = ordered.Skip(1).FirstOrDefault(d => catalog.Opponents.Any(o => o.deck == d)) ?? catalog.Decks.FirstOrDefault(d => d != PlayerDeck) ?? catalog.Decks[0];
+            Opponent = catalog.Opponents.FirstOrDefault(o => o.deck == OpponentDeck) ?? catalog.Opponents.FirstOrDefault();
         }
 
         private void Refresh() {

@@ -13,11 +13,15 @@ namespace SlayTheClone {
         public ICreature Creature { get; }
         public int SlotIndex { get; } // Where it fell
         public int Days { get; } // It rises at the Dawn this many Days on (1: the next Dawn)
+        public bool Ready { get; } // Rises ready, no Deployment Time (Phoenix Feather)
+        public (int attack, int health, int speed) Kept { get; } // Stat changes it had, back on it when it rises
 
-        public RevivalAction(ICreature creature, int slotIndex, int days = 1) {
+        public RevivalAction(ICreature creature, int slotIndex, int days = 1, bool ready = false, (int attack, int health, int speed) kept = default) {
             Creature = creature;
             SlotIndex = slotIndex;
             Days = System.Math.Max(1, days);
+            Ready = ready;
+            Kept = kept;
             Log($"Created {this}", LogTag.Actions | LogTag.Effects);
         }
 
@@ -34,15 +38,18 @@ namespace SlayTheClone {
                 return;
             }
             risen.SetOwner(home);
-            home.GoneDark.Add(new GoneDark(risen, System.Math.Max(0, revival.SlotIndex), context.TurnClock.TurnNumber + revival.Days, reborn: true));
+            home.GoneDark.Add(new GoneDark(risen, System.Math.Max(0, revival.SlotIndex), context.TurnClock.TurnNumber + revival.Days, reborn: true,
+                ready: revival.Ready, kept: revival.Kept));
+            context.GameMediator.NotifyBattlefieldStateChanged(home); // Its slot shows it'll rise
             Log($"{dead.Name} will rise again in {revival.Days} Day(s)", LogTag.Effects | LogTag.Creatures);
         }
     }
 
     /// <summary>
     /// Resurrection (Phoenix Feather): the creature is sacrificed now, for real (its Last Will happens, a Blessing doesn't
-    /// stop it), and rises again at the Dawn so many Days on, like a Revive: its card back from the discard pile, full
-    /// Health, Deployment Time again. Something that keeps it from dying (Borrowed Time) keeps it from rising too.
+    /// stop it), and rises again at the Dawn so many Days on: its card back from the discard pile into its slot (or the first
+    /// free one), ready at once with full Health and the stat changes it had; its statuses are gone, as it died. Its Arrival
+    /// happens again. Something that keeps it from dying (Borrowed Time) keeps it from rising too.
     /// </summary>
     public class ResurrectionAction : IGameAction {
         public ICreature Creature { get; }
@@ -66,7 +73,8 @@ namespace SlayTheClone {
             int slot = creature.Slot?.Index ?? 0;
             Log($"{creature.Name} is sacrificed, to rise again in {resurrection.Days} Days", LogTag.Effects | LogTag.Creatures);
             context.ActionsQueue.AddAction(new DestroyCreatureAction(creature, unconditional: true, controller: resurrection.Controller, sacrifice: true));
-            context.ActionsQueue.AddAction(new RevivalAction(creature, slot, resurrection.Days));
+            var kept = (creature.Attack - creature.BaseAttack, creature.MaxHealth - creature.BaseHealth, creature.Speed - creature.BaseSpeed);
+            context.ActionsQueue.AddAction(new RevivalAction(creature, slot, resurrection.Days, ready: true, kept: kept));
         }
     }
 
@@ -86,7 +94,17 @@ namespace SlayTheClone {
                 .OrderBy(c => c.Attack).ThenBy(c => c.Health).Take(Of(card)).ToList();
         }
 
-        public static bool CanPay(ICard card, IPlayer owner) => Of(card) <= 0 || Victims(card, owner).Count >= Of(card);
+        /// <summary>
+        /// Whether it can be played: enough creatures on the board, counting those queued to be summoned this Day (summons
+        /// resolve before spells, so they're there when it's paid).
+        /// </summary>
+        public static bool CanPay(ICard card, IPlayer owner, IActionsQueue queue = null) =>
+            Of(card) <= 0 || Victims(card, owner).Count + Incoming(owner, queue) >= Of(card);
+
+        /// <summary>The creatures this side has queued to be summoned this Day.</summary>
+        public static int Incoming(IPlayer owner, IActionsQueue queue) => queue?.GetPendingActions().Count(a =>
+            (a is PlayCardAction play && play.GetOwner() == owner && play.GetCard() is ICreature)
+            || (a is SummonCreatureAction summon && (summon.GetTargetSlot() as BoardSlot)?.Owner == owner)) ?? 0;
 
         /// <summary>When the card resolves: the victims die first. False: there aren't enough, so it fizzles.</summary>
         internal static bool Pay(ICard card, IPlayer owner, IActionsQueue queue) {
@@ -121,7 +139,8 @@ namespace SlayTheClone {
                 .OrderBy(c => c.Attack).ThenBy(c => c.Health).FirstOrDefault();
         }
 
-        public static bool CanPay(ICard card, IPlayer owner, IModifierManager modifiers) => Of(card) <= 0 || Condemned(card, owner, modifiers) != null;
+        public static bool CanPay(ICard card, IPlayer owner, IModifierManager modifiers, IActionsQueue queue = null) =>
+            Of(card) <= 0 || Condemned(card, owner, modifiers) != null || Sacrifice.Incoming(owner, queue) > 0;
 
         /// <summary>When the card resolves: the Doom lands first. False: nobody can take it, so it fizzles.</summary>
         internal static bool Pay(ICard card, IPlayer owner, IActionsQueue queue) {

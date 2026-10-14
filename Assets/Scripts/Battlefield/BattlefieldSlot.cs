@@ -40,6 +40,19 @@ namespace SlayTheClone {
         private static readonly Color BlockedHintColor = UITheme.Hex(0x3A181C, 0.55f);
         private Color? hintFill;
         private Color? hintTrim;
+        // While an aimed spell is carried: a slot it can be played on glows softly
+        private static readonly Color EligibleColor = UITheme.Hex(0xE2B04A, 0.14f);
+        private static readonly Color EligibleTrimColor = UITheme.Hex(0xFFE08A, 0.7f);
+        private bool isEligible;
+
+        /// <summary>Whether this slot glows as one the carried card can be played on.</summary>
+        public bool IsEligible => isEligible;
+
+        public void SetEligible(bool eligible) {
+            if (isEligible == eligible) return;
+            isEligible = eligible;
+            ShowHighlight(null);
+        }
         private TextMeshProUGUI hintLabel;
 
         // The Slot Effect on this slot, as a badge just under the slot, clear of the card's stats
@@ -97,12 +110,12 @@ namespace SlayTheClone {
 
         // Null for the resting look: the move hint while there is one
         private void ShowHighlight(Color? fill, Color? trimColor = null) {
-            if (backgroundImage != null) backgroundImage.color = fill ?? hintFill ?? (isMarkedForCombat ? UITheme.SlotCombat : Color.clear);
-            if (trim != null) trim.color = trimColor ?? hintTrim ?? Color.clear;
+            if (backgroundImage != null) backgroundImage.color = fill ?? hintFill ?? (isEligible ? EligibleColor : isMarkedForCombat ? UITheme.SlotCombat : Color.clear);
+            if (trim != null) trim.color = trimColor ?? hintTrim ?? (isEligible ? EligibleTrimColor : Color.clear);
         }
 
         /// <summary>Shows the slot's Slot Effect, or nothing. Hidden ones are only shown to their controller, marked as hidden.</summary>
-        public void ShowSlotEffect(SlotEffect effect, bool isHiddenFromViewer) {
+        public void ShowSlotEffect(SlotEffect effect, bool isHiddenFromViewer, int today = 0) {
             bool show = effect != null && !isHiddenFromViewer;
             if (!show) {
                 if (effectBadge != null) effectBadge.transform.parent.gameObject.SetActive(false);
@@ -123,7 +136,9 @@ namespace SlayTheClone {
                 UITheme.Stretch(effectBadge.rectTransform, 2f);
             }
             string icon = EffectIcons.Tag(CardTextFormatter.SlotEffectIcon(effect.Type));
-            effectBadge.text = $"{icon}{effect.Name}{(effect.IsHidden ? " <i>(hidden)</i>" : "")}";
+            int left = effect.DaysLeft(today); // An hourglass with the Days it still lasts, like a card's Deployment Time
+            string days = left > 0 ? $"  {EffectIcons.Tag(EffectIcons.Days)}{left}" : "";
+            effectBadge.text = $"{icon}{effect.Name}{(effect.IsHidden ? " <i>(hidden)</i>" : "")}{days}";
             effectBadge.transform.parent.gameObject.SetActive(true);
             effectBadge.transform.parent.SetAsLastSibling(); // Over the card standing here
         }
@@ -163,8 +178,10 @@ namespace SlayTheClone {
         public void OnPointerEnter(PointerEventData eventData) {
             var dragged = eventData?.pointerDrag != null ? eventData.pointerDrag.GetComponent<CardController>() : null;
             if (dragged != null) {
-                // Only a card aimed at a slot of this side lights it up: not a creature summoned elsewhere, nor a spell for the whole side
-                if (GetComponentInParent<BattlefieldUI>()?.AimOf(dragged) == BattlefieldUI.DropAim.Slot) {
+                // Only a card aimed at a slot of this side lights it up: not a creature summoned elsewhere, nor a spell for the whole side,
+                // nor a spell that has nothing to land on here
+                var board = GetComponentInParent<BattlefieldUI>();
+                if (board?.AimOf(dragged) == BattlefieldUI.DropAim.Slot && board.CanAimAt(dragged, Model)) {
                     ShowHighlight(DragTargetColor, DragTargetTrimColor);
                     if (IsCreatureFromHandDraggedOver(eventData)) OccupyingCard.SetReplacementPreview(true);
                 }

@@ -169,6 +169,7 @@ namespace SlayTheClone.Tests {
             StringAssert.Contains("(hidden)", Badge(p2.Battlefield[1]));
             Assert.AreEqual("", Badge(p1.Battlefield[1]), "The enemy's mine is secret");
             StringAssert.Contains("Temporal Shield", Badge(p1.Battlefield[3]), "Visible ones show to everyone");
+            StringAssert.Contains($"{EffectIcons.Tag(EffectIcons.Days)}2", Badge(p1.Battlefield[3]), "...with the Days they still last");
             game.Summon(p2, game.Cards.Creature("Test Sapper", 1, 5), 1);
             yield return null;
             Assert.AreEqual("", Badge(p2.Battlefield[1]), "Used up: gone from the slot");
@@ -323,6 +324,24 @@ namespace SlayTheClone.Tests {
         /// <summary>A queued creature shows as a ghost on its slot: it can be hovered, and taken back by clicking, right-clicking or dragging it away.</summary>
         [UnityTest]
         public IEnumerator AQueuedCreature_CanBeHovered_OrTakenBack() {
+            // A cost that can't be paid: the card stays in the hand and the screen says why. A creature queued this Day can be
+            // sacrificed (summons resolve before spells)
+            var offeringData = game.Cards.Spell("Test Offering", TargetType.Enemy, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.Enemy));
+            offeringData.sacrifice = 1;
+            var offering = game.GiveCard(p1, offeringData);
+            var kid = game.GiveCard(p1, game.Cards.Creature("Test Kid", 1, 1));
+            yield return null;
+            game.Play(offering, p1, p2.Battlefield[0]);
+            yield return null;
+            Assert.IsFalse(game.Queue.GetPendingActions().OfType<PlayCardAction>().Any(a => a.GetCard() == offering), "Nobody to sacrifice: it isn't played...");
+            Assert.AreEqual("Needs a creature to sacrifice", game.HandView(p1).RefusedReason, "...and the screen says why");
+            game.Play(kid, p1, p1.Battlefield[2]);
+            game.Play(offering, p1, p2.Battlefield[0]);
+            Assert.IsTrue(game.Queue.GetPendingActions().OfType<PlayCardAction>().Any(a => a.GetCard() == offering), "A creature on its way can pay");
+            game.Queue.CancelPlay(offering);
+            game.Queue.CancelPlay(kid);
+            yield return null;
+
             var occupant = game.Summon(p1, game.Cards.Creature("Test Ox", 0, 6), 3);
             var wolf = game.GiveCard(p1, game.Cards.Creature("Test Wolf", 2, 3));
             var hound = game.GiveCard(p1, game.Cards.Creature("Test Hound", 3, 1));
@@ -372,6 +391,28 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(hound, p1.Battlefield[3].OccupyingCreature);
             Assert.IsNull(pupSlot.OccupyingCreature, "The creature that was taken back isn't summoned");
             game.AssertViewsMatchRules();
+            // A sacrifice is only yours to make: carried, it lights up your creatures' slots, nothing else, and plays nowhere else
+            game.Summon(p2, game.Cards.Creature("Test Wolfhound", 1, 3), 0);
+            CardController Held(ICard card) => game.HandCards(p1).Single(c => c.GetLinkedCardInstance() == card);
+            var mine = game.Summon(p1, game.Cards.Creature("Test Lamb", 1, 2), 4);
+            var feather = game.GiveCard(p1, game.Cards.Spell("Test Feather", TargetType.FriendlyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Resurrect, 3, TargetType.FriendlyCreatures)));
+            yield return null;
+            Assert.IsFalse(p1.Battlefield[2].IsOccupied());
+            var featherDrag = SceneGame.BeginDrag(Held(feather));
+            yield return null;
+            Assert.IsTrue(game.BoardView(p1).FindSlotView(p1.Battlefield[4]).IsEligible, "Your creature's slot glows");
+            Assert.IsFalse(game.BoardView(p1).FindSlotView(p1.Battlefield[2]).IsEligible, "...not an empty one");
+            Assert.IsFalse(game.BoardView(p2).FindSlotView(p2.Battlefield[0]).IsEligible, "...nor an enemy creature's");
+            SceneGame.EndDrag(Held(feather), featherDrag);
+            yield return null;
+            Assert.IsFalse(game.BoardView(p1).FindSlotView(p1.Battlefield[4]).IsEligible, "Put down, nothing glows");
+            var onEnemy = SceneGame.BeginDrag(Held(feather));
+            game.BoardView(p2).DropOn(Held(feather), game.BoardView(p2).FindSlotView(p2.Battlefield[0]));
+            SceneGame.EndDrag(Held(feather), onEnemy);
+            yield return null;
+            Assert.IsNull(game.SpellGhost(feather), "Dropped on an enemy creature, it isn't played");
+            Assert.IsTrue(mine != null && !mine.IsDead);
         }
 
         /// <summary>

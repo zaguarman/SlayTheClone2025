@@ -11,6 +11,7 @@ namespace SlayTheClone {
         public event Action<IPlayer, int> PlayerDamaged;
         public event Action<IPlayer, int> PlayerHealed;
         public event Action<IPlayer> GameOver;
+        public event Action<ICard, string> PlayRefused;
 
         public event Action<ICreature, IPlayer> CreatureSummoned;
         public event Action<ICreature, int> CreatureDamaged;
@@ -46,6 +47,11 @@ namespace SlayTheClone {
 
             Log($"{player.Name} healed for {amount}, health now: {player.Health}", LogTag.Players | LogTag.Effects);
             PlayerHealed?.Invoke(player, amount);
+        }
+
+        public void NotifyPlayRefused(ICard card, string reason) {
+            Log($"{card?.Name} isn't played: {reason}", LogTag.Cards | LogTag.Actions);
+            PlayRefused?.Invoke(card, reason);
         }
 
         public void NotifyGameOver(IPlayer winner) {

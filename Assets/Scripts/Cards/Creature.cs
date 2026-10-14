@@ -78,6 +78,8 @@ namespace SlayTheClone {
         /// Its entry effects already happened, so they don't happen again when it's ready.
         /// </summary>
         void AddDeploymentTime(int days, int currentTurn);
+        /// <summary>Ready at once, no Deployment Time (Phoenix Feather's rebirth).</summary>
+        void MakeOperative();
         /// <summary>Counts down at each Dusk after the Day it landed in (GDD 3.2): Deployment Time N sits out N full Days.</summary>
         /// <returns>True when the countdown changed.</returns>
         bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue);
@@ -219,6 +221,8 @@ namespace SlayTheClone {
             Log($"{Name} is off Scorched Earth: its entry effects happen now", LogTag.Creatures | LogTag.Effects);
             HandleEffect(EffectTrigger.OnPlay, actionsQueue);
         }
+
+        public void MakeOperative() => TurnsUntilOperative = 0;
 
         public void AddDeploymentTime(int days, int currentTurn) {
             if (days <= 0) return;

@@ -12,6 +12,7 @@ namespace SlayTheClone {
         event Action<IPlayer, int> PlayerDamaged;
         event Action<IPlayer, int> PlayerHealed;
         event Action<IPlayer> GameOver; // With the winner
+        event Action<ICard, string> PlayRefused; // A card that couldn't be played, and why (its cost can't be paid)
         #endregion
 
         #region Creatures
@@ -37,6 +38,7 @@ namespace SlayTheClone {
         void NotifyPlayerHealed(IPlayer player, int amount);
         /// <summary>The game ends once; later calls are ignored.</summary>
         void NotifyGameOver(IPlayer winner);
+        void NotifyPlayRefused(ICard card, string reason);
         /// <summary>A player fell to 0 Health: the combat is over, and no more turns are played.</summary>
         bool IsGameOver { get; }
 
