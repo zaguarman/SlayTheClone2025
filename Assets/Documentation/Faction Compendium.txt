@@ -87,7 +87,7 @@ Tech: Systems & the Queue
     • Note: Tech and Shadow Ops. counter each other; whoever wins the information war wins the matchup.
 
 Digital Society: Virality & the Mob
-    • Theme: Social media, influencers, cancel culture (memes are Zeitgeist's).
+    • Theme: Internet culture: social media, influencers, cancel culture, memes and everything born online.
     • Coin: @ (your handle) on a coin in its color.
     • Play Style: A swarm of cheap Deployment Time 0 tokens, effects that spread, and many creatures piling onto one target.
     • Signature Mechanics: Flooding the board (bots, NPCs, Spam), "goes viral" (effects that spread to adjacent creatures), Dogpile (a bonus when several creatures attack the same target), Doxxing (reveals), Clickbait (taunts), Streisand Effect (anything hidden near it backfires on its owner).
@@ -99,9 +99,10 @@ Digital Society: Virality & the Mob
     • Weak Against: Statecraft (area damage), Corporate (Paywall).
 
 Zeitgeist: Moods of Modern Life
-    • Theme: Social trends, internet memes, archetypes, modern malaise.
+    • Theme: The culture itself: films and pop culture everyone quotes, human behaviours and archetypes, social trends, modern
+      malaise. Not the internet's memes (those are Digital Society's): what the times are like offline.
     • Coin: ☺ (the mood of the times) on a coin in its color.
-    • Plans or Reacts: Reacts. Internet memes have all the flexibility in the world: they act on what the others have planned and break those plans. Their cards are weaker, but they draw many more cards and play more dynamic strategies.
+    • Plans or Reacts: Reacts. The mood of the times has all the flexibility in the world: they act on what the others have planned and break those plans. Their cards are weaker, but they draw many more cards and play more dynamic strategies.
     • Play Style: Momentum and comebacks. Moods that buff a creature but burn it out; stronger when losing.
     • Signature Mechanics: Underdog (a bonus when you have fewer creatures or less Health), Plot Armor (survives a lethal hit once, using OnAboutToDie), Trends (cards that set the rules for the whole board for X Days: Zeitgeist, Rush Hour), Strikes and Protests (shut down engines).
     • Statuses: Hipster, Impatient, Slacking Off.

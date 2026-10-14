@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
-  m_Name: Multipass
+  m_Name: HumanIntelligence
   m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
-  cardId: 5534b22e-feea-4e58-b16c-d0e5dc771403
-  cardName: Multipass
-  description: Leeloo Dallas. Multipass.
+  cardId: b502362e-d253-4720-ab9f-6875f1b57c97
+  cardName: Human Intelligence
+  description: Coffee, a smile, a USB stick. The oldest tradecraft there is.
   cardType: 1
   faction: 3
-  artwork: {fileID: 3286163911610860551, guid: 621b4c04285979d4596b299afd904d04, type: 3}
+  artwork: {fileID: 0}
   discardCost: 0
   singleUse: 0
   sacrifice: 0
@@ -56,10 +56,8 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Shadow Ops.'' logistics: send for any card from your deck; it joins
-    your next hand. Was Multi Passport, the creature (its Off the Books went to Femme
-    Fatale).'
-  artDescription: A young woman with bright orange-red hair in a bob, in a white
-    strappy bandage outfit with orange suspenders, holding up a shiny pink-and-gold
-    Multipass card to a startled border guard, a fan of passports with the same face
-    spilling from her other hand.
+    your next hand. HUMINT: a source on the inside fetches it.'
+  artDescription: Two spies on a park bench back to back, one reading a newspaper
+    with eye holes cut in it, the other slipping a card into his coat pocket behind
+    the paper, pigeons watching.
   defaultTargetType: 0

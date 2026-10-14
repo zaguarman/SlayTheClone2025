@@ -4843,12 +4843,13 @@ CARDS["ShadowOps"].update({
     "IfIToldYouIdHavetoKillYou": if_i_told_you_id_have_to_kill_you, "LoneGunman": lone_gunman, "GlomarResponse": glomar_response,
     "Sabotage": sabotage, "GhostArmy": ghost_army, "InflatableTank": inflatable_tank, "ShermanTank": sherman_tank, "HAARP": haarp,
     "SocialEngineering": social_engineering, "BilderbergMembership": bilderberg_membership, "DeadDrop": dead_drop,
-    "Multipass": multipass, "WetWork": wet_work, "PerfectlyTimedCameraMalfunction": perfectly_timed_camera_malfunction,
+    "WetWork": wet_work, "PerfectlyTimedCameraMalfunction": perfectly_timed_camera_malfunction,
     "TheGoldenGun": the_golden_gun, "DieAnotherDay": die_another_day, "LicencetoKill": licence_to_kill,
     "ShakenNotStirred": shaken_not_stirred, "GoldenEye": golden_eye, "FemmeFatale": femme_fatale,
     "SupplyChainAttack": supply_chain_attack, "HollowedOutVolcanoLair": hollowed_out_volcano_lair,
 })
 CARDS["Corporate"].update({"NDA": nda, "Casino": casino})
+CARDS["Zeitgeist"].update({"Multipass": multipass})
 
 
 def main():

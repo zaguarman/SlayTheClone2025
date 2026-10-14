@@ -503,10 +503,10 @@ namespace SlayTheClone {
                 // A Trend is the same for both sides: worth what it does for us less what it does for them, over its Days
                 int days = System.Math.Max(1, action.statusDuration);
                 switch (action.trend) {
-                    case Trend.FreakWeather: { // The toughest creature on the board is struck: better be theirs
-                        var tallest = view.All.OrderByDescending(c => c.Health).FirstOrDefault();
-                        if (tallest == null) return 0.2f;
-                        return (tallest.Ours ? -1 : 1) * TrendSystem.LightningDamage * days * 0.8f * Style.Removal;
+                    case Trend.SurvivalOfTheFittest: { // The weakest creature on the board is culled: better be theirs
+                        var weakest = view.All.OrderBy(c => c.Health).FirstOrDefault();
+                        if (weakest == null) return 0.2f;
+                        return (weakest.Ours ? -1 : 1) * TrendSystem.CullDamage * days * 0.8f * Style.Removal;
                     }
                     case Trend.VolcanoLair: { // Each side's boss hides: ours is worth hiding if it's the bigger one
                         float Hidden(IEnumerable<SeenCreature> side) => side.Count() >= 2 ? side.Max(c => c.Worth) * 0.4f : 0;

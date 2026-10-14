@@ -16,8 +16,8 @@ MonoBehaviour:
   cards:
   - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
   - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
-  - {fileID: 11400000, guid: 459fccea2cdad1b40be5b8721ab517b1, type: 2}
-  - {fileID: 11400000, guid: 459fccea2cdad1b40be5b8721ab517b1, type: 2}
+  - {fileID: 11400000, guid: 0dc19b982c2b39a40bbe62ec3878625c, type: 2}
+  - {fileID: 11400000, guid: 0dc19b982c2b39a40bbe62ec3878625c, type: 2}
   - {fileID: 11400000, guid: 78cd5c5267fa0164db084db6099e1350, type: 2}
   - {fileID: 11400000, guid: 8aba5b6c983aeb747a02d69b28b0f4d3, type: 2}
   - {fileID: 11400000, guid: dc8822e884221714d88b9b0a7eadff4d, type: 2}
@@ -36,4 +36,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 42466d199f9ea0446815cebbad87421e, type: 2}
   - {fileID: 11400000, guid: 9bc4ef3438464c5429f9cd84bbb59b46, type: 2}
   - {fileID: 11400000, guid: b415b51222ed7d34788481d0e7187533, type: 2}
-  lastUpdated: 2026-10-14T08:35:10.0000000Z
+  lastUpdated: 2026-10-14T09:06:10.0791406Z

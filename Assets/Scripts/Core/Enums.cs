@@ -95,7 +95,7 @@ namespace SlayTheClone {
             None,
             Zeitgeist, // Each Day, whoever has fewer creatures draws 1 more card
             RushHour,  // The slowest act first
-            FreakWeather, // Each Dusk, lightning strikes the toughest creature on the other side of whoever set it
+            SurvivalOfTheFittest, // Each Dusk, the creature with the least Health on the board, either side, takes 3 damage
             VolcanoLair   // Each Day, whoever set it keeps their strongest creature Untouchable while another of theirs stands
         }
     }

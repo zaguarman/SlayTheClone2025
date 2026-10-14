@@ -77,7 +77,7 @@ namespace SlayTheClone {
             ("Shadow Ops. - Black Budget", "ShadowOpsBlackBudgetDeck",
                 "Your Deep State Handler", "Officially, we don't exist. Unofficially, you lost.", new[] {
                 "Dead Man's Switch", "Dead Man's Switch", "MK Ultra Test Subject", "MK Ultra Test Subject", "Lone Gunman",
-                "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Cleaner", "Multipass", "Wet Work", "Mole",
+                "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Cleaner", "Human Intelligence", "Wet Work", "Mole",
                 "False Flag Operation", "Never Let Them Know Your Next Move", "He Didn't Kill Himself", "Coup d'État", "Frame Job",
                 "Ghost Army", "Sabotage", "Witness Protection Program", "Extraction", "Fell Out of a Window", "Death By \"Natural Causes\"",
                 "Operation Paperclip", "HAARP", "Devil's Breath", "Asset Recruitment", "Glomar Response",
@@ -85,7 +85,7 @@ namespace SlayTheClone {
             }),
             ("Shadow Ops. - Double-O Section", "ShadowOpsDoubleODeck",
                 "Your Quartermaster", "Please return the car in one piece. You never do.", new[] {
-                "Cleaner", "Cleaner", "Multipass", "Multipass", "Wet Work", "Mole", "Femme Fatale", "Femme Fatale",
+                "Cleaner", "Cleaner", "Human Intelligence", "Human Intelligence", "Wet Work", "Mole", "Femme Fatale", "Femme Fatale",
                 "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Dead Man's Switch", "Lone Gunman",
                 "The Golden Gun", "Die Another Day", "Die Another Day", "Licence to Kill", "Licence to Kill",
                 "Shaken, Not Stirred", "Shaken, Not Stirred", "GoldenEye", "Supply Chain Attack", "Hollowed-Out Volcano Lair",
@@ -406,6 +406,11 @@ namespace SlayTheClone {
         // Pays with self-harm: damage to its own creatures and to you. Fast (Deployment Time 0-1), buffs that burn out.
         // Can't use Intelligence. Engine: cheap bodies that spike and fizzle, chaos that hits everyone.
         private static List<CardDef> ZeitgeistCards() => new List<CardDef> {
+            Spell("Multipass", TargetType.Player,
+                "Leeloo Dallas. Multipass.",
+                "Zeitgeist's logistics, a film everyone quotes: send for any card from your deck; it joins your next hand. Was Multi Passport, the Shadow Ops. creature (its Off the Books went to Femme Fatale).",
+                SendForCard(SendForFilter.Any))
+                .Picture("The Multipass shown to the camera, as in the film: on the left the cab driver with buzzed fair hair and stubble, an orange shirt under a dark vest; on the right the young woman with the bright orange bob and fringe, in a white top with orange suspenders, holding the Multipass up beside her face; a dim, crowded hall behind them."),
             Creature("Drug Smuggler", 1, 2, speed: 2, deploy: 0,
                 "Just a backpacker. With a very full backpack.",
                 "Zeitgeist's logistics: when it arrives, send for any card among the top 3 of your deck; it joins your next hand.",
@@ -660,11 +665,11 @@ namespace SlayTheClone {
                 On(EffectTrigger.EndOfTurn, Damage(1, TargetType.FriendlyCreatures, Each)))
                 .Gift()
                 .Picture("A suburban dad mowing his lawn in a polo shirt, an earpiece coiled behind his ear, while his shadow on the grass wears a trench coat and holds a sniper rifle."),
-            Spell("Multipass", TargetType.Player,
-                "Leeloo Dallas. Multipass.",
-                "Shadow Ops.' logistics: send for any card from your deck; it joins your next hand. Was Multi Passport, the creature (its Off the Books went to Femme Fatale).",
+            Spell("Human Intelligence", TargetType.Player,
+                "Coffee, a smile, a USB stick. The oldest tradecraft there is.",
+                "Shadow Ops.' logistics: send for any card from your deck; it joins your next hand. HUMINT: a source on the inside fetches it.",
                 SendForCard(SendForFilter.Any))
-                .Picture("A young woman with bright orange-red hair in a bob, in a white strappy bandage outfit with orange suspenders, holding up a shiny pink-and-gold Multipass card to a startled border guard, a fan of passports with the same face spilling from her other hand."),
+                .Picture("Two spies on a park bench back to back, one reading a newspaper with eye holes cut in it, the other slipping a card into his coat pocket behind the paper, pigeons watching."),
             Creature("Wet Work", 1, 4, speed: 3, deploy: 0,
                 "Nothing personal. Strictly a line item.",
                 "Extreme Prejudice: its attack destroys the creature it hits, whatever its Health or Armor, and then it's gone too: one hit, one roadblock. Untouchable or a Temporal Shield stops the hit; an empty slot, it just hits the player for 1.")
@@ -836,8 +841,8 @@ namespace SlayTheClone {
                 .Picture("A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks."),
             Spell("HAARP", TargetType.Player,
                 "Weather forecast: 100% chance of lightning, localized, on purpose.",
-                "Trend for 3 Days, Freak Weather: each Dusk, lightning strikes the toughest creature on the board (the most Health), either side, for 2 damage: play it when the tall one is theirs. Nobody's attack: nothing answers it or redirects it.",
-                SetTrend(Trend.FreakWeather, 3))
+                "Trend for 3 Days, Survival of the Fittest: each Dusk, the creature with the least Health on the board, either side, takes 3 damage: play it when the weak ones are theirs. Nobody's attack: nothing answers it or redirects it.",
+                SetTrend(Trend.SurvivalOfTheFittest, 3))
                 .NotInStarterDeck()
                 .Picture("A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy tent miles away, a technician in a parka sipping coffee by the control panel."),
             // Information trades: you need to give information to get some. Discard now, draw more with the next hand

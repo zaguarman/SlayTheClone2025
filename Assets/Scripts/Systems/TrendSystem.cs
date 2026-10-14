@@ -16,11 +16,11 @@ namespace SlayTheClone {
         int? LastDay { get; }
         UnityEvent<Trend> OnTrendChanged { get; }
         /// <summary>Sets the Trend from this Day for this many Days, counting this one (0: until replaced). None clears it.</summary>
-        /// <param name="setBy">Whose card set it: a Trend that takes a side (Freak Weather) strikes the other one.</param>
+        /// <param name="setBy">Whose card set it (Volcano Lair starts with its side).</param>
         void SetTrend(Trend trend, int days, int currentTurn, IPlayer setBy = null);
         /// <summary>Who set the current Trend, if anyone.</summary>
         IPlayer SetBy { get; }
-        /// <summary>At Dusk, before the Trend can end: what it does each Dusk (Freak Weather's lightning).</summary>
+        /// <summary>At Dusk, before the Trend can end: what it does each Dusk (Survival of the Fittest culls the weakest).</summary>
         void QueueDuskEffects(IActionsQueue queue);
         /// <summary>When it's set, and at each Dawn while it trends: what it does each Day (Volcano Lair hides the boss).</summary>
         void QueueDayEffects(IActionsQueue queue);
@@ -36,7 +36,7 @@ namespace SlayTheClone {
         public Trend Current { get; private set; } = Trend.None;
         public int? LastDay { get; private set; }
         public IPlayer SetBy { get; private set; }
-        public const int LightningDamage = 2;
+        public const int CullDamage = 3; // Survival of the Fittest
         public UnityEvent<Trend> OnTrendChanged { get; } = new UnityEvent<Trend>();
 
         public void SetTrend(Trend trend, int days, int currentTurn, IPlayer setBy = null) {
@@ -54,17 +54,17 @@ namespace SlayTheClone {
 
         public bool SlowestFirst => Current == Trend.RushHour;
 
-        // Freak Weather: lightning strikes the toughest creature on the board (the most Health; ties at random), whichever
-        // side it's on: the tallest tree. Nobody's attack: nothing answers it or redirects it
+        // Survival of the Fittest: nature culls the weakest creature on the board (the least Health; ties at random), whichever
+        // side it's on. Nobody's attack: nothing answers it or redirects it
         public void QueueDuskEffects(IActionsQueue queue) {
-            if (Current != Trend.FreakWeather || SetBy?.Opponent == null || queue == null) return;
+            if (Current != Trend.SurvivalOfTheFittest || SetBy?.Opponent == null || queue == null) return;
             var row = SetBy.Battlefield.Concat(SetBy.Opponent.Battlefield).Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead).ToList();
             if (row.Count == 0) return;
-            int top = row.Max(c => c.Health);
-            var tied = row.Where(c => c.Health == top).ToList();
+            int least = row.Min(c => c.Health);
+            var tied = row.Where(c => c.Health == least).ToList();
             var struck = tied[GameRandom.Next(tied.Count)];
-            Log($"Freak Weather: lightning strikes {struck.Name}", LogTag.Effects);
-            queue.AddAction(new DamageCreatureAction(struck, LightningDamage));
+            Log($"Survival of the Fittest: {struck.Name} is culled", LogTag.Effects);
+            queue.AddAction(new DamageCreatureAction(struck, CullDamage));
         }
 
         // Volcano Lair: on each side, the strongest creature (the most Attack) hides in a lair: Untouchable this Day, as long
@@ -90,7 +90,7 @@ namespace SlayTheClone {
         /// <summary>The Trend as cards print it, a keyword whose tooltip gives its rule.</summary>
         public static string NameOf(Trend trend) => trend switch {
             Trend.RushHour => "Rush Hour",
-            Trend.FreakWeather => "Freak Weather",
+            Trend.SurvivalOfTheFittest => "Survival of the Fittest",
             Trend.VolcanoLair => "Volcano Lair",
             Trend.None => "Nothing",
             _ => trend.ToString()
@@ -100,7 +100,7 @@ namespace SlayTheClone {
         public static string RuleOf(Trend trend) => trend switch {
             Trend.Zeitgeist => "each Day, whoever has fewer creatures draws 1 more card",
             Trend.RushHour => "the slowest act first",
-            Trend.FreakWeather => $"each Dusk, lightning strikes the toughest creature on the board, either side, for {LightningDamage} damage",
+            Trend.SurvivalOfTheFittest => $"each Dusk, the creature with the least Health on the board, either side, takes {CullDamage} damage",
             Trend.VolcanoLair => "each Day, on each side, the strongest creature hides in a lair: it's Untouchable that Day, as long as another creature of its side stands",
             _ => ""
         };

@@ -180,16 +180,19 @@ namespace SlayTheClone.Tests {
             yield return game.EndTurn();
             CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(torch));
 
-            // Freak Weather (HAARP): each Dusk, lightning strikes the toughest creature on the board, whichever side, even the
-            // setter's: a Trend is the same for both sides
-            var rod = game.Summon(game.Player1, game.Creature("Lightning Rod", 0, 30), 4);
-            var shrub = game.Summon(game.Player2, game.Creature("Shrub", 0, 5), 4);
-            game.Run(new SetTrendAction(Trend.FreakWeather, 2, game.Player1));
+            // Survival of the Fittest: each Dusk, the creature with the least Health on the board takes 3, whichever side, even
+            // the setter's: a Trend is the same for both sides
+            foreach (var slot in game.Player1.Battlefield.Concat(game.Player2.Battlefield).Where(s => s.IsOccupied()).ToList()) {
+                game.Run(new DestroyCreatureAction(slot.OccupyingCreature, unconditional: true)); // A clear board: the runt is the weakest
+            }
+            var runt = game.Summon(game.Player1, game.Creature("Runt", 0, 7), 4);
+            var giant = game.Summon(game.Player2, game.Creature("Giant", 0, 30), 4);
+            game.Run(new SetTrendAction(Trend.SurvivalOfTheFittest, 2, game.Player1));
             yield return game.EndTurn();
             yield return game.EndTurn();
             yield return game.EndTurn();
-            CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(rod), "2 Days, 2 strikes of 2 on its own setter's tall one, then the Trend is over");
-            CollectionAssert.IsEmpty(game.History.DamageTo(shrub));
+            CollectionAssert.AreEqual(new[] { 3, 3 }, game.History.DamageTo(runt), "2 Days, 2 culls of 3 on its own setter's weakling, then the Trend is over");
+            CollectionAssert.IsEmpty(game.History.DamageTo(giant));
 
             // Volcano Lair: each Day, each side's strongest creature is Untouchable, as long as another of its side stands
             var boss = game.Summon(game.Player1, game.Creature("Boss", 5, 5), 0);
