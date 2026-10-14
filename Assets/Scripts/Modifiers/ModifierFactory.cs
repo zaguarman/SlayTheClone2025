@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
@@ -17,17 +18,20 @@ namespace SlayTheClone {
         /// Applies one modifier per selected stat (attack, max health, speed). A zero value changes nothing.
         /// A positive duration makes the modifiers expire after that many turns.
         /// </summary>
-        public static void Apply(IModifierManager manager, IModifierFactory factory, ICreature target, int value,
+        /// <returns>The modifiers made, one per stat.</returns>
+        public static List<IModifier> Apply(IModifierManager manager, IModifierFactory factory, ICreature target, int value,
             bool modifyAttack, bool modifyHealth, bool modifySpeed,
             ModifierCalculationType calcType, int duration, int currentTurn) {
-            if (value == 0) return;
+            var made = new List<IModifier>();
+            if (value == 0) return made;
 
-            if (modifyAttack) ApplyOne(manager, factory, target, ModifiableStat.Attack, value, calcType, duration, currentTurn);
-            if (modifyHealth) ApplyOne(manager, factory, target, ModifiableStat.Health, value, calcType, duration, currentTurn);
-            if (modifySpeed) ApplyOne(manager, factory, target, ModifiableStat.Speed, value, calcType, duration, currentTurn);
+            if (modifyAttack) made.Add(ApplyOne(manager, factory, target, ModifiableStat.Attack, value, calcType, duration, currentTurn));
+            if (modifyHealth) made.Add(ApplyOne(manager, factory, target, ModifiableStat.Health, value, calcType, duration, currentTurn));
+            if (modifySpeed) made.Add(ApplyOne(manager, factory, target, ModifiableStat.Speed, value, calcType, duration, currentTurn));
+            return made;
         }
 
-        private static void ApplyOne(IModifierManager manager, IModifierFactory factory, ICreature target, ModifiableStat stat,
+        private static IModifier ApplyOne(IModifierManager manager, IModifierFactory factory, ICreature target, ModifiableStat stat,
             int value, ModifierCalculationType calcType, int duration, int currentTurn) {
             string statLabel = stat == ModifiableStat.Health ? "Max Health" : stat.ToString();
             string sign = calcType == ModifierCalculationType.Flat && value >= 0 ? "+" : "";
@@ -39,6 +43,7 @@ namespace SlayTheClone {
                 ? factory.CreateTimedStatModifier(name, description, stat, calcType, value, duration, currentTurn)
                 : factory.CreateStatModifier(name, description, stat, calcType, value);
             manager.ApplyModifier(target, modifier);
+            return modifier;
         }
     }
 

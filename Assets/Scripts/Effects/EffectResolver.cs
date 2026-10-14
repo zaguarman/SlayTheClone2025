@@ -375,7 +375,7 @@ namespace SlayTheClone {
                 case ActionType.ModifyStat:
                     return creature != null && action.value != 0
                         ? new ModifyAction(creature, action.value, action.modifyAttack, action.modifyHealth, action.modifySpeed,
-                            durationInTurns: action.statusDuration, source: source as ICreature, controller: controller)
+                            durationInTurns: action.statusDuration, source: source as ICreature, controller: controller) { Origin = source }
                         : null;
                 case ActionType.Stun: // A stun exhausts for its value in Days (1 is the usual stun)
                     return Status(creature, StatusEffectType.Exhausted, action.value, 0, source, controller);
@@ -477,7 +477,7 @@ namespace SlayTheClone {
                 LogWarning($"{source.Name}: invalid status {type} for {duration} turns; skipped.", LogTag.Effects);
                 return null;
             }
-            return new ApplyStatusEffectAction(creature, type, duration, potency, source as ICreature, controller);
+            return new ApplyStatusEffectAction(creature, type, duration, potency, source as ICreature, controller) { Origin = source };
         }
 
         /// <summary>Jumps from the creature that was hit to its neighbours, halving the damage on each jump (Chain Mail, chained effects).</summary>

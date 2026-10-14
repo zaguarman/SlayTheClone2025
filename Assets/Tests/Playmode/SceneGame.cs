@@ -105,6 +105,7 @@ namespace SlayTheClone.Tests {
             MatchSetup.Clear(); // A chosen match would otherwise carry over to the next test
             FogOfWar.PlaysAsPlayer1 = true; // Handing a seat to the AI may have switched the screen to the other one
             AIController.TurnPause = 1f;
+            BattlefieldUI.SpellsOnlyInStack = false;
             Cards.Dispose();
         }
 
@@ -212,8 +213,9 @@ namespace SlayTheClone.Tests {
             Vector2 min = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[0]);
             Vector2 max = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
 
-            // The center first; cards in a hand overlap, so other points of the card may be the visible ones
-            var points = new[] { 0.5f, 0.2f, 0.8f }.SelectMany(x => new[] { 0.5f, 0.2f, 0.8f }.Select(y => min + Vector2.Scale(max - min, new Vector2(x, y))));
+            // The center first; cards in a hand overlap, so other points of the card may be the visible ones, and of a card
+            // tucked under a creature only the top strip shows
+            var points = new[] { 0.5f, 0.2f, 0.8f }.SelectMany(x => new[] { 0.5f, 0.2f, 0.8f, 0.95f }.Select(y => min + Vector2.Scale(max - min, new Vector2(x, y))));
             foreach (var point in points) {
                 var eventData = new PointerEventData(EventSystem.current) { position = point };
                 var hits = new List<RaycastResult>();

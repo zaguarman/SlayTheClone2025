@@ -115,6 +115,10 @@ namespace SlayTheClone {
         private CardController activeCard;
         private CardController preview;
         private bool previewIsCard; // A card in your hand is raised out of the fan instead (Slay the Spire): it's its own preview
+        private int browsed; // A creature with cards tucked under it: 0 shows the creature, i its i-th tucked card (the wheel)
+
+        /// <summary>Which card of the hovered creature's stack the preview shows: 0 the creature itself, i its i-th tucked card.</summary>
+        public int Browsed => browsed;
 
         private void Awake() {
             // Try to get references if not already assigned
@@ -210,6 +214,7 @@ namespace SlayTheClone {
 
             HideTooltip();
             activeCard = card;
+            browsed = 0;
             canvasGroup.alpha = 1;
             gameObject.SetActive(true);
 
@@ -254,6 +259,12 @@ namespace SlayTheClone {
             if (card == null || card != activeCard) return;
 
             string details = card.GetActiveModifiersText();
+            int tucked = card.AttachedCards.Count;
+            if (tucked > 0 && !previewIsCard) {
+                details = browsed > 0
+                    ? $"<b>{card.AttachedCards[browsed - 1].Name}</b>, on {card.GetBaseCardData()?.cardName}: {browsed} of {tucked}\n<size=85%>Scroll for the others</size>"
+                    : (string.IsNullOrEmpty(details) ? "" : details + "\n\n") + $"<size=85%>{tucked} card{(tucked == 1 ? "" : "s")} on it: scroll to see {(tucked == 1 ? "it" : "them")}</size>";
+            }
             bool hasDetails = !string.IsNullOrEmpty(details) && preview != null;
             tooltipRect.gameObject.SetActive(hasDetails);
             if (!hasDetails) return;
@@ -404,6 +415,12 @@ namespace SlayTheClone {
         }
 
         private void Update() {
+            // Over a creature with cards tucked under it, the wheel goes through them, in the preview
+            if (WheelMoved && activeCard != null && preview != null && !previewIsCard && activeCard.AttachedCards.Count > 0
+                && (PointerOnTooltip(GameInput.PointerPosition, includeCard: true))) {
+                Browse(GameInput.WheelNotches < 0 ? 1 : -1);
+                return;
+            }
             if (WheelMoved) { // Scrolling: hide for a moment; the card still under the pointer shows again once the wheel is still
                 var card = activeCard;
                 HideTooltip();
@@ -417,6 +434,26 @@ namespace SlayTheClone {
             TrackKeywords(pointer);
             if (!released || PointerInArea(pointer)) lastHeldAt = Time.unscaledTime;
             else if (Time.unscaledTime - lastHeldAt > ReleaseGrace) HideTooltip();
+        }
+
+        /// <summary>
+        /// Shows the next (or, step -1, the previous) card of the hovered creature's stack enlarged: the creature, then each
+        /// card tucked under it, round again.
+        /// </summary>
+        public void Browse(int step) {
+            if (activeCard == null || preview == null || previewIsCard) return;
+            var stack = activeCard.AttachedCards;
+            int count = stack.Count + 1;
+            browsed = ((browsed + step) % count + count) % count;
+            CloseKeywordsFrom(0);
+            Destroy(preview.gameObject);
+            preview = browsed == 0
+                ? activeCard.CreatePreview(transform)
+                : activeCard.CreatePreviewOf(stack[browsed - 1], browsed - 1 < activeCard.AttachedOwners.Count ? activeCard.AttachedOwners[browsed - 1] : null, transform);
+            if (preview == null) return;
+            preview.transform.localScale = Vector3.one * PreviewScale;
+            PlacePreview(activeCard, (RectTransform)preview.transform);
+            UpdateTooltipContent(activeCard);
         }
 
         /// <summary>A click away from the card, its preview and the explanations closes them all. Returns whether it did.</summary>

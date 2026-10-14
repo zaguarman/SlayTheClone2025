@@ -33,6 +33,22 @@ namespace SlayTheClone {
         private const float CastScale = 2.1f;         // How big a cast spell swells, of board size
         private float nextCastTime;
 
+        // The cards whose effects are on each creature, tucked under its card like Magic's enchantments: each peeks out
+        // above the one in front of it, just its name showing (see RefreshAttachments)
+        private readonly Dictionary<BattlefieldSlot, List<CardController>> attachedViews = new Dictionary<BattlefieldSlot, List<CardController>>();
+        private readonly List<GameObject> attachedBands = new List<GameObject>();
+        private readonly List<(RectTransform band, CardController front, int depth)> strips = new List<(RectTransform, CardController, int)>();
+        private RectTransform stripLayer;
+        private readonly Dictionary<ICard, (IPlayer caster, BoardSlot slot)> spellGhostAims = new Dictionary<ICard, (IPlayer, BoardSlot)>();
+        public const float StripStep = 0.14f; // How much of a tucked card shows above the one in front: its name
+        public const int MaxStrips = 4;       // Shown tucked; hovering the creature and scrolling goes through them all
+
+        /// <summary>
+        /// Where a queued spell aimed at a creature shows (F6). False: small in the slot's lower-left corner, and also tucked
+        /// under the creature with the cards already on it. True: only tucked under it.
+        /// </summary>
+        public static bool SpellsOnlyInStack { get; set; }
+
         private BattlefieldArrowManager arrowManager;
         private CardController draggedCard; // Creature of this board currently being dragged
         private TableViews table; // For slots on the other side of the table
@@ -369,8 +385,13 @@ namespace SlayTheClone {
                 GameMediator.BattlefieldStateChanged += UpdateUI;
                 GameMediator.ActionsQueueChanged += RefreshQueuedGhosts;
                 GameMediator.ActionsQueueChanged += RefreshWatchdogs;
+                GameMediator.CreatureStatusChanged += OnCreatureStatusChanged;
+                GameMediator.CreatureStatsChanged += OnCreatureStatsChanged;
             }
         }
+
+        private void OnCreatureStatusChanged(ICreature creature, Enums.StatusEffectType status, bool applied) => RefreshAttachments();
+        private void OnCreatureStatsChanged(ICreature creature) => RefreshAttachments();
 
         protected override void UnregisterEvents() {
             if (GameMediator != null) {
@@ -378,6 +399,8 @@ namespace SlayTheClone {
                 GameMediator.BattlefieldStateChanged -= UpdateUI;
                 GameMediator.ActionsQueueChanged -= RefreshQueuedGhosts;
                 GameMediator.ActionsQueueChanged -= RefreshWatchdogs;
+                GameMediator.CreatureStatusChanged -= OnCreatureStatusChanged;
+                GameMediator.CreatureStatsChanged -= OnCreatureStatsChanged;
             }
         }
 
@@ -508,10 +531,14 @@ namespace SlayTheClone {
         private void RefreshSpellGhosts() {
             if (!IsInitialized || Player == null || GameManager?.ActionsQueue == null) return;
             var aimed = new List<(Spell spell, IPlayer caster, BoardSlot slot)>();
+            spellGhostAims.Clear();
             foreach (var play in GameManager.ActionsQueue.GetPendingActions().OfType<PlayCardAction>()) {
                 if (!(play.GetCard() is Spell spell) || HiddenFromScreen(play)) continue;
                 var side = BattlefieldArrowManager.AimOf(spell, play.GetOwner(), play.GetTarget(), out var slot);
-                if (side == Player) aimed.Add((spell, play.GetOwner(), slot));
+                if (side == Player) {
+                    aimed.Add((spell, play.GetOwner(), slot));
+                    spellGhostAims[spell] = (play.GetOwner(), slot);
+                }
             }
 
             // Gone from the queue: cast (it left its caster's hand), or taken back
@@ -550,13 +577,131 @@ namespace SlayTheClone {
                     PlaceSpellGhost(ghost, together[i].slot, together.Count - 1 - i, together.Count);
                 }
             }
+            RefreshAttachments();
         }
+
+        /// <summary>The cards tucked under the creature in this slot (its stack), the nearest first; empty when none.</summary>
+        public List<CardController> AttachedViews(BoardSlot slot) {
+            var view = slot != null && slot.Index < battlefieldSlots.Count ? battlefieldSlots[slot.Index] : null;
+            return view != null && attachedViews.TryGetValue(view, out var views) ? views.Where(v => v != null).ToList() : new List<CardController>();
+        }
+
+        // Above each creature, the cards whose effects are on it now (statuses and stat changes from other cards), then the
+        // spells queued on it as ghosts: a copy, or with SpellsOnlyInStack the spell's own ghost, which can still be dragged
+        // away or clicked to take the play back. Each shows through a strip just above the card in front of it, its name
+        // band only. Only so many show; the creature's card knows them all, for the preview
+        private void RefreshAttachments() {
+            if (!IsInitialized || Player == null) return;
+            foreach (var ghost in spellGhosts.Values) { // A ghost tucked away goes back to the mat before its strip goes
+                if (ghost != null && stripLayer != null && ghost.transform.IsChildOf(stripLayer)) ghost.transform.SetParent(transform, false);
+            }
+            foreach (var band in attachedBands) if (band != null) Destroy(band);
+            attachedBands.Clear();
+            strips.Clear();
+            attachedViews.Clear();
+            var modifiers = GameManager?.ModifierManager;
+            if (modifiers == null) return;
+
+            foreach (var slot in battlefieldSlots) {
+                var front = slot.OccupyingCard;
+                var creature = slot.OccupyingCreature;
+                if (front == null || creature == null) continue;
+                var attached = modifiers.AttachmentsOf(creature).Where(a => a.Card?.SourceData != null && CanSee(a, creature)).ToList();
+                var queued = spellGhostAims.Where(e => e.Value.slot == slot.Model && spellGhosts.ContainsKey(e.Key))
+                    .OrderBy(e => spellGhostOrder.TryGetValue(e.Key, out var order) ? order : 0).ToList();
+                front.AttachedCards = attached.Select(a => a.Card).Concat(queued.Select(q => q.Key)).ToList();
+                front.AttachedOwners = attached.Select(a => a.Owner).Concat(queued.Select(q => q.Value.caster)).ToList();
+
+                var views = new List<CardController>();
+                foreach (var attachment in attached.Take(MaxStrips)) {
+                    var view = CardViews.Create(attachment.Card, attachment.Owner ?? Player, transform);
+                    if (view == null) continue;
+                    view.name = $"Attached_{attachment.Card.Name}";
+                    view.SetAttachment();
+                    Tuck(view, front, views.Count + 1);
+                    views.Add(view);
+                }
+                foreach (var (spell, caster) in queued.Select(q => (q.Key, q.Value.caster))) {
+                    if (views.Count >= MaxStrips + 2) break;
+                    CardController view;
+                    if (SpellsOnlyInStack) {
+                        view = spellGhosts[spell];
+                        if (view == null || CardController.Dragged == view) continue;
+                    }
+                    else {
+                        view = CardViews.Create(spell, caster, transform);
+                        if (view == null) continue;
+                        view.name = $"AttachedGhost_{spell.Name}";
+                        view.SetAttachment();
+                        view.SetQueued(true);
+                        view.SetFaceDown(FogOfWar.HidesHandOf(caster));
+                    }
+                    Tuck(view, front, views.Count + 1);
+                    views.Add(view);
+                }
+                attachedViews[slot] = views;
+            }
+        }
+
+        // A strip just above the card in front (depth 1 right on its top edge), as wide as it and a name band tall, showing
+        // the top of the card tucked in it. The strips have a layer of their own beside the mat: for the side across the
+        // table it's over that side's hand, which would otherwise hide them; for the screen's side, under its hand, so a
+        // raised hand card stays over them
+        private void Tuck(CardController view, CardController front, int depth) {
+            var band = new GameObject($"Strip_{view.name}", typeof(RectTransform), typeof(RectMask2D));
+            attachedBands.Add(band);
+            var bandRect = (RectTransform)band.transform;
+            bandRect.SetParent(StripLayer(), false);
+            strips.Add((bandRect, front, depth));
+            PlaceStrip(bandRect, front, depth);
+            float strip = ((RectTransform)front.transform).rect.height * StripStep;
+
+            var cardRect = (RectTransform)view.transform;
+            cardRect.SetParent(bandRect, false);
+            cardRect.localScale = Vector3.one;
+            cardRect.localRotation = Quaternion.identity;
+            cardRect.localPosition = new Vector3(-cardRect.rect.center.x, strip / 2f - cardRect.rect.yMax, 0f);
+        }
+
+        private void PlaceStrip(RectTransform band, CardController front, int depth) {
+            var frontRect = (RectTransform)front.transform;
+            float strip = frontRect.rect.height * StripStep;
+            band.localScale = Vector3.one * (frontRect.lossyScale.x / Mathf.Max(1e-6f, band.parent.lossyScale.x));
+            band.rotation = frontRect.rotation;
+            band.sizeDelta = new Vector2(frontRect.rect.width, strip);
+            Vector3 top = frontRect.TransformPoint(new Vector3(frontRect.rect.center.x, frontRect.rect.yMax, 0f));
+            band.position = top + frontRect.up * (frontRect.lossyScale.y * strip * (depth - 0.5f));
+        }
+
+        // The strips follow their creature's card wherever it is (a summon's swell, the sides switching places)
+        private void LateUpdate() {
+            foreach (var (band, front, depth) in strips) {
+                if (band != null && front != null) PlaceStrip(band, front, depth);
+            }
+        }
+
+        private RectTransform StripLayer() {
+            if (stripLayer == null) {
+                stripLayer = (RectTransform)new GameObject($"AttachedCards_{Player?.Name}", typeof(RectTransform)).transform;
+                stripLayer.SetParent(transform.parent, false);
+            }
+            var hand = table.GetHand(Player)?.transform;
+            bool handAbove = hand != null && hand.parent == stripLayer.parent && hand.position.y > transform.position.y;
+            stripLayer.SetAsLastSibling();
+            stripLayer.SetSiblingIndex((handAbove ? hand : transform).GetSiblingIndex() + 1);
+            return stripLayer;
+        }
+
+        // A status the screen can't see (Fog of War) doesn't show which card put it there
+        private bool CanSee(Attachment attachment, ICreature creature) =>
+            !(attachment.Modifier is StatusEffectModifier status) || Intel.CanSeeStatus(Viewer, creature, status.EffectType);
 
         // A lone spell aimed at an empty slot sits in it; otherwise small in the slot's lower-left corner, on both sides of
         // the table, so the card it's aimed at still shows its name and stats; older ones step further left (stepsLeft, 0:
         // the newest). A spell on a whole side sits at the battlefield's lower-left end
         private void PlaceSpellGhost(CardController ghost, BoardSlot slot, int stepsLeft, int count) {
             var slotView = slot != null ? battlefieldSlots[slot.Index] : null;
+            if (SpellsOnlyInStack && slotView?.OccupyingCard != null) return; // Tucked under the creature (RefreshAttachments)
             bool roomInSlot = slotView != null && count == 1 && slotView.OccupyingCard == null && !queuedGhosts.ContainsKey(slotView);
             var rect = (RectTransform)ghost.transform;
             rect.localRotation = Quaternion.identity;
@@ -770,6 +915,10 @@ namespace SlayTheClone {
             base.OnDestroy();
             ClearQueuedGhosts();
             ClearSpellGhosts();
+            foreach (var band in attachedBands) if (band != null) Destroy(band);
+            attachedBands.Clear();
+            attachedViews.Clear();
+            if (stripLayer != null) Destroy(stripLayer.gameObject);
             foreach (var slot in battlefieldSlots) {
                 if (slot != null) {
                     var cardController = slot.OccupyingCard;

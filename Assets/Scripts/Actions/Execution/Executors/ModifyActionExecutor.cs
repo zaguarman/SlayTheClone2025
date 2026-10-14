@@ -23,6 +23,7 @@ namespace SlayTheClone {
                 && modifyAction.GetCalculationType() == ModifierCalculationType.Flat;
             if (isHealthLoss) {
                 context.ModifierManager.ChangeBaseStats(targetCreature, 0, value, 0);
+                context.ModifierManager.Attach(targetCreature, modifyAction.Origin, null, modifyAction.Controller);
             }
 
             bool changesStats = modifyAction.ShouldModifyAttack() || modifyAction.ShouldModifySpeed() || (modifyAction.ShouldModifyHealth() && !isHealthLoss);
@@ -33,9 +34,10 @@ namespace SlayTheClone {
                     Source = modifyAction.Source, Controller = modifyAction.Controller
                 });
                 if (resolved is Abilities.StatChange change) {
-                    StatModifiers.Apply(context.ModifierManager, context.ModifierFactory, change.Target, change.Value,
+                    var made = StatModifiers.Apply(context.ModifierManager, context.ModifierFactory, change.Target, change.Value,
                         modifyAction.ShouldModifyAttack(), modifyAction.ShouldModifyHealth() && !isHealthLoss, modifyAction.ShouldModifySpeed(),
                         change.CalcType, duration, context.TurnClock.TurnNumber);
+                    foreach (var modifier in made) context.ModifierManager.Attach(change.Target, modifyAction.Origin, modifier, modifyAction.Controller);
                     ReactWithSpite(change, context);
                     if (change.Target != targetCreature) CheckLethal(change.Target, context); // Bounced by No U
                 }

@@ -36,6 +36,7 @@ namespace SlayTheClone {
             var landed = StatusRules.Land(context, targetCreature, statusType, statusAction.GetDuration(), statusAction.GetPotency(),
                 context.TurnClock.TurnNumber, statusAction.Source);
             if (landed != null) {
+                context.ModifierManager.Attach(targetCreature, statusAction.Origin, landed, controller);
                 Log($"Executed ApplyStatusEffectAction via Executor: Applied {statusType} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
             }
         }

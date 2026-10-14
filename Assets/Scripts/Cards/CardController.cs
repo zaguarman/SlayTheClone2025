@@ -51,6 +51,14 @@ namespace SlayTheClone {
         public static CardController Dragged { get; private set; }
         /// <summary>Dragged with the right button: an attack on a creature of its own side (Friendly Fire).</summary>
         public bool IsFriendlyFire { get; set; }
+        /// <summary>A card tucked under a creature on the board, only its name showing: hovered for its enlarged view, never used.</summary>
+        public bool IsAttachment { get; private set; }
+        /// <summary>A creature on the board: the cards tucked under it, oldest first, then the spells queued on it.</summary>
+        public IReadOnlyList<ICard> AttachedCards { get; set; } = new List<ICard>();
+        /// <summary>For each attached card, who played it (the side whose frame it shows).</summary>
+        public IReadOnlyList<IPlayer> AttachedOwners { get; set; } = new List<IPlayer>();
+
+        public void SetAttachment() => IsAttachment = true;
         // Store both the base definition and the live instance
         private CardData baseCardData; // The original ScriptableObject definition
         private ICreature linkedCreature; // The live Creature instance (if applicable)
@@ -364,7 +372,7 @@ namespace SlayTheClone {
         #endregion
 
         public void OnBeginDrag(PointerEventData eventData) {
-            if (IsHoverPreview) {
+            if (IsHoverPreview || IsAttachment) {
                 eventData.pointerDrag = null;
                 return;
             }
@@ -438,7 +446,7 @@ namespace SlayTheClone {
         }
 
         public void OnPointerClick(PointerEventData eventData) {
-            if (eventData.dragging || IsHoverPreview) return;
+            if (eventData.dragging || IsHoverPreview || IsAttachment) return;
             if (!FogOfWar.CanControl(Player)) return; // The other side's cards aren't yours to use
             if (eventData.button == PointerEventData.InputButton.Left) OnCardClicked.Invoke(this);
             else if (eventData.button == PointerEventData.InputButton.Right) OnCardRightClicked.Invoke(this);
@@ -729,6 +737,17 @@ namespace SlayTheClone {
             preview.IsHoverPreview = true;
             var group = preview.GetComponent<CanvasGroup>();
             group.blocksRaycasts = true; // The pointer can rest on it without hovering the board underneath
+            group.interactable = false;
+            return preview;
+        }
+
+        /// <summary>An enlarged, non-interactive copy of another card (one tucked under this one), for the hover preview.</summary>
+        public CardController CreatePreviewOf(ICard card, IPlayer owner, Transform parent) {
+            var preview = cardViews.Create(card, owner ?? Player, parent);
+            if (preview == null) return null;
+            preview.IsHoverPreview = true;
+            var group = preview.GetComponent<CanvasGroup>();
+            group.blocksRaycasts = true;
             group.interactable = false;
             return preview;
         }

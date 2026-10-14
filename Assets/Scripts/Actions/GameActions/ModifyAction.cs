@@ -24,6 +24,8 @@ namespace SlayTheClone {
         public ICreature Source { get; }
         /// <summary>Whose effect it is: an enemy's effect is the one Unbothered and No U react to. Null: nobody's.</summary>
         public IPlayer Controller { get; }
+        /// <summary>The card whose effect it is, if any: shown tucked under the creature while the change lasts.</summary>
+        public ICard Origin { get; set; }
 
         public ModifyAction(
             ICreature target,

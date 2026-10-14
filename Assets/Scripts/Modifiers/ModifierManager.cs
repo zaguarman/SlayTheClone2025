@@ -14,6 +14,7 @@ namespace SlayTheClone {
 
         private readonly Dictionary<string, List<IModifier>> activeModifiers = new Dictionary<string, List<IModifier>>();
         private readonly Dictionary<string, ICreature> creatures = new Dictionary<string, ICreature>();
+        private readonly Dictionary<string, List<Attachment>> attachments = new Dictionary<string, List<Attachment>>();
         #endregion
 
         #region Constructor
@@ -48,12 +49,28 @@ namespace SlayTheClone {
                         RemoveModifier(creature, mod);
                     }
                     activeModifiers.Remove(creature.TargetId);
+                    attachments.Remove(creature.TargetId); // Its enchantments go with it
                 }
             }
         }
         #endregion
 
         #region Modifier Management
+        // A creature's own effects on itself aren't shown under it: it's the card already
+        public void Attach(ICreature creature, ICard origin, IModifier modifier, IPlayer owner) {
+            if (creature == null || origin == null || ReferenceEquals(origin, creature) || !creatures.ContainsKey(creature.TargetId)) return;
+            if (!attachments.TryGetValue(creature.TargetId, out var list)) attachments[creature.TargetId] = list = new List<Attachment>();
+            if (list.Any(a => a.Card == origin && a.Modifier == modifier)) return;
+            list.Add(new Attachment(origin, modifier, owner));
+        }
+
+        public IReadOnlyList<Attachment> AttachmentsOf(ICreature creature) {
+            if (creature == null || !attachments.TryGetValue(creature.TargetId, out var list)) return new List<Attachment>();
+            var active = new HashSet<IModifier>(GetActiveModifiersFor(creature));
+            list.RemoveAll(a => a.Modifier != null && !active.Contains(a.Modifier)); // Its effect is over: it falls off
+            return list.GroupBy(a => a.Card).Select(g => g.First()).ToList();
+        }
+
         public IEnumerable<IModifier> GetActiveModifiersFor(ICreature creature) {
             if (creature == null) return Enumerable.Empty<IModifier>();
 

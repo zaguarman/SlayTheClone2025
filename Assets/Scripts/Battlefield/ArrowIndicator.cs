@@ -40,7 +40,9 @@ namespace SlayTheClone {
         }
 
         // Shape
-        private const int Samples = 28;             // Points along each curve
+        private const int Samples = 64;             // Points along each curve
+        private const float PointSpacing = 0.035f;  // A band's points are spaced evenly along it, this far apart (world units)
+        private const float BendRoom = 0.9f;        // A band is never wider than this share of its bend's radius: it can't fold over
         private const float TailWidth = 0.7f;       // Of the band's width, at its tail
         private const float NotchDepth = 0.9f;      // The swallowtail's depth, in half-widths
         private const float HeadLength = 1.9f;      // In band widths
@@ -294,8 +296,9 @@ namespace SlayTheClone {
             float length = Length(drawn);
             if (length < 0.02f) return;
             Vector2 tip = drawn[drawn.Count - 1];
-            Vector2 direction = (tip - drawn[drawn.Count - 2]).normalized;
             float headLength = Mathf.Min(HeadLengthOf(headWidth), length * 0.6f);
+            // The head points along the last stretch of the curve, not its last (maybe tiny) step
+            Vector2 direction = (tip - PointAt(drawn, CumulativeLengths(drawn), length - headLength * 0.6f)).normalized;
             float headHalf = Mathf.Min(MaxHeadHalfWidth, headWidth * HeadHalfWidth) * Mathf.Clamp01(headLength / HeadLengthOf(headWidth) * 1.4f);
             var body = Cut(drawn, length - headLength * 0.98f);
             AddBand(layers, body, fromWidth, toWidth, fromU, Mathf.Lerp(fromU, toU, 0.9f), notched);
@@ -344,6 +347,7 @@ namespace SlayTheClone {
                                       bool notched, float expand, System.Func<float, Color> colorAt) {
             var path = new List<Vector2>(points);
             if (expand > 0f && notched) path.Insert(0, path[0] - (path[1] - path[0]).normalized * expand); // The edge wraps the tail
+            path = Even(path);
             var lengths = CumulativeLengths(path);
             float total = lengths[lengths.Count - 1];
             if (total <= 0f) return;
@@ -355,7 +359,7 @@ namespace SlayTheClone {
                 Vector2 tangent = (path[Mathf.Min(i + 1, path.Count - 1)] - path[Mathf.Max(i - 1, 0)]).normalized;
                 Vector2 normal = new Vector2(-tangent.y, tangent.x);
                 float u = lengths[i] / total;
-                float half = Mathf.Lerp(fromHalf, toHalf, Mathf.SmoothStep(0f, 1f, u)) + expand;
+                float half = Mathf.Min(Mathf.Lerp(fromHalf, toHalf, Mathf.SmoothStep(0f, 1f, u)) + expand, BendRadius(path, i) * BendRoom);
                 Vector2 middle = lengths[i] < notch ? notchPoint : path[i];
                 var vertexColor = colorAt(Mathf.Lerp(fromU, toU, u));
                 mesh.Add(path[i] + normal * half, vertexColor);
@@ -398,6 +402,26 @@ namespace SlayTheClone {
                 points.Add(u * u * u * a + 3f * u * u * t * b + 3f * u * t * t * c + t * t * t * d);
             }
             return points;
+        }
+
+        // The same curve through evenly spaced points: smooth edges, and no tiny step to throw a tangent off
+        private static List<Vector2> Even(List<Vector2> points) {
+            var lengths = CumulativeLengths(points);
+            float total = lengths[lengths.Count - 1];
+            if (total <= 0f) return points;
+            int count = Mathf.Clamp(Mathf.CeilToInt(total / PointSpacing), 8, 160);
+            var even = new List<Vector2>(count + 1);
+            for (int i = 0; i <= count; i++) even.Add(PointAt(points, lengths, total * i / count));
+            return even;
+        }
+
+        // How tightly the curve bends at this point: the radius of the circle through it and its neighbours
+        private static float BendRadius(List<Vector2> path, int i) {
+            if (i <= 0 || i >= path.Count - 1) return float.MaxValue;
+            Vector2 a = path[i - 1], b = path[i], c = path[i + 1];
+            float cross = Mathf.Abs((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x));
+            if (cross < 1e-7f) return float.MaxValue;
+            return Vector2.Distance(a, b) * Vector2.Distance(b, c) * Vector2.Distance(a, c) / (2f * cross);
         }
 
         private static List<float> CumulativeLengths(List<Vector2> points) {

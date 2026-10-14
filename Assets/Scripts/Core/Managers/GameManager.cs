@@ -36,6 +36,10 @@ namespace SlayTheClone {
         void ApplyModifier(ICreature target, IModifier modifier);
         void RemoveModifier(ICreature target, IModifier modifier);
         IEnumerable<IModifier> GetActiveModifiersFor(ICreature creature);
+        /// <summary>Remembers that this card's effect made this modifier on the creature (null: a change to the card itself).</summary>
+        void Attach(ICreature creature, ICard origin, IModifier modifier, IPlayer owner);
+        /// <summary>The cards whose effects are on the creature now, oldest first, each once (see <see cref="Attachment"/>).</summary>
+        IReadOnlyList<Attachment> AttachmentsOf(ICreature creature);
         bool HasStatusEffect(ICreature creature, StatusEffectType statusType);
         bool HasModifier(ICreature creature, Predicate<IModifier> predicate);
         /// <summary>

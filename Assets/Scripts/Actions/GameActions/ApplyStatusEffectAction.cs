@@ -16,6 +16,8 @@ namespace SlayTheClone {
         public ICreature Source { get; }
         /// <summary>Whose effect it is; null: nobody's. Return to Sender only bounces enemy statuses.</summary>
         public IPlayer Controller { get; }
+        /// <summary>The card whose effect it is, if any: shown tucked under the creature while the status lasts.</summary>
+        public ICard Origin { get; set; }
 
         public ApplyStatusEffectAction(ICreature target, StatusEffectType type, int duration, int potency, ICreature source = null, IPlayer controller = null) {
             Source = source;

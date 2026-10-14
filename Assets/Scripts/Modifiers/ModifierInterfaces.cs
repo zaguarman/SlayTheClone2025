@@ -14,6 +14,23 @@ namespace SlayTheClone {
         Speed
     }
 
+    /// <summary>
+    /// A card whose effect is on a creature (Magic's enchantments): the status or stat change it made, and who played it.
+    /// The board shows the card tucked under the creature's while its effect lasts. No modifier: a change to the card itself
+    /// (Health Loss), there until the creature leaves play.
+    /// </summary>
+    public class Attachment {
+        public ICard Card { get; }
+        public IModifier Modifier { get; }
+        public IPlayer Owner { get; }
+
+        public Attachment(ICard card, IModifier modifier, IPlayer owner) {
+            Card = card;
+            Modifier = modifier;
+            Owner = owner;
+        }
+    }
+
     // Interface for all modifiers
     public interface IModifier {
         Guid Id { get; }

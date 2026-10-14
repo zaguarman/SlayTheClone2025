@@ -491,6 +491,38 @@ namespace SlayTheClone.Tests {
             yield return null;
             Assert.IsNull(game.SpellGhost(zap), "Taking the spell back removes its ghost");
 
+            // Like Magic's enchantments, the cards whose effects are on a creature are tucked under its card, only their names
+            // showing; a spell queued on it is tucked there too, as a ghost. Hovering the creature, the wheel goes through them
+            var calf = aimedAt.OccupyingCreature;
+            game.Queue.AddAction(new ApplyStatusEffectAction(calf, StatusEffectType.Revealed, 1, 0, controller: p1) { Origin = quake });
+            game.Queue.ResolveActions();
+            game.Play(zap, p1, aimedAt);
+            yield return null;
+            var stack = game.BoardView(p2).AttachedViews(aimedAt);
+            CollectionAssert.AreEqual(new[] { quake, zap }, stack.Select(v => v.GetLinkedCardInstance()), "The card that Revealed it, then the queued spell");
+            Assert.IsTrue(stack[0].IsAttachment && stack[1].IsQueued, "...the queued one a ghost");
+            Assert.Greater(Height(stack[0]), Height(game.CardIn(aimedAt)), "Each peeks out above the card in front of it...");
+            Assert.Greater(Height(stack[1]), Height(stack[0]));
+            Assert.IsNotNull(stack[0].GetComponentInParent<RectMask2D>(), "...only its name band showing");
+            Assert.AreEqual(LeftOf(slotView), LeftOf(game.SpellGhost(zap)), 0.01f, "The ghost in the corner stays too (F6 switches it off)");
+            SceneGame.Hover(game.CardIn(aimedAt));
+            yield return SceneGame.PreviewShows();
+            Tooltip.Existing.Browse(1);
+            Assert.AreSame(quake, SceneGame.HoverPreview()?.GetLinkedCardInstance(), "Scrolling over the creature shows the cards on it, enlarged...");
+            Tooltip.Existing.Browse(1);
+            Tooltip.Existing.Browse(1);
+            Assert.AreEqual(0, Tooltip.Existing.Browsed, "...round to the creature again");
+            Tooltip.Existing.HideTooltip();
+            SceneGame.Click(game.SpellGhost(zap));
+            BattlefieldUI.SpellsOnlyInStack = true;
+            game.Play(zap, p1, aimedAt);
+            yield return null;
+            Assert.AreSame(game.SpellGhost(zap), game.BoardView(p2).AttachedViews(aimedAt).Last(), "Only in the stack: the ghost itself is tucked under the creature...");
+            SceneGame.Click(game.SpellGhost(zap));
+            yield return null;
+            Assert.IsNull(game.SpellGhost(zap), "...and still taken back by clicking it");
+            BattlefieldUI.SpellsOnlyInStack = false;
+
             var takeBacks = new (string how, System.Action<CardController> takeBack)[] {
                 ("Clicking", card => SceneGame.Click(card)),
                 ("Right-clicking", card => SceneGame.Click(card, PointerEventData.InputButton.Right)),
