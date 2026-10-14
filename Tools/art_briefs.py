@@ -91,7 +91,8 @@ USER_NOTES = {
                         "2026-10-14: the man at the lever stands back from the tracks, beyond the split, never between them."],
     "Script Kiddie": ["2026-10-14 (pixel art): a baby sitting in that gaming chair, looking towards us; the rest as it was."],
     "Frankenstein": ["2026-10-14 (pixel art): it was missing the monster's legs."],
-    "Rage Bait": ["2026-10-14 (pixel art): an angry fish going for a bait."],
+    "Rage Bait": ["2026-10-14 (pixel art): an angry fish going for a bait.",
+                  "2026-10-14: correct the shape of the mouth's shadow, the fins and the scales."],
     "Russian Roulette": ["2026-10-14 (pixel art): the skull centred in its slice."],
     "Hollowed-Out Volcano Lair": ["2026-10-14 (pixel art): like the You Only Live Twice set (the user's still): inside the "
                                   "crater, the round opening to the sky, a helicopter, the rocket in its gantry, the helipad, "

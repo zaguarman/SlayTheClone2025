@@ -228,6 +228,7 @@ Dogpile (spell)
 Rage Bait (spell)
     A phone screen with a glowing red notification, reflected in the furious eyes of the person holding it.
     USER: 2026-10-14 (pixel art): an angry fish going for a bait.
+    USER: 2026-10-14: correct the shape of the mouth's shadow, the fins and the scales.
 Its A Trap (spell)
     The free-boat sting: a bald, stubbled Homer Simpson strolls into a police station waving a letter, "CONGRATULATIONS! YOU'VE WON A FREE BOAT!", while the grinning police chief behind the counter slides him a pile of unpaid fines instead. A "FREE BOAT PICKUP" banner hangs over the open door of a holding cell.
     USER: Homer and the free boat: the trap where they want to get him to the police office to give him a fine.
