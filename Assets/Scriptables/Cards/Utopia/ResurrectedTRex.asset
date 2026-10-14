@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Sixty-six million years asleep. Woke up hungry.
   cardType: 0
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 006d14b37ff2a764fb8e54034978fd6f, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

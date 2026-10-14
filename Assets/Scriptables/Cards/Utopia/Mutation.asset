@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Three extra arms. One fewer kidney.
   cardType: 1
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 9af2658fa544529488500bf4638789b2, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

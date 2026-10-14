@@ -4478,23 +4478,6 @@ def sherman_tank():
     return svg(defs, body)
 
 
-def haarp():
-    # A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy
-    # tent miles away, a technician in a parka sipping coffee by the control panel
-    defs = lin("bg", ["#2a1a4a", "#8a5aa0", "#e8b0c0"])
-    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 140, W, 60, "#d8e0e8")
-    for row in range(3):
-        for col in range(7):
-            x, y, s = 20 + col * 24 + row * 8, 108 + row * 14, 0.7 + row * 0.15
-            body += stroke(f"M{x} {y + 30 * s} L{x} {y} M{x - 8 * s} {y + 6 * s} L{x + 8 * s} {y + 6 * s} M{x - 6 * s} {y + 12 * s} L{x + 6 * s} {y + 12 * s}", "#5a5a6a", 1.5)
-    body += bolt(286, 30, 2.4) + stroke("M300 110 l 14 18 M296 112 l -8 14", "#ffe45c", 2)
-    body += poly([(290, 138), (300, 124), (310, 138)], "#c0392b")
-    body += rect(200, 140, 34, 28, "#5a6070", 'rx="3"') + circle(210, 150, 3, "#3ad04a") + circle(222, 150, 3, "#d0342c")
-    body += person(250, 200, 0.85, SKIN[0], "#c0563a", face="smile", hat="hood")
-    body += stroke("M270 172 L284 156", "#c0563a", 8) + rect(280, 144, 12, 14, "#f4f4f4", 'rx="2"') + stroke("M286 140 q 3 -6 0 -10", "#ffffff", 1.2)
-    return svg(defs, body)
-
-
 def social_engineering():
     # A smiling man in a hi-vis vest with a clipboard and a fake lanyard holding a door open for a whole office of employees,
     # each one handing him their badge and password on a sticky note as they pass
@@ -4841,7 +4824,7 @@ CARDS["ShadowOps"].update({
     "HeDidntKillHimself": he_didnt_kill_himself, "Extraction": extraction, "WitnessProtectionProgram": witness_protection_program,
     "DeathByNaturalCauses": death_by_natural_causes, "AssetRecruitment": asset_recruitment,
     "IfIToldYouIdHavetoKillYou": if_i_told_you_id_have_to_kill_you, "LoneGunman": lone_gunman, "GlomarResponse": glomar_response,
-    "Sabotage": sabotage, "GhostArmy": ghost_army, "InflatableTank": inflatable_tank, "ShermanTank": sherman_tank, "HAARP": haarp,
+    "Sabotage": sabotage, "GhostArmy": ghost_army, "InflatableTank": inflatable_tank, "ShermanTank": sherman_tank, 
     "SocialEngineering": social_engineering, "BilderbergMembership": bilderberg_membership, "DeadDrop": dead_drop,
     "WetWork": wet_work, "PerfectlyTimedCameraMalfunction": perfectly_timed_camera_malfunction,
     "TheGoldenGun": the_golden_gun, "DieAnotherDay": die_another_day, "LicencetoKill": licence_to_kill,
@@ -5628,6 +5611,292 @@ def human_intelligence():
 CHUNK = {"Corporate": {"Headhunter": headhunter}, "DigitalSociety": {"Doomscrolling": doomscrolling},
          "Mind": {"LucidDreaming": lucid_dreaming}, "Statecraft": {"SupplyDepot": supply_depot}, "Tech": {"WebScraping": web_scraping},
          "Utopia": {"ResearchLab": research_lab}, "Zeitgeist": {"DrugSmuggler": drug_smuggler}, "ShadowOps": {"HumanIntelligence": human_intelligence}}
+for _theme, _cards in CHUNK.items():
+    CARDS[_theme].update(_cards)
+
+
+# ---------------------------------------------------------------- Holy cards, Science, HAARP's earthquake (2026-10-14)
+def gods_grace():
+    # A battered knight at 0 Health, an empty health bar over his head, held upright by a beam of light from parted clouds,
+    # two cherubs propping him up by the armpits, a choir of angels singing behind
+    defs, body = bg_myth()
+    defs += lin("beam", [("#fff7c8", 0.85), ("#fff7c8", 0.15)])
+    body += cloud(96, 16, 1.4, "#f4ecff", 0.9) + cloud(256, 16, 1.4, "#f4ecff", 0.9)
+    body += poly([(150, 0), (202, 0), (240, 200), (112, 200)], "url(#beam)")
+    for x in (52, 300):
+        body += angel(x, 70, 0.55)
+        body += stroke(f"M{x - 4} 56 q 4 -6 8 0", "#3a2a1a", 1.2)  # Singing
+    body += knight(176, 204, 1.2)
+    body += stroke("M150 160 L144 176 M202 160 L208 176", "#6a7078", 3)  # Dents
+    body += rect(144, 50, 64, 12, "#2a1a1a", 'rx="3" stroke="#f4f0e6" stroke-width="2"')  # His health bar, empty
+    body += lettering("0", 216, 50, 12, "#ff5a4a", width=2.4)
+    for f in (-1, 1):
+        body += angel(176 + f * 50, 142, 0.6)
+        body += stroke(f"M{176 + f * 42} 146 L{176 + f * 30} 150", SKIN[0], 4)  # Hands under his arms
+    return svg(defs, body)
+
+
+def phoenix_feather():
+    # A glowing golden feather laid on a small pile of ashes on a stone altar, three tally marks scratched beside it, the
+    # shape of a bird rising out of the smoke
+    defs, body = bg_myth()
+    defs += lin("plume", [("#fff2a0", 1), ("#ff8a1a", 1)])
+    for i, (x, y, r) in enumerate([(176, 120, 16), (164, 100, 14), (186, 84, 13), (170, 66, 12)]):
+        body += circle(x, y, r, "#8a8090", f'opacity="{0.45 - i * 0.08:.2f}"')
+    # The bird rising out of the smoke, wings spread
+    for f in (-1, 1):
+        body += path(f"M176 60 C {176 + f * 30} 30 {176 + f * 70} 20 {176 + f * 96} 34 C {176 + f * 70} 40 {176 + f * 50} 52 {176 + f * 30} 70 Z", "#ff9a2a", 'opacity="0.85"')
+        body += path(f"M176 62 C {176 + f * 24} 44 {176 + f * 50} 40 {176 + f * 70} 46 C {176 + f * 50} 52 {176 + f * 36} 60 {176 + f * 22} 72 Z", "#ffd84a", 'opacity="0.9"')
+    body += ellipse(176, 66, 9, 16, "#ff7a1a") + circle(176, 46, 7, "#ffb43a") + poly([(176, 40), (186, 44), (176, 48)], "#e8a020")
+    body += path("M170 80 L176 100 L182 80 Z", "#ff7a1a", 'opacity="0.8"')
+    # The altar, the ashes, the feather
+    body += rect(96, 150, 160, 50, "#8a8a8a", 'stroke="#5a5a5a" stroke-width="2"') + rect(88, 142, 176, 10, "#9a9a9a")
+    body += ellipse(176, 142, 44, 9, "#4a4a4a") + ellipse(170, 139, 26, 5, "#6a6a6a")
+    body += path("M128 146 C 150 132 196 118 232 112 C 206 124 166 138 132 148 Z", "url(#plume)", 'stroke="#c8781a" stroke-width="1.2"')
+    body += stroke("M130 147 L232 112", "#a85a10", 1.6)
+    for i in range(7):
+        x = 150 + i * 11
+        body += stroke(f"M{x} {139 - i * 3.6:.1f} l 4 -9", "#c8781a", 1, 'opacity="0.7"')
+    for i in range(3):
+        body += stroke(f"M{116 + i * 7} 162 l 0 18", "#3a3a3a", 2.4)
+    return svg(defs, body)
+
+
+def evolution_theory():
+    # Darwin in a lab coat at a chalkboard: the march of progress from ape to man to a huge muscled lab-grown superman, and
+    # a tiny weak creature at the start of the line crossed out
+    defs, body = bg_utopia()
+    body += rect(14, 14, 258, 130, "#8a5a2a") + rect(20, 20, 246, 118, "#2a4a3a")
+    chalk = "#f0f0e8"
+    # The little runt, crossed out
+    body += circle(42, 116, 6, "none", f'stroke="{chalk}" stroke-width="2"') + stroke("M42 122 L42 130 M38 130 l 4 -4 l 4 4", chalk, 2)
+    body += stroke("M32 106 L54 132 M54 106 L32 132", "#ff6a5a", 3)
+    # The ape, hunched
+    body += circle(86, 92, 7, "none", f'stroke="{chalk}" stroke-width="2"') + stroke("M90 98 C 98 104 98 116 92 124 M92 124 L86 134 M92 124 L98 134 M94 104 L80 122", chalk, 2)
+    # The man, upright
+    body += circle(132, 76, 8, "none", f'stroke="{chalk}" stroke-width="2"') + stroke("M132 84 L132 112 M132 112 L124 134 M132 112 L140 134 M132 92 L122 106 M132 92 L142 106", chalk, 2)
+    # The lab-grown superman, all muscle
+    body += circle(196, 48, 11, "none", f'stroke="{chalk}" stroke-width="2.4"')
+    body += path("M176 66 C 172 60 220 60 216 66 L212 104 L180 104 Z", "none", f'stroke="{chalk}" stroke-width="2.4"')
+    body += path("M176 68 C 156 70 152 92 166 96 C 162 86 170 80 178 80 M216 68 C 236 70 240 92 226 96 C 230 86 222 80 214 80", "none", f'stroke="{chalk}" stroke-width="2.4"')
+    body += stroke("M184 104 L178 134 M208 104 L214 134 M196 70 L196 100 M184 84 L208 84", chalk, 2.4)
+    for x in (62, 108, 158):
+        body += stroke(f"M{x} 120 l 10 0 m -4 -4 l 4 4 l -4 4", chalk, 1.6)
+    # Darwin, pointing with his chalk
+    body += person(306, 204, 1.15, SKIN[0], "#f4f4f4", face="smile", hair=OLD_HAIR, beard="#e8e8e8")
+    body += stroke("M280 160 L254 118", "#f4f4f4", 9) + circle(252, 115, 5, SKIN[0]) + stroke("M250 112 L238 100", chalk, 3)
+    return svg(defs, body)
+
+
+def mutation():
+    # A lab rat in a cage flexing three muscular arms, a scientist taking notes and quietly sliding a fourth arm onto the
+    # clipboard
+    defs, body = bg_utopia()
+    body += rect(30, 60, 190, 112, "#f4f4f0", 'opacity="0.35"')
+    # The rat, side on, its snout to the right
+    rat, line = "#b8b8c0", 'stroke="#7a7a84" stroke-width="1.5"'
+    body += path("M70 156 C 52 166 50 182 66 188", "none", 'stroke="#f0a0b0" stroke-width="4" stroke-linecap="round"')
+    body += ellipse(112, 148, 46, 22, rat, line)
+    body += path("M146 132 C 162 122 182 128 194 142 C 182 150 162 156 148 154 Z", rat, line)
+    body += circle(152, 128, 9, rat, line) + circle(152, 128, 5, "#f0a0b0") + circle(172, 136, 2.6, "#111") + circle(194, 142, 3, "#f0a0b0")
+    body += stroke("M194 142 l 12 -4 M194 144 l 12 2", "#555", 1)
+    # Three arms raised in a double-biceps flex: upper arm out, forearm up, a fist, a bulging biceps
+    for sx, sy, f in [(92, 134, -1), (114, 128, 1), (134, 132, 1)]:
+        ex, ey = sx + f * 22, sy - 10
+        fx, fy = ex + f * 2, ey - 26
+        body += stroke(f"M{sx} {sy} L{ex} {ey} L{fx} {fy}", "#7a7a84", 11)
+        body += stroke(f"M{sx} {sy} L{ex} {ey} L{fx} {fy}", rat, 8)
+        body += ellipse((sx + ex) / 2, (sy + ey) / 2 - 5, 9, 7, rat, line)
+        body += circle(fx, fy - 2, 6, "#f0a0b0", line)
+    # The cage bars in front of it
+    for i in range(9):
+        body += stroke(f"M{36 + i * 22} 58 L{36 + i * 22} 172", "#8a9aa0", 2.4)
+    body += rect(30, 54, 190, 6, "#8a9aa0") + rect(30, 170, 190, 6, "#8a9aa0")
+    # The scientist with the clipboard, drawing in a fourth
+    body += person(296, 204, 1.1, SKIN[1], "#f4f4f4", face="smirk", hair="#2a1a10", glasses="round")
+    body += rect(252, 130, 34, 44, "#c89a5a", 'rx="2"') + rect(256, 136, 26, 34, "#ffffff")
+    body += stroke("M262 160 C 262 146 274 142 276 150", "#c0392b", 2) + stroke("M260 144 l 6 0 M260 150 l 4 0", "#888", 1)
+    return svg(defs, body)
+
+
+def exponential_growth():
+    # A petri dish overflowing onto the lab bench, the colony spilling over the edge and climbing up the wall, a scientist
+    # backing away holding the lid
+    defs, body = bg_utopia()
+    body += rect(0, 146, W, 54, "#d8dcdc") + rect(0, 146, W, 6, "#b8c0c0")
+    body += ellipse(130, 148, 46, 10, "#ffffff", 'stroke="#a8c8c8" stroke-width="2" opacity="0.8"')
+    # The colony: a green mass welling out of the dish, spilling over the bench and climbing the wall
+    import random as _r
+    rng = _r.Random(7)
+    blobs = []
+    for i in range(140):
+        t = rng.random()
+        dist = (t ** 0.8) * 150
+        ang = rng.uniform(0.08, 0.92) * math.pi
+        x = 130 - math.cos(ang) * dist * 1.1
+        y = 142 - math.sin(ang) * dist * 0.85
+        blobs.append((dist, x, y, max(4, 15 - dist * 0.07)))
+    for dist, x, y, r in sorted(blobs, reverse=True):
+        body += circle(x, y, r, ["#3aa84a", "#5ac85a", "#7ad86a"][int(x + y) % 3])
+        body += circle(x - r * 0.3, y - r * 0.35, r * 0.3, "#c8f0b0", 'opacity="0.7"')
+    body += ellipse(130, 148, 46, 8, "none", 'stroke="#ffffff" stroke-width="2" opacity="0.9"')
+    # The scientist backing off, the lid held up like a shield
+    body += person(300, 204, 1.05, SKIN[2], "#f4f4f4", face="shout", hair="#1a1a1a", glasses="round")
+    body += ellipse(262, 130, 8, 26, "#ffffff", 'stroke="#a8c8c8" stroke-width="2" opacity="0.85"') + stroke("M270 150 L284 158", "#f4f4f4", 8)
+    body += sweat(322, 118, 1.0)
+    return svg(defs, body)
+
+
+def scientific_method():
+    # A scientist in goggles carefully pouring a glowing liquid into a beaker on a crowded bench, a whiteboard behind her:
+    # HYPOTHESIS, EXPERIMENT, GRANT
+    defs, body = bg_utopia()
+    body += rect(166, 14, 176, 96, "#ffffff", 'stroke="#a8a8a8" stroke-width="3"')
+    body += lettering("HYPOTHESIS", 254, 24, 10, "#2a5ad8", width=1.6)
+    body += lettering("EXPERIMENT", 254, 52, 10, "#2a5ad8", width=1.6)
+    body += lettering("GRANT", 254, 80, 13, "#1a9a4a", width=2.2)
+    for y in (40, 68):
+        body += stroke(f"M254 {y} l 0 8 m -4 -4 l 4 4 l 4 -4", "#c0392b", 2)
+    body += rect(0, 150, W, 50, "#a8b8b8") + rect(0, 150, W, 5, "#889898")
+    for x, h, c in [(200, 26, "#e85a8a"), (226, 36, "#5ac8e8"), (256, 22, "#f0c040"), (286, 30, "#9a6ad8"), (316, 24, "#5ad89a")]:
+        body += rect(x, 150 - h, 16, h, "#e8f4f4", 'rx="3" stroke="#a8c0c0" stroke-width="1.5" opacity="0.9"') + rect(x + 2, 150 - h * 0.55, 12, h * 0.55 - 2, c, 'opacity="0.8"')
+    body += person(84, 204, 1.25, SKIN[0], "#f4f4f4", face="flat", hat="bob")
+    body += rect(68, 116, 34, 9, "#3a6a8a", 'rx="4" opacity="0.85"')  # Goggles
+    # The flask tipped over the beaker, the glowing drip
+    body += stroke("M110 160 L136 116", "#f4f4f4", 10)
+    body += path("M134 100 L150 92 L162 112 L148 122 Z", "#e8f4f4", 'stroke="#a8c0c0" stroke-width="1.5"') + path("M150 104 L160 110 L150 118 Z", "#7aff6a")
+    body += stroke("M160 116 C 164 124 166 128 166 134", "#7aff6a", 3) + circle(166, 134, 14, "#c8ff9a", 'opacity="0.35"')
+    body += path("M152 134 L180 134 L184 150 L148 150 Z", "#e8f4f4", 'stroke="#a8c0c0" stroke-width="1.5"') + rect(151, 142, 32, 7, "#7aff6a", 'opacity="0.8"')
+    return svg(defs, body)
+
+
+def frankenstein():
+    # A towering stitched-together monster sitting up on a lab table under a lightning bolt, bolts in its neck smoking, the
+    # mad scientist cheering with both arms up
+    defs = lin("bg", ["#141a2a", "#3a3a5a"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 0, W, 10, "#2a2a3a")
+    body += bolt(116, 0, 1.8) + bolt(214, 6, 1.2)
+    body += rect(40, 160, 220, 14, "#5a5a6a") + rect(52, 174, 10, 26, "#3a3a4a") + rect(238, 174, 10, 26, "#3a3a4a")
+    green = "#7aa86a"
+    # The monster sitting up, arms out in front
+    body += path("M88 162 C 88 118 196 118 196 162 Z", "#2a2a2a")
+    body += stroke("M180 128 L238 120 M176 140 L236 134", green, 12) + stroke("M186 124 l 0 8 M206 122 l 0 8 M226 120 l 0 8", "#2a3a2a", 1.5)
+    body += rect(126, 104, 32, 22, green)
+    body += rect(112, 46, 60, 66, green, 'rx="8"') + rect(110, 40, 64, 14, "#1a1a1a", 'rx="3"')
+    for f in (-1, 1):
+        body += rect(142 + f * 40 - 5, 100, 10, 8, "#8a8a8a") + circle(142 + f * 46, 98, 5, "#a8a8a8", 'opacity="0.4"')
+    body += stroke("M124 74 l 12 0 M148 74 l 12 0", "#1a1a1a", 3) + stroke("M128 96 l 28 0", "#1a1a1a", 2.4)
+    body += stroke("M120 60 L164 60 M126 56 l 0 8 M136 56 l 0 8 M146 56 l 0 8 M156 56 l 0 8", "#2a3a2a", 1.5)
+    # The mad scientist, cheering
+    body += person(300, 204, 0.95, SKIN[0], "#f4f4f4", face="grin", hair=OLD_HAIR, glasses="round")
+    body += stroke("M276 160 L262 118 M324 160 L338 118", "#f4f4f4", 8) + circle(262, 114, 5, SKIN[0]) + circle(338, 114, 5, SKIN[0])
+    body += lettering("ALIVE!", 300, 20, 13, "#ffe45c", width=2.2)
+    return svg(defs, body)
+
+
+def chimera():
+    # A lion with a goat's head out of its back and a snake for a tail, all three in hospital ID wristbands, in a lab
+    # enclosure, a sticky note on the glass: DO NOT FEED AFTER MIDNIGHT
+    defs, body = bg_utopia()
+    body += rect(0, 168, W, 32, "#b8d0c8")
+    tan, mane = "#d8a050", "#a8601a"
+    # Snake tail
+    body += path("M236 140 C 270 150 280 120 300 112 C 316 106 322 120 312 126", "none", 'stroke="#4a9a4a" stroke-width="9" stroke-linecap="round"')
+    body += ellipse(316, 122, 9, 6, "#4a9a4a") + circle(318, 120, 1.5, "#111") + stroke("M324 124 l 8 2 m -3 -2 l 3 2 l -3 1", "#c0392b", 1.4)
+    # Body and legs
+    for x in (124, 148, 210, 232):
+        body += rect(x - 7, 150, 14, 26, tan, 'rx="4"')
+    body += ellipse(178, 138, 66, 28, tan)
+    body += rect(140, 162, 16, 6, "#ffffff", 'stroke="#8ab0d8" stroke-width="1"')  # Wristband on a leg
+    # The goat head out of its back
+    body += rect(186, 92, 14, 26, "#e8e4dc") + ellipse(196, 86, 14, 11, "#e8e4dc")
+    body += path("M188 78 C 180 64 192 60 194 76 M202 76 C 206 60 218 64 208 80", "none", 'stroke="#8a7a6a" stroke-width="3"')
+    body += circle(200, 84, 2, "#111") + path("M206 92 L212 100 L202 96 Z", "#c8c0b0")
+    body += rect(186, 104, 14, 5, "#ffffff", 'stroke="#8ab0d8" stroke-width="1"')
+    # The lion's head and mane
+    body += circle(106, 116, 30, mane) + circle(102, 118, 20, tan)
+    body += circle(94, 112, 2.6, "#111") + circle(108, 112, 2.6, "#111") + ellipse(100, 124, 5, 3.4, "#5a3a2a")
+    body += stroke("M94 130 q 6 4 12 0", "#5a3a2a", 1.6)
+    # The sticky note
+    body += rect(258, 20, 78, 56, "#ffe45c", 'transform="rotate(4 297 48)"')
+    body += lettering("DO NOT", 297, 28, 9, "#c0392b", width=1.6) + lettering("FEED", 297, 44, 9, "#c0392b", width=1.6)
+    body += lettering("MIDNIGHT", 297, 60, 7, "#5a3a2a", width=1.3)
+    return svg(defs, body)
+
+
+def resurrected_t_rex():
+    # A T-Rex skeleton half covered in new flesh breaking out of its museum display, the DNA sequencer that brought it back
+    # still beeping, a guide pointing at the exit
+    defs = lin("bg", ["#e8dcc4", "#c8b898"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 168, W, 32, "#8a6a4a")
+    body += rect(20, 150, 210, 18, "#a8a098") + rect(24, 146, 202, 6, "#c8c0b8")  # The plinth
+    flesh, bone = "#5a9a4a", "#f4ecd8"
+    # The head: the back half bone, the front half new flesh
+    body += path("M60 70 C 70 40 150 34 196 50 L200 70 C 160 76 120 82 64 90 Z", flesh)
+    body += path("M64 90 C 110 86 160 82 198 78 L196 96 C 160 100 110 104 70 104 Z", flesh)
+    for i in range(9):
+        x = 150 + i * 5.5
+        body += poly([(x, 70 + i * 0.6), (x + 3, 82), (x + 6, 70 + i * 0.6)], "#ffffff")
+    body += path("M60 70 C 66 52 96 44 120 46 L118 90 L64 92 Z", bone, 'stroke="#c8b898" stroke-width="2"')
+    body += circle(92, 64, 9, "#3a3a3a") + circle(160, 56, 5, "#ffe45c") + circle(160, 56, 2.2, "#111")
+    # Neck and spine of bone, the body still skeleton
+    body += stroke("M66 96 C 60 116 66 132 90 140 L190 132", bone, 7)
+    for i in range(6):
+        body += stroke(f"M{100 + i * 16} 138 l -4 12", bone, 3.4)
+    body += stroke("M196 132 C 210 128 226 116 238 96", bone, 6)  # The tail
+    body += stroke("M118 140 l -6 12 M112 152 l 8 0", bone, 4)
+    # Cracks in the glass case it broke out of
+    body += stroke("M30 30 L230 30 L230 146 M30 30 L30 146", "#a8c8d8", 2, 'opacity="0.6"')
+    body += stroke("M200 30 l 10 20 l -6 14 l 14 20 M210 50 l 16 -6", "#ffffff", 1.6)
+    # The DNA sequencer beeping
+    body += rect(246, 112, 46, 40, "#5a6070", 'rx="3"') + rect(252, 118, 34, 16, "#1a2a1a") + stroke("M254 126 l 6 0 l 3 -6 l 3 12 l 3 -6 l 12 0", "#5aff5a", 1.4)
+    body += stroke("M294 112 l 6 -8 M296 118 l 9 -3", "#c0392b", 1.6)
+    # The guide, pointing at the exit
+    body += rect(290, 16, 50, 20, "#1a9a4a", 'rx="2"') + lettering("EXIT", 315, 21, 10, "#ffffff", width=1.8)
+    body += person(312, 204, 0.9, SKIN[1], "#c0392b", face="shout", hair="#3a2a1a")
+    body += stroke("M330 164 L330 44", "#c0392b", 7) + circle(330, 40, 4, SKIN[1])
+    return svg(defs, body)
+
+
+def haarp():
+    # Deep under the antenna field, an installation in a cut-away of the ground: a huge laser on a gantry fires straight
+    # down an immense shaft toward the glowing core of the Earth, the ground cracking in zigzags around it, a technician with
+    # his coffee at the console
+    defs = lin("sky", ["#2a1a4a", "#6a4a8a"]) + rad("core", [("#fff2a0", 1), ("#ff8a1a", 0.9), ("#c0341a", 0)])
+    defs += lin("beam", [("#ff4a4a", 1), ("#ff2a2a", 0.85)])
+    body = rect(0, 0, W, 26, "url(#sky)")
+    for i, (y, c) in enumerate([(26, "#6a5a3a"), (60, "#5a4630"), (100, "#4a3626"), (140, "#3a281c")]):
+        body += rect(0, y, W, 200 - y, c)
+    body += rect(0, 22, W, 6, "#7aa05a")
+    for x in range(20, 340, 22):  # The antenna field on the surface
+        body += stroke(f"M{x} 22 L{x} 9 M{x - 6} 3 L{x} 9 L{x + 6} 3", "#c8c8d8", 1.4) + circle(x, 9, 1.6, "#ff6a6a")
+    body += circle(176, 236, 110, "url(#core)")
+    # The shaft, an immense hole down to the core
+    body += path("M146 92 L206 92 L232 200 L120 200 Z", "#140c08")
+    # The installation: a concrete hall, the gantry and the laser pointing down the shaft
+    body += rect(40, 36, 272, 58, "#8a8a90", 'stroke="#5a5a60" stroke-width="2"') + rect(46, 42, 260, 46, "#a8a8b0")
+    body += rect(150, 42, 52, 10, "#5a5a60") + rect(160, 52, 32, 26, "#3a3a4a", 'rx="4"') + rect(168, 78, 16, 14, "#2a2a3a")
+    body += circle(176, 92, 6, "#ff6a6a")
+    body += rect(171, 92, 10, 108, "url(#beam)") + rect(166, 92, 20, 108, "#ff4a4a", 'opacity="0.25"')
+    for y in (120, 150, 180):
+        body += circle(176, y, 9, "#ffb0b0", 'opacity="0.35"')
+    # Zigzag cracks in the rock around the shaft: the earthquake
+    for f in (-1, 1):
+        x0 = 176 + f * 44
+        body += stroke(f"M{x0} 120 l {f * 18} -10 l {f * 6} 14 l {f * 20} -12 l {f * 8} 16 l {f * 22} -10", "#ffb03a", 2)
+        body += stroke(f"M{x0 + f * 10} 160 l {f * 16} 8 l {f * 6} -14 l {f * 22} 10 l {f * 8} -12", "#ffb03a", 2)
+    # The console and the technician with his coffee
+    body += rect(62, 66, 40, 22, "#3a3a4a", 'rx="2"') + circle(72, 74, 3, "#3ad04a") + circle(84, 74, 3, "#d0342c") + rect(66, 80, 30, 4, "#5ab0ff")
+    body += person(120, 94, 0.5, SKIN[0], "#c0563a", face="smile", hat="hood")
+    body += rect(128, 74, 6, 7, "#f4f4f4", 'rx="1"') + stroke("M131 72 q 2 -4 0 -7", "#ffffff", 1)
+    return svg(defs, body)
+
+
+CHUNK = {"Myth": {"GodsGrace": gods_grace, "PhoenixFeather": phoenix_feather},
+         "Utopia": {"EvolutionTheory": evolution_theory, "Mutation": mutation, "ExponentialGrowth": exponential_growth,
+                    "ScientificMethod": scientific_method, "Frankenstein": frankenstein, "Chimera": chimera,
+                    "ResurrectedTRex": resurrected_t_rex},
+         "ShadowOps": {"HAARP": haarp}}
 for _theme, _cards in CHUNK.items():
     CARDS[_theme].update(_cards)
 
