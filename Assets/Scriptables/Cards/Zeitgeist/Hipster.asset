@@ -59,8 +59,8 @@ MonoBehaviour:
   designNotes: 'Too Mainstream: immune to effects that affect more than one creature.
     Future: Hipster status. Hurts only creatures that share a name with another creature.'
   artDescription: 
-  attack: 2
-  health: 2
+  attack: 4
+  health: 4
   speed: 2
   turnsUntilOperative: 0
   movement: 0

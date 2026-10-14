@@ -29,8 +29,8 @@ MonoBehaviour:
     one. A mood that burns it out.'
   artDescription: A wiry man smoking a length of steel chain like a cigarette, the
     far end swinging like a flail, a cloud of smoke around his head.
-  attack: 2
-  health: 5
+  attack: 4
+  health: 6
   speed: 2
   turnsUntilOperative: 1
   movement: 0

@@ -89,7 +89,7 @@ MonoBehaviour:
   artDescription: 'A messenger group chat in the familiar green-and-beige look: THE
     JURY (47 members), gavels and skulls with blue read ticks under a blurry photo
     of one guy, while the guy himself sweats alone outside the phone.'
-  attack: 1
+  attack: 2
   health: 4
   speed: 2
   turnsUntilOperative: 0

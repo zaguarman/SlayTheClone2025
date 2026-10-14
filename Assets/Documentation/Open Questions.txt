@@ -5,6 +5,27 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+39. New decks, accelerationism, buffing up (2026-10-14)
+    • Built as asked: the old decks are gone (the faction decks, Black Budget, Double-O Section, Panopticon, Prosperity
+      Gospel); each faction has one new 20-card deck of its best cards and combos, picked from the AI games' card stats.
+      Utopia's accelerationism: On the Brink (at 2 Health or less a creature deals double), Accelerationism (a Gamble where
+      every outcome pays), Cold Fusion, Antimatter, Biohacking, Blood Transfusion; the Resurrected T-Rex is On the Brink.
+      Off the Books is now Ambush. Fixed: a revived creature that had lost all its Health for good stood at 0.
+    • Balance (round robin of the nine decks, Hard, 48 games each), buffing up, no nerfs, four rounds:
+        - New decks: Corporate 88%, Shadow Ops. 85, Myth 63, Utopia 46, Statecraft 42, Zeitgeist 38, Digital Society 33,
+          Tech 8, Mind 4.
+        - After round 4: Shadow Ops. 85%, Corporate 77, Mind 50, Digital Society 46, Tech 44, Statecraft 38, Myth 35,
+          Utopia 29, Zeitgeist 27.
+        - Buffs: Mind and Tech creatures +1 to +3 Attack and Health, deeper cuts (Generational Trauma -4, Trolley Problem
+          -4, Imposter Syndrome -3/-1), Tech's stuns deal 2; Statecraft's creatures deploy 1 Day sooner and it has its old
+          control list back; Digital Society's swarm +1 Attack, Dogpile and Clickbait deal 2; Zeitgeist's creatures +1 or +2,
+          This Is Fine deals 3, Russian Roulette 5, Toxic Positivity in its deck; Utopia's Black Hole 4, Biohacking +4,
+          Cold Fusion 5/6, Antimatter 4/4; Statecraft's Preemptive Strike 4.
+    • Shadow Ops. and Corporate win in 5-7 Days; everyone else takes 9-12. Raising seven factions to their level is a lot
+      of power creep. Keep buffing, or bring those two down a little after all?
+    • The Statecraft deck I picked first did worse than its old list: the AI's card stats barely separate the cards of one
+      deck (almost every card is played in almost every game), so picks lean on damage and kills per game.
+
 38. Holy cards, cards under creatures, Science (2026-10-14)
     • Built as asked: God's Grace (Myth: you survive at 0 Health until the next Day's Dusk; still at 0 then, you lose; both at
       0, the one in Grace wins), Phoenix Feather (Myth: sacrifice a friendly creature, it rises 3 Days later), cards tucked

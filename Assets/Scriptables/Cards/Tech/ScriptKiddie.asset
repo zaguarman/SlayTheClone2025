@@ -29,8 +29,8 @@ MonoBehaviour:
     defensive abilities (Unbothered, No U, Return to Sender...), except Cold Storage.'
   artDescription: A twelve-year-old in an oversized gaming chair, hoodie up, double-clicking
     "H4CK3R T00L.exe" while a bank vault door swings open on his second monitor.
-  attack: 2
-  health: 2
+  attack: 3
+  health: 3
   speed: 3
   turnsUntilOperative: 0
   movement: 0

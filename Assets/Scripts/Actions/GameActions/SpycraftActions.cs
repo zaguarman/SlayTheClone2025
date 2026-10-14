@@ -397,6 +397,8 @@ namespace SlayTheClone {
                 SlotEffectRules.OnEnter(creature, slot, context);
                 creature.HandleEffect(EffectTrigger.OnPlay, context.ActionsQueue);
                 context.GameMediator.NotifyCreatureSummoned(creature, side);
+                // Health lost for good stays on the card: one that lost it all rises only to die again
+                if (creature.Health <= 0) context.ActionsQueue.AddAction(new CheckLethalAction(creature));
                 return;
             }
             StatusRules.Land(context, creature, StatusEffectType.Concealed, ReturnToHandActionExecutor.NewIdentityDays, 0, context.TurnClock.TurnNumber);

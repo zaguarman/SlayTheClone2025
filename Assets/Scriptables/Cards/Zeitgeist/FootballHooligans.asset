@@ -58,8 +58,8 @@ MonoBehaviour:
       decoy: {fileID: 0}
   designNotes: 'Future: a riot that spreads to adjacent creatures each Dusk.'
   artDescription: 
-  attack: 3
-  health: 2
+  attack: 5
+  health: 3
   speed: 2
   turnsUntilOperative: 0
   movement: 0

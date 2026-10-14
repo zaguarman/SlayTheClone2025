@@ -63,7 +63,7 @@ MonoBehaviour:
   artDescription: A heavyset warrior in a stained hoodie and a cape, holding a mechanical
     keyboard over his head like a greatsword, a gaming headset for a helmet and energy
     drinks hanging from his belt.
-  attack: 1
+  attack: 2
   health: 3
   speed: 2
   turnsUntilOperative: 0

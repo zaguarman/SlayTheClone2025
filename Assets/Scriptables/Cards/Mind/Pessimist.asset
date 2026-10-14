@@ -29,8 +29,8 @@ MonoBehaviour:
     it and it grows, buff it and it shrinks.'
   artDescription: A man in a raincoat under his own tiny raincloud on a sunny beach,
     frowning at a winning lottery ticket.
-  attack: 2
-  health: 4
+  attack: 5
+  health: 5
   speed: 1
   turnsUntilOperative: 0
   movement: 0

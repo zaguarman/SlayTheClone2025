@@ -59,10 +59,10 @@ MonoBehaviour:
   designNotes: 'Future: picks its own target among the creatures that hurt you last
     Day.'
   artDescription: 
-  attack: 3
-  health: 3
+  attack: 5
+  health: 4
   speed: 2
-  turnsUntilOperative: 1
+  turnsUntilOperative: 0
   movement: 0
   ability: 0
   gift: 0

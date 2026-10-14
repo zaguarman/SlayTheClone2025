@@ -30,7 +30,7 @@ MonoBehaviour:
     oncePerCombat: 0
     actions:
     - actionType: 6
-      value: -3
+      value: -4
       targetType: 4
       targetModifier: 4
       modifyAttack: 0
@@ -83,7 +83,7 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'Health Loss (not damage, which fits Mind): 3 on a random enemy creature,
+  designNotes: 'Health Loss (not damage, which fits Mind): 4 on a random enemy creature,
     1 on a random friendly one.'
   artDescription: 'The trolley problem from above: a lever, a trolley and a split
     track, with one bored man on a track scrolling his phone.'

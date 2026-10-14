@@ -29,8 +29,8 @@ MonoBehaviour:
     the other side until revealed.'
   artDescription: 'A cat and a goldfish in love: the cat presses its face to the
     fishbowl, the fish kisses the glass back, hearts all around.'
-  attack: 2
-  health: 1
+  attack: 3
+  health: 2
   speed: 3
   turnsUntilOperative: 0
   movement: 0

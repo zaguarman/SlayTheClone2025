@@ -56,10 +56,37 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'Mechanics test: Exhausted cancels the target''s planned actions (spells
-    land before attacks), lasts the rest of the Day and all of the next, turns its
-    abilities off and adds +1 to every hit (Exposed). Aimed at an enemy slot it''s
-    Fixed: the enemy can dodge by moving.'
+    - actionType: 0
+      value: 2
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: '2 damage, and Exhausted: it cancels the target''s planned actions
+    (spells land before attacks), lasts the rest of the Day and all of the next,
+    turns its abilities off and adds +1 to every hit (Exposed). Aimed at an enemy
+    slot it''s Fixed: the enemy can dodge by moving.'
   artDescription: A server rack melting under an avalanche of tiny envelope icons,
     smart fridges and toasters in the background, each with a red glowing eye.
   defaultTargetType: 4

@@ -85,6 +85,14 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual("Phoenix", p1.Battlefield[4].OccupyingCreature?.Name, "...but at the Dawn 3 Days on");
             Assert.AreEqual(4, p1.Battlefield[4].OccupyingCreature.Health);
 
+            // Health lost for good stays on the card: one that lost it all rises at 0 and dies again
+            var rot = Effect(EffectTrigger.OnDeath, ActionType.Revive, 0, TargetType.Self);
+            rot.oncePerCombat = true;
+            var ghoul = game.Summon(p1, game.Creature("Ghoul", 1, 2, 1, rot), 2);
+            game.Run(LoseHealth(ghoul, 2));
+            game.StartTurn();
+            Assert.IsNull(p1.Battlefield[2].OccupyingCreature, "It doesn't stand on the board at 0 Health");
+
             var frail = game.Summon(p1, game.Creature("Frail", 1, 3, 1, Effect(EffectTrigger.OnDeath, ActionType.Damage, 2, TargetType.Enemy)), 2);
             game.Run(LoseHealth(frail, 3));
             Assert.IsTrue(frail.IsDead, "Losing max Health to 0 kills it");

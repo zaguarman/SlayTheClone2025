@@ -152,10 +152,10 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(7, guard.Health, "Insider Job ignores Armor...");
             Assert.AreEqual(5, guard.CurrentArmorPool, "...and leaves it untouched");
 
-            // Off the Books: it arrives as ???, and hits double until the other side knows what it is
-            var sleeper = With(CreatureAbility.OffTheBooks, p1, 3, attack: 3);
+            // Ambush: it arrives as ???, and hits double until the other side knows what it is
+            var sleeper = With(CreatureAbility.Ambush, p1, 3, attack: 3);
             var mark = With(CreatureAbility.None, p2, 3, health: 20);
-            Assert.IsFalse(Intel.KnowsWhatItIs(p2, sleeper), "Off the Books: it arrives unknown");
+            Assert.IsFalse(Intel.KnowsWhatItIs(p2, sleeper), "Ambush: it arrives unknown");
             game.Attack(sleeper, p2.Battlefield[3]);
             Assert.AreEqual(14, mark.Health, "...and while they don't know it, 3 becomes 6");
             game.Run(new ApplyStatusEffectAction(sleeper, StatusEffectType.Revealed, 1, 0, controller: p2));
@@ -243,6 +243,15 @@ namespace SlayTheClone.Tests {
             game.Attack(chainer, p2.Battlefield[0]);
             Assert.AreEqual(new[] { 4, 6, 7 }, new[] { left.Health, middle.Health, right.Health },
                 "Chain Mail: 4, then the next creatures in line for half each jump (2, then 1)");
+
+            // On the Brink (Utopia's accelerationism): at 2 Health or less, everything it deals is doubled
+            var daredevil = With(CreatureAbility.Brink, p1, 4, attack: 3, health: 5);
+            var dummy = With(CreatureAbility.None, p2, 4, health: 30);
+            game.Attack(daredevil, p2.Battlefield[4]);
+            Assert.AreEqual(27, dummy.Health, "On the Brink, still healthy: plain damage");
+            game.Run(new DamageCreatureAction(daredevil, 3));
+            game.Attack(daredevil, p2.Battlefield[4]);
+            Assert.AreEqual(21, dummy.Health, "...at 2 Health, 3 becomes 6");
 
             // False Flag Operation: one of yours dies, the rest grow. Its Last Will still happens: Dead Man's Switch destroys
             // their strongest, whatever killed it

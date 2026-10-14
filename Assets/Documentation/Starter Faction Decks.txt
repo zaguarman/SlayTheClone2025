@@ -13,6 +13,9 @@ CONTENTS
 
 1. PURPOSE
 
+• 2026-10-14: the decks were rebuilt, one per faction, from each faction's best cards (FactionDecksGenerator, BestDecks);
+  the two-faction decks, Black Budget and Double-O Section are gone. The deck lists below are the old ones; the card
+  descriptions still hold, with the balance changes in Open Questions 39.
 • Nine monofaction decks of 20: Corporate, Statecraft, Zeitgeist and Utopia with 20 different cards; Digital Society, Shadow Ops., Tech, Myth and Mind with some cards twice (section 7). Two example two-faction decks of 20 (section 7).
 • Every card name comes from the 'Brainstorm List' or the 'Refined Brainstorm List', picking the most cynical ones. Margin Call is the exception: a Corporate staple added on purpose.
 • Cards only use what the engine already does: damage, healing, armor, draws, summoning from the deck, stat changes (ModifyStat), the Exhausted stun, and, for the cards in section 6, Doomed, Burn, Health Loss, Leapfrog and Swap.
@@ -232,7 +235,7 @@ Ability Test Creatures (no other effects: each tests one ability from the 'Abili
 
 Fog of War Test Cards (GDD 2.5)
     • Sleeper Agent (Shadow Ops., 0/3/1, 0): Gift, a poisoned one: played into an empty enemy slot, it joins their side; each Dusk, 1 damage to every creature there, itself included (it lasts three Dusks). Still your card: it comes back to your discard pile.
-    • Multi Passport (Shadow Ops., 3/3/2, 0): Off the Books (enters as ???; double damage while the enemy doesn't know what it is, or it's Concealed). Sleeper Agent's old role.
+    • Multi Passport (Shadow Ops., 3/3/2, 0): Ambush (enters as ???; double damage while the enemy doesn't know what it is, or it's Concealed). Sleeper Agent's old role.
     • Wet Work (Shadow Ops., 1/4/3, 0): Extreme Prejudice (its attack destroys what it hits, whatever its Health or Armor; then it's gone too).
     • Perfectly Timed Camera Malfunction (Shadow Ops. spell): Destroy target enemy creature if it's Revealed (Untouchable still saves it). Set it up with Tapped Communications.
     • Smoke And Mirrors (Shadow Ops. spell): Concealed for 2 Days on a friendly creature.

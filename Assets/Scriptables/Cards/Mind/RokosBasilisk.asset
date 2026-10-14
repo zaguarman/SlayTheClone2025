@@ -60,10 +60,10 @@ MonoBehaviour:
     deal it.'
   artDescription: A big green snake in headphones typing on a laptop, a sticky note
     on the screen reading NAUGHTY LIST.
-  attack: 0
-  health: 5
+  attack: 2
+  health: 6
   speed: 1
-  turnsUntilOperative: 1
+  turnsUntilOperative: 0
   movement: 0
   ability: 0
   gift: 0

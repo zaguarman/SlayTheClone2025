@@ -30,7 +30,7 @@ MonoBehaviour:
     oncePerCombat: 0
     actions:
     - actionType: 0
-      value: 3
+      value: 4
       targetType: 4
       targetModifier: 1
       modifyAttack: 1
@@ -83,7 +83,7 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: '3 damage to the creature and its neighbors; 2 damage to you (side
+  designNotes: '4 damage to the creature and its neighbors; 2 damage to you (side
     effects). Future: Black Hole repositioning.'
   artDescription: A swirling black hole sucking in a cow, a sofa, a single sock and
     a tax form.

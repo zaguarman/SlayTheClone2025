@@ -30,7 +30,7 @@ MonoBehaviour:
   artDescription: A pale figure in a dark room lit only by three monitors, a cork
     board of red strings and printed memes behind them, an energy-drink pyramid on
     the desk.
-  attack: 2
+  attack: 3
   health: 3
   speed: 2
   turnsUntilOperative: 0

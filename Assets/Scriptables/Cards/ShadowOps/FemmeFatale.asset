@@ -84,8 +84,8 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Each Dusk she squeezes the enemy creature facing her: 2 damage to
-    it, and she heals 1. Nothing facing her: nothing happens. Off the Books: she
-    arrives as ??? and deals double while nobody knows who she is.'
+    it, and she heals 1. Nothing facing her: nothing happens. Ambush: she arrives
+    as ??? and deals double while nobody knows who she is.'
   artDescription: A glamorous woman in a black evening gown smiling over her cocktail
     at a casino table, while the red-faced general in the chair beside her is squeezed
     between her crossed legs, his medals popping off.

@@ -60,8 +60,8 @@ MonoBehaviour:
   artDescription: A laptop held together with duct tape and a TODO sticky note, beside
     an empty, cracked piggy bank, the dashed outlines of the missing banknotes floating
     above.
-  attack: 3
-  health: 4
+  attack: 4
+  health: 5
   speed: 2
   turnsUntilOperative: 0
   movement: 0

@@ -56,8 +56,8 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'A huge abomination. Side effect: its cloned DNA is unstable, it loses
-    1 Health for good each Dusk.'
+  designNotes: 'A huge abomination, On the Brink. Side effect: its cloned DNA is
+    unstable, it loses 1 Health for good each Dusk, until it hits twice as hard.'
   artDescription: A T-Rex skeleton half covered in new flesh breaking out of a museum
     display, the DNA sequencer that brought it back still beeping, a guide pointing
     at the exit.
@@ -66,7 +66,7 @@ MonoBehaviour:
   speed: 1
   turnsUntilOperative: 2
   movement: 0
-  ability: 0
+  ability: 32
   gift: 0
   token: 0
   disguise: {fileID: 0}

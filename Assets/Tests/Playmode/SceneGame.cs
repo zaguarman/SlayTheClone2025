@@ -154,7 +154,8 @@ namespace SlayTheClone.Tests {
             int turn = Turns.TurnNumber;
             References.GetResolveActionsButton().onClick.Invoke();
             yield return Wait.For(() => !Turns.IsResolving, "the turn to resolve");
-            Assert.AreEqual(turn + 1, Turns.TurnNumber, "Clicking End Turn didn't end the turn");
+            bool over = Object.FindFirstObjectByType<GameUI>()?.GameOver?.IsShown ?? false; // Someone fell: no next Day
+            if (!over) Assert.AreEqual(turn + 1, Turns.TurnNumber, "Clicking End Turn didn't end the turn");
             yield return null; // Cards the views replaced are destroyed at the end of the frame
         }
         #endregion

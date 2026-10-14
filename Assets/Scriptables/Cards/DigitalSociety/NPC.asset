@@ -30,7 +30,7 @@ MonoBehaviour:
   artDescription: A crowd of identical grey, featureless NPC Wojak faces, every speech
     bubble repeating the same sentence, one of them proudly holding a "Think For
     Yourself" sign.
-  attack: 1
+  attack: 2
   health: 3
   speed: 2
   turnsUntilOperative: 0

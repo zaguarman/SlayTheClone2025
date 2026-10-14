@@ -129,7 +129,9 @@ Utopia: Science & the Future
     • Coin: ∞ (endless progress) on a coin in its color.
     • Play Style: Science. Its creatures grow: advancements raise their stats for good (Gene Editing, Mutation, Exponential
       Growth), experiments gone too far become abominations (Frankenstein, Chimera, Resurrected T-Rex), and Evolution Theory sets
-      Survival of the Fittest, which culls the weakest creature on the board each Dusk.
+      Survival of the Fittest, which culls the weakest creature on the board each Dusk. Its philosophy is accelerationism:
+      technology solves everything, however bad it gets first. It gambles (Accelerationism) and takes its own creatures to
+      the brink of death, where On the Brink (2 Health or less) makes them deal double: then the breakthrough pays.
     • Signature Mechanics: Evolution (each Deployment Time step unlocks an ability, using OnDeploymentTimeComplete), gene editing (Persistent Stat Modifications), healing and immunity (Vaccine, Placebo), Clone, field Slot Effects (Force Field, Stasis, Magnetic), Wormhole and Black Hole repositioning.
     • Statuses: Chill, Resurrected, Mutation.
     • Pays With: Side effects. Every experiment puts a negative status on the creature it targets.

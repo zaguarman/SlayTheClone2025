@@ -30,8 +30,8 @@ MonoBehaviour:
   artDescription: 'A beige mainframe held together with duct tape in a dusty basement,
     a yellowed sticky note on it: "DO NOT TOUCH - Gary (retired 1999)", and cobwebs
     over an "Update available" pop-up.'
-  attack: 1
-  health: 6
+  attack: 2
+  health: 7
   speed: 1
   turnsUntilOperative: 1
   movement: 0

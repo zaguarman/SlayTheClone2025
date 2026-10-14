@@ -412,7 +412,7 @@ namespace SlayTheClone {
         private int DamageOf(SeenCreature attacker) {
             int damage = AttackOf(attacker) + (attacker.Ability == CreatureAbility.Recoil ? 2 : 0);
             if (attacker.Ability == CreatureAbility.PennyStock && damage <= 3) damage *= 2;
-            if (attacker.DealsDouble) damage *= 2; // Off the Books, still unseen
+            if (attacker.DealsDouble) damage *= 2; // Ambush, still unseen
             return attacker.Ability == CreatureAbility.DoubleTap ? damage * 2 : damage;
         }
 
@@ -803,7 +803,7 @@ namespace SlayTheClone {
                 // A combo: with a "destroy it if it's Revealed" spell in hand, revealing a creature of theirs is nearly its death
                 StatusEffectType.Revealed when holdsKillIfRevealed && !creature.Ours && !IsUntouchable(creature) && HealthLeft(creature) > 0 =>
                     -(creature.Worth + HealthLeft(creature)) * 0.8f,
-                StatusEffectType.Revealed => creature.Has(StatusEffectType.Concealed) || creature.Ability is CreatureAbility.Undercover or CreatureAbility.OffTheBooks ? -2 : -0.5f,
+                StatusEffectType.Revealed => creature.Has(StatusEffectType.Concealed) || creature.Ability is CreatureAbility.Undercover or CreatureAbility.Ambush ? -2 : -0.5f,
                 StatusEffectType.Concealed or StatusEffectType.Encrypted => 1,
                 StatusEffectType.Untouchable => Hard && creature.Ours ? Protection(creature, ActionType.Stun, 0) : 3,
                 StatusEffectType.Cooldown => -1,

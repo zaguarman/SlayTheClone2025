@@ -57,7 +57,7 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
     - actionType: 0
-      value: 2
+      value: 3
       targetType: 2
       targetModifier: 2
       modifyAttack: 1

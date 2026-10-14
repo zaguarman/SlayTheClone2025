@@ -30,7 +30,7 @@ MonoBehaviour:
     oncePerCombat: 0
     actions:
     - actionType: 6
-      value: -2
+      value: -3
       targetType: 4
       targetModifier: 0
       modifyAttack: 1
@@ -56,7 +56,34 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: '-2 Attack for good. Future: the Imposter Syndrome status.'
+    - actionType: 6
+      value: -1
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 0
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: '-3 Attack and -1 Health for good. Future: the Imposter Syndrome status.'
   artDescription: A little space crewmate in a spacesuit and visor sitting at an
     office desk under a SENIOR ENGINEER name plate, sweating.
   defaultTargetType: 4

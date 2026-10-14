@@ -85,10 +85,10 @@ MonoBehaviour:
       decoy: {fileID: 0}
   designNotes: 'Future: Plot Armor. Survives a lethal hit once (OnAboutToDie).'
   artDescription: 
-  attack: 3
-  health: 3
+  attack: 5
+  health: 4
   speed: 2
-  turnsUntilOperative: 1
+  turnsUntilOperative: 0
   movement: 0
   ability: 0
   gift: 0

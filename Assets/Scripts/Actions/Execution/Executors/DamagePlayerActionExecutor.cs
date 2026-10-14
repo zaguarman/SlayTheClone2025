@@ -5,7 +5,8 @@ namespace SlayTheClone {
         protected override void ExecuteAction(DamagePlayerAction damagePlayerAction, ActionExecutionContext context) {
             var targetPlayer = damagePlayerAction.GetTargetPlayer();
             var damage = damagePlayerAction.GetDamage();
-            if (damage > 0 && Abilities.IsOffTheBooks(damagePlayerAction.GetAttacker(), context.ModifierManager)) damage *= 2;
+            if (damage > 0 && Abilities.IsAmbushing(damagePlayerAction.GetAttacker(), context.ModifierManager)) damage *= 2;
+            if (damage > 0 && Abilities.IsOnTheBrink(damagePlayerAction.GetAttacker())) damage *= 2;
 
             if (targetPlayer == null) {
                 LogError("DamagePlayerActionExecutor: Target player is null", LogTag.Actions | LogTag.Players);

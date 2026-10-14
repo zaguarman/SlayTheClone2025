@@ -87,8 +87,8 @@ MonoBehaviour:
     (fewer draws next Day).'
   artDescription: 'A raw steak sitting at a desk, copy-pasting text from one window
     to another on a computer screen, a price tag on the monitor: $9.99/MONTH.'
-  attack: 0
-  health: 3
+  attack: 1
+  health: 4
   speed: 1
   turnsUntilOperative: 1
   movement: 0

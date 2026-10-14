@@ -70,10 +70,10 @@ namespace SlayTheClone {
             watchdog.Controller == viewer || watchdog.RevealedTo.Contains(viewer);
 
         #region What a creature is
-        /// <summary>Stealthy: it keeps what it is hidden when it enters play. Undercover or Off the Books (printed, even before it's ready) or Concealed, and not Revealed.</summary>
+        /// <summary>Stealthy: it keeps what it is hidden when it enters play. Undercover or Ambush (printed, even before it's ready) or Concealed, and not Revealed.</summary>
         public static bool IsStealthy(ICreature creature, IModifierManager modifiers) =>
             creature != null && modifiers != null
-            && (creature.Ability is CreatureAbility.Undercover or CreatureAbility.OffTheBooks || creature.Disguise != null
+            && (creature.Ability is CreatureAbility.Undercover or CreatureAbility.Ambush || creature.Disguise != null
                 || modifiers.HasStatusEffect(creature, StatusEffectType.Concealed))
             && !modifiers.HasStatusEffect(creature, StatusEffectType.Revealed);
 

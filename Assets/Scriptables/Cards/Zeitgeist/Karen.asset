@@ -58,8 +58,8 @@ MonoBehaviour:
       decoy: {fileID: 0}
   designNotes: 'Future: Impatient. Escalates every Day nobody gives it an intent.'
   artDescription: 
-  attack: 2
-  health: 4
+  attack: 4
+  health: 5
   speed: 1
   turnsUntilOperative: 0
   movement: 0

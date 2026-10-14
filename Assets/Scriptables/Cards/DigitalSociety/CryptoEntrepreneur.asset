@@ -29,7 +29,7 @@ MonoBehaviour:
     in line, half the damage each jump.'
   artDescription: A guy in sunglasses and a hoodie on top of a human pyramid of recruits,
     a glowing coin passed down from hand to hand.
-  attack: 2
+  attack: 3
   health: 3
   speed: 2
   turnsUntilOperative: 0

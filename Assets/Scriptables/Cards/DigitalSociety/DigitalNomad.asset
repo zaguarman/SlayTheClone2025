@@ -28,7 +28,7 @@ MonoBehaviour:
   designNotes: 'Mechanics test: Leapfrog on a cheap, fast creature.'
   artDescription: A Tuareg nomad in a white turban and face veil, sitting cross-legged
     on a sand dune, typing on a laptop on his knees.
-  attack: 2
+  attack: 3
   health: 2
   speed: 2
   turnsUntilOperative: 0

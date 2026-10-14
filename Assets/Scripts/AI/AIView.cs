@@ -33,7 +33,7 @@ namespace SlayTheClone {
         public bool Exposed { get; }
         /// <summary>Damage it answers an attack with (Counterattack, Retaliate), from its card text.</summary>
         public int Retaliation { get; }
-        /// <summary>Off the Books and still unseen: its damage is doubled (known for ours, and for theirs once we know them).</summary>
+        /// <summary>Ambush and still unseen: its damage is doubled (known for ours, and for theirs once we know them).</summary>
         public bool DealsDouble { get; }
         /// <summary>How far its Attack and Health are above its printed ones (what Credit Grab steals).</summary>
         public int StatRaises { get; }
@@ -69,7 +69,7 @@ namespace SlayTheClone {
                 if (status != StatusEffectType.None && modifiers.HasStatusEffect(creature, status) && Intel.CanSeeStatus(viewer, creature, status)) statuses.Add(status);
             }
             StatRaises = creature.Attack - creature.BaseAttack + creature.Health - creature.BaseHealth;
-            DealsDouble = slot != null && creature.Slot != null && Abilities.IsOffTheBooks(creature, modifiers);
+            DealsDouble = slot != null && creature.Slot != null && (Abilities.IsAmbushing(creature, modifiers) || Abilities.IsOnTheBrink(creature));
             RevealBacklash = creature.Effects.Where(e => e.trigger == EffectTrigger.OnRevealed).SelectMany(e => e.actions)
                 .Where(a => a.actionType == ActionType.Damage && a.targetType == TargetType.Enemy).Sum(a => a.value);
             Retaliation = creature.Effects.Where(e => e.trigger == EffectTrigger.OnDamage).SelectMany(e => e.actions)

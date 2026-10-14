@@ -14,29 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Myth - Old Gods, New Tricks
   cards:
-  - {fileID: 11400000, guid: a6a4fb5192548394787288284a53ded3, type: 2}
-  - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
-  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
-  - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
   - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
-  - {fileID: 11400000, guid: 58393f7e44c440c489cea67f229b73f1, type: 2}
+  - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
   - {fileID: 11400000, guid: c2796d4d56336e74aaa133dfe1f96cc1, type: 2}
-  - {fileID: 11400000, guid: 18cc60c8301c8e348afd1ec6332a61a2, type: 2}
-  - {fileID: 11400000, guid: 98025cafa44666644ac23f4693fbdc90, type: 2}
-  - {fileID: 11400000, guid: 8154fce2f847a534da2d48a848ac798d, type: 2}
-  - {fileID: 11400000, guid: da99501379be9924094b1266d4b3a88f, type: 2}
-  - {fileID: 11400000, guid: da99501379be9924094b1266d4b3a88f, type: 2}
-  - {fileID: 11400000, guid: b83da39fc1648d74e91f1d386ba008a1, type: 2}
-  - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
-  - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
-  - {fileID: 11400000, guid: 08561350625093a4a87f3a0dac9acca3, type: 2}
-  - {fileID: 11400000, guid: ac13c245e63f34c4cadc7663e7e42079, type: 2}
-  - {fileID: 11400000, guid: ac13c245e63f34c4cadc7663e7e42079, type: 2}
-  - {fileID: 11400000, guid: 69d704671f0547340b15e4219f15b29c, type: 2}
-  - {fileID: 11400000, guid: 8590baeb53c9e8645bf452835140d3e3, type: 2}
-  - {fileID: 11400000, guid: 5a8d01f17086a9e4a84b662311eebbeb, type: 2}
-  - {fileID: 11400000, guid: 182b939e0c71c5e4bbae5e423d1fde83, type: 2}
+  - {fileID: 11400000, guid: c2796d4d56336e74aaa133dfe1f96cc1, type: 2}
   - {fileID: 11400000, guid: 4a189475bff55954db7d7c9dd6ba6479, type: 2}
-  - {fileID: 11400000, guid: 420ef2f61ea3a104fac581ccf1446cd3, type: 2}
-  - {fileID: 11400000, guid: 4068c3ec3d4399b449ee806537671ec2, type: 2}
-  lastUpdated: 2026-10-14T09:48:33.7508123Z
+  - {fileID: 11400000, guid: 4a189475bff55954db7d7c9dd6ba6479, type: 2}
+  - {fileID: 11400000, guid: da99501379be9924094b1266d4b3a88f, type: 2}
+  - {fileID: 11400000, guid: da99501379be9924094b1266d4b3a88f, type: 2}
+  - {fileID: 11400000, guid: 69d704671f0547340b15e4219f15b29c, type: 2}
+  - {fileID: 11400000, guid: 69d704671f0547340b15e4219f15b29c, type: 2}
+  - {fileID: 11400000, guid: 98025cafa44666644ac23f4693fbdc90, type: 2}
+  - {fileID: 11400000, guid: 18cc60c8301c8e348afd1ec6332a61a2, type: 2}
+  - {fileID: 11400000, guid: 3e85e758bdd60c7469348f2dbe0db0da, type: 2}
+  - {fileID: 11400000, guid: 1215031c18e9eb741a8633014341c44f, type: 2}
+  - {fileID: 11400000, guid: 08561350625093a4a87f3a0dac9acca3, type: 2}
+  - {fileID: 11400000, guid: 8590baeb53c9e8645bf452835140d3e3, type: 2}
+  - {fileID: 11400000, guid: ac13c245e63f34c4cadc7663e7e42079, type: 2}
+  - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
+  - {fileID: 11400000, guid: 58393f7e44c440c489cea67f229b73f1, type: 2}
+  - {fileID: 11400000, guid: 5a8d01f17086a9e4a84b662311eebbeb, type: 2}
+  lastUpdated: 2026-10-14T11:17:53.0109577Z

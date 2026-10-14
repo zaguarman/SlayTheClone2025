@@ -56,6 +56,33 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
+    - actionType: 0
+      value: 2
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
     - actionType: 2
       value: 1
       targetType: 0
@@ -83,7 +110,7 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: Exhausted, and you draw a card (the ransom).
+  designNotes: Exhausted, 2 damage, and you draw a card (the ransom).
   artDescription: A computer screen with a grinning skull and a padlock demanding
     1 BTC, while a grandma cries into her knitting.
   defaultTargetType: 4

@@ -12,29 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: ShadowOpsDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Shadow Ops. - Plausible Deniability
+  deckName: Shadow Ops. - Licence to Kill
   cards:
+  - {fileID: 11400000, guid: dc8822e884221714d88b9b0a7eadff4d, type: 2}
+  - {fileID: 11400000, guid: dc8822e884221714d88b9b0a7eadff4d, type: 2}
+  - {fileID: 11400000, guid: 9efb41643889f7d459d404c6e67e724a, type: 2}
+  - {fileID: 11400000, guid: 9efb41643889f7d459d404c6e67e724a, type: 2}
+  - {fileID: 11400000, guid: 2123b22b1d703cd46b0ded74774b3583, type: 2}
+  - {fileID: 11400000, guid: 2123b22b1d703cd46b0ded74774b3583, type: 2}
   - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
-  - {fileID: 11400000, guid: f6b043e3ca8ec5b4bbacd81dfacc2458, type: 2}
-  - {fileID: 11400000, guid: f6b043e3ca8ec5b4bbacd81dfacc2458, type: 2}
-  - {fileID: 11400000, guid: b89196ebb9a527744841ad9893254aeb, type: 2}
-  - {fileID: 11400000, guid: b89196ebb9a527744841ad9893254aeb, type: 2}
-  - {fileID: 11400000, guid: 2fd9e148fb5a89c4187d088c486c4ac9, type: 2}
-  - {fileID: 11400000, guid: 8aba5b6c983aeb747a02d69b28b0f4d3, type: 2}
-  - {fileID: 11400000, guid: 8aba5b6c983aeb747a02d69b28b0f4d3, type: 2}
-  - {fileID: 11400000, guid: f1151f787bcbaf94198836435fb77b0a, type: 2}
-  - {fileID: 11400000, guid: 852953fe670cca048bd2e4f2bcb6609f, type: 2}
-  - {fileID: 11400000, guid: 3848abb62f6aa18498632ae17cf10577, type: 2}
-  - {fileID: 11400000, guid: 0dc19b982c2b39a40bbe62ec3878625c, type: 2}
+  - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
+  - {fileID: 11400000, guid: 889ea9cf0d4f80248a5abe0ffcd4c681, type: 2}
+  - {fileID: 11400000, guid: 889ea9cf0d4f80248a5abe0ffcd4c681, type: 2}
+  - {fileID: 11400000, guid: bb17e17b05843804b88c57f26d889238, type: 2}
+  - {fileID: 11400000, guid: bb17e17b05843804b88c57f26d889238, type: 2}
+  - {fileID: 11400000, guid: a9e8d9a467600b74d92130a476a618c5, type: 2}
+  - {fileID: 11400000, guid: 5dcf4b91dddeba94892200eb971e000d, type: 2}
+  - {fileID: 11400000, guid: 0fc05be701e3249479b51b900492f8c4, type: 2}
+  - {fileID: 11400000, guid: e2f194f866b25224abf509ebaa6889db, type: 2}
+  - {fileID: 11400000, guid: 42466d199f9ea0446815cebbad87421e, type: 2}
+  - {fileID: 11400000, guid: 9bc4ef3438464c5429f9cd84bbb59b46, type: 2}
   - {fileID: 11400000, guid: 78cd5c5267fa0164db084db6099e1350, type: 2}
-  - {fileID: 11400000, guid: 5431854436dd8b24595b529786bff8ad, type: 2}
-  - {fileID: 11400000, guid: c4a9a8990224578428700b0e7be6e543, type: 2}
-  - {fileID: 11400000, guid: c4a9a8990224578428700b0e7be6e543, type: 2}
-  - {fileID: 11400000, guid: aa26842242b38a34eab1d206848233e6, type: 2}
-  - {fileID: 11400000, guid: aa26842242b38a34eab1d206848233e6, type: 2}
-  - {fileID: 11400000, guid: 50bfa74d440511342817e82dda49c169, type: 2}
-  - {fileID: 11400000, guid: 8fcb28f9f6067fb4e87b1f82f2e251af, type: 2}
-  - {fileID: 11400000, guid: 3c6c38f0542624d45bb9332eb7f6bc35, type: 2}
-  - {fileID: 11400000, guid: cf9ae998a80d0d24da493f3d1fbcef76, type: 2}
-  - {fileID: 11400000, guid: fa88f9ca7683fd14dbd86f39fda87ef3, type: 2}
-  lastUpdated: 2026-10-14T09:06:10.0623188Z
+  - {fileID: 11400000, guid: 0dc19b982c2b39a40bbe62ec3878625c, type: 2}
+  lastUpdated: 2026-10-14T11:17:53.0004187Z

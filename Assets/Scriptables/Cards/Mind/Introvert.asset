@@ -29,8 +29,8 @@ MonoBehaviour:
   artDescription: A person in big headphones reading in a blanket fort while a loud
     party rages around them, the partygoers' shouted invitations bouncing off the
     blankets.
-  attack: 1
-  health: 5
+  attack: 4
+  health: 6
   speed: 1
   turnsUntilOperative: 0
   movement: 0

@@ -152,7 +152,7 @@ Undercover
     Notes: Everything it plans (attacks, moves, active abilities) is a Concealed Action: the other side sees '???' on its card instead of its arrows, and their Watchdogs can't match it. Revealed cancels it, and a Reveal shows one Day's plans to whoever cast it. It's an ability, so whatever switches abilities off (Exhausted, Signal Jammer...) switches the concealment off too.
     Answers: Revealed, a Reveal, Signal Jammer, or effects that don't care what it plans (slot and area effects).
 
-Off the Books
+Ambush
     Inspired by: the GDD's stealthy creatures (2.5, Unknown Creatures): a spy hits hardest before anyone knows who it is. On Multi Passport (it was Sleeper Agent's).
     Type: Passive
     Description: "Enters as ???. Double damage while the enemy doesn't know what it is, or it's Concealed."

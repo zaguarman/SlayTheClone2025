@@ -31,7 +31,7 @@ MonoBehaviour:
     oncePerCombat: 0
     actions:
     - actionType: 0
-      value: 3
+      value: 4
       targetType: 4
       targetModifier: 0
       modifyAttack: 1

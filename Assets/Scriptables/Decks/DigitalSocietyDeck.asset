@@ -14,25 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Digital Society - Terminally Online
   cards:
-  - {fileID: 11400000, guid: cf18a07b157afe14881481760e45e989, type: 2}
+  - {fileID: 11400000, guid: 6dbc9d723fcaca744a265578375c3bcf, type: 2}
+  - {fileID: 11400000, guid: 6dbc9d723fcaca744a265578375c3bcf, type: 2}
+  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
+  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
+  - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}
+  - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}
+  - {fileID: 11400000, guid: 912bd0399cfd4844bacd0bdc6b342835, type: 2}
+  - {fileID: 11400000, guid: 912bd0399cfd4844bacd0bdc6b342835, type: 2}
+  - {fileID: 11400000, guid: fed2e051033dfec46808dfe59f733838, type: 2}
   - {fileID: 11400000, guid: fed2e051033dfec46808dfe59f733838, type: 2}
   - {fileID: 11400000, guid: 3f4f451c39d6daf4ea88007aa445281f, type: 2}
   - {fileID: 11400000, guid: 3f4f451c39d6daf4ea88007aa445281f, type: 2}
-  - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}
-  - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}
-  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
-  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
-  - {fileID: 11400000, guid: b3d7fcfd7bb472d45ac0258083a97e24, type: 2}
-  - {fileID: 11400000, guid: b3d7fcfd7bb472d45ac0258083a97e24, type: 2}
-  - {fileID: 11400000, guid: e86409097920347469c5cbf73aa57869, type: 2}
-  - {fileID: 11400000, guid: 912bd0399cfd4844bacd0bdc6b342835, type: 2}
-  - {fileID: 11400000, guid: 912bd0399cfd4844bacd0bdc6b342835, type: 2}
-  - {fileID: 11400000, guid: 41454336b8e16764d8897793b981ba6d, type: 2}
-  - {fileID: 11400000, guid: 285720a054817f2418d931d4c35ecb17, type: 2}
-  - {fileID: 11400000, guid: eb78815adfb01f74daff1cbe042de925, type: 2}
-  - {fileID: 11400000, guid: 6dbc9d723fcaca744a265578375c3bcf, type: 2}
-  - {fileID: 11400000, guid: 6dbc9d723fcaca744a265578375c3bcf, type: 2}
-  - {fileID: 11400000, guid: de3adc60108efa04d920eaf39638a8ce, type: 2}
   - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
+  - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
+  - {fileID: 11400000, guid: eb78815adfb01f74daff1cbe042de925, type: 2}
+  - {fileID: 11400000, guid: eb78815adfb01f74daff1cbe042de925, type: 2}
+  - {fileID: 11400000, guid: b3d7fcfd7bb472d45ac0258083a97e24, type: 2}
+  - {fileID: 11400000, guid: de3adc60108efa04d920eaf39638a8ce, type: 2}
   - {fileID: 11400000, guid: f2bf5369176d5fe43a56d06b7024f483, type: 2}
-  lastUpdated: 2026-10-14T08:35:10.0000000Z
+  - {fileID: 11400000, guid: 41454336b8e16764d8897793b981ba6d, type: 2}
+  lastUpdated: 2026-10-14T11:17:52.9878478Z

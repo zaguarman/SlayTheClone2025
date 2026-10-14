@@ -153,7 +153,7 @@ namespace SlayTheClone {
             CreatureAbility.Copypasta => "When it's ready and each [Dawn] after, it copies the ability of the creature opposite (once).",
             CreatureAbility.Undercover => "It's always [Concealed] until [Revealed].",
             CreatureAbility.ExtremePrejudice => "Its attack [Destroy|destroys] the creature it hits, whatever its Health or [Armor]; then it's gone too. [Untouchable] or a [Temporal Shield] stops the hit.",
-            CreatureAbility.OffTheBooks => "It enters as ??? to the other side. While they don't know what it is, or it's [Concealed], everything it deals is doubled. A [Reveal] or [Revealed] shows it for good.",
+            CreatureAbility.Ambush => "It enters as ??? to the other side. While they don't know what it is, or it's [Concealed], everything it deals is doubled. A [Reveal] or [Revealed] shows it for good.",
             CreatureAbility.HiveMind => "A creature that attacks it loses its ability and gains Hive Mind instead.",
             CreatureAbility.IdentityTheft => "Instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it).",
             CreatureAbility.InsiderJob => "Its damage ignores [Armor].",
@@ -167,6 +167,7 @@ namespace SlayTheClone {
             CreatureAbility.ShellGame => "Instead of attacking or moving: target creature trades places with the one to its right, or to its left at the end of the row (hold Shift as you drag it).",
             CreatureAbility.SafeSpace => "Each [Dawn], it and the friendly creatures beside it gain [Blessed|Bless]: a ward that stops the next status.",
             CreatureAbility.AllergicToLight => $"A drawback: each time it's [Revealed], or a [Reveal] shows it to the other side, it takes {Abilities.LightDamage} damage. Spies coming into the light; one day, vampires.",
+            CreatureAbility.Brink => "At 2 Health or less (0 on [Borrowed Time] included), everything it deals is doubled. Utopia's accelerationism: however bad it gets, the breakthrough pays off.",
             CreatureAbility.FallGuy => "When an enemy effect would make another friendly creature [Revealed] or [Destroy|destroy] it, it lands on this one instead: it takes the fall.",
             _ => Capitalize(Abilities.ReminderOf(ability)) + "."
         };

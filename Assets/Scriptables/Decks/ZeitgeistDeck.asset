@@ -14,26 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Zeitgeist - Moods of Modern Life
   cards:
-  - {fileID: 11400000, guid: ee550aae30e29634eb0bcc3d14b230ff, type: 2}
-  - {fileID: 11400000, guid: 05fa83554dffb8a40a3f43ec83f6d5c2, type: 2}
-  - {fileID: 11400000, guid: d15cf317060803f49a876036aec7f154, type: 2}
-  - {fileID: 11400000, guid: 0e6033fc5727d084c8d12457d775f0c2, type: 2}
-  - {fileID: 11400000, guid: 2a6b26d94bf0cc042948da6cabff0ec0, type: 2}
-  - {fileID: 11400000, guid: abf1338d51ee38e4cb392755631df395, type: 2}
-  - {fileID: 11400000, guid: 1354dc85d04090c438eaa57342c8da40, type: 2}
-  - {fileID: 11400000, guid: 85079479fcdfae24c98f36d42238c74e, type: 2}
-  - {fileID: 11400000, guid: fce7a5f6eb6a25342804e4e2e1b082a9, type: 2}
-  - {fileID: 11400000, guid: cb57619ee4a28f049a2a8aedfbf22c54, type: 2}
+  - {fileID: 11400000, guid: 912c75a7a317e164386de9d3b352da98, type: 2}
+  - {fileID: 11400000, guid: 912c75a7a317e164386de9d3b352da98, type: 2}
+  - {fileID: 11400000, guid: 431fe523e651ea34d851194cde543871, type: 2}
+  - {fileID: 11400000, guid: 431fe523e651ea34d851194cde543871, type: 2}
   - {fileID: 11400000, guid: e9645c92222d14c4d91f3b92d4663bc9, type: 2}
+  - {fileID: 11400000, guid: e9645c92222d14c4d91f3b92d4663bc9, type: 2}
+  - {fileID: 11400000, guid: abf1338d51ee38e4cb392755631df395, type: 2}
+  - {fileID: 11400000, guid: abf1338d51ee38e4cb392755631df395, type: 2}
+  - {fileID: 11400000, guid: 2a6b26d94bf0cc042948da6cabff0ec0, type: 2}
+  - {fileID: 11400000, guid: 2a6b26d94bf0cc042948da6cabff0ec0, type: 2}
+  - {fileID: 11400000, guid: 0e6033fc5727d084c8d12457d775f0c2, type: 2}
+  - {fileID: 11400000, guid: 0e6033fc5727d084c8d12457d775f0c2, type: 2}
+  - {fileID: 11400000, guid: b6365f6bccdabc24693f4f591c0cecbb, type: 2}
   - {fileID: 11400000, guid: b6365f6bccdabc24693f4f591c0cecbb, type: 2}
   - {fileID: 11400000, guid: 31609dab42e77df4f80649743431c21a, type: 2}
-  - {fileID: 11400000, guid: 3d01d22be9099a24e9c2e8774bbc5518, type: 2}
-  - {fileID: 11400000, guid: 87790aac015e49d44a145d5838081313, type: 2}
-  - {fileID: 11400000, guid: 912c75a7a317e164386de9d3b352da98, type: 2}
-  - {fileID: 11400000, guid: 7e468aeb21ac47d408932858d029bc05, type: 2}
-  - {fileID: 11400000, guid: 431fe523e651ea34d851194cde543871, type: 2}
+  - {fileID: 11400000, guid: 31609dab42e77df4f80649743431c21a, type: 2}
+  - {fileID: 11400000, guid: d15cf317060803f49a876036aec7f154, type: 2}
+  - {fileID: 11400000, guid: fce7a5f6eb6a25342804e4e2e1b082a9, type: 2}
   - {fileID: 11400000, guid: 3b440b18a4ffb974a8ceb55af253254f, type: 2}
-  - {fileID: 11400000, guid: 17041c770f14ec64198ac60152117f6a, type: 2}
-  - {fileID: 11400000, guid: 3a11754dcac21e64eb0d7e6461cc531c, type: 2}
-  - {fileID: 11400000, guid: 95e345c7a2a920d45b81f7e569aad8c5, type: 2}
-  lastUpdated: 2026-10-14T09:06:09.9753770Z
+  - {fileID: 11400000, guid: 3b440b18a4ffb974a8ceb55af253254f, type: 2}
+  lastUpdated: 2026-10-14T11:24:06.9756119Z

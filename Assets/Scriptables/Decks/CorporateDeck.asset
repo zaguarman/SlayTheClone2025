@@ -14,26 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Corporate - Shareholder Value
   cards:
-  - {fileID: 11400000, guid: b7687b707d736164a938b0df4fa36aca, type: 2}
-  - {fileID: 11400000, guid: d88725980981c9b4fb4cf2d0d68db75f, type: 2}
-  - {fileID: 11400000, guid: 1dc6d856885b4dd44bbbf3c5ad02b9b2, type: 2}
-  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
-  - {fileID: 11400000, guid: 8787b06cd5de4974989f7c3bcfcc9b2e, type: 2}
-  - {fileID: 11400000, guid: 885f0b3609889844ca95087ceb297672, type: 2}
-  - {fileID: 11400000, guid: 65207038c69d94840b68c43e9445d20d, type: 2}
-  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
-  - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
-  - {fileID: 11400000, guid: 136368a47c6c05e409600ed0c5d3b94e, type: 2}
-  - {fileID: 11400000, guid: e501123363d163a4092e2ad059abc29d, type: 2}
-  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
-  - {fileID: 11400000, guid: fee5f31226d0f6b49a15db74b37a2743, type: 2}
+  - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
   - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
-  - {fileID: 11400000, guid: 4d1b91992e3fa194f99ad5471cea7860, type: 2}
-  - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
+  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
+  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
+  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
+  - {fileID: 11400000, guid: 5b1b3dccdbb9e1348929cfb29cbfbc9d, type: 2}
   - {fileID: 11400000, guid: 5b1b3dccdbb9e1348929cfb29cbfbc9d, type: 2}
   - {fileID: 11400000, guid: 3ff8e29e684314f46bebf06737bc9000, type: 2}
+  - {fileID: 11400000, guid: 3ff8e29e684314f46bebf06737bc9000, type: 2}
+  - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
+  - {fileID: 11400000, guid: b7687b707d736164a938b0df4fa36aca, type: 2}
+  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
+  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
   - {fileID: 11400000, guid: fc6b56691729fb84e8472bcba349d39a, type: 2}
-  - {fileID: 11400000, guid: 2fe34e4b53b602d4ba40ee26e72b5d84, type: 2}
-  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
-  lastUpdated: 2026-10-14T08:49:16.3663675Z
+  - {fileID: 11400000, guid: fc6b56691729fb84e8472bcba349d39a, type: 2}
+  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
+  - {fileID: 11400000, guid: 885f0b3609889844ca95087ceb297672, type: 2}
+  - {fileID: 11400000, guid: fee5f31226d0f6b49a15db74b37a2743, type: 2}
+  - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
+  lastUpdated: 2026-10-14T11:17:52.9652948Z

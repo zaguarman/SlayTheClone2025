@@ -65,10 +65,11 @@ namespace SlayTheClone {
             CreatureAbility.DoubleTap => "Double Tap",
             CreatureAbility.ShellGame => "Shell Game",
             CreatureAbility.SafeSpace => "Safe Space",
-            CreatureAbility.OffTheBooks => "Off the Books",
+            CreatureAbility.Ambush => "Ambush",
             CreatureAbility.ExtremePrejudice => "Extreme Prejudice",
             CreatureAbility.AllergicToLight => "Allergic to Light",
             CreatureAbility.FallGuy => "Fall Guy",
+            CreatureAbility.Brink => "On the Brink",
             _ => ability.ToString()
         };
 
@@ -91,7 +92,7 @@ namespace SlayTheClone {
             CreatureAbility.ReturnToSender => "enemy statuses bounce back to the creature that sent them; from a spell, to a random enemy creature",
             CreatureAbility.PennyStock => "double damage when it hits for 3 or less",
             CreatureAbility.Undercover => "its plans show as ??? to the enemy",
-            CreatureAbility.OffTheBooks => "enters as ???; double damage while the enemy doesn't know what it is, or it's Concealed",
+            CreatureAbility.Ambush => "enters as ???; double damage while the enemy doesn't know what it is, or it's Concealed",
             CreatureAbility.ExtremePrejudice => "its attack destroys the creature it hits, whatever its Health or Armor; then it's gone too",
             CreatureAbility.Handover => "when a summon replaces it, the newcomer takes over its stat changes and statuses",
             CreatureAbility.Recoil => "+2 damage on its attacks; it takes 1 damage after each attack",
@@ -105,6 +106,7 @@ namespace SlayTheClone {
             CreatureAbility.SafeSpace => "each Dawn, it and the friendly creatures beside it gain Bless",
             CreatureAbility.AllergicToLight => $"when it's Revealed, or a Reveal shows it, it takes {LightDamage} damage",
             CreatureAbility.FallGuy => "when an enemy effect would Reveal or destroy another friendly creature, it lands on this one instead",
+            CreatureAbility.Brink => "at 2 Health or less, everything it deals is doubled",
             _ => ""
         };
 
@@ -262,17 +264,28 @@ namespace SlayTheClone {
                 damage = Math.Max(0, damage + (defender.MaxHealth - defender.BaseHealth));
             }
             if (damage > 0 && damage <= 3 && Has(attacker, CreatureAbility.PennyStock)) damage *= 2;
-            if (damage > 0 && IsOffTheBooks(attacker, modifiers)) damage *= 2;
+            if (damage > 0 && IsAmbushing(attacker, modifiers)) damage *= 2;
+            if (damage > 0 && IsOnTheBrink(attacker)) damage *= 2;
             return damage;
         }
 
         /// <summary>
-        /// Off the Books: everything it deals is doubled while the other side doesn't know what it is (it enters as ???, see
+        /// Ambush: everything it deals is doubled while the other side doesn't know what it is (it enters as ???, see
         /// <see cref="Intel.IsStealthy"/>) or while it's Concealed. A Reveal or Revealed shows it for good, and ends that.
         /// </summary>
-        public static bool IsOffTheBooks(ICreature creature, IModifierManager modifiers) =>
-            Has(creature, CreatureAbility.OffTheBooks)
+        public static bool IsAmbushing(ICreature creature, IModifierManager modifiers) =>
+            Has(creature, CreatureAbility.Ambush)
             && (!Intel.KnowsWhatItIs(creature.Owner?.Opponent, creature) || Intel.IsConcealed(creature, modifiers));
+
+        /// <summary>On the Brink's line: at this much Health or less it deals double.</summary>
+        public const int BrinkHealth = 2;
+
+        /// <summary>
+        /// On the Brink (Utopia's accelerationism: however bad it gets, the breakthrough pays off): at 2 Health or less, Borrowed
+        /// Time's 0 included, everything it deals is doubled.
+        /// </summary>
+        public static bool IsOnTheBrink(ICreature creature) =>
+            Has(creature, CreatureAbility.Brink) && !creature.IsDead && creature.Health <= BrinkHealth;
 
         /// <summary>Recoil: its attacks hit 2 harder (it takes 1 damage after each, see BattlefieldCombatActionExecutor).</summary>
         public static int AttackBonus(ICreature attacker) => Has(attacker, CreatureAbility.Recoil) ? 2 : 0;

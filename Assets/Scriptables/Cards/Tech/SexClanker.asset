@@ -61,8 +61,8 @@ MonoBehaviour:
   artDescription: 'Candlelight and satin: a figure in full shining plate reclines
     on a red heart-shaped bed, propped on one elbow, a rose in the visor and one
     knee up, rose petals everywhere, a heart shield leaning against the bed.'
-  attack: 1
-  health: 6
+  attack: 2
+  health: 7
   speed: 1
   turnsUntilOperative: 0
   movement: 0

@@ -14,24 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Utopia - Results May Vary
   cards:
-  - {fileID: 11400000, guid: ffabb0fa11b78e646b662e53c9f2c4d5, type: 2}
-  - {fileID: 11400000, guid: 15122c80637445d49bb99dc37fa3108e, type: 2}
-  - {fileID: 11400000, guid: adfdb1818290ea7478a5c306ba45a879, type: 2}
-  - {fileID: 11400000, guid: 16806f3d9e0f4d243be07fcafccdaba6, type: 2}
-  - {fileID: 11400000, guid: 8bf01ccda8e799f469fbc04a41eb4085, type: 2}
-  - {fileID: 11400000, guid: 6be6706b5e2f69244a34e066c8a34e2c, type: 2}
-  - {fileID: 11400000, guid: 6d1e3fcb65a763c4fb1821f7d9baf0e0, type: 2}
-  - {fileID: 11400000, guid: 08fb5163a4b25ff4e8c137dbdc189708, type: 2}
-  - {fileID: 11400000, guid: edc3d53fd1fe8bb41879a49711be277c, type: 2}
+  - {fileID: 11400000, guid: af5e598b03ef2d64f8fcf7cdeb6aad78, type: 2}
+  - {fileID: 11400000, guid: af5e598b03ef2d64f8fcf7cdeb6aad78, type: 2}
   - {fileID: 11400000, guid: f0740ff994d5b884baa17a27a3ab5050, type: 2}
-  - {fileID: 11400000, guid: 0835bb03ab6103544b65732b290a1099, type: 2}
+  - {fileID: 11400000, guid: f0740ff994d5b884baa17a27a3ab5050, type: 2}
+  - {fileID: 11400000, guid: 0f51bc317552d7d4997487a263863562, type: 2}
+  - {fileID: 11400000, guid: 0f51bc317552d7d4997487a263863562, type: 2}
   - {fileID: 11400000, guid: 7c4efc130535ec94b87ad62e6ea5efcd, type: 2}
-  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
-  - {fileID: 11400000, guid: 7c901312a0011ce42aaa7f669c20eda6, type: 2}
-  - {fileID: 11400000, guid: e8804ab51a3a4c741a54f9784201bd42, type: 2}
-  - {fileID: 11400000, guid: 7717b40ee8063f047907afef7e41e7e0, type: 2}
-  - {fileID: 11400000, guid: d501dc31c355f3b4081d7045a543399c, type: 2}
-  - {fileID: 11400000, guid: 8a030b617d685d045985263a7f28528c, type: 2}
-  - {fileID: 11400000, guid: 436d8ded07b9e9849a63f8053c44ff0f, type: 2}
+  - {fileID: 11400000, guid: 7c4efc130535ec94b87ad62e6ea5efcd, type: 2}
+  - {fileID: 11400000, guid: 0608f9b502e0dae43a5240e49a69187b, type: 2}
+  - {fileID: 11400000, guid: 0608f9b502e0dae43a5240e49a69187b, type: 2}
+  - {fileID: 11400000, guid: 7a51f897577500746935d02c4d51855c, type: 2}
+  - {fileID: 11400000, guid: 7a51f897577500746935d02c4d51855c, type: 2}
   - {fileID: 11400000, guid: 488d0929b489d5744b1305bca0b1ce0f, type: 2}
-  lastUpdated: 2026-10-14T10:08:32.9993475Z
+  - {fileID: 11400000, guid: 488d0929b489d5744b1305bca0b1ce0f, type: 2}
+  - {fileID: 11400000, guid: bb9b151b194b20f40b0c5fcf054d1ae6, type: 2}
+  - {fileID: 11400000, guid: 7c901312a0011ce42aaa7f669c20eda6, type: 2}
+  - {fileID: 11400000, guid: d501dc31c355f3b4081d7045a543399c, type: 2}
+  - {fileID: 11400000, guid: 6be6706b5e2f69244a34e066c8a34e2c, type: 2}
+  - {fileID: 11400000, guid: 436d8ded07b9e9849a63f8053c44ff0f, type: 2}
+  - {fileID: 11400000, guid: 8a030b617d685d045985263a7f28528c, type: 2}
+  lastUpdated: 2026-10-14T11:17:52.9854991Z

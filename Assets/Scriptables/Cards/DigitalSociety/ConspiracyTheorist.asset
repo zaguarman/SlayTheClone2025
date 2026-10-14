@@ -29,8 +29,8 @@ MonoBehaviour:
     Future: Doxxing, reveals.'
   artDescription: A man in a tinfoil hat pointing at a cork board of photos joined
     by red string, the biggest photo a pigeon labelled DRONE.
-  attack: 1
-  health: 3
+  attack: 2
+  health: 4
   speed: 2
   turnsUntilOperative: 0
   movement: 0
