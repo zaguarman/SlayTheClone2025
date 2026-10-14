@@ -17,7 +17,9 @@ STILL OPEN
       you pick the cards (Headhunter, NDA, Dead Drop: a picker opens when you play it, the AI gives up what it values least).
       Which way a card pays is also a balancing lever. A card whose effect is to discard (not to pay) discards as many as you
       have, up to X: in the rules and the keyword, no card does it yet.
-    • Open: a third way to pay, a fixed rule with some depth (see 40b in the answers to come).
+    • Answered: no third way to pay; random and picked by hand stay. Fixed rules (neighbours in the hand, newest first)
+      would add steps and juggling: play should stay streamlined. Kept as an option for later: a card can ask for a kind
+      of card as its payment (creatures, spells, or any card).
 
 39. New decks, accelerationism, buffing up (2026-10-14)
     • Built as asked: the old decks are gone (the faction decks, Black Budget, Double-O Section, Panopticon, Prosperity
