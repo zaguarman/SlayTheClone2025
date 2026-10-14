@@ -98,15 +98,18 @@ namespace SlayTheClone {
                 pipRect.sizeDelta = new Vector2(CardController.PipWidth, CardController.PipSize);
                 pipRect.anchoredPosition = new Vector2(CardController.PipInset + CardController.PipWidth / 2f, -(CardController.PipInset + CardController.PipSize / 2f));
                 pipRect.SetAsLastSibling();
-                UITheme.Round(pip, UITheme.Gold, 6f); // A square with small rounded corners
-                EnsureTrim(pip.transform, UITheme.Ink, 6f, 0f);
-                UITheme.AddHardShadow(pip, 2f);
+                // Part of the title bar: its left end in gold, the bar's own corners and trim, no outline or shadow of its own
+                UITheme.Round(pip, UITheme.Gold, 5f);
+                EnsureTrim(pip.transform, UITheme.GoldDim, 5f, 0f);
+                var pipShadow = pip.GetComponent<Shadow>();
+                if (pipShadow != null) Object.DestroyImmediate(pipShadow, true);
                 var readyText = Part<TextMeshProUGUI>(root, "ReadyPip/ReadyText");
                 UITheme.Stretch(readyText.rectTransform, 0f);
                 readyText.alignment = TextAlignmentOptions.Center;
                 readyText.fontStyle = FontStyles.Bold;
                 readyText.enableAutoSizing = false;
-                readyText.fontSize = 16f;
+                readyText.fontSize = 15f;
+                readyText.color = UITheme.Ink;
                 Part<TextMeshProUGUI>(root, "TitleBar/NameText").alignment = TextAlignmentOptions.Midline; // Centered
                 var nameRect = Part<TextMeshProUGUI>(root, "TitleBar/NameText").rectTransform;
                 nameRect.offsetMin = new Vector2(4f, nameRect.offsetMin.y); // The whole bar; CardController makes room for the square when it shows

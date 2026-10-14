@@ -296,10 +296,13 @@ namespace SlayTheClone {
         private static string Compared(int now, int printed) =>
             now > printed ? $"<color={BetterColor}>{now}</color>" : now < printed ? $"<color={WorseColor}>{now}</color>" : now.ToString();
 
-        /// <summary>The Deployment Time box's height, width (an hourglass and the Days) and distance from the card's top-left corner (card units).</summary>
-        public const float PipSize = 24f;
-        public const float PipWidth = 40f;
-        public const float PipInset = 5f;
+        /// <summary>
+        /// The Deployment Time box's height, width (an hourglass and the Days) and distance from the card's top-left corner
+        /// (card units): the left end of the title bar, as tall as it, so it reads as part of the bar.
+        /// </summary>
+        public const float PipSize = 20f;
+        public const float PipWidth = 38f;
+        public const float PipInset = 8f;
         private const float TitleBarLeft = 8f; // Where the title bar starts, from the card's left edge
         private const float NamePadding = 4f;
 
