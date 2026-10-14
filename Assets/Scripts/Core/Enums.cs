@@ -96,7 +96,11 @@ namespace SlayTheClone {
             Zeitgeist, // Each Day, whoever has fewer creatures draws 1 more card
             RushHour,  // The slowest act first
             SurvivalOfTheFittest, // Each Dusk, the creature with the least Health on the board, either side, takes 3 damage
-            VolcanoLair   // Each Day, whoever set it keeps their strongest creature Untouchable while another of theirs stands
+            VolcanoLair,  // Each Day, whoever set it keeps their strongest creature Untouchable while another of theirs stands
+            Casino        // Each Dawn the house's wheel spins the Day's weather, the same for both sides (see CasinoRoll)
         }
+
+        // Casino: the house's weather for the Day, like a Pokémon battle's weather, the same for everyone
+        public enum CasinoRoll { None, Heatwave, Rain, Hail, Tailwind, RushHour, Windfall }
     }
 }

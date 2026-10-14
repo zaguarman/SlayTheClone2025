@@ -170,13 +170,10 @@ namespace SlayTheClone {
         // Pays with capital (future: discard cards). Until discarding exists, its strongest cards leak value to the enemy.
         // Can't heal. Engine: card draw, workers that die usefully, money that hurts someone else first.
         private static List<CardDef> CorporateCards() => new List<CardDef> {
-            GambleSpell("Casino", TargetType.Enemy,
+            Spell("Casino", TargetType.Player,
                 "The house always wins. Except the houses he owned.",
-                "Gamble, the house's way: three outcomes are yours (a jackpot of cards, comped upgrades for your workers, security throwing out one of theirs), one is the house's (you lose 3 Health).",
-                new[] { Draw(3) },
-                new[] { Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, Each) },
-                new[] { Damage(3, TargetType.EnemyCreatures, AtRandom) },
-                new[] { Damage(3, TargetType.Player, Each) })
+                "A Trend for 3 Days: each Dawn the house's wheel spins the Day's weather for both sides (Heatwave, Rain, Hail, Tailwind, Rush Hour, Windfall), like the weather in a Pokemon battle. Corporate bets on tempo: whoever adapts best to the Day wins.",
+                SetTrend(Trend.Casino, 3))
                 .Picture("A caricature of Donald Trump in a dark suit and an overlong red tie, his blond hair swept over, grinning and throwing a fistful of casino chips in the air, in front of his gaudy gold-and-purple casino with onion domes and a giant neon sign, a red BANKRUPT stamp across the sign."),
             Spell("Headhunter", TargetType.Player,
                 "We found you on LinkedIn. We found everyone on LinkedIn.",

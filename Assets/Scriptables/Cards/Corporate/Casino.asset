@@ -24,21 +24,21 @@ MonoBehaviour:
   sacrifice: 0
   doomCost: 0
   prophecy: 0
-  gamble: 1
+  gamble: 0
   effects:
   - effectType: 1
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 2
-      value: 3
+    - actionType: 14
+      value: 0
       targetType: 0
       targetModifier: 0
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
       statusEffectToApply: 0
-      statusDuration: 0
+      statusDuration: 3
       statusPotency: 0
       cleanse: 0
       purge: 0
@@ -52,109 +52,17 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      trend: 0
+      trend: 5
       ability: 0
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  - effectType: 1
-    trigger: 0
-    oncePerCombat: 0
-    actions:
-    - actionType: 6
-      value: 1
-      targetType: 3
-      targetModifier: 2
-      modifyAttack: 1
-      modifyHealth: 0
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-      trend: 0
-      ability: 0
-      sendFor: 0
-      requires: 0
-      decoy: {fileID: 0}
-  - effectType: 1
-    trigger: 0
-    oncePerCombat: 0
-    actions:
-    - actionType: 0
-      value: 3
-      targetType: 4
-      targetModifier: 4
-      modifyAttack: 1
-      modifyHealth: 1
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-      trend: 0
-      ability: 0
-      sendFor: 0
-      requires: 0
-      decoy: {fileID: 0}
-  - effectType: 1
-    trigger: 0
-    oncePerCombat: 0
-    actions:
-    - actionType: 0
-      value: 3
-      targetType: 0
-      targetModifier: 2
-      modifyAttack: 1
-      modifyHealth: 1
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-      trend: 0
-      ability: 0
-      sendFor: 0
-      requires: 0
-      decoy: {fileID: 0}
-  designNotes: 'Gamble, the house''s way: three outcomes are yours (a jackpot of
-    cards, comped upgrades for your workers, security throwing out one of theirs),
-    one is the house''s (you lose 3 Health).'
+  designNotes: 'A Trend for 3 Days: each Dawn the house''s wheel spins the Day''s
+    weather for both sides (Heatwave, Rain, Hail, Tailwind, Rush Hour, Windfall),
+    like the weather in a Pokemon battle. Corporate bets on tempo: whoever adapts
+    best to the Day wins.'
   artDescription: A caricature of Donald Trump in a dark suit and an overlong red
     tie, his blond hair swept over, grinning and throwing a fistful of casino chips
     in the air, in front of his gaudy gold-and-purple casino with onion domes and
     a giant neon sign, a red BANKRUPT stamp across the sign.
-  defaultTargetType: 1
+  defaultTargetType: 0

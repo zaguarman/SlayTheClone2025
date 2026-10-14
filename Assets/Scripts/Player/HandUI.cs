@@ -39,7 +39,7 @@ namespace SlayTheClone {
         private readonly Dictionary<CardController, Sequence> slides = new Dictionary<CardController, Sequence>();
 
         // The hand at the bottom of the screen: the screen's player's, the one you play from (player 2's after switching sides, F8)
-        private bool IsYourHand => Player == null || Player.IsPlayer1 == FogOfWar.PlaysAsPlayer1;
+        public bool IsYourHand => Player == null || Player.IsPlayer1 == FogOfWar.PlaysAsPlayer1;
         private float CardScale => IsYourHand ? YourHandScale : 1f;
 
         // The hand area itself is invisible; it only shows a faint glow while a card is dragged over it
@@ -177,7 +177,12 @@ namespace SlayTheClone {
                     && queuedCards.Contains(instance) && !player.Hand.Contains(instance);
                 bool wasDiscarded = !wasCast && instance != null && !player.Hand.Contains(instance)
                     && player.Deck.GetDiscardPilePreview().Contains(instance);
-                if (wasCast) {
+                // The presenter flies a cast spell it can show from here to its stage (it hid this card); one it can't, flies from here
+                bool takenByPresenter = card.TryGetComponent(out CanvasGroup group) && group.alpha <= 0.01f;
+                if (wasCast && takenByPresenter) {
+                    Destroy(card.gameObject);
+                }
+                else if (wasCast) {
                     PlayCastAnimation(card);
                 }
                 else if (wasDiscarded) {

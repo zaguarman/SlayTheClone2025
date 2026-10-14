@@ -225,6 +225,16 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual((4, 0), (slow.TurnsUntilOperative, ready.TurnsUntilOperative), "Only the one still deploying waits longer");
             yield return game.EndTurn();
             Assert.AreEqual(3, p2.Hand.Count, "Their hand is 2 cards smaller");
+
+            // Casino: a Trend whose wheel spins the Day's weather each Dawn, the same for both sides, never twice running
+            var casino = game.GiveCard(p1, game.Spell("Casino", TargetType.Player, TestCards.TrendEffect(Trend.Casino, 3)));
+            game.Run(new PlayCardAction(casino, p1, p1));
+            var firstDay = game.TrendSystem.Roll;
+            Assert.AreNotEqual(CasinoRoll.None, firstDay, "Set, the wheel spins at once for its first Day");
+            yield return game.EndTurn();
+            Assert.AreEqual(Trend.Casino, game.TrendSystem.Current);
+            Assert.AreNotEqual(firstDay, game.TrendSystem.Roll, "...and again at each Dawn, never the same twice running");
+            Assert.AreEqual(game.TrendSystem.Roll == CasinoRoll.RushHour, game.TrendSystem.SlowestFirst, "Its Rush Hour is the real one");
         }
     }
 }

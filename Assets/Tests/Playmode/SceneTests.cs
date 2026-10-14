@@ -630,7 +630,20 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(tooltip.ClickAt(new Vector2(2f, 2f)), "A click anywhere else closes it all");
             CollectionAssert.IsEmpty(tooltip.OpenKeywords);
 
-            yield return game.EndTurn();
+            // Cast, the spell flies from its ghost to the stage beside the middle of the table, rings what it hits, then leaves
+            var presenter = Object.FindFirstObjectByType<ResolutionPresenter>();
+            bool staged = false;
+            int mostAuras = 0;
+            game.References.GetResolveActionsButton().onClick.Invoke();
+            while (game.Turns.IsResolving) {
+                staged |= presenter.Staged != null && presenter.Staged.GetLinkedCardInstance() == bolt;
+                mostAuras = Mathf.Max(mostAuras, presenter.AuraCount);
+                yield return null;
+            }
+            yield return null;
+            Assert.IsTrue(staged, "The cast spell waits on the stage...");
+            Assert.GreaterOrEqual(mostAuras, 1, "...ringing the creature it hits...");
+            Assert.IsNull(presenter.Staged, "...and is gone when the Day is over");
             Assert.AreEqual(3, ox.Health, "Only the spell left queued is cast");
             Assert.IsNull(game.SpellGhost(bolt), "Cast: its ghost is gone");
             var allOfP1sCards = p1.Deck.GetDeckPreview().Concat(p1.Deck.GetDiscardPilePreview()).Concat(p1.Hand);

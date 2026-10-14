@@ -15,6 +15,8 @@ RULES
 
 CORPORATE
 
+Casino (spell)
+    A caricature of Donald Trump in a dark suit and an overlong red tie, his blond hair swept over, grinning and throwing a fistful of casino chips in the air, in front of his gaudy gold-and-purple casino with onion domes and a giant neon sign, a red BANKRUPT stamp across the sign.
 Headhunter (spell)
     A slick recruiter in a sharp suit reeling in a startled employee from a rival's office tower with a fishing rod baited with a stock-options contract.
 Counterfeit (creature)

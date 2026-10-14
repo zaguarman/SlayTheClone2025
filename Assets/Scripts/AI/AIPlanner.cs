@@ -523,6 +523,8 @@ namespace SlayTheClone {
                     }
                     case Trend.Zeitgeist: // The side with fewer creatures draws more
                         return (view.Mine.Count() < view.Theirs.Count() ? 1.5f : view.Mine.Count() > view.Theirs.Count() ? -1.5f : 0) * days * Style.Cards + 0.2f;
+                    case Trend.Casino: // The house's weather: the same for both sides, a gamble; a little worth for the tempo
+                        return 0.3f * days;
                     case Trend.RushHour: { // The slowest act first: good for whoever is slower
                         float Speed(IEnumerable<SeenCreature> side) => side.Any() ? (float)side.Average(c => c.Known ? c.Creature.Speed : 1) : 0;
                         return (Speed(view.Theirs) - Speed(view.Mine)) * days + 0.2f;

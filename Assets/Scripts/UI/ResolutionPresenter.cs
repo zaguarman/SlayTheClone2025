@@ -42,6 +42,22 @@ namespace SlayTheClone {
         private TableViews table;
         private float busyUntil;
 
+        // The spell being cast: its card waits on the stage, beside the middle of the table, while its effects land, each thing
+        // it touches ringed with an aura; when the next action starts it goes to its caster's discard pile, or burns if it's
+        // Single Use
+        private const float StageScale = 1.35f;
+        private static readonly Vector2 StageAt = new Vector2(0.3f, 0f); // Of the screen's width and height, from its middle
+        private static readonly Color AuraColor = new Color(1f, 0.85f, 0.35f, 0.95f);
+        private CardController staged;
+        private IPlayer stagedCaster;
+        private bool stagedSingleUse;
+        private readonly Dictionary<object, Image> auras = new Dictionary<object, Image>();
+
+        /// <summary>The spell card on the stage now, if any (for tests).</summary>
+        public CardController Staged => staged;
+        /// <summary>How many creatures and players the staged spell's aura marks (for tests).</summary>
+        public int AuraCount => auras.Count;
+
         // Last known stats per creature, to show what a stat or armor change actually was
         private readonly Dictionary<string, CreatureSnapshot> snapshots = new Dictionary<string, CreatureSnapshot>();
         private readonly Dictionary<object, (float time, int count)> labelStacks = new Dictionary<object, (float, int)>();
@@ -96,6 +112,7 @@ namespace SlayTheClone {
         private void OnDestroy() {
             if (mediator == null) return;
 
+            ClearAuras();
             gameManager?.ActionsQueue?.OnActionExecuting.RemoveListener(OnActionExecuting);
             mediator.CreatureSummoned -= OnCreatureSummoned;
             mediator.CreatureDamaged -= OnCreatureDamaged;
@@ -117,6 +134,11 @@ namespace SlayTheClone {
 
         #region Action beats
         private void OnActionExecuting(IGameAction action) {
+            // The next thing happening: the staged spell is done
+            if (staged != null && action is PlayCardAction or PlaySpellAction or BattlefieldCombatAction or SummonCreatureAction
+                    or MoveCreatureAction or UseAbilityAction) {
+                ReleaseStaged();
+            }
             switch (action) {
                 case BattlefieldCombatAction attack:
                     PlayAttack(attack);
@@ -153,26 +175,106 @@ namespace SlayTheClone {
             Hold(AttackBeat);
         }
 
+        // The spell leaves where it was planned (its ghost on the board, or its card in the hand) for the stage, beside the
+        // middle of the table, so the board stays in view
         private void PlaySpellReveal(Spell spell, IPlayer caster) {
+            ReleaseStaged();
             var reveal = cardViews.Create(spell, caster, overlay);
             if (reveal == null) return;
 
             var group = reveal.GetComponent<CanvasGroup>();
             group.blocksRaycasts = false;
-            group.alpha = 0f;
             var rect = (RectTransform)reveal.transform;
-            rect.anchoredPosition = new Vector2(0f, 60f);
-            rect.localScale = Vector3.one * 1.2f;
+            var ghost = table.Battlefields.Select(b => b != null && b.SpellGhosts.TryGetValue(spell, out var g) ? g : null).FirstOrDefault(g => g != null);
+            var handCard = ghost == null ? table.GetHand(caster)?.GetComponentsInChildren<CardController>().FirstOrDefault(c => c.GetLinkedCardInstance() == spell) : null;
+            var origin = ghost != null ? ghost : handCard;
+            Vector2 from;
+            float fromScale = 0.6f;
+            if (origin != null && TryGetOverlayPoint(origin.transform, out from)) {
+                fromScale = Mathf.Max(0.3f, origin.transform.lossyScale.x / Mathf.Max(1e-5f, overlay.lossyScale.x));
+                if (origin.TryGetComponent(out CanvasGroup originGroup)) originGroup.alpha = 0f; // It's the one flying now
+            }
+            else {
+                bool atBottom = table.GetHand(caster)?.IsYourHand ?? true;
+                from = new Vector2(0f, overlay.rect.height * (atBottom ? -0.45f : 0.45f));
+            }
+            rect.anchoredPosition = from;
+            rect.localScale = Vector3.one * fromScale;
+            var stage = new Vector2(overlay.rect.width * StageAt.x, overlay.rect.height * StageAt.y);
 
             DOTween.Sequence().SetTarget(this)
-                .Append(DOTween.To(() => group.alpha, a => group.alpha = a, 1f, 0.15f))
-                .Join(rect.DOScale(1.7f, 0.25f).SetEase(Ease.OutBack))
-                .AppendInterval(0.45f)
-                .Append(DOTween.To(() => group.alpha, a => group.alpha = a, 0f, 0.25f))
-                .Join(rect.DOScale(2f, 0.25f))
-                .OnComplete(() => Destroy(reveal.gameObject));
+                .Append(DOTween.To(() => rect.anchoredPosition, p => rect.anchoredPosition = p, stage, 0.35f).SetEase(Ease.OutCubic))
+                .Join(rect.DOScale(StageScale, 0.35f).SetEase(Ease.OutBack))
+                .Append(rect.DOPunchScale(Vector3.one * 0.08f, 0.2f, 6, 0.5f));
 
+            staged = reveal;
+            stagedCaster = caster;
+            stagedSingleUse = spell.SourceData?.singleUse ?? false;
             Hold(SpellBeat);
+        }
+
+        // What the staged spell touches: a ring around each creature's card, or round the player's plaque
+        private void MarkAffected(object target) {
+            if (staged == null || target == null || auras.ContainsKey(target)) return;
+            Transform around = target switch {
+                ICreature creature => FindCard(creature)?.transform,
+                IPlayer player => FindObjectsByType<PlayerPlaque>(FindObjectsSortMode.None).FirstOrDefault(p => p.Owner == player)?.transform,
+                _ => null
+            };
+            if (around == null) return;
+            var ring = UITheme.AddTrim(around, AuraColor, 1f, -7f, "SpellAura");
+            ring.raycastTarget = false;
+            ring.transform.SetAsLastSibling();
+            DOTween.To(() => ring.color.a, a => ring.color = UITheme.WithAlpha(AuraColor, a), 0.35f, 0.45f)
+                .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine).SetTarget(ring);
+            auras[target] = ring;
+        }
+
+        private void ClearAuras() {
+            foreach (var ring in auras.Values) {
+                if (ring == null) continue;
+                DOTween.Kill(ring);
+                Destroy(ring.gameObject);
+            }
+            auras.Clear();
+        }
+
+        // Done: into its caster's discard pile, or, Single Use, it burns where it stands
+        private void ReleaseStaged() {
+            ClearAuras();
+            if (staged == null) return;
+            var card = staged;
+            var rect = (RectTransform)card.transform;
+            var group = card.GetComponent<CanvasGroup>();
+            staged = null;
+            if (stagedSingleUse) {
+                var image = card.GetComponentInChildren<Image>();
+                if (image != null) DOTween.To(() => image.color, c => image.color = c, new Color(1f, 0.45f, 0.15f), 0.3f).SetTarget(this);
+                CardFx.Burst(overlay, rect.position, 0.2f, CardFx.UnitOf(rect, overlay));
+                DOTween.Sequence().SetTarget(this)
+                    .Append(rect.DOScale(StageScale * 1.1f, 0.15f))
+                    .Append(rect.DOScale(0.1f, 0.4f).SetEase(Ease.InBack))
+                    .Join(rect.DORotate(new Vector3(0f, 0f, -25f), 0.4f))
+                    .Join(DOTween.To(() => group.alpha, a => group.alpha = a, 0f, 0.4f))
+                    .OnComplete(() => { if (card != null) Destroy(card.gameObject); });
+                Hold(0.45f);
+                return;
+            }
+            var hand = table.GetHand(stagedCaster);
+            Transform pile = hand != null && hand.IsYourHand ? hand.DiscardPile : GameObject.Find("EnemyDiscardViewButton")?.transform;
+            Vector2 to = pile != null && TryGetOverlayPoint(pile, out var point) ? point : new Vector2(overlay.rect.width * 0.5f, overlay.rect.height * 0.6f);
+            DOTween.Sequence().SetTarget(this)
+                .Append(DOTween.To(() => rect.anchoredPosition, p => rect.anchoredPosition = p, to, 0.4f).SetEase(Ease.InCubic))
+                .Join(rect.DOScale(0.25f, 0.4f).SetEase(Ease.InCubic))
+                .Join(rect.DORotate(new Vector3(0f, 0f, 12f), 0.4f))
+                .Append(DOTween.To(() => group.alpha, a => group.alpha = a, 0f, 0.1f))
+                .OnComplete(() => { if (card != null) Destroy(card.gameObject); });
+            Hold(0.3f);
+        }
+
+        // The Day is over: whatever is still on the stage leaves too
+        private void Update() {
+            if (staged != null && !(gameManager?.TurnManager?.IsResolving ?? false)) ReleaseStaged();
         }
         #endregion
 
@@ -182,6 +284,7 @@ namespace SlayTheClone {
         }
 
         private void OnCreatureDamaged(ICreature creature, int damage) {
+            MarkAffected(creature);
             var card = FindCard(creature);
             if (card == null) return;
 
@@ -192,6 +295,7 @@ namespace SlayTheClone {
         }
 
         private void OnCreatureHealed(ICreature creature, int amount) {
+            MarkAffected(creature);
             var card = FindCard(creature);
             if (card == null) return;
 
@@ -206,6 +310,7 @@ namespace SlayTheClone {
             previous.Armor = newArmor;
             snapshots[creature.TargetId] = previous;
 
+            if (change != 0) MarkAffected(creature);
             var card = FindCard(creature);
             if (card == null || change == 0) return;
 
@@ -220,6 +325,7 @@ namespace SlayTheClone {
             var current = new CreatureSnapshot(creature) { Armor = previous.Armor };
             snapshots[creature.TargetId] = current;
 
+            MarkAffected(creature);
             var card = FindCard(creature);
             if (card == null) return;
 
@@ -243,6 +349,7 @@ namespace SlayTheClone {
             var card = FindCard(creature);
             string icon = EffectIcons.ForStatus(status);
             if (!applied || card == null || icon == null || FogOfWar.HidesStatus(FogOfWar.ViewerOf(creature.Owner), creature, status)) return;
+            MarkAffected(creature);
 
             FlashCard(card, StatusColor);
             PopIcon(card.transform, icon, 120f);
@@ -261,11 +368,15 @@ namespace SlayTheClone {
         #endregion
 
         #region Player beats
-        private void OnPlayerDamaged(IPlayer player, int damage) =>
+        private void OnPlayerDamaged(IPlayer player, int damage) {
+            MarkAffected(player);
             ShowPlayerChange(player, $"-{damage}{EffectIcons.Tag(EffectIcons.Heart)}", DamageColor);
+        }
 
-        private void OnPlayerHealed(IPlayer player, int amount) =>
+        private void OnPlayerHealed(IPlayer player, int amount) {
+            MarkAffected(player);
             ShowPlayerChange(player, $"+{amount}{EffectIcons.Tag(EffectIcons.Heal)}", HealColor);
+        }
 
         private void ShowPlayerChange(IPlayer player, string text, Color color) {
             var healthText = GetHealthText(player);

@@ -30,9 +30,6 @@ namespace SlayTheClone {
         private const float SpellGhostSpread = 0.45f; // Older ghosts at the same place step left by this share of their width
         private readonly Dictionary<ICard, int> spellGhostOrder = new Dictionary<ICard, int>(); // When each ghost appeared
         private int nextSpellGhost;
-        private const float CastStagger = 0.2f;
-        private const float CastScale = 2.1f;         // How big a cast spell swells, of board size
-        private float nextCastTime;
 
         // The cards whose effects are on each creature, tucked under its card like Magic's enchantments: each peeks out
         // above the one in front of it, just its name showing (see RefreshAttachments)
@@ -612,8 +609,7 @@ namespace SlayTheClone {
                 spellGhosts.Remove(entry.Key);
                 var ghost = entry.Value;
                 if (ghost == null) continue;
-                if (ghost.Player != null && !ghost.Player.Hand.Contains(entry.Key)) PlayCast(ghost);
-                else Destroy(ghost.gameObject);
+                Destroy(ghost.gameObject); // Cast: the presenter flies it from here to the stage (see ResolutionPresenter)
             }
 
             foreach (var (spell, caster, _, _) in aimed) {
@@ -818,18 +814,6 @@ namespace SlayTheClone {
                 : (riverAbove ? mat.yMin : mat.yMax) - away * (height / 2f + 4f + stepsBack * CastPileStep);
             float x = mat.xMax + CastPileGap + width / 2f + stepsBack * CastPileStep;
             rect.localPosition = new Vector3(x, y, 0f);
-        }
-
-        // The cast: the ghost leaps to the middle of the screen, swells and bursts, like a spell cast from the hand
-        private void PlayCast(CardController ghost) {
-            var root = GetComponentInParent<Canvas>()?.rootCanvas;
-            if (root == null) {
-                Destroy(ghost.gameObject);
-                return;
-            }
-            float delay = Mathf.Max(0f, nextCastTime - Time.time);
-            nextCastTime = Time.time + delay + CastStagger;
-            ghost.PlayCastAnimation(root.transform, root.transform.position, delay, CardFx.UnitOf(transform, root.transform) * CastScale);
         }
 
         private void ClearSpellGhosts() {
