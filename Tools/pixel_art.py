@@ -2,7 +2,8 @@
 reused) and a subject layer over it, drawn at 192 x 108 pixels in a fixed palette (Endesga 32), outlined and shaded,
 then scaled up 6x with hard edges so it stays crisp.
 
-Output: Assets/Art/PixelSamples/<Card>.png (the card, scaled), and Layers/ with each background and subject at 1x.
+Output: Assets/Art/PixelSamples/<Card>.png (the card, scaled), and Layers/ with each background and subject at 1x. A
+picture a redraw replaces is kept in ArtArchive/PixelSamples/<Card>/<Card>_vN.png.
 Usage: python Tools/pixel_art.py
 """
 import math
@@ -14,6 +15,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 W, H = 192, 108
 SCALE = 6
 OUT = os.path.join(os.path.dirname(__file__), "..", "Assets", "Art", "PixelSamples")
+ARCHIVE = os.path.join(os.path.dirname(__file__), "..", "ArtArchive", "PixelSamples")
 
 # Endesga 32
 HEX = ["be4a2f", "d77643", "ead4aa", "e4a672", "b86f50", "733e39", "3e2731", "a22633", "e43b44", "f77622", "feae34",
@@ -97,13 +99,30 @@ def dot(img, x, y, color):
         img.putpixel((int(x), int(y)), color + (255,))
 
 
+def archive_old(name, card):
+    """Keeps the picture a redraw replaces: the old one moves to ArtArchive/PixelSamples/<name>/<name>_vN.png (outside
+    Assets, so Unity doesn't import it), for reference."""
+    path = os.path.join(OUT, f"{name}.png")
+    if not os.path.exists(path):
+        return
+    with Image.open(path) as old:
+        if old.size == card.size and not ImageChops.difference(old.convert("RGB"), card).getbbox():
+            return
+    folder = os.path.join(ARCHIVE, name)
+    os.makedirs(folder, exist_ok=True)
+    n = len([f for f in os.listdir(folder) if f.endswith(".png")]) + 1
+    os.replace(path, os.path.join(folder, f"{name}_v{n}.png"))
+
+
 def save(name, background, subject):
     layers = os.path.join(OUT, "Layers")
     os.makedirs(layers, exist_ok=True)
     subject.save(os.path.join(layers, f"{name}_subject.png"))
     card = background.copy()
     card.alpha_composite(subject)
-    card.convert("RGB").resize((W * SCALE, H * SCALE), Image.NEAREST).save(os.path.join(OUT, f"{name}.png"))
+    card = card.convert("RGB").resize((W * SCALE, H * SCALE), Image.NEAREST)
+    archive_old(name, card)
+    card.save(os.path.join(OUT, f"{name}.png"))
 
 
 # ---------------------------------------------------------------- backgrounds (drawn once, reused)
