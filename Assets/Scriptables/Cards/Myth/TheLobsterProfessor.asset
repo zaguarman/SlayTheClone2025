@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: TheLobsterProfessor
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 837ffb45-c9a2-4150-850b-2438ddac9299
+  cardName: The Lobster Professor
+  description: Clean your room, bucko. Then buy the seminar.
+  cardType: 0
+  faction: 1
+  artwork: {fileID: 0}
+  discardCost: 0
+  singleUse: 0
+  sacrifice: 0
+  prophecy: 0
+  effects:
+  - effectType: 0
+    trigger: 3
+    oncePerCombat: 0
+    actions:
+    - actionType: 6
+      value: 1
+      targetType: 3
+      targetModifier: 16
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Each Dawn, your strongest creature gets +1 Attack for as long as
+    it''s in play: the dominance hierarchy, as preached.'
+  artDescription: A gaunt professor in a three-piece suit lecturing tearfully at
+    a lectern, pointing at a projected slide of a lobster sitting on a throne, the
+    audience taking notes, a messy bedroom visible through a door behind him.
+  attack: 1
+  health: 6
+  speed: 1
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 0
+  gift: 0
+  token: 0
+  disguise: {fileID: 0}

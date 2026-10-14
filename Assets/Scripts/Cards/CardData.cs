@@ -16,6 +16,10 @@ namespace SlayTheClone {
         public int discardCost;
         /// <summary>Single Use: once played, it's gone for the rest of the combat instead of going to the discard pile.</summary>
         public bool singleUse;
+        /// <summary>Sacrifice N (Myth's cost): its side's N weakest creatures die when it resolves, before it does anything.</summary>
+        public int sacrifice;
+        /// <summary>Prophecy N (a spell): it comes true at the Dawn N Days after it's played.</summary>
+        public int prophecy;
 
         // OnEnable can be used to initialize cardId if null
         public virtual void OnEnable() {

@@ -20,6 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: b2bebcd286d045348970a9e71f4b5fa5, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 0
+  prophecy: 0
   effects: []
   designNotes: 'Mechanics test: Extremist. Stat changes on it are doubled, buffs
     and debuffs alike.'

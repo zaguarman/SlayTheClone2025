@@ -216,6 +216,10 @@ namespace SlayTheClone {
 
         public void AddAction(IGameAction action) {
             if (action is PlayCardAction costly && !DiscardCost.TryPay(costly, this)) return; // Can't pay its discard cost: it isn't played
+            if (action is PlayCardAction offering && !Sacrifice.CanPay(offering.GetCard(), offering.GetOwner())) { // Nobody to sacrifice
+                Log($"{offering.GetCard()?.Name} needs {Sacrifice.Of(offering.GetCard())} creature(s) to sacrifice: it isn't played", LogTag.Actions | LogTag.Cards);
+                return;
+            }
             if (executing == null && !resolving && IsInstant(action)) {
                 ResolveInstantly(action);
                 return;

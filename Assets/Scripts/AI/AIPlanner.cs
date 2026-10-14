@@ -204,7 +204,10 @@ namespace SlayTheClone {
         // What the spell does played there. Hard weighs it both ways when today's other spells could change it: they may
         // resolve before it or after (random order), so each way counts half
         private float SpellValue(Spell spell, ITarget aim) {
-            float ValueNow() => spell.Effects.SelectMany(e => e.actions).Sum(a => Value(a, spell, aim));
+            if (!Sacrifice.CanPay(spell, view.Me)) return -100; // Nobody to sacrifice: it can't be played
+            float ValueNow() => spell.Effects.SelectMany(e => e.actions).Sum(a => Value(a, spell, aim)) + SacrificeValue(spell);
+            // A Prophecy comes true later: worth less, and what it will hit may have changed by then
+            if (Prophecy.DaysOf(spell) > 0) return 0.7f * ValueNow();
             if (!Hard || forecasts.Count == 0) return ValueNow();
             seeForecast = true;
             float after = ValueNow();
@@ -214,7 +217,20 @@ namespace SlayTheClone {
 
         // Remembers what a spell just planned will do: the damage it deals (so nothing is killed twice), and for Hard what it
         // changes before the attacks: stats, stuns, Exposed, Heat, Untouchable
+        // What the creatures it costs are worth to us (negative), less what their Last Will and a Revive give back
+        private float SacrificeValue(ICard card) {
+            float value = 0;
+            foreach (var victim in Sacrifice.Victims(card, view.Me)) {
+                var ours = view.Mine.FirstOrDefault(c => c.Creature == victim);
+                if (ours == null) continue;
+                bool rises = victim.Effects.Any(e => e.trigger == EffectTrigger.OnDeath && e.actions.Any(a => a.actionType == ActionType.Revive));
+                value += -(ours.Worth + HealthLeft(ours)) * (rises ? 0.3f : 1f) + (Hard ? LastWillValue(ours) : 0);
+            }
+            return value;
+        }
+
         private void Expect(Spell spell, ITarget aim) {
+            if (Prophecy.DaysOf(spell) > 0) return; // Nothing happens today
             bool instant = EffectResolver.IsInstant(spell);
             foreach (var action in spell.Effects.SelectMany(e => e.actions)) {
                 if (action.targetModifier.HasFlag(TargetModifier.Random)) continue; // Where it lands is luck

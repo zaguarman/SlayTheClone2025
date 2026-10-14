@@ -20,6 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: cd28f24b2b4e7c04bbe532f47e4a3b99, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 0
+  prophecy: 0
   effects:
   - effectType: 0
     trigger: 3

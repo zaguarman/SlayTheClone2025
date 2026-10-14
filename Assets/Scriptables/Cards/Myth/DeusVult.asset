@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: DeusVult
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: e0e9435b-578d-4382-85a9-31008d44573e
+  cardName: Deus Vult
+  description: God wills it. God was not consulted.
+  cardType: 1
+  faction: 1
+  artwork: {fileID: 0}
+  discardCost: 0
+  singleUse: 0
+  sacrifice: 0
+  prophecy: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 6
+      value: 2
+      targetType: 3
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 1
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: Every friendly creature gets +2 Attack this Day.
+  artDescription: A crusader in a bucket helmet and white tabard with a red cross
+    shouting with a raised sword, a meme caption bar at the bottom of the picture.
+  defaultTargetType: 3

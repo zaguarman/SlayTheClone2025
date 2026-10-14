@@ -13,6 +13,8 @@ namespace SlayTheClone {
         void Shuffle();
         List<ICard> GetDeckPreview();
         List<ICard> GetDiscardPilePreview();
+        /// <summary>Takes this card's copy back out of the discard pile (the last one put there), or null if none is there.</summary>
+        ICard TakeFromDiscardPile(ICard card);
         bool RemoveCard(ICard card);
     }
 
@@ -104,6 +106,16 @@ namespace SlayTheClone {
                 fresh.Ability = used.Ability;
             }
             return copy;
+        }
+
+        public ICard TakeFromDiscardPile(ICard card) {
+            if (card == null) return null;
+            int index = discardPile.FindLastIndex(c => c == card || (c.SourceData != null && c.SourceData == card.SourceData) || c.CardId == card.CardId);
+            if (index < 0) return null;
+            var taken = discardPile[index];
+            discardPile.RemoveAt(index);
+            Log($"Took {taken.Name} back out of the discard pile (DeckID: {deckId.ToUpper()})", LogTag.Cards);
+            return taken;
         }
 
         public void ClearDiscardPile() {

@@ -52,6 +52,27 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(again.IsDead, "Reshuffling doesn't give the use back");
             StringAssert.Contains("Rebirth", Keywords.Plain(CardTextFormatter.GetRulesText(plotArmorData)), "A recurring pattern is printed as its keyword");
 
+            // Revive (Myth): it really dies (its Last Will is the revival), then rises at the next Dawn; once per combat
+            var rise = Effect(EffectTrigger.OnDeath, ActionType.Revive, 0, TargetType.Self);
+            rise.oncePerCombat = true;
+            var zombieData = game.Creature("Zombie", 2, 3, 1, rise);
+            var zombie = game.Summon(p1, zombieData, 3);
+            int cards = GameAsserts.CountCards(p1);
+            game.Run(new DamageCreatureAction(zombie, 5));
+            Assert.IsTrue(zombie.IsDead, "Revive doesn't save it: it dies");
+            Assert.IsNull(p1.Battlefield[3].OccupyingCreature);
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1), "Waiting to rise, it's still one of the player's cards");
+            game.StartTurn();
+            var risen = p1.Battlefield[3].OccupyingCreature;
+            Assert.AreEqual("Zombie", risen?.Name, "At the next Dawn it rises in the slot where it fell...");
+            Assert.AreEqual(3, risen.Health, "...with full Health...");
+            CollectionAssert.DoesNotContain(p1.Deck.GetDiscardPilePreview().Select(c => c.Name).ToList(), "Zombie", "...its card taken back from the discard pile");
+            game.Run(new DamageCreatureAction(risen, 5));
+            game.StartTurn();
+            Assert.IsNull(p1.Battlefield[3].OccupyingCreature, "Once per combat: the second death is for good");
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1));
+            StringAssert.Contains("Revive", Keywords.Plain(CardTextFormatter.GetRulesText(zombieData)));
+
             var frail = game.Summon(p1, game.Creature("Frail", 1, 3, 1, Effect(EffectTrigger.OnDeath, ActionType.Damage, 2, TargetType.Enemy)), 2);
             game.Run(LoseHealth(frail, 3));
             Assert.IsTrue(frail.IsDead, "Losing max Health to 0 kills it");

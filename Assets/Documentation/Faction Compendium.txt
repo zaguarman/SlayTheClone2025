@@ -24,7 +24,9 @@ Myth: Faith, Death & Prophecy
     • Theme: Legends, religion, monsters, tarot, the afterlife.
     • Coin: † (the cross, and death) on a coin in its color.
     • Play Style: Slow and inevitable. Creatures die and come back; prophecies pay off later.
-    • Signature Mechanics: Conversion, Revive, OnDied payoffs, sacrifice costs, Prophecy (GDD 5.7 Prophecy).
+    • Signature Mechanics: Conversion, Revive, OnDied payoffs, sacrifice costs, Prophecy (GDD 5.7 Prophecy). Built 2026-10-14:
+      Revive (it dies, then rises at the next Dawn, once per combat), Sacrifice X (your X weakest creatures die to play the
+      card), Prophecy X (a spell that comes true X Days later; the queue lists it), Conversion (take control, Attack 2 or less).
     • Statuses: Doomed, Blessed, Bloodthirst.
     • Pays With: Sacrifice. As an additional cost, destroy one of your own creatures.
     • Can't: Move creatures.

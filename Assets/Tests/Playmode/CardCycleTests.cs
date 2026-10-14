@@ -91,6 +91,35 @@ namespace SlayTheClone.Tests {
             CollectionAssert.Contains(p1.Spent, gun);
             CollectionAssert.DoesNotContain(p1.Deck.GetDiscardPilePreview(), gun);
             Assert.AreEqual(cards, GameAsserts.CountCards(p1));
+
+            // Sacrifice (Myth): the weakest creature of its side dies first; with none on the board it can't be played
+            var ritualData = game.Spell("Ritual", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 1, TargetType.Player));
+            ritualData.sacrifice = 1;
+            var ritual = game.GiveCard(p1, ritualData);
+            game.ActionsQueue.AddAction(new PlayCardAction(ritual, p1, p1));
+            Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount(), "Nobody to sacrifice: it can't be played");
+            var lamb = game.Summon(p1, game.Creature("Lamb", 1, 2), 0);
+            var bull = game.Summon(p1, game.Creature("Bull", 3, 5), 1);
+            game.ActionsQueue.AddAction(new PlayCardAction(ritual, p1, p1));
+            game.Resolve();
+            Assert.IsTrue(lamb.IsDead, "The weakest is sacrificed...");
+            Assert.IsFalse(bull.IsDead, "...and only it");
+            StringAssert.Contains("Sacrifice 1", Keywords.Plain(CardTextFormatter.GetRulesText(ritualData)));
+
+            // Prophecy (Myth): played now, it comes true at the Dawn so many Days later, and the queue lists it meanwhile
+            var floodData = game.Spell("Flood", TargetType.Enemy, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets));
+            floodData.prophecy = 2;
+            var foe = game.Summon(p2, game.Creature("Foe", 1, 5), 0);
+            var flood = game.GiveCard(p1, floodData);
+            game.ActionsQueue.AddAction(new PlayCardAction(flood, p1, p2));
+            game.Resolve();
+            Assert.AreEqual(5, foe.Health, "Foretold: nothing happens yet");
+            StringAssert.Contains("foretold", string.Join("\n", QueueView.Lines(p1, game.ActionsQueue, game.ModifierManager)), "Everyone hears it");
+            game.StartTurn();
+            Assert.AreEqual(5, foe.Health, "Not at the next Dawn...");
+            game.StartTurn();
+            Assert.AreEqual(3, foe.Health, "...but at the Dawn two Days on");
+            CollectionAssert.IsEmpty(p1.Prophecies);
         }
 
         [UnityTest]

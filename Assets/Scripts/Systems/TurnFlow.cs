@@ -86,6 +86,7 @@ namespace SlayTheClone {
 
                 // --- Phase 3: Start of Turn Processing (for the new turn) ---
                 GoneDark.ProcessDawn(players, turnNumber, actionsQueue); // Creatures that went dark come back first
+                Prophecy.ProcessDawn(players, turnNumber, actionsQueue); // Then what was foretold comes true
                 modifierManager.ProcessStartOfTurn(turnNumber, actionsQueue);
                 trends.QueueDayEffects(actionsQueue);
                 yield return ResolveQueuedActions();

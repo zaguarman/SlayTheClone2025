@@ -409,6 +409,8 @@ namespace SlayTheClone {
                     return creature != null ? new ReturnToHandAction(creature, fakesItsDeath: true) : null;
                 case ActionType.Vanish: // Off the board until the next Dawn (Witness Protection Program)
                     return creature != null ? new VanishAction(creature) : null;
+                case ActionType.Revive: // Its own Last Will: it rises at the next Dawn (queued as it dies, while it still has its slot)
+                    return creature != null && source == creature ? new RevivalAction(creature, creature.Slot?.Index ?? 0) : null;
                 case ActionType.Funnel: // The target takes the stat raises of every other creature on its side
                     return creature != null ? new FunnelAction(creature) : null;
                 case ActionType.PassHarmfulStatuses: { // The target's harmful statuses go to the creature facing it (Frame Job)

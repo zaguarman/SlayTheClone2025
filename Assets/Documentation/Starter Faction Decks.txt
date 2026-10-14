@@ -275,8 +275,22 @@ Since 2026-10-13 Digital Society, Shadow Ops., Tech, Myth and Mind each have a d
     Corporate, outside its starter deck: NDA (Discard 1, Blackout 2 on target enemy creature).
 • Tech - Move Fast and Break Things (The IT Department, "Have you tried turning your strategy off and on again?"). Every card twice but Ransomware Attack and Man-in-the-Middle.
     (new) Technical Debt (3/4/2, 0): Decay 1. Strong today, it pays every Dusk. Scope Creep (1/2/1, 1): Grow. It gets bigger every Dawn, like the project.
-• Myth - Old Gods, New Tricks (The Oracle, "Saw this loss coming. Didn't warn you."). Twice: Memento Mori, Martyr, Mummy, Cultist, Exorcism, Excess of Bread and Wine, Monkey Hand, Reincarnation.
-    (new) Reincarnation (1/1/2, 0): Rebirth and Grow. Last life a worm, this life a dog.
+• Myth - Old Gods, New Tricks (The Oracle, "Saw this loss coming. Didn't warn you."). Rebuilt 2026-10-14 around Myth's own
+  mechanics (22 cards): Revive, Sacrifice, Prophecy, Conversion and a wrath of its own.
+    Creatures: Killer Rabbit of Caerbannog x2 (3/2/3, 0), Living Dead x2 (2/3/1, 0, Revive), Templar Knight x2 (2/5/1, 1,
+    Blessed 2 on itself when ready), Zealot (3/2/2, 0, Doomed 3 on itself when ready), The Chosen One (2/4/2, 1, Spray and
+    Pray: Jesus with guns), Black Knight (2/6/1, 0, Rebirth), Buddy Christ (2/4/1, 0, each Dawn heals your creatures 1), Pope
+    (1/7/1, 1, each Dawn Blessed on your strongest), The Lobster Professor (1/6/1, 1, each Dawn +1 Attack to your strongest),
+    Horsemen Of Apocalypse (3/5/2, 2, when ready 2 damage to every enemy creature), Martyr, Cultist (now Deployment 0).
+    Spells: Holy War (2 damage to every enemy creature, 1 to yours), The Wicker Man (Sacrifice 1: 2 damage to every enemy
+    creature), Necronomicon (Sacrifice 1: destroy target enemy creature), Sacrificial Ritual (now Sacrifice 1: draw 3), Mox Nox
+    (Prophecy 2: destroy the strongest enemy creature), Lance Of Longinus (3 damage), Religious Instrumentalization
+    (Conversion: take control of an enemy creature with 2 Attack or less).
+    In the deck builder only: The Great Flood (Prophecy 2: 3 damage to every enemy creature), Holy Hand Grenade of Antioch
+    (2 damage to a creature and its neighbours), Thoughts and Prayers (Blessed 1 on every friendly creature), Deus Vult,
+    Curse Of Hubris, Genesis, The Lost Ark, The Omen, and the old cards (Memento Mori, Mummy, Exorcism, The Holy Grail,
+    Phoenix, now with Revive, Monkey Hand, Excess of Bread and Wine, Reincarnation, the Wizard, now Deployment 2).
+    Against Shadow Ops. (Hard and Very Hard, 360 games): 51%. Plausible Deniability 97%, Black Budget 56%, Double-O Section 0%.
 • Mind - All in Your Head (Your Inner Critic, "Knows exactly what to say. Always the worst thing."). Every card twice but Roko's Basilisk and Trolley Problem.
     (new) Ship of Theseus (2/3/1, 0): Regenerate 1. Escape Goat (was Scapegoating): Heat Signature 2 on target creature, draw a card (Mind makes someone else's damage find the goat).
 

@@ -20,39 +20,15 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: 19476d50e72b9d64393b5043380cb875, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 1
+  prophecy: 0
   effects:
   - effectType: 1
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 0
-      value: 5
-      targetType: 3
-      targetModifier: 4
-      modifyAttack: 1
-      modifyHealth: 1
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-      trend: 0
-      ability: 0
-      requires: 0
-      decoy: {fileID: 0}
     - actionType: 2
-      value: 2
+      value: 3
       targetType: 0
       targetModifier: 0
       modifyAttack: 1
@@ -77,8 +53,8 @@ MonoBehaviour:
       ability: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: '5 damage to a random friendly creature, then draw 2. Future: Myth''s
-    sacrifice cost (destroy a friendly creature).'
+  designNotes: 'Sacrifice 1: draw 3. The weakest goes, so a Cultist pays for it and
+    leaves its blessing behind.'
   artDescription: Hooded figures chanting around a chalk pentagram, offering a rubber
     chicken on the altar.
-  defaultTargetType: 3
+  defaultTargetType: 0

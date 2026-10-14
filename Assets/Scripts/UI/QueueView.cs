@@ -44,12 +44,19 @@ namespace SlayTheClone {
                     Details = Details(action, text, number, actionLayer, hidden, viewer, queue)
                 });
             }
+            // What's been foretold (Prophecy): not in the queue yet, but everyone heard it
+            var foretold = new[] { viewer, viewer?.Opponent }.Where(p => p != null).SelectMany(p => p.Prophecies).OrderBy(p => p.DueOnTurn).ToList();
+            if (foretold.Count > 0) items.Add(new Item { Heading = "Foretold" });
+            foreach (var prophecy in foretold) {
+                string text = $"{PlayerName(prophecy.Caster, viewer)} foretold {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: it comes true at the Dawn of Day {prophecy.DueOnTurn}";
+                items.Add(new Item { Text = text, Icon = EffectIcons.Days, Ours = prophecy.Caster == viewer, Details = text });
+            }
             return items;
         }
 
         /// <summary>One line per action, numbered in resolution order, under a heading for each layer.</summary>
         public static List<string> Lines(IPlayer viewer, IActionsQueue queue, IModifierManager modifiers) =>
-            Items(viewer, queue, modifiers).Select(i => i.Heading != null ? $"<b>{i.Heading}</b>" : $"{i.Number}. {i.Text}").ToList();
+            Items(viewer, queue, modifiers).Select(i => i.Heading != null ? $"<b>{i.Heading}</b>" : i.Number > 0 ? $"{i.Number}. {i.Text}" : i.Text).ToList();
 
         // What hovering an action tells: its place in the order, who does it (and their Speed, which orders a layer), the card
         // it comes from, and what's at the other end. Nothing the viewer can't see.

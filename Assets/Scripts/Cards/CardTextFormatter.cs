@@ -38,6 +38,7 @@ namespace SlayTheClone {
                 if (creature.ability != CreatureAbility.None) keywords.Add(AbilityName(creature.ability));
             }
             if (data.singleUse) keywords.Add(Keywords.Link("Single Use"));
+            if (data.prophecy > 0) keywords.Add($"{Keywords.Link("Prophecy", $"Prophecy {data.prophecy}")} (comes true in {data.prophecy} Day{(data.prophecy == 1 ? "" : "s")})");
 
             var sentences = new List<string>();
             foreach (var effect in data.effects ?? new List<CardEffect>()) {
@@ -53,7 +54,9 @@ namespace SlayTheClone {
             // An additional cost comes first, like Magic's: "Discard 2: give up 2 random other cards from your hand to play this"
             string cost = data.discardCost > 0
                 ? $"{Keywords.Link("Discard Cost", $"Discard {data.discardCost}")}: give up {data.discardCost} random other card{(data.discardCost == 1 ? "" : "s")} from your hand to play this"
-                : "";
+                : data.sacrifice > 0
+                    ? $"{Keywords.Link("Sacrifice", $"Sacrifice {data.sacrifice}")}: your {(data.sacrifice == 1 ? "weakest creature dies" : $"{data.sacrifice} weakest creatures die")} to play this"
+                    : "";
             return string.Join("\n", new[] { cost, keywordLine }.Concat(sentences).Where(line => !string.IsNullOrEmpty(line)));
         }
 
@@ -78,6 +81,10 @@ namespace SlayTheClone {
             bool plain = action.targetModifier == TargetModifier.None;
             if (!plain) return null;
 
+            // Revive: its own Last Will raises it at the next Dawn (once per combat)
+            if (effect.trigger == EffectTrigger.OnDeath && action.actionType == ActionType.Revive && action.targetType == TargetType.Self) {
+                return Keywords.Link("Revive");
+            }
             if (effect.oncePerCombat) {
                 return effect.trigger == EffectTrigger.OnAboutToDie && action.actionType == ActionType.Heal && action.targetType == TargetType.Self
                     ? Keywords.Link("Rebirth") : null;
@@ -286,6 +293,8 @@ namespace SlayTheClone {
                     return $"{target} fakes its death (its {Keywords.Link("Last Will")} happens) and goes back to your hand next {Keywords.Link("Day")}";
                 case ActionType.Vanish:
                     return $"{target} {Keywords.Link("Gone Dark", "goes dark")} until the next {Keywords.Link("Dawn")}";
+                case ActionType.Revive:
+                    return $"{target} {Keywords.Link("Revive", "rises again")} at the next {Keywords.Link("Dawn")}";
                 case ActionType.CutDraws:
                     return $"{target} draws {value} fewer card{(value == 1 ? "" : "s")} with the next hand";
                 case ActionType.WipeWatchdogs:

@@ -17,8 +17,13 @@ namespace SlayTheClone {
                 return;
             }
 
-            // The spell queues its own game actions
-            spell.Play(owner, actionsQueue, spellAction.GetTarget());
+            // The spell queues its own game actions; a Prophecy waits for its Dawn
+            int foretold = Prophecy.DaysOf(spell);
+            if (foretold > 0) {
+                owner.Prophecies.Add(new Prophecy(spell, owner, spellAction.GetTarget(), context.TurnClock.TurnNumber + foretold));
+                Log($"{owner.Name} foretells {spell.Name}: it comes true in {foretold} Day(s)", LogTag.Actions | LogTag.Cards);
+            }
+            else spell.Play(owner, actionsQueue, spellAction.GetTarget());
             if (spell.SourceData?.singleUse == true) owner.SpendForGood(spell); // One bullet: gone for the rest of the combat
             else owner.DiscardCard(spell);
 

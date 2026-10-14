@@ -20,6 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: ef1d36afa55bbb045870d3ce8ab531e0, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 0
+  prophecy: 0
   effects: []
   designNotes: 'Off the Books: it arrives as ??? and hits twice as hard until someone
     works out who it is (a Reveal or Revealed). Concealing it again (Smoke And Mirrors)

@@ -20,6 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: ee50c93bc06129947a1d5ad88265737d, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 0
+  prophecy: 0
   effects: []
   designNotes: 'Mechanics test: Signal Jammer. The enemy creature directly opposite
     has its ability switched off (its triggered effects still work).'

@@ -20,6 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: 1a084ea72ab2bca4ab45bf60d9b9f9da, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 0
+  prophecy: 0
   effects: []
   designNotes: 'A Ghost Army decoy (a token): to the enemy it''s a Sherman Tank until
     it''s revealed.'

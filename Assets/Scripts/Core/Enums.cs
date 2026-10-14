@@ -11,7 +11,7 @@ namespace SlayTheClone {
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetTrend,
             CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy,
             TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys,
-            WipeWatchdogs, CutDraws } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
+            WipeWatchdogs, CutDraws, Revive } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.

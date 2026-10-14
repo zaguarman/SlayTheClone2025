@@ -49,8 +49,7 @@ namespace SlayTheClone {
                         "Meatproxy As A Service", "Technical Debt", "Scope Creep"), written),
                     "The IT Department", "Have you tried turning your strategy off and on again?"),
                 Offer(Build(Faction.Myth, "Myth - Old Gods, New Tricks", Doubled(MythCards(),
-                        "Memento Mori", "Martyr", "Mummy", "Cultist", "Exorcism", "Excess of Bread and Wine", "Monkey Hand",
-                        "Reincarnation"), written),
+                        "Killer Rabbit of Caerbannog", "Living Dead", "Templar Knight"), written),
                     "The Oracle", "Saw this loss coming. Didn't warn you."),
                 Offer(Build(Faction.Mind, "Mind - All in Your Head", Doubled(MindCards(),
                         "Mimetic Theory", "Generational Trauma", "Pessimist", "Introvert", "Schrodinger's Cat", "Red Herring",
@@ -958,12 +957,15 @@ namespace SlayTheClone {
                 .Picture("Candlelight and satin: a figure in full shining plate reclines on a red heart-shaped bed, propped on one elbow, a rose in the visor and one knee up, rose petals everywhere, a heart shield leaning against the bed."),
         };
 
-        // Myth: slow and inevitable; creatures die and pay off
+        // Myth: faith, death and prophecy. Creatures that rise again (Revive) or die for the cause (Doomed), sacrifices that pay
+        // for miracles (Sacrifice), prophecies that come true Days later (Prophecy), converts (control change), and wrath on
+        // the unbelievers (Holy War). Pays with its own creatures; can't move them.
         private static List<CardDef> MythCards() => new List<CardDef> {
             Spell("Memento Mori", TargetType.AllCreatures,
                 "Remember that you will die. Preferably on schedule.",
                 "Mechanics test: Doomed on either side. It wipes other statuses and blocks new ones, gives +1 permanent Attack each Dawn (it stays on the card), then Last Rites strike the opposite slot even if the creature Cannot Act, and it dies for real.",
                 Status(StatusEffectType.Doomed, 3, TargetType.AllCreatures))
+                .NotInStarterDeck()
                 .Picture("A skull on an office desk beside an hourglass, and a wall calendar with three days crossed out in red."),
             Creature("Martyr", 2, 4, speed: 1, deploy: 1,
                 "He died for your sins. Your sins are on backorder.",
@@ -975,54 +977,202 @@ namespace SlayTheClone {
                 "Drink from it and live forever. Terms and conditions apply.",
                 "Mechanics test: Blessed 2. Each stack negates the next status that would land, friendly or not, Doomed included. Persistent, up to 3 stacks.",
                 Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 2))
+                .NotInStarterDeck()
                 .Picture("A gilded chalice on a velvet cushion behind museum glass. A queue of knights in dented armor stretches out the door, each holding a numbered ticket, and a gift shop by the exit sells plastic replicas at 3 for 2."),
             Spell("Exorcism", TargetType.AllCreatures,
                 "The power of Christ compels you. The invoice follows.",
                 "Mechanics test: Cleanse (statuses) on any creature. Blessed loses all its stacks. On a Doomed creature it's Heresy: the sentence passes to the weakest creature on its side, or is carried out if it's alone.",
                 Cleanse(CleanseTarget.Statuses, TargetType.AllCreatures))
+                .NotInStarterDeck()
                 .Picture("A priest in full vestments holding a crucifix over a teenager on a bed, whose smartphone floats above them, glowing red, demonic notification bubbles pouring out of it."),
             Creature("Mummy", 2, 5, speed: 1, deploy: 1,
                 "Touch the tomb, get the curse. It was in the fine print.",
                 "Mechanics test: Hive Mind. A creature that attacks it gains Hive Mind, replacing its own ability.")
                 .With(CreatureAbility.HiveMind)
+                .NotInStarterDeck()
                 .Picture("A museum mummy shaking hands with a smiling tourist, its bandages unravelling and winding up the tourist's arm, a \"Please Do Not Touch\" sign knocked to the floor."),
-            Creature("Omniscient Space-Time Bending Bearded Wizard", 3, 9, speed: 1, deploy: 3,
+            Creature("Omniscient Space-Time Bending Bearded Wizard", 3, 9, speed: 1, deploy: 2,
                 "Works in mysterious ways. Mostly late.",
-                "Each Dawn, Blessed on a random friendly creature. Future: Prophecy.",
+                "Each Dawn, Blessed on a random friendly creature.",
                 On(EffectTrigger.StartOfTurn, Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: AtRandom)))
+                .NotInStarterDeck()
                 .Picture("An old bearded man on a cloud in a bathrobe and slippers, lazily pointing a TV remote at a tiny spinning universe."),
-            Creature("Cultist", 1, 1, speed: 2, deploy: 1,
+            Creature("Cultist", 1, 1, speed: 2, deploy: 0,
                 "The end is near. Brunch is at eleven.",
-                "Fodder: when it dies, every friendly creature gets +1 Attack for good. Future: a sacrifice cost.",
+                "Fodder: when it dies, every friendly creature gets +1 Attack for good. The first to go when a Sacrifice is paid.",
                 On(EffectTrigger.OnDeath, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, Each)))
                 .Picture("A hooded cultist holding a THE END IS NEAR sign in one hand and a pumpkin spice latte in the other."),
-            Creature("Phoenix", 2, 2, speed: 2, deploy: 2,
+            Creature("Phoenix", 2, 2, speed: 2, deploy: 1,
                 "Dies, comes back, posts about it.",
-                "When it dies, summon a random creature from your deck. Future: Revive (it comes back itself).",
-                On(EffectTrigger.OnDeath, Summon(1)))
+                "Revive: once per combat it rises again at the next Dawn.",
+                Revive())
+                .NotInStarterDeck()
                 .Picture("A flaming bird rising from the smoking ashes of a burnt toaster, wings spread wide."),
             Spell("Excess of Bread and Wine", TargetType.FriendlyCreatures,
                 "Turned water into wine. Then wine into a hangover.",
                 "Heals your creatures; one of them is Exhausted (the hangover).",
                 Heal(2, TargetType.FriendlyCreatures, Each), Stun(1, TargetType.FriendlyCreatures, AtRandom))
+                .NotInStarterDeck()
                 .Picture("The Last Supper as a frat party: the apostles playing beer pong along the long table while Jesus refills everyone's cups from a jug."),
             Spell("Monkey Hand", TargetType.Player,
                 "Your wish is granted. Read the fine print.",
                 "Draw 3, and a random friendly creature is Doomed.",
                 Draw(3), Status(StatusEffectType.Doomed, 3, TargetType.FriendlyCreatures, modifier: AtRandom))
+                .NotInStarterDeck()
                 .Picture("A shriveled, mummified monkey's paw held up in a purple room, like the cursed paw of the old horror story: long knobbly grey-green fingers with pointed nails, a tuft of black fur at the wrist. Three fingers still up, one already curled into the palm: three wishes left."),
-            Spell("Sacrificial Ritual", TargetType.FriendlyCreatures,
+            Spell("Sacrificial Ritual", TargetType.Player,
                 "Somebody has to go. Ideally the intern.",
-                "5 damage to a random friendly creature, then draw 2. Future: Myth's sacrifice cost (destroy a friendly creature).",
-                Damage(5, TargetType.FriendlyCreatures, AtRandom), Draw(2))
+                "Sacrifice 1: draw 3. The weakest goes, so a Cultist pays for it and leaves its blessing behind.",
+                Draw(3))
+                .Sacrificing(1)
                 .Picture("Hooded figures chanting around a chalk pentagram, offering a rubber chicken on the altar."),
             Creature("Reincarnation", 1, 1, speed: 2, deploy: 0,
                 "Last life, a worm. This life, a good boy. Next life: depends how this one goes.",
                 "Rebirth (once per combat it survives death with 1 Health) and Grow 1: each life a little better.",
                 OncePerCombat(On(EffectTrigger.OnAboutToDie, Heal(1, TargetType.Self))),
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
+                .NotInStarterDeck()
                 .Picture("The Buddhist wheel of rebirth glowing in a temple: a pink worm on the left, a happy brown dog on the right, a dashed arrow arching from the worm's life to the dog's, a lotus between them."),
+
+            // --- The crusade (2026-10-14) ---
+            Spell("Holy War", TargetType.Enemy,
+                "God is on our side. He's on theirs too. He's very busy.",
+                "Myth's wrath: every enemy creature takes 2 damage; yours take 1 (holy wars have no bystanders).",
+                Damage(2, TargetType.EnemyCreatures, Each), Damage(1, TargetType.FriendlyCreatures, Each))
+                .Picture("Two armies of medieval knights charging each other across a field, both under identical banners with the same golden cross, a bewildered angel in the clouds above holding a scorecard."),
+            Spell("The Great Flood", TargetType.Enemy,
+                "Forty days of rain. You were warned. Twice.",
+                "Prophecy 2: in two Days, every enemy creature takes 3 damage. They see it coming; you'd better be ready to float.",
+                Damage(3, TargetType.EnemyCreatures, Each))
+                .Foretold(2)
+                .NotInStarterDeck()
+                .Picture("A wooden ark riding a huge wave, the animals two by two waving from the deck, while a line of enemy soldiers on a hilltop holds umbrellas as the water reaches their chins."),
+            Spell("Mox Nox", TargetType.Enemy,
+                "Soon it will be night.",
+                "Prophecy 2: at the Dawn two Days on, the strongest enemy creature (picked then) is destroyed.",
+                Destroy(TargetType.EnemyCreatures, modifier: StrongestOne))
+                .Foretold(2)
+                .Picture("An old sundial in a ruined cloister at dusk, the shadow of its gnomon falling across the Latin words MOX NOX carved in the stone, a black candle burning beside it."),
+            Spell("Holy Hand Grenade of Antioch", TargetType.EnemyCreatures,
+                "Count to three. Not four. Not two. Five is right out.",
+                "2 damage to target enemy creature and the creatures beside it.",
+                Damage(2, TargetType.EnemyCreatures, TargetModifier.WithAdjacent))
+                .NotInStarterDeck()
+                .Picture("A golden orb with a jewelled cross on top, its pin pulled, held up by a monk reading from an enormous book, three fingers raised, knights ducking behind him."),
+            Spell("Lance Of Longinus", TargetType.EnemyCreatures,
+                "Pierced the side of a god. Your creature is not a problem.",
+                "3 damage to target enemy creature.",
+                Damage(3, TargetType.EnemyCreatures))
+                .Picture("An ancient iron spearhead on a long wooden shaft, glowing faintly, pinned through a spy's trench coat to a brick wall, the spy wriggling out of the sleeves."),
+            Spell("Necronomicon", TargetType.EnemyCreatures,
+                "Bound in human skin. The reviews are mixed.",
+                "Sacrifice 1: destroy target enemy creature. Black magic always takes something.",
+                Destroy(TargetType.EnemyCreatures))
+                .Sacrificing(1)
+                .Picture("A heavy book bound in stitched leather with a screaming face on its cover, lying open on a stone altar, a hooded figure reading from it while a shadowy hand rises out of the pages."),
+            Spell("The Wicker Man", TargetType.Enemy,
+                "For a good harvest. Nothing personal, Sergeant.",
+                "Sacrifice 1: every enemy creature takes 2 damage. The film's ending, as a sweeper.",
+                Damage(2, TargetType.EnemyCreatures, Each))
+                .Sacrificing(1)
+                .Picture("A giant wicker figure burning on a cliff at sunset, villagers in animal masks dancing around it and singing, a small policeman in uniform visible inside its chest."),
+            Spell("Thoughts and Prayers", TargetType.FriendlyCreatures,
+                "Sent. Nothing else will be.",
+                "Blessed 1 on every friendly creature. A politician's answer: it changes nothing, except the next status.",
+                Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: Each))
+                .NotInStarterDeck()
+                .Picture("A politician at a podium covered in microphones, eyes closed and hands pressed together in prayer, while behind him an aide quietly shreds a stack of papers labelled REFORM."),
+            Spell("Religious Instrumentalization", TargetType.EnemyCreatures,
+                "Holding the book upside down. It's the gesture that counts.",
+                "Conversion: take control of target enemy creature with 2 Attack or less. It joins you, for good.",
+                TakeControl(TargetType.EnemyCreatures, TargetModifier.None, TargetRequisite.AttackAtMost, 2))
+                .Picture("A politician in a suit posing for cameras in front of a church, holding a bible upside down over his head, while a confused small creature from the other side shuffles over to stand behind him."),
+            Spell("Deus Vult", TargetType.FriendlyCreatures,
+                "God wills it. God was not consulted.",
+                "Every friendly creature gets +2 Attack this Day.",
+                Buff(2, TargetType.FriendlyCreatures, attack: true, health: false, Each, days: 1))
+                .NotInStarterDeck()
+                .Picture("A crusader in a bucket helmet and white tabard with a red cross shouting with a raised sword, a meme caption bar at the bottom of the picture."),
+            Spell("Curse Of Hubris", TargetType.Enemy,
+                "Flew too close to the sun. Landed in the comments.",
+                "The strongest enemy creature gets -3 Attack, for as long as it's in play.",
+                Buff(-3, TargetType.EnemyCreatures, attack: true, health: false, StrongestOne))
+                .NotInStarterDeck()
+                .Picture("Icarus with melting wax wings falling past a mountain top, a crowd of Greek gods on a cloud filming him on their phones."),
+            Spell("Genesis", TargetType.Player,
+                "Let there be light. And two more creatures.",
+                "Summon 2 creatures from your deck.",
+                Summon(2))
+                .NotInStarterDeck()
+                .Picture("A huge bearded hand reaching out of the clouds and pointing at the ground, where two small creatures pop out of the earth blinking, a sun switching on above them like a lamp."),
+            Spell("The Lost Ark", TargetType.Enemy,
+                "Don't look at it. Seriously, don't.",
+                "Every enemy creature takes 3 damage; yours close their eyes (Exhausted).",
+                Damage(3, TargetType.EnemyCreatures, Each), Stun(1, TargetType.FriendlyCreatures, Each))
+                .NotInStarterDeck()
+                .Picture("A golden chest with two winged angels on its lid, opened in a desert camp, ghostly light pouring out and melting the faces of enemy officers while an adventurer in a fedora keeps his eyes shut."),
+
+            Creature("Templar Knight", 2, 5, speed: 1, deploy: 1,
+                "Took a vow of poverty. Owns half of Europe.",
+                "When ready: Blessed 2 on itself, so the next two statuses aimed at it are wasted.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.Blessed, 0, TargetType.Self, potency: 2)))
+                .Picture("A knight in chainmail and a white mantle with a red cross, sword raised, standing in front of a medieval bank counter piled with gold coins and promissory notes."),
+            Creature("Zealot", 3, 2, speed: 2, deploy: 0,
+                "Will die for the cause. Will tell you about it first.",
+                "When ready: Doomed 3 on itself. It grows +1 Attack each Dawn, then its Last Rites strike and it dies for the cause.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.Doomed, 3, TargetType.Self)))
+                .Picture("A wild-eyed hermit in sackcloth with a long beard, waving a burning torch and a hand-painted REPENT sign on a busy city sidewalk."),
+            Creature("Living Dead", 2, 3, speed: 1, deploy: 0,
+                "Died on Friday. Back on Monday. Still not answering emails.",
+                "Revive: once per combat it rises again at the next Dawn.",
+                Revive())
+                .Picture("A grey zombie in a business suit climbing out of a cemetery grave with its briefcase, a sunrise behind the tombstones."),
+            Creature("The Chosen One", 2, 4, speed: 2, deploy: 1,
+                "This time he brought backup.",
+                "Spray and Pray: its attacks also hit the creatures beside its target. The second coming, armed.",
+                new CardEffect[0])
+                .With(CreatureAbility.SprayAndPray)
+                .Picture("Jesus in white robes and sandals with a halo, firing two golden submachine guns akimbo, doves scattering, an action-movie explosion behind him."),
+            Creature("Killer Rabbit of Caerbannog", 3, 2, speed: 3, deploy: 0,
+                "Look at the bones!",
+                "A harmless-looking bunny that strikes first and hard.",
+                new CardEffect[0])
+                .Picture("A small fluffy white rabbit sitting innocently in front of a cave mouth littered with bones and dented helmets, a tiny drop of red on its whiskers, knights fleeing in the distance."),
+            Creature("Black Knight", 2, 6, speed: 1, deploy: 0,
+                "'Tis but a scratch.",
+                "Rebirth: once per combat, when it would die, it survives with 1 Health. It's only a flesh wound.",
+                OncePerCombat(On(EffectTrigger.OnAboutToDie, Heal(1, TargetType.Self))))
+                .Picture("A knight in black armor standing defiantly at a forest bridge with no arms left, sword on the ground, shouting at a bemused king who rides an invisible horse to the sound of coconuts."),
+            Creature("Buddy Christ", 2, 4, speed: 1, deploy: 0,
+                "Winks. Points. Forgives.",
+                "Each Dawn, every friendly creature heals 1.",
+                On(EffectTrigger.StartOfTurn, Heal(1, TargetType.FriendlyCreatures, Each)))
+                .Picture("A smiling plastic Jesus statue winking and giving a big thumbs up and a finger point, on a church lawn next to a sign reading CATHOLICISM: WOW!"),
+            Creature("Pope", 1, 7, speed: 1, deploy: 1,
+                "Infallible. Bulletproof glass, just in case.",
+                "Each Dawn, Blessed 1 on your strongest creature.",
+                On(EffectTrigger.StartOfTurn, Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: StrongestOne)))
+                .Picture("The Pope waving from a glass-domed popemobile, sprinkling holy water from a garden hose over a crowd of creatures."),
+            Creature("The Lobster Professor", 1, 6, speed: 1, deploy: 1,
+                "Clean your room, bucko. Then buy the seminar.",
+                "Each Dawn, your strongest creature gets +1 Attack for as long as it's in play: the dominance hierarchy, as preached.",
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, StrongestOne)))
+                .Picture("A gaunt professor in a three-piece suit lecturing tearfully at a lectern, pointing at a projected slide of a lobster sitting on a throne, the audience taking notes, a messy bedroom visible through a door behind him."),
+            Creature("Horsemen Of Apocalypse", 3, 5, speed: 2, deploy: 2,
+                "Four riders. One group chat.",
+                "When ready (the end was foretold): every enemy creature takes 2 damage.",
+                On(EffectTrigger.OnPlay, Damage(2, TargetType.EnemyCreatures, Each)))
+                .Picture("Four horsemen galloping out of storm clouds, War, Famine, Pestilence and Death, one of them checking a smartphone map, a lightning bolt behind."),
+            Creature("The Omen", 1, 4, speed: 1, deploy: 2,
+                "He's not a bad kid. He's the Antichrist.",
+                "When ready: Doomed 2 on the strongest enemy creature.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.Doomed, 2, TargetType.EnemyCreatures, modifier: StrongestOne)))
+                .NotInStarterDeck()
+                .Picture("A small boy in a neat suit on a tricycle in a long mansion hallway, staring straight at the viewer, a black dog sitting beside him and a 666 birthmark peeking from his hairline."),
         };
+
+        // Revive: once per combat, its own Last Will raises it at the next Dawn
+        private static CardEffect Revive() => OncePerCombat(On(EffectTrigger.OnDeath, Act(ActionType.Revive, 0, TargetType.Self, TargetModifier.None)));
 
         // Mind: wins without raw damage
         private static List<CardDef> MindCards() => new List<CardDef> {
@@ -1264,6 +1414,21 @@ namespace SlayTheClone {
                 return this;
             }
 
+            public int SacrificeCost; // Additional cost: its side's weakest creatures die when it resolves
+            public int ProphecyDays; // A spell that comes true this many Days later
+
+            // Sacrifice N: an additional cost, its side's N weakest creatures
+            public CardDef Sacrificing(int creatures) {
+                SacrificeCost = creatures;
+                return this;
+            }
+
+            // Prophecy N: the spell comes true at the Dawn N Days after it's played
+            public CardDef Foretold(int days) {
+                ProphecyDays = days;
+                return this;
+            }
+
             // Discard N: an additional cost, N random other cards from the hand
             public CardDef Discarding(int cards) {
                 DiscardCost = cards;
@@ -1498,6 +1663,8 @@ namespace SlayTheClone {
             asset.faction = card.ShownFaction ?? faction;
             asset.discardCost = card.DiscardCost;
             asset.singleUse = card.IsSingleUse;
+            asset.sacrifice = card.SacrificeCost;
+            asset.prophecy = card.ProphecyDays;
             asset.SetEffects(card.Effects);
             switch (asset) {
                 case CreatureCardScriptableObject creature:

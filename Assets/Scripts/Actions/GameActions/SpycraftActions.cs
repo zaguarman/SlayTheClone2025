@@ -258,11 +258,13 @@ namespace SlayTheClone {
         public ICreature Creature { get; }
         public int SlotIndex { get; }    // Where it stood: it comes back there if it's free
         public int ReturnsOnTurn { get; } // The Day whose Dawn brings it back
+        public bool Reborn { get; } // It died and rises again (Revive): no new identity, a new arrival
 
-        public GoneDark(ICreature creature, int slotIndex, int returnsOnTurn) {
+        public GoneDark(ICreature creature, int slotIndex, int returnsOnTurn, bool reborn = false) {
             Creature = creature;
             SlotIndex = slotIndex;
             ReturnsOnTurn = returnsOnTurn;
+            Reborn = reborn;
         }
 
         /// <summary>At Dawn: the creatures due back today are queued to come back, ahead of the Day's Dawn effects.</summary>
@@ -388,6 +390,15 @@ namespace SlayTheClone {
             slot.Place(creature);
             context.ModifierManager.RegisterCreature(creature);
             creature.EnterPlay(context.TurnClock.TurnNumber);
+            if (hidden.Reborn) { // Revive: back from the dead for all to see, a new arrival (its Arrival happens again)
+                Log($"{creature.Name} rises again", LogTag.Effects | LogTag.Creatures);
+                Intel.OnEnteredPlay(creature, context.ModifierManager);
+                context.GameMediator.NotifyBattlefieldStateChanged(side);
+                SlotEffectRules.OnEnter(creature, slot, context);
+                creature.HandleEffect(EffectTrigger.OnPlay, context.ActionsQueue);
+                context.GameMediator.NotifyCreatureSummoned(creature, side);
+                return;
+            }
             StatusRules.Land(context, creature, StatusEffectType.Concealed, ReturnToHandActionExecutor.NewIdentityDays, 0, context.TurnClock.TurnNumber);
             Intel.OnEnteredPlay(creature, context.ModifierManager);
             Log($"{creature.Name} is back, with a new identity", LogTag.Effects | LogTag.Creatures);

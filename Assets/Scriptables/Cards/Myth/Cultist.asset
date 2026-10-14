@@ -20,6 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: 807b5a7ca61a7c84398563b5d5468da8, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 0
+  prophecy: 0
   effects:
   - effectType: 0
     trigger: 1
@@ -52,13 +54,13 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Fodder: when it dies, every friendly creature gets +1 Attack for
-    good. Future: a sacrifice cost.'
+    good. The first to go when a Sacrifice is paid.'
   artDescription: A hooded cultist holding a THE END IS NEAR sign in one hand and
     a pumpkin spice latte in the other.
   attack: 1
   health: 1
   speed: 2
-  turnsUntilOperative: 1
+  turnsUntilOperative: 0
   movement: 0
   ability: 0
   gift: 0

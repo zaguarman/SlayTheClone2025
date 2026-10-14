@@ -20,6 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: 208a68ac69373cc4e996872880ed4c7d, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 0
+  prophecy: 0
   effects: []
   designNotes: 'Recoil: +2 damage on its attacks, and it takes 1 damage after each
     one. A mood that burns it out.'

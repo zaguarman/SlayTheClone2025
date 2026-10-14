@@ -20,6 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: 81170292ba0785946801cf00b75acfda, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 0
+  prophecy: 0
   effects: []
   designNotes: 'Mechanics test: Unbothered. Enemy effects can''t lower its stats.'
   artDescription: A person in big headphones reading in a blanket fort while a loud

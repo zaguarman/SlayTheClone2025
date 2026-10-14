@@ -178,11 +178,11 @@ namespace SlayTheClone {
             var live = QueueView.Items(viewer, gameManager.ActionsQueue, gameManager.ModifierManager);
             var turns = gameManager.TurnManager;
             if (turns == null || !turns.IsResolving) lastPlanned = live; // While resolving, the queue empties: keep the plan
-            int count = live.Count(i => i.Heading == null);
+            int count = live.Count(i => i.Heading == null && i.Number > 0); // What's foretold isn't queued yet
             toggleLabel.text = count > 0 ? $"Queue ({count})" : "Queue";
 
             Items = shownPast.HasValue ? history[shownPast.Value].Items : live;
-            Lines = Items.Select(i => i.Heading != null ? $"<b>{i.Heading}</b>" : $"{i.Number}. {i.Text}").ToList();
+            Lines = Items.Select(i => i.Heading != null ? $"<b>{i.Heading}</b>" : i.Number > 0 ? $"{i.Number}. {i.Text}" : i.Text).ToList();
             heading.text = shownPast.HasValue ? $"Day {history[shownPast.Value].Day}, resolved"
                 : turns != null ? $"Action Queue, Day {turns.TurnNumber}" : "Action Queue";
             earlier.interactable = history.Count > 0 && (shownPast ?? history.Count) > 0;
@@ -221,7 +221,8 @@ namespace SlayTheClone {
             stripeRect.sizeDelta = new Vector2(7f, -10f);
             stripeRect.anchoredPosition = new Vector2(6f, 0f);
 
-            var text = UITheme.NewText("Text", row.transform, $"<b>{item.Number}.</b> {EffectIcons.Tag(item.Icon)} {item.Text}", 22f, UITheme.Parchment,
+            string number = item.Number > 0 ? $"<b>{item.Number}.</b> " : "";
+            var text = UITheme.NewText("Text", row.transform, $"{number}{EffectIcons.Tag(item.Icon)} {item.Text}", 22f, UITheme.Parchment,
                 TextAlignmentOptions.Left);
             text.textWrappingMode = TextWrappingModes.Normal;
             text.raycastTarget = false;

@@ -5,6 +5,26 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+35. Myth rebuilt, and the table changes (2026-10-14)
+    • Built: Revive, Sacrifice X and Prophecy X (Keywords, card text, AI), Conversion is the existing take-control. 24 new
+      Myth cards, a new 22-card Myth deck. Against Shadow Ops. with Hard and Very Hard, both seats: 51% of 360 games
+      (Hard 53%, Very Hard 49%). By deck: Plausible Deniability 97%, Black Budget 56%, Double-O Section 0%.
+    • Choices made, say if you want them otherwise:
+        - Sacrifice takes your weakest creatures (lowest Attack, then Health), not ones you pick, like Discard takes random
+          cards. It's paid when the card resolves; with too few creatures the card can't be played.
+        - Revive: the creature dies for real (its Last Will happens), its card comes back from the discard pile at the next
+          Dawn, full Health, Deployment Time again, its Arrival again. Once per combat.
+        - Prophecy is public: the queue lists what's been foretold and the Dawn it comes true.
+        - Jordan Peterson is The Lobster Professor ("Clean your room, bucko. Then buy the seminar."): each Dawn your
+          strongest creature gets +1 Attack (the dominance hierarchy).
+        - Names: from the Brainstorm List where one fit (Holy War, Mox Nox, Genesis, Curse Of Hubris, Templar Knight,
+          Zealot, Pope, Horsemen Of Apocalypse, The Great Flood, Lance Of Longinus, The Lost Ark, Necronomicon, Living Dead,
+          Religious Instrumentalization), the rest from your themes (The Chosen One for Jesus with guns, the Monty Python
+          and Dogma cards, The Wicker Man, The Omen, Thoughts and Prayers, Deus Vult, The Lobster Professor).
+        - The enemy's deck and discard buttons show only while Fog of War is off (F9).
+    • No art yet for the 24 new Myth cards: each has its picture brief. Draw them?
+    • Double-O Section beats Myth every game (it beats everything: 92%). Tone it down (Femme Fatale 2/3 or one copy)?
+
 34. Balance by faction, not by deck (2026-10-14)
     • From now on win rates are read per faction (big and rough); decks only when fine-tuning cards.
     • Factions (their one-faction decks, last run): Statecraft 85%, Corporate 82%, Digital Society 71%, Shadow Ops. 62%

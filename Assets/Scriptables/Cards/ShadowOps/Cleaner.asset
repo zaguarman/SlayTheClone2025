@@ -20,6 +20,8 @@ MonoBehaviour:
   artwork: {fileID: 3286163911610860551, guid: cc27eb2ec3ef07d49a62618a4c6bc3bb, type: 3}
   discardCost: 0
   singleUse: 0
+  sacrifice: 0
+  prophecy: 0
   effects: []
   designNotes: 'Mechanics test: Double Tap. It attacks twice: a second hit right
     after the first.'
