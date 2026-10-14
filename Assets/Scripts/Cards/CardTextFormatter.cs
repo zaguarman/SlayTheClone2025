@@ -65,9 +65,9 @@ namespace SlayTheClone {
             string cost = data.discardCost > 0
                 ? $"{Keywords.Link("Discard Cost", $"Discard {data.discardCost}")}: give up {data.discardCost} {(data.discardChosen ? "" : "random ")}other card{(data.discardCost == 1 ? "" : "s")}{(data.discardChosen ? " of your choice" : "")} from your hand to play this"
                 : data.sacrifice > 0
-                    ? $"{Keywords.Link("Sacrifice", $"Sacrifice {data.sacrifice}")}: your {(data.sacrifice == 1 ? "weakest creature dies" : $"{data.sacrifice} weakest creatures die")} to play this"
+                    ? $"{Keywords.Link("Sacrifice", $"Sacrifice {data.sacrifice}")}: your {(data.sacrifice == 1 ? $"{Keywords.Link("Weakest", "weakest")} creature dies" : $"{data.sacrifice} {Keywords.Link("Weakest", "weakest")} creatures die")} to play this"
                     : data.doomCost > 0
-                        ? $"{Keywords.Link("Doom Cost", $"Doom {data.doomCost}")}: your weakest creature not yet {Keywords.Link("Doomed")} is Doomed (dies in {data.doomCost} Day{(data.doomCost == 1 ? "" : "s")}) to play this"
+                        ? $"{Keywords.Link("Doom Cost", $"Doom {data.doomCost}")}: your {Keywords.Link("Weakest", "weakest")} creature not yet {Keywords.Link("Doomed")} is Doomed (dies in {data.doomCost} Day{(data.doomCost == 1 ? "" : "s")}) to play this"
                         : "";
             return string.Join("\n", new[] { cost, keywordLine }.Concat(sentences).Where(line => !string.IsNullOrEmpty(line)));
         }
@@ -302,7 +302,7 @@ namespace SlayTheClone {
                 case ActionType.ReturnToHand:
                     return $"{target} goes back to its owner's hand next {Keywords.Link("Day")}";
                 case ActionType.FakeDeath:
-                    return $"{target} fakes its death (its {Keywords.Link("Last Will")} happens) and goes back to your hand next {Keywords.Link("Day")}";
+                    return $"{target} fakes its death and goes back to your hand next {Keywords.Link("Day")}";
                 case ActionType.Vanish:
                     return $"{target} {Keywords.Link("Gone Dark", "goes dark")} until the next {Keywords.Link("Dawn")}";
                 case ActionType.SendFor: {
@@ -315,7 +315,7 @@ namespace SlayTheClone {
                 case ActionType.Grace:
                     return $"{Keywords.Link("Grace")} until the {Keywords.Link("Dusk")} of the next {Keywords.Link("Day")}: at 0 Health you don't lose yet; still at 0 then, you do. If both players fall to 0, you win";
                 case ActionType.Resurrect:
-                    return $"sacrifice {target} (its {Keywords.Link("Last Will")} happens): it {Keywords.Link("Revive", "rises again")} at the {Keywords.Link("Dawn")} {value} Day{(value == 1 ? "" : "s")} later";
+                    return $"sacrifice {target}: it {Keywords.Link("Revive", "rises again")} at the {Keywords.Link("Dawn")} {value} Day{(value == 1 ? "" : "s")} later";
                 case ActionType.CutDraws:
                     return $"{target} draws {value} fewer card{(value == 1 ? "" : "s")} with the next hand";
                 case ActionType.WipeWatchdogs:

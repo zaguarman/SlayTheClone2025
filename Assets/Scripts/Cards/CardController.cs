@@ -180,7 +180,9 @@ namespace SlayTheClone {
             // In play, a creature's ability as it is now: one gained from a spell or another creature is written in, the printed
             // one struck through (and one switched off, struck through)
             var ability = linkedCreature?.Ability;
-            bool abilityOff = linkedCreature != null && linkedCreature.Ability != Enums.CreatureAbility.None && !Abilities.IsActive(linkedCreature);
+            // Switched off only on the board, ready to act (a card in the hand, or still deploying, isn't)
+            bool abilityOff = linkedCreature?.Slot != null && !linkedCreature.IsDead && linkedCreature.IsOperative
+                              && linkedCreature.Ability != Enums.CreatureAbility.None && !Abilities.IsActive(linkedCreature);
             rulesText.text = ComposeTextBox(CardTextFormatter.GetRulesText(baseCardData, ability, abilityOff), baseCardData.description);
 
             bool isCreature = baseCardData is CreatureData;

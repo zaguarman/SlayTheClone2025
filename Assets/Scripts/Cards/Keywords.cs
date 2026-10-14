@@ -42,6 +42,7 @@ namespace SlayTheClone {
             Add("Random", "Picked by chance when the effect happens, among the creatures it can affect at that moment. The one with the most [Heat Signature] is picked first, if any has it. No creature to pick: nothing happens.");
             Add("Everything", "Every creature on both sides, and both players.");
             Add("Strongest", "The creature with the highest Attack, picked when the effect happens. Ties: one of them at random. No creature: nothing happens.");
+            Add("Weakest", "The creature with the lowest Attack; tied, the one with the lowest Health. Picked when the card resolves, among your creatures on the board.");
 
             // ---------------------------------------------------------------- Triggers
             group = "Triggers";
@@ -66,10 +67,10 @@ namespace SlayTheClone {
             Add("Friendly Fire", "Right-drag one of your creatures onto another of yours: it attacks it, a real attack. Its Last Will happens if it dies, which is the point (a Dead Man's Switch, a Martyr, a Cultist).");
             Add("Send For", "Pick a card from your deck (some only look at its top cards, some only take creatures or spells): it joins your next hand, so your plan has what it needs on the Day it needs it. You pick it when you play the card; if you don't, the best one is sent for.");
             Add("Revive", "Once per combat, when this dies, it rises again at the next [Dawn]: its card comes back from your discard pile to the slot where it fell (or the first free one), with full Health. A new arrival: [Deployment Time] again, its Arrival happens again. No free slot: it stays dead. Its [Last Will] still happens.");
-            Add("Sacrifice", "Sacrifice X: an additional cost. When this card resolves, your X weakest creatures (lowest Attack, then lowest Health) die first; their [Last Will] happens. You can't play it with fewer creatures on the board, and if they're gone by the time it resolves, it fizzles.");
+            Add("Sacrifice", "Sacrifice X: an additional cost. When this card resolves, your X [Weakest|weakest] creatures die first; their [Last Will] happens. You can't play it with fewer creatures on the board, and if they're gone by the time it resolves, it fizzles.");
             Add("Prophecy", "Prophecy X: the spell is foretold now and comes true at the [Dawn] X [Days] later, aimed where it was played. Everyone hears it: the queue lists what's been foretold.");
             Add("Single Use", "Once played, the card is gone for the rest of the combat instead of going to your discard pile.");
-            Add("Doom Cost", "Doom X, as a cost: when this card resolves, your weakest creature that isn't [Doomed] yet (lowest Attack, then lowest Health) is Doomed X first: it fights on harder, then dies in X [Days]. You can't play it without one, and if it's gone by the time it resolves, it fizzles. A [Blessed] creature stops the Doom with a stack.");
+            Add("Doom Cost", "Doom X, as a cost: when this card resolves, your [Weakest|weakest] creature that isn't [Doomed] yet is Doomed X first: it fights on harder, then dies in X [Days]. You can't play it without one, and if it's gone by the time it resolves, it fizzles. A [Blessed] creature stops the Doom with a stack.");
             Add("Discard Cost", "Discard X: a payment. To play this card, X other cards from your hand (not the ones you're playing) are given up: set aside now, discarded when it resolves, back in your hand if you take the play back. It's paid in full or not at all: with fewer cards, it isn't played and stays in your hand. A calculated card lets you pick them; a chaotic one takes them at random. A card whose effect is to discard (not to pay) discards as many as you have, up to X.");
             Add("Decoy", "A token that isn't what it looks like: until a [Reveal] or [Revealed] shows it, the other side sees the card it pretends to be, with that card's numbers. A token isn't a card in a deck: when it leaves play, it's gone.");
             Add("Take Control", "It changes sides for good: it goes to the [Slot|slot] facing the one it stood in, under your control, and whatever stands there is discarded. It keeps its Health, statuses and stat changes, and loses what it planned. It's still its owner's card: when it leaves play, it goes back to them.");
@@ -129,7 +130,7 @@ namespace SlayTheClone {
 
             // ---------------------------------------------------------------- Trends
             group = "Trends";
-            Add("Grace", "A player in Grace (God's Grace) can fall to 0 Health and not lose, until the [Dusk] its Grace ends: still at 0 then, they lose; healed above 0 in time, they live. If both players fall to 0, the one in Grace wins.");
+            Add("Grace", "A player in Grace (God's Grace) can fall to 0 Health and not lose, until the [Dusk] its Grace ends: still at 0 then, they lose; healed above 0 in time, they live. If both players fall to 0, the one in Grace wins. It doesn't stack: another Grace doesn't put that Dusk off.");
             Add("Earthquake", "It starts at a random slot on either side and zigzags out across the whole board, crossing to the other side at each column: every column is hit once, the sides taking turns, so the creatures facing each other never both take it. Nobody's attack: nothing answers it or redirects it.");
             Add("Trend", "What the world is into right now: a rule for the whole board, for the [Days] shown (no number: until another Trend replaces it). One at a time: a new Trend replaces the old. A Trend card plays on either side of the table. Like the weather, it's the same for both sides: it helps whoever is built for it, and can turn against whoever set it.");
             foreach (Trend trend in System.Enum.GetValues(typeof(Trend))) {

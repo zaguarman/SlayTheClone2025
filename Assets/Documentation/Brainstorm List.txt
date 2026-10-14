@@ -1594,8 +1594,10 @@ Card Game Factions Overview
 			Shinyo (kamikaze boat)
 			The Great Replacement Law
 			The Gullible Judge
+			To Protect the Children (the safety-over-freedom critique) (added 2026-10-14)
 			War Censorship Law
 			Welcome to Fear City
+			Who Watches the Watchers (added 2026-10-14)
 			Yokosuka (kamikaze plane)
 			Zero Grace Operational Policy
 		Shadow Ops.
@@ -1749,6 +1751,7 @@ Card Game Factions Overview
 		Mind
 			Epistemology (the study of how knowledge is gained: ontology, then epistemology, methodology, methods)
 			Freudian Slip
+			God Is Dead (as the philosopher said: Nietzsche) (added 2026-10-14)
 			Hyperbole
 			Legerdemain (sleight of hand)
 			Liminal Space (a Weather: Attack and Health swap for X turns)

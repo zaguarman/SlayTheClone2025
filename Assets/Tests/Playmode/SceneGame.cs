@@ -300,6 +300,9 @@ namespace SlayTheClone.Tests {
                 CollectionAssert.AreEquivalent(player.Hand.Except(onBoard), HandCards(player).Select(c => c.GetLinkedCardInstance()),
                     $"{player.Name}'s hand view shows different cards than the hand");
                 foreach (var spell in onBoard.OfType<Spell>()) Assert.IsNotNull(SpellGhost(spell), $"{spell.Name} is queued but shows no ghost");
+                foreach (var view in HandCards(player)) {
+                    StringAssert.DoesNotContain("(switched off)", view.RulesText.text, $"{view.name} in the hand shows its ability switched off");
+                }
 
                 foreach (var slot in player.Battlefield) {
                     var card = CardIn(slot);

@@ -136,6 +136,7 @@ namespace SlayTheClone.Tests {
             CollectionAssert.IsEmpty(game.History.Winners, "In Grace, 0 Health isn't the end...");
             game.StartTurn();
             CollectionAssert.IsEmpty(game.History.Winners, "...through this Day's Dusk...");
+            game.Run(new GraceAction(p2, 1)); // Another Grace doesn't put it off
             game.StartTurn();
             CollectionAssert.AreEqual(new[] { p1 }, game.History.Winners, "...but still at 0 at the next one, it is");
             Fresh();

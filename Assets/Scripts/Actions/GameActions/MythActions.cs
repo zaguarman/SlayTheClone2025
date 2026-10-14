@@ -159,6 +159,10 @@ namespace SlayTheClone {
     public class GraceActionExecutor : ActionExecutor<GraceAction> {
         protected override void ExecuteAction(GraceAction grace, ActionExecutionContext context) {
             if (grace.Player == null) return;
+            if (grace.Player.GraceUntilDay != null) { // It doesn't stack: the Dusk already set is the one
+                Log($"{grace.Player.Name} is already in Grace until the Dusk of Day {grace.Player.GraceUntilDay}: no longer", LogTag.Players | LogTag.Effects);
+                return;
+            }
             grace.Player.GraceUntilDay = context.TurnClock.TurnNumber + grace.Days;
             grace.Player.GraceCard = grace.Source;
             Log($"{grace.Player.Name} is in Grace until the Dusk of Day {grace.Player.GraceUntilDay}", LogTag.Players | LogTag.Effects);

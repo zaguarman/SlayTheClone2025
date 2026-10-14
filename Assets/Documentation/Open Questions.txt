@@ -76,7 +76,8 @@ STILL OPEN
           (on the emblem; name and Health stay in sight) with a red countdown, "1 DAY TO LIVE" then "0 DAYS LEFT" on the
           Day whose Dusk executes a player still at 0, beating faster.
         - A creature's own effects on itself don't show under it (it's the card already). Up to 4 tucked cards show (plus
-          the queued spells); the scroll goes through them all.
+          the queued spells); the scroll goes through them all. Answered: kept; what a creature has is read on its own card
+          (its final stats, and abilities gained in play written in its text).
         - Stat changes that last for good stay tucked until the creature leaves play; timed ones and statuses fall off when
           they end. The enemy's spells on its creatures show too, like their statuses do.
         - Science deck: 8 off-theme Utopia cards moved to the deck builder (Philosophy PhD, Mathematician, Quantum Physicist,
