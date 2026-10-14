@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Twice the sheep. Half the soul.
   cardType: 0
   faction: 9
-  artwork: {fileID: 21300000, guid: 984278811868a1e4cba5dc9fe1d70c89, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 63dd54157e2edd1478519d949fd067e7, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

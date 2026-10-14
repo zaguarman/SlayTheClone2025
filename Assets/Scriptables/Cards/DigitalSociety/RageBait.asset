@@ -17,7 +17,7 @@ MonoBehaviour:
   description: You won't BELIEVE what they said about you.
   cardType: 1
   faction: 6
-  artwork: {fileID: 21300000, guid: 938da52a6bb13a24680181374f672128, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 7a8206fe14e09c740a7a19274d8333d8, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

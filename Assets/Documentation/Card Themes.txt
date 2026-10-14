@@ -341,17 +341,18 @@ Business Expense (spell) [px]
 Taxpayer Funds Venture Capital Profits (spell)
   Aim:   Privatised gains, socialised losses.
   Hooks: The 2008 bank bailouts (TARP), the Silicon Valley Bank rescue (2023).
-  Twist: The flavor says it all. The rules are still a placeholder.
-  Push:  Give it a rule that tells the joke: the enemy pays your loss (when your creature dies, theirs loses the Health).
-         The art could show a public piggy bank pouring into a yacht.
+  Twist: The gains are yours alone (draw 2 with the next Day's hand); the bill is everyone's: 1
+         damage to every creature on the board, yours included (2026-10-14).
+  Push:  Done: the rules tell the joke now. Its old picture (the public paying in, coin by coin) stays.
 
 Cleaning Robot (creature) [px]
   Aim:   Subscriptions for everything.
   Hooks: BMW's heated seats sold as a subscription (2022), printer ink subscriptions, Roombas mapping your home, Love,
          Death & Robots.
   Twist: "Cleans 30% of your floor. The other 70% is a Premium feature." A sturdy pusher.
-  Push:  The art is now the Love, Death & Robots pool robot, which lost the subscription joke. A "SUBSCRIPTION EXPIRED"
-         pop-up on its disc head would bring it back.
+  Push:  Done (2026-10-14, the user's idea): a Google Nest-style fabric puck with the four coloured dots,
+         sucking up the family's photos, letters and diary while a beam uploads the floor plan to a cloud: "Free cleaning.
+         You're the product." Having one at home is handing your data over for free.
 
 Tax-Exempt Corruption (spell)
   Aim:   Megachurches and the prosperity gospel.
@@ -674,8 +675,8 @@ Strike (spell)
   Aim:   Labour fighting back.
   Hooks: The Hollywood writers' and actors' strikes (2023), the US auto workers' strike (2023).
   Twist: Stops both sides' engines for two Days.
-  Push:  Its drawing is a fur hat, which doesn't say "strike" at all. A picket line outside a factory gate, with a
-         worker's cardboard sign and the CEO peering out from a window above, would fit.
+  Push:  Done (2026-10-14, the user's idea): the head of the works council eating lobster at the boardroom
+         table, the CEO beaming, the strikers outside in the rain with a biscuit each. A strike sold out from inside.
 
 Russian Roulette (spell) [px]
   Aim:   Gambling with your life, and Russia.
@@ -690,11 +691,15 @@ Toxic Positivity (spell) [px]
   Push:  Rules and joke match. Great art.
 
 Mental Health Day (spell)
-  Aim:   Burnout.
+  Aim:   How superficially mental health is treated: a nice day to have, and zero measures from the
+         government; to rub salt in the wound, the only people backing it are mystic, shamanic, ayurveda- and reiki-loving
+         Karens (the user).
   Hooks: Taking the day off and still checking Slack.
   Twist: Cleanses the moods.
-  Push:  It has no art brief. Proposal: a worker under a duvet with only their eyes showing, the laptop glowing beside them
-         with 47 unread messages.
+  Push:  Done (2026-10-14): a politician cuts the ribbon on a MENTAL HEALTH DAY banner in front of a
+         boarded-up clinic (BUDGET CUTS), while a reiki lady waves sage over an exhausted worker (AURA: 90 EUR). The
+         flavor could follow the art: "One day a year. The other 364 are on you." Alternative medicine went into the
+         backlog as a group of its own.
 
 Delivery Cyclist (creature)
   Aim:   Delivery riders.
@@ -739,7 +744,8 @@ Crypto "Entrepreneur" (creature)
   Aim:   Crypto bros.
   Hooks: FTX and Sam Bankman-Fried (2022); BitConnect's "BitConneeeect!" (2017); Binance's "funds are SAFU".
   Twist: Chain Mail: its attacks jump down the line at half damage each, a pun on the blockchain and on chain letters.
-  Push:  Its flavor is a copy of the MLM Seller's. "Funds are safu." or "Few understand." would make it its own.
+  Push:  Done (2026-10-14): its flavor is "Funds are safu." now. "He Bought, Dump It" (the crypto meme) went
+         into the backlog as its partner.
 
 Digital Nomad (creature)
   Aim:   Remote workers in Bali and Lisbon.
@@ -1220,15 +1226,15 @@ Scope Creep (creature)
   Aim:   Projects that grow forever.
   Hooks: "Just one more small feature."
   Twist: Grow 1: it gets bigger every Dawn. The art is a pun: a creep with a spyglass.
-  Push:  The pun hides the project joke. The creep could be peeping at a Gantt chart through the window, or carrying a
-         sack of new tickets.
+  Push:  Done (2026-10-14): a Gantt chart whose bars run off the whiteboard, across the wall and past the
+         deadline, a manager sticking on one more note.
 
 Sex Clanker (creature)
   Aim:   Sex robots and AI girlfriends.
   Hooks: "Clanker", the 2025 slang for robots; Replika.
   Twist: Heat Signature 3: a decoy too attractive to ignore.
-  Push:  Its picture is the old No Glove, No Love art. A robot of its own (candlelight, a heart-shaped bed, "batteries not
-         included" on the box) would sit better with the flavor.
+  Push:  Its picture (the knight on the heart-shaped bed) is its own and named after it; the old note
+         about No Glove, No Love is history. Keep it.
 
 
 MIND (12)
@@ -1404,7 +1410,7 @@ Mox Nox (spell)
   Aim:   Mortality.
   Hooks: The Latin sundial motto "Mox nox": soon, night.
   Twist: Destroys the strongest enemy in two Days.
-  Push:  The one Myth card without a joke. A monk timing the shadow with a stopwatch would add one.
+  Push:  No joke needed (the user, 2026-10-14): some cards are just Latin words the user finds interesting.
 
 Holy Hand Grenade of Antioch (spell) [px]
   Aim:   Monty Python.
@@ -1611,9 +1617,7 @@ Surveillance Giraffe (creature) [px]
   Aim:   Seeing over the fog.
   Hooks: Google Street View cameras, mounted high enough to see over fences.
   Twist: It reveals an enemy slot when it enters: it looks over everyone's head.
-  Push:  The weakest link to its faction. Science or surveillance needs a cue: a Street View-style camera rig on its head
-         would give it a reason to be here (the user removed a camera from its head before; maybe as a badge on its neck
-         instead).
+  Push:  Keep it (the user, 2026-10-14): just absurd, and nice to have a giraffe around.
 
 Pioneer (creature)
   Aim:   Colonising Mars.
@@ -1786,19 +1790,23 @@ separate cards into a story a player discovers.
 
 5. FIXES AND GAPS FOUND ALONG THE WAY
 
-  - Crypto "Entrepreneur" and Multilevel Marketing Seller share the same flavor ("It's not a pyramid. It's a triangle of
-    opportunity"). Keep it on the MLM Seller; give the crypto bro "Funds are safu." or "Few understand."
-  - Strike: its drawing is a fur hat, which has nothing to do with a strike. Proposal: a picket line at a factory gate,
-    with the CEO peering out from a window above.
-  - Mental Health Day: no art brief at all. Proposal: a worker under a duvet, only their eyes showing, a laptop glowing
-    beside them with 47 unread messages.
-  - Scope Creep: the art is a pun (a creep with a spyglass) that hides the project joke. A Gantt chart or a sack of new
-    tickets would bring it back.
-  - Surveillance Giraffe: the weakest link to its faction (Utopia). A Street View-style camera rig would give it a reason.
-  - Sex Clanker: its picture is the old No Glove, No Love art. It deserves its own.
-  - Cleaning Robot: the current art (the Love, Death & Robots pool robot) lost the subscription joke from the flavor.
-  - Taxpayer Funds Venture Capital Profits: the rules are a placeholder that doesn't tell its joke.
-  - Its A Trap: the name is Star Wars and the art is The Simpsons. Fine as a double reference, but worth knowing.
-  - Mox Nox: the only card in Myth without a joke. Fine if that's deliberate (a serious card in a silly faction).
+What the review found, and what the user decided (2026-10-14):
 
-Nothing in this document has been changed in the cards: every Push is a suggestion for the user to pick from.
+  - Crypto "Entrepreneur" and Multilevel Marketing Seller shared a flavor. Done: the crypto bro says "Funds are safu."
+    now, and "He Bought, Dump It" is in the backlog.
+  - Strike's drawing was a fur hat. Done: the head of the works council eating lobster while the workers get a biscuit
+    each, and the boss is happy.
+  - Mental Health Day had no art brief. Done: a politician opening a "day" in front of a clinic closed by budget cuts,
+    the reiki lady the only help left. Alternative medicine went into the backlog.
+  - Scope Creep hid its project joke behind a pun. Done: the Gantt chart that outgrows the wall.
+  - Surveillance Giraffe: kept as it is. Absurd, and nice to have a giraffe around.
+  - Sex Clanker: its picture is its own (the old note was out of date). Kept.
+  - Cleaning Robot lost the subscription joke. Done: Google Nest-style, your data uploaded for free.
+  - Taxpayer Funds Venture Capital Profits had placeholder rules. Done: you draw 2, every creature on the board pays 1.
+    Note: Solidarity Towards The Small Businessman (draw 2, only your creatures pay) now does less for the same; worth a
+    look in the next balance pass.
+  - Its A Trap: a double reference (Star Wars name, Simpsons art). Left as it is.
+  - Mox Nox: no joke needed. Some cards are just Latin words the user finds interesting.
+
+Apart from the decisions above, nothing in this document has been changed in the cards: every other Push is a
+suggestion for the user to pick from.

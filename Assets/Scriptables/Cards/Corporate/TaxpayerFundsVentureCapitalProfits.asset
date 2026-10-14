@@ -59,7 +59,7 @@ MonoBehaviour:
       decoy: {fileID: 0}
     - actionType: 0
       value: 1
-      targetType: 1
+      targetType: 2
       targetModifier: 2
       modifyAttack: 1
       modifyHealth: 1
@@ -84,6 +84,7 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'Future: the enemy schedules 1 fewer draw instead of losing Health.'
+  designNotes: 'The gains are yours alone: draw 2 with the next Day''s hand. The
+    bill is everyone''s: 1 damage to every creature on the board, yours included.'
   artDescription: 
   defaultTargetType: 0

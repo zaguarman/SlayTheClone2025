@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
   cardId: b772c078-2b42-420b-a33c-8ed55d03c6a8
   cardName: Crypto "Entrepreneur"
-  description: It's not a pyramid. It's a triangle of opportunity.
+  description: Funds are safu.
   cardType: 0
   faction: 6
   artwork: {fileID: 3286163911610860551, guid: e4bb8bfa17dbf0545a22455787a226f0, type: 3}

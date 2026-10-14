@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Would like to speak to your manager. And theirs. And God's.
   cardType: 0
   faction: 7
-  artwork: {fileID: 21300000, guid: dbd7e8a44aa17684787dba27dccf637d, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 555ff15f303457746b878f21ceb7a4e6, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

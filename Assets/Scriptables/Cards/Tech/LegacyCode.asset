@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Written in 1987. Nobody knows how it works. Nobody dares touch it.
   cardType: 0
   faction: 5
-  artwork: {fileID: 21300000, guid: 3b654f2467e3b684f969166faaf5df4b, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: ce9b6cf9d19593f4eb8f793cf5e5ea38, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

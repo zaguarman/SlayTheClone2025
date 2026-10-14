@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Good vibes only. Bad vibes get one damage.
   cardType: 1
   faction: 7
-  artwork: {fileID: 21300000, guid: 4ecbca534936c4f458c71f9c3f55de2c, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 8673832e184a6774084f41d0c7e27797, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

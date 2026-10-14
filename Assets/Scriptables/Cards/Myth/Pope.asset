@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Infallible. Bulletproof glass, just in case.
   cardType: 0
   faction: 1
-  artwork: {fileID: 21300000, guid: 5ab0cc78bcc6cf74797299948f8c5530, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: b8941fb3f2dff93489c217d87679c16b, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

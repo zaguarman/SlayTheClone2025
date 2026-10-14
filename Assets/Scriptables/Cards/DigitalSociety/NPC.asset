@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Has opinions. All of them yours.
   cardType: 0
   faction: 6
-  artwork: {fileID: 21300000, guid: 8fe5bfb73e167494d8067dd9f8c02260, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: ddaa7291fd46b514f8cb91033e3439f7, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

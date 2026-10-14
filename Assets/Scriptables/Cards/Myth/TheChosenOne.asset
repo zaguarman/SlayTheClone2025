@@ -17,7 +17,7 @@ MonoBehaviour:
   description: This time he brought backup.
   cardType: 0
   faction: 1
-  artwork: {fileID: 21300000, guid: 0b8f279e0b4c30940850655ea1c5cc49, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 77589e45be4b02347a9c97f36674923f, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

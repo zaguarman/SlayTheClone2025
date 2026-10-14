@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Cleans 30% of your floor. The other 70% is a Premium feature.
   cardType: 0
   faction: 4
-  artwork: {fileID: 21300000, guid: 89fabc114e81a834eb8e2ccdc270278d, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 16a91debce2557146b397b0f27d6d61a, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0
@@ -28,9 +28,11 @@ MonoBehaviour:
   effects: []
   designNotes: 'Mechanics test: a sturdy pusher. Pushing (every creature can), no
     chain pushes, blocked pushes ("needs Swap") and the automatic move order.'
-  artDescription: 'A sleek, glossy robot vacuum with a glowing megacorp logo, shoving
-    a pile of tiny office workers and their desks into a corner. A "Subscription
-    expired: suction limited" pop-up flashes on its screen.'
+  artDescription: 'A smart-home robot vacuum in the style of a Google Nest (a soft
+    fabric puck with four coloured light dots: blue, red, yellow, green), its single
+    camera eye glowing, sucking up a family''s photos, letters and diary from the
+    living-room floor while a beam uploads a floor plan of the house to a cloud.
+    A pop-up on it reads "Free cleaning. You''re the product."'
   attack: 2
   health: 7
   speed: 1

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 1 threat blocked. 37 offers to upgrade to Premium.
   cardType: 1
   faction: 5
-  artwork: {fileID: 21300000, guid: 5008aeed154472446af2356b7ec61f27, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 32d5a1335de6b55489500910375b1ff4, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

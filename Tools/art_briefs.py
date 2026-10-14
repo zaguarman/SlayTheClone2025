@@ -16,6 +16,12 @@ OUT = os.path.join(ROOT, "Assets", "Documentation", "Card Art Briefs.txt")
 
 # What the user asked for, in their words (dated), per card name. Add to it whenever the user describes a card's art.
 USER_NOTES = {
+    "Strike": ["2026-10-14: a corrupt head of the works council eating lobster while the workers get nothing; the boss is happy."],
+    "Mental Health Day": ["2026-10-14: it criticises how superficially the topic is treated: a nice day to have, but zero measures from the "
+                          "government to tackle mental health problems; and to rub salt in the wound, the only people backing it are cringe "
+                          "mystic, shamanic, ayurveda- and reiki-loving Karens."],
+    "Scope Creep": ["2026-10-14: a Gantt chart instead of the creep with the spyglass."],
+    "Mox Nox": ["2026-10-14: some cards are just Latin words the user finds interesting; they don't need a joke."],
     "HAARP": ["2026-10-14: an underground installation with a device like a strong laser pointed at an immense hole in the "
               "ground, toward the Earth's center (an earthquake card)."],
     "Phoenix Feather": ["2026-10-14: only the feather, in the colors of the reference (a watercolor feather: red at the "
@@ -34,7 +40,8 @@ USER_NOTES = {
                     "2026-10-14: no cobweb (it read as a wifi signal) and no duct tape on the computer."],
     "Golden Dome": ["2026-10-14 (pixel art): redo it; Netanyahu as the man standing there (the user's reference photo: silver hair "
                     "swept back, dark suit, white shirt, red tie, an Israeli flag pin, a smirk).", "2026-10-14: no flag pin."],
-    "Surveillance Giraffe": ["2026-10-14 (pixel art): keep its shape; no blobs sticking out of it; no camera (the white thing) on its head."],
+    "Surveillance Giraffe": ["2026-10-14 (pixel art): keep its shape; no blobs sticking out of it; no camera (the white thing) on its head.",
+                             "2026-10-14: just absurd, and that's fine: nice to have a giraffe around. No faction cue needed."],
     "Keyboard Warrior": ["2026-10-14 (pixel art): like Rambo but fat, holding the keyboard as if it were a sword.",
                          "2026-10-14: the arms in the belly's lighter skin tone, smooth where they meet the shoulders; the "
                          "face the typical redditor meme face (the user's references: a tall bald dome, glasses, brow "
@@ -49,7 +56,8 @@ USER_NOTES = {
                              "down the curved tunnel, steel interconnects, cables, someone lying under it working, a white line "
                              "on the floor."],
     "Cleaning Robot": ["2026-10-14 (pixel art): after the pool-cleaning robot in Love, Death & Robots (the user's still): flat "
-                       "shading, a white angular hull at the water line of a cyan-tiled pool at night, a round disc head on an arm."],
+                       "shading, a white angular hull at the water line of a cyan-tiled pool at night, a round disc head on an arm.",
+                       "2026-10-14: make it like a Google Nest instead, more Google-themed: they take your data, and having one at home is handing it over for free."],
     "Templar Knight": ["2026-10-14 (pixel art): holding a shield with the cross; the treasure one cohesive pile, no coins flying about."],
     "Hostile Takeover": ["2026-10-14 (pixel art): the mouth a smile instead of an open box; the dorsal fin swept back, not a pyramid."],
     # From earlier sessions
@@ -73,7 +81,8 @@ USER_NOTES = {
     "We Are Not The Same": ["The Spider-Man meme, pointing at each other."],
     "Meta Group Chat": ["Redo it with a WhatsApp-like feel."],
     "Control Room": ["Delete the guy floating in the control room."],
-    "Sex Clanker": ["Use the old No Glove No Love picture for it."],
+    "Sex Clanker": ["Use the old No Glove No Love picture for it.",
+                    "2026-10-14: that picture (the knight on the heart-shaped bed) is Sex Clanker's own now, named after it; keep it."],
     "MK Ultra Test Subject": ["Make it look like the Unabomber before going into the woods."],
     "Genesis": ["Like the reference picture the user gave."],
     "Doomscrolling": ["A guy like the wojak meme, but on a phone instead of a computer.",
@@ -152,6 +161,8 @@ ART_RULES = [
     "Keep the background apart from the subject (the character or thing portrayed): one background per faction or scene,",
     "  drawn once and reused, the subject on its own layer over it.",
     "The user's notes (USER) win over the brief when a picture is redrawn.",
+    "2026-10-14: no more pixel art for now. The cards use the vector (SVG) art again; the pixel pictures already made are",
+    "  kept (Assets/Art/PixelCards, ArtArchive/RetroDiffusion) but not assigned.",
 ]
 
 FACTION_NAMES = {"Corporate": "Corporate", "Statecraft": "Statecraft", "Zeitgeist": "Zeitgeist",

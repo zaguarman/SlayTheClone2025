@@ -275,12 +275,12 @@ namespace SlayTheClone {
                 .Picture("A CEO in a full three-piece suit, briefcase still in hand, being walked into a jail cell by a guard, while he hands the guard a receipt stamped BUSINESS EXPENSE."),
             Spell("Taxpayer Funds Venture Capital Profits", TargetType.Player,
                 "Privatize the gains. Socialize the bill.",
-                "Future: the enemy schedules 1 fewer draw instead of losing Health.",
-                Draw(2), Damage(1, TargetType.Enemy, Each)),
+                "The gains are yours alone: draw 2 with the next Day's hand. The bill is everyone's: 1 damage to every creature on the board, yours included.",
+                Draw(2), Damage(1, TargetType.AllCreatures, Each)),
             Creature("Cleaning Robot", 2, 7, speed: 1, deploy: 1,
                 "Cleans 30% of your floor. The other 70% is a Premium feature.",
                 "Mechanics test: a sturdy pusher. Pushing (every creature can), no chain pushes, blocked pushes (\"needs Swap\") and the automatic move order.")
-                .Picture("A sleek, glossy robot vacuum with a glowing megacorp logo, shoving a pile of tiny office workers and their desks into a corner. A \"Subscription expired: suction limited\" pop-up flashes on its screen."),
+                .Picture("A smart-home robot vacuum in the style of a Google Nest (a soft fabric puck with four coloured light dots: blue, red, yellow, green), its single camera eye glowing, sucking up a family's photos, letters and diary from the living-room floor while a beam uploads a floor plan of the house to a cloud. A pop-up on it reads \"Free cleaning. You're the product.\""),
             Spell("Tax-Exempt Corruption", TargetType.Player,
                 "Thou shalt not pay taxes.",
                 "Future: Capital cost (discard 2 cards). Placeholder cost: the enemy draws a card. Plays in Prosperity Gospel.",
@@ -530,7 +530,8 @@ namespace SlayTheClone {
             Spell("Strike", TargetType.EnemyCreatures,
                 "Nobody works. Not them. Especially not us.",
                 "Future: a Strike. Stops Each Dawn triggers (engines) on both sides for 2 Days.",
-                Stun(1, TargetType.EnemyCreatures, Each), Stun(1, TargetType.FriendlyCreatures, Each)),
+                Stun(1, TargetType.EnemyCreatures, Each), Stun(1, TargetType.FriendlyCreatures, Each))
+                .Picture("A corrupt head of the works council in a lobster bib, a WORKS COUNCIL badge on his lapel, feasting on a lobster with champagne at the company's boardroom table; the beaming CEO pats him on the shoulder. Through the window behind them, the striking workers stand in the rain with their placards, each handed a single soggy biscuit."),
             Spell("Russian Roulette", TargetType.AllCreatures,
                 "Five empty chambers. Your odds are great. Probably.",
                 "Future: you pick the first slot; each Dawn it moves to the next one until it fires.",
@@ -543,7 +544,8 @@ namespace SlayTheClone {
             Spell("Mental Health Day", TargetType.FriendlyCreatures,
                 "Unpaid, unscheduled, unbelievably necessary.",
                 "Future: Cleanse every mood from the creature instead of the stun.",
-                Buff(3, TargetType.FriendlyCreatures, attack: false, health: true), Stun(1, TargetType.FriendlyCreatures)),
+                Buff(3, TargetType.FriendlyCreatures, attack: false, health: true), Stun(1, TargetType.FriendlyCreatures))
+                .Picture("A smiling politician cuts the ribbon on a MENTAL HEALTH DAY banner in front of a boarded-up mental health clinic (CLOSED: BUDGET CUTS). The only help on offer: a reiki-and-ayurveda lady in crystals and a shawl waving burning sage over an exhausted office worker, a price list beside her (AURA CLEANSE 90 EUROS)."),
             Creature("Delivery Cyclist", 1, 3, speed: 3, deploy: 0,
                 "Your food is 4 minutes away. It has been 4 minutes away for 40 minutes.",
                 "Mechanics test: Leapfrog jumps over creatures to an empty slot; if its landing slot is taken, it stops at the closest empty slot on the way.")
@@ -586,7 +588,7 @@ namespace SlayTheClone {
                 .Dooming(3)
                 .Picture("The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed and expressionless at 3AM, holding up a phone (we see its black back) where the meme had a computer, its glow on his face, cards drifting up out of the feed."),
             Creature("Crypto \"Entrepreneur\"", 3, 3, speed: 2, deploy: 0,
-                "It's not a pyramid. It's a triangle of opportunity.",
+                "Funds are safu.",
                 "Mechanics test: Chain Mail. Its attacks jump on to the next 2 creatures in line, half the damage each jump.")
                 .With(CreatureAbility.ChainMail)
                 .Picture("A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand."),
@@ -1028,7 +1030,7 @@ namespace SlayTheClone {
                 "Just one more small feature. And one more.",
                 "Grow 1: it gets bigger every Dawn, like the project.",
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
-                .Picture("A creep in a trench coat and a low hat peering through a brass spyglass at a couple kissing in a lit window."),
+                .Picture("A Gantt chart on an office whiteboard whose bars have outgrown it: they run off the board, across the wall and out of the window, past the DEADLINE line drawn in red, while a smiling manager sticks on one more note: \"+1 small feature\"."),
             Creature("Sex Clanker", 2, 7, speed: 1, deploy: 0,
                 "Batteries not included. Feelings not included either.",
                 "Arrival: Heat Signature 3 on itself. It draws every random effect and redirected attack: a decoy too attractive to ignore.",

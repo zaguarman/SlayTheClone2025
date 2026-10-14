@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Has never lost an argument. Has never left the house.
   cardType: 0
   faction: 6
-  artwork: {fileID: 21300000, guid: 03558780c6d8a514fa679c0e77b7a666, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 4dce3f0a463c97a47bf62ccfd4a84ed1, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

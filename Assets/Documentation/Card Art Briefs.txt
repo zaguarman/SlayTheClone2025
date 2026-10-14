@@ -11,6 +11,8 @@ RULES
   Keep the background apart from the subject (the character or thing portrayed): one background per faction or scene,
     drawn once and reused, the subject on its own layer over it.
   The user's notes (USER) win over the brief when a picture is redrawn.
+  2026-10-14: no more pixel art for now. The cards use the vector (SVG) art again; the pixel pictures already made are
+    kept (Assets/Art/PixelCards, ArtArchive/RetroDiffusion) but not assigned.
 
 
 CORPORATE
@@ -68,8 +70,9 @@ Business Expense (spell)
 Taxpayer Funds Venture Capital Profits (spell)
     (from the drawing) The public pays in, one coin at a time ---------------------------------------------------------------- Statecraft cards
 Cleaning Robot (creature)
-    A sleek, glossy robot vacuum with a glowing megacorp logo, shoving a pile of tiny office workers and their desks into a corner. A "Subscription expired: suction limited" pop-up flashes on its screen.
+    A smart-home robot vacuum in the style of a Google Nest (a soft fabric puck with four coloured light dots: blue, red, yellow, green), its single camera eye glowing, sucking up a family's photos, letters and diary from the living-room floor while a beam uploads a floor plan of the house to a cloud. A pop-up on it reads "Free cleaning. You're the product."
     USER: 2026-10-14 (pixel art): after the pool-cleaning robot in Love, Death & Robots (the user's still): flat shading, a white angular hull at the water line of a cyan-tiled pool at night, a round disc head on an arm.
+    USER: 2026-10-14: make it like a Google Nest instead, more Google-themed: they take your data, and having one at home is handing it over for free.
 Tax-Exempt Corruption (spell)
     A megachurch whose cross is a giant gold dollar sign, a private jet parked by the door and a big red TAX EXEMPT stamp across the sky.
 Solidarity Towards The Small Businessman (spell)
@@ -180,14 +183,16 @@ This Is Fine (spell)
     The meme dog in a little bowler hat at a table with his coffee, the room on fire around him, saying THIS IS FINE.
     USER: 2026-10-14 (pixel art): no chair post (the 'log') behind the dog.
 Strike (spell)
-    (from the drawing) A big fluffy fur hat: a round crown, a thick folded-up front and ear flaps hanging down
+    A corrupt head of the works council in a lobster bib, a WORKS COUNCIL badge on his lapel, feasting on a lobster with champagne at the company's boardroom table; the beaming CEO pats him on the shoulder. Through the window behind them, the striking workers stand in the rain with their placards, each handed a single soggy biscuit.
+    USER: 2026-10-14: a corrupt head of the works council eating lobster while the workers get nothing; the boss is happy.
 Russian Roulette (spell)
     A Russian woman in a fur ushanka spinning a roulette wheel of six slices, one of them a skull, onion domes in the snow behind her.
     USER: 2026-10-14 (pixel art): the skull centred in its slice.
 Toxic Positivity (spell)
     A huge yellow smiley face with a crack running through it and a sticking plaster on its cheek; vaporwave background.
 Mental Health Day (spell)
-    (from the drawing) ---------------------------------------------------------------- Backgrounds of the factions without a deck yet
+    A smiling politician cuts the ribbon on a MENTAL HEALTH DAY banner in front of a boarded-up mental health clinic (CLOSED: BUDGET CUTS). The only help on offer: a reiki-and-ayurveda lady in crystals and a shawl waving burning sage over an exhausted office worker, a price list beside her (AURA CLEANSE 90 EUROS).
+    USER: 2026-10-14: it criticises how superficially the topic is treated: a nice day to have, but zero measures from the government to tackle mental health problems; and to rub salt in the wound, the only people backing it are cringe mystic, shamanic, ayurveda- and reiki-loving Karens.
 Delivery Cyclist (creature)
     A rider with a huge square thermal backpack, mid-hop over a gridlocked row of cars, phone strapped to the handlebars showing a 1-star rating.
 Zeitgeist (spell)
@@ -395,10 +400,12 @@ Man-in-the-Middle (spell)
 Technical Debt (creature)
     A laptop held together with duct tape and a TODO sticky note, beside an empty, cracked piggy bank, the dashed outlines of the missing banknotes floating above.
 Scope Creep (creature)
-    A creep in a trench coat and a low hat peering through a brass spyglass at a couple kissing in a lit window.
+    A Gantt chart on an office whiteboard whose bars have outgrown it: they run off the board, across the wall and out of the window, past the DEADLINE line drawn in red, while a smiling manager sticks on one more note: "+1 small feature".
+    USER: 2026-10-14: a Gantt chart instead of the creep with the spyglass.
 Sex Clanker (creature)
     Candlelight and satin: a figure in full shining plate reclines on a red heart-shaped bed, propped on one elbow, a rose in the visor and one knee up, rose petals everywhere, a heart shield leaning against the bed.
     USER: Use the old No Glove No Love picture for it.
+    USER: 2026-10-14: that picture (the knight on the heart-shaped bed) is Sex Clanker's own now, named after it; keep it.
 
 MYTH
 
@@ -437,6 +444,7 @@ The Great Flood (spell)
     A wooden ark riding a huge wave, the animals two by two waving from the deck, while a line of enemy soldiers on a hilltop holds umbrellas as the water reaches their chins.
 Mox Nox (spell)
     An old sundial in a ruined cloister at dusk, the shadow of its gnomon falling across the Latin words MOX NOX carved in the stone, a black candle burning beside it.
+    USER: 2026-10-14: some cards are just Latin words the user finds interesting; they don't need a joke.
 Holy Hand Grenade of Antioch (spell)
     A golden orb with a jewelled cross on top, its pin pulled, held up by a monk reading from an enormous book, three fingers raised, knights ducking behind him.
     USER: 2026-10-14 (pixel art): no pin; the priest holds up two fingers, not three.
@@ -550,6 +558,7 @@ Genetically Modified Organism (creature)
 Surveillance Giraffe (creature)
     A giraffe whose neck runs out of the top of the picture and comes back in from the top further along, its head hanging upside down, peeking.
     USER: 2026-10-14 (pixel art): keep its shape; no blobs sticking out of it; no camera (the white thing) on its head.
+    USER: 2026-10-14: just absurd, and that's fine: nice to have a giraffe around. No faction cue needed.
 Pioneer (creature)
     An astronaut planting a flag on a red desert next to a sign: FOR RENT $9999.
 Placebo (spell)

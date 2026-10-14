@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Alive and dead. Mostly annoyed.
   cardType: 0
   faction: 8
-  artwork: {fileID: 21300000, guid: fddfa24d21d206947b6716d8b7a83327, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: dd974598db0a95c4f85043d891bb0b2b, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

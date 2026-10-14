@@ -85,5 +85,9 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Future: Cleanse every mood from the creature instead of the stun.'
-  artDescription: 
+  artDescription: 'A smiling politician cuts the ribbon on a MENTAL HEALTH DAY banner
+    in front of a boarded-up mental health clinic (CLOSED: BUDGET CUTS). The only
+    help on offer: a reiki-and-ayurveda lady in crystals and a shawl waving burning
+    sage over an exhausted office worker, a price list beside her (AURA CLEANSE 90
+    EUROS).'
   defaultTargetType: 3

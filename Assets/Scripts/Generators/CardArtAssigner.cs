@@ -6,16 +6,16 @@ using UnityEngine;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Links every card asset to its illustration by matching file name. The pixel art comes first:
-    /// Assets/Scriptables/Cards/&lt;Theme&gt;/&lt;Card&gt;.asset  ->  Assets/Art/PixelCards/&lt;Card&gt;.png (Tools/pixel_art.py)
-    /// and a card without one keeps its old vector art:
+    /// Links every card asset to its illustration by matching file name:
     /// Assets/Scriptables/Cards/&lt;Theme&gt;/&lt;Card&gt;.asset  ->  Assets/Art/Cards/&lt;Theme&gt;/&lt;Card&gt;.svg (Tools/generate_card_art.py)
-    /// The vector art a pixel picture replaced is archived in ArtArchive/Cards, outside Assets.
+    /// Pixel art is paused (2026-10-14): with UsePixelArt on, a card's pixel picture comes first instead,
+    /// Assets/Art/PixelCards/&lt;Card&gt;.png (Tools/pixel_art.py), and only the cards without one keep their vector art.
     /// </summary>
     public static class CardArtAssigner {
         private const string CardsFolder = "Assets/Scriptables/Cards";
         private const string ArtFolder = "Assets/Art/Cards";
         private const string PixelArtFolder = "Assets/Art/PixelCards";
+        private static readonly bool UsePixelArt = false; // Pixel art is paused: the pictures stay in PixelArtFolder, unassigned
         private const int ArtTextureSize = 768; // Longest edge of the rasterized vector art
         private const int PixelArtTextureSize = 2048; // Room for the 1152 x 648 pixel art at full size
 
@@ -29,7 +29,7 @@ namespace SlayTheClone {
                 var cardPath = AssetDatabase.GUIDToAssetPath(guid);
                 var card = AssetDatabase.LoadAssetAtPath<CardDataScriptableObject>(cardPath);
 
-                var sprite = LoadPixelArt($"{PixelArtFolder}/{Path.GetFileNameWithoutExtension(cardPath)}.png");
+                var sprite = UsePixelArt ? LoadPixelArt($"{PixelArtFolder}/{Path.GetFileNameWithoutExtension(cardPath)}.png") : null;
                 if (sprite != null) {
                     pixel++;
                 } else {

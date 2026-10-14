@@ -58,8 +58,10 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Grow 1: it gets bigger every Dawn, like the project.'
-  artDescription: A creep in a trench coat and a low hat peering through a brass
-    spyglass at a couple kissing in a lit window.
+  artDescription: 'A Gantt chart on an office whiteboard whose bars have outgrown
+    it: they run off the board, across the wall and out of the window, past the DEADLINE
+    line drawn in red, while a smiling manager sticks on one more note: "+1 small
+    feature".'
   attack: 2
   health: 3
   speed: 1

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Will die for the cause. Will tell you about it first.
   cardType: 0
   faction: 1
-  artwork: {fileID: 21300000, guid: f5c232f5f0e9c5846a4c189f03f82983, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 135e477f911e45249809e42961f84572, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

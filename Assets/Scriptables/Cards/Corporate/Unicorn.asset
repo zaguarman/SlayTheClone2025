@@ -18,7 +18,7 @@ MonoBehaviour:
     every year.
   cardType: 0
   faction: 4
-  artwork: {fileID: 21300000, guid: 61254fdd74559dd48b42d765b14c37fb, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 087f48479f7955c45b68da47d591bb4d, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Nothing personal. It's just business. Mostly the personal kind.
   cardType: 0
   faction: 4
-  artwork: {fileID: 21300000, guid: cbfb56b0f9ce9d74d9d83d85cd77ba5b, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 0f1dc73a68cb2274d8b1708d3d5e8115, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

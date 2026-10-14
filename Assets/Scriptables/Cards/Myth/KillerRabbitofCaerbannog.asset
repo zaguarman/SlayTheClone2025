@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Look at the bones!
   cardType: 0
   faction: 1
-  artwork: {fileID: 21300000, guid: 220ea02ba5713b649bbc260edbe11e1b, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 70975b661496c9d4bb590d48d39cb190, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Runs forever. The patent office stopped answering in 1911.
   cardType: 0
   faction: 9
-  artwork: {fileID: 21300000, guid: f077c24599b1abc4fb4dc6f74dba39e3, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 8631dd9a1bd495540ab469cd92805635, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

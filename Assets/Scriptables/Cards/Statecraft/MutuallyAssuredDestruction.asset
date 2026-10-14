@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Everybody loses. Fairly, for once.
   cardType: 1
   faction: 2
-  artwork: {fileID: 21300000, guid: d917a96ec9f29a141b47a5d484ce39b4, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: e19a00601e2d1ff4e9aab21a985f9424, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

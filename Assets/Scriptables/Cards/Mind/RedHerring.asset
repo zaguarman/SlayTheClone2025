@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Look over there. No, the fish.
   cardType: 1
   faction: 8
-  artwork: {fileID: 21300000, guid: 6dbe3e29eba7b6b4cb8e6e1e317ebecc, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 6d64b91e2a49a434d8f85f70a84ab6af, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

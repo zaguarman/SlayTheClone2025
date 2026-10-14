@@ -12,7 +12,9 @@ import os
 
 W, H = 352, 200  # Matches the card art box aspect ratio (144 x 82)
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "Assets", "Art", "Cards")
-# A card with pixel art (Tools/pixel_art.py) shows that instead: its vector art is written to the archive, outside Assets
+# Pixel art is paused (2026-10-14): every card shows its vector art again. Set USE_PIXEL_ART to True to go back: a card
+# with pixel art (Tools/pixel_art.py) then shows that instead, and its vector art is written to the archive, outside Assets
+USE_PIXEL_ART = False
 PIXEL_DIR = os.path.join(os.path.dirname(__file__), "..", "Assets", "Art", "PixelCards")
 ARCHIVE_DIR = os.path.join(os.path.dirname(__file__), "..", "ArtArchive", "Cards")
 
@@ -1159,12 +1161,45 @@ def this_is_fine():
 
 
 def strike():
-    defs, body = bg_vapor()
-    for x, top, color in ((90, 30, "#fff7e0"), (176, 16, "#ffe0f0"), (262, 34, "#e0f0ff")):
-        body += sign(x, top, 70, 40, color)
-        body += stroke(f"M{x - 20} {top + 14} L{x + 20} {top + 26} M{x + 20} {top + 14} L{x - 20} {top + 26}", "#d0342c", 5)
-    for i, x in enumerate((60, 130, 200, 290)):
-        body += person(x, 200, 0.9, SKIN[i], ("#e76f51", "#457b9d", "#8ab17d", "#f2c94c")[i], face="shout", brows="angry")
+    # The head of the works council in a lobster bib, feasting at the boardroom table behind his WORKS COUNCIL nameplate,
+    # while the beaming CEO pats him on the shoulder; through the window the strikers stand in the rain with their
+    # placards, each handed a single soggy biscuit
+    defs = lin("bg", ["#5a3a28", "#2e1c12"]) + lin("rain", ["#7a8a9a", "#3e4a5a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for x in range(22, W, 44):  # Wood panelling
+        body += stroke(f"M{x} 0 L{x} 140", "#24160c", 2, 'opacity="0.6"')
+    # The window, the rain and the strikers outside
+    wx, wy, ww, wh = 10, 12, 140, 100
+    body += rect(wx, wy, ww, wh, "url(#rain)")
+    for i, x in enumerate((30, 62, 94, 126)):
+        body += stroke(f"M{x + 10} {wy + 18} L{x + 10} {wy + 64}", "#6a4a2a", 3)
+        body += rect(x - 4, wy + 10, 28, 16, "#fff7e0", 'stroke="#333" stroke-width="1"')
+        body += stroke(f"M{x + 2} {wy + 15} L{x + 18} {wy + 21} M{x + 18} {wy + 15} L{x + 2} {wy + 21}", "#d0342c", 2.5)
+        body += person(x, wy + wh, 0.46, SKIN[i % 4], ("#e76f51", "#457b9d", "#8ab17d", "#9a7aa0")[i], face="frown", brows="sad")
+        body += circle(x - 12, wy + wh - 14, 3.2, "#c8a060", 'stroke="#7a5a2a" stroke-width="1"')  # The biscuit
+    for i in range(30):
+        x, y = wx + 6 + (i * 37) % (ww - 12), wy + 4 + (i * 23) % (wh - 16)
+        body += stroke(f"M{x} {y} l -3 9", "#d8e8f8", 1.2, 'opacity="0.75"')
+    body += rect(wx, wy, ww, wh, "none", 'stroke="#1a0e06" stroke-width="6"')
+    body += stroke(f"M{wx + ww / 2} {wy} L{wx + ww / 2} {wy + wh} M{wx} {wy + wh / 2} L{wx + ww} {wy + wh / 2}", "#1a0e06", 3)
+    # The union boss: bib on, a claw at his mouth
+    body += person(196, 150, 1.25, SKIN[1], "#4a4a5a", face="grin", hair="#3a2a1a", tie="#8a1e1e")
+    body += poly([(178, 96), (214, 96), (222, 140), (170, 140)], "#ffffff", 'stroke="#999" stroke-width="1.5"')
+    body += ellipse(196, 120, 9, 5, "#d0342c") + stroke("M187 118 l -6 -6 M205 118 l 6 -6", "#d0342c", 2.5)
+    body += stroke("M222 132 C 232 116 226 100 214 92", "#4a4a5a", 10) + ellipse(212, 88, 9, 5, "#d0342c", 'transform="rotate(-30 212 88)"')
+    # The CEO, beaming, a hand on his shoulder
+    body += person(300, 150, 1.15, SKIN[0], "#1a1a1a", face="grin", hair=OLD_HAIR, tie="#c0392b")
+    body += stroke("M272 118 C 256 108 240 106 226 108", "#1a1a1a", 10) + circle(224, 108, 6, SKIN[0])
+    # The table: the lobster, the champagne, the nameplate
+    body += rect(0, 138, W, 62, "#6a3a1a") + rect(0, 136, W, 6, "#8a4e24")
+    body += ellipse(262, 156, 36, 9, "#f4f4f4", 'stroke="#bbb" stroke-width="1"')
+    body += ellipse(262, 150, 22, 8, "#d0342c") + stroke("M240 150 L232 146 M240 152 L232 156", "#d0342c", 3)
+    body += ellipse(290, 146, 8, 5, "#d0342c") + ellipse(288, 156, 7, 4, "#d0342c")
+    for k in range(3):
+        body += stroke(f"M{250 + k * 8} 144 L{250 + k * 8} 156", "#a8221a", 1.2)
+    body += poly([(152, 116), (164, 116), (158, 132)], "#fff2b0", 'stroke="#c8b060" stroke-width="1"') + stroke("M158 132 L158 144 M152 144 L164 144", "#c8c8c8", 1.6)
+    body += rect(60, 152, 112, 18, "#d4af37", 'stroke="#8a6a1a" stroke-width="1.5"')
+    body += lettering("WORKS COUNCIL", 116, 157, 8, "#2a1a0a", width=1.4)
     return svg(defs, body)
 
 
@@ -1219,11 +1254,41 @@ def toxic_positivity():
 
 
 def mental_health_day():
-    defs, body = bg_vapor()
-    body += path("M70 120 L120 150 L230 150 L230 170 L110 170 L60 136 Z", "#3a3a5a")
-    body += person(110, 168, 1.3, SKIN[0], "#8ab17d", face="closed", hair="#6a4a2a")
-    body += path("M150 150 L270 136 L274 150 L150 164 Z", "#2a4a6a") + rect(266, 128, 20, 14, "#222", 'rx="3"')
-    body += zzz(150, 60, 1.3)
+    # A smiling politician cuts the ribbon on a MENTAL HEALTH DAY banner in front of a boarded-up clinic (CLOSED: BUDGET
+    # CUTS); the only help on offer is a reiki-and-ayurveda lady waving burning sage over an exhausted office worker, her
+    # price board beside her
+    defs = lin("bg", ["#9ab4c8", "#e0d0b8"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 176, W, 24, "#8a8a8a")
+    # The clinic, boarded up
+    body += rect(0, 46, 150, 130, "#c8b8a0") + rect(0, 46, 150, 6, "#a89880")
+    body += rect(14, 54, 110, 18, "#ffffff", 'stroke="#666" stroke-width="1"') + lettering("CLINIC", 69, 58, 10, "#2a5a8a")
+    body += rect(50, 104, 46, 72, "#6a4a3a")
+    for y, a in ((118, -12), (146, 10)):
+        body += rect(40, y, 66, 10, "#b08a5a", f'stroke="#6a4a2a" stroke-width="1" transform="rotate({a} 73 {y + 5})"')
+    body += rect(8, 84, 30, 26, "#4a5a6a") + stroke("M8 84 L38 110 M38 84 L8 110", "#b08a5a", 5)
+    body += rect(104, 84, 42, 40, "#fff7a0", 'stroke="#888" stroke-width="1"')
+    body += lettering("CLOSED", 125, 88, 6, "#c0392b", width=1.2) + lettering("BUDGET", 125, 100, 6, "#c0392b", width=1.2)
+    body += lettering("CUTS", 125, 112, 6, "#c0392b", width=1.2)
+    # The banner
+    body += stroke("M0 14 L52 22 M300 22 L352 14", "#555", 1.5)
+    body += rect(52, 10, 248, 26, "#2a7ad0", 'stroke="#1a4a8a" stroke-width="2"')
+    body += lettering("MENTAL HEALTH DAY", 176, 16, 12, "#ffffff", width=2)
+    # The politician cutting the ribbon
+    body += stroke("M14 152 L128 152", "#d0342c", 4) + stroke("M134 152 L144 162", "#d0342c", 4)
+    body += person(170, 200, 1.1, SKIN[0], "#1a2a4a", face="grin", hair="#5a4a3a", tie="#c0392b")
+    body += stroke("M150 172 C 144 164 138 158 136 154", "#1a2a4a", 9)
+    body += stroke("M136 154 L118 146 M136 154 L118 160", "#b8b8b8", 3) + circle(136, 154, 3, "#555")
+    # The exhausted worker, and the lady with the sage
+    body += person(240, 200, 0.95, SKIN[2], "#d8d8e8", face="flat", brows="sad", tie="#3a3a5a") + sweat(256, 134)
+    body += person(312, 200, 1.05, SKIN[0], "#8a4aa0", face="smile", hat="bob")
+    for k, color in enumerate(("#c080ff", "#80e0ff", "#ff9ad0")):
+        body += poly([(300 + k * 10, 162), (304 + k * 10, 156), (308 + k * 10, 162), (304 + k * 10, 170)], color, 'stroke="#555" stroke-width="0.8"')
+    body += stroke("M290 168 C 280 156 274 146 270 138", "#8a4aa0", 9)
+    body += stroke("M270 138 L258 118", "#6a7a4a", 5) + circle(257, 116, 3, "#ff8a3a")
+    for k in range(3):
+        body += path(f"M{256 - k * 4} {110 - k * 10} q -8 -6 0 -10 q 8 -4 0 -10", "none", 'stroke="#d8d8d8" stroke-width="2.5" opacity="0.8"')
+    body += rect(306, 52, 42, 40, "#fff7e0", 'stroke="#6a2a8a" stroke-width="1.5"')
+    body += lettering("AURA", 327, 58, 7, "#6a2a8a", width=1.3) + lettering("90 EUR", 327, 74, 6, "#6a2a8a", width=1.2)
     return svg(defs, body)
 
 
@@ -1692,18 +1757,39 @@ def inflation():
 
 
 def cleaning_robot():
-    defs = lin("bg", ["#e8e0d0", "#cfc4b0"])
-    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 120, W, 80, "#b08a5a")
-    for k in range(8):
-        body += stroke(f"M0 {128 + k * 10} L{W} {128 + k * 10}", "#9a7448", 1.5)
-    body += rect(0, 112, W, 8, "#f4ecd8")
-    for x, y in ((290, 168), (316, 150), (300, 186)):
-        body += circle(x, y, 6, "#9a9080", 'opacity="0.8"') + circle(x + 4, y - 3, 4, "#9a9080", 'opacity="0.8"')
-    body += stroke("M30 176 L120 176 M40 186 L110 186", "#c8a878", 3, 'opacity="0.7"')
-    body += ellipse(176, 182, 70, 12, "#000000", 'opacity="0.2"') + ellipse(176, 164, 68, 22, "#3a3f4a", 'stroke="#22262e" stroke-width="3"')
-    body += ellipse(176, 158, 58, 15, "#4a505c") + circle(176, 152, 9, "#22262e") + circle(176, 152, 3, "#5adf5a")
-    body += path("M118 160 C 130 148 222 148 234 160", "none", 'stroke="#22262e" stroke-width="3"')
-    body += stroke("M224 172 L248 182 M226 166 L252 170", "#888", 2)
+    # A smart-home robot vacuum in the style of a Google Nest (a soft fabric puck with four coloured light dots), its
+    # camera eye glowing, sucking up the family's photos, letters and diary while a beam uploads a floor plan of the house
+    # to a cloud. Its pop-up: FREE CLEANING. YOU'RE THE PRODUCT
+    defs = lin("bg", ["#f0e8dc", "#d8ccb8"]) + lin("floor", ["#b08a5a", "#8a6a42"]) + lin("beam", [("#8ac8ff", 0.05), ("#8ac8ff", 0.5)])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 128, W, 72, "url(#floor)")
+    for k in range(6):
+        body += stroke(f"M0 {134 + k * 12} L{W} {134 + k * 12}", "#7a5a34", 1.2, 'opacity="0.6"')
+    body += rect(0, 124, W, 6, "#f4ecd8")
+    # The upload: a beam from the robot to a cloud, a floor plan of the house riding it
+    body += poly([(196, 140), (214, 140), (300, 40), (270, 40)], "url(#beam)")
+    body += cloud(286, 34, 1.2)
+    body += group(rect(-20, -14, 40, 28, "#2a5aa0", 'stroke="#ffffff" stroke-width="1.5"')
+                  + stroke("M-20 -2 L4 -2 L4 14 M4 -14 L4 -6 M-6 -2 L-6 14", "#ffffff", 1.4), "translate(246 84) rotate(-12)")
+    # What it swallows: photos, letters, the diary
+    for x, y, a in ((40, 152, -10), (74, 140, 14)):
+        body += group(rect(-11, -9, 22, 18, "#ffffff", 'stroke="#888" stroke-width="1"') + rect(-8, -6, 16, 10, "#8ac8ff")
+                      + circle(0, -1, 3, SKIN[0]), f"translate({x} {y}) rotate({a})")
+    body += envelope(60, 178, 1.1) + envelope(108, 182, 0.9)
+    body += group(rect(-10, -13, 20, 26, "#c0392b", 'stroke="#6a1a1a" stroke-width="1"') + path("M0 4 C -6 -2 -2 -8 0 -3 C 2 -8 6 -2 0 4 Z", "#ffd0d8"),
+                  "translate(28 182) rotate(-20)")
+    body += speed_lines(126, 140, 3, 22, "#ffffff")
+    # The robot: a fabric puck with the four dots and a camera eye
+    body += ellipse(200, 182, 76, 10, "#000000", 'opacity="0.2"')
+    body += path("M128 158 C 128 182 272 182 272 158 L272 168 C 272 192 128 192 128 168 Z", "#bfb8ac")
+    body += ellipse(200, 158, 72, 20, "#e8e4dc", 'stroke="#bfb8ac" stroke-width="2"')
+    for k, color in enumerate(("#4285f4", "#ea4335", "#fbbc05", "#34a853")):
+        body += circle(182 + k * 12, 156, 4, color)
+    body += circle(150, 176, 12, "#ff3a3a", 'opacity="0.25"') + circle(150, 176, 7, "#1a1a1a") + circle(150, 176, 3.2, "#ff3a3a")
+    # The pop-up
+    body += rect(16, 26, 150, 40, "#ffffff", 'rx="5" stroke="#333" stroke-width="1.5"') + rect(16, 26, 150, 9, "#4285f4", 'rx="3"')
+    body += lettering("FREE CLEANING.", 91, 40, 7, "#222", width=1.3)
+    body += lettering("YOU'RE THE PRODUCT", 91, 52, 6, "#ea4335", width=1.2)
+    body += path("M120 66 L132 66 L150 120 Z", "#ffffff", 'stroke="#333" stroke-width="1.5"')
     return svg(defs, body)
 
 
@@ -3577,28 +3663,29 @@ def technical_debt():
 
 
 def scope_creep():
-    # A creep in a trench coat and a low hat peering through a brass spyglass at a couple kissing in a lit window
-    defs, body = bg_tech()
-    body += rect(196, 22, 136, 120, "#ffe9a8", 'stroke="#3a2f20" stroke-width="6"')  # The window
-    body += rect(196, 22, 136, 120, "none", 'stroke="#5a4a32" stroke-width="2"') + stroke("M264 22 L264 142", "#5a4a32", 3)
-    body += path("M196 22 L230 22 C 220 60 214 100 206 142 L196 142 Z", "#c0392b", 'opacity="0.85"')  # Curtains
-    body += path("M332 22 L298 22 C 308 60 314 100 322 142 L332 142 Z", "#c0392b", 'opacity="0.85"')
-    # The couple, in profile, kissing
-    body += path("M210 142 C 210 104 254 100 260 142 Z", "#3d5a80") + path("M268 142 C 274 100 318 104 318 142 Z", "#c05a8a")
-    body += circle(246, 82, 18, SKIN[0]) + path("M228 78 C 228 56 262 54 262 74 L254 70 C 246 66 236 70 232 84 Z", "#3a2a1a")
-    body += circle(282, 82, 18, SKIN[2]) + path("M300 70 C 300 52 266 52 266 72 C 268 96 296 112 304 120 C 302 100 300 84 300 70 Z", "#1a1a1a")
-    body += stroke("M248 80 q 4 3 8 0 M272 80 q 4 3 8 0", "#222", 1.6)
-    body += path("M264 70 C 258 58 244 62 252 72 C 256 76 264 82 264 82 C 264 82 272 76 276 72 C 284 62 270 58 264 70 Z", "#e8304a", 'transform="translate(0 -26)"')
-    # The creep: hat brim low, collar up, eye to the spyglass
-    body += path("M40 200 C 40 140 130 140 130 200 Z", "#5a4a32")
-    body += poly([(70, 150), (86, 176), (100, 150)], "#3a2f20")
-    body += circle(86, 112, 24, SKIN[1]) + rect(56, 92, 60, 8, "#2a2418", 'rx="3"') + rect(66, 70, 40, 26, "#2a2418", 'rx="6"')
-    body += path("M62 122 C 70 140 102 140 110 122 L110 132 C 100 148 72 148 62 132 Z", "#5a4a32")
-    body += stroke("M78 114 L90 112", "#222", 3)
-    body += group(rect(0, -8, 70, 16, "#c8a040", 'rx="4" stroke="#7a5a1a" stroke-width="2"')
-                  + rect(70, -11, 28, 22, "#d8b450", 'rx="4" stroke="#7a5a1a" stroke-width="2"')
-                  + rect(-6, -6, 8, 12, "#7a5a1a"), "translate(96 110) rotate(-12)")
-    body += path("M110 160 C 120 140 140 128 150 116", "none", 'stroke="#5a4a32" stroke-width="12" stroke-linecap="round"')
+    # A Gantt chart that has outgrown its whiteboard: its bars run off the board, across the wall and out of the window,
+    # past the red DEADLINE line, while a smiling manager sticks on one more note: +1 small feature
+    defs = lin("bg", ["#e8e4dc", "#c8c0b0"]) + lin("sky", ["#8ac8f0", "#d8f0ff"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += rect(262, 22, 80, 110, "url(#sky)") + rect(262, 22, 80, 110, "none", 'stroke="#6a6a6a" stroke-width="5"')
+    body += stroke("M302 22 L302 132", "#6a6a6a", 3)
+    body += rect(14, 16, 206, 132, "#ffffff", 'stroke="#9a9a9a" stroke-width="4"')
+    for x in range(40, 220, 26):
+        body += stroke(f"M{x} 24 L{x} 140", "#dcdcdc", 1)
+    rows = ((24, 50, "#4a90d0", None), (40, 70, "#e8a03a", None), (70, 90, "#5ab06a", None),
+            (90, 150, "#d05a8a", 248), (110, 196, "#8a6ad0", W), (130, 200, "#e05a4a", W))
+    for i, (x0, x1, color, beyond) in enumerate(rows):
+        y = 28 + i * 18
+        body += rect(x0, y, x1 - x0, 11, color, 'rx="2"')
+        if beyond:  # Taped on past the board's edge, across the wall and, for the worst, out of the window
+            body += rect(x1, y + 1, beyond - x1, 9, color, 'rx="2" opacity="0.9"')
+    body += stroke("M180 18 L180 146", "#d0342c", 3, 'stroke-dasharray="6 4"')
+    body += lettering("DEADLINE", 180, 152, 7, "#d0342c", width=1.4)
+    # The manager and the new sticky note
+    body += rect(120, 112, 30, 28, "#ffe45a", 'transform="rotate(-6 135 126)"')
+    body += lettering("+1", 135, 120, 9, "#222", width=1.8)
+    body += person(84, 200, 1.05, SKIN[0], "#3d5a80", face="smile", hair="#6a4a2a", tie="#f2c94c")
+    body += stroke("M108 166 C 116 152 120 142 124 134", "#3d5a80", 10) + circle(126, 132, 6, SKIN[0])
     return svg(defs, body)
 
 
@@ -6115,7 +6202,7 @@ def main():
     count = archived = 0
     for theme, cards in CARDS.items():
         for name, draw in cards.items():
-            replaced = os.path.exists(os.path.join(PIXEL_DIR, f"{name}.png"))
+            replaced = USE_PIXEL_ART and os.path.exists(os.path.join(PIXEL_DIR, f"{name}.png"))
             folder = os.path.normpath(os.path.join(ARCHIVE_DIR if replaced else OUT_DIR, theme))
             os.makedirs(folder, exist_ok=True)
             with open(os.path.join(folder, f"{name}.svg"), "w", encoding="utf-8", newline="\n") as f:

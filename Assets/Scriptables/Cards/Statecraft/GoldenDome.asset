@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Protects everyone. Some of everyone more than others.
   cardType: 0
   faction: 2
-  artwork: {fileID: 21300000, guid: dac615254440cbf4d921bef4180179c2, type: 3}
+  artwork: {fileID: 3286163911610860551, guid: 4337e4c063fabeb469098f3c1caa7768, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0
