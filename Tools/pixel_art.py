@@ -116,6 +116,10 @@ def archive_old(name, card):
 
 
 def save(name, background, subject):
+    # A card whose art now comes from Retro Diffusion (Tools/rd_cards.py) keeps it: this drawing is only its old version
+    generated = os.path.join(os.path.dirname(__file__), "generated_cards.txt")
+    if os.path.exists(generated) and name in open(generated).read().split():
+        return
     layers = os.path.join(OUT, "Layers")
     os.makedirs(layers, exist_ok=True)
     subject.save(os.path.join(layers, f"{name}_subject.png"))

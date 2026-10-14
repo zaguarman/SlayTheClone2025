@@ -1,0 +1,1679 @@
+Card Themes
+
+What every card is making fun of, the real things it points at, its twist, and what could make it land harder.
+Written 2026-10-14 from every card's name, flavor text, rules, art brief and picture (244 cards). A review to pick
+from, not a list of changes: nothing here is done until the user picks it.
+
+
+1. THE TONE
+
+The game is cynical, funny and acid, and isn't afraid to upset anybody. Read across all 244 cards, the joke works the
+same way almost every time:
+
+  - An official line, then the truth. The flavor text speaks in the deadpan voice of a press release, an HR email or a
+    sermon, and the second sentence undercuts it ("We're here for you. 'You' meaning the company." / "Sent. Nothing else
+    will be.").
+  - The sacred or the terrible, next to the everyday. Jesus with two submachine guns; the Last Supper as beer pong;
+    accountants in a Counter-Strike standoff aiming calculators; a coroner signing NATURAL CAUSES over a dart; a raw
+    steak doing "AI" at a desk.
+  - Everybody gets hit. Mostly it punches up (billionaires, states, churches, spies, tech companies), and sideways at
+    everyday archetypes (Karen, Boomer, the Keyboard Warrior, the Hipster). Nobody is safe, which is what keeps it fair.
+  - References people know at a glance. Memes (Wojak, This Is Fine, NPC, the pool meme), Monty Python, Bond, The
+    Simpsons, films everyone quotes, and real headlines (Trump's casinos, Snowden, oligarchs and windows, shrinkflation).
+  - The rules are the punchline. The best cards are the ones where playing them tells the joke: Inflation lowers max
+    Health ("same price, less creature"); Fell Out of a Window needs an empty slot beside the target (the window); Red
+    Tape adds Deployment Time; Hipster is immune to anything that hits more than one creature; the Unpaid Intern is the
+    fodder that Sacrificial Ritual's flavor asks for ("Ideally the intern").
+
+A card is at its strongest when it has all three beats:
+  (1) a real target (who or what it makes fun of),
+  (2) a hook people recognise (an event, a meme, a film, a headline),
+  (3) a twist in the rules, so the joke happens on the table and not only in the text.
+The notes below mark what each card has, and suggest what it could add when a beat is weak or missing.
+
+Each card:
+  Aim:   what it makes fun of.
+  Hooks: real events, people, memes and works it connects to.
+  Twist: how the card turns it, in the art, the flavor or the rules.
+  Push:  what could make it hit harder, or tie it to the rest of the game.
+[px] marks the cards with pixel art.
+
+
+2. WHAT EACH FACTION MAKES FUN OF
+
+  Corporate        Late capitalism: the gig economy, tax havens, layoffs by email, philanthropy as a tax trick,
+                   startup hype, private equity, the boss who calls the company a family.
+  Statecraft       The state: bureaucracy, nepotism, war sold as defence, propaganda, Orwell's ministries, the
+                   monopoly on violence, the court that answers to nobody.
+  Zeitgeist        Modern life offline: archetypes (Karen, Boomer, Hipster), moods (burnout, toxic positivity, YOLO),
+                   the films and memes everyone quotes, the culture war at the pub.
+  Digital Society  Life online: doomscrolling, pile-ons, cancel culture, rage bait, catfish, conspiracy threads, the
+                   group chat as a jury.
+  Shadow Ops.      Spies and cover-ups: Bond, the CIA's real history (MKUltra, Paperclip, Glomar), Russian windows
+                   and polonium, Epstein's cameras, false flags, lone gunmen.
+  Tech             Software and its people: the sysadmin, legacy code, ransomware, "AI" that's a guy named Dave,
+                   antivirus that sells your data, the hacker who is twelve.
+  Myth             Religion and legend as business and spectacle: Monty Python's Grail, the televangelist, the
+                   crusade, the prophecy, the curse in the fine print.
+  Mind             The brain's bugs: biases, paradoxes, imposter syndrome, the trolley problem, the basilisk.
+  Utopia           Science and the tech-bro future: accelerationism, biohacking billionaires, de-extinction, the
+                   breakthrough that blows up the lab.
+
+
+3. THE CARDS
+
+CORPORATE (29)
+
+Casino (spell)
+  Aim:   Trump the businessman: the man who managed to lose money running casinos.
+  Hooks: Trump's Atlantic City casinos (the Taj Mahal among them) went through several bankruptcies; "the house always
+         wins"; The Apprentice.
+  Twist: The flavor does the job ("The house always wins. Except the houses he owned"), and the rules make the whole board
+         gamble on a weather wheel.
+  Push:  Name the wheel's results after his career: Windfall as "Bailout", Hail as "Lawsuits", and a result that wipes the
+         caster's discard and costs nothing ("Chapter 11"). He's the thread that ties Spite-Elected President, Reality TV
+         Star, Golden Dome, Religious Instrumentalization and NDA together, so one caricature drawn the same way on every
+         card turns them into a set.
+
+Headhunter (spell) [px]
+  Aim:   Recruiters who fish in your company's pond.
+  Hooks: LinkedIn spam, the green #OpenToWork ring round a profile picture, "exciting opportunity, competitive salary".
+  Twist: You discard a card to fetch a creature: to hire, somebody gets let go.
+  Push:  Bait the hook with the #OpenToWork ring, or a pizza-Friday flyer instead of stock options. The flavor ("We found
+         everyone on LinkedIn") is already sharp.
+
+Counterfeit (creature)
+  Aim:   Knockoff culture.
+  Hooks: Fake brands like "Adibas" and "Pumma", Wish.com's expectation-versus-reality memes.
+  Twist: Wannabe copies another creature's stats: the fake becomes exactly as good as the original.
+  Push:  Make the art the expectation-versus-reality meme: a "Spider-Man" from Wish with the logo misspelled. If Wannabe
+         copied only Attack and Health, never the ability, the copy would be honest about being a copy.
+
+Private Equity (creature) [px]
+  Aim:   Buyouts that load companies with debt, strip them and sell them off.
+  Hooks: Toys "R" Us went bankrupt after its leveraged buyout; Goldman Sachs called a "great vampire squid" (Rolling
+         Stone, 2009).
+  Twist: A vampire sucking gold out of a family shop. Credit Grab steals the buffs other cards invested.
+  Push:  Make the vampire a squid, after that famous line. A Toys "R" Us giraffe crying in the shop window would give it a
+         face people know.
+
+Shell Company (creature) [px]
+  Aim:   Tax havens.
+  Hooks: The Panama Papers (2016), Delaware and the Cayman Islands, the "Double Irish" tax arrangement.
+  Twist: A literal shell game. Shell Game shuffles creatures around, the way the money gets moved.
+  Push:  Label the walnut shells Panama, Cayman and Delaware. Shadow Ops.' Whistleblower could reveal it (the Panama
+         Papers were a leak), a combo that tells the story.
+
+Work Shift Rotation (creature)
+  Aim:   Workers treated as interchangeable parts.
+  Hooks: Amazon warehouses, "Time Off Task" tracking, zero-hours contracts.
+  Twist: Handover passes its buffs and statuses to its replacement: the next shift inherits the burnout along with the
+         vest. Rules and joke are one and the same.
+  Push:  Put a handheld scanner in the art showing "TIME OFF TASK: 00:04".
+
+Unpaid Intern (creature)
+  Aim:   Unpaid internships.
+  Hooks: "Paid in exposure", the coffee run, "great experience for your CV".
+  Twist: A 1/1 born to be sacrificed. Myth's Sacrificial Ritual ("Somebody has to go. Ideally the intern") picks it first.
+  Push:  This is the best running gag in the game. Make the intern token what Mass Layoffs, Inhuman Resources and
+         Sacrificial Ritual eat by preference, and keep the art's tray of coffees with everyone's name but theirs.
+
+Inhuman Resources (creature)
+  Aim:   HR as the company's lawyer pretending to be your friend.
+  Hooks: "We're a family", mandatory wellness webinars, the meeting with a box of tissues on the table.
+  Twist: The flavor lands the turn ("'You' meaning the company"). The future rules (Layoffs) are the punchline.
+  Push:  A "WE'RE A FAMILY" poster behind the pink slips, which Mass Layoffs answers ("We were never a family").
+
+Micromanager (creature)
+  Aim:   The boss who checks everything.
+  Hooks: "Per my last email", remote-work tracking software, mouse jigglers sold to get around it.
+  Twist: It boosts its workers with Coffeinated instead of a raise.
+  Push:  Give it the remote-work angle: the magnifying glass over a webcam feed, or a mouse jiggler caught in the act.
+
+Multilevel Marketing Seller (creature)
+  Aim:   MLMs: the "boss babe" pyramid.
+  Hooks: Herbalife, Amway, LuLaRoe, essential oils, "Hey hun!" messages.
+  Twist: Recruits pay a share of their draws upward: the pyramid as a rule.
+  Push:  Its flavor is word for word the same as Crypto "Entrepreneur"'s; one of them needs a new line. Keep "triangle of
+         opportunity" here (it's the MLM pitch) and give the crypto bro his own.
+
+Day Trader (creature)
+  Aim:   Retail trading as gambling.
+  Hooks: r/wallstreetbets, the GameStop squeeze (2021), the "Stonks" meme, Robinhood switching off the buy button.
+  Twist: Insider Job: its damage ignores Armor. Up 300% in the morning, rent due in the afternoon.
+  Push:  The art could be the Stonks meme man. A Robinhood-style trick (the enemy's buy button switched off) would make a
+         great Corporate spell for the backlog.
+
+Pluriemployed Hustler (creature)
+  Aim:   Hustle culture and the gig economy.
+  Hooks: Uber, Deliveroo, Glovo, "rise and grind", five-star ratings as a lifeline.
+  Twist: Penny Stock doubles its small hits: small gigs add up.
+  Push:  Tie it to Zeitgeist's Delivery Cyclist: the same rider, one exploited by Corporate and one fighting traffic. Its
+         stars could fall each Dusk, like a rating.
+
+Unicorn (creature) [px]
+  Aim:   Startups that burn cash forever.
+  Hooks: WeWork's failed 2019 IPO, Theranos, "profitable next year, every year".
+  Twist: A 1/8 wall that Corporate can't heal: valuation without income. A unicorn standing on fire.
+  Push:  A kombucha tap or a ping-pong table burning in the fire would point at WeWork without naming it.
+
+Multimillionaire Philanthropist (creature)
+  Aim:   Philanthropy as tax planning and PR.
+  Hooks: Foundations as tax shelters, gala cheques, naming rights on hospital wings.
+  Twist: A Contract: the enemy gets the gift now, you collect the tax break later. Charity as an investment.
+  Push:  On the giant cheque, his name bigger than the amount.
+
+Fat Tony (creature) [px]
+  Aim:   The Mafia as just another business.
+  Hooks: The Simpsons' Fat Tony, The Godfather ("an offer he can't refuse").
+  Twist: An Offer You Can't Refuse recruits a damaged enemy instead of finishing it off.
+  Push:  Keep it as it is (the user's call). The Godfather's horse head could star in a future Corporate spell.
+
+Charles Ponzi (creature)
+  Aim:   Ponzi schemes.
+  Hooks: Ponzi himself (1920), Bernie Madoff (2008), FTX.
+  Twist: It pays draws from your future Days until it collapses and takes them all back. The scheme as a rule.
+  Push:  A champagne-glass pyramid is perfect. An SEC agent knocking at the door in the art would hint at the ending.
+
+Margin Call (spell) [px]
+  Aim:   The 2008 crash.
+  Hooks: Lehman Brothers, the film Margin Call (2011), traders carrying their desks out in a box.
+  Twist: Discard your hand and every creature takes damage: everyone's position gets liquidated.
+  Push:  The ringing phone works. Make it 2:00 a.m. on the clock, with a Lehman-style box of belongings by it.
+
+Hostile Takeover (spell) [px]
+  Aim:   Corporate raiders.
+  Hooks: Musk buying Twitter (2022) and walking into its offices carrying a sink ("let that sink in").
+  Twist: A shark in a tie among the towers.
+  Push:  The sink is the funniest image this card could have: the shark carrying a sink into the lobby.
+
+Mass Layoffs (spell)
+  Aim:   Mass firings dressed up as restructuring.
+  Hooks: Better.com laid off 900 people on one Zoom call (2021); the tech layoffs of 2022-23 by email; the share price
+         rising on the news.
+  Twist: Destroy your workers to draw cards: people as fuel.
+  Push:  Let the stock rise too: a little +Attack for every Worker you lose. The art could be a Zoom grid of faces
+         greying out one by one.
+
+Team Building Exercise (spell)
+  Aim:   Forced fun.
+  Hooks: The pizza party instead of a raise, trust falls, "attendance is voluntary".
+  Twist: Coffeinated, then Burnout: the high and the crash.
+  Push:  A trust fall where nobody catches, or the pizza-party meme.
+
+Dead Cat Bounce (spell) [px]
+  Aim:   False recoveries on the market.
+  Hooks: The trader's phrase "even a dead cat bounces".
+  Twist: +3 Attack for a Day, then a lasting -2 Health. Its art takes the phrase literally.
+  Push:  Already one of the cleanest cards: the term, the joke and the rules are the same thing.
+
+Business Expense (spell) [px]
+  Aim:   Executives who write everything off, even their punishment.
+  Hooks: Bank fines treated as a cost of doing business; after 2008 almost no senior banker went to prison.
+  Twist: Draw 2 and pay a fine of 2 damage: crime as a line in the budget.
+  Push:  Make the receipt read "FINE: TAX DEDUCTIBLE".
+
+Taxpayer Funds Venture Capital Profits (spell)
+  Aim:   Privatised gains, socialised losses.
+  Hooks: The 2008 bank bailouts (TARP), the Silicon Valley Bank rescue (2023).
+  Twist: The flavor says it all. The rules are still a placeholder.
+  Push:  Give it a rule that tells the joke: the enemy pays your loss (when your creature dies, theirs loses the Health).
+         The art could show a public piggy bank pouring into a yacht.
+
+Cleaning Robot (creature) [px]
+  Aim:   Subscriptions for everything.
+  Hooks: BMW's heated seats sold as a subscription (2022), printer ink subscriptions, Roombas mapping your home, Love,
+         Death & Robots.
+  Twist: "Cleans 30% of your floor. The other 70% is a Premium feature." A sturdy pusher.
+  Push:  The art is now the Love, Death & Robots pool robot, which lost the subscription joke. A "SUBSCRIPTION EXPIRED"
+         pop-up on its disc head would bring it back.
+
+Tax-Exempt Corruption (spell)
+  Aim:   Megachurches and the prosperity gospel.
+  Hooks: Televangelists with private jets (Kenneth Copeland said he needed one to avoid demons on commercial flights),
+         churches' tax exemptions.
+  Twist: A cross made of a dollar sign. It plays in the Prosperity Gospel deck with Myth.
+  Push:  Put the jet in the art with a halo painted on its tail. It's the bridge card between Corporate and Myth.
+
+Solidarity Towards The Small Businessman (spell)
+  Aim:   Billionaires asking for help from everybody else.
+  Hooks: Pandemic small-business loans (PPP, 2020) that went to big chains; the Monopoly man on "OnlyFunds".
+  Twist: You draw cards and your own workers pay the bill in damage.
+  Push:  Already strong. The OnlyFunds tip counter could read "$0.47 per hour".
+
+Inheritance (spell)
+  Aim:   The "self-made" rich.
+  Hooks: Forbes calling Kylie Jenner "self-made" (2019); Trump's "small loan of a million dollars".
+  Twist: +2/+2 for good, for doing nothing.
+  Push:  "A small loan of a million dollars" would be the perfect flavor for it.
+
+NDA (spell)
+  Aim:   Silence bought with contracts.
+  Hooks: Weinstein's NDAs, the Stormy Daniels hush-money payment (2016).
+  Twist: Blackout switches the target's abilities off: the effects stop "talking".
+  Push:  The Stormy Daniels link ties it to Casino and Spite-Elected President, if the user wants the Trump thread to
+         carry on.
+
+Inflation (spell) [px]
+  Aim:   Shrinkflation.
+  Hooks: Smaller Toblerones (with bigger gaps between the peaks), half-empty crisp bags.
+  Twist: Health Loss lowers max Health: "same price, less creature". Rules and joke are one.
+  Push:  Perfect as it is.
+
+STATECRAFT (26)
+
+Supply Depot (spell)
+  Aim:   Military logistics drowned in paperwork.
+  Hooks: Form 27B/6 from Terry Gilliam's Brazil (1985); "hurry up and wait".
+  Twist: A soldier delivered in a crate labelled REINFORCEMENTS.
+  Push:  The flavor says form 27-B; make it exactly "27B/6" so the Brazil reference lands. Red Tape uses the same form, a
+         nice thread.
+
+Golden Dome (creature) [px]
+  Aim:   Missile defence that protects whoever matters.
+  Hooks: Israel's Iron Dome; Trump's "Golden Dome" missile-defence plan (2025); Netanyahu in the art.
+  Twist: Bodyguard makes one creature Untouchable while the rest take the hits: "some of everyone more than others".
+  Push:  Strong already. More missiles landing on the city outside the dome would sharpen the "some more than others"
+         joke.
+
+Presidential Pardon (spell) [px]
+  Aim:   Pardons for friends and family.
+  Hooks: Trump's 2020-21 pardons, Biden pardoning his son (2024), the yearly White House turkey pardon.
+  Twist: Untouchable: "Whatever it did, it didn't."
+  Push:  The turkey: a president solemnly pardoning a turkey while the man in the orange jumpsuit holding a smoking gun
+         walks free behind it.
+
+Congruent Use of Force (creature)
+  Aim:   Disproportionate force.
+  Hooks: Police militarisation, "proportionate response" press releases.
+  Twist: Spray and Pray hits the target and both its neighbours: a gatling gun against a mosquito.
+  Push:  Perfect pairing of rules and joke. A press officer reading "proportionate" off a card in the background would
+         finish it.
+
+Weapons of Mass Distraction (spell)
+  Aim:   Spectacle that keeps people looking the other way.
+  Hooks: The Iraq WMD claims (2003) and Colin Powell's vial at the UN; YouTubers' giveaways as bread and circuses.
+  Twist: A swap: while the crowd watches the screen, the enemy's tents get moved.
+  Push:  The name is a WMD pun, so the art could add Powell's little vial held up on the screen. The Saddam thread fits
+         here (see 4. Threads).
+
+King Emeritus (creature)
+  Aim:   Royals living off the crown after leaving it.
+  Hooks: Juan Carlos I: the elephant hunt in Botswana (2012), his televised apology ("Lo siento mucho, me he equivocado y
+         no volverá a ocurrir"), his abdication (2014), his move to Abu Dhabi (2020).
+  Twist: Diplomatic Immunity: enemy spells can't target it.
+  Push:  His apology is the perfect flavor, in Spanish. The art could show the yacht with an elephant trophy on the deck.
+
+Spite-Elected President (creature)
+  Aim:   Voting to make everyone else miserable.
+  Hooks: "Own the libs", the 2016 vote as a middle finger.
+  Twist: Spite: when anything lowers its stats it gets angrier (+2 Attack). Attacking it feeds it, exactly like the real
+         thing.
+  Push:  Excellent rules. The caricature should match Casino's so the Trump thread reads as one man.
+
+Police Officer Productivity Target (creature)
+  Aim:   Arrest quotas.
+  Hooks: The NYPD quota lawsuits; "make your numbers".
+  Twist: Double damage against creatures that moved this Day: anyone moving is suspicious.
+  Push:  The tally marks on the wall work. A "STOP RESISTING" speech bubble aimed at a creature standing still would push
+         it further.
+
+Internal Revenue Service (creature)
+  Aim:   The tax office that audits the poor.
+  Hooks: Al Capone, caught for tax evasion (1931); reports that low-income families got audited as often as the rich.
+  Twist: Taxes the enemy's plays.
+  Push:  The Capone story makes it a natural counter to Corporate's Fat Tony, a cross-faction joke to keep.
+
+Mercenaries (creature)
+  Aim:   Armies for hire.
+  Hooks: Blackwater, the Wagner Group, Prigozhin's march on Moscow (2023) and the plane crash two months later.
+  Twist: Recruitment bait: when it dies, the enemy can hire it.
+  Push:  The Prigozhin story ties it to Shadow Ops.' Fell Out of a Window and Coup d'État: mercenaries turn on whoever
+         pays them, and then something happens to their plane.
+
+Man o' War (creature) [px]
+  Aim:   Gunboat diplomacy.
+  Hooks: The British Empire, the Opium Wars, "the sun never sets".
+  Twist: A warship that will take two slots and be Heavy.
+  Push:  The art is a plain warship. A small rowing boat of "diplomats" waving a trade treaty in front of the cannons
+         would give it its joke.
+
+Ministry for Equality (creature)
+  Aim:   Orwell's ministries: the name says the opposite of what it does.
+  Hooks: 1984's Ministry of Love, Animal Farm's "some animals are more equal than others".
+  Twist: "We love everybody. Please stop resisting our love." Barbed wire along the roof.
+  Push:  The Animal Farm line belongs here. This card leads the Orwell thread (see 4. Threads).
+
+Supreme Court (creature) [px]
+  Aim:   Judges appointed for life and accountable to nobody.
+  Hooks: The gifts and trips Justice Clarence Thomas took from a billionaire (ProPublica, 2023).
+  Twist: Return to Sender: enemy statuses bounce back to their source.
+  Push:  The art is a plain courthouse. A luxury yacht moored on its steps would make it funny.
+
+Protocol Enforcers (creature)
+  Aim:   Security theatre and VIP ropes.
+  Hooks: Airport security's shoes-off rule, bodyguards with earpieces.
+  Twist: "Which line? This line. Now that line."
+  Push:  Add a confused guard asking the general public to take their shoes off to cross the velvet rope.
+
+Demagogue (creature)
+  Aim:   Populists.
+  Hooks: "Fake news", "they don't want you to know this".
+  Twist: Loaded Language: its buffs last only while it's on the board, like the fervour.
+  Push:  Its megaphone could be plugged into a teleprompter run by someone else.
+
+Red Tape (spell)
+  Aim:   Bureaucracy.
+  Hooks: Kafka; Brazil's 27B/6; Asterix's "Permit A38" (The Twelve Tasks of Asterix), the house that drives people mad.
+  Twist: It adds a Day of Deployment Time: the creature literally waits in line.
+  Push:  Perfect. Permit A38 is the best reference in Europe; it could take the form number on the clerk's stamp.
+
+Preemptive Strike (spell)
+  Aim:   War sold as defence.
+  Hooks: The Iraq invasion (2003), the "Mission Accomplished" banner, the informant code-named Curveball whose claims
+         about mobile weapons labs turned out false.
+  Twist: Hits creatures that only planned an attack: punishment for intentions.
+  Push:  Swap "Source: trust me bro" on the report for "Source: Curveball": it's real, and the joke still works.
+
+Martial Law (spell)
+  Aim:   "For your safety" as an excuse to lock everyone down.
+  Hooks: South Korea's martial law of December 2024, lifted about six hours later; curfews everywhere.
+  Twist: Nobody moves.
+  Push:  Flavor: "For your safety, nobody moves. Ever. (Ever lasted six hours.)" Searchlights over a jail window work.
+
+Kakistocracy (spell)
+  Aim:   Government by the worst.
+  Hooks: The film Idiocracy and President Camacho.
+  Twist: A Law that shrinks strong creatures: competence is punished.
+  Push:  Rules and joke already agree. The throne's occupant could be someone in a Camacho-style outfit.
+
+Mutually Assured Destruction (spell) [px]
+  Aim:   The Cold War's logic.
+  Hooks: Dr. Strangelove ("Gentlemen, you can't fight in here! This is the War Room!"), the cowboy riding the bomb.
+  Twist: "Everybody loses. Fairly, for once."
+  Push:  A tiny cowboy riding one of the two missiles, hat in hand, would make the art a joke instead of a mushroom cloud.
+
+Panem Et Circenses (spell)
+  Aim:   Bread and circuses.
+  Hooks: Juvenal; The Hunger Games (the country is called Panem); World Cups built on public money.
+  Twist: A Law that costs your own paperwork.
+  Push:  The Hunger Games link is free: a reaping bowl full of names in the arena.
+
+Diplomat (creature)
+  Aim:   Nepotism in the diplomatic service.
+  Hooks: Jared Kushner as Middle East envoy; ambassadorships handed to donors.
+  Twist: "Qualifications: his surname." Slow to deploy, like every family favour.
+  Push:  The art (three generations in the same chair) is great as is.
+
+Raised Security Level (spell)
+  Aim:   Threat levels that mean nothing.
+  Hooks: The US colour-coded terror alert (2002-2011).
+  Twist: Armor that fades each Dusk: security that keeps wearing off.
+  Push:  Excellent. A tiny "WHAT DOES ORANGE MEAN?" sticky note on the sign would finish it.
+
+Lost Landmine (spell)
+  Aim:   Wars that never end for the people who live there.
+  Hooks: Landmines left in Cambodia and Angola; Princess Diana walking through a minefield in Angola (1997).
+  Twist: A hidden trap left on the board.
+  Push:  Dark and right for the tone. The faded sign is the joke; leave it.
+
+Ceasefire (spell)
+  Aim:   Ceasefires that last until the cameras leave.
+  Hooks: "Humanitarian pauses" broken within the hour.
+  Twist: A Temporal Shield that stops combat damage only: spells still hit. A ceasefire with loopholes, like the real ones.
+  Push:  Rules and joke match. Keep the two generals hiding grenades.
+
+Violence Monopoly (spell)
+  Aim:   The state's monopoly on violence.
+  Hooks: Max Weber's definition of the state; the Monopoly man.
+  Twist: A pun: Monopoly man as a cop. It cancels the enemy's attacks: only you're allowed to hit.
+  Push:  Excellent. Weber's phrase could be the flavor's first sentence.
+
+ZEITGEIST (27)
+
+Multipass (spell)
+  Aim:   The film quote everybody knows.
+  Hooks: The Fifth Element (1997): "Leeloo Dallas. Multipass."
+  Twist: A pass that gets any card: the one document that opens every door.
+  Push:  It's the opposite of Statecraft's Red Tape: the pass that skips the queue. A combo or a counter between the two
+         would be a good joke.
+
+Drug Smuggler (creature)
+  Aim:   The backpacker with a very full backpack.
+  Hooks: The TV show Banged Up Abroad; the Bali Nine.
+  Twist: Arrival fetches a card from the top of the deck: smuggled in.
+  Push:  A sniffer dog sitting down very pointedly next to him would make the scene.
+
+Not on My Watch (creature)
+  Aim:   The protective grandma, and safe spaces.
+  Hooks: The lollipop lady, "feelings are valid".
+  Twist: Safe Space blesses its neighbours against statuses.
+  Push:  Rules and joke match. A FEELINGS ARE VALID sticker on the back of her stop sign would tie the art to the
+         flavor.
+
+One for the Road (spell)
+  Aim:   Drinking culture.
+  Hooks: Closing time at the pub, "last one".
+  Twist: Double Tap: two attacks, two pints.
+  Push:  The rules are the joke. The barman putting chairs on the tables finishes it.
+
+Chain Smoker (creature)
+  Aim:   Addiction and "I'll quit tomorrow".
+  Hooks: The smoker who has been quitting since 1998.
+  Twist: A pun: smoking a chain. Recoil: it hits harder and hurts itself each time.
+  Push:  The pun only works if the picture reads as a chain he smokes (the first generated take lost it). A vape in his
+         pocket, unused, would be a nice extra.
+
+Karen (creature) [px]
+  Aim:   "I'd like to speak to the manager."
+  Hooks: The Karen meme (2020), the Karen haircut.
+  Twist: Impatient: it escalates every Day nobody gives it an order.
+  Push:  Give her the haircut in the art, and a phone already filming. Calling the police could be her Dawn effect.
+
+Boomer (creature) [px]
+  Aim:   The generation that bought a house at 22 and tells you to stop buying coffee.
+  Hooks: "OK Boomer" (2019); the Simpsons' "Old Man Yells at Cloud"; the millionaire who said young people should stop
+         buying avocado toast (2017).
+  Twist: Hits a random creature that moved this Day: yells at anyone who changes.
+  Push:  The cloud is in the picture; add a tiny avocado toast he's pointing at.
+
+Hipster (creature)
+  Aim:   "I liked it before it was cool."
+  Hooks: Vinyl, fixed-gear bikes, oat milk.
+  Twist: Too Mainstream: immune to anything that hits more than one creature. One of the best rules-as-joke cards.
+  Push:  Perfect as is.
+
+Underdog (creature)
+  Aim:   Inspirational losers.
+  Hooks: Rocky; Leicester City winning the Premier League at 5000-1 (2016).
+  Twist: Stronger when you're losing.
+  Push:  "Nobody believed in him. Correctly." is great. A Rocky-style training montage for a puppy would push the art.
+
+Hikikomori (creature)
+  Aim:   Shut-ins.
+  Hooks: Japan's hikikomori; the 2020 lockdowns ("Hasn't left the room since 2019").
+  Twist: Can't be ordered, can't be targeted: nobody can reach him.
+  Push:  Rules and joke match. A pile of delivery boxes at the door would add to it.
+
+Reality TV Star (creature)
+  Aim:   Famous for being famous.
+  Hooks: The Kardashians; The Apprentice, which took Trump to the presidency.
+  Twist: Plot Armor: survives a lethal hit once, like every scandal.
+  Push:  "You're fired" ties it to Casino and Spite-Elected President.
+
+Scam Artist (creature)
+  Aim:   Course-selling gurus.
+  Hooks: Andrew Tate's "Hustler's University"; the rented Lamborghini in every guru's photo.
+  Twist: "Sells a course on how to sell courses."
+  Push:  The rented Lamborghini with a hire-company sticker on the bumper would be the picture.
+
+Football Hooligans (creature)
+  Aim:   Fans who lost the match and won the street.
+  Hooks: The Euro 2020 final at Wembley, flares, ultras.
+  Twist: A riot that spreads to neighbours.
+  Push:  Rules and joke match. The plastic garden chair flying through the air is the hooligan image every European
+         knows.
+
+Antihero (creature)
+  Aim:   The cult of the "misunderstood" bad guy.
+  Hooks: Joker (2019) and the stairs; Breaking Bad.
+  Twist: Picks its own target among whoever hurt you last.
+  Push:  The Joker stairs dance is the image everyone knows.
+
+Bodybuilder (creature)
+  Aim:   Fitness influencers who are "natural".
+  Hooks: The "Liver King", exposed in 2022 for spending thousands a month on steroids.
+  Twist: Coffeinated then Burnout: never skips leg day, skips every rest day.
+  Push:  The Liver King angle: raw liver in his hand, a hidden syringe in his sock.
+
+Plot Armor (creature)
+  Aim:   Fiction's immortal heroes.
+  Hooks: The film trope; the hero who survives everything until the last season.
+  Twist: Survives a lethal hit once. Rules and name are the same joke.
+  Push:  It's one of four cheat-death cards (Plot Armor, Die Another Day, God's Grace, Schrodinger's Cat), each in a
+         different voice: fiction, Bond, God, physics. Worth keeping them that distinct.
+
+YOLO (spell)
+  Aim:   Recklessness for content.
+  Hooks: Drake's "YOLO" (2011); Jackass; the Darwin Awards.
+  Twist: +4 Attack paid with your own Health: the backflip off the garage roof.
+  Push:  The Darwin Awards tie it to Utopia's Evolution Theory: two cards, one joke.
+
+This Is Fine (spell) [px]
+  Aim:   Denial while everything burns.
+  Hooks: KC Green's webcomic (2013); climate change; every office during a crisis.
+  Twist: A Trend that burns everything and lets your creatures shrug it off.
+  Push:  Pairs with Utopia's Climate Change. Perfect as is.
+
+Strike (spell)
+  Aim:   Labour fighting back.
+  Hooks: The Hollywood writers' and actors' strikes (2023), the US auto workers' strike (2023).
+  Twist: Stops both sides' engines for two Days.
+  Push:  Its drawing is a fur hat, which doesn't say "strike" at all. A picket line outside a factory gate, with a
+         worker's cardboard sign and the CEO peering out from a window above, would fit.
+
+Russian Roulette (spell) [px]
+  Aim:   Gambling with your life, and Russia.
+  Hooks: The Deer Hunter (1978).
+  Twist: A bullet that moves slot by slot every Dawn until it fires.
+  Push:  Rules and joke match. It ties to the Russian thread (Fell Out of a Window, Involuntary Free Polonium Giveaway).
+
+Toxic Positivity (spell) [px]
+  Aim:   Good vibes only.
+  Hooks: Corporate wellness posters, "just be positive".
+  Twist: A buff that turns into Burnout when it wears off.
+  Push:  Rules and joke match. Great art.
+
+Mental Health Day (spell)
+  Aim:   Burnout.
+  Hooks: Taking the day off and still checking Slack.
+  Twist: Cleanses the moods.
+  Push:  It has no art brief. Proposal: a worker under a duvet with only their eyes showing, the laptop glowing beside them
+         with 47 unread messages.
+
+Delivery Cyclist (creature)
+  Aim:   Delivery riders.
+  Hooks: Deliveroo, Glovo, Uber Eats; "4 minutes away for 40 minutes".
+  Twist: Leapfrog: it jumps over the gridlock.
+  Push:  Pairs with Corporate's Pluriemployed Hustler (same worker, different employer).
+
+Zeitgeist (spell)
+  Aim:   Moods nobody decided on.
+  Hooks: Social media trends.
+  Twist: The underdog draws more: the times favour whoever's losing.
+  Push:  Twitter's "main character of the day": the ghost pointing at one random person in the crowd.
+
+Rush Hour (spell)
+  Aim:   Commuting.
+  Hooks: Traffic jams, "fastest way home: don't".
+  Twist: The slowest act first: the snail in the bus lane wins.
+  Push:  Rules and art are the same joke.
+
+No Glove, No Love (spell)
+  Aim:   Safe sex campaigns.
+  Hooks: The 90s condom ads.
+  Twist: Blessed and Armor: protection.
+  Push:  The flavor ("Protect yourself. Everyone else is.") is a herd-immunity joke, which ties it to Utopia's Vaccine.
+
+We Are Not The Same (spell)
+  Aim:   Two memes in one.
+  Hooks: The Spider-Man pointing meme; "We are not the same".
+  Twist: Your creature copies the stats of the one facing it.
+  Push:  Rules, name and art agree. Mind's Mimetic Theory does the same as a spell ("We want what they want"): two
+         factions, two jokes on copying, which is fine as long as their art stays this different.
+
+DIGITAL SOCIETY (15)
+
+Doomscrolling (spell) [px]
+  Aim:   Scrolling bad news at 3 a.m.
+  Hooks: The doomer Wojak; "just one more".
+  Twist: Doom 3: the feed eats your weakest creature to fetch you a card.
+  Push:  Rules and joke match. The phone's light on the doomer's face at 3:00 a.m. is the right picture.
+
+Crypto "Entrepreneur" (creature)
+  Aim:   Crypto bros.
+  Hooks: FTX and Sam Bankman-Fried (2022); BitConnect's "BitConneeeect!" (2017); Binance's "funds are SAFU".
+  Twist: Chain Mail: its attacks jump down the line at half damage each, a pun on the blockchain and on chain letters.
+  Push:  Its flavor is a copy of the MLM Seller's. "Funds are safu." or "Few understand." would make it its own.
+
+Digital Nomad (creature)
+  Aim:   Remote workers in Bali and Lisbon.
+  Hooks: Digital nomad visas; rents in Lisbon going up.
+  Twist: A pun: a real Tuareg nomad on a dune, with a laptop.
+  Push:  The pun is good. A "WIFI?" sign on a camel would finish it.
+
+Keyboard Warrior (creature) [px]
+  Aim:   Online tough guys.
+  Hooks: The soyjak and the redditor meme face, "well actually", the fedora.
+  Twist: Counterattack answers every hit, and No U bounces debuffs back: he never loses an argument.
+  Push:  The ability names (No U) are the joke. A "Source?" speech bubble could be his whole battle cry.
+
+Dogpile (spell) [px]
+  Aim:   Pile-ons.
+  Hooks: Twitter mobs.
+  Twist: A literal pile of dogs. Many hits at once.
+  Push:  Perfect pun. The waving hand could hold a phone showing the post that started it: "unpopular opinion: I
+         don't like dogs".
+
+Rage Bait (spell) [px]
+  Aim:   Content made to make you angry.
+  Hooks: Engagement farming; algorithms rewarding outrage.
+  Twist: A furious fish going for the bait. Burned: the anger keeps ticking.
+  Push:  The worm could be a phone screen on the hook, showing a notification.
+
+Its A Trap (spell)
+  Aim:   Scams that promise something free.
+  Hooks: Admiral Ackbar's "It's a trap!" (Star Wars, 1983); The Simpsons' free-boat sting; phishing.
+  Twist: A snare that springs when a creature leaves the slot.
+  Push:  The name is Ackbar's line, the art is the Simpsons' sting: one reference would be cleaner. The Simpsons scene
+         fits the rules better (you walk in, then you can't leave), so keep it and let the name be a nod.
+
+NPC (creature) [px]
+  Aim:   People who repeat what they're told.
+  Hooks: The NPC Wojak meme (2018).
+  Twist: Copypasta copies the ability of whoever is opposite it.
+  Push:  Perfect: one of them holding THINK FOR YOURSELF. All the speech bubbles could say "Same."
+
+Chronically Online (creature)
+  Aim:   Radicalisation by algorithm.
+  Hooks: The rabbit hole, the manifesto, the energy-drink pyramid.
+  Twist: Extremist: stat changes on it are doubled, good and bad.
+  Push:  Excellent rules for the joke. A TOUCH GRASS note taped to the inside of a door nobody has opened.
+
+Catfish (creature) [px]
+  Aim:   Fake online profiles.
+  Hooks: The MTV show Catfish (2012); the Manti Te'o hoax (2013).
+  Twist: A pun (a cat and a fish in love). Undercover: it stays ??? until revealed.
+  Push:  The pun works. The fish could hold up a photo of a cat in front of its face: the catfish catfishing.
+
+Conspiracy Theorist (creature)
+  Aim:   Doing your own research.
+  Hooks: "Birds Aren't Real" (the satirical movement that says birds are government drones); QAnon; flat earth.
+  Twist: Unbothered: nothing lowers its stats. The tinfoil works.
+  Push:  The pigeon labelled DRONE is already Birds Aren't Real; a "BIRDS AREN'T REAL" sticker on his laptop would make it
+         explicit.
+
+Clickbait (spell) [px]
+  Aim:   YouTube thumbnails.
+  Hooks: MrBeast faces, red arrows, red circles round nothing.
+  Twist: It will taunt: the enemy must attack it.
+  Push:  Rules and joke match. A video title under the thumbnail: "(GONE WRONG) (NOT CLICKBAIT)".
+
+Cancelled (spell)
+  Aim:   Cancel culture.
+  Hooks: Old tweets dug up; James Gunn fired and rehired (2018-19); comedians cancelled who then get a Netflix special.
+  Twist: Exhausted and a target on its back.
+  Push:  The comeback is the funniest part of cancel culture: the cancelled creature could come back stronger after it
+         wears off.
+
+Meta Group Chat (creature)
+  Aim:   The group chat as a jury.
+  Hooks: WhatsApp's look; Facebook renaming itself Meta (2021).
+  Twist: Each Dawn the in-group gets louder and someone outside it gets a target.
+  Push:  The name is a pun on Meta, and the WhatsApp look makes it work. The group admin's avatar could be the legless
+         metaverse avatar from Zuckerberg's 2022 demo.
+
+Social Panopticon (spell)
+  Aim:   Everyone watching everyone.
+  Hooks: Bentham's panopticon; Foucault; China's social credit system.
+  Twist: Reveals every enemy creature.
+  Push:  A social-credit score over each cell would tie it to the real thing. Part of the Orwell thread.
+
+SHADOW OPS. (51)
+
+Cleaner (creature)
+  Aim:   The hitman as a service worker.
+  Hooks: Pulp Fiction's Winston Wolf ("I solve problems"); Léon.
+  Twist: Double Tap: two shots, one invoice. A cleaning-company jumpsuit.
+  Push:  A business card in his breast pocket: "WOLF CLEANING. Discreet. 24h."
+
+Political Decoy (creature)
+  Aim:   Body doubles of dictators.
+  Hooks: Saddam Hussein's rumoured body doubles; the "Putin double" theories; Saddam found hiding in a hole (2003).
+  Twist: Swap: it trades places with any friendly creature, over everybody.
+  Push:  The best place for the Saddam jokes the user asked for: three identical moustached men on the balcony, all
+         waving, while the real one peeks out of a hole in the ground below. Flavor: "The real one is in a hole. Or is
+         he?"
+
+Burn Notice (spell) [px]
+  Aim:   Spies cut loose by their agency.
+  Hooks: The TV series Burn Notice; Banksy's Girl with Balloon shredding itself at auction (2018).
+  Twist: Scorched Earth: the creature in that slot loses its effects. The art shreds his portrait.
+  Push:  Banksy is anonymous, like a spy: the spy watching from the audience in a Banksy-style hood ties
+         the two together.
+
+Counter-Intelligence (spell)
+  Aim:   Spies spying on spies.
+  Hooks: The Counter-Strike box cover, remade with accountants.
+  Twist: Redirects the strongest enemy attack: "We knew you knew we knew."
+  Push:  Good pun. "Counter" as in accountants could be the flavor's punchline.
+
+Mole (creature)
+  Aim:   The double agent.
+  Hooks: Kim Philby and the Cambridge Five; Aldrich Ames; Robert Hanssen; Tinker Tailor Soldier Spy.
+  Twist: A pun: a literal mole. Underground ignores buffs both ways.
+  Push:  Good pun. Under the cardigan, a second lanyard in Cyrillic.
+
+Signal Jammer (creature)
+  Aim:   Cutting communications.
+  Hooks: Phone jammers; "no bars, no witnesses".
+  Twist: The creature opposite loses its ability.
+  Push:  A crowd staring at phones showing No Service, with one old man reading a paper newspaper, smug.
+
+Deep Cover (creature)
+  Aim:   Agents so deep they forget whose side they're on.
+  Hooks: Face/Off (1997); Donnie Brasco; Infernal Affairs and The Departed.
+  Twist: Identity Theft: it swaps abilities with a creature.
+  Push:  The two men peeling off each other's masks is Face/Off: one line ("I want to take his face... off") would make
+         it obvious.
+
+Sleeper Agent (creature) [px]
+  Aim:   Long-term infiltrators.
+  Hooks: The Americans; the Russian "illegals" caught in the US in 2010; Agent Smith (The Matrix) in the art.
+  Twist: A poisoned gift: planted on their side, it hurts them every Dusk.
+  Push:  The agent literally asleep is the joke. An alarm clock on the table set to "WHEN CALLED".
+
+Human Intelligence (spell)
+  Aim:   Spy work done by people.
+  Hooks: HUMINT; "coffee, a smile, a USB stick".
+  Twist: A source on the inside fetches the card.
+  Push:  The newspaper with eye holes is the classic gag. The pigeons could wear tiny earpieces.
+
+Wet Work (creature)
+  Aim:   Murder as a budget line.
+  Hooks: John Wick; "termination" in HR and in spycraft.
+  Twist: Extreme Prejudice: one hit, one kill, then it's gone too.
+  Push:  The TERMINATED stamp on a personnel file ties spy murder to HR firing: the same word for both.
+
+Perfectly Timed Camera Malfunction (spell)
+  Aim:   Cameras that fail at the right moment.
+  Hooks: Jeffrey Epstein's jail cell: the cameras that malfunctioned and the guards who fell asleep (2019).
+  Twist: Destroys a Revealed creature.
+  Push:  The Epstein thread: this, He Didn't Kill Himself and Control Room are three cards of one story. A combo where
+         Control Room's guards sleep exactly when this card is played would tell it on the table.
+
+Smoke And Mirrors (spell)
+  Aim:   Deception.
+  Hooks: Stage magic; the WWII Ghost Army.
+  Twist: Concealed: its plans show as ???.
+  Push:  A sticker on one mirror: "OBJECTS IN MIRROR ARE FEWER THAN THEY APPEAR".
+
+Eavesdrop (spell)
+  Aim:   Listening in.
+  Hooks: Watergate (1972); the glass against the wall.
+  Twist: An instant Reveal.
+  Push:  Nixon's face in the next booth, sweating, would bring Watergate in.
+
+Tapped Communications (spell)
+  Aim:   Mass surveillance.
+  Hooks: The NSA's PRISM programme revealed by Snowden (2013); Merkel's tapped phone (2013).
+  Twist: Revealed, and Watchdogs can see its plans.
+  Push:  The server on the other end of the call could have an NSA eagle logo. Part of the Orwell and Snowden threads.
+
+Whistleblower (creature)
+  Aim:   Whistleblowers.
+  Hooks: Snowden (stuck in Moscow airport, 2013); Assange in the Ecuadorian embassy (2012-2019) and his cat.
+  Twist: Dead Man's Switch: when it dies, every enemy is Revealed.
+  Push:  The embassy closet in the flavor is Assange; a cat in the closet with him would make that clear. WikiLeaks'
+         "insurance file" (2010) is the real dead man's switch.
+
+Involuntary Free Polonium Giveaway (spell)
+  Aim:   Russian state poisonings.
+  Hooks: Alexander Litvinenko's polonium tea in London (2006); Georgi Markov's poisoned umbrella in London (1978).
+  Twist: "A gift from an old friend." Burned for 3 Days.
+  Push:  The art mixes two real cases (umbrella and polonium); a teapot dripping glowing green would point at Litvinenko.
+
+Control Room (creature)
+  Aim:   Surveillance that sees nothing.
+  Hooks: Epstein's guards asleep; Orwell's telescreens.
+  Twist: Reveals a random enemy slot each Dawn.
+  Push:  The two operators asleep in front of 40 screens is the Epstein joke already.
+
+Humanitarian Trafficking Action (spell)
+  Aim:   Aid as a cover.
+  Hooks: Iran-Contra; the CIA's fake vaccination campaign in Pakistan used to find bin Laden (2011).
+  Twist: An aid package with a tracker: heals an enemy and paints a target on it.
+  Push:  Rules and joke match perfectly.
+
+Dead Man's Switch (creature)
+  Aim:   Insurance through blackmail.
+  Hooks: WikiLeaks' insurance file (2010).
+  Twist: Last Will: destroys the strongest enemy creature.
+  Push:  It's the same idea as WikiLeaks' insurance file, which ties it to Whistleblower. The DO NOT DISTURB
+         sign is a good touch.
+
+Fell Out of a Window (spell)
+  Aim:   Russian oligarchs and officials falling from windows.
+  Hooks: The run of falls since 2022 (Lukoil's chairman among them); the Defenestrations of Prague.
+  Twist: It destroys the strongest enemy only if a slot beside it is empty: it needs a window. The best rules-as-joke
+         card in the game.
+  Push:  Perfect.
+
+Coup d'État (spell)
+  Aim:   Military takeovers.
+  Hooks: Pinochet (1973); Latin American juntas; mirrored sunglasses.
+  Twist: Take control of their strongest creature, if you have more creatures.
+  Push:  A TV in the corner with a news ticker: "TEMPORARY MEASURES TO LAST UNTIL FURTHER NOTICE".
+
+Operation Paperclip (spell)
+  Aim:   The US recruiting Nazi scientists.
+  Hooks: Operation Paperclip (1945); Wernher von Braun; Tom Lehrer's satirical song about von Braun.
+  Twist: A pun: a giant paperclip moving a scientist from one flag to another.
+  Push:  Very good.
+
+False Flag Operation (spell)
+  Aim:   Attacking yourself to justify a war.
+  Hooks: The Gleiwitz incident (1939); the Gulf of Tonkin (1964).
+  Twist: Destroy your own creature to buff the rest.
+  Push:  Rules and joke match perfectly.
+
+Never Let Them Know Your Next Move (spell)
+  Aim:   Hoarding everything into one weapon.
+  Hooks: The "never let them know your next move" meme; Brezhnev's chest full of medals.
+  Twist: Everyone hands their buffs to one creature.
+  Push:  The flavor ("Everyone gets a medal. He gets all of them.") points at Brezhnev, who gave himself medal after medal.
+         A Brezhnev-like general under the pile of weapons would land it.
+
+Frame Job (spell)
+  Aim:   Framing an innocent.
+  Hooks: Police corruption; the planted gun.
+  Twist: Passes your harmful statuses to the enemy facing you.
+  Push:  The framed man could end up as Lone Gunman's placard-wearer: the frame job and the fall guy are one story.
+
+Devil's Breath (spell)
+  Aim:   Scopolamine robberies.
+  Hooks: "Burundanga" in Colombia: victims who help the thieves empty their own homes.
+  Twist: Steals the buffs and good statuses of the creature facing it.
+  Push:  Very good. Dark and real.
+
+He Didn't Kill Himself (spell)
+  Aim:   Faked deaths and the Epstein meme.
+  Hooks: "Epstein didn't kill himself" (2019).
+  Twist: Fakes a death: its Last Will happens, then it comes back to your hand.
+  Push:  The tan line on the toes is great. The Epstein thread.
+
+Extraction (spell)
+  Aim:   Getting an agent out.
+  Hooks: Argo (1979 and the 2012 film).
+  Twist: Back to your hand with a new face.
+  Push:  Argo's cover story was a fake film crew: the agent clutching a film clapperboard as he's hoisted
+         away.
+
+Witness Protection Program (spell)
+  Aim:   New identities.
+  Hooks: Goodfellas' Henry Hill, ending up in the suburbs.
+  Twist: It disappears for a Day and comes back unknown.
+  Push:  The terrible fake moustache is the joke.
+
+Death By "Natural Causes" (spell)
+  Aim:   Assassinations made to look natural.
+  Hooks: The CIA's heart-attack dart gun, shown to the US Senate in 1975 (Church Committee).
+  Twist: Kill Order: destroyed in two Days, and the other side doesn't see it coming.
+  Push:  The dart gun is real: a senator holding it up in a hearing would make a great alternative picture.
+
+Asset Recruitment (spell)
+  Aim:   Blackmail and recruitment.
+  Hooks: Kompromat; honey traps.
+  Twist: Brainwashed: it changes sides when the countdown runs out.
+  Push:  The woman in the kompromat photo could be the Femme Fatale: a cameo that links the two cards.
+
+If I Told You, I'd Have to Kill You (creature)
+  Aim:   The cliché line.
+  Hooks: Top Gun (1986).
+  Twist: When Revealed it hurts whoever revealed it, and itself.
+  Push:  Rules and line are one joke.
+
+Lone Gunman (creature)
+  Aim:   The official story.
+  Hooks: Lee Harvey Oswald; the grassy knoll; the "magic bullet".
+  Twist: Fall Guy: it takes the blame (Reveals and destroys) for the rest of your side.
+  Push:  Perfect.
+
+Glomar Response (spell)
+  Aim:   "We can neither confirm nor deny."
+  Hooks: The CIA's answer about the Glomar Explorer, the ship built to raise a sunken Soviet submarine (1975).
+  Twist: Nullifies the enemy's next 2 reveals.
+  Push:  Perfect. The Glomar Explorer on the press officer's screen would add the real story.
+
+Sabotage (spell)
+  Aim:   Sabotage.
+  Hooks: The OSS's Simple Sabotage Field Manual (1944), which tells saboteurs to hold long meetings, insist on proper
+         channels and refer everything to committees.
+  Twist: The strongest enemy attack backfires.
+  Push:  The manual is real and reads like a description of every office. Its advice as the flavor would be gold.
+
+Ghost Army (spell)
+  Aim:   Deception with inflatables.
+  Hooks: The WWII 23rd Headquarters Special Troops; Russia's inflatable decoys (2022).
+  Twist: Two inflatable tanks that the enemy sees as Shermans.
+  Push:  The real Ghost Army photo (four soldiers lifting a 40-ton tank with ease) is the picture to copy.
+
+Inflatable Tank (creature) [px]
+  Aim:   The Ghost Army decoy.
+  Hooks: The same.
+  Twist: A token.
+  Push:  A cactus in the field, after the Ghost Army flavor ("Do not inflate near cacti").
+
+Sherman Tank (creature) [px]
+  Aim:   What the decoy pretends to be.
+  Hooks: The Sherman.
+  Twist: Never a real card: it's the mask.
+  Push:  An inflation valve on its side, for those who look closely.
+
+HAARP (spell)
+  Aim:   Weather and earthquake conspiracies.
+  Hooks: The HAARP antenna field in Alaska and the theories about it; the 2021 "space laser" wildfire conspiracy.
+  Twist: An earthquake that zigzags across the board.
+  Push:  The art now points a laser into the ground (the user's note). The "space laser" conspiracy would make it more
+         controversial, if the user wants that.
+
+Social Engineering (spell)
+  Aim:   Hacking people instead of computers.
+  Hooks: Kevin Mitnick; the hi-vis vest and clipboard that open every door.
+  Twist: Discard 1, draw 2.
+  Push:  Very good.
+
+Bilderberg Membership (spell)
+  Aim:   Secret elite clubs.
+  Hooks: The Bilderberg meetings.
+  Twist: Discard 2, draw 4.
+  Push:  One of the envelopes on the table labelled "NEXT YEAR'S ELECTIONS".
+
+Dead Drop (spell)
+  Aim:   Spy dead drops.
+  Hooks: Robert Hanssen's drops under a footbridge in a Virginia park.
+  Twist: Discard 3, draw 4.
+  Push:  Hanssen's footbridge is the real place: the drop under a little wooden bridge instead of a bench.
+
+The Golden Gun (spell)
+  Aim:   Bond.
+  Hooks: The Man with the Golden Gun (1974).
+  Twist: Single Use: one golden bullet.
+  Push:  Perfect.
+
+Die Another Day (spell)
+  Aim:   Bond.
+  Hooks: Die Another Day (2002): the surfing and the ice palace.
+  Twist: It can't die until the next Dusk.
+  Push:  Perfect. The CGI surfing scene is the joke.
+
+Licence to Kill (spell)
+  Aim:   Bond, and bureaucracy.
+  Hooks: Licence to Kill (1989).
+  Twist: A civil servant stamping the licence.
+  Push:  Perfect.
+
+Shaken, Not Stirred (spell)
+  Aim:   Bond's martini.
+  Hooks: The Vesper recipe from Casino Royale.
+  Twist: +2 Attack and Composed: nerves of steel.
+  Push:  The bartender stirring it anyway, defiantly.
+
+GoldenEye (spell)
+  Aim:   Bond's EMP.
+  Hooks: GoldenEye (1995) and its N64 game.
+  Twist: Blackout on every enemy and wipes the Watchdogs.
+  Push:  A smoking toaster is in. The N64 game's split-screen could frame the picture.
+
+Supply Chain Attack (spell)
+  Aim:   Poisoned supply chains.
+  Hooks: The SolarWinds hack (2020); the exploding pagers in Lebanon (2024).
+  Twist: It slows the big organisations: Statecraft's bodies and Corporate's draws.
+  Push:  The pagers would make it more controversial, if the user wants to go there. The routers with skull stickers are
+         good.
+
+Hollowed-Out Volcano Lair (spell) [px]
+  Aim:   Bond villains.
+  Hooks: You Only Live Twice (1967); Dr. Evil.
+  Twist: The strongest creature hides in its lair.
+  Push:  A PLANNING PERMISSION: PENDING notice pinned at the crater's rim, after the flavor.
+
+Femme Fatale (creature)
+  Aim:   The seductive spy.
+  Hooks: Mata Hari; GoldenEye's Xenia Onatopp, who kills men by crushing them between her thighs.
+  Twist: She squeezes the creature facing her each Dusk.
+  Push:  The art is Xenia Onatopp: perfect, rules included.
+
+MK Ultra Test Subject (creature)
+  Aim:   The CIA's mind-control experiments.
+  Hooks: MKUltra; Ted Kaczynski, who took part in a Harvard psychology study (1959-62) often linked to it.
+  Twist: Each Dawn it attacks a random creature: strong, cheap, uncontrollable.
+  Push:  Very dark and very on-tone.
+
+TECH (13)
+
+Web Scraping (spell) [px]
+  Aim:   Companies scraping everything to train their AIs.
+  Hooks: AI crawlers ignoring robots.txt (2024); "we respect your robots.txt. We read it, anyway."
+  Twist: A pun: a cat scratching (scraping) a laptop open.
+  Push:  The cat could be wearing a lanyard of a big AI lab, or have "TRAINING DATA" on its food bowl.
+
+DDOS Attack (spell) [px]
+  Aim:   Botnets.
+  Hooks: The Mirai botnet (2016), built from hacked cameras and home devices.
+  Twist: "All of them from fridges." 2 damage and Exhausted.
+  Push:  The fridges with red eyes are Mirai. Perfect.
+
+Antivirus (spell) [px]
+  Aim:   Antivirus software that's half the problem.
+  Hooks: Avast selling its users' browsing data (2020); John McAfee's video on how to uninstall McAfee; Panda Security,
+         the Spanish antivirus with a panda.
+  Twist: A panda knight blocking a spell, its castle covered in its own upgrade pop-ups.
+  Push:  The panda is a Panda Security joke; the McAfee story could inspire a Tech creature for the backlog.
+
+Script Kiddie (creature) [px]
+  Aim:   Hackers who don't know what they're doing.
+  Hooks: The 2020 Twitter hack, led by a 17-year-old; LOIC; "H4CK3R T00L.exe".
+  Twist: Zero-Day ignores defences. Now a baby in a gaming chair.
+  Push:  A dummy in the baby's mouth with a USB plug on the end.
+
+Legacy Code (creature) [px]
+  Aim:   Code nobody dares touch.
+  Hooks: The US unemployment systems that needed COBOL programmers in 2020; "Gary (retired 1999)".
+  Twist: Cold Storage: enemy effects can't lower its stats. Nothing can change it, not even you.
+  Push:  HERE BE DRAGONS on a scroll is perfect.
+
+End-to-End Encryption (spell)
+  Aim:   Governments asking for backdoors.
+  Hooks: The UK's demand that Apple open a backdoor (2025); the EU's "Chat Control" proposals; "Pinky promise".
+  Twist: Encrypted: Watchdogs can't see its actions.
+  Push:  The agent's "Backdoor Request" form could have a smiley face on it: "for the children".
+
+SysAdmin (creature)
+  Aim:   IT support.
+  Hooks: The IT Crowd ("Have you tried turning it off and on again?").
+  Twist: Cleanses your creatures every Dawn: turning it off and on again cures everything.
+  Push:  Rules and joke match. This is the "technical support" card the user mentioned; a mug reading "NO, I WILL NOT
+         FIX YOUR PRINTER" would finish the art.
+
+Meatproxy As A Service (creature)
+  Aim:   "AI" that's actually people.
+  Hooks: Reports (2024) that Amazon's "Just Walk Out" checkouts relied on about a thousand workers in India; Builder.ai's
+         collapse (2025) after its "AI" turned out to be engineers.
+  Twist: A raw steak doing the job: "The AI is Dave. Dave copies and pastes."
+  Push:  These two stories are exactly the joke: the price tag could read "AI-POWERED" with "(DAVE)" in small print.
+
+Ransomware Attack (spell)
+  Aim:   Ransomware.
+  Hooks: WannaCry hitting the NHS (2017); the Colonial Pipeline attack (2021).
+  Twist: You draw a card: the ransom.
+  Push:  A hospital monitor showing the skull would make it darker; the crying grandma is the funnier version.
+
+Man-in-the-Middle (spell)
+  Aim:   Interception.
+  Hooks: Phishing ("Hi, it's your bank. Also, it's not.").
+  Twist: A literal man in the middle of a couple on a bench.
+  Push:  Great pun. One of the phones showing a padlock icon, broken.
+
+Technical Debt (creature)
+  Aim:   "Ship it now, fix it later."
+  Hooks: Southwest Airlines' 2022 meltdown, blamed on old scheduling software.
+  Twist: Decay: strong today, it pays every Dusk.
+  Push:  Rules and joke match. The TODO sticky note could be dated 2009.
+
+Scope Creep (creature)
+  Aim:   Projects that grow forever.
+  Hooks: "Just one more small feature."
+  Twist: Grow 1: it gets bigger every Dawn. The art is a pun: a creep with a spyglass.
+  Push:  The pun hides the project joke. The creep could be peeping at a Gantt chart through the window, or carrying a
+         sack of new tickets.
+
+Sex Clanker (creature)
+  Aim:   Sex robots and AI girlfriends.
+  Hooks: "Clanker", the 2025 slang for robots; Replika.
+  Twist: Heat Signature 3: a decoy too attractive to ignore.
+  Push:  Its picture is the old No Glove, No Love art. A robot of its own (candlelight, a heart-shaped bed, "batteries not
+         included" on the box) would sit better with the flavor.
+
+
+MIND (12)
+
+Lucid Dreaming (spell) [px]
+  Aim:   Dreams you can control, almost.
+  Hooks: Inception; "you still can't find the bathroom".
+  Twist: Pick a card from the top of the deck: from the dream.
+  Push:  A spinning top on the bedside table (Inception).
+
+Mimetic Theory (spell)
+  Aim:   Wanting what others want.
+  Hooks: René Girard's theory, which Peter Thiel says led him to invest in Facebook.
+  Twist: Copies the stats of the creature facing it.
+  Push:  Thiel and Facebook tie it to Digital Society: two people in identical poses, one wearing a Facebook-blue shirt.
+
+Generational Trauma (spell)
+  Aim:   Inherited damage and the generation gap.
+  Hooks: The pool meme.
+  Twist: Health Loss that stays on the card: it gets passed down.
+  Push:  Rules and joke match. The skeletons labelled Gen X, Millennials and Gen Z, the last one still holding a phone.
+
+Pessimist (creature) [px]
+  Aim:   Pessimism.
+  Hooks: Eeyore; Marvin the Paranoid Android.
+  Twist: Contrarian: buffs shrink it, debuffs grow it.
+  Push:  Rules and joke match. A sign reading "I TOLD YOU SO" in his pocket.
+
+Introvert (creature)
+  Aim:   Introverts at parties.
+  Hooks: The blanket fort.
+  Twist: Unbothered: nothing gets through.
+  Push:  A DO NOT DISTURB sign hung on the fort, and an invitation on the floor marked "RSVP: maybe".
+
+Schrodinger's Cat (creature) [px]
+  Aim:   The quantum paradox.
+  Hooks: Schrödinger's thought experiment.
+  Twist: Survives death once: alive and dead.
+  Push:  The real thought experiment's props in a corner of the box: a little vial of poison and a Geiger
+         counter.
+
+Roko's Basilisk (creature) [px]
+  Aim:   The AI that punishes whoever didn't help build it.
+  Hooks: The LessWrong thought experiment (2010), famously how Musk and Grimes met (2018).
+  Twist: A snake with a naughty list.
+  Push:  The flavor and art are already funny. A pop-up on its laptop: "Did you help build me? Y / N".
+
+Trolley Problem (spell) [px]
+  Aim:   The ethics puzzle.
+  Hooks: The trolley problem; the MIT Moral Machine for self-driving cars.
+  Twist: Health Loss: 4 on a random enemy, 1 on a random friend. Someone pays either way.
+  Push:  Rules and joke match. The "multi-track drifting" meme (the trolley hitting both tracks at once) is
+         the famous joke on it, and it fits the rules: both sides lose Health.
+
+Red Herring (spell) [px]
+  Aim:   Distractions.
+  Hooks: The detective story's red herring.
+  Twist: A literal red fish in a detective's hat. Redirects the next attack.
+  Push:  Good pun. A chalk outline of a body behind the fish, where nobody's looking.
+
+Imposter Syndrome (spell) [px]
+  Aim:   Feeling like a fraud.
+  Hooks: Among Us.
+  Twist: A pun: an Among Us crewmate as a SENIOR ENGINEER.
+  Push:  Good pun. An EMERGENCY MEETING button on the desk.
+
+Ship of Theseus (creature) [px]
+  Aim:   The identity paradox.
+  Hooks: The Ship of Theseus.
+  Twist: Regenerate 1: it replaces itself plank by plank.
+  Push:  The paradox's second half: the old planks rebuilt into a second ship on the shore. Which one is the
+         real one?
+
+Escape Goat (spell) [px]
+  Aim:   Scapegoats.
+  Hooks: The scapegoat; the meme "escape goat".
+  Twist: A pun: a goat escaping. Heat Signature on it.
+  Push:  Good pun. It pairs with Shadow Ops.' Lone Gunman (the official fall guy): a goat holding a placard
+         like the Lone Gunman's would tie them.
+MYTH (39)
+
+Omen Reading (spell)
+  Aim:   Fortune-telling, ancient and modern.
+  Hooks: Roman augurs reading entrails; today's market analysts and horoscopes.
+  Twist: Sacrifice 1 to fetch a card: the goat pays for the forecast.
+  Push:  The augur squinting at a calendar works. A stock ticker on the wall would make him a market analyst.
+
+Memento Mori (spell)
+  Aim:   "Remember you will die", on a schedule.
+  Hooks: The Stoics; the skull on the scholar's desk.
+  Twist: Doomed: it grows, then dies on schedule.
+  Push:  The calendar could be a corporate one: "Q3 deadline: death".
+
+Martyr (creature)
+  Aim:   Salvation sold online.
+  Hooks: Amazon Prime's delivery times; "ships in 3 days" against "rose on the third day".
+  Twist: A planned sacrifice that grows stronger.
+  Push:  "Ships in 3 days" is already the joke. A star rating under him ("4.2, would be saved again") would push it.
+
+The Holy Grail (spell)
+  Aim:   Relics as tourism.
+  Hooks: Monty Python and the Holy Grail; Indiana Jones and the Last Crusade ("He chose... poorly").
+  Twist: The Grail behind museum glass with a queue of knights and a gift shop.
+  Push:  One knight at the back of the queue, crumbled to dust: "He chose poorly".
+
+Exorcism (spell) [px]
+  Aim:   Exorcism, and phone addiction as possession.
+  Hooks: The Exorcist; the Vatican's real exorcism courses.
+  Twist: Cleanse: the phone is the demon.
+  Push:  The invoice from the flavor in the priest's other hand.
+
+Mummy (creature) [px]
+  Aim:   Curses, and museums keeping what isn't theirs.
+  Hooks: The curse of Tutankhamun; the British Museum and the calls to give things back (the Elgin Marbles).
+  Twist: Hive Mind spreads to whoever attacks it: the curse is contagious.
+  Push:  A "PLEASE RETURN TO EGYPT" sticker on the sarcophagus would add the museum joke.
+
+Omniscient Space-Time Bending Bearded Wizard (creature)
+  Aim:   God as an absent-minded old man.
+  Hooks: Bruce Almighty; Gandalf; "works in mysterious ways. Mostly late."
+  Twist: A random blessing each Dawn.
+  Push:  The TV remote pointed at a tiny universe is great. A "Universe 2.0 - beta" label on the box.
+
+Cultist (creature) [px]
+  Aim:   Doomsday cults.
+  Hooks: Heaven's Gate (1997) and its matching trainers; "the end is near. Brunch is at eleven."
+  Twist: Fodder: when it dies, every friendly creature grows.
+  Push:  Matching trainers on its feet would point at Heaven's Gate.
+
+Phoenix (creature)
+  Aim:   The comeback story.
+  Hooks: "Dies, comes back, posts about it."
+  Twist: Revive: it rises again at the next Dawn.
+  Push:  Rising from a burnt toaster is perfect.
+
+Excess of Bread and Wine (spell)
+  Aim:   The Last Supper as a party.
+  Hooks: Da Vinci's Last Supper; the Paris 2024 Olympics opening scene that many read as a Last Supper parody.
+  Twist: It heals your creatures, and one gets the hangover (Exhausted).
+  Push:  The beer pong is the joke. Jesus refilling cups from a water jug that pours wine finishes it.
+
+Monkey Hand (spell) [px]
+  Aim:   Wishes with a catch.
+  Hooks: The Monkey's Paw (1902); The Simpsons' Treehouse of Horror.
+  Twist: Draw 3, and someone is Doomed.
+  Push:  "Read the fine print": the merchant could be holding out a long scroll of terms and conditions.
+
+Sacrificial Ritual (spell)
+  Aim:   Rituals, and the intern.
+  Hooks: "Somebody has to go. Ideally the intern."
+  Twist: The weakest goes, so the Cultist pays.
+  Push:  The rubber chicken is good. An intern's lanyard on the altar would tie it to Corporate's Unpaid Intern.
+
+Reincarnation (creature)
+  Aim:   Rebirth.
+  Hooks: The Buddhist wheel; China's 2007 rule that a living Buddha needs state approval to reincarnate.
+  Twist: Rebirth and Grow: each life a little better.
+  Push:  The Chinese rule is real and absurd: a reincarnation permit, stamped, in the corner of the art.
+
+Holy War (spell)
+  Aim:   Religious wars.
+  Hooks: The Crusades; "Gott mit uns" on German belt buckles.
+  Twist: Both armies under the same cross. Your creatures take damage too.
+  Push:  The angel with the scorecard is perfect.
+
+The Great Flood (spell) [px]
+  Aim:   Divine punishment.
+  Hooks: Noah; climate change.
+  Twist: A Prophecy: the enemy sees it coming.
+  Push:  Climate change: the soldiers on the hill could be holding "IT'S JUST WEATHER" signs.
+
+Mox Nox (spell)
+  Aim:   Mortality.
+  Hooks: The Latin sundial motto "Mox nox": soon, night.
+  Twist: Destroys the strongest enemy in two Days.
+  Push:  The one Myth card without a joke. A monk timing the shadow with a stopwatch would add one.
+
+Holy Hand Grenade of Antioch (spell) [px]
+  Aim:   Monty Python.
+  Hooks: The Holy Grail (1975): "Five is right out."
+  Twist: 2 damage to the target and its neighbours.
+  Push:  Perfect.
+
+Lance Of Longinus (spell)
+  Aim:   Relics.
+  Hooks: The Spear of Destiny legends; Neon Genesis Evangelion.
+  Twist: 3 damage.
+  Push:  The legend says whoever holds the spear rules the world. A museum label under it, "Previous owner: an
+         Austrian painter", would be the controversial version.
+
+Necronomicon (spell)
+  Aim:   Black magic.
+  Hooks: Lovecraft; The Evil Dead and Army of Darkness ("Klaatu barada nikto").
+  Twist: Sacrifice 1, destroy an enemy.
+  Push:  Bound in human skin, "the reviews are mixed": a star rating stuck to the cover.
+
+The Wicker Man (spell) [px]
+  Aim:   Pagan sacrifice.
+  Hooks: The Wicker Man (1973); Nicolas Cage's remake (2006) and its bees.
+  Twist: Sacrifice 1, every enemy takes 2.
+  Push:  A few bees would point at the remake.
+
+Thoughts and Prayers (spell)
+  Aim:   Politicians' response to shootings.
+  Hooks: America's "thoughts and prayers".
+  Twist: Blessed on everyone: changes nothing except the next status.
+  Push:  Rules and joke match. A fat envelope from a gun lobby sticking out of his jacket pocket.
+
+Religious Instrumentalization (spell)
+  Aim:   Politicians using religion.
+  Hooks: Trump's bible photo-op outside St. John's Church (2020); the Trump-branded bible sold for $59.99 (2024).
+  Twist: Conversion: takes control of a weak enemy creature.
+  Push:  The $59.99 price tag on the bible would make the Trump thread obvious.
+
+Deus Vult (spell)
+  Aim:   The crusader meme.
+  Hooks: "Deus vult" memes.
+  Twist: +2 Attack for everyone this Day.
+  Push:  The meme caption bar in the pixel font, or the crusader holding a selfie stick.
+
+Curse Of Hubris (spell)
+  Aim:   Pride before the fall.
+  Hooks: Icarus; Tesla's Cybertruck window smashing during its unveiling (2019).
+  Twist: -3 Attack on the strongest.
+  Push:  The gods filming him on their phones is the joke.
+
+Genesis (spell)
+  Aim:   Creation.
+  Hooks: Michelangelo's Creation of Adam.
+  Twist: Summon 2 creatures.
+  Push:  God's finger pressing a light switch labelled SUN.
+
+The Lost Ark (spell)
+  Aim:   Raiders of the Lost Ark.
+  Hooks: The face-melting scene (1981).
+  Twist: Every enemy takes 3; yours close their eyes (Exhausted).
+  Push:  Rules and film match.
+
+Templar Knight (creature) [px]
+  Aim:   The Church's bankers.
+  Hooks: The Templars as early bankers; Philip IV, deep in debt to them, arresting them on Friday 13 October 1307.
+  Twist: "Took a vow of poverty. Owns half of Europe."
+  Push:  A "Friday the 13th" calendar on the bank counter.
+
+Zealot (creature) [px]
+  Aim:   Fanatics.
+  Hooks: The street preacher with a REPENT sign.
+  Twist: Doomed 3 on itself: it dies for the cause.
+  Push:  A QR code on the REPENT sign.
+
+Living Dead (creature)
+  Aim:   Zombie workers.
+  Hooks: "Died on Friday. Back on Monday."
+  Twist: Revive.
+  Push:  An out-of-office auto-reply glowing on the zombie's phone, after the flavor.
+
+The Chosen One (creature) [px]
+  Aim:   Christianity and gun culture.
+  Hooks: The Pennsylvania church that held a ceremony blessing AR-15 rifles (2018).
+  Twist: Jesus with two submachine guns. Spray and Pray hits three slots.
+  Push:  The ability's name is the joke. The AR-15 blessing ties it to Thoughts and Prayers: the same church,
+         both cards.
+
+Killer Rabbit of Caerbannog (creature) [px]
+  Aim:   Monty Python.
+  Hooks: The Holy Grail; Jimmy Carter's "killer rabbit" that swam at his boat (1979).
+  Twist: A 3/2 bunny with Speed 3: it strikes first and hard.
+  Push:  Perfect.
+
+Black Knight (creature) [px]
+  Aim:   Monty Python.
+  Hooks: The Holy Grail ("'Tis but a scratch"); politicians who never concede.
+  Twist: Unbothered: nothing lowers its stats.
+  Push:  Perfect.
+
+Buddy Christ (creature)
+  Aim:   Rebranding religion.
+  Hooks: Dogma (1999).
+  Twist: Heals every friendly creature each Dawn.
+  Push:  Dogma's church was relaunching its image: a marketing team with a flip chart behind the statue.
+
+Pope (creature) [px]
+  Aim:   The papacy.
+  Hooks: The popemobile; the AI image of the Pope in a white puffer jacket (2023).
+  Twist: Blessed on your strongest each Dawn.
+  Push:  The puffer jacket.
+
+The Lobster Professor (creature)
+  Aim:   Jordan Peterson.
+  Hooks: "Clean your room, bucko"; the lobster hierarchy argument.
+  Twist: Your strongest creature grows each Dawn: the hierarchy, as preached.
+  Push:  Rules and joke match.
+
+Horsemen Of Apocalypse (creature)
+  Aim:   The Apocalypse.
+  Hooks: The Book of Revelation.
+  Twist: "Four riders. One group chat."
+  Push:  A group-chat notification over their heads.
+
+God's Grace (spell)
+  Aim:   Divine rescue.
+  Hooks: Video game health bars.
+  Twist: You can't lose until the next Dusk.
+  Push:  An arcade CONTINUE? 9... 8... 7... countdown over the knight's head.
+
+Phoenix Feather (spell) [px]
+  Aim:   Resurrection.
+  Hooks: "Three days, as the scripture says."
+  Twist: Sacrifice, then return after three Days.
+  Push:  A burning receipt for "ash disposal" in the corner, after the flavor.
+
+The Omen (creature)
+  Aim:   The Antichrist as a kid.
+  Hooks: The Omen (1976).
+  Twist: Doomed 2 on the strongest enemy.
+  Push:  A 666 licence plate on the tricycle.
+UTOPIA (32)
+
+Research Lab (spell)
+  Aim:   Academia's grant chase.
+  Hooks: "Publish or perish"; grants that last two years for five-year results.
+  Twist: Fetches a spell from the deck: research produces results, eventually.
+  Push:  The grant deadline clock is the joke. A whiteboard with "RESULTS: TBD" would add to it.
+
+Clone (creature) [px]
+  Aim:   Cloning.
+  Hooks: Dolly the sheep (1996).
+  Twist: Summons another creature when it enters: twice the sheep.
+  Push:  One sheep in the row slightly wrong (two heads, or a different colour): cloning isn't perfect.
+
+Hypermetamorphosis (creature)
+  Aim:   Growing up into a corporate drone.
+  Hooks: Kafka's The Metamorphosis, the other way round.
+  Twist: +1/+1 for good each Dawn: it evolves into a middle manager.
+  Push:  "Nature is healing" is a meme. The butterfly-winged office worker with a lanyard says it all.
+
+Extremophile (creature)
+  Aim:   The toughest creature on Earth.
+  Hooks: The tardigrades spilled on the Moon when the Beresheet lander crashed (2019).
+  Twist: Unbothered, and it heals each Dusk.
+  Push:  The Moon crash is real and funny: the tardigrade in sunglasses lounging on the Moon next to a crashed lander.
+
+Philosophy PhD (creature)
+  Aim:   Overqualified, underemployed graduates.
+  Hooks: Student debt; "would you like fries with that?"
+  Twist: A draw each Dawn; the student debt costs it Health each Dusk.
+  Push:  Rules and joke match. Kant's portrait on the menu board instead of a burger would finish it.
+
+Mathematician (creature)
+  Aim:   Mathematicians nobody understands.
+  Hooks: The "confused math lady" meme (the Brazilian actress Renata Sorrah).
+  Twist: Shrinks a random enemy's Attack each Dawn.
+  Push:  The meme's floating equations could include one that's wrong, circled in red by someone else.
+
+Quantum Physicist (creature)
+  Aim:   Quantum physics.
+  Hooks: Superposition; the observer effect.
+  Twist: Swap, and whoever hits it is Exhausted: observing it collapses them.
+  Push:  Rules and physics match perfectly.
+
+Perpetual Motion Machine (creature) [px]
+  Aim:   Impossible inventions.
+  Hooks: Perpetual-motion patents; the patent office's refusal to look at them.
+  Twist: A hamster powering the fan that blows on the hamster.
+  Push:  A tiny patent rejection letter pinned on the wall.
+
+Particle Accelerator (creature) [px]
+  Aim:   Big science.
+  Hooks: CERN's Large Hadron Collider; the 2008 fears it would make a black hole; the Higgs boson ("God particle", 2012).
+  Twist: Each Dawn it hits a random creature: side effects.
+  Push:  A tiny black hole floating near the person under the pipe, unnoticed.
+
+Genetically Modified Organism (creature)
+  Aim:   GMO panic.
+  Hooks: "Organic, gluten-free" labels.
+  Twist: +2/+2, then side effects each Dusk.
+  Push:  Rules and joke match. The NON-GMO sticker peeling off is the joke.
+
+Surveillance Giraffe (creature) [px]
+  Aim:   Seeing over the fog.
+  Hooks: Google Street View cameras, mounted high enough to see over fences.
+  Twist: It reveals an enemy slot when it enters: it looks over everyone's head.
+  Push:  The weakest link to its faction. Science or surveillance needs a cue: a Street View-style camera rig on its head
+         would give it a reason to be here (the user removed a camera from its head before; maybe as a badge on its neck
+         instead).
+
+Pioneer (creature)
+  Aim:   Colonising Mars.
+  Hooks: Musk's Mars plans; "First human on Mars. First eviction on Mars."
+  Twist: Leapfrog: it jumps ahead.
+  Push:  The FOR RENT $9999 sign is the joke. A SpaceX-like logo on the flag would point at Musk.
+
+Placebo (spell) [px]
+  Aim:   Placebos and alternative medicine.
+  Hooks: Homeopathy; "a spoonful of sugar".
+  Twist: +3 Health for good, from sugar.
+  Push:  A tiny homeopathy bottle ("30C: contains no medicine") next to the spoon.
+
+Vaccine (spell) [px]
+  Aim:   Anti-vax conspiracies.
+  Hooks: The 5G and microchip theories about Bill Gates.
+  Twist: A syringe with Wi-Fi bars. Cleanses statuses, with a sore arm.
+  Push:  Perfect.
+
+Climate Change (spell)
+  Aim:   Climate change.
+  Hooks: Don't Look Up (2021); the polar bear on its ice floe.
+  Twist: Every creature Burned and marked.
+  Push:  Pairs with This Is Fine. A "DON'T LOOK UP" sign on the polar bear's ice cube.
+
+Overpopulation (spell)
+  Aim:   Overpopulation.
+  Hooks: Thanos; "Eight billion people and nobody to cover my shift."
+  Twist: Summon 2 random creatures.
+  Push:  The man balancing on top could be holding a sign: "COVER MY SHIFT?"
+
+Black Hole (spell) [px]
+  Aim:   Black holes.
+  Hooks: "Like your tax refund."
+  Twist: 4 damage to the target and its neighbours; 2 to you.
+  Push:  A tax form in the black hole is good. The 2019 first photo of a black hole (the orange ring) is the
+         image people know, and the art already looks like it.
+
+Stasis Field (spell)
+  Aim:   Salaries frozen.
+  Hooks: "Frozen in time. Like your salary."
+  Twist: A Temporal Shield on a slot.
+  Push:  A payslip frozen into the jelly with him.
+
+Absolute Zero (spell)
+  Aim:   Office air-conditioning wars.
+  Hooks: Gary and the thermostat.
+  Twist: Every creature Exhausted.
+  Push:  Gary appears in Legacy Code too: the same Gary on both cards would be a running gag.
+
+Splitting The Atom (spell)
+  Aim:   The atomic bomb.
+  Hooks: Oppenheimer (2023): "Now I am become Death".
+  Twist: 6 damage to a random enemy, 2 to you.
+  Push:  A lumberjack with an axe is a good pun. A sign on the stump: "Now I am become Death, destroyer of
+         logs."
+
+Gene Editing (spell)
+  Aim:   CRISPR.
+  Hooks: He Jiankui, the scientist jailed for editing babies' genes (2018).
+  Twist: +2/+2, but Burned.
+  Push:  A prison-cell window behind the lab bench, after He Jiankui's sentence.
+
+Cold Fusion (creature)
+  Aim:   Too-good-to-be-true energy.
+  Hooks: Fleischmann and Pons (1989); LK-99, the room-temperature superconductor that wasn't (2023).
+  Twist: On the Brink: it hits double near death; it hurts itself every Dusk.
+  Push:  The engineers in sunglasses giving a thumbs-up are the joke. A LK-99 label on the jar.
+
+Antimatter (creature)
+  Aim:   Antimatter.
+  Hooks: Angels & Demons; "one gram costs 62 trillion dollars".
+  Twist: It starts near death to hit double.
+  Push:  The flavor's price tag (62 trillion dollars) on a tiny jar on the bench.
+
+Biohacking (spell)
+  Aim:   Tech-bro biohacking.
+  Hooks: Bryan Johnson's anti-ageing regime; Neuralink.
+  Twist: 3 damage, then +4 Attack for good: what doesn't kill you.
+  Push:  Bryan Johnson's night-time erection tracker is the most famous detail of his regime; a gadget
+         blinking on the tech bro would be the controversial version.
+
+Blood Transfusion (spell)
+  Aim:   Billionaires who want young blood.
+  Hooks: Bryan Johnson taking plasma from his son (2023); Ambrosia, the startup selling young plasma, warned by the US FDA
+         (2019).
+  Twist: Heals 6.
+  Push:  Rules and joke match. The TEEN label on the IV bag is the joke.
+
+Evolution Theory (spell)
+  Aim:   Social Darwinism.
+  Hooks: The Darwin Awards; the "march of progress" drawing.
+  Twist: The weakest takes damage each Dusk.
+  Push:  Pairs with YOLO (the Darwin Awards).
+
+Mutation (spell)
+  Aim:   Mutation.
+  Hooks: X-Men; lab rats.
+  Twist: +3 Attack, -1 Health.
+  Push:  A NOBEL PRIZE application on the scientist's clipboard.
+
+Exponential Growth (spell)
+  Aim:   Growth that gets out of hand.
+  Hooks: COVID's exponential curves; "it doubles every day".
+  Twist: +1/+1 for everyone, but Burned.
+  Push:  A COVID-style chart on the wall going straight up, with a scientist's "oops".
+
+Scientific Method (creature)
+  Aim:   Science as a grant machine.
+  Hooks: The replication crisis.
+  Twist: "Hypothesis, experiment, grant renewal."
+  Push:  The whiteboard's "HYPOTHESIS -> EXPERIMENT -> GRANT" is the joke. A "REPLICATION: FAILED" stamp on a
+         paper in the bin.
+
+Frankenstein (creature) [px]
+  Aim:   Playing God.
+  Hooks: Mary Shelley; "It's alive! It's suing."
+  Twist: It grows each Dawn, and arrives Burned (the lightning).
+  Push:  A lawyer's business card in the monster's hand.
+
+Chimera (creature)
+  Aim:   Ethics committees on holiday.
+  Hooks: Gremlins ("do not feed after midnight").
+  Twist: Buffs a random friendly creature, at its own cost.
+  Push:  All three heads wearing hospital wristbands is good. A sign on the enclosure: "ETHICS COMMITTEE:
+         OUT OF OFFICE".
+
+Resurrected T-Rex (creature) [px]
+  Aim:   De-extinction.
+  Hooks: Jurassic Park; Colossal Biosciences' "dire wolves" (2025).
+  Twist: On the Brink: the unstable DNA keeps hurting it until it hits double.
+  Push:  A Colossal-style "DE-EXTINCTION: NOW IN BETA" banner in the museum.
+
+
+4. THREADS ACROSS THE FACTIONS
+
+Running jokes that already cross several cards. Drawing them consistently (the same face, the same object) turns
+separate cards into a story a player discovers.
+
+  Trump           Casino, Spite-Elected President, Reality TV Star, Golden Dome (missile defence), Religious
+                  Instrumentalization (the $59.99 bible), NDA (Stormy Daniels), Inheritance ("a small loan of a million
+                  dollars"). One caricature drawn the same way everywhere.
+  Epstein         Perfectly Timed Camera Malfunction, He Didn't Kill Himself, Control Room (the guards asleep). Three cards,
+                  one cover-up, with a combo that tells it.
+  Russia          Fell Out of a Window, Involuntary Free Polonium Giveaway, Russian Roulette, Mercenaries (Prigozhin).
+  Saddam          Political Decoy (the doubles, and the hole), Weapons of Mass Distraction (WMD), Preemptive Strike
+                  (Curveball, Mission Accomplished). The user welcomed Saddam jokes: these three are where they fit.
+  Orwell          Ministry for Equality (Ministry of Love, Animal Farm), Social Panopticon, Martial Law, Tapped
+                  Communications, Control Room.
+  Snowden and     Whistleblower, Tapped Communications (PRISM), Dead Man's Switch (the insurance file), End-to-End
+  WikiLeaks       Encryption.
+  Bond            The Golden Gun, Die Another Day, Licence to Kill, Shaken Not Stirred, GoldenEye, Hollowed-Out Volcano
+                  Lair, Femme Fatale (Xenia Onatopp). The Shadow Ops. backbone.
+  Monty Python    The Holy Grail, Holy Hand Grenade of Antioch, Killer Rabbit of Caerbannog, Black Knight. Nobody
+                  expects the Spanish Inquisition: the obvious one missing, if a fitting name is in the backlog.
+  The worker      Unpaid Intern, Work Shift Rotation, Mass Layoffs, Inhuman Resources, Team Building Exercise,
+                  Pluriemployed Hustler, Delivery Cyclist, Sacrificial Ritual ("Ideally the intern"). The intern as the
+                  first to be sacrificed, across factions, is the game's best running gag.
+  Gary            Legacy Code ("Gary, retired 1999") and Absolute Zero ("the office AC, as set by Gary"). Keep him: a
+                  recurring office villain.
+  Cheating death  Plot Armor (fiction), Die Another Day (Bond), God's Grace (God), Schrodinger's Cat (physics), Phoenix
+                  and Living Dead (Revive). Each in its own voice.
+  Darwin Awards   YOLO and Evolution Theory.
+  The fire        This Is Fine, Climate Change, The Great Flood: the end of the world, three ways.
+  Gun culture     The Chosen One (the AR-15 blessing) and Thoughts and Prayers.
+  Tech support    SysAdmin, Legacy Code, Antivirus, Meatproxy As A Service. The user named technical support as a theme;
+                  a scam-call card ("Hello, this is Microsoft, your computer has a virus") would complete it, if one is
+                  in the backlog.
+
+
+5. FIXES AND GAPS FOUND ALONG THE WAY
+
+  - Crypto "Entrepreneur" and Multilevel Marketing Seller share the same flavor ("It's not a pyramid. It's a triangle of
+    opportunity"). Keep it on the MLM Seller; give the crypto bro "Funds are safu." or "Few understand."
+  - Strike: its drawing is a fur hat, which has nothing to do with a strike. Proposal: a picket line at a factory gate,
+    with the CEO peering out from a window above.
+  - Mental Health Day: no art brief at all. Proposal: a worker under a duvet, only their eyes showing, a laptop glowing
+    beside them with 47 unread messages.
+  - Scope Creep: the art is a pun (a creep with a spyglass) that hides the project joke. A Gantt chart or a sack of new
+    tickets would bring it back.
+  - Surveillance Giraffe: the weakest link to its faction (Utopia). A Street View-style camera rig would give it a reason.
+  - Sex Clanker: its picture is the old No Glove, No Love art. It deserves its own.
+  - Cleaning Robot: the current art (the Love, Death & Robots pool robot) lost the subscription joke from the flavor.
+  - Taxpayer Funds Venture Capital Profits: the rules are a placeholder that doesn't tell its joke.
+  - Its A Trap: the name is Star Wars and the art is The Simpsons. Fine as a double reference, but worth knowing.
+  - Mox Nox: the only card in Myth without a joke. Fine if that's deliberate (a serious card in a silly faction).
+
+Nothing in this document has been changed in the cards: every Push is a suggestion for the user to pick from.

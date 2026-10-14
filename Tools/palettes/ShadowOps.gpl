@@ -1,0 +1,20 @@
+GIMP Palette
+Name: ShadowOps
+Columns: 8
+#
+  6  11  41	Night
+ 26  31  68	Deep Navy
+ 40  53  94	Slate
+ 84  64  91	Dusk Mauve
+130  81  88	Skin Shadow
+201 138 107	Skin
+240 199 160	Skin Light
+243 233 210	Parchment
+ 43  52  64	Light Deep
+ 79  92 107	Light Dark
+124 138 153	Light
+180 194 207	Light Bright
+230 238 245	Light Hot
+110  20  24	Accent Dark
+192  38  43	Accent
+255  90  74	Accent Bright
