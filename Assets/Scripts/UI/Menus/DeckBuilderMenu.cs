@@ -56,7 +56,7 @@ namespace SlayTheClone {
         /// <summary>The cards offered, in order.</summary>
         public List<CardController> ShownCards => cards?.Cards ?? new List<CardController>();
         /// <summary>Your decks, as listed.</summary>
-        public IReadOnlyList<DeckScriptableObject> Decks => DeckScriptableObject.NewestFirst(PlayerDecks.All(Catalog)); // The most recently updated first
+        public IReadOnlyList<DeckScriptableObject> Decks => DeckScriptableObject.InMenuOrder(PlayerDecks.All(Catalog)); // The most recently updated first
         public TMP_InputField NameField => nameField;
 
         #region Building decks
@@ -161,7 +161,7 @@ namespace SlayTheClone {
             var heading = AddText(deckListContent, "Starter decks", 24, AccentColor, FontStyles.Bold | FontStyles.SmallCaps, height: 40);
             heading.alignment = TextAlignmentOptions.BottomLeft;
             starterHeading = heading.gameObject;
-            foreach (var deck in DeckScriptableObject.NewestFirst(Catalog.Decks)) {
+            foreach (var deck in DeckScriptableObject.InMenuOrder(Catalog.Decks)) {
                 var button = AddChoice(deckListContent, StarterDeckButton + deck.GetDeckName(), deck.GetDeckName(), $"{deck.Cards.Count} cards · copy it to make it yours",
                     () => Open(deck), DeckCatalog.CoinsFor(deck));
                 ShowChosen(button, deck == OpenDeck);

@@ -51,5 +51,6 @@ MonoBehaviour:
     tagline: Knows exactly what to say. Always the worst thing.
     deck: {fileID: 11400000, guid: 69b2a19a2eedb3446bd97bd846561b82, type: 2}
   testDecks:
+  - {fileID: 11400000, guid: 3931d1131be0875488599d827939fc73, type: 2}
   - {fileID: 11400000, guid: 0f3ad3b977f753c4aa89694960c6b51b, type: 2}
   cardPrefab: {fileID: 4247672974874967921, guid: 9164b01cda78bc545b913d180247e537, type: 3}

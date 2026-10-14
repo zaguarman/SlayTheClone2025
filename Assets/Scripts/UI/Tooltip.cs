@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -119,6 +120,13 @@ namespace SlayTheClone {
 
         /// <summary>Which card of the hovered creature's stack the preview shows: 0 the creature itself, i its i-th tucked card.</summary>
         public int Browsed => browsed;
+
+        // Browsing the stack turns a wheel of cards: the shown one swings away along an arc around a point below it while
+        // the next swings in from the other side
+        private const float RouletteSeconds = 0.28f;
+        private const float RouletteAngle = 32f;  // Degrees between two cards on the wheel
+        private const float RouletteRadius = 1.6f; // The wheel's radius, in preview heights
+        private readonly List<CardController> leaving = new List<CardController>();
 
         private void Awake() {
             // Try to get references if not already assigned
@@ -302,6 +310,7 @@ namespace SlayTheClone {
             if (preview != null && !previewIsCard) Destroy(preview.gameObject);
             preview = null;
             previewIsCard = false;
+            ClearLeaving();
             canvasGroup.alpha = 0;
             gameObject.SetActive(false);
         }
@@ -446,14 +455,55 @@ namespace SlayTheClone {
             int count = stack.Count + 1;
             browsed = ((browsed + step) % count + count) % count;
             CloseKeywordsFrom(0);
-            Destroy(preview.gameObject);
+            var old = preview;
             preview = browsed == 0
                 ? activeCard.CreatePreview(transform)
                 : activeCard.CreatePreviewOf(stack[browsed - 1], browsed - 1 < activeCard.AttachedOwners.Count ? activeCard.AttachedOwners[browsed - 1] : null, transform);
-            if (preview == null) return;
+            if (preview == null) {
+                Destroy(old.gameObject);
+                return;
+            }
             preview.transform.localScale = Vector3.one * PreviewScale;
             PlacePreview(activeCard, (RectTransform)preview.transform);
             UpdateTooltipContent(activeCard);
+            Spin(old, preview, step < 0 ? -1 : 1);
+        }
+
+        // The roulette: both cards turn together around the wheel's center, the old one out, the new one in, settling where
+        // the new one belongs. A card still leaving from the last turn goes at once
+        private void Spin(CardController old, CardController next, int direction) {
+            ClearLeaving();
+            var nextRect = (RectTransform)next.transform;
+            Vector3 home = nextRect.position;
+            float radius = nextRect.rect.height * nextRect.lossyScale.y * RouletteRadius;
+            Vector3 center = home - nextRect.up * radius;
+            var oldRect = (RectTransform)old.transform;
+            Vector3 oldHome = oldRect.position;
+            if (old.TryGetComponent(out CanvasGroup oldGroup)) oldGroup.blocksRaycasts = false;
+            leaving.Add(old);
+
+            void Place(RectTransform rect, Vector3 from, float angle) {
+                var turn = Quaternion.Euler(0f, 0f, angle);
+                rect.position = center + turn * (from - center);
+                rect.localRotation = turn;
+            }
+            float tilt = -direction * RouletteAngle; // Scrolling on turns the wheel clockwise: the next card comes from the left
+            Place(nextRect, home, -tilt);
+            DOTween.To(() => 0f, t => {
+                if (nextRect != null) Place(nextRect, home, -tilt * (1f - t));
+                if (oldRect != null) Place(oldRect, oldHome, tilt * t);
+                if (oldGroup != null) oldGroup.alpha = 1f - t;
+            }, 1f, RouletteSeconds).SetEase(Ease.OutCubic).SetUpdate(true).SetTarget(this).OnComplete(ClearLeaving); // Real time: also while paused
+        }
+
+        private void ClearLeaving() {
+            DOTween.Kill(this, complete: false);
+            foreach (var card in leaving) if (card != null) Destroy(card.gameObject);
+            leaving.Clear();
+            if (preview != null && !previewIsCard && preview.transform.localRotation != Quaternion.identity) {
+                preview.transform.localRotation = Quaternion.identity;
+                PlacePreview(activeCard, (RectTransform)preview.transform);
+            }
         }
 
         /// <summary>A click away from the card, its preview and the explanations closes them all. Returns whether it did.</summary>

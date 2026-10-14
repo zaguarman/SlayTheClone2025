@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: WorkbenchDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Workbench - God's Grace, Phoenix Feather
+  cards:
+  - {fileID: 11400000, guid: 420ef2f61ea3a104fac581ccf1446cd3, type: 2}
+  - {fileID: 11400000, guid: 420ef2f61ea3a104fac581ccf1446cd3, type: 2}
+  - {fileID: 11400000, guid: 4068c3ec3d4399b449ee806537671ec2, type: 2}
+  - {fileID: 11400000, guid: 4068c3ec3d4399b449ee806537671ec2, type: 2}
+  - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
+  - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
+  - {fileID: 11400000, guid: c2796d4d56336e74aaa133dfe1f96cc1, type: 2}
+  - {fileID: 11400000, guid: c2796d4d56336e74aaa133dfe1f96cc1, type: 2}
+  - {fileID: 11400000, guid: 4a189475bff55954db7d7c9dd6ba6479, type: 2}
+  - {fileID: 11400000, guid: 4a189475bff55954db7d7c9dd6ba6479, type: 2}
+  - {fileID: 11400000, guid: da99501379be9924094b1266d4b3a88f, type: 2}
+  - {fileID: 11400000, guid: da99501379be9924094b1266d4b3a88f, type: 2}
+  - {fileID: 11400000, guid: 69d704671f0547340b15e4219f15b29c, type: 2}
+  - {fileID: 11400000, guid: 69d704671f0547340b15e4219f15b29c, type: 2}
+  - {fileID: 11400000, guid: 98025cafa44666644ac23f4693fbdc90, type: 2}
+  - {fileID: 11400000, guid: 18cc60c8301c8e348afd1ec6332a61a2, type: 2}
+  - {fileID: 11400000, guid: 3e85e758bdd60c7469348f2dbe0db0da, type: 2}
+  - {fileID: 11400000, guid: 1215031c18e9eb741a8633014341c44f, type: 2}
+  - {fileID: 11400000, guid: 08561350625093a4a87f3a0dac9acca3, type: 2}
+  - {fileID: 11400000, guid: 8590baeb53c9e8645bf452835140d3e3, type: 2}
+  lastUpdated: 2026-10-14T13:00:40.8767988Z
+  focus: 1

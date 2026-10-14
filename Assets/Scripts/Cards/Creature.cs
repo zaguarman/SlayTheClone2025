@@ -145,7 +145,16 @@ namespace SlayTheClone {
         public MovementKeyword Movement { get; internal set; }
         public bool IsGift { get; internal set; }
         public IPlayer DeckOwner { get; set; }
-        public CreatureAbility Ability { get; set; }
+        // Gained or lost in play (Grant Ability, Hive Mind): its card redraws, the ability written in its text
+        public CreatureAbility Ability {
+            get => ability;
+            set {
+                if (ability == value) return;
+                ability = value;
+                NotifyChanged();
+            }
+        }
+        private CreatureAbility ability;
         public int Heat { get; set; }
         public ISet<IPlayer> KnownTo { get; } = new HashSet<IPlayer>();
         public int TimesEnteredPlay { get; private set; }

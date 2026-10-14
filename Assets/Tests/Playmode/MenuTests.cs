@@ -245,7 +245,8 @@ namespace SlayTheClone.Tests {
             Click(GalleryButton(builder, DeckBuilderMenu.BackButtonName));
 
             yield return OpenSetup();
-            Assert.AreSame(yourDeck, setup.Decks[0], "Decks are listed newest first: yours, just finished, leads");
+            Assert.AreEqual(1, setup.Decks[0].Focus, "The decks being worked on lead, the Workbench first...");
+            Assert.AreSame(yourDeck, setup.Decks.First(d => d.Focus == 0), "...then the newest: yours, just finished");
             var opponent = catalog.Opponents.Last();
             var theirDeck = catalog.Decks.First(d => d != opponent.deck && d != yourDeck);
             Click(SetupButton(MatchSetupMenu.PlayerDeckButton + yourDeck.GetDeckName()));

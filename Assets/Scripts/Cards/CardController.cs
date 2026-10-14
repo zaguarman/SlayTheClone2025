@@ -177,7 +177,11 @@ namespace SlayTheClone {
         private void UpdateCardText() {
             nameText.text = baseCardData.cardName;
             typeText.text = CardTextFormatter.GetTypeLine(baseCardData);
-            rulesText.text = ComposeTextBox(CardTextFormatter.GetRulesText(baseCardData), baseCardData.description);
+            // In play, a creature's ability as it is now: one gained from a spell or another creature is written in, the printed
+            // one struck through (and one switched off, struck through)
+            var ability = linkedCreature?.Ability;
+            bool abilityOff = linkedCreature != null && linkedCreature.Ability != Enums.CreatureAbility.None && !Abilities.IsActive(linkedCreature);
+            rulesText.text = ComposeTextBox(CardTextFormatter.GetRulesText(baseCardData, ability, abilityOff), baseCardData.description);
 
             bool isCreature = baseCardData is CreatureData;
             statsBox.SetActive(isCreature);
@@ -762,19 +766,7 @@ namespace SlayTheClone {
             var lines = modifiers.Select(m => {
                 string icon = m is StatusEffectModifier status ? EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType)) : "";
                 return $"{icon}{m.Description}";
-            }).ToList();
-
-            // What the card face can't show about its ability: one it gained or lost, or that it's switched off
-            var printed = (linkedCreature.SourceData as CreatureData)?.ability ?? Enums.CreatureAbility.None;
-            var ability = linkedCreature.Ability;
-            if (ability != printed) {
-                lines.Insert(0, ability == Enums.CreatureAbility.None
-                    ? $"Lost its ability ({Abilities.NameOf(printed)})"
-                    : $"Now has {CardTextFormatter.AbilityLine(ability)}");
-            }
-            if (ability != Enums.CreatureAbility.None && !Abilities.IsActive(linkedCreature)) {
-                lines.Insert(0, $"{Abilities.NameOf(ability)} is switched off");
-            }
+            }).ToList(); // Its ability as it is now (gained, lost, switched off) is written in its text (UpdateCardText)
 
             if (lines.Count == 0) return "";
             return "<b>Active effects</b>\n" + string.Join("\n", lines);

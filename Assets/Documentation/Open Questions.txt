@@ -5,6 +5,15 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+41. Testing what we work on, the stack's wheel, gained abilities (2026-10-14)
+    • Built as asked: a Workbench deck holds the cards being worked on now (God's Grace and Phoenix Feather, two of each,
+      filled up to 20 with Myth's deck): the menus list it first, then the decks in focus (Myth now), then the rest by
+      when they last changed. God's Grace was in no deck before (the best-cards decks left it out), so it couldn't be tried.
+    • Browsing the cards on a creature (hover + scroll) turns a roulette: the enlarged card swings away along an arc and
+      the next swings in from the other side.
+    • An ability a creature gains in play (from a spell, or another creature's ability) is written in its card's text,
+      "(gained)", the printed one struck through; one switched off is struck through too. The side box no longer repeats it.
+
 40. The balance reports' credit, and Discard (2026-10-14)
     • Built as asked: the AI games now credit the cards that set things up, not only the ones that dealt the blow. Assists:
       damage and kills by a creature carrying another card's effect (a Licence to Kill, a power-up, Die Another Day), or on a

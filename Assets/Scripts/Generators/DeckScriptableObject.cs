@@ -8,6 +8,10 @@ namespace SlayTheClone {
         [SerializeField] private string deckName = "New Deck";
         [SerializeField] private List<CardDataScriptableObject> cards = new List<CardDataScriptableObject>();
         [SerializeField] private string lastUpdated = ""; // When its cards last changed (UTC, round-trip format): menus list the newest first
+        [SerializeField] private int focus; // Being worked on now: 1 the most important, then 2...; 0 not (Cards > Generate Faction Decks sets it)
+
+        /// <summary>Its place among the decks being worked on now (1 first), 0 if it isn't one: the menus list those first.</summary>
+        public int Focus => focus;
 
         /// <summary>When its cards last changed; the oldest possible date if it was never recorded.</summary>
         public System.DateTime LastUpdated =>
@@ -16,9 +20,12 @@ namespace SlayTheClone {
         /// <summary>Its cards changed now (or at this moment, read back from a save).</summary>
         internal void Touch(System.DateTime? when = null) => lastUpdated = (when ?? System.DateTime.UtcNow).ToUniversalTime().ToString("o");
 
-        /// <summary>Decks the most recently updated first; equally recent ones keep their order.</summary>
-        public static List<DeckScriptableObject> NewestFirst(IEnumerable<DeckScriptableObject> decks) =>
-            decks.Where(d => d != null).OrderByDescending(d => d.LastUpdated).ToList();
+        /// <summary>
+        /// Decks as the menus list them: the ones being worked on now first, the most important first (see <see cref="Focus"/>),
+        /// then the most recently updated; equally placed ones keep their order.
+        /// </summary>
+        public static List<DeckScriptableObject> InMenuOrder(IEnumerable<DeckScriptableObject> decks) =>
+            decks.Where(d => d != null).OrderBy(d => d.Focus > 0 ? d.Focus : int.MaxValue).ThenByDescending(d => d.LastUpdated).ToList();
 
         // Convert the scriptable object cards to runtime CardData objects
         public List<CardData> GetCardDataList() {

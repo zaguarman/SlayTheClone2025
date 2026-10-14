@@ -27,7 +27,10 @@ namespace SlayTheClone {
             }
         }
 
-        public static string GetRulesText(CardData data) {
+        /// <param name="ability">A creature's ability in play, when it differs from the printed one: written in the text, the
+        /// printed one struck through.</param>
+        /// <param name="abilityOff">Its ability is switched off for now: struck through too.</param>
+        public static string GetRulesText(CardData data, CreatureAbility? ability = null, bool abilityOff = false) {
             var creature = data as CreatureData;
             bool isSpell = data is SpellData;
             var keywords = new List<string>();
@@ -35,7 +38,13 @@ namespace SlayTheClone {
                 if (creature.movement.HasFlag(MovementKeyword.Leapfrog)) keywords.Add(Keywords.Link("Leapfrog"));
                 if (creature.movement.HasFlag(MovementKeyword.Swap)) keywords.Add(Keywords.Link("Swap"));
                 if (creature.gift) keywords.Add(Keywords.Link("Gift"));
-                if (creature.ability != CreatureAbility.None) keywords.Add(AbilityName(creature.ability));
+                var printed = creature.ability;
+                var now = ability ?? printed;
+                if (printed != CreatureAbility.None && now != printed) keywords.Add($"<s>{Abilities.NameOf(printed)}</s>"); // Replaced or lost
+                if (now != CreatureAbility.None) {
+                    string name = now != printed ? $"{AbilityName(now)} (gained)" : AbilityName(now);
+                    keywords.Add(abilityOff ? $"<s>{Abilities.NameOf(now)}</s> (switched off)" : name);
+                }
             }
             if (data.singleUse) keywords.Add(Keywords.Link("Single Use"));
             if (data.prophecy > 0) keywords.Add($"{Keywords.Link("Prophecy", $"Prophecy {data.prophecy}")} (comes true in {data.prophecy} Day{(data.prophecy == 1 ? "" : "s")})");

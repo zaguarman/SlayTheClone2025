@@ -125,6 +125,12 @@ namespace SlayTheClone.Tests {
             game.Queue.ResolveActions();
             yield return null;
 
+            // An ability gained from a spell is written in the creature's card
+            game.Queue.AddAction(new GrantAbilityAction(brute, CreatureAbility.Spite));
+            game.Queue.ResolveActions();
+            yield return null;
+            StringAssert.Contains($"{Abilities.NameOf(CreatureAbility.Spite)}</color></b></link> (gained)", game.CardIn(p1.Battlefield[0]).RulesText.text);
+
             // At 0 Health the combat is over: a screen says who won, and no more turns are played
             game.Queue.AddAction(new DamagePlayerAction(p2, p2.Health));
             game.Queue.ResolveActions();
@@ -500,6 +506,9 @@ namespace SlayTheClone.Tests {
             Tooltip.Existing.Browse(1);
             Tooltip.Existing.Browse(1);
             Assert.AreEqual(0, Tooltip.Existing.Browsed, "...round to the creature again");
+            yield return new WaitForSecondsRealtime(0.5f);
+            Assert.AreEqual(1, Tooltip.Existing.GetComponentsInChildren<CardController>().Length, "The wheel turns them in and out, then only the one shown is left...");
+            Assert.AreEqual(Quaternion.identity, SceneGame.HoverPreview().transform.localRotation, "...upright");
             Tooltip.Existing.HideTooltip();
             SceneGame.Click(zapGhost);
             yield return null;

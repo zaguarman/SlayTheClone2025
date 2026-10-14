@@ -46,9 +46,37 @@ namespace SlayTheClone {
             }
 
             var testDeck = WriteDeck("Mechanics Test", MechanicsTestCards.Select(name => written[name]).ToList(), $"{DecksFolder}/MechanicsTestDeck.asset");
-            FillCatalog(offered, testDeck);
+            var workbench = WriteDeck(WorkbenchName, WorkbenchCards().Select(name => written[name]).ToList(), $"{DecksFolder}/WorkbenchDeck.asset");
+            FillCatalog(offered, workbench, testDeck);
+            SetFocus(offered.Select(o => o.deck).Append(workbench).Append(testDeck));
             AssetDatabase.SaveAssets();
-            Debug.Log("Generated the faction decks, the two-faction decks and the Mechanics Test deck. Run Cards > Assign Card Art to link their art.");
+            Debug.Log("Generated the faction decks, the Workbench and the Mechanics Test deck. Run Cards > Assign Card Art to link their art.");
+        }
+
+        // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
+        // first in the menus. Change it with the work
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Myth, new[] { "God's Grace", "Phoenix Feather" });
+        private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
+
+        // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
+        // order, then the rest by when their cards last changed. Change it with the work
+        private static readonly string[] Focus = { "Myth - Old Gods, New Tricks" };
+
+        private static List<string> WorkbenchCards() {
+            var cards = Workbench.Cards.SelectMany(card => new[] { card, card }).ToList();
+            cards.AddRange(BestDecks[Workbench.Faction].Cards.Where(card => !Workbench.Cards.Contains(card)).Take(PlayerDecks.MinDeckSize - cards.Count));
+            return cards;
+        }
+
+        private static void SetFocus(IEnumerable<DeckScriptableObject> decks) {
+            foreach (var deck in decks) {
+                string deckName = deck.GetDeckName();
+                int rank = deckName == WorkbenchName ? 1 : System.Array.IndexOf(Focus, deckName) is int i && i >= 0 ? i + 2 : 0;
+                var serializedDeck = new SerializedObject(deck);
+                serializedDeck.FindProperty("focus").intValue = rank;
+                serializedDeck.ApplyModifiedPropertiesWithoutUndo();
+                EditorUtility.SetDirty(deck);
+            }
         }
 
         // Example two-faction decks (Faction Compendium 5, Example Two-Faction Decks): pairs that play well together, 20 cards each.
@@ -1793,8 +1821,8 @@ namespace SlayTheClone {
             return deckCards;
         }
 
-        // What the menu offers: each deck with the opponent who brings it, then the test deck (see DeckCatalog)
-        private static void FillCatalog(List<DeckCatalog.Opponent> offered, DeckScriptableObject testDeck) {
+        // What the menu offers: each deck with the opponent who brings it, then the test decks (see DeckCatalog)
+        private static void FillCatalog(List<DeckCatalog.Opponent> offered, params DeckScriptableObject[] testDeckList) {
             var guids = AssetDatabase.FindAssets("t:DeckCatalog");
             if (guids.Length != 1) {
                 Debug.LogError($"Expected one deck catalog, found {guids.Length}; the decks aren't offered in the menu.");
@@ -1814,8 +1842,8 @@ namespace SlayTheClone {
                 opponent.FindPropertyRelative("deck").objectReferenceValue = offered[i].deck;
             }
             var testDecks = serializedCatalog.FindProperty("testDecks");
-            testDecks.arraySize = 1;
-            testDecks.GetArrayElementAtIndex(0).objectReferenceValue = testDeck;
+            testDecks.arraySize = testDeckList.Length;
+            for (int i = 0; i < testDeckList.Length; i++) testDecks.GetArrayElementAtIndex(i).objectReferenceValue = testDeckList[i];
             serializedCatalog.FindProperty("cardPrefab").objectReferenceValue = AssetDatabase.LoadAssetAtPath<CardController>(CardPrefabPath);
             serializedCatalog.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(catalog);
