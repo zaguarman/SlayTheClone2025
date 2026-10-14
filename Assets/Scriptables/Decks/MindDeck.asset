@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Mind - All in Your Head
   cards:
+  - {fileID: 11400000, guid: 4fca9076e26cd6947a5eaabc5e3b7828, type: 2}
   - {fileID: 11400000, guid: 0410cdb664a5df94fa29c1f8271781a3, type: 2}
   - {fileID: 11400000, guid: 0410cdb664a5df94fa29c1f8271781a3, type: 2}
   - {fileID: 11400000, guid: 763d55a98242f6545a8f7f97c9ce93b8, type: 2}

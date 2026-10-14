@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Tech - Move Fast and Break Things
   cards:
+  - {fileID: 11400000, guid: 066b33f864b0b17418d76cebec8ef883, type: 2}
   - {fileID: 11400000, guid: e9521c4f57c50354c9326fd03f310258, type: 2}
   - {fileID: 11400000, guid: e9521c4f57c50354c9326fd03f310258, type: 2}
   - {fileID: 11400000, guid: 78d9222cb06de4149bbc255bc3cd051e, type: 2}

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Myth - Old Gods, New Tricks
   cards:
+  - {fileID: 11400000, guid: a6a4fb5192548394787288284a53ded3, type: 2}
   - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
   - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
   - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}

@@ -102,6 +102,9 @@ namespace SlayTheClone {
         // GrantAbility Specific: the ability the target gains, replacing its own until its card is reshuffled
         public CreatureAbility ability = CreatureAbility.None;
 
+        // SendFor Specific: the kind of card it fetches (value: only from the top this many cards of the deck, 0 = all of it)
+        public SendForFilter sendFor = SendForFilter.Any;
+
         // What the target must be for it to land (Destroy: "if it's Revealed")
         public TargetRequisite requires = TargetRequisite.None;
 

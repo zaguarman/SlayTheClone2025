@@ -51,6 +51,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 25
+      sendFor: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: an ability as a spell. Target creature gains Double

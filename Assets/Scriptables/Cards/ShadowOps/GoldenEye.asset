@@ -51,6 +51,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      sendFor: 0
       requires: 0
       decoy: {fileID: 0}
     - actionType: 29
@@ -77,6 +78,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      sendFor: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'An electromagnetic pulse on the enemy side: Blackout on every enemy

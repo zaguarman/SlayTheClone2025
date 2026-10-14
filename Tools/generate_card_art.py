@@ -4555,30 +4555,43 @@ def dead_drop():
     return svg(defs, body)
 
 
-def multi_passport():
-    # A man in a trench coat fanning out a dozen passports like a hand of cards, each photo the same face in a different
-    # disguise: moustache, glasses, wig, fake beard
-    defs = lin("bg", ["#3a4a5a", "#1a2028"])
+def multipass():
+    # A young woman with bright orange-red hair in a bob, in a white strappy bandage outfit with orange suspenders, holding up a
+    # shiny pink-and-gold Multipass card to a startled border guard, a fan of passports with the same face spilling from her
+    # other hand
+    defs = lin("bg", ["#5a3a7a", "#e07a4a"])
     body = rect(0, 0, W, H, "url(#bg)")
-    body += person(176, 200, 1.2, SKIN[0], "#a08a5a", face="smirk", hat="fedora")
-    body += path("M150 200 L176 150 L202 200 Z", "#7a6a42")
-    disguises = ["moustache", "glasses", "wig", "beard", "plain", "shades", "moustache"]
-    for i, d in enumerate(disguises):
-        a = -54 + i * 18
-        card = rect(-15, -60, 30, 42, ["#7a1a2a", "#1a3a6a", "#2a5a2a", "#5a2a6a"][i % 4], 'rx="3" stroke="#d4af37" stroke-width="1"')
-        card += rect(-10, -54, 20, 18, "#f4f4f4") + circle(0, -45, 6, SKIN[0])
-        if d == "moustache":
-            card += rect(-4, -42, 8, 2, "#3a2a1a")
-        elif d == "glasses":
-            card += circle(-3, -46, 2.5, "none", 'stroke="#222" stroke-width="1"') + circle(3, -46, 2.5, "none", 'stroke="#222" stroke-width="1"')
-        elif d == "wig":
-            card += path("M-7 -46 C -8 -56 8 -56 7 -46 L7 -38 L4 -46 L-4 -46 L-7 -38 Z", "#e8c86a")
-        elif d == "beard":
-            card += path("M-6 -45 C -6 -36 6 -36 6 -45 C 3 -42 -3 -42 -6 -45 Z", "#4a3a2a")
-        elif d == "shades":
-            card += rect(-6, -48, 12, 3, "#111")
-        body += group(card, f"translate(176 196) rotate({a})")
-    body += circle(162, 150, 7, SKIN[0]) + circle(190, 150, 7, SKIN[0])
+    # The city of the future behind the checkpoint: towers, and flying cabs in the traffic lanes
+    for x, h in [(10, 120), (52, 150), (96, 100), (300, 140), (330, 110)]:
+        body += rect(x, H - h, 34, h, "#2e2440", 'opacity="0.7"')
+    for x, y in [(70, 40), (150, 22), (240, 52), (320, 30)]:
+        body += ellipse(x, y, 16, 5, "#f2c14e") + ellipse(x, y - 4, 8, 4, "#9ad0ff")
+    body += rect(222, 120, 130, 80, "#3a3a4a") + rect(222, 116, 130, 6, "#c8c8d0")  # The checkpoint desk
+    # The guard behind the desk, mouth open
+    body += person(292, 150, 0.9, SKIN[1], "#2a3a5a", face="shout", hat="peaked", brows="angry")
+    # Her: the bob's back first, then her, then the fringe over her forehead
+    hx, hy, r = 128, 200 - 64 * 1.2, 20 * 1.2
+    hair = "#ff5a1f"
+    body += path(f"M{hx - r - 6:.1f} {hy + 16:.1f} C {hx - r - 8:.1f} {hy - r * 1.7:.1f} {hx + r + 8:.1f} {hy - r * 1.7:.1f} {hx + r + 6:.1f} {hy + 16:.1f} Z", hair)
+    body += person(hx, 200, 1.2, SKIN[0], "#f4f0e6", face="grin")
+    body += rect(hx - r, hy - r + 2, r * 2, 9, hair, 'rx="3"')
+    # The bandage straps across her and the orange suspenders over them
+    for y in (164, 174, 184, 194):
+        body += stroke(f"M{hx - 30} {y} L{hx + 30} {y - 3}", "#c8c0b0", 1.5)
+    body += stroke(f"M{hx - 14} 150 L{hx - 18} 200", "#ff8a1a", 4) + stroke(f"M{hx + 14} 150 L{hx + 18} 200", "#ff8a1a", 4)
+    # The raised arm and the Multipass held up to the guard
+    body += stroke(f"M{hx + 26} 168 L 196 104", SKIN[0], 9) + circle(198, 100, 7, SKIN[0])
+    card = rect(-24, -15, 48, 30, "#ff6ab4", 'rx="4" stroke="#d4af37" stroke-width="2"')
+    card += rect(-20, -11, 12, 14, "#f4f4f4") + circle(-14, -6, 4, SKIN[0]) + rect(-20, -11, 12, 4, hair)
+    card += lettering("MULTIPASS", 7, -2, 3.6, "#3a1a3a", width=0.9)
+    body += group(card, "translate(206 80) rotate(-12)")
+    # The other hand: passports with the same face spilling out
+    for i in range(5):
+        a = 40 + i * 14
+        pp = rect(-10, -14, 20, 28, ["#7a1a2a", "#1a3a6a", "#2a5a2a", "#5a2a6a", "#7a1a2a"][i], 'rx="2" stroke="#d4af37" stroke-width="1"')
+        pp += circle(0, -4, 5, SKIN[0]) + rect(-5, -9, 10, 3, hair)
+        body += group(pp, f"translate({hx - 46 + i * 6} {182 + i * 3}) rotate({a})")
+    body += circle(hx - 40, 178, 7, SKIN[0])
     return svg(defs, body)
 
 
@@ -4805,7 +4818,7 @@ CARDS["ShadowOps"].update({
     "IfIToldYouIdHavetoKillYou": if_i_told_you_id_have_to_kill_you, "LoneGunman": lone_gunman, "GlomarResponse": glomar_response,
     "Sabotage": sabotage, "GhostArmy": ghost_army, "InflatableTank": inflatable_tank, "ShermanTank": sherman_tank, "HAARP": haarp,
     "SocialEngineering": social_engineering, "BilderbergMembership": bilderberg_membership, "DeadDrop": dead_drop,
-    "MultiPassport": multi_passport, "WetWork": wet_work, "PerfectlyTimedCameraMalfunction": perfectly_timed_camera_malfunction,
+    "Multipass": multipass, "WetWork": wet_work, "PerfectlyTimedCameraMalfunction": perfectly_timed_camera_malfunction,
     "TheGoldenGun": the_golden_gun, "DieAnotherDay": die_another_day, "LicencetoKill": licence_to_kill,
     "ShakenNotStirred": shaken_not_stirred, "GoldenEye": golden_eye, "FemmeFatale": femme_fatale,
     "SupplyChainAttack": supply_chain_attack, "HollowedOutVolcanoLair": hollowed_out_volcano_lair,

@@ -120,6 +120,24 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             Assert.AreEqual(3, foe.Health, "...but at the Dawn two Days on");
             CollectionAssert.IsEmpty(p1.Prophecies);
+
+            // Send For (Multipass, Omen Reading...): the card picked from the deck joins the next hand; scouting only looks at its top
+            Fresh();
+            game.SetDecks(new List<CardData> { game.Creature("Scout", 1, 1), game.Creature("Giant", 5, 5), game.Creature("Runt", 1, 1) }, game.Fillers(3));
+            var send = game.GiveCard(p1, game.Spell("Send", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.SendFor, 0, TargetType.Player)));
+            cards = GameAsserts.CountCards(p1);
+            var giant = p1.Deck.GetDeckPreview().First(c => c.Name == "Giant");
+            p1.SendForPicks[send] = giant;
+            game.ActionsQueue.AddAction(new PlayCardAction(send, p1, p1));
+            game.Resolve();
+            CollectionAssert.Contains(p1.ComingBack, giant, "The picked card is on its way to the next hand");
+            CollectionAssert.DoesNotContain(p1.Deck.GetDeckPreview(), giant, "...out of the deck");
+            Assert.AreEqual(cards, GameAsserts.CountCards(p1));
+            var peek = game.GiveCard(p1, game.Spell("Peek", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.SendFor, 1, TargetType.Player)));
+            var top = p1.Deck.GetDeckPreview()[0];
+            game.ActionsQueue.AddAction(new PlayCardAction(peek, p1, p1));
+            game.Resolve();
+            CollectionAssert.Contains(p1.ComingBack, top, "Nothing picked: the best it can reach, and scouting only reaches the top card");
         }
 
         [UnityTest]

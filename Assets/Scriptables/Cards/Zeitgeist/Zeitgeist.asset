@@ -51,6 +51,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 1
       ability: 0
+      sendFor: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Trend for 3 Days: each Day, whoever has fewer creatures draws 1 more

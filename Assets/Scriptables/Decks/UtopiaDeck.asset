@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Utopia - Results May Vary
   cards:
+  - {fileID: 11400000, guid: ffabb0fa11b78e646b662e53c9f2c4d5, type: 2}
   - {fileID: 11400000, guid: 15122c80637445d49bb99dc37fa3108e, type: 2}
   - {fileID: 11400000, guid: adfdb1818290ea7478a5c306ba45a879, type: 2}
   - {fileID: 11400000, guid: 16806f3d9e0f4d243be07fcafccdaba6, type: 2}

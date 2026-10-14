@@ -34,6 +34,8 @@ namespace SlayTheClone {
         List<GoneDark> GoneDark { get; }
         /// <summary>This player's spells foretold (Prophecy) that haven't come true yet.</summary>
         List<Prophecy> Prophecies { get; }
+        /// <summary>Send For: the card picked from the deck for each card that sends for one, until it resolves.</summary>
+        Dictionary<ICard, ICard> SendForPicks { get; }
         /// <summary>Puts a card that left play on its way back to the hand: it joins the next Day's hand.</summary>
         void ReturnToHand(ICard card);
         void AddToHand(ICard card);
@@ -74,6 +76,7 @@ namespace SlayTheClone {
         public List<ICard> Spent { get; } = new List<ICard>();
         public List<GoneDark> GoneDark { get; } = new List<GoneDark>();
         public List<Prophecy> Prophecies { get; } = new List<Prophecy>();
+        public Dictionary<ICard, ICard> SendForPicks { get; } = new Dictionary<ICard, ICard>();
 
         public IReadOnlyList<BoardSlot> Battlefield { get; }
         public event Action<int> HealthChanged;

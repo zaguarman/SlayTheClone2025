@@ -51,6 +51,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 2
       ability: 0
+      sendFor: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Trend for 3 Days: the slowest act first, wherever Speed decides the

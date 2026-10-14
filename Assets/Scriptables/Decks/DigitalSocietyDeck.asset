@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Digital Society - Terminally Online
   cards:
+  - {fileID: 11400000, guid: cf18a07b157afe14881481760e45e989, type: 2}
   - {fileID: 11400000, guid: fed2e051033dfec46808dfe59f733838, type: 2}
   - {fileID: 11400000, guid: 3f4f451c39d6daf4ea88007aa445281f, type: 2}
   - {fileID: 11400000, guid: 3f4f451c39d6daf4ea88007aa445281f, type: 2}

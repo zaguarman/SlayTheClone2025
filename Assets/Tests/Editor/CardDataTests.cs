@@ -108,6 +108,7 @@ namespace SlayTheClone.Tests {
                 case ActionType.SummonDecoys:
                 case ActionType.WipeWatchdogs:
                 case ActionType.CutDraws:
+                case ActionType.SendFor:
                     if (!PlayerTargets.Contains(action.targetType)) return $"{action.actionType} only affects players but targets {action.targetType}";
                     break;
             }
@@ -128,7 +129,8 @@ namespace SlayTheClone.Tests {
                      or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Revive) {
                 return null; // Says what it does instead of a value
             }
-            else if (action.actionType is ActionType.Cleanse or ActionType.CleanseSlot or ActionType.CreateWatchdog or ActionType.Reveal or ActionType.WipeWatchdogs) {
+            else if (action.actionType is ActionType.Cleanse or ActionType.CleanseSlot or ActionType.CreateWatchdog or ActionType.Reveal or ActionType.WipeWatchdogs
+                     or ActionType.SendFor) {
                 return null; // Says what it removes instead of a value
             }
             else if (action.actionType == ActionType.PlaceSlotEffect) {

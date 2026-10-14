@@ -52,6 +52,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      sendFor: 0
       requires: 0
       decoy: {fileID: 0}
     - actionType: 7
@@ -78,6 +79,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      sendFor: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Target friendly creature gets +2 Attack this Day, and it''s Composed

@@ -49,6 +49,8 @@ namespace SlayTheClone {
             CreateQueuePanel(skin);
             CreateEnemyPileButtons(skin);
             GameOver = GameOverScreen.Create(transform, gameManager, gameMediator);
+            SendForPicker = GetOrAddComponent<SendForPicker>();
+            SendForPicker.Initialize(gameManager, gameMediator, gameReferences.GetDeckViewUI());
             gameMediator.GameOver += OnGameOver;
             FogOfWar.Changed += OnFogOfWarChanged;
             ShowFogOfWarState();
@@ -122,6 +124,9 @@ namespace SlayTheClone {
                 gameReferences.GetDeckViewButton(), gameReferences.GetDiscardViewButton(), gameReferences.GetDeckViewUI());
             LogControllerInitialized("DeckViewController", deckViewController.IsInitialized);
         }
+
+        /// <summary>Asks the screen's player which card a Send For fetches.</summary>
+        public SendForPicker SendForPicker { get; private set; }
 
         /// <summary>What covers the table when the combat is over.</summary>
         public GameOverScreen GameOver { get; private set; }

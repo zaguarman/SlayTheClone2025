@@ -126,6 +126,7 @@ namespace SlayTheClone {
                 LogError("Cannot hide deck view - deckViewPanel is null", LogTag.UI);
                 return;
             }
+            EndPick();
 
             Tooltip.Existing?.HideTooltip();
             deckViewPanel.SetActive(false);
@@ -158,6 +159,44 @@ namespace SlayTheClone {
                                     && RectTransformUtility.RectangleContainsScreenPoint(t, screenPoint, eventCamera))) return false;
             HideDeckView();
             return true;
+        }
+
+        // Send For: the window shows what can be fetched, and clicking a card picks it
+        private System.Action<ICard> onPick;
+        private System.Action onPickClosed;
+
+        /// <summary>Whether the window is open to pick a card (Send For), rather than to look.</summary>
+        public bool IsPicking => onPick != null;
+
+        /// <summary>Opens the window on these cards; clicking one calls <paramref name="picked"/> and closes it. Closed without a pick: <paramref name="closed"/>.</summary>
+        public void ShowPick(IPlayer player, string title, List<ICard> cards, System.Action<ICard> picked, System.Action closed) {
+            if (deckViewPanel == null || !IsInitialized) return;
+            EndPick();
+            ShowCards(player, title, "Click one to send for it", cards);
+            onPick = picked;
+            onPickClosed = closed;
+            foreach (var entry in cardEntries) {
+                var interceptor = entry.GetComponent<DeckViewCardInterceptor>();
+                if (interceptor != null) interceptor.Clicked = Pick;
+            }
+            deckViewPanel.SetActive(true);
+        }
+
+        /// <summary>Picks this card, as clicking it does.</summary>
+        public void Pick(ICard card) {
+            var picked = onPick;
+            onPick = null;
+            onPickClosed = null;
+            picked?.Invoke(card);
+            HideDeckView();
+        }
+
+        // Closed without a pick: whoever asked is told
+        private void EndPick() {
+            var closed = onPickClosed;
+            onPick = null;
+            onPickClosed = null;
+            closed?.Invoke();
         }
 
         public void ShowDeckCards(IPlayer player, bool enemy = false) {
@@ -241,10 +280,16 @@ namespace SlayTheClone {
     }
 
     // Lets deck view cards show their tooltip while preventing any drag
-    public class DeckViewCardInterceptor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
+    public class DeckViewCardInterceptor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler,
                                            IBeginDragHandler, IDragHandler, IEndDragHandler {
         private CardController cardController;
         private Tooltip tooltip;
+        /// <summary>Picking (Send For): what a click on the card does.</summary>
+        public System.Action<ICard> Clicked;
+
+        public void OnPointerClick(PointerEventData eventData) {
+            if (Clicked != null && cardController != null) Clicked(cardController.GetLinkedCardInstance());
+        }
 
         public void Initialize(CardController controller, Tooltip tooltip) {
             cardController = controller;

@@ -77,7 +77,7 @@ namespace SlayTheClone {
             ("Shadow Ops. - Black Budget", "ShadowOpsBlackBudgetDeck",
                 "Your Deep State Handler", "Officially, we don't exist. Unofficially, you lost.", new[] {
                 "Dead Man's Switch", "Dead Man's Switch", "MK Ultra Test Subject", "MK Ultra Test Subject", "Lone Gunman",
-                "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Cleaner", "Multi Passport", "Wet Work", "Mole",
+                "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Cleaner", "Multipass", "Wet Work", "Mole",
                 "False Flag Operation", "Never Let Them Know Your Next Move", "He Didn't Kill Himself", "Coup d'État", "Frame Job",
                 "Ghost Army", "Sabotage", "Witness Protection Program", "Extraction", "Fell Out of a Window", "Death By \"Natural Causes\"",
                 "Operation Paperclip", "HAARP", "Devil's Breath", "Asset Recruitment", "Glomar Response",
@@ -85,7 +85,7 @@ namespace SlayTheClone {
             }),
             ("Shadow Ops. - Double-O Section", "ShadowOpsDoubleODeck",
                 "Your Quartermaster", "Please return the car in one piece. You never do.", new[] {
-                "Cleaner", "Cleaner", "Multi Passport", "Multi Passport", "Wet Work", "Mole", "Femme Fatale", "Femme Fatale",
+                "Cleaner", "Cleaner", "Multipass", "Multipass", "Wet Work", "Mole", "Femme Fatale", "Femme Fatale",
                 "If I Told You, I'd Have to Kill You", "If I Told You, I'd Have to Kill You", "Dead Man's Switch", "Lone Gunman",
                 "The Golden Gun", "Die Another Day", "Die Another Day", "Licence to Kill", "Licence to Kill",
                 "Shaken, Not Stirred", "Shaken, Not Stirred", "GoldenEye", "Supply Chain Attack", "Hollowed-Out Volcano Lair",
@@ -94,7 +94,7 @@ namespace SlayTheClone {
                 "Your Data Broker", "Knows where you were last night. Sold it by noon.", new[] {
                 "Meta Group Chat", "Keyboard Warrior", "NPC", "Chronically Online", "Catfish", "Conspiracy Theorist",
                 "Social Panopticon", "Rage Bait", "Dogpile", "Cancelled",
-                "Control Room", "Mole", "Signal Jammer", "Deep Cover", "Sleeper Agent", "Whistleblower",
+                "Control Room", "Doomscrolling", "Mole", "Signal Jammer", "Deep Cover", "Sleeper Agent", "Whistleblower",
                 "Humanitarian Trafficking Action", "Eavesdrop", "Tapped Communications", "Burn Notice",
             }),
             ("Myth & Corporate - Prosperity Gospel", "ProsperityGospelDeck",
@@ -102,7 +102,7 @@ namespace SlayTheClone {
                 "Martyr", "Mummy", "Omniscient Space-Time Bending Bearded Wizard", "Cultist", "Phoenix",
                 "Unpaid Intern", "Inhuman Resources", "Multilevel Marketing Seller", "Charles Ponzi", "Unicorn", "Multimillionaire Philanthropist",
                 "Memento Mori", "The Holy Grail", "Exorcism", "Excess of Bread and Wine", "Monkey Hand", "Sacrificial Ritual",
-                "Mass Layoffs", "Taxpayer Funds Venture Capital Profits", "Tax-Exempt Corruption",
+                "Mass Layoffs", "Taxpayer Funds Venture Capital Profits", "Tax-Exempt Corruption", "Omen Reading",
             }),
         };
 
@@ -128,6 +128,12 @@ namespace SlayTheClone {
         // Pays with capital (future: discard cards). Until discarding exists, its strongest cards leak value to the enemy.
         // Can't heal. Engine: card draw, workers that die usefully, money that hurts someone else first.
         private static List<CardDef> CorporateCards() => new List<CardDef> {
+            Spell("Headhunter", TargetType.Player,
+                "We found you on LinkedIn. We found everyone on LinkedIn.",
+                "Corporate's recruiting: Discard 1, then send for a creature from your deck; it joins your next hand.",
+                SendForCard(SendForFilter.Creature))
+                .Discarding(1)
+                .Picture("A slick recruiter in a sharp suit reeling in a startled employee from a rival's office tower with a fishing rod baited with a stock-options contract."),
             Creature("Counterfeit", 1, 1, speed: 2, deploy: 0,
                 "Genuine replica. 100% authentic copy.",
                 "Mechanics test: Wannabe (Active, hold Shift as you drag it onto a creature): its Attack, Health and Speed become that creature's.")
@@ -264,6 +270,11 @@ namespace SlayTheClone {
         // Pays with bureaucracy: its creatures take longer to deploy than similar ones, and its spells tie up its own side.
         // Can't hide anything. Engine: armor, area damage, slow but sturdy bodies, disables.
         private static List<CardDef> StatecraftCards() => new List<CardDef> {
+            Spell("Supply Depot", TargetType.Player,
+                "Requisition form 27-B, in triplicate. Approved by Thursday.",
+                "Statecraft's logistics: send for a creature from your deck; it joins your next hand.",
+                SendForCard(SendForFilter.Creature))
+                .Picture("A huge military warehouse with endless shelves of crates, a forklift carrying a soldier in a crate labelled REINFORCEMENTS, a clerk stamping a form at the front desk."),
             Creature("Golden Dome", 0, 6, speed: 2, deploy: 1,
                 "Protects everyone. Some of everyone more than others.",
                 "Mechanics test: Bodyguard. It can't attack; drag it onto another friendly creature and that one is Untouchable this Day (no damage at all), then it rests a Day (Cooldown).")
@@ -387,6 +398,11 @@ namespace SlayTheClone {
         // Pays with self-harm: damage to its own creatures and to you. Fast (Deployment Time 0-1), buffs that burn out.
         // Can't use Intelligence. Engine: cheap bodies that spike and fizzle, chaos that hits everyone.
         private static List<CardDef> ZeitgeistCards() => new List<CardDef> {
+            Creature("Drug Smuggler", 1, 2, speed: 2, deploy: 0,
+                "Just a backpacker. With a very full backpack.",
+                "Zeitgeist's logistics: when it arrives, send for any card among the top 3 of your deck; it joins your next hand.",
+                On(EffectTrigger.OnPlay, SendForCard(SendForFilter.Any, top: 3)))
+                .Picture("A sunburnt backpacker with dreadlocks grinning at an airport security gate, his enormous backpack bulging with cards poking out of every zip."),
             Creature("Not on My Watch", 1, 5, speed: 1, deploy: 1,
                 "Feelings are valid. Statuses are not.",
                 "Mechanics test: Safe Space. Each Dawn, it and the friendly creatures beside it gain Bless (a ward that stops the next status).")
@@ -511,6 +527,11 @@ namespace SlayTheClone {
         #region Factions without a deck yet
         // Digital Society: a swarm of cheap bodies, effects that spread, many creatures piling on one target
         private static List<CardDef> DigitalSocietyCards() => new List<CardDef> {
+            Spell("Doomscrolling", TargetType.Player,
+                "Just one more. Just one more. Just one more.",
+                "Digital Society's scouting: send for any card among the top 4 of your deck; it joins your next hand.",
+                SendForCard(SendForFilter.Any, top: 4))
+                .Picture("A face lit blue by a phone in a dark bedroom at 3 AM, the thumb a blur, an endless feed of cards streaming up the screen and out of it."),
             Creature("Crypto \"Entrepreneur\"", 2, 3, speed: 2, deploy: 0,
                 "It's not a pyramid. It's a triangle of opportunity.",
                 "Mechanics test: Chain Mail. Its attacks jump on to the next 2 creatures in line, half the damage each jump.")
@@ -631,11 +652,11 @@ namespace SlayTheClone {
                 On(EffectTrigger.EndOfTurn, Damage(1, TargetType.FriendlyCreatures, Each)))
                 .Gift()
                 .Picture("A suburban dad mowing his lawn in a polo shirt, an earpiece coiled behind his ear, while his shadow on the grass wears a trench coat and holds a sniper rifle."),
-            Creature("Multi Passport", 3, 3, speed: 2, deploy: 0,
-                "Seven names, four nationalities, one face. Mostly.",
-                "Off the Books: it arrives as ??? and hits twice as hard until someone works out who it is (a Reveal or Revealed). Concealing it again (Smoke And Mirrors) brings the double damage back. Was Sleeper Agent's role.")
-                .With(CreatureAbility.OffTheBooks)
-                .Picture("A man in a trench coat fanning out a dozen passports like a hand of cards, each photo the same face in a different disguise: moustache, glasses, wig, fake beard."),
+            Spell("Multipass", TargetType.Player,
+                "Leeloo Dallas. Multipass.",
+                "Shadow Ops.' logistics: send for any card from your deck; it joins your next hand. Was Multi Passport, the creature (its Off the Books went to Femme Fatale).",
+                SendForCard(SendForFilter.Any))
+                .Picture("A young woman with bright orange-red hair in a bob, in a white strappy bandage outfit with orange suspenders, holding up a shiny pink-and-gold Multipass card to a startled border guard, a fan of passports with the same face spilling from her other hand."),
             Creature("Wet Work", 1, 4, speed: 3, deploy: 0,
                 "Nothing personal. Strictly a line item.",
                 "Extreme Prejudice: its attack destroys the creature it hits, whatever its Health or Armor, and then it's gone too: one hit, one roadblock. Untouchable or a Temporal Shield stops the hit; an empty slot, it just hits the player for 1.")
@@ -880,8 +901,9 @@ namespace SlayTheClone {
                 .Picture("A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass."),
             Creature("Femme Fatale", 2, 4, speed: 2, deploy: 0,
                 "She didn't kill him. She just held him very, very close.",
-                "Each Dusk she squeezes the enemy creature facing her: 2 damage to it, and she heals 1. Nothing facing her: nothing happens.",
+                "Each Dusk she squeezes the enemy creature facing her: 2 damage to it, and she heals 1. Nothing facing her: nothing happens. Off the Books: she arrives as ??? and deals double while nobody knows who she is.",
                 On(EffectTrigger.EndOfTurn, Damage(2, TargetType.EnemyCreatures, Facing), Heal(1, TargetType.Self)))
+                .With(CreatureAbility.OffTheBooks)
                 .NotInStarterDeck()
                 .Picture("A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in the chair beside her is squeezed between her crossed legs, his medals popping off."),
             Creature("MK Ultra Test Subject", 3, 3, speed: 1, deploy: 0,
@@ -894,6 +916,11 @@ namespace SlayTheClone {
 
         // Tech: rewires the queue
         private static List<CardDef> TechCards() => new List<CardDef> {
+            Spell("Web Scraping", TargetType.Player,
+                "We respect your robots.txt. We read it, anyway.",
+                "Tech's scouting: send for any card among the top 5 of your deck; it joins your next hand.",
+                SendForCard(SendForFilter.Any, top: 5))
+                .Picture("A cat scratching at a laptop screen, claw marks tearing the web page open and spilling out cards and data."),
             Spell("DDOS Attack", TargetType.EnemyCreatures,
                 "Ten thousand requests a second. All of them from fridges.",
                 "Mechanics test: Exhausted cancels the target's planned actions (spells land before attacks), lasts the rest of the Day and all of the next, turns its abilities off and adds +1 to every hit (Exposed). Aimed at an enemy slot it's Fixed: the enemy can dodge by moving.",
@@ -961,6 +988,12 @@ namespace SlayTheClone {
         // for miracles (Sacrifice), prophecies that come true Days later (Prophecy), converts (control change), and wrath on
         // the unbelievers (Holy War). Pays with its own creatures; can't move them.
         private static List<CardDef> MythCards() => new List<CardDef> {
+            Spell("Omen Reading", TargetType.Player,
+                "The entrails say Tuesday. The goat disagreed.",
+                "Myth's ritual: Sacrifice 1, then send for any card from your deck; it joins your next hand.",
+                SendForCard(SendForFilter.Any))
+                .Sacrificing(1)
+                .Picture("A robed augur reading the entrails of a goat on a stone altar by candlelight, squinting at a calendar pinned to the wall, an assistant taking notes."),
             Spell("Memento Mori", TargetType.AllCreatures,
                 "Remember that you will die. Preferably on schedule.",
                 "Mechanics test: Doomed on either side. It wipes other statuses and blocks new ones, gives +1 permanent Attack each Dawn (it stays on the card), then Last Rites strike the opposite slot even if the creature Cannot Act, and it dies for real.",
@@ -1171,11 +1204,23 @@ namespace SlayTheClone {
                 .Picture("A small boy in a neat suit on a tricycle in a long mansion hallway, staring straight at the viewer, a black dog sitting beside him and a 666 birthmark peeking from his hairline."),
         };
 
+        // Send For: a card from the deck (of this kind, among its top cards if top > 0) joins the next hand
+        private static EffectAction SendForCard(SendForFilter filter, int top = 0) {
+            var action = Act(ActionType.SendFor, top, TargetType.Player, TargetModifier.None);
+            action.sendFor = filter;
+            return action;
+        }
+
         // Revive: once per combat, its own Last Will raises it at the next Dawn
         private static CardEffect Revive() => OncePerCombat(On(EffectTrigger.OnDeath, Act(ActionType.Revive, 0, TargetType.Self, TargetModifier.None)));
 
         // Mind: wins without raw damage
         private static List<CardDef> MindCards() => new List<CardDef> {
+            Spell("Lucid Dreaming", TargetType.Player,
+                "You know it's a dream. You still can't find the bathroom.",
+                "Mind's scouting: send for any card among the top 3 of your deck; it joins your next hand.",
+                SendForCard(SendForFilter.Any, top: 3))
+                .Picture("A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases."),
             Spell("Mimetic Theory", TargetType.AllCreatures,
                 "We want what they want. Then we become them.",
                 "Mechanics test: the stat copy as a spell. Target creature copies the Attack, Health and Speed of the creature facing it.",
@@ -1238,6 +1283,11 @@ namespace SlayTheClone {
         // Long-term experiments: slow creatures that evolve, heal and multiply. Pays with side effects on its own side.
         // Can't conceal anything. Tempo: slow (Deployment Time 2-3).
         private static List<CardDef> UtopiaCards() => new List<CardDef> {
+            Spell("Research Lab", TargetType.Player,
+                "Results in five years. Funding for two.",
+                "Utopia's research: send for a spell from your deck; it joins your next hand.",
+                SendForCard(SendForFilter.Spell))
+                .Picture("A gleaming laboratory with scientists in white coats pulling glowing cards out of test tubes and a centrifuge, a grant deadline clock ticking on the wall."),
             Creature("Clone", 2, 3, speed: 2, deploy: 1,
                 "Twice the sheep. Half the soul.",
                 "When it enters, summon a random creature from your deck. Future: Clone (copies a friendly creature).",

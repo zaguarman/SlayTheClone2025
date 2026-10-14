@@ -52,6 +52,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      sendFor: 0
       requires: 0
       decoy: {fileID: 0}
   - effectType: 0
@@ -82,6 +83,7 @@ MonoBehaviour:
         moveEarlier: 0
       trend: 0
       ability: 0
+      sendFor: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Future: Unicorn (Enterprise) from the card examples. Burn rate stays:

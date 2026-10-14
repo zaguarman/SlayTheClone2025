@@ -293,6 +293,11 @@ namespace SlayTheClone {
                     return $"{target} fakes its death (its {Keywords.Link("Last Will")} happens) and goes back to your hand next {Keywords.Link("Day")}";
                 case ActionType.Vanish:
                     return $"{target} {Keywords.Link("Gone Dark", "goes dark")} until the next {Keywords.Link("Dawn")}";
+                case ActionType.SendFor: {
+                    string kind = action.sendFor switch { SendForFilter.Creature => "a creature", SendForFilter.Spell => "a spell", _ => "a card" };
+                    string where = value > 0 ? $"among the top {value} of your deck" : "from your deck";
+                    return $"{Keywords.Link("Send For", "send for")} {kind} {where}: it joins your next hand";
+                }
                 case ActionType.Revive:
                     return $"{target} {Keywords.Link("Revive", "rises again")} at the next {Keywords.Link("Dawn")}";
                 case ActionType.CutDraws:

@@ -321,7 +321,7 @@ namespace SlayTheClone {
         /// <summary>Whether this kind of effect can land on a player (aimed at an empty slot, it lands on that side's player).</summary>
         public static bool CanAffectPlayers(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Heal or ActionType.Draw or ActionType.Summon or ActionType.CreateWatchdog or ActionType.Reveal
-                or ActionType.SummonDecoys or ActionType.WipeWatchdogs or ActionType.CutDraws;
+                or ActionType.SummonDecoys or ActionType.WipeWatchdogs or ActionType.CutDraws or ActionType.SendFor;
         #endregion
 
         #region Actions
@@ -429,6 +429,8 @@ namespace SlayTheClone {
                     return creature != null && action.value > 0 ? new DelayDeploymentAction(creature, action.value) : null;
                 case ActionType.SummonDecoys: // Tokens into the player's empty slots (Ghost Army)
                     return target is IPlayer decoysSide && action.decoyData != null && action.value > 0 ? new SummonDecoysAction(decoysSide, action.decoyData, action.value) : null;
+                case ActionType.SendFor: // A card from the deck joins that player's next hand
+                    return target is IPlayer sender ? new SendForAction(sender, source, action.sendFor, action.value) : null;
                 case ActionType.CutDraws: // Fewer cards in that player's next hand (Supply Chain Attack)
                     return target is IPlayer cut && action.value > 0 ? new CutDrawsAction(cut, action.value) : null;
                 case ActionType.WipeWatchdogs: // Every Watchdog that player controls (GoldenEye)

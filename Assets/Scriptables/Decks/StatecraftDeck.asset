@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Statecraft - Order & Paperwork
   cards:
+  - {fileID: 11400000, guid: 95aad8a35a8f35b45944c88787ad093f, type: 2}
   - {fileID: 11400000, guid: 40653da7f44f64f4d87c617bc6080e3b, type: 2}
   - {fileID: 11400000, guid: 00673e54f9dc0604ba0de7d5cec69515, type: 2}
   - {fileID: 11400000, guid: 812d3392dbadd74459046284afc829d6, type: 2}

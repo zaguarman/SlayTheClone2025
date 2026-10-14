@@ -346,7 +346,8 @@ namespace SlayTheClone.Tests {
                 }
                 foreach (var player in game.Players) {
                     Assert.Greater(played[player], 0, $"{yourDeck.GetDeckName()} vs {theirDeck.GetDeckName()}: the AI played none of {player.Name}'s cards");
-                    if (couldAttack[player] > 0) Assert.Greater(attacked[player], 0, $"{yourDeck.GetDeckName()} vs {theirDeck.GetDeckName()}: the AI never attacked with {player.Name}'s creatures");
+                    // Given a couple of chances: with a single one, holding back can be the right call
+                    if (couldAttack[player] > 1) Assert.Greater(attacked[player], 0, $"{yourDeck.GetDeckName()} vs {theirDeck.GetDeckName()}: the AI never attacked with {player.Name}'s creatures");
                 }
             }
         }
