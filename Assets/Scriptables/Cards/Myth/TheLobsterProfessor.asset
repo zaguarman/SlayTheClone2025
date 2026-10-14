@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Clean your room, bucko. Then buy the seminar.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 11b7ae56c227622438043a93f8cc6581, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Don't look at it. Seriously, don't.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: fe92d0c3cd5a5e847bb4884211d11dd9, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: He's not a bad kid. He's the Antichrist.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 6c4c51593f6986c4b9585853bd3ca53c, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

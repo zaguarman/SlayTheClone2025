@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The entrails say Tuesday. The goat disagreed.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: f166919dcbfff9144bc297a502346d32, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 1

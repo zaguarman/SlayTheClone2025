@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Soon it will be night.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 0f9dab7e55378af488cfc19fd2986400, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

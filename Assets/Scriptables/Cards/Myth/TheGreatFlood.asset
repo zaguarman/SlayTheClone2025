@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Forty days of rain. You were warned. Twice.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 49583fdd1db0fc141a01b6247a2a414c, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

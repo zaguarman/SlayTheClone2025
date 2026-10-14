@@ -17,7 +17,7 @@ MonoBehaviour:
   description: For a good harvest. Nothing personal, Sergeant.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: cd5d36fafc048b042ad0212cadd9b12d, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 1

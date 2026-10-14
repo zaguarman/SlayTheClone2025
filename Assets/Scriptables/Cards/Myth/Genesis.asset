@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Let there be light. And two more creatures.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 30c0d8dad5cf00946bfe1df4404e78fa, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

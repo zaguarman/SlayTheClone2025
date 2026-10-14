@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Sent. Nothing else will be.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 6f5b2302f5f40ee49af32051ec9ac64b, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

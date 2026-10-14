@@ -17,7 +17,7 @@ MonoBehaviour:
   description: God is on our side. He's on theirs too. He's very busy.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: a01a873c5ca575142b7a6e3a2220c2fa, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

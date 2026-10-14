@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Just a backpacker. With a very full backpack.
   cardType: 0
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 077ef827b5debfe4a9525355da427963, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

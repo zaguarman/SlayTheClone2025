@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Winks. Points. Forgives.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 86eed1745ad60b74abfcbdb4243b7609, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

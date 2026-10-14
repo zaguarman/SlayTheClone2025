@@ -17,7 +17,7 @@ MonoBehaviour:
   description: You know it's a dream. You still can't find the bathroom.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 676281b27629e9941b5d0aab4a35cb69, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

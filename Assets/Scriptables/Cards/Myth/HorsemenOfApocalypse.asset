@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Four riders. One group chat.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 258371c29e7393a4a8075384e0cddb4b, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

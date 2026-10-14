@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Pierced the side of a god. Your creature is not a problem.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: b84d84c816668f64997c0a2c7d7949a8, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

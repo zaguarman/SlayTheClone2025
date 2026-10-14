@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Died on Friday. Back on Monday. Still not answering emails.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 4ac0858b081fd0244931178d61a93139, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

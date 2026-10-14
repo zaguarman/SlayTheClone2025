@@ -17,7 +17,7 @@ MonoBehaviour:
   description: '''Tis but a scratch.'
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: b6db3d48f17dc0345b1aa6712d16f293, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

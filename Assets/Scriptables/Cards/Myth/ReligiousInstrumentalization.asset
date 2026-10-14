@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Holding the book upside down. It's the gesture that counts.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: fedfa105bac6fd54c89f7ab0670961b3, type: 3}
   discardCost: 0
   singleUse: 0
   sacrifice: 0

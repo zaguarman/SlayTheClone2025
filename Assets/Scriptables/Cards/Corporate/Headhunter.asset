@@ -17,7 +17,7 @@ MonoBehaviour:
   description: We found you on LinkedIn. We found everyone on LinkedIn.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 1d5243b0d268bc645ba29c7e18caeef5, type: 3}
   discardCost: 1
   singleUse: 0
   sacrifice: 0
