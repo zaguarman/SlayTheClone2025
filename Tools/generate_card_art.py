@@ -5637,28 +5637,98 @@ def gods_grace():
 
 
 def phoenix_feather():
-    # A glowing golden feather laid on a small pile of ashes on a stone altar, three tally marks scratched beside it, the
-    # shape of a bird rising out of the smoke
-    defs, body = bg_myth()
-    defs += lin("plume", [("#fff2a0", 1), ("#ff8a1a", 1)])
-    for i, (x, y, r) in enumerate([(176, 120, 16), (164, 100, 14), (186, 84, 13), (170, 66, 12)]):
-        body += circle(x, y, r, "#8a8090", f'opacity="{0.45 - i * 0.08:.2f}"')
-    # The bird rising out of the smoke, wings spread
-    for f in (-1, 1):
-        body += path(f"M176 60 C {176 + f * 30} 30 {176 + f * 70} 20 {176 + f * 96} 34 C {176 + f * 70} 40 {176 + f * 50} 52 {176 + f * 30} 70 Z", "#ff9a2a", 'opacity="0.85"')
-        body += path(f"M176 62 C {176 + f * 24} 44 {176 + f * 50} 40 {176 + f * 70} 46 C {176 + f * 50} 52 {176 + f * 36} 60 {176 + f * 22} 72 Z", "#ffd84a", 'opacity="0.9"')
-    body += ellipse(176, 66, 9, 16, "#ff7a1a") + circle(176, 46, 7, "#ffb43a") + poly([(176, 40), (186, 44), (176, 48)], "#e8a020")
-    body += path("M170 80 L176 100 L182 80 Z", "#ff7a1a", 'opacity="0.8"')
-    # The altar, the ashes, the feather
-    body += rect(96, 150, 160, 50, "#8a8a8a", 'stroke="#5a5a5a" stroke-width="2"') + rect(88, 142, 176, 10, "#9a9a9a")
-    body += ellipse(176, 142, 44, 9, "#4a4a4a") + ellipse(170, 139, 26, 5, "#6a6a6a")
-    body += path("M128 146 C 150 132 196 118 232 112 C 206 124 166 138 132 148 Z", "url(#plume)", 'stroke="#c8781a" stroke-width="1.2"')
-    body += stroke("M130 147 L232 112", "#a85a10", 1.6)
-    for i in range(7):
-        x = 150 + i * 11
-        body += stroke(f"M{x} {139 - i * 3.6:.1f} l 4 -9", "#c8781a", 1, 'opacity="0.7"')
-    for i in range(3):
-        body += stroke(f"M{116 + i * 7} 162 l 0 18", "#3a3a3a", 2.4)
+    # Only the feather, watercolour on paper: red at the quill through orange to a yellow heart, its barbs licking out like
+    # flames, a glowing eye near the top, the tip burning out lilac, sparks all round
+    import random as _r
+    rnd = _r.Random(7)
+    defs = rad("paper", [("#fff8ec", 1), ("#f3e6d2", 1)], 0.5, 0.45, 0.75)
+    defs += rad("warmth", [("#ffc070", 0.45), ("#ffc070", 0)])
+    L = 270.0  # The feather's length, quill end at 0, tip at -L (local, pointing up)
+    defs += (f'<linearGradient id="vane" gradientUnits="userSpaceOnUse" x1="0" y1="-30" x2="0" y2="{-L}">'
+             f'{stops(["#b8161a", "#e8401c", "#ff7a1c", "#ffb02a", "#ff8a1c", "#e0381c", "#a0347a", "#8a5ac8"])}</linearGradient>')
+    defs += (f'<linearGradient id="heart" gradientUnits="userSpaceOnUse" x1="0" y1="-60" x2="0" y2="{-L + 60}">'
+             f'{stops([("#ffd84a", 0), ("#ffe36a", 0.95), ("#fff2a0", 1), ("#ffd04a", 0.8), ("#ff9a2a", 0)])}</linearGradient>')
+    defs += (f'<linearGradient id="tipflame" gradientUnits="userSpaceOnUse" x1="0" y1="{-L + 50}" x2="0" y2="{-L - 30}">'
+             f'{stops([("#c86ad0", 0.9), ("#b89ae8", 0.85), ("#e8d8f8", 0.6)])}</linearGradient>')
+    defs += rad("eye", [("#ffffff", 1), ("#fff2a0", 1), ("#ffb02a", 1), ("#e8401c", 1)])
+    body = rect(0, 0, W, H, "url(#paper)") + ellipse(186, 102, 150, 92, "url(#warmth)")
+
+    def width(t):  # Half-width of the vane along it (t: 0 at the vane's base, 1 at the tip)
+        return 38 * math.sin(math.pi * min(1.0, t * 0.92 + 0.05)) ** 0.8 + 4
+
+    def bend(y):  # The rachis curves gently
+        return 8 * math.sin(-y / L * math.pi)
+
+    g = []
+    base, top = -46.0, -L + 18
+    # The vane: each side a run of flame tongues, licking outward and up
+    for side in (-1, 1):
+        pts = [(bend(base), base)]
+        n = 10
+        for k in range(n + 1):
+            t = k / n
+            y = base + (top - base) * t
+            w = width(t)
+            jitter = rnd.uniform(-3, 4)
+            pts.append((bend(y) + side * (w * 0.72), y + 6))
+            pts.append((bend(y) + side * (w + 14 + jitter), y - 16 - rnd.uniform(0, 6)))  # A tongue's point, swept up
+        pts.append((bend(top), top - 6))
+        d = f"M{pts[0][0]:.1f} {pts[0][1]:.1f} " + " ".join(
+            f"Q {pts[i][0]:.1f} {pts[i][1]:.1f} {(pts[i][0] + pts[i + 1][0]) / 2:.1f} {(pts[i][1] + pts[i + 1][1]) / 2:.1f}"
+            for i in range(1, len(pts) - 1)) + f" L{pts[-1][0]:.1f} {pts[-1][1]:.1f} Z"
+        g.append(path(d, "url(#vane)", 'opacity="0.95"'))
+    # Loose flames breaking off the edges
+    for _ in range(12):
+        t = rnd.uniform(0.15, 0.95)
+        y = base + (top - base) * t
+        side = rnd.choice((-1, 1))
+        x0 = bend(y) + side * (width(t) + 6)
+        tongue = f"M{x0:.1f} {y:.1f} q {side * 10:.1f} -6 {side * 8:.1f} -20 q {-side * 2:.1f} 10 {-side * 8:.1f} 14 Z"
+        g.append(path(tongue, "#e8401c" if t < 0.75 else "#a85ab0", 'opacity="0.7"'))
+    # The yellow heart of it
+    heart = (f"M{bend(-70):.1f} -70 C {-26} -120 {-20} -190 {bend(-210):.1f} -212 C {22} -190 {28} -120 {bend(-70):.1f} -70 Z")
+    g.append(path(heart, "url(#heart)"))
+    # Barbs: fine lines from the shaft, swept up and out
+    for k in range(26):
+        t = 0.04 + k / 26 * 0.9
+        y = base + (top - base) * t
+        for side in (-1, 1):
+            w = width(t) * rnd.uniform(0.7, 0.95)
+            col = "#a8141a" if t < 0.3 else "#e8601c" if t < 0.75 else "#8a3a8a"
+            g.append(stroke(f"M{bend(y):.1f} {y:.1f} q {side * w * 0.5:.1f} -6 {side * w:.1f} -18", col, 0.9, 'opacity="0.55"'))
+    # The tip burning out lilac
+    for k, (dx, h, wid) in enumerate([(-10, 46, 12), (6, 58, 14), (16, 38, 10), (-2, 70, 9)]):
+        y0 = top + 16
+        g.append(path(f"M{dx - wid:.1f} {y0:.1f} C {dx - wid:.1f} {y0 - h * 0.5:.1f} {dx + wid * 0.2:.1f} {y0 - h * 0.7:.1f} {dx + 3:.1f} {y0 - h:.1f} "
+                      f"C {dx + wid * 0.6:.1f} {y0 - h * 0.6:.1f} {dx + wid:.1f} {y0 - h * 0.4:.1f} {dx + wid:.1f} {y0:.1f} Z",
+                      "url(#tipflame)", f'opacity="{0.75 - k * 0.08:.2f}"'))
+    # The eye near the top
+    ey = -L * 0.72
+    g.append(path(f"M{bend(ey):.1f} {ey + 22:.1f} C {bend(ey) - 14:.1f} {ey + 6:.1f} {bend(ey) - 10:.1f} {ey - 14:.1f} {bend(ey):.1f} {ey - 24:.1f} "
+                  f"C {bend(ey) + 10:.1f} {ey - 14:.1f} {bend(ey) + 14:.1f} {ey + 6:.1f} {bend(ey):.1f} {ey + 22:.1f} Z",
+                  "url(#eye)", 'stroke="#c8301a" stroke-width="2"'))
+    g.append(circle(bend(ey), ey, 3.2, "#ffffff"))
+    # Down at the base, wispy
+    for k in range(22):
+        side = -1 if k % 2 else 1
+        y = -30 - k * 0.9
+        w = rnd.uniform(14, 26)
+        g.append(stroke(f"M{bend(y):.1f} {y:.1f} q {side * w * 0.6:.1f} {rnd.uniform(-8, -2):.1f} {side * w:.1f} {rnd.uniform(-14, -4):.1f}", "#e0401c", 1.0, 'opacity="0.45"'))
+    # The shaft and the bare quill
+    g.append(stroke(f"M0 0 C 1 -20 {bend(-120):.1f} -120 {bend(top + 10):.1f} {top + 10:.1f}", "#c8401c", 2.6))
+    g.append(stroke(f"M0 0 C 1 -20 {bend(-120):.1f} -120 {bend(top + 10):.1f} {top + 10:.1f}", "#ffb06a", 0.9, 'opacity="0.8"'))
+    # Sparkles on the vane
+    for _ in range(40):
+        t = rnd.uniform(0.1, 0.95)
+        y = base + (top - base) * t
+        x = bend(y) + rnd.uniform(-1, 1) * width(t) * 0.8
+        g.append(circle(x, y, rnd.uniform(0.6, 1.4), "#fffbe8", f'opacity="{rnd.uniform(0.6, 1):.2f}"'))
+    body += f'<g transform="translate(78 182) rotate(56)">{"".join(g)}</g>'
+    # Sparks around it, red low and purple high, like flicked paint
+    for _ in range(36):
+        x, y = rnd.uniform(40, 330), rnd.uniform(10, 190)
+        col = "#8a5ac8" if y < 70 or (x > 240 and y < 110) else "#e8401c"
+        body += circle(x, y, rnd.uniform(0.8, 2.2), col, f'opacity="{rnd.uniform(0.35, 0.8):.2f}"')
     return svg(defs, body)
 
 

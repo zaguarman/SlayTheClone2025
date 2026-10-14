@@ -1261,7 +1261,7 @@ namespace SlayTheClone {
                 "It burns. It rises. It invoices you for the ashes.",
                 "Target friendly creature is sacrificed (its Last Will happens; a Blessing can't stop it) and rises again at the Dawn 3 Days later, full Health, Deployment Time again. Three days, as the scripture says.",
                 Act(ActionType.Resurrect, 3, TargetType.FriendlyCreatures, TargetModifier.None))
-                .Picture("A glowing golden feather laid on a small pile of ashes on a stone altar, three tally marks scratched beside it, the shape of a bird rising out of the smoke."),
+                .Picture("Only the feather, watercolour on paper: red at the quill through orange to a yellow heart, its barbs licking out like flames, a glowing eye near the top, the tip burning out lilac, sparks all round."),
             Creature("The Omen", 1, 4, speed: 1, deploy: 2,
                 "He's not a bad kid. He's the Antichrist.",
                 "When ready: Doomed 2 on the strongest enemy creature.",
