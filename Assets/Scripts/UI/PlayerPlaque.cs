@@ -8,7 +8,8 @@ namespace SlayTheClone {
     /// <summary>
     /// A player's nameplate, Pokémon style: faction emblem, name, an HP bar that drains green to yellow to red,
     /// the health numbers (the scene's health text, which <see cref="PlayerUI"/> keeps up to date), and how many
-    /// cards are left in the deck and the discard pile. It flashes and shakes when the player is hurt.
+    /// cards are left in the deck and the discard pile. It flashes and shakes when the player is hurt. In Grace (God's Grace)
+    /// the card lies over it with a countdown to the Dusk it ends: both players see who can't die yet, and when they will.
     /// Built once (in the editor too, see <see cref="BoardSkin"/>); <see cref="Bind"/> connects it to a player.
     /// </summary>
     public class PlayerPlaque : MonoBehaviour {
@@ -29,7 +30,26 @@ namespace SlayTheClone {
 
         private IPlayer player;
         private IGameMediator mediator;
+        private IGameManager manager;
+        private CardViews cardViews;
         private int shownHealth;
+
+        // Grace: its card over the plaque and the seal counting down the Days to its Dusk
+        private const float GraceCardHeight = 168f; // In plaque units: a little taller than the plaque, lying over its emblem
+        private static readonly Color SealDark = UITheme.Hex(0x3A0606);
+        private static readonly Color SealBright = UITheme.Hex(0xC81E1E);
+        private CardController graceCard;
+        private Image graceSeal;
+        private TextMeshProUGUI graceCount;
+        private TextMeshProUGUI graceCaption;
+        private (ICard card, int? until, int turn) shownGrace;
+
+        /// <summary>The player it follows.</summary>
+        public IPlayer Owner => player;
+        /// <summary>The Grace card over the plaque, while the player is in Grace (for tests).</summary>
+        public CardController GraceView => graceCard;
+        /// <summary>The countdown's lines, number then caption (for tests).</summary>
+        public string GraceCountdown => graceSeal != null ? $"{graceCount.text} {graceCaption.text}" : null;
 
         /// <summary>The plaque under the player's UI, built (and given their health text) if it isn't there yet.</summary>
         public static PlayerPlaque Ensure(Transform parent, TextMeshProUGUI health) {
@@ -137,10 +157,12 @@ namespace SlayTheClone {
         }
 
         /// <summary>Follows the player's health and piles from now on.</summary>
-        public void Bind(IPlayer owner, IGameMediator gameMediator) {
+        public void Bind(IPlayer owner, IGameMediator gameMediator, IGameManager gameManager = null, CardViews views = null) {
             Unbind();
             player = owner;
             mediator = gameMediator;
+            manager = gameManager;
+            cardViews = views;
             shownHealth = player.Health;
             ShowHealth(player.Health, animate: false);
             ShowPiles(player);
@@ -162,9 +184,11 @@ namespace SlayTheClone {
             }
             player = null;
             mediator = null;
+            HideGrace();
         }
 
         private void OnDestroy() {
+            HideGrace();
             DOTween.Kill(transform);
             if (barFill != null) DOTween.Kill(barFill);
             if (flash != null) DOTween.Kill(flash);
@@ -172,6 +196,102 @@ namespace SlayTheClone {
         }
 
         private void OnTurnEnded(int turn) => ShowPiles(player);
+
+        // Grace starts when its card resolves and ends at a Dusk; the countdown moves with the Days
+        private void Update() {
+            if (player == null) return;
+            var now = (player.GraceCard, player.GraceUntilDay, manager?.TurnManager?.TurnNumber ?? 0);
+            if (now == shownGrace) return;
+            shownGrace = now;
+            if (player.GraceUntilDay == null) HideGrace();
+            else ShowGrace(player.GraceUntilDay.Value - now.Item3);
+        }
+
+        // The card lies tilted over the plaque's emblem (name and Health stay in sight), the seal on its lower half. Days
+        // left: 1 or more, they can't die at this Dusk; 0, this Dusk is the one (still at 0 Health then, they're executed)
+        private void ShowGrace(int daysLeft) {
+            if (graceCard == null && player.GraceCard != null && cardViews != null) {
+                graceCard = cardViews.Create(player.GraceCard, player, transform);
+                if (graceCard != null) {
+                    graceCard.name = "GraceCard";
+                    graceCard.SetAttachment();
+                    var rect = (RectTransform)graceCard.transform;
+                    rect.anchorMin = rect.anchorMax = new Vector2(0f, 0.5f);
+                    rect.localScale = Vector3.one * (GraceCardHeight / Mathf.Max(1f, rect.rect.height));
+                    rect.anchoredPosition = new Vector2(64f, 8f);
+                    rect.localRotation = Quaternion.Euler(0f, 0f, -8f);
+                    rect.SetAsLastSibling();
+                    rect.DOPunchScale(Vector3.one * 0.25f * rect.localScale.x, 0.5f, 6).SetTarget(rect);
+                }
+            }
+            if (graceSeal == null) BuildSeal();
+            graceSeal.transform.SetAsLastSibling();
+
+            bool last = daysLeft <= 0;
+            graceCount.text = Mathf.Max(0, daysLeft).ToString();
+            graceCaption.text = last ? "DAYS LEFT" : daysLeft == 1 ? "DAY TO LIVE" : "DAYS TO LIVE";
+
+            // A heartbeat, faster and redder on the last Day
+            var seal = graceSeal.rectTransform;
+            DOTween.Kill(seal);
+            DOTween.Kill(graceSeal);
+            seal.localScale = Vector3.one;
+            graceSeal.color = SealDark;
+            float beat = last ? 0.35f : 0.8f;
+            seal.DOScale(last ? 1.18f : 1.08f, beat).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(seal);
+            var image = graceSeal;
+            DOTween.To(() => image.color, c => image.color = c, last ? SealBright : UITheme.Hex(0x6A0E0E), beat)
+                .SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(graceSeal);
+            if (last) seal.DOPunchPosition(new Vector3(0.08f, 0f, 0f), 0.6f, 20, 0.8f).SetTarget(seal);
+        }
+
+        private void BuildSeal() {
+            graceSeal = UITheme.NewImage("GraceCountdown", transform, SealDark);
+            UITheme.Round(graceSeal, SealDark, 0.6f);
+            UITheme.AddTrim(graceSeal.transform, SealBright, 0.6f);
+            UITheme.AddHardShadow(graceSeal, 4f);
+            graceSeal.raycastTarget = false;
+            var seal = graceSeal.rectTransform;
+            seal.anchorMin = seal.anchorMax = new Vector2(0f, 0.5f);
+            seal.pivot = new Vector2(0.5f, 0.5f);
+            seal.sizeDelta = new Vector2(124f, 92f);
+            seal.anchoredPosition = new Vector2(64f, -58f);
+
+            graceCount = UITheme.NewText("Count", seal, "", 56f, UITheme.Parchment);
+            graceCount.fontStyle = FontStyles.Bold;
+            graceCount.raycastTarget = false;
+            var count = graceCount.rectTransform;
+            count.anchorMin = new Vector2(0f, 0.42f);
+            count.anchorMax = Vector2.one;
+            count.offsetMin = count.offsetMax = Vector2.zero;
+
+            graceCaption = UITheme.NewText("Caption", seal, "", 20f, UITheme.Parchment);
+            graceCaption.fontStyle = FontStyles.Bold;
+            graceCaption.characterSpacing = 1f;
+            graceCaption.enableAutoSizing = true;
+            graceCaption.fontSizeMin = 9;
+            graceCaption.fontSizeMax = 20;
+            graceCaption.raycastTarget = false;
+            var caption = graceCaption.rectTransform;
+            caption.anchorMin = new Vector2(0.05f, 0.04f);
+            caption.anchorMax = new Vector2(0.95f, 0.46f);
+            caption.offsetMin = caption.offsetMax = Vector2.zero;
+        }
+
+        private void HideGrace() {
+            shownGrace = default;
+            if (graceCard != null) {
+                DOTween.Kill(graceCard.transform);
+                Destroy(graceCard.gameObject);
+            }
+            if (graceSeal != null) {
+                DOTween.Kill(graceSeal.rectTransform);
+                DOTween.Kill(graceSeal);
+                Destroy(graceSeal.gameObject);
+            }
+            graceCard = null;
+            graceSeal = null;
+        }
 
         private void OnHealthChanged(int health) {
             if (health < shownHealth) Flash(UITheme.HealthLow, shake: true);

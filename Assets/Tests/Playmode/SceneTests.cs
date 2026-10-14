@@ -109,6 +109,22 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Player.MaxHealth - 3, p2.Health);
             game.AssertViewsMatchRules(); // Including the new hands, the survivor's damage and player 2's health
 
+            // God's Grace lies over the player's plaque, counting down to the Dusk it ends
+            var grace = CardFactory.CreateCard(game.Cards.Spell("Test Grace", TargetType.Player));
+            game.Queue.AddAction(new GraceAction(p1, 1) { Source = grace });
+            game.Queue.ResolveActions();
+            yield return null;
+            var plaque = Object.FindObjectsByType<PlayerPlaque>(FindObjectsSortMode.None).Single(p => p.Owner == p1);
+            Assert.AreSame(grace, plaque.GraceView?.GetLinkedCardInstance(), "In Grace, its card lies over the plaque");
+            Assert.AreEqual("1 DAY TO LIVE", plaque.GraceCountdown);
+            endTurn.onClick.Invoke();
+            yield return Wait.For(() => !game.Turns.IsResolving, "the turn to resolve");
+            yield return null;
+            Assert.AreEqual("0 DAYS LEFT", plaque.GraceCountdown, "The next Day is its last: at its Dusk, still at 0, they're executed");
+            game.Queue.AddAction(new DamagePlayerAction(p1, p1.Health));
+            game.Queue.ResolveActions();
+            yield return null;
+
             // At 0 Health the combat is over: a screen says who won, and no more turns are played
             game.Queue.AddAction(new DamagePlayerAction(p2, p2.Health));
             game.Queue.ResolveActions();
@@ -119,7 +135,7 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(endTurn.interactable, "End Turn goes grey");
             endTurn.onClick.Invoke();
             yield return null;
-            Assert.AreEqual(1, game.Turns.TurnNumber, "...and a turn ended anyway doesn't happen");
+            Assert.AreEqual(2, game.Turns.TurnNumber, "...and a turn ended anyway doesn't happen");
         }
 
         /// <summary>

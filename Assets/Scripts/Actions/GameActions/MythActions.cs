@@ -142,7 +142,8 @@ namespace SlayTheClone {
     /// lose; at that Dusk, still at 0, they do. Healed above 0 in time, they live. If both players fall to 0, the one in
     /// Grace wins: only the other one loses when they hit 0.
     /// </summary>
-    public class GraceAction : IGameAction {
+    public class GraceAction : IGameAction, ISourcedAction {
+        public ICard Source { get; set; }
         public IPlayer Player { get; }
         public int Days { get; }
 
@@ -159,6 +160,7 @@ namespace SlayTheClone {
         protected override void ExecuteAction(GraceAction grace, ActionExecutionContext context) {
             if (grace.Player == null) return;
             grace.Player.GraceUntilDay = context.TurnClock.TurnNumber + grace.Days;
+            grace.Player.GraceCard = grace.Source;
             Log($"{grace.Player.Name} is in Grace until the Dusk of Day {grace.Player.GraceUntilDay}", LogTag.Players | LogTag.Effects);
         }
     }
@@ -172,6 +174,7 @@ namespace SlayTheClone {
             foreach (var player in players) {
                 if (player.GraceUntilDay == null || player.GraceUntilDay > endedTurn) continue;
                 player.GraceUntilDay = null;
+                player.GraceCard = null;
                 Log($"{player.Name}'s Grace ends at {player.Health} Health", LogTag.Players);
                 if (player.Health <= 0 && !mediator.IsGameOver) mediator.NotifyGameOver(player.Opponent);
             }

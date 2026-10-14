@@ -44,7 +44,7 @@ namespace SlayTheClone {
             InitializeControllers();
             SetupResolveButton();
             var skin = GetOrAddComponent<BoardSkin>();
-            skin.Apply(gameReferences, gameManager, gameMediator);
+            skin.Apply(gameReferences, gameManager, gameMediator, cardViews);
             skin.PutAtBottom(FogOfWar.PlaysAsPlayer1);
             CreateQueuePanel(skin);
             CreateEnemyPileButtons(skin);

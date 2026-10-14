@@ -36,6 +36,8 @@ namespace SlayTheClone {
         List<Prophecy> Prophecies { get; }
         /// <summary>God's Grace: the last Day at whose Dusk 0 Health doesn't lose yet; null when not in Grace.</summary>
         int? GraceUntilDay { get; set; }
+        /// <summary>The card that put the player in Grace (shown over their plaque while it lasts).</summary>
+        ICard GraceCard { get; set; }
         /// <summary>Send For: the card picked from the deck for each card that sends for one, until it resolves.</summary>
         Dictionary<ICard, ICard> SendForPicks { get; }
         /// <summary>A chosen discard cost: the cards picked to pay for each card, used when it's played.</summary>
@@ -81,6 +83,7 @@ namespace SlayTheClone {
         public List<GoneDark> GoneDark { get; } = new List<GoneDark>();
         public List<Prophecy> Prophecies { get; } = new List<Prophecy>();
         public int? GraceUntilDay { get; set; }
+        public ICard GraceCard { get; set; }
         public Dictionary<ICard, ICard> SendForPicks { get; } = new Dictionary<ICard, ICard>();
         public Dictionary<ICard, List<ICard>> DiscardPicks { get; } = new Dictionary<ICard, List<ICard>>();
 

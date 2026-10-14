@@ -63,7 +63,9 @@ STILL OPEN
     • Pick one: queued spells on a creature in the slot's corner AND in its stack (A, the default), or only in the stack (B).
       F6 switches in game; both screenshots were sent.
     • Choices made, say if you want them otherwise:
-        - God's Grace protects the player, as asked; there's no mark on the player's plaque yet while it lasts.
+        - God's Grace protects the player, as asked. Answered: while it lasts, its card lies over the player's plaque
+          (on the emblem; name and Health stay in sight) with a red countdown, "1 DAY TO LIVE" then "0 DAYS LEFT" on the
+          Day whose Dusk executes a player still at 0, beating faster.
         - A creature's own effects on itself don't show under it (it's the card already). Up to 4 tucked cards show (plus
           the queued spells); the scroll goes through them all.
         - Stat changes that last for good stay tucked until the creature leaves play; timed ones and statuses fall off when

@@ -46,12 +46,12 @@ namespace SlayTheClone {
         public bool IsApplied { get; private set; }
 
         /// <summary>When the game starts: dresses the table for the chosen decks and connects the plaques to the players.</summary>
-        public void Apply(IGameReferences references, IGameManager manager, IGameMediator mediator) {
+        public void Apply(IGameReferences references, IGameManager manager, IGameMediator mediator, CardViews cardViews) {
             if (IsApplied) return;
 
             Dress(references, manager.Player1.Name, manager.Player2.Name);
-            player1Plaque.Bind(manager.Player1, mediator);
-            player2Plaque.Bind(manager.Player2, mediator);
+            player1Plaque.Bind(manager.Player1, mediator, manager, cardViews);
+            player2Plaque.Bind(manager.Player2, mediator, manager, cardViews);
             IsApplied = true;
         }
 
