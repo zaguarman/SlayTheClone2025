@@ -1011,6 +1011,42 @@ def supreme_court():
     return img
 
 
+def crusader_skeleton(img, x, y, pose, helm=True, flip=1):
+    """A dead crusader: a skeleton in a white tabard with a red cross, a bucket helm (or a bare skull). pose: "sitting"
+    against the rock, slumped; "lying" flat on its back."""
+    d = ImageDraw.Draw(img)
+    bone, cross = C["white"], C["red"]
+    if pose == "sitting":
+        # Legs out in front, the torso slumped, the head tipped over
+        d.line([(x, y), (x + flip * 12, y + 2), (x + flip * 14, y + 8)], fill=bone + (255,), width=2)
+        d.line([(x + 2, y - 2), (x + flip * 10, y - 4), (x + flip * 12, y + 4)], fill=bone + (255,), width=2)
+        shape(img, lambda dr, v: dr.polygon([(x - 5, y), (x + 5, y), (x + 4, y - 16), (x - 4, y - 16)], fill=v), C["white"], C["silver"])
+        d.line([(x, y - 14), (x, y - 4)], fill=cross + (255,), width=2)
+        d.line([(x - 3, y - 11), (x + 3, y - 11)], fill=cross + (255,), width=2)
+        d.line([(x - 4, y - 14), (x - 8, y - 4)], fill=bone + (255,))  # An arm hanging down
+        d.line([(x + 4, y - 14), (x + flip * 9, y - 6)], fill=bone + (255,))
+        hx, hy = x - flip * 2, y - 21
+    else:
+        # On its back, the head toward the cave, a sword beside it
+        shape(img, lambda dr, v: dr.polygon([(x, y - 4), (x + flip * 16, y - 4), (x + flip * 16, y + 3), (x, y + 3)], fill=v), C["white"], C["silver"])
+        d.line([(x + flip * 6, y - 3), (x + flip * 6, y + 2)], fill=cross + (255,), width=2)
+        d.line([(x + flip * 3, y), (x + flip * 9, y)], fill=cross + (255,), width=2)
+        for dy in (-2, 2):
+            d.line([(x + flip * 16, y + dy), (x + flip * 28, y + dy * 2)], fill=bone + (255,), width=2)
+        d.line([(x + flip * 4, y - 4), (x + flip * 2, y - 10)], fill=bone + (255,))
+        d.line([(x - flip * 2, y + 6), (x + flip * 24, y + 6)], fill=C["silver"] + (255,))  # The sword
+        d.line([(x + flip * 2, y + 4), (x + flip * 2, y + 8)], fill=C["amber"] + (255,))
+        hx, hy = x - flip * 5, y - 1
+    if helm:  # The great helm: a flat-topped bucket with an eye slit and a cross of breathing holes
+        shape(img, lambda dr, v: dr.rectangle([hx - 5, hy - 5, hx + 5, hy + 5], fill=v), C["grey"], C["slate"], C["silver"])
+        d.line([(hx - 4, hy - 1), (hx + 4, hy - 1)], fill=C["ink"] + (255,))
+        d.line([(hx, hy + 1), (hx, hy + 4)], fill=C["ink"] + (255,))
+    else:
+        d.ellipse([hx - 4, hy - 4, hx + 4, hy + 4], fill=bone + (255,))
+        d.rectangle([hx - 2, hy - 1, hx - 1, hy], fill=C["ink"] + (255,))
+        d.rectangle([hx + 1, hy - 1, hx + 2, hy], fill=C["ink"] + (255,))
+
+
 def killer_rabbit():
     img = layer()
     d = ImageDraw.Draw(img)
@@ -1020,9 +1056,14 @@ def killer_rabbit():
         d.line([x - 6, y, x + 6, y - 2], fill=C["white"] + (255,), width=2)
         d.ellipse([x - 8, y - 2, x - 4, y + 2], fill=C["white"] + (255,))
         d.ellipse([x + 4, y - 4, x + 8, y], fill=C["white"] + (255,))
-    for x, y in ((44, 94), (150, 100), (114, 102)):
+    for x, y in ((150, 100),):
         shape(img, lambda dr, v: dr.chord([x - 7, y - 7, x + 7, y + 7], 180, 360, fill=v), C["grey"], C["slate"], C["silver"])
         d.line([x - 2, y - 6, x + 1, y - 3], fill=C["slate"] + (255,))  # A dent
+    # Crusaders who tried: one slumped against each side of the cave mouth, one flat on his back, a fourth helmless
+    crusader_skeleton(img, 56, 92, "sitting", helm=True, flip=1)
+    crusader_skeleton(img, 140, 90, "sitting", helm=False, flip=-1)
+    crusader_skeleton(img, 30, 100, "lying", helm=True, flip=1)
+    crusader_skeleton(img, 170, 100, "lying", helm=True, flip=-1)
     # The rabbit: small, fluffy, innocent, a drop of red on its whiskers
     shape(img, lambda dr, v: dr.ellipse([82, 70, 112, 98], fill=v), C["white"], C["silver"])
     shape(img, lambda dr, v: dr.ellipse([84, 56, 106, 78], fill=v), C["white"], C["silver"])

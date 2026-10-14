@@ -444,6 +444,7 @@ The Chosen One (creature)
     USER: 2026-10-14: delete the ball of fire; let Jesus with guns steal the show.
 Killer Rabbit of Caerbannog (creature)
     A small fluffy white rabbit sitting innocently in front of a cave mouth littered with bones and dented helmets, a tiny drop of red on its whiskers, knights fleeing in the distance.
+    USER: 2026-10-14 (pixel art): skeletons in crusader armor around the bunny's lair.
 Black Knight (creature)
     A knight in black armor standing defiantly at a forest bridge with no arms left, sword on the ground, shouting at a bemused king who rides an invisible horse to the sound of coconuts.
 Buddy Christ (creature)

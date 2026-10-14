@@ -27,6 +27,7 @@ USER_NOTES = {
                 "2026-10-14: then: keep only the first, shorter fire on the ground around it; no fire climbing over it.",
                 "2026-10-14: then: that short fire in front of the unicorn."],
     "Schrodinger's Cat": ["2026-10-14 (pixel art): no 50% printed on the box."],
+    "Killer Rabbit of Caerbannog": ["2026-10-14 (pixel art): skeletons in crusader armor around the bunny's lair."],
     "Hostile Takeover": ["2026-10-14 (pixel art): the mouth a smile instead of an open box; the dorsal fin swept back, not a pyramid."],
     # From earlier sessions
     "Dogpile": ["A big pile of dogs on top of someone."],
