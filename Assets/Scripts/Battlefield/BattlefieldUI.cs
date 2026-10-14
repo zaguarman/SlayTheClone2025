@@ -174,7 +174,11 @@ namespace SlayTheClone {
             }
             var targetSlot = aim == DropAim.Slot ? GetTargetSlot() : null;
             if (targetSlot == null) return;
+            DropOn(card, targetSlot);
+        }
 
+        /// <summary>The card released on this slot: played there from the hand, or a creature's attack or move (tests call it directly).</summary>
+        public void DropOn(CardController card, BattlefieldSlot targetSlot) {
             if (IsCardFromHand(card) || card.IsQueued) {
                 HandleCardFromHand(card, targetSlot);
             }
@@ -234,6 +238,15 @@ namespace SlayTheClone {
                 if (GameManager.ModifierManager.CanAct(creature) && Abilities.CanUseActive(creature, GameManager.ModifierManager)
                     && targetSlot.Model.OccupyingCreature != creature) {
                     GameManager.ActionsQueue.AddAction(new UseAbilityAction(creature, targetSlot.Model));
+                }
+                return;
+            }
+
+            // Friendly Fire (right-drag): it attacks the creature of its own side it was dropped on, Last Will and all
+            if (card.IsFriendlyFire) {
+                card.IsFriendlyFire = false;
+                if (creature.Owner == Player && targetSlot.Model.OccupyingCreature is ICreature victim && victim != creature) {
+                    GameManager.CombatHandler.HandleCreatureCombat(creature, targetSlot.Model);
                 }
                 return;
             }
@@ -711,6 +724,9 @@ namespace SlayTheClone {
 
         private BattlefieldArrowManager.DragIntent GetDragIntent(CardController card, BattlefieldSlot slotUnderPointer) {
             if (slotUnderPointer == null || slotUnderPointer == GetSlot(card)) return BattlefieldArrowManager.DragIntent.None;
+            if (card.IsFriendlyFire) { // Only onto another creature of its own side
+                return slotUnderPointer.Owner == Player && slotUnderPointer.Model.IsOccupied() ? BattlefieldArrowManager.DragIntent.Attack : BattlefieldArrowManager.DragIntent.None;
+            }
             return slotUnderPointer.Owner == Player ? BattlefieldArrowManager.DragIntent.Move : BattlefieldArrowManager.DragIntent.Attack;
         }
 

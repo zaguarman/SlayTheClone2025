@@ -140,7 +140,8 @@ namespace SlayTheClone {
         private Comparer<Entry> inLayerOrder;
         private Comparer<Entry> InLayerOrder => inLayerOrder ??= Comparer<Entry>.Create(CompareInLayer);
 
-        // GDD 3.7: higher Speed first (lower first in Rush Hour), then lowest Health + Armor, then lowest base Attack, then random.
+        // GDD 3.7: higher Speed first (lower first in Rush Hour); at the same Speed, one side's actions in the order its player
+        // planned them, and between the two sides lowest Health + Armor, then lowest base Attack, then random.
         // Moves resolve in the order they were planned, spells have no Speed and resolve in random order,
         // and actions no creature made come after the creatures', in the order they were queued.
         // A Watchdog's Reorder moves an action before or after the rest of its layer.
@@ -161,6 +162,7 @@ namespace SlayTheClone {
             int bySpeed = b.Source.Speed.CompareTo(a.Source.Speed);
             if (executionContext.TrendSystem.SlowestFirst) bySpeed = -bySpeed; // Rush Hour
             if (bySpeed != 0) return bySpeed;
+            if (a.Source.Owner == b.Source.Owner) return a.Sequence.CompareTo(b.Sequence); // Your own ties: as you planned them
             int byToughness = (a.Source.Health + a.Source.CurrentArmorPool).CompareTo(b.Source.Health + b.Source.CurrentArmorPool);
             if (byToughness != 0) return byToughness;
             int byAttack = a.Source.BaseAttack.CompareTo(b.Source.BaseAttack);

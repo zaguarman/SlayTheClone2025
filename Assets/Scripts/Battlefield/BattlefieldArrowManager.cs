@@ -43,6 +43,7 @@ namespace SlayTheClone {
         // One arrow: where it comes from (one start per action merged into it), where it goes, and how it looks
         private class ArrowPlan {
             public readonly List<Vector3> Starts = new List<Vector3>();
+            public readonly List<string> Labels = new List<string>(); // The attack's place in the order, at each start
             public Vector3 End;
             public Color Color;
             public ArrowIndicator.Style Style;
@@ -84,6 +85,7 @@ namespace SlayTheClone {
 
         private void RefreshArrows() {
             var wanted = new Dictionary<string, ArrowPlan>();
+            attackNumbers = AttackNumbers(actionsQueue, isHidden);
             aimedSides.Clear();
             foreach (var action in actionsQueue.GetPendingActions()) {
                 if (isHidden(action)) continue; // A Concealed Action: its creature's card shows ??? instead
@@ -105,12 +107,14 @@ namespace SlayTheClone {
                     arrow.SetStyle(plan.Style);
                     arrow.SetColor(plan.Color);
                     arrow.Show(plan.Starts, plan.End, drawIn: true);
+                    arrow.SetLabels(plan.Labels);
                     continue;
                 }
                 // Endpoints move when creatures change slots, and an arrow gains or loses branches as others join or leave
                 arrow.SetStyle(plan.Style);
                 arrow.SetColor(plan.Color);
                 arrow.Show(plan.Starts, plan.End);
+                arrow.SetLabels(plan.Labels);
             }
         }
 
@@ -126,7 +130,7 @@ namespace SlayTheClone {
             switch (action) {
                 case BattlefieldCombatAction attack when IsOwn(attack.GetAttacker()) && attack.GetTargetSlot() != null:
                     AddBetweenSlots(wanted, $"attack_{attack.GetTargetSlot().TargetId}", attack.GetAttacker().Slot, attack.GetTargetSlot(),
-                        AttackColor, ArrowIndicator.Style.Attack);
+                        AttackColor, ArrowIndicator.Style.Attack, attackNumbers.TryGetValue(attack, out int number) ? number.ToString() : null);
                     break;
                 case DamageCreatureAction damage when IsOwn(damage.GetAttacker()) && damage.GetTarget()?.Slot != null:
                     AddBetweenSlots(wanted, $"damage_{damage.GetTarget().TargetId}", damage.GetAttacker().Slot, damage.GetTarget().Slot,
@@ -135,12 +139,39 @@ namespace SlayTheClone {
             }
         }
 
-        private void AddBetweenSlots(Dictionary<string, ArrowPlan> wanted, string key, BoardSlot from, BoardSlot to, Color color, ArrowIndicator.Style style) {
+        private void AddBetweenSlots(Dictionary<string, ArrowPlan> wanted, string key, BoardSlot from, BoardSlot to, Color color, ArrowIndicator.Style style,
+            string label = null) {
             var fromView = findSlotView(from);
             var toView = findSlotView(to);
             if (fromView == null || toView == null) return;
             var plan = Plan(wanted, key, toView.transform.position, color, style);
-            if (!plan.Starts.Contains(fromView.transform.position)) plan.Starts.Add(fromView.transform.position);
+            if (plan.Starts.Contains(fromView.transform.position)) return;
+            plan.Starts.Add(fromView.transform.position);
+            plan.Labels.Add(label);
+        }
+
+        private Dictionary<IGameAction, int> attackNumbers = new Dictionary<IGameAction, int>();
+
+        /// <summary>
+        /// Where each planned attack the screen can see comes in the order they resolve, from 1: by layer, then Speed. At the
+        /// same Speed one side's attacks follow the order its player planned them, and the two sides' share numbers, a tie
+        /// (the first of each side is the same number), since which of those goes first is only settled as they resolve.
+        /// </summary>
+        public static Dictionary<IGameAction, int> AttackNumbers(IActionsQueue queue, Func<IGameAction, bool> hidden) {
+            var numbers = new Dictionary<IGameAction, int>();
+            int next = 1;
+            var attacks = queue.GetPendingActions().OfType<BattlefieldCombatAction>()
+                .Where(a => a.GetAttacker() != null && a.GetTargetSlot() != null && !(hidden?.Invoke(a) ?? false));
+            foreach (var tied in attacks.GroupBy(a => (queue.LayerOfPending(a), a.GetAttacker().Speed))) {
+                int most = 0;
+                foreach (var side in tied.GroupBy(a => a.GetAttacker().Owner)) {
+                    int i = 0;
+                    foreach (var attack in side) numbers[attack] = next + i++;
+                    most = Math.Max(most, i);
+                }
+                next += most;
+            }
+            return numbers;
         }
 
         private static ArrowPlan Plan(Dictionary<string, ArrowPlan> wanted, string key, Vector3 end, Color color, ArrowIndicator.Style style) {

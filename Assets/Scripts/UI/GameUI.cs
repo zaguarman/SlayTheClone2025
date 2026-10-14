@@ -201,7 +201,7 @@ namespace SlayTheClone {
             Shortcut(FogOfWar.ToggleKey.ToString(), $"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")}") + "\n" +
             Shortcut(FogOfWar.SwitchSidesKey.ToString(), $"Playing as: Player {(FogOfWar.PlaysAsPlayer1 ? 1 : 2)}") + "\n" +
             Shortcut(AIController.SwitchSeatsKey.ToString(), $"AI: {AIController.SeatsText}") + "\n" +
-            $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}</size>";
+            $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}    {Shortcut("Right-drag", "Attack your own")}</size>";
 
         private static string Shortcut(string key, string what) => $"<color=#B8B0A0>{key}</color>  {what}";
 

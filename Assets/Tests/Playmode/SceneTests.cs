@@ -75,6 +75,10 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(2, game.QueuedArrows(p1).Count, "Three attacks, two targets: two arrows");
             Assert.AreEqual(2, game.QueuedArrows(p1).Max(a => a.Branches), "The two attacks on the same slot merge into one arrow");
             Assert.AreEqual(1, game.QueuedArrows(p2).Count, "The other side's attack has its own arrow");
+            // Numbered in the order they resolve: at the same Speed, yours as you planned them, and a tie with theirs shares a number
+            CollectionAssert.AreEquivalent(new[] { "1", "3" }, game.QueuedArrows(p1).Single(a => a.Branches == 2).Labels, "The brute first, the flanker third...");
+            CollectionAssert.AreEquivalent(new[] { "2" }, game.QueuedArrows(p1).Single(a => a.Branches == 1).Labels, "...the striker second");
+            CollectionAssert.AreEquivalent(new[] { "1" }, game.QueuedArrows(p2).Single().Labels, "The mouse ties with the brute: both 1");
             Assert.IsTrue(game.QueuedArrows(p1).All(a => a.Color.b > a.Color.r), "Your attack arrows are blue...");
             Assert.IsTrue(game.QueuedArrows(p2).All(a => a.Color.r > a.Color.b), "...the enemy's red");
             game.Queue.CancelDeclaredAction(flanker.TargetId);
@@ -257,6 +261,16 @@ namespace SlayTheClone.Tests {
             Assert.IsNull(game.MoveHintIn(p1.Battlefield[0]), "Its own slot");
             SceneGame.EndDrag(card, drag);
             Assert.IsNull(game.MoveHintIn(p1.Battlefield[1]), "The hints go when the drag ends");
+
+            // Friendly Fire: right-dragged onto another creature of its own side, it attacks it
+            var rightDrag = SceneGame.BeginDrag(card, PointerEventData.InputButton.Right);
+            Assert.IsTrue(card.IsFriendlyFire, "A right-drag of a creature on the board is Friendly Fire");
+            game.BoardView(p1).DropOn(card, game.BoardView(p1).FindSlotView(p1.Battlefield[2]));
+            Assert.IsTrue(game.Queue.GetPendingActions().OfType<BattlefieldCombatAction>().Any(a => a.GetAttacker() == mover && a.GetTargetSlot() == p1.Battlefield[2]),
+                "Right-drag onto one of its own: Friendly Fire, a real attack on it");
+            SceneGame.EndDrag(card, rightDrag);
+            Assert.IsNull(game.MoveHintIn(p1.Battlefield[1]));
+            game.Queue.CancelDeclaredAction(mover.TargetId);
 
             game.Queue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[0], p1.Battlefield[2], p1));
             yield return null;

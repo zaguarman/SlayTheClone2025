@@ -49,6 +49,8 @@ namespace SlayTheClone {
         private bool isDragging;
         /// <summary>The card being dragged, if any: while the player is doing something, no tooltip opens.</summary>
         public static CardController Dragged { get; private set; }
+        /// <summary>Dragged with the right button: an attack on a creature of its own side (Friendly Fire).</summary>
+        public bool IsFriendlyFire { get; set; }
         // Store both the base definition and the live instance
         private CardData baseCardData; // The original ScriptableObject definition
         private ICreature linkedCreature; // The live Creature instance (if applicable)
@@ -366,7 +368,10 @@ namespace SlayTheClone {
                 eventData.pointerDrag = null;
                 return;
             }
-            if (eventData.button != PointerEventData.InputButton.Left) return;
+            // Right-drag: a creature on the board turns on one of its own side (Friendly Fire), with no targeting help
+            bool friendlyFire = eventData.button == PointerEventData.InputButton.Right && linkedCreature?.Slot != null;
+            if (eventData.button != PointerEventData.InputButton.Left && !friendlyFire) return;
+            IsFriendlyFire = friendlyFire;
 
             // Queued cards are committed (except in the hand, where dragging re-aims or takes back the play),
             // and nothing can be played while a turn resolves; cancel the drag so no drop zone receives the card

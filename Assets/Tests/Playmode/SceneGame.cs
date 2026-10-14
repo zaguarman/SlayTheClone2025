@@ -241,8 +241,8 @@ namespace SlayTheClone.Tests {
         /// Drags the card the way the event system does: begin drag, a drop on <paramref name="dropOn"/> (null: released
         /// where nothing takes it), then end drag. Returns false if the card refused to be dragged.
         /// </summary>
-        public static bool DragAndDrop(CardController card, GameObject dropOn) {
-            var eventData = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, pointerDrag = card.gameObject };
+        public static bool DragAndDrop(CardController card, GameObject dropOn, PointerEventData.InputButton button = PointerEventData.InputButton.Left) {
+            var eventData = new PointerEventData(EventSystem.current) { button = button, pointerDrag = card.gameObject };
             ExecuteEvents.Execute(card.gameObject, eventData, ExecuteEvents.beginDragHandler);
             if (eventData.pointerDrag == null) return false;
 
@@ -252,8 +252,8 @@ namespace SlayTheClone.Tests {
         }
 
         /// <summary>Starts dragging the card the way the event system does; finish with <see cref="EndDrag"/>.</summary>
-        public static PointerEventData BeginDrag(CardController card) {
-            var eventData = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, pointerDrag = card.gameObject };
+        public static PointerEventData BeginDrag(CardController card, PointerEventData.InputButton button = PointerEventData.InputButton.Left) {
+            var eventData = new PointerEventData(EventSystem.current) { button = button, pointerDrag = card.gameObject };
             ExecuteEvents.Execute(card.gameObject, eventData, ExecuteEvents.beginDragHandler);
             return eventData;
         }

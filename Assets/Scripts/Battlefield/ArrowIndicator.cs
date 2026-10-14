@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -177,6 +178,49 @@ namespace SlayTheClone {
         public bool IsVisible() => isVisible;
         public bool IsFadingOut => isFadingOut;
         /// <summary>Where it was asked to start (the first start, when several merge) and end, before insets and lanes.</summary>
+        // The order labels: a number by each start, telling when that attack resolves
+        private const float LabelSize = 3.2f;   // TextMeshPro size: about a third of a world unit tall
+        private const float LabelOffset = 0.55f; // From the start toward the end, on the card's edge
+        private readonly List<TMPro.TextMeshPro> labels = new List<TMPro.TextMeshPro>();
+
+        /// <summary>The numbers shown by the arrow's starts (one per start; null or empty shows none).</summary>
+        public IReadOnlyList<string> Labels => labels.Where(l => l != null && l.gameObject.activeSelf).Select(l => l.text).ToList();
+
+        public void SetLabels(IReadOnlyList<string> texts) {
+            for (int i = 0; i < Mathf.Max(texts?.Count ?? 0, labels.Count); i++) {
+                string text = texts != null && i < texts.Count && i < starts.Count ? texts[i] : null;
+                if (i >= labels.Count) labels.Add(null);
+                if (string.IsNullOrEmpty(text)) {
+                    if (labels[i] != null) labels[i].gameObject.SetActive(false);
+                    continue;
+                }
+                var label = labels[i] ?? (labels[i] = NewLabel());
+                label.gameObject.SetActive(true);
+                label.text = text;
+                var direction = (endPosition - starts[i]);
+                direction.z = 0f;
+                label.transform.position = starts[i] + (direction.sqrMagnitude > 0.0001f ? direction.normalized * LabelOffset : Vector3.zero) + new Vector3(0f, 0f, -0.01f);
+                float scale = transform.lossyScale.x > 0 ? 1f / transform.lossyScale.x : 1f;
+                label.transform.localScale = Vector3.one * scale;
+                label.color = new Color(1f, 1f, 1f, opacity);
+            }
+        }
+
+        private TMPro.TextMeshPro NewLabel() {
+            var labelObject = new GameObject("OrderLabel");
+            labelObject.transform.SetParent(transform, false);
+            var label = labelObject.AddComponent<TMPro.TextMeshPro>();
+            label.fontSize = LabelSize;
+            label.fontStyle = TMPro.FontStyles.Bold;
+            label.alignment = TMPro.TextAlignmentOptions.Center;
+            label.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+            label.rectTransform.sizeDelta = new Vector2(1f, 0.5f);
+            label.outlineWidth = 0.3f;
+            label.outlineColor = new Color32(20, 20, 30, 255);
+            label.sortingOrder = SortingOrder + 700; // Over every arrow
+            return label;
+        }
+
         public Vector3 StartPosition => starts.Count > 0 ? starts[0] : Vector3.zero;
         public Vector3 EndPosition => endPosition;
         public IReadOnlyList<Vector3> StartPositions => starts;
