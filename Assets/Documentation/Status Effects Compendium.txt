@@ -60,7 +60,9 @@ Blessed
     Type: Protective, Stacking, Consumable, Persistent
     Persistent: Yes
     Description: "Persistent. Wards the creature: the next status effect that would be applied to it is negated, and Blessed loses 1 stack. Up to 3 stacks. Re-applying adds stacks."
-    Core Impact: Scarce, expensive protection against status effects, including Doomed.
+    Core Impact: Scarce, expensive protection against status effects, including Doomed. Since 2026-10-14 each stack also
+        saves it once from being destroyed outright by a spell or an ability (a Licence to Kill, Extreme Prejudice, a Destroy);
+        a Sacrifice isn't warded. A licensed Double Tap strips two stacks, or one and the creature.
     Stacking & Duration:
         Initial Stacks: 1 (typically, or X from source)
         Max Stacks: 3
@@ -558,7 +560,7 @@ Borrowed Time
     Faction: Shadow Ops. (Die Another Day)
     Type: Delayed, Protection
     Description: "It can't die while it lasts, not even destroyed. When it runs out, at Dusk, it dies if it's at 0 Health."
-    Core Impact: Damage still lands (Health stops at 0), Destroys and Kill Orders fail, Last Wills don't happen. The creature keeps acting at 0 Health. Heal it before the Dusk it runs out and it lives.
+    Core Impact: Damage still lands (Health stops at 0), Destroys and Kill Orders fail, Last Wills don't happen. The creature keeps acting at 0 Health. Heal it before the Dusk it runs out and it lives. It's the one status that lands on a Doomed creature: on Borrowed Time when the sentence is carried out, it survives it (the sentence is served).
     Stacking & Duration:
         Initial Stacks: 1 (from source), Status Timing as usual: applied on Day X, it runs out at the Dusk of Day X+1
         Re-application Behavior: Refresh

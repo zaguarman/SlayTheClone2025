@@ -5,6 +5,27 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+36. The 2026-10-14 feedback batch
+    • Fixed: the combat never ended at 0 Health (nothing listened for the end). The turn flow now stops, End Turn greys out
+      and a Victory / Defeat screen offers Play Again and Main Menu; a scene test checks a turn ended after it doesn't happen.
+    • Built as asked: Blessed wards off outright destroys (one stack each); Licence to Kill + Double Tap strips two Blessings;
+      Die Another Day can save a Doomed creature if it's on Borrowed Time when the sentence is carried out; status icons
+      show a number (stacks, or Dusks left); stats are green above / red below the printed number; queued spells sit in the
+      slot's lower-left corner on both sides; Trends are the same for both sides (Freak Weather strikes the toughest creature
+      on the board, Volcano Lair hides each side's boss); Friendly Fire (right-drag onto your own creature); attack arrows
+      numbered in resolution order; Casino (Corporate, Gamble); Multipass (Multi Passport became a Send For spell, art
+      redrawn after the film still); decks listed most recently updated first.
+    • Send For (the "tutors"): one per deck, each faction its own way (Multipass, Omen Reading, Supply Depot, Headhunter,
+      Doomscrolling, Web Scraping, Drug Smuggler, Lucid Dreaming, Research Lab). The card picked joins your next hand.
+      Named Send For, not Tutor (Magic's slang for it).
+    • Choices made, say if you want them otherwise:
+        - Same-Speed attacks of one side now resolve in the order you planned them (was: lowest Health first). Between the
+          two sides the old tie-break stays, and the arrows show the same number.
+        - Off the Books moved from Multi Passport to Femme Fatale (every ability must be on a card).
+        - Friendly Fire is the player's: the AI doesn't attack its own creatures yet.
+        - Volcano Lair and HAARP now help the other side too: Double-O Section loses some of its edge.
+    • No art yet for 8 Send For cards and 24 Myth cards (Casino and Multipass are drawn). Draw them?
+
 35. Myth rebuilt, and the table changes (2026-10-14)
     • Built: Revive, Sacrifice X and Prophecy X (Keywords, card text, AI), Conversion is the existing take-control. 24 new
       Myth cards, a new 22-card Myth deck. Against Shadow Ops. with Hard and Very Hard, both seats: 51% of 360 games
