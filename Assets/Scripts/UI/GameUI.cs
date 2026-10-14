@@ -47,6 +47,7 @@ namespace SlayTheClone {
             skin.Apply(gameReferences, gameManager, gameMediator);
             skin.PutAtBottom(FogOfWar.PlaysAsPlayer1);
             CreateQueuePanel(skin);
+            CreateEnemyPileButtons(skin);
             FogOfWar.Changed += OnFogOfWarChanged;
             ShowFogOfWarState();
 
@@ -130,6 +131,22 @@ namespace SlayTheClone {
             skin.PlaceQueue(QueuePanel.Toggle, QueuePanel.Panel);
         }
 
+        // The other side's deck and discard pile, by its hand: copies of the screen player's buttons, shown while Fog of War is off
+        private void CreateEnemyPileButtons(BoardSkin skin) {
+            var deck = gameReferences.GetDeckViewButton();
+            var discard = gameReferences.GetDiscardViewButton();
+            if (deck == null || discard == null || deckViewController == null) return;
+            var enemyDeck = Instantiate(deck, deck.transform.parent);
+            enemyDeck.name = "EnemyDeckViewButton";
+            var enemyDiscard = Instantiate(discard, discard.transform.parent);
+            enemyDiscard.name = "EnemyDiscardViewButton";
+            // Drawn with the other piles, under the panels that open over the table (the queue's)
+            enemyDeck.transform.SetSiblingIndex(deck.transform.GetSiblingIndex() + 1);
+            enemyDiscard.transform.SetSiblingIndex(discard.transform.GetSiblingIndex() + 1);
+            skin.PlaceEnemyPiles((RectTransform)enemyDeck.transform, (RectTransform)enemyDiscard.transform);
+            deckViewController.AddEnemyButtons(enemyDeck, enemyDiscard);
+        }
+
         private T GetOrAddComponent<T>() where T : Component {
             var component = GetComponent<T>();
             return component != null ? component : gameObject.AddComponent<T>();
@@ -163,11 +180,14 @@ namespace SlayTheClone {
         }
 
         /// <summary>The note under the End Turn button: the debug switches' state, the seats the AI plays, and the keyboard shortcuts.</summary>
+        /// Every line reads the same way: the key, then what it switches and how it's set now.
         public string ShortcutsText =>
-            $"FOG OF WAR {(FogOfWar.Enabled ? "ON" : "OFF")} ({FogOfWar.ToggleKey})\n" +
-            (FogOfWar.PlaysAsPlayer1 ? $"{FogOfWar.SwitchSidesKey}: PLAY AS PLAYER 2" : $"PLAYING AS PLAYER 2 ({FogOfWar.SwitchSidesKey})") +
-            $"\nAI PLAYS: {AIController.SeatsText} ({AIController.SwitchSeatsKey})" +
-            "\n<size=85%><color=#B8B0A0>Esc: menu  ·  Shift + drag: use an ability</color></size>";
+            Shortcut(FogOfWar.ToggleKey.ToString(), $"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")}") + "\n" +
+            Shortcut(FogOfWar.SwitchSidesKey.ToString(), $"Playing as: Player {(FogOfWar.PlaysAsPlayer1 ? 1 : 2)}") + "\n" +
+            Shortcut(AIController.SwitchSeatsKey.ToString(), $"AI: {AIController.SeatsText}") + "\n" +
+            $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}</size>";
+
+        private static string Shortcut(string key, string what) => $"<color=#B8B0A0>{key}</color>  {what}";
 
         // Always shown under the End Turn button: whether the fog is on, whose view it is, and the other shortcuts
         private void ShowFogOfWarState() {

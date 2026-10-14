@@ -30,6 +30,8 @@ namespace SlayTheClone {
         private RectTransform endTurnButton;
         private RectTransform deckButton;
         private RectTransform discardButton;
+        private RectTransform enemyDeckButton;
+        private RectTransform enemyDiscardButton;
         private RectTransform queueToggle;
         private RectTransform queuePanel;
         private PlayerPlaque player1Plaque;
@@ -96,6 +98,13 @@ namespace SlayTheClone {
         public void PlaceQueue(RectTransform toggle, RectTransform panel) {
             queueToggle = toggle;
             queuePanel = panel;
+            Layout();
+        }
+
+        /// <summary>The other side's deck and discard buttons: by its hand at the top, mirroring yours.</summary>
+        public void PlaceEnemyPiles(RectTransform deck, RectTransform discard) {
+            enemyDeckButton = deck;
+            enemyDiscardButton = discard;
             Layout();
         }
 
@@ -385,6 +394,9 @@ namespace SlayTheClone {
             float handY = WorldBounds((player1AtBottom ? player1Hand : player2Hand).transform).center.y;
             PlaceAtLeft(discardButton, left, handY);
             PlaceAtRight(deckButton, right, handY);
+            float topHandY = WorldBounds((player1AtBottom ? player2Hand : player1Hand).transform).center.y;
+            PlaceAtLeft(enemyDiscardButton, left, topHandY);
+            PlaceAtRight(enemyDeckButton, right, topHandY);
 
             if (queueToggle != null && queuePanel != null && endTurnButton != null) {
                 PlaceAtRight(queueToggle, right, bottomMat.center.y);

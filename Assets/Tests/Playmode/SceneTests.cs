@@ -75,6 +75,8 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(2, game.QueuedArrows(p1).Count, "Three attacks, two targets: two arrows");
             Assert.AreEqual(2, game.QueuedArrows(p1).Max(a => a.Branches), "The two attacks on the same slot merge into one arrow");
             Assert.AreEqual(1, game.QueuedArrows(p2).Count, "The other side's attack has its own arrow");
+            Assert.IsTrue(game.QueuedArrows(p1).All(a => a.Color.b > a.Color.r), "Your attack arrows are blue...");
+            Assert.IsTrue(game.QueuedArrows(p2).All(a => a.Color.r > a.Color.b), "...the enemy's red");
             game.Queue.CancelDeclaredAction(flanker.TargetId);
             yield return null;
             Assert.IsTrue(game.QueuedArrows(p1).All(a => a.Branches == 1), "Called off: that arrow loses its branch");
@@ -84,6 +86,15 @@ namespace SlayTheClone.Tests {
             endTurn.onClick.Invoke(); // While the first click's turn is still resolving
             yield return Wait.For(() => !game.Turns.IsResolving, "the turn to resolve");
             Assert.AreEqual(1, game.Turns.TurnNumber, "Two clicks ended two turns");
+            var queuePanel = game.QueuePanel;
+            CollectionAssert.AreEqual(new[] { 0 }, queuePanel.PastDays, "The queue keeps the Day that just ended");
+            queuePanel.SetOpen(true);
+            queuePanel.Page(-1);
+            Assert.AreEqual(0, queuePanel.ShownDay);
+            StringAssert.Contains("Test Brute", string.Join("\n", queuePanel.Lines), "Paging back shows what was planned that Day");
+            queuePanel.Page(+1);
+            Assert.IsNull(queuePanel.ShownDay, "...and forward, the queue as it is now");
+            queuePanel.SetOpen(false);
 
             Assert.IsTrue(mouse.IsDead);
             Assert.IsNull(game.CardIn(p2.Battlefield[0]), "The dead creature's card is still on the board");
@@ -182,6 +193,15 @@ namespace SlayTheClone.Tests {
             FogOfWar.Enabled = false;
             yield return null;
             CollectionAssert.IsEmpty(game.BoardView(p2).CreaturesWithHiddenPlans, "Debug: with the fog off the screen shows everything");
+            var enemyDeckButton = GameObject.Find("EnemyDeckViewButton");
+            Assert.IsNotNull(enemyDeckButton, "...the enemy's deck and discard pile get buttons");
+            Object.FindFirstObjectByType<DeckViewController>().ToggleEnemyDeckView();
+            var deckWindow = Object.FindFirstObjectByType<DeckViewUI>(FindObjectsInactive.Include);
+            Assert.IsTrue(deckWindow.IsOpen, "...that open their deck");
+            var texts = deckWindow.DeckViewPanel.GetComponentsInChildren<TMPro.TextMeshProUGUI>(true).Select(t => t.text).ToList();
+            CollectionAssert.Contains(texts, "Their Deck", "...with their deck's title");
+            CollectionAssert.Contains(texts, $"Cards in deck: {p2.Deck.CardsRemaining}", "...and their cards");
+            deckWindow.HideDeckView();
             CollectionAssert.IsEmpty(game.BoardView(p2).AnonymousCards);
             Assert.AreEqual(1, game.QueuedArrows(p2).Count);
             var enemyCard = game.HandCards(p2)[0];
@@ -203,7 +223,16 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(queuePanel.IsOpen, "Clicking it again closes it");
             FogOfWar.Enabled = true;
             yield return null;
+            Assert.IsFalse(enemyDeckButton.activeSelf, "With the fog back on, the enemy's piles are hidden again");
             game.Queue.CancelDeclaredAction(sneak.TargetId);
+
+            // The icons above a creature's art: raised and lowered stats get one each, and hovering one says what changed
+            game.Queue.AddAction(new ModifyAction(sneak, 2, true, false, false, 2));
+            game.Queue.ResolveActions();
+            yield return null;
+            var sneakCard = game.CardIn(sneak.Slot);
+            StringAssert.Contains("icon:stats up", sneakCard.StatusText.text, "A raised stat shows an arrow up");
+            StringAssert.Contains("+2 Attack, 2 Days left", sneakCard.DescribeIcon("icon:stats up")?.Body, "...whose popup lists the change");
 
             var mover = game.Summon(p1, game.Cards.Creature("Test Mover", 1, 5), 0);
             var wall = game.Summon(p1, game.Cards.Creature("Test Wall", 1, 5), 2);

@@ -188,8 +188,65 @@ namespace SlayTheClone {
             var icons = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature)
                 .OfType<StatusEffectModifier>()
                 .Where(status => !FogOfWar.HidesStatus(viewer, linkedCreature, status.EffectType))
-                .Select(status => EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType)));
+                .Select(status => IconLink($"{StatusIconPrefix}{status.EffectType}", EffectIcons.ForStatus(status.EffectType)))
+                .ToList();
+            // Raised or lowered stats: an arrow up or down, before the statuses
+            var changes = StatChanges();
+            if (changes.Any(c => c.Value < 0)) icons.Insert(0, IconLink(StatsDownIcon, EffectIcons.Debuff));
+            if (changes.Any(c => c.Value > 0)) icons.Insert(0, IconLink(StatsUpIcon, EffectIcons.Buff));
             statusText.text = string.Concat(icons);
+        }
+
+        // Each icon is a link, so hovering it can tell what it stands for (see Tooltip and DescribeIcon)
+        private const string StatusIconPrefix = "icon:status:";
+        private const string StatsUpIcon = "icon:stats up";
+        private const string StatsDownIcon = "icon:stats down";
+        private static string IconLink(string id, string icon) => string.IsNullOrEmpty(icon) ? "" : $"<link=\"{id}\">{EffectIcons.Tag(icon)}</link>";
+
+        /// <summary>The icons above the art (statuses and stat changes); each is a link <see cref="DescribeIcon"/> explains.</summary>
+        public TMP_Text StatusText => statusText;
+
+        // The stat changes on the live creature: from effects (some for a few Days) and the ones that stay on the card
+        private List<(int Value, string Text)> StatChanges() {
+            var changes = new List<(int, string)>();
+            if (!CreatureIsAlive || IsDisguised || GameManager?.ModifierManager == null) return changes;
+            int today = GameManager.TurnManager?.TurnNumber ?? 0;
+            foreach (var stat in GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature).OfType<StatModifier>()) {
+                if (stat.Value == 0) continue;
+                string percent = stat.CalculationType == ModifierCalculationType.Percentage ? "%" : "";
+                string lasts = stat is TimedStatModifier timed
+                    ? DaysLeft(timed.TurnApplied + timed.DurationInTurns - today)
+                    : "while it's in play";
+                changes.Add((stat.Value, $"{stat.Value:+0;-0}{percent} {StatName(stat.StatToModify)}, {lasts}"));
+            }
+            var kept = linkedCreature.PersistentChanges;
+            if (kept.attack != 0) changes.Add((kept.attack, $"{kept.attack:+0;-0} Attack, for good (it stays on the card)"));
+            if (kept.health != 0) changes.Add((kept.health, $"{kept.health:+0;-0} Health, for good (it stays on the card)"));
+            if (kept.speed != 0) changes.Add((kept.speed, $"{kept.speed:+0;-0} Speed, for good (it stays on the card)"));
+            return changes;
+        }
+
+        private static string StatName(ModifiableStat stat) => stat == ModifiableStat.Health ? "Health" : stat.ToString();
+        private static string DaysLeft(int days) => days <= 1 ? "until Dusk" : $"{days} Days left, today included";
+
+        /// <summary>What an icon above the art stands for, for its popup: a title and a few lines. Null for no such icon.</summary>
+        public (string Title, string Body)? DescribeIcon(string id) {
+            if (id == StatsUpIcon || id == StatsDownIcon) {
+                var changes = StatChanges();
+                if (changes.Count == 0) return null;
+                var data = linkedCreature.SourceData as CreatureData;
+                string printed = data != null ? $"\n<i>Printed {data.attack}/{data.speed}/{data.health}, now {linkedCreature.Attack}/{linkedCreature.Speed}/{linkedCreature.Health}.</i>" : "";
+                return ("Stat changes", string.Join("\n", changes.Select(c => c.Text)) + printed);
+            }
+            if (id != null && id.StartsWith(StatusIconPrefix) && System.Enum.TryParse(id.Substring(StatusIconPrefix.Length), out Enums.StatusEffectType type)) {
+                var status = GameManager?.ModifierManager?.GetActiveModifiersFor(linkedCreature).OfType<StatusEffectModifier>()
+                    .FirstOrDefault(s => s.EffectType == type);
+                if (status == null) return null;
+                string title = System.Text.RegularExpressions.Regex.Replace(type.ToString(), "(?<=[a-z])(?=[A-Z])", " ");
+                string meaning = Keywords.Exists(title) ? "\n" + Keywords.Describe(title) : "";
+                return (title, status.Description + meaning);
+            }
+            return null;
         }
 
         // Alive: with Health left, or on the board at 0 Health on Borrowed Time (Die Another Day)

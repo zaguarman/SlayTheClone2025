@@ -11,6 +11,7 @@ namespace SlayTheClone {
     /// (see <see cref="QueueView"/>, Fog of War included). Each action is an item, edged in its side's color, with an icon for
     /// what it is; hovering one tells more about it. It follows the queue as it changes, and the fog switch (F9). Clicking
     /// anywhere else closes it.
+    /// The arrows by its heading page back through past Days: what was planned for each, as the screen saw it then.
     /// <see cref="BoardSkin"/> places both at the right edge of the table.
     /// </summary>
     public class QueuePanel : MonoBehaviour {
@@ -27,6 +28,14 @@ namespace SlayTheClone {
         private RectTransform panel;
         private Transform list;
         private TextMeshProUGUI empty;
+        private TextMeshProUGUI heading;
+        private Button earlier;
+        private Button later;
+
+        // Past Days: what the queue held when each was ended, as the screen's player saw it
+        private readonly List<(int Day, List<QueueView.Item> Items)> history = new List<(int, List<QueueView.Item>)>();
+        private List<QueueView.Item> lastPlanned = new List<QueueView.Item>();
+        private int? shownPast; // An index into history, or null for the queue as it is now
 
         public RectTransform Toggle => (RectTransform)toggle.transform;
         public RectTransform Panel => panel;
@@ -35,6 +44,10 @@ namespace SlayTheClone {
         public List<string> Lines { get; private set; } = new List<string>();
         /// <summary>The rows shown, headings included, top to bottom.</summary>
         public List<QueueView.Item> Items { get; private set; } = new List<QueueView.Item>();
+        /// <summary>The past Days kept, oldest first.</summary>
+        public IReadOnlyList<int> PastDays => history.Select(h => h.Day).ToList();
+        /// <summary>The past Day shown, or null for the queue as it is now.</summary>
+        public int? ShownDay => shownPast.HasValue ? history[shownPast.Value].Day : (int?)null;
 
         /// <summary>Makes the button and its (closed) panel next to <paramref name="sibling"/>, at its scale.</summary>
         public static QueuePanel Create(Transform sibling, IGameManager manager, IGameMediator mediator) {
@@ -46,6 +59,7 @@ namespace SlayTheClone {
             view.gameManager = manager;
             view.gameMediator = mediator;
             mediator.ActionsQueueChanged += view.Refresh;
+            mediator.TurnEnded += view.OnTurnEnded;
             FogOfWar.Changed += view.Refresh;
             view.Refresh();
             return view;
@@ -67,7 +81,7 @@ namespace SlayTheClone {
             panel.sizeDelta = new Vector2(640f, 600f);
             UITheme.StylePanel(panelImage);
 
-            var heading = UITheme.NewText("Heading", panel, "Action Queue", 30f, UITheme.Gold, TextAlignmentOptions.Top);
+            heading = UITheme.NewText("Heading", panel, "Action Queue", 30f, UITheme.Gold, TextAlignmentOptions.Top);
             UITheme.StyleHeading(heading);
             var headingRect = heading.rectTransform;
             headingRect.anchorMin = new Vector2(0f, 1f);
@@ -75,6 +89,8 @@ namespace SlayTheClone {
             headingRect.pivot = new Vector2(0.5f, 1f);
             headingRect.sizeDelta = new Vector2(0f, 44f);
             headingRect.anchoredPosition = new Vector2(0f, -12f);
+            earlier = PageButton("Earlier", "<", 0f, () => Page(-1));
+            later = PageButton("Later", ">", 1f, () => Page(+1));
 
             // The items, in a list that scrolls with the wheel when it's longer than the panel
             var viewport = UITheme.NewImage("Viewport", panel, Color.clear, raycastTarget: true);
@@ -110,6 +126,33 @@ namespace SlayTheClone {
             panel.gameObject.SetActive(false);
         }
 
+        // A small arrow button at one end of the heading, to page through the Days
+        private Button PageButton(string name, string label, float side, UnityEngine.Events.UnityAction onClick) {
+            var image = UITheme.NewImage(name, panel, UITheme.PanelLight, raycastTarget: true);
+            UITheme.Place(image.rectTransform, new Vector2(side, 1f), new Vector2(side == 0f ? 46f : -46f, -34f), new Vector2(56f, 44f));
+            var button = image.gameObject.AddComponent<Button>();
+            var text = UITheme.NewText("Label", image.transform, label, 28f, UITheme.Parchment);
+            UITheme.Stretch(text.rectTransform, 2f);
+            UITheme.StyleButton(button);
+            button.onClick.AddListener(onClick);
+            return button;
+        }
+
+        /// <summary>Shows the Day before (-1) or after (+1) the one shown; after the last past Day comes the queue as it is now.</summary>
+        public void Page(int step) {
+            if (history.Count == 0) return;
+            int index = (shownPast ?? history.Count) + step;
+            shownPast = index >= history.Count ? (int?)null : Mathf.Max(0, index);
+            Refresh();
+        }
+
+        // The Day just ended: keep what was planned for it (the queue empties as it resolves)
+        private void OnTurnEnded(int day) {
+            history.Add((day, lastPlanned));
+            lastPlanned = new List<QueueView.Item>();
+            Refresh();
+        }
+
         // Clicking anywhere else closes it, like a menu
         private void Update() {
             if (!IsOpen || !GameInput.ClickedThisFrame) return;
@@ -121,7 +164,10 @@ namespace SlayTheClone {
 
         public void SetOpen(bool open) {
             panel.gameObject.SetActive(open);
-            if (open) Refresh();
+            if (open) {
+                shownPast = null; // It opens on the queue as it is now
+                Refresh();
+            }
             else Tooltip.Existing?.HideText();
         }
 
@@ -129,13 +175,22 @@ namespace SlayTheClone {
         public void Refresh() {
             if (gameManager?.Player1 == null || list == null) return;
             var viewer = FogOfWar.ViewerOf(gameManager.Player1);
-            Items = QueueView.Items(viewer, gameManager.ActionsQueue, gameManager.ModifierManager);
-            Lines = Items.Select(i => i.Heading != null ? $"<b>{i.Heading}</b>" : $"{i.Number}. {i.Text}").ToList();
-            int count = Items.Count(i => i.Heading == null);
+            var live = QueueView.Items(viewer, gameManager.ActionsQueue, gameManager.ModifierManager);
+            var turns = gameManager.TurnManager;
+            if (turns == null || !turns.IsResolving) lastPlanned = live; // While resolving, the queue empties: keep the plan
+            int count = live.Count(i => i.Heading == null);
             toggleLabel.text = count > 0 ? $"Queue ({count})" : "Queue";
+
+            Items = shownPast.HasValue ? history[shownPast.Value].Items : live;
+            Lines = Items.Select(i => i.Heading != null ? $"<b>{i.Heading}</b>" : $"{i.Number}. {i.Text}").ToList();
+            heading.text = shownPast.HasValue ? $"Day {history[shownPast.Value].Day}, resolved"
+                : turns != null ? $"Action Queue, Day {turns.TurnNumber}" : "Action Queue";
+            earlier.interactable = history.Count > 0 && (shownPast ?? history.Count) > 0;
+            later.interactable = shownPast.HasValue;
 
             foreach (Transform row in list) Destroy(row.gameObject);
             foreach (var item in Items) AddRow(item);
+            empty.text = shownPast.HasValue ? "<i>Nothing was planned that Day.</i>" : "<i>Nothing planned yet.</i>";
             empty.gameObject.SetActive(Items.Count == 0);
         }
 
@@ -175,7 +230,10 @@ namespace SlayTheClone {
         }
 
         private void OnDestroy() {
-            if (gameMediator != null) gameMediator.ActionsQueueChanged -= Refresh;
+            if (gameMediator != null) {
+                gameMediator.ActionsQueueChanged -= Refresh;
+                gameMediator.TurnEnded -= OnTurnEnded;
+            }
             FogOfWar.Changed -= Refresh;
         }
     }

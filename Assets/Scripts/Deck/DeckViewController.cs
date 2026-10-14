@@ -3,14 +3,19 @@ using UnityEngine.UI;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
-    // Wires the deck and discard buttons to the DeckViewUI panel; at most one of the two views is open
+    // Wires the deck and discard buttons to the DeckViewUI panel; at most one view is open. The other side's deck and
+    // discard pile have buttons of their own, shown only while Fog of War is off (F9)
     public class DeckViewController : UIComponent {
-        private enum OpenView { None, Deck, Discard }
+        private enum OpenView { None, Deck, Discard, EnemyDeck, EnemyDiscard }
 
         private Button deckViewButton;
         private Button discardViewButton;
+        private Button enemyDeckButton;
+        private Button enemyDiscardButton;
         private TextMeshProUGUI deckButtonText;
         private TextMeshProUGUI discardButtonText;
+        private TextMeshProUGUI enemyDeckButtonText;
+        private TextMeshProUGUI enemyDiscardButtonText;
         private DeckViewUI deckViewUI;
 
         private OpenView openView = OpenView.None;
@@ -25,7 +30,43 @@ namespace SlayTheClone {
             base.Initialize(mediator, manager);
 
             if (SetupUIReferences()) SetupButtons();
+            FogOfWar.Changed += OnFogOfWarChanged;
             Log("DeckViewController initialized with dependencies", LogTag.Initialization);
+        }
+
+        /// <summary>The buttons for the other side's deck and discard pile (copies of the screen player's).</summary>
+        public void AddEnemyButtons(Button deckButton, Button discardButton) {
+            enemyDeckButton = deckButton;
+            enemyDiscardButton = discardButton;
+            if (enemyDeckButton == null || enemyDiscardButton == null || deckViewUI == null) return;
+            enemyDeckButtonText = GetButtonText(enemyDeckButton, "Enemy deck");
+            enemyDiscardButtonText = GetButtonText(enemyDiscardButton, "Enemy discard");
+            deckViewUI.AddToggle(enemyDeckButton);
+            deckViewUI.AddToggle(enemyDiscardButton);
+            enemyDeckButton.onClick.RemoveAllListeners();
+            enemyDiscardButton.onClick.RemoveAllListeners();
+            enemyDeckButton.onClick.AddListener(ToggleEnemyDeckView);
+            enemyDiscardButton.onClick.AddListener(ToggleEnemyDiscardView);
+            UpdateButtonTexts();
+            ShowEnemyButtons();
+        }
+
+        public void ToggleEnemyDeckView() => ToggleView(OpenView.EnemyDeck);
+
+        public void ToggleEnemyDiscardView() => ToggleView(OpenView.EnemyDiscard);
+
+        // Fog of War hides the other side's piles; switching sides (F8) changes whose piles are whose
+        private void OnFogOfWarChanged() {
+            if (openView != OpenView.None) {
+                SetOpenView(OpenView.None);
+                HideDeckView();
+            }
+            ShowEnemyButtons();
+        }
+
+        private void ShowEnemyButtons() {
+            if (enemyDeckButton != null) enemyDeckButton.gameObject.SetActive(!FogOfWar.Enabled);
+            if (enemyDiscardButton != null) enemyDiscardButton.gameObject.SetActive(!FogOfWar.Enabled);
         }
 
         private bool SetupUIReferences() {
@@ -91,7 +132,7 @@ namespace SlayTheClone {
             }
 
             SetOpenView(view);
-            if (!ShowDeckView(view == OpenView.Discard)) {
+            if (!ShowDeckView(view == OpenView.Discard || view == OpenView.EnemyDiscard, view == OpenView.EnemyDeck || view == OpenView.EnemyDiscard)) {
                 SetOpenView(OpenView.None); // Couldn't show it
             }
         }
@@ -108,10 +149,12 @@ namespace SlayTheClone {
         private void UpdateButtonTexts() {
             if (deckButtonText != null) deckButtonText.text = openView == OpenView.Deck ? "Hide Deck" : "View Deck";
             if (discardButtonText != null) discardButtonText.text = openView == OpenView.Discard ? "Hide Discard" : "View Discard";
+            if (enemyDeckButtonText != null) enemyDeckButtonText.text = openView == OpenView.EnemyDeck ? "Hide Their Deck" : "Their Deck";
+            if (enemyDiscardButtonText != null) enemyDiscardButtonText.text = openView == OpenView.EnemyDiscard ? "Hide Their Discard" : "Their Discard";
         }
 
         /// <returns>False if the view could not be shown.</returns>
-        private bool ShowDeckView(bool showDiscard) {
+        private bool ShowDeckView(bool showDiscard, bool enemy = false) {
             if (deckViewUI == null || deckViewUI.DeckViewPanel == null || !deckViewUI.IsInitialized) {
                 LogError("Cannot show deck view - DeckViewUI or its panel is missing, or it was not initialized", LogTag.UI);
                 return false;
@@ -119,14 +162,15 @@ namespace SlayTheClone {
 
             // The screen's player: player 1 unless the sides were switched (F8)
             var player = FogOfWar.ViewerOf(GameManager?.Player1);
+            if (enemy) player = player?.Opponent;
             if (player == null) {
                 LogError("Cannot show view - no active player found", LogTag.UI);
                 return false;
             }
 
             try {
-                if (showDiscard) deckViewUI.ShowDiscardPileCards(player);
-                else deckViewUI.ShowDeckCards(player);
+                if (showDiscard) deckViewUI.ShowDiscardPileCards(player, enemy);
+                else deckViewUI.ShowDeckCards(player, enemy);
 
                 deckViewUI.DeckViewPanel.SetActive(true);
                 Log($"Made {(showDiscard ? "discard" : "deck")} view panel visible for {player.Name}", LogTag.UI);
@@ -158,7 +202,10 @@ namespace SlayTheClone {
         }
 
         protected override void OnDestroy() {
+            FogOfWar.Changed -= OnFogOfWarChanged;
             if (deckViewButton != null) deckViewButton.onClick.RemoveListener(ToggleDeckView);
+            if (enemyDeckButton != null) enemyDeckButton.onClick.RemoveListener(ToggleEnemyDeckView);
+            if (enemyDiscardButton != null) enemyDiscardButton.onClick.RemoveListener(ToggleEnemyDiscardView);
             if (discardViewButton != null) discardViewButton.onClick.RemoveListener(ToggleDiscardView);
             if (deckViewUI != null && deckViewUI.CloseButton != null) {
                 deckViewUI.CloseButton.onClick.RemoveListener(OnCloseButtonClicked);

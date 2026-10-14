@@ -120,6 +120,8 @@ namespace SlayTheClone {
             return (filter, renderer, mesh);
         }
 
+        public Color Color => color;
+
         public void SetColor(Color newColor) {
             color = newColor;
             if (isVisible) Redraw();

@@ -19,6 +19,7 @@ namespace SlayTheClone {
         private GridLayoutGroup gridLayout;
         private ScrollRect scrollRect;
         private bool viewingDiscardPile = false;
+        private bool viewingEnemy = false; // The other side's piles (only while Fog of War is off)
 
         public GameObject DeckViewPanel => deckViewPanel;
         public Button CloseButton => closeButton;
@@ -113,10 +114,10 @@ namespace SlayTheClone {
 
             var dealingService = GameManager.CardDealingService;
             if (viewingDiscardPile) {
-                ShowCards(player, "Discard Pile", "Discarded cards", dealingService.GetDiscardPilePreview(player));
+                ShowCards(player, viewingEnemy ? "Their Discard Pile" : "Discard Pile", "Discarded cards", dealingService.GetDiscardPilePreview(player));
             }
             else {
-                ShowCards(player, "Deck View", "Cards in deck", dealingService.GetDeckPreview(player));
+                ShowCards(player, viewingEnemy ? "Their Deck" : "Deck View", "Cards in deck", dealingService.GetDeckPreview(player));
             }
         }
 
@@ -159,13 +160,15 @@ namespace SlayTheClone {
             return true;
         }
 
-        public void ShowDeckCards(IPlayer player) {
+        public void ShowDeckCards(IPlayer player, bool enemy = false) {
             viewingDiscardPile = false;
+            viewingEnemy = enemy;
             UpdateUI(player);
         }
 
-        public void ShowDiscardPileCards(IPlayer player) {
+        public void ShowDiscardPileCards(IPlayer player, bool enemy = false) {
             viewingDiscardPile = true;
+            viewingEnemy = enemy;
             UpdateUI(player);
         }
 

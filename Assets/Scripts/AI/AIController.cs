@@ -79,10 +79,10 @@ namespace SlayTheClone {
 
         /// <summary>For the note under End Turn: which seats the AI plays, and how well.</summary>
         public static string SeatsText => MatchSetup.AI switch {
-            AISeats.None => "OFF",
-            AISeats.Both => $"BOTH PLAYERS, {MatchSetup.AIPlayer.Name.ToUpper()}",
-            AISeats.Player1 => $"PLAYER 1, {MatchSetup.AIPlayer.Name.ToUpper()}",
-            _ => $"PLAYER 2, {MatchSetup.AIPlayer.Name.ToUpper()}"
+            AISeats.None => "Off",
+            AISeats.Both => $"Both players, {MatchSetup.AIPlayer.Name}",
+            AISeats.Player1 => $"Player 1, {MatchSetup.AIPlayer.Name}",
+            _ => $"Player 2, {MatchSetup.AIPlayer.Name}"
         };
     }
 }

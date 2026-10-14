@@ -471,6 +471,7 @@ namespace SlayTheClone {
                 if (RectTransformUtility.RectangleContainsScreenPoint(keywordPopups[i].Rect, pointer, null)) over = i;
             }
             var previewRect = (RectTransform)preview.transform;
+            if (over == -2 && TrackIcons(pointer, previewRect)) return true;
             if (over == -2 && RectTransformUtility.RectangleContainsScreenPoint(previewRect, pointer, PreviewCamera)) over = -1;
             if (over == -2) return false;
 
@@ -486,9 +487,27 @@ namespace SlayTheClone {
             return true;
         }
 
-        private void OpenKeyword(int index, string key, RectTransform parent, TMP_Text parentText, int linkIndex) {
+        // The icons above a creature's art (its statuses, its raised or lowered stats), on the board card or the enlarged
+        // one: hovering one opens a popup saying what it is, like a keyword's
+        private bool TrackIcons(Vector2 pointer, RectTransform previewRect) {
+            foreach (var (card, camera) in new[] { (preview, PreviewCamera), (activeCard, CanvasUtility.GetEventCamera(activeCard)) }) {
+                var icons = card != null ? card.StatusText : null;
+                if (icons == null || string.IsNullOrEmpty(icons.text) || !icons.isActiveAndEnabled) continue;
+                int link = TMP_TextUtilities.FindIntersectingLink(icons, pointer, camera);
+                if (link < 0) continue;
+                string key = icons.textInfo.linkInfo[link].GetLinkID();
+                if (keywordPopups.Count > 0 && keywordPopups[0].Key == key) return true;
+                var about = activeCard.DescribeIcon(key);
+                if (about == null) return true;
+                OpenKeyword(0, key, previewRect, icons, link, about.Value.Title, about.Value.Body);
+                return true;
+            }
+            return false;
+        }
+
+        private void OpenKeyword(int index, string key, RectTransform parent, TMP_Text parentText, int linkIndex, string title = null, string body = null) {
             CloseKeywordsFrom(index);
-            var popup = BuildKeywordPopup(key);
+            var popup = BuildKeywordPopup(key, title, body);
 
             // At the first free spot: below the text it was opened from, above it, or beside everything already shown,
             // level with the keyword. It never covers the preview or another popup, so the pointer can always reach it
@@ -498,6 +517,7 @@ namespace SlayTheClone {
                 parentText.transform.TransformPoint(character.topLeft)).y + 8f;
             var size = new Vector2(popup.Rect.rect.width * popup.Rect.lossyScale.x, popup.Rect.rect.height * popup.Rect.lossyScale.y);
             var shown = keywordPopups.Select(p => ScreenRect(p.Rect)).Append(PreviewScreenRect()).ToList();
+            if (tooltipRect.gameObject.activeSelf) shown.Add(ScreenRect(tooltipRect)); // The active effects beside the preview
             var from = index == 0 ? PreviewScreenRect() : ScreenRect(parent);
             float level = Mathf.Clamp(linkTop, size.y, Screen.height);
             float left = shown.Min(r => r.xMin), right = shown.Max(r => r.xMax);
@@ -520,8 +540,9 @@ namespace SlayTheClone {
         }
 
         // A parchment note like the card's text box: the keyword's name, then its explanation with its own keywords as links
-        private KeywordPopup BuildKeywordPopup(string key) {
-            var entry = Keywords.Get(key);
+        private KeywordPopup BuildKeywordPopup(string key, string titleText = null, string bodyText = null) {
+            var entry = Keywords.Get(key) ?? new Keywords.Entry { Key = key, Title = titleText ?? key };
+            if (titleText != null) entry = new Keywords.Entry { Key = key, Title = titleText };
             var background = UITheme.NewImage($"Keyword: {key}", transform, UITheme.Parchment, raycastTarget: true);
             UITheme.Round(background, UITheme.Parchment, 1.5f);
             UITheme.AddTrim(background.transform, UITheme.Gold, 1.5f);
@@ -531,7 +552,7 @@ namespace SlayTheClone {
             float inner = PopupWidth - 2 * PopupPadding;
             var title = UITheme.NewText("Title", rect, entry.Title, 24f, UITheme.Ink, TextAlignmentOptions.TopLeft);
             title.fontStyle = FontStyles.Bold | FontStyles.SmallCaps;
-            var body = UITheme.NewText("Body", rect, Keywords.Describe(key), 19f, UITheme.Ink, TextAlignmentOptions.TopLeft);
+            var body = UITheme.NewText("Body", rect, bodyText ?? Keywords.Describe(key), 19f, UITheme.Ink, TextAlignmentOptions.TopLeft);
             body.textWrappingMode = TextWrappingModes.Normal;
             float titleHeight = title.GetPreferredValues(entry.Title, inner, 0f).y;
             float bodyHeight = body.GetPreferredValues(body.text, inner, 0f).y;
