@@ -219,6 +219,9 @@ namespace SlayTheClone {
             // Reading keywords: passing over another card on the way to an explanation doesn't replace them, nor does a
             // card under the enlarged one or its explanations
             if ((keywordPopups.Count > 0 && PointerInArea(GameInput.PointerPosition)) || PointerOnTooltip(GameInput.PointerPosition)) return;
+            // A hand card explains itself only once its hand raises it (the hand asks again when it does)
+            var hand = card.GetComponentInParent<HandUI>();
+            if (hand != null && hand.Raised != card) return;
 
             HideTooltip();
             activeCard = card;
@@ -226,7 +229,7 @@ namespace SlayTheClone {
             canvasGroup.alpha = 1;
             gameObject.SetActive(true);
 
-            if (card.GetComponentInParent<HandUI>() != null) {
+            if (hand != null) {
                 preview = card; // The hand raises it, enlarged; its explanations open beside it
                 previewIsCard = true;
             }
@@ -304,6 +307,11 @@ namespace SlayTheClone {
         /// </summary>
         public void HideTooltip() {
             CancelPending();
+            HideShown();
+        }
+
+        // Hides what's shown, but not a card about to show (the next one hovered)
+        private void HideShown() {
             CloseKeywordsFrom(0);
             released = false;
             activeCard = null;
@@ -438,11 +446,19 @@ namespace SlayTheClone {
             }
             if (activeCard == null || preview == null) return;
             if (CardController.Dragged != null) { HideTooltip(); return; }
+            // A hand card back down in the fan takes its explanations with it: none are left floating over the hand
+            if (previewIsCard && !StillRaised(activeCard)) { HideShown(); return; }
             Vector2 pointer = GameInput.PointerPosition;
             if (GameInput.ClickedThisFrame && ClickAt(pointer)) return;
             TrackKeywords(pointer);
             if (!released || PointerInArea(pointer)) lastHeldAt = Time.unscaledTime;
             else if (Time.unscaledTime - lastHeldAt > ReleaseGrace) HideTooltip();
+        }
+
+        private static bool StillRaised(CardController card) {
+            if (!card.isActiveAndEnabled) return false;
+            var hand = card.GetComponentInParent<HandUI>();
+            return hand != null && hand.Raised == card;
         }
 
         /// <summary>

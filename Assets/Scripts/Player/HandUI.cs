@@ -29,7 +29,11 @@ namespace SlayTheClone {
 
         private CardController hovered;
         private bool releasePending; // The pointer left the risen card for its explanations: it stays up while they're open
+        private CardController waiting; // A neighbour the pointer is on meanwhile: it rises once those explanations close
         private CardController picked; // The card being dragged out of this hand
+
+        /// <summary>The card risen out of the fan, if any: the only one of this hand whose explanations may show.</summary>
+        public CardController Raised => hovered;
         private const float PickedScale = 1.15f;  // Picked up, a card grows a little (of its size in the hand)...
         private const float OverBoardReach = 260f; // ...and shrinks to board size as it's carried this far above the hand
         private const float DiscardStagger = 0.06f;
@@ -279,8 +283,11 @@ namespace SlayTheClone {
             if (hovered != null && Tooltip.Existing != null && Tooltip.Existing.ActiveCard == hovered && Tooltip.Existing.Preview == hovered) return;
             releasePending = false;
             if (hovered == null) return;
-            hovered = null;
+            // Its explanations closed: the neighbour the pointer went on to rises instead, with its own
+            hovered = waiting != null && cards.Contains(waiting) ? waiting : null;
+            waiting = null;
             Arrange(animate: true);
+            if (hovered != null) Tooltip.Shared.ShowTooltip(hovered);
         }
 
         protected override void OnCardBeginDrag(CardController card) {
@@ -288,6 +295,7 @@ namespace SlayTheClone {
             draggedPlay = card.IsQueued ? QueuedPlayOf(card.GetLinkedCardInstance()) : null;
             if (slides.TryGetValue(card, out var running)) running.Kill();
             hovered = null;
+            waiting = null;
             releasePending = false;
             card.transform.localRotation = Quaternion.identity;
             card.transform.localScale = Vector3.one * CardScale * PickedScale; // Picked up: it grows
@@ -353,12 +361,18 @@ namespace SlayTheClone {
 
         protected override void OnCardHoverEnter(CardController card) {
             if (card == null || CardController.Dragged != null || !cards.Contains(card) || card == hovered) return;
+            // Crossing a neighbour on the way to the risen card's explanations doesn't drop it from under them
+            if (releasePending) {
+                waiting = card;
+                return;
+            }
             hovered = card;
             releasePending = false;
             Arrange(animate: true);
         }
 
         protected override void OnCardHoverExit(CardController card) {
+            if (card == waiting) waiting = null;
             if (card != hovered) return;
             // Leaving through its edge toward the screen's edge keeps it up: dropping back under the pointer would only
             // raise it again
@@ -375,6 +389,7 @@ namespace SlayTheClone {
         }
 
         public override void RemoveCard(CardController card) {
+            if (card == waiting) waiting = null;
             if (card == hovered) {
                 hovered = null;
                 releasePending = false;
