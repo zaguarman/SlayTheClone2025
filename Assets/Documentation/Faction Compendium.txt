@@ -16,6 +16,10 @@ CONTENTS
 • Every Faction Has a Hole: One thing it can't do at all. You cover it by combining factions.
 • Every Faction Has a Tempo: How fast its creatures usually come online, set by its typical Deployment Time.
 • Every Strong Strategy Has Counters: At least two factions have tools against it.
+• Every Faction Has a Rhythm (2026-10-14): how it wins over time. Timing factions (Corporate, Shadow Ops.) strike hard in
+  short windows: fast creatures, burst spells, the right card at the right Day; their raw numbers stay modest, so a
+  well-timed play is what wins. Status quo factions (Statecraft, Myth) win by holding the board as it is: sturdy creatures,
+  protection, blessings, mines and paperwork, and slow, inevitable pressure once they're set up.
 
 
 2. THE NINE FACTIONS

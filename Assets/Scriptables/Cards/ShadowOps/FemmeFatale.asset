@@ -92,7 +92,7 @@ MonoBehaviour:
   attack: 2
   health: 4
   speed: 2
-  turnsUntilOperative: 1
+  turnsUntilOperative: 0
   movement: 0
   ability: 28
   gift: 0

@@ -25,6 +25,10 @@ STILL OPEN
       Femme Fatale, If I Told You I'd Have to Kill You, MK Ultra Test Subject, Cleaner, Cleaning Robot, Day Trader,
       Pluriemployed Hustler, Micromanager and Fat Tony. Then: Corporate 77%, Mind 63, Myth 52, Shadow Ops. 50, Zeitgeist 50,
       Digital Society 46, Tech 46, Statecraft 33, Utopia 29. Corporate wins with its spells, so creature delays barely touch it.
+    • Then reverted, as asked: Corporate and Shadow Ops. are timing factions (Faction Compendium, "Every Faction Has a
+      Rhythm"), so they keep their speed and Corporate's raw values come down instead: Margin Call 1 damage to all (was 2),
+      Hostile Takeover 3 (was 4), Taxpayer Funds Venture Capital Profits 1 to the enemy (was 2). Round robin after: Shadow
+      Ops. 81%, Mind 65, Corporate 60, Myth 58, Utopia 54, Digital Society 48, Tech 48, Statecraft 31, Zeitgeist 29.
     • The Statecraft deck I picked first did worse than its old list: the AI's card stats barely separate the cards of one
       deck (almost every card is played in almost every game), so picks lean on damage and kills per game.
 

@@ -184,7 +184,7 @@ namespace SlayTheClone {
                 "We're here for you. \"You\" meaning the company.",
                 "Future: Layoffs. Destroy a friendly Worker as an additional cost; schedule 2 draws.",
                 On(EffectTrigger.StartOfTurn, Damage(1, TargetType.FriendlyCreatures, AtRandom), Draw(1))),
-            Creature("Micromanager", 2, 3, speed: 1, deploy: 2,
+            Creature("Micromanager", 2, 3, speed: 1, deploy: 1,
                 "Per my last email. And the one before. And the meeting about the emails.",
                 "Future: gives a friendly Worker Coffeinated instead of a plain attack buff.",
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom))),
@@ -192,13 +192,13 @@ namespace SlayTheClone {
                 "It's not a pyramid. It's a triangle of opportunity.",
                 "Future: summons an Unpaid Intern token. Each recruit pays a share of its draws upward.",
                 On(EffectTrigger.OnPlay, Summon(1))),
-            Creature("Day Trader", 3, 1, speed: 3, deploy: 1,
+            Creature("Day Trader", 3, 1, speed: 3, deploy: 0,
                 "Up 300% this morning. Rent is due this afternoon.",
                 "Insider Job (insider trading): its damage ignores Armor. Future: Investment. Pays out or loses cards depending on the Day.",
                 On(EffectTrigger.OnPlay, Draw(1)),
                 On(EffectTrigger.OnDeath, Draw(1, TargetType.Enemy)))
                 .With(CreatureAbility.InsiderJob),
-            Creature("Pluriemployed Hustler", 2, 3, speed: 2, deploy: 1,
+            Creature("Pluriemployed Hustler", 2, 3, speed: 2, deploy: 0,
                 "Three jobs, two side hustles, one kidney left.",
                 "Penny Stock: small bets that pay double, so hits of 3 or less are doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).",
                 On(EffectTrigger.OnPlay, Draw(2)),
@@ -213,7 +213,7 @@ namespace SlayTheClone {
                 "Gave away 0.01% of his fortune. Wrote off 100% of it.",
                 "Future: a Contract. The enemy gets the gift now, you get the tax break on a later Day.",
                 On(EffectTrigger.OnPlay, Buff(1, TargetType.EnemyCreatures, attack: false, health: true), Draw(2))),
-            Creature("Fat Tony", 4, 5, speed: 1, deploy: 3,
+            Creature("Fat Tony", 4, 5, speed: 1, deploy: 2,
                 "Nothing personal. It's just business. Mostly the personal kind.",
                 "Future: An Offer You Can't Refuse. Recruits a damaged enemy creature instead of hurting it.",
                 On(EffectTrigger.OnPlay, Damage(2, TargetType.EnemyCreatures, AtRandom))),
@@ -225,11 +225,11 @@ namespace SlayTheClone {
             Spell("Margin Call", TargetType.AllCreatures,
                 "Your position has been liquidated. Everyone's has. Have a nice day.",
                 "Future: Capital cost, discard your hand; each creature takes damage equal to the cards discarded.",
-                Damage(2, TargetType.AllCreatures, Each), Draw(2)),
+                Damage(1, TargetType.AllCreatures, Each), Draw(2)),
             Spell("Hostile Takeover", TargetType.EnemyCreatures,
                 "We're not buying your company. We're buying its funeral.",
                 "Future: Capital cost, discard 2 cards. Placeholder cost: the enemy draws a card.",
-                Damage(4, TargetType.EnemyCreatures), Draw(1, TargetType.Enemy)),
+                Damage(3, TargetType.EnemyCreatures), Draw(1, TargetType.Enemy)),
             Spell("Mass Layoffs", TargetType.FriendlyCreatures,
                 "We were never a family. Please return your badge.",
                 "Future: as an additional cost, destroy any number of your Workers; draw 1 per Worker next Day.",
@@ -251,8 +251,8 @@ namespace SlayTheClone {
             Spell("Taxpayer Funds Venture Capital Profits", TargetType.Player,
                 "Privatize the gains. Socialize the bill.",
                 "Future: the enemy schedules 1 fewer draw instead of losing Health.",
-                Draw(2), Damage(2, TargetType.Enemy, Each)),
-            Creature("Cleaning Robot", 2, 7, speed: 1, deploy: 2,
+                Draw(2), Damage(1, TargetType.Enemy, Each)),
+            Creature("Cleaning Robot", 2, 7, speed: 1, deploy: 1,
                 "Cleans 30% of your floor. The other 70% is a Premium feature.",
                 "Mechanics test: a sturdy pusher. Pushing (every creature can), no chain pushes, blocked pushes (\"needs Swap\") and the automatic move order.")
                 .Picture("A sleek, glossy robot vacuum with a glowing megacorp logo, shoving a pile of tiny office workers and their desks into a corner. A \"Subscription expired: suction limited\" pop-up flashes on its screen."),
@@ -637,7 +637,7 @@ namespace SlayTheClone {
 
         // Shadow Ops.: fragile agents, hidden plans, traps
         private static List<CardDef> ShadowOpsCards() => new List<CardDef> {
-            Creature("Cleaner", 2, 3, speed: 3, deploy: 1,
+            Creature("Cleaner", 2, 3, speed: 3, deploy: 0,
                 "Two shots. One invoice.",
                 "Mechanics test: Double Tap. It attacks twice: a second hit right after the first.")
                 .With(CreatureAbility.DoubleTap)
@@ -812,7 +812,7 @@ namespace SlayTheClone {
                 Requiring(Status(StatusEffectType.Brainwashed, 1, TargetType.EnemyCreatures), TargetRequisite.Revealed))
                 .NotInStarterDeck()
                 .Picture("A handler in a dim bar sliding a thick envelope and a photograph across the table to a nervous soldier; the photo shows the soldier with a woman who isn't his wife."),
-            Creature("If I Told You, I'd Have to Kill You", 3, 4, speed: 2, deploy: 1,
+            Creature("If I Told You, I'd Have to Kill You", 3, 4, speed: 2, deploy: 0,
                 "It's classified. So are you, now.",
                 "When Revealed (Revealed, or a Reveal shows it): 4 damage to whoever revealed it, the creature whose effect it was or else its player. Allergic to Light: each time, it takes 2 damage itself.",
                 On(EffectTrigger.OnRevealed, Damage(4, TargetType.Enemy)))
@@ -927,14 +927,14 @@ namespace SlayTheClone {
                 SetTrend(Trend.VolcanoLair, 3))
                 .NotInStarterDeck()
                 .Picture("A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass."),
-            Creature("Femme Fatale", 2, 4, speed: 2, deploy: 1,
+            Creature("Femme Fatale", 2, 4, speed: 2, deploy: 0,
                 "She didn't kill him. She just held him very, very close.",
                 "Each Dusk she squeezes the enemy creature facing her: 2 damage to it, and she heals 1. Nothing facing her: nothing happens. Ambush: she arrives as ??? and deals double while nobody knows who she is.",
                 On(EffectTrigger.EndOfTurn, Damage(2, TargetType.EnemyCreatures, Facing), Heal(1, TargetType.Self)))
                 .With(CreatureAbility.Ambush)
                 .NotInStarterDeck()
                 .Picture("A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in the chair beside her is squeezed between her crossed legs, his medals popping off."),
-            Creature("MK Ultra Test Subject", 3, 3, speed: 1, deploy: 1,
+            Creature("MK Ultra Test Subject", 3, 3, speed: 1, deploy: 0,
                 "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
                 "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
                 On(EffectTrigger.StartOfTurn, Strike(TargetType.AllCreatures, AtRandom)))
