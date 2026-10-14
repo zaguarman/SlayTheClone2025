@@ -347,7 +347,7 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(creature.CurrentArmorPool, armor, $"{creature.Name}'s card shows the wrong armor ({stats})");
 
             string ready = ((TMP_Text)GetField(card, "readyText")).text;
-            Assert.AreEqual(creature.TurnsUntilOperative.ToString(), ready, $"{creature.Name}'s card shows the wrong turns until operative");
+            Assert.AreEqual($"{EffectIcons.Tag(EffectIcons.Days)}{creature.TurnsUntilOperative}", ready, $"{creature.Name}'s card shows the wrong turns until operative");
         }
         #endregion
 

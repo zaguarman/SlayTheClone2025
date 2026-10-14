@@ -287,7 +287,7 @@ namespace SlayTheClone {
             string armorPart = armor > 0 ? $"<color=#2f7fc1>+{armor}</color>" : "";
             // Against the printed numbers: green when better, red when worse (damage included)
             statsText.text = $"{Compared(attack, data.attack)}/{Compared(speed, data.speed)}/{Compared(health, data.health)}{armorPart}";
-            readyText.text = turnsUntilOperative.ToString();
+            readyText.text = $"{EffectIcons.Tag(EffectIcons.Days)}{turnsUntilOperative}"; // An hourglass: Days until it's ready
             ShowPip(turnsUntilOperative > 0);
         }
 
@@ -296,8 +296,9 @@ namespace SlayTheClone {
         private static string Compared(int now, int printed) =>
             now > printed ? $"<color={BetterColor}>{now}</color>" : now < printed ? $"<color={WorseColor}>{now}</color>" : now.ToString();
 
-        /// <summary>The Deployment Time square's size and its distance from the card's top-left corner (card units).</summary>
+        /// <summary>The Deployment Time box's height, width (an hourglass and the Days) and distance from the card's top-left corner (card units).</summary>
         public const float PipSize = 24f;
+        public const float PipWidth = 40f;
         public const float PipInset = 5f;
         private const float TitleBarLeft = 8f; // Where the title bar starts, from the card's left edge
         private const float NamePadding = 4f;
@@ -305,8 +306,11 @@ namespace SlayTheClone {
         // The Deployment Time square shows only when there is one; the name is centered in whatever room the bar has left
         private void ShowPip(bool shown) {
             readyPip.SetActive(shown);
+            var pipRect = (RectTransform)readyPip.transform; // Also for a prefab baked when it was a square
+            pipRect.sizeDelta = new Vector2(PipWidth, PipSize);
+            pipRect.anchoredPosition = new Vector2(PipInset + PipWidth / 2f, -(PipInset + PipSize / 2f));
             var nameRect = nameText.rectTransform;
-            float left = shown ? PipInset + PipSize - TitleBarLeft + NamePadding : NamePadding;
+            float left = shown ? PipInset + PipWidth - TitleBarLeft + NamePadding : NamePadding;
             nameRect.offsetMin = new Vector2(left, nameRect.offsetMin.y);
         }
 
@@ -615,6 +619,50 @@ namespace SlayTheClone {
         #endregion
 
         // A navy band across the card with brass edges and a word on it
+        /// <summary>
+        /// A reminder: this creature could act this Day (attack, move, use its ability) and has nothing planned. A band across
+        /// the top of its art, pulsing softly, while its player plans.
+        /// </summary>
+        public void SetIdle(bool idle) {
+            IsIdle = idle;
+            if (idle && idleBadge == null) {
+                idleBadge = CreateBadge("IdleBadge", "Idle zZ", UITheme.Parchment, 0.8f, 0.92f);
+                var group = idleBadge.AddComponent<CanvasGroup>();
+                group.blocksRaycasts = false;
+                DOTween.To(() => group.alpha, a => group.alpha = a, 0.55f, 0.9f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(idleBadge);
+            }
+            if (idleBadge != null) idleBadge.SetActive(idle);
+        }
+
+        public bool IsIdle { get; private set; }
+        private GameObject idleBadge;
+
+        /// <summary>A queued summon's place in the order its side's creatures arrive (null hides it), like an attack arrow's number.</summary>
+        public void SetOrderNumber(int? number) {
+            if (number == null) {
+                if (orderBadge != null) orderBadge.SetActive(false);
+                return;
+            }
+            if (orderBadge == null) {
+                var image = UITheme.NewImage("OrderNumber", transform, UITheme.WithAlpha(UITheme.Hex(0x141420), 0.82f));
+                UITheme.Round(image, image.color, 2f);
+                var rect = image.rectTransform;
+                rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.6f);
+                rect.sizeDelta = new Vector2(30f, 30f);
+                var label = UITheme.NewText("Number", image.transform, "", 22f, Color.white);
+                label.fontStyle = FontStyles.Bold;
+                UITheme.Stretch(label.rectTransform);
+                orderBadge = image.gameObject;
+            }
+            orderBadge.transform.SetAsLastSibling();
+            orderBadge.GetComponentInChildren<TextMeshProUGUI>().text = number.Value.ToString();
+            orderBadge.SetActive(true);
+        }
+
+        /// <summary>The number shown by <see cref="SetOrderNumber"/>, if any.</summary>
+        public string OrderNumber => orderBadge != null && orderBadge.activeSelf ? orderBadge.GetComponentInChildren<TextMeshProUGUI>().text : null;
+        private GameObject orderBadge;
+
         private GameObject CreateBadge(string objectName, string text, Color textColor, float anchorMinY, float anchorMaxY) {
             var badge = new GameObject(objectName, typeof(RectTransform), typeof(Image));
             badge.layer = gameObject.layer;
@@ -725,6 +773,7 @@ namespace SlayTheClone {
             if (Dragged == this) Dragged = null;
             Tooltip.Existing?.HideTooltipFor(this);
             DOTween.Kill(transform);
+            if (idleBadge != null) DOTween.Kill(idleBadge);
             CleanupEvents();
 
             base.OnDestroy(); // Unregisters mediator events

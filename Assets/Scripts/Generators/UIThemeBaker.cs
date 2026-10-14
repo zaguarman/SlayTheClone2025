@@ -89,14 +89,14 @@ namespace SlayTheClone {
                 UITheme.Round(titleBar, parchment, 5f);
                 EnsureTrim(titleBar.transform, UITheme.GoldDim, 5f, 0f);
 
-                // The Deployment Time square, in the top-left corner inside the card: the hand's cards overlap from the right
+                // The Deployment Time box (an hourglass and the Days), in the top-left corner inside the card: the hand's cards overlap from the right
                 var pip = root.transform.Find("ReadyPip") != null ? Part(root, "ReadyPip") : Part(root, "TitleBar/ReadyPip");
                 var pipRect = pip.rectTransform;
                 pipRect.SetParent(root.transform, false);
                 pipRect.anchorMin = pipRect.anchorMax = new Vector2(0f, 1f);
                 pipRect.pivot = new Vector2(0.5f, 0.5f);
-                pipRect.sizeDelta = new Vector2(CardController.PipSize, CardController.PipSize);
-                pipRect.anchoredPosition = new Vector2(CardController.PipInset + CardController.PipSize / 2f, -(CardController.PipInset + CardController.PipSize / 2f));
+                pipRect.sizeDelta = new Vector2(CardController.PipWidth, CardController.PipSize);
+                pipRect.anchoredPosition = new Vector2(CardController.PipInset + CardController.PipWidth / 2f, -(CardController.PipInset + CardController.PipSize / 2f));
                 pipRect.SetAsLastSibling();
                 UITheme.Round(pip, UITheme.Gold, 6f); // A square with small rounded corners
                 EnsureTrim(pip.transform, UITheme.Ink, 6f, 0f);

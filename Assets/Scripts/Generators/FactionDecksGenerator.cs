@@ -1229,8 +1229,8 @@ namespace SlayTheClone {
                 .Picture("A small fluffy white rabbit sitting innocently in front of a cave mouth littered with bones and dented helmets, a tiny drop of red on its whiskers, knights fleeing in the distance."),
             Creature("Black Knight", 2, 6, speed: 1, deploy: 0,
                 "'Tis but a scratch.",
-                "Rebirth: once per combat, when it would die, it survives with 1 Health. It's only a flesh wound.",
-                OncePerCombat(On(EffectTrigger.OnAboutToDie, Heal(1, TargetType.Self))))
+                "Unbothered: enemy effects can't lower its stats. Arms off, legs off: it's only a flesh wound.")
+                .With(CreatureAbility.Unbothered)
                 .Picture("A knight in black armor standing defiantly at a forest bridge with no arms left, sword on the ground, shouting at a bemused king who rides an invisible horse to the sound of coconuts."),
             Creature("Buddy Christ", 2, 4, speed: 1, deploy: 0,
                 "Winks. Points. Forgives.",

@@ -65,7 +65,10 @@ namespace SlayTheClone.Tests {
             var mouse = game.Summon(p2, game.Cards.Creature("Test Mouse", 1, 2), 0);
             var striker = game.Summon(p1, game.Cards.Creature("Test Striker", 3, 3), 1);
             var flanker = game.Summon(p1, game.Cards.Creature("Test Flanker", 1, 3), 2);
+            Assert.IsTrue(game.CardIn(p1.Battlefield[0]).IsIdle, "Ready with nothing planned: your creature is marked idle...");
+            Assert.IsFalse(game.CardIn(p2.Battlefield[0]).IsIdle, "...not the other side's");
             game.Attack(brute, p2.Battlefield[0]);
+            Assert.IsFalse(game.CardIn(p1.Battlefield[0]).IsIdle, "...until it's given something to do");
             game.Attack(mouse, p1.Battlefield[0]);
             game.Attack(striker, p2.Battlefield[1]); // An empty slot: the hit goes to player 2
 
@@ -326,6 +329,9 @@ namespace SlayTheClone.Tests {
             game.Play(wolf, p1, p1.Battlefield[1]);  // An empty slot
             game.Play(hound, p1, p1.Battlefield[3]); // Replacing the ox
             yield return null;
+            // Numbered like attacks, in the order they arrive: at the same Speed, as they were placed
+            Assert.AreEqual("1", game.GhostIn(p1.Battlefield[1]).OrderNumber);
+            Assert.AreEqual("2", game.GhostIn(p1.Battlefield[3]).OrderNumber);
 
             foreach (var (queued, slot) in new[] { (wolf, p1.Battlefield[1]), (hound, p1.Battlefield[3]) }) {
                 var hits = SceneGame.Hover(game.GhostIn(slot));
@@ -425,7 +431,7 @@ namespace SlayTheClone.Tests {
             void Enter(PointerEventData pointer, GameObject over) => ExecuteEvents.Execute(over, pointer, ExecuteEvents.pointerEnterHandler);
             void Exit(PointerEventData pointer, GameObject over) => ExecuteEvents.Execute(over, pointer, ExecuteEvents.pointerExitHandler);
             var cases = new (ICard card, bool litMat1, bool litMat2, bool litSlot1, bool litSlot2)[] {
-                (storm, false, true, false, false), // Hits every enemy creature: the enemy battlefield, no slot
+                (storm, true, true, false, false),  // Hits every enemy creature, its targets set: it plays wherever it's dropped, no slot
                 (zap, false, false, true, true),    // Aimed: any slot, never a whole battlefield
                 (pup, false, false, true, false),   // Summoned: a slot of its own side only
             };
@@ -458,17 +464,15 @@ namespace SlayTheClone.Tests {
             Exit(idle, SlotObject(p1.Battlefield[2]));
             Exit(idle, game.BoardView(p1).gameObject);
 
-            Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), game.PlayArea));
-            yield return null;
-            Assert.IsNull(game.SpellGhost(storm), "Between the battlefields: not for a spell that hits one side only");
-            Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), game.BoardView(p1).gameObject));
-            yield return null;
-            Assert.IsNull(game.SpellGhost(storm), "A spell that only hits enemy creatures can't be played on your own battlefield");
-            Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), game.BoardView(p2).gameObject));
-            yield return null;
-            Assert.IsNotNull(game.SpellGhost(storm), "...it's played by dropping it anywhere on the enemy's");
-            SceneGame.Click(game.SpellGhost(storm));
-            yield return null;
+            // A spell whose targets are set (every enemy creature) plays wherever it's dropped on the table
+            foreach (var dropOn in new[] { game.PlayArea, game.BoardView(p1).gameObject, game.BoardView(p2).gameObject }) {
+                Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), dropOn));
+                yield return null;
+                Assert.IsNotNull(game.SpellGhost(storm), $"Dropped on {dropOn.name}, a spell that hits every enemy creature is played");
+                Assert.AreSame(p2, game.Queue.GetPendingActions().OfType<PlayCardAction>().Single(a => a.GetCard() == storm).GetTarget(), "...on the side it hits");
+                SceneGame.Click(game.SpellGhost(storm));
+                yield return null;
+            }
             Assert.IsTrue(SceneGame.DragAndDrop(Shown(quake), game.PlayArea));
             yield return null;
             Assert.IsNotNull(game.SpellGhost(quake), "A spell for either side is played by dropping it anywhere on the table, even between the battlefields");

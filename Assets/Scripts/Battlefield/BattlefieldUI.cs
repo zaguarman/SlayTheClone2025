@@ -123,8 +123,8 @@ namespace SlayTheClone {
 
         /// <summary>
         /// What dropping this card here would aim at. Creatures on the board move or attack into a slot; creatures from the
-        /// hand are summoned into a slot of their own side (a Gift into an empty one of the other side); aimed spells hit a slot on either side; other spells play on a
-        /// side they do something to (see <see cref="EffectResolver.Reaches"/>). Only what it aims at lights up.
+        /// hand are summoned into a slot of their own side (a Gift into an empty one of the other side); aimed spells hit a slot on either side; other spells
+        /// already know their targets (all enemy creatures, a Trend...), so they play wherever on the table they're dropped. Only what it aims at lights up.
         /// </summary>
         public DropAim AimOf(CardController card) {
             if (card == null || Player == null) return DropAim.None;
@@ -138,8 +138,8 @@ namespace SlayTheClone {
                     return card.Player == Player ? DropAim.Slot : DropAim.None;
                 case Spell spell when EffectResolver.IsAimed(spell):
                     return DropAim.Slot;
-                case Spell spell:
-                    return EffectResolver.Reaches(spell, card.Player, Player) ? DropAim.Side : DropAim.None;
+                case Spell:
+                    return DropAim.Side;
                 default:
                     return DropAim.None;
             }
@@ -160,18 +160,22 @@ namespace SlayTheClone {
         public void LightUp(bool lit) => GetComponent<Image>().color = lit ? UITheme.MatValid : UITheme.Mat;
 
         /// <summary>
-        /// Whether this card plays on either side alike: a spell (a Trend, or one that does something to both sides) that
-        /// isn't aimed at a slot. It's played by dropping it anywhere on the table (see <see cref="PlayArea"/>).
+        /// Whether this card plays wherever it's dropped on the table: a spell that isn't aimed at a slot (its targets are
+        /// already set: all enemy creatures, its caster, a Trend...). See <see cref="PlayArea"/>.
         /// </summary>
         public bool PlaysAnywhere(CardController card) =>
-            card?.Player != null && (IsCardFromHand(card) || card.IsQueued) && card.GetLinkedCardInstance() is Spell spell && !EffectResolver.IsAimed(spell)
-            && EffectResolver.Reaches(spell, card.Player, card.Player) && EffectResolver.Reaches(spell, card.Player, card.Player.Opponent);
+            card?.Player != null && (IsCardFromHand(card) || card.IsQueued) && card.GetLinkedCardInstance() is Spell spell && !EffectResolver.IsAimed(spell);
 
-        /// <summary>Plays a card that plays on either side, dropped somewhere on the table: on its caster's side.</summary>
+        /// <summary>Plays a card that plays anywhere, dropped somewhere on the table: on a side it does something to.</summary>
         public void PlayAnywhere(CardController card) {
             if (!PlaysAnywhere(card) || GameManager == null) return;
-            PlayFromHand(card, card.Player);
+            PlayFromHand(card, SideFor((Spell)card.GetLinkedCardInstance(), card.Player, card.Player));
         }
+
+        // The side a spell that plays anywhere is played on: the one it was dropped on if it does something there, else
+        // its caster's, else the other one
+        private static IPlayer SideFor(Spell spell, IPlayer caster, IPlayer droppedOn) =>
+            EffectResolver.Reaches(spell, caster, droppedOn) ? droppedOn : EffectResolver.Reaches(spell, caster, caster) ? caster : caster.Opponent;
 
         protected override void HandleCardDropped(CardController card) {
             if (card == null || !CanAcceptCard(card)) return;
@@ -179,7 +183,7 @@ namespace SlayTheClone {
 
             var aim = AimOf(card);
             if (aim == DropAim.Side) {
-                PlayFromHand(card, Player);
+                PlayFromHand(card, SideFor((Spell)card.GetLinkedCardInstance(), card.Player, Player));
                 return;
             }
             var targetSlot = aim == DropAim.Slot ? GetTargetSlot() : null;
@@ -353,6 +357,7 @@ namespace SlayTheClone {
             }
             RefreshHiddenPlans();
             RefreshSpellGhosts(); // What stands in the slots decides where they go
+            RefreshIdle();
 
             UpdateLayout();
         }
@@ -379,6 +384,7 @@ namespace SlayTheClone {
                 GameMediator.BattlefieldStateChanged += UpdateUI;
                 GameMediator.ActionsQueueChanged += RefreshQueuedGhosts;
                 GameMediator.ActionsQueueChanged += RefreshWatchdogs;
+                GameMediator.ActionsQueueChanged += RefreshIdle;
                 GameMediator.CreatureStatusChanged += OnCreatureStatusChanged;
                 GameMediator.CreatureStatsChanged += OnCreatureStatsChanged;
             }
@@ -393,6 +399,7 @@ namespace SlayTheClone {
                 GameMediator.BattlefieldStateChanged -= UpdateUI;
                 GameMediator.ActionsQueueChanged -= RefreshQueuedGhosts;
                 GameMediator.ActionsQueueChanged -= RefreshWatchdogs;
+                GameMediator.ActionsQueueChanged -= RefreshIdle;
                 GameMediator.CreatureStatusChanged -= OnCreatureStatusChanged;
                 GameMediator.CreatureStatsChanged -= OnCreatureStatsChanged;
             }
@@ -458,6 +465,24 @@ namespace SlayTheClone {
             watchdogList.gameObject.SetActive(true);
         }
 
+        // A reminder before the Day ends: your creatures that could act (ready, free to, able to attack) with nothing planned.
+        // Only on the side the screen plays, while it plans
+        private void RefreshIdle() {
+            if (!IsInitialized || Player == null) return;
+            var queue = GameManager?.ActionsQueue;
+            var modifiers = GameManager?.ModifierManager;
+            bool planning = queue != null && modifiers != null && FogOfWar.CanControl(Player) && !MatchSetup.PlayedByAI(Player)
+                            && !(GameManager.TurnManager?.IsResolving ?? false) && !(GameMediator?.IsGameOver ?? false);
+            var pending = planning ? queue.GetPendingActions() : null;
+            foreach (var slot in battlefieldSlots) {
+                var card = slot.OccupyingCard;
+                if (card == null) continue;
+                var creature = slot.OccupyingCreature;
+                card.SetIdle(planning && creature != null && !creature.IsDead && creature.IsOperative && modifiers.CanAct(creature)
+                             && Abilities.CanAttack(creature) && !pending.Any(a => Intel.PlannerOf(a) == creature));
+            }
+        }
+
         private void RefreshQueuedGhosts() {
             if (!IsInitialized || Player == null) return;
             ClearQueuedGhosts();
@@ -465,6 +490,7 @@ namespace SlayTheClone {
             var pendingActions = GameManager?.ActionsQueue?.GetPendingActions();
             if (pendingActions == null) return;
 
+            int order = 0; // The queue lists them in the order they resolve: the side's creatures arrive in this order
             foreach (var action in pendingActions) {
                 // A played creature stays previewed until its follow-up summon actually executes
                 ICard card;
@@ -498,6 +524,8 @@ namespace SlayTheClone {
                 ghost.OnBeginDragEvent.AddListener(OnGhostBeginDrag);
                 ghost.OnEndDragEvent.AddListener(OnGhostEndDrag);
                 ghost.SetAnonymous(FogOfWar.HidesSummon(Viewer, action, GameManager.ActionsQueue)); // Something is coming, but what?
+                order++;
+                ghost.SetOrderNumber(ghost.IsAnonymous ? (int?)null : order); // Placed in order: arrivals happen in turn
                 queuedGhosts[slot] = ghost;
 
                 // The creature currently in the slot will be replaced when the summon resolves:
@@ -655,12 +683,19 @@ namespace SlayTheClone {
             band.position = top + frontRect.up * (frontRect.lossyScale.y * strip * (depth - 0.5f));
         }
 
-        // The strips follow their creature's card wherever it is (a summon's swell, the sides switching places)
+        // The strips follow their creature's card wherever it is (a summon's swell, the sides switching places). The idle
+        // reminders go while the Day plays out and come back when the next one is planned
         private void LateUpdate() {
             foreach (var (band, front, depth) in strips) {
                 if (band != null && front != null) PlaceStrip(band, front, depth);
             }
+            bool resolving = GameManager?.TurnManager?.IsResolving ?? false;
+            if (resolving != wasResolving) {
+                wasResolving = resolving;
+                RefreshIdle();
+            }
         }
+        private bool wasResolving;
 
         private RectTransform StripLayer() {
             if (stripLayer == null) {

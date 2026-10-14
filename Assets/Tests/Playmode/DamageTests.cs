@@ -76,7 +76,9 @@ namespace SlayTheClone.Tests {
             // Resurrection (Phoenix Feather): sacrificed now, a Blessing can't stop it; it rises at the Dawn 3 Days on
             var phoenix = game.Summon(p1, game.Creature("Phoenix", 2, 4), 4);
             game.Run(new ApplyStatusEffectAction(phoenix, StatusEffectType.Blessed, 0, 1));
-            game.Run(new ResurrectionAction(phoenix, p1, 3));
+            var feather = game.Spell("Feather", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Resurrect, 3, TargetType.FriendlyCreatures));
+            game.Play(game.GiveCard(p1, feather), p1, p1.Battlefield[4]); // Dropped on the creature it's for
+            game.Resolve();
             Assert.IsTrue(phoenix.IsDead, "A sacrifice: the Blessing doesn't ward it off");
             game.StartTurn();
             game.StartTurn();

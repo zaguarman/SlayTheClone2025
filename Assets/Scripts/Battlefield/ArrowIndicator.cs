@@ -343,6 +343,8 @@ namespace SlayTheClone {
 
         // A band three vertices wide (left edge, middle, right edge), narrowing to the tail. Its tail is a swallowtail: the
         // middle starts further in than the edges. Grown by expand all round, it makes the edge drawn around the fill.
+        // Round a tight bend only the inner edge gives way (so it can't fold over), and gradually: the outer edge keeps its
+        // sweep, so there's no bottleneck and no kink.
         private static void AddRibbon(MeshBuffer mesh, List<Vector2> points, float fromHalf, float toHalf, float fromU, float toU,
                                       bool notched, float expand, System.Func<float, Color> colorAt) {
             var path = new List<Vector2>(points);
@@ -354,17 +356,20 @@ namespace SlayTheClone {
             float notch = notched ? Mathf.Max(0f, fromHalf * NotchDepth - expand * 0.5f) : 0f;
             Vector2 notchPoint = PointAt(path, lengths, Mathf.Min(notch, total * 0.4f));
 
+            var room = InnerRoom(path);
             int first = mesh.Vertices.Count;
             for (int i = 0; i < path.Count; i++) {
                 Vector2 tangent = (path[Mathf.Min(i + 1, path.Count - 1)] - path[Mathf.Max(i - 1, 0)]).normalized;
                 Vector2 normal = new Vector2(-tangent.y, tangent.x);
                 float u = lengths[i] / total;
-                float half = Mathf.Min(Mathf.Lerp(fromHalf, toHalf, Mathf.SmoothStep(0f, 1f, u)) + expand, BendRadius(path, i) * BendRoom);
+                float half = Mathf.Lerp(fromHalf, toHalf, Mathf.SmoothStep(0f, 1f, u)) + expand;
+                float inner = Mathf.Min(half, room[i].radius * BendRoom + expand);
+                float left = room[i].turnsLeft ? inner : half, right = room[i].turnsLeft ? half : inner;
                 Vector2 middle = lengths[i] < notch ? notchPoint : path[i];
                 var vertexColor = colorAt(Mathf.Lerp(fromU, toU, u));
-                mesh.Add(path[i] + normal * half, vertexColor);
+                mesh.Add(path[i] + normal * left, vertexColor);
                 mesh.Add(middle, vertexColor);
-                mesh.Add(path[i] - normal * half, vertexColor);
+                mesh.Add(path[i] - normal * right, vertexColor);
             }
             for (int i = 0; i < path.Count - 1; i++) {
                 int a = first + i * 3, b = a + 3; // Left, middle, right of this point and the next
@@ -413,6 +418,38 @@ namespace SlayTheClone {
             var even = new List<Vector2>(count + 1);
             for (int i = 0; i <= count; i++) even.Add(PointAt(points, lengths, total * i / count));
             return even;
+        }
+
+        // How much room the inside of the bend leaves at each point, and which side the inside is: the tightest bend nearby,
+        // eased in and out along the band so the inner edge never kinks
+        private const int BendWindow = 6; // Points either side
+        private static (float radius, bool turnsLeft)[] InnerRoom(List<Vector2> path) {
+            int n = path.Count;
+            var radius = new float[n];
+            var turn = new float[n];
+            for (int i = 0; i < n; i++) {
+                radius[i] = BendRadius(path, i);
+                int a = Mathf.Max(0, i - 3), c = Mathf.Min(n - 1, i + 3);
+                Vector2 before = path[i] - path[a], after = path[c] - path[i];
+                turn[i] = before.x * after.y - before.y * after.x; // Above 0: turning left
+            }
+            var tightest = new float[n];
+            for (int i = 0; i < n; i++) {
+                float min = float.MaxValue;
+                for (int j = Mathf.Max(0, i - BendWindow); j <= Mathf.Min(n - 1, i + BendWindow); j++) min = Mathf.Min(min, radius[j]);
+                tightest[i] = min;
+            }
+            var room = new (float, bool)[n];
+            for (int i = 0; i < n; i++) {
+                float sum = 0f;
+                int count = 0;
+                for (int j = Mathf.Max(0, i - BendWindow); j <= Mathf.Min(n - 1, i + BendWindow); j++) {
+                    sum += Mathf.Min(tightest[j], 10f);
+                    count++;
+                }
+                room[i] = (sum / count, turn[i] > 0f);
+            }
+            return room;
         }
 
         // How tightly the curve bends at this point: the radius of the circle through it and its neighbours

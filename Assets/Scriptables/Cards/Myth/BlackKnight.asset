@@ -25,40 +25,9 @@ MonoBehaviour:
   doomCost: 0
   prophecy: 0
   gamble: 0
-  effects:
-  - effectType: 0
-    trigger: 6
-    oncePerCombat: 1
-    actions:
-    - actionType: 1
-      value: 1
-      targetType: 5
-      targetModifier: 0
-      modifyAttack: 1
-      modifyHealth: 1
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-      trend: 0
-      ability: 0
-      sendFor: 0
-      requires: 0
-      decoy: {fileID: 0}
-  designNotes: 'Rebirth: once per combat, when it would die, it survives with 1 Health.
-    It''s only a flesh wound.'
+  effects: []
+  designNotes: 'Unbothered: enemy effects can''t lower its stats. Arms off, legs
+    off: it''s only a flesh wound.'
   artDescription: A knight in black armor standing defiantly at a forest bridge with
     no arms left, sword on the ground, shouting at a bemused king who rides an invisible
     horse to the sound of coconuts.
@@ -67,7 +36,7 @@ MonoBehaviour:
   speed: 1
   turnsUntilOperative: 0
   movement: 0
-  ability: 0
+  ability: 3
   gift: 0
   token: 0
   disguise: {fileID: 0}
