@@ -938,31 +938,29 @@ def doomscrolling():
     pixel_text(clock, 34, 41, "AM", C["red"])
     img.alpha_composite(outline(clock))
     d = ImageDraw.Draw(img)
-    # The 3 AM wojak: bald, shirtless, baggy eyes, nothing in them, lit by the phone
-    shape(img, lambda dr, v: dr.ellipse([52, 70, 140, 140], fill=v), C["skin_dark"], C["brown"], C["skin"])
-    shape(img, lambda dr, v: dr.ellipse([70, 10, 122, 76], fill=v), C["skin"], C["skin_dark"], C["white"])
-    for ex in (86, 106):  # Small dead eyes, heavy bags under them
-        d.rectangle([ex - 3, 38, ex + 2, 39], fill=C["ink"] + (255,))
-        d.arc([ex - 5, 38, ex + 4, 46], 20, 160, fill=C["brown"] + (255,))
-        d.arc([ex - 5, 41, ex + 4, 49], 20, 160, fill=C["skin_dark"] + (255,))
-    d.line([88, 60, 104, 60], fill=C["brown"] + (255,))  # A flat mouth
-    d.line([96, 44, 94, 52, 97, 53], fill=C["skin_dark"] + (255,))
-    for ex in (70, 122):  # Ears
-        shape(img, lambda dr, v: dr.ellipse([ex - 4, 36, ex + 4, 50], fill=v), C["skin"], C["skin_dark"])
+    # Bojak: the bald wojak, a huge dome of a head with the face small at the bottom of it, lit blue by the phone
+    shape(img, lambda dr, v: dr.ellipse([50, 80, 142, 150], fill=v), C["slate"], C["navy"], C["grey"])  # Hunched, in a grey tee
+    for ex in (65, 127):  # Ears, low on the head
+        shape(img, lambda dr, v: dr.ellipse([ex - 4, 46, ex + 4, 60], fill=v), C["sand"], C["tan"])
+    shape(img, lambda dr, v: dr.ellipse([64, 2, 128, 84], fill=v), C["sand"], C["tan"], C["white"])
+    for y, (x0, x1) in ((22, (84, 108)), (27, (82, 110))):  # Forehead creases
+        d.arc([x0, y, x1, y + 6], 200, 340, fill=C["tan"] + (255,))
+    d.line([(78, 47), (90, 44)], fill=C["ink"] + (255,))  # Brows, sad
+    d.line([(102, 44), (114, 47)], fill=C["ink"] + (255,))
+    for ex in (85, 107):
+        d.arc([ex - 6, 48, ex + 6, 56], 200, 340, fill=C["ink"] + (255,))  # Heavy lids
+        d.rectangle([ex - 1, 51, ex, 52], fill=C["ink"] + (255,))
+        d.arc([ex - 6, 51, ex + 6, 59], 20, 160, fill=C["tan"] + (255,))  # Bags under them
+        d.arc([ex - 5, 54, ex + 5, 62], 30, 150, fill=C["tan"] + (255,))
+    d.line([(96, 50), (94, 61), (98, 62)], fill=C["ink"] + (255,))  # The nose
+    d.arc([90, 67, 102, 73], 200, 340, fill=C["ink"] + (255,))  # A small frown
+    d.arc([88, 73, 104, 81], 30, 150, fill=C["tan"] + (255,))  # The chin
     # The phone, its black back to us, held in both hands
-    shape(img, lambda dr, v: dr.rounded_rectangle([82, 74, 110, 104], 3, fill=v), C["night"], C["ink"], C["slate"])
-    d.ellipse([86, 77, 90, 81], fill=C["slate"] + (255,))
+    shape(img, lambda dr, v: dr.rounded_rectangle([82, 78, 110, 106], 3, fill=v), C["night"], C["ink"], C["slate"])
+    d.ellipse([86, 81, 90, 85], fill=C["slate"] + (255,))
     for hx in (80, 112):
-        shape(img, lambda dr, v: dr.ellipse([hx - 6, 84, hx + 6, 98], fill=v), C["skin"], C["skin_dark"])
-    img = outline(img)
-    # Cards drifting up out of the feed
-    for x, y, a in ((60, 20, 15), (132, 14, -20), (146, 44, 10), (40, 48, -12)):
-        card = Image.new("RGBA", (10, 14), (0, 0, 0, 0))
-        cd = ImageDraw.Draw(card)
-        cd.rectangle([0, 0, 9, 13], fill=C["sand"] + (255,), outline=C["amber"] + (255,))
-        cd.rectangle([2, 2, 7, 6], fill=C["sky"] + (255,))
-        img.alpha_composite(card.rotate(a, expand=True, resample=Image.NEAREST), (x, y))
-    return img
+        shape(img, lambda dr, v: dr.ellipse([hx - 6, 86, hx + 6, 100], fill=v), C["sand"], C["tan"])
+    return outline(img)
 
 
 def sherman_tank():
@@ -1166,19 +1164,11 @@ def legacy_code():
     d.rectangle([76, 36, 112, 54], fill=C["white"] + (255,), outline=C["slate"] + (255,))
     d.rectangle([76, 36, 112, 40], fill=C["blue"] + (255,))
     d.rectangle([86, 46, 102, 50], fill=C["silver"] + (255,), outline=C["grey"] + (255,))
-    # Duct tape holding it together
-    for (x0, y0, x1, y1) in ((44, 60, 72, 92), (120, 16, 150, 34)):
-        d.line([x0, y0, x1, y1], fill=C["silver"] + (255,), width=5)
-        d.line([x0, y1, x1, y0], fill=C["grey"] + (255,), width=5)
     # The sticky note
     shape(frame, lambda dr, v: dr.rectangle([122, 64, 140, 80], fill=v), C["yellow"], C["amber"])
     for k in range(3):
         d.line([124, 68 + k * 4, 137 - k * 3, 68 + k * 4], fill=C["dark_brown"] + (255,))
     frame = outline(frame)
-    web = ImageDraw.Draw(frame)
-    for k in range(4):  # Cobwebs in the corner
-        web.arc([40 - k * 4, 12 - k * 4, 60 + k * 4, 32 + k * 4], 180, 270, fill=C["white"] + (255,))
-    web.line([40, 12, 56, 28], fill=C["white"] + (255,))
     img = layer()
     img.alpha_composite(frame, (-26, 0))  # The mainframe to the left, the scroll on the wall beside it
     # The scroll: HERE BE DRAGONS over the old ASCII dragon, pinned up where the docs should be
@@ -1288,34 +1278,30 @@ def bg_field():
 
 
 def bg_forest():
-    """A forest at dusk, a little wooden bridge over a stream."""
+    """A forest glade by day: trunks, the canopy closing overhead, grass and a dirt path. No water."""
     img = layer()
-    gradient(img, [C["forest"], C["teal_dark"]], 0, H)
+    gradient(img, [C["forest"], C["dark_green"], C["green"]], 0, 84)
     d = ImageDraw.Draw(img)
     rnd = random.Random(37)
-    for x in range(-10, W, 18):
-        h = rnd.randint(40, 70)
-        d.polygon([(x, 84), (x + 9, 84 - h), (x + 18, 84)], fill=C["dark_green"] + (255,))
-        d.line([x + 9, 84, x + 9, 90], fill=C["dark_brown"] + (255,), width=2)
-    gradient(img, [C["blue"], C["navy"]], 90, H)
-    d.rectangle([0, 84, W, 90], fill=C["forest"] + (255,))
-    d.rectangle([40, 86, 152, 92], fill=C["brown"] + (255,))  # The bridge
-    for x in range(42, 152, 8):
-        d.line([x, 86, x, 92], fill=C["dark_brown"] + (255,))
-    return img
-
-
-def bg_topdown():
-    """Seen from above: fields in patches, roads."""
-    img = layer()
-    gradient(img, [C["dark_green"], C["green"], C["dark_green"]], 0, H)
-    d = ImageDraw.Draw(img)
-    rnd = random.Random(41)
-    for _ in range(10):
-        x, y = rnd.randrange(W), rnd.randrange(H)
-        d.rectangle([x, y, x + rnd.randint(14, 30), y + rnd.randint(10, 20)], fill=rnd.choice((C["forest"], C["amber"], C["tan"])) + (255,))
-    d.line([0, 92, W, 80], fill=C["grey"] + (255,), width=3)
-    d.line([20, 0, 34, H], fill=C["grey"] + (255,), width=2)
+    for x in range(-6, W, 20):  # Far trunks, dim
+        xx = x + rnd.randint(-4, 4)
+        d.rectangle([xx, 6, xx + 3, 84], fill=C["forest"] + (255,))
+    for x in range(8, W, 36):  # Near trunks
+        xx, w = x + rnd.randint(-6, 6), rnd.randint(6, 9)
+        d.rectangle([xx, 0, xx + w, 86], fill=C["dark_brown"] + (255,))
+        d.line([xx + 1, 0, xx + 1, 86], fill=C["brown"] + (255,))
+        d.polygon([(xx - 3, 86), (xx, 80), (xx + w, 80), (xx + w + 3, 86)], fill=C["dark_brown"] + (255,))  # Roots
+    for _ in range(30):  # The canopy
+        x, y, r = rnd.randrange(-10, W + 10), rnd.randint(-8, 14), rnd.randint(10, 18)
+        d.ellipse([x - r, y - r // 2 - 4, x + r, y + r // 2 + 4], fill=rnd.choice((C["forest"], C["dark_green"], C["teal_dark"])) + (255,))
+    gradient(img, [C["green"], C["dark_green"]], 84, H)
+    d.polygon([(76, 84), (116, 84), (150, H), (52, H)], fill=C["tan"] + (255,))  # The path
+    d.line([(76, 84), (52, H)], fill=C["brown"] + (255,))
+    d.line([(116, 84), (150, H)], fill=C["brown"] + (255,))
+    for _ in range(50):  # Grass tufts
+        x, y = rnd.randrange(W), rnd.randint(86, H - 2)
+        if not (60 < x < 140):
+            d.line([x, y, x + 1, y - 2], fill=C["forest"] + (255,))
     return img
 
 
@@ -1349,22 +1335,29 @@ def man(img, x, y, scale, skin, shirt, hair=None, face="neutral", tie=None, jack
 def placebo():
     img = layer()
     d = ImageDraw.Draw(img)
-    # A sugar pill the size of a melon labelled MIRACLE, on a spoonful of sugar
-    shape(img, lambda dr, v: dr.polygon([(30, 86), (96, 80), (100, 84), (34, 92)], fill=v), C["silver"], C["grey"], C["white"])  # Handle
-    shape(img, lambda dr, v: dr.ellipse([88, 70, 150, 96], fill=v), C["silver"], C["grey"], C["white"])  # The bowl
+    # A spoonful of sugar and nothing else: the handle rising off to the top right, the bowl's tip to the left, heaped high
+    shape(img, lambda dr, v: dr.polygon([(128, 66), (180, 4), (188, 2), (190, 8), (138, 72)], fill=v), C["silver"], C["grey"], C["white"])
+    d.line([(134, 64), (184, 5)], fill=C["white"] + (255,))
+    cx, cy, rx, ry = 84, 74, 58, 18
+    bowl = [(cx + rx * math.cos(a), cy + ry * math.sin(a) * (0.7 + 0.3 * math.cos(a))) for a in (k * math.pi / 40 for k in range(80))]
+    shape(img, lambda dr, v: dr.polygon(bowl, fill=v), C["silver"], C["grey"], C["white"])
+    d.line([(x, y - 1) for x, y in bowl[6:36]], fill=C["white"] + (255,))  # The light along its lip
     rnd = random.Random(43)
-    for _ in range(60):
-        dot(img, rnd.randint(94, 144), rnd.randint(76, 86), C["white"] if rnd.random() < 0.7 else C["sand"])
-    shape(img, lambda dr, v: dr.rounded_rectangle([90, 30, 148, 74], 22, fill=v), C["pink"], C["magenta"], C["white"], (1, 1), 3)
-    shape(img, lambda dr, v: dr.rounded_rectangle([90, 30, 119, 74], 22, fill=v), C["white"], C["silver"])
-    d.line([119, 32, 119, 72], fill=C["magenta"] + (255,))
-    pixel_text(img, 105, 49, "MIRACLE", C["red"])
-    # The skinny man beside it, flexing a bicep that isn't there, very proud
-    man(img, 52, 74, 1.1, C["skin"], C["white"], C["dark_brown"], face="smile")
-    d.line([(58, 44), (66, 40), (64, 32)], fill=C["skin"] + (255,), width=2)
-    d.ellipse([62, 30, 66, 34], fill=C["skin"] + (255,))
-    for k in range(3):  # Pride
-        d.line([(42 - k * 3, 22 + k * 4), (38 - k * 3, 20 + k * 4)], fill=C["yellow"] + (255,))
+    top, bottom = [], []
+    for x in range(cx - rx + 6, cx + rx - 3):
+        f = (x - cx) / rx
+        h = math.sqrt(max(0, 1 - f * f))
+        top.append((x, cy - 4 - 30 * h ** 1.4 * (1 - 0.1 * f) + rnd.choice((-1, 0, 0, 1))))
+        bottom.append((x, cy + 8 * h))
+    sugar = shape(img, lambda dr, v: dr.polygon(top + bottom[::-1], fill=v), C["white"], C["silver"])
+    sm = sugar.load()
+    for _ in range(320):  # Grains, thicker on the shaded side
+        x, y = rnd.randint(30, 140), rnd.randint(36, 84)
+        if sm[x, y] and rnd.random() < 0.35 + (x - 30) / 160:
+            dot(img, x, y, rnd.choice((C["silver"], C["silver"], C["sand"], C["grey"])))
+    for x, y in ((62, 54), (86, 46), (106, 60)):  # Glints
+        for dx, dy in ((0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)):
+            dot(img, x + dx, y + dy, C["cyan"] if (dx, dy) == (0, 0) else C["sky"])
     return outline(img)
 
 
@@ -1399,45 +1392,70 @@ def business_expense():
 def golden_dome():
     img = layer()
     d = ImageDraw.Draw(img)
-    rnd = random.Random(47)
-    # Missiles raining on the city outside
-    for x, y in ((20, 18), (40, 6), (150, 10), (172, 24), (12, 44), (182, 50)):
-        d.line([x, y, x + 4, y + 10], fill=C["silver"] + (255,), width=2)
-        d.polygon([(x + 3, y + 10), (x + 6, y + 10), (x + 5, y + 14)], fill=C["red"] + (255,))
-        for k in range(3):
-            dot(img, x - k, y - 2 - k * 2, C["amber"] if k == 0 else C["grey"])
-    for x in (24, 168):  # Explosions where they land
-        for r, col in ((8, C["orange"]), (5, C["yellow"])):
-            d.ellipse([x - r, 88 - r, x + r, 88 + r], fill=col + (255,))
-    # The dome of golden light
+    # The Golden Dome over the city: a lattice shell of gold light, missiles bursting on it
+    cx, base, rx, ry = 66, 98, 64, 64
     dome = mask()
-    ImageDraw.Draw(dome).chord([46, 18, 146, 140], 180, 360, fill=255)
+    ImageDraw.Draw(dome).chord([cx - rx, base - ry, cx + rx, base + ry], 180, 360, fill=255)
     px, mp = img.load(), dome.load()
     for y in range(H):
         for x in range(W):
-            if mp[x, y] and BAYER[y % 4][x % 4] < 4:
+            if mp[x, y] and BAYER[y % 4][x % 4] < 3:
                 px[x, y] = C["yellow"] + (255,)
-    d.arc([46, 18, 146, 140], 180, 360, fill=C["amber"] + (255,), width=2)
-    # The fat senator on his deckchair inside it
-    shape(img, lambda dr, v: dr.polygon([(74, 96), (82, 72), (112, 72), (122, 96)], fill=v), C["red"], C["wine"], C["pink"])
-    for x in range(78, 120, 6):
-        d.line([x, 74, x - 4, 94], fill=C["white"] + (255,))
-    shape(img, lambda dr, v: dr.ellipse([84, 62, 116, 90], fill=v), C["navy"], C["night"], C["slate"])
-    shape(img, lambda dr, v: dr.ellipse([90, 46, 110, 66], fill=v), C["skin"], C["skin_dark"], C["white"])
-    d.chord([90, 44, 110, 56], 180, 360, fill=C["silver"] + (255,))
-    for ex in (96, 104):
-        d.rectangle([ex - 1, 54, ex, 55], fill=C["ink"] + (255,))
-    d.arc([96, 56, 104, 62], 20, 160, fill=C["ink"] + (255,))
-    d.polygon([(99, 66), (101, 66), (102, 76), (100, 78), (98, 76)], fill=C["red"] + (255,))
-    shape(img, lambda dr, v: dr.rectangle([116, 70, 122, 80], fill=v), C["amber"], C["orange_brown"])  # A cocktail
-    d.line([119, 70, 121, 64], fill=C["pink"] + (255,))
+    for k in (1, 2, 3):  # Rings round it
+        h = ry * k / 4
+        w = rx * math.sqrt(1 - (h / ry) ** 2)
+        d.arc([cx - w, base - h - 6 + k, cx + w, base - h + 6 - k], 0, 180, fill=C["amber"] + (255,))
+    for s in (0.35, 0.72):  # Ribs over it
+        d.arc([cx - rx * s, base - ry, cx + rx * s, base + ry], 180, 360, fill=C["amber"] + (255,))
+    d.line([cx, base - ry, cx, base], fill=C["amber"] + (255,))
+    d.arc([cx - rx, base - ry, cx + rx, base + ry], 180, 360, fill=C["yellow"] + (255,), width=2)
+    for deg, (tx, ty) in ((150, (-14, -10)), (100, (-4, -16)), (55, (10, -14))):  # Missiles, bursting on the shell
+        ex, ey = cx + rx * math.cos(math.radians(deg)), base - ry * math.sin(math.radians(deg))
+        d.line([ex + tx * 2, ey + ty * 2, ex, ey], fill=C["grey"] + (255,))
+        for r, col in ((6, C["orange"]), (4, C["yellow"]), (2, C["white"])):
+            d.ellipse([ex - r, ey - r, ex + r, ey + r], fill=col + (255,))
+    d.line([10, 4, 18, 14], fill=C["silver"] + (255,), width=2)  # One more on its way
+    d.polygon([(17, 14), (20, 13), (21, 18)], fill=C["red"] + (255,))
+    # Netanyahu in front of it, pleased with himself: silver hair swept back, dark suit, red tie, the flag pin
+    shape(img, lambda dr, v: dr.polygon([(122, H), (126, 80), (138, 70), (174, 70), (186, 80), (190, H)], fill=v), C["night"], C["ink"], C["navy"])
+    d.rectangle([150, 58, 162, 72], fill=C["skin_dark"] + (255,))  # The neck
+    d.polygon([(146, 70), (166, 70), (156, 94)], fill=C["white"] + (255,))
+    d.polygon([(154, 72), (158, 72), (159, 76), (153, 76)], fill=C["red"] + (255,))
+    d.polygon([(154, 76), (158, 76), (160, 90), (156, 94), (152, 90)], fill=C["red"] + (255,))
+    d.line([(146, 70), (156, 94)], fill=C["navy"] + (255,))
+    d.line([(166, 70), (156, 94)], fill=C["navy"] + (255,))
+    d.rectangle([169, 80, 174, 84], fill=C["white"] + (255,))
+    d.line([169, 80, 174, 80], fill=C["blue"] + (255,))
+    d.line([169, 84, 174, 84], fill=C["blue"] + (255,))
+    dot(img, 171, 82, C["blue"])
+    for ex in (138, 174):  # Ears
+        shape(img, lambda dr, v: dr.ellipse([ex - 4, 32, ex + 4, 48], fill=v), C["skin"], C["skin_dark"])
+    shape(img, lambda dr, v: dr.ellipse([140, 14, 172, 64], fill=v), C["skin"], C["skin_dark"])
+    hair = [(140, 32), (139, 20), (144, 12), (152, 8), (162, 8), (169, 12), (173, 20), (172, 32), (169, 24), (162, 20), (150, 20), (143, 24)]
+    shape(img, lambda dr, v: dr.polygon(hair, fill=v), C["silver"], C["grey"], C["white"])
+    for x0, x1, y in ((146, 156, 14), (154, 166, 12), (148, 160, 17)):  # Combed back
+        d.line([x0, y, x1, y - 2], fill=C["grey"] + (255,))
+    d.line([150, 25, 162, 25], fill=C["skin_dark"] + (255,))  # Forehead lines
+    d.line([152, 27, 160, 27], fill=C["skin_dark"] + (255,))
+    d.line([(145, 31), (152, 30)], fill=C["grey"] + (255,), width=2)  # Brows, one cocked
+    d.line([(160, 29), (164, 27), (168, 30)], fill=C["grey"] + (255,), width=2)
+    for x0 in (146, 161):  # Narrowed eyes, a little bag under each
+        d.line([x0, 34, x0 + 5, 34], fill=C["skin_dark"] + (255,))
+        d.line([x0, 35, x0 + 5, 35], fill=C["ink"] + (255,))
+        dot(img, x0 + 3, 36, C["dark_brown"])
+        d.arc([x0 - 1, 35, x0 + 6, 40], 20, 160, fill=C["skin_dark"] + (255,))
+    d.line([(156, 32), (155, 44), (158, 45)], fill=C["skin_dark"] + (255,))  # The nose
+    dot(img, 154, 44, C["brown"])
+    d.line([(147, 44), (146, 52)], fill=C["skin_dark"] + (255,))  # Lines from the nose down
+    d.line([(165, 44), (166, 51)], fill=C["skin_dark"] + (255,))
+    d.line([(149, 51), (152, 52), (158, 52), (162, 49)], fill=C["ink"] + (255,))  # The smirk
+    d.arc([146, 52, 166, 64], 20, 160, fill=C["skin_dark"] + (255,))  # Jowls
     return outline(img)
 
 
 def surveillance_giraffe():
     img = layer()
     d = ImageDraw.Draw(img)
-    spots = [(-1, 0)]
     # The legs and body at the bottom, the neck running out of the top of the picture...
     for lx in (52, 62, 92, 102):
         shape(img, lambda dr, v: dr.rectangle([lx, 82, lx + 4, H], fill=v), C["amber"], C["orange_brown"])
@@ -1445,6 +1463,20 @@ def surveillance_giraffe():
     shape(img, lambda dr, v: dr.polygon([(96, 72), (104, 0), (114, 0), (108, 76)], fill=v), C["amber"], C["orange_brown"], C["yellow"])
     # ...and back in from the top further along, the head hanging upside down, peeking
     shape(img, lambda dr, v: dr.polygon([(136, 0), (146, 0), (144, 46), (138, 46)], fill=v), C["amber"], C["orange_brown"], C["yellow"])
+    # The coat: brown patches parted by pale lines, kept inside the body so nothing pokes out of its outline
+    coat = img.split()[3].point(lambda v: 255 if v else 0)
+    inner = coat
+    for dx, dy in ((2, 0), (-2, 0), (0, 2), (0, -2)):
+        inner = ImageChops.multiply(inner, shifted(coat, dx, dy))
+    rnd = random.Random(53)
+    seeds = [(x + rnd.randint(-2, 2), y + rnd.randint(-2, 2)) for y in range(-4, H + 8, 8) for x in range(36, 160, 8)]
+    px, im = img.load(), inner.load()
+    for y in range(H):
+        for x in range(W):
+            if im[x, y]:
+                ds = sorted((sx - x) ** 2 + (sy - y) ** 2 for sx, sy in seeds[:])[:2]
+                if math.sqrt(ds[1]) - math.sqrt(ds[0]) > 1.6:
+                    px[x, y] = C["orange_brown"] + (255,)
     shape(img, lambda dr, v: dr.ellipse([128, 42, 156, 66], fill=v), C["amber"], C["orange_brown"], C["yellow"])
     shape(img, lambda dr, v: dr.ellipse([134, 58, 150, 72], fill=v), C["tan"], C["brown"])  # Muzzle, at the bottom: upside down
     for ex in (136, 148):
@@ -1452,14 +1484,6 @@ def surveillance_giraffe():
         dot(img, ex - 1, 54, C["white"])
     for ox in (134, 150):  # Ossicones pointing down
         d.line([ox, 44, ox - (2 if ox < 140 else -2), 38], fill=C["brown"] + (255,), width=2)
-    # A security camera strapped to its head, its red light on
-    shape(img, lambda dr, v: dr.rectangle([150, 44, 166, 52], fill=v), C["white"], C["silver"])
-    d.rectangle([164, 46, 168, 50], fill=C["night"] + (255,))
-    d.rectangle([152, 46, 153, 47], fill=C["red"] + (255,))
-    rnd = random.Random(53)
-    for _ in range(26):  # Patches
-        x, y = rnd.choice(((rnd.randint(48, 108), rnd.randint(70, 88)), (rnd.randint(99, 111), rnd.randint(4, 70)), (rnd.randint(138, 145), rnd.randint(4, 44))))
-        d.rectangle([x, y, x + 2, y + 2], fill=C["orange_brown"] + (255,))
     return outline(img)
 
 
@@ -1492,136 +1516,211 @@ def inflatable_tank():
 def keyboard_warrior():
     img = layer()
     d = ImageDraw.Draw(img)
-    # A heavyset warrior in a stained hoodie and a cape, a keyboard held over his head like a greatsword
-    shape(img, lambda dr, v: dr.polygon([(70, 46), (122, 46), (138, 106), (54, 106)], fill=v), C["wine"], C["plum"], C["red"])  # The cape
-    shape(img, lambda dr, v: dr.ellipse([66, 48, 126, 108], fill=v), C["slate"], C["navy"], C["grey"])  # The hoodie
-    d.ellipse([86, 74, 94, 80], fill=C["amber"] + (255,))  # A stain
-    d.ellipse([102, 86, 108, 90], fill=C["orange_brown"] + (255,))
-    shape(img, lambda dr, v: dr.ellipse([80, 24, 112, 56], fill=v), C["skin"], C["skin_dark"], C["white"])
-    d.arc([86, 42, 106, 50], 200, 340, fill=C["ink"] + (255,))
-    for ex in (89, 103):
-        d.line([ex - 3, 36, ex + 3, 38 if ex < 96 else 34], fill=C["ink"] + (255,))
-        d.rectangle([ex - 1, 38, ex, 39], fill=C["ink"] + (255,))
-    # The gaming headset for a helmet
-    d.arc([78, 18, 114, 52], 190, 350, fill=C["night"] + (255,), width=3)
-    shape(img, lambda dr, v: dr.ellipse([74, 32, 84, 46], fill=v), C["night"], C["ink"], C["hot"])
-    shape(img, lambda dr, v: dr.ellipse([108, 32, 118, 46], fill=v), C["night"], C["ink"], C["hot"])
-    d.line([(80, 46), (88, 50)], fill=C["night"] + (255,))
-    # Arms up, the keyboard overhead
-    for x0, x1 in ((72, 62), (120, 132)):
-        d.line([(x0, 60), (x1, 30)], fill=C["slate"] + (255,), width=6)
-    shape(img, lambda dr, v: dr.rectangle([46, 10, 148, 26], fill=v), C["night"], C["ink"], C["slate"])
-    for kx in range(50, 144, 6):
-        for ky in (13, 19):
-            d.rectangle([kx, ky, kx + 4, ky + 3], fill=(C["hot"] if (kx + ky) % 18 == 0 else C["grey"]) + (255,))
-    # Energy drinks hanging from his belt
-    for cx in (72, 84, 108):
-        shape(img, lambda dr, v: dr.rectangle([cx, 90, cx + 6, 102], fill=v), C["green"], C["dark_green"], C["yellow"])
-        d.line([cx + 1, 94, cx + 5, 94], fill=C["ink"] + (255,))
-    return outline(img)
+    # Rambo gone soft: long black hair, the red headband, shirtless, a belly, a bandolier, camo trousers
+    hair = [(74, 18), (106, 18), (114, 54), (104, 46), (98, 50), (82, 50), (76, 46), (66, 54)]
+    shape(img, lambda dr, v: dr.polygon(hair, fill=v), C["night"], C["ink"], C["slate"])
+    shape(img, lambda dr, v: dr.rectangle([56, 98, 124, H], fill=v), C["dark_green"], C["forest"], C["green"])
+    rnd = random.Random(61)
+    for _ in range(10):  # Camo blotches
+        x, y = rnd.randint(58, 120), rnd.randint(100, H)
+        d.ellipse([x - 3, y - 2, x + 3, y + 2], fill=rnd.choice((C["forest"], C["brown"])) + (255,))
+    shape(img, lambda dr, v: dr.ellipse([56, 40, 124, 82], fill=v), C["skin"], C["skin_dark"])  # Chest
+    shape(img, lambda dr, v: dr.ellipse([54, 56, 126, 110], fill=v), C["skin"], C["skin_dark"])  # The belly
+    for x0 in (66, 92):
+        d.arc([x0, 52, x0 + 22, 66], 20, 160, fill=C["skin_dark"] + (255,))
+    d.arc([88, 92, 94, 96], 0, 180, fill=C["skin_dark"] + (255,))  # Navel
+    d.line([(64, 46), (112, 102)], fill=C["dark_brown"] + (255,), width=5)  # The bandolier
+    for k in range(9):
+        x, y = 66 + k * 5.3, 48 + k * 6
+        d.rectangle([x - 1, y - 2, x + 1, y + 1], fill=C["amber"] + (255,))
+        dot(img, x, y - 3, C["silver"])
+    # The head: double chin, scowl, gritted teeth, sweating
+    shape(img, lambda dr, v: dr.ellipse([76, 14, 104, 48], fill=v), C["skin"], C["skin_dark"], C["white"])
+    d.arc([80, 38, 100, 50], 20, 160, fill=C["skin_dark"] + (255,))
+    d.chord([74, 10, 106, 30], 180, 360, fill=C["night"] + (255,))
+    shape(img, lambda dr, v: dr.rectangle([75, 21, 105, 25], fill=v), C["red"], C["wine"])  # The headband, its tails flying
+    shape(img, lambda dr, v: dr.polygon([(76, 22), (58, 18), (56, 24), (68, 26), (76, 25)], fill=v), C["red"], C["wine"])
+    shape(img, lambda dr, v: dr.polygon([(76, 24), (60, 30), (63, 33), (76, 26)], fill=v), C["red"], C["wine"])
+    d.line([(82, 28), (88, 30)], fill=C["ink"] + (255,))
+    d.line([(92, 30), (98, 28)], fill=C["ink"] + (255,))
+    for ex in (85, 94):
+        d.rectangle([ex, 31, ex + 1, 32], fill=C["ink"] + (255,))
+    d.line([(90, 32), (89, 37), (91, 38)], fill=C["skin_dark"] + (255,))
+    d.rectangle([86, 41, 94, 43], fill=C["white"] + (255,), outline=C["ink"] + (255,))
+    for x, y in ((80, 40), (83, 44), (97, 44), (100, 40), (88, 46), (92, 46)):
+        dot(img, x, y, C["skin_dark"])
+    shape(img, lambda dr, v: dr.ellipse([101, 28, 103, 32], fill=v), C["sky"], C["blue"])
+    img = outline(img)
+    # Fat arms, both fists on the keyboard's end, held up and forward like a sword (their own outline, over the body)
+    body, img = img, layer()
+    d = ImageDraw.Draw(img)
+    shape(img, lambda dr, v: dr.line([(62, 48), (62, 64), (84, 72)], fill=v, width=10, joint="curve"), C["skin_dark"], C["brown"], C["skin"], (0, 1), 2)
+    shape(img, lambda dr, v: dr.line([(118, 48), (118, 64), (98, 70)], fill=v, width=10, joint="curve"), C["skin_dark"], C["brown"], C["skin"], (0, 1), 2)
+    a = math.radians(55)
+    ux, uy, nx, ny = math.cos(a), -math.sin(a), math.sin(a), math.cos(a)
+    p0x, p0y, L, w = 90 - ux * 4, 72 - uy * 4, 78, 7
+    blade = [(p0x + nx * w, p0y + ny * w), (p0x + ux * L + nx * w, p0y + uy * L + ny * w),
+             (p0x + ux * L - nx * w, p0y + uy * L - ny * w), (p0x - nx * w, p0y - ny * w)]
+    shape(img, lambda dr, v: dr.polygon(blade, fill=v), C["night"], C["ink"], C["slate"])
+    for i in range(14, L - 2, 4):
+        for j in (-4, 0, 4):
+            x, y = p0x + ux * i + nx * j, p0y + uy * i + ny * j
+            d.rectangle([x, y, x + 1, y + 1], fill=(C["hot"] if (i, j) in ((30, 0), (54, -4)) else C["grey"]) + (255,))
+    d.line([(p0x - 2, p0y + 2), (78, 88), (70, 100), (74, H)], fill=C["ink"] + (255,))  # The cable, a sword's tassel
+    for i in (4, 12):
+        x, y = p0x + ux * i, p0y + uy * i
+        shape(img, lambda dr, v: dr.ellipse([x - 6, y - 5, x + 6, y + 5], fill=v), C["skin"], C["skin_dark"])
+    body.alpha_composite(outline(img))
+    return body
 
 
 def black_knight():
     img = layer()
     d = ImageDraw.Draw(img)
-    # The Black Knight on the bridge: no arms left, still defiant, shouting
-    for lx in (84, 98):
-        shape(img, lambda dr, v: dr.rectangle([lx, 66, lx + 8, 88], fill=v), C["night"], C["ink"], C["slate"])
-        shape(img, lambda dr, v: dr.rectangle([lx - 2, 86, lx + 10, 90], fill=v), C["night"], C["ink"], C["slate"])
-    shape(img, lambda dr, v: dr.rounded_rectangle([80, 34, 112, 70], 6, fill=v), C["night"], C["ink"], C["slate"])
-    for sx in (78, 108):  # Stumps where his arms were
-        shape(img, lambda dr, v: dr.ellipse([sx, 36, sx + 8, 46], fill=v), C["night"], C["ink"], C["slate"])
-        d.ellipse([sx + 2, 38, sx + 6, 44], fill=C["red"] + (255,))
-    shape(img, lambda dr, v: dr.rectangle([86, 10, 106, 34], fill=v), C["night"], C["ink"], C["slate"])  # The great helm
-    d.line([88, 20, 104, 20], fill=C["red"] + (255,))  # The eye slit, shouting out of it
-    d.polygon([(96, 4), (100, 10), (92, 10)], fill=C["wine"] + (255,))  # A plume
-    # His sword on the ground
-    d.line([(54, 88), (78, 84)], fill=C["silver"] + (255,), width=2)
-    d.line([(76, 80), (78, 88)], fill=C["amber"] + (255,), width=2)
+    # The Black Knight, armless and still blocking the way, his arm and sword lying on the path
+    shape(img, lambda dr, v: dr.rounded_rectangle([4, 98, 28, 103], 2, fill=v), C["night"], C["ink"], C["slate"])
+    shape(img, lambda dr, v: dr.ellipse([26, 96, 33, 104], fill=v), C["night"], C["ink"], C["slate"])
+    d.line([(10, 94), (36, 90)], fill=C["silver"] + (255,), width=2)
+    d.line([(12, 90), (14, 97)], fill=C["amber"] + (255,), width=2)
+    for lx in (44, 58):
+        shape(img, lambda dr, v: dr.rectangle([lx, 74, lx + 8, 96], fill=v), C["night"], C["ink"], C["slate"])
+        shape(img, lambda dr, v: dr.rectangle([lx - 2, 94, lx + 10, 98], fill=v), C["night"], C["ink"], C["slate"])
+    shape(img, lambda dr, v: dr.rounded_rectangle([40, 42, 72, 78], 6, fill=v), C["night"], C["ink"], C["slate"])
+    for sx in (36, 68):  # Stumps where his arms were
+        shape(img, lambda dr, v: dr.ellipse([sx, 44, sx + 8, 54], fill=v), C["night"], C["ink"], C["slate"])
+        d.ellipse([sx + 2, 46, sx + 6, 52], fill=C["red"] + (255,))
+        d.line([sx + 4, 54, sx + 4, 58], fill=C["red"] + (255,))
+    shape(img, lambda dr, v: dr.rectangle([46, 18, 66, 42], fill=v), C["night"], C["ink"], C["slate"])  # The great helm
+    d.line([48, 28, 64, 28], fill=C["ink"] + (255,))
+    d.line([48, 27, 64, 27], fill=C["slate"] + (255,))
+    d.polygon([(56, 12), (60, 18), (52, 18)], fill=C["wine"] + (255,))  # A plume
+    # King Arthur, crowned and bearded, his sword out
+    man(img, 128, 100, 1.4, C["skin"], C["grey"], None, face="neutral", jacket=C["purple"])
+    d.rectangle([125, 66, 131, 72], fill=C["yellow"] + (255,))  # A gold emblem on his tunic
+    shape(img, lambda dr, v: dr.polygon([(121, 47), (135, 47), (134, 54), (128, 60), (122, 54)], fill=v), C["amber"], C["orange_brown"])
+    d.line([126, 51, 130, 51], fill=C["dark_brown"] + (255,))
+    shape(img, lambda dr, v: dr.polygon([(121, 39), (121, 32), (124, 35), (128, 30), (132, 35), (135, 32), (135, 39)], fill=v), C["yellow"], C["amber"])
+    dot(img, 128, 36, C["red"])
+    d.line([(120, 62), (110, 66)], fill=C["purple"] + (255,), width=3)
+    d.line([(108, 65), (88, 50)], fill=C["silver"] + (255,), width=2)
+    d.line([(106, 62), (110, 68)], fill=C["amber"] + (255,), width=2)
+    # Patsy behind him, banging two halves of a coconut
+    man(img, 166, 100, 1.1, C["skin"], C["sand"], C["dark_brown"], face="smile", jacket=C["tan"])
+    for box, start, end, lip in (([146, 64, 162, 80], 90, 270, 154), ([170, 64, 186, 80], 270, 90, 178)):  # The coconut halves
+        shape(img, lambda dr, v: dr.chord(box, start, end, fill=v), C["dark_brown"], C["plum"], C["brown"])
+        d.line([lip, 65, lip, 79], fill=C["white"] + (255,))
+    d.line([(158, 72), (154, 72)], fill=C["skin"] + (255,), width=2)  # His hands on them
+    d.line([(174, 72), (178, 72)], fill=C["skin"] + (255,), width=2)
     img = outline(img)
-    # 'Tis but a scratch
-    bubble = layer()
-    bd = ImageDraw.Draw(bubble)
-    bd.rounded_rectangle([118, 6, 182, 30], 6, fill=C["white"] + (255,))
-    bd.polygon([(122, 26), (110, 22), (128, 28)], fill=C["white"] + (255,))
-    pixel_text(bubble, 122, 10, "'TIS BUT A", C["ink"])
-    pixel_text(bubble, 122, 18, "SCRATCH", C["ink"])
-    img.alpha_composite(outline(bubble))
+    clop = ImageDraw.Draw(img)
+    for k in (-1, 1):
+        clop.line([(166 + k * 3, 66), (166 + k * 5, 62)], fill=C["white"] + (255,))
     return img
 
 
 def particle_accelerator():
     img = layer()
     d = ImageDraw.Draw(img)
-    # The huge ring of the tunnel seen from above
-    d.ellipse([16, 8, 176, 100], outline=C["grey"] + (255,), width=8)
-    d.ellipse([20, 12, 172, 96], outline=C["silver"] + (255,), width=2)
-    d.ellipse([24, 16, 168, 92], outline=C["slate"] + (255,), width=1)
-    for a in range(0, 360, 30):  # Service stations round it
-        r = math.radians(a)
-        x, y = 96 + math.cos(r) * 80, 54 + math.sin(r) * 46
-        shape(img, lambda dr, v: dr.rectangle([x - 4, y - 3, x + 4, y + 3], fill=v), C["white"], C["silver"])
-    # The glowing dot, racing round, and its trail
-    for k in range(12):
-        a = math.radians(-60 - k * 6)
-        x, y = 96 + math.cos(a) * 80, 54 + math.sin(a) * 46
-        dot(img, x, y, C["cyan"] if k < 4 else C["sky"])
-    hx, hy = 96 + math.cos(math.radians(-60)) * 80, 54 + math.sin(math.radians(-60)) * 46
-    d.ellipse([hx - 3, hy - 3, hx + 3, hy + 3], fill=C["white"] + (255,))
-    # The tiny scientist on a bicycle, chasing it
-    bx, by = 96 + math.cos(math.radians(-100)) * 80, 54 + math.sin(math.radians(-100)) * 46
-    d.ellipse([bx - 5, by - 1, bx - 1, by + 3], outline=C["ink"] + (255,))
-    d.ellipse([bx + 2, by - 1, bx + 6, by + 3], outline=C["ink"] + (255,))
-    d.rectangle([bx - 2, by - 6, bx + 1, by - 1], fill=C["white"] + (255,))  # The lab coat
-    d.ellipse([bx - 2, by - 9, bx + 1, by - 6], fill=C["skin"] + (255,))
+    # The blue magnet pipe running off down the tunnel, on red stands
+    for x in range(36, 104, 22):
+        h = 2 + (x - VP[0]) * 0.08
+        shape(img, lambda dr, v: dr.rectangle([x - 2 - h / 3, pipe_y(x, 1) - 2, x + 2 + h / 3, pipe_y(x, 1) + h], fill=v), C["red"], C["wine"])
+        d.rectangle([x + 4 + h / 2, pipe_y(x, 1) + h - 3, x + 8 + h, pipe_y(x, 1) + h], fill=C["amber"] + (255,))
+    for f0, f1, col in ((0, 0.08, C["cyan"]), (0.08, 0.55, C["sky"]), (0.55, 0.85, C["blue"]), (0.85, 1, C["navy"])):
+        d.polygon([(VP[0], pipe_y(VP[0], f0)), (104, pipe_y(104, f0)), (104, pipe_y(104, f1)), (VP[0], pipe_y(VP[0], f1))], fill=col + (255,))
+    for x in (52, 78):  # Its joints
+        d.line([x, pipe_y(x, 0), x, pipe_y(x, 1)], fill=C["navy"] + (255,))
+    # The steel interconnect, a little fatter, then its open end, full of cables
+    for f0, f1, col in ((0, 0.1, C["white"]), (0.1, 0.55, C["silver"]), (0.55, 0.85, C["grey"]), (0.85, 1, C["slate"])):
+        d.polygon([(104, pipe_y(104, f0, 2)), (132, pipe_y(132, f0, 2)), (132, pipe_y(132, f1, 2)), (104, pipe_y(104, f1, 2))], fill=col + (255,))
+    for x in (110, 118, 126):  # Bellows
+        d.line([x, pipe_y(x, 0.1, 2), x, pipe_y(x, 0.95, 2)], fill=C["grey"] + (255,))
+    t0, t1 = pipe_y(132, 0, 2), pipe_y(132, 1, 2)
+    shape(img, lambda dr, v: dr.ellipse([126, t0, 140, t1], fill=v), C["silver"], C["grey"], C["white"])
+    d.ellipse([129, t0 + 5, 138, t1 - 5], fill=C["ink"] + (255,))
+    for k in range(5):
+        y = t0 + 10 + k * 8
+        d.line([(131, y), (136, y + 3)], fill=C["silver"] + (255,))
+    d.ellipse([131, (t0 + t1) / 2 - 3, 136, (t0 + t1) / 2 + 3], outline=C["white"] + (255,))
+    # Cables spilling down to the floor
+    for k, col in enumerate((C["ink"], C["night"], C["ink"])):
+        d.line([(134 + k * 3, t1 - 6), (138 + k * 4, 96), (128 + k * 6, 104)], fill=col + (255,))
+    # The next magnet, a huge steel drum, yellow caps along its foot
+    for y0, y1, col in ((12, 18, C["white"]), (18, 58, C["silver"]), (58, 86, C["grey"]), (86, 98, C["slate"])):
+        d.rectangle([150, y0, W, y1], fill=col + (255,))
+    shape(img, lambda dr, v: dr.ellipse([144, 12, 158, 98], fill=v), C["silver"], C["grey"], C["white"])
+    d.ellipse([147, 22, 155, 88], fill=C["grey"] + (255,))
+    d.rectangle([176, 12, 179, 98], fill=C["amber"] + (255,))  # Tape round it
+    for x in (160, 170, 184):
+        shape(img, lambda dr, v: dr.ellipse([x, 92, x + 7, 99], fill=v), C["yellow"], C["amber"])
+    # Someone lying under it, fixing it: only his legs stick out
+    for dy in (0, 5):
+        d.line([(176, 98 + dy), (150, 101 + dy)], fill=C["navy"] + (255,), width=4)
+        d.line([(162, 98 + dy), (162, 103 + dy)], fill=C["silver"] + (255,))
+        shape(img, lambda dr, v: dr.ellipse([142, 98 + dy, 151, 104 + dy], fill=v), C["night"], C["ink"])
     return outline(img, C["night"])
 
 
 def cleaning_robot():
     img = layer()
     d = ImageDraw.Draw(img)
-    # Tiny office workers and their desks, shoved into a corner
-    for x, y in ((14, 88), (28, 92), (20, 76), (36, 80)):
-        shape(img, lambda dr, v: dr.rectangle([x - 6, y - 4, x + 6, y], fill=v), C["brown"], C["dark_brown"], C["tan"])
-        d.ellipse([x - 2, y - 10, x + 2, y - 6], fill=C["skin"] + (255,))
-        d.rectangle([x - 2, y - 6, x + 2, y - 4], fill=C["sky"] + (255,))
-    # The robot vacuum, sleek and glossy, a glowing megacorp logo
-    shape(img, lambda dr, v: dr.ellipse([60, 62, 172, 104], fill=v), C["night"], C["ink"], C["slate"], (1, 1), 3)
-    shape(img, lambda dr, v: dr.ellipse([66, 58, 166, 92], fill=v), C["slate"], C["night"], C["grey"])
-    d.arc([70, 60, 162, 90], 200, 330, fill=C["silver"] + (255,))  # The gloss
-    d.ellipse([108, 70, 124, 80], fill=C["cyan"] + (255,))
-    d.ellipse([112, 72, 120, 78], fill=C["sky"] + (255,))
-    # Its screen: "Subscription expired"
-    shape(img, lambda dr, v: dr.rectangle([126, 66, 154, 78], fill=v), C["ink"], C["night"])
-    pixel_text(img, 129, 69, "EXP", C["hot"])
-    pixel_text(img, 143, 69, "!", C["hot"])
-    for x in range(58, 66, 2):  # Dust it pushes ahead
-        dot(img, x - (x % 4), 92 + (x % 3), C["grey"])
-    img = outline(img)
-    pop = layer()  # The pop-up flashing above it
-    pd = ImageDraw.Draw(pop)
-    pd.rectangle([110, 22, 176, 46], fill=C["white"] + (255,))
-    pd.rectangle([110, 22, 176, 27], fill=C["red"] + (255,))
-    pixel_text(pop, 113, 31, "SUCTION", C["ink"])
-    pixel_text(pop, 113, 38, "LIMITED", C["red"])
-    img.alpha_composite(outline(pop))
+    # The pool robot, Love, Death & Robots style: a white angular hull half sunk at the water line, flippers below it
+    for poly in (((58, 78), (70, 76), (66, 96), (52, 100)), ((86, 74), (98, 72), (96, 92), (82, 96)), ((110, 68), (120, 66), (122, 86), (108, 88))):
+        d.polygon(poly, fill=C["grey"] + (255,))
+        d.line([poly[1], poly[2]], fill=C["slate"] + (255,), width=2)
+    d.polygon([(34, 60), (112, 48), (132, 54), (54, 68)], fill=C["white"] + (255,))  # Top
+    d.polygon([(54, 68), (132, 54), (132, 66), (54, 82)], fill=C["silver"] + (255,))  # Side
+    d.polygon([(34, 60), (54, 68), (54, 82), (34, 72)], fill=C["grey"] + (255,))  # Back end
+    d.polygon([(60, 61), (98, 55), (102, 58), (118, 55), (120, 56), (101, 60), (97, 57), (61, 63)], fill=C["ink"] + (255,))  # Its stripe
+    d.line([(60, 75), (126, 63)], fill=C["grey"] + (255,))
+    d.rectangle([108, 64, 114, 70], fill=C["ink"] + (255,))
+    # The arm, and the big round brush head on it, turned toward us
+    d.line([(124, 54), (134, 38), (146, 38)], fill=C["ink"] + (255,), width=2)
+    shape(img, lambda dr, v: dr.ellipse([131, 35, 137, 41], fill=v), C["grey"], C["slate"])
+    dot(img, 134, 38, C["red"])  # Watching
+    shape(img, lambda dr, v: dr.ellipse([152, 16, 176, 60], fill=v), C["grey"], C["slate"])  # The rim
+    for y in range(20, 58, 4):
+        d.line([170, y, 175, y], fill=C["night"] + (255,))
+    shape(img, lambda dr, v: dr.ellipse([144, 16, 168, 60], fill=v), C["silver"], C["grey"], C["white"])
+    d.ellipse([150, 30, 162, 46], outline=C["grey"] + (255,))
+    d.ellipse([153, 34, 159, 42], fill=C["slate"] + (255,))
+    img = outline(img, C["ink"])
+    # Under the water line everything goes blue
+    sunk = {C["white"]: C["sky"], C["silver"]: C["sky"], C["grey"]: C["blue"], C["slate"]: C["navy"], C["ink"]: C["night"], C["night"]: C["night"]}
+    px = img.load()
+    for x in range(W):
+        wy = water_y(x)
+        for y in range(int(wy) + 2, H):
+            r, g, b, a = px[x, y]
+            if a:
+                px[x, y] = sunk.get((r, g, b), C["blue"]) + (255,)
+        if px[x, int(wy)][3]:
+            px[x, int(wy)] = C["white"] + (255,)
+            px[x, int(wy) + 1] = C["cyan"] + (255,)
     return img
 
 
 def templar_knight():
     img = layer()
     d = ImageDraw.Draw(img)
-    # A medieval bank counter piled with gold coins and promissory notes
+    # A bank counter, the hoard heaped on it in one great pile, coin stacks and a promissory note in front
     shape(img, lambda dr, v: dr.rectangle([116, 70, 188, 100], fill=v), C["brown"], C["dark_brown"], C["tan"])
     for x in range(120, 186, 10):
         d.line([x, 72, x, 98], fill=C["dark_brown"] + (255,))
-    rnd = random.Random(59)
-    for k in range(30):
-        x, y = rnd.randint(122, 180), rnd.randint(52, 68) + k % 3
-        d.ellipse([x - 3, y - 2, x + 3, y + 2], fill=C["yellow"] + (255,), outline=C["amber"] + (255,))
-    for x, y in ((128, 58), (166, 54)):
-        d.rectangle([x, y, x + 10, y + 7], fill=C["sand"] + (255,), outline=C["tan"] + (255,))
-        d.line([x + 2, y + 3, x + 8, y + 3], fill=C["dark_brown"] + (255,))
+    hoard = shape(img, lambda dr, v: dr.chord([118, 34, 186, 106], 180, 360, fill=v), C["yellow"], C["amber"], C["white"])
+    hm = hoard.load()
+    for row, y in enumerate(range(40, 68, 4)):
+        for x in range(120 + (row % 2) * 3, 186, 6):
+            if hm[x - 2, y - 1] and hm[x + 2, y + 2] and hm[x, y + 3]:
+                d.arc([x - 2, y - 1, x + 2, y + 2], 0, 180, fill=C["amber"] + (255,))
+    for x, y in ((140, 46), (158, 52), (132, 60), (170, 62)):
+        dot(img, x, y, C["white"])
+    d.rectangle([142, 62, 154, 70], fill=C["sand"] + (255,), outline=C["tan"] + (255,))
+    d.line([144, 66, 152, 66], fill=C["dark_brown"] + (255,))
+    for x, h in ((124, 10), (160, 7), (172, 13)):
+        shape(img, lambda dr, v: dr.rectangle([x, 70 - h, x + 7, 70], fill=v), C["yellow"], C["amber"], C["white"])
+        for y in range(70 - h + 2, 70, 2):
+            d.line([x + 1, y, x + 6, y], fill=C["amber"] + (255,))
     # The Templar: chainmail, a white mantle with a red cross, sword raised
     shape(img, lambda dr, v: dr.polygon([(58, 42), (90, 42), (98, 104), (50, 104)], fill=v), C["white"], C["silver"])
     d.rectangle([70, 54, 78, 82], fill=C["red"] + (255,))
@@ -1634,7 +1733,87 @@ def templar_knight():
     d.line([(90, 50), (102, 34)], fill=C["grey"] + (255,), width=4)  # The arm, raised
     d.line([(104, 32), (116, 4)], fill=C["white"] + (255,), width=2)  # The sword
     d.line([(99, 30), (107, 36)], fill=C["amber"] + (255,), width=2)
+    # His shield on the other arm: white, the red cross on it
+    shape(img, lambda dr, v: dr.polygon([(32, 52), (60, 52), (60, 72), (46, 92), (32, 72)], fill=v), C["white"], C["silver"], None, (1, 1), 2)
+    d.rectangle([44, 54, 48, 86], fill=C["red"] + (255,))
+    d.rectangle([34, 61, 58, 65], fill=C["red"] + (255,))
     return outline(img)
+
+
+VP = (24, 46)  # The tunnel's vanishing point
+
+
+def pipe_y(x, f, grow=0):
+    """A point across the accelerator's pipe at x: f = 0 along its top edge, 1 along its bottom, receding to VP."""
+    t = (x - VP[0]) / (140 - VP[0])
+    top, bot = VP[1] - 2 + t * (26 - VP[1] + 2) - grow, VP[1] + 2 + t * (84 - VP[1] - 2) + grow
+    return top + f * (bot - top)
+
+
+def bg_tunnel():
+    """The LHC tunnel: a long concrete tube running off to a vanishing point, cable trays and strip lights overhead, a
+    white line down the floor."""
+    img = layer()
+    vx, vy = VP
+    d = ImageDraw.Draw(img)
+    gradient(img, [C["silver"], C["grey"]], 0, H)  # The walls
+    d.polygon([(0, 0), (W, 0), (W, 6), (vx, vy - 2), (0, 24)], fill=C["slate"] + (255,))  # The ceiling
+    floor = layer()
+    gradient(floor, [C["grey"], C["silver"]], vy, H)
+    fm = mask()
+    ImageDraw.Draw(fm).polygon([(vx, vy + 2), (W, 92), (W, H), (0, H), (0, 70)], fill=255)
+    img.paste(floor, (0, 0), fm)
+    for ex in (70, 110, 150):  # Cable trays along the ceiling
+        d.line([(vx, vy - 2), (ex, 0)], fill=C["grey"] + (255,))
+        for k in range(1, 8):
+            t = (k / 8) ** 2
+            x, y = vx + (ex - vx) * t, vy - 2 - (vy - 2) * t
+            d.line([x - 1 - 4 * t, y, x + 1 + 4 * t, y], fill=C["grey"] + (255,))
+    for k in range(1, 9):  # Strip lights down the middle of the ceiling, tubes along the tunnel, growing as they come near
+        t0, t1 = (k / 9) ** 1.7, (k / 9) ** 1.7 + 0.03 + 0.05 * k / 9
+        p = [(vx + (96 - vx) * t, vy - 2 - (vy - 2) * t) for t in (t0, min(t1, 1))]
+        d.line(p, fill=C["yellow"] + (255,), width=1 + int(t0 * 2))
+    for wy in (14, 22):  # Pipework along the far wall
+        d.line([(vx, vy - 1), (W, wy)], fill=C["grey"] + (255,))
+    d.line([(vx, vy + 2), (72, H)], fill=C["white"] + (255,), width=2)  # The white line down the floor
+    return img
+
+
+def water_y(x):
+    """The pool's water line, sloping a little with the coping."""
+    return 80 - x * 14 / W
+
+
+def coping_y(x):
+    return 42 - x * 22 / W
+
+
+def bg_pool():
+    """A swimming pool at night, flat-shaded like Love, Death & Robots: the stone coping, cyan tiles above the water line,
+    the dark water below it."""
+    img = layer()
+    gradient(img, [C["ink"], C["night"], C["teal_dark"]], 0, 46)
+    px = img.load()
+    for x in range(W):
+        cy, wy = coping_y(x), water_y(x)
+        for y in range(max(0, int(cy) - 5), H):
+            v = y - cy
+            if v < -2:
+                col = C["silver"] if v < -4 else C["white"]
+            elif v < 2:
+                col = C["grey"] if v < 0 else C["slate"]
+            else:
+                grout = int(v) % 10 == 0 or (x + int(v * 0.3)) % 13 == 0
+                if y < wy:
+                    col = C["navy"] if grout else (C["cyan"] if (x // 13 + int(v) // 10) % 5 == 0 else C["sky"])
+                else:
+                    col = C["navy"] if grout else C["blue"]
+                    if (x * 3 + y * 7) % 23 == 0 or ((x - y * 2) % 31 == 0 and BAYER[y % 4][x % 4] < 8):
+                        col = C["sky"]  # Light rippling under the water
+            px[x, y] = col + (255,)
+        for y in (int(wy), int(wy) + 1):  # The water's surface
+            px[x, y] = (C["white"] if y == int(wy) else C["cyan"]) + (255,)
+    return img
 
 
 CARDS += [
@@ -1645,11 +1824,11 @@ CARDS += [
     ("InflatableTank", "field", inflatable_tank),
     ("KeyboardWarrior", "room_night", keyboard_warrior),
     ("BlackKnight", "forest", black_knight),
-    ("ParticleAccelerator", "topdown", particle_accelerator),
-    ("CleaningRobot", "basement", cleaning_robot),
+    ("ParticleAccelerator", "tunnel", particle_accelerator),
+    ("CleaningRobot", "pool", cleaning_robot),
     ("TemplarKnight", "gallery", templar_knight),
 ]
-BACKGROUNDS.update({"jail": bg_jail, "field": bg_field, "forest": bg_forest, "topdown": bg_topdown})
+BACKGROUNDS.update({"jail": bg_jail, "field": bg_field, "forest": bg_forest, "tunnel": bg_tunnel, "pool": bg_pool})
 
 
 def main():

@@ -69,6 +69,7 @@ Taxpayer Funds Venture Capital Profits (spell)
     (from the drawing) The public pays in, one coin at a time ---------------------------------------------------------------- Statecraft cards
 Cleaning Robot (creature)
     A sleek, glossy robot vacuum with a glowing megacorp logo, shoving a pile of tiny office workers and their desks into a corner. A "Subscription expired: suction limited" pop-up flashes on its screen.
+    USER: 2026-10-14 (pixel art): after the pool-cleaning robot in Love, Death & Robots (the user's still): flat shading, a white angular hull at the water line of a cyan-tiled pool at night, a round disc head on an arm.
 Tax-Exempt Corruption (spell)
     A megachurch whose cross is a giant gold dollar sign, a private jet parked by the door and a big red TAX EXEMPT stamp across the sky.
 Solidarity Towards The Small Businessman (spell)
@@ -86,6 +87,7 @@ Supply Depot (spell)
     A huge military warehouse with endless shelves of crates, a forklift carrying a soldier in a crate labelled REINFORCEMENTS, a clerk stamping a form at the front desk.
 Golden Dome (creature)
     A shimmering golden dome of light over one fat senator on a deckchair, while missiles rain on the rest of the city outside it.
+    USER: 2026-10-14 (pixel art): redo it; Netanyahu as the man standing there (the user's reference photo: silver hair swept back, dark suit, white shirt, red tie, an Israeli flag pin, a smirk).
 Presidential Pardon (spell)
     A smiling president signing a giant pardon with a huge flourish for a creature in an orange jumpsuit still holding a smoking gun.
 Congruent Use of Force (creature)
@@ -201,12 +203,14 @@ Doomscrolling (spell)
     The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed and expressionless at 3AM, holding up a phone (we see its black back) where the meme had a computer, its glow on his face, cards drifting up out of the feed.
     USER: A guy like the wojak meme, but on a phone instead of a computer.
     USER: 2026-10-14 (pixel art): a clock showing 3:00 AM behind him.
+    USER: 2026-10-14: no cards flying about; the guy like Bojak from the memes (the bald wojak).
 Crypto "Entrepreneur" (creature)
     A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand.
 Digital Nomad (creature)
     A Tuareg nomad in a white turban and face veil, sitting cross-legged on a sand dune, typing on a laptop on his knees.
 Keyboard Warrior (creature)
     A heavyset warrior in a stained hoodie and a cape, holding a mechanical keyboard over his head like a greatsword, a gaming headset for a helmet and energy drinks hanging from his belt.
+    USER: 2026-10-14 (pixel art): like Rambo but fat, holding the keyboard as if it were a sword.
 Dogpile (spell)
     A huge, happy pile of dogs (corgis, labradors, a confused pug on top) burying one person, of whom only a waving hand sticks out.
     USER: A big pile of dogs on top of someone.
@@ -361,6 +365,7 @@ Script Kiddie (creature)
 Legacy Code (creature)
     A beige mainframe held together with duct tape in a dusty basement, a yellowed sticky note on it: "DO NOT TOUCH - Gary (retired 1999)", and cobwebs over an "Update available" pop-up.
     USER: 2026-10-14 (pixel art): a scroll with HERE BE DRAGONS in ASCII art (the user's reference: the dragon by snd).
+    USER: 2026-10-14: no cobweb (it read as a wifi signal) and no duct tape on the computer.
 End-to-End Encryption (spell)
     Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a "Backdoor Request" form.
 SysAdmin (creature)
@@ -439,6 +444,7 @@ The Lost Ark (spell)
     USER: Make the guy look more like Indiana Jones.
 Templar Knight (creature)
     A knight in chainmail and a white mantle with a red cross, sword raised, standing in front of a medieval bank counter piled with gold coins and promissory notes.
+    USER: 2026-10-14 (pixel art): holding a shield with the cross; the treasure one cohesive pile, no coins flying about.
 Zealot (creature)
     A wild-eyed hermit in sackcloth with a long beard, waving a burning torch and a hand-painted REPENT sign on a busy city sidewalk.
 Living Dead (creature)
@@ -451,6 +457,7 @@ Killer Rabbit of Caerbannog (creature)
     USER: 2026-10-14 (pixel art): skeletons in crusader armor around the bunny's lair; the bunny smaller, same design.
 Black Knight (creature)
     A knight in black armor standing defiantly at a forest bridge with no arms left, sword on the ground, shouting at a bemused king who rides an invisible horse to the sound of coconuts.
+    USER: 2026-10-14 (pixel art): no speech bubble; like the older picture, with King Arthur and Patsy there; the forest has no water.
 Buddy Christ (creature)
     A smiling plastic Jesus statue winking and giving a big thumbs up and a finger point, on a church lawn next to a sign reading CATHOLICISM: WOW!
 Pope (creature)
@@ -516,15 +523,18 @@ Perpetual Motion Machine (creature)
     A hamster running in a wheel that powers a fan, which blows on the hamster, which keeps running.
 Particle Accelerator (creature)
     A huge ring-shaped tunnel seen from above, a tiny scientist on a bicycle racing around it after a glowing dot.
+    USER: 2026-10-14 (pixel art): after the user's photo of the LHC tunnel: the blue magnet pipe running off down the curved tunnel, steel interconnects, cables, someone lying under it working, a white line on the floor.
 Genetically Modified Organism (creature)
     A ripe tomato with huge bodybuilder arms, flexing, a NON-GMO sticker peeling off its skin.
 Surveillance Giraffe (creature)
     A giraffe whose neck runs out of the top of the picture and comes back in from the top further along, its head hanging upside down, peeking.
+    USER: 2026-10-14 (pixel art): keep its shape; no blobs sticking out of it; no camera (the white thing) on its head.
 Pioneer (creature)
     An astronaut planting a flag on a red desert next to a sign: FOR RENT $9999.
 Placebo (spell)
     A sugar pill the size of a melon labelled MIRACLE on a spoonful of sugar, and a skinny man next to it flexing a non-existent bicep, very proud.
     USER: Put a spoon of sugar.
+    USER: 2026-10-14 (pixel art): only the spoon holding sugar, like the user's photo (a heaped spoonful, the handle rising to the right); keep the pink background.
 Vaccine (spell)
     A syringe with a tiny Wi-Fi antenna on its plunger and full signal bars above it.
 Climate Change (spell)

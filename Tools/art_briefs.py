@@ -30,7 +30,20 @@ USER_NOTES = {
     "Killer Rabbit of Caerbannog": ["2026-10-14 (pixel art): skeletons in crusader armor around the bunny's lair; the bunny smaller, same design."],
     "Supreme Court": ["2026-10-14 (pixel art): no gavel."],
     "Sherman Tank": ["2026-10-14 (pixel art): smoke behind the tank."],
-    "Legacy Code": ["2026-10-14 (pixel art): a scroll with HERE BE DRAGONS in ASCII art (the user's reference: the dragon by snd)."],
+    "Legacy Code": ["2026-10-14 (pixel art): a scroll with HERE BE DRAGONS in ASCII art (the user's reference: the dragon by snd).",
+                    "2026-10-14: no cobweb (it read as a wifi signal) and no duct tape on the computer."],
+    "Golden Dome": ["2026-10-14 (pixel art): redo it; Netanyahu as the man standing there (the user's reference photo: silver hair "
+                    "swept back, dark suit, white shirt, red tie, an Israeli flag pin, a smirk)."],
+    "Surveillance Giraffe": ["2026-10-14 (pixel art): keep its shape; no blobs sticking out of it; no camera (the white thing) on its head."],
+    "Keyboard Warrior": ["2026-10-14 (pixel art): like Rambo but fat, holding the keyboard as if it were a sword."],
+    "Black Knight": ["2026-10-14 (pixel art): no speech bubble; like the older picture, with King Arthur and Patsy there; the "
+                     "forest has no water."],
+    "Particle Accelerator": ["2026-10-14 (pixel art): after the user's photo of the LHC tunnel: the blue magnet pipe running off "
+                             "down the curved tunnel, steel interconnects, cables, someone lying under it working, a white line "
+                             "on the floor."],
+    "Cleaning Robot": ["2026-10-14 (pixel art): after the pool-cleaning robot in Love, Death & Robots (the user's still): flat "
+                       "shading, a white angular hull at the water line of a cyan-tiled pool at night, a round disc head on an arm."],
+    "Templar Knight": ["2026-10-14 (pixel art): holding a shield with the cross; the treasure one cohesive pile, no coins flying about."],
     "Hostile Takeover": ["2026-10-14 (pixel art): the mouth a smile instead of an open box; the dorsal fin swept back, not a pyramid."],
     # From earlier sessions
     "Dogpile": ["A big pile of dogs on top of someone."],
@@ -45,7 +58,9 @@ USER_NOTES = {
     "Catfish": ["A cat and a fish loving each other.",
                 "2026-10-14 (pixel art): the fish less pointy, less like a shark, in its water container (a fishbowl); the "
                 "cat's ears aligned with its head.", "2026-10-14: no round fin blob on top of the fish."],
-    "Placebo": ["Put a spoon of sugar."],
+    "Placebo": ["Put a spoon of sugar.",
+                "2026-10-14 (pixel art): only the spoon holding sugar, like the user's photo (a heaped spoonful, the handle "
+                "rising to the right); keep the pink background."],
     "Business Expense": ["A guy who looks like a CEO, in a full suit, going to jail."],
     "We Are Not The Same": ["The Spider-Man meme, pointing at each other."],
     "Meta Group Chat": ["Redo it with a WhatsApp-like feel."],
@@ -54,7 +69,8 @@ USER_NOTES = {
     "MK Ultra Test Subject": ["Make it look like the Unabomber before going into the woods."],
     "Genesis": ["Like the reference picture the user gave."],
     "Doomscrolling": ["A guy like the wojak meme, but on a phone instead of a computer.",
-                      "2026-10-14 (pixel art): a clock showing 3:00 AM behind him."],
+                      "2026-10-14 (pixel art): a clock showing 3:00 AM behind him.",
+                      "2026-10-14: no cards flying about; the guy like Bojak from the memes (the bald wojak)."],
     "The Holy Grail": ["Remove the pin."],
     "The Lost Ark": ["Make the guy look more like Indiana Jones."],
     "Omen Reading": ["The reader more centered at the table, his body showing."],
