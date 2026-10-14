@@ -22,6 +22,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   prophecy: 0
+  gamble: 0
   effects: []
   designNotes: 'Mechanics test: Credit Grab (Active, once per combat): steals target
     creature''s stat raises. Buff an enemy, or let them, then take it.'

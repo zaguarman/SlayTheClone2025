@@ -4556,42 +4556,67 @@ def dead_drop():
 
 
 def multipass():
-    # A young woman with bright orange-red hair in a bob, in a white strappy bandage outfit with orange suspenders, holding up a
-    # shiny pink-and-gold Multipass card to a startled border guard, a fan of passports with the same face spilling from her
-    # other hand
-    defs = lin("bg", ["#5a3a7a", "#e07a4a"])
+    # The Multipass shown to the camera, as in the film: on the left the cab driver with buzzed fair hair, stubble, an orange
+    # shirt under a dark leather vest; on the right the young woman with the bright orange bob and fringe, in a white top
+    # with orange suspenders, holding the Multipass up beside her face; a dim, crowded hall behind them
+    defs = lin("bg", ["#3a2e3e", "#1e1a24"])
     body = rect(0, 0, W, H, "url(#bg)")
-    # The city of the future behind the checkpoint: towers, and flying cabs in the traffic lanes
-    for x, h in [(10, 120), (52, 150), (96, 100), (300, 140), (330, 110)]:
-        body += rect(x, H - h, 34, h, "#2e2440", 'opacity="0.7"')
-    for x, y in [(70, 40), (150, 22), (240, 52), (320, 30)]:
-        body += ellipse(x, y, 16, 5, "#f2c14e") + ellipse(x, y - 4, 8, 4, "#9ad0ff")
-    body += rect(222, 120, 130, 80, "#3a3a4a") + rect(222, 116, 130, 6, "#c8c8d0")  # The checkpoint desk
-    # The guard behind the desk, mouth open
-    body += person(292, 150, 0.9, SKIN[1], "#2a3a5a", face="shout", hat="peaked", brows="angry")
-    # Her: the bob's back first, then her, then the fringe over her forehead
-    hx, hy, r = 128, 200 - 64 * 1.2, 20 * 1.2
-    hair = "#ff5a1f"
-    body += path(f"M{hx - r - 6:.1f} {hy + 16:.1f} C {hx - r - 8:.1f} {hy - r * 1.7:.1f} {hx + r + 8:.1f} {hy - r * 1.7:.1f} {hx + r + 6:.1f} {hy + 16:.1f} Z", hair)
-    body += person(hx, 200, 1.2, SKIN[0], "#f4f0e6", face="grin")
-    body += rect(hx - r, hy - r + 2, r * 2, 9, hair, 'rx="3"')
-    # The bandage straps across her and the orange suspenders over them
-    for y in (164, 174, 184, 194):
-        body += stroke(f"M{hx - 30} {y} L{hx + 30} {y - 3}", "#c8c0b0", 1.5)
-    body += stroke(f"M{hx - 14} 150 L{hx - 18} 200", "#ff8a1a", 4) + stroke(f"M{hx + 14} 150 L{hx + 18} 200", "#ff8a1a", 4)
-    # The raised arm and the Multipass held up to the guard
-    body += stroke(f"M{hx + 26} 168 L 196 104", SKIN[0], 9) + circle(198, 100, 7, SKIN[0])
-    card = rect(-24, -15, 48, 30, "#ff6ab4", 'rx="4" stroke="#d4af37" stroke-width="2"')
-    card += rect(-20, -11, 12, 14, "#f4f4f4") + circle(-14, -6, 4, SKIN[0]) + rect(-20, -11, 12, 4, hair)
-    card += lettering("MULTIPASS", 7, -2, 3.6, "#3a1a3a", width=0.9)
-    body += group(card, "translate(206 80) rotate(-12)")
-    # The other hand: passports with the same face spilling out
-    for i in range(5):
-        a = 40 + i * 14
-        pp = rect(-10, -14, 20, 28, ["#7a1a2a", "#1a3a6a", "#2a5a2a", "#5a2a6a", "#7a1a2a"][i], 'rx="2" stroke="#d4af37" stroke-width="1"')
-        pp += circle(0, -4, 5, SKIN[0]) + rect(-5, -9, 10, 3, hair)
-        body += group(pp, f"translate({hx - 46 + i * 6} {182 + i * 3}) rotate({a})")
-    body += circle(hx - 40, 178, 7, SKIN[0])
+    for i in range(60):  # The crowd behind, out of focus
+        x, y = (i * 47) % W, 20 + (i * 29) % 110
+        body += circle(x, y, 9 + (i % 3) * 3, ["#5a4a5e", "#4a3e52", "#6a5862", "#3e3446"][i % 4], 'opacity="0.6"')
+    # Him: the vest over the orange shirt, the buzz cut and the stubble
+    hx, hy, r = 96, 200 - 64 * 1.3, 20 * 1.3
+    body += person(hx, 200, 1.3, SKIN[0], "#2e2a28", face="smirk")
+    body += path(f"M{hx - 10} {hy + r + 10} L{hx} {hy + r + 24} L{hx + 10} {hy + r + 10} Z", "#ff7a1a")  # The orange collar
+    body += path(f"M{hx - r + 2:.1f} {hy - 6:.1f} C {hx - r + 4:.1f} {hy - r - 4:.1f} {hx + r - 4:.1f} {hy - r - 4:.1f} {hx + r - 2:.1f} {hy - 6:.1f} C {hx + 10:.1f} {hy - r + 2:.1f} {hx - 10:.1f} {hy - r + 2:.1f} {hx - r + 2:.1f} {hy - 6:.1f} Z", "#d8c08a")
+    body += path(f"M{hx - r + 4:.1f} {hy + 6:.1f} C {hx - r + 6:.1f} {hy + r + 2:.1f} {hx + r - 6:.1f} {hy + r + 2:.1f} {hx + r - 4:.1f} {hy + 6:.1f} C {hx + 8:.1f} {hy + r - 6:.1f} {hx - 8:.1f} {hy + r - 6:.1f} {hx - r + 4:.1f} {hy + 6:.1f} Z", "#b89a7a", 'opacity="0.55"')
+    # Her: the bob behind, then her, then the straight fringe
+    gx, gy, gr = 262, 200 - 64 * 1.25, 20 * 1.25
+    hair = "#ff5a14"
+    body += path(f"M{gx - gr - 7:.1f} {gy + 20:.1f} C {gx - gr - 9:.1f} {gy - gr * 1.75:.1f} {gx + gr + 9:.1f} {gy - gr * 1.75:.1f} {gx + gr + 7:.1f} {gy + 20:.1f} Z", hair)
+    body += person(gx, 200, 1.25, SKIN[0], "#f2eee6", face="flat")
+    body += rect(gx - gr, gy - gr + 1, gr * 2, 11, hair, 'rx="2"')
+    body += stroke(f"M{gx - 16} 158 L{gx - 20} 200", "#ff8a1a", 5) + stroke(f"M{gx + 16} 158 L{gx + 20} 200", "#ff8a1a", 5)
+    # The Multipass, held up beside her face
+    body += stroke(f"M{gx - 30} 196 L {gx - 52} 128", SKIN[0], 9) + circle(gx - 52, 124, 7, SKIN[0])
+    card = rect(-26, -17, 52, 34, "#e8e8f0", 'rx="4" stroke="#8a8a9a" stroke-width="1.5"')
+    card += rect(-24, -15, 48, 8, "#3a5ad8") + lettering("MULTI PASS", 0, -14, 4.2, "#ffffff", width=0.9)
+    card += rect(-21, -4, 14, 17, "#8ab0e0") + circle(-14, 3, 4, SKIN[0]) + rect(-18, -2, 8, 3, hair)
+    card += rect(-4, -3, 24, 3, "#ffb020") + rect(-4, 3, 20, 2, "#6a6a7a") + rect(-4, 8, 16, 2, "#6a6a7a")
+    body += group(card, f"translate({gx - 56} 110) rotate(-4)")
+    return svg(defs, body)
+
+
+def casino():
+    # A caricature of the tycoon-president in a dark suit and an overlong red tie, his blond hair swept over, grinning and
+    # throwing a fistful of chips in the air in front of his gaudy gold-and-purple casino with onion domes and a giant neon
+    # sign, a red BANKRUPT stamp across the sign
+    defs = lin("bg", ["#1a1240", "#4a1a5a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    # The casino: a palace of gold with purple onion domes, lit windows, the neon sign on top
+    body += rect(150, 70, 190, 130, "#c9a227") + rect(150, 70, 190, 8, "#f4d35e")
+    for x in (170, 245, 320):
+        body += path(f"M{x - 18} 70 C {x - 18} 44 {x} 30 {x} 22 C {x} 30 {x + 18} 44 {x + 18} 70 Z", "#7a2a9a") + circle(x, 20, 3, "#f4d35e")
+    for row in range(3):
+        for col in range(7):
+            body += rect(160 + col * 26, 92 + row * 30, 14, 18, "#ffe08a" if (row + col) % 3 else "#ff9ad5", 'rx="7"')
+    body += rect(178, 38, 134, 26, "#2a0a3a", 'rx="5" stroke="#ff3ad0" stroke-width="2.5"')
+    body += lettering("CASINO", 245, 43, 15, "#ffe14a", width=2.2)
+    body += stamp("BANKRUPT", 250, 128, 12, "#e8241c", -10)
+    # Him: dark suit, white collar, the long red tie, the orange tan and the swept-over hair
+    cx, base, sc = 92, 200, 1.35
+    hx, hy, r = cx, base - 64 * sc, 20 * sc
+    body += person(cx, base, sc, "#f0a060", "#1e2440", face="grin")
+    body += poly([(cx - 8, base - 46), (cx + 8, base - 46), (cx, base - 36)], "#ffffff")
+    body += poly([(cx - 5, base - 40), (cx + 5, base - 40), (cx + 8, base), (cx - 8, base)], "#d2202a")  # Down past the belt
+    body += path(f"M{hx - r - 3:.1f} {hy - 2:.1f} C {hx - r:.1f} {hy - r * 1.6:.1f} {hx + r * 1.3:.1f} {hy - r * 1.7:.1f} {hx + r + 8:.1f} {hy - r * 0.6:.1f} C {hx + r * 0.4:.1f} {hy - r * 0.9:.1f} {hx - r * 0.2:.1f} {hy - r * 0.5:.1f} {hx - r - 3:.1f} {hy - 2:.1f} Z", "#f5d061")
+    body += ellipse(hx - 9, hy - 2, 5, 2.5, "#ffd8b0") + ellipse(hx + 9, hy - 2, 5, 2.5, "#ffd8b0")  # Pale goggle tan
+    body += circle(hx - 9, hy - 2, 1.8, "#222") + circle(hx + 9, hy - 2, 1.8, "#222")
+    # A fistful of chips thrown up in the air
+    body += stroke(f"M{cx + 30} {base - 30} L {cx + 58} {base - 80}", "#1e2440", 10) + circle(cx + 60, base - 84, 7, "#f0a060")
+    for i, (x, y) in enumerate([(150, 60), (128, 34), (170, 92), (110, 18), (186, 28), (140, 82)]):
+        color = ["#d2202a", "#2a5ad8", "#1a9a4a", "#111111"][i % 4]
+        body += circle(x, y, 7, color, 'stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3 2"') + circle(x, y, 3, "#ffffff")
     return svg(defs, body)
 
 
@@ -4823,7 +4848,7 @@ CARDS["ShadowOps"].update({
     "ShakenNotStirred": shaken_not_stirred, "GoldenEye": golden_eye, "FemmeFatale": femme_fatale,
     "SupplyChainAttack": supply_chain_attack, "HollowedOutVolcanoLair": hollowed_out_volcano_lair,
 })
-CARDS["Corporate"].update({"NDA": nda})
+CARDS["Corporate"].update({"NDA": nda, "Casino": casino})
 
 
 def main():

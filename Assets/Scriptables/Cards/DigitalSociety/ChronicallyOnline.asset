@@ -22,6 +22,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   prophecy: 0
+  gamble: 0
   effects: []
   designNotes: 'Mechanics test: Extremist. Stat changes on it are doubled, buffs
     and debuffs alike.'

@@ -44,7 +44,12 @@ namespace SlayTheClone {
         /// <param name="chosenTarget">What the spell was dropped on: a board slot, creature or player. Null picks its default target.</param>
         public static void QueueSpellEffects(Spell spell, IPlayer caster, ITarget chosenTarget, IActionsQueue queue) {
             chosenTarget ??= DefaultSpellTarget(spell, caster);
-            foreach (var action in spell.Effects.SelectMany(e => e.actions)) {
+            // Gamble: one of its effects, at random
+            var effects = spell.SourceData?.gamble == true && spell.Effects.Count > 0
+                ? new List<CardEffect> { spell.Effects[GameRandom.Next(spell.Effects.Count)] }
+                : spell.Effects.ToList();
+            if (effects.Count == 1 && spell.SourceData?.gamble == true) Log($"{spell.Name}: the wheel stops on effect {spell.Effects.IndexOf(effects[0]) + 1}", LogTag.Effects);
+            foreach (var action in effects.SelectMany(e => e.actions)) {
                 QueueAction(spell, caster, action, SelectTargets(spell, caster, action, chosenTarget, queue), queue);
             }
         }

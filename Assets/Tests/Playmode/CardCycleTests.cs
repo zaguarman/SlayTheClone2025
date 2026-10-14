@@ -138,6 +138,18 @@ namespace SlayTheClone.Tests {
             game.ActionsQueue.AddAction(new PlayCardAction(peek, p1, p1));
             game.Resolve();
             CollectionAssert.Contains(p1.ComingBack, top, "Nothing picked: the best it can reach, and scouting only reaches the top card");
+
+            // Gamble (Casino): only one of its effects happens, at random
+            for (int spin = 0; spin < 6; spin++) {
+                var coinData = game.Spell("Coin", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.Player),
+                    TestGame.Effect(EffectTrigger.OnPlay, ActionType.Heal, 0, TargetType.Player), TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Player));
+                coinData.gamble = true;
+                var coin = game.GiveCard(p1, coinData);
+                int health = p1.Health;
+                game.ActionsQueue.AddAction(new PlayCardAction(coin, p1, p1));
+                game.Resolve();
+                CollectionAssert.Contains(new[] { health, health - 1, health - 2 }, p1.Health, "One outcome, never two at once");
+            }
         }
 
         [UnityTest]

@@ -16,6 +16,7 @@ namespace SlayTheClone {
         public bool singleUse; // Once played, gone for the rest of the combat (The Golden Gun's one bullet)
         [Min(0)] public int sacrifice; // Myth's cost: its side's weakest creatures die to play it
         [Min(0)] public int prophecy; // A spell that comes true this many Days later, at Dawn
+        public bool gamble; // Only one of its effects happens, at random (Casino)
         [SerializeField] protected List<CardEffect> effects = new List<CardEffect>();
         [TextArea(2, 6)] public string designNotes; // Editor only: what the card should become once the GDD mechanics it stands in for exist
         [TextArea(2, 6)] public string artDescription; // What the card's picture shows: the brief for its art
@@ -42,6 +43,7 @@ namespace SlayTheClone {
             data.singleUse = singleUse;
             data.sacrifice = sacrifice;
             data.prophecy = prophecy;
+            data.gamble = gamble;
             data.effects = CopyEffects();
         }
 

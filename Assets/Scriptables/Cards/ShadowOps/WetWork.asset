@@ -22,6 +22,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   prophecy: 0
+  gamble: 0
   effects: []
   designNotes: 'Extreme Prejudice: its attack destroys the creature it hits, whatever
     its Health or Armor, and then it''s gone too: one hit, one roadblock. Untouchable

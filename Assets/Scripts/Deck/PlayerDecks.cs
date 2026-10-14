@@ -28,6 +28,7 @@ namespace SlayTheClone {
         [Serializable]
         private class SavedDeck {
             public string name;
+            public string updated; // When its cards last changed
             public List<SavedCard> cards = new List<SavedCard>();
         }
 
@@ -89,6 +90,7 @@ namespace SlayTheClone {
         public static bool Add(DeckScriptableObject deck, CardDataScriptableObject card) {
             if (!CanAdd(deck, card)) return false;
             deck.SetCards(deck.Cards.Append(card));
+            deck.Touch();
             Save();
             return true;
         }
@@ -99,6 +101,7 @@ namespace SlayTheClone {
             var cards = deck.Cards.ToList();
             cards.RemoveAt(cards.LastIndexOf(card));
             deck.SetCards(cards);
+            deck.Touch();
             Save();
             return true;
         }
@@ -107,6 +110,7 @@ namespace SlayTheClone {
         public static void Rename(DeckScriptableObject deck, string name) {
             if (!IsPlayers(deck) || string.IsNullOrWhiteSpace(name) || name.Trim() == deck.GetDeckName()) return;
             deck.SetName(UniqueName(name.Trim(), deck));
+            deck.Touch();
             Save();
         }
 
@@ -139,7 +143,9 @@ namespace SlayTheClone {
                     var cards = entry.cards.Select(c => pool.FirstOrDefault(p => p.cardId == c.id) ?? pool.FirstOrDefault(p => p.cardName == c.name)).ToList();
                     int missing = cards.Count(c => c == null);
                     if (missing > 0) LogWarning($"Your deck '{entry.name}' had {missing} cards that no longer exist; they were taken out", LogTag.Cards);
-                    decks.Add(DeckScriptableObject.Make(entry.name, cards));
+                    var deck = DeckScriptableObject.Make(entry.name, cards);
+                    if (System.DateTime.TryParse(entry.updated, null, System.Globalization.DateTimeStyles.RoundtripKind, out var updated)) deck.Touch(updated);
+                    decks.Add(deck);
                 }
             }
             catch (Exception e) {
@@ -151,6 +157,7 @@ namespace SlayTheClone {
             var saved = new SavedDecks {
                 decks = decks.Select(d => new SavedDeck {
                     name = d.GetDeckName(),
+                    updated = d.LastUpdated.ToString("o"),
                     cards = d.Cards.Select(c => new SavedCard { id = c.cardId, name = c.cardName }).ToList()
                 }).ToList()
             };

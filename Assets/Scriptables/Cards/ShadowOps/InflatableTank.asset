@@ -22,6 +22,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   prophecy: 0
+  gamble: 0
   effects: []
   designNotes: 'A Ghost Army decoy (a token): to the enemy it''s a Sherman Tank until
     it''s revealed.'

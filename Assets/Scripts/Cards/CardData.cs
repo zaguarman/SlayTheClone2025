@@ -20,6 +20,8 @@ namespace SlayTheClone {
         public int sacrifice;
         /// <summary>Prophecy N (a spell): it comes true at the Dawn N Days after it's played.</summary>
         public int prophecy;
+        /// <summary>Gamble (a spell): only one of its effects happens, picked at random when it resolves.</summary>
+        public bool gamble;
 
         // OnEnable can be used to initialize cardId if null
         public virtual void OnEnable() {

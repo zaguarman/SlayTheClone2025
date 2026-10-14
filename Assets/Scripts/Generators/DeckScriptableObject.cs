@@ -7,6 +7,18 @@ namespace SlayTheClone {
     public class DeckScriptableObject : ScriptableObject {
         [SerializeField] private string deckName = "New Deck";
         [SerializeField] private List<CardDataScriptableObject> cards = new List<CardDataScriptableObject>();
+        [SerializeField] private string lastUpdated = ""; // When its cards last changed (UTC, round-trip format): menus list the newest first
+
+        /// <summary>When its cards last changed; the oldest possible date if it was never recorded.</summary>
+        public System.DateTime LastUpdated =>
+            System.DateTime.TryParse(lastUpdated, null, System.Globalization.DateTimeStyles.RoundtripKind, out var when) ? when.ToUniversalTime() : System.DateTime.MinValue;
+
+        /// <summary>Its cards changed now (or at this moment, read back from a save).</summary>
+        internal void Touch(System.DateTime? when = null) => lastUpdated = (when ?? System.DateTime.UtcNow).ToUniversalTime().ToString("o");
+
+        /// <summary>Decks the most recently updated first; equally recent ones keep their order.</summary>
+        public static List<DeckScriptableObject> NewestFirst(IEnumerable<DeckScriptableObject> decks) =>
+            decks.Where(d => d != null).OrderByDescending(d => d.LastUpdated).ToList();
 
         // Convert the scriptable object cards to runtime CardData objects
         public List<CardData> GetCardDataList() {
@@ -45,6 +57,7 @@ namespace SlayTheClone {
             deck.hideFlags = HideFlags.DontUnloadUnusedAsset; // Loading the game scene doesn't unload it
             deck.SetName(name);
             deck.SetCards(cards);
+            deck.Touch();
             return deck;
         }
 

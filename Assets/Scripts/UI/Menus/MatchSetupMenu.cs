@@ -45,7 +45,8 @@ namespace SlayTheClone {
         /// <summary>The AI that plays: a level, and for Hard a style (see <see cref="AIEntrant.All"/>).</summary>
         public AIEntrant AIPlayer { get; private set; } = new AIEntrant(AILevel.Medium);
         /// <summary>Every deck either side can play: the starter and test decks, then your own complete ones.</summary>
-        public IReadOnlyList<DeckScriptableObject> Decks => catalog.AllDecks.Concat(PlayerDecks.Playable(catalog)).ToList();
+        // The most recently updated first, yours and the starter decks alike
+        public IReadOnlyList<DeckScriptableObject> Decks => DeckScriptableObject.NewestFirst(catalog.AllDecks.Concat(PlayerDecks.Playable(catalog)));
 
         private GameObject panel;
         private bool wasTyping;

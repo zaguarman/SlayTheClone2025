@@ -128,6 +128,14 @@ namespace SlayTheClone {
         // Pays with capital (future: discard cards). Until discarding exists, its strongest cards leak value to the enemy.
         // Can't heal. Engine: card draw, workers that die usefully, money that hurts someone else first.
         private static List<CardDef> CorporateCards() => new List<CardDef> {
+            GambleSpell("Casino", TargetType.Enemy,
+                "The house always wins. Except the houses he owned.",
+                "Gamble, the house's way: three outcomes are yours (a jackpot of cards, comped upgrades for your workers, security throwing out one of theirs), one is the house's (you lose 3 Health).",
+                new[] { Draw(3) },
+                new[] { Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, Each) },
+                new[] { Damage(3, TargetType.EnemyCreatures, AtRandom) },
+                new[] { Damage(3, TargetType.Player, Each) })
+                .Picture("A caricature of Donald Trump in a dark suit and an overlong red tie, his blond hair swept over, grinning and throwing a fistful of casino chips in the air, in front of his gaudy gold-and-purple casino with onion domes and a giant neon sign, a red BANKRUPT stamp across the sign."),
             Spell("Headhunter", TargetType.Player,
                 "We found you on LinkedIn. We found everyone on LinkedIn.",
                 "Corporate's recruiting: Discard 1, then send for a creature from your deck; it joins your next hand.",
@@ -1464,6 +1472,7 @@ namespace SlayTheClone {
                 return this;
             }
 
+            public bool IsGamble; // Only one of its effects happens, at random
             public int SacrificeCost; // Additional cost: its side's weakest creatures die when it resolves
             public int ProphecyDays; // A spell that comes true this many Days later
 
@@ -1498,6 +1507,14 @@ namespace SlayTheClone {
                 Name = name, Attack = attack, Health = health, Speed = speed, DeploymentTime = deploy,
                 Flavor = flavor, Notes = notes, Effects = effects.ToList()
             };
+
+        // A Gamble: each outcome is an effect of its own, and only one of them happens, at random
+        private static CardDef GambleSpell(string name, TargetType aim, string flavor, string notes, params EffectAction[][] outcomes) {
+            var card = Spell(name, aim, flavor, notes);
+            card.Effects = outcomes.Select(actions => new CardEffect { effectType = EffectType.Triggered, trigger = EffectTrigger.OnPlay, actions = actions.ToList() }).ToList();
+            card.IsGamble = true;
+            return card;
+        }
 
         // A spell has one moment, being played, so all its actions form one effect
         private static CardDef Spell(string name, TargetType aim, string flavor, string notes, params EffectAction[] actions) =>
@@ -1715,6 +1732,7 @@ namespace SlayTheClone {
             asset.singleUse = card.IsSingleUse;
             asset.sacrifice = card.SacrificeCost;
             asset.prophecy = card.ProphecyDays;
+            asset.gamble = card.IsGamble;
             asset.SetEffects(card.Effects);
             switch (asset) {
                 case CreatureCardScriptableObject creature:
@@ -1743,8 +1761,11 @@ namespace SlayTheClone {
                 AssetDatabase.CreateAsset(deck, path);
             }
 
+            // Its cards changed (or it's new): it's the most recently updated, first in the menus
+            bool changed = !deck.Cards.SequenceEqual(cards) || deck.LastUpdated == System.DateTime.MinValue;
             var serializedDeck = new SerializedObject(deck);
             serializedDeck.FindProperty("deckName").stringValue = deckName;
+            if (changed) serializedDeck.FindProperty("lastUpdated").stringValue = System.DateTime.UtcNow.ToString("o");
             var cardsProp = serializedDeck.FindProperty("cards");
             cardsProp.arraySize = cards.Count;
             for (int i = 0; i < cards.Count; i++) {

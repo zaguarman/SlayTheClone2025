@@ -22,6 +22,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   prophecy: 0
+  gamble: 0
   effects: []
   designNotes: 'Mechanics test: Spray and Pray. Its attacks also hit the creatures
     beside its target, a cone of three slots.'

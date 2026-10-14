@@ -23,6 +23,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   prophecy: 0
+  gamble: 0
   effects:
   - effectType: 0
     trigger: 6

@@ -22,6 +22,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   prophecy: 0
+  gamble: 0
   effects: []
   designNotes: 'Spray and Pray: its attacks also hit the creatures beside its target.
     The second coming, armed.'

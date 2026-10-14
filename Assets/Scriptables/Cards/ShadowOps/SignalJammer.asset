@@ -22,6 +22,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   prophecy: 0
+  gamble: 0
   effects: []
   designNotes: 'Mechanics test: Signal Jammer. The enemy creature directly opposite
     has its ability switched off (its triggered effects still work).'

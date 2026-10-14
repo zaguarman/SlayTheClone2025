@@ -22,6 +22,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   prophecy: 0
+  gamble: 0
   effects: []
   designNotes: 'Unbothered: enemy effects can''t lower its stats (the tinfoil works).
     Future: Doxxing, reveals.'

@@ -41,12 +41,13 @@ namespace SlayTheClone {
             if (data.prophecy > 0) keywords.Add($"{Keywords.Link("Prophecy", $"Prophecy {data.prophecy}")} (comes true in {data.prophecy} Day{(data.prophecy == 1 ? "" : "s")})");
 
             var sentences = new List<string>();
+            if (data.gamble) sentences.Add($"{Keywords.Link("Gamble")}: one of these, at random:");
             foreach (var effect in data.effects ?? new List<CardEffect>()) {
                 string keyword = isSpell ? null : KeywordAbility(effect);
                 if (keyword != null) keywords.Add(keyword);
                 else {
                     string sentence = DescribeEffect(effect, isSpell);
-                    if (sentence != null) sentences.Add(sentence);
+                    if (sentence != null) sentences.Add(data.gamble ? $"• {sentence}" : sentence);
                 }
             }
 

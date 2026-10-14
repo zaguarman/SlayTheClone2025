@@ -205,7 +205,10 @@ namespace SlayTheClone {
         // resolve before it or after (random order), so each way counts half
         private float SpellValue(Spell spell, ITarget aim) {
             if (!Sacrifice.CanPay(spell, view.Me)) return -100; // Nobody to sacrifice: it can't be played
-            float ValueNow() => spell.Effects.SelectMany(e => e.actions).Sum(a => Value(a, spell, aim)) + SacrificeValue(spell);
+            // A Gamble is worth its outcomes on average
+            float ValueNow() => (spell.SourceData?.gamble == true && spell.Effects.Count > 0
+                ? spell.Effects.Average(e => e.actions.Sum(a => Value(a, spell, aim)))
+                : spell.Effects.SelectMany(e => e.actions).Sum(a => Value(a, spell, aim))) + SacrificeValue(spell);
             // A Prophecy comes true later: worth less, and what it will hit may have changed by then
             if (Prophecy.DaysOf(spell) > 0) return 0.7f * ValueNow();
             if (!Hard || forecasts.Count == 0) return ValueNow();
