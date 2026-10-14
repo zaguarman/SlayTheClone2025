@@ -591,13 +591,17 @@ namespace SlayTheClone {
         // can't see at all stays a card back in its caster's hand
         private void RefreshSpellGhosts() {
             if (!IsInitialized || Player == null || GameManager?.ActionsQueue == null) return;
-            var aimed = new List<(Spell spell, IPlayer caster, BoardSlot slot)>();
+            var aimed = new List<(Spell spell, IPlayer caster, BoardSlot slot, bool byRiver)>();
             spellGhostAims.Clear();
             foreach (var play in GameManager.ActionsQueue.GetPendingActions().OfType<PlayCardAction>()) {
                 if (!(play.GetCard() is Spell spell) || HiddenFromScreen(play)) continue;
                 var side = BattlefieldArrowManager.AimOf(spell, play.GetOwner(), play.GetTarget(), out var slot);
-                if (side == Player) {
-                    aimed.Add((spell, play.GetOwner(), slot));
+                // Where it waits: aimed, on what it's aimed at; on one whole side, beside that battlefield; on both sides (Holy
+                // War, a Trend), by the river, on its caster's half
+                var caster = play.GetOwner();
+                bool byRiver = side != null && slot == null && EffectResolver.Reaches(spell, caster, caster) && EffectResolver.Reaches(spell, caster, caster.Opponent);
+                if (byRiver ? caster == Player : side == Player) {
+                    aimed.Add((spell, caster, slot, byRiver));
                     spellGhostAims[spell] = (play.GetOwner(), slot);
                 }
             }
@@ -612,7 +616,7 @@ namespace SlayTheClone {
                 else Destroy(ghost.gameObject);
             }
 
-            foreach (var (spell, caster, _) in aimed) {
+            foreach (var (spell, caster, _, _) in aimed) {
                 if (!spellGhosts.TryGetValue(spell, out var ghost) || ghost == null) {
                     ghost = CardViews.Create(spell, caster, transform); // The caster's card, wherever it's aimed
                     if (ghost == null) continue;
@@ -630,12 +634,13 @@ namespace SlayTheClone {
             foreach (var gone in spellGhostOrder.Keys.Where(k => !spellGhosts.ContainsKey(k)).ToList()) spellGhostOrder.Remove(gone);
 
             // At one place, the newest in the middle and the older ones stepping left, each partly under the next
-            foreach (var group in aimed.Where(a => spellGhosts.ContainsKey(a.spell)).GroupBy(a => a.slot)) {
+            foreach (var group in aimed.Where(a => spellGhosts.ContainsKey(a.spell)).GroupBy(a => (a.slot, a.byRiver))) {
                 var together = group.OrderBy(a => spellGhostOrder[a.spell]).ToList();
                 for (int i = 0; i < together.Count; i++) {
                     var ghost = spellGhosts[together[i].spell];
                     if (CardController.Dragged == ghost) continue;
-                    PlaceSpellGhost(ghost, together[i].slot, together.Count - 1 - i, together.Count);
+                    if (together[i].slot == null) PlaceInPile(ghost, together[i].byRiver, together.Count - 1 - i);
+                    else PlaceSpellGhost(ghost, together[i].slot, together.Count - 1 - i, together.Count);
                 }
             }
             RefreshAttachments();
@@ -788,6 +793,28 @@ namespace SlayTheClone {
                 : mat.xMin;
             float x = left + width / 2f - stepsLeft * width * SpellGhostSpread;
             rect.localPosition = new Vector3(x, mat.yMin + height / 2f, 0f);
+        }
+
+        // Spells that aren't aimed wait in a pile past the right end of the mat, off the battlefields, the newest on top and
+        // the older ones peeking out behind: one on this whole side at the mat's outer edge, one on both sides by the river
+        // (on its caster's half: yours below the river, the other side's above)
+        private const float CastPileGap = 20f, CastPileStep = 12f, PileScale = 0.7f;
+        private void PlaceInPile(CardController ghost, bool byRiver, int stepsBack) {
+            var rect = (RectTransform)ghost.transform;
+            rect.SetParent(transform, false);
+            rect.SetAsLastSibling();
+            rect.localRotation = Quaternion.identity;
+            rect.localScale = Vector3.one * PileScale;
+            var mat = ((RectTransform)transform).rect;
+            float width = rect.rect.width * PileScale, height = rect.rect.height * PileScale;
+            var other = table.GetBattlefield(Player.Opponent);
+            bool riverAbove = other == null || other.transform.position.y > transform.position.y;
+            float away = riverAbove ? -1f : 1f; // From the river toward this side
+            float y = byRiver
+                ? (riverAbove ? mat.yMax : mat.yMin) + away * (height / 2f + 8f + stepsBack * CastPileStep)
+                : (riverAbove ? mat.yMin : mat.yMax) - away * (height / 2f + 8f + stepsBack * CastPileStep);
+            float x = mat.xMax + CastPileGap + width / 2f + stepsBack * CastPileStep;
+            rect.localPosition = new Vector3(x, y, 0f);
         }
 
         // The cast: the ghost leaps to the middle of the screen, swells and bursts, like a spell cast from the hand

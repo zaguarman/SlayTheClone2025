@@ -452,13 +452,13 @@ namespace SlayTheClone.Tests {
             Assert.IsNull(Shown(storm), "...instead of in the hand");
             CollectionAssert.IsEmpty(game.QueuedArrows(p1), "It needs no arrow");
             Assert.IsTrue(sideGhost.IsQueued, "The ghost is translucent, marked queued");
-            Assert.AreSame(game.BoardView(p2).transform, sideGhost.transform.parent, "One for a whole side sits on that battlefield...");
+            Assert.AreSame(game.BoardView(p2).transform, sideGhost.transform.parent, "One for a whole side waits beside that battlefield...");
             var corners = new Vector3[4];
             ((RectTransform)game.BoardView(p2).transform).GetWorldCorners(corners);
             var ghostCorners = new Vector3[4];
             ((RectTransform)sideGhost.transform).GetWorldCorners(ghostCorners);
-            Assert.AreEqual(corners[0].y, ghostCorners[0].y, 0.01f, "...in its lower-left corner, rather than in a slot...");
-            Assert.AreEqual(corners[0].x, ghostCorners[0].x, 0.01f, "...on both sides of the table, out of the way of the cards' names and stats");
+            Assert.Greater(ghostCorners[0].x, corners[2].x, "...past its right end, off the battlefields...");
+            Assert.Greater((ghostCorners[0].y + ghostCorners[2].y) / 2f, (corners[0].y + corners[2].y) / 2f, "...toward its outer edge, away from the river");
             Assert.Less(sideGhost.transform.lossyScale.x, game.CardIn(ox.Slot).transform.lossyScale.x, "...small");
             bool Glows(IPlayer side) => game.BoardView(side).transform.Cast<Transform>().Any(t => t.name.StartsWith("SpellAim_"));
             Assert.IsTrue(Glows(p2), "The whole battlefield it plays on glows while it's queued");

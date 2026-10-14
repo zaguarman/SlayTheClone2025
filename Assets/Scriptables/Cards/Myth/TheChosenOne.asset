@@ -29,7 +29,8 @@ MonoBehaviour:
   designNotes: 'Spray and Pray: its attacks also hit the creatures beside its target.
     The second coming, armed.'
   artDescription: Jesus in white robes and sandals with a halo, firing two golden
-    submachine guns akimbo, doves scattering, an action-movie explosion behind him.
+    submachine guns akimbo, doves scattering; nothing behind him but the temple light,
+    he steals the show.
   attack: 2
   health: 4
   speed: 2

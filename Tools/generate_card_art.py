@@ -5216,10 +5216,9 @@ def living_dead():
 
 
 def the_chosen_one():
-    # Jesus in white robes and sandals with a halo, firing two golden submachine guns akimbo, doves scattering, an
-    # action-movie explosion behind him
+    # Jesus in white robes and sandals with a halo, firing two golden submachine guns akimbo, doves scattering: he steals
+    # the show, nothing behind him but the temple light
     defs, body = bg_myth()
-    body += circle(80, 80, 50, "#ff8a1a", 'opacity="0.8"') + circle(80, 80, 32, "#ffd23a", 'opacity="0.9"') + flames(80, 130, 5, 20, 40)
     body += jesus(176, 200, 1.4, face="smirk")
     for f in (-1, 1):
         x0 = 176 + f * 40

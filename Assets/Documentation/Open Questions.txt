@@ -99,6 +99,7 @@ STILL OPEN
     • Choices made, say if you want them otherwise:
         - Doom Cost takes your weakest creature that isn't Doomed yet (lowest Attack, then Health), like Sacrifice; with none,
           the card can't be played. The doomed creature still gets +1 Attack each Dawn and its Last Rites. Doom 3 Days.
+          Answered: kept, automatic (no extra step); Weakest is a keyword, and a creature queued that Day can pay it.
         - The earthquake starts at a random slot on a random side and zigzags out both ways, switching sides at each column:
           every column is hit once (1 damage), so two creatures facing each other never both take it. It's a one-off when
           HAARP resolves, not a Trend.

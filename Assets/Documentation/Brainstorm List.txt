@@ -1583,6 +1583,7 @@ Card Game Factions Overview
 			Economic War (sanctions and tariffs instead of tanks)
 			Enhanced Interrogation (torture under the Bush administration)
 			Everybody Is Equal Before the Law
+			Free Nationality (a brainwash card) (added 2026-10-14)
 			Fukuryu (stealth diver carrying explosives)
 			Kaiten (kamikaze submarine)
 			Manhattan Project

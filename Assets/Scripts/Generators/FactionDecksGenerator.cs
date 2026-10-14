@@ -1221,7 +1221,7 @@ namespace SlayTheClone {
                 "Spray and Pray: its attacks also hit the creatures beside its target. The second coming, armed.",
                 new CardEffect[0])
                 .With(CreatureAbility.SprayAndPray)
-                .Picture("Jesus in white robes and sandals with a halo, firing two golden submachine guns akimbo, doves scattering, an action-movie explosion behind him."),
+                .Picture("Jesus in white robes and sandals with a halo, firing two golden submachine guns akimbo, doves scattering; nothing behind him but the temple light, he steals the show."),
             Creature("Killer Rabbit of Caerbannog", 3, 2, speed: 3, deploy: 0,
                 "Look at the bones!",
                 "A harmless-looking bunny that strikes first and hard.",
