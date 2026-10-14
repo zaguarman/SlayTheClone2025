@@ -19,6 +19,7 @@ MonoBehaviour:
   faction: 1
   artwork: {fileID: 3286163911610860551, guid: cd5d36fafc048b042ad0212cadd9b12d, type: 3}
   discardCost: 0
+  discardChosen: 0
   singleUse: 0
   sacrifice: 1
   doomCost: 0

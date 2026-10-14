@@ -14,6 +14,8 @@ namespace SlayTheClone {
         public List<CardEffect> effects = new List<CardEffect>();
         /// <summary>Additional cost: this many other cards from the hand, at random, are given up to play it (0: none).</summary>
         public int discardCost;
+        /// <summary>The discard cost is picked by hand (a calculated play) rather than at random (a chaotic one).</summary>
+        public bool discardChosen;
         /// <summary>Single Use: once played, it's gone for the rest of the combat instead of going to the discard pile.</summary>
         public bool singleUse;
         /// <summary>Sacrifice N (Myth's cost): its side's N weakest creatures die when it resolves, before it does anything.</summary>

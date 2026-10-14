@@ -1,7 +1,8 @@
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
-    public class HealPlayerAction : IGameAction {
+    public class HealPlayerAction : IGameAction, ISourcedAction {
+        public ICard Source { get; set; }
         private readonly IPlayer target;
         private readonly int amount;
 

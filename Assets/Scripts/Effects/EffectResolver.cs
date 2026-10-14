@@ -343,6 +343,7 @@ namespace SlayTheClone {
 
                 var gameAction = CreateAction(source, controller, action, target, queue.Modifiers);
                 if (gameAction == null) continue; // This kind of target can't receive this action
+                if (gameAction is ISourcedAction sourced) sourced.Source = source;
 
                 Log($"{source.Name}: queueing {gameAction}", LogTag.Effects | LogTag.Actions);
                 queue.AddAction(gameAction);

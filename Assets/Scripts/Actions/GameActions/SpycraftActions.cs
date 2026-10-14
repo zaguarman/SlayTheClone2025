@@ -66,7 +66,8 @@ namespace SlayTheClone {
     }
 
     /// <summary>Supply Chain Attack: the player draws fewer cards with their next hand (never fewer than none).</summary>
-    public class CutDrawsAction : IGameAction {
+    public class CutDrawsAction : IGameAction, ISourcedAction {
+        public ICard Source { get; set; }
         public IPlayer Player { get; }
         public int Cards { get; }
 
@@ -169,12 +170,18 @@ namespace SlayTheClone {
     }
 
     /// <summary>
-    /// A discard cost (Social Engineering: you need to give information to get some): to play the card, that many other
-    /// cards from the hand, picked at random among those not being played, are set aside. They're discarded when it
-    /// resolves, and come back to the hand if it's taken back. Fewer cards left than the cost: it can't be played.
+    /// A discard cost (Social Engineering: you need to give information to get some): a payment. To play the card, that many
+    /// other cards from the hand, among those not being played, are set aside; they're discarded when it resolves, and come
+    /// back to the hand if it's taken back. It's paid in full or not at all: with fewer cards left than the cost, the card
+    /// isn't played and stays in the hand. Two ways to pay, a card's theme decides: at random (chaotic: Social Engineering,
+    /// Bilderberg Membership) or picked by hand (calculated: Headhunter, NDA, Dead Drop; see <see cref="IPlayer.DiscardPicks"/>
+    /// and the picker on screen, which can change the picks while the play is queued).
     /// </summary>
     public static class DiscardCost {
         public static int Of(ICard card) => card?.SourceData?.discardCost ?? 0;
+
+        /// <summary>Picked by hand rather than at random.</summary>
+        public static bool IsChosen(ICard card) => card?.SourceData?.discardChosen ?? false;
 
         /// <summary>The cards that could pay for it now: the rest of the hand, minus the cards already being played.</summary>
         public static List<ICard> Payable(ICard card, IPlayer owner, IActionsQueue queue) {
@@ -195,14 +202,42 @@ namespace SlayTheClone {
                 Log($"{card.Name} needs {cost} other cards from the hand to play; {owner.Name} has {payable.Count}", LogTag.Cards | LogTag.Actions);
                 return false;
             }
-            for (int i = 0; i < cost; i++) {
-                var paid = payable[GameRandom.Next(payable.Count)];
-                payable.Remove(paid);
-                owner.RemoveFromHand(paid);
-                owner.SetAside.Add(paid);
-                play.Paid.Add(paid);
+            // Chosen: the cards picked, if they still can pay; otherwise (and for a random cost) at random
+            var picked = IsChosen(card) && owner.DiscardPicks.TryGetValue(card, out var picks) ? picks : null;
+            owner.DiscardPicks.Remove(card);
+            if (picked != null && picked.Count == cost && picked.Distinct().Count() == cost && picked.All(payable.Contains)) {
+                foreach (var paid in picked) SetAside(play, owner, paid);
+            }
+            else {
+                for (int i = 0; i < cost; i++) {
+                    var paid = payable[GameRandom.Next(payable.Count)];
+                    payable.Remove(paid);
+                    SetAside(play, owner, paid);
+                }
             }
             Log($"{owner.Name} gives up {string.Join(", ", play.Paid.Select(c => c.Name))} to play {card.Name}", LogTag.Cards | LogTag.Actions);
+            return true;
+        }
+
+        private static void SetAside(PlayCardAction play, IPlayer owner, ICard paid) {
+            owner.RemoveFromHand(paid);
+            owner.SetAside.Add(paid);
+            play.Paid.Add(paid);
+        }
+
+        /// <summary>
+        /// A chosen cost picked again while the play is queued (the picker on screen): what was set aside goes back to the
+        /// hand and these are set aside instead. False, and nothing changes, if they can't pay for it.
+        /// </summary>
+        public static bool Repay(PlayCardAction play, List<ICard> chosen, IActionsQueue queue) {
+            var owner = play.GetOwner();
+            var card = play.GetCard();
+            if (owner == null || chosen == null || chosen.Count != Of(card) || chosen.Distinct().Count() != chosen.Count) return false;
+            var payable = new HashSet<ICard>(Payable(card, owner, queue).Concat(play.Paid));
+            if (!chosen.All(payable.Contains)) return false;
+            Refund(play);
+            foreach (var paid in chosen) SetAside(play, owner, paid);
+            Log($"{owner.Name} picks {string.Join(", ", chosen.Select(c => c.Name))} to pay for {card.Name}", LogTag.Cards | LogTag.Actions);
             return true;
         }
 

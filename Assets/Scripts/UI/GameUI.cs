@@ -51,6 +51,8 @@ namespace SlayTheClone {
             GameOver = GameOverScreen.Create(transform, gameManager, gameMediator);
             SendForPicker = GetOrAddComponent<SendForPicker>();
             SendForPicker.Initialize(gameManager, gameMediator, gameReferences.GetDeckViewUI());
+            DiscardPicker = GetOrAddComponent<DiscardPicker>();
+            DiscardPicker.Initialize(gameManager, gameMediator, gameReferences.GetDeckViewUI());
             gameMediator.GameOver += OnGameOver;
             FogOfWar.Changed += OnFogOfWarChanged;
             ShowFogOfWarState();
@@ -127,6 +129,9 @@ namespace SlayTheClone {
 
         /// <summary>Asks the screen's player which card a Send For fetches.</summary>
         public SendForPicker SendForPicker { get; private set; }
+
+        /// <summary>Asks the screen's player which cards pay for a chosen discard cost.</summary>
+        public DiscardPicker DiscardPicker { get; private set; }
 
         /// <summary>What covers the table when the combat is over.</summary>
         public GameOverScreen GameOver { get; private set; }

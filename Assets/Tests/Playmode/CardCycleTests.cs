@@ -81,6 +81,24 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(4, p1.Hand.Count, "...and it draws 3 (the one card left and the 3 drawn)");
             Assert.AreEqual(cards, GameAsserts.CountCards(p1));
 
+            // A chosen discard cost (Headhunter, a calculated play): the cards picked pay, and can be picked again while queued
+            Fresh();
+            game.SetDecks(game.Fillers(10), game.Fillers(1));
+            var hireData = game.Spell("Hire", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 1, TargetType.Player));
+            hireData.discardCost = 1;
+            hireData.discardChosen = true;
+            var hire = game.GiveCard(p1, hireData);
+            game.Run(new DrawCardsAction(p1, 3));
+            var others = p1.Hand.Where(c => c != hire).ToList();
+            p1.DiscardPicks[hire] = new List<ICard> { others[1] };
+            var hiring = new PlayCardAction(hire, p1, p1);
+            game.ActionsQueue.AddAction(hiring);
+            CollectionAssert.AreEqual(new[] { others[1] }, p1.SetAside, "Chosen: the card picked pays");
+            Assert.IsTrue(DiscardCost.Repay(hiring, new List<ICard> { others[2] }, game.ActionsQueue));
+            CollectionAssert.AreEqual(new[] { others[2] }, p1.SetAside, "...and picked again while the play is queued, the new one pays instead");
+            CollectionAssert.Contains(p1.Hand, others[1]);
+            StringAssert.Contains("of your choice", Keywords.Plain(CardTextFormatter.GetRulesText(hireData)));
+
             // Single Use (The Golden Gun): once played, it's gone for the rest of the combat, but still the player's card
             var gunData = game.Spell("Gun", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 1, TargetType.Player));
             gunData.singleUse = true;

@@ -154,7 +154,7 @@ namespace SlayTheClone {
                 "We found you on LinkedIn. We found everyone on LinkedIn.",
                 "Corporate's recruiting: Discard 1, then send for a creature from your deck; it joins your next hand.",
                 SendForCard(SendForFilter.Creature))
-                .Discarding(1)
+                .Discarding(1, chosen: true)
                 .Picture("A slick recruiter in a sharp suit reeling in a startled employee from a rival's office tower with a fishing rod baited with a stock-options contract."),
             Creature("Counterfeit", 1, 1, speed: 2, deploy: 0,
                 "Genuine replica. 100% authentic copy.",
@@ -277,7 +277,7 @@ namespace SlayTheClone {
                 "You saw nothing. You'll say nothing. Initial here, here and here.",
                 "Non-Disclosure Agreement. Discard 1 (Corporate pays with capital), then Blackout for 2 Days on target enemy creature: its ability and its effects (arrival, Dawn and Dusk, retaliation, Last Will) are switched off. Silences the Shadow Ops. tricks and the Myth sacrifices alike.",
                 Status(StatusEffectType.Blackout, 2, TargetType.EnemyCreatures))
-                .Discarding(1)
+                .Discarding(1, chosen: true)
                 .NotInStarterDeck()
                 .Picture("A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a towering stack of contracts between them stamped CONFIDENTIAL."),
             Spell("Inflation", TargetType.EnemyCreatures,
@@ -879,7 +879,7 @@ namespace SlayTheClone {
                 "Leave the package under the third bench. Take the other one. Don't look inside either.",
                 "Discard 3 (random other cards from your hand, given up to play this), then draw 4 with the next Day's hand.",
                 Draw(4))
-                .Discarding(3)
+                .Discarding(3, chosen: true)
                 .NotInStarterDeck()
                 .Picture("A park bench in autumn, a man in a trench coat feeding pigeons while sliding a hollowed-out brick behind him with his heel, another man on the next bench reading an upside-down newspaper."),
             // Double-O Section, the spy-film Shadow Ops.: gadgets, licences and villains with very specific methods
@@ -1527,6 +1527,7 @@ namespace SlayTheClone {
             public bool Extra; // Not in its faction's starter deck (it's full): in the Mechanics Test deck and the deck builder
             public bool IsToken; // Made by an effect (Ghost Army's decoys), never in a deck
             public int DiscardCost; // Additional cost: other cards from the hand, at random, given up to play it
+            public bool DiscardChosen; // Paid with cards picked by hand (a calculated play) rather than at random (a chaotic one)
             public bool IsSingleUse; // Once played, gone for the rest of the combat
             public string DisguiseName; // The card the other side sees it as, until it's revealed
             public Faction? ShownFaction; // A fake card's frame: the faction it pretends to be from
@@ -1604,8 +1605,9 @@ namespace SlayTheClone {
             }
 
             // Discard N: an additional cost, N random other cards from the hand
-            public CardDef Discarding(int cards) {
+            public CardDef Discarding(int cards, bool chosen = false) {
                 DiscardCost = cards;
+                DiscardChosen = chosen;
                 return this;
             }
 
@@ -1835,6 +1837,7 @@ namespace SlayTheClone {
             asset.artDescription = card.ArtDescription;
             asset.faction = card.ShownFaction ?? faction;
             asset.discardCost = card.DiscardCost;
+            asset.discardChosen = card.DiscardChosen;
             asset.singleUse = card.IsSingleUse;
             asset.sacrifice = card.SacrificeCost;
             asset.doomCost = card.DoomCost;

@@ -38,6 +38,8 @@ namespace SlayTheClone {
         int? GraceUntilDay { get; set; }
         /// <summary>Send For: the card picked from the deck for each card that sends for one, until it resolves.</summary>
         Dictionary<ICard, ICard> SendForPicks { get; }
+        /// <summary>A chosen discard cost: the cards picked to pay for each card, used when it's played.</summary>
+        Dictionary<ICard, List<ICard>> DiscardPicks { get; }
         /// <summary>Puts a card that left play on its way back to the hand: it joins the next Day's hand.</summary>
         void ReturnToHand(ICard card);
         void AddToHand(ICard card);
@@ -80,6 +82,7 @@ namespace SlayTheClone {
         public List<Prophecy> Prophecies { get; } = new List<Prophecy>();
         public int? GraceUntilDay { get; set; }
         public Dictionary<ICard, ICard> SendForPicks { get; } = new Dictionary<ICard, ICard>();
+        public Dictionary<ICard, List<ICard>> DiscardPicks { get; } = new Dictionary<ICard, List<ICard>>();
 
         public IReadOnlyList<BoardSlot> Battlefield { get; }
         public event Action<int> HealthChanged;

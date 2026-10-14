@@ -54,7 +54,7 @@ namespace SlayTheClone {
             string keywordLine = keywords.Count > 0 ? string.Join(", ", keywords) : "";
             // An additional cost comes first, like Magic's: "Discard 2: give up 2 random other cards from your hand to play this"
             string cost = data.discardCost > 0
-                ? $"{Keywords.Link("Discard Cost", $"Discard {data.discardCost}")}: give up {data.discardCost} random other card{(data.discardCost == 1 ? "" : "s")} from your hand to play this"
+                ? $"{Keywords.Link("Discard Cost", $"Discard {data.discardCost}")}: give up {data.discardCost} {(data.discardChosen ? "" : "random ")}other card{(data.discardCost == 1 ? "" : "s")}{(data.discardChosen ? " of your choice" : "")} from your hand to play this"
                 : data.sacrifice > 0
                     ? $"{Keywords.Link("Sacrifice", $"Sacrifice {data.sacrifice}")}: your {(data.sacrifice == 1 ? "weakest creature dies" : $"{data.sacrifice} weakest creatures die")} to play this"
                     : data.doomCost > 0

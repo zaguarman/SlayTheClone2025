@@ -12,7 +12,8 @@ namespace SlayTheClone {
         public CardType cardType;
         public Faction faction;
         public Sprite artwork; // Shown in the card's art box; assigned by Tools > Cards > Assign Card Art
-        [Min(0)] public int discardCost; // Additional cost: other cards from the hand, at random, given up to play it
+        [Min(0)] public int discardCost; // Additional cost: other cards from the hand given up to play it
+        public bool discardChosen; // Picked by hand (calculated) rather than at random (chaotic)
         public bool singleUse; // Once played, gone for the rest of the combat (The Golden Gun's one bullet)
         [Min(0)] public int sacrifice; // Myth's cost: its side's weakest creatures die to play it
         [Min(0)] public int doomCost; // Doom N: its side's weakest creature not yet Doomed is Doomed N Days to play it
@@ -41,6 +42,7 @@ namespace SlayTheClone {
             data.faction = faction;
             data.artwork = artwork;
             data.discardCost = discardCost;
+            data.discardChosen = discardChosen;
             data.singleUse = singleUse;
             data.sacrifice = sacrifice;
             data.doomCost = doomCost;

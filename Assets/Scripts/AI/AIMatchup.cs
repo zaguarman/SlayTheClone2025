@@ -48,10 +48,15 @@ namespace SlayTheClone {
                     text.AppendLine($"    vs {other.Name}: {Share(atLevel.Where(r => r.Deck == other.Name || r.Deck2 == other.Name))}");
                 }
             }
-            text.AppendLine("  Its cards (in the games they're played: plays, damage, kills, win share of those games)");
-            foreach (var card in ledger.Cards.Where(c => names.Contains(c.Name) && c.Games > 0).OrderByDescending(c => c.WinRate)) {
-                text.AppendLine($"    {card.Name,-40} {card.PlaysPerGame,4:0.0} plays {(card.FaceDamage + card.CreatureDamage) / (float)card.Games,5:0.0} dmg " +
-                                $"{card.Kills / (float)card.Games,4:0.0} kills  {card.WinRate:0%} of {card.Games}");
+            text.AppendLine("  Its cards, by impact (a game they're played in): what they dealt, what they set up (assists: damage and kills by");
+            text.AppendLine("  the creatures they powered up or licensed, or on the ones they weakened; opened: player damage through a slot they");
+            text.AppendLine("  emptied), and logistics and support (cards drawn, sent for, denied to the enemy, Health healed). Impact weighs it all in damage.");
+            text.AppendLine($"    {"Card",-40} {"plays",5} {"dmg",5} {"kills",5} {"assist",6} {"a.kills",7} {"opened",6} {"draws",5} {"sent",4} {"denied",6} {"healed",6} {"impact",6} {"win",5}");
+            float G(CardLedger.Record c, int n) => n / (float)c.Games;
+            foreach (var card in ledger.Cards.Where(c => names.Contains(c.Name) && c.Games > 0).OrderByDescending(c => c.ImpactPerGame)) {
+                text.AppendLine($"    {card.Name,-40} {card.PlaysPerGame,5:0.0} {G(card, card.FaceDamage + card.CreatureDamage),5:0.0} {G(card, card.Kills),5:0.0} " +
+                                $"{G(card, card.AssistDamage),6:0.0} {G(card, card.AssistKills),7:0.0} {G(card, card.OpenedDamage),6:0.0} {G(card, card.Draws),5:0.0} " +
+                                $"{G(card, card.SentFor),4:0.0} {G(card, card.Denied),6:0.0} {G(card, card.Healed),6:0.0} {card.ImpactPerGame,6:0.0} {card.WinRate,5:0%}");
             }
             if (audit.Problems.Count > 0) text.AppendLine($"  PROBLEMS: {audit.Problems.Count}, first: {audit.Problems[0].Kind}: {audit.Problems[0].Message} at {audit.Problems[0].FirstSeen}");
             return text.ToString();

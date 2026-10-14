@@ -5,6 +5,20 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+40. The balance reports' credit, and Discard (2026-10-14)
+    • Built as asked: the AI games now credit the cards that set things up, not only the ones that dealt the blow. Assists:
+      damage and kills by a creature carrying another card's effect (a Licence to Kill, a power-up, Die Another Day), or on a
+      victim weakened by your side's cards (GoldenEye's Blackout, Generational Trauma). Opened: player damage through a slot a
+      card emptied, in the two Days after. Logistics and support: cards drawn, sent for, denied to the enemy (Supply Chain
+      Attack), Health healed. One impact score weighs it all in damage, logistics weighed up (a card drawn, sent for or
+      denied counts as 2 damage, a kill as 4). RunMatchup ranks a deck's cards by it; the Balance Report has a support table.
+    • Answered (Discard): a discard cost is a payment, paid in full or not at all (with fewer cards the card isn't played
+      and stays in the hand). Chaotic cards pay at random (Social Engineering, Bilderberg Membership); calculated ones let
+      you pick the cards (Headhunter, NDA, Dead Drop: a picker opens when you play it, the AI gives up what it values least).
+      Which way a card pays is also a balancing lever. A card whose effect is to discard (not to pay) discards as many as you
+      have, up to X: in the rules and the keyword, no card does it yet.
+    • Open: a third way to pay, a fixed rule with some depth (see 40b in the answers to come).
+
 39. New decks, accelerationism, buffing up (2026-10-14)
     • Built as asked: the old decks are gone (the faction decks, Black Budget, Double-O Section, Panopticon, Prosperity
       Gospel); each faction has one new 20-card deck of its best cards and combos, picked from the AI games' card stats.

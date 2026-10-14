@@ -169,9 +169,15 @@ namespace SlayTheClone {
                 if (!view.Me.Hand.Contains(spell) || !DiscardCost.CanPay(spell, view.Me, queue)) continue; // Given up for another
                 var aim = AimsFor(spell).Select(a => (aim: a, value: SpellValue(spell, a))).OrderByDescending(a => a.value).FirstOrDefault();
                 if (aim.aim == null || aim.value <= 0) continue;
+                if (DiscardCost.IsChosen(spell)) view.Me.DiscardPicks[spell] = LeastUseful(DiscardCost.Payable(spell, view.Me, queue), DiscardCost.Of(spell));
                 Play(spell, aim.aim);
             }
         }
+
+        // A chosen discard cost: the cards it would miss least (a spell by the most good it can do now, a creature by its stats)
+        private List<ICard> LeastUseful(List<ICard> cards, int count) =>
+            cards.OrderBy(c => c is Spell s ? AimsFor(s).Select(a => SpellValue(s, a)).DefaultIfEmpty(0).Max()
+                : c is ICreature creature ? (creature.Attack + creature.Health) / 2f : 0).Take(count).ToList();
 
         private void PlayEachSpell(List<Spell> spells) {
             if (Level == AILevel.Easy) {

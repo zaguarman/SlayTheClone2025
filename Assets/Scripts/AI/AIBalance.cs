@@ -7,7 +7,10 @@ namespace SlayTheClone {
     /// <summary>
     /// What each card did in AI games, for balance: how often it was played and by whom, what it dealt (damage to the other
     /// player and their creatures, kills), and how the games where it was played ended. Damage and kills are credited to the
-    /// card that caused them: the attacking or dying creature, or the spell being resolved.
+    /// card that caused them: the attacking or dying creature, or the spell being resolved. The cards that made it possible
+    /// are credited too: assists (the cards whose effects were on the creature that dealt it, a Licence to Kill, a power-up,
+    /// or the debuffs your side put on the victim), and a slot opened (player damage through a slot a card emptied, in the
+    /// two Days after). And what support and logistics did: cards drawn, cards sent for, Health healed.
     /// </summary>
     public sealed class CardLedger {
         public sealed class Record {
@@ -26,6 +29,24 @@ namespace SlayTheClone {
             public int CreatureDamage { get; internal set; }
             public int Kills { get; internal set; }
             public int FriendlyDamage { get; internal set; }
+            /// <summary>Damage and kills by creatures it powered up or licensed, or on creatures it weakened.</summary>
+            public int AssistDamage { get; internal set; }
+            public int AssistKills { get; internal set; }
+            /// <summary>Damage to the other player through a slot it emptied, in the two Days after.</summary>
+            public int OpenedDamage { get; internal set; }
+            public int Draws { get; internal set; }
+            public int SentFor { get; internal set; }
+            public int Healed { get; internal set; }
+            /// <summary>Cards it took from the other player's next hand (Supply Chain Attack).</summary>
+            public int Denied { get; internal set; }
+
+            /// <summary>
+            /// All it did, in damage: what it dealt, what it set up (assists and slots opened count a little less than dealing it),
+            /// kills at 4, and logistics and support weighed up: a card drawn or sent for at 2, Health healed at half.
+            /// </summary>
+            public float Impact => FaceDamage + CreatureDamage + 0.8f * AssistDamage + OpenedDamage + 4f * (Kills + 0.8f * AssistKills)
+                                   + 2f * (Draws + SentFor + Denied) + 0.5f * Healed;
+            public float ImpactPerGame => Games == 0 ? 0 : Impact / Games;
 
             public float WinRate => Wins + Losses == 0 ? 0 : Wins / (float)(Wins + Losses);
             public int EdgeGames => EdgeWins + EdgeLosses;
@@ -83,6 +104,13 @@ namespace SlayTheClone {
             total.CreatureDamage += game.CreatureDamage;
             total.Kills += game.Kills;
             total.FriendlyDamage += game.FriendlyDamage;
+            total.AssistDamage += game.AssistDamage;
+            total.AssistKills += game.AssistKills;
+            total.OpenedDamage += game.OpenedDamage;
+            total.Draws += game.Draws;
+            total.SentFor += game.SentFor;
+            total.Healed += game.Healed;
+            total.Denied += game.Denied;
         }
 
         /// <summary>One game being tallied: what was played, and what each card dealt.</summary>
@@ -98,6 +126,14 @@ namespace SlayTheClone {
             private readonly Dictionary<(string ai, string card), Record> byAI = new Dictionary<(string, string), Record>();
             private (ICard card, IPlayer owner) context; // The card whose action is resolving: a spell, a summon, an attack
             private (ICard card, IPlayer owner) credit;  // The card the action resolving now is credited to
+            private (ICard card, IPlayer owner) support; // A draw or heal resolving now, and the card whose effect it is
+            private BoardSlot attackedSlot; // The slot the attack resolving now is aimed at
+            // The cards whose effects were on the attacker when its attack began: a Licence is spent before the kill lands
+            private readonly List<(ICard card, IPlayer owner)> attackHelpers = new List<(ICard, IPlayer)>();
+            private int day;
+            // Slots emptied by a kill: who emptied them, and when
+            private readonly Dictionary<(IPlayer side, int slot), ((ICard card, IPlayer owner) by, int day)> opened =
+                new Dictionary<(IPlayer, int), ((ICard, IPlayer), int)>();
 
             public Watch(CardLedger ledger, GameSession session, GameMediator gameMediator, AIEntrant first, AIEntrant second, bool mirror, string deck1, string deck2) {
                 this.ledger = ledger;
@@ -110,6 +146,8 @@ namespace SlayTheClone {
                 mediator.PlayerDamaged += OnPlayerDamaged;
                 mediator.CreatureDamaged += OnCreatureDamaged;
                 mediator.CreatureDied += OnCreatureDied;
+                mediator.CreatureHealed += OnCreatureHealed;
+                mediator.PlayerHealed += OnPlayerHealed;
             }
 
             public void Detach() {
@@ -118,6 +156,8 @@ namespace SlayTheClone {
                 mediator.PlayerDamaged -= OnPlayerDamaged;
                 mediator.CreatureDamaged -= OnCreatureDamaged;
                 mediator.CreatureDied -= OnCreatureDied;
+                mediator.CreatureHealed -= OnCreatureHealed;
+                mediator.PlayerHealed -= OnPlayerHealed;
                 mediator = null;
             }
 
@@ -125,6 +165,8 @@ namespace SlayTheClone {
 
             private void OnExecuting(IGameAction action) {
                 credit = default;
+                support = default;
+                if (action is ISourcedAction { Source: ICard source }) support = (source, Whose(source));
                 switch (action) {
                     case PlayCardAction play:
                         var counts = plays[SideOf(play.GetOwner())];
@@ -133,13 +175,72 @@ namespace SlayTheClone {
                         break;
                     case PlaySpellAction spell: context = (spell.GetSpell(), spell.GetOwner()); break;
                     case SummonCreatureAction summon: context = (summon.GetCreature(), summon.GetOwner()); break;
-                    case BattlefieldCombatAction attack: context = (attack.GetAttacker(), Whose(attack.GetAttacker())); break;
+                    case BattlefieldCombatAction attack:
+                        context = (attack.GetAttacker(), Whose(attack.GetAttacker()));
+                        attackedSlot = attack.GetTargetSlot();
+                        attackHelpers.Clear();
+                        foreach (var a in game.ActionsQueue.Modifiers.AttachmentsOf(attack.GetAttacker())) {
+                            if (a.Owner == context.owner && a.Card != attack.GetAttacker()) attackHelpers.Add((a.Card, a.Owner));
+                        }
+                        break;
+                    case CutDrawsAction cut when support.card != null:
+                        foreach (var record in RecordsOf(support)) record.Denied += cut.Cards;
+                        break;
+                    case DrawCardsAction draw when support.card != null:
+                        foreach (var record in RecordsOf(support)) record.Draws += draw.GetAmount();
+                        break;
+                    case SendForAction sending when sending.Source != null:
+                        foreach (var record in RecordsOf((sending.Source, Whose(sending.Source)))) record.SentFor++;
+                        break;
                     case UseAbilityAction use: context = (use.Creature, Whose(use.Creature)); break;
                     case DamageCreatureAction hit: credit = hit.GetAttacker() != null ? (hit.GetAttacker(), Whose(hit.GetAttacker())) : SpellContext(); break;
                     case DamagePlayerAction hit: credit = hit.GetAttacker() != null ? (hit.GetAttacker(), Whose(hit.GetAttacker())) : SpellContext(); break;
                     case DestroyCreatureAction destroy: credit = destroy.GetKiller() != null ? (destroy.GetKiller(), Whose(destroy.GetKiller())) : SpellContext(); break;
-                    case DiscardHandAction or DrawCardsAction: context = default; break; // The Day is over
+                    case DiscardHandAction discard:
+                        context = default; // The Day is over
+                        if (discard.GetPlayer() == game.Player1) day++;
+                        break;
                 }
+                if (action is DrawCardsAction && support.card == null) context = default;
+            }
+
+            // Whose card it is: a creature's, or a spell's (in whichever hand or pile)
+            private IPlayer Whose(ICard card) =>
+                card is ICreature creature ? Whose(creature) : plays[0].ContainsKey(card) ? game.Player1 : plays[1].ContainsKey(card) ? game.Player2 : context.owner;
+
+            // The cards whose effects helped: on the creature that dealt it (its owner's), and on the victim (put there by that side)
+            private IEnumerable<(ICard card, IPlayer owner)> Helpers(ICreature dealer, ICreature victim) {
+                var modifiers = game.ActionsQueue.Modifiers;
+                if (dealer == context.card) {
+                    foreach (var helper in attackHelpers) yield return helper;
+                }
+                foreach (var a in modifiers.AttachmentsOf(dealer)) {
+                    if (a.Owner == credit.owner && a.Card != dealer) yield return (a.Card, a.Owner);
+                }
+                if (victim == null) yield break;
+                foreach (var a in modifiers.AttachmentsOf(victim)) {
+                    if (a.Owner == credit.owner && a.Card != dealer) yield return (a.Card, a.Owner);
+                }
+            }
+
+            private void Assist(ICreature victim, int damage, bool kill) {
+                if (!(credit.card is ICreature dealer)) return;
+                foreach (var helper in Helpers(dealer, victim).Distinct()) {
+                    foreach (var record in RecordsOf(helper)) {
+                        record.AssistDamage += damage;
+                        if (kill) record.AssistKills++;
+                    }
+                }
+            }
+
+            private void OnCreatureHealed(ICreature creature, int amount) {
+                if (support.card == null || Whose(creature) != support.owner) return;
+                foreach (var record in RecordsOf(support)) record.Healed += amount;
+            }
+
+            private void OnPlayerHealed(IPlayer player, int amount) {
+                if (support.card == null || player != support.owner) return;
+                foreach (var record in RecordsOf(support)) record.Healed += amount;
             }
 
             // A Gift on the other side still works for the player whose card it is
@@ -154,6 +255,14 @@ namespace SlayTheClone {
                     if (player != credit.owner) record.FaceDamage += amount;
                     else record.FriendlyDamage += amount;
                 }
+                if (player == credit.owner) return;
+                Assist(null, amount, kill: false);
+                // Through a slot another card emptied lately: that card opened the way
+                if (credit.card is ICreature && attackedSlot != null && attackedSlot.Owner == player
+                    && opened.TryGetValue((player, attackedSlot.Index), out var opener) && day - opener.day <= 2 && opener.by.owner == credit.owner
+                    && opener.by.card != credit.card) {
+                    foreach (var record in RecordsOf(opener.by)) record.OpenedDamage += amount;
+                }
             }
 
             private void OnCreatureDamaged(ICreature creature, int amount) {
@@ -162,11 +271,14 @@ namespace SlayTheClone {
                     if (Whose(creature) != credit.owner) record.CreatureDamage += amount;
                     else record.FriendlyDamage += amount;
                 }
+                if (Whose(creature) != credit.owner) Assist(creature, amount, kill: false);
             }
 
             private void OnCreatureDied(ICreature creature) {
                 if (credit.card == null || creature == credit.card || Whose(creature) == credit.owner) return;
                 foreach (var record in RecordsOf(credit)) record.Kills++;
+                Assist(creature, 0, kill: true);
+                if (creature.Slot != null) opened[(Whose(creature), creature.Slot.Index)] = (credit, day);
             }
 
             private IEnumerable<Record> RecordsOf((ICard card, IPlayer owner) source) {
@@ -326,6 +438,14 @@ namespace SlayTheClone {
                 .OrderBy(c => c.FacePerPlay + c.CreatureDamage / (float)System.Math.Max(1, c.Plays) / 3f + c.KillsPerPlay * 2f).Take(8));
             Table("  Most damage to the other player per play", playable.OrderByDescending(c => c.FacePerPlay).Take(10));
             Table("  Most kills per play", playable.OrderByDescending(c => c.KillsPerPlay).Take(10));
+            text.AppendLine("  Support and logistics, most impact: what they set up and supplied (a game they're played in, deck against deck)");
+            foreach (var c in deckLedger.Cards.Where(c => c.Games >= 5 && c.AssistDamage + c.AssistKills + c.OpenedDamage + c.Draws + c.SentFor + c.Denied + c.Healed > 0)
+                         .OrderByDescending(c => (0.8f * c.AssistDamage + c.OpenedDamage + 3.2f * c.AssistKills + 2f * (c.Draws + c.SentFor + c.Denied) + 0.5f * c.Healed) / c.Games).Take(15)) {
+                float g = c.Games;
+                text.AppendLine($"    {c.Name,-40} {CardTextFormatter.FactionName(c.Faction),-15} assist {c.AssistDamage / g:0.0} dmg {c.AssistKills / g:0.0} kills, " +
+                                $"opened {c.OpenedDamage / g:0.0}, draws {c.Draws / g:0.0}, sent for {c.SentFor / g:0.0}, denied {c.Denied / g:0.0}, healed {c.Healed / g:0.0}");
+            }
+            text.AppendLine();
             text.AppendLine("  By faction: average edge of its cards (cards with 60+ edge games)");
             foreach (var faction in withEdge.GroupBy(c => c.Faction).OrderByDescending(g => g.Average(c => c.Edge))) {
                 var best = faction.OrderByDescending(c => c.Edge).First();
@@ -381,14 +501,16 @@ namespace SlayTheClone {
             text.AppendLine();
 
             // Every card, so a new or changed one can be looked up whatever its rank
-            text.AppendLine("6. EVERY CARD (mirror games; deck-against-deck damage and kills a game it's played in)");
-            text.AppendLine($"    {"Card",-40} {"Faction",-15} {"Edge",5} {"(of)",5} {"Plays/g",8} {"Face/pl",8} {"Kills/pl",9} {"Dmg/g vs",9} {"Kills/g vs",11}");
+            text.AppendLine("6. EVERY CARD (mirror games; deck-against-deck damage and kills a game it's played in, and impact: all it dealt, set up");
+            text.AppendLine("   (assists, slots opened) and supplied (draws, sent for, healing), in damage, a game it's played in)");
+            text.AppendLine($"    {"Card",-40} {"Faction",-15} {"Edge",5} {"(of)",5} {"Plays/g",8} {"Face/pl",8} {"Kills/pl",9} {"Dmg/g vs",9} {"Kills/g vs",11} {"Impact/g",9}");
             foreach (var c in cardLedger.Cards.OrderBy(c => c.Faction).ThenBy(c => c.Name)) {
                 var versus = deckLedger.Cards.FirstOrDefault(d => d.Name == c.Name);
                 string dmg = versus == null || versus.Games == 0 ? "-" : $"{(versus.FaceDamage + versus.CreatureDamage) / (float)versus.Games:0.0}";
                 string kills = versus == null || versus.Games == 0 ? "-" : $"{versus.Kills / (float)versus.Games:0.0}";
                 string edge = c.EdgeGames == 0 ? "-" : $"{c.Edge:0%}";
-                text.AppendLine($"    {c.Name,-40} {CardTextFormatter.FactionName(c.Faction),-15} {edge,5} {c.EdgeGames,5} {c.PlaysPerGame,8:0.0} {c.FacePerPlay,8:0.0} {c.KillsPerPlay,9:0.00} {dmg,9} {kills,11}");
+                string impact = versus == null || versus.Games == 0 ? "-" : $"{versus.ImpactPerGame:0.0}";
+                text.AppendLine($"    {c.Name,-40} {CardTextFormatter.FactionName(c.Faction),-15} {edge,5} {c.EdgeGames,5} {c.PlaysPerGame,8:0.0} {c.FacePerPlay,8:0.0} {c.KillsPerPlay,9:0.00} {dmg,9} {kills,11} {impact,9}");
             }
             return text.ToString();
         }

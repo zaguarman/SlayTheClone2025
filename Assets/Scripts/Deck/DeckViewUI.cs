@@ -169,10 +169,10 @@ namespace SlayTheClone {
         public bool IsPicking => onPick != null;
 
         /// <summary>Opens the window on these cards; clicking one calls <paramref name="picked"/> and closes it. Closed without a pick: <paramref name="closed"/>.</summary>
-        public void ShowPick(IPlayer player, string title, List<ICard> cards, System.Action<ICard> picked, System.Action closed) {
+        public void ShowPick(IPlayer player, string title, List<ICard> cards, System.Action<ICard> picked, System.Action closed, string hint = "Click one to send for it") {
             if (deckViewPanel == null || !IsInitialized) return;
             EndPick();
-            ShowCards(player, title, "Click one to send for it", cards);
+            ShowCards(player, title, hint, cards);
             onPick = picked;
             onPickClosed = closed;
             foreach (var entry in cardEntries) {
@@ -187,8 +187,8 @@ namespace SlayTheClone {
             var picked = onPick;
             onPick = null;
             onPickClosed = null;
-            picked?.Invoke(card);
             HideDeckView();
+            picked?.Invoke(card); // It may open the window again, for the next pick
         }
 
         // Closed without a pick: whoever asked is told
