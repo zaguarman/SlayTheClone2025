@@ -1788,5 +1788,6 @@ Card Game Factions Overview
 		Faction to decide
 			Damage Control (added 2026-10-14)
 			Actionable Evidence (added 2026-10-14)
+			Digital Breadcrumbs (added 2026-10-14)
 		Mechanic ideas
 			Cards that come back to the hand when a condition is met
