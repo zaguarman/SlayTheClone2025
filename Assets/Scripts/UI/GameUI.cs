@@ -131,6 +131,19 @@ namespace SlayTheClone {
         /// <summary>What covers the table when the combat is over.</summary>
         public GameOverScreen GameOver { get; private set; }
 
+        /// <summary>
+        /// Closes the windows that cover the table (the deck and discard piles, the queue), so the board can be watched: when
+        /// a turn starts resolving, and when a test or a game asks for a clear view.
+        /// </summary>
+        public void CloseMenus() {
+            if (QueuePanel != null && QueuePanel.IsOpen) QueuePanel.SetOpen(false);
+            var deckWindow = gameReferences?.GetDeckViewUI();
+            if (deckWindow != null && deckWindow.IsOpen) deckWindow.HideDeckView();
+        }
+
+        private bool wasResolving;
+        private int lastTurn;
+
         // No more turns: End Turn goes grey
         private void OnGameOver(IPlayer winner) {
             var endTurn = gameReferences.GetResolveActionsButton();
@@ -178,6 +191,13 @@ namespace SlayTheClone {
 
         private void Update() {
             if (!IsInitialized) return;
+            // The turn plays out (or already has, in one go): let the player watch it
+            var turns = gameManager.TurnManager;
+            bool resolving = turns?.IsResolving ?? false;
+            int turn = turns?.TurnNumber ?? 0;
+            if ((resolving && !wasResolving) || turn != lastTurn) CloseMenus();
+            wasResolving = resolving;
+            lastTurn = turn;
             if (GameInput.KeyPressed(FogOfWar.ToggleKey)) FogOfWar.Toggle();
             if (GameInput.KeyPressed(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
             if (GameInput.KeyPressed(AIController.SwitchSeatsKey)) {

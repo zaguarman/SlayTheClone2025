@@ -204,7 +204,7 @@ namespace SlayTheClone {
         // What the spell does played there. Hard weighs it both ways when today's other spells could change it: they may
         // resolve before it or after (random order), so each way counts half
         private float SpellValue(Spell spell, ITarget aim) {
-            if (!Sacrifice.CanPay(spell, view.Me)) return -100; // Nobody to sacrifice: it can't be played
+            if (!Sacrifice.CanPay(spell, view.Me) || !DoomCost.CanPay(spell, view.Me, Modifiers)) return -100; // Nobody to pay with: it can't be played
             // A Gamble is worth its outcomes on average
             float ValueNow() => (spell.SourceData?.gamble == true && spell.Effects.Count > 0
                 ? spell.Effects.Average(e => e.actions.Sum(a => Value(a, spell, aim)))
@@ -223,6 +223,9 @@ namespace SlayTheClone {
         // What the creatures it costs are worth to us (negative), less what their Last Will and a Revive give back
         private float SacrificeValue(ICard card) {
             float value = 0;
+            // Doom: the creature fights on harder for a while, then dies
+            var condemned = view.Mine.FirstOrDefault(c => c.Creature == DoomCost.Condemned(card, view.Me, Modifiers));
+            if (condemned != null) value -= condemned.Worth / 2f;
             foreach (var victim in Sacrifice.Victims(card, view.Me)) {
                 var ours = view.Mine.FirstOrDefault(c => c.Creature == victim);
                 if (ours == null) continue;
@@ -521,6 +524,10 @@ namespace SlayTheClone {
                     default:
                         return 1;
                 }
+            }
+            // An Earthquake hits every other slot, on whichever side the zigzag puts it: each creature has an even chance
+            if (action.actionType == ActionType.Earthquake) {
+                return view.All.Sum(c => 0.5f * (c.Ours ? -1 : 1) * (HealthLeft(c) <= action.value ? c.Worth + HealthLeft(c) : action.value)) * Style.Removal + 0.2f;
             }
             if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;
             // Send For: the right card next Day (it picks the best one when it resolves)

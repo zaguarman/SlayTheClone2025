@@ -57,7 +57,9 @@ namespace SlayTheClone {
                 ? $"{Keywords.Link("Discard Cost", $"Discard {data.discardCost}")}: give up {data.discardCost} random other card{(data.discardCost == 1 ? "" : "s")} from your hand to play this"
                 : data.sacrifice > 0
                     ? $"{Keywords.Link("Sacrifice", $"Sacrifice {data.sacrifice}")}: your {(data.sacrifice == 1 ? "weakest creature dies" : $"{data.sacrifice} weakest creatures die")} to play this"
-                    : "";
+                    : data.doomCost > 0
+                        ? $"{Keywords.Link("Doom Cost", $"Doom {data.doomCost}")}: your weakest creature not yet {Keywords.Link("Doomed")} is Doomed (dies in {data.doomCost} Day{(data.doomCost == 1 ? "" : "s")}) to play this"
+                        : "";
             return string.Join("\n", new[] { cost, keywordLine }.Concat(sentences).Where(line => !string.IsNullOrEmpty(line)));
         }
 
@@ -315,6 +317,8 @@ namespace SlayTheClone {
                     return $"{target} trades places with the creature to its right";
                 case ActionType.GrantAbility:
                     return $"{target} gains {AbilityName(action.ability)}";
+                case ActionType.Earthquake:
+                    return $"an {Keywords.Link("Earthquake", "earthquake")}: from a random slot, a zigzag across the board, one hit in every column, the sides taking turns, {value} damage each";
                 case ActionType.SetTrend: // "Trending: Rush Hour [sand watch]3"
                     return action.trend == Trend.None
                         ? $"the {Keywords.Link("Trend")} ends"

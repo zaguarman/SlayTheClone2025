@@ -106,6 +106,18 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(bull.IsDead, "...and only it");
             StringAssert.Contains("Sacrifice 1", Keywords.Plain(CardTextFormatter.GetRulesText(ritualData)));
 
+            // Doom as a cost (Doomscrolling): the weakest creature not yet Doomed is Doomed first; with none it can't be played
+            var scrollData = game.Spell("Scroll", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 1, TargetType.Player));
+            scrollData.doomCost = 3;
+            var scroll = game.GiveCard(p1, scrollData);
+            game.ActionsQueue.AddAction(new PlayCardAction(scroll, p1, p1));
+            game.Resolve();
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(bull, StatusEffectType.Doomed), "The feed takes the only one left");
+            scroll = game.GiveCard(p1, scrollData);
+            game.ActionsQueue.AddAction(new PlayCardAction(scroll, p1, p1));
+            Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount(), "Everyone's Doomed already: it can't be played");
+            StringAssert.Contains("Doom 3", Keywords.Plain(CardTextFormatter.GetRulesText(scrollData)));
+
             // Prophecy (Myth): played now, it comes true at the Dawn so many Days later, and the queue lists it meanwhile
             var floodData = game.Spell("Flood", TargetType.Enemy, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets));
             floodData.prophecy = 2;

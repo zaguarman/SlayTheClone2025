@@ -73,6 +73,38 @@ namespace SlayTheClone {
     }
 
     /// <summary>
+    /// Doom N, a cost (Doomscrolling): to play the card, its side's weakest creature that isn't Doomed yet (the lowest Attack,
+    /// then the lowest Health) is Doomed N Days when it resolves, before it does anything. It can't be played without one, and
+    /// if it's gone by the time it resolves, it fizzles. A Blessed creature stops the Doom with a stack, like any status.
+    /// </summary>
+    public static class DoomCost {
+        public static int Of(ICard card) => card?.SourceData?.doomCost ?? 0;
+
+        /// <summary>The creature it would doom now; null when it costs nothing or nobody can pay.</summary>
+        public static ICreature Condemned(ICard card, IPlayer owner, IModifierManager modifiers) {
+            if (Of(card) <= 0 || owner == null) return null;
+            return owner.Battlefield.Select(s => s.OccupyingCreature)
+                .Where(c => c != null && !c.IsDead && c != card && !(modifiers?.HasStatusEffect(c, StatusEffectType.Doomed) ?? false))
+                .OrderBy(c => c.Attack).ThenBy(c => c.Health).FirstOrDefault();
+        }
+
+        public static bool CanPay(ICard card, IPlayer owner, IModifierManager modifiers) => Of(card) <= 0 || Condemned(card, owner, modifiers) != null;
+
+        /// <summary>When the card resolves: the Doom lands first. False: nobody can take it, so it fizzles.</summary>
+        internal static bool Pay(ICard card, IPlayer owner, IActionsQueue queue) {
+            if (Of(card) <= 0) return true;
+            var condemned = Condemned(card, owner, queue.Modifiers);
+            if (condemned == null) {
+                Log($"{card.Name} needs a creature to doom; {owner.Name} has none: it fizzles", LogTag.Cards | LogTag.Actions);
+                return false;
+            }
+            Log($"{owner.Name} dooms {condemned.Name} to play {card.Name}", LogTag.Cards | LogTag.Actions);
+            queue.AddAction(new ApplyStatusEffectAction(condemned, StatusEffectType.Doomed, Of(card), 0, controller: owner));
+            return true;
+        }
+    }
+
+    /// <summary>
     /// Prophecy (Myth): a spell foretold now that comes true later. Played, it does nothing yet; at the Dawn so many Days on,
     /// its effects happen, aimed where it was played. Everyone hears it: the queue lists what's been foretold.
     /// </summary>

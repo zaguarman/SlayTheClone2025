@@ -21,6 +21,7 @@ MonoBehaviour:
   discardCost: 0
   singleUse: 0
   sacrifice: 0
+  doomCost: 3
   prophecy: 0
   gamble: 0
   effects:
@@ -56,7 +57,9 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Digital Society''s scouting: send for any card among the top 4 of
-    your deck; it joins your next hand.'
-  artDescription: A face lit blue by a phone in a dark bedroom at 3 AM, the thumb
-    a blur, an endless feed of cards streaming up the screen and out of it.
+    your deck; it joins your next hand. Costs Doom 3: your weakest creature not yet
+    Doomed is Doomed first (the feed eats someone).'
+  artDescription: 'The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed
+    and expressionless at 3AM, holding up a phone (we see its black back) where the
+    meme had a computer, its glow on his face, cards drifting up out of the feed.'
   defaultTargetType: 0

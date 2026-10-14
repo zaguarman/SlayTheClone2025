@@ -85,12 +85,15 @@ namespace SlayTheClone.Tests {
             yield return null;
             Assert.IsTrue(game.QueuedArrows(p1).All(a => a.Branches == 1), "Called off: that arrow loses its branch");
 
+            var queuePanel = game.QueuePanel;
+            queuePanel.SetOpen(true);
             var endTurn = game.References.GetResolveActionsButton();
             endTurn.onClick.Invoke();
             endTurn.onClick.Invoke(); // While the first click's turn is still resolving
             yield return Wait.For(() => !game.Turns.IsResolving, "the turn to resolve");
+            yield return null;
             Assert.AreEqual(1, game.Turns.TurnNumber, "Two clicks ended two turns");
-            var queuePanel = game.QueuePanel;
+            Assert.IsFalse(queuePanel.IsOpen, "The turn playing out closes the windows over the table, so it can be watched");
             CollectionAssert.AreEqual(new[] { 0 }, queuePanel.PastDays, "The queue keeps the Day that just ended");
             queuePanel.SetOpen(true);
             queuePanel.Page(-1);
@@ -192,6 +195,7 @@ namespace SlayTheClone.Tests {
             StringAssert.Contains("can't see what it plans", Tooltip.Existing.ShownText, "Each action is an item: hovering it tells more, as far as you can see");
             Hover(Row("plans ???"), false);
             Assert.IsNull(Tooltip.Existing.ShownText, "...until the pointer leaves it");
+            queuePanel.SetOpen(false); // Out of the way: whoever watches the test sees the table
             float Height(Component view) => view.transform.position.y;
             FogOfWar.PlaysAsPlayer1 = false;
             yield return null;
@@ -230,6 +234,7 @@ namespace SlayTheClone.Tests {
             ExecuteEvents.Execute(enemyCard.gameObject, new PointerEventData(EventSystem.current) { position = Vector2.zero }, ExecuteEvents.pointerExitHandler);
             Tooltip.Existing.HideTooltip();
             StringAssert.Contains("Nullify", game.BoardView(p2).WatchdogText, "...the enemy's Watchdog conditions too");
+            queuePanel.SetOpen(true);
             StringAssert.Contains("Test Sneak</color> attacks", Listed(), "...and the queue");
             StringAssert.Contains("Test Incoming", Listed());
             Hover(Row("Test Sneak</color> attacks"), true);

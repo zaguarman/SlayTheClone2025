@@ -21,6 +21,7 @@ MonoBehaviour:
   discardCost: 1
   singleUse: 0
   sacrifice: 0
+  doomCost: 0
   prophecy: 0
   gamble: 0
   effects:

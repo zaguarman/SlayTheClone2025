@@ -244,6 +244,8 @@ namespace SlayTheClone {
                            (reveal.Slot != null ? SlotName(reveal.Slot, viewer) : $"{PlayerName(reveal.Side, viewer)}'s Watchdogs");
                 case SetTrendAction trend:
                     return $"Now trending: {TrendSystem.NameOf(trend.Trend)}";
+                case EarthquakeAction quake:
+                    return $"Earthquake: {quake.Damage} damage in a zigzag across the board";
                 default:
                     string name = action.GetType().Name;
                     return name.EndsWith("Action") ? name.Substring(0, name.Length - "Action".Length) : name;

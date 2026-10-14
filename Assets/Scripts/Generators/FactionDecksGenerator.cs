@@ -542,9 +542,10 @@ namespace SlayTheClone {
         private static List<CardDef> DigitalSocietyCards() => new List<CardDef> {
             Spell("Doomscrolling", TargetType.Player,
                 "Just one more. Just one more. Just one more.",
-                "Digital Society's scouting: send for any card among the top 4 of your deck; it joins your next hand.",
+                "Digital Society's scouting: send for any card among the top 4 of your deck; it joins your next hand. Costs Doom 3: your weakest creature not yet Doomed is Doomed first (the feed eats someone).",
                 SendForCard(SendForFilter.Any, top: 4))
-                .Picture("A face lit blue by a phone in a dark bedroom at 3 AM, the thumb a blur, an endless feed of cards streaming up the screen and out of it."),
+                .Dooming(3)
+                .Picture("The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed and expressionless at 3AM, holding up a phone (we see its black back) where the meme had a computer, its glow on his face, cards drifting up out of the feed."),
             Creature("Crypto \"Entrepreneur\"", 2, 3, speed: 2, deploy: 0,
                 "It's not a pyramid. It's a triangle of opportunity.",
                 "Mechanics test: Chain Mail. Its attacks jump on to the next 2 creatures in line, half the damage each jump.")
@@ -841,8 +842,8 @@ namespace SlayTheClone {
                 .Picture("A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks."),
             Spell("HAARP", TargetType.Player,
                 "Weather forecast: 100% chance of lightning, localized, on purpose.",
-                "Trend for 3 Days, Survival of the Fittest: each Dusk, the creature with the least Health on the board, either side, takes 3 damage: play it when the weak ones are theirs. Nobody's attack: nothing answers it or redirects it.",
-                SetTrend(Trend.SurvivalOfTheFittest, 3))
+                "Earthquake: from a random slot, a zigzag across the whole board, crossing sides at each column, 1 damage each hit. Every column is hit once, on one side or the other: it finishes off the wounded, and it can shake yours. Nobody's attack: nothing answers it or redirects it. Was the Survival of the Fittest Trend (that Trend has no card now).",
+                Act(ActionType.Earthquake, 1, TargetType.Player, TargetModifier.None))
                 .NotInStarterDeck()
                 .Picture("A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy tent miles away, a technician in a parka sipping coffee by the control panel."),
             // Information trades: you need to give information to get some. Discard now, draw more with the next hand
@@ -1480,10 +1481,17 @@ namespace SlayTheClone {
             public bool IsGamble; // Only one of its effects happens, at random
             public int SacrificeCost; // Additional cost: its side's weakest creatures die when it resolves
             public int ProphecyDays; // A spell that comes true this many Days later
+            public int DoomCost; // Additional cost: its side's weakest creature not yet Doomed is Doomed this many Days
 
             // Sacrifice N: an additional cost, its side's N weakest creatures
             public CardDef Sacrificing(int creatures) {
                 SacrificeCost = creatures;
+                return this;
+            }
+
+            // Doom N: an additional cost, its side's weakest creature not yet Doomed is Doomed N Days
+            public CardDef Dooming(int days) {
+                DoomCost = days;
                 return this;
             }
 
@@ -1736,6 +1744,7 @@ namespace SlayTheClone {
             asset.discardCost = card.DiscardCost;
             asset.singleUse = card.IsSingleUse;
             asset.sacrifice = card.SacrificeCost;
+            asset.doomCost = card.DoomCost;
             asset.prophecy = card.ProphecyDays;
             asset.gamble = card.IsGamble;
             asset.SetEffects(card.Effects);

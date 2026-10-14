@@ -121,6 +121,9 @@ namespace SlayTheClone.Tests {
             else if (action.actionType == ActionType.SetTrend) {
                 if (action.trend == Trend.None) return "sets no Trend";
             }
+            else if (action.actionType == ActionType.Earthquake) {
+                if (action.value <= 0) return "an Earthquake that deals no damage";
+            }
             else if (action.actionType == ActionType.GrantAbility) {
                 if (action.ability == CreatureAbility.None) return "grants no ability";
             }

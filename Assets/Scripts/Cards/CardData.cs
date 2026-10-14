@@ -18,6 +18,8 @@ namespace SlayTheClone {
         public bool singleUse;
         /// <summary>Sacrifice N (Myth's cost): its side's N weakest creatures die when it resolves, before it does anything.</summary>
         public int sacrifice;
+        /// <summary>Doom N (a cost): its side's weakest creature that isn't Doomed yet is Doomed N Days when it resolves.</summary>
+        public int doomCost;
         /// <summary>Prophecy N (a spell): it comes true at the Dawn N Days after it's played.</summary>
         public int prophecy;
         /// <summary>Gamble (a spell): only one of its effects happens, picked at random when it resolves.</summary>

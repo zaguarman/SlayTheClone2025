@@ -21,6 +21,7 @@ MonoBehaviour:
   discardCost: 0
   singleUse: 0
   sacrifice: 0
+  doomCost: 0
   prophecy: 0
   gamble: 0
   effects:
@@ -28,15 +29,15 @@ MonoBehaviour:
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 14
-      value: 0
+    - actionType: 33
+      value: 1
       targetType: 0
       targetModifier: 0
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
       statusEffectToApply: 0
-      statusDuration: 3
+      statusDuration: 0
       statusPotency: 0
       cleanse: 0
       purge: 0
@@ -50,14 +51,16 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
-      trend: 3
+      trend: 0
       ability: 0
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'Trend for 3 Days, Survival of the Fittest: each Dusk, the creature
-    with the least Health on the board, either side, takes 3 damage: play it when
-    the weak ones are theirs. Nobody''s attack: nothing answers it or redirects it.'
+  designNotes: 'Earthquake: from a random slot, a zigzag across the whole board,
+    crossing sides at each column, 1 damage each hit. Every column is hit once, on
+    one side or the other: it finishes off the wounded, and it can shake yours. Nobody''s
+    attack: nothing answers it or redirects it. Was the Survival of the Fittest Trend
+    (that Trend has no card now).'
   artDescription: A field of antennas in the Alaskan tundra under a purple sky, a
     single bolt of lightning forking down onto one tiny enemy tent miles away, a
     technician in a parka sipping coffee by the control panel.

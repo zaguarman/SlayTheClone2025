@@ -222,6 +222,10 @@ namespace SlayTheClone {
                 Log($"{offering.GetCard()?.Name} needs {Sacrifice.Of(offering.GetCard())} creature(s) to sacrifice: it isn't played", LogTag.Actions | LogTag.Cards);
                 return;
             }
+            if (action is PlayCardAction doomed && !DoomCost.CanPay(doomed.GetCard(), doomed.GetOwner(), Modifiers)) { // Nobody to doom
+                Log($"{doomed.GetCard()?.Name} needs a creature that isn't Doomed yet to doom: it isn't played", LogTag.Actions | LogTag.Cards);
+                return;
+            }
             if (executing == null && !resolving && IsInstant(action)) {
                 ResolveInstantly(action);
                 return;

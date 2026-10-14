@@ -194,6 +194,14 @@ namespace SlayTheClone.Tests {
             CollectionAssert.AreEqual(new[] { 3, 3 }, game.History.DamageTo(runt), "2 Days, 2 culls of 3 on its own setter's weakling, then the Trend is over");
             CollectionAssert.IsEmpty(game.History.DamageTo(giant));
 
+            // Earthquake (HAARP): from a random slot it zigzags out both ways, switching sides at each column: one hit a column
+            var quake = Earthquake.Path(game.Player1, game.Player2, 2, true);
+            CollectionAssert.AreEqual(new[] { "P1 2", "P2 1", "P2 3", "P1 0", "P1 4" },
+                quake.Select(s => $"{(s.Owner == game.Player1 ? "P1" : "P2")} {s.Index}"));
+            int shaken = game.History.DamageTo(runt).Count + game.History.DamageTo(giant).Count;
+            game.Run(new EarthquakeAction(game.Player1, 1));
+            Assert.AreEqual(shaken + 1, game.History.DamageTo(runt).Count + game.History.DamageTo(giant).Count, "Facing each other, only one of them is hit");
+
             // Volcano Lair: each Day, each side's strongest creature is Untouchable, as long as another of its side stands
             var boss = game.Summon(game.Player1, game.Creature("Boss", 5, 5), 0);
             var henchman = game.Summon(game.Player1, game.Creature("Henchman", 1, 5), 1);
