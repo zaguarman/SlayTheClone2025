@@ -56,8 +56,9 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Trend for 3 Days, Volcano Lair: each Day (from the Day it''s set),
-    whoever set it hides their strongest creature in the lair: it''s Untouchable
-    that Day, as long as another of their creatures stands. Henchmen first.'
+    on each side the strongest creature hides in a lair: it''s Untouchable that Day,
+    as long as another creature of its side stands. Every villain gets one: play
+    it when your boss is the one worth hiding.'
   artDescription: 'A cutaway of a volcano with a sleek steel base inside: a monorail,
     a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a
     bald man in a grey tunic stroking a white cat on a throne behind armored glass.'

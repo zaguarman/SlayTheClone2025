@@ -497,14 +497,27 @@ namespace SlayTheClone {
         private float Value(EffectAction action, Spell spell, ITarget aim) {
             // Good for whoever plays them, whichever side they look at
             if (action.actionType == ActionType.SetTrend) {
-                // Freak Weather strikes their toughest each Dusk; other Trends are good for whoever plays them
-                if (action.trend == Trend.FreakWeather) return view.Theirs.Any() ? TrendSystem.LightningDamage * System.Math.Max(1, action.statusDuration) * 0.8f * Style.Removal : 0.2f;
-                // Volcano Lair: our best creature out of reach each Day, while it has company
-                if (action.trend == Trend.VolcanoLair) {
-                    var boss = view.Mine.OrderByDescending(c => c.Attack).FirstOrDefault();
-                    return view.Mine.Count() >= 2 && boss != null ? boss.Worth * 0.4f * System.Math.Max(1, action.statusDuration) * Style.Protection : 0.2f;
+                // A Trend is the same for both sides: worth what it does for us less what it does for them, over its Days
+                int days = System.Math.Max(1, action.statusDuration);
+                switch (action.trend) {
+                    case Trend.FreakWeather: { // The toughest creature on the board is struck: better be theirs
+                        var tallest = view.All.OrderByDescending(c => c.Health).FirstOrDefault();
+                        if (tallest == null) return 0.2f;
+                        return (tallest.Ours ? -1 : 1) * TrendSystem.LightningDamage * days * 0.8f * Style.Removal;
+                    }
+                    case Trend.VolcanoLair: { // Each side's boss hides: ours is worth hiding if it's the bigger one
+                        float Hidden(IEnumerable<SeenCreature> side) => side.Count() >= 2 ? side.Max(c => c.Worth) * 0.4f : 0;
+                        return (Hidden(view.Mine) - Hidden(view.Theirs)) * days * Style.Protection + 0.2f;
+                    }
+                    case Trend.Zeitgeist: // The side with fewer creatures draws more
+                        return (view.Mine.Count() < view.Theirs.Count() ? 1.5f : view.Mine.Count() > view.Theirs.Count() ? -1.5f : 0) * days * Style.Cards + 0.2f;
+                    case Trend.RushHour: { // The slowest act first: good for whoever is slower
+                        float Speed(IEnumerable<SeenCreature> side) => side.Any() ? (float)side.Average(c => c.Known ? c.Creature.Speed : 1) : 0;
+                        return (Speed(view.Theirs) - Speed(view.Mine)) * days + 0.2f;
+                    }
+                    default:
+                        return 1;
                 }
-                return 1;
             }
             if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;
             // Send For: the right card next Day (it picks the best one when it resolves)

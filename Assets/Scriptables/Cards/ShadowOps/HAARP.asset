@@ -55,8 +55,9 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Trend for 3 Days, Freak Weather: each Dusk, lightning strikes the
-    toughest creature on the other side (the most Health), for 2 damage. Nobody''s
-    attack: nothing answers it or redirects it.'
+    toughest creature on the board (the most Health), either side, for 2 damage:
+    play it when the tall one is theirs. Nobody''s attack: nothing answers it or
+    redirects it.'
   artDescription: A field of antennas in the Alaskan tundra under a purple sky, a
     single bolt of lightning forking down onto one tiny enemy tent miles away, a
     technician in a parka sipping coffee by the control panel.

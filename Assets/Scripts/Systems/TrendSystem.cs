@@ -7,6 +7,8 @@ namespace SlayTheClone {
     /// <summary>
     /// The Trend (GDD 4.2 Trends): what the world is into right now, one rule for the whole board, set by a card for some
     /// Days until another Trend replaces it. Zeitgeist's signature: the mood of the times changes the rules for everyone.
+    /// Like the weather in a Pokémon battle, a Trend is the same for both sides: it favours whoever is built for it, and it
+    /// can turn against whoever set it.
     /// </summary>
     public interface ITrendSystem {
         Trend Current { get; }
@@ -52,11 +54,11 @@ namespace SlayTheClone {
 
         public bool SlowestFirst => Current == Trend.RushHour;
 
-        // Freak Weather: lightning strikes the toughest creature (the most Health; ties at random) on the other side of
-        // whoever set it. Nobody's attack: nothing answers it or redirects it
+        // Freak Weather: lightning strikes the toughest creature on the board (the most Health; ties at random), whichever
+        // side it's on: the tallest tree. Nobody's attack: nothing answers it or redirects it
         public void QueueDuskEffects(IActionsQueue queue) {
             if (Current != Trend.FreakWeather || SetBy?.Opponent == null || queue == null) return;
-            var row = SetBy.Opponent.Battlefield.Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead).ToList();
+            var row = SetBy.Battlefield.Concat(SetBy.Opponent.Battlefield).Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead).ToList();
             if (row.Count == 0) return;
             int top = row.Max(c => c.Health);
             var tied = row.Where(c => c.Health == top).ToList();
@@ -65,15 +67,17 @@ namespace SlayTheClone {
             queue.AddAction(new DamageCreatureAction(struck, LightningDamage));
         }
 
-        // Volcano Lair: whoever set it hides their strongest creature (the most Attack) in the lair: Untouchable this Day,
-        // as long as another of their creatures stands to guard it. Checked when it's set and at each Dawn
+        // Volcano Lair: on each side, the strongest creature (the most Attack) hides in a lair: Untouchable this Day, as long
+        // as another creature of its side stands to guard it. Every villain gets one. Checked when it's set and at each Dawn
         public void QueueDayEffects(IActionsQueue queue) {
-            if (Current != Trend.VolcanoLair || SetBy == null || queue == null) return;
-            var side = SetBy.Battlefield.Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead).ToList();
-            if (side.Count < 2) return; // No henchmen: no lair
-            var boss = EffectResolver.Strongest(side);
-            Log($"Volcano Lair: {boss.Name} hides in the lair", LogTag.Effects);
-            queue.AddAction(new ApplyStatusEffectAction(boss, StatusEffectType.Untouchable, 1, 0, controller: SetBy));
+            if (Current != Trend.VolcanoLair || SetBy?.Opponent == null || queue == null) return;
+            foreach (var player in new[] { SetBy, SetBy.Opponent }) {
+                var side = player.Battlefield.Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead).ToList();
+                if (side.Count < 2) continue; // No henchmen: no lair
+                var boss = EffectResolver.Strongest(side);
+                Log($"Volcano Lair: {boss.Name} hides in {player.Name}'s lair", LogTag.Effects);
+                queue.AddAction(new ApplyStatusEffectAction(boss, StatusEffectType.Untouchable, 1, 0, controller: player));
+            }
         }
 
         public int ExtraDraws(IPlayer player) {
@@ -96,8 +100,8 @@ namespace SlayTheClone {
         public static string RuleOf(Trend trend) => trend switch {
             Trend.Zeitgeist => "each Day, whoever has fewer creatures draws 1 more card",
             Trend.RushHour => "the slowest act first",
-            Trend.FreakWeather => $"each Dusk, lightning strikes the toughest creature on the other side of whoever set it, for {LightningDamage} damage",
-            Trend.VolcanoLair => "each Day, whoever set it hides their strongest creature in the lair: it's Untouchable that Day, as long as another of their creatures stands",
+            Trend.FreakWeather => $"each Dusk, lightning strikes the toughest creature on the board, either side, for {LightningDamage} damage",
+            Trend.VolcanoLair => "each Day, on each side, the strongest creature hides in a lair: it's Untouchable that Day, as long as another creature of its side stands",
             _ => ""
         };
     }

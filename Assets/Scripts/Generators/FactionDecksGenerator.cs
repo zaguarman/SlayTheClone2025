@@ -828,7 +828,7 @@ namespace SlayTheClone {
                 .Picture("A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks."),
             Spell("HAARP", TargetType.Player,
                 "Weather forecast: 100% chance of lightning, localized, on purpose.",
-                "Trend for 3 Days, Freak Weather: each Dusk, lightning strikes the toughest creature on the other side (the most Health), for 2 damage. Nobody's attack: nothing answers it or redirects it.",
+                "Trend for 3 Days, Freak Weather: each Dusk, lightning strikes the toughest creature on the board (the most Health), either side, for 2 damage: play it when the tall one is theirs. Nobody's attack: nothing answers it or redirects it.",
                 SetTrend(Trend.FreakWeather, 3))
                 .NotInStarterDeck()
                 .Picture("A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy tent miles away, a technician in a parka sipping coffee by the control panel."),
@@ -895,7 +895,7 @@ namespace SlayTheClone {
                 .Picture("A cheerful delivery driver unloading crates of identical routers at a ministry's loading dock, each box with a tiny skull sticker under the barcode, while a line of bureaucrats in grey suits signs for them."),
             Spell("Hollowed-Out Volcano Lair", TargetType.Player,
                 "Monorail, piranha pool, self-destruct button. Planning permission: pending.",
-                "Trend for 3 Days, Volcano Lair: each Day (from the Day it's set), whoever set it hides their strongest creature in the lair: it's Untouchable that Day, as long as another of their creatures stands. Henchmen first.",
+                "Trend for 3 Days, Volcano Lair: each Day (from the Day it's set), on each side the strongest creature hides in a lair: it's Untouchable that Day, as long as another creature of its side stands. Every villain gets one: play it when your boss is the one worth hiding.",
                 SetTrend(Trend.VolcanoLair, 3))
                 .NotInStarterDeck()
                 .Picture("A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass."),

@@ -180,19 +180,24 @@ namespace SlayTheClone.Tests {
             yield return game.EndTurn();
             CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(torch));
 
-            // Freak Weather (HAARP): each Dusk, lightning strikes the toughest creature on the other side of whoever set it
-            var rod = game.Summon(game.Player2, game.Creature("Lightning Rod", 0, 30), 4);
+            // Freak Weather (HAARP): each Dusk, lightning strikes the toughest creature on the board, whichever side, even the
+            // setter's: a Trend is the same for both sides
+            var rod = game.Summon(game.Player1, game.Creature("Lightning Rod", 0, 30), 4);
+            var shrub = game.Summon(game.Player2, game.Creature("Shrub", 0, 5), 4);
             game.Run(new SetTrendAction(Trend.FreakWeather, 2, game.Player1));
             yield return game.EndTurn();
             yield return game.EndTurn();
             yield return game.EndTurn();
-            CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(rod), "2 Days, 2 strikes of 2, then the Trend is over");
+            CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(rod), "2 Days, 2 strikes of 2 on its own setter's tall one, then the Trend is over");
+            CollectionAssert.IsEmpty(game.History.DamageTo(shrub));
 
-            // Volcano Lair: each Day, its setter's strongest creature is Untouchable, as long as another of theirs stands
+            // Volcano Lair: each Day, each side's strongest creature is Untouchable, as long as another of its side stands
             var boss = game.Summon(game.Player1, game.Creature("Boss", 5, 5), 0);
             var henchman = game.Summon(game.Player1, game.Creature("Henchman", 1, 5), 1);
+            var rival = game.Summon(game.Player2, game.Creature("Rival", 4, 5), 0);
             game.Run(new SetTrendAction(Trend.VolcanoLair, 2, game.Player1));
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(boss, StatusEffectType.Untouchable), "From the Day it's set");
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(rival, StatusEffectType.Untouchable), "...on both sides: the other villain has a lair too");
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(henchman, StatusEffectType.Untouchable));
             yield return game.EndTurn();
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(boss, StatusEffectType.Untouchable), "Each Day");
