@@ -157,6 +157,18 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(spy.IsDead, "At the next Day's Dusk, still at 0 Health: it dies");
             Assert.IsFalse(lucky.IsDead, "With Health left, it lives on");
 
+            // ...and it's the one status a Doomed creature takes: timed for the Day of its sentence, it survives it
+            var reprieved = game.Summon(p1, game.Creature("Condemned", 2, 3), 2);
+            game.Run(new ApplyStatusEffectAction(reprieved, StatusEffectType.Doomed, 1, 0)); // Carried out at the next Day's Dusk
+            game.StartTurn(); // Its last Day comes
+            game.Run(new ApplyStatusEffectAction(reprieved, StatusEffectType.BorrowedTime, 1, 0));
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(reprieved, StatusEffectType.BorrowedTime), "Borrowed Time lands on a Doomed creature");
+            game.StartTurn();
+            Assert.IsFalse(reprieved.IsDead, "The sentence is carried out (Last Rites), but it doesn't die today");
+            Assert.IsFalse(IsDoomed(reprieved), "...and the sentence is served");
+            game.StartTurn();
+            Assert.IsFalse(reprieved.IsDead, "With Health left when Borrowed Time runs out, it lives on");
+
             // Composed (Shaken, Not Stirred): stuns don't land on it this Day, and it shakes off the one it has
             var cool = game.Summon(p2, game.Creature("Cool", 2, 3), 2);
             game.Run(new ApplyStatusEffectAction(cool, StatusEffectType.Exhausted, 1, 0));
@@ -203,6 +215,11 @@ namespace SlayTheClone.Tests {
             game.Run(new ApplyStatusEffectAction(pope, StatusEffectType.Doomed, 1, 0));
             Assert.IsFalse(IsDoomed(pope), "Blessed is the one thing that stops Doomed");
             Assert.AreEqual(2, BlessingOf(pope).Stacks);
+            game.Run(new DestroyCreatureAction(pope, unconditional: true));
+            Assert.IsFalse(pope.IsDead, "Each stack also saves it from being destroyed by a spell or an ability...");
+            Assert.AreEqual(1, BlessingOf(pope).Stacks);
+            game.Run(new DestroyCreatureAction(pope, unconditional: true, sacrifice: true));
+            Assert.IsTrue(pope.IsDead, "...but not from being sacrificed");
         }
 
         [Test]
@@ -262,6 +279,7 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(IsDoomed(cleric) || IsDoomed(saint), "Onto a Blessed creature: the sentence is negated");
             Assert.AreEqual(1, BlessingOf(saint).Stacks);
 
+            game.Run(new DestroyCreatureAction(saint, unconditional: true)); // Its last Blessing takes the first
             game.Run(new DestroyCreatureAction(saint, unconditional: true));
             game.Run(new DestroyCreatureAction(cleric, unconditional: true));
             var loner = game.Summon(p2, game.Creature("Loner", 3, 5), 4);

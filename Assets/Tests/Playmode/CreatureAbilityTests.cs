@@ -319,6 +319,22 @@ namespace SlayTheClone.Tests {
             game.Attack(agent, p2.Battlefield[1]);
             Assert.AreEqual(29, henchman.Health, "The next attack is a plain one");
 
+            // With Double Tap both hits carry the licence: two Blessings, or one Blessing and the creature
+            var doubleO = With(CreatureAbility.DoubleTap, p1, 2, attack: 1, health: 5);
+            var saint = With(CreatureAbility.None, p2, 2, attack: 1, health: 30);
+            var martyr = With(CreatureAbility.None, p2, 3, attack: 1, health: 30);
+            game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Blessed, 1, 2));
+            game.Run(new ApplyStatusEffectAction(martyr, StatusEffectType.Blessed, 1, 1));
+            game.Run(new ApplyStatusEffectAction(doubleO, StatusEffectType.Licensed, 1, 0));
+            game.Attack(doubleO, p2.Battlefield[2]);
+            Assert.IsFalse(saint.IsDead, "Two Blessings take both hits");
+            Assert.IsFalse(HasStatus(saint, StatusEffectType.Blessed));
+            game.StartTurn();
+            var third = With(CreatureAbility.DoubleTap, p1, 3, attack: 1, health: 5);
+            game.Run(new ApplyStatusEffectAction(third, StatusEffectType.Licensed, 1, 0));
+            game.Attack(third, p2.Battlefield[3]);
+            Assert.IsTrue(martyr.IsDead, "One Blessing takes the first hit; the second kills");
+
             // Femme Fatale: each Dusk, 2 damage to the creature facing her, and she heals 1
             var fatale = game.Summon(p1, game.Creature("Fatale", 2, 4, 1,
                 Effect(EffectTrigger.EndOfTurn, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.Opposite),

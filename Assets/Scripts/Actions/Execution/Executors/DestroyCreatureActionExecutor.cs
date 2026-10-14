@@ -29,6 +29,13 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Blessed: an outright destroy (a spell, an ability, a licence to kill) spends one stack instead. A creature with no
+            // Health left still dies, and a Sacrifice is an offering, not an attack
+            if (destroy.IsUnconditional && !destroy.IsSacrifice && creature.Health > 0 && StatusRules.SpendBlessing(context, creature)) {
+                Log($"Executor: {creature.Name}'s Blessing saves it from being destroyed", LogTag.Creatures | LogTag.Actions);
+                return;
+            }
+
             Log($"Executor: {creature.Name} is destroyed", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
             creature.MarkAsDead();
             context.GameMediator.NotifyCreatureDied(creature);

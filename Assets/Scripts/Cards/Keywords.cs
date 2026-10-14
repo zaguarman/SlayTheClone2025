@@ -86,9 +86,9 @@ namespace SlayTheClone {
             group = "Statuses";
             Add("Exhausted", "Can't act, its ability is off and it's [Exposed]. Its planned action is cancelled. Lasts the rest of the [Day] and all of the next.");
             Add("Burned", "Burn X: takes X damage at each [Dusk] for the [Days] shown, starting the Dusk after it lands.");
-            Add("Doomed", "Doom X (no number: 1): dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it.");
+            Add("Doomed", "Doom X (no number: 1): dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it, except [Borrowed Time]: on Borrowed Time when the sentence is carried out, it survives.");
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
-            Add("Blessed", "Bless X (no number: 1): the next X statuses that would land on it are stopped, good or bad.");
+            Add("Blessed", "Bless X (no number: 1): the next X statuses that would land on it are stopped, good or bad. Each stack also saves it once from being [Destroy|destroyed] by a spell or an ability (a Sacrifice isn't stopped).");
             Add("Heat Signature", "Heat Signature X (no number: 1): [Random|random] effects and redirected attacks go to the creature with the most Heat Signature. It stays until cleansed.");
             Add("Concealed", "Conceal X (no number: 1): for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
             Add("Revealed", "Revealed X (no number: 1): for X [Days], it can't be [Concealed]: its plans can be seen.");
@@ -97,8 +97,8 @@ namespace SlayTheClone {
             Add("Cooldown", "Cooldown X (no number: 1): its Active ability rests and can't be used for the next X [Days].");
             Add("Brainwashed", "Brainwashed X (no number: 1): when its X [Days] run out, at [Dusk], it changes sides for good ([Take Control|taken] by the other side) and loses its ability until its card is reshuffled. A [Cleanse] can't remove it: only taking it off the board in time (back to a hand, or [Gone Dark|gone dark]) saves it.");
             Add("Kill Order", "Kill Order X (no number: 1): secret, only the side that gave it can see it, and the spell that gives it is played unseen. When its X [Days] run out, at [Dusk], the creature is [Destroy|destroyed]; [Untouchable] still saves it. A [Cleanse] removes it, knowingly or not.");
-            Add("Borrowed Time", "Borrowed Time X (no number: 1): it can't die, whatever its Health, not even [Destroy|destroyed], until its X [Days] run out at [Dusk]; then, if it's at 0 Health, it dies. Heal it in time and it lives.");
-            Add("Licensed", "Its next attack on a creature [Destroy|destroys] it, whatever its Health or [Armor], and the licence is spent ([Untouchable] or a [Temporal Shield] stops the hit, and spends it all the same). It lasts until used.");
+            Add("Borrowed Time", "Borrowed Time X (no number: 1): it can't die, whatever its Health, not even [Destroy|destroyed], until its X [Days] run out at [Dusk]; then, if it's at 0 Health, it dies. Heal it in time and it lives. It even lands on a [Doomed] creature: timed for the Day the sentence is carried out, it survives it.");
+            Add("Licensed", "Its next attack on a creature [Destroy|destroys] it, whatever its Health or [Armor], and the licence is spent ([Untouchable] or a [Temporal Shield] stops the hit, and spends it all the same). It lasts until used. With [Double Tap] both hits carry it: two [Blessed] stacks, or one and the creature.");
             Add("Composed", "Composed X (no number: 1): it can't be [Exhausted] for X [Days], counting the Day it lands (1 is this Day only), and it shakes off a stun it has.");
             Add("Blackout", "Blackout X (no number: 1): its ability and its effects (arrival, Dawn and Dusk, retaliation, [Last Will]) are switched off for X [Days].");
             Add("Cleanse", "Removes harmful statuses.");

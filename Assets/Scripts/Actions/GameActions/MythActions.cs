@@ -66,7 +66,7 @@ namespace SlayTheClone {
             }
             foreach (var victim in victims) {
                 Log($"{owner.Name} sacrifices {victim.Name} to play {card.Name}", LogTag.Cards | LogTag.Actions);
-                queue.AddAction(new DestroyCreatureAction(victim, unconditional: true, controller: owner));
+                queue.AddAction(new DestroyCreatureAction(victim, unconditional: true, controller: owner, sacrifice: true));
             }
             return true;
         }

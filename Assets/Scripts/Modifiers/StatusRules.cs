@@ -12,6 +12,17 @@ namespace SlayTheClone {
         public static StatusEffectModifier Find(IModifierManager manager, ICreature creature, StatusEffectType type) =>
             manager.GetActiveModifiersFor(creature).OfType<StatusEffectModifier>().FirstOrDefault(s => s.EffectType == type);
 
+        /// <summary>Blessed takes a blow for it (a status, or being destroyed): one stack is spent. False: it isn't Blessed.</summary>
+        public static bool SpendBlessing(ActionExecutionContext context, ICreature creature) {
+            var manager = context.ModifierManager;
+            var blessed = Find(manager, creature, StatusEffectType.Blessed);
+            if (blessed == null) return false;
+            if (blessed.Stacks > 1) blessed.SetStacks(blessed.Stacks - 1);
+            else manager.RemoveModifier(creature, blessed);
+            context.GameMediator.NotifyCreatureStatusChanged(creature, StatusEffectType.Blessed, blessed.Stacks > 1);
+            return true;
+        }
+
         /// <param name="turnApplied">The Day its countdown started: today, or the original Day for a status passed on.</param>
         /// <returns>The status now on the creature, or null if it didn't land.</returns>
         /// <param name="revealer">For Revealed: the creature whose effect it is, if any (If I Told You strikes back at it).</param>
@@ -19,8 +30,9 @@ namespace SlayTheClone {
             int duration, int potency, int turnApplied, ICreature revealer = null) {
             var manager = context.ModifierManager;
 
-            // A Doomed creature is immune to new statuses, and Doomed itself ignores re-application
-            if (manager.HasStatusEffect(target, StatusEffectType.Doomed)) {
+            // A Doomed creature is immune to new statuses, and Doomed itself ignores re-application. Borrowed Time is the one
+            // way in: on it when the sentence is carried out, it survives (Die Another Day)
+            if (manager.HasStatusEffect(target, StatusEffectType.Doomed) && type != StatusEffectType.BorrowedTime) {
                 Log($"{target.Name} is Doomed: {type} doesn't land", LogTag.Actions | LogTag.Effects);
                 return null;
             }
@@ -39,9 +51,7 @@ namespace SlayTheClone {
                 return blessed;
             }
             // Blessed wards against the next status, friendly or not, Doomed included
-            if (blessed != null) {
-                if (blessed.Stacks > 1) blessed.SetStacks(blessed.Stacks - 1);
-                else manager.RemoveModifier(target, blessed);
+            if (blessed != null && SpendBlessing(context, target)) {
                 Log($"{target.Name}'s Blessing negates {type}", LogTag.Actions | LogTag.Effects);
                 return null;
             }

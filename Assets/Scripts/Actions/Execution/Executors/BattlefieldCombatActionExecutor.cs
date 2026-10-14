@@ -42,7 +42,8 @@ namespace SlayTheClone {
             Log($"Executor: Creature {attacker.Name} attacking {DescribeTarget(primaryTarget)}", LogTag.Combat);
 
             // Licensed (Licence to Kill): this attack destroys the creature it hits, whatever its Health or Armor, and the
-            // licence is spent. What stops a hit (Untouchable, a Temporal Shield) stops it, and spends it all the same
+            // licence is spent. What stops a hit (Untouchable, a Temporal Shield) stops it, and spends it all the same. With
+            // Double Tap both hits carry it: a Blessing saves the target from one of them, two Blessings from both
             var licence = primaryTarget is ICreature ? StatusRules.Find(context.ModifierManager, attacker, Enums.StatusEffectType.Licensed) : null;
             if (licence != null && primaryTarget is ICreature mark) {
                 context.ModifierManager.RemoveModifier(attacker, licence);
@@ -52,6 +53,9 @@ namespace SlayTheClone {
                 }
                 Log($"Executor: {attacker.Name} uses its licence to kill on {mark.Name}", LogTag.Combat);
                 actionsQueue.AddAction(new DestroyCreatureAction(mark, attacker, unconditional: true, controller: attacker.Owner));
+                if (Abilities.Has(attacker, Enums.CreatureAbility.DoubleTap)) {
+                    actionsQueue.AddAction(new DestroyCreatureAction(mark, attacker, unconditional: true, controller: attacker.Owner));
+                }
                 return;
             }
 

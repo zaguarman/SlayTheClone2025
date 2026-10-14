@@ -612,6 +612,7 @@ namespace SlayTheClone {
                     var patsy = Hard && !creature.Ours ? view.Theirs.FirstOrDefault(c => c != creature && c.Ability == CreatureAbility.FallGuy) : null;
                     if (patsy != null) creature = patsy;
                     if (HealthLeft(creature) <= 0) return -0.1f; // Already dead to what's planned: wasted
+                    if (creature.Has(StatusEffectType.Blessed)) return -1f; // Its Blessing takes it: one stack off
                     // One of ours with a Last Will (Dead Man's Switch): its death does something for us
                     return -(creature.Worth + HealthLeft(creature)) + (Hard && creature.Ours ? LastWillValue(creature) : 0);
                 case ActionType.TakeControl: {
