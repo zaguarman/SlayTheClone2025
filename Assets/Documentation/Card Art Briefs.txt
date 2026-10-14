@@ -108,6 +108,7 @@ Ministry for Equality (creature)
     (from the drawing) Barbed wire along the roof
 Supreme Court (creature)
     A white columned courthouse with a judge's gavel beside it; sunburst.
+    USER: 2026-10-14 (pixel art): no gavel.
 Protocol Enforcers (creature)
     Two bodyguards in black suits and dark glasses with earpieces behind a gold velvet rope; sunburst.
 Demagogue (creature)
@@ -199,6 +200,7 @@ DIGITAL SOCIETY
 Doomscrolling (spell)
     The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed and expressionless at 3AM, holding up a phone (we see its black back) where the meme had a computer, its glow on his face, cards drifting up out of the feed.
     USER: A guy like the wojak meme, but on a phone instead of a computer.
+    USER: 2026-10-14 (pixel art): a clock showing 3:00 AM behind him.
 Crypto "Entrepreneur" (creature)
     A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand.
 Digital Nomad (creature)
@@ -315,6 +317,7 @@ Inflatable Tank (creature)
     A rubber tank half-deflated on a field, its barrel drooping, a soldier patching a hole with a bicycle repair kit.
 Sherman Tank (creature)
     A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks.
+    USER: 2026-10-14 (pixel art): smoke behind the tank.
 HAARP (spell)
     A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy tent miles away, a technician in a parka sipping coffee by the control panel.
     USER: 2026-10-14: an underground installation with a device like a strong laser pointed at an immense hole in the ground, toward the Earth's center (an earthquake card).
@@ -357,6 +360,7 @@ Script Kiddie (creature)
     A twelve-year-old in an oversized gaming chair, hoodie up, double-clicking "H4CK3R T00L.exe" while a bank vault door swings open on his second monitor.
 Legacy Code (creature)
     A beige mainframe held together with duct tape in a dusty basement, a yellowed sticky note on it: "DO NOT TOUCH - Gary (retired 1999)", and cobwebs over an "Update available" pop-up.
+    USER: 2026-10-14 (pixel art): a scroll with HERE BE DRAGONS in ASCII art (the user's reference: the dragon by snd).
 End-to-End Encryption (spell)
     Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a "Backdoor Request" form.
 SysAdmin (creature)
@@ -444,7 +448,7 @@ The Chosen One (creature)
     USER: 2026-10-14: delete the ball of fire; let Jesus with guns steal the show.
 Killer Rabbit of Caerbannog (creature)
     A small fluffy white rabbit sitting innocently in front of a cave mouth littered with bones and dented helmets, a tiny drop of red on its whiskers, knights fleeing in the distance.
-    USER: 2026-10-14 (pixel art): skeletons in crusader armor around the bunny's lair.
+    USER: 2026-10-14 (pixel art): skeletons in crusader armor around the bunny's lair; the bunny smaller, same design.
 Black Knight (creature)
     A knight in black armor standing defiantly at a forest bridge with no arms left, sword on the ground, shouting at a bemused king who rides an invisible horse to the sound of coconuts.
 Buddy Christ (creature)
