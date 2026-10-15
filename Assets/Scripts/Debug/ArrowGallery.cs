@@ -8,10 +8,11 @@ using static SlayTheClone.Enums;
 namespace SlayTheClone {
     /// <summary>
     /// The battle arrows from every slot to every slot, one side aiming (the other side is the mirror), shown one after the
-    /// other to judge the <see cref="ArrowTuning"/> sliders: UI > Arrow Gallery while the game plays. It fills both rows with
-    /// plain creatures; each set shows one kind of arrow (see <see cref="Set"/>), and the window sets how long each shot
-    /// stays, pauses on one while the sliders move, and steps back and forth. It loops until stopped. It can also save every
-    /// shot, labelled, with a sheet per set, in ArrowGallery/ at the project root (not in the project's files).
+    /// other to judge the <see cref="ArrowTuning"/> sliders. Two ways to run it while the game plays:
+    /// UI > Arrow Gallery plays them back: the window sets how long each shot stays, pauses on one while the sliders move,
+    /// and steps back and forth; it loops until stopped. UI > Arrow Gallery Screenshots goes once through the sets chosen
+    /// there, saving every shot, labelled, and a sheet per set in ArrowGallery/ at the project root (not in the project's
+    /// files), then stops. It fills both rows with plain creatures; each set shows one kind of arrow (see <see cref="Set"/>).
     /// It changes the game it runs on: use a game you don't mind losing.
     /// </summary>
     public class ArrowGallery : MonoBehaviour {
@@ -31,7 +32,7 @@ namespace SlayTheClone {
 
         // Set from the window before it starts; how long each shot stays can change while it runs
         public static float SecondsPerShot = 2f;
-        public static bool SavePictures;
+        public static bool SavePictures { get; private set; } // The screenshot version: once through, saving each shot
         public static readonly HashSet<Set> Chosen = new HashSet<Set>((Set[])System.Enum.GetValues(typeof(Set)));
 
         public static string Folder => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "ArrowGallery"));
@@ -57,9 +58,16 @@ namespace SlayTheClone {
         private readonly List<ArrowIndicator> drawn = new List<ArrowIndicator>(); // Arrows the gallery draws itself
         private int jump; // Previous / Next pressed
 
-        public static void Run() {
+        /// <summary>Plays the arrows back, looping, with no pictures saved.</summary>
+        public static void Run() => Begin(saving: false);
+
+        /// <summary>Goes once through the chosen sets, saving every shot and a sheet per set, then stops.</summary>
+        public static void RunScreenshots() => Begin(saving: true);
+
+        private static void Begin(bool saving) {
             if (Running || !Application.isPlaying) return;
-            new GameObject("ArrowGallery").AddComponent<ArrowGallery>();
+            SavePictures = saving;
+            new GameObject(saving ? "ArrowGalleryScreenshots" : "ArrowGallery").AddComponent<ArrowGallery>();
         }
 
         public static void Stop() {
@@ -118,6 +126,15 @@ namespace SlayTheClone {
                         sheetsWritten.Add(shot.Set);
                         Debug.Log($"Arrow Gallery: the {shot.Set} sheet is in {Folder}");
                     }
+                }
+                if (SavePictures) { // The screenshot version: on to the next shot at once, and done after the last
+                    if (Index == shots.Count - 1) {
+                        Debug.Log($"Arrow Gallery: every shot saved in {Folder}");
+                        Destroy(gameObject);
+                        yield break;
+                    }
+                    Index++;
+                    continue;
                 }
                 float shown = SettleSeconds;
                 while ((Paused || shown < SecondsPerShot) && jump == 0) {
@@ -288,7 +305,10 @@ namespace SlayTheClone {
     }
 
 #if UNITY_EDITOR
-    /// <summary>The gallery's controls (UI > Arrow Gallery): which sets, how long each shot stays, pause, back, next.</summary>
+    /// <summary>
+    /// The gallery's controls (UI > Arrow Gallery): which sets, how long each shot stays, pause, back, next. The screenshot
+    /// version (UI > Arrow Gallery Screenshots) uses the same sets.
+    /// </summary>
     public class ArrowGalleryWindow : UnityEditor.EditorWindow {
         private const string Prefs = "SlayTheClone.ArrowGallery.";
 
@@ -298,9 +318,20 @@ namespace SlayTheClone {
             window.minSize = new Vector2(320f, 300f);
         }
 
-        private void OnEnable() {
+        [UnityEditor.MenuItem("UI/Arrow Gallery Screenshots")]
+        private static void Screenshots() {
+            if (!Application.isPlaying) {
+                Debug.LogWarning("Arrow Gallery Screenshots: press Play first, in the game scene");
+                return;
+            }
+            LoadChoices();
+            ArrowGallery.RunScreenshots();
+        }
+
+        private void OnEnable() => LoadChoices();
+
+        private static void LoadChoices() {
             ArrowGallery.SecondsPerShot = UnityEditor.EditorPrefs.GetFloat(Prefs + "Seconds", 2f);
-            ArrowGallery.SavePictures = UnityEditor.EditorPrefs.GetBool(Prefs + "Save", false);
             foreach (ArrowGallery.Set set in System.Enum.GetValues(typeof(ArrowGallery.Set))) {
                 if (UnityEditor.EditorPrefs.GetBool(Prefs + set, true)) ArrowGallery.Chosen.Add(set);
                 else ArrowGallery.Chosen.Remove(set);
@@ -330,11 +361,6 @@ namespace SlayTheClone {
                     else ArrowGallery.Chosen.Remove(set);
                     UnityEditor.EditorPrefs.SetBool(Prefs + set, on);
                 }
-                bool save = UnityEditor.EditorGUILayout.ToggleLeft("Save every shot and a sheet per set (in ArrowGallery/)", ArrowGallery.SavePictures);
-                if (save != ArrowGallery.SavePictures) {
-                    ArrowGallery.SavePictures = save;
-                    UnityEditor.EditorPrefs.SetBool(Prefs + "Save", save);
-                }
             }
 
             UnityEditor.EditorGUILayout.Space();
@@ -344,6 +370,12 @@ namespace SlayTheClone {
             }
             if (gallery == null) {
                 if (GUILayout.Button("Start", GUILayout.Height(28f))) ArrowGallery.Run();
+                UnityEditor.EditorGUILayout.HelpBox("To save pictures of these sets instead: UI > Arrow Gallery Screenshots.", UnityEditor.MessageType.None);
+                return;
+            }
+            if (ArrowGallery.SavePictures) {
+                UnityEditor.EditorGUILayout.LabelField($"Saving {gallery.Index + 1} / {gallery.Count}", gallery.Current);
+                if (GUILayout.Button("Stop")) ArrowGallery.Stop();
                 return;
             }
             UnityEditor.EditorGUILayout.LabelField($"{gallery.Index + 1} / {gallery.Count}", gallery.Current);
