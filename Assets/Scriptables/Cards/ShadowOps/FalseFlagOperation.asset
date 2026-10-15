@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
     - actionType: 6
       value: 2
@@ -88,6 +89,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Destroy target creature (its Last Will happens); the other creatures
     on its side get +2 Attack while they stay in play, rallied by the outrage (the

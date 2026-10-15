@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Armor is capped at twice max Health, fades by 1 each
     Dusk and is lost when the creature leaves play. Aimed at your own creature, it

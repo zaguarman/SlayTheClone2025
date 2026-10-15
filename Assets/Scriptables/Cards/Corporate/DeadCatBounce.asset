@@ -31,40 +31,11 @@ MonoBehaviour:
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 6
-      value: 3
-      targetType: 3
+    - actionType: 1
+      value: 2
+      targetType: 2
       targetModifier: 0
       modifyAttack: 1
-      modifyHealth: 0
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-        damaging: 0
-      trend: 0
-      ability: 0
-      sendFor: 0
-      fromDiscard: 0
-      requires: 0
-      decoy: {fileID: 0}
-    - actionType: 6
-      value: -2
-      targetType: 3
-      targetModifier: 0
-      modifyAttack: 0
       modifyHealth: 1
       modifySpeed: 0
       statusEffectToApply: 0
@@ -88,7 +59,39 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
-  designNotes: 'Future: a Temporary +3 Attack for 1 Day, then a Persistent -2 Health.'
+    - actionType: 0
+      value: 5
+      targetType: 2
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 1
+      decoy: {fileID: 0}
+  designNotes: 'Target creature, either side (the user, 2026-10-15): it heals 2 now,
+    the bounce, and takes 5 damage at the next Dawn, the crash.'
   artDescription: 
-  defaultTargetType: 3
+  defaultTargetType: 2

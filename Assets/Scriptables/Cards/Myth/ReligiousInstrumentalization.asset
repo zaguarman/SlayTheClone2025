@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 4
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Conversion: take control of target enemy creature with 2 Attack or
     less. It joins you, for good.'

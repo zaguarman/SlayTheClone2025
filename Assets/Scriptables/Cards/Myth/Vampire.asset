@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
     - actionType: 1
       value: 1
@@ -88,6 +89,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Strength Sap (the user, 2026-10-15), kept fair: each Dawn the enemy
     creature facing it loses 1 Attack while it stays in play, and the Vampire heals

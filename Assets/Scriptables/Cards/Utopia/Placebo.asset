@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: +3 Health for good.
   artDescription: A sugar pill the size of a melon labelled MIRACLE on a spoonful

@@ -168,11 +168,13 @@ namespace SlayTheClone {
             foreach (var action in actions) {
                 if (done.Contains(action)) continue;
                 string what = DescribeAction(action, isSpell, Whom, atDawn);
-                var same = actions.Where(a => !done.Contains(a) && ReachOf(a) != Reach.None
+                var same = actions.Where(a => !done.Contains(a) && ReachOf(a) != Reach.None && a.delayDays == action.delayDays
                                               && DescribeAction(a, isSpell, Whom, atDawn) == what).ToList();
                 string group = what.Contains(Whom) && same.Count > 1 && same.Contains(action) ? GroupOf(same.Select(ReachOf)) : null;
                 if (group != null) same.ForEach(a => done.Add(a));
                 else done.Add(action);
+                // A part that waits says when: "at the next Dawn, 5 damage to it"
+                if (action.delayDays > 0) what = (action.delayDays == 1 ? $"at the next {Keywords.Link("Dawn")}, " : $"{action.delayDays} {Keywords.Link("Dawn")}s on, ") + what;
                 parts.Add((what, group ?? DescribeTarget(action, isSpell)));
             }
 

@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'When Revealed (Revealed, or a Reveal shows it): 4 damage to whoever
     revealed it, the creature whose effect it was or else its player. Allergic to

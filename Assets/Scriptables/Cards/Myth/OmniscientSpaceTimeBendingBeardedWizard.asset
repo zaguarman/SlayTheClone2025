@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: Each Dawn, Blessed on a random friendly creature.
   artDescription: An old bearded man on a cloud in a bathrobe and slippers, lazily

@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
     - actionType: 7
       value: 0
@@ -88,6 +89,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'An aid package with a tracker inside: heals an enemy creature 2,
     and gives it Heat Signature 2, so random and redirected attacks find it first.'

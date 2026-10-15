@@ -60,6 +60,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Trend for 3 Days, Volcano Lair: each Day (from the Day it''s set),
     on each side the strongest creature hides in a lair: it''s Untouchable that Day,

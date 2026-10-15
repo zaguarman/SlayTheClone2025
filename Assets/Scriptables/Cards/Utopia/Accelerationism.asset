@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
     - actionType: 6
       value: 3
@@ -88,6 +89,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   - effectType: 1
     trigger: 0
@@ -121,6 +123,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   - effectType: 1
     trigger: 0
@@ -154,6 +157,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Gamble, accelerationism''s way: every outcome pays, one only after
     it hurts. Your creatures take 2 and get +3 Attack for good (on the brink, then

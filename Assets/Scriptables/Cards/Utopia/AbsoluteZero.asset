@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: Every creature is Exhausted.
   artDescription: A man frozen solid at his desk holding a frozen cup of coffee,

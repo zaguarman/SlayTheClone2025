@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'A Monitored Watchdog: the next enemy spell is redirected to a random
     creature. 1 charge.'

@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Sacrifice 1: every enemy creature takes 2 damage. The film''s ending,
     as a sweeper.'

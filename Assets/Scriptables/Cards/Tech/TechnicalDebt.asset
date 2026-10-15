@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Decay 1: strong today, it pays for it every Dusk.'
   artDescription: A laptop held together with duct tape and a TODO sticky note, beside

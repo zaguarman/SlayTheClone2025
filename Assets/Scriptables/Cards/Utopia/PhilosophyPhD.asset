@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   - effectType: 0
     trigger: 4
@@ -92,6 +93,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: A draw each Dawn; the student debt costs it 1 Health each Dusk.
   artDescription: A graduate in cap and gown flipping burgers at a fast-food grill,

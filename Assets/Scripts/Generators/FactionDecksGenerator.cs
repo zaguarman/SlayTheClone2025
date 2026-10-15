@@ -276,10 +276,10 @@ namespace SlayTheClone {
                 "Target side, yours or theirs (the user, 2026-10-15): every creature there takes 1 damage and gets +1 Attack. Everyone goes, management included. Future: Coffeinated, followed by Burnout.",
                 Damage(1, TargetType.AllCreatures, Each | TargetModifier.DroppedSide),
                 Buff(1, TargetType.AllCreatures, attack: true, health: false, Each | TargetModifier.DroppedSide)),
-            Spell("Dead Cat Bounce", TargetType.FriendlyCreatures,
+            Spell("Dead Cat Bounce", TargetType.AllCreatures,
                 "It's recovering! It's recovering! It's... no.",
-                "Future: a Temporary +3 Attack for 1 Day, then a Persistent -2 Health.",
-                Buff(3, TargetType.FriendlyCreatures, attack: true, health: false), Buff(-2, TargetType.FriendlyCreatures, attack: false, health: true)),
+                "Target creature, either side (the user, 2026-10-15): it heals 2 now, the bounce, and takes 5 damage at the next Dawn, the crash.",
+                Heal(2, TargetType.AllCreatures), Later(Damage(5, TargetType.AllCreatures), 1)),
             Spell("Business Expense", TargetType.Player,
                 "The yacht was a business expense. So was the lawyer. So is the appeal.",
                 "Draw 2 next Day, and pay the fine now: 2 damage to you. Future: Capital cost, discard a card instead.",
@@ -1753,6 +1753,11 @@ namespace SlayTheClone {
             new EffectAction { actionType = type, value = value, targetType = target, targetModifier = modifier };
 
         private static EffectAction Damage(int value, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Damage, value, target, modifier);
+        // A part of a spell that waits: it lands at the Dawn this many Days on, on what the spell was aimed at
+        private static EffectAction Later(EffectAction action, int days) {
+            action.delayDays = days;
+            return action;
+        }
         // Hits back for its Attack whenever an attack lands on it: damage with no value of its own, on the attacker (see EffectResolver)
         private static CardEffect Counterattack() => On(EffectTrigger.OnDamage, Damage(0, TargetType.Enemy));
         private static EffectAction Heal(int value, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Heal, value, target, modifier);

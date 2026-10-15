@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: the protection as a spell. Untouchable this Day:
     target creature takes no damage at all.'

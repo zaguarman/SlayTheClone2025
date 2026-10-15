@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: Summon 2 random creatures from your deck.
   artDescription: A tiny Earth with people crammed all over it like a full elevator,

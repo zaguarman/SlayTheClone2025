@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
     - actionType: 6
       value: -1
@@ -88,6 +89,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: '-3 Attack and -1 Health for good. Future: the Imposter Syndrome status.'
   artDescription: A little space crewmate in a spacesuit and visor sitting at an

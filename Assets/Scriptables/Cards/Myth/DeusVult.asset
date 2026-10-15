@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: Every friendly creature gets +2 Attack this Day.
   artDescription: A crusader in a bucket helmet and white tabard with a red cross

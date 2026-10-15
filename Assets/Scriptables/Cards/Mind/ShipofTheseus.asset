@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Regenerate 1: it repairs itself plank by plank.'
   artDescription: 'Every plank replaced until nothing''s left: the ship is only a

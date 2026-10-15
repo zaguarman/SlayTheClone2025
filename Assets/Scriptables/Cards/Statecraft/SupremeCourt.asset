@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Return to Sender: enemy statuses bounce back to whoever sent them.
     Future: Fortifying. Adjacent friendly creatures can''t be moved by enemy effects.'

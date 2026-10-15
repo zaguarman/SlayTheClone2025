@@ -60,6 +60,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Last Will: destroy the strongest enemy creature, whatever killed
     it, even itself (He Didn''t Kill Himself, False Flag Operation).'

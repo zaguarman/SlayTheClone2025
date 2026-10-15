@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 2
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Utopia''s research: send for a spell from your deck; it joins your
     next hand.'

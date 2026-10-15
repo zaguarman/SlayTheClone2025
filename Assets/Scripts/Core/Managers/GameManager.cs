@@ -69,6 +69,8 @@ namespace SlayTheClone {
         IReadOnlyList<Watchdog> Watchdogs { get; }
         /// <summary>The creatures' statuses and stat changes, for rules that ask what a creature is under.</summary>
         IModifierManager Modifiers { get; }
+        /// <summary>The Day it is (a part of a spell that waits counts its Days from it).</summary>
+        int Today { get; }
         void AddWatchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days);
         /// <summary>Every Watchdog this player controls is gone (GoldenEye).</summary>
         void WipeWatchdogs(IPlayer controller);

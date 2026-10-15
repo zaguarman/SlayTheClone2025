@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Shadow Ops.'' logistics: send for any card from your deck; it joins
     your next hand. HUMINT: a source on the inside fetches it.'

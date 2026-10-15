@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Replaced (the user, 2026-10-15: a new trigger, being replaced isn''t
     dying): when a summon takes its slot, you draw 2. The executive leaves with the

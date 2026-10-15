@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Tailwind (the user, 2026-10-15: cards like Pokemon''s Tailwind):
     +1 Speed to all your creatures for 3 Days. Spells land before attacks, so today''s

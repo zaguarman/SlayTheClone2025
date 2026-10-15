@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   - effectType: 0
     trigger: 3
@@ -92,6 +93,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'An abomination that grows: +1/+1 for good each Dawn. Side effect:
     it arrives Burned for 2 Days (the lightning).'

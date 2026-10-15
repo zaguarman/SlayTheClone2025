@@ -50,9 +50,16 @@ namespace SlayTheClone {
                 : spell.Effects.ToList();
             if (effects.Count == 1 && spell.SourceData?.gamble == true) Log($"{spell.Name}: the wheel stops on effect {spell.Effects.IndexOf(effects[0]) + 1}", LogTag.Effects);
             foreach (var action in effects.SelectMany(e => e.actions)) {
-                QueueAction(spell, caster, action, SelectTargets(spell, caster, action, chosenTarget, queue), queue);
+                var targets = SelectTargets(spell, caster, action, chosenTarget, queue);
+                // A part that waits (Dead Cat Bounce's crash): aimed now, it lands at a later Dawn, listed with the foretold
+                if (action.delayDays > 0) caster.Prophecies.Add(new Prophecy(spell, caster, chosenTarget, queue.Today + action.delayDays, action, targets));
+                else QueueAction(spell, caster, action, targets, queue);
             }
         }
+
+        /// <summary>A spell's part that waited (see <see cref="EffectAction.delayDays"/>) lands now on what it was aimed at, those still there.</summary>
+        public static void QueueDelayed(Spell spell, IPlayer caster, EffectAction action, IEnumerable<ITarget> targets, IActionsQueue queue) =>
+            QueueAction(spell, caster, action, targets.Where(t => !(t is ICreature creature) || (!creature.IsDead && creature.Slot != null)).ToList(), queue);
 
         /// <summary>
         /// Queues the extra hits the attacker's OnDamage effects add to an attack on <paramref name="primaryTarget"/>:

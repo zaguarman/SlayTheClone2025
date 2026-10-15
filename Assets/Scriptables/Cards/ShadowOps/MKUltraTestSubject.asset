@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Each Dawn it attacks a random creature, on either side (never itself):
     strong, cheap, uncontrolled. It can still attack as you plan.'

@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Doomed on either side. It wipes other statuses and
     blocks new ones, gives +1 permanent Attack each Dawn (it stays on the card),

@@ -165,6 +165,24 @@ namespace SlayTheClone.Tests {
             for (int day = 0; day < 3 && p1.Prophecies.Count > 0; day++) game.StartTurn();
             Assert.AreEqual(1, foe.Health, "It came within three Dawns");
 
+            // A part that waits (Dead Cat Bounce): it heals now, and the crash lands on the same creature at the next Dawn
+            var bounce = TestGame.Effect(EffectTrigger.OnPlay, ActionType.Heal, 2, TargetType.AllCreatures);
+            var crash = TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 5, TargetType.AllCreatures).actions[0];
+            crash.delayDays = 1;
+            bounce.actions.Add(crash);
+            var catData = game.Spell("Cat", TargetType.AllCreatures, bounce);
+            StringAssert.Contains("at the next Dawn, 5 damage", Keywords.Plain(CardTextFormatter.GetRulesText(catData)));
+            var cat = game.Summon(p2, game.Creature("Stock", 1, 9), 1);
+            game.ActionsQueue.AddAction(new PlayCardAction(game.GiveCard(p1, game.Spell("Hit", TargetType.AllCreatures,
+                TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.AllCreatures))), p1, cat));
+            game.Resolve();
+            game.ActionsQueue.AddAction(new PlayCardAction(game.GiveCard(p1, catData), p1, cat));
+            game.Resolve();
+            Assert.AreEqual(8, cat.Health, "The bounce: healed 2, on either side");
+            StringAssert.Contains("the rest of it lands", string.Join("\n", QueueView.Lines(p1, game.ActionsQueue, game.ModifierManager)));
+            game.StartTurn();
+            Assert.AreEqual(3, cat.Health, "The crash, at the next Dawn");
+
             // Send For (Multipass, Omen Reading...): the card picked from the deck joins the next hand; scouting only looks at its top
             Fresh();
             game.SetDecks(new List<CardData> { game.Creature("Scout", 1, 1), game.Creature("Giant", 5, 5), game.Creature("Runt", 1, 1) }, game.Fillers(3));

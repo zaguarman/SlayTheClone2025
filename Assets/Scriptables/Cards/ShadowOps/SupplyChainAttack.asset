@@ -60,6 +60,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 5
+      delayDays: 0
       decoy: {fileID: 0}
     - actionType: 30
       value: 2
@@ -89,6 +90,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Disrupts the big organizations most: every enemy creature still deploying
     (Deployment Time left: Statecraft''s slow bodies) waits 2 more Days, and the

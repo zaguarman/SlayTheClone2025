@@ -68,7 +68,7 @@ namespace SlayTheClone.Tests {
             TMPro.TMP_Settings.defaultFontAsset.HasCharacters(shown, out uint[] undrawable, searchFallbacks: true);
             CollectionAssert.IsEmpty((undrawable ?? new uint[0]).Distinct().Where(c => !char.IsControl((char)c)).Select(c => (char)c), "Characters the font can't draw");
             Assert.AreEqual("Exhaust all creatures", printed["Strike"], "All enemy and all friendly creatures: all creatures");
-            Assert.AreEqual("Target +3 Attack and -2 Health", printed["Dead Cat Bounce"], "One target, named once");
+            Assert.AreEqual("Heal 2 to target and at the next Dawn, 5 damage to it", printed["Dead Cat Bounce"], "One target, named once; a part that waits says when");
             StringAssert.EndsWith("and Heat Signature on all creatures", printed["Climate Change"], "Statuses on the same creatures share them, and a 1 goes without saying");
             StringAssert.StartsWith("Swap\n", printed["Quantum Physicist"], "No full stop: each line is one rule");
             StringAssert.EndsWith("Retaliate: Exhaust", printed["Quantum Physicist"], "Retaliate, then what it does to the attacker");

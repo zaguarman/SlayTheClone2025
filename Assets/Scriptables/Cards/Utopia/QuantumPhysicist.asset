@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Swap. Whoever hits it is Exhausted: observing it collapses them.'
   artDescription: A physicist split down the middle, one half of him see-through,

@@ -293,6 +293,10 @@ namespace SlayTheClone {
         public int EarliestTurn { get; }
         public int LatestTurn { get; }
 
+        // Only one part of the spell, already aimed (Dead Cat Bounce's crash), or null for the whole spell
+        public EffectAction Part { get; }
+        public IReadOnlyList<ITarget> PartTargets { get; }
+
         public Prophecy(Spell spell, IPlayer caster, ITarget target, int dueOnTurn, int earliestTurn = 0, int latestTurn = 0) {
             Spell = spell;
             Caster = caster;
@@ -300,6 +304,13 @@ namespace SlayTheClone {
             DueOnTurn = dueOnTurn;
             EarliestTurn = earliestTurn > 0 ? earliestTurn : dueOnTurn;
             LatestTurn = latestTurn > 0 ? latestTurn : dueOnTurn;
+        }
+
+        /// <summary>A part of a spell that waits (<see cref="EffectAction.delayDays"/>): it lands on these targets at that Dawn.</summary>
+        public Prophecy(Spell spell, IPlayer caster, ITarget target, int dueOnTurn, EffectAction part, IReadOnlyList<ITarget> targets)
+            : this(spell, caster, target, dueOnTurn) {
+            Part = part;
+            PartTargets = targets;
         }
 
         public static int DaysOf(ICard card) => card?.SourceData?.prophecy ?? 0;
@@ -320,7 +331,8 @@ namespace SlayTheClone {
                 foreach (var due in player.Prophecies.Where(p => p.DueOnTurn <= turn).ToList()) {
                     player.Prophecies.Remove(due);
                     Log($"{player.Name}'s prophecy comes true: {due.Spell.Name}", LogTag.Effects | LogTag.Turns);
-                    EffectResolver.QueueSpellEffects(due.Spell, due.Caster, due.Target, queue);
+                    if (due.Part != null) EffectResolver.QueueDelayed(due.Spell, due.Caster, due.Part, due.PartTargets, queue);
+                    else EffectResolver.QueueSpellEffects(due.Spell, due.Caster, due.Target, queue);
                 }
             }
         }

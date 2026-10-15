@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: Unbothered, and it heals 1 each Dusk.
   artDescription: A chubby tardigrade lounging in a pool of lava in sunglasses, a

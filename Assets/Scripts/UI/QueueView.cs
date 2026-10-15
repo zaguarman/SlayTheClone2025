@@ -50,7 +50,9 @@ namespace SlayTheClone {
             foreach (var prophecy in foretold) {
                 string when = prophecy.EarliestTurn == prophecy.LatestTurn ? $"at the Dawn of Day {prophecy.DueOnTurn}"
                     : $"at a Dawn from Day {prophecy.EarliestTurn} to Day {prophecy.LatestTurn}, nobody knows which"; // The roll stays secret
-                string text = $"{PlayerName(prophecy.Caster, viewer)} foretold {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: it comes true {when}";
+                string text = prophecy.Part != null // A part of a spell that waits
+                    ? $"{PlayerName(prophecy.Caster, viewer)}'s {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: the rest of it lands {when}"
+                    : $"{PlayerName(prophecy.Caster, viewer)} foretold {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: it comes true {when}";
                 items.Add(new Item { Text = text, Icon = EffectIcons.Days, Ours = prophecy.Caster == viewer, Details = text });
             }
             return items;

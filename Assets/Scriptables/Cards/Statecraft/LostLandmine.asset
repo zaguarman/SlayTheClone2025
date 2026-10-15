@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: a hidden Landmine (3 damage) on a slot. The first
     creature to enter it, summoned or moved in, sets it off; it resolves before anything

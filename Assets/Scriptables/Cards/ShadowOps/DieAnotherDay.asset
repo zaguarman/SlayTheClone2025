@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Borrowed Time on target friendly creature: it can''t die (damage
     leaves it at 0 Health, a Destroy fails) until the Dusk of the next Day; then,

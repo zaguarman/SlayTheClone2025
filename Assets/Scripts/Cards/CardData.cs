@@ -117,6 +117,9 @@ namespace SlayTheClone {
         // What the target must be for it to land (Destroy: "if it's Revealed")
         public TargetRequisite requires = TargetRequisite.None;
 
+        // A spell's part that waits: it lands at the Dawn this many Days on, on what it was aimed at (Dead Cat Bounce's crash)
+        public int delayDays;
+
         // SummonDecoys Specific: the token it summons (value is how many). The asset is kept for the card text; the runtime
         // copy is made with the card's data (see CardDataScriptableObject), so games on other threads can create tokens
         public CreatureCardScriptableObject decoy;

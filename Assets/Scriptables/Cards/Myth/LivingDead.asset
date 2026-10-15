@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Revive: once per combat it rises again at the next Dawn.'
   artDescription: A grey zombie in a business suit climbing out of a cemetery grave

@@ -60,6 +60,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
     - actionType: 0
       value: 3
@@ -89,6 +90,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 6
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: '2 damage to target enemy creature, and 3 more if it''s Digital Society:
     the terminally online crack first (the user, 2026-10-15).'

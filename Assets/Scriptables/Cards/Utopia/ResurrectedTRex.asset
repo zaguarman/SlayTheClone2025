@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'A huge abomination, On the Brink. Side effect: its cloned DNA is
     unstable, it loses 1 Health for good each Dusk, until it hits twice as hard.'

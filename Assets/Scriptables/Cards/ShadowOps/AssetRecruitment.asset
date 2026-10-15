@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
     - actionType: 7
       value: 0
@@ -88,6 +89,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 1
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Brainwashed 2 on target enemy creature: when it runs out, at Dusk,
     it changes sides for good, its ability lost. Revealed, it''s turned faster: Brainwashed

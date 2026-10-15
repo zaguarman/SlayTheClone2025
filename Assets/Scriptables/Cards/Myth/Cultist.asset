@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Fodder: when it dies, every friendly creature gets +1 Attack for
     good. The first to go when a Sacrifice is paid.'

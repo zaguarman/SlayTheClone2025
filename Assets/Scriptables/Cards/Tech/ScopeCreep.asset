@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Grow 1: it gets bigger every Dawn, like the project.'
   artDescription: 'A Gantt chart on an office whiteboard whose bars have outgrown

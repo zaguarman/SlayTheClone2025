@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Adds 1 Day to an enemy creature''s Deployment Time: it sits out the
     rest of this Day and all of the next, its planned action is cancelled, and its

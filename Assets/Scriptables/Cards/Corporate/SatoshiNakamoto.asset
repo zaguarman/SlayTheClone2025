@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Number go up: each Dawn, +1 Attack while it stays in play. Nobody
     knows who he is (Undercover: his plans show as ??? to the enemy). Starts harmless;

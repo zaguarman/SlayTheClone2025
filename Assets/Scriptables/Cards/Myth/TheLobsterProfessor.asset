@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Each Dawn, your strongest creature gets +1 Attack for as long as
     it''s in play: the dominance hierarchy, as preached.'

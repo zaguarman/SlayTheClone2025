@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Cleanse (statuses) on any creature. Blessed loses
     all its stacks. On a Doomed creature it''s Heresy: the sentence passes to the

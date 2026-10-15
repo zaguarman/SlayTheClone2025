@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 1
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Statecraft''s logistics: send for a creature from your deck; it joins
     your next hand.'

@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
     - actionType: 7
       value: 0
@@ -88,6 +89,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: '1 damage now, then Burned for 3 Days. Future: Spontaneous Combustion.'
   artDescription: A gentleman in a bowler hat at a bus stop, the tip of his black

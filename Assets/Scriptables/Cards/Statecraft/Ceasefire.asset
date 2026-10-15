@@ -60,6 +60,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Shield for 2 Days on a slot (was 3, as Temporal Shield;
     2026-10-15, Statecraft is among the strongest). The creature there takes no combat

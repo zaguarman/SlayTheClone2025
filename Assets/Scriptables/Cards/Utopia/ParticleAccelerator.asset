@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: Each Dawn, 2 damage to a random creature on either side (side effects).
   artDescription: A huge ring-shaped tunnel seen from above, a tiny scientist on

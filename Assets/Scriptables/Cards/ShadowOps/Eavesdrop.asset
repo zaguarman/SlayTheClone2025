@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Reveal, instant. Played on an enemy slot, it resolves
     at once (during Planning) and shows its caster the slot''s hidden Slot Effect

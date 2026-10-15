@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'On the Brink: at 2 Health or less it deals double. The reactor runs
     hot: 1 damage to itself each Dusk.'

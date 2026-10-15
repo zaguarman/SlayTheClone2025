@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Die Another Day for the player, holy: Grace until the Dusk of the
     next Day, your Health can hit 0 and you don''t lose. At that Dusk, still at 0

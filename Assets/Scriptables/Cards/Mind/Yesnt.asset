@@ -60,6 +60,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mind''s denial (the user, 2026-10-15): a Watchdog that nullifies
     the next 2 enemy spells that deal damage, Monitored, so it catches ones planned

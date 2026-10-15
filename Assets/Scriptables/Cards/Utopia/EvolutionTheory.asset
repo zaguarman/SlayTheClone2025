@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Trend for 3 Days, Survival of the Fittest: each Dusk the creature
     with the least Health on the board, either side, takes 3. Utopia''s creatures

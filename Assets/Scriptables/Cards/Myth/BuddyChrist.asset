@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: Each Dawn, every friendly creature heals 1.
   artDescription: 'A smiling plastic Jesus statue winking and giving a big thumbs

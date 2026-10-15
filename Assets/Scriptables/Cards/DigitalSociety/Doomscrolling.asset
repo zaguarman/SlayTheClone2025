@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Digital Society''s scouting: send for any card among the top 4 of
     your deck; it joins your next hand. Costs Doom 3: your weakest creature not yet

@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'When ready (the end was foretold): every enemy creature takes 2 damage.'
   artDescription: Four horsemen galloping out of storm clouds, War, Famine, Pestilence

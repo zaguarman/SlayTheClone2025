@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Scorched Earth on a slot. The creature there can''t
     trigger its effects (entry, retaliation, Dawn and Dusk, death) or use its ability

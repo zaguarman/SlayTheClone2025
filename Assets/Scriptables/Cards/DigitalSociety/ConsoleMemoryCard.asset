@@ -60,6 +60,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 1
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Load your save (the user, 2026-10-15, after the PS2 memory card meme):
     send for any card from your discard pile; it joins your next hand. The first

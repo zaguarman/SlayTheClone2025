@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Health Loss is permanent and stays on the card until
     it''s reshuffled. It only affects creatures, so it fizzles on an empty slot.

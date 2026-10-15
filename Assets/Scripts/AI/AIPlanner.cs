@@ -213,8 +213,8 @@ namespace SlayTheClone {
             if (!Sacrifice.CanPay(spell, view.Me) || !DoomCost.CanPay(spell, view.Me, Modifiers)) return -100; // Nobody to pay with: it can't be played
             // A Gamble is worth its outcomes on average
             float ValueNow() => (spell.SourceData?.gamble == true && spell.Effects.Count > 0
-                ? spell.Effects.Average(e => e.actions.Sum(a => Value(a, spell, aim)))
-                : spell.Effects.SelectMany(e => e.actions).Sum(a => Value(a, spell, aim))) + SacrificeValue(spell);
+                ? spell.Effects.Average(e => e.actions.Sum(a => PartValue(a, spell, aim)))
+                : spell.Effects.SelectMany(e => e.actions).Sum(a => PartValue(a, spell, aim))) + SacrificeValue(spell);
             // A Prophecy comes true later: worth less, and what it will hit may have changed by then
             if (Prophecy.DaysOf(spell) > 0) return 0.7f * ValueNow();
             if (!Hard || forecasts.Count == 0) return ValueNow();
@@ -223,6 +223,9 @@ namespace SlayTheClone {
             seeForecast = false;
             return (after + ValueNow()) / 2f;
         }
+
+        // A part that waits (Dead Cat Bounce's crash) is worth less, like a Prophecy: what it hits may have changed by then
+        private float PartValue(EffectAction action, Spell spell, ITarget aim) => Value(action, spell, aim) * (action.delayDays > 0 ? 0.7f : 1f);
 
         // Remembers what a spell just planned will do: the damage it deals (so nothing is killed twice), and for Hard what it
         // changes before the attacks: stats, stuns, Exposed, Heat, Untouchable
@@ -246,6 +249,7 @@ namespace SlayTheClone {
             bool instant = EffectResolver.IsInstant(spell);
             foreach (var action in spell.Effects.SelectMany(e => e.actions)) {
                 if (action.targetModifier.HasFlag(TargetModifier.Random)) continue; // Where it lands is luck
+                if (action.delayDays > 0) continue; // It lands another Day
                 foreach (var creature in TargetsOf(action, aim).OfType<SeenCreature>()) {
                     if (instant && action.actionType == ActionType.ApplyStatus && action.statusEffectToApply == StatusEffectType.Revealed) {
                         revealedNow.Add(creature);

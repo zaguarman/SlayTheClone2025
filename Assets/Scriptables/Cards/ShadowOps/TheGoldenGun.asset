@@ -59,6 +59,7 @@ MonoBehaviour:
       sendFor: 0
       fromDiscard: 0
       requires: 0
+      delayDays: 0
       decoy: {fileID: 0}
   designNotes: 'Destroy target enemy creature, whatever its Health or Armor (Untouchable
     still saves it). Single Use: one golden bullet; once played, the card is gone
