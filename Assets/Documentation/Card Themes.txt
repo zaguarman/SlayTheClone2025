@@ -187,7 +187,7 @@ UTOPIA
 
 3. THE CARDS
 
-CORPORATE (33)
+CORPORATE (34)
 
 Casino (spell)
   Aim:   Trump the businessman: the man who managed to lose money running casinos.
@@ -394,6 +394,11 @@ Escape Goat (spell, Mind until 2026-10-15) [px]
   Push:  Good pun, and Corporate's: when things go wrong, someone else takes the blame. Its picture still has Mind's
          background. It pairs with Shadow Ops.' Lone Gunman (the official fall guy): a goat holding a placard
          like the Lone Gunman's would tie them.
+
+Satoshi Nakamoto (creature)
+  Aim:   Crypto's anonymous founder, and the crypto dream of getting rich doing nothing.
+  Hooks: Nobody knows who he is; the untouched million coins; "number go up".
+  Twist: Undercover, and +1 Attack each Dawn: harmless at first, a whale if left alone (the user, 2026-10-15).
 
 The fake free market (the user, 2026-10-15): Laissez-Faire and The Invisible Hand share one idea, wealth flowing to the
 top (the strongest creature takes Attack from the others), from two sides that don't fight each other.
@@ -1341,7 +1346,13 @@ Reflect (spell)
   Aim:   Mirroring: we copy the moods and habits of whoever is in front of us.
   Hooks: Mirror neurons; contagious yawns and panic.
   Twist: Target creature copies the statuses of the creature facing it, good and bad, and that one keeps its own.
-MYTH (39)
+MYTH (40)
+
+Vampire (creature)
+  Aim:   The life-sucker: the one who takes a little from you every night.
+  Hooks: Dracula; Strength Sap (the user, 2026-10-15); the blood bank.
+  Twist: Each Dawn the creature facing it loses 1 Attack for good and it heals 1. Allergic to Light: the Reveal burns
+         it, the vampire Allergic to Light was always waiting for.
 
 Omen Reading (spell)
   Aim:   Fortune-telling, ancient and modern.

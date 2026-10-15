@@ -12,27 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: WorkbenchDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Workbench - Laissez-Faire, The Invisible Hand, C-Suite, Inflation, Reflect
+  deckName: Workbench - Satoshi Nakamoto, Vampire, Laissez-Faire, The Invisible Hand,
+    C-Suite
   cards:
+  - {fileID: 11400000, guid: 9710b7bd3f0432442af510e22cbc062a, type: 2}
+  - {fileID: 11400000, guid: 9710b7bd3f0432442af510e22cbc062a, type: 2}
+  - {fileID: 11400000, guid: 0d15c21f0ff82f244878df02ced5ee28, type: 2}
+  - {fileID: 11400000, guid: 0d15c21f0ff82f244878df02ced5ee28, type: 2}
   - {fileID: 11400000, guid: 3feff565f4aab7e4498dc7ef7150aa27, type: 2}
   - {fileID: 11400000, guid: 3feff565f4aab7e4498dc7ef7150aa27, type: 2}
   - {fileID: 11400000, guid: 2c92fb9b577f8714680a5c339c579b1c, type: 2}
   - {fileID: 11400000, guid: 2c92fb9b577f8714680a5c339c579b1c, type: 2}
   - {fileID: 11400000, guid: c2d2e6fbfe011824b84a1af5473615cd, type: 2}
   - {fileID: 11400000, guid: c2d2e6fbfe011824b84a1af5473615cd, type: 2}
-  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
-  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
-  - {fileID: 11400000, guid: afef0aa19896246428fd44949ec5574e, type: 2}
-  - {fileID: 11400000, guid: afef0aa19896246428fd44949ec5574e, type: 2}
   - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
   - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
+  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
+  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
   - {fileID: 11400000, guid: 5b1b3dccdbb9e1348929cfb29cbfbc9d, type: 2}
   - {fileID: 11400000, guid: 5b1b3dccdbb9e1348929cfb29cbfbc9d, type: 2}
   - {fileID: 11400000, guid: 3ff8e29e684314f46bebf06737bc9000, type: 2}
   - {fileID: 11400000, guid: 3ff8e29e684314f46bebf06737bc9000, type: 2}
-  - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
-  - {fileID: 11400000, guid: b7687b707d736164a938b0df4fa36aca, type: 2}
-  lastUpdated: 2026-10-15T09:04:03.8791190Z
+  lastUpdated: 2026-10-15T09:27:49.1008731Z
   focus: 1

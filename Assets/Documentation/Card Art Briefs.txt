@@ -41,6 +41,8 @@ Day Trader (creature)
     A sweating trader in a headset, worried, under three wall screens of stock charts, two up and one crashing; office towers behind.
 Pluriemployed Hustler (creature)
     A delivery worker in a teal cap running past (speed lines) with a delivery box, a row of five rating stars above him; office towers behind.
+Satoshi Nakamoto (creature)
+    A figure in a grey hoodie whose face is only a swirl of fog with a question mark in it, sitting cross-legged on a mountain of gold coins, a laptop glowing on his knees and a price chart behind him shooting straight up.
 Unicorn (creature)
     A white unicorn startup with a gold horn and a rainbow mane, standing on fire, a red chart line falling behind it; office towers behind.
     USER: 2026-10-14 (pixel art): rework the mane and the chart's downturn arrow behind; the fire layer on top of the unicorn, so it looks like it's on fire.
@@ -484,6 +486,8 @@ Templar Knight (creature)
     USER: 2026-10-14 (pixel art): holding a shield with the cross; the treasure one cohesive pile, no coins flying about.
 Zealot (creature)
     A wild-eyed hermit in sackcloth with a long beard, waving a burning torch and a hand-painted REPENT sign on a busy city sidewalk.
+Vampire (creature)
+    A pale aristocrat in a cape at a blood-donation clinic, sipping from a sleeping gym bro's arm through a bendy straw, the bro's bicep visibly deflating like a balloon.
 Living Dead (creature)
     A grey zombie in a business suit climbing out of a cemetery grave with its briefcase, a sunrise behind the tombstones.
 The Chosen One (creature)

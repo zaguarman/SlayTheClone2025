@@ -55,7 +55,7 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Laissez-Faire", "The Invisible Hand", "C-Suite", "Inflation", "Reflect" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Satoshi Nakamoto", "Vampire", "Laissez-Faire", "The Invisible Hand", "C-Suite" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -142,7 +142,7 @@ namespace SlayTheClone {
             }),
             // Sturdy creatures that wear the enemy down, and stat cuts that kill
             [Faction.Mind] = ("Mind - All in Your Head", new[] {
-                "Pessimist", "Pessimist", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Lucid Dreaming", "Red Herring",
+                "Pessimist", "Pessimist", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Reflect", "Red Herring",
                 "Trolley Problem", "Trolley Problem", "Roko's Basilisk", "Roko's Basilisk", "Imposter Syndrome", "Imposter Syndrome",
                 "Schrodinger's Cat", "Schrodinger's Cat", "Mimetic Theory", "Mimetic Theory", "Lucid Dreaming", "Red Herring",
             }),
@@ -229,6 +229,12 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Draw(2)),
                 On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
                 .With(CreatureAbility.PennyStock),
+            Creature("Satoshi Nakamoto", 0, 5, speed: 1, deploy: 1,
+                "Mined a million coins. Never spent one. Never seen again.",
+                "Number go up: each Dawn, +1 Attack while it stays in play. Nobody knows who he is (Undercover: his plans show as ??? to the enemy). Starts harmless; leave him alone and he's a whale (the user, 2026-10-15).",
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: false)))
+                .With(CreatureAbility.Undercover)
+                .Picture("A figure in a grey hoodie whose face is only a swirl of fog with a question mark in it, sitting cross-legged on a mountain of gold coins, a laptop glowing on his knees and a price chart behind him shooting straight up."),
             Creature("Unicorn", 1, 8, speed: 1, deploy: 2,
                 "Valued at a billion. Burns a million a day. Profitable next year, every year.",
                 "Future: Unicorn (Enterprise) from the card examples. Burn rate stays: Corporate can't heal it.",
@@ -1239,6 +1245,12 @@ namespace SlayTheClone {
                 "When ready: Doomed 3 on itself. It grows +1 Attack each Dawn, then its Last Rites strike and it dies for the cause.",
                 On(EffectTrigger.OnPlay, Status(StatusEffectType.Doomed, 3, TargetType.Self)))
                 .Picture("A wild-eyed hermit in sackcloth with a long beard, waving a burning torch and a hand-painted REPENT sign on a busy city sidewalk."),
+            Creature("Vampire", 2, 4, speed: 1, deploy: 1,
+                "Doesn't drink. Just takes a little off the top. Every night.",
+                "Strength Sap (the user, 2026-10-15), kept fair: each Dawn the enemy creature facing it loses 1 Attack while it stays in play, and the Vampire heals 1. Only the one in front of it, so stepping out of its lane stops it; Allergic to Light, the Reveal it fears.",
+                On(EffectTrigger.StartOfTurn, Buff(-1, TargetType.EnemyCreatures, attack: true, health: false, Facing), Heal(1, TargetType.Self)))
+                .With(CreatureAbility.AllergicToLight)
+                .Picture("A pale aristocrat in a cape at a blood-donation clinic, sipping from a sleeping gym bro's arm through a bendy straw, the bro's bicep visibly deflating like a balloon."),
             Creature("Living Dead", 2, 3, speed: 1, deploy: 0,
                 "Died on Friday. Back on Monday. Still not answering emails.",
                 "Revive: once per combat it rises again at the next Dawn.",
@@ -1319,7 +1331,6 @@ namespace SlayTheClone {
                 "Mirror neurons: you yawn, I yawn. You panic, I panic.",
                 "Target creature copies every status of the creature facing it, good and harmful, with the Days they have left; that one keeps its own. Like Mimetic Theory, it works between the creature it's dropped on and the one facing it, so there's one target to pick (the user, 2026-10-15).",
                 Act(ActionType.CopyStatuses, 0, TargetType.AllCreatures, TargetModifier.None))
-                .NotInStarterDeck()
                 .Picture("A woman in front of a tall mirror, her reflection wearing a different man's bandages, halo and storm cloud: in the room he stands beside her with exactly those, and now she has them too."),
             Spell("Mimetic Theory", TargetType.AllCreatures,
                 "We want what they want. Then we become them.",

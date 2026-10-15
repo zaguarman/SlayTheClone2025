@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: SatoshiNakamoto
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: fb7bcb2e-c241-4072-939e-758a739d9647
+  cardName: Satoshi Nakamoto
+  description: Mined a million coins. Never spent one. Never seen again.
+  cardType: 0
+  faction: 4
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  gamble: 0
+  effects:
+  - effectType: 0
+    trigger: 3
+    oncePerCombat: 0
+    actions:
+    - actionType: 6
+      value: 1
+      targetType: 5
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Number go up: each Dawn, +1 Attack while it stays in play. Nobody
+    knows who he is (Undercover: his plans show as ??? to the enemy). Starts harmless;
+    leave him alone and he''s a whale (the user, 2026-10-15).'
+  artDescription: A figure in a grey hoodie whose face is only a swirl of fog with
+    a question mark in it, sitting cross-legged on a mountain of gold coins, a laptop
+    glowing on his knees and a price chart behind him shooting straight up.
+  attack: 0
+  health: 5
+  speed: 1
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 17
+  gift: 0
+  token: 0
+  disguise: {fileID: 0}
