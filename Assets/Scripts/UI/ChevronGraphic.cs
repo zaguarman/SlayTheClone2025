@@ -28,8 +28,8 @@ namespace SlayTheClone {
         /// <summary>
         /// The chevron round a formation's slots, shaped like a swept wing (the user: a plane's wing, not a B2's sawtooth):
         /// a blunt nose over the Vanguard, the leading edge sweeping back to the wingtips at Headquarters, square tips, and
-        /// one straight trailing edge from each tip back to a notch under the Vanguard. It keeps clear of every card: a
-        /// little room at the nose, more at the back.
+        /// a trailing edge that rises from each tip to a flat stretch tucked in just behind the Flanks, parallel to the
+        /// Vanguard's back edge. It keeps clear of every card: a little room at the nose, more at the back.
         /// </summary>
         /// <param name="slots">The slots' centres by formation index (0 the Vanguard, 1 and 2 the Flanks, 3 and 4 Headquarters).</param>
         /// <param name="cardHalf">Half a slot's size.</param>
@@ -45,22 +45,18 @@ namespace SlayTheClone {
             var a = new Vector2(v.x + cardHalf.x + noseRoom * 1.6f, v.y + cardHalf.y + noseRoom);
             var b = new Vector2(right.x + cardHalf.x + tailRoom, right.y + cardHalf.y + tailRoom);
             var c = new Vector2(right.x + cardHalf.x + tailRoom, right.y - cardHalf.y - tailRoom);
-            // The notch: as high as the trailing edge can go while passing under every card's bottom corners, with room
-            float notch = float.MaxValue;
-            foreach (var slot in slots) {
-                var p = Up(slot);
-                foreach (float corner in new[] { p.x - cardHalf.x, p.x + cardHalf.x }) {
-                    float t = (c.x - corner) / (c.x - cx); // 0 at the tip, 1 at the middle
-                    if (corner < cx || t <= 0.01f) continue;
-                    float clear = p.y - cardHalf.y - tailRoom * 0.6f;
-                    notch = Mathf.Min(notch, c.y + (clear - c.y) / t);
-                }
-            }
-            if (notch == float.MaxValue) notch = v.y - cardHalf.y - noseRoom;
-            var e = new Vector2(cx, notch);
+            // The tuck (the user): the trailing edge rises from each tip, under the Headquarters card with room, to a flat
+            // stretch parallel to the Vanguard's back edge, just behind the Flanks
+            Vector2 flank = Up(slots[2]);
+            float flat = flank.y - cardHalf.y - tailRoom * 0.5f;
+            var corner = new Vector2(right.x - cardHalf.x, right.y - cardHalf.y - tailRoom * 0.6f); // To pass under
+            float reach = corner.y > c.y + 0.5f
+                ? c.x - (flat - c.y) * (c.x - corner.x) / (corner.y - c.y) // The line from the tip under that corner, up to the flat
+                : cx + cardHalf.x;
+            var d = new Vector2(Mathf.Clamp(reach, cx + cardHalf.x * 0.5f, c.x - 1f), flat);
             Vector2 Mirror(Vector2 p) => new Vector2(2f * cx - p.x, p.y);
             Vector2 Back(Vector2 p) => new Vector2(p.x, p.y * s);
-            return new List<Vector2> { Back(a), Back(b), Back(c), Back(e), Back(Mirror(c)), Back(Mirror(b)), Back(Mirror(a)) };
+            return new List<Vector2> { Back(a), Back(b), Back(c), Back(d), Back(Mirror(d)), Back(Mirror(c)), Back(Mirror(b)), Back(Mirror(a)) };
         }
 
         protected override void OnPopulateMesh(VertexHelper vh) {
@@ -72,12 +68,13 @@ namespace SlayTheClone {
                 int start = vh.currentVertCount;
                 foreach (var point in outer) vh.AddVert(point, color, Vector2.zero);
                 int n = outer.Count;
-                if (n == 7) { // The wing: nose a-a2, tips b-c and b2-c2, notch e
+                if (n == 8) { // The wing: nose a-a2, tips b-c and b2-c2, the tuck d-d2 behind the Flanks
                     vh.AddTriangle(start, start + 1, start + 2);     // a, b, c
-                    vh.AddTriangle(start, start + 2, start + 3);     // a, c, e
-                    vh.AddTriangle(start + 6, start + 3, start + 4); // a2, e, c2
-                    vh.AddTriangle(start + 6, start + 4, start + 5); // a2, c2, b2
-                    vh.AddTriangle(start + 6, start, start + 3);     // a2, a, e
+                    vh.AddTriangle(start, start + 2, start + 3);     // a, c, d
+                    vh.AddTriangle(start, start + 3, start + 4);     // a, d, d2
+                    vh.AddTriangle(start, start + 4, start + 7);     // a, d2, a2
+                    vh.AddTriangle(start + 7, start + 4, start + 5); // a2, d2, c2
+                    vh.AddTriangle(start + 7, start + 5, start + 6); // a2, c2, b2
                 }
                 else {
                     for (int i = 1; i < n - 1; i++) vh.AddTriangle(start, start + i, start + i + 1);
