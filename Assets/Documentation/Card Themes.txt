@@ -187,7 +187,7 @@ UTOPIA
 
 3. THE CARDS
 
-CORPORATE (29)
+CORPORATE (32)
 
 Casino (spell)
   Aim:   Trump the businessman: the man who managed to lose money running casinos.
@@ -386,6 +386,26 @@ Inflation (spell) [px]
   Twist: It hits everyone, the other side harder: 2 damage to every enemy creature, 1 to each of yours (2026-10-15,
          the user's rework; it was -1 Health to each enemy, "same price, less creature").
   Push:  The flavor still reads as shrinkflation; a line about everyone paying for it would match the new rules.
+
+The fake free market (the user, 2026-10-15): Laissez-Faire and The Invisible Hand share one idea, wealth flowing to the
+top (the strongest creature takes Attack from the others), from two sides that don't fight each other.
+
+Laissez-Faire (spell)
+  Aim:   The hands-off free market, which always seems to pick whoever already had the most.
+  Hooks: Adam Smith misquoted; "let the market decide"; deregulation.
+  Twist: Nobody steers it: the strongest creature on the board, either side, takes 1 Attack from every other one. A
+         timing card: play it when the biggest is yours.
+
+The Invisible Hand (creature)
+  Aim:   The market's self-correction that nobody can see, only feel in their pocket.
+  Hooks: Adam Smith's invisible hand; an empty glove.
+  Twist: Each Dusk your strongest takes 1 Attack from your others, this one too; Undercover, you never see it coming.
+
+C-Suite (creature)
+  Aim:   Trickle-down economics, and the top of the corporate hierarchy.
+  Hooks: The champagne tower; "the savings will trickle down".
+  Twist: Trickle Down (trample): what its attack has left after the creature goes on to the player. What trickles down
+         is the bill.
 
 STATECRAFT (26)
 

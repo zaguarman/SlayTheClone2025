@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: TheInvisibleHand
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: d2a7f148-f0e4-4e4b-9f9a-1312418b168c
+  cardName: The Invisible Hand
+  description: Nobody has ever seen it. Everybody has felt it in their pocket.
+  cardType: 0
+  faction: 4
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  gamble: 0
+  effects:
+  - effectType: 0
+    trigger: 4
+    oncePerCombat: 0
+    actions:
+    - actionType: 36
+      value: 1
+      targetType: 3
+      targetModifier: 16
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Each Dusk your strongest creature takes 1 Attack from each of your
+    other creatures, this one too: the market sorts itself out. Undercover: you never
+    see it coming. Laissez-Faire does the same once, to the whole board.'
+  artDescription: An empty white glove floating over a busy market stall, nobody
+    inside it, quietly lifting coins out of the shoppers' pockets and dropping them
+    into a fat banker's top hat.
+  attack: 1
+  health: 4
+  speed: 1
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 17
+  gift: 0
+  token: 0
+  disguise: {fileID: 0}

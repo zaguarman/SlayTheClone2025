@@ -60,6 +60,13 @@ namespace SlayTheClone {
                 mediator.NotifyCreatureDamaged(targetCreature, actualHealthDamage);
             }
 
+            // Trickle Down: what its attack has left once the creature's Health is gone goes on to that creature's player
+            int overflow = remainingDamage - actualHealthDamage;
+            if (overflow > 0 && damageAction.IsCombatDamage() && Abilities.Has(attacker, CreatureAbility.TrickleDown) && targetCreature.Owner != null) {
+                Log($"Executor: {overflow} damage trickles down from {targetCreature.Name} to {targetCreature.Owner.Name}", LogTag.Actions | LogTag.Combat);
+                context.ActionsQueue.AddAction(new DamagePlayerAction(targetCreature.Owner, overflow, attacker, isCombatDamage: true));
+            }
+
             // Creature Death Sequence (GDD 3.9): OnDamage fires on every hit that did damage, Armor included, even a killing one,
             // and resolves right away. Then the lethal check, which may lead to the creature's destruction.
             // Only an attack is answered (Counterattack, Retaliate): hitting back isn't an attack, so it's never answered in turn

@@ -70,6 +70,7 @@ namespace SlayTheClone {
             CreatureAbility.AllergicToLight => "Allergic to Light",
             CreatureAbility.FallGuy => "Fall Guy",
             CreatureAbility.Brink => "On the Brink",
+            CreatureAbility.TrickleDown => "Trickle Down",
             _ => ability.ToString()
         };
 
@@ -107,6 +108,7 @@ namespace SlayTheClone {
             CreatureAbility.AllergicToLight => $"when it's Revealed, or a Reveal shows it, it takes {LightDamage} damage",
             CreatureAbility.FallGuy => "when an enemy effect would Reveal or destroy another friendly creature, it lands on this one instead",
             CreatureAbility.Brink => "at 2 Health or less, everything it deals is doubled",
+            CreatureAbility.TrickleDown => "when its attack is more than a creature's Health, the rest hits that creature's player",
             _ => ""
         };
 

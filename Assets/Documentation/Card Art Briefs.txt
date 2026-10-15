@@ -83,6 +83,12 @@ NDA (spell)
     A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a towering stack of contracts between them stamped CONFIDENTIAL.
 Inflation (spell)
     A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher.
+Laissez-Faire (spell)
+    A boxing referee lounging in a deck chair in the corner of the ring, reading the business pages, whistle unused, while a giant in a top hat sits on a heap of flattened small boxers and pockets their belts.
+The Invisible Hand (creature)
+    An empty white glove floating over a busy market stall, nobody inside it, quietly lifting coins out of the shoppers' pockets and dropping them into a fat banker's top hat.
+C-Suite (creature)
+    A champagne tower of glasses: five executives in suits at the top glass, toasting, the champagne overflowing past them down the tiers, until a line of workers at the bottom catch the last drips in paper cups.
 
 STATECRAFT
 

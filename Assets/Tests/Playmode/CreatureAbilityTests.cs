@@ -253,6 +253,14 @@ namespace SlayTheClone.Tests {
             game.Attack(daredevil, p2.Battlefield[4]);
             Assert.AreEqual(21, dummy.Health, "...at 2 Health, 3 becomes 6");
 
+            // Trickle Down: what its attack has left once the creature's Armor and Health are gone hits that creature's player
+            var executive = With(CreatureAbility.TrickleDown, p1, 0, attack: 7);
+            game.Run(new ModifyArmorAction(left, 1));
+            int before = p2.Health;
+            game.Attack(executive, p2.Battlefield[0]);
+            Assert.IsTrue(left.IsDead, "Trickle Down: 1 Armor and 4 Health take 5 of its 7...");
+            Assert.AreEqual(before - 2, p2.Health, "...and the 2 left go on to their player");
+
             // False Flag Operation: one of yours dies, the rest grow. Its Last Will still happens: Dead Man's Switch destroys
             // their strongest, whatever killed it
             Fresh();
@@ -460,6 +468,23 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual((8, 3), (hitman.Attack, patsy.Attack), "Devil's Breath: its raises...");
             Assert.IsTrue(HasStatus(hitman, StatusEffectType.Blessed) && !HasStatus(patsy, StatusEffectType.Blessed), "...and its good statuses");
             Assert.IsTrue(HasStatus(patsy, StatusEffectType.Burned), "The bad ones stay");
+
+            // The strongest takes from the rest: Laissez-Faire on the whole board (theirs is the strongest here), The
+            // Invisible Hand on its own side. Each gives what it has, up to 1; Too Mainstream keeps its own
+            Fresh();
+            var tycoon = With(CreatureAbility.None, p2, 0, attack: 5);
+            var hipster = With(CreatureAbility.TooMainstream, p2, 1, attack: 3);
+            var worker = With(CreatureAbility.None, p1, 0, attack: 2);
+            var broke = With(CreatureAbility.None, p1, 1, attack: 0);
+            var foreman = With(CreatureAbility.None, p1, 2, attack: 4);
+            game.Play(game.GiveCard(p1, game.Spell("Laissez-Faire", TargetType.AllCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Consolidate, 1, TargetType.AllCreatures, TargetModifier.Strongest))), p1, null);
+            game.Resolve();
+            Assert.AreEqual((7, 3, 1, 0, 3), (tycoon.Attack, hipster.Attack, worker.Attack, broke.Attack, foreman.Attack), "Laissez-Faire: the strongest on the board takes 1 from each other creature");
+            game.Play(game.GiveCard(p1, game.Spell("Invisible Hand", TargetType.FriendlyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Consolidate, 1, TargetType.FriendlyCreatures, TargetModifier.Strongest))), p1, null);
+            game.Resolve();
+            Assert.AreEqual((7, 0, 4), (tycoon.Attack, worker.Attack, foreman.Attack), "On its own side: your strongest takes from yours alone");
 
             Fresh();
             var dome = With(CreatureAbility.Bodyguard, p1, 0);

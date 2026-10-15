@@ -686,6 +686,15 @@ namespace SlayTheClone {
                     float back = Lost(creature) ? creature.Worth * 0.7f : -creature.Worth * 0.5f;
                     return back + (Hard ? LastWillValue(creature) : 0);
                 }
+                case ActionType.Consolidate: { // The strongest takes Attack from the rest: our gains and their losses count
+                    var group = action.targetType == TargetType.AllCreatures ? view.All : creature.Ours ? view.Mine : view.Theirs;
+                    float swing = 0;
+                    foreach (var giver in group.Where(c => c != creature)) {
+                        int amount = System.Math.Min(action.value, AttackOf(giver));
+                        swing += (creature.Ours ? amount : -amount) + (giver.Ours ? -amount : amount);
+                    }
+                    return swing;
+                }
                 case ActionType.Funnel: // Spread out raises gathered into one creature that can kill with them
                     var others = (creature.Ours ? view.Mine : view.Theirs).Where(c => c != creature).Sum(c => System.Math.Max(0, c.StatRaises));
                     return others * 0.5f;

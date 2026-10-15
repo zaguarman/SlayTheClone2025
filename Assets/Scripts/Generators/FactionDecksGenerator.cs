@@ -55,12 +55,12 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Myth, new[] { "God's Grace", "Phoenix Feather" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Laissez-Faire", "The Invisible Hand", "C-Suite", "Inflation" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
         // order, then the rest by when their cards last changed. Change it with the work
-        private static readonly string[] Focus = { "Myth - Old Gods, New Tricks" };
+        private static readonly string[] Focus = { "Corporate - Shareholder Value", "Myth - Old Gods, New Tricks", "Zeitgeist - Moods of Modern Life" };
 
         private static List<string> WorkbenchCards() {
             var cards = Workbench.Cards.SelectMany(card => new[] { card, card }).ToList();
@@ -310,6 +310,25 @@ namespace SlayTheClone {
                 "Everyone's money is worth less, theirs more so: 2 damage to every enemy creature and 1 to each of yours.",
                 Damage(2, TargetType.EnemyCreatures, Each), Damage(1, TargetType.FriendlyCreatures, Each))
                 .Picture("A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher."),
+            // The fake free market (the user, 2026-10-15): two cards on one idea, wealth flowing to the top, from two sides.
+            // Laissez-Faire lets it happen to everyone at once; The Invisible Hand does it quietly, on its own side, every Day
+            Spell("Laissez-Faire", TargetType.AllCreatures,
+                "Let the market decide. The market decided: whoever already had the most.",
+                "Hands off: the strongest creature on the board, on either side, takes 1 Attack from every other creature. Nobody steers it, so play it when the biggest is yours. The Invisible Hand does the same, quietly, on your own side each Dusk.",
+                Act(ActionType.Consolidate, 1, TargetType.AllCreatures, StrongestOne))
+                .Picture("A boxing referee lounging in a deck chair in the corner of the ring, reading the business pages, whistle unused, while a giant in a top hat sits on a heap of flattened small boxers and pockets their belts."),
+            Creature("The Invisible Hand", 1, 4, speed: 1, deploy: 1,
+                "Nobody has ever seen it. Everybody has felt it in their pocket.",
+                "Each Dusk your strongest creature takes 1 Attack from each of your other creatures, this one too: the market sorts itself out. Undercover: you never see it coming. Laissez-Faire does the same once, to the whole board.",
+                On(EffectTrigger.EndOfTurn, Act(ActionType.Consolidate, 1, TargetType.FriendlyCreatures, StrongestOne)))
+                .With(CreatureAbility.Undercover)
+                .Picture("An empty white glove floating over a busy market stall, nobody inside it, quietly lifting coins out of the shoppers' pockets and dropping them into a fat banker's top hat."),
+            Creature("C-Suite", 4, 3, speed: 1, deploy: 2,
+                "Record profits this quarter. The savings will trickle down to you shortly.",
+                "Trickle Down: when its attack is more than a creature's Health, the rest goes on to that creature's player. The top of Corporate's hierarchy; it costs capital: discard a card.")
+                .With(CreatureAbility.TrickleDown)
+                .Discarding(1)
+                .Picture("A champagne tower of glasses: five executives in suits at the top glass, toasting, the champagne overflowing past them down the tiers, until a line of workers at the bottom catch the last drips in paper cups."),
         };
         #endregion
 

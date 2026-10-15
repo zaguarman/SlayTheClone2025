@@ -201,6 +201,15 @@ Penny Stock
     Notes: Checked after the attacker's own stat calculation, before the target's modifiers (Exposed, Cognitive Dissonance) and Armor. 0 damage stays 0.
     Answers: Armor and damage reduction still blunt it. Buffing its hit above 3 actually switches the doubling off.
 
+Trickle Down
+    Inspired by: Trample (Magic: The Gathering), renamed for trickle-down economics. On C-Suite (Corporate), 2026-10-15.
+    Type: Passive
+    Description: "When its attack is more than a creature's Health, the rest hits that creature's player."
+    Notes: Only its attacks (combat damage, Double Tap and Spray and Pray hits included), not its effects. What's left is
+           the hit after Armor and the creature's Health: 7 against 1 Armor and 4 Health puts 2 on the player. A hit that
+           something stops (Untouchable, a Temporal Shield) has nothing left to pass on. It's combat damage to the player.
+    Answers: Big creatures, Armor and Health buffs soak it; Untouchable stops it all.
+
 Protecting, Copying and Moving Other Creatures
 
 Each of these also exists as an effect any card can carry (a spell, or a creature's trigger), so a card can do it without the ability: Untouchable (a status), copy stats, steal stat raises, swap places, and gain an ability (any ability below, or above, given by a spell or trigger, replacing the creature's own until its card is reshuffled). On a spell, the two-creature effects work between the target and the creature facing it.

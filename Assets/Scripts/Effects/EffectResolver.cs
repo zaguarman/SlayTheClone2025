@@ -341,7 +341,8 @@ namespace SlayTheClone {
                 or ActionType.CreateWatchdog or ActionType.DelayDeployment
                 or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility
                 or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
-                or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Resurrect;
+                or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Resurrect
+                or ActionType.Consolidate;
 
         // A Watchdog aimed at a player watches that whole side; a Reveal aimed at one shows their Watchdog conditions
         private static bool IsSideWide(EffectAction action) =>
@@ -445,6 +446,10 @@ namespace SlayTheClone {
                     return target is IPlayer graced ? new GraceAction(graced, action.value) : null;
                 case ActionType.Resurrect: // Sacrificed now, it rises at the Dawn so many Days on (Phoenix Feather)
                     return creature != null ? new ResurrectionAction(creature, controller, System.Math.Max(1, action.value)) : null;
+                case ActionType.Consolidate: // The target, the strongest, takes Attack from every other creature in its group
+                    return creature != null && action.value > 0
+                        ? new ConsolidateAction(creature, action.value, wholeBoard: action.targetType == TargetType.AllCreatures, controller, source)
+                        : null;
                 case ActionType.Funnel: // The target takes the stat raises of every other creature on its side
                     return creature != null ? new FunnelAction(creature) : null;
                 case ActionType.PassHarmfulStatuses: { // The target's harmful statuses go to the creature facing it (Frame Job)

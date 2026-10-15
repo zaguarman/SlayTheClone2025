@@ -45,6 +45,29 @@ namespace SlayTheClone {
         public override string ToString() => $"SwapPositionsAction: {Creature?.Name} trades places with its neighbor";
     }
 
+    /// <summary>
+    /// The strongest takes from the rest (Laissez-Faire, The Invisible Hand): every other creature in the group, the whole
+    /// board or the taker's side, loses up to <see cref="Value"/> Attack, and the taker gains as much as they had to give.
+    /// </summary>
+    public class ConsolidateAction : IGameAction {
+        public ICreature Taker { get; }
+        public int Value { get; }
+        public bool WholeBoard { get; }
+        public IPlayer Controller { get; }
+        public ICard Origin { get; }
+
+        public ConsolidateAction(ICreature taker, int value, bool wholeBoard, IPlayer controller, ICard origin) {
+            Taker = taker;
+            Value = value;
+            WholeBoard = wholeBoard;
+            Controller = controller;
+            Origin = origin;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"ConsolidateAction: {Taker?.Name} takes {Value} Attack from each other creature {(WholeBoard ? "on the board" : "on its side")}";
+    }
+
     public class GrantAbilityAction : IGameAction {
         public ICreature Creature { get; }
         public CreatureAbility Ability { get; }
@@ -141,6 +164,27 @@ namespace SlayTheClone {
                 SlotEffectRules.OnLeave(partner, to, context);
                 SlotEffectRules.OnEnter(partner, partner.Slot, context);
             }
+        }
+    }
+
+    // Each other creature with Attack to give loses it as a stat change from the effect's owner (its abilities can stop or
+    // bounce that), and the taker gains what was asked of them, while they all stay in play. Too Mainstream creatures are
+    // left out: it's an effect on more than one creature
+    public class ConsolidateActionExecutor : ActionExecutor<ConsolidateAction> {
+        protected override void ExecuteAction(ConsolidateAction consolidate, ActionExecutionContext context) {
+            var taker = consolidate.Taker;
+            if (taker == null || taker.IsDead || taker.Slot?.Owner == null || consolidate.Value <= 0) return;
+            var sides = consolidate.WholeBoard ? new[] { taker.Slot.Owner, taker.Slot.Owner.Opponent } : new[] { taker.Slot.Owner };
+            var givers = sides.Where(side => side != null).SelectMany(side => side.Battlefield).Select(s => s.OccupyingCreature)
+                .Where(c => c != null && c != taker && !c.IsDead && c.Attack > 0 && !Abilities.Has(c, CreatureAbility.TooMainstream)).ToList();
+            int taken = 0;
+            foreach (var giver in givers) {
+                int amount = System.Math.Min(consolidate.Value, giver.Attack);
+                context.ActionsQueue.AddAction(new ModifyAction(giver, -amount, true, false, false, controller: consolidate.Controller) { Origin = consolidate.Origin });
+                taken += amount;
+            }
+            Log($"{taker.Name} takes {taken} Attack from {givers.Count} creatures", LogTag.Effects);
+            if (taken > 0) context.ActionsQueue.AddAction(new ModifyAction(taker, taken, true, false, false, controller: consolidate.Controller) { Origin = consolidate.Origin });
         }
     }
 

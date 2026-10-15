@@ -322,6 +322,8 @@ namespace SlayTheClone {
                     return $"wipe out the {target}'s {Keywords.Link("Watchdog", "Watchdogs")}";
                 case ActionType.Funnel:
                     return $"every other creature on its side hands its stat raises to {target}";
+                case ActionType.Consolidate:
+                    return $"{target} takes {value} Attack from each other creature{(action.targetType == TargetType.AllCreatures ? " on the board" : " on its side")}";
                 case ActionType.PassHarmfulStatuses:
                     return $"{target} passes its harmful statuses to the creature facing it";
                 case ActionType.StealGoodStatuses:

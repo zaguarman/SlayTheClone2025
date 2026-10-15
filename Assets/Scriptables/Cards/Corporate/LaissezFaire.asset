@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: LaissezFaire
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 73fa9549-c4e0-4e15-8b9f-0a5add3e525e
+  cardName: Laissez-Faire
+  description: 'Let the market decide. The market decided: whoever already had the
+    most.'
+  cardType: 1
+  faction: 4
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  gamble: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 36
+      value: 1
+      targetType: 2
+      targetModifier: 16
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Hands off: the strongest creature on the board, on either side, takes
+    1 Attack from every other creature. Nobody steers it, so play it when the biggest
+    is yours. The Invisible Hand does the same, quietly, on your own side each Dusk.'
+  artDescription: A boxing referee lounging in a deck chair in the corner of the
+    ring, reading the business pages, whistle unused, while a giant in a top hat
+    sits on a heap of flattened small boxers and pockets their belts.
+  defaultTargetType: 2
