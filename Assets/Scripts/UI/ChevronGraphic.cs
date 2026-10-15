@@ -17,6 +17,9 @@ namespace SlayTheClone {
         /// <summary>The shape's corners, in the mat's local space, in order round the edge.</summary>
         public IReadOnlyList<Vector2> Outline => outline;
 
+        /// <summary>New corners, keeping the stroke (the sides were switched, F8: the formation faces the other way).</summary>
+        public void Reshape(IEnumerable<Vector2> corners) => SetShape(corners, thickness, inset);
+
         public void SetShape(IEnumerable<Vector2> corners, float strokeThickness = 0f, float strokeInset = 0f) {
             outline = new List<Vector2>(corners);
             thickness = strokeThickness;

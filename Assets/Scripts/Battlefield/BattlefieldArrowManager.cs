@@ -39,7 +39,7 @@ namespace SlayTheClone {
         private IGameAction current; // While the Day plays out: the action that ran last, shown until the next one starts
         private readonly Dictionary<string, ArrowIndicator> activeArrows = new Dictionary<string, ArrowIndicator>();
         private ArrowIndicator dragArrow;
-        private readonly Dictionary<IPlayer, Image> sideGlows = new Dictionary<IPlayer, Image>(); // A side this player's queued spells play on
+        private readonly Dictionary<IPlayer, Graphic> sideGlows = new Dictionary<IPlayer, Graphic>(); // A side this player's queued spells play on
         private readonly HashSet<IPlayer> aimedSides = new HashSet<IPlayer>();
 
         // One arrow: where it comes from (one start per action merged into it), where it goes, and how it looks
@@ -216,7 +216,8 @@ namespace SlayTheClone {
             return side;
         }
 
-        // The battlefields this player's queued spells play on glow in the spell color, pulsing gently
+        // The battlefields this player's queued spells play on glow in the spell color, pulsing gently: a band round the
+        // chevron of the mat, just outside it, and a faint wash inside
         private void ShowAimedSides() {
             foreach (var side in new[] { owner, owner.Opponent }) {
                 bool aimed = aimedSides.Contains(side);
@@ -231,15 +232,20 @@ namespace SlayTheClone {
                 }
                 if (glow != null) continue;
                 var board = findBoardView(side);
-                if (board == null) continue;
-                glow = UITheme.AddTrim(board, SpellColor, 1f, -6f, $"SpellAim_{owner.TargetId}");
-                glow.raycastTarget = false;
-                glow.transform.SetAsLastSibling();
-                var fill = UITheme.NewImage("Fill", glow.transform, new Color(SpellColor.r, SpellColor.g, SpellColor.b, 0.08f));
-                fill.raycastTarget = false;
-                fill.rectTransform.anchorMin = Vector2.zero;
-                fill.rectTransform.anchorMax = Vector2.one;
-                fill.rectTransform.offsetMin = fill.rectTransform.offsetMax = Vector2.zero;
+                var mat = board != null ? board.GetComponent<BattlefieldUI>() : null;
+                if (mat == null) continue;
+                var outline = mat.MatOutline();
+                var band = mat.Chevron($"SpellAim_{owner.TargetId}", board.childCount);
+                band.SetShape(outline, 4f, -6f);
+                band.color = SpellColor;
+                band.transform.SetAsLastSibling();
+                var wash = new GameObject("Fill", typeof(RectTransform), typeof(CanvasRenderer));
+                wash.layer = band.gameObject.layer;
+                wash.transform.SetParent(band.transform, false);
+                var fill = wash.AddComponent<ChevronGraphic>();
+                fill.SetShape(outline);
+                fill.color = new Color(SpellColor.r, SpellColor.g, SpellColor.b, 0.08f);
+                glow = band;
                 DOTween.To(() => glow.color.a, a => glow.color = new Color(SpellColor.r, SpellColor.g, SpellColor.b, a), 0.35f, 0.8f)
                     .SetLoops(-1, LoopType.Yoyo).SetTarget(glow);
                 sideGlows[side] = glow;

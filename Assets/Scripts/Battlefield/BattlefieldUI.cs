@@ -152,6 +152,20 @@ namespace SlayTheClone {
                 towardMiddle * (1 - Formation.Depth(i)) * RowStep)).ToList();
         }
 
+        /// <summary>
+        /// Lays the formation out again for the side of the table this mat is on now (the sides were switched, F8):
+        /// the slots, their markers and every chevron drawn on the mat (fill, trims, a spell's glow) face the middle.
+        /// </summary>
+        public void Relayout() {
+            UpdateSlotPositions();
+            var outline = MatOutline();
+            foreach (var chevron in GetComponentsInChildren<ChevronGraphic>(true)) chevron.Reshape(outline);
+            var positions = SlotPositions(SlayTheClone.Player.BattlefieldSize);
+            for (int i = 0; i < positions.Count; i++) {
+                if (transform.Find($"SlotMark_{i}") is RectTransform mark) mark.anchoredPosition = positions[i];
+            }
+        }
+
         private void UpdateSlotPositions() {
             var positions = SlotPositions(battlefieldSlots.Count);
             for (int i = 0; i < battlefieldSlots.Count; i++) {

@@ -117,6 +117,8 @@ namespace SlayTheClone {
             player1AtBottom = player1;
             Swap(player1Battlefield.transform, player2Battlefield.transform);
             Swap(player1Hand.transform, player2Hand.transform);
+            player1Battlefield.Relayout(); // Each formation turns to face the middle again: a Λ at the bottom, a V at the top
+            player2Battlefield.Relayout();
             SetEdge(player1Side, atTop: !player1);
             SetEdge(player2Side, atTop: player1);
             Layout();
