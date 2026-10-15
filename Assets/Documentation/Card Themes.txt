@@ -187,7 +187,7 @@ UTOPIA
 
 3. THE CARDS
 
-CORPORATE (32)
+CORPORATE (33)
 
 Casino (spell)
   Aim:   Trump the businessman: the man who managed to lose money running casinos.
@@ -386,6 +386,14 @@ Inflation (spell) [px]
   Twist: It hits everyone, the other side harder: 2 damage to every enemy creature, 1 to each of yours (2026-10-15,
          the user's rework; it was -1 Health to each enemy, "same price, less creature").
   Push:  The flavor still reads as shrinkflation; a line about everyone paying for it would match the new rules.
+
+Escape Goat (spell, Mind until 2026-10-15) [px]
+  Aim:   Scapegoats.
+  Hooks: The scapegoat; the meme "escape goat".
+  Twist: A pun: a goat escaping. Heat Signature on it.
+  Push:  Good pun, and Corporate's: when things go wrong, someone else takes the blame. Its picture still has Mind's
+         background. It pairs with Shadow Ops.' Lone Gunman (the official fall guy): a goat holding a placard
+         like the Lone Gunman's would tie them.
 
 The fake free market (the user, 2026-10-15): Laissez-Faire and The Invisible Hand share one idea, wealth flowing to the
 top (the strongest creature takes Attack from the others), from two sides that don't fight each other.
@@ -1329,12 +1337,10 @@ Ship of Theseus (creature) [px]
   Push:  The paradox's second half: the old planks rebuilt into a second ship on the shore. Which one is the
          real one?
 
-Escape Goat (spell) [px]
-  Aim:   Scapegoats.
-  Hooks: The scapegoat; the meme "escape goat".
-  Twist: A pun: a goat escaping. Heat Signature on it.
-  Push:  Good pun. It pairs with Shadow Ops.' Lone Gunman (the official fall guy): a goat holding a placard
-         like the Lone Gunman's would tie them.
+Reflect (spell)
+  Aim:   Mirroring: we copy the moods and habits of whoever is in front of us.
+  Hooks: Mirror neurons; contagious yawns and panic.
+  Twist: Target creature copies the statuses of the creature facing it, good and bad, and that one keeps its own.
 MYTH (39)
 
 Omen Reading (spell)

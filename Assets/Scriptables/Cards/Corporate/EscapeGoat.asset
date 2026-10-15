@@ -16,7 +16,7 @@ MonoBehaviour:
   cardName: Escape Goat
   description: It wasn't us. It was the goat. Everyone agrees it was the goat.
   cardType: 1
-  faction: 8
+  faction: 4
   artwork: {fileID: 3286163911610860551, guid: 8e7f67f4e693cfb4080d07201b75dd1f, type: 3}
   discardCost: 0
   discardChosen: 0
@@ -85,8 +85,9 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Heat Signature 2 on target creature (random effects and redirected
-    attacks go to it), and draw a card. Mind deals no damage: it makes someone else''s
-    damage find the goat.'
+    attacks go to it), and draw a card. Corporate since 2026-10-15 (the user): when
+    something goes wrong, someone else takes the blame, and the damage finds the
+    goat.'
   artDescription: 'The escape goat: a white goat scrambling over a wooden fence,
     front legs over the top rail, looking back in a sweat.'
   defaultTargetType: 4

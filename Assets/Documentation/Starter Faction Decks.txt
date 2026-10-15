@@ -295,7 +295,7 @@ Since 2026-10-13 Digital Society, Shadow Ops., Tech, Myth and Mind each have a d
     Phoenix, now with Revive, Monkey Hand, Excess of Bread and Wine, Reincarnation, the Wizard, now Deployment 2).
     Against Shadow Ops. (Hard and Very Hard, 360 games): 51%. Plausible Deniability 97%, Black Budget 56%, Double-O Section 0%.
 • Mind - All in Your Head (Your Inner Critic, "Knows exactly what to say. Always the worst thing."). Every card twice but Roko's Basilisk and Trolley Problem.
-    (new) Ship of Theseus (2/3/1, 0): Regenerate 1. Escape Goat (was Scapegoating): Heat Signature 2 on target creature, draw a card (Mind makes someone else's damage find the goat).
+    (new) Ship of Theseus (2/3/1, 0): Regenerate 1. Escape Goat (was Scapegoating; Corporate since 2026-10-15): Heat Signature 2 on target creature, draw a card.
 
 Two pairs stay as examples of factions that play well together (Faction Compendium, Example Two-Faction Decks). The deck's main faction (the one with more cards) dresses the table:
 • Digital Society & Shadow Ops. - Panopticon (opponent: Your Data Broker, "Knows where you were last night. Sold it by noon."): Digital Society marks the enemy with Heat Signature (Meta Group Chat, Social Panopticon, Cancelled), Shadow Ops. reveals them (Control Room, Eavesdrop, Whistleblower), and every random effect finds its target.

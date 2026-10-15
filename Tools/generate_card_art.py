@@ -4088,7 +4088,8 @@ CARDS["Corporate"].update({"SolidarityTowardsTheSmallBusinessman": solidarity_to
 CARDS["Statecraft"].update({"ViolenceMonopoly": violence_monopoly})
 CARDS["Myth"].update({"Reincarnation": reincarnation})
 CARDS["Tech"].update({"TechnicalDebt": technical_debt, "ScopeCreep": scope_creep, "SexClanker": sex_clanker})
-CARDS["Mind"].update({"ShipofTheseus": ship_of_theseus, "EscapeGoat": scapegoating})
+CARDS["Mind"].update({"ShipofTheseus": ship_of_theseus})
+CARDS["Corporate"].update({"EscapeGoat": scapegoating})  # Was Mind (2026-10-15); its background is still Mind's haze
 
 
 def mk_ultra_test_subject():

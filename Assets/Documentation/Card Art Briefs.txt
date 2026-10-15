@@ -83,6 +83,8 @@ NDA (spell)
     A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a towering stack of contracts between them stamped CONFIDENTIAL.
 Inflation (spell)
     A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher.
+Escape Goat (spell)
+    The escape goat: a white goat scrambling over a wooden fence, front legs over the top rail, looking back in a sweat.
 Laissez-Faire (spell)
     A boxing referee lounging in a deck chair in the corner of the ring, reading the business pages, whistle unused, while a giant in a top hat sits on a heap of flattened small boxers and pockets their belts.
 The Invisible Hand (creature)
@@ -537,8 +539,6 @@ Imposter Syndrome (spell)
     A little space crewmate in a spacesuit and visor sitting at an office desk under a SENIOR ENGINEER name plate, sweating.
 Ship of Theseus (creature)
     Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went.
-Escape Goat (spell)
-    The escape goat: a white goat scrambling over a wooden fence, front legs over the top rail, looking back in a sweat.
 
 UTOPIA
 

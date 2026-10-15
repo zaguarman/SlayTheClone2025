@@ -142,9 +142,9 @@ namespace SlayTheClone {
             }),
             // Sturdy creatures that wear the enemy down, and stat cuts that kill
             [Faction.Mind] = ("Mind - All in Your Head", new[] {
-                "Pessimist", "Pessimist", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Escape Goat", "Red Herring",
+                "Pessimist", "Pessimist", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Lucid Dreaming", "Red Herring",
                 "Trolley Problem", "Trolley Problem", "Roko's Basilisk", "Roko's Basilisk", "Imposter Syndrome", "Imposter Syndrome",
-                "Schrodinger's Cat", "Schrodinger's Cat", "Mimetic Theory", "Mimetic Theory", "Escape Goat", "Red Herring",
+                "Schrodinger's Cat", "Schrodinger's Cat", "Mimetic Theory", "Mimetic Theory", "Lucid Dreaming", "Red Herring",
             }),
         };
 
@@ -310,6 +310,11 @@ namespace SlayTheClone {
                 "Everyone's money is worth less, theirs more so: 2 damage to every enemy creature and 1 to each of yours.",
                 Damage(2, TargetType.EnemyCreatures, Each), Damage(1, TargetType.FriendlyCreatures, Each))
                 .Picture("A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher."),
+            Spell("Escape Goat", TargetType.EnemyCreatures,
+                "It wasn't us. It was the goat. Everyone agrees it was the goat.",
+                "Heat Signature 2 on target creature (random effects and redirected attacks go to it), and draw a card. Corporate since 2026-10-15 (the user): when something goes wrong, someone else takes the blame, and the damage finds the goat.",
+                Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2), Draw(1))
+                .Picture("The escape goat: a white goat scrambling over a wooden fence, front legs over the top rail, looking back in a sweat."),
             // The fake free market (the user, 2026-10-15): two cards on one idea, wealth flowing to the top, from two sides.
             // Laissez-Faire lets it happen to everyone at once; The Invisible Hand does it quietly, on its own side, every Day
             Spell("Laissez-Faire", TargetType.AllCreatures,
@@ -1361,11 +1366,6 @@ namespace SlayTheClone {
                 "Regenerate 1: it repairs itself plank by plank.",
                 On(EffectTrigger.EndOfTurn, Heal(1, TargetType.Self)))
                 .Picture("Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went."),
-            Spell("Escape Goat", TargetType.EnemyCreatures,
-                "It wasn't us. It was the goat. Everyone agrees it was the goat.",
-                "Heat Signature 2 on target creature (random effects and redirected attacks go to it), and draw a card. Mind deals no damage: it makes someone else's damage find the goat.",
-                Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 2), Draw(1))
-                .Picture("The escape goat: a white goat scrambling over a wooden fence, front legs over the top rail, looking back in a sweat."),
         };
         #endregion
 
