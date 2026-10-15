@@ -1566,6 +1566,7 @@ Card Game Factions Overview
 			Here Be Dragons (art: an ASCII-art dragon, like the reference given)
 			Luxor
 			Mithril
+			Moment of Silence (added 2026-10-15, satire of the state's answer to school shootings: no victims or violence shown). Idea: nobody can play spells this Day, both sides; that's all it does, and that's the joke
 			Public Autopsy
 			Publicly Funded Faith Schools
 			Venus of Willendorf
@@ -1591,6 +1592,7 @@ Card Game Factions Overview
 			Affidavit
 			Alea Iacta Est
 			Arisaka (Japanese rifle)
+			Arm the Teachers (added 2026-10-15, satire of the state's answer to school shootings: no victims or violence shown). Idea: a friendly creature with 0 Attack gets +3 Attack but is Exposed. Art: a substitute teacher sweating at the chalkboard, a holster over the cardigan
 			Blitzkrieg
 			Cardo and Decumanus (the two main roads of a Roman town)
 			Cloud Cover (a smoke screen, in war)
@@ -1603,12 +1605,15 @@ Card Game Factions Overview
 			Free Nationality (a brainwash card) (added 2026-10-14)
 			Fukuryu (stealth diver carrying explosives)
 			Kaiten (kamikaze submarine)
+			Lockdown (added 2026-10-15, satire of the state's answer to school shootings: no victims or violence shown). Idea: a Slot Effect: the creature there can't move or be moved for 2 Days
 			Manhattan Project
+			Not the Guns, It's the Video Games (added 2026-10-15, satire of the state's answer to school shootings: no victims or violence shown). Idea: a Trend: Digital Society creatures get -1 Attack while it lasts (the state blames a scapegoat)
 			Patronage Network (clientelism)
 			Peace Operation
 			Regulatory Overreach
 			Represented by Living Dinosaurs
 			Rome Does Not Pay Traitors
+			Safe School Officer (added 2026-10-15, satire of the state's answer to school shootings: no victims or violence shown). Idea: a Bodyguard with high Armor whose guard fails half the time. Art: an officer waiting outside the door, scrolling his phone
 			Shinyo (kamikaze boat)
 			The Great Replacement Law
 			The Gullible Judge
