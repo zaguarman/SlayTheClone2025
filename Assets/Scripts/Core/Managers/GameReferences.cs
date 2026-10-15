@@ -143,9 +143,35 @@ namespace SlayTheClone {
             return reference;
         }
 
-        // The match chosen in the main menu wins over the scene's own decks
-        public DeckScriptableObject Player1Deck => MatchSetup.IsChosen ? MatchSetup.PlayerDeck : player1Deck;
-        public DeckScriptableObject Player2Deck => MatchSetup.IsChosen ? MatchSetup.OpponentDeck : player2Deck;
+        // The match chosen in the main menu wins over the scene's own decks; played straight from the game scene (the
+        // editor's Play), two different faction decks at random each time (the user: not always Corporate vs Statecraft),
+        // never the Mechanics Test decks. The scene's own decks are the fallback
+        public DeckScriptableObject Player1Deck => MatchSetup.IsChosen ? MatchSetup.PlayerDeck : RandomDecks().first ?? player1Deck;
+        public DeckScriptableObject Player2Deck => MatchSetup.IsChosen ? MatchSetup.OpponentDeck : RandomDecks().second ?? player2Deck;
+
+        private static (DeckScriptableObject first, DeckScriptableObject second)? randomDecks;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ForgetRandomDecks() => randomDecks = null;
+
+        private static (DeckScriptableObject first, DeckScriptableObject second) RandomDecks() {
+            if (randomDecks.HasValue) return randomDecks.Value;
+            DeckScriptableObject first = null, second = null;
+#if UNITY_EDITOR
+            var guids = UnityEditor.AssetDatabase.FindAssets("t:DeckCatalog");
+            var catalog = guids.Length > 0 ? UnityEditor.AssetDatabase.LoadAssetAtPath<DeckCatalog>(UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0])) : null;
+            var decks = catalog != null ? new List<DeckScriptableObject>(catalog.Decks) : new List<DeckScriptableObject>();
+            if (decks.Count >= 2) {
+                var random = new System.Random();
+                first = decks[random.Next(decks.Count)];
+                decks.Remove(first);
+                second = decks[random.Next(decks.Count)];
+                Log($"Random match: {first.GetDeckName()} vs {second.GetDeckName()}", LogTag.Initialization);
+            }
+#endif
+            randomDecks = (first, second);
+            return randomDecks.Value;
+        }
         public string Player2Name => MatchSetup.IsChosen ? MatchSetup.OpponentName : MatchSetup.DefaultOpponentName;
 
         public List<CardData> GetPlayer1DeckCards() => GetDeckCards(Player1Deck, "Player1Deck");
