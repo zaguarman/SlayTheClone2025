@@ -349,6 +349,7 @@ namespace SlayTheClone {
             }
             var scroll = panel.GetComponentInChildren<ScrollRect>(true);
             if (scroll != null && scroll.TryGetComponent(out Image scrollImage)) UITheme.Round(scrollImage, UITheme.Hex(0x0A0F1C, 0.7f), 1.5f);
+            if (scroll != null && Application.isPlaying && !scroll.TryGetComponent<WheelScroll>(out _)) WheelScroll.AddTo(scroll).PixelsPerNotch = 140f; // Over the cards too
             if (deckView.CloseButton != null) {
                 UITheme.Round(deckView.CloseButton.image, UITheme.Hex(0x9A3A34), 3f);
             }

@@ -28,7 +28,7 @@ Where things live
     • Art: Tools/generate_card_art.py, then Cards > Assign Card Art. Corporate uses an office skyline with a stock line, Statecraft a propaganda poster, Zeitgeist a vaporwave sunset.
     • Decks: Assets/Scriptables/Decks/CorporateDeck, StatecraftDeck, ZeitgeistDeck, and the MechanicsTestDeck (section 6).
     • Pictures: each card asset has an "Art Description" field with the brief for its picture.
-    • Main menu: Assets/Scriptables/Decks/DeckCatalog lists the decks you can pick and one opponent per deck. Play opens the match setup: your deck, your opponent, and their deck (they bring their own unless you swap it).
+    • Main menu: Assets/Scriptables/Decks/DeckCatalog lists the decks you can pick and one opponent per deck. Play opens the match setup: your deck and your opponent, who brings their own deck.
     • Opening the game scene directly plays Corporate against Statecraft (the decks set on GameReferences).
 
 

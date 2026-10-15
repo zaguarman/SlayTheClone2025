@@ -72,11 +72,6 @@ namespace SlayTheClone {
             Refresh();
         }
 
-        /// <summary>Opens the deck this many entries down your list (up for negative steps), stopping at the ends.</summary>
-        public void StepDeck(int steps) {
-            if (Decks.Count > 0) Open(WheelStepper.Next(Decks, OpenDeck, steps));
-        }
-
         /// <summary>Adds a copy of the card to the open deck, starting a new deck if none is open (a copy, if a starter deck is).</summary>
         public bool AddCard(CardDataScriptableObject card) {
             if (OpenDeck == null) OpenDeck = PlayerDecks.Create(Catalog);
@@ -291,13 +286,12 @@ namespace SlayTheClone {
             ShownFaction = null;
         }
 
-        // Your decks, with New deck first; the wheel goes through them
+        // Your decks, with New deck first
         private void BuildDeckList(Transform columns) {
             var column = AddColumn(columns, "Your decks");
             var element = column.gameObject.AddComponent<LayoutElement>();
             element.minWidth = element.preferredWidth = DecksWidth;
             element.flexibleWidth = 0;
-            WheelStepper.AddTo(column.gameObject, StepDeck);
             deckListContent = AddList(column, out deckList);
             AddChoice(deckListContent, NewDeckButton, "+ New deck", "An empty deck to fill", NewDeck);
         }

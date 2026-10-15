@@ -50,8 +50,8 @@ namespace SlayTheClone {
         }
 
         /// <summary>
-        /// A list that takes the rest of its column and scrolls when it's longer. The wheel doesn't scroll it: it picks the
-        /// next choice (see <see cref="WheelStepper"/>), and <see cref="KeepInView"/> follows. Returns where its items go.
+        /// A list that takes the rest of its column and scrolls when it's longer, with the wheel too (see <see cref="WheelScroll"/>);
+        /// <see cref="KeepInView"/> brings a choice into view. Returns where its items go.
         /// </summary>
         public static Transform AddList(Transform column, out ScrollRect scroll) {
             var area = NewObject("List", column);
@@ -81,7 +81,7 @@ namespace SlayTheClone {
             scroll.content = contentRect;
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
-            scroll.scrollSensitivity = 0f;
+            WheelScroll.AddTo(scroll);
             AddScrollbar(scroll);
             return content.transform;
         }

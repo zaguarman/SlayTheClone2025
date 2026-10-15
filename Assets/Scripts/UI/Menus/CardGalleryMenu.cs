@@ -9,7 +9,7 @@ namespace SlayTheClone {
     /// <summary>
     /// The card gallery, opened from the title screen: every card on offer, faction by faction (or all of them at once), shown
     /// as the printed cards; creatures first, then spells. Hover a card to see it enlarged. Built from the <see cref="DeckCatalog"/>.
-    /// The mouse wheel over the faction list picks the next (wheel down) or previous (wheel up) faction; over the cards, it scrolls them.
+    /// The mouse wheel scrolls the faction list or the cards, whichever it's over.
     /// </summary>
     public class CardGalleryMenu : MenuScreen {
         public const string EveryCardButton = "Gallery: Every card";
@@ -30,9 +30,6 @@ namespace SlayTheClone {
         /// <summary>The factions listed, in order, after Every card.</summary>
         public IReadOnlyList<Faction> Factions => factionButtons.Where(b => b.faction != null).Select(b => b.faction.Value).ToList();
 
-        /// <summary>Shows the faction this many entries down the list (up for negative steps; Every card is first), stopping at the ends.</summary>
-        public void StepFaction(int steps) => ShowFaction(WheelStepper.Next(factionButtons.Select(b => b.faction).ToList(), ShownFaction, steps));
-
         /// <summary>Shows the faction's cards; null shows every card on offer.</summary>
         public void ShowFaction(Faction? faction) {
             ShownFaction = faction;
@@ -51,7 +48,6 @@ namespace SlayTheClone {
             var columns = screen.columns;
 
             var factions = AddColumn(columns, "Factions");
-            WheelStepper.AddTo(factions.gameObject, StepFaction);
             var factionsElement = factions.gameObject.AddComponent<LayoutElement>();
             factionsElement.minWidth = factionsElement.preferredWidth = SideColumnWidth;
             factionsElement.flexibleWidth = 0;

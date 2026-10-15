@@ -50,7 +50,7 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
-        public IEnumerator TheCardGallery_ShowsEveryFaction_TheGlossaryEveryKeyword_BothOpeningAsNew_AndPickingAnOpponent_BringsTheirDeck_WhichCanBeSwapped_AndBackKeepsTheChoices() {
+        public IEnumerator TheCardGallery_ShowsEveryFaction_TheGlossaryEveryKeyword_BothOpeningAsNew_AndPickingAnOpponent_BringsTheirDeck_EveryListScrolls_AndBackKeepsTheChoices() {
             Click(TitleButton(MainMenu.CardsButtonName));
             var gallery = Object.FindFirstObjectByType<CardGalleryMenu>();
             Assert.IsTrue(gallery.IsOpen, "Cards opens the card gallery");
@@ -64,11 +64,7 @@ namespace SlayTheClone.Tests {
                 CollectionAssert.AreEqual(cards.Select(c => c is CreatureCardScriptableObject).OrderByDescending(isCreature => isCreature),
                     gallery.ShownCards.Select(c => c.GetBaseCardData() is CreatureData), "...creatures first, then spells");
             }
-            Assert.IsNotNull(gallery.GetComponentInChildren<WheelStepper>(), "The mouse wheel steps through the faction list");
-            gallery.StepFaction(-99);
-            Assert.IsNull(gallery.ShownFaction, "Wheel up to the top: Every card");
-            gallery.StepFaction(1);
-            Assert.AreEqual(gallery.Factions[0], gallery.ShownFaction, "One tick down: the first faction");
+            AssertTheWheelScrollsEveryList(gallery);
             yield return null;
             CardsScroll(gallery).verticalNormalizedPosition = 0f;
             Click(GalleryButton(gallery, CardGalleryMenu.BackButtonName));
@@ -98,15 +94,8 @@ namespace SlayTheClone.Tests {
             yield return null;
             Assert.AreEqual(width, ((RectTransform)list.transform).rect.width, 0.5f, "The keyword list keeps its width whatever is shown");
             string KeyOf(Button b) => b.name.Substring(KeywordGlossaryMenu.KeywordButton.Length);
-            glossary.ShowKeyword(KeyOf(listed[0]));
-            glossary.Step(1);
-            Assert.AreEqual(KeyOf(listed[1]), glossary.Shown, "A tick of the wheel down goes to the next keyword");
-            glossary.Step(-1);
-            Assert.AreEqual(KeyOf(listed[0]), glossary.Shown, "...up, to the previous one");
-            glossary.Step(-1);
-            Assert.AreEqual(KeyOf(listed[0]), glossary.Shown, "...and it stops at the ends");
-            glossary.Step(listed.Count);
-            Assert.AreEqual(KeyOf(listed.Last()), glossary.Shown);
+            AssertTheWheelScrollsEveryList(glossary);
+            glossary.ShowKeyword(KeyOf(listed.Last()));
             yield return null;
             var view = ((RectTransform)list.viewport).rect;
             var last = (RectTransform)listed.Last().transform;
@@ -117,8 +106,6 @@ namespace SlayTheClone.Tests {
             CollectionAssert.AreEquivalent(Keywords.All.Where(e => e.Title.ToLower().Contains("reveal")).Select(e => e.Key), glossary.Listed,
                 "Typing in the filter lists only the keywords whose name has it, any case");
             Assert.AreEqual(glossary.Listed[0], glossary.Shown, "...and shows the first one, the one shown being filtered out");
-            glossary.Step(1);
-            Assert.AreEqual(glossary.Listed[1], glossary.Shown, "The wheel goes through the ones listed");
             glossary.Filter.text = "";
             Assert.AreEqual(listed.Count, glossary.Listed.Count, "Empty, it lists them all again");
 
@@ -156,22 +143,14 @@ namespace SlayTheClone.Tests {
                 AssertOnlyChoicesHighlighted();
             }
 
-            Assert.AreEqual(3, setup.GetComponentsInChildren<WheelStepper>().Length, "The mouse wheel steps through each column");
-            setup.StepOpponent(-99);
-            Assert.AreSame(catalog.Opponents[0], setup.Opponent, "Wheel up to the top of the opponents");
-            setup.StepOpponent(1);
-            Assert.AreSame(catalog.Opponents[1], setup.Opponent, "One tick down: the next opponent...");
-            Assert.AreSame(catalog.Opponents[1].deck, setup.OpponentDeck, "...who brings their deck");
-            setup.StepPlayerDeck(1);
-            setup.StepPlayerDeck(-1);
-            AssertOnlyChoicesHighlighted();
-
-            var chosenOpponent = setup.Opponent;
-            var otherDeck = catalog.Decks.First(d => d != chosenOpponent.deck);
-            Click(SetupButton(MatchSetupMenu.OpponentDeckButton + otherDeck.GetDeckName()));
-            Assert.AreSame(otherDeck, setup.OpponentDeck);
-            Assert.AreSame(chosenOpponent, setup.Opponent, "Swapping their deck keeps the opponent");
-            AssertOnlyChoicesHighlighted();
+            Assert.AreEqual(2, setup.GetComponentsInChildren<ScrollRect>().Length, "Two columns: your deck and your opponent, who brings theirs");
+            AssertTheWheelScrollsEveryList(setup);
+            var decksList = setup.GetComponentsInChildren<ScrollRect>()[0];
+            decksList.verticalNormalizedPosition = 1f;
+            decksList.GetComponent<WheelScroll>().ScrollBy(-1f);
+            Assert.Less(decksList.verticalNormalizedPosition, 1f, "...the long list of decks moves down a tick of the wheel");
+            var chosenOpponent = catalog.Opponents[1];
+            Click(SetupButton(MatchSetupMenu.OpponentButton + chosenOpponent.name));
 
             var yourDeck = catalog.Decks.Last();
             Click(SetupButton(MatchSetupMenu.PlayerDeckButton + yourDeck.GetDeckName()));
@@ -184,7 +163,6 @@ namespace SlayTheClone.Tests {
             yield return OpenSetup();
             Assert.AreSame(yourDeck, setup.PlayerDeck, "Play should reopen the setup with the same choices");
             Assert.AreSame(chosenOpponent, setup.Opponent);
-            Assert.AreSame(otherDeck, setup.OpponentDeck);
             AssertOnlyChoicesHighlighted();
         }
 
@@ -193,6 +171,7 @@ namespace SlayTheClone.Tests {
             Click(TitleButton(MainMenu.DecksButtonName));
             var builder = Object.FindFirstObjectByType<DeckBuilderMenu>();
             Assert.IsTrue(builder.IsOpen, "Decks opens the deck builder");
+            AssertTheWheelScrollsEveryList(builder);
             Assert.IsNull(builder.OpenDeck, "No decks of yours yet");
             var factions = catalog.AllCards.Select(c => c.faction).Distinct().ToList();
             Click(GalleryButton(builder, DeckBuilderMenu.FactionTab + CardTextFormatter.FactionName(factions[0])));
@@ -251,10 +230,9 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(1, setup.Decks[0].Focus, "The decks being worked on lead, the Workbench first...");
             Assert.AreSame(yourDeck, setup.Decks.First(d => d.Focus == 0), "...then the newest: yours, just finished");
             var opponent = catalog.Opponents.Last();
-            var theirDeck = catalog.Decks.First(d => d != opponent.deck && d != yourDeck);
+            var theirDeck = opponent.deck;
             Click(SetupButton(MatchSetupMenu.PlayerDeckButton + yourDeck.GetDeckName()));
             Click(SetupButton(MatchSetupMenu.OpponentButton + opponent.name));
-            Click(SetupButton(MatchSetupMenu.OpponentDeckButton + theirDeck.GetDeckName()));
             Assert.AreEqual(AISeats.Player2, setup.AI, "You play against the AI unless you choose otherwise");
             Click(SetupButton(MatchSetupMenu.SeatsButtonName));
             Assert.AreEqual(AISeats.None, setup.AI, "...then hot seat...");
@@ -372,6 +350,13 @@ namespace SlayTheClone.Tests {
             return button;
         }
 
+        // Every list on the screen scrolls with the wheel when the pointer is over it, whatever is under the pointer
+        private static void AssertTheWheelScrollsEveryList(Component screen) {
+            var lists = screen.GetComponentsInChildren<ScrollRect>();
+            Assert.IsNotEmpty(lists);
+            foreach (var list in lists) Assert.IsNotNull(list.GetComponent<WheelScroll>(), $"{screen.name}: the wheel doesn't scroll {list.name}");
+        }
+
         private static List<string> Shown(CardGalleryMenu gallery) => gallery.ShownCards.Select(c => c.GetBaseCardData().cardName).ToList();
 
         private static ScrollRect CardsScroll(Component screen) => screen.GetComponentsInChildren<ScrollRect>().Single(s => s.name == "Cards");
@@ -402,7 +387,6 @@ namespace SlayTheClone.Tests {
         private void AssertOnlyChoicesHighlighted() {
             AssertHighlighted(MatchSetupMenu.PlayerDeckButton, MatchSetupMenu.PlayerDeckButton + setup.PlayerDeck.GetDeckName());
             AssertHighlighted(MatchSetupMenu.OpponentButton, MatchSetupMenu.OpponentButton + setup.Opponent.name);
-            AssertHighlighted(MatchSetupMenu.OpponentDeckButton, MatchSetupMenu.OpponentDeckButton + setup.OpponentDeck.GetDeckName());
         }
 
         private void AssertHighlighted(string column, string chosen) {

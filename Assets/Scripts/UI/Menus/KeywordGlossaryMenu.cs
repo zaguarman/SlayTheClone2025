@@ -64,14 +64,6 @@ namespace SlayTheClone {
             KeepInView(key);
         }
 
-        /// <summary>Goes to the keyword this many entries further down the list (up for negative steps), stopping at the ends.</summary>
-        public void Step(int steps) {
-            var listed = Listed;
-            if (listed.Count == 0) return;
-            int index = Mathf.Clamp(listed.IndexOf(Shown) + steps, 0, listed.Count - 1);
-            ShowKeyword(listed[index]);
-        }
-
         /// <summary>Lists only the keywords whose name has the text (any case), and their sections; empty lists them all.
         /// If the one shown is filtered out, the first one left is shown.</summary>
         public void FilterBy(string text) {
@@ -107,8 +99,6 @@ namespace SlayTheClone {
         protected override void Update() {
             base.Update();
             if (!IsOpen || usedBy == null) return;
-            float ticks = GameInput.WheelNotches;
-            if (!Mathf.Approximately(ticks, 0f)) Step(ticks < 0f ? 1 : -1); // Wheel down: the next keyword
             int link = TMP_TextUtilities.FindIntersectingLink(usedBy, GameInput.PointerPosition, null);
             string id = link >= 0 ? usedBy.textInfo.linkInfo[link].GetLinkID() : null;
             string name = id != null && id.StartsWith(CardLink) ? id.Substring(CardLink.Length) : null;
@@ -214,7 +204,7 @@ namespace SlayTheClone {
             scroll.content = contentRect;
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
-            scroll.scrollSensitivity = 0f; // The wheel steps through the keywords instead (see Update)
+            WheelScroll.AddTo(scroll);
             list = scroll;
         }
 

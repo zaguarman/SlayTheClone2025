@@ -9,19 +9,17 @@ using static SlayTheClone.MenuWidgets;
 
 namespace SlayTheClone {
     /// <summary>
-    /// The screen between the title and the game: pick your deck, the opponent you face and the deck they bring, and who
-    /// plays: you against the AI, both players on this screen (hot seat), or the AI against itself.
-    /// Picking an opponent also picks their own deck, which can then be swapped for any other.
+    /// The screen between the title and the game: pick your deck and the opponent you face, who brings their own deck, and
+    /// who plays: you against the AI, both players on this screen (hot seat), or the AI against itself.
     /// Its buttons are built from the <see cref="DeckCatalog"/>, so new decks and opponents only need adding there, and the
     /// decks you made in the deck builder once complete (<see cref="PlayerDecks"/>), below the starter decks. It's built anew
     /// each time it opens, so it offers the decks as they are now, but it keeps the last choices.
-    /// The mouse wheel over a column picks its next (wheel down) or previous (wheel up) choice.
+    /// The mouse wheel scrolls the column it's over.
     /// </summary>
     public class MatchSetupMenu : MonoBehaviour {
         // Button names, so tests can find the button for a choice
         public const string PlayerDeckButton = "PlayerDeck: ";
         public const string OpponentButton = "Opponent: ";
-        public const string OpponentDeckButton = "OpponentDeck: ";
         public const string StartButtonName = "StartButton";
         public const string BackButtonName = "BackButton";
         public const string SeatsButtonName = "SeatsButton";
@@ -39,7 +37,8 @@ namespace SlayTheClone {
         public bool IsOpen => panel != null && panel.activeSelf;
         public DeckScriptableObject PlayerDeck { get; private set; }
         public DeckCatalog.Opponent Opponent { get; private set; }
-        public DeckScriptableObject OpponentDeck { get; private set; }
+        /// <summary>The deck the opponent brings.</summary>
+        public DeckScriptableObject OpponentDeck => Opponent?.deck;
         /// <summary>The seats the AI plays: your opponent's unless chosen otherwise.</summary>
         public AISeats AI { get; private set; } = AISeats.Player2;
         /// <summary>The AI that plays: a level, and for Hard a style (see <see cref="AIEntrant.All"/>).</summary>
@@ -69,7 +68,7 @@ namespace SlayTheClone {
             if (PlayerDeck == null) PickDefaults();
             // A deck of yours chosen before may have been deleted, or taken below its full size, since
             var decks = Decks;
-            if (!decks.Contains(OpponentDeck)) OpponentDeck = Opponent?.deck ?? decks[0];
+            if (Opponent == null) Opponent = catalog.Opponents.FirstOrDefault();
             if (!decks.Contains(PlayerDeck)) PlayerDeck = decks.FirstOrDefault(d => d != OpponentDeck) ?? decks[0];
             if (titleScreen != null) titleScreen.SetActive(false);
             Refresh();
@@ -103,19 +102,8 @@ namespace SlayTheClone {
 
         public void SelectOpponent(DeckCatalog.Opponent opponent) {
             Opponent = opponent;
-            OpponentDeck = opponent.deck; // They bring their own deck until told otherwise
             Refresh();
         }
-
-        public void SelectOpponentDeck(DeckScriptableObject deck) {
-            OpponentDeck = deck;
-            Refresh();
-        }
-
-        /// <summary>Picks the deck this many entries down your column (up for negative steps), stopping at the ends.</summary>
-        public void StepPlayerDeck(int steps) => SelectPlayerDeck(WheelStepper.Next(Decks, PlayerDeck, steps));
-        public void StepOpponent(int steps) => SelectOpponent(WheelStepper.Next(catalog.Opponents, Opponent, steps));
-        public void StepOpponentDeck(int steps) => SelectOpponentDeck(WheelStepper.Next(Decks, OpponentDeck, steps));
 
         /// <summary>Who plays, in turn: you against the AI, hot seat, the AI against itself.</summary>
         public void StepSeats() {
@@ -155,7 +143,6 @@ namespace SlayTheClone {
             if (MatchSetup.IsChosen) {
                 PlayerDeck = MatchSetup.PlayerDeck;
                 Opponent = catalog.Opponents.FirstOrDefault(o => o.name == MatchSetup.OpponentName);
-                OpponentDeck = MatchSetup.OpponentDeck;
                 AI = MatchSetup.AI;
                 AIPlayer = MatchSetup.AIPlayer;
                 return;
@@ -164,8 +151,8 @@ namespace SlayTheClone {
             // What we're working on: you play the first deck in focus (the Workbench), against the next one and whoever brings it
             var ordered = Decks;
             PlayerDeck = ordered.FirstOrDefault() ?? catalog.Decks[0];
-            OpponentDeck = ordered.Skip(1).FirstOrDefault(d => catalog.Opponents.Any(o => o.deck == d)) ?? catalog.Decks.FirstOrDefault(d => d != PlayerDeck) ?? catalog.Decks[0];
-            Opponent = catalog.Opponents.FirstOrDefault(o => o.deck == OpponentDeck) ?? catalog.Opponents.FirstOrDefault();
+            var theirs = ordered.Skip(1).FirstOrDefault(d => catalog.Opponents.Any(o => o.deck == d));
+            Opponent = catalog.Opponents.FirstOrDefault(o => o.deck == theirs) ?? catalog.Opponents.FirstOrDefault();
         }
 
         private void Refresh() {
@@ -194,17 +181,15 @@ namespace SlayTheClone {
             panel = screen.panel;
             var columns = screen.columns;
 
-            var yourDecks = AddChoiceColumn(columns, "Your deck", StepPlayerDeck, out var yourList);
+            var yourDecks = AddChoiceColumn(columns, "Your deck", out var yourList);
             AddDeckChoices(yourDecks, yourList, PlayerDeckButton, SelectPlayerDeck, () => PlayerDeck);
 
-            var opponents = AddChoiceColumn(columns, "Your opponent", StepOpponent, out var opponentList);
+            var opponents = AddChoiceColumn(columns, "Your opponent", out var opponentList);
             foreach (var opponent in catalog.Opponents) {
                 AddChoice(opponents, opponentList, OpponentButton + opponent.name, opponent.name, $"<i>{opponent.tagline}</i>",
                     () => SelectOpponent(opponent), () => Opponent == opponent, DeckCatalog.CoinsFor(opponent.deck));
             }
 
-            var theirDecks = AddChoiceColumn(columns, "Their deck", StepOpponentDeck, out var theirList);
-            AddDeckChoices(theirDecks, theirList, OpponentDeckButton, SelectOpponentDeck, () => OpponentDeck);
 
             summaryText = AddText(panel.transform, "", 30, TextColor, FontStyles.Normal, height: 44);
             summaryText.enableAutoSizing = true;
@@ -220,13 +205,12 @@ namespace SlayTheClone {
             start.GetComponentInChildren<TextMeshProUGUI>().fontStyle = FontStyles.Bold | FontStyles.SmallCaps;
         }
 
-        // A column of the same width as the others, its choices in a list that scrolls when it's long; the wheel picks
-        private static Transform AddChoiceColumn(Transform columns, string title, Action<int> step, out ScrollRect list) {
+        // A column of the same width as the others, its choices in a list that scrolls when it's long
+        private static Transform AddChoiceColumn(Transform columns, string title, out ScrollRect list) {
             var column = AddColumn(columns, title);
             var element = column.gameObject.AddComponent<LayoutElement>();
             element.flexibleWidth = 1;
-            element.minWidth = element.preferredWidth = 0; // Equal thirds, whatever their text
-            WheelStepper.AddTo(column.gameObject, step);
+            element.minWidth = element.preferredWidth = 0; // Equal halves, whatever their text
             return AddList(column, out list);
         }
 
