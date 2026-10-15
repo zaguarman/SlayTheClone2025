@@ -9,11 +9,12 @@ using static SlayTheClone.MenuWidgets;
 namespace SlayTheClone {
     /// <summary>
     /// A panel of printed cards in a scrolling grid, with a title above them: the card gallery's and the deck builder's.
-    /// Hover a card to see it enlarged; the mouse wheel over the grid scrolls it.
+    /// The cards fill the width in a set number of columns, as big as that allows (see <see cref="CardColumns"/>). Hover a
+    /// card to see it enlarged; the mouse wheel over the grid scrolls it.
     /// </summary>
     public class CardGrid {
         private readonly CardViews cardViews;
-        private readonly float cardScale;
+        private readonly CardColumns columns;
         private readonly Transform grid;
         private readonly ScrollRect scroll;
 
@@ -23,9 +24,8 @@ namespace SlayTheClone {
         /// <summary>The cards shown, in order.</summary>
         public List<CardController> Cards { get; } = new List<CardController>();
 
-        public CardGrid(Transform parent, CardController cardPrefab, Vector2 cellSize, float cardScale) {
+        public CardGrid(Transform parent, CardController cardPrefab, int columnCount) {
             cardViews = CardViews.ForDisplay(cardPrefab);
-            this.cardScale = cardScale;
 
             var area = NewObject("Cards", parent);
             Area = area.transform;
@@ -52,12 +52,12 @@ namespace SlayTheClone {
             contentRect.pivot = new Vector2(0.5f, 1f);
             contentRect.sizeDelta = Vector2.zero;
             var gridLayout = content.AddComponent<GridLayoutGroup>();
-            gridLayout.cellSize = cellSize;
-            gridLayout.spacing = new Vector2(12f, 14f);
+            gridLayout.spacing = new Vector2(16f, 18f);
             gridLayout.padding = new RectOffset(8, 8, 8, 8);
             gridLayout.childAlignment = TextAnchor.UpperCenter;
             content.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             grid = content.transform;
+            columns = CardColumns.AddTo(gridLayout, columnCount);
 
             scroll = area.AddComponent<ScrollRect>();
             scroll.viewport = (RectTransform)viewport.transform;
@@ -80,10 +80,10 @@ namespace SlayTheClone {
                 var rect = (RectTransform)face.transform;
                 rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
                 rect.anchoredPosition = Vector2.zero;
-                rect.localScale = Vector3.one * cardScale;
                 Cards.Add(face);
                 dress?.Invoke(face, data);
             }
+            columns.Fit();
             scroll.verticalNormalizedPosition = 1f;
         }
 

@@ -175,7 +175,7 @@ namespace SlayTheClone {
                 UpdateTooltipContent(card);
                 return;
             }
-            if (CardController.Dragged != null || !card.isActiveAndEnabled) return;
+            if (CardController.Dragged != null || !card.gameObject.activeInHierarchy) return; // On screen (a pile window's cards have their controller off)
             CancelPending();
             pendingCard = card;
             float delay = card.GetComponentInParent<HandUI>() != null ? HandDelay : preview != null ? SwitchDelay : HoverDelay;
@@ -239,7 +239,7 @@ namespace SlayTheClone {
             else {
                 preview = card.CreatePreview(transform);
                 if (preview != null) {
-                    preview.transform.localScale = Vector3.one * PreviewScale;
+                    preview.transform.localScale = Vector3.one * PreviewScaleFor(card);
                     PlacePreview(card, (RectTransform)preview.transform);
                 }
             }
@@ -444,7 +444,7 @@ namespace SlayTheClone {
             if (WheelMoved) { // Scrolling: hide for a moment; the card still under the pointer shows again once the wheel is still
                 var card = activeCard;
                 HideTooltip();
-                if (card != null && card.isActiveAndEnabled && CardScreenRect(card) is Rect rect && rect.Contains(GameInput.PointerPosition)) ShowTooltip(card);
+                if (card != null && card.gameObject.activeInHierarchy && CardScreenRect(card) is Rect rect && rect.Contains(GameInput.PointerPosition)) ShowTooltip(card);
                 return;
             }
             if (activeCard == null || preview == null) return;
@@ -482,7 +482,7 @@ namespace SlayTheClone {
                 Destroy(old.gameObject);
                 return;
             }
-            preview.transform.localScale = Vector3.one * PreviewScale;
+            preview.transform.localScale = Vector3.one * PreviewScaleFor(activeCard);
             PlacePreview(activeCard, (RectTransform)preview.transform);
             UpdateTooltipContent(activeCard);
             Spin(old, preview, step < 0 ? -1 : 1);
@@ -553,6 +553,13 @@ namespace SlayTheClone {
             var card = CardScreenRect(activeCard);
             if (card.HasValue) areas.Add(card.Value);
             return areas.Any(r => Rect.MinMaxRect(r.xMin - AreaMargin, r.yMin - AreaMargin, r.xMax + AreaMargin, r.yMax + AreaMargin).Contains(pointer));
+        }
+
+        // Twice a card's own size, and always well bigger than the card as it's shown (a pile window's cards are big already)
+        private float PreviewScaleFor(CardController card) {
+            var canvas = GetComponentInParent<Canvas>();
+            float unit = (canvas != null ? canvas.scaleFactor : 1f) * CardColumns.CardHeight; // A preview at scale 1, on screen
+            return CardScreenRect(card) is Rect shown && unit > 0f ? Mathf.Max(PreviewScale, 1.3f * shown.height / unit) : PreviewScale;
         }
 
         private static Rect? CardScreenRect(CardController card) {

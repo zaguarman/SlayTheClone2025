@@ -26,8 +26,7 @@ namespace SlayTheClone {
         public const string CopyButtonName = "DeckCopyButton";
         public const string DeleteButtonName = "DeckDeleteButton";
         public const string BackButtonName = "DecksBackButton";
-        private const float CardScale = 1f;
-        private static readonly Vector2 CellSize = new Vector2(172f, 214f);
+        private const int CardColumnCount = 4; // Big enough to read at a glance
         private const float DecksWidth = 340f, DeckWidth = 400f;
         private const int TabsPerRow = 5;
         private const string DeleteLabel = "Delete", DeleteArmedLabel = "Sure? Delete";
@@ -298,7 +297,7 @@ namespace SlayTheClone {
 
         // The cards on offer, with a tab for each faction above them
         private void BuildCards(Transform columns) {
-            cards = new CardGrid(columns, Catalog.CardPrefab, CellSize, CardScale);
+            cards = new CardGrid(columns, Catalog.CardPrefab, CardColumnCount);
             var tabs = NewObject("Factions", cards.Area);
             tabs.transform.SetSiblingIndex(1); // Between the title and the cards
             var tabsLayout = tabs.AddComponent<VerticalLayoutGroup>();

@@ -12,11 +12,11 @@ namespace SlayTheClone {
         [SerializeField] private Button closeButton;
         [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private TextMeshProUGUI cardsCountText;
-        [SerializeField] private int columnsCount = 4;
-        [SerializeField] private float cardScale = 0.7f;
+        private const int ColumnsCount = 4; // The cards fill the window's width, big enough to read at a glance (see CardColumns)
 
         private readonly List<CardController> cardEntries = new List<CardController>();
         private GridLayoutGroup gridLayout;
+        private CardColumns columns;
         private ScrollRect scrollRect;
         private bool viewingDiscardPile = false;
         private bool viewingEnemy = false; // The other side's piles (only while Fog of War is off)
@@ -62,13 +62,12 @@ namespace SlayTheClone {
             }
 
             gridLayout = cardListContent.gameObject.AddComponent<GridLayoutGroup>();
-            gridLayout.cellSize = new Vector2(150, 200);
-            gridLayout.spacing = new Vector2(15, 15);
+            gridLayout.spacing = new Vector2(20, 22);
+            gridLayout.padding = new RectOffset(16, 16, 16, 16);
             gridLayout.startCorner = GridLayoutGroup.Corner.UpperLeft;
             gridLayout.startAxis = GridLayoutGroup.Axis.Horizontal;
             gridLayout.childAlignment = TextAnchor.UpperCenter;
-            gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gridLayout.constraintCount = columnsCount;
+            columns = CardColumns.AddTo(gridLayout, ColumnsCount);
 
             var fitter = cardListContent.GetComponent<ContentSizeFitter>();
             if (fitter == null) {
@@ -220,6 +219,7 @@ namespace SlayTheClone {
             foreach (var card in cards) {
                 CreateCardEntry(card, player);
             }
+            if (columns != null) columns.Fit();
             Log($"Updated {title} with {cards.Count} cards for player (TargetID: {player.TargetId.ToUpper()})", LogTag.UI | LogTag.Cards);
 
             if (scrollRect != null) {
@@ -233,14 +233,20 @@ namespace SlayTheClone {
                 return;
             }
 
-            var cardController = cardViews.Create(card, owner, cardListContent);
+            // Each card in a cell of the grid, centered, scaled to fill it (the grid sizes the cells, not the cards)
+            var cell = new GameObject(card.Name, typeof(RectTransform));
+            cell.transform.SetParent(cardListContent, false);
+            var cardController = cardViews.Create(card, owner, cell.transform);
             if (cardController == null) {
                 LogError($"Failed to create card controller for {card.Name} (TargetID: {card.TargetId.ToUpper()})", LogTag.Cards);
+                Destroy(cell);
                 return;
             }
+            var rect = (RectTransform)cardController.transform;
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = Vector2.zero;
 
             DisableCardInteractions(cardController);
-            cardController.transform.localScale = new Vector3(cardScale, cardScale, cardScale);
             cardEntries.Add(cardController);
         }
 
@@ -264,7 +270,9 @@ namespace SlayTheClone {
             Tooltip.Existing?.HideTooltip();
 
             foreach (var entry in cardEntries) {
-                if (entry != null) Destroy(entry.gameObject);
+                if (entry == null) continue;
+                var cell = entry.transform.parent;
+                Destroy(cell != null && cell != cardListContent ? cell.gameObject : entry.gameObject);
             }
             cardEntries.Clear();
         }

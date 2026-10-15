@@ -15,8 +15,7 @@ namespace SlayTheClone {
         public const string EveryCardButton = "Gallery: Every card";
         public const string FactionButton = "Gallery: ";
         public const string BackButtonName = "GalleryBackButton";
-        private const float CardScale = 1.25f;
-        private static readonly Vector2 CellSize = new Vector2(215f, 268f);
+        private const int CardColumnCount = 5; // Big enough to read at a glance
         public const float SideColumnWidth = 470f; // The list beside the main area, on the gallery and the glossary alike
 
         private CardGrid cards;
@@ -60,7 +59,7 @@ namespace SlayTheClone {
                 factionButtons.Add((button, faction));
             }
 
-            cards = new CardGrid(columns, Catalog.CardPrefab, CellSize, CardScale);
+            cards = new CardGrid(columns, Catalog.CardPrefab, CardColumnCount);
 
             AddButton(AddFooter(screen.panel.transform), BackButtonName, "Back", BackWidth, Hide);
             return screen.panel;

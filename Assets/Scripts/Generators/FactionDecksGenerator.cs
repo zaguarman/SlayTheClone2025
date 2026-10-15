@@ -55,7 +55,7 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Laissez-Faire", "The Invisible Hand", "C-Suite", "Inflation" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Laissez-Faire", "The Invisible Hand", "C-Suite", "Inflation", "Reflect" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
