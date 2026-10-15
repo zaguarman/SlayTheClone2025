@@ -159,6 +159,8 @@ namespace SlayTheClone {
         // else. Going on from one enlarged card to the next is quicker, for reading a hand card by card.
         public const float HoverDelay = 0.35f;
         public const float SwitchDelay = 0.1f;
+        // A hand card rises at once, but explains itself only after a longer look: a glance along the hand opens nothing
+        public const float HandDelay = 0.8f;
         private CardController pendingCard;
         private Coroutine pendingShow;
 
@@ -176,7 +178,8 @@ namespace SlayTheClone {
             if (CardController.Dragged != null || !card.isActiveAndEnabled) return;
             CancelPending();
             pendingCard = card;
-            pendingShow = card.StartCoroutine(ShowAfter(card, preview != null ? SwitchDelay : HoverDelay)); // Stops if the card goes
+            float delay = card.GetComponentInParent<HandUI>() != null ? HandDelay : preview != null ? SwitchDelay : HoverDelay;
+            pendingShow = card.StartCoroutine(ShowAfter(card, delay)); // Stops if the card goes
         }
 
         /// <summary>The mouse wheel turned this frame: what's shown hides, and nothing shows until the wheel is still a moment.</summary>

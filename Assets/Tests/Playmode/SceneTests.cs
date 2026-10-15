@@ -56,6 +56,7 @@ namespace SlayTheClone.Tests {
             Object.FindFirstObjectByType<DeckViewController>().ToggleDeckView();
             var deckWindow = Object.FindFirstObjectByType<DeckViewUI>(FindObjectsInactive.Include);
             Assert.IsTrue(deckWindow.IsOpen, "View Deck opens the deck");
+            Assert.Greater(deckWindow.DeckViewPanel.transform.GetSiblingIndex(), game.QueuePanel.transform.GetSiblingIndex(), "...over the Queue button");
             Vector2 windowCenter = Camera.main.WorldToScreenPoint(deckWindow.DeckViewPanel.transform.position);
             Assert.IsFalse(deckWindow.ClickAt(windowCenter), "A click inside it keeps it open...");
             Assert.IsTrue(deckWindow.ClickAt(new Vector2(2f, Screen.height - 2f)), "...a click outside it closes it");

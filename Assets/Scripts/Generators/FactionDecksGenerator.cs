@@ -307,8 +307,8 @@ namespace SlayTheClone {
                 .Picture("A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a towering stack of contracts between them stamped CONFIDENTIAL."),
             Spell("Inflation", TargetType.EnemyCreatures,
                 "Same price. Less creature.",
-                "Mechanics test: Health Loss on every enemy. It ignores Armor, isn't damage (no OnDamaged), kills at 0 whatever the Armor, and lowers the Armor cap.",
-                Buff(-1, TargetType.EnemyCreatures, attack: false, health: true, Each))
+                "Everyone's money is worth less, theirs more so: 2 damage to every enemy creature and 1 to each of yours.",
+                Damage(2, TargetType.EnemyCreatures, Each), Damage(1, TargetType.FriendlyCreatures, Each))
                 .Picture("A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher."),
         };
         #endregion

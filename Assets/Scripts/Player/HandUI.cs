@@ -18,12 +18,13 @@ namespace SlayTheClone {
         public const float RaisedScale = 2.1f;      // The card under the pointer, risen out of your hand
         private const float CardWidth = 160f;       // A card's size at scale 1, in hand units
         private const float CardHeight = 200f;
-        private const float ShownShare = 0.6f;      // How much of a card in your hand shows above the screen's edge: name and picture
+        private const float ShownShare = 0.72f;     // How much of a card in your hand shows above the screen's edge: name and picture
         private const float RaisedMargin = 10f;     // Between the risen card and the screen's edge
         private const float Overlap = 0.78f;        // Spacing between card centers, as a share of a card's width
         private const float MaxFanWidth = 1250f;    // From the first card's center to the last's
-        private const float FanRadius = 2400f;      // The arc the cards sit on: smaller tilts and dips them more
-        private const float HoverRoom = 0.4f;       // How far its neighbours move aside, as a share of a card's width
+        private const float FanRadius = 3200f;      // The arc the cards sit on: smaller tilts and dips them more
+        private const float HoverRoom = 0.4f;       // How far its neighbours move aside, as a share of a card's width...
+        private const float YourHoverRoom = 0.22f;  // ...less in your hand, whose cards are bigger: the risen card just overlaps them
         private const float Settle = 0.12f;         // Seconds for the cards to slide to their places
         private const float Rise = 0.08f;           // Seconds for the card under the pointer to rise
 
@@ -238,7 +239,7 @@ namespace SlayTheClone {
                 float y = IsYourHand ? edge + height * (ShownShare - 0.5f) - dip : -facing * dip;
                 float tilt = -facing * angle * Mathf.Rad2Deg;
                 float cardScale = scale;
-                if (hoveredIndex >= 0 && i != hoveredIndex) x += Mathf.Sign(i - hoveredIndex) * CardWidth * scale * HoverRoom;
+                if (hoveredIndex >= 0 && i != hoveredIndex) x += Mathf.Sign(i - hoveredIndex) * CardWidth * scale * (IsYourHand ? YourHoverRoom : HoverRoom);
                 if (i == hoveredIndex && !card.IsFaceDown) {
                     // Whole, just clear of the screen's edge: above the bottom one, below the top one
                     cardScale = RaisedScale;

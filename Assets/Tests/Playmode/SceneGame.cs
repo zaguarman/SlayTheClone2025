@@ -276,7 +276,7 @@ namespace SlayTheClone.Tests {
         }
 
         /// <summary>Long enough for a hovered card to show enlarged (it waits for the pointer to rest on it).</summary>
-        public static WaitForSecondsRealtime PreviewShows() => new WaitForSecondsRealtime(Tooltip.HoverDelay + 0.05f);
+        public static WaitForSecondsRealtime PreviewShows() => new WaitForSecondsRealtime(Mathf.Max(Tooltip.HoverDelay, Tooltip.HandDelay) + 0.05f);
 
         /// <summary>The enlarged card shown while a card is hovered, if any: a copy, or a hand card raised out of the fan.</summary>
         public static CardController HoverPreview() {

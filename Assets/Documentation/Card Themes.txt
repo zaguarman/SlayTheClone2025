@@ -20,8 +20,8 @@ same way almost every time:
     everyday archetypes (Karen, Boomer, the Keyboard Warrior, the Hipster). Nobody is safe, which is what keeps it fair.
   - References people know at a glance. Memes (Wojak, This Is Fine, NPC, the pool meme), Monty Python, Bond, The
     Simpsons, films everyone quotes, and real headlines (Trump's casinos, Snowden, oligarchs and windows, shrinkflation).
-  - The rules are the punchline. The best cards are the ones where playing them tells the joke: Inflation lowers max
-    Health ("same price, less creature"); Fell Out of a Window needs an empty slot beside the target (the window); Red
+  - The rules are the punchline. The best cards are the ones where playing them tells the joke: Inflation hurts
+    everyone, the enemy most; Fell Out of a Window needs an empty slot beside the target (the window); Red
     Tape adds Deployment Time; Hipster is immune to anything that hits more than one creature; the Unpaid Intern is the
     fodder that Sacrificial Ritual's flavor asks for ("Ideally the intern").
 
@@ -383,8 +383,9 @@ NDA (spell)
 Inflation (spell) [px]
   Aim:   Shrinkflation.
   Hooks: Smaller Toblerones (with bigger gaps between the peaks), half-empty crisp bags.
-  Twist: Health Loss lowers max Health: "same price, less creature". Rules and joke are one.
-  Push:  Perfect as it is.
+  Twist: It hits everyone, the other side harder: 2 damage to every enemy creature, 1 to each of yours (2026-10-15,
+         the user's rework; it was -1 Health to each enemy, "same price, less creature").
+  Push:  The flavor still reads as shrinkflation; a line about everyone paying for it would match the new rules.
 
 STATECRAFT (26)
 

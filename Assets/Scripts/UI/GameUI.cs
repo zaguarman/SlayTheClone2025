@@ -48,6 +48,9 @@ namespace SlayTheClone {
             skin.PutAtBottom(FogOfWar.PlaysAsPlayer1);
             CreateQueuePanel(skin);
             CreateEnemyPileButtons(skin);
+            // The deck window covers every control made just now (the Queue button, the enemy's piles), as it does the scene's
+            var deckWindow = gameReferences.GetDeckViewUI();
+            if (deckWindow != null && deckWindow.DeckViewPanel != null) deckWindow.DeckViewPanel.transform.SetAsLastSibling();
             GameOver = GameOverScreen.Create(transform, gameManager, gameMediator);
             SendForPicker = GetOrAddComponent<SendForPicker>();
             SendForPicker.Initialize(gameManager, gameMediator, gameReferences.GetDeckViewUI());

@@ -30,11 +30,11 @@ MonoBehaviour:
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 6
-      value: -1
+    - actionType: 0
+      value: 2
       targetType: 4
       targetModifier: 2
-      modifyAttack: 0
+      modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
       statusEffectToApply: 0
@@ -57,8 +57,35 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'Mechanics test: Health Loss on every enemy. It ignores Armor, isn''t
-    damage (no OnDamaged), kills at 0 whatever the Armor, and lowers the Armor cap.'
+    - actionType: 0
+      value: 1
+      targetType: 3
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Everyone''s money is worth less, theirs more so: 2 damage to every
+    enemy creature and 1 to each of yours.'
   artDescription: A chocolate bar in its old-size wrapper, the bar inside visibly
     half as big, and a supermarket price tag re-stickered three times, each price
     higher.
