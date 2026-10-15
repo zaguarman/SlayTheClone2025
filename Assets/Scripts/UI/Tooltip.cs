@@ -400,6 +400,7 @@ namespace SlayTheClone {
         // pointer can always reach the next one. The tooltip stays while the pointer is over the card, its preview or a
         // popup, and closes a moment after it's over none, or at a click anywhere else. Dragging a card closes it.
         private const float ReleaseGrace = 0.4f; // Seconds to cross from the card to its preview, or between popups
+        private const float HandReleaseGrace = 0.15f; // A hand card's popups sit right beside it: little to cross
         private const int MaxKeywordPopups = 5;
         private const float PopupGap = 6f;
         private const float PopupWidth = 340f;
@@ -461,8 +462,12 @@ namespace SlayTheClone {
             Vector2 pointer = GameInput.PointerPosition;
             if (GameInput.ClickedThisFrame && ClickAt(pointer)) return;
             TrackKeywords(pointer);
-            if (!released || PointerInArea(pointer)) lastHeldAt = Time.unscaledTime;
-            else if (Time.unscaledTime - lastHeldAt > ReleaseGrace) HideTooltip();
+            // A risen hand card with its explanations open holds only while the pointer is around it or them, measured every
+            // frame (a missed pointer exit can't keep it up over the hand), and lets go quickly so the next card can rise
+            bool handReading = previewIsCard && keywordPopups.Count > 0;
+            bool held = handReading ? PointerInArea(pointer) : !released || PointerInArea(pointer);
+            if (held) lastHeldAt = Time.unscaledTime;
+            else if (Time.unscaledTime - lastHeldAt > (handReading ? HandReleaseGrace : ReleaseGrace)) HideTooltip();
         }
 
         private static bool StillRaised(CardController card) {
