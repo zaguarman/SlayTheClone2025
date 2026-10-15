@@ -13,7 +13,8 @@ namespace SlayTheClone {
     /// </summary>
     public class BattlefieldUI : CardContainer {
         private const float SummonStagger = 0.15f;
-        private const float MatPadding = 14f; // Between the slots and the edge of the mat
+        private const float MatPadding = 30f; // Between the slots and the edge of the mat, at the back (the chevron keeps its distance)
+        private const float NoseRoom = 16f;   // Round the Vanguard, at the chevron's nose
         private const float ReplacingGhostRaise = 0.3f; // Fraction of card height a ghost is raised when it will replace a creature
         private readonly List<BattlefieldSlot> battlefieldSlots = new List<BattlefieldSlot>();
 
@@ -85,7 +86,8 @@ namespace SlayTheClone {
         }
 
         // The mat only lights up under a card that plays on the whole side (see HandlePointerEnter)
-        protected override DropZoneColors ZoneColors => new DropZoneColors(UITheme.Mat, UITheme.Mat, UITheme.Mat, UITheme.Mat);
+        // The mat's rectangle stays invisible (it only catches drops): the chevron drawn on it is the mat (see ApplyMatLook)
+        protected override DropZoneColors ZoneColors => new DropZoneColors(Color.clear, Color.clear, Color.clear, Color.clear);
 
         // A rounded mat just big enough for its row of slots
         protected override void StyleZone(Image zoneImage) => ApplyMatLook();
@@ -96,10 +98,40 @@ namespace SlayTheClone {
         /// </summary>
         public void ApplyMatLook() {
             var zoneImage = GetComponent<Image>();
-            if (zoneImage != null) UITheme.Round(zoneImage, UITheme.Mat, 1.2f);
+            if (zoneImage != null) zoneImage.color = Color.clear; // Still a raycast target: drops land anywhere on its rectangle
             int slotCount = Player?.Battlefield.Count ?? SlayTheClone.Player.BattlefieldSize;
             ((RectTransform)transform).sizeDelta = new Vector2((slotCount - 1) * settings.spacing * SlotScale + BattlefieldSlot.Size.x * SlotScale + 2 * MatPadding,
                 BattlefieldSlot.Size.y * SlotScale + 2 * RowStep + 2 * MatPadding);
+            var fill = Chevron(MatFillName, 0);
+            fill.SetShape(MatOutline());
+            fill.color = UITheme.Mat;
+        }
+
+        public const string MatFillName = "MatChevron";
+
+        /// <summary>The chevron round this side's formation, in the mat's space (see <see cref="ChevronGraphic"/>).</summary>
+        public List<Vector2> MatOutline() {
+            var positions = SlotPositions(SlayTheClone.Player.BattlefieldSize);
+            return ChevronGraphic.Around(positions, BattlefieldSlot.Size * SlotScale / 2f, NoseRoom, MatPadding,
+                transform.localPosition.y <= 0f ? 1f : -1f);
+        }
+
+        /// <summary>A chevron layer of the mat by name, made if missing, at this place among the mat's children.</summary>
+        public ChevronGraphic Chevron(string layerName, int siblingIndex) {
+            var found = transform.Find(layerName);
+            var graphic = found != null ? found.GetComponent<ChevronGraphic>() : null;
+            if (graphic == null) {
+                var go = new GameObject(layerName, typeof(RectTransform), typeof(CanvasRenderer));
+                go.layer = gameObject.layer;
+                go.transform.SetParent(transform, false);
+                var rect = (RectTransform)go.transform;
+                rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.anchoredPosition = Vector2.zero;
+                rect.sizeDelta = Vector2.zero;
+                graphic = go.AddComponent<ChevronGraphic>();
+            }
+            graphic.transform.SetSiblingIndex(siblingIndex);
+            return graphic;
         }
 
         /// <summary>The slots (and the cards on them) are drawn this much smaller: three rows in the room one row had (hovering enlarges).</summary>
@@ -164,11 +196,20 @@ namespace SlayTheClone {
 
         protected override void HandlePointerExit(PointerEventData eventData) {
             var dragged = eventData.pointerDrag != null ? eventData.pointerDrag.GetComponent<CardController>() : null;
+            LightUp(false); // Off this mat: its glow goes (the zone's own image used to reset it)
             if (PlaysAnywhere(dragged)) table.GetBattlefield(Player.Opponent)?.LightUp(false);
         }
 
+        private bool matLit;
+
         /// <summary>Lights the mat up as where a carried card would play, or puts it back.</summary>
-        public void LightUp(bool lit) => GetComponent<Image>().color = lit ? UITheme.MatValid : UITheme.Mat;
+        public void LightUp(bool lit) {
+            matLit = lit;
+            var fill = transform.Find(MatFillName)?.GetComponent<ChevronGraphic>();
+            if (fill != null) fill.color = lit ? UITheme.MatValid : UITheme.Mat;
+        }
+
+
 
         /// <summary>
         /// Whether this card plays wherever it's dropped on the table: a spell that isn't aimed at a slot (its targets are
@@ -742,6 +783,7 @@ namespace SlayTheClone {
         // The strips follow their creature's card wherever it is (a summon's swell, the sides switching places). The idle
         // reminders go while the Day plays out and come back when the next one is planned
         private void LateUpdate() {
+            if (matLit && CardController.Dragged == null) LightUp(false); // Nothing carried any more: no glow left behind
             foreach (var (band, front, depth) in strips) {
                 if (band != null && front != null) PlaceStrip(band, front, depth);
             }

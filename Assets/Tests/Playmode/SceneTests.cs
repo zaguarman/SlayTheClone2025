@@ -488,7 +488,7 @@ namespace SlayTheClone.Tests {
 
             var pup = game.GiveCard(p1, game.Cards.Creature("Test Pup", 1, 1));
             yield return null;
-            Color MatOf(IPlayer side) => game.BoardView(side).GetComponent<Image>().color;
+            Color MatOf(IPlayer side) => game.BoardView(side).transform.Find(BattlefieldUI.MatFillName).GetComponent<ChevronGraphic>().color; // The chevron is the mat
             bool IsLit(BoardSlot slot) => game.BoardView(slot.Owner).FindSlotView(slot).GetComponent<Image>().color.a > 0f;
             GameObject SlotObject(BoardSlot slot) => game.BoardView(slot.Owner).FindSlotView(slot).gameObject;
             void Enter(PointerEventData pointer, GameObject over) => ExecuteEvents.Execute(over, pointer, ExecuteEvents.pointerEnterHandler);

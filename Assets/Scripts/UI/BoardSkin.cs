@@ -203,14 +203,20 @@ namespace SlayTheClone {
             var battlefield = side.BattlefieldUI;
             battlefield.ApplyMatLook();
 
-            var inner = FindOrCreate(battlefield.transform, "MatInnerLine",
-                () => UITheme.AddTrim(battlefield.transform, Color.clear, 2.5f, 7f, "MatInnerLine"));
-            inner.color = UITheme.WithAlpha(UITheme.Gold, 0.45f);
-            inner.transform.SetSiblingIndex(0);
-            var trim = FindOrCreate(battlefield.transform, "MatTrim",
-                () => UITheme.AddTrim(battlefield.transform, Color.clear, 1.2f, 0f, "MatTrim"));
+            // The mat is a chevron round the formation (the user): the rectangle's old rounded trims go
+            foreach (var old in new[] { "MatInnerLine", "MatTrim" }) {
+                var stale = battlefield.transform.Find(old);
+                if (stale == null) continue;
+                if (Application.isPlaying) Destroy(stale.gameObject);
+                else DestroyImmediate(stale.gameObject);
+            }
+            var outline = battlefield.MatOutline();
+            var trim = battlefield.Chevron("MatChevronTrim", 1);
+            trim.SetShape(outline, 3.5f, 0f);
             trim.color = UITheme.FactionColor(faction);
-            trim.transform.SetSiblingIndex(0);
+            var inner = battlefield.Chevron("MatChevronInner", 2);
+            inner.SetShape(outline, 2.5f, 7f);
+            inner.color = UITheme.WithAlpha(UITheme.Gold, 0.45f);
 
             var positions = battlefield.SlotPositions(Player.BattlefieldSize);
             for (int i = 0; i < positions.Count; i++) {
@@ -223,7 +229,7 @@ namespace SlayTheClone {
                     return fill;
                 });
                 UITheme.Place(mark.rectTransform, new Vector2(0.5f, 0.5f), positions[i], BattlefieldSlot.Size * BattlefieldUI.SlotScale);
-                mark.transform.SetSiblingIndex(2 + i); // Above the trims, under the slots made when the game starts
+                mark.transform.SetSiblingIndex(3 + i); // Above the chevron and its lines, under the slots made when the game starts
             }
 
             var hand = side.HandUI.GetComponent<Image>();
