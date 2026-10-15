@@ -222,7 +222,7 @@ namespace SlayTheClone {
                     brackets.sprite = UITheme.CornerBrackets;
                     return fill;
                 });
-                UITheme.Place(mark.rectTransform, new Vector2(0.5f, 0.5f), positions[i], BattlefieldSlot.Size);
+                UITheme.Place(mark.rectTransform, new Vector2(0.5f, 0.5f), positions[i], BattlefieldSlot.Size * BattlefieldUI.SlotScale);
                 mark.transform.SetSiblingIndex(2 + i); // Above the trims, under the slots made when the game starts
             }
 

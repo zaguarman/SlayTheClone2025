@@ -98,19 +98,32 @@ namespace SlayTheClone {
             var zoneImage = GetComponent<Image>();
             if (zoneImage != null) UITheme.Round(zoneImage, UITheme.Mat, 1.2f);
             int slotCount = Player?.Battlefield.Count ?? SlayTheClone.Player.BattlefieldSize;
-            ((RectTransform)transform).sizeDelta = new Vector2((slotCount - 1) * settings.spacing + BattlefieldSlot.Size.x + 2 * MatPadding, BattlefieldSlot.Size.y + 2 * MatPadding);
+            ((RectTransform)transform).sizeDelta = new Vector2((slotCount - 1) * settings.spacing * SlotScale + BattlefieldSlot.Size.x * SlotScale + 2 * MatPadding,
+                BattlefieldSlot.Size.y * SlotScale + 2 * RowStep + 2 * MatPadding);
         }
 
-        /// <summary>Where each of this many slots sits on the mat: a centered row.</summary>
+        /// <summary>The slots (and the cards on them) are drawn this much smaller: three rows in the room one row had (hovering enlarges).</summary>
+        public const float SlotScale = 0.8f;
+        // How far apart the formation's rows sit, up and down: the Vanguard nearest the middle of the table, Headquarters furthest
+        private const float RowStep = 56f;
+
+        /// <summary>
+        /// Where each of this many slots sits on the mat: the formation (see <see cref="Formation"/>), five columns across,
+        /// each row a step further from the middle of the table: a Λ on the bottom side, a V on the top one.
+        /// </summary>
         public List<Vector2> SlotPositions(int slotCount) {
-            float startX = -(slotCount - 1) * settings.spacing / 2f;
-            return Enumerable.Range(0, slotCount).Select(i => new Vector2(startX + settings.spacing * i, 0f)).ToList();
+            float spacing = settings.spacing * SlotScale;
+            float startX = -(slotCount - 1) * spacing / 2f;
+            float towardMiddle = transform.localPosition.y <= 0f ? 1f : -1f; // The bottom side's middle is up
+            return Enumerable.Range(0, slotCount).Select(i => new Vector2(startX + spacing * Formation.Column(i),
+                towardMiddle * (1 - Formation.Depth(i)) * RowStep)).ToList();
         }
 
         private void UpdateSlotPositions() {
             var positions = SlotPositions(battlefieldSlots.Count);
             for (int i = 0; i < battlefieldSlots.Count; i++) {
                 battlefieldSlots[i].SetPosition(positions[i]);
+                battlefieldSlots[i].transform.localScale = Vector3.one * SlotScale;
             }
         }
         #endregion
