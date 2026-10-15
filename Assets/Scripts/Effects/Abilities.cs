@@ -239,11 +239,11 @@ namespace SlayTheClone {
             mediator?.NotifyCreatureStatsChanged(creature);
         }
 
-        /// <summary>Safe Space: each Dawn, it and the friendly creatures beside it gain Bless 1 (a ward against the next status).</summary>
+        /// <summary>Safe Space: each Dawn, it and the friendly creatures beside it (a step away) gain Bless 1 (a ward against the next status).</summary>
         public static void TrySafeSpace(ICreature creature, IActionsQueue queue) {
             if (!Has(creature, CreatureAbility.SafeSpace) || creature.Slot?.Owner == null) return;
             var row = creature.Slot.Owner.Battlefield;
-            foreach (int i in new[] { creature.Slot.Index - 1, creature.Slot.Index, creature.Slot.Index + 1 }) {
+            foreach (int i in Formation.Neighbours(creature.Slot.Index).Append(creature.Slot.Index)) {
                 var ward = i >= 0 && i < row.Count ? row[i].OccupyingCreature : null;
                 if (ward != null && !ward.IsDead) queue.AddAction(new ApplyStatusEffectAction(ward, StatusEffectType.Blessed, 1, 1, creature, creature.Owner));
             }

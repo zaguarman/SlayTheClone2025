@@ -134,7 +134,8 @@ namespace SlayTheClone.Tests {
                 Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures, TargetModifier.WithAdjacent));
             var enemies = Enumerable.Range(0, 5).Select(i => game.Summon(p2, game.Creature($"Enemy {i}", 0, 10), i)).ToList();
             game.Run(new PlayCardAction(game.GiveCard(p1, dogpile), p1, p2.Battlefield[3]));
-            Assert.AreEqual(new[] { 10, 10, 9, 9, 9 }, enemies.Select(e => e.Health).ToArray(), "A spell with Adjacent also hits the creatures next to where it lands");
+            // Landing on the left Headquarters: its neighbours in the formation are the left Flank and the other Headquarters slot
+            Assert.AreEqual(new[] { 10, 9, 10, 9, 9 }, enemies.Select(e => e.Health).ToArray(), "A spell with Adjacent also hits the creatures a step away from where it lands");
 
             var cleaver = game.Summon(p1, game.Creature("Cleaver", 2, 5, 1,
                 Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.EnemyCreatures, TargetModifier.WithAdjacent)), 0);
@@ -142,7 +143,8 @@ namespace SlayTheClone.Tests {
             game.Declare(cleaver, p2.Battlefield[1]);
             game.ActionsQueue.AddAction(new PlayCardAction(rage, p1, p1.Battlefield[0])); // Spells land before attacks
             game.Resolve();
-            Assert.AreEqual(new[] { 5, 5, 4, 9, 9 }, enemies.Select(e => e.Health).ToArray(),
+            // The left Flank and its neighbours in the formation: the Vanguard, the right Flank, the left Headquarters
+            Assert.AreEqual(new[] { 5, 4, 5, 4, 9 }, enemies.Select(e => e.Health).ToArray(),
                 "A spreading attack hits the target and its neighbours, for the attack it has when the hits land");
         }
     }

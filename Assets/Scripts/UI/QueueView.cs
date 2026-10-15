@@ -301,7 +301,7 @@ namespace SlayTheClone {
             player == null ? Unknown : Painted(player, viewer, player == viewer ? "You" : "Enemy");
 
         private static string SlotName(BoardSlot slot, IPlayer viewer) =>
-            slot == null ? Unknown : Painted(slot.Owner, viewer, $"{(slot.Owner == viewer ? "your" : "enemy")} slot {slot.Index + 1}");
+            slot == null ? Unknown : Painted(slot.Owner, viewer, $"{(slot.Owner == viewer ? "your" : "enemy")} {Formation.Describe(slot.Index)}");
 
         // A creature, or the slot when nobody stands there
         private static string Target(ITarget target, IPlayer viewer) => target switch {

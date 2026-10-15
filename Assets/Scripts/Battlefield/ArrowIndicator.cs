@@ -102,6 +102,9 @@ namespace SlayTheClone {
             foreach (var part in new Renderer[] { fillRenderer, edgeRenderer, outlineRenderer }) {
                 if (part != null) part.forceRenderingOff = suppressed;
             }
+            foreach (var label in labels) { // The order numbers too: they're drawn over the interface as well
+                if (label != null && label.TryGetComponent<MeshRenderer>(out var text)) text.forceRenderingOff = suppressed;
+            }
         }
 
         public static ArrowIndicator Create(Transform parent = null) {
@@ -246,6 +249,7 @@ namespace SlayTheClone {
             label.outlineWidth = 0.3f;
             label.outlineColor = new Color32(20, 20, 30, 255);
             label.sortingOrder = SortingOrder + 700; // Over every arrow
+            if (label.TryGetComponent<MeshRenderer>(out var text)) text.forceRenderingOff = suppressed;
             return label;
         }
 

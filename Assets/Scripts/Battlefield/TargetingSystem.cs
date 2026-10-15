@@ -115,7 +115,7 @@ namespace SlayTheClone {
                 // Get the index of the primary target's slot
                 var slotIndex = creature.Slot.Index;
 
-                foreach (int index in new[] { slotIndex - 1, slotIndex + 1 }) {
+                foreach (int index in Formation.Neighbours(slotIndex)) {
                     if (index < 0 || index >= owner.Battlefield.Count) continue;
                     var neighbor = CreatureAt(owner.Battlefield, index);
                     if (neighbor != null) adjacentTargets.Add(neighbor);
@@ -194,41 +194,20 @@ namespace SlayTheClone {
             }
 
             var ownerBattlefield = creature.Owner.Battlefield;
-            var slotIndex = creature.Slot.Index;
+            var visited = new HashSet<int> { creature.Slot.Index };
+            int current = creature.Slot.Index;
 
-            // Count potential chain targets to the left and right
-            int leftCount = 0;
-            for (int i = slotIndex - 1; i >= 0 && ownerBattlefield[i].IsOccupied(); i--) leftCount++;
-
-            int rightCount = 0;
-            for (int i = slotIndex + 1; i < ownerBattlefield.Count && ownerBattlefield[i].IsOccupied(); i++) rightCount++;
-
-            // Determine direction
-            int direction; // -1 for left, 1 for right
-            if (leftCount > rightCount) {
-                direction = -1;
-            }
-            else if (rightCount > leftCount) {
-                direction = 1;
-            }
-            else if (leftCount == 0 && rightCount == 0) {
-                return chainTargets; // No adjacent targets
-            }
-            else {
-                direction = GameRandom.Next(2) == 0 ? -1 : 1; // Random tie-breaker
-            }
-
-            // Build the chain in the chosen direction
-            int currentSlotIndex = slotIndex + direction;
-            while (chainTargets.Count < maxChainLength && currentSlotIndex >= 0 && currentSlotIndex < ownerBattlefield.Count) {
-                var slot = ownerBattlefield[currentSlotIndex];
-                if (slot.IsOccupied() && slot.OccupyingCreature != null) {
-                    chainTargets.Add(slot.OccupyingCreature);
-                }
-                else {
-                    break; // Chain broken
-                }
-                currentSlotIndex += direction;
+            // The chain jumps from creature to creature a step apart in the formation, never back; with a choice, the one
+            // that leads on to more creatures, then at random. An empty step breaks it
+            bool Occupied(int i) => i >= 0 && i < ownerBattlefield.Count && ownerBattlefield[i].IsOccupied() && ownerBattlefield[i].OccupyingCreature != null;
+            while (chainTargets.Count < maxChainLength) {
+                var next = Formation.Neighbours(current).Where(i => !visited.Contains(i) && Occupied(i))
+                    .OrderByDescending(i => Formation.Neighbours(i).Count(j => !visited.Contains(j) && j != i && Occupied(j)))
+                    .ThenBy(_ => GameRandom.Next(int.MaxValue)).DefaultIfEmpty(-1).First();
+                if (next < 0) break;
+                chainTargets.Add(ownerBattlefield[next].OccupyingCreature);
+                visited.Add(next);
+                current = next;
             }
             return chainTargets;
         }

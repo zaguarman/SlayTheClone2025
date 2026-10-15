@@ -247,19 +247,21 @@ namespace SlayTheClone.Tests {
             var left = With(CreatureAbility.None, p2, 0);
             var middle = With(CreatureAbility.None, p2, 1);
             var right = With(CreatureAbility.None, p2, 2);
-            var far = With(CreatureAbility.None, p2, 3);
+            var far = With(CreatureAbility.None, p2, 4);
             game.Attack(sprayer, p2.Battlefield[1]);
             Assert.AreEqual(new[] { 8, 8, 8, 10 }, new[] { left.Health, middle.Health, right.Health, far.Health },
-                "Spray and Pray: the target and the creatures on both sides, a cone of three");
+                "Spray and Pray: the target (the left Flank) and the creatures a step away (the Vanguard, the right Flank), not the far Headquarters");
 
             var tapper = With(CreatureAbility.DoubleTap, p1, 3, attack: 2);
-            game.Attack(tapper, p2.Battlefield[3]);
+            game.Attack(tapper, p2.Battlefield[4]);
             Assert.AreEqual(6, far.Health, "Double Tap: it hits twice");
 
             var chainer = With(CreatureAbility.ChainMail, p1, 0, attack: 4);
             game.Attack(chainer, p2.Battlefield[0]);
-            Assert.AreEqual(new[] { 4, 6, 7 }, new[] { left.Health, middle.Health, right.Health },
-                "Chain Mail: 4, then the next creatures in line for half each jump (2, then 1)");
+            // From the Vanguard the chain jumps to the Flank that leads on further (the right one, beside the far Headquarters),
+            // then to one of the two a step from there, for 1
+            Assert.AreEqual((4, 6), (left.Health, right.Health), "Chain Mail: 4, then the next creature a step away for half (2)...");
+            Assert.AreEqual(8 + 6 - 1, middle.Health + far.Health, "...then the next one for half again (1)");
 
             // On the Brink (Utopia's accelerationism): at 2 Health or less, everything it deals is doubled
             var daredevil = With(CreatureAbility.Brink, p1, 4, attack: 3, health: 5);
@@ -299,6 +301,7 @@ namespace SlayTheClone.Tests {
             // Fell Out of a Window: the strongest dies only if a slot beside it is empty
             var wall = With(CreatureAbility.None, p2, 1, attack: 5);
             var filler = With(CreatureAbility.None, p2, 2, attack: 1);
+            With(CreatureAbility.None, p2, 3, attack: 1); // The left Flank's neighbours: the Vanguard, the right Flank, the left Headquarters
             var window = game.Spell("Window", TargetType.EnemyCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures, TargetModifier.Strongest));
             window.effects[0].actions[0].requires = TargetRequisite.NextToEmptySlot;
@@ -437,13 +440,14 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(4, grabber.Attack, "Once per combat");
 
             var shell = With(CreatureAbility.ShellGame, p1, 2);
-            var first = With(CreatureAbility.None, p2, 2);
-            var second = With(CreatureAbility.None, p2, 3, attack: 5);
-            game.Run(new UseAbilityAction(shell, p2.Battlefield[2]));
-            Assert.AreEqual((second, first), (p2.Battlefield[2].OccupyingCreature, p2.Battlefield[3].OccupyingCreature),
-                "Shell Game: the target trades places with the one to its right");
+            var first = With(CreatureAbility.None, p2, 3);
+            var second = With(CreatureAbility.None, p2, 4, attack: 5);
+            game.Run(new UseAbilityAction(shell, p2.Battlefield[3]));
+            Assert.AreEqual((second, first), (p2.Battlefield[3].OccupyingCreature, p2.Battlefield[4].OccupyingCreature),
+                "Shell Game: the target trades places with its partner in the formation (the other Headquarters slot)");
 
             // The same effects on spells: a spell works between its target and the creature facing it
+            With(CreatureAbility.None, p2, 2, attack: 5); // Facing the shell, now that the swap took the others to Headquarters
             var mimic = Effect(EffectTrigger.OnPlay, ActionType.CopyStats, 0, TargetType.AllCreatures);
             game.Play(game.GiveCard(p1, game.Spell("Mimetic Theory", TargetType.AllCreatures, mimic)), p1, p1.Battlefield[2]);
             var grant = Effect(EffectTrigger.OnPlay, ActionType.GrantAbility, 0, TargetType.FriendlyCreatures);
@@ -518,8 +522,8 @@ namespace SlayTheClone.Tests {
             var dome = With(CreatureAbility.Bodyguard, p1, 0);
             var vip = With(CreatureAbility.None, p1, 1, health: 5);
             var raider = With(CreatureAbility.None, p2, 1, attack: 4, health: 10);
-            var safe = With(CreatureAbility.SafeSpace, p1, 3);
-            var huddled = With(CreatureAbility.None, p1, 4);
+            var safe = With(CreatureAbility.SafeSpace, p1, 4); // The right Headquarters: beside it, the other Headquarters slot and the right Flank, not the guarded one
+            var huddled = With(CreatureAbility.None, p1, 3);
             game.Declare(dome, p2.Battlefield[0]);
             Assert.IsNull(game.ActionsQueue.GetActiveAction(dome.TargetId), "Bodyguard: it can't attack");
             game.Declare(raider, p1.Battlefield[1]);

@@ -143,7 +143,8 @@ namespace SlayTheClone {
         }
     }
 
-    // The creature trades places with the one to its right, or to its left at the end of the row. An empty slot just moves it.
+    // The creature trades places with its partner in the formation (the other Flank, the other Headquarters slot; the
+    // Vanguard with the left Flank). An empty slot just moves it.
     // Nobody chose to move, so it isn't a move: nothing stops it, but Slot Effects see both leave and enter
     public class SwapPositionsActionExecutor : ActionExecutor<SwapPositionsAction> {
         protected override void ExecuteAction(SwapPositionsAction swap, ActionExecutionContext context) {
@@ -152,7 +153,7 @@ namespace SlayTheClone {
             if (creature == null || creature.IsDead || from?.Owner == null) return;
 
             var row = from.Owner.Battlefield;
-            var to = row[from.Index + 1 < row.Count ? from.Index + 1 : from.Index - 1];
+            var to = row[Formation.Partner(from.Index)];
             var partner = to.OccupyingCreature;
             BoardSlot.Swap(from, to);
             Log($"{creature.Name} trades places with {partner?.Name ?? "an empty slot"}", LogTag.Effects | LogTag.Creatures);

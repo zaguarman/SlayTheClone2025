@@ -53,6 +53,10 @@ namespace SlayTheClone {
 
         public static bool AreNeighbours(int a, int b) => Neighbours(a).Contains(b);
 
+        /// <summary>The slot it trades places with when it's made to swap: its partner in the same row (Flank with Flank,
+        /// Headquarters with Headquarters); the Vanguard, alone in its row, with the left Flank.</summary>
+        public static int Partner(int index) => index switch { 0 => 1, 1 => 2, 2 => 1, 3 => 4, 4 => 3, _ => index };
+
         /// <summary>How many steps apart two slots of the same side are (0 for the same slot).</summary>
         public static int StepsBetween(int from, int to) {
             if (from == to) return 0;
@@ -85,5 +89,15 @@ namespace SlayTheClone {
         };
 
         public static string NameOf(int index) => NameOf(PositionOf(index));
+
+        /// <summary>The slot in words: "Vanguard", "left Flank", "right Headquarters".</summary>
+        public static string Describe(int index) => index switch {
+            0 => "Vanguard",
+            1 => "left Flank",
+            2 => "right Flank",
+            3 => "left Headquarters",
+            4 => "right Headquarters",
+            _ => $"slot {index + 1}"
+        };
     }
 }

@@ -201,11 +201,12 @@ namespace SlayTheClone.Tests {
                 TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 4, TargetType.EnemyCreatures, TargetModifier.Chained)), 0);
             var crabs = new[] {
                 game.Summon(p2, game.Creature("Crab A", 0, 10), 1),
-                game.Summon(p2, game.Creature("Crab B", 0, 10), 2),
-                game.Summon(p2, game.Creature("Crab C", 0, 10), 3)
+                game.Summon(p2, game.Creature("Crab B", 0, 10), 3),
+                game.Summon(p2, game.Creature("Crab C", 0, 10), 4)
             };
 
-            // A chain attack jumps from the creature hit along its row of neighbours, halving each jump
+            // A chain attack jumps from the creature hit to the next one a step away in the formation, halving each jump:
+            // the left Flank, then the left Headquarters behind it, then the other Headquarters slot
             Attack(eel, p2.Battlefield[1]);
             Assert.AreEqual(10 - 3, crabs[0].Health); // The attack itself
             Assert.AreEqual(10 - 4, crabs[1].Health); // First jump

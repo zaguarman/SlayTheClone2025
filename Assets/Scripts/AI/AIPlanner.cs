@@ -623,7 +623,7 @@ namespace SlayTheClone {
                 else if (EffectResolver.CanAffectPlayers(action.actionType)) targets.Add(slot.Ours ? view.Me : view.Them);
                 if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent) || beside) {
                     var row = slot.Ours ? view.MySlots : view.TheirSlots;
-                    foreach (int i in new[] { slot.Index - 1, slot.Index + 1 }) {
+                    foreach (int i in Formation.Neighbours(slot.Index)) {
                         if (i >= 0 && i < row.Count && row[i].Creature != null) targets.Add(row[i].Creature);
                     }
                 }
@@ -766,7 +766,7 @@ namespace SlayTheClone {
                 case TargetRequisite.Revealed: return creature.Has(StatusEffectType.Revealed) || revealedNow.Contains(creature);
                 case TargetRequisite.NextToEmptySlot:
                     var row = creature.Slot.Ours ? view.MySlots : view.TheirSlots;
-                    return new[] { creature.Slot.Index - 1, creature.Slot.Index + 1 }.Any(i => i >= 0 && i < row.Count && row[i].IsEmpty);
+                    return Formation.Neighbours(creature.Slot.Index).Any(i => i >= 0 && i < row.Count && row[i].IsEmpty);
                 case TargetRequisite.Outnumbered:
                     int mine = view.Mine.Count(), theirs = view.Theirs.Count();
                     return creature.Ours ? mine < theirs : theirs < mine;

@@ -211,7 +211,7 @@ namespace SlayTheClone {
             };
             if (slot?.Owner == null) yield break;
             var row = slot.Owner.Battlefield;
-            foreach (int i in new[] { slot.Index - 1, slot.Index + 1 }) {
+            foreach (int i in Formation.Neighbours(slot.Index)) { // A step away in the formation
                 if (i >= 0 && i < row.Count && row[i].OccupyingCreature != null) yield return row[i].OccupyingCreature;
             }
         }
@@ -360,7 +360,7 @@ namespace SlayTheClone {
             var slot = creature?.Slot;
             if (slot?.Owner == null) return false;
             var row = slot.Owner.Battlefield;
-            return new[] { slot.Index - 1, slot.Index + 1 }.Any(i => i >= 0 && i < row.Count && !row[i].IsOccupied());
+            return Formation.Neighbours(slot.Index).Any(i => i >= 0 && i < row.Count && !row[i].IsOccupied());
         }
 
         public static int CreatureCount(IPlayer side) => side?.Battlefield.Count(s => s.OccupyingCreature is { IsDead: false }) ?? 0;

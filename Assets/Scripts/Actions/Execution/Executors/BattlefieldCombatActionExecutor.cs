@@ -74,10 +74,10 @@ namespace SlayTheClone {
             QueueCombatDamage(actionsQueue, primaryTarget, attacker);
             // Double Tap: a second hit right after the first, on the same target
             if (Abilities.Has(attacker, Enums.CreatureAbility.DoubleTap)) QueueCombatDamage(actionsQueue, primaryTarget, attacker);
-            // Spray and Pray: the creatures beside the target slot are hit too, each for its attack (a cone of three)
+            // Spray and Pray: the creatures beside the target slot (a step away in the formation) are hit too, each for its attack
             if (Abilities.Has(attacker, Enums.CreatureAbility.SprayAndPray) && targetSlot?.Owner != null) {
                 var row = targetSlot.Owner.Battlefield;
-                foreach (int i in new[] { targetSlot.Index - 1, targetSlot.Index + 1 }) {
+                foreach (int i in Formation.Neighbours(targetSlot.Index)) {
                     var beside = i >= 0 && i < row.Count ? row[i].OccupyingCreature : null;
                     if (beside != null && !Abilities.Defends(beside, Enums.CreatureAbility.TooMainstream, attacker)) QueueCombatDamage(actionsQueue, beside, attacker);
                 }
