@@ -126,6 +126,12 @@ namespace SlayTheClone {
         public static Sprite SpellWindowCover => spellWindowCover != null ? spellWindowCover : spellWindowCover = LoadOrDraw(nameof(SpellWindowCover));
         public static Sprite SpellWindowTrim => spellWindowTrim != null ? spellWindowTrim : spellWindowTrim = LoadOrDraw(nameof(SpellWindowTrim));
 
+        /// <summary>A comic thought bubble: an oval, white with a dark outline, and two little circles trailing down to the left.</summary>
+        public static Sprite ThoughtBubble => thoughtBubble != null ? thoughtBubble : thoughtBubble = LoadOrDraw(nameof(ThoughtBubble));
+        private static Sprite thoughtBubble;
+        /// <summary>Where the oval sits in <see cref="ThoughtBubble"/>, as a share of its size (for what's written in it).</summary>
+        public static readonly Rect ThoughtBubbleOval = Rect.MinMaxRect(30f / 160f, 32f / 128f, 154f / 160f, 120f / 128f);
+
         /// <summary>The theme's sprites by name, with their slicing borders (in pixels) and whether they tile.</summary>
         public static readonly (string name, int border, bool tiles)[] SpriteNames = {
             (nameof(Rounded), CornerRadius + 2, false),
@@ -136,6 +142,7 @@ namespace SlayTheClone {
             (nameof(CreatureWindowTrim), 0, false),
             (nameof(SpellWindowCover), 0, false),
             (nameof(SpellWindowTrim), 0, false),
+            (nameof(ThoughtBubble), 0, false),
         };
 
         /// <summary>Draws one of the <see cref="SpriteNames"/>.</summary>
@@ -148,6 +155,7 @@ namespace SlayTheClone {
             nameof(CreatureWindowTrim) => DrawWindow(PennantWindow(), cover: false),
             nameof(SpellWindowCover) => DrawWindow(ArchWindow(), cover: true),
             nameof(SpellWindowTrim) => DrawWindow(ArchWindow(), cover: false),
+            nameof(ThoughtBubble) => DrawThoughtBubble(),
             _ => throw new System.ArgumentException($"No theme sprite called {spriteName}")
         };
 
@@ -292,6 +300,32 @@ namespace SlayTheClone {
                     float alpha = Mathf.Clamp01(0.5f - outside);
                     if (outline > 0) alpha *= Mathf.Clamp01(outside + outline + 0.5f);
                     pixels[y * size + x] = new Color32(255, 255, 255, (byte)(alpha * 255));
+                }
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply();
+            return texture;
+        }
+
+        // The oval and the two trailing circles, as one shape: white inside, a dark outline round the whole
+        private static Texture2D DrawThoughtBubble() {
+            const int width = 160, height = 128;
+            const float outline = 5f;
+            var texture = NewTexture(width, height);
+            var pixels = new Color32[width * height];
+            var ink = new Color(0.1f, 0.1f, 0.12f);
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    var p = new Vector2(x + 0.5f, y + 0.5f);
+                    // Signed distances, negative inside: the oval (approximated), then the two circles
+                    var e = new Vector2((p.x - 92f) / 62f, (p.y - 76f) / 44f);
+                    float oval = (e.magnitude - 1f) * 44f;
+                    float big = Vector2.Distance(p, new Vector2(34f, 24f)) - 13f;
+                    float small = Vector2.Distance(p, new Vector2(14f, 9f)) - 8f;
+                    float d = Mathf.Min(oval, Mathf.Min(big, small));
+                    float alpha = Mathf.Clamp01(0.5f - d);
+                    var color = Color.Lerp(ink, Color.white, Mathf.Clamp01(-d - outline + 0.5f));
+                    pixels[y * width + x] = new Color(color.r, color.g, color.b, alpha);
                 }
             }
             texture.SetPixels32(pixels);

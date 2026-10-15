@@ -624,13 +624,13 @@ namespace SlayTheClone {
 
         // A navy band across the card with brass edges and a word on it
         /// <summary>
-        /// A reminder: this creature could act this Day (attack, move, use its ability) and has nothing planned. A band across
-        /// the top of its art, pulsing softly, while its player plans.
+        /// A reminder: this creature could act this Day (attack, move, use its ability) and has nothing planned. A comic
+        /// thought bubble with "zZz" in it (the user, 2026-10-15) over the top of its art, pulsing softly, while its player plans.
         /// </summary>
         public void SetIdle(bool idle) {
             IsIdle = idle;
             if (idle && idleBadge == null) {
-                idleBadge = CreateBadge("IdleBadge", "Idle zZ", UITheme.Parchment, 0.66f, 0.77f); // On the art, under the name
+                idleBadge = CreateThoughtBubble("IdleBadge", "z<size=135%>Z</size>z");
                 var group = idleBadge.AddComponent<CanvasGroup>();
                 group.blocksRaycasts = false;
                 DOTween.To(() => group.alpha, a => group.alpha = a, 0.55f, 0.9f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetTarget(idleBadge).SetLink(idleBadge);
@@ -666,6 +666,39 @@ namespace SlayTheClone {
         /// <summary>The number shown by <see cref="SetOrderNumber"/>, if any.</summary>
         public string OrderNumber => orderBadge != null && orderBadge.activeSelf ? orderBadge.GetComponentInChildren<TextMeshProUGUI>().text : null;
         private GameObject orderBadge;
+
+        // A thought bubble over the top right of the art, with a few words in its oval
+        private GameObject CreateThoughtBubble(string objectName, string text) {
+            var bubble = new GameObject(objectName, typeof(RectTransform), typeof(Image));
+            bubble.layer = gameObject.layer;
+            bubble.transform.SetParent(transform, false);
+            var rect = (RectTransform)bubble.transform;
+            rect.anchorMin = new Vector2(0.4f, 0.58f);
+            rect.anchorMax = new Vector2(0.98f, 0.88f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            var image = bubble.GetComponent<Image>();
+            image.sprite = UITheme.ThoughtBubble;
+            image.preserveAspect = true;
+            image.raycastTarget = false;
+
+            var label = new GameObject("Label", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
+            label.gameObject.layer = gameObject.layer;
+            label.transform.SetParent(bubble.transform, false);
+            var oval = UITheme.ThoughtBubbleOval;
+            label.rectTransform.anchorMin = oval.min;
+            label.rectTransform.anchorMax = oval.max;
+            label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
+            label.text = text;
+            label.fontStyle = FontStyles.Bold;
+            label.color = new Color(0.1f, 0.1f, 0.12f);
+            label.alignment = TextAlignmentOptions.Center;
+            label.enableAutoSizing = true;
+            label.fontSizeMin = 6;
+            label.fontSizeMax = 40;
+            label.raycastTarget = false;
+            bubble.transform.SetAsLastSibling();
+            return bubble;
+        }
 
         private GameObject CreateBadge(string objectName, string text, Color textColor, float anchorMinY, float anchorMaxY) {
             var badge = new GameObject(objectName, typeof(RectTransform), typeof(Image));
