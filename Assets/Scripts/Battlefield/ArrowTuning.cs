@@ -76,10 +76,16 @@ namespace SlayTheClone {
         [Header("Bones and bends")]
         [Tooltip("Every arrow: points the band is built from, per world unit. More: a smoother shape, round bends and corners without facets (gallery: any set, Merging's corners most)")]
         [Range(4f, 120f)] public float bonesPerUnit = 28.6f;
-        [Tooltip("Lone arrows, trunks and routed branches: how far along the way the first bend sits, as a share of its length (a third: even) (gallery: Singles, Merging, Spray's trunk)")]
-        [Range(0f, 1f)] public float firstBend = 1f / 3f;
-        [Tooltip("...and the last bend (never before the first) (gallery: Singles, Merging, Spray's trunk). Spray's prongs have their own: Prong Leave and Prong Arrive")]
-        [Range(0f, 1f)] public float lastBend = 2f / 3f;
+        [Tooltip("Lone arrows (attack, damage, move, drag): how far along the way the first bend sits, as a share of its length (a third: even) (gallery: Singles, Damage, Moves, Drag)")]
+        [Range(0f, 1f)] public float singleFirstBend = 1f / 3f;
+        [Tooltip("Lone arrows: ...and the last bend (never before the first) (gallery: Singles, Damage, Moves, Drag)")]
+        [Range(0f, 1f)] public float singleLastBend = 2f / 3f;
+        [Tooltip("Merged arrows (the trunk, and the routed branches when Direct Branches is off) and Spray's trunk: the first bend, as a share of the length (gallery: Merging, Spray)")]
+        [UnityEngine.Serialization.FormerlySerializedAs("firstBend")]
+        [Range(0f, 1f)] public float mergedFirstBend = 1f / 3f;
+        [Tooltip("Merged arrows and Spray's trunk: ...and the last bend (never before the first). Spray's prongs have their own: Prong Leave and Prong Arrive (gallery: Merging, Spray)")]
+        [UnityEngine.Serialization.FormerlySerializedAs("lastBend")]
+        [Range(0f, 1f)] public float mergedLastBend = 2f / 3f;
 
         [Header("Sharpest curves: arrows routed into a shared one, like PCB tracks")]
         [Tooltip("Merged attacks: the branches' diagonal, its angle from straight ahead (45: a true diagonal; more: flatter, sharper turns) (gallery: Merging)")]

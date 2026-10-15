@@ -74,8 +74,11 @@ namespace SlayTheClone {
         private static int Samples => Mathf.Clamp(Mathf.RoundToInt(T.bonesPerUnit * 2.25f), 16, 400); // Points along each curve before that
         private static int CornerSteps => Mathf.Clamp(Mathf.RoundToInt(T.bonesPerUnit * 0.42f), 3, 60); // Points round a routed corner
         // Where a curve bends, as shares of its length (see ArrowTuning.firstBend / lastBend)
-        private static float FirstBend => T.firstBend;
-        private static float LastBend => Mathf.Max(T.lastBend, T.firstBend);
+        // Lone arrows and merged ones each have their own (they want different shapes)
+        private static float SingleFirstBend => T.singleFirstBend;
+        private static float SingleLastBend => Mathf.Max(T.singleLastBend, T.singleFirstBend);
+        private static float FirstBend => T.mergedFirstBend;
+        private static float LastBend => Mathf.Max(T.mergedLastBend, T.mergedFirstBend);
         // The rest are sliders (see ArrowTuning)
         private static ArrowTuning T => ArrowTuning.Current;
         private static float BendRoom => T.bendRoom;           // A band is never wider than this share of its bend's radius: it can't fold over
@@ -361,7 +364,7 @@ namespace SlayTheClone {
                 if (span.magnitude < MinLength) return;
                 Vector2 side = new Vector2(span.normalized.y, -span.normalized.x);
                 Vector2 bulge = side * Mathf.Min(span.magnitude * style.Bow, style.MaxBow) * 1.333f;
-                var curve = Sample(from, from + span * FirstBend + bulge, from + span * LastBend + bulge, tip);
+                var curve = Sample(from, from + span * SingleFirstBend + bulge, from + span * SingleLastBend + bulge, tip);
                 AddBandWithHead(layers, curve, drawnFraction, width * TailWidth, width, width, 0f, 1f, notched: true);
                 return;
             }
