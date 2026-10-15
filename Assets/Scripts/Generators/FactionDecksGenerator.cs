@@ -1167,8 +1167,8 @@ namespace SlayTheClone {
                 .Picture("An old sundial in a ruined cloister at dusk, the shadow of its gnomon falling across the Latin words MOX NOX carved in the stone, a black candle burning beside it."),
             Spell("Holy Hand Grenade of Antioch", TargetType.EnemyCreatures,
                 "Count to three. Not four. Not two. Five is right out.",
-                "2 damage to target enemy creature and the creatures beside it.",
-                Damage(2, TargetType.EnemyCreatures, TargetModifier.WithAdjacent))
+                "5 damage to target enemy creature and 2 to the creatures beside it (the user, 2026-10-15).",
+                Damage(5, TargetType.EnemyCreatures), Damage(2, TargetType.EnemyCreatures, TargetModifier.Beside))
                 .NotInStarterDeck()
                 .Picture("A golden orb with a jewelled cross on top, its pin pulled, held up by a monk reading from an enormous book, three fingers raised, knights ducking behind him."),
             Spell("Lance Of Longinus", TargetType.EnemyCreatures,
@@ -1178,7 +1178,7 @@ namespace SlayTheClone {
                 .Picture("An ancient iron spearhead on a long wooden shaft, glowing faintly, pinned through a spy's trench coat to a brick wall, the spy wriggling out of the sleeves."),
             Spell("Necronomicon", TargetType.EnemyCreatures,
                 "Bound in human skin. The reviews are mixed.",
-                "Sacrifice 1: destroy target enemy creature. Black magic always takes something.",
+                "Destroy target enemy creature; your weakest creature is sacrificed to play it. Black magic always takes something.",
                 Destroy(TargetType.EnemyCreatures))
                 .Sacrificing(1)
                 .Picture("A heavy book bound in stitched leather with a screaming face on its cover, lying open on a stone altar, a hooded figure reading from it while a shadowy hand rises out of the pages."),

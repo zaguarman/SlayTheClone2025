@@ -61,15 +61,17 @@ namespace SlayTheClone {
             }
 
             string keywordLine = keywords.Count > 0 ? string.Join(", ", keywords) : "";
-            // An additional cost comes first, like Magic's: "Discard 2: give up 2 random other cards from your hand to play this"
+            // An additional cost comes first, like Magic's: "Discard 2: give up 2 random other cards from your hand to play this".
+            // A sacrifice comes last, after what it buys (the user, 2026-10-15): "Destroy target creature / Sacrifice 1: ..."
+            string sacrifice = data.sacrifice > 0
+                ? $"{Keywords.Link("Sacrifice", $"Sacrifice {data.sacrifice}")}: your {(data.sacrifice == 1 ? $"{Keywords.Link("Weakest", "weakest")} creature" : $"{data.sacrifice} {Keywords.Link("Weakest", "weakest")} creatures")} will be sacrificed to play this"
+                : "";
             string cost = data.discardCost > 0
                 ? $"{Keywords.Link("Discard Cost", $"Discard {data.discardCost}")}: give up {data.discardCost} {(data.discardChosen ? "" : "random ")}other card{(data.discardCost == 1 ? "" : "s")}{(data.discardChosen ? " of your choice" : "")} from your hand to play this"
-                : data.sacrifice > 0
-                    ? $"{Keywords.Link("Sacrifice", $"Sacrifice {data.sacrifice}")}: your {(data.sacrifice == 1 ? $"{Keywords.Link("Weakest", "weakest")} creature dies" : $"{data.sacrifice} {Keywords.Link("Weakest", "weakest")} creatures die")} to play this"
-                    : data.doomCost > 0
+                : data.doomCost > 0
                         ? $"{Keywords.Link("Doom Cost", $"Doom {data.doomCost}")}: your {Keywords.Link("Weakest", "weakest")} creature not yet {Keywords.Link("Doomed")} is Doomed (dies in {data.doomCost} Day{(data.doomCost == 1 ? "" : "s")}) to play this"
                         : "";
-            return string.Join("\n", new[] { cost, keywordLine }.Concat(sentences).Where(line => !string.IsNullOrEmpty(line)));
+            return string.Join("\n", new[] { cost, keywordLine }.Concat(sentences).Append(sacrifice).Where(line => !string.IsNullOrEmpty(line)));
         }
 
         /// <summary>The rules text of these effects alone (no keyword line for the card's movement or ability).</summary>
@@ -208,7 +210,7 @@ namespace SlayTheClone {
         // Which whole group an action lands on; None when it's one target (chosen, random, or a creature and its neighbors)
         private static Reach ReachOf(EffectAction action) {
             if (action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.WithAdjacent)
-                || action.targetModifier.HasFlag(TargetModifier.Strongest) || action.targetModifier.HasFlag(TargetModifier.Opposite)) return Reach.None;
+                || action.targetModifier.HasFlag(TargetModifier.Beside) || action.targetModifier.HasFlag(TargetModifier.Strongest) || action.targetModifier.HasFlag(TargetModifier.Opposite)) return Reach.None;
             bool each = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
             return action.targetType switch {
                 TargetType.FriendlyCreatures when each => Reach.FriendlyCreatures,
@@ -391,11 +393,13 @@ namespace SlayTheClone {
                 }
             }
 
+            if (action.targetModifier.HasFlag(TargetModifier.Beside)) return "its neighbors";
             string adjacent = action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? " and its neighbors" : "";
             // Spells resolve against whatever they are dropped on unless they hit a whole group
             bool hitsGroup = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
             if (isSpell && !hitsGroup && action.targetType is not (TargetType.Player or TargetType.Enemy)) {
-                return (EffectResolver.OwnSideOnly(action.actionType) ? "target friendly creature" : "target") + adjacent;
+                if (EffectResolver.OwnSideOnly(action.actionType)) return "target friendly creature" + adjacent;
+                return (action.actionType == ActionType.Destroy ? "target creature" : "target") + adjacent; // Only a creature can be destroyed
             }
 
             switch (action.targetType) {

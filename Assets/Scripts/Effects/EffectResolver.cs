@@ -111,6 +111,9 @@ namespace SlayTheClone {
             if (chosenTarget != null && UsesChosenTarget(action) && IsSlotAction(action.actionType)) {
                 return new List<ITarget> { SlotOf(chosenTarget) }.Where(slot => slot != null).ToList();
             }
+            if (chosenTarget != null && UsesChosenTarget(action) && action.targetModifier.HasFlag(TargetModifier.Beside)) {
+                return WithoutTooMainstream(NeighboursOf(chosenTarget).ToList(), source);
+            }
             if (chosenTarget != null && UsesChosenTarget(action)) {
                 var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
                 if (OwnSideOnly(action.actionType) && (resolved as ICreature)?.Owner != controller) resolved = null; // A sacrifice is yours to make

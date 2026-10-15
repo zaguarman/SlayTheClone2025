@@ -57,8 +57,8 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'Sacrifice 1: destroy target enemy creature. Black magic always takes
-    something.'
+  designNotes: Destroy target enemy creature; your weakest creature is sacrificed
+    to play it. Black magic always takes something.
   artDescription: A heavy book bound in stitched leather with a screaming face on
     its cover, lying open on a stone altar, a hooded figure reading from it while
     a shadowy hand rises out of the pages.

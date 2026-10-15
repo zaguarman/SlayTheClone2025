@@ -610,9 +610,10 @@ namespace SlayTheClone {
                     targets.Add(slot);
                     return targets;
                 }
-                if (CreatureAt(aim) is SeenCreature creature) targets.Add(creature);
+                bool beside = action.targetModifier.HasFlag(TargetModifier.Beside); // Its neighbours only
+                if (!beside && CreatureAt(aim) is SeenCreature creature) targets.Add(creature);
                 else if (EffectResolver.CanAffectPlayers(action.actionType)) targets.Add(slot.Ours ? view.Me : view.Them);
-                if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) {
+                if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent) || beside) {
                     var row = slot.Ours ? view.MySlots : view.TheirSlots;
                     foreach (int i in new[] { slot.Index - 1, slot.Index + 1 }) {
                         if (i >= 0 && i < row.Count && row[i].Creature != null) targets.Add(row[i].Creature);

@@ -31,9 +31,9 @@ MonoBehaviour:
     oncePerCombat: 0
     actions:
     - actionType: 0
-      value: 2
+      value: 5
       targetType: 4
-      targetModifier: 1
+      targetModifier: 0
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
@@ -57,7 +57,35 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 2 damage to target enemy creature and the creatures beside it.
+    - actionType: 0
+      value: 2
+      targetType: 4
+      targetModifier: 64
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 5 damage to target enemy creature and 2 to the creatures beside it
+    (the user, 2026-10-15).
   artDescription: A golden orb with a jewelled cross on top, its pin pulled, held
     up by a monk reading from an enormous book, three fingers raised, knights ducking
     behind him.

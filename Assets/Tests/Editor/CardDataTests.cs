@@ -74,6 +74,8 @@ namespace SlayTheClone.Tests {
             StringAssert.EndsWith("Retaliate: Exhaust", printed["Quantum Physicist"], "Retaliate, then what it does to the attacker");
             Assert.AreEqual("Arrival: exhaust itself", printed["Hikikomori"], "Aimed at itself, it says so");
             StringAssert.Contains("Counterattack", printed["Keyboard Warrior"], "Hitting back for its Attack");
+            Assert.AreEqual("Destroy target creature\nSacrifice 1: your weakest creature will be sacrificed to play this", printed["Necronomicon"], "A sacrifice comes after what it buys");
+            Assert.AreEqual("5 damage to target and 2 damage to its neighbors", printed["Holy Hand Grenade of Antioch"], "Its neighbors alone");
 
             var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
             var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()

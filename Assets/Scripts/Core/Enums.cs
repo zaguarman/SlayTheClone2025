@@ -88,6 +88,7 @@ namespace SlayTheClone {
             Chained = 1 << 3,
             Strongest = 1 << 4, // The one with the highest Attack, picked when it happens (ties at random)
             Opposite = 1 << 5,  // A creature's effect: the creature facing it, on the other side (none there: nothing)
+            Beside = 1 << 6,    // Only the creatures beside where it lands, not the one there (Holy Hand Grenade's splash)
         }
 
         // Trends (GDD 4.2): what the world is into right now, one rule for the whole board for some Days, until another Trend replaces it. New ones go last
