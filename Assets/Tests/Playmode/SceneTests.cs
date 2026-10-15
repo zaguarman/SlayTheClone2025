@@ -315,6 +315,16 @@ namespace SlayTheClone.Tests {
             SceneGame.EndDrag(card, drag);
             Assert.IsNull(game.MoveHintIn(p1.Battlefield[1]), "The hints go when the drag ends");
 
+            // Picked up while it's still deploying: it says why it can't act
+            var rookieData = game.Cards.Creature("Test Rookie", 1, 3);
+            rookieData.turnsUntilOperative = 2;
+            var rookie = game.Summon(p1, rookieData, 4);
+            yield return null;
+            var rookieCard = game.CardIn(p1.Battlefield[4]);
+            var rookieDrag = SceneGame.BeginDrag(rookieCard);
+            StringAssert.StartsWith("Still deploying: ready in 2 Days", game.BoardView(p1).CantActReason, "A creature still deploying says why it can't act");
+            SceneGame.EndDrag(rookieCard, rookieDrag);
+
             // Friendly Fire: right-dragged onto another creature of its own side, it attacks it
             var rightDrag = SceneGame.BeginDrag(card, PointerEventData.InputButton.Right);
             Assert.IsTrue(card.IsFriendlyFire, "A right-drag of a creature on the board is Friendly Fire");

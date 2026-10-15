@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -983,6 +984,36 @@ namespace SlayTheClone {
             draggedCard = card;
             card.transform.SetAsLastSibling();
             ShowMoveHints(card.GetLinkedCreature());
+            ExplainWhyItCantAct(card);
+        }
+
+        /// <summary>The last reason a creature picked up couldn't act (shown over it), for tests.</summary>
+        public string CantActReason { get; private set; }
+
+        // A creature of ours that can't act this Day, picked up to attack or move: it says why (the user), as the hand does
+        // for a card it can't play
+        private void ExplainWhyItCantAct(CardController card) {
+            var creature = card.GetLinkedCreature();
+            if (creature?.Slot == null || creature.Owner != Player || !FogOfWar.CanControl(Player) || GameManager.ModifierManager.CanAct(creature)) return;
+            int days = creature.TurnsUntilOperative;
+            CantActReason = !creature.IsOperative
+                ? $"Still deploying: ready in {days} Day{(days == 1 ? "" : "s")}"
+                : "It can't act this Day";
+            card.transform.DOPunchPosition(new Vector3(10f, 0f, 0f), 0.35f, 14, 0.8f);
+            var note = UITheme.NewText("CantAct", transform, CantActReason, 24f, UITheme.Hex(0xFF8A7A));
+            note.fontStyle = TMPro.FontStyles.Bold;
+            note.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+            note.raycastTarget = false;
+            UITheme.AddDropShadow(note);
+            var rect = note.rectTransform;
+            rect.sizeDelta = new Vector2(520f, 40f);
+            rect.position = card.transform.position;
+            rect.anchoredPosition += new Vector2(0f, BattlefieldSlot.Size.y * SlotScale * 0.6f);
+            rect.SetAsLastSibling();
+            float from = rect.anchoredPosition.y;
+            DOTween.To(() => rect.anchoredPosition.y, y => rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, y), from + 50f, 1.8f)
+                .SetEase(Ease.OutCubic).SetTarget(note);
+            DOTween.To(() => note.alpha, a => note.alpha = a, 0f, 0.6f).SetDelay(1.3f).SetTarget(note).OnComplete(() => { if (note != null) Destroy(note.gameObject); });
         }
 
         // Every slot of the row says what dropping the creature there would do, given this side's other planned moves

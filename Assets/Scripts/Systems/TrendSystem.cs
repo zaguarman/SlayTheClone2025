@@ -99,14 +99,18 @@ namespace SlayTheClone {
         }
 
         // Casino: when it's set and at each Dawn, the house's wheel spins the Day's weather (never the same twice running),
-        // for everyone: Heatwave and Tailwind lift every creature on the board for the Day, Rain and Hail wait for Dusk
+        // for everyone: Heatwave lifts every creature on the board for the Day, Tailwind half of them at random, Rain and Hail wait for Dusk
         private void SpinTheWheel(IActionsQueue queue) {
             var outcomes = System.Enum.GetValues(typeof(CasinoRoll)).Cast<CasinoRoll>().Where(r => r != CasinoRoll.None && r != Roll).ToList();
             Roll = outcomes[GameRandom.Next(outcomes.Count)];
             Log($"Casino: the wheel stops on {NameOf(Roll)}", LogTag.Effects);
             OnTrendChanged.Invoke(Current); // The banner shows the Day's weather
             if (queue == null || SetBy?.Opponent == null || (Roll != CasinoRoll.Heatwave && Roll != CasinoRoll.Tailwind)) return;
-            foreach (var creature in BoardCreatures()) {
+            var lifted = BoardCreatures().ToList();
+            // Tailwind blows across the board at random (the user: +1 Speed for everyone changed nobody's order): half the
+            // creatures, either side, rounded up
+            if (Roll == CasinoRoll.Tailwind) lifted = lifted.OrderBy(_ => GameRandom.Next(int.MaxValue)).Take((lifted.Count + 1) / 2).ToList();
+            foreach (var creature in lifted) {
                 queue.AddAction(new ModifyAction(creature, 1, Roll == CasinoRoll.Heatwave, false, Roll == CasinoRoll.Tailwind, durationInTurns: 1));
             }
         }
@@ -133,7 +137,7 @@ namespace SlayTheClone {
             CasinoRoll.Heatwave => "every creature +1 Attack this Day",
             CasinoRoll.Rain => "at Dusk every creature heals 1",
             CasinoRoll.Hail => "at Dusk every creature takes 1 damage",
-            CasinoRoll.Tailwind => "every creature +1 Speed this Day",
+            CasinoRoll.Tailwind => "half the creatures on the board, at random, +1 Speed this Day",
             CasinoRoll.RushHour => "the slowest act first this Day",
             CasinoRoll.Windfall => "both players draw 1 more card next Day",
             _ => ""
@@ -157,7 +161,7 @@ namespace SlayTheClone {
             Trend.RushHour => "the slowest act first",
             Trend.SurvivalOfTheFittest => $"each Dusk, the creature with the least Health on the board, either side, takes {CullDamage} damage",
             Trend.VolcanoLair => "each Day, on each side, the strongest creature hides in a lair: it's Untouchable that Day, as long as another creature of its side stands",
-            Trend.Casino => "each Dawn the house's wheel spins the Day's weather, the same for both sides: Heatwave (every creature +1 Attack), Rain (at Dusk every creature heals 1), Hail (at Dusk every creature takes 1 damage), Tailwind (every creature +1 Speed), Rush Hour (the slowest act first) or Windfall (both players draw 1 more card next Day)",
+            Trend.Casino => "each Dawn the house's wheel spins the Day's weather, the same for both sides: Heatwave (every creature +1 Attack), Rain (at Dusk every creature heals 1), Hail (at Dusk every creature takes 1 damage), Tailwind (half the creatures on the board, at random, +1 Speed), Rush Hour (the slowest act first) or Windfall (both players draw 1 more card next Day)",
             _ => ""
         };
     }
