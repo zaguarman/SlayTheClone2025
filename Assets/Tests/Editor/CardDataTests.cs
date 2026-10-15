@@ -60,6 +60,13 @@ namespace SlayTheClone.Tests {
                 deadLinks.AddRange(mentioned.Where(k => !Keywords.Exists(k)).Select(k => $"{entry.Key}: {k}"));
             }
             CollectionAssert.IsEmpty(deadLinks, "Keywords without an explanation");
+
+            // ...and the font draws every character of it, and every faction's coin: its fallback is baked (static), so it
+            // doesn't rewrite itself at each run. A new sign goes into "LiberationSans SDF - Fallback" (TryAddCharacters)
+            var shown = string.Concat(printed.Keys.Concat(printed.Values).Concat(Keywords.All.Select(k => k.Title + Keywords.Plain(k.Text)))
+                .Concat(System.Enum.GetValues(typeof(Faction)).Cast<Faction>().Select(UITheme.FactionGlyph)));
+            TMPro.TMP_Settings.defaultFontAsset.HasCharacters(shown, out uint[] undrawable, searchFallbacks: true);
+            CollectionAssert.IsEmpty((undrawable ?? new uint[0]).Distinct().Where(c => !char.IsControl((char)c)).Select(c => (char)c), "Characters the font can't draw");
             Assert.AreEqual("Exhaust all creatures", printed["Strike"], "All enemy and all friendly creatures: all creatures");
             Assert.AreEqual("Target +3 Attack and -2 Health", printed["Dead Cat Bounce"], "One target, named once");
             StringAssert.EndsWith("and Heat Signature on all creatures", printed["Climate Change"], "Statuses on the same creatures share them, and a 1 goes without saying");
