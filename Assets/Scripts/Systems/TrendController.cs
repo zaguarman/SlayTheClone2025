@@ -48,7 +48,7 @@ namespace SlayTheClone {
             string rule = trend == Trend.Casino && Trends.Roll != CasinoRoll.None // The Day's weather, not the whole wheel
                 ? $"today <b>{TrendSystem.NameOf(Trends.Roll)}</b>, {TrendSystem.RuleOf(Trends.Roll)}"
                 : TrendSystem.RuleOf(trend);
-            trendText.text = trend == Trend.None ? "" : $"Trending: <b>{TrendSystem.NameOf(trend)}</b>{days}: {rule}";
+            trendText.text = trend == Trend.None ? "" : $"Trend: <b>{TrendSystem.NameOf(trend)}</b>{days}: {rule}";
             var banner = trendText.transform.parent;
             if (banner != null && banner.name == BannerName) banner.gameObject.SetActive(trend != Trend.None);
         }

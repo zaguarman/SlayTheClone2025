@@ -338,10 +338,10 @@ namespace SlayTheClone {
                     return $"{target} gains {AbilityName(action.ability)}";
                 case ActionType.Earthquake:
                     return $"an {Keywords.Link("Earthquake", "earthquake")}: from a random slot, a zigzag across the board, one hit in every column, the sides taking turns, {value} damage each";
-                case ActionType.SetTrend: // "Trending: Rush Hour [sand watch]3"
+                case ActionType.SetTrend: // "Trend: Rush Hour [sand watch]3" (one word, Trend, everywhere: the user, 2026-10-15)
                     return action.trend == Trend.None
                         ? $"the {Keywords.Link("Trend")} ends"
-                        : $"{Keywords.Link("Trend", "trending")}: {Keywords.Link(TrendSystem.NameOf(action.trend))}{DaysTag(action.statusDuration)}";
+                        : $"{Keywords.Link("Trend")}: {Keywords.Link(TrendSystem.NameOf(action.trend))}{DaysTag(action.statusDuration)}";
                 case ActionType.PlaceSlotEffect:
                     return $"{DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
                 case ActionType.CleanseSlot:

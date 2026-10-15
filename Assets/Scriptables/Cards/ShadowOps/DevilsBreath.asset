@@ -88,9 +88,10 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: Target friendly creature takes the stat raises and the good statuses
-    (Blessed, Concealed, Encrypted, Untouchable) of the enemy creature facing it.
-    Its victims hand everything over, smiling.
+  designNotes: 'Target friendly creature takes the stat raises and every status of
+    the enemy creature facing it (all of them since 2026-10-15: no status is good
+    or bad by itself, so a Burn or a Doom comes along too). Its victims hand everything
+    over, smiling.'
   artDescription: A woman blowing a puff of glittering white powder off her palm
     into a businessman's face; dazed and smiling, he hands her his watch, his wallet
     and the keys to an armored car.
