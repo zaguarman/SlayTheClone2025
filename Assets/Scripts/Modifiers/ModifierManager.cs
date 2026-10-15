@@ -71,6 +71,12 @@ namespace SlayTheClone {
             return list.GroupBy(a => a.Card).Select(g => g.First()).ToList();
         }
 
+        public IReadOnlyList<IModifier> ModifiersFrom(ICreature creature, ICard origin) {
+            if (creature == null || origin == null || !attachments.TryGetValue(creature.TargetId, out var list)) return new List<IModifier>();
+            var active = new HashSet<IModifier>(GetActiveModifiersFor(creature));
+            return list.Where(a => a.Card == origin && a.Modifier != null && active.Contains(a.Modifier)).Select(a => a.Modifier).Distinct().ToList();
+        }
+
         public IEnumerable<IModifier> GetActiveModifiersFor(ICreature creature) {
             if (creature == null) return Enumerable.Empty<IModifier>();
 

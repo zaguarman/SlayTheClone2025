@@ -40,6 +40,8 @@ namespace SlayTheClone {
         void Attach(ICreature creature, ICard origin, IModifier modifier, IPlayer owner);
         /// <summary>The cards whose effects are on the creature now, oldest first, each once (see <see cref="Attachment"/>).</summary>
         IReadOnlyList<Attachment> AttachmentsOf(ICreature creature);
+        /// <summary>What this card tucked under the creature is doing to it now: the modifiers it put there that still last.</summary>
+        IReadOnlyList<IModifier> ModifiersFrom(ICreature creature, ICard origin);
         bool HasStatusEffect(ICreature creature, StatusEffectType statusType);
         bool HasModifier(ICreature creature, Predicate<IModifier> predicate);
         /// <summary>

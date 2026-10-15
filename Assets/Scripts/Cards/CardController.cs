@@ -810,6 +810,19 @@ namespace SlayTheClone {
             return preview;
         }
 
+        /// <summary>
+        /// What a card tucked under this creature is doing to it now, and only that: its stat changes and statuses on it, one
+        /// a line. A spell still on its way says so.
+        /// </summary>
+        public string GetEffectsFromText(ICard origin) {
+            if (!CreatureIsAlive || GameManager?.ModifierManager == null || origin == null) return "";
+            var viewer = FogOfWar.ViewerOf(linkedCreature.Owner);
+            var lines = GameManager.ModifierManager.ModifiersFrom(linkedCreature, origin)
+                .Where(m => !(m is StatusEffectModifier s && FogOfWar.HidesStatus(viewer, linkedCreature, s.EffectType)))
+                .Select(m => (m is StatusEffectModifier status ? EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType)) : "") + m.Description).ToList();
+            return lines.Count > 0 ? string.Join("\n", lines) : "<i>On its way: it lands when it resolves</i>";
+        }
+
         /// <summary>What the card face can't show: the modifiers currently affecting this creature. Empty if none.</summary>
         public string GetActiveModifiersText() {
             if (!CreatureIsAlive || GameManager?.ModifierManager == null || IsDisguised) return "";

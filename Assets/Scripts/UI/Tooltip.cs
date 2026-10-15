@@ -241,6 +241,8 @@ namespace SlayTheClone {
                 if (preview != null) {
                     preview.transform.localScale = Vector3.one * PreviewScaleFor(card);
                     PlacePreview(card, (RectTransform)preview.transform);
+                    var shown = (RectTransform)preview.transform;
+                    ShowWheel(shown.position, shown.up, fadeIn: false);
                 }
             }
             UpdateTooltipContent(card);
@@ -275,8 +277,9 @@ namespace SlayTheClone {
             string details = card.GetActiveModifiersText();
             int tucked = card.AttachedCards.Count;
             if (tucked > 0 && !previewIsCard) {
+                // A tucked card: only what it does to this creature, then where it is in the stack
                 details = browsed > 0
-                    ? $"<b>{card.AttachedCards[browsed - 1].Name}</b>, on {card.GetBaseCardData()?.cardName}: {browsed} of {tucked}\n<size=85%>Scroll for the others</size>"
+                    ? $"{card.GetEffectsFromText(card.AttachedCards[browsed - 1])}\n<size=80%><color=#C9C0AE>{browsed} of {tucked} on {card.GetBaseCardData()?.cardName}: scroll for the others</color></size>"
                     : (string.IsNullOrEmpty(details) ? "" : details + "\n\n") + $"<size=85%>{tucked} card{(tucked == 1 ? "" : "s")} on it: scroll to see {(tucked == 1 ? "it" : "them")}</size>";
             }
             bool hasDetails = !string.IsNullOrEmpty(details) && preview != null;
@@ -293,6 +296,9 @@ namespace SlayTheClone {
 
         /// <summary>What a text tooltip says, while one shows.</summary>
         public string ShownText => gameObject.activeSelf && activeCard == null ? tooltipText.text : null;
+
+        /// <summary>What the details beside a card's preview say, while they show.</summary>
+        public string DetailsText => activeCard != null && tooltipRect.gameObject.activeSelf ? tooltipText.text : null;
 
         /// <summary>Hides a text tooltip; a card's preview stays.</summary>
         public void HideText() {
@@ -322,6 +328,7 @@ namespace SlayTheClone {
             preview = null;
             previewIsCard = false;
             ClearLeaving();
+            ClearWheel();
             canvasGroup.alpha = 0;
             gameObject.SetActive(false);
         }
@@ -485,7 +492,55 @@ namespace SlayTheClone {
             preview.transform.localScale = Vector3.one * PreviewScaleFor(activeCard);
             PlacePreview(activeCard, (RectTransform)preview.transform);
             UpdateTooltipContent(activeCard);
+            var home = (RectTransform)preview.transform;
+            Vector3 position = home.position, up = home.up; // Where it settles, before the spin turns it in
             Spin(old, preview, step < 0 ? -1 : 1);
+            ShowWheel(position, up, fadeIn: true);
+        }
+
+        // The rest of the stack, faint, on the wheel around the shown card: the cards to come wait on the left (the next one
+        // clearest), the ones gone by sit on the right, fainter the further back they are, until they're gone
+        private readonly List<CardController> wheel = new List<CardController>();
+        private const int WheelReach = 3; // Cards shown each side
+
+        private void ShowWheel(Vector3 home, Vector3 up, bool fadeIn) {
+            ClearWheel();
+            if (activeCard == null || preview == null || previewIsCard || activeCard.AttachedCards.Count == 0) return;
+            var stack = activeCard.AttachedCards;
+            var shown = (RectTransform)preview.transform;
+            float radius = shown.rect.height * shown.lossyScale.y * RouletteRadius;
+            Vector3 center = home - up * radius;
+            for (int i = 0; i <= stack.Count; i++) {
+                int distance = Mathf.Abs(i - browsed);
+                if (distance == 0 || distance > WheelReach) continue;
+                bool ahead = i > browsed;
+                float alpha = ahead ? 0.55f - 0.15f * (distance - 1) : 0.4f * Mathf.Pow(0.4f, distance - 1);
+                var ghost = i == 0
+                    ? activeCard.CreatePreview(transform)
+                    : activeCard.CreatePreviewOf(stack[i - 1], i - 1 < activeCard.AttachedOwners.Count ? activeCard.AttachedOwners[i - 1] : null, transform);
+                if (ghost == null) continue;
+                var rect = (RectTransform)ghost.transform;
+                rect.localScale = shown.localScale;
+                var turn = Quaternion.Euler(0f, 0f, (ahead ? 1f : -1f) * distance * RouletteAngle); // The next ones come from the left
+                rect.position = center + turn * (home - center);
+                rect.rotation = turn * shown.parent.rotation;
+                rect.SetAsFirstSibling(); // Behind the shown card and the explanations
+                var group = ghost.GetComponent<CanvasGroup>() ?? ghost.gameObject.AddComponent<CanvasGroup>();
+                group.blocksRaycasts = false;
+                group.interactable = false;
+                group.alpha = fadeIn ? 0f : alpha;
+                if (fadeIn) DOTween.To(() => group.alpha, a => group.alpha = a, alpha, RouletteSeconds).SetUpdate(true).SetTarget(group);
+                wheel.Add(ghost);
+            }
+        }
+
+        private void ClearWheel() {
+            foreach (var ghost in wheel) {
+                if (ghost == null) continue;
+                DOTween.Kill(ghost.GetComponent<CanvasGroup>());
+                Destroy(ghost.gameObject);
+            }
+            wheel.Clear();
         }
 
         // The roulette: both cards turn together around the wheel's center, the old one out, the new one in, settling where
