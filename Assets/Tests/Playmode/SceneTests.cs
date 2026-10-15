@@ -323,6 +323,7 @@ namespace SlayTheClone.Tests {
             var rookieCard = game.CardIn(p1.Battlefield[4]);
             var rookieDrag = SceneGame.BeginDrag(rookieCard);
             StringAssert.StartsWith("Still deploying: ready in 2 Days", game.BoardView(p1).CantActReason, "A creature still deploying says why it can't act");
+            Assert.IsNull(rookieDrag.pointerDrag, "...and isn't picked up: it stays in its slot");
             SceneGame.EndDrag(rookieCard, rookieDrag);
 
             // Friendly Fire: right-dragged onto another creature of its own side, it attacks it

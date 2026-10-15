@@ -967,6 +967,7 @@ namespace SlayTheClone {
             base.SetupCardEventHandlers(controller);
             controller.OnCardClicked.AddListener(OnCardClicked);
             controller.OnCardRightClicked.AddListener(OnCardClicked);
+            controller.RefusesDrag = RefuseIfItCantAct;
         }
 
         // Clicking or right-clicking a creature withdraws its queued attack
@@ -998,36 +999,54 @@ namespace SlayTheClone {
             draggedCard = card;
             card.transform.SetAsLastSibling();
             ShowMoveHints(card.GetLinkedCreature());
-            ExplainWhyItCantAct(card);
         }
 
         /// <summary>The last reason a creature picked up couldn't act (shown over it), for tests.</summary>
         public string CantActReason { get; private set; }
 
-        // A creature of ours that can't act this Day, picked up to attack or move: it says why (the user), as the hand does
-        // for a card it can't play
-        private void ExplainWhyItCantAct(CardController card) {
+        // A creature of ours that can't act this Day, picked up to attack or move, isn't picked up (the user): it stays in
+        // its slot, shakes its head (side to side, a "no no") and says why over everything else, as the hand does for a
+        // card it can't play
+        private bool RefuseIfItCantAct(CardController card) {
             var creature = card.GetLinkedCreature();
-            if (creature?.Slot == null || creature.Owner != Player || !FogOfWar.CanControl(Player) || GameManager.ModifierManager.CanAct(creature)) return;
+            if (creature?.Slot == null || creature.Owner != Player || !FogOfWar.CanControl(Player) || GameManager.ModifierManager.CanAct(creature)) return false;
             int days = creature.TurnsUntilOperative;
             CantActReason = !creature.IsOperative
                 ? $"Still deploying: ready in {days} Day{(days == 1 ? "" : "s")}"
                 : "It can't act this Day";
-            card.transform.DOPunchPosition(new Vector3(10f, 0f, 0f), 0.35f, 14, 0.8f);
-            var note = UITheme.NewText("CantAct", transform, CantActReason, 24f, UITheme.Hex(0xFF8A7A));
+
+            const string ShakeId = "CantActShake";
+            DOTween.Complete(card.transform.GetInstanceID() + ShakeId); // Asked again mid-shake: it starts over from its place
+            card.transform.DOPunchPosition(new Vector3(9f, 0f, 0f), 0.45f, 8, 0.6f).SetId(card.transform.GetInstanceID() + ShakeId);
+
+            // A dark pill on the root canvas, last, with its own sorting: readable over the other side, the river, the hand
+            // and any card shown enlarged
+            var canvas = GetComponentInParent<Canvas>().rootCanvas;
+            var old = canvas.transform.Find("CantAct");
+            if (old != null) Destroy(old.gameObject);
+            var pill = UITheme.NewImage("CantAct", canvas.transform, UITheme.Hex(0x0A0F1C, 0.9f));
+            UITheme.Round(pill, pill.color, 3f);
+            pill.raycastTarget = false;
+            var top = pill.gameObject.AddComponent<Canvas>();
+            top.overrideSorting = true;
+            top.sortingOrder = 1000;
+            var fade = pill.gameObject.AddComponent<CanvasGroup>();
+            fade.blocksRaycasts = false;
+            var note = UITheme.NewText("Text", pill.transform, CantActReason, 24f, UITheme.Hex(0xFF8A7A));
             note.fontStyle = TMPro.FontStyles.Bold;
             note.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+            note.alignment = TMPro.TextAlignmentOptions.Center;
             note.raycastTarget = false;
-            UITheme.AddDropShadow(note);
-            var rect = note.rectTransform;
-            rect.sizeDelta = new Vector2(520f, 40f);
-            rect.position = card.transform.position;
-            rect.anchoredPosition += new Vector2(0f, BattlefieldSlot.Size.y * SlotScale * 0.6f);
+            UITheme.Stretch(note.rectTransform, 0f);
+            var rect = pill.rectTransform;
+            rect.localScale = Vector3.one * (transform.lossyScale.x / canvas.transform.lossyScale.x); // The board's size of text
+            rect.sizeDelta = new Vector2(note.GetPreferredValues().x + 36f, 44f);
             rect.SetAsLastSibling();
-            float from = rect.anchoredPosition.y;
-            DOTween.To(() => rect.anchoredPosition.y, y => rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, y), from + 50f, 1.8f)
-                .SetEase(Ease.OutCubic).SetTarget(note);
-            DOTween.To(() => note.alpha, a => note.alpha = a, 0f, 0.6f).SetDelay(1.3f).SetTarget(note).OnComplete(() => { if (note != null) Destroy(note.gameObject); });
+            float lift = BattlefieldSlot.Size.y * SlotScale * 0.6f * transform.lossyScale.y;
+            rect.position = card.transform.position + new Vector3(0f, lift, 0f);
+            rect.DOMoveY(rect.position.y + 30f * transform.lossyScale.y, 1.8f).SetEase(Ease.OutCubic).SetTarget(pill);
+            DOTween.To(() => fade.alpha, a => fade.alpha = a, 0f, 0.6f).SetDelay(1.4f).SetTarget(pill).OnComplete(() => { if (pill != null) Destroy(pill.gameObject); });
+            return true;
         }
 
         // Every slot of the row says what dropping the creature there would do, given this side's other planned moves

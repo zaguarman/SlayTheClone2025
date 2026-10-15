@@ -84,6 +84,8 @@ namespace SlayTheClone {
         public bool IsLeavingPlay { get; private set; }
 
         public CardUnityEvent OnBeginDragEvent = new CardUnityEvent();
+        /// <summary>Asked as a drag starts: true keeps the card where it is (its view says why, see BattlefieldUI).</summary>
+        public System.Func<CardController, bool> RefusesDrag;
         public CardUnityEvent OnEndDragEvent = new CardUnityEvent();
         public CardUnityEvent OnCardDropped = new CardUnityEvent();
         public CardUnityEvent OnCardClicked = new CardUnityEvent(); // Pressed and released without dragging
@@ -398,7 +400,8 @@ namespace SlayTheClone {
             // and nothing can be played while a turn resolves; cancel the drag so no drop zone receives the card
             if ((IsQueued && !canDragWhileQueued) || (GameManager?.TurnManager?.IsResolving ?? false) || !FogOfWar.CanControl(Player)
                 || DeckViewUI.PickPending // A card to pick first (Send For)
-                || (cardViews?.IsDisplayOnly ?? false)) {
+                || (cardViews?.IsDisplayOnly ?? false)
+                || (RefusesDrag?.Invoke(this) ?? false)) { // A creature that can't act stays put and shakes its head
                 eventData.pointerDrag = null;
                 return;
             }
