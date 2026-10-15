@@ -53,8 +53,10 @@ namespace SlayTheClone {
 
         private void OnDestroy() {
             // Never leave the next scene frozen
-            if (IsPaused) Time.timeScale = 1f;
+            if (IsPaused) Time.timeScale = speedBeforePause;
         }
+
+        private float speedBeforePause = 1f; // The playback speed chosen in the editor (UI > Playback) comes back on resume
 
         public void Pause() => SetPaused(true);
 
@@ -66,9 +68,10 @@ namespace SlayTheClone {
         }
 
         private void SetPaused(bool paused) {
+            if (paused && !IsPaused && Time.timeScale > 0f) speedBeforePause = Time.timeScale;
             IsPaused = paused;
             panel.SetActive(paused);
-            Time.timeScale = paused ? 0f : 1f;
+            Time.timeScale = paused ? 0f : speedBeforePause;
             Log(paused ? "Game paused" : "Game resumed", LogTag.UI);
         }
     }

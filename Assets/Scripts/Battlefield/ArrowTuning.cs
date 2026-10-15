@@ -88,7 +88,26 @@ namespace SlayTheClone {
         // A slider moved: the arrows on the table take it at once
         private void OnValidate() => ArrowIndicator.RedrawAll();
 
+        /// <summary>The values it shipped with (the ones written above), kept whatever the sliders say.</summary>
+        public void RestoreOriginals() {
+            var originals = CreateInstance<ArrowTuning>();
+            JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(originals), this);
+            DestroyImmediate(originals);
+            ArrowIndicator.RedrawAll();
+        }
+
 #if UNITY_EDITOR
+        private const string RememberedKey = "SlayTheClone.ArrowTuning.Remembered";
+
+        /// <summary>A snapshot of the sliders, kept in the editor's settings: a set to come back to after experimenting.</summary>
+        public void Remember() => UnityEditor.EditorPrefs.SetString(RememberedKey, JsonUtility.ToJson(this));
+        public bool HasRemembered => UnityEditor.EditorPrefs.HasKey(RememberedKey);
+        public void BackToRemembered() {
+            if (!HasRemembered) return;
+            JsonUtility.FromJsonOverwrite(UnityEditor.EditorPrefs.GetString(RememberedKey), this);
+            ArrowIndicator.RedrawAll();
+        }
+
         /// <summary>Selects the tuning asset (made with the defaults if there's none) so its sliders show in the Inspector.</summary>
         [UnityEditor.MenuItem("UI/Arrow Tuning")]
         private static void Select() {
@@ -105,4 +124,35 @@ namespace SlayTheClone {
         }
 #endif
     }
+#if UNITY_EDITOR
+    /// <summary>
+    /// The sliders, with a safety net: back to the original values at any time, or to a set remembered earlier. What's
+    /// changed while playing stays (it's an asset, not the scene), and every change can be undone (Ctrl+Z).
+    /// </summary>
+    [UnityEditor.CustomEditor(typeof(ArrowTuning))]
+    public class ArrowTuningEditor : UnityEditor.Editor {
+        public override void OnInspectorGUI() {
+            var tuning = (ArrowTuning)target;
+            UnityEditor.EditorGUILayout.HelpBox("Changes show on the table at once while playing, and they stay when you stop: " +
+                "this is an asset, not the scene. Ctrl+Z undoes a change.", UnityEditor.MessageType.Info);
+            using (new UnityEditor.EditorGUILayout.HorizontalScope()) {
+                if (GUILayout.Button("Restore the original values")) {
+                    UnityEditor.Undo.RecordObject(tuning, "Restore the original arrow values");
+                    tuning.RestoreOriginals();
+                    UnityEditor.EditorUtility.SetDirty(tuning);
+                }
+                if (GUILayout.Button("Remember these values")) tuning.Remember();
+                using (new UnityEditor.EditorGUI.DisabledScope(!tuning.HasRemembered)) {
+                    if (GUILayout.Button("Back to the remembered ones")) {
+                        UnityEditor.Undo.RecordObject(tuning, "Back to the remembered arrow values");
+                        tuning.BackToRemembered();
+                        UnityEditor.EditorUtility.SetDirty(tuning);
+                    }
+                }
+            }
+            UnityEditor.EditorGUILayout.Space();
+            DrawDefaultInspector();
+        }
+    }
+#endif
 }
