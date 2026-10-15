@@ -42,6 +42,28 @@ namespace SlayTheClone {
         [Tooltip("Attacks, lone and merged, keep this far to the right of where they go, so opposite ones pass side by side; forks don't (gallery: Singles, Merging)")]
         [Range(0f, 0.6f)] public float attackLane = 0.22f;
 
+        [Header("Start and end positions, along the arrow's way (both sides alike)")]
+        [Tooltip("Attacks (lone, merged, forked): how far the tail starts forward of the attacker's center, toward the target (0.8: about the card's edge) (gallery: Singles, Merging, Spray)")]
+        [Range(-1f, 2f)] public float attackStartY = 0.8f;
+        [Tooltip("Attacks: how far the head stops back from the target's center, toward the attacker (0.99: the card's near edge) (gallery: Singles, Merging, Spray)")]
+        [Range(-1f, 2f)] public float attackEndY = 0.99f;
+        [Tooltip("Damage arrows: tail forward of the attacker's center (gallery: Damage)")]
+        [Range(-1f, 2f)] public float damageStartY = 0.8f;
+        [Tooltip("Damage arrows: head back from the target's center (gallery: Damage)")]
+        [Range(-1f, 2f)] public float damageEndY = 0.99f;
+        [Tooltip("Move arrows: tail forward of the moving creature's center (gallery: Moves)")]
+        [Range(-1f, 2f)] public float moveStartY = 0.3f;
+        [Tooltip("Move arrows: head back from the destination's center (gallery: Moves)")]
+        [Range(-1f, 2f)] public float moveEndY = 0.42f;
+        [Tooltip("The drag arrow: tail forward of the dragged creature's center (gallery: Drag)")]
+        [Range(-1f, 2f)] public float dragStartY = 0.3f;
+        [Tooltip("The drag arrow: head back from the pointer (0: right on it) (gallery: Drag)")]
+        [Range(-1f, 2f)] public float dragEndY = 0f;
+        [Tooltip("Every arrow: its tail moved sideways, to the right of where it's going (minus: to the left) (gallery: any set)")]
+        [Range(-1f, 1f)] public float startX = 0f;
+        [Tooltip("Every arrow: its head moved sideways, to the right of where it's going (minus: to the left) (gallery: any set)")]
+        [Range(-1f, 1f)] public float endX = 0f;
+
         [Header("Sharpest curves: arrows routed into a shared one, like PCB tracks")]
         [Tooltip("Merged attacks: the branches' diagonal, its angle from straight ahead (45: a true diagonal; more: flatter, sharper turns) (gallery: Merging)")]
         [Range(15f, 80f)] public float routeAngle = 45f;

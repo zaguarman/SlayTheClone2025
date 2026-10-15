@@ -35,10 +35,10 @@ namespace SlayTheClone {
             private static Style From(Kind kind) {
                 var t = ArrowTuning.Current;
                 switch (kind) {
-                    case Kind.Damage: return new Style { Of = kind, Width = t.damageWidth, Lane = 0f, Bow = t.damageBow, MaxBow = 0.35f * t.maxBowScale, StartInset = 0.8f, EndInset = 0.99f };
-                    case Kind.Move: return new Style { Of = kind, Width = t.moveWidth, Lane = 0f, Bow = t.moveBow, MaxBow = 0.42f * t.maxBowScale, StartInset = 0.3f, EndInset = 0.42f };
-                    case Kind.Drag: return new Style { Of = kind, Width = t.dragWidth, Lane = 0f, Bow = t.dragBow, MaxBow = 0.4f * t.maxBowScale, StartInset = 0.3f, EndInset = 0f };
-                    default: return new Style { Of = kind, Width = t.attackWidth, Lane = t.attackLane, Bow = t.attackBow, MaxBow = 0.35f * t.maxBowScale, StartInset = 0.8f, EndInset = 0.99f };
+                    case Kind.Damage: return new Style { Of = kind, Width = t.damageWidth, Lane = 0f, Bow = t.damageBow, MaxBow = 0.35f * t.maxBowScale, StartInset = t.damageStartY, EndInset = t.damageEndY };
+                    case Kind.Move: return new Style { Of = kind, Width = t.moveWidth, Lane = 0f, Bow = t.moveBow, MaxBow = 0.42f * t.maxBowScale, StartInset = t.moveStartY, EndInset = t.moveEndY };
+                    case Kind.Drag: return new Style { Of = kind, Width = t.dragWidth, Lane = 0f, Bow = t.dragBow, MaxBow = 0.4f * t.maxBowScale, StartInset = t.dragStartY, EndInset = t.dragEndY };
+                    default: return new Style { Of = kind, Width = t.attackWidth, Lane = t.attackLane, Bow = t.attackBow, MaxBow = 0.35f * t.maxBowScale, StartInset = t.attackStartY, EndInset = t.attackEndY };
                 }
             }
 
@@ -345,10 +345,10 @@ namespace SlayTheClone {
             Vector2 forward = travel.normalized;
             Vector2 right = new Vector2(forward.y, -forward.x);
             Vector2 axis = Mathf.Abs(forward.y) >= 0.35f ? new Vector2(0f, Mathf.Sign(forward.y)) : forward; // Rows face each other
-            Vector2 tip = end - axis * style.EndInset + right * style.Lane;
+            Vector2 tip = end - axis * style.EndInset + right * (style.Lane + T.endX);
 
             var tails = new List<Vector2>();
-            foreach (var start in starts) tails.Add((Vector2)start + axis * style.StartInset + right * style.Lane);
+            foreach (var start in starts) tails.Add((Vector2)start + axis * style.StartInset + right * (style.Lane + T.startX));
 
             float width = style.Width;
             if (tails.Count == 1) {
@@ -392,9 +392,10 @@ namespace SlayTheClone {
             if (travel.magnitude < MinLength) return;
             Vector2 forward = travel.normalized;
             Vector2 axis = Mathf.Abs(forward.y) >= 0.35f ? new Vector2(0f, Mathf.Sign(forward.y)) : forward; // Rows face each other
-            Vector2 tail = from + axis * style.StartInset;
-            var tips = new List<Vector2> { end - axis * style.EndInset };
-            foreach (var fork in forks) tips.Add((Vector2)fork - axis * style.EndInset);
+            Vector2 right = new Vector2(forward.y, -forward.x);
+            Vector2 tail = from + axis * style.StartInset + right * T.startX;
+            var tips = new List<Vector2> { end - axis * style.EndInset + right * T.endX };
+            foreach (var fork in forks) tips.Add((Vector2)fork - axis * style.EndInset + right * T.endX);
 
             float nearest = tips.Min(t => Vector2.Dot(t - tail, axis));
             if (nearest < MinLength) return;
