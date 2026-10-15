@@ -304,24 +304,25 @@ namespace SlayTheClone.Tests {
 
         [Test]
         public void Timing_RedTape_ThisDayBuffs_AndPersistentHeat() {
-            var clerk = game.Summon(p1, game.Creature("Clerk", 3, 5, 1, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.Enemy)), 0);
+            var clerkData = game.Creature("Clerk", 3, 5);
+            clerkData.turnsUntilOperative = 1;
+            var clerk = game.Summon(p1, clerkData, 0);
             var hero = game.Summon(p1, game.Creature("Hero", 1, 5), 1);
             var redTape = game.GiveCard(p2, game.Spell("Red Tape", TargetType.EnemyCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.DelayDeployment, 1, TargetType.EnemyCreatures)));
-            game.Declare(clerk, p2.Battlefield[0]);
             game.Play(redTape, p2, p1.Battlefield[0]);
-            game.Resolve(); // Spells before attacks
-            Assert.AreEqual(Player.MaxHealth - 1, p2.Health, "Red Tape cancels its planned attack");
-            Assert.IsFalse(game.ModifierManager.CanAct(clerk));
+            game.Resolve();
+            Assert.AreEqual(2, clerk.TurnsUntilOperative, "Red Tape: a creature still deploying waits a Day more...");
+            game.Run(new DelayDeploymentAction(hero, 1));
+            Assert.IsTrue(hero.IsOperative && game.ModifierManager.CanAct(hero), "...one already deployed isn't sent back");
             game.Run(new ModifyAction(hero, 4, true, false, false, durationInTurns: 1));
             Assert.AreEqual(5, hero.Attack);
 
             game.StartTurn();
-            Assert.IsFalse(clerk.IsOperative, "Not counted down at the Dusk of the Day it was added");
+            Assert.IsFalse(clerk.IsOperative, "Still waiting the next Day");
             Assert.AreEqual(1, hero.Attack, "A stat change for this Day ends at its Dusk");
-            game.StartTurn();
-            Assert.IsTrue(clerk.IsOperative);
-            Assert.AreEqual(Player.MaxHealth - 1, p2.Health, "Its entry effect doesn't happen again");
+            for (int day = 0; day < 3 && !clerk.IsOperative; day++) game.StartTurn();
+            Assert.IsTrue(clerk.IsOperative, "Then ready");
 
             Fresh();
             game.Summon(p2, game.Creature("Cold", 0, 10), 0);

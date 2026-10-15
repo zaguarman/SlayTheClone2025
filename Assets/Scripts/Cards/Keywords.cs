@@ -34,7 +34,7 @@ namespace SlayTheClone {
             Add("Dawn", "The start of a [Day], before anyone plans.");
             Add("Dusk", "The end of a [Day], after everything has resolved.");
             Add("Days", "How long it lasts, counting the [Day] it lands: 1 is this Day only, 2 is this Day and the next.");
-            Add("Deployment Time", "The [Days] a creature needs to get ready after it's summoned. Until then it can't act and its ability is off.");
+            Add("Deployment Time", "The [Days] a creature needs to get ready after it's summoned. Until then it can't act and its ability is off. Adding to it only slows a creature still deploying: one already ready isn't sent back.");
 
             // ---------------------------------------------------------------- Targets
             group = "Targets";

@@ -739,7 +739,7 @@ namespace SlayTheClone {
             ActionType.Heal => creature.Known ? System.Math.Min(amount, creature.MaxHealth - creature.Health) : 0,
             ActionType.Armor => amount * 0.75f,
             ActionType.Stun => creature.Operative && !IsStunned(creature) ? -(AttackOf(creature) + 1) : -0.5f,
-            ActionType.DelayDeployment => -1.5f * amount,
+            ActionType.DelayDeployment => creature.Operative ? 0 : -1.5f * amount, // Only a creature still deploying waits longer
             _ => 0
         };
 

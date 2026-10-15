@@ -2,8 +2,8 @@ using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Red Tape (GDD 3.2): adds Days to a creature's Deployment Time. A ready creature goes back to waiting: it sits out the
-    /// rest of this Day and the added Days, its planned action is cancelled and its abilities are off until it's ready again.
+    /// Red Tape (GDD 3.2): adds Days to the Deployment Time of a creature still deploying: it waits that much longer. A
+    /// creature already deployed isn't sent back (the user, 2026-10-15): nothing happens to it.
     /// </summary>
     public class DelayDeploymentAction : IGameAction {
         public ICreature Creature { get; }
@@ -22,6 +22,10 @@ namespace SlayTheClone {
         protected override void ExecuteAction(DelayDeploymentAction delay, ActionExecutionContext context) {
             var creature = delay.Creature;
             if (creature == null || creature.IsDead || creature.Slot == null || delay.Days <= 0) return;
+            if (creature.IsOperative) {
+                Log($"{creature.Name} is already deployed: Red Tape can't send it back", LogTag.Actions | LogTag.Effects);
+                return;
+            }
 
             creature.AddDeploymentTime(delay.Days, context.TurnClock.TurnNumber);
             context.ActionsQueue.CancelActionsOf(creature); // It can't act until it's ready again (GDD 3.8)
