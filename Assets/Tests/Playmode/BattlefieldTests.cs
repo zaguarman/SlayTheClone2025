@@ -57,6 +57,15 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(7, ox.Health);
             game.Run(new PlayCardAction(game.GiveCard(p1, bolt), p1, p2.Battlefield[3]));
             Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "...or that side's player on an empty slot");
+            // An effect that requires its target to be of a faction: Cyberpsychosis hits Digital Society harder
+            var trollData = game.Creature("Troll", 0, 10);
+            trollData.faction = Faction.DigitalSociety;
+            var troll = game.Summon(p2, trollData, 2);
+            var psycho = game.Spell("Psycho", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures));
+            psycho.effects[0].actions.Add(new EffectAction { actionType = ActionType.Damage, value = 3, targetType = TargetType.EnemyCreatures, requires = TargetRequisite.Online });
+            game.Run(new PlayCardAction(game.GiveCard(p1, psycho), p1, p2.Battlefield[2]));
+            game.Run(new PlayCardAction(game.GiveCard(p1, psycho), p1, p2.Battlefield[1]));
+            Assert.AreEqual((5, 5), (troll.Health, ox.Health), "2 and 3 more on the terminally online, 2 on anyone else");
             // An empty enemy slot a creature is being summoned into this Day: summons land before spells, so a spell that
             // hits creatures can be aimed there, and hits it (Necronomicon on a summon)
             var doom = (Spell)game.GiveCard(p1, game.Spell("Doom", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures)));

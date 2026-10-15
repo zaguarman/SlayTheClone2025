@@ -142,7 +142,7 @@ namespace SlayTheClone {
             }),
             // Sturdy creatures that wear the enemy down, and stat cuts that kill
             [Faction.Mind] = ("Mind - All in Your Head", new[] {
-                "Pessimist", "Pessimist", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Reflect", "Red Herring",
+                "Pessimist", "Pessimist", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Reflect", "Cyberpsychosis",
                 "Trolley Problem", "Trolley Problem", "Roko's Basilisk", "Roko's Basilisk", "Imposter Syndrome", "Imposter Syndrome",
                 "Schrodinger's Cat", "Schrodinger's Cat", "Mimetic Theory", "Mimetic Theory", "Lucid Dreaming", "Red Herring",
             }),
@@ -1327,6 +1327,11 @@ namespace SlayTheClone {
                 "Mind's scouting: send for any card among the top 3 of your deck; it joins your next hand.",
                 SendForCard(SendForFilter.Any, top: 3))
                 .Picture("A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases."),
+            Spell("Cyberpsychosis", TargetType.EnemyCreatures,
+                "Too much chrome, too little self. The feed was the last thing holding it together.",
+                "2 damage to target enemy creature, and 3 more if it's Digital Society: the terminally online crack first (the user, 2026-10-15).",
+                Damage(2, TargetType.EnemyCreatures), Requiring(Damage(3, TargetType.EnemyCreatures), TargetRequisite.Online))
+                .Picture("A man in a hoodie with glowing cables plugged into the back of his skull, eyes spinning with notification badges, screaming at a phone that screams back, sparks flying from his chrome arm."),
             Spell("Reflect", TargetType.AllCreatures,
                 "Mirror neurons: you yawn, I yawn. You panic, I panic.",
                 "Target creature copies every status of the creature facing it, good and harmful, with the Days they have left; that one keeps its own. Like Mimetic Theory, it works between the creature it's dropped on and the one facing it, so there's one target to pick (the user, 2026-10-15).",

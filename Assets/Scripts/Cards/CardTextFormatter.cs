@@ -259,7 +259,7 @@ namespace SlayTheClone {
                 case ActionType.Damage:
                     if (action.targetModifier.HasFlag(TargetModifier.Chained))
                         return $"{value} damage to its target, chaining to 2 more at half each jump";
-                    return $"{value} damage to {target}";
+                    return $"{value} damage to {target}{Requisite(action)}";
                 case ActionType.Heal:
                     return $"heal {value} to {target}";
                 case ActionType.Destroy:
@@ -372,6 +372,7 @@ namespace SlayTheClone {
             TargetRequisite.Outnumbered => " if you have more creatures than its side",
             TargetRequisite.AttackAtMost => $" with {action.value} Attack or less",
             TargetRequisite.Deploying => $" if it's still deploying ({Keywords.Link("Deployment Time")})",
+            TargetRequisite.Online => " if it's Digital Society",
             _ => ""
         };
 

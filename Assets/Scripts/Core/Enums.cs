@@ -16,9 +16,10 @@ namespace SlayTheClone {
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
         /// NextToEmptySlot: a slot beside it is empty. Outnumbered: its side has fewer creatures than the other. AttackAtMost:
-        /// its Attack is the effect's value or less. Deploying: it isn't ready yet (Deployment Time). New ones go last
+        /// its Attack is the effect's value or less. Deploying: it isn't ready yet (Deployment Time). Online: it's a Digital
+        /// Society card (Cyberpsychosis hits the terminally online harder). New ones go last
         /// </summary>
-        public enum TargetRequisite { None, Revealed, NextToEmptySlot, Outnumbered, AttackAtMost, Deploying }
+        public enum TargetRequisite { None, Revealed, NextToEmptySlot, Outnumbered, AttackAtMost, Deploying, Online }
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         // Send For: the kind of card it can fetch from the deck

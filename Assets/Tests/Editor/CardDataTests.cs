@@ -76,6 +76,7 @@ namespace SlayTheClone.Tests {
             StringAssert.Contains("Counterattack", printed["Keyboard Warrior"], "Hitting back for its Attack");
             Assert.AreEqual("Destroy target creature\nSacrifice 1: your weakest creature will be sacrificed to play this", printed["Necronomicon"], "A sacrifice comes after what it buys");
             Assert.AreEqual("5 damage to target and 2 damage to its neighbors", printed["Holy Hand Grenade of Antioch"], "Its neighbors alone");
+            Assert.AreEqual("2 damage to target and 3 damage to it if it's Digital Society", printed["Cyberpsychosis"], "A requisite on a faction");
 
             var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
             var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()

@@ -1277,7 +1277,12 @@ Sex Clanker (creature)
          about No Glove, No Love is history. Keep it.
 
 
-MIND (11)
+MIND (12)
+
+Cyberpsychosis (spell)
+  Aim:   Losing your mind to the screen: too much chrome, too much feed.
+  Hooks: Cyberpunk's cyberpsychos; doomscrolling breakdowns.
+  Twist: 2 damage, and 3 more on Digital Society: the terminally online crack first (the user, 2026-10-15).
 
 Lucid Dreaming (spell) [px]
   Aim:   Dreams you can control, almost.

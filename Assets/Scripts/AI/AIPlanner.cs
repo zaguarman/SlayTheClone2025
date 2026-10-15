@@ -643,6 +643,7 @@ namespace SlayTheClone {
         // How good the effect is for the creature it lands on (Hard: as its ability and statuses bend it)
         private float Goodness(EffectAction action, SeenCreature creature, Spell spell, bool area) {
             if (Hard && area && creature.Ability == CreatureAbility.TooMainstream) return 0;
+            if (action.actionType == ActionType.Damage && action.requires != TargetRequisite.None && !Lands(action, creature)) return 0;
             switch (action.actionType) {
                 case ActionType.ModifyStat:
                     return StatChangeGoodness(action, creature);
@@ -763,6 +764,7 @@ namespace SlayTheClone {
                     return creature.Ours ? mine < theirs : theirs < mine;
                 case TargetRequisite.AttackAtMost: return AttackOf(creature) <= action.value;
                 case TargetRequisite.Deploying: return !creature.Operative;
+                case TargetRequisite.Online: return creature.Creature?.SourceData?.faction == Faction.DigitalSociety;
                 default: return true;
             }
         }
