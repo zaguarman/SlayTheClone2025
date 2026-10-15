@@ -202,7 +202,7 @@ namespace SlayTheClone {
         private static string PronounFor(string whom) {
             if (whom == "target") return "it";
             if (whom == Itself) return Itself;
-            return whom.StartsWith("all ") || whom.Contains("everything") ? "them" : null;
+            return whom.StartsWith("all ") || whom.StartsWith("every ") || whom.Contains("everything") ? "them" : null;
         }
 
         [System.Flags] private enum Reach { None = 0, FriendlyCreatures = 1, EnemyCreatures = 2, You = 4, EnemyPlayer = 8 }
@@ -381,7 +381,7 @@ namespace SlayTheClone {
         // Plain words: "target" (what it's dropped on, either side), groups ("all enemy creatures"), players and the
         // creature itself. Only "random" and "strongest" are keywords.
         private static string DescribeTarget(EffectAction action, bool isSpell) {
-            if (action.targetModifier.HasFlag(TargetModifier.DroppedSide)) return "every creature on the side it's played on";
+            if (action.targetModifier.HasFlag(TargetModifier.DroppedSide)) return "every creature on target side"; // Either side: the one it's dropped on
             if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
                 string strongest = "the " + Keywords.Link("Strongest", "strongest");
                 switch (action.targetType) {

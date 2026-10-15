@@ -30,6 +30,35 @@ MonoBehaviour:
     trigger: 0
     oncePerCombat: 0
     actions:
+    - actionType: 0
+      value: 1
+      targetType: 2
+      targetModifier: 258
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      decoy: {fileID: 0}
     - actionType: 6
       value: 1
       targetType: 2
@@ -59,37 +88,8 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
-    - actionType: 0
-      value: 1
-      targetType: 2
-      targetModifier: 258
-      modifyAttack: 1
-      modifyHealth: 1
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-        damaging: 0
-      trend: 0
-      ability: 0
-      sendFor: 0
-      fromDiscard: 0
-      requires: 7
-      decoy: {fileID: 0}
-  designNotes: 'The side it''s played on, yours or theirs (the user, 2026-10-15):
-    its creatures +1 Attack, and the staff (every one not in Headquarters) take 1
-    damage. Management skips it. Future: Coffeinated, followed by Burnout.'
+  designNotes: 'Target side, yours or theirs (the user, 2026-10-15): every creature
+    there takes 1 damage and gets +1 Attack. Everyone goes, management included.
+    Future: Coffeinated, followed by Burnout.'
   artDescription: 
   defaultTargetType: 2

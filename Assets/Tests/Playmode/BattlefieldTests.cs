@@ -147,7 +147,7 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(new[] { 5, 4, 5, 4, 9 }, enemies.Select(e => e.Health).ToArray(),
                 "A spreading attack hits the target and its neighbours, for the attack it has when the hits land");
 
-            // Team Building Exercise: on the side it's played on, either one, +1 Attack, and 1 damage outside Headquarters
+            // Target side (Team Building Exercise): the side it's dropped on, either one; here also outside Headquarters only
             Fresh();
             var front = game.Summon(p1, game.Creature("Front", 1, 5), 0);
             var boss = game.Summon(p1, game.Creature("Boss", 1, 5), 3);
@@ -158,7 +158,7 @@ namespace SlayTheClone.Tests {
             var hurt = Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.AllCreatures, TargetModifier.AllSameTypeTargets | TargetModifier.DroppedSide);
             hurt.actions[0].requires = TargetRequisite.OutsideHeadquarters;
             var retreat = game.Spell("Retreat", TargetType.AllCreatures, pep, hurt);
-            StringAssert.Contains("every creature on the side it's played on outside Headquarters", Keywords.Plain(CardTextFormatter.GetRulesText(retreat)));
+            StringAssert.Contains("every creature on target side outside Headquarters", Keywords.Plain(CardTextFormatter.GetRulesText(retreat)));
             game.Run(new PlayCardAction(game.GiveCard(p1, retreat), p1, p1));
             Assert.AreEqual((2, 4), (front.Attack, front.Health), "Ours: +1 Attack, and the staff take 1...");
             Assert.AreEqual((2, 5), (boss.Attack, boss.Health), "...Headquarters skips the pain");
