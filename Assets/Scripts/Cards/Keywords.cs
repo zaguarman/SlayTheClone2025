@@ -48,6 +48,7 @@ namespace SlayTheClone {
             group = "Triggers";
             Add("Arrival", "Happens when this creature lands: once its summon finishes and its [Deployment Time] is over.");
             Add("Last Will", "Happens when this creature dies.");
+            Add("Replaced", "Happens when a creature summoned onto its slot replaces it. Being replaced isn't dying: no [Last Will].");
             Add("Hurt", "Happens each time this creature takes damage.");
             Add("On Hit", "Happens when this creature's attack lands, on top of the attack.");
             Add("When Revealed", "Happens when this creature becomes [Revealed], or a [Reveal] shows it to the other side. Against the enemy, it strikes whoever revealed it: the creature whose effect it was, or else its player.");

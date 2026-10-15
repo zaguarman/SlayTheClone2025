@@ -36,12 +36,14 @@ namespace SlayTheClone {
                 return;
             }
 
-            // Summoning onto an occupied slot replaces its creature (no death effects); it goes to its owner's discard pile,
-            // and what it planned for the Day goes with it
+            // Summoning onto an occupied slot replaces its creature: it isn't killed, so no Last Will or other death effect;
+            // its own Replaced effects happen instead (Golden Parachute), then it goes to its owner's discard pile, and what
+            // it planned for the Day goes with it
             var replacedCreature = slot.OccupyingCreature;
             var handover = Abilities.StartHandover(replacedCreature, modifierManager); // Before it leaves: its ability works on the board
             if (replacedCreature != null) {
                 Log($"Executor: {creature.Name} replaces {replacedCreature.Name}", LogTag.Actions | LogTag.Creatures);
+                replacedCreature.HandleEffect(EffectTrigger.OnReplaced, context.ActionsQueue);
                 context.ActionsQueue.CancelActionsOf(replacedCreature);
                 modifierManager.UnregisterCreature(replacedCreature);
                 (replacedCreature.Owner ?? owner).DiscardCard(replacedCreature);

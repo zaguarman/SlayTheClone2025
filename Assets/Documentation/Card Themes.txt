@@ -187,7 +187,12 @@ UTOPIA
 
 3. THE CARDS
 
-CORPORATE (35)
+CORPORATE (36)
+
+Golden Parachute (creature)
+  Aim:   Executives who fail upward: ousted with a fortune.
+  Hooks: The forty-million severance; "failing upward".
+  Twist: Replaced (a new trigger, the user, 2026-10-15): when a summon takes its slot, you draw 2. Being replaced isn't dying.
 
 Casino (spell)
   Aim:   Trump the businessman: the man who managed to lose money running casinos.

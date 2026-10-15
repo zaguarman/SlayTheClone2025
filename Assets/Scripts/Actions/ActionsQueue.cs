@@ -196,7 +196,8 @@ namespace SlayTheClone {
             var scope = new AbilityScope {
                 Creature = creature,
                 Layer = trigger == EffectTrigger.OnPlay ? ResolutionLayer.Summon : ResolutionLayer.AbilityAndAttack,
-                ResolvesWithItsTrigger = trigger is EffectTrigger.OnPlay or EffectTrigger.OnDamage or EffectTrigger.OnAboutToDie or EffectTrigger.OnRevealed,
+                ResolvesWithItsTrigger = trigger is EffectTrigger.OnPlay or EffectTrigger.OnDamage or EffectTrigger.OnAboutToDie or EffectTrigger.OnRevealed
+                    or EffectTrigger.OnReplaced, // Replaced: it happens as the newcomer takes the slot
                 Retaliatory = trigger is EffectTrigger.OnDamage or EffectTrigger.OnAboutToDie or EffectTrigger.OnDeath or EffectTrigger.OnRevealed
             };
             scope.OnDispose = () => {

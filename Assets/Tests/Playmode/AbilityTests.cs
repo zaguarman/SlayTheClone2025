@@ -70,6 +70,14 @@ namespace SlayTheClone.Tests {
             game.Run(new DamageCreatureAction(medic, 10));
             Assert.IsTrue(medic.IsDead);
             Assert.AreEqual(Player.MaxHealth - 2, p1.Health, "And the killing blow: retaliation happens even as it dies");
+
+            // Replaced (Golden Parachute): a summon onto its slot sets it off, and its Last Will doesn't: it isn't killed
+            var parachuteData = game.Creature("Parachute", 1, 3, 1, Effect(EffectTrigger.OnReplaced, ActionType.Damage, 2, TargetType.Enemy),
+                Effect(EffectTrigger.OnDeath, ActionType.Damage, 5, TargetType.Enemy));
+            game.Summon(p1, parachuteData, 4);
+            int before = p2.Health;
+            game.Summon(p1, game.Creature("Successor", 1, 3), 4);
+            Assert.AreEqual(before - 2, p2.Health, "Replaced: its effect happens, its Last Will doesn't");
         }
 
         [UnityTest]

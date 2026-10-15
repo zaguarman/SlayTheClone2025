@@ -27,6 +27,8 @@ Private Equity (creature)
     A vampire banker in a pinstripe suit sucking gold coins out of a little family shop through a long straw.
 Shell Company (creature)
     A street hustler playing the shell game with three walnut shells, each stamped with a different tax haven's flag, a gold coin under one.
+Golden Parachute (creature)
+    A grinning CEO floating down on a golden parachute stitched from banknotes, a briefcase overflowing with cash in hand, while the company tower he leaves behind burns and the staff watch from the windows.
 Work Shift Rotation (creature)
     Two warehouse workers at the clocking-in machine: the exhausted one hands his hi-vis vest, still warm, to the fresh one.
 Unpaid Intern (creature)

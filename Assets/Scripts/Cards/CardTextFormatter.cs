@@ -245,6 +245,7 @@ namespace SlayTheClone {
                 case EffectTrigger.EndOfTurn: return (EffectIcons.Dusk, Keywords.Link("Dusk"));
                 case EffectTrigger.ActionAttempted: return (EffectIcons.Attack, "Whenever this acts");
                 case EffectTrigger.OnRevealed: return (EffectIcons.Reveal, Keywords.Link("When Revealed"));
+                case EffectTrigger.OnReplaced: return (EffectIcons.Enter, Keywords.Link("Replaced"));
                 default: return (null, null);
             }
         }

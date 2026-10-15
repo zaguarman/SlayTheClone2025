@@ -55,7 +55,7 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Mind, new[] { "Console Memory Card", "Momentum", "Survivorship Bias", "Yesn't" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Golden Parachute", "Team Building Exercise", "Inflation", "Work Shift Rotation" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -196,6 +196,11 @@ namespace SlayTheClone {
                 "Mechanics test: Shell Game (Active, hold Shift as you drag it onto a creature): that creature trades places with the one to its right. Moves an enemy into a planned attack, or out of the way of one.")
                 .With(CreatureAbility.ShellGame).NotInStarterDeck()
                 .Picture("A street hustler playing the shell game with three walnut shells, each stamped with a different tax haven's flag, a gold coin under one."),
+            Creature("Golden Parachute", 2, 3, speed: 1, deploy: 0,
+                "Ousted with a forty-million bonus. Failing upward, gently.",
+                "Replaced (the user, 2026-10-15: a new trigger, being replaced isn't dying): when a summon takes its slot, you draw 2. The executive leaves with the payout; send in the next one.",
+                On(EffectTrigger.OnReplaced, Draw(2)))
+                .Picture("A grinning CEO floating down on a golden parachute stitched from banknotes, a briefcase overflowing with cash in hand, while the company tower he leaves behind burns and the staff watch from the windows."),
             Creature("Work Shift Rotation", 2, 3, speed: 1, deploy: 1,
                 "Same job, new face. The vest is still warm.",
                 "Handover: when a summon replaces it, the newcomer takes over its stat changes and statuses. Buff it, then send in the next shift.")
