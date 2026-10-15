@@ -69,8 +69,13 @@ namespace SlayTheClone {
         }
 
         // Shape
-        private const int Samples = 64;             // Points along each curve
-        private const float PointSpacing = 0.035f;  // A band's points are spaced evenly along it, this far apart (world units)
+        // Bones: how many points a band is built from (see ArrowTuning.bonesPerUnit)
+        private static float PointSpacing => 1f / Mathf.Max(1f, T.bonesPerUnit); // A band's points are spaced evenly along it, this far apart
+        private static int Samples => Mathf.Clamp(Mathf.RoundToInt(T.bonesPerUnit * 2.25f), 16, 400); // Points along each curve before that
+        private static int CornerSteps => Mathf.Clamp(Mathf.RoundToInt(T.bonesPerUnit * 0.42f), 3, 60); // Points round a routed corner
+        // Where a curve bends, as shares of its length (see ArrowTuning.firstBend / lastBend)
+        private static float FirstBend => T.firstBend;
+        private static float LastBend => Mathf.Max(T.lastBend, T.firstBend);
         // The rest are sliders (see ArrowTuning)
         private static ArrowTuning T => ArrowTuning.Current;
         private static float BendRoom => T.bendRoom;           // A band is never wider than this share of its bend's radius: it can't fold over
@@ -96,8 +101,7 @@ namespace SlayTheClone {
         private const float MinLength = 0.1f;
 
         // Look
-        private const float TailAlpha = 0.12f, BodyAlpha = 0.42f, NearHeadAlpha = 0.52f, HeadAlpha = 0.6f;
-        private const float EdgeTailAlpha = 0.18f, EdgeAlpha = 0.95f, OutlineAlpha = 0.55f;
+        private const float EdgeAlpha = 0.95f, OutlineAlpha = 0.55f; // The rim and the outline at their strongest (their gradient scales them)
         private const float DrawInDuration = 0.3f;
         private const float FadeOutDuration = 0.2f;
         private const int SortingOrder = 5000;
@@ -357,7 +361,7 @@ namespace SlayTheClone {
                 if (span.magnitude < MinLength) return;
                 Vector2 side = new Vector2(span.normalized.y, -span.normalized.x);
                 Vector2 bulge = side * Mathf.Min(span.magnitude * style.Bow, style.MaxBow) * 1.333f;
-                var curve = Sample(from, from + span / 3f + bulge, from + span * 2f / 3f + bulge, tip);
+                var curve = Sample(from, from + span * FirstBend + bulge, from + span * LastBend + bulge, tip);
                 AddBandWithHead(layers, curve, drawnFraction, width * TailWidth, width, width, 0f, 1f, notched: true);
                 return;
             }
@@ -378,7 +382,7 @@ namespace SlayTheClone {
             }
             float trunkProgress = Mathf.Clamp01((drawnFraction - BranchShare) / (1f - BranchShare));
             if (trunkProgress <= 0f) return;
-            var trunk = Sample(merge, merge + axis * trunkLength / 3f, merge + axis * trunkLength * 2f / 3f, tip);
+            var trunk = Sample(merge, merge + axis * trunkLength * FirstBend, merge + axis * trunkLength * LastBend, tip);
             AddBandWithHead(layers, trunk, trunkProgress, width * BranchWidthAtMerge, TrunkWidth(width, tails.Count), TrunkWidth(width, tails.Count),
                 BranchShare, 1f, notched: false);
         }
@@ -401,7 +405,7 @@ namespace SlayTheClone {
             if (nearest < MinLength) return;
             float width = style.Width;
             Vector2 split = tail + axis * nearest * ForkAt;
-            var trunk = Sample(tail, Vector2.Lerp(tail, split, 1f / 3f), Vector2.Lerp(tail, split, 2f / 3f), split);
+            var trunk = Sample(tail, Vector2.Lerp(tail, split, FirstBend), Vector2.Lerp(tail, split, LastBend), split);
             float trunkProgress = Mathf.Clamp01(drawnFraction / ForkShare);
             AddBand(layers, Cut(trunk, Length(trunk) * trunkProgress), width * TailWidth, width, 0f, ForkShare, notched: true);
 
@@ -433,7 +437,7 @@ namespace SlayTheClone {
             float headHalf = Mathf.Min(MaxHeadHalfWidth, headWidth * HeadHalfWidth) * Mathf.Clamp01(headLength / HeadLengthOf(headWidth) * 1.4f);
             var body = Cut(drawn, length - headLength * 0.98f);
             AddBand(layers, body, fromWidth, toWidth, fromU, Mathf.Lerp(fromU, toU, 0.9f), notched);
-            AddHead(layers.Fill, tip, direction, headLength, headHalf, toWidth / 2f, 0f, Fill(HeadAlpha));
+            AddHead(layers.Fill, tip, direction, headLength, headHalf, toWidth / 2f, 0f, Fill(T.headOpacity));
             AddHead(layers.Rim, tip, direction, headLength, headHalf, toWidth / 2f, RimWidth, Rim(EdgeAlpha));
             AddHead(layers.Outline, tip, direction, headLength, headHalf, toWidth / 2f, OutlineWidth, Outline(OutlineAlpha));
         }
@@ -446,7 +450,7 @@ namespace SlayTheClone {
         }
 
         // The edges fade toward the tail like the fill
-        private static float EdgeStrength(float u) => Mathf.Lerp(EdgeTailAlpha, 1f, Mathf.Clamp01(u * 1.6f));
+        private static float EdgeStrength(float u) => T.edgeOpacity.Evaluate(Mathf.Clamp01(u)).a; // The edges' transparency along the arrow (a slider)
 
         // The three parts of an arrow, drawn in this order
         private readonly struct Layers {
@@ -459,7 +463,7 @@ namespace SlayTheClone {
         }
 
         // Faint at the tail, strongest by the head: the direction reads even without seeing the head
-        private static float FillAlpha(float u) => u < 0.5f ? Mathf.Lerp(TailAlpha, BodyAlpha, u / 0.5f) : Mathf.Lerp(BodyAlpha, NearHeadAlpha, (u - 0.5f) / 0.5f);
+        private static float FillAlpha(float u) => T.fillOpacity.Evaluate(Mathf.Clamp01(u)).a; // Tail to head (a slider)
 
         private Color Fill(float alpha) => new Color(color.r, color.g, color.b, alpha * opacity);
         private Color Rim(float alpha) {
@@ -536,10 +540,11 @@ namespace SlayTheClone {
         private static List<Vector2> Route(Vector2 from, Vector2 to, Vector2 axis) {
             Vector2 across = new Vector2(axis.y, -axis.x);
             float rise = Vector2.Dot(to - from, axis), lateral = Vector2.Dot(to - from, across);
-            if (Mathf.Abs(lateral) < 0.02f || rise <= 0.05f) return Sample(from, Vector2.Lerp(from, to, 1f / 3f), Vector2.Lerp(from, to, 2f / 3f), to);
+            if (Mathf.Abs(lateral) < 0.02f || rise <= 0.05f) return Sample(from, Vector2.Lerp(from, to, FirstBend), Vector2.Lerp(from, to, LastBend), to);
             float stub = Mathf.Clamp(rise * 0.2f, 0.06f, 0.35f);
             float diagonal = Mathf.Min(Mathf.Max(rise - 2f * stub, 0.05f), Mathf.Abs(lateral) / RouteSlope); // Along the axis: at the tuned angle
-            float before = (rise - diagonal) / 2f;
+            // The straight stretches before and after the diagonal share what's left: the first and last bend sit there
+            float before = (rise - diagonal) * FirstBend / Mathf.Max(0.0001f, FirstBend + (1f - LastBend));
             Vector2 bendIn = from + axis * before;
             Vector2 bendOut = bendIn + axis * diagonal + across * lateral;
             return Rounded(new List<Vector2> { from, bendIn, bendOut, to });
@@ -553,8 +558,8 @@ namespace SlayTheClone {
                 float cut = Mathf.Min(CornerRadius, Vector2.Distance(previous, corner) * 0.48f, Vector2.Distance(corner, next) * 0.48f);
                 Vector2 enter = corner + (previous - corner).normalized * cut, leave = corner + (next - corner).normalized * cut;
                 AddLine(points, enter);
-                for (int k = 1; k <= 12; k++) { // A quadratic curve through the corner's control point
-                    float t = k / 12f, u = 1f - t;
+                for (int k = 1; k <= CornerSteps; k++) { // A quadratic curve through the corner's control point
+                    float t = (float)k / CornerSteps, u = 1f - t;
                     points.Add(u * u * enter + 2f * u * t * corner + t * t * leave);
                 }
             }
@@ -582,7 +587,7 @@ namespace SlayTheClone {
             var lengths = CumulativeLengths(points);
             float total = lengths[lengths.Count - 1];
             if (total <= 0f) return points;
-            int count = Mathf.Clamp(Mathf.CeilToInt(total / PointSpacing), 8, 160);
+            int count = Mathf.Clamp(Mathf.CeilToInt(total / PointSpacing), 8, 600);
             var even = new List<Vector2>(count + 1);
             for (int i = 0; i <= count; i++) even.Add(PointAt(points, lengths, total * i / count));
             return even;

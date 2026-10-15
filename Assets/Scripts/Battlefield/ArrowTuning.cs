@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace SlayTheClone {
@@ -64,6 +65,22 @@ namespace SlayTheClone {
         [Tooltip("Every arrow: its head moved sideways, to the right of where it's going (minus: to the left) (gallery: any set)")]
         [Range(-1f, 1f)] public float endX = 0f;
 
+        [Header("Transparency along the arrow, tail (left) to head (right)")]
+        [Tooltip("Every arrow: the band's fill. Only the markers on top count (transparency); click under the bar to add one, up to 8. Black: see-through, white: solid (gallery: any set)")]
+        public Gradient fillOpacity = Opacity((0f, 0.12f), (0.5f, 0.42f), (1f, 0.52f));
+        [Tooltip("Every arrow: its bright rim and dark outline, the same way (gallery: any set)")]
+        public Gradient edgeOpacity = Opacity((0f, 0.18f), (0.625f, 1f), (1f, 1f));
+        [Tooltip("Every arrow: the head's fill (gallery: any set)")]
+        [Range(0f, 1f)] public float headOpacity = 0.6f;
+
+        [Header("Bones and bends")]
+        [Tooltip("Every arrow: points the band is built from, per world unit. More: a smoother shape, round bends and corners without facets (gallery: any set, Merging's corners most)")]
+        [Range(4f, 120f)] public float bonesPerUnit = 28.6f;
+        [Tooltip("Lone arrows, trunks and routed branches: how far along the way the first bend sits, as a share of its length (a third: even) (gallery: Singles, Merging, Spray's trunk)")]
+        [Range(0f, 1f)] public float firstBend = 1f / 3f;
+        [Tooltip("...and the last bend (never before the first) (gallery: Singles, Merging, Spray's trunk). Spray's prongs have their own: Prong Leave and Prong Arrive")]
+        [Range(0f, 1f)] public float lastBend = 2f / 3f;
+
         [Header("Sharpest curves: arrows routed into a shared one, like PCB tracks")]
         [Tooltip("Merged attacks: the branches' diagonal, its angle from straight ahead (45: a true diagonal; more: flatter, sharper turns) (gallery: Merging)")]
         [Range(15f, 80f)] public float routeAngle = 45f;
@@ -105,6 +122,14 @@ namespace SlayTheClone {
         [Range(0.3f, 1.5f)] public float branchWidthAtMerge = 0.9f;
         [Tooltip("Merged attacks: the trunk's length, as a share of the way to the target (gallery: Merging)")]
         [Range(0.15f, 0.9f)] public float trunkShare = 0.5f;
+
+        // A gradient of transparency alone, these (position, opacity) markers along it; its colour stays white (the arrow's own)
+        private static Gradient Opacity(params (float at, float alpha)[] markers) {
+            var gradient = new Gradient();
+            gradient.SetKeys(new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
+                markers.Select(m => new GradientAlphaKey(m.alpha, m.at)).ToArray());
+            return gradient;
+        }
 
         private static ArrowTuning current;
 
