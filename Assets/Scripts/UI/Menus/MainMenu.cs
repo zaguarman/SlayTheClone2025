@@ -5,7 +5,8 @@ using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Title screen: Play opens the match setup (decks and opponent), which then loads the game scene; Cards opens the card
+    /// Title screen: Play opens the match setup (decks and opponent), which then loads the game scene; Adventure opens a
+    /// run across a map of fights (see <see cref="AdventureMenu"/>), and comes back to it after each one; Cards opens the card
     /// gallery (every card, by faction); Decks opens the deck builder (your own decks); Keywords opens the keyword glossary;
     /// Quit quits the application.
     /// </summary>
@@ -15,6 +16,7 @@ namespace SlayTheClone {
         [SerializeField] private Button quitButton;
         [SerializeField] private MatchSetupMenu matchSetup; // Without it, Play starts the game with the scene's own decks
 
+        public const string AdventureButtonName = "AdventureButton";
         public const string CardsButtonName = "CardsButton";
         public const string DecksButtonName = "DecksButton";
         public const string KeywordsButtonName = "KeywordsButton";
@@ -31,6 +33,11 @@ namespace SlayTheClone {
             else LogWarning("Quit button not assigned on MainMenu", LogTag.UI);
 
             if (matchSetup != null) matchSetup.MatchChosen += LoadGame;
+            // Back from an adventure's fight: straight to the map (a fight left halfway can be gone into again)
+            if (AdventureRun.Active && adventure != null) {
+                AdventureRun.LeaveFight();
+                adventure.Show();
+            }
 
             ApplyTheme();
         }
@@ -43,18 +50,23 @@ namespace SlayTheClone {
             UITheme.StyleButton(quitButton);
         }
 
-        // Cards, Decks and Keywords, between Play and Quit
+        private AdventureMenu adventure;
+
+        // Adventure, Cards, Decks and Keywords, between Play and Quit
         private void AddMenuButtons() {
             if (quitButton == null || matchSetup == null) return;
+            adventure = AddScreen<AdventureMenu>(AdventureButtonName, "Adventure");
+            adventure.StartGame = LoadGame;
             AddScreen<CardGalleryMenu>(CardsButtonName, "Cards");
             AddScreen<DeckBuilderMenu>(DecksButtonName, "Decks");
             AddScreen<KeywordGlossaryMenu>(KeywordsButtonName, "Keywords");
         }
 
-        private void AddScreen<T>(string buttonName, string label) where T : MenuScreen {
+        private T AddScreen<T>(string buttonName, string label) where T : MenuScreen {
             var screen = matchSetup.gameObject.AddComponent<T>();
             screen.Setup(matchSetup.Catalog, matchSetup.TitleScreen);
             AddTitleButton(buttonName, label, screen.Show);
+            return screen;
         }
 
         // Made from the Quit button and placed just before it, so it looks like the others

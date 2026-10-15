@@ -1,0 +1,50 @@
+Adventure Map
+
+How the adventure's map is built, after Slay the Spire 2's (researched 2026-10-15 from the fan references Spire Codex and
+the Slay the Spire wiki, which read the game's data; the path drawing itself isn't published for the sequel, so it follows
+the first game's, well documented). Code: Assets/Scripts/Adventure/AdventureMap.cs.
+
+
+1. WHAT SLAY THE SPIRE 2 DOES
+
+• Size. A 7-column grid. Act 1 has 15 rooms to choose (17 floors with the Ancient at the start and the boss), Act 2 has 14,
+  Act 3 13: the run speeds up.
+• Set counts, not percentages (the first game rolled each room's type; the sequel counts them, so no map is starved of
+  elites or shops): 5 elites (8 from Ascension 1), 3 shops, 10-14 unknown rooms in Act 1 (9-13 later), 6-7 rest sites in
+  Acts 1-2 (5-6 in Act 3); the rest are fights.
+• Fixed rows. The first is all fights (the easy pool: the first 3 fights of Act 1, 2 of the others). The row 7 from the end
+  is all treasure. The last is all rest sites, so there's always a rest before the boss. No elite or rest site in the first
+  5 rows.
+• Unknown rooms decide when you walk in: a fight 10% (+10% each time it doesn't come up), a shop 3% (+3%), a treasure 2%
+  (+2%), otherwise an event. What comes up drops back to its base; it all resets each act. Never an elite unless a modifier
+  says so.
+• Every act opens with an Ancient: a full heal and a choice of special relics.
+
+From the first game (likely still the basis):
+• Six paths drawn from the bottom up, each step to one of the 3 nearest rooms above; the first two start in different
+  rooms; paths never cross; rooms no path reaches are removed.
+• An elite, shop or rest site never leads straight into another of its kind.
+• Where a path forks, the branches hold different kinds of room.
+• No rest site in the row before the last (it's all rest sites).
+
+
+2. THE IDEAS BEHIND IT
+
+• The whole map is shown at once: the game is in planning a route, risk against reward.
+• Every fork is a real choice (the branches differ).
+• Safe rooms never stack (no rest after rest, no shop after shop) and danger is dosed (no elite after elite).
+• A gentle start (easy fights only), anchors at set points (treasure at the middle, rest before the boss).
+• Unknown rooms correct themselves: their odds rise until something other than an event comes up.
+• Counts over percentages: maps vary in shape, not in quality.
+
+
+3. WHAT OURS DOES NOW (2026-10-15)
+
+• One act of 15 rows and the boss above them; no Ascension, no Ancient yet.
+• The paths, the fixed rows and the placement rules as above; counts: 5 elites, 3 shops, 6 rest sites, 10-14 unknown rooms;
+  whatever can't be placed by the rules is a fight.
+• Fights, elites and the boss are matches against the AI with another faction's deck (Easy for the fights of the first
+  rows, then Medium; Hard for an elite, Very Hard for the boss). Winning one brings you back to the map a room further;
+  losing one ends the run; beating the boss wins it.
+• Rest sites, shops, treasure and unknown rooms are walked through: nothing in them yet.
+• Not carried between fights yet: your Health (each match starts at full), rewards, a deck that grows.

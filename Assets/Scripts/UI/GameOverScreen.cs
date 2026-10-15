@@ -81,9 +81,22 @@ namespace SlayTheClone {
             title.text = bothHuman || bothAI ? $"{winner.Name} wins" : winner == viewer ? "Victory" : "Defeat";
             var loser = winner.Opponent;
             subtitle.text = $"{loser?.Name} is out of Health on Day {gameManager.TurnManager?.TurnNumber ?? 0}.";
+            if (AdventureRun.Fighting != null) ShowAdventureEnd(winner.IsPlayer1);
             panel.SetActive(true);
             Tooltip.Existing?.HideTooltip();
             Log($"Game over screen: {title.text}", LogTag.UI);
+        }
+
+        // An adventure's fight: won, on to the map a room further (or the run is won); lost, the run is over. No Play Again
+        private void ShowAdventureEnd(bool won) {
+            bool boss = AdventureRun.Fighting.Type == RoomType.Boss;
+            if (won) AdventureRun.WinFight();
+            else AdventureRun.LoseFight();
+            title.text = won ? "Victory" : "Defeat";
+            subtitle.text = won ? boss ? "The boss is beaten: your adventure is won!" : "On to the next room." : "Your adventure ends here.";
+            PlayAgainButton.gameObject.SetActive(false);
+            MainMenuButton.GetComponentInChildren<TextMeshProUGUI>().text = won && !boss ? "Continue" : "To the map";
+            UITheme.Place((RectTransform)MainMenuButton.transform, new Vector2(0.5f, 0f), new Vector2(0f, 70f), new Vector2(260f, 70f));
         }
 
         private void OnDestroy() {

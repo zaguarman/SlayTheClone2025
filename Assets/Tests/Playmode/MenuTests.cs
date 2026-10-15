@@ -30,6 +30,7 @@ namespace SlayTheClone.Tests {
         [UnitySetUp]
         public IEnumerator SetUp() {
             MatchSetup.Clear();
+            AdventureRun.Clear();
             if (File.Exists(DecksFile)) File.Delete(DecksFile);
             PlayerDecks.FilePath = DecksFile;
             yield return SceneManager.LoadSceneAsync(MenuSceneName, LoadSceneMode.Single);
@@ -50,7 +51,7 @@ namespace SlayTheClone.Tests {
         }
 
         [UnityTest]
-        public IEnumerator TheCardGallery_ShowsEveryFaction_TheGlossaryEveryKeyword_BothOpeningAsNew_AndPickingAnOpponent_BringsTheirDeck_EveryListScrolls_AndBackKeepsTheChoices() {
+        public IEnumerator TheCardGallery_ShowsEveryFaction_TheGlossaryEveryKeyword_BothOpeningAsNew_AndPickingAnOpponent_BringsTheirDeck_EveryListScrolls_AndBackKeepsTheChoices_AnAdventureWalksAMap() {
             Click(TitleButton(MainMenu.CardsButtonName));
             var gallery = Object.FindFirstObjectByType<CardGalleryMenu>();
             Assert.IsTrue(gallery.IsOpen, "Cards opens the card gallery");
@@ -164,6 +165,49 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(yourDeck, setup.PlayerDeck, "Play should reopen the setup with the same choices");
             Assert.AreSame(chosenOpponent, setup.Opponent);
             AssertOnlyChoicesHighlighted();
+
+            // Adventure: a faction picked by its coin, then a map built like Slay the Spire 2's, walked room by room
+            Click(SetupButton(MatchSetupMenu.BackButtonName));
+            yield return null;
+            Click(TitleButton(MainMenu.AdventureButtonName));
+            var adventure = Object.FindFirstObjectByType<AdventureMenu>();
+            Assert.IsTrue(adventure.IsOpen, "Adventure asks for a faction first");
+            CollectionAssert.AreEquivalent(catalog.Opponents.Select(o => DeckCatalog.FactionOf(o.deck)).Distinct(), adventure.Factions.Select(f => f.faction), "...each once");
+            var yours = adventure.Factions[1].faction;
+            Click(GalleryButton(adventure, AdventureMenu.FactionButton + CardTextFormatter.FactionName(yours)));
+            Click(GalleryButton(adventure, AdventureMenu.EmbarkButtonName));
+            Assert.IsTrue(AdventureRun.Active && AdventureRun.Faction == yours, "Embark starts a run with it");
+            var map = AdventureRun.Map;
+            Assert.IsTrue(map.Row(0).All(n => n.Type == RoomType.Fight) && map.Row(AdventureMap.TreasureRow).All(n => n.Type == RoomType.Treasure)
+                && map.Row(AdventureMap.Rows - 1).All(n => n.Type == RoomType.Rest), "The first row all fights, the one 7 from the end all treasure, the last all rest sites");
+            Assert.GreaterOrEqual(map.Row(0).Count(), 2, "At least two ways in...");
+            Assert.IsTrue(map.Nodes.All(n => n.Next.Count > 0) && map.Boss.Previous.Count == map.Row(AdventureMap.Rows - 1).Count(), "...and every path leads up to the boss");
+            Assert.IsFalse(map.Nodes.Any(n => n.Row < AdventureMap.SafeRows && n.Type is RoomType.Elite or RoomType.Rest), "No elite or rest site in the first rows...");
+            Assert.IsTrue(map.Nodes.Where(n => n.Row is > 0 and < AdventureMap.Rows - 1 && n.Row != AdventureMap.TreasureRow).All(n => AdventureMap.Allowed(n, n.Type)),
+                "...nor two elites, shops or rest sites in a row, nor a fork into the same kind of room");
+            Assert.IsFalse(map.Nodes.Any(a => map.Nodes.Any(b => a.Row == b.Row && a.Column < b.Column && a.Next.Any(x => b.Next.Any(y => x.Column > y.Column)))), "Paths never cross");
+            Assert.IsTrue(adventure.Rooms.Where(r => r.Value.interactable).All(r => r.Key.Row == 0), "At first only the bottom row can be walked into");
+
+            var first = map.Row(0).First();
+            Assert.IsTrue(AdventureRun.Enter(first), "A fight is a match...");
+            adventure.SetUpFight(first);
+            Assert.AreSame(AdventureRun.Deck, MatchSetup.PlayerDeck, "...your faction's deck...");
+            Assert.AreNotEqual(yours, DeckCatalog.FactionOf(MatchSetup.OpponentDeck), "...against another faction's...");
+            Assert.AreEqual(AILevel.Easy, MatchSetup.AILevel, "...the first ones easy");
+            AdventureRun.WinFight(); // As the game's end does, before the title screen opens the map again
+            adventure.Show();
+            Assert.AreSame(first, AdventureRun.Current, "Won, you're in its room");
+            var walk = first.Next.FirstOrDefault(n => !n.IsCombat);
+            if (walk != null) {
+                Click(adventure.Rooms[walk]);
+                Assert.AreSame(walk, AdventureRun.Current, "Any other room is walked through");
+            }
+            Assert.IsTrue(adventure.Rooms.Where(r => r.Value.interactable).All(r => AdventureRun.Current.Next.Contains(r.Key)), "Then only the rooms its paths lead to");
+            Click(GalleryButton(adventure, AdventureMenu.AbandonButtonName));
+            Assert.IsTrue(AdventureRun.Active, "Abandon asks to be sure first...");
+            Click(GalleryButton(adventure, AdventureMenu.AbandonButtonName));
+            Assert.IsFalse(AdventureRun.Active, "...then ends the run");
+            MatchSetup.Clear();
         }
 
         [UnityTest]
