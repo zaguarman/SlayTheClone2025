@@ -114,6 +114,9 @@ namespace SlayTheClone {
             if (chosenTarget != null && UsesChosenTarget(action) && action.targetModifier.HasFlag(TargetModifier.Beside)) {
                 return WithoutTooMainstream(NeighboursOf(chosenTarget).ToList(), source);
             }
+            if (chosenTarget != null && action.targetModifier.HasFlag(TargetModifier.AlliesOfTarget)) {
+                return WithoutTooMainstream(AlliesOf(chosenTarget).ToList(), source);
+            }
             // Myth's loophole: a Phoenix Feather still finds its creature when a Sacrifice took it first this Day (one offering
             // pays every rite); the resurrection checks the Day
             if (action.actionType == ActionType.Resurrect && chosenTarget is HomingTarget { Creature: { IsDead: true } offered }
@@ -285,6 +288,21 @@ namespace SlayTheClone {
                 return true;
             }
             return false;
+        }
+
+        // "...the other creatures on its side": the creatures on the side of the slot it lands on, but the one there
+        private static IEnumerable<ITarget> AlliesOf(ITarget chosenTarget) {
+            var slot = chosenTarget switch {
+                HomingTarget homing => homing.CurrentSlot ?? homing.AimedSlot,
+                BoardSlot boardSlot => boardSlot,
+                ICreature creature => creature.Slot,
+                _ => null
+            };
+            var landedOn = (chosenTarget as HomingTarget)?.Creature ?? chosenTarget as ICreature ?? slot?.OccupyingCreature;
+            if (slot?.Owner == null) yield break;
+            foreach (var other in slot.Owner.Battlefield.Select(s => s.OccupyingCreature)) {
+                if (other != null && other != landedOn && !other.IsDead) yield return other;
+            }
         }
 
         // Slot Effects aim at the slot itself (Static, GDD 4.6): they never follow a creature

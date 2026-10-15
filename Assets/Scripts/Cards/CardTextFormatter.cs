@@ -210,7 +210,7 @@ namespace SlayTheClone {
         // Which whole group an action lands on; None when it's one target (chosen, random, or a creature and its neighbors)
         private static Reach ReachOf(EffectAction action) {
             if (action.targetModifier.HasFlag(TargetModifier.Random) || action.targetModifier.HasFlag(TargetModifier.WithAdjacent)
-                || action.targetModifier.HasFlag(TargetModifier.Beside) || action.targetModifier.HasFlag(TargetModifier.Strongest) || action.targetModifier.HasFlag(TargetModifier.Opposite)) return Reach.None;
+                || action.targetModifier.HasFlag(TargetModifier.Beside) || action.targetModifier.HasFlag(TargetModifier.AlliesOfTarget) || action.targetModifier.HasFlag(TargetModifier.Strongest) || action.targetModifier.HasFlag(TargetModifier.Opposite)) return Reach.None;
             bool each = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
             return action.targetType switch {
                 TargetType.FriendlyCreatures when each => Reach.FriendlyCreatures,
@@ -397,6 +397,7 @@ namespace SlayTheClone {
             }
 
             if (action.targetModifier.HasFlag(TargetModifier.Beside)) return "its neighbors";
+            if (action.targetModifier.HasFlag(TargetModifier.AlliesOfTarget)) return "the other creatures on its side";
             string adjacent = action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? " and its neighbors" : "";
             // Spells resolve against whatever they are dropped on unless they hit a whole group
             bool hitsGroup = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);

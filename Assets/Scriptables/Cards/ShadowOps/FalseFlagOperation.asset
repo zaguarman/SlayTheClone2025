@@ -32,7 +32,7 @@ MonoBehaviour:
     actions:
     - actionType: 19
       value: 0
-      targetType: 3
+      targetType: 2
       targetModifier: 0
       modifyAttack: 1
       modifyHealth: 1
@@ -60,11 +60,11 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
     - actionType: 6
-      value: 1
-      targetType: 3
-      targetModifier: 2
+      value: 2
+      targetType: 2
+      targetModifier: 128
       modifyAttack: 1
-      modifyHealth: 1
+      modifyHealth: 0
       modifySpeed: 0
       statusEffectToApply: 0
       statusDuration: 0
@@ -88,10 +88,11 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: Destroy target friendly creature (its Last Will happens); every other
-    friendly creature gets +1 Attack and +1 Health while it stays in play. Funnel
-    it all into one with Never Let Them Know Your Next Move.
+  designNotes: 'Destroy target creature (its Last Will happens); the other creatures
+    on its side get +2 Attack while they stay in play, rallied by the outrage (the
+    user, 2026-10-15: only the side where it was destroyed). Your own, to rally your
+    side; theirs, to remove a threat at a price.'
   artDescription: A soldier in an enemy uniform two sizes too small, its flag sewn
     on upside down, setting fire to his own side's outpost while a film crew records
     it and a general reads an outrage speech from a card.
-  defaultTargetType: 3
+  defaultTargetType: 2

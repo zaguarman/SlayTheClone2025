@@ -603,6 +603,14 @@ namespace SlayTheClone {
         private List<object> TargetsOf(EffectAction action, ITarget aim) {
             var targets = new List<object>();
             if (action.targetType == TargetType.Self) return targets; // A spell has no self
+            if (action.targetModifier.HasFlag(TargetModifier.AlliesOfTarget)) { // The other creatures on the aimed side
+                var aimed = view.Of(SlotOf(aim));
+                if (aimed == null) return targets;
+                foreach (var other in aimed.Ours ? view.MySlots : view.TheirSlots) {
+                    if (other != aimed && other.Creature != null) targets.Add(other.Creature);
+                }
+                return targets;
+            }
             if (EffectResolver.UsesChosenTarget(action)) {
                 var slot = view.Of(SlotOf(aim));
                 if (slot == null) return targets;

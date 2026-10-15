@@ -828,10 +828,10 @@ namespace SlayTheClone {
                 TakeControl(TargetType.EnemyCreatures, TargetModifier.None, TargetRequisite.AttackAtMost, value: 2))
                 .NotInStarterDeck()
                 .Picture("A giant paperclip hooking a bespectacled scientist in a lab coat by the collar and lifting him from one flag onto another, rocket blueprints fluttering out of his pockets."),
-            Spell("False Flag Operation", TargetType.FriendlyCreatures,
+            Spell("False Flag Operation", TargetType.AllCreatures,
                 "They attacked us. Well, someone did. Same thing.",
-                "Destroy target friendly creature (its Last Will happens); every other friendly creature gets +1 Attack and +1 Health while it stays in play. Funnel it all into one with Never Let Them Know Your Next Move.",
-                Destroy(TargetType.FriendlyCreatures), Buff(1, TargetType.FriendlyCreatures, attack: true, health: true, Each))
+                "Destroy target creature (its Last Will happens); the other creatures on its side get +2 Attack while they stay in play, rallied by the outrage (the user, 2026-10-15: only the side where it was destroyed). Your own, to rally your side; theirs, to remove a threat at a price.",
+                Destroy(TargetType.AllCreatures), Buff(2, TargetType.AllCreatures, attack: true, health: false, TargetModifier.AlliesOfTarget))
                 .NotInStarterDeck()
                 .Picture("A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost while a film crew records it and a general reads an outrage speech from a card."),
             Spell("Never Let Them Know Your Next Move", TargetType.FriendlyCreatures,

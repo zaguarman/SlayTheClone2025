@@ -124,6 +124,23 @@ namespace SlayTheClone.Tests {
 
         [Test]
         public void CombatAbilities_BendTheDamage_SpreadTheHit_OrHandItOver() {
+            // False Flag Operation: the creature it destroys rallies the others of its side only (+2 Attack)
+            using (var g = new TestGame()) {
+                var victim = g.Summon(g.Player2, g.Creature("Victim", 1, 3), 0);
+                var ally = g.Summon(g.Player2, g.Creature("Ally", 1, 3), 2);
+                var mine = g.Summon(g.Player1, g.Creature("Mine", 1, 3), 1);
+                var destroy = TestCards.Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.AllCreatures);
+                var rally = TestCards.Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.AllCreatures, TargetModifier.AlliesOfTarget);
+                rally.actions[0].modifyAttack = true;
+                rally.actions[0].modifyHealth = false;
+                var flagData = g.Spell("False Flag", TargetType.AllCreatures, destroy, rally);
+                StringAssert.Contains("The other creatures on its side +2 Attack", Keywords.Plain(CardTextFormatter.GetRulesText(flagData)));
+                g.Run(new PlayCardAction(g.GiveCard(g.Player1, flagData), g.Player1, g.Player2.Battlefield[0]));
+                Assert.IsTrue(victim.IsDead, "Destroyed...");
+                Assert.AreEqual(3, ally.Attack, "...and the others on its side rally...");
+                Assert.AreEqual(1, mine.Attack, "...not the other side");
+            }
+
             var mole = With(CreatureAbility.Underground, p1, 0, attack: 0);
             var brute = With(CreatureAbility.None, p2, 0, attack: 2);
             ChangeAttack(brute, 3, p2);
