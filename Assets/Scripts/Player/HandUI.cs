@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
@@ -18,7 +19,7 @@ namespace SlayTheClone {
         public const float RaisedScale = 2.1f;      // The card under the pointer, risen out of your hand
         private const float CardWidth = 160f;       // A card's size at scale 1, in hand units
         private const float CardHeight = 200f;
-        private const float ShownShare = 0.72f;     // How much of a card in your hand shows above the screen's edge: name and picture
+        private const float ShownShare = 0.62f;     // How much of a card in your hand shows above the screen's edge: name and picture (lower for the bigger board)
         private const float RaisedMargin = 10f;     // Between the risen card and the screen's edge
         private const float Overlap = 0.78f;        // Spacing between card centers, as a share of a card's width
         private const float MaxFanWidth = 1250f;    // From the first card's center to the last's
@@ -278,7 +279,12 @@ namespace SlayTheClone {
                 .OnKill(() => slides.Remove(card));
         }
 
+        private Image zoneImage;
+
         private void Update() {
+            // The hand's area only takes the pointer while a card is carried (a drop back into the hand): at rest it would
+            // cover the bottom of the board, the cards in the back row (the hand's own cards take the pointer themselves)
+            if (zoneImage != null || TryGetComponent(out zoneImage)) zoneImage.raycastTarget = CardController.Dragged != null;
             Carry();
             if (!releasePending) return;
             if (hovered != null && Tooltip.Existing != null && Tooltip.Existing.ActiveCard == hovered && Tooltip.Existing.Preview == hovered) return;

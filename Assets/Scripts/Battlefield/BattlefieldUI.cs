@@ -16,6 +16,7 @@ namespace SlayTheClone {
         private const float SummonStagger = 0.15f;
         private const float MatPadding = 30f; // Between the slots and the edge of the mat, at the back (the chevron keeps its distance)
         private const float NoseRoom = 16f;   // Round the Vanguard, at the chevron's nose
+        private const float RiverRoom = 26f;  // The formation sits this far back from the middle of the table: the two noses keep apart
         private const float ReplacingGhostRaise = 0.3f; // Fraction of card height a ghost is raised when it will replace a creature
         private readonly List<BattlefieldSlot> battlefieldSlots = new List<BattlefieldSlot>();
 
@@ -102,7 +103,7 @@ namespace SlayTheClone {
             if (zoneImage != null) zoneImage.color = Color.clear; // Still a raycast target: drops land anywhere on its rectangle
             int slotCount = Player?.Battlefield.Count ?? SlayTheClone.Player.BattlefieldSize;
             ((RectTransform)transform).sizeDelta = new Vector2((slotCount - 1) * settings.spacing * SlotScale + BattlefieldSlot.Size.x * SlotScale + 2 * MatPadding,
-                BattlefieldSlot.Size.y * SlotScale + 2 * RowStep + 2 * MatPadding);
+                BattlefieldSlot.Size.y * SlotScale + 2 * RowStep + 2 * MatPadding + 2 * RiverRoom);
             var fill = Chevron(MatFillName, 0);
             fill.SetShape(MatOutline());
             fill.color = UITheme.Mat;
@@ -135,10 +136,10 @@ namespace SlayTheClone {
             return graphic;
         }
 
-        /// <summary>The slots (and the cards on them) are drawn this much smaller: three rows in the room one row had (hovering enlarges).</summary>
-        public const float SlotScale = 0.8f;
+        /// <summary>The slots (and the cards on them) are drawn this much smaller than a card in the hand (hovering enlarges).</summary>
+        public const float SlotScale = 0.9f;
         // How far apart the formation's rows sit, up and down: the Vanguard nearest the middle of the table, Headquarters furthest
-        private const float RowStep = 56f;
+        private const float RowStep = 64f;
 
         /// <summary>
         /// Where each of this many slots sits on the mat: the formation (see <see cref="Formation"/>), five columns across,
@@ -149,7 +150,7 @@ namespace SlayTheClone {
             float startX = -(slotCount - 1) * spacing / 2f;
             float towardMiddle = transform.localPosition.y <= 0f ? 1f : -1f; // The bottom side's middle is up
             return Enumerable.Range(0, slotCount).Select(i => new Vector2(startX + spacing * Formation.Column(i),
-                towardMiddle * (1 - Formation.Depth(i)) * RowStep)).ToList();
+                towardMiddle * ((1 - Formation.Depth(i)) * RowStep - RiverRoom))).ToList();
         }
 
         /// <summary>
