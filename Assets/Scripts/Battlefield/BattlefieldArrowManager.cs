@@ -46,6 +46,7 @@ namespace SlayTheClone {
         // One arrow: where it comes from (one start per action merged into it), where it goes, and how it looks
         private class ArrowPlan {
             public readonly List<Vector3> Starts = new List<Vector3>();
+            public readonly List<Vector3> Forks = new List<Vector3>(); // Its other targets: the arrow forks like a Y (Spray and Pray)
             public readonly List<string> Labels = new List<string>(); // The attack's place in the order, at each start
             public Vector3 End;
             public Color Color;
@@ -126,6 +127,7 @@ namespace SlayTheClone {
                     activeArrows[entry.Key] = arrow;
                     arrow.SetStyle(plan.Style);
                     arrow.SetColor(plan.Color);
+                    arrow.SetForks(plan.Forks);
                     arrow.Show(plan.Starts, plan.End, drawIn: true);
                     arrow.SetLabels(plan.Labels);
                     continue;
@@ -133,6 +135,7 @@ namespace SlayTheClone {
                 // Endpoints move when creatures change slots, and an arrow gains or loses branches as others join or leave
                 arrow.SetStyle(plan.Style);
                 arrow.SetColor(plan.Color);
+                arrow.SetForks(plan.Forks);
                 arrow.Show(plan.Starts, plan.End);
                 arrow.SetLabels(plan.Labels);
             }
@@ -148,18 +151,26 @@ namespace SlayTheClone {
             }
 
             switch (action) {
-                case BattlefieldCombatAction attack when IsOwn(attack.GetAttacker()) && attack.GetTargetSlot() != null:
-                    AddBetweenSlots(wanted, $"attack_{attack.GetTargetSlot().TargetId}", attack.GetAttacker().Slot, attack.GetTargetSlot(),
-                        AttackColor, ArrowIndicator.Style.Attack, attackNumbers.TryGetValue(attack, out int number) ? number.ToString() : null);
-                    // An attack that also hits beside its target (the user): thinner arrows to each creature it'll catch. Planned
-                    // only; playing out, each of those hits shows its own arrow as it lands
-                    if (!isResolving()) {
-                        foreach (var beside in SplashedBy(attack)) {
-                            AddBetweenSlots(wanted, $"splash_{attack.GetAttacker().TargetId}_{beside.TargetId}", attack.GetAttacker().Slot, beside,
-                                AttackColor, ArrowIndicator.Style.Splash);
-                        }
+                case BattlefieldCombatAction attack when IsOwn(attack.GetAttacker()) && attack.GetTargetSlot() != null: {
+                    string number = attackNumbers.TryGetValue(attack, out int n) ? n.ToString() : null;
+                    // An attack that also hits beside its target (the user): its own arrow, forking like a Y, a prong to each
+                    // creature it'll catch and a small one on to its target, straight down the middle. Planned only; playing
+                    // out, each of those hits shows its own arrow as it lands
+                    var splash = isResolving() ? new List<BoardSlot>() : SplashedBy(attack);
+                    if (splash.Count == 0) {
+                        AddBetweenSlots(wanted, $"attack_{attack.GetTargetSlot().TargetId}", attack.GetAttacker().Slot, attack.GetTargetSlot(),
+                            AttackColor, ArrowIndicator.Style.Attack, number);
+                        break;
+                    }
+                    var plan = AddBetweenSlots(wanted, $"spray_{attack.GetAttacker().TargetId}", attack.GetAttacker().Slot, attack.GetTargetSlot(),
+                        AttackColor, ArrowIndicator.Style.Attack.Centered(), number);
+                    if (plan == null) break;
+                    foreach (var beside in splash) {
+                        var view = findSlotView(beside);
+                        if (view != null) plan.Forks.Add(view.transform.position);
                     }
                     break;
+                }
                 case DamageCreatureAction damage when IsOwn(damage.GetAttacker()) && damage.GetTarget()?.Slot != null:
                     AddBetweenSlots(wanted, $"damage_{damage.GetTarget().TargetId}", damage.GetAttacker().Slot, damage.GetTarget().Slot,
                         DamageColor, ArrowIndicator.Style.Damage);
@@ -189,15 +200,16 @@ namespace SlayTheClone {
             return slots.Where(s => s != target).Distinct().ToList();
         }
 
-        private void AddBetweenSlots(Dictionary<string, ArrowPlan> wanted, string key, BoardSlot from, BoardSlot to, Color color, ArrowIndicator.Style style,
+        private ArrowPlan AddBetweenSlots(Dictionary<string, ArrowPlan> wanted, string key, BoardSlot from, BoardSlot to, Color color, ArrowIndicator.Style style,
             string label = null) {
             var fromView = findSlotView(from);
             var toView = findSlotView(to);
-            if (fromView == null || toView == null) return;
+            if (fromView == null || toView == null) return null;
             var plan = Plan(wanted, key, toView.transform.position, color, style);
-            if (plan.Starts.Contains(fromView.transform.position)) return;
+            if (plan.Starts.Contains(fromView.transform.position)) return plan;
             plan.Starts.Add(fromView.transform.position);
             plan.Labels.Add(label);
+            return plan;
         }
 
         private Dictionary<IGameAction, int> attackNumbers = new Dictionary<IGameAction, int>();

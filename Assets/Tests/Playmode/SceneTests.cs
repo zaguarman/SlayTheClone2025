@@ -157,13 +157,14 @@ namespace SlayTheClone.Tests {
             yield return null;
             StringAssert.Contains($"{Abilities.NameOf(CreatureAbility.Spite)}</color></b></link> (gained)", game.CardIn(p1.Battlefield[0]).RulesText.text);
 
-            // An attack that also hits beside its target (Spray and Pray) shows thinner arrows to the creatures it'll catch
+            // An attack that also hits beside its target (Spray and Pray) forks like a Y: a prong to each creature it'll catch
             game.Queue.AddAction(new GrantAbilityAction(brute, CreatureAbility.SprayAndPray));
             game.Queue.ResolveActions();
             foreach (int i in new[] { 0, 1, 2 }) game.Summon(p2, game.Cards.Creature($"Test Target {i}", 1, 9), i);
             game.Attack(brute, p2.Battlefield[0]);
             yield return null;
-            Assert.AreEqual(3, game.QueuedArrows(p1).Count, "One attack, and a side arrow to each neighbour of its target");
+            var spray = game.QueuedArrows(p1).Single();
+            Assert.AreEqual(2, spray.Forks.Count, "One arrow, forking to each neighbour of its target");
             game.Queue.CancelDeclaredAction(brute.TargetId);
             yield return null;
 

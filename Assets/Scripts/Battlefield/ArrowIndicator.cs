@@ -26,10 +26,16 @@ namespace SlayTheClone {
             // Cards are 1.6 x 1.96 units, and the rows 1.26 apart
             public static Style Attack => new Style { Width = 0.2f, Lane = 0.22f, Bow = 0.08f, MaxBow = 0.35f, StartInset = 0.8f, EndInset = 0.99f };
             public static Style Damage => new Style { Width = 0.16f, Lane = 0f, Bow = 0.08f, MaxBow = 0.35f, StartInset = 0.8f, EndInset = 0.99f };
-            public static Style Splash => new Style { Width = 0.09f, Lane = 0f, Bow = 0.12f, MaxBow = 0.35f, StartInset = 0.8f, EndInset = 0.99f }; // An attack's side hits (Spray and Pray)
             public static Style Spell => new Style { Width = 0.17f, Lane = 0.5f, Bow = 0.1f, MaxBow = 0.5f, StartInset = 0f, EndInset = 0.99f }; // Starts at its card's edge
             public static Style Move => new Style { Width = 0.14f, Lane = 0f, Bow = 0.2f, MaxBow = 0.42f, StartInset = 0.3f, EndInset = 0.42f };
             public static Style Drag => new Style { Width = 0.18f, Lane = 0f, Bow = 0.1f, MaxBow = 0.4f, StartInset = 0.3f, EndInset = 0f };
+
+            /// <summary>Down the middle, no lane: a forked arrow stays symmetrical when its targets are.</summary>
+            public Style Centered() {
+                var style = this;
+                style.Lane = 0f;
+                return style;
+            }
 
             /// <summary>To the edge of a whole battlefield: the tip lands exactly there (between two slots), no lane.</summary>
             public Style ToEdge() {
@@ -55,6 +61,9 @@ namespace SlayTheClone {
         private const float WidthPerExtraBranch = 0.15f, MaxTrunkWidth = 1.35f; // In band widths: the trunk stays lean as attackers join
         private const float CornerRadius = 0.45f;   // A branch's bends are rounded this much at most (world units), like a PCB track's
         private const float BranchShare = 0.55f;    // How much of the draw-in the branches take before the trunk
+        private const float ForkShare = 0.4f;       // A forked arrow: how much of the draw-in its trunk takes before the prongs
+        private const float ProngWidth = 0.7f;      // A fork's prongs, of the trunk's width: the middle one too, a small arrow
+        private const float ForkAt = 0.35f;         // Where the trunk forks, as a share of the way to the nearest target
         private const float MinLength = 0.1f;
 
         // Look
@@ -74,6 +83,7 @@ namespace SlayTheClone {
         private Material material;
 
         private readonly List<Vector3> starts = new List<Vector3>();
+        private readonly List<Vector3> forks = new List<Vector3>(); // More ends: the trunk splits like a Y (Spray and Pray)
         private Vector3 endPosition;
         private Color color = Color.red;
         private Style style = Style.Attack;
@@ -254,6 +264,18 @@ namespace SlayTheClone {
             return label;
         }
 
+        /// <summary>
+        /// The other targets an attack hits as it lands (Spray and Pray): the arrow's trunk splits like a Y, a prong to each
+        /// of them and a small one on to its own end. None: a plain arrow.
+        /// </summary>
+        public void SetForks(IEnumerable<Vector3> ends) {
+            forks.Clear();
+            if (ends != null) foreach (var end in ends) forks.Add(new Vector3(end.x, end.y, 0f));
+            if (isVisible) Redraw();
+        }
+
+        public IReadOnlyList<Vector3> Forks => forks;
+
         public Vector3 StartPosition => starts.Count > 0 ? starts[0] : Vector3.zero;
         public Vector3 EndPosition => endPosition;
         public IReadOnlyList<Vector3> StartPositions => starts;
@@ -273,6 +295,10 @@ namespace SlayTheClone {
 
         // Where the arrow runs: insets and the lane first, then one curve (or branches flowing into a trunk), then the head
         private void BuildShape(Layers layers) {
+            if (forks.Count > 0 && starts.Count == 1) {
+                BuildFork(layers);
+                return;
+            }
             Vector2 end = endPosition;
             Vector2 centroid = Vector2.zero;
             foreach (var start in starts) centroid += (Vector2)start;
@@ -318,6 +344,38 @@ namespace SlayTheClone {
             var trunk = Sample(merge, merge + axis * trunkLength / 3f, merge + axis * trunkLength * 2f / 3f, tip);
             AddBandWithHead(layers, trunk, trunkProgress, width * 0.9f, TrunkWidth(width, tails.Count), TrunkWidth(width, tails.Count),
                 BranchShare, 1f, notched: false);
+        }
+
+        // A trunk straight out along the rows' axis, splitting like a Y: a prong to each target, the middle one a small arrow
+        // on to its own end. Every prong is routed the same way (no lane, no bow), so mirrored targets get a mirrored fork
+        private void BuildFork(Layers layers) {
+            Vector2 from = starts[0], end = endPosition;
+            Vector2 travel = end - from;
+            if (travel.magnitude < MinLength) return;
+            Vector2 forward = travel.normalized;
+            Vector2 axis = Mathf.Abs(forward.y) >= 0.35f ? new Vector2(0f, Mathf.Sign(forward.y)) : forward; // Rows face each other
+            Vector2 tail = from + axis * style.StartInset;
+            var tips = new List<Vector2> { end - axis * style.EndInset };
+            foreach (var fork in forks) tips.Add((Vector2)fork - axis * style.EndInset);
+
+            float nearest = tips.Min(t => Vector2.Dot(t - tail, axis));
+            if (nearest < MinLength) return;
+            float width = style.Width;
+            Vector2 split = tail + axis * nearest * ForkAt;
+            var trunk = Sample(tail, Vector2.Lerp(tail, split, 1f / 3f), Vector2.Lerp(tail, split, 2f / 3f), split);
+            float trunkProgress = Mathf.Clamp01(drawnFraction / ForkShare);
+            AddBand(layers, Cut(trunk, Length(trunk) * trunkProgress), width * TailWidth, width, 0f, ForkShare, notched: true);
+
+            float prongProgress = Mathf.Clamp01((drawnFraction - ForkShare) / (1f - ForkShare));
+            if (prongProgress <= 0f) return;
+            float prong = width * ProngWidth;
+            // Each prong leaves the fork going forward and bends smoothly onto its target: a Y, not a T
+            Vector2 root = split - axis * 0.03f;
+            foreach (var tip in tips) {
+                float rise = Mathf.Max(0.05f, Vector2.Dot(tip - root, axis));
+                var route = Sample(root, root + axis * rise * 0.45f, tip - axis * rise * 0.3f, tip);
+                AddBandWithHead(layers, route, prongProgress, prong, prong, prong, ForkShare, 1f, notched: false);
+            }
         }
 
         private static float TrunkWidth(float width, int branches) => width * Mathf.Min(MaxTrunkWidth, 1f + WidthPerExtraBranch * (branches - 1));
