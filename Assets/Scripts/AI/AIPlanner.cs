@@ -17,7 +17,7 @@ namespace SlayTheClone {
     /// <item>Medium scores every choice by a rough value of what it does (see <see cref="Value"/>): each spell where it does the
     /// most good, if anywhere; each attack where it kills the most, else at the player through an empty slot.</item>
     /// <item>Hard also reads what the cards it knows say: abilities that bend effects (Contrarian, No U, Too Mainstream...),
-    /// Blessed, Doomed, Untouchable, Heat, Temporal Shields, Counterattacks; it protects the creatures the other side can kill,
+    /// Blessed, Doomed, Untouchable, Heat, Shields, Counterattacks; it protects the creatures the other side can kill,
     /// races or holds the board, kills the biggest threats with the smallest attacker that does it, and moves idle creatures
     /// out of bad slots. It plays combinations: it forecasts what its spells will have done by the time attacks land (see
     /// <see cref="Forecast"/>) and picks each next spell knowing the ones before. Its <see cref="AIStyle"/> says what it
@@ -144,7 +144,7 @@ namespace SlayTheClone {
             return effect.Type switch {
                 SlotEffectType.Landmine => -effect.Value,
                 SlotEffectType.BarbedSnare => -effect.Value / 2f,
-                SlotEffectType.TemporalShield => 2,
+                SlotEffectType.Shield => 2,
                 SlotEffectType.ScorchedEarth => -2,
                 _ => 0
             };
@@ -363,7 +363,7 @@ namespace SlayTheClone {
         /// Hard: lethal if it has it. Otherwise the race: ahead (we'd bring them to 0 in fewer Days than they would us, as
         /// eager as its style is), it only stops real threats; behind, it kills the most threatening creatures, each with the
         /// smallest attacker (or two, for a big threat or when it could die next Day) that does it. The rest go at the player.
-        /// It doesn't waste an attack on what can't be hurt (Untouchable, a Temporal Shield) and weighs Counterattacks.
+        /// It doesn't waste an attack on what can't be hurt (Untouchable, a Shield) and weighs Counterattacks.
         /// </summary>
         private List<SeenCreature> AttackByThreat(List<SeenCreature> ready) {
             var left = ready.Where(CanAttack).ToList();
@@ -486,7 +486,7 @@ namespace SlayTheClone {
         #endregion
 
         #region Moves
-        // Hard: a creature with nothing to do leaves a slot that harms it, or takes cover on a Temporal Shield of ours
+        // Hard: a creature with nothing to do leaves a slot that harms it, or takes cover on a Shield of ours
         private void MoveOutOfHarm(SeenCreature creature) {
             bool harmed = creature.Slot.VisibleEffect?.Type == SlotEffectType.ScorchedEarth;
             bool exposed = WouldDie(creature) && !creature.Slot.Shielded;
@@ -870,7 +870,7 @@ namespace SlayTheClone {
                 case ActionType.Heal:
                     int healed = ours.Known ? System.Math.Min(amount, ours.MaxHealth - ours.Health) : 0;
                     return threat >= toughness && threat < toughness + healed ? ours.Worth * 0.6f : healed;
-                default: // Untouchable, or a Temporal Shield
+                default: // Untouchable, or a Shield
                     return threat <= 0 ? 0.3f : threat >= toughness ? ours.Worth : threat * 0.7f;
             }
         }
@@ -883,9 +883,9 @@ namespace SlayTheClone {
                     return action.slotEffect switch {
                         SlotEffectType.Landmine => occupied ? -0.5f : -action.value * 0.6f, // Waits for the next creature to enter
                         SlotEffectType.BarbedSnare => occupied ? -action.value * 0.6f : -0.5f, // Waits for one to leave
-                        SlotEffectType.TemporalShield when Hard && slot.Ours && (slot.Creature ?? view.IncomingTo(slot)) is SeenCreature ours =>
+                        SlotEffectType.Shield when Hard && slot.Ours && (slot.Creature ?? view.IncomingTo(slot)) is SeenCreature ours =>
                             Protection(ours, ActionType.Stun, 0),
-                        SlotEffectType.TemporalShield => occupied ? 2 : 0.25f,
+                        SlotEffectType.Shield => occupied ? 2 : 0.25f,
                         SlotEffectType.ScorchedEarth => occupied ? -1.5f : -0.5f,
                         _ => 0
                     };

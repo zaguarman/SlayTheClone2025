@@ -492,13 +492,13 @@ namespace SlayTheClone {
         private static string SlotTarget(EffectAction action, bool isSpell) =>
             isSpell || action.targetType != TargetType.Self ? $"target {Keywords.Link("Slot", "slot")}" : $"its {Keywords.Link("Slot", "slot")}";
 
-        // "Landmine 3" (its damage, always shown), "Temporal Shield 2" (its Days; just "Temporal Shield" for 1)
+        // "Landmine 3" (its damage, always shown), "Shield 2" (its Days; just "Shield" for 1)
         private static string DescribeSlotEffect(EffectAction action) {
             string days = action.statusDuration > 0 ? Count(action.statusDuration) : "";
             return action.slotEffect switch {
                 SlotEffectType.Landmine => Keywords.Link("Landmine", $"Landmine {action.value}"),
                 SlotEffectType.BarbedSnare => Keywords.Link("Barbed Snare", $"Barbed Snare {action.value}"),
-                SlotEffectType.TemporalShield => Keywords.Link("Temporal Shield", $"Temporal Shield{days}"),
+                SlotEffectType.Shield => Keywords.Link("Shield", $"Shield{days}"),
                 SlotEffectType.ScorchedEarth => Keywords.Link("Scorched Earth") + DaysTag(action.statusDuration),
                 _ => "nothing"
             };
@@ -507,7 +507,7 @@ namespace SlayTheClone {
         public static string SlotEffectIcon(SlotEffectType type) => type switch {
             SlotEffectType.Landmine => EffectIcons.Damage,
             SlotEffectType.BarbedSnare => EffectIcons.Hurt,
-            SlotEffectType.TemporalShield => EffectIcons.Armor,
+            SlotEffectType.Shield => EffectIcons.Armor,
             SlotEffectType.ScorchedEarth => EffectIcons.Burn,
             _ => null
         };

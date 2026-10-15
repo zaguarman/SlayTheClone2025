@@ -78,7 +78,7 @@ Hard: Medium, plus:
           areas, Spite gains Attack.
         - Statuses: Blessed negates (and loses a stack), Doomed blocks others, Untouchable takes no damage.
         - Heat: random damage goes to the hottest creature it can see, on either side.
-        - A Temporal Shield stops combat damage; Counterattacks hit back; Hive Mind steals abilities.
+        - A Shield stops combat damage; Counterattacks hit back; Hive Mind steals abilities.
         - Its own attacks: Recoil, Penny Stock, Double Tap, Insider Job.
     • Combinations: a forecast of what today's spells will have done when the attacks land (spells resolve before
       attacks, GDD 3.7): stat changes, damage, stuns (a stunned enemy is no threat), Exposed (+1 a hit), Heat, Untouchable.
@@ -99,12 +99,12 @@ Hard: Medium, plus:
       what Allergic to Light burns; a Fall Guy takes its Destroys; decoys look like their fake card; Freak Weather is
       worth its lightning. Cards with a discard cost go last, paid with what it wasn't going to play.
     • Hidden from it: a Kill Order on its own creatures (tested: FogOfWarTests).
-    • Protection: Armor, healing, Untouchable and Temporal Shields are worth the whole creature when they save one the
+    • Protection: Armor, healing, Untouchable and Shields are worth the whole creature when they save one the
       other side could kill next Day; Bodyguard guards the one most at risk.
     • Attacks: lethal if it has it. Otherwise the race: if it would bring them to 0 in fewer Days than they would it, it
       goes for the player and only stops real threats. If not, it kills the biggest threats, each with the smallest
       attacker (or pair) that does it, and sends the rest at the player.
-    • Moves: a creature with nothing to do leaves a Scorched Earth slot, or takes cover on a free Temporal Shield.
+    • Moves: a creature with nothing to do leaves a Scorched Earth slot, or takes cover on a free Shield.
 
 Very Hard: Hard, plus the long game (2026-10-14), the cards that pay off on a later Day. Only this level does it:
     • Lost creatures: one of its own that's Doomed, Brainwashed, or on Borrowed Time at 0 Health counts as lost even

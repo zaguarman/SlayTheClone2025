@@ -42,7 +42,7 @@ namespace SlayTheClone {
             Log($"Executor: Creature {attacker.Name} attacking {DescribeTarget(primaryTarget)}", LogTag.Combat);
 
             // Licensed (Licence to Kill): this attack destroys the creature it hits, whatever its Health or Armor, and the
-            // licence is spent. What stops a hit (Untouchable, a Temporal Shield) stops it, and spends it all the same. With
+            // licence is spent. What stops a hit (Untouchable, a Shield) stops it, and spends it all the same. With
             // Double Tap both hits carry it: a Blessing saves the target from one of them, two Blessings from both
             var licence = primaryTarget is ICreature ? StatusRules.Find(context.ModifierManager, attacker, Enums.StatusEffectType.Licensed) : null;
             if (licence != null && primaryTarget is ICreature mark) {
@@ -60,7 +60,7 @@ namespace SlayTheClone {
             }
 
             // Extreme Prejudice: the hit destroys the creature outright, then the assassin is gone too. What stops a hit
-            // (Untouchable, a Temporal Shield) stops it; Health and Armor don't
+            // (Untouchable, a Shield) stops it; Health and Armor don't
             if (Abilities.Has(attacker, Enums.CreatureAbility.ExtremePrejudice) && primaryTarget is ICreature victim) {
                 if (context.ModifierManager.HasStatusEffect(victim, Enums.StatusEffectType.Untouchable) || SlotEffectRules.BlocksCombatDamage(victim)) {
                     Log($"Executor: {attacker.Name} can't touch {victim.Name}", LogTag.Combat);

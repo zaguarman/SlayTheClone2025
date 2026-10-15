@@ -93,9 +93,9 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void Placing_OnePerSlot_StaysWithTheSlot_Cleansable_AndTemporalShieldStopsCombatDamage() {
+        public void Placing_OnePerSlot_StaysWithTheSlot_Cleansable_AndShieldStopsCombatDamage() {
             var mover = game.Summon(p1, game.Creature("Mover", 1, 10), 0);
-            var shield = game.GiveCard(p1, game.Spell("Shield Slot", TargetType.AllCreatures, PlaceEffect(SlotEffectType.TemporalShield, 0, 2)));
+            var shield = game.GiveCard(p1, game.Spell("Shield Slot", TargetType.AllCreatures, PlaceEffect(SlotEffectType.Shield, 0, 2)));
             game.Play(shield, p1, p1.Battlefield[0]); // Aimed at its own creature's slot
             game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[0], p1.Battlefield[2], p1));
             game.Resolve();
@@ -106,7 +106,7 @@ namespace SlayTheClone.Tests {
             var shielded = game.Summon(p1, game.Creature("Shielded", 0, 10), 0);
             var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 0);
             game.Attack(brute, p1.Battlefield[0]);
-            Assert.AreEqual(10, shielded.Health, "A Temporal Shield stops combat damage");
+            Assert.AreEqual(10, shielded.Health, "A Shield stops combat damage");
             game.Run(new DamageCreatureAction(shielded, 2));
             Assert.AreEqual(8, shielded.Health, "...not other damage");
             game.StartTurn();

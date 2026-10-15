@@ -179,7 +179,7 @@ namespace SlayTheClone.Tests {
         public IEnumerator TheBoardShows_SlotEffects_Watchdogs_TheQueue_MoveHints_AndPlannedMoves() {
             game.Queue.AddAction(new PlaceSlotEffectAction(p2.Battlefield[1], SlotEffectType.Landmine, 2, 0, p1));
             game.Queue.AddAction(new PlaceSlotEffectAction(p1.Battlefield[1], SlotEffectType.Landmine, 2, 0, p2));
-            game.Queue.AddAction(new PlaceSlotEffectAction(p1.Battlefield[3], SlotEffectType.TemporalShield, 0, 2, p1));
+            game.Queue.AddAction(new PlaceSlotEffectAction(p1.Battlefield[3], SlotEffectType.Shield, 0, 2, p1));
             var nullify = new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Nullify, charges = 2 };
             game.Queue.AddAction(new CreateWatchdogAction(nullify, p1, null, 0));
             game.Queue.AddAction(new CreateWatchdogAction(nullify, p2, null, 0));
@@ -190,7 +190,7 @@ namespace SlayTheClone.Tests {
             StringAssert.Contains("Landmine", Badge(p2.Battlefield[1]), "Your own mine, on the enemy's side");
             StringAssert.Contains("(hidden)", Badge(p2.Battlefield[1]));
             Assert.AreEqual("", Badge(p1.Battlefield[1]), "The enemy's mine is secret");
-            StringAssert.Contains("Temporal Shield", Badge(p1.Battlefield[3]), "Visible ones show to everyone");
+            StringAssert.Contains("Shield", Badge(p1.Battlefield[3]), "Visible ones show to everyone");
             StringAssert.Contains($"{EffectIcons.Tag(EffectIcons.Days)}2", Badge(p1.Battlefield[3]), "...with the Days they still last");
             game.Summon(p2, game.Cards.Creature("Test Sapper", 1, 5), 1);
             yield return null;

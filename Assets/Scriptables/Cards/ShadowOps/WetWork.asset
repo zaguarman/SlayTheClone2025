@@ -28,8 +28,7 @@ MonoBehaviour:
   effects: []
   designNotes: 'Extreme Prejudice: its attack destroys the creature it hits, whatever
     its Health or Armor, and then it''s gone too: one hit, one roadblock. Untouchable
-    or a Temporal Shield stops the hit; an empty slot, it just hits the player for
-    1.'
+    or a Shield stops the hit; an empty slot, it just hits the player for 1.'
   artDescription: A hitman in a dripping raincoat under a black umbrella in the rain,
     pressing a red TERMINATED stamp onto a personnel file with a photo clipped to
     it.

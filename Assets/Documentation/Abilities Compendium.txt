@@ -163,8 +163,8 @@ Extreme Prejudice
     Inspired by: "terminate with extreme prejudice", the spy-world euphemism. Named on purpose not after another game's similar keyword. On Wet Work.
     Type: Passive
     Description: "Its attack destroys the creature it hits, whatever its Health or Armor; then it's gone too."
-    Notes: The hit is a Destroy, not damage: Health, Armor, Exposed and damage abilities don't matter. Untouchable or a Temporal Shield still stops the hit, and then the assassin survives to try again. Attacking an empty slot, it hits the player for its Attack and stays. One hit, one roadblock: meant for the walls and armored giants nothing else gets through.
-    Answers: Kill it before it acts (it waits a Day like every creature), make the target Untouchable, or keep it on a Temporal Shield.
+    Notes: The hit is a Destroy, not damage: Health, Armor, Exposed and damage abilities don't matter. Untouchable or a Shield still stops the hit, and then the assassin survives to try again. Attacking an empty slot, it hits the player for its Attack and stays. One hit, one roadblock: meant for the walls and armored giants nothing else gets through.
+    Answers: Kill it before it acts (it waits a Day like every creature), make the target Untouchable, or keep it on a Shield.
 
 Allergic to Light
     Inspired by: vampires and sunlight; for now, spies coming into the light. On If I Told You, I'd Have to Kill You.
@@ -207,7 +207,7 @@ Collateral Damage
     Description: "When its attack is more than a creature's Health, the rest hits that creature's player."
     Notes: Only its attacks (combat damage, Double Tap and Spray and Pray hits included), not its effects. What's left is
            the hit after Armor and the creature's Health: 7 against 1 Armor and 4 Health puts 2 on the player. A hit that
-           something stops (Untouchable, a Temporal Shield) has nothing left to pass on. It's combat damage to the player.
+           something stops (Untouchable, a Shield) has nothing left to pass on. It's combat damage to the player.
     Answers: Big creatures, Armor and Health buffs soak it; Untouchable stops it all.
 
 Protecting, Copying and Moving Other Creatures

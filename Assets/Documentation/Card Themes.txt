@@ -587,7 +587,7 @@ Lost Landmine (spell)
 Ceasefire (spell)
   Aim:   Ceasefires that last until the cameras leave.
   Hooks: "Humanitarian pauses" broken within the hour.
-  Twist: A Temporal Shield that stops combat damage only: spells still hit. A ceasefire with loopholes, like the real ones.
+  Twist: A Shield that stops combat damage only: spells still hit. A ceasefire with loopholes, like the real ones.
   Push:  Rules and joke match. Keep the two generals hiding grenades.
 
 Violence Monopoly (spell)
@@ -1729,7 +1729,7 @@ Black Hole (spell) [px]
 Stasis Field (spell)
   Aim:   Salaries frozen.
   Hooks: "Frozen in time. Like your salary."
-  Twist: A Temporal Shield on a slot.
+  Twist: A Shield on a slot.
   Push:  A payslip frozen into the jelly with him.
 
 Absolute Zero (spell)

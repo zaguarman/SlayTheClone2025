@@ -24,7 +24,7 @@ namespace SlayTheClone {
         public float Cards { get; private set; } = 1;
         /// <summary>Information: Reveals, Watchdogs, Concealed and Encrypted.</summary>
         public float Intel { get; private set; } = 1;
-        /// <summary>Keeping ours alive: Armor, healing, Bless, Untouchable, Temporal Shields, Cleanse.</summary>
+        /// <summary>Keeping ours alive: Armor, healing, Bless, Untouchable, Shields, Cleanse.</summary>
         public float Protection { get; private set; } = 1;
         /// <summary>How eager it is to race: over 1 it goes face sooner, under 1 it holds the board longer.</summary>
         public float Aggression { get; private set; } = 1;

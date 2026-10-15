@@ -103,7 +103,7 @@ namespace SlayTheClone {
             Add("Brainwashed", "Brainwashed X (no number: 1): when its X [Days] run out, at [Dusk], it changes sides for good ([Take Control|taken] by the other side) and loses its ability until its card is reshuffled. A [Cleanse] can't remove it: only taking it off the board in time (back to a hand, or [Gone Dark|gone dark]) saves it.");
             Add("Kill Order", "Kill Order X (no number: 1): secret, only the side that gave it can see it, and the spell that gives it is played unseen. When its X [Days] run out, at [Dusk], the creature is [Destroy|destroyed]; [Untouchable] still saves it. A [Cleanse] removes it, knowingly or not.");
             Add("Borrowed Time", "Borrowed Time X (no number: 1): it can't die, whatever its Health, not even [Destroy|destroyed], until its X [Days] run out at [Dusk]; then, if it's at 0 Health, it dies. Heal it in time and it lives. It even lands on a [Doomed] creature: timed for the Day the sentence is carried out, it survives it.");
-            Add("Licensed", "Its next attack on a creature [Destroy|destroys] it, whatever its Health or [Armor], and the licence is spent ([Untouchable] or a [Temporal Shield] stops the hit, and spends it all the same). It lasts until used. With [Double Tap] both hits carry it: two [Blessed] stacks, or one and the creature.");
+            Add("Licensed", "Its next attack on a creature [Destroy|destroys] it, whatever its Health or [Armor], and the licence is spent ([Untouchable] or a [Shield] stops the hit, and spends it all the same). It lasts until used. With [Double Tap] both hits carry it: two [Blessed] stacks, or one and the creature.");
             Add("Survivor", "From full Health, a hit that would kill it leaves it at 1 Health instead, and the status is spent. It lasts until used: hurt first, and it doesn't help.");
             Add("Composed", "Composed X (no number: 1): it can't be [Exhausted] for X [Days], counting the Day it lands (1 is this Day only), and it shakes off a stun it has.");
             Add("Blackout", "Blackout X (no number: 1): its ability and its effects (arrival, Dawn and Dusk, retaliation, [Last Will]) are switched off for X [Days].");
@@ -126,7 +126,7 @@ namespace SlayTheClone {
             Add("Slot Effect", "A condition on a [Slot|slot], not on the creature: it stays with the slot. One per slot.");
             Add("Landmine", "Landmine X: hidden. The next creature to enter the slot takes X damage.");
             Add("Barbed Snare", "Barbed Snare X: hidden. The next creature to leave the slot takes X damage.");
-            Add("Temporal Shield", "Temporal Shield X (no number: 1): for X [Days], the creature in the slot takes no combat damage.");
+            Add("Shield", "Shield X (no number: 1): for X [Days], the creature in the slot takes no combat damage.");
             Add("Scorched Earth", "The creature in the slot can't use its ability or trigger its effects. Its [Arrival] effects wait until it's off the slot. It can still move and attack.");
 
             // ---------------------------------------------------------------- Trends
@@ -154,7 +154,7 @@ namespace SlayTheClone {
             CreatureAbility.ZeroDay => "Its attacks and effects ignore defensive abilities, except [Cold Storage].",
             CreatureAbility.Copypasta => "When it's ready and each [Dawn] after, it copies the ability of the creature opposite (once).",
             CreatureAbility.Undercover => "It's always [Concealed] until [Revealed].",
-            CreatureAbility.ExtremePrejudice => "Its attack [Destroy|destroys] the creature it hits, whatever its Health or [Armor]; then it's gone too. [Untouchable] or a [Temporal Shield] stops the hit.",
+            CreatureAbility.ExtremePrejudice => "Its attack [Destroy|destroys] the creature it hits, whatever its Health or [Armor]; then it's gone too. [Untouchable] or a [Shield] stops the hit.",
             CreatureAbility.Ambush => "It enters as ??? to the other side. While they don't know what it is, or it's [Concealed], everything it deals is doubled. A [Reveal] or [Revealed] shows it for good.",
             CreatureAbility.HiveMind => "A creature that attacks it loses its ability and gains Hive Mind instead.",
             CreatureAbility.IdentityTheft => "Instead of attacking or moving: swap abilities with target creature (hold Shift as you drag it).",

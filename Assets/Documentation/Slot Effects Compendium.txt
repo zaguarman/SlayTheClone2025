@@ -6,7 +6,7 @@ Surveillance Post
     Duration of Slot Effect: 1 Trigger (consumed immediately after its effect is queued, as per GDD 3.11 Instant Effects).
     Cleansable: Yes
 
-Temporal Shield
+Shield
     Visibility: Visible
     Trigger Event(s): Continuous while active.
     Effect: Any creature on this slot is immune to combat damage.

@@ -60,8 +60,8 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Licensed: target friendly creature''s next attack on a creature destroys
-    it, whatever its Health or Armor (Untouchable or a Temporal Shield stops the
-    hit, and spends the licence). It keeps it until it''s used.'
+    it, whatever its Health or Armor (Untouchable or a Shield stops the hit, and
+    spends the licence). It keeps it until it''s used.'
   artDescription: A civil servant in sleeve garters at a cluttered desk stamping
     a laminated LICENCE TO KILL card with a smirking agent's passport photo, a tray
     of forms marked 00 beside him.

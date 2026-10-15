@@ -571,7 +571,7 @@ Licensed
     Faction: Shadow Ops. (Licence to Kill)
     Type: Persistent, Destroy
     Description: "Its next attack on a creature destroys it, whatever its Health or Armor; then the licence is spent."
-    Core Impact: One kill on demand. Untouchable or a Temporal Shield stops the hit and spends the licence. An attack at an empty slot (the player) is a plain one and keeps it.
+    Core Impact: One kill on demand. Untouchable or a Shield stops the hit and spends the licence. An attack at an empty slot (the player) is a plain one and keeps it.
     Stacking & Duration:
         Initial Stacks: until used (Persistent)
         Re-application Behavior: Refresh (still one kill)

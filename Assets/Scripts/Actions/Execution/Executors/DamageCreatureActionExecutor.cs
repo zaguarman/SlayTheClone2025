@@ -22,9 +22,9 @@ namespace SlayTheClone {
                 return;
             }
 
-            // Temporal Shield: the creature on it takes no combat damage
+            // Shield: the creature on it takes no combat damage
             if (damageAction.IsCombatDamage() && SlotEffectRules.BlocksCombatDamage(targetCreature)) {
-                Log($"Executor: {targetCreature.Name} is on a Temporal Shield: no combat damage", LogTag.Actions | LogTag.Combat);
+                Log($"Executor: {targetCreature.Name} is on a Shield: no combat damage", LogTag.Actions | LogTag.Combat);
                 return;
             }
 

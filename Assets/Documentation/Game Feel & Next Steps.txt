@@ -14,7 +14,7 @@ Resolution playback
 • [M] Pace by importance: moves and buffs quick (0.2s), attacks and deaths slow (0.5s), a beat of silence before Last Rites. A "fast forward" button and hold-to-skip.
 • [S] Spotlight the actor: dim the table, light the creature acting and its target, then return. One thing on screen at a time.
 • [M] Impact frames: a 2-3 frame freeze on hits, the card squashes and shakes in proportion to the damage, a small screen shake on big hits and player damage only.
-• [S] Floating numbers: red damage, green heals, blue Armor absorbed, grey "0" when Temporal Shield or Armor eats it all. Crits... we don't have crits, so make Exposed's +1 a visible "+1".
+• [S] Floating numbers: red damage, green heals, blue Armor absorbed, grey "0" when Shield or Armor eats it all. Crits... we don't have crits, so make Exposed's +1 a visible "+1".
 • [S] The queue panel as a timeline: a strip along the top showing the next 5 actions as icons, the current one highlighted, so the player sees "what's next" without opening anything.
 • [M] Watchdogs as a reveal moment: when one triggers, the action freezes, the Watchdog card flips up from the side ("NULLIFIED" stamp in red), then the action shatters or bends to its new target.
 

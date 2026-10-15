@@ -73,7 +73,7 @@ namespace SlayTheClone {
             None,
             Landmine,       // Hidden. The first creature to enter takes X damage, then it's consumed
             BarbedSnare,    // Hidden. The first creature to leave takes X damage, then it's consumed
-            TemporalShield, // Visible. The creature here is immune to combat damage, for X Days
+            Shield, // Visible. The creature here is immune to combat damage, for X Days
             ScorchedEarth   // Visible. The creature here can't trigger its effects, entry effects included (its ability still works)
         }
 

@@ -464,8 +464,8 @@ namespace SlayTheClone {
                 .Picture("A rusty landmine half-buried in a children's sandbox, next to a faded government sign: \"AREA CLEARED. PROBABLY. - Ministry of Defence, 1998\"."),
             Spell("Ceasefire", TargetType.FriendlyCreatures,
                 "Both sides agree to stop shooting. Starting right after this last volley.",
-                "Mechanics test: Temporal Shield for 3 Days on a slot. The creature there takes no combat damage, but spells and abilities still hurt it. It stays with the slot, not the creature (Static).",
-                PlaceSlotEffect(SlotEffectType.TemporalShield, 0, 3, TargetType.FriendlyCreatures))
+                "Mechanics test: Shield for 2 Days on a slot (was 3, as Temporal Shield; 2026-10-15, Statecraft is among the strongest). The creature there takes no combat damage, but spells and abilities still hurt it. It stays with the slot, not the creature (Static).",
+                PlaceSlotEffect(SlotEffectType.Shield, 0, 2, TargetType.FriendlyCreatures))
                 .Picture("Two generals shaking hands for the cameras in front of a CEASEFIRE banner, each hiding a grenade behind his back."),
             Spell("Violence Monopoly", TargetType.Player,
                 "Only one of us is allowed to hit people. Guess which.",
@@ -759,7 +759,7 @@ namespace SlayTheClone {
                 .Picture("Two spies on a park bench back to back, one reading a newspaper with eye holes cut in it, the other slipping a card into his coat pocket behind the paper, pigeons watching."),
             Creature("Wet Work", 1, 4, speed: 3, deploy: 0,
                 "Nothing personal. Strictly a line item.",
-                "Extreme Prejudice: its attack destroys the creature it hits, whatever its Health or Armor, and then it's gone too: one hit, one roadblock. Untouchable or a Temporal Shield stops the hit; an empty slot, it just hits the player for 1.")
+                "Extreme Prejudice: its attack destroys the creature it hits, whatever its Health or Armor, and then it's gone too: one hit, one roadblock. Untouchable or a Shield stops the hit; an empty slot, it just hits the player for 1.")
                 .With(CreatureAbility.ExtremePrejudice)
                 .Picture("A hitman in a dripping raincoat under a black umbrella in the rain, pressing a red TERMINATED stamp onto a personnel file with a photo clipped to it."),
             Spell("Perfectly Timed Camera Malfunction", TargetType.EnemyCreatures,
@@ -970,7 +970,7 @@ namespace SlayTheClone {
                 .Picture("A spy in a torn tuxedo surfing a towering wave on a car door past a collapsing ice palace, checking his wristwatch."),
             Spell("Licence to Kill", TargetType.FriendlyCreatures,
                 "Paperwork for murder, signed in triplicate. Valid until used.",
-                "Licensed: target friendly creature's next attack on a creature destroys it, whatever its Health or Armor (Untouchable or a Temporal Shield stops the hit, and spends the licence). It keeps it until it's used.",
+                "Licensed: target friendly creature's next attack on a creature destroys it, whatever its Health or Armor (Untouchable or a Shield stops the hit, and spends the licence). It keeps it until it's used.",
                 Status(StatusEffectType.Licensed, 1, TargetType.FriendlyCreatures))
                 .NotInStarterDeck()
                 .Picture("A civil servant in sleeve garters at a cluttered desk stamping a laminated LICENCE TO KILL card with a smirking agent's passport photo, a tray of forms marked 00 beside him."),
@@ -1519,8 +1519,8 @@ namespace SlayTheClone {
                 .Picture("A swirling black hole sucking in a cow, a sofa, a single sock and a tax form."),
             Spell("Stasis Field", TargetType.FriendlyCreatures,
                 "Frozen in time. Like your salary.",
-                "Temporal Shield for 3 Days on a slot: the creature there takes no combat damage. Stays with the slot.",
-                PlaceSlotEffect(SlotEffectType.TemporalShield, 0, 3, TargetType.FriendlyCreatures))
+                "Shield for 3 Days on a slot: the creature there takes no combat damage. Stays with the slot.",
+                PlaceSlotEffect(SlotEffectType.Shield, 0, 3, TargetType.FriendlyCreatures))
                 .Picture("A man frozen mid-sneeze inside a giant block of green jelly, the droplets hanging in the air."),
             Spell("Absolute Zero", TargetType.AllCreatures,
                 "Minus 273. The office AC, as set by Gary.",

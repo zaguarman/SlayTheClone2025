@@ -103,7 +103,7 @@ namespace SlayTheClone {
 
         public bool IsEmpty => Creature == null;
         public bool IsFree => Creature == null && Incoming == null;
-        public bool Shielded => VisibleEffect?.Type == SlotEffectType.TemporalShield; // No combat damage to the creature here
+        public bool Shielded => VisibleEffect?.Type == SlotEffectType.Shield; // No combat damage to the creature here
         public override string ToString() => $"{(Ours ? "our" : "their")} slot {Index}";
     }
 

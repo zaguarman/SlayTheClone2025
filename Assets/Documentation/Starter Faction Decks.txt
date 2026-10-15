@@ -254,7 +254,7 @@ Spells
     • The Holy Grail (Myth): Bless a friendly creature twice (Blessed 2: each stack negates the next status that would land).
     • Exorcism (Myth): Cleanse a creature's statuses. On a Doomed creature it's Heresy: the sentence passes to the weakest creature on its side.
     • Lost Landmine (Statecraft): A hidden Landmine (3 damage) on a slot: the first creature to enter it takes the damage, before anything else happens.
-    • Ceasefire (Statecraft): A Temporal Shield on a slot for 2 Days: the creature there takes no combat damage.
+    • Ceasefire (Statecraft): A Shield on a slot for 2 Days: the creature there takes no combat damage.
     • Its A Trap (Digital Society): A hidden Barbed Snare (2 damage) on a slot: the first creature to leave it, even pushed or swapped, takes the damage (dying or being replaced isn't leaving).
     • Burn Notice (Shadow Ops.): Scorched Earth on a slot: the creature there can't trigger its effects, entry effects included.
     • Antivirus (Tech): Watchdog: enemy spells -> Nullify, 1 charge (Monitored).
@@ -344,7 +344,7 @@ Spells
 • Evolution Theory: Trend for 3 Days, Survival of the Fittest. Mutation: +3 Attack for good, -1 Health for good. Exponential
   Growth: +1/+1 for good on each of your creatures, all Burned for 2 Days. Gene Editing: +2/+2 for good, then Burned for 2 Days.
   Placebo: +3 Health for good. Vaccine: cleanse, then -1 Attack this Day. Research Lab: send for a spell. Black Hole: 3 damage
-  to the creature and its neighbors, 2 to you. Stasis Field: Temporal Shield for 3 Days. Splitting The Atom: 6 damage to a
+  to the creature and its neighbors, 2 to you. Stasis Field: Shield for 3 Days. Splitting The Atom: 6 damage to a
   random enemy, 2 to you.
 
 Out of the deck, in the deck builder: Philosophy PhD, Mathematician, Quantum Physicist, Surveillance Giraffe, Pioneer, Climate
