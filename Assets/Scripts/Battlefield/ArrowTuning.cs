@@ -38,6 +38,11 @@ namespace SlayTheClone {
         [Range(0f, 0.4f)] public float moveBow = 0.2f;
         [Tooltip("The drag arrow (gallery: Drag)")]
         [Range(0f, 0.4f)] public float dragBow = 0.1f;
+        public enum BendDirection { Mirrored, Clockwise, Counterclockwise }
+        [Tooltip("Lone arrows between the rows (attack, damage, drag): which way they turn. Mirrored: back toward their own row, so from the left they curve right and from the right left; Clockwise / Counterclockwise: always that way as they go (gallery: Singles, Damage, Drag)")]
+        public BendDirection bendDirection = BendDirection.Mirrored;
+        [Tooltip("Lone arrows between the rows: the arrows going down the screen (the enemy's) turn the other way (gallery: switch sides with F8 to see them)")]
+        public bool mirrorY = false;
         [Tooltip("Every lone arrow: scales the cap on how far it can bow; it shows on the long ones (gallery: Singles, Damage, Moves, Drag)")]
         [Range(0f, 3f)] public float maxBowScale = 1f;
         [Tooltip("Attacks, lone and merged, keep this far to the right of where they go, so opposite ones pass side by side; forks don't (gallery: Singles, Merging)")]

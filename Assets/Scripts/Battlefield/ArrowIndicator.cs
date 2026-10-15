@@ -365,10 +365,16 @@ namespace SlayTheClone {
                 Vector2 side = new Vector2(span.normalized.y, -span.normalized.x);
                 float bow = Mathf.Min(span.magnitude * style.Bow, style.MaxBow);
                 if (axis.x == 0f) {
-                    // Between the rows (the user): mirrored, both sides alike. It bows back toward its own row, so it sets off
-                    // sideways and turns in onto the target: from the left it curves to the right, from the right to the
-                    // left; and the more it goes sideways the more it bows, so one straight ahead stays straight
-                    if (Vector2.Dot(side, axis) > 0f) side = -side;
+                    // Between the rows (the user), which way it turns (Bend Direction): Mirrored bows back toward its own row,
+                    // so it sets off sideways and turns in onto the target (from the left it curves to the right, from the right
+                    // to the left); Clockwise and Counterclockwise always turn that way as it goes. Mirror Y flips it for the
+                    // arrows going down the screen. The more it goes sideways the more it bows: one straight ahead stays straight
+                    // ("side" is to the right of travel: bowing there, it turns counterclockwise)
+                    switch (T.bendDirection) {
+                        case ArrowTuning.BendDirection.Mirrored: if (Vector2.Dot(side, axis) > 0f) side = -side; break;
+                        case ArrowTuning.BendDirection.Clockwise: side = -side; break;
+                    }
+                    if (T.mirrorY && axis.y < 0f) side = -side;
                     bow *= Mathf.Abs(span.normalized.x);
                 }
                 Vector2 bulge = side * bow * 1.333f;

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470667c2cff7c7c4588790ff44e6a898, type: 3}
   m_Name: ArrowTuning
   m_EditorClassIdentifier: Scripts::SlayTheClone.ArrowTuning
-  attackWidth: 0.238
+  attackWidth: 0.199
   damageWidth: 0.238
   moveWidth: 0.133
   dragWidth: 0.238
@@ -23,18 +23,20 @@ MonoBehaviour:
   damageBow: 0.207
   moveBow: 0.144
   dragBow: 0.207
+  bendDirection: 0
+  mirrorY: 0
   maxBowScale: 1.33
   attackLane: 0.183
-  attackStartY: 0.23
-  attackEndY: 0.62
-  damageStartY: 0.23
+  attackStartY: 0.17
+  attackEndY: 0.43
+  damageStartY: -0.03
   damageEndY: 0.62
   moveStartY: 0.34
   moveEndY: 0.39
-  dragStartY: 0.23
+  dragStartY: 0.63
   dragEndY: 0.62
-  startX: -0.173
-  endX: -0.095
+  startX: -0.158
+  endX: -0.156
   fillOpacity:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 0.1291334}
@@ -97,8 +99,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 3
   headOpacity: 0.481
   bonesPerUnit: 66.2
-  singleFirstBend: 0.43
-  singleLastBend: 0.407
+  singleFirstBend: 0.35
+  singleLastBend: 0.764
   mergedFirstBend: 0.692
   mergedLastBend: 0.582
   routeAngle: 80
@@ -115,8 +117,8 @@ MonoBehaviour:
   barbSweep: 0.283
   notchDepth: 0.631
   directBranches: 1
-  meetOffsetX: -0.15
-  widthPerExtraBranch: 0.412
-  maxTrunkWidth: 2.095
-  branchWidthAtMerge: 1
-  trunkShare: 0.65
+  meetOffsetX: -0.08
+  widthPerExtraBranch: 0
+  maxTrunkWidth: 1.943
+  branchWidthAtMerge: 0.827
+  trunkShare: 0.77
