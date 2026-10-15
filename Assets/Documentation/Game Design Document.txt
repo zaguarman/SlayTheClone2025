@@ -622,6 +622,7 @@ Order Inside a Layer
     • Actions Without a Living Creature: An action created by a creature that is no longer on the battlefield (e.g., OnDied effects, a Prophecy, a status ticking) uses that creature's last known stats for Speed and tie-breaking.
 
 Standard Tie-Breaking (when Speed is tied)
+    • One rule for everyone: it settles ties between your own actions too, never the order they were planned in.
     • Lowest current (Health + Armor) resolves first.
     • If still tied, lowest base Attack resolves first.
     • If still tied, random (a possible future Karma System might influence this).

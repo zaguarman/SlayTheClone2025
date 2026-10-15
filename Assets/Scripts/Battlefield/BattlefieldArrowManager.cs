@@ -172,9 +172,9 @@ namespace SlayTheClone {
         private Dictionary<IGameAction, int> attackNumbers = new Dictionary<IGameAction, int>();
 
         /// <summary>
-        /// Where each planned attack the screen can see comes in the order they resolve, from 1: by layer, then Speed. At the
-        /// same Speed one side's attacks follow the order its player planned them, and the two sides' share numbers, a tie
-        /// (the first of each side is the same number), since which of those goes first is only settled as they resolve.
+        /// Where each planned attack the screen can see comes in the order they resolve, from 1: by layer, then Speed. Every
+        /// attack at the same Speed shares a number, on both sides: the game settles that tie as they resolve (Health + Armor,
+        /// then Attack, then a coin flip), so the number never gives away the order the enemy planned.
         /// </summary>
         public static Dictionary<IGameAction, int> AttackNumbers(IActionsQueue queue, Func<IGameAction, bool> hidden) {
             var numbers = new Dictionary<IGameAction, int>();
@@ -182,13 +182,8 @@ namespace SlayTheClone {
             var attacks = queue.GetPendingActions().OfType<BattlefieldCombatAction>()
                 .Where(a => a.GetAttacker() != null && a.GetTargetSlot() != null && !(hidden?.Invoke(a) ?? false));
             foreach (var tied in attacks.GroupBy(a => (queue.LayerOfPending(a), a.GetAttacker().Speed))) {
-                int most = 0;
-                foreach (var side in tied.GroupBy(a => a.GetAttacker().Owner)) {
-                    int i = 0;
-                    foreach (var attack in side) numbers[attack] = next + i++;
-                    most = Math.Max(most, i);
-                }
-                next += most;
+                foreach (var attack in tied) numbers[attack] = next;
+                next++;
             }
             return numbers;
         }

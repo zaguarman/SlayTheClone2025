@@ -497,7 +497,8 @@ namespace SlayTheClone {
             var pendingActions = GameManager?.ActionsQueue?.GetPendingActions();
             if (pendingActions == null) return;
 
-            int order = 0; // The queue lists them in the order they resolve: the side's creatures arrive in this order
+            int order = 0; // The queue lists them in the order they resolve; the same Speed shares a number (the game settles that tie)
+            int? lastSpeed = null;
             // Moves resolve before summons: a creature planned to step out of a slot leaves it free for one summoned there
             var afterMoves = MovementRules.Preview(Player.Battlefield, MovementRules.PlannedMovesOf(Player, GameManager.ActionsQueue)).FinalSlots;
             foreach (var action in pendingActions) {
@@ -533,8 +534,10 @@ namespace SlayTheClone {
                 ghost.OnBeginDragEvent.AddListener(OnGhostBeginDrag);
                 ghost.OnEndDragEvent.AddListener(OnGhostEndDrag);
                 ghost.SetAnonymous(FogOfWar.HidesSummon(Viewer, action, GameManager.ActionsQueue)); // Something is coming, but what?
-                order++;
-                ghost.SetOrderNumber(ghost.IsAnonymous ? (int?)null : order); // Placed in order: arrivals happen in turn
+                int speed = ((ICreature)card).Speed;
+                if (lastSpeed != speed) order++;
+                lastSpeed = speed;
+                ghost.SetOrderNumber(ghost.IsAnonymous ? (int?)null : order); // Arrivals happen in turn, by Speed
                 queuedGhosts[slot] = ghost;
 
                 // The creature currently in the slot will be replaced when the summon resolves (unless it moves out first):

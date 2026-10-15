@@ -34,7 +34,9 @@ STILL OPEN
         B) Display and rules: drop "your ties as planned"; every tie goes Health + Armor, then Attack, then the coin.
       Recommended: B, one tie rule for everyone, and the number says exactly what you know. Keep Health + Armor (stable and
       readable) or go straight to the coin flip: the user's call.
-    • Waiting for the answer before anything is built.
+    • Decided (the user, 2026-10-15): B. Every tie, your own included, goes Health + Armor, then printed Attack, then the
+      coin flip; the planned order plays no part. The arrows number by Speed alone: all attacks at the same Speed share a
+      number, both sides. Health + Armor stays the first tie-breaker. Built.
 
 42. Reach: a cone by default, Ranged and Artillery (an idea, 2026-10-14, not built)
     • Now: a creature can attack any enemy slot. The idea: by default it only reaches a cone, the slot facing it and the two

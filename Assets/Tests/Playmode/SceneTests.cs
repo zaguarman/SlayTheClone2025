@@ -64,7 +64,7 @@ namespace SlayTheClone.Tests {
 
             var brute = game.Summon(p1, game.Cards.Creature("Test Brute", 4, 5), 0);
             var mouse = game.Summon(p2, game.Cards.Creature("Test Mouse", 1, 2), 0);
-            var striker = game.Summon(p1, game.Cards.Creature("Test Striker", 3, 3), 1);
+            var striker = game.Summon(p1, game.Cards.Creature("Test Striker", 3, 3, speed: 2), 1);
             var flanker = game.Summon(p1, game.Cards.Creature("Test Flanker", 1, 3), 2);
             Assert.IsTrue(game.CardIn(p1.Battlefield[0]).IsIdle, "Ready with nothing planned: your creature is marked idle...");
             Assert.IsFalse(game.CardIn(p2.Battlefield[0]).IsIdle, "...not the other side's");
@@ -79,10 +79,10 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(2, game.QueuedArrows(p1).Count, "Three attacks, two targets: two arrows");
             Assert.AreEqual(2, game.QueuedArrows(p1).Max(a => a.Branches), "The two attacks on the same slot merge into one arrow");
             Assert.AreEqual(1, game.QueuedArrows(p2).Count, "The other side's attack has its own arrow");
-            // Numbered in the order they resolve: at the same Speed, yours as you planned them, and a tie with theirs shares a number
-            CollectionAssert.AreEquivalent(new[] { "1", "3" }, game.QueuedArrows(p1).Single(a => a.Branches == 2).Labels, "The brute first, the flanker third...");
-            CollectionAssert.AreEquivalent(new[] { "2" }, game.QueuedArrows(p1).Single(a => a.Branches == 1).Labels, "...the striker second");
-            CollectionAssert.AreEquivalent(new[] { "1" }, game.QueuedArrows(p2).Single().Labels, "The mouse ties with the brute: both 1");
+            // Numbered by Speed: every attack at the same Speed shares a number, both sides, so it never shows the planned order
+            CollectionAssert.AreEquivalent(new[] { "1" }, game.QueuedArrows(p1).Single(a => a.Branches == 1).Labels, "The faster striker first...");
+            CollectionAssert.AreEquivalent(new[] { "2", "2" }, game.QueuedArrows(p1).Single(a => a.Branches == 2).Labels, "...then the brute and the flanker, tied...");
+            CollectionAssert.AreEquivalent(new[] { "2" }, game.QueuedArrows(p2).Single().Labels, "...and the mouse ties with them: all 2");
             Assert.IsTrue(game.QueuedArrows(p1).All(a => a.Color.b > a.Color.r), "Your attack arrows are blue...");
             Assert.IsTrue(game.QueuedArrows(p2).All(a => a.Color.r > a.Color.b), "...the enemy's red");
             game.Queue.CancelDeclaredAction(flanker.TargetId);
@@ -350,13 +350,13 @@ namespace SlayTheClone.Tests {
 
             var occupant = game.Summon(p1, game.Cards.Creature("Test Ox", 0, 6), 3);
             var wolf = game.GiveCard(p1, game.Cards.Creature("Test Wolf", 2, 3));
-            var hound = game.GiveCard(p1, game.Cards.Creature("Test Hound", 3, 1));
+            var hound = game.GiveCard(p1, game.Cards.Creature("Test Hound", 3, 1, speed: 2));
             game.Play(wolf, p1, p1.Battlefield[1]);  // An empty slot
             game.Play(hound, p1, p1.Battlefield[3]); // Replacing the ox
             yield return null;
-            // Numbered like attacks, in the order they arrive: at the same Speed, as they were placed
-            Assert.AreEqual("1", game.GhostIn(p1.Battlefield[1]).OrderNumber);
-            Assert.AreEqual("2", game.GhostIn(p1.Battlefield[3]).OrderNumber);
+            // Numbered like attacks, in the order they arrive by Speed: the faster hound first, though placed second
+            Assert.AreEqual("2", game.GhostIn(p1.Battlefield[1]).OrderNumber);
+            Assert.AreEqual("1", game.GhostIn(p1.Battlefield[3]).OrderNumber);
 
             foreach (var (queued, slot) in new[] { (wolf, p1.Battlefield[1]), (hound, p1.Battlefield[3]) }) {
                 var hits = SceneGame.Hover(game.GhostIn(slot));

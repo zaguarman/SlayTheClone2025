@@ -95,6 +95,15 @@ namespace SlayTheClone.Tests {
                 Assert.IsTrue(soft.IsDead);
                 Assert.AreEqual(2, hard.Health, "At equal Speed and Health the one with lower base Attack strikes first");
             }
+            using (var g = new TestGame()) {
+                var sturdy = g.Summon(g.Player1, g.Creature("Sturdy", 1, 9), 0);
+                var fragile = g.Summon(g.Player1, g.Creature("Fragile", 5, 1), 1);
+                var dummy = g.Summon(g.Player2, g.Creature("Dummy", 0, 20), 0);
+                g.Declare(sturdy, g.Player2.Battlefield[0]); // Planned first...
+                g.Declare(fragile, g.Player2.Battlefield[0]);
+                g.Resolve();
+                CollectionAssert.AreEqual(new[] { 5, 1 }, g.History.DamageTo(dummy), "...but your own ties follow the same rule: the frailer strikes first");
+            }
 
             var buff = Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures);
             var armor = Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures);
