@@ -56,6 +56,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Tech''s scouting: send for any card among the top 5 of your deck;

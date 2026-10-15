@@ -57,6 +57,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Mind''s denial (the user, 2026-10-15): a Watchdog that nullifies

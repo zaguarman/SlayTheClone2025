@@ -110,6 +110,7 @@ namespace SlayTheClone {
 
         // SendFor Specific: the kind of card it fetches (value: only from the top this many cards of the deck, 0 = all of it)
         public SendForFilter sendFor = SendForFilter.Any;
+        public bool fromDiscard;    // SendFor: from the discard pile instead of the deck (Console Memory Card: load your save)
 
         // What the target must be for it to land (Destroy: "if it's Revealed")
         public TargetRequisite requires = TargetRequisite.None;

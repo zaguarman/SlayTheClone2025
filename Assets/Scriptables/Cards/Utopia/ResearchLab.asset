@@ -56,6 +56,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 2
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Utopia''s research: send for a spell from your deck; it joins your

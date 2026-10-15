@@ -33,7 +33,7 @@ namespace SlayTheClone {
             asked.Add(play);
             var owner = play.GetOwner();
             var sending = SendFor.Of(play.GetCard());
-            var choices = SendFor.Choices(owner, sending.sendFor, sending.value);
+            var choices = SendFor.Choices(owner, sending);
             if (choices.Count == 0) return;
             Asking = play;
             deckView.ShowPick(owner, $"{play.GetCard().Name}: send for a card", choices, picked => {

@@ -779,7 +779,12 @@ Generational Trauma (spell, Mind until 2026-10-15)
   Twist: Health Loss that stays on the card: it gets passed down.
   Push:  Rules and joke match. The skeletons labelled Gen X, Millennials and Gen Z, the last one still holding a phone.
 
-DIGITAL SOCIETY (15)
+DIGITAL SOCIETY (16)
+
+Console Memory Card (spell)
+  Aim:   Your save lives on a card because the console forgets everything (the user, 2026-10-15).
+  Hooks: The PS2 8 MB memory card meme: "the memory of a goldfish"; sold separately.
+  Twist: Send for a card from your discard pile: load your save.
 
 Doomscrolling (spell) [px]
   Aim:   Scrolling bad news at 3 a.m.

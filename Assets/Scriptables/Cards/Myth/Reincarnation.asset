@@ -57,6 +57,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
   - effectType: 0
@@ -89,6 +90,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Rebirth (once per combat it survives death with 1 Health) and Grow

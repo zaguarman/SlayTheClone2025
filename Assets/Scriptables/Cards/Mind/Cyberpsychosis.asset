@@ -57,6 +57,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
     - actionType: 0
@@ -85,6 +86,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 6
       decoy: {fileID: 0}
   designNotes: '2 damage to target enemy creature, and 3 more if it''s Digital Society:

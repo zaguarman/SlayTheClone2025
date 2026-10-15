@@ -12,28 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: WorkbenchDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Workbench - Momentum, Survivorship Bias, Yesn't, Business Operating Expenses,
-    Satoshi Nakamoto, Laissez-Faire, The Invisible Hand, C-Suite
+  deckName: Workbench - Console Memory Card, Momentum, Survivorship Bias, Yesn't
   cards:
+  - {fileID: 11400000, guid: 837d1ac84fa4db3498299301e25df320, type: 2}
+  - {fileID: 11400000, guid: 837d1ac84fa4db3498299301e25df320, type: 2}
   - {fileID: 11400000, guid: dd11f91f7b049a341ae6e31e13820ff4, type: 2}
   - {fileID: 11400000, guid: dd11f91f7b049a341ae6e31e13820ff4, type: 2}
   - {fileID: 11400000, guid: 197d029fd4badfd43b582fc451f3ed44, type: 2}
   - {fileID: 11400000, guid: 197d029fd4badfd43b582fc451f3ed44, type: 2}
   - {fileID: 11400000, guid: f5e562aea85718a46b50fa7aa3c8f529, type: 2}
   - {fileID: 11400000, guid: f5e562aea85718a46b50fa7aa3c8f529, type: 2}
-  - {fileID: 11400000, guid: 1976206d5d92a594fbbbd2c75cf75c95, type: 2}
-  - {fileID: 11400000, guid: 1976206d5d92a594fbbbd2c75cf75c95, type: 2}
-  - {fileID: 11400000, guid: 9710b7bd3f0432442af510e22cbc062a, type: 2}
-  - {fileID: 11400000, guid: 9710b7bd3f0432442af510e22cbc062a, type: 2}
-  - {fileID: 11400000, guid: 3feff565f4aab7e4498dc7ef7150aa27, type: 2}
-  - {fileID: 11400000, guid: 3feff565f4aab7e4498dc7ef7150aa27, type: 2}
-  - {fileID: 11400000, guid: 2c92fb9b577f8714680a5c339c579b1c, type: 2}
-  - {fileID: 11400000, guid: 2c92fb9b577f8714680a5c339c579b1c, type: 2}
-  - {fileID: 11400000, guid: c2d2e6fbfe011824b84a1af5473615cd, type: 2}
-  - {fileID: 11400000, guid: c2d2e6fbfe011824b84a1af5473615cd, type: 2}
-  - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
-  - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
-  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
-  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
-  lastUpdated: 2026-10-15T10:19:56.2994908Z
+  - {fileID: 11400000, guid: c5405e23f4cdaa747a169a990ebbf035, type: 2}
+  - {fileID: 11400000, guid: c5405e23f4cdaa747a169a990ebbf035, type: 2}
+  - {fileID: 11400000, guid: a6edde4600e9c334c808ed4a55c6e25e, type: 2}
+  - {fileID: 11400000, guid: a6edde4600e9c334c808ed4a55c6e25e, type: 2}
+  - {fileID: 11400000, guid: 0efb4c3a89595d04ca8e4ccec26b8ab6, type: 2}
+  - {fileID: 11400000, guid: 0efb4c3a89595d04ca8e4ccec26b8ab6, type: 2}
+  - {fileID: 11400000, guid: afef0aa19896246428fd44949ec5574e, type: 2}
+  - {fileID: 11400000, guid: ddce5a6785d507046a21ea5759544480, type: 2}
+  - {fileID: 11400000, guid: 8084b1109215d5f4aa0014e67f969862, type: 2}
+  - {fileID: 11400000, guid: 8084b1109215d5f4aa0014e67f969862, type: 2}
+  - {fileID: 11400000, guid: b2d0789f9446bd04b82633099da8a4ab, type: 2}
+  - {fileID: 11400000, guid: b2d0789f9446bd04b82633099da8a4ab, type: 2}
+  lastUpdated: 2026-10-15T10:38:10.3610833Z
   focus: 1

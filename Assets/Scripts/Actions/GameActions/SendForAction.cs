@@ -15,27 +15,29 @@ namespace SlayTheClone {
         public ICard Source { get; } // The card that sends for it: its pick is kept under it
         public SendForFilter Filter { get; }
         public int Top { get; } // Only the top this many cards of the deck (0: the whole deck)
+        public bool FromDiscard { get; } // From the discard pile instead (Console Memory Card)
 
-        public SendForAction(IPlayer player, ICard source, SendForFilter filter, int top) {
+        public SendForAction(IPlayer player, ICard source, SendForFilter filter, int top, bool fromDiscard = false) {
             Player = player;
             Source = source;
             Filter = filter;
             Top = top;
+            FromDiscard = fromDiscard;
             Log($"Created {this}", LogTag.Actions | LogTag.Cards);
         }
 
-        public override string ToString() => $"SendForAction: {Player?.Name} sends for a card ({Filter}{(Top > 0 ? $", top {Top}" : "")})";
+        public override string ToString() => $"SendForAction: {Player?.Name} sends for a card ({Filter}{(Top > 0 ? $", top {Top}" : "")}{(FromDiscard ? ", discard pile" : "")})";
     }
 
     public class SendForActionExecutor : ActionExecutor<SendForAction> {
         protected override void ExecuteAction(SendForAction sending, ActionExecutionContext context) {
             var player = sending.Player;
             if (player == null) return;
-            var choices = SendFor.Choices(player, sending.Filter, sending.Top);
+            var choices = SendFor.Choices(player, sending.Filter, sending.Top, sending.FromDiscard);
             player.SendForPicks.TryGetValue(sending.Source, out var picked);
             player.SendForPicks.Remove(sending.Source);
             var card = picked != null && choices.Contains(picked) ? picked : SendFor.Best(player, choices);
-            if (card == null || !player.Deck.RemoveCard(card)) {
+            if (card == null || !(sending.FromDiscard ? player.Deck.TakeFromDiscardPile(card) != null : player.Deck.RemoveCard(card))) {
                 Log($"{player.Name} sends for a card, but there's none to send for", LogTag.Cards);
                 return;
             }
@@ -50,10 +52,13 @@ namespace SlayTheClone {
         public static EffectAction Of(ICard card) =>
             card?.Effects?.SelectMany(e => e.actions).FirstOrDefault(a => a.actionType == ActionType.SendFor);
 
-        /// <summary>What it can send for now: the deck (or its top cards), of the kind it takes.</summary>
-        public static List<ICard> Choices(IPlayer player, SendForFilter filter, int top) {
-            var deck = player?.Deck.GetDeckPreview() ?? new List<ICard>();
-            return (top > 0 ? deck.Take(top) : deck).Where(c => filter switch {
+        /// <summary>What this card's Send For can fetch now.</summary>
+        public static List<ICard> Choices(IPlayer player, EffectAction sending) => Choices(player, sending.sendFor, sending.value, sending.fromDiscard);
+
+        /// <summary>What it can send for now: the deck (or its top cards), or the discard pile, of the kind it takes.</summary>
+        public static List<ICard> Choices(IPlayer player, SendForFilter filter, int top, bool fromDiscard = false) {
+            var pile = (fromDiscard ? player?.Deck.GetDiscardPilePreview() : player?.Deck.GetDeckPreview())?.ToList() ?? new List<ICard>();
+            return (top > 0 && !fromDiscard ? pile.Take(top) : pile).Where(c => filter switch {
                 SendForFilter.Creature => c is ICreature,
                 SendForFilter.Spell => c is Spell,
                 _ => true

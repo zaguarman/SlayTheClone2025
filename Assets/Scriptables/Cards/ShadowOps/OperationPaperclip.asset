@@ -57,6 +57,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 4
       decoy: {fileID: 0}
   designNotes: Take control of target enemy creature with 2 Attack or less. It changes

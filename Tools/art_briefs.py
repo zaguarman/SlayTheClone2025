@@ -20,6 +20,8 @@ USER_NOTES = {
     "Mental Health Day": ["2026-10-14: it criticises how superficially the topic is treated: a nice day to have, but zero measures from the "
                           "government to tackle mental health problems; and to rub salt in the wound, the only people backing it are cringe "
                           "mystic, shamanic, ayurveda- and reiki-loving Karens."],
+    "Console Memory Card": ["2026-10-15: after the meme of the PS2 8 MB memory card: the save data lives on the card because "
+                            "the console has the memory of a goldfish."],
     "Scope Creep": ["2026-10-14: a Gantt chart instead of the creep with the spyglass."],
     "Mox Nox": ["2026-10-14: some cards are just Latin words the user finds interesting; they don't need a joke."],
     "HAARP": ["2026-10-14: an underground installation with a device like a strong laser pointed at an immense hole in the "

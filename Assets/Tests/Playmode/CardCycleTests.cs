@@ -168,6 +168,17 @@ namespace SlayTheClone.Tests {
             game.ActionsQueue.AddAction(new PlayCardAction(peek, p1, p1));
             game.Resolve();
             CollectionAssert.Contains(p1.ComingBack, top, "Nothing picked: the best it can reach, and scouting only reaches the top card");
+            var loadData = game.Spell("Load", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.SendFor, 0, TargetType.Player));
+            loadData.effects[0].actions[0].fromDiscard = true;
+            StringAssert.Contains("from your discard pile", Keywords.Plain(CardTextFormatter.GetRulesText(loadData)));
+            var load = game.GiveCard(p1, loadData);
+            var saved = p1.Deck.GetDiscardPilePreview().FirstOrDefault() ?? p1.Deck.GetDeckPreview()[0];
+            if (!p1.Deck.GetDiscardPilePreview().Contains(saved)) { p1.Deck.RemoveCard(saved); p1.Deck.AddToDiscardPile(saved); }
+            p1.SendForPicks[load] = saved;
+            game.ActionsQueue.AddAction(new PlayCardAction(load, p1, p1));
+            game.Resolve();
+            CollectionAssert.Contains(p1.ComingBack, saved, "Console Memory Card: the save loads from the discard pile...");
+            CollectionAssert.DoesNotContain(p1.Deck.GetDiscardPilePreview(), saved, "...and leaves it");
 
             // Gamble (Casino): only one of its effects happens, at random
             for (int spin = 0; spin < 6; spin++) {

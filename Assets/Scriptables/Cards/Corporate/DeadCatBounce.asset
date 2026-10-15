@@ -56,6 +56,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
     - actionType: 6
@@ -84,6 +85,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Future: a Temporary +3 Attack for 1 Day, then a Persistent -2 Health.'

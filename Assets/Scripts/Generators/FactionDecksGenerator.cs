@@ -55,7 +55,7 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Momentum", "Survivorship Bias", "Yesn't", "Business Operating Expenses", "Satoshi Nakamoto", "Laissez-Faire", "The Invisible Hand", "C-Suite" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Mind, new[] { "Console Memory Card", "Momentum", "Survivorship Bias", "Yesn't" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -621,6 +621,11 @@ namespace SlayTheClone {
         #region Factions without a deck yet
         // Digital Society: a swarm of cheap bodies, effects that spread, many creatures piling on one target
         private static List<CardDef> DigitalSocietyCards() => new List<CardDef> {
+            Spell("Console Memory Card", TargetType.Player,
+                "Your console has the memory of a goldfish. 8 MB of remembering, sold separately.",
+                "Load your save (the user, 2026-10-15, after the PS2 memory card meme): send for any card from your discard pile; it joins your next hand. The first Send For that reaches the discard pile instead of the deck.",
+                SendForCard(SendForFilter.Any, fromDiscard: true))
+                .Picture("A chunky black console memory card, 8 MB MEMORY CARD on its label, with a goldfish in a tiny bowl taped on top for the console's memory, a glowing save icon floating out of the card."),
             Spell("Doomscrolling", TargetType.Player,
                 "Just one more. Just one more. Just one more.",
                 "Digital Society's scouting: send for any card among the top 4 of your deck; it joins your next hand. Costs Doom 3: your weakest creature not yet Doomed is Doomed first (the feed eats someone).",
@@ -1316,9 +1321,10 @@ namespace SlayTheClone {
         };
 
         // Send For: a card from the deck (of this kind, among its top cards if top > 0) joins the next hand
-        private static EffectAction SendForCard(SendForFilter filter, int top = 0) {
+        private static EffectAction SendForCard(SendForFilter filter, int top = 0, bool fromDiscard = false) {
             var action = Act(ActionType.SendFor, top, TargetType.Player, TargetModifier.None);
             action.sendFor = filter;
+            action.fromDiscard = fromDiscard;
             return action;
         }
 

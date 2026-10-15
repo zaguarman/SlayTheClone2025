@@ -56,6 +56,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 3
       decoy: {fileID: 0}
   designNotes: Take control of the strongest enemy creature if you have more creatures

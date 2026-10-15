@@ -545,7 +545,7 @@ namespace SlayTheClone {
             }
             if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;
             // Send For: the right card next Day (it picks the best one when it resolves)
-            if (action.actionType == ActionType.SendFor) return SendFor.Choices(view.Me, action.sendFor, action.value).Count > 0 ? 2.5f * Style.Cards : 0;
+            if (action.actionType == ActionType.SendFor) return SendFor.Choices(view.Me, action).Count > 0 ? 2.5f * Style.Cards : 0;
             // GoldenEye: each of their Watchdogs gone is a trap we no longer walk into
             if (action.actionType == ActionType.WipeWatchdogs) return queue.Watchdogs.Count(w => w.Controller == view.Them) * 1.5f * Style.Intel;
             if (action.actionType == ActionType.Reveal) {

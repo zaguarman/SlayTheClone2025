@@ -56,6 +56,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
   designNotes: Each Dawn a random enemy creature gets -1 Attack for good.

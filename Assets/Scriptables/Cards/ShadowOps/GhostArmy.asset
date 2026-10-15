@@ -57,6 +57,7 @@ MonoBehaviour:
       trend: 0
       ability: 0
       sendFor: 0
+      fromDiscard: 0
       requires: 0
       decoy: {fileID: 11400000, guid: 4c2a53f4b7b07bd45938d418a612c6d8, type: 2}
   designNotes: 'Put 2 Inflatable Tanks (0/1 decoys) in your empty slots: until a

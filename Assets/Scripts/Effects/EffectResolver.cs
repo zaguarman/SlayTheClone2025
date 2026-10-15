@@ -489,7 +489,7 @@ namespace SlayTheClone {
                 case ActionType.SummonDecoys: // Tokens into the player's empty slots (Ghost Army)
                     return target is IPlayer decoysSide && action.decoyData != null && action.value > 0 ? new SummonDecoysAction(decoysSide, action.decoyData, action.value) : null;
                 case ActionType.SendFor: // A card from the deck joins that player's next hand
-                    return target is IPlayer sender ? new SendForAction(sender, source, action.sendFor, action.value) : null;
+                    return target is IPlayer sender ? new SendForAction(sender, source, action.sendFor, action.value, action.fromDiscard) : null;
                 case ActionType.CutDraws: // Fewer cards in that player's next hand (Supply Chain Attack)
                     return target is IPlayer cut && action.value > 0 ? new CutDrawsAction(cut, action.value) : null;
                 case ActionType.WipeWatchdogs: // Every Watchdog that player controls (GoldenEye)
