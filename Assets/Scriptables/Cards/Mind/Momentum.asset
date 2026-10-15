@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: Momentum
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: f5bf6ae5-1b4d-4f6f-a8d1-f02cc1d6c69f
+  cardName: Momentum
+  description: Once you get going you can't stop. That was the plan. Stopping wasn't.
+  cardType: 1
+  faction: 8
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  gamble: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 6
+      value: 1
+      targetType: 3
+      targetModifier: 2
+      modifyAttack: 0
+      modifyHealth: 0
+      modifySpeed: 1
+      statusEffectToApply: 0
+      statusDuration: 3
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Tailwind (the user, 2026-10-15: cards like Pokemon''s Tailwind):
+    +1 Speed to all your creatures for 3 Days. Spells land before attacks, so today''s
+    attacks already go sooner.'
+  artDescription: A man in a business suit sprinting downhill, legs a cartoon blur,
+    a gale of motivational posters (HUSTLE, NEVER STOP) blowing at his back, the
+    edge of a cliff just ahead.
+  defaultTargetType: 3

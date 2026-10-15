@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: WorkbenchDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Workbench - Yesn't, Business Operating Expenses, Satoshi Nakamoto, Laissez-Faire,
-    The Invisible Hand, C-Suite
+  deckName: Workbench - Momentum, Survivorship Bias, Yesn't, Business Operating Expenses,
+    Satoshi Nakamoto, Laissez-Faire, The Invisible Hand, C-Suite
   cards:
+  - {fileID: 11400000, guid: dd11f91f7b049a341ae6e31e13820ff4, type: 2}
+  - {fileID: 11400000, guid: dd11f91f7b049a341ae6e31e13820ff4, type: 2}
+  - {fileID: 11400000, guid: 197d029fd4badfd43b582fc451f3ed44, type: 2}
+  - {fileID: 11400000, guid: 197d029fd4badfd43b582fc451f3ed44, type: 2}
   - {fileID: 11400000, guid: f5e562aea85718a46b50fa7aa3c8f529, type: 2}
   - {fileID: 11400000, guid: f5e562aea85718a46b50fa7aa3c8f529, type: 2}
   - {fileID: 11400000, guid: 1976206d5d92a594fbbbd2c75cf75c95, type: 2}
@@ -31,9 +35,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
-  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
-  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
-  - {fileID: 11400000, guid: 5b1b3dccdbb9e1348929cfb29cbfbc9d, type: 2}
-  - {fileID: 11400000, guid: 5b1b3dccdbb9e1348929cfb29cbfbc9d, type: 2}
-  lastUpdated: 2026-10-15T09:55:31.5984064Z
+  lastUpdated: 2026-10-15T10:19:56.2994908Z
   focus: 1

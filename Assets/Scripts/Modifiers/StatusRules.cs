@@ -76,7 +76,8 @@ namespace SlayTheClone {
             // (re-applying sets them to the new amount)
             if (type is StatusEffectType.Exhausted or StatusEffectType.Concealed or StatusEffectType.Revealed or StatusEffectType.Encrypted
                 or StatusEffectType.Untouchable or StatusEffectType.Cooldown or StatusEffectType.Brainwashed or StatusEffectType.KillOrder
-                or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Blackout) {
+                or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Blackout
+                or StatusEffectType.Survivor) {
                 foreach (var old in manager.GetActiveModifiersFor(target).OfType<StatusEffectModifier>()
                              .Where(s => s.EffectType == type).ToList()) {
                     manager.RemoveModifier(target, old);
@@ -125,6 +126,7 @@ namespace SlayTheClone {
                 StatusEffectType.Composed => $"Composed ({days}): it can't be Exhausted",
                 StatusEffectType.Blackout => $"Blackout ({days}): its ability and effects are off",
                 StatusEffectType.Licensed => "Licensed: its next attack on a creature destroys it",
+                StatusEffectType.Survivor => "Survivor: from full Health, a killing hit leaves it at 1",
                 StatusEffectType.Blessed or StatusEffectType.HeatSignature => type.ToString(), // Its stacks are added by the status itself
                 _ => $"{type} ({days})"
             };

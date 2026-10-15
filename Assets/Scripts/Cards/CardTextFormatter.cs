@@ -451,6 +451,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Licensed: return $"{Keywords.Link("Licensed", "license")} {target}";
                 case StatusEffectType.Composed: return $"{Keywords.Link("Composed", "Composed" + Count(days))} on {target}";
                 case StatusEffectType.Blackout: return $"{Keywords.Link("Blackout", "Blackout" + Count(days))} on {target}";
+                case StatusEffectType.Survivor: return $"{Keywords.Link("Survivor")} on {target}";
                 default: return null;
             }
         }

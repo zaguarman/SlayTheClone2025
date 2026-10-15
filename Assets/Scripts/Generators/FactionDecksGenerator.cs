@@ -55,7 +55,7 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Yesn't", "Business Operating Expenses", "Satoshi Nakamoto", "Laissez-Faire", "The Invisible Hand", "C-Suite" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Momentum", "Survivorship Bias", "Yesn't", "Business Operating Expenses", "Satoshi Nakamoto", "Laissez-Faire", "The Invisible Hand", "C-Suite" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -1332,6 +1332,16 @@ namespace SlayTheClone {
                 "Mind's scouting: send for any card among the top 3 of your deck; it joins your next hand.",
                 SendForCard(SendForFilter.Any, top: 3))
                 .Picture("A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases."),
+            Spell("Momentum", TargetType.FriendlyCreatures,
+                "Once you get going you can't stop. That was the plan. Stopping wasn't.",
+                "Tailwind (the user, 2026-10-15: cards like Pokemon's Tailwind): +1 Speed to all your creatures for 3 Days. Spells land before attacks, so today's attacks already go sooner.",
+                Buff(1, TargetType.FriendlyCreatures, attack: false, health: false, Each, days: 3, speed: true))
+                .Picture("A man in a business suit sprinting downhill, legs a cartoon blur, a gale of motivational posters (HUSTLE, NEVER STOP) blowing at his back, the edge of a cliff just ahead."),
+            Spell("Survivorship Bias", TargetType.FriendlyCreatures,
+                "Every plane that came back had holes in the same places. Armor those, said everyone who never saw the others.",
+                "Focus Sash (the user, 2026-10-15: cards like Pokemon's Focus Sash): Survivor on target friendly creature: from full Health, a hit that would kill it leaves it at 1, once. Hurt first, and it doesn't help.",
+                Status(StatusEffectType.Survivor, 1, TargetType.FriendlyCreatures))
+                .Picture("A WWII bomber back on the runway, riddled with red dots of bullet holes in the famous diagram's pattern, its smug pilot on the wing giving a thumbs-up with one eyebrow singed off."),
             Spell("Yesn't", TargetType.Player,
                 "It happened. It also didn't. Both are true until you stop thinking about it.",
                 "Mind's denial (the user, 2026-10-15): a Watchdog that nullifies the next 2 enemy spells that deal damage, Monitored, so it catches ones planned before it. Narrower than Antivirus (any spell, 1 charge), so 2 charges: the blow lands and doesn't, and the mind picks doesn't.",
@@ -1796,11 +1806,11 @@ namespace SlayTheClone {
 
         // Lasts while the creature stays on the battlefield; negative values are debuffs
         // days: how long it lasts, counting the Day it lands (1 = this Day only); 0 = until it leaves play
-        private static EffectAction Buff(int value, TargetType target, bool attack, bool health, TargetModifier modifier = TargetModifier.None, int days = 0) {
+        private static EffectAction Buff(int value, TargetType target, bool attack, bool health, TargetModifier modifier = TargetModifier.None, int days = 0, bool speed = false) {
             var action = Act(ActionType.ModifyStat, value, target, modifier);
             action.modifyAttack = attack;
             action.modifyHealth = health;
-            action.modifySpeed = false;
+            action.modifySpeed = speed;
             action.statusDuration = days;
             return action;
         }

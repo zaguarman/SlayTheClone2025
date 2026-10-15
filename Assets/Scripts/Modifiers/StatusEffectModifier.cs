@@ -16,10 +16,10 @@ namespace SlayTheClone {
         /// <summary>Intensity, for statuses that count it instead of Days (Blessed charges, Heat). Time doesn't reduce it.</summary>
         public int Stacks { get; private set; }
         /// <summary>Lasts until removed or used up, whatever its Days (Blessed, Heat Signature).</summary>
-        public bool IsPersistent => EffectType is StatusEffectType.Blessed or StatusEffectType.HeatSignature or StatusEffectType.Licensed;
+        public bool IsPersistent => EffectType is StatusEffectType.Blessed or StatusEffectType.HeatSignature or StatusEffectType.Licensed or StatusEffectType.Survivor;
         /// <summary>Whether it harms its creature: what a Cleanse removes (a Purge removes the rest too). Blessed is the good one.</summary>
         public bool IsNegative => EffectType is not (StatusEffectType.Blessed or StatusEffectType.Concealed or StatusEffectType.Encrypted or StatusEffectType.Untouchable
-            or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed);
+            or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Survivor);
         /// <summary>Its Days count the Day it lands, like a Day-long buff (Untouchable 1 is this Day only), instead of skipping it.</summary>
         public bool CountsTheDayItLands => EffectType is StatusEffectType.Untouchable or StatusEffectType.Composed;
 
@@ -74,6 +74,11 @@ namespace SlayTheClone {
             if (EffectType == StatusEffectType.HeatSignature) {
                 Stacks = Math.Max(1, Math.Min(MaxHeat, stacks));
                 Description = $"Heat Signature {Stacks}: random effects and redirected attacks go to the hottest creature";
+                return;
+            }
+            if (EffectType == StatusEffectType.Survivor) {
+                Stacks = 1;
+                Description = "Survivor: from full Health, a killing hit leaves it at 1";
                 return;
             }
             if (EffectType == StatusEffectType.Licensed) {

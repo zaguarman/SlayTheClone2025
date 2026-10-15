@@ -843,6 +843,9 @@ namespace SlayTheClone {
                 StatusEffectType.Licensed => creature.Has(StatusEffectType.Licensed) || !CanAttack(creature) ? 0
                     : view.Theirs.Where(Hittable).Select(t => (t.Worth + HealthLeft(t)) * 0.6f).DefaultIfEmpty(0.5f).Max(),
                 StatusEffectType.Composed => creature.Has(StatusEffectType.Exhausted) ? AttackOf(creature) + 1 : 0.5f,
+                // One more hit survived, only while unhurt: worth most on a healthy creature that's about to be hit
+                StatusEffectType.Survivor => creature.Has(StatusEffectType.Survivor) || creature.Health < creature.MaxHealth ? 0
+                    : WouldDie(creature) ? creature.Worth * 0.6f : 0.5f,
                 StatusEffectType.Blackout => creature.Ability != CreatureAbility.None || creature.Retaliation > 0 ? -1.5f : -0.5f,
                 _ => 0
             };

@@ -50,6 +50,16 @@ namespace SlayTheClone {
                 mediator.NotifyCreatureArmorChanged(targetCreature, targetCreature.CurrentArmorPool);
             }
 
+            // Survivor (Survivorship Bias): from full Health, a hit that would kill it leaves it at 1, and the status is spent
+            if (remainingDamage > 0 && remainingDamage >= targetCreature.Health && targetCreature.Health >= targetCreature.MaxHealth) {
+                var survivor = StatusRules.Find(modifierManager, targetCreature, StatusEffectType.Survivor);
+                if (survivor != null) {
+                    modifierManager.RemoveModifier(targetCreature, survivor);
+                    remainingDamage = targetCreature.Health - 1;
+                    Log($"Executor: {targetCreature.Name} survives the hit at 1 Health (Survivor)", LogTag.Actions | LogTag.Combat);
+                }
+            }
+
             int actualHealthDamage = 0;
             if (remainingDamage > 0 && !targetCreature.IsDead) {
                 Log($"Executor: Applying {remainingDamage} remaining damage to health.", LogTag.Actions | LogTag.Creatures | LogTag.Combat);

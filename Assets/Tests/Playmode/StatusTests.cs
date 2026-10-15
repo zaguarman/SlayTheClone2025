@@ -190,6 +190,19 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(health, p1.Health, "...and its Dusk effect does nothing");
             game.StartTurn();
             Assert.AreEqual(health - 1, p1.Health, "Over at the next Day's Dusk: it works again");
+
+            // Survivor (Survivorship Bias): from full Health a killing hit leaves it at 1, once; hurt first, it doesn't help
+            var veteran = game.Summon(p2, game.Creature("Veteran", 1, 4), 4);
+            game.Run(new ApplyStatusEffectAction(veteran, StatusEffectType.Survivor, 1, 0));
+            game.Run(new DamageCreatureAction(veteran, 9));
+            Assert.IsFalse(veteran.IsDead, "It survives the killing hit...");
+            Assert.AreEqual(1, veteran.Health, "...at 1 Health");
+            Assert.IsNull(StatusRules.Find(game.ModifierManager, veteran, StatusEffectType.Survivor), "...and it's spent");
+            var scarred = game.Summon(p1, game.Creature("Scarred", 1, 4), 4);
+            game.Run(new ApplyStatusEffectAction(scarred, StatusEffectType.Survivor, 1, 0));
+            game.Run(new DamageCreatureAction(scarred, 1));
+            game.Run(new DamageCreatureAction(scarred, 9));
+            Assert.IsTrue(scarred.IsDead, "Hurt first: no help");
         }
 
         [Test]

@@ -6,7 +6,7 @@ Stat Changes: A status's stat change applies only while the status is on the cre
 
 Status Ownership: Every status belongs to one faction, or is Neutral. A faction's cards apply its own statuses freely; other factions apply them only rarely and at a higher cost (see 'Faction Compendium'). Each faction owns at most 3 statuses.
 
-• Neutral: Anchored, Concealed, Exposed, Muted, Revealed
+• Neutral: Anchored, Concealed, Exposed, Muted, Revealed, Survivor
 • Myth: Blessed, Bloodthirst, Doomed
 • Statecraft: Diplomatic Immunity, Heavy, Keep Calm
 • Shadow Ops.: Brainwashed, Compromised, Honeypot
@@ -586,6 +586,18 @@ Composed
     Stacking & Duration:
         Initial Stacks: 1 (from source), counting the Day it lands like Untouchable: 1 is this Day only
         Re-application Behavior: Refresh
+    Cleansable: No (not harmful)
+
+Survivor
+    Faction: Neutral (first on Survivorship Bias, a Mind card: Mind already owns 3 statuses)
+    Type: Protection
+    Description: "From full Health, a hit that would kill it leaves it at 1 Health instead, and the status is spent."
+    Core Impact: One lethal hit survived, like Pokemon's Focus Sash (the user, 2026-10-15). Only from full Health: hurt it
+        first, even by 1, and it doesn't help. Armor is spent first as usual; what's left of the hit stops at 1 Health.
+    Stacking & Duration:
+        Initial Stacks: until used (Persistent)
+        Re-application Behavior: Refresh (still one hit)
+    Answers: Chip it first, Destroy it (not a hit), or hit it twice.
     Cleansable: No (not harmful)
 
 Blackout

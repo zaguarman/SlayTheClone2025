@@ -1284,7 +1284,17 @@ Sex Clanker (creature)
          about No Glove, No Love is history. Keep it.
 
 
-MIND (13)
+MIND (15)
+
+Momentum (spell)
+  Aim:   Hustle culture's "never stop": the rush that carries you, off the cliff too.
+  Hooks: Pokemon's Tailwind (the user, 2026-10-15); grindset posters.
+  Twist: +1 Speed to all your creatures for 3 Days: everything you planned goes sooner.
+
+Survivorship Bias (spell)
+  Aim:   The fallacy: we only see the ones that made it.
+  Hooks: Pokemon's Focus Sash (the user, 2026-10-15); Abraham Wald's WWII bomber diagram.
+  Twist: Survivor: from full Health, a killing hit leaves it at 1, once.
 
 Yesn't (spell)
   Aim:   Denial, doublethink: it happened and it didn't, and the mind picks didn't.

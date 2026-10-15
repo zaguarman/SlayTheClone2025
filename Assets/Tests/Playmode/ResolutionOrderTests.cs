@@ -78,6 +78,20 @@ namespace SlayTheClone.Tests {
                 Assert.AreEqual(Enums.Trend.None, g.TrendSystem.Current, "A Trend for 1 Day ends at its Dusk");
             }
             using (var g = new TestGame()) {
+                // Momentum: +1 Speed for your side, played the same Day, and the slower creature strikes first
+                var fast = g.Summon(g.Player1, g.Creature("Fast", 5, 3, speed: 2), 0);
+                var slow = g.Summon(g.Player2, g.Creature("Slow", 5, 3), 0);
+                var tailwind = Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures, TargetModifier.AllSameTypeTargets);
+                tailwind.actions[0].modifySpeed = true;
+                tailwind.actions[0].statusDuration = 3;
+                g.Declare(fast, g.Player2.Battlefield[0]);
+                g.Declare(slow, g.Player1.Battlefield[0]);
+                g.ActionsQueue.AddAction(new PlayCardAction(g.GiveCard(g.Player2, g.Spell("Momentum", TargetType.FriendlyCreatures, tailwind)), g.Player2, g.Player2.Battlefield[0]));
+                g.Resolve();
+                Assert.AreEqual(3, slow.Speed, "+2 Speed on its side...");
+                Assert.IsTrue(fast.IsDead, "...so it strikes first, the same Day");
+            }
+            using (var g = new TestGame()) {
                 var tough = g.Summon(g.Player1, g.Creature("Tough", 5, 5), 0);
                 var frail = g.Summon(g.Player2, g.Creature("Frail", 5, 3), 0);
                 g.Declare(tough, g.Player2.Battlefield[0]);

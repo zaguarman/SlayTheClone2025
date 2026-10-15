@@ -64,7 +64,8 @@ namespace SlayTheClone {
             BorrowedTime,  // It can't die while it lasts; when it runs out, it dies if it's at 0 Health
             Licensed,      // Its next attack on a creature destroys it, then the licence is spent (lasts until used)
             Composed,      // Exhausted can't land on it (this Day only, like Untouchable)
-            Blackout       // Its ability and effects are switched off
+            Blackout,      // Its ability and effects are switched off
+            Survivor       // From full Health, a hit that would kill it leaves it at 1, then it's spent (lasts until used)
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old
