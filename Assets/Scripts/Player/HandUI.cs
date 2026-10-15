@@ -319,13 +319,14 @@ namespace SlayTheClone {
         }
 
         // While a card is carried it keeps the picked-up size over the hand, and eases down to board size as it rises
-        // over the board, so the slot it's aimed at stays in view
+        // over the board, so the slot it's aimed at stays in view; over a slot it'll land in, it shrinks to a slotted card's size
         private void Carry() {
             if (picked == null || CardController.Dragged != picked) return;
             float big = CardScale * PickedScale;
             float scale = big;
             var rect = (RectTransform)transform;
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, GameInput.PointerPosition, CanvasUtility.GetEventCamera(this), out var local)) {
+            if (picked.SnapsTo != null) scale = picked.SnapsTo.lossyScale.x / Mathf.Max(1e-6f, picked.transform.parent.lossyScale.x);
+            else if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, GameInput.PointerPosition, CanvasUtility.GetEventCamera(this), out var local)) {
                 float away = IsYourHand ? local.y - rect.rect.yMax : rect.rect.yMin - local.y; // Toward the board
                 scale = Mathf.Lerp(big, 1f, Mathf.InverseLerp(0f, OverBoardReach, away));
             }

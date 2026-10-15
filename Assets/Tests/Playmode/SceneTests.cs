@@ -518,7 +518,9 @@ namespace SlayTheClone.Tests {
                     Assert.AreEqual(litMat ? UITheme.MatValid : UITheme.Mat, MatOf(side), $"{card.Name} over {side.Name}'s battlefield");
                     Enter(drag, SlotObject(slot));
                     Assert.AreEqual(litSlot, IsLit(slot), $"{card.Name} over {slot}");
+                    Assert.AreEqual(litSlot ? SlotObject(slot).transform : null, Shown(card).SnapsTo, "Where it would land, it settles into the slot");
                     Exit(drag, SlotObject(slot));
+                    Assert.IsNull(Shown(card).SnapsTo, "...and off it, follows the pointer again");
                     Exit(drag, mat);
                 }
                 SceneGame.EndDrag(Shown(card), drag);

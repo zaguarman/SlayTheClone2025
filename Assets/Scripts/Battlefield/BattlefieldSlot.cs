@@ -184,6 +184,8 @@ namespace SlayTheClone {
                 if (board?.AimOf(dragged) == BattlefieldUI.DropAim.Slot && board.CanAimAt(dragged, Model)) {
                     ShowHighlight(DragTargetColor, DragTargetTrimColor);
                     if (IsCreatureFromHandDraggedOver(eventData)) OccupyingCard.SetReplacementPreview(true);
+                    // A card being played (not a creature moving or attacking) settles into the slot it'll land in (the user)
+                    if (dragged.IsQueued || dragged.GetComponentInParent<HandUI>() != null) dragged.SnapsTo = transform;
                 }
             }
             else if (OccupyingCard != null) ShowHighlight(HoverColor, HoverTrimColor); // An empty slot stays plain
@@ -194,6 +196,8 @@ namespace SlayTheClone {
         }
 
         public void OnPointerExit(PointerEventData eventData) {
+            var dragged = eventData?.pointerDrag != null ? eventData.pointerDrag.GetComponent<CardController>() : null;
+            if (dragged != null && dragged.SnapsTo == transform) dragged.SnapsTo = null; // Off the slot: it follows the pointer again
             if (OccupyingCard != null) {
                 OccupyingCard.SetReplacementPreview(false);
             }

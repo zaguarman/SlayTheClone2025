@@ -49,6 +49,12 @@ namespace SlayTheClone {
         private bool isDragging;
         /// <summary>The card being dragged, if any: while the player is doing something, no tooltip opens.</summary>
         public static CardController Dragged { get; private set; }
+
+        /// <summary>
+        /// The slot this carried card would land in, while it's over one (see BattlefieldSlot): it settles there, at the size
+        /// of a card in that slot (the hand shrinks it), so the player sees the drop will take before letting go.
+        /// </summary>
+        public Transform SnapsTo { get; set; }
         /// <summary>Dragged with the right button: an attack on a creature of its own side (Friendly Fire).</summary>
         public bool IsFriendlyFire { get; set; }
         /// <summary>A card tucked under a creature on the board, only its name showing: hovered for its enlarged view, never used.</summary>
@@ -414,6 +420,7 @@ namespace SlayTheClone {
             originalPosition = transform.position;
             originalParent = transform.parent;
             dragTarget = transform.position;
+            SnapsTo = null;
             dragLean = 0f;
             isDragging = true;
             Dragged = this;
@@ -442,7 +449,8 @@ namespace SlayTheClone {
             if (!isDragging) return;
             float dt = Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
             var before = transform.position;
-            transform.position = Vector3.Lerp(before, dragTarget, 1f - Mathf.Exp(-DragFollow * dt));
+            var target = SnapsTo != null ? new Vector3(SnapsTo.position.x, SnapsTo.position.y, dragTarget.z) : dragTarget; // Over a slot it'll land in: settled there
+            transform.position = Vector3.Lerp(before, target, 1f - Mathf.Exp(-DragFollow * dt));
             float speed = (transform.position.x - before.x) / dt;
             float lean = Mathf.Clamp(-speed * DragLeanPerSpeed, -MaxDragLean, MaxDragLean);
             dragLean = Mathf.Lerp(dragLean, lean, 1f - Mathf.Exp(-14f * dt));
@@ -453,6 +461,7 @@ namespace SlayTheClone {
             if (!isDragging) return;
 
             isDragging = false;
+            SnapsTo = null;
             transform.position = dragTarget; // Where the pointer let go
             transform.localRotation = Quaternion.identity;
             if (Dragged == this) Dragged = null;
