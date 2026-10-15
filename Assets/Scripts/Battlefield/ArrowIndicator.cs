@@ -14,8 +14,11 @@ namespace SlayTheClone {
     /// each other, and longer ones bow gently to that side. Queued arrows draw themselves in and fade out when removed.
     /// </summary>
     public class ArrowIndicator : MonoBehaviour {
-        /// <summary>How an arrow sits between its ends, in world units.</summary>
+        /// <summary>How an arrow sits between its ends, in world units. Its numbers come from <see cref="ArrowTuning"/>, by kind.</summary>
         public struct Style {
+            public enum Kind { Attack, Damage, Spell, Move, Drag }
+            public Kind Of;
+            private bool toEdge, centered;
             public float Width;      // The band's width where it meets the head (a trunk merging several is wider)
             public float Lane;       // Shift to the right of travel, so arrows going opposite ways pass side by side
             public float Bow;        // Bulge to the right of travel, as a fraction of its length...
@@ -24,15 +27,35 @@ namespace SlayTheClone {
             public float EndInset;   // Back from the end: the head stops at the target's near edge, clear of its stats
 
             // Cards are 1.6 x 1.96 units, and the rows 1.26 apart
-            public static Style Attack => new Style { Width = 0.2f, Lane = 0.22f, Bow = 0.08f, MaxBow = 0.35f, StartInset = 0.8f, EndInset = 0.99f };
-            public static Style Damage => new Style { Width = 0.16f, Lane = 0f, Bow = 0.08f, MaxBow = 0.35f, StartInset = 0.8f, EndInset = 0.99f };
-            public static Style Spell => new Style { Width = 0.17f, Lane = 0.5f, Bow = 0.1f, MaxBow = 0.5f, StartInset = 0f, EndInset = 0.99f }; // Starts at its card's edge
-            public static Style Move => new Style { Width = 0.14f, Lane = 0f, Bow = 0.2f, MaxBow = 0.42f, StartInset = 0.3f, EndInset = 0.42f };
-            public static Style Drag => new Style { Width = 0.18f, Lane = 0f, Bow = 0.1f, MaxBow = 0.4f, StartInset = 0.3f, EndInset = 0f };
+            public static Style Attack => From(Kind.Attack);
+            public static Style Damage => From(Kind.Damage);
+            public static Style Spell => From(Kind.Spell); // Starts at its card's edge
+            public static Style Move => From(Kind.Move);
+            public static Style Drag => From(Kind.Drag);
+
+            private static Style From(Kind kind) {
+                var t = ArrowTuning.Current;
+                switch (kind) {
+                    case Kind.Damage: return new Style { Of = kind, Width = t.damageWidth, Lane = 0f, Bow = t.damageBow, MaxBow = 0.35f * t.maxBowScale, StartInset = 0.8f, EndInset = 0.99f };
+                    case Kind.Spell: return new Style { Of = kind, Width = t.spellWidth, Lane = 0.5f, Bow = t.spellBow, MaxBow = 0.5f * t.maxBowScale, StartInset = 0f, EndInset = 0.99f };
+                    case Kind.Move: return new Style { Of = kind, Width = t.moveWidth, Lane = 0f, Bow = t.moveBow, MaxBow = 0.42f * t.maxBowScale, StartInset = 0.3f, EndInset = 0.42f };
+                    case Kind.Drag: return new Style { Of = kind, Width = t.dragWidth, Lane = 0f, Bow = t.dragBow, MaxBow = 0.4f * t.maxBowScale, StartInset = 0.3f, EndInset = 0f };
+                    default: return new Style { Of = kind, Width = t.attackWidth, Lane = t.attackLane, Bow = t.attackBow, MaxBow = 0.35f * t.maxBowScale, StartInset = 0.8f, EndInset = 0.99f };
+                }
+            }
+
+            /// <summary>The same style with the tuning as it is now (the sliders may have moved since it was made).</summary>
+            public Style Resolved() {
+                var style = From(Of);
+                if (centered) style = style.Centered();
+                if (toEdge) style = style.ToEdge();
+                return style;
+            }
 
             /// <summary>Down the middle, no lane: a forked arrow stays symmetrical when its targets are.</summary>
             public Style Centered() {
                 var style = this;
+                style.centered = true;
                 style.Lane = 0f;
                 return style;
             }
@@ -40,6 +63,7 @@ namespace SlayTheClone {
             /// <summary>To the edge of a whole battlefield: the tip lands exactly there (between two slots), no lane.</summary>
             public Style ToEdge() {
                 var style = this;
+                style.toEdge = true;
                 style.EndInset = 0f;
                 style.Lane = 0f;
                 return style;
@@ -49,21 +73,28 @@ namespace SlayTheClone {
         // Shape
         private const int Samples = 64;             // Points along each curve
         private const float PointSpacing = 0.035f;  // A band's points are spaced evenly along it, this far apart (world units)
-        private const float BendRoom = 0.9f;        // A band is never wider than this share of its bend's radius: it can't fold over
-        private const float TailWidth = 0.7f;       // Of the band's width, at its tail
-        private const float NotchDepth = 0.9f;      // The swallowtail's depth, in half-widths
-        private const float HeadLength = 1.9f;      // In band widths
-        private const float HeadHalfWidth = 1.35f;  // In band widths
-        private const float MaxHeadLength = 0.62f, MaxHeadHalfWidth = 0.46f;
-        private const float BarbSweep = 0.28f;      // How far back the barbs reach, in head lengths
-        private const float RimWidth = 0.022f;     // A bright line round the band: it reads on the dark table...
-        private const float OutlineWidth = 0.045f; // ...and a thin dark one outside it, on the light cards
-        private const float WidthPerExtraBranch = 0.15f, MaxTrunkWidth = 1.35f; // In band widths: the trunk stays lean as attackers join
-        private const float CornerRadius = 0.45f;   // A branch's bends are rounded this much at most (world units), like a PCB track's
+        // The rest are sliders (see ArrowTuning)
+        private static ArrowTuning T => ArrowTuning.Current;
+        private static float BendRoom => T.bendRoom;           // A band is never wider than this share of its bend's radius: it can't fold over
+        private static float TailWidth => T.tailWidth;         // Of the band's width, at its tail
+        private static float NotchDepth => T.notchDepth;       // The swallowtail's depth, in half-widths
+        private static float HeadLength => T.headLength;       // In band widths
+        private static float HeadHalfWidth => T.headHalfWidth; // In band widths
+        private static float MaxHeadLength => T.maxHeadLength;
+        private static float MaxHeadHalfWidth => T.maxHeadHalfWidth;
+        private static float BarbSweep => T.barbSweep;         // How far back the barbs reach, in head lengths
+        private static float RimWidth => T.rimWidth;           // A bright line round the band: it reads on the dark table...
+        private static float OutlineWidth => T.outlineWidth;   // ...and a thin dark one outside it, on the light cards
+        private static float WidthPerExtraBranch => T.widthPerExtraBranch; // In band widths: the trunk stays lean as attackers join...
+        private static float MaxTrunkWidth => T.maxTrunkWidth;
+        private static float BranchWidthAtMerge => T.branchWidthAtMerge;   // ...and the branches flow into it this wide
+        private static float TrunkShare => T.trunkShare;       // The merged trunk, as a share of the way to the target
+        private static float CornerRadius => T.cornerRadius;   // A branch's bends are rounded this much at most (world units), like a PCB track's
+        private static float RouteSlope => Mathf.Tan(T.routeAngle * Mathf.Deg2Rad); // A routed branch's diagonal: across per along
         private const float BranchShare = 0.55f;    // How much of the draw-in the branches take before the trunk
         private const float ForkShare = 0.4f;       // A forked arrow: how much of the draw-in its trunk takes before the prongs
-        private const float ProngWidth = 0.7f;      // A fork's prongs, of the trunk's width: the middle one too, a small arrow
-        private const float ForkAt = 0.35f;         // Where the trunk forks, as a share of the way to the nearest target
+        private static float ProngWidth => T.prongWidth;       // A fork's prongs, of the trunk's width: the middle one too, a small arrow
+        private static float ForkAt => T.forkAt;               // Where the trunk forks, as a share of the way to the nearest target
         private const float MinLength = 0.1f;
 
         // Look
@@ -86,7 +117,7 @@ namespace SlayTheClone {
         private readonly List<Vector3> forks = new List<Vector3>(); // More ends: the trunk splits like a Y (Spray and Pray)
         private Vector3 endPosition;
         private Color color = Color.red;
-        private Style style = Style.Attack;
+        private Style style; // An attack's until set (no tuning read here: a MonoBehaviour can't load resources while it's made)
         private float drawnFraction = 1f; // Draw-in progress
         private float opacity = 1f;
         private bool isVisible;
@@ -217,6 +248,13 @@ namespace SlayTheClone {
                 .OnComplete(() => Destroy(gameObject));
         }
 
+        /// <summary>Redraws every arrow there is: an <see cref="ArrowTuning"/> slider moved.</summary>
+        public static void RedrawAll() {
+            foreach (var arrow in all) {
+                if (arrow != null && arrow.isVisible) arrow.Redraw();
+            }
+        }
+
         public bool IsVisible() => isVisible;
         public bool IsFadingOut => isFadingOut;
         /// <summary>Where it was asked to start (the first start, when several merge) and end, before insets and lanes.</summary>
@@ -295,6 +333,7 @@ namespace SlayTheClone {
 
         // Where the arrow runs: insets and the lane first, then one curve (or branches flowing into a trunk), then the head
         private void BuildShape(Layers layers) {
+            var style = this.style.Resolved();
             if (forks.Count > 0 && starts.Count == 1) {
                 BuildFork(layers);
                 return;
@@ -332,23 +371,24 @@ namespace SlayTheClone {
             Vector2 acrossAxis = new Vector2(axis.y, -axis.x);
             float widest = 0f;
             foreach (var from in tails) widest = Mathf.Max(widest, Mathf.Abs(Vector2.Dot(tip - from, acrossAxis)));
-            float trunkLength = Mathf.Max(Mathf.Min(reach * 0.5f, reach - widest - 0.3f), headLength + 0.3f);
+            float trunkLength = Mathf.Max(Mathf.Min(reach * TrunkShare, reach - widest / RouteSlope - 0.3f), headLength + 0.3f);
             Vector2 merge = tip - axis * trunkLength;
             float branchProgress = Mathf.Clamp01(drawnFraction / BranchShare);
             foreach (var from in tails) {
                 var branch = Route(from, merge + axis * 0.03f, axis);
-                AddBand(layers, Cut(branch, Length(branch) * branchProgress), width * TailWidth, width * 0.9f, 0f, BranchShare, notched: true);
+                AddBand(layers, Cut(branch, Length(branch) * branchProgress), width * TailWidth, width * BranchWidthAtMerge, 0f, BranchShare, notched: true);
             }
             float trunkProgress = Mathf.Clamp01((drawnFraction - BranchShare) / (1f - BranchShare));
             if (trunkProgress <= 0f) return;
             var trunk = Sample(merge, merge + axis * trunkLength / 3f, merge + axis * trunkLength * 2f / 3f, tip);
-            AddBandWithHead(layers, trunk, trunkProgress, width * 0.9f, TrunkWidth(width, tails.Count), TrunkWidth(width, tails.Count),
+            AddBandWithHead(layers, trunk, trunkProgress, width * BranchWidthAtMerge, TrunkWidth(width, tails.Count), TrunkWidth(width, tails.Count),
                 BranchShare, 1f, notched: false);
         }
 
         // A trunk straight out along the rows' axis, splitting like a Y: a prong to each target, the middle one a small arrow
         // on to its own end. Every prong is routed the same way (no lane, no bow), so mirrored targets get a mirrored fork
         private void BuildFork(Layers layers) {
+            var style = this.style.Resolved();
             Vector2 from = starts[0], end = endPosition;
             Vector2 travel = end - from;
             if (travel.magnitude < MinLength) return;
@@ -373,7 +413,7 @@ namespace SlayTheClone {
             Vector2 root = split - axis * 0.03f;
             foreach (var tip in tips) {
                 float rise = Mathf.Max(0.05f, Vector2.Dot(tip - root, axis));
-                var route = Sample(root, root + axis * rise * 0.45f, tip - axis * rise * 0.3f, tip);
+                var route = Sample(root, root + axis * rise * T.prongLeave, tip - axis * rise * T.prongArrive, tip);
                 AddBandWithHead(layers, route, prongProgress, prong, prong, prong, ForkShare, 1f, notched: false);
             }
         }
@@ -499,7 +539,7 @@ namespace SlayTheClone {
             float rise = Vector2.Dot(to - from, axis), lateral = Vector2.Dot(to - from, across);
             if (Mathf.Abs(lateral) < 0.02f || rise <= 0.05f) return Sample(from, Vector2.Lerp(from, to, 1f / 3f), Vector2.Lerp(from, to, 2f / 3f), to);
             float stub = Mathf.Clamp(rise * 0.2f, 0.06f, 0.35f);
-            float diagonal = Mathf.Min(Mathf.Max(rise - 2f * stub, 0.05f), Mathf.Abs(lateral)); // Along the axis: 45° when it's |lateral|
+            float diagonal = Mathf.Min(Mathf.Max(rise - 2f * stub, 0.05f), Mathf.Abs(lateral) / RouteSlope); // Along the axis: at the tuned angle
             float before = (rise - diagonal) / 2f;
             Vector2 bendIn = from + axis * before;
             Vector2 bendOut = bendIn + axis * diagonal + across * lateral;

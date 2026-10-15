@@ -5,6 +5,20 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+45. The Kübler-Ross model as statuses (the user, 2026-10-15)
+    • The ask: all five stages of grief as status effects. Proposed, nothing built yet; each lasts N Days unless it says so.
+        - Denial: the damage it takes is held back, not felt; it all lands at once when Denial ends ("It's fine.").
+          Collides a little with Borrowed Time (can't die while it lasts): Denial delays the damage, it doesn't stop dying.
+        - Anger: +2 Attack, but it can't be healed or given Armor.
+        - Bargaining: a hit that would kill it leaves it at 1 Health, and its controller discards a random card for the deal
+          (each time). Collides with Survivor (once, from full Health, free): Bargaining works any time, and costs a card.
+        - Depression: its Attack and Speed are halved (rounded down), and it can't get buffs.
+        - Acceptance: no other status can land on it; landing, it ends the other four stages.
+    • A chain to tie them together: one card ("Five Stages of Grief") gives Denial, and each stage, ending, gives the next
+      (Denial, Anger, Bargaining, Depression, Acceptance), so a creature goes through all of them.
+    • Faction: Mind (the psyche) fits best; Zeitgeist (moods of modern life) for a meme take.
+    • To decide: the five effects, whether the chain is in, and the faction.
+
 44. Corporate: hustle, leveraging losses, tempo, and the hierarchy (the user, 2026-10-15)
     • The direction: we're in a rush, be a hustler, "work hard and you can become a billionaire". Corporate turns its losses
       into gains and builds tempo; the hierarchy is the other half, and how to play it is still to decide.
