@@ -176,7 +176,10 @@ namespace SlayTheClone.Tests {
             var yours = adventure.Factions[1].faction;
             Click(GalleryButton(adventure, AdventureMenu.FactionButton + CardTextFormatter.FactionName(yours)));
             Click(GalleryButton(adventure, AdventureMenu.EmbarkButtonName));
-            Assert.IsTrue(AdventureRun.Active && AdventureRun.Faction == yours, "Embark starts a run with it");
+            Assert.IsTrue(AdventureRun.Active && AdventureRun.Faction == yours, "Embark starts a run with it...");
+            Assert.AreEqual(AdventureDecks.StarterSize, AdventureRun.Deck.Cards.Count, "...and a small starter deck...");
+            Assert.IsTrue(AdventureRun.Deck.Cards.All(c => c.faction == yours) && AdventureRun.Deck.Cards.Any(c => c is CreatureCardScriptableObject)
+                && AdventureRun.Deck.Cards.Any(c => c is not CreatureCardScriptableObject), "...of its faction, creatures and spells");
             var map = AdventureRun.Map;
             Assert.IsTrue(map.Row(0).All(n => n.Type == RoomType.Fight) && map.Row(AdventureMap.TreasureRow).All(n => n.Type == RoomType.Treasure)
                 && map.Row(AdventureMap.Rows - 1).All(n => n.Type == RoomType.Rest), "The first row all fights, the one 7 from the end all treasure, the last all rest sites");
@@ -193,10 +196,25 @@ namespace SlayTheClone.Tests {
             adventure.SetUpFight(first);
             Assert.AreSame(AdventureRun.Deck, MatchSetup.PlayerDeck, "...your faction's deck...");
             Assert.AreNotEqual(yours, DeckCatalog.FactionOf(MatchSetup.OpponentDeck), "...against another faction's...");
-            Assert.AreEqual(AILevel.Easy, MatchSetup.AILevel, "...the first ones easy");
+            Assert.AreEqual(AILevel.Easy, MatchSetup.AILevel, "...the first ones easy...");
+            var tiers = AdventureDecks.Tiers(catalog.AllCards);
+            double TierOf(DeckScriptableObject deck) => deck.Cards.Average(c => (int)tiers[c]);
+            var beaten = MatchSetup.OpponentDeck;
+            Assert.AreSame(beaten, AdventureRun.EnemyDeck);
+            Assert.LessOrEqual(TierOf(beaten), (double)AdventureDecks.Tier.C + 0.5, "...with weak cards (Tier C and D)");
+            var bossDeck = AdventureDecks.Enemy(DeckCatalog.FactionOf(beaten), AdventureDecks.StrengthOf(map.Boss), catalog.AllCards, new System.Random(1), "Boss");
+            Assert.Greater(TierOf(bossDeck), TierOf(beaten) + 1, "The boss's cards are much better");
+            Assert.LessOrEqual(bossDeck.Cards.Count, PlayerDecks.MaxDeckSize);
             AdventureRun.WinFight(); // As the game's end does, before the title screen opens the map again
             adventure.Show();
-            Assert.AreSame(first, AdventureRun.Current, "Won, you're in its room");
+            Assert.AreSame(first, AdventureRun.Current, "Won, you're in its room...");
+            Assert.AreEqual(Mathf.Min(3, beaten.Cards.Distinct().Count()), adventure.RewardCards.Count, "...and three of their cards are offered");
+            Assert.IsEmpty(AdventureRun.Reachable(), "No walking on before choosing");
+            var taken = adventure.RewardCards[0].GetBaseCardData().cardName;
+            ClickCard(adventure.RewardCards[0]);
+            Assert.AreEqual(AdventureDecks.StarterSize + 1, AdventureRun.Deck.Cards.Count, "Clicking one takes it into your deck...");
+            Assert.IsTrue(AdventureRun.Deck.Cards.Any(c => c.cardName == taken) && beaten.Cards.Any(c => c.cardName == taken), "...a card of the deck you beat");
+            Assert.IsEmpty(AdventureRun.RewardOffer, "...and the map is back");
             var walk = first.Next.FirstOrDefault(n => !n.IsCombat);
             if (walk != null) {
                 Click(adventure.Rooms[walk]);
@@ -224,7 +242,7 @@ namespace SlayTheClone.Tests {
             for (int i = 0; i < 3; i++) ClickCard(first);
             var yourDeck = builder.OpenDeck;
             Assert.IsNotNull(yourDeck, "Clicking a card starts a deck with it");
-            Assert.AreEqual(PlayerDecks.MaxCopies, yourDeck.Cards.Count, "...and adds copies of it, two at most");
+            Assert.AreEqual(3, yourDeck.Cards.Count, "...and adds a copy at each click: copies aren't limited");
             Click(GalleryButton(builder, DeckBuilderMenu.FactionTab + CardTextFormatter.FactionName(factions[1])));
             foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
             Click(GalleryButton(builder, DeckBuilderMenu.EveryFactionTab));

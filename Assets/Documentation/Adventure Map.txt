@@ -43,8 +43,23 @@ From the first game (likely still the basis):
 • One act of 15 rows and the boss above them; no Ascension, no Ancient yet.
 • The paths, the fixed rows and the placement rules as above; counts: 5 elites, 3 shops, 6 rest sites, 10-14 unknown rooms;
   whatever can't be placed by the rules is a fight.
-• Fights, elites and the boss are matches against the AI with another faction's deck (Easy for the fights of the first
-  rows, then Medium; Hard for an elite, Very Hard for the boss). Winning one brings you back to the map a room further;
-  losing one ends the run; beating the boss wins it.
+• Fights, elites and the boss are matches against the AI (Easy for the fights of the first rows, then Medium; Hard for an
+  elite, Very Hard for the boss). Winning one brings you back to the map a room further; losing one ends the run;
+  beating the boss wins it.
 • Rest sites, shops, treasure and unknown rooms are walked through: nothing in them yet.
-• Not carried between fights yet: your Health (each match starts at full), rewards, a deck that grows.
+• Not carried between fights yet: your Health (each match starts at full).
+
+
+4. THE DECKS (the user, 2026-10-15; AdventureDecks.cs)
+
+• Your starter deck, Slay the Spire style: 12 plain cards of your faction, two simple creatures (4 and 3 copies), a
+  spell that hits (3) and one that helps (2). No big strategy to learn.
+• Tiers: every card gets a rough power score from its stats, effects and costs, and is ranked against the other cards
+  of its kind (creatures and spells apart): D the bottom fifth, C, B, A, S the top tenth.
+• The enemy's deck is made for its room, of another faction. Strength 0 to 1 by row (an elite more, the boss 1):
+    - The first fights: Tier C/D cards, and clumsy on top: some bloated (30 to 40 cards, a little of everything, nothing
+      to build momentum on), the mix of creatures and spells off (a quarter, or nine tenths, creatures).
+    - Further up: better tiers, about 3 creatures to 2 spells, the best cards in several copies, 18 to 22 cards.
+• After a fight won (not the boss): three different cards of the deck you beat, shown big; click one to take it into
+  your deck, or Skip. Your deck grows up to 40 cards.
+• Decks everywhere: at most 40 cards, copies no longer limited.

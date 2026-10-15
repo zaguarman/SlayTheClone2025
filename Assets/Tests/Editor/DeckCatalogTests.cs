@@ -21,7 +21,7 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void EveryDeck_IsOneOrTwoFactions_20To40Cards_TwoCopiesAtMost_BroughtByOneOpponent() {
+        public void EveryDeck_IsOneOrTwoFactions_20To40Cards_BroughtByOneOpponent() {
             Assert.IsNotEmpty(catalog.Decks);
             var factions = catalog.Decks.Select(deck => {
                 var deckFactions = DeckCatalog.FactionsOf(deck);
@@ -36,8 +36,6 @@ namespace SlayTheClone.Tests {
             foreach (var offered in catalog.Decks) {
                 string name = offered.GetDeckName();
                 Assert.That(offered.Cards.Count, Is.InRange(PlayerDecks.MinDeckSize, PlayerDecks.MaxDeckSize), $"{name} has {offered.Cards.Count} cards");
-                var most = offered.Cards.GroupBy(c => c).OrderByDescending(g => g.Count()).First();
-                Assert.LessOrEqual(most.Count(), PlayerDecks.MaxCopies, $"{name} has {most.Count()} copies of {most.Key.cardName}");
                 Assert.IsTrue(offered.Cards.Any(c => c is CreatureCardScriptableObject), $"{name} has no creatures");
                 Assert.IsTrue(offered.Cards.Any(c => c is SpellCardScriptableObject), $"{name} has no spells");
             }

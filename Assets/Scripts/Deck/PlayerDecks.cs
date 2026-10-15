@@ -9,13 +9,12 @@ namespace SlayTheClone {
     /// <summary>
     /// The decks the player makes in the deck builder, mixing any cards on offer. They're kept between sessions in a file
     /// in the player's data folder, each card by its id (and its name, in case the id changed). A deck has
-    /// <see cref="MinDeckSize"/> to <see cref="MaxDeckSize"/> cards, at most <see cref="MaxCopies"/> of each; once it has
+    /// <see cref="MinDeckSize"/> to <see cref="MaxDeckSize"/> cards, as many copies of a card as you like; once it has
     /// enough, the match setup offers it next to the starter decks, to you and to your opponent.
     /// </summary>
     public static class PlayerDecks {
         public const int MinDeckSize = 20; // As many as a starter deck
         public const int MaxDeckSize = 40;
-        public const int MaxCopies = 2;
         public const int MaxNameLength = 20;
         public const string NewDeckName = "New deck";
 
@@ -70,7 +69,7 @@ namespace SlayTheClone {
         public static bool IsComplete(DeckScriptableObject deck) => deck != null && deck.Cards.Count >= MinDeckSize && deck.Cards.Count <= MaxDeckSize;
         public static int CopiesOf(DeckScriptableObject deck, CardDataScriptableObject card) => deck?.Cards.Count(c => c == card) ?? 0;
         public static bool CanAdd(DeckScriptableObject deck, CardDataScriptableObject card) =>
-            IsPlayers(deck) && card != null && deck.Cards.Count < MaxDeckSize && CopiesOf(deck, card) < MaxCopies;
+            IsPlayers(deck) && card != null && deck.Cards.Count < MaxDeckSize; // Copies aren't limited (the user, 2026-10-15)
         public static bool IsPlayers(DeckScriptableObject deck) => deck != null && decks != null && decks.Contains(deck);
 
         /// <summary>"14 / 20 cards" until it has enough, then "26 cards". Its factions show as coins (see <see cref="DeckCatalog.CoinsFor"/>).</summary>
@@ -86,7 +85,7 @@ namespace SlayTheClone {
             return deck;
         }
 
-        /// <summary>Adds a copy of the card, unless the deck has 40 cards or as many copies as allowed.</summary>
+        /// <summary>Adds a copy of the card, unless the deck has 40 cards.</summary>
         public static bool Add(DeckScriptableObject deck, CardDataScriptableObject card) {
             if (!CanAdd(deck, card)) return false;
             deck.SetCards(deck.Cards.Append(card));

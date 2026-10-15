@@ -10,10 +10,12 @@ using static SlayTheClone.MenuWidgets;
 namespace SlayTheClone {
     /// <summary>
     /// Adventure, from the title screen. With no run under way it asks for your faction, its coins side by side; Embark
-    /// starts a run with that faction's deck. Then the map (see <see cref="AdventureMap"/>), bottom to top: the rooms you
-    /// can walk into next light up. A fight, an elite or the boss is a match against the AI (Easy for the first fights,
-    /// then Medium; Hard for an elite, Very Hard for the boss) with a deck of another faction; the other rooms are walked
-    /// through, nothing in them yet. Winning a fight brings you back here; losing one, or beating the boss, ends the run.
+    /// starts a run with that faction's starter deck, small and plain (see <see cref="AdventureDecks"/>). Then the map (see
+    /// <see cref="AdventureMap"/>), bottom to top: the rooms you can walk into next light up. A fight, an elite or the boss
+    /// is a match against the AI (Easy for the first fights, then Medium; Hard for an elite, Very Hard for the boss) with a
+    /// deck of another faction made for the room, weak and clumsy at first, better further up; the other rooms are walked
+    /// through, nothing in them yet. Winning a fight brings you back here to take one of three of its cards, or skip;
+    /// losing one, or beating the boss, ends the run.
     /// </summary>
     public class AdventureMenu : MenuScreen {
         public const string FactionButton = "Faction: ";
@@ -21,6 +23,7 @@ namespace SlayTheClone {
         public const string BackButtonName = "BackButton";
         public const string AbandonButtonName = "AbandonButton";
         public const string RoomButton = "Room ";
+        public const string SkipButtonName = "SkipButton";
         private const float RowSpacing = 96f, ColumnSpacing = 150f, MapMargin = 70f, SideWidth = 400f, CoinSize = 120f;
 
         /// <summary>Loads the game scene for a fight (the title screen's own way of starting a game).</summary>
@@ -36,6 +39,9 @@ namespace SlayTheClone {
         public IReadOnlyDictionary<MapNode, Button> Rooms => rooms;
         /// <summary>What the last room did, or how the run ended.</summary>
         public string Status => status != null ? status.text : null;
+        /// <summary>The cards offered after a fight won, while the choice is open.</summary>
+        public IReadOnlyList<CardController> RewardCards => reward != null ? reward.Cards : new List<CardController>();
+        private CardGrid reward;
 
         private readonly Dictionary<Faction, Button> factionButtons = new Dictionary<Faction, Button>();
         private readonly Dictionary<MapNode, Button> rooms = new Dictionary<MapNode, Button>();
@@ -46,13 +52,14 @@ namespace SlayTheClone {
         private string lastWalk; // What the last room walked through said, kept across the rebuild
         private bool abandonArmed;
 
-        protected override GameObject Build() => AdventureRun.Active ? BuildMap() : BuildFactions();
+        protected override GameObject Build() => !AdventureRun.Active ? BuildFactions() : AdventureRun.RewardOffer.Count > 0 ? BuildReward() : BuildMap();
 
         protected override void Opened() {
             if (!AdventureRun.Active) {
                 Pick(Chosen ?? Factions.FirstOrDefault().faction);
                 return;
             }
+            if (mapScroll == null) return; // The card reward is up
             // The map opens on where you are
             Canvas.ForceUpdateCanvases();
             float row = AdventureRun.Current?.Row ?? 0;
@@ -63,6 +70,7 @@ namespace SlayTheClone {
             factionButtons.Clear();
             rooms.Clear();
             embark = null;
+            reward = null;
             chosenText = status = null;
             mapScroll = null;
             abandonArmed = false;
@@ -72,16 +80,16 @@ namespace SlayTheClone {
         public void Pick(Faction faction) {
             Chosen = faction;
             foreach (var pair in factionButtons) ShowChosen(pair.Value, pair.Key == faction);
-            var deck = Factions.FirstOrDefault(f => f.faction == faction).deck;
-            if (chosenText != null) chosenText.text = deck != null ? $"{CardTextFormatter.FactionName(faction)}, with <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{deck.GetDeckName()}</color>" : "";
-            if (embark != null) embark.interactable = deck != null;
+            bool offered = Factions.Any(f => f.faction == faction);
+            if (chosenText != null) chosenText.text = offered
+                ? $"{CardTextFormatter.FactionName(faction)}, with <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>a starter deck of {AdventureDecks.StarterSize} plain cards</color>" : "";
+            if (embark != null) embark.interactable = offered;
         }
 
-        /// <summary>Starts a run with the chosen faction's deck, on a new map, and shows it.</summary>
+        /// <summary>Starts a run with the chosen faction's starter deck, on a new map, and shows it.</summary>
         public void Embark() {
-            var deck = Factions.FirstOrDefault(f => f.faction == Chosen).deck;
-            if (deck == null || Chosen == null) return;
-            AdventureRun.Start(Chosen.Value, deck, Environment.TickCount);
+            if (Chosen == null || !Factions.Any(f => f.faction == Chosen)) return;
+            AdventureRun.Start(Chosen.Value, AdventureDecks.Starter(Chosen.Value, Catalog.AllCards), Environment.TickCount);
             lastWalk = "Your journey begins. Pick a room on the bottom row.";
             Show();
         }
@@ -145,12 +153,19 @@ namespace SlayTheClone {
             _ => "You walk on."
         };
 
-        /// <summary>The match for a fight room: your deck against another faction's, the AI as strong as the room.</summary>
+        /// <summary>
+        /// The match for a fight room: your deck against a deck of another faction made for the room (weak and clumsy at
+        /// first, better further up), the AI as strong as the room.
+        /// </summary>
         public void SetUpFight(MapNode room) {
-            var rivals = Catalog.Opponents.Where(o => DeckCatalog.FactionOf(o.deck) != AdventureRun.Faction).ToList();
-            if (rivals.Count == 0) rivals = Catalog.Opponents.ToList();
-            var rival = rivals[new System.Random(AdventureRun.Map.Seed * 31 + room.Row * 7 + room.Column).Next(rivals.Count)];
-            MatchSetup.Choose(AdventureRun.Deck, rival.name, rival.deck, AISeats.Player2);
+            var random = new System.Random(AdventureRun.Map.Seed * 31 + room.Row * 7 + room.Column);
+            var rivals = Factions.Select(f => f.faction).Where(f => f != AdventureRun.Faction).ToList();
+            if (rivals.Count == 0) rivals = Factions.Select(f => f.faction).ToList();
+            var faction = rivals[random.Next(rivals.Count)];
+            string name = AdventureDecks.EnemyName(faction, room);
+            var deck = AdventureDecks.Enemy(faction, AdventureDecks.StrengthOf(room), Catalog.AllCards, random, name);
+            AdventureRun.SetEnemy(deck);
+            MatchSetup.Choose(AdventureRun.Deck, name, deck, AISeats.Player2);
             MatchSetup.AILevel = LevelFor(room);
             MatchSetup.AIStyle = AIStyle.Balanced;
         }
@@ -186,7 +201,7 @@ namespace SlayTheClone {
             coinHolder.AddComponent<LayoutElement>().preferredHeight = CoinSize + 10;
             var coin = UITheme.AddFactionCoin(coinHolder.transform, AdventureRun.Faction, CoinSize).rectTransform;
             coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0.5f, 0.5f);
-            AddText(side, AdventureRun.Deck != null ? AdventureRun.Deck.GetDeckName() : "", 22, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 34);
+            AddText(side, AdventureRun.Deck != null ? $"Your deck: {CardGrid.Count(AdventureRun.Deck.Cards)}" : "", 22, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 34);
             status = AddText(side, StatusText(), 24, TextColor, FontStyles.Normal, height: 150);
             status.textWrappingMode = TextWrappingModes.Normal;
             foreach (RoomType type in Enum.GetValues(typeof(RoomType))) AddLegend(side, type);
@@ -197,6 +212,36 @@ namespace SlayTheClone {
             var abandon = AddButton(footer, AbandonButtonName, over ? "<b>New adventure</b>" : "Abandon run", 360, Abandon);
             if (over) UITheme.StyleButton(abandon, UITheme.ButtonKind.Primary);
             return screen.panel;
+        }
+
+        // After a fight won, Slay the Spire style: three of its cards, big; click one to take it into your deck, or skip
+        private GameObject BuildReward() {
+            var screen = AddScreen(transform, "AdventurePanel", "Choose a card");
+            reward = new CardGrid(screen.columns, Catalog.CardPrefab, AdventureDecks.RewardChoices);
+            string from = AdventureRun.EnemyDeck != null ? AdventureRun.EnemyDeck.GetDeckName() : "the deck you beat";
+            reward.Title.text = $"From {from}: take one into your deck ({CardGrid.Count(AdventureRun.Deck.Cards)})";
+            reward.Title.enableAutoSizing = true;
+            reward.Title.fontSizeMin = 20;
+            reward.Show(AdventureRun.RewardOffer, (face, asset) => face.OnCardClicked.AddListener(_ => TakeReward(asset)));
+
+            var footer = AddFooter(screen.panel.transform);
+            var skip = AddButton(footer, SkipButtonName, "Skip", 360, SkipReward);
+            UITheme.StyleButton(skip, UITheme.ButtonKind.Primary);
+            return screen.panel;
+        }
+
+        /// <summary>Takes the card into your deck and goes on to the map.</summary>
+        public void TakeReward(CardDataScriptableObject card) {
+            if (!AdventureRun.TakeReward(card)) return;
+            lastWalk = $"{card.cardName} joins your deck.";
+            Show();
+        }
+
+        /// <summary>Takes none of the cards and goes on to the map.</summary>
+        public void SkipReward() {
+            AdventureRun.SkipReward();
+            lastWalk = "You leave their cards behind.";
+            Show();
         }
 
         private string StatusText() {

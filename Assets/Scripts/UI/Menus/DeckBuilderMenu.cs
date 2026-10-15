@@ -138,7 +138,7 @@ namespace SlayTheClone {
             RefreshDeck();
             foreach (var (face, asset) in shownAssets) {
                 int copies = PlayerDecks.CopiesOf(OpenDeck, asset);
-                ShowCopies(face, copies, copies >= PlayerDecks.MaxCopies);
+                ShowCopies(face, copies, OpenDeck != null && OpenDeck.Cards.Count >= PlayerDecks.MaxDeckSize);
             }
         }
 
