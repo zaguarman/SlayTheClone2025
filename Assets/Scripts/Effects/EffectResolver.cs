@@ -443,8 +443,10 @@ namespace SlayTheClone {
                     return creature != null ? new ReturnToHandAction(creature, fakesItsDeath: true) : null;
                 case ActionType.Vanish: // Off the board until the next Dawn (Witness Protection Program)
                     return creature != null ? new VanishAction(creature) : null;
-                case ActionType.Revive: // Its own Last Will: it rises at the next Dawn (queued as it dies, while it still has its slot)
-                    return creature != null && source == creature ? new RevivalAction(creature, creature.Slot?.Index ?? 0) : null;
+                case ActionType.Revive: // Its own Last Will: it rises at the next Dawn, ready, with its stat changes (queued as it dies, while it still has its slot and them)
+                    return creature != null && source == creature
+                        ? new RevivalAction(creature, creature.Slot?.Index ?? 0, ready: true, kept: RevivalAction.StatChangesOn(creature))
+                        : null;
                 case ActionType.Grace: // The player's Die Another Day (God's Grace)
                     return target is IPlayer graced ? new GraceAction(graced, action.value) : null;
                 case ActionType.Resurrect: // Sacrificed now, it rises at the Dawn so many Days on (Phoenix Feather)

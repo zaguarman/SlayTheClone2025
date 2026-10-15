@@ -56,7 +56,11 @@ namespace SlayTheClone.Tests {
             var rise = Effect(EffectTrigger.OnDeath, ActionType.Revive, 0, TargetType.Self);
             rise.oncePerCombat = true;
             var zombieData = game.Creature("Zombie", 2, 3, 1, rise);
+            zombieData.turnsUntilOperative = 2;
             var zombie = game.Summon(p1, zombieData, 3);
+            zombie.MakeOperative(); // Deployed: a creature still deploying has its effects off
+            game.Run(new ModifyAction(zombie, 1, true, false, false, controller: p1)); // +1 Attack
+            game.Run(new ApplyStatusEffectAction(zombie, StatusEffectType.Revealed, 3, 0, controller: p2));
             int cards = GameAsserts.CountCards(p1);
             game.Run(new DamageCreatureAction(zombie, 5));
             Assert.IsTrue(zombie.IsDead, "Revive doesn't save it: it dies");
@@ -66,6 +70,9 @@ namespace SlayTheClone.Tests {
             var risen = p1.Battlefield[3].OccupyingCreature;
             Assert.AreEqual("Zombie", risen?.Name, "At the next Dawn it rises in the slot where it fell...");
             Assert.AreEqual(3, risen.Health, "...with full Health...");
+            Assert.IsTrue(risen.IsOperative, "...ready at once, no Deployment Time...");
+            Assert.AreEqual(3, risen.Attack, "...with the stat changes it had...");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(risen, StatusEffectType.Revealed), "...but not its statuses");
             CollectionAssert.DoesNotContain(p1.Deck.GetDiscardPilePreview().Select(c => c.Name).ToList(), "Zombie", "...its card taken back from the discard pile");
             game.Run(new DamageCreatureAction(risen, 5));
             game.StartTurn();

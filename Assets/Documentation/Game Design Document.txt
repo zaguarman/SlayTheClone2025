@@ -771,7 +771,7 @@ Movement Restriction
 
 4.5 Recursion & Recovery
 
-• Revive: Returns a creature from your discard pile to an empty friendly slot. It gets Deployment Time like any creature entering play. It keeps any Persistent Stat Modifications the card still has.
+• Revive: Returns a creature from your discard pile to an empty friendly slot, at the next Dawn. It's ready at once (no Deployment Time), keeps the stat changes it had (and any Persistent Stat Modifications the card still has), but not its statuses. Its Arrival happens again, and its Last Will happened when it died (the user, 2026-10-15).
 • Return to Hand (from Battlefield): Moves a creature from its slot to its owner's hand. It loses Temporary Stat Modifications (unless the effect says otherwise) and keeps Persistent Stat Modifications.
 • Return to Hand (from Discard): Moves a card from your discard pile to your hand. It keeps any Persistent Stat Modifications it has.
 

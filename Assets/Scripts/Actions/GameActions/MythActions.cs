@@ -6,8 +6,9 @@ using static SlayTheClone.Enums;
 namespace SlayTheClone {
     /// <summary>
     /// Revive (Myth): a creature that died rises again at the next Dawn, its card taken back from the discard pile: to the
-    /// slot where it fell if it's free, else the first free one on its side, with its full Health. It's a new arrival:
-    /// Deployment Time again, no statuses. No free slot: it stays dead. Its OnDeath effect, so its Last Will still happens.
+    /// slot where it fell if it's free, else the first free one on its side, with its full Health. It rises ready (no
+    /// Deployment Time) with the stat changes it had, but not its statuses; its Arrival happens again (the user, 2026-10-15).
+    /// No free slot: it stays dead. Its OnDeath effect, so its Last Will still happens.
     /// </summary>
     public class RevivalAction : IGameAction {
         public ICreature Creature { get; }
@@ -24,6 +25,10 @@ namespace SlayTheClone {
             Kept = kept;
             Log($"Created {this}", LogTag.Actions | LogTag.Effects);
         }
+
+        /// <summary>The stat changes a creature has in play (over its card's stats), to give back when it rises.</summary>
+        public static (int attack, int health, int speed) StatChangesOn(ICreature creature) =>
+            (creature.Attack - creature.BaseAttack, creature.MaxHealth - creature.BaseHealth, creature.Speed - creature.BaseSpeed);
 
         public override string ToString() => $"RevivalAction: {Creature?.Name} will rise {(Days == 1 ? "at the next Dawn" : $"at the Dawn {Days} Days on")}";
     }
@@ -73,8 +78,7 @@ namespace SlayTheClone {
             int slot = creature.Slot?.Index ?? 0;
             Log($"{creature.Name} is sacrificed, to rise again in {resurrection.Days} Days", LogTag.Effects | LogTag.Creatures);
             context.ActionsQueue.AddAction(new DestroyCreatureAction(creature, unconditional: true, controller: resurrection.Controller, sacrifice: true));
-            var kept = (creature.Attack - creature.BaseAttack, creature.MaxHealth - creature.BaseHealth, creature.Speed - creature.BaseSpeed);
-            context.ActionsQueue.AddAction(new RevivalAction(creature, slot, resurrection.Days, ready: true, kept: kept));
+            context.ActionsQueue.AddAction(new RevivalAction(creature, slot, resurrection.Days, ready: true, kept: RevivalAction.StatChangesOn(creature)));
         }
     }
 
