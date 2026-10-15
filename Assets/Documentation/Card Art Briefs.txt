@@ -204,6 +204,9 @@ No Glove, No Love (spell)
 We Are Not The Same (spell)
     The meme: two identical masked heroes in red suits with web lines, pointing at each other in a dim warehouse.
     USER: The Spider-Man meme, pointing at each other.
+Generational Trauma (spell)
+    The swimming-pool meme: the Silent Generation stands in the pool holding a smiling Boomer high above the water, while on the bottom Gen X and the generations after them sit as skeletons, still waiting.
+    USER: The meme of the woman holding something above water in a swimming pool with a skeleton at the bottom, with the generations: the one before the boomers holds the boomers above water, the next generations drowned underwater.
 
 DIGITAL SOCIETY
 
@@ -506,9 +509,6 @@ Lucid Dreaming (spell)
     A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases.
 Mimetic Theory (spell)
     Two people facing each other in identical poses, one of them slowly turning into the other's mirror image.
-Generational Trauma (spell)
-    The swimming-pool meme: the Silent Generation stands in the pool holding a smiling Boomer high above the water, while on the bottom Gen X and the generations after them sit as skeletons, still waiting.
-    USER: The meme of the woman holding something above water in a swimming pool with a skeleton at the bottom, with the generations: the one before the boomers holds the boomers above water, the next generations drowned underwater.
 Pessimist (creature)
     A man in a raincoat under his own tiny raincloud on a sunny beach, frowning at a winning lottery ticket.
 Introvert (creature)

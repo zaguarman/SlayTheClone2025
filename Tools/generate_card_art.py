@@ -4044,7 +4044,7 @@ CARDS = {
     "Mind": {
         "SchrodingersCat": schrodingers_cat, "RokosBasilisk": rokos_basilisk, "TrolleyProblem": trolley_problem,
         "RedHerring": red_herring, "ImposterSyndrome": imposter_syndrome,
-        "GenerationalTrauma": generational_trauma, "Introvert": introvert, "Pessimist": pessimist,
+        "Introvert": introvert, "Pessimist": pessimist,
     },
     "Myth": {
         "OmniscientSpaceTimeBendingBeardedWizard": omniscient_space_time_bending_bearded_wizard, "Cultist": cultist, "Phoenix": phoenix_card,
@@ -4076,6 +4076,7 @@ CARDS["Corporate"].update({"Counterfeit": counterfeit, "PrivateEquity": private_
 CARDS["Statecraft"].update({"GoldenDome": golden_dome, "PresidentialPardon": presidential_pardon,
                             "CongruentUseofForce": congruent_use_of_force, "WeaponsofMassDistraction": weapons_of_mass_distraction})
 CARDS["Zeitgeist"].update({"NotonMyWatch": not_on_my_watch, "OnefortheRoad": one_for_the_road})
+CARDS["Zeitgeist"].update({"GenerationalTrauma": generational_trauma})  # Was Mind (2026-10-15)
 CARDS["DigitalSociety"].update({"CryptoEntrepreneur": crypto_entrepreneur})
 CARDS["ShadowOps"].update({"Cleaner": cleaner})
 CARDS["Mind"].update({"MimeticTheory": mimetic_theory})

@@ -16,7 +16,7 @@ MonoBehaviour:
   cardName: Generational Trauma
   description: Your grandfather's, your father's, and now yours. A family heirloom.
   cardType: 1
-  faction: 8
+  faction: 7
   artwork: {fileID: 3286163911610860551, guid: f33253c25c4228c4ca8e6c0856e8df6f, type: 3}
   discardCost: 0
   discardChosen: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Health Loss is permanent and stays on the card until
     it''s reshuffled. It only affects creatures, so it fizzles on an empty slot.
-    Not damage, which fits Mind.'
+    Zeitgeist since 2026-10-15 (the user): the generations are the mood of the times.'
   artDescription: 'The swimming-pool meme: the Silent Generation stands in the pool
     holding a smiling Boomer high above the water, while on the bottom Gen X and
     the generations after them sit as skeletons, still waiting.'

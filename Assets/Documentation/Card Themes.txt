@@ -556,7 +556,7 @@ Violence Monopoly (spell)
   Twist: A pun: Monopoly man as a cop. It cancels the enemy's attacks: only you're allowed to hit.
   Push:  Excellent. Weber's phrase could be the flavor's first sentence.
 
-ZEITGEIST (27)
+ZEITGEIST (28)
 
 Multipass (spell)
   Aim:   The film quote everybody knows.
@@ -732,6 +732,12 @@ We Are Not The Same (spell)
   Twist: Your creature copies the stats of the one facing it.
   Push:  Rules, name and art agree. Mind's Mimetic Theory does the same as a spell ("We want what they want"): two
          factions, two jokes on copying, which is fine as long as their art stays this different.
+
+Generational Trauma (spell, Mind until 2026-10-15)
+  Aim:   Inherited damage and the generation gap.
+  Hooks: The pool meme.
+  Twist: Health Loss that stays on the card: it gets passed down.
+  Push:  Rules and joke match. The skeletons labelled Gen X, Millennials and Gen Z, the last one still holding a phone.
 
 DIGITAL SOCIETY (15)
 
@@ -1238,7 +1244,7 @@ Sex Clanker (creature)
          about No Glove, No Love is history. Keep it.
 
 
-MIND (12)
+MIND (11)
 
 Lucid Dreaming (spell) [px]
   Aim:   Dreams you can control, almost.
@@ -1251,12 +1257,6 @@ Mimetic Theory (spell)
   Hooks: René Girard's theory, which Peter Thiel says led him to invest in Facebook.
   Twist: Copies the stats of the creature facing it.
   Push:  Thiel and Facebook tie it to Digital Society: two people in identical poses, one wearing a Facebook-blue shirt.
-
-Generational Trauma (spell)
-  Aim:   Inherited damage and the generation gap.
-  Hooks: The pool meme.
-  Twist: Health Loss that stays on the card: it gets passed down.
-  Push:  Rules and joke match. The skeletons labelled Gen X, Millennials and Gen Z, the last one still holding a phone.
 
 Pessimist (creature) [px]
   Aim:   Pessimism.

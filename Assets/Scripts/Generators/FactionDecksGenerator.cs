@@ -142,7 +142,7 @@ namespace SlayTheClone {
             }),
             // Sturdy creatures that wear the enemy down, and stat cuts that kill
             [Faction.Mind] = ("Mind - All in Your Head", new[] {
-                "Pessimist", "Pessimist", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Generational Trauma", "Generational Trauma",
+                "Pessimist", "Pessimist", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Escape Goat", "Red Herring",
                 "Trolley Problem", "Trolley Problem", "Roko's Basilisk", "Roko's Basilisk", "Imposter Syndrome", "Imposter Syndrome",
                 "Schrodinger's Cat", "Schrodinger's Cat", "Mimetic Theory", "Mimetic Theory", "Escape Goat", "Red Herring",
             }),
@@ -575,6 +575,11 @@ namespace SlayTheClone {
                 CopyStats(TargetType.FriendlyCreatures))
                 .NotInStarterDeck()
                 .Picture("The meme: two identical masked heroes in red suits with web lines, pointing at each other in a dim warehouse."),
+            Spell("Generational Trauma", TargetType.EnemyCreatures,
+                "Your grandfather's, your father's, and now yours. A family heirloom.",
+                "Mechanics test: Health Loss is permanent and stays on the card until it's reshuffled. It only affects creatures, so it fizzles on an empty slot. Zeitgeist since 2026-10-15 (the user): the generations are the mood of the times.",
+                Buff(-4, TargetType.EnemyCreatures, attack: false, health: true))
+                .Picture("The swimming-pool meme: the Silent Generation stands in the pool holding a smiling Boomer high above the water, while on the bottom Gen X and the generations after them sit as skeletons, still waiting."),
         };
         #endregion
 
@@ -1291,11 +1296,6 @@ namespace SlayTheClone {
                 "Mechanics test: the stat copy as a spell. Target creature copies the Attack, Health and Speed of the creature facing it.",
                 CopyStats(TargetType.AllCreatures))
                 .Picture("Two people facing each other in identical poses, one of them slowly turning into the other's mirror image."),
-            Spell("Generational Trauma", TargetType.EnemyCreatures,
-                "Your grandfather's, your father's, and now yours. A family heirloom.",
-                "Mechanics test: Health Loss is permanent and stays on the card until it's reshuffled. It only affects creatures, so it fizzles on an empty slot. Not damage, which fits Mind.",
-                Buff(-4, TargetType.EnemyCreatures, attack: false, health: true))
-                .Picture("The swimming-pool meme: the Silent Generation stands in the pool holding a smiling Boomer high above the water, while on the bottom Gen X and the generations after them sit as skeletons, still waiting."),
             Creature("Pessimist", 5, 5, speed: 1, deploy: 0,
                 "The glass is half empty. Also, it's poisoned.",
                 "Mechanics test: Contrarian. Stat changes on it are reversed: debuff it and it grows, buff it and it shrinks.")
