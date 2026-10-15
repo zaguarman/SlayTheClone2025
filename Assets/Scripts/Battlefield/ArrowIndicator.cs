@@ -363,7 +363,15 @@ namespace SlayTheClone {
                 Vector2 span = tip - from;
                 if (span.magnitude < MinLength) return;
                 Vector2 side = new Vector2(span.normalized.y, -span.normalized.x);
-                Vector2 bulge = side * Mathf.Min(span.magnitude * style.Bow, style.MaxBow) * 1.333f;
+                float bow = Mathf.Min(span.magnitude * style.Bow, style.MaxBow);
+                if (axis.x == 0f) {
+                    // Between the rows (the user): mirrored, both sides alike. It bows back toward its own row, so it sets off
+                    // sideways and turns in onto the target: from the left it curves to the right, from the right to the
+                    // left; and the more it goes sideways the more it bows, so one straight ahead stays straight
+                    if (Vector2.Dot(side, axis) > 0f) side = -side;
+                    bow *= Mathf.Abs(span.normalized.x);
+                }
+                Vector2 bulge = side * bow * 1.333f;
                 var curve = Sample(from, from + span * SingleFirstBend + bulge, from + span * SingleLastBend + bulge, tip);
                 AddBandWithHead(layers, curve, drawnFraction, width * TailWidth, width, width, 0f, 1f, notched: true);
                 return;

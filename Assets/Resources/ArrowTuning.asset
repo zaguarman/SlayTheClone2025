@@ -12,29 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470667c2cff7c7c4588790ff44e6a898, type: 3}
   m_Name: ArrowTuning
   m_EditorClassIdentifier: Scripts::SlayTheClone.ArrowTuning
-  attackWidth: 0.131
-  damageWidth: 0.165
+  attackWidth: 0.238
+  damageWidth: 0.238
   moveWidth: 0.133
-  dragWidth: 0.166
+  dragWidth: 0.238
   tailWidth: 0.891
-  rimWidth: 0.0548
+  rimWidth: 0.045
   outlineWidth: 0.094
-  attackBow: 0.073
-  damageBow: 0.08
-  moveBow: 0.122
-  dragBow: 0.109
-  maxBowScale: 0.86
+  attackBow: 0.207
+  damageBow: 0.207
+  moveBow: 0.144
+  dragBow: 0.207
+  maxBowScale: 1.33
   attackLane: 0.183
   attackStartY: 0.23
-  attackEndY: 0.46
-  damageStartY: 0.82
-  damageEndY: 0.82
+  attackEndY: 0.62
+  damageStartY: 0.23
+  damageEndY: 0.62
   moveStartY: 0.34
-  moveEndY: 0.38
-  dragStartY: 0.37
-  dragEndY: 0.32
-  startX: -0.12
-  endX: -0.209
+  moveEndY: 0.39
+  dragStartY: 0.23
+  dragEndY: 0.62
+  startX: -0.173
+  endX: -0.095
   fillOpacity:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 0.1291334}
@@ -96,11 +96,11 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 3
   headOpacity: 0.481
-  bonesPerUnit: 10
-  singleFirstBend: 0.232
-  singleLastBend: 0.586
-  mergedFirstBend: 0.232
-  mergedLastBend: 0.586
+  bonesPerUnit: 66.2
+  singleFirstBend: 0.43
+  singleLastBend: 0.407
+  mergedFirstBend: 0.692
+  mergedLastBend: 0.582
   routeAngle: 80
   cornerRadius: 0.671
   bendRoom: 0.595
@@ -108,14 +108,14 @@ MonoBehaviour:
   prongWidth: 0.714
   prongLeave: 0.388
   prongArrive: 0.806
-  headLength: 2.42
-  headHalfWidth: 1.46
-  maxHeadLength: 0.512
-  maxHeadHalfWidth: 0.418
-  barbSweep: 0.402
-  notchDepth: 1.019
+  headLength: 2.37
+  headHalfWidth: 1.67
+  maxHeadLength: 0.432
+  maxHeadHalfWidth: 0.344
+  barbSweep: 0.283
+  notchDepth: 0.631
   directBranches: 1
-  meetOffsetX: 0
+  meetOffsetX: -0.15
   widthPerExtraBranch: 0.412
   maxTrunkWidth: 2.095
   branchWidthAtMerge: 1
