@@ -44,9 +44,12 @@ namespace SlayTheClone {
     }
 
     /// <summary>
-    /// How creatures move along their row (GDD 2.4 Slot Occupation &amp; Movement). By default a creature walks to an empty
-    /// slot, without passing through others, or walks into an occupied one by pushing its creature one slot further.
-    /// Leapfrog jumps over creatures; Swap trades places with a friendly creature at any distance.
+    /// How creatures move in their formation (GDD 2.4 Slot Occupation &amp; Movement; the shape is <see cref="Formation"/>):
+    /// a step goes to a slot one step away (the Vanguard to either Flank, Flank to Flank, a Flank to the Headquarters slot
+    /// behind it, Headquarters to Headquarters), so the back rows are never blocked by the ones ahead. By default a creature
+    /// walks to an empty slot along empty slots, or walks up to an occupied one and trades places with its creature (the
+    /// user, 2026-10-15: like the bench in Pokemon's card games). Leapfrog jumps over creatures to any empty slot; Swap
+    /// trades places with a friendly creature at any distance.
     /// </summary>
     public static class MovementRules {
         // A move worked out on a row of occupants (index = slot), so it can run on the board or on a copy of it
@@ -89,9 +92,7 @@ namespace SlayTheClone {
         }
 
         private static RowOutcome Resolve(ICreature[] row, int from, int to, MoveKind kind) {
-            int dir = to > from ? 1 : -1;
             bool occupied = row[to] != null;
-
             switch (kind) {
                 case MoveKind.Swap:
                     // Ignores creatures in between; with nobody there any more, it takes the empty slot
@@ -99,27 +100,50 @@ namespace SlayTheClone {
 
                 case MoveKind.Leapfrog:
                     if (!occupied) return new RowOutcome(to, true);
-                    // Taken: the empty slot closest to the destination on its way there
-                    for (int i = to - dir; i != from; i -= dir) {
-                        if (row[i] == null) return new RowOutcome(i, false);
-                    }
-                    return new RowOutcome(from, false);
+                    return Closest(row, from, to, Reachable(row, from, overCreatures: true));
 
-                default: // Walk, Push
-                    int reached = from;
-                    for (int i = from + dir; i != to; i += dir) {
-                        if (row[i] != null) return new RowOutcome(reached, false);
-                        reached = i;
-                    }
-                    if (!occupied) return new RowOutcome(to, true);
-
-                    // A push moves the creature one slot further, only into an empty slot: never two creatures in a chain
-                    int beyond = to + dir;
-                    if (kind == MoveKind.Push && beyond >= 0 && beyond < row.Length && row[beyond] == null) {
-                        return new RowOutcome(to, true, beyond);
-                    }
-                    return new RowOutcome(reached, false);
+                default: { // Walk, Push: along empty slots only
+                    var reachable = Reachable(row, from, overCreatures: false);
+                    if (!occupied) return reachable.Contains(to) ? new RowOutcome(to, true) : Closest(row, from, to, reachable);
+                    // Occupied: walking up to it (from a slot a step away), the two trade places; a walk never pushes
+                    bool besideIt = reachable.Append(from).Any(i => Formation.AreNeighbours(i, to));
+                    if (kind == MoveKind.Push && besideIt) return new RowOutcome(to, true, from);
+                    return Closest(row, from, to, reachable);
+                }
             }
+        }
+
+        // The slots it can get to: along empty slots, or (Leapfrog) to any empty slot, over creatures
+        private static HashSet<int> Reachable(ICreature[] row, int from, bool overCreatures) {
+            var reached = new HashSet<int>();
+            if (overCreatures) {
+                for (int i = 0; i < row.Length; i++) if (i != from && row[i] == null) reached.Add(i);
+                return reached;
+            }
+            var frontier = new Queue<int>();
+            frontier.Enqueue(from);
+            while (frontier.Count > 0) {
+                foreach (int next in Formation.Neighbours(frontier.Dequeue())) {
+                    if (next < 0 || next >= row.Length || next == from || row[next] != null || !reached.Add(next)) continue;
+                    frontier.Enqueue(next);
+                }
+            }
+            return reached;
+        }
+
+        // Blocked on the way: the empty slot it can reach closest to where it was going, if that's closer than where it
+        // stands (GDD 2.4 Blocked Before It Resolves); else it stays put
+        private static RowOutcome Closest(ICreature[] row, int from, int to, HashSet<int> reachable) {
+            int best = from, bestSteps = Formation.StepsBetween(from, to);
+            foreach (int i in reachable.OrderBy(i => i)) {
+                if (row[i] != null) continue;
+                int steps = Formation.StepsBetween(i, to);
+                if (steps < bestSteps) {
+                    best = i;
+                    bestSteps = steps;
+                }
+            }
+            return new RowOutcome(best, false);
         }
 
         /// <summary>Carries out a move's outcome on the board.</summary>
@@ -127,7 +151,8 @@ namespace SlayTheClone {
             var from = creature.Slot;
             if (from == null || outcome.End == null || outcome.End == from) return;
 
-            if (kind == MoveKind.Swap) {
+            // A swap, or walking up to a creature: the two trade places
+            if (kind == MoveKind.Swap || (outcome.Partner != null && outcome.PartnerEnd == from)) {
                 BoardSlot.Swap(from, outcome.End);
                 return;
             }
@@ -211,7 +236,7 @@ namespace SlayTheClone {
             bool blocked = Preview(creature.Slot.Owner.Battlefield, moves).Blocked.Contains(creature);
             string hint = !blocked ? null : kind switch {
                 MoveKind.Walk => "needs Leapfrog",
-                MoveKind.Push => "needs Swap",
+                MoveKind.Push => "too far: needs Swap",
                 _ => "blocked"
             };
             return (kind, blocked, hint);

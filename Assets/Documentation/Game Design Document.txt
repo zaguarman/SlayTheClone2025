@@ -265,11 +265,19 @@ You use Intelligence to figure out and deal with threats from enemy Faction grou
 
 2.4 The Battlefield
 
-• Layout: You control a row of 5 slots for your creatures. The enemy has an opposing row of 5 slots.
+• Layout (the user, 2026-10-15): each side has 5 slots in a formation, as in a real war: the Vanguard alone in front (the
+  wall that takes the melee), the two Flanks behind it (the shooters: +1 Attack and +1 Speed), and Headquarters at the back
+  (the important people, hard to reach). Ours is a Λ, the enemy's a V, Vanguards facing at the middle of the table. A slot
+  faces the one in the same column across the table. A step goes from the Vanguard to either Flank, Flank to Flank, a Flank
+  to the Headquarters slot behind it, and Headquarters to Headquarters: "beside" means a step away. (Formation.cs)
+  Reach: the distance of an attack is how deep each slot sits (Vanguard 0, Flanks 1, Headquarters 2), added, plus 1. The
+  slot decides: the Vanguard melees (1, their Vanguard); the Flanks and Headquarters shoot (2-3); Artillery, a keyword,
+  shoots exactly 4. Bonuses: Vanguard +1 Armor each Dawn (at most 2), Flanks +1 Attack/Speed, Headquarters none.
+  (Reach and bonuses: being built.)
 Slot Occupation & Movement
     • Creatures block the slot they're in; other creatures can't normally move into or through an occupied slot, unless an ability specifically says they can (like swapping, pushing, or pulling).
-    • Default Movement: A creature moving itself slides along its own row, any distance, to an empty slot. It can't enter or pass through an occupied slot. Exception: friendly Ghosted creatures don't block it.
-    • Push (every creature): A moving creature can move into an occupied slot by pushing that creature one slot further along, only if the slot beyond it is empty. It never pushes two creatures in a chain. Being pushed isn't the pushed creature's own movement. Heavy and multi-slot creatures can't be pushed.
+    • Default Movement: A creature moving itself walks step by step through its formation, any distance, along empty slots, to an empty slot. It can't enter or pass through an occupied slot. The back rows are never blocked by the ones ahead (Headquarters to Headquarters is a step). Exception: friendly Ghosted creatures don't block it.
+    • Trading Places (every creature; was Push): A moving creature that walks up to an occupied slot (from a step away) trades places with its creature, like the bench in Pokemon's card games: the other one takes the slot the mover started from. Being moved isn't the other creature's own movement. Heavy and multi-slot creatures can't be moved.
     • Mobility Matters: Most attacks are aimed at a chosen slot or creature, and Homing is scarce, so repositioning is how you dodge threats and line up attacks. Moving past other creatures (Leapfrog) or swapping with them is a special ability only some creatures have.
     • Blocked Before It Resolves: If the path or destination gets blocked before the Movement Action resolves, the creature stops at the furthest empty slot it can still reach toward its destination. If it can't move at all, the move does nothing.
     • Entering Slots: Only the slot where a creature ends its move counts as entered (OnEnterSlot). Slots it passes don't trigger.
@@ -283,7 +291,7 @@ Slot Occupation & Movement
         • Tie-Breaker: When several orders work, the game uses the order the moves were planned in.
         • The AI plans its moves the same way.
     Movement Keywords (abilities printed on specific creatures; each is still that creature's own Movement Action):
-        • Leapfrog: Moves to any empty slot in its row, jumping over occupied slots.
+        • Leapfrog: Moves to any empty slot of its formation, jumping over occupied slots.
         • Swap: Trades places with a friendly creature at any distance, ignoring creatures in between. Being swapped isn't the partner's own movement, so it works on Anchored partners. Heavy and multi-slot creatures can't be swapped.
         • Swap and Push only affect friendly creatures. Creatures never change sides by moving (see 5.4 Recruitment & Conversion).
     Choosing the Move Type

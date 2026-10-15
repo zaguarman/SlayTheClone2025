@@ -217,11 +217,11 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(p1.Battlefield[0].IsOccupied());
             Assert.AreSame(p1.Battlefield[4], eel.Slot);
 
-            // Moving onto a friendly creature pushes it one slot further along
+            // Moving onto a friendly creature a step away: they trade places
             var turtle = game.Summon(p1, game.Creature("Turtle", 1, 6), 3);
             game.Run(new MoveCreatureAction(eel, p1.Battlefield[4], p1.Battlefield[3], p1));
             Assert.AreSame(eel, p1.Battlefield[3].OccupyingCreature);
-            Assert.AreSame(turtle, p1.Battlefield[2].OccupyingCreature);
+            Assert.AreSame(turtle, p1.Battlefield[4].OccupyingCreature);
 
             // Summoning onto an occupied slot replaces its creature, which is discarded, and what it planned goes with it
             var sharkData = game.Creature("Shark", 4, 4);
@@ -243,8 +243,8 @@ namespace SlayTheClone.Tests {
 
             // An exhausted (stunned) creature can't move or attack
             game.Run(new ApplyStatusEffectAction(turtle, StatusEffectType.Exhausted, 1, 0));
-            game.Run(new MoveCreatureAction(turtle, p1.Battlefield[2], p1.Battlefield[0], p1));
-            Assert.AreSame(turtle, p1.Battlefield[2].OccupyingCreature);
+            game.Run(new MoveCreatureAction(turtle, p1.Battlefield[4], p1.Battlefield[0], p1));
+            Assert.AreSame(turtle, p1.Battlefield[4].OccupyingCreature);
             Assert.IsFalse(p1.Battlefield[0].IsOccupied());
             int healthBeforeStunnedAttack = p2.Health;
             Attack(turtle, p2.Battlefield[4]); // An empty slot: the attack would hit the player
@@ -285,9 +285,9 @@ namespace SlayTheClone.Tests {
             giftData.gift = true;
             var apple = (ICreature)game.GiveCard(p1, giftData);
             int p1Cards = GameAsserts.CountCards(p1), p2Cards = GameAsserts.CountCards(p2);
-            game.Play(apple, p1, p2.Battlefield[4]);
+            game.Play(apple, p1, p2.Battlefield[2]); // The right Flank, empty
             game.Resolve();
-            Assert.AreSame(apple, p2.Battlefield[4].OccupyingCreature, "A Gift lands in the enemy slot it was given into...");
+            Assert.AreSame(apple, p2.Battlefield[2].OccupyingCreature, "A Gift lands in the enemy slot it was given into...");
             Assert.AreSame(p2, apple.Owner, "...on their side");
             Assert.AreEqual(p1Cards, GameAsserts.CountCards(p1), "It's still the giver's card");
             Assert.AreEqual(p2Cards, GameAsserts.CountCards(p2));

@@ -69,7 +69,7 @@ namespace SlayTheClone.Tests {
             var doomed = game.Summon(p1, game.Creature("Doomed", 0, 2), 3);
             Place(p1.Battlefield[1], SlotEffectType.BarbedSnare, 2);
             Place(p1.Battlefield[3], SlotEffectType.BarbedSnare, 2);
-            game.Run(new MoveCreatureAction(pusher, p1.Battlefield[0], p1.Battlefield[1], p1)); // Pushes Snared to slot 2
+            game.Run(new MoveCreatureAction(pusher, p1.Battlefield[0], p1.Battlefield[1], p1)); // They trade places: Snared goes to the Vanguard
             Assert.AreEqual(3, snared.Health, "A Barbed Snare hurts the creature that leaves, even one pushed out");
             Assert.AreEqual(5, pusher.Health, "Entering isn't leaving");
             Assert.IsNull(p1.Battlefield[1].Effect);

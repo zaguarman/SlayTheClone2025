@@ -309,8 +309,8 @@ namespace SlayTheClone.Tests {
             var card = game.CardIn(p1.Battlefield[0]);
             var drag = SceneGame.BeginDrag(card);
             Assert.AreEqual((MoveKind.Walk, false), game.MoveHintIn(p1.Battlefield[1]));
-            Assert.AreEqual((MoveKind.Push, false), game.MoveHintIn(p1.Battlefield[2]), "The wall can be pushed into slot 3");
-            Assert.AreEqual((MoveKind.Walk, true), game.MoveHintIn(p1.Battlefield[4]), "The wall is in the way: blocked");
+            Assert.AreEqual((MoveKind.Push, false), game.MoveHintIn(p1.Battlefield[2]), "A step from the wall: they can trade places");
+            Assert.AreEqual((MoveKind.Walk, false), game.MoveHintIn(p1.Battlefield[4]), "The wall's in the way, but the other Flank goes round");
             Assert.IsNull(game.MoveHintIn(p1.Battlefield[0]), "Its own slot");
             SceneGame.EndDrag(card, drag);
             Assert.IsNull(game.MoveHintIn(p1.Battlefield[1]), "The hints go when the drag ends");
@@ -327,13 +327,13 @@ namespace SlayTheClone.Tests {
 
             game.Queue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[0], p1.Battlefield[2], p1));
             yield return null;
-            CollectionAssert.AreEquivalent(new[] { (mover, p1.Battlefield[2]), (wall, p1.Battlefield[3]) }, game.BoardView(p1).MoveGhosts.ToList(),
-                "A ghost of each creature where it will end up, the pushed one included");
+            CollectionAssert.AreEquivalent(new[] { (mover, p1.Battlefield[2]), (wall, p1.Battlefield[0]) }, game.BoardView(p1).MoveGhosts.ToList(),
+                "A ghost of each creature where it will end up, the one it trades places with included");
             var arrows = game.QueuedArrows(p1);
             Vector2 Slot(int i) => game.BoardView(p1).FindSlotView(p1.Battlefield[i]).transform.position;
-            Assert.AreEqual(2, arrows.Count, "One arrow for the mover, one for the creature it pushes");
-            Assert.IsTrue(arrows.Any(a => Vector2.Distance(a.StartPosition, Slot(2)) < 0.01f && Vector2.Distance(a.EndPosition, Slot(3)) < 0.01f),
-                "The pushed creature's arrow shows where it ends up");
+            Assert.AreEqual(2, arrows.Count, "One arrow for the mover, one for the creature it trades places with");
+            Assert.IsTrue(arrows.Any(a => Vector2.Distance(a.StartPosition, Slot(2)) < 0.01f && Vector2.Distance(a.EndPosition, Slot(0)) < 0.01f),
+                "The other creature's arrow shows where it ends up"); 
             Assert.AreSame(p1.Battlefield[0], mover.Slot, "Nothing has moved yet");
             game.AssertViewsMatchRules();
 

@@ -3,7 +3,9 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone.Tests {
     /// <summary>
-    /// Creatures walk, push, Leapfrog and Swap along their row as GDD 2.4 describes, and each side's moves resolve in an
+    /// Creatures walk, trade places, Leapfrog and Swap in their formation as GDD 2.4 describes (the shape is
+    /// <see cref="Formation"/>: 0 the Vanguard, 1 and 2 the Flanks, 3 and 4 Headquarters; a step goes Vanguard-Flank,
+    /// Flank-Flank, Flank-the Headquarters slot behind it, Headquarters-Headquarters), and each side's moves resolve in an
     /// order that makes every planned move work. Runs the real rules without the scene (see <see cref="TestGame"/>).
     /// </summary>
     public class MovementTests {
@@ -39,15 +41,20 @@ namespace SlayTheClone.Tests {
 
         [Test]
         public void Moves_Walk_Push_Leapfrog_Swap() {
-            var walker = Place("Walker", 0);
-            var wall = Place("Wall", 3);
-            Plan(walker, 2);
+            var walker = Place("Walker", 3);
+            var wall = Place("Wall", 1);
+            Plan(walker, 4);
             game.Resolve();
-            AssertAt(walker, 2, "Walking goes any distance to an empty slot");
-            Plan(walker, 4); // The wall in slot 3 doesn't move
+            AssertAt(walker, 4, "Headquarters to Headquarters: the back row isn't blocked by the Flank ahead");
+            Plan(walker, 0);
             game.Resolve();
-            AssertAt(walker, 2, "Blocked on the way, it stays at the furthest empty slot it reached");
-            AssertAt(wall, 3);
+            AssertAt(walker, 0, "Walking goes any distance along empty slots (round by the right Flank)");
+            var other = Place("Other", 2);
+            Plan(walker, 3); // Both Flanks taken: no way back
+            game.Resolve();
+            AssertAt(walker, 0, "Hemmed in, it stays put");
+            AssertAt(wall, 1);
+            AssertAt(other, 2);
 
             Fresh();
             var pusher = Place("Pusher", 0);
@@ -56,12 +63,12 @@ namespace SlayTheClone.Tests {
             Plan(pusher, 1);
             game.Resolve();
             AssertAt(pusher, 1);
-            AssertAt(pushed, 2, "Pushed one slot further; being pushed isn't its own movement: even a stunned creature gets pushed");
-            var third = Place("Third", 3);
-            Plan(pusher, 2); // Pushing 'pushed' would need slot 3, which 'third' holds
+            AssertAt(pushed, 0, "Walking up to a creature, they trade places (like the bench in Pokemon); being moved isn't its own movement: even a stunned creature is");
+            var far = Place("Far", 4);
+            Plan(pusher, 4); // Along the empty left Headquarters slot, up to it
             game.Resolve();
-            AssertAt(pusher, 1, "Pushes never chain");
-            AssertAt(third, 3);
+            AssertAt(pusher, 4, "It walks up to the creature along empty slots, then they trade places...");
+            AssertAt(far, 1, "...the other one taking the slot it started from");
 
             Fresh();
             var frog = Place("Frog", 0, MovementKeyword.Leapfrog);
@@ -82,25 +89,26 @@ namespace SlayTheClone.Tests {
         [Test]
         public void Planning_MovesWhoeverMakesRoomFirst_PreviewsTheFormation_AndSpotsImpossiblePlans() {
             var a = Place("A", 1);
-            var b = Place("B", 0);
-            Plan(b, 2); // A is in the way...
-            Plan(a, 4); // ...but planned to leave
+            var b = Place("B", 3);
+            Place("Post", 4); // The other way round is taken
+            Plan(b, 0); // A is in the way...
+            Plan(a, 2); // ...but planned to leave
             var preview = MovementRules.Preview(p1.Battlefield, MovementRules.PlannedMovesOf(p1, game.ActionsQueue));
-            Assert.AreSame(p1.Battlefield[4], preview.FinalSlots[a], "The preview shows the final formation");
-            Assert.AreSame(p1.Battlefield[2], preview.FinalSlots[b]);
+            Assert.AreSame(p1.Battlefield[2], preview.FinalSlots[a], "The preview shows the final formation");
+            Assert.AreSame(p1.Battlefield[0], preview.FinalSlots[b]);
             CollectionAssert.IsEmpty(preview.Blocked);
             AssertAt(a, 1, "Previewing moves nothing");
             game.Resolve();
-            AssertAt(a, 4);
-            AssertAt(b, 2, "A moved first to let B through, whatever order they were planned in");
+            AssertAt(a, 2);
+            AssertAt(b, 0, "A moved first to let B through, whatever order they were planned in");
 
             Fresh();
-            var left = Place("Left", 0);
-            var right = Place("Right", 2);
-            Plan(right, 1);
-            var (kind, blocked, hint) = MovementRules.Evaluate(left, p1.Battlefield[4], game.ActionsQueue);
+            var hemmed = Place("Hemmed", 0);
+            Place("Left Flank", 1);
+            Place("Right Flank", 2);
+            var (kind, blocked, hint) = MovementRules.Evaluate(hemmed, p1.Battlefield[3], game.ActionsQueue);
             Assert.AreEqual(MoveKind.Walk, kind);
-            Assert.IsTrue(blocked, "Two creatures that would have to pass each other: an impossible plan");
+            Assert.IsTrue(blocked, "Both Flanks taken: the Vanguard can't walk back to Headquarters");
             Assert.AreEqual("needs Leapfrog", hint);
         }
     }
