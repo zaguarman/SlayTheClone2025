@@ -163,14 +163,15 @@ namespace SlayTheClone.Tests {
             game.Run(new DamageCreatureAction(porcupine, 1));
             Assert.AreEqual(7, hedgehog.Health, "Damage that isn't an attack isn't answered");
 
-            var giantA = game.Summon(p1, game.Creature("Giant A", 15, 5), 1);
-            var giantB = game.Summon(p1, game.Creature("Giant B", 15, 5), 2);
+            var giantA = game.Summon(p1, game.Creature("Giant A", 25, 5), 1);
+            var giantB = game.Summon(p1, game.Creature("Giant B", 25, 5), 2);
             game.Declare(giantA, p2.Battlefield[1]);
             game.Declare(giantB, p2.Battlefield[2]);
             game.Resolve();
             Assert.AreEqual(0, p2.Health);
-            CollectionAssert.AreEqual(new[] { 15, 5 }, game.History.DamageTo(p2), "A player's Health stops at 0");
+            CollectionAssert.AreEqual(new[] { 20 }, game.History.DamageTo(p2), "A player's Health stops at 0, and the game stops there: the other attack never lands");
             CollectionAssert.AreEqual(new[] { p1 }, game.History.Winners, "The game ends once, won by player 1");
+            Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount(), "Nothing still queued happens");
 
             // God's Grace: at 0 Health a player in Grace holds on until the Dusk of the next Day; still at 0 then, they lose
             Fresh();

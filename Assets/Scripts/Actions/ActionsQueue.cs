@@ -282,6 +282,7 @@ namespace SlayTheClone {
             action is PlayCardAction play && play.GetCard() is Spell spell && EffectResolver.IsInstant(spell);
 
         private void ResolveInstantly(IGameAction action) {
+            if (gameMediator.IsGameOver) return; // Nothing happens once the game is over
             Log($"{action.GetType().Name} is instant: resolving it now (Queue ID: {QueueId})", LogTag.Actions);
             var entry = new Entry { Action = action, Layer = LayerOf(action), Sequence = sequence++, Watched = true };
             // Information is outside the order of the Day, but an Intelligence Watchdog still sees it (Glomar Response)
@@ -376,6 +377,16 @@ namespace SlayTheClone {
         /// <returns>False once the queue is empty.</returns>
         private bool ExecuteNextAction() {
             if (GetPendingActionsCount() == 0) return false;
+
+            // Someone won (the user): the game stops right there, and nothing still queued happens
+            if (gameMediator.IsGameOver) {
+                Log($"The game is over: the {GetPendingActionsCount()} actions still queued are dropped (Queue ID: {QueueId})", LogTag.Actions);
+                resolvingNow.Clear();
+                waiting.Clear();
+                activeCreatureActions.Clear();
+                gameMediator.NotifyActionsQueueChanged();
+                return false;
+            }
 
             if (actionsResolved >= MaxActionsPerResolution) {
                 LogError($"Stopped resolving after {MaxActionsPerResolution} actions, probably effects triggering each other endlessly. " +
