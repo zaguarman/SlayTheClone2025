@@ -55,7 +55,7 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Business Operating Expenses", "Satoshi Nakamoto", "Vampire", "Laissez-Faire", "The Invisible Hand", "C-Suite" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Yesn't", "Business Operating Expenses", "Satoshi Nakamoto", "Laissez-Faire", "The Invisible Hand", "C-Suite" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -1332,6 +1332,11 @@ namespace SlayTheClone {
                 "Mind's scouting: send for any card among the top 3 of your deck; it joins your next hand.",
                 SendForCard(SendForFilter.Any, top: 3))
                 .Picture("A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases."),
+            Spell("Yesn't", TargetType.Player,
+                "It happened. It also didn't. Both are true until you stop thinking about it.",
+                "Mind's denial (the user, 2026-10-15): a Watchdog that nullifies the next 2 enemy spells that deal damage, Monitored, so it catches ones planned before it. Narrower than Antivirus (any spell, 1 charge), so 2 charges: the blow lands and doesn't, and the mind picks doesn't.",
+                CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Spell, side = WatchdogSide.Enemy, effect = WatchdogEffect.Nullify, charges = 2, damaging = true }, TargetType.Enemy))
+                .Picture("A man calmly sipping tea while a fireball hits him, drawn twice over itself like a double exposure: in one he is burnt to a crisp, in the other untouched, a thought bubble above him reading YES / NO with both boxes ticked."),
             Spell("Cyberpsychosis", TargetType.EnemyCreatures,
                 "Too much chrome, too little self. The feed was the last thing holding it together.",
                 "2 damage to target enemy creature, and 3 more if it's Digital Society: the terminally online crack first (the user, 2026-10-15).",

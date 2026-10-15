@@ -133,5 +133,6 @@ namespace SlayTheClone {
         public WatchdogTiming timing;
         public BriefingPick pick;   // Briefing only
         public bool moveEarlier;    // Briefing Reorder only: earlier instead of later
+        public bool damaging;       // Only the ones that deal damage (Yesn't: damaging spells)
     }
 }

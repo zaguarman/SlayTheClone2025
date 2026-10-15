@@ -1816,6 +1816,8 @@ Card Game Factions Overview
 			Actionable Evidence (added 2026-10-14)
 			Digital Breadcrumbs (added 2026-10-14)
 			Pick Your Poison (added 2026-10-15, no faction given)
+			Disarm (added 2026-10-15, no faction given): picture: a guy whose arms have fallen off onto the floor while a
+				policeman shouts "Put your hands up! Police!"
 		Mechanic ideas
 			Cards that come back to the hand when a condition is met
 			More tempo-altering effects (2026-10-14): some that raise your creatures' Speed, others that cut Deployment Time

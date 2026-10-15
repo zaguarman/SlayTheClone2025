@@ -52,6 +52,7 @@ namespace SlayTheClone {
             if (WatchedCreature != null && actor != WatchedCreature) return false;
 
             if (Spec.atMost > 0 && WatchdogRules.StrengthOf(action) > Spec.atMost) return false;
+            if (Spec.damaging && !WatchdogRules.Damages(action)) return false;
             return true;
         }
 
@@ -68,6 +69,7 @@ namespace SlayTheClone {
             if (!forController) return $"Watching {watched}: ???";
             string what = Spec.watches.ToString().ToLower() + (Spec.watches == WatchedAction.Ability ? "" : "s");
             string atMost = Spec.atMost > 0 ? $" of {Spec.atMost} or less" : "";
+            if (Spec.damaging) what = "damaging " + what;
             return $"{what}{atMost} by {watched} -> {Spec.effect} ({ChargesLeft} left, {(Spec.timing == WatchdogTiming.Briefing ? "Briefing" : "Monitored")})";
         }
 
@@ -121,6 +123,16 @@ namespace SlayTheClone {
             PlaySpellAction cast => RevealsSomething(cast.GetSpell()),
             _ => false
         };
+
+        /// <summary>Whether it deals damage: an attack, or a spell with a damage effect.</summary>
+        public static bool Damages(IGameAction action) => action switch {
+            BattlefieldCombatAction => true,
+            PlayCardAction play => play.GetCard() is Spell spell && DealsDamage(spell),
+            PlaySpellAction cast => DealsDamage(cast.GetSpell()),
+            _ => false
+        };
+
+        private static bool DealsDamage(Spell spell) => spell != null && spell.Effects.SelectMany(e => e.actions).Any(a => a.actionType == ActionType.Damage);
 
         private static bool RevealsSomething(Spell spell) => spell != null && spell.Effects.SelectMany(e => e.actions)
             .Any(a => a.actionType == ActionType.Reveal || (a.actionType == ActionType.ApplyStatus && a.statusEffectToApply == StatusEffectType.Revealed));

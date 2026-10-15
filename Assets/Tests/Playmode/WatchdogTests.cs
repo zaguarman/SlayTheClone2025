@@ -91,6 +91,25 @@ namespace SlayTheClone.Tests {
             CollectionAssert.DoesNotContain(p1.Hand, tap, "The spell is spent");
             game.Play(game.GiveCard(p1, tapData), p1, p2.Battlefield[0]);
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(hidden, StatusEffectType.Revealed), "Its one charge is gone");
+
+            // Yesn't: only damaging spells; the others go through and keep its charges
+            Fresh();
+            var target = game.Summon(p2, game.Creature("Target", 1, 5), 0);
+            var yesnt = Spec(WatchdogEffect.Nullify, WatchedAction.Spell, charges: 2);
+            yesnt.damaging = true;
+            var yesntData = game.Spell("Yesn't", TargetType.Player, new CardEffect {
+                trigger = EffectTrigger.OnPlay,
+                actions = new List<EffectAction> { new EffectAction { actionType = ActionType.CreateWatchdog, targetType = TargetType.Enemy, watchdog = yesnt } }
+            });
+            StringAssert.Contains("Watchdog: enemy damaging spells -> Nullify, 2 charges", Keywords.Plain(CardTextFormatter.GetRulesText(yesntData)));
+            Watch(yesnt, p2);
+            game.Play(game.GiveCard(p1, game.Spell("Pep Talk", TargetType.EnemyCreatures, TestCards.Effect(EffectTrigger.OnPlay, ActionType.Heal, 1, TargetType.EnemyCreatures))), p1, p2.Battlefield[0]);
+            game.Resolve();
+            Assert.AreEqual(2, game.ActionsQueue.Watchdogs.Single().ChargesLeft, "A spell that deals no damage goes through");
+            game.Play(game.GiveCard(p1, game.Spell("Zap", TargetType.EnemyCreatures, TestCards.Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures))), p1, p2.Battlefield[0]);
+            game.Resolve();
+            Assert.AreEqual(5, target.Health, "A damaging one is nullified");
+            Assert.AreEqual(1, game.ActionsQueue.Watchdogs.Single().ChargesLeft);
         }
 
         [Test]

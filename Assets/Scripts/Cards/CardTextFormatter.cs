@@ -473,6 +473,7 @@ namespace SlayTheClone {
             bool watchesCreature = action.targetType is not (TargetType.Player or TargetType.Enemy);
             string by = watchesCreature ? $" by {target}" : "";
             string atMost = spec.atMost > 0 ? $" of {spec.atMost} or less" : "";
+            if (spec.damaging) what = "damaging " + what;
             string effect = spec.effect switch {
                 WatchdogEffect.Nullify => Keywords.Link("Nullify"), WatchdogEffect.Redirect => Keywords.Link("Redirect"),
                 WatchdogEffect.Reveal => Keywords.Link("Reveal"),

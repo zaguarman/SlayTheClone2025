@@ -52,6 +52,7 @@ MonoBehaviour:
         timing: 1
         pick: 1
         moveEarlier: 0
+        damaging: 0
       trend: 0
       ability: 0
       sendFor: 0

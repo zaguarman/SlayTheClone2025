@@ -521,6 +521,8 @@ MIND
 
 Lucid Dreaming (spell)
     A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases.
+Yesn't (spell)
+    A man calmly sipping tea while a fireball hits him, drawn twice over itself like a double exposure: in one he is burnt to a crisp, in the other untouched, a thought bubble above him reading YES / NO with both boxes ticked.
 Cyberpsychosis (spell)
     A man in a hoodie with glowing cables plugged into the back of his skull, eyes spinning with notification badges, screaming at a phone that screams back, sparks flying from his chrome arm.
 Reflect (spell)
@@ -630,3 +632,5 @@ Here Be Dragons
     USER: An ASCII-art dragon, like the reference given.
 No Glove No Love
     USER: A woman saying no-no with her finger, a bit sensual (its old picture went to Sex Clanker).
+Disarm
+    USER: 2026-10-15: a guy whose arms have fallen off onto the floor while a policeman shouts "Put your hands up! Police!"

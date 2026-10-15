@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: Yesnt
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: c37ad666-b18a-4ab4-a0a3-664d0387cf27
+  cardName: Yesn't
+  description: It happened. It also didn't. Both are true until you stop thinking
+    about it.
+  cardType: 1
+  faction: 8
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  gamble: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 11
+      value: 0
+      targetType: 1
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 1
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 2
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 1
+      trend: 0
+      ability: 0
+      sendFor: 0
+      requires: 0
+      decoy: {fileID: 0}
+  designNotes: 'Mind''s denial (the user, 2026-10-15): a Watchdog that nullifies
+    the next 2 enemy spells that deal damage, Monitored, so it catches ones planned
+    before it. Narrower than Antivirus (any spell, 1 charge), so 2 charges: the blow
+    lands and doesn''t, and the mind picks doesn''t.'
+  artDescription: 'A man calmly sipping tea while a fireball hits him, drawn twice
+    over itself like a double exposure: in one he is burnt to a crisp, in the other
+    untouched, a thought bubble above him reading YES / NO with both boxes ticked.'
+  defaultTargetType: 0

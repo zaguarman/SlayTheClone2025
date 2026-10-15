@@ -52,6 +52,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+        damaging: 0
       trend: 0
       ability: 0
       sendFor: 0
@@ -79,6 +80,7 @@ MonoBehaviour:
         timing: 0
         pick: 0
         moveEarlier: 0
+        damaging: 0
       trend: 0
       ability: 0
       sendFor: 0

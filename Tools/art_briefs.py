@@ -153,6 +153,7 @@ USER_NOTES_BRAINSTORM = {
                                                 "string (the Always Sunny meme)."],
     "Here Be Dragons": ["An ASCII-art dragon, like the reference given."],
     "No Glove No Love": ["A woman saying no-no with her finger, a bit sensual (its old picture went to Sex Clanker)."],
+    "Disarm": ["2026-10-15: a guy whose arms have fallen off onto the floor while a policeman shouts \"Put your hands up! Police!\""],
 }
 
 # How every picture is made, the user's standing rules for the art

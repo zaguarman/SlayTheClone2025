@@ -1284,7 +1284,12 @@ Sex Clanker (creature)
          about No Glove, No Love is history. Keep it.
 
 
-MIND (12)
+MIND (13)
+
+Yesn't (spell)
+  Aim:   Denial, doublethink: it happened and it didn't, and the mind picks didn't.
+  Hooks: "Yesn't", the meme word; Schrodinger-style both-at-once; Orwell's doublethink.
+  Twist: A Watchdog: the next 2 enemy spells that deal damage are nullified (the user, 2026-10-15: block a kind of action).
 
 Cyberpsychosis (spell)
   Aim:   Losing your mind to the screen: too much chrome, too much feed.
