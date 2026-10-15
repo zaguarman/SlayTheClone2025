@@ -55,6 +55,8 @@ namespace SlayTheClone {
     /// stop it), and rises again at the Dawn so many Days on: its card back from the discard pile into its slot (or the first
     /// free one), ready at once with full Health and the stat changes it had; its statuses are gone, as it died. Its Arrival
     /// happens again. Something that keeps it from dying (Borrowed Time) keeps it from rising too.
+    /// Myth's loophole: if the creature was already given up this Day (a Sacrifice took it first, Necronomicon's), that
+    /// offering counts, and it rises all the same.
     /// </summary>
     public class ResurrectionAction : IGameAction {
         public ICreature Creature { get; }
@@ -74,11 +76,50 @@ namespace SlayTheClone {
     public class ResurrectionActionExecutor : ActionExecutor<ResurrectionAction> {
         protected override void ExecuteAction(ResurrectionAction resurrection, ActionExecutionContext context) {
             var creature = resurrection.Creature;
-            if (creature == null || creature.IsDead) return;
-            int slot = creature.Slot?.Index ?? 0;
+            if (creature == null) return;
+            int day = context.TurnClock.TurnNumber;
+            var offering = Offering.Of(creature, day);
+            if (creature.IsDead) {
+                if (offering == null) return; // Dead some other way: nothing to raise
+                Log($"{creature.Name} was already offered this Day: it rises again in {resurrection.Days} Days all the same", LogTag.Effects | LogTag.Creatures);
+                context.ActionsQueue.AddAction(new RevivalAction(creature, offering.SlotIndex, resurrection.Days, ready: true, kept: offering.Kept));
+                return;
+            }
+            offering ??= Offering.Make(creature, day);
             Log($"{creature.Name} is sacrificed, to rise again in {resurrection.Days} Days", LogTag.Effects | LogTag.Creatures);
             context.ActionsQueue.AddAction(new DestroyCreatureAction(creature, unconditional: true, controller: resurrection.Controller, sacrifice: true));
-            context.ActionsQueue.AddAction(new RevivalAction(creature, slot, resurrection.Days, ready: true, kept: RevivalAction.StatChangesOn(creature)));
+            context.ActionsQueue.AddAction(new RevivalAction(creature, offering.SlotIndex, resurrection.Days, ready: true, kept: offering.Kept));
+        }
+    }
+
+    /// <summary>
+    /// A creature its player gave up on a Day (a Sacrifice, Phoenix Feather), with where it stood and the stat changes it
+    /// had. Myth bends the rules: one offering pays every Sacrifice of its Day.
+    /// </summary>
+    public class Offering {
+        public ICreature Creature { get; }
+        public int Day { get; }
+        public int SlotIndex { get; }
+        public (int attack, int health, int speed) Kept { get; }
+
+        private Offering(ICreature creature, int day) {
+            Creature = creature;
+            Day = day;
+            SlotIndex = creature.Slot?.Index ?? 0;
+            Kept = RevivalAction.StatChangesOn(creature);
+        }
+
+        /// <summary>The creature's offering of this Day, if it was given up.</summary>
+        public static Offering Of(ICreature creature, int day) =>
+            (creature?.DeckOwner ?? creature?.Owner)?.Offerings.FirstOrDefault(o => o.Creature == creature && o.Day == day);
+
+        /// <summary>Records the creature as given up today, while it still stands (its slot, its stat changes); older Days are forgotten.</summary>
+        public static Offering Make(ICreature creature, int day) {
+            var side = creature.DeckOwner ?? creature.Owner;
+            side.Offerings.RemoveAll(o => o.Day != day);
+            var offering = new Offering(creature, day);
+            side.Offerings.Add(offering);
+            return offering;
         }
     }
 
@@ -87,6 +128,9 @@ namespace SlayTheClone {
     /// when it resolves (the lowest Attack, then the lowest Health), before it does anything. They really die: their Last
     /// Will happens. It can't be played with fewer creatures than that on the board, and if they're gone by the time it
     /// resolves, it fizzles.
+    /// Myth's loophole (the user, 2026-10-15: bending the rules with God's blessing is central to every religion): one
+    /// offering pays every Sacrifice of its Day. A creature sacrificed this Day, or one a Phoenix Feather is taking this Day,
+    /// pays first, in place of the weakest: Necronomicon and Phoenix Feather on the same creature cost one death.
     /// </summary>
     public static class Sacrifice {
         public static int Of(ICard card) => card?.SourceData?.sacrifice ?? 0;
@@ -111,19 +155,47 @@ namespace SlayTheClone {
             || (a is SummonCreatureAction summon && (summon.GetTargetSlot() as BoardSlot)?.Owner == owner)) ?? 0;
 
         /// <summary>When the card resolves: the victims die first. False: there aren't enough, so it fizzles.</summary>
-        internal static bool Pay(ICard card, IPlayer owner, IActionsQueue queue) {
+        internal static bool Pay(ICard card, IPlayer owner, IActionsQueue queue, int day) {
             int cost = Of(card);
             if (cost <= 0) return true;
-            var victims = Victims(card, owner);
+            // This Day's offerings pay first: the ones already given, then the ones a Phoenix Feather is about to take
+            var offered = owner.Offerings.Where(o => o.Day == day).Select(o => o.Creature)
+                .Concat(Promised(owner, queue)).Distinct().Take(cost).ToList();
+            var victims = offered.Concat(Victims(card, owner).Where(v => !offered.Contains(v))).Take(cost).ToList();
             if (victims.Count < cost) {
                 Log($"{card.Name} needs {cost} creature(s) to sacrifice; {owner.Name} has {victims.Count}: it fizzles", LogTag.Cards | LogTag.Actions);
                 return false;
             }
             foreach (var victim in victims) {
+                if (Offering.Of(victim, day) != null) {
+                    Log($"{victim.Name}, already offered this Day, pays for {card.Name} too", LogTag.Cards | LogTag.Actions);
+                    continue;
+                }
                 Log($"{owner.Name} sacrifices {victim.Name} to play {card.Name}", LogTag.Cards | LogTag.Actions);
+                Offering.Make(victim, day);
                 queue.AddAction(new DestroyCreatureAction(victim, unconditional: true, controller: owner, sacrifice: true));
             }
             return true;
+        }
+
+        // The creatures of this side a Phoenix Feather played this Day will take (it hasn't resolved yet)
+        private static IEnumerable<ICreature> Promised(IPlayer owner, IActionsQueue queue) {
+            if (queue == null) yield break;
+            foreach (var action in queue.GetPendingActions()) {
+                var (spell, caster, target) = action switch {
+                    PlayCardAction play => (play.GetCard() as Spell, play.GetOwner(), play.GetTarget()),
+                    PlaySpellAction cast => (cast.GetSpell(), cast.GetOwner(), cast.GetTarget()),
+                    _ => (null, null, null)
+                };
+                if (spell == null || caster != owner || !spell.Effects.SelectMany(e => e.actions).Any(a => a.actionType == ActionType.Resurrect)) continue;
+                var creature = target switch {
+                    HomingTarget homing => homing.CreatureInPlay,
+                    BoardSlot slot => slot.OccupyingCreature,
+                    ICreature c => c,
+                    _ => null
+                };
+                if (creature != null && !creature.IsDead && creature.Owner == owner) yield return creature;
+            }
         }
     }
 

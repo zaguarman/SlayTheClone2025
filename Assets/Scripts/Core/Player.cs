@@ -32,6 +32,8 @@ namespace SlayTheClone {
         void SpendForGood(ICard card);
         /// <summary>This player's creatures that are off the board for now (Witness Protection Program), and when they come back.</summary>
         List<GoneDark> GoneDark { get; }
+        /// <summary>The creatures this player sacrificed, by Day: one offering pays every Sacrifice of its Day (see <see cref="Sacrifice"/>).</summary>
+        List<Offering> Offerings { get; }
         /// <summary>This player's spells foretold (Prophecy) that haven't come true yet.</summary>
         List<Prophecy> Prophecies { get; }
         /// <summary>God's Grace: the last Day at whose Dusk 0 Health doesn't lose yet; null when not in Grace.</summary>
@@ -81,6 +83,7 @@ namespace SlayTheClone {
         public List<ICard> SetAside { get; } = new List<ICard>();
         public List<ICard> Spent { get; } = new List<ICard>();
         public List<GoneDark> GoneDark { get; } = new List<GoneDark>();
+        public List<Offering> Offerings { get; } = new List<Offering>();
         public List<Prophecy> Prophecies { get; } = new List<Prophecy>();
         public int? GraceUntilDay { get; set; }
         public ICard GraceCard { get; set; }

@@ -101,6 +101,25 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual((4, 6, 6), (reborn.Attack, reborn.MaxHealth, reborn.Health), "Its +2/+2 kept, at full Health");
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(reborn, StatusEffectType.Blessed), "Its statuses died with it");
 
+            // Myth's loophole: one offering pays every Sacrifice of its Day. A Necronomicon and a Phoenix Feather on the weakest
+            // creature cost that one death, whichever resolves first, and it still rises (a few rounds: the order is random)
+            for (int round = 0; round < 4; round++) {
+                var lamb = game.Summon(p1, game.Creature("Lamb", 1, 2), 0);
+                var shepherd = game.Summon(p1, game.Creature("Shepherd", 5, 5), 1);
+                var heretic = game.Summon(p2, game.Creature("Heretic", 3, 9), 3);
+                var necro = game.Spell("Necro", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures));
+                necro.sacrifice = 1;
+                game.Play(game.GiveCard(p1, game.Spell("Feather", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Resurrect, 1, TargetType.FriendlyCreatures))), p1, p1.Battlefield[0]);
+                game.Play(game.GiveCard(p1, necro), p1, p2.Battlefield[3]);
+                game.Resolve();
+                Assert.IsTrue(lamb.IsDead && heretic.IsDead, $"Round {round}: the lamb is offered and the heretic destroyed...");
+                Assert.IsFalse(shepherd.IsDead, "...and one offering paid for both");
+                game.StartTurn();
+                Assert.AreEqual("Lamb", p1.Battlefield[0].OccupyingCreature?.Name, "...and it rises, as the feather promised");
+                game.Run(new DestroyCreatureAction(p1.Battlefield[0].OccupyingCreature, unconditional: true));
+                game.Run(new DestroyCreatureAction(shepherd, unconditional: true));
+            }
+
             // Health lost for good stays on the card: one that lost it all rises at 0 and dies again
             var rot = Effect(EffectTrigger.OnDeath, ActionType.Revive, 0, TargetType.Self);
             rot.oncePerCombat = true;

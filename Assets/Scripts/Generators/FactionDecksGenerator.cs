@@ -138,7 +138,7 @@ namespace SlayTheClone {
             [Faction.Myth] = ("Myth - Old Gods, New Tricks", new[] {
                 "Holy War", "Holy War", "Lance Of Longinus", "Lance Of Longinus", "Horsemen Of Apocalypse", "Horsemen Of Apocalypse",
                 "Templar Knight", "Templar Knight", "Black Knight", "Black Knight", "The Wicker Man", "Necronomicon", "The Great Flood",
-                "Holy Hand Grenade of Antioch", "The Chosen One", "Buddy Christ", "Killer Rabbit of Caerbannog", "Living Dead", "Mox Nox", "Pope",
+                "Holy Hand Grenade of Antioch", "The Chosen One", "Buddy Christ", "Living Dead", "Necronomicon", "Phoenix Feather", "Phoenix Feather",
             }),
             // Sturdy creatures that wear the enemy down, and stat cuts that kill
             [Faction.Mind] = ("Mind - All in Your Head", new[] {
@@ -1183,7 +1183,7 @@ namespace SlayTheClone {
                 .Picture("An ancient iron spearhead on a long wooden shaft, glowing faintly, pinned through a spy's trench coat to a brick wall, the spy wriggling out of the sleeves."),
             Spell("Necronomicon", TargetType.EnemyCreatures,
                 "Bound in human skin. The reviews are mixed.",
-                "Destroy target enemy creature; your weakest creature is sacrificed to play it. Black magic always takes something.",
+                "Destroy target enemy creature; your weakest creature is sacrificed to play it. Black magic always takes something. With a Phoenix Feather the same Day, the feathered creature pays (one offering, every rite), and still rises.",
                 Destroy(TargetType.EnemyCreatures))
                 .Sacrificing(1)
                 .Picture("A heavy book bound in stitched leather with a screaming face on its cover, lying open on a stone altar, a hooded figure reading from it while a shadowy hand rises out of the pages."),
@@ -1287,7 +1287,7 @@ namespace SlayTheClone {
                 .Picture("A battered knight at 0 Health, a red health bar empty above his head, held upright by a beam of light from parted clouds, two cherubs propping him up by the armpits, a choir of angels singing behind."),
             Spell("Phoenix Feather", TargetType.FriendlyCreatures,
                 "It burns. It rises. It invoices you for the ashes.",
-                "Target friendly creature is sacrificed (its Last Will happens; a Blessing can't stop it) and rises again at the Dawn 3 Days later, full Health, Deployment Time again. Three days, as the scripture says.",
+                "Target friendly creature is sacrificed (its Last Will happens; a Blessing can't stop it) and rises again at the Dawn 3 Days later, ready, full Health. Three days, as the scripture says. Myth's loophole: its offering pays a Necronomicon's Sacrifice the same Day, one death for both.",
                 Act(ActionType.Resurrect, 3, TargetType.FriendlyCreatures, TargetModifier.None))
                 .Picture("Only the feather, watercolour on paper: red at the quill through orange to a yellow heart, its barbs licking out like flames, a glowing eye near the top, the tip burning out lilac, sparks all round."),
             Creature("The Omen", 1, 4, speed: 1, deploy: 2,

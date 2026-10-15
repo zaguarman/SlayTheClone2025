@@ -57,9 +57,10 @@ MonoBehaviour:
       sendFor: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: Target friendly creature is sacrificed (its Last Will happens; a Blessing
-    can't stop it) and rises again at the Dawn 3 Days later, full Health, Deployment
-    Time again. Three days, as the scripture says.
+  designNotes: 'Target friendly creature is sacrificed (its Last Will happens; a
+    Blessing can''t stop it) and rises again at the Dawn 3 Days later, ready, full
+    Health. Three days, as the scripture says. Myth''s loophole: its offering pays
+    a Necronomicon''s Sacrifice the same Day, one death for both.'
   artDescription: 'Only the feather, watercolour on paper: red at the quill through
     orange to a yellow heart, its barbs licking out like flames, a glowing eye near
     the top, the tip burning out lilac, sparks all round.'

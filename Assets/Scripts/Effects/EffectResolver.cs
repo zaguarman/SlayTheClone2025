@@ -114,6 +114,12 @@ namespace SlayTheClone {
             if (chosenTarget != null && UsesChosenTarget(action) && action.targetModifier.HasFlag(TargetModifier.Beside)) {
                 return WithoutTooMainstream(NeighboursOf(chosenTarget).ToList(), source);
             }
+            // Myth's loophole: a Phoenix Feather still finds its creature when a Sacrifice took it first this Day (one offering
+            // pays every rite); the resurrection checks the Day
+            if (action.actionType == ActionType.Resurrect && chosenTarget is HomingTarget { Creature: { IsDead: true } offered }
+                && controller.Offerings.Any(o => o.Creature == offered)) {
+                return new List<ITarget> { offered };
+            }
             if (chosenTarget != null && UsesChosenTarget(action)) {
                 var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
                 if (OwnSideOnly(action.actionType) && (resolved as ICreature)?.Owner != controller) resolved = null; // A sacrifice is yours to make
