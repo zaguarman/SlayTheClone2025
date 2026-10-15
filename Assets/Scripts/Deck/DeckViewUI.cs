@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -205,7 +206,11 @@ namespace SlayTheClone {
             ArrowIndicator.Suppressed = deckViewPanel.activeSelf; // Its Update stops while it's hidden
             if (closeButton != null) closeButton.gameObject.SetActive(!IsPicking);
             if (hideButton != null) hideButton.gameObject.SetActive(IsPicking && !PickHidden);
-            if (showButton != null) showButton.gameObject.SetActive(IsPicking && PickHidden);
+            if (showButton != null) {
+                bool waiting = IsPicking && PickHidden;
+                showButton.gameObject.SetActive(waiting);
+                Breathe(showButton.transform, waiting); // A pick is waiting: it breathes slowly, like a queued card, so it's noticed
+            }
             if (PickHidden) Tooltip.Existing?.HideTooltip();
         }
 
@@ -217,10 +222,10 @@ namespace SlayTheClone {
             hideRect.sizeDelta = new Vector2(130f, ((RectTransform)closeButton.transform).sizeDelta.y);
             UITheme.StyleButton(hideButton);
             // Show takes Hide's place, so the toggle stays under the pointer; it lives beside the window, as that hides
-            showButton = MakeLike(closeButton, deckViewPanel.transform.parent, "PickShowButton", "Show the pick", () => SetPickHidden(false));
+            showButton = MakeLike(closeButton, deckViewPanel.transform.parent, "PickShowButton", "Show", () => SetPickHidden(false));
             var showRect = (RectTransform)showButton.transform;
             showRect.pivot = hideRect.pivot;
-            showRect.sizeDelta = new Vector2(220f, hideRect.sizeDelta.y);
+            showRect.sizeDelta = new Vector2(150f, hideRect.sizeDelta.y);
             var parentScale = showRect.parent.lossyScale;
             showRect.localScale = new Vector3(hideRect.lossyScale.x / parentScale.x, hideRect.lossyScale.y / parentScale.y, 1f);
             showRect.rotation = hideRect.rotation;
@@ -228,6 +233,15 @@ namespace SlayTheClone {
             UITheme.StyleButton(showButton, UITheme.ButtonKind.Primary);
             showButton.gameObject.SetActive(false);
             hideButton.gameObject.SetActive(false);
+        }
+
+        private Vector3 showScale;
+
+        private void Breathe(Transform target, bool on) {
+            DOTween.Kill(target);
+            if (showScale == Vector3.zero) showScale = target.localScale;
+            target.localScale = showScale;
+            if (on) target.DOScale(showScale * 1.08f, 0.9f).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetUpdate(true).SetTarget(target).SetLink(target.gameObject);
         }
 
         private static Button MakeLike(Button model, Transform parent, string name, string label, UnityEngine.Events.UnityAction onClick) {
