@@ -69,6 +69,8 @@ Dead Cat Bounce (spell)
 Business Expense (spell)
     A CEO in a full three-piece suit, briefcase still in hand, being walked into a jail cell by a guard, while he hands the guard a receipt stamped BUSINESS EXPENSE.
     USER: A guy who looks like a CEO, in a full suit, going to jail.
+Business Operating Expenses (spell)
+    A smiling executive in an orange jumpsuit with a silk tie, checking into a cushy white-collar prison camp with a tennis court and a golf green, an assistant wheeling his luggage behind him; a sign over the gate reads COST OF DOING BUSINESS.
 Taxpayer Funds Venture Capital Profits (spell)
     (from the drawing) The public pays in, one coin at a time ---------------------------------------------------------------- Statecraft cards
 Cleaning Robot (creature)

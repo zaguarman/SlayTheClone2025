@@ -201,8 +201,8 @@ Penny Stock
     Notes: Checked after the attacker's own stat calculation, before the target's modifiers (Exposed, Cognitive Dissonance) and Armor. 0 damage stays 0.
     Answers: Armor and damage reduction still blunt it. Buffing its hit above 3 actually switches the doubling off.
 
-Trickle Down
-    Inspired by: Trample (Magic: The Gathering), renamed for trickle-down economics. On C-Suite (Corporate), 2026-10-15.
+Collateral Damage
+    Inspired by: Trample (Magic: The Gathering). First called Trickle Down; renamed by the user (2026-10-15). On C-Suite (Corporate).
     Type: Passive
     Description: "When its attack is more than a creature's Health, the rest hits that creature's player."
     Notes: Only its attacks (combat damage, Double Tap and Spray and Pray hits included), not its effects. What's left is

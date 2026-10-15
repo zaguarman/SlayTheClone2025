@@ -27,9 +27,9 @@ MonoBehaviour:
   prophecy: 0
   gamble: 0
   effects: []
-  designNotes: 'Trickle Down: when its attack is more than a creature''s Health,
-    the rest goes on to that creature''s player. The top of Corporate''s hierarchy;
-    it costs capital: discard a card.'
+  designNotes: 'Collateral Damage (trample): when its attack is more than a creature''s
+    Health, the rest goes on to that creature''s player. The top of Corporate''s
+    hierarchy; it costs capital: discard a card.'
   artDescription: 'A champagne tower of glasses: five executives in suits at the
     top glass, toasting, the champagne overflowing past them down the tiers, until
     a line of workers at the bottom catch the last drips in paper cups.'

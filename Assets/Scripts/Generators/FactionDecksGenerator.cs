@@ -55,7 +55,7 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Satoshi Nakamoto", "Vampire", "Laissez-Faire", "The Invisible Hand", "C-Suite" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Business Operating Expenses", "Satoshi Nakamoto", "Vampire", "Laissez-Faire", "The Invisible Hand", "C-Suite" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -279,6 +279,11 @@ namespace SlayTheClone {
                 Draw(2), Damage(2, TargetType.Player, Each))
                 .NotInStarterDeck()
                 .Picture("A CEO in a full three-piece suit, briefcase still in hand, being walked into a jail cell by a guard, while he hands the guard a receipt stamped BUSINESS EXPENSE."),
+            Spell("Business Operating Expenses", TargetType.FriendlyCreatures,
+                "Two years in a federal prison camp. Priced in. The stock went up.",
+                "Jail time as overhead (the user, 2026-10-15): target friendly creature goes dark until the next Dawn (it does its time) and you draw 2 next Day. Business Expense is the perks and the fine; this is the cell, written off.",
+                Act(ActionType.Vanish, 0, TargetType.FriendlyCreatures, TargetModifier.None), Draw(2))
+                .Picture("A smiling executive in an orange jumpsuit with a silk tie, checking into a cushy white-collar prison camp with a tennis court and a golf green, an assistant wheeling his luggage behind him; a sign over the gate reads COST OF DOING BUSINESS."),
             Spell("Taxpayer Funds Venture Capital Profits", TargetType.Player,
                 "Privatize the gains. Socialize the bill.",
                 "The gains are yours alone: draw 2 with the next Day's hand. The bill is everyone's: 1 damage to every creature on the board, yours included.",
@@ -336,8 +341,8 @@ namespace SlayTheClone {
                 .Picture("An empty white glove floating over a busy market stall, nobody inside it, quietly lifting coins out of the shoppers' pockets and dropping them into a fat banker's top hat."),
             Creature("C-Suite", 4, 3, speed: 1, deploy: 2,
                 "Record profits this quarter. The savings will trickle down to you shortly.",
-                "Trickle Down: when its attack is more than a creature's Health, the rest goes on to that creature's player. The top of Corporate's hierarchy; it costs capital: discard a card.")
-                .With(CreatureAbility.TrickleDown)
+                "Collateral Damage (trample): when its attack is more than a creature's Health, the rest goes on to that creature's player. The top of Corporate's hierarchy; it costs capital: discard a card.")
+                .With(CreatureAbility.CollateralDamage)
                 .Discarding(1)
                 .Picture("A champagne tower of glasses: five executives in suits at the top glass, toasting, the champagne overflowing past them down the tiers, until a line of workers at the bottom catch the last drips in paper cups."),
         };

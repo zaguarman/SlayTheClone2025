@@ -60,10 +60,10 @@ namespace SlayTheClone {
                 mediator.NotifyCreatureDamaged(targetCreature, actualHealthDamage);
             }
 
-            // Trickle Down: what its attack has left once the creature's Health is gone goes on to that creature's player
+            // Collateral Damage: what its attack has left once the creature's Health is gone goes on to that creature's player
             int overflow = remainingDamage - actualHealthDamage;
-            if (overflow > 0 && damageAction.IsCombatDamage() && Abilities.Has(attacker, CreatureAbility.TrickleDown) && targetCreature.Owner != null) {
-                Log($"Executor: {overflow} damage trickles down from {targetCreature.Name} to {targetCreature.Owner.Name}", LogTag.Actions | LogTag.Combat);
+            if (overflow > 0 && damageAction.IsCombatDamage() && Abilities.Has(attacker, CreatureAbility.CollateralDamage) && targetCreature.Owner != null) {
+                Log($"Executor: {overflow} damage goes through {targetCreature.Name} to {targetCreature.Owner.Name}", LogTag.Actions | LogTag.Combat);
                 context.ActionsQueue.AddAction(new DamagePlayerAction(targetCreature.Owner, overflow, attacker, isCombatDamage: true));
             }
 

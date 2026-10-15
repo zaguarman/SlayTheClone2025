@@ -253,12 +253,12 @@ namespace SlayTheClone.Tests {
             game.Attack(daredevil, p2.Battlefield[4]);
             Assert.AreEqual(21, dummy.Health, "...at 2 Health, 3 becomes 6");
 
-            // Trickle Down: what its attack has left once the creature's Armor and Health are gone hits that creature's player
-            var executive = With(CreatureAbility.TrickleDown, p1, 0, attack: 7);
+            // Collateral Damage: what its attack has left once the creature's Armor and Health are gone hits that creature's player
+            var executive = With(CreatureAbility.CollateralDamage, p1, 0, attack: 7);
             game.Run(new ModifyArmorAction(left, 1));
             int before = p2.Health;
             game.Attack(executive, p2.Battlefield[0]);
-            Assert.IsTrue(left.IsDead, "Trickle Down: 1 Armor and 4 Health take 5 of its 7...");
+            Assert.IsTrue(left.IsDead, "Collateral Damage: 1 Armor and 4 Health take 5 of its 7...");
             Assert.AreEqual(before - 2, p2.Health, "...and the 2 left go on to their player");
 
             // False Flag Operation: one of yours dies, the rest grow. Its Last Will still happens: Dead Man's Switch destroys

@@ -187,7 +187,7 @@ UTOPIA
 
 3. THE CARDS
 
-CORPORATE (34)
+CORPORATE (35)
 
 Casino (spell)
   Aim:   Trump the businessman: the man who managed to lose money running casinos.
@@ -395,6 +395,13 @@ Escape Goat (spell, Mind until 2026-10-15) [px]
          background. It pairs with Shadow Ops.' Lone Gunman (the official fall guy): a goat holding a placard
          like the Lone Gunman's would tie them.
 
+Business Operating Expenses (spell)
+  Aim:   White-collar crime priced in: prison as a line in the budget.
+  Hooks: Cushy federal prison camps; "the cost of doing business".
+  Twist: A friendly creature does its time (goes dark until the next Dawn) and you draw 2. Next to Business Expense
+         (the perks and the fine), this one is the cell, written off; its picture is the prison camp, not the arrest
+         (the user, 2026-10-15).
+
 Satoshi Nakamoto (creature)
   Aim:   Crypto's anonymous founder, and the crypto dream of getting rich doing nothing.
   Hooks: Nobody knows who he is; the untouched million coins; "number go up".
@@ -417,7 +424,7 @@ The Invisible Hand (creature)
 C-Suite (creature)
   Aim:   Trickle-down economics, and the top of the corporate hierarchy.
   Hooks: The champagne tower; "the savings will trickle down".
-  Twist: Trickle Down (trample): what its attack has left after the creature goes on to the player. What trickles down
+  Twist: Collateral Damage (trample): what its attack has left after the creature goes on to the player. What trickles down
          is the bill.
 
 STATECRAFT (26)

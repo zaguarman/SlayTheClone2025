@@ -169,7 +169,7 @@ namespace SlayTheClone {
             CreatureAbility.SafeSpace => "Each [Dawn], it and the friendly creatures beside it gain [Blessed|Bless]: a ward that stops the next status.",
             CreatureAbility.AllergicToLight => $"A drawback: each time it's [Revealed], or a [Reveal] shows it to the other side, it takes {Abilities.LightDamage} damage. Spies coming into the light; one day, vampires.",
             CreatureAbility.Brink => "At 2 Health or less (0 on [Borrowed Time] included), everything it deals is doubled. Utopia's accelerationism: however bad it gets, the breakthrough pays off.",
-            CreatureAbility.TrickleDown => "When its attack deals more than a creature's Health (after [Armor]), the rest goes on to that creature's player. The wealth at the top trickles down, as a bill.",
+            CreatureAbility.CollateralDamage => "When its attack deals more than a creature's Health (after [Armor]), the rest goes on to that creature's player: whoever stands behind it pays for the overflow.",
             CreatureAbility.FallGuy => "When an enemy effect would make another friendly creature [Revealed] or [Destroy|destroy] it, it lands on this one instead: it takes the fall.",
             _ => Capitalize(Abilities.ReminderOf(ability)) + "."
         };
