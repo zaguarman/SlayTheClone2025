@@ -129,6 +129,14 @@ namespace SlayTheClone {
         public bool directBranches = false;
         [Tooltip("Merged attacks, Direct Branches: the meeting point moved sideways, to the right of the target (minus: left) (gallery: Merging)")]
         [Range(-2f, 2f)] public float meetOffsetX = 0f;
+        [Tooltip("Merged attacks, Direct Branches: branches on the same side join each other first, like streams into a river (the outermost into its inner neighbour...), so overlapping ones show where each comes from (gallery: Merging, 'All five')")]
+        public bool joinBranches = true;
+        [Tooltip("Merged attacks, Join Branches: how far along its inner neighbour's way a branch joins it, as a share of that way (gallery: Merging, 'All five')")]
+        [Range(0.05f, 0.95f)] public float joinAt = 0.55f;
+        [Tooltip("Merged attacks, Direct Branches: how long a branch keeps heading straight for where it joins, as a share of the way (gallery: Merging)")]
+        [Range(0f, 1f)] public float joinLeave = 0.3f;
+        [Tooltip("Merged attacks, Direct Branches: how long it comes in along the way it joins (the trunk, or the branch it joins), as a share of the way: more is a smoother, wider turn (gallery: Merging)")]
+        [Range(0f, 1f)] public float joinArrive = 0.4f;
         [Tooltip("Merged attacks: the trunk widens this much for each arrow that joins, in band widths (gallery: Merging, 'All five' most)")]
         [Range(0f, 0.6f)] public float widthPerExtraBranch = 0.15f;
         [Tooltip("Merged attacks: ...up to this many band widths (gallery: Merging, 'All five')")]

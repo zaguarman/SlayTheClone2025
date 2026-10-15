@@ -396,9 +396,12 @@ namespace SlayTheClone {
                 : Mathf.Max(Mathf.Min(reach * TrunkShare, reach - widest / RouteSlope - 0.3f), headLength + 0.3f);
             Vector2 merge = tip - axis * trunkLength + (T.directBranches ? acrossAxis * T.meetOffsetX : Vector2.zero);
             float branchProgress = Mathf.Clamp01(drawnFraction / BranchShare);
-            foreach (var from in tails) {
-                var branch = T.directBranches ? Direct(from, merge, axis, trunkLength) : Route(from, merge + axis * 0.03f, axis);
-                AddBand(layers, Cut(branch, Length(branch) * branchProgress), width * TailWidth, width * BranchWidthAtMerge, 0f, BranchShare, notched: true);
+            if (T.directBranches) AddDirectBranches(layers, tails, merge, axis, acrossAxis, width, branchProgress);
+            else {
+                foreach (var from in tails) {
+                    var branch = Route(from, merge + axis * 0.03f, axis);
+                    AddBand(layers, Cut(branch, Length(branch) * branchProgress), width * TailWidth, width * BranchWidthAtMerge, 0f, BranchShare, notched: true);
+                }
             }
             float trunkProgress = Mathf.Clamp01((drawnFraction - BranchShare) / (1f - BranchShare));
             if (trunkProgress <= 0f) return;
@@ -570,12 +573,63 @@ namespace SlayTheClone {
             return Rounded(new List<Vector2> { from, bendIn, bendOut, to });
         }
 
-        // A branch straight from its creature to where the arrows meet, then turning (rounded) up the trunk: no stub, no
-        // fixed angle (Direct Branches)
-        private static List<Vector2> Direct(Vector2 from, Vector2 meet, Vector2 axis, float trunkLength) {
-            if (Vector2.Distance(from, meet) < 0.05f) return new List<Vector2> { from, meet + axis * 0.03f };
-            float onward = Mathf.Clamp(CornerRadius, 0.05f, trunkLength * 0.5f); // Up the trunk past the meeting point, for the turn
-            return Rounded(new List<Vector2> { from, meet, meet + axis * onward });
+        // Direct Branches: each branch curves from its creature into where the arrows meet, arriving along the trunk, so it
+        // flows into it with no corner (the user: no step at the meeting point). With Join Branches, branches on the same side
+        // join each other first, like streams into a river: the outermost into its inner neighbour, that one into the next,
+        // and the innermost into the trunk; each joins partway along the other's way (Join At), arriving along it, and from
+        // there the shared stretch carries them all, wider for each (Width Per Extra Branch), so every arrow's way shows
+        private void AddDirectBranches(Layers layers, List<Vector2> tails, Vector2 merge, Vector2 axis, Vector2 across, float width, float progress) {
+            float mergeWidth = width * BranchWidthAtMerge;
+            foreach (var side in tails.GroupBy(t => Vector2.Dot(t - merge, across) >= 0f)) {
+                // Nearest the meeting point first: each next one joins the one before it
+                var chain = side.OrderBy(t => Mathf.Abs(Vector2.Dot(t - merge, across))).ToList();
+                if (!T.joinBranches) {
+                    foreach (var from in chain) DrawPart(Join(from, merge, axis));
+                    continue;
+                }
+                var curves = new List<List<Vector2>>();
+                var joins = new List<int>(); // Where on its curve the next branch out joins it (a point index), or -1
+                for (int i = 0; i < chain.Count; i++) {
+                    Vector2 to = merge, along = axis;
+                    if (i > 0) {
+                        var host = curves[i - 1];
+                        var lengths = CumulativeLengths(host);
+                        float at = lengths[lengths.Count - 1] * T.joinAt;
+                        to = PointAt(host, lengths, at);
+                        along = (PointAt(host, lengths, Mathf.Min(at + 0.05f, lengths[lengths.Count - 1])) - PointAt(host, lengths, Mathf.Max(at - 0.05f, 0f))).normalized;
+                        for (int k = 1; k < host.Count; k++) {
+                            if (lengths[k] >= at) { joins[i - 1] = k; break; }
+                        }
+                    }
+                    curves.Add(Join(chain[i], to, along));
+                    joins.Add(-1);
+                }
+                // From the outermost in: each curve's own stretch, then the stretch it shares with the branches joined to it
+                for (int i = 0; i < chain.Count; i++) {
+                    var curve = Cut(curves[i], Length(curves[i]) * progress);
+                    int carried = chain.Count - i; // This branch and every one further out
+                    int split = joins[i];
+                    if (split < 0 || split >= curve.Count) {
+                        DrawPart(curve, i == 0 ? mergeWidth : width);
+                        continue;
+                    }
+                    DrawPart(curve.GetRange(0, split + 1), width);
+                    var shared = curve.GetRange(split, curve.Count - split);
+                    float sharedWidth = TrunkWidth(width, carried);
+                    AddBand(layers, shared, sharedWidth, i == 0 ? Mathf.Max(sharedWidth, mergeWidth) : sharedWidth, BranchShare * 0.5f, BranchShare, notched: false);
+                }
+            }
+
+            void DrawPart(List<Vector2> part, float endWidth = -1f) =>
+                AddBand(layers, part, width * TailWidth, endWidth > 0f ? endWidth : mergeWidth, 0f, BranchShare, notched: true);
+        }
+
+        // A curve from a creature into a point it reaches going along this direction: it sets off toward the point (Join
+        // Leave) and comes in along the direction (Join Arrive), so it flows into what's there without a corner
+        private static List<Vector2> Join(Vector2 from, Vector2 to, Vector2 along) {
+            float distance = Vector2.Distance(from, to);
+            if (distance < 0.05f) return new List<Vector2> { from, to };
+            return Sample(from, from + (to - from) * T.joinLeave, to - along * distance * T.joinArrive, to);
         }
 
         // The polyline with each corner replaced by a curve tangent to both sides
