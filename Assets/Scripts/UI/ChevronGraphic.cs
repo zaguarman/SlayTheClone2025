@@ -45,18 +45,16 @@ namespace SlayTheClone {
             var a = new Vector2(v.x + cardHalf.x + noseRoom * 1.6f, v.y + cardHalf.y + noseRoom);
             var b = new Vector2(right.x + cardHalf.x + tailRoom, right.y + cardHalf.y + tailRoom);
             var c = new Vector2(right.x + cardHalf.x + tailRoom, right.y - cardHalf.y - tailRoom);
-            // The tuck (the user): the trailing edge rises from each tip, under the Headquarters card with room, to a flat
-            // stretch parallel to the Vanguard's back edge, just behind the Flanks
+            // The tuck (the user): under each Headquarters card the trailing edge keeps the same room the Flanks get, then
+            // past its inner corner it rises to a flat stretch just behind the Flanks, parallel to the Vanguard's back edge
             Vector2 flank = Up(slots[2]);
-            float flat = flank.y - cardHalf.y - tailRoom * 0.5f;
-            var corner = new Vector2(right.x - cardHalf.x, right.y - cardHalf.y - tailRoom * 0.6f); // To pass under
-            float reach = corner.y > c.y + 0.5f
-                ? c.x - (flat - c.y) * (c.x - corner.x) / (corner.y - c.y) // The line from the tip under that corner, up to the flat
-                : cx + cardHalf.x;
-            var d = new Vector2(Mathf.Clamp(reach, cx + cardHalf.x * 0.5f, c.x - 1f), flat);
+            float gap = tailRoom * 0.5f;
+            float flat = flank.y - cardHalf.y - gap;
+            var k = new Vector2(right.x - cardHalf.x - gap, right.y - cardHalf.y - gap); // Clear of the Headquarters card's inner corner
+            var d = new Vector2(Mathf.Min(flank.x, k.x - 1f), flat);                      // The flat starts under the Flank's middle
             Vector2 Mirror(Vector2 p) => new Vector2(2f * cx - p.x, p.y);
             Vector2 Back(Vector2 p) => new Vector2(p.x, p.y * s);
-            return new List<Vector2> { Back(a), Back(b), Back(c), Back(d), Back(Mirror(d)), Back(Mirror(c)), Back(Mirror(b)), Back(Mirror(a)) };
+            return new List<Vector2> { Back(a), Back(b), Back(c), Back(k), Back(d), Back(Mirror(d)), Back(Mirror(k)), Back(Mirror(c)), Back(Mirror(b)), Back(Mirror(a)) };
         }
 
         protected override void OnPopulateMesh(VertexHelper vh) {
@@ -68,13 +66,15 @@ namespace SlayTheClone {
                 int start = vh.currentVertCount;
                 foreach (var point in outer) vh.AddVert(point, color, Vector2.zero);
                 int n = outer.Count;
-                if (n == 8) { // The wing: nose a-a2, tips b-c and b2-c2, the tuck d-d2 behind the Flanks
+                if (n == 10) { // The wing: nose a-a2, tips b-c, the room under Headquarters to k, the tuck d-d2 behind the Flanks
                     vh.AddTriangle(start, start + 1, start + 2);     // a, b, c
-                    vh.AddTriangle(start, start + 2, start + 3);     // a, c, d
-                    vh.AddTriangle(start, start + 3, start + 4);     // a, d, d2
-                    vh.AddTriangle(start, start + 4, start + 7);     // a, d2, a2
-                    vh.AddTriangle(start + 7, start + 4, start + 5); // a2, d2, c2
-                    vh.AddTriangle(start + 7, start + 5, start + 6); // a2, c2, b2
+                    vh.AddTriangle(start, start + 2, start + 3);     // a, c, k
+                    vh.AddTriangle(start, start + 3, start + 4);     // a, k, d
+                    vh.AddTriangle(start, start + 4, start + 5);     // a, d, d2
+                    vh.AddTriangle(start, start + 5, start + 9);     // a, d2, a2
+                    vh.AddTriangle(start + 9, start + 5, start + 6); // a2, d2, k2
+                    vh.AddTriangle(start + 9, start + 6, start + 7); // a2, k2, c2
+                    vh.AddTriangle(start + 9, start + 7, start + 8); // a2, c2, b2
                 }
                 else {
                     for (int i = 1; i < n - 1; i++) vh.AddTriangle(start, start + i, start + i + 1);
