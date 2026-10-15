@@ -24,6 +24,8 @@ namespace SlayTheClone {
         public int doomCost;
         /// <summary>Prophecy N (a spell): it comes true at the Dawn N Days after it's played.</summary>
         public int prophecy;
+        /// <summary>Prophecy N-M: when above <see cref="prophecy"/>, it comes true a random number of Days in that range (Margin Call).</summary>
+        public int prophecyLatest;
         /// <summary>Gamble (a spell): only one of its effects happens, picked at random when it resolves.</summary>
         public bool gamble;
 

@@ -151,6 +151,20 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(3, foe.Health, "...but at the Dawn two Days on");
             CollectionAssert.IsEmpty(p1.Prophecies);
 
+            // Prophecy 1-3 (Margin Call): it comes on a Dawn in that window, rolled in secret; the queue only tells the window
+            floodData.prophecy = 1;
+            floodData.prophecyLatest = 3;
+            StringAssert.Contains("Prophecy 1-3", Keywords.Plain(CardTextFormatter.GetRulesText(floodData)));
+            game.ActionsQueue.AddAction(new PlayCardAction(game.GiveCard(p1, floodData), p1, p2));
+            game.Resolve();
+            var due = p1.Prophecies.Single();
+            Assert.That(due.DueOnTurn, Is.InRange(due.EarliestTurn, due.LatestTurn));
+            Assert.AreEqual(2, due.LatestTurn - due.EarliestTurn, "A window of three Days");
+            string foretoldLine = string.Join("\n", QueueView.Lines(p1, game.ActionsQueue, game.ModifierManager));
+            StringAssert.Contains($"from Day {due.EarliestTurn} to Day {due.LatestTurn}", foretoldLine, "Everyone knows the window, not the Day");
+            for (int day = 0; day < 3 && p1.Prophecies.Count > 0; day++) game.StartTurn();
+            Assert.AreEqual(1, foe.Health, "It came within three Dawns");
+
             // Send For (Multipass, Omen Reading...): the card picked from the deck joins the next hand; scouting only looks at its top
             Fresh();
             game.SetDecks(new List<CardData> { game.Creature("Scout", 1, 1), game.Creature("Giant", 5, 5), game.Creature("Runt", 1, 1) }, game.Fillers(3));

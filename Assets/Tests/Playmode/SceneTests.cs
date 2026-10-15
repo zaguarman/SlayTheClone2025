@@ -23,11 +23,12 @@ namespace SlayTheClone.Tests {
 
         [UnitySetUp]
         public IEnumerator SetUp() {
+            game = new SceneGame();
+            yield return game.Load(Seed);
+            // Once this test's scene is up: switched before, the last test's scene, still there, would redraw its cards, made for that test and gone
             fogWasOn = FogOfWar.Enabled;
             FogOfWar.Enabled = true; // What the screen hides is part of what's tested
             FogOfWar.PlaysAsPlayer1 = true;
-            game = new SceneGame();
-            yield return game.Load(Seed);
             p1 = game.Player1;
             p2 = game.Player2;
         }

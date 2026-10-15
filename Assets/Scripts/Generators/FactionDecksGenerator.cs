@@ -260,8 +260,9 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnDeath, Damage(3, TargetType.Player))),
             Spell("Margin Call", TargetType.AllCreatures,
                 "Your position has been liquidated. Everyone's has. Have a nice day.",
-                "Future: Capital cost, discard your hand; each creature takes damage equal to the cards discarded.",
-                Damage(1, TargetType.AllCreatures, Each), Draw(2)),
+                "Prophecy 1-3 (the user, 2026-10-15): it comes in 1 to 3 Days, nobody knows which. Future: Capital cost, discard your hand; each creature takes damage equal to the cards discarded.",
+                Damage(1, TargetType.AllCreatures, Each), Draw(2))
+                .Foretold(1, 3),
             Spell("Hostile Takeover", TargetType.EnemyCreatures,
                 "We're not buying your company. We're buying its funeral.",
                 "Future: Capital cost, discard 2 cards. Placeholder cost: the enemy draws a card.",
@@ -1685,6 +1686,7 @@ namespace SlayTheClone {
             public bool IsGamble; // Only one of its effects happens, at random
             public int SacrificeCost; // Additional cost: its side's weakest creatures die when it resolves
             public int ProphecyDays; // A spell that comes true this many Days later
+            public int ProphecyLatest; // Or at random, up to this many
             public int DoomCost; // Additional cost: its side's weakest creature not yet Doomed is Doomed this many Days
 
             // Sacrifice N: an additional cost, its side's N weakest creatures
@@ -1699,9 +1701,10 @@ namespace SlayTheClone {
                 return this;
             }
 
-            // Prophecy N: the spell comes true at the Dawn N Days after it's played
-            public CardDef Foretold(int days) {
+            // Prophecy N: the spell comes true at the Dawn N Days after it's played; Prophecy N-M, a random number of Days between
+            public CardDef Foretold(int days, int latest = 0) {
                 ProphecyDays = days;
+                ProphecyLatest = latest;
                 return this;
             }
 
@@ -1943,6 +1946,7 @@ namespace SlayTheClone {
             asset.sacrifice = card.SacrificeCost;
             asset.doomCost = card.DoomCost;
             asset.prophecy = card.ProphecyDays;
+            asset.prophecyLatest = card.ProphecyLatest;
             asset.gamble = card.IsGamble;
             asset.SetEffects(card.Effects);
             switch (asset) {

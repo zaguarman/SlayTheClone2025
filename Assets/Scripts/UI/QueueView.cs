@@ -48,7 +48,9 @@ namespace SlayTheClone {
             var foretold = new[] { viewer, viewer?.Opponent }.Where(p => p != null).SelectMany(p => p.Prophecies).OrderBy(p => p.DueOnTurn).ToList();
             if (foretold.Count > 0) items.Add(new Item { Heading = "Foretold" });
             foreach (var prophecy in foretold) {
-                string text = $"{PlayerName(prophecy.Caster, viewer)} foretold {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: it comes true at the Dawn of Day {prophecy.DueOnTurn}";
+                string when = prophecy.EarliestTurn == prophecy.LatestTurn ? $"at the Dawn of Day {prophecy.DueOnTurn}"
+                    : $"at a Dawn from Day {prophecy.EarliestTurn} to Day {prophecy.LatestTurn}, nobody knows which"; // The roll stays secret
+                string text = $"{PlayerName(prophecy.Caster, viewer)} foretold {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: it comes true {when}";
                 items.Add(new Item { Text = text, Icon = EffectIcons.Days, Ours = prophecy.Caster == viewer, Details = text });
             }
             return items;

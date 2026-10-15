@@ -24,6 +24,7 @@ MonoBehaviour:
   sacrifice: 0
   doomCost: 0
   prophecy: 0
+  prophecyLatest: 0
   gamble: 1
   effects:
   - effectType: 1

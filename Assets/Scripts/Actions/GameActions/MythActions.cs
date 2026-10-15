@@ -289,15 +289,30 @@ namespace SlayTheClone {
         public IPlayer Caster { get; }
         public ITarget Target { get; }
         public int DueOnTurn { get; } // The Day whose Dawn fulfils it
+        // What everyone knows of when (Prophecy N-M, Margin Call): the first and last Day it can come; the same Day when it's sure
+        public int EarliestTurn { get; }
+        public int LatestTurn { get; }
 
-        public Prophecy(Spell spell, IPlayer caster, ITarget target, int dueOnTurn) {
+        public Prophecy(Spell spell, IPlayer caster, ITarget target, int dueOnTurn, int earliestTurn = 0, int latestTurn = 0) {
             Spell = spell;
             Caster = caster;
             Target = target;
             DueOnTurn = dueOnTurn;
+            EarliestTurn = earliestTurn > 0 ? earliestTurn : dueOnTurn;
+            LatestTurn = latestTurn > 0 ? latestTurn : dueOnTurn;
         }
 
         public static int DaysOf(ICard card) => card?.SourceData?.prophecy ?? 0;
+
+        /// <summary>The most Days it can take: above <see cref="DaysOf"/> when it comes at random (Prophecy N-M).</summary>
+        public static int LatestOf(ICard card) => System.Math.Max(DaysOf(card), card?.SourceData?.prophecyLatest ?? 0);
+
+        /// <summary>Foretold now (today is <paramref name="today"/>): when it comes true, rolled in secret if it comes at random.</summary>
+        public static Prophecy Foretell(Spell spell, IPlayer caster, ITarget target, int today) {
+            int earliest = DaysOf(spell), latest = LatestOf(spell);
+            int days = earliest + GameRandom.Next(latest - earliest + 1);
+            return new Prophecy(spell, caster, target, today + days, today + earliest, today + latest);
+        }
 
         /// <summary>At Dawn: the prophecies due today come true, after the creatures that went dark come back.</summary>
         public static void ProcessDawn(IEnumerable<IPlayer> players, int turn, IActionsQueue queue) {

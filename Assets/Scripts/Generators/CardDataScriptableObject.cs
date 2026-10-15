@@ -18,6 +18,7 @@ namespace SlayTheClone {
         [Min(0)] public int sacrifice; // Myth's cost: its side's weakest creatures die to play it
         [Min(0)] public int doomCost; // Doom N: its side's weakest creature not yet Doomed is Doomed N Days to play it
         [Min(0)] public int prophecy; // A spell that comes true this many Days later, at Dawn
+        [Min(0)] public int prophecyLatest; // Above prophecy: it comes true at random, between the two
         public bool gamble; // Only one of its effects happens, at random (Casino)
         [SerializeField] protected List<CardEffect> effects = new List<CardEffect>();
         [TextArea(2, 6)] public string designNotes; // Editor only: what the card should become once the GDD mechanics it stands in for exist
@@ -47,6 +48,7 @@ namespace SlayTheClone {
             data.sacrifice = sacrifice;
             data.doomCost = doomCost;
             data.prophecy = prophecy;
+            data.prophecyLatest = prophecyLatest;
             data.gamble = gamble;
             data.effects = CopyEffects();
         }

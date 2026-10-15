@@ -20,7 +20,7 @@ namespace SlayTheClone {
             // The spell queues its own game actions; a Prophecy waits for its Dawn
             int foretold = Prophecy.DaysOf(spell);
             if (foretold > 0) {
-                owner.Prophecies.Add(new Prophecy(spell, owner, spellAction.GetTarget(), context.TurnClock.TurnNumber + foretold));
+                owner.Prophecies.Add(Prophecy.Foretell(spell, owner, spellAction.GetTarget(), context.TurnClock.TurnNumber));
                 Log($"{owner.Name} foretells {spell.Name}: it comes true in {foretold} Day(s)", LogTag.Actions | LogTag.Cards);
             }
             else spell.Play(owner, actionsQueue, spellAction.GetTarget());

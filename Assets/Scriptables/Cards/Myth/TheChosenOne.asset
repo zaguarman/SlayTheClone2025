@@ -24,6 +24,7 @@ MonoBehaviour:
   sacrifice: 0
   doomCost: 0
   prophecy: 0
+  prophecyLatest: 0
   gamble: 0
   effects: []
   designNotes: 'Spray and Pray: its attacks also hit the creatures beside its target.
