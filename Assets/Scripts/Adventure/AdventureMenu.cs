@@ -24,6 +24,13 @@ namespace SlayTheClone {
         public const string AbandonButtonName = "AbandonButton";
         public const string RoomButton = "Room ";
         public const string SkipButtonName = "SkipButton";
+        public const string PackButton = "RewardPack ";
+        public const string ProceedButtonName = "ProceedButton";
+        public const string DeckButtonName = "DeckButton";
+        public const string PickBackButtonName = "PickBackButton";
+        private const int RewardColumns = 4; // The reward's cards at a readable size, not stretched over the width
+        private const int DeckColumns = 6; // The whole deck at a glance
+        private const float RewardsWidth = 760f; // The rewards list: a narrow scroll in the middle, as in Slay the Spire
         private const float RowSpacing = 96f, ColumnSpacing = 150f, MapMargin = 70f, SideWidth = 400f, CoinSize = 120f;
 
         /// <summary>Loads the game scene for a fight (the title screen's own way of starting a game).</summary>
@@ -39,9 +46,15 @@ namespace SlayTheClone {
         public IReadOnlyDictionary<MapNode, Button> Rooms => rooms;
         /// <summary>What the last room did, or how the run ended.</summary>
         public string Status => status != null ? status.text : null;
-        /// <summary>The cards offered after a fight won, while the choice is open.</summary>
+        /// <summary>The cards of the pack open on screen; empty when none is.</summary>
         public IReadOnlyList<CardController> RewardCards => reward != null ? reward.Cards : new List<CardController>();
-        private CardGrid reward;
+        /// <summary>The deck shown on screen (View Deck); empty when it isn't.</summary>
+        public IReadOnlyList<CardController> DeckCards => deckGrid != null ? deckGrid.Cards : new List<CardController>();
+        /// <summary>The pack open on screen, if any.</summary>
+        public AdventureRun.RewardPack OpenPack { get; private set; }
+        /// <summary>Your deck is shown, over the rewards or the map.</summary>
+        public bool ViewingDeck { get; private set; }
+        private CardGrid reward, deckGrid;
 
         private readonly Dictionary<Faction, Button> factionButtons = new Dictionary<Faction, Button>();
         private readonly Dictionary<MapNode, Button> rooms = new Dictionary<MapNode, Button>();
@@ -52,7 +65,10 @@ namespace SlayTheClone {
         private string lastWalk; // What the last room walked through said, kept across the rebuild
         private bool abandonArmed;
 
-        protected override GameObject Build() => !AdventureRun.Active ? BuildFactions() : AdventureRun.RewardOffer.Count > 0 ? BuildReward() : BuildMap();
+        protected override GameObject Build() => !AdventureRun.Active ? BuildFactions()
+            : ViewingDeck ? BuildDeck()
+            : AdventureRun.InRewards ? (OpenPack != null ? BuildPick(OpenPack) : BuildRewards())
+            : BuildMap();
 
         protected override void Opened() {
             if (!AdventureRun.Active) {
@@ -70,7 +86,7 @@ namespace SlayTheClone {
             factionButtons.Clear();
             rooms.Clear();
             embark = null;
-            reward = null;
+            reward = deckGrid = null;
             chosenText = status = null;
             mapScroll = null;
             abandonArmed = false;
@@ -208,41 +224,101 @@ namespace SlayTheClone {
 
             var footer = AddFooter(screen.panel.transform);
             AddButton(footer, BackButtonName, "Back", BackWidth, Hide);
+            AddButton(footer, DeckButtonName, "View deck", 260, () => ShowDeck(true));
             bool over = AdventureRun.Won || AdventureRun.Lost;
             var abandon = AddButton(footer, AbandonButtonName, over ? "<b>New adventure</b>" : "Abandon run", 360, Abandon);
             if (over) UITheme.StyleButton(abandon, UITheme.ButtonKind.Primary);
             return screen.panel;
         }
 
-        // After a fight won, Slay the Spire style: three of its cards, big; click one to take it into your deck, or skip
-        private GameObject BuildReward() {
-            var screen = AddScreen(transform, "AdventurePanel", "Choose a card");
-            reward = new CardGrid(screen.columns, Catalog.CardPrefab, AdventureDecks.RewardChoices);
+        #region Rewards (Slay the Spire's)
+        // After a fight won: the packs it dropped, each opened as often as you like until you take a card or skip it; your
+        // deck one click away; Proceed goes on to the map
+        private GameObject BuildRewards() {
             string from = AdventureRun.EnemyDeck != null ? AdventureRun.EnemyDeck.GetDeckName() : "the deck you beat";
-            reward.Title.text = $"From {from}: take one into your deck ({CardGrid.Count(AdventureRun.Deck.Cards)})";
-            reward.Title.enableAutoSizing = true;
-            reward.Title.fontSizeMin = 20;
-            reward.Show(AdventureRun.RewardOffer, (face, asset) => face.OnCardClicked.AddListener(_ => TakeReward(asset)));
+            var screen = AddScreen(transform, "AdventurePanel", "Rewards");
+            var column = AddColumn(screen.columns, $"Beaten: {from}");
+            var columnSize = column.gameObject.AddComponent<LayoutElement>();
+            columnSize.preferredWidth = RewardsWidth;
+            columnSize.flexibleWidth = 0;
+            if (screen.columns.GetComponent<HorizontalLayoutGroup>() is HorizontalLayoutGroup row) row.childAlignment = TextAnchor.UpperCenter;
+            for (int i = 0; i < AdventureRun.Rewards.Count; i++) {
+                var pack = AdventureRun.Rewards[i];
+                if (pack.Cards.Count == 0) continue;
+                string label = pack.Taken != null ? $"<s>Add a card to your deck</s>  <color=#C9C0AE>{pack.Taken.cardName} taken</color>"
+                    : pack.Done ? "<s>Add a card to your deck</s>  <color=#C9C0AE>skipped</color>"
+                    : "<b>Add a card to your deck</b>";
+                var button = AddButton(column, PackButton + i, label, -1, () => OpenRewardPack(pack));
+                button.interactable = !pack.Done;
+            }
+            AddText(column, $"Your deck: {CardGrid.Count(AdventureRun.Deck.Cards)}", 22, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 40);
 
             var footer = AddFooter(screen.panel.transform);
-            var skip = AddButton(footer, SkipButtonName, "Skip", 360, SkipReward);
+            AddButton(footer, DeckButtonName, "View deck", 260, () => ShowDeck(true));
+            var proceed = AddButton(footer, ProceedButtonName, "<b>Proceed</b>", 360, ProceedFromRewards);
+            UITheme.StyleButton(proceed, UITheme.ButtonKind.Primary);
+            return screen.panel;
+        }
+
+        // A pack open: its cards at a readable size; click one to take it, Skip to leave them, Back to decide later
+        private GameObject BuildPick(AdventureRun.RewardPack pack) {
+            var screen = AddScreen(transform, "AdventurePanel", "Choose a card");
+            reward = new CardGrid(screen.columns, Catalog.CardPrefab, RewardColumns);
+            reward.Title.text = "Take one into your deck, or skip them";
+            reward.Show(pack.Cards, (face, asset) => face.OnCardClicked.AddListener(_ => TakeReward(asset)));
+
+            var footer = AddFooter(screen.panel.transform);
+            AddButton(footer, PickBackButtonName, "Back", BackWidth, () => OpenRewardPack(null));
+            AddButton(footer, DeckButtonName, "View deck", 260, () => ShowDeck(true));
+            var skip = AddButton(footer, SkipButtonName, "Skip", 300, SkipReward);
             UITheme.StyleButton(skip, UITheme.ButtonKind.Primary);
             return screen.panel;
         }
 
-        /// <summary>Takes the card into your deck and goes on to the map.</summary>
-        public void TakeReward(CardDataScriptableObject card) {
-            if (!AdventureRun.TakeReward(card)) return;
-            lastWalk = $"{card.cardName} joins your deck.";
+        // Your deck, Slay the Spire style: every card, a few to a row; Back returns where you were
+        private GameObject BuildDeck() {
+            var screen = AddScreen(transform, "AdventurePanel", "Your deck");
+            deckGrid = new CardGrid(screen.columns, Catalog.CardPrefab, DeckColumns);
+            deckGrid.Title.text = CardGrid.Count(AdventureRun.Deck.Cards);
+            deckGrid.Show(AdventureRun.Deck.Cards.OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.cardName));
+            var footer = AddFooter(screen.panel.transform);
+            AddButton(footer, BackButtonName, "Back", BackWidth, () => ShowDeck(false));
+            return screen.panel;
+        }
+
+        /// <summary>Opens a pack to choose from (null: back to the rewards). It can be opened again until a card is taken or it's skipped.</summary>
+        public void OpenRewardPack(AdventureRun.RewardPack pack) {
+            OpenPack = pack != null && !pack.Done ? pack : null;
             Show();
         }
 
-        /// <summary>Takes none of the cards and goes on to the map.</summary>
-        public void SkipReward() {
-            AdventureRun.SkipReward();
-            lastWalk = "You leave their cards behind.";
+        /// <summary>Shows your deck, or goes back from it.</summary>
+        public void ShowDeck(bool show) {
+            ViewingDeck = show;
             Show();
         }
+
+        /// <summary>Takes the card from the open pack into your deck, back to the rewards.</summary>
+        public void TakeReward(CardDataScriptableObject card) {
+            if (!AdventureRun.TakeReward(OpenPack, card)) return;
+            lastWalk = $"{card.cardName} joins your deck.";
+            OpenRewardPack(null);
+        }
+
+        /// <summary>Leaves the open pack's cards, back to the rewards.</summary>
+        public void SkipReward() {
+            AdventureRun.SkipReward(OpenPack);
+            OpenRewardPack(null);
+        }
+
+        /// <summary>On to the map; packs not opened are left behind.</summary>
+        public void ProceedFromRewards() {
+            AdventureRun.Proceed();
+            OpenPack = null;
+            if (lastWalk == null || !lastWalk.EndsWith("joins your deck.")) lastWalk = "You leave their cards behind.";
+            Show();
+        }
+        #endregion
 
         private string StatusText() {
             if (AdventureRun.Won) return "<b>The boss is beaten.</b> Your adventure is won!";
@@ -261,6 +337,8 @@ namespace SlayTheClone {
             }
             AdventureRun.Clear();
             lastWalk = null;
+            OpenPack = null;
+            ViewingDeck = false;
             Show();
         }
 

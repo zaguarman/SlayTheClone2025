@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static SlayTheClone.Enums;
 
@@ -7,9 +8,19 @@ namespace SlayTheClone {
     /// The adventure under way: the faction and deck you chose, the map, the rooms you've walked through and the one you're
     /// in. It lives across scenes: a fight loads the game scene, and winning it brings you back to the map, a room further.
     /// Losing one ends the run. For now there's one act and no Ascension: the boss at the top is the end.
-    /// Each fight won offers three cards of the deck beaten: take one into your deck, or skip (Slay the Spire's reward).
+    /// Each fight won drops card packs (an elite two), each three cards of the deck beaten: open one, take a card into your
+    /// deck or skip it, as often as you like, then proceed (Slay the Spire's rewards).
     /// </summary>
     public static class AdventureRun {
+        /// <summary>A card pack dropped by a fight: three cards to take one of, or none.</summary>
+        public class RewardPack {
+            public List<CardDataScriptableObject> Cards { get; } = new List<CardDataScriptableObject>();
+            /// <summary>The card taken from it; null while undecided or skipped.</summary>
+            public CardDataScriptableObject Taken { get; internal set; }
+            /// <summary>A card was taken, or it was skipped: the pack is used up.</summary>
+            public bool Done { get; internal set; }
+        }
+
         public static bool Active { get; private set; }
         public static Faction Faction { get; private set; }
         public static DeckScriptableObject Deck { get; private set; }
@@ -26,8 +37,10 @@ namespace SlayTheClone {
         public static bool Lost { get; private set; }
         /// <summary>The deck of the fight under way, or of the last one fought.</summary>
         public static DeckScriptableObject EnemyDeck { get; private set; }
-        /// <summary>The cards offered after the fight just won, to take one of or skip; empty when there's no choice to make.</summary>
-        public static List<CardDataScriptableObject> RewardOffer { get; } = new List<CardDataScriptableObject>();
+        /// <summary>The packs dropped by the fight just won, until you proceed to the map; empty outside the rewards.</summary>
+        public static List<RewardPack> Rewards { get; } = new List<RewardPack>();
+        /// <summary>The fight is won and its rewards are up: the map waits until you proceed.</summary>
+        public static bool InRewards => Rewards.Count > 0;
 
         public static void Start(Faction faction, DeckScriptableObject deck, int seed) {
             Clear();
@@ -39,7 +52,7 @@ namespace SlayTheClone {
 
         /// <summary>The rooms you can walk into next: the bottom row at first, then the rooms your room's paths lead to.</summary>
         public static IReadOnlyList<MapNode> Reachable() {
-            if (!Active || Won || Lost || Fighting != null || RewardOffer.Count > 0) return new List<MapNode>();
+            if (!Active || Won || Lost || Fighting != null || InRewards) return new List<MapNode>();
             return Current == null ? new List<MapNode>(Map.Row(0)) : Current.Next;
         }
 
@@ -71,20 +84,37 @@ namespace SlayTheClone {
                 Won = true;
                 return;
             }
-            RewardOffer.Clear();
-            RewardOffer.AddRange(AdventureDecks.Reward(EnemyDeck, new System.Random(Map.Seed * 17 + room.Row * 5 + room.Column)));
+            Rewards.Clear();
+            var random = new System.Random(Map.Seed * 17 + room.Row * 5 + room.Column);
+            int packs = room.Type == RoomType.Elite ? 2 : 1; // An elite drops a second pack
+            var offered = new HashSet<CardDataScriptableObject>();
+            for (int i = 0; i < packs; i++) {
+                var pack = new RewardPack();
+                // A second pack shows other cards of the deck, when there are enough
+                var fresh = AdventureDecks.Reward(EnemyDeck, random).Where(c => !offered.Contains(c)).ToList();
+                pack.Cards.AddRange(fresh.Count > 0 ? fresh : AdventureDecks.Reward(EnemyDeck, random));
+                foreach (var card in pack.Cards) offered.Add(card);
+                if (pack.Cards.Count > 0) Rewards.Add(pack);
+            }
+            if (Rewards.Count == 0) Rewards.Add(new RewardPack { Done = true }); // Nothing to offer: still the rewards screen, to proceed
         }
 
-        /// <summary>Takes one of the cards offered into your deck (unless it has 40 already); the offer is over.</summary>
-        public static bool TakeReward(CardDataScriptableObject card) {
-            if (card == null || !RewardOffer.Contains(card)) return false;
-            if (Deck.Cards.Count < PlayerDecks.MaxDeckSize) Deck = DeckScriptableObject.Make(Deck.GetDeckName(), System.Linq.Enumerable.Append(Deck.Cards, card));
-            RewardOffer.Clear();
+        /// <summary>Takes one of the pack's cards into your deck (unless it has 40 already); the pack is used up.</summary>
+        public static bool TakeReward(RewardPack pack, CardDataScriptableObject card) {
+            if (pack == null || pack.Done || card == null || !pack.Cards.Contains(card)) return false;
+            if (Deck.Cards.Count < PlayerDecks.MaxDeckSize) Deck = DeckScriptableObject.Make(Deck.GetDeckName(), Deck.Cards.Append(card));
+            pack.Taken = card;
+            pack.Done = true;
             return true;
         }
 
-        /// <summary>Takes none of the cards offered.</summary>
-        public static void SkipReward() => RewardOffer.Clear();
+        /// <summary>Takes none of the pack's cards: it's used up.</summary>
+        public static void SkipReward(RewardPack pack) {
+            if (pack != null) pack.Done = true;
+        }
+
+        /// <summary>Leaves the rewards for the map; packs not opened are left behind.</summary>
+        public static void Proceed() => Rewards.Clear();
 
         public static void LoseFight() {
             if (Fighting == null) return;
@@ -106,7 +136,7 @@ namespace SlayTheClone {
             Active = Won = Lost = false;
             Faction = Faction.None;
             Deck = EnemyDeck = null;
-            RewardOffer.Clear();
+            Rewards.Clear();
             Map = null;
             Current = Fighting = null;
             Path.Clear();

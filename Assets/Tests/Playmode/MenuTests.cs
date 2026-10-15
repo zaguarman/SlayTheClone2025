@@ -208,13 +208,23 @@ namespace SlayTheClone.Tests {
             AdventureRun.WinFight(); // As the game's end does, before the title screen opens the map again
             adventure.Show();
             Assert.AreSame(first, AdventureRun.Current, "Won, you're in its room...");
-            Assert.AreEqual(Mathf.Min(3, beaten.Cards.Distinct().Count()), adventure.RewardCards.Count, "...and three of their cards are offered");
-            Assert.IsEmpty(AdventureRun.Reachable(), "No walking on before choosing");
+            Assert.AreEqual(1, AdventureRun.Rewards.Count, "...and it drops a card pack (Slay the Spire's rewards)");
+            Assert.IsEmpty(AdventureRun.Reachable(), "No walking on before proceeding");
+            Click(GalleryButton(adventure, AdventureMenu.DeckButtonName));
+            Assert.AreEqual(AdventureDecks.StarterSize, adventure.DeckCards.Count, "Your deck is a click away");
+            Click(GalleryButton(adventure, AdventureMenu.BackButtonName));
+            Click(GalleryButton(adventure, AdventureMenu.PackButton + 0));
+            Assert.AreEqual(Mathf.Min(3, beaten.Cards.Distinct().Count()), adventure.RewardCards.Count, "Opened, the pack shows three of their cards...");
+            Click(GalleryButton(adventure, AdventureMenu.PickBackButtonName));
+            Assert.IsEmpty(adventure.RewardCards, "...it can be closed to think...");
+            Click(GalleryButton(adventure, AdventureMenu.PackButton + 0));
             var taken = adventure.RewardCards[0].GetBaseCardData().cardName;
             ClickCard(adventure.RewardCards[0]);
-            Assert.AreEqual(AdventureDecks.StarterSize + 1, AdventureRun.Deck.Cards.Count, "Clicking one takes it into your deck...");
+            Assert.AreEqual(AdventureDecks.StarterSize + 1, AdventureRun.Deck.Cards.Count, "...and opened again: clicking one takes it into your deck...");
             Assert.IsTrue(AdventureRun.Deck.Cards.Any(c => c.cardName == taken) && beaten.Cards.Any(c => c.cardName == taken), "...a card of the deck you beat");
-            Assert.IsEmpty(AdventureRun.RewardOffer, "...and the map is back");
+            Assert.IsFalse(GalleryButton(adventure, AdventureMenu.PackButton + 0).interactable, "The pack is used up");
+            Click(GalleryButton(adventure, AdventureMenu.ProceedButtonName));
+            Assert.IsFalse(AdventureRun.InRewards, "Proceed: on to the map");
             var walk = first.Next.FirstOrDefault(n => !n.IsCombat);
             if (walk != null) {
                 Click(adventure.Rooms[walk]);

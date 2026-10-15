@@ -60,6 +60,8 @@ From the first game (likely still the basis):
     - The first fights: Tier C/D cards, and clumsy on top: some bloated (30 to 40 cards, a little of everything, nothing
       to build momentum on), the mix of creatures and spells off (a quarter, or nine tenths, creatures).
     - Further up: better tiers, about 3 creatures to 2 spells, the best cards in several copies, 18 to 22 cards.
-• After a fight won (not the boss): three different cards of the deck you beat, shown big; click one to take it into
-  your deck, or Skip. Your deck grows up to 40 cards.
+• After a fight won (not the boss), Slay the Spire's rewards screen: a card pack ("Add a card to your deck"; an elite drops
+  two, with different cards). Open one to see three cards of the deck you beat; click one to take it, Skip to leave them,
+  or Back to think and open it again later. View deck shows your whole deck, from the rewards and from the map. Proceed
+  goes on to the map; packs not opened are left behind. Your deck grows up to 40 cards.
 • Decks everywhere: at most 40 cards, copies no longer limited.
