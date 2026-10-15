@@ -7,83 +7,130 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
-    /// Screenshots of the battle arrows from every slot to every slot, one side aiming (the other side is the mirror), to
-    /// judge the <see cref="ArrowTuning"/> sliders: UI > Arrow Gallery while the game plays. It fills both rows with plain
-    /// creatures and plans attacks from the bottom row: each attacker slot at each target slot, several at one target (the
-    /// neck where they merge), and Spray and Pray's fork from each slot to each. Every shot is labelled; each set is also
-    /// put together into one sheet. Saved in ArrowGallery/ at the project root (not in the project's files).
+    /// The battle arrows from every slot to every slot, one side aiming (the other side is the mirror), shown one after the
+    /// other to judge the <see cref="ArrowTuning"/> sliders: UI > Arrow Gallery while the game plays. It fills both rows with
+    /// plain creatures; each set shows one kind of arrow (see <see cref="Set"/>), and the window sets how long each shot
+    /// stays, pauses on one while the sliders move, and steps back and forth. It loops until stopped. It can also save every
+    /// shot, labelled, with a sheet per set, in ArrowGallery/ at the project root (not in the project's files).
     /// It changes the game it runs on: use a game you don't mind losing.
     /// </summary>
     public class ArrowGallery : MonoBehaviour {
-        private static readonly string[] SlotNames = { "Vanguard", "Left Flank", "Right Flank", "Left HQ", "Right HQ" };
+        /// <summary>What each set shows, and so which sliders it tests (each slider's tooltip says its sets).</summary>
+        public enum Set {
+            Singles, // One attack, each attacker slot at each target slot: attack width, bow, lane; the head, tail and edges
+            Merging, // Several attacks on one target: the neck (trunk width, merge, trunk length), routed branches (angle, corners)
+            Spray,   // Spray and Pray's fork, each slot at each slot: fork point, prongs
+            Damage,  // A damage arrow, each slot at each slot (a hit landing, planned damage): damage width and bow
+            Moves,   // A move, each slot to each other slot of its own row: move width and bow
+            Drag     // The arrow that follows the pointer, dragged from each slot onto each target: drag width and bow
+        }
+
+        public static readonly string[] SlotNames = { "Vanguard", "Left Flank", "Right Flank", "Left HQ", "Right HQ" };
         private const float SettleSeconds = 0.6f; // The old arrows fade out, the new ones draw in
-        private const float Scale = 0.5f;          // Of the screen, for each shot: a sheet of 25 stays a reasonable size
+        private const float PictureScale = 0.5f;   // Of the screen, for each saved shot: a sheet of 25 stays a reasonable size
+
+        // Set from the window before it starts; how long each shot stays can change while it runs
+        public static float SecondsPerShot = 2f;
+        public static bool SavePictures;
+        public static readonly HashSet<Set> Chosen = new HashSet<Set>((Set[])System.Enum.GetValues(typeof(Set)));
 
         public static string Folder => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "ArrowGallery"));
-        public static bool Running { get; private set; }
+        public static ArrowGallery Instance { get; private set; }
+        public static bool Running => Instance != null;
+
+        public bool Paused { get; set; }
+        public int Index { get; private set; }
+        public int Count => shots.Count;
+        public string Current => Index < shots.Count ? $"{shots[Index].Set}: {shots[Index].Name}" : "Setting up...";
+
+        private class Shot {
+            public Set Set;
+            public string Name;
+            public System.Action Show;
+        }
 
         private GameManager game;
+        private GameReferences references;
         private TMPro.TextMeshProUGUI label;
         private readonly List<ICreature> attackers = new List<ICreature>();
+        private readonly List<Shot> shots = new List<Shot>();
+        private readonly List<ArrowIndicator> drawn = new List<ArrowIndicator>(); // Arrows the gallery draws itself
+        private int jump; // Previous / Next pressed
 
         public static void Run() {
             if (Running || !Application.isPlaying) return;
             new GameObject("ArrowGallery").AddComponent<ArrowGallery>();
         }
 
-        private IEnumerator Start() {
-            Running = true;
-            try {
-                game = FindFirstObjectByType<GameManager>();
-                if (game == null || game.Player1 == null) {
-                    Debug.LogWarning("Arrow Gallery: start a game first (Play in the game scene)");
-                    yield break;
-                }
-                MatchSetup.AI = AISeats.None; // Nobody plans anything else meanwhile
-                Directory.CreateDirectory(Folder);
-                Setup();
-                yield return new WaitForSecondsRealtime(1f); // The summons pop in
+        public static void Stop() {
+            if (Instance != null) Destroy(Instance.gameObject);
+        }
 
-                var singles = new List<(string, Texture2D)>();
-                for (int a = 0; a < 5; a++) {
-                    for (int t = 0; t < 5; t++) {
-                        yield return Shot(singles, $"{SlotNames[a]} -> {SlotNames[t]}", (a, t));
-                    }
-                }
-                Sheet("1 Singles", singles, 5);
+        /// <summary>Goes this many shots on (back when negative), now.</summary>
+        public void Jump(int by) => jump += by;
 
-                var merging = new List<(string, Texture2D)>();
-                var groups = new (string name, int[] from)[] {
-                    ("All five", new[] { 0, 1, 2, 3, 4 }), ("Both flanks", new[] { 1, 2 }), ("Both HQ", new[] { 3, 4 }),
-                    ("Left side", new[] { 1, 3 }), ("Vanguard + Right HQ", new[] { 0, 4 })
-                };
-                foreach (var (name, from) in groups) {
-                    for (int t = 0; t < 5; t++) {
-                        yield return Shot(merging, $"{name} -> {SlotNames[t]}", from.Select(a => (a, t)).ToArray());
-                    }
-                }
-                Sheet("2 Merging", merging, 5);
+        private void Awake() => Instance = this;
 
-                var sprays = new List<(string, Texture2D)>();
-                foreach (var attacker in attackers) attacker.Ability = CreatureAbility.SprayAndPray;
-                for (int a = 0; a < 5; a++) {
-                    for (int t = 0; t < 5; t++) {
-                        yield return Shot(sprays, $"Spray: {SlotNames[a]} -> {SlotNames[t]}", (a, t));
-                    }
-                }
-                foreach (var attacker in attackers) attacker.Ability = CreatureAbility.None;
-                Sheet("3 Spray and Pray", sprays, 5);
+        private void OnDestroy() {
+            if (Instance == this) Instance = null;
+            ClearDrawn();
+            if (label != null) Destroy(label.gameObject);
+            if (game != null) {
                 CancelAll();
-                Debug.Log($"Arrow Gallery: saved in {Folder}");
-            }
-            finally {
-                Running = false;
-                if (label != null) Destroy(label.gameObject);
-                Destroy(gameObject);
+                foreach (var attacker in attackers) attacker.Ability = CreatureAbility.None;
             }
         }
 
-        // Plain creatures in every slot, both sides, and nothing else planned
+        private IEnumerator Start() {
+            game = FindFirstObjectByType<GameManager>();
+            references = FindFirstObjectByType<GameReferences>();
+            if (game == null || game.Player1 == null || references == null) {
+                Debug.LogWarning("Arrow Gallery: start a game first (Play in the game scene)");
+                Destroy(gameObject);
+                yield break;
+            }
+            MatchSetup.AI = AISeats.None; // Nobody plans anything else meanwhile
+            Setup();
+            BuildShots();
+            yield return new WaitForSecondsRealtime(1f); // The summons pop in
+            if (shots.Count == 0) {
+                Debug.LogWarning("Arrow Gallery: no set chosen");
+                Destroy(gameObject);
+                yield break;
+            }
+
+            var saved = new Dictionary<int, Texture2D>();
+            var sheetsWritten = new HashSet<Set>();
+            if (SavePictures) Directory.CreateDirectory(Folder);
+            Index = 0;
+            while (true) {
+                var shot = shots[Index];
+                ShowShot(shot);
+                yield return new WaitForSecondsRealtime(SettleSeconds);
+                if (SavePictures && !saved.ContainsKey(Index)) {
+                    yield return new WaitForEndOfFrame();
+                    var picture = Capture();
+                    File.WriteAllBytes(Path.Combine(Folder, Safe($"{shot.Set} - {shot.Name}") + ".png"), picture.EncodeToPNG());
+                    saved[Index] = picture;
+                    var ofSet = Enumerable.Range(0, shots.Count).Where(i => shots[i].Set == shot.Set).ToList();
+                    if (!sheetsWritten.Contains(shot.Set) && ofSet.All(saved.ContainsKey)) {
+                        Sheet(shot.Set.ToString(), ofSet.Select(i => saved[i]).ToList(), 5);
+                        sheetsWritten.Add(shot.Set);
+                        Debug.Log($"Arrow Gallery: the {shot.Set} sheet is in {Folder}");
+                    }
+                }
+                float shown = SettleSeconds;
+                while ((Paused || shown < SecondsPerShot) && jump == 0) {
+                    shown += Time.unscaledDeltaTime;
+                    yield return null;
+                }
+                int next = Index + (jump != 0 ? jump : 1);
+                jump = 0;
+                Index = ((next % shots.Count) + shots.Count) % shots.Count; // It loops
+            }
+        }
+
+        // Plain creatures in every slot, both sides, nothing else planned, and the label in the top left corner
         private void Setup() {
             foreach (var play in game.ActionsQueue.GetPendingActions().OfType<PlayCardAction>().ToList()) game.ActionsQueue.CancelPlay(play.GetCard());
             for (int i = 0; i < 5; i++) {
@@ -92,7 +139,7 @@ namespace SlayTheClone {
             }
             CancelAll();
 
-            var board = FindFirstObjectByType<BattlefieldUI>();
+            var board = Board(game.Player1);
             var canvas = board.GetComponentInParent<Canvas>().rootCanvas;
             label = UITheme.NewText("GalleryLabel", canvas.transform, "", 40f, UITheme.Gold, TMPro.TextAlignmentOptions.TopLeft);
             label.transform.localScale = Vector3.one * (board.transform.lossyScale.x / canvas.transform.lossyScale.x); // The table's size of text
@@ -106,9 +153,80 @@ namespace SlayTheClone {
             rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
             rect.sizeDelta = new Vector2(1400f, 80f);
             var cam = Camera.main;
-            rect.position = cam.ViewportToWorldPoint(new Vector3(0.02f, 0.97f, cam.nearClipPlane));
-            rect.position = new Vector3(rect.position.x, rect.position.y, canvas.transform.position.z);
+            var corner = cam.ViewportToWorldPoint(new Vector3(0.02f, 0.97f, cam.nearClipPlane));
+            rect.position = new Vector3(corner.x, corner.y, canvas.transform.position.z);
         }
+
+        private void BuildShots() {
+            var pairs = from a in Enumerable.Range(0, 5) from t in Enumerable.Range(0, 5) select (a, t);
+            if (Chosen.Contains(Set.Singles)) {
+                foreach (var (a, t) in pairs) Add(Set.Singles, $"{SlotNames[a]} -> {SlotNames[t]}", () => Attack(a, t));
+            }
+            if (Chosen.Contains(Set.Merging)) {
+                var groups = new (string name, int[] from)[] {
+                    ("All five", new[] { 0, 1, 2, 3, 4 }), ("Both flanks", new[] { 1, 2 }), ("Both HQ", new[] { 3, 4 }),
+                    ("Left side", new[] { 1, 3 }), ("Vanguard + Right HQ", new[] { 0, 4 })
+                };
+                foreach (var (name, from) in groups) {
+                    for (int t = 0; t < 5; t++) {
+                        int target = t;
+                        Add(Set.Merging, $"{name} -> {SlotNames[t]}", () => { foreach (int a in from) Attack(a, target); });
+                    }
+                }
+            }
+            if (Chosen.Contains(Set.Spray)) {
+                foreach (var (a, t) in pairs) Add(Set.Spray, $"{SlotNames[a]} -> {SlotNames[t]}", () => {
+                    attackers[a].Ability = CreatureAbility.SprayAndPray;
+                    Attack(a, t);
+                });
+            }
+            if (Chosen.Contains(Set.Damage)) {
+                foreach (var (a, t) in pairs) Add(Set.Damage, $"{SlotNames[a]} -> {SlotNames[t]}",
+                    () => Draw(game.Player1.Battlefield[a], game.Player2.Battlefield[t], ArrowIndicator.Style.Damage, BattlefieldArrowManager.OurDamageColor));
+            }
+            if (Chosen.Contains(Set.Moves)) {
+                foreach (var (a, t) in pairs.Where(p => p.a != p.t)) Add(Set.Moves, $"{SlotNames[a]} -> {SlotNames[t]}",
+                    () => Draw(game.Player1.Battlefield[a], game.Player1.Battlefield[t], ArrowIndicator.Style.Move, BattlefieldArrowManager.MoveColor));
+            }
+            if (Chosen.Contains(Set.Drag)) {
+                foreach (var (a, t) in pairs) Add(Set.Drag, $"{SlotNames[a]} onto {SlotNames[t]}",
+                    () => Draw(game.Player1.Battlefield[a], game.Player2.Battlefield[t], ArrowIndicator.Style.Drag, BattlefieldArrowManager.OurAttackColor));
+            }
+        }
+
+        private void Add(Set set, string name, System.Action show) => shots.Add(new Shot { Set = set, Name = name, Show = show });
+
+        private void ShowShot(Shot shot) {
+            CancelAll();
+            ClearDrawn();
+            foreach (var attacker in attackers) attacker.Ability = CreatureAbility.None;
+            label.text = $"{shot.Set}: {shot.Name}";
+            shot.Show();
+        }
+
+        private void Attack(int from, int to) => game.CombatHandler.HandleCreatureCombat(attackers[from], game.Player2.Battlefield[to]);
+
+        // An arrow the game draws only at certain moments (a hit landing, a move, a drag), drawn here between two slots
+        private void Draw(BoardSlot from, BoardSlot to, ArrowIndicator.Style style, Color color) {
+            var fromView = Board(from.Owner).FindSlotView(from);
+            var toView = Board(to.Owner).FindSlotView(to);
+            if (fromView == null || toView == null) return;
+            var arrow = ArrowIndicator.Create(Board(game.Player1).transform);
+            arrow.SetStyle(style);
+            arrow.SetColor(color);
+            arrow.Show(fromView.transform.position, toView.transform.position, drawIn: true);
+            drawn.Add(arrow);
+        }
+
+        private void ClearDrawn() {
+            foreach (var arrow in drawn) {
+                if (arrow != null) arrow.FadeOutAndDestroy();
+            }
+            drawn.Clear();
+        }
+
+        private BattlefieldUI Board(IPlayer side) =>
+            side == game.Player1 ? references.Player1References.BattlefieldUI : references.Player2References.BattlefieldUI;
 
         private ICreature Summon(Player side, int slot, string name) {
             var data = ScriptableObject.CreateInstance<CreatureData>();
@@ -131,21 +249,9 @@ namespace SlayTheClone {
             }
         }
 
-        // Plans these attacks (attacker slot, target slot) alone, waits for the arrows, and takes the picture
-        private IEnumerator Shot(List<(string, Texture2D)> into, string name, params (int from, int to)[] attacks) {
-            CancelAll();
-            foreach (var (from, to) in attacks) game.CombatHandler.HandleCreatureCombat(attackers[from], game.Player2.Battlefield[to]);
-            label.text = name;
-            yield return new WaitForSecondsRealtime(SettleSeconds);
-            yield return new WaitForEndOfFrame();
-            var picture = Capture();
-            File.WriteAllBytes(Path.Combine(Folder, Safe(name) + ".png"), picture.EncodeToPNG());
-            into.Add((name, picture));
-        }
-
         private static Texture2D Capture() {
             var cam = Camera.main;
-            int width = Mathf.RoundToInt(Screen.width * Scale), height = Mathf.RoundToInt(Screen.height * Scale);
+            int width = Mathf.RoundToInt(Screen.width * PictureScale), height = Mathf.RoundToInt(Screen.height * PictureScale);
             var target = RenderTexture.GetTemporary(width, height, 24);
             var previous = cam.targetTexture;
             cam.targetTexture = target;
@@ -162,35 +268,103 @@ namespace SlayTheClone {
         }
 
         // The shots of a set side by side, in reading order, a thin dark gap between them
-        private static void Sheet(string name, List<(string name, Texture2D picture)> shots, int columns) {
-            if (shots.Count == 0) return;
+        private static void Sheet(string name, List<Texture2D> pictures, int columns) {
+            if (pictures.Count == 0) return;
             const int gap = 6;
-            int w = shots[0].picture.width, h = shots[0].picture.height;
-            int rows = Mathf.CeilToInt(shots.Count / (float)columns);
+            int w = pictures[0].width, h = pictures[0].height;
+            int rows = Mathf.CeilToInt(pictures.Count / (float)columns);
             var sheet = new Texture2D(columns * (w + gap) + gap, rows * (h + gap) + gap, TextureFormat.RGB24, false);
-            var fill = Enumerable.Repeat(new Color32(12, 14, 22, 255), sheet.width * sheet.height).ToArray();
-            sheet.SetPixels32(fill);
-            for (int i = 0; i < shots.Count; i++) {
-                int column = i % columns, row = i / columns;
-                int x = gap + column * (w + gap);
-                int y = sheet.height - (row + 1) * (h + gap); // Textures count rows from the bottom
-                sheet.SetPixels(x, y, w, h, shots[i].picture.GetPixels());
+            sheet.SetPixels32(Enumerable.Repeat(new Color32(12, 14, 22, 255), sheet.width * sheet.height).ToArray());
+            for (int i = 0; i < pictures.Count; i++) {
+                int x = gap + (i % columns) * (w + gap);
+                int y = sheet.height - (i / columns + 1) * (h + gap); // Textures count rows from the bottom
+                sheet.SetPixels(x, y, w, h, pictures[i].GetPixels());
             }
             sheet.Apply();
             File.WriteAllBytes(Path.Combine(Folder, $"Sheet - {name}.png"), sheet.EncodeToPNG());
         }
 
         private static string Safe(string name) => string.Concat(name.Select(c => Path.GetInvalidFileNameChars().Contains(c) || c == '>' ? '_' : c));
+    }
 
 #if UNITY_EDITOR
-        [UnityEditor.MenuItem("UI/Arrow Gallery (while playing)")]
-        private static void RunFromMenu() {
+    /// <summary>The gallery's controls (UI > Arrow Gallery): which sets, how long each shot stays, pause, back, next.</summary>
+    public class ArrowGalleryWindow : UnityEditor.EditorWindow {
+        private const string Prefs = "SlayTheClone.ArrowGallery.";
+
+        [UnityEditor.MenuItem("UI/Arrow Gallery")]
+        private static void Open() {
+            var window = GetWindow<ArrowGalleryWindow>("Arrow Gallery");
+            window.minSize = new Vector2(320f, 300f);
+        }
+
+        private void OnEnable() {
+            ArrowGallery.SecondsPerShot = UnityEditor.EditorPrefs.GetFloat(Prefs + "Seconds", 2f);
+            ArrowGallery.SavePictures = UnityEditor.EditorPrefs.GetBool(Prefs + "Save", false);
+            foreach (ArrowGallery.Set set in System.Enum.GetValues(typeof(ArrowGallery.Set))) {
+                if (UnityEditor.EditorPrefs.GetBool(Prefs + set, true)) ArrowGallery.Chosen.Add(set);
+                else ArrowGallery.Chosen.Remove(set);
+            }
+        }
+
+        private void OnInspectorUpdate() {
+            if (Application.isPlaying) Repaint();
+        }
+
+        private void OnGUI() {
+            var gallery = ArrowGallery.Instance;
+            UnityEditor.EditorGUILayout.LabelField("Each shot", UnityEditor.EditorStyles.boldLabel);
+            float seconds = UnityEditor.EditorGUILayout.Slider("Seconds on screen", ArrowGallery.SecondsPerShot, 0.8f, 15f);
+            if (!Mathf.Approximately(seconds, ArrowGallery.SecondsPerShot)) {
+                ArrowGallery.SecondsPerShot = seconds;
+                UnityEditor.EditorPrefs.SetFloat(Prefs + "Seconds", seconds);
+            }
+
+            UnityEditor.EditorGUILayout.Space();
+            UnityEditor.EditorGUILayout.LabelField("Sets (chosen before it starts)", UnityEditor.EditorStyles.boldLabel);
+            using (new UnityEditor.EditorGUI.DisabledScope(gallery != null)) {
+                foreach (ArrowGallery.Set set in System.Enum.GetValues(typeof(ArrowGallery.Set))) {
+                    bool on = UnityEditor.EditorGUILayout.ToggleLeft($"{set}: {Tests(set)}", ArrowGallery.Chosen.Contains(set));
+                    if (on == ArrowGallery.Chosen.Contains(set)) continue;
+                    if (on) ArrowGallery.Chosen.Add(set);
+                    else ArrowGallery.Chosen.Remove(set);
+                    UnityEditor.EditorPrefs.SetBool(Prefs + set, on);
+                }
+                bool save = UnityEditor.EditorGUILayout.ToggleLeft("Save every shot and a sheet per set (in ArrowGallery/)", ArrowGallery.SavePictures);
+                if (save != ArrowGallery.SavePictures) {
+                    ArrowGallery.SavePictures = save;
+                    UnityEditor.EditorPrefs.SetBool(Prefs + "Save", save);
+                }
+            }
+
+            UnityEditor.EditorGUILayout.Space();
             if (!Application.isPlaying) {
-                Debug.LogWarning("Arrow Gallery: press Play first, in the game scene");
+                UnityEditor.EditorGUILayout.HelpBox("Press Play in the game scene, then Start. It fills the board with test creatures: use a game you don't mind losing.", UnityEditor.MessageType.Info);
                 return;
             }
-            Run();
+            if (gallery == null) {
+                if (GUILayout.Button("Start", GUILayout.Height(28f))) ArrowGallery.Run();
+                return;
+            }
+            UnityEditor.EditorGUILayout.LabelField($"{gallery.Index + 1} / {gallery.Count}", gallery.Current);
+            using (new UnityEditor.EditorGUILayout.HorizontalScope()) {
+                if (GUILayout.Button("< Back")) gallery.Jump(-1);
+                if (GUILayout.Button(gallery.Paused ? "Resume" : "Pause")) gallery.Paused = !gallery.Paused;
+                if (GUILayout.Button("Next >")) gallery.Jump(1);
+            }
+            if (GUILayout.Button("Stop")) ArrowGallery.Stop();
+            UnityEditor.EditorGUILayout.HelpBox("Pause on a shot, then move the sliders in UI > Arrow Tuning: the arrows redraw as they change.", UnityEditor.MessageType.None);
         }
-#endif
+
+        private static string Tests(ArrowGallery.Set set) => set switch {
+            ArrowGallery.Set.Singles => "attack width, bow, lane",
+            ArrowGallery.Set.Merging => "neck, routed branches",
+            ArrowGallery.Set.Spray => "fork and prongs",
+            ArrowGallery.Set.Damage => "damage width, bow",
+            ArrowGallery.Set.Moves => "move width, bow",
+            ArrowGallery.Set.Drag => "drag width, bow",
+            _ => ""
+        };
     }
+#endif
 }

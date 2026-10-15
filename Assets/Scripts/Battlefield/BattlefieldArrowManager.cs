@@ -20,14 +20,14 @@ namespace SlayTheClone {
         public enum DragIntent { None, Attack, Move }
 
         // The screen's player's attacks are blue, the other side's red; damage a lighter shade of the same
-        private static readonly Color OurAttackColor = new Color(0.25f, 0.55f, 1f);
-        private static readonly Color OurDamageColor = new Color(0.45f, 0.8f, 1f);
+        internal static readonly Color OurAttackColor = new Color(0.25f, 0.55f, 1f);
+        internal static readonly Color OurDamageColor = new Color(0.45f, 0.8f, 1f);
         private static readonly Color TheirAttackColor = new Color(0.93f, 0.22f, 0.2f);
         private static readonly Color TheirDamageColor = new Color(1f, 0.55f, 0.15f);
-        private static readonly Color MoveColor = new Color(0.3f, 0.85f, 0.45f);
+        internal static readonly Color MoveColor = new Color(0.3f, 0.85f, 0.45f);
         private static readonly Color MovedColor = new Color(0.62f, 0.8f, 0.66f); // A creature pushed or swapped by another's move
         private static readonly Color SpellColor = new Color(0.62f, 0.45f, 1f);
-        private static readonly Color NeutralColor = new Color(0.75f, 0.75f, 0.8f);
+        internal static readonly Color NeutralColor = new Color(0.75f, 0.75f, 0.8f);
 
         private readonly Transform parentTransform;
         private readonly IGameMediator gameMediator;

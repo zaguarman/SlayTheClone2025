@@ -16,7 +16,7 @@ namespace SlayTheClone {
     public class ArrowIndicator : MonoBehaviour {
         /// <summary>How an arrow sits between its ends, in world units. Its numbers come from <see cref="ArrowTuning"/>, by kind.</summary>
         public struct Style {
-            public enum Kind { Attack, Damage, Spell, Move, Drag }
+            public enum Kind { Attack, Damage, Move, Drag }
             public Kind Of;
             private bool toEdge, centered;
             public float Width;      // The band's width where it meets the head (a trunk merging several is wider)
@@ -29,7 +29,6 @@ namespace SlayTheClone {
             // Cards are 1.6 x 1.96 units, and the rows 1.26 apart
             public static Style Attack => From(Kind.Attack);
             public static Style Damage => From(Kind.Damage);
-            public static Style Spell => From(Kind.Spell); // Starts at its card's edge
             public static Style Move => From(Kind.Move);
             public static Style Drag => From(Kind.Drag);
 
@@ -37,7 +36,6 @@ namespace SlayTheClone {
                 var t = ArrowTuning.Current;
                 switch (kind) {
                     case Kind.Damage: return new Style { Of = kind, Width = t.damageWidth, Lane = 0f, Bow = t.damageBow, MaxBow = 0.35f * t.maxBowScale, StartInset = 0.8f, EndInset = 0.99f };
-                    case Kind.Spell: return new Style { Of = kind, Width = t.spellWidth, Lane = 0.5f, Bow = t.spellBow, MaxBow = 0.5f * t.maxBowScale, StartInset = 0f, EndInset = 0.99f };
                     case Kind.Move: return new Style { Of = kind, Width = t.moveWidth, Lane = 0f, Bow = t.moveBow, MaxBow = 0.42f * t.maxBowScale, StartInset = 0.3f, EndInset = 0.42f };
                     case Kind.Drag: return new Style { Of = kind, Width = t.dragWidth, Lane = 0f, Bow = t.dragBow, MaxBow = 0.4f * t.maxBowScale, StartInset = 0.3f, EndInset = 0f };
                     default: return new Style { Of = kind, Width = t.attackWidth, Lane = t.attackLane, Bow = t.attackBow, MaxBow = 0.35f * t.maxBowScale, StartInset = 0.8f, EndInset = 0.99f };

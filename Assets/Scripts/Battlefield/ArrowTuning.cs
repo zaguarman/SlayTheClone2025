@@ -10,68 +10,78 @@ namespace SlayTheClone {
     public class ArrowTuning : ScriptableObject {
         public const string ResourcePath = "ArrowTuning";
 
+        // Each tooltip says which arrows it changes and which Arrow Gallery set shows it (UI > Arrow Gallery)
+
         [Header("Band widths, where the band meets the head")]
+        [Tooltip("Attack arrows: planned attacks, lone, merged and forked (gallery: Singles, Merging, Spray)")]
         [Range(0.04f, 0.5f)] public float attackWidth = 0.2f;
+        [Tooltip("Damage arrows: a hit as it lands while the Day plays out, and other planned damage (gallery: Damage)")]
         [Range(0.04f, 0.5f)] public float damageWidth = 0.16f;
-        [Range(0.04f, 0.5f)] public float spellWidth = 0.17f;
+        [Tooltip("Move arrows: planned moves, and the creatures they push or swap (gallery: Moves)")]
         [Range(0.04f, 0.5f)] public float moveWidth = 0.14f;
+        [Tooltip("The arrow that follows the pointer while you drag a creature (gallery: Drag)")]
         [Range(0.04f, 0.5f)] public float dragWidth = 0.18f;
-        [Tooltip("The band at its tail, as a share of its width")]
+        [Tooltip("Every arrow: the band at its tail, as a share of its width (gallery: any set)")]
         [Range(0.2f, 1.2f)] public float tailWidth = 0.7f;
-        [Tooltip("The bright line round the band")]
+        [Tooltip("Every arrow: the bright line round the band (gallery: any set)")]
         [Range(0f, 0.08f)] public float rimWidth = 0.022f;
-        [Tooltip("The thin dark line outside it")]
+        [Tooltip("Every arrow: the thin dark line outside it (gallery: any set)")]
         [Range(0f, 0.12f)] public float outlineWidth = 0.045f;
 
         [Header("Curvature: how far a lone arrow bows to its right, as a share of its length")]
+        [Tooltip("A lone attack, not merged nor forked (gallery: Singles)")]
         [Range(0f, 0.4f)] public float attackBow = 0.08f;
+        [Tooltip("Damage arrows (gallery: Damage)")]
         [Range(0f, 0.4f)] public float damageBow = 0.08f;
-        [Range(0f, 0.4f)] public float spellBow = 0.1f;
+        [Tooltip("Move arrows (gallery: Moves)")]
         [Range(0f, 0.4f)] public float moveBow = 0.2f;
+        [Tooltip("The drag arrow (gallery: Drag)")]
         [Range(0f, 0.4f)] public float dragBow = 0.1f;
-        [Tooltip("Scales every arrow's cap on how far it can bow")]
+        [Tooltip("Every lone arrow: scales the cap on how far it can bow; it shows on the long ones (gallery: Singles, Damage, Moves, Drag)")]
         [Range(0f, 3f)] public float maxBowScale = 1f;
-        [Tooltip("Attacks keep this far to the right of where they go, so opposite ones pass side by side")]
+        [Tooltip("Attacks, lone and merged, keep this far to the right of where they go, so opposite ones pass side by side; forks don't (gallery: Singles, Merging)")]
         [Range(0f, 0.6f)] public float attackLane = 0.22f;
 
         [Header("Sharpest curves: arrows routed into a shared one, like PCB tracks")]
-        [Tooltip("The diagonal's angle from straight ahead (45: a true diagonal; more: flatter, sharper turns)")]
+        [Tooltip("Merged attacks: the branches' diagonal, its angle from straight ahead (45: a true diagonal; more: flatter, sharper turns) (gallery: Merging)")]
         [Range(15f, 80f)] public float routeAngle = 45f;
-        [Tooltip("How much each corner is rounded off")]
+        [Tooltip("Merged attacks: how much each branch corner is rounded off (gallery: Merging)")]
         [Range(0.05f, 1.2f)] public float cornerRadius = 0.45f;
-        [Tooltip("Round a tight bend the band is never wider than this share of its radius")]
+        [Tooltip("Every arrow, round its tightest bends: the band is never wider than this share of the bend's radius; it shows on merged branches (gallery: Merging)")]
         [Range(0.3f, 1f)] public float bendRoom = 0.9f;
 
         [Header("Fork (Spray and Pray): where the trunk splits into prongs")]
-        [Tooltip("As a share of the way to the nearest target")]
+        [Tooltip("Forked attacks: where the trunk splits, as a share of the way to the nearest target (gallery: Spray)")]
         [Range(0.1f, 0.8f)] public float forkAt = 0.35f;
-        [Tooltip("The prongs' width, of the trunk's")]
+        [Tooltip("Forked attacks: the prongs' width, of the trunk's (gallery: Spray)")]
         [Range(0.3f, 1.2f)] public float prongWidth = 0.7f;
-        [Tooltip("How long a prong keeps going straight ahead before it bends (share of its rise)")]
+        [Tooltip("Forked attacks: how long a prong keeps going straight ahead before it bends (share of its rise) (gallery: Spray)")]
         [Range(0f, 1f)] public float prongLeave = 0.45f;
-        [Tooltip("How straight it comes into its target (share of its rise)")]
+        [Tooltip("Forked attacks: how straight a prong comes into its target (share of its rise) (gallery: Spray)")]
         [Range(0f, 1f)] public float prongArrive = 0.3f;
 
-        [Header("Head")]
-        [Tooltip("Its length, in band widths")]
+        [Header("Head (every arrow)")]
+        [Tooltip("Every arrow: the head's length, in band widths (gallery: any set)")]
         [Range(0.8f, 4f)] public float headLength = 1.9f;
-        [Tooltip("Its half width, in band widths")]
+        [Tooltip("Every arrow: the head's half width, in band widths (gallery: any set)")]
         [Range(0.6f, 3f)] public float headHalfWidth = 1.35f;
+        [Tooltip("Every arrow: the longest a head gets, in world units (shows on wide bands: Merging's trunks, or a raised width)")]
         [Range(0.2f, 1.2f)] public float maxHeadLength = 0.62f;
+        [Tooltip("Every arrow: the widest a head gets, in world units (shows on wide bands: Merging's trunks, or a raised width)")]
         [Range(0.15f, 1f)] public float maxHeadHalfWidth = 0.46f;
-        [Tooltip("How far back the barbs reach, in head lengths")]
+        [Tooltip("Every arrow: how far back the barbs reach, in head lengths (gallery: any set)")]
         [Range(0f, 0.8f)] public float barbSweep = 0.28f;
-        [Tooltip("The swallowtail's depth at the tail, in half widths")]
+        [Tooltip("Every arrow: the swallowtail's depth at the tail, in half widths (gallery: any set)")]
         [Range(0f, 2f)] public float notchDepth = 0.9f;
 
         [Header("Neck: where several arrows merge into one trunk")]
-        [Tooltip("The trunk widens this much for each arrow that joins (in band widths)")]
+        [Tooltip("Merged attacks: the trunk widens this much for each arrow that joins, in band widths (gallery: Merging, 'All five' most)")]
         [Range(0f, 0.6f)] public float widthPerExtraBranch = 0.15f;
-        [Tooltip("...up to this many band widths")]
+        [Tooltip("Merged attacks: ...up to this many band widths (gallery: Merging, 'All five')")]
         [Range(1f, 3f)] public float maxTrunkWidth = 1.35f;
-        [Tooltip("A branch's width as it flows into the trunk, of the band's")]
+        [Tooltip("Merged attacks: a branch's width as it flows into the trunk, of the band's (gallery: Merging)")]
         [Range(0.3f, 1.5f)] public float branchWidthAtMerge = 0.9f;
-        [Tooltip("The trunk's length, as a share of the way to the target")]
+        [Tooltip("Merged attacks: the trunk's length, as a share of the way to the target (gallery: Merging)")]
         [Range(0.15f, 0.9f)] public float trunkShare = 0.5f;
 
         private static ArrowTuning current;
