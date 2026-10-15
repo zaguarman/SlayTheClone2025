@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>
@@ -150,12 +151,42 @@ namespace SlayTheClone {
                 case BattlefieldCombatAction attack when IsOwn(attack.GetAttacker()) && attack.GetTargetSlot() != null:
                     AddBetweenSlots(wanted, $"attack_{attack.GetTargetSlot().TargetId}", attack.GetAttacker().Slot, attack.GetTargetSlot(),
                         AttackColor, ArrowIndicator.Style.Attack, attackNumbers.TryGetValue(attack, out int number) ? number.ToString() : null);
+                    // An attack that also hits beside its target (the user): thinner arrows to each creature it'll catch. Planned
+                    // only; playing out, each of those hits shows its own arrow as it lands
+                    if (!isResolving()) {
+                        foreach (var beside in SplashedBy(attack)) {
+                            AddBetweenSlots(wanted, $"splash_{attack.GetAttacker().TargetId}_{beside.TargetId}", attack.GetAttacker().Slot, beside,
+                                AttackColor, ArrowIndicator.Style.Splash);
+                        }
+                    }
                     break;
                 case DamageCreatureAction damage when IsOwn(damage.GetAttacker()) && damage.GetTarget()?.Slot != null:
                     AddBetweenSlots(wanted, $"damage_{damage.GetTarget().TargetId}", damage.GetAttacker().Slot, damage.GetTarget().Slot,
                         DamageColor, ArrowIndicator.Style.Damage);
                     break;
             }
+        }
+
+        /// <summary>
+        /// The other slots an attack will hit as it lands, as the board stands now: the creatures beside its target for Spray
+        /// and Pray (a step away in the formation), and those its attacker's on-hit damage spreads to (with its neighbours).
+        /// </summary>
+        public static List<BoardSlot> SplashedBy(BattlefieldCombatAction attack) {
+            var attacker = attack.GetAttacker();
+            var target = attack.GetTargetSlot();
+            var slots = new List<BoardSlot>();
+            if (attacker == null || target?.Owner == null) return slots;
+            var row = target.Owner.Battlefield;
+            if (Abilities.Has(attacker, CreatureAbility.SprayAndPray)) {
+                slots.AddRange(Formation.Neighbours(target.Index).Where(i => i >= 0 && i < row.Count && row[i].OccupyingCreature != null).Select(i => row[i]));
+            }
+            bool spreads = attacker.Effects.Any(e => e.trigger == EffectTrigger.OnDamage
+                && e.actions.Any(a => a.actionType == ActionType.Damage && a.targetModifier.HasFlag(TargetModifier.WithAdjacent)));
+            if (spreads && target.OccupyingCreature != null) {
+                slots.AddRange(TargetingSystem.GetAdditionalTargets(attacker.Owner, target.OccupyingCreature, TargetModifier.WithAdjacent)
+                    .OfType<ICreature>().Where(c => c.Slot != null).Select(c => c.Slot));
+            }
+            return slots.Where(s => s != target).Distinct().ToList();
         }
 
         private void AddBetweenSlots(Dictionary<string, ArrowPlan> wanted, string key, BoardSlot from, BoardSlot to, Color color, ArrowIndicator.Style style,

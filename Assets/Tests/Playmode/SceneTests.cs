@@ -157,6 +157,16 @@ namespace SlayTheClone.Tests {
             yield return null;
             StringAssert.Contains($"{Abilities.NameOf(CreatureAbility.Spite)}</color></b></link> (gained)", game.CardIn(p1.Battlefield[0]).RulesText.text);
 
+            // An attack that also hits beside its target (Spray and Pray) shows thinner arrows to the creatures it'll catch
+            game.Queue.AddAction(new GrantAbilityAction(brute, CreatureAbility.SprayAndPray));
+            game.Queue.ResolveActions();
+            foreach (int i in new[] { 0, 1, 2 }) game.Summon(p2, game.Cards.Creature($"Test Target {i}", 1, 9), i);
+            game.Attack(brute, p2.Battlefield[0]);
+            yield return null;
+            Assert.AreEqual(3, game.QueuedArrows(p1).Count, "One attack, and a side arrow to each neighbour of its target");
+            game.Queue.CancelDeclaredAction(brute.TargetId);
+            yield return null;
+
             // At 0 Health the combat is over: a screen says who won, and no more turns are played
             game.Queue.AddAction(new DamagePlayerAction(p2, p2.Health));
             game.Queue.ResolveActions();
