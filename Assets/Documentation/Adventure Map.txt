@@ -41,8 +41,11 @@ From the first game (likely still the basis):
 3. WHAT OURS DOES NOW (2026-10-15)
 
 • One act of 15 rows and the boss above them; no Ascension, no Ancient yet.
-• The paths, the fixed rows and the placement rules as above; counts: 5 elites, 3 shops, 6 rest sites, 10-14 unknown rooms;
-  whatever can't be placed by the rules is a fight.
+• The paths, the fixed rows and the placement rules as above; counts: 5 elites, 3 shops, 6 rest sites, 10-14 unknown rooms,
+  and fights for every other room, in one bag the size of the map (as Slay the Spire does); each room draws one at random
+  among those it may hold. Fixed 2026-10-15 (the user: rest sites didn't follow Slay the Spire): the bag held only the
+  special rooms and each room took the first allowed, so the first rows used them up, elites and rest sites piled onto
+  row 5 and the top of the map was all fights. Now they spread evenly over rows 5-13 (200 maps, no rule broken).
 • Fights, elites and the boss are matches against the AI (Easy for the fights of the first rows, then Medium; Hard for an
   elite, Very Hard for the boss). Winning one brings you back to the map a room further; losing one ends the run;
   beating the boss wins it.

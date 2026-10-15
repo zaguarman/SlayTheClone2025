@@ -31,8 +31,9 @@ namespace SlayTheClone {
     /// crossing another path; the rooms no path reaches aren't there. Then every room is given what it holds:
     /// • Fixed rows: the first is all fights, the one 7 rows from the end all treasure, the last all rest sites; the boss
     ///   waits above, reached from every room of the last row.
-    /// • The rest, from set counts, shuffled (Slay the Spire 2 counts rooms where the first game rolled percentages):
-    ///   5 elites, 3 shops, 6 rest sites, 10 to 14 unknown rooms; whatever doesn't fit is a fight.
+    /// • The rest, from set counts (Slay the Spire 2 counts rooms where the first game rolled percentages): 5 elites,
+    ///   3 shops, 6 rest sites, 10 to 14 unknown rooms, and fights for every other room, all in one shuffled bag the size
+    ///   of the map, so the special rooms spread over every row; each room draws one at random among those it may hold.
     /// • Placement: no elite or rest site in the first 5 rows; no rest site just before the last row (it's all rest sites);
     ///   an elite, shop or rest site never leads straight into another of its kind; and where a path forks, the branches
     ///   hold different kinds of room (fights aside), so every fork is a choice.
@@ -113,15 +114,21 @@ namespace SlayTheClone {
                 else if (node.Row == Rows - 1) node.Type = RoomType.Rest;
             }
 
-            var pool = Enumerable.Repeat(RoomType.Elite, Elites)
+            var open = Nodes.Where(n => n.Row != 0 && n.Row != TreasureRow && n.Row != Rows - 1).OrderBy(n => n.Row).ThenBy(n => n.Column).ToList();
+            // As Slay the Spire does: the bag holds a room for every open spot, the fights included, so the special rooms
+            // spread over the whole map instead of the first rows taking them all (the rest sites bunched after row 5)
+            var specials = Enumerable.Repeat(RoomType.Elite, Elites)
                 .Concat(Enumerable.Repeat(RoomType.Shop, Shops))
                 .Concat(Enumerable.Repeat(RoomType.Rest, RestSites))
-                .Concat(Enumerable.Repeat(RoomType.Unknown, random.Next(MinUnknown, MaxUnknown + 1)))
+                .Concat(Enumerable.Repeat(RoomType.Unknown, random.Next(MinUnknown, MaxUnknown + 1))).ToList();
+            var pool = specials.Concat(Enumerable.Repeat(RoomType.Fight, Math.Max(0, open.Count - specials.Count)))
                 .OrderBy(_ => random.Next()).ToList();
-            var open = Nodes.Where(n => n.Row != 0 && n.Row != TreasureRow && n.Row != Rows - 1).OrderBy(n => n.Row).ThenBy(n => n.Column).ToList();
             var assigned = new HashSet<MapNode>(Nodes.Where(n => !open.Contains(n)));
             foreach (var node in open) {
-                int pick = pool.FindIndex(type => Allowed(node, type, assigned));
+                // A random one of the rooms it may hold: taking the first allowed would leave what the early rows can't
+                // hold (elites, rest sites) at the front of the bag, all landing on the first row that can
+                var fits = Enumerable.Range(0, pool.Count).Where(i => Allowed(node, pool[i], assigned)).ToList();
+                int pick = fits.Count > 0 ? fits[random.Next(fits.Count)] : -1;
                 node.Type = pick >= 0 ? pool[pick] : RoomType.Fight;
                 if (pick >= 0) pool.RemoveAt(pick);
                 assigned.Add(node);
