@@ -22,6 +22,16 @@ STILL OPEN
            moving and pushing.
       Recommended: a), the Boss as "your strongest", since it's streamlined and already half built.
     • To decide: which hierarchy, and which loss-leveraging cards to make first.
+    • The formation (the user, 2026-10-15, after thinking it over): five slots a side in three rows, as in a real war. Ours
+      a Λ (the enemy's a V): 1 at the front, 2 in the middle, 2 at the back.
+        - Front (1): the defensive wall, takes the melee. Name to pick (Frontline is the user's working name).
+        - Flanks (2, the middle): the attackers, ranged positions. +1 Attack and +1 Speed while there.
+        - Headquarters (2, the back): the important people (presidents, CEOs, the Pope), hard to reach. Bonus: to decide.
+      Reach: distance = how deep each slot sits (front 0, Flanks 1, Headquarters 2), added, plus 1. Melee: 1 (front to front).
+      Ranged: 2-3. Artillery: exactly 4 (Flanks to their Headquarters). Attacking an empty slot hits the player.
+      Moving: one row forward or back, or along the same row; the back rows aren't blocked by the ones ahead.
+      The hierarchy (Chain of Command for Corporate and Myth, rank by slot) waits for the slot names: to discuss later.
+      Front slot bonus suggested: +1 Armor each Dawn (at most 2); Headquarters: none (being hard to reach is its guard).
 
 43. Speed ties: what the order numbers show, and who wins a tie (the user, 2026-10-15)
     • Now (GDD 3.7, ActionsQueue.CompareInLayer): in a layer, higher Speed first (Rush Hour: lower). At the same Speed, one
