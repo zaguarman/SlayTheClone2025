@@ -606,10 +606,10 @@ One for the Road (spell)
 
 Chain Smoker (creature)
   Aim:   Addiction and "I'll quit tomorrow".
-  Hooks: The smoker who has been quitting since 1998.
-  Twist: A pun: smoking a chain. Recoil: it hits harder and hurts itself each time.
-  Push:  The pun only works if the picture reads as a chain he smokes (the first generated take lost it). A vape in his
-         pocket, unused, would be a nice extra.
+  Hooks: "My grandfather smoked a pack a day his whole life and lived to 90", the survivor's excuse every smoker knows.
+  Twist: Chained to the habit, literally, and happy on the leash: a man chained by the neck to a red-and-white cigarette
+         pack (2026-10-15, the user). Recoil: it hits harder and hurts itself each time.
+  Push:  The pack should read as the classic red chevron one at a glance, without its brand name.
 
 Karen (creature) [px]
   Aim:   "I'd like to speak to the manager."

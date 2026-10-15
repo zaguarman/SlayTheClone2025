@@ -130,21 +130,24 @@ namespace SlayTheClone {
 
     /// <summary>
     /// Statuses move from one creature to another, with the Days they have left: Frame Job pins the harmful ones on the
-    /// creature facing its target; Devil's Breath takes the good ones of the creature facing its target.
+    /// creature facing its target; Devil's Breath takes the good ones of the creature facing its target. Reflect copies
+    /// them all, good and harmful, and the creature facing its target keeps its own.
     /// </summary>
     public class PassStatusesAction : IGameAction {
         public ICreature From { get; }
         public ICreature To { get; }
-        public bool Harmful { get; } // The harmful ones (what a Cleanse removes), or the good ones
+        public bool? Harmful { get; } // The harmful ones (what a Cleanse removes), the good ones, or (null) every one
+        public bool Copy { get; }     // A copy: they stay on the creature they came from too
 
-        public PassStatusesAction(ICreature from, ICreature to, bool harmful) {
+        public PassStatusesAction(ICreature from, ICreature to, bool? harmful, bool copy = false) {
             From = from;
             To = to;
             Harmful = harmful;
+            Copy = copy;
             Log($"Created {this}", LogTag.Actions | LogTag.Effects);
         }
 
-        public override string ToString() => $"PassStatusesAction: {From?.Name}'s {(Harmful ? "harmful" : "good")} statuses go to {To?.Name}";
+        public override string ToString() => $"PassStatusesAction: {From?.Name}'s {(Harmful == null ? "" : Harmful.Value ? "harmful " : "good ")}statuses {(Copy ? "are copied to" : "go to")} {To?.Name}";
     }
 
     // Each lands as if applied on its original Day, so it keeps the Days it had left; Blessed and Heat keep their stacks.
@@ -158,11 +161,11 @@ namespace SlayTheClone {
                 return;
             }
             var manager = context.ModifierManager;
-            foreach (var status in manager.GetActiveModifiersFor(from).OfType<StatusEffectModifier>().Where(s => s.IsNegative == pass.Harmful).ToList()) {
-                manager.RemoveModifier(from, status);
+            foreach (var status in manager.GetActiveModifiersFor(from).OfType<StatusEffectModifier>().Where(s => pass.Harmful == null || s.IsNegative == pass.Harmful).ToList()) {
+                if (!pass.Copy) manager.RemoveModifier(from, status);
                 int potency = status.IsPersistent ? status.Stacks : status.Potency;
                 StatusRules.Land(context, to, status.EffectType, status.DurationInTurns, potency, status.TurnApplied);
-                Log($"{status.EffectType} passes from {from.Name} to {to.Name}", LogTag.Effects);
+                Log($"{status.EffectType} {(pass.Copy ? "is copied" : "passes")} from {from.Name} to {to.Name}", LogTag.Effects);
             }
             context.GameMediator.NotifyCreatureStatsChanged(from);
             context.GameMediator.NotifyCreatureStatsChanged(to);

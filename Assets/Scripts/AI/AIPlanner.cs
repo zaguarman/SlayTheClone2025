@@ -711,6 +711,10 @@ namespace SlayTheClone {
                         _ => 2 * GoodStatuses.Count(facing.Has)
                     };
                 }
+                case ActionType.CopyStatuses: { // A copy of the facing creature's statuses: its good ones help, its harmful ones hurt
+                    var model = (creature.Ours ? view.TheirSlots : view.MySlots)[creature.Slot.Index].Creature;
+                    return model == null ? 0 : 2 * (GoodStatuses.Count(model.Has) - HarmfulStatuses.Count(model.Has));
+                }
                 case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility:
                     return IntendedFor(spell, creature.Ours ? view.Me : view.Them) ? 1 : -1; // Hard to weigh: done where the card means it
                 case ActionType.Armor or ActionType.Heal when Hard && creature.Ours:

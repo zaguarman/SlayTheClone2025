@@ -345,7 +345,7 @@ namespace SlayTheClone {
                 or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility
                 or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                 or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Resurrect
-                or ActionType.Consolidate;
+                or ActionType.Consolidate or ActionType.CopyStatuses;
 
         // A Watchdog aimed at a player watches that whole side; a Reveal aimed at one shows their Watchdog conditions
         private static bool IsSideWide(EffectAction action) =>
@@ -464,6 +464,10 @@ namespace SlayTheClone {
                 case ActionType.StealGoodStatuses: { // The target takes the good statuses of the creature facing it (Devil's Breath)
                     var (thief, victim) = Pair(source, creature);
                     return thief != null && victim != null ? new PassStatusesAction(victim, thief, harmful: false) : null;
+                }
+                case ActionType.CopyStatuses: { // The target copies every status of the creature facing it (Reflect)
+                    var (mirror, model) = Pair(source, creature);
+                    return mirror != null && model != null ? new PassStatusesAction(model, mirror, harmful: null, copy: true) : null;
                 }
                 case ActionType.GrantAbility:
                     return creature != null && action.ability != CreatureAbility.None ? new GrantAbilityAction(creature, action.ability) : null;

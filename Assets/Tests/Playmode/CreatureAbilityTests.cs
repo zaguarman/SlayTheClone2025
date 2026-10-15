@@ -469,6 +469,17 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(HasStatus(hitman, StatusEffectType.Blessed) && !HasStatus(patsy, StatusEffectType.Blessed), "...and its good statuses");
             Assert.IsTrue(HasStatus(patsy, StatusEffectType.Burned), "The bad ones stay");
 
+            // Reflect: the target copies every status of the creature facing it, good and harmful, and that one keeps them
+            var mirror = With(CreatureAbility.None, p1, 1);
+            var model = With(CreatureAbility.None, p2, 1);
+            game.Run(new ApplyStatusEffectAction(model, StatusEffectType.Concealed, 2, 0, controller: p2));
+            game.Run(new ApplyStatusEffectAction(model, StatusEffectType.Burned, 2, 1, controller: p1));
+            game.Play(game.GiveCard(p1, game.Spell("Reflect", TargetType.AllCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.CopyStatuses, 0, TargetType.AllCreatures))), p1, p1.Battlefield[1]);
+            game.Resolve();
+            Assert.IsTrue(HasStatus(mirror, StatusEffectType.Concealed) && HasStatus(mirror, StatusEffectType.Burned), "Reflect: both statuses copied...");
+            Assert.IsTrue(HasStatus(model, StatusEffectType.Concealed) && HasStatus(model, StatusEffectType.Burned), "...and kept by the one it copied");
+
             // The strongest takes from the rest: Laissez-Faire on the whole board (theirs is the strongest here), The
             // Invisible Hand on its own side. Each gives what it has, up to 1; Too Mainstream keeps its own
             Fresh();

@@ -330,6 +330,8 @@ namespace SlayTheClone {
                     return $"{target} passes its harmful statuses to the creature facing it";
                 case ActionType.StealGoodStatuses:
                     return $"{target} takes the good statuses of the creature facing it";
+                case ActionType.CopyStatuses:
+                    return $"{target} copies the statuses of the creature facing it";
                 case ActionType.SwapPositions:
                     return $"{target} trades places with the creature to its right";
                 case ActionType.GrantAbility:

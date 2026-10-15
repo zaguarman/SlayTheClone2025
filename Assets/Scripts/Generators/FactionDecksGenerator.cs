@@ -486,10 +486,10 @@ namespace SlayTheClone {
                 .NotInStarterDeck()
                 .Picture("A pub regular raising two pints at once under a CLOSING TIME sign, the barman already putting chairs on tables."),
             Creature("Chain Smoker", 4, 6, speed: 2, deploy: 1,
-                "Quitting tomorrow. Has said so since 1998.",
+                "My grandfather smoked a pack a day his whole life and lived to 90.",
                 "Recoil: +2 damage on its attacks, and it takes 1 damage after each one. A mood that burns it out.")
                 .With(CreatureAbility.Recoil)
-                .Picture("A wiry man smoking a length of steel chain like a cigarette, the far end swinging like a flail, a cloud of smoke around his head."),
+                .Picture("A man chained by the neck to a giant cigarette pack like a dog on a leash, and happy about it: grinning, a cigarette in his mouth, a cloud of smoke around his head. The pack is a classic red-and-white one (a red chevron lid over a white body, a small gold crest, \"FILTER CIGARETTES\" on the red band), no brand name."),
             Creature("Karen", 4, 5, speed: 1, deploy: 0,
                 "Would like to speak to your manager. And theirs. And God's.",
                 "Future: Impatient. Escalates every Day nobody gives it an intent.",
@@ -1310,6 +1310,12 @@ namespace SlayTheClone {
                 "Mind's scouting: send for any card among the top 3 of your deck; it joins your next hand.",
                 SendForCard(SendForFilter.Any, top: 3))
                 .Picture("A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases."),
+            Spell("Reflect", TargetType.AllCreatures,
+                "Mirror neurons: you yawn, I yawn. You panic, I panic.",
+                "Target creature copies every status of the creature facing it, good and harmful, with the Days they have left; that one keeps its own. Like Mimetic Theory, it works between the creature it's dropped on and the one facing it, so there's one target to pick (the user, 2026-10-15).",
+                Act(ActionType.CopyStatuses, 0, TargetType.AllCreatures, TargetModifier.None))
+                .NotInStarterDeck()
+                .Picture("A woman in front of a tall mirror, her reflection wearing a different man's bandages, halo and storm cloud: in the room he stands beside her with exactly those, and now she has them too."),
             Spell("Mimetic Theory", TargetType.AllCreatures,
                 "We want what they want. Then we become them.",
                 "Mechanics test: the stat copy as a spell. Target creature copies the Attack, Health and Speed of the creature facing it.",
