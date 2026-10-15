@@ -118,7 +118,8 @@ Zeitgeist: Moods of Modern Life
     • Weak Against: Myth (Blessed), Tech and Utopia (Cleanse).
 
 Mind: Perception & Paradox
-    • Theme: Psychology, cognitive biases, philosophy, paradoxes.
+    • Theme: Psychology, cognitive biases, philosophy, paradoxes. In the user's words (2026-10-15): driving you crazy,
+      illusions, fallacies, inner demons, psychologists, peace of mind, telekinesis.
     • Coin: Ψ (psyche) on a coin in its color.
     • Play Style: Wins without big stats by manipulating choices: forcing, inverting and faking them.
     • Signature Mechanics: Misleading Watchdogs (Mental Breakdown, Red Herring), forced behavior (Hypnosis, Paranoid), rule inversion (Temporal Distortion, Vice Versa: swap Attack and Health), fake intents shown to the enemy, Mandela Effect, Precognition (see future enemy intents).
