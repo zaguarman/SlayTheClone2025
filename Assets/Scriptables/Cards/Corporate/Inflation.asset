@@ -23,7 +23,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   doomCost: 0
-  prophecy: 0
+  prophecy: 2
   gamble: 0
   effects:
   - effectType: 1
@@ -89,7 +89,8 @@ MonoBehaviour:
       requires: 0
       decoy: {fileID: 0}
   designNotes: 'Everyone''s money is worth less, theirs more so: 2 damage to every
-    enemy creature and 1 to each of yours.'
+    enemy creature and 1 to each of yours. Prophecy 2 (the user, 2026-10-15): it
+    hits two Days later, as prices catch up.'
   artDescription: A chocolate bar in its old-size wrapper, the bar inside visibly
     half as big, and a supermarket price tag re-stickered three times, each price
     higher.

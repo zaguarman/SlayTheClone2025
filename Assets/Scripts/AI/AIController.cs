@@ -31,6 +31,7 @@ namespace SlayTheClone {
         public void Initialize(IGameManager gameManager, IGameMediator gameMediator) {
             game = gameManager ?? throw new System.ArgumentNullException(nameof(gameManager));
             mediator = gameMediator ?? throw new System.ArgumentNullException(nameof(gameMediator));
+            MatchSetup.DirectPlayDefaults(); // Play pressed straight in the game scene: a Medium AI opponent
             planner = MatchSetup.AIPlayer.Planner(game, System.Environment.TickCount);
             mediator.GameOver += OnGameOver;
             ShowHumanSeat();

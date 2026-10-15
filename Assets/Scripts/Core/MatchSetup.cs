@@ -30,16 +30,38 @@ namespace SlayTheClone {
 
         public static bool IsChosen => PlayerDeck != null && OpponentDeck != null;
 
+        /// <summary>
+        /// The match was set up on purpose (the menu chose one, or a test cleared it). False when Play is pressed straight in
+        /// the game scene: then the opponent is a Medium AI (see <see cref="DirectPlayDefaults"/>).
+        /// </summary>
+        public static bool Prepared { get; private set; }
+
+        /// <summary>Pressing Play straight in the game scene (the user): the opponent is played by a Medium AI.</summary>
+        public static void DirectPlayDefaults() {
+            if (IsChosen || Prepared) return;
+            AI = AISeats.Player2;
+            AILevel = AILevel.Medium;
+            AIStyle = AIStyle.Balanced;
+            Prepared = true;
+        }
+
         public static void Choose(DeckScriptableObject playerDeck, string opponentName, DeckScriptableObject opponentDeck, AISeats ai = AISeats.None) {
+            Prepared = true;
             PlayerDeck = playerDeck;
             AI = ai;
             OpponentDeck = opponentDeck;
             OpponentName = string.IsNullOrEmpty(opponentName) ? DefaultOpponentName : opponentName;
         }
 
-        // Also runs when play mode starts, so a match chosen in an earlier session never leaks into this one
+        // When play mode starts: a match chosen in an earlier session never leaks into this one, and nothing is prepared yet
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void OnPlayStart() {
+            Clear();
+            Prepared = false;
+        }
+
         public static void Clear() {
+            Prepared = true;
             PlayerDeck = null;
             OpponentDeck = null;
             OpponentName = null;

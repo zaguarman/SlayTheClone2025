@@ -318,8 +318,9 @@ namespace SlayTheClone {
                 .Picture("A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a towering stack of contracts between them stamped CONFIDENTIAL."),
             Spell("Inflation", TargetType.EnemyCreatures,
                 "Same price. Less creature.",
-                "Everyone's money is worth less, theirs more so: 2 damage to every enemy creature and 1 to each of yours.",
+                "Everyone's money is worth less, theirs more so: 2 damage to every enemy creature and 1 to each of yours. Prophecy 2 (the user, 2026-10-15): it hits two Days later, as prices catch up.",
                 Damage(2, TargetType.EnemyCreatures, Each), Damage(1, TargetType.FriendlyCreatures, Each))
+                .Foretold(2)
                 .Picture("A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher."),
             Spell("Escape Goat", TargetType.EnemyCreatures,
                 "It wasn't us. It was the goat. Everyone agrees it was the goat.",
