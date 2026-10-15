@@ -93,8 +93,9 @@ namespace SlayTheClone {
             var actions = new List<EffectAction>();
             foreach (var (effect, index) in effects) {
                 if (effect.oncePerCombat && owner != null) {
-                    // Once per combat: used up for this card, wherever it goes, until the combat ends
-                    string key = $"{card.CardId}#{index}";
+                    // Once per combat: used up for this copy of the card, wherever it goes, until the combat ends; each copy has
+                    // its own (the card's id is its definition's, the same for every copy: a second Living Dead never rose)
+                    string key = $"{card.CopyId}#{index}";
                     if (!owner.UsedOncePerCombat.Add(key)) {
                         Log($"{card.Name}: its once-per-combat {trigger} effect is used up", LogTag.Effects);
                         continue;

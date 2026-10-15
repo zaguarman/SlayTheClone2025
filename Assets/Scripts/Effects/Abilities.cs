@@ -46,7 +46,7 @@ namespace SlayTheClone {
             && !(creature.Ability == CreatureAbility.CreditGrab && (creature.Owner?.UsedOncePerCombat.Contains(OnceKey(creature)) ?? false));
 
         /// <summary>The key a once-per-combat ability is spent under, for this card, until the combat ends.</summary>
-        public static string OnceKey(ICreature creature) => $"{creature.CardId}#ability";
+        public static string OnceKey(ICreature creature) => $"{creature.CopyId}#ability"; // This copy's, not every copy's
 
         public static string NameOf(CreatureAbility ability) => ability switch {
             CreatureAbility.NoU => "No U",

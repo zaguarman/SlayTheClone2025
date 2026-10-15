@@ -152,7 +152,9 @@ namespace SlayTheClone {
             // Add cards from discard to deck and shuffle using IDeck methods. Reshuffling resets them for good:
             // Persistent Stat Modifications are removed here (GDD glossary)
             foreach (var card in discardPileCards) {
-                deck.AddCardToBottom(card.SourceData != null ? CardFactory.CreateCard(card.SourceData) : card);
+                var fresh = card.SourceData != null ? CardFactory.CreateCard(card.SourceData) : card;
+                if (fresh != null) fresh.CopyId = card.CopyId; // The same copy: what it spent once per combat stays spent
+                deck.AddCardToBottom(fresh);
             }
 
             // Clear the discard pile using IDeck method

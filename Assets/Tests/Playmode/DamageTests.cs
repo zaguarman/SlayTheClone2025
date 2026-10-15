@@ -56,6 +56,7 @@ namespace SlayTheClone.Tests {
             var rise = Effect(EffectTrigger.OnDeath, ActionType.Revive, 0, TargetType.Self);
             rise.oncePerCombat = true;
             var zombieData = game.Creature("Zombie", 2, 3, 1, rise);
+            zombieData.cardId = "Zombie"; // Like a real card: every copy shares its definition's id
             zombieData.turnsUntilOperative = 2;
             var zombie = game.Summon(p1, zombieData, 3);
             zombie.MakeOperative(); // Deployed: a creature still deploying has its effects off
@@ -79,6 +80,13 @@ namespace SlayTheClone.Tests {
             Assert.IsNull(p1.Battlefield[3].OccupyingCreature, "Once per combat: the second death is for good");
             Assert.AreEqual(cards, GameAsserts.CountCards(p1));
             StringAssert.Contains("Revive", Keywords.Plain(CardTextFormatter.GetRulesText(zombieData)));
+            // ...for each copy: another copy has its own, and a sacrifice is a death like any other
+            var twin = game.Summon(p1, zombieData, 3);
+            twin.MakeOperative();
+            game.Run(new DestroyCreatureAction(twin, unconditional: true, controller: p1, sacrifice: true));
+            game.StartTurn();
+            Assert.AreEqual("Zombie", p1.Battlefield[3].OccupyingCreature?.Name, "Another copy rises too, sacrificed");
+            game.Run(new DamageCreatureAction(p1.Battlefield[3].OccupyingCreature, 5));
 
             // Resurrection (Phoenix Feather): sacrificed now, a Blessing can't stop it; it rises at the Dawn 3 Days on, ready at
             // once, full Health, with the stat changes it had, its statuses gone

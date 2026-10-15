@@ -100,6 +100,7 @@ namespace SlayTheClone {
                 return card;
             }
             var copy = CardFactory.CreateCard(card.SourceData);
+            if (copy != null) copy.CopyId = card.CopyId; // The same copy: what it spent once per combat stays spent
             if (card is ICreature used && copy is ICreature fresh) {
                 var (attack, health, speed) = used.PersistentChanges;
                 fresh.ChangeBaseStats(attack, health, speed);
