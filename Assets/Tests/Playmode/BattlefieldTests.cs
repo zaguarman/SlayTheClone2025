@@ -57,6 +57,16 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(7, ox.Health);
             game.Run(new PlayCardAction(game.GiveCard(p1, bolt), p1, p2.Battlefield[3]));
             Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "...or that side's player on an empty slot");
+            // An empty enemy slot a creature is being summoned into this Day: summons land before spells, so a spell that
+            // hits creatures can be aimed there, and hits it (Necronomicon on a summon)
+            var doom = (Spell)game.GiveCard(p1, game.Spell("Doom", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures)));
+            Assert.IsFalse(EffectResolver.CanAimAt(doom, p1, p2.Battlefield[4], game.ActionsQueue), "Nothing there yet: nothing to destroy");
+            var summoned = game.GiveCard(p2, game.Creature("Summoned", 1, 3));
+            game.Play(summoned, p2, p2.Battlefield[4]);
+            Assert.IsTrue(EffectResolver.CanAimAt(doom, p1, p2.Battlefield[4], game.ActionsQueue), "A creature on its way there: it can be aimed at");
+            game.Play(doom, p1, p2.Battlefield[4]);
+            game.Resolve();
+            Assert.IsTrue(((ICreature)summoned).IsDead, "...and it's hit as it lands");
 
             Fresh();
             var plating = game.Spell("Plating", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures));

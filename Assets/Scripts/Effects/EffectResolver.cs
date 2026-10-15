@@ -272,6 +272,8 @@ namespace SlayTheClone {
                 var resolved = aim is HomingTarget { CreatureInPlay: null } incoming // A creature on its way here
                     ? (CanAffectCreatures(action.actionType) ? incoming.Creature : null)
                     : ResolveChosenTarget(aim, action.actionType);
+                // An empty slot the other side is summoning into this Day: summons land before spells, so the spell finds it
+                if (resolved == null && CanAffectCreatures(action.actionType) && IncomingCreature(slot, queue) is ICreature arriving) resolved = arriving;
                 if (resolved == null) continue;
                 if (OwnSideOnly(action.actionType) && !(resolved is ICreature && slot.Owner == caster)) continue;
                 return true;
