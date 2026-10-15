@@ -669,24 +669,33 @@ namespace SlayTheClone {
 
         // A thought bubble over the top right of the art, with a few words in its oval
         private GameObject CreateThoughtBubble(string objectName, string text) {
-            var bubble = new GameObject(objectName, typeof(RectTransform), typeof(Image));
-            bubble.layer = gameObject.layer;
-            bubble.transform.SetParent(transform, false);
-            var rect = (RectTransform)bubble.transform;
+            // The area it may take, and inside it the bubble at its own proportions, so the words sit in the drawn oval
+            var area = new GameObject(objectName, typeof(RectTransform));
+            area.layer = gameObject.layer;
+            area.transform.SetParent(transform, false);
+            var rect = (RectTransform)area.transform;
             rect.anchorMin = new Vector2(0.4f, 0.58f);
             rect.anchorMax = new Vector2(0.98f, 0.88f);
             rect.offsetMin = rect.offsetMax = Vector2.zero;
+            var bubble = new GameObject("Bubble", typeof(RectTransform), typeof(Image), typeof(AspectRatioFitter));
+            bubble.layer = gameObject.layer;
+            bubble.transform.SetParent(area.transform, false);
+            var fitter = bubble.GetComponent<AspectRatioFitter>();
+            fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+            fitter.aspectRatio = UITheme.ThoughtBubble.rect.width / UITheme.ThoughtBubble.rect.height;
             var image = bubble.GetComponent<Image>();
             image.sprite = UITheme.ThoughtBubble;
-            image.preserveAspect = true;
             image.raycastTarget = false;
 
             var label = new GameObject("Label", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
             label.gameObject.layer = gameObject.layer;
             label.transform.SetParent(bubble.transform, false);
             var oval = UITheme.ThoughtBubbleOval;
-            label.rectTransform.anchorMin = oval.min;
-            label.rectTransform.anchorMax = oval.max;
+            var inset = new Vector2(oval.width, oval.height) * 0.16f; // Clear of the outline
+            label.rectTransform.anchorMin = oval.min + inset;
+            label.rectTransform.anchorMax = oval.max - inset;
+            label.margin = Vector4.zero;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
             label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
             label.text = text;
             label.fontStyle = FontStyles.Bold;
@@ -696,8 +705,8 @@ namespace SlayTheClone {
             label.fontSizeMin = 6;
             label.fontSizeMax = 40;
             label.raycastTarget = false;
-            bubble.transform.SetAsLastSibling();
-            return bubble;
+            area.transform.SetAsLastSibling();
+            return area;
         }
 
         private GameObject CreateBadge(string objectName, string text, Color textColor, float anchorMinY, float anchorMaxY) {
