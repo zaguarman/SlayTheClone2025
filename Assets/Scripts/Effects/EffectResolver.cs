@@ -134,6 +134,12 @@ namespace SlayTheClone {
                 var facing = Opposite(source as ICreature);
                 return facing != null && !facing.IsDead ? new List<ITarget> { facing } : new List<ITarget>();
             }
+            if (action.targetModifier.HasFlag(TargetModifier.DroppedSide)) { // The creatures of the side it was played on
+                var side = chosenTarget as IPlayer ?? (SlotOf(chosenTarget) as BoardSlot)?.Owner ?? controller;
+                var there = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier)
+                    .OfType<ICreature>().Where(c => c.Owner == side).Cast<ITarget>().ToList();
+                return WithoutTooMainstream(there, source);
+            }
             if (action.targetModifier.HasFlag(TargetModifier.Random)) return PickAtRandom(source, controller, action, queue);
             if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
                 var strongest = Strongest(TargetingSystem.GetValidTargets(controller, action.targetType).OfType<ICreature>());
@@ -352,6 +358,7 @@ namespace SlayTheClone {
             TargetRequisite.AttackAtMost => creature != null && creature.Attack <= value,
             TargetRequisite.Deploying => creature != null && !creature.IsOperative,
             TargetRequisite.Online => creature?.SourceData?.faction == Faction.DigitalSociety,
+            TargetRequisite.OutsideHeadquarters => creature?.Slot != null && Formation.PositionOf(creature.Slot.Index) != Formation.Position.Headquarters,
             _ => true
         };
 

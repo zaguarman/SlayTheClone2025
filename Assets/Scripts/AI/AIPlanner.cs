@@ -293,8 +293,13 @@ namespace SlayTheClone {
                 foreach (var slot in view.MySlots) yield return EffectResolver.AimAt(spell, view.Me, slot.Slot, queue);
                 foreach (var slot in view.TheirSlots) yield return slot.Slot;
             }
-            else if (EffectResolver.Reaches(spell, view.Me, view.Me)) yield return view.Me;
-            else if (EffectResolver.Reaches(spell, view.Me, view.Them)) yield return view.Them;
+            else {
+                // A spell for whichever side it's played on (Team Building Exercise) is weighed on both
+                bool eitherSide = spell.Effects.SelectMany(e => e.actions).Any(a => a.targetModifier.HasFlag(TargetModifier.DroppedSide));
+                bool mine = EffectResolver.Reaches(spell, view.Me, view.Me);
+                if (mine) yield return view.Me;
+                if ((!mine || eitherSide) && EffectResolver.Reaches(spell, view.Me, view.Them)) yield return view.Them;
+            }
         }
 
         // A creature on the side the card names, at random; a slot there if it has none
@@ -603,6 +608,13 @@ namespace SlayTheClone {
         private List<object> TargetsOf(EffectAction action, ITarget aim) {
             var targets = new List<object>();
             if (action.targetType == TargetType.Self) return targets; // A spell has no self
+            if (action.targetModifier.HasFlag(TargetModifier.DroppedSide)) { // The creatures of the side it's played on
+                bool ours = aim is IPlayer player ? player == view.Me : view.Of(SlotOf(aim))?.Ours ?? true;
+                foreach (var slot in ours ? view.MySlots : view.TheirSlots) {
+                    if (slot.Creature != null && (action.requires == TargetRequisite.None || Lands(action, slot.Creature))) targets.Add(slot.Creature);
+                }
+                return targets;
+            }
             if (action.targetModifier.HasFlag(TargetModifier.AlliesOfTarget)) { // The other creatures on the aimed side
                 var aimed = view.Of(SlotOf(aim));
                 if (aimed == null) return targets;
@@ -773,6 +785,7 @@ namespace SlayTheClone {
                 case TargetRequisite.AttackAtMost: return AttackOf(creature) <= action.value;
                 case TargetRequisite.Deploying: return !creature.Operative;
                 case TargetRequisite.Online: return creature.Creature?.SourceData?.faction == Faction.DigitalSociety;
+                case TargetRequisite.OutsideHeadquarters: return Formation.PositionOf(creature.Slot.Index) != Formation.Position.Headquarters;
                 default: return true;
             }
         }

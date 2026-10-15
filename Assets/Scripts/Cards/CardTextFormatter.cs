@@ -286,7 +286,7 @@ namespace SlayTheClone {
                 case ActionType.Stun:
                     return $"{Keywords.Link("Exhausted", "exhaust")} {target}";
                 case ActionType.ModifyStat:
-                    return $"{target} {DescribeStatChange(action)}";
+                    return $"{target}{Requisite(action)} {DescribeStatChange(action)}";
                 case ActionType.ApplyStatus:
                     string status = DescribeStatus(action, target);
                     return status != null ? status + Requisite(action) : null;
@@ -373,12 +373,14 @@ namespace SlayTheClone {
             TargetRequisite.AttackAtMost => $" with {action.value} Attack or less",
             TargetRequisite.Deploying => $" if it's still deploying ({Keywords.Link("Deployment Time")})",
             TargetRequisite.Online => " if it's Digital Society",
+            TargetRequisite.OutsideHeadquarters => " outside Headquarters",
             _ => ""
         };
 
         // Plain words: "target" (what it's dropped on, either side), groups ("all enemy creatures"), players and the
         // creature itself. Only "random" and "strongest" are keywords.
         private static string DescribeTarget(EffectAction action, bool isSpell) {
+            if (action.targetModifier.HasFlag(TargetModifier.DroppedSide)) return "every creature on the side it's played on";
             if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
                 string strongest = "the " + Keywords.Link("Strongest", "strongest");
                 switch (action.targetType) {

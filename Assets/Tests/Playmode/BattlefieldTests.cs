@@ -146,6 +146,25 @@ namespace SlayTheClone.Tests {
             // The left Flank and its neighbours in the formation: the Vanguard, the right Flank, the left Headquarters
             Assert.AreEqual(new[] { 5, 4, 5, 4, 9 }, enemies.Select(e => e.Health).ToArray(),
                 "A spreading attack hits the target and its neighbours, for the attack it has when the hits land");
+
+            // Team Building Exercise: on the side it's played on, either one, +1 Attack, and 1 damage outside Headquarters
+            Fresh();
+            var front = game.Summon(p1, game.Creature("Front", 1, 5), 0);
+            var boss = game.Summon(p1, game.Creature("Boss", 1, 5), 3);
+            var rival = game.Summon(p2, game.Creature("Rival", 1, 5), 1);
+            var pep = Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 1, TargetType.AllCreatures, TargetModifier.AllSameTypeTargets | TargetModifier.DroppedSide);
+            pep.actions[0].modifyAttack = true;
+            pep.actions[0].modifyHealth = false;
+            var hurt = Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.AllCreatures, TargetModifier.AllSameTypeTargets | TargetModifier.DroppedSide);
+            hurt.actions[0].requires = TargetRequisite.OutsideHeadquarters;
+            var retreat = game.Spell("Retreat", TargetType.AllCreatures, pep, hurt);
+            StringAssert.Contains("every creature on the side it's played on outside Headquarters", Keywords.Plain(CardTextFormatter.GetRulesText(retreat)));
+            game.Run(new PlayCardAction(game.GiveCard(p1, retreat), p1, p1));
+            Assert.AreEqual((2, 4), (front.Attack, front.Health), "Ours: +1 Attack, and the staff take 1...");
+            Assert.AreEqual((2, 5), (boss.Attack, boss.Health), "...Headquarters skips the pain");
+            Assert.AreEqual((1, 5), (rival.Attack, rival.Health), "The other side is untouched");
+            game.Run(new PlayCardAction(game.GiveCard(p1, retreat), p1, p2));
+            Assert.AreEqual((2, 4), (rival.Attack, rival.Health), "Played on their side, it's theirs");
         }
     }
 }

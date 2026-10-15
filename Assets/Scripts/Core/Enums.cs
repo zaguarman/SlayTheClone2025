@@ -19,7 +19,7 @@ namespace SlayTheClone {
         /// its Attack is the effect's value or less. Deploying: it isn't ready yet (Deployment Time). Online: it's a Digital
         /// Society card (Cyberpsychosis hits the terminally online harder). New ones go last
         /// </summary>
-        public enum TargetRequisite { None, Revealed, NextToEmptySlot, Outnumbered, AttackAtMost, Deploying, Online }
+        public enum TargetRequisite { None, Revealed, NextToEmptySlot, Outnumbered, AttackAtMost, Deploying, Online, OutsideHeadquarters }
         public enum TargetType { Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures, Self }
 
         // Send For: the kind of card it can fetch from the deck
@@ -92,6 +92,7 @@ namespace SlayTheClone {
             Opposite = 1 << 5,  // A creature's effect: the creature facing it, on the other side (none there: nothing)
             Beside = 1 << 6,    // Only the creatures beside where it lands, not the one there (Holy Hand Grenade's splash)
             AlliesOfTarget = 1 << 7, // The other creatures on the side of the one it lands on (False Flag Operation rallies them)
+            DroppedSide = 1 << 8,    // The creatures of the side it's played on, either one (Team Building Exercise)
         }
 
         // Trends (GDD 4.2): what the world is into right now, one rule for the whole board for some Days, until another Trend replaces it. New ones go last
