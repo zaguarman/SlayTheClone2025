@@ -51,7 +51,8 @@ namespace SlayTheClone {
         private const float BarbSweep = 0.28f;      // How far back the barbs reach, in head lengths
         private const float RimWidth = 0.022f;     // A bright line round the band: it reads on the dark table...
         private const float OutlineWidth = 0.045f; // ...and a thin dark one outside it, on the light cards
-        private const float WidthPerExtraBranch = 0.45f, MaxTrunkWidth = 2.2f; // In band widths
+        private const float WidthPerExtraBranch = 0.15f, MaxTrunkWidth = 1.35f; // In band widths: the trunk stays lean as attackers join
+        private const float CornerRadius = 0.45f;   // A branch's bends are rounded this much at most (world units), like a PCB track's
         private const float BranchShare = 0.55f;    // How much of the draw-in the branches take before the trunk
         private const float MinLength = 0.1f;
 
@@ -296,12 +297,15 @@ namespace SlayTheClone {
             // Several starts: each flows along the rows' axis into a trunk that runs straight into the target
             float reach = Mathf.Abs(Vector2.Dot(tip - (centroid + axis * style.StartInset), axis));
             float headLength = HeadLengthOf(TrunkWidth(width, tails.Count));
-            float trunkLength = Mathf.Max(reach * 0.5f, headLength + 0.3f);
+            // The trunk gives the branches room for 45° when they come from far to the side, but keeps room for the head
+            Vector2 acrossAxis = new Vector2(axis.y, -axis.x);
+            float widest = 0f;
+            foreach (var from in tails) widest = Mathf.Max(widest, Mathf.Abs(Vector2.Dot(tip - from, acrossAxis)));
+            float trunkLength = Mathf.Max(Mathf.Min(reach * 0.5f, reach - widest - 0.3f), headLength + 0.3f);
             Vector2 merge = tip - axis * trunkLength;
             float branchProgress = Mathf.Clamp01(drawnFraction / BranchShare);
             foreach (var from in tails) {
-                float rise = Mathf.Max(0.12f, Vector2.Dot(merge - from, axis));
-                var branch = Sample(from, from + axis * rise * 0.45f, merge - axis * rise * 0.55f, merge + axis * 0.03f);
+                var branch = Route(from, merge + axis * 0.03f, axis);
                 AddBand(layers, Cut(branch, Length(branch) * branchProgress), width * TailWidth, width * 0.9f, 0f, BranchShare, notched: true);
             }
             float trunkProgress = Mathf.Clamp01((drawnFraction - BranchShare) / (1f - BranchShare));
@@ -425,6 +429,43 @@ namespace SlayTheClone {
         #endregion
 
         #region Curves
+        // A branch routed like a PCB track: straight out along the rows' axis, a 45° diagonal across (shallower only when
+        // the rows are too close for 45°), then straight on into the merge; every corner rounded off, never a sharp turn
+        private static List<Vector2> Route(Vector2 from, Vector2 to, Vector2 axis) {
+            Vector2 across = new Vector2(axis.y, -axis.x);
+            float rise = Vector2.Dot(to - from, axis), lateral = Vector2.Dot(to - from, across);
+            if (Mathf.Abs(lateral) < 0.02f || rise <= 0.05f) return Sample(from, Vector2.Lerp(from, to, 1f / 3f), Vector2.Lerp(from, to, 2f / 3f), to);
+            float stub = Mathf.Clamp(rise * 0.2f, 0.06f, 0.35f);
+            float diagonal = Mathf.Min(Mathf.Max(rise - 2f * stub, 0.05f), Mathf.Abs(lateral)); // Along the axis: 45° when it's |lateral|
+            float before = (rise - diagonal) / 2f;
+            Vector2 bendIn = from + axis * before;
+            Vector2 bendOut = bendIn + axis * diagonal + across * lateral;
+            return Rounded(new List<Vector2> { from, bendIn, bendOut, to });
+        }
+
+        // The polyline with each corner replaced by a curve tangent to both sides
+        private static List<Vector2> Rounded(List<Vector2> corners) {
+            var points = new List<Vector2> { corners[0] };
+            for (int i = 1; i < corners.Count - 1; i++) {
+                Vector2 previous = corners[i - 1], corner = corners[i], next = corners[i + 1];
+                float cut = Mathf.Min(CornerRadius, Vector2.Distance(previous, corner) * 0.48f, Vector2.Distance(corner, next) * 0.48f);
+                Vector2 enter = corner + (previous - corner).normalized * cut, leave = corner + (next - corner).normalized * cut;
+                AddLine(points, enter);
+                for (int k = 1; k <= 12; k++) { // A quadratic curve through the corner's control point
+                    float t = k / 12f, u = 1f - t;
+                    points.Add(u * u * enter + 2f * u * t * corner + t * t * leave);
+                }
+            }
+            AddLine(points, corners[corners.Count - 1]);
+            return points;
+        }
+
+        private static void AddLine(List<Vector2> points, Vector2 to) {
+            Vector2 from = points[points.Count - 1];
+            int steps = Mathf.Max(1, Mathf.CeilToInt(Vector2.Distance(from, to) / (PointSpacing * 0.5f)));
+            for (int k = 1; k <= steps; k++) points.Add(Vector2.Lerp(from, to, (float)k / steps));
+        }
+
         private static List<Vector2> Sample(Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
             var points = new List<Vector2>(Samples + 1);
             for (int i = 0; i <= Samples; i++) {
