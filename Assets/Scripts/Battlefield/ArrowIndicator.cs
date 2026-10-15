@@ -373,11 +373,14 @@ namespace SlayTheClone {
             Vector2 acrossAxis = new Vector2(axis.y, -axis.x);
             float widest = 0f;
             foreach (var from in tails) widest = Mathf.Max(widest, Mathf.Abs(Vector2.Dot(tip - from, acrossAxis)));
-            float trunkLength = Mathf.Max(Mathf.Min(reach * TrunkShare, reach - widest / RouteSlope - 0.3f), headLength + 0.3f);
-            Vector2 merge = tip - axis * trunkLength;
+            // Direct: they meet exactly where Trunk Share and Meet Offset X say; routed: as low as their 45° diagonals allow
+            float trunkLength = T.directBranches
+                ? Mathf.Max(reach * TrunkShare, headLength + 0.3f)
+                : Mathf.Max(Mathf.Min(reach * TrunkShare, reach - widest / RouteSlope - 0.3f), headLength + 0.3f);
+            Vector2 merge = tip - axis * trunkLength + (T.directBranches ? acrossAxis * T.meetOffsetX : Vector2.zero);
             float branchProgress = Mathf.Clamp01(drawnFraction / BranchShare);
             foreach (var from in tails) {
-                var branch = Route(from, merge + axis * 0.03f, axis);
+                var branch = T.directBranches ? Direct(from, merge, axis, trunkLength) : Route(from, merge + axis * 0.03f, axis);
                 AddBand(layers, Cut(branch, Length(branch) * branchProgress), width * TailWidth, width * BranchWidthAtMerge, 0f, BranchShare, notched: true);
             }
             float trunkProgress = Mathf.Clamp01((drawnFraction - BranchShare) / (1f - BranchShare));
@@ -548,6 +551,14 @@ namespace SlayTheClone {
             Vector2 bendIn = from + axis * before;
             Vector2 bendOut = bendIn + axis * diagonal + across * lateral;
             return Rounded(new List<Vector2> { from, bendIn, bendOut, to });
+        }
+
+        // A branch straight from its creature to where the arrows meet, then turning (rounded) up the trunk: no stub, no
+        // fixed angle (Direct Branches)
+        private static List<Vector2> Direct(Vector2 from, Vector2 meet, Vector2 axis, float trunkLength) {
+            if (Vector2.Distance(from, meet) < 0.05f) return new List<Vector2> { from, meet + axis * 0.03f };
+            float onward = Mathf.Clamp(CornerRadius, 0.05f, trunkLength * 0.5f); // Up the trunk past the meeting point, for the turn
+            return Rounded(new List<Vector2> { from, meet, meet + axis * onward });
         }
 
         // The polyline with each corner replaced by a curve tangent to both sides

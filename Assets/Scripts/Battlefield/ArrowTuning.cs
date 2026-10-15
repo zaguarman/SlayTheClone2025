@@ -114,13 +114,17 @@ namespace SlayTheClone {
         [Range(0f, 2f)] public float notchDepth = 0.9f;
 
         [Header("Neck: where several arrows merge into one trunk")]
+        [Tooltip("Merged attacks: each branch runs straight from its creature to the meeting point, then turns up the trunk: no stub, no fixed angle. Where they meet: Trunk Share (height) and Meet Offset X (sideways). Off: branches take the routed diagonal (Route Angle, First and Last Bend) (gallery: Merging)")]
+        public bool directBranches = false;
+        [Tooltip("Merged attacks, Direct Branches: the meeting point moved sideways, to the right of the target (minus: left) (gallery: Merging)")]
+        [Range(-2f, 2f)] public float meetOffsetX = 0f;
         [Tooltip("Merged attacks: the trunk widens this much for each arrow that joins, in band widths (gallery: Merging, 'All five' most)")]
         [Range(0f, 0.6f)] public float widthPerExtraBranch = 0.15f;
         [Tooltip("Merged attacks: ...up to this many band widths (gallery: Merging, 'All five')")]
         [Range(1f, 3f)] public float maxTrunkWidth = 1.35f;
         [Tooltip("Merged attacks: a branch's width as it flows into the trunk, of the band's (gallery: Merging)")]
         [Range(0.3f, 1.5f)] public float branchWidthAtMerge = 0.9f;
-        [Tooltip("Merged attacks: the trunk's length, as a share of the way to the target (gallery: Merging)")]
+        [Tooltip("Merged attacks: the trunk's length, as a share of the way to the target. With Direct Branches it sets exactly where they meet (more: lower, nearer the attackers); routed, it's capped so the diagonals fit (gallery: Merging)")]
         [Range(0.15f, 0.9f)] public float trunkShare = 0.5f;
 
         // A gradient of transparency alone, these (position, opacity) markers along it; its colour stays white (the arrow's own)
