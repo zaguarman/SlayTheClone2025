@@ -80,6 +80,29 @@ namespace SlayTheClone {
         private bool isVisible;
         private bool isFadingOut;
 
+        // Every arrow there is, so a window over the table can hide them all at once
+        private static readonly HashSet<ArrowIndicator> all = new HashSet<ArrowIndicator>();
+        private static bool suppressed;
+
+        /// <summary>
+        /// While a window covers the table (a pile, a pick), every arrow is hidden: they're drawn over the interface.
+        /// They come back as they were when it's off.
+        /// </summary>
+        public static bool Suppressed {
+            get => suppressed;
+            set {
+                if (suppressed == value) return;
+                suppressed = value;
+                foreach (var arrow in all) arrow.ApplySuppressed();
+            }
+        }
+
+        private void ApplySuppressed() {
+            foreach (var part in new Renderer[] { fillRenderer, edgeRenderer, outlineRenderer }) {
+                if (part != null) part.forceRenderingOff = suppressed;
+            }
+        }
+
         public static ArrowIndicator Create(Transform parent = null) {
             var arrowObject = new GameObject("ArrowIndicator");
             if (parent != null) {
@@ -103,6 +126,8 @@ namespace SlayTheClone {
             (fillFilter, fillRenderer, fillMesh) = CreatePart("Fill", order);
             (edgeFilter, edgeRenderer, edgeMesh) = CreatePart("Rim", order + 1);
             (outlineFilter, outlineRenderer, outlineMesh) = CreatePart("Outline", order + 2);
+            all.Add(this);
+            ApplySuppressed();
             Hide();
         }
 
@@ -526,6 +551,7 @@ namespace SlayTheClone {
         }
 
         private void OnDestroy() {
+            all.Remove(this);
             DOTween.Kill(this);
             if (material != null) Destroy(material);
             if (fillMesh != null) Destroy(fillMesh);

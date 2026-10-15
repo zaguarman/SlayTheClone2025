@@ -947,6 +947,8 @@ namespace SlayTheClone {
         private void Play(ICard card, ITarget aim) {
             if (!view.Me.Hand.Contains(card)) return; // Given up to pay for another card
             Log($"AI: {view.Me.Name} plays {card.Name} on {aim}", LogTag.Turns);
+            // A Send For: the AI picks its card now, so no one is asked on screen
+            if (SendFor.Of(card) is EffectAction sending && SendFor.Best(view.Me, SendFor.Choices(view.Me, sending)) is ICard wanted) view.Me.SendForPicks[card] = wanted;
             queue.AddAction(new PlayCardAction(card, view.Me, aim));
         }
         #endregion

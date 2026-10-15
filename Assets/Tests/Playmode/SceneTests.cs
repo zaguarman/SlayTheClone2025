@@ -60,6 +60,22 @@ namespace SlayTheClone.Tests {
             Vector2 windowCenter = Camera.main.WorldToScreenPoint(deckWindow.DeckViewPanel.transform.position);
             Assert.IsFalse(deckWindow.ClickAt(windowCenter), "A click inside it keeps it open...");
             Assert.IsTrue(deckWindow.ClickAt(new Vector2(2f, Screen.height - 2f)), "...a click outside it closes it");
+            // A pick (Send For) can't be closed, only hidden to look at the table; nothing is played until it's made
+            ICard pickedCard = null;
+            deckWindow.ShowPick(p1, "Test pick", p1.Deck.GetDeckPreview().Take(2).ToList(), c => pickedCard = c, null);
+            yield return null;
+            Assert.IsTrue(DeckViewUI.PickPending && ArrowIndicator.Suppressed, "Picking: nothing else is played, and the arrows hide");
+            Assert.IsFalse(deckWindow.CloseButton.gameObject.activeSelf, "No close button...");
+            Assert.IsFalse(deckWindow.ClickAt(new Vector2(2f, Screen.height - 2f)), "...and a click outside doesn't close it");
+            deckWindow.HideButton.onClick.Invoke();
+            yield return null;
+            Assert.IsTrue(!deckWindow.IsOpen && deckWindow.ShowButton.gameObject.activeSelf && !ArrowIndicator.Suppressed, "Hidden: the table shows, arrows and all");
+            deckWindow.ShowButton.onClick.Invoke();
+            Assert.IsTrue(deckWindow.IsOpen, "Shown again");
+            var choice = p1.Deck.GetDeckPreview()[0];
+            deckWindow.Pick(choice);
+            yield return null;
+            Assert.IsTrue(pickedCard == choice && !DeckViewUI.PickPending && !deckWindow.IsOpen && deckWindow.CloseButton.gameObject.activeSelf, "Picked: done, the window closes");
             yield return null;
 
             var brute = game.Summon(p1, game.Cards.Creature("Test Brute", 4, 5), 0);

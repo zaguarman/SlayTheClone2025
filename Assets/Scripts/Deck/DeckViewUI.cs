@@ -24,6 +24,17 @@ namespace SlayTheClone {
         public GameObject DeckViewPanel => deckViewPanel;
         public Button CloseButton => closeButton;
 
+        /// <summary>
+        /// A card must be picked (Send For) before anything else is played or the Day ends: the window can be hidden to
+        /// look at the table (hovering it works), but not closed (the user, 2026-10-15).
+        /// </summary>
+        public static bool PickPending { get; private set; }
+        /// <summary>The pick's window is tucked away to see the table; Show brings it back.</summary>
+        public bool PickHidden { get; private set; }
+        public Button HideButton => hideButton;
+        public Button ShowButton => showButton;
+        private Button hideButton, showButton;
+
         // Set up when initialized rather than in Awake: the panel is saved hidden in the scene (so it doesn't cover
         // the table in the editor), and a hidden panel only wakes up the first time it is shown
         private void Setup() {
@@ -125,10 +136,12 @@ namespace SlayTheClone {
                 LogError("Cannot hide deck view - deckViewPanel is null", LogTag.UI);
                 return;
             }
+            if (IsPicking) return; // A pick isn't closed: it's made (or called off, see CancelPick)
             EndPick();
 
             Tooltip.Existing?.HideTooltip();
             deckViewPanel.SetActive(false);
+            ArrowIndicator.Suppressed = false;
             Log("Hiding deck view", LogTag.UI);
         }
 
@@ -140,15 +153,16 @@ namespace SlayTheClone {
             if (button != null) toggles.Add((RectTransform)button.transform);
         }
 
-        // A click anywhere outside the window closes it, like the close button
+        // A click anywhere outside the window closes it, like the close button. The battle arrows hide while it's open
         private void Update() {
+            ArrowIndicator.Suppressed = IsOpen;
             if (!IsOpen) return;
             if (GameInput.ClickedThisFrame) ClickAt(GameInput.PointerPosition);
         }
 
         /// <summary>A click at this screen point: outside the window (and any card preview it shows), it closes. Returns whether it did.</summary>
         public bool ClickAt(Vector2 screenPoint) {
-            if (!IsOpen) return false;
+            if (!IsOpen || IsPicking) return false; // A pick can't be closed: only hidden
             var canvas = deckViewPanel.GetComponentInParent<Canvas>();
             var eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.rootCanvas.worldCamera : null;
             if (RectTransformUtility.RectangleContainsScreenPoint((RectTransform)deckViewPanel.transform, screenPoint, eventCamera)) return false;
@@ -174,11 +188,70 @@ namespace SlayTheClone {
             ShowCards(player, title, hint, cards);
             onPick = picked;
             onPickClosed = closed;
+            PickPending = true;
             foreach (var entry in cardEntries) {
                 var interceptor = entry.GetComponent<DeckViewCardInterceptor>();
                 if (interceptor != null) interceptor.Clicked = Pick;
             }
             deckViewPanel.SetActive(true);
+            SetPickHidden(false);
+        }
+
+        /// <summary>Tucks the pick's window away to look at the table, or brings it back. Only while picking.</summary>
+        public void SetPickHidden(bool hidden) {
+            EnsurePickButtons();
+            PickHidden = hidden && IsPicking;
+            if (IsPicking) deckViewPanel.SetActive(!PickHidden);
+            ArrowIndicator.Suppressed = deckViewPanel.activeSelf; // Its Update stops while it's hidden
+            if (closeButton != null) closeButton.gameObject.SetActive(!IsPicking);
+            if (hideButton != null) hideButton.gameObject.SetActive(IsPicking && !PickHidden);
+            if (showButton != null) showButton.gameObject.SetActive(IsPicking && PickHidden);
+            if (PickHidden) Tooltip.Existing?.HideTooltip();
+        }
+
+        // Hide sits where the close button is (a pick has none); Show floats over the table while it's hidden
+        private void EnsurePickButtons() {
+            if (hideButton != null || closeButton == null) return;
+            hideButton = MakeLike(closeButton, closeButton.transform.parent, "PickHideButton", "Hide", () => SetPickHidden(true));
+            var hideRect = (RectTransform)hideButton.transform;
+            hideRect.sizeDelta = new Vector2(130f, ((RectTransform)closeButton.transform).sizeDelta.y);
+            UITheme.StyleButton(hideButton);
+            // Show takes Hide's place, so the toggle stays under the pointer; it lives beside the window, as that hides
+            showButton = MakeLike(closeButton, deckViewPanel.transform.parent, "PickShowButton", "Show the pick", () => SetPickHidden(false));
+            var showRect = (RectTransform)showButton.transform;
+            showRect.pivot = hideRect.pivot;
+            showRect.sizeDelta = new Vector2(220f, hideRect.sizeDelta.y);
+            var parentScale = showRect.parent.lossyScale;
+            showRect.localScale = new Vector3(hideRect.lossyScale.x / parentScale.x, hideRect.lossyScale.y / parentScale.y, 1f);
+            showRect.rotation = hideRect.rotation;
+            showRect.position = hideRect.position;
+            UITheme.StyleButton(showButton, UITheme.ButtonKind.Primary);
+            showButton.gameObject.SetActive(false);
+            hideButton.gameObject.SetActive(false);
+        }
+
+        private static Button MakeLike(Button model, Transform parent, string name, string label, UnityEngine.Events.UnityAction onClick) {
+            var copy = Instantiate(model.gameObject, parent, false);
+            copy.name = name;
+            var button = copy.GetComponent<Button>();
+            button.onClick = new Button.ButtonClickedEvent();
+            button.onClick.AddListener(onClick);
+            var text = copy.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (text != null) {
+                text.text = label;
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 14;
+                text.fontSizeMax = 26;
+            }
+            copy.transform.SetAsLastSibling();
+            return button;
+        }
+
+        /// <summary>Calls the pick off (the card that asked for it was taken back): the window closes.</summary>
+        public void CancelPick() {
+            if (!IsPicking) return;
+            EndPick();
+            HideDeckView();
         }
 
         /// <summary>Picks this card, as clicking it does.</summary>
@@ -186,6 +259,7 @@ namespace SlayTheClone {
             var picked = onPick;
             onPick = null;
             onPickClosed = null;
+            PickPending = false;
             HideDeckView();
             picked?.Invoke(card); // It may open the window again, for the next pick
         }
@@ -195,16 +269,20 @@ namespace SlayTheClone {
             var closed = onPickClosed;
             onPick = null;
             onPickClosed = null;
+            PickPending = false;
+            if (hideButton != null) SetPickHidden(false);
             closed?.Invoke();
         }
 
         public void ShowDeckCards(IPlayer player, bool enemy = false) {
+            if (IsPicking) return; // The pick comes first
             viewingDiscardPile = false;
             viewingEnemy = enemy;
             UpdateUI(player);
         }
 
         public void ShowDiscardPileCards(IPlayer player, bool enemy = false) {
+            if (IsPicking) return;
             viewingDiscardPile = true;
             viewingEnemy = enemy;
             UpdateUI(player);
@@ -278,6 +356,8 @@ namespace SlayTheClone {
         }
 
         protected override void OnDestroy() {
+            PickPending = false;
+            ArrowIndicator.Suppressed = false;
             if (closeButton != null) {
                 closeButton.onClick.RemoveListener(HideDeckView);
             }

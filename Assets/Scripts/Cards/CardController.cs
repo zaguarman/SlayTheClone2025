@@ -397,6 +397,7 @@ namespace SlayTheClone {
             // Queued cards are committed (except in the hand, where dragging re-aims or takes back the play),
             // and nothing can be played while a turn resolves; cancel the drag so no drop zone receives the card
             if ((IsQueued && !canDragWhileQueued) || (GameManager?.TurnManager?.IsResolving ?? false) || !FogOfWar.CanControl(Player)
+                || DeckViewUI.PickPending // A card to pick first (Send For)
                 || (cardViews?.IsDisplayOnly ?? false)) {
                 eventData.pointerDrag = null;
                 return;

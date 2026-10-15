@@ -5,8 +5,9 @@ using UnityEngine;
 namespace SlayTheClone {
     /// <summary>
     /// Send For on screen: when the player at the screen plays a card that sends for one (Multipass, Omen Reading...), the
-    /// deck window opens on what it can fetch; clicking one picks it (see <see cref="IPlayer.SendForPicks"/>). Closed without
-    /// a pick, the best one is sent for when it resolves.
+    /// deck window opens on what it can fetch; clicking one picks it (see <see cref="IPlayer.SendForPicks"/>). It can't be
+    /// closed, only hidden to look at the table, and nothing else is played until the pick is made; taking the card back
+    /// calls it off.
     /// </summary>
     public class SendForPicker : MonoBehaviour {
         private IGameManager gameManager;
@@ -26,9 +27,16 @@ namespace SlayTheClone {
 
         // A new play of a Send For card by a seat the screen plays: ask which card
         private void OnQueueChanged() {
-            if (deckView == null || gameManager?.ActionsQueue == null || Asking != null) return;
+            if (deckView == null || gameManager?.ActionsQueue == null) return;
+            // The card asking was taken back: its pick is called off
+            if (Asking != null && !gameManager.ActionsQueue.GetPendingActions().Contains(Asking)) {
+                Asking = null;
+                deckView.CancelPick();
+            }
+            if (Asking != null) return;
             var play = gameManager.ActionsQueue.GetPendingActions().OfType<PlayCardAction>()
-                .FirstOrDefault(p => !asked.Contains(p) && SendFor.Of(p.GetCard()) != null && FogOfWar.CanControl(p.GetOwner()) && !MatchSetup.PlayedByAI(p.GetOwner()));
+                .FirstOrDefault(p => !asked.Contains(p) && SendFor.Of(p.GetCard()) != null && FogOfWar.CanControl(p.GetOwner()) && !MatchSetup.PlayedByAI(p.GetOwner())
+                    && !p.GetOwner().SendForPicks.ContainsKey(p.GetCard())); // Already picked (the AI picks its own)
             if (play == null) return;
             asked.Add(play);
             var owner = play.GetOwner();

@@ -232,8 +232,8 @@ namespace SlayTheClone {
             canvasGroup.alpha = 1;
             gameObject.SetActive(true);
 
-            if (hand != null) {
-                preview = card; // The hand raises it, enlarged; its explanations open beside it
+            if (hand != null || InWindow(card)) {
+                preview = card; // The hand raises it, enlarged (a window's cards are big already); its explanations open beside it
                 previewIsCard = true;
             }
             else {
@@ -458,7 +458,7 @@ namespace SlayTheClone {
             if (activeCard == null || preview == null) return;
             if (CardController.Dragged != null) { HideTooltip(); return; }
             // A hand card back down in the fan takes its explanations with it: none are left floating over the hand
-            if (previewIsCard && !StillRaised(activeCard)) { HideShown(); return; }
+            if (previewIsCard && !InWindow(activeCard) && !StillRaised(activeCard)) { HideShown(); return; }
             Vector2 pointer = GameInput.PointerPosition;
             if (GameInput.ClickedThisFrame && ClickAt(pointer)) return;
             TrackKeywords(pointer);
@@ -469,6 +469,9 @@ namespace SlayTheClone {
             if (held) lastHeldAt = Time.unscaledTime;
             else if (Time.unscaledTime - lastHeldAt > (handReading ? HandReleaseGrace : ReleaseGrace)) HideTooltip();
         }
+
+        // A card of the deck window (a pile, a pick): shown big already, it's its own preview
+        private static bool InWindow(CardController card) => card != null && card.GetComponent<DeckViewCardInterceptor>() != null;
 
         private static bool StillRaised(CardController card) {
             if (!card.isActiveAndEnabled) return false;

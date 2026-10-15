@@ -269,7 +269,9 @@ namespace SlayTheClone {
             }
 
             resolveButton.onClick.RemoveAllListeners();
-            resolveButton.onClick.AddListener(turnManager.EndTurn);
+            resolveButton.onClick.AddListener(() => {
+                if (!DeckViewUI.PickPending) turnManager.EndTurn(); // A card to pick first (Send For)
+            });
 
             var buttonText = resolveButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (buttonText != null) buttonText.text = "End Turn";
