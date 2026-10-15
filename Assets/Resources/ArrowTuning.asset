@@ -35,7 +35,7 @@ MonoBehaviour:
   moveEndY: 0.39
   dragStartY: 0.63
   dragEndY: 0.62
-  startX: -0.158
+  startX: -0.014
   endX: -0.156
   fillOpacity:
     serializedVersion: 2
@@ -98,31 +98,31 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 3
   headOpacity: 0.481
-  bonesPerUnit: 66.2
-  singleFirstBend: 0.35
-  singleLastBend: 0.764
-  mergedFirstBend: 0.692
+  bonesPerUnit: 64.4
+  singleFirstBend: 0.396
+  singleLastBend: 0.642
+  mergedFirstBend: 0.688
   mergedLastBend: 0.582
   routeAngle: 80
   cornerRadius: 0.671
   bendRoom: 0.595
-  forkAt: 0.382
-  prongWidth: 0.714
-  prongLeave: 0.388
-  prongArrive: 0.806
+  forkAt: 0.292
+  prongWidth: 0.772
+  prongLeave: 0.004
+  prongArrive: 0.651
   headLength: 2.37
   headHalfWidth: 1.67
   maxHeadLength: 0.432
-  maxHeadHalfWidth: 0.344
-  barbSweep: 0.283
+  maxHeadHalfWidth: 0.302
+  barbSweep: 0.222
   notchDepth: 0.631
   directBranches: 1
-  meetOffsetX: 0.46
-  joinBranches: 1
-  joinAt: 0.55
-  joinLeave: 0.3
-  joinArrive: 0.4
-  widthPerExtraBranch: 0
-  maxTrunkWidth: 2.004
-  branchWidthAtMerge: 1.288
-  trunkShare: 0.545
+  meetOffsetX: 0.22
+  joinBranches: 0
+  joinAt: 0.95
+  joinLeave: 0.255
+  joinArrive: 0.437
+  widthPerExtraBranch: 0.098
+  maxTrunkWidth: 1
+  branchWidthAtMerge: 1
+  trunkShare: 0.563
