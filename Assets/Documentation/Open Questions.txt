@@ -52,7 +52,9 @@ STILL OPEN
       guns), Golden Dome (missile defence), Particle Accelerator (a beam), Omniscient Space-Time Bending Bearded Wizard,
       Surveillance Giraffe (sees over everything). Artillery: Sherman Tank, Man o' War (a broadside, if not Ranged),
       Mercenaries (mortars). The Chosen One's Spray and Pray already hits at random.
-    • To decide: whether the cone becomes the default for every creature (it changes every faction's balance, the AI's
+    • Decided (the user, 2026-10-15): yes. Melee (the default): the slot in front and its sides. Ranged: 1 to 2 slots away.
+      Artillery: only 3 slots away. To build with the new formation (see 44).
+    • Was to decide: whether the cone becomes the default for every creature (it changes every faction's balance, the AI's
       attack choice and the drag hints: the slots out of reach would grey out while you drag), or only some creatures get
       a limited reach. Recommended: the cone for everyone, Ranged and Artillery as keywords, built together, then a round
       robin to rebalance by faction.
@@ -276,17 +278,23 @@ STILL OPEN
     • Card names waiting per faction (Brainstorm List sections / Card Backlog), against cards made: Zeitgeist 212 / 51 backlog, 25 made; Corporate 197 / 45, 24 made; Myth 189 / 21, 12 made; Statecraft 145 / 28, 24 made; Mind 142 / 14, 11 made; Digital Society 125 / 19, 14 made; Shadow Ops. 109 / 22, 15 made; Tech 105 / 16, 11 made; Utopia 103 / 10, 20 made. (Section counts include some sub-lists, so they're generous.)
     • Every faction has room for 100+ cards on paper. The thinnest in ideas the user tagged directly: Utopia, Tech and Mind.
     • Question: merge Digital Society into Zeitgeist (internet culture is already Zeitgeist's), or keep them apart? Any other merge (Tech into Utopia, the two "science" ones)?
+    • Dropped for now (the user, 2026-10-15): the factions stay as they are. Kept here as discussed, to come back to.
 
 24. The five new cards (2026-10-13)
     • Done: Meta Group Chat and Social Panopticon (Digital Society), Control Room and Humanitarian Trafficking Action (Shadow Ops.), No Glove, No Love (Zeitgeist), with the effects in 'Starter Faction Decks'. Explained with pictures in the chat (round 13).
     • Question: are the factions and effects what you had in mind?
+    • Closed (2026-10-15): an old check-in on cards made in round 13; nothing to decide.
 
 10. Keyword names and reminder text
     • Done: triggers read Arrival, Last Will, Dawn, Dusk, Hurt, On Hit; keyword abilities Counterattack, Retaliate, Decay X, Regenerate X, Grow X, Rebirth. Abilities and statuses print their name only (no reminder text in parentheses), as Slay the Spire does; hovering explains them, and the Keywords screen lists them all (with a filter).
     • Question: OK with these names? And should reminder text stay on cards for the rarer keywords (as Magic does on common cards)?
+    • Decided (the user, 2026-10-15): the names are good; the user will say when one needs a change or a new keyword is needed.
 
 1. Which statuses are positive (only removed by a Purge)?
     • Answered in part: mixed ones count as bad; Blessed, Concealed and Encrypted are good. The rest is to be decided status by status.
+    • Decided (the user, 2026-10-15): no status is good or bad by itself. What sorted them works on all of them now: a
+      Cleanse removes every status (SysAdmin, Vaccine, Exorcism), Frame Job passes them all, Devil's Breath steals them all.
+      Built. The AI still weighs which ones help it. Purge differs from a Cleanse only on stat changes (all, not just drops).
 
 5. Fog of War: what's still to come
     • Done: Concealed, Revealed and Encrypted statuses, the Undercover ability, Reveal (instant), Watchdogs blind to Concealed actions and ignoring Encrypted ones, the '???' on screen, and the debug switches (F9, F8).

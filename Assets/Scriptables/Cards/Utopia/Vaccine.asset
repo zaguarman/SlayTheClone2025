@@ -88,8 +88,8 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'Cleanses its harmful statuses; side effect: -1 Attack for this Day
-    (sore arm).'
+  designNotes: 'Cleanses its statuses, all of them; side effect: -1 Attack for this
+    Day (sore arm).'
   artDescription: A syringe with a tiny Wi-Fi antenna on its plunger and full signal
     bars above it.
   defaultTargetType: 3

@@ -842,13 +842,13 @@ namespace SlayTheClone {
                 .Picture("A row of agents in identical grey suits passing their pistols, knives and grenades down the line to one man at the end, who disappears under a mountain of weapons with only his sunglasses showing."),
             Spell("Frame Job", TargetType.FriendlyCreatures,
                 "The fingerprints were his. We checked. We put them there.",
-                "Target friendly creature passes every harmful status it has (Revealed, Heat Signature, Burned, Doomed...) to the enemy creature facing it, with the Days they have left. Nothing faces it: nothing happens.",
+                "Target friendly creature passes every status it has (Revealed, Heat Signature, Burned, Doomed... and its good ones too: no status is good or bad by itself, the user, 2026-10-15) to the enemy creature facing it, with the Days they have left. Nothing faces it: nothing happens.",
                 Act(ActionType.PassHarmfulStatuses, 0, TargetType.FriendlyCreatures, TargetModifier.None))
                 .NotInStarterDeck()
                 .Picture("A smiling agent pressing a sleeping man's thumb onto a smoking gun with tweezers, a police lineup board behind them already labelled with the sleeper's name."),
             Spell("Devil's Breath", TargetType.FriendlyCreatures,
                 "One puff of scopolamine and he helped carry his own safe to our van.",
-                "Target friendly creature takes the stat raises and the good statuses (Blessed, Concealed, Encrypted, Untouchable) of the enemy creature facing it. Its victims hand everything over, smiling.",
+                "Target friendly creature takes the stat raises and every status of the enemy creature facing it (all of them since 2026-10-15: no status is good or bad by itself, so a Burn or a Doom comes along too). Its victims hand everything over, smiling.",
                 Act(ActionType.StealStatChanges, 0, TargetType.FriendlyCreatures, TargetModifier.None),
                 Act(ActionType.StealGoodStatuses, 0, TargetType.FriendlyCreatures, TargetModifier.None))
                 .NotInStarterDeck()
@@ -1048,7 +1048,7 @@ namespace SlayTheClone {
                 .Picture("Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a \"Backdoor Request\" form."),
             Creature("SysAdmin", 2, 5, speed: 1, deploy: 1,
                 "Have you tried turning it off and on again?",
-                "Each Dawn it cleanses your creatures' harmful statuses (Tech owns Cleanse).",
+                "Each Dawn it cleanses your creatures' statuses, all of them (Tech owns Cleanse; since 2026-10-15 a Cleanse takes the good ones too).",
                 On(EffectTrigger.StartOfTurn, Cleanse(CleanseTarget.Statuses, TargetType.FriendlyCreatures)))
                 .Picture("A bearded sysadmin in socks and sandals yanking the power cable out of a smoking server rack, a coffee mug in his other hand."),
             Creature("Meatproxy As A Service", 1, 4, speed: 1, deploy: 1,
@@ -1496,7 +1496,7 @@ namespace SlayTheClone {
                 .Picture("A sugar pill the size of a melon labelled MIRACLE on a spoonful of sugar, and a skinny man next to it flexing a non-existent bicep, very proud."),
             Spell("Vaccine", TargetType.FriendlyCreatures,
                 "Side effects include not dying, and 5G.",
-                "Cleanses its harmful statuses; side effect: -1 Attack for this Day (sore arm).",
+                "Cleanses its statuses, all of them; side effect: -1 Attack for this Day (sore arm).",
                 Cleanse(CleanseTarget.Statuses, TargetType.FriendlyCreatures), Buff(-1, TargetType.FriendlyCreatures, attack: true, health: false, days: 1))
                 .Picture("A syringe with a tiny Wi-Fi antenna on its plunger and full signal bars above it."),
             Spell("Climate Change", TargetType.AllCreatures,

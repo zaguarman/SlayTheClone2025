@@ -484,13 +484,14 @@ namespace SlayTheClone {
                         : null;
                 case ActionType.Funnel: // The target takes the stat raises of every other creature on its side
                     return creature != null ? new FunnelAction(creature) : null;
-                case ActionType.PassHarmfulStatuses: { // The target's harmful statuses go to the creature facing it (Frame Job)
+                // No status is good or bad by itself (the user, 2026-10-15): these move every status
+                case ActionType.PassHarmfulStatuses: { // The target's statuses go to the creature facing it (Frame Job)
                     var (from, to) = Pair(source, creature);
-                    return from != null && to != null ? new PassStatusesAction(from, to, harmful: true) : null;
+                    return from != null && to != null ? new PassStatusesAction(from, to, harmful: null) : null;
                 }
-                case ActionType.StealGoodStatuses: { // The target takes the good statuses of the creature facing it (Devil's Breath)
+                case ActionType.StealGoodStatuses: { // The target takes the statuses of the creature facing it (Devil's Breath)
                     var (thief, victim) = Pair(source, creature);
-                    return thief != null && victim != null ? new PassStatusesAction(victim, thief, harmful: false) : null;
+                    return thief != null && victim != null ? new PassStatusesAction(victim, thief, harmful: null) : null;
                 }
                 case ActionType.CopyStatuses: { // The target copies every status of the creature facing it (Reflect)
                     var (mirror, model) = Pair(source, creature);

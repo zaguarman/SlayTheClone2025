@@ -246,14 +246,13 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(6, patient.Attack);
 
             game.Run(new CleanseAction(patient, CleanseTarget.Statuses));
-            Assert.IsFalse(game.ModifierManager.HasStatusEffect(patient, StatusEffectType.Burned), "A Cleanse removes harmful statuses");
-            Assert.IsNotNull(BlessingOf(patient), "Blessed is good for it: a Cleanse leaves it");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(patient, StatusEffectType.Burned), "A Cleanse removes every status...");
+            Assert.IsNull(BlessingOf(patient), "...good ones too: no status is good or bad by itself");
             Assert.AreEqual(6, patient.Attack, "Statuses only: the stat changes stay");
             game.Run(new CleanseAction(patient, CleanseTarget.StatModifications));
             Assert.AreEqual(7, patient.Attack, "The -1 goes, the +2 stays");
 
             game.Run(new CleanseAction(patient, CleanseTarget.Both, purge: true));
-            Assert.IsNull(BlessingOf(patient), "A Purge removes good and bad: Blessed loses all its stacks");
             Assert.AreEqual(5, patient.Attack, "The temporary +2 is gone, the persistent +1 stays");
         }
 

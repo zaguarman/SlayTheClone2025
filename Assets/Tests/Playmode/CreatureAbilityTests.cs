@@ -475,7 +475,7 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(HasStatus(hitman, StatusEffectType.Revealed) || HasStatus(hitman, StatusEffectType.Burned), "Frame Job: the evidence leaves it...");
             Assert.IsTrue(HasStatus(patsy, StatusEffectType.Revealed) && HasStatus(patsy, StatusEffectType.Burned), "...for the creature facing it");
 
-            // Devil's Breath: the target takes the stat raises and the good statuses of the creature facing it
+            // Devil's Breath: the target takes the stat raises and every status of the creature facing it (none is good or bad by itself)
             game.Run(new ApplyStatusEffectAction(patsy, StatusEffectType.Blessed, 1, 2, controller: p2));
             ChangeAttack(patsy, 2, p2);
             var breath = game.Spell("Breath", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.StealStatChanges, 0, TargetType.FriendlyCreatures));
@@ -483,8 +483,8 @@ namespace SlayTheClone.Tests {
             game.Play(game.GiveCard(p1, breath), p1, p1.Battlefield[0]);
             game.Resolve();
             Assert.AreEqual((8, 3), (hitman.Attack, patsy.Attack), "Devil's Breath: its raises...");
-            Assert.IsTrue(HasStatus(hitman, StatusEffectType.Blessed) && !HasStatus(patsy, StatusEffectType.Blessed), "...and its good statuses");
-            Assert.IsTrue(HasStatus(patsy, StatusEffectType.Burned), "The bad ones stay");
+            Assert.IsTrue(HasStatus(hitman, StatusEffectType.Blessed) && !HasStatus(patsy, StatusEffectType.Blessed), "...and its statuses...");
+            Assert.IsTrue(HasStatus(hitman, StatusEffectType.Burned) && !HasStatus(patsy, StatusEffectType.Burned), "...all of them, the Burn too");
 
             // Reflect: the target copies every status of the creature facing it, good and harmful, and that one keeps them
             var mirror = With(CreatureAbility.None, p1, 1);

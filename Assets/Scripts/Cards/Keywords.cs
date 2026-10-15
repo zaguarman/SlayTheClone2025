@@ -108,7 +108,7 @@ namespace SlayTheClone {
             Add("Survivor", "From full Health, a hit that would kill it leaves it at 1 Health instead, and the status is spent. It lasts until used: hurt first, and it doesn't help.");
             Add("Composed", "Composed X (no number: 1): it can't be [Exhausted] for X [Days], counting the Day it lands (1 is this Day only), and it shakes off a stun it has.");
             Add("Blackout", "Blackout X (no number: 1): its ability and its effects (arrival, Dawn and Dusk, retaliation, [Last Will]) are switched off for X [Days].");
-            Add("Cleanse", "Removes harmful statuses.");
+            Add("Cleanse", "Removes every status, whichever side it helps.");
             Add("Purge", "Removes every status, good and bad.");
 
             // ---------------------------------------------------------------- Intelligence

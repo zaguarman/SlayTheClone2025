@@ -83,3 +83,14 @@ Open decisions that block some of this (see 'Open Questions'): own decks vs pair
 1. Sound + resolution playback pacing + floating numbers (one session; the biggest feel improvement for the effort).
 2. A scripted AI opponent good enough to lose to: a first version is in (see A); next, moves and personalities.
 3. The AI vs AI balance tournament: the harness is in (AITournament); next, a deck-against-deck table with Hard on both sides, then fix the worst decks.
+
+
+NOTES FROM THE USER (2026-10-15)
+
+• Card visual effects like the Pokemon cards in the mobile games (Pokemon TCG Pocket): crisp, with glitter, holographic
+  sheen and reflections that move with the card as it tilts. To try for rare cards first, then for every card.
+• Creatures are subjects: something you could point at. Schrodinger's Cat is a cat, the Ship of Theseus is a ship.
+  Abstract things (the Scientific Method, a theory, a fallacy) are spells, Watchdogs, Trends or Slot Effects instead.
+  To review: the creatures that are abstract today, to turn into spells or rename.
+• Planning ahead for the next draw (Lucid Dreaming, the Send For cards, delayed draws): two of them played the same Day can
+  pick the same card. A card picked is set aside at once (stashed) so the next one can't pick it too.

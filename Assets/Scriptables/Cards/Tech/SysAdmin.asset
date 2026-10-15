@@ -59,8 +59,8 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: Each Dawn it cleanses your creatures' harmful statuses (Tech owns
-    Cleanse).
+  designNotes: Each Dawn it cleanses your creatures' statuses, all of them (Tech
+    owns Cleanse; since 2026-10-15 a Cleanse takes the good ones too).
   artDescription: A bearded sysadmin in socks and sandals yanking the power cable
     out of a smoking server rack, a coffee mug in his other hand.
   attack: 2

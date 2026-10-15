@@ -11,7 +11,7 @@ namespace SlayTheClone {
             var manager = context.ModifierManager;
             if (cleanse.GetWhat() != CleanseTarget.StatModifications) {
                 foreach (var status in manager.GetActiveModifiersFor(creature).OfType<StatusEffectModifier>().ToList()) {
-                    if (!cleanse.IsPurge && !status.IsNegative) continue; // A Cleanse leaves the good ones (Blessed)
+                    // Every status goes, good or bad: there's no telling them apart (the user, 2026-10-15)
                     if (status.IsCleansable) manager.RemoveModifier(creature, status); // Blessed loses all its stacks
                     else if (status.EffectType == StatusEffectType.Doomed) PassOnDoomed(creature, status, context);
                 }

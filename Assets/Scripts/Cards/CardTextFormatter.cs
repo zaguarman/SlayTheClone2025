@@ -327,9 +327,9 @@ namespace SlayTheClone {
                 case ActionType.Consolidate:
                     return $"{target} takes {value} Attack from each other creature{(action.targetType == TargetType.AllCreatures ? " on the board" : " on its side")}";
                 case ActionType.PassHarmfulStatuses:
-                    return $"{target} passes its harmful statuses to the creature facing it";
+                    return $"{target} passes its statuses to the creature facing it";
                 case ActionType.StealGoodStatuses:
-                    return $"{target} takes the good statuses of the creature facing it";
+                    return $"{target} takes the statuses of the creature facing it";
                 case ActionType.CopyStatuses:
                     return $"{target} copies the statuses of the creature facing it";
                 case ActionType.SwapPositions:

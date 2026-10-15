@@ -679,8 +679,8 @@ namespace SlayTheClone {
                     // Revealing one that burns in the light, or strikes back at whoever reveals it
                     float revealed = action.statusEffectToApply == StatusEffectType.Revealed && !creature.Ours ? RevealCost(creature) : 0;
                     return StatusGoodness(action, creature) + revealed;
-                case ActionType.Cleanse:
-                    return HarmfulStatuses.Any(creature.Has) ? 2 : 0;
+                case ActionType.Cleanse: // Every status goes: the harmful ones are a relief, the good ones a loss
+                    return 2 * (HarmfulStatuses.Count(creature.Has) - GoodStatuses.Count(creature.Has));
                 case ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish: {
                     // Off the board: worth it to save one that would die (and for its Last Will); otherwise a lost Day
                     if (!creature.Ours) return 0;
@@ -716,8 +716,8 @@ namespace SlayTheClone {
                         ActionType.StealStatChanges => 2 * System.Math.Max(0, facing.StatRaises), // They lose them, it gains them
                         ActionType.PassHarmfulStatuses when VeryHard && (creature.Has(StatusEffectType.Doomed) || creature.Has(StatusEffectType.Brainwashed)) =>
                             creature.Worth + facing.Worth, // Ours saved, theirs condemned
-                        ActionType.PassHarmfulStatuses => 2 * HarmfulStatuses.Count(creature.Has),
-                        _ => 2 * GoodStatuses.Count(facing.Has)
+                        ActionType.PassHarmfulStatuses => 2 * (HarmfulStatuses.Count(creature.Has) - GoodStatuses.Count(creature.Has)), // All of them go
+                        _ => 2 * (GoodStatuses.Count(facing.Has) - HarmfulStatuses.Count(facing.Has)) // All of them come
                     };
                 }
                 case ActionType.CopyStatuses: { // A copy of the facing creature's statuses: its good ones help, its harmful ones hurt

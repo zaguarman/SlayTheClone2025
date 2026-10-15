@@ -59,9 +59,10 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       decoy: {fileID: 0}
-  designNotes: 'Target friendly creature passes every harmful status it has (Revealed,
-    Heat Signature, Burned, Doomed...) to the enemy creature facing it, with the
-    Days they have left. Nothing faces it: nothing happens.'
+  designNotes: 'Target friendly creature passes every status it has (Revealed, Heat
+    Signature, Burned, Doomed... and its good ones too: no status is good or bad
+    by itself, the user, 2026-10-15) to the enemy creature facing it, with the Days
+    they have left. Nothing faces it: nothing happens.'
   artDescription: A smiling agent pressing a sleeping man's thumb onto a smoking
     gun with tweezers, a police lineup board behind them already labelled with the
     sleeper's name.
