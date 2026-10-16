@@ -1,0 +1,42 @@
+Telemetry
+
+Every game is recorded, and the records can be sent to a collector server (the user, 2026-10-16: "a logger that saves
+data from all games played, able to send the data to be collected by the telemetry server"). Code:
+Assets/Scripts/Core/Telemetry (GameRecord, GameRecorder, Telemetry), Debug > Telemetry; the server and its report in Tools/.
+
+
+1. WHAT IS RECORDED
+
+• Every game played on screen: a match from the menu ("match"), an adventure's fight ("adventure"), the autopilot's
+  ("autopilot"). A game left before its end (the menu, the game closed) is kept too, marked as not ended.
+• The headless AI games (tournaments, the balance study, the adventure simulation, "simulation") only with "Record
+  Simulations" on: a balance study is thousands of games.
+• Each game, one JSON line (GameRecord): its id, an anonymous install id (a random id, nothing about the person), the
+  game's version, the mode, the seed; each side's name, deck, factions, deck list, who played it (human or which AI, and
+  whether the AI took over during the game), relics, Health at the start and the end; an adventure's run, room, row,
+  fights won before and Ascension; the winner and the Days; the board at the end of each Day (Health, creatures, hand);
+  and every card played, by side: plays, damage to the player and to creatures, kills, assists, slots opened, draws,
+  sent for, healing, denied draws, damage to its own side. The card numbers are the balance study's (CardLedger), now
+  crediting Burn, Toxic, traps, Prophecies and delayed parts to their card.
+
+
+2. WHERE IT GOES
+
+• Kept locally: Logs/Telemetry/pending in the project (in a build, the app's data folder, Telemetry/pending), a file a day.
+• Sent: when an endpoint is set (Debug > Telemetry > Settings), every few minutes while the game runs, when it quits, and
+  with Debug > Telemetry > Send Now. Batches of up to 200 games are posted as {"installId", "version", "records": [...]};
+  what's sent moves to /sent, what fails waits for the next try (nothing is lost or sent twice: the collector skips ids it
+  has). An API key, if the collector asks for one, goes in the X-Api-Key header.
+• Debug > Telemetry > Status tells how many games wait and what the last send did; Open Folder shows them.
+
+
+3. THE COLLECTOR
+
+• python Tools/telemetry_server.py (standard library only): http://localhost:8787/v1/games by default, keeping the games
+  in TelemetryData/ (git ignores it). Options: --port, --host 0.0.0.0 to take games from other machines, --out, --key.
+  GET /v1/health and /v1/summary say how many games it has.
+• python Tools/telemetry_report.py [folders] [--mode adventure] [--since 2026-10-16]: the games by mode, decks and
+  factions by win share, the adventures (how far, where they died), the cards (20+ games: win share, plays, damage and
+  kills a play). It reads the collector's folder by default, or the game's own (Logs/Telemetry/pending and sent).
+• To collect from players: run the server somewhere they can reach (with --key), and set that address in the settings
+  before the build.

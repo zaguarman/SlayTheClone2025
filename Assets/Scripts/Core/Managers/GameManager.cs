@@ -180,10 +180,32 @@ namespace SlayTheClone {
 
             session.Equip(Player1, MatchSetup.PlayerRelics, MatchSetup.PlayerPotions.Select(p => p.ToCardData())); // An adventure's kit
             session.DealOpeningHands();
+            recorder = StartRecording(session, mediator as GameMediator, seed, player1Cards, player2Cards);
             Log("GameManager Initialization complete.", LogTag.Initialization);
         }
 
+        private GameRecorder recorder;
+
+        // The telemetry's record of this game (see GameRecorder): who plays what, and an adventure's room
+        private GameRecorder StartRecording(GameSession session, GameMediator mediator, int seed, List<CardData> cards1, List<CardData> cards2) {
+            string Who(IPlayer player) => MatchSetup.PlayedByAI(player) ? $"AI {MatchSetup.AIFor(player).Name}" : "human";
+            bool adventure = AdventureRun.Fighting != null;
+            var room = AdventureRun.Fighting;
+            return GameRecorder.Begin(session, mediator,
+                mode: adventure ? AdventureAutopilot.On ? "autopilot" : "adventure" : "match", seed,
+                new GameRecorder.Seat { Name = Player1.Name, Deck = MatchSetup.PlayerDeck?.GetDeckName() ?? "Scene deck", PlayedBy = Who(Player1),
+                    Cards = cards1, Relics = string.Join(", ", Player1.Relics.Select(Relics.NameOf)) },
+                new GameRecorder.Seat { Name = Player2.Name, Deck = MatchSetup.OpponentDeck?.GetDeckName() ?? "Scene deck", PlayedBy = Who(Player2),
+                    Cards = cards2, Relics = string.Join(", ", Player2.Relics.Select(Relics.NameOf)) },
+                adventure ? new AdventureRecord {
+                    runId = AdventureRun.RunId, faction = CardTextFormatter.FactionName(AdventureRun.Faction), room = room.Type.ToString(),
+                    row = room.Row + 1, fightsWonBefore = AdventureRun.FightsWon, ascension = AdventureRun.Ascension
+                } : null,
+                Who);
+        }
+
         protected void OnDestroy() {
+            recorder?.Abandon(); // Left before the end: saved as not ended (a finished game was saved already)
             ModifierManager?.Cleanup();
             ActionsQueue?.Cleanup();
             IsInitialized = false;

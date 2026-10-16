@@ -1,7 +1,9 @@
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
-    public class DamagePlayerAction : IGameAction {
+    public class DamagePlayerAction : IGameAction, ISourcedAction {
+        /// <summary>The card whose effect deals it, for the stats.</summary>
+        public ICard Source { get; set; }
         private readonly IPlayer target;
         private readonly int damage;
         private readonly ICreature attacker; // Creature dealing the damage, if any

@@ -91,6 +91,10 @@ namespace SlayTheClone {
         public static int RemovalCost => Discounted(RemovalPrice + RemovalRise * removals);
         private static int removals;
         public static Faction Faction { get; private set; }
+        /// <summary>This run, for the telemetry's records of its fights.</summary>
+        public static string RunId { get; private set; } = "";
+        /// <summary>The run's Ascension level (0: none): each one makes it harder (see <see cref="Ascension"/>).</summary>
+        public static int Ascension { get; private set; }
         public static DeckScriptableObject Deck { get; private set; }
         public static AdventureMap Map { get; private set; }
         /// <summary>The room you're in; null before the first.</summary>
@@ -131,6 +135,7 @@ namespace SlayTheClone {
         public static void Start(Faction faction, DeckScriptableObject deck, int seed, IEnumerable<CardDataScriptableObject> pool = null,
             IEnumerable<CardDataScriptableObject> potions = null) {
             Clear();
+            RunId = System.Guid.NewGuid().ToString("N");
             Pool = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null).Distinct().ToList();
             PotionPool = (potions ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null).Distinct().ToList();
             Active = true;

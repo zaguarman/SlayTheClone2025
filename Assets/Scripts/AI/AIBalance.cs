@@ -75,7 +75,11 @@ namespace SlayTheClone {
 
         /// <summary>Starts tallying one game, on the thread that plays it; its numbers join the others when it ends.</summary>
         internal Watch Begin(GameSession session, GameMediator mediator, AIEntrant first, AIEntrant second, bool mirror, string deck1, string deck2) =>
-            new Watch(this, session, mediator, first, second, mirror, deck1, deck2);
+            new Watch(this, session, mediator, first.Name, second.Name, mirror, deck1, deck2);
+
+        /// <summary>The same, for seats named by who plays them (a game on screen: "Player 1", "Hard AI"...).</summary>
+        internal Watch Begin(GameSession session, GameMediator mediator, string first, string second, string deck1, string deck2) =>
+            new Watch(this, session, mediator, first, second, false, deck1, deck2);
 
         private static Record Get<TKey>(Dictionary<TKey, Record> table, TKey key, string name, Faction faction, bool isCreature) {
             if (!table.TryGetValue(key, out var record)) {
@@ -118,7 +122,7 @@ namespace SlayTheClone {
             private readonly CardLedger ledger;
             private readonly GameSession game;
             private GameMediator mediator;
-            private readonly AIEntrant[] seats;
+            private readonly string[] seats; // Who plays each side, by name
             private readonly string[] deckNames;
             private readonly bool sameOnBothSides;
             private readonly Dictionary<ICard, int>[] plays = { new Dictionary<ICard, int>(), new Dictionary<ICard, int>() };
@@ -135,13 +139,13 @@ namespace SlayTheClone {
             private readonly Dictionary<(IPlayer side, int slot), ((ICard card, IPlayer owner) by, int day)> opened =
                 new Dictionary<(IPlayer, int), ((ICard, IPlayer), int)>();
 
-            public Watch(CardLedger ledger, GameSession session, GameMediator gameMediator, AIEntrant first, AIEntrant second, bool mirror, string deck1, string deck2) {
+            public Watch(CardLedger ledger, GameSession session, GameMediator gameMediator, string first, string second, bool mirror, string deck1, string deck2) {
                 this.ledger = ledger;
                 game = session;
                 mediator = gameMediator;
                 seats = new[] { first, second };
                 deckNames = new[] { deck1, deck2 };
-                sameOnBothSides = mirror && first.Name == second.Name;
+                sameOnBothSides = mirror && first == second;
                 game.ActionsQueue.OnActionExecuting.AddListener(OnExecuting);
                 mediator.PlayerDamaged += OnPlayerDamaged;
                 mediator.CreatureDamaged += OnCreatureDamaged;
@@ -193,8 +197,10 @@ namespace SlayTheClone {
                         foreach (var record in RecordsOf((sending.Source, Whose(sending.Source)))) record.SentFor++;
                         break;
                     case UseAbilityAction use: context = (use.Creature, Whose(use.Creature)); break;
-                    case DamageCreatureAction hit: credit = hit.GetAttacker() != null ? (hit.GetAttacker(), Whose(hit.GetAttacker())) : SpellContext(); break;
-                    case DamagePlayerAction hit: credit = hit.GetAttacker() != null ? (hit.GetAttacker(), Whose(hit.GetAttacker())) : SpellContext(); break;
+                    // A status's or a trap's damage is its card's; then the creature that hits; then the card whose effect it is (a
+                    // Prophecy or a delayed part at Dawn too); then the spell resolving
+                    case DamageCreatureAction hit: credit = Credit(hit.GetAttacker(), hit.Source); break;
+                    case DamagePlayerAction hit: credit = Credit(hit.GetAttacker(), hit.Source); break;
                     case DestroyCreatureAction destroy: credit = destroy.GetKiller() != null ? (destroy.GetKiller(), Whose(destroy.GetKiller())) : SpellContext(); break;
                     case DiscardHandAction discard:
                         context = default; // The Day is over
@@ -246,8 +252,14 @@ namespace SlayTheClone {
             // A Gift on the other side still works for the player whose card it is
             private static IPlayer Whose(ICreature creature) => creature == null ? null : creature.DeckOwner ?? creature.Owner;
 
-            // Damage nobody dealt by hand (a spell's effects) is the spell's; other sources (Burn at Dusk) aren't credited
+            // Damage nobody dealt by hand (a spell's effects) is the spell's
             private (ICard, IPlayer) SpellContext() => context.card is Spell ? context : default;
+
+            private (ICard, IPlayer) Credit(ICreature attacker, ICard source) {
+                if (source != null && source != attacker) return (source, Whose(source)); // A Burn's card, not the creature burning
+                if (attacker != null) return (attacker, Whose(attacker));
+                return SpellContext();
+            }
 
             private void OnPlayerDamaged(IPlayer player, int amount) {
                 if (credit.card == null) return;
@@ -284,7 +296,7 @@ namespace SlayTheClone {
             private IEnumerable<Record> RecordsOf((ICard card, IPlayer owner) source) {
                 if (source.owner == null) yield break;
                 yield return Get(cards, source.card.Name, source.card);
-                yield return Get(byAI, (seats[SideOf(source.owner)].Name, source.card.Name), source.card);
+                yield return Get(byAI, (seats[SideOf(source.owner)], source.card.Name), source.card);
             }
 
             private static Record Get<TKey>(Dictionary<TKey, Record> table, TKey key, ICard card) =>
@@ -294,11 +306,11 @@ namespace SlayTheClone {
                 var entries = new List<Entry>();
                 for (int side = 0; side < 2; side++) {
                     bool won = winner == side + 1, lost = winner != 0 && !won;
-                    var entry = new Entry { AI = seats[side].Name, Deck = deckNames[side], Won = won, Decided = winner != 0 };
+                    var entry = new Entry { AI = seats[side], Deck = deckNames[side], Won = won, Decided = winner != 0 };
                     foreach (var group in plays[side].GroupBy(p => p.Key.Name)) entry.Plays[group.Key] = group.Sum(p => p.Value);
                     entries.Add(entry);
                     foreach (var (card, count) in plays[side].GroupBy(p => p.Key.Name).Select(g => (g.First().Key, g.Sum(p => p.Value)))) {
-                        foreach (var record in new[] { Get(cards, card.Name, card), Get(byAI, (seats[side].Name, card.Name), card) }) {
+                        foreach (var record in new[] { Get(cards, card.Name, card), Get(byAI, (seats[side], card.Name), card) }) {
                             record.Plays += count;
                             record.Games++;
                             if (won) record.Wins++;

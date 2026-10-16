@@ -34,17 +34,17 @@ namespace SlayTheClone {
             if (creature == null) return;
             // Checkpoint (a side hazard, Pokémon's Stealth Rock): every creature that enters pays, and it stays
             if (slot?.Effect?.Type == SlotEffectType.Checkpoint) {
-                Trigger(slot, context, $"{creature.Name} is stopped at a Checkpoint", new DamageCreatureAction(creature, slot.Effect.Value));
+                Trigger(slot, context, $"{creature.Name} is stopped at a Checkpoint", new DamageCreatureAction(creature, slot.Effect.Value) { Source = slot.Effect.Source });
                 return;
             }
             if (slot?.Effect?.Type != SlotEffectType.Landmine) return;
-            Trigger(slot, context, $"{creature.Name} steps on a Landmine", new DamageCreatureAction(creature, slot.Effect.Value));
+            Trigger(slot, context, $"{creature.Name} steps on a Landmine", new DamageCreatureAction(creature, slot.Effect.Value) { Source = slot.Effect.Source });
         }
 
         /// <summary>A creature left the slot by moving: on its own, pushed or swapped. Dying or being replaced isn't leaving.</summary>
         public static void OnLeave(ICreature creature, BoardSlot slot, ActionExecutionContext context) {
             if (creature == null || slot?.Effect?.Type != SlotEffectType.BarbedSnare) return;
-            Trigger(slot, context, $"{creature.Name} tears free of a Barbed Snare", new DamageCreatureAction(creature, slot.Effect.Value));
+            Trigger(slot, context, $"{creature.Name} tears free of a Barbed Snare", new DamageCreatureAction(creature, slot.Effect.Value) { Source = slot.Effect.Source });
         }
 
         // The effect is queued as an environment action, and a "1 Trigger" effect is removed (and so revealed) right away

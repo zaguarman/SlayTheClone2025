@@ -288,7 +288,7 @@ namespace SlayTheClone {
                     }
                     else {
                         Log($"{creature.Name} burns for {burn.Potency} (StatusEffect '{burn.Name}')", LogTag.Effects | LogTag.Turns);
-                        actionsQueue.AddAction(new DamageCreatureAction(creature, burn.Potency, creature));
+                        actionsQueue.AddAction(new DamageCreatureAction(creature, burn.Potency, creature) { Source = OriginOf(creature, burn) });
                     }
                     if (burn.EffectType == StatusEffectType.Toxic) burn.Grow();
                 }
@@ -368,6 +368,10 @@ namespace SlayTheClone {
                 mediator?.NotifyCreatureStatsChanged(creature);
             }
         }
+
+        // The card whose effect made this modifier, if one did (the stats credit a Burn's damage to it)
+        private ICard OriginOf(ICreature creature, IModifier modifier) =>
+            attachments.TryGetValue(creature.TargetId, out var list) ? list.FirstOrDefault(a => a.Modifier == modifier)?.Card : null;
 
         public void RefreshConditionalStats() {
             foreach (var creature in creatures.Values.ToList()) {

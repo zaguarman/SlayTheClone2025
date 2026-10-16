@@ -121,6 +121,7 @@ namespace SlayTheClone {
             GameSession session = null;
             TurnFlow turns = null;
             GameAudit.Watch watch = null;
+            GameRecorder recorder = null;
             CardLedger.Watch tally = null;
             try {
                 // Each game deals from its own copy of the deck lists: decks shuffle what they're given
@@ -129,6 +130,10 @@ namespace SlayTheClone {
                 turns = session.CreateTurnFlow(mediator);
                 session.Equip(session.Player1, game.Relics1, game.Potions1);
                 session.DealOpeningHands();
+                recorder = Telemetry.RecordingSimulations ? GameRecorder.Begin(session, mediator, "simulation", game.Seed,
+                    new GameRecorder.Seat { Name = game.First.Name, Deck = game.Deck1.Name, PlayedBy = $"AI {game.First.Name}", Cards = game.Deck1.Cards,
+                        Relics = string.Join(", ", (game.Relics1 ?? new Relic[0]).Select(Relics.NameOf)) },
+                    new GameRecorder.Seat { Name = game.Second.Name, Deck = game.Deck2.Name, PlayedBy = $"AI {game.Second.Name}", Cards = game.Deck2.Cards }) : null;
                 var planners = new[] {
                     game.First.Planner(session.ActionsQueue, session.CombatHandler, game.Seed),
                     game.Second.Planner(session.ActionsQueue, session.CombatHandler, game.Seed + 1)
@@ -148,6 +153,7 @@ namespace SlayTheClone {
                 bool firstDown = session.Player1.Health <= 0, secondDown = session.Player2.Health <= 0;
                 int winner = champion == session.Player1 ? 1 : champion == session.Player2 ? 2 : firstDown == secondDown ? 0 : firstDown ? 2 : 1;
                 tally?.End(winner);
+                recorder?.End(winner); // Called off after MaxDays: ended, nobody won
                 var potionsLeft = session.Player1.Hand.Where(c => c.SourceData?.potion == true).Select(c => c.Name).ToArray();
                 return new Result(game.Deck1.Name, game.Deck2.Name, game.First, game.Second, winner, turns.TurnNumber, session.Player1.Health, session.Player2.Health, potionsLeft);
             }

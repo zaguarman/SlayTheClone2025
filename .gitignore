@@ -91,3 +91,6 @@ Assets/Scriptables/Cards/Birds/HealingDove.asset
 /Assets/InitTestScene*
 
 /ArrowGallery/
+
+# The telemetry collector's data (Tools/telemetry_server.py)
+/TelemetryData/
