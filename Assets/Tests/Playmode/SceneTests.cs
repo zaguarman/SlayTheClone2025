@@ -607,7 +607,7 @@ namespace SlayTheClone.Tests {
             SceneGame.Hover(game.CardIn(aimedAt));
             yield return SceneGame.PreviewShows();
             var wheel = Tooltip.Existing.GetComponentsInChildren<CardController>().Where(c => c != SceneGame.HoverPreview()).ToList();
-            Assert.AreEqual(2, wheel.Count, "The cards on it wait on the wheel beside the creature...");
+            Assert.AreEqual(Mathf.Min(2, RouletteTuning.Current.reach), wheel.Count, "The cards on it wait on the wheel beside the creature (as far as it reaches)...");
             Assert.IsTrue(wheel.All(c => c.GetComponent<CanvasGroup>().alpha < 1f), "...faint");
             Tooltip.Existing.Browse(1);
             Assert.AreSame(quake, SceneGame.HoverPreview()?.GetLinkedCardInstance(), "Scrolling over the creature shows the cards on it, enlarged...");
@@ -616,9 +616,9 @@ namespace SlayTheClone.Tests {
             Tooltip.Existing.Browse(1);
             Tooltip.Existing.Browse(1);
             Assert.AreEqual(0, Tooltip.Existing.Browsed, "...round to the creature again");
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(RouletteTuning.Current.seconds + 0.25f); // However long a turn is tuned to take
             var settled = Tooltip.Existing.GetComponentsInChildren<CardController>();
-            Assert.AreEqual(3, settled.Length, "The wheel turns them in and out, then the one shown and the others, faint, are left...");
+            Assert.AreEqual(1 + Mathf.Min(2, RouletteTuning.Current.reach), settled.Length, "The wheel turns them in and out, then the one shown and the others, faint, are left...");
             Assert.AreEqual(1, settled.Count(c => c.GetComponent<CanvasGroup>().alpha >= 0.99f), "...only the shown one solid");
             Assert.AreEqual(Quaternion.identity, SceneGame.HoverPreview().transform.localRotation, "...upright");
             Tooltip.Existing.HideTooltip();

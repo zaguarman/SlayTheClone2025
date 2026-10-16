@@ -72,7 +72,7 @@ namespace SlayTheClone {
             // Add TextMeshProUGUI component
             TextMeshProUGUI tooltipText = textObj.AddComponent<TextMeshProUGUI>();
             tooltipText.alignment = TextAlignmentOptions.Center;
-            tooltipText.fontSize = 16;
+            tooltipText.fontSize = Roulette.detailsFontSize;
             tooltipText.color = UITheme.Parchment;
             tooltipText.enableWordWrapping = true;
 
@@ -102,8 +102,7 @@ namespace SlayTheClone {
 
         // Card hover preview: an enlarged live copy of the hovered card, placed next to it (its size is a RouletteTuning slider)
         private static float PreviewScale => RouletteTuning.Current.previewScale;
-        private const float PreviewGap = 10f;      // Screen pixels between the card and its preview
-        private const float DetailsWidth = 300f;
+        private const float PreviewGap = 10f;      // Screen pixels between a preview and its explanations (the preview's own gap and the details box are sliders)
         private const float TextWidth = 420f; // A text tooltip, like a queued action's details
 
         // References to tooltip components
@@ -141,6 +140,7 @@ namespace SlayTheClone {
                 canvasGroup = GetComponent<CanvasGroup>();
 
             textPivot = tooltipRect.pivot;
+            FogOfWar.Changed += OnFogOfWarChanged;
 
             // Ensure tooltip starts hidden
             HideTooltip();
@@ -292,8 +292,8 @@ namespace SlayTheClone {
             tooltipText.text = details;
             tooltipText.alignment = TextAlignmentOptions.Center;
             tooltipText.fontSize = 16;
-            float textHeight = tooltipText.GetPreferredValues(details, DetailsWidth - 20f, 0f).y;
-            tooltipRect.sizeDelta = new Vector2(DetailsWidth, textHeight + 20f);
+            float textHeight = tooltipText.GetPreferredValues(details, Roulette.detailsWidth - 20f, 0f).y;
+            tooltipRect.sizeDelta = new Vector2(Roulette.detailsWidth, textHeight + 20f);
             PlaceDetailsBesidePreview();
         }
 
@@ -345,22 +345,27 @@ namespace SlayTheClone {
             Vector2 cardMax = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
 
             bool showAbove = (cardMin.y + cardMax.y) * 0.5f < Screen.height * 0.5f;
+            float gap = Roulette.previewGap;
             previewRect.pivot = new Vector2(0.5f, showAbove ? 0f : 1f);
-            previewRect.position = new Vector2((cardMin.x + cardMax.x) * 0.5f, showAbove ? cardMax.y + PreviewGap : cardMin.y - PreviewGap);
+            previewRect.position = new Vector2((cardMin.x + cardMax.x) * 0.5f, showAbove ? cardMax.y + gap : cardMin.y - gap);
+            // The sliders' nudges, in preview sizes: sideways, and away from the card
+            var size = ScreenRect(previewRect).size;
+            previewRect.position += new Vector3(Roulette.previewSideways * size.x, (showAbove ? 1f : -1f) * Roulette.previewAway * size.y, 0f);
             KeepOnScreen(previewRect);
         }
 
         // To the right of the preview, or to its left when there is no room
         private void PlaceDetailsBesidePreview() {
             var shown = PreviewScreenRect();
+            float gap = previewIsCard ? PreviewGap : Roulette.detailsGap, top = shown.yMax - (previewIsCard ? 0f : Roulette.detailsDown);
             tooltipRect.pivot = new Vector2(0f, 1f);
-            tooltipRect.position = new Vector2(shown.xMax + PreviewGap, shown.yMax);
+            tooltipRect.position = new Vector2(shown.xMax + gap, top);
 
             var corners = new Vector3[4];
             tooltipRect.GetWorldCorners(corners);
             if (corners[2].x > Screen.width) {
                 tooltipRect.pivot = new Vector2(1f, 1f);
-                tooltipRect.position = new Vector2(shown.xMin - PreviewGap, shown.yMax);
+                tooltipRect.position = new Vector2(shown.xMin - gap, top);
             }
             KeepOnScreen(tooltipRect);
         }
@@ -394,6 +399,10 @@ namespace SlayTheClone {
         private void LateUpdate() {
             if (gameObject.activeSelf && activeCard == null) {
                 FollowMouse();
+            }
+            if (stackStale) {
+                stackStale = false;
+                RefreshStack();
             }
         }
 
@@ -521,6 +530,7 @@ namespace SlayTheClone {
             var shown = (RectTransform)preview.transform;
             float radius = shown.rect.height * shown.lossyScale.y * RouletteRadius;
             Vector3 center = home - up * radius;
+            float height = shown.rect.height * shown.lossyScale.y;
             for (int i = 0; i <= stack.Count; i++) {
                 int distance = Mathf.Abs(i - browsed);
                 if (distance == 0 || distance > WheelReach) continue;
@@ -531,10 +541,10 @@ namespace SlayTheClone {
                     : activeCard.CreatePreviewOfAttached(i - 1, transform);
                 if (ghost == null) continue;
                 var rect = (RectTransform)ghost.transform;
-                rect.localScale = shown.localScale;
-                var turn = Quaternion.Euler(0f, 0f, (ahead ? 1f : -1f) * distance * RouletteAngle); // The next ones come from the left
-                rect.position = center + turn * (home - center);
-                rect.rotation = turn * shown.parent.rotation;
+                rect.localScale = shown.localScale * Roulette.waitingScale;
+                float angle = (ahead ? 1f : -1f) * distance * RouletteAngle; // The next ones come from the left
+                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (home - center) + Nudge(up, height, ahead) * distance;
+                rect.rotation = Quaternion.Euler(0f, 0f, angle * Roulette.waitingTilt) * shown.parent.rotation;
                 rect.SetAsFirstSibling(); // Behind the shown card and the explanations
                 var group = ghost.GetComponent<CanvasGroup>() ?? ghost.gameObject.AddComponent<CanvasGroup>();
                 group.blocksRaycasts = false;
@@ -554,29 +564,40 @@ namespace SlayTheClone {
             wheel.Clear();
         }
 
+        // Where a waiting card sits beyond the wheel's arc, one place out (the sliders): out to its side, and up
+        private static Vector3 Nudge(Vector3 up, float height, bool ahead) {
+            var right = new Vector3(up.y, -up.x, 0f);
+            return ((ahead ? -right : right) * Roulette.waitingOut + up * Roulette.waitingUp) * height;
+        }
+
         // The roulette: both cards turn together around the wheel's center, the old one out, the new one in, settling where
-        // the new one belongs. A card still leaving from the last turn goes at once
+        // the new one belongs; each grows or shrinks between the shown card's size and a waiting card's, and leans as they do.
+        // A card still leaving from the last turn goes at once
         private void Spin(CardController old, CardController next, int direction) {
             ClearLeaving();
             var nextRect = (RectTransform)next.transform;
-            Vector3 home = nextRect.position;
-            float radius = nextRect.rect.height * nextRect.lossyScale.y * RouletteRadius;
-            Vector3 center = home - nextRect.up * radius;
+            Vector3 home = nextRect.position, up = nextRect.up;
+            float height = nextRect.rect.height * nextRect.lossyScale.y;
+            float radius = height * RouletteRadius;
+            Vector3 center = home - up * radius;
+            Vector3 nextScale = nextRect.localScale;
             var oldRect = (RectTransform)old.transform;
-            Vector3 oldHome = oldRect.position;
+            Vector3 oldHome = oldRect.position, oldScale = oldRect.localScale;
             if (old.TryGetComponent(out CanvasGroup oldGroup)) oldGroup.blocksRaycasts = false;
             leaving.Add(old);
 
-            void Place(RectTransform rect, Vector3 from, float angle) {
-                var turn = Quaternion.Euler(0f, 0f, angle);
-                rect.position = center + turn * (from - center);
-                rect.localRotation = turn;
+            // waiting: 0 where the shown card is, 1 a place out on the wheel, on the ahead side or the other
+            void Place(RectTransform rect, Vector3 from, Vector3 scale, float angle, float waiting, bool ahead) {
+                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (from - center) + Nudge(up, height, ahead) * waiting;
+                rect.localRotation = Quaternion.Euler(0f, 0f, angle * Roulette.waitingTilt);
+                rect.localScale = scale * Mathf.Lerp(1f, Roulette.waitingScale, waiting);
             }
             float tilt = -direction * RouletteAngle; // Scrolling on turns the wheel clockwise: the next card comes from the left
-            Place(nextRect, home, -tilt);
+            bool fromAhead = direction > 0;
+            Place(nextRect, home, nextScale, -tilt, 1f, fromAhead);
             DOTween.To(() => 0f, t => {
-                if (nextRect != null) Place(nextRect, home, -tilt * (1f - t));
-                if (oldRect != null) Place(oldRect, oldHome, tilt * t);
+                if (nextRect != null) Place(nextRect, home, nextScale, -tilt * (1f - t), 1f - t, fromAhead);
+                if (oldRect != null) Place(oldRect, oldHome, oldScale, tilt * t, t, !fromAhead);
                 if (oldGroup != null) oldGroup.alpha = 1f - t;
             }, 1f, RouletteSeconds).SetEase(Roulette.ease).SetUpdate(true).SetTarget(this).OnComplete(ClearLeaving); // Real time: also while paused
         }
@@ -591,6 +612,28 @@ namespace SlayTheClone {
             UpdateTooltipContent(activeCard);
             ShowWheel(rect.position, rect.up, fadeIn: false);
         }
+
+        /// <summary>
+        /// The cards under the hovered creature changed (Fog of War switched, a hidden one shown): the card on show and the
+        /// wheel again, as they are now.
+        /// </summary>
+        public void RefreshStack() {
+            if (activeCard == null || preview == null || previewIsCard) return;
+            ClearLeaving();
+            CloseKeywordsFrom(0);
+            if (browsed > activeCard.AttachedCards.Count) browsed = 0;
+            var fresh = browsed == 0 ? activeCard.CreatePreview(transform) : activeCard.CreatePreviewOfAttached(browsed - 1, transform);
+            if (fresh == null) return;
+            Destroy(preview.gameObject);
+            preview = fresh;
+            RedrawRoulette();
+        }
+
+        // Switching Fog of War turns hidden cards face up or down: the stack shows again once the board has caught up
+        private bool stackStale;
+        private void OnFogOfWarChanged() => stackStale = true;
+
+        private void OnDestroy() => FogOfWar.Changed -= OnFogOfWarChanged;
 
         /// <summary>Shows this card's preview now, as if hovered, and keeps it up until <see cref="HideTooltip"/> (the Roulette Gallery).</summary>
         public void Pin(CardController card) {

@@ -10,14 +10,16 @@ namespace SlayTheClone {
     /// under it shows its enlarged preview, and the wheel turns through its stack, one card at a time, round to the creature
     /// again; then the next shot. UI > Roulette Gallery plays it back while the game plays: the window sets how long each
     /// card stays, pauses (the wheel can still be turned by hand there), and steps back and forth; it loops until stopped.
-    /// It fills both rows with plain creatures and tucks cards from both decks under them (see <see cref="Set"/>).
+    /// It fills both rows with plain creatures and tucks cards from both decks under them (see <see cref="Set"/>); the
+    /// enemy's spells among them are on their way, so they show their backs while Fog of War is on (F9, or the window's
+    /// switch, turns them over as the wheel shows them).
     /// It changes the game it runs on: use a game you don't mind losing.
     /// </summary>
     public class RouletteGallery : MonoBehaviour {
         /// <summary>What each set shows.</summary>
         public enum Set {
             Sizes,  // Stacks of 1 to 8 cards on your Vanguard: the wheel's reach, how faint the waiting cards are
-            Hidden, // Enemy spells on their way among them, showing their backs
+            Hidden, // Only enemy spells on their way: all backs under Fog of War
             Places  // A stack of 3 on each slot, both sides: where the preview and its wheel sit
         }
 
@@ -39,7 +41,7 @@ namespace SlayTheClone {
             public bool Yours;   // Your side's slot, or the enemy's
             public int Slot;
             public int Tucked;
-            public int[] Hidden; // Which of the tucked cards are enemy spells on their way (their backs show), from 0
+            public int[] Enemy; // Which of the tucked cards are the enemy's whoever's they are in the pool, from 0
         }
 
         private GameManager game;
@@ -48,6 +50,7 @@ namespace SlayTheClone {
         private readonly List<Shot> shots = new List<Shot>();
         private readonly List<(ICard Card, IPlayer Owner)> pool = new List<(ICard, IPlayer)>(); // Cards to tuck, from both decks
         private CardController shown; // The creature whose stack shows now
+        private Shot showing;         // ...and the shot it's for
         private int jump;   // Previous / Next pressed
         private int turns;  // Turns of the wheel asked for by hand
 
@@ -147,8 +150,8 @@ namespace SlayTheClone {
                 foreach (int n in new[] { 1, 2, 3, 5, 8 }) Add(Set.Sizes, $"{n} tucked under your Vanguard", true, 0, n);
             }
             if (Chosen.Contains(Set.Hidden)) {
-                Add(Set.Hidden, "4 tucked, the 2nd and 4th enemy spells on their way", true, 0, 4, 1, 3);
-                Add(Set.Hidden, "3 enemy spells on their way", true, 0, 3, 0, 1, 2);
+                Add(Set.Hidden, "4 enemy spells on their way", true, 0, 4, 0, 1, 2, 3);
+                Add(Set.Hidden, "3 enemy spells on the enemy's Vanguard", false, 0, 3, 0, 1, 2);
             }
             if (Chosen.Contains(Set.Places)) {
                 foreach (bool yours in new[] { true, false }) {
@@ -159,8 +162,8 @@ namespace SlayTheClone {
             }
         }
 
-        private void Add(Set set, string name, bool yours, int slot, int tucked, params int[] hidden) =>
-            shots.Add(new Shot { Set = set, Name = name, Yours = yours, Slot = slot, Tucked = tucked, Hidden = hidden });
+        private void Add(Set set, string name, bool yours, int slot, int tucked, params int[] enemy) =>
+            shots.Add(new Shot { Set = set, Name = name, Yours = yours, Slot = slot, Tucked = tucked, Enemy = enemy });
 
         private void ShowShot(Shot shot) {
             Tooltip.Existing?.HideTooltip();
@@ -170,15 +173,40 @@ namespace SlayTheClone {
             var side = shot.Yours ? game.Player1 : game.Player2;
             shown = Board(side).FindSlotView(side.Battlefield[shot.Slot])?.OccupyingCard;
             if (shown == null) return;
-            var stack = Enumerable.Range(0, shot.Tucked).Select(i => pool[i % pool.Count]).ToList();
-            shown.AttachedCards = stack.Select(s => s.Card).ToList();
-            shown.AttachedOwners = stack.Select((s, i) => shot.Hidden.Contains(i) ? game.Player2 : s.Owner).ToList();
-            shown.AttachedHidden = stack.Select((s, i) => shot.Hidden.Contains(i)).ToList();
+            showing = shot;
+            Tuck();
             Tooltip.Shared.Pin(shown);
+        }
+
+        // The shot's stack under the creature shown: the enemy's spells are on their way, hidden as the fog says now
+        private void Tuck() {
+            var stack = Enumerable.Range(0, showing.Tucked).Select(i => (pool[i % pool.Count].Card, Owner: showing.Enemy.Contains(i) ? game.Player2 : pool[i % pool.Count].Owner)).ToList();
+            stackCards = stack.Select(s => s.Card).ToList();
+            shown.AttachedCards = stackCards;
+            shown.AttachedOwners = stack.Select(s => (IPlayer)s.Owner).ToList();
+            shown.AttachedHidden = Hidden();
+        }
+
+        private List<ICard> stackCards;
+
+        private List<bool> Hidden() => shown.AttachedCards.Select((card, i) =>
+            card is Spell && i < shown.AttachedOwners.Count && FogOfWar.HidesHandOf(shown.AttachedOwners[i])).ToList();
+
+        // The board redraws its stacks when anything changes (the fog switched, say): the shot's goes back on, and the
+        // wheel shows what's hidden now
+        private void LateUpdate() {
+            if (shown == null || showing == null) return;
+            bool lost = !ReferenceEquals(shown.AttachedCards, stackCards);
+            if (lost) Tuck();
+            var hidden = Hidden();
+            if (!lost && hidden.SequenceEqual(shown.AttachedHidden)) return;
+            shown.AttachedHidden = hidden;
+            Tooltip.Existing?.RefreshStack();
         }
 
         // The creature shown last gets its own stack back (none: the gallery's creatures have nothing on them)
         private void Untuck() {
+            showing = null;
             if (shown == null) return;
             shown.AttachedCards = new List<ICard>();
             shown.AttachedOwners = new List<IPlayer>();
@@ -253,13 +281,15 @@ namespace SlayTheClone {
                 if (GUILayout.Button("< Turn back")) gallery.Turn(-1);
                 if (GUILayout.Button("Turn on >")) gallery.Turn(1);
             }
+            if (GUILayout.Button($"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")} (F9)")) FogOfWar.Toggle();
             if (GUILayout.Button("Stop")) RouletteGallery.Stop();
-            UnityEditor.EditorGUILayout.HelpBox("Pause on a shot, then move the sliders in UI > Roulette Tuning: the wheel redraws as they change. Turn it by hand to see a turn again.", UnityEditor.MessageType.None);
+            UnityEditor.EditorGUILayout.HelpBox("Pause on a shot, then move the sliders in UI > Roulette Tuning: the wheel redraws as they change. Turn it by hand to see a turn again. " +
+                "The enemy's spells show their backs while the fog is on.", UnityEditor.MessageType.None);
         }
 
         private static string Shows(RouletteGallery.Set set) => set switch {
             RouletteGallery.Set.Sizes => "stacks of 1 to 8: reach, fading",
-            RouletteGallery.Set.Hidden => "enemy spells showing their backs",
+            RouletteGallery.Set.Hidden => "only enemy spells: all backs under fog",
             RouletteGallery.Set.Places => "each slot, both sides: placement",
             _ => ""
         };

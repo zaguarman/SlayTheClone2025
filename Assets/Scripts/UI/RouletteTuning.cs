@@ -25,7 +25,17 @@ namespace SlayTheClone {
         [Tooltip("How the turn eases in and out")]
         public Ease ease = Ease.OutCubic;
 
-        [Header("The cards waiting on the wheel")]
+        [Header("The cards waiting on the wheel: where they sit")]
+        [Tooltip("Their size, of the shown card's")]
+        [Range(0.3f, 1.3f)] public float waitingScale = 1f;
+        [Tooltip("How far out to the sides they move, in preview heights per place on the wheel (negative: in)")]
+        [Range(-1f, 1f)] public float waitingOut = 0f;
+        [Tooltip("How far up they move, in preview heights per place on the wheel (negative: down)")]
+        [Range(-1f, 1f)] public float waitingUp = 0f;
+        [Tooltip("How much they lean with the wheel: 1 follows it, 0 stays upright")]
+        [Range(0f, 1.5f)] public float waitingTilt = 1f;
+
+        [Header("The cards waiting on the wheel: how faint")]
         [Tooltip("The next card to come (on the left): its opacity")]
         [Range(0f, 1f)] public float nextAlpha = 0.55f;
         [Tooltip("Each card further ahead: this much fainter than the one before")]
@@ -35,9 +45,25 @@ namespace SlayTheClone {
         [Tooltip("Each card further back: its opacity times this")]
         [Range(0f, 1f)] public float behindFade = 0.4f;
 
-        [Header("The preview")]
+        [Header("The preview (any enlarged card on the table)")]
         [Tooltip("The enlarged card, in card sizes (always well bigger than the card as shown)")]
         [Range(1f, 3.5f)] public float previewScale = 2f;
+        [Tooltip("Screen pixels between the card and its preview")]
+        [Range(-100f, 150f)] public float previewGap = 10f;
+        [Tooltip("Moves it sideways, in preview widths (negative: left)")]
+        [Range(-1f, 1f)] public float previewSideways = 0f;
+        [Tooltip("Moves it away from the card, in preview heights (negative: toward it)")]
+        [Range(-1f, 1f)] public float previewAway = 0f;
+
+        [Header("The details box beside the preview")]
+        [Tooltip("Its width, in screen pixels")]
+        [Range(150f, 600f)] public float detailsWidth = 300f;
+        [Tooltip("Its text size")]
+        [Range(10f, 30f)] public float detailsFontSize = 16f;
+        [Tooltip("Screen pixels between the preview and the box")]
+        [Range(-100f, 150f)] public float detailsGap = 10f;
+        [Tooltip("Moves it down from the preview's top, in screen pixels (negative: up)")]
+        [Range(-400f, 600f)] public float detailsDown = 0f;
 
         /// <summary>How faint a card is on the wheel, this many places ahead of the shown one (or behind it).</summary>
         public float AlphaAt(int distance, bool ahead) =>
