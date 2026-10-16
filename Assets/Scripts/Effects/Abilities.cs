@@ -113,8 +113,15 @@ namespace SlayTheClone {
             CreatureAbility.CollateralDamage => "when its attack is more than a creature's Health, the rest hits that creature's player",
             CreatureAbility.SorryImLate => "played onto a friendly creature, it arrives after the attacks: the creature there takes the Day's hits, then it's replaced",
             CreatureAbility.HeProtec => "when a summon replaces it, it stays through the attacks and takes the Day's hits; the newcomer arrives after them",
+            CreatureAbility.Irreplaceable => "no summon can replace it: its slot stays its own until it leaves",
             _ => ""
         };
+
+        /// <summary>
+        /// Whether a summon can replace this creature: not an Irreplaceable one (Demagogue), its drawback. Printed, so it
+        /// holds even while its ability is switched off.
+        /// </summary>
+        public static bool CanBeReplaced(ICreature creature) => creature == null || creature.Ability != CreatureAbility.Irreplaceable;
 
         /// <summary>
         /// A summon onto a friendly creature that waits for the attacks (the Late Arrivals layer, after every other): the

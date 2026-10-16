@@ -34,7 +34,7 @@ namespace SlayTheClone {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
             SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, PennyStock, Undercover, Handover, Recoil,
             Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace, Ambush, ExtremePrejudice,
-            AllergicToLight, FallGuy, Brink, CollateralDamage, SorryImLate, HeProtec
+            AllergicToLight, FallGuy, Brink, CollateralDamage, SorryImLate, HeProtec, Irreplaceable
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look
@@ -93,6 +93,7 @@ namespace SlayTheClone {
             Beside = 1 << 6,    // Only the creatures beside where it lands, not the one there (Holy Hand Grenade's splash)
             AlliesOfTarget = 1 << 7, // The other creatures on the side of the one it lands on (False Flag Operation rallies them)
             DroppedSide = 1 << 8,    // The creatures of the side it's played on, either one (Team Building Exercise)
+            Others = 1 << 9,         // A creature's effect on a group, or a pick from one: every creature but itself (Demagogue)
         }
 
         // Trends (GDD 4.2): what the world is into right now, one rule for the whole board for some Days, until another Trend replaces it. New ones go last

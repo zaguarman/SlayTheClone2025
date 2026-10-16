@@ -23,6 +23,7 @@ namespace SlayTheClone {
         private const TargetModifier Each = TargetModifier.AllSameTypeTargets;
         private const TargetModifier AtRandom = TargetModifier.Random;
         private const TargetModifier StrongestOne = TargetModifier.Strongest;
+        private const TargetModifier Others = TargetModifier.Others; // Not itself (the user, 2026-10-16)
         private const TargetModifier Facing = TargetModifier.Opposite;
 
         [MenuItem("Cards/Generate Faction Decks")]
@@ -218,7 +219,7 @@ namespace SlayTheClone {
             Creature("Micromanager", 2, 3, speed: 1, deploy: 1,
                 "Per my last email. And the one before. And the meeting about the emails.",
                 "Future: gives a friendly Worker Coffeinated instead of a plain attack buff.",
-                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom))),
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom | Others))),
             Creature("Multilevel Marketing Seller", 1, 2, speed: 2, deploy: 0,
                 "It's not a pyramid. It's a triangle of opportunity.",
                 "Future: summons an Unpaid Intern token. Each recruit pays a share of its draws upward.",
@@ -420,16 +421,17 @@ namespace SlayTheClone {
             Creature("Supreme Court", 0, 7, speed: 1, deploy: 1,
                 "Appointed for life. Accountable for nothing.",
                 "Return to Sender: enemy statuses bounce back to whoever sent them. Future: Fortifying. Adjacent friendly creatures can't be moved by enemy effects.",
-                On(EffectTrigger.OnPlay, Armor(2, TargetType.FriendlyCreatures)))
+                On(EffectTrigger.OnPlay, Armor(2, TargetType.FriendlyCreatures, Others)))
                 .With(CreatureAbility.ReturnToSender),
             Creature("Protocol Enforcers", 2, 5, speed: 1, deploy: 0,
                 "Please stand behind the line. Which line? This line. Now that line.",
                 "Future: Keep Calm on friendly creatures each time it's hit.",
-                On(EffectTrigger.OnDamage, Armor(1, TargetType.FriendlyCreatures))),
-            Creature("Demagogue", 2, 4, speed: 2, deploy: 0,
+                On(EffectTrigger.OnDamage, Armor(1, TargetType.FriendlyCreatures, Others))),
+            Creature("Demagogue", 2, 4, speed: 2, deploy: 1,
                 "Says what you think. Thinks what he's told.",
-                "Future: Loaded Language. The buff only lasts while it stays on the battlefield.",
-                On(EffectTrigger.OnPlay, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false))),
+                "The user, 2026-10-16: +2 Attack to the other friendly creatures when ready, not itself; 1 Day to deploy, and Irreplaceable, its drawback: no summon can take its slot. Future: Loaded Language.",
+                On(EffectTrigger.OnPlay, Buff(2, TargetType.FriendlyCreatures, attack: true, health: false, Others)))
+                .With(CreatureAbility.Irreplaceable),
             Spell("Red Tape", TargetType.EnemyCreatures,
                 "Your request is being processed. Please hold. Forever.",
                 "Adds 1 Day to an enemy creature's Deployment Time: it sits out the rest of this Day and all of the next, its planned action is cancelled, and its abilities are off until it's ready again. Its entry effects don't happen twice.",
@@ -459,7 +461,7 @@ namespace SlayTheClone {
             Creature("Diplomat", 3, 6, speed: 1, deploy: 1,
                 "Third-generation ambassador. Qualifications: his surname.",
                 "Mechanics test: Deployment Time 2 counts down at Dusk, never at the Dusk of the Day it arrived; its entry effect waits until it's ready. Armor fades by 1 each Dusk on every creature.",
-                On(EffectTrigger.OnPlay, Armor(2, TargetType.FriendlyCreatures, Each)))
+                On(EffectTrigger.OnPlay, Armor(2, TargetType.FriendlyCreatures, Each | Others)))
                 .Picture("A young heir lounging in a leather chair at a summit table, feet up, a gold name plate reading \"AMBASSADOR (BY BIRTH)\". Behind him, a wall of portraits of his father and grandfather in the very same chair."),
             Spell("Raised Security Level", TargetType.FriendlyCreatures,
                 "The threat level is now Orange. Nobody knows what Orange means.",
@@ -715,7 +717,7 @@ namespace SlayTheClone {
             Creature("Meta Group Chat", 2, 4, speed: 2, deploy: 0,
                 "If you aren't in it, you're not on the jury, you're on trial.",
                 "Each Dawn the in-group gets louder (+1 Attack on a random friendly creature) and someone outside it gets a target on their back (Heat Signature 1 on a random enemy creature). Future: Ostracised.",
-                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom),
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom | Others),
                     Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 1, modifier: AtRandom)))
                 .Picture("A messenger group chat in the familiar green-and-beige look: THE JURY (47 members), gavels and skulls with blue read ticks under a blurry photo of one guy, while the guy himself sweats alone outside the phone."),
             Spell("Social Panopticon", TargetType.EnemyCreatures,
@@ -1146,7 +1148,7 @@ namespace SlayTheClone {
             Creature("Omniscient Space-Time Bending Bearded Wizard", 3, 9, speed: 1, deploy: 2,
                 "Works in mysterious ways. Mostly late.",
                 "Each Dawn, Blessed on a random friendly creature.",
-                On(EffectTrigger.StartOfTurn, Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: AtRandom)))
+                On(EffectTrigger.StartOfTurn, Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: AtRandom | Others)))
                 .NotInStarterDeck()
                 .Picture("An old bearded man on a cloud in a bathrobe and slippers, lazily pointing a TV remote at a tiny spinning universe."),
             Creature("Cultist", 1, 1, speed: 2, deploy: 0,
@@ -1304,17 +1306,17 @@ namespace SlayTheClone {
             Creature("Buddy Christ", 2, 4, speed: 1, deploy: 0,
                 "Winks. Points. Forgives.",
                 "Each Dawn, every friendly creature heals 1.",
-                On(EffectTrigger.StartOfTurn, Heal(1, TargetType.FriendlyCreatures, Each)))
+                On(EffectTrigger.StartOfTurn, Heal(1, TargetType.FriendlyCreatures, Each | Others)))
                 .Picture("A smiling plastic Jesus statue winking and giving a big thumbs up and a finger point, on a church lawn next to a sign reading CATHOLICISM: WOW!"),
             Creature("Pope", 1, 7, speed: 1, deploy: 1,
                 "Infallible. Bulletproof glass, just in case.",
                 "Each Dawn, Blessed 1 on your strongest creature.",
-                On(EffectTrigger.StartOfTurn, Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: StrongestOne)))
+                On(EffectTrigger.StartOfTurn, Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: StrongestOne | Others)))
                 .Picture("The Pope waving from a glass-domed popemobile, sprinkling holy water from a garden hose over a crowd of creatures."),
             Creature("The Lobster Professor", 1, 6, speed: 1, deploy: 1,
                 "Clean your room, bucko. Then buy the seminar.",
                 "Each Dawn, your strongest creature gets +1 Attack for as long as it's in play: the dominance hierarchy, as preached.",
-                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, StrongestOne)))
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, StrongestOne | Others)))
                 .Picture("A gaunt professor in a three-piece suit lecturing tearfully at a lectern, pointing at a projected slide of a lobster sitting on a throne, the audience taking notes, a messy bedroom visible through a door behind him."),
             Creature("Pyramids", 0, 10, speed: 1, deploy: 2,
                 "Built by aliens, apparently. Or by paid workers on beer rations.",
@@ -1609,7 +1611,7 @@ namespace SlayTheClone {
             Creature("Scientific Method", 1, 4, speed: 1, deploy: 1,
                 "Hypothesis, experiment, grant renewal.",
                 "Each Dawn, +1 Attack for good on a random friendly creature (peer reviewed).",
-                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom)))
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom | Others)))
                 .Picture("A scientist in goggles carefully pouring a glowing liquid into a beaker on a bench crowded with labelled flasks, a whiteboard behind her reading HYPOTHESIS → EXPERIMENT → GRANT."),
             Creature("Frankenstein", 3, 6, speed: 1, deploy: 2,
                 "It's alive! It's ALIVE! It's suing.",
@@ -1620,7 +1622,7 @@ namespace SlayTheClone {
             Creature("Chimera", 4, 4, speed: 2, deploy: 1,
                 "Lion, goat, snake. The ethics committee was on holiday.",
                 "When ready: +2/+2 for good on a random friendly creature, maybe itself (a graft); side effect: it loses 2 Health for good.",
-                On(EffectTrigger.OnPlay, Buff(2, TargetType.FriendlyCreatures, attack: true, health: true, AtRandom), Buff(-2, TargetType.Self, attack: false, health: true)))
+                On(EffectTrigger.OnPlay, Buff(2, TargetType.FriendlyCreatures, attack: true, health: true, AtRandom | Others), Buff(-2, TargetType.Self, attack: false, health: true)))
                 .Picture("A lion with a goat's head sprouting from its back and a snake for a tail, all three wearing hospital ID wristbands, in a lab enclosure with a sticky note: DO NOT FEED AFTER MIDNIGHT."),
             Creature("Resurrected T-Rex", 6, 7, speed: 1, deploy: 2,
                 "Sixty-six million years asleep. Woke up hungry.",

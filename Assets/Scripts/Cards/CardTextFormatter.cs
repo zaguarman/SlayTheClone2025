@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
@@ -384,6 +385,13 @@ namespace SlayTheClone {
         // Plain words: "target" (what it's dropped on, either side), groups ("all enemy creatures"), players and the
         // creature itself. Only "random" and "strongest" are keywords.
         private static string DescribeTarget(EffectAction action, bool isSpell) {
+            // "Other": a creature's effect that leaves itself out (Demagogue)
+            string target = DescribeTargetGroup(action, isSpell);
+            if (!action.targetModifier.HasFlag(TargetModifier.Others)) return target;
+            return Regex.Replace(target, @"\b(friendly creature|enemy creature|creature)", "other $1");
+        }
+
+        private static string DescribeTargetGroup(EffectAction action, bool isSpell) {
             if (action.targetModifier.HasFlag(TargetModifier.DroppedSide)) return "every creature on target side"; // Either side: the one it's dropped on
             if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
                 string strongest = "the " + Keywords.Link("Strongest", "strongest");

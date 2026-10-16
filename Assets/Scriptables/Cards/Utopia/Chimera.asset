@@ -34,7 +34,7 @@ MonoBehaviour:
     - actionType: 6
       value: 2
       targetType: 3
-      targetModifier: 4
+      targetModifier: 516
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0

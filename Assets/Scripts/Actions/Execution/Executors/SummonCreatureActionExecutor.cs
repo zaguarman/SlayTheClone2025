@@ -36,6 +36,15 @@ namespace SlayTheClone {
                 return;
             }
 
+            // An Irreplaceable creature there (it moved in after the summon was planned): the summon doesn't happen, and the
+            // card goes back to its owner's hand (the discard pile if it's full)
+            if (!Abilities.CanBeReplaced(slot.OccupyingCreature) && slot.OccupyingCreature != creature) {
+                Log($"Executor: {slot.OccupyingCreature.Name} is Irreplaceable: {creature.Name} goes back", LogTag.Actions | LogTag.Creatures);
+                owner.AddToHand(creature);
+                if (!owner.Hand.Contains(creature)) owner.DiscardCard(creature);
+                return;
+            }
+
             // Summoning onto an occupied slot replaces its creature: it isn't killed, so no Last Will or other death effect;
             // its own Replaced effects happen instead (Golden Parachute), then it goes to its owner's discard pile, and what
             // it planned for the Day goes with it

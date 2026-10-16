@@ -108,6 +108,12 @@ namespace SlayTheClone {
 
         #region Targets
         private static List<ITarget> SelectTargets(ICard source, IPlayer controller, EffectAction action, ITarget chosenTarget, IActionsQueue queue) {
+            var targets = SelectTargetsWithItself(source, controller, action, chosenTarget, queue);
+            if (action.targetModifier.HasFlag(TargetModifier.Others) && source is ICreature self) targets.Remove(self); // "Other" creatures: not itself
+            return targets;
+        }
+
+        private static List<ITarget> SelectTargetsWithItself(ICard source, IPlayer controller, EffectAction action, ITarget chosenTarget, IActionsQueue queue) {
             if (action.targetType == TargetType.Self) {
                 return source is ICreature self ? new List<ITarget> { self } : new List<ITarget>();
             }
@@ -150,7 +156,8 @@ namespace SlayTheClone {
             }
             if (action.targetModifier.HasFlag(TargetModifier.Random)) return PickAtRandom(source, controller, action, queue);
             if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
-                var strongest = Strongest(TargetingSystem.GetValidTargets(controller, action.targetType).OfType<ICreature>());
+                var strongest = Strongest(TargetingSystem.GetValidTargets(controller, action.targetType).OfType<ICreature>()
+                    .Where(c => !(action.targetModifier.HasFlag(TargetModifier.Others) && c == source)));
                 return strongest != null ? new List<ITarget> { strongest } : new List<ITarget>();
             }
             var valid = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
@@ -165,7 +172,7 @@ namespace SlayTheClone {
         // picks among the creatures that still hide something from its caster. No creature to pick: it fizzles.
         private static List<ITarget> PickAtRandom(ICard source, IPlayer controller, EffectAction action, IActionsQueue queue) {
             var candidates = TargetingSystem.GetValidTargets(controller, action.targetType).ToList();
-            if (action.actionType == ActionType.Attack) candidates.Remove(source as ICreature); // It never attacks itself
+            if (action.actionType == ActionType.Attack || action.targetModifier.HasFlag(TargetModifier.Others)) candidates.Remove(source as ICreature); // Never itself
             if (action.actionType == ActionType.Reveal) {
                 candidates = candidates.Where(t => Intel.HidesSomethingFrom(controller, t as ICreature, queue)).ToList();
             }

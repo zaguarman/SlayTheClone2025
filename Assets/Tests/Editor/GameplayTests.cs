@@ -267,6 +267,22 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(latecomer, p1.Battlefield[1].OccupyingCreature, "...and it arrives after them, into the free slot");
             Assert.AreEqual(4, latecomer.Health);
             game.Run(new DestroyCreatureAction(latecomer, unconditional: true)); // Out of the way of what follows
+
+            // Irreplaceable (Demagogue's drawback): no summon can take its slot; and an effect on "other" creatures leaves
+            // its own creature out
+            var leaderData = game.Creature("Leader", 2, 4, 1, TestGame.Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures, TargetModifier.Others));
+            leaderData.effects[0].actions[0].modifyAttack = true;
+            leaderData.effects[0].actions[0].modifyHealth = false;
+            leaderData.ability = CreatureAbility.Irreplaceable;
+            int turtleAttack = turtle.Attack;
+            var leader = game.Summon(p1, leaderData, 1);
+            Assert.AreEqual(2, leader.Attack, "Its +2 Attack goes to the other friendly creatures, not itself...");
+            Assert.AreEqual(turtleAttack + 2, turtle.Attack, "...the others get it");
+            var usurper = (ICreature)game.GiveCard(p1, game.Creature("Usurper", 3, 3));
+            game.Play(usurper, p1, p1.Battlefield[1]);
+            Assert.IsEmpty(game.ActionsQueue.GetPendingActions().OfType<PlayCardAction>(), "Irreplaceable: a summon onto it is refused...");
+            CollectionAssert.Contains(p1.Hand, usurper, "...and the card stays in the hand");
+            game.Run(new DestroyCreatureAction(leader, unconditional: true));
             game.Run(new DestroyCreatureAction(biter, unconditional: true));
 
             // An exhausted (stunned) creature can't move or attack

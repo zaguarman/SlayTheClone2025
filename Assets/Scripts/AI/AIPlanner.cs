@@ -129,6 +129,7 @@ namespace SlayTheClone {
                     ? free.Count > 0 ? free[random.Next(free.Count)] : null
                     : free.OrderByDescending(ValueOfEntering).FirstOrDefault()
                       ?? view.MySlots.Where(s => s.Creature != null && s.Incoming == null && !queue.HasActiveAction(s.Creature.Creature.TargetId)
+                                                 && Abilities.CanBeReplaced(s.Creature.Creature)
                                                  && creature.Attack + creature.Health >= s.Creature.Worth + 4 / Style.Board)
                           .OrderBy(s => s.Creature.Worth).FirstOrDefault();
                 if (slot == null) continue;

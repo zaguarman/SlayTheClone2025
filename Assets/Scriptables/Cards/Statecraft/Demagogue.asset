@@ -32,9 +32,9 @@ MonoBehaviour:
     oncePerCombat: 0
     actions:
     - actionType: 6
-      value: 1
+      value: 2
       targetType: 3
-      targetModifier: 0
+      targetModifier: 512
       modifyAttack: 1
       modifyHealth: 0
       modifySpeed: 0
@@ -61,15 +61,16 @@ MonoBehaviour:
       requires: 0
       delayDays: 0
       decoy: {fileID: 0}
-  designNotes: 'Future: Loaded Language. The buff only lasts while it stays on the
-    battlefield.'
+  designNotes: 'The user, 2026-10-16: +2 Attack to the other friendly creatures when
+    ready, not itself; 1 Day to deploy, and Irreplaceable, its drawback: no summon
+    can take its slot. Future: Loaded Language.'
   artDescription: 
   attack: 2
   health: 4
   speed: 2
-  turnsUntilOperative: 0
+  turnsUntilOperative: 1
   movement: 0
-  ability: 0
+  ability: 36
   gift: 0
   token: 0
   disguise: {fileID: 0}

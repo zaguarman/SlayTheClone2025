@@ -234,6 +234,11 @@ namespace SlayTheClone {
                 executionContext.GameMediator?.NotifyPlayRefused(doomed.GetCard(), "Needs a creature that isn't Doomed to doom");
                 return;
             }
+            if (action is PlayCardAction replacing && replacing.GetCard() is ICreature newcomer && replacing.GetTarget() is BoardSlot into
+                && into.OccupyingCreature != null && into.OccupyingCreature != newcomer && !Abilities.CanBeReplaced(into.OccupyingCreature)) {
+                executionContext.GameMediator?.NotifyPlayRefused(newcomer, $"{into.OccupyingCreature.Name} is Irreplaceable: nothing can take its place");
+                return;
+            }
             if (executing == null && !resolving && IsInstant(action)) {
                 ResolveInstantly(action);
                 return;
