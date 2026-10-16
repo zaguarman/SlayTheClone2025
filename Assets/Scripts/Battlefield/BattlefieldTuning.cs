@@ -13,21 +13,21 @@ namespace SlayTheClone {
 
         [Header("Size")]
         [Tooltip("The slots and the cards on them, of a card in the hand (hovering enlarges)")]
-        [Range(0.5f, 1.4f)] public float slotScale = 0.9f;
+        [Range(0.5f, 1.4f)] public float slotScale = 1.2f;
         [Tooltip("How far apart the formation's columns are, of the board's own spacing")]
-        [Range(0.6f, 1.8f)] public float columnSpacing = 1f;
+        [Range(0.6f, 1.8f)] public float columnSpacing = 1.05f;
 
         [Header("Size: the slots, and the cards in them")]
         [Tooltip("A slot's width, of a card's (its frame and marker; the chevron keeps clear of it)")]
-        [Range(0.6f, 1.6f)] public float slotWidth = 1f;
+        [Range(0.6f, 1.6f)] public float slotWidth = 1.2f;
         [Tooltip("A slot's height, of a card's")]
-        [Range(0.6f, 1.6f)] public float slotHeight = 1f;
+        [Range(0.6f, 1.6f)] public float slotHeight = 1.2f;
         [Tooltip("A card in a slot, of its slot's size (1: as big as a card in the hand at Slot Scale)")]
-        [Range(0.5f, 1.3f)] public float cardScale = 1f;
+        [Range(0.5f, 1.3f)] public float cardScale = 1.2f;
 
         [Header("Form: the formation")]
         [Tooltip("How far apart its rows are, up and down: the Vanguard nearest the middle of the table, Headquarters furthest (0: one straight row; negative: the other way round)")]
-        [Range(-120f, 250f)] public float rowStep = 64f;
+        [Range(-120f, 250f)] public float rowStep = 80f;
 
         [Header("Form: the mat's chevron round it")]
         [Tooltip("Room between the slots and the mat's edge, at the back and the wingtips")]
@@ -37,27 +37,27 @@ namespace SlayTheClone {
         [Tooltip("The nose's flat over the Vanguard, its whole length (as the Tuck Width: equal numbers, equal flats; small: a point)")]
         [Range(1f, 800f)] public float noseWidth = 200f;
         [Tooltip("The tucked-in flat behind the Flanks, its whole length (as the Nose Width; small: a point)")]
-        [Range(1f, 1200f)] public float tuckWidth = 400f;
+        [Range(1f, 1200f)] public float tuckWidth = 170f;
         [Tooltip("How far behind the Flanks' cards the tucked-in flat sits (negative: over them); only the flat moves, the wings stay")]
-        [Range(-300f, 300f)] public float tuckGap = 15f;
+        [Range(-300f, 300f)] public float tuckGap = 0f;
 
         [Header("Form: the wing's shape")]
         [Tooltip("The wingtips reach this much further out, past Headquarters")]
-        [Range(-60f, 200f)] public float tipOut = 0f;
+        [Range(-60f, 200f)] public float tipOut = -2f;
         [Tooltip("A wingtip's front corner (on the leading edge) moves this much toward the middle of the table")]
-        [Range(-100f, 200f)] public float tipFront = 0f;
+        [Range(-100f, 200f)] public float tipFront = -5f;
         [Tooltip("A wingtip's back corner moves this much away from the middle")]
-        [Range(-100f, 200f)] public float tipBack = 0f;
+        [Range(-100f, 200f)] public float tipBack = 10f;
         [Tooltip("The wing's flap: its straight back edge, level, reaching this far in from the wingtip")]
-        [Range(0f, 700f)] public float wingSize = 200f;
+        [Range(0f, 700f)] public float wingSize = 260f;
 
         [Header("Form: corner rounding, each corner its own (looks only: the shape the game uses stays the same)")]
         [Tooltip("The nose's two corners, over the Vanguard: the rounding's radius")]
         [Range(0f, 120f)] public float noseRounding = 0f;
         [Tooltip("The wingtips' front corners")]
-        [Range(0f, 120f)] public float tipFrontRounding = 0f;
+        [Range(0f, 120f)] public float tipFrontRounding = 10f;
         [Tooltip("The wingtips' back corners")]
-        [Range(0f, 120f)] public float tipBackRounding = 0f;
+        [Range(0f, 120f)] public float tipBackRounding = 10f;
         [Tooltip("The corners tucked under Headquarters")]
         [Range(0f, 120f)] public float tuckRounding = 0f;
         [Tooltip("The two corners of the flat stretch behind the Flanks")]
@@ -68,7 +68,7 @@ namespace SlayTheClone {
 
         [Header("Position")]
         [Tooltip("How far back from the middle of the table the formation sits: the two noses keep this far apart, each side")]
-        [Range(-80f, 250f)] public float riverRoom = 26f;
+        [Range(-80f, 250f)] public float riverRoom = 90f;
         [Tooltip("Moves both formations sideways on their mats (negative: left)")]
         [Range(-400f, 400f)] public float sideways = 0f;
 

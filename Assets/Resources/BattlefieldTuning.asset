@@ -12,25 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c7841311da54b4d8a4493bd4e0771a, type: 3}
   m_Name: BattlefieldTuning
   m_EditorClassIdentifier: Scripts::SlayTheClone.BattlefieldTuning
-  slotScale: 1.32
-  columnSpacing: 0.88
-  slotWidth: 1.038
-  slotHeight: 1.05
-  cardScale: 1.17
-  rowStep: 64
-  matPadding: 27
-  noseRoom: 21
-  noseWidth: 235.7
-  tuckWidth: 191.1
-  tuckGap: 11
-  tipOut: 13
-  tipFront: -11
-  tipBack: 35
-  wingSize: 329.7
+  slotScale: 1.2
+  columnSpacing: 1.05
+  slotWidth: 1.2
+  slotHeight: 1.2
+  cardScale: 1.2
+  rowStep: 80
+  matPadding: 30
+  noseRoom: 16
+  noseWidth: 200
+  tuckWidth: 170
+  tuckGap: -0
+  tipOut: -2
+  tipFront: -5
+  tipBack: 10
+  wingSize: 260
   noseRounding: 0
-  tipFrontRounding: 20
-  tipBackRounding: 28
+  tipFrontRounding: 10
+  tipBackRounding: 10
   tuckRounding: 0
   flatRounding: 0
-  riverRoom: 70
-  sideways: -0
+  riverRoom: 90
+  sideways: 0
