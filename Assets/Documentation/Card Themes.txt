@@ -189,6 +189,17 @@ UTOPIA
 
 CORPORATE (36)
 
+Peace the Frontier (spell, added 2026-10-16)
+  Aim:   Regulatory capture by frontier AI labs: lobbying the government for rules so strict that only the incumbents can
+         meet them, burning through investors' money, and casting themselves as the victims.
+  Hooks: The user's theme, to be taken seriously as the card's target (2026-10-16): the user has in mind Dario Amodei
+         and Sam Altman, whom the user regards as conmen pressing the government to press back on them, to slow AI
+         development and restrict it so no competitor can rise and their monopoly holds, while they run out of money and
+         want to be seen as victims rather than as perpetrators of what the user calls a Ponzi scheme. This is the user's
+         view of public figures, recorded as the inspiration: no card names them or makes the accusation. Parody only.
+  Twist: Every enemy creature still deploying waits 1 more Day (the moat), and the lobbying costs you 2 Health (the cash
+         burns). Flavor: "Please, regulate us. Only us can afford it. Also, could someone lend us a few billion?"
+
 Golden Parachute (creature)
   Aim:   Executives who fail upward: ousted with a fortune.
   Hooks: The forty-million severance; "failing upward".
