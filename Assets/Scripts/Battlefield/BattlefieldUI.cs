@@ -1276,8 +1276,15 @@ namespace SlayTheClone {
         }
 
         #region Cleanup
-        private void OnEnable() => boards.Add(this);
-        private void OnDisable() => boards.Remove(this);
+        protected override void OnEnable() {
+            base.OnEnable(); // Its events again
+            boards.Add(this);
+        }
+
+        protected override void OnDisable() {
+            base.OnDisable();
+            boards.Remove(this);
+        }
 
         protected override void OnDestroy() {
             base.OnDestroy();

@@ -71,6 +71,7 @@ namespace SlayTheClone {
             Func<BoardSlot, BattlefieldSlot> findSlotView, Func<IPlayer, Transform> findBoardView, Func<IGameAction, bool> isHidden = null,
             Func<bool> isResolving = null) {
             parentTransform = parent ?? throw new ArgumentNullException(nameof(parent));
+            Focused = null; // A new game: nothing hovered in its queue yet (an old game's focus can outlive its panel)
             gameMediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.actionsQueue = actionsQueue ?? throw new ArgumentNullException(nameof(actionsQueue));
             this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
@@ -440,6 +441,7 @@ namespace SlayTheClone {
         #endregion
 
         public void Cleanup() {
+            Focused = null; // Its queue's rows are going: nothing stays focused
             gameMediator.ActionsQueueChanged -= RefreshArrows;
             actionsQueue.OnActionExecuting.RemoveListener(OnActionExecuting);
             gameMediator.BattlefieldStateChanged -= OnBattlefieldStateChanged;

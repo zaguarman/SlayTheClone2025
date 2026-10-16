@@ -299,7 +299,7 @@ namespace SlayTheClone {
                 case ActionType.DelayDeployment:
                     return $"+{value} {Keywords.Link("Deployment Time")} to {target}";
                 case ActionType.Rush: // Overtime
-                    return $"up to -{value} {Keywords.Link("Deployment Time")} to {target}{Requisite(action)}, then {Keywords.Link("Burnout")}: destroyed at the end of its first Day ready";
+                    return $"{target}{Requisite(action)}: ready up to {value} Days sooner, then {Keywords.Link("Burnout")}: destroyed at the end of its first Day ready";
                 // Between two creatures: this one and its target, or (on a spell, or aimed at itself) the target and the creature facing it
                 case ActionType.CopyStats:
                     return isSpell || action.targetType == TargetType.Self

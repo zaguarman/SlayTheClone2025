@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: Taqiyya
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: a01ed08d-28b4-4374-9ca3-df7b1898bb98
+  cardName: Taqiyya
+  description: The smile is sincere. The rest is between me and God.
+  cardType: 1
+  faction: 1
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 12
+      statusDuration: 1
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      decoy: {fileID: 0}
+    - actionType: 6
+      value: 2
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 0
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      decoy: {fileID: 0}
+  designNotes: 'The user, 2026-10-16: a poisoned gift. Taqiyya, the doctrine of hiding
+    one''s faith to survive, as a gift that hides its purpose: target enemy creature
+    gets +2 Attack (the gift, for all to see) and a secret Kill Order 1 (the purpose,
+    unseen): at the next Day''s Dusk it''s destroyed. Quicker than Death By "Natural
+    Causes", but they hit harder until then. A Cleanse removes the Kill Order, knowingly
+    or not.'
+  artDescription: A serene robed figure bowing slightly and offering an ornate gift
+    box tied with a gold ribbon, both hands extended in welcome; on the wall behind,
+    the box's shadow is a coiled snake.
+  defaultTargetType: 4

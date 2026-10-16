@@ -66,6 +66,14 @@ namespace SlayTheClone {
         /// <summary>Each of the wing's ten corners' rounding, in its order round the edge (see ChevronGraphic.Around).</summary>
         public float[] Roundings => new[] { noseRounding, tipFrontRounding, tipBackRounding, tuckRounding, flatRounding, flatRounding, tuckRounding, tipBackRounding, tipFrontRounding, noseRounding };
 
+        [Header("Cards not ready: how see-through (a ready card is solid)")]
+        [Tooltip("A creature still deploying (an hourglass over its art)")]
+        [Range(0.1f, 1f)] public float deployingAlpha = 0.45f;
+        [Tooltip("A queued card pulses between this...")]
+        [Range(0.1f, 1f)] public float queuedAlphaHigh = 0.6f;
+        [Tooltip("...and this")]
+        [Range(0.05f, 1f)] public float queuedAlphaLow = 0.3f;
+
         [Header("Playing cards")]
         [Tooltip("How far round a slot a card from the hand still lands in it, of the slot's size (0: only right on it). Near it the slot lights up; the card settles in only once the pointer is on the slot itself")]
         [Range(0f, 0.5f)] public float dropReach = 0.15f;

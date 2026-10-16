@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
-    public class HandUI : CardContainer {
+    public class HandUI : CardContainer, ICanvasRaycastFilter {
         private const float CastStagger = 0.2f;
 
         // The hand is held as a fan, like in Slay the Spire: the cards sit on a wide arc, overlapping, each tilted along it
@@ -48,9 +48,105 @@ namespace SlayTheClone {
         public bool IsYourHand => Player == null || Player.IsPlayer1 == FogOfWar.PlaysAsPlayer1;
         private float CardScale => IsYourHand ? YourHandScale : 1f;
 
-        // The hand area itself is invisible; it only shows a faint glow while a card is dragged over it
-        protected override DropZoneColors ZoneColors => new DropZoneColors(
-            Color.clear, new Color(1f, 1f, 1f, 0.04f), new Color(1f, 0.3f, 0.3f, 0.05f), Color.clear);
+        // The hand area itself is invisible: while a card is carried, its drop area shows as a faint oval (DropGlow)
+        protected override DropZoneColors ZoneColors => new DropZoneColors(Color.clear, Color.clear, Color.clear, Color.clear);
+
+        #region The drop area
+        // While a card is carried the hand takes it back only over an oval round its middle (the user): as wide as the
+        // Flanks, reaching up over them by this much of a slot's height, not a band across the screen
+        private const float DropOverlap = 0.2f;
+        private BattlefieldUI ownBoard;
+        private Image dropGlow;
+        private static Sprite oval;
+
+        private BattlefieldUI OwnBoard {
+            get {
+                if (ownBoard == null || ownBoard.Player != Player) {
+                    ownBoard = FindObjectsByType<BattlefieldUI>(FindObjectsSortMode.None).FirstOrDefault(b => b.Player == Player);
+                }
+                return ownBoard;
+            }
+        }
+
+        // The oval on screen: its middle, on the screen's edge the hand sits on, and its half sizes
+        private bool DropOval(out Vector2 center, out Vector2 half) {
+            center = half = Vector2.zero;
+            var board = OwnBoard;
+            if (board == null || Player == null || Player.Battlefield.Count < 3) return false;
+            var eventCamera = CanvasUtility.GetEventCamera(this);
+            var left = board.FindSlotView(Player.Battlefield[1]);
+            var right = board.FindSlotView(Player.Battlefield[2]);
+            if (left == null || right == null) return false;
+            Rect l = ScreenRect((RectTransform)left.transform, eventCamera), r = ScreenRect((RectTransform)right.transform, eventCamera);
+            var hand = ScreenRect((RectTransform)transform, eventCamera);
+            bool below = hand.center.y < l.center.y;
+            float edge = below ? 0f : Screen.height;
+            float reach = below ? Mathf.Min(l.yMin, r.yMin) + DropOverlap * l.height : Mathf.Max(l.yMax, r.yMax) - DropOverlap * l.height;
+            float middle = (l.center.x + r.center.x) / 2f;
+            center = new Vector2(middle, edge);
+            half = new Vector2(Mathf.Max(r.xMax - middle, middle - l.xMin), Mathf.Abs(reach - edge));
+            return half.x > 1f && half.y > 1f;
+        }
+
+        private static Rect ScreenRect(RectTransform rect, Camera eventCamera) {
+            var corners = new Vector3[4];
+            rect.GetWorldCorners(corners);
+            Vector2 min = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[0]);
+            Vector2 max = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
+            return Rect.MinMaxRect(Mathf.Min(min.x, max.x), Mathf.Min(min.y, max.y), Mathf.Max(min.x, max.x), Mathf.Max(min.y, max.y));
+        }
+
+        /// <summary>Whether this point on screen is in the hand's drop area (the oval).</summary>
+        public bool InDropArea(Vector2 screenPoint) =>
+            DropOval(out var center, out var half) && (new Vector2((screenPoint.x - center.x) / half.x, (screenPoint.y - center.y) / half.y)).sqrMagnitude <= 1f;
+
+        // Unity asks before the hand (or a card in it) takes the pointer: at rest as usual, while a card is carried only in the oval
+        public bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera) => CardController.Dragged == null || InDropArea(screenPoint);
+
+        // The oval, faint while a card that can go back is carried, a little brighter with the pointer in it
+        private void UpdateDropGlow() {
+            var carried = CardController.Dragged;
+            bool show = carried != null && (carried == picked || carried.IsQueued) && FogOfWar.CanControl(Player) && !IsHidden
+                        && DropOval(out var center, out var half);
+            if (!show) {
+                if (dropGlow != null) dropGlow.enabled = false;
+                return;
+            }
+            DropOval(out center, out half);
+            if (dropGlow == null) {
+                dropGlow = UITheme.NewImage("DropGlow", transform, Color.clear);
+                dropGlow.sprite = Oval;
+                dropGlow.rectTransform.anchorMin = dropGlow.rectTransform.anchorMax = dropGlow.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            }
+            dropGlow.enabled = true;
+            dropGlow.transform.SetAsFirstSibling(); // Under the cards
+            var eventCamera = CanvasUtility.GetEventCamera(this);
+            var rect = (RectTransform)transform;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, center - half, eventCamera, out var min);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, center + half, eventCamera, out var max);
+            dropGlow.rectTransform.localPosition = (min + max) / 2f;
+            dropGlow.rectTransform.sizeDelta = new Vector2(Mathf.Abs(max.x - min.x), Mathf.Abs(max.y - min.y));
+            dropGlow.color = new Color(1f, 1f, 1f, InDropArea(GameInput.PointerPosition) ? 0.12f : 0.06f);
+        }
+
+        // A soft-edged disc, stretched into the oval
+        private static Sprite Oval {
+            get {
+                if (oval != null) return oval;
+                const int size = 128;
+                var texture = new Texture2D(size, size, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp };
+                for (int y = 0; y < size; y++) {
+                    for (int x = 0; x < size; x++) {
+                        float d = new Vector2(x + 0.5f - size / 2f, y + 0.5f - size / 2f).magnitude / (size / 2f);
+                        texture.SetPixel(x, y, new Color(1f, 1f, 1f, Mathf.Clamp01((1f - d) / 0.2f)));
+                    }
+                }
+                texture.Apply();
+                oval = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f));
+                return oval;
+            }
+        }
+        #endregion
 
         // Cards of this player with a pending PlayCardAction, and those of them shown as ghosts on the board instead
         // (creatures, and the spells the screen can see; see BattlefieldUI)
@@ -172,8 +268,17 @@ namespace SlayTheClone {
 
             if (player != Player) return;
 
-            // Clear all current cards
+            // What it shows: the cards in hand, in order, but those shown as ghosts on the board. A card still shown keeps its
+            // view (the user): one raised, being read or carried doesn't start over whenever something happens on the board
+            var shown = player.Hand.Where(c => !onBoard.Contains(c)).ToList();
+            var kept = new Dictionary<ICard, CardController>();
+            var before = cards.ToList();
             foreach (var card in cards.ToList()) {
+                var shownCard = card != null ? card.GetLinkedCardInstance() : null;
+                if (shownCard != null && shown.Contains(shownCard) && !kept.ContainsKey(shownCard)) {
+                    kept[shownCard] = card;
+                    continue;
+                }
                 RemoveCard(card);
                 if (card == null) continue;
 
@@ -198,23 +303,30 @@ namespace SlayTheClone {
                     Destroy(card.gameObject);
                 }
             }
-            cards.Clear();
+            cards.RemoveAll(c => c == null);
 
-            // Create new card controllers for each card in hand
-            foreach (var handCard in player.Hand) {
+            // A view for each card newly shown; the kept ones take their state as it is now
+            bool faceDown = FogOfWar.HidesHandOf(Player); // The enemy's hand shows only card backs
+            var order = new List<CardController>();
+            foreach (var handCard in shown) {
                 // Queued cards are shown as ghosts where they're aimed (see BattlefieldUI)
                 bool isQueued = queuedCards.Contains(handCard);
-                if (onBoard.Contains(handCard)) continue;
-
-                var controller = CardViews.Create(handCard, Player, transform);
-                if (controller != null) {
-                    AddCard(controller);
-                    if (isQueued) controller.SetQueued(true, canBeDragged: true);
-                    controller.SetFaceDown(FogOfWar.HidesHandOf(Player)); // The enemy's hand shows only card backs
+                if (kept.TryGetValue(handCard, out var controller)) {
+                    if (controller.IsQueued != isQueued) controller.SetQueued(isQueued, canBeDragged: true);
+                    if (controller.IsFaceDown != faceDown) controller.SetFaceDown(faceDown);
+                    order.Add(controller);
+                    continue;
                 }
+                controller = CardViews.Create(handCard, Player, transform);
+                if (controller == null) continue;
+                AddCard(controller);
+                if (isQueued) controller.SetQueued(true, canBeDragged: true);
+                controller.SetFaceDown(faceDown);
+                order.Add(controller);
             }
+            cards.Sort((a, b) => order.IndexOf(a).CompareTo(order.IndexOf(b)));
 
-            UpdateLayout();
+            UpdateLayout(); // The kept cards keep their view, raised or not: they're only placed again
         }
 
         protected override void UpdateLayout() => Arrange(animate: false);
@@ -298,6 +410,7 @@ namespace SlayTheClone {
 
         private void Update() {
             RefreshVisibility(); // Fog of War switched (F9), the seats (F8), or the tuning's button
+            UpdateDropGlow();
             // The hand's area only takes the pointer while a card is carried (a drop back into the hand): at rest it would
             // cover the bottom of the board, the cards in the back row (the hand's own cards take the pointer themselves)
             if (zoneImage != null || TryGetComponent(out zoneImage)) zoneImage.raycastTarget = CardController.Dragged != null;

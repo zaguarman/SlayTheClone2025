@@ -42,7 +42,11 @@ namespace SlayTheClone {
             public List<QueueView.Item> Foretold;
             public List<Watchdog> Watchdogs = new List<Watchdog>();                          // On watch that Day
             public List<(BoardSlot, SlotEffect)> Traps = new List<(BoardSlot, SlotEffect)>(); // In the slots that Day
+            // As it played out (the user): when each action ran, and the attacks nobody planned (a Last Rites strike, an effect's)
+            public Dictionary<IGameAction, int> Ran = new Dictionary<IGameAction, int>();
+            public List<IGameAction> Unplanned = new List<IGameAction>();
         }
+        private int ranCount;
         private readonly List<PastDay> history = new List<PastDay>();
         private PastDay lastPlanned = new PastDay { Planned = new List<(IGameAction, ResolutionLayer)>(), Foretold = new List<QueueView.Item>() };
         private readonly HashSet<IGameAction> played = new HashSet<IGameAction>(); // Actions that ran: everyone saw them
@@ -179,7 +183,14 @@ namespace SlayTheClone {
             Refresh();
         }
 
-        private void OnActionExecuting(IGameAction action) => played.Add(action);
+        // Running now, on the Day being played out (its Dusk included: the Day ends after it)
+        private void OnActionExecuting(IGameAction action) {
+            played.Add(action);
+            if (!lastPlanned.Ran.ContainsKey(action)) lastPlanned.Ran[action] = ranCount++;
+            if (action is BattlefieldCombatAction && !lastPlanned.Unplanned.Contains(action) && !lastPlanned.Planned.Any(p => p.Action == action)) {
+                lastPlanned.Unplanned.Add(action);
+            }
+        }
 
         private void OnBattlefieldStateChanged(IPlayer player) => Refresh();
 
@@ -263,15 +274,29 @@ namespace SlayTheClone {
             items.AddRange(actions);
         }
 
-        // A past Day as the screen knows it now
+        // A past Day as the screen knows it now, in the order it played out: ties as they fell, the attacks it brought among
+        // them; what never ran (cancelled, stopped) stays where it was planned
         private List<QueueView.Item> Past(PastDay day, IPlayer viewer) {
-            var items = QueueView.Actions(viewer, gameManager.ActionsQueue, gameManager.ModifierManager, day.Planned,
+            var items = QueueView.Actions(viewer, gameManager.ActionsQueue, gameManager.ModifierManager, AsItRan(day),
                 played.Contains, (player, action) => revealed.Contains((player, action)));
             if (day.Foretold.Count > 0) {
                 items.Add(new QueueView.Item { Heading = "Foretold" });
                 items.AddRange(day.Foretold.Where(i => i.Heading == null));
             }
             return items;
+        }
+
+        private static List<(IGameAction Action, ResolutionLayer Layer)> AsItRan(PastDay day) {
+            var keyed = new List<(float Key, (IGameAction, ResolutionLayer) Entry)>();
+            float last = -1f;
+            foreach (var entry in day.Planned) {
+                last = day.Ran.TryGetValue(entry.Action, out int ran) ? ran : last + 0.001f; // Never ran: right after the one before it
+                keyed.Add((last, entry));
+            }
+            foreach (var attack in day.Unplanned) {
+                if (day.Ran.TryGetValue(attack, out int ran)) keyed.Add((ran, (attack, ActionsQueue.LayerOf(attack))));
+            }
+            return keyed.OrderBy(k => k.Key).Select(k => k.Entry).ToList(); // Stable: ties keep the plan's order
         }
 
         private const string DayName = "Day ";
@@ -373,7 +398,8 @@ namespace SlayTheClone {
 
         // The panel closing or the list being redrawn: the arrows come back now
         private void OnDisable() {
-            if (Stop()) Release(Action);
+            // Its release waiting (the pointer just left) dies with the panel: let go now, or the board keeps its arrows alone
+            if (Stop() || BattlefieldArrowManager.Focused == Action) Release(Action);
         }
 
         private bool Stop() {

@@ -79,9 +79,10 @@ namespace SlayTheClone {
         private CardViews cardViews; // Made this card; gives its color and makes its previews
 
         // Queued (played but not yet resolved) visuals
-        private const float QueuedAlphaHigh = 0.75f;
-        private const float QueuedAlphaLow = 0.4f;
-        private const float DeployingAlpha = 0.6f;  // Still deploying: faded like a queued card, held still
+        // Not ready (queued, deploying): faded well apart from a ready card, which keeps its colors (sliders, UI > Battlefield Tuning)
+        private static float QueuedAlphaHigh => BattlefieldTuning.Current.queuedAlphaHigh;
+        private static float QueuedAlphaLow => BattlefieldTuning.Current.queuedAlphaLow;
+        private static float DeployingAlpha => BattlefieldTuning.Current.deployingAlpha; // Still deploying: faded like a queued card, held still
         private const float HourglassAlpha = 0.65f; // The hourglass over its art, see-through
         private GameObject queuedBadge;
         private Tween queuedPulse;
