@@ -16,6 +16,7 @@ namespace SlayTheClone {
             player.DiscardHand();
             foreach (var card in laidOff) LaidOff.Queue(card, player, context.ActionsQueue);
             Ripening.Ripen(player, context.GameMediator); // The spells kept ripen
+            player.SpellsToday = 0; // A new Day: Combo counts again
             // Paid for a card that never resolved (a Watchdog nullified it): spent all the same
             foreach (var card in player.SetAside.ToList()) {
                 player.SetAside.Remove(card);

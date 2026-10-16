@@ -251,6 +251,8 @@ namespace SlayTheClone {
             if (Prophecy.DaysOf(spell) > 0) return 0.7f * ValueNow();
             // A Policy happens again each Dawn: worth several times what it does now (the sooner, the more)
             if (Policy.Has(spell)) return PolicyWorth * System.Math.Max(0.5f, ValueNow());
+            // Combo: worth more with each other spell of ours today (its numbers grow by 1 for each)
+            if (Combo.Has(spell)) return ValueNow() * (1f + 0.5f * Combo.OthersToday(spell, view.Me, queue));
             if (!Hard || forecasts.Count == 0) return ValueNow();
             seeForecast = true;
             float after = ValueNow();
@@ -783,6 +785,8 @@ namespace SlayTheClone {
                     var model = (creature.Ours ? view.TheirSlots : view.MySlots)[creature.Slot.Index].Creature;
                     return model == null ? 0 : 2 * (GoodStatuses.Count(model.Has) - HarmfulStatuses.Count(model.Has));
                 }
+                case ActionType.Equip: // A second ability on one of ours: more on a strong one; none on theirs
+                    return creature.Ours ? (creature.Creature?.Gear == CreatureAbility.None ? 1.5f + AttackOf(creature) * 0.2f : 0.5f) : -1f;
                 case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility:
                     return IntendedFor(spell, creature.Ours ? view.Me : view.Them) ? 1 : -1; // Hard to weigh: done where the card means it
                 case ActionType.Armor or ActionType.Heal when Hard && creature.Ours:
@@ -925,6 +929,8 @@ namespace SlayTheClone {
                 // One more hit survived, only while unhurt: worth most on a healthy creature that's about to be hit
                 StatusEffectType.Survivor => creature.Has(StatusEffectType.Survivor) || creature.Health < creature.MaxHealth ? 0
                     : WouldDie(creature) ? creature.Worth * 0.6f : 0.5f,
+                // Provoked: on theirs, its attack goes where we choose to stand; on ours, it loses its aim
+                StatusEffectType.Provoked => creature.Operative && CanAttack(creature) ? -1.5f : -0.3f,
                 StatusEffectType.Blackout => creature.Ability != CreatureAbility.None || creature.Retaliation > 0 ? -1.5f : -0.5f,
                 _ => 0
             };

@@ -93,7 +93,8 @@ namespace SlayTheClone {
             runEnded = false;
             Directory.CreateDirectory(LogFolder);
             logPath = Path.Combine(LogFolder, $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {CardTextFormatter.FactionName(faction).TrimEnd('.')}.txt");
-            Write($"Adventure on autopilot: {CardTextFormatter.FactionName(faction)}, map seed {AdventureRun.Map.Seed}, your seat played by the {new AIEntrant(Level).Name} AI"
+            Write($"Adventure on autopilot: {CardTextFormatter.FactionName(faction)}" + (AdventureRun.Ascension > 0 ? $", Ascension {AdventureRun.Ascension}" : "")
+                  + $", map seed {AdventureRun.Map.Seed}, the boss plays {CardTextFormatter.FactionName(AdventureRun.BossFaction)}, your seat played by the {new AIEntrant(Level).Name} AI"
                   + (fresh ? "" : $" (taken over in room {AdventureRun.Path.Count}, Health {AdventureRun.Health})"));
             Write($"Starter deck: {DeckList(AdventureRun.Deck.Cards)}");
             wait = StepSeconds;
@@ -183,7 +184,8 @@ namespace SlayTheClone {
             if (room.IsCombat) {
                 menu.Enter(room); // Sets the fight up, then the game scene loads
                 var enemy = AdventureRun.EnemyDeck;
-                Write($"    Fight: {enemy?.GetDeckName()} ({MatchSetup.OpponentHealth} Health, {new AIEntrant(MatchSetup.LevelOf(AISeats.Player2)).Name} AI); you: {AdventureRun.Health} Health");
+                Write($"    Fight: {enemy?.GetDeckName()} ({MatchSetup.OpponentHealth} Health, {new AIEntrant(MatchSetup.LevelOf(AISeats.Player2)).Name} AI"
+                      + (AdventureRun.EnemyRelics.Count > 0 ? $", relics {string.Join(", ", AdventureRun.EnemyRelics.Select(Relics.NameOf))}" : "") + $"); you: {AdventureRun.Health} Health");
                 lostIn = room.Type == RoomType.Boss ? "the boss" : $"{(room.Type == RoomType.Elite ? "an elite" : "a fight")} in row {room.Row + 1}";
             }
             else menu.Enter(room);
@@ -250,6 +252,12 @@ namespace SlayTheClone {
                     return;
                 }
             }
+            var relic = AdventureRun.Shop.FirstOrDefault(o => o.IsRelic && !o.Sold && o.Price <= AdventureRun.EuroYuans);
+            if (relic != null) {
+                Write($"    Shop: buys the relic {Relics.NameOf(relic.Relic)} for {relic.Price}");
+                menu.Buy(relic);
+                return;
+            }
             if (AdventureRun.CanRemove) {
                 menu.OpenRemoval(true);
                 return;
@@ -280,7 +288,7 @@ namespace SlayTheClone {
             }
             AdventureEvents.Choice choice;
             if (happening.Id == "Rest") choice = AdventureRun.Health < HurtBelow || !open.Any(c => c.Trains) ? open.First(c => !c.Trains) : open.First(c => c.Trains);
-            else if (happening.Id == "Treasure") choice = open.First();
+            else if (happening.Id is "Treasure" or "Onboarding") choice = open.First(); // The chest; the opening choice's relic
             else choice = open[random.Next(open.Count)];
             Write($"    {happening.Title}: {Plain(choice.Label)}");
             menu.ChooseAtEvent(choice);

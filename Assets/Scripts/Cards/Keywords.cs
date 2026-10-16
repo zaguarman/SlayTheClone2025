@@ -74,6 +74,8 @@ namespace SlayTheClone {
             Add("Prophecy", "Prophecy X: the spell is foretold now and comes true at the [Dawn] X [Days] later, aimed where it was played. Prophecy X-Y: at a [Dawn] X to Y [Days] later, at random, and nobody knows which. Everyone hears it: the queue lists what's been foretold.");
             Add("Single Use", "Once played, the card is gone for the rest of the combat instead of going to your discard pile.");
             Add("Potion", "An adventure's: carried from fight to fight (3 at most), in your opening hand, not counted among your spells. Once played it's gone; one not used stays with you.");
+            Add("Gear", "A held item: a second ability the creature has while it stays in play, on top of its own. New gear replaces the old; leaving play, it's gone. A [Blackout] switches it off like an ability.");
+            Add("Combo", "+1 to the card's numbers (damage, healing, [Armor], cards drawn, stat changes, stacks) for each other spell you play the same [Day], before or after it.");
             Add("Policy", "A spell that becomes a rule of your side: it happens when it resolves, then again at each [Dawn], for the rest of the combat. It doesn't go to your discard pile; the queue lists the Policies in force.");
             Add("Ripening", "A spell that gets better in your hand: at each [Dawn] you keep it, its numbers (damage, healing, [Armor], cards drawn, stat changes, stacks) go up by 1, up to +3. Played or discarded, the next copy starts fresh.");
             Add("Doom Cost", "Doom X, as a cost: when this card resolves, your [Weakest|weakest] creature that isn't [Doomed] yet is Doomed X first: it fights on harder, then dies in X [Days]. You can't play it without one, and if it's gone by the time it resolves, it fizzles. A [Blessed] creature stops the Doom with a stack.");
@@ -97,6 +99,7 @@ namespace SlayTheClone {
             group = "Statuses";
             Add("Exhausted", "Can't act, its ability is off and it's [Exposed]. Its planned action is cancelled. Lasts the rest of the [Day] and all of the next.");
             Add("Burned", "Burn X: takes X damage at each [Dusk] for the [Days] shown, starting the Dusk after it lands.");
+            Add("Provoked", "Provoked X: for the rest of the [Day] it lands and the next X [Days], its attacks go to the creature facing it (or that player, when the slot is empty) whatever it aimed at, and it can't use its Active ability.");
             Add("Toxic", "Toxic X: like [Burned|Burn], it takes X damage at each [Dusk] for the [Days] shown, starting the Dusk after it lands; but it grows: each time, the next one is 1 more (2, then 3, then 4...).");
             Add("Doomed", "Doom X (no number: 1): dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it, except [Borrowed Time]: on Borrowed Time when the sentence is carried out, it survives that too.");
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");

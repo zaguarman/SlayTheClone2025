@@ -19,6 +19,11 @@ namespace SlayTheClone {
                 LogError("BattlefieldCombatActionExecutor: Attacker is null.", LogTag.Actions | LogTag.Combat);
                 return;
             }
+            // Provoked (Taunt, Follow Me): whatever it aimed at, it attacks the slot facing it
+            if (context.ModifierManager.HasStatusEffect(attacker, Enums.StatusEffectType.Provoked) && attacker.Slot != null && !combatAction.IsLastRites) {
+                var across = attacker.Owner?.Opponent?.Battlefield;
+                if (across != null && attacker.Slot.Index < across.Count) targetSlot = across[attacker.Slot.Index];
+            }
             if (targetSlot == null) {
                 // Treated as a cancelled or invalid attack: nothing is hit
                 Log($"BattlefieldCombatActionExecutor: TargetSlot is null for attacker {attacker.Name}. Assuming cancellation or invalid target.", LogTag.Actions | LogTag.Combat);

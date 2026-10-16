@@ -79,6 +79,12 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual("2 damage to target creature or player and 3 damage to it if it's Digital Society", printed["Cyberpsychosis"], "A requisite on a faction");
 
             var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
+            foreach (var asset in assets) { // Or given by a card: gained, or a Gear's
+                var data = asset.ToCardData();
+                carried.UnionWith(data.effects.SelectMany(e => e.actions)
+                    .Where(a => a.actionType is ActionType.GrantAbility or ActionType.Equip).Select(a => a.ability));
+                Object.DestroyImmediate(data);
+            }
             var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()
                 .Where(a => a != CreatureAbility.None && !carried.Contains(a));
             CollectionAssert.IsEmpty(missing, "Abilities no card has ('Abilities Compendium')");
@@ -108,6 +114,7 @@ namespace SlayTheClone.Tests {
                 case ActionType.StealStatChanges:
                 case ActionType.SwapPositions:
                 case ActionType.GrantAbility:
+                case ActionType.Equip:
                 case ActionType.Destroy:
                 case ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                     or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Revive
@@ -136,7 +143,7 @@ namespace SlayTheClone.Tests {
             else if (action.actionType == ActionType.Earthquake) {
                 if (action.value <= 0) return "an Earthquake that deals no damage";
             }
-            else if (action.actionType == ActionType.GrantAbility) {
+            else if (action.actionType is ActionType.GrantAbility or ActionType.Equip) {
                 if (action.ability == CreatureAbility.None) return "grants no ability";
             }
             else if (action.actionType is ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.Destroy

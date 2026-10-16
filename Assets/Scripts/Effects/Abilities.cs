@@ -43,6 +43,7 @@ namespace SlayTheClone {
         public static bool CanUseActive(ICreature creature, IModifierManager modifiers) =>
             creature != null && IsActiveAbility(creature.Ability) && IsActive(creature)
             && !(modifiers?.HasStatusEffect(creature, StatusEffectType.Cooldown) ?? false)
+            && !(modifiers?.HasStatusEffect(creature, StatusEffectType.Provoked) ?? false) // Provoked: it only attacks
             && !(creature.Ability == CreatureAbility.CreditGrab && (creature.Owner?.UsedOncePerCombat.Contains(OnceKey(creature)) ?? false));
 
         /// <summary>The key a once-per-combat ability is spent under, for this card, until the combat ends.</summary>
@@ -79,6 +80,7 @@ namespace SlayTheClone {
             CreatureAbility.ShieldBash => "Shield Bash",
             CreatureAbility.StripSearch => "Strip Search",
             CreatureAbility.OnTrend => "On Trend",
+            CreatureAbility.SelfRepair => "Self-Repair",
             _ => ability.ToString()
         };
 
@@ -129,6 +131,8 @@ namespace SlayTheClone {
             CreatureAbility.ShieldBash => "its Attack goes up by its Armor",
             CreatureAbility.StripSearch => $"its attack on a creature with a status or a stat change Purges it first, and hits {StripBonus} harder",
             CreatureAbility.OnTrend => $"+{TrendBonus} Attack while a Trend is on",
+            CreatureAbility.Hover => "Slot Effects don't touch it: no trap or Checkpoint as it enters or leaves a slot",
+            CreatureAbility.SelfRepair => $"each Dawn, it heals {SelfRepairHeal}",
             _ => ""
         };
 
@@ -160,7 +164,7 @@ namespace SlayTheClone {
         /// abilities, and no Signal Jammer faces it. Switched off isn't removed: it still has the ability.
         /// </summary>
         public static bool IsActive(ICreature creature) =>
-            creature != null && creature.Ability != CreatureAbility.None && IsSwitchedOn(creature) && !IsJammed(creature);
+            creature != null && (creature.Ability != CreatureAbility.None || creature.Gear != CreatureAbility.None) && IsSwitchedOn(creature) && !IsJammed(creature);
 
         // A Signal Jammer's own ability is judged without other jammers, so two facing each other switch each other off.
         // Scorched Earth switches the ability of the creature standing on it off too.
@@ -176,8 +180,9 @@ namespace SlayTheClone {
             return jammer != null && jammer.Ability == CreatureAbility.SignalJammer && IsSwitchedOn(jammer);
         }
 
-        /// <summary>Whether the creature has this ability switched on.</summary>
-        public static bool Has(ICreature creature, CreatureAbility ability) => creature?.Ability == ability && IsActive(creature);
+        /// <summary>Whether the creature has this ability switched on: its own, or its Gear's.</summary>
+        public static bool Has(ICreature creature, CreatureAbility ability) =>
+            creature != null && ability != CreatureAbility.None && (creature.Ability == ability || creature.Gear == ability) && IsActive(creature);
 
         /// <summary>
         /// Whether the target's defensive ability works against this source: Zero-Day ignores every defensive ability
@@ -337,7 +342,7 @@ namespace SlayTheClone {
         public static bool IsMartyred(ICreature creature, IModifierManager modifiers) =>
             Has(creature, CreatureAbility.Martyrdom) && (modifiers?.HasStatusEffect(creature, StatusEffectType.Doomed) ?? false);
 
-        public const int GrudgeMost = 5, TrendBonus = 2, StripBonus = 2;
+        public const int GrudgeMost = 5, TrendBonus = 2, StripBonus = 2, SelfRepairHeal = 2;
 
         /// <summary>The abilities whose Attack hangs on the game around the creature: recalculated after every action.</summary>
         public static bool HangsOnTheGame(CreatureAbility ability) => ability is CreatureAbility.Grudge or CreatureAbility.OnTrend or CreatureAbility.ShieldBash;

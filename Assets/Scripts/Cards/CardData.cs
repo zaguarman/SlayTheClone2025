@@ -35,6 +35,8 @@ namespace SlayTheClone {
         public bool policy;
         /// <summary>An upgraded copy (a rest site's): one better number, and a + after its name (see <see cref="CardUpgrades"/>).</summary>
         public bool upgraded;
+        /// <summary>Combo (a spell): +1 to its numbers for each other spell its player plays the same Day (see <see cref="Combo"/>).</summary>
+        public bool combo;
         /// <summary>A potion (an adventure's): a Single Use spell carried from fight to fight, in the opening hand, not counted among the spells.</summary>
         public bool potion;
 

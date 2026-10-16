@@ -17,6 +17,8 @@ namespace SlayTheClone {
                 return;
             }
 
+            Combo.Charge(spell, owner, actionsQueue); // Combo: 1 more for each other spell of its player's today
+            owner.SpellsToday++;
             // The spell queues its own game actions; a Prophecy waits for its Dawn
             int foretold = Prophecy.DaysOf(spell);
             if (foretold > 0) {

@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Recoil: +2 damage on its attacks, and it takes 1 damage after each
     one. A mood that burns it out.'

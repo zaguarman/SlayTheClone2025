@@ -59,6 +59,7 @@ namespace SlayTheClone {
             var items = Actions(viewer, queue, modifiers, queue.GetPendingActions().Select(a => (a, queue.LayerOfPending(a))).ToList());
             items.AddRange(Foretold(viewer));
             items.AddRange(InForce(viewer));
+            items.AddRange(RelicsOf(viewer));
             return items;
         }
 
@@ -121,6 +122,19 @@ namespace SlayTheClone {
                     ? $"{Whose(prophecy.Caster, viewer, capital: true)} {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: the rest of it lands {when}"
                     : $"{PlayerName(prophecy.Caster, viewer)} foretold {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: it comes true {when}";
                 items.Add(new Item { Text = text, Icon = EffectIcons.Days, Ours = prophecy.Caster == viewer, Details = text });
+            }
+            return items;
+        }
+
+        /// <summary>The relics each side carries (an adventure's: yours, an elite's or a boss's): always on.</summary>
+        public static List<Item> RelicsOf(IPlayer viewer) {
+            var items = new List<Item>();
+            foreach (var side in new[] { viewer, viewer?.Opponent }.Where(p => p != null && p.Relics.Count > 0)) {
+                if (items.Count == 0) items.Add(new Item { Heading = "Relics" });
+                foreach (var relic in side.Relics) {
+                    string text = $"{Whose(side, viewer, capital: true)} {Relics.NameOf(relic)}";
+                    items.Add(new Item { Text = text, Icon = EffectIcons.Bless, Ours = side == viewer, Details = $"<b>{Relics.NameOf(relic)}</b>: {Relics.Describe(relic)}" });
+                }
             }
             return items;
         }
@@ -251,6 +265,7 @@ namespace SlayTheClone {
             StatusEffectType.Exhausted => EffectIcons.Paralyze,
             StatusEffectType.Burned => EffectIcons.Burn,
             StatusEffectType.Toxic => EffectIcons.Burn,
+            StatusEffectType.Provoked => EffectIcons.Attack,
             StatusEffectType.Doomed => EffectIcons.Doom,
             StatusEffectType.Blessed => EffectIcons.Bless,
             StatusEffectType.HeatSignature => EffectIcons.Heat,

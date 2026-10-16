@@ -35,6 +35,11 @@ namespace SlayTheClone {
         public const string EventOnButtonName = "EventOnButton";
         public const string UpgradeBackButtonName = "UpgradeBackButton";
         public const string AutoplayButtonName = "AutoplayButton";
+        public const string AscensionButtonName = "AscensionButton";
+        public const string RelicOfferButtonName = "RelicOfferButton";
+        /// <summary>The Ascension level the next run starts at (see <see cref="Ascension"/>), up to what the chosen faction unlocked.</summary>
+        public int AscensionLevel { get; private set; }
+        private Button ascensionButton;
         private const float EventWidth = 900f;
         private const int ShopColumns = 5; // The shop's cards on one row
         private const int RewardColumns = 4; // The reward's cards at a readable size, not stretched over the width
@@ -101,6 +106,7 @@ namespace SlayTheClone {
             factionButtons.Clear();
             rooms.Clear();
             embark = null;
+            ascensionButton = null;
             reward = deckGrid = shopGrid = null;
             chosenText = status = null;
             mapScroll = null;
@@ -115,6 +121,25 @@ namespace SlayTheClone {
             if (chosenText != null) chosenText.text = offered
                 ? $"{CardTextFormatter.FactionName(faction)}, with <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>a starter deck of {AdventureDecks.StarterSize} plain cards</color>" : "";
             if (embark != null) embark.interactable = offered;
+            AscensionLevel = Mathf.Min(AscensionLevel, Ascension.Unlocked(faction));
+            ShowAscension();
+        }
+
+        /// <summary>The next Ascension level for the chosen faction, back to 0 after the highest it unlocked.</summary>
+        public void CycleAscension() {
+            if (Chosen == null) return;
+            int unlocked = Ascension.Unlocked(Chosen.Value);
+            AscensionLevel = AscensionLevel >= unlocked ? 0 : AscensionLevel + 1;
+            Pick(Chosen.Value); // Its text again, with the level's rules
+        }
+
+        private void ShowAscension() {
+            if (ascensionButton == null || Chosen == null) return;
+            int unlocked = Ascension.Unlocked(Chosen.Value);
+            ascensionButton.GetComponentInChildren<TextMeshProUGUI>().text = unlocked == 0 ? "Ascension: locked"
+                : $"Ascension {AscensionLevel} <size=70%>of {unlocked}</size>";
+            ascensionButton.interactable = unlocked > 0;
+            if (chosenText != null && AscensionLevel > 0) chosenText.text += $"\n<size=75%>{string.Join("  ", Ascension.Rules(AscensionLevel))}</size>";
         }
 
         /// <summary>
@@ -135,7 +160,8 @@ namespace SlayTheClone {
         /// <summary>Starts a run with the chosen faction's starter deck, on a new map, and shows it.</summary>
         public void Embark() {
             if (Chosen == null || !Factions.Any(f => f.faction == Chosen)) return;
-            AdventureRun.Start(Chosen.Value, AdventureDecks.Starter(Chosen.Value, Catalog.AllCards), Environment.TickCount, Catalog.AllCards, Catalog.Potions);
+            AdventureRun.Start(Chosen.Value, AdventureDecks.Starter(Chosen.Value, Catalog.AllCards), Environment.TickCount, Catalog.AllCards, Catalog.Potions,
+                Mathf.Min(AscensionLevel, Ascension.Unlocked(Chosen.Value)));
             lastWalk = "Your journey begins. Pick a room on the bottom row.";
             Show();
         }
@@ -171,6 +197,7 @@ namespace SlayTheClone {
             embark = AddButton(footer, EmbarkButtonName, "<b>Embark</b>", 360, Embark);
             UITheme.StyleButton(embark, UITheme.ButtonKind.Primary);
             AddButton(footer, AutoplayButtonName, "Autoplay", 260, Autoplay);
+            ascensionButton = AddButton(footer, AscensionButtonName, "Ascension", 300, CycleAscension);
             return screen.panel;
         }
         #endregion
@@ -209,6 +236,7 @@ namespace SlayTheClone {
             var rivals = Factions.Select(f => f.faction).Where(f => f != AdventureRun.Faction).ToList();
             if (rivals.Count == 0) rivals = Factions.Select(f => f.faction).ToList();
             var faction = rivals[random.Next(rivals.Count)];
+            if (room.Type == RoomType.Boss && AdventureRun.BossFaction != Faction.None) faction = AdventureRun.BossFaction; // The one the map showed
             string name = AdventureDecks.EnemyName(faction, room);
             var deck = AdventureDecks.Enemy(faction, AdventureDecks.StrengthOf(room), Catalog.AllCards, random, name);
             AdventureRun.SetEnemy(deck);
@@ -217,6 +245,16 @@ namespace SlayTheClone {
             MatchSetup.OpponentHealth = AdventureRun.EnemyHealthFor(room); // 5, 10, 15... the boss 60
             MatchSetup.PlayerRelics.AddRange(AdventureRun.Relics); // Your kit: the relics, and the potions in your opening hand
             MatchSetup.PlayerPotions.AddRange(AdventureRun.Potions);
+            // An elite carries a relic of its own, the boss two (Slay the Spire's elites differ; these are readable)
+            AdventureRun.EnemyRelics.Clear();
+            int perks = room.Type == RoomType.Boss ? 2 : room.Type == RoomType.Elite ? 1 : 0;
+            var perkPool = AdventureRun.EnemyPerks.ToList();
+            for (int i = 0; i < perks && perkPool.Count > 0; i++) {
+                var perk = perkPool[random.Next(perkPool.Count)];
+                perkPool.Remove(perk);
+                AdventureRun.EnemyRelics.Add(perk);
+            }
+            MatchSetup.OpponentRelics.AddRange(AdventureRun.EnemyRelics);
             MatchSetup.AILevel = LevelFor(room);
             MatchSetup.AIStyle = AIStyle.Balanced;
             if (AdventureAutopilot.On) { // The autopilot: the AI plays your seat too
@@ -227,11 +265,15 @@ namespace SlayTheClone {
         }
 
         /// <summary>How well the AI plays a fight room: the first fights are easy, an elite hard, the boss very hard.</summary>
-        public static AILevel LevelFor(MapNode room) => room.Type switch {
-            RoomType.Boss => AILevel.VeryHard,
-            RoomType.Elite => AILevel.Hard,
-            _ => room.Row < 3 ? AILevel.Easy : AILevel.Medium
-        };
+        public static AILevel LevelFor(MapNode room, int ascension = -1) {
+            var level = room.Type switch {
+                RoomType.Boss => AILevel.VeryHard,
+                RoomType.Elite => AILevel.Hard,
+                _ => room.Row < 3 ? AILevel.Easy : AILevel.Medium
+            };
+            int bonus = Ascension.AIBonus(ascension < 0 ? AdventureRun.Ascension : ascension); // Ascension 2: a level better
+            return (AILevel)Mathf.Min((int)AILevel.VeryHard, (int)level + bonus);
+        }
 
         private GameObject BuildMap() {
             string faction = CardTextFormatter.FactionName(AdventureRun.Faction);
@@ -259,6 +301,8 @@ namespace SlayTheClone {
             coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0.5f, 0.5f);
             AddText(side, AdventureRun.Deck != null ? $"Your deck: {CardGrid.Count(AdventureRun.Deck.Cards)}" : "", 22, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 34);
             AddText(side, $"Health: <b>{AdventureRun.Health}</b>    EuroYuans: {AdventureRun.Money(AdventureRun.EuroYuans)}", 26, AccentColor, FontStyles.Normal, height: 38);
+            AddText(side, (AdventureRun.BossFaction != Faction.None ? $"The boss plays <b>{CardTextFormatter.FactionName(AdventureRun.BossFaction)}</b>" : "")
+                          + (AdventureRun.Ascension > 0 ? $"    Ascension {AdventureRun.Ascension}" : ""), 22, TextColor, FontStyles.Normal, height: 32);
             status = AddText(side, StatusText(), 24, TextColor, FontStyles.Normal, height: 150);
             status.textWrappingMode = TextWrappingModes.Normal;
             AddKit(side);
@@ -407,7 +451,9 @@ namespace SlayTheClone {
             var screen = AddScreen(transform, "AdventurePanel", "Shop");
             shopGrid = new CardGrid(screen.columns, Catalog.CardPrefab, ShopColumns);
             shopGrid.Title.text = $"You have {AdventureRun.Money(AdventureRun.EuroYuans)}  <size=70%><color=#C9C0AE>Click a card to buy it</color></size>";
-            var offers = AdventureRun.Shop.ToList();
+            var offers = AdventureRun.Shop.Where(o => !o.IsRelic).ToList(); // Cards and potions; the relic has its button
+            var relic = AdventureRun.Shop.FirstOrDefault(o => o.IsRelic);
+            if (relic != null && !relic.Sold) shopGrid.Title.text += $"\n<size=60%><color=#C9C0AE>Relic for sale: {Relics.Line(relic.Relic)}</color></size>";
             int at = 0;
             shopGrid.Show(offers.Select(o => o.Card), (face, _) => {
                 var offer = offers[at++];
@@ -420,6 +466,11 @@ namespace SlayTheClone {
             AddButton(footer, DeckButtonName, "View deck", 260, () => ShowDeck(true));
             string removal = AdventureRun.RemovedHere ? "<s>Remove a card</s>  <color=#C9C0AE>done</color>"
                 : $"Remove a card  {AdventureRun.Money(AdventureRun.RemovalCost)}";
+            if (relic != null) {
+                var buyRelic = AddButton(footer, RelicOfferButtonName, relic.Sold ? $"<s>{Relics.NameOf(relic.Relic)}</s>  <color=#C9C0AE>sold</color>"
+                    : $"Relic: {Relics.NameOf(relic.Relic)}  {AdventureRun.Money(relic.Price)}", 380, () => Buy(relic));
+                buyRelic.interactable = !relic.Sold && AdventureRun.EuroYuans >= relic.Price;
+            }
             var remove = AddButton(footer, RemoveCardButtonName, removal, 380, () => OpenRemoval(true));
             remove.interactable = AdventureRun.CanRemove;
             var leave = AddButton(footer, LeaveShopButtonName, "<b>Leave</b>", 300, LeaveShop);
@@ -462,7 +513,8 @@ namespace SlayTheClone {
         /// <summary>Buys the shop's card, if you can pay it.</summary>
         public void Buy(AdventureRun.ShopOffer offer) {
             if (!AdventureRun.Buy(offer)) return;
-            lastWalk = offer.IsPotion ? $"You bought a potion: {offer.Card.cardName}." : $"You bought {offer.Card.cardName}.";
+            lastWalk = offer.IsRelic ? $"You bought a relic: {Relics.NameOf(offer.Relic)}."
+                : offer.IsPotion ? $"You bought a potion: {offer.Card.cardName}." : $"You bought {offer.Card.cardName}.";
             Show();
         }
 
@@ -534,7 +586,8 @@ namespace SlayTheClone {
         #endregion
 
         private string StatusText() {
-            if (AdventureRun.Won) return "<b>The boss is beaten.</b> Your adventure is won!";
+            if (AdventureRun.Won) return "<b>The boss is beaten.</b> Your adventure is won!"
+                + (AdventureRun.AscensionUnlocked > 0 ? $" Ascension {AdventureRun.AscensionUnlocked} is open for {CardTextFormatter.FactionName(AdventureRun.Faction)}." : "");
             if (AdventureRun.Lost) return $"<b>Defeated</b> after {AdventureRun.Path.Count} rooms. The run is over.";
             return lastWalk ?? (AdventureRun.Current == null ? "Pick a room on the bottom row." : "Pick the next room along your path.");
         }

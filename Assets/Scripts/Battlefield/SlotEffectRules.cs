@@ -31,7 +31,7 @@ namespace SlayTheClone {
         /// <summary>A creature entered the slot: summoned there, or moved in by any means.</summary>
         public static void OnEnter(ICreature creature, BoardSlot slot, ActionExecutionContext context) {
             creature?.ReleaseHeldEntryEffects(context.ActionsQueue); // Moved off Scorched Earth: its entry effects happen now
-            if (creature == null) return;
+            if (creature == null || Abilities.Has(creature, CreatureAbility.Hover)) return; // Hover: traps don't touch it
             // Checkpoint (a side hazard, Pokémon's Stealth Rock): every creature that enters pays, and it stays
             if (slot?.Effect?.Type == SlotEffectType.Checkpoint) {
                 Trigger(slot, context, $"{creature.Name} is stopped at a Checkpoint", new DamageCreatureAction(creature, slot.Effect.Value) { Source = slot.Effect.Source });
@@ -43,7 +43,7 @@ namespace SlayTheClone {
 
         /// <summary>A creature left the slot by moving: on its own, pushed or swapped. Dying or being replaced isn't leaving.</summary>
         public static void OnLeave(ICreature creature, BoardSlot slot, ActionExecutionContext context) {
-            if (creature == null || slot?.Effect?.Type != SlotEffectType.BarbedSnare) return;
+            if (creature == null || slot?.Effect?.Type != SlotEffectType.BarbedSnare || Abilities.Has(creature, CreatureAbility.Hover)) return;
             Trigger(slot, context, $"{creature.Name} tears free of a Barbed Snare", new DamageCreatureAction(creature, slot.Effect.Value) { Source = slot.Effect.Source });
         }
 

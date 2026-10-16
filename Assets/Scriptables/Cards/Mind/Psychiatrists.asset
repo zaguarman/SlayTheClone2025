@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Strip Search: its attack on a creature with a status or a stat change
     Purges it first and hits 2 harder. They strip away everything you were carrying.'

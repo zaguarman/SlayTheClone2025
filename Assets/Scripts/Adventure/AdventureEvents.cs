@@ -31,10 +31,11 @@ namespace SlayTheClone {
             Text = "A motorway service station at 3 a.m. The coffee machine works. The Wi-Fi doesn't. Nobody will bother you here.",
             Choices = {
                 new Choice {
-                    Label = $"Sleep  <color=#C9C0AE>(+{AdventureRun.RestHeal} Health)</color>",
+                    Label = $"Sleep  <color=#C9C0AE>(+{Ascension.RestHealing(AdventureRun.Ascension)} Health)</color>",
                     Outcome = c => {
-                        AdventureRun.ChangeHealth(AdventureRun.RestHeal);
-                        return $"You sleep across three plastic chairs. It's the best night in weeks. <b>+{AdventureRun.RestHeal} Health</b>.";
+                        int heal = Ascension.RestHealing(AdventureRun.Ascension);
+                        AdventureRun.ChangeHealth(heal);
+                        return $"You sleep across three plastic chairs. It's the best night in weeks. <b>+{heal} Health</b>.";
                     }
                 },
                 new Choice {
@@ -44,6 +45,60 @@ namespace SlayTheClone {
                 }
             }
         };
+
+        /// <summary>
+        /// The run's opening choice (Slay the Spire's Neow): a relic, two potions, more Health, or two cards upgraded. The same
+        /// deck, a different run.
+        /// </summary>
+        public static Event Onboarding() => new Event {
+            Id = "Onboarding",
+            Title = "Orientation Day",
+            Text = "HR hands you a lanyard, a laptop that won't turn on, and a choice of welcome perks. The free lunch is a lie. The rest might not be.",
+            Choices = {
+                new Choice {
+                    Label = "The company perk  <color=#C9C0AE>(a random relic)</color>",
+                    Outcome = c => {
+                        var relic = AdventureRun.GainRelic(c.Random);
+                        return relic != Relic.None ? $"A perk nobody else got: {Relics.Line(relic)}" : "The perks ran out before your turn.";
+                    }
+                },
+                new Choice {
+                    Label = "The wellness kit  <color=#C9C0AE>(two random potions)</color>",
+                    Available = () => AdventureRun.PotionPool.Count > 0,
+                    Outcome = c => {
+                        var got = new List<string>();
+                        for (int i = 0; i < 2; i++) {
+                            var potion = AdventureRun.PotionPool[c.Random.Next(AdventureRun.PotionPool.Count)];
+                            if (AdventureRun.AddPotion(potion)) got.Add(potion.cardName);
+                        }
+                        return $"A tote bag with <b>{string.Join("</b> and <b>", got)}</b> inside.";
+                    }
+                },
+                new Choice {
+                    Label = $"The health plan  <color=#C9C0AE>(+{OnboardingHealth} Health)</color>",
+                    Outcome = c => {
+                        AdventureRun.ChangeHealth(OnboardingHealth);
+                        return $"Dental, vision, and a gym you'll never visit. <b>+{OnboardingHealth} Health</b>.";
+                    }
+                },
+                new Choice {
+                    Label = "The training budget  <color=#C9C0AE>(two random cards upgraded)</color>",
+                    Available = () => CardUpgrades.Upgradable(AdventureRun.Deck.Cards).Count > 0,
+                    Outcome = c => {
+                        var done = new List<string>();
+                        for (int i = 0; i < 2; i++) {
+                            var options = CardUpgrades.Upgradable(AdventureRun.Deck.Cards);
+                            if (options.Count == 0) break;
+                            var card = options[c.Random.Next(options.Count)];
+                            if (AdventureRun.UpgradeAny(card)) done.Add(card.cardName + CardUpgrades.Mark);
+                        }
+                        return $"Two online courses, finished at 2x speed: <b>{string.Join("</b> and <b>", done)}</b>.";
+                    }
+                }
+            }
+        };
+
+        public const int OnboardingHealth = 15;
 
         /// <summary>A treasure room: a relic you don't have yet, and some EuroYuans.</summary>
         public static Event Treasure() => new Event {

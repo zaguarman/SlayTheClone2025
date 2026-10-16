@@ -42,6 +42,8 @@ namespace SlayTheClone {
         int Fallen { get; set; }
         /// <summary>The adventure's relics this player carries into the fight (none outside an adventure).</summary>
         ISet<Relic> Relics { get; }
+        /// <summary>The spells this player's played that resolved today (Combo counts them); back to 0 at Dawn.</summary>
+        int SpellsToday { get; set; }
         /// <summary>God's Grace: the last Day at whose Dusk 0 Health doesn't lose yet; null when not in Grace.</summary>
         int? GraceUntilDay { get; set; }
         /// <summary>The card that put the player in Grace (shown over their plaque while it lasts).</summary>
@@ -104,6 +106,7 @@ namespace SlayTheClone {
         public List<ICard> Policies { get; } = new List<ICard>();
         public int Fallen { get; set; }
         public ISet<Relic> Relics { get; } = new HashSet<Relic>();
+        public int SpellsToday { get; set; }
         public int? GraceUntilDay { get; set; }
         public ICard GraceCard { get; set; }
         public Dictionary<ICard, ICard> SendForPicks { get; } = new Dictionary<ICard, ICard>();

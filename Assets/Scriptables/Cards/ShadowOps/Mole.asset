@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Mechanics test: Underground (both ways). When it''s attacked, the
     attacker''s buffs and debuffs are ignored; when it attacks, the defender''s temporary

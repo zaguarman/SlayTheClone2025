@@ -29,6 +29,9 @@ namespace SlayTheClone {
             public int Price { get; internal set; }
             public bool Sold { get; internal set; }
             public bool IsPotion => Card != null && Card.potion;
+            /// <summary>A relic for sale (Card is null then); None for a card or a potion.</summary>
+            public Relic Relic { get; internal set; }
+            public bool IsRelic => Relic != Relic.None;
         }
 
         /// <summary>The currency's symbol: the yen's Y fused to the euro's C, its bars shared (TextMeshPro rich text).</summary>
@@ -91,6 +94,8 @@ namespace SlayTheClone {
         public static int RemovalCost => Discounted(RemovalPrice + RemovalRise * removals);
         private static int removals;
         public static Faction Faction { get; private set; }
+        /// <summary>The Ascension level the boss's defeat just opened for this faction; 0 if none.</summary>
+        public static int AscensionUnlocked { get; private set; }
         /// <summary>This run, for the telemetry's records of its fights.</summary>
         public static string RunId { get; private set; } = "";
         /// <summary>The run's Ascension level (0: none): each one makes it harder (see <see cref="Ascension"/>).</summary>
@@ -123,17 +128,26 @@ namespace SlayTheClone {
         public static int FightsWon => Path.Count(n => n.IsCombat);
 
         /// <summary>The Health the enemy of this fight room starts at, by stage (see <see cref="EnemyHealth"/>).</summary>
-        public static int EnemyHealthFor(MapNode room) => EnemyHealth(room.Type, FightsWon);
+        public static int EnemyHealthFor(MapNode room) => EnemyHealth(room.Type, FightsWon, Ascension);
 
         /// <summary>
         /// An enemy's Health, in stages of <see cref="FightsPerStage"/> fights (the user): the first ones 5, the next 10, then
         /// 15...; an elite a stage higher; the boss 60.
         /// </summary>
-        public static int EnemyHealth(RoomType type, int fightsWon) => type == RoomType.Boss ? BossHealth
-            : Mathf.Min(BossHealth - HealthStep, HealthStep * (fightsWon / FightsPerStage + 1 + (type == RoomType.Elite ? 1 : 0)));
+        public static int EnemyHealth(RoomType type, int fightsWon, int ascension = 0) => type == RoomType.Boss ? SlayTheClone.Ascension.BossHealthAt(ascension)
+            : Mathf.Min(BossHealth - HealthStep, HealthStep * (fightsWon / FightsPerStage + 1
+                + (type == RoomType.Elite ? 1 + SlayTheClone.Ascension.EliteStages(ascension) : 0)));
+
+        public const int RelicPrice = 35; // A relic at a shop
+        /// <summary>The faction the boss plays, known from the start (the map shows it, Slay the Spire's boss icon).</summary>
+        public static Faction BossFaction { get; private set; }
+        /// <summary>The relics the enemy of the fight under way carries (an elite one, the boss two); empty in a plain fight.</summary>
+        public static List<Relic> EnemyRelics { get; } = new List<Relic>();
+        /// <summary>The relics an elite or a boss can carry: the ones that work in a fight.</summary>
+        public static readonly Relic[] EnemyPerks = { Relic.Taser, Relic.Kevlar, Relic.ProteinShake, Relic.Coffee, Relic.AirFryer, Relic.MemoNote };
 
         public static void Start(Faction faction, DeckScriptableObject deck, int seed, IEnumerable<CardDataScriptableObject> pool = null,
-            IEnumerable<CardDataScriptableObject> potions = null) {
+            IEnumerable<CardDataScriptableObject> potions = null, int ascension = 0) {
             Clear();
             RunId = System.Guid.NewGuid().ToString("N");
             Pool = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null).Distinct().ToList();
@@ -141,8 +155,16 @@ namespace SlayTheClone {
             Active = true;
             Faction = faction;
             Deck = deck;
-            Health = StartingHealth;
+            Ascension = Mathf.Clamp(ascension, 0, SlayTheClone.Ascension.Max);
+            Health = SlayTheClone.Ascension.StartHealth(Ascension);
             Map = AdventureMap.Generate(seed);
+            // The boss: a faction other than yours, among those in the pool, decided now and shown on the map
+            var rivals = Pool.Select(c => c.faction).Where(f => f != Faction.None && f != faction).Distinct().OrderBy(f => f).ToList();
+            BossFaction = rivals.Count > 0 ? rivals[new System.Random(seed * 13 + 5).Next(rivals.Count)] : Faction.None;
+            // The run opens with a choice (Slay the Spire's Neow): a relic, potions, Health or upgrades
+            Event = AdventureEvents.Onboarding();
+            EventOutcome = null;
+            eventRoom = null;
         }
 
         /// <summary>The rooms you can walk into next: the bottom row at first, then the rooms your room's paths lead to.</summary>
@@ -188,7 +210,7 @@ namespace SlayTheClone {
                 return true;
             }
             var context = new AdventureEvents.Context {
-                Random = new System.Random(Map.Seed * 59 + eventRoom.Row * 17 + eventRoom.Column),
+                Random = new System.Random(Map.Seed * 59 + (eventRoom?.Row ?? -1) * 17 + (eventRoom?.Column ?? 0)),
                 Pool = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).ToList()
             };
             EventOutcome = AdventureEvents.Run(choice, context);
@@ -207,6 +229,15 @@ namespace SlayTheClone {
             Deck = DeckScriptableObject.Make(Deck.GetDeckName(), cards);
             Upgrading = false;
             EventOutcome = $"You train until it's second nature: <b>{upgraded.cardName}</b> ({CardUpgrades.Describe(card)}).";
+            return true;
+        }
+
+        /// <summary>Upgrades one copy of the card in your deck outside a rest site (an event's training).</summary>
+        public static bool UpgradeAny(CardDataScriptableObject card) {
+            if (!CardUpgrades.CanUpgrade(card) || !Deck.Cards.Contains(card)) return false;
+            var cards = Deck.Cards.ToList();
+            cards[cards.IndexOf(card)] = CardUpgrades.Upgrade(card);
+            Deck = DeckScriptableObject.Make(Deck.GetDeckName(), cards);
             return true;
         }
 
@@ -283,14 +314,18 @@ namespace SlayTheClone {
             // Two potions, different ones
             foreach (var potion in PotionPool.OrderBy(_ => random.Next()).Take(ShopPotions))
                 Shop.Add(new ShopOffer { Card = potion, Price = Discounted(PotionPrice) });
+            // And one relic you don't have yet, dearer (Slay the Spire's shops sell relics too)
+            var forSale = SlayTheClone.Relics.All.Where(r => !Relics.Contains(r)).ToList();
+            if (forSale.Count > 0) Shop.Add(new ShopOffer { Relic = forSale[random.Next(forSale.Count)], Price = Discounted(RelicPrice) });
         }
 
         /// <summary>Buys the card, if you can pay it and your deck has room: into your deck, the money gone.</summary>
         public static bool Buy(ShopOffer offer) {
             if (!InShop || offer == null || offer.Sold || !Shop.Contains(offer) || EuroYuans < offer.Price) return false;
-            if (offer.IsPotion ? Potions.Count >= MaxPotions : Deck.Cards.Count >= PlayerDecks.MaxDeckSize) return false;
+            if (offer.IsRelic ? Relics.Contains(offer.Relic) : offer.IsPotion ? Potions.Count >= MaxPotions : Deck.Cards.Count >= PlayerDecks.MaxDeckSize) return false;
             EuroYuans -= offer.Price;
-            if (offer.IsPotion) Potions.Add(offer.Card);
+            if (offer.IsRelic) Relics.Add(offer.Relic);
+            else if (offer.IsPotion) Potions.Add(offer.Card);
             else Deck = DeckScriptableObject.Make(Deck.GetDeckName(), Deck.Cards.Append(offer.Card));
             offer.Sold = true;
             return true;
@@ -334,6 +369,7 @@ namespace SlayTheClone {
             Found.Clear();
             if (room.Type == RoomType.Boss) {
                 Won = true;
+                if (SlayTheClone.Ascension.UnlockAfterWin(Faction, Ascension)) AscensionUnlocked = Ascension + 1;
                 return;
             }
             Rewards.Clear();
@@ -399,6 +435,9 @@ namespace SlayTheClone {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Clear() {
             Active = Won = Lost = InShop = RemovedHere = Upgrading = false;
+            Ascension = AscensionUnlocked = 0;
+            BossFaction = Faction.None;
+            EnemyRelics.Clear();
             Relics.Clear();
             Potions.Clear();
             Found.Clear();

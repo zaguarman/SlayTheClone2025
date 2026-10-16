@@ -450,6 +450,34 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual((6, 9), (hacker.Health, poisoned.Health), "1 at the first Dusk...");
             game.StartTurn();
             Assert.AreEqual((8, 7), (hacker.Health, poisoned.Health), "...2 at the next");
+
+            // The next picks (2026-10-16). Gear: a second ability while it stays (Recoil as a Life Orb)
+            Fresh();
+            var geared = With(CreatureAbility.None, p1, 0, attack: 1, health: 6);
+            game.Run(new EquipAction(geared, CreatureAbility.Recoil));
+            Assert.IsTrue(Abilities.Has(geared, CreatureAbility.Recoil), "Gear: a second ability");
+            var anvil = With(CreatureAbility.None, p2, 0, attack: 0, health: 20);
+            game.Attack(geared, p2.Battlefield[0]);
+            Assert.AreEqual((17, 5), (anvil.Health, geared.Health), "Recoil from its Gear: +2 on the hit, 1 back");
+
+            // Provoked (Taunt, Follow Me): whatever it aims at, it attacks the creature facing it
+            var provoked = With(CreatureAbility.None, p2, 1, attack: 3, health: 5);
+            var taunter = With(CreatureAbility.None, p1, 1, attack: 0, health: 10);
+            game.Run(new ApplyStatusEffectAction(provoked, StatusEffectType.Provoked, 2, 0));
+            int healthBefore = p1.Health;
+            game.Attack(provoked, p1.Battlefield[3]); // Aimed at an empty slot, so the player
+            Assert.AreEqual((7, healthBefore), (taunter.Health, p1.Health), "Provoked: it hit the creature facing it");
+
+            // Combo: 1 more for each other spell its player plays the same Day
+            var finisherData = game.Spell("Finisher", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures));
+            finisherData.combo = true;
+            var jabData = game.Spell("Jab", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures));
+            var comboMark = With(CreatureAbility.None, p2, 2, attack: 0, health: 20);
+            game.ActionsQueue.AddAction(new PlayCardAction(game.GiveCard(p1, finisherData), p1, comboMark));
+            game.ActionsQueue.AddAction(new PlayCardAction(game.GiveCard(p1, jabData), p1, comboMark));
+            game.ActionsQueue.AddAction(new PlayCardAction(game.GiveCard(p1, jabData), p1, comboMark));
+            game.Resolve();
+            Assert.AreEqual(20 - 1 - 1 - 3, comboMark.Health, "The two Jabs, and the Finisher +2 for them, whichever resolved first");
         }
 
         [Test]

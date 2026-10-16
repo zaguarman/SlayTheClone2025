@@ -13,7 +13,7 @@ namespace SlayTheClone {
             CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy,
             TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys,
             WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay, Rush, Defect, SwapStats,
-            SwapSlotEffects } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
+            SwapSlotEffects, Equip } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
@@ -38,7 +38,9 @@ namespace SlayTheClone {
             Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace, Ambush, ExtremePrejudice,
             AllergicToLight, FallGuy, Brink, CollateralDamage, SorryImLate, HeProtec, Irreplaceable, Turncoat,
             // The meta picks (2026-10-16): statuses that help their owner, losses as fuel, priority, pivots, Armor as damage, strips, Trends
-            Hormesis, Martyrdom, Grudge, SuckerPunch, HitAndRun, ShieldBash, StripSearch, OnTrend
+            Hormesis, Martyrdom, Grudge, SuckerPunch, HitAndRun, ShieldBash, StripSearch, OnTrend,
+            // Gear only (held items, 2026-10-16): Hover keeps it off Slot Effects, Self-Repair heals it each Dawn
+            Hover, SelfRepair
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look
@@ -75,7 +77,8 @@ namespace SlayTheClone {
             Rooted,        // It can't move, and nothing can move or swap it (a building going up: Ministry for Equality)
             Burnout,       // When it runs out, the creature is destroyed (Overtime: it lasts through the first Day it's ready)
             Shielded,      // Takes no combat damage, for its Days counting the one it lands (the user: a creature's, not a slot's)
-            Toxic          // Like Burned, but it grows: each Dusk it deals its potency, then the potency goes up by 1
+            Toxic,         // Like Burned, but it grows: each Dusk it deals its potency, then the potency goes up by 1
+            Provoked       // Taunt and Follow Me: its attacks go to the creature facing it, and it can't use its Active ability
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old

@@ -179,6 +179,7 @@ namespace SlayTheClone {
             IsInitialized = true;
 
             session.Equip(Player1, MatchSetup.PlayerRelics, MatchSetup.PlayerPotions.Select(p => p.ToCardData())); // An adventure's kit
+            session.Equip(Player2, MatchSetup.OpponentRelics, null); // An elite's or a boss's relics
             session.DealOpeningHands();
             recorder = StartRecording(session, mediator as GameMediator, seed, player1Cards, player2Cards);
             Log("GameManager Initialization complete.", LogTag.Initialization);

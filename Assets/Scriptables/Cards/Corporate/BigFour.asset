@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Grudge (Kingambit''s Supreme Overlord): +1 Attack for each friendly
     creature that died this combat, up to +5. The workers Corporate spends become

@@ -221,6 +221,30 @@ namespace SlayTheClone {
     }
 
     // Like Hive Mind: the new ability replaces its own until its card is reshuffled
+    /// <summary>Equip: the creature's Gear (a held item): a second ability while it stays in play; new gear replaces the old.</summary>
+    public class EquipAction : IGameAction {
+        public ICreature Creature { get; }
+        public CreatureAbility Gear { get; }
+
+        public EquipAction(ICreature creature, CreatureAbility gear) {
+            Creature = creature;
+            Gear = gear;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"EquipAction: {Creature?.Name} gets the gear {Gear}";
+    }
+
+    public class EquipActionExecutor : ActionExecutor<EquipAction> {
+        protected override void ExecuteAction(EquipAction equip, ActionExecutionContext context) {
+            var creature = equip.Creature;
+            if (creature == null || creature.IsDead || creature.Slot == null || equip.Gear == CreatureAbility.None) return;
+            Log($"{creature.Name} is equipped with {equip.Gear} (was {creature.Gear})", LogTag.Effects);
+            creature.Gear = equip.Gear;
+            context.GameMediator.NotifyCreatureStatsChanged(creature);
+        }
+    }
+
     public class GrantAbilityActionExecutor : ActionExecutor<GrantAbilityAction> {
         protected override void ExecuteAction(GrantAbilityAction grant, ActionExecutionContext context) {
             var creature = grant.Creature;

@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Sucker Punch: its attack on a creature goes before every other, but
     only if that creature planned an attack; otherwise it holds back. Read their

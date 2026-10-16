@@ -123,6 +123,10 @@ Bloomberg Terminal (creature)
     A black two-screen trading terminal with its keyboard of colored keys, every chart spiking green, a trader's sweaty finger hovering over the yellow BUY key.
 Internal Protocol: Quota Crusher Mindset (spell)
     A motivational poster over a cubicle farm, a lone runner on a mountain top under the words QUOTA CRUSHER, the workers below asleep on their keyboards.
+Smartwatch (spell)
+    A sleek smartwatch on a sweating wrist, its screen flashing 'Stand up! Productivity -3%', a subscription renewal notice sliding in underneath.
+High-Frequency Trading Scam (spell)
+    A server rack in a basement next to the stock exchange, cables running under the street, a trader's face reflected in a screen of numbers moving too fast to read.
 
 STATECRAFT
 
@@ -189,6 +193,8 @@ Security Guard (creature)
     An airport security guard snapping on a blue latex glove with a grin, a traveler in socks with arms raised in the body scanner, a bin of confiscated water bottles overflowing behind.
 Si Vis Pacem, Para Bellum (spell)
     A Roman general signing a peace treaty with one hand while the other points at a row of catapults being built behind the tent.
+Exoskeleton (spell)
+    A soldier in a powered military exoskeleton standing guard at a checkpoint, an extension cord trailing from his back to a wall socket in the guard booth.
 
 ZEITGEIST
 
@@ -275,6 +281,8 @@ Lost Generation (creature)
     Tired millennials in graduation gowns sitting on the steps of a closed bank, their diplomas folded into paper boats floating down the gutter.
 Universal Basic Income (spell)
     A long line of citizens at an ATM spitting out identical small banknotes, a politician in the background tearing his hair out, a man in the line buying a lottery ticket with his.
+Calm Your Tits (spell)
+    A man at a family barbecue telling his furious aunt to calm down, everyone around them freezing mid-bite, the aunt's face going from red to purple.
 
 DIGITAL SOCIETY
 
@@ -345,6 +353,8 @@ Selfie Esteem (spell)
     A girl holding a selfie stick at arm's length, the phone screen showing a perfect filtered face while the real one is crying, a ring light glowing.
 Influencer (creature)
     An influencer posing in front of a melting glacier with a branded water bottle, an assistant holding a reflector, the caption 'so grateful' on the phone.
+U Mad Bro? (creature)
+    A smug teenager in a gaming chair, trollface on his hoodie, typing 'u mad bro?' while a wall of furious replies piles up on his screen.
 
 SHADOW OPS.
 
@@ -478,6 +488,8 @@ Polonium Umbrella (spell)
     A gentleman in a bowler hat at a London bus stop pressing the tip of his black umbrella into a stranger's calf, a faint green glow at the tip, the stranger reading his newspaper.
 Nonchalant Agent (creature)
     An agent in a tuxedo leaning on a casino bar sipping a martini without looking, his free hand already flicking a pistol from his sleeve at a henchman who has only half drawn.
+Q Branch (spell)
+    An old quartermaster in a lab coat demonstrating an exploding briefcase to a bored agent, a test dummy in the background missing its head.
 
 TECH
 
@@ -526,6 +538,10 @@ Code Review (spell)
     Two developers at a desk, one pointing at a screen full of red warning markers, the other shrugging and clicking 'Approve' with a coffee in hand.
 Bomber Drone (creature)
     A quadcopter drone with a delivery company's logo dropping a small bomb on a tank and zipping away, a 5-star rating popping up on its operator's phone below.
+Hovercraft (spell)
+    A sleek hovercraft gliding over a minefield, every mine underneath it blinking red and doing nothing, a deminer watching with his mouth open.
+Ctrl + Y (spell)
+    A keyboard with the Y key worn down to a nub, a hand mashing Ctrl + Y while the same explosion repeats on the screen behind it.
 
 MYTH
 
@@ -694,6 +710,8 @@ Projection (spell)
     A man on a therapist's couch pointing at her, a film projector behind him throwing his own dark shadow-monster onto the wall behind her chair.
 Psychiatrists (creature)
     Two psychiatrists in armchairs taking notes while a patient on the couch has his emotional baggage (suitcases labelled 'Mom', 'Ex', 'Work') taken away one by one.
+Hyperbole (spell)
+    A man telling a story at a bar with his arms spread wider and wider, the fish he's describing growing from a sardine to a whale in thought bubbles behind him.
 
 UTOPIA
 
@@ -786,6 +804,8 @@ Biohacker (creature)
     A shirtless tech bro in an ice bath full of glowing green sludge, sensors taped all over his chest, his smartwatch showing 'biological age: 19'.
 Prion Disease (spell)
     A cow in a lab coat staring blankly into a microscope while its own brain, full of holes like Swiss cheese, floats in a jar beside it.
+Nanobots (spell)
+    A swarm of glittering nanobots stitching a robot's torn arm back together, a few of them on a tiny picket line holding 'Fair Wages' signs.
 
 POTION
 

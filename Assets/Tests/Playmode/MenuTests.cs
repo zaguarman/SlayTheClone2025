@@ -180,6 +180,13 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(AdventureDecks.StarterSize, AdventureRun.Deck.Cards.Count, "...and a small starter deck...");
             Assert.IsTrue(AdventureRun.Deck.Cards.All(c => c.faction == yours) && AdventureRun.Deck.Cards.Any(c => c is CreatureCardScriptableObject)
                 && AdventureRun.Deck.Cards.Any(c => c is not CreatureCardScriptableObject), "...of its faction, creatures and spells");
+            // The run opens with a choice (Orientation Day): one of four perks, then the map; the boss's faction is known
+            Assert.IsTrue(AdventureRun.InEvent && AdventureRun.Event.Id == "Onboarding", "...opened by a choice");
+            Assert.AreNotEqual(Faction.None, AdventureRun.BossFaction, "The boss's faction is known from the start...");
+            Assert.AreNotEqual(yours, AdventureRun.BossFaction, "...and isn't yours");
+            Click(GalleryButton(adventure, AdventureMenu.EventChoiceButton + 0));
+            Assert.AreEqual(1, AdventureRun.Relics.Count, "The company perk: a relic");
+            Click(GalleryButton(adventure, AdventureMenu.EventOnButtonName));
             var map = AdventureRun.Map;
             Assert.IsTrue(map.Row(0).All(n => n.Type == RoomType.Fight) && map.Row(AdventureMap.TreasureRow).All(n => n.Type == RoomType.Treasure)
                 && map.Row(AdventureMap.Rows - 1).All(n => n.Type == RoomType.Rest), "The first row all fights, the one 7 from the end all treasure, the last all rest sites");
@@ -210,7 +217,7 @@ namespace SlayTheClone.Tests {
             AdventureRun.WinFight(AdventureRun.StartingHealth - 15); // As the game's end does, before the title screen opens the map again
             Assert.AreEqual(AdventureRun.StartingHealth - 15, AdventureRun.Health, "What's left of your Health goes on with you");
             adventure.Show();
-            Assert.AreEqual(AdventureRun.FightPurse, AdventureRun.EuroYuans, "A fight won pays EuroYuans");
+            Assert.AreEqual(AdventureRun.FightPurse + (AdventureRun.Relics.Contains(Relic.DoubleHeadedCoin) ? Relics.CoinPay : 0), AdventureRun.EuroYuans, "A fight won pays EuroYuans (more with the Double Headed Coin)");
             Assert.AreSame(first, AdventureRun.Current, "Won, you're in its room...");
             Assert.AreEqual(1, AdventureRun.Rewards.Count, "...and it drops a card pack (Slay the Spire's rewards)");
             Assert.IsEmpty(AdventureRun.Reachable(), "No walking on before proceeding");
@@ -274,9 +281,10 @@ namespace SlayTheClone.Tests {
                 Click(adventure.Rooms[shop]);
                 Assert.IsTrue(AdventureRun.InShop, "A shop opens...");
                 Assert.AreEqual(AdventureRun.ShopCards + AdventureRun.ShopPotions, adventure.ShopCards.Count, "...its cards on show, and two potions...");
-                Assert.IsTrue(AdventureRun.Shop.Where(o => !o.IsPotion).All(o => o.Card.faction == yours), "...the cards all of your faction");
+                Assert.IsTrue(AdventureRun.Shop.Where(o => !o.IsPotion && !o.IsRelic).All(o => o.Card.faction == yours), "...the cards all of your faction...");
+                Assert.AreEqual(1, AdventureRun.Shop.Count(o => o.IsRelic), "...and a relic");
                 Assert.IsEmpty(AdventureRun.Reachable(), "No walking on from a shop before leaving it");
-                var cheapest = AdventureRun.Shop.Where(o => !o.IsPotion).OrderBy(o => o.Price).First();
+                var cheapest = AdventureRun.Shop.Where(o => !o.IsPotion && !o.IsRelic).OrderBy(o => o.Price).First();
                 int size = AdventureRun.Deck.Cards.Count;
                 ClickCard(adventure.ShopCards[AdventureRun.Shop.IndexOf(cheapest)]);
                 Assert.IsTrue(cheapest.Sold && AdventureRun.Deck.Cards.Count == size + 1 && AdventureRun.EuroYuans == purse - cheapest.Price, "Clicking a card buys it, paid");

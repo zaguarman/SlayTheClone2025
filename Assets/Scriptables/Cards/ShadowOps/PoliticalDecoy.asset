@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Mechanics test: Swap trades places with a friendly creature at any
     distance, over the creatures in between, even one that can''t act.'

@@ -77,7 +77,7 @@ namespace SlayTheClone {
             if (type is StatusEffectType.Exhausted or StatusEffectType.Concealed or StatusEffectType.Revealed or StatusEffectType.Encrypted
                 or StatusEffectType.Untouchable or StatusEffectType.Cooldown or StatusEffectType.Brainwashed or StatusEffectType.KillOrder
                 or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Blackout
-                or StatusEffectType.Survivor or StatusEffectType.Burnout or StatusEffectType.Shielded) {
+                or StatusEffectType.Survivor or StatusEffectType.Burnout or StatusEffectType.Shielded or StatusEffectType.Provoked) {
                 foreach (var old in manager.GetActiveModifiersFor(target).OfType<StatusEffectModifier>()
                              .Where(s => s.EffectType == type).ToList()) {
                     manager.RemoveModifier(target, old);
@@ -116,6 +116,7 @@ namespace SlayTheClone {
                 StatusEffectType.Doomed => $"Doomed ({days}): +1 Attack each Dawn, then Last Rites and it dies",
                 StatusEffectType.Burned => $"Burned ({days})" + (potency > 0 ? $" (Potency: {potency})" : ""),
                 StatusEffectType.Toxic => $"Toxic ({days}): damage at each Dusk, 1 more each time",
+                StatusEffectType.Provoked => $"Provoked ({days}): it attacks the creature facing it, and can't use its Active ability",
                 StatusEffectType.Concealed => $"Concealed ({days}): its plans show as ??? to the enemy",
                 StatusEffectType.Revealed => $"Revealed ({days}): its plans can be seen",
                 StatusEffectType.Encrypted => $"Encrypted ({days}): Watchdogs ignore its actions",

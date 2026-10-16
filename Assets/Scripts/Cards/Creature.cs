@@ -37,6 +37,8 @@ namespace SlayTheClone {
         /// until it's reshuffled, like Persistent Stat Modifications. Whether it's switched on: see <see cref="Abilities.IsActive"/>.
         /// </summary>
         CreatureAbility Ability { get; set; }
+        /// <summary>Its Gear (a held item, 2026-10-16): a second ability while it stays in play, given by an Equip effect. None: no gear.</summary>
+        CreatureAbility Gear { get; set; }
         /// <summary>Its Heat Signature stacks, kept by the ModifierManager (0: none). Random and redirected attacks go to the hottest.</summary>
         int Heat { get; set; }
         /// <summary>
@@ -161,6 +163,16 @@ namespace SlayTheClone {
             }
         }
         private CreatureAbility ability;
+
+        public CreatureAbility Gear {
+            get => gear;
+            set {
+                if (gear == value) return;
+                gear = value;
+                NotifyChanged();
+            }
+        }
+        private CreatureAbility gear;
         public int Heat { get; set; }
         public ISet<IPlayer> KnownTo { get; } = new HashSet<IPlayer>();
         public int TimesEnteredPlay { get; private set; }

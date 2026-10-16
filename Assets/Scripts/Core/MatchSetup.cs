@@ -41,6 +41,8 @@ namespace SlayTheClone {
         public static List<Relic> PlayerRelics { get; } = new List<Relic>();
         /// <summary>The potions you carry into the fight, in your opening hand: an adventure's.</summary>
         public static List<CardDataScriptableObject> PlayerPotions { get; } = new List<CardDataScriptableObject>();
+        /// <summary>The relics the opponent carries: an adventure's elite or boss.</summary>
+        public static List<Relic> OpponentRelics { get; } = new List<Relic>();
 
         public static bool PlayedByAI(IPlayer player) =>
             player != null && (AI & (player.IsPlayer1 ? AISeats.Player1 : AISeats.Player2)) != 0;
@@ -69,6 +71,7 @@ namespace SlayTheClone {
             PlayerHealth = OpponentHealth = null;
             PlayerRelics.Clear();
             PlayerPotions.Clear();
+            OpponentRelics.Clear();
             AI = ai;
             OpponentDeck = opponentDeck;
             OpponentName = string.IsNullOrEmpty(opponentName) ? DefaultOpponentName : opponentName;
@@ -89,6 +92,7 @@ namespace SlayTheClone {
             PlayerHealth = OpponentHealth = null;
             PlayerRelics.Clear();
             PlayerPotions.Clear();
+            OpponentRelics.Clear();
             seatLevels.Clear();
             AI = AISeats.None;
             AILevel = AILevel.Medium;

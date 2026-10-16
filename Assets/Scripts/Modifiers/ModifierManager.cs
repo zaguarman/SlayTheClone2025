@@ -249,6 +249,10 @@ namespace SlayTheClone {
 
                 Abilities.TryCopypasta(creature, mediator); // Each Dawn while it still has Copypasta
                 Abilities.TrySafeSpace(creature, actionsQueue);
+                // Self-Repair (a Gear: Pokémon's Leftovers): it heals a little each Dawn
+                if (Abilities.Has(creature, CreatureAbility.SelfRepair) && creature.Health < creature.MaxHealth) {
+                    actionsQueue.AddAction(new HealCreatureAction(creature, Abilities.SelfRepairHeal));
+                }
                 creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);

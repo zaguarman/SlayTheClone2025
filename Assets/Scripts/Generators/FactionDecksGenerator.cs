@@ -94,15 +94,15 @@ namespace SlayTheClone {
         private static readonly (string Name, string File, string Opponent, string Tagline, string Strategy, string[] Cards)[] PairDecks = {
             // A second deck for each faction, another strategy than its best one (the user, 2026-10-16: decks combining different
             // strategies, then a tournament)
-            ("Corporate - Hustle Rush", "CorporateRushDeck", "Your Startup's Founder", "Moving fast. Breaking you.", "Aggro", new[] { "Day Trader", "Day Trader", "Unpaid Intern", "Unpaid Intern", "Pluriemployed Hustler", "Pluriemployed Hustler", "Multilevel Marketing Seller", "Multilevel Marketing Seller", "Counterfeit", "Shell Company", "Shell Company", "Golden Parachute", "Golden Parachute", "Work Shift Rotation", "Work Shift Rotation", "Hostile Takeover", "Hostile Takeover", "Team Building Exercise", "Team Building Exercise", "Overtime", "Overtime", "Business Expense", "Inheritance", "Inheritance", "Just in Time", "Just in Time", "Venture Capital", "Venture Capital", "Moral Bankruptcy", "Moral Bankruptcy", "Hedonic Treadmillionaire", "Hedonic Treadmillionaire", "Middle Manager", "Middle Manager", "Bloomberg Terminal", "Bloomberg Terminal", "Internal Protocol: Quota Crusher Mindset", "Internal Protocol: Quota Crusher Mindset" }),
-            ("Statecraft - Shock and Awe", "StatecraftAggroDeck", "The Minister of Defence", "Peace through superior firepower.", "Aggro", new[] { "Mercenaries", "Mercenaries", "Sherman Tank", "Sherman Tank", "Police Officer Productivity Target", "Police Officer Productivity Target", "Spite-Elected President", "Spite-Elected President", "Demagogue", "Demagogue", "Man o' War", "Man o' War", "Preemptive Strike", "Preemptive Strike", "Raised Security Level", "Raised Security Level", "Martial Law", "Martial Law", "Panem Et Circenses", "Weapons of Mass Distraction", "Security Guard", "Security Guard" }),
-            ("Zeitgeist - Underdogs", "ZeitgeistSwarmDeck", "Your Neighbourhood", "Nobody believed in them. Correctly.", "Swarm", new[] { "Underdog", "Underdog", "Plot Armor", "Plot Armor", "Scam Artist", "Scam Artist", "Delivery Cyclist", "Delivery Cyclist", "Drug Smuggler", "Drug Smuggler", "Hikikomori", "Hikikomori", "Not on My Watch", "Karen", "Karen", "No Glove, No Love", "No Glove, No Love", "One for the Road", "One for the Road", "Rush Hour", "Generational Trauma", "Generational Trauma", "Mental Health Day", "YOLO", "The Friends We Made Along the Way", "The Friends We Made Along the Way", "Absentee Parents", "Absentee Parents", "Ol' Reliable", "Ol' Reliable", "Weaponized Incompetence", "Listen Kid", "Listen Kid", "Lost Generation", "Lost Generation", "Spite Voter", "Spite Voter", "Camper Van", "Camper Van", "Universal Basic Income" }),
-            ("Utopia - Lab Grown", "UtopiaEngineDeck", "The Gene Therapist", "Side effects may include winning.", "Engine", new[] { "Hypermetamorphosis", "Hypermetamorphosis", "Frankenstein", "Frankenstein", "Genetically Modified Organism", "Genetically Modified Organism", "Clone", "Clone", "Extremophile", "Extremophile", "Quantum Physicist", "Surveillance Giraffe", "Perpetual Motion Machine", "Philosophy PhD", "Exponential Growth", "Exponential Growth", "Gene Editing", "Gene Editing", "Placebo", "Blood Transfusion", "Blood Transfusion", "Stasis Field", "Overpopulation", "Overpopulation", "Quark", "Quark", "Seasteading", "Seasteading", "White Dwarf", "White Dwarf", "Longevity Hub", "Longevity Hub", "Femtosecond Laser", "Femtosecond Laser" }),
-            ("Digital Society - Influencer Economy", "DigitalSocietyMidrangeDeck", "Your Favourite Streamer", "Like, subscribe, surrender.", "Midrange", new[] { "Thirst Trap", "Thirst Trap", "Content Creator", "Content Creator", "Short King", "Short King", "Good Boi", "Good Boi", "Its Been 84 Years...", "Its Been 84 Years...", "Catfish", "Catfish", "Meta Group Chat", "Meta Group Chat", "Cancelled", "Cancelled", "Social Panopticon", "Social Panopticon", "Its A Trap", "Dogpile", "Dogpile", "Console Memory Card", "Selfie Esteem", "Selfie Esteem", "Influencer", "Influencer" }),
-            ("Shadow Ops. - Black Budget", "ShadowOpsControlDeck", "The Station Chief", "This meeting never happened.", "Control", new[] { "Control Room", "Control Room", "Signal Jammer", "Signal Jammer", "Political Decoy", "Deep Cover", "Deep Cover", "Whistleblower", "Whistleblower", "Wet Work", "Wet Work", "Mole", "Mole", "Counter-Intelligence", "Counter-Intelligence", "Sabotage", "Perfectly Timed Camera Malfunction", "Perfectly Timed Camera Malfunction", "Tapped Communications", "Tapped Communications", "Fell Out of a Window", "Fell Out of a Window", "Coup d'État", "Asset Recruitment", "Embassy", "Embassy", "Tracking Beacon", "Tracking Beacon", "Counter-Surveillance", "Counter-Surveillance", "Exploding Pen", "Exploding Pen", "Secret Anthrax Laboratory", "Compromised Agent", "Compromised Agent", "Polonium Umbrella", "Polonium Umbrella", "Nonchalant Agent", "Nonchalant Agent" }),
-            ("Tech - Threat Model", "TechComboDeck", "The Red Team", "We found 47 vulnerabilities. You are 46 of them.", "Combo", new[] { "Threat Hunter", "Threat Hunter", "Script Kiddie", "Script Kiddie", "Sex Clanker", "Legacy Code", "Legacy Code", "Scope Creep", "Scope Creep", "SysAdmin", "Meatproxy As A Service", "Suspicious USB Stick in the Parking Lot", "Suspicious USB Stick in the Parking Lot", "Pair Programming", "Pair Programming", "Ctrl + Z", "Ctrl + Z", "DDOS Attack", "DDOS Attack", "Ransomware Attack", "Ransomware Attack", "Antivirus", "Web Scraping", "Bomber Drone", "Bomber Drone", "Code Review" }),
+            ("Corporate - Hustle Rush", "CorporateRushDeck", "Your Startup's Founder", "Moving fast. Breaking you.", "Aggro", new[] { "Day Trader", "Day Trader", "Unpaid Intern", "Unpaid Intern", "Pluriemployed Hustler", "Pluriemployed Hustler", "Multilevel Marketing Seller", "Multilevel Marketing Seller", "Counterfeit", "Shell Company", "Shell Company", "Golden Parachute", "Golden Parachute", "Work Shift Rotation", "Work Shift Rotation", "Hostile Takeover", "Hostile Takeover", "Team Building Exercise", "Team Building Exercise", "Overtime", "Overtime", "Business Expense", "Inheritance", "Inheritance", "Just in Time", "Just in Time", "Venture Capital", "Venture Capital", "Moral Bankruptcy", "Moral Bankruptcy", "Hedonic Treadmillionaire", "Hedonic Treadmillionaire", "Middle Manager", "Middle Manager", "Bloomberg Terminal", "Bloomberg Terminal", "Internal Protocol: Quota Crusher Mindset", "Internal Protocol: Quota Crusher Mindset", "Smartwatch", "Smartwatch", "High-Frequency Trading Scam", "High-Frequency Trading Scam" }),
+            ("Statecraft - Shock and Awe", "StatecraftAggroDeck", "The Minister of Defence", "Peace through superior firepower.", "Aggro", new[] { "Mercenaries", "Mercenaries", "Sherman Tank", "Sherman Tank", "Police Officer Productivity Target", "Police Officer Productivity Target", "Spite-Elected President", "Spite-Elected President", "Demagogue", "Demagogue", "Man o' War", "Man o' War", "Preemptive Strike", "Preemptive Strike", "Raised Security Level", "Raised Security Level", "Martial Law", "Martial Law", "Panem Et Circenses", "Weapons of Mass Distraction", "Security Guard", "Security Guard", "Exoskeleton", "Exoskeleton" }),
+            ("Zeitgeist - Underdogs", "ZeitgeistSwarmDeck", "Your Neighbourhood", "Nobody believed in them. Correctly.", "Swarm", new[] { "Underdog", "Underdog", "Plot Armor", "Plot Armor", "Scam Artist", "Scam Artist", "Delivery Cyclist", "Delivery Cyclist", "Drug Smuggler", "Drug Smuggler", "Hikikomori", "Hikikomori", "Not on My Watch", "Karen", "Karen", "No Glove, No Love", "No Glove, No Love", "One for the Road", "One for the Road", "Rush Hour", "Generational Trauma", "Generational Trauma", "Mental Health Day", "YOLO", "The Friends We Made Along the Way", "The Friends We Made Along the Way", "Absentee Parents", "Absentee Parents", "Ol' Reliable", "Ol' Reliable", "Weaponized Incompetence", "Listen Kid", "Listen Kid", "Lost Generation", "Lost Generation", "Spite Voter", "Spite Voter", "Camper Van", "Camper Van", "Universal Basic Income", "Calm Your Tits" }),
+            ("Utopia - Lab Grown", "UtopiaEngineDeck", "The Gene Therapist", "Side effects may include winning.", "Engine", new[] { "Hypermetamorphosis", "Hypermetamorphosis", "Frankenstein", "Frankenstein", "Genetically Modified Organism", "Genetically Modified Organism", "Clone", "Clone", "Extremophile", "Extremophile", "Quantum Physicist", "Surveillance Giraffe", "Perpetual Motion Machine", "Philosophy PhD", "Exponential Growth", "Exponential Growth", "Gene Editing", "Gene Editing", "Placebo", "Blood Transfusion", "Blood Transfusion", "Stasis Field", "Overpopulation", "Overpopulation", "Quark", "Quark", "Seasteading", "Seasteading", "White Dwarf", "White Dwarf", "Longevity Hub", "Longevity Hub", "Femtosecond Laser", "Femtosecond Laser", "Nanobots", "Nanobots" }),
+            ("Digital Society - Influencer Economy", "DigitalSocietyMidrangeDeck", "Your Favourite Streamer", "Like, subscribe, surrender.", "Midrange", new[] { "Thirst Trap", "Thirst Trap", "Content Creator", "Content Creator", "Short King", "Short King", "Good Boi", "Good Boi", "Its Been 84 Years...", "Its Been 84 Years...", "Catfish", "Catfish", "Meta Group Chat", "Meta Group Chat", "Cancelled", "Cancelled", "Social Panopticon", "Social Panopticon", "Its A Trap", "Dogpile", "Dogpile", "Console Memory Card", "Selfie Esteem", "Selfie Esteem", "Influencer", "Influencer", "U Mad Bro?", "U Mad Bro?" }),
+            ("Shadow Ops. - Black Budget", "ShadowOpsControlDeck", "The Station Chief", "This meeting never happened.", "Control", new[] { "Control Room", "Control Room", "Signal Jammer", "Signal Jammer", "Political Decoy", "Deep Cover", "Deep Cover", "Whistleblower", "Whistleblower", "Wet Work", "Wet Work", "Mole", "Mole", "Counter-Intelligence", "Counter-Intelligence", "Sabotage", "Perfectly Timed Camera Malfunction", "Perfectly Timed Camera Malfunction", "Tapped Communications", "Tapped Communications", "Fell Out of a Window", "Fell Out of a Window", "Coup d'État", "Asset Recruitment", "Embassy", "Embassy", "Tracking Beacon", "Tracking Beacon", "Counter-Surveillance", "Counter-Surveillance", "Exploding Pen", "Exploding Pen", "Secret Anthrax Laboratory", "Compromised Agent", "Compromised Agent", "Polonium Umbrella", "Polonium Umbrella", "Nonchalant Agent", "Nonchalant Agent", "Q Branch", "Q Branch" }),
+            ("Tech - Threat Model", "TechComboDeck", "The Red Team", "We found 47 vulnerabilities. You are 46 of them.", "Combo", new[] { "Threat Hunter", "Threat Hunter", "Script Kiddie", "Script Kiddie", "Sex Clanker", "Legacy Code", "Legacy Code", "Scope Creep", "Scope Creep", "SysAdmin", "Meatproxy As A Service", "Suspicious USB Stick in the Parking Lot", "Suspicious USB Stick in the Parking Lot", "Pair Programming", "Pair Programming", "Ctrl + Z", "Ctrl + Z", "DDOS Attack", "DDOS Attack", "Ransomware Attack", "Ransomware Attack", "Antivirus", "Web Scraping", "Bomber Drone", "Bomber Drone", "Code Review", "Ctrl + Y", "Ctrl + Y", "Hovercraft" }),
             ("Myth - Blessed Martyrs", "MythEngineDeck", "The Abbess", "Blessed are the meek. Briefly.", "Engine", new[] { "Pope", "Pope", "Omniscient Space-Time Bending Bearded Wizard", "Martyr", "Martyr", "Cultist", "Cultist", "Zealot", "Zealot", "Phoenix", "Phoenix", "Reincarnation", "Reincarnation", "The Lobster Professor", "Thoughts and Prayers", "Thoughts and Prayers", "The Holy Grail", "Deus Vult", "Deus Vult", "Sacrificial Ritual", "Mox Nox", "Excess of Bread and Wine", "Blessing in Disguise", "Blessing in Disguise", "Mithril", "Mithril", "Grim Reaper", "Grim Reaper", "Gracias Jesús", "Here Be Dragons", "Heretic", "Heretic", "Publicly Funded Faith Schools", "Publicly Funded Faith Schools", "Ambrosia", "Ambrosia" }),
-            ("Mind - Mind Games", "MindControlDeck", "Your Therapist", "And how does losing make you feel?", "Control", new[] { "Socrates", "Socrates", "Roko's Basilisk", "Roko's Basilisk", "Schrodinger's Cat", "Schrodinger's Cat", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Legerdemain", "Legerdemain", "Maslow's Pyramid", "Maslow's Pyramid", "Yesn't", "Yesn't", "Red Herring", "Red Herring", "Survivorship Bias", "Momentum", "Trolley Problem", "Trolley Problem", "Lucid Dreaming", "Hold That Thought", "Hold That Thought", "Psychiatrists", "Psychiatrists", "Projection" }),
+            ("Mind - Mind Games", "MindControlDeck", "Your Therapist", "And how does losing make you feel?", "Control", new[] { "Socrates", "Socrates", "Roko's Basilisk", "Roko's Basilisk", "Schrodinger's Cat", "Schrodinger's Cat", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Legerdemain", "Legerdemain", "Maslow's Pyramid", "Maslow's Pyramid", "Yesn't", "Yesn't", "Red Herring", "Red Herring", "Survivorship Bias", "Momentum", "Trolley Problem", "Trolley Problem", "Lucid Dreaming", "Hold That Thought", "Hold That Thought", "Psychiatrists", "Psychiatrists", "Projection", "Hyperbole", "Hyperbole" }),
             // Two factions that play well together (Faction Compendium 5, Example Two-Faction Decks)
             ("Myth + Corporate - Prosperity Gospel", "ProsperityGospelDeck", "The Televangelist", "Your donation is tax-deductible. Your soul is not.", "Combo", new[] { "Sacrificial Ritual", "Sacrificial Ritual", "Omen Reading", "Necronomicon", "Necronomicon", "Cultist", "Cultist", "Unpaid Intern", "Unpaid Intern", "Golden Parachute", "Golden Parachute", "Charles Ponzi", "Day Trader", "Day Trader", "Fat Tony", "Fat Tony", "Martyr", "Martyr", "Tax-Exempt Corruption", "Monkey Hand", "Holy War", "Holy War", "Hostile Takeover", "Hostile Takeover" }),
             ("Digital Society + Shadow Ops. - Panopticon", "PanopticonDeck", "The Data Broker", "We know what you did. We sold it.", "Combo", new[] { "Meta Group Chat", "Meta Group Chat", "Social Panopticon", "Social Panopticon", "Cancelled", "Cancelled", "Control Room", "Control Room", "Wet Work", "Wet Work", "Perfectly Timed Camera Malfunction", "Perfectly Timed Camera Malfunction", "Tapped Communications", "Keyboard Warrior", "Keyboard Warrior", "Chronically Online", "Chronically Online", "Licence to Kill", "Licence to Kill", "Cleaner", "Cleaner", "Dogpile", "Dogpile" }),
@@ -482,6 +482,18 @@ namespace SlayTheClone {
                 Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, modifier: Each, days: 1))
                 .Policy()
                 .Picture("A motivational poster over a cubicle farm, a lone runner on a mountain top under the words QUOTA CRUSHER, the workers below asleep on their keyboards."),
+            // The next picks (the user, 2026-10-16): Gear (held items), Provoked (Taunt), Combo (chaining spells)
+            Spell("Smartwatch", TargetType.FriendlyCreatures,
+                "Tracks your steps, your sleep, your heart rate and your productivity. Reports three of them to HR.",
+                "Gear (Pokémon's Life Orb): Recoil while it stays in play, +2 damage on its attacks and 1 damage to itself after each. A megacorp's subscription device, the hustle strapped to a wrist.",
+                Equip(CreatureAbility.Recoil, TargetType.FriendlyCreatures))
+                .Picture("A sleek smartwatch on a sweating wrist, its screen flashing 'Stand up! Productivity -3%', a subscription renewal notice sliding in underneath."),
+            Spell("High-Frequency Trading Scam", TargetType.Player,
+                "Buy at a millisecond, sell at the next. Repeat until regulated. Nobody ever regulates.",
+                "Combo (Slay the Spire's Finisher): draw a card next Day, 1 more for each other spell you play this Day. Corporate's spells feed its draw.",
+                Draw(1))
+                .Combo()
+                .Picture("A server rack in a basement next to the stock exchange, cables running under the street, a trader's face reflected in a screen of numbers moving too fast to read."),
         };
         #endregion
 
@@ -637,6 +649,12 @@ namespace SlayTheClone {
                 Armor(1, TargetType.FriendlyCreatures, Each))
                 .Policy()
                 .Picture("A Roman general signing a peace treaty with one hand while the other points at a row of catapults being built behind the tent."),
+            // The next picks (the user, 2026-10-16): Gear (held items), Provoked (Taunt), Combo (chaining spells)
+            Spell("Exoskeleton", TargetType.FriendlyCreatures,
+                "Standard issue. Batteries not included. Batteries never included.",
+                "Gear (Pokémon's Assault Vest): Unbothered while it stays in play, enemy effects can't lower its stats. On top of the creature's own ability.",
+                Equip(CreatureAbility.Unbothered, TargetType.FriendlyCreatures))
+                .Picture("A soldier in a powered military exoskeleton standing guard at a checkpoint, an extension cord trailing from his back to a wall socket in the guard booth."),
         };
         #endregion
 
@@ -835,6 +853,12 @@ namespace SlayTheClone {
                 Draw(1))
                 .Policy()
                 .Picture("A long line of citizens at an ATM spitting out identical small banknotes, a politician in the background tearing his hair out, a man in the line buying a lottery ticket with his."),
+            // The next picks (the user, 2026-10-16): Gear (held items), Provoked (Taunt), Combo (chaining spells)
+            Spell("Calm Your Tits", TargetType.EnemyCreatures,
+                "Said nobody, ever, successfully.",
+                "Provoke 2 (Taunt, Follow Me) on target creature: for the rest of this Day and the next 2, it attacks the creature facing it and can't use its Active ability; and you draw a card next Day. Put a wall in front of it.",
+                Status(StatusEffectType.Provoked, 2, TargetType.EnemyCreatures), Draw(1))
+                .Picture("A man at a family barbecue telling his furious aunt to calm down, everyone around them freezing mid-bite, the aunt's face going from red to purple."),
         };
         #endregion
 
@@ -971,6 +995,12 @@ namespace SlayTheClone {
                 "On Trend: +2 Attack while a Trend is on. Digital Society lives on what's trending.")
                 .With(CreatureAbility.OnTrend)
                 .Picture("An influencer posing in front of a melting glacier with a branded water bottle, an assistant holding a reflector, the caption 'so grateful' on the phone."),
+            // The next picks (the user, 2026-10-16): Gear (held items), Provoked (Taunt), Combo (chaining spells)
+            Creature("U Mad Bro?", 2, 4, speed: 2, deploy: 0,
+                "Didn't read your argument. Disagrees anyway. Has posted the trollface.",
+                "Arrival: Provoke 2 on the creature facing it (Taunt): it has to attack this troll for the next Days, and can't use its Active ability. A sturdy body that pulls the hits.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.Provoked, 2, TargetType.EnemyCreatures, modifier: Facing)))
+                .Picture("A smug teenager in a gaming chair, trollface on his hoodie, typing 'u mad bro?' while a wall of furious replies piles up on his screen."),
         };
 
         // Shadow Ops.: fragile agents, hidden plans, traps
@@ -1335,6 +1365,12 @@ namespace SlayTheClone {
                 "Sucker Punch: its attack on a creature goes before every other, but only if that creature planned an attack; otherwise it holds back. Read their plans (Fog of War makes it a gamble) and punch first.")
                 .With(CreatureAbility.SuckerPunch)
                 .Picture("An agent in a tuxedo leaning on a casino bar sipping a martini without looking, his free hand already flicking a pistol from his sleeve at a henchman who has only half drawn."),
+            // The next picks (the user, 2026-10-16): Gear (held items), Provoked (Taunt), Combo (chaining spells)
+            Spell("Q Branch", TargetType.FriendlyCreatures,
+                "Now pay attention, 007.",
+                "Gear: Insider Job while it stays in play, its damage ignores Armor. The quartermaster's gadgets, for the faction of glass cannons that meets walls.",
+                Equip(CreatureAbility.InsiderJob, TargetType.FriendlyCreatures))
+                .Picture("An old quartermaster in a lab coat demonstrating an exploding briefcase to a bored agent, a test dummy in the background missing its head."),
         };
 
         // Tech: rewires the queue
@@ -1446,6 +1482,18 @@ namespace SlayTheClone {
                 "Hit and Run: after its attack it goes back to your hand, fresh, with the next Day's. It strikes and is gone before the answer comes.")
                 .With(CreatureAbility.HitAndRun)
                 .Picture("A quadcopter drone with a delivery company's logo dropping a small bomb on a tank and zipping away, a 5-star rating popping up on its operator's phone below."),
+            // The next picks (the user, 2026-10-16): Gear (held items), Provoked (Taunt), Combo (chaining spells)
+            Spell("Hovercraft", TargetType.FriendlyCreatures,
+                "Floats over the problem. Never solves it.",
+                "Gear (Pokémon's Heavy-Duty Boots): Hover while it stays in play, Slot Effects don't touch it (no Landmine, Barbed Snare or Checkpoint as it enters or leaves).",
+                Equip(CreatureAbility.Hover, TargetType.FriendlyCreatures))
+                .Picture("A sleek hovercraft gliding over a minefield, every mine underneath it blinking red and doing nothing, a deminer watching with his mouth open."),
+            Spell("Ctrl + Y", TargetType.EnemyCreatures,
+                "Redo. And again. And again.",
+                "Combo: 1 damage to target creature or player, 1 more for each other spell you play this Day. Tech's spells pile up into a finisher.",
+                Damage(1, TargetType.EnemyCreatures))
+                .Combo()
+                .Picture("A keyboard with the Y key worn down to a nub, a hand mashing Ctrl + Y while the same explosion repeats on the screen behind it."),
         };
 
         // Myth: faith, death and prophecy. Creatures that rise again (Revive) or die for the cause (Doomed), sacrifices that pay
@@ -1886,6 +1934,13 @@ namespace SlayTheClone {
                 "Strip Search: its attack on a creature with a status or a stat change Purges it first and hits 2 harder. They strip away everything you were carrying.")
                 .With(CreatureAbility.StripSearch)
                 .Picture("Two psychiatrists in armchairs taking notes while a patient on the couch has his emotional baggage (suitcases labelled 'Mom', 'Ex', 'Work') taken away one by one."),
+            // The next picks (the user, 2026-10-16): Gear (held items), Provoked (Taunt), Combo (chaining spells)
+            Spell("Hyperbole", TargetType.EnemyCreatures,
+                "The worst card ever printed in the history of the universe.",
+                "Combo: target creature -1 Attack this Day, 1 more for each other spell you play this Day. Mind's words grow with every one said.",
+                Buff(-1, TargetType.EnemyCreatures, attack: true, health: false, days: 1))
+                .Combo()
+                .Picture("A man telling a story at a bar with his arms spread wider and wider, the fish he's describing growing from a sardine to a whale in thought bubbles behind him."),
         };
         #endregion
 
@@ -2135,6 +2190,12 @@ namespace SlayTheClone {
                 "Toxic 1 for 4 Days on target creature: 1, then 2, 3 and 4 damage, 10 in all. Slow removal that grows.",
                 Status(StatusEffectType.Toxic, 4, TargetType.EnemyCreatures, potency: 1))
                 .Picture("A cow in a lab coat staring blankly into a microscope while its own brain, full of holes like Swiss cheese, floats in a jar beside it."),
+            // The next picks (the user, 2026-10-16): Gear (held items), Provoked (Taunt), Combo (chaining spells)
+            Spell("Nanobots", TargetType.FriendlyCreatures,
+                "Billions of tiny repairmen. One tiny union.",
+                "Gear (Pokémon's Leftovers): Self-Repair while it stays in play, it heals 2 each Dawn.",
+                Equip(CreatureAbility.SelfRepair, TargetType.FriendlyCreatures))
+                .Picture("A swarm of glittering nanobots stitching a robot's torn arm back together, a few of them on a tiny picket line holding 'Fair Wages' signs."),
         };
         #endregion
 
@@ -2262,6 +2323,13 @@ namespace SlayTheClone {
 
             public CardDef Policy() {
                 IsPolicy = true;
+                return this;
+            }
+
+            public bool IsCombo; // Combo: +1 to its numbers for each other spell you play the same Day
+
+            public CardDef Combo() {
+                IsCombo = true;
                 return this;
             }
 
@@ -2420,6 +2488,13 @@ namespace SlayTheClone {
         private static EffectAction CopyStats(TargetType target) => Act(ActionType.CopyStats, 0, target, TargetModifier.None);
         private static EffectAction SwapPositions(TargetType target) => Act(ActionType.SwapPositions, 0, target, TargetModifier.None);
 
+        // Gear: a second ability while the creature stays in play (a held item)
+        private static EffectAction Equip(CreatureAbility gear, TargetType target) {
+            var action = Act(ActionType.Equip, 0, target, TargetModifier.None);
+            action.ability = gear;
+            return action;
+        }
+
         private static EffectAction GrantAbility(CreatureAbility ability, TargetType target) {
             var action = Act(ActionType.GrantAbility, 0, target, TargetModifier.None);
             action.ability = ability;
@@ -2563,6 +2638,7 @@ namespace SlayTheClone {
             asset.ripening = card.IsRipening;
             asset.policy = card.IsPolicy;
             asset.potion = card.IsPotion;
+            asset.combo = card.IsCombo;
             asset.SetEffects(card.Effects);
             switch (asset) {
                 case CreatureCardScriptableObject creature:

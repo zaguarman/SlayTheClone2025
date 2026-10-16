@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Hit and Run: after its attack it goes back to your hand, fresh, with
     the next Day''s. It strikes and is gone before the answer comes.'

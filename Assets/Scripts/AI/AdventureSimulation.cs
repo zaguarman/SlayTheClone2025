@@ -26,6 +26,8 @@ namespace SlayTheClone {
             public List<CardDataScriptableObject> Deck;
             public int Health = AdventureRun.StartingHealth, Money, FightsWon, Removals, Bought, Rests, Upgrades, PotionsUsed;
             public readonly List<Relic> Relics = new List<Relic>();
+            public Faction BossFaction;
+            public readonly List<Relic> EnemyRelics = new List<Relic>();
             public readonly List<CardDataScriptableObject> Potions = new List<CardDataScriptableObject>();
             public bool Over, Won, Stalled;
             public Faction FightingFaction, KilledBy;
@@ -44,10 +46,14 @@ namespace SlayTheClone {
             foreach (var faction in factions) {
                 for (int i = 0; i < runsPerFaction; i++) {
                     int seed = 7919 * (int)faction + 104729 * i + 17;
-                    sims.Add(new AdventureSim {
+                    var sim = new AdventureSim {
                         Faction = faction, Index = i, Random = new System.Random(seed), Map = AdventureMap.Generate(seed),
                         Deck = AdventureDecks.Starter(faction, cards).Cards.ToList()
-                    });
+                    };
+                    var rivals = factions.Where(f => f != faction).ToList();
+                    sim.BossFaction = rivals[sim.Random.Next(rivals.Count)]; // Known from the start, as the map shows it
+                    GainRelic(sim); // The opening choice: it takes the relic
+                    sims.Add(sim);
                 }
             }
             var audit = new GameAudit();
@@ -67,8 +73,8 @@ namespace SlayTheClone {
                     int enemyHealth = AdventureRun.EnemyHealth(sim.Fighting.Type, sim.FightsWon);
                     var kit = new DeckCards { Name = "Potions", Cards = sim.Potions.Select(p => p.ToCardData()).ToList() };
                     read.Add(kit);
-                    games.Add(new Game(mine, player, theirs, new AIEntrant(AdventureMenu.LevelFor(sim.Fighting)), sim.Random.Next(), sim.Health, enemyHealth,
-                        sim.Relics.ToArray(), kit.Cards));
+                    games.Add(new Game(mine, player, theirs, new AIEntrant(AdventureMenu.LevelFor(sim.Fighting, 0)), sim.Random.Next(), sim.Health, enemyHealth,
+                        sim.Relics.ToArray(), kit.Cards, sim.EnemyRelics.ToArray()));
                     playing.Add(sim);
                 }
                 if (games.Count == 0) break;
@@ -128,7 +134,15 @@ namespace SlayTheClone {
                 if (room.IsCombat) {
                     sim.Fighting = room;
                     var rivals = factions.Where(f => f != sim.Faction).ToList();
-                    sim.FightingFaction = rivals[sim.Random.Next(rivals.Count)];
+                    sim.FightingFaction = room.Type == RoomType.Boss ? sim.BossFaction : rivals[sim.Random.Next(rivals.Count)];
+                    // An elite carries a relic, the boss two (as the adventure does)
+                    sim.EnemyRelics.Clear();
+                    var perks = AdventureRun.EnemyPerks.ToList();
+                    for (int p = 0; p < (room.Type == RoomType.Boss ? 2 : room.Type == RoomType.Elite ? 1 : 0); p++) {
+                        var perk = perks[sim.Random.Next(perks.Count)];
+                        perks.Remove(perk);
+                        sim.EnemyRelics.Add(perk);
+                    }
                     if (sim.EnemyDeck != null) Object.DestroyImmediate(sim.EnemyDeck);
                     sim.EnemyDeck = AdventureDecks.Enemy(sim.FightingFaction, AdventureDecks.StrengthOf(room), pool, sim.Random, AdventureDecks.EnemyName(sim.FightingFaction, room));
                     return;
@@ -155,6 +169,11 @@ namespace SlayTheClone {
             if (potions.Count > 0 && sim.Potions.Count < AdventureRun.MaxPotions && sim.Money >= Price(sim, AdventureRun.PotionPrice)) {
                 sim.Money -= Price(sim, AdventureRun.PotionPrice);
                 sim.Potions.Add(potions[sim.Random.Next(potions.Count)]);
+            }
+            // A relic, when there's money left for it
+            if (sim.Money >= Price(sim, AdventureRun.RelicPrice) && Relics.All.Any(r => !sim.Relics.Contains(r))) {
+                sim.Money -= Price(sim, AdventureRun.RelicPrice);
+                GainRelic(sim);
             }
             int removal = Price(sim, AdventureRun.RemovalPrice + AdventureRun.RemovalRise * sim.Removals);
             if (sim.Money >= removal && sim.Deck.Count > AdventureRun.MinDeck) {
@@ -212,7 +231,8 @@ namespace SlayTheClone {
             text.AppendLine("Very Hard boss; Health 5, 10, 15... and 60 for the boss). Won, a run takes the strongest card offered (its own faction's);");
             text.AppendLine("shops buy the strongest card it can pay and a potion, then take out the weakest. Rest sites: sleep (+20) below 40");
             text.AppendLine("Health, otherwise upgrade the strongest card. Elites and treasure rooms give a relic; fights drop potions (40%),");
-            text.AppendLine("which join the opening hand. Events are walked through.");
+            text.AppendLine("which join the opening hand. Events are walked through. The opening choice: a relic. Shops sell a relic too (bought with");
+            text.AppendLine("what's left); elites carry a relic, the boss two, and the boss's faction is known from the start.");
             text.AppendLine("A fight still going after 40 Days counts as lost (stalled).");
             text.AppendLine();
             text.AppendLine("1. BY FACTION, the most trouble first (bosses beaten, then fights won)");

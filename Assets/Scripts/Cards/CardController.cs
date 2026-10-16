@@ -220,7 +220,8 @@ namespace SlayTheClone {
             // A Ripening spell ripened in the hand reads with its numbers as they are now
             var ripened = linkedCardInstance is Spell { Ripeness: > 0 } ripe ? ripe.Effects : null;
             if (ripened != null) nameText.text = $"{baseCardData.cardName} <size=80%>(ripe +{((Spell)linkedCardInstance).Ripeness})</size>";
-            rulesText.text = ComposeTextBox(CardTextFormatter.GetRulesText(baseCardData, ability, abilityOff, ripened), baseCardData.description);
+            var gear = linkedCreature?.Slot != null ? linkedCreature.Gear : Enums.CreatureAbility.None; // Its held item, in play
+            rulesText.text = ComposeTextBox(CardTextFormatter.GetRulesText(baseCardData, ability, abilityOff, ripened, gear), baseCardData.description);
 
             bool isCreature = baseCardData is CreatureData;
             statsBox.SetActive(isCreature);

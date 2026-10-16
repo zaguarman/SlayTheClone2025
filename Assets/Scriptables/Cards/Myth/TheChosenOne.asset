@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Spray and Pray: its attacks also hit the creatures beside its target.
     The second coming, armed.'

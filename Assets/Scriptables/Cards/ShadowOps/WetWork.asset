@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Extreme Prejudice: its attack destroys the creature it hits, whatever
     its Health or Armor, and then it''s gone too: one hit, one roadblock. Untouchable

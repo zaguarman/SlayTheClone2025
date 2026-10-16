@@ -424,7 +424,7 @@ namespace SlayTheClone {
             actionType is ActionType.Damage or ActionType.Destroy or ActionType.Heal or ActionType.ModifyStat
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
                 or ActionType.CreateWatchdog or ActionType.DelayDeployment or ActionType.Rush or ActionType.Defect
-                or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility or ActionType.SwapStats
+                or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility or ActionType.Equip or ActionType.SwapStats
                 or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                 or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Resurrect
                 or ActionType.Consolidate or ActionType.CopyStatuses;
@@ -564,6 +564,8 @@ namespace SlayTheClone {
                 }
                 case ActionType.GrantAbility:
                     return creature != null && action.ability != CreatureAbility.None ? new GrantAbilityAction(creature, action.ability) : null;
+                case ActionType.Equip: // Gear: a second ability while it stays (a held item)
+                    return creature != null && action.ability != CreatureAbility.None ? new EquipAction(creature, action.ability) : null;
                 case ActionType.SetTrend: // The whole board's: it doesn't matter where it lands
                     return new SetTrendAction(action.trend, action.statusDuration, controller);
                 case ActionType.EndDay: // Amen: the Day ends here, whatever is still queued is discarded

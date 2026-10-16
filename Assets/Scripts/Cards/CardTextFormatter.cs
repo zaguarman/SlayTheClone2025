@@ -32,7 +32,9 @@ namespace SlayTheClone {
         /// printed one struck through.</param>
         /// <param name="abilityOff">Its ability is switched off for now: struck through too.</param>
         /// <param name="effects">The effects as they are now, when they differ from the printed ones (a Ripening spell ripened).</param>
-        public static string GetRulesText(CardData data, CreatureAbility? ability = null, bool abilityOff = false, IEnumerable<CardEffect> effects = null) {
+        /// <param name="gear">A creature's Gear in play (a held item), written after its ability.</param>
+        public static string GetRulesText(CardData data, CreatureAbility? ability = null, bool abilityOff = false, IEnumerable<CardEffect> effects = null,
+            CreatureAbility gear = CreatureAbility.None) {
             var creature = data as CreatureData;
             bool isSpell = data is SpellData;
             var keywords = new List<string>();
@@ -48,11 +50,13 @@ namespace SlayTheClone {
                     string name = now != printed ? $"{AbilityName(now)} (gained)" : AbilityName(now);
                     keywords.Add(abilityOff ? $"<s>{Abilities.NameOf(now)}</s> (switched off)" : name);
                 }
+                if (gear != CreatureAbility.None) keywords.Add($"{Keywords.Link("Gear")}: {AbilityName(gear)}");
             }
             if (data.homing) keywords.Add(Keywords.Link("Homing"));
             if (data.potion) keywords.Add(Keywords.Link("Potion"));
             else if (data.singleUse) keywords.Add(Keywords.Link("Single Use"));
             if (data.policy) keywords.Add(Keywords.Link("Policy") + " (it happens again each Dawn, for the rest of the combat)");
+            if (data.combo) keywords.Add(Keywords.Link("Combo") + " (+1 to its numbers for each other spell you play this Day)");
             if (data.ripening) keywords.Add(Keywords.Link("Ripening") + $" (+1 to its numbers for each Dawn it's kept in your hand, up to +{Ripening.Most})");
             if (data.prophecyLatest > data.prophecy) keywords.Add($"{Keywords.Link("Prophecy", $"Prophecy {data.prophecy}-{data.prophecyLatest}")} (comes true in {data.prophecy} to {data.prophecyLatest} Days, at random)");
             else if (data.prophecy > 0) keywords.Add($"{Keywords.Link("Prophecy", $"Prophecy {data.prophecy}")} (comes true in {data.prophecy} Day{(data.prophecy == 1 ? "" : "s")})");
@@ -355,6 +359,8 @@ namespace SlayTheClone {
                     return $"{target} trades places with the creature to its right";
                 case ActionType.GrantAbility:
                     return $"{target} gains {AbilityName(action.ability)}";
+                case ActionType.Equip:
+                    return $"{Keywords.Link("Gear", "equip")} {target} with {AbilityName(action.ability)}";
                 case ActionType.EndDay:
                     return "the Day ends here: every other action still in the queue, both sides', is discarded";
                 case ActionType.Earthquake:
@@ -477,6 +483,7 @@ namespace SlayTheClone {
             switch (action.statusEffectToApply) {
                 case StatusEffectType.Exhausted: return $"{Keywords.Link("Exhausted", "exhaust")} {target}";
                 case StatusEffectType.Burned: return $"{Keywords.Link("Burned", $"Burn {potency}")}{DaysTag(days)} on {target}";
+                case StatusEffectType.Provoked: return $"{Keywords.Link("Provoked", "Provoke" + Count(days))} on {target}";
                 case StatusEffectType.Toxic: return $"{Keywords.Link("Toxic", $"Toxic {potency}")}{DaysTag(days)} on {target}";
                 case StatusEffectType.Doomed: return $"{Keywords.Link("Doomed", "Doom" + Count(days))} on {target}";
                 case StatusEffectType.Blessed: return $"{Keywords.Link("Blessed", "Bless" + Count(potency))} on {target}";

@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Mechanics test: Shell Game (Active, hold Shift as you drag it onto
     a creature): that creature trades places with the one to its right. Moves an

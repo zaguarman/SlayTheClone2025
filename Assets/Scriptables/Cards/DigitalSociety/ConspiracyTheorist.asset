@@ -31,6 +31,7 @@ MonoBehaviour:
   policy: 0
   upgraded: 0
   potion: 0
+  combo: 0
   effects: []
   designNotes: 'Unbothered: enemy effects can''t lower its stats (the tinfoil works).
     Future: Doxxing, reveals.'

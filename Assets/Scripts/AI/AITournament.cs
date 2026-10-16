@@ -57,12 +57,15 @@ namespace SlayTheClone {
             public readonly int Health1, Health2; // What each player starts at (an adventure's fights differ from 20)
             public readonly Relic[] Relics1; // An adventure's kit for player 1: its relics and potions
             public readonly List<CardData> Potions1;
+            public readonly Relic[] Relics2; // An adventure's elite or boss: its relics
 
             public Game(DeckCards deck1, AIEntrant first, DeckCards deck2, AIEntrant second, int seed,
-                int health1 = Player.StartingHealth, int health2 = Player.StartingHealth, Relic[] relics1 = null, List<CardData> potions1 = null) {
+                int health1 = Player.StartingHealth, int health2 = Player.StartingHealth, Relic[] relics1 = null, List<CardData> potions1 = null,
+                Relic[] relics2 = null) {
                 (Deck1, First, Deck2, Second, Seed, Health1, Health2) = (deck1, first, deck2, second, seed, health1, health2);
                 Relics1 = relics1;
                 Potions1 = potions1;
+                Relics2 = relics2;
             }
         }
 
@@ -129,6 +132,7 @@ namespace SlayTheClone {
                     new SimpleModifierFactory(), game.Seed, health1: game.Health1, health2: game.Health2);
                 turns = session.CreateTurnFlow(mediator);
                 session.Equip(session.Player1, game.Relics1, game.Potions1);
+                session.Equip(session.Player2, game.Relics2, null);
                 session.DealOpeningHands();
                 recorder = Telemetry.RecordingSimulations ? GameRecorder.Begin(session, mediator, "simulation", game.Seed,
                     new GameRecorder.Seat { Name = game.First.Name, Deck = game.Deck1.Name, PlayedBy = $"AI {game.First.Name}", Cards = game.Deck1.Cards,
