@@ -340,7 +340,7 @@ namespace SlayTheClone {
                 playTargetCard = card;
                 target.ShowPlayTarget(card, true);
             }
-            if (target != null) target.SnapCard(card, onIt);
+            if (target != null) target.SnapCard(card, true); // Its size only: it keeps following the pointer (the user)
         }
 
         /// <summary>The pointer is on this slot, carrying a card being played (the slot's own events): it lands here if it can.</summary>
@@ -428,8 +428,11 @@ namespace SlayTheClone {
         // creatures are summoned into it, spells resolve against its creature or its owner (see Spell.ResolveTarget).
         private void HandleCardFromHand(CardController card, BattlefieldSlot targetSlot) {
             var cardToPlay = card.GetLinkedCardInstance();
-            if (cardToPlay is ICreature && queuedGhosts.TryGetValue(targetSlot, out var ghost) && ghost.GetLinkedCardInstance() != cardToPlay) {
-                Log($"Slot already has a creature queued; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
+            // A creature dropped on one queued here replaces it (the user): that one goes back to the hand. One summoned by an
+            // effect, not played, can't be taken back: the drop is ignored
+            if (cardToPlay is ICreature && queuedGhosts.TryGetValue(targetSlot, out var ghost) && ghost.GetLinkedCardInstance() is ICard queuedThere
+                && queuedThere != cardToPlay && !GameManager.ActionsQueue.CancelPlay(queuedThere)) {
+                Log($"Slot already has a creature on its way that can't be taken back; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
                 return;
             }
             if (cardToPlay is ICreature { IsGift: true } && targetSlot.Model.IsOccupied()) {

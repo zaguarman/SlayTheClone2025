@@ -56,6 +56,7 @@ namespace SlayTheClone {
         /// </summary>
         public Transform SnapsTo { get; set; }
 
+        // SnapsTo: the slot it would land in, while carried: it shows at that slot's card size (HandUI.Carry), still following the pointer
         /// <summary>Where the pointer carrying it is, once it has moved (null before that, and when not carried).</summary>
         public Vector2? DragPointer { get; private set; }
         /// <summary>Dragged with the right button: an attack on a creature of its own side (Friendly Fire).</summary>
@@ -468,7 +469,7 @@ namespace SlayTheClone {
             if (!isDragging) return;
             float dt = Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
             var before = transform.position;
-            var target = SnapsTo != null ? new Vector3(SnapsTo.position.x, SnapsTo.position.y, dragTarget.z) : dragTarget; // Over a slot it'll land in: settled there
+            var target = dragTarget; // Free to go: over a slot it'll land in it only takes the slot's size (see HandUI.Carry), it isn't pinned there
             transform.position = Vector3.Lerp(before, target, 1f - Mathf.Exp(-DragFollow * dt));
             float speed = (transform.position.x - before.x) / dt;
             float lean = Mathf.Clamp(-speed * DragLeanPerSpeed, -MaxDragLean, MaxDragLean);

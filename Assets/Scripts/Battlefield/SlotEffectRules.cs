@@ -44,8 +44,10 @@ namespace SlayTheClone {
         // The effect is queued as an environment action, and a "1 Trigger" effect is removed (and so revealed) right away
         private static void Trigger(BoardSlot slot, ActionExecutionContext context, string what, IGameAction effect) {
             Log($"{what} ({slot})", LogTag.Effects);
+            var sprung = slot.Effect;
             if (slot.Effect.IsOneTrigger) Remove(slot, context.GameMediator, context.ActionsQueue);
             using (context.ActionsQueue.QueueingEnvironment()) {
+                if (sprung.Source != null) context.ActionsQueue.AddAction(new TrapSprungAction(slot, sprung)); // Its card on the stage first
                 context.ActionsQueue.AddAction(effect);
             }
         }

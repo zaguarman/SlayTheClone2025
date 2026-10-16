@@ -165,21 +165,39 @@ namespace SlayTheClone {
         public const float HandDelay = 0.8f;
         private CardController pendingCard;
         private Coroutine pendingShow;
+        private float pendingSince;
+
+        // Why the last hover showed nothing, logged once per card when the pointer rests on it (the user's unresponsive cards)
+        private CardController refusedCard;
+        private string refusedWhy;
+
+        private void Refused(CardController card, string why) {
+            if (card == null || (card == refusedCard && why == refusedWhy)) return; // Said once
+            if (why.StartsWith("a card is carried") && GameInput.ButtonHeld) return; // Carrying one: no explanations, as meant
+            refusedCard = card;
+            refusedWhy = why;
+            DebugLogger.LogWarning($"Hovering {card.GetLinkedCardInstance()?.Name ?? card.name} shows nothing: {why}", DebugLogger.LogTag.UI);
+        }
 
         /// <summary>
         /// Shows the hovered card enlarged next to it, plus its active effects when it has any, once the pointer has rested
         /// on it for a moment (<see cref="HoverDelay"/>). Leaving the card before that shows nothing.
         /// </summary>
         public void ShowTooltip(CardController card) {
-            if (pinned || card == null || card.GetBaseCardData() == null || card == pendingCard) return;
+            // A wait that should have ended (its coroutine stopped with its card switched off a moment): start again
+            if (card != null && card == pendingCard && Time.unscaledTime > pendingSince + HandDelay + 0.5f) CancelPending();
+            if (pinned) { Refused(card, "a preview is pinned (a gallery)"); return; }
+            if (card == null || card.GetBaseCardData() == null || card == pendingCard) return;
             if (card == activeCard && preview != null) {
                 released = false;
                 UpdateTooltipContent(card);
                 return;
             }
-            if (CardController.Dragged != null || !card.gameObject.activeInHierarchy) return; // On screen (a pile window's cards have their controller off)
+            if (CardController.Dragged != null) { Refused(card, $"a card is carried ({CardController.Dragged.name})"); return; }
+            if (!card.gameObject.activeInHierarchy) return; // On screen (a pile window's cards have their controller off)
             CancelPending();
             pendingCard = card;
+            pendingSince = Time.unscaledTime;
             float delay = card.GetComponentInParent<HandUI>() != null ? HandDelay : preview != null ? SwitchDelay : HoverDelay;
             pendingShow = card.StartCoroutine(ShowAfter(card, delay)); // Stops if the card goes
         }
@@ -215,7 +233,7 @@ namespace SlayTheClone {
                 ShowTooltip(card.IsQueued ? "<b>???</b>\nSomething is being summoned here." : "<b>???</b>\nAn enemy creature. You don't know what it is.");
                 return;
             }
-            if (CardController.Dragged != null) return; // The player is doing something: no explanations in the way
+            if (CardController.Dragged != null) { Refused(card, $"a card is carried ({CardController.Dragged.name})"); return; } // The player is doing something: no explanations in the way
             if (card == activeCard && preview != null) {
                 released = false;
                 UpdateTooltipContent(card);
@@ -223,10 +241,13 @@ namespace SlayTheClone {
             }
             // Reading keywords: passing over another card on the way to an explanation doesn't replace them, nor does a
             // card under the enlarged one or its explanations
-            if ((keywordPopups.Count > 0 && PointerInArea(GameInput.PointerPosition)) || PointerOnTooltip(GameInput.PointerPosition)) return;
+            if ((keywordPopups.Count > 0 && PointerInArea(GameInput.PointerPosition)) || PointerOnTooltip(GameInput.PointerPosition)) {
+                Refused(card, $"the pointer is on what's shown already ({activeCard?.GetLinkedCardInstance()?.Name}, {keywordPopups.Count} explanations)");
+                return;
+            }
             // A hand card explains itself only once its hand raises it (the hand asks again when it does)
             var hand = card.GetComponentInParent<HandUI>();
-            if (hand != null && hand.Raised != card) return;
+            if (hand != null && hand.Raised != card) { Refused(card, $"its hand raised another card ({hand.Raised?.GetLinkedCardInstance()?.Name})"); return; }
 
             HideTooltip();
             activeCard = card;
@@ -470,6 +491,8 @@ namespace SlayTheClone {
                 return;
             }
             if (WheelMoved) { // Scrolling: hide for a moment; the card still under the pointer shows again once the wheel is still
+                // Nothing to scroll there (the user): a card on the board or in the hand, with no stack to turn, stays as it is
+                if (activeCard != null && !InWindow(activeCard) && activeCard.GetComponentInParent<ScrollRect>() == null) return;
                 var card = activeCard;
                 HideTooltip();
                 if (card != null && card.gameObject.activeInHierarchy && CardScreenRect(card) is Rect rect && rect.Contains(GameInput.PointerPosition)) ShowTooltip(card);

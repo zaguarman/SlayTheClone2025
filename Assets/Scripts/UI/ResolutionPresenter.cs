@@ -152,7 +152,36 @@ namespace SlayTheClone {
                 case PlayCardAction play when play.GetCard() is Spell:
                     Hold(SpellLeavesHandBeat); // HandUI flies the card out of the hand; one spell at a time
                     break;
+                case TrapSprungAction sprung:
+                    PlayTrapReveal(sprung);
+                    break;
             }
+        }
+
+        // A trap going off (the user: like Slay the Spire's cards activating): its card rises out of the slot onto the
+        // stage, beside the middle of the table, while what it does lands; then it goes, like a spell cast
+        private void PlayTrapReveal(TrapSprungAction sprung) {
+            var card = sprung.Effect?.Source;
+            if (card == null) return;
+            ReleaseStaged();
+            var controller = sprung.Effect.Controller;
+            var reveal = cardViews.Create(card, controller, overlay);
+            if (reveal == null) return;
+            reveal.GetComponent<CanvasGroup>().blocksRaycasts = false;
+            var rect = (RectTransform)reveal.transform;
+            var slotView = FindSlotView(sprung.Slot);
+            Vector2 from = slotView != null && TryGetOverlayPoint(slotView.transform, out var at) ? at : Vector2.zero;
+            rect.anchoredPosition = from;
+            rect.localScale = Vector3.one * 0.3f;
+            var stage = new Vector2(overlay.rect.width * StageAt.x, overlay.rect.height * StageAt.y);
+            DOTween.Sequence().SetTarget(this)
+                .Append(DOTween.To(() => rect.anchoredPosition, p => rect.anchoredPosition = p, stage, 0.35f).SetEase(Ease.OutCubic))
+                .Join(rect.DOScale(StageScale, 0.35f).SetEase(Ease.OutBack))
+                .Append(rect.DOPunchScale(Vector3.one * 0.08f, 0.2f, 6, 0.5f));
+            staged = reveal;
+            stagedCaster = controller;
+            stagedSingleUse = false;
+            Hold(SpellBeat);
         }
 
         private void PlayAttack(BattlefieldCombatAction attack) {

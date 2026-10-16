@@ -25,6 +25,9 @@ namespace SlayTheClone {
 
         public static bool KeyPressed(Key key) => Keyboard.current != null && Keyboard.current[key].wasPressedThisFrame;
 
+        /// <summary>A mouse button held down (a drag going on).</summary>
+        public static bool ButtonHeld => Mouse.current != null && (Mouse.current.leftButton.isPressed || Mouse.current.rightButton.isPressed);
+
         public static bool ShiftHeld => Keyboard.current != null && Keyboard.current.shiftKey.isPressed;
     }
 }

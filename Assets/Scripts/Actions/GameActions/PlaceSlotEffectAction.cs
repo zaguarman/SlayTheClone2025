@@ -3,7 +3,9 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>Puts a Slot Effect on a slot, replacing the one there. Static: it stays with the slot, not the creature in it.</summary>
-    public class PlaceSlotEffectAction : IGameAction {
+    public class PlaceSlotEffectAction : IGameAction, ISourcedAction {
+        /// <summary>The card that placed it (shown when a trap it laid goes off).</summary>
+        public ICard Source { get; set; }
         private readonly BoardSlot slot;
         private readonly SlotEffectType type;
         private readonly int value;
@@ -26,6 +28,19 @@ namespace SlayTheClone {
         }
 
         public override string ToString() => $"PlaceSlotEffectAction: {type} on {slot}, Value={value}, Days={days}, Controller={controller?.Name}";
+    }
+
+    /// <summary>A Slot Effect going off (a Landmine, a Barbed Snare): its card shows on the stage, then what it does lands.</summary>
+    public class TrapSprungAction : IGameAction {
+        public BoardSlot Slot { get; }
+        public SlotEffect Effect { get; }
+
+        public TrapSprungAction(BoardSlot slot, SlotEffect effect) {
+            Slot = slot;
+            Effect = effect;
+        }
+
+        public override string ToString() => $"TrapSprungAction: {Effect?.Name} on {Slot}";
     }
 
     /// <summary>Cleanse (SlotEffect): removes the slot's Slot Effect, hidden or not, without triggering it.</summary>

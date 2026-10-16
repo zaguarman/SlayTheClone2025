@@ -574,6 +574,10 @@ namespace SlayTheClone {
 
         public override void RemoveCard(CardController card) {
             if (card == waiting) waiting = null;
+            if (card != null && card == picked) { // Played while carried: its end of drag won't come here
+                picked = null;
+                draggedPlay = null;
+            }
             if (card == hovered) {
                 hovered = null;
                 releasePending = false;

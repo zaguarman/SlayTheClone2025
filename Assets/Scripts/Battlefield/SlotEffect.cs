@@ -7,6 +7,8 @@ namespace SlayTheClone {
     /// </summary>
     public class SlotEffect {
         public SlotEffectType Type { get; }
+        /// <summary>The card that placed it, if one did: what shows on the stage when it goes off (the user, like Slay the Spire's).</summary>
+        public ICard Source { get; set; }
         public IPlayer Controller { get; }
         public int Value { get; }       // Damage for Landmine and Barbed Snare
         public int Days { get; }        // How long it lasts, counting the Day it's placed; 0 means until replaced or used up
