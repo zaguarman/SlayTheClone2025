@@ -95,6 +95,7 @@ namespace SlayTheClone {
                 "Margin Call", "Margin Call", "Hostile Takeover", "Hostile Takeover", "Inflation", "Inflation", "Dead Cat Bounce", "Dead Cat Bounce",
                 "Taxpayer Funds Venture Capital Profits", "Taxpayer Funds Venture Capital Profits", "Team Building Exercise", "Casino",
                 "Fat Tony", "Fat Tony", "Cleaning Robot", "Cleaning Robot", "Day Trader", "Micromanager", "Charles Ponzi", "Pluriemployed Hustler",
+                "Peace the Frontier",
             }),
             // Big bodies that buff each other on arrival, and Mutually Assured Destruction that they survive
             // Its control list: big bodies that buff each other, mines, shields and paperwork, and Mutually Assured Destruction
@@ -172,6 +173,12 @@ namespace SlayTheClone {
         // Pays with capital (future: discard cards). Until discarding exists, its strongest cards leak value to the enemy.
         // Can't heal. Engine: card draw, workers that die usefully, money that hurts someone else first.
         private static List<CardDef> CorporateCards() => new List<CardDef> {
+            Spell("Peace the Frontier", TargetType.Enemy,
+                "Please, regulate us. Only us can afford it. Also, could someone lend us a few billion?",
+                "The user, 2026-10-16: frontier AI labs lobbying the government for rules strict enough that no newcomer can compete, while they burn through cash and play the victim. Regulatory capture: every enemy creature still deploying waits 1 more Day; the lobbying isn't free, you take 2 damage.",
+                Requiring(Act(ActionType.DelayDeployment, 1, TargetType.EnemyCreatures, Each), TargetRequisite.Deploying),
+                Damage(2, TargetType.Player))
+                .Picture("Two tech executives in hoodies at a congressional hearing table, one tearfully holding up a sign reading REGULATE US (ONLY), the other quietly sliding a rulebook titled BARRIERS TO ENTRY across to a smiling senator, a burning pile of cash under the table."),
             Spell("Casino", TargetType.Player,
                 "The house always wins. Except the houses he owned.",
                 "A Trend for 3 Days: each Dawn the house's wheel spins the Day's weather for both sides (Heatwave, Rain, Hail, Tailwind, Rush Hour, Windfall), like the weather in a Pokemon battle. Corporate bets on tempo: whoever adapts best to the Day wins.",
