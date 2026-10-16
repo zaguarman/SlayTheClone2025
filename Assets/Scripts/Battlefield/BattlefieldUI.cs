@@ -845,7 +845,8 @@ namespace SlayTheClone {
         // several there, small in the slot's lower-left corner, older ones stepping further left (stepsLeft, 0: the newest).
         // A spell on a whole side sits at the battlefield's lower-left end
         private void PlaceSpellGhost(CardController ghost, BoardSlot slot, int stepsLeft, int count) {
-            var slotView = slot != null ? battlefieldSlots[slot.Index] : null;
+            // A slot this board hasn't a view for (its views not built yet, or another side's): it waits at the board's end
+            var slotView = slot != null && slot.Owner == Player && slot.Index >= 0 && slot.Index < battlefieldSlots.Count ? battlefieldSlots[slot.Index] : null;
             if (slotView?.OccupyingCard != null) return; // Tucked under the creature (RefreshAttachments)
             bool roomInSlot = slotView != null && count == 1 && slotView.OccupyingCard == null && !queuedGhosts.ContainsKey(slotView);
             var rect = (RectTransform)ghost.transform;

@@ -75,6 +75,7 @@ namespace SlayTheClone {
             tooltipText.fontSize = Roulette.detailsFontSize;
             tooltipText.color = UITheme.Parchment;
             tooltipText.enableWordWrapping = true;
+            tooltipText.raycastTarget = false; // Nor the text: under the pointer, it would take the hover from the row it explains, and flicker
 
             // Configure text RectTransform
             RectTransform textRect = tooltipText.rectTransform;
@@ -389,9 +390,13 @@ namespace SlayTheClone {
             rect.position += shift;
         }
 
+        // Above the pointer, or below it when there's no room above (near the top of the screen): never over it
         private void FollowMouse() {
             Vector2 mousePos = GameInput.PointerPosition;
-            tooltipRect.position = new Vector2(mousePos.x, mousePos.y + 40);
+            float height = tooltipRect.rect.height * tooltipRect.lossyScale.y;
+            bool below = mousePos.y + 40f + height > Screen.height;
+            tooltipRect.pivot = new Vector2(textPivot.x, below ? 1f : 0f);
+            tooltipRect.position = new Vector2(mousePos.x, below ? mousePos.y - 30f : mousePos.y + 40f);
             KeepOnScreen(tooltipRect);
         }
 

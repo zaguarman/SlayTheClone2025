@@ -26,6 +26,8 @@ namespace SlayTheClone {
             public string Icon;     // An EffectIcons sprite for the kind of action
             public bool Ours;       // Started by the viewer's side
             public IGameAction Action; // Hovering it shows this action's arrows alone; none for what's foretold
+            public bool DaySeparator;  // A Day's title in the list that runs through every Day ("Day 2"); Heading holds it
+            public bool Note;          // A line of plain text ("Nothing planned yet."), not an action
         }
 
         // What the viewer knows of one action: the fog as it is now, and whether it played out in front of them (Played) or a
@@ -83,6 +85,26 @@ namespace SlayTheClone {
                     Details = Details(action, text, number, actionLayer, hidden, sight)
                 });
             }
+            return items;
+        }
+
+        /// <summary>
+        /// What watches over a Day, as the viewer knows it: the Watchdogs set (the other side's condition ??? until a Reveal
+        /// shows it) and the traps in the slots (the other side's only once seen), under an "On Watch" heading; none: nothing.
+        /// </summary>
+        public static List<Item> OnWatch(IPlayer viewer, IEnumerable<Watchdog> watchdogs, IEnumerable<(BoardSlot Slot, SlotEffect Effect)> traps) {
+            var items = new List<Item>();
+            foreach (var watchdog in watchdogs ?? Enumerable.Empty<Watchdog>()) {
+                bool sees = watchdog.Controller == viewer || !FogOfWar.HidesCondition(viewer, watchdog);
+                string text = $"{Whose(watchdog.Controller, viewer, capital: true)} Watchdog: {watchdog.Describe(sees)}";
+                items.Add(new Item { Text = text, Details = text, Icon = EffectIcons.Reveal, Ours = watchdog.Controller == viewer });
+            }
+            foreach (var (slot, effect) in traps ?? Enumerable.Empty<(BoardSlot, SlotEffect)>()) {
+                if (effect == null || FogOfWar.Hides(viewer, effect)) continue;
+                string text = $"{Whose(effect.Controller, viewer, capital: true)} {effect.Name} on {SlotName(slot, viewer)}";
+                items.Add(new Item { Text = text, Details = text, Icon = CardTextFormatter.SlotEffectIcon(effect.Type), Ours = effect.Controller == viewer });
+            }
+            if (items.Count > 0) items.Insert(0, new Item { Heading = "On Watch" });
             return items;
         }
 

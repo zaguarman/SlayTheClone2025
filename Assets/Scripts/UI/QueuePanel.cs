@@ -11,8 +11,10 @@ namespace SlayTheClone {
     /// (see <see cref="QueueView"/>, Fog of War included). Each action is an item, edged in its side's color, with an icon for
     /// what it is; hovering one tells more about it, and the board shows that action's arrows alone. It follows the queue as it changes, and the fog switch (F9). Clicking
     /// anywhere else closes it.
-    /// The arrows by its heading page back through past Days: what was planned for each, as the screen knows it now (what
-    /// played out, or a Reveal showed, is no longer ???).
+    /// One list runs through every Day (the user): each under its title ("Day 2"), with what watched over it (Watchdogs,
+    /// traps), oldest first, as the screen knows it now (what played out, or a Reveal showed, is no longer ???). It opens on
+    /// the Day being planned; the mouse wheel goes back and on one action at a time, so the pointer can rest on an action
+    /// and step through what happened.
     /// <see cref="BoardSkin"/> places both at the right edge of the table.
     /// </summary>
     public class QueuePanel : MonoBehaviour {
@@ -28,10 +30,9 @@ namespace SlayTheClone {
         private TextMeshProUGUI toggleLabel;
         private RectTransform panel;
         private Transform list;
-        private TextMeshProUGUI empty;
         private TextMeshProUGUI heading;
-        private Button earlier;
-        private Button later;
+        private ScrollRect scroll;
+        private bool scrollToToday; // On opening, and when a Day ends: the Day being planned at the top
 
         // Past Days: what the queue held when each was ended (and what was foretold then), described again whenever shown, so
         // it says what's been seen since: what played out, and what a Reveal or a Watchdog showed
@@ -39,12 +40,13 @@ namespace SlayTheClone {
             public int Day;
             public List<(IGameAction Action, ResolutionLayer Layer)> Planned;
             public List<QueueView.Item> Foretold;
+            public List<Watchdog> Watchdogs = new List<Watchdog>();                          // On watch that Day
+            public List<(BoardSlot, SlotEffect)> Traps = new List<(BoardSlot, SlotEffect)>(); // In the slots that Day
         }
         private readonly List<PastDay> history = new List<PastDay>();
         private PastDay lastPlanned = new PastDay { Planned = new List<(IGameAction, ResolutionLayer)>(), Foretold = new List<QueueView.Item>() };
         private readonly HashSet<IGameAction> played = new HashSet<IGameAction>(); // Actions that ran: everyone saw them
         private readonly HashSet<(IPlayer, IGameAction)> revealed = new HashSet<(IPlayer, IGameAction)>(); // Shown to a player by a Reveal or a Watchdog
-        private int? shownPast; // An index into history, or null for the queue as it is now
 
         public RectTransform Toggle => (RectTransform)toggle.transform;
         public RectTransform Panel => panel;
@@ -55,8 +57,6 @@ namespace SlayTheClone {
         public List<QueueView.Item> Items { get; private set; } = new List<QueueView.Item>();
         /// <summary>The past Days kept, oldest first.</summary>
         public IReadOnlyList<int> PastDays => history.Select(h => h.Day).ToList();
-        /// <summary>The past Day shown, or null for the queue as it is now.</summary>
-        public int? ShownDay => shownPast.HasValue ? history[shownPast.Value].Day : (int?)null;
 
         /// <summary>Makes the button and its (closed) panel next to <paramref name="sibling"/>, at its scale.</summary>
         public static QueuePanel Create(Transform sibling, IGameManager manager, IGameMediator mediator) {
@@ -100,8 +100,6 @@ namespace SlayTheClone {
             headingRect.pivot = new Vector2(0.5f, 1f);
             headingRect.sizeDelta = new Vector2(0f, 44f);
             headingRect.anchoredPosition = new Vector2(0f, -12f);
-            earlier = PageButton("Earlier", "<", 0f, () => Page(-1));
-            later = PageButton("Later", ">", 1f, () => Page(+1));
 
             // The items, in a list that scrolls with the wheel when it's longer than the panel
             var viewport = UITheme.NewImage("Viewport", panel, Color.clear, raycastTarget: true);
@@ -123,38 +121,53 @@ namespace SlayTheClone {
             content.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             list = content.transform;
 
-            var scroll = panel.gameObject.AddComponent<ScrollRect>();
+            scroll = panel.gameObject.AddComponent<ScrollRect>();
             scroll.viewport = viewport.rectTransform;
             scroll.content = contentRect;
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
-            WheelScroll.AddTo(scroll);
-
-            empty = UITheme.NewText("Empty", panel, "<i>Nothing planned yet.</i>", 24f, UITheme.Parchment, TextAlignmentOptions.Top);
-            UITheme.Stretch(empty.rectTransform, 22f);
-            empty.rectTransform.offsetMax = new Vector2(-22f, -70f);
-            empty.raycastTarget = false;
+            scroll.scrollSensitivity = 0f; // The wheel steps an action at a time (Update)
             panel.gameObject.SetActive(false);
         }
 
-        // A small arrow button at one end of the heading, to page through the Days
-        private Button PageButton(string name, string label, float side, UnityEngine.Events.UnityAction onClick) {
-            var image = UITheme.NewImage(name, panel, UITheme.PanelLight, raycastTarget: true);
-            UITheme.Place(image.rectTransform, new Vector2(side, 1f), new Vector2(side == 0f ? 46f : -46f, -34f), new Vector2(56f, 44f));
-            var button = image.gameObject.AddComponent<Button>();
-            var text = UITheme.NewText("Label", image.transform, label, 28f, UITheme.Parchment);
-            UITheme.Stretch(text.rectTransform, 2f);
-            UITheme.StyleButton(button);
-            button.onClick.AddListener(onClick);
-            return button;
+        // The tops of the rows in the list, down from its top, for the action rows (or the Days' titles)
+        private List<float> RowTops(bool days) {
+            var content = scroll.content;
+            var corners = new Vector3[4];
+            var tops = new List<float>();
+            foreach (RectTransform row in content) {
+                bool isDay = row.name.StartsWith(DayName);
+                if (days ? !isDay : row.GetComponent<QueueItemHover>() == null) continue;
+                row.GetWorldCorners(corners);
+                tops.Add(-content.InverseTransformPoint(corners[1]).y);
+            }
+            tops.Sort();
+            return tops;
         }
 
-        /// <summary>Shows the Day before (-1) or after (+1) the one shown; after the last past Day comes the queue as it is now.</summary>
-        public void Page(int step) {
-            if (history.Count == 0) return;
-            int index = (shownPast ?? history.Count) + step;
-            shownPast = index >= history.Count ? (int?)null : Mathf.Max(0, index);
-            Refresh();
+        private float MaxOffset => Mathf.Max(0f, scroll.content.rect.height - scroll.viewport.rect.height);
+
+        private void ScrollTo(float offset) {
+            scroll.StopMovement();
+            var content = scroll.content;
+            content.anchoredPosition = new Vector2(content.anchoredPosition.x, Mathf.Clamp(offset, 0f, MaxOffset));
+        }
+
+        /// <summary>
+        /// One action on (a notch down, positive) or back (negative): the list moves so the next action's top is at the top of
+        /// the panel, so the pointer resting on an action rests on the next one.
+        /// </summary>
+        public void Step(int actions) {
+            if (actions == 0 || scroll == null) return;
+            float now = scroll.content.anchoredPosition.y;
+            var tops = RowTops(days: false);
+            for (int i = 0; i < Mathf.Abs(actions); i++) {
+                now = actions > 0
+                    ? tops.Where(t => t > now + 0.5f).DefaultIfEmpty(MaxOffset).First()
+                    : tops.Where(t => t < now - 0.5f).DefaultIfEmpty(0f).Last();
+                now = Mathf.Clamp(now, 0f, MaxOffset);
+            }
+            ScrollTo(now);
         }
 
         // The Day just ended: keep what was planned for it (the queue empties as it resolves)
@@ -162,6 +175,7 @@ namespace SlayTheClone {
             lastPlanned.Day = day;
             history.Add(lastPlanned);
             lastPlanned = new PastDay { Planned = new List<(IGameAction, ResolutionLayer)>(), Foretold = new List<QueueView.Item>() };
+            scrollToToday = true;
             Refresh();
         }
 
@@ -179,10 +193,12 @@ namespace SlayTheClone {
             }
         }
 
-        // Clicking anywhere else closes it, like a menu
+        // Clicking anywhere else closes it, like a menu; the wheel over it steps an action at a time
         private void Update() {
-            if (!IsOpen || !GameInput.ClickedThisFrame) return;
-            if (!PointerOn(panel) && !PointerOn(Toggle)) SetOpen(false);
+            if (!IsOpen) return;
+            float notches = GameInput.WheelNotches;
+            if (!Mathf.Approximately(notches, 0f) && PointerOn(scroll.viewport)) Step(notches < 0f ? 1 : -1); // Down: on
+            if (GameInput.ClickedThisFrame && !PointerOn(panel) && !PointerOn(Toggle)) SetOpen(false);
         }
 
         private static bool PointerOn(RectTransform rect) =>
@@ -191,7 +207,7 @@ namespace SlayTheClone {
         public void SetOpen(bool open) {
             panel.gameObject.SetActive(open);
             if (open) {
-                shownPast = null; // It opens on the queue as it is now
+                scrollToToday = true; // It opens on the Day being planned
                 Refresh();
             }
             else Tooltip.Existing?.HideText();
@@ -204,25 +220,47 @@ namespace SlayTheClone {
             var queue = gameManager.ActionsQueue;
             var live = QueueView.Items(viewer, queue, gameManager.ModifierManager);
             var turns = gameManager.TurnManager;
-            if (queue != null && (turns == null || !turns.IsResolving)) { // While resolving, the queue empties: keep the plan
+            bool resolving = turns != null && turns.IsResolving;
+            if (queue != null && !resolving) { // While resolving, the queue empties: keep the plan, and what watched over it
                 lastPlanned.Planned = queue.GetPendingActions().Select(a => (a, queue.LayerOfPending(a))).ToList();
                 lastPlanned.Foretold = QueueView.Foretold(viewer);
+                lastPlanned.Watchdogs = queue.Watchdogs.ToList();
+                lastPlanned.Traps = new[] { gameManager.Player1, gameManager.Player2 }.Where(p => p != null).SelectMany(p => p.Battlefield)
+                    .Where(s => s.Effect != null && s.Effect.IsHidden).Select(s => (s, s.Effect)).ToList();
             }
             RememberReveals(queue, lastPlanned.Planned.Select(p => p.Action));
             int count = live.Count(i => i.Heading == null && i.Number > 0); // What's foretold isn't queued yet
             toggleLabel.text = count > 0 ? $"Queue ({count})" : "Queue";
+            if (!IsOpen) return; // The list is built when it's seen: every Day of a long game, on every change, costs
 
-            Items = shownPast.HasValue ? Past(history[shownPast.Value], viewer) : live;
+            // Every Day, oldest first, each under its title; the Day being planned last (playing out: its plan, as seen so far)
+            var items = new List<QueueView.Item>();
+            foreach (var day in history) AddDay(items, day.Day, Past(day, viewer), day, viewer, "<i>Nothing was planned that Day.</i>");
+            AddDay(items, turns?.TurnNumber ?? 0, resolving ? Past(lastPlanned, viewer) : live, lastPlanned, viewer, "<i>Nothing planned yet.</i>");
+            Items = items;
             Lines = Items.Select(i => i.Heading != null ? $"<b>{i.Heading}</b>" : i.Number > 0 ? $"{i.Number}. {i.Text}" : i.Text).ToList();
-            heading.text = shownPast.HasValue ? $"Day {history[shownPast.Value].Day}, resolved"
-                : turns != null ? $"Action Queue, Day {turns.TurnNumber}" : "Action Queue";
-            earlier.interactable = history.Count > 0 && (shownPast ?? history.Count) > 0;
-            later.interactable = shownPast.HasValue;
+            heading.text = "Action Queue";
 
-            foreach (Transform row in list) Destroy(row.gameObject);
+            float offset = scroll.content.anchoredPosition.y;
+            foreach (var row in list.Cast<Transform>().ToList()) {
+                row.SetParent(null, false); // Out of the layout now, gone at the end of the frame
+                Destroy(row.gameObject);
+            }
             foreach (var item in Items) AddRow(item);
-            empty.text = shownPast.HasValue ? "<i>Nothing was planned that Day.</i>" : "<i>Nothing planned yet.</i>";
-            empty.gameObject.SetActive(Items.Count == 0);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(scroll.content);
+            if (scrollToToday && IsOpen) {
+                scrollToToday = false;
+                ScrollTo(RowTops(days: true).LastOrDefault());
+            }
+            else ScrollTo(offset); // Where it was, as the list grows
+        }
+
+        // A Day in the list: its title, what watched over it, then its actions (or a note that there were none)
+        private static void AddDay(List<QueueView.Item> items, int day, List<QueueView.Item> actions, PastDay watched, IPlayer viewer, string none) {
+            items.Add(new QueueView.Item { Heading = $"Day {day}", DaySeparator = true });
+            items.AddRange(QueueView.OnWatch(viewer, watched.Watchdogs, watched.Traps));
+            if (actions.Count == 0) items.Add(new QueueView.Item { Text = none, Note = true });
+            items.AddRange(actions);
         }
 
         // A past Day as the screen knows it now
@@ -236,7 +274,27 @@ namespace SlayTheClone {
             return items;
         }
 
+        private const string DayName = "Day ";
+
         private void AddRow(QueueView.Item item) {
+            if (item.DaySeparator) { // A Day's title: larger, a gold rule under it
+                var day = UITheme.NewText(DayName + item.Heading, list, item.Heading, 28f, UITheme.Gold, TextAlignmentOptions.BottomLeft);
+                day.fontStyle = FontStyles.Bold | FontStyles.SmallCaps; // Not StyleHeading: its shadow needs a material the closed panel's text hasn't got yet
+                day.gameObject.AddComponent<LayoutElement>().preferredHeight = 48f;
+                day.raycastTarget = false;
+                var rule = UITheme.NewImage("Rule", day.transform, UITheme.WithAlpha(UITheme.Gold, 0.6f));
+                rule.rectTransform.anchorMin = Vector2.zero;
+                rule.rectTransform.anchorMax = new Vector2(1f, 0f);
+                rule.rectTransform.pivot = new Vector2(0.5f, 1f);
+                rule.rectTransform.sizeDelta = new Vector2(0f, 2f);
+                return;
+            }
+            if (item.Note) {
+                var note = UITheme.NewText("Note", list, item.Text, 22f, UITheme.Parchment, TextAlignmentOptions.Left);
+                note.gameObject.AddComponent<LayoutElement>().preferredHeight = 34f;
+                note.raycastTarget = false;
+                return;
+            }
             if (item.Heading != null) {
                 var heading = UITheme.NewText("Layer " + item.Heading, list, item.Heading, 22f, UITheme.Gold, TextAlignmentOptions.BottomLeft);
                 heading.fontStyle = FontStyles.Bold | FontStyles.SmallCaps;

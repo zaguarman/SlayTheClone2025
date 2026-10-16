@@ -125,12 +125,11 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(queuePanel.IsOpen, "The turn playing out closes the windows over the table, so it can be watched");
             CollectionAssert.AreEqual(new[] { 0 }, queuePanel.PastDays, "The queue keeps the Day that just ended");
             queuePanel.SetOpen(true);
-            queuePanel.Page(-1);
-            Assert.AreEqual(0, queuePanel.ShownDay);
-            StringAssert.Contains("Test Brute", string.Join("\n", queuePanel.Lines), "Paging back shows what was planned that Day");
-            StringAssert.Contains("Test Rookie", string.Join("\n", queuePanel.Lines), "...as it's known now: the summon played out, no longer ???");
-            queuePanel.Page(+1);
-            Assert.IsNull(queuePanel.ShownDay, "...and forward, the queue as it is now");
+            string listed = string.Join(System.Environment.NewLine, queuePanel.Lines);
+            Assert.Less(listed.IndexOf("<b>Day 0</b>"), listed.IndexOf("<b>Day 1</b>"), "One list through every Day, each under its title, oldest first");
+            StringAssert.Contains("Test Brute", listed, "...the Day that ended shows what was planned for it");
+            StringAssert.Contains("Test Rookie", listed, "...as it's known now: the summon played out, no longer ???");
+            StringAssert.DoesNotContain("resolved", listed);
             queuePanel.SetOpen(false);
 
             Assert.IsTrue(mouse.IsDead);
