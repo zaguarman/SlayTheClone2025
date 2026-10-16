@@ -27,10 +27,10 @@ namespace SlayTheClone {
         [Tooltip("How the turn eases in and out")]
         public Ease ease = Ease.OutCubic;
 
-        [Header("The shown card: where it sits, against the cards waiting on the wheel")]
-        [Tooltip("Moves the shown card sideways while the wheel stays, in preview heights (negative: left)")]
+        [Header("The shown card: moves it alone, the waiting cards stay where they are")]
+        [Tooltip("Moves the shown card sideways, in preview heights (negative: left); the waiting cards stay")]
         [Range(-1f, 1f)] public float shownSideways = 0f;
-        [Tooltip("Moves the shown card up while the wheel stays, in preview heights (negative: down)")]
+        [Tooltip("Moves the shown card up, in preview heights (negative: down); the waiting cards stay")]
         [Range(-1f, 1f)] public float shownUp = 0f;
 
         [Header("The cards waiting on the wheel: where they sit")]
@@ -38,12 +38,18 @@ namespace SlayTheClone {
         [Range(0.3f, 1.3f)] public float waitingScale = 1f;
         [Tooltip("How far out to the sides they move, in preview heights per place on the wheel (negative: in)")]
         [Range(-1f, 1f)] public float waitingOut = 0f;
-        [Tooltip("How far up they move, in preview heights per place on the wheel (negative: down)")]
+        [Tooltip("Moves them all up by the same amount, in preview heights (negative: down)")]
+        [Range(-1f, 1f)] public float waitingLift = 0f;
+        [Tooltip("Moves them up more the further out they are, in preview heights per place on the wheel (negative: down): bends the arc")]
         [Range(-1f, 1f)] public float waitingUp = 0f;
         [Tooltip("How much they lean with the wheel: 1 follows it, 0 stays upright")]
         [Range(0f, 1.5f)] public float waitingTilt = 1f;
 
-        [Header("The cards waiting on the wheel: how faint (both sides alike)")]
+        [Header("The cards waiting on the wheel: how faint")]
+        [Tooltip("Both sides alike, in even steps: each card a place further out is Fade Step fainter (0.3: 70%, then 40%, then 10%...). Off: the four sliders below")]
+        public bool mirrorFade = false;
+        [Tooltip("Mirror Fade: how much fainter each card is than the one before it, both sides (0.3: 30% each place)")]
+        [Range(0f, 1f)] public float fadeStep = 0.3f;
         [Tooltip("The next card to come (on the left): its opacity")]
         [Range(0f, 1f)] public float nextAlpha = 0.55f;
         [Tooltip("Each card further ahead: its opacity times this (1: all as clear as the next one)")]
@@ -75,7 +81,11 @@ namespace SlayTheClone {
 
         /// <summary>How faint a card is on the wheel, this many places ahead of the shown one (or behind it).</summary>
         public float AlphaAt(int distance, bool ahead) =>
-            ahead ? nextAlpha * Mathf.Pow(aheadFade, distance - 1) : lastAlpha * Mathf.Pow(behindFade, distance - 1);
+            mirrorFade ? Mathf.Max(0f, 1f - fadeStep * distance)
+            : ahead ? nextAlpha * Mathf.Pow(aheadFade, distance - 1) : lastAlpha * Mathf.Pow(behindFade, distance - 1);
+
+        // The sliders that place the shown card: back to these, it sits where it started, right by its card
+        public static readonly string[] Placing = { nameof(previewGap), nameof(previewSideways), nameof(previewAway), nameof(shownSideways), nameof(shownUp) };
 
         // The shown card's nudge from its place on the wheel (sideways is to the right of up)
         public Vector3 ShownOffset(Vector3 up, float previewHeight) => (new Vector3(up.y, -up.x, 0f) * shownSideways + up * shownUp) * previewHeight;
@@ -160,6 +170,13 @@ namespace SlayTheClone {
                         UnityEditor.EditorUtility.SetDirty(tuning);
                     }
                 }
+            }
+            if (GUILayout.Button("Center the shown card: back where it started, right by its card")) {
+                // Only the sliders that place it: the wheel, the fades and the rest stay as tuned
+                serializedObject.Update();
+                var shipped = new UnityEditor.SerializedObject(originals);
+                foreach (string field in RouletteTuning.Placing) serializedObject.CopyFromSerializedProperty(shipped.FindProperty(field));
+                serializedObject.ApplyModifiedProperties();
             }
             UnityEditor.EditorGUILayout.Space();
             TuningInspector.DrawWithResets(serializedObject, originals);

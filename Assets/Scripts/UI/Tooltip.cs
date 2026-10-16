@@ -349,8 +349,9 @@ namespace SlayTheClone {
             float gap = Roulette.previewGap * height;
             previewRect.pivot = new Vector2(0.5f, showAbove ? 0f : 1f);
             previewRect.position = new Vector2((cardMin.x + cardMax.x) * 0.5f, showAbove ? cardMax.y + gap : cardMin.y - gap);
-            // The sliders' nudges: sideways, and away from the card
+            // The sliders' nudges: sideways, and away from the card; with a stack, the shown card's own (its wheel stays put)
             previewRect.position += new Vector3(Roulette.previewSideways * height, (showAbove ? 1f : -1f) * Roulette.previewAway * height, 0f);
+            if (card.AttachedCards.Count > 0) previewRect.position += Roulette.ShownOffset(previewRect.up, height);
             KeepOnScreen(previewRect);
         }
 
@@ -544,7 +545,7 @@ namespace SlayTheClone {
                 var rect = (RectTransform)ghost.transform;
                 rect.localScale = shown.localScale * Roulette.waitingScale;
                 float angle = (ahead ? 1f : -1f) * distance * RouletteAngle; // The next ones come from the left
-                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (wheelHome - center) + Nudge(up, height, ahead) * distance;
+                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (wheelHome - center) + Nudge(up, height, ahead, distance);
                 rect.rotation = Quaternion.Euler(0f, 0f, angle * Roulette.waitingTilt) * shown.parent.rotation;
                 rect.SetAsFirstSibling(); // Behind the shown card and the explanations
                 var group = ghost.GetComponent<CanvasGroup>() ?? ghost.gameObject.AddComponent<CanvasGroup>();
@@ -566,9 +567,12 @@ namespace SlayTheClone {
         }
 
         // Where a waiting card sits beyond the wheel's arc, one place out (the sliders): out to its side, and up
-        private static Vector3 Nudge(Vector3 up, float height, bool ahead) {
+        // places: how far out on the wheel (during a turn, a share of the first place). Out and Up grow with it; Lift is
+        // the same for every waiting card
+        private static Vector3 Nudge(Vector3 up, float height, bool ahead, float places) {
             var right = new Vector3(up.y, -up.x, 0f);
-            return ((ahead ? -right : right) * Roulette.waitingOut + up * Roulette.waitingUp) * height;
+            return ((ahead ? -right : right) * Roulette.waitingOut + up * Roulette.waitingUp) * height * places
+                   + up * Roulette.waitingLift * height * Mathf.Min(places, 1f);
         }
 
         // The roulette: both cards turn together around the wheel's center, the old one out, the new one in, settling where
@@ -591,7 +595,7 @@ namespace SlayTheClone {
 
             // waiting: 0 where the shown card is, 1 a place out on the wheel, on the ahead side or the other
             void Place(RectTransform rect, Vector3 from, Vector3 scale, float angle, float waiting, bool ahead) {
-                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (from - center) + Nudge(up, height, ahead) * waiting + shownOffset * (1f - waiting);
+                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (from - center) + Nudge(up, height, ahead, waiting) + shownOffset * (1f - waiting);
                 rect.localRotation = Quaternion.Euler(0f, 0f, angle * Roulette.waitingTilt);
                 rect.localScale = scale * Mathf.Lerp(1f, Roulette.waitingScale, waiting);
             }
