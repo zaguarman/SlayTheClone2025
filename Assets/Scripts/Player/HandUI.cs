@@ -408,7 +408,13 @@ namespace SlayTheClone {
             group.blocksRaycasts = !hidden;
         }
 
+        private bool lifted;
+
         private void Update() {
+            if (!lifted) { // Over the board and what happens on it: arrows, statuses, damage (the user)
+                lifted = true;
+                UITheme.Lift(gameObject, UITheme.HandsLayer);
+            }
             RefreshVisibility(); // Fog of War switched (F9), the seats (F8), or the tuning's button
             UpdateDropGlow();
             RaiseNearPointer();

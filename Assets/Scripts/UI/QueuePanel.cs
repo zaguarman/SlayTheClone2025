@@ -69,6 +69,7 @@ namespace SlayTheClone {
             host.transform.SetParent(sibling.parent, false);
             var view = host.AddComponent<QueuePanel>();
             view.Build(sibling.localScale);
+            UITheme.Lift(host, UITheme.WindowsLayer); // Over the hands too
             view.gameManager = manager;
             view.gameMediator = mediator;
             mediator.ActionsQueueChanged += view.Refresh;

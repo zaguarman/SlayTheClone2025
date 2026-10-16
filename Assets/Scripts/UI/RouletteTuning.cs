@@ -29,11 +29,11 @@ namespace SlayTheClone {
 
         [Header("The shown card: moves it alone, the waiting cards stay where they are")]
         [Tooltip("Its size, of the preview's (Preview Scale): bigger or smaller than the waiting cards would make it, while they and the wheel stay as they are")]
-        [Range(0.5f, 2f)] public float shownScale = 1.029f;
+        [Range(0.5f, 2f)] public float shownScale = 1f;
         [Tooltip("Moves the shown card sideways, in preview heights (negative: left); the waiting cards stay")]
         [Range(-1f, 1f)] public float shownSideways = 0f;
         [Tooltip("Moves the shown card up, in preview heights (negative: down); the waiting cards stay")]
-        [Range(-1f, 1f)] public float shownUp = 0f;
+        [Range(-1f, 1f)] public float shownUp = -0.32f;
 
         [Header("The cards waiting on the wheel: where they sit")]
         [Tooltip("Their size, of the shown card's")]
@@ -107,14 +107,15 @@ namespace SlayTheClone {
         }
 
         // A slider moved: the wheel showing takes it at once
-        private void OnValidate() => Tooltip.Existing?.RedrawRoulette();
+        // Asked for, not done here: inside the Inspector, the screen it'd measure is the Inspector's (the roulette slid left)
+        private void OnValidate() => Tooltip.Existing?.RequestRedraw();
 
         /// <summary>The values it shipped with (the ones written above), kept whatever the sliders say.</summary>
         public void RestoreOriginals() {
             var originals = CreateInstance<RouletteTuning>();
             JsonUtility.FromJsonOverwrite(JsonUtility.ToJson(originals), this);
             DestroyImmediate(originals);
-            Tooltip.Existing?.RedrawRoulette();
+            Tooltip.Existing?.RequestRedraw();
         }
 
 #if UNITY_EDITOR
@@ -126,7 +127,7 @@ namespace SlayTheClone {
         public void BackToRemembered() {
             if (!HasRemembered) return;
             JsonUtility.FromJsonOverwrite(UnityEditor.EditorPrefs.GetString(RememberedKey), this);
-            Tooltip.Existing?.RedrawRoulette();
+            Tooltip.Existing?.RequestRedraw();
         }
 
         /// <summary>Selects the tuning asset (made with the defaults if there's none) so its sliders show in the Inspector.</summary>

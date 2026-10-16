@@ -12,6 +12,20 @@ namespace SlayTheClone {
     /// texture assets), and helpers that style buttons, panels and labels the same way everywhere.
     /// </summary>
     public static class UITheme {
+        // The table's layers, bottom to top (the user: nothing of the board's over the hands): the table and its battlefields
+        // with their arrows (the main canvas, 0), what happens on them (the Resolution Presenter), the hands, then the
+        // windows that open over everything (the deck view, the queue). The tooltip stays an overlay, above all
+        public const int EffectsLayer = 20, HandsLayer = 30, WindowsLayer = 60;
+
+        /// <summary>Draws this part of the table above the rest, at this order, still taking the pointer (a canvas of its own). Once.</summary>
+        public static void Lift(GameObject part, int order) {
+            if (part == null) return;
+            if (!part.TryGetComponent(out Canvas canvas)) canvas = part.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = order;
+            if (!part.TryGetComponent(out GraphicRaycaster _)) part.AddComponent<GraphicRaycaster>();
+        }
+
         #region Palette
         public static readonly Color TableDark = Hex(0x0A0F1C);
         public static readonly Color TableBase = Hex(0x111A2E);

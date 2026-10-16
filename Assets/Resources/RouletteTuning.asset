@@ -17,9 +17,9 @@ MonoBehaviour:
   reach: 2
   seconds: 0.28
   ease: 9
-  shownScale: 1.029
+  shownScale: 1
   shownSideways: 0
-  shownUp: 0
+  shownUp: -0.32
   waitingScale: 1
   waitingOut: 0.06
   waitingLift: 0

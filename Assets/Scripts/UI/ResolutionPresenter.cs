@@ -78,8 +78,16 @@ namespace SlayTheClone {
             presenterObject.transform.SetParent(parent, false);
 
             var canvas = presenterObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 9000; // Above the board, below the tooltip
+            // Drawn by the table's camera among the table's layers: above the board, under the hands (the user: no damage,
+            // skull or status over your hand's cards), the tooltip above all
+            var camera = Camera.main != null ? Camera.main : Object.FindAnyObjectByType<Camera>();
+            if (camera != null) {
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = camera;
+                canvas.planeDistance = camera.nearClipPlane + 1f;
+            }
+            else canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = UITheme.EffectsLayer;
 
             var scaler = presenterObject.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -452,7 +460,9 @@ namespace SlayTheClone {
             if (target.GetComponentInParent<Canvas>() == null) return false;
 
             Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(CanvasUtility.GetEventCamera(target), target.position);
-            return RectTransformUtility.ScreenPointToLocalPointInRectangle(overlay, screenPoint, null, out point);
+            var own = overlay.GetComponent<Canvas>();
+            return RectTransformUtility.ScreenPointToLocalPointInRectangle(overlay, screenPoint,
+                own != null && own.renderMode != RenderMode.ScreenSpaceOverlay ? own.worldCamera : null, out point);
         }
 
         private void ShowOnCard(CardController card, string text, Color color, float size = 46f) {

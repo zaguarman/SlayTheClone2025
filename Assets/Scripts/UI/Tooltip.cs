@@ -461,7 +461,15 @@ namespace SlayTheClone {
                 stackStale = false;
                 RefreshStack();
             }
+            if (redrawPending) {
+                redrawPending = false;
+                RedrawRoulette();
+            }
         }
+
+        // A Roulette Tuning slider moved: redrawn on the game's own frame, where the screen is the Game view's
+        private bool redrawPending;
+        public void RequestRedraw() => redrawPending = true;
 
         #region Keyword popups
         // Slay the Spire style: hovering a keyword on the enlarged card opens its explanation beside it; keywords in that

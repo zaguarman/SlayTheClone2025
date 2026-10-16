@@ -195,6 +195,7 @@ namespace SlayTheClone {
                 if (interceptor != null) interceptor.Clicked = Pick;
             }
             deckViewPanel.SetActive(true);
+            UITheme.Lift(deckViewPanel, UITheme.WindowsLayer); // Over the hands too
             SetPickHidden(false);
         }
 
