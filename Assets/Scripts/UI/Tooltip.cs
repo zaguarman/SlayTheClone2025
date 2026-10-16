@@ -170,7 +170,7 @@ namespace SlayTheClone {
         /// on it for a moment (<see cref="HoverDelay"/>). Leaving the card before that shows nothing.
         /// </summary>
         public void ShowTooltip(CardController card) {
-            if (card == null || card.GetBaseCardData() == null || card == pendingCard) return;
+            if (pinned || card == null || card.GetBaseCardData() == null || card == pendingCard) return;
             if (card == activeCard && preview != null) {
                 released = false;
                 UpdateTooltipContent(card);
@@ -318,6 +318,7 @@ namespace SlayTheClone {
         /// Hides the tooltip
         /// </summary>
         public void HideTooltip() {
+            pinned = false;
             CancelPending();
             HideShown();
         }
@@ -456,6 +457,10 @@ namespace SlayTheClone {
         }
 
         private void Update() {
+            if (pinned) {
+                if (WheelMoved && activeCard != null && preview != null && !previewIsCard && activeCard.AttachedCards.Count > 0) Browse(GameInput.WheelNotches < 0 ? 1 : -1);
+                return;
+            }
             // Over a creature with cards tucked under it, the wheel goes through them, in the preview
             if (WheelMoved && activeCard != null && preview != null && !previewIsCard && activeCard.AttachedCards.Count > 0
                 && (PointerOnTooltip(GameInput.PointerPosition, includeCard: true))) {
@@ -646,7 +651,15 @@ namespace SlayTheClone {
         public void Pin(CardController card) {
             HideTooltip();
             ShowNow(card);
+            pinned = activeCard == card;
         }
+
+        // Pinned (the Roulette Gallery): the mouse wheel anywhere turns its stack, back and on, as over the card in play;
+        // nothing else hovered replaces it, and moving away doesn't close it
+        private bool pinned;
+
+        /// <summary>A preview shown by <see cref="Pin"/>, up until hidden.</summary>
+        public bool IsPinned => pinned;
 
         private void ClearLeaving() {
             DOTween.Kill(this, complete: false);

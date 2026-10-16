@@ -9,7 +9,8 @@ namespace SlayTheClone {
     /// The card roulette turning on its own, to judge the <see cref="RouletteTuning"/> sliders: a creature with cards tucked
     /// under it shows its enlarged preview, and the wheel turns through its stack, one card at a time, round to the creature
     /// again; then the next shot. UI > Roulette Gallery plays it back while the game plays: the window sets how long each
-    /// card stays, pauses (the wheel can still be turned by hand there), and steps back and forth; it loops until stopped.
+    /// card stays, pauses, and steps back and forth; it loops until stopped. The mouse wheel turns it back and on, anywhere
+    /// over the game, as over the card in play (the window's Turn buttons too).
     /// It fills both rows with plain creatures and tucks cards from both decks under them (see <see cref="Set"/>); the
     /// enemy's spells among them are on their way, so they show their backs while Fog of War is on (F9, or the window's
     /// switch, turns them over as the wheel shows them).
@@ -104,16 +105,24 @@ namespace SlayTheClone {
                 // Once round the stack, back to the creature, a card at a time; by hand too, while paused
                 int turned = 0;
                 float waited = 0f;
+                int seen = Tooltip.Existing != null ? Tooltip.Existing.Browsed : 0;
                 while (jump == 0 && (Paused || turned <= shot.Tucked)) {
+                    int browsed = Tooltip.Existing != null ? Tooltip.Existing.Browsed : 0;
+                    if (browsed != seen) { // Turned with the mouse wheel: the next turn of its own waits the full time again
+                        seen = browsed;
+                        waited = 0f;
+                    }
                     if (turns != 0) {
                         Tooltip.Existing?.Browse(turns > 0 ? 1 : -1);
                         turns -= System.Math.Sign(turns);
                         waited = 0f;
+                        seen = Tooltip.Existing != null ? Tooltip.Existing.Browsed : 0;
                     }
                     else if (!Paused && (waited += Time.unscaledDeltaTime) >= SecondsPerTurn) {
                         waited = 0f;
                         if (++turned > shot.Tucked) break;
                         Tooltip.Existing?.Browse(1);
+                        seen = Tooltip.Existing != null ? Tooltip.Existing.Browsed : 0;
                     }
                     yield return null;
                 }
@@ -287,7 +296,7 @@ namespace SlayTheClone {
             }
             if (GUILayout.Button($"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")} (F9)")) FogOfWar.Toggle();
             if (GUILayout.Button("Stop")) RouletteGallery.Stop();
-            UnityEditor.EditorGUILayout.HelpBox("Pause on a shot, then move the sliders in UI > Roulette Tuning: the wheel redraws as they change. Turn it by hand to see a turn again. " +
+            UnityEditor.EditorGUILayout.HelpBox("Pause on a shot, then move the sliders in UI > Roulette Tuning: the wheel redraws as they change. Scroll the mouse wheel over the game to turn it back and on, as in play. " +
                 "The enemy's spells show their backs while the fog is on.", UnityEditor.MessageType.None);
         }
 
