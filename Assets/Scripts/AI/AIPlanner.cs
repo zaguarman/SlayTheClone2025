@@ -596,7 +596,7 @@ namespace SlayTheClone {
                 case ActionType.ApplyStatus:
                     if (action.statusEffectToApply is StatusEffectType.Concealed or StatusEffectType.Encrypted or StatusEffectType.Revealed) return Style.Intel;
                     return ours ? good > 0 ? Style.Protection : Style.Board : Style.Statuses;
-                case ActionType.Stun or ActionType.DelayDeployment:
+                case ActionType.Stun or ActionType.DelayDeployment or ActionType.Rush:
                     return ours ? Style.Board : Style.Statuses;
                 case ActionType.PlaceSlotEffect:
                     return ours && good > 0 ? Style.Protection : Style.Statuses;
@@ -757,6 +757,8 @@ namespace SlayTheClone {
             ActionType.Armor => amount * 0.75f,
             ActionType.Stun => creature.Operative && !IsStunned(creature) ? -(AttackOf(creature) + 1) : -0.5f,
             ActionType.DelayDeployment => creature.Operative ? 0 : -1.5f * amount, // Only a creature still deploying waits longer
+            // Overtime: a Day of it now, for the creature afterwards; worth it only for a strong one that would wait long
+            ActionType.Rush => creature.Operative ? 0 : AttackOf(creature) * 1.5f - creature.Worth * 0.6f,
             _ => 0
         };
 
@@ -860,6 +862,7 @@ namespace SlayTheClone {
                 // A delayed death they can't see coming, unless they happen to cleanse it
                 StatusEffectType.KillOrder when VeryHard && !creature.Ours => -(creature.Worth + HealthLeft(creature)) * 0.9f * SlowKillShare(creature),
                 StatusEffectType.KillOrder => creature.Has(StatusEffectType.KillOrder) ? 0 : -(creature.Worth + HealthLeft(creature)) * 0.7f,
+                StatusEffectType.Burnout => creature.Has(StatusEffectType.Burnout) ? 0 : -(creature.Worth + HealthLeft(creature)) * 0.7f,
                 // A defection: they lose it and we gain it, later; sooner when it's Revealed
                 StatusEffectType.Brainwashed when VeryHard && !creature.Ours => -(creature.Worth * 2) * (days <= 1 ? 0.85f : 0.7f) * SlowKillShare(creature),
                 StatusEffectType.Brainwashed => creature.Ours ? -creature.Worth : -(creature.Worth * 2) * (days <= 1 ? 0.75f : 0.6f),

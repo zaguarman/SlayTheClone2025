@@ -11,7 +11,7 @@ namespace SlayTheClone {
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetTrend,
             CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy,
             TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys,
-            WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
+            WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay, Rush } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
@@ -68,7 +68,8 @@ namespace SlayTheClone {
             Composed,      // Exhausted can't land on it (this Day only, like Untouchable)
             Blackout,      // Its ability and effects are switched off
             Survivor,      // From full Health, a hit that would kill it leaves it at 1, then it's spent (lasts until used)
-            Rooted         // It can't move, and nothing can move or swap it (a building going up: Ministry for Equality)
+            Rooted,        // It can't move, and nothing can move or swap it (a building going up: Ministry for Equality)
+            Burnout        // When it runs out, the creature is destroyed (Overtime: it lasts through the first Day it's ready)
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old

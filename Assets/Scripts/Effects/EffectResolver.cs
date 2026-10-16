@@ -390,7 +390,7 @@ namespace SlayTheClone {
         private static bool CanAffectCreatures(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Destroy or ActionType.Heal or ActionType.ModifyStat
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
-                or ActionType.CreateWatchdog or ActionType.DelayDeployment
+                or ActionType.CreateWatchdog or ActionType.DelayDeployment or ActionType.Rush
                 or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility
                 or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                 or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Resurrect
@@ -529,6 +529,8 @@ namespace SlayTheClone {
                     return action.value > 0 ? new EarthquakeAction(controller, action.value) : null;
                 case ActionType.DelayDeployment: // Red Tape: value is the Days added
                     return creature != null && action.value > 0 ? new DelayDeploymentAction(creature, action.value) : null;
+                case ActionType.Rush: // Overtime: value is the most Days taken off, then Burnout
+                    return creature != null && action.value > 0 ? new RushAction(creature, action.value) : null;
                 case ActionType.SummonDecoys: // Tokens into the player's empty slots (Ghost Army)
                     return target is IPlayer decoysSide && action.decoyData != null && action.value > 0 ? new SummonDecoysAction(decoysSide, action.decoyData, action.value) : null;
                 case ActionType.SendFor: // A card from the deck joins that player's next hand

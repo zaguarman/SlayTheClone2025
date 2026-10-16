@@ -55,6 +55,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Cooldown: return Days;
                 case StatusEffectType.Brainwashed: return Hurt;
                 case StatusEffectType.KillOrder: return Death;
+                case StatusEffectType.Burnout: return Death;
                 case StatusEffectType.BorrowedTime: return Days;
                 case StatusEffectType.Licensed: return Attack;
                 case StatusEffectType.Composed: return Bless;

@@ -623,6 +623,18 @@ Cooldown
     Answers: (It's the price of a strong ability.)
     Cleansable: Yes
 
+Burnout (the user, 2026-10-16)
+    Faction: Corporate (Overtime)
+    Type: Delayed Death
+    Description: "When it runs out, the creature is destroyed."
+    Core Impact: The price of rushing a creature in: Overtime cuts up to 2 Days off its Deployment Time and gives it Burnout, lasting through the first Day it's ready. It gets that one Day to act, and at that Day's Dusk it's destroyed (its Last Will happens as usual).
+    Stacking & Duration:
+        Initial Stacks: as many Days as it takes to be ready for one Day: 1 if Overtime leaves no Deployment Time, else its Deployment Time left (one more if it landed that Day)
+        Re-application Behavior: Refresh
+    Notes: Unlike a Kill Order it's seen by both sides, and Untouchable doesn't stop it.
+    Answers: Cleanse it before its Dusk, and the creature stays.
+    Cleansable: Yes
+
 Rooted (the user, 2026-10-16)
     Faction: Neutral (Statecraft's buildings, Myth's monuments)
     Type: Restriction

@@ -330,6 +330,8 @@ namespace SlayTheClone {
 
         protected override void OnCardEndDrag(CardController card) {
             Log($"End dragging card from hand: {card.GetBaseCardData()?.cardName} (TargetID: {card.GetBaseCardData()?.cardId.ToUpper()})", LogTag.UI | LogTag.Cards);
+            // Let go near a slot (over the hand's area reaching over the back row, say): it's played in the slot picked
+            BattlefieldUI.PlayOnTarget(card);
 
             // A queued card dropped where it can't be played keeps its old play; take it back. A valid drop already replaced it.
             if (draggedPlay != null && QueuedPlayOf(card.GetLinkedCardInstance()) == draggedPlay) {

@@ -196,14 +196,12 @@ namespace SlayTheClone {
         public void OnPointerEnter(PointerEventData eventData) {
             var dragged = eventData?.pointerDrag != null ? eventData.pointerDrag.GetComponent<CardController>() : null;
             if (dragged != null) {
-                // Only a card aimed at a slot of this side lights it up: not a creature summoned elsewhere, nor a spell for the whole side,
-                // nor a spell that has nothing to land on here
+                // A card being played: the board picks its slot, near the pointer as well as under it (see ShowPlayTarget).
+                // A creature moving or attacking lights up a slot of this side it's aimed at
                 var board = GetComponentInParent<BattlefieldUI>();
-                if (board?.AimOf(dragged) == BattlefieldUI.DropAim.Slot && board.CanAimAt(dragged, Model)) {
+                if (BattlefieldUI.IsPlayed(dragged)) BattlefieldUI.PointerOnSlot(this, dragged, true);
+                else if (board?.AimOf(dragged) == BattlefieldUI.DropAim.Slot && board.CanAimAt(dragged, Model)) {
                     ShowHighlight(DragTargetColor, DragTargetTrimColor);
-                    if (IsCreatureFromHandDraggedOver(eventData)) OccupyingCard.SetReplacementPreview(true);
-                    // A card being played (not a creature moving or attacking) settles into the slot it'll land in (the user)
-                    if (dragged.IsQueued || dragged.GetComponentInParent<HandUI>() != null) dragged.SnapsTo = transform;
                 }
             }
             else if (OccupyingCard != null) ShowHighlight(HoverColor, HoverTrimColor); // An empty slot stays plain
@@ -215,11 +213,12 @@ namespace SlayTheClone {
 
         public void OnPointerExit(PointerEventData eventData) {
             var dragged = eventData?.pointerDrag != null ? eventData.pointerDrag.GetComponent<CardController>() : null;
-            if (dragged != null && dragged.SnapsTo == transform) dragged.SnapsTo = null; // Off the slot: it follows the pointer again
-            if (OccupyingCard != null) {
-                OccupyingCard.SetReplacementPreview(false);
+            if (BattlefieldUI.IsPlayed(dragged)) BattlefieldUI.PointerOnSlot(this, dragged, false);
+            // The slot picked for a card being played stays lit while the pointer is near it (see ShowPlayTarget)
+            if (!IsPlayTarget) {
+                if (OccupyingCard != null) OccupyingCard.SetReplacementPreview(false);
+                ShowHighlight(null);
             }
-            ShowHighlight(null);
 
             // Leaving a slot only lets go of what the tooltip shows: it closes once the pointer is away from it, not because
             // a keyword explanation opened over this slot and took the pointer
@@ -227,16 +226,26 @@ namespace SlayTheClone {
             else Tooltip.Existing?.Release();
         }
 
-        // True while a creature card from a hand is dragged over this occupied slot (dropping it replaces the occupant)
-        private bool IsCreatureFromHandDraggedOver(PointerEventData eventData) {
-            if (OccupyingCard == null || eventData?.pointerDrag == null) return false;
-
-            var draggedCard = eventData.pointerDrag.GetComponent<CardController>();
-            return draggedCard != null
-                && draggedCard != OccupyingCard
-                && draggedCard.GetBaseCardData() is CreatureData
-                && (draggedCard.IsQueued || draggedCard.GetComponentInParent<HandUI>() != null); // A queued creature's ghost is a hand card too
+        /// <summary>
+        /// Picked by the board for the card being played (see <see cref="BattlefieldUI.PlayTarget"/>): lit, the card settling
+        /// into it (the user), and a creature standing here shown as replaced by a creature coming in. Off again, as it was.
+        /// </summary>
+        public void ShowPlayTarget(CardController card, bool on) {
+            IsPlayTarget = on;
+            if (on) ShowHighlight(DragTargetColor, DragTargetTrimColor);
+            else ShowHighlight(null);
+            if (OccupyingCard != null && OccupyingCard != card) OccupyingCard.SetReplacementPreview(on && card.GetBaseCardData() is CreatureData);
+            if (!on) SnapCard(card, false);
         }
+
+        /// <summary>The card being played settles into this slot (the pointer is on it), or follows the pointer again.</summary>
+        public void SnapCard(CardController card, bool snap) {
+            if (card == null) return;
+            if (snap) card.SnapsTo = transform;
+            else if (card.SnapsTo == transform) card.SnapsTo = null;
+        }
+
+        public bool IsPlayTarget { get; private set; }
 
         // The pointer entered this slot by entering the ghost card of a creature queued to be summoned here
         private bool IsOverQueuedGhost(PointerEventData eventData) {

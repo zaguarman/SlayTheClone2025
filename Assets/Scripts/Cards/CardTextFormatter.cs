@@ -298,6 +298,8 @@ namespace SlayTheClone {
                     return status != null ? status + Requisite(action) : null;
                 case ActionType.DelayDeployment:
                     return $"+{value} {Keywords.Link("Deployment Time")} to {target}";
+                case ActionType.Rush: // Overtime
+                    return $"up to -{value} {Keywords.Link("Deployment Time")} to {target}{Requisite(action)}, then {Keywords.Link("Burnout")}: destroyed at the end of its first Day ready";
                 // Between two creatures: this one and its target, or (on a spell, or aimed at itself) the target and the creature facing it
                 case ActionType.CopyStats:
                     return isSpell || action.targetType == TargetType.Self
@@ -465,6 +467,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Cooldown: return $"{Keywords.Link("Cooldown", "Cooldown" + Count(days))} on {target}";
                 case StatusEffectType.Brainwashed: return $"{Keywords.Link("Brainwashed", "Brainwashed" + Count(days))} on {target}";
                 case StatusEffectType.KillOrder: return $"{Keywords.Link("Kill Order", "Kill Order" + Count(days))} on {target}";
+                case StatusEffectType.Burnout: return $"{Keywords.Link("Burnout", "Burnout" + Count(days))} on {target}";
                 case StatusEffectType.BorrowedTime: return $"{Keywords.Link("Borrowed Time", "Borrowed Time" + Count(days))} on {target}";
                 case StatusEffectType.Licensed: return $"{Keywords.Link("Licensed", "license")} {target}";
                 case StatusEffectType.Composed: return $"{Keywords.Link("Composed", "Composed" + Count(days))} on {target}";

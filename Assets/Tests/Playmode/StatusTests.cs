@@ -323,6 +323,21 @@ namespace SlayTheClone.Tests {
             for (int day = 0; day < 3 && !clerk.IsOperative; day++) game.StartTurn();
             Assert.IsTrue(clerk.IsOperative, "Then ready");
 
+            // Overtime: up to 2 Days off its Deployment Time, then Burnout: it gets its first Day ready, and burns out at its Dusk
+            var internData = game.Creature("Intern", 4, 5);
+            internData.turnsUntilOperative = 3;
+            var intern = game.Summon(p1, internData, 2);
+            game.StartTurn();
+            game.Play(game.GiveCard(p1, game.Spell("Overtime", TargetType.FriendlyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Rush, 2, TargetType.FriendlyCreatures))), p1, p1.Battlefield[2]);
+            game.Resolve();
+            Assert.AreEqual(1, intern.TurnsUntilOperative, "Overtime: 2 Days off...");
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(intern, StatusEffectType.Burnout), "...and Burnout, for all to see");
+            game.StartTurn();
+            Assert.IsTrue(intern.IsOperative && !intern.IsDead, "Ready the next Day: it has that Day to act");
+            game.StartTurn();
+            Assert.IsTrue(intern.IsDead, "At that Day's Dusk it burns out");
+
             Fresh();
             game.Summon(p2, game.Creature("Cold", 0, 10), 0);
             var warm = game.Summon(p2, game.Creature("Warm", 0, 10), 1);

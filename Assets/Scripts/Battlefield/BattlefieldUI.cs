@@ -284,10 +284,111 @@ namespace SlayTheClone {
                 PlayFromHand(card, SideFor((Spell)card.GetLinkedCardInstance(), card.Player, Player));
                 return;
             }
+            if (PlayOnTarget(card)) return; // A card being played lands where the board picked, whatever took the drop
             var targetSlot = aim == DropAim.Slot ? GetTargetSlot() : null;
             if (targetSlot == null) return;
             DropOn(card, targetSlot);
         }
+
+        #region Where a card being played lands
+        // The user: a card picked up from the hand (or a queued one moved) lands in the slot under the pointer, or failing
+        // that the nearest one it can go to within Drop Reach of it (a slider), whatever covers the board there (the hand's
+        // own area reaches over the back row): the slots come first. Right on a slot it can't go to, nowhere. The card only
+        // settles into the slot while the pointer is on the slot itself: near it, the slot lights up and the card follows the
+        // pointer (the user: no pull like a gridlock)
+        private static float PlayTolerance => Tuning.dropReach;
+        private static readonly List<BattlefieldUI> boards = new List<BattlefieldUI>();
+
+        /// <summary>The slot the card being played would land in now (lit, the card settling into it), if any.</summary>
+        public static BattlefieldSlot PlayTarget { get; private set; }
+        private static CardController playTargetCard;
+        private static int playTargetFrame = -1;
+
+        /// <summary>Whether the card is being played: carried from a hand, or a queued one moved to aim it elsewhere.</summary>
+        public static bool IsPlayed(CardController card) => card != null && (card.IsQueued || FromHand(card));
+
+        /// <summary>Plays the carried card in the slot picked for it, if there is one; true if it did.</summary>
+        public static bool PlayOnTarget(CardController card) {
+            if (card == null || card != playTargetCard || PlayTarget == null) return false;
+            var slot = PlayTarget;
+            ClearPlayTarget();
+            var board = slot.GetComponentInParent<BattlefieldUI>();
+            if (board == null) return false;
+            board.DropOn(card, slot);
+            return true;
+        }
+
+        private static void ClearPlayTarget() {
+            if (PlayTarget != null && playTargetCard != null) PlayTarget.ShowPlayTarget(playTargetCard, false);
+            PlayTarget = null;
+            playTargetCard = null;
+        }
+
+        // Once a frame, whichever board asks first
+        private static void UpdatePlayTarget() {
+            if (playTargetFrame == Time.frameCount) return;
+            playTargetFrame = Time.frameCount;
+            var card = CardController.Dragged;
+            if (card != null && card.DragPointer == null) return; // Not moved yet (or a simulated drag): entering a slot sets it
+            var (target, onIt) = IsPlayed(card) ? FindPlayTarget(card, card.DragPointer.Value) : (null, false);
+            if (target != PlayTarget || (target != null && card != playTargetCard)) {
+                ClearPlayTarget();
+                if (target == null) return;
+                PlayTarget = target;
+                playTargetCard = card;
+                target.ShowPlayTarget(card, true);
+            }
+            if (target != null) target.SnapCard(card, onIt);
+        }
+
+        /// <summary>The pointer is on this slot, carrying a card being played (the slot's own events): it lands here if it can.</summary>
+        public static void PointerOnSlot(BattlefieldSlot slot, CardController card, bool on) {
+            if (card == null || card.DragPointer != null) return; // A real drag: picked each frame, near slots too
+            if (!on) {
+                if (PlayTarget == slot) ClearPlayTarget();
+                return;
+            }
+            var board = slot.GetComponentInParent<BattlefieldUI>();
+            if (board == null || board.AimOf(card) != DropAim.Slot || !board.CanAimAt(card, slot.Model)) return;
+            ClearPlayTarget();
+            PlayTarget = slot;
+            playTargetCard = card;
+            slot.ShowPlayTarget(card, true);
+            slot.SnapCard(card, true);
+        }
+
+        // The slot it would land in, and whether the pointer is on that slot itself (not only near it)
+        private static (BattlefieldSlot slot, bool onIt) FindPlayTarget(CardController card, Vector2 pointer) {
+            if (pointer.x < 0f || pointer.y < 0f || pointer.x > Screen.width || pointer.y > Screen.height) return (null, false);
+            BattlefieldSlot best = null;
+            float nearest = float.MaxValue;
+            float reach = 1f + 2f * PlayTolerance; // In half a slot's size from its middle
+            var corners = new Vector3[4];
+            foreach (var board in boards) {
+                if (board == null || !board.IsInitialized || board.AimOf(card) != DropAim.Slot) continue;
+                var eventCamera = CanvasUtility.GetEventCamera(board);
+                foreach (var slot in board.battlefieldSlots) {
+                    if (slot == null || slot.Model == null) continue;
+                    ((RectTransform)slot.transform).GetWorldCorners(corners);
+                    Vector2 min = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[0]);
+                    Vector2 max = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
+                    var half = (max - min) / 2f;
+                    if (half.x <= 0f || half.y <= 0f) continue;
+                    var off = pointer - (min + half);
+                    float dx = Mathf.Abs(off.x) / half.x, dy = Mathf.Abs(off.y) / half.y;
+                    bool fits = board.CanAimAt(card, slot.Model);
+                    if (dx <= 1f && dy <= 1f) return (fits ? slot : null, fits);
+                    if (!fits || dx > reach || dy > reach) continue;
+                    float distance = Mathf.Max(dx, dy);
+                    if (distance < nearest) {
+                        nearest = distance;
+                        best = slot;
+                    }
+                }
+            }
+            return (best, false);
+        }
+        #endregion
 
         /// <summary>The card released on this slot: played there from the hand, or a creature's attack or move (tests call it directly).</summary>
         /// <summary>Whether this card, carried from the hand, can be played on this slot: for an aimed spell, only where it lands on something.</summary>
@@ -308,7 +409,9 @@ namespace SlayTheClone {
             }
         }
 
-        private bool IsCardFromHand(CardController card) {
+        private bool IsCardFromHand(CardController card) => FromHand(card);
+
+        private static bool FromHand(CardController card) {
             if (card.OriginalParent == null) return false;
 
             Transform parent = card.OriginalParent;
@@ -838,6 +941,7 @@ namespace SlayTheClone {
         // The strips follow their creature's card wherever it is (a summon's swell, the sides switching places). The idle
         // reminders go while the Day plays out and come back when the next one is planned
         private void LateUpdate() {
+            UpdatePlayTarget();
             if (matLit && CardController.Dragged == null) LightUp(false); // Nothing carried any more: no glow left behind
             foreach (var (band, front, depth) in strips) {
                 if (band != null && front != null) PlaceStrip(band, front, depth);
@@ -981,6 +1085,7 @@ namespace SlayTheClone {
         }
 
         private void OnGhostEndDrag(CardController ghost) {
+            PlayOnTarget(ghost); // Let go near a slot, not on one: it lands in the one picked
             // Dropped where it can't be played, it keeps its old play: take it back. A valid drop already replaced it.
             if (draggedGhostPlay != null && QueuedPlayOf(ghost.GetLinkedCardInstance()) == draggedGhostPlay) {
                 GameManager.ActionsQueue.CancelPlay(ghost.GetLinkedCardInstance());
@@ -1033,11 +1138,16 @@ namespace SlayTheClone {
         #endregion
 
         #region Drag Handling
+        private const float DragArrowClearance = 0.55f; // Of the card's height, from its slot's middle: no arrow nearer
+
         protected override void OnCardBeginDrag(CardController card) {
             if (card == null) return;
 
             var startSlot = GetSlot(card);
-            arrowManager.ShowDragArrow(startSlot != null ? startSlot.transform.position : card.transform.position);
+            // No arrow until the pointer is off the creature's own card, about: a few pixels' drag draws nothing
+            var cardRect = (RectTransform)card.transform;
+            float clear = DragArrowClearance * cardRect.rect.height * cardRect.lossyScale.y;
+            arrowManager.ShowDragArrow(startSlot != null ? startSlot.transform.position : card.transform.position, clear);
             draggedCard = card;
             card.transform.SetAsLastSibling();
             ShowMoveHints(card.GetLinkedCreature());
@@ -1166,6 +1276,9 @@ namespace SlayTheClone {
         }
 
         #region Cleanup
+        private void OnEnable() => boards.Add(this);
+        private void OnDisable() => boards.Remove(this);
+
         protected override void OnDestroy() {
             base.OnDestroy();
             ClearQueuedGhosts();

@@ -56,7 +56,7 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.DigitalSociety, new[] { "Its Been 84 Years...", "Good Boi" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Overtime" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -173,6 +173,11 @@ namespace SlayTheClone {
         // Pays with capital (future: discard cards). Until discarding exists, its strongest cards leak value to the enemy.
         // Can't heal. Engine: card draw, workers that die usefully, money that hurts someone else first.
         private static List<CardDef> CorporateCards() => new List<CardDef> {
+            Spell("Overtime", TargetType.FriendlyCreatures,
+                "Just this once. Every week.",
+                "The user, 2026-10-16: a creature still deploying of yours comes in up to 2 Days sooner, and pays for it with Burnout: it's destroyed at the end of the first Day it's ready, so it gets that one Day to act. A Cleanse saves it. Corporate's tempo: a big body now, for one Day.",
+                Requiring(Act(ActionType.Rush, 2, TargetType.FriendlyCreatures, TargetModifier.None), TargetRequisite.Deploying))
+                .Picture("An office worker at a desk late at night, surrounded by empty coffee cups and energy drink cans, typing furiously with smoke rising from the keyboard, eyes bloodshot and wide open, a wall clock showing 3 a.m. and a calendar with every weekend crossed out."),
             Spell("Peace the Frontier", TargetType.Enemy,
                 "Please, regulate us. Only us can afford it. Also, could someone lend us a few billion?",
                 "The user, 2026-10-16: frontier AI labs lobbying the government for rules strict enough that no newcomer can compete, while they burn through cash and play the victim. Regulatory capture: every enemy creature still deploying waits 1 more Day; the lobbying isn't free, you take 2 damage.",

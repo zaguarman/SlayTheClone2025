@@ -88,18 +88,35 @@ namespace SlayTheClone {
         }
 
         #region Drag arrow
-        public void ShowDragArrow(Vector3 startPos) {
-            dragArrow.SetColor(NeutralColor);
-            dragArrow.Show(startPos, startPos);
+        // The drag arrow shows only once the pointer is this far from where it started (the user: a short one, still over
+        // the creature's own card, is only a stub and a head)
+        private Vector3 dragStart;
+        private float dragMinLength;
+        private bool dragging;
+
+        /// <summary>A creature picked up: its arrow will grow from here once the pointer has gone <paramref name="minLength"/> (world units).</summary>
+        public void ShowDragArrow(Vector3 startPos, float minLength = 0f) {
+            dragStart = startPos;
+            dragMinLength = minLength;
+            dragging = true;
+            dragArrow.Hide();
         }
 
         public void UpdateDragArrow(Vector3 worldPos, DragIntent intent) {
-            if (!dragArrow.IsVisible()) return;
+            if (!dragging) return;
+            if (Vector2.Distance(worldPos, dragStart) < dragMinLength) {
+                if (dragArrow.IsVisible()) dragArrow.Hide();
+                return;
+            }
+            if (!dragArrow.IsVisible()) dragArrow.Show(dragStart, worldPos);
             dragArrow.SetColor(intent == DragIntent.Attack ? AttackColor : intent == DragIntent.Move ? MoveColor : NeutralColor);
             dragArrow.UpdateEndPosition(worldPos);
         }
 
-        public void HideDragArrow() => dragArrow.Hide();
+        public void HideDragArrow() {
+            dragging = false;
+            dragArrow.Hide();
+        }
         #endregion
 
         #region Queued action arrows
@@ -263,6 +280,7 @@ namespace SlayTheClone {
                 DestroyCreatureAction destroy => destroy.GetCreature(),
                 DoomedSentenceAction sentence => sentence.GetCreature(),
                 DelayDeploymentAction delay => delay.Creature,
+                RushAction rush => rush.Creature,
                 PlaceSlotEffectAction place => place.GetSlot(),
                 CleanseSlotAction clear => clear.GetSlot(),
                 RevealAction reveal => reveal.Slot,

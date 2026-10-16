@@ -302,6 +302,10 @@ namespace SlayTheClone {
                     if (expiredMod is StatusEffectModifier { EffectType: StatusEffectType.KillOrder } && !HasStatusEffect(creature, StatusEffectType.Untouchable)) {
                         actionsQueue.AddAction(new DestroyCreatureAction(creature, unconditional: true));
                     }
+                    // Burnout runs out (Overtime): it had its Day, it's destroyed. The price of rushing it: nothing saves it but a Cleanse
+                    if (expiredMod is StatusEffectModifier { EffectType: StatusEffectType.Burnout }) {
+                        actionsQueue.AddAction(new DestroyCreatureAction(creature, unconditional: true));
+                    }
                 }
 
                 // A Health buff wearing off takes its Health back, which can kill the creature

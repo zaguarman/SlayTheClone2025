@@ -80,6 +80,10 @@ namespace SlayTheClone {
         void AddDeploymentTime(int days, int currentTurn);
         /// <summary>Ready at once, no Deployment Time (Phoenix Feather's rebirth).</summary>
         void MakeOperative();
+        /// <summary>Overtime: up to this many Days off its Deployment Time; ready now if none is left (its entry effects happen then).</summary>
+        void ReduceDeploymentTime(int days, IActionsQueue actionsQueue);
+        /// <summary>The first Day it can act from its start (planning it): tomorrow if it's ready now, else when its Deployment Time runs out.</summary>
+        int FirstDayReady(int today);
         /// <summary>Counts down at each Dusk after the Day it landed in (GDD 3.2): Deployment Time N sits out N full Days.</summary>
         /// <returns>True when the countdown changed.</returns>
         bool AdvanceReadiness(int startingTurn, IActionsQueue actionsQueue);
@@ -200,15 +204,28 @@ namespace SlayTheClone {
 
             TurnsUntilOperative--;
             Log($"{Name} is {(IsOperative ? "now operative" : $"operative in {TurnsUntilOperative} turn(s)")}", LogTag.Creatures | LogTag.Turns);
-            if (IsOperative && entryEffectsPending) {
-                // Its on-play effect waited for this moment; Deployment Time ignores Abilities Disabled (GDD 3.2). On Scorched
-                // Earth it waits until the creature is off the scorched slot
-                entryEffectsPending = false;
-                if (SlotEffectRules.SuppressesTriggeredEffects(this)) HoldEntryEffects();
-                else EffectResolver.QueueCreatureEffects(this, EffectTrigger.OnPlay, actionsQueue);
-            }
+            if (IsOperative) Arrive(actionsQueue);
             return true;
         }
+
+        // Its on-play effect waited for this moment; Deployment Time ignores Abilities Disabled (GDD 3.2). On Scorched Earth it
+        // waits until the creature is off the scorched slot
+        private void Arrive(IActionsQueue actionsQueue) {
+            if (!entryEffectsPending || actionsQueue == null) return;
+            entryEffectsPending = false;
+            if (SlotEffectRules.SuppressesTriggeredEffects(this)) HoldEntryEffects();
+            else EffectResolver.QueueCreatureEffects(this, EffectTrigger.OnPlay, actionsQueue);
+        }
+
+        public void ReduceDeploymentTime(int days, IActionsQueue actionsQueue) {
+            if (days <= 0 || IsOperative || IsDead) return;
+            TurnsUntilOperative = Math.Max(0, TurnsUntilOperative - days);
+            Log($"{Name} is rushed: {(IsOperative ? "operative now" : $"operative in {TurnsUntilOperative} turn(s)")}", LogTag.Creatures | LogTag.Turns);
+            if (IsOperative) Arrive(actionsQueue);
+        }
+
+        // Deployment Time counts down at each Dusk after the Day it landed: N left, it's ready N Dusks on
+        public int FirstDayReady(int today) => IsOperative ? today + 1 : Math.Max(today, landedOnTurn + 1) + TurnsUntilOperative;
 
         private void HoldEntryEffects() {
             entryEffectsHeld = true;

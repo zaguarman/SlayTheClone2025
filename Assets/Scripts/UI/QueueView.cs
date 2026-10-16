@@ -224,7 +224,7 @@ namespace SlayTheClone {
             ModifyArmorAction => EffectIcons.Armor,
             ApplyStatusEffectAction status => StatusIcon(status.GetStatusType()),
             CleanseAction or CleanseSlotAction => EffectIcons.Cleanse,
-            DelayDeploymentAction => EffectIcons.Days,
+            DelayDeploymentAction or RushAction => EffectIcons.Days,
             DestroyCreatureAction or DoomedSentenceAction => EffectIcons.Death,
             DrawCardsAction or DiscardHandAction => EffectIcons.Draw,
             RevealAction or CreateWatchdogAction => EffectIcons.Reveal,
@@ -298,6 +298,8 @@ namespace SlayTheClone {
                     return $"{(cleanse.IsPurge ? "Purge" : "Cleanse")} {Who(cleanse.GetTargetCreature(), viewer)}";
                 case DelayDeploymentAction delay:
                     return $"+{delay.Days} Deployment Time to {Who(delay.Creature, viewer)}";
+                case RushAction rush:
+                    return $"Up to -{rush.Days} Deployment Time to {Who(rush.Creature, viewer)}, then Burnout";
                 case DestroyCreatureAction destroy:
                     return $"Destroy {Who(destroy.GetCreature(), viewer)}";
                 case DoomedSentenceAction sentence:

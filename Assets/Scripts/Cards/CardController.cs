@@ -55,6 +55,9 @@ namespace SlayTheClone {
         /// of a card in that slot (the hand shrinks it), so the player sees the drop will take before letting go.
         /// </summary>
         public Transform SnapsTo { get; set; }
+
+        /// <summary>Where the pointer carrying it is, once it has moved (null before that, and when not carried).</summary>
+        public Vector2? DragPointer { get; private set; }
         /// <summary>Dragged with the right button: an attack on a creature of its own side (Friendly Fire).</summary>
         public bool IsFriendlyFire { get; set; }
         /// <summary>A card tucked under a creature on the board, only its name showing: hovered for its enlarged view, never used.</summary>
@@ -436,6 +439,7 @@ namespace SlayTheClone {
             SnapsTo = null;
             dragLean = 0f;
             isDragging = true;
+            DragPointer = null;
             Dragged = this;
             canvasGroup.blocksRaycasts = false;
             transform.SetAsLastSibling();
@@ -448,6 +452,7 @@ namespace SlayTheClone {
 
         public void OnDrag(PointerEventData eventData) {
             if (!isDragging) return;
+            DragPointer = eventData.position;
 
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 parentCanvas.transform as RectTransform,
@@ -474,6 +479,7 @@ namespace SlayTheClone {
             if (!isDragging) return;
 
             isDragging = false;
+            DragPointer = null;
             SnapsTo = null;
             transform.position = dragTarget; // Where the pointer let go
             transform.localRotation = Quaternion.identity;

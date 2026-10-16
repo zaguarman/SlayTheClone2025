@@ -107,6 +107,7 @@ namespace SlayTheClone {
             Add("Lethal", "What would kill a creature: damage that takes it to 0 Health, or a [Destroy].");
             Add("Licensed", "Its next attack on a creature [Destroy|destroys] it, whatever its Health or [Armor], and the licence is spent ([Untouchable] or a [Shield] stops the hit, and spends it all the same). It lasts until used. With [Double Tap] both hits carry it: two [Blessed] stacks, or one and the creature.");
             Add("Survivor", "From full Health, a hit that would kill it leaves it at 1 Health instead, and the status is spent. It lasts until used: hurt first, and it doesn't help.");
+            Add("Burnout", "Burnout X (no number: 1): when its X [Days] run out, at [Dusk], the creature is [Destroy|destroyed], whatever protects it. Overtime gives it: it lasts through the first Day the rushed creature is ready, so it gets that one Day to act. A [Cleanse] removes it.");
             Add("Rooted", "Rooted X (no number: 1): it can't move, and nothing can move or swap it, for X [Days]. A building going up: while deploying, it stays where it's built.");
             Add("Composed", "Composed X (no number: 1): it can't be [Exhausted] for X [Days], counting the Day it lands (1 is this Day only), and it shakes off a stun it has.");
             Add("Blackout", "Blackout X (no number: 1): its ability and its effects (arrival, Dawn and Dusk, retaliation, [Last Will]) are switched off for X [Days].");
