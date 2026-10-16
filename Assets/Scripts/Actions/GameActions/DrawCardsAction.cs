@@ -11,10 +11,14 @@ namespace SlayTheClone {
         public IPlayer GetPlayer() => player;
         public int GetAmount() => amount;
 
-        public DrawCardsAction(IPlayer player, int amount = 1, bool fromEffect = false) {
+        /// <summary>The Day's hand (creatures up to 3, 2 spells), its amount the extra cards (fewer, negative).</summary>
+        public bool DealsDay { get; }
+
+        public DrawCardsAction(IPlayer player, int amount = 1, bool fromEffect = false, bool dealsDay = false) {
             this.player = player;
             this.amount = amount;
             FromEffect = fromEffect;
+            DealsDay = dealsDay;
             Log($"Created {this}", LogTag.Actions | LogTag.Cards);
         }
 

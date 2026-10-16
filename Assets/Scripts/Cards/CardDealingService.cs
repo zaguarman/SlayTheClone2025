@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
@@ -9,6 +10,11 @@ namespace SlayTheClone {
         void DrawCardForPlayer(IPlayer player);
         bool RecycleDiscardPile(IPlayer player);
         void DrawCards(IPlayer player, int count);
+        /// <summary>
+        /// A Day's hand: creatures up to <see cref="Player.CreaturesPerDay"/>, <see cref="Player.SpellsPerDay"/> spells (never
+        /// past <see cref="Player.MaxSpellsInHand"/>), and <paramref name="extra"/> more cards (fewer, negative), see <see cref="DrawCards"/>.
+        /// </summary>
+        void DealDay(IPlayer player, int extra);
         List<ICard> GetDeckPreview(IPlayer player);
         List<ICard> GetDiscardPilePreview(IPlayer player);
         int GetDiscardPileCount(IPlayer player);
@@ -45,13 +51,37 @@ namespace SlayTheClone {
             return true;
         }
 
+        // The opening hands are a Day's: 3 creatures and 2 spells each (handSize is no longer used)
         public void DealInitialHands(IPlayer player1, IPlayer player2, int handSize = 6) {
-            // Alternate draws, as if dealt from the top; DrawCardForPlayer skips players whose hand is full
-            for (int i = 0; i < handSize; i++) {
-                DrawCardForPlayer(player1);
-                DrawCardForPlayer(player2);
-            }
+            DealDay(player1, 0);
+            DealDay(player2, 0);
             Log("Dealt initial hands to both players", LogTag.Cards | LogTag.Initialization);
+        }
+
+        public void DealDay(IPlayer player, int extra) {
+            if (player == null) return;
+            int creatures = System.Math.Max(0, Player.CreaturesPerDay - Player.CreaturesIn(player.Hand));
+            int spells = System.Math.Max(0, System.Math.Min(Player.SpellsPerDay, Player.MaxSpellsInHand - Player.SpellsIn(player.Hand)));
+            // Fewer cards (Supply Chain Attack): spells first, then creatures
+            for (; extra < 0 && spells > 0; extra++) spells--;
+            for (; extra < 0 && creatures > 0; extra++) creatures--;
+            for (int i = 0; i < creatures; i++) DrawKind(player, creature: true);
+            for (int i = 0; i < spells; i++) DrawKind(player, creature: false);
+            if (extra > 0) DrawCards(player, extra);
+        }
+
+        // The top card of this kind; with none left in the deck, the discard pile is shuffled back in first. False if there's none
+        private bool DrawKind(IPlayer player, bool creature) {
+            if (player.Hand.Count >= Player.MaxHandSize || !playerDecks.TryGetValue(player, out var deck)) return false;
+            bool Kind(ICard c) => (c is ICreature) == creature;
+            if (!deck.GetDeckPreview().Any(Kind)) {
+                if (!deck.GetDiscardPilePreview().Any(Kind) || !RecycleDiscardPile(player)) return false;
+            }
+            var card = deck.DrawCard(Kind);
+            if (card == null) return false;
+            player.AddToHand(card);
+            Log($"Drew {(creature ? "a creature" : "a spell")} for {player.Name}: {card.Name}", LogTag.Cards);
+            return true;
         }
 
         public bool CanDrawCard(IPlayer player) {
@@ -118,22 +148,20 @@ namespace SlayTheClone {
 
             Log($"Drawing {count} cards for {player.Name} (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
 
+            // A drawn card is a spell while the hand holds fewer than 5 (spells are what keeps); past that, a creature
             int drawnCount = 0;
             for (int i = 0; i < count; i++) {
                 if (player.Hand.Count >= Player.MaxHandSize) {
                     Log($"Hand full ({Player.MaxHandSize} cards), stopped drawing after {drawnCount} cards for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
                     break;
                 }
-
-                // Check if we need to recycle before drawing
-                if (!playerDecks.TryGetValue(player, out var deck) || deck.CardsRemaining == 0) {
-                    if (!RecycleDiscardPile(player)) {
-                        Log($"No more cards in deck or discard pile after drawing {drawnCount} cards for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
-                        break;
-                    }
+                // Without a spell left in the deck it takes a creature rather than reshuffle the discard pile for one
+                bool spell = Player.SpellsIn(player.Hand) < Player.MaxSpellsInHand
+                             && (!playerDecks.TryGetValue(player, out var deck) || deck.GetDeckPreview().Any(c => !(c is ICreature)) || deck.CardsRemaining == 0);
+                if (!DrawKind(player, creature: !spell) && !DrawKind(player, creature: spell)) {
+                    Log($"No more cards in deck or discard pile after drawing {drawnCount} cards for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Cards);
+                    break;
                 }
-
-                DrawCardForPlayer(player);
                 drawnCount++;
             }
 

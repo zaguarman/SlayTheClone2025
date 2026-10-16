@@ -72,6 +72,12 @@ namespace SlayTheClone {
 
     public class Player : Entity, IPlayer {
         public const int MaxHandSize = 10;
+        // The hand (the user, 2026-10-16): each Day the creatures left over go and up to 3 new ones come; spells stay until
+        // played, 2 more a Day, 5 at most
+        public const int CreaturesPerDay = 3, SpellsPerDay = 2, MaxSpellsInHand = 5;
+        /// <summary>The spells in a hand.</summary>
+        public static int SpellsIn(IEnumerable<ICard> hand) => hand.Count(c => !(c is ICreature));
+        public static int CreaturesIn(IEnumerable<ICard> hand) => hand.Count(c => c is ICreature);
         public const int BattlefieldSize = 5;
         public const int StartingHealth = 20; // A fight starts at it (an adventure carries its own); healing has no ceiling
 
@@ -197,14 +203,15 @@ namespace SlayTheClone {
             Log($"{card.Name} is on its way back to {Name}'s hand", LogTag.Cards);
         }
 
+        // The Day's creatures not played go to the discard pile; the spells stay in the hand (the user, 2026-10-16)
         public void DiscardHand() {
-            Log($"Discarding entire hand for {Name}: {Hand.Count} cards", LogTag.Cards);
+            var cardsToDiscard = Hand.Where(c => c is ICreature).ToList();
+            Log($"Discarding the creatures left in {Name}'s hand: {cardsToDiscard.Count} cards", LogTag.Cards);
 
-            if (Hand.Count == 0) return;
+            if (cardsToDiscard.Count == 0) return;
 
-            // Empty the hand in one go so listeners get a single HandStateChanged instead of one per card
-            var cardsToDiscard = new List<ICard>(Hand);
-            Hand.Clear();
+            // Out of the hand in one go so listeners get a single HandStateChanged instead of one per card
+            Hand.RemoveAll(c => c is ICreature);
 
             foreach (var card in cardsToDiscard) {
                 Deck.AddToDiscardPile(card);

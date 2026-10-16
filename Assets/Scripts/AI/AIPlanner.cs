@@ -177,9 +177,13 @@ namespace SlayTheClone {
         }
 
         // A chosen discard cost: the cards it would miss least (a spell by the most good it can do now, a creature by its stats)
+        // Creatures not played today are discarded at Dusk anyway: they're the cheapest to give up
         private List<ICard> LeastUseful(List<ICard> cards, int count) =>
             cards.OrderBy(c => c is Spell s ? AimsFor(s).Select(a => SpellValue(s, a)).DefaultIfEmpty(0).Max()
-                : c is ICreature creature ? (creature.Attack + creature.Health) / 2f : 0).Take(count).ToList();
+                : c is ICreature creature ? (creature.Attack + creature.Health) / 2f * 0.3f : 0).Take(count).ToList();
+
+        // How much good a spell must do today to be played rather than kept for a better Day (spells stay in the hand)
+        private const float HoldBar = 1f;
 
         private void PlayEachSpell(List<Spell> spells) {
             if (Level == AILevel.Easy) {
@@ -190,8 +194,10 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Spells stay in the hand (5 at most): one that does little today waits, unless the hand is full and new ones would be lost
+            float bar = Player.SpellsIn(view.Me.Hand) >= Player.MaxSpellsInHand ? 0f : HoldBar;
             while (spells.Count > 0) {
-                (Spell spell, ITarget aim, float value) best = (null, null, 0);
+                (Spell spell, ITarget aim, float value) best = (null, null, bar);
                 foreach (var spell in Hard ? spells : spells.Take(1).ToList()) {
                     foreach (var aim in AimsFor(spell)) {
                         float value = SpellValue(spell, aim);

@@ -7,6 +7,8 @@ namespace SlayTheClone {
         int CardsRemaining { get; }
         void Initialize(List<CardData> cardDataList);
         ICard DrawCard();
+        /// <summary>The top card of this kind (a creature, a spell), or null if the deck has none.</summary>
+        ICard DrawCard(System.Func<ICard, bool> which);
         void AddCardToBottom(ICard card);
         void AddToDiscardPile(ICard card);
         void ClearDiscardPile();
@@ -62,6 +64,15 @@ namespace SlayTheClone {
 
             var drawnCard = cards[0];
             cards.RemoveAt(0);
+            Log($"Drew card: {drawnCard.Name} (CardID: {drawnCard.TargetId.ToUpper()}) from deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
+            return drawnCard;
+        }
+
+        public ICard DrawCard(System.Func<ICard, bool> which) {
+            int index = cards.FindIndex(c => which(c));
+            if (index < 0) return null;
+            var drawnCard = cards[index];
+            cards.RemoveAt(index);
             Log($"Drew card: {drawnCard.Name} (CardID: {drawnCard.TargetId.ToUpper()}) from deck (DeckID: {deckId.ToUpper()})", LogTag.Cards);
             return drawnCard;
         }

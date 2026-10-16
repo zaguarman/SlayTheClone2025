@@ -225,10 +225,15 @@ namespace SlayTheClone.Tests {
             }
         }
 
+        // The hand (the user, 2026-10-16): each Day the creatures left over go and up to 3 new ones come; the spells stay until
+        // played, 2 more a Day, 5 at most; extra draws are spells while there's room for them, creatures past that
         [UnityTest]
-        public IEnumerator EndingATurn_DiscardsBothHandsAndDrawsFiveEach() {
-            game.SetDecks(game.Fillers(20), game.Fillers(20));
+        public IEnumerator EndingATurn_DiscardsTheCreaturesLeft_KeepsTheSpells_AndDealsTheDay() {
+            List<CardData> Mixed() => game.Fillers(12).Concat(Enumerable.Range(0, 12).Select(i => game.Spell("Memo", TargetType.Player))).ToList();
+            game.SetDecks(Mixed(), Mixed());
             game.CardDealingService.DealInitialHands(p1, p2, 5);
+            foreach (var player in new[] { p1, p2 })
+                Assert.AreEqual((3, 2), (Player.CreaturesIn(player.Hand), Player.SpellsIn(player.Hand)), "The first hand: 3 creatures and 2 spells");
             var firstHands = new[] { p1, p2 }.ToDictionary(p => p, p => p.Hand.ToList());
             game.Summon(p1, game.Creature("Crowd", 1, 1), 4);
             var sketchbook = game.GiveCard(p1, game.Spell("Sketchbook", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 2, TargetType.Player)));
@@ -243,17 +248,19 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Trend.Zeitgeist, game.TrendSystem.Current, "A Trend for 2 Days lasts this Day and the next");
             Assert.AreEqual("Trend", CardTextFormatter.GetTypeLine(zeitgeistCard), "A card that only sets a Trend is a Trend");
             foreach (var player in new[] { p1, p2 }) {
-                int drawn = player == p1 ? 7 : 6; // The underdog (no creatures) draws 1 more
-                Assert.AreEqual(drawn, player.Hand.Count, "A draw resolved during the Day comes with the next Day's hand, not into the hand about to be discarded");
-                CollectionAssert.IsEmpty(player.Hand.Intersect(firstHands[player]), "The old hand should have been discarded");
-                Assert.AreEqual(20 - 5 - drawn, player.Deck.CardsRemaining);
+                CollectionAssert.IsEmpty(player.Hand.OfType<ICreature>().Intersect(firstHands[player]), "The creatures left over were discarded...");
+                CollectionAssert.IsSubsetOf(firstHands[player].Where(c => !(c is ICreature)), player.Hand, "...the spells stay");
             }
-            Assert.AreEqual(6, p2.Deck.GetDiscardPilePreview().Count, "Its 5 cards and the Trend it played");
+            // P1: 3 new creatures, 2 spells kept and 2 more, and Sketchbook's 2 extra: a spell (the 5th), then a creature
+            Assert.AreEqual((4, 5), (Player.CreaturesIn(p1.Hand), Player.SpellsIn(p1.Hand)), "A draw resolved during the Day comes with the next Day's hand; spells stop at 5");
+            // P2: 3 new creatures, 2 + 2 spells, and the Trend's 1 more (it has fewer creatures): a spell
+            Assert.AreEqual((3, 5), (Player.CreaturesIn(p2.Hand), Player.SpellsIn(p2.Hand)), "The underdog draws 1 more");
+            Assert.AreEqual(4, p2.Deck.GetDiscardPilePreview().Count, "Its 3 creatures and the Trend it played");
             Assert.AreEqual(0, p1.ExtraDraws, "The owed cards were drawn");
 
             yield return game.EndTurn();
             Assert.AreEqual(Trend.None, game.TrendSystem.Current, "Over after its last Day's Dusk");
-            Assert.AreEqual(5, p2.Hand.Count, "No more extra card");
+            Assert.AreEqual((3, 5), (Player.CreaturesIn(p2.Hand), Player.SpellsIn(p2.Hand)), "No more extra card, and no spell past 5");
 
             // Supply Chain Attack: every enemy creature still deploying waits 2 more Days, and their next hand is 2 cards smaller
             var slowData = game.Creature("Slow", 2, 2);
@@ -267,7 +274,7 @@ namespace SlayTheClone.Tests {
             game.Run(new PlayCardAction(supplyChain, p1, p2));
             Assert.AreEqual((4, 0), (slow.TurnsUntilOperative, ready.TurnsUntilOperative), "Only the one still deploying waits longer");
             yield return game.EndTurn();
-            Assert.AreEqual(3, p2.Hand.Count, "Their hand is 2 cards smaller");
+            Assert.AreEqual((1, 5), (Player.CreaturesIn(p2.Hand), Player.SpellsIn(p2.Hand)), "Their hand is 2 cards smaller (no spell was coming: 2 creatures fewer)");
 
             // Casino: a Trend whose wheel spins the Day's weather each Dawn, the same for both sides, never twice running
             var casino = game.GiveCard(p1, game.Spell("Casino", TargetType.Player, TestCards.TrendEffect(Trend.Casino, 3)));

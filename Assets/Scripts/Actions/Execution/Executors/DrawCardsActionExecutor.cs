@@ -23,7 +23,8 @@ namespace SlayTheClone {
                 Log($"{player.Name} will draw {amount} more next Day", LogTag.Actions | LogTag.Cards);
                 return;
             }
-            cardDealingService.DrawCards(player, amount);
+            if (drawAction.DealsDay) cardDealingService.DealDay(player, amount);
+            else cardDealingService.DrawCards(player, amount);
             Log($"Executed DrawCardsAction via Executor: Drew {amount} cards for {player.Name}", LogTag.Actions | LogTag.Cards);
         }
     }

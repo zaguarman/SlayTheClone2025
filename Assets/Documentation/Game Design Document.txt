@@ -498,15 +498,25 @@ Creature Roles
 
 3.5 Cards, Hand & Deck
 
+The Hand (the user, 2026-10-16)
+    • Creatures: at Dawn the creatures left in your hand from the Day before are discarded, and you draw creatures until you
+      hold 3 (from the top of your deck, skipping its spells). You always have 3 creatures to choose from.
+    • Spells: they stay in your hand until you play them. You draw 2 more at Dawn, never past 5 in hand.
+    • The opening hand is a Day's: 3 creatures and 2 spells.
+    • Extra draws ("draw X next Day") are spells while you hold fewer than 5, creatures past that (and a creature when your
+      deck has no spell left, rather than reshuffling for one). Fewer cards ("draw X fewer next Day") cut the spells first,
+      then the creatures.
+    • Reshuffling: when the deck has none of the kind you need, the discard pile is shuffled back into it.
+
 Drawing Cards (Scheduled Draw)
-    • Regular Draw: You draw a base of 2 cards at Dawn of each Day. Besides the opening hand, this is the only time cards move from your deck to your hand.
+    • Regular Draw: see The Hand above. Besides the opening hand, this is the only time cards move from your deck to your hand.
     • Draw Amount: Base Draw (2) + all draw modifiers gained during the previous Day.
     • Minimum Draw: You always draw at least 1 card, as long as your deck (or your discard pile, through reshuffling) has one.
     • No Mid-Day Draws: No effect lets you draw from your deck in the middle of a Day.
 
 Draw Manipulation (Changing Next Day's Draw)
     • More cards: "Schedule X additional card draws for your next Day." This adds to a counter for the next Day's draw.
-    • Every "draw X" that resolves during the Day or at Dusk works this way: the hand in play is about to be discarded, so the cards come with the next Day's hand (printed "draw X next Day"). Only a Dawn draw lands in the hand right away, before planning.
+    • Every "draw X" that resolves during the Day or at Dusk works this way: the Day's creatures are about to be discarded, so the cards come with the next Day's hand (printed "draw X next Day"). Only a Dawn draw lands in the hand right away, before planning.
     • Fewer cards: "Draw X fewer cards next Day" or "Scheduled draw reduced by X." This subtracts from the counter (down to the minimum of 1).
     • All modifiers gained during a Day are added together and applied at the next Dawn.
 

@@ -79,8 +79,9 @@ namespace SlayTheClone {
                 }
                 clock.DrawsWaitForNextDay = false;
                 foreach (var player in players) {
-                    // ExtraDraws can be negative (Supply Chain Attack): a smaller hand, never less than none
-                    actionsQueue.AddAction(new DrawCardsAction(player, System.Math.Max(0, player.CardsToDraw + player.ExtraDraws + trends.ExtraDraws(player))));
+                    // The Day's hand: up to 3 creatures, 2 more spells (5 at most), and the extra draws; ExtraDraws can be
+                    // negative (Supply Chain Attack): a smaller hand, never less than none
+                    actionsQueue.AddAction(new DrawCardsAction(player, player.ExtraDraws + trends.ExtraDraws(player), dealsDay: true));
                     player.ExtraDraws = 0;
                 }
                 yield return ResolveQueuedActions();
