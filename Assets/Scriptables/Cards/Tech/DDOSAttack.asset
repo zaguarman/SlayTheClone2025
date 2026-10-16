@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
     - actionType: 0
       value: 2
@@ -90,6 +91,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: '2 damage, and Exhausted: it cancels the target''s planned actions
     (spells land before attacks), lasts the rest of the Day and all of the next,

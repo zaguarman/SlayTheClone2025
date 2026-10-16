@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: Discard 1 (a random other card from your hand, given up to play this),
     then draw 2 with the next Day's hand.

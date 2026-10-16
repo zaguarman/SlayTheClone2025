@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
     - actionType: 2
       value: 3
@@ -90,6 +91,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Future: as an additional cost, destroy any number of your Workers;
     draw 1 per Worker next Day.'

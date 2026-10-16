@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
     - actionType: 0
       value: 5
@@ -90,6 +91,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 1
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Target creature, either side (the user, 2026-10-15): it heals 2 now,
     the bounce, and takes 5 damage at the next Dawn, the crash.'

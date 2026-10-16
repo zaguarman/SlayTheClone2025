@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Kill Order 2 on target enemy creature: at the Dusk two Days later,
     it''s destroyed (Untouchable saves it). It''s secret: the other side doesn''t

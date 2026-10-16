@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Shield 3 on target creature: for 3 Days, counting this one, it takes
     no combat damage. It goes with the creature (the user, 2026-10-16: a slot can''t

@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Future: OLD MAN YELLS AT CLOUD. Hits a random creature that moved
     this Day.'

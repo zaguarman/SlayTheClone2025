@@ -121,6 +121,8 @@ namespace SlayTheClone {
 
         // A spell's part that waits: it lands at the Dawn this many Days on, on what it was aimed at (Dead Cat Bounce's crash)
         public int delayDays;
+        /// <summary>Only if the spell's target died by then (False Flag Operation's rally: no death, or the Destroy stopped, no rally).</summary>
+        public bool onlyIfTargetDies;
 
         // SummonDecoys Specific: the token it summons (value is how many). The asset is kept for the card text; the runtime
         // copy is made with the card's data (see CardDataScriptableObject), so games on other threads can create tokens

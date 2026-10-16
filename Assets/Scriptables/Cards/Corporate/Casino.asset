@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'A Trend for 3 Days: each Dawn the house''s wheel spins the Day''s
     weather for both sides (Heatwave, Rain, Hail, Tailwind, Rush Hour, Windfall),

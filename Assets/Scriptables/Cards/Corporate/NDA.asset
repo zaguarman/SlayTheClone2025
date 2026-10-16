@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Non-Disclosure Agreement. Discard 1 (Corporate pays with capital),
     then Blackout for 2 Days on target enemy creature: its ability and its effects

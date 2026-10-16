@@ -79,6 +79,19 @@ namespace SlayTheClone {
             return movement.HasFlag(MovementKeyword.Leapfrog) ? MoveKind.Leapfrog : MoveKind.Walk;
         }
 
+        /// <summary>
+        /// As above, given the side's planned moves (the user): a slot whose creature is planned to leave it (for anywhere
+        /// but this creature's own slot) will be empty, so it's walked into, not swapped: both go where they were sent.
+        /// </summary>
+        public static MoveKind KindOf(ICreature creature, BoardSlot to, IActionsQueue queue) {
+            var kind = KindOf(creature, to);
+            if (kind != MoveKind.Swap || queue == null || to?.Owner == null) return kind;
+            var occupant = to.OccupyingCreature;
+            var leaving = PlannedMovesOf(to.Owner, queue).Where(m => m.Creature == occupant).Select(m => (PlannedMove?)m).FirstOrDefault();
+            if (leaving == null || leaving.Value.To == creature.Slot || leaving.Value.To == to) return kind;
+            return (creature.Movement & MovementKeyword.Leapfrog) != 0 ? MoveKind.Leapfrog : MoveKind.Walk;
+        }
+
         // The Swap keyword: it swaps at any distance; without it, only with the creature one step away
         private static bool SwapsAnywhere(ICreature creature) => (creature?.Movement ?? MovementKeyword.None).HasFlag(MovementKeyword.Swap);
 
@@ -224,7 +237,7 @@ namespace SlayTheClone {
         /// move, and whether it's blocked (GDD 2.4 Impossible Plans) with a hint at what would make it work.
         /// </summary>
         public static (MoveKind kind, bool blocked, string hint) Evaluate(ICreature creature, BoardSlot to, IActionsQueue queue) {
-            var kind = KindOf(creature, to);
+            var kind = KindOf(creature, to, queue);
             var moves = PlannedMovesOf(creature.Slot.Owner, queue).Where(m => m.Creature != creature).ToList();
             moves.Add(new PlannedMove(creature, to, kind)); // A new plan replaces the creature's old one, and is planned last
             bool blocked = Preview(creature.Slot.Owner.Battlefield, moves).Blocked.Contains(creature);

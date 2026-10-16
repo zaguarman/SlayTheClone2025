@@ -535,6 +535,7 @@ namespace SlayTheClone {
             }
             if (activeCard == null || preview == null) return;
             if (CardController.Dragged != null) { HideTooltip(); return; }
+            if (GameInput.RightClickedThisFrame && TakeBackShown(GameInput.PointerPosition)) return;
             // A hand card back down in the fan takes its explanations with it: none are left floating over the hand
             if (previewIsCard && !InWindow(activeCard) && !StillRaised(activeCard)) { HideShown(); return; }
             Vector2 pointer = GameInput.PointerPosition;
@@ -897,6 +898,22 @@ namespace SlayTheClone {
         }
 
         // Overlay canvas: world space is screen pixels
+        // Right-click on the roulette (the user): the card it shows, if it's a queued play of yours (a spell on the creature, or
+        // the creature itself on its way), is taken back to the hand, as a right-click on its ghost does
+        private bool TakeBackShown(Vector2 pointer) {
+            if (previewIsCard || !PointerOnTooltip(pointer, includeCard: true)) return false;
+            var shownCard = browsed > 0 && browsed <= activeCard.AttachedCards.Count ? activeCard.AttachedCards[browsed - 1] : activeCard.GetLinkedCardInstance();
+            var manager = FindFirstObjectByType<GameManager>();
+            var queue = manager?.ActionsQueue;
+            if (queue == null || shownCard == null || (manager.TurnManager?.IsResolving ?? true)) return false;
+            var play = queue.GetPendingActions().OfType<PlayCardAction>().FirstOrDefault(p => p.GetCard() == shownCard);
+            if (play == null || !FogOfWar.CanControl(play.GetOwner()) || !queue.CancelPlay(shownCard)) return false;
+            if (browsed > 0) browsed--; // The one before it shows once the stack is drawn again
+            stackStale = true;
+            if (browsed == 0 && shownCard == activeCard.GetLinkedCardInstance()) HideTooltip(); // The creature itself went back
+            return true;
+        }
+
         // The enlarged card only shows: the pointer goes through it to the card it covers (the user: the other side's middle
         // slot, under a middle card's preview, took nothing while it showed)
         private static void PassThrough(CardController shown) {

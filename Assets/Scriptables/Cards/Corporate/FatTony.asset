@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Future: An Offer You Can''t Refuse. Recruits a damaged enemy creature
     instead of hurting it.'

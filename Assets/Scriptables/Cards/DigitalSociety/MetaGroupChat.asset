@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
     - actionType: 7
       value: 0
@@ -90,6 +91,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Each Dawn the in-group gets louder (+1 Attack on a random friendly
     creature) and someone outside it gets a target on their back (Heat Signature

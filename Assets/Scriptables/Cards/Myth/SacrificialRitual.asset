@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Sacrifice 1: draw 3. The weakest goes, so a Cultist pays for it and
     leaves its blessing behind.'

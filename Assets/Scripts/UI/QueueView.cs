@@ -308,6 +308,8 @@ namespace SlayTheClone {
                     return null; // Bookkeeping: whether a creature that reached 0 Health dies
                 case SwapStatsAction swapStats:
                     return $"{Who(swapStats.Creature, viewer)}'s Attack and Health trade places";
+                case BorrowedTimeEndsAction:
+                    return null; // Bookkeeping: the Dusk it ends at
                 case TrapSprungAction:
                     return null; // Only the screen's: the trap's card shown while its damage lands
                 case DrawCardsAction draw:

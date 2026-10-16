@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Licensed: target friendly creature''s next attack on a creature destroys
     it, whatever its Health or Armor (Untouchable or a Shield stops the hit, and

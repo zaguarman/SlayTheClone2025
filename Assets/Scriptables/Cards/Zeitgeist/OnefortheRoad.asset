@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: an ability as a spell. Target creature gains Double
     Tap (it attacks twice), replacing its own until its card is reshuffled.'

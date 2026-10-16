@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Arrival: Heat Signature 3 on itself. It draws every random effect
     and redirected attack: a decoy too attractive to ignore.'

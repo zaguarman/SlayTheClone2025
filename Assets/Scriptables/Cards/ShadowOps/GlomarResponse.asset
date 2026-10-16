@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'A Watchdog: the next 2 enemy reveals (a Reveal, Revealed, or a spell
     that does either, even an instant one) are nullified, and they learn nothing.

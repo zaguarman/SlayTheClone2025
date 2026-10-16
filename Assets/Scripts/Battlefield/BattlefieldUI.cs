@@ -452,9 +452,18 @@ namespace SlayTheClone {
             // A creature dropped on one queued here replaces it (the user): that one goes back to the hand. One summoned by an
             // effect, not played, can't be taken back: the drop is ignored
             if (cardToPlay is ICreature && queuedGhosts.TryGetValue(targetSlot, out var ghost) && ghost.GetLinkedCardInstance() is ICard queuedThere
-                && queuedThere != cardToPlay && !GameManager.ActionsQueue.CancelPlay(queuedThere)) {
-                Log($"Slot already has a creature on its way that can't be taken back; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
-                return;
+                && queuedThere != cardToPlay) {
+                // A queued creature dragged onto another queued one: they trade slots (the user), nobody goes back to the hand
+                var mine = QueuedPlayOf(cardToPlay);
+                var theirs = QueuedPlayOf(queuedThere);
+                if (card.IsQueued && mine?.GetTarget() is BoardSlot from && from != targetSlot.Model && theirs != null && from.Owner == targetSlot.Model.Owner) {
+                    GameManager.ActionsQueue.CancelPlay(queuedThere);
+                    GameManager.ActionsQueue.AddAction(new PlayCardAction(queuedThere, theirs.GetOwner(), from));
+                }
+                else if (!GameManager.ActionsQueue.CancelPlay(queuedThere)) {
+                    Log($"Slot already has a creature on its way that can't be taken back; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
+                    return;
+                }
             }
             if (cardToPlay is ICreature { IsGift: true } && targetSlot.Model.IsOccupied()) {
                 Log($"A Gift needs an empty slot; ignoring drop of {cardToPlay.Name}", LogTag.Actions | LogTag.Cards);
@@ -526,7 +535,8 @@ namespace SlayTheClone {
                 Log($"{creature.Name} can't move to {targetSlot}: {hint}", LogTag.UI | LogTag.Creatures);
                 return;
             }
-            GameManager.ActionsQueue.AddAction(new MoveCreatureAction(creature, sourceSlot, targetSlot, Player));
+            GameManager.ActionsQueue.AddAction(new MoveCreatureAction(creature, sourceSlot, targetSlot, Player,
+                MovementRules.KindOf(creature, targetSlot, GameManager.ActionsQueue)));
         }
 
         private BattlefieldSlot GetTargetSlot() {
@@ -915,6 +925,7 @@ namespace SlayTheClone {
                     incoming.AttachedCards = onIt.Select(q => q.Key).ToList();
                     incoming.AttachedOwners = onIt.Select(q => q.Value.caster).ToList();
                     incoming.AttachedHidden = onIt.Select(q => spellGhosts[q.Key] != null && spellGhosts[q.Key].IsFaceDown).ToList();
+                    incoming.AttachedQueued = onIt.Select(_ => true).ToList();
                     var ghostViews = new List<CardController>();
                     foreach (var spell in onIt.Select(q => q.Key)) {
                         if (ghostViews.Count >= MaxStrips + 2) break;
@@ -936,6 +947,7 @@ namespace SlayTheClone {
                 front.AttachedOwners = attached.Select(a => a.Owner).Concat(queued.Select(q => q.Value.caster)).ToList();
                 // An enemy spell on its way shows its back here too: scrolling the stack mustn't show what it is
                 front.AttachedHidden = attached.Select(_ => false).Concat(queued.Select(q => spellGhosts[q.Key] != null && spellGhosts[q.Key].IsFaceDown)).ToList();
+                front.AttachedQueued = attached.Select(_ => false).Concat(queued.Select(_ => true)).ToList();
 
                 var views = new List<CardController>();
                 foreach (var attachment in attached.Take(MaxStrips)) {

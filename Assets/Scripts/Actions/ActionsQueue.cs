@@ -416,6 +416,16 @@ namespace SlayTheClone {
             return true;
         }
 
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<IGameAction, Func<bool>> gates =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<IGameAction, Func<bool>>();
+
+        /// <summary>The action happens only if this still holds when its turn comes (checked just before it runs).</summary>
+        public static void OnlyIf(IGameAction action, Func<bool> condition) {
+            if (action == null || condition == null) return;
+            gates.Remove(action);
+            gates.Add(action, condition);
+        }
+
         private void Run(Entry entry) {
             var action = entry.Action;
 
@@ -429,6 +439,12 @@ namespace SlayTheClone {
                 return;
             }
 
+            // A part that depends on another (False Flag Operation's rally on the death): it doesn't happen if that didn't
+            if (gates.TryGetValue(action, out var holds) && !holds()) {
+                gates.Remove(action);
+                Log($"Skipped {action.GetType().Name}: what it depended on didn't happen (Queue ID: {QueueId})", LogTag.Actions);
+                return;
+            }
             Log($"Processing action: {action.GetType().Name} via {executor.GetType().Name} in the {entry.Layer} layer (Queue ID: {QueueId})", LogTag.Actions);
             OnActionExecuting.Invoke(action);
             executing = entry;

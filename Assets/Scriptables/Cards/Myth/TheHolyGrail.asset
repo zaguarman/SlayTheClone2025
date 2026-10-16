@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Blessed 2. Each stack negates the next status that
     would land, friendly or not, Doomed included. Persistent, up to 3 stacks.'

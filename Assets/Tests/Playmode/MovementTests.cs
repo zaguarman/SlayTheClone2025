@@ -129,6 +129,17 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(MoveKind.Walk, kind);
             Assert.IsTrue(blocked, "Both Flanks taken: the Vanguard can't walk back to Headquarters");
             Assert.AreEqual("needs Leapfrog", hint);
+
+            // A slot its creature is leaving is walked into, not swapped (the user): both end where they were sent
+            Fresh();
+            var leaver = Place("Leaver", 0);
+            var follower = Place("Follower", 1);
+            Plan(leaver, 2);
+            Assert.AreEqual(MoveKind.Walk, MovementRules.Evaluate(follower, p1.Battlefield[0], game.ActionsQueue).kind, "Its creature is leaving: a walk, not a swap");
+            game.ActionsQueue.AddAction(new MoveCreatureAction(follower, p1.Battlefield[1], p1.Battlefield[0], p1, MovementRules.KindOf(follower, p1.Battlefield[0], game.ActionsQueue)));
+            game.Resolve();
+            AssertAt(leaver, 2);
+            AssertAt(follower, 0, "...each where it was sent");
         }
     }
 }

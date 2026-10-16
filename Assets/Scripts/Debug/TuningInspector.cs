@@ -11,9 +11,16 @@ namespace SlayTheClone {
     public static class TuningInspector {
         private const float ButtonWidth = 24f;
 
+        private const string HintsKey = "SlayTheClone.TuningInspector.Hints";
+
         public static void DrawWithResets(SerializedObject tuning, Object originals) {
             var shipped = new SerializedObject(originals);
             tuning.Update();
+            // What each one does, written under it (the user): Unity's own tooltips only show over a focused window
+            bool hints = EditorPrefs.GetBool(HintsKey, true);
+            bool wanted = EditorGUILayout.ToggleLeft("Show what each one does", hints);
+            if (wanted != hints) EditorPrefs.SetBool(HintsKey, wanted);
+            var hintStyle = new GUIStyle(EditorStyles.wordWrappedMiniLabel) { normal = { textColor = new Color(0.62f, 0.62f, 0.62f) } };
             var property = tuning.GetIterator();
             for (bool enter = true; property.NextVisible(enter); enter = false) {
                 if (property.propertyPath == "m_Script") continue;
@@ -27,6 +34,11 @@ namespace SlayTheClone {
                     if (GUI.Button(button, new GUIContent("↺", $"Back to {Describe(original)}, the value it shipped with"), EditorStyles.miniButton)) {
                         tuning.CopyFromSerializedProperty(original);
                     }
+                }
+                if (wanted && !string.IsNullOrEmpty(property.tooltip)) {
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.LabelField(property.tooltip, hintStyle);
+                    EditorGUI.indentLevel--;
                 }
             }
             tuning.ApplyModifiedProperties();

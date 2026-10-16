@@ -864,8 +864,8 @@ namespace SlayTheClone {
                 .Picture("A giant paperclip hooking a bespectacled scientist in a lab coat by the collar and lifting him from one flag onto another, rocket blueprints fluttering out of his pockets."),
             Spell("False Flag Operation", TargetType.AllCreatures,
                 "They attacked us. Well, someone did. Same thing.",
-                "Destroy target creature (its Last Will happens); the other creatures on its side get +2 Attack while they stay in play, rallied by the outrage (the user, 2026-10-15: only the side where it was destroyed). Your own, to rally your side; theirs, to remove a threat at a price.",
-                Destroy(TargetType.AllCreatures), Buff(2, TargetType.AllCreatures, attack: true, health: false, TargetModifier.AlliesOfTarget))
+                "Destroy target creature (its Last Will happens); the other creatures on its side get +2 Attack while they stay in play, rallied by the outrage (the user, 2026-10-15: only the side where it was destroyed). Your own, to rally your side; theirs, to remove a threat at a price. If it doesn't die (the Destroy stopped or denied), no rally either (the user, 2026-10-16).",
+                Destroy(TargetType.AllCreatures), OnlyIfItDies(Buff(2, TargetType.AllCreatures, attack: true, health: false, TargetModifier.AlliesOfTarget)))
                 .NotInStarterDeck()
                 .Picture("A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost while a film crew records it and a general reads an outrage speech from a card."),
             Spell("Never Let Them Know Your Next Move", TargetType.FriendlyCreatures,
@@ -998,7 +998,7 @@ namespace SlayTheClone {
                 .Picture("A gold pistol pieced together from a cigarette case, a lighter, a cufflink and a fountain pen, lying on black velvet beside a single golden bullet engraved with a name."),
             Spell("Die Another Day", TargetType.FriendlyCreatures,
                 "Not today. Probably not tomorrow. Ask again on Thursday.",
-                "Borrowed Time on target friendly creature: it can't die (damage leaves it at 0 Health, a Destroy fails) until the Dusk of the next Day; then, if it's at 0 Health, it dies. Heal it in time and it lives.",
+                "Borrowed Time on target friendly creature (the user, 2026-10-16): this Day it can't die (damage leaves it at 0 Health, a Destroy fails); at this Day's Dusk, at 0 Health, it's brought back to 1 and Borrowed Time ends. Not two Days of attacks.",
                 Status(StatusEffectType.BorrowedTime, 1, TargetType.FriendlyCreatures))
                 .NotInStarterDeck()
                 .Picture("A spy in a torn tuxedo surfing a towering wave on a car door past a collapsing ice palace, checking his wristwatch."),
@@ -1603,7 +1603,7 @@ namespace SlayTheClone {
                 .Picture("A pair of scissors cutting a DNA double helix, a strip of tape sticking a unicorn horn onto it."),
             GambleSpell("Accelerationism", TargetType.Player,
                 "Whatever the problem, more technology. Whatever the cost, faster.",
-                "Gamble, accelerationism's way: every outcome pays and every one costs (the user: drawbacks, 2026-10-16). Your creatures take 2 and get +3 Attack for good (on the brink, then boom); or progress for everyone, +2/+2 for good to every creature, the enemy's too; or Borrowed Time until the next Dusk, then 3 damage to each: on the brink they deal double, and any left at 0 die at Dusk.",
+                "Gamble, accelerationism's way: every outcome pays and every one costs (the user: drawbacks, 2026-10-16). Your creatures take 2 and get +3 Attack for good (on the brink, then boom); or progress for everyone, +2/+2 for good to every creature, the enemy's too; or Borrowed Time this Day, then 3 damage to each: on the brink they deal double, and any left at 0 are back to 1 at Dusk (the user's Borrowed Time, 2026-10-16).",
                 new[] { Damage(2, TargetType.FriendlyCreatures, Each), Buff(3, TargetType.FriendlyCreatures, attack: true, health: false, Each) },
                 new[] { Buff(2, TargetType.AllCreatures, attack: true, health: true, Each) },
                 new[] { Status(StatusEffectType.BorrowedTime, 1, TargetType.FriendlyCreatures, modifier: Each), Damage(3, TargetType.FriendlyCreatures, Each) })
@@ -1815,6 +1815,12 @@ namespace SlayTheClone {
             new EffectAction { actionType = type, value = value, targetType = target, targetModifier = modifier };
 
         private static EffectAction Damage(int value, TargetType target, TargetModifier modifier = TargetModifier.None) => Act(ActionType.Damage, value, target, modifier);
+        // A part that happens only if the spell's target died (False Flag Operation's rally)
+        private static EffectAction OnlyIfItDies(EffectAction action) {
+            action.onlyIfTargetDies = true;
+            return action;
+        }
+
         // A part of a spell that waits: it lands at the Dawn this many Days on, on what the spell was aimed at
         private static EffectAction Later(EffectAction action, int days) {
             action.delayDays = days;

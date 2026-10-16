@@ -61,6 +61,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
     - actionType: 7
       value: 0
@@ -91,6 +92,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Target friendly creature gets +2 Attack this Day, and it''s Composed
     this Day: stuns (Exhausted) don''t land on it, and it shakes off one it has.'

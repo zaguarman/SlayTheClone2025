@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 5
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'The user, 2026-10-16: a creature still deploying of yours comes in
     up to 2 Days sooner, and pays for it with Burnout: it''s destroyed at the end

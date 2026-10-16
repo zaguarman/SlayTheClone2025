@@ -125,7 +125,7 @@ namespace SlayTheClone {
                 StatusEffectType.Rooted => $"Rooted ({days}): it can't move, and nothing can move it",
                 StatusEffectType.Burnout => $"Burnout ({days}): then it's destroyed",
                 StatusEffectType.Shielded => $"Shield ({days}): takes no combat damage",
-                StatusEffectType.BorrowedTime => $"Borrowed Time ({days}): survives lethal damage",
+                StatusEffectType.BorrowedTime => "Borrowed Time: it can't die this Day; at Dusk, at 0 Health, back to 1",
                 StatusEffectType.Composed => $"Composed ({days}): it can't be Exhausted",
                 StatusEffectType.Blackout => $"Blackout ({days}): its ability and effects are off",
                 StatusEffectType.Licensed => "Licensed: its next attack on a creature destroys it",

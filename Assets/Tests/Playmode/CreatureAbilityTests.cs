@@ -133,12 +133,19 @@ namespace SlayTheClone.Tests {
                 var rally = TestCards.Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.AllCreatures, TargetModifier.AlliesOfTarget);
                 rally.actions[0].modifyAttack = true;
                 rally.actions[0].modifyHealth = false;
+                rally.actions[0].onlyIfTargetDies = true;
                 var flagData = g.Spell("False Flag", TargetType.AllCreatures, destroy, rally);
-                StringAssert.Contains("The other creatures on its side +2 Attack", Keywords.Plain(CardTextFormatter.GetRulesText(flagData)));
+                StringAssert.Contains("if it dies, the other creatures on its side +2 attack", Keywords.Plain(CardTextFormatter.GetRulesText(flagData)).ToLowerInvariant());
                 g.Run(new PlayCardAction(g.GiveCard(g.Player1, flagData), g.Player1, g.Player2.Battlefield[0]));
                 Assert.IsTrue(victim.IsDead, "Destroyed...");
                 Assert.AreEqual(3, ally.Attack, "...and the others on its side rally...");
                 Assert.AreEqual(1, mine.Attack, "...not the other side");
+                // ...but only if it dies (the user): a Destroy that fails rallies nobody
+                var survivor = g.Summon(g.Player2, g.Creature("Survivor", 1, 3), 1);
+                g.Run(new ApplyStatusEffectAction(survivor, StatusEffectType.BorrowedTime, 1, 0));
+                g.Run(new PlayCardAction(g.GiveCard(g.Player1, flagData), g.Player1, g.Player2.Battlefield[1]));
+                Assert.IsFalse(survivor.IsDead, "On Borrowed Time it isn't destroyed...");
+                Assert.AreEqual(3, ally.Attack, "...so no rally");
             }
 
             var mole = With(CreatureAbility.Underground, p1, 0, attack: 0);

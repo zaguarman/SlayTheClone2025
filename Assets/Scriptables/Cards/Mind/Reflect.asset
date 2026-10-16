@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: Target creature copies every status of the creature facing it, good
     and harmful, with the Days they have left; that one keeps its own. Like Mimetic

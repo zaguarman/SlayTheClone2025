@@ -289,6 +289,12 @@ namespace SlayTheClone {
                     .Where(m => m is ITimedModifier timedMod && timedMod.HasExpired(nextTurnNumber)) // Check against the upcoming turn
                     .ToList();
                 foreach (var expiredMod in expiredModifiers) {
+                    // Borrowed Time ends once the Dusk's other actions are done (a Doomed sentence carried out meanwhile still
+                    // finds it), bringing its creature back to 1 Health if it's at 0 (the user)
+                    if (expiredMod is StatusEffectModifier { EffectType: StatusEffectType.BorrowedTime }) {
+                        actionsQueue.AddAction(new BorrowedTimeEndsAction(creature, expiredMod));
+                        continue;
+                    }
                     RemoveModifier(creature, expiredMod);
                     // Doomed's last stack is gone: the sentence is carried out
                     if (expiredMod is StatusEffectModifier { EffectType: StatusEffectType.Doomed }) {

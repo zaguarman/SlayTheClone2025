@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Too Mainstream: immune to effects that affect more than one creature.
     Future: Hipster status. Hurts only creatures that share a name with another creature.'

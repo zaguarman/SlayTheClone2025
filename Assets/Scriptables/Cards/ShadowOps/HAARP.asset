@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Earthquake: from a random slot, a zigzag across the whole board,
     crossing sides at each column, 1 damage each hit. Every column is hit once, on

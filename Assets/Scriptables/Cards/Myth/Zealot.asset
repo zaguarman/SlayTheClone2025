@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'When ready: Doomed 3 on itself. It grows +1 Attack each Dawn, then
     its Last Rites strike and it dies for the cause.'

@@ -177,6 +177,7 @@ namespace SlayTheClone {
                 else done.Add(action);
                 // A part that waits says when: "at the next Dawn, 5 damage to it"
                 if (action.delayDays > 0) what = (action.delayDays == 1 ? $"at the next {Keywords.Link("Dawn")}, " : $"{action.delayDays} {Keywords.Link("Dawn")}s on, ") + what;
+                if (action.onlyIfTargetDies) what = "if it dies, " + what;
                 parts.Add((what, group ?? DescribeTarget(action, isSpell)));
             }
 

@@ -61,6 +61,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 11400000, guid: 4c2a53f4b7b07bd45938d418a612c6d8, type: 2}
   designNotes: 'Put 2 Inflatable Tanks (0/1 decoys) in your empty slots: until a
     Reveal or Revealed shows them, the enemy sees each as a Sherman Tank, 6/6. Big

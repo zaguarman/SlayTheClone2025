@@ -53,7 +53,7 @@ namespace SlayTheClone {
                 var targets = SelectTargets(spell, caster, action, chosenTarget, queue);
                 // A part that waits (Dead Cat Bounce's crash): aimed now, it lands at a later Dawn, listed with the foretold
                 if (action.delayDays > 0) caster.Prophecies.Add(new Prophecy(spell, caster, chosenTarget, queue.Today + action.delayDays, action, targets));
-                else QueueAction(spell, caster, action, targets, queue);
+                else QueueAction(spell, caster, action, targets, queue, action.onlyIfTargetDies ? DiesOf(chosenTarget) : null);
             }
         }
 
@@ -407,7 +407,13 @@ namespace SlayTheClone {
         #endregion
 
         #region Actions
-        private static void QueueAction(ICard source, IPlayer controller, EffectAction action, List<ITarget> targets, IActionsQueue queue) {
+        // Whether the creature the spell is aimed at has died (or left play) by the time it's asked
+        private static System.Func<bool> DiesOf(ITarget chosenTarget) {
+            var victim = ResolveChosenTarget(chosenTarget, ActionType.Destroy) as ICreature;
+            return () => victim != null && (victim.IsDead || victim.Slot == null);
+        }
+
+        private static void QueueAction(ICard source, IPlayer controller, EffectAction action, List<ITarget> targets, IActionsQueue queue, System.Func<bool> onlyIf = null) {
             // Chain damage only exists as part of an attack (see QueueAttackEffects)
             if (action.actionType == ActionType.Damage && action.targetModifier.HasFlag(TargetModifier.Chained)) return;
 
@@ -423,6 +429,7 @@ namespace SlayTheClone {
                 if (gameAction is ISourcedAction sourced) sourced.Source = source;
 
                 Log($"{source.Name}: queueing {gameAction}", LogTag.Effects | LogTag.Actions);
+                if (onlyIf != null) ActionsQueue.OnlyIf(gameAction, onlyIf);
                 queue.AddAction(gameAction);
             }
         }

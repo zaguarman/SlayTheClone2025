@@ -141,8 +141,8 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(turncoat, p1.Battlefield[3].OccupyingCreature, "...then at the Dusk two Days later it comes over, to the slot facing it");
             Assert.AreEqual(CreatureAbility.None, turncoat.Ability, "Its ability is lost");
 
-            // Borrowed Time (Die Another Day): it can't die, not even destroyed, until the Dusk of the next Day; then it dies
-            // if it's at 0 Health
+            // Borrowed Time (Die Another Day, the user): this Day it can't die, not even destroyed; at its Dusk, at 0 Health,
+            // it's back to 1 and Borrowed Time ends: not two Days of attacks
             Fresh();
             var spy = game.Summon(p1, game.Creature("Spy", 2, 3), 0);
             var lucky = game.Summon(p1, game.Creature("Lucky", 2, 3), 1);
@@ -152,9 +152,10 @@ namespace SlayTheClone.Tests {
             game.Run(new DestroyCreatureAction(lucky, unconditional: true));
             Assert.IsFalse(spy.IsDead || lucky.IsDead, "At 0 Health, or destroyed: not today");
             game.StartTurn();
-            Assert.IsFalse(spy.IsDead, "Nor the next Day, until its Dusk");
-            game.StartTurn();
-            Assert.IsTrue(spy.IsDead, "At the next Day's Dusk, still at 0 Health: it dies");
+            Assert.IsTrue(!spy.IsDead && spy.Health == 1, "At its Dusk, at 0 Health: back to 1");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(spy, StatusEffectType.BorrowedTime), "...and Borrowed Time is over");
+            game.Run(TargetedActions.Damage(spy, 5));
+            Assert.IsTrue(spy.IsDead, "The next Day it's mortal again");
             Assert.IsFalse(lucky.IsDead, "With Health left, it lives on");
 
             // ...and it's the one status a Doomed creature takes: timed for the Day of its sentence, it survives it

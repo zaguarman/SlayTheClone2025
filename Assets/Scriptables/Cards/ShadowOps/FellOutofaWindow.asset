@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 2
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Destroy the strongest enemy creature if a slot beside it is empty:
     it has a window. Make room first.'

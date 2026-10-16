@@ -506,7 +506,7 @@ namespace SlayTheClone {
                 .OrderByDescending(ValueOfEntering).FirstOrDefault(s => !MovementRules.Evaluate(creature.Creature, s.Slot, queue).blocked);
             if (to == null) return;
             Log($"AI: {creature} moves to {to}", LogTag.Turns);
-            queue.AddAction(new MoveCreatureAction(creature.Creature, creature.Slot.Slot, to.Slot, view.Me));
+            queue.AddAction(new MoveCreatureAction(creature.Creature, creature.Slot.Slot, to.Slot, view.Me, MovementRules.KindOf(creature.Creature, to.Slot, queue)));
             to.Incoming = creature.Creature; // Taken
         }
         #endregion

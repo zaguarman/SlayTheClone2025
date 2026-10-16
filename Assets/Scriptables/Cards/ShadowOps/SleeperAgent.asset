@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Gift, a poisoned one: you plant it in an empty enemy slot and it
     joins their side. Each Dusk it sabotages: 1 damage to every creature on its side,

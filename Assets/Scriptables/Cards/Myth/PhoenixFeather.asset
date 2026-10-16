@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Target friendly creature is sacrificed (its Last Will happens; a
     Blessing can''t stop it) and rises again at the Dawn 3 Days later, ready, full

@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 3
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: Take control of the strongest enemy creature if you have more creatures
     than they do. It changes sides for good, to the slot facing it.

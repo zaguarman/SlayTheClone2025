@@ -23,6 +23,9 @@ namespace SlayTheClone {
         public static bool ClickedThisFrame => Mouse.current != null
             && (Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame);
 
+        /// <summary>The right mouse button went down this frame.</summary>
+        public static bool RightClickedThisFrame => Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame;
+
         public static bool KeyPressed(Key key) => Keyboard.current != null && Keyboard.current[key].wasPressedThisFrame;
 
         /// <summary>A mouse button held down (a drag going on).</summary>

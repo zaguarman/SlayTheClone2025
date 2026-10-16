@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Status Timing. Burn does nothing at the Dusk of the
     Day it''s applied, then ticks for 2 Days.'

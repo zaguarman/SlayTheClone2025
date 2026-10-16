@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'When ready: Doomed 2 on the strongest enemy creature.'
   artDescription: A small boy in a neat suit on a tricycle in a long mansion hallway,

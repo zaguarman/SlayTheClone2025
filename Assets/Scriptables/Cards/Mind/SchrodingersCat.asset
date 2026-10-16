@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: Once per combat, when it would die, it heals 1 and survives.
   artDescription: A cat sitting in an open cardboard box, its left half fluffy and

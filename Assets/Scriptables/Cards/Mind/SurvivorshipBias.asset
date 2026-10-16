@@ -61,6 +61,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Focus Sash (the user, 2026-10-15: cards like Pokemon''s Focus Sash):
     Survivor on target friendly creature: from full Health, a hit that would kill

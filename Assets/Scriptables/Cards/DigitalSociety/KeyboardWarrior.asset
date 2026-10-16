@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Counterattack answers every attack that lands, even
     one Armor absorbs or a killing blow, for its Attack, and still lands when it

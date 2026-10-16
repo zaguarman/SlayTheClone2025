@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
     - actionType: 6
       value: 3
@@ -90,6 +91,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   - effectType: 1
     trigger: 0
@@ -124,6 +126,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   - effectType: 1
     trigger: 0
@@ -158,6 +161,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
     - actionType: 0
       value: 3
@@ -188,12 +192,14 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Gamble, accelerationism''s way: every outcome pays and every one
     costs (the user: drawbacks, 2026-10-16). Your creatures take 2 and get +3 Attack
     for good (on the brink, then boom); or progress for everyone, +2/+2 for good
-    to every creature, the enemy''s too; or Borrowed Time until the next Dusk, then
-    3 damage to each: on the brink they deal double, and any left at 0 die at Dusk.'
+    to every creature, the enemy''s too; or Borrowed Time this Day, then 3 damage
+    to each: on the brink they deal double, and any left at 0 are back to 1 at Dusk
+    (the user''s Borrowed Time, 2026-10-16).'
   artDescription: A tech founder in a hoodie flooring the accelerator of a rocket-powered
     car toward a cliff edge, the road on fire behind him, a bridge of glowing circuit
     boards assembling itself in mid-air just ahead of the wheels.

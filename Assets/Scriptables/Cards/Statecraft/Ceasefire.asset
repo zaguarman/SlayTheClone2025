@@ -61,6 +61,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Shield 2 on target creature (was a slot''s, as Temporal
     Shield; the user, 2026-10-16: a slot can''t have a shield, only a creature):

@@ -103,7 +103,7 @@ namespace SlayTheClone {
             Add("Cooldown", "Cooldown X (no number: 1): its Active ability rests and can't be used for the next X [Days].");
             Add("Brainwashed", "Brainwashed X (no number: 1): when its X [Days] run out, at [Dusk], it changes sides for good ([Take Control|taken] by the other side) and loses its ability until its card is reshuffled. A [Cleanse] can't remove it: only taking it off the board in time (back to a hand, or [Gone Dark|gone dark]) saves it.");
             Add("Kill Order", "Kill Order X (no number: 1): secret, only the side that gave it can see it, and the spell that gives it is played unseen. When its X [Days] run out, at [Dusk], the creature is [Destroy|destroyed]; [Untouchable] still saves it. A [Cleanse] removes it, knowingly or not.");
-            Add("Borrowed Time", "Borrowed Time X (no number: 1): it survives [Lethal] damage for X [Days]. Still at 0 Health when they run out, it dies.");
+            Add("Borrowed Time", "Borrowed Time: this Day it can't die, [Lethal] damage or a [Destroy|Destroy]; at its [Dusk], at 0 Health, it's brought back to 1, and Borrowed Time ends.");
             Add("Lethal", "What would kill a creature: damage that takes it to 0 Health, or a [Destroy].");
             Add("Licensed", "Its next attack on a creature [Destroy|destroys] it, whatever its Health or [Armor], and the licence is spent ([Untouchable] or a [Shield] stops the hit, and spends it all the same). It lasts until used. With [Double Tap] both hits carry it: two [Blessed] stacks, or one and the creature.");
             Add("Survivor", "From full Health, a hit that would kill it leaves it at 1 Health instead, and the status is spent. It lasts until used: hurt first, and it doesn't help.");

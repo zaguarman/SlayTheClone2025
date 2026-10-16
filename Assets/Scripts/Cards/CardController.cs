@@ -71,6 +71,8 @@ namespace SlayTheClone {
         public IReadOnlyList<IPlayer> AttachedOwners { get; set; } = new List<IPlayer>();
         /// <summary>Which tucked cards the screen can't see (an enemy spell on its way): they show their back.</summary>
         public IReadOnlyList<bool> AttachedHidden { get; set; } = new List<bool>();
+        /// <summary>For each tucked card, whether it's only queued (a spell on its way): its preview says so.</summary>
+        public IReadOnlyList<bool> AttachedQueued { get; set; } = new List<bool>();
 
         public bool IsAttachedHidden(int index) => index >= 0 && index < AttachedHidden.Count && AttachedHidden[index];
 
@@ -950,7 +952,16 @@ namespace SlayTheClone {
             if (index < 0 || index >= AttachedCards.Count) return null;
             var preview = CreatePreviewOf(AttachedCards[index], index < AttachedOwners.Count ? AttachedOwners[index] : null, parent);
             if (preview != null && IsAttachedHidden(index)) preview.SetFaceDown(true);
+            // Still on its way (the user): its preview in the roulette says Queued too, solid all the same
+            if (preview != null && index < AttachedQueued.Count && AttachedQueued[index]) preview.ShowQueuedBadge();
             return preview;
+        }
+
+        /// <summary>The Queued band alone, without the fading: on a preview of a card still on its way.</summary>
+        public void ShowQueuedBadge(string badge = "Queued") {
+            if (queuedBadge == null) queuedBadge = CreateBadge("QueuedBadge", badge, UITheme.Gold, 0.4f, 0.6f);
+            queuedBadge.GetComponentInChildren<TextMeshProUGUI>().text = badge;
+            queuedBadge.SetActive(true);
         }
 
         /// <summary>

@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Zeitgeist''s logistics, a film everyone quotes: send for any card
     from your deck; it joins your next hand. Was Multi Passport, the Shadow Ops.

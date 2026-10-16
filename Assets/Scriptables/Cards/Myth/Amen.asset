@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Amen (the user, 2026-10-16): it ends the Day when it resolves, with
     the spells: every other action still in the queue, both sides'', is discarded

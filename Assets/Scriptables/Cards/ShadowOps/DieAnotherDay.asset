@@ -60,10 +60,12 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Borrowed Time on target friendly creature: it can''t die (damage
-    leaves it at 0 Health, a Destroy fails) until the Dusk of the next Day; then,
-    if it''s at 0 Health, it dies. Heal it in time and it lives.'
+  designNotes: 'Borrowed Time on target friendly creature (the user, 2026-10-16):
+    this Day it can''t die (damage leaves it at 0 Health, a Destroy fails); at this
+    Day''s Dusk, at 0 Health, it''s brought back to 1 and Borrowed Time ends. Not
+    two Days of attacks.'
   artDescription: A spy in a torn tuxedo surfing a towering wave on a car door past
     a collapsing ice palace, checking his wristwatch.
   defaultTargetType: 3

@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Rooted while deploying (the user, 2026-10-16): a building going up
     can''t be moved, which keeps its strong Dawn stun in check. Future: Red Tape

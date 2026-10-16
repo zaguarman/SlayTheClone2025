@@ -60,6 +60,7 @@ MonoBehaviour:
       fromDiscard: 0
       requires: 0
       delayDays: 0
+      onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Prophecy 2: in two Days, every enemy creature takes 3 damage. They
     see it coming; you''d better be ready to float.'
