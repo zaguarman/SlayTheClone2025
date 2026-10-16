@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: CompromisedAgent
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 26ec4b00-9b00-48a7-a752-9c86dd8ceda9
+  cardName: Compromised Agent
+  description: Her cover's blown. Her friends' covers aren't. Yet.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  effects:
+  - effectType: 0
+    trigger: 9
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 3
+      targetModifier: 4
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 6
+      statusDuration: 2
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Laid Off: when it''s discarded from your hand, a random friendly
+    creature is Concealed 2 Days. A burned agent covers the ones still out there.'
+  artDescription: A spy in a trench coat mobbed by paparazzi in a train station,
+    while behind her three other agents slip away unnoticed in the confusion.
+  attack: 2
+  health: 2
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 0
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

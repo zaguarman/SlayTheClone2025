@@ -1,3 +1,4 @@
+using System.Linq;
 using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
@@ -47,6 +48,14 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Sucker Punch: it went first to beat the creature it faces to the punch; if that creature planned no attack, it
+            // holds back (Pokémon's Sucker Punch fails on a target that isn't attacking)
+            if (Abilities.Has(attacker, Enums.CreatureAbility.SuckerPunch) && primaryTarget is ICreature punched && !combatAction.IsLastRites
+                && !actionsQueue.GetPendingActions().OfType<BattlefieldCombatAction>().Any(a => a.GetAttacker() == punched)) {
+                Log($"Executor: {attacker.Name} holds back: {punched.Name} planned no attack (Sucker Punch)", LogTag.Combat);
+                return;
+            }
+
             Log($"Executor: Creature {attacker.Name} attacking {DescribeTarget(primaryTarget)}", LogTag.Combat);
 
             // Licensed (Licence to Kill): this attack destroys the creature it hits, whatever its Health or Armor, and the
@@ -79,7 +88,18 @@ namespace SlayTheClone {
                 actionsQueue.AddAction(new DestroyCreatureAction(attacker, unconditional: true));
                 return;
             }
-            QueueCombatDamage(actionsQueue, primaryTarget, attacker);
+            // Strip Search: a creature with any status or stat change is Purged first (good and bad alike), and hit 2 harder
+            if (Abilities.Has(attacker, Enums.CreatureAbility.StripSearch) && primaryTarget is ICreature searched && IsDressedUp(searched, context.ModifierManager)) {
+                Log($"Executor: {attacker.Name} strip-searches {searched.Name}", LogTag.Combat);
+                actionsQueue.AddAction(new CleanseAction(searched, Enums.CleanseTarget.Both, purge: true));
+                QueueCombatDamage(actionsQueue, primaryTarget, attacker);
+                actionsQueue.AddAction(new DamageCreatureAction(searched, Abilities.StripBonus, attacker));
+            }
+            else QueueCombatDamage(actionsQueue, primaryTarget, attacker);
+            // Taser (an adventure's relic): a creature that attacks one of its carrier's takes 1 damage back
+            if (primaryTarget is ICreature wired && wired.Owner != null && wired.Owner != attacker.Owner && wired.Owner.Relics.Contains(Relic.Taser)) {
+                actionsQueue.AddAction(new DamageCreatureAction(attacker, Relics.TaserDamage));
+            }
             // Double Tap: a second hit right after the first, on the same target
             if (Abilities.Has(attacker, Enums.CreatureAbility.DoubleTap)) QueueCombatDamage(actionsQueue, primaryTarget, attacker);
             // Spray and Pray: the creatures beside the target slot (a step away in the formation) are hit too, each for its attack
@@ -111,8 +131,17 @@ namespace SlayTheClone {
                 actionsQueue.AddAction(new DamageCreatureAction(attacker, 1));
             }
 
+            // Hit and Run: after its attack, back to the hand with the next Day's, fresh (U-turn)
+            if (Abilities.Has(attacker, Enums.CreatureAbility.HitAndRun) && !combatAction.IsLastRites) {
+                actionsQueue.AddAction(new ReturnToHandAction(attacker));
+            }
+
             Log($"Executed BattlefieldCombatAction via Executor for {attacker.Name}", LogTag.Actions | LogTag.Combat);
         }
+
+        // Strip Search's mark: it has a status or a stat change (Temporary Stat Modifications; the printed stats don't count)
+        private static bool IsDressedUp(ICreature creature, IModifierManager modifiers) =>
+            modifiers.GetActiveModifiersFor(creature).Any(m => m is StatusEffectModifier || m is StatModifier);
 
         // The hit deals the attacker's attack as it is when the hit lands: a buff or debuff that lands in between counts
         private static void QueueCombatDamage(IActionsQueue actionsQueue, ITarget target, ICreature attacker) {

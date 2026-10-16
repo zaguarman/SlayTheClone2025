@@ -1553,17 +1553,14 @@ Card Game Factions Overview
 		Already cards, so left out: Charles Ponzi, Cleaning Robot, Counter-Intelligence, Day Trader, Fat Tony, Football Hooligans, Hikikomori, Hypermetamorphosis, Its A Trap, Man o' War, Man-in-the-Middle, Overpopulation, Police Officer Performance Indicators (as Police Officer Productivity Target), Signal Jammer, Spite-Elected President, Tax-Exempt Corruption, Taxpayer Funds Venture Capital Profits. Return to Sender is an ability.
 		Myth
 			Abrahamic Inheritance
-			Ambrosia
 			Bermuda Triangle
 			Confessional (tagged Myth)
 			Drug-Induced Spirituality
 			Entheogenic Sacrament
 			Gudea (the oldest known depicted person)
-			Heretic (added 2026-10-16)
 			Luxor
 			Moment of Silence (added 2026-10-15, satire of the state's answer to school shootings: no victims or violence shown). Idea: nobody can play spells this Day, both sides; that's all it does, and that's the joke
 			Public Autopsy
-			Publicly Funded Faith Schools
 			Venus of Willendorf
 		Alternative medicine (added 2026-10-14: the user's idea, "that would also slap hard"). Mostly Myth (faith instead of medicine); the ones sold for profit could be Corporate, and the reiki Karens tie to Zeitgeist's Mental Health Day
 			Homeopathy (water that remembers; "30C": not one molecule of the remedy left)
@@ -1631,8 +1628,6 @@ Card Game Factions Overview
 			You Can't Eat Your Cake and Have It Too (the Unabomber's phrasing; moved from Mind 2026-10-14: a Unabomber theme would be Zeitgeist, but the experiments done on him make it Shadow Ops., next to MK Ultra Test Subject)
 		Corporate
 			120-Year Mickey Mouse Copyright
-			Big Four
-			Bloomberg Terminal
 			Bonwit Teller Building Demolition
 			Business Culture
 			Buy Now, Give Your Soul Later
@@ -1647,7 +1642,6 @@ Card Game Factions Overview
 			High-Frequency Trading Scam
 			High-Pressure Sales Tactics
 			Intergenerational Short Squeeze
-			Internal Protocol: Quota Crusher Mindset
 			Layering
 			Limited Liability Warranty
 			Live Better in a Home of Your Own
@@ -1671,11 +1665,9 @@ Card Game Factions Overview
 			The Enron Ledger Fantasy (tagged Corporate)
 			The Rat Race
 			The Value of a Statistical Life (see Pinto Memo)
-			Usury
 			Yen Carry Trade
 		Tech
 			Bounty Program
-			Code Review
 			Ctrl + Y
 			Dialing Progress
 			Effect 2000 (the Y2K bug)
@@ -1697,7 +1689,6 @@ Card Game Factions Overview
 			Internet Beggar
 			Link-in-Bio Babe
 			Monkey Clicking
-			Selfie Esteem
 			Simp Summoner
 			Task Failed Successfully (moved from Zeitgeist: an internet meme, 2026-10-14)
 			He Bought, Dump It (the crypto meme "He bought? Dump it.": the whale on the phone who sells the moment you buy; added 2026-10-14, a partner for Crypto "Entrepreneur")
@@ -1707,7 +1698,6 @@ Card Game Factions Overview
 			All Along the Watchtower (tagged Zeitgeist; it puts up a watchtower)
 			Banana Gun
 			Calm Your Tits
-			Camper Van
 			Choose Your Poison
 			Dangit
 			Deeply Concerned
@@ -1717,7 +1707,6 @@ Card Game Factions Overview
 			Dont Dead Open Inside (the meme, misspelled on purpose)
 			Dr. Deiman's Black Jack
 			Enslaved Moisture
-			Fidget Spinner
 			For Society It Would Be Better If Some People Didn't Have Children
 			Glass Ceiling (art: a queue of women in careers that aren't STEM)
 			Harder Daddy (a creature that gains Attack and heals when it takes combat damage)
@@ -1727,7 +1716,6 @@ Card Game Factions Overview
 			It's About Sending a Message (tagged Zeitgeist; the Joker)
 			It's All Disco, Baby (tagged Zeitgeist; Disco Elysium)
 			Ladies First
-			Lost Generation
 			Melancholy
 			Mexican Telenovela
 			Morning Routine
@@ -1738,7 +1726,6 @@ Card Game Factions Overview
 			Real Life (good graphics, but a long tutorial)
 			Reject Modernity, Embrace Tradition (the meme's slogan; next to Trad Wife) (added 2026-10-16)
 			Second-Hand Embarrassment
-			Spite Voter (tagged Zeitgeist; someone who votes out of spite)
 			Stop Being Poor
 			Stunlock
 			There Is a Considerable Overlap Between the Smartest Bears and the Dumbest Humans
@@ -1762,7 +1749,6 @@ Card Game Factions Overview
 		Utopia
 			Coprolite (fossilized poop)
 			Inverted Population Pyramid
-			Prion Disease
 			The Line (Saudi Arabia's 170 km linear city; added 2026-10-14)
 			Tessellate
 		Faction to decide (plain items and places)

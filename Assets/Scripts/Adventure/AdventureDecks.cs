@@ -207,7 +207,7 @@ namespace SlayTheClone {
 
         /// <summary>After a fight won: three different cards of your own faction (the user, 2026-10-16: only your deck's faction drops), to take one of or none.</summary>
         public static List<CardDataScriptableObject> Reward(Faction faction, float strength, IEnumerable<CardDataScriptableObject> pool, Random random,
-            ICollection<CardDataScriptableObject> skip = null) => Roll(faction, strength, pool, random, RewardChoices, skip);
+            ICollection<CardDataScriptableObject> skip = null, int choices = RewardChoices) => Roll(faction, strength, pool, random, choices, skip);
 
         // The odds of each tier, D to S, at the bottom of the map and at the top (Slay the Spire's rarities, the user: random,
         // a high tier unlikely early): in between they blend by the room's strength

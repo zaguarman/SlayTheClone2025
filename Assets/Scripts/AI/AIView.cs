@@ -69,7 +69,7 @@ namespace SlayTheClone {
                 if (status != StatusEffectType.None && modifiers.HasStatusEffect(creature, status) && Intel.CanSeeStatus(viewer, creature, status)) statuses.Add(status);
             }
             StatRaises = creature.Attack - creature.BaseAttack + creature.Health - creature.BaseHealth;
-            DealsDouble = slot != null && creature.Slot != null && (Abilities.IsAmbushing(creature, modifiers) || Abilities.IsOnTheBrink(creature));
+            DealsDouble = slot != null && creature.Slot != null && (Abilities.IsAmbushing(creature, modifiers) || Abilities.IsOnTheBrink(creature) || Abilities.IsMartyred(creature, modifiers));
             RevealBacklash = creature.Effects.Where(e => e.trigger == EffectTrigger.OnRevealed).SelectMany(e => e.actions)
                 .Where(a => a.actionType == ActionType.Damage && a.targetType == TargetType.Enemy).Sum(a => a.value);
             Retaliation = creature.Effects.Where(e => e.trigger == EffectTrigger.OnDamage).SelectMany(e => e.actions)
@@ -78,6 +78,8 @@ namespace SlayTheClone {
         }
 
         public bool Has(StatusEffectType status) => statuses.Contains(status);
+        /// <summary>How many statuses it's seen to have (Strip Search hits harder on any).</summary>
+        public int Statuses => statuses.Count + (StatRaises != 0 ? 1 : 0);
         public float Worth => Attack + Health + Armor;
 
         public override string ToString() => Known ? Creature.Name : "???";

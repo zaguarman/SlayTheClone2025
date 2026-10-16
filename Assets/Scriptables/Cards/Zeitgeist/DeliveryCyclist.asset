@@ -27,6 +27,10 @@ MonoBehaviour:
   prophecyLatest: 0
   gamble: 0
   homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
   effects: []
   designNotes: 'Mechanics test: Leapfrog jumps over creatures to an empty slot; if
     its landing slot is taken, it stops at the closest empty slot on the way.'

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using static SlayTheClone.DebugLogger;
 
@@ -38,7 +39,7 @@ namespace SlayTheClone {
 
             CardDealingService = new CardDealingService(mediator);
             TrendSystem = new TrendSystem();
-            ModifierManager = new ModifierManager(mediator, modifierFactory);
+            ModifierManager = new ModifierManager(mediator, modifierFactory) { Trends = TrendSystem };
             ActionsQueue = new ActionsQueue(mediator, TrendSystem, CardDealingService, ModifierManager, Clock, ActionExecutors.CreateRegistry());
             CombatHandler = new BattlefieldCombatHandler(ActionsQueue, ModifierManager);
             Player1.Initialize(mediator, CardDealingService);
@@ -52,7 +53,23 @@ namespace SlayTheClone {
         public TurnFlow CreateTurnFlow(IGameMediator mediator) =>
             new TurnFlow(Players, ActionsQueue, ModifierManager, mediator, Clock, TrendSystem);
 
-        public void DealOpeningHands() => CardDealingService.DealInitialHands(Player1, Player2, OpeningHand);
+        public void DealOpeningHands() {
+            CardDealingService.DealInitialHands(Player1, Player2, OpeningHand);
+            foreach (var player in new[] { Player1, Player2 }) {
+                if (player.Relics.Contains(Relic.MemoNote)) CardDealingService.DrawCards(player, 1); // One more spell (or a creature, with none)
+                foreach (var potion in potions.TryGetValue(player, out var carried) ? carried : new List<CardData>()) {
+                    player.AddToHand(CardFactory.CreateCard(potion)); // The potions carried in: in the hand from the start
+                }
+            }
+        }
+
+        private readonly Dictionary<IPlayer, List<CardData>> potions = new Dictionary<IPlayer, List<CardData>>();
+
+        /// <summary>An adventurer's kit, before the opening hands: the relics they carry, and the potions that join their hand.</summary>
+        public void Equip(IPlayer player, IEnumerable<Relic> relics, IEnumerable<CardData> carried) {
+            foreach (var relic in relics ?? Enumerable.Empty<Relic>()) player.Relics.Add(relic);
+            potions[player] = (carried ?? Enumerable.Empty<CardData>()).Where(p => p != null).ToList();
+        }
 
         /// <summary>Lets go of what the systems hold on to, when the game is over.</summary>
         public void Cleanup() {

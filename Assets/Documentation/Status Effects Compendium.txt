@@ -657,3 +657,17 @@ Rooted (the user, 2026-10-16)
     Notes: A building going up can't be moved (Ministry for Equality, Pyramids): it keeps strong cards with an immovable theme in check, since a creature still deploying can otherwise move.
     Answers: Cleanse it, or wait until it's built.
     Cleansable: Yes
+
+
+Toxic (the user, 2026-10-16)
+    Faction: Utopia (Prion Disease, Biohacker), Shadow Ops. (Polonium Umbrella)
+    Inspired by: Pokémon's Toxic (bad poison) and Slay the Spire's Poison
+    Type: Damage Over Time, growing
+    Description: "Toxic X: like Burn, X damage at each Dusk for its Days; then 1 more each time."
+    Core Impact: Applied on Day X for N Days, it first acts at the Dusk of Day X+1 (Status Timing), dealing X, then X+1,
+                 X+2... Toxic 1 for 4 Days deals 10 in all. Hormesis (Biohacker) heals from it instead.
+    Stacking & Duration:
+        Initial Stacks: X Days (from source)
+        Re-application Behavior: Stacks (two Toxics tick side by side)
+    Answers: Cleanse it early: the longer it stays, the more it hurts.
+    Cleansable: Yes

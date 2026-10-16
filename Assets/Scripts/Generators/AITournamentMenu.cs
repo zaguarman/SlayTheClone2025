@@ -26,7 +26,7 @@ namespace SlayTheClone {
                 var catalog = AssetDatabase.LoadAssetAtPath<DeckCatalog>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("t:DeckCatalog")[0]));
                 var factions = catalog.Opponents.Select(o => DeckCatalog.FactionsOf(o.deck)).Where(f => f.Count == 1).Select(f => f[0])
                     .Where(f => f != Enums.Faction.None).Distinct().ToList();
-                return (new List<AITournament.Result>(), AITournament.RunAdventures(factions, catalog.AllCards, runsPerFaction, new AIEntrant(AILevel.Hard), progress));
+                return (new List<AITournament.Result>(), AITournament.RunAdventures(factions, catalog.AllCards, runsPerFaction, new AIEntrant(AILevel.Hard), progress, catalog.Potions));
             });
 
         [MenuItem("Debug/AI Tournament")]

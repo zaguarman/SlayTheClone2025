@@ -58,6 +58,7 @@ namespace SlayTheClone {
             if (queue == null) return new List<Item>();
             var items = Actions(viewer, queue, modifiers, queue.GetPendingActions().Select(a => (a, queue.LayerOfPending(a))).ToList());
             items.AddRange(Foretold(viewer));
+            items.AddRange(InForce(viewer));
             return items;
         }
 
@@ -120,6 +121,21 @@ namespace SlayTheClone {
                     ? $"{Whose(prophecy.Caster, viewer, capital: true)} {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: the rest of it lands {when}"
                     : $"{PlayerName(prophecy.Caster, viewer)} foretold {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: it comes true {when}";
                 items.Add(new Item { Text = text, Icon = EffectIcons.Days, Ours = prophecy.Caster == viewer, Details = text });
+            }
+            return items;
+        }
+
+        /// <summary>The Policies in force, both sides': they happen again at each Dawn.</summary>
+        public static List<Item> InForce(IPlayer viewer) {
+            var items = new List<Item>();
+            var sides = new[] { viewer, viewer?.Opponent }.Where(p => p != null).ToList();
+            foreach (var side in sides) {
+                foreach (var policy in side.Policies) {
+                    if (items.Count == 0) items.Add(new Item { Heading = "In Force" });
+                    string rules = policy.SourceData != null ? CardTextFormatter.GetRulesText(policy.SourceData).Replace("\n", " ") : "";
+                    string text = $"{Whose(side, viewer, capital: true)} {Painted(side, viewer, policy.Name)} (Policy): again each Dawn";
+                    items.Add(new Item { Text = text, Icon = EffectIcons.Dawn, Ours = side == viewer, Details = $"<b>{policy.Name}</b>: {rules}" });
+                }
             }
             return items;
         }
@@ -234,6 +250,7 @@ namespace SlayTheClone {
         private static string StatusIcon(StatusEffectType status) => status switch {
             StatusEffectType.Exhausted => EffectIcons.Paralyze,
             StatusEffectType.Burned => EffectIcons.Burn,
+            StatusEffectType.Toxic => EffectIcons.Burn,
             StatusEffectType.Doomed => EffectIcons.Doom,
             StatusEffectType.Blessed => EffectIcons.Bless,
             StatusEffectType.HeatSignature => EffectIcons.Heat,
@@ -327,6 +344,8 @@ namespace SlayTheClone {
                            $"{(hiddenTrap ? Unknown : effect.Name)} on {SlotName(place.GetSlot(), viewer)}";
                 case CleanseSlotAction clear:
                     return $"Clear {SlotName(clear.GetSlot(), viewer)}";
+                case SwapSlotEffectsAction swap:
+                    return $"{PlayerName(swap.Controller, viewer)} {(swap.Controller == viewer ? "swap" : "swaps")} the Slot Effects of both sides";
                 case CreateWatchdogAction watchdog:
                     // Its condition stays unknown to the other side until a Reveal shows it
                     bool hiddenCondition = FogOfWar.Enabled && watchdog.Controller != viewer && !sight.Revealed

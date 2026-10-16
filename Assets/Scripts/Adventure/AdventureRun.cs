@@ -23,11 +23,12 @@ namespace SlayTheClone {
             public bool Done { get; internal set; }
         }
 
-        /// <summary>A card for sale at a shop.</summary>
+        /// <summary>A card for sale at a shop, or a potion.</summary>
         public class ShopOffer {
             public CardDataScriptableObject Card { get; internal set; }
             public int Price { get; internal set; }
             public bool Sold { get; internal set; }
+            public bool IsPotion => Card != null && Card.potion;
         }
 
         /// <summary>The currency's symbol: the yen's Y fused to the euro's C, its bars shared (TextMeshPro rich text).</summary>
@@ -44,6 +45,22 @@ namespace SlayTheClone {
             AdventureDecks.Tier.A => 22,
             _ => 30
         };
+        /// <summary>A price at the shop: a quarter off with the Credit Card.</summary>
+        public static int Discounted(int price) => Relics.Contains(Relic.CreditCard) ? Mathf.RoundToInt(price * SlayTheClone.Relics.CreditDiscount) : price;
+
+        public const int MaxPotions = 3, PotionPrice = 12, ShopPotions = 2, PotionDropPercent = 40; // Slay the Spire's: 3 slots, a 40% drop
+        public const int RestHeal = 20, TreasureMoney = 20;
+        /// <summary>The relics found this run (Slay the Spire's): each one rule that's always on, in the fights or the run.</summary>
+        public static List<Relic> Relics { get; } = new List<Relic>();
+        /// <summary>The potions carried (up to <see cref="MaxPotions"/>): in your opening hand each fight, gone once used.</summary>
+        public static List<CardDataScriptableObject> Potions { get; } = new List<CardDataScriptableObject>();
+        /// <summary>The potions there are, to find and buy.</summary>
+        public static IReadOnlyList<CardDataScriptableObject> PotionPool { get; private set; } = new List<CardDataScriptableObject>();
+        /// <summary>What the fight just won gave besides cards (a relic, a potion), for the rewards screen; empty outside them.</summary>
+        public static List<string> Found { get; } = new List<string>();
+        /// <summary>At a rest site, your deck is up to pick the card to upgrade.</summary>
+        public static bool Upgrading { get; private set; }
+
         /// <summary>An amount with the symbol: "¥€ 25".</summary>
         public static string Money(int amount) => $"{Symbol}\u00A0{amount}";
 
@@ -71,7 +88,7 @@ namespace SlayTheClone {
         private static MapNode eventRoom;
 
         /// <summary>What taking a card out costs now.</summary>
-        public static int RemovalCost => RemovalPrice + RemovalRise * removals;
+        public static int RemovalCost => Discounted(RemovalPrice + RemovalRise * removals);
         private static int removals;
         public static Faction Faction { get; private set; }
         public static DeckScriptableObject Deck { get; private set; }
@@ -111,9 +128,11 @@ namespace SlayTheClone {
         public static int EnemyHealth(RoomType type, int fightsWon) => type == RoomType.Boss ? BossHealth
             : Mathf.Min(BossHealth - HealthStep, HealthStep * (fightsWon / FightsPerStage + 1 + (type == RoomType.Elite ? 1 : 0)));
 
-        public static void Start(Faction faction, DeckScriptableObject deck, int seed, IEnumerable<CardDataScriptableObject> pool = null) {
+        public static void Start(Faction faction, DeckScriptableObject deck, int seed, IEnumerable<CardDataScriptableObject> pool = null,
+            IEnumerable<CardDataScriptableObject> potions = null) {
             Clear();
             Pool = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null).Distinct().ToList();
+            PotionPool = (potions ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null).Distinct().ToList();
             Active = true;
             Faction = faction;
             Deck = deck;
@@ -147,12 +166,22 @@ namespace SlayTheClone {
                 EventOutcome = null;
                 eventRoom = node;
             }
+            // A rest site and a treasure room are events of their own: rest or train; open the chest
+            if (node.Type is RoomType.Rest or RoomType.Treasure) {
+                Event = node.Type == RoomType.Rest ? AdventureEvents.RestSite() : AdventureEvents.Treasure();
+                EventOutcome = null;
+                eventRoom = node;
+            }
             return false;
         }
 
         /// <summary>Makes the event's choice, if it can be made and none was yet: what it says happens.</summary>
         public static bool ChooseAtEvent(AdventureEvents.Choice choice, IEnumerable<CardDataScriptableObject> pool) {
             if (!InEvent || EventOutcome != null || choice == null || !Event.Choices.Contains(choice) || !choice.Available()) return false;
+            if (choice.Trains) { // A rest site's Train: pick the card to upgrade first
+                StartUpgrade(true);
+                return true;
+            }
             var context = new AdventureEvents.Context {
                 Random = new System.Random(Map.Seed * 59 + eventRoom.Row * 17 + eventRoom.Column),
                 Pool = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).ToList()
@@ -161,8 +190,51 @@ namespace SlayTheClone {
             return true;
         }
 
+        /// <summary>A rest site's Train: your deck is up to pick the card to upgrade (false: back to the choices).</summary>
+        public static void StartUpgrade(bool start) => Upgrading = start && InEvent && EventOutcome == null;
+
+        /// <summary>Upgrades one copy of the card in your deck (see <see cref="CardUpgrades"/>): the rest site's choice is made.</summary>
+        public static bool UpgradeCard(CardDataScriptableObject card) {
+            if (!Upgrading || !CardUpgrades.CanUpgrade(card) || !Deck.Cards.Contains(card)) return false;
+            var cards = Deck.Cards.ToList();
+            var upgraded = CardUpgrades.Upgrade(card);
+            cards[cards.IndexOf(card)] = upgraded;
+            Deck = DeckScriptableObject.Make(Deck.GetDeckName(), cards);
+            Upgrading = false;
+            EventOutcome = $"You train until it's second nature: <b>{upgraded.cardName}</b> ({CardUpgrades.Describe(card)}).";
+            return true;
+        }
+
+        /// <summary>A relic you don't have yet, at random; None when you have them all.</summary>
+        public static Relic GainRelic(System.Random random) {
+            var left = SlayTheClone.Relics.All.Where(r => !Relics.Contains(r)).ToList();
+            if (left.Count == 0) return Relic.None;
+            var relic = left[random.Next(left.Count)];
+            Relics.Add(relic);
+            return relic;
+        }
+
+        /// <summary>A potion into your belt, if it has room.</summary>
+        public static bool AddPotion(CardDataScriptableObject potion) {
+            if (potion == null || Potions.Count >= MaxPotions) return false;
+            Potions.Add(potion);
+            return true;
+        }
+
+        /// <summary>After a fight: the potions still in your hand are kept, the ones used are gone.</summary>
+        public static void KeepPotions(IEnumerable<string> leftInHand) {
+            var left = leftInHand.ToList();
+            var kept = new List<CardDataScriptableObject>();
+            foreach (var potion in Potions) {
+                if (left.Remove(potion.cardName)) kept.Add(potion);
+            }
+            Potions.Clear();
+            Potions.AddRange(kept);
+        }
+
         /// <summary>On from the event to the map.</summary>
         public static void LeaveEvent() {
+            Upgrading = false;
             Event = null;
             EventOutcome = null;
             eventRoom = null;
@@ -202,15 +274,19 @@ namespace SlayTheClone {
             // Each card's tier rolled like a reward's: the better ones rarer, more likely higher up the map
             var own = AdventureDecks.Roll(Faction, AdventureDecks.StrengthOf(room), cards, random, ShopCards);
             foreach (var card in own.OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => tiers[c]))
-                Shop.Add(new ShopOffer { Card = card, Price = PriceOf(tiers[card]) });
+                Shop.Add(new ShopOffer { Card = card, Price = Discounted(PriceOf(tiers[card])) });
+            // Two potions, different ones
+            foreach (var potion in PotionPool.OrderBy(_ => random.Next()).Take(ShopPotions))
+                Shop.Add(new ShopOffer { Card = potion, Price = Discounted(PotionPrice) });
         }
 
         /// <summary>Buys the card, if you can pay it and your deck has room: into your deck, the money gone.</summary>
         public static bool Buy(ShopOffer offer) {
             if (!InShop || offer == null || offer.Sold || !Shop.Contains(offer) || EuroYuans < offer.Price) return false;
-            if (Deck.Cards.Count >= PlayerDecks.MaxDeckSize) return false;
+            if (offer.IsPotion ? Potions.Count >= MaxPotions : Deck.Cards.Count >= PlayerDecks.MaxDeckSize) return false;
             EuroYuans -= offer.Price;
-            Deck = DeckScriptableObject.Make(Deck.GetDeckName(), Deck.Cards.Append(offer.Card));
+            if (offer.IsPotion) Potions.Add(offer.Card);
+            else Deck = DeckScriptableObject.Make(Deck.GetDeckName(), Deck.Cards.Append(offer.Card));
             offer.Sold = true;
             return true;
         }
@@ -243,25 +319,35 @@ namespace SlayTheClone {
         public static void WinFight(int? healthLeft = null) {
             if (Fighting == null) return;
             if (healthLeft.HasValue) Health = Mathf.Max(1, healthLeft.Value);
+            if (Relics.Contains(Relic.FirstAidKit)) Health += SlayTheClone.Relics.FirstAidHeal;
             var room = Fighting;
             Fighting = null;
             Arrive(room);
             Earned = room.Type == RoomType.Elite ? ElitePurse : room.Type == RoomType.Boss ? 0 : FightPurse;
+            if (Earned > 0 && Relics.Contains(Relic.DoubleHeadedCoin)) Earned += SlayTheClone.Relics.CoinPay;
             EuroYuans += Earned;
+            Found.Clear();
             if (room.Type == RoomType.Boss) {
                 Won = true;
                 return;
             }
             Rewards.Clear();
             var random = new System.Random(Map.Seed * 17 + room.Row * 5 + room.Column);
+            // An elite drops a relic; any fight may drop a potion (Slay the Spire's 40%)
+            if (room.Type == RoomType.Elite && GainRelic(random) is var relic && relic != Relic.None) Found.Add($"Relic: {SlayTheClone.Relics.Line(relic)}");
+            if (PotionPool.Count > 0 && random.Next(100) < PotionDropPercent) {
+                var potion = PotionPool[random.Next(PotionPool.Count)];
+                Found.Add(AddPotion(potion) ? $"Potion: <b>{potion.cardName}</b>" : $"A potion ({potion.cardName}), but your belt is full");
+            }
             int packs = room.Type == RoomType.Elite ? 2 : 1; // An elite drops a second pack
             var offered = new HashSet<CardDataScriptableObject>();
             float strength = AdventureDecks.StrengthOf(room);
             for (int i = 0; i < packs; i++) {
                 var pack = new RewardPack();
                 // Cards of your own faction (the user); a second pack shows others, when there are enough
-                var fresh = AdventureDecks.Reward(Faction, strength, Pool, random, offered);
-                pack.Cards.AddRange(fresh.Count > 0 ? fresh : AdventureDecks.Reward(Faction, strength, Pool, random));
+                int choices = Relics.Contains(Relic.Backpack) ? AdventureDecks.RewardChoices + 1 : AdventureDecks.RewardChoices;
+                var fresh = AdventureDecks.Reward(Faction, strength, Pool, random, offered, choices);
+                pack.Cards.AddRange(fresh.Count > 0 ? fresh : AdventureDecks.Reward(Faction, strength, Pool, random, null, choices));
                 foreach (var card in pack.Cards) offered.Add(card);
                 if (pack.Cards.Count > 0) Rewards.Add(pack);
             }
@@ -285,6 +371,7 @@ namespace SlayTheClone {
         /// <summary>Leaves the rewards for the map; packs not opened are left behind.</summary>
         public static void Proceed() {
             Rewards.Clear();
+            Found.Clear();
             Earned = 0;
         }
 
@@ -306,7 +393,11 @@ namespace SlayTheClone {
         // Also runs when play mode starts, so a run from an earlier session never leaks into this one
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Clear() {
-            Active = Won = Lost = InShop = RemovedHere = false;
+            Active = Won = Lost = InShop = RemovedHere = Upgrading = false;
+            Relics.Clear();
+            Potions.Clear();
+            Found.Clear();
+            PotionPool = new List<CardDataScriptableObject>();
             EuroYuans = Earned = removals = Health = 0; // A roguelite: the money goes with the run
             Pool = new List<CardDataScriptableObject>();
             Event = null;

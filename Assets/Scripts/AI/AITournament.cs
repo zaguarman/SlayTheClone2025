@@ -26,9 +26,12 @@ namespace SlayTheClone {
             public readonly int Days;
             /// <summary>Each player's Health at the end.</summary>
             public readonly int Health1, Health2;
+            /// <summary>The potions still in player 1's hand at the end (an adventure keeps those), by name.</summary>
+            public readonly string[] PotionsLeft1;
 
-            public Result(string deck, string deck2, AIEntrant first, AIEntrant second, int winner, int days, int health1 = 0, int health2 = 0) {
+            public Result(string deck, string deck2, AIEntrant first, AIEntrant second, int winner, int days, int health1 = 0, int health2 = 0, string[] potionsLeft1 = null) {
                 (Deck, Deck2, First, Second, Winner, Days, Health1, Health2) = (deck, deck2, first, second, winner, days, health1, health2);
+                PotionsLeft1 = potionsLeft1 ?? new string[0];
             }
 
             public AILevel Level1 => First.Level;
@@ -50,10 +53,14 @@ namespace SlayTheClone {
             public readonly AIEntrant First, Second;
             public readonly int Seed;
             public readonly int Health1, Health2; // What each player starts at (an adventure's fights differ from 20)
+            public readonly Relic[] Relics1; // An adventure's kit for player 1: its relics and potions
+            public readonly List<CardData> Potions1;
 
             public Game(DeckCards deck1, AIEntrant first, DeckCards deck2, AIEntrant second, int seed,
-                int health1 = Player.StartingHealth, int health2 = Player.StartingHealth) {
+                int health1 = Player.StartingHealth, int health2 = Player.StartingHealth, Relic[] relics1 = null, List<CardData> potions1 = null) {
                 (Deck1, First, Deck2, Second, Seed, Health1, Health2) = (deck1, first, deck2, second, seed, health1, health2);
+                Relics1 = relics1;
+                Potions1 = potions1;
             }
         }
 
@@ -102,6 +109,7 @@ namespace SlayTheClone {
                 session = new GameSession(mediator, new List<CardData>(game.Deck1.Cards), new List<CardData>(game.Deck2.Cards),
                     new SimpleModifierFactory(), game.Seed, health1: game.Health1, health2: game.Health2);
                 turns = session.CreateTurnFlow(mediator);
+                session.Equip(session.Player1, game.Relics1, game.Potions1);
                 session.DealOpeningHands();
                 var planners = new[] {
                     game.First.Planner(session.ActionsQueue, session.CombatHandler, game.Seed),
@@ -122,7 +130,8 @@ namespace SlayTheClone {
                 bool firstDown = session.Player1.Health <= 0, secondDown = session.Player2.Health <= 0;
                 int winner = champion == session.Player1 ? 1 : champion == session.Player2 ? 2 : firstDown == secondDown ? 0 : firstDown ? 2 : 1;
                 tally?.End(winner);
-                return new Result(game.Deck1.Name, game.Deck2.Name, game.First, game.Second, winner, turns.TurnNumber, session.Player1.Health, session.Player2.Health);
+                var potionsLeft = session.Player1.Hand.Where(c => c.SourceData?.potion == true).Select(c => c.Name).ToArray();
+                return new Result(game.Deck1.Name, game.Deck2.Name, game.First, game.Second, winner, turns.TurnNumber, session.Player1.Health, session.Player2.Health, potionsLeft);
             }
             catch (System.Exception exception) {
                 audit?.Note("Exception", $"{exception.GetType().Name}: {exception.Message}", $"{where}, Day {turns?.TurnNumber ?? 0}\n{exception.StackTrace}");

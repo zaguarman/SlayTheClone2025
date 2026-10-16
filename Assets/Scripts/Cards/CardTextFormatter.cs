@@ -31,7 +31,8 @@ namespace SlayTheClone {
         /// <param name="ability">A creature's ability in play, when it differs from the printed one: written in the text, the
         /// printed one struck through.</param>
         /// <param name="abilityOff">Its ability is switched off for now: struck through too.</param>
-        public static string GetRulesText(CardData data, CreatureAbility? ability = null, bool abilityOff = false) {
+        /// <param name="effects">The effects as they are now, when they differ from the printed ones (a Ripening spell ripened).</param>
+        public static string GetRulesText(CardData data, CreatureAbility? ability = null, bool abilityOff = false, IEnumerable<CardEffect> effects = null) {
             var creature = data as CreatureData;
             bool isSpell = data is SpellData;
             var keywords = new List<string>();
@@ -49,13 +50,16 @@ namespace SlayTheClone {
                 }
             }
             if (data.homing) keywords.Add(Keywords.Link("Homing"));
-            if (data.singleUse) keywords.Add(Keywords.Link("Single Use"));
+            if (data.potion) keywords.Add(Keywords.Link("Potion"));
+            else if (data.singleUse) keywords.Add(Keywords.Link("Single Use"));
+            if (data.policy) keywords.Add(Keywords.Link("Policy") + " (it happens again each Dawn, for the rest of the combat)");
+            if (data.ripening) keywords.Add(Keywords.Link("Ripening") + $" (+1 to its numbers for each Dawn it's kept in your hand, up to +{Ripening.Most})");
             if (data.prophecyLatest > data.prophecy) keywords.Add($"{Keywords.Link("Prophecy", $"Prophecy {data.prophecy}-{data.prophecyLatest}")} (comes true in {data.prophecy} to {data.prophecyLatest} Days, at random)");
             else if (data.prophecy > 0) keywords.Add($"{Keywords.Link("Prophecy", $"Prophecy {data.prophecy}")} (comes true in {data.prophecy} Day{(data.prophecy == 1 ? "" : "s")})");
 
             var sentences = new List<string>();
             if (data.gamble) sentences.Add($"{Keywords.Link("Gamble")}: one of these, at random:");
-            foreach (var effect in data.effects ?? new List<CardEffect>()) {
+            foreach (var effect in effects ?? data.effects ?? new List<CardEffect>()) {
                 string keyword = isSpell ? null : KeywordAbility(effect);
                 if (keyword != null) keywords.Add(keyword);
                 else {
@@ -253,6 +257,7 @@ namespace SlayTheClone {
                 case EffectTrigger.ActionAttempted: return (EffectIcons.Attack, "Whenever this acts");
                 case EffectTrigger.OnRevealed: return (EffectIcons.Reveal, Keywords.Link("When Revealed"));
                 case EffectTrigger.OnReplaced: return (EffectIcons.Enter, Keywords.Link("Replaced"));
+                case EffectTrigger.OnDiscarded: return (EffectIcons.Days, Keywords.Link("Laid Off"));
                 default: return (null, null);
             }
         }
@@ -361,7 +366,11 @@ namespace SlayTheClone {
                 case ActionType.PlaceSlotEffect:
                     return $"{DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
                 case ActionType.CleanseSlot:
-                    return $"clear the {Keywords.Link("Slot Effect")} on {SlotTarget(action, isSpell)}";
+                    return action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets)
+                        ? $"clear the {Keywords.Link("Slot Effect", "Slot Effects")} on {SlotTarget(action, isSpell)}"
+                        : $"clear the {Keywords.Link("Slot Effect")} on {SlotTarget(action, isSpell)}";
+                case ActionType.SwapSlotEffects: // Projection (Court Change): each side's Slot Effects go to the other's
+                    return $"the {Keywords.Link("Slot Effect", "Slot Effects")} on each side trade places with the other side's";
                 case ActionType.CreateWatchdog:
                     return DescribeWatchdog(action, target);
                 case ActionType.Reveal: // Instant: it resolves as soon as it's played
@@ -468,6 +477,7 @@ namespace SlayTheClone {
             switch (action.statusEffectToApply) {
                 case StatusEffectType.Exhausted: return $"{Keywords.Link("Exhausted", "exhaust")} {target}";
                 case StatusEffectType.Burned: return $"{Keywords.Link("Burned", $"Burn {potency}")}{DaysTag(days)} on {target}";
+                case StatusEffectType.Toxic: return $"{Keywords.Link("Toxic", $"Toxic {potency}")}{DaysTag(days)} on {target}";
                 case StatusEffectType.Doomed: return $"{Keywords.Link("Doomed", "Doom" + Count(days))} on {target}";
                 case StatusEffectType.Blessed: return $"{Keywords.Link("Blessed", "Bless" + Count(potency))} on {target}";
                 case StatusEffectType.HeatSignature: return $"{Keywords.Link("Heat Signature", "Heat Signature" + Count(potency))} on {target}";
@@ -525,8 +535,16 @@ namespace SlayTheClone {
         }
 
         // Slot Effects aim at the slot, whoever stands in it
-        private static string SlotTarget(EffectAction action, bool isSpell) =>
-            isSpell || action.targetType != TargetType.Self ? $"target {Keywords.Link("Slot", "slot")}" : $"its {Keywords.Link("Slot", "slot")}";
+        private static string SlotTarget(EffectAction action, bool isSpell) {
+            if (action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets)) { // A side hazard: every slot of a side
+                return action.targetType switch {
+                    TargetType.EnemyCreatures or TargetType.Enemy => $"every enemy {Keywords.Link("Slot", "slot")}",
+                    TargetType.AllCreatures => $"every {Keywords.Link("Slot", "slot")}",
+                    _ => $"every one of your {Keywords.Link("Slot", "slots")}"
+                };
+            }
+            return isSpell || action.targetType != TargetType.Self ? $"target {Keywords.Link("Slot", "slot")}" : $"its {Keywords.Link("Slot", "slot")}";
+        }
 
         // "Landmine 3" (its damage, always shown), "Shield 2" (its Days; just "Shield" for 1)
         private static string DescribeSlotEffect(EffectAction action) {
@@ -536,6 +554,7 @@ namespace SlayTheClone {
                 SlotEffectType.BarbedSnare => Keywords.Link("Barbed Snare", $"Barbed Snare {action.value}"),
                 SlotEffectType.Shield => Keywords.Link("Shield", $"Shield{days}"),
                 SlotEffectType.ScorchedEarth => Keywords.Link("Scorched Earth") + DaysTag(action.statusDuration),
+                SlotEffectType.Checkpoint => Keywords.Link("Checkpoint", $"Checkpoint {action.value}") + DaysTag(action.statusDuration),
                 _ => "nothing"
             };
         }
@@ -545,6 +564,7 @@ namespace SlayTheClone {
             SlotEffectType.BarbedSnare => EffectIcons.Hurt,
             SlotEffectType.Shield => EffectIcons.Armor,
             SlotEffectType.ScorchedEarth => EffectIcons.Burn,
+            SlotEffectType.Checkpoint => EffectIcons.Hurt,
             _ => null
         };
         #endregion

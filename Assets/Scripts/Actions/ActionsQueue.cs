@@ -161,6 +161,8 @@ namespace SlayTheClone {
             }
             if (a.Source == b.Source) return a.Sequence.CompareTo(b.Sequence); // A creature's actions keep their order
 
+            int byPriority = HasPriority(b).CompareTo(HasPriority(a)); // Sucker Punch's attack first, whatever the Speed
+            if (byPriority != 0) return byPriority;
             int bySpeed = b.Source.Speed.CompareTo(a.Source.Speed);
             if (executionContext.TrendSystem.SlowestFirst) bySpeed = -bySpeed; // Rush Hour
             if (bySpeed != 0) return bySpeed;
@@ -170,6 +172,10 @@ namespace SlayTheClone {
             if (byAttack != 0) return byAttack;
             return Tiebreak(a.RandomKey.CompareTo(b.RandomKey), a, b);
         }
+
+        // Priority (Pokémon's Sucker Punch): its attack goes before the layer's others, Rush Hour or not
+        private static bool HasPriority(Entry entry) =>
+            entry.Action is BattlefieldCombatAction attack && Abilities.Has(attack.GetAttacker(), Enums.CreatureAbility.SuckerPunch);
 
         private static int Tiebreak(int byRandom, Entry a, Entry b) => byRandom != 0 ? byRandom : a.Sequence.CompareTo(b.Sequence);
         #endregion
@@ -459,6 +465,7 @@ namespace SlayTheClone {
             finally {
                 executing = null;
             }
+            executionContext.ModifierManager?.RefreshConditionalStats(); // Grudge and On Trend follow what just happened
 
             gameMediator.NotifyActionsQueueChanged();
         }

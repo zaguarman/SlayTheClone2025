@@ -14,32 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Workbench - New Cards
   cards:
-  - {fileID: 11400000, guid: e2282bf2988125d4ab1f4b146d03e8ab, type: 2}
-  - {fileID: 11400000, guid: e2282bf2988125d4ab1f4b146d03e8ab, type: 2}
-  - {fileID: 11400000, guid: 88a40b486c45db944ac39f04bc2ca194, type: 2}
-  - {fileID: 11400000, guid: 88a40b486c45db944ac39f04bc2ca194, type: 2}
-  - {fileID: 11400000, guid: b41ef19f4b8e5a44599bdf436ab2436a, type: 2}
-  - {fileID: 11400000, guid: b41ef19f4b8e5a44599bdf436ab2436a, type: 2}
-  - {fileID: 11400000, guid: 8067d08e7b1cef54ea5563a12c928625, type: 2}
-  - {fileID: 11400000, guid: 8067d08e7b1cef54ea5563a12c928625, type: 2}
-  - {fileID: 11400000, guid: d24770ac471a1d046b9f9aab4645fa00, type: 2}
-  - {fileID: 11400000, guid: d24770ac471a1d046b9f9aab4645fa00, type: 2}
-  - {fileID: 11400000, guid: 1a40651830edf3548be852dde383fe34, type: 2}
-  - {fileID: 11400000, guid: 1a40651830edf3548be852dde383fe34, type: 2}
-  - {fileID: 11400000, guid: 7cbd62442e2434742b7ad25fe2d6829b, type: 2}
-  - {fileID: 11400000, guid: 7cbd62442e2434742b7ad25fe2d6829b, type: 2}
-  - {fileID: 11400000, guid: 9ae363bc20379664cb956e3407e46b43, type: 2}
-  - {fileID: 11400000, guid: 9ae363bc20379664cb956e3407e46b43, type: 2}
-  - {fileID: 11400000, guid: 4c8f0774af0a3074e955916c896343e0, type: 2}
-  - {fileID: 11400000, guid: 4c8f0774af0a3074e955916c896343e0, type: 2}
-  - {fileID: 11400000, guid: 56611a2d00e62bf428c0bfb506bb52d8, type: 2}
-  - {fileID: 11400000, guid: 56611a2d00e62bf428c0bfb506bb52d8, type: 2}
-  - {fileID: 11400000, guid: fbcd0812c94c18d40a893a334a3bbcb9, type: 2}
-  - {fileID: 11400000, guid: fbcd0812c94c18d40a893a334a3bbcb9, type: 2}
-  - {fileID: 11400000, guid: 708faae99c993bf4fbe1a7a3edab0807, type: 2}
-  - {fileID: 11400000, guid: 708faae99c993bf4fbe1a7a3edab0807, type: 2}
-  - {fileID: 11400000, guid: b309dd9e06f4be642bb34396bebddeca, type: 2}
-  - {fileID: 11400000, guid: b309dd9e06f4be642bb34396bebddeca, type: 2}
-  lastUpdated: 2026-10-16T15:55:55.0401415Z
+  - {fileID: 11400000, guid: 8deee5d2f833ac549a779670d370bb3d, type: 2}
+  - {fileID: 11400000, guid: 8deee5d2f833ac549a779670d370bb3d, type: 2}
+  - {fileID: 11400000, guid: b665257d8f3285e43a94c83ea0b4d87c, type: 2}
+  - {fileID: 11400000, guid: b665257d8f3285e43a94c83ea0b4d87c, type: 2}
+  - {fileID: 11400000, guid: 1f3acb3f965f1a64c81c656dc424c030, type: 2}
+  - {fileID: 11400000, guid: 1f3acb3f965f1a64c81c656dc424c030, type: 2}
+  - {fileID: 11400000, guid: de4b073773222374f8f5eb4d53b27510, type: 2}
+  - {fileID: 11400000, guid: de4b073773222374f8f5eb4d53b27510, type: 2}
+  - {fileID: 11400000, guid: 189e9eb19a64617499c3606919dc053c, type: 2}
+  - {fileID: 11400000, guid: 189e9eb19a64617499c3606919dc053c, type: 2}
+  - {fileID: 11400000, guid: f0fa9cfb203620f42a5049750f960932, type: 2}
+  - {fileID: 11400000, guid: f0fa9cfb203620f42a5049750f960932, type: 2}
+  - {fileID: 11400000, guid: cc9307a356b5d524e9245a6fc3c35d2e, type: 2}
+  - {fileID: 11400000, guid: cc9307a356b5d524e9245a6fc3c35d2e, type: 2}
+  - {fileID: 11400000, guid: f48732c5b31572b45bcf2e1e264eae2a, type: 2}
+  - {fileID: 11400000, guid: f48732c5b31572b45bcf2e1e264eae2a, type: 2}
+  - {fileID: 11400000, guid: e021499e67379634a97370f9b2d4b6d6, type: 2}
+  - {fileID: 11400000, guid: e021499e67379634a97370f9b2d4b6d6, type: 2}
+  - {fileID: 11400000, guid: bb9a917d0c64e664597fb242d47068af, type: 2}
+  - {fileID: 11400000, guid: bb9a917d0c64e664597fb242d47068af, type: 2}
+  - {fileID: 11400000, guid: ba4dbc05f60417b46b64ba1b51cd4512, type: 2}
+  - {fileID: 11400000, guid: ba4dbc05f60417b46b64ba1b51cd4512, type: 2}
+  - {fileID: 11400000, guid: 8433ea7fd105b3844a4b07510af74a0c, type: 2}
+  - {fileID: 11400000, guid: 8433ea7fd105b3844a4b07510af74a0c, type: 2}
+  - {fileID: 11400000, guid: 9ab1f3d11a2862b4fae127096a89625e, type: 2}
+  - {fileID: 11400000, guid: 9ab1f3d11a2862b4fae127096a89625e, type: 2}
+  - {fileID: 11400000, guid: aa0a64f22d780ec40b6226b1e4f5e391, type: 2}
+  - {fileID: 11400000, guid: aa0a64f22d780ec40b6226b1e4f5e391, type: 2}
+  - {fileID: 11400000, guid: 6372c7949902b5a44a3895e9be3da0e1, type: 2}
+  - {fileID: 11400000, guid: 6372c7949902b5a44a3895e9be3da0e1, type: 2}
+  lastUpdated: 2026-10-16T19:41:40.3948362Z
   strategy: 
   focus: 1

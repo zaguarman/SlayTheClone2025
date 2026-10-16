@@ -33,6 +33,7 @@ namespace SlayTheClone {
         public const string RemoveCardButtonName = "RemoveCardButton";
         public const string EventChoiceButton = "EventChoice ";
         public const string EventOnButtonName = "EventOnButton";
+        public const string UpgradeBackButtonName = "UpgradeBackButton";
         private const float EventWidth = 900f;
         private const int ShopColumns = 5; // The shop's cards on one row
         private const int RewardColumns = 4; // The reward's cards at a readable size, not stretched over the width
@@ -79,7 +80,7 @@ namespace SlayTheClone {
         protected override GameObject Build() => !AdventureRun.Active ? BuildFactions()
             : ViewingDeck ? BuildDeck()
             : AdventureRun.InShop ? (Removing ? BuildRemoval() : BuildShop())
-            : AdventureRun.InEvent ? BuildEvent()
+            : AdventureRun.InEvent ? (AdventureRun.Upgrading ? BuildUpgrade() : BuildEvent())
             : AdventureRun.InRewards ? (OpenPack != null ? BuildPick(OpenPack) : BuildRewards())
             : BuildMap();
 
@@ -118,7 +119,7 @@ namespace SlayTheClone {
         /// <summary>Starts a run with the chosen faction's starter deck, on a new map, and shows it.</summary>
         public void Embark() {
             if (Chosen == null || !Factions.Any(f => f.faction == Chosen)) return;
-            AdventureRun.Start(Chosen.Value, AdventureDecks.Starter(Chosen.Value, Catalog.AllCards), Environment.TickCount, Catalog.AllCards);
+            AdventureRun.Start(Chosen.Value, AdventureDecks.Starter(Chosen.Value, Catalog.AllCards), Environment.TickCount, Catalog.AllCards, Catalog.Potions);
             lastWalk = "Your journey begins. Pick a room on the bottom row.";
             Show();
         }
@@ -175,9 +176,9 @@ namespace SlayTheClone {
 
         // What a room that does nothing yet says as you pass
         private static string WalkThrough(RoomType type) => type switch {
-            RoomType.Rest => "A rest site. Nothing to do here yet: you walk on.",
+            RoomType.Rest => "A rest site.",
             RoomType.Shop => "A shop, closed for now. You walk on.",
-            RoomType.Treasure => "A chest, empty for now. You walk on.",
+            RoomType.Treasure => "A chest.",
             RoomType.Unknown => "Something happened here. Or will, one day. You walk on.",
             _ => "You walk on."
         };
@@ -197,6 +198,8 @@ namespace SlayTheClone {
             MatchSetup.Choose(AdventureRun.Deck, name, deck, AISeats.Player2);
             MatchSetup.PlayerHealth = AdventureRun.Health; // Your Health goes from fight to fight
             MatchSetup.OpponentHealth = AdventureRun.EnemyHealthFor(room); // 5, 10, 15... the boss 60
+            MatchSetup.PlayerRelics.AddRange(AdventureRun.Relics); // Your kit: the relics, and the potions in your opening hand
+            MatchSetup.PlayerPotions.AddRange(AdventureRun.Potions);
             MatchSetup.AILevel = LevelFor(room);
             MatchSetup.AIStyle = AIStyle.Balanced;
         }
@@ -236,6 +239,7 @@ namespace SlayTheClone {
             AddText(side, $"Health: <b>{AdventureRun.Health}</b>    EuroYuans: {AdventureRun.Money(AdventureRun.EuroYuans)}", 26, AccentColor, FontStyles.Normal, height: 38);
             status = AddText(side, StatusText(), 24, TextColor, FontStyles.Normal, height: 150);
             status.textWrappingMode = TextWrappingModes.Normal;
+            AddKit(side);
             foreach (RoomType type in Enum.GetValues(typeof(RoomType))) AddLegend(side, type);
 
             var footer = AddFooter(screen.panel.transform);
@@ -258,6 +262,10 @@ namespace SlayTheClone {
             columnSize.preferredWidth = RewardsWidth;
             columnSize.flexibleWidth = 0;
             if (screen.columns.GetComponent<HorizontalLayoutGroup>() is HorizontalLayoutGroup row) row.childAlignment = TextAnchor.UpperCenter;
+            foreach (var found in AdventureRun.Found) {
+                var line = AddText(column, found, 24, TextColor, FontStyles.Normal, height: 64);
+                line.textWrappingMode = TextWrappingModes.Normal;
+            }
             if (AdventureRun.Earned > 0) AddText(column, $"<b>+{AdventureRun.Money(AdventureRun.Earned)}</b>  <color=#C9C0AE>you have {AdventureRun.Money(AdventureRun.EuroYuans)}</color>",
                 30, AccentColor, FontStyles.Normal, height: 56);
             for (int i = 0; i < AdventureRun.Rewards.Count; i++) {
@@ -325,6 +333,34 @@ namespace SlayTheClone {
                 UITheme.StyleButton(on, UITheme.ButtonKind.Primary);
             }
             return screen.panel;
+        }
+
+        // A rest site's Train: the cards of your deck that can be upgraded; click one to upgrade it, Back to the choices
+        private GameObject BuildUpgrade() {
+            var screen = AddScreen(transform, "AdventurePanel", "Train");
+            deckGrid = new CardGrid(screen.columns, Catalog.CardPrefab, DeckColumns);
+            deckGrid.Title.text = "Click the card to upgrade  <size=70%><color=#C9C0AE>a creature +1 Attack and +1 Health; a spell 1 more on each of its numbers</color></size>";
+            deckGrid.Show(CardUpgrades.Upgradable(AdventureRun.Deck.Cards).OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.cardName),
+                (face, asset) => face.OnCardClicked.AddListener(_ => UpgradeCard(asset)));
+            var footer = AddFooter(screen.panel.transform);
+            AddButton(footer, UpgradeBackButtonName, "Back", BackWidth, () => { AdventureRun.StartUpgrade(false); Show(); });
+            return screen.panel;
+        }
+
+        /// <summary>Upgrades the card (the rest site's Train), back to the rest site to go on.</summary>
+        public void UpgradeCard(CardDataScriptableObject card) {
+            if (!AdventureRun.UpgradeCard(card)) return;
+            Show();
+        }
+
+        // The relics and potions you carry, under the map's status
+        private void AddKit(Transform side) {
+            string relics = AdventureRun.Relics.Count == 0 ? "<color=#C9C0AE>none yet</color>"
+                : string.Join("\n", AdventureRun.Relics.Select(r => $"<b>{SlayTheClone.Relics.NameOf(r)}</b> <size=85%><color=#C9C0AE>{SlayTheClone.Relics.Describe(r)}</color></size>"));
+            string potions = AdventureRun.Potions.Count == 0 ? "<color=#C9C0AE>none</color>" : string.Join(", ", AdventureRun.Potions.Select(p => p.cardName));
+            var kit = AddText(side, $"Relics:\n{relics}\nPotions ({AdventureRun.Potions.Count}/{AdventureRun.MaxPotions}): {potions}", 20, TextColor, FontStyles.Normal,
+                height: 60 + 30 * Math.Max(1, AdventureRun.Relics.Count));
+            kit.textWrappingMode = TextWrappingModes.Normal;
         }
 
         /// <summary>Makes the event's choice: what it says happens, and the screen says so.</summary>
@@ -403,7 +439,7 @@ namespace SlayTheClone {
         /// <summary>Buys the shop's card, if you can pay it.</summary>
         public void Buy(AdventureRun.ShopOffer offer) {
             if (!AdventureRun.Buy(offer)) return;
-            lastWalk = $"You bought {offer.Card.cardName}.";
+            lastWalk = offer.IsPotion ? $"You bought a potion: {offer.Card.cardName}." : $"You bought {offer.Card.cardName}.";
             Show();
         }
 
@@ -585,9 +621,9 @@ namespace SlayTheClone {
             RoomType.Elite => "a tougher one",
             RoomType.Boss => "the last fight",
             RoomType.Unknown => "an event",
-            RoomType.Rest => "rest (soon)",
-            RoomType.Shop => "cards for EuroYuans",
-            RoomType.Treasure => "a chest (soon)",
+            RoomType.Rest => "heal, or upgrade a card",
+            RoomType.Shop => "cards and potions",
+            RoomType.Treasure => "a relic",
             _ => ""
         };
 

@@ -148,8 +148,25 @@ namespace SlayTheClone {
                 SlotEffectType.BarbedSnare => -effect.Value / 2f,
                 SlotEffectType.Shield => 2,
                 SlotEffectType.ScorchedEarth => -2,
+                SlotEffectType.Checkpoint => -effect.Value,
                 _ => 0
             };
+        }
+
+        // Projection: the Slot Effects each side can see trade places; good for us when the worse ones are on our side now
+        private float SwapValue() {
+            float For(SlotEffect effect) => effect == null || !Intel.CanSee(view.Me, effect) ? 0 : effect.Type switch { // What this side can see
+                SlotEffectType.Landmine or SlotEffectType.Checkpoint => -effect.Value,
+                SlotEffectType.BarbedSnare => -effect.Value / 2f,
+                SlotEffectType.ScorchedEarth => -1.5f,
+                SlotEffectType.Shield => 2,
+                _ => 0
+            };
+            var mine = view.Me.Battlefield;
+            var theirs = view.Them.Battlefield;
+            float gain = 0;
+            for (int i = 0; i < System.Math.Min(mine.Count, theirs.Count); i++) gain += 2 * (For(theirs[i].Effect) - For(mine[i].Effect));
+            return gain * Style.Protection;
         }
         #endregion
 
@@ -179,11 +196,15 @@ namespace SlayTheClone {
         // A chosen discard cost: the cards it would miss least (a spell by the most good it can do now, a creature by its stats)
         // Creatures not played today are discarded at Dusk anyway: they're the cheapest to give up
         private List<ICard> LeastUseful(List<ICard> cards, int count) =>
-            cards.OrderBy(c => c is Spell s ? AimsFor(s).Select(a => SpellValue(s, a)).DefaultIfEmpty(0).Max()
-                : c is ICreature creature ? (creature.Attack + creature.Health) / 2f * 0.3f : 0).Take(count).ToList();
+            cards.OrderBy(c => (c is Spell s ? AimsFor(s).Select(a => SpellValue(s, a)).DefaultIfEmpty(0).Max()
+                : c is ICreature creature ? (creature.Attack + creature.Health) / 2f * 0.3f : 0)
+                - (LaidOff.Has(c) ? LaidOffGain : 0)).Take(count).ToList(); // A Laid Off card does something when given up
 
         // How much good a spell must do today to be played rather than kept for a better Day (spells stay in the hand)
         private const float HoldBar = 1f;
+        private const float RipeningWait = 1.5f;
+        private const float LaidOffGain = 1.5f;
+        private const float PolicyWorth = 2.5f; // A Policy happens again each Dawn: about this many times its first go
 
         private void PlayEachSpell(List<Spell> spells) {
             if (Level == AILevel.Easy) {
@@ -195,12 +216,15 @@ namespace SlayTheClone {
             }
 
             // Spells stay in the hand (5 at most): one that does little today waits, unless the hand is full and new ones would be lost
-            float bar = Player.SpellsIn(view.Me.Hand) >= Player.MaxSpellsInHand ? 0f : HoldBar;
+            bool full = Player.SpellsIn(view.Me.Hand) >= Player.MaxSpellsInHand;
+            float bar = full ? 0f : HoldBar;
+            // A Ripening spell that can still ripen asks for more today: tomorrow it's better (unless the hand is full)
+            float Ripens(Spell spell) => !full && Ripening.Has(spell) && spell.Ripeness < Ripening.Most ? RipeningWait : 0;
             while (spells.Count > 0) {
                 (Spell spell, ITarget aim, float value) best = (null, null, bar);
                 foreach (var spell in Hard ? spells : spells.Take(1).ToList()) {
                     foreach (var aim in AimsFor(spell)) {
-                        float value = SpellValue(spell, aim);
+                        float value = SpellValue(spell, aim) - Ripens(spell);
                         if (value > best.value) best = (spell, aim, value);
                     }
                 }
@@ -225,6 +249,8 @@ namespace SlayTheClone {
                 : spell.Effects.SelectMany(e => e.actions).Sum(a => PartValue(a, spell, aim))) + SacrificeValue(spell);
             // A Prophecy comes true later: worth less, and what it will hit may have changed by then
             if (Prophecy.DaysOf(spell) > 0) return 0.7f * ValueNow();
+            // A Policy happens again each Dawn: worth several times what it does now (the sooner, the more)
+            if (Policy.Has(spell)) return PolicyWorth * System.Math.Max(0.5f, ValueNow());
             if (!Hard || forecasts.Count == 0) return ValueNow();
             seeForecast = true;
             float after = ValueNow();
@@ -443,8 +469,10 @@ namespace SlayTheClone {
         private static bool Assassin(SeenCreature attacker) => attacker.Ability == CreatureAbility.ExtremePrejudice || attacker.Has(StatusEffectType.Licensed);
 
         // Its damage to this creature: Exposed adds 1 a hit; Insider Job goes through Armor; Extreme Prejudice kills
+        // Sucker Punch holds back against a creature that won't attack: one that can't today isn't worth punching
         private int Hit(SeenCreature attacker, SeenCreature target) => Assassin(attacker) ? 999 :
-            DamageOf(attacker) + (IsExposed(target) ? attacker.Ability == CreatureAbility.DoubleTap ? 2 : 1 : 0)
+            attacker.Ability == CreatureAbility.SuckerPunch && !(target.Operative && CanAttack(target)) ? 0 :
+            DamageOf(attacker) + (attacker.Ability == CreatureAbility.StripSearch && target.Statuses > 0 ? Abilities.StripBonus : 0) + (IsExposed(target) ? attacker.Ability == CreatureAbility.DoubleTap ? 2 : 1 : 0)
             + (attacker.Ability == CreatureAbility.InsiderJob ? target.Armor : 0);
 
         private bool Hittable(SeenCreature target) => !IsUntouchable(target) && !target.Slot.Shielded && !target.Has(StatusEffectType.Shielded) && !target.Planted;
@@ -561,6 +589,7 @@ namespace SlayTheClone {
                 return view.All.Sum(c => 0.5f * (c.Ours ? -1 : 1) * (HealthLeft(c) <= action.value ? c.Worth + HealthLeft(c) : action.value)) * Style.Removal + 0.2f;
             }
             if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;
+            if (action.actionType == ActionType.SwapSlotEffects) return SwapValue();
             // Send For: the right card next Day (it picks the best one when it resolves)
             if (action.actionType == ActionType.SendFor) return SendFor.Choices(view.Me, action).Count > 0 ? 2.5f * Style.Cards : 0;
             // GoldenEye: each of their Watchdogs gone is a trap we no longer walk into
@@ -620,6 +649,12 @@ namespace SlayTheClone {
         private List<object> TargetsOf(EffectAction action, ITarget aim) {
             var targets = new List<object>();
             if (action.targetType == TargetType.Self) return targets; // A spell has no self
+            // A side hazard or its sweeper: every slot of the side
+            if (action.actionType is ActionType.PlaceSlotEffect or ActionType.CleanseSlot && action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets)) {
+                if (action.targetType is TargetType.FriendlyCreatures or TargetType.Player or TargetType.AllCreatures) targets.AddRange(view.MySlots);
+                if (action.targetType is TargetType.EnemyCreatures or TargetType.Enemy or TargetType.AllCreatures) targets.AddRange(view.TheirSlots);
+                return targets;
+            }
             if (action.targetModifier.HasFlag(TargetModifier.DroppedSide)) { // The creatures of the side it's played on
                 bool ours = aim is IPlayer player ? player == view.Me : view.Of(SlotOf(aim))?.Ours ?? true;
                 foreach (var slot in ours ? view.MySlots : view.TheirSlots) {
@@ -850,13 +885,18 @@ namespace SlayTheClone {
 
         private static readonly StatusEffectType[] HarmfulStatuses = {
             StatusEffectType.Burned, StatusEffectType.Exhausted, StatusEffectType.Doomed, StatusEffectType.HeatSignature,
-            StatusEffectType.Revealed, StatusEffectType.Cooldown
+            StatusEffectType.Revealed, StatusEffectType.Cooldown, StatusEffectType.Toxic
         };
 
         private float StatusGoodness(EffectAction action, SeenCreature creature) {
             int days = System.Math.Max(1, action.statusDuration);
             return action.statusEffectToApply switch {
-                StatusEffectType.Burned => -System.Math.Max(1, action.statusPotency) * days,
+                // Hormesis: what would burn it heals it
+                StatusEffectType.Burned or StatusEffectType.Toxic when creature.Ability == CreatureAbility.Hormesis => BurnTotal(action, days) * 0.5f,
+                StatusEffectType.Burned => -BurnTotal(action, days),
+                StatusEffectType.Toxic => -BurnTotal(action, days),
+                // Martyrdom: Doomed doubles what it deals until it dies
+                StatusEffectType.Doomed when creature.Ability == CreatureAbility.Martyrdom && creature.Ours => AttackOf(creature) * 1.5f - creature.Worth / 4f,
                 StatusEffectType.Exhausted => creature.Operative && !IsStunned(creature) ? -(AttackOf(creature) + 1) : -0.5f,
                 StatusEffectType.Doomed => -creature.Worth / 2f,
                 StatusEffectType.Blessed => System.Math.Max(1, action.statusPotency),
@@ -890,6 +930,12 @@ namespace SlayTheClone {
             };
         }
 
+        // What a Burn deals over its Days; a Toxic one grows by 1 each Dusk
+        private static float BurnTotal(EffectAction action, int days) {
+            int potency = System.Math.Max(1, action.statusPotency);
+            return action.statusEffectToApply == StatusEffectType.Toxic ? potency * days + days * (days - 1) / 2f : potency * days;
+        }
+
         // Hard: help for one of ours is worth what it saves: the whole creature if it would otherwise die next Day
         private float Protection(SeenCreature ours, ActionType type, int amount) {
             if (IsUntouchable(ours)) return 0.1f; // Safe already
@@ -918,6 +964,7 @@ namespace SlayTheClone {
                             Protection(ours, ActionType.Stun, 0),
                         SlotEffectType.Shield => occupied ? 2 : 0.25f,
                         SlotEffectType.ScorchedEarth => occupied ? -1.5f : -0.5f,
+                        SlotEffectType.Checkpoint => -action.value * (occupied ? 0.5f : 0.8f), // Every creature that comes after pays
                         _ => 0
                     };
                 case ActionType.CleanseSlot:

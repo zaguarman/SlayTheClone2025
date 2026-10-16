@@ -43,7 +43,7 @@ namespace SlayTheClone.Tests {
 
             CardDealingService = new CardDealingService(Mediator);
             TrendSystem = new TrendSystem();
-            ModifierManager = new ModifierManager(Mediator, new SimpleModifierFactory());
+            ModifierManager = new ModifierManager(Mediator, new SimpleModifierFactory()) { Trends = TrendSystem };
             ActionsQueue = new ActionsQueue(Mediator, TrendSystem, CardDealingService, ModifierManager, TurnClock, ActionExecutors.CreateRegistry());
             CombatHandler = new BattlefieldCombatHandler(ActionsQueue, ModifierManager);
             Player1.Initialize(Mediator, CardDealingService);
@@ -105,6 +105,7 @@ namespace SlayTheClone.Tests {
             TurnClock.Advance();
             GoneDark.ProcessDawn(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, ActionsQueue);
             Prophecy.ProcessDawn(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, ActionsQueue);
+            Policy.ProcessDawn(new IPlayer[] { Player1, Player2 }, ActionsQueue);
             ModifierManager.ProcessStartOfTurn(TurnClock.TurnNumber, ActionsQueue);
             TrendSystem.QueueDayEffects(ActionsQueue);
             Resolve();

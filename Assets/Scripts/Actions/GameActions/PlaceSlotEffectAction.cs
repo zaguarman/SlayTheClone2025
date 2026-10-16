@@ -56,4 +56,19 @@ namespace SlayTheClone {
 
         public override string ToString() => $"CleanseSlotAction: {slot}";
     }
+
+    /// <summary>
+    /// Projection (Pokémon's Court Change): the Slot Effects on each side trade places with the other side's, slot for slot,
+    /// hidden traps too (they stay hidden, and keep their controller). What was set up against you now waits for them.
+    /// </summary>
+    public class SwapSlotEffectsAction : IGameAction {
+        public IPlayer Controller { get; }
+
+        public SwapSlotEffectsAction(IPlayer controller) {
+            Controller = controller;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"SwapSlotEffectsAction: by {Controller?.Name}";
+    }
 }

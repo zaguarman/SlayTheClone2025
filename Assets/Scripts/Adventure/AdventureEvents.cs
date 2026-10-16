@@ -17,7 +17,54 @@ namespace SlayTheClone {
             public Func<bool> Available { get; internal set; } = () => true;
             /// <summary>Does it, and says what happened.</summary>
             internal Func<Context, string> Outcome { get; set; }
+            /// <summary>A rest site's Train: it opens your deck to pick the card to upgrade (see <see cref="AdventureRun.UpgradeCard"/>).</summary>
+            public bool Trains { get; internal set; }
         }
+
+        /// <summary>
+        /// A rest site (Slay the Spire's campfire): sleep, healing <see cref="AdventureRun.RestHeal"/>, or train, upgrading a
+        /// card of your deck (see <see cref="CardUpgrades"/>). One or the other.
+        /// </summary>
+        public static Event RestSite() => new Event {
+            Id = "Rest",
+            Title = "Rest Site",
+            Text = "A motorway service station at 3 a.m. The coffee machine works. The Wi-Fi doesn't. Nobody will bother you here.",
+            Choices = {
+                new Choice {
+                    Label = $"Sleep  <color=#C9C0AE>(+{AdventureRun.RestHeal} Health)</color>",
+                    Outcome = c => {
+                        AdventureRun.ChangeHealth(AdventureRun.RestHeal);
+                        return $"You sleep across three plastic chairs. It's the best night in weeks. <b>+{AdventureRun.RestHeal} Health</b>.";
+                    }
+                },
+                new Choice {
+                    Label = "Train  <color=#C9C0AE>(upgrade a card of your deck)</color>",
+                    Available = () => CardUpgrades.Upgradable(AdventureRun.Deck.Cards).Count > 0,
+                    Trains = true
+                }
+            }
+        };
+
+        /// <summary>A treasure room: a relic you don't have yet, and some EuroYuans.</summary>
+        public static Event Treasure() => new Event {
+            Id = "Treasure",
+            Title = "Treasure",
+            Text = "A briefcase handcuffed to nothing, under a bench. The combination is 0000. It's always 0000.",
+            Choices = {
+                new Choice {
+                    Label = "Open it",
+                    Outcome = c => {
+                        var relic = AdventureRun.GainRelic(c.Random);
+                        AdventureRun.ChangeMoney(AdventureRun.TreasureMoney);
+                        return (relic != Relic.None ? $"Inside: {Relics.Line(relic)}\n" : "") + $"And <b>{AdventureRun.Money(AdventureRun.TreasureMoney)}</b> in an envelope marked \"expenses\".";
+                    }
+                },
+                new Choice {
+                    Label = "Leave it  <color=#C9C0AE>(it could be a trap)</color>",
+                    Outcome = c => "It's definitely a trap. Probably. You'll never know."
+                }
+            }
+        };
 
         /// <summary>An event: what you find, and what you can do about it.</summary>
         public class Event {

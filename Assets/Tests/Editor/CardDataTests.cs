@@ -142,7 +142,7 @@ namespace SlayTheClone.Tests {
             else if (action.actionType is ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.Destroy
                      or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                      or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Revive
-                     or ActionType.CopyStatuses or ActionType.EndDay or ActionType.Defect or ActionType.SwapStats) {
+                     or ActionType.CopyStatuses or ActionType.EndDay or ActionType.Defect or ActionType.SwapStats or ActionType.SwapSlotEffects) {
                 return null; // Says what it does instead of a value
             }
             else if (action.actionType is ActionType.Cleanse or ActionType.CleanseSlot or ActionType.CreateWatchdog or ActionType.Reveal or ActionType.WipeWatchdogs
@@ -151,7 +151,7 @@ namespace SlayTheClone.Tests {
             }
             else if (action.actionType == ActionType.PlaceSlotEffect) {
                 if (action.slotEffect == SlotEffectType.None) return "places no Slot Effect";
-                bool deals = action.slotEffect is SlotEffectType.Landmine or SlotEffectType.BarbedSnare;
+                bool deals = action.slotEffect is SlotEffectType.Landmine or SlotEffectType.BarbedSnare or SlotEffectType.Checkpoint;
                 if (deals && action.value <= 0) return $"{action.slotEffect} deals no damage";
             }
             else if (action.actionType == ActionType.ModifyStat) {

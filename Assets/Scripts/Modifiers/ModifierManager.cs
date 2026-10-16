@@ -11,6 +11,7 @@ namespace SlayTheClone {
         private readonly IModifierFactory modifierFactory;
 
         public IModifierFactory ModifierFactory => modifierFactory;
+        public ITrendSystem Trends { get; set; }
 
         private readonly Dictionary<string, List<IModifier>> activeModifiers = new Dictionary<string, List<IModifier>>();
         private readonly Dictionary<string, ICreature> creatures = new Dictionary<string, ICreature>();
@@ -277,11 +278,19 @@ namespace SlayTheClone {
 
                 var modifiers = activeModifiers[targetId];
 
-                // Burn ticks at every Dusk it is active, from the Day after it was applied (Status Timing), including its last
+                // Burn ticks at every Dusk it is active, from the Day after it was applied (Status Timing), including its last.
+                // Toxic too, then grows by 1. Hormesis (Utopia's biohackers): what doesn't kill it heals it instead
                 foreach (var burn in modifiers.OfType<StatusEffectModifier>()
-                             .Where(s => s.EffectType == StatusEffectType.Burned && s.Potency > 0 && s.ActsAtDuskOf(endedTurnNumber))) {
-                    Log($"{creature.Name} burns for {burn.Potency} (StatusEffect '{burn.Name}')", LogTag.Effects | LogTag.Turns);
-                    actionsQueue.AddAction(new DamageCreatureAction(creature, burn.Potency, creature));
+                             .Where(s => s.EffectType is StatusEffectType.Burned or StatusEffectType.Toxic && s.Potency > 0 && s.ActsAtDuskOf(endedTurnNumber)).ToList()) {
+                    if (Abilities.Has(creature, CreatureAbility.Hormesis)) {
+                        Log($"{creature.Name}'s Hormesis: its {burn.EffectType} heals it for {burn.Potency}", LogTag.Effects | LogTag.Turns);
+                        actionsQueue.AddAction(new HealCreatureAction(creature, burn.Potency));
+                    }
+                    else {
+                        Log($"{creature.Name} burns for {burn.Potency} (StatusEffect '{burn.Name}')", LogTag.Effects | LogTag.Turns);
+                        actionsQueue.AddAction(new DamageCreatureAction(creature, burn.Potency, creature));
+                    }
+                    if (burn.EffectType == StatusEffectType.Toxic) burn.Grow();
                 }
 
                 // Remove expired modifiers; RemoveModifier recalculates stats and notifies when needed
@@ -345,6 +354,7 @@ namespace SlayTheClone {
             int finalAttack = Math.Max(0, CalculateStat(creature.BaseAttack, mods, ModifiableStat.Attack));
             int finalMaxHealth = Math.Max(0, CalculateStat(creature.BaseHealth, mods, ModifiableStat.Health)); // 0 means it dies (GDD 3.3)
             int finalSpeed = Math.Max(0, CalculateStat(creature.BaseSpeed, mods, ModifiableStat.Speed));
+            finalAttack += Abilities.AttackFromGame(creature, Trends); // Grudge, On Trend
 
             var before = (creature.Attack, creature.MaxHealth, creature.Speed, creature.Health);
 
@@ -356,6 +366,12 @@ namespace SlayTheClone {
             // Only announce real changes; recalculating on registration or on a status expiring changes nothing
             if (before != (creature.Attack, creature.MaxHealth, creature.Speed, creature.Health)) {
                 mediator?.NotifyCreatureStatsChanged(creature);
+            }
+        }
+
+        public void RefreshConditionalStats() {
+            foreach (var creature in creatures.Values.ToList()) {
+                if (creature != null && !creature.IsDead && Abilities.HangsOnTheGame(creature.Ability)) RecalculateStats(creature);
             }
         }
 

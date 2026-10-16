@@ -253,11 +253,12 @@ namespace SlayTheClone {
             play.Paid.Clear();
         }
 
-        internal static void Spend(PlayCardAction play) {
+        internal static void Spend(PlayCardAction play, IActionsQueue queue = null) {
             var owner = play.GetOwner();
             foreach (var card in play.Paid) {
                 owner.SetAside.Remove(card);
                 owner.Deck.AddToDiscardPile(card);
+                LaidOff.Queue(card, owner, queue); // Given up: what it does when discarded happens
             }
             play.Paid.Clear();
             if (owner != null) Log($"{owner.Name}'s discard cost is spent", LogTag.Cards);

@@ -53,6 +53,13 @@ namespace SlayTheClone {
         /// <summary>Whether the creature takes +1 damage from every hit (Exposed, also part of Exhausted).</summary>
         bool IsExposed(ICreature creature);
         void RecalculateStats(ICreature creature);
+        /// <summary>
+        /// Recalculates the creatures whose Attack hangs on the game around them (Grudge: the fallen; On Trend: a Trend). Run
+        /// after every action, so the numbers on the cards are always the ones that count.
+        /// </summary>
+        void RefreshConditionalStats();
+        /// <summary>The game's Trends, for the abilities that ask (On Trend); null in games that have none.</summary>
+        ITrendSystem Trends { get; set; }
         /// <summary>A Persistent Stat Modification on a creature in play: its base stats change and stay on the card.</summary>
         void ChangeBaseStats(ICreature creature, int attack, int health, int speed);
         void ProcessEndOfTurn(int endedTurnNumber, IActionsQueue actionsQueue);
@@ -171,6 +178,7 @@ namespace SlayTheClone {
 
             IsInitialized = true;
 
+            session.Equip(Player1, MatchSetup.PlayerRelics, MatchSetup.PlayerPotions.Select(p => p.ToCardData())); // An adventure's kit
             session.DealOpeningHands();
             Log("GameManager Initialization complete.", LogTag.Initialization);
         }

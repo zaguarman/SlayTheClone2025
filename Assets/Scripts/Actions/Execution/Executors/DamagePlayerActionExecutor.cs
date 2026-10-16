@@ -7,6 +7,7 @@ namespace SlayTheClone {
             var damage = damagePlayerAction.GetDamage();
             if (damage > 0 && Abilities.IsAmbushing(damagePlayerAction.GetAttacker(), context.ModifierManager)) damage *= 2;
             if (damage > 0 && Abilities.IsOnTheBrink(damagePlayerAction.GetAttacker())) damage *= 2;
+            if (damage > 0 && Abilities.IsMartyred(damagePlayerAction.GetAttacker(), context.ModifierManager)) damage *= 2;
 
             if (targetPlayer == null) {
                 LogError("DamagePlayerActionExecutor: Target player is null", LogTag.Actions | LogTag.Players);

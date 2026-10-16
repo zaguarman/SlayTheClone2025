@@ -31,7 +31,13 @@ namespace SlayTheClone {
         /// <summary>A creature entered the slot: summoned there, or moved in by any means.</summary>
         public static void OnEnter(ICreature creature, BoardSlot slot, ActionExecutionContext context) {
             creature?.ReleaseHeldEntryEffects(context.ActionsQueue); // Moved off Scorched Earth: its entry effects happen now
-            if (creature == null || slot?.Effect?.Type != SlotEffectType.Landmine) return;
+            if (creature == null) return;
+            // Checkpoint (a side hazard, Pokémon's Stealth Rock): every creature that enters pays, and it stays
+            if (slot?.Effect?.Type == SlotEffectType.Checkpoint) {
+                Trigger(slot, context, $"{creature.Name} is stopped at a Checkpoint", new DamageCreatureAction(creature, slot.Effect.Value));
+                return;
+            }
+            if (slot?.Effect?.Type != SlotEffectType.Landmine) return;
             Trigger(slot, context, $"{creature.Name} steps on a Landmine", new DamageCreatureAction(creature, slot.Effect.Value));
         }
 

@@ -507,6 +507,13 @@ The Hand (the user, 2026-10-16)
       deck has no spell left, rather than reshuffling for one). Fewer cards ("draw X fewer next Day") cut the spells first,
       then the creatures.
     • Reshuffling: when the deck has none of the kind you need, the discard pile is shuffled back into it.
+    • Ripening (2026-10-16, from Slay the Spire's Retain cards that grow): at each Dawn, every Ripening spell still in your
+      hand ripens: its numbers (damage, healing, Armor, cards drawn, stat changes, stacks) go up by 1, up to +3. Played or
+      discarded, the next copy starts fresh. Holding a spell becomes a choice instead of a leftover.
+    • Laid Off (2026-10-16, from Slay the Spire's discard cards): a card discarded from your hand (a creature left unplayed at
+      Dawn, a card given up to pay a discard cost) does what its "Laid Off" text says, as your effect, its targets picked then.
+    • Potions (an adventure's): Single Use spells carried from fight to fight (3 at most), in your opening hand, not counted
+      among your spells. One you don't use stays with you.
 
 Drawing Cards (Scheduled Draw)
     • Regular Draw: see The Hand above. Besides the opening hand, this is the only time cards move from your deck to your hand.
@@ -955,6 +962,24 @@ A Myth mechanic: an effect announced now that happens later, in plain sight.
 • Independent: A Prophecy stays even if the creature that made it leaves play.
 • Stopping One: Only effects that explicitly mention Prophecies can delay, change or remove them. The usual counterplay is to see it coming and get out of the way.
 • Example: "Prophecy (2 Days): Static: deal 4 damage to the slot opposite this creature." Played on Day 3, it hits at Dawn of Day 5, so the opponent has a full Day to move the threatened creature.
+
+
+5.8 Policies (2026-10-16)
+
+From Slay the Spire's Powers: a Policy is a spell that becomes a rule of your side.
+• It happens when it resolves, then again at each Dawn (after the Prophecies), for the rest of the combat.
+• It never goes to the discard pile: it's in force, listed in the queue view ("In Force"), both sides'.
+• Its targets are its own (your side, a random creature, the player): a Policy is never aimed.
+• Cards: Internal Protocol: Quota Crusher Mindset (Corporate), Si Vis Pacem, Para Bellum (Statecraft), Universal Basic
+  Income (Zeitgeist), Publicly Funded Faith Schools (Myth).
+
+5.9 Side Hazards (2026-10-16)
+
+From Pokémon's Stealth Rock: a Slot Effect placed on every slot of a side.
+• Checkpoint X: visible, it stays; every creature that enters the slot (summoned or moved in) takes X damage, for its Days.
+  Border Crossing (Statecraft) puts Checkpoint 2 on every enemy slot for 3 Days: the summon-every-Day rhythm costs something.
+• Its answers: Code Review (Tech) clears every Slot Effect on your side (Rapid Spin, Defog); Projection (Mind) trades the
+  Slot Effects of both sides, slot for slot (Court Change).
 
 
 6. DESIGN PHILOSOPHY & BALANCING

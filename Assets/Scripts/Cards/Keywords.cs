@@ -49,6 +49,7 @@ namespace SlayTheClone {
             group = "Triggers";
             Add("Arrival", "Happens when this creature lands: once its summon finishes and its [Deployment Time] is over.");
             Add("Last Will", "Happens when this creature dies.");
+            Add("Laid Off", "Happens when this card is discarded from your hand: a creature left unplayed at [Dawn], or a card given up to pay a [Discard Cost]. It's your effect, with nothing of it in play: its targets are picked when it happens.");
             Add("Replaced", "Happens when a creature summoned onto its slot replaces it. Being replaced isn't dying: no [Last Will].");
             Add("Hurt", "Happens each time this creature takes damage.");
             Add("On Hit", "Happens when this creature's attack lands, on top of the attack.");
@@ -72,6 +73,9 @@ namespace SlayTheClone {
             Add("Sacrifice", "Sacrifice X: an additional cost. When this card resolves, your X [Weakest|weakest] creatures die first; their [Last Will] happens. You can't play it with fewer creatures on the board, and if they're gone by the time it resolves, it fizzles. Myth bends the rules: one offering pays every Sacrifice of its Day, so a creature you sacrificed this Day, or one a Phoenix Feather is taking, pays instead of your weakest.");
             Add("Prophecy", "Prophecy X: the spell is foretold now and comes true at the [Dawn] X [Days] later, aimed where it was played. Prophecy X-Y: at a [Dawn] X to Y [Days] later, at random, and nobody knows which. Everyone hears it: the queue lists what's been foretold.");
             Add("Single Use", "Once played, the card is gone for the rest of the combat instead of going to your discard pile.");
+            Add("Potion", "An adventure's: carried from fight to fight (3 at most), in your opening hand, not counted among your spells. Once played it's gone; one not used stays with you.");
+            Add("Policy", "A spell that becomes a rule of your side: it happens when it resolves, then again at each [Dawn], for the rest of the combat. It doesn't go to your discard pile; the queue lists the Policies in force.");
+            Add("Ripening", "A spell that gets better in your hand: at each [Dawn] you keep it, its numbers (damage, healing, [Armor], cards drawn, stat changes, stacks) go up by 1, up to +3. Played or discarded, the next copy starts fresh.");
             Add("Doom Cost", "Doom X, as a cost: when this card resolves, your [Weakest|weakest] creature that isn't [Doomed] yet is Doomed X first: it fights on harder, then dies in X [Days]. You can't play it without one, and if it's gone by the time it resolves, it fizzles. A [Blessed] creature stops the Doom with a stack.");
             Add("Discard Cost", "Discard X: a payment. To play this card, X other cards from your hand (not the ones you're playing) are given up: set aside now, discarded when it resolves, back in your hand if you take the play back. It's paid in full or not at all: with fewer cards, it isn't played and stays in your hand. A calculated card lets you pick them; a chaotic one takes them at random. A card whose effect is to discard (not to pay) discards as many as you have, up to X.");
             Add("Decoy", "A token that isn't what it looks like: until a [Reveal] or [Revealed] shows it, the other side sees the card it pretends to be, with that card's numbers. A token isn't a card in a deck: when it leaves play, it's gone.");
@@ -93,6 +97,7 @@ namespace SlayTheClone {
             group = "Statuses";
             Add("Exhausted", "Can't act, its ability is off and it's [Exposed]. Its planned action is cancelled. Lasts the rest of the [Day] and all of the next.");
             Add("Burned", "Burn X: takes X damage at each [Dusk] for the [Days] shown, starting the Dusk after it lands.");
+            Add("Toxic", "Toxic X: like [Burned|Burn], it takes X damage at each [Dusk] for the [Days] shown, starting the Dusk after it lands; but it grows: each time, the next one is 1 more (2, then 3, then 4...).");
             Add("Doomed", "Doom X (no number: 1): dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it, except [Borrowed Time]: on Borrowed Time when the sentence is carried out, it survives that too.");
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
             Add("Blessed", "Bless X (no number: 1): the next X statuses that would land on it are stopped, good or bad. Each stack also saves it once from being [Destroy|destroyed] by a spell or an ability (a Sacrifice isn't stopped).");
@@ -133,6 +138,7 @@ namespace SlayTheClone {
             Add("Barbed Snare", "Barbed Snare X: hidden. The next creature to leave the slot takes X damage.");
             Add("Shield", "Shield X (no number: 1): for X [Days], counting the one it lands, this creature takes no combat damage (attacks); spells and abilities still hurt it. It goes with the creature. A [Cleanse] doesn't remove it.");
             Add("Scorched Earth", "The creature in the slot can't use its ability or trigger its effects. Its [Arrival] effects wait until it's off the slot. It can still move and attack.");
+            Add("Checkpoint", "Checkpoint X: visible, and it stays. Every creature that enters the slot (summoned there, or moved in) takes X damage, for the [Days] shown. Played on a whole side, it makes every summon there cost something.");
 
             // ---------------------------------------------------------------- Trends
             group = "Trends";

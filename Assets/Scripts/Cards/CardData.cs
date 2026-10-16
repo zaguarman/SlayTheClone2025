@@ -29,6 +29,14 @@ namespace SlayTheClone {
         /// <summary>Gamble (a spell): only one of its effects happens, picked at random when it resolves.</summary>
         public bool gamble;
         public bool homing; // Homing (GDD 4.6): locks on the enemy creature it's aimed at; Heat Signature pulls it
+        /// <summary>Ripening (a spell): each Dawn it spends in your hand, its numbers go up by 1 (up to +3; see <see cref="Ripening"/>).</summary>
+        public bool ripening;
+        /// <summary>Policy (a spell): it happens when played and again each Dawn, for the rest of the combat (see <see cref="Policy"/>).</summary>
+        public bool policy;
+        /// <summary>An upgraded copy (a rest site's): one better number, and a + after its name (see <see cref="CardUpgrades"/>).</summary>
+        public bool upgraded;
+        /// <summary>A potion (an adventure's): a Single Use spell carried from fight to fight, in the opening hand, not counted among the spells.</summary>
+        public bool potion;
 
         // OnEnable can be used to initialize cardId if null
         public virtual void OnEnable() {

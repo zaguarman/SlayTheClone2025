@@ -74,3 +74,36 @@ is). Two-faction decks are listed apart.
 • The report doesn't credit damage that lands later (Dead Cat Bounce's crash, Prophecies like Inflation) to its card: their
   impact reads 0. The effects work (checked); the ledger needs to follow the delayed actions to their card.
 • Adventures: the elites (Hard AI, a stage more Health) end most runs; Myth and Corporate never beat the boss.
+
+
+6. THE META PICKS (2026-10-16, the user: "implement all of your ideas", from the Pokémon and Slay the Spire report)
+
+Lever 3 done the other way round: instead of changing the mechanics that lose, they were given owners and payoffs.
+• New rules: Ripening (spells that grow in the hand), Laid Off (a card discarded from the hand does something), Toxic
+  (Burn that grows) with Hormesis (heals from it), Martyrdom (Doomed doubles it), Grudge (+1 Attack per friendly death),
+  side hazards (Checkpoint on a whole side) with a sweeper and Projection, Sucker Punch (priority), Hit and Run (pivot),
+  Policies (spells that repeat each Dawn), Shield Bash (Armor as Attack), Strip Search (purge and hit), On Trend.
+• 29 cards to carry them, names from the Brainstorm List, in the decks they fit (Workbench: the showcase).
+• The adventure: rest sites (sleep or upgrade a card), treasure (a relic), relics from elites, potions.
+
+Results (the AI Balance Report, after +1 here and there on the new creatures that came in weakest):
+                     before   after
+  Zeitgeist            73%     77%
+  Statecraft           54%     62%
+  Digital Society      64%     61%
+  Mind                 60%     59%
+  Myth                 48%     50%
+  Corporate            33%     45%
+  Tech                 52%     45%
+  Shadow Ops.          40%     37%
+  Utopia               38%     33%
+
+• Corporate rose most (Usury 70% edge, Quota Crusher 65%); Statecraft and Myth gained a little.
+• The mechanics they were meant to rescue still lose as a group: Toxic 30%, Doomed 27%, Blessed 35% (was 26%), Last Will
+  35%: the payoff cards are few (2-3 each) and in second decks that lose anyway (Black Budget 8%, Blessed Martyrs 33%,
+  Lab Grown 21%, Threat Model 19%). Rebuilding those second decks is the next step, as planned.
+• Weakest new cards: Spite Voter 34%, Lost Generation 36%, Psychiatrists 38%. Strongest: Universal Basic Income (91%, few
+  games), Usury 70%, Quota Crusher 65%, Code Review 61%, Ambrosia 57%.
+• Adventures (30 runs a faction): bosses beaten Zeitgeist 8, Statecraft 4, Digital Society 4, Corporate 2, Mind 2, Tech 2,
+  Shadow Ops. 1, Utopia 1, Myth 0. Before: Statecraft 12, Mind 4, Shadow Ops. 3, Zeitgeist 2, Digital Society 2, Utopia 1,
+  Tech 0, Corporate 0, Myth 0. The starter decks changed too (new plain cards). Elites still end most runs.

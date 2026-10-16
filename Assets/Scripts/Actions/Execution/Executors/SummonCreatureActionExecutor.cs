@@ -75,6 +75,7 @@ namespace SlayTheClone {
             modifierManager.RegisterCreature(creature);
             creature.EnterPlay(context.TurnClock.TurnNumber);
             Abilities.CompleteHandover(creature, handover, modifierManager);
+            Relics.OnEnter(creature, context); // An adventure's relics: Coffee, Kevlar, Protein Shake
             // A building going up (Ministry for Equality): Rooted while it deploys, so nothing moves it until it's ready
             if ((creature.SourceData as CreatureData)?.rootedWhileDeploying == true && creature.TurnsUntilOperative > 0) {
                 StatusRules.Land(context, creature, StatusEffectType.Rooted, creature.TurnsUntilOperative, 0, context.TurnClock.TurnNumber);

@@ -25,7 +25,7 @@ namespace SlayTheClone {
 
             // The card leaves the hand now and is discarded once it leaves play (see Player.DiscardCard)
             owner.RemoveFromHand(card);
-            DiscardCost.Spend(playAction); // What paid for it goes to the discard pile
+            DiscardCost.Spend(playAction, actionsQueue); // What paid for it goes to the discard pile (and is Laid Off)
             if (!Sacrifice.Pay(card, owner, actionsQueue, context.TurnClock.TurnNumber) || !DoomCost.Pay(card, owner, actionsQueue)) { // Nobody left to pay with: it fizzles
                 owner.DiscardCard(card);
                 return;

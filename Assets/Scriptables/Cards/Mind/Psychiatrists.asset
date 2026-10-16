@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Psychiatrists
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 95264b34-64c8-42c8-ab18-b54b22620cfb
+  cardName: Psychiatrists
+  description: Your issues are fascinating. That'll be 200 an hour.
+  cardType: 0
+  faction: 8
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  effects: []
+  designNotes: 'Strip Search: its attack on a creature with a status or a stat change
+    Purges it first and hits 2 harder. They strip away everything you were carrying.'
+  artDescription: Two psychiatrists in armchairs taking notes while a patient on
+    the couch has his emotional baggage (suitcases labelled 'Mom', 'Ex', 'Work')
+    taken away one by one.
+  attack: 3
+  health: 4
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 44
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

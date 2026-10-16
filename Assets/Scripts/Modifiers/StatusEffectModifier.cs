@@ -10,7 +10,7 @@ namespace SlayTheClone {
         public StatusEffectType EffectType { get; }
         public int DurationInTurns { get; }
         public int TurnApplied { get; }
-        public int Potency { get; } // e.g., Burn damage per turn
+        public int Potency { get; private set; } // e.g., Burn damage per turn
         public const int MaxBlessedStacks = 3;
         public const int MaxHeat = 99; // Only the display limit for now
         /// <summary>Intensity, for statuses that count it instead of Days (Blessed charges, Heat). Time doesn't reduce it.</summary>
@@ -39,6 +39,9 @@ namespace SlayTheClone {
 
             Log($"StatusEffectModifier '{Name}' created: Type={EffectType}, Duration={DurationInTurns}, Potency={Potency}, AppliedTurn={TurnApplied}", LogTag.Effects);
         }
+
+        /// <summary>Toxic: after each Dusk it acts, it deals 1 more the next time.</summary>
+        public void Grow() => Potency++;
 
         /// <summary>The Dusks it has left, today's included (what its icon shows); 0 for a persistent one.</summary>
         public int DusksLeft(int today) => IsPersistent ? 0 : Math.Max(1, TurnApplied + DurationInTurns - (CountsTheDayItLands ? 1 : 0) - today + 1);

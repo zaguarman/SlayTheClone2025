@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SlayTheClone {
@@ -36,6 +37,10 @@ namespace SlayTheClone {
         public static int? PlayerHealth { get; set; }
         /// <summary>The Health the opponent (Player 2) starts at, when not the usual 20: an adventure's enemies, 5 more each fight.</summary>
         public static int? OpponentHealth { get; set; }
+        /// <summary>The relics you (Player 1) carry into the fight: an adventure's.</summary>
+        public static List<Relic> PlayerRelics { get; } = new List<Relic>();
+        /// <summary>The potions you carry into the fight, in your opening hand: an adventure's.</summary>
+        public static List<CardDataScriptableObject> PlayerPotions { get; } = new List<CardDataScriptableObject>();
 
         public static bool PlayedByAI(IPlayer player) =>
             player != null && (AI & (player.IsPlayer1 ? AISeats.Player1 : AISeats.Player2)) != 0;
@@ -62,6 +67,8 @@ namespace SlayTheClone {
             seatLevels.Clear();
             PlayerDeck = playerDeck;
             PlayerHealth = OpponentHealth = null;
+            PlayerRelics.Clear();
+            PlayerPotions.Clear();
             AI = ai;
             OpponentDeck = opponentDeck;
             OpponentName = string.IsNullOrEmpty(opponentName) ? DefaultOpponentName : opponentName;
@@ -80,6 +87,8 @@ namespace SlayTheClone {
             OpponentDeck = null;
             OpponentName = null;
             PlayerHealth = OpponentHealth = null;
+            PlayerRelics.Clear();
+            PlayerPotions.Clear();
             seatLevels.Clear();
             AI = AISeats.None;
             AILevel = AILevel.Medium;

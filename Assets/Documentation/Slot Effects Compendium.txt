@@ -48,6 +48,16 @@ Scorched Earth
     Duration of Slot Effect: Persistent until replaced.
     Cleansable: Yes
 
+Checkpoint (the user, 2026-10-16: a side hazard, Pokémon's Stealth Rock)
+    Visibility: Visible
+    Trigger Event(s): OnEnterSlot (summoned there, or moved in).
+    Effect: The entering creature takes X damage. It stays: every creature that enters pays.
+    Placement: on every slot of a side at once (Border Crossing, Statecraft: Checkpoint 2 on every enemy slot for 3 Days).
+    Parameters: Damage: X. Duration of Slot Effect: X Days.
+    Answers: Code Review (Tech) clears every Slot Effect on your side; Projection (Mind) trades both sides' Slot Effects,
+             slot for slot (Court Change).
+    Cleansable: Yes
+
 Rally Point
     Visibility: Visible
     Trigger Event(s): OnTurnStart (Slot effect logic checks if its slot is occupied by a creature controlled by the same player who controls this Rally Point).

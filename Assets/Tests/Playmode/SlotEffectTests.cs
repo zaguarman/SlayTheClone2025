@@ -90,6 +90,27 @@ namespace SlayTheClone.Tests {
             game.History.Clear();
             game.Resolve();
             Assert.AreEqual("DamageCreature", game.History.ExecutedKinds()[0], "Environment actions go first, whatever their layer");
+
+            // A side hazard (Border Crossing, the user 2026-10-16): a Checkpoint on every enemy slot hurts each creature that
+            // enters and stays. Projection trades the sides' Slot Effects; a sweep (Code Review) clears a whole side
+            Fresh();
+            var hazard = new CardEffect { trigger = EffectTrigger.OnPlay, actions = new List<EffectAction> {
+                new EffectAction { actionType = ActionType.PlaceSlotEffect, slotEffect = SlotEffectType.Checkpoint, value = 2, statusDuration = 3,
+                    targetType = TargetType.EnemyCreatures, targetModifier = TargetModifier.AllSameTypeTargets } } };
+            var border = game.GiveCard(p1, game.Spell("Border", TargetType.Enemy, hazard));
+            game.Run(new PlayCardAction(border, p1, p2));
+            Assert.IsTrue(p2.Battlefield.All(s => s.Effect?.Type == SlotEffectType.Checkpoint && !s.Effect.IsHidden), "On every enemy slot, in sight");
+            var first = game.Summon(p2, game.Creature("First", 1, 5), 0);
+            var second = game.Summon(p2, game.Creature("Second", 1, 5), 1);
+            Assert.AreEqual((3, 3), (first.Health, second.Health));
+            Assert.IsNotNull(p2.Battlefield[0].Effect, "It stays for the next one");
+            game.Run(new SwapSlotEffectsAction(p2));
+            Assert.IsTrue(p1.Battlefield.All(s => s.Effect?.Type == SlotEffectType.Checkpoint) && p2.Battlefield.All(s => s.Effect == null),
+                "Projection: now it waits on the other side");
+            var sweep = Effect(EffectTrigger.OnPlay, ActionType.CleanseSlot, 0, TargetType.FriendlyCreatures, TargetModifier.AllSameTypeTargets);
+            var review = game.GiveCard(p1, game.Spell("Review", TargetType.Player, sweep));
+            game.Run(new PlayCardAction(review, p1, p1));
+            Assert.IsTrue(p1.Battlefield.All(s => s.Effect == null), "The sweep clears every slot of its side");
         }
 
         [Test]

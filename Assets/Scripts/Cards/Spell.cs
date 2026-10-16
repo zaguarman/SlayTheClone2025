@@ -4,6 +4,8 @@ using static SlayTheClone.Enums;
 namespace SlayTheClone {
     public class Spell : Card {
         public TargetType DefaultTargetType { get; }
+        /// <summary>Ripening: the Dawns it has ripened in the hand (its numbers are this much higher); 0 for a fresh copy.</summary>
+        public int Ripeness { get; set; }
 
         public Spell(string name, TargetType defaultTargetType, string cardId = null) : base(name, cardId) {
             DefaultTargetType = defaultTargetType;

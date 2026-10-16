@@ -36,6 +36,12 @@ namespace SlayTheClone {
         List<Offering> Offerings { get; }
         /// <summary>This player's spells foretold (Prophecy) that haven't come true yet.</summary>
         List<Prophecy> Prophecies { get; }
+        /// <summary>This player's Policies in force: spells that happen again each Dawn, out of the deck for the combat.</summary>
+        List<ICard> Policies { get; }
+        /// <summary>This player's creatures that died this combat, tokens included (Grudge counts them).</summary>
+        int Fallen { get; set; }
+        /// <summary>The adventure's relics this player carries into the fight (none outside an adventure).</summary>
+        ISet<Relic> Relics { get; }
         /// <summary>God's Grace: the last Day at whose Dusk 0 Health doesn't lose yet; null when not in Grace.</summary>
         int? GraceUntilDay { get; set; }
         /// <summary>The card that put the player in Grace (shown over their plaque while it lasts).</summary>
@@ -76,7 +82,7 @@ namespace SlayTheClone {
         // played, 2 more a Day, 5 at most
         public const int CreaturesPerDay = 3, SpellsPerDay = 2, MaxSpellsInHand = 5;
         /// <summary>The spells in a hand.</summary>
-        public static int SpellsIn(IEnumerable<ICard> hand) => hand.Count(c => !(c is ICreature));
+        public static int SpellsIn(IEnumerable<ICard> hand) => hand.Count(c => !(c is ICreature) && c.SourceData?.potion != true); // Potions aside
         public static int CreaturesIn(IEnumerable<ICard> hand) => hand.Count(c => c is ICreature);
         public const int BattlefieldSize = 5;
         public const int StartingHealth = 20; // A fight starts at it (an adventure carries its own); healing has no ceiling
@@ -95,6 +101,9 @@ namespace SlayTheClone {
         public List<GoneDark> GoneDark { get; } = new List<GoneDark>();
         public List<Offering> Offerings { get; } = new List<Offering>();
         public List<Prophecy> Prophecies { get; } = new List<Prophecy>();
+        public List<ICard> Policies { get; } = new List<ICard>();
+        public int Fallen { get; set; }
+        public ISet<Relic> Relics { get; } = new HashSet<Relic>();
         public int? GraceUntilDay { get; set; }
         public ICard GraceCard { get; set; }
         public Dictionary<ICard, ICard> SendForPicks { get; } = new Dictionary<ICard, ICard>();

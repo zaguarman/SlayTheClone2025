@@ -285,6 +285,30 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Trend.Casino, game.TrendSystem.Current);
             Assert.AreNotEqual(firstDay, game.TrendSystem.Roll, "...and again at each Dawn, never the same twice running");
             Assert.AreEqual(game.TrendSystem.Roll == CasinoRoll.RushHour, game.TrendSystem.SlowestFirst, "Its Rush Hour is the real one");
+
+            // The meta picks (2026-10-16): a Ripening spell kept in the hand ripens at each Dawn; a creature discarded at Dawn is
+            // Laid Off (what it does happens); a Policy happens when played and again at each Dawn, out of the discard pile
+            p1.DiscardHand(); // Room in the hand
+            var interestData = game.Spell("Interest", TargetType.Player, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Draw, 1, TargetType.Player));
+            interestData.ripening = true;
+            var interest = (Spell)game.GiveCard(p1, interestData);
+            game.GiveCard(p1, game.Creature("Quitter", 1, 1, 1,
+                TestGame.Effect(EffectTrigger.OnDiscarded, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));
+            var mark = game.Summon(p2, game.Creature("Mark", 0, 10), 3);
+            var wall = game.Summon(p1, game.Creature("Wall", 0, 5), 3);
+            var policyData = game.Spell("Daily Armor", TargetType.Player,
+                TestGame.Effect(EffectTrigger.OnPlay, ActionType.Armor, 1, TargetType.FriendlyCreatures, TargetModifier.AllSameTypeTargets));
+            policyData.policy = true;
+            var policy = game.GiveCard(p1, policyData);
+            game.Run(new PlayCardAction(policy, p1, p1));
+            Assert.AreEqual(1, wall.CurrentArmorPool, "A Policy happens when it's played...");
+            CollectionAssert.Contains(p1.Policies, policy);
+            yield return game.EndTurn();
+            Assert.AreEqual(1, interest.Ripeness, "Kept through a Dawn, it ripened");
+            Assert.AreEqual(2, interest.Effects[0].actions[0].value, "...it draws 1 more");
+            Assert.AreEqual(8, mark.Health, "The Quitter, discarded at Dawn, was Laid Off: 2 damage");
+            Assert.AreEqual(1, wall.CurrentArmorPool, "...and the Policy again at Dawn (the first Armor faded at Dusk)");
+            Assert.IsFalse(p1.Deck.GetDiscardPilePreview().Any(c => c.Name == "Daily Armor"), "In force, not in the discard pile");
         }
     }
 }

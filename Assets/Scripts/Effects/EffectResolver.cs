@@ -57,6 +57,17 @@ namespace SlayTheClone {
             }
         }
 
+        /// <summary>
+        /// Queues what a card not in play does on this trigger (Laid Off: discarded from the hand), as its owner's effect:
+        /// targets are picked as a spell's are, without one chosen; "itself" is nothing.
+        /// </summary>
+        public static void QueueCardEffects(ICard card, IPlayer owner, EffectTrigger trigger, IActionsQueue queue) {
+            foreach (var action in ActionsFor(card, trigger, owner)) {
+                if (action.targetType == TargetType.Self) continue;
+                QueueAction(card, owner, action, SelectTargets(card, owner, action, chosenTarget: null, queue), queue);
+            }
+        }
+
         /// <summary>A spell's part that waited (see <see cref="EffectAction.delayDays"/>) lands now on what it was aimed at, those still there.</summary>
         public static void QueueDelayed(Spell spell, IPlayer caster, EffectAction action, IEnumerable<ITarget> targets, IActionsQueue queue) =>
             QueueAction(spell, caster, action, targets.Where(t => !(t is ICreature creature) || (!creature.IsDead && creature.Slot != null)).ToList(), queue);
@@ -122,6 +133,10 @@ namespace SlayTheClone {
                 return new List<ITarget>();
             }
 
+            // A side hazard, or its sweeper: every slot of the side (Checkpoint, Bomb Disposal)
+            if (action.actionType is ActionType.PlaceSlotEffect or ActionType.CleanseSlot && action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets)) {
+                return SidesOf(action.targetType, controller).SelectMany(side => side.Battlefield).Cast<ITarget>().ToList();
+            }
             if (chosenTarget != null && UsesChosenTarget(action) && IsSlotAction(action.actionType)) {
                 return new List<ITarget> { SlotOf(chosenTarget) }.Where(slot => slot != null).ToList();
             }
@@ -491,7 +506,10 @@ namespace SlayTheClone {
                         ? new PlaceSlotEffectAction(slot, action.slotEffect, action.value, action.statusDuration, controller)
                         : null;
                 case ActionType.CleanseSlot:
-                    return SlotOf(target) is BoardSlot cleansed ? new CleanseSlotAction(cleansed) : null;
+                    return SlotOf(target) is BoardSlot cleansed && (cleansed.Effect != null || !action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets))
+                        ? new CleanseSlotAction(cleansed) : null;
+                case ActionType.SwapSlotEffects: // Projection: the whole board's, whatever it lands on
+                    return new SwapSlotEffectsAction(controller);
                 case ActionType.CreateWatchdog: // Aimed at a creature it watches that creature; at a player, that whole side
                     return creature != null || target is IPlayer
                         ? new CreateWatchdogAction(action.watchdog, controller, creature, action.statusDuration)

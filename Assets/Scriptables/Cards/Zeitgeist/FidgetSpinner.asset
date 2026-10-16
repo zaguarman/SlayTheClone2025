@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: FidgetSpinner
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 7659f9c7-ac72-4c2b-b779-f0156bf95542
+  cardName: Fidget Spinner
+  description: 2017's must-have. 2018's landfill.
+  cardType: 0
+  faction: 7
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  effects: []
+  designNotes: 'On Trend: +2 Attack while a Trend is on. A fad: only as strong as
+    the moment it''s in.'
+  artDescription: A giant fidget spinner whirling on a school desk, sparks flying
+    off its bearings, a crowd of kids staring at it hypnotized, a teacher's 'Confiscated'
+    box in the corner.
+  attack: 2
+  health: 3
+  speed: 3
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 45
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

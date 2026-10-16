@@ -314,6 +314,7 @@ namespace SlayTheClone {
                 if (kept.TryGetValue(handCard, out var controller)) {
                     if (controller.IsQueued != isQueued) controller.SetQueued(isQueued, canBeDragged: true);
                     if (controller.IsFaceDown != faceDown) controller.SetFaceDown(faceDown);
+                    if (handCard is Spell { Ripeness: > 0 } && !faceDown) controller.UpdateUI(); // It ripened: its numbers changed
                     order.Add(controller);
                     continue;
                 }

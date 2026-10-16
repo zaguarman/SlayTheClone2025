@@ -217,7 +217,10 @@ namespace SlayTheClone {
             // Switched off only on the board, ready to act (a card in the hand, or still deploying, isn't)
             bool abilityOff = linkedCreature?.Slot != null && !linkedCreature.IsDead && linkedCreature.IsOperative
                               && linkedCreature.Ability != Enums.CreatureAbility.None && !Abilities.IsActive(linkedCreature);
-            rulesText.text = ComposeTextBox(CardTextFormatter.GetRulesText(baseCardData, ability, abilityOff), baseCardData.description);
+            // A Ripening spell ripened in the hand reads with its numbers as they are now
+            var ripened = linkedCardInstance is Spell { Ripeness: > 0 } ripe ? ripe.Effects : null;
+            if (ripened != null) nameText.text = $"{baseCardData.cardName} <size=80%>(ripe +{((Spell)linkedCardInstance).Ripeness})</size>";
+            rulesText.text = ComposeTextBox(CardTextFormatter.GetRulesText(baseCardData, ability, abilityOff, ripened), baseCardData.description);
 
             bool isCreature = baseCardData is CreatureData;
             statsBox.SetActive(isCreature);

@@ -27,6 +27,10 @@ MonoBehaviour:
   prophecyLatest: 0
   gamble: 0
   homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
   effects:
   - effectType: 0
     trigger: 0

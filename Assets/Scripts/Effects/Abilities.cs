@@ -74,6 +74,11 @@ namespace SlayTheClone {
             CreatureAbility.SorryImLate => "Sorry I'm Late",
             CreatureAbility.HeProtec => "He Protec",
             CreatureAbility.Turncoat => "Turncoat",
+            CreatureAbility.SuckerPunch => "Sucker Punch",
+            CreatureAbility.HitAndRun => "Hit and Run",
+            CreatureAbility.ShieldBash => "Shield Bash",
+            CreatureAbility.StripSearch => "Strip Search",
+            CreatureAbility.OnTrend => "On Trend",
             _ => ability.ToString()
         };
 
@@ -116,6 +121,14 @@ namespace SlayTheClone {
             CreatureAbility.HeProtec => "when a summon replaces it, it stays through the attacks and takes the Day's hits; the newcomer arrives after them",
             CreatureAbility.Irreplaceable => "no summon can replace it: its slot stays its own until it leaves",
             CreatureAbility.Turncoat => "no summon can replace it, and nobody can order it to attack: it strikes its own side, on its own",
+            CreatureAbility.Hormesis => "Burn and Toxic heal it instead of hurting it",
+            CreatureAbility.Martyrdom => "while Doomed, everything it deals is doubled",
+            CreatureAbility.Grudge => $"+1 Attack for each friendly creature that died this combat (up to +{GrudgeMost})",
+            CreatureAbility.SuckerPunch => "its attack on a creature goes before every other, but only if that creature planned an attack; otherwise it holds back",
+            CreatureAbility.HitAndRun => "after its attack, it goes back to your hand, fresh, with the next Day's",
+            CreatureAbility.ShieldBash => "its Attack goes up by its Armor",
+            CreatureAbility.StripSearch => $"its attack on a creature with a status or a stat change Purges it first, and hits {StripBonus} harder",
+            CreatureAbility.OnTrend => $"+{TrendBonus} Attack while a Trend is on",
             _ => ""
         };
 
@@ -298,6 +311,7 @@ namespace SlayTheClone {
             if (damage > 0 && damage <= 3 && Has(attacker, CreatureAbility.PennyStock)) damage *= 2;
             if (damage > 0 && IsAmbushing(attacker, modifiers)) damage *= 2;
             if (damage > 0 && IsOnTheBrink(attacker)) damage *= 2;
+            if (damage > 0 && IsMartyred(attacker, modifiers)) damage *= 2;
             return damage;
         }
 
@@ -318,6 +332,30 @@ namespace SlayTheClone {
         /// </summary>
         public static bool IsOnTheBrink(ICreature creature) =>
             Has(creature, CreatureAbility.Brink) && !creature.IsDead && creature.Health <= BrinkHealth;
+
+        /// <summary>Martyrdom (Myth's martyrs): while Doomed, everything it deals is doubled.</summary>
+        public static bool IsMartyred(ICreature creature, IModifierManager modifiers) =>
+            Has(creature, CreatureAbility.Martyrdom) && (modifiers?.HasStatusEffect(creature, StatusEffectType.Doomed) ?? false);
+
+        public const int GrudgeMost = 5, TrendBonus = 2, StripBonus = 2;
+
+        /// <summary>The abilities whose Attack hangs on the game around the creature: recalculated after every action.</summary>
+        public static bool HangsOnTheGame(CreatureAbility ability) => ability is CreatureAbility.Grudge or CreatureAbility.OnTrend or CreatureAbility.ShieldBash;
+
+        /// <summary>
+        /// The Attack its ability adds from the game around it: Grudge, +1 for each friendly creature fallen this combat (up to
+        /// +5, the losses as fuel, Kingambit's Supreme Overlord); On Trend, +2 while a Trend is on (Protosynthesis); Shield
+        /// Bash, its Armor (Body Press).
+        /// </summary>
+        public static int AttackFromGame(ICreature creature, ITrendSystem trends) {
+            if (creature == null || !HangsOnTheGame(creature.Ability) || !IsActive(creature)) return 0;
+            return creature.Ability switch {
+                CreatureAbility.Grudge => Math.Min(GrudgeMost, creature.Owner?.Fallen ?? 0),
+                CreatureAbility.OnTrend => trends != null && trends.Current != Trend.None ? TrendBonus : 0,
+                CreatureAbility.ShieldBash => Math.Max(0, creature.CurrentArmorPool),
+                _ => 0
+            };
+        }
 
         /// <summary>Recoil: its attacks hit 2 harder (it takes 1 damage after each, see BattlefieldCombatActionExecutor).</summary>
         public static int AttackBonus(ICreature attacker) => Has(attacker, CreatureAbility.Recoil) ? 2 : 0;

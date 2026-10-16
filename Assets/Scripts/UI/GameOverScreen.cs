@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -90,6 +91,7 @@ namespace SlayTheClone {
         // An adventure's fight: won, on to the map a room further (or the run is won); lost, the run is over. No Play Again
         private void ShowAdventureEnd(bool won) {
             bool boss = AdventureRun.Fighting.Type == RoomType.Boss;
+            if (won) AdventureRun.KeepPotions(gameManager.Player1.Hand.Where(c => c.SourceData?.potion == true).Select(c => c.Name)); // The ones not used
             if (won) AdventureRun.WinFight(gameManager.Player1.Health); // What's left of your Health goes on with you
             else AdventureRun.LoseFight();
             title.text = won ? "Victory" : "Defeat";

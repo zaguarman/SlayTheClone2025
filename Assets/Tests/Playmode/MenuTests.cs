@@ -229,7 +229,7 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(GalleryButton(adventure, AdventureMenu.PackButton + 0).interactable, "The pack is used up");
             Click(GalleryButton(adventure, AdventureMenu.ProceedButtonName));
             Assert.IsFalse(AdventureRun.InRewards, "Proceed: on to the map");
-            var walk = first.Next.FirstOrDefault(n => !n.IsCombat && n.Type is not (RoomType.Shop or RoomType.Unknown));
+            var walk = first.Next.FirstOrDefault(n => !n.IsCombat && n.Type is not (RoomType.Shop or RoomType.Unknown or RoomType.Rest or RoomType.Treasure));
             if (walk != null) {
                 Click(adventure.Rooms[walk]);
                 Assert.AreSame(walk, AdventureRun.Current, "Any other room is walked through");
@@ -273,10 +273,10 @@ namespace SlayTheClone.Tests {
                 adventure.Show();
                 Click(adventure.Rooms[shop]);
                 Assert.IsTrue(AdventureRun.InShop, "A shop opens...");
-                Assert.AreEqual(AdventureRun.ShopCards, adventure.ShopCards.Count, "...its cards on show...");
-                Assert.IsTrue(AdventureRun.Shop.All(o => o.Card.faction == yours), "...all of your faction");
+                Assert.AreEqual(AdventureRun.ShopCards + AdventureRun.ShopPotions, adventure.ShopCards.Count, "...its cards on show, and two potions...");
+                Assert.IsTrue(AdventureRun.Shop.Where(o => !o.IsPotion).All(o => o.Card.faction == yours), "...the cards all of your faction");
                 Assert.IsEmpty(AdventureRun.Reachable(), "No walking on from a shop before leaving it");
-                var cheapest = AdventureRun.Shop.OrderBy(o => o.Price).First();
+                var cheapest = AdventureRun.Shop.Where(o => !o.IsPotion).OrderBy(o => o.Price).First();
                 int size = AdventureRun.Deck.Cards.Count;
                 ClickCard(adventure.ShopCards[AdventureRun.Shop.IndexOf(cheapest)]);
                 Assert.IsTrue(cheapest.Sold && AdventureRun.Deck.Cards.Count == size + 1 && AdventureRun.EuroYuans == purse - cheapest.Price, "Clicking a card buys it, paid");
@@ -305,6 +305,21 @@ namespace SlayTheClone.Tests {
                 Click(GalleryButton(adventure, AdventureMenu.EventOnButtonName));
                 Assert.IsFalse(AdventureRun.InEvent, "...then on to the map");
                 Assert.IsNotEmpty(AdventureRun.Reachable());
+            }
+            // A rest site (the user, 2026-10-16): sleep, or train, upgrading a card of your deck
+            var rest = WalkTowards(RoomType.Rest);
+            if (rest != null) {
+                Click(adventure.Rooms[rest]);
+                Assert.IsTrue(AdventureRun.InEvent && AdventureRun.Event.Id == "Rest", "A rest site...");
+                int deckSize = AdventureRun.Deck.Cards.Count;
+                Click(GalleryButton(adventure, AdventureMenu.EventChoiceButton + 1));
+                Assert.IsTrue(AdventureRun.Upgrading && adventure.DeckCards.Count > 0, "...Train shows the cards that can be upgraded...");
+                string trained = adventure.DeckCards[0].GetBaseCardData().cardName;
+                ClickCard(adventure.DeckCards[0]);
+                Assert.IsTrue(AdventureRun.Deck.Cards.Any(c => c.cardName == trained + CardUpgrades.Mark && c.upgraded), "...a click upgrades it: the + version...");
+                Assert.AreEqual(deckSize, AdventureRun.Deck.Cards.Count, "...in its place");
+                Click(GalleryButton(adventure, AdventureMenu.EventOnButtonName));
+                Assert.IsFalse(AdventureRun.InEvent);
             }
             Click(GalleryButton(adventure, AdventureMenu.AbandonButtonName));
             Assert.IsTrue(AdventureRun.Active, "Abandon asks to be sure first...");
@@ -403,8 +418,12 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(yourDeck, game.References.Player1Deck);
             Assert.AreSame(theirDeck, game.References.Player2Deck);
             foreach (var player in game.Players) {
-                // A spell that only shows something resolves as soon as the AI plays it
-                Assert.AreEqual(5, player.Hand.Count + player.Deck.GetDiscardPilePreview().Count, $"{player.Name} should start with a full hand");
+                // A Day's hand: 3 creatures and 2 spells, as many as the deck has (yours, cut to 20, may be all creatures). A spell
+                // that only shows something resolves as soon as the AI plays it; a discard cost sets its cards aside
+                var dealt = (player == game.Player1 ? yourDeck : theirDeck).Cards;
+                int full = System.Math.Min(Player.CreaturesPerDay, dealt.Count(c => c is CreatureCardScriptableObject))
+                           + System.Math.Min(Player.SpellsPerDay, dealt.Count(c => !(c is CreatureCardScriptableObject)));
+                Assert.AreEqual(full, player.Hand.Count + player.Deck.GetDiscardPilePreview().Count + player.SetAside.Count, $"{player.Name} should start with a full hand");
                 GameAsserts.AssertEachCardInOneZone(player);
                 Assert.IsFalse(FogOfWar.CanControl(player), "The AI's cards aren't yours to use");
             }

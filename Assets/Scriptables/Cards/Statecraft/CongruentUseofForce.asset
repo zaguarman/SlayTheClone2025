@@ -27,6 +27,10 @@ MonoBehaviour:
   prophecyLatest: 0
   gamble: 0
   homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
   effects: []
   designNotes: 'Mechanics test: Spray and Pray. Its attacks also hit the creatures
     beside its target, a cone of three slots.'

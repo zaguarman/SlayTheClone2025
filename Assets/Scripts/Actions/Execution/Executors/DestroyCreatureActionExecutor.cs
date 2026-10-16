@@ -38,6 +38,7 @@ namespace SlayTheClone {
 
             Log($"Executor: {creature.Name} is destroyed", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
             creature.MarkAsDead();
+            if (creature.Owner != null) creature.Owner.Fallen++; // Grudge counts the fallen of its side
             context.GameMediator.NotifyCreatureDied(creature);
 
             // OnDied effects wait their turn in the Ability and Attack layer

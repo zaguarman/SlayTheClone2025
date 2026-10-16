@@ -269,3 +269,70 @@ Safe Space
     Description: "Each Dawn, it and the friendly creatures beside it gain Bless."
     Notes: Bless 1 each Dawn, a ward that stops the next status, good or bad (Blessed stacks up to 3). Nothing at the Dawn it lands: it starts the Dawn after it's ready.
     Answers: Spend the wards with weak statuses first, or use damage.
+
+
+The Meta Picks (the user, 2026-10-16: from the Pokémon and Slay the Spire report, "implement all of your ideas")
+
+Hormesis
+    Inspired by: Poison Heal (Gliscor). On Biohacker (Utopia).
+    Type: Passive
+    Description: "Burn and Toxic heal it instead of hurting it."
+    Notes: Each Dusk the damage the status would deal heals it instead (up to its maximum Health). Utopia burns its own
+           creatures: this gives that cost an owner who wants it. Biohacker makes itself Toxic on arrival.
+    Answers: Statuses that aren't damage; plain damage; a Cleanse (yours) takes its fuel away.
+
+Martyrdom
+    Inspired by: Guts and the martyr archetype. On Heretic (Myth).
+    Type: Passive
+    Description: "While Doomed, everything it deals is doubled."
+    Notes: Doomed already gives +1 Attack each Dawn; doubled, a Doomed martyr is a clock on the other side. Myth's Doom costs
+           pick the weakest creature not yet Doomed: a martyr volunteers.
+    Answers: Kill it before the sentence; Untouchable on its target; Heresy moves the Doom elsewhere.
+
+Grudge
+    Inspired by: Supreme Overlord (Kingambit). On Big Four (Corporate) and Lost Generation (Zeitgeist).
+    Type: Passive
+    Description: "+1 Attack for each friendly creature that died this combat (up to +5)."
+    Notes: Every friendly death counts, tokens and sacrifices included, from the start of the combat, even before it
+           arrived. Losses become fuel: Last Will decks and swarms finally build toward something.
+    Answers: Kill it first, or don't kill its friends.
+
+Sucker Punch
+    Inspired by: Sucker Punch (Kingambit). On Nonchalant Agent (Shadow Ops.).
+    Type: Passive
+    Description: "Its attack on a creature goes before every other, but only if that creature planned an attack; otherwise it holds back."
+    Notes: Priority beats Speed and Rush Hour. Checked when it resolves: if the creature it attacks has no attack waiting in
+           the queue, it does nothing. Your plans show your intents; Concealed ones make it a guess (Fog of War). Against an
+           empty slot it hits the player as usual.
+    Answers: Don't attack with the creature facing it; Conceal your plans.
+
+Hit and Run
+    Inspired by: U-turn and Volt Switch (pivoting). On Camper Van (Zeitgeist) and Bomber Drone (Tech).
+    Type: Passive
+    Description: "After its attack, it goes back to your hand, fresh, with the next Day's."
+    Notes: It counts among the next Day's 3 creatures. Its slot is free for a new summon; its damage and statuses are gone.
+           Its Arrival happens again when it's played again.
+    Answers: Hit it before it attacks; Checkpoints make every return cost something.
+
+Shield Bash
+    Inspired by: Body Press. On Peace Force (Statecraft).
+    Type: Passive
+    Description: "Its Attack goes up by its Armor."
+    Notes: Armor fades by 1 at each Dusk, and so does the bonus. Armor gained from anything counts (Si Vis Pacem, Para Bellum).
+    Answers: Damage strips its Armor and its Attack with it.
+
+Strip Search
+    Inspired by: Knock Off. On Security Guard (Statecraft) and Psychiatrists (Mind).
+    Type: Passive
+    Description: "Its attack on a creature with a status or a stat change Purges it first, and hits 2 harder."
+    Notes: A Purge removes good and bad alike (there's no telling them apart); Doomed moves on as Heresy. The +2 is a second
+           hit of 2 right after the attack. Printed stats don't count: only Temporary Stat Modifications and statuses.
+    Answers: Keep your creatures plain; put your buffs on what it can't reach.
+
+On Trend
+    Inspired by: Protosynthesis and Quark Drive (field-wakers). On Bloomberg Terminal (Corporate), Fidget Spinner
+    (Zeitgeist) and Influencer (Digital Society).
+    Type: Passive
+    Description: "+2 Attack while a Trend is on."
+    Notes: Any Trend, whoever set it. Trends become team-building: Rush Hour, Casino and the Zeitgeist switch it on.
+    Answers: End the Trend, or set none.

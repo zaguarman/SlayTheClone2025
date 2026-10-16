@@ -387,6 +387,69 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             Assert.AreEqual(27, henchman.Health, "Squeezed: the one facing her");
             Assert.AreEqual(3, fatale.Health);
+
+            // The meta picks (2026-10-16). Shield Bash: its Armor joins its Attack. Strip Search: a creature with a stat change
+            // is Purged first, and hit 2 harder
+            Fresh();
+            var riot = With(CreatureAbility.ShieldBash, p1, 0, attack: 1, health: 5);
+            game.Run(new ModifyArmorAction(riot, 3));
+            Assert.AreEqual(4, riot.Attack, "Shield Bash: 1 Attack and 3 Armor");
+            var screener = With(CreatureAbility.StripSearch, p1, 1, attack: 3, health: 5);
+            var dressed = With(CreatureAbility.None, p2, 1, attack: 1, health: 20);
+            ChangeAttack(dressed, 2, p2);
+            game.Attack(screener, p2.Battlefield[1]);
+            Assert.AreEqual(1, dressed.Attack, "Strip Search Purged its raise");
+            Assert.AreEqual(20 - 3 - Abilities.StripBonus, dressed.Health, "...and hit 2 harder");
+
+            // Sucker Punch: its attack goes first against a creature that attacks, faster or not; it holds back against one that doesn't
+            var puncher = With(CreatureAbility.SuckerPunch, p1, 2, attack: 4, health: 5);
+            var bruiser = game.Summon(p2, game.Creature("Brute", 3, 4, speed: 5), 2);
+            game.Declare(bruiser, p1.Battlefield[2]);
+            game.Attack(puncher, p2.Battlefield[2]);
+            Assert.IsTrue(bruiser.IsDead, "It punched first, beating the bruiser's Speed 5");
+            Assert.AreEqual(5, puncher.Health, "...so the bruiser never landed its hit");
+            var idler = With(CreatureAbility.None, p2, 3, attack: 1, health: 10);
+            var waiting = With(CreatureAbility.SuckerPunch, p1, 3, attack: 4, health: 5);
+            game.Attack(waiting, p2.Battlefield[3]);
+            Assert.AreEqual(10, idler.Health, "No attack planned against it: it holds back");
+
+            // Hit and Run: after its hit, back to the hand with the next Day's, its slot free
+            var runner = With(CreatureAbility.HitAndRun, p1, 4, attack: 2, health: 3);
+            int health = p2.Health;
+            game.Attack(runner, p2.Battlefield[4]);
+            Assert.AreEqual(health - 2, p2.Health);
+            Assert.IsNull(p1.Battlefield[4].OccupyingCreature, "It ran");
+            Assert.IsTrue(p1.ComingBack.Any(c => c.Name == runner.Name), "...back to the hand");
+
+            // Grudge: +1 Attack for each friendly creature fallen this combat. On Trend: +2 while a Trend is on
+            Fresh();
+            var avenger = With(CreatureAbility.Grudge, p1, 0, attack: 2, health: 5);
+            var fodder = With(CreatureAbility.None, p1, 1, attack: 1, health: 1);
+            game.Run(TargetedActions.Damage(fodder, 5));
+            Assert.AreEqual(3, avenger.Attack, "One friend fallen: +1");
+            var spinner = With(CreatureAbility.OnTrend, p1, 2, attack: 2, health: 5);
+            Assert.AreEqual(2, spinner.Attack);
+            game.Run(new SetTrendAction(Trend.RushHour, 2, p1));
+            Assert.AreEqual(2 + Abilities.TrendBonus, spinner.Attack, "A Trend is on");
+
+            // Martyrdom: while Doomed, everything it deals is doubled
+            var heretic = With(CreatureAbility.Martyrdom, p1, 3, attack: 3, health: 5);
+            var punchbag = With(CreatureAbility.None, p2, 3, attack: 0, health: 30);
+            game.Run(new ApplyStatusEffectAction(heretic, StatusEffectType.Doomed, 3, 0));
+            game.Attack(heretic, p2.Battlefield[3]);
+            Assert.AreEqual(24, punchbag.Health, "3 Attack, doubled");
+
+            // Toxic grows by 1 each Dusk; Hormesis heals from it instead
+            var hacker = With(CreatureAbility.Hormesis, p1, 4, attack: 0, health: 10);
+            var poisoned = With(CreatureAbility.None, p2, 4, attack: 0, health: 10);
+            game.Run(TargetedActions.Damage(hacker, 5));
+            game.Run(new ApplyStatusEffectAction(hacker, StatusEffectType.Toxic, 3, 1));
+            game.Run(new ApplyStatusEffectAction(poisoned, StatusEffectType.Toxic, 3, 1));
+            game.StartTurn(); // It skips the Dusk of the Day it lands
+            game.StartTurn();
+            Assert.AreEqual((6, 9), (hacker.Health, poisoned.Health), "1 at the first Dusk...");
+            game.StartTurn();
+            Assert.AreEqual((8, 7), (hacker.Health, poisoned.Health), "...2 at the next");
         }
 
         [Test]

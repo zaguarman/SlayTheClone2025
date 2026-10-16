@@ -7,11 +7,13 @@ namespace SlayTheClone {
         // The nine factions of the 'Faction Compendium'; None for cards made before factions existed
         public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, Zeitgeist, Mind, Utopia }
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
-        public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie, OnRevealed, OnReplaced } // New triggers go last: cards store them as numbers
+        public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie, OnRevealed, OnReplaced,
+            OnDiscarded } // OnDiscarded: Laid Off, given up from the hand (the Dawn discard, a discard cost) // New triggers go last: cards store them as numbers
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetTrend,
             CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy,
             TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys,
-            WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay, Rush, Defect, SwapStats } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
+            WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay, Rush, Defect, SwapStats,
+            SwapSlotEffects } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
@@ -34,7 +36,9 @@ namespace SlayTheClone {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
             SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, PennyStock, Undercover, Handover, Recoil,
             Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace, Ambush, ExtremePrejudice,
-            AllergicToLight, FallGuy, Brink, CollateralDamage, SorryImLate, HeProtec, Irreplaceable, Turncoat
+            AllergicToLight, FallGuy, Brink, CollateralDamage, SorryImLate, HeProtec, Irreplaceable, Turncoat,
+            // The meta picks (2026-10-16): statuses that help their owner, losses as fuel, priority, pivots, Armor as damage, strips, Trends
+            Hormesis, Martyrdom, Grudge, SuckerPunch, HitAndRun, ShieldBash, StripSearch, OnTrend
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look
@@ -70,7 +74,8 @@ namespace SlayTheClone {
             Survivor,      // From full Health, a hit that would kill it leaves it at 1, then it's spent (lasts until used)
             Rooted,        // It can't move, and nothing can move or swap it (a building going up: Ministry for Equality)
             Burnout,       // When it runs out, the creature is destroyed (Overtime: it lasts through the first Day it's ready)
-            Shielded       // Takes no combat damage, for its Days counting the one it lands (the user: a creature's, not a slot's)
+            Shielded,      // Takes no combat damage, for its Days counting the one it lands (the user: a creature's, not a slot's)
+            Toxic          // Like Burned, but it grows: each Dusk it deals its potency, then the potency goes up by 1
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old
@@ -79,7 +84,8 @@ namespace SlayTheClone {
             Landmine,       // Hidden. The first creature to enter takes X damage, then it's consumed
             BarbedSnare,    // Hidden. The first creature to leave takes X damage, then it's consumed
             Shield, // Visible. The creature here is immune to combat damage, for X Days
-            ScorchedEarth   // Visible. The creature here can't trigger its effects, entry effects included (its ability still works)
+            ScorchedEarth,  // Visible. The creature here can't trigger its effects, entry effects included (its ability still works)
+            Checkpoint      // Visible. Every creature that enters takes X damage; it stays (a side hazard: placed on a whole side)
         }
 
         // What a Cleanse removes (GDD Cleanse - Specificity): statuses and stat modifications are independent

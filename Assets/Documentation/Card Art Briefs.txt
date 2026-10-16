@@ -113,6 +113,16 @@ Hedonic Treadmillionaire (creature)
     A billionaire in a gold tracksuit running on a treadmill that is itself on a yacht on a bigger yacht, sweating, his smile not moving.
 Moral Bankruptcy (spell)
     A banker stamping BANKRUPT across a smiling worker's portrait, the worker's chair already being carried away by movers.
+Usury (spell)
+    A loan shark in a pinstripe suit feeding coins into a piggy bank swollen to the size of a house, a tiny debtor pinned under its trotter.
+Middle Manager (creature)
+    A middle manager carrying a cardboard box of desk things out of the office, a 'Synergy' mug on top, already on the phone to get rehired as a consultant.
+Big Four (creature)
+    Four identical accountants in grey suits shoulder to shoulder at a long table, the shredder behind them overflowing, a fifth chair empty with a name card reading 'Arthur Andersen'.
+Bloomberg Terminal (creature)
+    A black two-screen trading terminal with its keyboard of colored keys, every chart spiking green, a trader's sweaty finger hovering over the yellow BUY key.
+Internal Protocol: Quota Crusher Mindset (spell)
+    A motivational poster over a cubicle farm, a lone runner on a mountain top under the words QUOTA CRUSHER, the workers below asleep on their keyboards.
 
 STATECRAFT
 
@@ -171,6 +181,14 @@ Ceasefire (spell)
     Two generals shaking hands for the cameras in front of a CEASEFIRE banner, each hiding a grenade behind his back.
 Violence Monopoly (spell)
     The board-game tycoon (top hat, white moustache, tailcoat) as the police: a badge on his chest, a baton raised in his white glove, glaring straight at you from beside the GO TO JAIL corner.
+Border Crossing (spell)
+    A border checkpoint at night: a striped barrier, a bored officer in a booth stamping passports, a queue of strange creatures waiting under the floodlights, a 'Welcome' sign half fallen off.
+Peace Force (creature)
+    A line of blue-helmeted peacekeepers behind riot shields, the front one shoving his shield into a protester's face, a banner reading 'PEACE' behind them.
+Security Guard (creature)
+    An airport security guard snapping on a blue latex glove with a grin, a traveler in socks with arms raised in the body scanner, a bin of confiscated water bottles overflowing behind.
+Si Vis Pacem, Para Bellum (spell)
+    A Roman general signing a peace treaty with one hand while the other points at a row of catapults being built behind the tent.
 
 ZEITGEIST
 
@@ -247,6 +265,16 @@ Absentee Parents (creature)
     A family portrait on a mantelpiece with two parent-shaped holes cut out of it, a postcard from Ibiza tucked into the frame.
 The Friends We Made Along the Way (spell)
     A ragtag group of adventurers around a campfire laughing, an empty treasure chest behind them, a map with the X scribbled out.
+Spite Voter (creature)
+    A grumpy man in a voting booth gleefully ticking the box of a clown candidate, a 'Don't Blame Me' badge pinned to his cardigan.
+Fidget Spinner (creature)
+    A giant fidget spinner whirling on a school desk, sparks flying off its bearings, a crowd of kids staring at it hypnotized, a teacher's 'Confiscated' box in the corner.
+Camper Van (creature)
+    A painted hippie camper van speeding away from a dented mailbox, a dreamcatcher swinging from the mirror, the couple inside filming the getaway for their followers.
+Lost Generation (creature)
+    Tired millennials in graduation gowns sitting on the steps of a closed bank, their diplomas folded into paper boats floating down the gutter.
+Universal Basic Income (spell)
+    A long line of citizens at an ATM spitting out identical small banknotes, a politician in the background tearing his hair out, a man in the line buying a lottery ticket with his.
 
 DIGITAL SOCIETY
 
@@ -313,6 +341,10 @@ Content Creator (creature)
     A streamer in a headset under a ring light screaming at the camera with a shocked face and a giant red arrow pointing at nothing, the thumbnail on the monitor behind showing the same face, 100K in gold letters.
 Thirst Trap (creature)
     A steel bear trap open on a beach towel, a ring light and a phone on a tripod set up in front of it, the phone screen filling with hearts, and a glass of water standing beside it.
+Selfie Esteem (spell)
+    A girl holding a selfie stick at arm's length, the phone screen showing a perfect filtered face while the real one is crying, a ring light glowing.
+Influencer (creature)
+    An influencer posing in front of a melting glacier with a branded water bottle, an assistant holding a reflector, the caption 'so grateful' on the phone.
 
 SHADOW OPS.
 
@@ -440,6 +472,12 @@ Arsonist (creature)
     A man in a suit holding a briefcase and a lit match in front of a failing shop, a fire insurance policy sticking out of his breast pocket.
 Counter-Surveillance (spell)
     A spy in a dark room watching a wall of monitors, every screen showing another spy watching him back, one of them waving.
+Compromised Agent (creature)
+    A spy in a trench coat mobbed by paparazzi in a train station, while behind her three other agents slip away unnoticed in the confusion.
+Polonium Umbrella (spell)
+    A gentleman in a bowler hat at a London bus stop pressing the tip of his black umbrella into a stranger's calf, a faint green glow at the tip, the stranger reading his newspaper.
+Nonchalant Agent (creature)
+    An agent in a tuxedo leaning on a casino bar sipping a martini without looking, his free hand already flicking a pistol from his sleeve at a henchman who has only half drawn.
 
 TECH
 
@@ -484,6 +522,10 @@ Pair Programming (spell)
     Two developers squeezed at one tiny desk sharing a single keyboard: one types with a coffee in his other hand, the other leans over his shoulder pointing at a bug on the screen, a timesheet pinned between them billing 16 hours.
 Suspicious USB Stick in the Parking Lot (creature)
     A lone USB stick lying on the asphalt of an empty parking lot under a streetlight, labelled SALARIES 2026 in marker, an employee in a lanyard bending down to pick it up, a nuclear plant's cooling tower behind the fence.
+Code Review (spell)
+    Two developers at a desk, one pointing at a screen full of red warning markers, the other shrugging and clicking 'Approve' with a coffee in hand.
+Bomber Drone (creature)
+    A quadcopter drone with a delivery company's logo dropping a small bomb on a tank and zipping away, a 5-star rating popping up on its operator's phone below.
 
 MYTH
 
@@ -597,6 +639,12 @@ Here Be Dragons (creature)
     An old parchment sea map ending in a ragged edge, beyond it a big dragon drawn in green ASCII characters on a black terminal screen, breathing fire made of # signs.
 Gracias Jesús (spell)
     Jesus in a straw hat carrying two big baskets of vegetables in from the fields at sunset, a family at the farmhouse table clapping.
+Heretic (creature)
+    A heretic tied to a stake on a pile of firewood, laughing, swinging a broken chain at the inquisitors as the first flames catch, a placard reading 'The Earth is round' nailed above him.
+Ambrosia (spell)
+    A golden bowl of glowing honey on an Olympus banquet table, Zeus in sunglasses dipping a finger in, the jar's label reading 'Organic, Artisanal, Divine'.
+Publicly Funded Faith Schools (spell)
+    A classroom of kids in uniforms praying over their exam papers instead of writing, a nun at the front under a 'Funded by your taxes' banner hung over the crucifix.
 
 MIND
 
@@ -640,6 +688,12 @@ Maslow's Pyramid (spell)
     Maslow's pyramid as a great stone pyramid in layers, tiny people at the bottom fighting over bread and water, one man meditating smugly alone at the glowing top, and a WiFi symbol carved into a new layer under the base.
 Legerdemain (spell)
     A magician's white-gloved hands doing the cups-and-ball trick on a velvet table, but under the cups are tiny soldiers being shuffled around, one cup lifted to show the soldier is gone.
+Hold That Thought (spell)
+    A man frozen mid-sentence with a finger raised, a glowing lightbulb above his head stuck behind a pause icon, everyone at the dinner table waiting.
+Projection (spell)
+    A man on a therapist's couch pointing at her, a film projector behind him throwing his own dark shadow-monster onto the wall behind her chair.
+Psychiatrists (creature)
+    Two psychiatrists in armchairs taking notes while a patient on the couch has his emotional baggage (suitcases labelled 'Mom', 'Ex', 'Work') taken away one by one.
 
 UTOPIA
 
@@ -728,6 +782,29 @@ Ankylorhiza (creature)
     A huge prehistoric whale with a crocodile's teeth bursting out of a lab aquarium tank, water and glass everywhere, a scientist in a lab coat clutching a sign reading DE-EXTINCTION: PHASE 1.
 White Dwarf (creature)
     A small, very white man in a turtleneck standing in space, glowing faintly, the planets around him bending toward him, unbothered.
+Biohacker (creature)
+    A shirtless tech bro in an ice bath full of glowing green sludge, sensors taped all over his chest, his smartwatch showing 'biological age: 19'.
+Prion Disease (spell)
+    A cow in a lab coat staring blankly into a microscope while its own brain, full of holes like Swiss cheese, floats in a jar beside it.
+
+POTION
+
+Nicotine (spell)
+    A crumpled pack of cigarettes on a café table, one lit in the ashtray, a ribbon of smoke curling into a question mark.
+Stimulant Drug (spell)
+    A pill organizer with every compartment full of the same blue pill, a student's desk behind it buried in energy drink cans at 4 a.m.
+Superglue (spell)
+    A tube of superglue squeezed over a cracked vase, two fingers already stuck to it.
+Soylent (spell)
+    A beige bottle of meal-replacement drink on an empty dining table, a lonely fork beside it.
+Flamethrower (spell)
+    A flamethrower with a novelty-store price tag, a jet of fire roaring out of it across a garden barbecue.
+Eject Button (spell)
+    A big red button under a flip-up cover on a cockpit panel, a pilot's seat already rocketing out of the frame.
+Stealth Suit (spell)
+    An empty mannequin in a shop window wearing a suit you can only see by its outline, the price tag floating in mid-air.
+Creatine (spell)
+    A giant tub of white powder with a flexing cartoon bicep on its label, a scoop sticking out of it.
 
 IDEAS NOT YET CARDS (Brainstorm List)
 

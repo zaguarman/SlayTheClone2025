@@ -11,7 +11,11 @@ namespace SlayTheClone {
             }
 
             int initialHandCount = player.Hand.Count;
+            // Laid Off: the creatures given up at Dawn do what they do when discarded, after the discard
+            var laidOff = player.Hand.Where(c => c is ICreature && LaidOff.Has(c)).ToList();
             player.DiscardHand();
+            foreach (var card in laidOff) LaidOff.Queue(card, player, context.ActionsQueue);
+            Ripening.Ripen(player, context.GameMediator); // The spells kept ripen
             // Paid for a card that never resolved (a Watchdog nullified it): spent all the same
             foreach (var card in player.SetAside.ToList()) {
                 player.SetAside.Remove(card);

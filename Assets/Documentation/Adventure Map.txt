@@ -49,7 +49,8 @@ From the first game (likely still the basis):
 • Fights, elites and the boss are matches against the AI (Easy for the fights of the first rows, then Medium; Hard for an
   elite, Very Hard for the boss). Winning one brings you back to the map a room further; losing one ends the run;
   beating the boss wins it.
-• Rest sites, shops, treasure and unknown rooms are walked through: nothing in them yet.
+• Rest sites, shops, treasure and unknown rooms are walked through: nothing in them yet. (Since then: shops and events
+  2026-10-16; rest sites, treasure, relics, potions and card upgrades 2026-10-16, see 6.)
 • Not carried between fights yet: your Health (each match starts at full).
 
 
@@ -68,3 +69,23 @@ From the first game (likely still the basis):
   or Back to think and open it again later. View deck shows your whole deck, from the rewards and from the map. Proceed
   goes on to the map; packs not opened are left behind. Your deck grows up to 40 cards.
 • Decks everywhere: at most 40 cards, copies no longer limited.
+
+
+6. RELICS, POTIONS, REST SITES AND UPGRADES (the user, 2026-10-16: "implement all of your ideas", from Slay the Spire)
+
+• Rest sites: Sleep (+20 Health) or Train (upgrade a card of your deck). One or the other.
+• Card upgrades (CardUpgrades.cs): the card's "+" version, one better number: a creature +1 Attack and +1 Health; a spell 1
+  more on each of its numbers (damage, healing, Armor, draws, stat changes, stacks). Once per card; it lives in the run only.
+• Treasure rooms: a relic you don't have yet and 20 EuroYuans.
+• Elites drop a relic on top of their two packs.
+• Relics (Relics.cs), each one rule that's always on, named after the Brainstorm List's Neutral Resources:
+    First Aid Kit (heal 6 after each fight won), Double Headed Coin (each fight pays 5 more), Credit Card (shop prices a
+    quarter off), Backpack (packs show 4 cards), Air Fryer (each Dawn your most hurt creature heals 2), Taser (a creature that
+    attacks one of yours takes 1), Coffee (your first creature each fight arrives ready), Kevlar (your creatures enter with
+    2 Armor), Protein Shake (your creatures enter with +1 Health), Memo Note (one more spell in your opening hand).
+• Potions: Single Use spells, 3 at most, in your opening hand each fight, not counted among your spells; one not used stays.
+  Fights drop one 40% of the time; shops sell two at 12. Nicotine (draw 2), Stimulant Drug (+2 Attack this Day), Superglue
+  (+5 Armor), Soylent (heal 6), Flamethrower (4 damage), Eject Button (a creature of yours back to your hand), Stealth Suit
+  (Conceal 2 on your creatures), Creatine (+1/+1).
+• The map's side panel lists your relics and potions; the rewards screen says what a fight gave besides cards.
+• The AI adventure simulation does all of this too: it sleeps below 40 Health and trains above, buys a potion at shops.

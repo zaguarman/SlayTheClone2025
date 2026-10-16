@@ -10,9 +10,11 @@ namespace SlayTheClone {
     /// problems"). Each run starts with its faction's starter deck and 60 Health and walks the map at random along the paths;
     /// its fights are played by the real rules, the player's seat by the AI standing in for you, the enemy as the room sets
     /// it (deck, AI level, Health). Won, it takes the strongest card of its rewards (your faction's), and the Health left goes
-    /// on; at a shop it buys the strongest card it can pay, then has its weakest taken out. Events and rest sites are walked
-    /// through: the simulation can't make their choices yet. Every run of a round is prepared on the main thread (decks are
-    /// Unity assets), then their fights are played together on worker threads.
+    /// on; at a shop it buys the strongest card it can pay and a potion, then has its weakest taken out. At a rest site it
+    /// sleeps below 40 Health and trains (upgrades its strongest card) above; a treasure room gives a relic, as an elite
+    /// does; potions drop and go into its opening hands. Events are walked through: the simulation can't make their choices.
+    /// Every run of a round is prepared on the main thread (decks are Unity assets), then their fights are played together on
+    /// worker threads.
     /// </summary>
     public static partial class AITournament {
         private sealed class AdventureSim {
@@ -22,7 +24,9 @@ namespace SlayTheClone {
             public AdventureMap Map;
             public MapNode Current, Fighting;
             public List<CardDataScriptableObject> Deck;
-            public int Health = AdventureRun.StartingHealth, Money, FightsWon, Removals, Bought;
+            public int Health = AdventureRun.StartingHealth, Money, FightsWon, Removals, Bought, Rests, Upgrades, PotionsUsed;
+            public readonly List<Relic> Relics = new List<Relic>();
+            public readonly List<CardDataScriptableObject> Potions = new List<CardDataScriptableObject>();
             public bool Over, Won, Stalled;
             public Faction FightingFaction, KilledBy;
             public DeckScriptableObject EnemyDeck;
@@ -31,8 +35,10 @@ namespace SlayTheClone {
 
         /// <summary>Plays <paramref name="runsPerFaction"/> adventures for each faction; returns the report.</summary>
         public static string RunAdventures(IReadOnlyList<Faction> factions, IReadOnlyList<CardDataScriptableObject> pool, int runsPerFaction,
-            AIEntrant player, System.Action<float> progress = null) {
+            AIEntrant player, System.Action<float> progress = null, IReadOnlyList<CardDataScriptableObject> potionPool = null) {
             var cards = pool.Where(c => c != null).Distinct().ToList();
+            potions = (potionPool ?? new List<CardDataScriptableObject>()).Where(p => p != null).ToList();
+            upgradedMade.Clear();
             var tiers = AdventureDecks.Tiers(cards);
             var sims = new List<AdventureSim>();
             foreach (var faction in factions) {
@@ -59,7 +65,10 @@ namespace SlayTheClone {
                     read.Add(mine);
                     read.Add(theirs);
                     int enemyHealth = AdventureRun.EnemyHealth(sim.Fighting.Type, sim.FightsWon);
-                    games.Add(new Game(mine, player, theirs, new AIEntrant(AdventureMenu.LevelFor(sim.Fighting)), sim.Random.Next(), sim.Health, enemyHealth));
+                    var kit = new DeckCards { Name = "Potions", Cards = sim.Potions.Select(p => p.ToCardData()).ToList() };
+                    read.Add(kit);
+                    games.Add(new Game(mine, player, theirs, new AIEntrant(AdventureMenu.LevelFor(sim.Fighting)), sim.Random.Next(), sim.Health, enemyHealth,
+                        sim.Relics.ToArray(), kit.Cards));
                     playing.Add(sim);
                 }
                 if (games.Count == 0) break;
@@ -70,8 +79,35 @@ namespace SlayTheClone {
                 Release(read);
             }
             progress?.Invoke(1f);
-            return AdventureReport(sims, factions, runsPerFaction, player, fights, audit, cards);
+            string report = AdventureReport(sims, factions, runsPerFaction, player, fights, audit, cards);
+            foreach (var made in upgradedMade) Object.DestroyImmediate(made);
+            upgradedMade.Clear();
+            return report;
         }
+
+        private static List<CardDataScriptableObject> potions = new List<CardDataScriptableObject>();
+        private static readonly List<CardDataScriptableObject> upgradedMade = new List<CardDataScriptableObject>();
+
+        private static void GainRelic(AdventureSim sim) {
+            var left = Relics.All.Where(r => !sim.Relics.Contains(r)).ToList();
+            if (left.Count > 0) sim.Relics.Add(left[sim.Random.Next(left.Count)]);
+        }
+
+        // A rest site: sleep when hurt, otherwise train its strongest card that can still be upgraded
+        private static void Rest(AdventureSim sim) {
+            var best = sim.Deck.Where(CardUpgrades.CanUpgrade).OrderByDescending(AdventureDecks.Power).FirstOrDefault();
+            if (sim.Health < 40 || best == null) {
+                sim.Health += AdventureRun.RestHeal;
+                sim.Rests++;
+                return;
+            }
+            var upgraded = CardUpgrades.Upgrade(best);
+            upgradedMade.Add(upgraded);
+            sim.Deck[sim.Deck.IndexOf(best)] = upgraded;
+            sim.Upgrades++;
+        }
+
+        private static int Price(AdventureSim sim, int price) => sim.Relics.Contains(Relic.CreditCard) ? Mathf.RoundToInt(price * Relics.CreditDiscount) : price;
 
         // Walks on (rooms at random along the paths) up to the next fight, which is set up: its enemy deck and faction. Shops
         // buy and remove; the other rooms do nothing here
@@ -92,6 +128,11 @@ namespace SlayTheClone {
                     return;
                 }
                 if (room.Type == RoomType.Shop) Shop(sim, pool, tiers);
+                if (room.Type == RoomType.Rest) Rest(sim);
+                if (room.Type == RoomType.Treasure) {
+                    GainRelic(sim);
+                    sim.Money += AdventureRun.TreasureMoney;
+                }
                 sim.Current = room;
             }
         }
@@ -99,13 +140,17 @@ namespace SlayTheClone {
         // The shop's five cards of the run's faction: the strongest it can pay, then the weakest card out of the deck if it still can
         private static void Shop(AdventureSim sim, List<CardDataScriptableObject> pool, Dictionary<CardDataScriptableObject, AdventureDecks.Tier> tiers) {
             var stock = AdventureDecks.Roll(sim.Faction, AdventureDecks.StrengthOf(sim.Current ?? sim.Map.Row(0).First()), pool, sim.Random, AdventureRun.ShopCards);
-            var buy = stock.Where(c => AdventureRun.PriceOf(tiers[c]) <= sim.Money).OrderByDescending(AdventureDecks.Power).FirstOrDefault();
+            var buy = stock.Where(c => Price(sim, AdventureRun.PriceOf(tiers[c])) <= sim.Money).OrderByDescending(AdventureDecks.Power).FirstOrDefault();
             if (buy != null && sim.Deck.Count < PlayerDecks.MaxDeckSize) {
-                sim.Money -= AdventureRun.PriceOf(tiers[buy]);
+                sim.Money -= Price(sim, AdventureRun.PriceOf(tiers[buy]));
                 sim.Deck.Add(buy);
                 sim.Bought++;
             }
-            int removal = AdventureRun.RemovalPrice + AdventureRun.RemovalRise * sim.Removals;
+            if (potions.Count > 0 && sim.Potions.Count < AdventureRun.MaxPotions && sim.Money >= Price(sim, AdventureRun.PotionPrice)) {
+                sim.Money -= Price(sim, AdventureRun.PotionPrice);
+                sim.Potions.Add(potions[sim.Random.Next(potions.Count)]);
+            }
+            int removal = Price(sim, AdventureRun.RemovalPrice + AdventureRun.RemovalRise * sim.Removals);
             if (sim.Money >= removal && sim.Deck.Count > AdventureRun.MinDeck) {
                 sim.Money -= removal;
                 sim.Removals++;
@@ -125,16 +170,26 @@ namespace SlayTheClone {
             }
             sim.Current = room;
             sim.FightsWon++;
-            sim.Health = Mathf.Max(1, result.Health1);
+            sim.Health = Mathf.Max(1, result.Health1) + (sim.Relics.Contains(Relic.FirstAidKit) ? Relics.FirstAidHeal : 0);
             sim.HealthAfterFights.Add(sim.Health);
+            // The potions used are gone; the rest are kept
+            var left = result.PotionsLeft1.ToList();
+            var kept = sim.Potions.Where(p => left.Remove(p.cardName)).ToList();
+            sim.PotionsUsed += sim.Potions.Count - kept.Count;
+            sim.Potions.Clear();
+            sim.Potions.AddRange(kept);
             if (room.Type == RoomType.Boss) {
                 sim.Won = sim.Over = true;
                 return;
             }
-            sim.Money += room.Type == RoomType.Elite ? AdventureRun.ElitePurse : AdventureRun.FightPurse;
+            sim.Money += (room.Type == RoomType.Elite ? AdventureRun.ElitePurse : AdventureRun.FightPurse) + (sim.Relics.Contains(Relic.DoubleHeadedCoin) ? Relics.CoinPay : 0);
+            if (room.Type == RoomType.Elite) GainRelic(sim);
+            if (potions.Count > 0 && sim.Random.Next(100) < AdventureRun.PotionDropPercent && sim.Potions.Count < AdventureRun.MaxPotions)
+                sim.Potions.Add(potions[sim.Random.Next(potions.Count)]);
             var offered = new HashSet<CardDataScriptableObject>();
+            int choices = sim.Relics.Contains(Relic.Backpack) ? AdventureDecks.RewardChoices + 1 : AdventureDecks.RewardChoices;
             for (int pack = 0; pack < (room.Type == RoomType.Elite ? 2 : 1); pack++) {
-                var cards = AdventureDecks.Reward(sim.Faction, AdventureDecks.StrengthOf(room), pool, sim.Random, offered);
+                var cards = AdventureDecks.Reward(sim.Faction, AdventureDecks.StrengthOf(room), pool, sim.Random, offered, choices);
                 foreach (var card in cards) offered.Add(card);
                 var best = cards.OrderByDescending(AdventureDecks.Power).FirstOrDefault();
                 if (best != null && sim.Deck.Count < PlayerDecks.MaxDeckSize) sim.Deck.Add(best);
@@ -149,7 +204,9 @@ namespace SlayTheClone {
             text.AppendLine($"{runs} runs a faction, {fights} fights in all. Each run: the faction's starter deck, 60 Health, rooms picked at random along");
             text.AppendLine($"the paths. You are played by the {player.Name} AI; the enemies as the rooms set them (Easy early, Medium, Hard elites,");
             text.AppendLine("Very Hard boss; Health 5, 10, 15... and 60 for the boss). Won, a run takes the strongest card offered (its own faction's);");
-            text.AppendLine("shops buy the strongest card it can pay, then take out the weakest. Events and rest sites are walked through.");
+            text.AppendLine("shops buy the strongest card it can pay and a potion, then take out the weakest. Rest sites: sleep (+20) below 40");
+            text.AppendLine("Health, otherwise upgrade the strongest card. Elites and treasure rooms give a relic; fights drop potions (40%),");
+            text.AppendLine("which join the opening hand. Events are walked through.");
             text.AppendLine("A fight still going after 40 Days counts as lost (stalled).");
             text.AppendLine();
             text.AppendLine("1. BY FACTION, the most trouble first (bosses beaten, then fights won)");
@@ -176,6 +233,7 @@ namespace SlayTheClone {
                 text.AppendLine("    Beaten by: " + string.Join(", ", lost.GroupBy(s => s.KilledBy).OrderByDescending(g => g.Count()).Select(g => $"{CardTextFormatter.FactionName(g.Key)} {g.Count()}")));
                 var afterFirst = group.Where(s => s.HealthAfterFights.Count > 0).Select(s => s.HealthAfterFights[0]).ToList();
                 if (afterFirst.Count > 0) text.AppendLine($"    Health after its first fight: {afterFirst.Average():0} on average (of 60); cards bought at shops: {group.Sum(s => s.Bought)}, removed: {group.Sum(s => s.Removals)}");
+                text.AppendLine($"    Rests: {group.Sum(s => s.Rests)} slept, {group.Sum(s => s.Upgrades)} cards upgraded; relics {group.Average(s => s.Relics.Count):0.0} a run; potions used {group.Sum(s => s.PotionsUsed)}");
             }
             text.AppendLine();
             text.AppendLine("3. STARTER DECKS (12 cards: the plainest of the faction)");

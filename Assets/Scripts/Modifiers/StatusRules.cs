@@ -115,6 +115,7 @@ namespace SlayTheClone {
                 StatusEffectType.Exhausted => $"Exhausted ({days}): can't act, abilities off, takes +1 damage",
                 StatusEffectType.Doomed => $"Doomed ({days}): +1 Attack each Dawn, then Last Rites and it dies",
                 StatusEffectType.Burned => $"Burned ({days})" + (potency > 0 ? $" (Potency: {potency})" : ""),
+                StatusEffectType.Toxic => $"Toxic ({days}): damage at each Dusk, 1 more each time",
                 StatusEffectType.Concealed => $"Concealed ({days}): its plans show as ??? to the enemy",
                 StatusEffectType.Revealed => $"Revealed ({days}): its plans can be seen",
                 StatusEffectType.Encrypted => $"Encrypted ({days}): Watchdogs ignore its actions",

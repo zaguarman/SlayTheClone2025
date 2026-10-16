@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: NonchalantAgent
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 0358d35b-f5b2-4e7d-b9d5-7a03b2c18d73
+  cardName: Nonchalant Agent
+  description: Never draws first. Never draws second either.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  effects: []
+  designNotes: 'Sucker Punch: its attack on a creature goes before every other, but
+    only if that creature planned an attack; otherwise it holds back. Read their
+    plans (Fog of War makes it a gamble) and punch first.'
+  artDescription: An agent in a tuxedo leaning on a casino bar sipping a martini
+    without looking, his free hand already flicking a pistol from his sleeve at a
+    henchman who has only half drawn.
+  attack: 3
+  health: 2
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 41
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

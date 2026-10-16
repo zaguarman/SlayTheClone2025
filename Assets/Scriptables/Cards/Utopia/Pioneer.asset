@@ -27,6 +27,10 @@ MonoBehaviour:
   prophecyLatest: 0
   gamble: 0
   homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
   effects: []
   designNotes: 'Leapfrog: it jumps over creatures to an empty slot.'
   artDescription: 'An astronaut planting a flag on a red desert next to a sign: FOR

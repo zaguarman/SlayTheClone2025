@@ -24,6 +24,9 @@ namespace SlayTheClone {
         [SerializeField] private List<DeckScriptableObject> testDecks = new List<DeckScriptableObject>();
         // How a card looks, for showing the cards outside a game (the menu's card gallery)
         [SerializeField] private CardController cardPrefab;
+        // An adventure's potions: found and bought on the way, never in a deck (see AdventureRun.Potions)
+        [SerializeField] private List<CardDataScriptableObject> potions = new List<CardDataScriptableObject>();
+        public IReadOnlyList<CardDataScriptableObject> Potions => potions.Where(p => p != null).ToList();
 
         public CardController CardPrefab => cardPrefab;
 

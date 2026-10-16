@@ -118,3 +118,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3931d1131be0875488599d827939fc73, type: 2}
   - {fileID: 11400000, guid: 0f3ad3b977f753c4aa89694960c6b51b, type: 2}
   cardPrefab: {fileID: 4247672974874967921, guid: 9164b01cda78bc545b913d180247e537, type: 3}
+  potions:
+  - {fileID: 11400000, guid: 1eed24c46790cf14ab8f514808c471c8, type: 2}
+  - {fileID: 11400000, guid: 879a65a1dc4c25c4dade259bd926bdaf, type: 2}
+  - {fileID: 11400000, guid: c834b7fa76366ed4c9aeb00a4511a37b, type: 2}
+  - {fileID: 11400000, guid: 79470b5da6a154640877e8c0b177a134, type: 2}
+  - {fileID: 11400000, guid: ab3ee4e52c3b8fe42886bbdd531a758b, type: 2}
+  - {fileID: 11400000, guid: fff101c8eb6821e44a6e7b9f0d34a89c, type: 2}
+  - {fileID: 11400000, guid: fece267f1599cab41ba59d02d15458a6, type: 2}
+  - {fileID: 11400000, guid: 21c49cf35f320bc47a7708f5bd1c2c67, type: 2}

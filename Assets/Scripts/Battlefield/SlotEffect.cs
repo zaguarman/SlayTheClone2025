@@ -49,6 +49,7 @@ namespace SlayTheClone {
             SlotEffectType.BarbedSnare => $"Hidden. The first creature to leave takes {Value} damage.",
             SlotEffectType.Shield => "The creature here is immune to combat damage.",
             SlotEffectType.ScorchedEarth => "The creature here can't trigger its effects. Its entry effects wait until it's off this slot.",
+            SlotEffectType.Checkpoint => $"Every creature that enters takes {Value} damage.",
             _ => ""
         };
 

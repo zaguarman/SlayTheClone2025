@@ -24,7 +24,8 @@ namespace SlayTheClone {
                 Log($"{owner.Name} foretells {spell.Name}: it comes true in {foretold} Day(s)", LogTag.Actions | LogTag.Cards);
             }
             else spell.Play(owner, actionsQueue, spellAction.GetTarget());
-            if (spell.SourceData?.singleUse == true) owner.SpendForGood(spell); // One bullet: gone for the rest of the combat
+            if (Policy.Has(spell)) Policy.Enact(spell, owner); // In force: it happens again each Dawn
+            else if (spell.SourceData?.singleUse == true) owner.SpendForGood(spell); // One bullet: gone for the rest of the combat
             else owner.DiscardCard(spell);
 
             Log($"Executed PlaySpellAction via Executor for {spell.Name}", LogTag.Actions | LogTag.Cards);

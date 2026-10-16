@@ -65,6 +65,7 @@ namespace SlayTheClone {
                 SlotEffectRules.ProcessEndOfTurn(players, endedTurn, gameMediator, actionsQueue);
                 trends.QueueDuskEffects(actionsQueue);
                 trends.ProcessDusk(endedTurn); // A Trend ends after its last Day
+                modifierManager.RefreshConditionalStats(); // On Trend loses its boost with it
                 yield return ResolveQueuedActions();
                 Grace.ProcessDusk(players, endedTurn, gameMediator); // Still at 0 when Grace runs out: it's over
                 if (gameMediator.IsGameOver) yield break;
@@ -92,6 +93,8 @@ namespace SlayTheClone {
                 // --- Phase 3: Start of Turn Processing (for the new turn) ---
                 GoneDark.ProcessDawn(players, turnNumber, actionsQueue); // Creatures that went dark come back first
                 Prophecy.ProcessDawn(players, turnNumber, actionsQueue); // Then what was foretold comes true
+                Policy.ProcessDawn(players, actionsQueue); // The Policies in force happen again
+                Relics.ProcessDawn(players, actionsQueue);
                 modifierManager.ProcessStartOfTurn(turnNumber, actionsQueue);
                 trends.QueueDayEffects(actionsQueue);
                 yield return ResolveQueuedActions();

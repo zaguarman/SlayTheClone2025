@@ -21,6 +21,10 @@ namespace SlayTheClone {
         [Min(0)] public int prophecyLatest; // Above prophecy: it comes true at random, between the two
         public bool gamble; // Only one of its effects happens, at random (Casino)
         public bool homing; // Homing: aimed at an enemy creature it locks on and follows it; Heat Signature pulls it
+        public bool ripening; // Ripening: +1 to its numbers for each Dawn it spends in your hand (up to +3)
+        public bool policy; // Policy: it happens when played and again each Dawn, for the rest of the combat
+        public bool upgraded; // An upgraded copy made in an adventure (CardUpgrades): never an asset
+        public bool potion; // An adventure's potion: Single Use, carried from fight to fight, in the opening hand
         [SerializeField] protected List<CardEffect> effects = new List<CardEffect>();
         [TextArea(2, 6)] public string designNotes; // Editor only: what the card should become once the GDD mechanics it stands in for exist
         [TextArea(2, 6)] public string artDescription; // What the card's picture shows: the brief for its art
@@ -52,6 +56,10 @@ namespace SlayTheClone {
             data.prophecyLatest = prophecyLatest;
             data.gamble = gamble;
             data.homing = homing;
+            data.ripening = ripening;
+            data.policy = policy;
+            data.upgraded = upgraded;
+            data.potion = potion;
             data.effects = CopyEffects();
         }
 
@@ -63,6 +71,9 @@ namespace SlayTheClone {
             }
             return copies;
         }
+
+        // A runtime copy's new effects (an upgraded card, see CardUpgrades): never saved to an asset
+        public void ReplaceEffects(IEnumerable<CardEffect> newEffects) => effects = newEffects.Select(effect => effect.Clone()).ToList();
 
 #if UNITY_EDITOR
         // For card generators: replaces the card's effects with copies of the given ones
