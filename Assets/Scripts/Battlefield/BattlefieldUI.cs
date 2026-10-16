@@ -118,7 +118,7 @@ namespace SlayTheClone {
             var positions = SlotPositions(SlayTheClone.Player.BattlefieldSize);
             return ChevronGraphic.Around(positions, BattlefieldSlot.Size * SlotScale / 2f, NoseRoom, MatPadding,
                 transform.localPosition.y <= 0f ? 1f : -1f, Tuning.noseWidth, Tuning.tuckGap,
-                Tuning.tipOut, Tuning.tipFront, Tuning.tipBack, Tuning.tuckRise, Tuning.tuckWidth);
+                Tuning.tipOut, Tuning.tipFront, Tuning.tipBack, Tuning.wingSize, Tuning.tuckWidth);
         }
 
         /// <summary>A chevron layer of the mat by name, made if missing, at this place among the mat's children.</summary>
@@ -173,11 +173,25 @@ namespace SlayTheClone {
             }
         }
 
-        /// <summary>A <see cref="BattlefieldTuning"/> slider moved: the mat takes its new size and shape, the slots their places, the arrows follow.</summary>
+        /// <summary>A <see cref="BattlefieldTuning"/> slider moved: the mat takes its new size and shape, the slots their places, the
+        /// cards played on them (their ghosts) their size, the arrows follow.</summary>
         public void Retune() {
             ApplyMatLook();
             Relayout();
+            RefreshQueuedGhosts();
             arrowManager?.RefreshArrows();
+        }
+
+        /// <summary>A card on a slot, of the slot (a slider): the creatures standing there and the ghosts of those on their way.</summary>
+        public static float CardInSlotScale => Tuning.cardScale;
+
+        private static BattlefieldSlot anySlot;
+
+        /// <summary>A card's scale under this parent to show at a card-in-a-slot's size (1 when there's no board).</summary>
+        public static float SlottedScaleUnder(Transform parent) {
+            if (anySlot == null) anySlot = FindAnyObjectByType<BattlefieldSlot>();
+            if (anySlot == null || parent == null) return 1f;
+            return anySlot.transform.lossyScale.x * CardInSlotScale / Mathf.Max(1e-6f, parent.lossyScale.x);
         }
 
         private void UpdateSlotPositions() {
@@ -614,6 +628,7 @@ namespace SlayTheClone {
 
                 ghost.name = $"QueuedGhost_{card.Name}";
                 ghost.transform.localRotation = Quaternion.identity;
+                ghost.transform.localScale = Vector3.one * CardInSlotScale; // As big as the card it'll be
                 // Hoverable for its enlarged preview; drops still reach the slot (they bubble up, and targets come from a full raycast).
                 // Like a queued card in the hand, clicking it or dragging it away takes the play back, and dragging it to a slot re-aims it.
                 ghost.SetQueued(true, canBeDragged: true, badge: Abilities.ArrivesLate(action) ? "After the attacks" : "Queued"); // Sorry I'm Late, He Protec
@@ -633,7 +648,7 @@ namespace SlayTheClone {
                 var occupant = slot.OccupyingCard;
                 var standing = slot.OccupyingCreature;
                 if (standing != null && afterMoves.TryGetValue(standing, out var willStand) && willStand != slot.Model) occupant = null;
-                float raise = occupant != null ? ((RectTransform)ghost.transform).rect.height * ReplacingGhostRaise : 0f;
+                float raise = occupant != null ? ((RectTransform)ghost.transform).rect.height * CardInSlotScale * ReplacingGhostRaise : 0f;
                 ghost.transform.localPosition = new Vector3(0f, raise, 0f);
                 occupant?.SetMarkedForReplacement(true);
             }
@@ -659,6 +674,7 @@ namespace SlayTheClone {
                 if (ghost == null) continue;
                 ghost.name = $"RisingGhost_{waiting.Creature.Name}";
                 ghost.transform.localRotation = Quaternion.identity;
+                ghost.transform.localScale = Vector3.one * CardInSlotScale;
                 int days = waiting.ReturnsOnTurn - today;
                 ghost.SetQueued(true, badge: days <= 1 ? "Rises at Dawn" : $"Rises in {days} Days");
                 risingGhosts.Add(ghost);
@@ -872,7 +888,7 @@ namespace SlayTheClone {
             if (roomInSlot) {
                 rect.SetParent(slotView.transform, false);
                 rect.localPosition = Vector3.zero;
-                rect.localScale = Vector3.one;
+                rect.localScale = Vector3.one * CardInSlotScale;
                 rect.SetAsLastSibling();
                 return;
             }
@@ -935,10 +951,11 @@ namespace SlayTheClone {
                 if (ghost == null) continue;
                 ghost.name = $"MoveGhost_{creature.Name}";
                 ghost.transform.localRotation = Quaternion.identity;
+                ghost.transform.localScale = Vector3.one * CardInSlotScale;
                 ghost.SetQueued(true, blockRaycasts: false, badge: "Moving");
                 ghost.SetAnonymous(FogOfWar.HidesIdentity(Viewer, creature));
                 // Someone stands there now (it leaves first): lift the ghost so both stay visible
-                float raise = slot.OccupyingCard != null || queuedGhosts.ContainsKey(slot) ? ((RectTransform)ghost.transform).rect.height * ReplacingGhostRaise : 0f;
+                float raise = slot.OccupyingCard != null || queuedGhosts.ContainsKey(slot) ? ((RectTransform)ghost.transform).rect.height * CardInSlotScale * ReplacingGhostRaise : 0f;
                 ghost.transform.localPosition = new Vector3(0f, raise, 0f);
                 moveGhosts.Add(ghost);
             }

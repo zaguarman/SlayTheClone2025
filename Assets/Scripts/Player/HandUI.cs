@@ -331,10 +331,11 @@ namespace SlayTheClone {
             float big = CardScale * PickedScale;
             float scale = big;
             var rect = (RectTransform)transform;
-            if (picked.SnapsTo != null) scale = picked.SnapsTo.lossyScale.x / Mathf.Max(1e-6f, picked.transform.parent.lossyScale.x);
+            // The board's size by the sliders (UI > Battlefield Tuning): the slot's, and the card's in it
+            if (picked.SnapsTo != null) scale = picked.SnapsTo.lossyScale.x * BattlefieldUI.CardInSlotScale / Mathf.Max(1e-6f, picked.transform.parent.lossyScale.x);
             else if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, GameInput.PointerPosition, CanvasUtility.GetEventCamera(this), out var local)) {
                 float away = IsYourHand ? local.y - rect.rect.yMax : rect.rect.yMin - local.y; // Toward the board
-                scale = Mathf.Lerp(big, 1f, Mathf.InverseLerp(0f, OverBoardReach, away));
+                scale = Mathf.Lerp(big, BattlefieldUI.SlottedScaleUnder(picked.transform.parent), Mathf.InverseLerp(0f, OverBoardReach, away));
             }
             float now = picked.transform.localScale.x;
             picked.transform.localScale = Vector3.one * Mathf.Lerp(now, scale, 1f - Mathf.Exp(-16f * Time.unscaledDeltaTime));

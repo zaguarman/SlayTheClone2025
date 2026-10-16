@@ -39,31 +39,30 @@ namespace SlayTheClone {
         /// <param name="noseRoom">Room round the Vanguard; the nose is a little wider still, to blunt it.</param>
         /// <param name="tailRoom">Room round the rest, Headquarters most of all.</param>
         /// <param name="towardMiddle">+1 when the middle of the table is up (the bottom side), -1 otherwise.</param>
-        /// <param name="noseWidth">How wide the nose is, in nose rooms either side of the Vanguard (a slider).</param>
-        /// <param name="tuckGap">The trailing edge's tuck behind the Flanks, in tail rooms (a slider).</param>
+        /// <param name="noseWidth">The nose's flat over the Vanguard, its whole length (a slider; the same units as <paramref name="tuckWidth"/>).</param>
+        /// <param name="tuckGap">How far behind the Flanks' cards the tucked-in flat sits (a slider): only the flat moves.</param>
         /// <param name="tipOut">The wingtips reach this much further out (a slider), <paramref name="tipFront"/> and
-        /// <paramref name="tipBack"/> move their corners toward and away from the middle, and <paramref name="tuckRise"/>
-        /// the flat behind the Flanks toward it.</param>
+        /// <paramref name="tipBack"/> move their corners toward and away from the middle, and <paramref name="wingSize"/> is
+        /// the flap's level back edge, from the wingtip in.</param>
+        /// <param name="tuckWidth">The tucked-in flat, its whole length (a slider).</param>
         public static List<Vector2> Around(IReadOnlyList<Vector2> slots, Vector2 cardHalf, float noseRoom, float tailRoom, float towardMiddle,
-            float noseWidth = 1.6f, float tuckGap = 0.5f, float tipOut = 0f, float tipFront = 0f, float tipBack = 0f, float tuckRise = 0f,
-            float tuckWidth = 0f) {
+            float noseWidth = 200f, float tuckGap = 15f, float tipOut = 0f, float tipFront = 0f, float tipBack = 0f, float wingSize = 200f,
+            float tuckWidth = 400f) {
             float s = towardMiddle;
             // Worked out with the middle of the table up (y flipped for the top side), then flipped back
             Vector2 Up(Vector2 p) => new Vector2(p.x, p.y * s);
             Vector2 v = Up(slots[0]), right = Up(slots[4]);
             float cx = v.x; // The formation's middle column
-            // As pointy as wanted (the user): no minimum, down to a point just off the middle
-            var a = new Vector2(Mathf.Max(cx + 0.5f, v.x + cardHalf.x + noseRoom * noseWidth), v.y + cardHalf.y + noseRoom);
+            // Its flat's whole length (the user: in the same units as the tuck's), as pointy as wanted: down to a point
+            var a = new Vector2(cx + Mathf.Max(0.5f, noseWidth / 2f), v.y + cardHalf.y + noseRoom);
             var b = new Vector2(right.x + cardHalf.x + tailRoom + tipOut, right.y + cardHalf.y + tailRoom + tipFront);
             var c = new Vector2(right.x + cardHalf.x + tailRoom + tipOut, right.y - cardHalf.y - tailRoom - tipBack);
-            // The tuck (the user): under each Headquarters card the trailing edge keeps the same room the Flanks get, then
-            // past its inner corner it rises to a flat stretch just behind the Flanks, parallel to the Vanguard's back edge
+            // The flap (the user): from the wingtip the trailing edge runs level, this long, then rises to the tucked-in flat
+            // behind the Flanks, parallel to the Vanguard's back edge. The tuck's gap moves only that flat, never the wings
+            var k = new Vector2(Mathf.Clamp(c.x - wingSize, cx + 1.5f, c.x - 0.5f), c.y);
             Vector2 flank = Up(slots[2]);
-            float gap = tailRoom * tuckGap;
-            float flat = flank.y - cardHalf.y - gap + tuckRise;
-            var k = new Vector2(right.x - cardHalf.x - gap, right.y - cardHalf.y - gap); // Clear of the Headquarters card's inner corner
-            // The flat starts under the Flank's middle, wider or narrower by the slider, down to a point just off the middle
-            var d = new Vector2(Mathf.Clamp(flank.x + tuckWidth, cx + 0.5f, k.x - 1f), flat);
+            float flat = flank.y - cardHalf.y - tuckGap;
+            var d = new Vector2(cx + Mathf.Clamp(tuckWidth / 2f, 0.5f, k.x - cx - 1f), flat); // Its whole length, down to a point
             Vector2 Mirror(Vector2 p) => new Vector2(2f * cx - p.x, p.y);
             Vector2 Back(Vector2 p) => new Vector2(p.x, p.y * s);
             return new List<Vector2> { Back(a), Back(b), Back(c), Back(k), Back(d), Back(Mirror(d)), Back(Mirror(k)), Back(Mirror(c)), Back(Mirror(b)), Back(Mirror(a)) };

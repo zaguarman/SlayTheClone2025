@@ -5,7 +5,8 @@ namespace SlayTheClone {
     /// The battlefields' size, form and position, as sliders (the user): select it with UI > Battlefield Tuning and drag
     /// them while the game plays; both mats, their slots and the chevron round them redraw as they change. Kept in
     /// Resources/BattlefieldTuning, so what's set there is what the game uses. UI > Battlefield Gallery fills the boards
-    /// with cards to judge them. Lengths are in board units: a slot is 172 wide and 212 tall before Slot Scale.
+    /// with cards to judge them. Every length is in board units, the same for all of them (the user): a nose and a tuck
+    /// of the same width are the same size. A slot is 172 wide and 212 tall before Slot Scale.
     /// </summary>
     public class BattlefieldTuning : ScriptableObject {
         public const string ResourcePath = "BattlefieldTuning";
@@ -33,10 +34,12 @@ namespace SlayTheClone {
         [Range(0f, 150f)] public float matPadding = 30f;
         [Tooltip("Room round the Vanguard, at the chevron's nose")]
         [Range(0f, 100f)] public float noseRoom = 16f;
-        [Tooltip("How wide the nose is, in Nose Rooms past the Vanguard's sides (more: blunter; low enough, a point over the middle)")]
-        [Range(-12f, 4f)] public float noseWidth = 1.6f;
-        [Tooltip("The trailing edge's room under the cards, in Mat Paddings (0: tight to them; negative: over them)")]
-        [Range(-2f, 2f)] public float tuckGap = 0.5f;
+        [Tooltip("The nose's flat over the Vanguard, its whole length (as the Tuck Width: equal numbers, equal flats; small: a point)")]
+        [Range(1f, 800f)] public float noseWidth = 200f;
+        [Tooltip("The tucked-in flat behind the Flanks, its whole length (as the Nose Width; small: a point)")]
+        [Range(1f, 1200f)] public float tuckWidth = 400f;
+        [Tooltip("How far behind the Flanks' cards the tucked-in flat sits (negative: over them); only the flat moves, the wings stay")]
+        [Range(-300f, 300f)] public float tuckGap = 15f;
 
         [Header("Form: the wing's shape")]
         [Tooltip("The wingtips reach this much further out, past Headquarters")]
@@ -45,10 +48,8 @@ namespace SlayTheClone {
         [Range(-100f, 200f)] public float tipFront = 0f;
         [Tooltip("A wingtip's back corner moves this much away from the middle")]
         [Range(-100f, 200f)] public float tipBack = 0f;
-        [Tooltip("The tucked-in flat behind the Flanks moves this much toward the middle (negative: away)")]
-        [Range(-150f, 150f)] public float tuckRise = 0f;
-        [Tooltip("The tucked-in flat gets this much wider each side (negative: narrower, down to a point over the middle)")]
-        [Range(-300f, 300f)] public float tuckWidth = 0f;
+        [Tooltip("The wing's flap: its straight back edge, level, reaching this far in from the wingtip")]
+        [Range(0f, 700f)] public float wingSize = 200f;
 
         [Header("Form: corner rounding, each corner its own (looks only: the shape the game uses stays the same)")]
         [Tooltip("The nose's two corners, over the Vanguard: the rounding's radius")]
