@@ -45,13 +45,15 @@ namespace SlayTheClone {
         /// <paramref name="tipBack"/> move their corners toward and away from the middle, and <paramref name="tuckRise"/>
         /// the flat behind the Flanks toward it.</param>
         public static List<Vector2> Around(IReadOnlyList<Vector2> slots, Vector2 cardHalf, float noseRoom, float tailRoom, float towardMiddle,
-            float noseWidth = 1.6f, float tuckGap = 0.5f, float tipOut = 0f, float tipFront = 0f, float tipBack = 0f, float tuckRise = 0f) {
+            float noseWidth = 1.6f, float tuckGap = 0.5f, float tipOut = 0f, float tipFront = 0f, float tipBack = 0f, float tuckRise = 0f,
+            float tuckWidth = 0f) {
             float s = towardMiddle;
             // Worked out with the middle of the table up (y flipped for the top side), then flipped back
             Vector2 Up(Vector2 p) => new Vector2(p.x, p.y * s);
             Vector2 v = Up(slots[0]), right = Up(slots[4]);
             float cx = v.x; // The formation's middle column
-            var a = new Vector2(v.x + cardHalf.x + noseRoom * noseWidth, v.y + cardHalf.y + noseRoom);
+            // As pointy as wanted (the user): no minimum, down to a point just off the middle
+            var a = new Vector2(Mathf.Max(cx + 0.5f, v.x + cardHalf.x + noseRoom * noseWidth), v.y + cardHalf.y + noseRoom);
             var b = new Vector2(right.x + cardHalf.x + tailRoom + tipOut, right.y + cardHalf.y + tailRoom + tipFront);
             var c = new Vector2(right.x + cardHalf.x + tailRoom + tipOut, right.y - cardHalf.y - tailRoom - tipBack);
             // The tuck (the user): under each Headquarters card the trailing edge keeps the same room the Flanks get, then
@@ -60,7 +62,8 @@ namespace SlayTheClone {
             float gap = tailRoom * tuckGap;
             float flat = flank.y - cardHalf.y - gap + tuckRise;
             var k = new Vector2(right.x - cardHalf.x - gap, right.y - cardHalf.y - gap); // Clear of the Headquarters card's inner corner
-            var d = new Vector2(Mathf.Min(flank.x, k.x - 1f), flat);                      // The flat starts under the Flank's middle
+            // The flat starts under the Flank's middle, wider or narrower by the slider, down to a point just off the middle
+            var d = new Vector2(Mathf.Clamp(flank.x + tuckWidth, cx + 0.5f, k.x - 1f), flat);
             Vector2 Mirror(Vector2 p) => new Vector2(2f * cx - p.x, p.y);
             Vector2 Back(Vector2 p) => new Vector2(p.x, p.y * s);
             return new List<Vector2> { Back(a), Back(b), Back(c), Back(k), Back(d), Back(Mirror(d)), Back(Mirror(k)), Back(Mirror(c)), Back(Mirror(b)), Back(Mirror(a)) };

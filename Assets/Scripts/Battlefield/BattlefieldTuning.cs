@@ -33,10 +33,10 @@ namespace SlayTheClone {
         [Range(0f, 150f)] public float matPadding = 30f;
         [Tooltip("Room round the Vanguard, at the chevron's nose")]
         [Range(0f, 100f)] public float noseRoom = 16f;
-        [Tooltip("How wide the nose is, in Nose Rooms either side of the Vanguard (more: blunter)")]
-        [Range(0f, 4f)] public float noseWidth = 1.6f;
-        [Tooltip("The trailing edge's tuck behind the Flanks, in Mat Paddings (0: tight to the cards)")]
-        [Range(0f, 2f)] public float tuckGap = 0.5f;
+        [Tooltip("How wide the nose is, in Nose Rooms past the Vanguard's sides (more: blunter; low enough, a point over the middle)")]
+        [Range(-12f, 4f)] public float noseWidth = 1.6f;
+        [Tooltip("The trailing edge's room under the cards, in Mat Paddings (0: tight to them; negative: over them)")]
+        [Range(-2f, 2f)] public float tuckGap = 0.5f;
 
         [Header("Form: the wing's shape")]
         [Tooltip("The wingtips reach this much further out, past Headquarters")]
@@ -45,8 +45,10 @@ namespace SlayTheClone {
         [Range(-100f, 200f)] public float tipFront = 0f;
         [Tooltip("A wingtip's back corner moves this much away from the middle")]
         [Range(-100f, 200f)] public float tipBack = 0f;
-        [Tooltip("The flat stretch behind the Flanks moves this much toward the middle (negative: away)")]
+        [Tooltip("The tucked-in flat behind the Flanks moves this much toward the middle (negative: away)")]
         [Range(-150f, 150f)] public float tuckRise = 0f;
+        [Tooltip("The tucked-in flat gets this much wider each side (negative: narrower, down to a point over the middle)")]
+        [Range(-300f, 300f)] public float tuckWidth = 0f;
 
         [Header("Form: corner rounding, each corner its own (looks only: the shape the game uses stays the same)")]
         [Tooltip("The nose's two corners, over the Vanguard: the rounding's radius")]
@@ -77,6 +79,20 @@ namespace SlayTheClone {
                 if (current == null) current = Resources.Load<BattlefieldTuning>(ResourcePath);
                 if (current == null) current = CreateInstance<BattlefieldTuning>();
                 return current;
+            }
+        }
+
+        /// <summary>Whether both hands are hidden, to see the battlefields whole while tuning them (the user).</summary>
+        public static bool HandsHidden { get; private set; }
+
+        /// <summary>Hides both hands (or shows them again): they fade out and let the pointer through. Play mode only.</summary>
+        public static void SetHandsHidden(bool hidden) {
+            HandsHidden = hidden && Application.isPlaying;
+            if (!Application.isPlaying) return;
+            foreach (var hand in Object.FindObjectsByType<HandUI>(FindObjectsSortMode.None)) {
+                if (!hand.TryGetComponent(out CanvasGroup group)) group = hand.gameObject.AddComponent<CanvasGroup>(); // Not ??: a missing component is Unity's fake null
+                group.alpha = HandsHidden ? 0f : 1f;
+                group.blocksRaycasts = !HandsHidden;
             }
         }
 
@@ -155,6 +171,11 @@ namespace SlayTheClone {
                         tuning.BackToRemembered();
                         UnityEditor.EditorUtility.SetDirty(tuning);
                     }
+                }
+            }
+            using (new UnityEditor.EditorGUI.DisabledScope(!Application.isPlaying)) {
+                if (GUILayout.Button(BattlefieldTuning.HandsHidden ? "Show the hands" : "Hide the hands (to see the battlefields whole)")) {
+                    BattlefieldTuning.SetHandsHidden(!BattlefieldTuning.HandsHidden);
                 }
             }
             UnityEditor.EditorGUILayout.Space();

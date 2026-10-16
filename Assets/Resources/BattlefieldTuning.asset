@@ -26,6 +26,7 @@ MonoBehaviour:
   tipFront: 0
   tipBack: 0
   tuckRise: 0
+  tuckWidth: 0
   noseRounding: 0
   tipFrontRounding: 29.2
   tipBackRounding: 25.3

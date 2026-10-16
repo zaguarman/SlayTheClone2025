@@ -63,6 +63,7 @@ namespace SlayTheClone {
         private void OnDestroy() {
             if (Instance == this) Instance = null;
             if (label != null) Destroy(label.gameObject);
+            BattlefieldTuning.SetHandsHidden(false);
             if (game != null) FogOfWar.PlaysAsPlayer1 = seatBefore;
         }
 
@@ -114,6 +115,7 @@ namespace SlayTheClone {
                 if (GUILayout.Button("< Back")) gallery.Jump(-1);
                 if (GUILayout.Button("Next >")) gallery.Jump(1);
             }
+            if (GUILayout.Button(BattlefieldTuning.HandsHidden ? "Show the hands" : "Hide the hands")) BattlefieldTuning.SetHandsHidden(!BattlefieldTuning.HandsHidden);
             if (GUILayout.Button("Battlefield Tuning")) UnityEditor.EditorApplication.ExecuteMenuItem("UI/Battlefield Tuning");
             if (GUILayout.Button("Stop")) BattlefieldGallery.Stop();
             UnityEditor.EditorGUILayout.HelpBox("Move the sliders in UI > Battlefield Tuning: the mats redraw as they change.", UnityEditor.MessageType.None);

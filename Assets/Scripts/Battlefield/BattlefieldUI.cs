@@ -118,7 +118,7 @@ namespace SlayTheClone {
             var positions = SlotPositions(SlayTheClone.Player.BattlefieldSize);
             return ChevronGraphic.Around(positions, BattlefieldSlot.Size * SlotScale / 2f, NoseRoom, MatPadding,
                 transform.localPosition.y <= 0f ? 1f : -1f, Tuning.noseWidth, Tuning.tuckGap,
-                Tuning.tipOut, Tuning.tipFront, Tuning.tipBack, Tuning.tuckRise);
+                Tuning.tipOut, Tuning.tipFront, Tuning.tipBack, Tuning.tuckRise, Tuning.tuckWidth);
         }
 
         /// <summary>A chevron layer of the mat by name, made if missing, at this place among the mat's children.</summary>
