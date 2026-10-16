@@ -41,21 +41,24 @@ namespace SlayTheClone {
         /// <param name="towardMiddle">+1 when the middle of the table is up (the bottom side), -1 otherwise.</param>
         /// <param name="noseWidth">How wide the nose is, in nose rooms either side of the Vanguard (a slider).</param>
         /// <param name="tuckGap">The trailing edge's tuck behind the Flanks, in tail rooms (a slider).</param>
+        /// <param name="tipOut">The wingtips reach this much further out (a slider), <paramref name="tipFront"/> and
+        /// <paramref name="tipBack"/> move their corners toward and away from the middle, and <paramref name="tuckRise"/>
+        /// the flat behind the Flanks toward it.</param>
         public static List<Vector2> Around(IReadOnlyList<Vector2> slots, Vector2 cardHalf, float noseRoom, float tailRoom, float towardMiddle,
-            float noseWidth = 1.6f, float tuckGap = 0.5f) {
+            float noseWidth = 1.6f, float tuckGap = 0.5f, float tipOut = 0f, float tipFront = 0f, float tipBack = 0f, float tuckRise = 0f) {
             float s = towardMiddle;
             // Worked out with the middle of the table up (y flipped for the top side), then flipped back
             Vector2 Up(Vector2 p) => new Vector2(p.x, p.y * s);
             Vector2 v = Up(slots[0]), right = Up(slots[4]);
             float cx = v.x; // The formation's middle column
             var a = new Vector2(v.x + cardHalf.x + noseRoom * noseWidth, v.y + cardHalf.y + noseRoom);
-            var b = new Vector2(right.x + cardHalf.x + tailRoom, right.y + cardHalf.y + tailRoom);
-            var c = new Vector2(right.x + cardHalf.x + tailRoom, right.y - cardHalf.y - tailRoom);
+            var b = new Vector2(right.x + cardHalf.x + tailRoom + tipOut, right.y + cardHalf.y + tailRoom + tipFront);
+            var c = new Vector2(right.x + cardHalf.x + tailRoom + tipOut, right.y - cardHalf.y - tailRoom - tipBack);
             // The tuck (the user): under each Headquarters card the trailing edge keeps the same room the Flanks get, then
             // past its inner corner it rises to a flat stretch just behind the Flanks, parallel to the Vanguard's back edge
             Vector2 flank = Up(slots[2]);
             float gap = tailRoom * tuckGap;
-            float flat = flank.y - cardHalf.y - gap;
+            float flat = flank.y - cardHalf.y - gap + tuckRise;
             var k = new Vector2(right.x - cardHalf.x - gap, right.y - cardHalf.y - gap); // Clear of the Headquarters card's inner corner
             var d = new Vector2(Mathf.Min(flank.x, k.x - 1f), flat);                      // The flat starts under the Flank's middle
             Vector2 Mirror(Vector2 p) => new Vector2(2f * cx - p.x, p.y);
@@ -66,29 +69,18 @@ namespace SlayTheClone {
         protected override void OnPopulateMesh(VertexHelper vh) {
             vh.Clear();
             if (outline == null || outline.Count < 3) return;
-            var outer = Offset(outline, inset);
+            // The wing's corners rounded, for the look only (the user): the shape the game uses stays its ten corners
+            var drawn = outline.Count == 10 ? Rounded(outline, BattlefieldTuning.Current.Roundings) : outline;
+            var outer = Offset(drawn, inset);
             if (thickness <= 0f) {
-                // The chevron is two mirrored fans and a middle triangle: corners 0-4 on one side, 4-8 on the other
+                // Filled: cut into triangles round the edge (ear clipping), whatever its corners
                 int start = vh.currentVertCount;
                 foreach (var point in outer) vh.AddVert(point, color, Vector2.zero);
-                int n = outer.Count;
-                if (n == 10) { // The wing: nose a-a2, tips b-c, the room under Headquarters to k, the tuck d-d2 behind the Flanks
-                    vh.AddTriangle(start, start + 1, start + 2);     // a, b, c
-                    vh.AddTriangle(start, start + 2, start + 3);     // a, c, k
-                    vh.AddTriangle(start, start + 3, start + 4);     // a, k, d
-                    vh.AddTriangle(start, start + 4, start + 5);     // a, d, d2
-                    vh.AddTriangle(start, start + 5, start + 9);     // a, d2, a2
-                    vh.AddTriangle(start + 9, start + 5, start + 6); // a2, d2, k2
-                    vh.AddTriangle(start + 9, start + 6, start + 7); // a2, k2, c2
-                    vh.AddTriangle(start + 9, start + 7, start + 8); // a2, c2, b2
-                }
-                else {
-                    for (int i = 1; i < n - 1; i++) vh.AddTriangle(start, start + i, start + i + 1);
-                }
+                foreach (var (i, j, k) in Triangulate(outer)) vh.AddTriangle(start + i, start + j, start + k);
                 return;
             }
             // An outline: a band between the edge (moved in by the inset) and the same edge moved in by the thickness
-            var inner = Offset(outline, inset + thickness);
+            var inner = Offset(drawn, inset + thickness);
             for (int i = 0; i < outer.Count; i++) {
                 int j = (i + 1) % outer.Count;
                 int start = vh.currentVertCount;
@@ -99,6 +91,70 @@ namespace SlayTheClone {
                 vh.AddTriangle(start, start + 1, start + 2);
                 vh.AddTriangle(start, start + 2, start + 3);
             }
+        }
+
+        // Each corner rounded: cut back along both its edges by its radius (never past 45% of an edge), the curve between
+        // bulging toward the old corner
+        private static List<Vector2> Rounded(List<Vector2> points, float[] radii) {
+            const int Steps = 8;
+            var result = new List<Vector2>();
+            int n = points.Count;
+            for (int i = 0; i < n; i++) {
+                var point = points[i];
+                float radius = i < radii.Length ? radii[i] : 0f;
+                if (radius <= 0f) {
+                    result.Add(point);
+                    continue;
+                }
+                var previous = points[(i - 1 + n) % n];
+                var next = points[(i + 1) % n];
+                var from = point + (previous - point).normalized * Mathf.Min(radius, 0.45f * Vector2.Distance(previous, point));
+                var to = point + (next - point).normalized * Mathf.Min(radius, 0.45f * Vector2.Distance(next, point));
+                for (int s = 0; s <= Steps; s++) {
+                    float t = s / (float)Steps;
+                    result.Add((1 - t) * (1 - t) * from + 2 * (1 - t) * t * point + t * t * to);
+                }
+            }
+            return result;
+        }
+
+        // Triangles filling a simple polygon (its corners in order round the edge), by clipping ears
+        private static List<(int, int, int)> Triangulate(List<Vector2> points) {
+            var triangles = new List<(int, int, int)>();
+            var left = new List<int>();
+            for (int i = 0; i < points.Count; i++) left.Add(i);
+            float area = 0f;
+            for (int i = 0; i < points.Count; i++) {
+                var p = points[i];
+                var q = points[(i + 1) % points.Count];
+                area += p.x * q.y - q.x * p.y;
+            }
+            float turn = area > 0f ? 1f : -1f; // Counter-clockwise: an ear turns left
+            float Cross(Vector2 a, Vector2 b, Vector2 c) => (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+            bool Inside(Vector2 p, Vector2 a, Vector2 b, Vector2 c) =>
+                Cross(a, b, p) * turn >= 0f && Cross(b, c, p) * turn >= 0f && Cross(c, a, p) * turn >= 0f;
+            int guard = 0;
+            while (left.Count > 3 && guard++ < 10000) {
+                bool clipped = false;
+                for (int i = 0; i < left.Count; i++) {
+                    int ia = left[(i - 1 + left.Count) % left.Count], ib = left[i], ic = left[(i + 1) % left.Count];
+                    Vector2 a = points[ia], b = points[ib], c = points[ic];
+                    if (Cross(a, b, c) * turn <= 1e-4f) continue; // A reflex (or flat) corner isn't an ear
+                    bool empty = true;
+                    foreach (int other in left) {
+                        if (other == ia || other == ib || other == ic) continue;
+                        if (Inside(points[other], a, b, c)) { empty = false; break; }
+                    }
+                    if (!empty) continue;
+                    triangles.Add((ia, ib, ic));
+                    left.RemoveAt(i);
+                    clipped = true;
+                    break;
+                }
+                if (!clipped) break; // A degenerate shape: what's left is fanned
+            }
+            for (int i = 1; i < left.Count - 1; i++) triangles.Add((left[0], left[i], left[i + 1]));
+            return triangles;
         }
 
         // The outline moved inward by a distance, each corner along its mitre

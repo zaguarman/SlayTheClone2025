@@ -22,7 +22,7 @@ namespace SlayTheClone {
         // A card-shaped space on the mat. At rest it is invisible over the slot marker the mat already draws there
         // (see BoardSkin); it lights up under the pointer when a creature stands here, and turns brass under a dragged
         // card that can be dropped here
-        public static readonly Vector2 Size = new Vector2(172f, 212f);
+        public static Vector2 Size => new Vector2(172f * BattlefieldTuning.Current.slotWidth, 212f * BattlefieldTuning.Current.slotHeight); // A card's, by the sliders (UI > Battlefield Tuning)
         public static readonly Color MarkerColor = UITheme.Hex(0xE2B04A, 0.6f); // The corner brackets of a slot marker
         private static readonly Color HoverColor = UITheme.Hex(0xFFFFFF, 0.06f);
         private static readonly Color HoverTrimColor = UITheme.Hex(0xE2B04A, 0.95f);
@@ -102,6 +102,7 @@ namespace SlayTheClone {
             card.transform.SetParent(transform, false);
             card.transform.localPosition = Vector3.zero;
             card.transform.localRotation = Quaternion.identity;
+            card.transform.localScale = Vector3.one * BattlefieldTuning.Current.cardScale; // A slider: the card's size in its slot
         }
 
         /// <summary>Stops showing the current card and returns it; the caller decides what happens to it.</summary>

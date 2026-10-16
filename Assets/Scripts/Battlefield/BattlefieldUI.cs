@@ -117,7 +117,8 @@ namespace SlayTheClone {
         public List<Vector2> MatOutline() {
             var positions = SlotPositions(SlayTheClone.Player.BattlefieldSize);
             return ChevronGraphic.Around(positions, BattlefieldSlot.Size * SlotScale / 2f, NoseRoom, MatPadding,
-                transform.localPosition.y <= 0f ? 1f : -1f, Tuning.noseWidth, Tuning.tuckGap);
+                transform.localPosition.y <= 0f ? 1f : -1f, Tuning.noseWidth, Tuning.tuckGap,
+                Tuning.tipOut, Tuning.tipFront, Tuning.tipBack, Tuning.tuckRise);
         }
 
         /// <summary>A chevron layer of the mat by name, made if missing, at this place among the mat's children.</summary>
@@ -184,6 +185,9 @@ namespace SlayTheClone {
             for (int i = 0; i < battlefieldSlots.Count; i++) {
                 battlefieldSlots[i].SetPosition(positions[i]);
                 battlefieldSlots[i].transform.localScale = Vector3.one * SlotScale;
+                ((RectTransform)battlefieldSlots[i].transform).sizeDelta = BattlefieldSlot.Size;
+                var card = battlefieldSlots[i].OccupyingCard;
+                if (card != null && !DOTween.IsTweening(card.transform)) card.transform.localScale = Vector3.one * Tuning.cardScale;
             }
         }
         #endregion

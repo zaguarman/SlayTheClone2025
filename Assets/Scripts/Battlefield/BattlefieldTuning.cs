@@ -16,6 +16,14 @@ namespace SlayTheClone {
         [Tooltip("How far apart the formation's columns are, of the board's own spacing")]
         [Range(0.6f, 1.8f)] public float columnSpacing = 1f;
 
+        [Header("Size: the slots, and the cards in them")]
+        [Tooltip("A slot's width, of a card's (its frame and marker; the chevron keeps clear of it)")]
+        [Range(0.6f, 1.6f)] public float slotWidth = 1f;
+        [Tooltip("A slot's height, of a card's")]
+        [Range(0.6f, 1.6f)] public float slotHeight = 1f;
+        [Tooltip("A card in a slot, of its slot's size (1: as big as a card in the hand at Slot Scale)")]
+        [Range(0.5f, 1.3f)] public float cardScale = 1f;
+
         [Header("Form: the formation")]
         [Tooltip("How far apart its rows are, up and down: the Vanguard nearest the middle of the table, Headquarters furthest (0: one straight row; negative: the other way round)")]
         [Range(-120f, 250f)] public float rowStep = 64f;
@@ -29,6 +37,31 @@ namespace SlayTheClone {
         [Range(0f, 4f)] public float noseWidth = 1.6f;
         [Tooltip("The trailing edge's tuck behind the Flanks, in Mat Paddings (0: tight to the cards)")]
         [Range(0f, 2f)] public float tuckGap = 0.5f;
+
+        [Header("Form: the wing's shape")]
+        [Tooltip("The wingtips reach this much further out, past Headquarters")]
+        [Range(-60f, 200f)] public float tipOut = 0f;
+        [Tooltip("A wingtip's front corner (on the leading edge) moves this much toward the middle of the table")]
+        [Range(-100f, 200f)] public float tipFront = 0f;
+        [Tooltip("A wingtip's back corner moves this much away from the middle")]
+        [Range(-100f, 200f)] public float tipBack = 0f;
+        [Tooltip("The flat stretch behind the Flanks moves this much toward the middle (negative: away)")]
+        [Range(-150f, 150f)] public float tuckRise = 0f;
+
+        [Header("Form: corner rounding, each corner its own (looks only: the shape the game uses stays the same)")]
+        [Tooltip("The nose's two corners, over the Vanguard: the rounding's radius")]
+        [Range(0f, 120f)] public float noseRounding = 0f;
+        [Tooltip("The wingtips' front corners")]
+        [Range(0f, 120f)] public float tipFrontRounding = 0f;
+        [Tooltip("The wingtips' back corners")]
+        [Range(0f, 120f)] public float tipBackRounding = 0f;
+        [Tooltip("The corners tucked under Headquarters")]
+        [Range(0f, 120f)] public float tuckRounding = 0f;
+        [Tooltip("The two corners of the flat stretch behind the Flanks")]
+        [Range(0f, 120f)] public float flatRounding = 0f;
+
+        /// <summary>Each of the wing's ten corners' rounding, in its order round the edge (see ChevronGraphic.Around).</summary>
+        public float[] Roundings => new[] { noseRounding, tipFrontRounding, tipBackRounding, tuckRounding, flatRounding, flatRounding, tuckRounding, tipBackRounding, tipFrontRounding, noseRounding };
 
         [Header("Position")]
         [Tooltip("How far back from the middle of the table the formation sits: the two noses keep this far apart, each side")]
