@@ -35,4 +35,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4fca9076e26cd6947a5eaabc5e3b7828, type: 2}
   - {fileID: 11400000, guid: f8d9b562f89fc3b44a415bf3883fbd56, type: 2}
   lastUpdated: 2026-10-15T09:32:23.1940655Z
+  strategy: Control
   focus: 0

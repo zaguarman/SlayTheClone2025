@@ -101,8 +101,11 @@ namespace SlayTheClone {
         public static int FightsWon => Path.Count(n => n.IsCombat);
 
         /// <summary>The Health the enemy of this fight room starts at: 5 for the first fight, 5 more for each one won since, the boss 60.</summary>
-        public static int EnemyHealthFor(MapNode room) => room.Type == RoomType.Boss ? BossHealth
-            : Mathf.Min(BossHealth - HealthStep, HealthStep * (FightsWon + 1) + (room.Type == RoomType.Elite ? HealthStep : 0));
+        public static int EnemyHealthFor(MapNode room) => EnemyHealth(room.Type, FightsWon);
+
+        /// <summary>An enemy's Health in a room of this kind, after so many fights won: 5 more each, an elite 5 more yet, the boss 60.</summary>
+        public static int EnemyHealth(RoomType type, int fightsWon) => type == RoomType.Boss ? BossHealth
+            : Mathf.Min(BossHealth - HealthStep, HealthStep * (fightsWon + 1) + (type == RoomType.Elite ? HealthStep : 0));
 
         public static void Start(Faction faction, DeckScriptableObject deck, int seed, IEnumerable<CardDataScriptableObject> pool = null) {
             Clear();

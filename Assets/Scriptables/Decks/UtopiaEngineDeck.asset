@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: UtopiaEngineDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Utopia - Lab Grown
+  cards:
+  - {fileID: 11400000, guid: adfdb1818290ea7478a5c306ba45a879, type: 2}
+  - {fileID: 11400000, guid: adfdb1818290ea7478a5c306ba45a879, type: 2}
+  - {fileID: 11400000, guid: 8a030b617d685d045985263a7f28528c, type: 2}
+  - {fileID: 11400000, guid: 8a030b617d685d045985263a7f28528c, type: 2}
+  - {fileID: 11400000, guid: 6d1e3fcb65a763c4fb1821f7d9baf0e0, type: 2}
+  - {fileID: 11400000, guid: 6d1e3fcb65a763c4fb1821f7d9baf0e0, type: 2}
+  - {fileID: 11400000, guid: 15122c80637445d49bb99dc37fa3108e, type: 2}
+  - {fileID: 11400000, guid: 15122c80637445d49bb99dc37fa3108e, type: 2}
+  - {fileID: 11400000, guid: 16806f3d9e0f4d243be07fcafccdaba6, type: 2}
+  - {fileID: 11400000, guid: 16806f3d9e0f4d243be07fcafccdaba6, type: 2}
+  - {fileID: 11400000, guid: f83ad450ef802624eb4e0cfd80bb1ebc, type: 2}
+  - {fileID: 11400000, guid: 90862f950dd773a45ab00c0b7f63eda3, type: 2}
+  - {fileID: 11400000, guid: 8bf01ccda8e799f469fbc04a41eb4085, type: 2}
+  - {fileID: 11400000, guid: 82bf13f9e6c1c7a46b24602df0fe9f4b, type: 2}
+  - {fileID: 11400000, guid: 7717b40ee8063f047907afef7e41e7e0, type: 2}
+  - {fileID: 11400000, guid: 7717b40ee8063f047907afef7e41e7e0, type: 2}
+  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
+  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
+  - {fileID: 11400000, guid: 08fb5163a4b25ff4e8c137dbdc189708, type: 2}
+  - {fileID: 11400000, guid: bb9b151b194b20f40b0c5fcf054d1ae6, type: 2}
+  - {fileID: 11400000, guid: bb9b151b194b20f40b0c5fcf054d1ae6, type: 2}
+  - {fileID: 11400000, guid: 0835bb03ab6103544b65732b290a1099, type: 2}
+  - {fileID: 11400000, guid: 4f95cfedbc1cbb54a92ee6f0728595c4, type: 2}
+  - {fileID: 11400000, guid: 4f95cfedbc1cbb54a92ee6f0728595c4, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.2713204Z
+  strategy: Engine
+  focus: 0

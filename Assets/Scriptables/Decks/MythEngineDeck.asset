@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: MythEngineDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Myth - Blessed Martyrs
+  cards:
+  - {fileID: 11400000, guid: 5a8d01f17086a9e4a84b662311eebbeb, type: 2}
+  - {fileID: 11400000, guid: 5a8d01f17086a9e4a84b662311eebbeb, type: 2}
+  - {fileID: 11400000, guid: d50c4a3c94e970b4aa3350a12dd32521, type: 2}
+  - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
+  - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
+  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
+  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
+  - {fileID: 11400000, guid: b83da39fc1648d74e91f1d386ba008a1, type: 2}
+  - {fileID: 11400000, guid: b83da39fc1648d74e91f1d386ba008a1, type: 2}
+  - {fileID: 11400000, guid: 5f98f2c0ee739fe44a86b26eb0869495, type: 2}
+  - {fileID: 11400000, guid: 5f98f2c0ee739fe44a86b26eb0869495, type: 2}
+  - {fileID: 11400000, guid: f61d6057329ed744aa50e12dba6ac5ec, type: 2}
+  - {fileID: 11400000, guid: f61d6057329ed744aa50e12dba6ac5ec, type: 2}
+  - {fileID: 11400000, guid: 182b939e0c71c5e4bbae5e423d1fde83, type: 2}
+  - {fileID: 11400000, guid: b306141104efb6449942f4bbc31ee7d6, type: 2}
+  - {fileID: 11400000, guid: b306141104efb6449942f4bbc31ee7d6, type: 2}
+  - {fileID: 11400000, guid: 53fb908cccff5704db8655bf6a50761e, type: 2}
+  - {fileID: 11400000, guid: c464253a7813f9349b7c153953a8021c, type: 2}
+  - {fileID: 11400000, guid: c464253a7813f9349b7c153953a8021c, type: 2}
+  - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
+  - {fileID: 11400000, guid: 58393f7e44c440c489cea67f229b73f1, type: 2}
+  - {fileID: 11400000, guid: 0c2a19c2387eaba4d894a0cd59782e00, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.3983346Z
+  strategy: Engine
+  focus: 0

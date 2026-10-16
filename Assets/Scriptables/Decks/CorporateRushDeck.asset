@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: CorporateRushDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Corporate - Hustle Rush
+  cards:
+  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
+  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
+  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
+  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
+  - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
+  - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
+  - {fileID: 11400000, guid: 65207038c69d94840b68c43e9445d20d, type: 2}
+  - {fileID: 11400000, guid: 65207038c69d94840b68c43e9445d20d, type: 2}
+  - {fileID: 11400000, guid: a7851017bdfde604aadd7a44e123c73d, type: 2}
+  - {fileID: 11400000, guid: ddac427ce83333f4e844e38db795bc02, type: 2}
+  - {fileID: 11400000, guid: ddac427ce83333f4e844e38db795bc02, type: 2}
+  - {fileID: 11400000, guid: 0a1ee8666e83eeb46b496294cc6319f9, type: 2}
+  - {fileID: 11400000, guid: 0a1ee8666e83eeb46b496294cc6319f9, type: 2}
+  - {fileID: 11400000, guid: 1dc6d856885b4dd44bbbf3c5ad02b9b2, type: 2}
+  - {fileID: 11400000, guid: 1dc6d856885b4dd44bbbf3c5ad02b9b2, type: 2}
+  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
+  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
+  - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
+  - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
+  - {fileID: 11400000, guid: fbcd0812c94c18d40a893a334a3bbcb9, type: 2}
+  - {fileID: 11400000, guid: fbcd0812c94c18d40a893a334a3bbcb9, type: 2}
+  - {fileID: 11400000, guid: 6da251ed4f0f0e1448dedb752e3e8a1a, type: 2}
+  - {fileID: 11400000, guid: f771ed04a3c573445a1fd4c07b976d70, type: 2}
+  - {fileID: 11400000, guid: f771ed04a3c573445a1fd4c07b976d70, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.1673132Z
+  strategy: Aggro
+  focus: 0

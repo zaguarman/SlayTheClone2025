@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 
 namespace SlayTheClone {
@@ -14,6 +15,19 @@ namespace SlayTheClone {
         public const string LevelsReportPath = "Assets/Documentation/AI Tournament.txt";
         public const string StylesReportPath = "Assets/Documentation/AI Styles.txt";
         public const string BalanceReportPath = "Assets/Documentation/Balance Report (AI games).txt";
+        public const string AdventureReportPath = "Assets/Documentation/Adventure Simulation.txt";
+
+        [MenuItem("Debug/AI Adventure Simulation")]
+        private static void RunAdventuresFromMenu() => RunAdventures();
+
+        /// <summary>Adventures played by the AI, every faction (see <see cref="AITournament.RunAdventures"/>).</summary>
+        public static void RunAdventures(int runsPerFaction = 20) =>
+            Run(AdventureReportPath, (decks, progress) => {
+                var catalog = AssetDatabase.LoadAssetAtPath<DeckCatalog>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("t:DeckCatalog")[0]));
+                var factions = catalog.Opponents.Select(o => DeckCatalog.FactionsOf(o.deck)).Where(f => f.Count == 1).Select(f => f[0])
+                    .Where(f => f != Enums.Faction.None).Distinct().ToList();
+                return (new List<AITournament.Result>(), AITournament.RunAdventures(factions, catalog.AllCards, runsPerFaction, new AIEntrant(AILevel.Hard), progress));
+            });
 
         [MenuItem("Debug/AI Tournament")]
         private static void RunLevelsFromMenu() => RunLevels();

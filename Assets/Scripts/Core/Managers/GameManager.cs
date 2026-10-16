@@ -155,7 +155,8 @@ namespace SlayTheClone {
 
             // The players and the rules systems, each given only what it uses (see GameSession)
             int seed = randomSeed != 0 ? randomSeed : Environment.TickCount;
-            var session = new GameSession(mediator, player1Cards, player2Cards, modifierFactory, seed, player2Name);
+            var session = new GameSession(mediator, player1Cards, player2Cards, modifierFactory, seed, player2Name,
+                MatchSetup.PlayerHealth ?? Player.StartingHealth, MatchSetup.OpponentHealth ?? Player.StartingHealth); // An adventure's Health
             Player1 = session.Player1;
             Player2 = session.Player2;
             CardDealingService = session.CardDealingService;

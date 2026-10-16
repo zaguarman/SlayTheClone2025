@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: ProsperityGospelDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Myth + Corporate - Prosperity Gospel
+  cards:
+  - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
+  - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
+  - {fileID: 11400000, guid: a6a4fb5192548394787288284a53ded3, type: 2}
+  - {fileID: 11400000, guid: 18cc60c8301c8e348afd1ec6332a61a2, type: 2}
+  - {fileID: 11400000, guid: 18cc60c8301c8e348afd1ec6332a61a2, type: 2}
+  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
+  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
+  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
+  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
+  - {fileID: 11400000, guid: 0a1ee8666e83eeb46b496294cc6319f9, type: 2}
+  - {fileID: 11400000, guid: 0a1ee8666e83eeb46b496294cc6319f9, type: 2}
+  - {fileID: 11400000, guid: fee5f31226d0f6b49a15db74b37a2743, type: 2}
+  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
+  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
+  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
+  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
+  - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
+  - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
+  - {fileID: 11400000, guid: 2fe34e4b53b602d4ba40ee26e72b5d84, type: 2}
+  - {fileID: 11400000, guid: 5da5c6ae6f66e944abe5ed9f7ef0c109, type: 2}
+  - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
+  - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
+  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
+  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.4593010Z
+  strategy: Combo
+  focus: 0

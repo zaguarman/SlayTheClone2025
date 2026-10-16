@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: DigitalSocietyMidrangeDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Digital Society - Influencer Economy
+  cards:
+  - {fileID: 11400000, guid: 56611a2d00e62bf428c0bfb506bb52d8, type: 2}
+  - {fileID: 11400000, guid: 56611a2d00e62bf428c0bfb506bb52d8, type: 2}
+  - {fileID: 11400000, guid: 4c8f0774af0a3074e955916c896343e0, type: 2}
+  - {fileID: 11400000, guid: 4c8f0774af0a3074e955916c896343e0, type: 2}
+  - {fileID: 11400000, guid: 9ae363bc20379664cb956e3407e46b43, type: 2}
+  - {fileID: 11400000, guid: 9ae363bc20379664cb956e3407e46b43, type: 2}
+  - {fileID: 11400000, guid: 183a9e51095f19c419ae927f0d8b8008, type: 2}
+  - {fileID: 11400000, guid: 183a9e51095f19c419ae927f0d8b8008, type: 2}
+  - {fileID: 11400000, guid: d7c80cec3755e7247bd5ef0e7f98f04b, type: 2}
+  - {fileID: 11400000, guid: d7c80cec3755e7247bd5ef0e7f98f04b, type: 2}
+  - {fileID: 11400000, guid: 285720a054817f2418d931d4c35ecb17, type: 2}
+  - {fileID: 11400000, guid: 285720a054817f2418d931d4c35ecb17, type: 2}
+  - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
+  - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
+  - {fileID: 11400000, guid: de3adc60108efa04d920eaf39638a8ce, type: 2}
+  - {fileID: 11400000, guid: de3adc60108efa04d920eaf39638a8ce, type: 2}
+  - {fileID: 11400000, guid: f2bf5369176d5fe43a56d06b7024f483, type: 2}
+  - {fileID: 11400000, guid: f2bf5369176d5fe43a56d06b7024f483, type: 2}
+  - {fileID: 11400000, guid: e86409097920347469c5cbf73aa57869, type: 2}
+  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
+  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
+  - {fileID: 11400000, guid: 837d1ac84fa4db3498299301e25df320, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.3030389Z
+  strategy: Midrange
+  focus: 0

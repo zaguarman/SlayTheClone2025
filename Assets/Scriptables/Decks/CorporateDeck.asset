@@ -36,4 +36,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
   - {fileID: 11400000, guid: 3e4d8f59c6e074f4ebeaa136233a5776, type: 2}
   lastUpdated: 2026-10-16T09:56:24.1136650Z
+  strategy: Engine
   focus: 3

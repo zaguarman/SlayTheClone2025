@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: MindControlDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Mind - Mind Games
+  cards:
+  - {fileID: 11400000, guid: d24770ac471a1d046b9f9aab4645fa00, type: 2}
+  - {fileID: 11400000, guid: d24770ac471a1d046b9f9aab4645fa00, type: 2}
+  - {fileID: 11400000, guid: b2d0789f9446bd04b82633099da8a4ab, type: 2}
+  - {fileID: 11400000, guid: b2d0789f9446bd04b82633099da8a4ab, type: 2}
+  - {fileID: 11400000, guid: 844a62cc2c4853f4bb547f093521bb1b, type: 2}
+  - {fileID: 11400000, guid: 844a62cc2c4853f4bb547f093521bb1b, type: 2}
+  - {fileID: 11400000, guid: a6edde4600e9c334c808ed4a55c6e25e, type: 2}
+  - {fileID: 11400000, guid: a6edde4600e9c334c808ed4a55c6e25e, type: 2}
+  - {fileID: 11400000, guid: 0efb4c3a89595d04ca8e4ccec26b8ab6, type: 2}
+  - {fileID: 11400000, guid: 0efb4c3a89595d04ca8e4ccec26b8ab6, type: 2}
+  - {fileID: 11400000, guid: 7cbd62442e2434742b7ad25fe2d6829b, type: 2}
+  - {fileID: 11400000, guid: 7cbd62442e2434742b7ad25fe2d6829b, type: 2}
+  - {fileID: 11400000, guid: 1a40651830edf3548be852dde383fe34, type: 2}
+  - {fileID: 11400000, guid: 1a40651830edf3548be852dde383fe34, type: 2}
+  - {fileID: 11400000, guid: f5e562aea85718a46b50fa7aa3c8f529, type: 2}
+  - {fileID: 11400000, guid: f5e562aea85718a46b50fa7aa3c8f529, type: 2}
+  - {fileID: 11400000, guid: f8d9b562f89fc3b44a415bf3883fbd56, type: 2}
+  - {fileID: 11400000, guid: f8d9b562f89fc3b44a415bf3883fbd56, type: 2}
+  - {fileID: 11400000, guid: 197d029fd4badfd43b582fc451f3ed44, type: 2}
+  - {fileID: 11400000, guid: dd11f91f7b049a341ae6e31e13820ff4, type: 2}
+  - {fileID: 11400000, guid: 8084b1109215d5f4aa0014e67f969862, type: 2}
+  - {fileID: 11400000, guid: 8084b1109215d5f4aa0014e67f969862, type: 2}
+  - {fileID: 11400000, guid: 4fca9076e26cd6947a5eaabc5e3b7828, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.4293634Z
+  strategy: Control
+  focus: 0

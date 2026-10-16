@@ -359,7 +359,8 @@ namespace SlayTheClone {
                 Release(cards);
             }
             Problems = audit.Problems;
-            return BalanceReport(decks, cardResults, cardLedger, styleResults, styleLedger, deckResults, deckLedger) + "\n" + audit.Report();
+            return BalanceReport(decks, cardResults, cardLedger, styleResults, styleLedger, deckResults, deckLedger)
+                   + StrategyReport(decks, deckResults, deckLedger) + "\n" + audit.Report();
         }
 
         private static string BalanceReport(IReadOnlyList<DeckScriptableObject> decks, List<Result> cardResults, CardLedger cardLedger,
@@ -404,8 +405,8 @@ namespace SlayTheClone {
                 var hitters = deckLedger.Cards.Where(c => names.Contains(c.Name) && c.Games >= 5)
                     .OrderByDescending(c => (c.FaceDamage + c.CreatureDamage) / (float)c.Games).Take(3)
                     .Select(c => $"{c.Name} {(c.FaceDamage + c.CreatureDamage) / (float)c.Games:0.0} dmg, {c.Kills / (float)c.Games:0.0} kills");
-                text.AppendLine($"    {ShortDeck(deck.GetDeckName()),-10} {profile}");
-                text.AppendLine($"    {"",-10} {string.Join("; ", hitters)}");
+                text.AppendLine($"    {ShortDeck(deck.GetDeckName()),-22} {profile}");
+                text.AppendLine($"    {"",-22} {string.Join("; ", hitters)}");
             }
             text.AppendLine($"  First seat: Player 1 won {deckResults.Count(r => r.Winner == 1)}, Player 2 {deckResults.Count(r => r.Winner == 2)}, draws {deckResults.Count(r => r.Winner == 0)}; {deckResults.Average(r => r.Days):0.0} Days on average");
             text.AppendLine();
@@ -490,12 +491,12 @@ namespace SlayTheClone {
             text.AppendLine();
 
             text.AppendLine("5. DECK AGAINST DECK: the row deck's wins out of 6 against the column deck");
-            text.AppendLine("  " + new string(' ', 16) + string.Join("", deckNames.Select(d => $"{ShortDeck(d),10}")));
+            text.AppendLine("  " + new string(' ', 26) + string.Join("", deckNames.Select((d, i) => $"{i + 1,4}")));
             foreach (var row in deckNames) {
-                text.AppendLine($"  {ShortDeck(row),-16}" + string.Join("", deckNames.Select(column => {
-                    if (row == column) return $"{"-",10}";
+                text.AppendLine($"  {deckNames.IndexOf(row) + 1,2} {ShortDeck(row),-22} " + string.Join("", deckNames.Select(column => {
+                    if (row == column) return $"{"-",4}";
                     var played = deckResults.Where(r => (r.Deck == row && r.Deck2 == column) || (r.Deck == column && r.Deck2 == row)).ToList();
-                    return $"{played.Count(r => (r.Winner == 1 && r.Deck == row) || (r.Winner == 2 && r.Deck2 == row)),10}";
+                    return $"{played.Count(r => (r.Winner == 1 && r.Deck == row) || (r.Winner == 2 && r.Deck2 == row)),4}";
                 })));
             }
             text.AppendLine();
@@ -515,11 +516,11 @@ namespace SlayTheClone {
             return text.ToString();
         }
 
-        // The faction of a one-faction deck; a two-faction deck goes by its own name
+        // A deck by its own name, without its faction (a faction has several decks now)
         private static string ShortDeck(string deck) {
             int dash = deck.IndexOf(" - ");
-            string name = dash < 0 ? deck : deck.Substring(0, dash).Contains("&") ? deck.Substring(dash + 3) : deck.Substring(0, dash);
-            return name.Length > 9 ? name.Substring(0, 8) + "." : name;
+            string name = dash < 0 ? deck : deck.Substring(dash + 3);
+            return name.Length > 22 ? name.Substring(0, 21) + "." : name;
         }
 
         private static float PairShare(List<Result> results, string deck, string other) {

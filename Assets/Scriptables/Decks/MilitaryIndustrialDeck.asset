@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: MilitaryIndustrialDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Statecraft + Corporate - Military-Industrial Complex
+  cards:
+  - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
+  - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
+  - {fileID: 11400000, guid: 6b312445addd586499f7311d8d3a4b70, type: 2}
+  - {fileID: 11400000, guid: 6b312445addd586499f7311d8d3a4b70, type: 2}
+  - {fileID: 11400000, guid: d941c52272e44564496335a69e6e4a15, type: 2}
+  - {fileID: 11400000, guid: d941c52272e44564496335a69e6e4a15, type: 2}
+  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
+  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
+  - {fileID: 11400000, guid: fc6b56691729fb84e8472bcba349d39a, type: 2}
+  - {fileID: 11400000, guid: fc6b56691729fb84e8472bcba349d39a, type: 2}
+  - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
+  - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
+  - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
+  - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
+  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
+  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
+  - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
+  - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
+  - {fileID: 11400000, guid: 310b0094c8b008747aa5b3bd448a289d, type: 2}
+  - {fileID: 11400000, guid: 95aad8a35a8f35b45944c88787ad093f, type: 2}
+  - {fileID: 11400000, guid: 3ff8e29e684314f46bebf06737bc9000, type: 2}
+  - {fileID: 11400000, guid: 3ff8e29e684314f46bebf06737bc9000, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.5516718Z
+  strategy: Midrange
+  focus: 0

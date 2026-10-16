@@ -42,7 +42,7 @@ namespace SlayTheClone {
             };
 
             foreach (var pair in PairDecks) {
-                var deck = WriteDeck(pair.Name, pair.Cards.Select(name => written[name]).ToList(), $"{DecksFolder}/{pair.File}.asset");
+                var deck = WriteDeck(pair.Name, pair.Cards.Select(name => written[name]).ToList(), $"{DecksFolder}/{pair.File}.asset", pair.Strategy);
                 offered.Add(Offer(deck, pair.Opponent, pair.Tagline));
             }
 
@@ -90,7 +90,34 @@ namespace SlayTheClone {
         // staged deaths, decoys, information trades).
         // Panopticon: Digital Society marks the enemy with Heat Signature and Shadow Ops. reveals them, so every random
         // effect finds its target. Prosperity Gospel: Myth's sacrifices feed Corporate's draw engine.
-        private static readonly (string Name, string File, string Opponent, string Tagline, string[] Cards)[] PairDecks = { };
+        private static readonly (string Name, string File, string Opponent, string Tagline, string Strategy, string[] Cards)[] PairDecks = {
+            // A second deck for each faction, another strategy than its best one (the user, 2026-10-16: decks combining different
+            // strategies, then a tournament)
+            ("Corporate - Hustle Rush", "CorporateRushDeck", "Your Startup's Founder", "Moving fast. Breaking you.", "Aggro", new[] { "Day Trader", "Day Trader", "Unpaid Intern", "Unpaid Intern", "Pluriemployed Hustler", "Pluriemployed Hustler", "Multilevel Marketing Seller", "Multilevel Marketing Seller", "Counterfeit", "Shell Company", "Shell Company", "Golden Parachute", "Golden Parachute", "Work Shift Rotation", "Work Shift Rotation", "Hostile Takeover", "Hostile Takeover", "Team Building Exercise", "Team Building Exercise", "Overtime", "Overtime", "Business Expense", "Inheritance", "Inheritance" }),
+            ("Statecraft - Shock and Awe", "StatecraftAggroDeck", "The Minister of Defence", "Peace through superior firepower.", "Aggro", new[] { "Mercenaries", "Mercenaries", "Sherman Tank", "Sherman Tank", "Police Officer Productivity Target", "Police Officer Productivity Target", "Spite-Elected President", "Spite-Elected President", "Demagogue", "Demagogue", "Man o' War", "Man o' War", "Preemptive Strike", "Preemptive Strike", "Raised Security Level", "Raised Security Level", "Martial Law", "Martial Law", "Panem Et Circenses", "Weapons of Mass Distraction" }),
+            ("Zeitgeist - Underdogs", "ZeitgeistSwarmDeck", "Your Neighbourhood", "Nobody believed in them. Correctly.", "Swarm", new[] { "Underdog", "Underdog", "Plot Armor", "Plot Armor", "Scam Artist", "Scam Artist", "Delivery Cyclist", "Delivery Cyclist", "Drug Smuggler", "Drug Smuggler", "Hikikomori", "Hikikomori", "Not on My Watch", "Karen", "Karen", "No Glove, No Love", "No Glove, No Love", "One for the Road", "One for the Road", "Rush Hour", "Generational Trauma", "Generational Trauma", "Mental Health Day", "YOLO" }),
+            ("Utopia - Lab Grown", "UtopiaEngineDeck", "The Gene Therapist", "Side effects may include winning.", "Engine", new[] { "Hypermetamorphosis", "Hypermetamorphosis", "Frankenstein", "Frankenstein", "Genetically Modified Organism", "Genetically Modified Organism", "Clone", "Clone", "Extremophile", "Extremophile", "Quantum Physicist", "Surveillance Giraffe", "Perpetual Motion Machine", "Philosophy PhD", "Exponential Growth", "Exponential Growth", "Gene Editing", "Gene Editing", "Placebo", "Blood Transfusion", "Blood Transfusion", "Stasis Field", "Overpopulation", "Overpopulation" }),
+            ("Digital Society - Influencer Economy", "DigitalSocietyMidrangeDeck", "Your Favourite Streamer", "Like, subscribe, surrender.", "Midrange", new[] { "Thirst Trap", "Thirst Trap", "Content Creator", "Content Creator", "Short King", "Short King", "Good Boi", "Good Boi", "Its Been 84 Years...", "Its Been 84 Years...", "Catfish", "Catfish", "Meta Group Chat", "Meta Group Chat", "Cancelled", "Cancelled", "Social Panopticon", "Social Panopticon", "Its A Trap", "Dogpile", "Dogpile", "Console Memory Card" }),
+            ("Shadow Ops. - Black Budget", "ShadowOpsControlDeck", "The Station Chief", "This meeting never happened.", "Control", new[] { "Control Room", "Control Room", "Signal Jammer", "Signal Jammer", "Political Decoy", "Deep Cover", "Deep Cover", "Whistleblower", "Whistleblower", "Wet Work", "Wet Work", "Mole", "Mole", "Counter-Intelligence", "Counter-Intelligence", "Sabotage", "Perfectly Timed Camera Malfunction", "Perfectly Timed Camera Malfunction", "Tapped Communications", "Tapped Communications", "Fell Out of a Window", "Fell Out of a Window", "Coup d'État", "Asset Recruitment" }),
+            ("Tech - Threat Model", "TechComboDeck", "The Red Team", "We found 47 vulnerabilities. You are 46 of them.", "Combo", new[] { "Threat Hunter", "Threat Hunter", "Script Kiddie", "Script Kiddie", "Sex Clanker", "Legacy Code", "Legacy Code", "Scope Creep", "Scope Creep", "SysAdmin", "Meatproxy As A Service", "Suspicious USB Stick in the Parking Lot", "Suspicious USB Stick in the Parking Lot", "Pair Programming", "Pair Programming", "Ctrl + Z", "Ctrl + Z", "DDOS Attack", "DDOS Attack", "Ransomware Attack", "Ransomware Attack", "Antivirus", "Web Scraping" }),
+            ("Myth - Blessed Martyrs", "MythEngineDeck", "The Abbess", "Blessed are the meek. Briefly.", "Engine", new[] { "Pope", "Pope", "Omniscient Space-Time Bending Bearded Wizard", "Martyr", "Martyr", "Cultist", "Cultist", "Zealot", "Zealot", "Phoenix", "Phoenix", "Reincarnation", "Reincarnation", "The Lobster Professor", "Thoughts and Prayers", "Thoughts and Prayers", "The Holy Grail", "Deus Vult", "Deus Vult", "Sacrificial Ritual", "Mox Nox", "Excess of Bread and Wine" }),
+            ("Mind - Mind Games", "MindControlDeck", "Your Therapist", "And how does losing make you feel?", "Control", new[] { "Socrates", "Socrates", "Roko's Basilisk", "Roko's Basilisk", "Schrodinger's Cat", "Schrodinger's Cat", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Legerdemain", "Legerdemain", "Maslow's Pyramid", "Maslow's Pyramid", "Yesn't", "Yesn't", "Red Herring", "Red Herring", "Survivorship Bias", "Momentum", "Trolley Problem", "Trolley Problem", "Lucid Dreaming" }),
+            // Two factions that play well together (Faction Compendium 5, Example Two-Faction Decks)
+            ("Myth + Corporate - Prosperity Gospel", "ProsperityGospelDeck", "The Televangelist", "Your donation is tax-deductible. Your soul is not.", "Combo", new[] { "Sacrificial Ritual", "Sacrificial Ritual", "Omen Reading", "Necronomicon", "Necronomicon", "Cultist", "Cultist", "Unpaid Intern", "Unpaid Intern", "Golden Parachute", "Golden Parachute", "Charles Ponzi", "Day Trader", "Day Trader", "Fat Tony", "Fat Tony", "Martyr", "Martyr", "Tax-Exempt Corruption", "Monkey Hand", "Holy War", "Holy War", "Hostile Takeover", "Hostile Takeover" }),
+            ("Digital Society + Shadow Ops. - Panopticon", "PanopticonDeck", "The Data Broker", "We know what you did. We sold it.", "Combo", new[] { "Meta Group Chat", "Meta Group Chat", "Social Panopticon", "Social Panopticon", "Cancelled", "Cancelled", "Control Room", "Control Room", "Wet Work", "Wet Work", "Perfectly Timed Camera Malfunction", "Perfectly Timed Camera Malfunction", "Tapped Communications", "Keyboard Warrior", "Keyboard Warrior", "Chronically Online", "Chronically Online", "Licence to Kill", "Licence to Kill", "Cleaner", "Cleaner", "Dogpile", "Dogpile" }),
+            ("Corporate + Zeitgeist - Hustle Culture", "HustleCultureDeck", "The Motivational Speaker", "Rise and grind. Mostly grind.", "Aggro", new[] { "Day Trader", "Day Trader", "Pluriemployed Hustler", "Pluriemployed Hustler", "Bodybuilder", "Bodybuilder", "Football Hooligans", "Football Hooligans", "Reality TV Star", "Reality TV Star", "Antihero", "Antihero", "Overtime", "Overtime", "YOLO", "YOLO", "Toxic Positivity", "Toxic Positivity", "Hostile Takeover", "Hostile Takeover", "Team Building Exercise", "Team Building Exercise", "Mass Layoffs", "Business Expense" }),
+            ("Statecraft + Corporate - Military-Industrial Complex", "MilitaryIndustrialDeck", "The Defence Contractor", "Peace is bad for business.", "Midrange", new[] { "Man o' War", "Man o' War", "Diplomat", "Diplomat", "Sherman Tank", "Sherman Tank", "Fat Tony", "Fat Tony", "Cleaning Robot", "Cleaning Robot", "Mercenaries", "Mercenaries", "Preemptive Strike", "Preemptive Strike", "Inflation", "Inflation", "Margin Call", "Margin Call", "Raised Security Level", "Supply Depot", "Taxpayer Funds Venture Capital Profits", "Taxpayer Funds Venture Capital Profits" }),
+            ("Utopia + Myth - Frankenstein", "FrankensteinDeck", "The Mad Scientist", "It's alive. Again. And again.", "Engine", new[] { "Living Dead", "Living Dead", "Phoenix", "Phoenix", "Reincarnation", "Reincarnation", "Frankenstein", "Frankenstein", "Genetically Modified Organism", "Genetically Modified Organism", "Gene Editing", "Gene Editing", "Mutation", "Mutation", "Phoenix Feather", "Phoenix Feather", "Exponential Growth", "The Holy Grail", "Templar Knight", "Templar Knight", "Resurrected T-Rex", "Resurrected T-Rex" }),
+            ("Tech + Digital Society - The Algorithm", "AlgorithmDeck", "The Recommendation Engine", "Because you watched: losing.", "Swarm", new[] { "Script Kiddie", "Script Kiddie", "NPC", "NPC", "Short King", "Short King", "Digital Nomad", "Digital Nomad", "Threat Hunter", "Threat Hunter", "Crypto \"Entrepreneur\"", "Crypto \"Entrepreneur\"", "Pair Programming", "Pair Programming", "Clickbait", "Clickbait", "Dogpile", "Dogpile", "DDOS Attack", "DDOS Attack", "Social Panopticon", "Ransomware Attack" }),
+            ("Shadow Ops. + Mind - Psyop", "PsyopDeck", "The Handler", "You were never here. Neither were we.", "Control", new[] { "Femme Fatale", "Femme Fatale", "Deep Cover", "Deep Cover", "Roko's Basilisk", "Roko's Basilisk", "Introvert", "Introvert", "Red Herring", "Red Herring", "Counter-Intelligence", "Counter-Intelligence", "Sabotage", "Legerdemain", "Legerdemain", "Imposter Syndrome", "Imposter Syndrome", "Smoke And Mirrors", "Trolley Problem", "Trolley Problem", "The Golden Gun" }),
+        };
+
+        // The strategy each faction's best deck plays, for the balance study's strategy table
+        private static readonly Dictionary<Faction, string> BestDeckStrategies = new Dictionary<Faction, string> {
+            [Faction.Corporate] = "Engine", [Faction.Statecraft] = "Control", [Faction.Zeitgeist] = "Midrange", [Faction.Utopia] = "Aggro",
+            [Faction.DigitalSociety] = "Swarm", [Faction.ShadowOps] = "Aggro", [Faction.Tech] = "Midrange", [Faction.Myth] = "Control",
+            [Faction.Mind] = "Control",
+        };
 
         // Each faction's deck (2026-10-14): its best 20 cards and combos, picked from the AI games' card stats (damage, kills,
         // win share per card), before any balance study. Two copies at most. The old decks (and the two-faction ones) are gone
@@ -2017,7 +2044,7 @@ namespace SlayTheClone {
         private static DeckScriptableObject Build(Faction faction, List<CardDef> cards, Dictionary<string, CardDataScriptableObject> written) {
             WriteCards(faction, cards, written);
             var (name, list) = BestDecks[faction];
-            return WriteDeck(name, list.Select(card => written[card]).ToList(), $"{DecksFolder}/{faction}Deck.asset");
+            return WriteDeck(name, list.Select(card => written[card]).ToList(), $"{DecksFolder}/{faction}Deck.asset", BestDeckStrategies[faction]);
         }
 
         private static DeckCatalog.Opponent Offer(DeckScriptableObject deck, string opponent, string tagline) =>
@@ -2124,7 +2151,7 @@ namespace SlayTheClone {
             return asset;
         }
 
-        private static DeckScriptableObject WriteDeck(string deckName, List<CardDataScriptableObject> cards, string path) {
+        private static DeckScriptableObject WriteDeck(string deckName, List<CardDataScriptableObject> cards, string path, string strategy = "") {
             var deck = AssetDatabase.LoadAssetAtPath<DeckScriptableObject>(path);
             if (deck == null) {
                 deck = ScriptableObject.CreateInstance<DeckScriptableObject>();
@@ -2135,6 +2162,7 @@ namespace SlayTheClone {
             bool changed = !deck.Cards.SequenceEqual(cards) || deck.LastUpdated == System.DateTime.MinValue;
             var serializedDeck = new SerializedObject(deck);
             serializedDeck.FindProperty("deckName").stringValue = deckName;
+            serializedDeck.FindProperty("strategy").stringValue = strategy ?? "";
             if (changed) serializedDeck.FindProperty("lastUpdated").stringValue = System.DateTime.UtcNow.ToString("o");
             var cardsProp = serializedDeck.FindProperty("cards");
             cardsProp.arraySize = cards.Count;

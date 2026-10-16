@@ -111,7 +111,10 @@ namespace SlayTheClone {
 
         public ICard TakeFromDiscardPile(ICard card) {
             if (card == null) return null;
-            int index = discardPile.FindLastIndex(c => c == card || (c.SourceData != null && c.SourceData == card.SourceData) || c.CardId == card.CardId);
+            // The copy itself first: copies of a card share their definition and id, and the one asked for must be the one that
+            // leaves (Console Memory Card took one copy while the other left the pile: one card, two places)
+            int index = discardPile.LastIndexOf(card);
+            if (index < 0) index = discardPile.FindLastIndex(c => (c.SourceData != null && c.SourceData == card.SourceData) || c.CardId == card.CardId);
             if (index < 0) return null;
             var taken = discardPile[index];
             discardPile.RemoveAt(index);

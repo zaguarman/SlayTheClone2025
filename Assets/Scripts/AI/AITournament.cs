@@ -24,9 +24,11 @@ namespace SlayTheClone {
             /// <summary>1 or 2; 0 when nobody won (both at 0 on the same action, or called off).</summary>
             public readonly int Winner;
             public readonly int Days;
+            /// <summary>Each player's Health at the end.</summary>
+            public readonly int Health1, Health2;
 
-            public Result(string deck, string deck2, AIEntrant first, AIEntrant second, int winner, int days) {
-                (Deck, Deck2, First, Second, Winner, Days) = (deck, deck2, first, second, winner, days);
+            public Result(string deck, string deck2, AIEntrant first, AIEntrant second, int winner, int days, int health1 = 0, int health2 = 0) {
+                (Deck, Deck2, First, Second, Winner, Days, Health1, Health2) = (deck, deck2, first, second, winner, days, health1, health2);
             }
 
             public AILevel Level1 => First.Level;
@@ -47,9 +49,11 @@ namespace SlayTheClone {
             public readonly DeckCards Deck1, Deck2;
             public readonly AIEntrant First, Second;
             public readonly int Seed;
+            public readonly int Health1, Health2; // What each player starts at (an adventure's fights differ from 20)
 
-            public Game(DeckCards deck1, AIEntrant first, DeckCards deck2, AIEntrant second, int seed) {
-                (Deck1, First, Deck2, Second, Seed) = (deck1, first, deck2, second, seed);
+            public Game(DeckCards deck1, AIEntrant first, DeckCards deck2, AIEntrant second, int seed,
+                int health1 = Player.StartingHealth, int health2 = Player.StartingHealth) {
+                (Deck1, First, Deck2, Second, Seed, Health1, Health2) = (deck1, first, deck2, second, seed, health1, health2);
             }
         }
 
@@ -96,7 +100,7 @@ namespace SlayTheClone {
             try {
                 // Each game deals from its own copy of the deck lists: decks shuffle what they're given
                 session = new GameSession(mediator, new List<CardData>(game.Deck1.Cards), new List<CardData>(game.Deck2.Cards),
-                    new SimpleModifierFactory(), game.Seed);
+                    new SimpleModifierFactory(), game.Seed, health1: game.Health1, health2: game.Health2);
                 turns = session.CreateTurnFlow(mediator);
                 session.DealOpeningHands();
                 var planners = new[] {
@@ -118,7 +122,7 @@ namespace SlayTheClone {
                 bool firstDown = session.Player1.Health <= 0, secondDown = session.Player2.Health <= 0;
                 int winner = champion == session.Player1 ? 1 : champion == session.Player2 ? 2 : firstDown == secondDown ? 0 : firstDown ? 2 : 1;
                 tally?.End(winner);
-                return new Result(game.Deck1.Name, game.Deck2.Name, game.First, game.Second, winner, turns.TurnNumber);
+                return new Result(game.Deck1.Name, game.Deck2.Name, game.First, game.Second, winner, turns.TurnNumber, session.Player1.Health, session.Player2.Health);
             }
             catch (System.Exception exception) {
                 audit?.Note("Exception", $"{exception.GetType().Name}: {exception.Message}", $"{where}, Day {turns?.TurnNumber ?? 0}\n{exception.StackTrace}");
@@ -354,7 +358,7 @@ namespace SlayTheClone {
             public void CheckDay(int endedDay, bool advanced, bool over) {
                 string at = $"{where}, Day {endedDay}";
                 if (!advanced && !over) Note("Rules", "Ending the turn didn't start the next Day", at);
-                if (game.ActionsQueue.GetPendingActionsCount() > 0) {
+                if (game.ActionsQueue.GetPendingActionsCount() > 0 && !over) { // Won mid-Day, what's still planned is dropped: fine
                     Note("Rules", "Actions left in the queue after the turn", $"{at}: {string.Join(", ", game.ActionsQueue.GetPendingActions().Select(a => a.GetType().Name))}");
                 }
                 var placed = new HashSet<ICreature>();

@@ -1,0 +1,197 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UnityEngine;
+using static SlayTheClone.Enums;
+
+namespace SlayTheClone {
+    /// <summary>
+    /// Adventures played by the AI (the user, 2026-10-16: "run adventures with different factions and tell me which have more
+    /// problems"). Each run starts with its faction's starter deck and 60 Health and walks the map at random along the paths;
+    /// its fights are played by the real rules, the player's seat by the AI standing in for you, the enemy as the room sets
+    /// it (deck, AI level, Health). Won, it takes the strongest card of its rewards (your faction's), and the Health left goes
+    /// on; at a shop it buys the strongest card it can pay, then has its weakest taken out. Events and rest sites are walked
+    /// through: the simulation can't make their choices yet. Every run of a round is prepared on the main thread (decks are
+    /// Unity assets), then their fights are played together on worker threads.
+    /// </summary>
+    public static partial class AITournament {
+        private sealed class AdventureSim {
+            public Faction Faction;
+            public int Index;
+            public System.Random Random;
+            public AdventureMap Map;
+            public MapNode Current, Fighting;
+            public List<CardDataScriptableObject> Deck;
+            public int Health = AdventureRun.StartingHealth, Money, FightsWon, Removals, Bought;
+            public bool Over, Won, Stalled;
+            public Faction FightingFaction, KilledBy;
+            public DeckScriptableObject EnemyDeck;
+            public readonly List<int> HealthAfterFights = new List<int>();
+        }
+
+        /// <summary>Plays <paramref name="runsPerFaction"/> adventures for each faction; returns the report.</summary>
+        public static string RunAdventures(IReadOnlyList<Faction> factions, IReadOnlyList<CardDataScriptableObject> pool, int runsPerFaction,
+            AIEntrant player, System.Action<float> progress = null) {
+            var cards = pool.Where(c => c != null).Distinct().ToList();
+            var tiers = AdventureDecks.Tiers(cards);
+            var sims = new List<AdventureSim>();
+            foreach (var faction in factions) {
+                for (int i = 0; i < runsPerFaction; i++) {
+                    int seed = 7919 * (int)faction + 104729 * i + 17;
+                    sims.Add(new AdventureSim {
+                        Faction = faction, Index = i, Random = new System.Random(seed), Map = AdventureMap.Generate(seed),
+                        Deck = AdventureDecks.Starter(faction, cards).Cards.ToList()
+                    });
+                }
+            }
+            var audit = new GameAudit();
+            int rounds = 0, fights = 0;
+            while (sims.Any(s => !s.Over)) {
+                rounds++;
+                var games = new List<Game>();
+                var playing = new List<AdventureSim>();
+                var read = new List<DeckCards>();
+                foreach (var sim in sims.Where(s => !s.Over)) {
+                    WalkToFight(sim, factions, cards, tiers);
+                    if (sim.Over) continue;
+                    var mine = new DeckCards { Name = $"{sim.Faction} run {sim.Index}", Cards = DeckScriptableObject.Make("Run", sim.Deck).GetCardDataList() };
+                    var theirs = new DeckCards { Name = sim.EnemyDeck.GetDeckName(), Cards = sim.EnemyDeck.GetCardDataList() };
+                    read.Add(mine);
+                    read.Add(theirs);
+                    int enemyHealth = AdventureRun.EnemyHealth(sim.Fighting.Type, sim.FightsWon);
+                    games.Add(new Game(mine, player, theirs, new AIEntrant(AdventureMenu.LevelFor(sim.Fighting)), sim.Random.Next(), sim.Health, enemyHealth));
+                    playing.Add(sim);
+                }
+                if (games.Count == 0) break;
+                int before = fights;
+                var results = PlayAll(games, audit, null, done => progress?.Invoke(Mathf.Clamp01((before + done * games.Count) / (float)(sims.Count * 8))));
+                fights += games.Count;
+                for (int i = 0; i < results.Length; i++) AfterFight(playing[i], results[i], cards);
+                Release(read);
+            }
+            progress?.Invoke(1f);
+            return AdventureReport(sims, factions, runsPerFaction, player, fights, audit, cards);
+        }
+
+        // Walks on (rooms at random along the paths) up to the next fight, which is set up: its enemy deck and faction. Shops
+        // buy and remove; the other rooms do nothing here
+        private static void WalkToFight(AdventureSim sim, IReadOnlyList<Faction> factions, List<CardDataScriptableObject> pool, Dictionary<CardDataScriptableObject, AdventureDecks.Tier> tiers) {
+            while (true) {
+                var options = sim.Current == null ? sim.Map.Row(0).ToList() : sim.Current.Next;
+                if (options.Count == 0) {
+                    sim.Over = true;
+                    return;
+                }
+                var room = options[sim.Random.Next(options.Count)];
+                if (room.IsCombat) {
+                    sim.Fighting = room;
+                    var rivals = factions.Where(f => f != sim.Faction).ToList();
+                    sim.FightingFaction = rivals[sim.Random.Next(rivals.Count)];
+                    if (sim.EnemyDeck != null) Object.DestroyImmediate(sim.EnemyDeck);
+                    sim.EnemyDeck = AdventureDecks.Enemy(sim.FightingFaction, AdventureDecks.StrengthOf(room), pool, sim.Random, AdventureDecks.EnemyName(sim.FightingFaction, room));
+                    return;
+                }
+                if (room.Type == RoomType.Shop) Shop(sim, pool, tiers);
+                sim.Current = room;
+            }
+        }
+
+        // The shop's five cards of the run's faction: the strongest it can pay, then the weakest card out of the deck if it still can
+        private static void Shop(AdventureSim sim, List<CardDataScriptableObject> pool, Dictionary<CardDataScriptableObject, AdventureDecks.Tier> tiers) {
+            var stock = pool.Where(c => c.faction == sim.Faction && !(c is CreatureCardScriptableObject { token: true }))
+                .OrderBy(c => sim.Random.NextDouble() + (int)tiers[c] * 0.1).Take(AdventureRun.ShopCards).ToList();
+            var buy = stock.Where(c => AdventureRun.PriceOf(tiers[c]) <= sim.Money).OrderByDescending(AdventureDecks.Power).FirstOrDefault();
+            if (buy != null && sim.Deck.Count < PlayerDecks.MaxDeckSize) {
+                sim.Money -= AdventureRun.PriceOf(tiers[buy]);
+                sim.Deck.Add(buy);
+                sim.Bought++;
+            }
+            int removal = AdventureRun.RemovalPrice + AdventureRun.RemovalRise * sim.Removals;
+            if (sim.Money >= removal && sim.Deck.Count > AdventureRun.MinDeck) {
+                sim.Money -= removal;
+                sim.Removals++;
+                sim.Deck.Remove(sim.Deck.OrderBy(AdventureDecks.Power).First());
+            }
+        }
+
+        private static void AfterFight(AdventureSim sim, Result result, List<CardDataScriptableObject> pool) {
+            var room = sim.Fighting;
+            sim.Fighting = null;
+            if (result.Winner != 1) {
+                sim.Over = true;
+                sim.Stalled = result.Winner == 0;
+                sim.KilledBy = sim.FightingFaction;
+                sim.Current = room; // Where it ended
+                return;
+            }
+            sim.Current = room;
+            sim.FightsWon++;
+            sim.Health = Mathf.Max(1, result.Health1);
+            sim.HealthAfterFights.Add(sim.Health);
+            if (room.Type == RoomType.Boss) {
+                sim.Won = sim.Over = true;
+                return;
+            }
+            sim.Money += room.Type == RoomType.Elite ? AdventureRun.ElitePurse : AdventureRun.FightPurse;
+            var offered = new HashSet<CardDataScriptableObject>();
+            for (int pack = 0; pack < (room.Type == RoomType.Elite ? 2 : 1); pack++) {
+                var cards = AdventureDecks.Reward(sim.Faction, AdventureDecks.StrengthOf(room), pool, sim.Random, offered);
+                foreach (var card in cards) offered.Add(card);
+                var best = cards.OrderByDescending(AdventureDecks.Power).FirstOrDefault();
+                if (best != null && sim.Deck.Count < PlayerDecks.MaxDeckSize) sim.Deck.Add(best);
+            }
+        }
+
+        private static string AdventureReport(List<AdventureSim> sims, IReadOnlyList<Faction> factions, int runs, AIEntrant player, int fights, GameAudit audit,
+            List<CardDataScriptableObject> pool) {
+            var text = new StringBuilder();
+            text.AppendLine("ADVENTURE SIMULATION");
+            text.AppendLine();
+            text.AppendLine($"{runs} runs a faction, {fights} fights in all. Each run: the faction's starter deck, 60 Health, rooms picked at random along");
+            text.AppendLine($"the paths. You are played by the {player.Name} AI; the enemies as the rooms set them (Easy early, Medium, Hard elites,");
+            text.AppendLine("Very Hard boss; Health 5, 10, 15... and 60 for the boss). Won, a run takes the strongest card offered (its own faction's);");
+            text.AppendLine("shops buy the strongest card it can pay, then take out the weakest. Events and rest sites are walked through.");
+            text.AppendLine("A fight still going after 40 Days counts as lost (stalled).");
+            text.AppendLine();
+            text.AppendLine("1. BY FACTION, the most trouble first (bosses beaten, then fights won)");
+            text.AppendLine();
+            text.AppendLine($"{"Faction",-18}{"Boss beaten",12}{"Fights won (avg)",18}{"Died: fight",13}{"elite",7}{"boss",6}{"stalled",9}{"Deck at end",13}");
+            foreach (var group in sims.GroupBy(s => s.Faction).OrderBy(g => g.Count(s => s.Won)).ThenBy(g => g.Average(s => s.FightsWon))) {
+                var lost = group.Where(s => !s.Won).ToList();
+                text.AppendLine($"{CardTextFormatter.FactionName(group.Key),-18}{group.Count(s => s.Won),5} of {group.Count(),-4}{group.Average(s => s.FightsWon),14:0.0}    "
+                    + $"{lost.Count(s => s.Current?.Type == RoomType.Fight),9}{lost.Count(s => s.Current?.Type == RoomType.Elite),7}{lost.Count(s => s.Current?.Type == RoomType.Boss),6}"
+                    + $"{group.Count(s => s.Stalled),9}{group.Average(s => s.Deck.Count),13:0.0}");
+            }
+            text.AppendLine();
+            text.AppendLine("2. WHERE AND TO WHOM EACH FACTION LOSES");
+            foreach (var group in sims.GroupBy(s => s.Faction).OrderBy(g => g.Count(s => s.Won)).ThenBy(g => g.Average(s => s.FightsWon))) {
+                var lost = group.Where(s => !s.Won).ToList();
+                text.AppendLine();
+                text.AppendLine($"{CardTextFormatter.FactionName(group.Key)}");
+                if (lost.Count == 0) {
+                    text.AppendLine("    Never lost.");
+                    continue;
+                }
+                string Band(MapNode n) => n == null ? "?" : n.Type == RoomType.Boss ? "the boss" : n.Row < 5 ? "rows 1-5" : n.Row < 10 ? "rows 6-10" : "rows 11-15";
+                text.AppendLine("    Died in: " + string.Join(", ", lost.GroupBy(s => Band(s.Current)).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} {g.Count()}")));
+                text.AppendLine("    Beaten by: " + string.Join(", ", lost.GroupBy(s => s.KilledBy).OrderByDescending(g => g.Count()).Select(g => $"{CardTextFormatter.FactionName(g.Key)} {g.Count()}")));
+                var afterFirst = group.Where(s => s.HealthAfterFights.Count > 0).Select(s => s.HealthAfterFights[0]).ToList();
+                if (afterFirst.Count > 0) text.AppendLine($"    Health after its first fight: {afterFirst.Average():0} on average (of 60); cards bought at shops: {group.Sum(s => s.Bought)}, removed: {group.Sum(s => s.Removals)}");
+            }
+            text.AppendLine();
+            text.AppendLine("3. STARTER DECKS (12 cards: the plainest of the faction)");
+            foreach (var faction in factions) {
+                var first = AdventureDecks.Starter(faction, pool);
+                text.AppendLine($"    {CardTextFormatter.FactionName(faction)}: {string.Join(", ", first.Cards.GroupBy(c => c.cardName).Select(g => $"{g.Key} x{g.Count()}"))}");
+                Object.DestroyImmediate(first);
+            }
+            if (audit.Problems.Count > 0) {
+                text.AppendLine();
+                text.AppendLine("4. WHAT THE GAMES RAN INTO (the audit)");
+                foreach (var problem in audit.Problems) text.AppendLine($"    {problem.Kind}: {problem.Message} ({problem.Count}x; first: {problem.FirstSeen})");
+            }
+            foreach (var sim in sims) if (sim.EnemyDeck != null) Object.DestroyImmediate(sim.EnemyDeck);
+            return text.ToString();
+        }
+    }
+}

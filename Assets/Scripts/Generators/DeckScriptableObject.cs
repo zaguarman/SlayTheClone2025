@@ -8,7 +8,11 @@ namespace SlayTheClone {
         [SerializeField] private string deckName = "New Deck";
         [SerializeField] private List<CardDataScriptableObject> cards = new List<CardDataScriptableObject>();
         [SerializeField] private string lastUpdated = ""; // When its cards last changed (UTC, round-trip format): menus list the newest first
+        [SerializeField] private string strategy = ""; // How it means to win: Aggro, Control, Midrange, Engine, Swarm or Combo (the balance study groups by it)
         [SerializeField] private int focus; // Being worked on now: 1 the most important, then 2...; 0 not (Cards > Generate Faction Decks sets it)
+
+        /// <summary>How it means to win (Aggro, Control, Midrange, Engine, Swarm, Combo); empty for a player's own deck.</summary>
+        public string Strategy => strategy;
 
         /// <summary>Its place among the decks being worked on now (1 first), 0 if it isn't one: the menus list those first.</summary>
         public int Focus => focus;

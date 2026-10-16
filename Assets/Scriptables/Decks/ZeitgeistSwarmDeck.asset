@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: ZeitgeistSwarmDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Zeitgeist - Underdogs
+  cards:
+  - {fileID: 11400000, guid: 1354dc85d04090c438eaa57342c8da40, type: 2}
+  - {fileID: 11400000, guid: 1354dc85d04090c438eaa57342c8da40, type: 2}
+  - {fileID: 11400000, guid: 3d01d22be9099a24e9c2e8774bbc5518, type: 2}
+  - {fileID: 11400000, guid: 3d01d22be9099a24e9c2e8774bbc5518, type: 2}
+  - {fileID: 11400000, guid: cb57619ee4a28f049a2a8aedfbf22c54, type: 2}
+  - {fileID: 11400000, guid: cb57619ee4a28f049a2a8aedfbf22c54, type: 2}
+  - {fileID: 11400000, guid: 3a11754dcac21e64eb0d7e6461cc531c, type: 2}
+  - {fileID: 11400000, guid: 3a11754dcac21e64eb0d7e6461cc531c, type: 2}
+  - {fileID: 11400000, guid: 05fa83554dffb8a40a3f43ec83f6d5c2, type: 2}
+  - {fileID: 11400000, guid: 05fa83554dffb8a40a3f43ec83f6d5c2, type: 2}
+  - {fileID: 11400000, guid: 85079479fcdfae24c98f36d42238c74e, type: 2}
+  - {fileID: 11400000, guid: 85079479fcdfae24c98f36d42238c74e, type: 2}
+  - {fileID: 11400000, guid: cee1332c5e1aeb44b8041e1ad36c2caf, type: 2}
+  - {fileID: 11400000, guid: 0e6033fc5727d084c8d12457d775f0c2, type: 2}
+  - {fileID: 11400000, guid: 0e6033fc5727d084c8d12457d775f0c2, type: 2}
+  - {fileID: 11400000, guid: 575a418898c064443a1c258f1faa61dc, type: 2}
+  - {fileID: 11400000, guid: 575a418898c064443a1c258f1faa61dc, type: 2}
+  - {fileID: 11400000, guid: e79c326f61ff12b468eaa25ff43f0f43, type: 2}
+  - {fileID: 11400000, guid: e79c326f61ff12b468eaa25ff43f0f43, type: 2}
+  - {fileID: 11400000, guid: 6372c7949902b5a44a3895e9be3da0e1, type: 2}
+  - {fileID: 11400000, guid: 763d55a98242f6545a8f7f97c9ce93b8, type: 2}
+  - {fileID: 11400000, guid: 763d55a98242f6545a8f7f97c9ce93b8, type: 2}
+  - {fileID: 11400000, guid: 17041c770f14ec64198ac60152117f6a, type: 2}
+  - {fileID: 11400000, guid: 87790aac015e49d44a145d5838081313, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.2400571Z
+  strategy: Swarm
+  focus: 0

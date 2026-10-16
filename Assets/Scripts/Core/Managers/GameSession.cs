@@ -22,7 +22,7 @@ namespace SlayTheClone {
         public IReadOnlyList<IPlayer> Players => new IPlayer[] { Player1, Player2 };
 
         public GameSession(IGameMediator mediator, List<CardData> player1Cards, List<CardData> player2Cards, IModifierFactory modifierFactory,
-            int seed, string player2Name = MatchSetup.DefaultOpponentName) {
+            int seed, string player2Name = MatchSetup.DefaultOpponentName, int health1 = Player.StartingHealth, int health2 = Player.StartingHealth) {
             if (mediator == null) throw new ArgumentNullException(nameof(mediator));
             if (player1Cards == null) throw new ArgumentNullException(nameof(player1Cards));
             if (player2Cards == null) throw new ArgumentNullException(nameof(player2Cards));
@@ -31,8 +31,8 @@ namespace SlayTheClone {
             GameRandom.Reset(seed);
             Log($"Random seed {seed} (set it on GameManager to replay this game)", LogTag.Initialization);
 
-            Player1 = new Player(MatchSetup.DefaultPlayerName, isPlayer1: true, MatchSetup.PlayerHealth ?? Player.StartingHealth) { CardsToDraw = OpeningHand };
-            Player2 = new Player(player2Name, isPlayer1: false, MatchSetup.OpponentHealth ?? Player.StartingHealth) { CardsToDraw = OpeningHand };
+            Player1 = new Player(MatchSetup.DefaultPlayerName, isPlayer1: true, health1) { CardsToDraw = OpeningHand };
+            Player2 = new Player(player2Name, isPlayer1: false, health2) { CardsToDraw = OpeningHand };
             Player1.Opponent = Player2;
             Player2.Opponent = Player1;
 

@@ -22,6 +22,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 77e785c31491a134cba41678509c8849, type: 2}
   - {fileID: 11400000, guid: c3522f8beee11f2458ea75e8e33bff76, type: 2}
   - {fileID: 11400000, guid: 69b2a19a2eedb3446bd97bd846561b82, type: 2}
+  - {fileID: 11400000, guid: edd71d7700bffc04383e6172df37bc4e, type: 2}
+  - {fileID: 11400000, guid: ab9d755db939da54daac79d182d0b105, type: 2}
+  - {fileID: 11400000, guid: 9c1b68440bbfa9040b29553b8f0d4d56, type: 2}
+  - {fileID: 11400000, guid: 49af619189b316141a9bb4e1e7d34909, type: 2}
+  - {fileID: 11400000, guid: b2bf5aa9dc09c1d4681a2022ae3055ab, type: 2}
+  - {fileID: 11400000, guid: 2dd2000d9d9328d4f8a544a5701b9c6e, type: 2}
+  - {fileID: 11400000, guid: 0c9b091659985d849aef8ba585f0b1ea, type: 2}
+  - {fileID: 11400000, guid: eff7e8e5bd6ca1643820944cc3f40880, type: 2}
+  - {fileID: 11400000, guid: 4c79736e66eca4340ad6f3be803db26e, type: 2}
+  - {fileID: 11400000, guid: 53f4d215f51991d4f8b5f1187b94c78a, type: 2}
+  - {fileID: 11400000, guid: f4c402a4f2bafd545a0fef36c48fa6f7, type: 2}
+  - {fileID: 11400000, guid: f7dccede00d55174cb849bce7ecf6969, type: 2}
+  - {fileID: 11400000, guid: b0f0a0be67c3ec64e87d8c257b43e320, type: 2}
+  - {fileID: 11400000, guid: 920a7ab9ce3b0064797c00b59154724c, type: 2}
+  - {fileID: 11400000, guid: 7338637969830864a9e3c3bf4d073a91, type: 2}
+  - {fileID: 11400000, guid: 0c296cbdbc242eb4aaf8d73126d0efaf, type: 2}
   opponents:
   - name: Your Manager
     tagline: Has scheduled a quick sync about your attitude.
@@ -50,6 +66,54 @@ MonoBehaviour:
   - name: Your Inner Critic
     tagline: Knows exactly what to say. Always the worst thing.
     deck: {fileID: 11400000, guid: 69b2a19a2eedb3446bd97bd846561b82, type: 2}
+  - name: Your Startup's Founder
+    tagline: Moving fast. Breaking you.
+    deck: {fileID: 11400000, guid: edd71d7700bffc04383e6172df37bc4e, type: 2}
+  - name: The Minister of Defence
+    tagline: Peace through superior firepower.
+    deck: {fileID: 11400000, guid: ab9d755db939da54daac79d182d0b105, type: 2}
+  - name: Your Neighbourhood
+    tagline: Nobody believed in them. Correctly.
+    deck: {fileID: 11400000, guid: 9c1b68440bbfa9040b29553b8f0d4d56, type: 2}
+  - name: The Gene Therapist
+    tagline: Side effects may include winning.
+    deck: {fileID: 11400000, guid: 49af619189b316141a9bb4e1e7d34909, type: 2}
+  - name: Your Favourite Streamer
+    tagline: Like, subscribe, surrender.
+    deck: {fileID: 11400000, guid: b2bf5aa9dc09c1d4681a2022ae3055ab, type: 2}
+  - name: The Station Chief
+    tagline: This meeting never happened.
+    deck: {fileID: 11400000, guid: 2dd2000d9d9328d4f8a544a5701b9c6e, type: 2}
+  - name: The Red Team
+    tagline: We found 47 vulnerabilities. You are 46 of them.
+    deck: {fileID: 11400000, guid: 0c9b091659985d849aef8ba585f0b1ea, type: 2}
+  - name: The Abbess
+    tagline: Blessed are the meek. Briefly.
+    deck: {fileID: 11400000, guid: eff7e8e5bd6ca1643820944cc3f40880, type: 2}
+  - name: Your Therapist
+    tagline: And how does losing make you feel?
+    deck: {fileID: 11400000, guid: 4c79736e66eca4340ad6f3be803db26e, type: 2}
+  - name: The Televangelist
+    tagline: Your donation is tax-deductible. Your soul is not.
+    deck: {fileID: 11400000, guid: 53f4d215f51991d4f8b5f1187b94c78a, type: 2}
+  - name: The Data Broker
+    tagline: We know what you did. We sold it.
+    deck: {fileID: 11400000, guid: f4c402a4f2bafd545a0fef36c48fa6f7, type: 2}
+  - name: The Motivational Speaker
+    tagline: Rise and grind. Mostly grind.
+    deck: {fileID: 11400000, guid: f7dccede00d55174cb849bce7ecf6969, type: 2}
+  - name: The Defence Contractor
+    tagline: Peace is bad for business.
+    deck: {fileID: 11400000, guid: b0f0a0be67c3ec64e87d8c257b43e320, type: 2}
+  - name: The Mad Scientist
+    tagline: It's alive. Again. And again.
+    deck: {fileID: 11400000, guid: 920a7ab9ce3b0064797c00b59154724c, type: 2}
+  - name: The Recommendation Engine
+    tagline: 'Because you watched: losing.'
+    deck: {fileID: 11400000, guid: 7338637969830864a9e3c3bf4d073a91, type: 2}
+  - name: The Handler
+    tagline: You were never here. Neither were we.
+    deck: {fileID: 11400000, guid: 0c296cbdbc242eb4aaf8d73126d0efaf, type: 2}
   testDecks:
   - {fileID: 11400000, guid: 3931d1131be0875488599d827939fc73, type: 2}
   - {fileID: 11400000, guid: 0f3ad3b977f753c4aa89694960c6b51b, type: 2}

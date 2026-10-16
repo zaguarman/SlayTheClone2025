@@ -37,7 +37,9 @@ namespace SlayTheClone {
             player.SendForPicks.TryGetValue(sending.Source, out var picked);
             player.SendForPicks.Remove(sending.Source);
             var card = picked != null && choices.Contains(picked) ? picked : SendFor.Best(player, choices);
-            if (card == null || !(sending.FromDiscard ? player.Deck.TakeFromDiscardPile(card) != null : player.Deck.RemoveCard(card))) {
+            if (card != null && sending.FromDiscard) card = player.Deck.TakeFromDiscardPile(card); // The copy that left the pile
+            else if (card != null && !player.Deck.RemoveCard(card)) card = null;
+            if (card == null) {
                 Log($"{player.Name} sends for a card, but there's none to send for", LogTag.Cards);
                 return;
             }

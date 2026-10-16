@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: StatecraftAggroDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Statecraft - Shock and Awe
+  cards:
+  - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
+  - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
+  - {fileID: 11400000, guid: d941c52272e44564496335a69e6e4a15, type: 2}
+  - {fileID: 11400000, guid: d941c52272e44564496335a69e6e4a15, type: 2}
+  - {fileID: 11400000, guid: 812d3392dbadd74459046284afc829d6, type: 2}
+  - {fileID: 11400000, guid: 812d3392dbadd74459046284afc829d6, type: 2}
+  - {fileID: 11400000, guid: 00673e54f9dc0604ba0de7d5cec69515, type: 2}
+  - {fileID: 11400000, guid: 00673e54f9dc0604ba0de7d5cec69515, type: 2}
+  - {fileID: 11400000, guid: 965d63b6d655a714a974a5b5c163ec4f, type: 2}
+  - {fileID: 11400000, guid: 965d63b6d655a714a974a5b5c163ec4f, type: 2}
+  - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
+  - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
+  - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
+  - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
+  - {fileID: 11400000, guid: 310b0094c8b008747aa5b3bd448a289d, type: 2}
+  - {fileID: 11400000, guid: 310b0094c8b008747aa5b3bd448a289d, type: 2}
+  - {fileID: 11400000, guid: f551b8bf2603afc489de81dc57f7f48d, type: 2}
+  - {fileID: 11400000, guid: f551b8bf2603afc489de81dc57f7f48d, type: 2}
+  - {fileID: 11400000, guid: 7ec7af517addad648aab7504c6593165, type: 2}
+  - {fileID: 11400000, guid: f70c89b49a370eb4b80fc6754b6c629c, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.2000277Z
+  strategy: Aggro
+  focus: 0

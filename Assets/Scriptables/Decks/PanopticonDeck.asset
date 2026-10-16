@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
+  m_Name: PanopticonDeck
+  m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
+  deckName: Digital Society + Shadow Ops. - Panopticon
+  cards:
+  - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
+  - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
+  - {fileID: 11400000, guid: f2bf5369176d5fe43a56d06b7024f483, type: 2}
+  - {fileID: 11400000, guid: f2bf5369176d5fe43a56d06b7024f483, type: 2}
+  - {fileID: 11400000, guid: de3adc60108efa04d920eaf39638a8ce, type: 2}
+  - {fileID: 11400000, guid: de3adc60108efa04d920eaf39638a8ce, type: 2}
+  - {fileID: 11400000, guid: cf9ae998a80d0d24da493f3d1fbcef76, type: 2}
+  - {fileID: 11400000, guid: cf9ae998a80d0d24da493f3d1fbcef76, type: 2}
+  - {fileID: 11400000, guid: 78cd5c5267fa0164db084db6099e1350, type: 2}
+  - {fileID: 11400000, guid: 78cd5c5267fa0164db084db6099e1350, type: 2}
+  - {fileID: 11400000, guid: 5431854436dd8b24595b529786bff8ad, type: 2}
+  - {fileID: 11400000, guid: 5431854436dd8b24595b529786bff8ad, type: 2}
+  - {fileID: 11400000, guid: 50bfa74d440511342817e82dda49c169, type: 2}
+  - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}
+  - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}
+  - {fileID: 11400000, guid: 41454336b8e16764d8897793b981ba6d, type: 2}
+  - {fileID: 11400000, guid: 41454336b8e16764d8897793b981ba6d, type: 2}
+  - {fileID: 11400000, guid: 2123b22b1d703cd46b0ded74774b3583, type: 2}
+  - {fileID: 11400000, guid: 2123b22b1d703cd46b0ded74774b3583, type: 2}
+  - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
+  - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
+  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
+  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
+  lastUpdated: 2026-10-16T16:23:25.4894716Z
+  strategy: Combo
+  focus: 0
