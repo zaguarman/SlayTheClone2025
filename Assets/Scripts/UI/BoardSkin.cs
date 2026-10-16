@@ -365,6 +365,9 @@ namespace SlayTheClone {
         #endregion
 
         #region Layout
+        /// <summary>The battlefields changed size or place (UI > Battlefield Tuning): everything round them is placed again.</summary>
+        public void RefreshLayout() => Layout();
+
         // Puts the table under the whole view and the controls at the edges of the screen. Everything is placed in
         // world space, since the board lives on a world-space canvas seen by an orthographic camera.
         private void Layout() {

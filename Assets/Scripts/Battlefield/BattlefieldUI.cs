@@ -14,9 +14,11 @@ namespace SlayTheClone {
     /// </summary>
     public class BattlefieldUI : CardContainer {
         private const float SummonStagger = 0.15f;
-        private const float MatPadding = 30f; // Between the slots and the edge of the mat, at the back (the chevron keeps its distance)
-        private const float NoseRoom = 16f;   // Round the Vanguard, at the chevron's nose
-        private const float RiverRoom = 26f;  // The formation sits this far back from the middle of the table: the two noses keep apart
+        // The mat's measurements are sliders (UI > Battlefield Tuning)
+        private static BattlefieldTuning Tuning => BattlefieldTuning.Current;
+        private static float MatPadding => Tuning.matPadding; // Between the slots and the edge of the mat, at the back (the chevron keeps its distance)
+        private static float NoseRoom => Tuning.noseRoom;     // Round the Vanguard, at the chevron's nose
+        private static float RiverRoom => Tuning.riverRoom;   // The formation sits this far back from the middle of the table: the two noses keep apart
         private const float ReplacingGhostRaise = 0.3f; // Fraction of card height a ghost is raised when it will replace a creature
         private readonly List<BattlefieldSlot> battlefieldSlots = new List<BattlefieldSlot>();
 
@@ -102,7 +104,7 @@ namespace SlayTheClone {
             var zoneImage = GetComponent<Image>();
             if (zoneImage != null) zoneImage.color = Color.clear; // Still a raycast target: drops land anywhere on its rectangle
             int slotCount = Player?.Battlefield.Count ?? SlayTheClone.Player.BattlefieldSize;
-            ((RectTransform)transform).sizeDelta = new Vector2((slotCount - 1) * settings.spacing * SlotScale + BattlefieldSlot.Size.x * SlotScale + 2 * MatPadding,
+            ((RectTransform)transform).sizeDelta = new Vector2((slotCount - 1) * ColumnSpacing + BattlefieldSlot.Size.x * SlotScale + 2 * MatPadding + 2 * Mathf.Abs(Tuning.sideways),
                 BattlefieldSlot.Size.y * SlotScale + 2 * RowStep + 2 * MatPadding + 2 * RiverRoom);
             var fill = Chevron(MatFillName, 0);
             fill.SetShape(MatOutline());
@@ -115,7 +117,7 @@ namespace SlayTheClone {
         public List<Vector2> MatOutline() {
             var positions = SlotPositions(SlayTheClone.Player.BattlefieldSize);
             return ChevronGraphic.Around(positions, BattlefieldSlot.Size * SlotScale / 2f, NoseRoom, MatPadding,
-                transform.localPosition.y <= 0f ? 1f : -1f);
+                transform.localPosition.y <= 0f ? 1f : -1f, Tuning.noseWidth, Tuning.tuckGap);
         }
 
         /// <summary>A chevron layer of the mat by name, made if missing, at this place among the mat's children.</summary>
@@ -137,17 +139,18 @@ namespace SlayTheClone {
         }
 
         /// <summary>The slots (and the cards on them) are drawn this much smaller than a card in the hand (hovering enlarges).</summary>
-        public const float SlotScale = 0.9f;
+        public static float SlotScale => Tuning.slotScale;
         // How far apart the formation's rows sit, up and down: the Vanguard nearest the middle of the table, Headquarters furthest
-        private const float RowStep = 64f;
+        private static float RowStep => Tuning.rowStep;
+        private float ColumnSpacing => settings.spacing * Tuning.columnSpacing * SlotScale;
 
         /// <summary>
         /// Where each of this many slots sits on the mat: the formation (see <see cref="Formation"/>), five columns across,
         /// each row a step further from the middle of the table: a Λ on the bottom side, a V on the top one.
         /// </summary>
         public List<Vector2> SlotPositions(int slotCount) {
-            float spacing = settings.spacing * SlotScale;
-            float startX = -(slotCount - 1) * spacing / 2f;
+            float spacing = ColumnSpacing;
+            float startX = -(slotCount - 1) * spacing / 2f + Tuning.sideways;
             float towardMiddle = transform.localPosition.y <= 0f ? 1f : -1f; // The bottom side's middle is up
             return Enumerable.Range(0, slotCount).Select(i => new Vector2(startX + spacing * Formation.Column(i),
                 towardMiddle * ((1 - Formation.Depth(i)) * RowStep - RiverRoom))).ToList();
@@ -163,8 +166,17 @@ namespace SlayTheClone {
             foreach (var chevron in GetComponentsInChildren<ChevronGraphic>(true)) chevron.Reshape(outline);
             var positions = SlotPositions(SlayTheClone.Player.BattlefieldSize);
             for (int i = 0; i < positions.Count; i++) {
-                if (transform.Find($"SlotMark_{i}") is RectTransform mark) mark.anchoredPosition = positions[i];
+                if (!(transform.Find($"SlotMark_{i}") is RectTransform mark)) continue;
+                mark.anchoredPosition = positions[i];
+                mark.sizeDelta = BattlefieldSlot.Size * SlotScale;
             }
+        }
+
+        /// <summary>A <see cref="BattlefieldTuning"/> slider moved: the mat takes its new size and shape, the slots their places, the arrows follow.</summary>
+        public void Retune() {
+            ApplyMatLook();
+            Relayout();
+            arrowManager?.RefreshArrows();
         }
 
         private void UpdateSlotPositions() {

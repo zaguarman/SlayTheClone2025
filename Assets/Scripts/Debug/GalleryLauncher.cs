@@ -11,7 +11,7 @@ namespace SlayTheClone {
     /// </summary>
     [InitializeOnLoad]
     public static class GalleryLauncher {
-        public const string Arrows = "Arrow Gallery", Roulette = "Roulette Gallery";
+        public const string Arrows = "Arrow Gallery", Roulette = "Roulette Gallery", Battlefields = "Battlefield Gallery";
         private const string PendingKey = "SlayTheClone.GalleryPending";
         private const string SinceKey = "SlayTheClone.GalleryPendingSince";
         private const double GiveUpSeconds = 30.0;
@@ -62,6 +62,7 @@ namespace SlayTheClone {
         private static void Run(string gallery) {
             if (gallery == Arrows) ArrowGallery.Run();
             else if (gallery == Roulette) RouletteGallery.Run();
+            else if (gallery == Battlefields) BattlefieldGallery.Run();
         }
     }
 }
