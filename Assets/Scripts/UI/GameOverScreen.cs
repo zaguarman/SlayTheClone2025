@@ -90,7 +90,7 @@ namespace SlayTheClone {
         // An adventure's fight: won, on to the map a room further (or the run is won); lost, the run is over. No Play Again
         private void ShowAdventureEnd(bool won) {
             bool boss = AdventureRun.Fighting.Type == RoomType.Boss;
-            if (won) AdventureRun.WinFight();
+            if (won) AdventureRun.WinFight(gameManager.Player1.Health); // What's left of your Health goes on with you
             else AdventureRun.LoseFight();
             title.text = won ? "Victory" : "Defeat";
             subtitle.text = won ? boss ? "The boss is beaten: your adventure is won!" : $"{AdventureRun.Money(AdventureRun.Earned)} earned. Take one of their cards, then on to the next room."

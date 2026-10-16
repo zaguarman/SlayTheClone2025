@@ -28,6 +28,7 @@ namespace SlayTheClone {
         public int prophecyLatest;
         /// <summary>Gamble (a spell): only one of its effects happens, picked at random when it resolves.</summary>
         public bool gamble;
+        public bool homing; // Homing (GDD 4.6): locks on the enemy creature it's aimed at; Heat Signature pulls it
 
         // OnEnable can be used to initialize cardId if null
         public virtual void OnEnable() {

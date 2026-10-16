@@ -410,7 +410,7 @@ namespace SlayTheClone.Tests {
             game.Resolve();
             Assert.AreEqual(CreatureAbility.Unpatchable, thief.Ability, "Identity Theft swaps abilities");
             Assert.AreEqual(CreatureAbility.IdentityTheft, mark.Ability, "The target gets Identity Theft and can use it in turn");
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "Using it replaced the planned attack");
+            Assert.AreEqual(Player.StartingHealth, p2.Health, "Using it replaced the planned attack");
 
             var calm = With(CreatureAbility.Unbothered, p1, 3);
             With(CreatureAbility.SignalJammer, p2, 3);

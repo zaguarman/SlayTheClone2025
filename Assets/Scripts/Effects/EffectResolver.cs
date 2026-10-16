@@ -138,7 +138,10 @@ namespace SlayTheClone {
                 return new List<ITarget> { offered };
             }
             if (chosenTarget != null && UsesChosenTarget(action)) {
-                var resolved = ResolveChosenTarget(chosenTarget, action.actionType);
+                var resolved = ResolveChosenTarget(Homed(source, controller, chosenTarget, queue), action.actionType);
+                // Heat Signature pulls Homing (the user): the hottest creature on either side takes it, even the caster's own
+                if (IsHoming(source) && CanAffectCreatures(action.actionType) && !OwnSideOnly(action.actionType)
+                    && HeatRules.Hottest(null, controller) is ICreature hottest) resolved = hottest;
                 if (OwnSideOnly(action.actionType) && (resolved as ICreature)?.Owner != controller) resolved = null; // A sacrifice is yours to make
                 var targets = resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
                 if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) targets.AddRange(NeighboursOf(chosenTarget));
@@ -202,10 +205,15 @@ namespace SlayTheClone {
         /// <summary>
         /// What a card dropped on a slot is aimed at. A spell aimed at one of the caster's own creatures, on the board or
         /// queued to be summoned there, homes on it: there's no fog of war on your own side, so you know where it will be.
-        /// Aimed at an enemy slot (or an empty one), it's Fixed: it hits whatever is in that slot when it resolves (GDD 4.6).
+        /// Aimed at an enemy slot (or an empty one), it's Fixed: it hits whatever is in that slot when it resolves (GDD 4.6),
+        /// unless the card says Homing: then it locks on the enemy creature standing there and follows it.
         /// </summary>
         public static ITarget AimAt(ICard card, IPlayer caster, BoardSlot slot, IActionsQueue queue) {
-            if (!(card is Spell spell) || slot == null || slot.Owner != caster || !IsAimed(spell)) return slot;
+            if (!(card is Spell spell) || slot == null || !IsAimed(spell)) return slot;
+            if (slot.Owner != caster) {
+                var mark = slot.OccupyingCreature;
+                return IsHoming(spell) && mark != null && !mark.IsDead ? new HomingTarget(mark, slot) : slot;
+            }
 
             // A creature queued to be summoned here replaces the one standing here before spells resolve
             var creature = IncomingCreature(slot, queue) ?? slot.OccupyingCreature;
@@ -324,6 +332,16 @@ namespace SlayTheClone {
             foreach (var other in slot.Owner.Battlefield.Select(s => s.OccupyingCreature)) {
                 if (other != null && other != landedOn && !other.IsDead) yield return other;
             }
+        }
+
+        /// <summary>The card says Homing (GDD 4.6): aimed at an enemy creature it follows it, and Heat Signature pulls it.</summary>
+        public static bool IsHoming(ICard card) => card?.SourceData?.homing == true;
+
+        // Against a Concealed enemy creature, Homing works like Fixed (GDD 4.6): it hits whatever is in the slot it was aimed at
+        private static ITarget Homed(ICard source, IPlayer controller, ITarget chosenTarget, IActionsQueue queue) {
+            if (!(chosenTarget is HomingTarget homing) || homing.Creature.Owner == controller || queue?.Modifiers == null) return chosenTarget;
+            bool hides = queue.Modifiers.HasStatusEffect(homing.Creature, StatusEffectType.Concealed) || Abilities.Has(homing.Creature, CreatureAbility.Undercover);
+            return hides && homing.AimedSlot != null ? homing.AimedSlot : chosenTarget;
         }
 
         // Slot Effects aim at the slot itself (Static, GDD 4.6): they never follow a creature

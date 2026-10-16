@@ -60,19 +60,23 @@ namespace SlayTheClone {
         int TakeDamage(int amount);
 
         /// <summary>
-        /// Heals the player by the specified amount, up to their maximum health.
+        /// Heals the player by the specified amount: there's no maximum (the user, 2026-10-16), Health goes as high as it's healed.
         /// </summary>
         /// <param name="amount">The amount to heal.</param>
         /// <returns>The actual amount the player was healed.</returns>
         int Heal(int amount);
+
+        /// <summary>The Health this fight started at (20, or what an adventure carried in): the Health bar is full at it.</summary>
+        int StartHealth { get; }
     }
 
     public class Player : Entity, IPlayer {
         public const int MaxHandSize = 10;
         public const int BattlefieldSize = 5;
-        public const int MaxHealth = 20; // Players start at full health and can't heal past it
+        public const int StartingHealth = 20; // A fight starts at it (an adventure carries its own); healing has no ceiling
 
-        public int Health { get; private set; } = MaxHealth;
+        public int Health { get; private set; }
+        public int StartHealth { get; }
         public IPlayer Opponent { get; set; }
         public List<ICard> Hand { get; private set; }
         public IDeck Deck { get; private set; }
@@ -98,7 +102,8 @@ namespace SlayTheClone {
         private IGameMediator gameMediator;
         private ICardDealingService cardDealingService;
 
-        public Player(string name = "Player", bool isPlayer1 = false) : base(name) {
+        public Player(string name = "Player", bool isPlayer1 = false, int health = StartingHealth) : base(name) {
+            Health = StartHealth = Math.Max(1, health);
             Hand = new List<ICard>();
             Battlefield = Enumerable.Range(0, BattlefieldSize).Select(i => new BoardSlot(this, i)).ToList();
             Deck = new Deck();
@@ -128,32 +133,16 @@ namespace SlayTheClone {
             return actualDamage;
         }
 
-        /// <summary>
-        /// Heals the player by the specified amount, up to their maximum health.
-        /// </summary>
-        /// <param name="amount">The amount to heal.</param>
-        /// <returns>The actual amount the player was healed.</returns>
+        /// <summary>Heals the player by the amount, with no ceiling (the user, 2026-10-16: you can go as high as you want).</summary>
+        /// <returns>The amount healed.</returns>
         public int Heal(int amount) {
-            if (amount <= 0) {
-                return 0; // Cannot heal with non-positive amount
-            }
-
+            if (amount <= 0) return 0;
             int previousHealth = Health;
-            int maxPossibleHeal = MaxHealth - Health;
-            int actualHealAmount = Math.Min(amount, maxPossibleHeal);
-
-            if (actualHealAmount <= 0) {
-                return 0; // Already at full health
-            }
-
-            Health += actualHealAmount;
-
-            Log($"{Name} healed for {actualHealAmount} (requested {amount}). Health: {previousHealth} -> {Health}/{MaxHealth}",
-                LogTag.Players | LogTag.Effects);
-
+            Health += amount;
+            Log($"{Name} healed for {amount}. Health: {previousHealth} -> {Health}", LogTag.Players | LogTag.Effects);
             HealthChanged?.Invoke(Health);
             // HealPlayerActionExecutor notifies the mediator
-            return actualHealAmount;
+            return amount;
         }
 
         public void AddToHand(ICard card) {

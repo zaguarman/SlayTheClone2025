@@ -56,7 +56,7 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(8, target.Health, "A spell hits only the creature it was dropped on");
             Assert.AreEqual(7, ox.Health);
             game.Run(new PlayCardAction(game.GiveCard(p1, bolt), p1, p2.Battlefield[3]));
-            Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "...or that side's player on an empty slot");
+            Assert.AreEqual(Player.StartingHealth - 3, p2.Health, "...or that side's player on an empty slot");
             // An effect that requires its target to be of a faction: Cyberpsychosis hits Digital Society harder
             var trollData = game.Creature("Troll", 0, 10);
             trollData.faction = Faction.DigitalSociety;
@@ -111,7 +111,29 @@ namespace SlayTheClone.Tests {
             game.Resolve();
             Assert.AreEqual(0, dodger.CurrentArmorPool, "Enemy creatures can dodge: the Armor needs a creature in the slot, so it fizzles");
             Assert.AreEqual(5, stepper.Health);
-            Assert.AreEqual(Player.MaxHealth - 3, p2.Health, "Damage doesn't need one: into an empty slot it hits that side's player");
+            Assert.AreEqual(Player.StartingHealth - 3, p2.Health, "Damage doesn't need one: into an empty slot it hits that side's player");
+
+            // Homing, when the card says so: locked on the enemy creature it's aimed at, it follows it, and Heat pulls it
+            Fresh();
+            var homingBolt = game.Spell("Homing Bolt", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
+            homingBolt.homing = true;
+            var runaway = game.Summon(p2, game.Creature("Runaway", 1, 10), 0);
+            var hunterData = game.Creature("Hunter", 2, 5);
+            hunterData.homing = true;
+            var hunter = game.Summon(p1, hunterData, 3);
+            var prey = game.Summon(p2, game.Creature("Prey", 0, 10), 3);
+            game.ActionsQueue.AddAction(new MoveCreatureAction(runaway, p2.Battlefield[0], p2.Battlefield[1], p2));
+            game.ActionsQueue.AddAction(new MoveCreatureAction(prey, p2.Battlefield[3], p2.Battlefield[4], p2));
+            game.Play(game.GiveCard(p1, homingBolt), p1, p2.Battlefield[0]);
+            game.Declare(hunter, p2.Battlefield[3]);
+            game.Resolve();
+            Assert.AreEqual(7, runaway.Health, "A Homing spell follows the enemy creature it was aimed at...");
+            Assert.AreEqual(8, prey.Health, "...and so does a Homing creature's attack");
+            var decoy = game.Summon(p1, game.Creature("Decoy", 0, 10), 0);
+            game.Run(new ApplyStatusEffectAction(decoy, StatusEffectType.HeatSignature, 1, 1));
+            game.Play(game.GiveCard(p1, homingBolt), p1, p2.Battlefield[1]);
+            game.Resolve();
+            Assert.AreEqual((7, 7), (decoy.Health, runaway.Health), "Heat Signature pulls Homing, even to the caster's own creature");
         }
 
         [Test]

@@ -767,7 +767,7 @@ namespace SlayTheClone {
 
         private float PlayerGoodness(IPlayer player, ActionType type, int amount) => type switch {
             ActionType.Damage => amount + (player == view.Them ? plannedFace : 0) >= player.Health ? -Lethal : -amount,
-            ActionType.Heal => System.Math.Min(amount, Player.MaxHealth - player.Health),
+            ActionType.Heal => amount, // No ceiling: every point counts
             ActionType.Draw => amount,
             ActionType.Summon => 2 * amount,
             ActionType.SummonDecoys => 2.5f * amount, // Bodies that soak their attacks and kills

@@ -368,7 +368,7 @@ namespace SlayTheClone {
                                  .Concat(player.Battlefield.Where(s => s.IsOccupied()).Select(s => (ICard)s.OccupyingCreature))) {
                         if (!seen.Add(card)) Note("Rules", "A card is in two places at once", $"{at}: {card.Name} ({player.Name})");
                     }
-                    if (player.Health < 0 || player.Health > Player.MaxHealth) Note("Rules", "A player's Health is out of bounds", $"{at}: {player.Name} at {player.Health}");
+                    if (player.Health < 0) Note("Rules", "A player's Health is out of bounds", $"{at}: {player.Name} at {player.Health}");
                     if (player.Hand.Count > Player.MaxHandSize) Note("Rules", "A hand is over the maximum", $"{at}: {player.Name} holds {player.Hand.Count}");
                     foreach (var slot in player.Battlefield) {
                         var creature = slot.OccupyingCreature;

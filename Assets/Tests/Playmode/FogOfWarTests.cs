@@ -51,7 +51,7 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(P1Sees(attack), "...but the rules don't change");
             FogOfWar.Enabled = true;
             game.Resolve();
-            Assert.AreEqual(Player.MaxHealth - 2, p1.Health, "A Watchdog can't match an action its controller can't see");
+            Assert.AreEqual(Player.StartingHealth - 2, p1.Health, "A Watchdog can't match an action its controller can't see");
             Assert.AreEqual(1, game.ActionsQueue.Watchdogs.Single().ChargesLeft);
 
             var undercover = game.Creature("Mole Rat", 1, 10);
@@ -70,7 +70,7 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(Intel.KnowsWhatItIs(p1, mole), "...and what it is, for good");
             Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "Nothing else resolved with it");
             game.Resolve();
-            Assert.AreEqual(Player.MaxHealth - 2, p1.Health, "Revealed to the Watchdog's controller: it could match it");
+            Assert.AreEqual(Player.StartingHealth - 2, p1.Health, "Revealed to the Watchdog's controller: it could match it");
             Assert.IsEmpty(game.ActionsQueue.Watchdogs);
 
             game.Run(new ApplyStatusEffectAction(sneak, StatusEffectType.Revealed, 1, 0));
@@ -81,7 +81,7 @@ namespace SlayTheClone.Tests {
             game.Declare(cipher, p1.Battlefield[2]);
             Assert.IsTrue(P1Sees(PlanOf(sneak)), "Revealed cancels Concealed");
             game.Resolve();
-            Assert.AreEqual(Player.MaxHealth - 2 - 3, p1.Health, "The Revealed attack is nullified; Watchdogs ignore an Encrypted creature's actions...");
+            Assert.AreEqual(Player.StartingHealth - 2 - 3, p1.Health, "The Revealed attack is nullified; Watchdogs ignore an Encrypted creature's actions...");
             Assert.AreEqual(1, game.ActionsQueue.Watchdogs.Single().ChargesLeft, "...and spend no charge on them");
 
             var incoming = game.GiveCard(p2, game.Creature("Incoming", 1, 1));

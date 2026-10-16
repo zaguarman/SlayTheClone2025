@@ -43,20 +43,20 @@ namespace SlayTheClone.Tests {
             var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 0);
             Watch(Spec(WatchdogEffect.Nullify), p1);
             game.Attack(brute, p1.Battlefield[1]); // An empty slot: it would hit player 1
-            Assert.AreEqual(Player.MaxHealth, p1.Health, "Nullified");
+            Assert.AreEqual(Player.StartingHealth, p1.Health, "Nullified");
             Assert.IsEmpty(game.ActionsQueue.Watchdogs, "Its only charge is used: it's gone");
             game.Attack(brute, p1.Battlefield[1]);
-            Assert.AreEqual(Player.MaxHealth - 3, p1.Health);
+            Assert.AreEqual(Player.StartingHealth - 3, p1.Health);
 
             Watch(Spec(WatchdogEffect.Nullify, atMost: 2), p1);
             game.Attack(brute, p1.Battlefield[1]);
-            Assert.AreEqual(Player.MaxHealth - 6, p1.Health, "Attack 3 isn't 2 or less");
+            Assert.AreEqual(Player.StartingHealth - 6, p1.Health, "Attack 3 isn't 2 or less");
             Watch(Spec(WatchdogEffect.Nullify), p1);
             game.Attack(mine, p2.Battlefield[1]);
-            Assert.AreEqual(Player.MaxHealth - 4, p2.Health, "It watches enemy attacks, not friendly ones");
+            Assert.AreEqual(Player.StartingHealth - 4, p2.Health, "It watches enemy attacks, not friendly ones");
             Watch(Spec(WatchdogEffect.Reveal), p1);
             game.Attack(brute, p1.Battlefield[1]);
-            Assert.AreEqual(Player.MaxHealth - 6, p1.Health, "The older Nullify triggered");
+            Assert.AreEqual(Player.StartingHealth - 6, p1.Health, "The older Nullify triggered");
             Assert.AreEqual(2, game.ActionsQueue.Watchdogs.Count, "The newer one kept its charge (with the strength one)");
 
             Fresh();
@@ -73,7 +73,7 @@ namespace SlayTheClone.Tests {
             game.Declare(late, p1.Battlefield[0]); // Planned first
             game.Play(firewall, p1, null);
             game.Resolve(); // The spell layer comes before attacks
-            Assert.AreEqual(Player.MaxHealth, p1.Health, "A Watchdog made by a spell catches attacks queued before it");
+            Assert.AreEqual(Player.StartingHealth, p1.Health, "A Watchdog made by a spell catches attacks queued before it");
 
             // Intelligence (Glomar Response): an enemy reveal is nullified, even an instant one, and they learn nothing
             Fresh();
@@ -150,14 +150,14 @@ namespace SlayTheClone.Tests {
             game.Declare(a, p1.Battlefield[0]);
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
-            Assert.AreEqual(Player.MaxHealth - 2, p1.Health, "Created today: it briefs from tomorrow");
+            Assert.AreEqual(Player.StartingHealth - 2, p1.Health, "Created today: it briefs from tomorrow");
 
             game.StartTurn();
             game.Declare(a, p1.Battlefield[0]);
             game.Declare(b, p1.Battlefield[1]);
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
-            Assert.AreEqual(Player.MaxHealth - 2, p1.Health, "Every enemy attack nullified");
+            Assert.AreEqual(Player.StartingHealth - 2, p1.Health, "Every enemy attack nullified");
             Assert.AreEqual(1, game.ActionsQueue.Watchdogs.Single().ChargesLeft, "One charge per action it changed");
 
             game.StartTurn();
@@ -165,7 +165,7 @@ namespace SlayTheClone.Tests {
             game.Declare(c, p1.Battlefield[2]);
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
-            Assert.AreEqual(Player.MaxHealth - 2 - 4, p1.Health, "Its last charge only stops the first: C's attack lands");
+            Assert.AreEqual(Player.StartingHealth - 2 - 4, p1.Health, "Its last charge only stops the first: C's attack lands");
             Assert.IsEmpty(game.ActionsQueue.Watchdogs);
 
             Watch(Spec(WatchdogEffect.Nullify, timing: WatchdogTiming.Briefing, pick: BriefingPick.Strongest), p1);
@@ -176,7 +176,7 @@ namespace SlayTheClone.Tests {
             game.Declare(c, p1.Battlefield[2]);
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
-            Assert.AreEqual(Player.MaxHealth - 2 - 4 - 2, p1.Health, "It picked the strongest: only A's attack lands");
+            Assert.AreEqual(Player.StartingHealth - 2 - 4 - 2, p1.Health, "It picked the strongest: only A's attack lands");
 
             // Backfire (Sabotage): the strongest attack doesn't happen, and its attacker takes its own Attack instead
             Watch(Spec(WatchdogEffect.Backfire, timing: WatchdogTiming.Briefing, pick: BriefingPick.Strongest), p1);

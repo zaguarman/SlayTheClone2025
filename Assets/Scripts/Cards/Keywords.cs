@@ -39,6 +39,7 @@ namespace SlayTheClone {
             // ---------------------------------------------------------------- Targets
             group = "Targets";
             Add("Slot", "One of the five places on each side of the table where a creature stands.");
+            Add("Homing", "Locks on the enemy creature it's aimed at and follows it wherever it moves (aimed at an enemy slot, other cards hit whatever stands there then). A [Concealed] creature can't be locked on: it hits the slot. [Heat Signature] pulls it: if any creature has Heat, the hottest one on either side takes it, even one of yours.");
             Add("Random", "Picked by chance when the effect happens, among the creatures it can affect at that moment. The one with the most [Heat Signature] is picked first, if any has it. No creature to pick: nothing happens.");
             Add("Everything", "Every creature on both sides, and both players.");
             Add("Strongest", "The creature with the highest Attack, picked when the effect happens. Ties: one of them at random. No creature: nothing happens.");
@@ -95,7 +96,7 @@ namespace SlayTheClone {
             Add("Doomed", "Doom X (no number: 1): dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it, except [Borrowed Time]: on Borrowed Time when the sentence is carried out, it survives that too.");
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
             Add("Blessed", "Bless X (no number: 1): the next X statuses that would land on it are stopped, good or bad. Each stack also saves it once from being [Destroy|destroyed] by a spell or an ability (a Sacrifice isn't stopped).");
-            Add("Heat Signature", "Heat Signature X (no number: 1): [Random|random] effects and redirected attacks go to the creature with the most Heat Signature. It stays until cleansed.");
+            Add("Heat Signature", "Heat Signature X (no number: 1): [Random|random] effects, [Homing] ones and redirected attacks go to the creature with the most Heat Signature, on either side. It stays until cleansed.");
             Add("Concealed", "Conceal X (no number: 1): for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
             Add("Revealed", "Revealed X (no number: 1): for X [Days], it can't be [Concealed]: its plans can be seen.");
             Add("Encrypted", "Encrypt X (no number: 1): for X [Days], its actions slip past every [Watchdog], the enemy's and yours: none reacts to them, and none spends a charge on them. Unlike [Concealed], everyone still sees what it plans.");

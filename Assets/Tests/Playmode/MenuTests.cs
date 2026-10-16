@@ -195,6 +195,7 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(AdventureRun.Enter(first), "A fight is a match...");
             adventure.SetUpFight(first);
             Assert.AreSame(AdventureRun.Deck, MatchSetup.PlayerDeck, "...your faction's deck...");
+            Assert.AreEqual(AdventureRun.StartingHealth, MatchSetup.PlayerHealth, "...at the run's Health (60 to begin with)...");
             Assert.AreNotEqual(yours, DeckCatalog.FactionOf(MatchSetup.OpponentDeck), "...against another faction's...");
             Assert.AreEqual(AILevel.Easy, MatchSetup.AILevel, "...the first ones easy...");
             var tiers = AdventureDecks.Tiers(catalog.AllCards);
@@ -205,7 +206,8 @@ namespace SlayTheClone.Tests {
             var bossDeck = AdventureDecks.Enemy(DeckCatalog.FactionOf(beaten), AdventureDecks.StrengthOf(map.Boss), catalog.AllCards, new System.Random(1), "Boss");
             Assert.Greater(TierOf(bossDeck), TierOf(beaten) + 1, "The boss's cards are much better");
             Assert.LessOrEqual(bossDeck.Cards.Count, PlayerDecks.MaxDeckSize);
-            AdventureRun.WinFight(); // As the game's end does, before the title screen opens the map again
+            AdventureRun.WinFight(AdventureRun.StartingHealth - 15); // As the game's end does, before the title screen opens the map again
+            Assert.AreEqual(AdventureRun.StartingHealth - 15, AdventureRun.Health, "What's left of your Health goes on with you");
             adventure.Show();
             Assert.AreEqual(AdventureRun.FightPurse, AdventureRun.EuroYuans, "A fight won pays EuroYuans");
             Assert.AreSame(first, AdventureRun.Current, "Won, you're in its room...");
@@ -226,36 +228,45 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(GalleryButton(adventure, AdventureMenu.PackButton + 0).interactable, "The pack is used up");
             Click(GalleryButton(adventure, AdventureMenu.ProceedButtonName));
             Assert.IsFalse(AdventureRun.InRewards, "Proceed: on to the map");
-            var walk = first.Next.FirstOrDefault(n => !n.IsCombat);
+            var walk = first.Next.FirstOrDefault(n => !n.IsCombat && n.Type is not (RoomType.Shop or RoomType.Unknown));
             if (walk != null) {
                 Click(adventure.Rooms[walk]);
                 Assert.AreSame(walk, AdventureRun.Current, "Any other room is walked through");
             }
             Assert.IsTrue(adventure.Rooms.Where(r => r.Value.interactable).All(r => AdventureRun.Current.Next.Contains(r.Key)), "Then only the rooms its paths lead to");
 
-            // On to a shop, the fights on the way won
-            var way = new Dictionary<MapNode, MapNode>();
-            var search = new Queue<MapNode>(new[] { AdventureRun.Current });
-            MapNode shop = null;
-            while (search.Count > 0 && shop == null) {
-                var node = search.Dequeue();
-                foreach (var next in node.Next.Where(n => !way.ContainsKey(n))) {
-                    way[next] = node;
-                    if (next.Type == RoomType.Shop) shop = next;
-                    search.Enqueue(next);
+            // Walks up to the nearest room of a kind (not into it), the fights on the way won, shops and events left: that
+            // room, or null if none is ahead
+            MapNode WalkTowards(RoomType kind) {
+                var way = new Dictionary<MapNode, MapNode>();
+                var search = new Queue<MapNode>(new[] { AdventureRun.Current });
+                MapNode found = null;
+                while (search.Count > 0 && found == null) {
+                    var node = search.Dequeue();
+                    foreach (var next in node.Next.Where(n => !way.ContainsKey(n))) {
+                        way[next] = node;
+                        if (next.Type == kind) found = next;
+                        search.Enqueue(next);
+                    }
                 }
-            }
-            if (shop != null) {
+                if (found == null) return null;
                 var steps = new List<MapNode>();
-                for (var node = shop; node != AdventureRun.Current; node = way[node]) steps.Insert(0, node);
-                foreach (var step in steps) {
-                    if (step == shop) break;
+                for (var node = found; node != AdventureRun.Current; node = way[node]) steps.Insert(0, node);
+                foreach (var step in steps.Take(steps.Count - 1)) {
                     if (AdventureRun.Enter(step, catalog.AllCards)) {
                         AdventureRun.WinFight();
                         AdventureRun.Proceed();
                     }
                     if (AdventureRun.InShop) AdventureRun.LeaveShop();
+                    if (AdventureRun.InEvent) AdventureRun.LeaveEvent();
                 }
+                adventure.Show();
+                return found;
+            }
+
+            // On to a shop
+            var shop = WalkTowards(RoomType.Shop);
+            if (shop != null) {
                 int purse = AdventureRun.EuroYuans + 30; // Enough to buy and remove
                 typeof(AdventureRun).GetProperty(nameof(AdventureRun.EuroYuans)).SetValue(null, purse);
                 adventure.Show();
@@ -277,6 +288,21 @@ namespace SlayTheClone.Tests {
                 Assert.IsFalse(GalleryButton(adventure, AdventureMenu.RemoveCardButtonName).interactable, "...once a shop");
                 Click(GalleryButton(adventure, AdventureMenu.LeaveShopButtonName));
                 Assert.IsFalse(AdventureRun.InShop, "Leave: on to the map");
+                Assert.IsNotEmpty(AdventureRun.Reachable());
+            }
+
+            // A ? room: an event, its choices, what one did, then on
+            var mystery = WalkTowards(RoomType.Unknown);
+            if (mystery != null) {
+                Click(adventure.Rooms[mystery]);
+                Assert.IsTrue(AdventureRun.InEvent, "A ? room is an event...");
+                Assert.IsEmpty(AdventureRun.Reachable(), "...the map waits...");
+                int pick = AdventureRun.Event.Choices.FindIndex(c => c.Available());
+                Click(GalleryButton(adventure, AdventureMenu.EventChoiceButton + pick));
+                Assert.IsFalse(string.IsNullOrEmpty(AdventureRun.EventOutcome), "...a choice says what it did...");
+                Assert.Greater(AdventureRun.Health, 0);
+                Click(GalleryButton(adventure, AdventureMenu.EventOnButtonName));
+                Assert.IsFalse(AdventureRun.InEvent, "...then on to the map");
                 Assert.IsNotEmpty(AdventureRun.Reachable());
             }
             Click(GalleryButton(adventure, AdventureMenu.AbandonButtonName));
@@ -381,9 +407,11 @@ namespace SlayTheClone.Tests {
             var cardCounts = game.Players.ToDictionary(p => p, GameAsserts.CountCards);
             yield return Wait.For(() => game.Turns.TurnNumber >= day + 2 && !game.Turns.IsResolving, "the AI to play two Days by itself");
 
-            AIController.SwitchSeats(); // F7: you take Player 2 back
+            bool side = FogOfWar.PlaysAsPlayer1;
+            AIController.ToggleSeat(AISeats.Player2); // F7: you take Player 2 back
             Assert.AreEqual(AISeats.Player1, MatchSetup.AI);
-            Assert.IsFalse(FogOfWar.PlaysAsPlayer1, "The screen shows your seat");
+            Assert.AreEqual(side, FogOfWar.PlaysAsPlayer1, "Your side of the table stays as it was");
+            FogOfWar.PlaysAsPlayer1 = false; // F8: to your seat
             Assert.IsTrue(FogOfWar.CanControl(game.Player2) && !FogOfWar.CanControl(game.Player1));
             day = game.Turns.TurnNumber;
             yield return new WaitForSecondsRealtime(0.5f);

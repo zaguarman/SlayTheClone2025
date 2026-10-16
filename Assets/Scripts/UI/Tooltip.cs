@@ -256,7 +256,8 @@ namespace SlayTheClone {
                 ShowTooltip(card.IsQueued ? "<b>???</b>\nA spell the enemy is casting here." : "<b>???</b>\nA card in the enemy's hand.");
                 return;
             }
-            if (card.IsAnonymous) { // Fog of War: nothing about what it is
+            // Fog of War: nothing about what it is. Being summoned with your spells on it, its roulette shows them (the user)
+            if (card.IsAnonymous && !(card.IsQueued && card.HasSeenAttached)) {
                 ShowTooltip(card.IsQueued ? "<b>???</b>\nSomething is being summoned here." : "<b>???</b>\nAn enemy creature. You don't know what it is.");
                 return;
             }
@@ -326,14 +327,22 @@ namespace SlayTheClone {
         public void UpdateTooltipContent(CardController card) {
             if (card == null || card != activeCard) return;
 
-            string details = card.GetActiveModifiersText();
+            string details = card.IsAnonymous ? "<b>???</b>\nSomething is being summoned here." : card.GetActiveModifiersText();
             int tucked = card.AttachedCards.Count;
-            if (tucked > 0 && !previewIsCard) {
+            string onWhat = card.IsAnonymous ? "???" : card.GetBaseCardData()?.cardName;
+            if (tucked > 0 && !previewIsCard && card.HeadsPile) {
+                // A pile: the others in it, in turn
+                string what = card.IsAttachedHidden(browsed - 1) ? "<b>???</b>\nA spell the enemy is casting: what it is shows when it lands." : "";
+                details = browsed > 0
+                    ? $"{what}{(what.Length > 0 ? "\n" : "")}<size=80%><color=#C9C0AE>{browsed + 1} of {tucked + 1} in this pile: scroll for the others</color></size>"
+                    : $"<size=85%>{tucked} more in this pile: scroll to see {(tucked == 1 ? "it" : "them")}</size>";
+            }
+            else if (tucked > 0 && !previewIsCard) {
                 // A tucked card: only what it does to this creature, then where it is in the stack
                 string what = card.IsAttachedHidden(browsed - 1) ? "<b>???</b>\nA spell the enemy is casting here: what it is shows when it lands."
                     : browsed > 0 ? card.GetEffectsFromText(card.AttachedCards[browsed - 1]) : "";
                 details = browsed > 0
-                    ? $"{what}\n<size=80%><color=#C9C0AE>{browsed} of {tucked} on {card.GetBaseCardData()?.cardName}: scroll for the others</color></size>"
+                    ? $"{what}\n<size=80%><color=#C9C0AE>{browsed} of {tucked} on {onWhat}: scroll for the others</color></size>"
                     : (string.IsNullOrEmpty(details) ? "" : details + "\n\n") + $"<size=85%>{tucked} card{(tucked == 1 ? "" : "s")} on it: scroll to see {(tucked == 1 ? "it" : "them")}</size>";
             }
             bool hasDetails = !string.IsNullOrEmpty(details) && preview != null;
@@ -543,7 +552,10 @@ namespace SlayTheClone {
             }
             if (activeCard == null || preview == null) return;
             if (CardController.Dragged != null) { HideTooltip(); return; }
-            if (GameInput.RightClickedThisFrame && TakeBackShown(GameInput.PointerPosition)) return;
+            if (GameInput.RightClickedThisFrame && CardController.Dragged == null && !GameInput.RightClickSwallowed && TakeBackShown(GameInput.PointerPosition)) {
+                GameInput.SwallowRightClick(); // The card under the roulette doesn't take this click as well
+                return;
+            }
             // A hand card back down in the fan takes its explanations with it: none are left floating over the hand
             if (previewIsCard && !InWindow(activeCard) && !StillRaised(activeCard)) { HideShown(); return; }
             Vector2 pointer = GameInput.PointerPosition;

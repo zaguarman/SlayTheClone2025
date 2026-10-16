@@ -31,6 +31,9 @@ namespace SlayTheClone {
         public const string PickBackButtonName = "PickBackButton";
         public const string LeaveShopButtonName = "LeaveShopButton";
         public const string RemoveCardButtonName = "RemoveCardButton";
+        public const string EventChoiceButton = "EventChoice ";
+        public const string EventOnButtonName = "EventOnButton";
+        private const float EventWidth = 900f;
         private const int ShopColumns = 5; // The shop's cards on one row
         private const int RewardColumns = 4; // The reward's cards at a readable size, not stretched over the width
         private const int DeckColumns = 6; // The whole deck at a glance
@@ -76,6 +79,7 @@ namespace SlayTheClone {
         protected override GameObject Build() => !AdventureRun.Active ? BuildFactions()
             : ViewingDeck ? BuildDeck()
             : AdventureRun.InShop ? (Removing ? BuildRemoval() : BuildShop())
+            : AdventureRun.InEvent ? BuildEvent()
             : AdventureRun.InRewards ? (OpenPack != null ? BuildPick(OpenPack) : BuildRewards())
             : BuildMap();
 
@@ -165,7 +169,7 @@ namespace SlayTheClone {
                 StartGame?.Invoke();
                 return;
             }
-            lastWalk = AdventureRun.InShop ? "A shop." : WalkThrough(room.Type);
+            lastWalk = AdventureRun.InShop ? "A shop." : AdventureRun.InEvent ? null : WalkThrough(room.Type);
             Show();
         }
 
@@ -191,6 +195,7 @@ namespace SlayTheClone {
             var deck = AdventureDecks.Enemy(faction, AdventureDecks.StrengthOf(room), Catalog.AllCards, random, name);
             AdventureRun.SetEnemy(deck);
             MatchSetup.Choose(AdventureRun.Deck, name, deck, AISeats.Player2);
+            MatchSetup.PlayerHealth = AdventureRun.Health; // Your Health goes from fight to fight
             MatchSetup.AILevel = LevelFor(room);
             MatchSetup.AIStyle = AIStyle.Balanced;
         }
@@ -227,7 +232,7 @@ namespace SlayTheClone {
             var coin = UITheme.AddFactionCoin(coinHolder.transform, AdventureRun.Faction, CoinSize).rectTransform;
             coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0.5f, 0.5f);
             AddText(side, AdventureRun.Deck != null ? $"Your deck: {CardGrid.Count(AdventureRun.Deck.Cards)}" : "", 22, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 34);
-            AddText(side, $"EuroYuans: {AdventureRun.Money(AdventureRun.EuroYuans)}", 26, AccentColor, FontStyles.Normal, height: 38);
+            AddText(side, $"Health: <b>{AdventureRun.Health}</b>    EuroYuans: {AdventureRun.Money(AdventureRun.EuroYuans)}", 26, AccentColor, FontStyles.Normal, height: 38);
             status = AddText(side, StatusText(), 24, TextColor, FontStyles.Normal, height: 150);
             status.textWrappingMode = TextWrappingModes.Normal;
             foreach (RoomType type in Enum.GetValues(typeof(RoomType))) AddLegend(side, type);
@@ -286,6 +291,51 @@ namespace SlayTheClone {
             UITheme.StyleButton(skip, UITheme.ButtonKind.Primary);
             return screen.panel;
         }
+
+        #region Events (the ? rooms)
+        // The scene, then its choices; once one is made, what happened and a button to go on
+        private GameObject BuildEvent() {
+            var happening = AdventureRun.Event;
+            var screen = AddScreen(transform, "AdventurePanel", happening.Title);
+            var column = AddColumn(screen.columns, null);
+            var size = column.gameObject.AddComponent<LayoutElement>();
+            size.preferredWidth = EventWidth;
+            size.flexibleWidth = 0;
+            if (screen.columns.GetComponent<HorizontalLayoutGroup>() is HorizontalLayoutGroup row) row.childAlignment = TextAnchor.UpperCenter;
+            var scene = AddText(column, $"<i>{happening.Text}</i>", 28, TextColor, FontStyles.Normal, height: 190);
+            scene.textWrappingMode = TextWrappingModes.Normal;
+            AddText(column, $"Health {AdventureRun.Health}    {AdventureRun.Money(AdventureRun.EuroYuans)}    {CardGrid.Count(AdventureRun.Deck.Cards)}", 22, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 40);
+            var footer = AddFooter(screen.panel.transform);
+            AddButton(footer, DeckButtonName, "View deck", 260, () => ShowDeck(true));
+            if (AdventureRun.EventOutcome == null) {
+                for (int i = 0; i < happening.Choices.Count; i++) {
+                    var choice = happening.Choices[i];
+                    var button = AddButton(column, EventChoiceButton + i, choice.Label, -1, () => ChooseAtEvent(choice));
+                    button.interactable = choice.Available();
+                }
+            }
+            else {
+                var outcome = AddText(column, AdventureRun.EventOutcome, 28, AccentColor, FontStyles.Normal, height: 120);
+                outcome.textWrappingMode = TextWrappingModes.Normal;
+                var on = AddButton(footer, EventOnButtonName, "<b>Go on</b>", 300, LeaveEvent);
+                UITheme.StyleButton(on, UITheme.ButtonKind.Primary);
+            }
+            return screen.panel;
+        }
+
+        /// <summary>Makes the event's choice: what it says happens, and the screen says so.</summary>
+        public void ChooseAtEvent(AdventureEvents.Choice choice) {
+            if (!AdventureRun.ChooseAtEvent(choice, Catalog.AllCards)) return;
+            Show();
+        }
+
+        /// <summary>On from the event to the map.</summary>
+        public void LeaveEvent() {
+            lastWalk = AdventureRun.EventOutcome;
+            AdventureRun.LeaveEvent();
+            Show();
+        }
+        #endregion
 
         #region The shop
         // A shop: its cards on a row, each with its price; click one to buy it. A card can be taken out of your deck, once;
@@ -529,7 +579,7 @@ namespace SlayTheClone {
             RoomType.Fight => "a match against the AI",
             RoomType.Elite => "a tougher one",
             RoomType.Boss => "the last fight",
-            RoomType.Unknown => "an event (soon)",
+            RoomType.Unknown => "an event",
             RoomType.Rest => "rest (soon)",
             RoomType.Shop => "cards for EuroYuans",
             RoomType.Treasure => "a chest (soon)",

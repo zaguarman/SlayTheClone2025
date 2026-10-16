@@ -208,8 +208,12 @@ namespace SlayTheClone {
             lastTurn = turn;
             if (GameInput.KeyPressed(FogOfWar.ToggleKey)) FogOfWar.Toggle();
             if (GameInput.KeyPressed(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
-            if (GameInput.KeyPressed(AIController.SwitchSeatsKey)) {
-                AIController.SwitchSeats();
+            if (GameInput.KeyPressed(AIController.Player1Key)) {
+                AIController.ToggleSeat(AISeats.Player1);
+                ShowFogOfWarState();
+            }
+            if (GameInput.KeyPressed(AIController.Player2Key)) {
+                AIController.ToggleSeat(AISeats.Player2);
                 ShowFogOfWarState();
             }
         }
@@ -228,7 +232,8 @@ namespace SlayTheClone {
         public string ShortcutsText =>
             Shortcut(FogOfWar.ToggleKey.ToString(), $"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")}") + "\n" +
             Shortcut(FogOfWar.SwitchSidesKey.ToString(), $"Playing as: Player {(FogOfWar.PlaysAsPlayer1 ? 1 : 2)}") + "\n" +
-            Shortcut(AIController.SwitchSeatsKey.ToString(), $"AI: {AIController.SeatsText}") + "\n" +
+            Shortcut(AIController.Player1Key.ToString(), $"AI Player 1: {AIController.SeatText(AISeats.Player1)}") + "\n" +
+            Shortcut(AIController.Player2Key.ToString(), $"AI Player 2: {AIController.SeatText(AISeats.Player2)}") + "\n" +
             $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}\n{Shortcut("Right-drag", "Attack your own")}</size>";
 
         private static string Shortcut(string key, string what) => $"<color=#B8B0A0>{key}</color>  {what}";

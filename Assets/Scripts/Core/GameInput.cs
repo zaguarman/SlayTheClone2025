@@ -26,6 +26,25 @@ namespace SlayTheClone {
         /// <summary>The right mouse button went down this frame.</summary>
         public static bool RightClickedThisFrame => Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame;
 
+        /// <summary>
+        /// The right click under way was used up (it cancelled a drag, or took a card back from the roulette): until the
+        /// button is let go, nothing else takes it, its release included (the user: that right click cancels nothing else).
+        /// </summary>
+        public static bool RightClickSwallowed { get; private set; }
+
+        public static void SwallowRightClick() {
+            if (RightClickSwallowed) return;
+            RightClickSwallowed = true;
+            InputSystem.onAfterUpdate += WatchSwallowed;
+        }
+
+        private static void WatchSwallowed() {
+            var mouse = Mouse.current;
+            if (mouse != null && (mouse.rightButton.isPressed || mouse.rightButton.wasReleasedThisFrame)) return;
+            RightClickSwallowed = false;
+            InputSystem.onAfterUpdate -= WatchSwallowed;
+        }
+
         public static bool KeyPressed(Key key) => Keyboard.current != null && Keyboard.current[key].wasPressedThisFrame;
 
         /// <summary>A mouse button held down (a drag going on).</summary>

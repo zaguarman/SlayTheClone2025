@@ -48,6 +48,7 @@ namespace SlayTheClone {
                     keywords.Add(abilityOff ? $"<s>{Abilities.NameOf(now)}</s> (switched off)" : name);
                 }
             }
+            if (data.homing) keywords.Add(Keywords.Link("Homing"));
             if (data.singleUse) keywords.Add(Keywords.Link("Single Use"));
             if (data.prophecyLatest > data.prophecy) keywords.Add($"{Keywords.Link("Prophecy", $"Prophecy {data.prophecy}-{data.prophecyLatest}")} (comes true in {data.prophecy} to {data.prophecyLatest} Days, at random)");
             else if (data.prophecy > 0) keywords.Add($"{Keywords.Link("Prophecy", $"Prophecy {data.prophecy}")} (comes true in {data.prophecy} Day{(data.prophecy == 1 ? "" : "s")})");

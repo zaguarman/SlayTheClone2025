@@ -13,9 +13,17 @@ namespace SlayTheClone {
     /// </summary>
     public static class UITheme {
         // The table's layers, bottom to top (the user: nothing of the board's over the hands): the table and its battlefields
-        // with their arrows (the main canvas, 0), what happens on them (the Resolution Presenter), the hands, then the
-        // windows that open over everything (the deck view, the queue). The tooltip stays an overlay, above all
-        public const int EffectsLayer = 20, HandsLayer = 30, WindowsLayer = 60;
+        // (the main canvas, 0), the arrows over them (meshes, from ArrowsLayer up to 800 more), what happens on them (the
+        // Resolution Presenter), the hands, then the windows that open over everything (the deck view, the queue). The
+        // tooltip stays an overlay, above all
+        public const int ArrowsLayer = 100, EffectsLayer = 1000, HandsLayer = 2000, WindowsLayer = 3000;
+
+        /// <summary>Puts a part lifted for a while (a carried card) back among the others: its own canvas goes.</summary>
+        public static void Lower(GameObject part) {
+            if (part == null) return;
+            if (part.TryGetComponent(out GraphicRaycaster raycaster)) Object.DestroyImmediate(raycaster);
+            if (part.TryGetComponent(out Canvas canvas)) Object.DestroyImmediate(canvas);
+        }
 
         /// <summary>Draws this part of the table above the rest, at this order, still taking the pointer (a canvas of its own). Once.</summary>
         public static void Lift(GameObject part, int order) {

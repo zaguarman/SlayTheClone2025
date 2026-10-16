@@ -152,7 +152,7 @@ namespace SlayTheClone {
             if (Application.isPlaying) return;
             SetFill(1f);
             barFillImage.color = UITheme.HealthHigh;
-            if (healthText != null) healthText.text = $"{Player.MaxHealth}/{Player.MaxHealth}";
+            if (healthText != null) healthText.text = $"{Player.StartingHealth}";
             pilesText.text = PilesLine(deck != null ? deck.Cards.Count : 0, 0);
         }
 
@@ -301,7 +301,8 @@ namespace SlayTheClone {
         }
 
         private void ShowHealth(int health, bool animate) {
-            float fraction = Mathf.Clamp01(health / (float)Player.MaxHealth);
+            // Full at the Health the fight started at; healed past it, it stays full (the number says how far)
+            float fraction = Mathf.Clamp01(health / (float)Mathf.Max(1, player?.StartHealth ?? Player.StartingHealth));
             var color = UITheme.HealthColor(fraction);
             DOTween.Kill(barFill);
             if (!animate) {

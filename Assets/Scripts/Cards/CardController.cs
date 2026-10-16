@@ -73,6 +73,10 @@ namespace SlayTheClone {
         public IReadOnlyList<bool> AttachedHidden { get; set; } = new List<bool>();
         /// <summary>For each tucked card, whether it's only queued (a spell on its way): its preview says so.</summary>
         public IReadOnlyList<bool> AttachedQueued { get; set; } = new List<bool>();
+        /// <summary>The front card of a pile of queued spells: its stack is the rest of the pile, not cards on it.</summary>
+        public bool HeadsPile { get; set; }
+        /// <summary>A card of its stack the screen can see (not a back): it has a roulette worth opening even when it's all ??? itself.</summary>
+        public bool HasSeenAttached => Enumerable.Range(0, AttachedCards.Count).Any(i => !IsAttachedHidden(i));
 
         public bool IsAttachedHidden(int index) => index >= 0 && index < AttachedHidden.Count && AttachedHidden[index];
 
@@ -111,6 +115,11 @@ namespace SlayTheClone {
         public CardUnityEvent OnCardDropped = new CardUnityEvent();
         public CardUnityEvent OnCardClicked = new CardUnityEvent(); // Pressed and released without dragging
         public CardUnityEvent OnCardRightClicked = new CardUnityEvent();
+        /// <summary>Right-clicked by the player across the table, on a card of a side they don't control (a spell of theirs may be on it).</summary>
+        public CardUnityEvent OnRightClickedAcross = new CardUnityEvent();
+        /// <summary>The last drag was called off with a right click: the card went back, nothing was played or changed.</summary>
+        public bool DragCancelled { get; private set; }
+        private PointerEventData dragEvent;
         public Action OnPointerEnterHandler;
         public Action OnPointerExitHandler;
 
@@ -421,6 +430,10 @@ namespace SlayTheClone {
             }
             // Right-drag: a creature on the board turns on one of its own side (Friendly Fire), with no targeting help
             bool friendlyFire = eventData.button == PointerEventData.InputButton.Right && linkedCreature?.Slot != null;
+            if (friendlyFire && GameInput.RightClickSwallowed) { // The right click that called off a drag starts none
+                eventData.pointerDrag = null;
+                return;
+            }
             if (eventData.button != PointerEventData.InputButton.Left && !friendlyFire) return;
             IsFriendlyFire = friendlyFire;
 
@@ -445,6 +458,8 @@ namespace SlayTheClone {
             SnapsTo = null;
             dragLean = 0f;
             isDragging = true;
+            DragCancelled = false;
+            dragEvent = eventData;
             DragPointer = null;
             Dragged = this;
             canvasGroup.blocksRaycasts = false;
@@ -471,6 +486,10 @@ namespace SlayTheClone {
 
         private void Update() {
             if (!isDragging) return;
+            if (!IsFriendlyFire && GameInput.RightClickedThisFrame) { // A right click calls the drag off (the user)
+                CancelDrag();
+                return;
+            }
             float dt = Mathf.Max(Time.unscaledDeltaTime, 0.0001f);
             var before = transform.position;
             var target = dragTarget; // Free to go: over a slot it'll land in it only takes the slot's size (see HandUI.Carry), it isn't pinned there
@@ -481,8 +500,32 @@ namespace SlayTheClone {
             transform.localRotation = Quaternion.Euler(0f, 0f, dragLean);
         }
 
+        /// <summary>
+        /// Calls the drag off: the card goes back where it was picked up from, played nowhere, and the right click that did
+        /// it is used up. The pointer's own drag ends here too, so letting go of the button drops nothing.
+        /// </summary>
+        public void CancelDrag() {
+            if (!isDragging) return;
+            GameInput.SwallowRightClick();
+            if (dragEvent != null) {
+                dragEvent.pointerDrag = null; // No drop, no end of drag when the button is let go
+                dragEvent.dragging = false;
+            }
+            dragEvent = null;
+            isDragging = false;
+            DragCancelled = true;
+            DragPointer = null;
+            SnapsTo = null;
+            transform.position = originalPosition;
+            transform.localRotation = Quaternion.identity;
+            if (Dragged == this) Dragged = null;
+            canvasGroup.blocksRaycasts = true;
+            OnEndDragEvent.Invoke(this); // Its place puts it back (the hand's fan, its slot); DragCancelled says it went nowhere
+        }
+
         public void OnEndDrag(PointerEventData eventData) {
             if (!isDragging) return;
+            dragEvent = null;
 
             isDragging = false;
             DragPointer = null;
@@ -498,7 +541,12 @@ namespace SlayTheClone {
 
         public void OnPointerClick(PointerEventData eventData) {
             if (eventData.dragging || IsHoverPreview || IsAttachment) return;
-            if (!FogOfWar.CanControl(Player)) return; // The other side's cards aren't yours to use
+            bool right = eventData.button == PointerEventData.InputButton.Right;
+            if (right && GameInput.RightClickSwallowed) return; // It called off a drag, or took a card back: nothing more
+            if (!FogOfWar.CanControl(Player)) { // The other side's cards aren't yours to use; a spell of yours on one is
+                if (right) OnRightClickedAcross.Invoke(this);
+                return;
+            }
             if (eventData.button == PointerEventData.InputButton.Left) OnCardClicked.Invoke(this);
             else if (eventData.button == PointerEventData.InputButton.Right) OnCardRightClicked.Invoke(this);
         }
@@ -928,6 +976,7 @@ namespace SlayTheClone {
             var preview = cardViews.Create(linkedCardInstance, Player, parent);
             if (preview == null) return null;
             preview.SetDisguise(disguise); // Enlarged, a decoy still shows its fake card
+            if (IsAnonymous) preview.SetAnonymous(true); // Something being summoned: enlarged it's still ???
 
             preview.IsHoverPreview = true;
             var group = preview.GetComponent<CanvasGroup>();
@@ -999,6 +1048,7 @@ namespace SlayTheClone {
             OnCardDropped.RemoveAllListeners();
             OnCardClicked.RemoveAllListeners();
             OnCardRightClicked.RemoveAllListeners();
+            OnRightClickedAcross.RemoveAllListeners();
             OnPointerEnterHandler = null;
             OnPointerExitHandler = null;
         }

@@ -43,12 +43,12 @@ namespace SlayTheClone.Tests {
             game.Declare(brute, p2.Battlefield[0]); // An empty slot: the attack would hit player 2
             game.Play(game.GiveCard(p2, stunner), p2, p1.Battlefield[0]);
             yield return game.EndTurn(); // Spells land before attacks
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "Being stunned cancels the attack it planned");
+            Assert.AreEqual(Player.StartingHealth, p2.Health, "Being stunned cancels the attack it planned");
             Assert.IsTrue(IsExhausted(brute), "It skipped the Dusk of the Day it was applied");
             Assert.IsFalse(game.ModifierManager.CanAct(brute), "It's stunned for all of the next Day");
             game.Declare(brute, p2.Battlefield[0]);
             yield return game.EndTurn();
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "It couldn't be given an intent");
+            Assert.AreEqual(Player.StartingHealth, p2.Health, "It couldn't be given an intent");
             Assert.IsFalse(IsExhausted(brute), "It ends at the Dusk of the Day after it was applied");
             Assert.IsTrue(game.ModifierManager.CanAct(brute));
 

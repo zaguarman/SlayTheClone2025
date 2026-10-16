@@ -222,7 +222,7 @@ namespace SlayTheClone.Tests {
                 var hits = new List<RaycastResult>();
                 EventSystem.current.RaycastAll(eventData, hits);
                 if (hits.Count == 0 || hits[0].gameObject.GetComponentInParent<CardController>() != card) {
-                    if (hits.Count > 0) covers.Add(hits[0].gameObject.GetComponentInParent<CardController>()?.name ?? hits[0].gameObject.name);
+                    if (hits.Count > 0) covers.Add(CoverName(hits[0].gameObject));
                     continue;
                 }
 
@@ -234,6 +234,12 @@ namespace SlayTheClone.Tests {
             }
             Assert.Fail($"{card.name} can't be pointed at: it's covered, or doesn't take the pointer (on top: {string.Join(", ", covers)})");
             return null;
+        }
+
+        // What covers a card: the card on top (and where it sits: a hand, a slot, the tooltip), or the object
+        private static string CoverName(GameObject hit) {
+            var card = hit.GetComponentInParent<CardController>();
+            return card == null ? hit.name : $"{card.name} in {card.transform.parent?.name}";
         }
 
         /// <summary>Clicks a visible part of the card: the click goes to whatever handles it under the pointer.</summary>
@@ -296,7 +302,7 @@ namespace SlayTheClone.Tests {
         public void AssertViewsMatchRules() {
             var pending = Queue.GetPendingActions();
             foreach (var player in Players) {
-                Assert.AreEqual($"{player.Health}/{Player.MaxHealth}", ViewsOf(player).HealthText.text, $"{player.Name}'s health text");
+                Assert.AreEqual($"{player.Health}", ViewsOf(player).HealthText.text, $"{player.Name}'s health text");
 
                 // Queued creatures, and the queued spells the screen can see, show on the board; the rest stay in the hand
                 var onBoard = pending.OfType<PlayCardAction>().Where(a => a.GetOwner() == player

@@ -47,7 +47,10 @@ namespace SlayTheClone {
         /// <summary>An amount with the symbol: "¥€ 25".</summary>
         public static string Money(int amount) => $"{Symbol}\u00A0{amount}";
 
+        public const int StartingHealth = 60; // The user: about 60 at the start, no maximum
         public static bool Active { get; private set; }
+        /// <summary>Your Health, carried from fight to fight: a fight starts at it and ends with what's left. 0: the run is lost.</summary>
+        public static int Health { get; private set; }
         /// <summary>The run's money (EY): fights pay it, shops take it. Gone when the run ends.</summary>
         public static int EuroYuans { get; private set; }
         /// <summary>What the fight just won paid; 0 outside the rewards.</summary>
@@ -58,6 +61,15 @@ namespace SlayTheClone {
         public static bool InShop { get; private set; }
         /// <summary>A card was taken out of your deck at this shop (once a shop).</summary>
         public static bool RemovedHere { get; private set; }
+        /// <summary>The event of the ? room you're in, until you leave it; null outside one.</summary>
+        public static AdventureEvents.Event Event { get; private set; }
+        /// <summary>What the choice made at the event did; null until one is made.</summary>
+        public static string EventOutcome { get; private set; }
+        /// <summary>You're at an event: the map waits until you go on.</summary>
+        public static bool InEvent => Event != null;
+        private static readonly HashSet<string> seenEvents = new HashSet<string>();
+        private static MapNode eventRoom;
+
         /// <summary>What taking a card out costs now.</summary>
         public static int RemovalCost => RemovalPrice + RemovalRise * removals;
         private static int removals;
@@ -86,12 +98,13 @@ namespace SlayTheClone {
             Active = true;
             Faction = faction;
             Deck = deck;
+            Health = StartingHealth;
             Map = AdventureMap.Generate(seed);
         }
 
         /// <summary>The rooms you can walk into next: the bottom row at first, then the rooms your room's paths lead to.</summary>
         public static IReadOnlyList<MapNode> Reachable() {
-            if (!Active || Won || Lost || Fighting != null || InRewards || InShop) return new List<MapNode>();
+            if (!Active || Won || Lost || Fighting != null || InRewards || InShop || InEvent) return new List<MapNode>();
             return Current == null ? new List<MapNode>(Map.Row(0)) : Current.Next;
         }
 
@@ -109,7 +122,53 @@ namespace SlayTheClone {
             }
             Arrive(node);
             if (node.Type == RoomType.Shop && pool != null) OpenShop(node, pool);
+            if (node.Type == RoomType.Unknown && pool != null) {
+                Event = AdventureEvents.For(node, Map.Seed, seenEvents);
+                seenEvents.Add(Event.Id);
+                EventOutcome = null;
+                eventRoom = node;
+            }
             return false;
+        }
+
+        /// <summary>Makes the event's choice, if it can be made and none was yet: what it says happens.</summary>
+        public static bool ChooseAtEvent(AdventureEvents.Choice choice, IEnumerable<CardDataScriptableObject> pool) {
+            if (!InEvent || EventOutcome != null || choice == null || !Event.Choices.Contains(choice) || !choice.Available()) return false;
+            var context = new AdventureEvents.Context {
+                Random = new System.Random(Map.Seed * 59 + eventRoom.Row * 17 + eventRoom.Column),
+                Pool = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).ToList()
+            };
+            EventOutcome = AdventureEvents.Run(choice, context);
+            return true;
+        }
+
+        /// <summary>On from the event to the map.</summary>
+        public static void LeaveEvent() {
+            Event = null;
+            EventOutcome = null;
+            eventRoom = null;
+        }
+
+        /// <summary>Health won or lost outside a fight (an event): never below 1, and no maximum.</summary>
+        public static void ChangeHealth(int amount) => Health = Mathf.Max(1, Health + amount);
+
+        /// <summary>EuroYuans won or spent outside a fight and a shop (an event); never below 0.</summary>
+        public static void ChangeMoney(int amount) => EuroYuans = Mathf.Max(0, EuroYuans + amount);
+
+        /// <summary>A card into your deck, unless it's full.</summary>
+        public static bool AddCard(CardDataScriptableObject card) {
+            if (card == null || Deck.Cards.Count >= PlayerDecks.MaxDeckSize) return false;
+            Deck = DeckScriptableObject.Make(Deck.GetDeckName(), Deck.Cards.Append(card));
+            return true;
+        }
+
+        /// <summary>One copy of a card out of your deck (not below <see cref="MinDeck"/>).</summary>
+        public static bool TakeCard(CardDataScriptableObject card) {
+            if (card == null || Deck.Cards.Count <= MinDeck || !Deck.Cards.Contains(card)) return false;
+            var cards = Deck.Cards.ToList();
+            cards.Remove(card);
+            Deck = DeckScriptableObject.Make(Deck.GetDeckName(), cards);
+            return true;
         }
 
         // A shop's cards: three of your faction and two of others, different ones, none you can't put in a deck; priced by
@@ -162,8 +221,10 @@ namespace SlayTheClone {
         /// <summary>The deck you're about to fight.</summary>
         public static void SetEnemy(DeckScriptableObject deck) => EnemyDeck = deck;
 
-        public static void WinFight() {
+        /// <summary>The fight is won, with this much Health left (null: as it went in).</summary>
+        public static void WinFight(int? healthLeft = null) {
             if (Fighting == null) return;
+            if (healthLeft.HasValue) Health = Mathf.Max(1, healthLeft.Value);
             var room = Fighting;
             Fighting = null;
             Arrive(room);
@@ -212,6 +273,7 @@ namespace SlayTheClone {
             if (Fighting == null) return;
             Fighting = null;
             Lost = true;
+            Health = 0;
         }
 
         /// <summary>Back out of a fight that hasn't been played to the end (the pause menu's Main Menu): you can go in again.</summary>
@@ -226,7 +288,11 @@ namespace SlayTheClone {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Clear() {
             Active = Won = Lost = InShop = RemovedHere = false;
-            EuroYuans = Earned = removals = 0; // A roguelite: the money goes with the run
+            EuroYuans = Earned = removals = Health = 0; // A roguelite: the money goes with the run
+            Event = null;
+            EventOutcome = null;
+            eventRoom = null;
+            seenEvents.Clear();
             Shop.Clear();
             Faction = Faction.None;
             Deck = EnemyDeck = null;

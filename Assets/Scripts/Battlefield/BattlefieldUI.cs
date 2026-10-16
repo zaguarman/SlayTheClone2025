@@ -773,7 +773,8 @@ namespace SlayTheClone {
                 // Like a queued card in the hand, clicking it or dragging it away takes the play back, and dragging it to a slot re-aims it.
                 ghost.SetQueued(true, canBeDragged: true, badge: Abilities.ArrivesLate(action) ? "After the attacks" : "Queued"); // Sorry I'm Late, He Protec
                 ghost.OnCardClicked.AddListener(TakeBackPlay);
-                ghost.OnCardRightClicked.AddListener(TakeBackPlay);
+                ghost.OnCardRightClicked.AddListener(g => { if (!TakeBackSpellOn(g)) TakeBackPlay(g); }); // Your spells on it come back first
+                ghost.OnRightClickedAcross.AddListener(g => TakeBackSpellOn(g));
                 ghost.OnBeginDragEvent.AddListener(OnGhostBeginDrag);
                 ghost.OnEndDragEvent.AddListener(OnGhostEndDrag);
                 ghost.SetAnonymous(FogOfWar.HidesSummon(Viewer, action, GameManager.ActionsQueue)); // Something is coming, but what?
@@ -881,8 +882,10 @@ namespace SlayTheClone {
             foreach (var gone in spellGhostOrder.Keys.Where(k => !spellGhosts.ContainsKey(k)).ToList()) spellGhostOrder.Remove(gone);
 
             // At one place, the newest in the middle and the older ones stepping left, each partly under the next
+            piles.Clear();
             foreach (var group in aimed.Where(a => spellGhosts.ContainsKey(a.spell)).GroupBy(a => (a.slot, a.byRiver))) {
                 var together = group.OrderBy(a => spellGhostOrder[a.spell]).ToList();
+                if (group.Key.slot == null) piles.Add(together.Select(a => ((ICard)a.spell, a.caster)).ToList());
                 for (int i = 0; i < together.Count; i++) {
                     var ghost = spellGhosts[together[i].spell];
                     if (CardController.Dragged == ghost) continue;
@@ -891,6 +894,34 @@ namespace SlayTheClone {
                 }
             }
             RefreshAttachments();
+        }
+
+        // The piles of spells beside the mat (on a whole side, or by the river), each oldest first
+        private readonly List<List<(ICard spell, IPlayer caster)>> piles = new List<List<(ICard, IPlayer)>>();
+
+        // A pile's roulette (the user): its newest card the screen can see leads, the others are its stack, newest first, so
+        // hovering any of them opens it there. A pile of backs only (the enemy's, unseen) has none
+        private void GroupPiles() {
+            foreach (var pile in piles) {
+                var views = pile.Where(p => spellGhosts.TryGetValue(p.spell, out var v) && v != null).Select(p => (p.spell, p.caster, view: spellGhosts[p.spell])).ToList();
+                foreach (var (_, _, view) in views) {
+                    view.HeadsPile = false;
+                    view.AttachedCards = new List<ICard>();
+                    view.AttachedOwners = new List<IPlayer>();
+                    view.AttachedHidden = new List<bool>();
+                    view.AttachedQueued = new List<bool>();
+                }
+                if (views.Count < 2) continue;
+                var front = views.LastOrDefault(v => !v.view.IsFaceDown).view;
+                if (front == null) continue;
+                var rest = views.Where(v => v.view != front).Reverse().ToList();
+                front.HeadsPile = true;
+                front.AttachedCards = rest.Select(v => v.spell).ToList();
+                front.AttachedOwners = rest.Select(v => v.caster).ToList();
+                front.AttachedHidden = rest.Select(v => v.view.IsFaceDown).ToList();
+                front.AttachedQueued = rest.Select(_ => true).ToList();
+                foreach (var v in rest) v.view.TuckedUnder = front;
+            }
         }
 
         /// <summary>The cards tucked under the creature in this slot (its stack), the nearest first; empty when none.</summary>
@@ -967,6 +998,7 @@ namespace SlayTheClone {
                 }
                 attachedViews[slot] = views;
             }
+            GroupPiles();
         }
 
         // Whether this queued spell lands on the creature on its way to this slot: it homes on it, or it's aimed at the slot
@@ -1150,16 +1182,38 @@ namespace SlayTheClone {
         private PlayCardAction QueuedPlayOf(ICard card) =>
             GameManager?.ActionsQueue?.GetPendingActions().OfType<PlayCardAction>().FirstOrDefault(p => p.GetCard() == card);
 
+        /// <summary>
+        /// A right click on a creature, or one on its way, with spells of the player's queued on it: the newest of them goes
+        /// back to their hand (the user), and the click does nothing else. False when there's none of theirs.
+        /// </summary>
+        private bool TakeBackSpellOn(CardController card) {
+            if (card == null || (GameManager?.TurnManager?.IsResolving ?? true)) return false;
+            var queue = GameManager.ActionsQueue;
+            for (int i = card.AttachedCards.Count - 1; i >= 0; i--) {
+                if (i >= card.AttachedQueued.Count || !card.AttachedQueued[i]) continue;
+                var play = QueuedPlayOf(card.AttachedCards[i]);
+                if (play == null || !FogOfWar.CanControl(play.GetOwner())) continue;
+                if (queue.CancelPlay(card.AttachedCards[i])) {
+                    GameInput.SwallowRightClick();
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void OnGhostBeginDrag(CardController ghost) {
             draggedGhostPlay = QueuedPlayOf(ghost.GetLinkedCardInstance());
             var rootCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
             if (rootCanvas != null) ghost.transform.SetParent(rootCanvas.transform, true); // Drawn over every slot while dragged
+            UITheme.Lift(ghost.gameObject, UITheme.HandsLayer + 1); // Carried, over the arrows and the hands as a hand card is
         }
 
         private void OnGhostEndDrag(CardController ghost) {
-            PlayOnTarget(ghost); // Let go near a slot, not on one: it lands in the one picked
+            UITheme.Lower(ghost.gameObject);
+            if (!ghost.DragCancelled) PlayOnTarget(ghost); // Let go near a slot, not on one: it lands in the one picked
             // Dropped where it can't be played, it keeps its old play: take it back. A valid drop already replaced it.
-            if (draggedGhostPlay != null && QueuedPlayOf(ghost.GetLinkedCardInstance()) == draggedGhostPlay) {
+            // Called off with a right click, it keeps it as it was
+            if (!ghost.DragCancelled && draggedGhostPlay != null && QueuedPlayOf(ghost.GetLinkedCardInstance()) == draggedGhostPlay) {
                 GameManager.ActionsQueue.CancelPlay(ghost.GetLinkedCardInstance());
             }
             draggedGhostPlay = null;
@@ -1185,7 +1239,8 @@ namespace SlayTheClone {
         protected override void SetupCardEventHandlers(CardController controller) {
             base.SetupCardEventHandlers(controller);
             controller.OnCardClicked.AddListener(OnCardClicked);
-            controller.OnCardRightClicked.AddListener(OnCardClicked);
+            controller.OnCardRightClicked.AddListener(c => { if (!TakeBackSpellOn(c)) OnCardClicked(c); }); // Your spells on it come back first
+            controller.OnRightClickedAcross.AddListener(c => TakeBackSpellOn(c));
             controller.RefusesDrag = RefuseIfItCantAct;
         }
 
@@ -1261,7 +1316,7 @@ namespace SlayTheClone {
             pill.raycastTarget = false;
             var top = pill.gameObject.AddComponent<Canvas>();
             top.overrideSorting = true;
-            top.sortingOrder = 1000;
+            top.sortingOrder = UITheme.WindowsLayer; // Over the hands too
             var fade = pill.gameObject.AddComponent<CanvasGroup>();
             fade.blocksRaycasts = false;
             var note = UITheme.NewText("Text", pill.transform, CantActReason, 24f, UITheme.Hex(0xFF8A7A));
@@ -1317,8 +1372,9 @@ namespace SlayTheClone {
             draggedCard = null;
             ClearMoveHints();
 
-            // Released anywhere but another slot (including back on its own): the creature stands down
-            if (GetDragIntent(card, GetTargetSlot()) == BattlefieldArrowManager.DragIntent.None && !GameManager.TurnManager.IsResolving) {
+            // Released anywhere but another slot (including back on its own): the creature stands down. Called off with a
+            // right click, its plan stays as it was
+            if (!card.DragCancelled && GetDragIntent(card, GetTargetSlot()) == BattlefieldArrowManager.DragIntent.None && !GameManager.TurnManager.IsResolving) {
                 GameManager.CombatHandler.CancelAttack(card.GetLinkedCreature());
             }
             UpdateUI(Player);

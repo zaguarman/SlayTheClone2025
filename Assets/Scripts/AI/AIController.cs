@@ -7,10 +7,10 @@ namespace SlayTheClone {
     /// Plugs the <see cref="AIPlanner"/> into a running game. At the start of each Day it plans the Day of every seat the AI
     /// plays (<see cref="MatchSetup.AI"/>), as chosen (<see cref="MatchSetup.AIPlayer"/>: a level, and for Hard a style), so its plans are on the table before you make yours (GDD 3.6: the AI plans first).
     /// When it plays both seats it also ends the turn, after a pause so its plans can be watched. Which seats it plays can
-    /// change at any time (<see cref="SwitchSeats"/>, F7); it stops when the combat ends.
+    /// change at any time (<see cref="ToggleSeat"/>: F6 for Player 1, F7 for Player 2); it stops when the combat ends.
     /// </summary>
     public class AIController : MonoBehaviour {
-        public const UnityEngine.InputSystem.Key SwitchSeatsKey = UnityEngine.InputSystem.Key.F7;
+        public const UnityEngine.InputSystem.Key Player1Key = UnityEngine.InputSystem.Key.F6, Player2Key = UnityEngine.InputSystem.Key.F7;
 
         /// <summary>Real seconds between the AI planning a Day and ending it, when it plays both seats.</summary>
         public static float TurnPause = 1f;
@@ -60,19 +60,19 @@ namespace SlayTheClone {
             if (MatchSetup.AI == AISeats.Both && Time.unscaledTime - plannedAt >= TurnPause) turns.EndTurn();
         }
 
-        /// <summary>Hands the next seats to the AI: none, Player 2, both, Player 1, then none again.</summary>
-        public static void SwitchSeats() {
-            MatchSetup.AI = MatchSetup.AI switch {
-                AISeats.None => AISeats.Player2,
-                AISeats.Player2 => AISeats.Both,
-                AISeats.Both => AISeats.Player1,
-                _ => AISeats.None
-            };
+        /// <summary>
+        /// The AI takes this seat, or gives it back (the user: a key each, F6 and F7). The screen stays on the side it shows:
+        /// the switch moves no one round the table (F8 does).
+        /// </summary>
+        public static void ToggleSeat(AISeats seat) {
+            MatchSetup.AI ^= seat;
             Log($"The AI now plays {MatchSetup.AI}", LogTag.Turns);
-            ShowHumanSeat();
         }
 
-        // With one seat left to you, the screen shows yours
+        /// <summary>Whether the AI plays this seat, for the note under End Turn.</summary>
+        public static string SeatText(AISeats seat) => (MatchSetup.AI & seat) != 0 ? $"On, {MatchSetup.AIPlayer.Name}" : "Off";
+
+        // At the start, with one seat left to you, the screen shows yours
         private static void ShowHumanSeat() {
             if (MatchSetup.AI == AISeats.Player1) FogOfWar.PlaysAsPlayer1 = false;
             else if (MatchSetup.AI == AISeats.Player2) FogOfWar.PlaysAsPlayer1 = true;

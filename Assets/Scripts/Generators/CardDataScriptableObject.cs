@@ -20,6 +20,7 @@ namespace SlayTheClone {
         [Min(0)] public int prophecy; // A spell that comes true this many Days later, at Dawn
         [Min(0)] public int prophecyLatest; // Above prophecy: it comes true at random, between the two
         public bool gamble; // Only one of its effects happens, at random (Casino)
+        public bool homing; // Homing: aimed at an enemy creature it locks on and follows it; Heat Signature pulls it
         [SerializeField] protected List<CardEffect> effects = new List<CardEffect>();
         [TextArea(2, 6)] public string designNotes; // Editor only: what the card should become once the GDD mechanics it stands in for exist
         [TextArea(2, 6)] public string artDescription; // What the card's picture shows: the brief for its art
@@ -50,6 +51,7 @@ namespace SlayTheClone {
             data.prophecy = prophecy;
             data.prophecyLatest = prophecyLatest;
             data.gamble = gamble;
+            data.homing = homing;
             data.effects = CopyEffects();
         }
 

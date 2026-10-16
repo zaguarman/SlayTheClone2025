@@ -237,7 +237,7 @@ namespace SlayTheClone {
                 "Future: summons an Unpaid Intern token. Each recruit pays a share of its draws upward.",
                 On(EffectTrigger.OnPlay, Summon(1))),
             Creature("Day Trader", 3, 1, speed: 3, deploy: 0,
-                "Up 300% this morning. Rent is due this afternoon.",
+                "Time is money, friend. Up 300% by noon, rent due at five.",
                 "Insider Job (insider trading): its damage ignores Armor. Future: Investment. Pays out or loses cards depending on the Day.",
                 On(EffectTrigger.OnPlay, Draw(1)),
                 On(EffectTrigger.OnDeath, Draw(1, TargetType.Enemy)))
@@ -1740,6 +1740,12 @@ namespace SlayTheClone {
             }
 
             public bool IsGamble; // Only one of its effects happens, at random
+            public bool IsHoming; // Homing: locks on the enemy creature it's aimed at (a spell) or attacks (a creature)
+
+            public CardDef Homing() {
+                IsHoming = true;
+                return this;
+            }
             public int SacrificeCost; // Additional cost: its side's weakest creatures die when it resolves
             public int ProphecyDays; // A spell that comes true this many Days later
             public int ProphecyLatest; // Or at random, up to this many
@@ -2021,6 +2027,7 @@ namespace SlayTheClone {
             asset.prophecy = card.ProphecyDays;
             asset.prophecyLatest = card.ProphecyLatest;
             asset.gamble = card.IsGamble;
+            asset.homing = card.IsHoming;
             asset.SetEffects(card.Effects);
             switch (asset) {
                 case CreatureCardScriptableObject creature:

@@ -28,7 +28,7 @@ namespace SlayTheClone {
         }
 
         private void ShowHealth(int health) {
-            if (healthText != null) healthText.text = $"{health}/{SlayTheClone.Player.MaxHealth}";
+            if (healthText != null) healthText.text = $"{health}"; // No maximum to show (the user)
         }
 
         public override void UpdateUI(IPlayer player) {

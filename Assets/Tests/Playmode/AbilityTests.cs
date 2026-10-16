@@ -61,15 +61,15 @@ namespace SlayTheClone.Tests {
             game.Run(new DamagePlayerAction(p1, 5));
 
             game.Run(new DamageCreatureAction(medic, 1));
-            Assert.AreEqual(Player.MaxHealth - 4, p1.Health, "A hit the creature survives should fire its on-damage effect");
+            Assert.AreEqual(Player.StartingHealth - 4, p1.Health, "A hit the creature survives should fire its on-damage effect");
 
             game.Run(new ModifyArmorAction(medic, 3));
             game.Run(new DamageCreatureAction(medic, 2));
-            Assert.AreEqual(Player.MaxHealth - 3, p1.Health, "So should a hit its armor takes");
+            Assert.AreEqual(Player.StartingHealth - 3, p1.Health, "So should a hit its armor takes");
 
             game.Run(new DamageCreatureAction(medic, 10));
             Assert.IsTrue(medic.IsDead);
-            Assert.AreEqual(Player.MaxHealth - 2, p1.Health, "And the killing blow: retaliation happens even as it dies");
+            Assert.AreEqual(Player.StartingHealth - 2, p1.Health, "And the killing blow: retaliation happens even as it dies");
 
             // Replaced (Golden Parachute): a summon onto its slot sets it off, and its Last Will doesn't: it isn't killed
             var parachuteData = game.Creature("Parachute", 1, 3, 1, Effect(EffectTrigger.OnReplaced, ActionType.Damage, 2, TargetType.Enemy),
@@ -92,8 +92,8 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(1, phoenix.Health);
             CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(phoenix), "Once per turn");
             Assert.AreEqual(5, bystander.Health, "Self means the creature itself");
-            Assert.AreEqual(Player.MaxHealth, p1.Health, "Self means the creature itself");
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "Self means the creature itself");
+            Assert.AreEqual(Player.StartingHealth, p1.Health, "Self means the creature itself");
+            Assert.AreEqual(Player.StartingHealth, p2.Health, "Self means the creature itself");
         }
     }
 }

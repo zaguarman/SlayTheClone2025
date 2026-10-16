@@ -107,7 +107,7 @@ namespace SlayTheClone {
         private const float EdgeAlpha = 0.95f, OutlineAlpha = 0.55f; // The rim and the outline at their strongest (their gradient scales them)
         private const float DrawInDuration = 0.3f;
         private const float FadeOutDuration = 0.2f;
-        private const int SortingOrder = 5000;
+        private const int SortingOrder = UITheme.ArrowsLayer; // Over the board, under the hands (the user)
 
         private static Material sharedMaterial;
         private static int nextStencil;   // Each arrow merges only with itself

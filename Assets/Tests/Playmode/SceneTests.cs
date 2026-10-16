@@ -46,7 +46,7 @@ namespace SlayTheClone.Tests {
             SceneGame.AssertPlays(p2, game.References.Player2Deck);
             Assert.AreEqual(MatchSetup.DefaultOpponentName, p2.Name, "With no match chosen, the opponent keeps its default name");
             foreach (var player in game.Players) {
-                Assert.AreEqual(Player.MaxHealth, player.Health);
+                Assert.AreEqual(Player.StartingHealth, player.Health);
                 Assert.AreEqual(5, player.Hand.Count);
                 Assert.IsTrue(player.Battlefield.All(s => !s.IsOccupied()));
                 GameAsserts.AssertEachCardInOneZone(player);
@@ -135,7 +135,7 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(mouse.IsDead);
             Assert.IsNull(game.CardIn(p2.Battlefield[0]), "The dead creature's card is still on the board");
             Assert.AreEqual(4, brute.Health, "At equal Speed the mouse, with less Health, strikes first");
-            Assert.AreEqual(Player.MaxHealth - 3, p2.Health);
+            Assert.AreEqual(Player.StartingHealth - 3, p2.Health);
             game.AssertViewsMatchRules(); // Including the new hands, the survivor's damage and player 2's health
 
             // God's Grace lies over the player's plaque, counting down to the Dusk it ends
@@ -401,17 +401,17 @@ namespace SlayTheClone.Tests {
             game.Queue.CancelPlay(kid);
             yield return null;
 
-            var occupant = game.Summon(p1, game.Cards.Creature("Test Ox", 0, 6), 3);
+            var occupant = game.Summon(p1, game.Cards.Creature("Test Ox", 0, 6), 0); // The front slot: the lower ones' edges are under the hand
             var wolf = game.GiveCard(p1, game.Cards.Creature("Test Wolf", 2, 3));
             var hound = game.GiveCard(p1, game.Cards.Creature("Test Hound", 3, 1, speed: 2));
             game.Play(wolf, p1, p1.Battlefield[1]);  // An empty slot
-            game.Play(hound, p1, p1.Battlefield[3]); // Replacing the ox
+            game.Play(hound, p1, p1.Battlefield[0]); // Replacing the ox
             yield return null;
             // Numbered like attacks, in the order they arrive by Speed: the faster hound first, though placed second
             Assert.AreEqual("2", game.GhostIn(p1.Battlefield[1]).OrderNumber);
-            Assert.AreEqual("1", game.GhostIn(p1.Battlefield[3]).OrderNumber);
+            Assert.AreEqual("1", game.GhostIn(p1.Battlefield[0]).OrderNumber);
 
-            foreach (var (queued, slot) in new[] { (wolf, p1.Battlefield[1]), (hound, p1.Battlefield[3]) }) {
+            foreach (var (queued, slot) in new[] { (wolf, p1.Battlefield[1]), (hound, p1.Battlefield[0]) }) {
                 var hits = SceneGame.Hover(game.GhostIn(slot));
                 // Going on from one enlarged card to the next is quicker
                 yield return queued == wolf ? SceneGame.PreviewShows() : new WaitForSecondsRealtime(Tooltip.SwitchDelay + 0.05f);
@@ -424,12 +424,12 @@ namespace SlayTheClone.Tests {
                         $"A card dropped on {queued.Name}'s ghost must still find {slot}");
                 }
             }
-            SceneGame.Hover(game.CardIn(p1.Battlefield[3]));
+            SceneGame.Hover(game.CardIn(p1.Battlefield[0]));
             yield return SceneGame.PreviewShows();
             Assert.AreSame(occupant, SceneGame.HoverPreview()?.GetLinkedCardInstance(), "The creature about to be replaced can still be hovered");
 
             var pup = game.GiveCard(p1, game.Cards.Creature("Test Pup", 1, 2)) as ICreature;
-            var pupSlot = p1.Battlefield[0];
+            var pupSlot = p1.Battlefield[4];
             var takeBacks = new (string how, System.Action<CardController> takeBack)[] {
                 ("Clicking", ghost => SceneGame.Click(ghost)),
                 ("Right-clicking", ghost => SceneGame.Click(ghost, PointerEventData.InputButton.Right)),
@@ -447,7 +447,7 @@ namespace SlayTheClone.Tests {
 
             yield return game.EndTurn();
             Assert.AreSame(wolf, p1.Battlefield[1].OccupyingCreature);
-            Assert.AreSame(hound, p1.Battlefield[3].OccupyingCreature);
+            Assert.AreSame(hound, p1.Battlefield[0].OccupyingCreature);
             Assert.IsNull(pupSlot.OccupyingCreature, "The creature that was taken back isn't summoned");
             game.AssertViewsMatchRules();
             // A sacrifice is only yours to make: carried, it lights up your creatures' slots, nothing else, and plays nowhere else
@@ -466,6 +466,13 @@ namespace SlayTheClone.Tests {
             SceneGame.EndDrag(Held(feather), featherDrag);
             yield return null;
             Assert.IsFalse(game.BoardView(p1).FindSlotView(p1.Battlefield[4]).IsEligible, "Put down, nothing glows");
+            SceneGame.BeginDrag(Held(feather));
+            yield return null;
+            Held(feather).CancelDrag(); // What a right click does while it's carried
+            yield return null;
+            Assert.IsTrue(Held(feather).DragCancelled && CardController.Dragged == null, "A right click calls the drag off...");
+            Assert.IsFalse(game.Queue.GetPendingActions().OfType<PlayCardAction>().Any(a => a.GetCard() == feather), "...the card is played nowhere...");
+            Assert.IsFalse(game.BoardView(p1).FindSlotView(p1.Battlefield[4]).IsEligible, "...and nothing glows");
             var onEnemy = SceneGame.BeginDrag(Held(feather));
             game.BoardView(p2).DropOn(Held(feather), game.BoardView(p2).FindSlotView(p2.Battlefield[0]));
             SceneGame.EndDrag(Held(feather), onEnemy);

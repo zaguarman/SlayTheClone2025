@@ -5,6 +5,14 @@ namespace SlayTheClone {
         protected override void ExecuteAction(BattlefieldCombatAction combatAction, ActionExecutionContext context) {
             var attacker = combatAction.GetAttacker();
             var targetSlot = combatAction.GetTargetSlot();
+            if (EffectResolver.IsHoming(attacker) && attacker != null) {
+                // Against a Concealed (or Undercover) mark, Homing works like Fixed: the slot it was aimed at
+                var locked = combatAction.Mark;
+                if (locked != null && (context.ModifierManager.HasStatusEffect(locked, Enums.StatusEffectType.Concealed) || Abilities.Has(locked, Enums.CreatureAbility.Undercover)))
+                    targetSlot = combatAction.AimedSlot;
+                // Heat Signature pulls a Homing attack to the hottest creature on either side (not itself)
+                if (HeatRules.Hottest(attacker, attacker.Owner, new[] { attacker }) is ICreature hottest && hottest.Slot != null) targetSlot = hottest.Slot;
+            }
 
             if (attacker == null) {
                 LogError("BattlefieldCombatActionExecutor: Attacker is null.", LogTag.Actions | LogTag.Combat);

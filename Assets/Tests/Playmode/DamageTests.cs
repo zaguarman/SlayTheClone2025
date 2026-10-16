@@ -223,7 +223,9 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(3, spiky.Health);
             Assert.AreEqual(3, spiky.MaxHealth, "Health Loss lowers max and current Health");
             Assert.AreEqual(3, spiky.CurrentArmorPool, "Armor doesn't absorb it");
-            Assert.AreEqual(Player.MaxHealth, p2.Health, "It isn't damage: OnDamaged doesn't trigger");
+            Assert.AreEqual(Player.StartingHealth, p2.Health, "It isn't damage: OnDamaged doesn't trigger");
+            Assert.AreEqual(7, p2.Heal(7), "A player heals with no ceiling...");
+            Assert.AreEqual(Player.StartingHealth + 7, p2.Health, "...past the Health the fight started at");
             game.Summon(p1, game.Creature("Replacement", 1, 1), 2); // Summoning over it discards it
             var discarded = (ICreature)p1.Deck.GetDiscardPilePreview().Single(c => c.Name == "Spiky");
             Assert.AreEqual(3, discarded.BaseHealth, "Permanent unless it says otherwise: it stays on the card");

@@ -24,6 +24,8 @@ namespace SlayTheClone {
         /// <summary>For the Hard AI, the way it plays.</summary>
         public static AIStyle AIStyle { get; set; } = AIStyle.Balanced;
         public static AIEntrant AIPlayer => new AIEntrant(AILevel, AIStyle);
+        /// <summary>The Health you (Player 1) start the fight at, when not the usual 20: an adventure's, carried from fight to fight.</summary>
+        public static int? PlayerHealth { get; set; }
 
         public static bool PlayedByAI(IPlayer player) =>
             player != null && (AI & (player.IsPlayer1 ? AISeats.Player1 : AISeats.Player2)) != 0;
@@ -48,6 +50,7 @@ namespace SlayTheClone {
         public static void Choose(DeckScriptableObject playerDeck, string opponentName, DeckScriptableObject opponentDeck, AISeats ai = AISeats.None) {
             Prepared = true;
             PlayerDeck = playerDeck;
+            PlayerHealth = null;
             AI = ai;
             OpponentDeck = opponentDeck;
             OpponentName = string.IsNullOrEmpty(opponentName) ? DefaultOpponentName : opponentName;
@@ -65,6 +68,7 @@ namespace SlayTheClone {
             PlayerDeck = null;
             OpponentDeck = null;
             OpponentName = null;
+            PlayerHealth = null;
             AI = AISeats.None;
             AILevel = AILevel.Medium;
             AIStyle = AIStyle.Balanced;
