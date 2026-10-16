@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: ThreatHunter
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: b5d13c9f-b64f-41c6-a032-f8ae76ae0255
+  cardName: Threat Hunter
+  description: Assume breach. Then go looking for it.
+  cardType: 0
+  faction: 5
+  artwork: {fileID: 3286163911610860551, guid: 8eb9df001b4c3514c97ec261990328b9, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 1
+  effects:
+  - effectType: 0
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 4
+      targetModifier: 4
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 5
+      statusDuration: 1
+      statusPotency: 1
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Homing (the user, 2026-10-16): its attacks lock on the enemy creature
+    in the slot it''s aimed at and follow it if it moves. Arrival: Heat Signature
+    1 on a random enemy creature, which then pulls every Homing effect, its own included:
+    aim at anything and the hottest one takes it. Tech''s Heat and Homing in one
+    card.'
+  artDescription: A security analyst in a headlamp crawling on hands and knees through
+    a tunnel of server cables with a magnifying glass, following a trail of glowing
+    red footprints to a tiny hooded hacker hiding behind a rack.
+  attack: 2
+  health: 4
+  speed: 2
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 0
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

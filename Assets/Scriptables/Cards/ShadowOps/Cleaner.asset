@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects: []
   designNotes: 'Mechanics test: Double Tap. It attacks twice: a second hit right
     after the first.'

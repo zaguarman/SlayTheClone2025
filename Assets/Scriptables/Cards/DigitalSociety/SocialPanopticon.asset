@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects:
   - effectType: 1
     trigger: 0

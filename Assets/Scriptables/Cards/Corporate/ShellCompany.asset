@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects: []
   designNotes: 'Mechanics test: Shell Game (Active, hold Shift as you drag it onto
     a creature): that creature trades places with the one to its right. Moves an

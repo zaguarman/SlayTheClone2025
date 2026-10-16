@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects: []
   designNotes: 'Recoil: +2 damage on its attacks, and it takes 1 damage after each
     one. A mood that burns it out.'

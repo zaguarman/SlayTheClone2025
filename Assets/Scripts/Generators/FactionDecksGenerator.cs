@@ -56,8 +56,13 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Overtime" });
-        private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
+        // Here (the user, 2026-10-16): the cards for the smaller factions and the newest ones, from three or four factions;
+        // a test deck may mix them
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Tech, new[] {
+            "Threat Hunter", "Ctrl + Z", "Pair Programming", "Suspicious USB Stick in the Parking Lot",
+            "Socrates", "Maslow's Pyramid", "Legerdemain", "Short King", "Content Creator", "Thirst Trap",
+            "Overtime", "Taqiyya", "Geomagnetic Reversal" });
+        private static string WorkbenchName => Workbench.Cards.Length <= 3 ? $"Workbench - {string.Join(", ", Workbench.Cards)}" : "Workbench - New Cards";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
         // order, then the rest by when their cards last changed. Change it with the work
@@ -739,6 +744,28 @@ namespace SlayTheClone {
                 Status(StatusEffectType.Revealed, 2, TargetType.EnemyCreatures, modifier: Each),
                 Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 1, modifier: Each))
                 .Picture("A real panopticon seen from inside: a ring of barred cells on two floors around a central watchtower with a single recording eye, every inmate lit by their own phone."),
+            // The user, 2026-10-16: more cards for the smaller factions (leapers, swappers, tanks, combinations)
+            Creature("Short King", 2, 2, speed: 3, deploy: 0,
+                "Five foot four. Six foot in the bio.",
+                "A leaper: Leapfrog, it jumps over creatures to an empty slot. Arrival: +2 Attack this Day, a big entrance. Fast and cheap, it hops to the target the rest of the swarm is piling on (Dogpile).",
+                On(EffectTrigger.OnPlay, Buff(2, TargetType.Self, attack: true, health: false, days: 1)))
+                .With(MovementKeyword.Leapfrog)
+                .NotInStarterDeck()
+                .Picture("A short man wearing a paper crown standing on a stack of phone books to take a selfie at arm's length, the profile on his phone screen reading 6 FT."),
+            Creature("Content Creator", 1, 3, speed: 2, deploy: 0,
+                "Smash that like button. Smash it. Please.",
+                "A swapper: Swap, it trades places with a friendly creature however far. Each Dawn it goes live: Heat Signature 1 on itself, for good (Digital Society pays with exposure), so random effects and Homing ones come to it. Swap it next to the creature you want spared, or in front of the hit.",
+                On(EffectTrigger.StartOfTurn, Status(StatusEffectType.HeatSignature, 1, TargetType.Self, potency: 1)))
+                .With(MovementKeyword.Swap)
+                .NotInStarterDeck()
+                .Picture("A streamer in a headset under a ring light screaming at the camera with a shocked face and a giant red arrow pointing at nothing, the thumbnail on the monitor behind showing the same face, 100K in gold letters."),
+            Creature("Thirst Trap", 1, 5, speed: 1, deploy: 0,
+                "Not looking for attention. Posted it 14 times.",
+                "A tank: Arrival: Heat Signature 2 on itself, so random effects and Homing ones go to it rather than to the others. Each Dawn a random other friendly creature gets +1 Attack this Day (its simps fight harder).",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.HeatSignature, 1, TargetType.Self, potency: 2)),
+                On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom | Others, days: 1)))
+                .NotInStarterDeck()
+                .Picture("A steel bear trap open on a beach towel, a ring light and a phone on a tripod set up in front of it, the phone screen filling with hearts, and a glass of water standing beside it."),
         };
 
         // Shadow Ops.: fragile agents, hidden plans, traps
@@ -1116,6 +1143,34 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Status(StatusEffectType.HeatSignature, 1, TargetType.Self, potency: 3)))
                 .NotInStarterDeck()
                 .Picture("Candlelight and satin: a figure in full shining plate reclines on a red heart-shaped bed, propped on one elbow, a rose in the visor and one knee up, rose petals everywhere, a heart shield leaning against the bed."),
+            // The user, 2026-10-16: more cards for the smaller factions, leaning on the mechanics there are few of (leapers,
+            // swappers, healers, tanks) and on combinations
+            Creature("Threat Hunter", 2, 4, speed: 2, deploy: 1,
+                "Assume breach. Then go looking for it.",
+                "Homing (the user, 2026-10-16): its attacks lock on the enemy creature in the slot it's aimed at and follow it if it moves. Arrival: Heat Signature 1 on a random enemy creature, which then pulls every Homing effect, its own included: aim at anything and the hottest one takes it. Tech's Heat and Homing in one card.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.HeatSignature, 1, TargetType.EnemyCreatures, potency: 1, modifier: AtRandom)))
+                .Homing()
+                .NotInStarterDeck()
+                .Picture("A security analyst in a headlamp crawling on hands and knees through a tunnel of server cables with a magnifying glass, following a trail of glowing red footprints to a tiny hooded hacker hiding behind a rack."),
+            Spell("Ctrl + Z", TargetType.FriendlyCreatures,
+                "Undo. Undo. Undo. Undo the undo.",
+                "A friendly creature goes back to your hand (with the next Day's hand), and you draw 1 more next Day. Played again, its Arrival happens again, and it comes back fresh: a reset for a hurt creature, a second Arrival for one with a good one (Threat Hunter, Sex Clanker). Unlike Shadow Ops.' Extraction, no new face, a card instead.",
+                Act(ActionType.ReturnToHand, 0, TargetType.FriendlyCreatures, TargetModifier.None), Draw(1))
+                .NotInStarterDeck()
+                .Picture("A huge curved UNDO arrow pulling a startled knight backwards off a battlefield into a playing card held up by a hand, the keys CTRL and Z glowing on a keyboard below."),
+            Spell("Pair Programming", TargetType.FriendlyCreatures,
+                "One types, one watches. Both bill the hours.",
+                "A swapper: target friendly creature trades places with its partner in the formation, then it and the creatures beside it where it lands get +1 Attack this Day. Lines up a pair on one lane, or pulls a hurt creature out of one.",
+                SwapPositions(TargetType.FriendlyCreatures), Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, TargetModifier.WithAdjacent, days: 1))
+                .NotInStarterDeck()
+                .Picture("Two developers squeezed at one tiny desk sharing a single keyboard: one types with a coffee in his other hand, the other leans over his shoulder pointing at a bug on the screen, a timesheet pinned between them billing 16 hours."),
+            Creature("Suspicious USB Stick in the Parking Lot", 0, 1, speed: 1, deploy: 0,
+                "SALARIES 2026. Do not open. Definitely open.",
+                "A Gift (Stuxnet reportedly got into Iran's nuclear plant on USB sticks): you play it into an empty enemy slot and it joins their side. On arrival, a random other creature of its new side is Exhausted (infected), and it carries Heat Signature 1, pulling their random effects and your Homing ones.",
+                On(EffectTrigger.OnPlay, Stun(1, TargetType.FriendlyCreatures, AtRandom | Others), Status(StatusEffectType.HeatSignature, 1, TargetType.Self, potency: 1)))
+                .Gift()
+                .NotInStarterDeck()
+                .Picture("A lone USB stick lying on the asphalt of an empty parking lot under a streetlight, labelled SALARIES 2026 in marker, an employee in a lanyard bending down to pick it up, a nuclear plant's cooling tower behind the fence."),
         };
 
         // Myth: faith, death and prophecy. Creatures that rise again (Revive) or die for the cause (Doomed), sacrifices that pay
@@ -1465,6 +1520,25 @@ namespace SlayTheClone {
                 "Regenerate 1: it repairs itself plank by plank.",
                 On(EffectTrigger.EndOfTurn, Heal(1, TargetType.Self)))
                 .Picture("Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went."),
+            // The user, 2026-10-16: more cards for the smaller factions (tanks, healers, swappers, combinations)
+            Creature("Socrates", 1, 6, speed: 1, deploy: 1,
+                "I know that I know nothing. You, apparently, know even less.",
+                "A tank that asks questions: each Dawn the enemy creature facing it is Revealed for the Day (the Socratic method: its plans show). No damage, which Mind can't deal; it just stands there, hard to kill, and makes the creature in front of it explain itself.",
+                On(EffectTrigger.StartOfTurn, Status(StatusEffectType.Revealed, 1, TargetType.EnemyCreatures, modifier: Facing)))
+                .NotInStarterDeck()
+                .Picture("Socrates in a white toga, bald with a big beard, cornering a sweating man in a business suit against a marble column with one raised finger, a huge question mark in his speech bubble, a cup of hemlock waiting on a pedestal behind."),
+            Spell("Maslow's Pyramid", TargetType.Player,
+                "Food, shelter, safety, love, esteem. And WiFi, underneath all of it.",
+                "A healer, double-edged as Mind's cards are: every creature on the board heals 3, theirs as well as yours. Best when yours are the hurt ones.",
+                Heal(3, TargetType.AllCreatures, Each))
+                .NotInStarterDeck()
+                .Picture("Maslow's pyramid as a great stone pyramid in layers, tiny people at the bottom fighting over bread and water, one man meditating smugly alone at the glowing top, and a WiFi symbol carved into a new layer under the base."),
+            Spell("Legerdemain", TargetType.EnemyCreatures,
+                "Watch the left hand. No, the other left.",
+                "A swapper for the other side (telekinesis, sleight of hand): target enemy creature trades places with its partner in the formation, so their attacks and spells aimed at a slot find someone else there, and you draw 1 next Day. Moves resolve first, so it can undo a plan they made today.",
+                SwapPositions(TargetType.EnemyCreatures), Draw(1))
+                .NotInStarterDeck()
+                .Picture("A magician's white-gloved hands doing the cups-and-ball trick on a velvet table, but under the cups are tiny soldiers being shuffled around, one cup lifted to show the soldier is gone."),
         };
         #endregion
 

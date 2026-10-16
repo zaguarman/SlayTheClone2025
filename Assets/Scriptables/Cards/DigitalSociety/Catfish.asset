@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects: []
   designNotes: 'Undercover: its plans are Concealed Actions, and it stays ??? to
     the other side until revealed.'

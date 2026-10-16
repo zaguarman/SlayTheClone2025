@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects: []
   designNotes: 'Mechanics test: Safe Space. Each Dawn, it and the friendly creatures
     beside it gain Bless (a ward that stops the next status).'

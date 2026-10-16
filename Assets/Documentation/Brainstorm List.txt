@@ -1694,18 +1694,13 @@ Card Game Factions Overview
 			Bounty Program
 			Code Review
 			Ctrl + Y
-			Ctrl + Z
 			Dialing Progress
 			Effect 2000 (the Y2K bug)
 			End User (art: as if the user were being terminated)
 			FAANG
 			P(Doom)
-			Pair Programming
-			Suspicious USB Stick in the Parking Lot
-			Threat Hunter
 			Web Scraping (art: a cat scratching a laptop screen)
 		Digital Society
-			Content Creator
 			Dislike Button
 			Doomscrolling While Driving
 			Dubai Female "Entrepreneurs"
@@ -1720,11 +1715,9 @@ Card Game Factions Overview
 			Link-in-Bio Babe
 			Monkey Clicking
 			Selfie Esteem
-			Short King
 			Simp Summoner
 			Task Failed Successfully (moved from Zeitgeist: an internet meme, 2026-10-14)
 			He Bought, Dump It (the crypto meme "He bought? Dump it.": the whale on the phone who sells the moment you buy; added 2026-10-14, a partner for Crypto "Entrepreneur")
-			Thirst Trap
 			University of Life Degree
 		Zeitgeist
 			Absentee Parents
@@ -1783,12 +1776,9 @@ Card Game Factions Overview
 			Freudian Slip
 			God Is Dead (as the philosopher said: Nietzsche) (added 2026-10-14)
 			Hyperbole
-			Legerdemain (sleight of hand)
 			Liminal Space (a Weather: Attack and Health swap for X turns)
-			Maslow's Pyramid
 			Ontology (the study of existence)
 			Phronetic (practical wisdom: knowledge in context)
-			Socrates (tagged Mind)
 			The ELIZA Effect
 			Tolerance Paradox
 		Utopia

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: North is south now. The compass apologises. The pigeons do not.
   cardType: 1
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: bdceafda326e5754abe3d5592ad442d2, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0
@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects:
   - effectType: 1
     trigger: 0

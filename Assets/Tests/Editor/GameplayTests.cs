@@ -349,6 +349,18 @@ namespace SlayTheClone.Tests {
             game.Resolve();
             Assert.AreSame(crabs[0], p2.Battlefield[1].OccupyingCreature, "Given into a taken slot, a Gift fizzles: it never replaces their creature");
             Assert.AreEqual(2, p1.Deck.GetDiscardPilePreview().Count(c => c.CardId == apple.CardId), "...and goes back to the giver's discard pile");
+            // A Gift's arrival hits its new side (Suspicious USB Stick in the Parking Lot): one of theirs is Exhausted, never itself
+            var stickData = game.Creature("USB Stick", 0, 1, 1,
+                TestGame.Effect(EffectTrigger.OnPlay, ActionType.Stun, 1, TargetType.FriendlyCreatures, TargetModifier.Random | TargetModifier.Others));
+            stickData.gift = true;
+            var stick = (ICreature)game.GiveCard(p1, stickData);
+            var free = p2.Battlefield.First(slot => !slot.IsOccupied());
+            game.Play(stick, p1, free);
+            game.Resolve();
+            Assert.AreSame(p2, stick.Owner);
+            Assert.IsTrue(p2.Battlefield.Select(slot => slot.OccupyingCreature).Any(c => c != null && c != stick && game.ModifierManager.HasStatusEffect(c, StatusEffectType.Exhausted)),
+                "Its arrival infects one of its new side");
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(stick, StatusEffectType.Exhausted), "...not itself");
 
             // Taking control (GDD 5.4): the creature goes to the slot facing it, on its new controller's side, for good.
             // Operation Paperclip only takes creatures with 2 Attack or less

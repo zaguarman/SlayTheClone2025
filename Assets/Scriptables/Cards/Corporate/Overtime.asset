@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Just this once. Every week.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: e9d3eda0f53d80b46a920eef92a69d4a, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0
@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects:
   - effectType: 1
     trigger: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
   cardId: 0a883f6d-7480-4d83-a4b4-ecfb1fa1e0df
   cardName: Day Trader
-  description: Up 300% this morning. Rent is due this afternoon.
+  description: Time is money, friend. Up 300% by noon, rent due at five.
   cardType: 0
   faction: 4
   artwork: {fileID: 3286163911610860551, guid: c4b1ef2c8f21ad14490df717c8f5c1de, type: 3}
@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects:
   - effectType: 0
     trigger: 0

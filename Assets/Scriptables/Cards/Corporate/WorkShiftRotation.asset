@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects: []
   designNotes: 'Handover: when a summon replaces it, the newcomer takes over its
     stat changes and statuses. Buff it, then send in the next shift.'

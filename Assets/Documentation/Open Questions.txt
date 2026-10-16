@@ -327,7 +327,7 @@ STILL OPEN
 
 5. Fog of War: what's still to come
     • Done: Concealed, Revealed and Encrypted statuses, the Undercover ability, Reveal (instant), Watchdogs blind to Concealed actions and ignoring Encrypted ones, the '???' on screen, and the debug switches (F9, F8).
-    • Waiting for other systems: the Turn History, Surveillance, OnRevealedByIntelligence effects and Strategic Disclosures, Honeypot-style traps for snoopers, hidden enemy abilities (bosses), Compromised, and enemy Homing.
+    • Waiting for other systems: the Turn History, Surveillance, OnRevealedByIntelligence effects and Strategic Disclosures, Honeypot-style traps for snoopers, hidden enemy abilities (bosses), Compromised. (Enemy Homing built 2026-10-16: the Homing keyword, pulled by Heat Signature.)
 
 4b. Scorched Earth needs a rework (noted 2026-10-13)
     • For now its creature's entry effects wait until it's off the slot. The mechanic as a whole is to be reworked later; ideas welcome.

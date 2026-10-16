@@ -26,6 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects: []
   designNotes: 'Fall Guy: when an enemy effect would make another friendly creature
     Revealed or destroy it (Perfectly Timed Camera Malfunction, Extreme Prejudice...),

@@ -27,6 +27,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
+  homing: 0
   effects: []
   designNotes: 'Collateral Damage (trample): when its attack is more than a creature''s
     Health, the rest goes on to that creature''s player. The top of Corporate''s

@@ -285,6 +285,12 @@ Meta Group Chat (creature)
     USER: Redo it with a WhatsApp-like feel.
 Social Panopticon (spell)
     A real panopticon seen from inside: a ring of barred cells on two floors around a central watchtower with a single recording eye, every inmate lit by their own phone.
+Short King (creature)
+    A short man wearing a paper crown standing on a stack of phone books to take a selfie at arm's length, the profile on his phone screen reading 6 FT.
+Content Creator (creature)
+    A streamer in a headset under a ring light screaming at the camera with a shocked face and a giant red arrow pointing at nothing, the thumbnail on the monitor behind showing the same face, 100K in gold letters.
+Thirst Trap (creature)
+    A steel bear trap open on a beach towel, a ring light and a phone on a tripod set up in front of it, the phone screen filling with hearts, and a glass of water standing beside it.
 
 SHADOW OPS.
 
@@ -434,6 +440,14 @@ Sex Clanker (creature)
     Candlelight and satin: a figure in full shining plate reclines on a red heart-shaped bed, propped on one elbow, a rose in the visor and one knee up, rose petals everywhere, a heart shield leaning against the bed.
     USER: Use the old No Glove No Love picture for it.
     USER: 2026-10-14: that picture (the knight on the heart-shaped bed) is Sex Clanker's own now, named after it; keep it.
+Threat Hunter (creature)
+    A security analyst in a headlamp crawling on hands and knees through a tunnel of server cables with a magnifying glass, following a trail of glowing red footprints to a tiny hooded hacker hiding behind a rack.
+Ctrl + Z (spell)
+    A huge curved UNDO arrow pulling a startled knight backwards off a battlefield into a playing card held up by a hand, the keys CTRL and Z glowing on a keyboard below.
+Pair Programming (spell)
+    Two developers squeezed at one tiny desk sharing a single keyboard: one types with a coffee in his other hand, the other leans over his shoulder pointing at a bug on the screen, a timesheet pinned between them billing 16 hours.
+Suspicious USB Stick in the Parking Lot (creature)
+    A lone USB stick lying on the asphalt of an empty parking lot under a streetlight, labelled SALARIES 2026 in marker, an employee in a lanyard bending down to pick it up, a nuclear plant's cooling tower behind the fence.
 
 MYTH
 
@@ -572,6 +586,12 @@ Imposter Syndrome (spell)
     A little space crewmate in a spacesuit and visor sitting at an office desk under a SENIOR ENGINEER name plate, sweating.
 Ship of Theseus (creature)
     Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went.
+Socrates (creature)
+    Socrates in a white toga, bald with a big beard, cornering a sweating man in a business suit against a marble column with one raised finger, a huge question mark in his speech bubble, a cup of hemlock waiting on a pedestal behind.
+Maslow's Pyramid (spell)
+    Maslow's pyramid as a great stone pyramid in layers, tiny people at the bottom fighting over bread and water, one man meditating smugly alone at the glowing top, and a WiFi symbol carved into a new layer under the base.
+Legerdemain (spell)
+    A magician's white-gloved hands doing the cups-and-ball trick on a velvet table, but under the cups are tiny soldiers being shuffled around, one cup lifted to show the soldier is gone.
 
 UTOPIA
 
