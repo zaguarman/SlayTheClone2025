@@ -77,6 +77,8 @@ namespace SlayTheClone {
         [Header("Playing cards")]
         [Tooltip("How far round a slot a card from the hand still lands in it, of the slot's size (0: only right on it). Near it the slot lights up; the card settles in only once the pointer is on the slot itself")]
         [Range(0f, 0.5f)] public float dropReach = 0.15f;
+        [Tooltip("How far above your hand's cards the pointer raises the card nearest it, of a hand card's height (0: only on the cards)")]
+        [Range(0f, 1f)] public float handRiseReach = 0.3f;
 
         [Header("Position")]
         [Tooltip("How far back from the middle of the table the formation sits: the two noses keep this far apart, each side")]

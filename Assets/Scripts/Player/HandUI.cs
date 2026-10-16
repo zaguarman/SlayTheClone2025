@@ -411,6 +411,7 @@ namespace SlayTheClone {
         private void Update() {
             RefreshVisibility(); // Fog of War switched (F9), the seats (F8), or the tuning's button
             UpdateDropGlow();
+            RaiseNearPointer();
             // The hand's area only takes the pointer while a card is carried (a drop back into the hand): at rest it would
             // cover the bottom of the board, the cards in the back row (the hand's own cards take the pointer themselves)
             if (zoneImage != null || TryGetComponent(out zoneImage)) zoneImage.raycastTarget = CardController.Dragged != null;
@@ -497,6 +498,49 @@ namespace SlayTheClone {
             // If the card is still in the hand, it wasn't handled by another component
             // Just update layout again to ensure proper positioning
             UpdateLayout();
+        }
+
+        // Near your hand a card rises without the pointer coming all the way down onto it (the user): with the pointer in
+        // a band just above the fan's resting cards (Hand Rise Reach, a slider in UI > Battlefield Tuning), the card whose
+        // resting place is nearest across rises. On the cards themselves the pointer picks as usual; on the risen card, it stays
+        private CardController raisedNear;
+
+        private void RaiseNearPointer() {
+            if (!IsYourHand || IsHidden || CardController.Dragged != null || releasePending || cards.Count == 0) return;
+            if (Tooltip.Existing != null && Tooltip.Existing.OpenKeywords.Count > 0) return; // Reading its keywords
+            var rect = (RectTransform)transform;
+            var eventCamera = CanvasUtility.GetEventCamera(this);
+            var screenPoint = GameInput.PointerPosition;
+            if (hovered != null && RectTransformUtility.RectangleContainsScreenPoint((RectTransform)hovered.transform, screenPoint, eventCamera)) return;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, screenPoint, eventCamera, out var pointer)) return;
+
+            // Where the cards rest (as Arrange lays them out, without one risen): which one is nearest, and its top
+            int count = cards.Count;
+            float scale = CardScale;
+            float spacing = count > 1 ? Mathf.Min(CardWidth * scale * Overlap, MaxFanWidth / (count - 1)) : 0f;
+            float half = CardWidth * scale / 2f;
+            float first = -(count - 1) / 2f * spacing;
+            int index = spacing > 0f ? Mathf.Clamp(Mathf.RoundToInt((pointer.x - first) / spacing), 0, count - 1) : 0;
+            float x = first + index * spacing;
+            float dip = FanRadius - Mathf.Sqrt(FanRadius * FanRadius - x * x);
+            float top = ScreenEdgeY() + CardHeight * scale * ShownShare - dip;
+            float reach = CardHeight * scale * BattlefieldTuning.Current.handRiseReach;
+            bool near = pointer.x >= first - half && pointer.x <= first + (count - 1) * spacing + half && pointer.y > top - 1f && pointer.y <= top + reach;
+
+            var card = cards[index];
+            if (near && card != null && card != hovered) {
+                Tooltip.Shared.ShowTooltip(card); // Its explanations follow, once it's up a moment (Tooltip.HandDelay)
+                OnCardHoverEnter(card);
+                raisedNear = hovered == card ? card : raisedNear;
+            }
+            else if (!near && raisedNear != null && raisedNear == hovered && pointer.y > top - 1f) {
+                // Gone from the band, and not onto the cards: it settles back
+                var lowered = hovered;
+                raisedNear = null;
+                hovered = null;
+                Arrange(animate: true);
+                Tooltip.Existing?.ReleaseCard(lowered);
+            }
         }
 
         protected override void OnCardHoverEnter(CardController card) {
