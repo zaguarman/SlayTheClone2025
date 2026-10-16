@@ -68,15 +68,15 @@ namespace SlayTheClone.Tests {
             TMPro.TMP_Settings.defaultFontAsset.HasCharacters(shown, out uint[] undrawable, searchFallbacks: true);
             CollectionAssert.IsEmpty((undrawable ?? new uint[0]).Distinct().Where(c => !char.IsControl((char)c)).Select(c => (char)c), "Characters the font can't draw");
             Assert.AreEqual("Exhaust all creatures", printed["Strike"], "All enemy and all friendly creatures: all creatures");
-            Assert.AreEqual("Heal 2 to target and at the next Dawn, 5 damage to it", printed["Dead Cat Bounce"], "One target, named once; a part that waits says when");
+            Assert.AreEqual("Heal 2 to target creature or player and at the next Dawn, 5 damage to it", printed["Dead Cat Bounce"], "One target, named once; a part that waits says when");
             StringAssert.EndsWith("and Heat Signature on all creatures", printed["Climate Change"], "Statuses on the same creatures share them, and a 1 goes without saying");
             StringAssert.StartsWith("Swap\n", printed["Quantum Physicist"], "No full stop: each line is one rule");
             StringAssert.EndsWith("Retaliate: Exhaust", printed["Quantum Physicist"], "Retaliate, then what it does to the attacker");
             Assert.AreEqual("Arrival: exhaust itself", printed["Hikikomori"], "Aimed at itself, it says so");
             StringAssert.Contains("Counterattack", printed["Keyboard Warrior"], "Hitting back for its Attack");
             Assert.AreEqual("Destroy target creature\nSacrifice 1: your weakest creature will be sacrificed to play this", printed["Necronomicon"], "A sacrifice comes after what it buys");
-            Assert.AreEqual("5 damage to target and 2 damage to its neighbors", printed["Holy Hand Grenade of Antioch"], "Its neighbors alone");
-            Assert.AreEqual("2 damage to target and 3 damage to it if it's Digital Society", printed["Cyberpsychosis"], "A requisite on a faction");
+            Assert.AreEqual("5 damage to target creature or player and 2 damage to its neighbors", printed["Holy Hand Grenade of Antioch"], "Its neighbors alone");
+            Assert.AreEqual("2 damage to target creature or player and 3 damage to it if it's Digital Society", printed["Cyberpsychosis"], "A requisite on a faction");
 
             var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
             var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()

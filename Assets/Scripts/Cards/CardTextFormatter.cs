@@ -205,7 +205,7 @@ namespace SlayTheClone {
 
         // A target named again: "it" for one creature, "them" for a group. Random picks and players are named each time
         private static string PronounFor(string whom) {
-            if (whom == "target") return "it";
+            if (whom == "target" || whom.StartsWith("target ") && !whom.Contains(" side")) return "it";
             if (whom == Itself) return Itself;
             return whom.StartsWith("all ") || whom.StartsWith("every ") || whom.Contains("everything") ? "them" : null;
         }
@@ -422,9 +422,14 @@ namespace SlayTheClone {
             string adjacent = action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? " and its neighbors" : "";
             // Spells resolve against whatever they are dropped on unless they hit a whole group
             bool hitsGroup = action.targetModifier.HasFlag(TargetModifier.AllSameTypeTargets);
+            // What it's dropped on, by what it can land on (the user: say whether it's a creature, a slot or a player). Either
+            // side's, unless it only works on your own
             if (isSpell && !hitsGroup && action.targetType is not (TargetType.Player or TargetType.Enemy)) {
                 if (EffectResolver.OwnSideOnly(action.actionType)) return "target friendly creature" + adjacent;
-                return (action.actionType == ActionType.Destroy ? "target creature" : "target") + adjacent; // Only a creature can be destroyed
+                if (EffectResolver.IsSlotAction(action.actionType)) return "target slot" + adjacent;
+                bool creatures = EffectResolver.CanAffectCreatures(action.actionType), players = EffectResolver.CanAffectPlayers(action.actionType);
+                if (creatures && players) return "target creature or player" + adjacent; // An empty slot: that side's player
+                return (creatures ? "target creature" : "target") + adjacent;
             }
 
             switch (action.targetType) {

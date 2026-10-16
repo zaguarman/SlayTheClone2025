@@ -43,6 +43,8 @@ namespace SlayTheClone {
         private readonly List<(RectTransform band, CardController front, int depth)> strips = new List<(RectTransform, CardController, int)>();
         private RectTransform stripLayer;
         private readonly Dictionary<ICard, (IPlayer caster, BoardSlot slot)> spellGhostAims = new Dictionary<ICard, (IPlayer, BoardSlot)>();
+        // The creature each of them homes on (your own, or one on its way to the slot), when it's a creature and not the slot
+        private readonly Dictionary<ICard, ICreature> spellGhostHoming = new Dictionary<ICard, ICreature>();
         public const float StripStep = 0.14f; // How much of a tucked card shows above the one in front: its name
         public const int MaxStrips = 4;       // Shown tucked; hovering the creature and scrolling goes through them all
 
@@ -801,6 +803,7 @@ namespace SlayTheClone {
             if (!IsInitialized || Player == null || GameManager?.ActionsQueue == null) return;
             var aimed = new List<(Spell spell, IPlayer caster, BoardSlot slot, bool byRiver, bool hidden)>();
             spellGhostAims.Clear();
+            spellGhostHoming.Clear();
             foreach (var play in GameManager.ActionsQueue.GetPendingActions().OfType<PlayCardAction>()) {
                 if (!(play.GetCard() is Spell spell) || HiddenFromScreen(play)) continue;
                 var side = BattlefieldArrowManager.AimOf(spell, play.GetOwner(), play.GetTarget(), out var slot);
@@ -813,6 +816,7 @@ namespace SlayTheClone {
                     bool hidden = FogOfWar.HidesHandOf(caster) && !GameManager.ActionsQueue.IsRevealedTo(Viewer, play);
                     aimed.Add((spell, caster, slot, byRiver, hidden));
                     spellGhostAims[spell] = (play.GetOwner(), slot);
+                    if (play.GetTarget() is HomingTarget homing) spellGhostHoming[spell] = homing.Creature;
                 }
             }
 
@@ -877,12 +881,31 @@ namespace SlayTheClone {
             if (modifiers == null) return;
 
             foreach (var slot in battlefieldSlots) {
+                var aimedHere = spellGhostAims.Where(e => e.Value.slot == slot.Model && spellGhosts.ContainsKey(e.Key))
+                    .OrderBy(e => spellGhostOrder.TryGetValue(e.Key, out var order) ? order : 0).ToList();
+                // The creature on its way here (its ghost): the spells that will land on it are tucked under it, in its stack (the user)
+                if (queuedGhosts.TryGetValue(slot, out var incoming) && incoming != null) {
+                    var onIt = aimedHere.Where(e => OnIncoming(e.Key, slot)).ToList();
+                    incoming.AttachedCards = onIt.Select(q => q.Key).ToList();
+                    incoming.AttachedOwners = onIt.Select(q => q.Value.caster).ToList();
+                    incoming.AttachedHidden = onIt.Select(q => spellGhosts[q.Key] != null && spellGhosts[q.Key].IsFaceDown).ToList();
+                    var ghostViews = new List<CardController>();
+                    foreach (var spell in onIt.Select(q => q.Key)) {
+                        if (ghostViews.Count >= MaxStrips + 2) break;
+                        var view = spellGhosts[spell];
+                        if (view == null || CardController.Dragged == view) continue;
+                        Tuck(view, incoming, ghostViews.Count + 1);
+                        ghostViews.Add(view);
+                    }
+                    aimedHere = aimedHere.Where(e => !OnIncoming(e.Key, slot)).ToList();
+                    if (slot.OccupyingCard == null) attachedViews[slot] = ghostViews;
+                }
+
                 var front = slot.OccupyingCard;
                 var creature = slot.OccupyingCreature;
                 if (front == null || creature == null) continue;
                 var attached = modifiers.AttachmentsOf(creature).Where(a => a.Card?.SourceData != null && CanSee(a, creature)).ToList();
-                var queued = spellGhostAims.Where(e => e.Value.slot == slot.Model && spellGhosts.ContainsKey(e.Key))
-                    .OrderBy(e => spellGhostOrder.TryGetValue(e.Key, out var order) ? order : 0).ToList();
+                var queued = aimedHere;
                 front.AttachedCards = attached.Select(a => a.Card).Concat(queued.Select(q => q.Key)).ToList();
                 front.AttachedOwners = attached.Select(a => a.Owner).Concat(queued.Select(q => q.Value.caster)).ToList();
                 // An enemy spell on its way shows its back here too: scrolling the stack mustn't show what it is
@@ -906,6 +929,15 @@ namespace SlayTheClone {
                 }
                 attachedViews[slot] = views;
             }
+        }
+
+        // Whether this queued spell lands on the creature on its way to this slot: it homes on it, or it's aimed at the slot
+        // with nothing standing there (the arrival is what it finds)
+        private bool OnIncoming(ICard spell, BattlefieldSlot slot) {
+            if (spell == null || slot == null || !queuedGhosts.TryGetValue(slot, out var incoming) || incoming == null) return false;
+            var arriving = incoming.GetLinkedCardInstance() as ICreature;
+            if (arriving == null) return false;
+            return spellGhostHoming.TryGetValue(spell, out var homesOn) ? homesOn == arriving : slot.OccupyingCreature == null;
         }
 
         // A strip just above the card in front (depth 1 right on its top edge), as wide as it and a name band tall, showing
@@ -987,6 +1019,7 @@ namespace SlayTheClone {
             // A slot this board hasn't a view for (its views not built yet, or another side's): it waits at the board's end
             var slotView = slot != null && slot.Owner == Player && slot.Index >= 0 && slot.Index < battlefieldSlots.Count ? battlefieldSlots[slot.Index] : null;
             if (slotView?.OccupyingCard != null) return; // Tucked under the creature (RefreshAttachments)
+            if (slotView != null && OnIncoming(ghost.GetLinkedCardInstance(), slotView)) return; // Under the ghost of the creature on its way
             bool roomInSlot = slotView != null && count == 1 && slotView.OccupyingCard == null && !queuedGhosts.ContainsKey(slotView);
             var rect = (RectTransform)ghost.transform;
             rect.localRotation = Quaternion.identity;

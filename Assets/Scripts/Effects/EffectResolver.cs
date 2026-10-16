@@ -387,7 +387,7 @@ namespace SlayTheClone {
 
         public static int CreatureCount(IPlayer side) => side?.Battlefield.Count(s => s.OccupyingCreature is { IsDead: false }) ?? 0;
 
-        private static bool CanAffectCreatures(ActionType actionType) =>
+        public static bool CanAffectCreatures(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Destroy or ActionType.Heal or ActionType.ModifyStat
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
                 or ActionType.CreateWatchdog or ActionType.DelayDeployment or ActionType.Rush or ActionType.Defect
