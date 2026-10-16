@@ -1647,6 +1647,7 @@ Card Game Factions Overview
 			Bonwit Teller Building Demolition
 			Business Culture
 			Buy Now, Give Your Soul Later
+			CO2 Offsetting (accounting magic: the emissions stay, the books say they're gone) (added 2026-10-16)
 			Corporate Bailouts
 			Cozy Loft in an "Exclusive" Location
 			Credit Card (tagged Corporate)
