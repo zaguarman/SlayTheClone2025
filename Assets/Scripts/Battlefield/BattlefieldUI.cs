@@ -661,7 +661,7 @@ namespace SlayTheClone {
         // can't see at all stays a card back in its caster's hand
         private void RefreshSpellGhosts() {
             if (!IsInitialized || Player == null || GameManager?.ActionsQueue == null) return;
-            var aimed = new List<(Spell spell, IPlayer caster, BoardSlot slot, bool byRiver)>();
+            var aimed = new List<(Spell spell, IPlayer caster, BoardSlot slot, bool byRiver, bool hidden)>();
             spellGhostAims.Clear();
             foreach (var play in GameManager.ActionsQueue.GetPendingActions().OfType<PlayCardAction>()) {
                 if (!(play.GetCard() is Spell spell) || HiddenFromScreen(play)) continue;
@@ -671,7 +671,9 @@ namespace SlayTheClone {
                 var caster = play.GetOwner();
                 bool byRiver = side != null && slot == null && EffectResolver.Reaches(spell, caster, caster) && EffectResolver.Reaches(spell, caster, caster.Opponent);
                 if (byRiver ? caster == Player : side == Player) {
-                    aimed.Add((spell, caster, slot, byRiver));
+                    // Fog of War: the enemy's shows its back, until a Reveal (or a Watchdog) shows it
+                    bool hidden = FogOfWar.HidesHandOf(caster) && !GameManager.ActionsQueue.IsRevealedTo(Viewer, play);
+                    aimed.Add((spell, caster, slot, byRiver, hidden));
                     spellGhostAims[spell] = (play.GetOwner(), slot);
                 }
             }
@@ -685,7 +687,7 @@ namespace SlayTheClone {
                 Destroy(ghost.gameObject); // Cast: the presenter flies it from here to the stage (see ResolutionPresenter)
             }
 
-            foreach (var (spell, caster, _, _) in aimed) {
+            foreach (var (spell, caster, _, _, hidden) in aimed) {
                 if (!spellGhosts.TryGetValue(spell, out var ghost) || ghost == null) {
                     ghost = CardViews.Create(spell, caster, transform); // The caster's card, wherever it's aimed
                     if (ghost == null) continue;
@@ -698,7 +700,7 @@ namespace SlayTheClone {
                     spellGhosts[spell] = ghost;
                     spellGhostOrder[spell] = nextSpellGhost++;
                 }
-                ghost.SetFaceDown(FogOfWar.HidesHandOf(caster));
+                ghost.SetFaceDown(hidden);
             }
             foreach (var gone in spellGhostOrder.Keys.Where(k => !spellGhosts.ContainsKey(k)).ToList()) spellGhostOrder.Remove(gone);
 
@@ -745,6 +747,8 @@ namespace SlayTheClone {
                     .OrderBy(e => spellGhostOrder.TryGetValue(e.Key, out var order) ? order : 0).ToList();
                 front.AttachedCards = attached.Select(a => a.Card).Concat(queued.Select(q => q.Key)).ToList();
                 front.AttachedOwners = attached.Select(a => a.Owner).Concat(queued.Select(q => q.Value.caster)).ToList();
+                // An enemy spell on its way shows its back here too: scrolling the stack mustn't show what it is
+                front.AttachedHidden = attached.Select(_ => false).Concat(queued.Select(q => spellGhosts[q.Key] != null && spellGhosts[q.Key].IsFaceDown)).ToList();
 
                 var views = new List<CardController>();
                 foreach (var attachment in attached.Take(MaxStrips)) {

@@ -11,7 +11,8 @@ namespace SlayTheClone {
     /// (see <see cref="QueueView"/>, Fog of War included). Each action is an item, edged in its side's color, with an icon for
     /// what it is; hovering one tells more about it, and the board shows that action's arrows alone. It follows the queue as it changes, and the fog switch (F9). Clicking
     /// anywhere else closes it.
-    /// The arrows by its heading page back through past Days: what was planned for each, as the screen saw it then.
+    /// The arrows by its heading page back through past Days: what was planned for each, as the screen knows it now (what
+    /// played out, or a Reveal showed, is no longer ???).
     /// <see cref="BoardSkin"/> places both at the right edge of the table.
     /// </summary>
     public class QueuePanel : MonoBehaviour {
@@ -32,9 +33,17 @@ namespace SlayTheClone {
         private Button earlier;
         private Button later;
 
-        // Past Days: what the queue held when each was ended, as the screen's player saw it
-        private readonly List<(int Day, List<QueueView.Item> Items)> history = new List<(int, List<QueueView.Item>)>();
-        private List<QueueView.Item> lastPlanned = new List<QueueView.Item>();
+        // Past Days: what the queue held when each was ended (and what was foretold then), described again whenever shown, so
+        // it says what's been seen since: what played out, and what a Reveal or a Watchdog showed
+        private class PastDay {
+            public int Day;
+            public List<(IGameAction Action, ResolutionLayer Layer)> Planned;
+            public List<QueueView.Item> Foretold;
+        }
+        private readonly List<PastDay> history = new List<PastDay>();
+        private PastDay lastPlanned = new PastDay { Planned = new List<(IGameAction, ResolutionLayer)>(), Foretold = new List<QueueView.Item>() };
+        private readonly HashSet<IGameAction> played = new HashSet<IGameAction>(); // Actions that ran: everyone saw them
+        private readonly HashSet<(IPlayer, IGameAction)> revealed = new HashSet<(IPlayer, IGameAction)>(); // Shown to a player by a Reveal or a Watchdog
         private int? shownPast; // An index into history, or null for the queue as it is now
 
         public RectTransform Toggle => (RectTransform)toggle.transform;
@@ -59,7 +68,9 @@ namespace SlayTheClone {
             view.gameManager = manager;
             view.gameMediator = mediator;
             mediator.ActionsQueueChanged += view.Refresh;
+            mediator.BattlefieldStateChanged += view.OnBattlefieldStateChanged; // A creature showing what it is
             mediator.TurnEnded += view.OnTurnEnded;
+            manager.ActionsQueue?.OnActionExecuting.AddListener(view.OnActionExecuting);
             FogOfWar.Changed += view.Refresh;
             view.Refresh();
             return view;
@@ -148,9 +159,24 @@ namespace SlayTheClone {
 
         // The Day just ended: keep what was planned for it (the queue empties as it resolves)
         private void OnTurnEnded(int day) {
-            history.Add((day, lastPlanned));
-            lastPlanned = new List<QueueView.Item>();
+            lastPlanned.Day = day;
+            history.Add(lastPlanned);
+            lastPlanned = new PastDay { Planned = new List<(IGameAction, ResolutionLayer)>(), Foretold = new List<QueueView.Item>() };
             Refresh();
+        }
+
+        private void OnActionExecuting(IGameAction action) => played.Add(action);
+
+        private void OnBattlefieldStateChanged(IPlayer player) => Refresh();
+
+        // What a Reveal or a Watchdog has shown either player, kept: the queue forgets it once the Day has played out
+        private void RememberReveals(IActionsQueue queue, IEnumerable<IGameAction> actions) {
+            if (queue == null) return;
+            foreach (var action in actions) {
+                foreach (var player in new[] { gameManager.Player1, gameManager.Player2 }) {
+                    if (player != null && queue.IsRevealedTo(player, action)) revealed.Add((player, action));
+                }
+            }
         }
 
         // Clicking anywhere else closes it, like a menu
@@ -175,13 +201,18 @@ namespace SlayTheClone {
         public void Refresh() {
             if (gameManager?.Player1 == null || list == null) return;
             var viewer = FogOfWar.ViewerOf(gameManager.Player1);
-            var live = QueueView.Items(viewer, gameManager.ActionsQueue, gameManager.ModifierManager);
+            var queue = gameManager.ActionsQueue;
+            var live = QueueView.Items(viewer, queue, gameManager.ModifierManager);
             var turns = gameManager.TurnManager;
-            if (turns == null || !turns.IsResolving) lastPlanned = live; // While resolving, the queue empties: keep the plan
+            if (queue != null && (turns == null || !turns.IsResolving)) { // While resolving, the queue empties: keep the plan
+                lastPlanned.Planned = queue.GetPendingActions().Select(a => (a, queue.LayerOfPending(a))).ToList();
+                lastPlanned.Foretold = QueueView.Foretold(viewer);
+            }
+            RememberReveals(queue, lastPlanned.Planned.Select(p => p.Action));
             int count = live.Count(i => i.Heading == null && i.Number > 0); // What's foretold isn't queued yet
             toggleLabel.text = count > 0 ? $"Queue ({count})" : "Queue";
 
-            Items = shownPast.HasValue ? history[shownPast.Value].Items : live;
+            Items = shownPast.HasValue ? Past(history[shownPast.Value], viewer) : live;
             Lines = Items.Select(i => i.Heading != null ? $"<b>{i.Heading}</b>" : i.Number > 0 ? $"{i.Number}. {i.Text}" : i.Text).ToList();
             heading.text = shownPast.HasValue ? $"Day {history[shownPast.Value].Day}, resolved"
                 : turns != null ? $"Action Queue, Day {turns.TurnNumber}" : "Action Queue";
@@ -192,6 +223,17 @@ namespace SlayTheClone {
             foreach (var item in Items) AddRow(item);
             empty.text = shownPast.HasValue ? "<i>Nothing was planned that Day.</i>" : "<i>Nothing planned yet.</i>";
             empty.gameObject.SetActive(Items.Count == 0);
+        }
+
+        // A past Day as the screen knows it now
+        private List<QueueView.Item> Past(PastDay day, IPlayer viewer) {
+            var items = QueueView.Actions(viewer, gameManager.ActionsQueue, gameManager.ModifierManager, day.Planned,
+                played.Contains, (player, action) => revealed.Contains((player, action)));
+            if (day.Foretold.Count > 0) {
+                items.Add(new QueueView.Item { Heading = "Foretold" });
+                items.AddRange(day.Foretold.Where(i => i.Heading == null));
+            }
+            return items;
         }
 
         private void AddRow(QueueView.Item item) {
@@ -235,8 +277,10 @@ namespace SlayTheClone {
         private void OnDestroy() {
             if (gameMediator != null) {
                 gameMediator.ActionsQueueChanged -= Refresh;
+                gameMediator.BattlefieldStateChanged -= OnBattlefieldStateChanged;
                 gameMediator.TurnEnded -= OnTurnEnded;
             }
+            gameManager?.ActionsQueue?.OnActionExecuting.RemoveListener(OnActionExecuting);
             FogOfWar.Changed -= Refresh;
         }
     }

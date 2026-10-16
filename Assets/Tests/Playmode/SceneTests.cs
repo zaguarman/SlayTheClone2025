@@ -107,7 +107,10 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(game.QueuedArrows(p1).All(a => a.Branches == 1), "Called off: that arrow loses its branch");
 
             var queuePanel = game.QueuePanel;
+            var rookie = game.GiveCard(p2, game.Cards.Creature("Test Rookie", 1, 5));
+            game.Play(rookie, p2, p2.Battlefield[3]);
             queuePanel.SetOpen(true);
+            StringAssert.DoesNotContain("Test Rookie", string.Join("\n", queuePanel.Lines), "An enemy summon is ??? while it's planned...");
             var endTurn = game.References.GetResolveActionsButton();
             endTurn.onClick.Invoke();
             endTurn.onClick.Invoke(); // While the first click's turn is still resolving
@@ -125,6 +128,7 @@ namespace SlayTheClone.Tests {
             queuePanel.Page(-1);
             Assert.AreEqual(0, queuePanel.ShownDay);
             StringAssert.Contains("Test Brute", string.Join("\n", queuePanel.Lines), "Paging back shows what was planned that Day");
+            StringAssert.Contains("Test Rookie", string.Join("\n", queuePanel.Lines), "...as it's known now: the summon played out, no longer ???");
             queuePanel.Page(+1);
             Assert.IsNull(queuePanel.ShownDay, "...and forward, the queue as it is now");
             queuePanel.SetOpen(false);
@@ -245,7 +249,10 @@ namespace SlayTheClone.Tests {
             Assert.IsTrue(queuePanel.IsOpen, "The Queue button opens it");
             StringAssert.Contains("Test Sneak", Listed());
             StringAssert.Contains("plans ???", Listed(), "The queue shows a Concealed plan as ???...");
-            StringAssert.DoesNotContain("Test Incoming", Listed(), "...and what an enemy summons");
+            StringAssert.DoesNotContain("Test Incoming", Listed(), "...and what an enemy summons...");
+            game.Queue.RevealTo(p1, game.Queue.GetPendingActions().OfType<PlayCardAction>().Single(a => a.GetCard() == incoming)); // As a Reveal of its slot does
+            queuePanel.Refresh();
+            StringAssert.Contains("Test Incoming", Listed(), "...until a Reveal shows it");
             QueueItemHover Row(string text) => queuePanel.Panel.GetComponentsInChildren<QueueItemHover>().First(r => r.Details.Contains(text));
             void Hover(QueueItemHover row, bool on) {
                 if (on) row.OnPointerEnter(new PointerEventData(EventSystem.current));
@@ -314,6 +321,12 @@ namespace SlayTheClone.Tests {
             var sneakCard = game.CardIn(sneak.Slot);
             StringAssert.Contains("icon:stats up", sneakCard.StatusText.text, "A raised stat shows an arrow up");
             StringAssert.Contains("+2 Attack, 2 Days left", sneakCard.DescribeIcon("icon:stats up")?.Body, "...whose popup lists the change");
+            game.Queue.AddAction(new ApplyStatusEffectAction(sneak, StatusEffectType.Burned, 2, 1));
+            game.Queue.ResolveActions();
+            yield return null;
+            Assert.AreEqual(2, System.Text.RegularExpressions.Regex.Matches(sneakCard.StatusText.text, "<link").Count,
+                "Two icons at most: up for what helps it, down for what harms it (the user)...");
+            StringAssert.Contains("Burned", sneakCard.DescribeIcon("icon:stats down")?.Body, "...the down arrow's popup lists the statuses too");
 
             var mover = game.Summon(p1, game.Cards.Creature("Test Mover", 1, 5), 0);
             var wall = game.Summon(p1, game.Cards.Creature("Test Wall", 1, 5), 2);

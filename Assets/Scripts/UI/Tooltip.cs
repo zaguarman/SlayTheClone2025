@@ -278,8 +278,10 @@ namespace SlayTheClone {
             int tucked = card.AttachedCards.Count;
             if (tucked > 0 && !previewIsCard) {
                 // A tucked card: only what it does to this creature, then where it is in the stack
+                string what = card.IsAttachedHidden(browsed - 1) ? "<b>???</b>\nA spell the enemy is casting here: what it is shows when it lands."
+                    : browsed > 0 ? card.GetEffectsFromText(card.AttachedCards[browsed - 1]) : "";
                 details = browsed > 0
-                    ? $"{card.GetEffectsFromText(card.AttachedCards[browsed - 1])}\n<size=80%><color=#C9C0AE>{browsed} of {tucked} on {card.GetBaseCardData()?.cardName}: scroll for the others</color></size>"
+                    ? $"{what}\n<size=80%><color=#C9C0AE>{browsed} of {tucked} on {card.GetBaseCardData()?.cardName}: scroll for the others</color></size>"
                     : (string.IsNullOrEmpty(details) ? "" : details + "\n\n") + $"<size=85%>{tucked} card{(tucked == 1 ? "" : "s")} on it: scroll to see {(tucked == 1 ? "it" : "them")}</size>";
             }
             bool hasDetails = !string.IsNullOrEmpty(details) && preview != null;
@@ -492,7 +494,7 @@ namespace SlayTheClone {
             var old = preview;
             preview = browsed == 0
                 ? activeCard.CreatePreview(transform)
-                : activeCard.CreatePreviewOf(stack[browsed - 1], browsed - 1 < activeCard.AttachedOwners.Count ? activeCard.AttachedOwners[browsed - 1] : null, transform);
+                : activeCard.CreatePreviewOfAttached(browsed - 1, transform);
             if (preview == null) {
                 Destroy(old.gameObject);
                 return;
@@ -525,7 +527,7 @@ namespace SlayTheClone {
                 float alpha = ahead ? 0.55f - 0.15f * (distance - 1) : 0.4f * Mathf.Pow(0.4f, distance - 1);
                 var ghost = i == 0
                     ? activeCard.CreatePreview(transform)
-                    : activeCard.CreatePreviewOf(stack[i - 1], i - 1 < activeCard.AttachedOwners.Count ? activeCard.AttachedOwners[i - 1] : null, transform);
+                    : activeCard.CreatePreviewOfAttached(i - 1, transform);
                 if (ghost == null) continue;
                 var rect = (RectTransform)ghost.transform;
                 rect.localScale = shown.localScale;

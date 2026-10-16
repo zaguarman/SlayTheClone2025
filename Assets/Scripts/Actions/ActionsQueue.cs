@@ -461,11 +461,12 @@ namespace SlayTheClone {
             watchdogs.Where(w => !w.IsSpent && !w.HasExpired(executionContext.TurnClock.TurnNumber)).ToList().AsReadOnly();
 
         /// <summary>A Watchdog becomes active (GDD 3.11). From now on it watches; a Briefing one briefs from tomorrow.</summary>
-        public void AddWatchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days) {
+        public Watchdog AddWatchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days) {
             var watchdog = new Watchdog(spec, controller, watchedCreature, executionContext.TurnClock.TurnNumber, days, watchdogSequence++);
             watchdogs.Add(watchdog);
             Log($"Active: {watchdog}", LogTag.Actions | LogTag.Effects);
             gameMediator.NotifyActionsQueueChanged();
+            return watchdog;
         }
 
         public void WipeWatchdogs(IPlayer controller) {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static SlayTheClone.Enums;
@@ -6,8 +7,10 @@ namespace SlayTheClone {
     /// <summary>
     /// The action queue as one player sees it (the Queue panel, see <see cref="QueuePanel"/>): what will happen, in the order it
     /// resolves, grouped by layer (GDD 3.7), with who does what to whom. Fog of War applies (GDD 2.5): the other side's Concealed
-    /// plans, unknown creatures, the spells it plays from its hand and its hidden traps and Watchdogs show as "???". With the fog
-    /// switched off for debugging (F9) everything shows.
+    /// plans, unknown creatures, the spells it plays from its hand and its hidden traps and Watchdogs show as "???". What the
+    /// viewer has seen since shows for what it is: an action a Reveal (or a Watchdog) showed them, and on a past Day's queue,
+    /// whatever played out in front of them; only secrets stay secret (a Kill Order, a hidden trap, a Watchdog's condition).
+    /// With the fog switched off for debugging (F9) everything shows.
     /// </summary>
     public static class QueueView {
         private const string OursColor = "#8FE3A8";
@@ -25,27 +28,67 @@ namespace SlayTheClone {
             public IGameAction Action; // Hovering it shows this action's arrows alone; none for what's foretold
         }
 
-        /// <summary>The queue in resolution order, numbered, under a heading for each layer.</summary>
+        // What the viewer knows of one action: the fog as it is now, and whether it played out in front of them (Played) or a
+        // Reveal or a Watchdog showed it to them (Revealed)
+        private readonly struct Sight {
+            public readonly IPlayer Viewer;
+            public readonly IActionsQueue Queue;
+            public readonly IModifierManager Modifiers;
+            public readonly bool Played, Revealed;
+
+            public Sight(IPlayer viewer, IActionsQueue queue, IModifierManager modifiers, IGameAction action, bool played, bool revealed) {
+                Viewer = viewer;
+                Queue = queue;
+                Modifiers = modifiers;
+                Played = played;
+                Revealed = revealed || (queue?.IsRevealedTo(viewer, action) ?? false);
+            }
+
+            public bool Seen => Played || Revealed;
+
+            // "plans ???": a plan the fog hides, unless it was seen, and not a secret that stays one after it lands
+            public bool HidesPlan(IGameAction action) =>
+                FogOfWar.Hides(Viewer, action, Queue, Modifiers) && (!Seen || FogOfWar.KeepsSecret(Viewer, action, Queue, Revealed));
+        }
+
+        /// <summary>The queue in resolution order, numbered, under a heading for each layer, then what's been foretold.</summary>
         public static List<Item> Items(IPlayer viewer, IActionsQueue queue, IModifierManager modifiers) {
+            if (queue == null) return new List<Item>();
+            var items = Actions(viewer, queue, modifiers, queue.GetPendingActions().Select(a => (a, queue.LayerOfPending(a))).ToList());
+            items.AddRange(Foretold(viewer));
+            return items;
+        }
+
+        /// <summary>
+        /// These actions, numbered, under a heading for each layer, as the viewer knows them now: one that played out in front
+        /// of them (<paramref name="played"/>) or that a Reveal showed them (<paramref name="revealed"/>) shows for what it was.
+        /// A past Day's queue, or the queue now.
+        /// </summary>
+        public static List<Item> Actions(IPlayer viewer, IActionsQueue queue, IModifierManager modifiers,
+            IEnumerable<(IGameAction Action, ResolutionLayer Layer)> actions, Func<IGameAction, bool> played = null, Func<IPlayer, IGameAction, bool> revealed = null) {
             var items = new List<Item>();
-            if (queue == null) return items;
             ResolutionLayer? layer = null;
             int number = 0;
-            foreach (var action in queue.GetPendingActions()) {
-                string text = Describe(action, viewer, queue, modifiers);
+            foreach (var (action, actionLayer) in actions) {
+                var sight = new Sight(viewer, queue, modifiers, action, played?.Invoke(action) ?? false, revealed?.Invoke(viewer, action) ?? false);
+                string text = Describe(action, sight);
                 if (text == null) continue;
-                var actionLayer = queue.LayerOfPending(action);
                 if (actionLayer != layer) {
                     items.Add(new Item { Heading = LayerName(actionLayer) });
                     layer = actionLayer;
                 }
-                bool hidden = FogOfWar.Hides(viewer, action, queue, modifiers);
+                bool hidden = sight.HidesPlan(action);
                 items.Add(new Item {
                     Number = ++number, Text = text, Icon = hidden ? EffectIcons.Conceal : IconOf(action), Ours = SideOf(action) == viewer, Action = action,
-                    Details = Details(action, text, number, actionLayer, hidden, viewer, queue)
+                    Details = Details(action, text, number, actionLayer, hidden, sight)
                 });
             }
-            // What's been foretold (Prophecy): not in the queue yet, but everyone heard it
+            return items;
+        }
+
+        /// <summary>What's been foretold (Prophecy): not in the queue yet, but everyone heard it.</summary>
+        public static List<Item> Foretold(IPlayer viewer) {
+            var items = new List<Item>();
             var foretold = new[] { viewer, viewer?.Opponent }.Where(p => p != null).SelectMany(p => p.Prophecies).OrderBy(p => p.DueOnTurn).ToList();
             if (foretold.Count > 0) items.Add(new Item { Heading = "Foretold" });
             foreach (var prophecy in foretold) {
@@ -65,7 +108,8 @@ namespace SlayTheClone {
 
         // What hovering an action tells: its place in the order, who does it (and their Speed, which orders a layer), the card
         // it comes from, and what's at the other end. Nothing the viewer can't see.
-        private static string Details(IGameAction action, string text, int number, ResolutionLayer layer, bool hidden, IPlayer viewer, IActionsQueue queue) {
+        private static string Details(IGameAction action, string text, int number, ResolutionLayer layer, bool hidden, Sight sight) {
+            var viewer = sight.Viewer;
             var lines = new List<string> { $"<b>{number}. {text}</b>", $"<size=85%><color=#C9C0AE>{LayerName(layer)}: {LayerRule(layer)}</color></size>" };
             if (hidden) {
                 lines.Add("Concealed: you can't see what it plans until it resolves, or a Reveal shows it.");
@@ -76,7 +120,9 @@ namespace SlayTheClone {
                 lines.Add($"{Who(actor, viewer)}: {actor.Attack} Attack, {actor.Health} Health, Speed {actor.Speed}");
             }
             var card = CardOf(action);
-            bool cardHidden = card != null && FogOfWar.Enabled && OwnerOf(action) != viewer;
+            // The other side's card: seen once it played out or a Reveal showed it, unless it's a creature still unknown (stealthy)
+            bool cardHidden = card != null && FogOfWar.Enabled && OwnerOf(action) != viewer
+                && !(sight.Seen && !(sight.Played && card is ICreature creature && FogOfWar.HidesIdentity(viewer, creature)));
             if (card?.SourceData != null && !cardHidden) {
                 string rules = CardTextFormatter.GetRulesText(card.SourceData);
                 lines.Add($"<b>{card.Name}</b>" + (string.IsNullOrEmpty(rules) ? "" : $": {rules.Replace("\n", " ")}"));
@@ -183,20 +229,25 @@ namespace SlayTheClone {
             _ => "Abilities & Attacks"
         };
 
-        /// <summary>What the action does, as the viewer may see it; null for bookkeeping the player doesn't need to see.</summary>
-        public static string Describe(IGameAction action, IPlayer viewer, IActionsQueue queue, IModifierManager modifiers) {
-            if (FogOfWar.Hides(viewer, action, queue, modifiers)) return $"{Who(Intel.PlannerOf(action), viewer)} plans {Unknown}";
+        /// <summary>What the action does, as the viewer may see it now; null for bookkeeping the player doesn't need to see.</summary>
+        public static string Describe(IGameAction action, IPlayer viewer, IActionsQueue queue, IModifierManager modifiers) =>
+            Describe(action, new Sight(viewer, queue, modifiers, action, false, false));
+
+        private static string Describe(IGameAction action, Sight sight) {
+            var viewer = sight.Viewer;
+            if (sight.HidesPlan(action)) return $"{Who(Intel.PlannerOf(action), viewer)} plans {Unknown}";
 
             switch (action) {
                 case PlayCardAction play when play.GetCard() is ICreature creature:
-                    return Summons(play.GetOwner(), creature, play.GetTarget(), FogOfWar.HidesSummon(viewer, play, queue), viewer);
+                    return Summons(play.GetOwner(), creature, play.GetTarget(), SummonedName(play, creature, sight), viewer);
                 case SummonCreatureAction summon:
-                    return Summons(summon.GetOwner(), summon.GetCreature(), summon.GetTargetSlot(), FogOfWar.HidesSummon(viewer, summon, queue), viewer)
+                    return Summons(summon.GetOwner(), summon.GetCreature(), summon.GetTargetSlot(), SummonedName(summon, summon.GetCreature(), sight), viewer)
                         + (summon.IsFromDeck() ? " from the deck" : "");
+                // An enemy spell queued from the hand shows where it's aimed, not what it is, until it resolves or a Reveal shows it (GDD 2.5)
                 case PlayCardAction play when play.GetCard() is Spell spell:
-                    return Casts(play.GetOwner(), spell, play.GetTarget(), viewer);
+                    return Casts(play.GetOwner(), spell, play.GetTarget(), FogOfWar.Enabled && play.GetOwner() != viewer && !sight.Seen, viewer);
                 case PlaySpellAction cast:
-                    return Casts(cast.GetOwner(), cast.GetSpell(), cast.GetTarget(), viewer);
+                    return Casts(cast.GetOwner(), cast.GetSpell(), cast.GetTarget(), FogOfWar.Enabled && cast.GetOwner() != viewer && !sight.Seen, viewer);
                 case MoveCreatureAction move:
                     return $"{Who(move.GetCreature(), viewer)} {MoveVerb(move.Kind)} {SlotName(move.GetToSlot(), viewer)}";
                 case BattlefieldCombatAction attack:
@@ -235,13 +286,19 @@ namespace SlayTheClone {
                     return $"{PlayerName(discard.GetPlayer(), viewer)} {(discard.GetPlayer() == viewer ? "discard" : "discards")} the hand";
                 case PlaceSlotEffectAction place:
                     var effect = new SlotEffect(place.GetEffectType(), place.GetController(), place.GetValue(), place.GetDays(), 0);
-                    bool hiddenTrap = FogOfWar.Enabled && effect.IsHidden && place.GetController() != viewer;
+                    // A hidden trap stays ??? once it's down, unless a Reveal shows it there
+                    var laid = place.GetSlot()?.Effect;
+                    bool trapSeen = sight.Revealed || (sight.Played && laid != null && laid.Type == effect.Type && laid.Controller == effect.Controller
+                                                       && Intel.CanSee(viewer, laid));
+                    bool hiddenTrap = FogOfWar.Enabled && effect.IsHidden && place.GetController() != viewer && !trapSeen;
                     return $"{PlayerName(place.GetController(), viewer)} {(place.GetController() == viewer ? "place" : "places")} " +
                            $"{(hiddenTrap ? Unknown : effect.Name)} on {SlotName(place.GetSlot(), viewer)}";
                 case CleanseSlotAction clear:
                     return $"Clear {SlotName(clear.GetSlot(), viewer)}";
                 case CreateWatchdogAction watchdog:
-                    bool hiddenCondition = FogOfWar.Enabled && watchdog.Controller != viewer;
+                    // Its condition stays unknown to the other side until a Reveal shows it
+                    bool hiddenCondition = FogOfWar.Enabled && watchdog.Controller != viewer && !sight.Revealed
+                                           && !(watchdog.Created != null && Intel.CanSeeCondition(viewer, watchdog.Created));
                     return $"{PlayerName(watchdog.Controller, viewer)} {(watchdog.Controller == viewer ? "set" : "sets")} a Watchdog" +
                            (hiddenCondition ? "" : $" ({watchdog.Spec.side} {watchdog.Spec.watches}: {watchdog.Spec.effect})");
                 case RevealAction reveal:
@@ -257,15 +314,21 @@ namespace SlayTheClone {
             }
         }
 
-        private static string Summons(IPlayer owner, ICreature creature, ITarget slot, bool hidden, IPlayer viewer) {
-            string name = Painted(owner, viewer, hidden ? Unknown : creature?.Name ?? Unknown); // Not in play yet: it has no side
+        // Who's summoned, as the viewer knows: on its way, ??? for the other side's unless a Reveal showed it; once it's in, what
+        // the creature shows (??? while it's stealthy, a decoy's fake name)
+        private static string SummonedName(IGameAction summon, ICreature creature, Sight sight) {
+            var owner = summon is PlayCardAction play ? play.GetOwner() : (summon as SummonCreatureAction)?.GetOwner();
+            if (sight.Played && creature?.Owner != null) return Who(creature, sight.Viewer);
+            bool hidden = FogOfWar.HidesSummon(sight.Viewer, summon, sight.Queue) && !sight.Revealed;
+            return Painted(owner, sight.Viewer, hidden ? Unknown : creature?.Name ?? Unknown); // Not in play yet: it has no side
+        }
+
+        private static string Summons(IPlayer owner, ICreature creature, ITarget slot, string name, IPlayer viewer) {
             string into = slot is BoardSlot boardSlot ? $" into {SlotName(boardSlot, viewer)}" : "";
             return $"{PlayerName(owner, viewer)} {(owner == viewer ? "summon" : "summons")} {name}{into}";
         }
 
-        // An enemy spell queued from the hand shows where it's aimed, not what it is, until it resolves (GDD 2.5)
-        private static string Casts(IPlayer caster, Spell spell, ITarget target, IPlayer viewer) {
-            bool hidden = FogOfWar.Enabled && caster != viewer;
+        private static string Casts(IPlayer caster, Spell spell, ITarget target, bool hidden, IPlayer viewer) {
             string name = Painted(caster, viewer, hidden ? $"a spell ({Unknown})" : spell.Name);
             string aim = target switch {
                 null => "",

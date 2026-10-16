@@ -37,8 +37,12 @@ namespace SlayTheClone {
             return !IsConcealed(planner, modifiers) || (queue?.IsRevealedTo(viewer, action) ?? false);
         }
 
-        // Secret work: a covert spell (all it does is give a Kill Order) is played and cast unseen by the other side, and the
-        // Kill Order itself is never seen landing by the side whose creature gets it
+        /// <summary>
+        /// Secret work: a covert spell (all it does is give a Kill Order) is played and cast unseen by the other side, and the
+        /// Kill Order itself is never seen landing by the side whose creature gets it. It stays unseen after it lands.
+        /// </summary>
+        public static bool IsSecretFrom(IPlayer viewer, IGameAction action, IActionsQueue queue) => HiddenFrom(viewer, action, queue);
+
         private static bool HiddenFrom(IPlayer viewer, IGameAction action, IActionsQueue queue) {
             if (viewer == null) return false;
             return action switch {
@@ -204,6 +208,13 @@ namespace SlayTheClone {
             Enabled && !Intel.CanSee(viewer, action, queue, modifiers);
 
         public static bool Hides(IPlayer viewer, SlotEffect effect) => Enabled && !Intel.CanSee(viewer, effect);
+
+        /// <summary>
+        /// A secret that stays one once the action has played out (a covert spell, a Kill Order landing), unless a Reveal
+        /// showed the play (<paramref name="revealed"/>).
+        /// </summary>
+        public static bool KeepsSecret(IPlayer viewer, IGameAction action, IActionsQueue queue, bool revealed) =>
+            Enabled && Intel.IsSecretFrom(viewer, action, queue) && !(revealed && action is PlayCardAction);
 
         public static bool HidesCondition(IPlayer viewer, Watchdog watchdog) => Enabled && !Intel.CanSeeCondition(viewer, watchdog);
 

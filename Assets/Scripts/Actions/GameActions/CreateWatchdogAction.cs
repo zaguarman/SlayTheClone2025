@@ -7,6 +7,7 @@ namespace SlayTheClone {
         public IPlayer Controller { get; }
         public ICreature WatchedCreature { get; } // Null: it watches a side
         public int Days { get; }                  // 0: until its charges are used
+        public Watchdog Created { get; set; }     // Once it resolved: the Watchdog it set (whose condition a Reveal can show)
 
         public CreateWatchdogAction(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days) {
             Spec = spec;
@@ -24,7 +25,7 @@ namespace SlayTheClone {
         protected override void ExecuteAction(CreateWatchdogAction create, ActionExecutionContext context) {
             // Watching a creature that's gone already: nothing to watch
             if (create.WatchedCreature != null && (create.WatchedCreature.IsDead || create.WatchedCreature.Slot == null)) return;
-            context.ActionsQueue.AddWatchdog(create.Spec, create.Controller, create.WatchedCreature, create.Days);
+            create.Created = context.ActionsQueue.AddWatchdog(create.Spec, create.Controller, create.WatchedCreature, create.Days);
         }
     }
 }

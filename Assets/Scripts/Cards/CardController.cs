@@ -63,6 +63,10 @@ namespace SlayTheClone {
         public IReadOnlyList<ICard> AttachedCards { get; set; } = new List<ICard>();
         /// <summary>For each attached card, who played it (the side whose frame it shows).</summary>
         public IReadOnlyList<IPlayer> AttachedOwners { get; set; } = new List<IPlayer>();
+        /// <summary>Which tucked cards the screen can't see (an enemy spell on its way): they show their back.</summary>
+        public IReadOnlyList<bool> AttachedHidden { get; set; } = new List<bool>();
+
+        public bool IsAttachedHidden(int index) => index >= 0 && index < AttachedHidden.Count && AttachedHidden[index];
 
         public void SetAttachment() => IsAttachment = true;
         // Store both the base definition and the live instance
@@ -208,33 +212,48 @@ namespace SlayTheClone {
                 return;
             }
 
-            var viewer = FogOfWar.ViewerOf(linkedCreature.Owner);
-            var icons = GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature)
-                .OfType<StatusEffectModifier>()
-                .Where(status => !FogOfWar.HidesStatus(viewer, linkedCreature, status.EffectType))
-                .Select(status => IconLink($"{StatusIconPrefix}{status.EffectType}", EffectIcons.ForStatus(status.EffectType), StatusNumber(status)))
-                .ToList();
-            // Raised or lowered stats: an arrow up or down, before the statuses
+            // Two icons at most (the user): an arrow up for whatever helps it (raised stats, good statuses), an arrow down for
+            // whatever harms it; hovering one lists them all
+            var statuses = VisibleStatuses();
             var changes = StatChanges();
-            if (changes.Any(c => c.Value < 0)) icons.Insert(0, IconLink(StatsDownIcon, EffectIcons.Debuff));
-            if (changes.Any(c => c.Value > 0)) icons.Insert(0, IconLink(StatsUpIcon, EffectIcons.Buff));
+            var icons = new List<string>();
+            if (changes.Any(c => c.Value > 0) || statuses.Any(s => !s.IsNegative)) icons.Add(IconLink(StatsUpIcon, EffectIcons.Buff));
+            if (changes.Any(c => c.Value < 0) || statuses.Any(s => s.IsNegative)) icons.Add(IconLink(StatsDownIcon, EffectIcons.Debuff));
             statusText.text = string.Concat(icons);
         }
 
+        // The statuses on the live creature the screen may see (not the Kill Order on your own)
+        private List<StatusEffectModifier> VisibleStatuses() {
+            if (linkedCreature == null || GameManager?.ModifierManager == null) return new List<StatusEffectModifier>();
+            var viewer = FogOfWar.ViewerOf(linkedCreature.Owner);
+            return GameManager.ModifierManager.GetActiveModifiersFor(linkedCreature).OfType<StatusEffectModifier>()
+                .Where(status => !FogOfWar.HidesStatus(viewer, linkedCreature, status.EffectType)).ToList();
+        }
+
+        // A status in an icon's popup: its icon and name, how long it has left (or its stacks), and what it does
+        private string StatusLine(StatusEffectModifier status) {
+            string icon = EffectIcons.Tag(EffectIcons.ForStatus(status.EffectType));
+            int colon = status.Description.IndexOf(':');
+            if (colon < 0) return icon + status.Description;
+            string name = System.Text.RegularExpressions.Regex.Replace(status.EffectType.ToString(), "(?<=[a-z])(?=[A-Z])", " ");
+            int number = StatusNumber(status);
+            string count = number <= 0 ? "" : status.EffectType is Enums.StatusEffectType.Blessed or Enums.StatusEffectType.HeatSignature
+                ? $" {number}" : $" ({DaysLeft(number)})";
+            return $"{icon}<b>{name}</b>{count}:{status.Description.Substring(colon + 1)}";
+        }
+
         // Each icon is a link, so hovering it can tell what it stands for (see Tooltip and DescribeIcon)
-        private const string StatusIconPrefix = "icon:status:";
         private const string StatsUpIcon = "icon:stats up";
         private const string StatsDownIcon = "icon:stats down";
-        // A small number at the icon's foot: the stacks of one that stacks (Blessed, Heat), otherwise the Dusks it has left
-        private static string IconLink(string id, string icon, int number = 0) => string.IsNullOrEmpty(icon) ? ""
-            : $"<link=\"{id}\">{EffectIcons.Tag(icon)}{(number > 0 ? $"<size=55%><voffset=-0.35em><b>{number}</b></voffset></size>" : "")}</link>";
+        private static string IconLink(string id, string icon) => string.IsNullOrEmpty(icon) ? "" : $"<link=\"{id}\">{EffectIcons.Tag(icon)}</link>";
 
+        // The stacks of one that stacks (Blessed, Heat), otherwise the Dusks it has left
         private int StatusNumber(StatusEffectModifier status) {
             if (status.EffectType is Enums.StatusEffectType.Blessed or Enums.StatusEffectType.HeatSignature) return status.Stacks;
             return status.DusksLeft(GameManager?.TurnManager?.TurnNumber ?? status.TurnApplied);
         }
 
-        /// <summary>The icons above the art (statuses and stat changes); each is a link <see cref="DescribeIcon"/> explains.</summary>
+        /// <summary>The icons above the art (up: what helps it, down: what harms it); each is a link <see cref="DescribeIcon"/> explains.</summary>
         public TMP_Text StatusText => statusText;
 
         // The stat changes on the live creature: from effects (some for a few Days) and the ones that stay on the card
@@ -262,22 +281,14 @@ namespace SlayTheClone {
 
         /// <summary>What an icon above the art stands for, for its popup: a title and a few lines. Null for no such icon.</summary>
         public (string Title, string Body)? DescribeIcon(string id) {
-            if (id == StatsUpIcon || id == StatsDownIcon) {
-                var changes = StatChanges();
-                if (changes.Count == 0) return null;
-                var data = linkedCreature.SourceData as CreatureData;
-                string printed = data != null ? $"\n<i>Printed {data.attack}/{data.speed}/{data.health}, now {linkedCreature.Attack}/{linkedCreature.Speed}/{linkedCreature.Health}.</i>" : "";
-                return ("Stat changes", string.Join("\n", changes.Select(c => c.Text)) + printed);
-            }
-            if (id != null && id.StartsWith(StatusIconPrefix) && System.Enum.TryParse(id.Substring(StatusIconPrefix.Length), out Enums.StatusEffectType type)) {
-                var status = GameManager?.ModifierManager?.GetActiveModifiersFor(linkedCreature).OfType<StatusEffectModifier>()
-                    .FirstOrDefault(s => s.EffectType == type);
-                if (status == null) return null;
-                string title = System.Text.RegularExpressions.Regex.Replace(type.ToString(), "(?<=[a-z])(?=[A-Z])", " ");
-                string meaning = Keywords.Exists(title) ? "\n" + Keywords.Describe(title) : "";
-                return (title, status.Description + meaning);
-            }
-            return null;
+            if (id != StatsUpIcon && id != StatsDownIcon) return null;
+            bool up = id == StatsUpIcon;
+            var lines = StatChanges().Where(c => up ? c.Value > 0 : c.Value < 0).Select(c => c.Text)
+                .Concat(VisibleStatuses().Where(s => s.IsNegative != up).Select(StatusLine)).ToList();
+            if (lines.Count == 0) return null;
+            var data = linkedCreature.SourceData as CreatureData;
+            string printed = data != null ? $"\n<i>Printed {data.attack}/{data.speed}/{data.health}, now {linkedCreature.Attack}/{linkedCreature.Speed}/{linkedCreature.Health}.</i>" : "";
+            return (up ? "Helping it" : "Harming it", string.Join("\n", lines) + printed);
         }
 
         // Alive: with Health left, or on the board at 0 Health on Borrowed Time (Die Another Day)
@@ -862,6 +873,14 @@ namespace SlayTheClone {
             var group = preview.GetComponent<CanvasGroup>();
             group.blocksRaycasts = true;
             group.interactable = false;
+            return preview;
+        }
+
+        /// <summary>An enlarged copy of the card tucked <paramref name="index"/>-th under this one; its back, if the screen can't see it.</summary>
+        public CardController CreatePreviewOfAttached(int index, Transform parent) {
+            if (index < 0 || index >= AttachedCards.Count) return null;
+            var preview = CreatePreviewOf(AttachedCards[index], index < AttachedOwners.Count ? AttachedOwners[index] : null, parent);
+            if (preview != null && IsAttachedHidden(index)) preview.SetFaceDown(true);
             return preview;
         }
 
