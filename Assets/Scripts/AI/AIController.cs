@@ -7,7 +7,8 @@ namespace SlayTheClone {
     /// Plugs the <see cref="AIPlanner"/> into a running game. At the start of each Day it plans the Day of every seat the AI
     /// plays (<see cref="MatchSetup.AI"/>), as chosen (<see cref="MatchSetup.AIPlayer"/>: a level, and for Hard a style), so its plans are on the table before you make yours (GDD 3.6: the AI plans first).
     /// When it plays both seats it also ends the turn, after a pause so its plans can be watched. Which seats it plays can
-    /// change at any time (<see cref="ToggleSeat"/>: F6 for Player 1, F7 for Player 2); it stops when the combat ends.
+    /// change at any time (<see cref="CycleSeat"/>: F6 for Player 1, F7 for Player 2, each press Off, Easy, Medium, Hard,
+    /// Very Hard, Off again); it stops when the combat ends.
     /// </summary>
     public class AIController : MonoBehaviour {
         public const UnityEngine.InputSystem.Key Player1Key = UnityEngine.InputSystem.Key.F6, Player2Key = UnityEngine.InputSystem.Key.F7;
@@ -16,7 +17,7 @@ namespace SlayTheClone {
         public static float TurnPause = 1f;
 
         private IGameManager game;
-        private AIPlanner planner;
+        private readonly Dictionary<AILevel, AIPlanner> planners = new Dictionary<AILevel, AIPlanner>(); // One a level, made when first needed
         private readonly Dictionary<IPlayer, int> plannedDay = new Dictionary<IPlayer, int>(); // The last Day each seat was planned
         private float plannedAt;
         private bool gameOver;
@@ -32,7 +33,6 @@ namespace SlayTheClone {
             game = gameManager ?? throw new System.ArgumentNullException(nameof(gameManager));
             mediator = gameMediator ?? throw new System.ArgumentNullException(nameof(gameMediator));
             MatchSetup.DirectPlayDefaults(); // Play pressed straight in the game scene: a Medium AI opponent
-            planner = MatchSetup.AIPlayer.Planner(game, System.Environment.TickCount);
             mediator.GameOver += OnGameOver;
             ShowHumanSeat();
             Log($"AIController initialized: the AI ({MatchSetup.AIPlayer}) plays {MatchSetup.AI}", LogTag.Initialization | LogTag.Turns);
@@ -52,7 +52,7 @@ namespace SlayTheClone {
             foreach (var player in new[] { game.Player1, game.Player2 }) {
                 if (!MatchSetup.PlayedByAI(player)) continue;
                 if (plannedDay.TryGetValue(player, out int day) && day == turns.TurnNumber) continue;
-                planner.PlanDay(player);
+                PlannerFor(player).PlanDay(player);
                 plannedDay[player] = turns.TurnNumber;
                 plannedAt = Time.unscaledTime;
             }
@@ -60,17 +60,33 @@ namespace SlayTheClone {
             if (MatchSetup.AI == AISeats.Both && Time.unscaledTime - plannedAt >= TurnPause) turns.EndTurn();
         }
 
-        /// <summary>
-        /// The AI takes this seat, or gives it back (the user: a key each, F6 and F7). The screen stays on the side it shows:
-        /// the switch moves no one round the table (F8 does).
-        /// </summary>
-        public static void ToggleSeat(AISeats seat) {
-            MatchSetup.AI ^= seat;
-            Log($"The AI now plays {MatchSetup.AI}", LogTag.Turns);
+        private AIPlanner PlannerFor(IPlayer player) {
+            var level = MatchSetup.LevelOf(player);
+            if (!planners.TryGetValue(level, out var planner)) {
+                planner = MatchSetup.AIFor(player).Planner(game, System.Environment.TickCount + (int)level);
+                planners[level] = planner;
+            }
+            return planner;
         }
 
-        /// <summary>Whether the AI plays this seat, for the note under End Turn.</summary>
-        public static string SeatText(AISeats seat) => (MatchSetup.AI & seat) != 0 ? $"On, {MatchSetup.AIPlayer.Name}" : "Off";
+        /// <summary>
+        /// The next AI for this seat (the user: a key each, F6 and F7): Off, Easy, Medium, Hard, Very Hard, then Off again. The
+        /// screen stays on the side it shows: the switch moves no one round the table (F8 does).
+        /// </summary>
+        public static void CycleSeat(AISeats seat) {
+            bool on = (MatchSetup.AI & seat) != 0;
+            var level = MatchSetup.LevelOf(seat);
+            if (!on) {
+                MatchSetup.AI |= seat;
+                MatchSetup.SetLevel(seat, AILevel.Easy);
+            }
+            else if (level < AILevel.VeryHard) MatchSetup.SetLevel(seat, level + 1);
+            else MatchSetup.AI &= ~seat;
+            Log($"The AI now plays {MatchSetup.AI} ({seat}: {SeatText(seat)})", LogTag.Turns);
+        }
+
+        /// <summary>The AI on this seat and how well it plays, for the note under End Turn.</summary>
+        public static string SeatText(AISeats seat) => (MatchSetup.AI & seat) != 0 ? new AIEntrant(MatchSetup.LevelOf(seat), MatchSetup.AIStyle).Name : "Off";
 
         // At the start, with one seat left to you, the screen shows yours
         private static void ShowHumanSeat() {

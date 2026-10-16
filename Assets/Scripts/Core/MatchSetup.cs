@@ -24,8 +24,18 @@ namespace SlayTheClone {
         /// <summary>For the Hard AI, the way it plays.</summary>
         public static AIStyle AIStyle { get; set; } = AIStyle.Balanced;
         public static AIEntrant AIPlayer => new AIEntrant(AILevel, AIStyle);
+        // A seat's own level, once switched in the game (F6, F7); otherwise the match's
+        private static readonly System.Collections.Generic.Dictionary<AISeats, AILevel> seatLevels = new System.Collections.Generic.Dictionary<AISeats, AILevel>();
+        /// <summary>How well the AI plays this seat: its own level if one was picked in the game, the match's otherwise.</summary>
+        public static AILevel LevelOf(AISeats seat) => seatLevels.TryGetValue(seat, out var level) ? level : AILevel;
+        public static AILevel LevelOf(IPlayer player) => LevelOf(player != null && player.IsPlayer1 ? AISeats.Player1 : AISeats.Player2);
+        public static void SetLevel(AISeats seat, AILevel level) => seatLevels[seat] = level;
+        /// <summary>The AI that plays this seat.</summary>
+        public static AIEntrant AIFor(IPlayer player) => new AIEntrant(LevelOf(player), AIStyle);
         /// <summary>The Health you (Player 1) start the fight at, when not the usual 20: an adventure's, carried from fight to fight.</summary>
         public static int? PlayerHealth { get; set; }
+        /// <summary>The Health the opponent (Player 2) starts at, when not the usual 20: an adventure's enemies, 5 more each fight.</summary>
+        public static int? OpponentHealth { get; set; }
 
         public static bool PlayedByAI(IPlayer player) =>
             player != null && (AI & (player.IsPlayer1 ? AISeats.Player1 : AISeats.Player2)) != 0;
@@ -49,8 +59,9 @@ namespace SlayTheClone {
 
         public static void Choose(DeckScriptableObject playerDeck, string opponentName, DeckScriptableObject opponentDeck, AISeats ai = AISeats.None) {
             Prepared = true;
+            seatLevels.Clear();
             PlayerDeck = playerDeck;
-            PlayerHealth = null;
+            PlayerHealth = OpponentHealth = null;
             AI = ai;
             OpponentDeck = opponentDeck;
             OpponentName = string.IsNullOrEmpty(opponentName) ? DefaultOpponentName : opponentName;
@@ -68,7 +79,8 @@ namespace SlayTheClone {
             PlayerDeck = null;
             OpponentDeck = null;
             OpponentName = null;
-            PlayerHealth = null;
+            PlayerHealth = OpponentHealth = null;
+            seatLevels.Clear();
             AI = AISeats.None;
             AILevel = AILevel.Medium;
             AIStyle = AIStyle.Balanced;

@@ -14,7 +14,7 @@ namespace SlayTheClone {
     /// </summary>
     public static class PlayerDecks {
         public const int MinDeckSize = 20; // As many as a starter deck
-        public const int MaxDeckSize = 40;
+        public const int MaxDeckSize = 60; // The user, 2026-10-16 (was 40)
         public const int MaxNameLength = 20;
         public const string NewDeckName = "New deck";
 

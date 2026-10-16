@@ -570,7 +570,7 @@ namespace SlayTheClone {
         }
 
         // A card of the deck window (a pile, a pick): shown big already, it's its own preview
-        private static bool InWindow(CardController card) => card != null && card.GetComponent<DeckViewCardInterceptor>() != null;
+        private static bool InWindow(CardController card) => card != null && (card.ShowsItself || card.GetComponent<DeckViewCardInterceptor>() != null);
 
         private static bool StillRaised(CardController card) {
             if (!card.isActiveAndEnabled) return false;

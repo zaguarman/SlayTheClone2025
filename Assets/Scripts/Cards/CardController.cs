@@ -75,6 +75,8 @@ namespace SlayTheClone {
         public IReadOnlyList<bool> AttachedQueued { get; set; } = new List<bool>();
         /// <summary>The front card of a pile of queued spells: its stack is the rest of the pile, not cards on it.</summary>
         public bool HeadsPile { get; set; }
+        /// <summary>Shown big enough already (a reward or a shop's card): hovered, no enlarged copy, only its explanations beside it.</summary>
+        public bool ShowsItself { get; set; }
         /// <summary>A card of its stack the screen can see (not a back): it has a roulette worth opening even when it's all ??? itself.</summary>
         public bool HasSeenAttached => Enumerable.Range(0, AttachedCards.Count).Any(i => !IsAttachedHidden(i));
 

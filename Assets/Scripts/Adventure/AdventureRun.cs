@@ -34,7 +34,7 @@ namespace SlayTheClone {
         public const string Symbol = "<b>\u00A5<space=-0.42em>\u20AC</b>";
         public const int FightPurse = 10, ElitePurse = 15; // What a fight pays (the user: about 10)
         public const int RemovalPrice = 20, RemovalRise = 10; // Taking a card out of your deck; dearer each time, as in Slay the Spire
-        public const int ShopCards = 5, ShopOwnFaction = 3; // Cards for sale: most of your faction, a couple of others
+        public const int ShopCards = 5; // Cards for sale, all of your faction (the user, 2026-10-16)
         public const int MinDeck = 6; // The fewest cards a removal leaves you
         /// <summary>The price of a card at a shop, by its tier.</summary>
         public static int PriceOf(AdventureDecks.Tier tier) => tier switch {
@@ -93,8 +93,20 @@ namespace SlayTheClone {
         /// <summary>The fight is won and its rewards are up: the map waits until you proceed.</summary>
         public static bool InRewards => Rewards.Count > 0;
 
-        public static void Start(Faction faction, DeckScriptableObject deck, int seed) {
+        /// <summary>The cards on offer when the run started: rewards, shops and events take theirs from it.</summary>
+        public static IReadOnlyList<CardDataScriptableObject> Pool { get; private set; } = new List<CardDataScriptableObject>();
+        public const int BossHealth = 60, HealthStep = 5; // Enemy Health (the user, 2026-10-16): 5, 10, 15... as you go; the boss 60
+
+        /// <summary>The fights won so far this run.</summary>
+        public static int FightsWon => Path.Count(n => n.IsCombat);
+
+        /// <summary>The Health the enemy of this fight room starts at: 5 for the first fight, 5 more for each one won since, the boss 60.</summary>
+        public static int EnemyHealthFor(MapNode room) => room.Type == RoomType.Boss ? BossHealth
+            : Mathf.Min(BossHealth - HealthStep, HealthStep * (FightsWon + 1) + (room.Type == RoomType.Elite ? HealthStep : 0));
+
+        public static void Start(Faction faction, DeckScriptableObject deck, int seed, IEnumerable<CardDataScriptableObject> pool = null) {
             Clear();
+            Pool = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null).Distinct().ToList();
             Active = true;
             Faction = faction;
             Deck = deck;
@@ -171,8 +183,8 @@ namespace SlayTheClone {
             return true;
         }
 
-        // A shop's cards: three of your faction and two of others, different ones, none you can't put in a deck; priced by
-        // tier, the better ones rarer (Slay the Spire's shops: mostly commons, now and then a rare)
+        // A shop's cards: five of your faction, different ones, none you can't put in a deck; priced by tier, the better ones
+        // rarer (Slay the Spire's shops: mostly commons, now and then a rare)
         private static void OpenShop(MapNode room, IEnumerable<CardDataScriptableObject> pool) {
             Shop.Clear();
             RemovedHere = false;
@@ -181,9 +193,8 @@ namespace SlayTheClone {
             var tiers = AdventureDecks.Tiers(cards);
             var random = new System.Random(Map.Seed * 23 + room.Row * 11 + room.Column);
             double Draw(CardDataScriptableObject c) => random.NextDouble() + (int)tiers[c] * 0.1;
-            var own = cards.Where(c => c.faction == Faction).OrderBy(Draw).Take(ShopOwnFaction).ToList();
-            var others = cards.Where(c => c.faction != Faction).OrderBy(Draw);
-            foreach (var card in own.Concat(others).Take(ShopCards).OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => tiers[c]))
+            var own = cards.Where(c => c.faction == Faction).OrderBy(Draw).Take(ShopCards).ToList();
+            foreach (var card in own.OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => tiers[c]))
                 Shop.Add(new ShopOffer { Card = card, Price = PriceOf(tiers[card]) });
         }
 
@@ -238,11 +249,12 @@ namespace SlayTheClone {
             var random = new System.Random(Map.Seed * 17 + room.Row * 5 + room.Column);
             int packs = room.Type == RoomType.Elite ? 2 : 1; // An elite drops a second pack
             var offered = new HashSet<CardDataScriptableObject>();
+            float strength = AdventureDecks.StrengthOf(room);
             for (int i = 0; i < packs; i++) {
                 var pack = new RewardPack();
-                // A second pack shows other cards of the deck, when there are enough
-                var fresh = AdventureDecks.Reward(EnemyDeck, random).Where(c => !offered.Contains(c)).ToList();
-                pack.Cards.AddRange(fresh.Count > 0 ? fresh : AdventureDecks.Reward(EnemyDeck, random));
+                // Cards of your own faction (the user); a second pack shows others, when there are enough
+                var fresh = AdventureDecks.Reward(Faction, strength, Pool, random, offered);
+                pack.Cards.AddRange(fresh.Count > 0 ? fresh : AdventureDecks.Reward(Faction, strength, Pool, random));
                 foreach (var card in pack.Cards) offered.Add(card);
                 if (pack.Cards.Count > 0) Rewards.Add(pack);
             }
@@ -289,6 +301,7 @@ namespace SlayTheClone {
         public static void Clear() {
             Active = Won = Lost = InShop = RemovedHere = false;
             EuroYuans = Earned = removals = Health = 0; // A roguelite: the money goes with the run
+            Pool = new List<CardDataScriptableObject>();
             Event = null;
             EventOutcome = null;
             eventRoom = null;

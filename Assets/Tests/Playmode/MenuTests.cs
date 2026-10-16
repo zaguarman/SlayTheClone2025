@@ -196,6 +196,7 @@ namespace SlayTheClone.Tests {
             adventure.SetUpFight(first);
             Assert.AreSame(AdventureRun.Deck, MatchSetup.PlayerDeck, "...your faction's deck...");
             Assert.AreEqual(AdventureRun.StartingHealth, MatchSetup.PlayerHealth, "...at the run's Health (60 to begin with)...");
+            Assert.AreEqual(AdventureRun.HealthStep, MatchSetup.OpponentHealth, "...against an enemy at 5 Health, the first time (5 more each fight won, the boss 60)...");
             Assert.AreNotEqual(yours, DeckCatalog.FactionOf(MatchSetup.OpponentDeck), "...against another faction's...");
             Assert.AreEqual(AILevel.Easy, MatchSetup.AILevel, "...the first ones easy...");
             var tiers = AdventureDecks.Tiers(catalog.AllCards);
@@ -217,14 +218,14 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(AdventureDecks.StarterSize, adventure.DeckCards.Count, "Your deck is a click away");
             Click(GalleryButton(adventure, AdventureMenu.BackButtonName));
             Click(GalleryButton(adventure, AdventureMenu.PackButton + 0));
-            Assert.AreEqual(Mathf.Min(3, beaten.Cards.Distinct().Count()), adventure.RewardCards.Count, "Opened, the pack shows three of their cards...");
+            Assert.AreEqual(AdventureDecks.RewardChoices, adventure.RewardCards.Count, "Opened, the pack shows three cards...");
             Click(GalleryButton(adventure, AdventureMenu.PickBackButtonName));
             Assert.IsEmpty(adventure.RewardCards, "...it can be closed to think...");
             Click(GalleryButton(adventure, AdventureMenu.PackButton + 0));
             var taken = adventure.RewardCards[0].GetBaseCardData().cardName;
             ClickCard(adventure.RewardCards[0]);
             Assert.AreEqual(AdventureDecks.StarterSize + 1, AdventureRun.Deck.Cards.Count, "...and opened again: clicking one takes it into your deck...");
-            Assert.IsTrue(AdventureRun.Deck.Cards.Any(c => c.cardName == taken) && beaten.Cards.Any(c => c.cardName == taken), "...a card of the deck you beat");
+            Assert.IsTrue(AdventureRun.Deck.Cards.Any(c => c.cardName == taken && c.faction == yours), "...a card of your own faction (only those drop)");
             Assert.IsFalse(GalleryButton(adventure, AdventureMenu.PackButton + 0).interactable, "The pack is used up");
             Click(GalleryButton(adventure, AdventureMenu.ProceedButtonName));
             Assert.IsFalse(AdventureRun.InRewards, "Proceed: on to the map");
@@ -273,7 +274,7 @@ namespace SlayTheClone.Tests {
                 Click(adventure.Rooms[shop]);
                 Assert.IsTrue(AdventureRun.InShop, "A shop opens...");
                 Assert.AreEqual(AdventureRun.ShopCards, adventure.ShopCards.Count, "...its cards on show...");
-                Assert.AreEqual(AdventureRun.ShopOwnFaction, AdventureRun.Shop.Count(o => o.Card.faction == yours), "...most of your faction");
+                Assert.IsTrue(AdventureRun.Shop.All(o => o.Card.faction == yours), "...all of your faction");
                 Assert.IsEmpty(AdventureRun.Reachable(), "No walking on from a shop before leaving it");
                 var cheapest = AdventureRun.Shop.OrderBy(o => o.Price).First();
                 int size = AdventureRun.Deck.Cards.Count;
@@ -332,7 +333,7 @@ namespace SlayTheClone.Tests {
             foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
             Click(GalleryButton(builder, DeckBuilderMenu.EveryFactionTab));
             foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
-            Assert.AreEqual(PlayerDecks.MaxDeckSize, yourDeck.Cards.Count, "Cards are added until the deck has 40, not beyond");
+            Assert.AreEqual(PlayerDecks.MaxDeckSize, yourDeck.Cards.Count, "Cards are added until the deck is full (60), not beyond");
             Assert.GreaterOrEqual(DeckCatalog.FactionsOf(yourDeck).Count, 2, "...whatever their faction");
             var name = builder.NameField;
             Assert.AreEqual(PlayerDecks.MaxNameLength, name.characterLimit, "A deck's name is 20 characters at most...");
@@ -408,8 +409,16 @@ namespace SlayTheClone.Tests {
             yield return Wait.For(() => game.Turns.TurnNumber >= day + 2 && !game.Turns.IsResolving, "the AI to play two Days by itself");
 
             bool side = FogOfWar.PlaysAsPlayer1;
-            AIController.ToggleSeat(AISeats.Player2); // F7: you take Player 2 back
-            Assert.AreEqual(AISeats.Player1, MatchSetup.AI);
+            for (int press = 0; press < 3 && (MatchSetup.AI & AISeats.Player2) != 0; press++) AIController.CycleSeat(AISeats.Player2); // F7: up to Very Hard, then off
+            Assert.AreEqual(AISeats.Player1, MatchSetup.AI, "F7 goes up the levels, then off: you take Player 2 back");
+            AIController.CycleSeat(AISeats.Player1);
+            Assert.AreEqual(AILevel.Hard, MatchSetup.LevelOf(AISeats.Player1), "F6 on an AI seat: the next level (Medium to Hard)");
+            AIController.CycleSeat(AISeats.Player1);
+            AIController.CycleSeat(AISeats.Player1);
+            Assert.AreEqual(AISeats.None, MatchSetup.AI, "...Very Hard, then off...");
+            AIController.CycleSeat(AISeats.Player1);
+            Assert.AreEqual(AISeats.Player1, MatchSetup.AI, "...and on again at Easy");
+            Assert.AreEqual(AILevel.Easy, MatchSetup.LevelOf(AISeats.Player1));
             Assert.AreEqual(side, FogOfWar.PlaysAsPlayer1, "Your side of the table stays as it was");
             FogOfWar.PlaysAsPlayer1 = false; // F8: to your seat
             Assert.IsTrue(FogOfWar.CanControl(game.Player2) && !FogOfWar.CanControl(game.Player1));

@@ -32,7 +32,7 @@ namespace SlayTheClone {
             Log($"Random seed {seed} (set it on GameManager to replay this game)", LogTag.Initialization);
 
             Player1 = new Player(MatchSetup.DefaultPlayerName, isPlayer1: true, MatchSetup.PlayerHealth ?? Player.StartingHealth) { CardsToDraw = OpeningHand };
-            Player2 = new Player(player2Name, isPlayer1: false) { CardsToDraw = OpeningHand };
+            Player2 = new Player(player2Name, isPlayer1: false, MatchSetup.OpponentHealth ?? Player.StartingHealth) { CardsToDraw = OpeningHand };
             Player1.Opponent = Player2;
             Player2.Opponent = Player1;
 

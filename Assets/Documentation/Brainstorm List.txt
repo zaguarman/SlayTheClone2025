@@ -1563,6 +1563,7 @@ Card Game Factions Overview
 			Gracias Jesús (meme: Jesus bringing in the food from the fields)
 			Grim Reaper
 			Gudea (the oldest known depicted person)
+			Heretic (added 2026-10-16)
 			Here Be Dragons (art: an ASCII-art dragon, like the reference given)
 			Luxor
 			Mithril

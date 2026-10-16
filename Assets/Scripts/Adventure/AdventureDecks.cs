@@ -18,6 +18,7 @@ namespace SlayTheClone {
 
         public const int StarterSize = 12;
         public const int RewardChoices = 3;
+        private const int BloatedMost = 40; // A clumsy enemy deck: 30 to 40 cards
 
         // Share of the ranked cards in each tier, from the bottom: D 20%, C 25%, B 25%, A 20%, S 10%
         private static readonly float[] TierTops = { 0.2f, 0.45f, 0.7f, 0.9f, 1f };
@@ -155,7 +156,7 @@ namespace SlayTheClone {
             float clumsy = 1f - strength;
 
             bool bloated = clumsy > 0.5f && random.NextDouble() < 0.4;
-            int size = bloated ? random.Next(30, PlayerDecks.MaxDeckSize + 1) : random.Next(18, 23);
+            int size = bloated ? random.Next(30, BloatedMost + 1) : random.Next(18, 23);
             // About 3 creatures to 2 spells when well built; off by up to a third either way when clumsy
             float creatureShare = 0.6f + (float)(random.NextDouble() * 2 - 1) * 0.35f * clumsy;
             if (clumsy > 0.5f && random.NextDouble() < 0.5) creatureShare = random.NextDouble() < 0.5 ? 0.25f + 0.1f * (float)random.NextDouble() : 0.85f + 0.1f * (float)random.NextDouble();
@@ -197,9 +198,17 @@ namespace SlayTheClone {
         }
         #endregion
 
-        /// <summary>After a fight won: up to three different cards of the deck you beat, at random, to take one of (or none).</summary>
-        public static List<CardDataScriptableObject> Reward(DeckScriptableObject beaten, Random random) =>
-            beaten == null ? new List<CardDataScriptableObject>()
-                : beaten.Cards.Where(c => c != null).Distinct().OrderBy(_ => random.Next()).Take(RewardChoices).ToList();
+        /// <summary>
+        /// After a fight won: three different cards of your own faction (the user, 2026-10-16: only your deck's faction drops),
+        /// near the tier the room's strength calls for (C and D early, A and S near the top), to take one of or none.
+        /// </summary>
+        public static List<CardDataScriptableObject> Reward(Faction faction, float strength, IEnumerable<CardDataScriptableObject> pool, Random random,
+            ICollection<CardDataScriptableObject> skip = null) {
+            var cards = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null && !(c is CreatureCardScriptableObject { token: true })).Distinct().ToList();
+            var tiers = Tiers(cards);
+            float target = 0.5f + strength * 3.5f;
+            return cards.Where(c => c.faction == faction && (skip == null || !skip.Contains(c)))
+                .OrderBy(c => Math.Abs((int)tiers[c] - target) + random.NextDouble() * 1.5).Take(RewardChoices).ToList();
+        }
     }
 }

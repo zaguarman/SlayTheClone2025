@@ -73,10 +73,10 @@ namespace SlayTheClone {
                         }
                     },
                     new Choice {
-                        Label = "Ask for a free sample  <color=#C9C0AE>(a random card into your deck)</color>",
+                        Label = "Ask for a free sample  <color=#C9C0AE>(a random card of your faction into your deck)</color>",
                         Available = () => AdventureRun.Deck.Cards.Count < PlayerDecks.MaxDeckSize,
                         Outcome = c => {
-                            var card = AnyCard(c);
+                            var card = AnyCard(c, x => x.faction == AdventureRun.Faction); // Only your faction's cards drop (the user)
                             if (card == null || !AdventureRun.AddCard(card)) return "He hands you a business card. It's blank on both sides.";
                             return $"He gives you something \"for the exposure\": <b>{card.cardName}</b> joins your deck.";
                         }

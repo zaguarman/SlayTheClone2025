@@ -209,11 +209,11 @@ namespace SlayTheClone {
             if (GameInput.KeyPressed(FogOfWar.ToggleKey)) FogOfWar.Toggle();
             if (GameInput.KeyPressed(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
             if (GameInput.KeyPressed(AIController.Player1Key)) {
-                AIController.ToggleSeat(AISeats.Player1);
+                AIController.CycleSeat(AISeats.Player1);
                 ShowFogOfWarState();
             }
             if (GameInput.KeyPressed(AIController.Player2Key)) {
-                AIController.ToggleSeat(AISeats.Player2);
+                AIController.CycleSeat(AISeats.Player2);
                 ShowFogOfWarState();
             }
         }

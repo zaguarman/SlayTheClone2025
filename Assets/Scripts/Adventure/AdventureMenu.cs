@@ -118,7 +118,7 @@ namespace SlayTheClone {
         /// <summary>Starts a run with the chosen faction's starter deck, on a new map, and shows it.</summary>
         public void Embark() {
             if (Chosen == null || !Factions.Any(f => f.faction == Chosen)) return;
-            AdventureRun.Start(Chosen.Value, AdventureDecks.Starter(Chosen.Value, Catalog.AllCards), Environment.TickCount);
+            AdventureRun.Start(Chosen.Value, AdventureDecks.Starter(Chosen.Value, Catalog.AllCards), Environment.TickCount, Catalog.AllCards);
             lastWalk = "Your journey begins. Pick a room on the bottom row.";
             Show();
         }
@@ -196,6 +196,7 @@ namespace SlayTheClone {
             AdventureRun.SetEnemy(deck);
             MatchSetup.Choose(AdventureRun.Deck, name, deck, AISeats.Player2);
             MatchSetup.PlayerHealth = AdventureRun.Health; // Your Health goes from fight to fight
+            MatchSetup.OpponentHealth = AdventureRun.EnemyHealthFor(room); // 5, 10, 15... the boss 60
             MatchSetup.AILevel = LevelFor(room);
             MatchSetup.AIStyle = AIStyle.Balanced;
         }
@@ -282,7 +283,10 @@ namespace SlayTheClone {
             var screen = AddScreen(transform, "AdventurePanel", "Choose a card");
             reward = new CardGrid(screen.columns, Catalog.CardPrefab, RewardColumns);
             reward.Title.text = "Take one into your deck, or skip them";
-            reward.Show(pack.Cards, (face, asset) => face.OnCardClicked.AddListener(_ => TakeReward(asset)));
+            reward.Show(pack.Cards, (face, asset) => {
+                face.ShowsItself = true; // Read where it is (the user): its keywords explain themselves beside it, a click takes it
+                face.OnCardClicked.AddListener(_ => TakeReward(asset));
+            });
 
             var footer = AddFooter(screen.panel.transform);
             AddButton(footer, PickBackButtonName, "Back", BackWidth, () => OpenRewardPack(null));
@@ -348,6 +352,7 @@ namespace SlayTheClone {
             int at = 0;
             shopGrid.Show(offers.Select(o => o.Card), (face, _) => {
                 var offer = offers[at++];
+                face.ShowsItself = true;
                 AddPriceTag(face, offer);
                 face.OnCardClicked.AddListener(__ => Buy(offer));
             });
