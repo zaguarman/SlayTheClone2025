@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Ousted with a forty-million bonus. Failing upward, gently.
   cardType: 0
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 9715a88b989bdc94995c0e7452f90f7f, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

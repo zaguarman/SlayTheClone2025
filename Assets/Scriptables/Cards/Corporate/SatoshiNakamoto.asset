@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Mined a million coins. Never spent one. Never seen again.
   cardType: 0
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 499f1ec188515134db0e1572c19839f6, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

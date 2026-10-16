@@ -17,7 +17,7 @@ MonoBehaviour:
   description: He protec. He attac. But most importantly, he gets snac.
   cardType: 0
   faction: 6
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: a5365ae529c062b44a00202d80bbc5b5, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

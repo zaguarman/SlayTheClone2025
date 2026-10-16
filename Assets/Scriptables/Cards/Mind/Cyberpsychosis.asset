@@ -18,7 +18,7 @@ MonoBehaviour:
     it together.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 79f0f37aa2928f14297e2324599f49c2, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

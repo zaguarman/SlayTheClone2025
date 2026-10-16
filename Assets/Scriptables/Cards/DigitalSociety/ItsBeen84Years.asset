@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Sorry I'm late. Traffic was terrible. And the century.
   cardType: 0
   faction: 6
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: d9d9473f600d1444f9c27cdbd78cfe9c, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

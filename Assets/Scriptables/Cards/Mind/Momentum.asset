@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Once you get going you can't stop. That was the plan. Stopping wasn't.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: b5fdfc4b47b9341418c1116bd3684f9b, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

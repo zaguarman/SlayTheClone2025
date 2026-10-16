@@ -18,7 +18,7 @@ MonoBehaviour:
     said everyone who never saw the others.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 6dabe15c13520fb44b7704143cd16c7b, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

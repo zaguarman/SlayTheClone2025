@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Doesn't drink. Just takes a little off the top. Every night.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 2d042d9bdaa79db4f8d2a27eb31132a3, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

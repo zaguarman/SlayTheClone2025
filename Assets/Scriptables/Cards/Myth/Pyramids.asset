@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Built by aliens, apparently. Or by paid workers on beer rations.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: d70ffc79793a23547bd4bbfef4bf32a9, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Two years in a federal prison camp. Priced in. The stock went up.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 0f2780fb6d26f534d99c6b6a262d7063, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0
