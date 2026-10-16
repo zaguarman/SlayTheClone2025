@@ -28,6 +28,8 @@ namespace SlayTheClone {
         public Ease ease = Ease.OutCubic;
 
         [Header("The shown card: moves it alone, the waiting cards stay where they are")]
+        [Tooltip("Its size, of the preview's (Preview Scale): bigger or smaller than the waiting cards would make it, while they and the wheel stay as they are")]
+        [Range(0.5f, 2f)] public float shownScale = 1f;
         [Tooltip("Moves the shown card sideways, in preview heights (negative: left); the waiting cards stay")]
         [Range(-1f, 1f)] public float shownSideways = 0f;
         [Tooltip("Moves the shown card up, in preview heights (negative: down); the waiting cards stay")]
@@ -86,6 +88,9 @@ namespace SlayTheClone {
 
         // The sliders that place the shown card: back to these, it sits where it started, right by its card
         public static readonly string[] Placing = { nameof(previewGap), nameof(previewSideways), nameof(previewAway), nameof(shownSideways), nameof(shownUp) };
+
+        /// <summary>A waiting card's size, of the shown card's: Waiting Scale, against Shown Scale.</summary>
+        public float WaitingOfShown => waitingScale / Mathf.Max(0.01f, shownScale);
 
         // The shown card's nudge from its place on the wheel (sideways is to the right of up)
         public Vector3 ShownOffset(Vector3 up, float previewHeight) => (new Vector3(up.y, -up.x, 0f) * shownSideways + up * shownUp) * previewHeight;

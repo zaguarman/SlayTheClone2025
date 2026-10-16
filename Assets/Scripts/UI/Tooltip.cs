@@ -346,7 +346,7 @@ namespace SlayTheClone {
             Vector2 cardMax = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
 
             bool showAbove = (cardMin.y + cardMax.y) * 0.5f < Screen.height * 0.5f;
-            float height = ScreenRect(previewRect).height; // The sliders' unit
+            float height = ScreenRect(previewRect).height / ShownScaleOf(card); // The sliders' unit: the preview's height before Shown Scale
             float gap = Roulette.previewGap * height;
             previewRect.pivot = new Vector2(0.5f, showAbove ? 0f : 1f);
             previewRect.position = new Vector2((cardMin.x + cardMax.x) * 0.5f, showAbove ? cardMax.y + gap : cardMin.y - gap);
@@ -534,7 +534,7 @@ namespace SlayTheClone {
             if (activeCard == null || preview == null || previewIsCard || activeCard.AttachedCards.Count == 0) return;
             var stack = activeCard.AttachedCards;
             var shown = (RectTransform)preview.transform;
-            float height = shown.rect.height * shown.lossyScale.y;
+            float height = shown.rect.height * shown.lossyScale.y / ShownScaleOf(activeCard); // The wheel's unit: before Shown Scale
             float radius = height * RouletteRadius;
             Vector3 wheelHome = home - Roulette.ShownOffset(up, height); // The shown card's place on the wheel, before its own nudge
             Vector3 center = wheelHome - up * radius;
@@ -548,7 +548,7 @@ namespace SlayTheClone {
                     : activeCard.CreatePreviewOfAttached(i - 1, transform);
                 if (ghost == null) continue;
                 var rect = (RectTransform)ghost.transform;
-                rect.localScale = shown.localScale * Roulette.waitingScale;
+                rect.localScale = shown.localScale * Roulette.WaitingOfShown;
                 float angle = (ahead ? 1f : -1f) * distance * RouletteAngle; // The next ones come from the left
                 rect.position = center + Quaternion.Euler(0f, 0f, angle) * (wheelHome - center) + Nudge(up, height, ahead, distance);
                 rect.rotation = Quaternion.Euler(0f, 0f, angle * Roulette.waitingTilt) * shown.parent.rotation;
@@ -587,7 +587,7 @@ namespace SlayTheClone {
             ClearLeaving();
             var nextRect = (RectTransform)next.transform;
             Vector3 up = nextRect.up;
-            float height = nextRect.rect.height * nextRect.lossyScale.y;
+            float height = nextRect.rect.height * nextRect.lossyScale.y / ShownScaleOf(activeCard);
             float radius = height * RouletteRadius;
             Vector3 shownOffset = Roulette.ShownOffset(up, height);
             Vector3 home = nextRect.position - shownOffset; // On the wheel, before the shown card's own nudge
@@ -602,7 +602,7 @@ namespace SlayTheClone {
             void Place(RectTransform rect, Vector3 from, Vector3 scale, float angle, float waiting, bool ahead) {
                 rect.position = center + Quaternion.Euler(0f, 0f, angle) * (from - center) + Nudge(up, height, ahead, waiting) + shownOffset * (1f - waiting);
                 rect.localRotation = Quaternion.Euler(0f, 0f, angle * Roulette.waitingTilt);
-                rect.localScale = scale * Mathf.Lerp(1f, Roulette.waitingScale, waiting);
+                rect.localScale = scale * Mathf.Lerp(1f, Roulette.WaitingOfShown, waiting);
             }
             float tilt = -direction * RouletteAngle; // Scrolling on turns the wheel clockwise: the next card comes from the left
             bool fromAhead = direction > 0;
@@ -701,11 +701,15 @@ namespace SlayTheClone {
             return areas.Any(r => Rect.MinMaxRect(r.xMin - AreaMargin, r.yMin - AreaMargin, r.xMax + AreaMargin, r.yMax + AreaMargin).Contains(pointer));
         }
 
+        // With cards tucked under it, the shown card's own size (a slider), the wheel's cards keeping theirs
+        private static float ShownScaleOf(CardController card) => card != null && card.AttachedCards.Count > 0 ? Roulette.shownScale : 1f;
+
         // Twice a card's own size, and always well bigger than the card as it's shown (a pile window's cards are big already)
         private float PreviewScaleFor(CardController card) {
             var canvas = GetComponentInParent<Canvas>();
             float unit = (canvas != null ? canvas.scaleFactor : 1f) * CardColumns.CardHeight; // A preview at scale 1, on screen
-            return CardScreenRect(card) is Rect shown && unit > 0f ? Mathf.Max(PreviewScale, 1.3f * shown.height / unit) : PreviewScale;
+            float scale = CardScreenRect(card) is Rect shown && unit > 0f ? Mathf.Max(PreviewScale, 1.3f * shown.height / unit) : PreviewScale;
+            return scale * ShownScaleOf(card);
         }
 
         private static Rect? CardScreenRect(CardController card) {
