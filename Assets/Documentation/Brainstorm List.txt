@@ -1622,6 +1622,7 @@ Card Game Factions Overview
 			NDA (Non-Disclosure Agreement): built in Corporate (2026-10-14), Discard 1 and Blackout 2
 			Memory Wipe / Mandela Effect (all your creatures become unknown again). Better in another faction (Mind?), with its mechanic changed (2026-10-13)
 			Spy-film gadgets (James Bond, 2026-10-13): built The Golden Gun, GoldenEye, Shaken Not Stirred, Licence to Kill, Die Another Day, Femme Fatale (Double-O Section deck, 2026-10-14). Still ideas: Exploding Pen, Ejector Seat, Tank Chase, Bungee Jump off the Dam, No Mr. Bond I Expect You to Die, Q Branch, Steel Teeth
+			Psyop (added 2026-10-16)
 			Secure Deletion
 			Self-Destruct Message
 			Steganography (tagged Shadow Ops.)
