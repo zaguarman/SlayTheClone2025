@@ -1,30 +1,46 @@
 AI TOURNAMENT: THE LEVELS
-Each deck against itself, each pairing, both seats. 660 games, called off after 40 Days.
+Each deck against itself, each pairing, both seats. 1500 games, called off after 40 Days.
 
 Ranking: share of all its games won (draws count as not won)
-  Hard               65% of 440  Weighs everything the same: the plain Hard AI.
-  Medium             50% of 440
-  Easy               15% of 440
+  Hard               72% of 1000  Weighs everything the same: the plain Hard AI.
+  Medium             56% of 1000
+  Easy               18% of 1000
 
 Head to head: the row's wins - the column's wins
                           Easy      Medium        Hard
-  Easy                       -    39 - 155    27 - 176
-  Medium              155 - 39           -    66 - 112
-  Hard                176 - 27    112 - 66           -
+  Easy                       -   102 - 393    79 - 420
+  Medium             393 - 102           -   163 - 304
+  Hard                420 - 79   304 - 163           -
 
-Seats: Player 1 won 287, Player 2 won 288, 85 draws; 19,0 Days on average
+Seats: Player 1 won 727, Player 2 won 734, 39 draws; 12,9 Days on average
 
 By deck: which AI won the most with it
-  Corporate - Shareholder Value: Hard 63%, Medium 53%, Easy 20%; last Easy 20%
-  Statecraft - Order & Paperwork: Hard 65%, Medium 35%, Easy 13%; last Easy 13%
-  Zeitgeist - Moods of Modern Life: Medium 58%, Hard 53%, Easy 25%; last Easy 25%
-  Utopia - Results May Vary: Hard 85%, Medium 45%, Easy 8%; last Easy 8%
-  Digital Society - Terminally Online: Hard 68%, Easy 43%, Medium 28%; last Medium 28%
-  Shadow Ops. - Plausible Deniability: Hard 68%, Medium 23%, Easy 8%; last Easy 8%
-  Tech - Move Fast and Break Things: Hard 83%, Medium 45%, Easy 5%; last Easy 5%
-  Myth - Old Gods, New Tricks: Hard 73%, Medium 70%, Easy 5%; last Easy 5%
-  Mind - All in Your Head: Medium 70%, Easy 40%, Hard 18%; last Hard 18%
-  Digital Society & Shadow Ops. - Panopticon: Hard 73%, Medium 53%, Easy 0%; last Easy 0%
-  Myth & Corporate - Prosperity Gospel: Medium 75%, Hard 75%, Easy 0%; last Easy 0%
+  Corporate - Shareholder Value: Hard 68%, Medium 43%, Easy 15%
+  Statecraft - Order & Paperwork: Hard 83%, Medium 65%, Easy 3%
+  Zeitgeist - Moods of Modern Life: Hard 75%, Medium 45%, Easy 30%
+  Utopia - Results May Vary: Medium 68%, Hard 65%, Easy 18%
+  Digital Society - Terminally Online: Hard 58%, Medium 50%, Easy 15%
+  Shadow Ops. - Licence to Kill: Medium 70%, Hard 68%, Easy 13%
+  Tech - Move Fast and Break Things: Hard 78%, Medium 55%, Easy 18%
+  Myth - Old Gods, New Tricks: Hard 65%, Easy 50%, Medium 35%
+  Mind - All in Your Head: Hard 78%, Medium 60%, Easy 13%
+  Corporate - Hustle Rush: Medium 80%, Hard 60%, Easy 10%
+  Statecraft - Shock and Awe: Medium 80%, Hard 68%, Easy 0%
+  Zeitgeist - Underdogs: Medium 78%, Hard 68%, Easy 5%
+  Utopia - Lab Grown: Hard 80%, Medium 65%, Easy 5%
+  Digital Society - Influencer Economy: Hard 98%, Medium 53%, Easy 0%
+  Shadow Ops. - Black Budget: Hard 78%, Medium 48%, Easy 18%
+  Tech - Threat Model: Hard 83%, Medium 63%, Easy 5%
+  Myth - Blessed Martyrs: Hard 73%, Medium 70%, Easy 8%
+  Mind - Mind Games: Hard 90%, Medium 58%, Easy 0%
+  Myth + Corporate - Prosperity Gospel: Easy 95%, Hard 53%, Medium 0%
+  Digital Society + Shadow Ops. - Panopticon: Hard 93%, Medium 53%, Easy 5%
+  Corporate + Zeitgeist - Hustle Culture: Hard 75%, Medium 73%, Easy 3%
+  Statecraft + Corporate - Military-Industrial Complex: Hard 63%, Easy 53%, Medium 13%
+  Utopia + Myth - Frankenstein: Hard 65%, Medium 55%, Easy 30%
+  Tech + Digital Society - The Algorithm: Hard 65%, Medium 58%, Easy 28%
+  Shadow Ops. + Mind - Psyop: Hard 68%, Medium 58%, Easy 18%
 
-PROBLEMS: none found.
+PROBLEMS: 1 kinds
+  [Rules] x1: A creature at # Health is still alive on the board
+      first: Zeitgeist - Underdogs, Hard vs Medium, seed 1719, Day 6: Camper Van 2/0

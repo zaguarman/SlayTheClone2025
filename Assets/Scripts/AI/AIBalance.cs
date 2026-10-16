@@ -408,7 +408,7 @@ namespace SlayTheClone {
                 text.AppendLine($"    {ShortDeck(deck.GetDeckName()),-22} {profile}");
                 text.AppendLine($"    {"",-22} {string.Join("; ", hitters)}");
             }
-            text.AppendLine($"  First seat: Player 1 won {deckResults.Count(r => r.Winner == 1)}, Player 2 {deckResults.Count(r => r.Winner == 2)}, draws {deckResults.Count(r => r.Winner == 0)}; {deckResults.Average(r => r.Days):0.0} Days on average");
+            text.AppendLine($"  First seat: Player 1 won {deckResults.Count(r => r.Winner == 1)}, Player 2 {deckResults.Count(r => r.Winner == 2)}, draws {deckResults.Count(r => r.Winner == 0)}; {(deckResults.Count == 0 ? 0 : deckResults.Average(r => r.Days)):0.0} Days on average");
             text.AppendLine();
 
             // Cards

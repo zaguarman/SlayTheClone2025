@@ -58,9 +58,18 @@ namespace SlayTheClone {
                 return new List<AITournament.Result>();
             }
             var catalog = AssetDatabase.LoadAssetAtPath<DeckCatalog>(AssetDatabase.GUIDToAssetPath(guids[0]));
+            AITournament.BeginRun();
             try {
-                var (results, report) = run(catalog.Decks,
-                    done => EditorUtility.DisplayProgressBar("AI Tournament", "The AIs are playing each other...", done));
+                // Cancel stops it early (the user): the games under way finish, and the report is written from those played
+                var (results, report) = run(catalog.Decks, done => {
+                    string doing = AITournament.StopRequested ? "Stopping: the games under way finish, then the report is written..."
+                        : "The AIs are playing each other... (Cancel stops early and writes the report so far)";
+                    if (EditorUtility.DisplayCancelableProgressBar("AI Tournament", doing, done)) AITournament.StopRequested = true;
+                });
+                if (AITournament.Stopped) {
+                    report = $"STOPPED EARLY: {AITournament.GamesPlayed} of the {AITournament.GamesPlanned} games planned so far were played; "
+                             + "everything below comes from those (later stages may be missing).\n\n" + report;
+                }
                 File.WriteAllText(reportPath, report);
                 AssetDatabase.ImportAsset(reportPath);
                 UnityEngine.Debug.Log($"AI Tournament done, written to {reportPath}:\n{report}");

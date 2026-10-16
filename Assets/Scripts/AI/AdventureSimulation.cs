@@ -52,7 +52,7 @@ namespace SlayTheClone {
             }
             var audit = new GameAudit();
             int rounds = 0, fights = 0;
-            while (sims.Any(s => !s.Over)) {
+            while (sims.Any(s => !s.Over) && !StopRequested) {
                 rounds++;
                 var games = new List<Game>();
                 var playing = new List<AdventureSim>();
@@ -73,12 +73,18 @@ namespace SlayTheClone {
                 }
                 if (games.Count == 0) break;
                 int before = fights;
-                var results = PlayAll(games, audit, null, done => progress?.Invoke(Mathf.Clamp01((before + done * games.Count) / (float)(sims.Count * 8))));
-                fights += games.Count;
-                for (int i = 0; i < results.Length; i++) AfterFight(playing[i], results[i], cards);
+                var results = PlayAll(games, audit, null, done => progress?.Invoke(Mathf.Clamp01((before + done * games.Count) / (float)(sims.Count * 8))), aligned: true);
+                fights += results.Count(r => r.Played);
+                for (int i = 0; i < results.Length; i++) {
+                    if (results[i].Played) AfterFight(playing[i], results[i], cards);
+                }
                 Release(read);
             }
             progress?.Invoke(1f);
+            if (StopRequested) { // Stopped early: only the runs that finished are reported
+                foreach (var unfinished in sims.Where(s => !s.Over)) if (unfinished.EnemyDeck != null) Object.DestroyImmediate(unfinished.EnemyDeck);
+                sims.RemoveAll(s => !s.Over);
+            }
             string report = AdventureReport(sims, factions, runsPerFaction, player, fights, audit, cards);
             foreach (var made in upgradedMade) Object.DestroyImmediate(made);
             upgradedMade.Clear();

@@ -34,6 +34,8 @@ namespace SlayTheClone {
                 PotionsLeft1 = potionsLeft1 ?? new string[0];
             }
 
+            /// <summary>It was played: false for a game skipped because the run was stopped early.</summary>
+            public bool Played => Deck != null;
             public AILevel Level1 => First.Level;
             public AILevel Level2 => Second.Level;
             public string WinnerName => Winner == 1 ? First.Name : Winner == 2 ? Second.Name : null;
@@ -70,6 +72,22 @@ namespace SlayTheClone {
         /// so past about 5 the threads mostly wait for each other. Using every core would take separate processes.
         /// </summary>
         public static int Workers { get; set; } = System.Math.Max(1, System.Math.Min(5, System.Environment.ProcessorCount - 1));
+
+        /// <summary>
+        /// Stop early (the user, 2026-10-16: the progress bar's Cancel): no new game starts, the ones under way finish, and the
+        /// report is written from the games played so far.
+        /// </summary>
+        public static volatile bool StopRequested;
+        /// <summary>The run since <see cref="BeginRun"/> was stopped early: the games it planned and the ones it played.</summary>
+        public static bool Stopped { get; private set; }
+        public static int GamesPlanned { get; private set; }
+        public static int GamesPlayed { get; private set; }
+
+        /// <summary>A new run: not stopped, nothing played yet.</summary>
+        public static void BeginRun() {
+            StopRequested = Stopped = false;
+            GamesPlanned = GamesPlayed = 0;
+        }
 
         internal static List<DeckCards> Read(IReadOnlyList<DeckScriptableObject> decks) =>
             decks.Select(d => new DeckCards { Name = d.GetDeckName(), Cards = d.GetCardDataList() }).ToList();
@@ -149,7 +167,9 @@ namespace SlayTheClone {
         /// in the order of the games (each game's seed makes it play out the same whatever thread it's on). The calling
         /// (main) thread reports the progress and listens for what the games log.
         /// </summary>
-        internal static Result[] PlayAll(IReadOnlyList<Game> games, GameAudit audit, CardLedger ledger, System.Action<float> progress) {
+        /// <param name="aligned">Keep a result for each game, in their order (a game skipped by a stop is not <see cref="Result.Played"/>);
+        /// otherwise only the games played are returned.</param>
+        internal static Result[] PlayAll(IReadOnlyList<Game> games, GameAudit audit, CardLedger ledger, System.Action<float> progress, bool aligned = false) {
             var results = new Result[games.Count];
             int done = 0;
             bool muted = DebugLogger.MuteInfo;
@@ -157,7 +177,11 @@ namespace SlayTheClone {
             audit?.Listen();
             try {
                 var options = new ParallelOptions { MaxDegreeOfParallelism = Workers };
-                var work = Task.Run(() => Parallel.For(0, games.Count, options, i => {
+                var work = Task.Run(() => Parallel.For(0, games.Count, options, (i, loop) => {
+                    if (StopRequested) { // Stopped: no new game starts
+                        loop.Stop();
+                        return;
+                    }
                     results[i] = Play(games[i], audit, ledger);
                     Interlocked.Increment(ref done);
                 }));
@@ -168,7 +192,10 @@ namespace SlayTheClone {
                 audit?.StopListening();
                 DebugLogger.MuteInfo = muted;
             }
-            return results;
+            GamesPlanned += games.Count;
+            GamesPlayed += done;
+            if (done < games.Count) Stopped = true;
+            return aligned ? results : results.Where(r => r.Played).ToArray();
         }
 
         public static readonly AIEntrant[] Levels = { new AIEntrant(AILevel.Easy), new AIEntrant(AILevel.Medium), new AIEntrant(AILevel.Hard) };
@@ -253,7 +280,7 @@ namespace SlayTheClone {
             text.AppendLine();
 
             int firstSeat = results.Count(r => r.Winner == 1), secondSeat = results.Count(r => r.Winner == 2);
-            text.AppendLine($"Seats: Player 1 won {firstSeat}, Player 2 won {secondSeat}, {results.Count - firstSeat - secondSeat} draws; {results.Average(r => r.Days):0.0} Days on average");
+            text.AppendLine($"Seats: Player 1 won {firstSeat}, Player 2 won {secondSeat}, {results.Count - firstSeat - secondSeat} draws; {(results.Count == 0 ? 0 : results.Average(r => r.Days)):0.0} Days on average");
             text.AppendLine();
 
             text.AppendLine("By deck: which AI won the most with it");
