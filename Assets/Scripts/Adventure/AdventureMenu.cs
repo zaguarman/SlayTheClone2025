@@ -34,6 +34,7 @@ namespace SlayTheClone {
         public const string EventChoiceButton = "EventChoice ";
         public const string EventOnButtonName = "EventOnButton";
         public const string UpgradeBackButtonName = "UpgradeBackButton";
+        public const string AutoplayButtonName = "AutoplayButton";
         private const float EventWidth = 900f;
         private const int ShopColumns = 5; // The shop's cards on one row
         private const int RewardColumns = 4; // The reward's cards at a readable size, not stretched over the width
@@ -116,6 +117,21 @@ namespace SlayTheClone {
             if (embark != null) embark.interactable = offered;
         }
 
+        /// <summary>
+        /// The autopilot (see <see cref="AdventureAutopilot"/>): it plays the run on screen, the AI on both seats of the fights,
+        /// at the speed you set. From the faction choice it starts a run first; on the map it takes over the run, or gives it back.
+        /// </summary>
+        public void Autoplay() {
+            if (AdventureAutopilot.On) {
+                AdventureAutopilot.End();
+                Show();
+                return;
+            }
+            if (!AdventureRun.Active) Embark();
+            AdventureAutopilot.Begin();
+            Show();
+        }
+
         /// <summary>Starts a run with the chosen faction's starter deck, on a new map, and shows it.</summary>
         public void Embark() {
             if (Chosen == null || !Factions.Any(f => f.faction == Chosen)) return;
@@ -154,6 +170,7 @@ namespace SlayTheClone {
             AddButton(footer, BackButtonName, "Back", BackWidth, Hide);
             embark = AddButton(footer, EmbarkButtonName, "<b>Embark</b>", 360, Embark);
             UITheme.StyleButton(embark, UITheme.ButtonKind.Primary);
+            AddButton(footer, AutoplayButtonName, "Autoplay", 260, Autoplay);
             return screen.panel;
         }
         #endregion
@@ -202,6 +219,11 @@ namespace SlayTheClone {
             MatchSetup.PlayerPotions.AddRange(AdventureRun.Potions);
             MatchSetup.AILevel = LevelFor(room);
             MatchSetup.AIStyle = AIStyle.Balanced;
+            if (AdventureAutopilot.On) { // The autopilot: the AI plays your seat too
+                MatchSetup.AI = AISeats.Both;
+                MatchSetup.SetLevel(AISeats.Player1, AdventureAutopilot.Level);
+                MatchSetup.SetLevel(AISeats.Player2, LevelFor(room));
+            }
         }
 
         /// <summary>How well the AI plays a fight room: the first fights are easy, an elite hard, the boss very hard.</summary>
@@ -246,6 +268,7 @@ namespace SlayTheClone {
             AddButton(footer, BackButtonName, "Back", BackWidth, Hide);
             AddButton(footer, DeckButtonName, "View deck", 260, () => ShowDeck(true));
             bool over = AdventureRun.Won || AdventureRun.Lost;
+            if (!over) AddButton(footer, AutoplayButtonName, AdventureAutopilot.On ? "Take over" : "Autoplay", 240, Autoplay);
             var abandon = AddButton(footer, AbandonButtonName, over ? "<b>New adventure</b>" : "Abandon run", 360, Abandon);
             if (over) UITheme.StyleButton(abandon, UITheme.ButtonKind.Primary);
             return screen.panel;

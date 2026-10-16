@@ -89,3 +89,17 @@ From the first game (likely still the basis):
   (Conceal 2 on your creatures), Creatine (+1/+1).
 • The map's side panel lists your relics and potions; the rewards screen says what a fight gave besides cards.
 • The AI adventure simulation does all of this too: it sleeps below 40 Health and trains above, buys a potion at shops.
+
+
+7. THE AUTOPILOT (the user, 2026-10-16: "an automated run tool with a speed changer to analyze the runs personally")
+
+• Autoplay, on the faction choice (it starts a run) or on the map (it takes the run over). Code: AdventureAutopilot.cs.
+• It plays the run on screen: rooms at random along the paths (leaning to rest sites when hurt, to shops with money, away
+  from elites when weak), the strongest card of each pack, at shops the strongest card it can pay, a potion, then its
+  weakest card out; rest sites sleep below 40 Health and train above; events pick a choice at random. The fights: the AI on
+  both seats (yours Hard; the button cycles Easy to Very Hard).
+• A panel in the top-left corner, in the map and the fights: speed 0.25x to 16x (- and = keys, or the buttons; it sets the
+  time scale, so the fights' playback follows), Pause (P) and Step (one choice while paused), Repeat (a new run with the
+  same faction when one ends), Logs (opens the folder), Stop (you take over where it is).
+• Each run is logged to Logs/Autopilot in the project folder: a line a room and a choice, each fight's enemy, result, Day
+  and Health, and a summary at the end (rooms, fights won, relics, potions, the deck).
