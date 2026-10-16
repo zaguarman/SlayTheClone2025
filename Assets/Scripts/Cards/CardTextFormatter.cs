@@ -473,6 +473,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Revealed: return $"{Keywords.Link("Revealed", "Revealed" + Count(days))} on {target}";
                 case StatusEffectType.Encrypted: return $"{Keywords.Link("Encrypted", "Encrypt" + Count(days))} on {target}";
                 case StatusEffectType.Untouchable: return $"{Keywords.Link("Untouchable", "Untouchable" + Count(days))} on {target}";
+                case StatusEffectType.Shielded: return $"{Keywords.Link("Shield", "Shield" + Count(days))} on {target}";
                 case StatusEffectType.Cooldown: return $"{Keywords.Link("Cooldown", "Cooldown" + Count(days))} on {target}";
                 case StatusEffectType.Brainwashed: return $"{Keywords.Link("Brainwashed", "Brainwashed" + Count(days))} on {target}";
                 case StatusEffectType.KillOrder: return $"{Keywords.Link("Kill Order", "Kill Order" + Count(days))} on {target}";

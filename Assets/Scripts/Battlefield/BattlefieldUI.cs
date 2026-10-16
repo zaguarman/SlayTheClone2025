@@ -895,7 +895,9 @@ namespace SlayTheClone {
         private void RefreshAttachments() {
             if (!IsInitialized || Player == null) return;
             foreach (var ghost in spellGhosts.Values) { // A ghost tucked away goes back to the mat before its strip goes
-                if (ghost != null && stripLayer != null && ghost.transform.IsChildOf(stripLayer)) ghost.transform.SetParent(transform, false);
+                if (ghost == null) continue;
+                ghost.TuckedUnder = null;
+                if (stripLayer != null && ghost.transform.IsChildOf(stripLayer)) ghost.transform.SetParent(transform, false);
             }
             foreach (var band in attachedBands) if (band != null) Destroy(band);
             attachedBands.Clear();
@@ -969,6 +971,7 @@ namespace SlayTheClone {
         // table it's over that side's hand, which would otherwise hide them; for the screen's side, under its hand, so a
         // raised hand card stays over them
         private void Tuck(CardController view, CardController front, int depth) {
+            view.TuckedUnder = front;
             var band = new GameObject($"Strip_{view.name}", typeof(RectTransform), typeof(RectMask2D));
             attachedBands.Add(band);
             var bandRect = (RectTransform)band.transform;

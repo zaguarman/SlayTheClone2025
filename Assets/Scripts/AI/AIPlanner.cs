@@ -441,7 +441,7 @@ namespace SlayTheClone {
             DamageOf(attacker) + (IsExposed(target) ? attacker.Ability == CreatureAbility.DoubleTap ? 2 : 1 : 0)
             + (attacker.Ability == CreatureAbility.InsiderJob ? target.Armor : 0);
 
-        private bool Hittable(SeenCreature target) => !IsUntouchable(target) && !target.Slot.Shielded && !target.Planted;
+        private bool Hittable(SeenCreature target) => !IsUntouchable(target) && !target.Slot.Shielded && !target.Has(StatusEffectType.Shielded) && !target.Planted;
 
         // A hit that doesn't kill: worth the damage to a threat, minus what answers it
         private float ChipValue(SeenCreature attacker, SeenCreature target) {
@@ -500,7 +500,7 @@ namespace SlayTheClone {
         // Hard: a creature with nothing to do leaves a slot that harms it, or takes cover on a Shield of ours
         private void MoveOutOfHarm(SeenCreature creature) {
             bool harmed = creature.Slot.VisibleEffect?.Type == SlotEffectType.ScorchedEarth;
-            bool exposed = WouldDie(creature) && !creature.Slot.Shielded;
+            bool exposed = WouldDie(creature) && !creature.Slot.Shielded && !creature.Has(StatusEffectType.Shielded);
             if (!harmed && !exposed) return;
             var to = view.MySlots.Where(s => s.IsFree && ValueOfEntering(s) >= 0 && (harmed || s.Shielded))
                 .OrderByDescending(ValueOfEntering).FirstOrDefault(s => !MovementRules.Evaluate(creature.Creature, s.Slot, queue).blocked);
@@ -861,6 +861,7 @@ namespace SlayTheClone {
                 StatusEffectType.Revealed => creature.Has(StatusEffectType.Concealed) || creature.Ability is CreatureAbility.Undercover or CreatureAbility.Ambush ? -2 : -0.5f,
                 StatusEffectType.Concealed or StatusEffectType.Encrypted => 1,
                 StatusEffectType.Untouchable => Hard && creature.Ours ? Protection(creature, ActionType.Stun, 0) : 3,
+                StatusEffectType.Shielded => creature.Has(StatusEffectType.Shielded) ? 0 : 2,
                 StatusEffectType.Cooldown => -1,
                 // A delayed death they can't see coming, unless they happen to cleanse it
                 StatusEffectType.KillOrder when VeryHard && !creature.Ours => -(creature.Worth + HealthLeft(creature)) * 0.9f * SlowKillShare(creature),

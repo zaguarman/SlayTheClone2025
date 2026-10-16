@@ -19,9 +19,10 @@ namespace SlayTheClone {
         public bool IsPersistent => EffectType is StatusEffectType.Blessed or StatusEffectType.HeatSignature or StatusEffectType.Licensed or StatusEffectType.Survivor;
         /// <summary>Whether it harms its creature: what a Cleanse removes (a Purge removes the rest too). Blessed is the good one.</summary>
         public bool IsNegative => EffectType is not (StatusEffectType.Blessed or StatusEffectType.Concealed or StatusEffectType.Encrypted or StatusEffectType.Untouchable
-            or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Survivor);
+            or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Survivor
+            or StatusEffectType.Shielded);
         /// <summary>Its Days count the Day it lands, like a Day-long buff (Untouchable 1 is this Day only), instead of skipping it.</summary>
-        public bool CountsTheDayItLands => EffectType is StatusEffectType.Untouchable or StatusEffectType.Composed;
+        public bool CountsTheDayItLands => EffectType is StatusEffectType.Untouchable or StatusEffectType.Composed or StatusEffectType.Shielded;
 
         /// <summary>Doomed can't be cleansed: a cleanse attempt passes it on instead (Heresy). Nor can Brainwashed: only taking
         /// the creature off the board in time saves it.</summary>

@@ -69,7 +69,8 @@ namespace SlayTheClone {
             Blackout,      // Its ability and effects are switched off
             Survivor,      // From full Health, a hit that would kill it leaves it at 1, then it's spent (lasts until used)
             Rooted,        // It can't move, and nothing can move or swap it (a building going up: Ministry for Equality)
-            Burnout        // When it runs out, the creature is destroyed (Overtime: it lasts through the first Day it's ready)
+            Burnout,       // When it runs out, the creature is destroyed (Overtime: it lasts through the first Day it's ready)
+            Shielded       // Takes no combat damage, for its Days counting the one it lands (the user: a creature's, not a slot's)
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old

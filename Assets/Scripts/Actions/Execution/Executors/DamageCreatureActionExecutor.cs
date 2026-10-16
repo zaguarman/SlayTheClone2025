@@ -23,7 +23,7 @@ namespace SlayTheClone {
             }
 
             // Shield: the creature on it takes no combat damage
-            if (damageAction.IsCombatDamage() && SlotEffectRules.BlocksCombatDamage(targetCreature)) {
+            if (damageAction.IsCombatDamage() && SlotEffectRules.BlocksCombatDamage(targetCreature, context.ModifierManager)) {
                 Log($"Executor: {targetCreature.Name} is on a Shield: no combat damage", LogTag.Actions | LogTag.Combat);
                 return;
             }

@@ -488,8 +488,8 @@ namespace SlayTheClone {
                 .Picture("A rusty landmine half-buried in a children's sandbox, next to a faded government sign: \"AREA CLEARED. PROBABLY. - Ministry of Defence, 1998\"."),
             Spell("Ceasefire", TargetType.FriendlyCreatures,
                 "Both sides agree to stop shooting. Starting right after this last volley.",
-                "Mechanics test: Shield for 2 Days on a slot (was 3, as Temporal Shield; 2026-10-15, Statecraft is among the strongest). The creature there takes no combat damage, but spells and abilities still hurt it. It stays with the slot, not the creature (Static).",
-                PlaceSlotEffect(SlotEffectType.Shield, 0, 2, TargetType.FriendlyCreatures))
+                "Mechanics test: Shield 2 on target creature (was a slot's, as Temporal Shield; the user, 2026-10-16: a slot can't have a shield, only a creature): for 2 Days, counting this one, it takes no combat damage, but spells and abilities still hurt it. It goes with the creature.",
+                Status(StatusEffectType.Shielded, 2, TargetType.FriendlyCreatures))
                 .Picture("Two generals shaking hands for the cameras in front of a CEASEFIRE banner, each hiding a grenade behind his back."),
             Spell("Violence Monopoly", TargetType.Player,
                 "Only one of us is allowed to hit people. Guess which.",
@@ -1582,8 +1582,8 @@ namespace SlayTheClone {
                 .Picture("A swirling black hole sucking in a cow, a sofa, a single sock and a tax form."),
             Spell("Stasis Field", TargetType.FriendlyCreatures,
                 "Frozen in time. Like your salary.",
-                "Shield for 3 Days on a slot: the creature there takes no combat damage. Stays with the slot.",
-                PlaceSlotEffect(SlotEffectType.Shield, 0, 3, TargetType.FriendlyCreatures))
+                "Shield 3 on target creature: for 3 Days, counting this one, it takes no combat damage. It goes with the creature (the user, 2026-10-16: a slot can't have a shield).",
+                Status(StatusEffectType.Shielded, 3, TargetType.FriendlyCreatures))
                 .Picture("A man frozen mid-sneeze inside a giant block of green jelly, the droplets hanging in the air."),
             Spell("Absolute Zero", TargetType.AllCreatures,
                 "Minus 273. The office AC, as set by Gary.",

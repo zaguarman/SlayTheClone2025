@@ -623,6 +623,17 @@ Cooldown
     Answers: (It's the price of a strong ability.)
     Cleansable: Yes
 
+Shield (the user, 2026-10-16: a creature's, not a slot's)
+    Faction: Statecraft (Ceasefire), Utopia (Stasis Field)
+    Type: Protection
+    Description: "It takes no combat damage."
+    Core Impact: Attacks don't hurt it, whoever makes them; spells, abilities and other damage still do. It goes with the creature when it moves. It was a Slot Effect, staying with the slot: a slot can't have a shield.
+    Stacking & Duration:
+        Initial Stacks: X Days (from source), counting the Day it lands (like Untouchable)
+        Re-application Behavior: Refresh
+    Answers: Damage it with spells or abilities, or wait it out.
+    Cleansable: No (not harmful)
+
 Burnout (the user, 2026-10-16)
     Faction: Corporate (Overtime)
     Type: Delayed Death

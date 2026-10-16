@@ -130,7 +130,7 @@ namespace SlayTheClone {
             Add("Slot Effect", "A condition on a [Slot|slot], not on the creature: it stays with the slot. One per slot.");
             Add("Landmine", "Landmine X: hidden. The next creature to enter the slot takes X damage.");
             Add("Barbed Snare", "Barbed Snare X: hidden. The next creature to leave the slot takes X damage.");
-            Add("Shield", "Shield X (no number: 1): for X [Days], the creature in the slot takes no combat damage.");
+            Add("Shield", "Shield X (no number: 1): for X [Days], counting the one it lands, this creature takes no combat damage (attacks); spells and abilities still hurt it. It goes with the creature. A [Cleanse] doesn't remove it.");
             Add("Scorched Earth", "The creature in the slot can't use its ability or trigger its effects. Its [Arrival] effects wait until it's off the slot. It can still move and attack.");
 
             // ---------------------------------------------------------------- Trends

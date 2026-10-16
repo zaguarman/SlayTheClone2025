@@ -47,7 +47,7 @@ namespace SlayTheClone {
             var licence = primaryTarget is ICreature ? StatusRules.Find(context.ModifierManager, attacker, Enums.StatusEffectType.Licensed) : null;
             if (licence != null && primaryTarget is ICreature mark) {
                 context.ModifierManager.RemoveModifier(attacker, licence);
-                if (context.ModifierManager.HasStatusEffect(mark, Enums.StatusEffectType.Untouchable) || SlotEffectRules.BlocksCombatDamage(mark)) {
+                if (context.ModifierManager.HasStatusEffect(mark, Enums.StatusEffectType.Untouchable) || SlotEffectRules.BlocksCombatDamage(mark, context.ModifierManager)) {
                     Log($"Executor: {attacker.Name}'s licence is spent on {mark.Name}, who can't be touched", LogTag.Combat);
                     return;
                 }
@@ -62,7 +62,7 @@ namespace SlayTheClone {
             // Extreme Prejudice: the hit destroys the creature outright, then the assassin is gone too. What stops a hit
             // (Untouchable, a Shield) stops it; Health and Armor don't
             if (Abilities.Has(attacker, Enums.CreatureAbility.ExtremePrejudice) && primaryTarget is ICreature victim) {
-                if (context.ModifierManager.HasStatusEffect(victim, Enums.StatusEffectType.Untouchable) || SlotEffectRules.BlocksCombatDamage(victim)) {
+                if (context.ModifierManager.HasStatusEffect(victim, Enums.StatusEffectType.Untouchable) || SlotEffectRules.BlocksCombatDamage(victim, context.ModifierManager)) {
                     Log($"Executor: {attacker.Name} can't touch {victim.Name}", LogTag.Combat);
                     return;
                 }

@@ -93,27 +93,30 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void Placing_OnePerSlot_StaysWithTheSlot_Cleansable_AndShieldStopsCombatDamage() {
+        public void Placing_OnePerSlot_StaysWithTheSlot_Cleansable_AndShieldStopsCombatDamage_OnACreature() {
             var mover = game.Summon(p1, game.Creature("Mover", 1, 10), 0);
-            var shield = game.GiveCard(p1, game.Spell("Shield Slot", TargetType.AllCreatures, PlaceEffect(SlotEffectType.Shield, 0, 2)));
-            game.Play(shield, p1, p1.Battlefield[0]); // Aimed at its own creature's slot
+            var scorch = game.GiveCard(p1, game.Spell("Scorch Slot", TargetType.AllCreatures, PlaceEffect(SlotEffectType.ScorchedEarth, 0, 2)));
+            game.Play(scorch, p1, p1.Battlefield[0]); // Aimed at its own creature's slot
             game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[0], p1.Battlefield[2], p1));
             game.Resolve();
             Assert.AreSame(p1.Battlefield[2], mover.Slot, "Moves resolve before spells");
             Assert.AreSame(p1, p1.Battlefield[0].Effect?.Controller, "Static: it lands on the slot it was aimed at");
             Assert.IsNull(p1.Battlefield[2].Effect);
 
-            var shielded = game.Summon(p1, game.Creature("Shielded", 0, 10), 0);
+            // Shield is a creature's (the user: a slot can't have one): no combat damage for its Days, counting this one, wherever it goes
+            var shielded = game.Summon(p1, game.Creature("Shielded", 0, 10), 1);
+            game.Run(new ApplyStatusEffectAction(shielded, StatusEffectType.Shielded, 2, 0));
+            game.Run(new MoveCreatureAction(shielded, p1.Battlefield[1], p1.Battlefield[3], p1));
             var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 0);
-            game.Attack(brute, p1.Battlefield[0]);
-            Assert.AreEqual(10, shielded.Health, "A Shield stops combat damage");
+            game.Attack(brute, p1.Battlefield[3]);
+            Assert.AreEqual(10, shielded.Health, "A Shield stops combat damage, and goes with its creature");
             game.Run(new DamageCreatureAction(shielded, 2));
             Assert.AreEqual(8, shielded.Health, "...not other damage");
             game.StartTurn();
-            Assert.IsNotNull(p1.Battlefield[0].Effect, "2 Days: this one and the next");
+            Assert.IsTrue(game.ModifierManager.HasStatusEffect(shielded, StatusEffectType.Shielded), "2 Days: this one and the next");
             game.StartTurn();
-            Assert.IsNull(p1.Battlefield[0].Effect);
-            game.Attack(brute, p1.Battlefield[0]);
+            Assert.IsFalse(game.ModifierManager.HasStatusEffect(shielded, StatusEffectType.Shielded));
+            game.Attack(brute, p1.Battlefield[3]);
             Assert.AreEqual(5, shielded.Health);
 
             Place(p2.Battlefield[3], SlotEffectType.Landmine, 2);

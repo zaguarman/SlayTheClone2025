@@ -32,5 +32,10 @@ MonoBehaviour:
   tipBackRounding: 10
   tuckRounding: 0
   flatRounding: 0
+  deployingAlpha: 0.45
+  queuedAlphaHigh: 0.6
+  queuedAlphaLow: 0.3
+  dropReach: 0.15
+  handRiseReach: 0.3
   riverRoom: 90
   sideways: 0

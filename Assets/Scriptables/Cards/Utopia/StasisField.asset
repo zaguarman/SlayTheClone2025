@@ -31,19 +31,19 @@ MonoBehaviour:
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 9
+    - actionType: 7
       value: 0
       targetType: 3
       targetModifier: 0
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
-      statusEffectToApply: 0
+      statusEffectToApply: 20
       statusDuration: 3
       statusPotency: 0
       cleanse: 0
       purge: 0
-      slotEffect: 3
+      slotEffect: 0
       watchdog:
         watches: 0
         side: 0
@@ -61,8 +61,9 @@ MonoBehaviour:
       requires: 0
       delayDays: 0
       decoy: {fileID: 0}
-  designNotes: 'Shield for 3 Days on a slot: the creature there takes no combat damage.
-    Stays with the slot.'
+  designNotes: 'Shield 3 on target creature: for 3 Days, counting this one, it takes
+    no combat damage. It goes with the creature (the user, 2026-10-16: a slot can''t
+    have a shield).'
   artDescription: A man frozen mid-sneeze inside a giant block of green jelly, the
     droplets hanging in the air.
   defaultTargetType: 3

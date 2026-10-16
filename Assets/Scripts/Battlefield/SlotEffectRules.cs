@@ -55,6 +55,10 @@ namespace SlayTheClone {
         /// <summary>Shield: the creature standing on it takes no combat damage.</summary>
         public static bool BlocksCombatDamage(ICreature creature) => creature?.Slot?.Effect?.Type == SlotEffectType.Shield;
 
+        /// <summary>Shield (a creature's status, the user: a slot can't have one) or an old Shield slot: no combat damage to it.</summary>
+        public static bool BlocksCombatDamage(ICreature creature, IModifierManager modifiers) =>
+            creature != null && (BlocksCombatDamage(creature) || (modifiers?.HasStatusEffect(creature, StatusEffectType.Shielded) ?? false));
+
         /// <summary>Scorched Earth: the triggered effects of the creature standing on it don't happen, and its ability is
         /// switched off (see Abilities). Its entry effects wait until it's off the slot (moved, or the effect ended). It can
         /// still move and attack.</summary>

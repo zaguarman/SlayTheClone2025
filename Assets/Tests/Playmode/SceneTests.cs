@@ -627,6 +627,11 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(1f, SceneGame.HoverPreview().GetComponent<CanvasGroup>().alpha, 0.01f, "...and the shown one solid");
             Assert.AreEqual(Quaternion.identity, SceneGame.HoverPreview().transform.localRotation, "...upright");
             Tooltip.Existing.HideTooltip();
+            SceneGame.Hover(game.BoardView(p2).AttachedViews(aimedAt)[0]); // The tucked card's own strip
+            yield return SceneGame.PreviewShows();
+            Assert.AreSame(quake, SceneGame.HoverPreview()?.GetLinkedCardInstance(), "A tucked card hovered opens its creature's roulette, on it");
+            Assert.AreEqual(1, Tooltip.Existing.Browsed);
+            Tooltip.Existing.HideTooltip();
             SceneGame.Click(zapGhost);
             yield return null;
             Assert.IsNull(game.SpellGhost(zap), "Clicking its strip takes the play back");

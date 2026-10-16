@@ -77,7 +77,7 @@ namespace SlayTheClone {
             if (type is StatusEffectType.Exhausted or StatusEffectType.Concealed or StatusEffectType.Revealed or StatusEffectType.Encrypted
                 or StatusEffectType.Untouchable or StatusEffectType.Cooldown or StatusEffectType.Brainwashed or StatusEffectType.KillOrder
                 or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Blackout
-                or StatusEffectType.Survivor or StatusEffectType.Burnout) {
+                or StatusEffectType.Survivor or StatusEffectType.Burnout or StatusEffectType.Shielded) {
                 foreach (var old in manager.GetActiveModifiersFor(target).OfType<StatusEffectModifier>()
                              .Where(s => s.EffectType == type).ToList()) {
                     manager.RemoveModifier(target, old);
@@ -124,6 +124,7 @@ namespace SlayTheClone {
                 StatusEffectType.KillOrder => $"Kill Order ({days}): then it's destroyed",
                 StatusEffectType.Rooted => $"Rooted ({days}): it can't move, and nothing can move it",
                 StatusEffectType.Burnout => $"Burnout ({days}): then it's destroyed",
+                StatusEffectType.Shielded => $"Shield ({days}): takes no combat damage",
                 StatusEffectType.BorrowedTime => $"Borrowed Time ({days}): survives lethal damage",
                 StatusEffectType.Composed => $"Composed ({days}): it can't be Exhausted",
                 StatusEffectType.Blackout => $"Blackout ({days}): its ability and effects are off",

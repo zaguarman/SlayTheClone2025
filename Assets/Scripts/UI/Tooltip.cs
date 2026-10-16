@@ -165,6 +165,19 @@ namespace SlayTheClone {
         public const float HandDelay = 0.8f;
         private CardController pendingCard;
         private Coroutine pendingShow;
+        private int startBrowse;            // The card of the stack to open on (a tucked card hovered)
+        private CardController hoveredTucked; // ...and that tucked card, while the pointer is on it
+
+        // Where a tucked card is in its creature's stack (1: the first under it), or null if it isn't there
+        private static int? TuckedIndex(CardController tucked) {
+            var stack = tucked.TuckedUnder.AttachedCards;
+            var card = tucked.GetLinkedCardInstance();
+            for (int i = 0; i < stack.Count; i++) if (stack[i] == card) return i + 1;
+            return null;
+        }
+
+        private bool PointerOnTucked(Vector2 pointer) =>
+            hoveredTucked != null && hoveredTucked.TuckedUnder == activeCard && CardScreenRect(hoveredTucked) is Rect rect && rect.Contains(pointer);
         private float pendingSince;
 
         // Why the last hover showed nothing, logged once per card when the pointer rests on it (the user's unresponsive cards)
@@ -184,6 +197,19 @@ namespace SlayTheClone {
         /// on it for a moment (<see cref="HoverDelay"/>). Leaving the card before that shows nothing.
         /// </summary>
         public void ShowTooltip(CardController card) {
+            // A card tucked under a creature (the user): the creature's roulette opens, by the creature, turned to this card
+            if (card != null && card.TuckedUnder != null && TuckedIndex(card) is int at && at > 0) {
+                var front = card.TuckedUnder;
+                hoveredTucked = card;
+                if (front == activeCard && preview != null && !previewIsCard) {
+                    released = false;
+                    if (browsed != at) Browse(at - browsed);
+                    return;
+                }
+                startBrowse = at;
+                card = front;
+            }
+            else startBrowse = 0; // On the creature itself: its roulette opens on it (not where a tucked card left it)
             // A wait that should have ended (its coroutine stopped with its card switched off a moment): start again
             if (card != null && card == pendingCard && Time.unscaledTime > pendingSince + HandDelay + 0.5f) CancelPending();
             if (pinned) { Refused(card, "a preview is pinned (a gallery)"); return; }
@@ -252,7 +278,8 @@ namespace SlayTheClone {
 
             HideTooltip();
             activeCard = card;
-            browsed = 0;
+            browsed = Mathf.Clamp(startBrowse, 0, card.AttachedCards.Count); // Opened from a tucked card: on that one
+            startBrowse = 0;
             canvasGroup.alpha = 1;
             gameObject.SetActive(true);
 
@@ -261,7 +288,7 @@ namespace SlayTheClone {
                 previewIsCard = true;
             }
             else {
-                preview = card.CreatePreview(transform);
+                preview = browsed > 0 ? card.CreatePreviewOfAttached(browsed - 1, transform) : card.CreatePreview(transform);
                 PassThrough(preview);
                 if (preview != null) {
                     preview.transform.localScale = Vector3.one * PreviewScaleFor(card);
@@ -472,6 +499,12 @@ namespace SlayTheClone {
 
         /// <summary>The pointer left the card: the tooltip stays while the pointer goes on to the preview or its popups.</summary>
         public void ReleaseCard(CardController card) {
+            if (card != null && card == hoveredTucked) {
+                hoveredTucked = null;
+                if (card.TuckedUnder == pendingCard) CancelPending();
+                if (card.TuckedUnder == activeCard) Release();
+                return;
+            }
             if (card != null && card == pendingCard) CancelPending(); // It was only passed over
             if (card == null || card != activeCard) return;
             Release();
@@ -488,7 +521,7 @@ namespace SlayTheClone {
             if (pinned) return; // The gallery turns it (the mouse wheel included), nothing hovered or scrolled here closes it
             // Over a creature with cards tucked under it, the wheel goes through them, in the preview
             if (WheelMoved && activeCard != null && preview != null && !previewIsCard && activeCard.AttachedCards.Count > 0
-                && (PointerOnTooltip(GameInput.PointerPosition, includeCard: true))) {
+                && (PointerOnTooltip(GameInput.PointerPosition, includeCard: true) || PointerOnTucked(GameInput.PointerPosition))) {
                 Browse(GameInput.WheelNotches < 0 ? 1 : -1);
                 return;
             }

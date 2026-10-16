@@ -63,6 +63,8 @@ namespace SlayTheClone {
         public bool IsFriendlyFire { get; set; }
         /// <summary>A card tucked under a creature on the board, only its name showing: hovered for its enlarged view, never used.</summary>
         public bool IsAttachment { get; private set; }
+        /// <summary>The creature's card this one is tucked under (a strip above it), while it is: hovered, it opens that one's roulette.</summary>
+        public CardController TuckedUnder { get; set; }
         /// <summary>A creature on the board: the cards tucked under it, oldest first, then the spells queued on it.</summary>
         public IReadOnlyList<ICard> AttachedCards { get; set; } = new List<ICard>();
         /// <summary>For each attached card, who played it (the side whose frame it shows).</summary>
