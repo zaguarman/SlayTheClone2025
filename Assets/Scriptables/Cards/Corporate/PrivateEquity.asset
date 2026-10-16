@@ -32,7 +32,7 @@ MonoBehaviour:
     creature''s stat raises. Buff an enemy, or let them, then take it.'
   artDescription: A vampire banker in a pinstripe suit sucking gold coins out of
     a little family shop through a long straw.
-  attack: 2
+  attack: 3
   health: 4
   speed: 1
   turnsUntilOperative: 1

@@ -66,8 +66,8 @@ MonoBehaviour:
   designNotes: Unbothered, and it heals 1 each Dusk.
   artDescription: A chubby tardigrade lounging in a pool of lava in sunglasses, a
     tiny cocktail in its claw.
-  attack: 1
-  health: 4
+  attack: 2
+  health: 5
   speed: 1
   turnsUntilOperative: 1
   movement: 0

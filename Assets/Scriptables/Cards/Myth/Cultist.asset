@@ -68,7 +68,7 @@ MonoBehaviour:
   artDescription: A hooded cultist holding a THE END IS NEAR sign in one hand and
     a pumpkin spice latte in the other.
   attack: 1
-  health: 1
+  health: 2
   speed: 2
   turnsUntilOperative: 0
   movement: 0

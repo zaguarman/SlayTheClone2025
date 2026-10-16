@@ -64,7 +64,7 @@ MonoBehaviour:
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
     - actionType: 6
-      value: -2
+      value: -1
       targetType: 5
       targetModifier: 0
       modifyAttack: 0

@@ -95,17 +95,21 @@ namespace SlayTheClone {
 
         /// <summary>The cards on offer when the run started: rewards, shops and events take theirs from it.</summary>
         public static IReadOnlyList<CardDataScriptableObject> Pool { get; private set; } = new List<CardDataScriptableObject>();
-        public const int BossHealth = 60, HealthStep = 5; // Enemy Health (the user, 2026-10-16): 5, 10, 15... as you go; the boss 60
+        public const int BossHealth = 60, HealthStep = 5; // Enemy Health (the user, 2026-10-16): in stages, 5, 10, 15...; the boss 60
+        public const int FightsPerStage = 2; // The first 2 enemies have 5 Health, the next 2 have 10, and so on
 
         /// <summary>The fights won so far this run.</summary>
         public static int FightsWon => Path.Count(n => n.IsCombat);
 
-        /// <summary>The Health the enemy of this fight room starts at: 5 for the first fight, 5 more for each one won since, the boss 60.</summary>
+        /// <summary>The Health the enemy of this fight room starts at, by stage (see <see cref="EnemyHealth"/>).</summary>
         public static int EnemyHealthFor(MapNode room) => EnemyHealth(room.Type, FightsWon);
 
-        /// <summary>An enemy's Health in a room of this kind, after so many fights won: 5 more each, an elite 5 more yet, the boss 60.</summary>
+        /// <summary>
+        /// An enemy's Health, in stages of <see cref="FightsPerStage"/> fights (the user): the first ones 5, the next 10, then
+        /// 15...; an elite a stage higher; the boss 60.
+        /// </summary>
         public static int EnemyHealth(RoomType type, int fightsWon) => type == RoomType.Boss ? BossHealth
-            : Mathf.Min(BossHealth - HealthStep, HealthStep * (fightsWon + 1) + (type == RoomType.Elite ? HealthStep : 0));
+            : Mathf.Min(BossHealth - HealthStep, HealthStep * (fightsWon / FightsPerStage + 1 + (type == RoomType.Elite ? 1 : 0)));
 
         public static void Start(Faction faction, DeckScriptableObject deck, int seed, IEnumerable<CardDataScriptableObject> pool = null) {
             Clear();
@@ -195,8 +199,8 @@ namespace SlayTheClone {
             var cards = pool.Where(c => c != null && !(c is CreatureCardScriptableObject { token: true })).Distinct().ToList();
             var tiers = AdventureDecks.Tiers(cards);
             var random = new System.Random(Map.Seed * 23 + room.Row * 11 + room.Column);
-            double Draw(CardDataScriptableObject c) => random.NextDouble() + (int)tiers[c] * 0.1;
-            var own = cards.Where(c => c.faction == Faction).OrderBy(Draw).Take(ShopCards).ToList();
+            // Each card's tier rolled like a reward's: the better ones rarer, more likely higher up the map
+            var own = AdventureDecks.Roll(Faction, AdventureDecks.StrengthOf(room), cards, random, ShopCards);
             foreach (var card in own.OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => tiers[c]))
                 Shop.Add(new ShopOffer { Card = card, Price = PriceOf(tiers[card]) });
         }

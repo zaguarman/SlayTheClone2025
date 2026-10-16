@@ -67,7 +67,7 @@ MonoBehaviour:
     for 2 Days.'
   artDescription: A man in a hoodie blowing a sports whistle, classified documents
     spilling out of every pocket.
-  attack: 1
+  attack: 2
   health: 2
   speed: 3
   turnsUntilOperative: 0

@@ -34,7 +34,7 @@ MonoBehaviour:
     unravelling and winding up the tourist's arm, a "Please Do Not Touch" sign knocked
     to the floor.
   attack: 2
-  health: 5
+  health: 6
   speed: 1
   turnsUntilOperative: 1
   movement: 0

@@ -66,7 +66,7 @@ MonoBehaviour:
   designNotes: 'Future: summons an Unpaid Intern token. Each recruit pays a share
     of its draws upward.'
   artDescription: 
-  attack: 1
+  attack: 2
   health: 2
   speed: 2
   turnsUntilOperative: 0

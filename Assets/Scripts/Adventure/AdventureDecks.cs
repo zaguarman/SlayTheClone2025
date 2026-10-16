@@ -99,6 +99,9 @@ namespace SlayTheClone {
             return score;
         }
 
+        private static bool Helps(CardDataScriptableObject spell) =>
+            spell.ToCardData().effects?.SelectMany(e => e.actions).All(a => a.targetType is TargetType.FriendlyCreatures or TargetType.Player or TargetType.Self) == true;
+
         private static bool Hits(CardDataScriptableObject spell) =>
             spell.ToCardData().effects?.SelectMany(e => e.actions).Any(a => a.actionType == ActionType.Damage && a.targetType is TargetType.Enemy or TargetType.EnemyCreatures) == true;
 
@@ -110,11 +113,15 @@ namespace SlayTheClone {
             var cards = pool.Where(c => c != null && c.faction == faction).Distinct().ToList();
             var tiers = Tiers(pool);
             float Middling(CardDataScriptableObject c) => Math.Abs((int)tiers[c] - (int)Tier.C);
-            var creatures = cards.OfType<CreatureCardScriptableObject>().Where(c => !c.token)
-                .OrderBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName).Cast<CardDataScriptableObject>().Take(2).ToList();
-            var spells = cards.Where(c => c is not CreatureCardScriptableObject).OrderBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName).ToList();
+            // Nothing of Tier A or S in a starter (a text-less 6/6 is plain but no starter card), when the faction has enough below
+            bool Modest(CardDataScriptableObject c) => tiers[c] <= Tier.B;
+            var plainCreatures = cards.OfType<CreatureCardScriptableObject>().Where(c => !c.token).Cast<CardDataScriptableObject>().ToList();
+            if (plainCreatures.Count(Modest) >= 2) plainCreatures = plainCreatures.Where(Modest).ToList();
+            var creatures = plainCreatures.OrderBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName).Take(2).ToList();
+            var spells = cards.Where(c => c is not CreatureCardScriptableObject).OrderBy(c => Modest(c) ? 0 : 1).ThenBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName).ToList();
             var strike = spells.FirstOrDefault(Hits);
-            var defend = spells.FirstOrDefault(s => s != strike && !Hits(s));
+            // The one that helps helps your side: aimed at your creatures or you (not a curse on theirs, like Memento Mori)
+            var defend = spells.FirstOrDefault(s => s != strike && Helps(s)) ?? spells.FirstOrDefault(s => s != strike && !Hits(s));
 
             var deck = new List<CardDataScriptableObject>();
             if (creatures.Count > 0) deck.AddRange(Enumerable.Repeat(creatures[0], 4));
@@ -198,17 +205,35 @@ namespace SlayTheClone {
         }
         #endregion
 
-        /// <summary>
-        /// After a fight won: three different cards of your own faction (the user, 2026-10-16: only your deck's faction drops),
-        /// near the tier the room's strength calls for (C and D early, A and S near the top), to take one of or none.
-        /// </summary>
+        /// <summary>After a fight won: three different cards of your own faction (the user, 2026-10-16: only your deck's faction drops), to take one of or none.</summary>
         public static List<CardDataScriptableObject> Reward(Faction faction, float strength, IEnumerable<CardDataScriptableObject> pool, Random random,
+            ICollection<CardDataScriptableObject> skip = null) => Roll(faction, strength, pool, random, RewardChoices, skip);
+
+        // The odds of each tier, D to S, at the bottom of the map and at the top (Slay the Spire's rarities, the user: random,
+        // a high tier unlikely early): in between they blend by the room's strength
+        private static readonly float[] OddsEarly = { 35, 38, 20, 6, 1 }, OddsLate = { 10, 20, 32, 24, 14 };
+
+        /// <summary>
+        /// Different cards of the faction, each one's tier rolled by the odds for the room's strength (0 the bottom, 1 the boss),
+        /// then a card of that tier picked at random (the nearest tier that has one left, if it hasn't).
+        /// </summary>
+        public static List<CardDataScriptableObject> Roll(Faction faction, float strength, IEnumerable<CardDataScriptableObject> pool, Random random, int count,
             ICollection<CardDataScriptableObject> skip = null) {
             var cards = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null && !(c is CreatureCardScriptableObject { token: true })).Distinct().ToList();
             var tiers = Tiers(cards);
-            float target = 0.5f + strength * 3.5f;
-            return cards.Where(c => c.faction == faction && (skip == null || !skip.Contains(c)))
-                .OrderBy(c => Math.Abs((int)tiers[c] - target) + random.NextDouble() * 1.5).Take(RewardChoices).ToList();
+            var left = cards.Where(c => c.faction == faction && (skip == null || !skip.Contains(c))).ToList();
+            var picked = new List<CardDataScriptableObject>();
+            float t = Math.Clamp(strength, 0f, 1f);
+            var odds = OddsEarly.Select((early, i) => early + (OddsLate[i] - early) * t).ToArray();
+            while (picked.Count < count && left.Count > 0) {
+                double roll = random.NextDouble() * odds.Sum();
+                int tier = 0;
+                for (; tier < odds.Length - 1 && roll >= odds[tier]; tier++) roll -= odds[tier];
+                var card = left.OrderBy(c => Math.Abs((int)tiers[c] - tier)).ThenBy(_ => random.Next()).First();
+                picked.Add(card);
+                left.Remove(card);
+            }
+            return picked;
         }
     }
 }

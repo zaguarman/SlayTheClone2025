@@ -100,7 +100,7 @@ MonoBehaviour:
   artDescription: A glamorous woman in a black evening gown smiling over her cocktail
     at a casino table, while the red-faced general in the chair beside her is squeezed
     between her crossed legs, his medals popping off.
-  attack: 1
+  attack: 2
   health: 4
   speed: 2
   turnsUntilOperative: 0

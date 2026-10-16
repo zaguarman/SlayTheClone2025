@@ -69,7 +69,7 @@ MonoBehaviour:
   artDescription: A grinning CEO floating down on a golden parachute stitched from
     banknotes, a briefcase overflowing with cash in hand, while the company tower
     he leaves behind burns and the staff watch from the windows.
-  attack: 2
+  attack: 3
   health: 3
   speed: 1
   turnsUntilOperative: 0

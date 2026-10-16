@@ -298,7 +298,9 @@ namespace SlayTheClone {
 
         private static void OnAnyLog(string message, string stackTrace, LogType type) {
             if (type == LogType.Log) return;
-            current?.Noticed(type == LogType.Warning ? "Warning" : type.ToString(), message);
+            // An exception keeps where it was thrown, to find it later (it may not happen again on the main thread)
+            current?.Noticed(type == LogType.Warning ? "Warning" : type.ToString(), message,
+                type == LogType.Exception ? string.Join("\n", (stackTrace ?? "").Split('\n').Take(8)) : null);
         }
 
         public void Note(string kind, string message, string at) {
@@ -344,7 +346,8 @@ namespace SlayTheClone {
 
             private IEnumerable<Player> Players => new[] { game.Player1, game.Player2 };
 
-            public void Noticed(string kind, string message) => audit.Note(kind, message, $"{where}, Day {day}");
+            public void Noticed(string kind, string message, string stack = null) =>
+                audit.Note(kind, message, $"{where}, Day {day}" + (string.IsNullOrEmpty(stack) ? "" : "\n" + stack));
 
             private void Note(string kind, string message, string at) => audit.Note(kind, message, at);
 

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: WhiteDwarf
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 32fb3313-60e7-4408-843c-51fb641acaf9
+  cardName: White Dwarf
+  description: Small. Very white. Incredibly dense.
+  cardType: 0
+  faction: 9
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  effects: []
+  designNotes: 'A dense wall: Unbothered (enemy effects can''t lower its stats; the
+    study''s best ability, 65%). Ready at once.'
+  artDescription: A small, very white man in a turtleneck standing in space, glowing
+    faintly, the planets around him bending toward him, unbothered.
+  attack: 2
+  health: 6
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 3
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

@@ -98,9 +98,9 @@ MonoBehaviour:
     break on a later Day.'
   artDescription: 
   attack: 2
-  health: 5
+  health: 6
   speed: 1
-  turnsUntilOperative: 2
+  turnsUntilOperative: 1
   movement: 0
   ability: 0
   gift: 0

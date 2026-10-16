@@ -69,7 +69,7 @@ MonoBehaviour:
   artDescription: Two men facing each other in front of a mirror, each peeling off
     a latex mask of the other's face.
   attack: 2
-  health: 2
+  health: 3
   speed: 2
   turnsUntilOperative: 0
   movement: 0

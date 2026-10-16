@@ -2,95 +2,95 @@ BALANCE REPORT (AI games)
 7900 games: 2500 mirror games of the Very Hard AI (cards), 3600 between the AI styles (strategies), 1800 deck against deck (decks). Called off after 40 Days.
 
 1. STRATEGIES: the AI styles, each deck against itself
-  Hard Hexer        56%  Statuses and debuffs: Burn, stuns, Doomed, Heat, then the hits that use them.
-  Hard Engine       53%  Card advantage: draws whenever it can, paying with Health and creatures.
-  Hard              53%  Weighs everything the same: the plain Hard AI.
-  Hard Controller   52%  Control: kills and disables their creatures, goes face only once the board is safe.
+  Hard Engine       52%  Card advantage: draws whenever it can, paying with Health and creatures.
   Hard Spymaster    52%  Intelligence: Reveals, Watchdogs, Concealed and Encrypted, and cards.
-  Hard Bastion      47%  Defence: protects its creatures and its Health, wins late.
-  Hard Rusher       45%  Aggro: damage to the player first, its own Health spent freely, races early.
-  Hard Swarm        43%  Goes wide: summons, buffs for its creatures and cards to keep the row full.
-  Medium            35%
+  Hard Controller   51%  Control: kills and disables their creatures, goes face only once the board is safe.
+  Hard Hexer        51%  Statuses and debuffs: Burn, stuns, Doomed, Heat, then the hits that use them.
+  Hard              49%  Weighs everything the same: the plain Hard AI.
+  Hard Swarm        48%  Goes wide: summons, buffs for its creatures and cards to keep the row full.
+  Hard Bastion      48%  Defence: protects its creatures and its Health, wins late.
+  Hard Rusher       41%  Aggro: damage to the player first, its own Health spent freely, races early.
+  Medium            31%
 
 2. DECKS: every deck against every other, Very Hard AI on both sides (win share of its games; draws count as not won)
-  Mind - Mind Games                               92%   worst against Shadow Ops. + Mind - Psyop (0%), best against Tech + Digital Society - The Algorithm (100%)
-  Tech + Digital Society - The Algorithm          83%   worst against Mind - Mind Games (0%), best against Shadow Ops. + Mind - Psyop (100%)
-  Statecraft - Order & Paperwork                  77%   worst against Mind - Mind Games (0%), best against Utopia + Myth - Frankenstein (100%)
-  Statecraft + Corporate - Military-Industrial Complex  76%   worst against Mind - Mind Games (0%), best against Utopia + Myth - Frankenstein (100%)
-  Digital Society - Terminally Online             76%   worst against Mind - Mind Games (0%), best against Shadow Ops. + Mind - Psyop (100%)
-  Tech - Move Fast and Break Things               75%   worst against Mind - Mind Games (0%), best against Utopia + Myth - Frankenstein (100%)
-  Mind - All in Your Head                         73%   worst against Digital Society - Terminally Online (0%), best against Utopia + Myth - Frankenstein (100%)
-  Shadow Ops. + Mind - Psyop                      72%   worst against Digital Society - Terminally Online (0%), best against Utopia + Myth - Frankenstein (100%)
-  Myth - Old Gods, New Tricks                     69%   worst against Mind - Mind Games (0%), best against Utopia + Myth - Frankenstein (100%)
-  Zeitgeist - Moods of Modern Life                65%   worst against Mind - Mind Games (17%), best against Utopia + Myth - Frankenstein (100%)
-  Statecraft - Shock and Awe                      64%   worst against Digital Society - Terminally Online (0%), best against Utopia + Myth - Frankenstein (100%)
-  Utopia - Results May Vary                       63%   worst against Mind - Mind Games (0%), best against Utopia + Myth - Frankenstein (100%)
-  Tech - Threat Model                             55%   worst against Statecraft - Order & Paperwork (0%), best against Utopia + Myth - Frankenstein (100%)
-  Digital Society - Influencer Economy            51%   worst against Statecraft - Order & Paperwork (0%), best against Utopia + Myth - Frankenstein (100%)
-  Corporate - Shareholder Value                   50%   worst against Statecraft - Order & Paperwork (0%), best against Utopia + Myth - Frankenstein (100%)
-  Digital Society + Shadow Ops. - Panopticon      45%   worst against Statecraft - Order & Paperwork (0%), best against Utopia + Myth - Frankenstein (100%)
-  Shadow Ops. - Licence to Kill                   39%   worst against Digital Society - Terminally Online (0%), best against Utopia + Myth - Frankenstein (100%)
-  Myth + Corporate - Prosperity Gospel            27%   worst against Corporate - Shareholder Value (0%), best against Utopia + Myth - Frankenstein (100%)
-  Myth - Blessed Martyrs                          20%   worst against Corporate - Shareholder Value (0%), best against Corporate + Zeitgeist - Hustle Culture (100%)
-  Zeitgeist - Underdogs                           19%   worst against Corporate - Shareholder Value (0%), best against Shadow Ops. - Black Budget (100%)
-  Utopia + Myth - Frankenstein                    17%   worst against Corporate - Shareholder Value (0%), best against Shadow Ops. - Black Budget (100%)
-  Corporate - Hustle Rush                         13%   worst against Corporate - Shareholder Value (0%), best against Corporate + Zeitgeist - Hustle Culture (83%)
-  Corporate + Zeitgeist - Hustle Culture          12%   worst against Corporate - Shareholder Value (0%), best against Utopia - Lab Grown (100%)
-  Utopia - Lab Grown                              10%   worst against Corporate - Shareholder Value (0%), best against Corporate - Hustle Rush (67%)
-  Shadow Ops. - Black Budget                       3%   worst against Corporate - Shareholder Value (0%), best against Corporate + Zeitgeist - Hustle Culture (50%)
+  Digital Society - Terminally Online             88%   worst against Zeitgeist - Moods of Modern Life (0%), best against Shadow Ops. + Mind - Psyop (100%)
+  Zeitgeist - Moods of Modern Life                87%   worst against Mind - All in Your Head (50%), best against Utopia + Myth - Frankenstein (100%)
+  Shadow Ops. + Mind - Psyop                      83%   worst against Digital Society - Terminally Online (0%), best against Utopia + Myth - Frankenstein (100%)
+  Tech + Digital Society - The Algorithm          74%   worst against Digital Society - Terminally Online (0%), best against Utopia + Myth - Frankenstein (100%)
+  Tech - Move Fast and Break Things               74%   worst against Zeitgeist - Moods of Modern Life (0%), best against Utopia + Myth - Frankenstein (100%)
+  Statecraft + Corporate - Military-Industrial Complex  74%   worst against Tech - Move Fast and Break Things (0%), best against Utopia + Myth - Frankenstein (100%)
+  Myth - Old Gods, New Tricks                     69%   worst against Tech - Move Fast and Break Things (0%), best against Tech + Digital Society - The Algorithm (100%)
+  Shadow Ops. - Licence to Kill                   65%   worst against Zeitgeist - Moods of Modern Life (0%), best against Utopia + Myth - Frankenstein (100%)
+  Mind - All in Your Head                         65%   worst against Digital Society - Terminally Online (0%), best against Utopia + Myth - Frankenstein (100%)
+  Zeitgeist - Underdogs                           60%   worst against Digital Society - Terminally Online (0%), best against Utopia + Myth - Frankenstein (100%)
+  Statecraft - Shock and Awe                      57%   worst against Zeitgeist - Moods of Modern Life (0%), best against Utopia + Myth - Frankenstein (100%)
+  Mind - Mind Games                               56%   worst against Digital Society - Terminally Online (0%), best against Utopia + Myth - Frankenstein (100%)
+  Corporate - Shareholder Value                   53%   worst against Mind - All in Your Head (0%), best against Utopia + Myth - Frankenstein (100%)
+  Statecraft - Order & Paperwork                  51%   worst against Zeitgeist - Moods of Modern Life (0%), best against Utopia + Myth - Frankenstein (100%)
+  Digital Society + Shadow Ops. - Panopticon      47%   worst against Corporate - Shareholder Value (0%), best against Utopia + Myth - Frankenstein (100%)
+  Utopia - Results May Vary                       46%   worst against Zeitgeist - Moods of Modern Life (0%), best against Corporate + Zeitgeist - Hustle Culture (100%)
+  Digital Society - Influencer Economy            41%   worst against Corporate - Shareholder Value (0%), best against Utopia + Myth - Frankenstein (100%)
+  Utopia - Lab Grown                              31%   worst against Digital Society - Terminally Online (0%), best against Shadow Ops. - Black Budget (100%)
+  Tech - Threat Model                             31%   worst against Statecraft - Order & Paperwork (0%), best against Corporate + Zeitgeist - Hustle Culture (100%)
+  Myth - Blessed Martyrs                          26%   worst against Corporate - Shareholder Value (0%), best against Shadow Ops. - Black Budget (100%)
+  Myth + Corporate - Prosperity Gospel            21%   worst against Corporate - Shareholder Value (0%), best against Utopia + Myth - Frankenstein (100%)
+  Shadow Ops. - Black Budget                      15%   worst against Corporate - Shareholder Value (0%), best against Corporate + Zeitgeist - Hustle Culture (83%)
+  Corporate - Hustle Rush                         12%   worst against Corporate - Shareholder Value (0%), best against Utopia + Myth - Frankenstein (83%)
+  Corporate + Zeitgeist - Hustle Culture          10%   worst against Corporate - Shareholder Value (0%), best against Utopia + Myth - Frankenstein (100%)
+  Utopia + Myth - Frankenstein                     8%   worst against Corporate - Shareholder Value (0%), best against Myth - Blessed Martyrs (67%)
 
   What the decks are made of, and their cards that hit hardest in these games (damage and kills a game they're played in)
-    Mind Games             10 creatures (avg 2,8/5,2, speed 1,2, deploy 0,2), 13 spells
-                           Introvert 15,7 dmg, 2,0 kills; Ship of Theseus 15,0 dmg, 1,8 kills; Roko's Basilisk 11,4 dmg, 1,6 kills
-    The Algorithm          12 creatures (avg 2,5/2,8, speed 2,3, deploy 0,2), 10 spells
-                           Dogpile 33,6 dmg, 5,3 kills; Clickbait 31,0 dmg, 5,4 kills; DDOS Attack 13,5 dmg, 2,7 kills
-    Order & Paperwork      11 creatures (avg 2,1/5,6, speed 1,5, deploy 0,6), 9 spells
-                           Mutually Assured Destruction 31,1 dmg, 4,9 kills; Preemptive Strike 17,5 dmg, 4,2 kills; Man o' War 12,1 dmg, 1,5 kills
-    Military-Industrial C. 12 creatures (avg 3,8/6,0, speed 1,3, deploy 0,8), 10 spells
-                           Taxpayer Funds Venture Capital Profits 22,3 dmg, 3,4 kills; Preemptive Strike 17,5 dmg, 4,2 kills; Sherman Tank 12,3 dmg, 1,3 kills
     Terminally Online      13 creatures (avg 2,4/3,2, speed 2,0, deploy 0,0), 7 spells
-                           Dogpile 33,6 dmg, 5,3 kills; Clickbait 31,0 dmg, 5,4 kills; Keyboard Warrior 8,0 dmg, 1,4 kills
+                           Clickbait 46,5 dmg, 7,3 kills; Dogpile 40,1 dmg, 6,0 kills; Keyboard Warrior 9,6 dmg, 1,6 kills
+    Moods of Modern Life   16 creatures (avg 4,2/4,4, speed 1,8, deploy 0,1), 8 spells
+                           This Is Fine 50,0 dmg, 10,2 kills; Hipster 17,1 dmg, 2,1 kills; Ol' Reliable 8,5 dmg, 1,3 kills
+    Psyop                  8 creatures (avg 2,5/4,8, speed 1,5, deploy 0,0), 13 spells
+                           Femme Fatale 23,5 dmg, 3,2 kills; Introvert 19,6 dmg, 2,6 kills; Roko's Basilisk 13,7 dmg, 2,2 kills
+    The Algorithm          12 creatures (avg 2,5/2,8, speed 2,3, deploy 0,2), 10 spells
+                           Clickbait 46,5 dmg, 7,3 kills; Dogpile 40,1 dmg, 6,0 kills; DDOS Attack 17,4 dmg, 3,2 kills
     Move Fast and Break T. 13 creatures (avg 2,4/4,9, speed 1,5, deploy 0,4), 7 spells
-                           DDOS Attack 13,5 dmg, 2,7 kills; Ransomware Attack 11,7 dmg, 2,6 kills; Technical Debt 9,5 dmg, 1,2 kills
+                           DDOS Attack 17,4 dmg, 3,2 kills; Ransomware Attack 15,1 dmg, 3,1 kills; Technical Debt 9,5 dmg, 1,0 kills
+    Military-Industrial C. 12 creatures (avg 4,0/6,0, speed 1,3, deploy 0,7), 10 spells
+                           Taxpayer Funds Venture Capital Profits 27,4 dmg, 4,0 kills; Preemptive Strike 21,2 dmg, 4,5 kills; Man o' War 15,0 dmg, 1,7 kills
+    Old Gods, New Tricks   13 creatures (avg 2,8/5,4, speed 1,4, deploy 1,0), 14 spells
+                           Holy War 39,3 dmg, 5,9 kills; Holy Hand Grenade of Antioch 20,6 dmg, 3,8 kills; The Wicker Man 15,1 dmg, 3,0 kills
+    Licence to Kill        15 creatures (avg 2,2/3,1, speed 2,2, deploy 0,0), 12 spells
+                           Femme Fatale 23,5 dmg, 3,2 kills; Secret Anthrax Laboratory 17,7 dmg, 1,8 kills; Cleaner 10,2 dmg, 1,6 kills
     All in Your Head       10 creatures (avg 3,6/5,0, speed 1,2, deploy 0,0), 10 spells
-                           Introvert 15,7 dmg, 2,0 kills; Ship of Theseus 15,0 dmg, 1,8 kills; Roko's Basilisk 11,4 dmg, 1,6 kills
-    Psyop                  8 creatures (avg 2,3/4,5, speed 1,5, deploy 0,0), 13 spells
-                           Femme Fatale 17,2 dmg, 2,5 kills; Introvert 15,7 dmg, 2,0 kills; Roko's Basilisk 11,4 dmg, 1,6 kills
-    Old Gods, New Tricks   10 creatures (avg 2,0/5,3, speed 1,3, deploy 0,9), 12 spells
-                           Holy War 34,6 dmg, 6,2 kills; Holy Hand Grenade of Antioch 26,2 dmg, 5,5 kills; Lance Of Longinus 17,9 dmg, 3,4 kills
-    Moods of Modern Life   14 creatures (avg 4,5/4,3, speed 1,9, deploy 0,1), 6 spells
-                           This Is Fine 25,6 dmg, 5,1 kills; Hipster 14,5 dmg, 1,9 kills; Boomer 10,0 dmg, 1,3 kills
+                           Introvert 19,6 dmg, 2,6 kills; Ship of Theseus 19,2 dmg, 2,5 kills; Roko's Basilisk 13,7 dmg, 2,2 kills
+    Underdogs              19 creatures (avg 1,9/3,5, speed 1,9, deploy 0,1), 14 spells
+                           Ol' Reliable 8,5 dmg, 1,3 kills; Karen 7,2 dmg, 0,6 kills; Absentee Parents 6,7 dmg, 0,9 kills
     Shock and Awe          12 creatures (avg 3,5/5,2, speed 1,8, deploy 0,5), 8 spells
-                           Preemptive Strike 17,5 dmg, 4,2 kills; Sherman Tank 12,3 dmg, 1,3 kills; Man o' War 12,1 dmg, 1,5 kills
-    Results May Vary       10 creatures (avg 4,1/5,5, speed 1,3, deploy 1,5), 10 spells
-                           Black Hole 44,3 dmg, 8,9 kills; Biohacking 12,9 dmg, 1,9 kills; Splitting The Atom 10,2 dmg, 2,6 kills
-    Threat Model           13 creatures (avg 1,8/4,0, speed 1,5, deploy 0,5), 10 spells
-                           DDOS Attack 13,5 dmg, 2,7 kills; Ransomware Attack 11,7 dmg, 2,6 kills; Sex Clanker 7,2 dmg, 0,9 kills
+                           Preemptive Strike 21,2 dmg, 4,5 kills; Man o' War 15,0 dmg, 1,7 kills; Sherman Tank 14,4 dmg, 1,8 kills
+    Mind Games             10 creatures (avg 2,8/5,2, speed 1,2, deploy 0,2), 13 spells
+                           Introvert 19,6 dmg, 2,6 kills; Ship of Theseus 19,2 dmg, 2,5 kills; Roko's Basilisk 13,7 dmg, 2,2 kills
+    Shareholder Value      10 creatures (avg 3,3/4,7, speed 1,4, deploy 0,8), 16 spells
+                           Flash Crash 29,0 dmg, 4,0 kills; Taxpayer Funds Venture Capital Profits 27,4 dmg, 4,0 kills; Hostile Takeover 14,7 dmg, 3,2 kills
+    Order & Paperwork      11 creatures (avg 2,1/5,6, speed 1,5, deploy 0,6), 9 spells
+                           Mutually Assured Destruction 32,7 dmg, 4,7 kills; Preemptive Strike 21,2 dmg, 4,5 kills; Man o' War 15,0 dmg, 1,7 kills
+    Panopticon             12 creatures (avg 1,8/3,7, speed 2,2, deploy 0,0), 11 spells
+                           Dogpile 40,1 dmg, 6,0 kills; Cleaner 10,2 dmg, 1,6 kills; Keyboard Warrior 9,6 dmg, 1,6 kills
+    Results May Vary       13 creatures (avg 3,7/5,8, speed 1,2, deploy 1,2), 12 spells
+                           Black Hole 31,6 dmg, 5,9 kills; Femtosecond Laser 11,7 dmg, 2,4 kills; Splitting The Atom 10,2 dmg, 2,1 kills
     Influencer Economy     14 creatures (avg 2,0/3,9, speed 1,9, deploy 0,0), 8 spells
-                           Dogpile 33,6 dmg, 5,3 kills; Its Been 84 Years... 10,1 dmg, 1,3 kills; Catfish 7,8 dmg, 1,2 kills
-    Shareholder Value      8 creatures (avg 2,5/4,3, speed 1,5, deploy 1,0), 13 spells
-                           Taxpayer Funds Venture Capital Profits 22,3 dmg, 3,4 kills; Hostile Takeover 16,5 dmg, 3,6 kills; Peace the Frontier 10,5 dmg, 2,3 kills
-    Panopticon             12 creatures (avg 1,5/3,7, speed 2,2, deploy 0,0), 11 spells
-                           Dogpile 33,6 dmg, 5,3 kills; Keyboard Warrior 8,0 dmg, 1,4 kills; Cleaner 7,3 dmg, 1,1 kills
-    Licence to Kill        11 creatures (avg 1,4/3,3, speed 2,1, deploy 0,0), 9 spells
-                           Femme Fatale 17,2 dmg, 2,5 kills; MK Ultra Test Subject 10,9 dmg, 1,8 kills; Cleaner 7,3 dmg, 1,1 kills
-    Prosperity Gospel      13 creatures (avg 2,1/2,5, speed 1,8, deploy 0,5), 11 spells
-                           Holy War 34,6 dmg, 6,2 kills; Hostile Takeover 16,5 dmg, 3,6 kills; Golden Parachute 4,2 dmg, 0,5 kills
-    Blessed Martyrs        14 creatures (avg 1,7/3,5, speed 1,6, deploy 0,6), 8 spells
-                           Pope 5,1 dmg, 0,9 kills; Reincarnation 4,1 dmg, 0,6 kills; Martyr 3,5 dmg, 0,4 kills
-    Underdogs              15 creatures (avg 1,7/3,3, speed 2,1, deploy 0,1), 9 spells
-                           Karen 8,2 dmg, 1,0 kills; Plot Armor 3,7 dmg, 0,5 kills; Hikikomori 3,3 dmg, 0,5 kills
-    Frankenstein           14 creatures (avg 2,7/3,9, speed 1,4, deploy 1,0), 8 spells
-                           Templar Knight 5,4 dmg, 0,7 kills; Reincarnation 4,1 dmg, 0,6 kills; Frankenstein 3,0 dmg, 0,4 kills
-    Hustle Rush            15 creatures (avg 1,7/2,3, speed 2,0, deploy 0,1), 9 spells
-                           Hostile Takeover 16,5 dmg, 3,6 kills; Team Building Exercise 9,9 dmg, 2,2 kills; Golden Parachute 4,2 dmg, 0,5 kills
-    Hustle Culture         12 creatures (avg 4,2/3,0, speed 2,3, deploy 0,0), 12 spells
-                           Hostile Takeover 16,5 dmg, 3,6 kills; Team Building Exercise 9,9 dmg, 2,2 kills; Football Hooligans 8,3 dmg, 1,0 kills
-    Lab Grown              14 creatures (avg 1,7/4,2, speed 1,4, deploy 1,4), 10 spells
-                           Frankenstein 3,0 dmg, 0,4 kills; Genetically Modified Organism 2,3 dmg, 0,4 kills; Hypermetamorphosis 2,3 dmg, 0,3 kills
-    Black Budget           13 creatures (avg 1,1/3,7, speed 1,9, deploy 0,0), 11 spells
-                           Mole 6,3 dmg, 0,7 kills; Signal Jammer 4,9 dmg, 0,8 kills; Deep Cover 3,0 dmg, 0,4 kills
-  First seat: Player 1 won 894, Player 2 898, draws 8; 9,1 Days on average
+                           Dogpile 40,1 dmg, 6,0 kills; Its Been 84 Years... 13,4 dmg, 1,9 kills; Good Boi 7,5 dmg, 1,5 kills
+    Lab Grown              20 creatures (avg 2,0/4,6, speed 1,4, deploy 0,9), 14 spells
+                           Femtosecond Laser 11,7 dmg, 2,4 kills; Quark 7,6 dmg, 1,2 kills; White Dwarf 5,5 dmg, 0,8 kills
+    Threat Model           13 creatures (avg 1,8/4,0, speed 1,5, deploy 0,5), 10 spells
+                           DDOS Attack 17,4 dmg, 3,2 kills; Ransomware Attack 15,1 dmg, 3,1 kills; Sex Clanker 7,8 dmg, 1,0 kills
+    Blessed Martyrs        17 creatures (avg 2,4/4,1, speed 1,6, deploy 0,8), 13 spells
+                           Grim Reaper 10,7 dmg, 1,6 kills; Zealot 6,9 dmg, 1,0 kills; Pope 6,1 dmg, 0,9 kills
+    Prosperity Gospel      13 creatures (avg 2,3/3,0, speed 1,8, deploy 0,4), 11 spells
+                           Holy War 39,3 dmg, 5,9 kills; Hostile Takeover 14,7 dmg, 3,2 kills; Fat Tony 8,3 dmg, 1,1 kills
+    Black Budget           15 creatures (avg 1,5/4,4, speed 1,8, deploy 0,1), 18 spells
+                           Secret Anthrax Laboratory 17,7 dmg, 1,8 kills; Exploding Pen 10,1 dmg, 2,2 kills; Signal Jammer 5,7 dmg, 0,7 kills
+    Hustle Rush            17 creatures (avg 2,4/3,1, speed 1,9, deploy 0,2), 15 spells
+                           Hostile Takeover 14,7 dmg, 3,2 kills; Team Building Exercise 10,5 dmg, 2,0 kills; Hedonic Treadmillionaire 5,6 dmg, 0,6 kills
+    Hustle Culture         12 creatures (avg 4,3/3,2, speed 2,3, deploy 0,0), 12 spells
+                           Hostile Takeover 14,7 dmg, 3,2 kills; Team Building Exercise 10,5 dmg, 2,0 kills; Football Hooligans 8,1 dmg, 1,1 kills
+    Frankenstein           14 creatures (avg 3,1/3,9, speed 1,4, deploy 0,7), 8 spells
+                           Templar Knight 5,3 dmg, 0,7 kills; Frankenstein 4,8 dmg, 0,6 kills; Reincarnation 3,9 dmg, 0,5 kills
+  First seat: Player 1 won 912, Player 2 876, draws 12; 10,3 Days on average
 
 3. CARDS (mirror games: same deck, same Very Hard AI on both sides)
    Edge: when one side played the card more often than the other, how often that side won (50% = no effect).
@@ -101,512 +101,542 @@ BALANCE REPORT (AI games)
 
   Spells, strongest: the most edge
     Card                                     Faction          Edge  (of)  Win%  Face/pl  Kills/pl  Plays/g
-    Clickbait                                Digital Society   82%   157   51%      0,0      1,96      6,3
-    Dogpile                                  Digital Society   79%   297   50%      0,2      1,33      9,1
-    Holy Hand Grenade of Antioch             Myth              78%    64   50%      0,6      1,23      5,2
-    Hostile Takeover                         Corporate         72%   298   50%      0,5      0,56     10,7
-    This Is Fine                             Zeitgeist         71%    75   53%      0,0      1,80      2,7
-    Red Tape                                 Statecraft        70%    80   54%      0,0      0,00      2,4
-    Ransomware Attack                        Tech              69%   224   50%      0,2      0,41      7,4
-    Team Building Exercise                   Corporate         69%   230   53%      0,0      1,21      3,0
-    Panem Et Circenses                       Statecraft        69%   102   50%      0,0      0,00      3,0
-    Lance Of Longinus                        Myth              68%    74   50%      0,6      0,46     10,5
-    Legerdemain                              Mind              67%   163   50%      0,0      0,00     11,8
-    Black Hole                               Utopia            67%    66   50%      0,4      1,62      5,1
+    Clickbait                                Digital Society   74%   142   50%      0,0      2,18     13,0
+    Team Building Exercise                   Corporate         73%   174   52%      0,0      0,83      3,9
+    Dogpile                                  Digital Society   72%   317   50%      0,2      1,47     11,2
+    Panem Et Circenses                       Statecraft        71%   124   52%      0,0      0,00      2,8
+    Hostile Takeover                         Corporate         69%   270   50%      0,5      0,62      9,0
+    Seasteading                              Utopia            69%    67   51%      0,0      0,00      3,6
+    Black Hole                               Utopia            67%    79   52%      0,1      1,13      2,6
+    Secret Anthrax Laboratory                Shadow Ops.       67%   121   51%      0,0      1,08      2,7
+    Cyberpsychosis                           Mind              66%    74   50%      0,1      0,32      2,7
+    Blood Transfusion                        Utopia            66%   142   52%      0,0      0,00      2,5
+    Ransomware Attack                        Tech              66%   233   50%      0,3      0,42      8,2
+    Preemptive Strike                        Statecraft        65%   193   50%      0,2      0,53     10,7
 
   Spells, weakest: the least edge (playing them more didn't help, or they're played when losing)
     Card                                     Faction          Edge  (of)  Win%  Face/pl  Kills/pl  Plays/g
-    Martial Law                              Statecraft        17%   150   34%      0,0      0,00      1,9
-    Reflect                                  Mind              30%    70   46%      0,0      0,00      2,0
-    Phoenix Feather                          Myth              34%   164   47%      0,0      0,00      3,0
-    Licence to Kill                          Shadow Ops.       39%   139   50%      0,0      0,00      7,7
-    Mimetic Theory                           Mind              41%    61   50%      0,0      0,00      6,2
-    Russian Roulette                         Zeitgeist         42%    79   48%      0,0      0,52      2,2
-    Overtime                                 Corporate         43%    82   47%      0,0      0,00      2,2
-    Casino                                   Corporate         43%    70   50%      0,0      0,01      7,1
+    Martial Law                              Statecraft        13%   163   36%      0,0      0,00      2,3
+    Russian Roulette                         Zeitgeist         24%    87   47%      0,0      0,45      6,0
+    Phoenix Feather                          Myth              25%   118   50%      0,0      0,00      4,0
+    Rage Bait                                Digital Society   32%    60   50%      0,0      0,00      9,0
+    Overtime                                 Corporate         33%    80   49%      0,0      0,00      3,6
+    Reflect                                  Mind              33%    75   48%      0,0      0,00      2,3
+    Social Panopticon                        Digital Society   33%   287   50%      0,0      0,00      6,4
+    Asset Recruitment                        Shadow Ops.       38%    72   50%      0,0      0,02      4,0
 
   Creatures, most value: damage and kills over their life, per play
     Card                                     Faction          Edge  (of)  Win%  Face/pl  Kills/pl  Plays/g
-    Surveillance Giraffe                     Utopia            43%    58   49%      1,7      1,41      1,7
-    Pope                                     Myth              40%    62   50%      2,5      1,05      2,5
-    Hipster                                  Zeitgeist         45%    66   49%      2,4      0,86      2,2
-    Reincarnation                            Myth              55%   129   54%      1,1      1,01      1,3
-    Quantum Physicist                        Utopia            49%    59   49%      0,4      0,94      1,6
-    The Lobster Professor                    Myth              40%    57   48%      1,6      0,65      1,4
-    Shell Company                            Corporate         30%    79   50%      1,3      0,66      3,7
-    Genetically Modified Organism            Utopia            47%   148   50%      0,4      0,71      2,5
-    Frankenstein                             Utopia            40%   172   50%      1,4      0,48      2,8
-    Omniscient Space-Time Bending Bearded Wizard Myth              40%    50   50%      1,6      0,38      1,7
-    MK Ultra Test Subject                    Shadow Ops.       42%    64   50%      1,2      0,63      3,3
-    Hypermetamorphosis                       Utopia            46%    69   45%      0,9      0,52      1,6
+    Reincarnation                            Myth              56%   107   53%      1,3      1,22      1,1
+    Surveillance Giraffe                     Utopia            34%    44   47%      2,0      0,94      1,2
+    Quark                                    Utopia            54%    56   52%      0,3      0,95      1,2
+    Counterfeit                              Corporate         43%    54   45%      2,9      0,50      1,1
+    Frankenstein                             Utopia            29%   167   48%      2,0      0,57      1,9
+    Pope                                     Myth              32%    66   49%      1,4      0,82      2,2
+    Hypermetamorphosis                       Utopia            47%    53   48%      1,1      0,61      1,1
+    Hipster                                  Zeitgeist         56%    71   50%      1,7      0,48      3,9
+    Omniscient Space-Time Bending Bearded Wizard Myth              45%    51   50%      1,4      0,58      1,6
+    Extremophile                             Utopia            33%    61   46%      0,9      0,52      1,7
+    Femme Fatale                             Shadow Ops.       40%   128   50%      0,5      0,69      6,7
+    White Dwarf                              Utopia            27%    77   48%      1,0      0,47      2,1
 
   Creatures, least value
     Card                                     Faction          Edge  (of)  Win%  Face/pl  Kills/pl  Plays/g
-    Suspicious USB Stick in the Parking Lot  Tech              86%    85   51%      0,0      0,00      5,7
-    Micromanager                             Corporate         64%    55   50%      0,0      0,00      5,7
-    Pyramids                                 Myth              53%    58   50%      0,0      0,00      3,9
-    Political Decoy                          Shadow Ops.       35%    23   50%      0,0      0,00      5,2
-    Charles Ponzi                            Corporate         45%   150   50%      0,0      0,00      4,8
-    Fat Tony                                 Corporate         48%   209   50%      0,0      0,01     10,4
-    Cleaning Robot                           Corporate         55%   146   50%      0,1      0,01      9,0
-    Particle Accelerator                     Utopia            52%    63   50%      0,1      0,01      2,0
+    Suspicious USB Stick in the Parking Lot  Tech              78%    82   50%      0,0      0,00      5,4
+    Philosophy PhD                           Utopia            59%    34   57%      0,0      0,00      1,0
+    Pyramids                                 Myth              57%    74   50%      0,0      0,00      4,4
+    Embassy                                  Shadow Ops.       61%    71   50%      0,0      0,00      7,9
+    Chain Smoker                             Zeitgeist         52%    58   50%      0,0      0,00      2,5
+    Micromanager                             Corporate         43%    28   50%      0,0      0,00     11,5
+    Charles Ponzi                            Corporate         52%   108   50%      0,0      0,00      6,5
+    Digital Nomad                            Digital Society   34%   145   50%      0,0      0,00      9,1
 
   Most damage to the other player per play
     Card                                     Faction          Edge  (of)  Win%  Face/pl  Kills/pl  Plays/g
-    Mutually Assured Destruction             Statecraft        51%    67   49%      3,0      1,29      1,9
-    Pope                                     Myth              40%    62   50%      2,5      1,05      2,5
-    Hipster                                  Zeitgeist         45%    66   49%      2,4      0,86      2,2
-    Surveillance Giraffe                     Utopia            43%    58   49%      1,7      1,41      1,7
-    The Lobster Professor                    Myth              40%    57   48%      1,6      0,65      1,4
-    Omniscient Space-Time Bending Bearded Wizard Myth              40%    50   50%      1,6      0,38      1,7
-    Frankenstein                             Utopia            40%   172   50%      1,4      0,48      2,8
-    Shell Company                            Corporate         30%    79   50%      1,3      0,66      3,7
-    MK Ultra Test Subject                    Shadow Ops.       42%    64   50%      1,2      0,63      3,3
-    Internal Revenue Service                 Statecraft        43%    60   49%      1,1      0,33      1,5
+    Mutually Assured Destruction             Statecraft        53%    59   48%      2,9      1,37      2,1
+    Counterfeit                              Corporate         43%    54   45%      2,9      0,50      1,1
+    Frankenstein                             Utopia            29%   167   48%      2,0      0,57      1,9
+    Surveillance Giraffe                     Utopia            34%    44   47%      2,0      0,94      1,2
+    Hipster                                  Zeitgeist         56%    71   50%      1,7      0,48      3,9
+    Not on My Watch                          Zeitgeist         55%    44   53%      1,6      0,26      1,0
+    Omniscient Space-Time Bending Bearded Wizard Myth              45%    51   50%      1,4      0,58      1,6
+    Pope                                     Myth              32%    66   49%      1,4      0,82      2,2
+    Reincarnation                            Myth              56%   107   53%      1,3      1,22      1,1
+    Delivery Cyclist                         Zeitgeist         32%    60   46%      1,2      0,37      1,3
 
   Most kills per play
     Card                                     Faction          Edge  (of)  Win%  Face/pl  Kills/pl  Plays/g
-    Clickbait                                Digital Society   82%   157   51%      0,0      1,96      6,3
-    This Is Fine                             Zeitgeist         71%    75   53%      0,0      1,80      2,7
-    Black Hole                               Utopia            67%    66   50%      0,4      1,62      5,1
-    Surveillance Giraffe                     Utopia            43%    58   49%      1,7      1,41      1,7
-    Holy War                                 Myth              59%   162   50%      0,0      1,40      8,6
-    Dogpile                                  Digital Society   79%   297   50%      0,2      1,33      9,1
-    Mutually Assured Destruction             Statecraft        51%    67   49%      3,0      1,29      1,9
-    Holy Hand Grenade of Antioch             Myth              78%    64   50%      0,6      1,23      5,2
-    Team Building Exercise                   Corporate         69%   230   53%      0,0      1,21      3,0
-    Pope                                     Myth              40%    62   50%      2,5      1,05      2,5
+    Clickbait                                Digital Society   74%   142   50%      0,0      2,18     13,0
+    This Is Fine                             Zeitgeist         55%    78   50%      0,0      1,62      7,0
+    Holy War                                 Myth              52%   166   50%      0,0      1,53      8,8
+    Dogpile                                  Digital Society   72%   317   50%      0,2      1,47     11,2
+    Mutually Assured Destruction             Statecraft        53%    59   48%      2,9      1,37      2,1
+    Holy Hand Grenade of Antioch             Myth              60%    82   51%      0,4      1,26      3,3
+    Reincarnation                            Myth              56%   107   53%      1,3      1,22      1,1
+    Black Hole                               Utopia            67%    79   52%      0,1      1,13      2,6
+    Secret Anthrax Laboratory                Shadow Ops.       67%   121   51%      0,0      1,08      2,7
+    The Wicker Man                           Myth              58%    71   50%      0,0      1,02      2,4
 
   Support and logistics, most impact: what they set up and supplied (a game they're played in, deck against deck)
-    Momentum                                 Mind            assist 42,0 dmg 5,3 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
-    Panem Et Circenses                       Statecraft      assist 32,0 dmg 4,1 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 9,3
-    Tax-Exempt Corruption                    Corporate       assist 0,0 dmg 0,0 kills, opened 0,0, draws 14,8, sent for 0,0, denied 0,0, healed 0,0
-    False Flag Operation                     Shadow Ops.     assist 17,3 dmg 4,3 kills, opened 1,3, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
-    Thoughts and Prayers                     Myth            assist 22,1 dmg 3,2 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
-    Trolley Problem                          Mind            assist 17,6 dmg 2,7 kills, opened 3,8, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
-    Social Panopticon                        Digital Society assist 14,3 dmg 4,1 kills, opened 0,1, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
-    Taxpayer Funds Venture Capital Profits   Corporate       assist 0,0 dmg 0,0 kills, opened 0,9, draws 11,7, sent for 0,0, denied 0,0, healed 0,0
-    Margin Call                              Corporate       assist 0,0 dmg 0,0 kills, opened 0,0, draws 10,8, sent for 0,0, denied 0,0, healed 0,0
-    Monkey Hand                              Myth            assist 2,8 dmg 0,3 kills, opened 0,0, draws 8,8, sent for 0,0, denied 0,0, healed 0,0
-    This Is Fine                             Zeitgeist       assist 14,7 dmg 1,7 kills, opened 3,2, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
-    GoldenEye                                Shadow Ops.     assist 10,2 dmg 3,7 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
-    Meta Group Chat                          Digital Society assist 13,7 dmg 2,5 kills, opened 1,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
-    Pair Programming                         Tech            assist 16,4 dmg 1,9 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
-    Deus Vult                                Myth            assist 15,0 dmg 2,1 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    The Friends We Made Along the Way        Zeitgeist       assist 64,6 dmg 7,6 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    Blessing in Disguise                     Myth            assist 50,2 dmg 6,6 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 9,2
+    Momentum                                 Mind            assist 44,7 dmg 6,2 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    Panem Et Circenses                       Statecraft      assist 34,2 dmg 4,0 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 10,1
+    Thoughts and Prayers                     Myth            assist 36,4 dmg 4,6 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    Social Panopticon                        Digital Society assist 20,8 dmg 5,1 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    This Is Fine                             Zeitgeist       assist 23,9 dmg 2,5 kills, opened 4,8, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    Taxpayer Funds Venture Capital Profits   Corporate       assist 0,0 dmg 0,0 kills, opened 1,1, draws 13,5, sent for 0,0, denied 0,0, healed 0,0
+    Tax-Exempt Corruption                    Corporate       assist 0,0 dmg 0,0 kills, opened 0,0, draws 12,7, sent for 0,0, denied 0,0, healed 0,0
+    Deus Vult                                Myth            assist 19,3 dmg 2,5 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    Meta Group Chat                          Digital Society assist 16,1 dmg 2,9 kills, opened 0,9, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    Trolley Problem                          Mind            assist 15,9 dmg 2,4 kills, opened 2,6, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    Margin Call                              Corporate       assist 0,0 dmg 0,0 kills, opened 0,0, draws 11,5, sent for 0,0, denied 0,0, healed 0,0
+    False Flag Operation                     Shadow Ops.     assist 13,8 dmg 3,2 kills, opened 0,9, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
+    Pair Programming                         Tech            assist 17,1 dmg 2,3 kills, opened 0,0, draws 0,0, sent for 0,0, denied 0,0, healed 0,0
 
   By faction: average edge of its cards (cards with 60+ edge games)
-    Tech            52%   best Suspicious USB Stick in the Parking Lot (86%)
-    Myth            51%   best Holy Hand Grenade of Antioch (78%)
-    Zeitgeist       50%   best This Is Fine (71%)
-    Corporate       49%   best Hostile Takeover (72%)
-    Digital Society 49%   best Clickbait (82%)
-    Utopia          49%   best Black Hole (67%)
-    Mind            47%   best Legerdemain (67%)
-    Statecraft      46%   best Red Tape (70%)
-    Shadow Ops.     46%   best Dead Man's Switch (56%)
+    Tech            53%   best Suspicious USB Stick in the Parking Lot (78%)
+    Corporate       50%   best Team Building Exercise (73%)
+    Myth            48%   best Deus Vult (63%)
+    Mind            47%   best Cyberpsychosis (66%)
+    Utopia          46%   best Seasteading (69%)
+    Shadow Ops.     46%   best Secret Anthrax Laboratory (67%)
+    Statecraft      46%   best Panem Et Circenses (71%)
+    Digital Society 44%   best Clickbait (74%)
+    Zeitgeist       44%   best Rush Hour (61%)
 
 4. WHAT EACH STRATEGY LEANS ON (style games)
    Signature: the cards it plays most often compared with the plain Hard AI, with the same deck (x times as often).
    Lift: in the games it played the card more than usual, how much more it won than its usual with that deck (15+ such games).
-  Hard Hexer: Statuses and debuffs: Burn, stuns, Doomed, Heat, then the hits that use them.
-    signature: Sacrificial Ritual x1,7, Team Building Exercise x1,5, Philosophy PhD x1,5, Trolley Problem x1,4, Excess of Bread and Wine x1,4
-    lift:      Ransomware Attack +21% (Move Fast and Break T.), Sherman Tank +17% (Military-Industrial C.), Taxpayer Funds Venture Capital Profits +17% (Military-Industrial C.), Margin Call +17% (Military-Industrial C.), Red Herring +15% (Mind Games)
   Hard Engine: Card advantage: draws whenever it can, paying with Health and creatures.
-    signature: Business Expense x35,4, Business Expense x19,8, Sacrificial Ritual x2,6, Omen Reading x2,1, Mass Layoffs x1,5
-    lift:      Ransomware Attack +28% (Move Fast and Break T.), Hostile Takeover +17% (Hustle Culture), Bodybuilder +10% (Hustle Culture), Football Hooligans +10% (Hustle Culture), Gene Editing +7% (Frankenstein)
+    signature: Business Expense x19,8, Business Expense x13,8, Quark x1,6, Schrodinger's Cat x1,5, Reincarnation x1,5
+    lift:      Ship of Theseus +16% (All in Your Head), Generational Trauma +14% (Underdogs), Preemptive Strike +12% (Shock and Awe), Overpopulation +10% (Lab Grown), Mutation +9% (Frankenstein)
+  Hard Spymaster: Intelligence: Reveals, Watchdogs, Concealed and Encrypted, and cards.
+    signature: Business Expense x17,9, Business Expense x15,4, Red Herring x2,3, Perpetual Motion Machine x1,8, Antivirus x1,7
+    lift:      Social Panopticon +18% (Influencer Economy), Boomer +14% (Moods of Modern Life), Toxic Positivity +14% (Moods of Modern Life), Charles Ponzi +10% (Prosperity Gospel), Red Herring +9% (Psyop)
+  Hard Controller: Control: kills and disables their creatures, goes face only once the board is safe.
+    signature: Quark x1,8, Accelerationism x1,7, Schrodinger's Cat x1,6, Team Building Exercise x1,6, Russian Roulette x1,5
+    lift:      Team Building Exercise +20% (Hustle Culture), Hostile Takeover +17% (Prosperity Gospel), Hypermetamorphosis +13% (Lab Grown), Femtosecond Laser +13% (Results May Vary), Holy War +10% (Prosperity Gospel)
+  Hard Hexer: Statuses and debuffs: Burn, stuns, Doomed, Heat, then the hits that use them.
+    signature: Schrodinger's Cat x1,6, Perpetual Motion Machine x1,6, Martyr x1,5, Team Building Exercise x1,5, Scientific Method x1,4
+    lift:      Good Boi +17% (Influencer Economy), Dogpile +17% (Influencer Economy), Black Hole +17% (Results May Vary), Just in Time +14% (Hustle Rush), Football Hooligans +14% (Hustle Culture)
   Hard: Weighs everything the same: the plain Hard AI.
     signature: -
-    lift:      Hostile Takeover +18% (Prosperity Gospel), Ransomware Attack +13% (Threat Model), Unpaid Intern +11% (Prosperity Gospel), Splitting The Atom +10% (Results May Vary), Cancelled +10% (Panopticon)
-  Hard Controller: Control: kills and disables their creatures, goes face only once the board is safe.
-    signature: Excess of Bread and Wine x1,9, Sacrificial Ritual x1,5, Phoenix x1,4, Omen Reading x1,4, Mercenaries x1,4
-    lift:      Suspicious USB Stick in the Parking Lot +19% (Threat Model), Trolley Problem +17% (All in Your Head), Ransomware Attack +13% (Threat Model), Gene Editing +11% (Lab Grown), Placebo +11% (Lab Grown)
-  Hard Spymaster: Intelligence: Reveals, Watchdogs, Concealed and Encrypted, and cards.
-    signature: Business Expense x32,6, Business Expense x19,4, Clone x1,6, Sacrificial Ritual x1,6, Counterfeit x1,5
-    lift:      Femme Fatale +22% (Psyop), Holy War +18% (Prosperity Gospel), Sabotage +15% (Psyop), Suspicious USB Stick in the Parking Lot +14% (Threat Model), Web Scraping +14% (Threat Model)
-  Hard Bastion: Defence: protects its creatures and its Health, wins late.
-    signature: Martial Law x2,1, Martial Law x1,9, Excess of Bread and Wine x1,8, Counterfeit x1,7, Sacrificial Ritual x1,7
-    lift:      Chronically Online +23% (Terminally Online), Dogpile +16% (Terminally Online), Clickbait +16% (Terminally Online), Suspicious USB Stick in the Parking Lot +14% (Threat Model), Ctrl + Z +14% (Threat Model)
-  Hard Rusher: Aggro: damage to the player first, its own Health spent freely, races early.
-    signature: Business Expense x26,6, Business Expense x20,1, Reincarnation x1,4, Mutually Assured Destruction x1,4, Scientific Method x1,3
-    lift:      Trolley Problem +26% (All in Your Head), Dogpile +23% (Terminally Online), Keyboard Warrior +17% (Terminally Online), Taxpayer Funds Venture Capital Profits +15% (Shareholder Value), Charles Ponzi +15% (Shareholder Value)
+    lift:      Reincarnation +21% (Blessed Martyrs), This Is Fine +20% (Moods of Modern Life), Suspicious USB Stick in the Parking Lot +16% (Threat Model), Ransomware Attack +16% (The Algorithm), Antivirus +10% (Threat Model)
   Hard Swarm: Goes wide: summons, buffs for its creatures and cards to keep the row full.
-    signature: Business Expense x31,6, Business Expense x21,3, Sacrificial Ritual x1,6, SysAdmin x1,5, Mercenaries x1,4
-    lift:      Cleaning Robot +15% (Shareholder Value), Pyramids +15% (Old Gods, New Tricks), Maslow's Pyramid +13% (Mind Games), Pope +13% (Blessed Martyrs), Team Building Exercise +10% (Hustle Rush)
+    signature: Business Expense x20,1, Business Expense x16,6, Schrodinger's Cat x2,3, Accelerationism x1,6, Mercenaries x1,5
+    lift:      Chronically Online +17% (Panopticon), Pyramids +13% (Old Gods, New Tricks), Good Boi +11% (Influencer Economy), Dogpile +11% (Influencer Economy), Trolley Problem +10% (Mind Games)
+  Hard Bastion: Defence: protects its creatures and its Health, wins late.
+    signature: Accelerationism x2,1, Martial Law x1,9, Schrodinger's Cat x1,8, Quark x1,8, Martial Law x1,7
+    lift:      Holy Hand Grenade of Antioch +31% (Old Gods, New Tricks), Team Building Exercise +17% (Hustle Culture), Thoughts and Prayers +17% (Blessed Martyrs), Holy War +14% (Prosperity Gospel), Die by the Sword +11% (Old Gods, New Tricks)
+  Hard Rusher: Aggro: damage to the player first, its own Health spent freely, races early.
+    signature: Business Expense x18,5, Business Expense x14,1, Schrodinger's Cat x2,0, Reincarnation x1,7, Perpetual Motion Machine x1,6
+    lift:      Antivirus +26% (Move Fast and Break T.), Ransomware Attack +19% (Move Fast and Break T.), Antihero +16% (Moods of Modern Life), Tax-Exempt Corruption +15% (Prosperity Gospel), Scope Creep +12% (Move Fast and Break T.)
 
 5. DECK AGAINST DECK: the row deck's wins out of 6 against the column deck
                                1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25
-   1 Shareholder Value         -   0   4   3   4   5   0   1   0   6   1   6   4   1   6   0   6   0   6   3   6   1   6   2   1
-   2 Order & Paperwork         6   -   4   4   3   4   4   3   1   6   5   6   6   6   6   6   6   0   6   6   6   3   6   5   3
-   3 Moods of Modern Life      2   2   -   4   2   5   2   2   2   6   5   6   6   4   6   4   6   1   6   6   6   2   6   2   1
-   4 Results May Vary          3   2   2   -   5   5   1   3   1   5   3   6   6   4   5   4   6   0   6   6   6   1   6   3   1
-   5 Terminally Online         2   3   4   1   -   6   3   4   6   6   6   6   6   6   6   5   6   0   6   6   6   1   6   2   6
-   6 Licence to Kill           1   2   1   1   0   -   0   1   0   6   1   4   6   1   6   1   5   0   6   1   5   1   6   0   1
-   7 Move Fast and Break T.    6   2   4   5   3   6   -   4   6   6   2   6   6   6   6   4   6   0   6   6   6   2   6   2   2
-   8 Old Gods, New Tricks      5   3   4   3   2   5   2   -   2   6   1   6   5   6   6   4   6   0   6   6   6   2   6   2   5
-   9 All in Your Head          6   5   4   5   0   6   0   4   -   6   6   6   6   3   6   5   6   3   6   5   6   3   6   0   2
-  10 Hustle Rush               0   0   0   1   0   0   0   0   0   -   0   1   2   0   5   0   2   0   0   0   5   0   2   0   0
-  11 Shock and Awe             5   1   1   3   0   5   4   5   0   6   -   6   6   6   6   6   6   0   6   5   6   1   6   0   2
-  12 Underdogs                 0   0   0   0   0   2   0   0   0   5   0   -   3   0   6   0   2   0   1   2   3   1   2   0   0
-  13 Lab Grown                 0   0   0   0   0   0   0   0   0   4   0   3   -   0   2   0   2   0   0   0   0   0   3   0   0
-  14 Influencer Economy        5   0   2   2   0   5   0   0   3   6   0   6   6   -   6   1   6   0   6   3   6   0   6   0   5
-  15 Black Budget              0   0   0   1   0   0   0   0   0   1   0   0   0   0   -   0   0   0   0   0   3   0   0   0   0
-  16 Threat Model              6   0   2   2   1   5   2   2   1   6   0   6   6   5   6   -   6   0   6   4   6   1   6   0   0
-  17 Blessed Martyrs           0   0   0   0   0   1   0   0   0   4   0   4   4   0   6   0   -   0   2   0   6   0   2   0   0
-  18 Mind Games                6   6   5   6   6   6   6   6   3   6   6   6   6   6   6   6   6   -   6   5   6   6   6   6   0
-  19 Prosperity Gospel         0   0   0   0   0   0   0   0   0   6   0   5   6   0   6   0   4   0   -   0   6   0   6   0   0
-  20 Panopticon                3   0   0   0   0   5   0   0   1   6   1   4   6   3   6   2   6   1   6   -   6   0   6   0   3
-  21 Hustle Culture            0   0   0   0   0   1   0   0   0   1   0   3   6   0   3   0   0   0   0   0   -   0   3   0   0
-  22 Military-Industrial C.    5   3   4   5   5   5   4   4   3   6   5   5   6   6   6   5   6   0   6   6   6   -   6   1   2
-  23 Frankenstein              0   0   0   0   0   0   0   0   0   4   0   4   3   0   6   0   4   0   0   0   3   0   -   0   0
-  24 The Algorithm             4   1   4   3   4   6   4   4   6   6   6   6   6   6   6   6   6   0   6   6   6   5   6   -   6
-  25 Psyop                     5   3   5   5   0   5   4   1   4   6   3   6   6   1   6   6   6   6   6   3   6   4   6   0   -
+   1 Shareholder Value         -   1   1   5   1   4   2   2   0   6   0   3   2   3   6   5   6   3   6   6   6   0   6   1   2
+   2 Order & Paperwork         5   -   0   1   2   1   3   3   0   5   0   0   4   4   6   6   4   0   6   6   6   3   6   3   0
+   3 Moods of Modern Life      5   6   -   6   6   6   6   4   3   6   6   5   4   6   6   6   6   4   5   6   6   3   6   4   4
+   4 Results May Vary          1   5   0   -   0   3   1   2   3   6   3   3   4   1   1   5   5   1   6   1   6   1   5   3   0
+   5 Terminally Online         5   4   0   6   -   3   6   2   6   6   6   6   6   6   6   6   6   6   6   6   6   4   6   6   6
+   6 Licence to Kill           2   5   0   3   3   -   1   3   1   6   4   4   6   5   6   5   6   3   6   6   6   3   6   2   1
+   7 Move Fast and Break T.    4   3   0   5   0   5   -   6   5   6   0   4   6   6   6   6   4   6   6   6   6   6   6   3   1
+   8 Old Gods, New Tricks      3   3   2   4   4   3   0   -   5   6   5   4   4   6   6   5   5   3   6   4   6   3   6   6   1
+   9 All in Your Head          5   6   3   3   0   5   1   1   -   6   6   3   6   6   5   5   5   3   6   5   6   1   6   0   0
+  10 Hustle Rush               0   1   0   0   0   0   0   0   0   -   0   0   2   0   1   0   3   0   2   0   3   0   5   0   0
+  11 Shock and Awe             6   6   0   3   0   2   6   1   0   6   -   2   4   5   6   6   6   0   6   3   6   2   6   0   0
+  12 Underdogs                 3   6   1   3   0   2   2   2   3   6   4   -   6   5   6   6   5   5   4   3   6   2   6   0   0
+  13 Lab Grown                 4   2   2   2   0   0   0   2   0   4   2   0   -   4   6   0   4   0   4   0   3   0   5   0   0
+  14 Influencer Economy        0   2   0   5   0   1   0   0   0   6   1   1   2   -   6   3   3   5   6   4   6   0   6   0   2
+  15 Black Budget              0   0   0   5   0   0   0   0   1   5   0   0   0   0   -   0   0   0   2   0   5   0   4   0   0
+  16 Threat Model              1   0   0   1   0   1   0   1   1   6   0   0   6   3   6   -   1   2   4   1   6   0   4   0   0
+  17 Blessed Martyrs           0   2   0   1   0   0   2   1   1   3   0   1   2   3   6   5   -   0   3   1   4   0   2   0   0
+  18 Mind Games                2   6   2   5   0   3   0   3   2   6   6   1   6   1   6   4   6   -   6   1   6   1   6   1   0
+  19 Prosperity Gospel         0   0   1   0   0   0   0   0   0   4   0   2   2   0   4   2   3   0   -   0   6   0   6   0   0
+  20 Panopticon                0   0   0   5   0   0   0   2   1   6   3   3   6   2   6   5   5   5   6   -   6   1   6   0   0
+  21 Hustle Culture            0   0   0   0   0   0   0   0   0   3   0   0   3   0   1   0   2   0   0   0   -   0   6   0   0
+  22 Military-Industrial C.    4   3   3   5   2   3   0   3   5   6   3   4   6   6   6   6   6   5   6   5   6   -   6   5   2
+  23 Frankenstein              0   0   0   1   0   0   0   0   0   1   0   0   1   0   2   2   4   0   0   0   0   0   -   0   0
+  24 The Algorithm             5   3   2   3   0   4   3   0   6   6   6   6   6   6   6   6   6   5   6   6   6   1   6   -   3
+  25 Psyop                     3   6   2   6   0   5   5   5   6   6   5   6   6   4   6   6   6   6   6   6   6   4   6   3   -
 
 6. EVERY CARD (mirror games; deck-against-deck damage and kills a game it's played in, and impact: all it dealt, set up
    (assists, slots opened) and supplied (draws, sent for, healing), in damage, a game it's played in)
     Card                                     Faction          Edge  (of)  Plays/g  Face/pl  Kills/pl  Dmg/g vs  Kills/g vs  Impact/g
-    Black Knight                             Myth              50%    72      7,8      0,5      0,10      10,5         1,3      16,0
-    Buddy Christ                             Myth              52%    62      3,5      0,3      0,04       2,3         0,3       5,5
-    Cultist                                  Myth              54%   155      3,6      0,0      0,03       0,6         0,1       8,5
-    Deus Vult                                Myth              65%    74      4,7      0,0      0,00       0,0         0,0      18,6
-    Excess of Bread and Wine                 Myth              54%    61      1,3      0,0      0,00       0,0         0,0       2,5
-    Holy Hand Grenade of Antioch             Myth              78%    64      5,2      0,6      1,23      26,2         5,5      52,2
-    Holy War                                 Myth              59%   162      8,6      0,0      1,40      34,6         6,2      61,1
-    Horsemen Of Apocalypse                   Myth              40%    75      7,9      0,1      0,09      13,0         2,1      22,1
-    Lance Of Longinus                        Myth              68%    74     10,5      0,6      0,46      17,9         3,4      34,1
-    Living Dead                              Myth              44%   142      2,4      0,4      0,14       2,9         0,4       4,9
-    Martyr                                   Myth              48%   139      7,1      0,2      0,11       3,5         0,4       6,5
-    Monkey Hand                              Myth              58%    79      6,4      0,0      0,00       0,1         0,0      20,9
-    Mox Nox                                  Myth              49%    55      2,3      0,0      0,00       0,0         0,0       0,0
-    Necronomicon                             Myth              43%   171      6,2      0,0      0,81       0,0         3,2      14,2
-    Omen Reading                             Myth              43%    83      2,1      0,0      0,00       0,0         0,0       2,5
-    Omniscient Space-Time Bending Bearded Wizard Myth              40%    50      1,7      1,6      0,38       2,9         0,4       7,4
-    Phoenix                                  Myth              35%   137      1,7      0,2      0,39       1,0         0,1       1,8
-    Phoenix Feather                          Myth              34%   164      3,0      0,0      0,00       0,0         0,0       0,0
-    Pope                                     Myth              40%    62      2,5      2,5      1,05       5,1         0,9      18,3
-    Pyramids                                 Myth              53%    58      3,9      0,0      0,00       0,0         0,0       0,0
-    Reincarnation                            Myth              55%   129      1,3      1,1      1,01       4,1         0,6       8,1
-    Sacrificial Ritual                       Myth              47%   133      3,2      0,0      0,00       0,0         0,0      11,0
-    Templar Knight                           Myth              45%   143      4,6      0,5      0,10       5,4         0,7       8,6
-    The Chosen One                           Myth              55%    74      3,5      0,1      0,06       4,3         0,6       7,4
-    The Great Flood                          Myth              40%    57      4,4      0,0      0,00       0,0         0,0       0,0
-    The Holy Grail                           Myth              51%    78      2,1      0,0      0,00       0,0         0,0       3,3
-    The Lobster Professor                    Myth              40%    57      1,4      1,6      0,65       3,0         0,4       9,8
-    The Wicker Man                           Myth              59%    76      1,8      0,0      1,03      10,4         2,0      19,0
-    Thoughts and Prayers                     Myth              51%    68      2,6      0,0      0,00       0,0         0,0      27,9
-    Zealot                                   Myth              42%    86      2,3      0,2      0,35       2,6         0,3       4,4
-    Ceasefire                                Statecraft        63%    49      3,6      0,0      0,00       0,0         0,0       5,1
-    Demagogue                                Statecraft        40%   129      1,6      0,6      0,23       2,6         0,3      15,5
-    Diplomat                                 Statecraft        42%   130      5,5      0,2      0,07       3,0         0,4       5,1
-    Internal Revenue Service                 Statecraft        43%    60      1,5      1,1      0,33       3,0         0,5       5,4
-    King Emeritus                            Statecraft        24%    54      1,7      1,0      0,30       2,4         0,4       5,7
-    Lost Landmine                            Statecraft        39%    54      3,5      0,0      0,00       0,0         0,0       0,0
-    Man o' War                               Statecraft        38%   206      5,2      0,9      0,34      12,1         1,5      18,8
-    Martial Law                              Statecraft        17%   150      1,9      0,0      0,00       0,0         0,0       4,5
-    Mercenaries                              Statecraft        36%   208      3,4      0,2      0,22       4,5         0,7      12,7
-    Ministry for Equality                    Statecraft        36%    50      1,5      0,9      0,37       2,8         0,4       5,8
-    Mutually Assured Destruction             Statecraft        51%    67      1,9      3,0      1,29      31,1         4,9      52,2
-    Panem Et Circenses                       Statecraft        69%   102      3,0      0,0      0,00       0,0         0,0      43,3
-    Police Officer Productivity Target       Statecraft        44%   136      1,6      0,5      0,37       5,8         0,7       9,6
-    Preemptive Strike                        Statecraft        64%   191      8,3      0,2      0,60      17,5         4,2      37,6
-    Protocol Enforcers                       Statecraft        34%    67      1,6      1,0      0,36       2,8         0,4       5,1
-    Raised Security Level                    Statecraft        64%   183      5,5      0,0      0,00       0,0         0,0       0,0
-    Red Tape                                 Statecraft        70%    80      2,4      0,0      0,00       0,0         0,0       0,0
-    Sherman Tank                             Statecraft        38%   130      7,5      0,9      0,32      12,3         1,3      20,0
-    Spite-Elected President                  Statecraft        34%   126      2,2      0,5      0,40       6,9         0,8      10,9
-    Supply Depot                             Statecraft        55%   132      5,1      0,0      0,00       0,0         0,0       6,1
-    Supreme Court                            Statecraft        33%    57      1,5      0,6      0,28       1,6         0,2       2,4
-    Asset Recruitment                        Shadow Ops.       73%    22      9,2      0,0      0,00       0,2         0,0       1,5
-    Cleaner                                  Shadow Ops.       40%   154      3,6      0,6      0,61       7,3         1,1      14,0
-    Control Room                             Shadow Ops.       47%    99      6,3      0,1      0,05       1,6         0,3       2,7
-    Counter-Intelligence                     Shadow Ops.       51%   106     17,8      0,0      0,00       0,1         0,0       0,3
-    Coup d'État                              Shadow Ops.       70%    23      3,1      0,0      0,00       0,1         0,0       0,2
-    Dead Man's Switch                        Shadow Ops.       56%    72      2,6      0,5      0,71       1,6         2,3      11,9
-    Deep Cover                               Shadow Ops.       41%    95      7,7      0,1      0,12       3,0         0,4       5,2
-    Die Another Day                          Shadow Ops.       65%    52      2,7      0,0      0,00       0,0         0,0       3,4
-    False Flag Operation                     Shadow Ops.       49%    59      2,4      0,0      0,41       0,0         1,7      35,9
-    Fell Out of a Window                     Shadow Ops.       60%    25     10,8      0,0      0,22       0,0         0,8       3,5
-    Femme Fatale                             Shadow Ops.       42%   137      6,2      0,6      0,62      17,2         2,5      30,8
-    GoldenEye                                Shadow Ops.       71%    55      2,4      0,0      0,00       0,0         0,0      20,0
-    Human Intelligence                       Shadow Ops.       42%    53      2,5      0,0      0,00       0,1         0,0       5,7
-    If I Told You, I'd Have to Kill You      Shadow Ops.       40%    63      4,4      0,6      0,27       4,2         1,0       9,2
-    Licence to Kill                          Shadow Ops.       39%   139      7,7      0,0      0,00       0,0         0,0       7,3
-    MK Ultra Test Subject                    Shadow Ops.       42%    64      3,3      1,2      0,63      10,9         1,8      18,3
-    Mole                                     Shadow Ops.       48%    27      8,3      0,6      0,31       6,3         0,7       9,4
-    Perfectly Timed Camera Malfunction       Shadow Ops.       47%   114      9,9      0,0      0,91       0,0         3,4      15,4
-    Political Decoy                          Shadow Ops.       35%    23      5,2      0,0      0,00       0,3         0,0       0,5
-    Sabotage                                 Shadow Ops.       51%    91      8,8      0,0      0,00       0,0         0,0       0,1
-    Shaken, Not Stirred                      Shadow Ops.       63%    52      2,6      0,0      0,00       0,0         0,0       2,8
-    Signal Jammer                            Shadow Ops.       40%    25     10,3      0,4      0,27       4,9         0,8       8,0
-    Smoke And Mirrors                        Shadow Ops.       54%    67      8,3      0,0      0,00       0,1         0,0      11,1
-    Supply Chain Attack                      Shadow Ops.       49%    45      2,6      0,0      0,00       0,0         0,0      12,0
-    Tapped Communications                    Shadow Ops.       54%    95     11,5      0,0      0,00       0,0         0,0       1,6
-    The Golden Gun                           Shadow Ops.      100%     2      1,0      0,0      0,98       0,0         1,0       4,7
-    Wet Work                                 Shadow Ops.       44%   165      5,8      0,1      0,54       0,4         1,4       7,2
-    Whistleblower                            Shadow Ops.       39%    23      5,2      0,3      0,20       2,7         0,3       5,8
-    Casino                                   Corporate         43%    70      7,1      0,0      0,01       0,3         0,0       0,4
-    Charles Ponzi                            Corporate         45%   150      4,8      0,0      0,00       0,4         0,0       2,2
-    Cleaning Robot                           Corporate         55%   146      9,0      0,1      0,01       4,9         0,5       7,1
-    Counterfeit                              Corporate         39%    61      1,3      0,7      0,15       1,6         0,2       2,8
-    Day Trader                               Corporate         43%   292      5,2      0,0      0,04       1,4         0,2      14,6
-    Dead Cat Bounce                          Corporate         55%    75     14,3      0,0      0,00       0,3         0,1       0,6
-    Fat Tony                                 Corporate         48%   209     10,4      0,0      0,01       3,7         0,6       6,5
-    Golden Parachute                         Corporate         43%   159      7,3      0,4      0,12       4,2         0,5       7,1
-    Hostile Takeover                         Corporate         72%   298     10,7      0,5      0,56      16,5         3,6      45,2
-    Inflation                                Corporate         56%   174      8,1      0,0      0,00       0,1         0,0       0,1
-    Inheritance                              Corporate         54%    70      7,1      0,0      0,00       0,0         0,0      17,2
-    Margin Call                              Corporate         56%   179     11,3      0,0      0,00       0,1         0,0      21,8
-    Mass Layoffs                             Corporate         47%    57      1,2      0,0      0,00       0,0         0,0       6,9
-    Micromanager                             Corporate         64%    55      5,7      0,0      0,00       1,1         0,1       4,8
-    Multilevel Marketing Seller              Corporate         38%    74      2,0      0,7      0,29       1,7         0,2       2,8
-    Overtime                                 Corporate         43%    82      2,2      0,0      0,00       0,0         0,0       0,0
-    Peace the Frontier                       Corporate         58%    71      7,2      0,5      0,30      10,5         2,3      20,2
-    Pluriemployed Hustler                    Corporate         52%   213      4,8      0,0      0,05       1,3         0,2      16,2
-    Shell Company                            Corporate         30%    79      3,7      1,3      0,66       4,0         0,5       6,5
-    Tax-Exempt Corruption                    Corporate         57%    69      8,2      0,0      0,00       0,0         0,0      29,6
-    Taxpayer Funds Venture Capital Profits   Corporate         58%   177     10,7      0,0      0,45      22,3         3,4      60,3
-    Team Building Exercise                   Corporate         69%   230      3,0      0,0      1,21       9,9         2,2      26,8
-    Unpaid Intern                            Corporate         42%   140      3,7      0,1      0,02       0,9         0,1       5,3
-    Work Shift Rotation                      Corporate         29%    83      4,2      0,4      0,10       2,3         0,4       4,0
-    Antivirus                                Tech              59%   148      4,7      0,0      0,00       0,0         0,0       0,0
-    Ctrl + Z                                 Tech              59%    76      6,3      0,0      0,00       0,0         0,0      12,1
-    DDOS Attack                              Tech              62%   222      8,4      0,3      0,40      13,5         2,7      28,5
-    Legacy Code                              Tech              32%   150      4,6      0,9      0,42       7,0         0,9      11,4
-    Man-in-the-Middle                        Tech              61%    74      6,1      0,0      0,00       0,0         0,0       0,1
-    Meatproxy As A Service                   Tech              44%   125      1,3      0,4      0,13       0,4         0,0       2,1
-    Pair Programming                         Tech              62%   130      6,3      0,0      0,00       0,0         0,0      19,1
-    Ransomware Attack                        Tech              69%   224      7,4      0,2      0,41      11,7         2,6      35,5
-    Scope Creep                              Tech              50%   149      1,8      0,4      0,26       7,0         0,8      10,8
-    Script Kiddie                            Tech              42%   222      3,7      0,2      0,11       5,9         0,7      10,3
-    Sex Clanker                              Tech              42%   142      4,3      0,6      0,39       7,2         0,9      11,4
-    Suspicious USB Stick in the Parking Lot  Tech              86%    85      5,7      0,0      0,00       0,0         0,0       0,2
-    SysAdmin                                 Tech              40%   144      3,1      0,6      0,28       3,5         0,3       5,1
-    Technical Debt                           Tech              33%    85      9,8      0,0      0,11       9,5         1,2      17,5
-    Threat Hunter                            Tech              43%   146      3,8      0,1      0,06       2,9         0,4       5,9
-    Web Scraping                             Tech              57%   150      4,4      0,0      0,00       0,0         0,0       6,5
-    Cancelled                                Digital Society   56%   218      7,5      0,0      0,00       0,0         0,0       5,8
-    Catfish                                  Digital Society   38%    74      4,2      0,1      0,20       7,8         1,2      14,6
-    Chronically Online                       Digital Society   40%   147      5,5      0,3      0,15       3,8         0,6       7,0
-    Clickbait                                Digital Society   82%   157      6,3      0,0      1,96      31,0         5,4      55,9
-    Console Memory Card                      Digital Society   59%    82      3,4      0,0      0,00       0,0         0,0       4,6
-    Conspiracy Theorist                      Digital Society   41%    74      6,2      0,4      0,08       6,6         0,9      10,9
-    Content Creator                          Digital Society   47%    77      2,8      0,4      0,45       3,5         0,7       7,1
-    Crypto "Entrepreneur"                    Digital Society   44%   141      5,9      0,4      0,12       7,3         0,9      12,1
-    Digital Nomad                            Digital Society   39%   148      4,9      0,1      0,03       5,1         0,7       9,7
-    Dogpile                                  Digital Society   79%   297      9,1      0,2      1,33      33,6         5,3      58,4
-    Good Boi                                 Digital Society   43%    79      5,5      0,7      0,61       6,3         1,3      12,0
-    Its A Trap                               Digital Society   39%    54      4,9      0,0      0,00       0,0         0,0       0,0
-    Its Been 84 Years...                     Digital Society   39%    74      7,8      0,4      0,29      10,1         1,3      16,5
-    Keyboard Warrior                         Digital Society   44%   159      5,3      0,7      0,53       8,0         1,4      15,1
-    Meta Group Chat                          Digital Society   44%   224      6,3      0,4      0,21       6,3         1,0      30,2
-    NPC                                      Digital Society   47%   135      4,6      0,5      0,15       6,3         0,8      10,9
-    Rage Bait                                Digital Society   48%    79      3,4      0,0      0,00       0,0         0,0       2,5
-    Short King                               Digital Society   42%   156      3,5      0,1      0,07       3,7         0,5       6,8
-    Social Panopticon                        Digital Society   45%   295      5,9      0,0      0,00       0,1         0,0      24,8
-    Thirst Trap                              Digital Society   54%    76      4,6      0,8      0,63       5,8         1,1      20,1
-    Antihero                                 Zeitgeist         44%   124      3,5      0,4      0,28       6,0         0,9      11,9
-    Bodybuilder                              Zeitgeist         42%   137      3,1      0,1      0,06       1,1         0,1       2,4
-    Boomer                                   Zeitgeist         47%    59      3,8      0,8      0,24      10,0         1,3      16,3
-    Chain Smoker                             Zeitgeist         51%    45      1,9      0,2      0,04       1,3         0,2       2,5
-    Delivery Cyclist                         Zeitgeist         32%    78      2,2      0,4      0,11       3,0         0,4       4,9
-    Drug Smuggler                            Zeitgeist         42%    69      1,6      0,6      0,18       1,7         0,2       6,6
-    Football Hooligans                       Zeitgeist         50%   137      3,0      0,2      0,59       8,3         1,0      13,8
-    Generational Trauma                      Zeitgeist         64%    69      5,3      0,0      0,69       0,0         2,8      14,7
-    Hikikomori                               Zeitgeist         44%    71      2,8      0,8      0,37       3,3         0,5       5,4
-    Hipster                                  Zeitgeist         45%    66      2,2      2,4      0,86      14,5         1,9      24,7
-    Karen                                    Zeitgeist         52%   135      3,8      1,0      0,36       8,2         1,0      13,6
-    Mental Health Day                        Zeitgeist         44%    50      2,8      0,0      0,00       0,0         0,0       4,8
-    No Glove, No Love                        Zeitgeist         44%    59      5,6      0,0      0,00       0,0         0,0      14,0
-    Not on My Watch                          Zeitgeist         47%    47      1,4      0,8      0,38       1,8         0,3       3,0
-    One for the Road                         Zeitgeist         58%    62      5,6      0,0      0,00       0,0         0,0       0,0
-    Plot Armor                               Zeitgeist         52%    67      2,2      0,5      0,20       3,7         0,5       6,6
-    Reality TV Star                          Zeitgeist         43%   107      2,6      0,9      0,21       4,1         0,5       7,5
-    Rush Hour                                Zeitgeist         64%    72      2,0      0,0      0,00       0,0         0,0       0,0
-    Russian Roulette                         Zeitgeist         42%    79      2,2      0,0      0,52       4,6         1,0       9,3
-    Scam Artist                              Zeitgeist         55%    74      2,4      0,3      0,16       2,5         0,3       5,5
-    This Is Fine                             Zeitgeist         71%    75      2,7      0,0      1,80      25,6         5,1      66,5
-    Toxic Positivity                         Zeitgeist         50%   140      1,9      0,0      0,01       0,0         0,0      16,0
-    Underdog                                 Zeitgeist         55%    73      1,4      0,3      0,08       1,1         0,1       7,2
-    YOLO                                     Zeitgeist         52%   121      3,1      0,0      0,00       0,0         0,0       2,7
-    Cyberpsychosis                           Mind              47%    55      3,1      0,3      0,39       6,9         1,3      13,3
-    Imposter Syndrome                        Mind              50%   144     10,7      0,0      0,18       0,1         1,3      12,0
-    Introvert                                Mind              33%   213      6,3      1,0      0,39      15,7         2,0      26,5
-    Legerdemain                              Mind              67%   163     11,8      0,0      0,00       0,1         0,0      13,2
-    Lucid Dreaming                           Mind              52%   130      3,3      0,0      0,00       0,0         0,0       5,5
-    Maslow's Pyramid                         Mind              62%    90      3,8      0,0      0,00       0,0         0,0       4,6
-    Mimetic Theory                           Mind              41%    61      6,2      0,0      0,00       0,0         0,0       0,1
-    Momentum                                 Mind              63%    63      3,6      0,0      0,00       0,0         0,0      50,5
-    Pessimist                                Mind              32%    57      4,7      0,8      0,41       8,0         0,9      14,2
-    Red Herring                              Mind              66%   191      9,2      0,0      0,00       0,1         0,0       0,2
-    Reflect                                  Mind              30%    70      2,0      0,0      0,00       0,0         0,0       0,0
-    Roko's Basilisk                          Mind              42%   219      5,4      0,4      0,27      11,4         1,6      24,9
-    Schrodinger's Cat                        Mind              23%   165      2,5      0,1      0,19       5,4         0,8      11,0
-    Ship of Theseus                          Mind              31%   149      4,0      0,9      0,45      15,0         1,8      27,7
-    Socrates                                 Mind              27%    75      3,0      0,2      0,16       4,2         0,7      11,4
-    Survivorship Bias                        Mind              49%    57      3,9      0,0      0,00       0,0         0,0      14,5
-    Trolley Problem                          Mind              65%   227      9,3      0,0      0,52       0,0         3,5      40,5
-    Yesn't                                   Mind              58%    64      7,8      0,0      0,00       0,0         0,0       0,0
-    Accelerationism                          Utopia            47%    55      1,5      0,0      0,00       0,2         0,1      11,6
-    Antimatter                               Utopia            39%    75      3,8      0,2      0,04       1,6         0,2       2,5
-    Biohacking                               Utopia            64%    45      5,2      0,2      0,39      12,9         1,9      24,9
-    Black Hole                               Utopia            67%    66      5,1      0,4      1,62      44,3         8,9      83,3
-    Blood Transfusion                        Utopia            59%   129      4,3      0,0      0,01       0,0         0,0       7,4
-    Chimera                                  Utopia            39%    59      1,9      0,1      0,03       0,7         0,1       2,9
-    Clone                                    Utopia            31%    81      2,3      0,1      0,42       2,0         0,3       3,2
-    Cold Fusion                              Utopia            49%    63      4,4      0,4      0,06       5,9         0,4       8,5
-    Evolution Theory                         Utopia            51%    71      1,5      0,0      0,08       0,2         0,1       0,6
-    Exponential Growth                       Utopia            63%    63      1,2      0,0      0,00       0,0         0,0      18,2
-    Extremophile                             Utopia            42%    72      2,1      0,9      0,46       1,9         0,3       3,6
-    Frankenstein                             Utopia            40%   172      2,8      1,4      0,48       3,0         0,4       4,8
-    Gene Editing                             Utopia            55%   126      5,2      0,0      0,00       0,0         0,0      15,2
-    Genetically Modified Organism            Utopia            47%   148      2,5      0,4      0,71       2,3         0,4       4,9
-    Hypermetamorphosis                       Utopia            46%    69      1,6      0,9      0,52       2,3         0,3       3,5
-    Mutation                                 Utopia            63%    54      3,4      0,0      0,04       0,0         0,1       5,9
-    Overpopulation                           Utopia            46%    61      6,9      0,0      0,00       0,0         0,0       0,0
-    Particle Accelerator                     Utopia            52%    63      2,0      0,1      0,01       1,8         0,1       2,5
-    Perpetual Motion Machine                 Utopia            47%    58      1,3      0,7      0,29       0,0         0,0       2,0
-    Philosophy PhD                           Utopia            41%    59      1,3      0,4      0,09       0,0         0,0       2,5
-    Placebo                                  Utopia            55%    55      3,4      0,0      0,00       0,0         0,0      11,4
-    Quantum Physicist                        Utopia            49%    59      1,6      0,4      0,94       1,3         0,3       3,1
-    Resurrected T-Rex                        Utopia            48%   100      3,3      0,6      0,08       2,4         0,2       3,5
-    Scientific Method                        Utopia            46%    63      1,7      0,1      0,03       0,2         0,0       1,5
-    Splitting The Atom                       Utopia            48%    66      4,2      0,0      0,82      10,2         2,6      21,5
-    Stasis Field                             Utopia            47%    45      3,5      0,0      0,00       0,0         0,0       5,1
-    Surveillance Giraffe                     Utopia            43%    58      1,7      1,7      1,41       1,8         0,2       2,8
+    Black Knight                             Myth              50%    70      7,3      0,6      0,11       8,1         0,9      12,0
+    Blessing in Disguise                     Myth              47%    66      3,8      0,0      0,00       0,0         0,0      65,9
+    Buddy Christ                             Myth              48%    67      2,5      0,3      0,05       1,5         0,2       4,1
+    Cultist                                  Myth              48%   151      4,0      0,0      0,02       0,5         0,1       9,9
+    Deus Vult                                Myth              63%    62      4,2      0,0      0,00       0,0         0,0      23,6
+    Die by the Sword                         Myth              60%    81      6,4      0,5      0,66      14,4         3,2      29,6
+    Excess of Bread and Wine                 Myth              55%    60      1,7      0,0      0,00       0,0         0,0       2,6
+    Gracias Jesús                            Myth              52%    60      2,0      0,0      0,00       0,0         0,0       9,4
+    Grim Reaper                              Myth              42%   152      5,8      0,2      0,25      10,7         1,6      19,0
+    Here Be Dragons                          Myth              48%   107      3,0      0,5      0,18       5,9         0,7       9,0
+    Holy Hand Grenade of Antioch             Myth              60%    82      3,3      0,4      1,26      20,6         3,8      37,6
+    Holy War                                 Myth              52%   166      8,8      0,0      1,53      39,3         5,9      64,2
+    Horsemen Of Apocalypse                   Myth              40%    82      6,9      0,1      0,13      13,8         2,0      22,5
+    Lance Of Longinus                        Myth              54%    80      6,4      0,4      0,51      11,9         2,6      23,9
+    Living Dead                              Myth              44%   120      1,8      1,0      0,29       3,3         0,4       5,4
+    Martyr                                   Myth              39%   150      7,5      0,1      0,04       2,2         0,3       4,5
+    Mithril                                  Myth              55%    73      4,1      0,0      0,00       0,0         0,0      14,4
+    Monkey Hand                              Myth              56%    81      5,7      0,0      0,00       0,0         0,0      20,2
+    Mox Nox                                  Myth              45%    64      1,9      0,0      0,00       0,0         0,0       0,0
+    Necronomicon                             Myth              45%   162      8,2      0,0      0,78       0,0         4,0      17,1
+    Omen Reading                             Myth              46%    72      3,8      0,0      0,00       0,0         0,0       3,9
+    Omniscient Space-Time Bending Bearded Wizard Myth              45%    51      1,6      1,4      0,58       4,0         0,6      12,9
+    Phoenix                                  Myth              44%   126      1,3      0,2      0,36       1,4         0,2       2,6
+    Phoenix Feather                          Myth              25%   118      4,0      0,0      0,00       0,0         0,0       0,1
+    Pope                                     Myth              32%    66      2,2      1,4      0,82       6,1         0,9      22,3
+    Pyramids                                 Myth              57%    74      4,4      0,0      0,00       0,2         0,0       0,2
+    Reincarnation                            Myth              56%   107      1,1      1,3      1,22       3,9         0,5       7,2
+    Sacrificial Ritual                       Myth              53%   143      5,9      0,0      0,00       0,0         0,0      18,4
+    Templar Knight                           Myth              42%   138      4,4      0,6      0,13       5,3         0,7       8,8
+    The Chosen One                           Myth              47%    77      2,5      0,0      0,03       1,4         0,2       2,5
+    The Great Flood                          Myth              54%    83      3,4      0,0      0,00       0,0         0,0       0,0
+    The Holy Grail                           Myth              46%    85      1,8      0,0      0,00       0,0         0,0       3,3
+    The Lobster Professor                    Myth              31%    54      1,2      1,0      0,45       1,9         0,2       8,2
+    The Wicker Man                           Myth              58%    71      2,4      0,0      1,02      15,1         3,0      27,9
+    Thoughts and Prayers                     Myth              48%    73      2,8      0,0      0,00       0,0         0,0      44,0
+    Zealot                                   Myth              32%    75      2,5      0,4      0,43       6,9         1,0      12,0
+    Ceasefire                                Statecraft        39%    64      2,7      0,0      0,00       0,0         0,0       4,1
+    Demagogue                                Statecraft        46%   128      1,4      0,6      0,25       2,0         0,3      15,4
+    Diplomat                                 Statecraft        36%   121      9,4      0,1      0,02       2,0         0,2       3,3
+    Internal Revenue Service                 Statecraft        50%    56      1,5      0,7      0,38       2,4         0,3       3,6
+    King Emeritus                            Statecraft        32%    59      1,8      0,7      0,26       1,5         0,3       3,5
+    Lost Landmine                            Statecraft        55%    69      2,4      0,0      0,00       0,0         0,0       0,0
+    Man o' War                               Statecraft        35%   173      7,9      0,5      0,21      15,0         1,7      22,8
+    Martial Law                              Statecraft        13%   163      2,3      0,0      0,00       0,0         0,0       7,2
+    Mercenaries                              Statecraft        41%   202      5,9      0,1      0,09       4,0         0,6      11,5
+    Ministry for Equality                    Statecraft        29%    59      1,5      0,4      0,21       1,7         0,3       4,5
+    Mutually Assured Destruction             Statecraft        53%    59      2,1      2,9      1,37      32,7         4,7      52,5
+    Panem Et Circenses                       Statecraft        71%   124      2,8      0,0      0,00       0,0         0,0      45,3
+    Police Officer Productivity Target       Statecraft        37%   124      1,5      0,5      0,33       4,4         0,6       7,3
+    Preemptive Strike                        Statecraft        65%   193     10,7      0,2      0,53      21,2         4,5      42,3
+    Protocol Enforcers                       Statecraft        34%    58      1,6      0,5      0,26       2,4         0,3       4,2
+    Raised Security Level                    Statecraft        61%   192      6,7      0,0      0,00       0,0         0,0       0,0
+    Red Tape                                 Statecraft        58%    72      2,5      0,0      0,00       0,0         0,0       0,1
+    Sherman Tank                             Statecraft        41%   114     11,7      0,6      0,21      14,4         1,8      23,9
+    Spite-Elected President                  Statecraft        29%   137      2,2      0,4      0,34       8,0         0,9      12,3
+    Supply Depot                             Statecraft        60%   119      6,7      0,0      0,00       0,0         0,0       7,5
+    Supreme Court                            Statecraft        38%    50      1,5      0,4      0,20       1,2         0,2       2,1
+    Arsonist                                 Shadow Ops.       51%    63      2,9      0,5      0,44       8,1         1,3      15,1
+    Asset Recruitment                        Shadow Ops.       38%    72      4,0      0,0      0,02       0,1         0,0       1,4
+    Cleaner                                  Shadow Ops.       50%   136      3,4      0,4      0,71      10,2         1,6      20,0
+    Control Room                             Shadow Ops.       39%   131      6,1      0,5      0,34       5,6         1,1      10,2
+    Counter-Intelligence                     Shadow Ops.       50%   153      7,3      0,0      0,01       0,2         0,1       0,5
+    Counter-Surveillance                     Shadow Ops.       61%    83      6,4      0,0      0,04       0,7         0,2       1,7
+    Coup d'État                              Shadow Ops.       47%    66      2,9      0,0      0,00       0,1         0,0       0,2
+    Dead Man's Switch                        Shadow Ops.       38%    72      2,0      0,3      0,67       1,2         1,5       8,2
+    Deep Cover                               Shadow Ops.       34%   148      4,7      0,1      0,10       3,2         0,3       4,9
+    Die Another Day                          Shadow Ops.       55%    60      1,5      0,0      0,00       0,0         0,0       2,7
+    Drug Pigeon                              Shadow Ops.       40%    68      2,2      0,5      0,17       3,1         0,4       9,8
+    Embassy                                  Shadow Ops.       61%    71      7,9      0,0      0,00       0,2         0,0       5,1
+    Exploding Pen                            Shadow Ops.       60%   146      5,2      0,1      0,75      10,1         2,2      20,8
+    False Flag Operation                     Shadow Ops.       53%    49      1,6      0,0      0,63       0,0         1,4      27,8
+    Fell Out of a Window                     Shadow Ops.       43%    75      6,9      0,0      0,15       0,2         0,5       2,5
+    Femme Fatale                             Shadow Ops.       40%   128      6,7      0,5      0,69      23,5         3,2      41,0
+    GoldenEye                                Shadow Ops.       50%    52      1,5      0,0      0,00       0,0         0,0      15,5
+    Human Intelligence                       Shadow Ops.       61%    57      1,5      0,0      0,00       0,0         0,0       4,2
+    If I Told You, I'd Have to Kill You      Shadow Ops.       45%    55      3,3      0,3      0,09       4,2         0,8       8,4
+    Licence to Kill                          Shadow Ops.       41%   160      4,5      0,0      0,00       0,0         0,0       6,0
+    MK Ultra Test Subject                    Shadow Ops.       36%    70      2,9      0,6      0,37       9,8         1,6      16,4
+    Mole                                     Shadow Ops.       40%    77      7,5      0,4      0,24       5,0         0,7       8,3
+    Perfectly Timed Camera Malfunction       Shadow Ops.       55%   141      6,4      0,0      0,92       0,1         3,4      15,8
+    Political Decoy                          Shadow Ops.       33%    63      3,8      0,7      0,30       2,0         0,2       3,0
+    Sabotage                                 Shadow Ops.       61%   150      3,7      0,0      0,01       0,1         0,0       0,3
+    Secret Anthrax Laboratory                Shadow Ops.       67%   121      2,7      0,0      1,08      17,7         1,8      35,8
+    Shaken, Not Stirred                      Shadow Ops.       39%    57      1,5      0,0      0,00       0,0         0,0       2,0
+    Signal Jammer                            Shadow Ops.       45%    75      8,7      0,6      0,31       5,7         0,7       8,6
+    Smoke And Mirrors                        Shadow Ops.       38%    76      4,2      0,0      0,00       0,0         0,0       6,5
+    Supply Chain Attack                      Shadow Ops.       68%    56      1,5      0,0      0,00       0,0         0,0       8,3
+    Tapped Communications                    Shadow Ops.       45%   136      5,1      0,0      0,00       0,0         0,0       0,9
+    The Golden Gun                           Shadow Ops.       60%    10      1,0      0,0      0,95       0,0         0,9       4,7
+    Tracking Beacon                          Shadow Ops.       44%    79      7,9      0,0      0,01       0,2         0,1       9,4
+    Wet Work                                 Shadow Ops.       42%   201      3,6      0,2      0,60       0,4         1,3       6,6
+    Whistleblower                            Shadow Ops.       32%    74      2,4      0,2      0,10       1,9         0,2       5,2
+    Casino                                   Corporate         63%    30      7,8      0,0      0,01       0,2         0,0       0,3
+    Charles Ponzi                            Corporate         52%   108      6,5      0,0      0,00       0,3         0,0       1,4
+    Cleaning Robot                           Corporate         59%    73     21,9      0,0      0,01       7,0         0,8      10,6
+    Counterfeit                              Corporate         43%    54      1,1      2,9      0,50       0,4         0,0       0,7
+    Day Trader                               Corporate         47%   252      5,8      0,1      0,05       1,7         0,2      13,3
+    Dead Cat Bounce                          Corporate         60%    30     16,6      0,0      0,01       0,3         0,0       0,3
+    Fat Tony                                 Corporate         45%   158     18,1      0,0      0,05       8,3         1,1      13,3
+    Flash Crash                              Corporate         54%    28      7,1      0,0      0,93      29,0         4,0      45,8
+    Golden Parachute                         Corporate         41%   147      7,5      0,4      0,11       4,6         0,5       7,6
+    Hedonic Treadmillionaire                 Corporate         38%    99     14,7      0,2      0,06       5,6         0,6      14,9
+    Hostile Takeover                         Corporate         69%   270      9,0      0,5      0,62      14,7         3,2      38,4
+    Inflation                                Corporate         47%    92     16,4      0,0      0,00       0,0         0,0       0,0
+    Inheritance                              Corporate         63%    79      4,0      0,0      0,00       0,0         0,0       9,1
+    Just in Time                             Corporate         40%    72      4,0      0,0      0,00       0,0         0,0       6,0
+    Margin Call                              Corporate         61%    92     16,8      0,0      0,00       0,1         0,0      23,1
+    Mass Layoffs                             Corporate         46%    48      1,3      0,0      0,00       0,0         0,0       7,5
+    Micromanager                             Corporate         43%    28     11,5      0,0      0,00       0,4         0,1       2,5
+    Moral Bankruptcy                         Corporate         59%   104      8,0      0,0      0,67       0,0         3,8      16,3
+    Multilevel Marketing Seller              Corporate         34%    76      1,7      0,6      0,32       1,3         0,1       1,5
+    Overtime                                 Corporate         33%    80      3,6      0,0      0,00       0,0         0,0       0,0
+    Peace the Frontier                       Corporate         86%    29      8,0      0,3      0,37       7,1         1,5      13,5
+    Pluriemployed Hustler                    Corporate         35%   178      7,0      0,0      0,02       0,9         0,1      15,3
+    Shell Company                            Corporate         39%    69      2,1      0,4      0,21       2,3         0,1       2,9
+    Tax-Exempt Corruption                    Corporate         47%    83      6,3      0,0      0,00       0,0         0,0      25,5
+    Taxpayer Funds Venture Capital Profits   Corporate         52%    94     16,9      0,0      0,36      27,4         4,0      71,5
+    Team Building Exercise                   Corporate         73%   174      3,9      0,0      0,83      10,5         2,0      27,8
+    Unpaid Intern                            Corporate         46%   154      3,9      0,1      0,02       0,6         0,0       4,2
+    Venture Capital                          Corporate         60%    83      3,9      0,0      0,00       0,0         0,0      15,1
+    Work Shift Rotation                      Corporate         52%    65      3,3      0,4      0,17       1,9         0,2       2,8
+    Antivirus                                Tech              62%   144      3,5      0,0      0,00       0,0         0,0       0,0
+    Ctrl + Z                                 Tech              43%    80      6,5      0,0      0,00       0,0         0,0      13,3
+    DDOS Attack                              Tech              56%   217      9,6      0,3      0,43      17,4         3,2      34,9
+    Legacy Code                              Tech              51%   140      4,3      0,8      0,31       7,2         0,9      11,3
+    Man-in-the-Middle                        Tech              60%    73      4,6      0,0      0,00       0,0         0,0       0,0
+    Meatproxy As A Service                   Tech              47%   122      1,2      0,7      0,16       0,7         0,1       3,2
+    Pair Programming                         Tech              43%   155      7,0      0,0      0,00       0,0         0,0      21,2
+    Ransomware Attack                        Tech              66%   233      8,2      0,3      0,42      15,1         3,1      45,3
+    Scope Creep                              Tech              47%   141      1,8      0,4      0,17       6,4         0,9      10,6
+    Script Kiddie                            Tech              46%   223      4,3      0,3      0,09       5,7         0,7      10,1
+    Sex Clanker                              Tech              47%   157      3,9      0,7      0,30       7,8         1,0      12,3
+    Suspicious USB Stick in the Parking Lot  Tech              78%    82      5,4      0,0      0,00       0,0         0,0       0,2
+    SysAdmin                                 Tech              52%   143      2,9      0,6      0,25       4,0         0,5       6,6
+    Technical Debt                           Tech              64%    70      8,4      0,0      0,06       9,5         1,0      14,9
+    Threat Hunter                            Tech              44%   144      4,6      0,1      0,04       3,0         0,5       6,4
+    Web Scraping                             Tech              48%   132      5,4      0,0      0,00       0,0         0,0       8,9
+    Cancelled                                Digital Society   51%   206      8,5      0,0      0,00       0,0         0,0       7,2
+    Catfish                                  Digital Society   40%    82      4,6      0,1      0,15       7,2         1,0      12,3
+    Chronically Online                       Digital Society   38%   130      6,9      0,2      0,11       5,2         0,8       9,4
+    Clickbait                                Digital Society   74%   142     13,0      0,0      2,18      46,5         7,3      79,1
+    Console Memory Card                      Digital Society   50%    60      4,8      0,0      0,00       0,0         0,0       7,3
+    Conspiracy Theorist                      Digital Society   47%    53     13,4      0,2      0,02       5,9         0,8       9,7
+    Content Creator                          Digital Society   40%    78      2,9      0,5      0,45       3,8         0,7       7,3
+    Crypto "Entrepreneur"                    Digital Society   31%   130     10,3      0,2      0,07       8,5         1,2      14,4
+    Digital Nomad                            Digital Society   34%   145      9,1      0,0      0,00       5,8         0,8      10,5
+    Dogpile                                  Digital Society   72%   317     11,2      0,2      1,47      40,1         6,0      67,4
+    Good Boi                                 Digital Society   47%    76      5,6      0,6      0,52       7,5         1,5      13,7
+    Its A Trap                               Digital Society   42%    71      5,0      0,0      0,00       0,0         0,0       0,0
+    Its Been 84 Years...                     Digital Society   41%    76      8,0      0,4      0,31      13,4         1,9      22,2
+    Keyboard Warrior                         Digital Society   45%   143      7,5      0,5      0,33       9,6         1,6      17,6
+    Meta Group Chat                          Digital Society   49%   214      8,5      0,3      0,17       6,9         1,0      34,2
+    NPC                                      Digital Society   42%   142      8,4      0,3      0,09       6,5         0,9      11,1
+    Rage Bait                                Digital Society   32%    60      9,0      0,0      0,00       0,0         0,0       2,4
+    Short King                               Digital Society   36%   171      4,1      0,1      0,04       3,8         0,5       6,5
+    Social Panopticon                        Digital Society   33%   287      6,4      0,0      0,00       0,1         0,0      33,3
+    Thirst Trap                              Digital Society   41%    75      4,7      0,8      0,70       7,1         1,1      24,3
+    Absentee Parents                         Zeitgeist         39%    64      2,1      0,7      0,23       6,7         0,9      15,8
+    Antihero                                 Zeitgeist         44%   127      5,0      0,3      0,22       5,5         0,8      10,4
+    Bodybuilder                              Zeitgeist         39%   152      4,4      0,1      0,03       1,0         0,1       2,2
+    Boomer                                   Zeitgeist         48%    65      5,0      0,2      0,08       7,7         0,8      11,2
+    Chain Smoker                             Zeitgeist         52%    58      2,5      0,0      0,00       0,8         0,1       2,1
+    Delivery Cyclist                         Zeitgeist         32%    60      1,3      1,2      0,37       4,6         0,6       8,2
+    Drug Smuggler                            Zeitgeist         31%    49      1,2      1,1      0,38       3,1         0,4       8,5
+    Football Hooligans                       Zeitgeist         43%   145      4,5      0,1      0,48       8,1         1,1      13,6
+    Generational Trauma                      Zeitgeist         37%    49      2,7      0,0      0,42       0,0         2,4      12,4
+    Hikikomori                               Zeitgeist         24%    62      1,9      1,0      0,27       4,7         0,5       7,6
+    Hipster                                  Zeitgeist         56%    71      3,9      1,7      0,48      17,1         2,1      28,0
+    Karen                                    Zeitgeist         41%   125      3,5      0,4      0,13       7,2         0,6      11,4
+    Listen Kid                               Zeitgeist         53%   138      2,7      0,6      0,15       6,1         0,7      11,2
+    Mental Health Day                        Zeitgeist         30%    33      1,3      0,0      0,00       0,0         0,0       5,0
+    No Glove, No Love                        Zeitgeist         45%    49      2,7      0,0      0,00       0,0         0,0      12,5
+    Not on My Watch                          Zeitgeist         55%    44      1,0      1,6      0,26       3,8         0,5       6,7
+    Ol' Reliable                             Zeitgeist         55%   126      5,6      0,5      0,26       8,5         1,3      23,8
+    One for the Road                         Zeitgeist         52%    48      2,1      0,0      0,00       0,0         0,0       0,0
+    Plot Armor                               Zeitgeist         41%    64      1,3      0,9      0,41       5,6         0,7      11,1
+    Reality TV Star                          Zeitgeist         35%   128      3,5      0,7      0,13       3,0         0,3       5,2
+    Rush Hour                                Zeitgeist         61%    69      1,2      0,0      0,00       0,0         0,0       0,0
+    Russian Roulette                         Zeitgeist         24%    87      6,0      0,0      0,45       6,1         1,3      11,9
+    Scam Artist                              Zeitgeist         54%    63      1,4      0,8      0,21       3,5         0,4       7,5
+    The Friends We Made Along the Way        Zeitgeist         75%    44      2,7      0,0      0,00       0,0         0,0      76,0
+    This Is Fine                             Zeitgeist         55%    78      7,0      0,0      1,62      50,0        10,2     122,7
+    Toxic Positivity                         Zeitgeist         51%   158      3,6      0,0      0,01       0,0         0,0      20,6
+    Underdog                                 Zeitgeist         47%    51      1,1      0,8      0,30       2,9         0,4      13,5
+    Weaponized Incompetence                  Zeitgeist         58%    36      1,4      0,0      0,00       0,0         0,0       2,9
+    YOLO                                     Zeitgeist         44%   110      2,0      0,0      0,00       0,0         0,0       2,4
+    Cyberpsychosis                           Mind              66%    74      2,7      0,1      0,32       6,3         1,4      12,9
+    Imposter Syndrome                        Mind              48%   160      8,0      0,0      0,12       0,0         0,9       9,1
+    Introvert                                Mind              36%   225      9,2      0,7      0,44      19,6         2,6      32,7
+    Legerdemain                              Mind              59%   161      6,4      0,0      0,00       0,0         0,0       8,1
+    Lucid Dreaming                           Mind              53%   155      3,1      0,0      0,00       0,0         0,0       5,7
+    Maslow's Pyramid                         Mind              62%    79      6,0      0,0      0,00       0,0         0,0       8,0
+    Mimetic Theory                           Mind              50%    68      2,9      0,0      0,00       0,0         0,0       0,0
+    Momentum                                 Mind              49%    79      4,1      0,0      0,00       0,0         0,0      55,5
+    Pessimist                                Mind              33%    76      5,6      0,7      0,50       8,9         1,2      16,8
+    Red Herring                              Mind              59%   198      5,6      0,0      0,00       0,0         0,0       0,0
+    Reflect                                  Mind              33%    75      2,3      0,0      0,00       0,0         0,0       0,0
+    Roko's Basilisk                          Mind              45%   223      6,8      0,4      0,40      13,7         2,2      31,9
+    Schrodinger's Cat                        Mind              28%   144      1,8      0,2      0,20       4,5         0,5       7,5
+    Ship of Theseus                          Mind              33%   163      5,7      0,6      0,50      19,2         2,5      34,8
+    Socrates                                 Mind              31%    78      3,3      0,1      0,30       4,4         0,7      12,3
+    Survivorship Bias                        Mind              59%    74      3,9      0,0      0,00       0,0         0,0      13,1
+    Trolley Problem                          Mind              62%   251      7,5      0,0      0,42       0,0         2,9      34,8
+    Yesn't                                   Mind              40%    81      6,7      0,0      0,00       0,0         0,0       0,0
+    Accelerationism                          Utopia            43%    65      1,5      0,0      0,00       0,0         0,0      17,4
+    Ankylorhiza                              Utopia            51%    47      1,5      0,6      0,17       1,9         0,2       2,9
+    Antimatter                               Utopia            37%    70      2,6      0,2      0,10       2,9         0,4       5,9
+    Biohacking                               Utopia            60%    68      2,6      0,0      0,37       8,5         1,4      17,1
+    Black Hole                               Utopia            67%    79      2,6      0,1      1,13      31,6         5,9      57,2
+    Blood Transfusion                        Utopia            66%   142      2,5      0,0      0,00       0,0         0,0       5,3
+    Chimera                                  Utopia            44%    64      1,3      0,1      0,04       0,8         0,1       4,4
+    Clone                                    Utopia            38%    61      1,5      0,1      0,23       3,1         0,3       5,1
+    Cold Fusion                              Utopia            47%    62      3,1      0,5      0,14       4,9         0,5       7,9
+    Evolution Theory                         Utopia            39%    46      1,3      0,0      0,03       0,0         0,0       0,0
+    Exponential Growth                       Utopia            63%    46      1,2      0,0      0,00       0,0         0,0      14,9
+    Extremophile                             Utopia            33%    61      1,7      0,9      0,52       4,2         0,6       8,1
+    Femtosecond Laser                        Utopia            56%   135      3,2      0,1      0,41      11,7         2,4      22,7
+    Frankenstein                             Utopia            29%   167      1,9      2,0      0,57       4,8         0,6       7,6
+    Gene Editing                             Utopia            55%   114      3,2      0,0      0,00       0,0         0,0      18,3
+    Genetically Modified Organism            Utopia            39%   133      1,4      0,6      0,34       2,3         0,3       4,2
+    Hypermetamorphosis                       Utopia            47%    53      1,1      1,1      0,61       3,6         0,5       6,4
+    Longevity Hub                            Utopia            29%   143      1,8      0,6      0,25       2,7         0,3       7,8
+    Mutation                                 Utopia            66%    44      2,9      0,0      0,03       0,0         0,1       4,3
+    Overpopulation                           Utopia            48%    67      3,5      0,0      0,00       0,0         0,0       0,0
+    Particle Accelerator                     Utopia            48%    54      1,4      0,7      0,13       2,8         0,2       3,7
+    Perpetual Motion Machine                 Utopia            31%    52      1,0      0,0      0,01       0,7         0,1       7,6
+    Philosophy PhD                           Utopia            59%    34      1,0      0,0      0,00       0,1         0,0       2,4
+    Placebo                                  Utopia            59%    46      1,8      0,0      0,00       0,0         0,0      15,4
+    Quantum Physicist                        Utopia            45%    58      1,2      0,2      0,15       1,8         0,3       3,4
+    Quark                                    Utopia            54%    56      1,2      0,3      0,95       7,6         1,2      14,0
+    Resurrected T-Rex                        Utopia            45%    97      2,7      0,9      0,15       3,5         0,3       5,8
+    Scientific Method                        Utopia            38%    56      1,1      0,0      0,01       0,1         0,0       1,1
+    Seasteading                              Utopia            69%    67      3,6      0,0      0,00       0,0         0,0       0,0
+    Splitting The Atom                       Utopia            49%    65      2,6      0,0      0,69      10,2         2,1      20,3
+    Stasis Field                             Utopia            60%    53      1,9      0,0      0,00       0,0         0,0       8,9
+    Surveillance Giraffe                     Utopia            34%    44      1,2      2,0      0,94       3,1         0,5       5,3
+    White Dwarf                              Utopia            27%    77      2,1      1,0      0,47       5,5         0,8       8,6
 
 6. SUMMARY: FACTIONS, STRATEGIES, MECHANICS AND COMBINATIONS (deck against deck, Very Hard AI on both sides)
 
   Factions: the average win share of their one-faction decks (each faction has two: its best, and a second strategy),
   then of the two-faction decks they're part of
-    Mind              83%   (Control 92%, Control 73%);  in pairs 72%
-    Statecraft        70%   (Control 77%, Aggro 64%);  in pairs 76%
-    Tech              65%   (Midrange 75%, Combo 55%);  in pairs 83%
-    Digital Society   64%   (Swarm 76%, Midrange 51%);  in pairs 64%
-    Myth              44%   (Control 69%, Engine 20%);  in pairs 22%
-    Zeitgeist         42%   (Midrange 65%, Swarm 19%);  in pairs 12%
-    Utopia            36%   (Aggro 63%, Engine 10%);  in pairs 17%
-    Corporate         31%   (Engine 50%, Aggro 13%);  in pairs 38%
-    Shadow Ops.       21%   (Aggro 39%, Control 3%);  in pairs 58%
+    Zeitgeist         73%   (Midrange 87%, Swarm 60%);  in pairs 10%
+    Digital Society   64%   (Swarm 88%, Midrange 41%);  in pairs 61%
+    Mind              60%   (Control 65%, Control 56%);  in pairs 83%
+    Statecraft        54%   (Aggro 57%, Control 51%);  in pairs 74%
+    Tech              52%   (Midrange 74%, Combo 31%);  in pairs 74%
+    Myth              48%   (Control 69%, Engine 26%);  in pairs 14%
+    Shadow Ops.       40%   (Aggro 65%, Control 15%);  in pairs 65%
+    Utopia            38%   (Aggro 46%, Engine 31%);  in pairs 8%
+    Corporate         33%   (Engine 53%, Aggro 12%);  in pairs 35%
 
   Strategies: the average win share of the decks playing each (every faction's decks together)
-    Midrange    67%   4 decks; best Statecraft + Corporate - Military-Industrial Complex (76%)
-    Control     64%   6 decks; best Mind - Mind Games (92%)
-    Swarm       59%   3 decks; best Tech + Digital Society - The Algorithm (83%)
-    Combo       42%   3 decks; best Tech - Threat Model (55%)
-    Aggro       38%   5 decks; best Statecraft - Shock and Awe (64%)
-    Engine      24%   4 decks; best Corporate - Shareholder Value (50%)
+    Swarm       74%   3 decks; best Digital Society - Terminally Online (88%)
+    Midrange    69%   4 decks; best Zeitgeist - Moods of Modern Life (87%)
+    Control     57%   6 decks; best Shadow Ops. + Mind - Psyop (83%)
+    Aggro       38%   5 decks; best Shadow Ops. - Licence to Kill (65%)
+    Combo       33%   3 decks; best Digital Society + Shadow Ops. - Panopticon (47%)
+    Engine      29%   4 decks; best Corporate - Shareholder Value (53%)
     Strategy against strategy (rows' win share against columns):
                    Aggro     Combo   Control    Engine  Midrange     Swarm
-    Aggro              -       46%       24%       64%       19%       31%
-    Combo            54%         -       24%       85%       18%       30%
-    Control          75%       76%         -       81%       54%       50%
-    Engine           36%       15%       15%         -        6%       32%
-    Midrange         81%       82%       46%       94%         -       53%
-    Swarm            69%       70%       50%       68%       47%         -
+    Aggro              -       51%       26%       65%       21%       19%
+    Combo            49%         -       26%       56%       10%        9%
+    Control          73%       74%         -       72%       35%       31%
+    Engine           35%       44%       25%         -       18%        8%
+    Midrange         78%       90%       65%       77%         -       47%
+    Swarm            81%       91%       69%       92%       53%         -
 
   Mechanics: the cards carrying each, in the games their side played them (win share of those games; impact a game,
   damage, kills and what they set up and supplied). 50% means no edge. At least 3 cards and 60 games.
     Mechanic                            Win%  Impact/g  Cards  Games
-    Ability: Unbothered                  67%      18,9      4    833
-    Armor                                65%       4,1      6   1257
-    Watchdog                             63%       0,1      6   1568
-    Send for a card                      61%       5,7      7   1299
-    Leapfrog                             60%       7,6      3    609
-    Exhaust                              59%      16,9     11   2602
-    Status: HeatSignature                59%      15,9      8   2326
-    Prophecy                             58%       7,6      4    813
-    Board damage                         55%      32,3     17   3147
-    Big body (7+ Health)                 54%       9,0     13   2615
-    Targeted damage                      53%      22,4     37   8798
-    Debuffs                              52%      16,8      7   1529
-    Healing                              51%      14,6     15   2815
-    Ability: On the Brink                50%       4,6      3    556
-    Creature, deploys 1                  50%       7,2     33   6098
-    Status: Revealed                     48%      15,1      4   1068
-    Trigger: Dawn                        48%      10,5     27   4957
-    Trend                                48%       0,3      3    338
-    Trigger: Hurt                        48%      11,3      4    781
-    Creature, ready at once              47%      12,4     66  14412
-    Trigger: Arrival                     43%       9,4     31   7201
-    Trigger: Dusk                        42%      13,3     12   2507
-    Card draw                            41%      20,9     19   4935
-    Buffs                                40%      15,9     35   6749
-    Creature, deploys 2                  39%       6,0      8   1769
-    Sacrifice cost                       39%      12,6      4    532
-    Fast creature (Speed 3+)             39%       9,5     13   3362
-    Destroy                              36%      12,3      7   1279
-    Trigger: Last Will                   31%       8,7     12   3088
-    Status: Burned                       30%       8,8      4    878
-    Status: Blessed                      26%      11,4      6   1112
-    Status: Doomed                       23%       9,5      3    557
-    Swap                                 19%       3,5      3    369
-    Summon tokens                        10%       2,0      3    389
+    Trigger: Hurt                        61%      11,5      4    742
+    Prophecy                             60%       8,0      4    799
+    Leapfrog                             60%       9,3      5    824
+    Exhaust                              56%      19,5     13   2996
+    Watchdog                             55%       0,3      7   1586
+    Board damage                         55%      36,3     20   3912
+    Ability: Unbothered                  54%      18,1      6   1110
+    Send for a card                      54%       7,1      8   1430
+    Status: HeatSignature                52%      18,9      9   2506
+    Targeted damage                      52%      23,1     43  10142
+    Debuffs                              52%      15,6      7   1455
+    Armor                                51%       4,4      9   1721
+    Trend                                50%       0,1      3    338
+    Creature, ready at once              50%      13,6     72  14969
+    Creature, deploys 2                  48%       8,5      7   1042
+    Status: Concealed                    48%       5,4      3    526
+    Big body (7+ Health)                 47%      10,3     16   3178
+    Healing                              46%      18,2     19   3382
+    Status: Revealed                     44%      21,6      6   1481
+    Trigger: Dusk                        44%      15,5     12   2445
+    Destroy                              44%      12,5      8   1593
+    Trigger: Arrival                     44%      10,8     38   8505
+    Fast creature (Speed 3+)             43%       9,8     14   3364
+    Trigger: Dawn                        43%      12,2     30   5288
+    Creature, deploys 1                  42%       8,6     42   8173
+    Buffs                                41%      19,3     38   6998
+    Sacrifice cost                       40%      17,1      4    663
+    Card draw                            37%      20,2     26   6039
+    Ability: On the Brink                35%       6,4      3    561
+    Trigger: Last Will                   32%       8,7     13   3043
+    Status: Burned                       32%      10,9      4    921
+    Status: Blessed                      31%      19,5      8   1372
+    Swap                                 24%       4,6      3    333
+    Summon tokens                        24%       2,0      3    371
+    Status: Doomed                       23%      10,3      3    551
 
   Combinations: two cards its side played in the same game, and how much more that side won than its deck usually
   does (lift). At least 25 such games; the cards of one deck only, since pairs only meet in a deck.
     Each deck's best pair (the most lift), the decks by win share:
-      Legerdemain + Trolley Problem                                    82% won   lift  +0%    282 games   (Mind - Mind Games)
-      Clickbait + Ransomware Attack                                    84% won   lift  +2%    140 games   (Tech + Digital Society - The Algorithm)
-      Preemptive Strike + Red Tape                                     85% won   lift  +7%     71 games   (Statecraft - Order & Paperwork)
-      Preemptive Strike + Taxpayer Funds Venture Capital Profits       77% won   lift  +1%    140 games   (Statecraft + Corporate - Military-Industrial Complex)
-      Clickbait + Dogpile                                              81% won   lift  +1%    277 games   (Digital Society - Terminally Online)
-      Antivirus + Man-in-the-Middle                                    75% won   lift  +0%    143 games   (Tech - Move Fast and Break Things)
-      Cyberpsychosis + Lucid Dreaming                                  74% won   lift  +2%    133 games   (Mind - All in Your Head)
-      Counter-Intelligence + Trolley Problem                           72% won   lift  +0%    140 games   (Shadow Ops. + Mind - Psyop)
-      Holy Hand Grenade of Antioch + Lance Of Longinus                 70% won   lift  +1%    141 games   (Myth - Old Gods, New Tricks)
-      Boomer + This Is Fine                                            66% won   lift  +1%    123 games   (Zeitgeist - Moods of Modern Life)
-      Preemptive Strike + Sherman Tank                                 71% won   lift  +1%    283 games   (Statecraft - Shock and Awe)
-      Black Hole + Evolution Theory                                    65% won   lift  +2%    105 games   (Utopia - Results May Vary)
-      Ransomware Attack + Suspicious USB Stick in the Parking Lot      57% won   lift  +2%    139 games   (Tech - Threat Model)
-      Console Memory Card + Dogpile                                    53% won   lift  +1%    131 games   (Digital Society - Influencer Economy)
-      Peace the Frontier + Taxpayer Funds Venture Capital Profits      51% won   lift  +1%    138 games   (Corporate - Shareholder Value)
-      Dogpile + Perfectly Timed Camera Malfunction                     46% won   lift  +1%    128 games   (Digital Society + Shadow Ops. - Panopticon)
-      False Flag Operation + GoldenEye                                 42% won   lift  +3%    132 games   (Shadow Ops. - Licence to Kill)
-      Holy War + Monkey Hand                                           29% won   lift  +2%    132 games   (Myth + Corporate - Prosperity Gospel)
-      Mox Nox + Sacrificial Ritual                                     33% won   lift +13%     30 games   (Myth - Blessed Martyrs)
-      Rush Hour + YOLO                                                 25% won   lift  +7%     83 games   (Zeitgeist - Underdogs)
-      Exponential Growth + Reincarnation                               31% won   lift +14%     42 games   (Utopia + Myth - Frankenstein)
-      Counterfeit + Team Building Exercise                             24% won   lift +12%     41 games   (Corporate - Hustle Rush)
-      Overtime + Team Building Exercise                                17% won   lift  +5%     71 games   (Corporate + Zeitgeist - Hustle Culture)
-      Hypermetamorphosis + Quantum Physicist                           14% won   lift  +4%     85 games   (Utopia - Lab Grown)
-      Coup d'État + Deep Cover                                         10% won   lift  +7%     49 games   (Shadow Ops. - Black Budget)
+      Clickbait + Rage Bait                                            88% won   lift  +0%    144 games   (Digital Society - Terminally Online)
+      Boomer + Ol' Reliable                                            86% won   lift  +0%    139 games   (Zeitgeist - Moods of Modern Life)
+      Femme Fatale + Red Herring                                       85% won   lift  +1%    134 games   (Shadow Ops. + Mind - Psyop)
+      Clickbait + DDOS Attack                                          74% won   lift  +0%    144 games   (Tech + Digital Society - The Algorithm)
+      Antivirus + Man-in-the-Middle                                    74% won   lift  +0%    144 games   (Tech - Move Fast and Break Things)
+      Inflation + Man o' War                                           75% won   lift  +0%    141 games   (Statecraft + Corporate - Military-Industrial Complex)
+      The Great Flood + The Wicker Man                                 75% won   lift  +5%    106 games   (Myth - Old Gods, New Tricks)
+      Human Intelligence + The Golden Gun                              66% won   lift  +1%    135 games   (Shadow Ops. - Licence to Kill)
+      Pessimist + Trolley Problem                                      66% won   lift  +0%    141 games   (Mind - All in Your Head)
+      No Glove, No Love + The Friends We Made Along the Way            60% won   lift  +1%    141 games   (Zeitgeist - Underdogs)
+      Panem Et Circenses + Sherman Tank                                58% won   lift  +0%    141 games   (Statecraft - Shock and Awe)
+      Legerdemain + Survivorship Bias                                  59% won   lift  +2%    123 games   (Mind - Mind Games)
+      Cleaning Robot + Flash Crash                                     61% won   lift  +4%    122 games   (Corporate - Shareholder Value)
+      Panem Et Circenses + Red Tape                                    59% won   lift  +7%     80 games   (Statecraft - Order & Paperwork)
+      Cancelled + Tapped Communications                                47% won   lift  +0%    135 games   (Digital Society + Shadow Ops. - Panopticon)
+      Accelerationism + Biohacking                                     52% won   lift  +6%     94 games   (Utopia - Results May Vary)
+      Console Memory Card + Social Panopticon                          42% won   lift  +0%    140 games   (Digital Society - Influencer Economy)
+      Antivirus + Suspicious USB Stick in the Parking Lot              35% won   lift  +4%    126 games   (Tech - Threat Model)
+      Femtosecond Laser + Philosophy PhD                               34% won   lift  +4%     41 games   (Utopia - Lab Grown)
+      Excess of Bread and Wine + The Holy Grail                        31% won   lift  +5%     98 games   (Myth - Blessed Martyrs)
+      Fat Tony + Omen Reading                                          25% won   lift  +4%    109 games   (Myth + Corporate - Prosperity Gospel)
+      Coup d'État + Tracking Beacon                                    18% won   lift  +3%     92 games   (Shadow Ops. - Black Budget)
+      Counterfeit + Team Building Exercise                             17% won   lift  +5%     35 games   (Corporate - Hustle Rush)
+      Hostile Takeover + YOLO                                          11% won   lift  +1%    122 games   (Corporate + Zeitgeist - Hustle Culture)
+      Exponential Growth + Reincarnation                               17% won   lift  +9%     65 games   (Utopia + Myth - Frankenstein)
     The pairs that add the most to their deck (lift):
-      Exponential Growth + Reincarnation                               31% won   lift +14%     42 games   (Utopia + Myth - Frankenstein)
-      Exponential Growth + Mutation                                    30% won   lift +13%     60 games   (Utopia + Myth - Frankenstein)
-      Exponential Growth + Resurrected T-Rex                           30% won   lift +13%     60 games   (Utopia + Myth - Frankenstein)
-      Mox Nox + Sacrificial Ritual                                     33% won   lift +13%     30 games   (Myth - Blessed Martyrs)
-      Exponential Growth + Frankenstein                                30% won   lift +13%     61 games   (Utopia + Myth - Frankenstein)
-      Exponential Growth + Gene Editing                                30% won   lift +13%     61 games   (Utopia + Myth - Frankenstein)
-      Exponential Growth + Phoenix Feather                             30% won   lift +13%     61 games   (Utopia + Myth - Frankenstein)
-      Exponential Growth + The Holy Grail                              30% won   lift +13%     61 games   (Utopia + Myth - Frankenstein)
-      Exponential Growth + Living Dead                                 29% won   lift +12%     55 games   (Utopia + Myth - Frankenstein)
-      Exponential Growth + Genetically Modified Organism               29% won   lift +12%     59 games   (Utopia + Myth - Frankenstein)
-      Sacrificial Ritual + Thoughts and Prayers                        32% won   lift +12%     31 games   (Myth - Blessed Martyrs)
-      Counterfeit + Team Building Exercise                             24% won   lift +12%     41 games   (Corporate - Hustle Rush)
+      Exponential Growth + Reincarnation                               17% won   lift  +9%     65 games   (Utopia + Myth - Frankenstein)
+      Panem Et Circenses + Red Tape                                    59% won   lift  +7%     80 games   (Statecraft - Order & Paperwork)
+      Lost Landmine + Red Tape                                         58% won   lift  +7%     81 games   (Statecraft - Order & Paperwork)
+      Accelerationism + Biohacking                                     52% won   lift  +6%     94 games   (Utopia - Results May Vary)
+      Raised Security Level + Red Tape                                 58% won   lift  +6%     80 games   (Statecraft - Order & Paperwork)
+      Internal Revenue Service + Red Tape                              57% won   lift  +6%     79 games   (Statecraft - Order & Paperwork)
+      Counterfeit + Team Building Exercise                             17% won   lift  +5%     35 games   (Corporate - Hustle Rush)
+      Accelerationism + Splitting The Atom                             51% won   lift  +5%     92 games   (Utopia - Results May Vary)
+      Ceasefire + Red Tape                                             57% won   lift  +5%     83 games   (Statecraft - Order & Paperwork)
+      Accelerationism + Cold Fusion                                    51% won   lift  +5%     96 games   (Utopia - Results May Vary)
+      Accelerationism + Resurrected T-Rex                              51% won   lift  +5%     96 games   (Utopia - Results May Vary)
+      Man o' War + Red Tape                                            56% won   lift  +5%     87 games   (Statecraft - Order & Paperwork)
     The pairs that drag their deck down:
-      Martial Law + Sherman Tank                                       42% won   lift -22%     81 games   (Statecraft - Shock and Awe)
-      Demagogue + Martial Law                                          51% won   lift -19%    147 games   (Statecraft - Order & Paperwork)
-      Hipster + Russian Roulette                                       47% won   lift -18%     59 games   (Zeitgeist - Moods of Modern Life)
-      Reflect + Schrodinger's Cat                                      56% won   lift -17%     59 games   (Mind - All in Your Head)
-      Reality TV Star + Russian Roulette                               48% won   lift -17%     62 games   (Zeitgeist - Moods of Modern Life)
-      Martial Law + Police Officer Productivity Target                 54% won   lift -17%    149 games   (Statecraft - Order & Paperwork)
-      Martial Law + Mercenaries                                        55% won   lift -16%    170 games   (Statecraft - Order & Paperwork)
-      Imposter Syndrome + Reflect                                      57% won   lift -16%     60 games   (Mind - All in Your Head)
+      Rush Hour + Underdog                                             30% won   lift -30%     50 games   (Zeitgeist - Underdogs)
+      Drug Smuggler + Underdog                                         32% won   lift -28%     53 games   (Zeitgeist - Underdogs)
+      Not on My Watch + Underdog                                       32% won   lift -28%     56 games   (Zeitgeist - Underdogs)
+      Delivery Cyclist + Underdog                                      35% won   lift -24%     62 games   (Zeitgeist - Underdogs)
+      Plot Armor + Underdog                                            36% won   lift -24%     59 games   (Zeitgeist - Underdogs)
+      Listen Kid + Underdog                                            37% won   lift -23%     65 games   (Zeitgeist - Underdogs)
+      Drug Smuggler + Not on My Watch                                  37% won   lift -22%     67 games   (Zeitgeist - Underdogs)
+      Mental Health Day + Underdog                                     38% won   lift -22%     66 games   (Zeitgeist - Underdogs)
 
   The cards that bring the most (impact a game, deck against deck; 15+ games), and their win share
-    Black Hole                               Utopia          impact  83,3   won  63%
-    This Is Fine                             Zeitgeist       impact  66,5   won  66%
-    Holy War                                 Myth            impact  61,1   won  48%
-    Taxpayer Funds Venture Capital Profits   Corporate       impact  60,3   won  64%
-    Dogpile                                  Digital Society impact  58,4   won  64%
-    Clickbait                                Digital Society impact  55,9   won  80%
-    Holy Hand Grenade of Antioch             Myth            impact  52,2   won  70%
-    Mutually Assured Destruction             Statecraft      impact  52,2   won  76%
-    Momentum                                 Mind            impact  50,5   won  92%
-    Hostile Takeover                         Corporate       impact  45,2   won  26%
-    Panem Et Circenses                       Statecraft      impact  43,3   won  71%
-    Trolley Problem                          Mind            impact  40,5   won  79%
-    Preemptive Strike                        Statecraft      impact  37,6   won  74%
-    False Flag Operation                     Shadow Ops.     impact  35,9   won  41%
-    Ransomware Attack                        Tech            impact  35,5   won  71%
+    This Is Fine                             Zeitgeist       impact 122,7   won  86%
+    Clickbait                                Digital Society impact  79,1   won  81%
+    The Friends We Made Along the Way        Zeitgeist       impact  76,0   won  60%
+    Taxpayer Funds Venture Capital Profits   Corporate       impact  71,5   won  66%
+    Dogpile                                  Digital Society impact  67,4   won  63%
+    Blessing in Disguise                     Myth            impact  65,9   won  27%
+    Holy War                                 Myth            impact  64,2   won  45%
+    Black Hole                               Utopia          impact  57,2   won  46%
+    Momentum                                 Mind            impact  55,5   won  55%
+    Mutually Assured Destruction             Statecraft      impact  52,5   won  53%
+    Flash Crash                              Corporate       impact  45,8   won  61%
+    Ransomware Attack                        Tech            impact  45,3   won  59%
+    Panem Et Circenses                       Statecraft      impact  45,3   won  56%
+    Thoughts and Prayers                     Myth            impact  44,0   won  27%
+    Preemptive Strike                        Statecraft      impact  42,3   won  62%
 
 PROBLEMS: none found.

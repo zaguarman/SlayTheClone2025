@@ -101,7 +101,7 @@ MonoBehaviour:
   designNotes: 'Future: pays draws from your next Days until it collapses, then takes
     them all back.'
   artDescription: 
-  attack: 1
+  attack: 2
   health: 3
   speed: 2
   turnsUntilOperative: 1

@@ -34,7 +34,7 @@ MonoBehaviour:
   artDescription: A mild office clerk in a cardigan and lanyard at his desk, a mole's
     snout and claws poking out of his sleeves, a tunnel opening under his chair that
     leads to a foreign embassy's flag.
-  attack: 2
+  attack: 3
   health: 3
   speed: 2
   turnsUntilOperative: 0

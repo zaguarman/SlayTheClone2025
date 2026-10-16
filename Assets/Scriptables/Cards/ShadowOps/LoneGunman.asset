@@ -36,7 +36,7 @@ MonoBehaviour:
     press cameras, holding a rifle he has clearly never seen before, a LONE GUNMAN
     placard hung round his neck, while two men in dark suits and hats slip away behind
     a picket fence on a grassy knoll.
-  attack: 1
+  attack: 2
   health: 3
   speed: 1
   turnsUntilOperative: 0

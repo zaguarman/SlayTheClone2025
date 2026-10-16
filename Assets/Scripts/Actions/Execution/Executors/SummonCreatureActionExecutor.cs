@@ -27,6 +27,15 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Picked out of the deck: it leaves the deck now (this very copy); drawn, played or discarded since, nothing to summon
+            if (summonAction.PickedFromDeck) {
+                if (!owner.Deck.GetDeckPreview().Contains(creature)) {
+                    Log($"Executor: {creature.Name} left the deck since it was picked: nothing to summon", LogTag.Actions | LogTag.Creatures);
+                    return;
+                }
+                owner.Deck.RemoveCard(creature);
+            }
+
             creature.SetOwner(owner); // Set owner BEFORE adding to battlefield/registering
 
             // A Gift needs an empty slot: given into a taken one, it fizzles and goes back to its giver's discard pile

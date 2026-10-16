@@ -68,7 +68,7 @@ MonoBehaviour:
   artDescription: A knight in chainmail and a white mantle with a red cross, sword
     raised, standing in front of a medieval bank counter piled with gold coins and
     promissory notes.
-  attack: 2
+  attack: 3
   health: 5
   speed: 1
   turnsUntilOperative: 1

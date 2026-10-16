@@ -67,7 +67,7 @@ MonoBehaviour:
     and what the creature there plans that Day. Future: chooses the slot.'
   artDescription: A dark room with a wall of surveillance monitors, two operators
     asleep in their chairs with headsets on, cold coffee.
-  attack: 0
+  attack: 1
   health: 5
   speed: 1
   turnsUntilOperative: 0

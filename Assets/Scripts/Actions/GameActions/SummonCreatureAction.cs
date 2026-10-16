@@ -9,8 +9,11 @@ namespace SlayTheClone {
         public IPlayer GetOwner() => owner;
         public ITarget GetTargetSlot() => targetSlot;
         public bool IsFromDeck() => fromDeck;
+        /// <summary>Picked out of its owner's deck when queued (Summon from deck): it must still be there when it resolves.</summary>
+        public bool PickedFromDeck { get; }
 
-        public SummonCreatureAction(ICreature creature, IPlayer owner, ITarget target, bool fromDeck = false) {
+        public SummonCreatureAction(ICreature creature, IPlayer owner, ITarget target, bool fromDeck = false, bool pickedFromDeck = false) {
+            PickedFromDeck = pickedFromDeck;
             this.creature = creature;
             this.owner = owner;
             targetSlot = target;

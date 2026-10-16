@@ -35,7 +35,7 @@ MonoBehaviour:
     camera eye glowing, sucking up a family''s photos, letters and diary from the
     living-room floor while a beam uploads a floor plan of the house to a cloud.
     A pop-up on it reads "Free cleaning. You''re the product."'
-  attack: 2
+  attack: 3
   health: 7
   speed: 1
   turnsUntilOperative: 1

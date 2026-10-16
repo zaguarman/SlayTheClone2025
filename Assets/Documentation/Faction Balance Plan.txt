@@ -1,0 +1,76 @@
+FACTION BALANCE PLAN (2026-10-16)
+
+The goal: the nine factions within reach of each other, judged as factions, not deck by deck (the user). A faction is
+judged two ways: its best deck (what it can do built well) and the average of all its decks (how forgiving its card pool
+is). Two-faction decks are listed apart.
+
+
+1. PRINCIPLES
+
+• Buff the weak up to the strong; no nerfs unless the user asks (mild ones were accepted before, when asked).
+• Keep each faction's rhythm (Faction Compendium, "Every Faction Has a Rhythm"): Corporate and Shadow Ops. are timing
+  factions (they keep their speed; their numbers move), Statecraft and Myth hold the status quo (durability, protection).
+• Change what the faction lacks, not one deck's list: a hole in the card pool is filled with new cards; a mechanic that
+  loses everywhere is fixed as a mechanic; weak bodies get stats.
+• Measure after every round, the same way: the AI Balance Report (Very Hard AI, every deck against every other, mirror
+  games for the cards) and the Adventure Simulation (30 runs a faction).
+
+
+2. WHAT THE DATA SAID (the tournament under the new hand rules, before any change)
+
+• Factions (all their decks): Digital Society 75%, Mind 71, Statecraft 69, Tech 66, Zeitgeist 49, Myth 45, Corporate 28,
+  Utopia 28, Shadow Ops. 25.
+• What wins: Unbothered, Armor, Watchdogs, Send For, Leapfrog, Exhaust, Heat Signature, board damage, big bodies.
+• What loses: tokens (10%), Swap, Doomed, Blessed, Burn, Last Will, conditional Destroy, fast small creatures, draw.
+• Strategies: Midrange and Swarm win, Control holds, Aggro, Combo and Engine lose.
+• The holes: Shadow Ops. had no plain damage (its starter deck could not finish a 5-Health enemy) and no walls;
+  Utopia's bodies hurt themselves and its removal hurt its player; Corporate's creatures were 1/1s to 2/3s and its
+  numbers had been cut on 2026-10-14; Myth's knights were slow and soft; Zeitgeist's swarm had nothing to make it stick.
+
+
+3. THE LEVERS, IN ORDER
+
+1) New cards for the holes (30, 2026-10-16): Shadow Ops. 7 (Exploding Pen, Drug Pigeon, Embassy, Secret Anthrax
+   Laboratory, Tracking Beacon, Arsonist, Counter-Surveillance), Utopia 6 (Longevity Hub, Femtosecond Laser, Quark,
+   Seasteading, Ankylorhiza, White Dwarf), Corporate 6 (Venture Capital, Corporate Bailouts, Flash Crash, Just in Time,
+   Hedonic Treadmillionaire, Moral Bankruptcy), Myth 6 (Grim Reaper, Blessing in Disguise, Die by the Sword, Mithril,
+   Here Be Dragons, Gracias Jesús), Zeitgeist 5 (Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents,
+   The Friends We Made Along the Way). Each faction's two decks took the ones they needed most.
+2) Stats for the weakest bodies (+1 here and there) and the 2026-10-14 cuts given back: Corporate (Margin Call 2,
+   Hostile Takeover 4, its small creatures +1, its big ones a Day faster), Shadow Ops. (Femme Fatale, Cleaner, MK Ultra,
+   If I Told You back up, its walls and spies +1), Utopia (slow science a Day sooner, Chimera hurts itself less),
+   Myth (sturdier faithful).
+3) Next, if the gap stays: the mechanics that lose everywhere. Blessed (a stack could also stop 1 damage), Doomed on an
+   enemy (it gets +1 Attack a Dawn: a curse that helps them early), Burn on your own creatures (Utopia's cost), Last Will,
+   tokens. Fixing a mechanic lifts every faction that owns it at once.
+4) Last, and only if asked: mild trims at the top (Zeitgeist's Moods of Modern Life, Digital Society's Terminally Online).
+
+
+4. ROUNDS
+
+                     before   new cards   + stats   + round 2     best deck now
+  Zeitgeist            49%        84%        75%        73%          87%
+  Digital Society      75%        68%        65%        64%          88%
+  Mind                 71%        68%        64%        60%          65%
+  Statecraft           69%        62%        58%        54%          57%
+  Tech                 66%        57%        53%        52%          74%
+  Myth                 45%        45%        50%        48%          69%
+  Shadow Ops.          25%        31%        42%        40%          65%
+  Utopia               28%        37%        35%        38%          46%
+  Corporate            28%        25%        25%        33%          53%
+
+  Spread (all decks): 50 points before, 40 now. By best deck: Utopia (46%) and Corporate (53%) are the bottom, Zeitgeist
+  and Digital Society (87-88%) the top.
+
+  Adventures (30 runs a faction, bosses beaten): before Shadow Ops. 0 (29 runs dead in the first rows), now Statecraft 12,
+  Mind 4, Shadow Ops. 3, Zeitgeist 2, Digital Society 2, Utopia 1, Tech 0, Corporate 0, Myth 0. Elites are where most runs end.
+
+
+5. NEXT
+
+• Utopia and Corporate: lever 3 (Burn on their own creatures, Engine's draw) before more stats.
+• The second decks of a faction are first drafts (Black Budget, Hustle Rush, Lab Grown, Blessed Martyrs, Underdogs): they
+  drag the all-decks average down; rebuild them from the card stats before judging a faction on them.
+• The report doesn't credit damage that lands later (Dead Cat Bounce's crash, Prophecies like Inflation) to its card: their
+  impact reads 0. The effects work (checked); the ledger needs to follow the delayed actions to their card.
+• Adventures: the elites (Hard AI, a stage more Health) end most runs; Myth and Corporate never beat the boss.

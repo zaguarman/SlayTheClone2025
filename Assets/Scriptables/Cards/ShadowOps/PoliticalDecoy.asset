@@ -32,7 +32,7 @@ MonoBehaviour:
     distance, over the creatures in between, even one that can''t act.'
   artDescription: 'Two identical politicians in matching suits: one waves from a
     balcony, the other ducks behind the curtain.'
-  attack: 0
+  attack: 1
   health: 6
   speed: 1
   turnsUntilOperative: 0

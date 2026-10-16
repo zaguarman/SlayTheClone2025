@@ -32,13 +32,14 @@ namespace SlayTheClone.Tests {
             var bolt = game.Spell("Bolt", TargetType.EnemyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
             var fish = game.Creature("Fish", 1, 1);
             var bear = game.Creature("Bear", 1, 3);
-            var p1Deck = new List<CardData> { wolf, bolt, fish, fish, fish };
+            var memo = game.Spell("Memo", TargetType.Player);
+            var p1Deck = new List<CardData> { wolf, bolt, fish, fish, memo };
             var p2Deck = new List<CardData> { bear };
             game.SetDecks(p1Deck, p2Deck);
 
-            // Dealing draws the shuffled deck into the hand
+            // Dealing draws the shuffled deck into the hand: 3 creatures and 2 spells
             game.CardDealingService.DealInitialHands(p1, p2, 5);
-            Assert.AreEqual(5, p1.Hand.Count);
+            Assert.AreEqual((3, 2), (Player.CreaturesIn(p1.Hand), Player.SpellsIn(p1.Hand)));
             Assert.AreEqual(0, p1.Deck.CardsRemaining);
             var dealtOrder = p1.Hand.Select(c => c.Name).ToList();
 
@@ -65,14 +66,15 @@ namespace SlayTheClone.Tests {
             AssertDiscarded(p2, bearCard);
             AssertDiscarded(p1, boltCard);
 
-            // Discarding empties the hand; drawing from an empty deck shuffles the discard pile back in
+            // The Day's end discards the creatures left in the hand, the spells stay; drawing a spell with none in the deck
+            // shuffles the discard pile back in, and with no spell left there it takes a creature
             game.Run(new DiscardHandAction(p1));
-            Assert.AreEqual(0, p1.Hand.Count);
-            Assert.AreEqual(4, p1.Deck.GetDiscardPilePreview().Count); // Bolt and the three Fish
+            CollectionAssert.AreEqual(new[] { "Memo" }, p1.Hand.Select(c => c.Name).ToList());
+            Assert.AreEqual(3, p1.Deck.GetDiscardPilePreview().Count); // Bolt and the two Fish
 
             game.Run(new DrawCardsAction(p1, 2));
-            Assert.AreEqual(2, p1.Hand.Count);
-            Assert.AreEqual(2, p1.Deck.CardsRemaining);
+            CollectionAssert.AreEquivalent(new[] { "Memo", "Bolt", "Fish" }, p1.Hand.Select(c => c.Name).ToList());
+            Assert.AreEqual(1, p1.Deck.CardsRemaining);
             Assert.AreEqual(0, p1.Deck.GetDiscardPilePreview().Count);
 
             // Extraction: a creature goes back to its owner's hand, with the next Day's hand. Extracted while Revealed, it

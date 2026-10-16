@@ -98,8 +98,7 @@ namespace SlayTheClone {
 
         // The shop's five cards of the run's faction: the strongest it can pay, then the weakest card out of the deck if it still can
         private static void Shop(AdventureSim sim, List<CardDataScriptableObject> pool, Dictionary<CardDataScriptableObject, AdventureDecks.Tier> tiers) {
-            var stock = pool.Where(c => c.faction == sim.Faction && !(c is CreatureCardScriptableObject { token: true }))
-                .OrderBy(c => sim.Random.NextDouble() + (int)tiers[c] * 0.1).Take(AdventureRun.ShopCards).ToList();
+            var stock = AdventureDecks.Roll(sim.Faction, AdventureDecks.StrengthOf(sim.Current ?? sim.Map.Row(0).First()), pool, sim.Random, AdventureRun.ShopCards);
             var buy = stock.Where(c => AdventureRun.PriceOf(tiers[c]) <= sim.Money).OrderByDescending(AdventureDecks.Power).FirstOrDefault();
             if (buy != null && sim.Deck.Count < PlayerDecks.MaxDeckSize) {
                 sim.Money -= AdventureRun.PriceOf(tiers[buy]);

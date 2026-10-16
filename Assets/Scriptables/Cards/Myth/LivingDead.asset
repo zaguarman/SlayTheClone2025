@@ -66,7 +66,7 @@ MonoBehaviour:
   designNotes: 'Revive: once per combat it rises again at the next Dawn.'
   artDescription: A grey zombie in a business suit climbing out of a cemetery grave
     with its briefcase, a sunrise behind the tombstones.
-  attack: 2
+  attack: 3
   health: 3
   speed: 1
   turnsUntilOperative: 0

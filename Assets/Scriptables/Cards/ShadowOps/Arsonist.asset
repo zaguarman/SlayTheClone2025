@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: Arsonist
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 7dd3aa21-cba4-4bf9-a9cb-b97ef1700aad
+  cardName: Arsonist
+  description: Insurance fraud is a team sport.
+  cardType: 0
+  faction: 3
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  effects:
+  - effectType: 0
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 0
+      value: 2
+      targetType: 4
+      targetModifier: 32
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'A body that hits on arrival: 2 damage to the creature facing it.
+    Shadow Ops.'' creatures were 1/3s and 1/4s; this one trades.'
+  artDescription: A man in a suit holding a briefcase and a lit match in front of
+    a failing shop, a fire insurance policy sticking out of his breast pocket.
+  attack: 3
+  health: 3
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 0
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

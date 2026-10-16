@@ -34,7 +34,7 @@ MonoBehaviour:
     on the chest, flexing proudly in front of a mirror that shows a real muscled
     hero.
   attack: 1
-  health: 1
+  health: 2
   speed: 2
   turnsUntilOperative: 0
   movement: 0

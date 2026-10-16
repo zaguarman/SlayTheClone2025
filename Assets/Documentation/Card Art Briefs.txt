@@ -101,6 +101,18 @@ The Invisible Hand (creature)
     An empty white glove floating over a busy market stall, nobody inside it, quietly lifting coins out of the shoppers' pockets and dropping them into a fat banker's top hat.
 C-Suite (creature)
     A champagne tower of glasses: five executives in suits at the top glass, toasting, the champagne overflowing past them down the tiers, until a line of workers at the bottom catch the last drips in paper cups.
+Venture Capital (spell)
+    A man in a fleece vest pouring a bucket of gold coins into a lanky startup founder's head through a funnel, the founder growing taller and more delusional.
+Corporate Bailouts (spell)
+    A sinking cruise ship branded MEGABANK being lifted out of the sea by a giant hand made of taxpayers' wallets, the executives on deck popping champagne.
+Flash Crash (spell)
+    A stock chart dropping off a cliff into a canyon, tiny traders in suits falling with it, a trading robot at the top shrugging.
+Just in Time (spell)
+    A delivery van screeching up to a factory door exactly as the last box on the assembly line runs out, a manager holding a stopwatch at 0:00.
+Hedonic Treadmillionaire (creature)
+    A billionaire in a gold tracksuit running on a treadmill that is itself on a yacht on a bigger yacht, sweating, his smile not moving.
+Moral Bankruptcy (spell)
+    A banker stamping BANKRUPT across a smiling worker's portrait, the worker's chair already being carried away by movers.
 
 STATECRAFT
 
@@ -225,6 +237,16 @@ We Are Not The Same (spell)
 Generational Trauma (spell)
     The swimming-pool meme: the Silent Generation stands in the pool holding a smiling Boomer high above the water, while on the bottom Gen X and the generations after them sit as skeletons, still waiting.
     USER: The meme of the woman holding something above water in a swimming pool with a skeleton at the bottom, with the generations: the one before the boomers holds the boomers above water, the next generations drowned underwater.
+Listen Kid (creature)
+    An old man on a porch rocking chair pointing his cane at a terrified teenager, a speech bubble filled with tiny drawings of horses, rotary phones and a nickel.
+Ol' Reliable (spell)
+    A worn-out frying pan hanging alone on a kitchen wall with a halo around it, a dented shape of a burglar's head in its bottom.
+Weaponized Incompetence (spell)
+    A man holding a plate he has 'washed' that is still covered in food, looking helpless, while his partner behind him quietly takes over the whole sink.
+Absentee Parents (creature)
+    A family portrait on a mantelpiece with two parent-shaped holes cut out of it, a postcard from Ibiza tucked into the frame.
+The Friends We Made Along the Way (spell)
+    A ragtag group of adventurers around a campfire laughing, an empty treasure chest behind them, a map with the X scribbled out.
 
 DIGITAL SOCIETY
 
@@ -404,6 +426,20 @@ Femme Fatale (creature)
 MK Ultra Test Subject (creature)
     Ted Kaczynski as the young Harvard math prodigy, before the woods: clean-cut, short neat hair, white shirt and narrow tie, strapped into a 1950s lab chair with electrodes taped to his temples, a blackboard of equations behind him and a psychologist with a clipboard in the corner.
     USER: Make it look like the Unabomber before going into the woods.
+Exploding Pen (spell)
+    A fountain pen lying on a desk with its cap off and a lit fuse curling out of the nib, a spy's hand sliding it across to a villain who is already reaching for it.
+Drug Pigeon (creature)
+    A pigeon in tiny aviator goggles flying over a prison wall, a little backpack strapped to its chest bulging with white packets, a guard in the watchtower looking the other way.
+Embassy (creature)
+    A grand embassy building with a flag over the door, a man in a trench coat climbing in through a back window while the ambassador smiles for photographers on the front steps.
+Secret Anthrax Laboratory (spell)
+    An abandoned concrete lab on a cracked dry seabed, rusty ships stranded in the sand around it, a lone scientist in a gas mask locking the door and pocketing the key.
+Tracking Beacon (spell)
+    A tiny blinking red device stuck to the back of a henchman's collar, a map on a laptop screen in the background showing his dot moving through the city.
+Arsonist (creature)
+    A man in a suit holding a briefcase and a lit match in front of a failing shop, a fire insurance policy sticking out of his breast pocket.
+Counter-Surveillance (spell)
+    A spy in a dark room watching a wall of monitors, every screen showing another spy watching him back, one of them waving.
 
 TECH
 
@@ -549,6 +585,18 @@ Phoenix Feather (spell)
     USER: 2026-10-14: only the feather, in the colors of the reference (a watercolor feather: red at the quill, orange and yellow, flame-like barbs, a glowing eye near the top, the tip burning lilac).
 The Omen (creature)
     A small boy in a neat suit on a tricycle in a long mansion hallway, staring straight at the viewer, a black dog sitting beside him and a 666 birthmark peeking from his hairline.
+Grim Reaper (creature)
+    The Grim Reaper in his black hood waiting in a hospital corridor, checking his watch, a number ticket in his bony hand, a sign above him reading NOW SERVING 42.
+Blessing in Disguise (spell)
+    A man sitting in a crashed car in a ditch, a halo of light around him, an angel in the back seat handing him a winning lottery ticket.
+Die by the Sword (spell)
+    A knight run through by his own sword which bounced back off a mirror, a smug monk holding the mirror.
+Mithril (spell)
+    A silver chain-mail shirt glittering on a velvet cushion in a dwarven forge, a tiny hobbit trying it on and a dragon peering in through the window.
+Here Be Dragons (creature)
+    An old parchment sea map ending in a ragged edge, beyond it a big dragon drawn in green ASCII characters on a black terminal screen, breathing fire made of # signs.
+Gracias Jesús (spell)
+    Jesus in a straw hat carrying two big baskets of vegetables in from the fields at sunset, a family at the farmhouse table clapping.
 
 MIND
 
@@ -668,6 +716,18 @@ Chimera (creature)
     A lion with a goat's head sprouting from its back and a snake for a tail, all three wearing hospital ID wristbands, in a lab enclosure with a sticky note: DO NOT FEED AFTER MIDNIGHT.
 Resurrected T-Rex (creature)
     A T-Rex skeleton half covered in new flesh breaking out of a museum display, the DNA sequencer that brought it back still beeping, a guide pointing at the exit.
+Longevity Hub (creature)
+    A gleaming white clinic in the desert where billionaires lie in pods drinking smoothies through tubes, a young intern on a treadmill in the corner wired to them by a blood line.
+Femtosecond Laser (spell)
+    A laser beam the thickness of a hair slicing a falling apple into perfect quarters in mid-air, a physicist in safety goggles timing it with a stopwatch.
+Quark (creature)
+    Three tiny glowing particles in colored hats bouncing on a trampoline inside an atom, one of them flipping off the edge with a grin.
+Seasteading (spell)
+    A floating hexagonal platform city in the middle of the ocean, tech-bros sunbathing on the deck while one corner quietly sinks and a lone lifeguard chair stands empty.
+Ankylorhiza (creature)
+    A huge prehistoric whale with a crocodile's teeth bursting out of a lab aquarium tank, water and glass everywhere, a scientist in a lab coat clutching a sign reading DE-EXTINCTION: PHASE 1.
+White Dwarf (creature)
+    A small, very white man in a turtleneck standing in space, glowing faintly, the planets around him bending toward him, unbothered.
 
 IDEAS NOT YET CARDS (Brainstorm List)
 

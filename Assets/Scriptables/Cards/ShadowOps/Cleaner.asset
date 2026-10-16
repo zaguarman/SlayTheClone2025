@@ -32,7 +32,7 @@ MonoBehaviour:
     after the first.'
   artDescription: A calm man in a cleaning company jumpsuit, a mop in one hand and
     a silenced pistol in the other, two neat holes in a target behind him.
-  attack: 1
+  attack: 2
   health: 3
   speed: 3
   turnsUntilOperative: 0

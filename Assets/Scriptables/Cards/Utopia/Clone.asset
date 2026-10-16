@@ -67,7 +67,7 @@ MonoBehaviour:
     Clone (copies a friendly creature).'
   artDescription: Dolly the sheep in a lab coat and goggles proudly presenting a
     row of identical sheep behind her.
-  attack: 2
+  attack: 3
   health: 3
   speed: 2
   turnsUntilOperative: 1

@@ -69,7 +69,7 @@ MonoBehaviour:
   artDescription: A spy in a dark suit leaning in at a cocktail party to whisper
     into an eager journalist's ear, while under the table his other hand quietly
     screws a silencer onto a pistol.
-  attack: 2
+  attack: 3
   health: 4
   speed: 2
   turnsUntilOperative: 0

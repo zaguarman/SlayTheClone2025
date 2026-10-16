@@ -1555,18 +1555,12 @@ Card Game Factions Overview
 			Abrahamic Inheritance
 			Ambrosia
 			Bermuda Triangle
-			Blessing in Disguise
 			Confessional (tagged Myth)
-			Die by the Sword
 			Drug-Induced Spirituality
 			Entheogenic Sacrament
-			Gracias Jesús (meme: Jesus bringing in the food from the fields)
-			Grim Reaper
 			Gudea (the oldest known depicted person)
 			Heretic (added 2026-10-16)
-			Here Be Dragons (art: an ASCII-art dragon, like the reference given)
 			Luxor
-			Mithril
 			Moment of Silence (added 2026-10-15, satire of the state's answer to school shootings: no victims or violence shown). Idea: nobody can play spells this Day, both sides; that's all it does, and that's the joke
 			Public Autopsy
 			Publicly Funded Faith Schools
@@ -1625,22 +1619,16 @@ Card Game Factions Overview
 			Yokosuka (kamikaze plane)
 			Zero Grace Operational Policy
 		Shadow Ops.
-			Arsonist
 			Conspiracies That Turned Out to Be True (MK Ultra, Operation Northwoods, COINTELPRO...) (added 2026-10-14). Art: the conspiracy guy pointing at a wall of papers joined by red string (the Always Sunny meme)
-			Counter-Surveillance (tagged Shadow Ops.)
-			Drug Pigeon
-			Embassy (tagged Shadow Ops.)
 			Fingerprinting
 			Honey Pot (like the reference card: give the opponent two Treasures, then take control of them). To move to Tech, as a cyber honeypot, with a new mechanic (2026-10-13)
 			NDA (Non-Disclosure Agreement): built in Corporate (2026-10-14), Discard 1 and Blackout 2
 			Memory Wipe / Mandela Effect (all your creatures become unknown again). Better in another faction (Mind?), with its mechanic changed (2026-10-13)
 			Spy-film gadgets (James Bond, 2026-10-13): built The Golden Gun, GoldenEye, Shaken Not Stirred, Licence to Kill, Die Another Day, Femme Fatale (Double-O Section deck, 2026-10-14). Still ideas: Exploding Pen, Ejector Seat, Tank Chase, Bungee Jump off the Dam, No Mr. Bond I Expect You to Die, Q Branch, Steel Teeth
-			Secret Anthrax Laboratory
 			Secure Deletion
 			Self-Destruct Message
 			Steganography (tagged Shadow Ops.)
 			You Can't Eat Your Cake and Have It Too (the Unabomber's phrasing; moved from Mind 2026-10-14: a Unabomber theme would be Zeitgeist, but the experiments done on him make it Shadow Ops., next to MK Ultra Test Subject)
-			Tracking Beacon (tagged Shadow Ops.)
 		Corporate
 			120-Year Mickey Mouse Copyright
 			Big Four
@@ -1649,27 +1637,22 @@ Card Game Factions Overview
 			Business Culture
 			Buy Now, Give Your Soul Later
 			CO2 Offsetting (accounting magic: the emissions stay, the books say they're gone) (added 2026-10-16)
-			Corporate Bailouts
 			Cozy Loft in an "Exclusive" Location
 			Credit Card (tagged Corporate)
 			DMCA (moved from Tech, 2026-10-14)
 			Deal with a Neutral Third Party That We Bought
 			EBITDA
-			Flash Crash
 			Forced Upselling
 			Front-Running
-			Hedonic Treadmillionaire (the hedonic treadmill, with a fortune)
 			High-Frequency Trading Scam
 			High-Pressure Sales Tactics
 			Intergenerational Short Squeeze
 			Internal Protocol: Quota Crusher Mindset
-			Just in Time (tagged Corporate)
 			Layering
 			Limited Liability Warranty
 			Live Better in a Home of Your Own
 			Market Equilibrium (tagged Corporate; a mock: the card should show the inequality the market drives us towards)
 			Meetings About Meetings
-			Moral Bankruptcy (people in finance with no moral sense at all)
 			Open Closed Shell Corporation
 			Perfect Competition
 			Perfect Information
@@ -1689,7 +1672,6 @@ Card Game Factions Overview
 			The Rat Race
 			The Value of a Statistical Life (see Pinto Memo)
 			Usury
-			Venture Capital (added 2026-10-14)
 			Yen Carry Trade
 		Tech
 			Bounty Program
@@ -1721,7 +1703,6 @@ Card Game Factions Overview
 			He Bought, Dump It (the crypto meme "He bought? Dump it.": the whale on the phone who sells the moment you buy; added 2026-10-14, a partner for Crypto "Entrepreneur")
 			University of Life Degree
 		Zeitgeist
-			Absentee Parents
 			After-Sex Cigarette
 			All Along the Watchtower (tagged Zeitgeist; it puts up a watchtower)
 			Banana Gun
@@ -1746,14 +1727,12 @@ Card Game Factions Overview
 			It's About Sending a Message (tagged Zeitgeist; the Joker)
 			It's All Disco, Baby (tagged Zeitgeist; Disco Elysium)
 			Ladies First
-			Listen Kid (an old-timer's unasked-for life advice)
 			Lost Generation
 			Melancholy
 			Mexican Telenovela
 			Morning Routine
 			Nevermind (tagged Zeitgeist; Nirvana)
 			Nuclear Summer (the opposite of a nuclear winter)
-			Ol' Reliable (the one thing that always works, used again)
 			Passive Smoker (art: a guy getting screwed from behind while smoking)
 			Prince Charles Paradox (the intergenerational wealth problem)
 			Real Life (good graphics, but a long tutorial)
@@ -1762,12 +1741,10 @@ Card Game Factions Overview
 			Spite Voter (tagged Zeitgeist; someone who votes out of spite)
 			Stop Being Poor
 			Stunlock
-			The Friends We Made Along the Way
 			There Is a Considerable Overlap Between the Smartest Bears and the Dumbest Humans
 			This Is from Matilda
 			Too Bad, So Sad
 			Von hinten Lyzeum, von vorne Museum (German saying: a schoolgirl from behind, a museum piece from the front)
-			Weaponized Incompetence
 			What Is Reality Anyway? (tagged Zeitgeist; Disco Elysium)
 			Yesn't (yes and no at once)
 			You Can Kill the Man, but Not the Idea (tagged Zeitgeist)
@@ -1783,17 +1760,11 @@ Card Game Factions Overview
 			The ELIZA Effect
 			Tolerance Paradox
 		Utopia
-			Ankylorhiza
 			Coprolite (fossilized poop)
-			Femtosecond Laser
 			Inverted Population Pyramid
-			Longevity Hub
 			Prion Disease
-			Quark
-			Seasteading
 			The Line (Saudi Arabia's 170 km linear city; added 2026-10-14)
 			Tessellate
-			White Dwarf (art: a small, very white guy)
 		Faction to decide (plain items and places)
 			Baguette
 			Boulangerie

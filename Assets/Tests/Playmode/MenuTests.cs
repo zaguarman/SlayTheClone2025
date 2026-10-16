@@ -332,7 +332,12 @@ namespace SlayTheClone.Tests {
             Click(GalleryButton(builder, DeckBuilderMenu.FactionTab + CardTextFormatter.FactionName(factions[1])));
             foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
             Click(GalleryButton(builder, DeckBuilderMenu.EveryFactionTab));
-            foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
+            // Up to a full deck, then one click more (each click redraws the gallery: clicking every card takes minutes)
+            foreach (var card in builder.ShownCards.ToList()) {
+                bool full = yourDeck.Cards.Count >= PlayerDecks.MaxDeckSize;
+                ClickCard(card);
+                if (full) break;
+            }
             Assert.AreEqual(PlayerDecks.MaxDeckSize, yourDeck.Cards.Count, "Cards are added until the deck is full (60), not beyond");
             Assert.GreaterOrEqual(DeckCatalog.FactionsOf(yourDeck).Count, 2, "...whatever their faction");
             var name = builder.NameField;

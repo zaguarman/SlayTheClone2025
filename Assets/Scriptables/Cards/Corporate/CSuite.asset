@@ -36,9 +36,9 @@ MonoBehaviour:
     top glass, toasting, the champagne overflowing past them down the tiers, until
     a line of workers at the bottom catch the last drips in paper cups.'
   attack: 4
-  health: 3
+  health: 4
   speed: 1
-  turnsUntilOperative: 2
+  turnsUntilOperative: 1
   movement: 0
   ability: 33
   gift: 0

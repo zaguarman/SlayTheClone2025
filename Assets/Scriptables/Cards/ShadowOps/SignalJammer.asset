@@ -33,7 +33,7 @@ MonoBehaviour:
   artDescription: An agent in a black suit with a backpack bristling with antennas,
     standing in a busy street where everyone stares in horror at phones showing "No
     Service".
-  attack: 1
+  attack: 2
   health: 5
   speed: 1
   turnsUntilOperative: 0

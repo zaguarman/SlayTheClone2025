@@ -23,8 +23,8 @@ namespace SlayTheClone {
                 var creature = TakeRandom(creaturesInDeck);
                 var slot = TakeRandom(emptySlots);
 
-                player.Deck.RemoveCard(creature);
-                actionsQueue.AddAction(new SummonCreatureAction(creature, player, slot, fromDeck: true));
+                // It leaves the deck when the summon happens: a summon called off (its creature replaced first) loses nothing
+                actionsQueue.AddAction(new SummonCreatureAction(creature, player, slot, fromDeck: true, pickedFromDeck: true));
                 Log($"Summon from deck: queued {creature.Name} for {player.Name}", LogTag.Creatures | LogTag.Effects | LogTag.Actions);
             }
         }

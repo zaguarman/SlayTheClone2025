@@ -67,8 +67,8 @@ MonoBehaviour:
     its Last Rites strike and it dies for the cause.'
   artDescription: A wild-eyed hermit in sackcloth with a long beard, waving a burning
     torch and a hand-painted REPENT sign on a busy city sidewalk.
-  attack: 3
-  health: 2
+  attack: 4
+  health: 3
   speed: 2
   turnsUntilOperative: 0
   movement: 0
