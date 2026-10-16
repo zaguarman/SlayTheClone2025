@@ -52,6 +52,11 @@ Abilities Disabled
     • Immediate Effect: If a creature gets Abilities Disabled during resolution, it takes effect right away. Any of its pending actions that came from its abilities are cancelled and won't resolve. Its Attack Actions are not affected (that is what Cannot Act does). The creature also can't trigger new passive abilities or use active ones while this is on.
     • Exception: Deployment Time and its OnDeploymentTimeComplete trigger follow their own rules (see 3.2 Tempo & Deployment Time).
 
+Action and Effect (the user, 2026-10-16)
+    • Action: what is done, a step of the Day's queue: an attack, a move, a summon, a spell cast, an ability used, a Watchdog set. Actions are planned, queued, ordered by layer and Speed, watched by Watchdogs, and they resolve.
+    • Effect: what an action did in the game when it resolved: the damage dealt, the status that landed, the stat changed, the creature that died. Example: the action "Ram attacks the Turtle" had the effects 3 damage and Exhausted on the Turtle.
+    • In the code an action is a queued IGameAction; the effects are what its executor changes on the board (and the follow-up actions it queues, which are actions of their own). Cards print effects ("Gamble", "On Play: 2 damage..."), which become actions when they trigger. Say "action" for the step and "effect" for its result, in text, the queue and the docs.
+
 Action Nullification (When a Creature is About to Die)
     • What it is: A game rule. When a creature is marked for destruction, its pending non-retaliatory actions are cancelled.
     • Exceptions: Retaliatory triggers (OnDamaged, OnAboutToDie, OnDied) still happen. The full order is in 3.9 Creature Death Sequence.

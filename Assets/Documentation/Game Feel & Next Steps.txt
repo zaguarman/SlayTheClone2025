@@ -31,6 +31,10 @@ Card handling
 • [S] Summon arrival: the creature drops into the slot with a dust puff; Deployment Time shown as a ticking clock that pops when ready.
 • [M] Deaths: Last Will effects flash their icon as the card burns away; Doomed creatures get a cracked frame that spreads each Dawn.
 
+• [M] TODO (the user, 2026-10-16), if hands get too full and we drop the hand limit: show the hand as the card roulette
+  (the wheel that turns through the cards tucked under a creature, see RouletteTuning), without its fading, scrolled
+  with the mouse wheel to see what we have; with a reminder at each end when more cards are left or right ("+4 more ->").
+
 Time of day
 • [M] Dawn and Dusk as lighting: the table warms at Dawn and turns blue-violet at Dusk, the river line glows. A banner "DAY 3 — DAWN" like Inscryption's chapter cards. It teaches the Dawn/Dusk keywords for free.
 

@@ -17,21 +17,25 @@ MonoBehaviour:
   reach: 2
   seconds: 0.28
   ease: 9
+  shownScale: 1.029
   shownSideways: 0
   shownUp: 0
   waitingScale: 1
-  waitingOut: 0
-  waitingUp: 0
-  waitingTilt: 1
-  nextAlpha: 1
-  aheadFade: 0.5
-  lastAlpha: 1
-  behindFade: 0.5
-  previewScale: 1.64
-  previewGap: 0.07
-  previewSideways: -0.14
+  waitingOut: 0.06
+  waitingLift: 0
+  waitingUp: 0.1
+  waitingTilt: 0.5
+  mirrorFade: 1
+  fadeStep: 0.47
+  nextAlpha: 0.265
+  aheadFade: 0.354
+  lastAlpha: 0.46
+  behindFade: 0.372
+  previewScale: 2
+  previewGap: 0.02
+  previewSideways: 0
   previewAway: 0
-  detailsWidth: 300
+  detailsWidth: 269
   detailsFontSize: 16
   detailsGap: 0.02
   detailsDown: 0
