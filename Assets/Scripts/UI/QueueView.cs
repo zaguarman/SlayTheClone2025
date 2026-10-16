@@ -306,6 +306,8 @@ namespace SlayTheClone {
                     return $"{Who(sentence.GetCreature(), viewer)}'s Doomed sentence";
                 case CheckLethalAction:
                     return null; // Bookkeeping: whether a creature that reached 0 Health dies
+                case SwapStatsAction swapStats:
+                    return $"{Who(swapStats.Creature, viewer)}'s Attack and Health trade places";
                 case TrapSprungAction:
                     return null; // Only the screen's: the trap's card shown while its damage lands
                 case DrawCardsAction draw:

@@ -760,6 +760,8 @@ namespace SlayTheClone {
             ActionType.DelayDeployment => creature.Operative ? 0 : -1.5f * amount, // Only a creature still deploying waits longer
             // Overtime: a Day of it now, for the creature afterwards; worth it only for a strong one that would wait long
             ActionType.Rush => creature.Operative ? 0 : AttackOf(creature) * 1.5f - creature.Worth * 0.6f,
+            // Attack and Health trade places: the Attack it gains (or loses), and a kill when it had none
+            ActionType.SwapStats => AttackOf(creature) <= 0 ? -(creature.Worth + HealthLeft(creature)) : (HealthLeft(creature) - AttackOf(creature)) * 0.6f,
             _ => 0
         };
 

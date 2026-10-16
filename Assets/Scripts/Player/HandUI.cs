@@ -513,6 +513,9 @@ namespace SlayTheClone {
             var screenPoint = GameInput.PointerPosition;
             if (hovered != null && RectTransformUtility.RectangleContainsScreenPoint((RectTransform)hovered.transform, screenPoint, eventCamera)) return;
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, screenPoint, eventCamera, out var pointer)) return;
+            // Not over a card on the board (the user's unresponsive slots): the band reaches over the board's lowest cards
+            bool onBoardCard = FindObjectsByType<BattlefieldSlot>(FindObjectsSortMode.None).Any(s => s.GetComponentInChildren<CardController>() != null
+                && RectTransformUtility.RectangleContainsScreenPoint((RectTransform)s.transform, screenPoint, CanvasUtility.GetEventCamera(s)));
 
             // Where the cards rest (as Arrange lays them out, without one risen): which one is nearest, and its top
             int count = cards.Count;
@@ -525,7 +528,7 @@ namespace SlayTheClone {
             float dip = FanRadius - Mathf.Sqrt(FanRadius * FanRadius - x * x);
             float top = ScreenEdgeY() + CardHeight * scale * ShownShare - dip;
             float reach = CardHeight * scale * BattlefieldTuning.Current.handRiseReach;
-            bool near = pointer.x >= first - half && pointer.x <= first + (count - 1) * spacing + half && pointer.y > top - 1f && pointer.y <= top + reach;
+            bool near = !onBoardCard && pointer.x >= first - half && pointer.x <= first + (count - 1) * spacing + half && pointer.y > top - 1f && pointer.y <= top + reach;
 
             var card = cards[index];
             if (near && card != null && card != hovered) {

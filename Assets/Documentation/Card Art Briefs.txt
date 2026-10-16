@@ -575,6 +575,8 @@ Ship of Theseus (creature)
 
 UTOPIA
 
+Geomagnetic Reversal (spell)
+    A globe with its magnetic field lines flipping over, the N and S labels swapping places mid-air, a scientist staring at a compass whose needle spins wildly, and a flock of birds flying in confused loops.
 Research Lab (spell)
     A gleaming laboratory with scientists in white coats pulling glowing cards out of test tubes and a centrifuge, a grant deadline clock ticking on the wall.
 Clone (creature)

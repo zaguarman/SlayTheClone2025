@@ -21,6 +21,18 @@ namespace SlayTheClone {
         public override string ToString() => $"CopyStatsAction: {Copier?.Name} copies {Model?.Name}";
     }
 
+    /// <summary>Geomagnetic Reversal (the user, 2026-10-16): its Attack and Health trade places.</summary>
+    public class SwapStatsAction : IGameAction {
+        public ICreature Creature { get; }
+
+        public SwapStatsAction(ICreature creature) {
+            Creature = creature;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"SwapStatsAction: {Creature?.Name}'s Attack and Health trade places";
+    }
+
     public class StealStatChangesAction : IGameAction {
         public ICreature Thief { get; }
         public ICreature Victim { get; }
@@ -103,6 +115,24 @@ namespace SlayTheClone {
             Log($"{copier.Name} copies {model.Name}: {copier.Attack}/{copier.Health}/{copier.Speed}", LogTag.Effects);
             context.GameMediator.NotifyCreatureStatsChanged(copier);
             if (copier.Health <= 0) context.ActionsQueue.AddAction(new CheckLethalAction(copier));
+        }
+    }
+
+    // Its Attack becomes its Health as it is now (damage counted), and its Health its Attack, at full: a 5/2 (hurt from 5/6)
+    // becomes a 2/5. Lasting stat changes, as when a creature copies another; 0 Attack becomes 0 Health, and it dies
+    public class SwapStatsActionExecutor : ActionExecutor<SwapStatsAction> {
+        protected override void ExecuteAction(SwapStatsAction swap, ActionExecutionContext context) {
+            var creature = swap.Creature;
+            if (creature == null || creature.IsDead || creature.Slot == null) return;
+            int attack = creature.Attack, health = creature.Health, turn = context.TurnClock.TurnNumber;
+            var manager = context.ModifierManager;
+            StatModifiers.Apply(manager, context.ModifierFactory, creature, health - attack, true, false, false, ModifierCalculationType.Flat, 0, turn);
+            StatModifiers.Apply(manager, context.ModifierFactory, creature, attack - creature.MaxHealth, false, true, false, ModifierCalculationType.Flat, 0, turn);
+            if (creature.Health < attack) creature.Heal(attack - creature.Health);
+            else if (creature.Health > attack) creature.TakeHealthDamage(creature.Health - attack); // Not damage: its Health is set
+            Log($"{creature.Name}'s Attack and Health trade places: {creature.Attack}/{creature.Health}", LogTag.Effects);
+            context.GameMediator.NotifyCreatureStatsChanged(creature);
+            if (creature.Health <= 0) context.ActionsQueue.AddAction(new CheckLethalAction(creature));
         }
     }
 

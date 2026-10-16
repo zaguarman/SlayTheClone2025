@@ -282,6 +282,7 @@ namespace SlayTheClone {
                 DoomedSentenceAction sentence => sentence.GetCreature(),
                 DelayDeploymentAction delay => delay.Creature,
                 RushAction rush => rush.Creature,
+                SwapStatsAction swapStats => swapStats.Creature,
                 PlaceSlotEffectAction place => place.GetSlot(),
                 CleanseSlotAction clear => clear.GetSlot(),
                 RevealAction reveal => reveal.Slot,

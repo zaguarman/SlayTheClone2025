@@ -298,6 +298,8 @@ namespace SlayTheClone {
                     return status != null ? status + Requisite(action) : null;
                 case ActionType.DelayDeployment:
                     return $"+{value} {Keywords.Link("Deployment Time")} to {target}";
+                case ActionType.SwapStats: // Geomagnetic Reversal
+                    return $"{target}{Requisite(action)}: its Attack and Health trade places";
                 case ActionType.Defect: // Taqiyya
                     return "it goes over to the enemy, into the slot opposite (whatever stands there is discarded)";
                 case ActionType.Rush: // Overtime

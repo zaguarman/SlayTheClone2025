@@ -24,8 +24,35 @@ namespace SlayTheClone {
             outline = new List<Vector2>(corners);
             thickness = strokeThickness;
             inset = strokeInset;
-            raycastTarget = false;
+            raycastTarget = takesPointer;
             SetVerticesDirty();
+        }
+
+        [SerializeField] private bool takesPointer;
+
+        /// <summary>
+        /// The mat's fill takes the pointer for the mat (the user's unresponsive slots): drops and hovers land on the mat's
+        /// own shape, not on its rectangle, which reached over the other side's Vanguard. The trims don't.
+        /// </summary>
+        public bool TakesPointer {
+            get => takesPointer;
+            set {
+                takesPointer = value;
+                raycastTarget = value;
+            }
+        }
+
+        // Only inside the shape (its rectangle spans the whole mat)
+        public override bool Raycast(Vector2 sp, Camera eventCamera) {
+            if (!takesPointer || outline == null || outline.Count < 3 || !base.Raycast(sp, eventCamera)) return false;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, sp, eventCamera, out var local)) return false;
+            bool inside = false;
+            for (int i = 0, j = outline.Count - 1; i < outline.Count; j = i++) {
+                var a = outline[i];
+                var b = outline[j];
+                if ((a.y > local.y) != (b.y > local.y) && local.x < (b.x - a.x) * (local.y - a.y) / (b.y - a.y) + a.x) inside = !inside;
+            }
+            return inside;
         }
 
         /// <summary>

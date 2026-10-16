@@ -85,10 +85,18 @@ namespace SlayTheClone {
             // Now initialize Battlefield specific things
             InitializeManagers(player); // Pass player
             CreateSlots(player);
+            // The mats as the sliders say now, not as the scene was saved: a retune, once everything is up (the user: the
+            // mat's old size covered the other side's middle slot until the sliders were touched)
+            StartCoroutine(RetuneWhenUp());
             Log($"BattlefieldUI initialized for player (TargetID: {player.TargetId.ToUpper()})", LogTag.Initialization);
 
             // Update UI based on initial state
             UpdateUI(Player);
+        }
+
+        private System.Collections.IEnumerator RetuneWhenUp() {
+            yield return null;
+            BattlefieldTuning.ApplyToTable();
         }
 
         // The mat only lights up under a card that plays on the whole side (see HandlePointerEnter)
@@ -104,11 +112,17 @@ namespace SlayTheClone {
         /// </summary>
         public void ApplyMatLook() {
             var zoneImage = GetComponent<Image>();
-            if (zoneImage != null) zoneImage.color = Color.clear; // Still a raycast target: drops land anywhere on its rectangle
+            if (zoneImage != null) {
+                zoneImage.color = Color.clear;
+                // Not its rectangle (the user): it reaches past the river over the other side's Vanguard, and the other
+                // side's over yours. The chevron takes drops and hovers for the mat, in its own shape
+                zoneImage.raycastTarget = false;
+            }
             int slotCount = Player?.Battlefield.Count ?? SlayTheClone.Player.BattlefieldSize;
             ((RectTransform)transform).sizeDelta = new Vector2((slotCount - 1) * ColumnSpacing + BattlefieldSlot.Size.x * SlotScale + 2 * MatPadding + 2 * Mathf.Abs(Tuning.sideways),
                 BattlefieldSlot.Size.y * SlotScale + 2 * RowStep + 2 * MatPadding + 2 * RiverRoom);
             var fill = Chevron(MatFillName, 0);
+            fill.TakesPointer = true;
             fill.SetShape(MatOutline());
             fill.color = UITheme.Mat;
         }
@@ -137,6 +151,13 @@ namespace SlayTheClone {
                 rect.sizeDelta = Vector2.zero;
                 graphic = go.AddComponent<ChevronGraphic>();
             }
+            // Over the whole mat (its points are from the mat's middle either way): the pointer is tested against it there
+            var layerRect = (RectTransform)graphic.transform;
+            layerRect.anchorMin = Vector2.zero;
+            layerRect.anchorMax = Vector2.one;
+            layerRect.pivot = new Vector2(0.5f, 0.5f);
+            layerRect.sizeDelta = Vector2.zero;
+            layerRect.anchoredPosition = Vector2.zero;
             graphic.transform.SetSiblingIndex(siblingIndex);
             return graphic;
         }

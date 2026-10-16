@@ -176,7 +176,7 @@ namespace SlayTheClone {
             if (why.StartsWith("a card is carried") && GameInput.ButtonHeld) return; // Carrying one: no explanations, as meant
             refusedCard = card;
             refusedWhy = why;
-            DebugLogger.LogWarning($"Hovering {card.GetLinkedCardInstance()?.Name ?? card.name} shows nothing: {why}", DebugLogger.LogTag.UI);
+            Debug.LogWarning($"[Hover] {card.GetLinkedCardInstance()?.Name ?? card.name} shows nothing: {why}");
         }
 
         /// <summary>
@@ -198,7 +198,8 @@ namespace SlayTheClone {
             CancelPending();
             pendingCard = card;
             pendingSince = Time.unscaledTime;
-            float delay = card.GetComponentInParent<HandUI>() != null ? HandDelay : preview != null ? SwitchDelay : HoverDelay;
+            float delay = card.GetComponentInParent<HandUI>() != null ? HandDelay
+                : preview != null && !PointerOnPreview(GameInput.PointerPosition) ? SwitchDelay : HoverDelay;
             pendingShow = card.StartCoroutine(ShowAfter(card, delay)); // Stops if the card goes
         }
 
@@ -241,7 +242,7 @@ namespace SlayTheClone {
             }
             // Reading keywords: passing over another card on the way to an explanation doesn't replace them, nor does a
             // card under the enlarged one or its explanations
-            if ((keywordPopups.Count > 0 && PointerInArea(GameInput.PointerPosition)) || PointerOnTooltip(GameInput.PointerPosition)) {
+            if ((keywordPopups.Count > 0 && PointerInArea(GameInput.PointerPosition)) || PointerReading(GameInput.PointerPosition)) {
                 Refused(card, $"the pointer is on what's shown already ({activeCard?.GetLinkedCardInstance()?.Name}, {keywordPopups.Count} explanations)");
                 return;
             }
@@ -261,6 +262,7 @@ namespace SlayTheClone {
             }
             else {
                 preview = card.CreatePreview(transform);
+                PassThrough(preview);
                 if (preview != null) {
                     preview.transform.localScale = Vector3.one * PreviewScaleFor(card);
                     PlacePreview(card, (RectTransform)preview.transform);
@@ -536,6 +538,7 @@ namespace SlayTheClone {
             preview = browsed == 0
                 ? activeCard.CreatePreview(transform)
                 : activeCard.CreatePreviewOfAttached(browsed - 1, transform);
+            PassThrough(preview);
             if (preview == null) {
                 Destroy(old.gameObject);
                 return;
@@ -668,6 +671,7 @@ namespace SlayTheClone {
             CloseKeywordsFrom(0);
             if (browsed > activeCard.AttachedCards.Count) browsed = 0;
             var fresh = browsed == 0 ? activeCard.CreatePreview(transform) : activeCard.CreatePreviewOfAttached(browsed - 1, transform);
+            PassThrough(fresh);
             if (fresh == null) return;
             Destroy(preview.gameObject);
             preview = fresh;
@@ -860,6 +864,26 @@ namespace SlayTheClone {
         }
 
         // Overlay canvas: world space is screen pixels
+        // The enlarged card only shows: the pointer goes through it to the card it covers (the user: the other side's middle
+        // slot, under a middle card's preview, took nothing while it showed)
+        private static void PassThrough(CardController shown) {
+            if (shown != null && shown.TryGetComponent(out CanvasGroup group)) group.blocksRaycasts = false;
+        }
+
+        // Reading what's shown: an explanation, the shown card's text box (its keywords) or its details. Elsewhere on the shown
+        // card, the card under it takes over
+        private bool PointerReading(Vector2 pointer) {
+            if (preview == null) return false;
+            if (keywordPopups.Any(p => ScreenRect(p.Rect).Contains(pointer))) return true;
+            // On one of its keywords (its explanation opens there): the shown card's text box alone isn't reading, it may
+            // be over the card the pointer went for (a middle card's preview covers the other side's middle card)
+            var text = preview.RulesText;
+            return text != null && TMP_TextUtilities.FindIntersectingLink(text, pointer, PreviewCamera) >= 0;
+        }
+
+        // On what's shown now (its enlarged card): the card under it only takes over once the pointer rests there
+        private bool PointerOnPreview(Vector2 pointer) => preview != null && !previewIsCard && PreviewScreenRect().Contains(pointer);
+
         private static Rect ScreenRect(RectTransform rect) {
             var corners = new Vector3[4];
             rect.GetWorldCorners(corners);

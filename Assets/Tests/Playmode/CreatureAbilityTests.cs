@@ -559,6 +559,16 @@ namespace SlayTheClone.Tests {
             Assert.IsFalse(Abilities.CanBeReplaced(turncoat) || Abilities.CanAttack(turncoat), "Nobody summons over it, nor orders it to attack");
             game.StartTurn();
             Assert.Less(host.Health, 10, "Each Dawn it attacks its new side");
+
+            // Geomagnetic Reversal: Attack and Health trade places, Health as it is now; no Attack leaves no Health
+            Fresh();
+            var cannon = With(CreatureAbility.None, p1, 0, attack: 5, health: 6);
+            game.Run(new DamageCreatureAction(cannon, 4));
+            game.Run(new SwapStatsAction(cannon));
+            Assert.AreEqual((2, 5, 5), (cannon.Attack, cannon.Health, cannon.MaxHealth), "A hurt 5/2 becomes a whole 2/5");
+            var wall = With(CreatureAbility.None, p2, 0, attack: 0, health: 10);
+            game.Run(new SwapStatsAction(wall));
+            Assert.IsTrue(wall.IsDead, "A wall with no Attack is left with no Health");
         }
 
         private bool HasStatus(ICreature creature, StatusEffectType status) => game.ModifierManager.HasStatusEffect(creature, status);

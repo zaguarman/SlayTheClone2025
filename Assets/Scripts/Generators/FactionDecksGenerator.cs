@@ -1476,6 +1476,12 @@ namespace SlayTheClone {
         // Accelerationism, its philosophy: technology solves everything, however bad it gets first. It gambles, takes its own
         // creatures to the brink of death (On the Brink: at 2 Health or less they deal double) and then the breakthrough pays.
         private static List<CardDef> UtopiaCards() => new List<CardDef> {
+            Spell("Geomagnetic Reversal", TargetType.EnemyCreatures,
+                "North is south now. The compass apologises. The pigeons do not.",
+                "The user, 2026-10-16: target creature's Attack and Health trade places, on either side. Its Attack becomes its Health as it is now, and its Health its Attack: a glass cannon becomes a wall, a wall a glass cannon, and a creature with no Attack is left with no Health and dies.",
+                Act(ActionType.SwapStats, 0, TargetType.EnemyCreatures, TargetModifier.None))
+                .NotInStarterDeck()
+                .Picture("A globe with its magnetic field lines flipping over, the N and S labels swapping places mid-air, a scientist staring at a compass whose needle spins wildly, and a flock of birds flying in confused loops."),
             Spell("Research Lab", TargetType.Player,
                 "Results in five years. Funding for two.",
                 "Utopia's research: send for a spell from your deck; it joins your next hand.",
