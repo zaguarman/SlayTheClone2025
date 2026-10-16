@@ -242,10 +242,12 @@ namespace SlayTheClone {
     public class ArrowGalleryWindow : UnityEditor.EditorWindow {
         private const string Prefs = "SlayTheClone.ArrowGallery.";
 
+        // Opening it starts it: Play is pressed if needed, and it begins once the game is up
         [UnityEditor.MenuItem("UI/Arrow Gallery")]
         private static void Open() {
             var window = GetWindow<ArrowGalleryWindow>("Arrow Gallery");
             window.minSize = new Vector2(320f, 300f);
+            GalleryLauncher.Start(GalleryLauncher.Arrows);
         }
 
         private void OnEnable() {
@@ -282,12 +284,14 @@ namespace SlayTheClone {
             }
 
             UnityEditor.EditorGUILayout.Space();
-            if (!Application.isPlaying) {
-                UnityEditor.EditorGUILayout.HelpBox("Press Play in the game scene, then Start. It fills the board with test creatures: use a game you don't mind losing.", UnityEditor.MessageType.Info);
-                return;
-            }
             if (gallery == null) {
-                if (GUILayout.Button("Start", GUILayout.Height(28f))) ArrowGallery.Run();
+                if (GalleryLauncher.Waiting == GalleryLauncher.Arrows) {
+                    UnityEditor.EditorGUILayout.HelpBox("Starting the game: the gallery begins once it's up.", UnityEditor.MessageType.Info);
+                    if (GUILayout.Button("Cancel")) GalleryLauncher.Cancel();
+                    return;
+                }
+                if (GUILayout.Button("Start", GUILayout.Height(28f))) GalleryLauncher.Start(GalleryLauncher.Arrows);
+                UnityEditor.EditorGUILayout.HelpBox("Start presses Play if needed (the game scene must be open). It fills the board with test creatures: use a game you don't mind losing.", UnityEditor.MessageType.None);
                 return;
             }
             UnityEditor.EditorGUILayout.LabelField($"{gallery.Index + 1} / {gallery.Count}", gallery.Current);

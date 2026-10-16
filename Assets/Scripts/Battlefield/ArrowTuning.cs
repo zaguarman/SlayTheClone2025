@@ -94,7 +94,7 @@ namespace SlayTheClone {
 
         [Header("Sharpest curves: arrows routed into a shared one, like PCB tracks")]
         [Tooltip("Merged attacks: the branches' diagonal, its angle from straight ahead (45: a true diagonal; more: flatter, sharper turns) (gallery: Merging)")]
-        [Range(15f, 80f)] public float routeAngle = 80f;
+        [Range(15f, 88f)] public float routeAngle = 80f;
         [Tooltip("Merged attacks: how much each branch corner is rounded off (gallery: Merging)")]
         [Range(0.05f, 1.2f)] public float cornerRadius = 0.671f;
         [Tooltip("Every arrow, round its tightest bends: the band is never wider than this share of the bend's radius; it shows on merged branches (gallery: Merging)")]
@@ -132,7 +132,7 @@ namespace SlayTheClone {
         [Tooltip("Merged attacks, Direct Branches: branches on the same side join each other first, like streams into a river (the outermost into its inner neighbour...), so overlapping ones show where each comes from (gallery: Merging, 'All five')")]
         public bool joinBranches = false;
         [Tooltip("Merged attacks, Join Branches: how far along its inner neighbour's way a branch joins it, as a share of that way (gallery: Merging, 'All five')")]
-        [Range(0.05f, 0.95f)] public float joinAt = 0.95f;
+        [Range(0.05f, 1f)] public float joinAt = 0.95f;
         [Tooltip("Merged attacks, Direct Branches: how long a branch keeps heading straight for where it joins, as a share of the way (gallery: Merging)")]
         [Range(0f, 1f)] public float joinLeave = 0.255f;
         [Tooltip("Merged attacks, Direct Branches: how long it comes in along the way it joins (the trunk, or the branch it joins), as a share of the way: more is a smoother, wider turn (gallery: Merging)")]
@@ -140,7 +140,7 @@ namespace SlayTheClone {
         [Tooltip("Merged attacks: the trunk widens this much for each arrow that joins, in band widths (gallery: Merging, 'All five' most)")]
         [Range(0f, 0.6f)] public float widthPerExtraBranch = 0.098f;
         [Tooltip("Merged attacks: ...up to this many band widths (gallery: Merging, 'All five')")]
-        [Range(1f, 3f)] public float maxTrunkWidth = 1f;
+        [Range(0.5f, 3f)] public float maxTrunkWidth = 1f;
         [Tooltip("Merged attacks: a branch's width as it flows into the trunk, of the band's (gallery: Merging)")]
         [Range(0.3f, 1.5f)] public float branchWidthAtMerge = 1f;
         [Tooltip("Merged attacks: the trunk's length, as a share of the way to the target. With Direct Branches it sets exactly where they meet (more: lower, nearer the attackers); routed, it's capped so the diagonals fit (gallery: Merging)")]
@@ -211,6 +211,11 @@ namespace SlayTheClone {
     /// </summary>
     [UnityEditor.CustomEditor(typeof(ArrowTuning))]
     public class ArrowTuningEditor : UnityEditor.Editor {
+        private ArrowTuning originals; // The values it shipped with, for each slider's reset button
+
+        private void OnEnable() => originals = CreateInstance<ArrowTuning>();
+        private void OnDisable() => DestroyImmediate(originals);
+
         public override void OnInspectorGUI() {
             var tuning = (ArrowTuning)target;
             UnityEditor.EditorGUILayout.HelpBox("Changes show on the table at once while playing, and they stay when you stop: " +
@@ -231,7 +236,7 @@ namespace SlayTheClone {
                 }
             }
             UnityEditor.EditorGUILayout.Space();
-            DrawDefaultInspector();
+            TuningInspector.DrawWithResets(serializedObject, originals);
         }
     }
 #endif

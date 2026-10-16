@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: ItsBeen84Years
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: a1233a6b-1cbb-44d5-a63d-2ad45e480dc4
+  cardName: Its Been 84 Years...
+  description: Sorry I'm late. Traffic was terrible. And the century.
+  cardType: 0
+  faction: 6
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  effects: []
+  designNotes: 'Sorry I''m Late (the user, 2026-10-16, a meme ability): played onto
+    a friendly creature, it arrives after the attacks, so the creature it replaces
+    takes the Day''s hits first. A big body that walks in fresh.'
+  artDescription: A very old lady in a cardigan wheeled in on a hospital bed through
+    a doorway, a tiny party hat on, a wall clock behind her covered in cobwebs, a
+    dusty birthday cake on the table with 84 candles burnt down to stubs.
+  attack: 4
+  health: 5
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 34
+  gift: 0
+  token: 0
+  disguise: {fileID: 0}

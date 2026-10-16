@@ -34,7 +34,7 @@ namespace SlayTheClone {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
             SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, PennyStock, Undercover, Handover, Recoil,
             Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace, Ambush, ExtremePrejudice,
-            AllergicToLight, FallGuy, Brink, CollateralDamage
+            AllergicToLight, FallGuy, Brink, CollateralDamage, SorryImLate, HeProtec
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look

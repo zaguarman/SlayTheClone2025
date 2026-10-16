@@ -9,7 +9,8 @@ using static SlayTheClone.Enums;
 
 namespace SlayTheClone {
     /// <summary>The layers every resolution pass goes through, in this order (GDD 3.7 Resolution Order).</summary>
-    public enum ResolutionLayer { Movement, Summon, Spell, AbilityAndAttack }
+    // LateArrivals: summons that replace a creature only once the attacks are over (Sorry I'm Late, He Protec)
+    public enum ResolutionLayer { Movement, Summon, Spell, AbilityAndAttack, LateArrivals }
 
     /// <summary>
     /// Resolves the Day's actions layer by layer (GDD 3.7): moves, then summons, then spells, then abilities and attacks.
@@ -117,6 +118,7 @@ namespace SlayTheClone {
         #region Layers and order
         /// <summary>The layer an action resolves in when it is queued on its own (GDD 3.7).</summary>
         public static ResolutionLayer LayerOf(IGameAction action) => action switch {
+            _ when Abilities.ArrivesLate(action) => ResolutionLayer.LateArrivals,
             MoveCreatureAction => ResolutionLayer.Movement,
             SummonCreatureAction or ReappearAction => ResolutionLayer.Summon,
             PlayCardAction play => play.GetCard() is ICreature ? ResolutionLayer.Summon : ResolutionLayer.Spell,

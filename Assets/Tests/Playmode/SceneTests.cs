@@ -608,7 +608,10 @@ namespace SlayTheClone.Tests {
             yield return SceneGame.PreviewShows();
             var wheel = Tooltip.Existing.GetComponentsInChildren<CardController>().Where(c => c != SceneGame.HoverPreview()).ToList();
             Assert.AreEqual(Mathf.Min(2, RouletteTuning.Current.reach), wheel.Count, "The cards on it wait on the wheel beside the creature (as far as it reaches)...");
-            Assert.IsTrue(wheel.All(c => c.GetComponent<CanvasGroup>().alpha < 1f), "...faint");
+            // As faint as Roulette Tuning says: the next one, then each further one fading
+            float[] WheelAlphas(System.Collections.Generic.IEnumerable<CardController> cards) => cards.Select(c => Mathf.Round(c.GetComponent<CanvasGroup>().alpha * 100f) / 100f).OrderBy(a => a).ToArray();
+            var tunedAlphas = Enumerable.Range(1, wheel.Count).Select(d => Mathf.Round(RouletteTuning.Current.AlphaAt(d, true) * 100f) / 100f).OrderBy(a => a).ToArray();
+            CollectionAssert.AreEqual(tunedAlphas, WheelAlphas(wheel), "...faint, as tuned");
             Tooltip.Existing.Browse(1);
             Assert.AreSame(quake, SceneGame.HoverPreview()?.GetLinkedCardInstance(), "Scrolling over the creature shows the cards on it, enlarged...");
             StringAssert.Contains("Revealed", Tooltip.Existing.DetailsText, "...beside it only what that card does to the creature");
@@ -619,7 +622,8 @@ namespace SlayTheClone.Tests {
             yield return new WaitForSecondsRealtime(RouletteTuning.Current.seconds + 0.25f); // However long a turn is tuned to take
             var settled = Tooltip.Existing.GetComponentsInChildren<CardController>();
             Assert.AreEqual(1 + Mathf.Min(2, RouletteTuning.Current.reach), settled.Length, "The wheel turns them in and out, then the one shown and the others, faint, are left...");
-            Assert.AreEqual(1, settled.Count(c => c.GetComponent<CanvasGroup>().alpha >= 0.99f), "...only the shown one solid");
+            CollectionAssert.AreEqual(tunedAlphas, WheelAlphas(settled.Where(c => c != SceneGame.HoverPreview())), "...faint as tuned again");
+            Assert.AreEqual(1f, SceneGame.HoverPreview().GetComponent<CanvasGroup>().alpha, 0.01f, "...and the shown one solid");
             Assert.AreEqual(Quaternion.identity, SceneGame.HoverPreview().transform.localRotation, "...upright");
             Tooltip.Existing.HideTooltip();
             SceneGame.Click(zapGhost);

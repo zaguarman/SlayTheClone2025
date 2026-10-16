@@ -71,6 +71,8 @@ namespace SlayTheClone {
             CreatureAbility.FallGuy => "Fall Guy",
             CreatureAbility.Brink => "On the Brink",
             CreatureAbility.CollateralDamage => "Collateral Damage",
+            CreatureAbility.SorryImLate => "Sorry I'm Late",
+            CreatureAbility.HeProtec => "He Protec",
             _ => ability.ToString()
         };
 
@@ -109,8 +111,27 @@ namespace SlayTheClone {
             CreatureAbility.FallGuy => "when an enemy effect would Reveal or destroy another friendly creature, it lands on this one instead",
             CreatureAbility.Brink => "at 2 Health or less, everything it deals is doubled",
             CreatureAbility.CollateralDamage => "when its attack is more than a creature's Health, the rest hits that creature's player",
+            CreatureAbility.SorryImLate => "played onto a friendly creature, it arrives after the attacks: the creature there takes the Day's hits, then it's replaced",
+            CreatureAbility.HeProtec => "when a summon replaces it, it stays through the attacks and takes the Day's hits; the newcomer arrives after them",
             _ => ""
         };
+
+        /// <summary>
+        /// A summon onto a friendly creature that waits for the attacks (the Late Arrivals layer, after every other): the
+        /// newcomer is Sorry I'm Late, or the creature it replaces says He Protec. The one in the slot stays through the Day's
+        /// hits, attacking if it planned to, and is replaced after them; if it died or left meanwhile, the newcomer just
+        /// arrives. Decided when the summon is queued, so the plan shows where it lands in the order.
+        /// </summary>
+        public static bool ArrivesLate(IGameAction action) {
+            var (newcomer, slot) = action switch {
+                PlayCardAction play when play.GetCard() is ICreature creature => (creature, play.GetTarget() as BoardSlot),
+                SummonCreatureAction summon => (summon.GetCreature(), summon.GetTargetSlot() as BoardSlot),
+                _ => (null, null)
+            };
+            var standing = slot?.OccupyingCreature;
+            if (newcomer == null || standing == null || standing == newcomer) return false;
+            return newcomer.Ability == CreatureAbility.SorryImLate || Has(standing, CreatureAbility.HeProtec);
+        }
 
         /// <summary>
         /// Whether the creature's ability is switched on: it has it, it's ready (Deployment Time), no status disables its

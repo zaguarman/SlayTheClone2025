@@ -345,19 +345,19 @@ namespace SlayTheClone {
             Vector2 cardMax = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
 
             bool showAbove = (cardMin.y + cardMax.y) * 0.5f < Screen.height * 0.5f;
-            float gap = Roulette.previewGap;
+            float height = ScreenRect(previewRect).height; // The sliders' unit
+            float gap = Roulette.previewGap * height;
             previewRect.pivot = new Vector2(0.5f, showAbove ? 0f : 1f);
             previewRect.position = new Vector2((cardMin.x + cardMax.x) * 0.5f, showAbove ? cardMax.y + gap : cardMin.y - gap);
-            // The sliders' nudges, in preview sizes: sideways, and away from the card
-            var size = ScreenRect(previewRect).size;
-            previewRect.position += new Vector3(Roulette.previewSideways * size.x, (showAbove ? 1f : -1f) * Roulette.previewAway * size.y, 0f);
+            // The sliders' nudges: sideways, and away from the card
+            previewRect.position += new Vector3(Roulette.previewSideways * height, (showAbove ? 1f : -1f) * Roulette.previewAway * height, 0f);
             KeepOnScreen(previewRect);
         }
 
         // To the right of the preview, or to its left when there is no room
         private void PlaceDetailsBesidePreview() {
             var shown = PreviewScreenRect();
-            float gap = previewIsCard ? PreviewGap : Roulette.detailsGap, top = shown.yMax - (previewIsCard ? 0f : Roulette.detailsDown);
+            float gap = previewIsCard ? PreviewGap : Roulette.detailsGap * shown.height, top = shown.yMax - (previewIsCard ? 0f : Roulette.detailsDown * shown.height);
             tooltipRect.pivot = new Vector2(0f, 1f);
             tooltipRect.position = new Vector2(shown.xMax + gap, top);
 
@@ -528,9 +528,10 @@ namespace SlayTheClone {
             if (activeCard == null || preview == null || previewIsCard || activeCard.AttachedCards.Count == 0) return;
             var stack = activeCard.AttachedCards;
             var shown = (RectTransform)preview.transform;
-            float radius = shown.rect.height * shown.lossyScale.y * RouletteRadius;
-            Vector3 center = home - up * radius;
             float height = shown.rect.height * shown.lossyScale.y;
+            float radius = height * RouletteRadius;
+            Vector3 wheelHome = home - Roulette.ShownOffset(up, height); // The shown card's place on the wheel, before its own nudge
+            Vector3 center = wheelHome - up * radius;
             for (int i = 0; i <= stack.Count; i++) {
                 int distance = Mathf.Abs(i - browsed);
                 if (distance == 0 || distance > WheelReach) continue;
@@ -543,7 +544,7 @@ namespace SlayTheClone {
                 var rect = (RectTransform)ghost.transform;
                 rect.localScale = shown.localScale * Roulette.waitingScale;
                 float angle = (ahead ? 1f : -1f) * distance * RouletteAngle; // The next ones come from the left
-                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (home - center) + Nudge(up, height, ahead) * distance;
+                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (wheelHome - center) + Nudge(up, height, ahead) * distance;
                 rect.rotation = Quaternion.Euler(0f, 0f, angle * Roulette.waitingTilt) * shown.parent.rotation;
                 rect.SetAsFirstSibling(); // Behind the shown card and the explanations
                 var group = ghost.GetComponent<CanvasGroup>() ?? ghost.gameObject.AddComponent<CanvasGroup>();
@@ -576,19 +577,21 @@ namespace SlayTheClone {
         private void Spin(CardController old, CardController next, int direction) {
             ClearLeaving();
             var nextRect = (RectTransform)next.transform;
-            Vector3 home = nextRect.position, up = nextRect.up;
+            Vector3 up = nextRect.up;
             float height = nextRect.rect.height * nextRect.lossyScale.y;
             float radius = height * RouletteRadius;
+            Vector3 shownOffset = Roulette.ShownOffset(up, height);
+            Vector3 home = nextRect.position - shownOffset; // On the wheel, before the shown card's own nudge
             Vector3 center = home - up * radius;
             Vector3 nextScale = nextRect.localScale;
             var oldRect = (RectTransform)old.transform;
-            Vector3 oldHome = oldRect.position, oldScale = oldRect.localScale;
+            Vector3 oldHome = oldRect.position - shownOffset, oldScale = oldRect.localScale;
             if (old.TryGetComponent(out CanvasGroup oldGroup)) oldGroup.blocksRaycasts = false;
             leaving.Add(old);
 
             // waiting: 0 where the shown card is, 1 a place out on the wheel, on the ahead side or the other
             void Place(RectTransform rect, Vector3 from, Vector3 scale, float angle, float waiting, bool ahead) {
-                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (from - center) + Nudge(up, height, ahead) * waiting;
+                rect.position = center + Quaternion.Euler(0f, 0f, angle) * (from - center) + Nudge(up, height, ahead) * waiting + shownOffset * (1f - waiting);
                 rect.localRotation = Quaternion.Euler(0f, 0f, angle * Roulette.waitingTilt);
                 rect.localScale = scale * Mathf.Lerp(1f, Roulette.waitingScale, waiting);
             }

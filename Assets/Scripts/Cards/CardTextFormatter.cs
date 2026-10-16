@@ -493,7 +493,8 @@ namespace SlayTheClone {
             string pick = spec.timing == WatchdogTiming.Briefing && spec.pick != BriefingPick.First ? $"{spec.pick.ToString().ToLower()} " : "";
             string timing = (spec.timing == WatchdogTiming.Briefing ? Keywords.Link("Briefing") : "") + DaysTag(action.statusDuration);
             timing = timing.Trim();
-            return $"{Keywords.Link("Watchdog")}: {pick}{whose}{what}{atMost}{by} -> {effect}, {charges} charge{(charges == 1 ? "" : "s")}" +
+            // One charge goes without saying (the user): only more are written
+            return $"{Keywords.Link("Watchdog")}: {pick}{whose}{what}{atMost}{by} -> {effect}{(charges > 1 ? $", {charges} charges" : "")}" +
                    (timing.Length > 0 ? $" ({timing})" : "");
         }
 

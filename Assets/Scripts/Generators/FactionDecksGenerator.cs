@@ -55,12 +55,12 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] { "Golden Parachute", "Team Building Exercise", "Inflation", "Work Shift Rotation" });
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.DigitalSociety, new[] { "Its Been 84 Years...", "Good Boi" });
         private static string WorkbenchName => $"Workbench - {string.Join(", ", Workbench.Cards)}";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
         // order, then the rest by when their cards last changed. Change it with the work
-        private static readonly string[] Focus = { "Corporate - Shareholder Value", "Myth - Old Gods, New Tricks", "Zeitgeist - Moods of Modern Life" };
+        private static readonly string[] Focus = { "Digital Society - Terminally Online", "Corporate - Shareholder Value", "Myth - Old Gods, New Tricks", "Zeitgeist - Moods of Modern Life" };
 
         private static List<string> WorkbenchCards() {
             var cards = Workbench.Cards.SelectMany(card => new[] { card, card }).ToList();
@@ -139,6 +139,7 @@ namespace SlayTheClone {
                 "Holy War", "Holy War", "Lance Of Longinus", "Lance Of Longinus", "Horsemen Of Apocalypse", "Horsemen Of Apocalypse",
                 "Templar Knight", "Templar Knight", "Black Knight", "Black Knight", "The Wicker Man", "Necronomicon", "The Great Flood",
                 "Holy Hand Grenade of Antioch", "The Chosen One", "Buddy Christ", "Living Dead", "Necronomicon", "Phoenix Feather", "Phoenix Feather",
+                "Pyramids",
             }),
             // Sturdy creatures that wear the enemy down, and stat cuts that kill
             [Faction.Mind] = ("Mind - All in Your Head", new[] {
@@ -629,6 +630,16 @@ namespace SlayTheClone {
         #region Factions without a deck yet
         // Digital Society: a swarm of cheap bodies, effects that spread, many creatures piling on one target
         private static List<CardDef> DigitalSocietyCards() => new List<CardDef> {
+            Creature("Its Been 84 Years...", 4, 5, speed: 1, deploy: 0,
+                "Sorry I'm late. Traffic was terrible. And the century.",
+                "Sorry I'm Late (the user, 2026-10-16, a meme ability): played onto a friendly creature, it arrives after the attacks, so the creature it replaces takes the Day's hits first. A big body that walks in fresh.")
+                .With(CreatureAbility.SorryImLate)
+                .Picture("A very old lady in a cardigan wheeled in on a hospital bed through a doorway, a tiny party hat on, a wall clock behind her covered in cobwebs, a dusty birthday cake on the table with 84 candles burnt down to stubs."),
+            Creature("Good Boi", 1, 6, speed: 1, deploy: 0,
+                "He protec. He attac. But most importantly, he gets snac.",
+                "He Protec (the user, 2026-10-16, a meme ability): when a summon replaces it, it stays through the attacks and takes the Day's hits, and the newcomer arrives after them. Sturdy, to soak the Day before it hands over.")
+                .With(CreatureAbility.HeProtec)
+                .Picture("A fluffy shiba dog in a tiny knight's helmet holding up a pot lid as a shield, standing in front of a crying smaller creature, a dog biscuit tucked behind its ear."),
             Spell("Console Memory Card", TargetType.Player,
                 "Your console has the memory of a goldfish. 8 MB of remembering, sold separately.",
                 "Load your save (the user, 2026-10-15, after the PS2 memory card meme): send for any card from your discard pile; it joins your next hand. The first Send For that reaches the discard pile instead of the deck.",
@@ -1305,6 +1316,11 @@ namespace SlayTheClone {
                 "Each Dawn, your strongest creature gets +1 Attack for as long as it's in play: the dominance hierarchy, as preached.",
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, StrongestOne)))
                 .Picture("A gaunt professor in a three-piece suit lecturing tearfully at a lectern, pointing at a projected slide of a lobster sitting on a throne, the audience taking notes, a messy bedroom visible through a door behind him."),
+            Creature("Pyramids", 0, 10, speed: 1, deploy: 2,
+                "Built by aliens, apparently. Or by paid workers on beer rations.",
+                "Pyramids (the user, 2026-10-16): a monument, not a fighter. 0 Attack, 10 Health, two Days to build. Safe Space: each Dawn it and the friendly creatures beside it gain Bless, the pharaoh's eternal protection. Myth holds the status quo.")
+                .With(CreatureAbility.SafeSpace)
+                .Picture("The three pyramids of Giza at golden sunset, the biggest one's capstone glowing with a holy light that rains down on two tiny knights standing beside it, a bored camel in the foreground."),
             Creature("Horsemen Of Apocalypse", 3, 5, speed: 2, deploy: 2,
                 "Four riders. One group chat.",
                 "When ready (the end was foretold): every enemy creature takes 2 damage.",

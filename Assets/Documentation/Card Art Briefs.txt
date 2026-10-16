@@ -224,6 +224,10 @@ Generational Trauma (spell)
 
 DIGITAL SOCIETY
 
+Its Been 84 Years... (creature)
+    A very old lady in a cardigan wheeled in on a hospital bed through a doorway, a tiny party hat on, a wall clock behind her covered in cobwebs, a dusty birthday cake on the table with 84 candles burnt down to stubs.
+Good Boi (creature)
+    A fluffy shiba dog in a tiny knight's helmet holding up a pot lid as a shield, standing in front of a crying smaller creature, a dog biscuit tucked behind its ear.
 Console Memory Card (spell)
     A chunky black console memory card, 8 MB MEMORY CARD on its label, with a goldfish in a tiny bowl taped on top for the console's memory, a glowing save icon floating out of the card.
     USER: 2026-10-15: after the meme of the PS2 8 MB memory card: the save data lives on the card because the console has the memory of a goldfish.
@@ -512,6 +516,8 @@ Pope (creature)
     The Pope waving from a glass-domed popemobile, sprinkling holy water from a garden hose over a crowd of creatures.
 The Lobster Professor (creature)
     A gaunt professor in a three-piece suit lecturing tearfully at a lectern, pointing at a projected slide of a lobster sitting on a throne, the audience taking notes, a messy bedroom visible through a door behind him.
+Pyramids (creature)
+    The three pyramids of Giza at golden sunset, the biggest one's capstone glowing with a holy light that rains down on two tiny knights standing beside it, a bored camel in the foreground.
 Horsemen Of Apocalypse (creature)
     Four horsemen galloping out of storm clouds, War, Famine, Pestilence and Death, one of them checking a smartphone map, a lightning bolt behind.
 God's Grace (spell)

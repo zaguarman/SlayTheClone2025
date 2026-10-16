@@ -12,24 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c35235125886d6d47abe96ac60348262, type: 3}
   m_Name: RouletteTuning
   m_EditorClassIdentifier: Scripts::SlayTheClone.RouletteTuning
-  angle: 23.6
-  radius: 1.7
+  angle: 25
+  radius: 1.45
   reach: 2
-  seconds: 0.796
+  seconds: 0.28
   ease: 9
+  shownSideways: 0
+  shownUp: 0
   waitingScale: 1
   waitingOut: 0
   waitingUp: 0
   waitingTilt: 1
-  nextAlpha: 0.55
-  aheadFade: 0.15
-  lastAlpha: 0.4
-  behindFade: 0.4
-  previewScale: 2
-  previewGap: 10
-  previewSideways: 0
+  nextAlpha: 1
+  aheadFade: 0.5
+  lastAlpha: 1
+  behindFade: 0.5
+  previewScale: 1.64
+  previewGap: 0.07
+  previewSideways: -0.14
   previewAway: 0
   detailsWidth: 300
   detailsFontSize: 16
-  detailsGap: 10
+  detailsGap: 0.02
   detailsDown: 0

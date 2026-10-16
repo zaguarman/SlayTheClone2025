@@ -223,10 +223,12 @@ namespace SlayTheClone {
     public class RouletteGalleryWindow : UnityEditor.EditorWindow {
         private const string Prefs = "SlayTheClone.RouletteGallery.";
 
+        // Opening it starts it: Play is pressed if needed, and it begins once the game is up
         [UnityEditor.MenuItem("UI/Roulette Gallery")]
         private static void Open() {
             var window = GetWindow<RouletteGalleryWindow>("Roulette Gallery");
             window.minSize = new Vector2(320f, 280f);
+            GalleryLauncher.Start(GalleryLauncher.Roulette);
         }
 
         private void OnEnable() {
@@ -263,12 +265,14 @@ namespace SlayTheClone {
             }
 
             UnityEditor.EditorGUILayout.Space();
-            if (!Application.isPlaying) {
-                UnityEditor.EditorGUILayout.HelpBox("Press Play in the game scene, then Start. It fills the board with test creatures: use a game you don't mind losing.", UnityEditor.MessageType.Info);
-                return;
-            }
             if (gallery == null) {
-                if (GUILayout.Button("Start", GUILayout.Height(28f))) RouletteGallery.Run();
+                if (GalleryLauncher.Waiting == GalleryLauncher.Roulette) {
+                    UnityEditor.EditorGUILayout.HelpBox("Starting the game: the gallery begins once it's up.", UnityEditor.MessageType.Info);
+                    if (GUILayout.Button("Cancel")) GalleryLauncher.Cancel();
+                    return;
+                }
+                if (GUILayout.Button("Start", GUILayout.Height(28f))) GalleryLauncher.Start(GalleryLauncher.Roulette);
+                UnityEditor.EditorGUILayout.HelpBox("Start presses Play if needed (the game scene must be open). It fills the board with test creatures: use a game you don't mind losing.", UnityEditor.MessageType.None);
                 return;
             }
             UnityEditor.EditorGUILayout.LabelField($"{gallery.Index + 1} / {gallery.Count}", gallery.Current);

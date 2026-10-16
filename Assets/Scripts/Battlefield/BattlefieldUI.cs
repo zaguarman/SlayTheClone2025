@@ -598,7 +598,7 @@ namespace SlayTheClone {
                 ghost.transform.localRotation = Quaternion.identity;
                 // Hoverable for its enlarged preview; drops still reach the slot (they bubble up, and targets come from a full raycast).
                 // Like a queued card in the hand, clicking it or dragging it away takes the play back, and dragging it to a slot re-aims it.
-                ghost.SetQueued(true, canBeDragged: true);
+                ghost.SetQueued(true, canBeDragged: true, badge: Abilities.ArrivesLate(action) ? "After the attacks" : "Queued"); // Sorry I'm Late, He Protec
                 ghost.OnCardClicked.AddListener(TakeBackPlay);
                 ghost.OnCardRightClicked.AddListener(TakeBackPlay);
                 ghost.OnBeginDragEvent.AddListener(OnGhostBeginDrag);

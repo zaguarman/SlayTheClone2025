@@ -241,6 +241,34 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(cards, GameAsserts.CountCards(p1), "A creature that left play went to the discard pile again");
             Assert.AreEqual(1, p1.Deck.GetDiscardPilePreview().Count(c => c.CardId == eel.CardId));
 
+            // Late Arrivals (the user, 2026-10-16): He Protec on the creature in the slot, or Sorry I'm Late on the newcomer, holds
+            // the replacement until after the attacks: the one there takes the Day's hits first, then it's replaced
+            var guardData = game.Creature("Guard Dog", 0, 9);
+            guardData.ability = CreatureAbility.HeProtec;
+            var guard = game.Summon(p1, guardData, 1);
+            var biter = game.Summon(p2, game.Creature("Biter", 3, 5), 2);
+            var pup = (ICreature)game.GiveCard(p1, game.Creature("Pup", 1, 2));
+            game.Play(pup, p1, p1.Battlefield[1]);
+            game.Declare(biter, p1.Battlefield[1]);
+            Assert.AreEqual(ResolutionLayer.LateArrivals, game.ActionsQueue.LayerOfPending(game.ActionsQueue.GetPendingActions().OfType<PlayCardAction>().Single()),
+                "It waits in the last layer, after the attacks");
+            game.Resolve();
+            Assert.AreEqual(6, guard.Health, "He Protec: it stays through the attacks and takes the hit on its slot...");
+            Assert.AreSame(pup, p1.Battlefield[1].OccupyingCreature, "...then the newcomer takes its place");
+            Assert.AreEqual(2, pup.Health, "...unhurt");
+            AssertDiscarded(p1, guard);
+            var lateData = game.Creature("Latecomer", 2, 4);
+            lateData.ability = CreatureAbility.SorryImLate;
+            var latecomer = (ICreature)game.GiveCard(p1, lateData);
+            game.Play(latecomer, p1, p1.Battlefield[1]);
+            game.Declare(biter, p1.Battlefield[1]);
+            game.Resolve();
+            Assert.IsTrue(pup.IsDead, "Sorry I'm Late: the creature it replaces takes the Day's hits (and dies of this one)...");
+            Assert.AreSame(latecomer, p1.Battlefield[1].OccupyingCreature, "...and it arrives after them, into the free slot");
+            Assert.AreEqual(4, latecomer.Health);
+            game.Run(new DestroyCreatureAction(latecomer, unconditional: true)); // Out of the way of what follows
+            game.Run(new DestroyCreatureAction(biter, unconditional: true));
+
             // An exhausted (stunned) creature can't move or attack
             game.Run(new ApplyStatusEffectAction(turtle, StatusEffectType.Exhausted, 1, 0));
             game.Run(new MoveCreatureAction(turtle, p1.Battlefield[4], p1.Battlefield[0], p1));

@@ -140,6 +140,7 @@ namespace SlayTheClone {
             ResolutionLayer.Movement => "first, before anything else.",
             ResolutionLayer.Summon => "after the moves.",
             ResolutionLayer.Spell => "after the summons.",
+            ResolutionLayer.LateArrivals => "last, after the attacks: the creature it replaces takes the Day's hits first (Sorry I'm Late, He Protec).",
             _ => "last; the faster creature acts first."
         };
 
@@ -226,6 +227,7 @@ namespace SlayTheClone {
             ResolutionLayer.Movement => "Moves",
             ResolutionLayer.Summon => "Summons",
             ResolutionLayer.Spell => "Spells",
+            ResolutionLayer.LateArrivals => "Late Arrivals",
             _ => "Abilities & Attacks"
         };
 
