@@ -137,7 +137,9 @@ namespace SlayTheClone {
             Add("Trend", "What the world is into right now: a rule for the whole board, for the [Days] shown (no number: until another Trend replaces it). One at a time: a new Trend replaces the old. A Trend card plays on either side of the table. Like the weather, it's the same for both sides: it helps whoever is built for it, and can turn against whoever set it.");
             foreach (Trend trend in System.Enum.GetValues(typeof(Trend))) {
                 if (trend == Trend.None) continue;
-                Add(TrendSystem.NameOf(trend), $"A [Trend]: {TrendSystem.RuleOf(trend)}." + (trend == Trend.RushHour ? " Lower Speed goes first, wherever Speed decides the order." : ""));
+                // Just its rule: the card says it's a Trend (the user)
+                string rule = TrendSystem.RuleOf(trend);
+                Add(TrendSystem.NameOf(trend), $"{char.ToUpper(rule[0])}{rule.Substring(1)}." + (trend == Trend.RushHour ? " Lower Speed goes first, wherever Speed decides the order." : ""));
             }
 
             // ---------------------------------------------------------------- Creature abilities (Abilities Compendium)

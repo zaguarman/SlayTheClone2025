@@ -100,8 +100,8 @@ namespace SlayTheClone {
             return tooltip;
         }
 
-        // Card hover preview: an enlarged live copy of the hovered card, placed next to it
-        private const float PreviewScale = 2f;
+        // Card hover preview: an enlarged live copy of the hovered card, placed next to it (its size is a RouletteTuning slider)
+        private static float PreviewScale => RouletteTuning.Current.previewScale;
         private const float PreviewGap = 10f;      // Screen pixels between the card and its preview
         private const float DetailsWidth = 300f;
         private const float TextWidth = 420f; // A text tooltip, like a queued action's details
@@ -122,10 +122,11 @@ namespace SlayTheClone {
         public int Browsed => browsed;
 
         // Browsing the stack turns a wheel of cards: the shown one swings away along an arc around a point below it while
-        // the next swings in from the other side
-        private const float RouletteSeconds = 0.28f;
-        private const float RouletteAngle = 32f;  // Degrees between two cards on the wheel
-        private const float RouletteRadius = 1.6f; // The wheel's radius, in preview heights
+        // the next swings in from the other side. Its measurements are sliders (UI > Roulette Tuning)
+        private static RouletteTuning Roulette => RouletteTuning.Current;
+        private static float RouletteSeconds => Roulette.seconds;
+        private static float RouletteAngle => Roulette.angle;   // Degrees between two cards on the wheel
+        private static float RouletteRadius => Roulette.radius; // The wheel's radius, in preview heights
         private readonly List<CardController> leaving = new List<CardController>();
 
         private void Awake() {
@@ -511,7 +512,7 @@ namespace SlayTheClone {
         // The rest of the stack, faint, on the wheel around the shown card: the cards to come wait on the left (the next one
         // clearest), the ones gone by sit on the right, fainter the further back they are, until they're gone
         private readonly List<CardController> wheel = new List<CardController>();
-        private const int WheelReach = 3; // Cards shown each side
+        private static int WheelReach => Roulette.reach; // Cards shown each side
 
         private void ShowWheel(Vector3 home, Vector3 up, bool fadeIn) {
             ClearWheel();
@@ -524,7 +525,7 @@ namespace SlayTheClone {
                 int distance = Mathf.Abs(i - browsed);
                 if (distance == 0 || distance > WheelReach) continue;
                 bool ahead = i > browsed;
-                float alpha = ahead ? 0.55f - 0.15f * (distance - 1) : 0.4f * Mathf.Pow(0.4f, distance - 1);
+                float alpha = Roulette.AlphaAt(distance, ahead);
                 var ghost = i == 0
                     ? activeCard.CreatePreview(transform)
                     : activeCard.CreatePreviewOfAttached(i - 1, transform);
@@ -577,7 +578,24 @@ namespace SlayTheClone {
                 if (nextRect != null) Place(nextRect, home, -tilt * (1f - t));
                 if (oldRect != null) Place(oldRect, oldHome, tilt * t);
                 if (oldGroup != null) oldGroup.alpha = 1f - t;
-            }, 1f, RouletteSeconds).SetEase(Ease.OutCubic).SetUpdate(true).SetTarget(this).OnComplete(ClearLeaving); // Real time: also while paused
+            }, 1f, RouletteSeconds).SetEase(Roulette.ease).SetUpdate(true).SetTarget(this).OnComplete(ClearLeaving); // Real time: also while paused
+        }
+
+        /// <summary>A <see cref="RouletteTuning"/> slider moved: the preview showing takes its size again, and its wheel is laid out anew.</summary>
+        public void RedrawRoulette() {
+            if (activeCard == null || preview == null || previewIsCard) return;
+            ClearLeaving();
+            var rect = (RectTransform)preview.transform;
+            rect.localScale = Vector3.one * PreviewScaleFor(activeCard);
+            PlacePreview(activeCard, rect);
+            UpdateTooltipContent(activeCard);
+            ShowWheel(rect.position, rect.up, fadeIn: false);
+        }
+
+        /// <summary>Shows this card's preview now, as if hovered, and keeps it up until <see cref="HideTooltip"/> (the Roulette Gallery).</summary>
+        public void Pin(CardController card) {
+            HideTooltip();
+            ShowNow(card);
         }
 
         private void ClearLeaving() {

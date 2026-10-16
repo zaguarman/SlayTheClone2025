@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 using static SlayTheClone.Enums;
@@ -8,11 +7,9 @@ using static SlayTheClone.Enums;
 namespace SlayTheClone {
     /// <summary>
     /// The battle arrows from every slot to every slot, one side aiming (the other side is the mirror), shown one after the
-    /// other to judge the <see cref="ArrowTuning"/> sliders. Two ways to run it while the game plays:
-    /// UI > Arrow Gallery plays them back: the window sets how long each shot stays, pauses on one while the sliders move,
-    /// and steps back and forth; it loops until stopped. UI > Arrow Gallery Screenshots goes once through the sets chosen
-    /// there, saving every shot, labelled, and a sheet per set in ArrowGallery/ at the project root (not in the project's
-    /// files), then stops. It fills both rows with plain creatures; each set shows one kind of arrow (see <see cref="Set"/>).
+    /// other to judge the <see cref="ArrowTuning"/> sliders. UI > Arrow Gallery plays them back while the game plays: the
+    /// window sets how long each shot stays, pauses on one while the sliders move, and steps back and forth; it loops until
+    /// stopped. It fills both rows with plain creatures; each set shows one kind of arrow (see <see cref="Set"/>).
     /// It changes the game it runs on: use a game you don't mind losing.
     /// </summary>
     public class ArrowGallery : MonoBehaviour {
@@ -28,14 +25,11 @@ namespace SlayTheClone {
 
         public static readonly string[] SlotNames = { "Vanguard", "Left Flank", "Right Flank", "Left HQ", "Right HQ" };
         private const float SettleSeconds = 0.6f; // The old arrows fade out, the new ones draw in
-        private const float PictureScale = 0.5f;   // Of the screen, for each saved shot: a sheet of 25 stays a reasonable size
 
         // Set from the window before it starts; how long each shot stays can change while it runs
         public static float SecondsPerShot = 2f;
-        public static bool SavePictures { get; private set; } // The screenshot version: once through, saving each shot
         public static readonly HashSet<Set> Chosen = new HashSet<Set>((Set[])System.Enum.GetValues(typeof(Set)));
 
-        public static string Folder => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "ArrowGallery"));
         public static ArrowGallery Instance { get; private set; }
         public static bool Running => Instance != null;
 
@@ -58,16 +52,10 @@ namespace SlayTheClone {
         private readonly List<ArrowIndicator> drawn = new List<ArrowIndicator>(); // Arrows the gallery draws itself
         private int jump; // Previous / Next pressed
 
-        /// <summary>Plays the arrows back, looping, with no pictures saved.</summary>
-        public static void Run() => Begin(saving: false);
-
-        /// <summary>Goes once through the chosen sets, saving every shot and a sheet per set, then stops.</summary>
-        public static void RunScreenshots() => Begin(saving: true);
-
-        private static void Begin(bool saving) {
+        /// <summary>Plays the arrows back, looping.</summary>
+        public static void Run() {
             if (Running || !Application.isPlaying) return;
-            SavePictures = saving;
-            new GameObject(saving ? "ArrowGalleryScreenshots" : "ArrowGallery").AddComponent<ArrowGallery>();
+            new GameObject("ArrowGallery").AddComponent<ArrowGallery>();
         }
 
         public static void Stop() {
@@ -107,35 +95,10 @@ namespace SlayTheClone {
                 yield break;
             }
 
-            var saved = new Dictionary<int, Texture2D>();
-            var sheetsWritten = new HashSet<Set>();
-            if (SavePictures) Directory.CreateDirectory(Folder);
             Index = 0;
             while (true) {
-                var shot = shots[Index];
-                ShowShot(shot);
+                ShowShot(shots[Index]);
                 yield return new WaitForSecondsRealtime(SettleSeconds);
-                if (SavePictures && !saved.ContainsKey(Index)) {
-                    yield return new WaitForEndOfFrame();
-                    var picture = Capture();
-                    File.WriteAllBytes(Path.Combine(Folder, Safe($"{shot.Set} - {shot.Name}") + ".png"), picture.EncodeToPNG());
-                    saved[Index] = picture;
-                    var ofSet = Enumerable.Range(0, shots.Count).Where(i => shots[i].Set == shot.Set).ToList();
-                    if (!sheetsWritten.Contains(shot.Set) && ofSet.All(saved.ContainsKey)) {
-                        Sheet(shot.Set.ToString(), ofSet.Select(i => saved[i]).ToList(), 5);
-                        sheetsWritten.Add(shot.Set);
-                        Debug.Log($"Arrow Gallery: the {shot.Set} sheet is in {Folder}");
-                    }
-                }
-                if (SavePictures) { // The screenshot version: on to the next shot at once, and done after the last
-                    if (Index == shots.Count - 1) {
-                        Debug.Log($"Arrow Gallery: every shot saved in {Folder}");
-                        Destroy(gameObject);
-                        yield break;
-                    }
-                    Index++;
-                    continue;
-                }
                 float shown = SettleSeconds;
                 while ((Paused || shown < SecondsPerShot) && jump == 0) {
                     shown += Time.unscaledDeltaTime;
@@ -151,14 +114,17 @@ namespace SlayTheClone {
         private void Setup() {
             foreach (var play in game.ActionsQueue.GetPendingActions().OfType<PlayCardAction>().ToList()) game.ActionsQueue.CancelPlay(play.GetCard());
             for (int i = 0; i < 5; i++) {
-                attackers.Add(Summon(game.Player1, i, $"Attacker {i}"));
-                Summon(game.Player2, i, $"Target {i}");
+                attackers.Add(Summon(game, game.Player1, i, $"Attacker {i}"));
+                Summon(game, game.Player2, i, $"Target {i}");
             }
             CancelAll();
+            label = GalleryLabel(Board(game.Player1));
+        }
 
-            var board = Board(game.Player1);
+        /// <summary>A label in the screen's top left corner, at the table's size of text, over everything: what a gallery shows now.</summary>
+        public static TMPro.TextMeshProUGUI GalleryLabel(BattlefieldUI board) {
             var canvas = board.GetComponentInParent<Canvas>().rootCanvas;
-            label = UITheme.NewText("GalleryLabel", canvas.transform, "", 40f, UITheme.Gold, TMPro.TextAlignmentOptions.TopLeft);
+            var label = UITheme.NewText("GalleryLabel", canvas.transform, "", 40f, UITheme.Gold, TMPro.TextAlignmentOptions.TopLeft);
             label.transform.localScale = Vector3.one * (board.transform.lossyScale.x / canvas.transform.lossyScale.x); // The table's size of text
             label.fontStyle = TMPro.FontStyles.Bold;
             label.raycastTarget = false;
@@ -172,6 +138,7 @@ namespace SlayTheClone {
             var cam = Camera.main;
             var corner = cam.ViewportToWorldPoint(new Vector3(0.02f, 0.97f, cam.nearClipPlane));
             rect.position = new Vector3(corner.x, corner.y, canvas.transform.position.z);
+            return label;
         }
 
         private void BuildShots() {
@@ -245,7 +212,8 @@ namespace SlayTheClone {
         private BattlefieldUI Board(IPlayer side) =>
             side == game.Player1 ? references.Player1References.BattlefieldUI : references.Player2References.BattlefieldUI;
 
-        private ICreature Summon(Player side, int slot, string name) {
+        /// <summary>A plain test creature put straight into a slot (2 Attack, 9 Health, no text).</summary>
+        public static ICreature Summon(GameManager game, Player side, int slot, string name) {
             var data = ScriptableObject.CreateInstance<CreatureData>();
             data.name = data.cardName = name;
             data.attack = 2;
@@ -265,49 +233,11 @@ namespace SlayTheClone {
                 }
             }
         }
-
-        private static Texture2D Capture() {
-            var cam = Camera.main;
-            int width = Mathf.RoundToInt(Screen.width * PictureScale), height = Mathf.RoundToInt(Screen.height * PictureScale);
-            var target = RenderTexture.GetTemporary(width, height, 24);
-            var previous = cam.targetTexture;
-            cam.targetTexture = target;
-            cam.Render();
-            cam.targetTexture = previous;
-            var active = RenderTexture.active;
-            RenderTexture.active = target;
-            var picture = new Texture2D(width, height, TextureFormat.RGB24, false);
-            picture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-            picture.Apply();
-            RenderTexture.active = active;
-            RenderTexture.ReleaseTemporary(target);
-            return picture;
-        }
-
-        // The shots of a set side by side, in reading order, a thin dark gap between them
-        private static void Sheet(string name, List<Texture2D> pictures, int columns) {
-            if (pictures.Count == 0) return;
-            const int gap = 6;
-            int w = pictures[0].width, h = pictures[0].height;
-            int rows = Mathf.CeilToInt(pictures.Count / (float)columns);
-            var sheet = new Texture2D(columns * (w + gap) + gap, rows * (h + gap) + gap, TextureFormat.RGB24, false);
-            sheet.SetPixels32(Enumerable.Repeat(new Color32(12, 14, 22, 255), sheet.width * sheet.height).ToArray());
-            for (int i = 0; i < pictures.Count; i++) {
-                int x = gap + (i % columns) * (w + gap);
-                int y = sheet.height - (i / columns + 1) * (h + gap); // Textures count rows from the bottom
-                sheet.SetPixels(x, y, w, h, pictures[i].GetPixels());
-            }
-            sheet.Apply();
-            File.WriteAllBytes(Path.Combine(Folder, $"Sheet - {name}.png"), sheet.EncodeToPNG());
-        }
-
-        private static string Safe(string name) => string.Concat(name.Select(c => Path.GetInvalidFileNameChars().Contains(c) || c == '>' ? '_' : c));
     }
 
 #if UNITY_EDITOR
     /// <summary>
-    /// The gallery's controls (UI > Arrow Gallery): which sets, how long each shot stays, pause, back, next. The screenshot
-    /// version (UI > Arrow Gallery Screenshots) uses the same sets.
+    /// The gallery's controls (UI > Arrow Gallery): which sets, how long each shot stays, pause, back, next.
     /// </summary>
     public class ArrowGalleryWindow : UnityEditor.EditorWindow {
         private const string Prefs = "SlayTheClone.ArrowGallery.";
@@ -318,19 +248,7 @@ namespace SlayTheClone {
             window.minSize = new Vector2(320f, 300f);
         }
 
-        [UnityEditor.MenuItem("UI/Arrow Gallery Screenshots")]
-        private static void Screenshots() {
-            if (!Application.isPlaying) {
-                Debug.LogWarning("Arrow Gallery Screenshots: press Play first, in the game scene");
-                return;
-            }
-            LoadChoices();
-            ArrowGallery.RunScreenshots();
-        }
-
-        private void OnEnable() => LoadChoices();
-
-        private static void LoadChoices() {
+        private void OnEnable() {
             ArrowGallery.SecondsPerShot = UnityEditor.EditorPrefs.GetFloat(Prefs + "Seconds", 2f);
             foreach (ArrowGallery.Set set in System.Enum.GetValues(typeof(ArrowGallery.Set))) {
                 if (UnityEditor.EditorPrefs.GetBool(Prefs + set, true)) ArrowGallery.Chosen.Add(set);
@@ -370,12 +288,6 @@ namespace SlayTheClone {
             }
             if (gallery == null) {
                 if (GUILayout.Button("Start", GUILayout.Height(28f))) ArrowGallery.Run();
-                UnityEditor.EditorGUILayout.HelpBox("To save pictures of these sets instead: UI > Arrow Gallery Screenshots.", UnityEditor.MessageType.None);
-                return;
-            }
-            if (ArrowGallery.SavePictures) {
-                UnityEditor.EditorGUILayout.LabelField($"Saving {gallery.Index + 1} / {gallery.Count}", gallery.Current);
-                if (GUILayout.Button("Stop")) ArrowGallery.Stop();
                 return;
             }
             UnityEditor.EditorGUILayout.LabelField($"{gallery.Index + 1} / {gallery.Count}", gallery.Current);

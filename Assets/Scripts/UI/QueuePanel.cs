@@ -269,6 +269,8 @@ namespace SlayTheClone {
             text.textWrappingMode = TextWrappingModes.Normal;
             text.raycastTarget = false;
 
+            // The rows' hit areas meet across the gap between them: the pointer going from one to the next never lands between
+            row.raycastPadding = new Vector4(0f, -list.GetComponent<VerticalLayoutGroup>().spacing / 2f, 0f, -list.GetComponent<VerticalLayoutGroup>().spacing / 2f);
             var hover = row.gameObject.AddComponent<QueueItemHover>();
             hover.Details = item.Details;
             hover.Action = item.Action;
@@ -291,26 +293,48 @@ namespace SlayTheClone {
         public string Details;
         public IGameAction Action;
         private bool showing;
+        private static QueueItemHover hovered; // The row under the pointer, if any
+        private const float ReleaseGrace = 0.15f; // Leaving a row: the arrows wait this long for the next row before all come back
 
         public void OnPointerEnter(PointerEventData eventData) {
             if (CardController.Dragged != null) return;
             GetComponent<Image>().color = UITheme.Hex(0x34466E);
             Tooltip.Shared.ShowTooltip(Details);
             BattlefieldArrowManager.Focus(Action);
+            hovered = this;
             showing = true;
         }
 
-        public void OnPointerExit(PointerEventData eventData) => Stop();
+        // Off the row: the board's arrows come back unless the pointer is on another row by then (no flicker going down the list)
+        public void OnPointerExit(PointerEventData eventData) {
+            if (!Stop()) return;
+            var panel = GetComponentInParent<QueuePanel>();
+            if (panel != null && panel.isActiveAndEnabled) panel.StartCoroutine(ReleaseSoon(Action));
+            else Release(Action);
+        }
 
-        private void OnDisable() => Stop();
+        // The panel closing or the list being redrawn: the arrows come back now
+        private void OnDisable() {
+            if (Stop()) Release(Action);
+        }
 
-        private void Stop() {
-            if (!showing) return;
+        private bool Stop() {
+            if (!showing) return false;
             showing = false;
+            if (hovered == this) hovered = null;
             var image = GetComponent<Image>();
             if (image != null) image.color = UITheme.PanelLight;
             Tooltip.Existing?.HideText();
-            if (BattlefieldArrowManager.Focused == Action) BattlefieldArrowManager.Focus(null);
+            return true;
+        }
+
+        private static System.Collections.IEnumerator ReleaseSoon(IGameAction action) {
+            yield return new WaitForSecondsRealtime(ReleaseGrace);
+            if (hovered == null) Release(action);
+        }
+
+        private static void Release(IGameAction action) {
+            if (BattlefieldArrowManager.Focused == action) BattlefieldArrowManager.Focus(null);
         }
     }
 }

@@ -1548,10 +1548,10 @@ namespace SlayTheClone {
                 .Picture("A pair of scissors cutting a DNA double helix, a strip of tape sticking a unicorn horn onto it."),
             GambleSpell("Accelerationism", TargetType.Player,
                 "Whatever the problem, more technology. Whatever the cost, faster.",
-                "Gamble, accelerationism's way: every outcome pays, one only after it hurts. Your creatures take 2 and get +3 Attack for good (on the brink, then boom), or +2/+2 for good, or Borrowed Time until the next Dusk.",
+                "Gamble, accelerationism's way: every outcome pays and every one costs (the user: drawbacks, 2026-10-16). Your creatures take 2 and get +3 Attack for good (on the brink, then boom); or progress for everyone, +2/+2 for good to every creature, the enemy's too; or Borrowed Time until the next Dusk, then 3 damage to each: on the brink they deal double, and any left at 0 die at Dusk.",
                 new[] { Damage(2, TargetType.FriendlyCreatures, Each), Buff(3, TargetType.FriendlyCreatures, attack: true, health: false, Each) },
-                new[] { Buff(2, TargetType.FriendlyCreatures, attack: true, health: true, Each) },
-                new[] { Status(StatusEffectType.BorrowedTime, 1, TargetType.FriendlyCreatures, modifier: Each) })
+                new[] { Buff(2, TargetType.AllCreatures, attack: true, health: true, Each) },
+                new[] { Status(StatusEffectType.BorrowedTime, 1, TargetType.FriendlyCreatures, modifier: Each), Damage(3, TargetType.FriendlyCreatures, Each) })
                 .Picture("A tech founder in a hoodie flooring the accelerator of a rocket-powered car toward a cliff edge, the road on fire behind him, a bridge of glowing circuit boards assembling itself in mid-air just ahead of the wheels."),
             Creature("Cold Fusion", 5, 6, speed: 1, deploy: 1,
                 "Clean, limitless energy. Slight meltdown risk. Mostly fine.",

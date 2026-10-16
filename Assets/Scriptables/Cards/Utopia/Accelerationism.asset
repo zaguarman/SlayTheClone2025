@@ -97,7 +97,7 @@ MonoBehaviour:
     actions:
     - actionType: 6
       value: 2
-      targetType: 3
+      targetType: 2
       targetModifier: 2
       modifyAttack: 1
       modifyHealth: 1
@@ -159,9 +159,41 @@ MonoBehaviour:
       requires: 0
       delayDays: 0
       decoy: {fileID: 0}
-  designNotes: 'Gamble, accelerationism''s way: every outcome pays, one only after
-    it hurts. Your creatures take 2 and get +3 Attack for good (on the brink, then
-    boom), or +2/+2 for good, or Borrowed Time until the next Dusk.'
+    - actionType: 0
+      value: 3
+      targetType: 3
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      decoy: {fileID: 0}
+  designNotes: 'Gamble, accelerationism''s way: every outcome pays and every one
+    costs (the user: drawbacks, 2026-10-16). Your creatures take 2 and get +3 Attack
+    for good (on the brink, then boom); or progress for everyone, +2/+2 for good
+    to every creature, the enemy''s too; or Borrowed Time until the next Dusk, then
+    3 damage to each: on the brink they deal double, and any left at 0 die at Dusk.'
   artDescription: A tech founder in a hoodie flooring the accelerator of a rocket-powered
     car toward a cliff edge, the road on fire behind him, a bridge of glowing circuit
     boards assembling itself in mid-air just ahead of the wheels.
