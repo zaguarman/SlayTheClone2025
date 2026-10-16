@@ -47,6 +47,18 @@ namespace SlayTheClone {
             ApplyToOpenScenes();
         }
 
+        /// <summary>
+        /// Lays the open scene's table out again, as the game does when it starts, without baking the theme: what the
+        /// Battlefield Tuning sliders say shows in the editor without playing. The scene is marked to save.
+        /// </summary>
+        public static void RedressOpenTable() {
+            var references = Object.FindFirstObjectByType<GameReferences>(FindObjectsInactive.Include);
+            var gameUI = Object.FindFirstObjectByType<GameUI>(FindObjectsInactive.Include);
+            if (references == null || gameUI == null || !gameUI.TryGetComponent<BoardSkin>(out var skin)) return;
+            skin.Dress(references, MatchSetup.DefaultPlayerName, references.Player2Name);
+            EditorSceneManager.MarkSceneDirty(gameUI.gameObject.scene);
+        }
+
         private static void ApplyToOpenScenes() {
             var references = Object.FindFirstObjectByType<GameReferences>(FindObjectsInactive.Include);
             var gameUI = Object.FindFirstObjectByType<GameUI>(FindObjectsInactive.Include);

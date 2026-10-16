@@ -97,12 +97,35 @@ namespace SlayTheClone {
             }
         }
 
-        // A slider moved: the mats on the table take it at once
-        private void OnValidate() => ApplyToTable();
-
-        /// <summary>Lays both battlefields out again with the sliders as they are: mats, slots, markers, chevrons, the table round them.</summary>
-        public static void ApplyToTable() {
+        // A slider moved while playing: the mats on the table take it (just after: not inside OnValidate, where Unity
+        // won't have layouts redone). Without playing the inspector redraws the scene's table (see the editor below)
+        private void OnValidate() {
             if (!Application.isPlaying) return;
+#if UNITY_EDITOR
+            if (applyPending) return;
+            applyPending = true;
+            UnityEditor.EditorApplication.delayCall += () => {
+                applyPending = false;
+                ApplyToTable();
+            };
+#else
+            ApplyToTable();
+#endif
+        }
+
+        private static bool applyPending;
+
+        /// <summary>
+        /// Lays both battlefields out again with the sliders as they are: mats, slots, markers, chevrons, the table round
+        /// them. Without playing, in the editor, the open scene's table is drawn again with them (and the scene is to save).
+        /// </summary>
+        public static void ApplyToTable() {
+            if (!Application.isPlaying) {
+#if UNITY_EDITOR
+                if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) UIThemeBaker.RedressOpenTable();
+#endif
+                return;
+            }
             foreach (var board in Object.FindObjectsByType<BattlefieldUI>(FindObjectsSortMode.None)) board.Retune();
             foreach (var skin in Object.FindObjectsByType<BoardSkin>(FindObjectsSortMode.None)) skin.RefreshLayout();
         }
@@ -152,8 +175,26 @@ namespace SlayTheClone {
     public class BattlefieldTuningEditor : UnityEditor.Editor {
         private BattlefieldTuning originals;
 
-        private void OnEnable() => originals = CreateInstance<BattlefieldTuning>();
-        private void OnDisable() => DestroyImmediate(originals);
+        private void OnEnable() {
+            originals = CreateInstance<BattlefieldTuning>();
+            UnityEditor.Undo.undoRedoPerformed += Redraw;
+        }
+
+        private void OnDisable() {
+            UnityEditor.Undo.undoRedoPerformed -= Redraw;
+            DestroyImmediate(originals);
+        }
+
+        // Without playing, the scene's table is drawn again once the sliders change (once per editor tick, while dragging)
+        private bool redrawPending;
+        private void Redraw() {
+            if (Application.isPlaying || redrawPending) return;
+            redrawPending = true;
+            UnityEditor.EditorApplication.delayCall += () => {
+                redrawPending = false;
+                BattlefieldTuning.ApplyToTable();
+            };
+        }
 
         public override void OnInspectorGUI() {
             var tuning = (BattlefieldTuning)target;
@@ -164,6 +205,7 @@ namespace SlayTheClone {
                     UnityEditor.Undo.RecordObject(tuning, "Restore the original battlefield values");
                     tuning.RestoreOriginals();
                     UnityEditor.EditorUtility.SetDirty(tuning);
+                    Redraw();
                 }
                 if (GUILayout.Button("Remember these values")) tuning.Remember();
                 using (new UnityEditor.EditorGUI.DisabledScope(!tuning.HasRemembered)) {
@@ -171,6 +213,7 @@ namespace SlayTheClone {
                         UnityEditor.Undo.RecordObject(tuning, "Back to the remembered battlefield values");
                         tuning.BackToRemembered();
                         UnityEditor.EditorUtility.SetDirty(tuning);
+                        Redraw();
                     }
                 }
             }
@@ -180,7 +223,9 @@ namespace SlayTheClone {
                 }
             }
             UnityEditor.EditorGUILayout.Space();
+            UnityEditor.EditorGUI.BeginChangeCheck();
             TuningInspector.DrawWithResets(serializedObject, originals);
+            if (UnityEditor.EditorGUI.EndChangeCheck()) Redraw();
         }
     }
 #endif
