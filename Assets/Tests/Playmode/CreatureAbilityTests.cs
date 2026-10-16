@@ -539,6 +539,26 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             game.Run(new UseAbilityAction(dome, p1.Battlefield[1]));
             Assert.IsTrue(HasStatus(vip, StatusEffectType.Untouchable), "Rested, it guards again");
+
+            // Taqiyya, a Turncoat: it deploys on your side, then on arrival goes over into the slot opposite, discarding what
+            // stood there; on their side nobody can summon over it nor order it to attack, and each Dawn it hits its new side
+            Fresh();
+            var standing = With(CreatureAbility.None, p2, 2, attack: 1, health: 10);
+            var host = With(CreatureAbility.None, p2, 0, attack: 3, health: 10);
+            var giftData = game.Creature("Test Taqiyya", 2, 2, 1,
+                Effect(EffectTrigger.OnPlay, ActionType.Defect, 0, TargetType.Self),
+                Effect(EffectTrigger.StartOfTurn, ActionType.Attack, 0, TargetType.FriendlyCreatures, TargetModifier.Random | TargetModifier.Others));
+            giftData.ability = CreatureAbility.Turncoat;
+            giftData.turnsUntilOperative = 2;
+            var turncoat = game.Summon(p1, giftData, 2);
+            game.StartTurn();
+            Assert.AreSame(p1, turncoat.Owner, "Deploying, it's still yours");
+            for (int day = 0; day < 4 && turncoat.Owner == p1; day++) game.StartTurn();
+            Assert.AreSame(turncoat, p2.Battlefield[2].OccupyingCreature, "Arrived: it goes over into the slot opposite...");
+            Assert.IsFalse(p2.Battlefield.Any(s => s.OccupyingCreature == standing), "...and what stood there is discarded");
+            Assert.IsFalse(Abilities.CanBeReplaced(turncoat) || Abilities.CanAttack(turncoat), "Nobody summons over it, nor orders it to attack");
+            game.StartTurn();
+            Assert.Less(host.Health, 10, "Each Dawn it attacks its new side");
         }
 
         private bool HasStatus(ICreature creature, StatusEffectType status) => game.ModifierManager.HasStatusEffect(creature, status);

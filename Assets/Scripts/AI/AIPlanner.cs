@@ -118,7 +118,8 @@ namespace SlayTheClone {
                     continue;
                 }
                 // A Gift they planted on our side is the first thing to summon over
-                var poisoned = Level == AILevel.Easy ? null : view.MySlots.FirstOrDefault(s => s.Creature is { GiftFromThem: true } && s.Incoming == null);
+                var poisoned = Level == AILevel.Easy ? null : view.MySlots.FirstOrDefault(s => s.Creature is { GiftFromThem: true } && s.Incoming == null
+                    && Abilities.CanBeReplaced(s.Creature.Creature)); // A Turncoat can't be summoned over
                 if (poisoned != null) {
                     Play(creature, poisoned.Slot);
                     poisoned.Incoming = creature;

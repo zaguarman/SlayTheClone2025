@@ -11,7 +11,7 @@ namespace SlayTheClone {
         public enum ActionType { Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot, CreateWatchdog, DelayDeployment, Reveal, SetTrend,
             CopyStats, StealStatChanges, SwapPositions, GrantAbility, Destroy,
             TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys,
-            WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay, Rush } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
+            WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay, Rush, Defect } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
@@ -34,7 +34,7 @@ namespace SlayTheClone {
             None, Contrarian, Extremist, Unbothered, NoU, Spite, Underground, TooMainstream, ZeroDay, Unpatchable,
             SignalJammer, Copypasta, IdentityTheft, HiveMind, InsiderJob, ReturnToSender, PennyStock, Undercover, Handover, Recoil,
             Bodyguard, Wannabe, CreditGrab, SprayAndPray, ChainMail, DoubleTap, ShellGame, SafeSpace, Ambush, ExtremePrejudice,
-            AllergicToLight, FallGuy, Brink, CollateralDamage, SorryImLate, HeProtec, Irreplaceable
+            AllergicToLight, FallGuy, Brink, CollateralDamage, SorryImLate, HeProtec, Irreplaceable, Turncoat
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look

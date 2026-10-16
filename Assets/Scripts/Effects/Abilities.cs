@@ -24,7 +24,7 @@ namespace SlayTheClone {
             or CreatureAbility.Wannabe or CreatureAbility.CreditGrab or CreatureAbility.ShellGame;
 
         /// <summary>Bodyguard can't attack: it only protects. It's printed on the creature, so it holds even while switched off.</summary>
-        public static bool CanAttack(ICreature creature) => creature != null && creature.Ability != CreatureAbility.Bodyguard;
+        public static bool CanAttack(ICreature creature) => creature != null && creature.Ability is not (CreatureAbility.Bodyguard or CreatureAbility.Turncoat); // A Turncoat strikes on its own (Taqiyya)
 
         /// <summary>
         /// Abilities that only help a friendly creature land with the spells, before the Day's attacks, as help played this Day
@@ -73,6 +73,7 @@ namespace SlayTheClone {
             CreatureAbility.CollateralDamage => "Collateral Damage",
             CreatureAbility.SorryImLate => "Sorry I'm Late",
             CreatureAbility.HeProtec => "He Protec",
+            CreatureAbility.Turncoat => "Turncoat",
             _ => ability.ToString()
         };
 
@@ -114,6 +115,7 @@ namespace SlayTheClone {
             CreatureAbility.SorryImLate => "played onto a friendly creature, it arrives after the attacks: the creature there takes the Day's hits, then it's replaced",
             CreatureAbility.HeProtec => "when a summon replaces it, it stays through the attacks and takes the Day's hits; the newcomer arrives after them",
             CreatureAbility.Irreplaceable => "no summon can replace it: its slot stays its own until it leaves",
+            CreatureAbility.Turncoat => "no summon can replace it, and nobody can order it to attack: it strikes its own side, on its own",
             _ => ""
         };
 
@@ -121,7 +123,7 @@ namespace SlayTheClone {
         /// Whether a summon can replace this creature: not an Irreplaceable one (Demagogue), its drawback. Printed, so it
         /// holds even while its ability is switched off.
         /// </summary>
-        public static bool CanBeReplaced(ICreature creature) => creature == null || creature.Ability != CreatureAbility.Irreplaceable;
+        public static bool CanBeReplaced(ICreature creature) => creature == null || creature.Ability is not (CreatureAbility.Irreplaceable or CreatureAbility.Turncoat);
 
         /// <summary>
         /// A summon onto a friendly creature that waits for the attacks (the Late Arrivals layer, after every other): the

@@ -1122,11 +1122,15 @@ namespace SlayTheClone {
         // for miracles (Sacrifice), prophecies that come true Days later (Prophecy), converts (control change), and wrath on
         // the unbelievers (Holy War). Pays with its own creatures; can't move them.
         private static List<CardDef> MythCards() => new List<CardDef> {
-            Spell("Taqiyya", TargetType.EnemyCreatures,
+            Creature("Taqiyya", 2, 2, speed: 1, deploy: 2,
                 "The smile is sincere. The rest is between me and God.",
-                "The user, 2026-10-16: a poisoned gift. Taqiyya, the doctrine of hiding one's faith to survive, as a gift that hides its purpose: target enemy creature gets +2 Attack (the gift, for all to see) and a secret Kill Order 1 (the purpose, unseen): at the next Day's Dusk it's destroyed. Quicker than Death By \"Natural Causes\", but they hit harder until then. A Cleanse removes the Kill Order, knowingly or not.",
-                Status(StatusEffectType.KillOrder, 1, TargetType.EnemyCreatures),
-                Buff(2, TargetType.EnemyCreatures, attack: true, health: false))
+                "The user, 2026-10-16: a poisoned gift. Played on your side, it deploys for 2 Days; on arrival it goes over to the enemy, into the slot opposite, and whatever stands there is discarded. There it's a Turncoat: no summon can replace it and they can't order it to attack; each Dawn it attacks a random other creature of its new side, Reveals another (you see its plans) and takes 1 Attack off another. Low Health: they can knock it out easily (Friendly Fire, an effect).",
+                On(EffectTrigger.OnPlay, Act(ActionType.Defect, 0, TargetType.Self, TargetModifier.None)),
+                On(EffectTrigger.StartOfTurn,
+                    Strike(TargetType.FriendlyCreatures, AtRandom | Others),
+                    Status(StatusEffectType.Revealed, 1, TargetType.FriendlyCreatures, modifier: AtRandom | Others),
+                    Buff(-1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom | Others)))
+                .With(CreatureAbility.Turncoat)
                 .NotInStarterDeck()
                 .Picture("A serene robed figure bowing slightly and offering an ornate gift box tied with a gold ribbon, both hands extended in welcome; on the wall behind, the box's shadow is a coiled snake."),
             Spell("Omen Reading", TargetType.Player,

@@ -390,7 +390,7 @@ namespace SlayTheClone {
         private static bool CanAffectCreatures(ActionType actionType) =>
             actionType is ActionType.Damage or ActionType.Destroy or ActionType.Heal or ActionType.ModifyStat
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
-                or ActionType.CreateWatchdog or ActionType.DelayDeployment or ActionType.Rush
+                or ActionType.CreateWatchdog or ActionType.DelayDeployment or ActionType.Rush or ActionType.Defect
                 or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility
                 or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                 or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Resurrect
@@ -539,6 +539,8 @@ namespace SlayTheClone {
                     return target is IPlayer cut && action.value > 0 ? new CutDrawsAction(cut, action.value) : null;
                 case ActionType.WipeWatchdogs: // Every Watchdog that player controls (GoldenEye)
                     return target is IPlayer wiped ? new WipeWatchdogsAction(wiped) : null;
+                case ActionType.Defect: // Taqiyya: it goes over to the other side, into the slot opposite (whatever stands there is discarded)
+                    return creature?.Slot != null && creature.Owner?.Opponent != null ? new ChangeSidesAction(creature, creature.Owner.Opponent) : null;
                 case ActionType.TakeControl: // It changes sides, to the effect's controller (GDD 5.4)
                     return creature != null && creature.Owner != controller ? new ChangeSidesAction(creature, controller) : null;
                 case ActionType.Attack: // The creature whose effect it is attacks the target's slot, a real attack

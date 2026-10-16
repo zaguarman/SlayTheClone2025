@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: Taqiyya
-  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
-  cardId: a01ed08d-28b4-4374-9ca3-df7b1898bb98
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: a5f2f42f-0e19-423d-b8d0-fb9d321ec1f4
   cardName: Taqiyya
   description: The smile is sincere. The rest is between me and God.
-  cardType: 1
+  cardType: 0
   faction: 1
   artwork: {fileID: 0}
   discardCost: 0
@@ -27,18 +27,82 @@ MonoBehaviour:
   prophecyLatest: 0
   gamble: 0
   effects:
-  - effectType: 1
+  - effectType: 0
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 7
+    - actionType: 40
       value: 0
-      targetType: 4
+      targetType: 5
       targetModifier: 0
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
-      statusEffectToApply: 12
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      decoy: {fileID: 0}
+  - effectType: 0
+    trigger: 3
+    oncePerCombat: 0
+    actions:
+    - actionType: 21
+      value: 0
+      targetType: 3
+      targetModifier: 516
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      decoy: {fileID: 0}
+    - actionType: 7
+      value: 0
+      targetType: 3
+      targetModifier: 516
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 7
       statusDuration: 1
       statusPotency: 0
       cleanse: 0
@@ -62,9 +126,9 @@ MonoBehaviour:
       delayDays: 0
       decoy: {fileID: 0}
     - actionType: 6
-      value: 2
-      targetType: 4
-      targetModifier: 0
+      value: -1
+      targetType: 3
+      targetModifier: 516
       modifyAttack: 1
       modifyHealth: 0
       modifySpeed: 0
@@ -91,13 +155,22 @@ MonoBehaviour:
       requires: 0
       delayDays: 0
       decoy: {fileID: 0}
-  designNotes: 'The user, 2026-10-16: a poisoned gift. Taqiyya, the doctrine of hiding
-    one''s faith to survive, as a gift that hides its purpose: target enemy creature
-    gets +2 Attack (the gift, for all to see) and a secret Kill Order 1 (the purpose,
-    unseen): at the next Day''s Dusk it''s destroyed. Quicker than Death By "Natural
-    Causes", but they hit harder until then. A Cleanse removes the Kill Order, knowingly
-    or not.'
+  designNotes: 'The user, 2026-10-16: a poisoned gift. Played on your side, it deploys
+    for 2 Days; on arrival it goes over to the enemy, into the slot opposite, and
+    whatever stands there is discarded. There it''s a Turncoat: no summon can replace
+    it and they can''t order it to attack; each Dawn it attacks a random other creature
+    of its new side, Reveals another (you see its plans) and takes 1 Attack off another.
+    Low Health: they can knock it out easily (Friendly Fire, an effect).'
   artDescription: A serene robed figure bowing slightly and offering an ornate gift
     box tied with a gold ribbon, both hands extended in welcome; on the wall behind,
     the box's shadow is a coiled snake.
-  defaultTargetType: 4
+  attack: 2
+  health: 2
+  speed: 1
+  turnsUntilOperative: 2
+  movement: 0
+  ability: 37
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

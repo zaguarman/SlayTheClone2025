@@ -437,7 +437,7 @@ Sex Clanker (creature)
 
 MYTH
 
-Taqiyya (spell)
+Taqiyya (creature)
     A serene robed figure bowing slightly and offering an ornate gift box tied with a gold ribbon, both hands extended in welcome; on the wall behind, the box's shadow is a coiled snake.
 Omen Reading (spell)
     A robed augur reading the entrails of a goat on a stone altar by candlelight, squinting at a calendar pinned to the wall, an assistant taking notes.

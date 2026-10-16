@@ -298,6 +298,8 @@ namespace SlayTheClone {
                     return status != null ? status + Requisite(action) : null;
                 case ActionType.DelayDeployment:
                     return $"+{value} {Keywords.Link("Deployment Time")} to {target}";
+                case ActionType.Defect: // Taqiyya
+                    return "it goes over to the enemy, into the slot opposite (whatever stands there is discarded)";
                 case ActionType.Rush: // Overtime
                     return $"{target}{Requisite(action)}: ready up to {value} Days sooner, then {Keywords.Link("Burnout")}: destroyed at the end of its first Day ready";
                 // Between two creatures: this one and its target, or (on a spell, or aimed at itself) the target and the creature facing it
