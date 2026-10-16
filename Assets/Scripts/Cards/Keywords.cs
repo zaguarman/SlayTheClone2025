@@ -116,12 +116,13 @@ namespace SlayTheClone {
             // ---------------------------------------------------------------- Intelligence
             group = "Intelligence";
             Add("Reveal", "Shows you everything about a slot: its hidden [Slot Effect], the creature there and what it plans. Instant.");
-            Add("Watchdog", "A trap in the action queue: when an action it watches comes up, it acts on it. One charge per action.");
-            Add("Briefing", "Each [Day], once everyone has planned and before anything resolves, the [Watchdog] reads the whole queue and acts on what it watches. It starts the Day after it's set.");
-            Add("Nullify", "The action is cancelled.");
-            Add("Redirect", "The action hits another creature, picked at [Random|random].");
-            Add("Reorder", "The action moves to the start or the end of its turn in the queue.");
-            Add("Backfire", "The attack doesn't happen: the attacker takes its own Attack as damage instead.");
+            // The Watchdog's words (the user, 2026-10-16): it intercepts an action, then disables, redirects, reorders or reveals it
+            Add("Watchdog", "A trap in the action queue: it [Intercept|intercepts] the actions it watches as they come up. One charge per action.");
+            Add("Intercept", "A [Watchdog] catches an action it watches, before it resolves, and does what it says to it: [Disable], [Redirect], [Reorder] or [Reveal].");
+            Add("Briefing", "Each [Day], once everyone has planned and before anything resolves, the [Watchdog] reads the whole queue and [Intercept|intercepts] what it watches. It starts the Day after it's set.");
+            Add("Disable", "The intercepted action is cancelled: it doesn't happen.");
+            Add("Redirect", "The intercepted action hits another creature, picked at [Random|random]. Redirected to the attacker: an attack that doesn't happen, its attacker taking its own Attack as damage instead.");
+            Add("Reorder", "The intercepted action moves to the start or the end of its turn in the queue.");
 
             // ---------------------------------------------------------------- Slot Effects
             group = "Slot Effects";

@@ -342,6 +342,8 @@ namespace SlayTheClone {
                     return $"{target} trades places with the creature to its right";
                 case ActionType.GrantAbility:
                     return $"{target} gains {AbilityName(action.ability)}";
+                case ActionType.EndDay:
+                    return "the Day ends here: every other action still in the queue, both sides', is discarded";
                 case ActionType.Earthquake:
                     return $"an {Keywords.Link("Earthquake", "earthquake")}: from a random slot, a zigzag across the board, one hit in every column, the sides taking turns, {value} damage each";
                 case ActionType.SetTrend: // "Trend: Rush Hour [sand watch]3" (one word, Trend, everywhere: the user, 2026-10-15)
@@ -493,9 +495,9 @@ namespace SlayTheClone {
             string atMost = spec.atMost > 0 ? $" of {spec.atMost} or less" : "";
             if (spec.damaging) what = "damaging " + what;
             string effect = spec.effect switch {
-                WatchdogEffect.Nullify => Keywords.Link("Nullify"), WatchdogEffect.Redirect => Keywords.Link("Redirect"),
+                WatchdogEffect.Nullify => Keywords.Link("Disable"), WatchdogEffect.Redirect => Keywords.Link("Redirect"),
                 WatchdogEffect.Reveal => Keywords.Link("Reveal"),
-                WatchdogEffect.Backfire => Keywords.Link("Backfire"),
+                WatchdogEffect.Backfire => Keywords.Link("Redirect", "Redirect to the attacker"),
                 _ => Keywords.Link("Reorder", spec.moveEarlier ? "move it first" : "move it last")
             };
             int charges = System.Math.Max(1, spec.charges);

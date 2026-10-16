@@ -324,12 +324,14 @@ namespace SlayTheClone {
                     bool hiddenCondition = FogOfWar.Enabled && watchdog.Controller != viewer && !sight.Revealed
                                            && !(watchdog.Created != null && Intel.CanSeeCondition(viewer, watchdog.Created));
                     return $"{PlayerName(watchdog.Controller, viewer)} {(watchdog.Controller == viewer ? "set" : "sets")} a Watchdog" +
-                           (hiddenCondition ? "" : $" ({watchdog.Spec.side} {watchdog.Spec.watches}: {watchdog.Spec.effect})");
+                           (hiddenCondition ? "" : $" ({watchdog.Spec.side} {watchdog.Spec.watches}: {WatchdogRules.NameOf(watchdog.Spec.effect)})");
                 case RevealAction reveal:
                     return $"{PlayerName(reveal.Viewer, viewer)} {(reveal.Viewer == viewer ? "look" : "looks")} at " +
                            (reveal.Slot != null ? SlotName(reveal.Slot, viewer) : $"{Whose(reveal.Side, viewer)} Watchdogs");
                 case SetTrendAction trend:
                     return $"Now trending: {TrendSystem.NameOf(trend.Trend)}";
+                case EndDayAction amen:
+                    return $"{Painted(amen.Controller, viewer, amen.Source?.Name ?? "Amen")}: the Day ends here, the rest is discarded";
                 case EarthquakeAction quake:
                     return $"Earthquake: {quake.Damage} damage in a zigzag across the board";
                 default:

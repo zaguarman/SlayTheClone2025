@@ -140,7 +140,7 @@ namespace SlayTheClone {
                 "Holy War", "Holy War", "Lance Of Longinus", "Lance Of Longinus", "Horsemen Of Apocalypse", "Horsemen Of Apocalypse",
                 "Templar Knight", "Templar Knight", "Black Knight", "Black Knight", "The Wicker Man", "Necronomicon", "The Great Flood",
                 "Holy Hand Grenade of Antioch", "The Chosen One", "Buddy Christ", "Living Dead", "Necronomicon", "Phoenix Feather", "Phoenix Feather",
-                "Pyramids",
+                "Pyramids", "Amen",
             }),
             // Sturdy creatures that wear the enemy down, and stat cuts that kill
             [Faction.Mind] = ("Mind - All in Your Head", new[] {
@@ -1319,6 +1319,12 @@ namespace SlayTheClone {
                 "Each Dawn, your strongest creature gets +1 Attack for as long as it's in play: the dominance hierarchy, as preached.",
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, StrongestOne | Others)))
                 .Picture("A gaunt professor in a three-piece suit lecturing tearfully at a lectern, pointing at a projected slide of a lobster sitting on a throne, the audience taking notes, a messy bedroom visible through a door behind him."),
+            Spell("Amen", TargetType.Player,
+                "And so it is. Go in peace. Now.",
+                "Amen (the user, 2026-10-16): it ends the Day when it resolves, with the spells: every other action still in the queue, both sides', is discarded (their cards go to the discard pile), so no attack lands that Day. Single Use: it burns out.",
+                Act(ActionType.EndDay, 0, TargetType.Player, TargetModifier.None))
+                .SingleUse()
+                .Picture("A choir of robed monks in a stone chapel snapping a giant hymn book shut with a thunderclap, every candle in the room blowing out at once, a single wisp of smoke curling up from each."),
             Creature("Pyramids", 0, 10, speed: 1, deploy: 2,
                 "Built by aliens, apparently. Or by paid workers on beer rations.",
                 "Pyramids (the user, 2026-10-16): a monument, not a fighter. 0 Attack, 10 Health, two Days to build. Safe Space: each Dawn it and the friendly creatures beside it gain Bless, the pharaoh's eternal protection. Myth holds the status quo.")

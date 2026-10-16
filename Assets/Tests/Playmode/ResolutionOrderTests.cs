@@ -55,6 +55,21 @@ namespace SlayTheClone.Tests {
                 "BattlefieldCombat", "DamagePlayer" // So does an attack's hit
             }, game.History.ExecutedKinds());
 
+            // Amen (the user, 2026-10-16): it ends the Day when it resolves, with the spells; what's still queued is discarded
+            using (var g = new TestGame()) {
+                var striker = g.Summon(g.Player2, g.Creature("Striker", 5, 3), 0);
+                var amenData = g.Spell("Amen", TargetType.Player, Effect(EffectTrigger.OnPlay, ActionType.EndDay, 0, TargetType.Player));
+                amenData.singleUse = true;
+                var amen = g.GiveCard(g.Player1, amenData);
+                g.Declare(striker, g.Player1.Battlefield[0]);
+                g.ActionsQueue.AddAction(new PlayCardAction(amen, g.Player1, null));
+                int health = g.Player1.Health;
+                g.Resolve();
+                Assert.AreEqual(health, g.Player1.Health, "Amen: the attack after it never lands");
+                Assert.AreEqual(0, g.ActionsQueue.GetPendingActionsCount(), "...nothing is left in the queue");
+                CollectionAssert.DoesNotContain(g.Player1.Deck.GetDiscardPilePreview(), amen, "...and, Single Use, it burns out");
+            }
+
             using (var g = new TestGame()) {
                 var fast = g.Summon(g.Player1, g.Creature("Fast", 5, 3, speed: 2), 0);
                 var slow = g.Summon(g.Player2, g.Creature("Slow", 5, 3), 0);

@@ -123,7 +123,7 @@ namespace SlayTheClone {
         }
 
         protected override GameObject Build() {
-            var screen = AddScreen(transform, "KeywordGlossaryPanel", "Keywords");
+            var screen = AddScreen(transform, "KeywordGlossaryPanel", "Glossary");
             var columns = screen.columns;
             BuildList(columns);
             BuildEntry(columns);

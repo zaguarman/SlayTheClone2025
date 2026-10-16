@@ -59,7 +59,7 @@ namespace SlayTheClone {
             adventure.StartGame = LoadGame;
             AddScreen<CardGalleryMenu>(CardsButtonName, "Cards");
             AddScreen<DeckBuilderMenu>(DecksButtonName, "Decks");
-            AddScreen<KeywordGlossaryMenu>(KeywordsButtonName, "Keywords");
+            AddScreen<KeywordGlossaryMenu>(KeywordsButtonName, "Glossary");
         }
 
         private T AddScreen<T>(string buttonName, string label) where T : MenuScreen {

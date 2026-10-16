@@ -68,7 +68,7 @@ namespace SlayTheClone.Tests {
                         watchdog = Spec(WatchdogEffect.Nullify, WatchedAction.Attack) }
                 }
             });
-            StringAssert.Contains("Watchdog: enemy attacks -> Nullify (2)", Keywords.Plain(CardTextFormatter.GetRulesText(firewallData)));
+            StringAssert.Contains("Watchdog: enemy attacks -> Disable (2)", Keywords.Plain(CardTextFormatter.GetRulesText(firewallData)));
             var firewall = game.GiveCard(p1, firewallData);
             game.Declare(late, p1.Battlefield[0]); // Planned first
             game.Play(firewall, p1, null);
@@ -101,7 +101,7 @@ namespace SlayTheClone.Tests {
                 trigger = EffectTrigger.OnPlay,
                 actions = new List<EffectAction> { new EffectAction { actionType = ActionType.CreateWatchdog, targetType = TargetType.Enemy, watchdog = yesnt } }
             });
-            StringAssert.Contains("Watchdog: enemy damaging spells -> Nullify, 2 charges", Keywords.Plain(CardTextFormatter.GetRulesText(yesntData)));
+            StringAssert.Contains("Watchdog: enemy damaging spells -> Disable, 2 charges", Keywords.Plain(CardTextFormatter.GetRulesText(yesntData)));
             Watch(yesnt, p2);
             game.Play(game.GiveCard(p1, game.Spell("Pep Talk", TargetType.EnemyCreatures, TestCards.Effect(EffectTrigger.OnPlay, ActionType.Heal, 1, TargetType.EnemyCreatures))), p1, p2.Battlefield[0]);
             game.Resolve();

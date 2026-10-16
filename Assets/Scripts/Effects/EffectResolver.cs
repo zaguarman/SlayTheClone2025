@@ -523,6 +523,8 @@ namespace SlayTheClone {
                     return creature != null && action.ability != CreatureAbility.None ? new GrantAbilityAction(creature, action.ability) : null;
                 case ActionType.SetTrend: // The whole board's: it doesn't matter where it lands
                     return new SetTrendAction(action.trend, action.statusDuration, controller);
+                case ActionType.EndDay: // Amen: the Day ends here, whatever is still queued is discarded
+                    return new EndDayAction(controller, source);
                 case ActionType.Earthquake: // The whole board's too: a zigzag from a random slot (HAARP)
                     return action.value > 0 ? new EarthquakeAction(controller, action.value) : null;
                 case ActionType.DelayDeployment: // Red Tape: value is the Days added

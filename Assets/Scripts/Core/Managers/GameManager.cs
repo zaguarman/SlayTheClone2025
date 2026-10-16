@@ -73,6 +73,7 @@ namespace SlayTheClone {
         /// <summary>The Day it is (a part of a spell that waits counts its Days from it).</summary>
         int Today { get; }
         Watchdog AddWatchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days);
+        int DiscardPending(); // Amen: every action still queued is gone; returns how many
         /// <summary>Every Watchdog this player controls is gone (GoldenEye).</summary>
         void WipeWatchdogs(IPlayer controller);
         /// <summary>The Briefing: before the actions of the Day resolve, Briefing Watchdogs look at the whole queue once.</summary>

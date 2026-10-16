@@ -476,6 +476,23 @@ namespace SlayTheClone {
             return watchdog;
         }
 
+        /// <summary>
+        /// Amen: every action still queued, both sides', is discarded; the cards played for them go to their owners'
+        /// discard piles (a Single Use one is spent). Returns how many there were.
+        /// </summary>
+        public int DiscardPending() {
+            var gone = resolvingNow.Concat(waiting).Select(e => e.Action).ToList();
+            resolvingNow.Clear();
+            waiting.Clear();
+            activeCreatureActions.Clear();
+            nextResolvingNowIndex = 0;
+            foreach (var action in gone) {
+                if (action is PlayCardAction play && play.GetCard() != null) play.GetOwner()?.DiscardCard(play.GetCard());
+            }
+            gameMediator.NotifyActionsQueueChanged();
+            return gone.Count;
+        }
+
         public void WipeWatchdogs(IPlayer controller) {
             int wiped = watchdogs.RemoveAll(w => w.Controller == controller);
             Log($"{controller?.Name}'s Watchdogs are wiped out ({wiped})", LogTag.Actions | LogTag.Effects);

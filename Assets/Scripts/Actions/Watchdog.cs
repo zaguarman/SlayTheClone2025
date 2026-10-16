@@ -70,7 +70,7 @@ namespace SlayTheClone {
             string what = Spec.watches.ToString().ToLower() + (Spec.watches == WatchedAction.Ability ? "" : "s");
             string atMost = Spec.atMost > 0 ? $" of {Spec.atMost} or less" : "";
             if (Spec.damaging) what = "damaging " + what;
-            return $"{what}{atMost} by {watched} -> {Spec.effect} ({ChargesLeft} left{(Spec.timing == WatchdogTiming.Briefing ? ", Briefing" : "")})";
+            return $"{what}{atMost} by {watched} -> {WatchdogRules.NameOf(Spec.effect)} ({ChargesLeft} left{(Spec.timing == WatchdogTiming.Briefing ? ", Briefing" : "")})";
         }
 
         public override string ToString() =>
@@ -136,6 +136,13 @@ namespace SlayTheClone {
 
         private static bool RevealsSomething(Spell spell) => spell != null && spell.Effects.SelectMany(e => e.actions)
             .Any(a => a.actionType == ActionType.Reveal || (a.actionType == ActionType.ApplyStatus && a.statusEffectToApply == StatusEffectType.Revealed));
+
+        /// <summary>What players call each effect (the user, 2026-10-16): Nullify is Disable, Backfire a Redirect to the attacker.</summary>
+        public static string NameOf(WatchdogEffect effect) => effect switch {
+            WatchdogEffect.Nullify => "Disable",
+            WatchdogEffect.Backfire => "Redirect to the attacker",
+            _ => effect.ToString()
+        };
 
         /// <summary>Backfire: the attack is replaced by its own Attack as damage to the attacker. Other actions are just nullified (null).</summary>
         public static IGameAction Backfire(IGameAction action) =>
