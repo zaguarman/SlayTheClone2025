@@ -38,5 +38,6 @@ MonoBehaviour:
   movement: 0
   ability: 0
   gift: 0
+  rootedWhileDeploying: 0
   token: 1
   disguise: {fileID: 11400000, guid: d941c52272e44564496335a69e6e4a15, type: 2}

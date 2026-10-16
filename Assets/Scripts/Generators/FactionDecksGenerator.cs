@@ -416,8 +416,9 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Damage(1, TargetType.EnemyCreatures))),
             Creature("Ministry for Equality", 1, 6, speed: 1, deploy: 1,
                 "We love everybody. Please stop resisting our love.",
-                "Future: Red Tape every Dawn: +1 Deployment Time on a random enemy creature.",
-                On(EffectTrigger.StartOfTurn, Stun(1, TargetType.EnemyCreatures, AtRandom))),
+                "Rooted while deploying (the user, 2026-10-16): a building going up can't be moved, which keeps its strong Dawn stun in check. Future: Red Tape every Dawn: +1 Deployment Time on a random enemy creature.",
+                On(EffectTrigger.StartOfTurn, Stun(1, TargetType.EnemyCreatures, AtRandom)))
+                .RootedWhileDeploying(),
             Creature("Supreme Court", 0, 7, speed: 1, deploy: 1,
                 "Appointed for life. Accountable for nothing.",
                 "Return to Sender: enemy statuses bounce back to whoever sent them. Future: Fortifying. Adjacent friendly creatures can't be moved by enemy effects.",
@@ -1322,6 +1323,7 @@ namespace SlayTheClone {
                 "Built by aliens, apparently. Or by paid workers on beer rations.",
                 "Pyramids (the user, 2026-10-16): a monument, not a fighter. 0 Attack, 10 Health, two Days to build. Safe Space: each Dawn it and the friendly creatures beside it gain Bless, the pharaoh's eternal protection. Myth holds the status quo.")
                 .With(CreatureAbility.SafeSpace)
+                .RootedWhileDeploying()
                 .Picture("The three pyramids of Giza at golden sunset, the biggest one's capstone glowing with a holy light that rains down on two tiny knights standing beside it, a bored camel in the foreground."),
             Creature("Horsemen Of Apocalypse", 3, 5, speed: 2, deploy: 2,
                 "Four riders. One group chat.",
@@ -1640,6 +1642,7 @@ namespace SlayTheClone {
             public CreatureAbility Ability;
             public bool IsSpell;
             public bool IsGift; // Played into an empty enemy slot, it joins their side
+            public bool IsRootedWhileDeploying; // It can't move nor be moved until it's ready
             public int Attack, Health, Speed, DeploymentTime;
             public TargetType SpellTarget;
             public List<CardEffect> Effects;
@@ -1736,6 +1739,12 @@ namespace SlayTheClone {
             // Gift: you play it into an empty enemy slot, where it joins their side
             public CardDef Gift() {
                 IsGift = true;
+                return this;
+            }
+
+            // A building going up: Rooted while it deploys (the user, 2026-10-16), so nothing moves it until it's ready
+            public CardDef RootedWhileDeploying() {
+                IsRootedWhileDeploying = true;
                 return this;
             }
 
@@ -1981,6 +1990,7 @@ namespace SlayTheClone {
                     creature.movement = card.Movement;
                     creature.ability = card.Ability;
                     creature.gift = card.IsGift;
+                    creature.rootedWhileDeploying = card.IsRootedWhileDeploying;
                     break;
                 case SpellCardScriptableObject spell:
                     spell.defaultTargetType = card.SpellTarget;

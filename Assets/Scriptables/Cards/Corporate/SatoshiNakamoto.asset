@@ -74,5 +74,6 @@ MonoBehaviour:
   movement: 0
   ability: 17
   gift: 0
+  rootedWhileDeploying: 0
   token: 0
   disguise: {fileID: 0}

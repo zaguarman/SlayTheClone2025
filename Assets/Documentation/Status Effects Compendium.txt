@@ -622,3 +622,15 @@ Cooldown
     Notes: Bodyguard gives itself Cooldown 1 each time it guards. A Bless stops it, and a Cleanse removes it.
     Answers: (It's the price of a strong ability.)
     Cleansable: Yes
+
+Rooted (the user, 2026-10-16)
+    Faction: Neutral (Statecraft's buildings, Myth's monuments)
+    Type: Restriction
+    Description: "It can't move, and nothing can move or swap it."
+    Core Impact: Its own moves do nothing, and no swap (melee range, the Swap keyword, Shell Game) can move it. It can still attack and use its ability.
+    Stacking & Duration:
+        Initial Stacks: X Days (from source). Rooted while deploying: as many Days as its Deployment Time, so it ends when the creature is ready
+        Re-application Behavior: Refresh
+    Notes: A building going up can't be moved (Ministry for Equality, Pyramids): it keeps strong cards with an immovable theme in check, since a creature still deploying can otherwise move.
+    Answers: Cleanse it, or wait until it's built.
+    Cleansable: Yes

@@ -60,6 +60,7 @@ namespace SlayTheClone {
                 case StatusEffectType.Composed: return Bless;
                 case StatusEffectType.Blackout: return Debuff;
                 case StatusEffectType.Survivor: return Heart;
+                case StatusEffectType.Rooted: return Days;
                 default: return null;
             }
         }

@@ -19,6 +19,7 @@ namespace SlayTheClone {
 
         #region Constructor
         public ModifierManager(IGameMediator mediator, IModifierFactory factory) {
+            MovementRules.IsRooted = creature => HasStatusEffect(creature, StatusEffectType.Rooted); // The game in play's
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             modifierFactory = factory ?? throw new ArgumentNullException(nameof(factory));
 
@@ -186,6 +187,16 @@ namespace SlayTheClone {
                 return mods.OfType<StatusEffectModifier>().Any(mod => mod.EffectType == statusType);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Whether it can move itself: on the board and not stopped (Exhausted), and not Rooted. Still deploying, it can
+        /// (the user, 2026-10-16): it can't attack or use its ability yet, but it can take its place.
+        /// </summary>
+        public bool CanMove(ICreature creature) {
+            if (creature == null || creature.IsDead || creature.Slot == null) return false;
+            if (HasStatusEffect(creature, StatusEffectType.Rooted)) return false;
+            return !GetActiveModifiersFor(creature).OfType<StatusEffectModifier>().Any(s => s.PreventsActions());
         }
 
         public bool CanAct(ICreature creature) {

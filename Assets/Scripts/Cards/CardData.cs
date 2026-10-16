@@ -42,6 +42,8 @@ namespace SlayTheClone {
         public int health;
         /// <summary>Gift: it's played into an empty enemy slot and joins their side; still your card, it comes back to your discard pile.</summary>
         public bool gift;
+        /// <summary>Rooted while it deploys: it can't move, nor be moved, until it's ready (a building going up).</summary>
+        public bool rootedWhileDeploying;
         /// <summary>A token: made by an effect, never a card in a deck. When it leaves play, it's gone.</summary>
         public bool token;
         /// <summary>What the other side sees it as, until it's revealed (a decoy). Null: itself.</summary>

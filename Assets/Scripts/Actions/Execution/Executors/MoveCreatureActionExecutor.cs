@@ -12,8 +12,8 @@ namespace SlayTheClone {
                 return;
             }
 
-            // Only the creature that moves has to be able to act; one it pushes or swaps with is moved passively
-            if (!context.ModifierManager.CanAct(creature)) return;
+            // Only the creature that moves has to be able to move (deploying is fine, Rooted isn't); one it swaps with is moved passively
+            if (!context.ModifierManager.CanMove(creature)) return;
 
             // The creature moves from wherever it is now: something earlier this turn may have moved it.
             // Blocked on the way, it stops at the furthest empty slot it can still reach (GDD 2.4)

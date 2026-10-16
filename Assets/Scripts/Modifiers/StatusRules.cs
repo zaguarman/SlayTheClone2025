@@ -122,6 +122,7 @@ namespace SlayTheClone {
                 StatusEffectType.Cooldown => $"Cooldown ({days}): its Active ability rests",
                 StatusEffectType.Brainwashed => $"Brainwashed ({days}): then it changes sides, its ability lost",
                 StatusEffectType.KillOrder => $"Kill Order ({days}): then it's destroyed",
+                StatusEffectType.Rooted => $"Rooted ({days}): it can't move, and nothing can move it",
                 StatusEffectType.BorrowedTime => $"Borrowed Time ({days}): survives lethal damage",
                 StatusEffectType.Composed => $"Composed ({days}): it can't be Exhausted",
                 StatusEffectType.Blackout => $"Blackout ({days}): its ability and effects are off",

@@ -45,7 +45,9 @@ namespace SlayTheClone {
         public enum BriefingPick { First, Strongest, Every }
 
         // What a planned move does (see MovementRules.KindOf)
-        public enum MoveKind { Walk, Push, Leapfrog, Swap }
+        // Swap: with the friendly creature one step away (melee range), or at any distance with the Swap keyword. Push was
+        // archived (the user, 2026-10-16): Documentation/Archived/Push.txt
+        public enum MoveKind { Walk, Leapfrog, Swap }
 
         public enum StatusEffectType {
             None,
@@ -65,7 +67,8 @@ namespace SlayTheClone {
             Licensed,      // Its next attack on a creature destroys it, then the licence is spent (lasts until used)
             Composed,      // Exhausted can't land on it (this Day only, like Untouchable)
             Blackout,      // Its ability and effects are switched off
-            Survivor       // From full Health, a hit that would kill it leaves it at 1, then it's spent (lasts until used)
+            Survivor,      // From full Health, a hit that would kill it leaves it at 1, then it's spent (lasts until used)
+            Rooted         // It can't move, and nothing can move or swap it (a building going up: Ministry for Equality)
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old

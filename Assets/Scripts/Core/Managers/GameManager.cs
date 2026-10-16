@@ -49,6 +49,7 @@ namespace SlayTheClone {
         /// prevent actions. Logs why not. Being swapped by another creature doesn't need this.
         /// </summary>
         bool CanAct(ICreature creature);
+        bool CanMove(ICreature creature); // Moving itself: deploying is fine, Exhausted or Rooted isn't
         /// <summary>Whether the creature takes +1 damage from every hit (Exposed, also part of Exhausted).</summary>
         bool IsExposed(ICreature creature);
         void RecalculateStats(ICreature creature);

@@ -1,0 +1,13 @@
+PUSH (archived 2026-10-16, the user: "archive the push ability and make it swap on melee range instead")
+
+What it was (GDD 2.4, "Trading Places", every creature, called Push in the code):
+A moving creature walked along empty slots up to an occupied slot of its row, from a step away, and traded places with
+the creature there, like the bench in Pokemon's card games: the other one took the slot the mover started from. Being
+moved wasn't the other creature's own movement, so even a stunned creature was moved. Further than the empty path
+allowed, it was blocked ("too far: needs Swap"). The move preview colored those slots orange and labelled them "Push";
+the queue said "pushes into".
+
+What replaced it: a swap with the friendly creature one step away (melee range), without walking there first. Further
+away needs the Swap keyword. A Rooted creature can't be swapped.
+
+Why kept: if a card ever wants a real push (shoving a creature down the row, maybe an enemy's), this was the rule shape.

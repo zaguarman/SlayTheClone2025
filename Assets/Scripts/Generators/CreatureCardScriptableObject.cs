@@ -10,6 +10,7 @@ namespace SlayTheClone {
         public MovementKeyword movement; // Leapfrog, Swap (GDD 2.4 Movement Keywords)
         public CreatureAbility ability; // Its one ability ('Abilities Compendium')
         public bool gift; // Played into an empty enemy slot, it joins their side (still your card)
+        public bool rootedWhileDeploying; // It can't move nor be moved until it's ready
         public bool token; // Made by an effect, never in a deck: when it leaves play, it's gone
         public CreatureCardScriptableObject disguise; // What the other side sees it as until it's revealed
 
@@ -28,6 +29,7 @@ namespace SlayTheClone {
             data.movement = movement;
             data.ability = ability;
             data.gift = gift;
+            data.rootedWhileDeploying = rootedWhileDeploying;
             data.token = token;
             data.disguise = disguise != null && disguise != this ? (CreatureData)disguise.ToCardData() : null;
             return data;

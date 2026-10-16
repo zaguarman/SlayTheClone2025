@@ -156,7 +156,6 @@ namespace SlayTheClone {
         public void ShowMoveHint(MoveKind kind, bool blocked, string hint) {
             MoveHint = (kind, blocked);
             hintFill = blocked ? BlockedHintColor : kind switch {
-                MoveKind.Push => PushHintColor,
                 MoveKind.Leapfrog => LeapfrogHintColor,
                 MoveKind.Swap => SwapHintColor,
                 _ => WalkHintColor

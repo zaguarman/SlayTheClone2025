@@ -333,21 +333,23 @@ namespace SlayTheClone.Tests {
             var card = game.CardIn(p1.Battlefield[0]);
             var drag = SceneGame.BeginDrag(card);
             Assert.AreEqual((MoveKind.Walk, false), game.MoveHintIn(p1.Battlefield[1]));
-            Assert.AreEqual((MoveKind.Push, false), game.MoveHintIn(p1.Battlefield[2]), "A step from the wall: they can trade places");
+            Assert.AreEqual((MoveKind.Swap, false), game.MoveHintIn(p1.Battlefield[2]), "A step from the wall (melee range): they swap");
             Assert.AreEqual((MoveKind.Walk, false), game.MoveHintIn(p1.Battlefield[4]), "The wall's in the way, but the other Flank goes round");
             Assert.IsNull(game.MoveHintIn(p1.Battlefield[0]), "Its own slot");
             SceneGame.EndDrag(card, drag);
             Assert.IsNull(game.MoveHintIn(p1.Battlefield[1]), "The hints go when the drag ends");
 
-            // Picked up while it's still deploying: it says why it can't act
+            // Still deploying, it can be picked up to move (the user, 2026-10-16), not to attack: dropped on the enemy, it says why
             var rookieData = game.Cards.Creature("Test Rookie", 1, 3);
             rookieData.turnsUntilOperative = 2;
             var rookie = game.Summon(p1, rookieData, 4);
             yield return null;
             var rookieCard = game.CardIn(p1.Battlefield[4]);
             var rookieDrag = SceneGame.BeginDrag(rookieCard);
-            StringAssert.StartsWith("Still deploying: ready in 2 Days", game.BoardView(p1).CantActReason, "A creature still deploying says why it can't act");
-            Assert.IsNull(rookieDrag.pointerDrag, "...and isn't picked up: it stays in its slot");
+            Assert.IsNotNull(rookieDrag.pointerDrag, "A creature still deploying is picked up: it can move");
+            game.BoardView(p2).DropOn(rookieCard, game.BoardView(p2).FindSlotView(p2.Battlefield[4])); // The board it's dropped on handles it
+            StringAssert.StartsWith("Still deploying: it can move, and attack in 2 Days", game.BoardView(p2).CantActReason, "...dropped on the enemy, it says why it can't attack");
+            Assert.IsFalse(game.Queue.GetPendingActions().OfType<BattlefieldCombatAction>().Any(a => a.GetAttacker() == rookie), "...and no attack is planned");
             SceneGame.EndDrag(rookieCard, rookieDrag);
 
             // Friendly Fire: right-dragged onto another creature of its own side, it attacks it

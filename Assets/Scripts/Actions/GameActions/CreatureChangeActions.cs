@@ -155,6 +155,7 @@ namespace SlayTheClone {
             var row = from.Owner.Battlefield;
             var to = row[Formation.Partner(from.Index)];
             var partner = to.OccupyingCreature;
+            if (MovementRules.IsRooted(from.OccupyingCreature) || MovementRules.IsRooted(to.OccupyingCreature)) return; // Rooted: nothing moves it
             BoardSlot.Swap(from, to);
             Log($"{creature.Name} trades places with {partner?.Name ?? "an empty slot"}", LogTag.Effects | LogTag.Creatures);
             NotifyBattlefieldsChanged(context, from.Owner, from.Owner);

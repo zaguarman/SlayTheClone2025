@@ -39,6 +39,7 @@ namespace SlayTheClone {
                 if (creature.movement.HasFlag(MovementKeyword.Leapfrog)) keywords.Add(Keywords.Link("Leapfrog"));
                 if (creature.movement.HasFlag(MovementKeyword.Swap)) keywords.Add(Keywords.Link("Swap"));
                 if (creature.gift) keywords.Add(Keywords.Link("Gift"));
+                if (creature.rootedWhileDeploying) keywords.Add(Keywords.Link("Rooted") + " while deploying");
                 var printed = creature.ability;
                 var now = ability ?? printed;
                 if (printed != CreatureAbility.None && now != printed) keywords.Add($"<s>{Abilities.NameOf(printed)}</s>"); // Replaced or lost

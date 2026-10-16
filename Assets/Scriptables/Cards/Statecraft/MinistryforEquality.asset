@@ -61,8 +61,9 @@ MonoBehaviour:
       requires: 0
       delayDays: 0
       decoy: {fileID: 0}
-  designNotes: 'Future: Red Tape every Dawn: +1 Deployment Time on a random enemy
-    creature.'
+  designNotes: 'Rooted while deploying (the user, 2026-10-16): a building going up
+    can''t be moved, which keeps its strong Dawn stun in check. Future: Red Tape
+    every Dawn: +1 Deployment Time on a random enemy creature.'
   artDescription: 
   attack: 1
   health: 6
@@ -71,5 +72,6 @@ MonoBehaviour:
   movement: 0
   ability: 0
   gift: 0
+  rootedWhileDeploying: 1
   token: 0
   disguise: {fileID: 0}

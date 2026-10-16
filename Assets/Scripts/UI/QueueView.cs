@@ -366,7 +366,6 @@ namespace SlayTheClone {
         private static string StatusName(StatusEffectType status) => status == StatusEffectType.HeatSignature ? "Heat Signature" : status.ToString();
 
         private static string MoveVerb(MoveKind kind) => kind switch {
-            MoveKind.Push => "pushes into",
             MoveKind.Leapfrog => "leapfrogs to",
             MoveKind.Swap => "swaps with",
             _ => "moves to"

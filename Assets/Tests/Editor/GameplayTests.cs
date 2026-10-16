@@ -294,8 +294,8 @@ namespace SlayTheClone.Tests {
             Attack(turtle, p2.Battlefield[4]); // An empty slot: the attack would hit the player
             Assert.AreEqual(healthBeforeStunnedAttack, p2.Health);
 
-            // A creature that needs time to become operative can't attack or move by itself and its effects are off;
-            // its on-play effect (2 damage to the enemy player) waits until it is operative
+            // A creature that needs time to become operative can't attack yet and its effects are off, but it can move (the
+            // user, 2026-10-16); its on-play effect (2 damage to the enemy player) waits until it is operative
             var golemData = game.Creature("Golem", 3, 5, 1, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.Enemy));
             golemData.turnsUntilOperative = 1;
             int p2Health = p2.Health;
@@ -306,9 +306,10 @@ namespace SlayTheClone.Tests {
             Attack(golem, p2.Battlefield[0]);
             Assert.AreEqual(p2Health, p2.Health);
             game.Run(new MoveCreatureAction(golem, p1.Battlefield[0], p1.Battlefield[1], p1));
-            Assert.AreSame(golem, p1.Battlefield[0].OccupyingCreature);
+            Assert.AreSame(golem, p1.Battlefield[1].OccupyingCreature, "Deploying, it still takes its place");
+            game.Run(new MoveCreatureAction(golem, p1.Battlefield[1], p1.Battlefield[0], p1)); // ...and back, for what follows
 
-            // ...but an operative creature with Swap can still trade places with it, over the turtle in between
+            // ...and an operative creature with Swap can trade places with it, over the turtle in between
             game.Run(new MoveCreatureAction(shark, p1.Battlefield[3], p1.Battlefield[0], p1));
             Assert.AreSame(golem, p1.Battlefield[3].OccupyingCreature);
             Assert.AreSame(shark, p1.Battlefield[0].OccupyingCreature);

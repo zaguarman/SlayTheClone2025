@@ -40,7 +40,7 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(p1.Battlefield[slot], creature.Slot, message ?? $"{creature.Name} should be in slot {slot}");
 
         [Test]
-        public void Moves_Walk_Push_Leapfrog_Swap() {
+        public void Moves_Walk_SwapInMelee_Leapfrog_Swap_WhileDeploying_ButNotRooted() {
             var walker = Place("Walker", 3);
             var wall = Place("Wall", 1);
             Plan(walker, 4);
@@ -57,18 +57,37 @@ namespace SlayTheClone.Tests {
             AssertAt(other, 2);
 
             Fresh();
-            var pusher = Place("Pusher", 0);
-            var pushed = Place("Pushed", 1);
-            game.Run(new ApplyStatusEffectAction(pushed, StatusEffectType.Exhausted, 1, 0));
-            Plan(pusher, 1);
+            var mover = Place("Mover", 0);
+            var partner = Place("Partner", 1);
+            game.Run(new ApplyStatusEffectAction(partner, StatusEffectType.Exhausted, 1, 0));
+            Plan(mover, 1);
             game.Resolve();
-            AssertAt(pusher, 1);
-            AssertAt(pushed, 0, "Walking up to a creature, they trade places (like the bench in Pokemon); being moved isn't its own movement: even a stunned creature is");
+            AssertAt(mover, 1);
+            AssertAt(partner, 0, "A step away (melee range), the two swap; being moved isn't its own movement: even a stunned creature is");
             var far = Place("Far", 4);
-            Plan(pusher, 4); // Along the empty left Headquarters slot, up to it
+            Plan(mover, 4); // Not a step away: Push is archived (the user, 2026-10-16)
             game.Resolve();
-            AssertAt(pusher, 4, "It walks up to the creature along empty slots, then they trade places...");
-            AssertAt(far, 1, "...the other one taking the slot it started from");
+            AssertAt(mover, 2, "Further away, there's no swap without the Swap keyword: blocked, it gets as close as it can");
+            AssertAt(far, 4, "...and the other one isn't moved");
+
+            // Still deploying, a creature can take its place; Rooted (a building going up), it can't move nor be moved
+            Fresh();
+            var builderData = game.Creature("Builder", 1, 5);
+            builderData.turnsUntilOperative = 1;
+            var builder = game.Summon(p1, builderData, 0);
+            Assert.IsFalse(builder.IsOperative);
+            Plan(builder, 1);
+            game.Resolve();
+            AssertAt(builder, 1, "Deploying, it can move (the user, 2026-10-16)");
+            game.Run(new ApplyStatusEffectAction(builder, StatusEffectType.Rooted, 2, 0));
+            Plan(builder, 0);
+            game.Resolve();
+            AssertAt(builder, 1, "Rooted: it can't move...");
+            var neighbour = Place("Neighbour", 0);
+            Plan(neighbour, 1);
+            game.Resolve();
+            AssertAt(builder, 1, "...nor be swapped");
+            AssertAt(neighbour, 0);
 
             Fresh();
             var frog = Place("Frog", 0, MovementKeyword.Leapfrog);

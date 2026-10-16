@@ -343,7 +343,9 @@ namespace SlayTheClone {
             }
 
             if (creature.Owner != Player) {
-                GameManager.CombatHandler.HandleCreatureCombat(creature, targetSlot.Model);
+                // Still deploying, it could be picked up to move, not to attack: say so
+                if (!GameManager.ModifierManager.CanAct(creature)) ShowCantAct(card, CantActText(creature));
+                else GameManager.CombatHandler.HandleCreatureCombat(creature, targetSlot.Model);
             }
             else {
                 HandleCreatureMove(creature, targetSlot.Model);
@@ -354,7 +356,7 @@ namespace SlayTheClone {
         public static System.Func<bool> UsingAbility = () => GameInput.ShiftHeld;
 
         private void HandleCreatureMove(ICreature creature, BoardSlot targetSlot) {
-            if (!GameManager.ModifierManager.CanAct(creature)) return;
+            if (!GameManager.ModifierManager.CanMove(creature)) return;
 
             var sourceSlot = creature.Slot;
             if (sourceSlot == null || sourceSlot == targetSlot) return;
@@ -1010,16 +1012,24 @@ namespace SlayTheClone {
         /// <summary>The last reason a creature picked up couldn't act (shown over it), for tests.</summary>
         public string CantActReason { get; private set; }
 
-        // A creature of ours that can't act this Day, picked up to attack or move, isn't picked up (the user): it stays in
-        // its slot, shakes its head (side to side, a "no no") and says why over everything else, as the hand does for a
-        // card it can't play
+        // A creature of ours that can do nothing this Day, picked up, isn't picked up (the user): it stays in its slot, shakes
+        // its head (side to side, a "no no") and says why over everything else, as the hand does for a card it can't play.
+        // One still deploying can be picked up: it can move, not attack
         private bool RefuseIfItCantAct(CardController card) {
             var creature = card.GetLinkedCreature();
-            if (creature?.Slot == null || creature.Owner != Player || !FogOfWar.CanControl(Player) || GameManager.ModifierManager.CanAct(creature)) return false;
+            if (creature?.Slot == null || creature.Owner != Player || !FogOfWar.CanControl(Player) || GameManager.ModifierManager.CanMove(creature)) return false;
+            ShowCantAct(card, GameManager.ModifierManager.HasStatusEffect(creature, Enums.StatusEffectType.Rooted) && GameManager.ModifierManager.CanAct(creature)
+                ? "Rooted: it can't move" : CantActText(creature));
+            return true;
+        }
+
+        private static string CantActText(ICreature creature) {
             int days = creature.TurnsUntilOperative;
-            CantActReason = !creature.IsOperative
-                ? $"Still deploying: ready in {days} Day{(days == 1 ? "" : "s")}"
-                : "It can't act this Day";
+            return !creature.IsOperative ? $"Still deploying: it can move, and attack in {days} Day{(days == 1 ? "" : "s")}" : "It can't act this Day";
+        }
+
+        private void ShowCantAct(CardController card, string reason) {
+            CantActReason = reason;
 
             const string ShakeId = "CantActShake";
             DOTween.Complete(card.transform.GetInstanceID() + ShakeId); // Asked again mid-shake: it starts over from its place
@@ -1052,12 +1062,11 @@ namespace SlayTheClone {
             rect.position = card.transform.position + new Vector3(0f, lift, 0f);
             rect.DOMoveY(rect.position.y + 30f * transform.lossyScale.y, 1.8f).SetEase(Ease.OutCubic).SetTarget(pill);
             DOTween.To(() => fade.alpha, a => fade.alpha = a, 0f, 0.6f).SetDelay(1.4f).SetTarget(pill).OnComplete(() => { if (pill != null) Destroy(pill.gameObject); });
-            return true;
         }
 
         // Every slot of the row says what dropping the creature there would do, given this side's other planned moves
         private void ShowMoveHints(ICreature creature) {
-            if (creature?.Slot == null || creature.Owner != Player || !GameManager.ModifierManager.CanAct(creature)) return;
+            if (creature?.Slot == null || creature.Owner != Player || !GameManager.ModifierManager.CanMove(creature)) return;
             foreach (var slot in battlefieldSlots) {
                 if (slot.Model == creature.Slot) continue;
                 var (kind, blocked, hint) = MovementRules.Evaluate(creature, slot.Model, GameManager.ActionsQueue);
