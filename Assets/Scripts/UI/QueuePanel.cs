@@ -9,7 +9,7 @@ namespace SlayTheClone {
     /// <summary>
     /// The Queue button and the panel it opens: the actions waiting to resolve, in order, as the screen's player sees them
     /// (see <see cref="QueueView"/>, Fog of War included). Each action is an item, edged in its side's color, with an icon for
-    /// what it is; hovering one tells more about it. It follows the queue as it changes, and the fog switch (F9). Clicking
+    /// what it is; hovering one tells more about it, and the board shows that action's arrows alone. It follows the queue as it changes, and the fog switch (F9). Clicking
     /// anywhere else closes it.
     /// The arrows by its heading page back through past Days: what was planned for each, as the screen saw it then.
     /// <see cref="BoardSkin"/> places both at the right edge of the table.
@@ -227,7 +227,9 @@ namespace SlayTheClone {
             text.textWrappingMode = TextWrappingModes.Normal;
             text.raycastTarget = false;
 
-            row.gameObject.AddComponent<QueueItemHover>().Details = item.Details;
+            var hover = row.gameObject.AddComponent<QueueItemHover>();
+            hover.Details = item.Details;
+            hover.Action = item.Action;
         }
 
         private void OnDestroy() {
@@ -239,15 +241,18 @@ namespace SlayTheClone {
         }
     }
 
-    /// <summary>A queue item: hovering it lights it up and tells more about the action (see <see cref="QueueView.Item.Details"/>).</summary>
+    /// <summary>A queue item: hovering it lights it up and tells more about the action (see <see cref="QueueView.Item.Details"/>),
+    /// and the board puts its arrows away to show that action's alone (see <see cref="BattlefieldArrowManager.Focus"/>).</summary>
     public class QueueItemHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
         public string Details;
+        public IGameAction Action;
         private bool showing;
 
         public void OnPointerEnter(PointerEventData eventData) {
             if (CardController.Dragged != null) return;
             GetComponent<Image>().color = UITheme.Hex(0x34466E);
             Tooltip.Shared.ShowTooltip(Details);
+            BattlefieldArrowManager.Focus(Action);
             showing = true;
         }
 
@@ -261,6 +266,7 @@ namespace SlayTheClone {
             var image = GetComponent<Image>();
             if (image != null) image.color = UITheme.PanelLight;
             Tooltip.Existing?.HideText();
+            if (BattlefieldArrowManager.Focused == Action) BattlefieldArrowManager.Focus(null);
         }
     }
 }

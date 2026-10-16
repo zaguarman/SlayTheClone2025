@@ -68,7 +68,7 @@ namespace SlayTheClone.Tests {
                         watchdog = Spec(WatchdogEffect.Nullify, WatchedAction.Attack) }
                 }
             });
-            StringAssert.Contains("Watchdog: enemy attacks -> Nullify, 1 charge (Monitored 2)", Keywords.Plain(CardTextFormatter.GetRulesText(firewallData)));
+            StringAssert.Contains("Watchdog: enemy attacks -> Nullify, 1 charge (2)", Keywords.Plain(CardTextFormatter.GetRulesText(firewallData)));
             var firewall = game.GiveCard(p1, firewallData);
             game.Declare(late, p1.Battlefield[0]); // Planned first
             game.Play(firewall, p1, null);

@@ -469,7 +469,8 @@ namespace SlayTheClone {
         // " [sand watch]3": how many Days a timed change lasts. Nothing for a lasting one
         private static string DaysTag(int days) => days > 0 ? " " + Keywords.Link("Days", $"{EffectIcons.Tag(EffectIcons.Days)}{days}") : "";
 
-        // The GDD card format: "Watchdog: [condition] -> [effect], N charges (timing)"
+        // The GDD card format: "Watchdog: [condition] -> [effect], N charges (timing)". A Watchdog checks each action as it comes
+        // up unless it's a Briefing one: that's how a Watchdog works, so only Briefing is written (the user)
         private static string DescribeWatchdog(EffectAction action, string target) {
             var spec = action.watchdog;
             string whose = spec.side switch { WatchdogSide.Enemy => "enemy ", WatchdogSide.Friendly => "friendly ", _ => "" };
@@ -490,8 +491,10 @@ namespace SlayTheClone {
             };
             int charges = System.Math.Max(1, spec.charges);
             string pick = spec.timing == WatchdogTiming.Briefing && spec.pick != BriefingPick.First ? $"{spec.pick.ToString().ToLower()} " : "";
-            string timing = spec.timing == WatchdogTiming.Briefing ? Keywords.Link("Briefing") : Keywords.Link("Monitored");
-            return $"{Keywords.Link("Watchdog")}: {pick}{whose}{what}{atMost}{by} -> {effect}, {charges} charge{(charges == 1 ? "" : "s")} ({timing}{DaysTag(action.statusDuration)})";
+            string timing = (spec.timing == WatchdogTiming.Briefing ? Keywords.Link("Briefing") : "") + DaysTag(action.statusDuration);
+            timing = timing.Trim();
+            return $"{Keywords.Link("Watchdog")}: {pick}{whose}{what}{atMost}{by} -> {effect}, {charges} charge{(charges == 1 ? "" : "s")}" +
+                   (timing.Length > 0 ? $" ({timing})" : "");
         }
 
         // Slot Effects aim at the slot, whoever stands in it

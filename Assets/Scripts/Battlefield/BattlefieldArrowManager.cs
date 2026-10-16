@@ -15,6 +15,8 @@ namespace SlayTheClone {
     /// Queued spells need no arrow: each shows as a ghost where it's aimed (see <see cref="BattlefieldUI"/>), and a whole
     /// battlefield one of them plays on glows in the spell's color while it's queued.
     /// Arrows persist across queue changes, drawing in when an action is queued and fading out when it's cancelled or resolved.
+    /// Hovering an action in the queue (see <see cref="Focus"/>) puts the rest away: every board shows only what that action
+    /// does and where, until the pointer leaves it.
     /// </summary>
     public class BattlefieldArrowManager {
         public enum DragIntent { None, Attack, Move }
@@ -42,6 +44,18 @@ namespace SlayTheClone {
         private ArrowIndicator dragArrow;
         private readonly Dictionary<IPlayer, Graphic> sideGlows = new Dictionary<IPlayer, Graphic>(); // A side this player's queued spells play on
         private readonly HashSet<IPlayer> aimedSides = new HashSet<IPlayer>();
+        private readonly List<BattlefieldSlot> focusGlows = new List<BattlefieldSlot>(); // Where the focused action lands, when no arrow shows it
+
+        /// <summary>The action hovered in the queue: while set, the boards show its arrows alone.</summary>
+        public static IGameAction Focused { get; private set; }
+        private static event Action FocusChanged;
+
+        /// <summary>Shows only <paramref name="action"/>'s arrows on every board (the user: what did where); null brings the rest back.</summary>
+        public static void Focus(IGameAction action) {
+            if (Focused == action) return;
+            Focused = action;
+            FocusChanged?.Invoke();
+        }
 
         // One arrow: where it comes from (one start per action merged into it), where it goes, and how it looks
         private class ArrowPlan {
@@ -70,6 +84,7 @@ namespace SlayTheClone {
             dragArrow.SetStyle(ArrowIndicator.Style.Drag);
             gameMediator.ActionsQueueChanged += RefreshArrows;
             gameMediator.BattlefieldStateChanged += OnBattlefieldStateChanged;
+            FocusChanged += RefreshArrows;
         }
 
         #region Drag arrow
@@ -97,12 +112,20 @@ namespace SlayTheClone {
             RefreshArrows();
         }
 
-        /// <summary>Redraws the arrows: everything planned, or while the Day plays out, only what's happening now.</summary>
+        /// <summary>Redraws the arrows: everything planned, or while the Day plays out, only what's happening now; the action
+        /// hovered in the queue alone, while one is.</summary>
         public void RefreshArrows() {
             var wanted = new Dictionary<string, ArrowPlan>();
             attackNumbers = AttackNumbers(actionsQueue, isHidden);
             aimedSides.Clear();
-            if (isResolving()) {
+            foreach (var glow in focusGlows) {
+                if (glow != null) glow.SetFocused(false);
+            }
+            focusGlows.Clear();
+            if (Focused != null) {
+                if (!isHidden(Focused)) PlanFocused(Focused, wanted);
+            }
+            else if (isResolving()) {
                 if (current != null && !isHidden(current)) PlanArrow(current, wanted);
             }
             else {
@@ -176,6 +199,81 @@ namespace SlayTheClone {
                         DamageColor, ArrowIndicator.Style.Damage);
                     break;
             }
+        }
+
+        // The hovered action, if it's this board's player's: an arrow from the creature doing it to where it lands, or where no
+        // creature does it (a spell, a summon, a Slot Effect), the slot it lands on glowing, or the side a spell plays on
+        private void PlanFocused(IGameAction action, Dictionary<string, ArrowPlan> wanted) {
+            var target = TargetSlotOf(action);
+            if ((QueueView.SideOf(action) ?? target?.Owner) != owner) return;
+            switch (action) {
+                case BattlefieldCombatAction:
+                case DamageCreatureAction:
+                    PlanArrow(action, wanted);
+                    return;
+                case MoveCreatureAction move when IsOwn(move.GetCreature()) && target != null:
+                    AddBetweenSlots(wanted, $"move_{move.GetCreature().TargetId}_{target.TargetId}", move.GetCreature().Slot, target,
+                        MoveColor, ArrowIndicator.Style.Move);
+                    return;
+                case PlayCardAction play when play.GetCard() is Spell spell:
+                    FocusSpell(spell, play.GetOwner(), play.GetTarget());
+                    return;
+                case PlaySpellAction cast:
+                    FocusSpell(cast.GetSpell(), cast.GetOwner(), cast.GetTarget());
+                    return;
+            }
+            var from = QueueView.ActorOf(action)?.Slot;
+            if (target == null) return;
+            if (from != null && from != target) {
+                AddBetweenSlots(wanted, $"focus_{target.TargetId}", from, target,
+                    action is SwapPositionsAction ? MoveColor : DamageColor, ArrowIndicator.Style.Damage);
+            }
+            else Glow(target);
+        }
+
+        private void FocusSpell(Spell spell, IPlayer caster, ITarget target) {
+            if (spell == null || caster == null) return;
+            var side = AimOf(spell, caster, target, out var slot);
+            if (slot != null) Glow(slot);
+            else if (side != null) aimedSides.Add(side);
+        }
+
+        private void Glow(BoardSlot slot) {
+            var view = findSlotView(slot);
+            if (view == null) return;
+            view.SetFocused(true);
+            focusGlows.Add(view);
+        }
+
+        // Where an action lands on the board, if on a slot or a creature in one
+        private static BoardSlot TargetSlotOf(IGameAction action) {
+            object target = action switch {
+                PlayCardAction play => play.GetTarget(),
+                PlaySpellAction cast => cast.GetTarget(),
+                SummonCreatureAction summon => summon.GetTargetSlot(),
+                BattlefieldCombatAction attack => attack.GetTargetSlot(),
+                UseAbilityAction use => use.TargetSlot,
+                MoveCreatureAction move => move.GetToSlot(),
+                DamageCreatureAction damage => damage.GetTarget(),
+                HealCreatureAction heal => heal.GetTarget(),
+                ModifyAction modify => modify.GetTarget(),
+                ModifyArmorAction armor => armor.GetTargetCreature(),
+                ApplyStatusEffectAction status => status.GetTargetCreature(),
+                CleanseAction cleanse => cleanse.GetTargetCreature(),
+                DestroyCreatureAction destroy => destroy.GetCreature(),
+                DoomedSentenceAction sentence => sentence.GetCreature(),
+                DelayDeploymentAction delay => delay.Creature,
+                PlaceSlotEffectAction place => place.GetSlot(),
+                CleanseSlotAction clear => clear.GetSlot(),
+                RevealAction reveal => reveal.Slot,
+                _ => null
+            };
+            return target switch {
+                BoardSlot slot => slot,
+                HomingTarget homing => homing.CurrentSlot ?? homing.AimedSlot,
+                ICreature creature => creature.Slot,
+                _ => null
+            };
         }
 
         /// <summary>
@@ -327,6 +425,7 @@ namespace SlayTheClone {
             gameMediator.ActionsQueueChanged -= RefreshArrows;
             actionsQueue.OnActionExecuting.RemoveListener(OnActionExecuting);
             gameMediator.BattlefieldStateChanged -= OnBattlefieldStateChanged;
+            FocusChanged -= RefreshArrows;
             foreach (var arrow in activeArrows.Values) {
                 if (arrow != null) GameObject.Destroy(arrow.gameObject);
             }

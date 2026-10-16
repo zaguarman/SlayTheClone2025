@@ -208,7 +208,7 @@ namespace SlayTheClone.Tests {
             yield return null;
             Assert.AreEqual("", Badge(p2.Battlefield[1]), "Used up: gone from the slot");
 
-            StringAssert.Contains("attacks by the enemy -> Nullify (2 left, Monitored)", game.BoardView(p1).WatchdogText);
+            StringAssert.Contains("attacks by the enemy -> Nullify (2 left)", game.BoardView(p1).WatchdogText);
             StringAssert.Contains("???", game.BoardView(p2).WatchdogText, "The enemy's Watchdog condition is hidden");
             StringAssert.DoesNotContain("Nullify", game.BoardView(p2).WatchdogText);
 

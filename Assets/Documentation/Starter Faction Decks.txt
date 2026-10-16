@@ -257,7 +257,7 @@ Spells
     • Ceasefire (Statecraft): A Shield on a slot for 2 Days: the creature there takes no combat damage.
     • Its A Trap (Digital Society): A hidden Barbed Snare (2 damage) on a slot: the first creature to leave it, even pushed or swapped, takes the damage (dying or being replaced isn't leaving).
     • Burn Notice (Shadow Ops.): Scorched Earth on a slot: the creature there can't trigger its effects, entry effects included.
-    • Antivirus (Tech): Watchdog: enemy spells -> Nullify, 1 charge (Monitored).
+    • Antivirus (Tech): Watchdog: enemy spells -> Nullify, 1 charge.
     • Counter-Intelligence (Shadow Ops.): Watchdog: the strongest enemy attack -> Redirect, 2 charges (Briefing).
 
     • Plot Armor (Zeitgeist, 2/2/2, 0): Once per combat, when this would die, heal it for 1 (it survives). The use is gone for the rest of the combat, even after a reshuffle.

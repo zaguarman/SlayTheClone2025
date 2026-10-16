@@ -70,7 +70,7 @@ namespace SlayTheClone {
             string what = Spec.watches.ToString().ToLower() + (Spec.watches == WatchedAction.Ability ? "" : "s");
             string atMost = Spec.atMost > 0 ? $" of {Spec.atMost} or less" : "";
             if (Spec.damaging) what = "damaging " + what;
-            return $"{what}{atMost} by {watched} -> {Spec.effect} ({ChargesLeft} left, {(Spec.timing == WatchdogTiming.Briefing ? "Briefing" : "Monitored")})";
+            return $"{what}{atMost} by {watched} -> {Spec.effect} ({ChargesLeft} left{(Spec.timing == WatchdogTiming.Briefing ? ", Briefing" : "")})";
         }
 
         public override string ToString() =>

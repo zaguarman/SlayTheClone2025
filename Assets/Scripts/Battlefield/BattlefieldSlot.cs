@@ -44,6 +44,15 @@ namespace SlayTheClone {
         private static readonly Color EligibleColor = UITheme.Hex(0xE2B04A, 0.14f);
         private static readonly Color EligibleTrimColor = UITheme.Hex(0xFFE08A, 0.7f);
         private bool isEligible;
+        // Where the action hovered in the queue lands (see BattlefieldArrowManager.Focus): lit up like a drop target
+        private bool isFocused;
+
+        /// <summary>Lights the slot up as where the action hovered in the queue lands.</summary>
+        public void SetFocused(bool focused) {
+            if (isFocused == focused) return;
+            isFocused = focused;
+            ShowHighlight(null);
+        }
 
         /// <summary>Whether this slot glows as one the carried card can be played on.</summary>
         public bool IsEligible => isEligible;
@@ -110,8 +119,8 @@ namespace SlayTheClone {
 
         // Null for the resting look: the move hint while there is one
         private void ShowHighlight(Color? fill, Color? trimColor = null) {
-            if (backgroundImage != null) backgroundImage.color = fill ?? hintFill ?? (isEligible ? EligibleColor : isMarkedForCombat ? UITheme.SlotCombat : Color.clear);
-            if (trim != null) trim.color = trimColor ?? hintTrim ?? (isEligible ? EligibleTrimColor : Color.clear);
+            if (backgroundImage != null) backgroundImage.color = fill ?? hintFill ?? (isFocused ? DragTargetColor : isEligible ? EligibleColor : isMarkedForCombat ? UITheme.SlotCombat : Color.clear);
+            if (trim != null) trim.color = trimColor ?? hintTrim ?? (isFocused ? DragTargetTrimColor : isEligible ? EligibleTrimColor : Color.clear);
         }
 
         /// <summary>Shows the slot's Slot Effect, or nothing. Hidden ones are only shown to their controller, marked as hidden.</summary>

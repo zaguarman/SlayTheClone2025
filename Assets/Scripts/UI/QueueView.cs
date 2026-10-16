@@ -22,6 +22,7 @@ namespace SlayTheClone {
             public string Details;  // Shown when hovered: who, with what, on what, and when
             public string Icon;     // An EffectIcons sprite for the kind of action
             public bool Ours;       // Started by the viewer's side
+            public IGameAction Action; // Hovering it shows this action's arrows alone; none for what's foretold
         }
 
         /// <summary>The queue in resolution order, numbered, under a heading for each layer.</summary>
@@ -40,7 +41,7 @@ namespace SlayTheClone {
                 }
                 bool hidden = FogOfWar.Hides(viewer, action, queue, modifiers);
                 items.Add(new Item {
-                    Number = ++number, Text = text, Icon = hidden ? EffectIcons.Conceal : IconOf(action), Ours = SideOf(action) == viewer,
+                    Number = ++number, Text = text, Icon = hidden ? EffectIcons.Conceal : IconOf(action), Ours = SideOf(action) == viewer, Action = action,
                     Details = Details(action, text, number, actionLayer, hidden, viewer, queue)
                 });
             }
@@ -51,7 +52,7 @@ namespace SlayTheClone {
                 string when = prophecy.EarliestTurn == prophecy.LatestTurn ? $"at the Dawn of Day {prophecy.DueOnTurn}"
                     : $"at a Dawn from Day {prophecy.EarliestTurn} to Day {prophecy.LatestTurn}, nobody knows which"; // The roll stays secret
                 string text = prophecy.Part != null // A part of a spell that waits
-                    ? $"{PlayerName(prophecy.Caster, viewer)}'s {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: the rest of it lands {when}"
+                    ? $"{Whose(prophecy.Caster, viewer, capital: true)} {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: the rest of it lands {when}"
                     : $"{PlayerName(prophecy.Caster, viewer)} foretold {Painted(prophecy.Caster, viewer, prophecy.Spell.Name)}: it comes true {when}";
                 items.Add(new Item { Text = text, Icon = EffectIcons.Days, Ours = prophecy.Caster == viewer, Details = text });
             }
@@ -83,7 +84,7 @@ namespace SlayTheClone {
             var target = TargetOf(action);
             if (card is Spell spell && !EffectResolver.IsAimed(spell)) {
                 var side = target switch { IPlayer player => player, BoardSlot slot => slot.Owner, HomingTarget homing => homing.AimedSlot?.Owner, _ => null };
-                if (side != null) lines.Add($"On: {PlayerName(side, viewer)} side, as a whole");
+                if (side != null) lines.Add($"On: {Whose(side, viewer)} side, as a whole");
             }
             else if (target != null) lines.Add($"On: {Target(target, viewer)}");
             return string.Join("\n", lines);
@@ -97,7 +98,7 @@ namespace SlayTheClone {
         };
 
         // The creature doing it, if a creature does it
-        private static ICreature ActorOf(IGameAction action) => Intel.PlannerOf(action) ?? action switch {
+        internal static ICreature ActorOf(IGameAction action) => Intel.PlannerOf(action) ?? action switch {
             BattlefieldCombatAction attack => attack.GetAttacker(),
             DamageCreatureAction damage => damage.GetAttacker(),
             DamagePlayerAction damage => damage.GetAttacker(),
@@ -121,7 +122,7 @@ namespace SlayTheClone {
         };
 
         // Whose side started it: the creature doing it, the player playing it, or the one it's for
-        private static IPlayer SideOf(IGameAction action) => ActorOf(action)?.Owner ?? OwnerOf(action) ?? action switch {
+        internal static IPlayer SideOf(IGameAction action) => ActorOf(action)?.Owner ?? OwnerOf(action) ?? action switch {
             DrawCardsAction draw => draw.GetPlayer(),
             DiscardHandAction discard => discard.GetPlayer(),
             PlaceSlotEffectAction place => place.GetController(),
@@ -245,7 +246,7 @@ namespace SlayTheClone {
                            (hiddenCondition ? "" : $" ({watchdog.Spec.side} {watchdog.Spec.watches}: {watchdog.Spec.effect})");
                 case RevealAction reveal:
                     return $"{PlayerName(reveal.Viewer, viewer)} {(reveal.Viewer == viewer ? "look" : "looks")} at " +
-                           (reveal.Slot != null ? SlotName(reveal.Slot, viewer) : $"{PlayerName(reveal.Side, viewer)}'s Watchdogs");
+                           (reveal.Slot != null ? SlotName(reveal.Slot, viewer) : $"{Whose(reveal.Side, viewer)} Watchdogs");
                 case SetTrendAction trend:
                     return $"Now trending: {TrendSystem.NameOf(trend.Trend)}";
                 case EarthquakeAction quake:
@@ -268,7 +269,7 @@ namespace SlayTheClone {
             string name = Painted(caster, viewer, hidden ? $"a spell ({Unknown})" : spell.Name);
             string aim = target switch {
                 null => "",
-                IPlayer side => $" on {PlayerName(side, viewer)}'s side",
+                IPlayer side => $" on {Whose(side, viewer)} side",
                 _ when spell != null && !EffectResolver.IsAimed(spell) => "",
                 _ => $" at {Target(target, viewer)}"
             };
@@ -306,6 +307,13 @@ namespace SlayTheClone {
 
         private static string SlotName(BoardSlot slot, IPlayer viewer) =>
             slot == null ? Unknown : Painted(slot.Owner, viewer, $"{(slot.Owner == viewer ? "your" : "enemy")} {Formation.Describe(slot.Index)}");
+
+        // "your", or "the enemy's", painted in the side's color
+        private static string Whose(IPlayer player, IPlayer viewer, bool capital = false) {
+            if (player == null) return Unknown;
+            string whose = player == viewer ? "your" : "the enemy's";
+            return Painted(player, viewer, capital ? char.ToUpper(whose[0]) + whose.Substring(1) : whose);
+        }
 
         // A creature, or the slot when nobody stands there
         private static string Target(ITarget target, IPlayer viewer) => target switch {

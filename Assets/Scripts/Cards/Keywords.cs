@@ -116,7 +116,6 @@ namespace SlayTheClone {
             group = "Intelligence";
             Add("Reveal", "Shows you everything about a slot: its hidden [Slot Effect], the creature there and what it plans. Instant.");
             Add("Watchdog", "A trap in the action queue: when an action it watches comes up, it acts on it. One charge per action.");
-            Add("Monitored", "The [Watchdog] checks every action right before it resolves.");
             Add("Briefing", "Each [Day], once everyone has planned and before anything resolves, the [Watchdog] reads the whole queue and acts on what it watches. It starts the Day after it's set.");
             Add("Nullify", "The action is cancelled.");
             Add("Redirect", "The action hits another creature, picked at [Random|random].");
