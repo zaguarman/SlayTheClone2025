@@ -14,8 +14,9 @@ namespace SlayTheClone {
     /// <see cref="AdventureMap"/>), bottom to top: the rooms you can walk into next light up. A fight, an elite or the boss
     /// is a match against the AI (Easy for the first fights, then Medium; Hard for an elite, Very Hard for the boss) with a
     /// deck of another faction made for the room, weak and clumsy at first, better further up; the other rooms are walked
-    /// through, nothing in them yet. Winning a fight brings you back here to take one of three of its cards, or skip;
-    /// losing one, or beating the boss, ends the run.
+    /// through, nothing in them yet, but a shop. Winning a fight brings you back here to take one of three of its cards, or
+    /// skip, and pays EuroYuans; at a shop they buy cards, or have one taken out of your deck. Losing a fight, or beating
+    /// the boss, ends the run, and its money with it.
     /// </summary>
     public class AdventureMenu : MenuScreen {
         public const string FactionButton = "Faction: ";
@@ -28,6 +29,9 @@ namespace SlayTheClone {
         public const string ProceedButtonName = "ProceedButton";
         public const string DeckButtonName = "DeckButton";
         public const string PickBackButtonName = "PickBackButton";
+        public const string LeaveShopButtonName = "LeaveShopButton";
+        public const string RemoveCardButtonName = "RemoveCardButton";
+        private const int ShopColumns = 5; // The shop's cards on one row
         private const int RewardColumns = 4; // The reward's cards at a readable size, not stretched over the width
         private const int DeckColumns = 6; // The whole deck at a glance
         private const float RewardsWidth = 760f; // The rewards list: a narrow scroll in the middle, as in Slay the Spire
@@ -54,7 +58,11 @@ namespace SlayTheClone {
         public AdventureRun.RewardPack OpenPack { get; private set; }
         /// <summary>Your deck is shown, over the rewards or the map.</summary>
         public bool ViewingDeck { get; private set; }
-        private CardGrid reward, deckGrid;
+        /// <summary>At a shop, your deck is up to pick the card to take out.</summary>
+        public bool Removing { get; private set; }
+        /// <summary>The shop's cards on screen, in its order; empty outside it.</summary>
+        public IReadOnlyList<CardController> ShopCards => shopGrid != null ? shopGrid.Cards : new List<CardController>();
+        private CardGrid reward, deckGrid, shopGrid;
 
         private readonly Dictionary<Faction, Button> factionButtons = new Dictionary<Faction, Button>();
         private readonly Dictionary<MapNode, Button> rooms = new Dictionary<MapNode, Button>();
@@ -67,6 +75,7 @@ namespace SlayTheClone {
 
         protected override GameObject Build() => !AdventureRun.Active ? BuildFactions()
             : ViewingDeck ? BuildDeck()
+            : AdventureRun.InShop ? (Removing ? BuildRemoval() : BuildShop())
             : AdventureRun.InRewards ? (OpenPack != null ? BuildPick(OpenPack) : BuildRewards())
             : BuildMap();
 
@@ -86,7 +95,7 @@ namespace SlayTheClone {
             factionButtons.Clear();
             rooms.Clear();
             embark = null;
-            reward = deckGrid = null;
+            reward = deckGrid = shopGrid = null;
             chosenText = status = null;
             mapScroll = null;
             abandonArmed = false;
@@ -151,12 +160,12 @@ namespace SlayTheClone {
         /// </summary>
         public void Enter(MapNode room) {
             if (!AdventureRun.CanEnter(room)) return;
-            if (AdventureRun.Enter(room)) {
+            if (AdventureRun.Enter(room, Catalog.AllCards)) {
                 SetUpFight(room);
                 StartGame?.Invoke();
                 return;
             }
-            lastWalk = WalkThrough(room.Type);
+            lastWalk = AdventureRun.InShop ? "A shop." : WalkThrough(room.Type);
             Show();
         }
 
@@ -218,6 +227,7 @@ namespace SlayTheClone {
             var coin = UITheme.AddFactionCoin(coinHolder.transform, AdventureRun.Faction, CoinSize).rectTransform;
             coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0.5f, 0.5f);
             AddText(side, AdventureRun.Deck != null ? $"Your deck: {CardGrid.Count(AdventureRun.Deck.Cards)}" : "", 22, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 34);
+            AddText(side, $"EuroYuans: {AdventureRun.Money(AdventureRun.EuroYuans)}", 26, AccentColor, FontStyles.Normal, height: 38);
             status = AddText(side, StatusText(), 24, TextColor, FontStyles.Normal, height: 150);
             status.textWrappingMode = TextWrappingModes.Normal;
             foreach (RoomType type in Enum.GetValues(typeof(RoomType))) AddLegend(side, type);
@@ -242,6 +252,8 @@ namespace SlayTheClone {
             columnSize.preferredWidth = RewardsWidth;
             columnSize.flexibleWidth = 0;
             if (screen.columns.GetComponent<HorizontalLayoutGroup>() is HorizontalLayoutGroup row) row.childAlignment = TextAnchor.UpperCenter;
+            if (AdventureRun.Earned > 0) AddText(column, $"<b>+{AdventureRun.Money(AdventureRun.Earned)}</b>  <color=#C9C0AE>you have {AdventureRun.Money(AdventureRun.EuroYuans)}</color>",
+                30, AccentColor, FontStyles.Normal, height: 56);
             for (int i = 0; i < AdventureRun.Rewards.Count; i++) {
                 var pack = AdventureRun.Rewards[i];
                 if (pack.Cards.Count == 0) continue;
@@ -274,6 +286,93 @@ namespace SlayTheClone {
             UITheme.StyleButton(skip, UITheme.ButtonKind.Primary);
             return screen.panel;
         }
+
+        #region The shop
+        // A shop: its cards on a row, each with its price; click one to buy it. A card can be taken out of your deck, once;
+        // Leave goes on to the map
+        private GameObject BuildShop() {
+            var screen = AddScreen(transform, "AdventurePanel", "Shop");
+            shopGrid = new CardGrid(screen.columns, Catalog.CardPrefab, ShopColumns);
+            shopGrid.Title.text = $"You have {AdventureRun.Money(AdventureRun.EuroYuans)}  <size=70%><color=#C9C0AE>Click a card to buy it</color></size>";
+            var offers = AdventureRun.Shop.ToList();
+            int at = 0;
+            shopGrid.Show(offers.Select(o => o.Card), (face, _) => {
+                var offer = offers[at++];
+                AddPriceTag(face, offer);
+                face.OnCardClicked.AddListener(__ => Buy(offer));
+            });
+
+            var footer = AddFooter(screen.panel.transform);
+            AddButton(footer, DeckButtonName, "View deck", 260, () => ShowDeck(true));
+            string removal = AdventureRun.RemovedHere ? "<s>Remove a card</s>  <color=#C9C0AE>done</color>"
+                : $"Remove a card  {AdventureRun.Money(AdventureRun.RemovalCost)}";
+            var remove = AddButton(footer, RemoveCardButtonName, removal, 380, () => OpenRemoval(true));
+            remove.interactable = AdventureRun.CanRemove;
+            var leave = AddButton(footer, LeaveShopButtonName, "<b>Leave</b>", 300, LeaveShop);
+            UITheme.StyleButton(leave, UITheme.ButtonKind.Primary);
+            return screen.panel;
+        }
+
+        // The price under a card for sale (red if you can't pay it), or Sold over a faded one
+        private static void AddPriceTag(CardController face, AdventureRun.ShopOffer offer) {
+            var tag = UITheme.Round(UITheme.NewImage("Price", face.transform, UITheme.Panel), UITheme.Panel, 1.2f);
+            UITheme.AddTrim(tag.transform, offer.Sold ? UITheme.GoldDim : AccentColor, 1.2f);
+            var rect = tag.rectTransform;
+            rect.anchorMin = new Vector2(0.18f, -0.05f);
+            rect.anchorMax = new Vector2(0.82f, 0.05f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            bool afford = AdventureRun.EuroYuans >= offer.Price;
+            var text = UITheme.NewText("Amount", tag.transform, offer.Sold ? "Sold" : AdventureRun.Money(offer.Price), 40,
+                offer.Sold ? UITheme.TextMuted : afford ? UITheme.Gold : UITheme.HealthLow);
+            text.enableAutoSizing = true;
+            text.fontSizeMin = 10;
+            text.fontSizeMax = 60;
+            text.alignment = TextAlignmentOptions.Center;
+            text.raycastTarget = false;
+            UITheme.Stretch(text.rectTransform, 4f);
+            if (offer.Sold) (face.TryGetComponent(out CanvasGroup group) ? group : face.gameObject.AddComponent<CanvasGroup>()).alpha = 0.35f;
+        }
+
+        // Your deck, to click the card to take out of it; Back to the shop
+        private GameObject BuildRemoval() {
+            var screen = AddScreen(transform, "AdventurePanel", "Remove a card");
+            deckGrid = new CardGrid(screen.columns, Catalog.CardPrefab, DeckColumns);
+            deckGrid.Title.text = $"Click the card to take out of your deck, for {AdventureRun.Money(AdventureRun.RemovalCost)}";
+            deckGrid.Show(AdventureRun.Deck.Cards.OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.cardName),
+                (face, asset) => face.OnCardClicked.AddListener(_ => RemoveFromDeck(asset)));
+            var footer = AddFooter(screen.panel.transform);
+            AddButton(footer, BackButtonName, "Back", BackWidth, () => OpenRemoval(false));
+            return screen.panel;
+        }
+
+        /// <summary>Buys the shop's card, if you can pay it.</summary>
+        public void Buy(AdventureRun.ShopOffer offer) {
+            if (!AdventureRun.Buy(offer)) return;
+            lastWalk = $"You bought {offer.Card.cardName}.";
+            Show();
+        }
+
+        /// <summary>Opens your deck to pick the card to take out (false: back to the shop).</summary>
+        public void OpenRemoval(bool open) {
+            Removing = open && AdventureRun.CanRemove;
+            Show();
+        }
+
+        /// <summary>Takes the card out of your deck, for the shop's price; back to the shop.</summary>
+        public void RemoveFromDeck(CardDataScriptableObject card) {
+            if (!AdventureRun.Remove(card)) return;
+            lastWalk = $"{card.cardName} is out of your deck.";
+            OpenRemoval(false);
+        }
+
+        /// <summary>Out of the shop, on to the map.</summary>
+        public void LeaveShop() {
+            AdventureRun.LeaveShop();
+            Removing = false;
+            if (lastWalk == "A shop.") lastWalk = "You leave the shop.";
+            Show();
+        }
+        #endregion
 
         // Your deck, Slay the Spire style: every card, a few to a row; Back returns where you were
         private GameObject BuildDeck() {
@@ -338,7 +437,7 @@ namespace SlayTheClone {
             AdventureRun.Clear();
             lastWalk = null;
             OpenPack = null;
-            ViewingDeck = false;
+            ViewingDeck = Removing = false;
             Show();
         }
 
@@ -432,7 +531,7 @@ namespace SlayTheClone {
             RoomType.Boss => "the last fight",
             RoomType.Unknown => "an event (soon)",
             RoomType.Rest => "rest (soon)",
-            RoomType.Shop => "a shop (soon)",
+            RoomType.Shop => "cards for EuroYuans",
             RoomType.Treasure => "a chest (soon)",
             _ => ""
         };

@@ -93,7 +93,8 @@ namespace SlayTheClone {
             if (won) AdventureRun.WinFight();
             else AdventureRun.LoseFight();
             title.text = won ? "Victory" : "Defeat";
-            subtitle.text = won ? boss ? "The boss is beaten: your adventure is won!" : "Take one of their cards, then on to the next room." : "Your adventure ends here.";
+            subtitle.text = won ? boss ? "The boss is beaten: your adventure is won!" : $"{AdventureRun.Money(AdventureRun.Earned)} earned. Take one of their cards, then on to the next room."
+                : "Your adventure ends here, and its EuroYuans with it.";
             PlayAgainButton.gameObject.SetActive(false);
             MainMenuButton.GetComponentInChildren<TextMeshProUGUI>().text = won && !boss ? "Continue" : "To the map";
             UITheme.Place((RectTransform)MainMenuButton.transform, new Vector2(0.5f, 0f), new Vector2(0f, 70f), new Vector2(260f, 70f));

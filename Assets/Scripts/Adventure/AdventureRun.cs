@@ -10,6 +10,8 @@ namespace SlayTheClone {
     /// Losing one ends the run. For now there's one act and no Ascension: the boss at the top is the end.
     /// Each fight won drops card packs (an elite two), each three cards of the deck beaten: open one, take a card into your
     /// deck or skip it, as often as you like, then proceed (Slay the Spire's rewards).
+    /// Each fight won also pays EuroYuans (the user, 2026-10-16), spent at the shops on the way: cards, or a card taken
+    /// out of your deck. A roguelite's money: the run ends, it's gone.
     /// </summary>
     public static class AdventureRun {
         /// <summary>A card pack dropped by a fight: three cards to take one of, or none.</summary>
@@ -21,7 +23,44 @@ namespace SlayTheClone {
             public bool Done { get; internal set; }
         }
 
+        /// <summary>A card for sale at a shop.</summary>
+        public class ShopOffer {
+            public CardDataScriptableObject Card { get; internal set; }
+            public int Price { get; internal set; }
+            public bool Sold { get; internal set; }
+        }
+
+        /// <summary>The currency's symbol: the yen's Y fused to the euro's C, its bars shared (TextMeshPro rich text).</summary>
+        public const string Symbol = "<b>\u00A5<space=-0.42em>\u20AC</b>";
+        public const int FightPurse = 10, ElitePurse = 15; // What a fight pays (the user: about 10)
+        public const int RemovalPrice = 20, RemovalRise = 10; // Taking a card out of your deck; dearer each time, as in Slay the Spire
+        public const int ShopCards = 5, ShopOwnFaction = 3; // Cards for sale: most of your faction, a couple of others
+        public const int MinDeck = 6; // The fewest cards a removal leaves you
+        /// <summary>The price of a card at a shop, by its tier.</summary>
+        public static int PriceOf(AdventureDecks.Tier tier) => tier switch {
+            AdventureDecks.Tier.D => 8,
+            AdventureDecks.Tier.C => 12,
+            AdventureDecks.Tier.B => 16,
+            AdventureDecks.Tier.A => 22,
+            _ => 30
+        };
+        /// <summary>An amount with the symbol: "¥€ 25".</summary>
+        public static string Money(int amount) => $"{Symbol}\u00A0{amount}";
+
         public static bool Active { get; private set; }
+        /// <summary>The run's money (EY): fights pay it, shops take it. Gone when the run ends.</summary>
+        public static int EuroYuans { get; private set; }
+        /// <summary>What the fight just won paid; 0 outside the rewards.</summary>
+        public static int Earned { get; private set; }
+        /// <summary>The shop you're in: its cards, sold or not; empty outside one.</summary>
+        public static List<ShopOffer> Shop { get; } = new List<ShopOffer>();
+        /// <summary>You're at a shop: the map waits until you leave.</summary>
+        public static bool InShop { get; private set; }
+        /// <summary>A card was taken out of your deck at this shop (once a shop).</summary>
+        public static bool RemovedHere { get; private set; }
+        /// <summary>What taking a card out costs now.</summary>
+        public static int RemovalCost => RemovalPrice + RemovalRise * removals;
+        private static int removals;
         public static Faction Faction { get; private set; }
         public static DeckScriptableObject Deck { get; private set; }
         public static AdventureMap Map { get; private set; }
@@ -52,7 +91,7 @@ namespace SlayTheClone {
 
         /// <summary>The rooms you can walk into next: the bottom row at first, then the rooms your room's paths lead to.</summary>
         public static IReadOnlyList<MapNode> Reachable() {
-            if (!Active || Won || Lost || Fighting != null || InRewards) return new List<MapNode>();
+            if (!Active || Won || Lost || Fighting != null || InRewards || InShop) return new List<MapNode>();
             return Current == null ? new List<MapNode>(Map.Row(0)) : Current.Next;
         }
 
@@ -60,16 +99,64 @@ namespace SlayTheClone {
 
         /// <summary>
         /// Walks into the room. A fight (an elite, the boss) starts: true, and the caller starts the game; it counts once won
-        /// (<see cref="WinFight"/>). Any other room is walked through at once (nothing happens in them yet): false.
+        /// (<see cref="WinFight"/>). Any other room is walked through at once: false. A shop opens, stocked from the pool.
         /// </summary>
-        public static bool Enter(MapNode node) {
+        public static bool Enter(MapNode node, IEnumerable<CardDataScriptableObject> pool = null) {
             if (!CanEnter(node)) return false;
             if (node.IsCombat) {
                 Fighting = node;
                 return true;
             }
             Arrive(node);
+            if (node.Type == RoomType.Shop && pool != null) OpenShop(node, pool);
             return false;
+        }
+
+        // A shop's cards: three of your faction and two of others, different ones, none you can't put in a deck; priced by
+        // tier, the better ones rarer (Slay the Spire's shops: mostly commons, now and then a rare)
+        private static void OpenShop(MapNode room, IEnumerable<CardDataScriptableObject> pool) {
+            Shop.Clear();
+            RemovedHere = false;
+            InShop = true;
+            var cards = pool.Where(c => c != null && !(c is CreatureCardScriptableObject { token: true })).Distinct().ToList();
+            var tiers = AdventureDecks.Tiers(cards);
+            var random = new System.Random(Map.Seed * 23 + room.Row * 11 + room.Column);
+            double Draw(CardDataScriptableObject c) => random.NextDouble() + (int)tiers[c] * 0.1;
+            var own = cards.Where(c => c.faction == Faction).OrderBy(Draw).Take(ShopOwnFaction).ToList();
+            var others = cards.Where(c => c.faction != Faction).OrderBy(Draw);
+            foreach (var card in own.Concat(others).Take(ShopCards).OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => tiers[c]))
+                Shop.Add(new ShopOffer { Card = card, Price = PriceOf(tiers[card]) });
+        }
+
+        /// <summary>Buys the card, if you can pay it and your deck has room: into your deck, the money gone.</summary>
+        public static bool Buy(ShopOffer offer) {
+            if (!InShop || offer == null || offer.Sold || !Shop.Contains(offer) || EuroYuans < offer.Price) return false;
+            if (Deck.Cards.Count >= PlayerDecks.MaxDeckSize) return false;
+            EuroYuans -= offer.Price;
+            Deck = DeckScriptableObject.Make(Deck.GetDeckName(), Deck.Cards.Append(offer.Card));
+            offer.Sold = true;
+            return true;
+        }
+
+        /// <summary>You can have a card taken out of your deck here: once a shop, if you can pay, down to <see cref="MinDeck"/> cards.</summary>
+        public static bool CanRemove => InShop && !RemovedHere && EuroYuans >= RemovalCost && Deck.Cards.Count > MinDeck;
+
+        /// <summary>Takes one copy of the card out of your deck, for <see cref="RemovalCost"/>.</summary>
+        public static bool Remove(CardDataScriptableObject card) {
+            if (!CanRemove || card == null || !Deck.Cards.Contains(card)) return false;
+            EuroYuans -= RemovalCost;
+            removals++;
+            RemovedHere = true;
+            var cards = Deck.Cards.ToList();
+            cards.Remove(card);
+            Deck = DeckScriptableObject.Make(Deck.GetDeckName(), cards);
+            return true;
+        }
+
+        /// <summary>Out of the shop, back to the map; what you didn't buy stays behind.</summary>
+        public static void LeaveShop() {
+            InShop = false;
+            Shop.Clear();
         }
 
         /// <summary>The deck you're about to fight.</summary>
@@ -80,6 +167,8 @@ namespace SlayTheClone {
             var room = Fighting;
             Fighting = null;
             Arrive(room);
+            Earned = room.Type == RoomType.Elite ? ElitePurse : room.Type == RoomType.Boss ? 0 : FightPurse;
+            EuroYuans += Earned;
             if (room.Type == RoomType.Boss) {
                 Won = true;
                 return;
@@ -114,7 +203,10 @@ namespace SlayTheClone {
         }
 
         /// <summary>Leaves the rewards for the map; packs not opened are left behind.</summary>
-        public static void Proceed() => Rewards.Clear();
+        public static void Proceed() {
+            Rewards.Clear();
+            Earned = 0;
+        }
 
         public static void LoseFight() {
             if (Fighting == null) return;
@@ -133,7 +225,9 @@ namespace SlayTheClone {
         // Also runs when play mode starts, so a run from an earlier session never leaks into this one
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Clear() {
-            Active = Won = Lost = false;
+            Active = Won = Lost = InShop = RemovedHere = false;
+            EuroYuans = Earned = removals = 0; // A roguelite: the money goes with the run
+            Shop.Clear();
             Faction = Faction.None;
             Deck = EnemyDeck = null;
             Rewards.Clear();

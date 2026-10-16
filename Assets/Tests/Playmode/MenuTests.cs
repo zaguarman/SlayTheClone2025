@@ -207,6 +207,7 @@ namespace SlayTheClone.Tests {
             Assert.LessOrEqual(bossDeck.Cards.Count, PlayerDecks.MaxDeckSize);
             AdventureRun.WinFight(); // As the game's end does, before the title screen opens the map again
             adventure.Show();
+            Assert.AreEqual(AdventureRun.FightPurse, AdventureRun.EuroYuans, "A fight won pays EuroYuans");
             Assert.AreSame(first, AdventureRun.Current, "Won, you're in its room...");
             Assert.AreEqual(1, AdventureRun.Rewards.Count, "...and it drops a card pack (Slay the Spire's rewards)");
             Assert.IsEmpty(AdventureRun.Reachable(), "No walking on before proceeding");
@@ -231,10 +232,58 @@ namespace SlayTheClone.Tests {
                 Assert.AreSame(walk, AdventureRun.Current, "Any other room is walked through");
             }
             Assert.IsTrue(adventure.Rooms.Where(r => r.Value.interactable).All(r => AdventureRun.Current.Next.Contains(r.Key)), "Then only the rooms its paths lead to");
+
+            // On to a shop, the fights on the way won
+            var way = new Dictionary<MapNode, MapNode>();
+            var search = new Queue<MapNode>(new[] { AdventureRun.Current });
+            MapNode shop = null;
+            while (search.Count > 0 && shop == null) {
+                var node = search.Dequeue();
+                foreach (var next in node.Next.Where(n => !way.ContainsKey(n))) {
+                    way[next] = node;
+                    if (next.Type == RoomType.Shop) shop = next;
+                    search.Enqueue(next);
+                }
+            }
+            if (shop != null) {
+                var steps = new List<MapNode>();
+                for (var node = shop; node != AdventureRun.Current; node = way[node]) steps.Insert(0, node);
+                foreach (var step in steps) {
+                    if (step == shop) break;
+                    if (AdventureRun.Enter(step, catalog.AllCards)) {
+                        AdventureRun.WinFight();
+                        AdventureRun.Proceed();
+                    }
+                    if (AdventureRun.InShop) AdventureRun.LeaveShop();
+                }
+                int purse = AdventureRun.EuroYuans + 30; // Enough to buy and remove
+                typeof(AdventureRun).GetProperty(nameof(AdventureRun.EuroYuans)).SetValue(null, purse);
+                adventure.Show();
+                Click(adventure.Rooms[shop]);
+                Assert.IsTrue(AdventureRun.InShop, "A shop opens...");
+                Assert.AreEqual(AdventureRun.ShopCards, adventure.ShopCards.Count, "...its cards on show...");
+                Assert.AreEqual(AdventureRun.ShopOwnFaction, AdventureRun.Shop.Count(o => o.Card.faction == yours), "...most of your faction");
+                Assert.IsEmpty(AdventureRun.Reachable(), "No walking on from a shop before leaving it");
+                var cheapest = AdventureRun.Shop.OrderBy(o => o.Price).First();
+                int size = AdventureRun.Deck.Cards.Count;
+                ClickCard(adventure.ShopCards[AdventureRun.Shop.IndexOf(cheapest)]);
+                Assert.IsTrue(cheapest.Sold && AdventureRun.Deck.Cards.Count == size + 1 && AdventureRun.EuroYuans == purse - cheapest.Price, "Clicking a card buys it, paid");
+                int cost = AdventureRun.RemovalCost;
+                purse = AdventureRun.EuroYuans;
+                Click(GalleryButton(adventure, AdventureMenu.RemoveCardButtonName));
+                Assert.IsTrue(adventure.Removing && adventure.DeckCards.Count == size + 1, "Remove a card shows your deck...");
+                ClickCard(adventure.DeckCards[0]);
+                Assert.IsTrue(AdventureRun.Deck.Cards.Count == size && AdventureRun.EuroYuans == purse - cost && !adventure.Removing, "...a click takes that one out, paid...");
+                Assert.IsFalse(GalleryButton(adventure, AdventureMenu.RemoveCardButtonName).interactable, "...once a shop");
+                Click(GalleryButton(adventure, AdventureMenu.LeaveShopButtonName));
+                Assert.IsFalse(AdventureRun.InShop, "Leave: on to the map");
+                Assert.IsNotEmpty(AdventureRun.Reachable());
+            }
             Click(GalleryButton(adventure, AdventureMenu.AbandonButtonName));
             Assert.IsTrue(AdventureRun.Active, "Abandon asks to be sure first...");
             Click(GalleryButton(adventure, AdventureMenu.AbandonButtonName));
             Assert.IsFalse(AdventureRun.Active, "...then ends the run");
+            Assert.AreEqual(0, AdventureRun.EuroYuans, "...and its money goes with it");
             MatchSetup.Clear();
         }
 
