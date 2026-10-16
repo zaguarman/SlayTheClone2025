@@ -216,11 +216,15 @@ namespace SlayTheClone.Tests {
             // The center first; cards in a hand overlap, so other points of the card may be the visible ones, and of a card
             // tucked under a creature only the top strip shows
             var points = new[] { 0.5f, 0.2f, 0.8f }.SelectMany(x => new[] { 0.5f, 0.2f, 0.8f, 0.95f }.Select(y => min + Vector2.Scale(max - min, new Vector2(x, y))));
+            var covers = new HashSet<string>();
             foreach (var point in points) {
                 var eventData = new PointerEventData(EventSystem.current) { position = point };
                 var hits = new List<RaycastResult>();
                 EventSystem.current.RaycastAll(eventData, hits);
-                if (hits.Count == 0 || hits[0].gameObject.GetComponentInParent<CardController>() != card) continue;
+                if (hits.Count == 0 || hits[0].gameObject.GetComponentInParent<CardController>() != card) {
+                    if (hits.Count > 0) covers.Add(hits[0].gameObject.GetComponentInParent<CardController>()?.name ?? hits[0].gameObject.name);
+                    continue;
+                }
 
                 eventData.pointerEnter = hits[0].gameObject;
                 for (var t = hits[0].gameObject.transform; t != null; t = t.parent) {
@@ -228,7 +232,7 @@ namespace SlayTheClone.Tests {
                 }
                 return hits;
             }
-            Assert.Fail($"{card.name} can't be pointed at: it's covered, or doesn't take the pointer");
+            Assert.Fail($"{card.name} can't be pointed at: it's covered, or doesn't take the pointer (on top: {string.Join(", ", covers)})");
             return null;
         }
 

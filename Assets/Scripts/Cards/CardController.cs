@@ -78,6 +78,8 @@ namespace SlayTheClone {
         // Queued (played but not yet resolved) visuals
         private const float QueuedAlphaHigh = 0.75f;
         private const float QueuedAlphaLow = 0.4f;
+        private const float DeployingAlpha = 0.6f;  // Still deploying: faded like a queued card, held still
+        private const float HourglassAlpha = 0.65f; // The hourglass over its art, see-through
         private GameObject queuedBadge;
         private Tween queuedPulse;
         public bool IsQueued { get; private set; }
@@ -527,9 +529,65 @@ namespace SlayTheClone {
                 queuedBadge.SetActive(true);
             }
             else {
-                canvasGroup.alpha = 1f;
+                canvasGroup.alpha = RestingAlpha;
                 canvasGroup.blocksRaycasts = true;
                 if (queuedBadge != null) queuedBadge.SetActive(false);
+            }
+        }
+
+        /// <summary>
+        /// A creature still deploying (the user): a see-through hourglass over the middle of its art, 80% of its height,
+        /// and the card faded like a queued one, so it reads as not usable yet.
+        /// </summary>
+        public void SetDeploying(bool deploying) {
+            if (deploying == IsDeploying && (!deploying || deployingBadge != null)) return;
+            IsDeploying = deploying;
+            if (deploying && deployingBadge == null) deployingBadge = CreateHourglass();
+            if (deployingBadge != null) deployingBadge.SetActive(deploying);
+            if (summonTween == null || !summonTween.IsActive()) canvasGroup.alpha = RestingAlpha; // Else it ends there
+        }
+
+        public bool IsDeploying { get; private set; }
+        private GameObject deployingBadge;
+        private Sequence summonTween;
+
+        // How see-through the card is when nothing animates it: queued cards pulse on their own
+        private float RestingAlpha => IsLeavingPlay ? canvasGroup.alpha
+            : IsQueued ? QueuedAlphaHigh
+            : isMarkedForReplacement || isReplacementPreviewed ? ReplacedAlpha
+            : IsDeploying ? DeployingAlpha : 1f;
+
+        // The Deployment Time's hourglass (the effect icon), centred on the art, 80% of its height
+        private GameObject CreateHourglass() {
+            if (artImage == null) return null;
+            var artFrame = artImage.transform.parent;
+            var image = UITheme.NewImage("DeployingHourglass", artFrame, UITheme.WithAlpha(Color.white, HourglassAlpha));
+            image.sprite = HourglassSprite;
+            image.preserveAspect = true;
+            var rect = image.rectTransform;
+            rect.anchorMin = new Vector2(0f, 0.1f);
+            rect.anchorMax = new Vector2(1f, 0.9f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            var under = windowTrim != null ? windowTrim.transform : artImage.transform;
+            image.transform.SetSiblingIndex(under.GetSiblingIndex() + 1); // Over the art and its window, under the status icons
+            return image.gameObject;
+        }
+
+        private static Sprite hourglassSprite;
+
+        // Cut from the effect icons' sprite sheet (TMP's default sprite asset), shared by every card
+        private static Sprite HourglassSprite {
+            get {
+                if (hourglassSprite != null) return hourglassSprite;
+                var icons = TMP_Settings.defaultSpriteAsset;
+                if (icons == null || !(icons.spriteSheet is Texture2D sheet)) return null;
+                foreach (var character in icons.spriteCharacterTable) {
+                    if (character.name != EffectIcons.Days || character.glyph == null) continue;
+                    var r = character.glyph.glyphRect;
+                    hourglassSprite = Sprite.Create(sheet, new Rect(r.x, r.y, r.width, r.height), new Vector2(0.5f, 0.5f));
+                    break;
+                }
+                return hourglassSprite;
             }
         }
 
@@ -553,7 +611,7 @@ namespace SlayTheClone {
             if (IsLeavingPlay) return;
 
             bool show = isMarkedForReplacement || isReplacementPreviewed;
-            canvasGroup.alpha = show ? ReplacedAlpha : 1f;
+            canvasGroup.alpha = RestingAlpha;
             // Bottom strip, so it stays visible under the raised ghost of the incoming creature
             if (show && replaceBadge == null) replaceBadge = CreateBadge("ReplaceBadge", "Replace", ReplaceLabelColor, 0.02f, 0.22f);
             if (replaceBadge != null) replaceBadge.SetActive(show);
@@ -776,11 +834,12 @@ namespace SlayTheClone {
             transform.localScale = endScale * 0.5f;
             canvasGroup.alpha = 0f;
 
-            DOTween.Sequence().SetTarget(transform)
+            summonTween = DOTween.Sequence().SetTarget(transform)
                 .AppendInterval(delay)
                 .Append(FadeTo(1f, 0.15f))
                 .Join(transform.DOScale(endScale * 1.15f, 0.2f).SetEase(Ease.OutQuad))
-                .Append(transform.DOScale(endScale, 0.15f).SetEase(Ease.InOutQuad));
+                .Append(transform.DOScale(endScale, 0.15f).SetEase(Ease.InOutQuad))
+                .OnComplete(() => canvasGroup.alpha = RestingAlpha); // Faded again if it's still deploying
         }
 
         /// <summary>

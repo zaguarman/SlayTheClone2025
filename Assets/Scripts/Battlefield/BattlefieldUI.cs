@@ -183,7 +183,7 @@ namespace SlayTheClone {
         }
 
         /// <summary>A card on a slot, of the slot (a slider): the creatures standing there and the ghosts of those on their way.</summary>
-        public static float CardInSlotScale => Tuning.cardScale;
+        public static float CardInSlotScale => BattlefieldSlot.CardScale;
 
         private static BattlefieldSlot anySlot;
 
@@ -201,7 +201,7 @@ namespace SlayTheClone {
                 battlefieldSlots[i].transform.localScale = Vector3.one * SlotScale;
                 ((RectTransform)battlefieldSlots[i].transform).sizeDelta = BattlefieldSlot.Size;
                 var card = battlefieldSlots[i].OccupyingCard;
-                if (card != null && !DOTween.IsTweening(card.transform)) card.transform.localScale = Vector3.one * Tuning.cardScale;
+                if (card != null && !DOTween.IsTweening(card.transform)) card.transform.localScale = Vector3.one * CardInSlotScale;
             }
         }
         #endregion
@@ -589,6 +589,7 @@ namespace SlayTheClone {
                 var creature = slot.OccupyingCreature;
                 card.SetIdle(planning && creature != null && !creature.IsDead && creature.IsOperative && modifiers.CanAct(creature)
                              && Abilities.CanAttack(creature) && !pending.Any(a => Intel.PlannerOf(a) == creature));
+                card.SetDeploying(creature != null && !creature.IsDead && !creature.IsOperative && !card.IsAnonymous);
             }
         }
 

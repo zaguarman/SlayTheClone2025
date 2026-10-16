@@ -22,8 +22,8 @@ namespace SlayTheClone {
         [Range(0.6f, 1.6f)] public float slotWidth = 1.2f;
         [Tooltip("A slot's height, of a card's")]
         [Range(0.6f, 1.6f)] public float slotHeight = 1.2f;
-        [Tooltip("A card in a slot, of its slot's size (1: as big as a card in the hand at Slot Scale)")]
-        [Range(0.5f, 1.3f)] public float cardScale = 1.2f;
+        [Tooltip("A card in its slot, of the most that fits it (1: as big as it can be, up to the slot's markers)")]
+        [Range(0.5f, 1.1f)] public float cardScale = 1f;
 
         [Header("Form: the formation")]
         [Tooltip("How far apart its rows are, up and down: the Vanguard nearest the middle of the table, Headquarters furthest (0: one straight row; negative: the other way round)")]
@@ -90,11 +90,7 @@ namespace SlayTheClone {
         public static void SetHandsHidden(bool hidden) {
             HandsHidden = hidden && Application.isPlaying;
             if (!Application.isPlaying) return;
-            foreach (var hand in Object.FindObjectsByType<HandUI>(FindObjectsSortMode.None)) {
-                if (!hand.TryGetComponent(out CanvasGroup group)) group = hand.gameObject.AddComponent<CanvasGroup>(); // Not ??: a missing component is Unity's fake null
-                group.alpha = HandsHidden ? 0f : 1f;
-                group.blocksRaycasts = !HandsHidden;
-            }
+            foreach (var hand in Object.FindObjectsByType<HandUI>(FindObjectsSortMode.None)) hand.RefreshVisibility(); // The enemy's stays hidden under Fog of War
         }
 
         // A slider moved while playing: the mats on the table take it (just after: not inside OnValidate, where Unity

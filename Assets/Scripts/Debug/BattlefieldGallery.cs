@@ -13,9 +13,10 @@ namespace SlayTheClone {
         public static BattlefieldGallery Instance { get; private set; }
         public static bool Running => Instance != null;
 
-        private static readonly (string Name, int Yours, int Theirs, bool OtherSeat)[] Shots = {
-            ("Both rows full", 5, 5, false), ("Both rows empty", 0, 0, false), ("Your row full, theirs empty", 5, 0, false),
-            ("The Vanguards and Flanks only", 3, 3, false), ("Both rows full, from the other seat (F8)", 5, 5, true)
+        private static readonly (string Name, int Yours, int Theirs, bool OtherSeat, bool Deploying)[] Shots = {
+            ("Both rows full", 5, 5, false, false), ("Both rows empty", 0, 0, false, false), ("Your row full, theirs empty", 5, 0, false, false),
+            ("The Vanguards and Flanks only", 3, 3, false, false), ("Both rows full, from the other seat (F8)", 5, 5, true, false),
+            ("Still deploying, all but the Vanguards", 5, 5, false, true)
         };
 
         public int Index { get; private set; }
@@ -78,8 +79,10 @@ namespace SlayTheClone {
                 }
             }
             game.ActionsQueue.ResolveActions();
-            for (int i = 0; i < shot.Yours; i++) ArrowGallery.Summon(game, game.Player1, i, $"Yours {i}");
-            for (int i = 0; i < shot.Theirs; i++) ArrowGallery.Summon(game, game.Player2, i, $"Theirs {i}");
+            // Deploying: the Flanks for a Day more, Headquarters for two (an hourglass over the art, the card faded)
+            int Days(int slot) => shot.Deploying ? Formation.Depth(slot) : 0;
+            for (int i = 0; i < shot.Yours; i++) ArrowGallery.Summon(game, game.Player1, i, $"Yours {i}", Days(i));
+            for (int i = 0; i < shot.Theirs; i++) ArrowGallery.Summon(game, game.Player2, i, $"Theirs {i}", Days(i));
         }
     }
 

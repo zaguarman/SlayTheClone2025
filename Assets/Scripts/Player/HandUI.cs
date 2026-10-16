@@ -281,7 +281,23 @@ namespace SlayTheClone {
 
         private Image zoneImage;
 
+        /// <summary>Whether the hand is out of sight: the enemy's under Fog of War (the user: not even how many cards they
+        /// hold), or both while tuning the battlefields (<see cref="BattlefieldTuning.HandsHidden"/>).</summary>
+        public bool IsHidden => BattlefieldTuning.HandsHidden || FogOfWar.HidesHandOf(Player);
+        private bool? shownHidden;
+
+        /// <summary>Hides the hand, or shows it again, as <see cref="IsHidden"/> says: faded out, letting the pointer through.</summary>
+        public void RefreshVisibility() {
+            bool hidden = IsHidden;
+            if (shownHidden == hidden) return;
+            shownHidden = hidden;
+            if (!TryGetComponent(out CanvasGroup group)) group = gameObject.AddComponent<CanvasGroup>(); // Not ??: a missing component is Unity's fake null
+            group.alpha = hidden ? 0f : 1f;
+            group.blocksRaycasts = !hidden;
+        }
+
         private void Update() {
+            RefreshVisibility(); // Fog of War switched (F9), the seats (F8), or the tuning's button
             // The hand's area only takes the pointer while a card is carried (a drop back into the hand): at rest it would
             // cover the bottom of the board, the cards in the back row (the hand's own cards take the pointer themselves)
             if (zoneImage != null || TryGetComponent(out zoneImage)) zoneImage.raycastTarget = CardController.Dragged != null;

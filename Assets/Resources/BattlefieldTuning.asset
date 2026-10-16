@@ -16,13 +16,13 @@ MonoBehaviour:
   columnSpacing: 1.05
   slotWidth: 1.2
   slotHeight: 1.2
-  cardScale: 1.2
+  cardScale: 1
   rowStep: 80
   matPadding: 30
   noseRoom: 16
   noseWidth: 200
   tuckWidth: 170
-  tuckGap: -0
+  tuckGap: 0
   tipOut: -2
   tipFront: -5
   tipBack: 10

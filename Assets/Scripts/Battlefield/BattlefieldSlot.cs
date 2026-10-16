@@ -22,6 +22,15 @@ namespace SlayTheClone {
         // A card-shaped space on the mat. At rest it is invisible over the slot marker the mat already draws there
         // (see BoardSkin); it lights up under the pointer when a creature stands here, and turns brass under a dragged
         // card that can be dropped here
+        /// <summary>A card's own size (the card prefab's), before any scale.</summary>
+        public static readonly Vector2 CardSize = new Vector2(160f, 200f);
+
+        /// <summary>
+        /// A card's scale in a slot: as big as fits it, up to the slot's markers (the user: legible without hovering), times
+        /// the Card Scale slider (UI > Battlefield Tuning).
+        /// </summary>
+        public static float CardScale => BattlefieldTuning.Current.cardScale * Mathf.Min(Size.x / CardSize.x, Size.y / CardSize.y);
+
         public static Vector2 Size => new Vector2(172f * BattlefieldTuning.Current.slotWidth, 212f * BattlefieldTuning.Current.slotHeight); // A card's, by the sliders (UI > Battlefield Tuning)
         public static readonly Color MarkerColor = UITheme.Hex(0xE2B04A, 0.6f); // The corner brackets of a slot marker
         private static readonly Color HoverColor = UITheme.Hex(0xFFFFFF, 0.06f);
@@ -102,7 +111,7 @@ namespace SlayTheClone {
             card.transform.SetParent(transform, false);
             card.transform.localPosition = Vector3.zero;
             card.transform.localRotation = Quaternion.identity;
-            card.transform.localScale = Vector3.one * BattlefieldTuning.Current.cardScale; // A slider: the card's size in its slot
+            card.transform.localScale = Vector3.one * CardScale; // A slider: the card's size in its slot
         }
 
         /// <summary>Stops showing the current card and returns it; the caller decides what happens to it.</summary>

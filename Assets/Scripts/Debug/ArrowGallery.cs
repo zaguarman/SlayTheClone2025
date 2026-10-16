@@ -213,9 +213,10 @@ namespace SlayTheClone {
             side == game.Player1 ? references.Player1References.BattlefieldUI : references.Player2References.BattlefieldUI;
 
         /// <summary>A plain test creature put straight into a slot (2 Attack, 9 Health, no text).</summary>
-        public static ICreature Summon(GameManager game, Player side, int slot, string name) {
+        public static ICreature Summon(GameManager game, Player side, int slot, string name, int deployingDays = 0) {
             var data = ScriptableObject.CreateInstance<CreatureData>();
             data.name = data.cardName = name;
+            data.turnsUntilOperative = deployingDays;
             data.attack = 2;
             data.health = 9;
             data.speed = 1;

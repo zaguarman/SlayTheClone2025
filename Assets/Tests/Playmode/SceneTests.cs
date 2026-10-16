@@ -634,7 +634,7 @@ namespace SlayTheClone.Tests {
             yield return null;
             zapGhost = game.SpellGhost(zap);
             Assert.AreSame(game.BoardView(p2).FindSlotView(p2.Battlefield[3]).transform, zapGhost.transform.parent, "In an empty slot it's in the slot...");
-            Assert.AreEqual(1f, zapGhost.transform.localScale.x, 0.01f, "...at full size");
+            Assert.AreEqual(BattlefieldSlot.CardScale, zapGhost.transform.localScale.x, 0.01f, "...at a slotted card's size");
             SceneGame.Click(zapGhost);
             yield return null;
             Assert.IsNull(game.SpellGhost(zap), "Taking the spell back removes its ghost");

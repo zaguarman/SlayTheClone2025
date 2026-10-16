@@ -538,6 +538,9 @@ namespace SlayTheClone {
             var shown = (RectTransform)preview.transform;
             float height = shown.rect.height * shown.lossyScale.y / ShownScaleOf(activeCard); // The wheel's unit: before Shown Scale
             float radius = height * RouletteRadius;
+            // From the shown card's bottom edge, whichever way it hangs from the card in play: above yours, below an enemy's
+            // (the user: the same roulette both sides)
+            home -= up * (shown.pivot.y * shown.rect.height * shown.lossyScale.y);
             Vector3 wheelHome = home - Roulette.ShownOffset(up, height); // The shown card's place on the wheel, before its own nudge
             Vector3 center = wheelHome - up * radius;
             // Never-ending (the user): once the stack fills the whole wheel, both sides, with no card showing twice (the
@@ -597,7 +600,8 @@ namespace SlayTheClone {
             float radius = height * RouletteRadius;
             Vector3 shownOffset = Roulette.ShownOffset(up, height);
             Vector3 home = nextRect.position - shownOffset; // On the wheel, before the shown card's own nudge
-            Vector3 center = home - up * radius;
+            // The wheel's center, under the card's bottom edge whichever way it hangs (as in ShowWheel)
+            Vector3 center = home - up * (radius + nextRect.pivot.y * nextRect.rect.height * nextRect.lossyScale.y);
             Vector3 nextScale = nextRect.localScale;
             var oldRect = (RectTransform)old.transform;
             Vector3 oldHome = oldRect.position - shownOffset, oldScale = oldRect.localScale;
