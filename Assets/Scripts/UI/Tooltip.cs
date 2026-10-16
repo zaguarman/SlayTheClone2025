@@ -457,10 +457,7 @@ namespace SlayTheClone {
         }
 
         private void Update() {
-            if (pinned) {
-                if (WheelMoved && activeCard != null && preview != null && !previewIsCard && activeCard.AttachedCards.Count > 0) Browse(GameInput.WheelNotches < 0 ? 1 : -1);
-                return;
-            }
+            if (pinned) return; // The gallery turns it (the mouse wheel included), nothing hovered or scrolled here closes it
             // Over a creature with cards tucked under it, the wheel goes through them, in the preview
             if (WheelMoved && activeCard != null && preview != null && !previewIsCard && activeCard.AttachedCards.Count > 0
                 && (PointerOnTooltip(GameInput.PointerPosition, includeCard: true))) {
@@ -654,8 +651,8 @@ namespace SlayTheClone {
             pinned = activeCard == card;
         }
 
-        // Pinned (the Roulette Gallery): the mouse wheel anywhere turns its stack, back and on, as over the card in play;
-        // nothing else hovered replaces it, and moving away doesn't close it
+        // Pinned (the Roulette Gallery): nothing else hovered replaces it, moving away or scrolling doesn't close it; the
+        // gallery turns its stack, the mouse wheel included
         private bool pinned;
 
         /// <summary>A preview shown by <see cref="Pin"/>, up until hidden.</summary>

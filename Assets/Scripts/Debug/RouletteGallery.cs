@@ -73,6 +73,16 @@ namespace SlayTheClone {
 
         private void Awake() => Instance = this;
 
+        // The mouse wheel over the game turns the roulette back and on, as over the card in play, paused or not. Read from
+        // the game view's own events: they reach it under the pointer even while another window (this gallery's) has the
+        // focus, which the game's input doesn't
+        private void OnGUI() {
+            var e = Event.current;
+            if (e.type != EventType.ScrollWheel || Mathf.Approximately(e.delta.y, 0f)) return;
+            Turn(e.delta.y > 0f ? 1 : -1); // Wheel down: on, as in play
+            e.Use();
+        }
+
         private void OnDestroy() {
             if (Instance == this) Instance = null;
             Tooltip.Existing?.HideTooltip();
@@ -254,6 +264,11 @@ namespace SlayTheClone {
 
         private void OnGUI() {
             var gallery = RouletteGallery.Instance;
+            // The mouse wheel over this window turns it too, back and on, as over the game
+            if (gallery != null && Event.current.type == EventType.ScrollWheel) {
+                gallery.Turn(Event.current.delta.y > 0f ? 1 : -1);
+                Event.current.Use();
+            }
             UnityEditor.EditorGUILayout.LabelField("Each card", UnityEditor.EditorStyles.boldLabel);
             float seconds = UnityEditor.EditorGUILayout.Slider("Seconds on screen", RouletteGallery.SecondsPerTurn, 0.3f, 8f);
             if (!Mathf.Approximately(seconds, RouletteGallery.SecondsPerTurn)) {
