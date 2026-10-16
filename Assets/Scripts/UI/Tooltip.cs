@@ -535,10 +535,14 @@ namespace SlayTheClone {
             float radius = height * RouletteRadius;
             Vector3 wheelHome = home - Roulette.ShownOffset(up, height); // The shown card's place on the wheel, before its own nudge
             Vector3 center = wheelHome - up * radius;
-            for (int i = 0; i <= stack.Count; i++) {
-                int distance = Mathf.Abs(i - browsed);
-                if (distance == 0 || distance > WheelReach) continue;
-                bool ahead = i > browsed;
+            // Never-ending (the user): once the stack fills the whole wheel, both sides, with no card showing twice (the
+            // creature and its cards: 5 or more at a reach of 2), the wheel shows it going round, the first after the last
+            int count = stack.Count + 1;
+            bool endless = count >= 2 * WheelReach + 1;
+            foreach (var (distance, ahead) in Enumerable.Range(1, Mathf.Max(0, WheelReach)).SelectMany(d => new[] { (d, true), (d, false) })) {
+                int i = browsed + (ahead ? distance : -distance);
+                if (endless) i = (i % count + count) % count;
+                else if (i < 0 || i >= count) continue;
                 float alpha = Roulette.AlphaAt(distance, ahead);
                 var ghost = i == 0
                     ? activeCard.CreatePreview(transform)
