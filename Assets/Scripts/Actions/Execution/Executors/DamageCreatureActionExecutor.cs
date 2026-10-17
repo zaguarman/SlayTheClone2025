@@ -34,6 +34,13 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Immaculate (the user, 2026-10-17, Pokémon's Wonder Guard: Holy Ghost): attacks and effects do nothing to it;
+            // only a status (Burn) hurts it
+            if (!damageAction.FromStatus && Abilities.Defends(targetCreature, CreatureAbility.Immaculate, attacker)) {
+                Log($"Executor: {targetCreature.Name} is Immaculate: no damage", LogTag.Actions | LogTag.Combat);
+                return;
+            }
+
             // Exposed (part of Exhausted): +1 damage from every source
             if (damage > 0 && modifierManager.IsExposed(targetCreature)) {
                 damage += 1;

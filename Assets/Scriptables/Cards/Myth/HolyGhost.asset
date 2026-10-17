@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: HolyGhost
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 3920f4b4-3496-4bb5-8b60-d18ff9771502
+  cardName: Holy Ghost
+  description: Thou canst not touch what thou canst not see. Thou canst, however,
+    light a candle.
+  cardType: 0
+  faction: 1
+  artwork: {fileID: 3286163911610860551, guid: fdf4f7ec9752efb4dacfc663a628aef9, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects: []
+  designNotes: 'Wonder Guard (the user, 2026-10-17: ''would be better for holy''):
+    Immaculate. Attacks and effects do nothing to it; only a status (Burn) hurts
+    it, and with 1 Health any Burn is the end. Doomed and Destroy still take it.'
+  artDescription: A translucent white sheet-ghost with a golden halo and two round
+    eye holes, hovering serenely in a church aisle while arrows and bullets pass
+    straight through it and clatter on the floor behind, a dove on its head, and
+    in the corner a single lit match it eyes with real fear.
+  attack: 3
+  health: 1
+  speed: 2
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 51
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

@@ -127,6 +127,10 @@ namespace SlayTheClone {
             Add("Burnout", "Burnout X (no number: 1): when its X [Days] run out, at [Dusk], the creature is [Destroy|destroyed], whatever protects it. Overtime gives it: it lasts through the first Day the rushed creature is ready, so it gets that one Day to act. A [Cleanse] removes it.");
             Add("Rooted", "Rooted X (no number: 1): it can't move, and nothing can move or swap it, for X [Days]. A building going up: while deploying, it stays where it's built.");
             Add("Composed", "Composed X (no number: 1): it can't be [Exhausted] for X [Days], counting the Day it lands (1 is this Day only), and it shakes off a stun it has.");
+            // The Pokémon picks (the user, 2026-10-17)
+            Add("Looping", "Groundhog Day: the plan it had as the loop closed (an attack on that slot, a move, an ability, or nothing) is its plan each [Day] it lasts, made for it at [Dawn]; it can plan nothing else, and the plan can't be taken back. A stun still cancels the Day's.");
+            Add("Stalled", "It acts last this [Day]: its attack, move or ability comes after every other in its part of the Day.");
+            Add("Deniable", "This [Day], effects that hit more than one creature skip it, like [Too Mainstream].");
             Add("Blackout", "Blackout X (no number: 1): its ability and its effects (arrival, Dawn and Dusk, retaliation, [Last Will]) are switched off for X [Days].");
             Add("Cleanse", "Removes every status, whichever side it helps.");
             Add("Purge", "Removes every status, good and bad.");
@@ -141,6 +145,7 @@ namespace SlayTheClone {
             Add("Disable", "The action is cancelled: it doesn't happen.");
             Add("Redirect", "The action hits another creature instead, picked at [Random|random]. Redirected to its attacker: the attack doesn't happen, and the attacker takes its own Attack as damage.");
             Add("Reorder", "The action moves to the start or the end of the Day.");
+            Add("DMCA", "For the [Days] shown, that player can't play a card that shares its name with a creature on the board, either side's: the copy on the board holds the rights.");
 
             // ---------------------------------------------------------------- Slot Effects
             group = "Slot Effects";
@@ -150,6 +155,7 @@ namespace SlayTheClone {
             Add("Shield", "Shield X (no number: 1): for X [Days], counting the one it lands, this creature takes no combat damage (attacks); spells and abilities still hurt it. It goes with the creature. A [Cleanse] doesn't remove it.");
             Add("Scorched Earth", "The creature in the slot can't use its ability or trigger its effects. Its [Arrival] effects wait until it's off the slot. It can still move and attack.");
             Add("Checkpoint", "Checkpoint X: visible, and it stays. Every creature that enters the slot (summoned there, or moved in) takes X damage, for the [Days] shown. Played on a whole side, it makes every summon there cost something.");
+            Add("Prayer", "Prayer X: visible. When its [Days] run out, at [Dusk], the creature standing in the slot heals X, whoever it is by then.");
 
             // ---------------------------------------------------------------- Trends
             group = "Trends";

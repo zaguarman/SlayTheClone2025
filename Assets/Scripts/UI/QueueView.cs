@@ -265,6 +265,8 @@ namespace SlayTheClone {
             StatusEffectType.Exhausted => EffectIcons.Paralyze,
             StatusEffectType.Burned => EffectIcons.Burn,
             StatusEffectType.Provoked => EffectIcons.Attack,
+            StatusEffectType.Looping or StatusEffectType.Stalled => EffectIcons.Days,
+            StatusEffectType.Deniable => EffectIcons.Armor,
             StatusEffectType.Doomed => EffectIcons.Doom,
             StatusEffectType.Blessed => EffectIcons.Bless,
             StatusEffectType.HeatSignature => EffectIcons.Heat,

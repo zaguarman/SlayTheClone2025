@@ -21,7 +21,7 @@ namespace SlayTheClone {
         /// <summary>Who set the current Trend, if anyone.</summary>
         IPlayer SetBy { get; }
         /// <summary>At Dusk, before the Trend can end: what it does each Dusk (Survival of the Fittest culls the weakest).</summary>
-        void QueueDuskEffects(IActionsQueue queue);
+        void QueueDuskEffects(IActionsQueue queue, int endedTurn);
         /// <summary>When it's set, and at each Dawn while it trends: what it does each Day (Volcano Lair hides the boss).</summary>
         void QueueDayEffects(IActionsQueue queue);
         /// <summary>At Dusk: the Trend ends after its last Day.</summary>
@@ -60,7 +60,12 @@ namespace SlayTheClone {
 
         // Survival of the Fittest: nature culls the weakest creature on the board (the least Health; ties at random), whichever
         // side it's on. Nobody's attack: nothing answers it or redirects it
-        public void QueueDuskEffects(IActionsQueue queue) {
+        public void QueueDuskEffects(IActionsQueue queue, int endedTurn) {
+            // Liminal Space ends tonight: everyone's Attack and Health trade back
+            if (Current == Trend.LiminalSpace && LastDay != null && endedTurn >= LastDay && queue != null && SetBy?.Opponent != null) {
+                foreach (var creature in BoardCreatures()) queue.AddAction(new SwapStatsAction(creature));
+                return;
+            }
             if (Current == Trend.Casino) {
                 QueueCasinoDusk(queue);
                 return;
@@ -151,6 +156,7 @@ namespace SlayTheClone {
             Trend.SurvivalOfTheFittest => "Survival of the Fittest",
             Trend.VolcanoLair => "Volcano Lair",
             Trend.Casino => "Casino",
+            Trend.LiminalSpace => "Liminal Space",
             Trend.None => "Nothing",
             _ => trend.ToString()
         };
@@ -162,6 +168,7 @@ namespace SlayTheClone {
             Trend.SurvivalOfTheFittest => $"each Dusk, the creature with the least Health on the board, either side, takes {CullDamage} damage",
             Trend.VolcanoLair => "each Day, on each side, the strongest creature hides in a lair: it's Untouchable that Day, as long as another creature of its side stands",
             Trend.Casino => "each Dawn the house's wheel spins the Day's weather, the same for both sides: Heatwave (every creature +1 Attack), Rain (at Dusk every creature heals 1), Hail (at Dusk every creature takes 1 damage), Tailwind (half the creatures on the board, at random, +1 Speed), Rush Hour (the slowest act first) or Windfall (both players draw 1 more card next Day)",
+            Trend.LiminalSpace => "every creature\'s Attack and Health trade places: the ones on the board as it starts, and each one that enters while it trends; they trade back when it ends",
             _ => ""
         };
     }

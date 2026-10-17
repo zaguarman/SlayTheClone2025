@@ -21,6 +21,7 @@ namespace SlayTheClone {
         #region Constructor
         public ModifierManager(IGameMediator mediator, IModifierFactory factory) {
             MovementRules.IsRooted = creature => HasStatusEffect(creature, StatusEffectType.Rooted); // The game in play's
+            Abilities.IsDeniable = creature => HasStatusEffect(creature, StatusEffectType.Deniable); // Plausible Deniability: area effects skip it this Day
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             modifierFactory = factory ?? throw new ArgumentNullException(nameof(factory));
 
@@ -253,6 +254,7 @@ namespace SlayTheClone {
                 if (Abilities.Has(creature, CreatureAbility.SelfRepair) && creature.Health < creature.MaxHealth) {
                     actionsQueue.AddAction(new HealCreatureAction(creature, Abilities.SelfRepairHeal));
                 }
+                Abilities.TryMoodSwings(creature, this); // Mood Swings: its stats drift each Dawn
                 creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
@@ -292,7 +294,7 @@ namespace SlayTheClone {
                     }
                     else {
                         Log($"{creature.Name} burns for {burn.Potency} (StatusEffect '{burn.Name}')", LogTag.Effects | LogTag.Turns);
-                        actionsQueue.AddAction(new DamageCreatureAction(creature, burn.Potency, creature) { Source = OriginOf(creature, burn) });
+                        actionsQueue.AddAction(new DamageCreatureAction(creature, burn.Potency, creature) { Source = OriginOf(creature, burn), FromStatus = true });
                     }
                 }
 

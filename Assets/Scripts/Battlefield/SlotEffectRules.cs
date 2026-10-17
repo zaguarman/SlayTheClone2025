@@ -73,7 +73,13 @@ namespace SlayTheClone {
         /// <summary>At Dusk: Slot Effects whose Days ran out are removed.</summary>
         public static void ProcessEndOfTurn(IEnumerable<IPlayer> players, int endedTurn, IGameMediator mediator, IActionsQueue actionsQueue = null) {
             foreach (var slot in players.Where(p => p?.Battlefield != null).SelectMany(p => p.Battlefield)) {
-                if (slot.Effect != null && slot.Effect.HasExpired(endedTurn + 1)) Remove(slot, mediator, actionsQueue);
+                if (slot.Effect == null || !slot.Effect.HasExpired(endedTurn + 1)) continue;
+                // A Prayer answered (Thoughts and Prayers, Pokémon's Wish): whoever stands there by now heals
+                if (slot.Effect.Type == SlotEffectType.Prayer && slot.OccupyingCreature is { IsDead: false } prayed && actionsQueue != null) {
+                    Log($"The prayers on {slot} are answered: {prayed.Name} heals {slot.Effect.Value}", LogTag.Effects);
+                    actionsQueue.AddAction(new HealCreatureAction(prayed, slot.Effect.Value));
+                }
+                Remove(slot, mediator, actionsQueue);
             }
         }
     }

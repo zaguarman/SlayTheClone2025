@@ -53,6 +53,11 @@ namespace SlayTheClone {
                 return;
             }
 
+            // Next Question (the user, 2026-10-17: the politician sidestepping the uncomfortable question): once a Day, as an
+            // attack is about to hit it, it steps into an empty slot of its side (one beside it if it can) and the attack hits nothing
+            if (primaryTarget is ICreature dodger && !combatAction.IsLastRites && Abilities.Defends(dodger, Enums.CreatureAbility.NextQuestion, attacker)
+                && Dodge(dodger, context)) return;
+
             // Sucker Punch: it went first to beat the creature it faces to the punch; if that creature planned no attack, it
             // holds back (Pokémon's Sucker Punch fails on a target that isn't attacking)
             if (Abilities.Has(attacker, Enums.CreatureAbility.SuckerPunch) && primaryTarget is ICreature punched && !combatAction.IsLastRites
@@ -100,6 +105,8 @@ namespace SlayTheClone {
                 QueueCombatDamage(actionsQueue, primaryTarget, attacker);
                 actionsQueue.AddAction(new DamageCreatureAction(searched, Abilities.StripBonus, attacker));
             }
+            // Wild Card (the user, 2026-10-17, Pokémon's Metronome: Florida Man): its attack on a creature does any one thing
+            else if (Abilities.Has(attacker, Enums.CreatureAbility.WildCard) && primaryTarget is ICreature wild && !combatAction.IsLastRites) WildCardHit(actionsQueue, wild, attacker);
             else QueueCombatDamage(actionsQueue, primaryTarget, attacker);
             // Taser (an adventure's relic): a creature that attacks one of its carrier's takes 1 damage back
             if (primaryTarget is ICreature wired && wired.Owner != null && wired.Owner != attacker.Owner && wired.Owner.Relics.Contains(Relic.Taser)) {
@@ -112,7 +119,7 @@ namespace SlayTheClone {
                 var row = targetSlot.Owner.Battlefield;
                 foreach (int i in Formation.Neighbours(targetSlot.Index)) {
                     var beside = i >= 0 && i < row.Count ? row[i].OccupyingCreature : null;
-                    if (beside != null && !Abilities.Defends(beside, Enums.CreatureAbility.TooMainstream, attacker)) QueueCombatDamage(actionsQueue, beside, attacker);
+                    if (beside != null && !Abilities.ShrugsOffArea(beside, attacker)) QueueCombatDamage(actionsQueue, beside, attacker);
                 }
             }
             // Chain Mail: the hit jumps on to the next creatures in line, at half the damage each jump
@@ -142,6 +149,41 @@ namespace SlayTheClone {
             }
 
             Log($"Executed BattlefieldCombatAction via Executor for {attacker.Name}", LogTag.Actions | LogTag.Combat);
+        }
+
+        // Next Question: into an empty slot beside it, or any empty slot of its side; once a Day; a Rooted one can't
+        private static bool Dodge(ICreature dodger, ActionExecutionContext context) {
+            var from = dodger.Slot;
+            var row = from?.Owner?.Battlefield;
+            if (row == null || dodger.Owner == null || MovementRules.IsRooted(dodger)) return false;
+            string key = $"{dodger.CopyId}#dodge#{context.TurnClock.TurnNumber}";
+            if (dodger.Owner.UsedOncePerCombat.Contains(key)) return false;
+            var to = Formation.Neighbours(from.Index).Where(i => i < row.Count).Select(i => row[i]).FirstOrDefault(s => !s.IsOccupied())
+                     ?? row.FirstOrDefault(s => !s.IsOccupied());
+            if (to == null) return false;
+            dodger.Owner.UsedOncePerCombat.Add(key);
+            Log($"Next question: {dodger.Name} sidesteps into slot {to.Index}, and the attack hits nothing", LogTag.Combat | LogTag.Effects);
+            Maneuvers.Trade(from, to, context);
+            context.GameMediator.NotifyBattlefieldStateChanged(from.Owner);
+            return true;
+        }
+
+        // Wild Card: twice, a Burn instead, a stun instead, or nothing at all (it got distracted)
+        private static void WildCardHit(IActionsQueue actionsQueue, ICreature target, ICreature attacker) {
+            int roll = GameRandom.Next(4);
+            Log($"Wild card: {attacker.Name} rolls {roll} on {target.Name}", LogTag.Combat | LogTag.Effects);
+            switch (roll) {
+                case 0:
+                    QueueCombatDamage(actionsQueue, target, attacker);
+                    QueueCombatDamage(actionsQueue, target, attacker);
+                    break;
+                case 1:
+                    actionsQueue.AddAction(new ApplyStatusEffectAction(target, Enums.StatusEffectType.Burned, 2, 2, attacker, attacker.Owner));
+                    break;
+                case 2:
+                    actionsQueue.AddAction(new ApplyStatusEffectAction(target, Enums.StatusEffectType.Exhausted, 1, 0, attacker, attacker.Owner));
+                    break;
+            }
         }
 
         // Strip Search's mark: it has a status or a stat change (Temporary Stat Modifications; the printed stats don't count)

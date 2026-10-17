@@ -100,14 +100,16 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Future: Plot Armor. Survives a lethal hit once (OnAboutToDie).'
+  designNotes: 'Mood Swings (the user, 2026-10-17: ''and others''): famous for the
+    drama; each Dawn, +2 to one of its stats and -1 to another, at random, for good.
+    Future: Plot Armor. Survives a lethal hit once (OnAboutToDie).'
   artDescription: 
   attack: 5
   health: 4
   speed: 2
   turnsUntilOperative: 0
   movement: 0
-  ability: 0
+  ability: 48
   gift: 0
   rootedWhileDeploying: 0
   token: 0

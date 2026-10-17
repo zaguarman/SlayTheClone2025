@@ -118,7 +118,7 @@ namespace SlayTheClone.Tests {
                 case ActionType.Cleanse:
                 case ActionType.CopyStats:
                 case ActionType.StealStatChanges:
-                case ActionType.SwapPositions or ActionType.Push or ActionType.Pull:
+                case ActionType.SwapPositions or ActionType.Push or ActionType.Pull or ActionType.Mimic or ActionType.TradeStats:
                 case ActionType.GrantAbility:
                 case ActionType.Equip:
                 case ActionType.Destroy:
@@ -134,6 +134,7 @@ namespace SlayTheClone.Tests {
                 case ActionType.CutDraws:
                 case ActionType.SendFor:
                 case ActionType.Grace:
+                case ActionType.Seal:
                     if (!PlayerTargets.Contains(action.targetType)) return $"{action.actionType} only affects players but targets {action.targetType}";
                     break;
             }
@@ -155,7 +156,7 @@ namespace SlayTheClone.Tests {
             else if (action.actionType is ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.Destroy
                      or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                      or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Revive
-                     or ActionType.CopyStatuses or ActionType.EndDay or ActionType.Defect or ActionType.SwapStats or ActionType.SwapSlotEffects
+                     or ActionType.CopyStatuses or ActionType.EndDay or ActionType.Defect or ActionType.SwapStats or ActionType.SwapSlotEffects or ActionType.Mimic or ActionType.TradeStats
                      or ActionType.Push or ActionType.Pull or ActionType.Shuffle or ActionType.Spin) {
                 return null; // Says what it does instead of a value
             }

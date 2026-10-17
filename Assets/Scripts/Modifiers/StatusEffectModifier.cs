@@ -23,7 +23,7 @@ namespace SlayTheClone {
             or StatusEffectType.Shielded);
         /// <summary>Its Days count the Day it lands, like a Day-long buff (Untouchable 1 is this Day only), instead of skipping it.</summary>
         public bool CountsTheDayItLands => EffectType is StatusEffectType.Untouchable or StatusEffectType.Composed or StatusEffectType.Shielded
-            or StatusEffectType.BorrowedTime;
+            or StatusEffectType.BorrowedTime or StatusEffectType.Stalled or StatusEffectType.Deniable; // Stalled, Deniable: this Day only
 
         /// <summary>Doomed can't be cleansed: a cleanse attempt passes it on instead (Heresy). Nor can Brainwashed: only taking
         /// the creature off the board in time saves it.</summary>

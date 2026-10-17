@@ -68,6 +68,7 @@ namespace SlayTheClone {
         private int sequence;
 
         private readonly Dictionary<string, Entry> activeCreatureActions = new Dictionary<string, Entry>();
+        private readonly Dictionary<string, (ICreature creature, Func<IGameAction> again)> loops = new Dictionary<string, (ICreature, Func<IGameAction>)>(); // Groundhog Day
         private int actionsResolved; // In the current resolution
 
         private readonly IGameMediator gameMediator;
@@ -153,6 +154,9 @@ namespace SlayTheClone {
             int byWatchdog = a.Reordered.CompareTo(b.Reordered); // Watchdog Reorder: before or after the rest of its layer
             if (byWatchdog != 0) return byWatchdog;
 
+            int byStall = IsStalled(a).CompareTo(IsStalled(b)); // Filibuster: a Stalled creature's actions go last in their layer
+            if (byStall != 0) return byStall;
+
             if (a.Layer == ResolutionLayer.Spell) return Tiebreak(a.RandomKey.CompareTo(b.RandomKey), a, b);
 
             if (a.Source == null || b.Source == null) {
@@ -176,6 +180,9 @@ namespace SlayTheClone {
         // Priority (Pokémon's Sucker Punch): its attack goes before the layer's others, Rush Hour or not
         private static bool HasPriority(Entry entry) =>
             entry.Action is BattlefieldCombatAction attack && Abilities.Has(attack.GetAttacker(), Enums.CreatureAbility.SuckerPunch);
+
+        // Stalled (Filibuster, Pokémon's Quash): its actions go after every other in their layer
+        private bool IsStalled(Entry entry) => entry.Source != null && Modifiers.HasStatusEffect(entry.Source, StatusEffectType.Stalled);
 
         private static int Tiebreak(int byRandom, Entry a, Entry b) => byRandom != 0 ? byRandom : a.Sequence.CompareTo(b.Sequence);
         #endregion
@@ -243,6 +250,10 @@ namespace SlayTheClone {
             if (action is PlayCardAction replacing && replacing.GetCard() is ICreature newcomer && replacing.GetTarget() is BoardSlot into
                 && into.OccupyingCreature != null && into.OccupyingCreature != newcomer && !Abilities.CanBeReplaced(into.OccupyingCreature)) {
                 executionContext.GameMediator?.NotifyPlayRefused(newcomer, $"{into.OccupyingCreature.Name} is Irreplaceable: nothing can take its place");
+                return;
+            }
+            if (action is PlayCardAction claimed && PlayRestrictions.Why(claimed.GetCard(), claimed.GetOwner(), Today) is string why) { // The DMCA
+                executionContext.GameMediator?.NotifyPlayRefused(claimed.GetCard(), why);
                 return;
             }
             if (executing == null && !resolving && IsInstant(action)) {
@@ -685,6 +696,7 @@ namespace SlayTheClone {
 
         public bool CancelDeclaredAction(string creatureId) {
             if (creatureId == null || !activeCreatureActions.TryGetValue(creatureId, out var entry)) return false;
+            if (IsLooping(creatureId)) return false; // Groundhog Day: the plan can't be taken back
 
             activeCreatureActions.Remove(creatureId);
             waiting.Remove(entry);
@@ -712,12 +724,50 @@ namespace SlayTheClone {
         public IGameAction GetActiveAction(string creatureId) {
             return activeCreatureActions.TryGetValue(creatureId, out var entry) ? entry.Action : null;
         }
+
+        /// <summary>
+        /// Groundhog Day (the user, 2026-10-17, Pokémon's Encore): the creature's plan as the loop closes (an attack on that
+        /// slot, a move, an ability, or nothing) is what it does each Day while it's Looping, made for it at Dawn.
+        /// </summary>
+        public void StartLoop(ICreature creature) {
+            if (creature == null) return;
+            var owner = creature.Owner;
+            var planned = GetActiveAction(creature.TargetId);
+            Func<IGameAction> again = planned switch {
+                BattlefieldCombatAction attack when attack.GetTargetSlot() is BoardSlot aimed => () => new BattlefieldCombatAction(creature, aimed),
+                MoveCreatureAction move when move.GetToSlot() is BoardSlot to => () => new MoveCreatureAction(creature, creature.Slot, to, owner),
+                UseAbilityAction use => () => new UseAbilityAction(creature, use.TargetSlot),
+                _ => null
+            };
+            loops[creature.TargetId] = (creature, again);
+            Log($"{creature.Name} is caught in a loop: it repeats {(again != null ? planned.ToString() : "nothing")} each Day", LogTag.Actions | LogTag.Effects);
+        }
+
+        public bool IsLooping(ICreature creature) => creature != null && IsLooping(creature.TargetId);
+
+        private bool IsLooping(string creatureId) =>
+            creatureId != null && loops.TryGetValue(creatureId, out var loop) && Modifiers.HasStatusEffect(loop.creature, StatusEffectType.Looping);
+
+        /// <summary>At Dawn, once the Day's effects are done: the looping creatures' plans are made for them. A loop ends with its status.</summary>
+        public void ReplayLoops() {
+            foreach (var (id, loop) in loops.ToList()) {
+                var creature = loop.creature;
+                if (creature.IsDead || creature.Slot == null || !Modifiers.HasStatusEffect(creature, StatusEffectType.Looping)) {
+                    loops.Remove(id);
+                    continue;
+                }
+                if (loop.again == null || HasActiveAction(id) || !Modifiers.CanAct(creature)) continue;
+                Log($"Groundhog Day: {creature.Name} does it all again", LogTag.Actions | LogTag.Effects);
+                AddAction(loop.again());
+            }
+        }
         #endregion
 
         #region Cleanup
         public void Cleanup() {
             resolvingNow.Clear();
             waiting.Clear();
+            loops.Clear();
             activeCreatureActions.Clear();
             abilities.Clear();
             watchdogs.Clear();

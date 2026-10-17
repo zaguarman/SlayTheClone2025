@@ -63,7 +63,7 @@ namespace SlayTheClone {
                 // --- Phase 2: Dusk, for the Day that just resolved: Armor fades, statuses tick, Deployment Time counts down ---
                 modifierManager.ProcessEndOfTurn(endedTurn, actionsQueue);
                 SlotEffectRules.ProcessEndOfTurn(players, endedTurn, gameMediator, actionsQueue);
-                trends.QueueDuskEffects(actionsQueue);
+                trends.QueueDuskEffects(actionsQueue, endedTurn);
                 trends.ProcessDusk(endedTurn); // A Trend ends after its last Day
                 modifierManager.RefreshConditionalStats(); // On Trend loses its boost with it
                 yield return ResolveQueuedActions();
@@ -98,6 +98,7 @@ namespace SlayTheClone {
                 modifierManager.ProcessStartOfTurn(turnNumber, actionsQueue);
                 trends.QueueDayEffects(actionsQueue);
                 yield return ResolveQueuedActions();
+                actionsQueue.ReplayLoops(); // Groundhog Day: the looping creatures' plans are made before anyone else's
 
                 Log($"--- Turn {turnNumber} Started ---", LogTag.Turns);
             }

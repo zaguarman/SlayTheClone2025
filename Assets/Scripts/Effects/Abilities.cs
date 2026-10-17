@@ -14,7 +14,7 @@ namespace SlayTheClone {
         private static readonly CreatureAbility[] Defensive = {
             CreatureAbility.Contrarian, CreatureAbility.Extremist, CreatureAbility.Unbothered, CreatureAbility.NoU,
             CreatureAbility.Spite, CreatureAbility.Underground, CreatureAbility.TooMainstream, CreatureAbility.ReturnToSender,
-            CreatureAbility.HiveMind
+            CreatureAbility.HiveMind, CreatureAbility.NextQuestion, CreatureAbility.Immaculate
         };
 
         public static bool IsDefensive(CreatureAbility ability) => Defensive.Contains(ability);
@@ -81,6 +81,9 @@ namespace SlayTheClone {
             CreatureAbility.StripSearch => "Strip Search",
             CreatureAbility.OnTrend => "On Trend",
             CreatureAbility.SelfRepair => "Self-Repair",
+            CreatureAbility.MoodSwings => "Mood Swings",
+            CreatureAbility.NextQuestion => "Next Question",
+            CreatureAbility.WildCard => "Wild Card",
             _ => ability.ToString()
         };
 
@@ -133,6 +136,11 @@ namespace SlayTheClone {
             CreatureAbility.OnTrend => $"+{TrendBonus} Attack while a Trend is on",
             CreatureAbility.Hover => "Slot Effects don't touch it: no trap or Checkpoint as it enters or leaves a slot",
             CreatureAbility.SelfRepair => $"each Dawn, it heals {SelfRepairHeal}",
+            // The Pokémon picks (the user, 2026-10-17)
+            CreatureAbility.MoodSwings => "each Dawn, +2 to one of its stats and -1 to another, at random, for good",
+            CreatureAbility.NextQuestion => "once a Day, when an attack is about to hit it, it steps into an empty slot of its side and the attack hits nothing",
+            CreatureAbility.WildCard => "its attack on a creature does one of these, at random: hits twice, Burns it 2 instead, Exhausts it instead, or nothing at all",
+            CreatureAbility.Immaculate => "attacks and effects do nothing to it: only a status (Burn) hurts it",
             _ => ""
         };
 
@@ -190,6 +198,13 @@ namespace SlayTheClone {
         /// </summary>
         public static bool Defends(ICreature target, CreatureAbility ability, ICreature source) =>
             Has(target, ability) && !(IsDefensive(ability) && Has(source, CreatureAbility.ZeroDay));
+
+        /// <summary>Deniable (Plausible Deniability, this Day): set by the game's modifiers, like MovementRules.IsRooted.</summary>
+        public static Func<ICreature, bool> IsDeniable = _ => false;
+
+        /// <summary>Whether an effect that hits more than one creature skips it: Too Mainstream, or Deniable this Day.</summary>
+        public static bool ShrugsOffArea(ICreature creature, ICreature source) =>
+            Defends(creature, CreatureAbility.TooMainstream, source) || IsDeniable(creature);
 
         /// <summary>
         /// "The creature that caused it", for bounced effects: the source creature if it's still in play, otherwise (a spell)
@@ -296,6 +311,25 @@ namespace SlayTheClone {
                 if (ward != null && !ward.IsDead) queue.AddAction(new ApplyStatusEffectAction(ward, StatusEffectType.Blessed, 1, 1, creature, creature.Owner));
             }
         }
+
+        /// <summary>
+        /// Mood Swings (the user, 2026-10-17, Pokémon's Moody; Karen): each Dawn, +2 to one of its stats and -1 to another, at
+        /// random, for good. A stat at 1 isn't lowered, so its Health never goes below 1 this way.
+        /// </summary>
+        public static void TryMoodSwings(ICreature creature, IModifierManager modifiers) {
+            if (!Has(creature, CreatureAbility.MoodSwings) || modifiers == null) return;
+            int up = GameRandom.Next(3);
+            var downs = new[] { 0, 1, 2 }.Where(i => i != up && StatOf(creature, i) > 1).ToList();
+            int down = downs.Count > 0 ? downs[GameRandom.Next(downs.Count)] : -1;
+            int[] change = { 0, 0, 0 };
+            change[up] += 2;
+            if (down >= 0) change[down] -= 1;
+            Log($"{creature.Name}'s mood swings: +2 {StatName(up)}" + (down >= 0 ? $", -1 {StatName(down)}" : ""), LogTag.Effects);
+            modifiers.ChangeBaseStats(creature, change[0], change[1], change[2]);
+        }
+
+        private static int StatOf(ICreature creature, int stat) => stat == 0 ? creature.Attack : stat == 1 ? creature.Health : creature.Speed;
+        private static string StatName(int stat) => stat == 0 ? "Attack" : stat == 1 ? "Health" : "Speed";
         #endregion
 
         #region Damage

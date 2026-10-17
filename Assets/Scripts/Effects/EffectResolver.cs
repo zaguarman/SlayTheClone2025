@@ -223,7 +223,7 @@ namespace SlayTheClone {
 
         /// <summary>Too Mainstream: immune to effects that affect more than one creature (area, "each creature", spreads).</summary>
         private static List<ITarget> WithoutTooMainstream(List<ITarget> targets, ICard source) =>
-            targets.Where(t => !(t is ICreature c && Abilities.Defends(c, CreatureAbility.TooMainstream, source as ICreature))).ToList();
+            targets.Where(t => !(t is ICreature c && Abilities.ShrugsOffArea(c, source as ICreature))).ToList(); // Too Mainstream, or Deniable this Day
 
         /// <summary>
         /// What a card dropped on a slot is aimed at. A spell aimed at one of the caster's own creatures, on the board or
@@ -433,7 +433,7 @@ namespace SlayTheClone {
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
                 or ActionType.CreateWatchdog or ActionType.DelayDeployment or ActionType.Rush or ActionType.Defect
                 or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility or ActionType.Equip or ActionType.SwapStats
-                or ActionType.Push or ActionType.Pull
+                or ActionType.Push or ActionType.Pull or ActionType.Mimic or ActionType.TradeStats
                 or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                 or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Resurrect
                 or ActionType.Consolidate or ActionType.CopyStatuses;
@@ -599,6 +599,14 @@ namespace SlayTheClone {
                     return target is IPlayer cut && action.value > 0 ? new CutDrawsAction(cut, action.value) : null;
                 case ActionType.WipeWatchdogs: // Every Watchdog that player controls (GoldenEye)
                     return target is IPlayer wiped ? new WipeWatchdogsAction(wiped) : null;
+                case ActionType.Mimic: // Monkey See, Monkey Do: a fresh copy of the target in the slot facing it, on the caster's side
+                    return creature?.Slot != null ? new MimicAction(creature, controller) : null;
+                case ActionType.TradeStats: { // Freaky Friday: the target and the creature facing it trade Attack and Health
+                    var (one, other) = Pair(source, creature);
+                    return one != null && other != null ? new TradeStatsAction(one, other) : null;
+                }
+                case ActionType.Seal: // The DMCA: value is the Days
+                    return target is IPlayer claimed && action.value > 0 ? new SealAction(claimed, action.value) : null;
                 case ActionType.SwapStats: // Geomagnetic Reversal: its Attack and Health trade places
                     return creature != null ? new SwapStatsAction(creature) : null;
                 case ActionType.Defect: // Taqiyya: it goes over to the other side, into the slot opposite (whatever stands there is discarded)

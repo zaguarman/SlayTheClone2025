@@ -686,3 +686,42 @@ Provoked (the user, 2026-10-16)
         Re-application Behavior: Refresh
     Answers: Move the creature facing it, or Cleanse it.
     Cleansable: Yes
+
+Looping (the user, 2026-10-17)
+    Faction: Zeitgeist (Groundhog Day)
+    Inspired by: Encore
+    Type: Control
+    Description: "It repeats the plan it had as the loop closed, each Day, and can plan nothing else."
+    Core Impact: The plan (an attack on that slot, a move, an ability, or nothing) is made for it at Dawn, before anyone
+                 plans, and can't be taken back; everyone sees it in the queue. A stun still cancels the Day's.
+    Stacking & Duration:
+        Initial Stacks: the next X Days (the Day it lands, its plan is already the plan)
+        Re-application Behavior: Refresh, on the plan it has then
+    Answers: Cleanse it; stun it; move what it aims at (an attack on an emptied slot hits the player).
+    Cleansable: Yes
+
+Stalled (the user, 2026-10-17)
+    Faction: Statecraft (Filibuster)
+    Inspired by: Quash, After You
+    Type: Tempo
+    Description: "It acts last this Day."
+    Core Impact: Its attack, move or ability comes after every other in its layer, whatever its Speed; Watchdog Reorders
+                 still come first.
+    Stacking & Duration:
+        Initial Stacks: this Day only
+        Re-application Behavior: Refresh
+    Answers: None needed: it's one Day.
+    Cleansable: Yes
+
+Deniable (the user, 2026-10-17)
+    Faction: Shadow Ops. (Plausible Deniability)
+    Inspired by: Wide Guard
+    Type: Protection
+    Description: "Effects that hit more than one creature skip it this Day."
+    Core Impact: Area spells, Spray and Pray, a Hipster's arrival and every other effect aimed at more than one creature
+                 pass it by, like Too Mainstream. Single-target effects land as ever.
+    Stacking & Duration:
+        Initial Stacks: this Day only
+        Re-application Behavior: Refresh
+    Answers: Aim at it alone.
+    Cleansable: Yes

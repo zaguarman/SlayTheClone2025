@@ -1,3 +1,4 @@
+using System.Linq;
 using static SlayTheClone.DebugLogger;
 using static SlayTheClone.Enums;
 
@@ -20,8 +21,16 @@ namespace SlayTheClone {
 
     public class SetTrendActionExecutor : ActionExecutor<SetTrendAction> {
         protected override void ExecuteAction(SetTrendAction action, ActionExecutionContext context) {
-            context.TrendSystem.SetTrend(action.Trend, action.Days, context.TurnClock.TurnNumber, action.Controller);
-            context.TrendSystem.QueueDayEffects(context.ActionsQueue); // Its first Day is this one
+            var trends = context.TrendSystem;
+            bool wasLiminal = trends.Current == Trend.LiminalSpace;
+            trends.SetTrend(action.Trend, action.Days, context.TurnClock.TurnNumber, action.Controller);
+            // Liminal Space starting, or replaced (the user, 2026-10-17): everyone's Attack and Health trade places, or back
+            if (wasLiminal != (trends.Current == Trend.LiminalSpace) && action.Controller?.Opponent != null) {
+                var everyone = action.Controller.Battlefield.Concat(action.Controller.Opponent.Battlefield)
+                    .Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead).ToList();
+                foreach (var creature in everyone) context.ActionsQueue.AddAction(new SwapStatsAction(creature));
+            }
+            trends.QueueDayEffects(context.ActionsQueue); // Its first Day is this one
         }
     }
 }

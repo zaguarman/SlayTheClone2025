@@ -91,6 +91,8 @@ namespace SlayTheClone {
             if (creature.DeckOwner != null) Intel.MakeKnown(creature, creature.DeckOwner); // Its giver knows what they gave
             SlotEffectRules.OnEnter(creature, slot, context); // A Landmine goes off before the creature's entry effects
             Abilities.TryCopypasta(creature, mediator); // "When ready": only does something if it's ready now
+            // Liminal Space: a creature entering while it trends has its Attack and Health traded too
+            if (context.TrendSystem?.Current == Trend.LiminalSpace) context.ActionsQueue.AddAction(new SwapStatsAction(creature));
             Log($"Executor: Triggering OnPlay effects for {creature.Name}", LogTag.Effects | LogTag.Actions);
             creature.HandleEffect(EffectTrigger.OnPlay, context.ActionsQueue);
             mediator.NotifyCreatureSummoned(creature, owner);

@@ -50,6 +50,7 @@ namespace SlayTheClone {
             SlotEffectType.Shield => "The creature here is immune to combat damage.",
             SlotEffectType.ScorchedEarth => "The creature here can't trigger its effects. Its entry effects wait until it's off this slot.",
             SlotEffectType.Checkpoint => $"Every creature that enters takes {Value} damage.",
+            SlotEffectType.Prayer => $"When its Days run out, the creature standing here heals {Value}.",
             _ => ""
         };
 

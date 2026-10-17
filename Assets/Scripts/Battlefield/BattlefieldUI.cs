@@ -426,8 +426,9 @@ namespace SlayTheClone {
         /// <summary>The card released on this slot: played there from the hand, or a creature's attack or move (tests call it directly).</summary>
         /// <summary>Whether this card, carried from the hand, can be played on this slot: for an aimed spell, only where it lands on something.</summary>
         public bool CanAimAt(CardController card, BoardSlot slot) =>
-            !(card?.GetLinkedCardInstance() is Spell spell) || !EffectResolver.IsAimed(spell)
-            || EffectResolver.CanAimAt(spell, card.Player, slot, GameManager?.ActionsQueue);
+            PlayRestrictions.Why(card?.GetLinkedCardInstance(), card?.Player, GameManager?.TurnManager?.TurnNumber ?? 0) == null // The DMCA
+            && (!(card?.GetLinkedCardInstance() is Spell spell) || !EffectResolver.IsAimed(spell)
+                || EffectResolver.CanAimAt(spell, card.Player, slot, GameManager?.ActionsQueue));
 
         public void DropOn(CardController card, BattlefieldSlot targetSlot) {
             if ((IsCardFromHand(card) || card.IsQueued) && !CanAimAt(card, targetSlot.Model)) {
@@ -1305,7 +1306,12 @@ namespace SlayTheClone {
         // One still deploying can be picked up: it can move, not attack
         private bool RefuseIfItCantAct(CardController card) {
             var creature = card.GetLinkedCreature();
-            if (creature?.Slot == null || creature.Owner != Player || !FogOfWar.CanControl(Player) || GameManager.ModifierManager.CanMove(creature)) return false;
+            if (creature?.Slot == null || creature.Owner != Player || !FogOfWar.CanControl(Player)) return false;
+            if (GameManager.ActionsQueue?.IsLooping(creature) == true) { // Groundhog Day: its plan is made for it
+                ShowCantAct(card, "Groundhog Day: it does today what it did yesterday");
+                return true;
+            }
+            if (GameManager.ModifierManager.CanMove(creature)) return false;
             ShowCantAct(card, GameManager.ModifierManager.HasStatusEffect(creature, Enums.StatusEffectType.Rooted) && GameManager.ModifierManager.CanAct(creature)
                 ? "Rooted: it can't move" : CantActText(creature));
             return true;

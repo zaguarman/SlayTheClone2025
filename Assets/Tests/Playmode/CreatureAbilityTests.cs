@@ -670,5 +670,53 @@ namespace SlayTheClone.Tests {
         }
 
         private bool HasStatus(ICreature creature, StatusEffectType status) => game.ModifierManager.HasStatusEffect(creature, status);
+
+        // The Pokémon picks (the user, 2026-10-17): Moody, the politician's dodge, Metronome and Wonder Guard
+        [Test]
+        public void PokemonPicks_MoodSwings_NextQuestion_WildCard_Immaculate() {
+            // Mood Swings: each Dawn +2 to one stat and -1 to another, for good
+            var karen = With(CreatureAbility.MoodSwings, p1, 0, attack: 4, health: 5);
+            int before = karen.Attack + karen.Health + karen.Speed;
+            game.StartTurn();
+            Assert.AreEqual(before + 1, karen.Attack + karen.Health + karen.Speed, "+2 to one stat, -1 to another");
+            Assert.AreEqual(before + 1, karen.BaseAttack + karen.BaseHealth + karen.BaseSpeed, "...for good");
+
+            // Next Question: once a Day, as an attack is about to hit it, it steps into an empty slot and the attack hits nothing
+            Fresh();
+            var doctor = With(CreatureAbility.NextQuestion, p1, 0, attack: 2, health: 5);
+            var hitter = With(CreatureAbility.None, p2, 0, attack: 3, health: 10);
+            int health = p1.Health;
+            game.Attack(hitter, p1.Battlefield[0]);
+            Assert.AreEqual(5, doctor.Health, "It sidestepped");
+            Assert.AreNotSame(p1.Battlefield[0], doctor.Slot, "...into another slot");
+            Assert.AreEqual(health, p1.Health, "...and the attack hit nothing, not the player either");
+            game.Attack(hitter, doctor.Slot);
+            Assert.AreEqual(2, doctor.Health, "Once a Day: the second attack lands");
+            Fresh();
+            doctor = With(CreatureAbility.NextQuestion, p1, 0, attack: 2, health: 5);
+            for (int i = 1; i < 5; i++) With(CreatureAbility.None, p1, i);
+            hitter = With(CreatureAbility.None, p2, 0, attack: 3, health: 10);
+            game.Attack(hitter, p1.Battlefield[0]);
+            Assert.AreEqual(2, doctor.Health, "Nowhere to step: the hit lands");
+
+            // Wild Card: its attack on a creature hits twice, Burns it, Exhausts it, or does nothing: never the plain hit
+            Fresh();
+            var florida = With(CreatureAbility.WildCard, p1, 0, attack: 3, health: 5);
+            var mark = With(CreatureAbility.None, p2, 0, attack: 0, health: 20);
+            game.Attack(florida, p2.Battlefield[0]);
+            Assert.IsTrue(mark.Health is 14 or 20, $"Twice (14), or a Burn, a stun or nothing (20), never 17: {mark.Health}");
+
+            // Immaculate: attacks and effects do nothing to it; only a Burn hurts it
+            Fresh();
+            var ghost = With(CreatureAbility.Immaculate, p1, 0, attack: 3, health: 1);
+            var brute = With(CreatureAbility.None, p2, 0, attack: 5, health: 10);
+            game.Attack(brute, p1.Battlefield[0]);
+            game.Run(TargetedActions.Damage(ghost, 5));
+            Assert.AreEqual(1, ghost.Health, "An attack and an effect: nothing");
+            game.Run(new ApplyStatusEffectAction(ghost, StatusEffectType.Burned, 2, 1));
+            game.StartTurn();
+            game.StartTurn(); // The Burn ticks from the Dusk after the Day it lands
+            Assert.IsTrue(ghost.IsDead, "Only a status hurts it, and 1 Health is all it has");
+        }
     }
 }

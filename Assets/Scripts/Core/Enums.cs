@@ -14,7 +14,8 @@ namespace SlayTheClone {
             TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys,
             WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay, Rush, Defect, SwapStats,
             SwapSlotEffects, Equip,
-            Push, Pull, Shuffle, Spin } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers. Push/Pull/Shuffle/Spin: moves
+            Push, Pull, Shuffle, Spin,
+            Mimic, TradeStats, Seal } // Mimic (Monkey See, Monkey Do), TradeStats (Freaky Friday), Seal (the DMCA): the Pokémon picks, 2026-10-17. Renamed Buff to ModifyStat. New ones go last: cards store them as numbers. Push/Pull/Shuffle/Spin: moves
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
@@ -41,7 +42,9 @@ namespace SlayTheClone {
             // The meta picks (2026-10-16): statuses that help their owner, losses as fuel, priority, pivots, Armor as damage, strips, Trends
             Hormesis, Martyrdom, Grudge, SuckerPunch, HitAndRun, ShieldBash, StripSearch, OnTrend,
             // Gear only (held items, 2026-10-16): Hover keeps it off Slot Effects, Self-Repair heals it each Dawn
-            Hover, SelfRepair
+            Hover, SelfRepair,
+            // The Pokémon picks (the user, 2026-10-17): Moody, a dodge (the politician's), Metronome, Wonder Guard
+            MoodSwings, NextQuestion, WildCard, Immaculate
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look
@@ -79,7 +82,10 @@ namespace SlayTheClone {
             Burnout,       // When it runs out, the creature is destroyed (Overtime: it lasts through the first Day it's ready)
             Shielded,      // Takes no combat damage, for its Days counting the one it lands (the user: a creature's, not a slot's)
             Toxic,         // Merged into Burned (the user, 2026-10-17): no card uses it; kept so the numbers after it stay put
-            Provoked       // Taunt and Follow Me: its attacks go to the creature facing it, and it can't use its Active ability
+            Provoked,       // Taunt and Follow Me: its attacks go to the creature facing it, and it can't use its Active ability
+            Looping,       // Groundhog Day (Encore): it repeats the plan it had when the loop closed, each Day, and can plan nothing else
+            Stalled,       // Filibuster (Quash): it acts last in its layer this Day
+            Deniable       // Plausible Deniability (Wide Guard): effects that hit more than one creature skip it
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old
@@ -89,7 +95,8 @@ namespace SlayTheClone {
             BarbedSnare,    // Hidden. The first creature to leave takes X damage, then it's consumed
             Shield, // Visible. The creature here is immune to combat damage, for X Days
             ScorchedEarth,  // Visible. The creature here can't trigger its effects, entry effects included (its ability still works)
-            Checkpoint      // Visible. Every creature that enters takes X damage; it stays (a side hazard: placed on a whole side)
+            Checkpoint,      // Visible. Every creature that enters takes X damage; it stays (a side hazard: placed on a whole side)
+            Prayer          // Visible. When its Days run out, the creature standing here heals X (Thoughts and Prayers, Pokémon\'s Wish)
         }
 
         // What a Cleanse removes (GDD Cleanse - Specificity): statuses and stat modifications are independent
@@ -118,7 +125,8 @@ namespace SlayTheClone {
             RushHour,  // The slowest act first
             SurvivalOfTheFittest, // Each Dusk, the creature with the least Health on the board, either side, takes 3 damage
             VolcanoLair,  // Each Day, whoever set it keeps their strongest creature Untouchable while another of theirs stands
-            Casino        // Each Dawn the house's wheel spins the Day's weather, the same for both sides (see CasinoRoll)
+            Casino,        // Each Dawn the house's wheel spins the Day's weather, the same for both sides (see CasinoRoll)
+            LiminalSpace  // Every creature\'s Attack and Health trade places while it trends, and back when it ends (Mind, 2026-10-17)
         }
 
         // Casino: the house's weather for the Day, like a Pokémon battle's weather, the same for everyone

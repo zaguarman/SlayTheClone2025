@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: LiminalSpace
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 57c4c91d-7010-425a-9d17-6debe313e875
+  cardName: Liminal Space
+  description: You have been here before. You have never been here. The carpet remembers
+    you.
+  cardType: 1
+  faction: 8
+  artwork: {fileID: 3286163911610860551, guid: faf161a0d01aef64b852c8a89c4aa489, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 14
+      value: 0
+      targetType: 0
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 2
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 6
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Trend for 2 Days (the user, 2026-10-17: Attack and Health swap):
+    every creature''s Attack and Health trade places, the ones on the board now and
+    each one that enters while it trends; when it ends they trade back. Walls become
+    cannons and cannons walls, for two Days.'
+  artDescription: An endless empty office corridor in sickly yellow light, damp beige
+    carpet, humming fluorescent tubes, one door ajar onto another identical corridor,
+    a lone figure far away with its head turned the wrong way round, no exit anywhere.
+  defaultTargetType: 0

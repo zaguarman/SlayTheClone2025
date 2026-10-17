@@ -58,6 +58,15 @@ Checkpoint (the user, 2026-10-16: a side hazard, Pokémon's Stealth Rock)
              slot for slot (Court Change).
     Cleansable: Yes
 
+Prayer (the user, 2026-10-17, Pokémon's Wish)
+    Visibility: Visible
+    Trigger Event(s): its Days run out (at Dusk).
+    Effect: The creature standing in the slot heals X, whoever it is by then; an empty slot, nothing. Then it's gone.
+    Placement: on a friendly creature's slot (Thoughts and Prayers, Myth: Prayer 6 for 2 Days: heals at the end of the next Day).
+    Parameters: Healing: X. Duration of Slot Effect: X Days.
+    Answers: Kill or move the creature before the prayers arrive; Code Review clears it; Projection trades it over.
+    Cleansable: Yes
+
 Rally Point
     Visibility: Visible
     Trigger Event(s): OnTurnStart (Slot effect logic checks if its slot is occupied by a creature controlled by the same player who controls this Rally Point).

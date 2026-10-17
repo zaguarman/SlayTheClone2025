@@ -21,7 +21,8 @@ USER_NOTES = {
     "The Friends We Made Along the Way": ["2026-10-17: Jesus with two guns instead of the cultist."],
     "Domino Effect": ["2026-10-17: add a housing market flavour."],
     "Tourist Trap": ["2026-10-17: put a beach."],
-    "Mass Emigration": ["2026-10-17: put Istanbul's Hagia Sophia (the user's photo: the Sultan Ahmed Mosque at sunset over the Bosphorus, six minarets)."],
+    "Mass Emigration": ["2026-10-17: put Istanbul's Hagia Sophia (the user's photo: the Sultan Ahmed Mosque at sunset over the Bosphorus, six minarets).",
+                        "2026-10-17: then, told the stories of both: the Hagia Sophia (Claude's recommendation, the building that changed hands) over the Blue Mosque."],
     "Strike": ["2026-10-14: a corrupt head of the works council eating lobster while the workers get nothing; the boss is happy."],
     "Mental Health Day": ["2026-10-14: it criticises how superficially the topic is treated: a nice day to have, but zero measures from the "
                           "government to tackle mental health problems; and to rub salt in the wound, the only people backing it are cringe "

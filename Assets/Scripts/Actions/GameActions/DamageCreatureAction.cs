@@ -4,6 +4,7 @@ namespace SlayTheClone {
     public class DamageCreatureAction : IGameAction, ISourcedAction {
         /// <summary>The card whose effect deals it (a spell, a creature's effect, a status's or a trap's card), for the stats.</summary>
         public ICard Source { get; set; }
+        public bool FromStatus { get; set; } // A Burn tick: the one damage an Immaculate creature takes
         private readonly ICreature target;
         private readonly int damage;
         private readonly ICreature attacker; // Creature dealing the damage, if any

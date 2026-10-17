@@ -97,6 +97,9 @@ namespace SlayTheClone {
         bool HasActiveAction(string creatureId);
         IGameAction GetActiveAction(string creatureId);
         bool CancelDeclaredAction(string creatureId); // Removes the creature's declared intent (move, attack or swap) from the queue
+        void StartLoop(ICreature creature); // Groundhog Day: it repeats today's plan each Day while Looping
+        void ReplayLoops();                 // At Dawn: the looping creatures' plans are made for them
+        bool IsLooping(ICreature creature);
         bool CancelPlay(ICard card); // Takes back a card played this Day that hasn't resolved yet; it stays in the hand
         void Cleanup();
         // Events

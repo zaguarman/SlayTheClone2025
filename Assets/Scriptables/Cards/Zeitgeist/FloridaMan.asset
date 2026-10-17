@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: FloridaMan
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 30da4020-62f4-4d11-ab6f-e3c6b49cdc8c
+  cardName: Florida Man
+  description: Florida Man does something. Again. Nobody knows what until it's done.
+  cardType: 0
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: 5ece159f6c958c84fb1f95cfc685d499, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects: []
+  designNotes: "Wild Card (the user, 2026-10-17, Pok\xE9mon's Metronome): its attack
+    on a creature does one of these, at random: hits twice, Burns it 2 instead, Exhausts
+    it instead, or nothing at all. Against the player, a plain hit."
+  artDescription: A sunburnt shirtless man with a mullet and jorts wrestling an alligator
+    in a supermarket car park, a beer can in his free hand, a shopping trolley on
+    fire behind him, a news ticker at the bottom reading FLORIDA MAN STRIKES AGAIN.
+  attack: 3
+  health: 4
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 50
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

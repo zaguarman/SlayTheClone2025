@@ -77,7 +77,8 @@ namespace SlayTheClone {
             if (type is StatusEffectType.Exhausted or StatusEffectType.Concealed or StatusEffectType.Revealed or StatusEffectType.Encrypted
                 or StatusEffectType.Untouchable or StatusEffectType.Cooldown or StatusEffectType.Brainwashed or StatusEffectType.KillOrder
                 or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Blackout
-                or StatusEffectType.Survivor or StatusEffectType.Burnout or StatusEffectType.Shielded or StatusEffectType.Provoked) {
+                or StatusEffectType.Survivor or StatusEffectType.Burnout or StatusEffectType.Shielded or StatusEffectType.Provoked
+                or StatusEffectType.Looping or StatusEffectType.Stalled or StatusEffectType.Deniable) {
                 foreach (var old in manager.GetActiveModifiersFor(target).OfType<StatusEffectModifier>()
                              .Where(s => s.EffectType == type).ToList()) {
                     manager.RemoveModifier(target, old);
@@ -101,6 +102,9 @@ namespace SlayTheClone {
             var status = (StatusEffectModifier)context.ModifierFactory.CreateStatusEffectModifier(
                 $"{type} Effect", Describe(type, duration, potency), type, duration, potency, turnApplied);
             manager.ApplyModifier(target, status);
+
+            // Groundhog Day: the plan it has as the loop closes is what it does each Day the loop lasts
+            if (type == StatusEffectType.Looping) context.ActionsQueue.StartLoop(target);
 
             // A creature that can't act loses what it planned (GDD 3.8): its attack, move and ability actions
             if (status.PreventsActions()) {
@@ -131,6 +135,9 @@ namespace SlayTheClone {
                 StatusEffectType.Blackout => $"Blackout ({days}): its ability and effects are off",
                 StatusEffectType.Licensed => "Licensed: its next attack on a creature destroys it",
                 StatusEffectType.Survivor => "Survivor: from full Health, a killing hit leaves it at 1",
+                StatusEffectType.Looping => $"Groundhog Day ({days}): it repeats the same action each Day, and plans nothing else",
+                StatusEffectType.Stalled => "Stalled: it acts last this Day",
+                StatusEffectType.Deniable => "Deniable: effects that hit more than one creature skip it this Day",
                 StatusEffectType.Blessed or StatusEffectType.HeatSignature => type.ToString(), // Its stacks are added by the status itself
                 _ => $"{type} ({days})"
             };

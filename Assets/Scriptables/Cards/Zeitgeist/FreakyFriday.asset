@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: FreakyFriday
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 8fead604-f8ac-423e-ba19-93881f3834b1
+  cardName: Freaky Friday
+  description: Mom, I have your job today. Also your knees.
+  cardType: 1
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: 310e686999507bf4fb1c1fad1bcc892d, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 49
+      value: 0
+      targetType: 2
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Trick, turned to stats (the user, 2026-10-17): target creature and
+    the creature facing it trade Attack and Health, each waking up in the other''s
+    body. Aim it at their glass cannon facing your wall, or the other way round.'
+  artDescription: 'A mother and her teenage daughter facing each other across a breakfast
+    table, a broken fortune cookie between them, their faces swapped: the mother
+    with a nose ring and headphones, the daughter in reading glasses holding a mug
+    reading WORLD''S BEST MOM, both screaming.'
+  defaultTargetType: 2

@@ -64,6 +64,9 @@ namespace SlayTheClone {
                 case StatusEffectType.Blackout: return Debuff;
                 case StatusEffectType.Survivor: return Heart;
                 case StatusEffectType.Rooted: return Days;
+                case StatusEffectType.Looping: return Days;
+                case StatusEffectType.Stalled: return Days;
+                case StatusEffectType.Deniable: return Armor;
                 default: return null;
             }
         }

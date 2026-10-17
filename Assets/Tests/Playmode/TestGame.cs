@@ -97,8 +97,8 @@ namespace SlayTheClone.Tests {
         /// </summary>
         public void StartTurn() {
             ModifierManager.ProcessEndOfTurn(TurnClock.TurnNumber, ActionsQueue);
-            SlotEffectRules.ProcessEndOfTurn(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, Mediator);
-            TrendSystem.QueueDuskEffects(ActionsQueue);
+            SlotEffectRules.ProcessEndOfTurn(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, Mediator, ActionsQueue);
+            TrendSystem.QueueDuskEffects(ActionsQueue, TurnClock.TurnNumber);
             TrendSystem.ProcessDusk(TurnClock.TurnNumber);
             Resolve();
             Grace.ProcessDusk(new IPlayer[] { Player1, Player2 }, TurnClock.TurnNumber, Mediator);
@@ -109,6 +109,7 @@ namespace SlayTheClone.Tests {
             ModifierManager.ProcessStartOfTurn(TurnClock.TurnNumber, ActionsQueue);
             TrendSystem.QueueDayEffects(ActionsQueue);
             Resolve();
+            ActionsQueue.ReplayLoops();
         }
 
         /// <summary>

@@ -312,6 +312,12 @@ namespace SlayTheClone {
                     return status != null ? status + Requisite(action) : null;
                 case ActionType.DelayDeployment:
                     return $"+{value} {Keywords.Link("Deployment Time")} to {target}";
+                case ActionType.Mimic: // Monkey See, Monkey Do
+                    return $"a fresh copy of {target} appears in the slot facing it on your side (whatever stands there is discarded)";
+                case ActionType.TradeStats: // Freaky Friday
+                    return $"{target} and the creature facing it trade Attack and Health";
+                case ActionType.Seal: // The DMCA
+                    return $"{Keywords.Link("DMCA")}{DaysTag(value)}: the enemy can't play a card that shares its name with a creature on the board, either side's";
                 case ActionType.SwapStats: // Geomagnetic Reversal
                     return $"{target}{Requisite(action)}: its Attack and Health trade places";
                 case ActionType.Defect: // Taqiyya
@@ -517,6 +523,9 @@ namespace SlayTheClone {
                 case StatusEffectType.Licensed: return $"{Keywords.Link("Licensed", "license")} {target}";
                 case StatusEffectType.Composed: return $"{Keywords.Link("Composed", "Composed" + Count(days))} on {target}";
                 case StatusEffectType.Blackout: return $"{Keywords.Link("Blackout", "Blackout" + Count(days))} on {target}";
+                case StatusEffectType.Looping: return $"{Keywords.Link("Looping", "Groundhog Day")} on {target}: it repeats today's action, the same target, for the next {days} {(days == 1 ? "Day" : "Days")}, and can plan nothing else";
+                case StatusEffectType.Stalled: return $"{target} {Keywords.Link("Stalled", "acts last")} {(days <= 1 ? "this Day" : $"for {days} Days")}";
+                case StatusEffectType.Deniable: return $"{(days <= 1 ? "this Day" : $"for {days} Days")}, effects that hit more than one creature {Keywords.Link("Deniable", "skip")} {target}";
                 case StatusEffectType.Survivor: return $"{Keywords.Link("Survivor")} on {target}";
                 default: return null;
             }
@@ -593,6 +602,7 @@ namespace SlayTheClone {
                 SlotEffectType.Shield => Keywords.Link("Shield", $"Shield{days}"),
                 SlotEffectType.ScorchedEarth => Keywords.Link("Scorched Earth") + DaysTag(action.statusDuration),
                 SlotEffectType.Checkpoint => Keywords.Link("Checkpoint", $"Checkpoint {action.value}") + DaysTag(action.statusDuration),
+                SlotEffectType.Prayer => Keywords.Link("Prayer", $"Prayer {action.value}") + DaysTag(action.statusDuration),
                 _ => "nothing"
             };
         }
@@ -603,6 +613,7 @@ namespace SlayTheClone {
             SlotEffectType.Shield => EffectIcons.Armor,
             SlotEffectType.ScorchedEarth => EffectIcons.Burn,
             SlotEffectType.Checkpoint => EffectIcons.Hurt,
+            SlotEffectType.Prayer => EffectIcons.Heal,
             _ => null
         };
         #endregion

@@ -286,6 +286,7 @@ namespace SlayTheClone {
             deleteArmed = false;
             deckButtons.Clear();
             factionTabs.Clear();
+            tierTabs.Clear(); // Rebuilt with the screen
             shownAssets.Clear();
             OpenDeck = null;
             ShownFaction = null;

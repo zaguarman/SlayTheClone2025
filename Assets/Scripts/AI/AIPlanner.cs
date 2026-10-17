@@ -104,7 +104,7 @@ namespace SlayTheClone {
         #region Creatures
         // The best creatures first, each to the free slot that suits it best (Easy: any); a much better one replaces a weak one
         private void PlayCreatures() {
-            var hand = view.Me.Hand.OfType<ICreature>().Where(c => !IsQueued(c)).ToList();
+            var hand = view.Me.Hand.OfType<ICreature>().Where(c => !IsQueued(c) && PlayRestrictions.Why(c, view.Me, queue.Today) == null).ToList(); // The DMCA
             hand = Level == AILevel.Easy ? hand.OrderBy(_ => random.Next()).ToList() : hand.OrderByDescending(c => c.Attack + c.Health).ToList();
             var planted = new HashSet<SeenSlot>();
             foreach (var creature in hand) {
@@ -576,6 +576,8 @@ namespace SlayTheClone {
                         float Speed(IEnumerable<SeenCreature> side) => side.Any() ? (float)side.Average(c => c.Known ? c.Creature.Speed : 1) : 0;
                         return (Speed(view.Theirs) - Speed(view.Mine)) * days + 0.2f;
                     }
+                    case Trend.LiminalSpace: // Attack and Health trade places for everyone: good for whoever has the taller creatures
+                        return view.All.Sum(c => (c.Ours ? 1 : -1) * (HealthLeft(c) - AttackOf(c))) * 0.4f + 0.2f;
                     default:
                         return 1;
                 }
@@ -798,7 +800,9 @@ namespace SlayTheClone {
                     return creature.Ours ? (creature.Creature?.Gear == CreatureAbility.None ? 1.5f + AttackOf(creature) * 0.2f : 0.5f) : -1f;
                 case ActionType.Push or ActionType.Pull: // Maneuvers: theirs into reach or off their bonuses; a hurt one of ours out of the front
                     return PositionValue(creature, action.actionType == ActionType.Pull);
-                case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility:
+                case ActionType.Mimic: // Monkey See, Monkey Do: one of theirs copied onto our side (over whatever stands there)
+                    return creature.Ours ? -1 : creature.Worth * 0.8f;
+                case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility or ActionType.TradeStats:
                     return IntendedFor(spell, creature.Ours ? view.Me : view.Them) ? 1 : -1; // Hard to weigh: done where the card means it
                 case ActionType.Armor or ActionType.Heal when Hard && creature.Ours:
                     return Protection(creature, action.actionType, action.value);
@@ -828,6 +832,7 @@ namespace SlayTheClone {
             ActionType.Summon => 2 * amount,
             ActionType.SummonDecoys => 2.5f * amount, // Bodies that soak their attacks and kills
             ActionType.CutDraws => -amount, // Cards they won't have
+            ActionType.Seal => -1.5f, // The DMCA: their second copies wait
             _ => 0
         };
 
@@ -941,6 +946,10 @@ namespace SlayTheClone {
                     : WouldDie(creature) ? creature.Worth * 0.6f : 0.5f,
                 // Provoked: on theirs, its attack goes where we choose to stand; on ours, it loses its aim
                 StatusEffectType.Provoked => creature.Operative && CanAttack(creature) ? -1.5f : -0.3f,
+                // Groundhog Day: stuck repeating today's plan (ours loses its choices; theirs, we see every Day coming)
+                StatusEffectType.Looping => creature.Operative ? -1.2f * System.Math.Max(1, days) : -0.3f,
+                StatusEffectType.Stalled => creature.Operative && CanAttack(creature) ? -0.8f : 0, // Filibuster: its hit lands after ours
+                StatusEffectType.Deniable => 0.8f, // Plausible Deniability: area effects pass it by
                 StatusEffectType.Blackout => creature.Ability != CreatureAbility.None || creature.Retaliation > 0 ? -1.5f : -0.5f,
                 _ => 0
             };
@@ -1024,7 +1033,8 @@ namespace SlayTheClone {
 
         private bool IsStunned(SeenCreature creature) => creature.Has(StatusEffectType.Exhausted) || (Expected(creature)?.Exhausted ?? false);
         private bool IsExposed(SeenCreature creature) => creature.Exposed || (Expected(creature)?.Exhausted ?? false); // Exhausted exposes
-        private bool IsUntouchable(SeenCreature creature) => creature.Has(StatusEffectType.Untouchable) || (Expected(creature)?.Untouchable ?? false);
+        private bool IsUntouchable(SeenCreature creature) => creature.Has(StatusEffectType.Untouchable) || (Expected(creature)?.Untouchable ?? false)
+            || creature.Ability == CreatureAbility.Immaculate; // Only a Burn hurts it
         private int HeatOf(SeenCreature creature) => creature.Heat + (Expected(creature)?.Heat ?? 0);
         #endregion
 

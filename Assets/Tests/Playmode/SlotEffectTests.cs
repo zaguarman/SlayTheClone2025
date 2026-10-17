@@ -185,5 +185,19 @@ namespace SlayTheClone.Tests {
             game.Run(new MoveCreatureAction(late, p1.Battlefield[2], p1.Battlefield[3], p1));
             CollectionAssert.AreEqual(new[] { 3, 2 }, game.History.DamageTo(p2), "Only once");
         }
+
+        // Thoughts and Prayers (the user, 2026-10-17, Pokémon's Wish): help that arrives late, for whoever is there by then
+        [Test]
+        public void Prayer_HealsWhoeverStandsThere_WhenItsDaysRunOut() {
+            var hurt = game.Summon(p1, game.Creature("Hurt", 1, 10), 0);
+            game.Run(TargetedActions.Damage(hurt, 8));
+            Place(p1.Battlefield[0], SlotEffectType.Prayer, 6, 2, p1);
+            Assert.IsFalse(p1.Battlefield[0].Effect.IsHidden, "A Prayer is visible");
+            game.StartTurn();
+            Assert.AreEqual(2, hurt.Health, "Not yet: its Days aren't out");
+            game.StartTurn();
+            Assert.AreEqual(8, hurt.Health, "At the end of the next Day, the creature standing there heals 6");
+            Assert.IsNull(p1.Battlefield[0].Effect, "...and the prayer is spent");
+        }
     }
 }

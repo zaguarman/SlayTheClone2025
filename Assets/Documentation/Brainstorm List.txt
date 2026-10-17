@@ -685,7 +685,6 @@ Card Game Factions Overview
 			Nonchalant Agent
 			Panic Button
 			Persuasion Vs Coercion
-			Plausible Deniability
 			Political Decoy
 			Political Police
 			Polonium Umbrella
@@ -767,7 +766,6 @@ Card Game Factions Overview
 			Everybody Is Equal Before The Law
 			Expropriate
 			Facecrime
-			Filibuster
 			Gerontocracy
 			Globalization
 			Gun Control
@@ -1635,7 +1633,6 @@ Card Game Factions Overview
 			CO2 Offsetting (accounting magic: the emissions stay, the books say they're gone) (added 2026-10-16)
 			Cozy Loft in an "Exclusive" Location
 			Credit Card (tagged Corporate)
-			DMCA (moved from Tech, 2026-10-14)
 			Deal with a Neutral Third Party That We Bought
 			EBITDA
 			Forced Upselling
@@ -1739,7 +1736,6 @@ Card Game Factions Overview
 			Epistemology (the study of how knowledge is gained: ontology, then epistemology, methodology, methods)
 			Freudian Slip
 			God Is Dead (as the philosopher said: Nietzsche) (added 2026-10-14)
-			Liminal Space (a Weather: Attack and Health swap for X turns)
 			Ontology (the study of existence)
 			Phronetic (practical wisdom: knowledge in context)
 			The ELIZA Effect
@@ -1771,9 +1767,23 @@ Card Game Factions Overview
 				policeman shouts "Put your hands up! Police!"
 			Touch Grass (added 2026-10-15, no faction given)
 			Afterburner (added 2026-10-17, no faction given)
+			Homeostasis (added 2026-10-17, no faction given)
+			Laser Eyes (added 2026-10-17, no faction given)
 		Mechanic ideas
 			Cards that come back to the hand when a condition is met
 			More tempo-altering effects (2026-10-14): some that raise your creatures' Speed, others that cut Deployment Time
+			Roar (2026-10-17, Pokémon, to brainstorm): the user's idea, the creature "rotates with one of the sides": it's forced out and
+				another takes its place. Options: back to its owner's deck and a random creature from that deck takes the slot, ready;
+				or it trades places with a random creature of its side (a Shuffle of one); or it goes back to the hand and the top
+				creature of the deck comes out in its slot. Flavours: Statecraft "Deportation", Corporate "Reshuffle" (the board's),
+				Zeitgeist "Get Off the Stage".
+			Yawn (2026-10-17, Pokémon, how is to be determined): the target is Exhausted at the next Dawn unless it moves or leaves
+				its slot first (pairs with the Maneuvers). Names: Mind "Boring Lecture", Utopia "Peer Review".
+			Trick Room flavours (2026-10-17): Rush Hour is the Trend (the slowest act first); other factions could set it under their
+				own card names: Mind "Slow Thinking" (Kahneman), Myth "The Last Shall Be First", Corporate "Seniority", Statecraft
+				"Due Process", Utopia "Peer Review", Tech "Latency", Digital Society "Buffering", Shadow Ops. "Slow Burn".
+			Destiny Bond variations (2026-10-17, Pokémon; the user picks one): see the session's proposals (Mutually Assured
+				Destruction, Blood Pact, Insurance Policy, Scorched Earth Policy, Hostage Situation).
 		Flavor text waiting for a card
 			"Nothing beats a Jet2 holiday. And right now you can save £50 per person. That's £200 off for a family of four."
 				(the user, 2026-10-15: the Jet2 advert, quoted as a meme; it names a real company, a trademark risk the user takes on.

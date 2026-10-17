@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: PlausibleDeniability
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: c79005e9-afc3-46d9-b41d-cb96c356899f
+  cardName: Plausible Deniability
+  description: I have no recollection of that creature, that Day, or this conversation.
+  cardType: 1
+  faction: 3
+  artwork: {fileID: 3286163911610860551, guid: f2a0b34999d0b0c4dbcf1f9d4a816710, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 3
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 25
+      statusDuration: 1
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Wide Guard (the user, 2026-10-17): this Day, effects that hit more
+    than one creature skip your creatures (area spells, Spray and Pray, a Hipster''s
+    arrival), like Too Mainstream for the whole side.'
+  artDescription: A man in a grey suit at a hearing shrugging with both palms up
+    in front of a wall of documents so redacted they are solid black bars, a speech
+    bubble reading I DON'T RECALL, the committee's questions bouncing off him as
+    little paper planes.
+  defaultTargetType: 0

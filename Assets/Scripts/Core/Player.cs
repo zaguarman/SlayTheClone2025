@@ -46,6 +46,7 @@ namespace SlayTheClone {
         int SpellsToday { get; set; }
         /// <summary>God's Grace: the last Day at whose Dusk 0 Health doesn't lose yet; null when not in Grace.</summary>
         int? GraceUntilDay { get; set; }
+        int? SealedUntilDay { get; set; } // The DMCA: until this Day, it can't play a card that shares its name with a creature on the board
         /// <summary>The card that put the player in Grace (shown over their plaque while it lasts).</summary>
         ICard GraceCard { get; set; }
         /// <summary>Send For: the card picked from the deck for each card that sends for one, until it resolves.</summary>
@@ -108,6 +109,7 @@ namespace SlayTheClone {
         public ISet<Relic> Relics { get; } = new HashSet<Relic>();
         public int SpellsToday { get; set; }
         public int? GraceUntilDay { get; set; }
+        public int? SealedUntilDay { get; set; }
         public ICard GraceCard { get; set; }
         public Dictionary<ICard, ICard> SendForPicks { get; } = new Dictionary<ICard, ICard>();
         public Dictionary<ICard, List<ICard>> DiscardPicks { get; } = new Dictionary<ICard, List<ICard>>();

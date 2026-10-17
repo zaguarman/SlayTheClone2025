@@ -370,5 +370,53 @@ namespace SlayTheClone.Tests {
             game.StartTurn();
             Assert.AreEqual(3, hot.Heat, "Persistent: it doesn't decay");
         }
+
+        // The Pokémon picks (the user, 2026-10-17): Encore, Quash and Wide Guard as statuses
+        [Test]
+        public void PokemonPicks_Looping_RepeatsThePlan_Stalled_ActsLast_Deniable_SkipsAreaEffects() {
+            // Stalled (Filibuster): the faster creature's hit comes after the slower one's
+            var slow = game.Summon(p1, game.Creature("Slow", 5, 5, 1), 0);
+            var fast = game.Summon(p2, game.Creature("Fast", 5, 5, 3), 0);
+            game.Run(new ApplyStatusEffectAction(fast, StatusEffectType.Stalled, 1, 0));
+            game.Declare(fast, p1.Battlefield[0]);
+            game.Declare(slow, p2.Battlefield[0]);
+            game.Resolve();
+            Assert.IsTrue(fast.IsDead, "Stalled, the fast one acted last: the slow one's hit landed first...");
+            Assert.AreEqual(5, slow.Health, "...and it died before its own");
+
+            // Looping (Groundhog Day): the plan it has as the spell lands is its plan each Day the loop lasts
+            Fresh();
+            var wall = game.Summon(p1, game.Creature("Wall", 0, 30), 0);
+            var looper = game.Summon(p2, game.Creature("Looper", 3, 10), 1);
+            var loop = Effect(EffectTrigger.OnPlay, ActionType.ApplyStatus, 0, TargetType.EnemyCreatures);
+            loop.actions[0].statusEffectToApply = StatusEffectType.Looping;
+            loop.actions[0].statusDuration = 2;
+            var groundhogDay = game.GiveCard(p1, game.Spell("Groundhog Day", TargetType.EnemyCreatures, loop));
+            game.Declare(looper, p1.Battlefield[0]);
+            game.Play(groundhogDay, p1, p2.Battlefield[1]);
+            game.Resolve(); // The spell lands before the attack: the loop closes on the attack
+            Assert.AreEqual(27, wall.Health);
+            game.StartTurn();
+            Assert.IsTrue(game.ActionsQueue.HasActiveAction(looper.TargetId), "At Dawn its plan is made for it");
+            Assert.IsFalse(game.ActionsQueue.CancelDeclaredAction(looper.TargetId), "...and can't be taken back");
+            game.Resolve();
+            Assert.AreEqual(24, wall.Health, "The same attack on the same slot");
+            game.StartTurn();
+            game.Resolve();
+            Assert.AreEqual(21, wall.Health, "Looping 2: the next 2 Days");
+            game.StartTurn();
+            Assert.IsFalse(game.ActionsQueue.HasActiveAction(looper.TargetId), "Then the loop is over");
+
+            // Deniable (Plausible Deniability): an effect on more than one creature skips it, like Too Mainstream
+            Fresh();
+            var denier = game.Summon(p1, game.Creature("Denier", 1, 10), 0);
+            var bystander = game.Summon(p1, game.Creature("Bystander", 1, 10), 1);
+            game.Run(new ApplyStatusEffectAction(denier, StatusEffectType.Deniable, 1, 0));
+            var blast = game.GiveCard(p2, game.Spell("Blast", TargetType.EnemyCreatures,
+                Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));
+            game.Play(blast, p2, p1.Battlefield[1]);
+            game.Resolve();
+            Assert.AreEqual((10, 8), (denier.Health, bystander.Health), "The area hit skipped the Deniable creature");
+        }
     }
 }

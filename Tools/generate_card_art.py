@@ -5113,27 +5113,6 @@ def the_wicker_man():
     return svg(defs, body)
 
 
-def thoughts_and_prayers():
-    # A politician at a podium covered in microphones, eyes closed and hands pressed together in prayer, while behind him
-    # an aide quietly shreds a stack of papers labelled REFORM
-    defs = lin("bg", ["#1a2a4a", "#3a4a6a"])
-    body = rect(0, 0, W, H, "url(#bg)")
-    for i in range(13):
-        body += rect(0, i * 16, W, 8, "#b22234" if i % 2 == 0 else "#f4f4f4", 'opacity="0.12"')
-    body += person(250, 180, 1.0, SKIN[0], "#2a2a3a", face="flat", hair="#3a2a1a")
-    body += rect(270, 120, 40, 40, "#d0d0d0", 'stroke="#888" stroke-width="2"') + lettering("REFORM", 290, 106, 7, "#ffffff")
-    for x in (276, 286, 296):
-        body += stroke(f"M{x} 160 L{x} 180", "#f4f4f4", 2)
-    body += person(140, 170, 1.35, SKIN[0], "#1e2440", face="closed", hair="#c8c8c8", tie="#c0392b")
-
-    body += rect(80, 140, 120, 60, "#5a3a2a", 'stroke="#3a2a1a" stroke-width="2"') + circle(140, 166, 12, "#d4af37")
-    body += poly([(130, 142), (150, 142), (140, 112)], SKIN[0], 'stroke="#b88a6a" stroke-width="1.5"')  # Hands together
-    body += stroke("M140 114 L140 140", "#b88a6a", 1.2)
-    for i, x in enumerate((96, 112, 128, 152, 168, 184)):
-        body += stroke(f"M{x} 140 L{140 + (x - 140) * 0.3:.0f} 118", "#2a2a2a", 2) + rect(140 + (x - 140) * 0.3 - 3, 110, 6, 9, "#2a2a2a", 'rx="2"')
-    return svg(defs, body)
-
-
 def religious_instrumentalization():
     # A politician in a suit posing for cameras in front of a church, holding a bible upside down over his head, while a
     # confused small creature from the other side shuffles over to stand behind him
@@ -5184,8 +5163,7 @@ def curse_of_hubris():
 
 CHUNK = {"Myth": {"HolyWar": holy_war, "TheGreatFlood": the_great_flood, "MoxNox": mox_nox,
                   "HolyHandGrenadeofAntioch": holy_hand_grenade_of_antioch, "LanceOfLonginus": lance_of_longinus,
-                  "Necronomicon": necronomicon, "TheWickerMan": the_wicker_man, "ThoughtsandPrayers": thoughts_and_prayers,
-                  "ReligiousInstrumentalization": religious_instrumentalization, "DeusVult": deus_vult, "CurseOfHubris": curse_of_hubris}}
+                  "Necronomicon": necronomicon, "TheWickerMan": the_wicker_man, "ReligiousInstrumentalization": religious_instrumentalization, "DeusVult": deus_vult, "CurseOfHubris": curse_of_hubris}}
 for _theme, _cards in CHUNK.items():
     CARDS[_theme].update(_cards)
 
@@ -9691,31 +9669,346 @@ def weaponized_incompetence():
     return svg(defs, body)
 
 
+# ---------------------------------------------------------------- The Pokémon picks (the user, 2026-10-17)
+def hagia_sophia(cx, base, s=1.0):
+    """Istanbul's Hagia Sophia in profile (the user's pick, 2026-10-17, over the Blue Mosque): the great shallow dome over
+    two half domes, smaller semi-domes and buttresses, terracotta walls, lead-grey domes, four minarets (two slender, two
+    stout)."""
+    wall, dome, dark = "#b86a52", "#8a8a9a", "#7a4a3a"
+    out = rect(cx - 96 * s, base - 30 * s, 192 * s, 30 * s, wall)
+    for dx in (-70, 70):  # The buttresses
+        out += rect(cx + (dx - 10) * s, base - 44 * s, 20 * s, 44 * s, dark)
+    for dx, r in ((-78, 14), (78, 14)):  # Small semi-domes at the ends
+        out += path(f"M{cx + (dx - r) * s:.1f} {base - 30 * s:.1f} A{r * s:.1f} {r * s:.1f} 0 0 1 {cx + (dx + r) * s:.1f} {base - 30 * s:.1f} Z", dome)
+    out += rect(cx - 58 * s, base - 50 * s, 116 * s, 20 * s, wall)
+    for dx in (-46, 46):  # The two great half domes
+        out += path(f"M{cx + (dx - 26) * s:.1f} {base - 50 * s:.1f} A{26 * s:.1f} {22 * s:.1f} 0 0 1 {cx + (dx + 26) * s:.1f} {base - 50 * s:.1f} Z", dome)
+    out += rect(cx - 34 * s, base - 70 * s, 68 * s, 20 * s, wall)
+    for i in range(-3, 4):  # The ring of windows under the dome
+        out += rect(cx + (i * 9 - 2) * s, base - 66 * s, 4 * s, 10 * s, "#f0d8a0")
+    out += path(f"M{cx - 36 * s:.1f} {base - 70 * s:.1f} A{36 * s:.1f} {24 * s:.1f} 0 0 1 {cx + 36 * s:.1f} {base - 70 * s:.1f} Z", dome)
+    out += stroke(f"M{cx:.1f} {base - 94 * s:.1f} L{cx:.1f} {base - 102 * s:.1f}", "#c8a84a", 2 * s)
+    for dx, h, w, c in ((-108, 96, 7, wall), (-92, 84, 5, "#e8d8c0"), (92, 84, 5, "#e8d8c0"), (108, 96, 7, wall)):  # Minarets, two stout, two slender
+        x = cx + dx * s
+        out += rect(x - w / 2 * s, base - h * s, w * s, h * s, c) + poly([(x - (w / 2 + 1) * s, base - h * s), (x, base - (h + 14) * s), (x + (w / 2 + 1) * s, base - h * s)], dark)
+        out += rect(x - (w / 2 + 2) * s, base - h * 0.7 * s, (w + 4) * s, 3 * s, dark)
+    return out
+
+
+def groundhog_day():
+    # A man in a hotel bed slapping an alarm clock that reads 6:00, the groundhog in a tiny top hat on the windowsill, and the
+    # same scene again in two smaller frames stacked at the side like a film strip, his face more desperate each time
+    defs = lin("bg", ["#e8d8c0", "#c8b090"]) + lin("sky", ["#9ab8d8", "#dce8f0"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 150, W, 50, "#8a6a4a")
+    def scene(x0, y0, s, face):
+        out = rect(x0 + 150 * s, y0 + 14 * s, 70 * s, 56 * s, "url(#sky)", f'stroke="#5a3a2a" stroke-width="{3 * s:.1f}"')
+        for k in range(6):  # Snow
+            out += circle(x0 + (158 + k * 11) * s, y0 + (24 + (k % 3) * 14) * s, 1.5 * s, "#ffffff")
+        out += rect(x0 + 150 * s, y0 + 70 * s, 70 * s, 5 * s, "#5a3a2a")
+        # The groundhog on the sill, in its top hat
+        out += ellipse(x0 + 186 * s, y0 + 62 * s, 12 * s, 9 * s, "#7a5a3a") + circle(x0 + 196 * s, y0 + 54 * s, 7 * s, "#8a6a4a")
+        out += circle(x0 + 198 * s, y0 + 53 * s, 1.2 * s, "#111") + rect(x0 + 195 * s, y0 + 57 * s, 4 * s, 3 * s, "#ffffff")
+        out += rect(x0 + 189 * s, y0 + 46 * s, 14 * s, 2.5 * s, "#111") + rect(x0 + 192 * s, y0 + 38 * s, 8 * s, 9 * s, "#111")
+        # The bed, the man sitting up in it, the clock on the nightstand
+        out += rect(x0 + 20 * s, y0 + 96 * s, 120 * s, 40 * s, "#c04a4a", f'rx="{4 * s:.1f}"') + rect(x0 + 20 * s, y0 + 90 * s, 120 * s, 10 * s, "#ffffff")
+        out += person(x0 + 70 * s, y0 + 100 * s, 0.75 * s, SKIN[0], "#e8e8f0", face=face, hair="#4a3a2a", brows="sad")
+        out += stroke(f"M{x0 + 92 * s:.1f} {y0 + 78 * s:.1f} L{x0 + 128 * s:.1f} {y0 + 62 * s:.1f}", SKIN[0], 6 * s)
+        out += rect(x0 + 126 * s, y0 + 66 * s, 30 * s, 30 * s, "#5a3a2a") + rect(x0 + 130 * s, y0 + 48 * s, 24 * s, 16 * s, "#222", f'rx="{2 * s:.1f}"')
+        out += lettering("6:00", x0 + 142 * s, y0 + 51 * s, 8 * s, "#ff4040", width=1.4 * s)
+        for k in (-1, 1):
+            out += stroke(f"M{x0 + (142 + k * 6) * s:.1f} {y0 + 46 * s:.1f} l {k * 5 * s:.1f} {-4 * s:.1f}", "#222", 1.5 * s)  # It rings
+        return out
+    body += scene(0, 20, 1.0, "frown")
+    for i, face in enumerate(("wavy", "shout")):
+        y = 8 + i * 94
+        body += rect(238, y, 112, 86, "#1a1a1a") + rect(242, y + 4, 104, 78, "#f4ecd8")
+        for k in range(6):
+            body += rect(239, y + 6 + k * 14, 3, 7, "#f4ecd8") + rect(347, y + 6 + k * 14, 3, 7, "#f4ecd8")
+        body += group(scene(0, 0, 0.44, face), f"translate(246 {y + 8})")
+    return svg(defs, body)
+
+
+def dmca():
+    # A lawyer slapping a huge red COPYRIGHT STRIKE sticker over a creature's face on a giant video thumbnail, a second,
+    # identical thumbnail greyed out and CLAIMED, a tiny APPEAL button crossed out
+    defs, body = bg_office()
+    body += rect(30, 14, 292, 150, "#1a1a22", 'rx="6" stroke="#444" stroke-width="3"')
+    for i, x in enumerate((48, 184)):
+        grey = i == 1
+        body += rect(x, 30, 120, 76, "#3a6a8a" if not grey else "#555", 'rx="3"')
+        face = "#8a8a8a" if grey else SKIN[1]
+        body += circle(x + 60, 66, 22, face) + circle(x + 52, 62, 2.5, "#222") + circle(x + 68, 62, 2.5, "#222")
+        body += path(f"M{x + 50} 76 q 10 8 20 0", "none", 'stroke="#222" stroke-width="2"')
+        body += rect(x, 110, 120, 8, "#444") + rect(x, 110, 70 if not grey else 20, 8, "#c0392b")
+        body += lettering("CLAIMED" if grey else "4.2M VIEWS", x + 60, 124, 7, "#bbb" if grey else "#ddd", width=1.2)
+        if grey:
+            body += stroke(f"M{x + 10} 40 L{x + 110} 96 M{x + 110} 40 L{x + 10} 96", "#999", 3)
+    body += group(rect(26, -14, 164, 30, "#d0342c", 'rx="3" stroke="#7a1a12" stroke-width="2"') + lettering("COPYRIGHT STRIKE", 108, -8, 11, "#ffffff", width=2), "translate(100 70) rotate(-14)")
+    body += rect(236, 134, 56, 18, "#2a2a2a", 'rx="4" stroke="#666" stroke-width="1"') + lettering("APPEAL", 264, 139, 7, "#888", width=1.2)
+    body += stroke("M240 136 L288 150 M288 136 L240 150", "#d0342c", 3)
+    body += person(96, 200, 1.1, SKIN[0], "#1a1a2a", face="smirk", hair="#2a2a2a", tie="#c0392b")
+    body += stroke("M126 160 L164 110", "#1a1a2a", 10) + circle(170, 104, 8, SKIN[0])
+    return svg(defs, body)
+
+
+def liminal_space():
+    # An endless empty office corridor in sickly yellow light, damp beige carpet, humming fluorescent tubes, one door ajar
+    # onto another identical corridor, a lone far figure with its head on backwards, no exit anywhere (the Backrooms)
+    defs = lin("wall", ["#e8d060", "#b8a040"]) + lin("floor", ["#c8b070", "#7a6a3a"])
+    body = rect(0, 0, W, H, "#d8c050")
+    body += poly([(0, 200), (352, 200), (214, 112), (138, 112)], "url(#floor)")
+    body += poly([(0, 0), (138, 74), (138, 112), (0, 200)], "url(#wall)") + poly([(352, 0), (214, 74), (214, 112), (352, 200)], "url(#wall)")
+    body += poly([(0, 0), (352, 0), (214, 74), (138, 74)], "#f0e4a0")
+    body += rect(138, 74, 76, 38, "#c8b050")  # The far end: more corridor
+    for i, (y, w) in enumerate(((14, 100), (34, 72), (50, 50), (62, 32))):  # Fluorescent tubes receding
+        body += rect(176 - w / 2, y, w, 4, "#ffffff", 'opacity="0.95"') + rect(176 - w / 2 - 6, y - 3, w + 12, 10, "#ffffff", 'opacity="0.18"')
+    for i in range(1, 6):  # Carpet seams and wall panels
+        t = i / 6
+        body += stroke(f"M{138 * t} {200 - 88 * t} L{352 - 138 * t} {200 - 88 * t}", "#9a8a4a", 1, 'opacity="0.5"')
+        body += stroke(f"M{138 * t} {74 * t} L{138 * t} {200 - 88 * t}", "#9a8a4a", 1, 'opacity="0.5"') + stroke(f"M{352 - 138 * t} {74 * t} L{352 - 138 * t} {200 - 88 * t}", "#9a8a4a", 1, 'opacity="0.5"')
+    body += poly([(40, 60), (84, 74), (84, 162), (40, 182)], "#5a4a2a") + poly([(44, 66), (74, 76), (74, 156), (44, 174)], "#c8b050")  # The door ajar
+    body += path("M46 68 L72 78 L72 154 L46 172 Z", "none", 'stroke="#3a2a1a" stroke-width="1"')
+    body += rect(170, 92, 8, 20, "#2a2a2a") + circle(174, 89, 4, "#2a2a2a") + circle(176, 88, 1.2, "#f0e4a0")  # The far figure, head the wrong way round
+    for x, y in ((250, 150), (120, 170), (300, 180)):
+        body += ellipse(x, y, 16, 4, "#6a5a2a", 'opacity="0.5"')  # Damp patches
+    return svg(defs, body)
+
+
+def monkey_see_monkey_do():
+    # A chimpanzee in a lab coat and a scientist in a lab coat facing each other through an empty mirror frame, each copying
+    # the other's pose exactly, clipboard for clipboard; a banana on the scientist's clipboard
+    defs, body = bg_mind()
+    body += rect(0, 172, W, 28, "#8a7aa0")
+    body += rect(160, 20, 32, 170, "#d4af37", 'rx="4"') + rect(168, 28, 16, 154, "#e8d8f0", 'opacity="0.35"')  # The mirror's frame, nothing in it
+    # The chimp, left: a brown face with a lighter muzzle and big ears, in a lab coat
+    body += person(84, 200, 1.2, "#6a4a2a", "#ffffff", face="smile", brows="sad")
+    body += circle(60, 123, 7, "#6a4a2a") + circle(108, 123, 7, "#6a4a2a") + ellipse(84, 132, 15, 11, "#c8a080")
+    body += circle(80, 130, 1.6, "#222") + circle(88, 130, 1.6, "#222") + path("M76 138 q 8 6 16 0", "none", 'stroke="#222" stroke-width="2"')
+    body += circle(84, 118, 22, "none", 'stroke="#5a3a1a" stroke-width="3"')
+    # The scientist, right, the same pose in a mirror
+    body += person(268, 200, 1.2, SKIN[0], "#ffffff", face="smile", hair="#3a2a1a", glasses="clear", brows="sad")
+    for x, f in ((84, 1), (268, -1)):  # Each raises a clipboard and an eyebrow
+        body += stroke(f"M{x + f * 30} 164 L{x + f * 58} 120", "#ffffff", 9) + rect(x + f * 58 - 14, 96, 28, 36, "#8a6a4a", 'rx="2"') + rect(x + f * 58 - 11, 100, 22, 28, "#f4f4f4")
+        body += stroke(f"M{x - f * 14} 104 l {f * 12} -5", "#3a2a1a" if f < 0 else "#5a3a1a", 2.5)
+    body += path("M250 108 q 10 -10 18 2 q -8 4 -18 -2 Z", "#f2d03a", 'stroke="#8a7a2a" stroke-width="1"')  # The banana
+    return svg(defs, body)
+
+
+def third_parallel_job():
+    # A hollow-eyed man at three desks pushed together, a laptop and a different lanyard on each, three video calls on mute,
+    # an IV drip of coffee into his arm, the wall clock at 3:00, his biceps absurdly huge from typing
+    defs, body = bg_office()
+    body += rect(0, 150, W, 50, "#2a2a36")
+    for i, (x, screen, badge) in enumerate(((36, "#3a6ad0", "#c0392b"), (136, "#2aa0a0", "#2a8a4a"), (236, "#8a4ad0", "#d4a020"))):
+        body += rect(x - 6, 150, 92, 8, "#5a4a3a") + monitor(x, 106, 76, 46, screen)
+        body += rect(x + 10, 112, 56, 34, "#1a1a2a", 'opacity="0.4"') + circle(x + 38, 128, 8, SKIN[(i + 1) % 4]) + rect(x + 46, 136, 14, 6, "#d0342c") + lettering("MUTE", x + 53, 137, 4, "#fff", width=0.8)
+        body += rect(x + 30, 158, 16, 36, badge) + rect(x + 32, 190, 12, 8, "#f4f4f4")  # Each lanyard
+    body += person(176, 200, 1.3, "#e0c0a8", "#5a5a6a", face="flat", hair="#2a2a2a")
+    body += ellipse(167, 129, 7, 4, "#5a4a6a", 'opacity="0.7"') + ellipse(185, 129, 7, 4, "#5a4a6a", 'opacity="0.7"')  # The bags under the eyes
+    for f in (-1, 1):  # The arms, absurd
+        body += ellipse(176 + f * 44, 168, 22, 16, "#e0c0a8") + ellipse(176 + f * 44, 158, 12, 8, "#e0c0a8")
+    body += stroke("M304 60 L304 150", "#aaa", 2) + rect(292, 48, 24, 30, "#6a3a1a", 'rx="4"') + rect(296, 52, 16, 6, "#f4f4f4")  # The coffee drip
+    body += path("M304 78 C 300 110 240 120 222 160", "none", 'stroke="#c8a070" stroke-width="2"')
+    body += circle(40, 40, 18, "#f4f4f4", 'stroke="#333" stroke-width="2"') + stroke("M40 40 L40 28 M40 40 L50 40", "#333", 2)  # 3:00
+    body += lettering("3:00 AM", 40, 62, 6, "#ddd", width=1)
+    return svg(defs, body)
+
+
+def plausible_deniability():
+    # A man in a grey suit at a hearing shrugging with both palms up in front of a wall of documents redacted into solid black
+    # bars, a speech bubble reading I DON'T RECALL, the committee's questions bouncing off him as paper planes
+    defs, body = bg_shadow()
+    for row in range(3):
+        for col in range(6):
+            x, y = 12 + col * 56, 10 + row * 50
+            body += rect(x, y, 46, 40, "#f4f0e6", 'stroke="#999" stroke-width="1"')
+            for k in range(4):
+                w = 34 if (row + col + k) % 3 else 20
+                body += rect(x + 6, y + 7 + k * 8, w, 4, "#111")
+    body += rect(0, 168, W, 32, "#3a2a1a") + rect(110, 150, 132, 22, "#5a3a22")
+    body += person(176, 200, 1.35, SKIN[0], "#6a6a72", face="flat", hair=OLD_HAIR, tie="#2a3a6a", brows="sad")
+    for f in (-1, 1):  # The shrug: arms up, palms open
+        body += stroke(f"M{176 + f * 40} 160 L{176 + f * 70} 128", "#6a6a72", 11) + circle(176 + f * 76, 120, 9, SKIN[0])
+    body += bubble(276, 44, 54, 18, tail=(214, 100)) + lettering("I DON'T RECALL", 276, 40, 6.5, "#333", width=1.2)
+    for x, y, a in ((60, 120, 20), (90, 70, -30), (300, 120, 160), (48, 160, 40)):  # The questions, as paper planes
+        body += group(poly([(0, 0), (22, -6), (6, 4), (8, 10)], "#ffffff", 'stroke="#888" stroke-width="1"'), f"translate({x} {y}) rotate({a})")
+    return svg(defs, body)
+
+
+def filibuster():
+    # An old senator at a podium reading from a phone book as thick as a pillow, hour 14 on the chamber clock, the benches
+    # full of sleeping politicians, one with a newspaper over his face, a clerk's eyes rolled back
+    defs, body = bg_state("#8a6a3a")
+    body += rect(0, 160, W, 40, "#5a3a22")
+    for i, x in enumerate((40, 96, 256, 312)):  # The benches, asleep
+        body += rect(x - 26, 156, 52, 10, "#7a4a2a")
+        body += person(x, 160, 0.7, SKIN[i % 4], ("#2a2a3a", "#3a3a4a", "#2a2a3a", "#4a3a3a")[i], face="closed", hair=(OLD_HAIR, "#3a2a1a", None, "#8a8a8a")[i])
+        body += zzz(x + 18, 96, 0.6, "#ffffff")
+    body += rect(236, 104, 40, 20, "#f4f4f4", 'stroke="#999" stroke-width="1"') + stroke("M240 110 L272 110 M240 116 L272 116", "#999", 1.5)  # A newspaper over a face
+    body += rect(136, 122, 80, 78, "#6a4a2a", 'stroke="#3a2a12" stroke-width="2"') + rect(130, 116, 92, 10, "#8a6a3a")  # The podium
+    body += person(176, 136, 1.1, SKIN[0], "#2a2a3a", face="wavy", hair=OLD_HAIR, glasses="clear", tie="#8a2a2a")
+    body += rect(140, 92, 72, 30, "#e8e0c0", 'stroke="#8a7a5a" stroke-width="2"') + rect(140, 88, 72, 6, "#c0392b")  # The phone book, open
+    for k in range(5):
+        body += stroke(f"M146 {98 + k * 5} L176 {98 + k * 5} M180 {98 + k * 5} L206 {98 + k * 5}", "#8a8a8a", 1)
+    body += lettering("A - Z", 176, 76, 6, "#f4ecd8", width=1.2)
+    body += circle(312, 36, 20, "#f4f4f4", 'stroke="#333" stroke-width="2"') + stroke("M312 36 L312 24 M312 36 L320 40", "#333", 2)  # Hour 14
+    body += lettering("HOUR 14", 312, 60, 6, "#f4ecd8", width=1.1)
+    return svg(defs, body)
+
+
+def curfew():
+    # An empty city street at night under a CURFEW 22:00 sign, every window lit with a face pressed to the glass, a lone
+    # police car's light sweeping the road, and one cat sitting in the middle of it, the only one allowed out
+    defs = lin("bg", ["#0a1026", "#1c2a4a"]) + lin("beam", [("#ff6060", 0.3), ("#ff6060", 0)])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 150, W, 50, "#2a2a36") + stroke("M0 176 L352 176", "#c8c0a0", 2, 'stroke-dasharray="14 10"')
+    for x, w, h, c in ((0, 70, 120, "#2a2436"), (74, 50, 140, "#342c40"), (128, 60, 110, "#2a2436"), (248, 54, 130, "#342c40"), (306, 46, 118, "#2a2436")):
+        body += rect(x, 150 - h, w, h, c)
+        for wy in range(150 - h + 12, 140, 22):
+            for wx in range(x + 8, x + w - 12, 18):
+                body += rect(wx, wy, 12, 14, "#f2d060") + circle(wx + 6, wy + 8, 4, SKIN[(wx + wy) % 4]) + circle(wx + 4.5, wy + 7, 0.8, "#222") + circle(wx + 7.5, wy + 7, 0.8, "#222")
+    body += stroke("M212 150 L212 60", "#888", 4) + rect(186, 36, 52, 28, "#c0392b", 'rx="3" stroke="#f4f4f4" stroke-width="2"')
+    body += lettering("CURFEW", 212, 40, 7, "#ffffff", width=1.4) + lettering("22:00", 212, 52, 7, "#ffffff", width=1.4)
+    body += poly([(60, 150), (120, 150), (160, 60), (0, 60)], "url(#beam)")  # The sweep of the light
+    body += rect(20, 150, 70, 22, "#2a3a6a", 'rx="4"') + rect(34, 138, 42, 14, "#3a4a7a", 'rx="3"') + rect(40, 134, 14, 5, "#ff4040") + rect(56, 134, 14, 5, "#4080ff")
+    body += circle(34, 172, 7, "#111") + circle(76, 172, 7, "#111") + lettering("POLICE", 55, 157, 5, "#ffffff", width=1)
+    body += ellipse(236, 186, 14, 7, "#111") + circle(250, 178, 7, "#111") + poly([(245, 173), (247, 165), (250, 172)], "#111") + poly([(253, 172), (256, 165), (257, 173)], "#111")  # The cat
+    body += path("M222 186 q -14 -4 -8 -16", "none", 'stroke="#111" stroke-width="3"') + circle(248, 178, 1.2, "#f2d060") + circle(253, 178, 1.2, "#f2d060")
+    return svg(defs, body)
+
+
+def spin_doctor():
+    # A press secretary leaning sideways out of frame at a podium as a forest of microphones lunges at where his head was,
+    # a NEXT QUESTION speech bubble, the reporters' notepads reading WHERE IS THE MONEY
+    defs, body = bg_state("#8a6a8a")
+    body += rect(0, 168, W, 32, "#4a3a4a")
+    body += rect(150, 120, 80, 80, "#3a3a5a", 'stroke="#1a1a2a" stroke-width="2"') + circle(190, 150, 14, "#d4af37", 'stroke="#8a7a2a" stroke-width="2"')
+    body += group(person(0, 0, 1.15, SKIN[0], "#2a2a3a", face="smirk", hair="#3a2a1a", tie="#c0392b"), "translate(190 128) rotate(-28)")
+    for i, (x, y) in enumerate(((20, 60), (40, 110), (70, 36), (300, 70), (330, 120), (290, 30))):  # The microphones, at his old head
+        body += stroke(f"M{x} {y} L{176 + (x - 176) * 0.3} {70 + (y - 70) * 0.3}", "#222", 3) + circle(176 + (x - 176) * 0.3, 70 + (y - 70) * 0.3, 6, "#444", 'stroke="#111" stroke-width="1.5"')
+    body += circle(176, 70, 16, "none", 'stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4 3"')  # Where his head was
+    body += bubble(90, 150, 42, 15, tail=(150, 142)) + lettering("NEXT QUESTION", 90, 146, 5.5, "#333", width=1.1)
+    for x in (44, 300):
+        body += rect(x - 22, 128, 44, 56, "#f4f0e6", 'stroke="#999" stroke-width="1"')
+        body += lettering("WHERE IS", x, 136, 5, "#333", width=1) + lettering("THE", x, 148, 5, "#333", width=1) + lettering("MONEY?", x, 160, 5, "#c0392b", width=1)
+    return svg(defs, body)
+
+
+def freaky_friday():
+    # A mother and her teenage daughter facing each other across a breakfast table, a broken fortune cookie between them,
+    # their faces swapped: the mother with a nose ring and headphones, the daughter in reading glasses with a WORLD'S BEST
+    # MOM mug, both screaming
+    defs = lin("bg", ["#f4e0b0", "#e8c890"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 150, W, 50, "#a0703a") + rect(80, 140, 192, 14, "#c8a060")
+    body += rect(20, 20, 60, 70, "#bfe0ff", 'stroke="#8a6a3a" stroke-width="3"') + stroke("M50 20 L50 90 M20 55 L80 55", "#8a6a3a", 2)
+    # The mother's body with the daughter's face: a nose ring, headphones, a hoodie string
+    body += person(104, 200, 1.3, SKIN[0], "#6a4a7a", face="shout", hair="#8a6a4a", brows="angry")
+    body += circle(108, 124, 2.5, "none", 'stroke="#d4af37" stroke-width="1.2"')
+    body += path("M78 110 C 78 86 130 86 130 110", "none", 'stroke="#222" stroke-width="4"') + rect(74, 106, 8, 14, "#222", 'rx="3"') + rect(126, 106, 8, 14, "#222", 'rx="3"')
+    # The daughter's body with the mother's face: reading glasses on a chain, a cardigan, the mug
+    body += person(248, 200, 1.1, SKIN[0], "#c04a6a", face="shout", hair="#3a2a1a", glasses="clear", brows="sad")
+    body += path("M232 128 q 16 14 32 0", "none", 'stroke="#d4af37" stroke-width="1"')
+    body += stroke("M226 170 L196 150", "#c04a6a", 8) + rect(180, 132, 22, 24, "#ffffff", 'stroke="#999" stroke-width="1"') + path("M202 138 q 10 6 0 14", "none", 'stroke="#999" stroke-width="2"')
+    body += lettering("BEST", 191, 136, 4, "#c0392b", width=0.9) + lettering("MOM", 191, 146, 4, "#c0392b", width=0.9)
+    body += path("M160 136 q 8 -10 16 0 q -8 2 -16 0 Z", "#e8b870", 'stroke="#8a6a3a" stroke-width="1"') + path("M184 134 q 6 -8 12 2 q -6 0 -12 -2 Z", "#e8b870", 'stroke="#8a6a3a" stroke-width="1"')
+    body += rect(166, 126, 22, 6, "#ffffff", 'stroke="#999" stroke-width="0.8"')  # The slip of paper
+    return svg(defs, body)
+
+
+def thoughts_and_prayers():
+    # A hospital bed with a bandaged creature in it, a GET WELL SOON balloon drifting in through the window two days late,
+    # and outside, a crowd of politicians with hands clasped and eyes closed, each holding a phone showing #prayers
+    defs, body = bg_myth()
+    body += rect(0, 160, W, 40, "#9ab0b8")
+    body += rect(190, 30, 140, 90, "#bfe0ff", 'stroke="#5a5a6a" stroke-width="3"')
+    for i, x in enumerate((214, 258, 302)):  # The politicians at the window
+        body += person(x, 122, 0.62, SKIN[i % 4], "#2a2a3a", face="closed", hair=(OLD_HAIR, "#3a2a1a", "#8a8a8a")[i], tie="#8a2a2a")
+        body += circle(x - 5, 108, 5, SKIN[i % 4]) + circle(x + 5, 108, 5, SKIN[i % 4])
+        body += rect(x - 6, 86, 12, 7, "#222", 'rx="1"') + lettering("#PRAY", x, 88, 3, "#4fc3ff", width=0.6)
+    body += rect(20, 110, 150, 50, "#ffffff", 'stroke="#8a8a9a" stroke-width="2"') + rect(20, 100, 40, 16, "#e8e8f0", 'rx="4"') + rect(14, 150, 8, 50, "#8a8a9a") + rect(164, 150, 8, 50, "#8a8a9a")
+    body += rect(60, 124, 110, 22, "#6aa0d0")  # The blanket
+    body += circle(50, 112, 18, "#c8e0a0") + circle(44, 108, 2.5, "#222") + stroke("M52 110 l 4 4 m 0 -4 l -4 4", "#222", 1.5)  # The patient, one eye a cross
+    body += path("M36 104 L66 112 M34 116 L64 120", "none", 'stroke="#f4f4f4" stroke-width="5"') + path("M42 124 q 8 -6 16 0", "none", 'stroke="#222" stroke-width="2"')
+    body += ellipse(120, 60, 26, 32, "#ff5a8a") + poly([(116, 90), (124, 90), (120, 96)], "#ff5a8a") + path("M120 96 q -6 20 4 36", "none", 'stroke="#aaa" stroke-width="1.5"')
+    body += lettering("GET WELL", 120, 50, 6, "#ffffff", width=1.1) + lettering("SOON", 120, 62, 6, "#ffffff", width=1.1)
+    body += rect(90, 20, 40, 12, "#f4f4f4", 'stroke="#999" stroke-width="1"') + lettering("2 DAYS LATE", 110, 23, 4, "#c0392b", width=0.8)
+    return svg(defs, body)
+
+
+def holy_ghost():
+    # A translucent white sheet-ghost with a golden halo and two round eye holes, hovering serenely in a church aisle while
+    # arrows and bullets pass straight through it, a dove on its head, and in the corner a single lit match it eyes with fear
+    defs, body = bg_myth()
+    body += rect(0, 160, W, 40, "#5a4a6a")
+    for x in (40, 312):
+        body += rect(x - 14, 20, 28, 140, "#e8dcc0", 'opacity="0.45"')
+    body += path("M176 150 C 120 150 124 60 176 44 C 228 60 232 150 176 150 Z", "#ffffff", 'opacity="0.86"')
+    body += path("M124 148 q 13 -14 26 0 q 13 14 26 0 q 13 -14 26 0 q 13 14 26 0", "none", 'stroke="#ffffff" stroke-width="6" opacity="0.86"')
+    body += ellipse(176, 40, 30, 7, "none", 'stroke="#f2c94c" stroke-width="4"')
+    body += circle(166, 84, 6, "#2a1a3a") + circle(186, 84, 6, "#2a1a3a") + circle(170, 86, 1.6, "#ffffff") + circle(190, 86, 1.6, "#ffffff")  # Eyes, turned to the corner
+    body += ellipse(176, 30, 10, 6, "#ffffff") + circle(185, 26, 4, "#ffffff") + poly([(188, 26), (194, 25), (188, 28)], "#f2a030") + path("M170 30 q -8 -8 -4 -14", "none", 'stroke="#ffffff" stroke-width="3"')  # The dove
+    for y, a in ((100, -8), (120, 6)):  # Arrows straight through
+        body += group(arrow(60, 0, 300, 0, "#8a6a4a", 3), f"translate(0 {y}) rotate({a} 176 0)")
+    for x in (130, 150, 196, 220):  # Bullets through it too
+        body += ellipse(x, 136, 4, 2, "#8a8a9a") + stroke(f"M{x - 12} 136 L{x - 5} 136", "#ffffff", 1, 'opacity="0.6"')
+    body += stroke("M306 176 L318 150", "#c8a070", 3) + circle(318, 149, 3, "#c0392b") + flames(319, 146, 2, 6, 14)  # The match, the one thing it fears
+    body += sweat(196, 70, 0.9)
+    return svg(defs, body)
+
+
+def florida_man():
+    # A sunburnt shirtless man with a mullet and jorts wrestling an alligator in a supermarket car park, a beer can in his
+    # free hand, a shopping trolley on fire behind him, a news ticker reading FLORIDA MAN STRIKES AGAIN
+    defs = lin("bg", ["#ffb860", "#ff7a40"])
+    body = rect(0, 0, W, H, "url(#bg)") + circle(300, 34, 22, "#fff2a0") + rect(0, 110, W, 90, "#5a5a62")
+    for x in range(10, 352, 60):
+        body += stroke(f"M{x} 112 L{x + 20} 180", "#f4f4f4", 2)
+    body += rect(20, 40, 150, 50, "#2a4a8a") + lettering("SUPER MART", 95, 56, 12, "#ffffff", width=2.2) + rect(20, 90, 150, 20, "#1a3a6a")
+    # The trolley, on fire
+    body += rect(250, 120, 60, 36, "none", 'stroke="#888" stroke-width="3"') + stroke("M250 156 L240 176 M310 156 L320 176", "#888", 3) + circle(244, 180, 5, "#222") + circle(316, 180, 5, "#222")
+    for k in range(4):
+        body += stroke(f"M{258 + k * 14} 120 L{258 + k * 14} 156", "#888", 1.5)
+    body += flames(280, 122, 6, 50, 44)
+    # The alligator, mid-wrestle
+    body += ellipse(96, 176, 70, 16, "#3a7a3a") + path("M160 170 C 190 166 200 176 206 190 C 196 184 180 182 160 182 Z", "#3a7a3a")
+    body += ellipse(40, 172, 30, 11, "#4a8a4a") + path("M14 170 L10 176 L14 178 L18 174 L22 178 L26 174 L30 178 L34 174 L38 178 L44 176", "none", 'stroke="#ffffff" stroke-width="2"')
+    body += circle(50, 166, 3, "#f2d060") + circle(51, 166, 1.2, "#111")
+    for x in (60, 90, 120, 150):
+        body += poly([(x, 160), (x + 6, 152), (x + 12, 160)], "#2a5a2a")
+    # The man: sunburnt, shirtless, mullet, jorts, beer
+    body += person(120, 176, 1.1, "#f08a6a", "#f08a6a", face="grin", hair="#c8a040", brows="angry")
+    body += path("M96 110 C 90 130 96 150 110 160", "none", 'stroke="#c8a040" stroke-width="10"')  # The mullet's party at the back
+    body += rect(90, 150, 60, 14, "#5a7aa0") + stroke("M100 160 L96 182 M140 160 L144 182", "#f08a6a", 10)
+    body += stroke("M150 150 L186 120", "#f08a6a", 9) + rect(180, 100, 14, 24, "#c0392b", 'rx="3"') + rect(182, 98, 10, 4, "#ccc")
+    body += stroke("M92 148 L62 160", "#f08a6a", 9)
+    body += rect(0, 184, W, 16, "#c0392b") + lettering("BREAKING: FLORIDA MAN STRIKES AGAIN", 176, 187, 7, "#ffffff", width=1.3)
+    return svg(defs, body)
+
+
 CHUNK_MISSING = {
-    "Corporate": {"BigFour": big_four, "BloombergTerminal": bloomberg_terminal, "CorporateBailouts": corporate_bailouts,
+    "Corporate": {"DMCA": dmca, "3rdParallelJob": third_parallel_job, "BigFour": big_four, "BloombergTerminal": bloomberg_terminal, "CorporateBailouts": corporate_bailouts,
                   "FlashCrash": flash_crash, "HedonicTreadmillionaire": hedonic_treadmillionaire,
                   "HighFrequencyTradingScam": high_frequency_trading_scam,
                   "InternalProtocolQuotaCrusherMindset": internal_protocol_quota_crusher_mindset, "JustinTime": just_in_time,
                   "MiddleManager": middle_manager, "MoralBankruptcy": moral_bankruptcy, "Smartwatch": smartwatch, "Usury": usury,
                   "VentureCapital": venture_capital},
     "DigitalSociety": {"Influencer": influencer, "SelfieEsteem": selfie_esteem, "UMadBro": u_mad_bro},
-    "Mind": {"HoldThatThought": hold_that_thought, "Hyperbole": hyperbole, "Projection": projection, "Psychiatrists": psychiatrists},
-    "Myth": {"Ambrosia": ambrosia, "BlessinginDisguise": blessing_in_disguise, "DiebytheSword": die_by_the_sword,
+    "Mind": {"LiminalSpace": liminal_space, "MonkeySeeMonkeyDo": monkey_see_monkey_do, "HoldThatThought": hold_that_thought, "Hyperbole": hyperbole, "Projection": projection, "Psychiatrists": psychiatrists},
+    "Myth": {"HolyGhost": holy_ghost, "ThoughtsandPrayers": thoughts_and_prayers, "Ambrosia": ambrosia, "BlessinginDisguise": blessing_in_disguise, "DiebytheSword": die_by_the_sword,
              "GraciasJesús": gracias_jesus, "GrimReaper": grim_reaper, "HereBeDragons": here_be_dragons, "Heretic": heretic,
              "Mithril": mithril, "PubliclyFundedFaithSchools": publicly_funded_faith_schools},
     "None": {"Creatine": creatine, "EjectButton": eject_button, "Flamethrower": flamethrower, "Nicotine": nicotine,
              "Soylent": soylent, "StealthSuit": stealth_suit, "StimulantDrug": stimulant_drug, "Superglue": superglue},
-    "ShadowOps": {"Arsonist": arsonist, "CompromisedAgent": compromised_agent, "CounterSurveillance": counter_surveillance,
+    "ShadowOps": {"PlausibleDeniability": plausible_deniability, "Arsonist": arsonist, "CompromisedAgent": compromised_agent, "CounterSurveillance": counter_surveillance,
                   "DrugPigeon": drug_pigeon, "Embassy": embassy, "ExplodingPen": exploding_pen, "NonchalantAgent": nonchalant_agent,
                   "PoloniumUmbrella": polonium_umbrella, "QBranch": q_branch, "SecretAnthraxLaboratory": secret_anthrax_laboratory,
                   "TrackingBeacon": tracking_beacon},
-    "Statecraft": {"BorderCrossing": border_crossing, "Exoskeleton": exoskeleton, "PeaceForce": peace_force,
+    "Statecraft": {"Curfew": curfew, "Filibuster": filibuster, "SpinDoctor": spin_doctor, "BorderCrossing": border_crossing, "Exoskeleton": exoskeleton, "PeaceForce": peace_force,
                    "SecurityGuard": security_guard, "SiVisPacemParaBellum": si_vis_pacem_para_bellum},
     "Tech": {"BomberDrone": bomber_drone, "CodeReview": code_review, "CtrlY": ctrl_y, "Hovercraft": hovercraft},
     "Utopia": {"Ankylorhiza": ankylorhiza, "Biohacker": biohacker, "FemtosecondLaser": femtosecond_laser,
                "LongevityHub": longevity_hub, "Nanobots": nanobots, "PrionDisease": prion_disease, "Quark": quark,
                "Seasteading": seasteading, "WhiteDwarf": white_dwarf},
-    "Zeitgeist": {"AbsenteeParents": absentee_parents, "CalmYourTits": calm_your_tits, "CamperVan": camper_van,
+    "Zeitgeist": {"FloridaMan": florida_man, "FreakyFriday": freaky_friday, "GroundhogDay": groundhog_day, "AbsenteeParents": absentee_parents, "CalmYourTits": calm_your_tits, "CamperVan": camper_van,
                   "FidgetSpinner": fidget_spinner, "ListenKid": listen_kid, "LostGeneration": lost_generation,
                   "OlReliable": ol_reliable, "SpiteVoter": spite_voter,
                   "TheFriendsWeMadeAlongtheWay": the_friends_we_made_along_the_way,
@@ -9809,12 +10102,12 @@ def istanbul_mosque(cx, base, s=1.0, color="#3a2a3a"):
 
 def mass_emigration():
     # A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a
-    # podium announces that the economy has never been stronger; behind them, Istanbul's great mosque over the Bosphorus
-    # at sunset (the user, 2026-10-17, after their photo)
+    # podium announces that the economy has never been stronger; behind them, Istanbul's Hagia Sophia over the Bosphorus
+    # at sunset (the user, 2026-10-17: the Hagia Sophia over the Blue Mosque of their photo)
     defs = lin("bg", ["#7ab8c8", "#f0c890", "#f0a060"]) + lin("sea", ["#5a8aa8", "#2a5a7a"])
     body = rect(0, 0, W, H, "url(#bg)") + rect(0, 120, W, 56, "url(#sea)")
     body += rect(0, 112, 90, 8, "#c8a088", 'opacity="0.7"') + rect(260, 114, 92, 6, "#b89078", 'opacity="0.6"')
-    body += istanbul_mosque(176, 132, 0.95, "#5a3a4a")
+    body += hagia_sophia(176, 132, 0.95)
     body += rect(0, 172, W, 28, "#6a5a4a")
     body += stroke("M54 176 L54 70", "#6a4a2a", 5)
     for i, (right, label) in enumerate(((True, "OUT"), (False, "AWAY"), (True, "EXIT"), (False, "BYE"))):

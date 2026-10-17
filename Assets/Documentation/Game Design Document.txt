@@ -778,6 +778,7 @@ Movement Restriction
 • Trends: what the world is into right now. Cards that set one rule for the whole board (printed "Trend: Rush Hour"; one word, Trend, everywhere), for the Days they print (no number: until another Trend replaces them). One Trend at a time: a new one replaces the old. A Trend card plays on either side of the table and resolves with the spells, so it already rules this Day's attacks. It's Zeitgeist's signature (the mood of the times changes the rules for everyone). A Trend sits in a banner in the middle of the table, with its Days left and its rule; the banner is hidden while there's none.
     • Zeitgeist (Trend): each Day, whoever has fewer creatures draws 1 more card, on top of the Day's hand (a tie: nobody).
     • Rush Hour (Trend): the slowest act first. Lower Speed goes first wherever Speed decides the order (summons, abilities and attacks); the other tie-breakers stay as they are.
+    • Liminal Space (Trend, Mind, 2026-10-17): every creature's Attack and Health trade places, the ones on the board as it starts and each one that enters while it trends; they trade back when it ends or another Trend replaces it.
     • The effect that sets a Trend works on any card (a spell, a creature's trigger); a card that only sets a Trend is a "Trend" on its type line.
 
 • Flooding: Overwhelming the board with many weak or token creatures.
@@ -1033,6 +1034,45 @@ Logistics), Corporate; Heimlich Maneuver (Push, Logistics), Utopia. Push was arc
   Dead Man's Switch before He Didn't Kill Himself; Threat Hunter or Sex Clanker before Ctrl + Z.
   Later, maybe (the user: "keep this in the afterburner"): a glow when a target condition is met, e.g. Perfectly Timed
   Camera Malfunction whenever an enemy is Revealed, however that happened.
+
+
+5.13 The Pokémon picks (2026-10-17)
+
+From the Pokémon mechanics that are fun but rarely played, the user's picks, each one line on a card (the names from the
+Brainstorm List where it had one):
+• Groundhog Day (Zeitgeist; Encore): Looping X, a status. The plan the creature has as the spell lands (an attack on that
+  slot, a move, an ability, or nothing) is its plan each of the next X Days, made for it at Dawn before anyone plans; it
+  can plan nothing else and the plan can't be taken back. A stun still cancels the Day's. Spells resolve before attacks,
+  so the loop closes on the plan everyone can see in the queue.
+• Filibuster (Statecraft; Quash, "Take a Number" renamed): Stalled, this Day: its attack, move or ability comes after
+  every other in its layer.
+• Plausible Deniability (Shadow Ops.; Wide Guard): Deniable, this Day, on every friendly creature: effects that hit more
+  than one creature skip it, like Too Mainstream.
+• Liminal Space (Mind; Wonder Room): a Trend for 2 Days, see 4.2 (Geomagnetic Reversal's swap, for everyone).
+• Monkey See, Monkey Do (Mind; Ditto): a fresh copy of target enemy creature, from its card, appears in the slot facing it
+  on your side, a token; whatever stood there is discarded, and an Irreplaceable creature keeps its slot.
+• Freaky Friday (Zeitgeist; Trick, turned to stats): the target and the creature facing it trade Attack and Health,
+  current Health with the body.
+• DMCA (Corporate; Imprison): for 3 Days the enemy can't play a card that shares its name with a creature on the board,
+  either side's (every deck runs two copies: the second waits while the first stands). Refused at the drop, like an
+  unpaid cost, and the AI doesn't try.
+• 3rd Parallel Job (Corporate; Belly Drum): you take 8 damage; a friendly creature gets +6 Attack for good.
+• Curfew (Statecraft; Gravity, "a logistics shutdown"): every creature on the board is Rooted 2 Days: no moves, swaps or
+  Maneuvers.
+• Thoughts and Prayers (Myth; Wish): a Prayer, a visible Slot Effect: when its Days run out, at Dusk, the creature
+  standing in the slot heals X, whoever it is by then.
+• Spin Doctor (Statecraft): Next Question, the politician's dodge: once a Day, as an attack is about to hit it, it steps
+  into an empty slot of its side (one beside it if it can) and the attack hits nothing, the player included. Hemmed in
+  or Rooted, it takes the hit. Defensive: Zero-Day ignores it.
+• Florida Man (Zeitgeist; Metronome): Wild Card: its attack on a creature hits twice, Burns it 2 instead, Exhausts it
+  instead, or does nothing at all, at random; against the player, a plain hit.
+• Holy Ghost (Myth; Wonder Guard, "better for holy"): Immaculate: attacks and effects do nothing to it; only a status (a
+  Burn tick) hurts it, and it has 1 Health. Destroy and Doomed still take it. Defensive: Zero-Day ignores it.
+• Mood Swings (Moody) on Karen and the Reality TV Star: each Dawn +2 to one stat and -1 to another, at random, for good
+  (a stat at 1 isn't lowered).
+Left out on purpose: Truant and Slow Start (the user: bad mechanics); Trick Room is already Rush Hour (other factions'
+flavours of it are in the Brainstorm List); Yawn and Roar wait in the Brainstorm List; Destiny Bond waits for a pick
+among its variations.
 
 
 6. DESIGN PHILOSOPHY & BALANCING

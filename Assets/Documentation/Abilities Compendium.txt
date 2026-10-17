@@ -354,3 +354,34 @@ Self-Repair
     Description: "Each Dawn, it heals 2."
     Notes: Only when it's hurt; up to its maximum Health.
     Answers: Hit it harder than it mends.
+
+Mood Swings (the user, 2026-10-17)
+    Inspired by: Moody. On Karen and the Reality TV Star (Zeitgeist).
+    Type: Passive
+    Description: "Each Dawn, +2 to one of its stats and -1 to another, at random, for good."
+    Notes: Attack, Health or Speed; a stat at 1 isn't lowered, so its Health never goes below 1 this way. Persistent Stat
+           Modifications: they stay through replacements that hand over (Handover) and go with the card.
+    Answers: Kill it before it drifts somewhere good; Blackout stops the swings.
+
+Next Question (the user, 2026-10-17)
+    Inspired by: a politician dodging the uncomfortable question (and Pokémon's Wimp Out, in spirit). On Spin Doctor (Statecraft).
+    Type: Defensive
+    Description: "Once a Day, when an attack is about to hit it, it steps into an empty slot of its side and the attack hits nothing."
+    Notes: An empty slot beside it if there is one, else any empty slot of its side; not the player, nothing. Once a Day,
+           so the second attack of the Day lands. Hemmed in, or Rooted, it takes the hit. Zero-Day ignores it.
+    Answers: Two attackers; fill its side (a Gift); Rooted; spells and abilities, which aren't attacks.
+
+Wild Card (the user, 2026-10-17)
+    Inspired by: Metronome. On Florida Man (Zeitgeist).
+    Type: Combat
+    Description: "Its attack on a creature does one of these, at random: hits twice, Burns it 2 instead, Exhausts it instead, or nothing at all."
+    Notes: One roll per attack, as it lands. Against the player, a plain hit. Double Tap would add its second hit after.
+    Answers: Nothing to answer: a quarter of the time it does nothing.
+
+Immaculate (the user, 2026-10-17)
+    Inspired by: Wonder Guard (Shedinja). On Holy Ghost (Myth, 1 Health).
+    Type: Defensive
+    Description: "Attacks and effects do nothing to it: only a status (Burn) hurts it."
+    Notes: Combat damage, spell and ability damage, Landmines, Checkpoints and Earthquakes: none. A Burn tick kills it
+           (1 Health). Destroy, Doomed, Kill Order and Burnout still take it. Zero-Day ignores it.
+    Answers: Any Burn; a Destroy; Doomed.
