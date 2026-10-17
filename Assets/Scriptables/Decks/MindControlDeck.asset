@@ -14,6 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Enlightenment - Mind Games
   cards:
+  - {fileID: 11400000, guid: d029033432afe7048a9e644b9cf29f3f, type: 2}
+  - {fileID: 11400000, guid: b100c7684c140c54fb53deb89163fc72, type: 2}
+  - {fileID: 11400000, guid: f9a6de1cec40d0f4194eab1eb5bca7fd, type: 2}
+  - {fileID: 11400000, guid: 9a3efd71a8c60004c94d99b76d13d5e3, type: 2}
+  - {fileID: 11400000, guid: 6d6785c84fac3af458a7557099b71653, type: 2}
+  - {fileID: 11400000, guid: 282d52d73c25a304abf37ea6f72f8450, type: 2}
+  - {fileID: 11400000, guid: 3e1a21768a74429468637f3583e07ca8, type: 2}
   - {fileID: 11400000, guid: b87e1650b9957274c9072b871b49fd84, type: 2}
   - {fileID: 11400000, guid: b87e1650b9957274c9072b871b49fd84, type: 2}
   - {fileID: 11400000, guid: b2d0789f9446bd04b82633099da8a4ab, type: 2}
@@ -46,6 +53,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 844a62cc2c4853f4bb547f093521bb1b, type: 2}
   - {fileID: 11400000, guid: 197d029fd4badfd43b582fc451f3ed44, type: 2}
   - {fileID: 11400000, guid: d56d0e78e56301845861840fc5b0e132, type: 2}
-  lastUpdated: 2026-10-17T20:21:15.8327181Z
+  lastUpdated: 2026-10-17T21:57:54.1949254Z
   strategy: Control
   focus: 0
