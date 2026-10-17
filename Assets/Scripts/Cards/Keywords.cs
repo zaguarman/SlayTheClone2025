@@ -95,6 +95,7 @@ namespace SlayTheClone {
             Add("Logistics", "A [Maneuver] that only moves your own creatures.");
             Add("Push", "It goes one step back: the Vanguard to a Flank (an empty one if there is one), a Flank to the Headquarters slot behind it. A creature already there trades places with it. Headquarters can't go further back.");
             Add("Pull", "It comes one step forward: a Headquarters slot to the Flank in front of it, a Flank to the Vanguard. A creature already there trades places with it. The Vanguard can't come further forward.");
+            Add("Spin", "The creatures in the Vanguard and the two Flanks move round one slot, clockwise as that side sees it: the Vanguard's to the right Flank, the right Flank's to the left Flank, the left Flank's to the Vanguard. A [Rooted] creature stays put.");
             Add("Partner", "Its partner in the formation: Flank with Flank, Headquarters with Headquarters; the Vanguard's is the left Flank.");
 
             // ---------------------------------------------------------------- Creature stats and states

@@ -14,7 +14,7 @@ namespace SlayTheClone {
             TakeControl, Attack, Funnel, PassHarmfulStatuses, StealGoodStatuses, ReturnToHand, FakeDeath, Vanish, SummonDecoys,
             WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay, Rush, Defect, SwapStats,
             SwapSlotEffects, Equip,
-            Push, Pull, Shuffle } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers. Push/Pull/Shuffle: Maneuvers
+            Push, Pull, Shuffle, Spin } // Renamed Buff to ModifyStat. New ones go last: cards store them as numbers. Push/Pull/Shuffle/Spin: moves
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.

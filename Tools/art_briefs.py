@@ -16,6 +16,8 @@ OUT = os.path.join(ROOT, "Assets", "Documentation", "Card Art Briefs.txt")
 
 # What the user asked for, in their words (dated), per card name. Add to it whenever the user describes a card's art.
 USER_NOTES = {
+    "White Dwarf": ["2026-10-17: a dwarf like in The Lord of the Rings."],
+    "Blessing in Disguise": ["2026-10-17: something that references the story: a farmer's horse runs away; his neighbours say 'What bad luck!'; the farmer replies 'Maybe.'"],
     "The Friends We Made Along the Way": ["2026-10-17: Jesus with two guns instead of the cultist."],
     "Domino Effect": ["2026-10-17: add a housing market flavour."],
     "Tourist Trap": ["2026-10-17: put a beach."],

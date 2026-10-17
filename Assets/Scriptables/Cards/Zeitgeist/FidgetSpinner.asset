@@ -33,9 +33,45 @@ MonoBehaviour:
   potion: 0
   combo: 0
   setUpBy: []
-  effects: []
-  designNotes: 'On Trend: +2 Attack while a Trend is on. A fad: only as strong as
-    the moment it''s in.'
+  effects:
+  - effectType: 0
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 47
+      value: 0
+      targetType: 1
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Arrival: the enemy''s Vanguard and Flanks spin clockwise, one slot
+    round. Arriving the Day it''s played, it scrambles where that Day''s attacks
+    land.'
   artDescription: A giant fidget spinner whirling on a school desk, sparks flying
     off its bearings, a crowd of kids staring at it hypnotized, a teacher's 'Confiscated'
     box in the corner.
@@ -44,7 +80,7 @@ MonoBehaviour:
   speed: 3
   turnsUntilOperative: 0
   movement: 0
-  ability: 45
+  ability: 0
   gift: 0
   rootedWhileDeploying: 0
   token: 0

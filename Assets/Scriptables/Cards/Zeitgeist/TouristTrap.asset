@@ -72,7 +72,7 @@ MonoBehaviour:
   designNotes: 'Disruption Maneuver: pull target enemy creature a step forward (Headquarters
     to its Flank, a Flank to the Vanguard); a creature already there trades places
     with it. Drags their important people into reach.'
-  artDescription: A sunburnt tourist in socks and sandals lured off the street by
-    a neon sign reading AUTHENTIC, into a restaurant where a waiter already holds
-    out a bill a metre long.
+  artDescription: A sunburnt tourist in socks and sandals lured off the beach by
+    a neon sign reading AUTHENTIC, into a beach restaurant where a waiter already
+    holds out a bill a metre long, a palm and a parasol behind.
   defaultTargetType: 4

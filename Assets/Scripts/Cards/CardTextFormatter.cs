@@ -364,6 +364,9 @@ namespace SlayTheClone {
                     return $"{Keywords.Link("Push", "push")} {target} back";
                 case ActionType.Pull:
                     return $"{Keywords.Link("Pull", "pull")} {target} forward";
+                case ActionType.Spin:
+                    string spun = action.targetType is TargetType.Enemy or TargetType.EnemyCreatures ? "the enemy's" : action.targetType is TargetType.Player or TargetType.FriendlyCreatures ? "your" : "target side's";
+                    return $"{Keywords.Link("Spin", "spin")} {spun} Vanguard and Flanks clockwise";
                 case ActionType.Shuffle:
                     string whose = action.targetType switch {
                         TargetType.Enemy or TargetType.EnemyCreatures => "every enemy creature",

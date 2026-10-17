@@ -8560,24 +8560,36 @@ def ambrosia():
 
 
 def blessing_in_disguise():
-    # A man sitting in a crashed car in a ditch, a halo of light around him, an angel in the back seat handing him a winning
-    # lottery ticket
-    defs = lin("bg", ["#2a2a5a", "#8a6a8a"]) + rad("halo", [("#fff6c0", 0.85), ("#fff6c0", 0)])
-    body = rect(0, 0, W, H, "url(#bg)") + poly([(0, 140), (352, 120), (352, 200), (0, 200)], "#3a5a2a") + poly([(60, 200), (130, 150), (300, 150), (352, 200)], "#2a3a1a")
-    car = rect(70, 100, 220, 50, "#c0392b", 'rx="12" stroke="#7a1a1a" stroke-width="2"')
-    car += path("M110 100 L136 66 L240 66 L262 100 Z", "#c0392b", 'stroke="#7a1a1a" stroke-width="2"')
-    car += path("M120 98 L140 72 L184 72 L184 98 Z", "#bfe0f0") + path("M192 98 L192 72 L236 72 L252 98 Z", "#bfe0f0")
-    car += circle(110, 150, 16, "#222") + circle(250, 150, 16, "#222") + circle(110, 150, 6, "#888") + circle(250, 150, 6, "#888")
-    car += stroke("M70 120 l 14 -6 l -6 14 l 12 -4", "#7a1a1a", 2) + rect(286, 110, 8, 12, "#ffd23a")
-    body += circle(162, 80, 60, "url(#halo)")
-    body += group(car, "rotate(12 180 120)")
-    body += circle(158, 86, 13, SKIN[0]) + circle(154, 84, 1.8, "#222") + circle(162, 84, 1.8, "#222") + ellipse(158, 92, 3, 3.5, "#5a1a1a")
-    body += path("M146 80 C 146 66 170 66 170 80 Z", "#5a3a1a")
-    body += ellipse(158, 66, 13, 4, "none", 'stroke="#ffd23a" stroke-width="2.5"')
-    body += group(angel(0, 0, 0.9), "translate(214 92) rotate(12)")
-    body += group(rect(-12, -7, 24, 14, "#f4f0c8", 'stroke="#c9a24a" stroke-width="1.5"') + lettering("WIN", 0, -4, 6, "#c0392b", width=1.2), "translate(184 78) rotate(-8)")
-    for x in (40, 314):
-        body += ellipse(x, 60, 18, 8, "#c8c8c8", 'opacity="0.3"')
+    # The farmer's story (the user, 2026-10-17): his horse runs away and the neighbours cry "What bad luck!"; the farmer
+    # shrugs: "Maybe." Over the hill, the horse is already coming back with a herd of wild horses behind it, a soft halo
+    # over the farmer
+    defs = lin("bg", ["#3a1f5c", "#d8a050"]) + rad("halo", [("#ffe9a0", 0.6), ("#ffe9a0", 0)])
+    body = rect(0, 0, W, H, "url(#bg)") + circle(290, 60, 22, "#fff2b0", 'opacity="0.9"')
+    body += path("M0 120 C 80 96 160 104 230 92 C 280 84 320 96 352 90 L352 200 L0 200 Z", "#7a8a3a")
+    body += path("M0 150 C 90 136 200 144 352 132 L352 200 L0 200 Z", "#5a6a2a")
+    for i in range(5):
+        body += stroke(f"M0 {160 + i * 9} C 120 {152 + i * 9} 240 {156 + i * 9} 352 {146 + i * 9}", "#4a5a22", 1.5, 'opacity="0.6"')
+    def horse(x, y, s, color):
+        out = ellipse(x, y, 14 * s, 7 * s, color) + path(f"M{x + 10 * s} {y - 3 * s} L{x + 18 * s} {y - 14 * s} L{x + 24 * s} {y - 12 * s} L{x + 16 * s} {y} Z", color)
+        out += ellipse(x + 23 * s, y - 13 * s, 5 * s, 3 * s, color)
+        for dx in (-9, -4, 5, 10):
+            out += stroke(f"M{x + dx * s} {y + 5 * s} l {(-2 if dx < 0 else 2) * s} {9 * s}", color, 2 * s)
+        out += stroke(f"M{x - 13 * s} {y - 2 * s} q {-6 * s} {2 * s} {-8 * s} {8 * s}", color, 2 * s)
+        return out
+    body += horse(250, 104, 1.1, "#6a3a1a")  # His horse, coming back over the hill...
+    for x, y, c in ((276, 98, "#3a2a1a"), (296, 102, "#8a6a4a"), (316, 96, "#2a1a10"), (286, 90, "#a0784a")):
+        body += horse(x, y, 0.7, c)  # ...with the wild ones
+    body += speed_lines(234, 96, 2, 18, "#ffffff")
+    body += rect(20, 112, 54, 40, "#a0703a", 'stroke="#5a3a1a" stroke-width="2"') + stroke("M20 122 L74 122 M20 134 L74 134", "#5a3a1a", 1.5)
+    body += rect(34, 128, 18, 24, "#2a1a10")  # The open, empty stable
+    body += circle(140, 108, 56, "url(#halo)")
+    body += person(140, 200, 1.3, SKIN[1], "#8a6a4a", face="smile", beard="#d8d8d8", hair=OLD_HAIR)
+    body += ellipse(140, 104, 34, 6, "#e8c860", 'stroke="#a8882a" stroke-width="1.5"') + path("M124 104 C 124 84 156 84 156 104 Z", "#e8c860", 'stroke="#a8882a" stroke-width="1.5"')
+    body += stroke("M112 166 L96 148 M168 166 L184 148", "#8a6a4a", 8) + circle(94, 145, 5, SKIN[1]) + circle(186, 145, 5, SKIN[1])
+    body += bubble(150, 42, 30, 14, tail=(146, 74)) + lettering("MAYBE", 150, 38, 7, "#333", width=1.4)
+    for x, sk, shirt in ((40, SKIN[0], "#4a6a8a"), (78, SKIN[2], "#8a4a6a")):
+        body += person(x, 200, 0.75, sk, shirt, face="shout", hair="#3a2a1a", brows="sad")
+    body += bubble(60, 64, 52, 16, tail=(56, 126)) + lettering("BAD LUCK!", 60, 60, 6.5, "#c0392b", width=1.3)
     return svg(defs, body)
 
 
@@ -9428,22 +9440,42 @@ def seasteading():
 
 
 def white_dwarf():
-    # A small, very white man in a turtleneck standing in space, glowing faintly, the planets around him bending toward him
+    # A dwarf like those of The Lord of the Rings (the user, 2026-10-17), standing in space and glowing white like the star:
+    # a long braided beard, a winged helm, a double-bladed axe, chain mail, the planets around him bending toward him,
+    # unbothered
     defs, body = bg_space()
     defs += rad("glow", [("#ffffff", 0.6), ("#bfe0ff", 0)])
     for i in range(1, 7):  # Space itself, curving toward him
         body += path(f"M0 {20 + i * 26} C 120 {20 + i * 26} 150 {110 + (i - 3.5) * 10} 176 {110 + (i - 3.5) * 8} "
                      f"C 202 {110 + (i - 3.5) * 10} 232 {20 + i * 26} 352 {20 + i * 26}", "none", 'stroke="#5a6ac8" stroke-width="1" opacity="0.5"')
-    body += circle(176, 110, 80, "url(#glow)")
+    body += circle(176, 112, 86, "url(#glow)")
     for x, y, r, c, sx in ((50, 50, 20, "#d08a4a", 1.25), (300, 46, 16, "#6ab0e0", 1.3), (60, 160, 12, "#c06ad0", 1.4), (300, 156, 22, "#e8c86a", 1.2)):
         body += group(ellipse(0, 0, r * sx, r, c), f"translate({x} {y}) rotate({math.degrees(math.atan2(110 - y, 176 - x)):.0f})")
     body += ellipse(300, 156, 34, 6, "none", 'stroke="#c8a85a" stroke-width="2" transform="rotate(-25 300 156)"')
-    body += person(176, 170, 0.8, "#fbfbff", "#1a1a1e", face="flat", hair="#f4f4ff")
-    body += rect(167, 130, 18, 10, "#1a1a1e", 'rx="4"')
+    white, shade = "#fbfbff", "#d8e0f0"
+    # The axe, held across, behind him
+    body += stroke("M126 178 L232 70", "#c8b088", 5)
+    body += path("M222 62 C 238 52 252 62 248 80 L236 74 L228 84 C 216 80 214 68 222 62 Z", "#e8eef8", 'stroke="#9aa8c0" stroke-width="1.5"')
+    body += path("M222 62 C 214 50 222 38 238 40 L232 52 L242 60 Z", "#e8eef8", 'stroke="#9aa8c0" stroke-width="1.5"')
+    # Stocky body in mail, a belt
+    body += path("M138 196 C 136 150 216 150 214 196 Z", shade, 'stroke="#9aa8c0" stroke-width="2"')
+    for row in range(4):
+        for col in range(8):
+            body += circle(146 + col * 9 + (row % 2) * 4, 160 + row * 9, 2.6, "none", 'stroke="#aab8d0" stroke-width="0.8"')
+    body += rect(140, 186, 72, 8, "#c8b088") + rect(170, 184, 12, 12, "#e8d8a0", 'stroke="#9a8a5a" stroke-width="1"')
+    # The head: a round face, a bulbous nose, the great beard in two braids
+    body += circle(176, 112, 22, white)
+    body += circle(168, 108, 2.4, "#2a2a3a") + circle(184, 108, 2.4, "#2a2a3a") + stroke("M162 101 L172 103 M190 101 L180 103", "#c8d0e0", 3)
+    body += ellipse(176, 116, 6, 5, "#eef0fa", 'stroke="#c8d0e0" stroke-width="1"')
+    body += path("M154 114 C 152 140 162 156 176 160 C 190 156 200 140 198 114 C 190 124 162 124 154 114 Z", "#ffffff", 'stroke="#d0d8ea" stroke-width="1.5"')
+    for dx in (-8, 8):
+        body += stroke(f"M{176 + dx} 156 L{176 + dx * 1.2} 184", "#ffffff", 7) + stroke(f"M{176 + dx * 1.15} 176 l 0 4", "#c8b088", 4)
+    # The winged helm
+    body += path("M152 106 C 152 80 200 80 200 106 Z", "#e8eef8", 'stroke="#9aa8c0" stroke-width="2"') + rect(150, 102, 52, 6, "#c8d0e0", 'rx="2"')
+    body += stroke("M176 84 L176 106", "#9aa8c0", 2)
+    for f in (-1, 1):
+        body += path(f"M{176 + f * 24} 98 C {176 + f * 40} 90 {176 + f * 44} 74 {176 + f * 40} 66 C {176 + f * 34} 80 {176 + f * 30} 86 {176 + f * 24} 92 Z", "#ffffff", 'stroke="#c8d0e0" stroke-width="1"')
     return svg(defs, body)
-
-
-# ---- Zeitgeist
 
 def absentee_parents():
     # A family portrait on a mantelpiece with two parent-shaped holes cut out of it, a postcard from Ibiza tucked into the frame

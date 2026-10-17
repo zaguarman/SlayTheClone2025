@@ -16,7 +16,7 @@ RULES
 
 TO SUPERVISE
 
-  300 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
+  298 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
   the user has checked one, its approval goes into SUPERVISED in Tools/art_briefs.py (or their changes into USER_NOTES).
 
   Corporate (46): Overtime, Peace the Frontier, Casino, Headhunter, Counterfeit, Private Equity, Shell Company, Golden Parachute, Work Shift Rotation, Unpaid Intern, Inhuman Resources, Micromanager, Multilevel Marketing Seller, Day Trader, Pluriemployed Hustler, Satoshi Nakamoto, Multimillionaire Philanthropist, Charles Ponzi, Margin Call, Mass Layoffs, Team Building Exercise, Dead Cat Bounce, Business Operating Expenses, Taxpayer Funds Venture Capital Profits, Tax-Exempt Corruption, Solidarity Towards The Small Businessman, Inheritance, NDA, Inflation, Escape Goat, Laissez-Faire, The Invisible Hand, C-Suite, Venture Capital, Corporate Bailouts, Flash Crash, Just in Time, Hedonic Treadmillionaire, Moral Bankruptcy, Usury, Middle Manager, Big Four, Bloomberg Terminal, Internal Protocol: Quota Crusher Mindset, High-Frequency Trading Scam, Valet
@@ -25,9 +25,9 @@ TO SUPERVISE
   Digital Society (16): Its Been 84 Years..., Good Boi, Crypto "Entrepreneur", Digital Nomad, NPC, Chronically Online, Conspiracy Theorist, Clickbait, Cancelled, Social Panopticon, Short King, Content Creator, Thirst Trap, Selfie Esteem, Influencer, U Mad Bro?
   Shadow Ops. (53): Cleaner, Political Decoy, Mole, Signal Jammer, Deep Cover, Human Intelligence, Wet Work, Perfectly Timed Camera Malfunction, Smoke And Mirrors, Eavesdrop, Tapped Communications, Whistleblower, Involuntary Free Polonium Giveaway, Humanitarian Trafficking Action, Dead Man's Switch, Fell Out of a Window, Coup d'État, Operation Paperclip, False Flag Operation, Never Let Them Know Your Next Move, Frame Job, Devil's Breath, He Didn't Kill Himself, Extraction, Witness Protection Program, Death By "Natural Causes", Asset Recruitment, If I Told You, I'd Have to Kill You, Lone Gunman, Glomar Response, Sabotage, Ghost Army, Inflatable Tank, Social Engineering, Bilderberg Membership, Dead Drop, The Golden Gun, Die Another Day, Licence to Kill, Shaken, Not Stirred, GoldenEye, Supply Chain Attack, Femme Fatale, Exploding Pen, Drug Pigeon, Embassy, Secret Anthrax Laboratory, Tracking Beacon, Arsonist, Counter-Surveillance, Compromised Agent, Polonium Umbrella, Nonchalant Agent
   Tech (15): Web Scraping, DDOS Attack, End-to-End Encryption, SysAdmin, Meatproxy As A Service, Ransomware Attack, Man-in-the-Middle, Technical Debt, Threat Hunter, Ctrl + Z, Pair Programming, Suspicious USB Stick in the Parking Lot, Code Review, Bomber Drone, Ctrl + Y
-  Myth (40): Taqiyya, Memento Mori, Martyr, Exorcism, Mummy, Omniscient Space-Time Bending Bearded Wizard, Cultist, Phoenix, Excess of Bread and Wine, Sacrificial Ritual, Reincarnation, Holy War, The Great Flood, Lance Of Longinus, Necronomicon, The Wicker Man, Thoughts and Prayers, Religious Instrumentalization, Deus Vult, Curse Of Hubris, Zealot, Vampire, Living Dead, Buddy Christ, Pope, The Lobster Professor, Amen, Pyramids, Horsemen Of Apocalypse, God's Grace, The Omen, Grim Reaper, Blessing in Disguise, Die by the Sword, Mithril, Here Be Dragons, Gracias Jesús, Heretic, Ambrosia, Publicly Funded Faith Schools
+  Myth (39): Taqiyya, Memento Mori, Martyr, Exorcism, Mummy, Omniscient Space-Time Bending Bearded Wizard, Cultist, Phoenix, Excess of Bread and Wine, Sacrificial Ritual, Reincarnation, Holy War, The Great Flood, Lance Of Longinus, Necronomicon, The Wicker Man, Thoughts and Prayers, Religious Instrumentalization, Deus Vult, Curse Of Hubris, Zealot, Vampire, Living Dead, Buddy Christ, Pope, The Lobster Professor, Amen, Pyramids, Horsemen Of Apocalypse, God's Grace, The Omen, Grim Reaper, Die by the Sword, Mithril, Here Be Dragons, Gracias Jesús, Heretic, Ambrosia, Publicly Funded Faith Schools
   Mind (20): Lucid Dreaming, Momentum, Survivorship Bias, Yesn't, Cyberpsychosis, Reflect, Mimetic Theory, Pessimist, Introvert, Roko's Basilisk, Imposter Syndrome, Ship of Theseus, Socrates, Maslow's Pyramid, Legerdemain, Hold That Thought, Projection, Psychiatrists, Hyperbole, Controlled Chaos
-  Utopia (38): Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, White Dwarf, Biohacker, Prion Disease, Heimlich Maneuver
+  Utopia (37): Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, Biohacker, Prion Disease, Heimlich Maneuver
   Shelved (5): Smartwatch, Exoskeleton, Q Branch, Hovercraft, Nanobots
   Potion (8): Nicotine, Stimulant Drug, Superglue, Soylent, Flamethrower, Eject Button, Stealth Suit, Creatine
 
@@ -885,8 +885,8 @@ Grim Reaper (creature)
     The Grim Reaper in his black hood waiting in a hospital corridor, checking his watch, a number ticket in his bony hand, a sign above him reading NOW SERVING 42.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Blessing in Disguise (spell)
-    A man sitting in a crashed car in a ditch, a halo of light around him, an angel in the back seat handing him a winning lottery ticket.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+    The farmer's story: his horse has run away and the neighbours cry WHAT BAD LUCK!; the old farmer in a straw hat shrugs, MAYBE, a soft halo over him, while over the hill his horse is already coming back with a herd of wild horses.
+    USER: 2026-10-17: something that references the story: a farmer's horse runs away; his neighbours say 'What bad luck!'; the farmer replies 'Maybe.'
 Die by the Sword (spell)
     A knight run through by his own sword which bounced back off a mirror, a smug monk holding the mirror.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -1105,8 +1105,8 @@ Ankylorhiza (creature)
     A huge prehistoric whale with a crocodile's teeth bursting out of a lab aquarium tank, water and glass everywhere, a scientist in a lab coat clutching a sign reading DE-EXTINCTION: PHASE 1.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 White Dwarf (creature)
-    A small, very white man in a turtleneck standing in space, glowing faintly, the planets around him bending toward him, unbothered.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+    A dwarf like those of The Lord of the Rings standing in space, glowing white like the star: a long braided beard, a winged helm, a double-bladed axe, chain mail, the planets around him bending toward him, unbothered.
+    USER: 2026-10-17: a dwarf like in The Lord of the Rings.
 Biohacker (creature)
     A shirtless tech bro in an ice bath full of glowing green sludge, sensors taped all over his chest, his smartwatch showing 'biological age: 19'.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet

@@ -129,6 +129,20 @@ namespace SlayTheClone.Tests {
             AssertAt(back, 2, "A shuffle leaves a Rooted creature where it is");
             Assert.IsTrue(new[] { front, flank }.All(c => c.Slot?.Owner == p1 && c.Slot.OccupyingCreature == c), "...and every other one lands in a slot of its side");
             Assert.AreEqual(3, p1.Battlefield.Count(s => s.IsOccupied()), "Nobody lost or doubled");
+
+            // Spin (Fidget Spinner): the Vanguard and Flanks go round one slot clockwise; a Rooted one stays
+            Fresh();
+            var v = Place("V", 0);
+            var right = Place("Right", 2);
+            game.Run(new SpinAction(p1));
+            AssertAt(v, 2, "The Vanguard's to the right Flank...");
+            AssertAt(right, 1, "...the right Flank's to the left Flank");
+            game.Run(new SpinAction(p1));
+            AssertAt(right, 0, "...the left Flank's to the Vanguard");
+            game.Run(new ApplyStatusEffectAction(right, StatusEffectType.Rooted, 2, 0));
+            game.Run(new SpinAction(p1));
+            AssertAt(right, 0, "Rooted, it stays put...");
+            AssertAt(v, 2, "...and the other goes round the slots left (the right Flank to the left one, then back)");
         }
 
         [Test]

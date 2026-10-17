@@ -166,7 +166,7 @@ namespace SlayTheClone {
                 var facing = Opposite(source as ICreature);
                 return facing != null && !facing.IsDead ? new List<ITarget> { facing } : new List<ITarget>();
             }
-            if (action.actionType == ActionType.Shuffle) { // A Maneuver on a whole side: the side it names, or the one it was played on
+            if (action.actionType is ActionType.Shuffle or ActionType.Spin) { // A move on a whole side: the side it names, or the one it was played on
                 var shuffled = action.targetType switch {
                     TargetType.Enemy or TargetType.EnemyCreatures => controller.Opponent,
                     TargetType.Player or TargetType.FriendlyCreatures => controller,
@@ -540,6 +540,8 @@ namespace SlayTheClone {
                     return creature != null ? new SwapPositionsAction(creature) : null;
                 case ActionType.Push or ActionType.Pull: // Maneuvers: a step back, or forward
                     return creature != null ? new PushAction(creature, action.actionType == ActionType.Pull) : null;
+                case ActionType.Spin: // Fidget Spinner: that side's front three slots, clockwise
+                    return target is IPlayer spun ? new SpinAction(spun) : null;
                 case ActionType.Shuffle: // A Maneuver: that whole side, at random
                     return target is IPlayer shuffled ? new ShuffleAction(shuffled) : null;
                 case ActionType.ReturnToHand: // Back to its owner's hand, with the next Day's hand (Extraction)

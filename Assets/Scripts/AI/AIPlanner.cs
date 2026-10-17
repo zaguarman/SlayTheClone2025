@@ -593,7 +593,7 @@ namespace SlayTheClone {
             if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;
             if (action.actionType == ActionType.SwapSlotEffects) return SwapValue();
             // Shuffle (a Maneuver): scrambling their formation is worth a little; ours, rarely
-            if (action.actionType == ActionType.Shuffle) {
+            if (action.actionType is ActionType.Shuffle or ActionType.Spin) {
                 var side = action.targetType switch {
                     TargetType.Enemy or TargetType.EnemyCreatures => view.Them, TargetType.Player or TargetType.FriendlyCreatures => view.Me,
                     _ => aim as IPlayer ?? (aim as BoardSlot)?.Owner ?? (aim as ICreature)?.Owner ?? view.Them

@@ -102,6 +102,8 @@ MonoBehaviour:
       decoy: {fileID: 0}
   designNotes: 'Myth holds the board (a status quo faction): every friendly creature
     heals 3 and gains Bless 1.'
-  artDescription: A man sitting in a crashed car in a ditch, a halo of light around
-    him, an angel in the back seat handing him a winning lottery ticket.
+  artDescription: 'The farmer''s story: his horse has run away and the neighbours
+    cry WHAT BAD LUCK!; the old farmer in a straw hat shrugs, MAYBE, a soft halo
+    over him, while over the hill his horse is already coming back with a herd of
+    wild horses.'
   defaultTargetType: 3

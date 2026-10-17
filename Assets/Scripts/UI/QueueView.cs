@@ -247,7 +247,7 @@ namespace SlayTheClone {
             BattlefieldCombatAction attack => attack.IsLastRites ? EffectIcons.Doom : EffectIcons.Attack,
             UseAbilityAction => EffectIcons.Chain,
             CopyStatsAction or StealStatChangesAction or GrantAbilityAction => EffectIcons.Buff,
-            SwapPositionsAction or PushAction or ShuffleAction => EffectIcons.Speed,
+            SwapPositionsAction or PushAction or ShuffleAction or SpinAction => EffectIcons.Speed,
             DamageCreatureAction or DamagePlayerAction => EffectIcons.Damage,
             HealCreatureAction or HealPlayerAction => EffectIcons.Heal,
             ModifyAction modify => modify.GetValue() >= 0 ? EffectIcons.Buff : EffectIcons.Debuff,

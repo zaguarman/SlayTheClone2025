@@ -12,7 +12,13 @@ namespace SlayTheClone {
     /// creature isn't moved, and Slot Effects see the creatures leave and enter.
     /// </summary>
     public static class Maneuvers {
-        public static bool IsMove(ActionType type) => type is ActionType.SwapPositions or ActionType.Push or ActionType.Pull or ActionType.Shuffle;
+        public static bool IsMove(ActionType type) => type is ActionType.SwapPositions or ActionType.Push or ActionType.Pull or ActionType.Shuffle or ActionType.Spin;
+
+        /// <summary>
+        /// Spin (the user, 2026-10-17, Fidget Spinner): the front three slots of a side, clockwise as its owner sees them: the
+        /// Vanguard's creature to the right Flank, the right Flank's to the left Flank, the left Flank's to the Vanguard.
+        /// </summary>
+        public static readonly int[] SpinRing = { 0, 2, 1 };
 
         /// <summary>A spell that does nothing but move creatures.</summary>
         public static bool IsManeuver(IEnumerable<CardEffect> effects) {
@@ -87,6 +93,40 @@ namespace SlayTheClone {
         }
 
         public override string ToString() => $"ShuffleAction: {Side?.Name}'s side";
+    }
+
+    /// <summary>Spin: the creatures in that side's Vanguard and Flanks move round one slot, clockwise (see <see cref="Maneuvers.SpinRing"/>).</summary>
+    public class SpinAction : IGameAction {
+        public IPlayer Side { get; }
+
+        public SpinAction(IPlayer side) {
+            Side = side;
+            Log($"Created {this}", LogTag.Actions | LogTag.Effects);
+        }
+
+        public override string ToString() => $"SpinAction: {Side?.Name}'s Vanguard and Flanks";
+    }
+
+    // A Rooted creature stays put; the others go round the slots left, skipping it
+    public class SpinActionExecutor : ActionExecutor<SpinAction> {
+        protected override void ExecuteAction(SpinAction spin, ActionExecutionContext context) {
+            var row = spin.Side?.Battlefield;
+            if (row == null || row.Count < 3) return;
+            var ring = Maneuvers.SpinRing.Select(i => row[i]).Where(s => !MovementRules.IsRooted(s.OccupyingCreature)).ToList();
+            if (ring.Count < 2 || ring.All(s => s.OccupyingCreature == null)) return;
+            var before = ring.ToDictionary(s => s, s => s.OccupyingCreature);
+            var moving = ring.Select(s => s.Clear()).ToList();
+            for (int i = 0; i < ring.Count; i++) {
+                var creature = moving[i];
+                if (creature != null) ring[(i + 1) % ring.Count].Place(creature);
+            }
+            Log($"{spin.Side.Name}'s Vanguard and Flanks spin clockwise", LogTag.Effects | LogTag.Creatures);
+            foreach (var (slot, creature) in before.Where(pair => pair.Value != null && pair.Value.Slot != pair.Key)) {
+                SlotEffectRules.OnLeave(creature, slot, context);
+                SlotEffectRules.OnEnter(creature, creature.Slot, context);
+            }
+            NotifyBattlefieldsChanged(context, spin.Side, spin.Side);
+        }
     }
 
     public class PushActionExecutor : ActionExecutor<PushAction> {

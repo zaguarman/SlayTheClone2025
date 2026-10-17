@@ -156,7 +156,7 @@ namespace SlayTheClone.Tests {
                      or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                      or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Revive
                      or ActionType.CopyStatuses or ActionType.EndDay or ActionType.Defect or ActionType.SwapStats or ActionType.SwapSlotEffects
-                     or ActionType.Push or ActionType.Pull or ActionType.Shuffle) {
+                     or ActionType.Push or ActionType.Pull or ActionType.Shuffle or ActionType.Spin) {
                 return null; // Says what it does instead of a value
             }
             else if (action.actionType is ActionType.Cleanse or ActionType.CleanseSlot or ActionType.CreateWatchdog or ActionType.Reveal or ActionType.WipeWatchdogs

@@ -44,6 +44,7 @@ namespace SlayTheClone {
 
         private static bool Build(string output) {
             PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled; // Served as plain files, no headers needed
+            PlayerSettings.WebGL.template = "PROJECT:FullWindow"; // The whole window, no letterboxing (Assets/WebGLTemplates/FullWindow)
             PlayerSettings.WebGL.dataCaching = true;
             PlayerSettings.runInBackground = true;
             var scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();

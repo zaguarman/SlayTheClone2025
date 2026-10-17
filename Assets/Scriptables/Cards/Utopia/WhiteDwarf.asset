@@ -36,8 +36,9 @@ MonoBehaviour:
   effects: []
   designNotes: 'A dense wall: Unbothered (enemy effects can''t lower its stats; the
     study''s best ability, 65%). Ready at once.'
-  artDescription: A small, very white man in a turtleneck standing in space, glowing
-    faintly, the planets around him bending toward him, unbothered.
+  artDescription: 'A dwarf like those of The Lord of the Rings standing in space,
+    glowing white like the star: a long braided beard, a winged helm, a double-bladed
+    axe, chain mail, the planets around him bending toward him, unbothered.'
   attack: 2
   health: 6
   speed: 1

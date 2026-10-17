@@ -839,10 +839,12 @@ namespace SlayTheClone {
                 "Laid Off: when it's discarded from your hand, 2 damage to a random enemy creature. Zeitgeist reacts: even the creatures it doesn't play hit back.",
                 On(EffectTrigger.OnDiscarded, Damage(2, TargetType.EnemyCreatures, AtRandom)))
                 .Picture("A grumpy man in a voting booth gleefully ticking the box of a clown candidate, a 'Don't Blame Me' badge pinned to his cardigan."),
+            // It spins (the user, 2026-10-17); it was a 2/3, Speed 3 On Trend creature (+2 Attack while a Trend is on, a fad):
+            // Bloomberg Terminal keeps On Trend
             Creature("Fidget Spinner", 2, 3, speed: 3, deploy: 0,
                 "2017's must-have. 2018's landfill.",
-                "On Trend: +2 Attack while a Trend is on. A fad: only as strong as the moment it's in.")
-                .With(CreatureAbility.OnTrend)
+                "Arrival: the enemy's Vanguard and Flanks spin clockwise, one slot round. Arriving the Day it's played, it scrambles where that Day's attacks land.",
+                On(EffectTrigger.OnPlay, Act(ActionType.Spin, 0, TargetType.Enemy, TargetModifier.None)))
                 .Picture("A giant fidget spinner whirling on a school desk, sparks flying off its bearings, a crowd of kids staring at it hypnotized, a teacher's 'Confiscated' box in the corner."),
             Creature("Camper Van", 2, 4, speed: 2, deploy: 0,
                 "Van life: no rent, no fixed address, no witnesses.",
@@ -1774,7 +1776,7 @@ namespace SlayTheClone {
                 "It looked like a disaster. It was a disaster. But a blessed one.",
                 "Myth holds the board (a status quo faction): every friendly creature heals 3 and gains Bless 1.",
                 Heal(3, TargetType.FriendlyCreatures, Each), Status(StatusEffectType.Blessed, 1, TargetType.FriendlyCreatures, potency: 1, modifier: Each))
-                .Picture("A man sitting in a crashed car in a ditch, a halo of light around him, an angel in the back seat handing him a winning lottery ticket."),
+                .Picture("The farmer's story: his horse has run away and the neighbours cry WHAT BAD LUCK!; the old farmer in a straw hat shrugs, MAYBE, a soft halo over him, while over the hill his horse is already coming back with a herd of wild horses."),
             Spell("Die by the Sword", TargetType.EnemyCreatures,
                 "Live by it, too, if you can.",
                 "Removal with a reward: 4 damage to target creature, and if it dies, you heal 3.",
@@ -2202,7 +2204,7 @@ namespace SlayTheClone {
                 "Small. Very white. Incredibly dense.",
                 "A dense wall: Unbothered (enemy effects can't lower its stats; the study's best ability, 65%). Ready at once.")
                 .With(CreatureAbility.Unbothered)
-                .Picture("A small, very white man in a turtleneck standing in space, glowing faintly, the planets around him bending toward him, unbothered."),
+                .Picture("A dwarf like those of The Lord of the Rings standing in space, glowing white like the star: a long braided beard, a winged helm, a double-bladed axe, chain mail, the planets around him bending toward him, unbothered."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
             // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
