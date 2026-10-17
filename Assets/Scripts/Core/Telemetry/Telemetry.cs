@@ -62,7 +62,7 @@ namespace Zeitgeist {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Load() {
             settings = Resources.Load<TelemetrySettings>("TelemetrySettings");
-            Recording = settings == null || settings.record;
+            Recording = (settings == null || settings.record) && OptedIn; // The player's say (the settings screen), over the project's
             RecordingSimulations = settings != null && settings.record && settings.recordSimulations;
             Endpoint = settings != null ? settings.endpoint?.Trim() ?? "" : "";
             Version = Application.version;
@@ -74,6 +74,16 @@ namespace Zeitgeist {
             }
             InstallId = PlayerPrefs.GetString(InstallIdKey);
             if (Application.isPlaying && !string.IsNullOrEmpty(Endpoint)) TelemetryUploader.Ensure(settings.uploadEveryMinutes);
+        }
+
+        private const string OptInKey = "TelemetryOptIn";
+        /// <summary>Whether the player lets the game record their games (on unless they switched it off; the settings screen).</summary>
+        public static bool OptedIn => PlayerPrefs.GetInt(OptInKey, 1) == 1;
+
+        public static void SetOptedIn(bool on) {
+            PlayerPrefs.SetInt(OptInKey, on ? 1 : 0);
+            PlayerPrefs.Save();
+            Recording = (settings == null || settings.record) && on;
         }
 
         /// <summary>Keeps the record, as one JSON line in today's pending file. Any thread.</summary>
