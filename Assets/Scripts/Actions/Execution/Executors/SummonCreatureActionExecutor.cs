@@ -76,6 +76,9 @@ namespace SlayTheClone {
             creature.EnterPlay(context.TurnClock.TurnNumber);
             Abilities.CompleteHandover(creature, handover, modifierManager);
             Relics.OnEnter(creature, context); // An adventure's relics: Coffee, Kevlar, Protein Shake
+            // A card that comes back with lasting Health cuts as big as its Health (Generational Trauma, then Hit and Run or
+            // Extraction) enters at 0: it dies at once (GDD 3.3), its Last Will included
+            if (creature.Health <= 0) context.ActionsQueue.AddAction(new CheckLethalAction(creature));
             // A building going up (Ministry for Equality): Rooted while it deploys, so nothing moves it until it's ready
             if ((creature.SourceData as CreatureData)?.rootedWhileDeploying == true && creature.TurnsUntilOperative > 0) {
                 StatusRules.Land(context, creature, StatusEffectType.Rooted, creature.TurnsUntilOperative, 0, context.TurnClock.TurnNumber);

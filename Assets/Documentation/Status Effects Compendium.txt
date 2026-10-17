@@ -671,3 +671,17 @@ Toxic (the user, 2026-10-16)
         Re-application Behavior: Stacks (two Toxics tick side by side)
     Answers: Cleanse it early: the longer it stays, the more it hurts.
     Cleansable: Yes
+
+
+Provoked (the user, 2026-10-16)
+    Faction: Digital Society (U Mad Bro?), Zeitgeist (Calm Your Tits)
+    Inspired by: Taunt and Follow Me
+    Type: Control
+    Description: "Its attacks go to the creature facing it, and it can't use its Active ability."
+    Core Impact: Whatever slot it aimed at, its attack hits the slot facing it: the creature there, or that player if it's
+                 empty. A Provocateur puts a wall in front of it; Sucker Punch and Hit and Run lose their aim.
+    Stacking & Duration:
+        Initial Stacks: the rest of the Day it lands and the next X Days
+        Re-application Behavior: Refresh
+    Answers: Move the creature facing it, or Cleanse it.
+    Cleansable: Yes

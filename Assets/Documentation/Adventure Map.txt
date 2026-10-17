@@ -103,3 +103,18 @@ From the first game (likely still the basis):
   same faction when one ends), Logs (opens the folder), Stop (you take over where it is).
 • Each run is logged to Logs/Autopilot in the project folder: a line a room and a choice, each fight's enemy, result, Day
   and Health, and a summary at the end (rooms, fights won, relics, potions, the deck).
+
+
+8. THE NEXT PICKS (the user, 2026-10-16)
+
+• The opening choice (Slay the Spire's Neow): every run starts with Orientation Day, one of four perks: a random relic, two
+  random potions, +15 Health, or two random cards upgraded.
+• Ascension (Ascension.cs): five levels, each with the ones below: 1 elites a stage more Health, 2 every enemy AI a level
+  better, 3 you start with 50 Health, 4 rest sites heal 15, 5 the boss has 80 Health. A faction opens the next level by
+  beating the boss at the one below (kept between sessions). Chosen on the faction screen (the Ascension button cycles the
+  levels unlocked).
+• Elite and boss perks: an elite carries one relic of its own, the boss two (Taser, Kevlar, Protein Shake, Coffee, Air
+  Fryer, Memo Note). The queue view lists both sides' relics in a fight ("Relics"), and the autopilot's log names them.
+• The boss's faction is decided when the run starts and shown on the map's side panel ("The boss plays ...").
+• Shops sell one relic you don't have, for 35 (a quarter off with the Credit Card).
+• The adventure simulation does all of this too (the opening choice: the relic).

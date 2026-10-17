@@ -336,3 +336,21 @@ On Trend
     Description: "+2 Attack while a Trend is on."
     Notes: Any Trend, whoever set it. Trends become team-building: Rush Hour, Casino and the Zeitgeist switch it on.
     Answers: End the Trend, or set none.
+
+
+Gear-only abilities (the user, 2026-10-16: held items; an Equip spell gives one as a creature's second ability)
+
+Hover
+    Inspired by: Heavy-Duty Boots and Levitate. On Hovercraft (Tech).
+    Type: Passive (Gear)
+    Description: "Slot Effects don't touch it: no trap or Checkpoint as it enters or leaves a slot."
+    Notes: Landmine, Barbed Snare and Checkpoint don't go off for it (they stay for the next creature). Scorched Earth and a
+           Shield still apply: they're on the slot, not on entering.
+    Answers: Damage it the plain way; a Blackout switches its gear off.
+
+Self-Repair
+    Inspired by: Leftovers. On Nanobots (Utopia).
+    Type: Passive (Gear)
+    Description: "Each Dawn, it heals 2."
+    Notes: Only when it's hurt; up to its maximum Health.
+    Answers: Hit it harder than it mends.

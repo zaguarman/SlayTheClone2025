@@ -982,6 +982,19 @@ From Pokémon's Stealth Rock: a Slot Effect placed on every slot of a side.
   Slot Effects of both sides, slot for slot (Court Change).
 
 
+5.10 Gear, Provoked and Combo (2026-10-16, the next picks)
+
+• Gear (Pokémon's held items): an Equip spell gives a creature a second ability, its item, while it stays in play; new gear
+  replaces the old. Gear-only abilities: Hover (Slot Effects don't touch it: Heavy-Duty Boots) and Self-Repair (heals 2 each
+  Dawn: Leftovers); the others are abilities you know (Recoil as a Life Orb, Unbothered as an Assault Vest, Insider Job).
+  Cards: Hovercraft (Tech), Nanobots (Utopia), Q Branch (Shadow Ops.), Smartwatch (Corporate), Exoskeleton (Statecraft).
+• Provoked X (Taunt, Follow Me): for the rest of the Day it lands and the next X Days, its attacks go to the creature facing
+  it (or that player), whatever it aimed at, and it can't use its Active ability. Cards: U Mad Bro? (Digital Society),
+  Calm Your Tits (Zeitgeist).
+• Combo (Slay the Spire's Finisher): +1 to the card's numbers for each other spell its player plays the same Day, before or
+  after it (spells resolve in random order). Cards: Ctrl + Y (Tech), Hyperbole (Mind), High-Frequency Trading Scam (Corporate).
+
+
 6. DESIGN PHILOSOPHY & BALANCING
 
 6.1 Tone

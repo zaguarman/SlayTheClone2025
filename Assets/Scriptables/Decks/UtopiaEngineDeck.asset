@@ -14,42 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Utopia - Lab Grown
   cards:
+  - {fileID: 11400000, guid: b3ae63c1449a50941b6b390412364cf9, type: 2}
+  - {fileID: 11400000, guid: b3ae63c1449a50941b6b390412364cf9, type: 2}
+  - {fileID: 11400000, guid: e373e11e77224c441898dae393b4628f, type: 2}
+  - {fileID: 11400000, guid: e373e11e77224c441898dae393b4628f, type: 2}
+  - {fileID: 11400000, guid: 6be6706b5e2f69244a34e066c8a34e2c, type: 2}
+  - {fileID: 11400000, guid: 6be6706b5e2f69244a34e066c8a34e2c, type: 2}
+  - {fileID: 11400000, guid: 0608f9b502e0dae43a5240e49a69187b, type: 2}
+  - {fileID: 11400000, guid: 0608f9b502e0dae43a5240e49a69187b, type: 2}
   - {fileID: 11400000, guid: adfdb1818290ea7478a5c306ba45a879, type: 2}
   - {fileID: 11400000, guid: adfdb1818290ea7478a5c306ba45a879, type: 2}
-  - {fileID: 11400000, guid: 8a030b617d685d045985263a7f28528c, type: 2}
-  - {fileID: 11400000, guid: 8a030b617d685d045985263a7f28528c, type: 2}
-  - {fileID: 11400000, guid: 6d1e3fcb65a763c4fb1821f7d9baf0e0, type: 2}
-  - {fileID: 11400000, guid: 6d1e3fcb65a763c4fb1821f7d9baf0e0, type: 2}
-  - {fileID: 11400000, guid: 15122c80637445d49bb99dc37fa3108e, type: 2}
-  - {fileID: 11400000, guid: 15122c80637445d49bb99dc37fa3108e, type: 2}
-  - {fileID: 11400000, guid: 16806f3d9e0f4d243be07fcafccdaba6, type: 2}
-  - {fileID: 11400000, guid: 16806f3d9e0f4d243be07fcafccdaba6, type: 2}
-  - {fileID: 11400000, guid: f83ad450ef802624eb4e0cfd80bb1ebc, type: 2}
-  - {fileID: 11400000, guid: 90862f950dd773a45ab00c0b7f63eda3, type: 2}
-  - {fileID: 11400000, guid: 8bf01ccda8e799f469fbc04a41eb4085, type: 2}
-  - {fileID: 11400000, guid: 82bf13f9e6c1c7a46b24602df0fe9f4b, type: 2}
+  - {fileID: 11400000, guid: 488d0929b489d5744b1305bca0b1ce0f, type: 2}
+  - {fileID: 11400000, guid: 488d0929b489d5744b1305bca0b1ce0f, type: 2}
+  - {fileID: 11400000, guid: 7a51f897577500746935d02c4d51855c, type: 2}
+  - {fileID: 11400000, guid: 7a51f897577500746935d02c4d51855c, type: 2}
+  - {fileID: 11400000, guid: ba4dbc05f60417b46b64ba1b51cd4512, type: 2}
+  - {fileID: 11400000, guid: ba4dbc05f60417b46b64ba1b51cd4512, type: 2}
+  - {fileID: 11400000, guid: 0f51bc317552d7d4997487a263863562, type: 2}
+  - {fileID: 11400000, guid: 0f51bc317552d7d4997487a263863562, type: 2}
+  - {fileID: 11400000, guid: e8804ab51a3a4c741a54f9784201bd42, type: 2}
+  - {fileID: 11400000, guid: e8804ab51a3a4c741a54f9784201bd42, type: 2}
   - {fileID: 11400000, guid: 7717b40ee8063f047907afef7e41e7e0, type: 2}
   - {fileID: 11400000, guid: 7717b40ee8063f047907afef7e41e7e0, type: 2}
-  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
-  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
-  - {fileID: 11400000, guid: 08fb5163a4b25ff4e8c137dbdc189708, type: 2}
+  - {fileID: 11400000, guid: 3056d8b9bffe1d443813806e3b9803fc, type: 2}
+  - {fileID: 11400000, guid: 3056d8b9bffe1d443813806e3b9803fc, type: 2}
   - {fileID: 11400000, guid: bb9b151b194b20f40b0c5fcf054d1ae6, type: 2}
   - {fileID: 11400000, guid: bb9b151b194b20f40b0c5fcf054d1ae6, type: 2}
   - {fileID: 11400000, guid: 0835bb03ab6103544b65732b290a1099, type: 2}
-  - {fileID: 11400000, guid: 4f95cfedbc1cbb54a92ee6f0728595c4, type: 2}
-  - {fileID: 11400000, guid: 4f95cfedbc1cbb54a92ee6f0728595c4, type: 2}
-  - {fileID: 11400000, guid: b3ae63c1449a50941b6b390412364cf9, type: 2}
-  - {fileID: 11400000, guid: b3ae63c1449a50941b6b390412364cf9, type: 2}
-  - {fileID: 11400000, guid: 3056d8b9bffe1d443813806e3b9803fc, type: 2}
-  - {fileID: 11400000, guid: 3056d8b9bffe1d443813806e3b9803fc, type: 2}
-  - {fileID: 11400000, guid: c835d8738298d6449b72fa845c985923, type: 2}
-  - {fileID: 11400000, guid: c835d8738298d6449b72fa845c985923, type: 2}
-  - {fileID: 11400000, guid: 612207995677be54185d746c3bf93063, type: 2}
-  - {fileID: 11400000, guid: 612207995677be54185d746c3bf93063, type: 2}
-  - {fileID: 11400000, guid: 5a22a772cbf35214ab6402b9818544ef, type: 2}
-  - {fileID: 11400000, guid: 5a22a772cbf35214ab6402b9818544ef, type: 2}
+  - {fileID: 11400000, guid: 0835bb03ab6103544b65732b290a1099, type: 2}
+  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
+  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
   - {fileID: 11400000, guid: 614f5facbd715424998aa02925098e39, type: 2}
-  - {fileID: 11400000, guid: 614f5facbd715424998aa02925098e39, type: 2}
-  lastUpdated: 2026-10-16T21:51:18.4938794Z
+  lastUpdated: 2026-10-17T07:20:19.7257437Z
   strategy: Engine
   focus: 0

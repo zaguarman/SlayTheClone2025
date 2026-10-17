@@ -107,3 +107,15 @@ Results (the AI Balance Report, after +1 here and there on the new creatures tha
 • Adventures (30 runs a faction): bosses beaten Zeitgeist 8, Statecraft 4, Digital Society 4, Corporate 2, Mind 2, Tech 2,
   Shadow Ops. 1, Utopia 1, Myth 0. Before: Statecraft 12, Mind 4, Shadow Ops. 3, Zeitgeist 2, Digital Society 2, Utopia 1,
   Tech 0, Corporate 0, Myth 0. The starter decks changed too (new plain cards). Elites still end most runs.
+
+
+7. THE SECOND DECKS REBUILT (2026-10-17, step 10 of the next picks)
+
+Black Budget, Hustle Rush, Lab Grown, Threat Model and Blessed Martyrs rebuilt from the study's card numbers (edge in mirror
+games), each keeping its strategy: 8 creatures and 7 spells, two of each. Their win share: Black Budget 6% -> 44%, Hustle
+Rush 19% -> 43%, Lab Grown 22% -> 43%, Blessed Martyrs 31% -> 42%, Threat Model 27% -> 35%.
+Factions (all their decks): Zeitgeist 74%, Digital Society 59%, Tech 54%, Shadow Ops. 54%, Mind 53%, Statecraft 50%, Myth 50%,
+Corporate 49%, Utopia 40%. Spread 34 points (43 before). No game broke a rule.
+Adventures (30 runs a faction, Ascension 0): bosses beaten Tech 6, Statecraft 5, Corporate 4, Utopia 3, Mind 2, Digital
+Society 2, Zeitgeist 2, Shadow Ops. 1, Myth 0. Elites end most runs; Myth dies to them most.
+From now on the study runs rarely (the user: it blocks manual testing): batch changes, measure once, build for the browser first.

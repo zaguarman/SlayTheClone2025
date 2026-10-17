@@ -1,89 +1,90 @@
 ADVENTURE SIMULATION
 
-20 runs a faction, 1274 fights in all. Each run: the faction's starter deck, 60 Health, rooms picked at random along
+30 runs a faction, 1908 fights in all. Each run: the faction's starter deck, 60 Health, rooms picked at random along
 the paths. You are played by the Hard AI; the enemies as the rooms set them (Easy early, Medium, Hard elites,
 Very Hard boss; Health 5, 10, 15... and 60 for the boss). Won, a run takes the strongest card offered (its own faction's);
 shops buy the strongest card it can pay and a potion, then take out the weakest. Rest sites: sleep (+20) below 40
 Health, otherwise upgrade the strongest card. Elites and treasure rooms give a relic; fights drop potions (40%),
-which join the opening hand. Events are walked through.
+which join the opening hand. Events are walked through. The opening choice: a relic. Shops sell a relic too (bought with
+what's left); elites carry a relic, the boss two, and the boss's faction is known from the start.
 A fight still going after 40 Days counts as lost (stalled).
 
 1. BY FACTION, the most trouble first (bosses beaten, then fights won)
 
 Faction            Boss beaten  Fights won (avg)  Died: fight  elite  boss  stalled  Deck at end
-Myth                  0 of 20             4,8           11      9     0        0         17,6
-Shadow Ops.           0 of 20             5,6            8      9     3        1         18,0
-Utopia                1 of 20             5,3            7      7     5        2         17,9
-Tech                  1 of 20             5,5            6     10     3        2         18,5
-Mind                  1 of 20             6,3            3     11     5        2         18,8
-Corporate             2 of 20             6,4            2     11     5        1         19,6
-Zeitgeist             3 of 20             6,8            6      5     6        0         19,6
-Digital Society       3 of 20             6,8            1     10     6        4         20,0
-Statecraft            4 of 20             8,1            2      5     9        0         21,2
+Myth                  0 of 30             4,4           11     17     2        0         17,0
+Shadow Ops.           1 of 30             5,3           13     16     0        0         18,0
+Mind                  2 of 30             6,3            7     15     6        1         19,1
+Digital Society       2 of 30             6,7            4     14    10        2         19,6
+Zeitgeist             2 of 30             6,8            4     13    11        0         19,7
+Utopia                3 of 30             5,7           13      9     5        7         18,4
+Corporate             4 of 30             6,6            9     10     7       11         19,9
+Statecraft            5 of 30             7,4            2      7    16        1         20,9
+Tech                  6 of 30             6,1            7     11     6        0         18,9
 
 2. WHERE AND TO WHOM EACH FACTION LOSES
 
 Myth
-    Died in: rows 6-10 11, rows 11-15 8, rows 1-5 1
-    Beaten by: Zeitgeist 5, Statecraft 4, Utopia 3, Mind 3, Corporate 2, Digital Society 1, Tech 1, Shadow Ops. 1
-    Health after its first fight: 59 on average (of 60); cards bought at shops: 11, removed: 0
-    Rests: 7 slept, 9 cards upgraded; relics 0,8 a run; potions used 30
+    Died in: rows 6-10 20, rows 11-15 5, rows 1-5 3, the boss 2
+    Beaten by: Mind 8, Zeitgeist 6, Utopia 6, Statecraft 4, Shadow Ops. 3, Corporate 2, Tech 1
+    Health after its first fight: 59 on average (of 60); cards bought at shops: 18, removed: 3
+    Rests: 4 slept, 11 cards upgraded; relics 1,6 a run; potions used 41
 
 Shadow Ops.
-    Died in: rows 11-15 9, rows 6-10 8, the boss 3
-    Beaten by: Mind 4, Digital Society 4, Utopia 3, Statecraft 3, Corporate 3, Zeitgeist 2, Tech 1
-    Health after its first fight: 60 on average (of 60); cards bought at shops: 6, removed: 2
-    Rests: 7 slept, 10 cards upgraded; relics 0,9 a run; potions used 39
-
-Utopia
-    Died in: rows 6-10 10, the boss 5, rows 11-15 3, rows 1-5 1
-    Beaten by: Statecraft 5, Digital Society 3, Zeitgeist 3, Myth 2, Corporate 2, Mind 2, Tech 1, Shadow Ops. 1
-    Health after its first fight: 59 on average (of 60); cards bought at shops: 9, removed: 3
-    Rests: 9 slept, 11 cards upgraded; relics 1,0 a run; potions used 30
-
-Tech
-    Died in: rows 6-10 8, rows 11-15 7, the boss 3, rows 1-5 1
-    Beaten by: Myth 5, Statecraft 5, Digital Society 3, Mind 2, Corporate 2, Zeitgeist 1, Shadow Ops. 1
-    Health after its first fight: 59 on average (of 60); cards bought at shops: 9, removed: 1
-    Rests: 4 slept, 10 cards upgraded; relics 1,3 a run; potions used 39
+    Died in: rows 6-10 17, rows 11-15 12
+    Beaten by: Statecraft 6, Mind 5, Myth 4, Digital Society 4, Corporate 3, Zeitgeist 3, Tech 3, Utopia 1
+    Health after its first fight: 61 on average (of 60); cards bought at shops: 17, removed: 3
+    Rests: 2 slept, 16 cards upgraded; relics 2,0 a run; potions used 67
 
 Mind
-    Died in: rows 11-15 10, the boss 5, rows 6-10 4
-    Beaten by: Statecraft 5, Tech 4, Digital Society 4, Myth 3, Shadow Ops. 2, Utopia 1
-    Health after its first fight: 60 on average (of 60); cards bought at shops: 9, removed: 4
-    Rests: 3 slept, 27 cards upgraded; relics 1,3 a run; potions used 38
-
-Corporate
-    Died in: rows 11-15 7, rows 6-10 6, the boss 5
-    Beaten by: Tech 3, Shadow Ops. 3, Zeitgeist 3, Mind 3, Statecraft 2, Utopia 2, Myth 1, Digital Society 1
-    Health after its first fight: 60 on average (of 60); cards bought at shops: 15, removed: 2
-    Rests: 9 slept, 14 cards upgraded; relics 1,6 a run; potions used 57
-
-Zeitgeist
-    Died in: rows 11-15 7, the boss 6, rows 6-10 4
-    Beaten by: Tech 5, Shadow Ops. 3, Utopia 2, Corporate 2, Statecraft 2, Digital Society 1, Mind 1, Myth 1
-    Health after its first fight: 60 on average (of 60); cards bought at shops: 14, removed: 5
-    Rests: 9 slept, 18 cards upgraded; relics 1,5 a run; potions used 52
+    Died in: rows 11-15 11, rows 6-10 10, the boss 6, rows 1-5 1
+    Beaten by: Tech 7, Statecraft 6, Zeitgeist 5, Digital Society 3, Utopia 3, Corporate 2, Myth 1, Shadow Ops. 1
+    Health after its first fight: 60 on average (of 60); cards bought at shops: 14, removed: 4
+    Rests: 5 slept, 30 cards upgraded; relics 2,3 a run; potions used 66
 
 Digital Society
-    Died in: rows 11-15 9, the boss 6, rows 6-10 2
-    Beaten by: Shadow Ops. 4, Tech 4, Zeitgeist 3, Mind 2, Myth 2, Corporate 1, Utopia 1
-    Health after its first fight: 59 on average (of 60); cards bought at shops: 16, removed: 4
-    Rests: 4 slept, 26 cards upgraded; relics 1,7 a run; potions used 53
+    Died in: rows 11-15 11, the boss 10, rows 6-10 7
+    Beaten by: Myth 9, Utopia 8, Mind 4, Tech 3, Shadow Ops. 2, Statecraft 1, Zeitgeist 1
+    Health after its first fight: 60 on average (of 60); cards bought at shops: 12, removed: 1
+    Rests: 7 slept, 34 cards upgraded; relics 2,5 a run; potions used 65
+
+Zeitgeist
+    Died in: rows 11-15 12, the boss 11, rows 6-10 5
+    Beaten by: Tech 7, Mind 4, Digital Society 4, Utopia 3, Myth 3, Statecraft 3, Corporate 2, Shadow Ops. 2
+    Health after its first fight: 60 on average (of 60); cards bought at shops: 21, removed: 5
+    Rests: 18 slept, 26 cards upgraded; relics 2,5 a run; potions used 82
+
+Utopia
+    Died in: rows 6-10 14, rows 11-15 8, the boss 5
+    Beaten by: Statecraft 11, Corporate 4, Tech 4, Digital Society 3, Zeitgeist 3, Myth 2
+    Health after its first fight: 66 on average (of 60); cards bought at shops: 14, removed: 3
+    Rests: 3 slept, 26 cards upgraded; relics 2,3 a run; potions used 54
+
+Corporate
+    Died in: rows 11-15 14, the boss 7, rows 6-10 4, rows 1-5 1
+    Beaten by: Tech 5, Utopia 5, Statecraft 4, Zeitgeist 4, Shadow Ops. 3, Digital Society 2, Myth 2, Mind 1
+    Health after its first fight: 61 on average (of 60); cards bought at shops: 19, removed: 4
+    Rests: 6 slept, 34 cards upgraded; relics 3,0 a run; potions used 64
 
 Statecraft
-    Died in: the boss 9, rows 11-15 7
-    Beaten by: Zeitgeist 5, Tech 4, Digital Society 2, Mind 2, Utopia 2, Myth 1
-    Health after its first fight: 60 on average (of 60); cards bought at shops: 11, removed: 7
-    Rests: 8 slept, 29 cards upgraded; relics 2,1 a run; potions used 65
+    Died in: the boss 16, rows 11-15 8, rows 6-10 1
+    Beaten by: Myth 6, Mind 6, Tech 5, Utopia 3, Zeitgeist 2, Digital Society 2, Shadow Ops. 1
+    Health after its first fight: 60 on average (of 60); cards bought at shops: 30, removed: 7
+    Rests: 12 slept, 45 cards upgraded; relics 3,1 a run; potions used 108
+
+Tech
+    Died in: rows 11-15 10, rows 6-10 8, the boss 6
+    Beaten by: Digital Society 9, Utopia 4, Zeitgeist 4, Mind 2, Statecraft 2, Corporate 1, Shadow Ops. 1, Myth 1
+    Health after its first fight: 60 on average (of 60); cards bought at shops: 18, removed: 3
+    Rests: 13 slept, 27 cards upgraded; relics 2,4 a run; potions used 68
 
 3. STARTER DECKS (12 cards: the plainest of the faction)
-    Corporate: Cleaning Robot x4, Golden Parachute x3, Usury x3, Inheritance x2
-    Statecraft: Internal Revenue Service x4, King Emeritus x3, Preemptive Strike x3, Raised Security Level x2
+    Corporate: Cleaning Robot x4, Golden Parachute x3, Usury x3, High-Frequency Trading Scam x2
+    Statecraft: Internal Revenue Service x4, King Emeritus x3, Preemptive Strike x3, Exoskeleton x2
     Zeitgeist: Bodybuilder x4, Delivery Cyclist x3, Ol' Reliable x3, Universal Basic Income x2
-    Utopia: Hypermetamorphosis x4, Clone x3, Femtosecond Laser x3, Placebo x2
+    Utopia: Hypermetamorphosis x4, Genetically Modified Organism x3, Femtosecond Laser x3, Blood Transfusion x2
     Digital Society: Digital Nomad x4, Conspiracy Theorist x3, Dogpile x3, Selfie Esteem x2
-    Shadow Ops.: Political Decoy x4, Cleaner x3, Exploding Pen x3, Smoke And Mirrors x2
-    Tech: Scope Creep x4, Technical Debt x3, DDOS Attack x3, Web Scraping x2
+    Shadow Ops.: Political Decoy x4, Cleaner x3, Exploding Pen x3, Human Intelligence x2
+    Tech: Scope Creep x4, Technical Debt x3, Ctrl + Y x3, Hovercraft x2
     Myth: Buddy Christ x4, Living Dead x3, Lance Of Longinus x3, Phoenix Feather x2
     Mind: Schrodinger's Cat x4, Ship of Theseus x3, Cyberpsychosis x3, Hold That Thought x2
