@@ -19,8 +19,13 @@ namespace Zeitgeist {
             titleScreen = title;
         }
 
+        /// <summary>Whether the screen shows cards (then it needs the catalog and its card prefab); the settings screen doesn't.</summary>
+        protected virtual bool NeedsCards => true;
+        /// <summary>Told when the screen closes (the pause menu shows itself again).</summary>
+        public System.Action Closed;
+
         public void Show() {
-            if (Catalog == null || Catalog.CardPrefab == null) {
+            if (NeedsCards && (Catalog == null || Catalog.CardPrefab == null)) {
                 Debug.LogWarning($"{GetType().Name} needs a deck catalog with a card prefab (Cards > Generate Faction Decks sets it)");
                 return;
             }
@@ -33,6 +38,7 @@ namespace Zeitgeist {
         public void Hide() {
             Close();
             if (titleScreen != null) titleScreen.SetActive(true);
+            Closed?.Invoke();
         }
 
         protected virtual void Update() {

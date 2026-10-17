@@ -144,8 +144,14 @@ namespace Zeitgeist {
         private const string SpeedKey = "PlaybackSpeed";
         private static bool speedLoaded;
 
-        public static void CycleSpeed() {
-            Speed = Speed >= 4f ? 1f : Speed * 2f;
+        public static readonly float[] Speeds = { 1f, 2f, 4f };
+
+        public static void CycleSpeed() => SetSpeed(Speed >= 4f ? 1f : Speed * 2f);
+
+        /// <summary>The playback speed, 1, 2 or 4, kept between sessions (the settings screen and the F key set it).</summary>
+        public static void SetSpeed(float speed) {
+            Speed = Mathf.Clamp(speed, 1f, 4f);
+            speedLoaded = true;
             PlayerPrefs.SetFloat(SpeedKey, Speed);
             PlayerPrefs.Save();
         }

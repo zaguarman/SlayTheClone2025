@@ -16,8 +16,24 @@ namespace Zeitgeist {
         private const UnityEngine.InputSystem.Key ToggleKey = UnityEngine.InputSystem.Key.Escape;
 
         public const string CopyLogButtonName = "CopyLogButton", CopyLogLabel = "Copy game log";
-        public const string AutoplayButtonName = "AutoplayButton";
-        private Button copyLogButton, autoplayButton;
+        public const string AutoplayButtonName = "AutoplayButton", SettingsButtonName = "SettingsButton";
+        private Button copyLogButton, autoplayButton, settingsButton;
+        private SettingsMenu settings;
+
+        /// <summary>The settings screen over the paused game; the pause box comes back when it closes.</summary>
+        public void OpenSettings() {
+            if (settings == null) {
+                var canvas = GetComponentInParent<Canvas>() ?? panel.GetComponentInParent<Canvas>();
+                var host = new GameObject("Settings", typeof(RectTransform));
+                host.transform.SetParent(canvas != null ? canvas.transform : panel.transform.parent, false);
+                MenuWidgets.Stretch(host);
+                settings = host.AddComponent<SettingsMenu>();
+                settings.Setup(null, null);
+                settings.Closed = () => { if (IsPaused && panel != null) panel.SetActive(true); };
+            }
+            panel.SetActive(false);
+            settings.Show();
+        }
         private TMPro.TMP_Text copyLogLabel, autoplayLabel;
 
         /// <summary>In an adventure's fight: the autopilot takes over, or you take back over, and the game goes on.</summary>
@@ -67,6 +83,14 @@ namespace Zeitgeist {
                 autoplayButton.onClick = new Button.ButtonClickedEvent();
                 autoplayButton.onClick.AddListener(ToggleAutoplay);
                 autoplayLabel = autoplayButton.GetComponentInChildren<TMPro.TMP_Text>();
+                // Settings (the dossier, 2026-10-17): the same screen the title offers, over the game
+                settingsButton = Instantiate(mainMenuButton, mainMenuButton.transform.parent);
+                settingsButton.name = SettingsButtonName;
+                settingsButton.transform.SetSiblingIndex(mainMenuButton.transform.GetSiblingIndex());
+                settingsButton.onClick = new Button.ButtonClickedEvent();
+                settingsButton.onClick.AddListener(OpenSettings);
+                var settingsLabel = settingsButton.GetComponentInChildren<TMPro.TMP_Text>();
+                if (settingsLabel != null) settingsLabel.text = "Settings";
                 mainMenuButton.onClick.AddListener(GoToMainMenu);
             }
             if (quitButton != null) quitButton.onClick.AddListener(MainMenu.QuitGame);
@@ -82,6 +106,7 @@ namespace Zeitgeist {
             UITheme.StyleButton(mainMenuButton);
             if (copyLogButton != null) UITheme.StyleButton(copyLogButton);
             if (autoplayButton != null) UITheme.StyleButton(autoplayButton);
+            if (settingsButton != null) UITheme.StyleButton(settingsButton);
             UITheme.StyleButton(quitButton);
             var box = resumeButton != null ? resumeButton.transform.parent.GetComponent<Image>() : null;
             if (box != null) UITheme.StylePanel(box, trim: UITheme.Gold);
@@ -117,6 +142,7 @@ namespace Zeitgeist {
             if (paused) ShowAutoplayButton();
             if (paused && !IsPaused && Time.timeScale > 0f) speedBeforePause = Time.timeScale;
             IsPaused = paused;
+            if (!paused && settings != null && settings.IsOpen) settings.Hide();
             panel.SetActive(paused);
             Time.timeScale = paused ? 0f : speedBeforePause;
             Log(paused ? "Game paused" : "Game resumed", LogTag.UI);

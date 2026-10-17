@@ -20,6 +20,7 @@ namespace Zeitgeist {
         public const string CardsButtonName = "CardsButton";
         public const string DecksButtonName = "DecksButton";
         public const string KeywordsButtonName = "KeywordsButton";
+        public const string SettingsButtonName = "SettingsButton";
 
         private void Awake() {
             // Make sure a previous pause doesn't leave the game frozen
@@ -61,6 +62,7 @@ namespace Zeitgeist {
             AddScreen<CardGalleryMenu>(CardsButtonName, "Cards");
             AddScreen<DeckBuilderMenu>(DecksButtonName, "Decks");
             AddScreen<KeywordGlossaryMenu>(KeywordsButtonName, "Glossary");
+            AddScreen<SettingsMenu>(SettingsButtonName, "Settings"); // The dossier (2026-10-17): speed, fullscreen, records and the keys, in one place
         }
 
         private T AddScreen<T>(string buttonName, string label) where T : MenuScreen {

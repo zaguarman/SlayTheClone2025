@@ -163,6 +163,17 @@ namespace Zeitgeist.Tests {
             Assert.AreEqual(Keywords.All.First().Key, glossary.Shown, "It opens as new each time: on the first keyword");
             Click(GalleryButton(glossary, KeywordGlossaryMenu.BackButtonName));
 
+            // Settings (the dossier, 2026-10-17): the playback speed, fullscreen, the game records and the keys, from the title
+            float speedBefore = ResolutionPresenter.Speed;
+            Click(TitleButton(MainMenu.SettingsButtonName));
+            var settings = Object.FindFirstObjectByType<SettingsMenu>();
+            Assert.IsTrue(settings.IsOpen, "Settings opens the settings screen");
+            Click(GalleryButton(settings, SettingsMenu.SpeedButton + "2"));
+            Assert.AreEqual(2f, ResolutionPresenter.Speed, "A speed button sets the playback speed");
+            ResolutionPresenter.SetSpeed(speedBefore);
+            Click(GalleryButton(settings, SettingsMenu.BackButtonName));
+            Assert.IsFalse(settings.IsOpen, "...and Back closes it");
+
             yield return OpenSetup();
             Assert.AreSame(setup.Decks[0], setup.PlayerDeck, "By default you play the deck being worked on (the Workbench)...");
             Assert.AreSame(setup.Decks.Skip(1).First(d => catalog.Opponents.Any(o => o.deck == d)), setup.OpponentDeck, "...against the next one in focus");
