@@ -70,7 +70,7 @@ namespace Zeitgeist {
                 string keyword = isSpell ? null : KeywordAbility(effect);
                 if (keyword != null) keywords.Add(keyword);
                 else {
-                    string sentence = DescribeEffect(effect, isSpell);
+                    string sentence = DescribeEffect(effect, isSpell, now: data.potion && isSpell && effect.actions.All(x => x.actionType == ActionType.Draw)); // A potion's draw comes at once
                     if (sentence != null) sentences.Add(data.gamble ? $"• {sentence}" : sentence);
                 }
             }
@@ -141,8 +141,8 @@ namespace Zeitgeist {
         // The same thing done to several groups reads once, for the group they make up ("exhaust all creatures",
         // "1 damage to everything"). A number after a status is its Days ("Doom 3"); a status with a strength shows the
         // Days with the sand watch ("Burn 2 [sand watch]3": 2 damage, 3 Days). The rest lives in the keywords' explanations.
-        private static string DescribeEffect(CardEffect effect, bool isSpell) {
-            bool atDawn = !isSpell && effect.trigger == EffectTrigger.StartOfTurn;
+        private static string DescribeEffect(CardEffect effect, bool isSpell, bool now = false) {
+            bool atDawn = (!isSpell && effect.trigger == EffectTrigger.StartOfTurn) || now; // now: a potion's draw comes at once (the user, 2026-10-17)
             var actions = effect.actions.Where(a => DescribeAction(a, isSpell, null, atDawn) != null).ToList();
             if (actions.Count == 0) return null;
 

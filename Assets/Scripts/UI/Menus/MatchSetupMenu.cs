@@ -164,8 +164,7 @@ namespace Zeitgeist {
             if (summaryText != null && PlayerDeck != null && OpponentDeck != null) {
                 string you = AI.HasFlag(AISeats.Player1) ? "The AI" : "You";
                 string them = AI.HasFlag(AISeats.Player2) ? $"{OpponentName} (AI)" : OpponentName;
-                summaryText.text = $"{you}, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{PlayerDeck.GetDeckName()}</color>"
-                    + $"   vs   {them}, playing <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>{OpponentDeck.GetDeckName()}</color>";
+                summaryText.text = $"{you}, playing <b>{PlayerDeck.GetDeckName()}</b>   vs   {them}, playing <b>{OpponentDeck.GetDeckName()}</b>"; // Bold, not the keyword colour (the user, 2026-10-17)
             }
             if (seatsLabel != null) seatsLabel.text = SeatsName;
             if (levelButton != null) {

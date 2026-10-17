@@ -117,7 +117,7 @@ namespace Zeitgeist {
             foreach (var pair in factionButtons) ShowChosen(pair.Value, pair.Key == faction);
             bool offered = Factions.Contains(faction);
             if (chosenText != null) chosenText.text = offered
-                ? $"{Umbrellas.Name(faction)} ({string.Join(", ", Umbrellas.Subfactions(faction).Select(CardTextFormatter.FactionName))}), with <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>a starter deck of {AdventureDecks.StarterSize} plain cards</color>" : "";
+                ? $"{Umbrellas.Name(faction)} ({string.Join(", ", Umbrellas.Subfactions(faction).Select(CardTextFormatter.FactionName))})" : ""; // The user, 2026-10-17: no starter-deck note, no highlight colour on plain words
             if (embark != null) embark.interactable = offered;
             AscensionLevel = Mathf.Min(AscensionLevel, Ascension.Unlocked(faction));
             ShowAscension();
@@ -300,7 +300,7 @@ namespace Zeitgeist {
             var coin = UITheme.AddUmbrellaCoin(coinHolder.transform, AdventureRun.Umbrella, CoinSize).rectTransform;
             coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0.5f, 0.5f);
             AddText(side, AdventureRun.Deck != null ? $"Your deck: {CardGrid.Count(AdventureRun.Deck.Cards)}" : "", 22, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 34);
-            AddText(side, $"Health: <b>{AdventureRun.Health}</b>    EuroYuans: {AdventureRun.Money(AdventureRun.EuroYuans)}", 26, AccentColor, FontStyles.Normal, height: 38);
+            AddText(side, $"Health: <b>{AdventureRun.Health}</b>    EuroYuans: {AdventureRun.Money(AdventureRun.EuroYuans)}", 26, TextColor, FontStyles.Normal, height: 38); // Plain words in the text colour: the highlight is for keywords (the user)
             AddText(side, (AdventureRun.BossFaction != Faction.None ? $"The boss plays <b>{CardTextFormatter.FactionName(AdventureRun.BossFaction)}</b>" : "")
                           + (AdventureRun.Ascension > 0 ? $"    Ascension {AdventureRun.Ascension}" : ""), 22, TextColor, FontStyles.Normal, height: 32);
             status = AddText(side, StatusText(), 24, TextColor, FontStyles.Normal, height: 150);
@@ -334,7 +334,7 @@ namespace Zeitgeist {
                 line.textWrappingMode = TextWrappingModes.Normal;
             }
             if (AdventureRun.Earned > 0) AddText(column, $"<b>+{AdventureRun.Money(AdventureRun.Earned)}</b>  <color=#C9C0AE>you have {AdventureRun.Money(AdventureRun.EuroYuans)}</color>",
-                30, AccentColor, FontStyles.Normal, height: 56);
+                30, TextColor, FontStyles.Normal, height: 56);
             for (int i = 0; i < AdventureRun.Rewards.Count; i++) {
                 var pack = AdventureRun.Rewards[i];
                 if (pack.Cards.Count == 0) continue;
@@ -394,7 +394,7 @@ namespace Zeitgeist {
                 }
             }
             else {
-                var outcome = AddText(column, AdventureRun.EventOutcome, 28, AccentColor, FontStyles.Normal, height: 120);
+                var outcome = AddText(column, AdventureRun.EventOutcome, 28, TextColor, FontStyles.Normal, height: 120);
                 outcome.textWrappingMode = TextWrappingModes.Normal;
                 var on = AddButton(footer, EventOnButtonName, "<b>Go on</b>", 300, LeaveEvent);
                 UITheme.StyleButton(on, UITheme.ButtonKind.Primary);
@@ -408,7 +408,7 @@ namespace Zeitgeist {
             deckGrid = new CardGrid(screen.columns, Catalog.CardPrefab, DeckColumns);
             deckGrid.Title.text = "Click the card to upgrade  <size=70%><color=#C9C0AE>a creature +1 Attack and +1 Health; a spell 1 more on each of its numbers</color></size>";
             deckGrid.Show(CardUpgrades.Upgradable(AdventureRun.Deck.Cards).OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.cardName),
-                (face, asset) => face.OnCardClicked.AddListener(_ => UpgradeCard(asset)));
+                (face, asset) => { face.ShowsItself = true; face.OnCardClicked.AddListener(_ => UpgradeCard(asset)); }); // Big enough: no enlarged copy on hover (the user)
             var footer = AddFooter(screen.panel.transform);
             AddButton(footer, UpgradeBackButtonName, "Back", BackWidth, () => { AdventureRun.StartUpgrade(false); Show(); });
             return screen.panel;
@@ -535,7 +535,7 @@ namespace Zeitgeist {
             deckGrid = new CardGrid(screen.columns, Catalog.CardPrefab, DeckColumns);
             deckGrid.Title.text = $"Click the card to take out of your deck, for {AdventureRun.Money(AdventureRun.RemovalCost)}";
             deckGrid.Show(AdventureRun.Deck.Cards.OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.cardName),
-                (face, asset) => face.OnCardClicked.AddListener(_ => RemoveFromDeck(asset)));
+                (face, asset) => { face.ShowsItself = true; face.OnCardClicked.AddListener(_ => RemoveFromDeck(asset)); });
             var footer = AddFooter(screen.panel.transform);
             AddButton(footer, BackButtonName, "Back", BackWidth, () => OpenRemoval(false));
             return screen.panel;
@@ -576,7 +576,7 @@ namespace Zeitgeist {
             var screen = AddScreen(transform, "AdventurePanel", "Your deck");
             deckGrid = new CardGrid(screen.columns, Catalog.CardPrefab, DeckColumns);
             deckGrid.Title.text = CardGrid.Count(AdventureRun.Deck.Cards);
-            deckGrid.Show(AdventureRun.Deck.Cards.OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.cardName));
+            deckGrid.Show(AdventureRun.Deck.Cards.OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.cardName), (face, _) => face.ShowsItself = true);
             var footer = AddFooter(screen.panel.transform);
             AddButton(footer, BackButtonName, "Back", BackWidth, () => ShowDeck(false));
             return screen.panel;

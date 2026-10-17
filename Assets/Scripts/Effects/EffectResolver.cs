@@ -274,7 +274,10 @@ namespace Zeitgeist {
         /// </summary>
         public static bool IsInstant(Spell spell) {
             var actions = spell?.Effects.SelectMany(e => e.actions).ToList();
-            return actions != null && actions.Count > 0 && actions.All(a => a.actionType == ActionType.Reveal
+            if (actions == null || actions.Count == 0) return false;
+            // A potion that draws draws at once, into this Day's hand (the user, 2026-10-17: Nicotine)
+            if (spell.SourceData?.potion == true && actions.All(a => a.actionType == ActionType.Draw)) return true;
+            return actions.All(a => a.actionType == ActionType.Reveal
                 || (a.actionType == ActionType.ApplyStatus && a.statusEffectToApply == StatusEffectType.Revealed));
         }
 

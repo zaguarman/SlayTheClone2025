@@ -69,7 +69,8 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Potion: draw 2 next Day.'
+  designNotes: 'Potion: draw 2 now, into this Day''s hand (the user, 2026-10-17:
+    a potion that draws draws at once).'
   artDescription: "A crumpled pack of cigarettes on a caf\xE9 table, one lit in the
     ashtray, a ribbon of smoke curling into a question mark."
   defaultTargetType: 0

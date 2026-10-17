@@ -202,10 +202,9 @@ namespace Zeitgeist {
             nameField.SetTextWithoutNotify(open ? OpenDeck.GetDeckName() : "");
             ShowDeleteButton();
 
-            string accent = ColorUtility.ToHtmlStringRGB(AccentColor);
             if (!open) countText.text = "<i>Name a deck or click a card to start one.</i>";
             else if (ShowsStarterDeck) countText.text = $"Starter deck, {OpenDeck.Cards.Count} cards · <i>Copy it to make it yours</i>";
-            else if (PlayerDecks.IsComplete(OpenDeck)) countText.text = $"{PlayerDecks.SizeText(OpenDeck)} · <color=#{accent}>ready to play</color>" +
+            else if (PlayerDecks.IsComplete(OpenDeck)) countText.text = $"{PlayerDecks.SizeText(OpenDeck)} · ready to play" +
                 (OpenDeck.Cards.Count < PlayerDecks.MaxDeckSize ? $" <i>(up to {PlayerDecks.MaxDeckSize})</i>" : "");
             else countText.text = $"{PlayerDecks.SizeText(OpenDeck)} · <i>{CardGrid.Plural(PlayerDecks.MinDeckSize - OpenDeck.Cards.Count, "more card")} to play</i>";
             foreach (Transform coin in deckFactions.Cast<Transform>().ToList()) Discard(coin.gameObject);
@@ -252,7 +251,7 @@ namespace Zeitgeist {
             label.overflowMode = TextOverflowModes.Truncate;
             label.rectTransform.offsetMin = new Vector2(42f, 0f);
             label.rectTransform.offsetMax = new Vector2(-48f, 0f);
-            var copies = AddText(row.transform, $"×{PlayerDecks.CopiesOf(OpenDeck, card)}", 22, AccentColor, FontStyles.Bold, height: -1);
+            var copies = AddText(row.transform, $"×{PlayerDecks.CopiesOf(OpenDeck, card)}", 22, TextColor, FontStyles.Bold, height: -1);
             var copiesRect = copies.rectTransform;
             copiesRect.anchorMin = new Vector2(1f, 0f);
             copiesRect.anchorMax = Vector2.one;

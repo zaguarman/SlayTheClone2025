@@ -16,8 +16,23 @@ namespace Zeitgeist {
         private const UnityEngine.InputSystem.Key ToggleKey = UnityEngine.InputSystem.Key.Escape;
 
         public const string CopyLogButtonName = "CopyLogButton", CopyLogLabel = "Copy game log";
-        private Button copyLogButton;
-        private TMPro.TMP_Text copyLogLabel;
+        public const string AutoplayButtonName = "AutoplayButton";
+        private Button copyLogButton, autoplayButton;
+        private TMPro.TMP_Text copyLogLabel, autoplayLabel;
+
+        /// <summary>In an adventure's fight: the autopilot takes over, or you take back over, and the game goes on.</summary>
+        public void ToggleAutoplay() {
+            if (AdventureRun.Fighting == null) return;
+            if (AdventureAutopilot.On) AdventureAutopilot.End();
+            else AdventureAutopilot.Begin();
+            SetPaused(false);
+        }
+
+        private void ShowAutoplayButton() {
+            if (autoplayButton == null) return;
+            autoplayButton.gameObject.SetActive(AdventureRun.Fighting != null);
+            if (autoplayLabel != null) autoplayLabel.text = AdventureAutopilot.On ? "Stop autoplay" : "Autoplay";
+        }
 
         public bool IsPaused { get; private set; }
 
@@ -45,6 +60,13 @@ namespace Zeitgeist {
                 copyLogButton.onClick.AddListener(CopyLog);
                 copyLogLabel = copyLogButton.GetComponentInChildren<TMPro.TMP_Text>();
                 if (copyLogLabel != null) copyLogLabel.text = CopyLogLabel;
+                // Autoplay in an adventure's fight (the user, 2026-10-17): stop it, or start it, from here
+                autoplayButton = Instantiate(mainMenuButton, mainMenuButton.transform.parent);
+                autoplayButton.name = AutoplayButtonName;
+                autoplayButton.transform.SetSiblingIndex(copyLogButton.transform.GetSiblingIndex());
+                autoplayButton.onClick = new Button.ButtonClickedEvent();
+                autoplayButton.onClick.AddListener(ToggleAutoplay);
+                autoplayLabel = autoplayButton.GetComponentInChildren<TMPro.TMP_Text>();
                 mainMenuButton.onClick.AddListener(GoToMainMenu);
             }
             if (quitButton != null) quitButton.onClick.AddListener(MainMenu.QuitGame);
@@ -59,6 +81,7 @@ namespace Zeitgeist {
             UITheme.StyleButton(resumeButton, UITheme.ButtonKind.Primary);
             UITheme.StyleButton(mainMenuButton);
             if (copyLogButton != null) UITheme.StyleButton(copyLogButton);
+            if (autoplayButton != null) UITheme.StyleButton(autoplayButton);
             UITheme.StyleButton(quitButton);
             var box = resumeButton != null ? resumeButton.transform.parent.GetComponent<Image>() : null;
             if (box != null) UITheme.StylePanel(box, trim: UITheme.Gold);
@@ -91,6 +114,7 @@ namespace Zeitgeist {
 
         private void SetPaused(bool paused) {
             if (paused && copyLogLabel != null) copyLogLabel.text = CopyLogLabel; // Ready to copy again
+            if (paused) ShowAutoplayButton();
             if (paused && !IsPaused && Time.timeScale > 0f) speedBeforePause = Time.timeScale;
             IsPaused = paused;
             panel.SetActive(paused);

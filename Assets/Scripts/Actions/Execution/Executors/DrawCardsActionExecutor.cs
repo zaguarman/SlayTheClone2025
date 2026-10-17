@@ -17,8 +17,10 @@ namespace Zeitgeist {
                 return;
             }
 
-            // The hand is discarded at the end of the Day: cards drawn while it resolves come with the next Day's hand
-            if (drawAction.FromEffect && context.TurnClock.DrawsWaitForNextDay) {
+            // The hand is discarded at the end of the Day: cards drawn while it resolves come with the next Day's hand.
+            // An instant spell (a potion that draws) resolves while you plan: its cards come now
+            bool now = drawAction.Source is Spell spell && EffectResolver.IsInstant(spell);
+            if (drawAction.FromEffect && !now && context.TurnClock.DrawsWaitForNextDay) {
                 player.ExtraDraws += amount;
                 Log($"{player.Name} will draw {amount} more next Day", LogTag.Actions | LogTag.Cards);
                 return;
