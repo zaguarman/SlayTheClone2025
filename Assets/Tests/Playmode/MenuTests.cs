@@ -89,8 +89,15 @@ namespace SlayTheClone.Tests {
             Click(TitleButton(MainMenu.KeywordsButtonName));
             var glossary = Object.FindFirstObjectByType<KeywordGlossaryMenu>();
             Assert.IsTrue(glossary.IsOpen, "Keywords opens the glossary");
-            var listed = glossary.GetComponentsInChildren<Button>().Where(b => b.name.StartsWith(KeywordGlossaryMenu.KeywordButton)).ToList();
+            // The sections are the list (the user, 2026-10-17): one open at a time, its keywords under it; every keyword is there to open
+            var listed = glossary.GetComponentsInChildren<Button>(includeInactive: true).Where(b => b.name.StartsWith(KeywordGlossaryMenu.KeywordButton)).ToList();
             Assert.AreEqual(Keywords.All.Count(), listed.Count, "It lists every keyword");
+            CollectionAssert.AreEquivalent(Keywords.Groups, glossary.GetComponentsInChildren<Button>().Where(b => b.name.StartsWith(KeywordGlossaryMenu.SectionButton))
+                .Select(b => b.name.Substring(KeywordGlossaryMenu.SectionButton.Length)), "...under a header per section");
+            Assert.AreEqual(Keywords.Groups[0], glossary.OpenSection, "It opens on the first section");
+            glossary.Open("Statuses");
+            Assert.IsTrue(listed.Where(b => b.gameObject.activeInHierarchy).All(b => Keywords.Get(b.name.Substring(KeywordGlossaryMenu.KeywordButton.Length)).Group == "Statuses"),
+                "Opening a section shows its keywords and closes the other");
             Click(listed.Single(b => b.name == KeywordGlossaryMenu.KeywordButton + "Exhausted"));
             Assert.AreEqual("Exhausted", glossary.Shown);
             yield return null;
@@ -100,6 +107,7 @@ namespace SlayTheClone.Tests {
 
             var list = glossary.GetComponentsInChildren<ScrollRect>().Single();
             float width = ((RectTransform)list.transform).rect.width;
+            glossary.Open("Targets"); // A keyword is clicked in its open section
             Click(listed.Single(b => b.name == KeywordGlossaryMenu.KeywordButton + "Random"));
             yield return null;
             Assert.AreEqual(width, ((RectTransform)list.transform).rect.width, 0.5f, "The keyword list keeps its width whatever is shown");
@@ -119,6 +127,7 @@ namespace SlayTheClone.Tests {
             glossary.Filter.text = "";
             Assert.AreEqual(listed.Count, glossary.Listed.Count, "Empty, it lists them all again");
 
+            glossary.Open("Statuses");
             Click(listed.Single(b => b.name == KeywordGlossaryMenu.KeywordButton + "Exhausted"));
             var exhausting = glossary.CardsWith("Exhausted").Select(c => c.cardName).ToList();
             CollectionAssert.Contains(exhausting, "DDOS Attack", "The cards that print it are read from the cards themselves");
