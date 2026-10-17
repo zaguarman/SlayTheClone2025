@@ -151,3 +151,15 @@ strategies work, not more points.
 Tied to a build from now on (the user, 2026-10-17, nothing retroactive): the report prints the commit it ran on and that
 commit gets the tag study-<date>; milestones are tagged v0.x-<name> and main is fast-forwarded to them (the first:
 v0.1-zeitgeist, at 52d82d0b).
+
+
+10. THE FOUR FACTIONS, EVERY CARD IN A DECK (2026-10-17, study-2026-10-17b, run headless with Tools/ai_reports.ps1)
+After the regrouping into four factions (Establishment, Capital, Enlightenment, Digital Society), the 94 cards that were in
+no deck going one copy each into the deck of their subfaction that fits, and the 80-Day cap: 7900 games of balance report
+and 1560 of shuffled tournament at f839a70d. The decks: Military-Industrial Complex 92%, Terminally Online 84%, Psyop 83%,
+Order & Paperwork 81%, The Algorithm 78%, Move Fast and Break Things 76%, Moods of Modern Life 75%; at the bottom Hustle
+Culture 13%, Frankenstein 15%, Prosperity Gospel 17%, Black Budget 28%, Licence to Kill 31%. By faction (one-faction decks):
+Digital Society 68%, Enlightenment 49%, Establishment 45%, Capital 44%; by strategy: Swarm 74%, Midrange 74%, Control 57%,
+Engine 36%, Aggro 32%, Combo 30%. The cards one by one (shuffled): Establishment 51%, Enlightenment 49%, Digital Society 47%,
+Capital 46%. What each faction has, lacks and should add is in Faction Gaps.txt. Next: the decks rebuilt from
+ShuffledScores.json and CardScores.json (the user's "redo all decks"), then one more measure.
