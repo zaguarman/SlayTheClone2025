@@ -8,31 +8,31 @@ Civil Servant [2/6/1, deploy 0]: Hunker Down
     "Not my department. Not my desk. Not my problem."
 Congruent Use of Force [2/4/1, deploy 1]: Spray and Pray
     "Proportionate. To something, surely."
-Demagogue [2/4/2, deploy 1]: Irreplaceable | Arrival: all other friendly creatures +2 Attack
+Demagogue [2/4/2, deploy 1]: Irreplaceable | [enter]Arrival: all other friendly creatures +2 Attack
     "Says what you think. Thinks what he's told."
-Diplomat [3/6/1, deploy 1]: Arrival: all other friendly creatures +2
+Diplomat [3/6/1, deploy 1]: [enter]Arrival: all other friendly creatures +2[armor]
     "Third-generation ambassador. Qualifications: his surname."
-Drill Sergeant [3/4/2, deploy 0]: Arrival: the creature facing it -2 Attack
+Drill Sergeant [3/4/2, deploy 0]: [enter]Arrival: the creature facing it -2 Attack
     "I can't HEAR you. Good. Stay that way."
 Drone Operator [2/3/2, deploy 1]: Artillery
     "Nine to five. Nevada. Twelve time zones from the target."
 Golden Dome [0/6/2, deploy 1]: Bodyguard
     "Protects everyone. Some of everyone more than others."
-Internal Revenue Service [1/6/1, deploy 0]: Dawn: 1 damage to enemy player
+Internal Revenue Service [1/6/1, deploy 0]: [dawn]Dawn: 1 damage to enemy player
     "We've noticed some irregularities. Specifically, you."
-King Emeritus [1/7/1, deploy 1]: Dawn: heal 1 to you
+King Emeritus [1/7/1, deploy 1]: [dawn]Dawn: heal 1 to you
     "Abdicated in disgrace. Kept the yacht, the pension and the Swiss account."
-Man o' War [5/8/1, deploy 1]: Arrival: 1 damage to all enemy creatures
+Man o' War [5/8/1, deploy 1]: [enter]Arrival: 1 damage to all enemy creatures
     "Gunboat diplomacy, minus the diplomacy."
-Mercenaries [4/5/3, deploy 1]: Last Will: enemy draws a card next Day
+Mercenaries [4/5/3, deploy 1]: [death]Last Will: enemy draws a card next Day
     "Loyal to whoever pays next."
-Ministry for Equality [1/6/1, deploy 1]: Rooted while deploying | Dawn: exhaust a random enemy creature
+Ministry for Equality [1/6/1, deploy 1]: Rooted while deploying | [dawn]Dawn: exhaust a random enemy creature
     "We love everybody. Please stop resisting our love."
-Peace Force [2/5/1, deploy 0]: Shield Bash | Arrival: give itself +3
+Peace Force [2/5/1, deploy 0]: Shield Bash | [enter]Arrival: give itself +3[armor]
     "We come in peace. Mostly with shields."
-Police Officer Productivity Target [2/4/2, deploy 0]: Dawn: 1 damage to a random enemy creature
+Police Officer Productivity Target [2/4/2, deploy 0]: [dawn]Dawn: 1 damage to a random enemy creature
     "Ten arrests a week. Guilt is optional."
-Protocol Enforcers [2/5/1, deploy 0]: On Hit: all other friendly creatures +
+Protocol Enforcers [2/5/1, deploy 0]: [attack]On Hit: all other friendly creatures +[armor]
     "Please stand behind the line. Which line? This line. Now that line."
 Riot Police [3/5/1, deploy 0]: Riot Gear
     "Protecting the public from the public."
@@ -44,19 +44,19 @@ Sherman Tank [6/6/1, deploy 1]:
     "Thirty tons of steel. Allegedly."
 Spin Doctor [2/5/2, deploy 0]: Next Question
     "That's a great question. Here's the answer to a different one."
-Spite-Elected President [3/5/2, deploy 1]: Spite | Arrival: 1 damage to all creatures
+Spite-Elected President [3/5/2, deploy 1]: Spite | [enter]Arrival: 1 damage to all creatures
     "Voted in to make everyone else miserable. Delivered on day one."
-Supreme Court [0/7/1, deploy 1]: Return to Sender | Arrival: all other friendly creatures +2
+Supreme Court [0/7/1, deploy 1]: Return to Sender | [enter]Arrival: all other friendly creatures +2[armor]
     "Appointed for life. Accountable for nothing."
-Border Crossing [spell]: Checkpoint 2 3 on every enemy slot
+Border Crossing [spell]: Checkpoint 2 [days]3 on every enemy slot
     "Papers. Purpose of visit. Papers again."
 Ceasefire [spell]: Shield 2 on target creature
     "Both sides agree to stop shooting. Starting right after this last volley."
-Curfew [spell]: Rooted 2 on target creature
+Curfew [spell]: Rooted [days]2 on target creature
     "Everyone indoors by ten. Yes, you too. Especially you."
 Doomsday Clock [spell]: 3 damage to everything
     "Everybody loses. Fairly, for once."
-Due Process [spell]: Trend: Rush Hour 3
+Due Process [spell]: Trend: Rush Hour [days]3
     "Justice will be served. In the order the forms were received."
 Filibuster [spell]: Target creature acts last this Day
     "The senator will now read the phone book. All of it. Slowly."
@@ -64,11 +64,11 @@ Kakistocracy [spell]: All creatures -1 Attack
     "Elect the least competent. What could go wrong?"
 Lost Landmine [spell]: Landmine 3 on target slot
     "The war ended decades ago. Nobody told the mine."
-Martial Law [spell]: All friendly creatures +3 and exhaust them
+Martial Law [spell]: All friendly creatures +3[armor] and exhaust them
     "For your safety, nobody moves. Ever."
 Mass Emigration [spell]: Disruption | Every enemy creature changes slots at random
     "The best and brightest left. The rest are rearranging the furniture."
-Mutually Assured Destruction [spell]: Mutually Assured 2 on target creature: the creature that kills it dies too
+Mutually Assured Destruction [spell]: Mutually Assured [days]2 on target creature: the creature that kills it dies too
     "If we go, you go. That's the whole plan. There is no other plan."
 Panem Et Circenses [spell]: Heal 3 to you and all friendly creatures +1 Attack
     "Free bread, free games, free of questions."
@@ -76,11 +76,11 @@ Preemptive Strike [spell]: 4 damage to target creature or player
     "They were going to attack us. Probably. Eventually. Somebody said so."
 Presidential Pardon [spell]: Untouchable on target creature
     "Whatever it did, it didn't."
-Raised Security Level [spell]: Target creature +6
+Raised Security Level [spell]: Target creature +6[armor]
     "The threat level is now Orange. Nobody knows what Orange means."
 Red Tape [spell]: +1 Deployment Time to target creature
     "Your request is being processed. Please hold. Forever."
-Si Vis Pacem, Para Bellum [spell]: Policy (it happens again each Dawn, for the rest of the combat) | All friendly creatures +
+Si Vis Pacem, Para Bellum [spell]: Policy (it happens again each Dawn, for the rest of the combat) | All friendly creatures +[armor]
     "If you want peace, prepare for war. If you want war, also prepare for war."
 Supply Depot [spell]: Send for a creature from your deck: it joins your next hand
     "Requisition form 27-B, in triplicate. Approved by Thursday."
@@ -94,55 +94,55 @@ Berserker [3/6/2, deploy 0]: Berserk
     "Pain is just the body's way of asking for more."
 Black Knight [2/6/1, deploy 0]: Unbothered
     "'Tis but a scratch."
-Buddy Christ [2/5/1, deploy 0]: Dawn: heal 1 to all other friendly creatures
+Buddy Christ [2/5/1, deploy 0]: [dawn]Dawn: heal 1 to all other friendly creatures
     "Winks. Points. Forgives."
-Cultist [2/2/2, deploy 0]: Last Will: all friendly creatures +1 Attack
+Cultist [2/2/2, deploy 0]: [death]Last Will: all friendly creatures +1 Attack
     "The end is near. Brunch is at eleven."
-Grim Reaper [4/5/2, deploy 1]: Arrival: 3 damage to the creature facing it
+Grim Reaper [4/5/2, deploy 1]: [enter]Arrival: 3 damage to the creature facing it
     "Not today. Probably."
-Here Be Dragons [5/7/1, deploy 2]: Arrival: 1 damage to all enemy creatures
+Here Be Dragons [5/7/1, deploy 2]: [enter]Arrival: 1 damage to all enemy creatures
     "The map ends here. The dragon doesn't."
-Heretic [3/5/2, deploy 0]: Martyrdom | Arrival: Doom 3 on itself
+Heretic [3/5/2, deploy 0]: Martyrdom | [enter]Arrival: Doom 3 on itself
     "Said the Earth was round. Got the stake. Said it louder."
 Holy Ghost [3/1/2, deploy 1]: Immaculate
     "Thou canst not touch what thou canst not see. Thou canst, however, light a candle."
-Holy Pigeon [1/3/3, deploy 0]: Leapfrog | Arrival: Bless on all friendly creatures
+Holy Pigeon [1/3/3, deploy 0]: Leapfrog | [enter]Arrival: Bless on all friendly creatures
     "The Holy Spirit, as depicted. Please do not feed it."
-Horsemen Of Apocalypse [3/5/2, deploy 2]: Arrival: 2 damage to all enemy creatures
+Horsemen Of Apocalypse [3/5/2, deploy 2]: [enter]Arrival: 2 damage to all enemy creatures
     "Four riders. One group chat."
 Killer Rabbit of Caerbannog [3/2/3, deploy 0]: 
     "Look at the bones!"
 Living Dead [3/3/1, deploy 0]: Revive
     "Died on Friday. Back on Monday. Still not answering emails."
-Martyr [2/4/1, deploy 1]: Arrival: Doom 2 on itself | Last Will: heal 3 to all friendly creatures
+Martyr [2/4/1, deploy 1]: [enter]Arrival: Doom 2 on itself | [death]Last Will: heal 3 to all friendly creatures
     "He died for your sins. Your sins are on backorder."
 Mummy [2/6/1, deploy 1]: Hive Mind
     "Touch the tomb, get the curse. It was in the fine print."
-Omniscient Space-Time Bending Bearded Wizard [3/9/1, deploy 2]: Dawn: Bless on a random other friendly creature
+Omniscient Space-Time Bending Bearded Wizard [3/9/1, deploy 2]: [dawn]Dawn: Bless on a random other friendly creature
     "Works in mysterious ways. Mostly late."
 Phoenix [3/2/2, deploy 1]: Revive
     "Dies, comes back, posts about it."
-Pope [1/7/1, deploy 1]: Dawn: Bless on the strongest other friendly creature
+Pope [1/7/1, deploy 1]: [dawn]Dawn: Bless on the strongest other friendly creature
     "Infallible. Bulletproof glass, just in case."
 Pyramids [0/10/1, deploy 2]: Rooted while deploying, Safe Space
     "Built by aliens, apparently. Or by paid workers on beer rations."
 Reincarnation [1/1/2, deploy 0]: Rebirth, Grow
     "Last life, a worm. This life, a good boy. Next life: depends how this one goes."
-Taqiyya [2/2/1, deploy 2]: Turncoat | Arrival: it goes over to the enemy, into the slot opposite (whatever stands there is discarded) | Dawn: attack a random other friendly creature, Revealed on a random other friendly creature and a random other friendly creature -1 Attack
+Taqiyya [2/2/1, deploy 2]: Turncoat | [enter]Arrival: it goes over to the enemy, into the slot opposite (whatever stands there is discarded) | [dawn]Dawn: attack a random other friendly creature, Revealed on a random other friendly creature and a random other friendly creature -1 Attack
     "The smile is sincere. The rest is between me and God."
-Templar Knight [3/5/1, deploy 1]: Arrival: Bless 2 on itself
+Templar Knight [3/5/1, deploy 1]: [enter]Arrival: Bless 2 on itself
     "Took a vow of poverty. Owns half of Europe."
 The Chosen One [2/4/2, deploy 1]: Spray and Pray
     "This time he brought backup."
-The Lobster Professor [1/6/1, deploy 1]: Dawn: the strongest other friendly creature +1 Attack
+The Lobster Professor [1/6/1, deploy 1]: [dawn]Dawn: the strongest other friendly creature +1 Attack
     "Clean your room, bucko. Then buy the seminar."
-The Omen [1/4/1, deploy 2]: Arrival: Doom 2 on the strongest enemy creature
+The Omen [1/4/1, deploy 2]: [enter]Arrival: Doom 2 on the strongest enemy creature
     "He's not a bad kid. He's the Antichrist."
 Tutankhamun [2/7/1, deploy 1]: Pharaoh's Curse
     "Death shall come on swift wings to him who disturbs the peace of the king. Swift-ish."
-Vampire [2/4/1, deploy 1]: Allergic to Light | Dawn: the creature facing it -1 Attack and heal 1 to itself
+Vampire [2/4/1, deploy 1]: Allergic to Light | [dawn]Dawn: the creature facing it -1 Attack and heal 1 to itself
     "Doesn't drink. Just takes a little off the top. Every night."
-Zealot [4/3/2, deploy 1]: Arrival: Doom 3 on itself
+Zealot [4/3/2, deploy 1]: [enter]Arrival: Doom 3 on itself
     "Will die for the cause. Will tell you about it first."
 Ambrosia [spell]: Ripening (+1 to its numbers for each Dawn it's kept in your hand, up to +3) | Heal 2 to target creature or player and target creature +1 Attack
     "Food of the gods. Gluten-free, apparently."
@@ -152,7 +152,7 @@ Blessing in Disguise [spell]: Heal 3 to all friendly creatures and Bless on them
     "It looked like a disaster. It was a disaster. But a blessed one."
 Curse Of Hubris [spell]: The strongest enemy creature -3 Attack
     "Flew too close to the sun. Landed in the comments."
-Deus Vult [spell]: All friendly creatures +2 Attack 1
+Deus Vult [spell]: All friendly creatures +2 Attack [days]1
     "God wills it. God was not consulted."
 Die by the Sword [spell]: 4 damage to target creature or player and if it dies, heal 3 to you
     "Live by it, too, if you can."
@@ -174,7 +174,7 @@ Lance Of Longinus [spell]: 3 damage to target creature or player
     "Pierced the side of a god. Your creature is not a problem."
 Memento Mori [spell]: Doom 3 on target creature
     "Remember that you will die. Preferably on schedule."
-Mithril [spell]: Target creature +4 and Bless on it
+Mithril [spell]: Target creature +4[armor] and Bless on it
     "Light as a feather. Hard as dragon scales. Worth a Shire."
 Monkey Hand [spell]: Draw 3 next Day and Doom 3 on a random friendly creature
     "Your wish is granted. Read the fine print."
@@ -182,7 +182,7 @@ Mox Nox [spell]: Prophecy 2 (comes true in 2 Days) | Destroy the strongest enemy
     "Soon it will be night."
 Necronomicon [spell]: Destroy target creature | Sacrifice 1: your weakest creature will be sacrificed to play this
     "Bound in human skin. The reviews are mixed."
-Novena [spell]: Prayer 6 2 on target slot
+Novena [spell]: Prayer 6 [days]2 on target slot
     "Nine days of prayer. Delivery on the tenth."
 Omen Reading [spell]: Send for a card from your deck: it joins your next hand | Sacrifice 1: your weakest creature will be sacrificed to play this
     "The entrails say Tuesday. The goat disagreed."
@@ -198,7 +198,7 @@ The Great Flood [spell]: Prophecy 2 (comes true in 2 Days) | 3 damage to all ene
     "Forty days of rain. You were warned. Twice."
 The Holy Grail [spell]: Bless 2 on target creature
     "Drink from it and live forever. Terms and conditions apply."
-The Last Shall Be First [spell]: Trend: Rush Hour 3
+The Last Shall Be First [spell]: Trend: Rush Hour [days]3
     "And the first shall wait their turn, like everyone else."
 The Lost Ark [spell]: 3 damage to all enemy creatures and exhaust all friendly creatures
     "Don't look at it. Seriously, don't."
@@ -206,35 +206,35 @@ The Wicker Man [spell]: 2 damage to all enemy creatures | Sacrifice 1: your weak
     "For a good harvest. Nothing personal, Sergeant."
 Thoughts and Prayers [spell]: Bless on all friendly creatures
     "Sent. Nothing else will be."
-Tithe [spell]: Leech 1 3 on target creature
+Tithe [spell]: Leech 1 [days]3 on target creature
     "Ten percent, every Sunday, forever. God's own subscription."
 
 == Shadow Ops. (62)
-Arsonist [3/3/2, deploy 0]: Arrival: 2 damage to the creature facing it
+Arsonist [3/3/2, deploy 0]: [enter]Arrival: 2 damage to the creature facing it
     "Insurance fraud is a team sport."
 Cleaner [2/3/3, deploy 0]: Double Tap
     "Two shots. One invoice."
-Compromised Agent [2/2/2, deploy 0]: Laid Off: Conceal 2 on a random friendly creature
+Compromised Agent [2/2/2, deploy 0]: [days]Laid Off: Conceal 2 on a random friendly creature
     "Her cover's blown. Her friends' covers aren't. Yet."
-Control Room [1/5/1, deploy 0]: Dawn: reveal a random enemy creature
+Control Room [1/5/1, deploy 0]: [dawn]Dawn: reveal a random enemy creature
     "Forty screens, all on. Nobody watching the one that matters."
-Dead Man's Switch [1/2/2, deploy 0]: Last Will: destroy the strongest enemy creature
+Dead Man's Switch [1/2/2, deploy 0]: [death]Last Will: destroy the strongest enemy creature
     "If I stop checking in, the files go to every newspaper. So does the bomb."
-Deep Cover [2/3/2, deploy 0]: Identity Theft | Arrival: Conceal 3 on itself
+Deep Cover [2/3/2, deploy 0]: Identity Theft | [enter]Arrival: Conceal 3 on itself
     "Undercover so long he forgot whose side he's on. So did they."
-Drug Pigeon [2/2/3, deploy 0]: Leapfrog | Arrival: send for a card among the top 3 of your deck: it joins your next hand
+Drug Pigeon [2/2/3, deploy 0]: Leapfrog | [enter]Arrival: send for a card among the top 3 of your deck: it joins your next hand
     "Coo. Coo. Cocaine."
-Embassy [0/8/1, deploy 1]: Unbothered | Dawn: Conceal on a random other friendly creature
+Embassy [0/8/1, deploy 1]: Unbothered | [dawn]Dawn: Conceal on a random other friendly creature
     "Sovereign soil. Bulletproof glass. Excellent canapés."
-Femme Fatale [2/4/2, deploy 0]: Ambush | Dusk: 1 damage to the creature facing it and heal 1 to itself
+Femme Fatale [2/4/2, deploy 0]: Ambush | [dusk]Dusk: 1 damage to the creature facing it and heal 1 to itself
     "She didn't kill him. She just held him very, very close."
-If I Told You, I'd Have to Kill You [3/4/2, deploy 0]: Allergic to Light | When Revealed: 4 damage to whoever revealed it
+If I Told You, I'd Have to Kill You [3/4/2, deploy 0]: Allergic to Light | [reveal]When Revealed: 4 damage to whoever revealed it
     "It's classified. So are you, now."
 Inflatable Tank [0/1/1, deploy 0]: 
     "Pressure: 2 bar. Threat level: classified."
 Lone Gunman [2/3/1, deploy 0]: Fall Guy
     "Acted alone. Says he didn't. Officially, that settles it."
-MK Ultra Test Subject [3/3/1, deploy 0]: Dawn: attack a random creature
+MK Ultra Test Subject [3/3/1, deploy 0]: [dawn]Dawn: attack a random creature
     "Volunteered for a Harvard study in 1959. Doesn't remember the rest."
 Mole [3/3/2, deploy 0]: Underground
     "Twenty years with the company. Twenty-one with the other one."
@@ -244,11 +244,11 @@ Political Decoy [1/6/1, deploy 0]: Swap
     "The real one is in a bunker. Or is he?"
 Signal Jammer [2/5/1, deploy 0]: Signal Jammer
     "No bars. No calls. No witnesses."
-Sleeper Agent [0/3/1, deploy 0]: Gift | Dusk: 1 damage to all friendly creatures
+Sleeper Agent [0/3/1, deploy 0]: Gift | [dusk]Dusk: 1 damage to all friendly creatures
     "Eleven years next door. Waters your plants. Waiting for a phone call."
 Wet Work [1/4/3, deploy 0]: Extreme Prejudice
     "Nothing personal. Strictly a line item."
-Whistleblower [2/2/3, deploy 0]: Last Will: Revealed 2 on all enemy creatures
+Whistleblower [2/2/3, deploy 0]: [death]Last Will: Revealed 2 on all enemy creatures
     "Leaked everything. Now lives in an embassy closet."
 Asset Recruitment [spell]: Brainwashed 2 on target creature and Brainwashed on it if it's Revealed
     "We'll double your salary. Or tell your wife. Your choice."
@@ -292,15 +292,15 @@ HAARP [spell]: An earthquake: from a random slot, a zigzag across the board, one
     "Weather forecast: 100% chance of lightning, localized, on purpose."
 He Didn't Kill Himself [spell]: Target friendly creature fakes its death and goes back to your hand next Day
     "Officially: suicide. Unofficially: on a beach in Belize, rereading the files."
-Hollowed-Out Volcano Lair [spell]: Trend: Volcano Lair 3
+Hollowed-Out Volcano Lair [spell]: Trend: Volcano Lair [days]3
     "Monorail, piranha pool, self-destruct button. Planning permission: pending."
-Hostage Situation [spell]: Mutually Assured 2 on target creature: the creature that kills it dies too and Heat Signature 2 on it
+Hostage Situation [spell]: Mutually Assured [days]2 on target creature: the creature that kills it dies too and Heat Signature 2 on it
     "Nobody move, or the creature gets it. And then you get it."
 Human Intelligence [spell]: Send for a card from your deck: it joins your next hand
     "Coffee, a smile, a USB stick. The oldest tradecraft there is."
 Humanitarian Trafficking Action [spell]: Heal 2 to target creature or player and Heat Signature 2 on target creature
     "The crates say MEDICINE. The crates say a lot of things."
-Involuntary Free Polonium Giveaway [spell]: 1 damage to target creature or player and Burn 1 3 on target creature
+Involuntary Free Polonium Giveaway [spell]: 1 damage to target creature or player and Burn 1 [days]3 on target creature
     "A gift from an old friend. Do not open indoors."
 Licence to Kill [spell]: License target creature
     "Paperwork for murder, signed in triplicate. Valid until used."
@@ -312,13 +312,13 @@ Perfectly Timed Camera Malfunction [spell]: Destroy target creature if it's Reve
     "Tragic. The one minute the cameras were down."
 Plausible Deniability [spell]: This Day, effects that hit more than one creature skip all friendly creatures
     "I have no recollection of that creature, that Day, or this conversation."
-Polonium Umbrella [spell]: Burn 3 3 on target creature
+Polonium Umbrella [spell]: Burn 3 [days]3 on target creature
     "A quick jab at a bus stop. A slow week in hospital."
 Sabotage [spell]: Watchdog: redirect the strongest enemy attack to its attacker
     "Someone filled the cannon with sand. Someone else lit it."
 Secret Anthrax Laboratory [spell]: 2 damage to all enemy creatures and Revealed on them
     "Rebirth Island. The sea dried up. The anthrax didn't."
-Shaken, Not Stirred [spell]: Target creature +2 Attack 1 and Composed on it
+Shaken, Not Stirred [spell]: Target creature +2 Attack [days]1 and Composed on it
     "Three measures of gin, one of vodka, half of Kina Lillet. Nerves: none."
 Smoke And Mirrors [spell]: Conceal 2 on target creature
     "Look over there. No, the other there."
@@ -340,7 +340,7 @@ Big Four [2/4/1, deploy 0]: Grudge
     "Four firms. Every audit. No findings."
 Bloomberg Terminal [2/4/2, deploy 0]: On Trend
     "Twenty-five grand a year to watch other people's money move."
-Charles Ponzi [2/3/2, deploy 1]: Dawn: draw a card | Last Will: 3 damage to you
+Charles Ponzi [2/3/2, deploy 1]: [dawn]Dawn: draw a card | [death]Last Will: 3 damage to you
     "Early investors were extremely satisfied."
 Cleaning Robot [3/7/1, deploy 1]: 
     "Cleans 30% of your floor. The other 70% is a Premium feature."
@@ -348,41 +348,41 @@ Counterfeit [1/2/2, deploy 0]: Wannabe
     "Genuine replica. 100% authentic copy."
 C-Suite [4/4/1, deploy 1]: Discard 1: give up 1 random other card from your hand to play this | Collateral Damage
     "Record profits this quarter. The savings will trickle down to you shortly."
-Day Trader [3/2/3, deploy 0]: Insider Job | Arrival: draw a card next Day | Last Will: enemy draws a card next Day
+Day Trader [3/2/3, deploy 0]: Insider Job | [enter]Arrival: draw a card next Day | [death]Last Will: enemy draws a card next Day
     "Time is money, friend. Up 300% by noon, rent due at five."
-Fat Tony [4/5/1, deploy 1]: Arrival: 2 damage to a random enemy creature
+Fat Tony [4/5/1, deploy 1]: [enter]Arrival: 2 damage to a random enemy creature
     "Nothing personal. It's just business. Mostly the personal kind."
-Golden Parachute [3/3/1, deploy 0]: Replaced: draw 2 next Day
+Golden Parachute [3/3/1, deploy 0]: [enter]Replaced: draw 2 next Day
     "Ousted with a forty-million bonus. Failing upward, gently."
-Hedonic Treadmillionaire [4/6/1, deploy 1]: Arrival: draw a card next Day
+Hedonic Treadmillionaire [4/6/1, deploy 1]: [enter]Arrival: draw a card next Day
     "Third yacht. Still not happy. Buying a fourth."
-Inhuman Resources [1/4/1, deploy 1]: Dawn: 1 damage to a random friendly creature and draw a card
+Inhuman Resources [1/4/1, deploy 1]: [dawn]Dawn: 1 damage to a random friendly creature and draw a card
     "We're here for you. "You" meaning the company."
 Legal Department [2/7/1, deploy 0]: Litigious
     "You'll be hearing from us. Repeatedly. At your home address."
-Micromanager [3/3/1, deploy 1]: Dawn: a random other friendly creature +1 Attack
+Micromanager [3/3/1, deploy 1]: [dawn]Dawn: a random other friendly creature +1 Attack
     "Per my last email. And the one before. And the meeting about the emails."
-Middle Manager [2/3/1, deploy 0]: Laid Off: draw a card next Day
+Middle Manager [2/3/1, deploy 0]: [days]Laid Off: draw a card next Day
     "Restructured. Again. Still somehow on the payroll."
-Multilevel Marketing Seller [2/2/2, deploy 0]: Arrival: summon
+Multilevel Marketing Seller [2/2/2, deploy 0]: [enter]Arrival: summon
     "It's not a pyramid. It's a triangle of opportunity."
-Multimillionaire Philanthropist [2/6/1, deploy 1]: Arrival: all enemy creatures +1 Health and draw 2 next Day
+Multimillionaire Philanthropist [2/6/1, deploy 1]: [enter]Arrival: all enemy creatures +1 Health and draw 2 next Day
     "Gave away 0.01% of his fortune. Wrote off 100% of it."
-Pluriemployed Hustler [3/3/2, deploy 0]: Penny Stock, Decay 1 | Arrival: draw 2 next Day
+Pluriemployed Hustler [3/3/2, deploy 0]: Penny Stock, Decay 1 | [enter]Arrival: draw 2 next Day
     "Three jobs, two side hustles, one kidney left."
 Private Equity [3/4/1, deploy 1]: Credit Grab
     "We don't buy companies. We buy what they used to be worth."
-Satoshi Nakamoto [0/5/1, deploy 1]: Undercover | Dawn: give itself +1 Attack
+Satoshi Nakamoto [0/5/1, deploy 1]: Undercover | [dawn]Dawn: give itself +1 Attack
     "Mined a million coins. Never spent one. Never seen again."
 Shell Company [1/4/2, deploy 0]: Shell Game
     "Registered in four countries. Exists in none."
 Teflon Don [4/5/2, deploy 1]: Teflon
     "Charged forty times. Convicted of being fabulous."
-The Invisible Hand [1/4/1, deploy 1]: Undercover | Dusk: the strongest friendly creature takes 1 Attack from each other creature on its side
+The Invisible Hand [1/4/1, deploy 1]: Undercover | [dusk]Dusk: the strongest friendly creature takes 1 Attack from each other creature on its side
     "Nobody has ever seen it. Everybody has felt it in their pocket."
-Unicorn [1/8/1, deploy 1]: Decay 1 | Dawn: draw a card
+Unicorn [1/8/1, deploy 1]: Decay 1 | [dawn]Dawn: draw a card
     "Valued at a billion. Burns a million a day. Profitable next year, every year."
-Unpaid Intern [1/2/3, deploy 0]: Last Will: draw a card next Day
+Unpaid Intern [1/2/3, deploy 0]: [death]Last Will: draw a card next Day
     "Paid in experience. The experience is this."
 Work Shift Rotation [3/3/1, deploy 1]: Handover
     "Same job, new face. The vest is still warm."
@@ -392,13 +392,13 @@ Business Expense [spell]: Draw 2 next Day and 2 damage to you
     "The yacht was a business expense. So was the lawyer. So is the appeal."
 Business Operating Expenses [spell]: Target creature goes dark until the next Dawn and draw 2 next Day
     "Two years in a federal prison camp. Priced in. The stock went up."
-Casino [spell]: Trend: Casino 3
+Casino [spell]: Trend: Casino [days]3
     "The house always wins. Except the houses he owned."
-Corporate Bailouts [spell]: Discard 1: give up 1 random other card from your hand to play this | All friendly creatures +3 and heal 3 to you
+Corporate Bailouts [spell]: Discard 1: give up 1 random other card from your hand to play this | All friendly creatures +3[armor] and heal 3 to you
     "Losses are public. Profits are private. Simple."
 Dead Cat Bounce [spell]: Heal 2 to target creature or player and at the next Dawn, 5 damage to it
     "It's recovering! It's recovering! It's... no."
-DMCA [spell]: Destroy target creature and DMCA 2: the enemy can't play a card that shares its name with a creature on the board, either side's
+DMCA [spell]: Destroy target creature and DMCA [days]2: the enemy can't play a card that shares its name with a creature on the board, either side's
     "This creature has been claimed by its rights holder. Your appeal has been automatically denied."
 Escape Goat [spell]: Heat Signature 2 on target creature and draw a card next Day
     "It wasn't us. It was the goat. Everyone agrees it was the goat."
@@ -414,9 +414,9 @@ Inflation [spell]: Prophecy 2 (comes true in 2 Days) | 2 damage to all enemy cre
     "Same price. Less creature."
 Inheritance [spell]: Target creature +2 Attack/Health
     "Self-made. Grandma did the making."
-Insurance Policy [spell]: Mutually Assured 3 on target creature: the creature that kills it dies too
+Insurance Policy [spell]: Mutually Assured [days]3 on target creature: the creature that kills it dies too
     "In the event of death, the beneficiary receives the killer."
-Internal Protocol: Quota Crusher Mindset [spell]: Policy (it happens again each Dawn, for the rest of the combat) | All friendly creatures +1 Attack 1
+Internal Protocol: Quota Crusher Mindset [spell]: Policy (it happens again each Dawn, for the rest of the combat) | All friendly creatures +1 Attack [days]1
     "Crush it. Then crush it again. The quota is a feeling."
 Job Rotation [spell]: Target creature and the creature facing it swap abilities
     "Everyone will now be doing someone else's job, badly. It builds character."
@@ -438,7 +438,7 @@ Peace the Frontier [spell]: +1 Deployment Time to all enemy creatures and 2 dama
     "Please, regulate us. Only us can afford it. Also, could someone lend us a few billion?"
 Resignation Letter [spell]: Target creature -3 Attack | Sacrifice 1: your weakest creature will be sacrificed to play this
     "I quit. Effective immediately. Also I took the client list."
-Seniority Priority [spell]: Trend: Rush Hour 3
+Seniority Priority [spell]: Trend: Rush Hour [days]3
     "The slowest to adapt go first. It's called experience."
 Solidarity Towards The Small Businessman [spell]: Draw 2 next Day and 1 damage to all friendly creatures
     "He's just a little guy. With seven yachts. Every coin helps."
@@ -462,25 +462,25 @@ EMP Drone [1/4/2, deploy 0]: Jamming Field
     "No signal. No abilities. No complaints: nobody can call to complain."
 Legacy Code [2/7/1, deploy 1]: Cold Storage
     "Written in 1987. Nobody knows how it works. Nobody dares touch it."
-Meatproxy As A Service [1/4/1, deploy 1]: Dawn: draw a card and 1 damage to you
+Meatproxy As A Service [1/4/1, deploy 1]: [dawn]Dawn: draw a card and 1 damage to you
     "Powered by AI. The AI is Dave. Dave copies and pastes."
 Scope Creep [2/3/1, deploy 0]: Grow
     "Just one more small feature. And one more."
 Script Kiddie [3/3/3, deploy 0]: Zero-Day
     "Doesn't know how it works. Doesn't need to."
-Sex Clanker [2/7/1, deploy 0]: Arrival: Heat Signature 3 on itself
+Sex Clanker [2/7/1, deploy 0]: [enter]Arrival: Heat Signature 3 on itself
     "Batteries not included. Feelings not included either."
-Suspicious USB Stick in the Parking Lot [0/1/1, deploy 0]: Gift | Arrival: exhaust a random other friendly creature and Heat Signature on itself
+Suspicious USB Stick in the Parking Lot [0/1/1, deploy 0]: Gift | [enter]Arrival: exhaust a random other friendly creature and Heat Signature on itself
     "SALARIES 2026. Do not open. Definitely open."
-SysAdmin [2/5/1, deploy 1]: Dawn: cleanse all friendly creatures
+SysAdmin [2/5/1, deploy 1]: [dawn]Dawn: cleanse all friendly creatures
     "Have you tried turning it off and on again?"
 Technical Debt [4/5/2, deploy 1]: Decay 1
     "Ship it now. Someone will fix it later. You are someone."
-Threat Hunter [2/4/2, deploy 1]: Homing | Arrival: Heat Signature on a random enemy creature
+Threat Hunter [2/4/2, deploy 1]: Homing | [enter]Arrival: Heat Signature on a random enemy creature
     "Assume breach. Then go looking for it."
 Antivirus [spell]: Watchdog: disable the next enemy spell
     "1 threat blocked. 37 offers to upgrade to Premium."
-Buffering [spell]: Trend: Rush Hour 3
+Buffering [spell]: Trend: Rush Hour [days]3
     "99%. 99%. 99%. 99%."
 Code Review [spell]: Clear the Slot Effects on every one of your slots and draw a card next Day
     "LGTM. (Didn't read it.)"
@@ -494,7 +494,7 @@ End-to-End Encryption [spell]: Encrypt 2 on target creature
     "Not even we can read your messages. Pinky promise."
 Man-in-the-Middle [spell]: Watchdog: redirect the next enemy spell
     "Hi, it's your bank. Also, it's not."
-Pair Programming [spell]: Target creature trades places with its partner and target creature and its neighbors +1 Attack 1
+Pair Programming [spell]: Target creature trades places with its partner and target creature and its neighbors +1 Attack [days]1
     "One types, one watches. Both bill the hours."
 Ransomware Attack [spell]: Exhaust target creature, 2 damage to target creature or player and draw a card next Day
     "Your files are safe. With us."
@@ -502,47 +502,47 @@ Web Scraping [spell]: Send for a card among the top 5 of your deck: it joins you
     "We respect your robots.txt. We read it, anyway."
 
 == Utopia (45)
-Ankylorhiza [5/7/1, deploy 2]: Arrival: give itself +3
+Ankylorhiza [5/7/1, deploy 2]: [enter]Arrival: give itself +3[armor]
     "Twenty-five million years extinct. Still holds a grudge."
-Antimatter [5/5/2, deploy 1]: On the Brink | Arrival: 2 damage to itself
+Antimatter [5/5/2, deploy 1]: On the Brink | [enter]Arrival: 2 damage to itself
     "One gram costs 62 trillion dollars. Worth it."
-Biohacker [3/4/1, deploy 0]: Hormesis | Arrival: Burn 2 3 on itself
+Biohacker [3/4/1, deploy 0]: Hormesis | [enter]Arrival: Burn 2 [days]3 on itself
     "Microdoses, cold plunges, and a chip in his hand that opens the fridge."
-Chimera [4/5/2, deploy 1]: Arrival: a random other friendly creature +2 Attack/Health and give itself -1 Health
+Chimera [4/5/2, deploy 1]: [enter]Arrival: a random other friendly creature +2 Attack/Health and give itself -1 Health
     "Lion, goat, snake. The ethics committee was on holiday."
-Clone [3/3/2, deploy 1]: Arrival: summon
+Clone [3/3/2, deploy 1]: [enter]Arrival: summon
     "Twice the sheep. Half the soul."
 Cold Fusion [5/6/1, deploy 1]: On the Brink, Decay 1
     "Clean, limitless energy. Slight meltdown risk. Mostly fine."
 Extremophile [2/5/1, deploy 1]: Unbothered, Regenerate 1
     "Survived five mass extinctions. Your opinion won't be the sixth."
-Frankenstein [3/6/1, deploy 1]: Grow | Arrival: Burn 1 2 on itself
+Frankenstein [3/6/1, deploy 1]: Grow | [enter]Arrival: Burn 1 [days]2 on itself
     "It's alive! It's ALIVE! It's suing."
-Genetically Modified Organism [3/3/2, deploy 1]: Decay 1 | Arrival: give itself +2 Attack/Health
+Genetically Modified Organism [3/3/2, deploy 1]: Decay 1 | [enter]Arrival: give itself +2 Attack/Health
     "Organic. Gluten-free. Bench-presses 200."
 Hypermetamorphosis [2/3/1, deploy 1]: Grow
     "Caterpillar, cocoon, middle manager. Nature is healing."
-Longevity Hub [2/6/1, deploy 1]: Dawn: heal 2 to all other friendly creatures
+Longevity Hub [2/6/1, deploy 1]: [dawn]Dawn: heal 2 to all other friendly creatures
     "Live forever. Subscription renews monthly."
-Mathematician [1/4/1, deploy 1]: Dawn: a random enemy creature -1 Attack
+Mathematician [1/4/1, deploy 1]: [dawn]Dawn: a random enemy creature -1 Attack
     "Showed her work. Nobody checked it."
-Particle Accelerator [3/7/1, deploy 2]: Dawn: 2 damage to a random creature
+Particle Accelerator [3/7/1, deploy 2]: [dawn]Dawn: 2 damage to a random creature
     "Found the God particle. Lost the car keys."
-Perpetual Motion Machine [0/6/1, deploy 2]: Regenerate 1 | Dawn: draw a card
+Perpetual Motion Machine [0/6/1, deploy 2]: Regenerate 1 | [dawn]Dawn: draw a card
     "Runs forever. The patent office stopped answering in 1911."
-Philosophy PhD [0/4/1, deploy 1]: Decay 1 | Dawn: draw a card
+Philosophy PhD [0/4/1, deploy 1]: Decay 1 | [dawn]Dawn: draw a card
     "Eight years of Kant. Would you like fries with that?"
 Pioneer [2/2/3, deploy 1]: Leapfrog
     "First human on Mars. First eviction on Mars."
-Quantum Physicist [2/4/2, deploy 1]: Swap | Retaliate: Exhaust
+Quantum Physicist [2/4/2, deploy 1]: Swap | [hurt]Retaliate: Exhaust
     "In two places at once. Late to both."
 Quark [2/3/2, deploy 0]: Leapfrog, Grow
     "Up, down, charm, strange. Mostly strange."
-Resurrected T-Rex [6/7/1, deploy 1]: On the Brink | Dusk: give itself -1 Health
+Resurrected T-Rex [6/7/1, deploy 1]: On the Brink | [dusk]Dusk: give itself -1 Health
     "Sixty-six million years asleep. Woke up hungry."
-Scientific Method [1/5/1, deploy 1]: Dawn: a random other friendly creature +1 Attack
+Scientific Method [1/5/1, deploy 1]: [dawn]Dawn: a random other friendly creature +1 Attack
     "Hypothesis, experiment, grant renewal."
-Surveillance Giraffe [2/7/1, deploy 1]: Arrival: reveal a random enemy creature
+Surveillance Giraffe [2/7/1, deploy 1]: [enter]Arrival: reveal a random enemy creature
     "Heart the size of a TV. Still can't reach its own feet."
 White Dwarf [2/6/1, deploy 0]: Unbothered
     "Small. Very white. Incredibly dense."
@@ -556,15 +556,15 @@ Black Hole [spell]: 4 damage to target creature or player and its neighbors and 
     "What goes in doesn't come out. Like your tax refund."
 Blood Transfusion [spell]: Heal 6 to target creature or player
     "Young blood, old money."
-Climate Change [spell]: Burn 1 2 and Heat Signature on all creatures
+Climate Change [spell]: Burn 1 [days]2 and Heat Signature on all creatures
     "The scientists agreed. The weather didn't wait."
-Evolution Theory [spell]: Trend: Survival of the Fittest 3
+Evolution Theory [spell]: Trend: Survival of the Fittest [days]3
     "Only the fittest survive. We've been making ours fitter."
-Exponential Growth [spell]: All friendly creatures +1 Attack/Health and Burn 1 2 on them
+Exponential Growth [spell]: All friendly creatures +1 Attack/Health and Burn 1 [days]2 on them
     "It doubles every day. That's what worries us."
 Femtosecond Laser [spell]: 4 damage to target creature or player
     "Faster than a thought. Cleaner than a scalpel."
-Gene Editing [spell]: Target creature +2 Attack/Health and Burn 1 2 on it
+Gene Editing [spell]: Target creature +2 Attack/Health and Burn 1 [days]2 on it
     "Bigger, stronger, slightly radioactive."
 Geomagnetic Reversal [spell]: Target creature: its Attack and Health trade places
     "North is south now. The compass apologises. The pigeons do not."
@@ -580,17 +580,17 @@ Peer Review [spell]: Reveal target slot and Blackout 2 on target creature
     "Interesting results. Shame they don't replicate."
 Placebo [spell]: Target creature +3 Health
     "Clinically proven to work on people who believe it works."
-Prion Disease [spell]: Burn 3 3 on target creature
+Prion Disease [spell]: Burn 3 [days]3 on target creature
     "Misfolded, contagious, and in no hurry."
 Research Lab [spell]: Send for a spell from your deck: it joins your next hand
     "Results in five years. Funding for two."
-Seasteading [spell]: All friendly creatures +3
+Seasteading [spell]: All friendly creatures +3[armor]
     "No taxes. No laws. No lifeboats."
 Splitting The Atom [spell]: 6 damage to a random enemy creature and 2 damage to you
     "Science's greatest achievement: a really big bang."
 Stasis Field [spell]: Shield 3 on target creature
     "Frozen in time. Like your salary."
-Vaccine [spell]: Cleanse target creature and give it -1 Attack 1
+Vaccine [spell]: Cleanse target creature and give it -1 Attack [days]1
     "Side effects include not dying, and 5G."
 
 == Mind (31)
@@ -602,9 +602,9 @@ Pessimist [5/5/1, deploy 1]: Contrarian
     "The glass is half empty. Also, it's poisoned."
 Psychiatrists [3/4/1, deploy 0]: Strip Search
     "Your issues are fascinating. That'll be 200 an hour."
-Red Herring [1/7/1, deploy 0]: Undercover | Arrival: Heat Signature 2 on itself | When Revealed: exhaust whoever revealed it; revealed by a spell, the enemy draws 1 fewer card with the next hand
+Red Herring [1/7/1, deploy 0]: Undercover | [enter]Arrival: Heat Signature 2 on itself | [reveal]When Revealed: exhaust whoever revealed it; revealed by a spell, the enemy draws 1 fewer card with the next hand
     "Look over there. No, the fish."
-Roko's Basilisk [2/6/1, deploy 0]: Dawn: exhaust a random enemy creature
+Roko's Basilisk [2/6/1, deploy 0]: [dawn]Dawn: exhaust a random enemy creature
     "It knows you didn't help build it. It's taking notes."
 Schrodinger's Cat [3/3/2, deploy 0]: Rebirth
     "Alive and dead. Mostly annoyed."
@@ -612,7 +612,7 @@ Ship of Theseus [4/5/1, deploy 1]: Regenerate 1
     "Every plank replaced. Still the same ship. Probably."
 Sleepwalker [3/4/2, deploy 0]: Autopilot
     "Do not wake it. Do not stand in front of it either."
-Socrates [1/6/1, deploy 1]: Dawn: Revealed on the creature facing it
+Socrates [1/6/1, deploy 1]: [dawn]Dawn: Revealed on the creature facing it
     "I know that I know nothing. You, apparently, know even less."
 Controlled Chaos [spell]: Ambivalent | Every creature on target side changes slots at random
     "Everything is going exactly to plan. Which plan, though."
@@ -622,13 +622,13 @@ Domino Effect [spell]: Ambivalent | Push target creature back
     "One falls back, and everyone behind it finds out."
 Hold That Thought [spell]: Ripening (+1 to its numbers for each Dawn it's kept in your hand, up to +3) | Draw a card next Day
     "It'll be brilliant. Later. Much later."
-Hyperbole [spell]: Combo (+1 to its numbers for each other spell you play this Day) | Target creature -1 Attack 1
+Hyperbole [spell]: Combo (+1 to its numbers for each other spell you play this Day) | Target creature -1 Attack [days]1
     "The worst card ever printed in the history of the universe."
 Imposter Syndrome [spell]: Target creature -3 Attack and -1 Health
     "Twenty years of experience. Still waiting to be found out."
 Legerdemain [spell]: Target creature trades places with its partner and draw a card next Day
     "Watch the left hand. No, the other left."
-Liminal Space [spell]: Trend: Liminal Space 2
+Liminal Space [spell]: Trend: Liminal Space [days]2
     "You have been here before. You have never been here. The carpet remembers you."
 Lucid Dreaming [spell]: Send for a card among the top 3 of your deck: it joins your next hand
     "You know it's a dream. You still can't find the bathroom."
@@ -636,7 +636,7 @@ Maslow's Pyramid [spell]: Heal 3 to all creatures
     "Food, shelter, safety, love, esteem. And WiFi, underneath all of it."
 Mimetic Theory [spell]: Target creature copies the Attack, Health and Speed of the creature facing it
     "We want what they want. Then we become them."
-Momentum [spell]: All friendly creatures +1 Speed 3
+Momentum [spell]: All friendly creatures +1 Speed [days]3
     "Once you get going you can't stop. That was the plan. Stopping wasn't."
 Monkey See, Monkey Do [spell]: A fresh copy of target creature appears in the slot facing it on your side (whatever stands there is discarded)
     "Imitation is the sincerest form of having no ideas."
@@ -646,7 +646,7 @@ Reality Check [spell]: Cleanse stat changes on target creature
     "You're not that strong. You were never that strong. Sit down."
 Reflect [spell]: Target creature copies the statuses of the creature facing it
     "Mirror neurons: you yawn, I yawn. You panic, I panic."
-Slow Thinking [spell]: Trend: Rush Hour 3
+Slow Thinking [spell]: Trend: Rush Hour [days]3
     "System 2 would like a word. It will take a while."
 Survivorship Bias [spell]: Survivor on target creature
     "Every plane that came back had holes in the same places. Armor those, said everyone who never saw the others."
@@ -664,7 +664,7 @@ Chronically Online [3/3/2, deploy 0]: Extremist
     "Read one post. Now has a manifesto."
 Conspiracy Theorist [2/4/2, deploy 0]: Unbothered
     "Did his own research. For eleven minutes."
-Content Creator [1/3/2, deploy 0]: Swap | Dawn: Heat Signature on itself
+Content Creator [1/3/2, deploy 0]: Swap | [dawn]Dawn: Heat Signature on itself
     "Smash that like button. Smash it. Please."
 Crypto "Entrepreneur" [3/3/2, deploy 0]: Chain Mail
     "Funds are safu."
@@ -678,29 +678,29 @@ Its Been 84 Years... [4/5/1, deploy 1]: Sorry I'm Late
     "Sorry I'm late. Traffic was terrible. And the century."
 Keyboard Warrior [2/3/2, deploy 0]: No U, Counterattack
     "Has never lost an argument. Has never left the house."
-Meta Group Chat [2/4/2, deploy 0]: Dawn: a random other friendly creature +1 Attack and Heat Signature on a random enemy creature
+Meta Group Chat [2/4/2, deploy 0]: [dawn]Dawn: a random other friendly creature +1 Attack and Heat Signature on a random enemy creature
     "If you aren't in it, you're not on the jury, you're on trial."
 NPC [2/3/2, deploy 0]: Copypasta
     "Has opinions. All of them yours."
-Short King [2/2/3, deploy 0]: Leapfrog | Arrival: give itself +2 Attack 1
+Short King [2/2/3, deploy 0]: Leapfrog | [enter]Arrival: give itself +2 Attack [days]1
     "Five foot four. Six foot in the bio."
-Thirst Trap [1/5/1, deploy 0]: Arrival: Heat Signature 2 on itself | Dawn: a random other friendly creature +1 Attack 1
+Thirst Trap [1/5/1, deploy 0]: [enter]Arrival: Heat Signature 2 on itself | [dawn]Dawn: a random other friendly creature +1 Attack [days]1
     "Not looking for attention. Posted it 14 times."
-U Mad Bro? [2/4/2, deploy 0]: Arrival: Provoke 2 on the creature facing it
+U Mad Bro? [2/4/2, deploy 0]: [enter]Arrival: Provoke 2 on the creature facing it
     "Didn't read your argument. Disagrees anyway. Has posted the trollface."
 Cancelled [spell]: Exhaust target creature and Heat Signature 2 on it
     "One tweet from 2011. Career over by lunch."
-Clickbait [spell]: 2 damage to all enemy creatures
+Clickbait [spell]: Prophecy 1 (comes true in 1 Day) | 2 damage to all enemy creatures
     "Number 7 will shock you. Number 8 is an ad."
 Console Memory Card [spell]: Send for a card from your discard pile: it joins your next hand
     "Your console has the memory of a goldfish. 8 MB of remembering, sold separately."
-Dogpile [spell]: 2 damage to target creature or player and its neighbors
+Dogpile [spell]: 3 damage to target creature or player
     "Nobody read the post. Everybody has an opinion."
 Doomscrolling [spell]: Doom 3: your weakest creature not yet Doomed is Doomed (dies in 3 Days) to play this | Send for a card among the top 4 of your deck: it joins your next hand
     "Just one more. Just one more. Just one more."
 Its A Trap [spell]: Barbed Snare 2 on target slot
     "FREE PHONE! Just click here. And here. And give us your mother's maiden name."
-Rage Bait [spell]: Burn 2 2 on target creature
+Rage Bait [spell]: Burn 2 [days]2 on target creature
     "You won't BELIEVE what they said about you."
 Selfie Esteem [spell]: Ripening (+1 to its numbers for each Dawn it's kept in your hand, up to +3) | Target creature +1 Attack/Health
     "Forty takes. One filter. Zero self-worth."
@@ -708,9 +708,9 @@ Social Panopticon [spell]: Revealed 2 and Heat Signature on all enemy creatures
     "Nobody is watching you. Everybody is."
 
 == Offline (47)
-Absentee Parents [4/4/2, deploy 1]: Last Will: draw a card next Day
+Absentee Parents [4/4/2, deploy 1]: [death]Last Will: draw a card next Day
     "Gone for cigarettes. Back for the inheritance."
-Antihero [5/4/2, deploy 1]: Arrival: 2 damage to a random creature
+Antihero [5/4/2, deploy 1]: [enter]Arrival: 2 damage to a random creature
     "Not a good guy. Just a better-written bad one."
 Anti-Vaxxer [3/5/2, deploy 0]: Do Your Own Research
     "I've done my own research. It was a video."
@@ -718,7 +718,7 @@ Backup Dancer [2/3/2, deploy 0]: Backup Dancer
     "Three steps behind the star, five steps ahead of the choreography."
 Bodybuilder [5/3/3, deploy 1]: Decay 1
     "Natural. Definitely natural. Don't check."
-Boomer [4/6/1, deploy 1]: Dusk: 2 damage to a random creature
+Boomer [4/6/1, deploy 1]: [dusk]Dusk: 2 damage to a random creature
     "Bought a house at 22. Recommends you stop buying coffee."
 Camper Van [2/4/2, deploy 0]: Hit and Run
     "Van life: no rent, no fixed address, no witnesses."
@@ -728,21 +728,21 @@ Clingy Ex [2/4/2, deploy 0]: Clingy
     "We're not done talking. We'll never be done talking."
 Delivery Cyclist [1/3/3, deploy 0]: Leapfrog
     "Your food is 4 minutes away. It has been 4 minutes away for 40 minutes."
-Drug Smuggler [1/2/2, deploy 0]: Arrival: send for a card among the top 3 of your deck: it joins your next hand
+Drug Smuggler [1/2/2, deploy 0]: [enter]Arrival: send for a card among the top 3 of your deck: it joins your next hand
     "Just a backpacker. With a very full backpack."
-Fidget Spinner [2/3/3, deploy 0]: Arrival: spin the enemy's Vanguard and Flanks clockwise
+Fidget Spinner [2/3/3, deploy 0]: [enter]Arrival: spin the enemy's Vanguard and Flanks clockwise
     "2017's must-have. 2018's landfill."
 Florida Man [3/4/2, deploy 0]: Wild Card
     "Florida Man does something. Again. Nobody knows what until it's done."
-Football Hooligans [5/3/2, deploy 1]: Last Will: 1 damage to all creatures
+Football Hooligans [5/3/2, deploy 1]: [death]Last Will: 1 damage to all creatures
     "Lost the match. Won the street."
-Hikikomori [1/7/1, deploy 0]: Arrival: exhaust itself
+Hikikomori [1/7/1, deploy 0]: [enter]Arrival: exhaust itself
     "Hasn't left the room since 2019. Neither will you."
-Hipster [4/4/2, deploy 1]: Too Mainstream | Arrival: 1 damage to all creatures
+Hipster [4/4/2, deploy 1]: Too Mainstream | [enter]Arrival: 1 damage to all creatures
     "Liked this battlefield before it got so crowded."
-Karen [4/5/1, deploy 1]: Mood Swings | Hurt: give itself +1 Attack
+Karen [4/5/1, deploy 1]: Mood Swings | [hurt]Hurt: give itself +1 Attack
     "Would like to speak to your manager. And theirs. And God's."
-Listen Kid [2/5/1, deploy 0]: Arrival: exhaust the creature facing it
+Listen Kid [2/5/1, deploy 0]: [enter]Arrival: exhaust the creature facing it
     "Back in my day we had one channel and we liked it."
 Lost Generation [2/4/1, deploy 0]: Grudge
     "Born into one crisis, graduated into the next."
@@ -752,13 +752,13 @@ One-Trick Pony [5/3/2, deploy 1]: Fixated
     "It does the one thing. Ask it for the other thing and watch it do the one thing."
 Plot Armor [2/2/2, deploy 0]: Rebirth
     "The hero can't die. It's only the second act."
-Reality TV Star [5/4/2, deploy 1]: Mood Swings | Arrival: give itself +2 Attack/Health and 1 damage to all friendly creatures
+Reality TV Star [5/4/2, deploy 1]: Mood Swings | [enter]Arrival: give itself +2 Attack/Health and 1 damage to all friendly creatures
     "Famous for being famous. Unbearable for free."
-Scam Artist [2/2/3, deploy 0]: Arrival: a random enemy creature -2 Attack
+Scam Artist [2/2/3, deploy 0]: [enter]Arrival: a random enemy creature -2 Attack
     "Sells a course on how to sell courses."
-Spite Voter [3/3/2, deploy 0]: Laid Off: 2 damage to a random enemy creature
+Spite Voter [3/3/2, deploy 0]: [days]Laid Off: 2 damage to a random enemy creature
     "Didn't like either of them. Voted for the worst one, out of principle."
-Underdog [1/1/3, deploy 0]: Last Will: all friendly creatures +2 Attack
+Underdog [1/1/3, deploy 0]: [death]Last Will: all friendly creatures +2 Attack
     "Nobody believed in him. Correctly. Still, very inspiring."
 Calm Your Tits [spell]: Provoke 2 on target creature and draw a card next Day
     "Said nobody, ever, successfully."
@@ -772,13 +772,13 @@ Mental Health Day [spell]: Target creature +3 Health and exhaust it
     "Unpaid, unscheduled, unbelievably necessary."
 Multipass [spell]: Send for a card from your deck: it joins your next hand
     "Leeloo Dallas. Multipass."
-No Glove, No Love [spell]: Bless on target creature and give it +2
+No Glove, No Love [spell]: Bless on target creature and give it +2[armor]
     "Protect yourself. Everyone else is."
 Ol' Reliable [spell]: 2 damage to target creature or player and draw a card next Day
     "The one thing that always works. Used again."
 One for the Road [spell]: Target creature gains Double Tap
     "Last one. Then one more."
-Rush Hour [spell]: Trend: Rush Hour 3
+Rush Hour [spell]: Trend: Rush Hour [days]3
     "Fastest way home: don't."
 Russian Roulette [spell]: 5 damage to a random creature
     "Five empty chambers. Your odds are great. Probably."
@@ -798,9 +798,9 @@ We Are Not The Same [spell]: Target creature copies the Attack, Health and Speed
     "I copy whoever's in front of me. You copy whoever's in front of you. We are not the same."
 Weaponized Incompetence [spell]: Exhaust the strongest enemy creature
     "Oh no, I did the dishes wrong again. Guess you'll have to do them forever."
-YOLO [spell]: Target creature +4 Attack 1 and 2 damage to you
+YOLO [spell]: Target creature +4 Attack [days]1 and 2 damage to you
     "Look Mom, no hands... Look Mom, no teef!"
-Zeitgeist [spell]: Trend: Zeitgeist 3
+Zeitgeist [spell]: Trend: Zeitgeist [days]3
     "Everyone agrees. Nobody remembers deciding."
 
 == None (8)
@@ -816,9 +816,9 @@ Soylent [spell]: Potion | Heal 6 to you
     "All the nutrients. None of the joy."
 Stealth Suit [spell]: Potion | Conceal 2 on all friendly creatures
     "Comes in black, darker black, and invisible."
-Stimulant Drug [spell]: Potion | Target creature +2 Attack 1
+Stimulant Drug [spell]: Potion | Target creature +2 Attack [days]1
     "Focus, energy, and a heart rate of 190."
-Superglue [spell]: Potion | Target creature +5
+Superglue [spell]: Potion | Target creature +5[armor]
     "Holds anything together. Fingers, mostly."
 
 KEYWORDS (194), by group
