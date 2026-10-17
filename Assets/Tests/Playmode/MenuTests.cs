@@ -505,8 +505,12 @@ namespace Zeitgeist.Tests {
         /// Each game pits two decks against each other, so half as many games as decks cover them all.
         /// </summary>
         [UnityTest]
-        public IEnumerator EveryDeckOnOffer_PlayedByTheAI_ForSeveralTurns_WithTheScreenInStepWithTheRules() {
-            var decks = catalog.AllDecks; // The test decks too
+        public IEnumerator EveryDeckOnOffer_PlayedByTheAI_ForSeveralTurns_WithTheScreenInStepWithTheRules([ValueSource(nameof(DeckGroups))] string group) {
+            // One test a faction (the user, 2026-10-17: one test of every deck grew with the deck list, 130 s and counting; the
+            // runner's limit is 3 minutes a test): a faction's decks play each other, the test decks theirs
+            int groupIndex = DeckGroups.IndexOf(group);
+            var decks = catalog.AllDecks.Where(d => GroupOf(d) == group).ToList();
+            if (decks.Count == 0) Assert.Ignore($"No deck of {group}");
             for (int i = 0; i < decks.Count; i += 2) {
                 var yourDeck = decks[i];
                 var theirDeck = decks[(i + 1) % decks.Count];
@@ -517,8 +521,8 @@ namespace Zeitgeist.Tests {
                 var cardCounts = game.Players.ToDictionary(p => p, GameAsserts.CountCards);
                 // Each game two levels, so every level plays several decks
                 var ai = new Dictionary<Player, AIPlanner> {
-                    [game.Player1] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)(i / 2 % 4), i),
-                    [game.Player2] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)((i / 2 + 1) % 4), i + 1)
+                    [game.Player1] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)((i / 2 + groupIndex) % 4), i),
+                    [game.Player2] = new AIPlanner(game.Queue, game.Manager.CombatHandler, (AILevel)((i / 2 + groupIndex + 1) % 4), i + 1)
                 };
                 var played = game.Players.ToDictionary(p => p, p => 0);
                 var attacked = game.Players.ToDictionary(p => p, p => 0);
@@ -557,6 +561,13 @@ namespace Zeitgeist.Tests {
         }
 
         private const int Turns = 4;
+
+        // The deck groups, one test each: the factions (a two-faction deck goes with its first), then the test decks
+        private static readonly List<string> DeckGroups = System.Enum.GetValues(typeof(Faction)).Cast<Faction>()
+            .Where(f => f != Faction.None && f != Faction.PopCulture).Select(f => f.ToString()).Append("Test decks").ToList();
+
+        private string GroupOf(DeckScriptableObject deck) =>
+            catalog.TestDecks.Contains(deck) ? "Test decks" : (DeckCatalog.FactionsOf(deck).FirstOrDefault(f => f != Faction.None)).ToString();
 
         #region Helpers
         private IEnumerator OpenSetup() {

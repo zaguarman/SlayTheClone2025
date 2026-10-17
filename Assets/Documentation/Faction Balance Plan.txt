@@ -148,3 +148,6 @@ Assured Destruction; the older ones keep Blood Transfusion, Thoughts and Prayers
 Next: the bottom is still Corporate's and Utopia's second decks (Hustle Rush 22%, Lab Grown 34%), the Engine and Combo
 strategies as a kind (33%, 30%), and the two-faction decks (Frankenstein 8%, Hustle Culture 6%): cards that make those
 strategies work, not more points.
+Tied to a build from now on (the user, 2026-10-17, nothing retroactive): the report prints the commit it ran on and that
+commit gets the tag study-<date>; milestones are tagged v0.x-<name> and main is fast-forwarded to them (the first:
+v0.1-zeitgeist, at 52d82d0b).

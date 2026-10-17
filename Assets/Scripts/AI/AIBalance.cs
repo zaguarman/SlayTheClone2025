@@ -378,12 +378,32 @@ namespace Zeitgeist {
         /// <summary>Every card's tier from the last balance study (its mirror games), for the deck builder's Tier filter.</summary>
         public static CardScores.File LastCardScores { get; private set; }
 
+        // The commit the study ran on (git, from the project folder), or "unknown" without git
+        private static string Commit() {
+            try {
+                var git = new System.Diagnostics.Process {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo("git", "rev-parse --short HEAD") {
+                        WorkingDirectory = System.IO.Path.GetFullPath(System.IO.Path.Combine(UnityEngine.Application.dataPath, "..")),
+                        RedirectStandardOutput = true, UseShellExecute = false, CreateNoWindow = true
+                    }
+                };
+                git.Start();
+                string hash = git.StandardOutput.ReadToEnd().Trim();
+                git.WaitForExit(3000);
+                return string.IsNullOrEmpty(hash) ? "unknown" : hash;
+            }
+            catch (System.Exception) {
+                return "unknown";
+            }
+        }
+
         private static string BalanceReport(IReadOnlyList<DeckScriptableObject> decks, List<Result> cardResults, CardLedger cardLedger,
             List<Result> styleResults, CardLedger styleLedger, List<Result> deckResults, CardLedger deckLedger) {
             var text = new StringBuilder();
             int games = cardResults.Count + styleResults.Count + deckResults.Count;
             LastCardScores = CardScores.From(cardLedger.Cards, cardResults.Count);
             text.AppendLine("BALANCE REPORT (AI games)");
+            text.AppendLine($"Run {System.DateTime.Now:yyyy-MM-dd HH:mm} at commit {Commit()}: tag that commit study-{System.DateTime.Now:yyyy-MM-dd} (the user, 2026-10-17: a study is tied to its build).");
             text.AppendLine($"{games} games: {cardResults.Count} mirror games of the Very Hard AI (cards), {styleResults.Count} between the AI styles " +
                             $"(strategies), {deckResults.Count} deck against deck (decks). Called off after {MaxDays} Days.");
             text.AppendLine();
