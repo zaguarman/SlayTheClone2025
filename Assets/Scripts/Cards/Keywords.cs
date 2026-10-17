@@ -28,6 +28,17 @@ namespace Zeitgeist {
             entries[key] = new Entry { Key = key, Title = title ?? key, Text = text, Group = group };
 
         static Keywords() {
+            // ---------------------------------------------------------------- The factions (the user, 2026-10-17: what each is about)
+            group = "Factions";
+            Add("Myth", "Faith, death and prophecy: legends, religion, monsters, the afterlife. Slow and inevitable: its creatures die and come back, its spells pay off Days later ([Prophecy]), its statuses are [Doomed] and [Blessed]. It pays with [Sacrifice] and it can't move its creatures. A status-quo faction: it wins by holding the board as it is.");
+            Add("Statecraft", "Order, law and war: government, bureaucracy, the military, propaganda. It fortifies the line, slows everyone down with paperwork (Red Tape: [Deployment Time] on the enemy), then strikes first. It pays with bureaucracy (its own creatures deploy slowly) and it can't hide anything: all its plans are public.");
+            Add("Shadow Ops.", "Secrets and sabotage: espionage, covert operations, conspiracies. Fragile agents, hidden plans ([Concealed], Undercover), traps and [Watchdog]s set up in advance. It wins the information war and loses fair fights. It pays by burning its own cards and it can't heal or gain [Armor]. A timing faction: it strikes hard in short windows.");
+            Add("Corporate", "Money, growth and exploitation: business, finance, labour, organised crime. An engine: invest now, cash out later, spend cheap workers as fuel; it draws more cards than anyone. It pays with capital (discarding from its hand) and it can't heal: the insurance never pays out. A timing faction.");
+            Add("Tech", "Systems and the queue: software, hacking, infrastructure. It rewires the Day with [Watchdog]s, copies and overrides, Speed boosts and automated units. It pays with technical debt (fewer draws next Day) and it can't bring anything back from the discard pile: deleted is deleted.");
+            Add("Digital Society", "The culture itself, offline and online: films and memes everyone quotes, human archetypes, social media, influencers, the mob. Momentum and comebacks: moods that buff a creature but burn it out, Underdog bonuses when losing, swarms of cheap creatures that pile onto one target (Dogpile), effects that spread. It pays with self-harm and exposure and it can't use Intelligence: it lives in the moment.");
+            Add("Mind", "Perception and paradox: psychology, cognitive biases, philosophy. It wins without big stats by bending choices: misleading Watchdogs, forced behaviour, rules turned on their head (Attack and Health swapped), fake intents. Its effects are double-edged and its creatures weak: it can't deal raw damage.");
+            Add("Utopia", "Science and the future: physics, biology, medicine, space. Its creatures grow for good (gene editing, mutations, exponential growth), the experiments that go too far become abominations, and On the Brink its damage doubles at low Health. It pays with side effects on its own creatures and it can't conceal anything: results get published. Slow, strongest late.");
+
             // ---------------------------------------------------------------- Time
             group = "Time";
             Add("Day", "One turn: both sides plan, then everything resolves in order (moves, summons, spells, then abilities and attacks). It runs from [Dawn] to [Dusk].");

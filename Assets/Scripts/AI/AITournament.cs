@@ -407,8 +407,12 @@ namespace Zeitgeist {
             public void CheckDay(int endedDay, bool advanced, bool over) {
                 string at = $"{where}, Day {endedDay}";
                 if (!advanced && !over) Note("Rules", "Ending the turn didn't start the next Day", at);
-                if (game.ActionsQueue.GetPendingActionsCount() > 0 && !over) { // Won mid-Day, what's still planned is dropped: fine
-                    Note("Rules", "Actions left in the queue after the turn", $"{at}: {string.Join(", ", game.ActionsQueue.GetPendingActions().Select(a => a.GetType().Name))}");
+                // Won mid-Day, what's still planned is dropped: fine. A plan made at the new Dawn for a Looping or Fixated creature
+                // (Groundhog Day, One-Trick Pony) is the next Day's, not a leftover
+                var leftover = game.ActionsQueue.GetPendingActions()
+                    .Where(a => !(a is BattlefieldCombatAction combat && game.ActionsQueue.IsLooping(combat.GetAttacker()))).ToList();
+                if (leftover.Count > 0 && !over) {
+                    Note("Rules", "Actions left in the queue after the turn", $"{at}: {string.Join(", ", leftover.Select(a => a.GetType().Name))}");
                 }
                 var placed = new HashSet<ICreature>();
                 foreach (var player in Players) {

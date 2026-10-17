@@ -39,6 +39,24 @@ namespace Zeitgeist {
         [MenuItem("Debug/AI Balance Report")]
         private static void RunBalanceFromMenu() => RunBalance();
 
+        public const string ShuffledReportPath = "Assets/Documentation/Shuffled Tournament.txt";
+
+        [MenuItem("Debug/AI Shuffled Tournament")]
+        private static void RunShuffledFromMenu() => RunShuffled();
+
+        /// <summary>
+        /// Every card in play (the user, 2026-10-17): random decks drawn from the whole pool, factions mixed, played round
+        /// robin by the Very Hard AI, to see which cards, roles and faction pairs carry the most potential (see
+        /// <see cref="AITournament.RunShuffled"/>). A minute or two.
+        /// </summary>
+        public static void RunShuffled() =>
+            Run(ShuffledReportPath, (decks, progress) => {
+                var pool = AssetDatabase.FindAssets("t:CardDataScriptableObject")
+                    .Select(guid => AssetDatabase.LoadAssetAtPath<CardDataScriptableObject>(AssetDatabase.GUIDToAssetPath(guid)))
+                    .Where(c => c != null && AssetDatabase.GetAssetPath(c).StartsWith("Assets/Scriptables/Cards/")).ToList();
+                return (new List<AITournament.Result>(), AITournament.RunShuffled(pool, progress));
+            });
+
         /// <summary>The balance study (see <see cref="AITournament.RunBalance"/>): two to three thousand games.</summary>
         public static void RunBalance() =>
             Run(BalanceReportPath, (decks, progress) => (new List<AITournament.Result>(), AITournament.RunBalance(decks, progress)));
