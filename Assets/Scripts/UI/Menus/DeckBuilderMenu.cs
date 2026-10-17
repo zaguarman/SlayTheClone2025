@@ -22,6 +22,7 @@ namespace SlayTheClone {
         public const string StarterDeckButton = "Decks: Starter: ";
         public const string EveryFactionTab = "DeckFaction: Every card";
         public const string FactionTab = "DeckFaction: ";
+        public const string TierTab = "DeckTier: ";
         public const string CardRow = "DeckCard: ";
         public const string CopyButtonName = "DeckCopyButton";
         public const string DeleteButtonName = "DeckDeleteButton";
@@ -44,6 +45,7 @@ namespace SlayTheClone {
         private bool deleteArmed; // Delete was clicked once: a second click deletes
         private readonly List<(Button button, DeckScriptableObject deck)> deckButtons = new List<(Button, DeckScriptableObject)>();
         private readonly List<(Button button, Faction? faction)> factionTabs = new List<(Button, Faction?)>();
+        private readonly List<(Button button, string tier)> tierTabs = new List<(Button, string)>();
         private readonly Dictionary<CardController, CardDataScriptableObject> shownAssets = new Dictionary<CardController, CardDataScriptableObject>();
 
         /// <summary>The deck being built, or a starter deck being looked at; null when none is open.</summary>
@@ -52,6 +54,8 @@ namespace SlayTheClone {
         public bool ShowsStarterDeck => OpenDeck != null && !PlayerDecks.IsPlayers(OpenDeck);
         /// <summary>The faction whose cards are offered; null when every card is.</summary>
         public Faction? ShownFaction { get; private set; }
+        /// <summary>The tier offered, "S" to "D" (the latest balance study's, see <see cref="CardScores"/>); null: any.</summary>
+        public string ShownTier { get; private set; }
         /// <summary>The cards offered, in order.</summary>
         public List<CardController> ShownCards => cards?.Cards ?? new List<CardController>();
         /// <summary>Your decks, as listed.</summary>
@@ -118,15 +122,17 @@ namespace SlayTheClone {
         public void ShowFaction(Faction? faction) {
             ShownFaction = faction;
             var offered = CardGrid.CardsOf(Catalog, faction);
+            if (ShownTier != null) offered = offered.Where(c => CardScores.TierOf(c.cardName) == ShownTier).ToList();
             shownAssets.Clear();
             cards.Show(offered, (face, asset) => {
                 shownAssets[face] = asset;
                 face.OnCardClicked.AddListener(_ => AddCard(asset));
                 face.OnCardRightClicked.AddListener(_ => RemoveCard(asset));
             });
-            string title = faction != null ? CardTextFormatter.FactionName(faction.Value) : "Every card";
+            string title = (faction != null ? CardTextFormatter.FactionName(faction.Value) : "Every card") + (ShownTier != null ? $", Tier {ShownTier}" : "");
             cards.Title.text = $"{title}  <size=70%>{CardGrid.Count(offered)}</size>";
             foreach (var (tab, listed) in factionTabs) ShowChosen(tab, listed == faction);
+            foreach (var (tab, listed) in tierTabs) ShowChosen(tab, listed == ShownTier);
             Refresh();
         }
 
@@ -335,6 +341,27 @@ namespace SlayTheClone {
                 }
                 factionTabs.Add((tab, faction));
             }
+
+            // The tiers of the latest balance study (the user, 2026-10-17): any, then S to D. Without a study yet, none
+            if (!CardScores.HasScores) return;
+            var tierRow = NewObject("Tiers", tabs.transform).transform;
+            var tierLayout = tierRow.gameObject.AddComponent<HorizontalLayoutGroup>();
+            tierLayout.spacing = 8;
+            SetControls(tierLayout, expandHeight: false);
+            foreach (var tier in new string[] { null }.Concat(CardScores.Tiers)) {
+                var tab = AddButton(tierRow, TierTab + (tier ?? "Any"), tier != null ? $"Tier {tier}" : "Any tier", -1, () => ShowTier(tier));
+                var tabElement = tab.GetComponent<LayoutElement>();
+                tabElement.preferredHeight = 38;
+                tabElement.flexibleWidth = 1;
+                tabElement.preferredWidth = 0;
+                tierTabs.Add((tab, tier));
+            }
+        }
+
+        /// <summary>Offers only the cards of this tier in the latest balance study (null: any), in the faction shown.</summary>
+        public void ShowTier(string tier) {
+            ShownTier = tier;
+            ShowFaction(ShownFaction);
         }
 
         // The open deck: its name, how full it is, its cards, and Copy and Delete

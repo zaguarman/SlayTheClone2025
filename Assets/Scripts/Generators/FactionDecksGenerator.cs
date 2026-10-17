@@ -661,7 +661,7 @@ namespace SlayTheClone {
                 "The best and brightest left. The rest are rearranging the furniture.",
                 "Disruption Maneuver: every enemy creature changes slots at random. Their formation scattered: the Vanguard may end up at the back, Headquarters in front.",
                 Act(ActionType.Shuffle, 0, TargetType.Enemy, TargetModifier.None))
-                .Picture("A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a podium announces that the economy has never been stronger."),
+                .Picture("A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a podium announces that the economy has never been stronger; behind them, Istanbul's great mosque over the Bosphorus at sunset."),
         };
         #endregion
 
@@ -873,7 +873,7 @@ namespace SlayTheClone {
                 "Authentic local cuisine. Twenty-two euros a coffee.",
                 "Disruption Maneuver: pull target enemy creature a step forward (Headquarters to its Flank, a Flank to the Vanguard); a creature already there trades places with it. Drags their important people into reach.",
                 Act(ActionType.Pull, 0, TargetType.EnemyCreatures, TargetModifier.None))
-                .Picture("A sunburnt tourist in socks and sandals lured off the street by a neon sign reading AUTHENTIC, into a restaurant where a waiter already holds out a bill a metre long."),
+                .Picture("A sunburnt tourist in socks and sandals lured off the beach by a neon sign reading AUTHENTIC, into a beach restaurant where a waiter already holds out a bill a metre long, a palm and a parasol behind."),
         };
         #endregion
 
@@ -1962,7 +1962,7 @@ namespace SlayTheClone {
                 "One falls back, and everyone behind it finds out.",
                 "Ambivalent Maneuver: push target creature, on either side, a step back (the Vanguard to a Flank, a Flank to its Headquarters slot); a creature already there trades places with it. Clear your own front, or knock theirs off it.",
                 Act(ActionType.Push, 0, TargetType.AllCreatures, TargetModifier.None))
-                .Picture("A row of office workers falling like dominoes down a corridor, the first one tipped by a single pointing finger, the last one spilling coffee over the boss."),
+                .Picture("The housing market as dominoes: a row of houses for sale, price tags dropping, falling one into the next, the first tipped by a pointing finger marked RATES, the last landing on a banker spilling his coffee, a price chart crashing behind."),
             Spell("Controlled Chaos", TargetType.AllCreatures,
                 "Everything is going exactly to plan. Which plan, though.",
                 "Ambivalent Maneuver: every creature on the side it's played on changes slots at random. Scramble their formation, or roll the dice on yours.",

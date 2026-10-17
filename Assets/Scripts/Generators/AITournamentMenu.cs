@@ -16,6 +16,7 @@ namespace SlayTheClone {
         public const string StylesReportPath = "Assets/Documentation/AI Styles.txt";
         public const string BalanceReportPath = "Assets/Documentation/Balance Report (AI games).txt";
         public const string AdventureReportPath = "Assets/Documentation/Adventure Simulation.txt";
+        public const string CardScoresPath = "Assets/Resources/CardScores.json";
 
         [MenuItem("Debug/AI Adventure Simulation")]
         private static void RunAdventuresFromMenu() => RunAdventures();
@@ -73,6 +74,12 @@ namespace SlayTheClone {
                 }
                 File.WriteAllText(reportPath, report);
                 AssetDatabase.ImportAsset(reportPath);
+                // The balance study's card tiers, for the deck builder's Tier filter (the user, 2026-10-17)
+                if (reportPath == BalanceReportPath && AITournament.LastCardScores is { cards: { Count: > 0 } } scores) {
+                    File.WriteAllText(CardScoresPath, UnityEngine.JsonUtility.ToJson(scores, true));
+                    AssetDatabase.ImportAsset(CardScoresPath);
+                    CardScores.Reload();
+                }
                 UnityEngine.Debug.Log($"AI Tournament done, written to {reportPath}:\n{report}");
                 return results;
             }

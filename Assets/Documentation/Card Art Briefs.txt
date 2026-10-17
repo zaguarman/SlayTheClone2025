@@ -16,17 +16,17 @@ RULES
 
 TO SUPERVISE
 
-  304 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
+  300 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
   the user has checked one, its approval goes into SUPERVISED in Tools/art_briefs.py (or their changes into USER_NOTES).
 
   Corporate (46): Overtime, Peace the Frontier, Casino, Headhunter, Counterfeit, Private Equity, Shell Company, Golden Parachute, Work Shift Rotation, Unpaid Intern, Inhuman Resources, Micromanager, Multilevel Marketing Seller, Day Trader, Pluriemployed Hustler, Satoshi Nakamoto, Multimillionaire Philanthropist, Charles Ponzi, Margin Call, Mass Layoffs, Team Building Exercise, Dead Cat Bounce, Business Operating Expenses, Taxpayer Funds Venture Capital Profits, Tax-Exempt Corruption, Solidarity Towards The Small Businessman, Inheritance, NDA, Inflation, Escape Goat, Laissez-Faire, The Invisible Hand, C-Suite, Venture Capital, Corporate Bailouts, Flash Crash, Just in Time, Hedonic Treadmillionaire, Moral Bankruptcy, Usury, Middle Manager, Big Four, Bloomberg Terminal, Internal Protocol: Quota Crusher Mindset, High-Frequency Trading Scam, Valet
-  Statecraft (29): Supply Depot, Presidential Pardon, Congruent Use of Force, Weapons of Mass Distraction, King Emeritus, Spite-Elected President, Police Officer Productivity Target, Internal Revenue Service, Mercenaries, Man o' War, Ministry for Equality, Protocol Enforcers, Demagogue, Red Tape, Preemptive Strike, Martial Law, Kakistocracy, Mutually Assured Destruction, Panem Et Circenses, Diplomat, Raised Security Level, Lost Landmine, Ceasefire, Violence Monopoly, Border Crossing, Peace Force, Security Guard, Si Vis Pacem, Para Bellum, Mass Emigration
-  Zeitgeist (33): Drug Smuggler, Not on My Watch, One for the Road, Chain Smoker, Karen, Boomer, Hipster, Underdog, Hikikomori, Reality TV Star, Scam Artist, Football Hooligans, Antihero, Bodybuilder, Plot Armor, YOLO, Toxic Positivity, Delivery Cyclist, Zeitgeist, Rush Hour, No Glove, No Love, Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents, The Friends We Made Along the Way, Spite Voter, Fidget Spinner, Camper Van, Lost Generation, Universal Basic Income, Calm Your Tits, Tourist Trap
+  Statecraft (28): Supply Depot, Presidential Pardon, Congruent Use of Force, Weapons of Mass Distraction, King Emeritus, Spite-Elected President, Police Officer Productivity Target, Internal Revenue Service, Mercenaries, Man o' War, Ministry for Equality, Protocol Enforcers, Demagogue, Red Tape, Preemptive Strike, Martial Law, Kakistocracy, Mutually Assured Destruction, Panem Et Circenses, Diplomat, Raised Security Level, Lost Landmine, Ceasefire, Violence Monopoly, Border Crossing, Peace Force, Security Guard, Si Vis Pacem, Para Bellum
+  Zeitgeist (31): Drug Smuggler, Not on My Watch, One for the Road, Chain Smoker, Karen, Boomer, Hipster, Underdog, Hikikomori, Reality TV Star, Scam Artist, Football Hooligans, Antihero, Bodybuilder, Plot Armor, YOLO, Toxic Positivity, Delivery Cyclist, Zeitgeist, Rush Hour, No Glove, No Love, Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents, Spite Voter, Fidget Spinner, Camper Van, Lost Generation, Universal Basic Income, Calm Your Tits
   Digital Society (16): Its Been 84 Years..., Good Boi, Crypto "Entrepreneur", Digital Nomad, NPC, Chronically Online, Conspiracy Theorist, Clickbait, Cancelled, Social Panopticon, Short King, Content Creator, Thirst Trap, Selfie Esteem, Influencer, U Mad Bro?
   Shadow Ops. (53): Cleaner, Political Decoy, Mole, Signal Jammer, Deep Cover, Human Intelligence, Wet Work, Perfectly Timed Camera Malfunction, Smoke And Mirrors, Eavesdrop, Tapped Communications, Whistleblower, Involuntary Free Polonium Giveaway, Humanitarian Trafficking Action, Dead Man's Switch, Fell Out of a Window, Coup d'État, Operation Paperclip, False Flag Operation, Never Let Them Know Your Next Move, Frame Job, Devil's Breath, He Didn't Kill Himself, Extraction, Witness Protection Program, Death By "Natural Causes", Asset Recruitment, If I Told You, I'd Have to Kill You, Lone Gunman, Glomar Response, Sabotage, Ghost Army, Inflatable Tank, Social Engineering, Bilderberg Membership, Dead Drop, The Golden Gun, Die Another Day, Licence to Kill, Shaken, Not Stirred, GoldenEye, Supply Chain Attack, Femme Fatale, Exploding Pen, Drug Pigeon, Embassy, Secret Anthrax Laboratory, Tracking Beacon, Arsonist, Counter-Surveillance, Compromised Agent, Polonium Umbrella, Nonchalant Agent
   Tech (15): Web Scraping, DDOS Attack, End-to-End Encryption, SysAdmin, Meatproxy As A Service, Ransomware Attack, Man-in-the-Middle, Technical Debt, Threat Hunter, Ctrl + Z, Pair Programming, Suspicious USB Stick in the Parking Lot, Code Review, Bomber Drone, Ctrl + Y
   Myth (40): Taqiyya, Memento Mori, Martyr, Exorcism, Mummy, Omniscient Space-Time Bending Bearded Wizard, Cultist, Phoenix, Excess of Bread and Wine, Sacrificial Ritual, Reincarnation, Holy War, The Great Flood, Lance Of Longinus, Necronomicon, The Wicker Man, Thoughts and Prayers, Religious Instrumentalization, Deus Vult, Curse Of Hubris, Zealot, Vampire, Living Dead, Buddy Christ, Pope, The Lobster Professor, Amen, Pyramids, Horsemen Of Apocalypse, God's Grace, The Omen, Grim Reaper, Blessing in Disguise, Die by the Sword, Mithril, Here Be Dragons, Gracias Jesús, Heretic, Ambrosia, Publicly Funded Faith Schools
-  Mind (21): Lucid Dreaming, Momentum, Survivorship Bias, Yesn't, Cyberpsychosis, Reflect, Mimetic Theory, Pessimist, Introvert, Roko's Basilisk, Imposter Syndrome, Ship of Theseus, Socrates, Maslow's Pyramid, Legerdemain, Hold That Thought, Projection, Psychiatrists, Hyperbole, Domino Effect, Controlled Chaos
+  Mind (20): Lucid Dreaming, Momentum, Survivorship Bias, Yesn't, Cyberpsychosis, Reflect, Mimetic Theory, Pessimist, Introvert, Roko's Basilisk, Imposter Syndrome, Ship of Theseus, Socrates, Maslow's Pyramid, Legerdemain, Hold That Thought, Projection, Psychiatrists, Hyperbole, Controlled Chaos
   Utopia (38): Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, White Dwarf, Biohacker, Prion Disease, Heimlich Maneuver
   Shelved (5): Smartwatch, Exoskeleton, Q Branch, Hovercraft, Nanobots
   Potion (8): Nicotine, Stimulant Drug, Superglue, Soylent, Flamethrower, Eject Button, Stealth Suit, Creatine
@@ -285,8 +285,8 @@ Si Vis Pacem, Para Bellum (spell)
     A Roman general signing a peace treaty with one hand while the other points at a row of catapults being built behind the tent.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mass Emigration (spell)
-    A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a podium announces that the economy has never been stronger.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+    A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a podium announces that the economy has never been stronger; behind them, Istanbul's great mosque over the Bosphorus at sunset.
+    USER: 2026-10-17: put Istanbul's Hagia Sophia (the user's photo: the Sultan Ahmed Mosque at sunset over the Bosphorus, six minarets).
 
 ZEITGEIST
 
@@ -388,7 +388,7 @@ Absentee Parents (creature)
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 The Friends We Made Along the Way (spell)
     A ragtag group of adventurers around a campfire laughing, an empty treasure chest behind them, a map with the X scribbled out.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+    USER: 2026-10-17: Jesus with two guns instead of the cultist.
 Spite Voter (creature)
     A grumpy man in a voting booth gleefully ticking the box of a clown candidate, a 'Don't Blame Me' badge pinned to his cardigan.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -408,8 +408,8 @@ Calm Your Tits (spell)
     A man at a family barbecue telling his furious aunt to calm down, everyone around them freezing mid-bite, the aunt's face going from red to purple.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Tourist Trap (spell)
-    A sunburnt tourist in socks and sandals lured off the street by a neon sign reading AUTHENTIC, into a restaurant where a waiter already holds out a bill a metre long.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+    A sunburnt tourist in socks and sandals lured off the beach by a neon sign reading AUTHENTIC, into a beach restaurant where a waiter already holds out a bill a metre long, a palm and a parasol behind.
+    USER: 2026-10-17: put a beach.
 
 DIGITAL SOCIETY
 
@@ -979,8 +979,8 @@ Hyperbole (spell)
     A man telling a story at a bar with his arms spread wider and wider, the fish he's describing growing from a sardine to a whale in thought bubbles behind him.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Domino Effect (spell)
-    A row of office workers falling like dominoes down a corridor, the first one tipped by a single pointing finger, the last one spilling coffee over the boss.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+    The housing market as dominoes: a row of houses for sale, price tags dropping, falling one into the next, the first tipped by a pointing finger marked RATES, the last landing on a banker spilling his coffee, a price chart crashing behind.
+    USER: 2026-10-17: add a housing market flavour.
 Controlled Chaos (spell)
     A calm psychiatrist conducting an orchestra of patients who have all swapped instruments, the drummer on the violin, the sheet music flying through the air.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet

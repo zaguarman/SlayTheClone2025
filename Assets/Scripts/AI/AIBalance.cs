@@ -375,10 +375,14 @@ namespace SlayTheClone {
                    + StrategyReport(decks, deckResults, deckLedger) + "\n" + audit.Report();
         }
 
+        /// <summary>Every card's tier from the last balance study (its mirror games), for the deck builder's Tier filter.</summary>
+        public static CardScores.File LastCardScores { get; private set; }
+
         private static string BalanceReport(IReadOnlyList<DeckScriptableObject> decks, List<Result> cardResults, CardLedger cardLedger,
             List<Result> styleResults, CardLedger styleLedger, List<Result> deckResults, CardLedger deckLedger) {
             var text = new StringBuilder();
             int games = cardResults.Count + styleResults.Count + deckResults.Count;
+            LastCardScores = CardScores.From(cardLedger.Cards, cardResults.Count);
             text.AppendLine("BALANCE REPORT (AI games)");
             text.AppendLine($"{games} games: {cardResults.Count} mirror games of the Very Hard AI (cards), {styleResults.Count} between the AI styles " +
                             $"(strategies), {deckResults.Count} deck against deck (decks). Called off after {MaxDays} Days.");

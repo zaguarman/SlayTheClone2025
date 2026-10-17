@@ -9606,7 +9606,12 @@ def the_friends_we_made_along_the_way():
     body += knight(60, 196, 0.9)
     body += person(122, 196, 0.8, SKIN[1], "#5a3a8a", face="grin", beard="#d8d8d8", hair=OLD_HAIR)
     body += poly([(104, 150 - 64 * 0.8 + 6), (140, 150 - 64 * 0.8 + 6), (122, 150 - 64 * 0.8 - 32)], "#3a2a6a")
-    body += person(232, 196, 0.8, SKIN[2], "#3a6a3a", face="grin", hat="hood")
+    # Jesus with two guns among the friends (the user, 2026-10-17), as on The Chosen One
+    body += jesus(232, 196, 0.8, face="grin")
+    for f in (-1, 1):
+        x0 = 232 + f * 22
+        body += stroke(f"M{232 + f * 14} 172 L{x0 + f * 16} 156", "#f4f0e6", 6)
+        body += rect(x0 + f * 15 - 8, 148, 16, 6, "#d4af37", 'rx="1.5"') + rect(x0 + f * 16 - 2, 153, 4, 8, "#a8842a")
     body += dog(298, 168, 0.6, "#c8883a", "#8a5a2a", face=-1)
     body += flames(176, 182, 3, 14, 30) + rect(150, 180, 52, 6, "#5a3a1a", 'rx="3"')
     body += rect(20, 20, 70, 50, "#e8d4a0", 'stroke="#a88a5a" stroke-width="2" transform="rotate(-6 55 45)"')
@@ -9690,24 +9695,110 @@ for _theme, _cards in CHUNK_MISSING.items():
 
 # ---------------------------------------------------------------- Maneuvers (2026-10-17)
 
+def house(x, base, s=1.0, wall="#e8d4b0", roof="#a0522d", price=None):
+    """A little house standing on y=base, its left wall at x, with a FOR SALE price tag if given."""
+    out = rect(x, base - 30 * s, 34 * s, 30 * s, wall, 'stroke="#5a3a1a" stroke-width="1.5"')
+    out += poly([(x - 4 * s, base - 30 * s), (x + 17 * s, base - 48 * s), (x + 38 * s, base - 30 * s)], roof, 'stroke="#5a3a1a" stroke-width="1.5"')
+    out += rect(x + 13 * s, base - 16 * s, 8 * s, 16 * s, "#6a4a2a") + rect(x + 4 * s, base - 24 * s, 7 * s, 7 * s, "#bfe0f0") + rect(x + 23 * s, base - 24 * s, 7 * s, 7 * s, "#bfe0f0")
+    if price:
+        out += stroke(f"M{x + 40 * s:.1f} {base:.1f} L{x + 40 * s:.1f} {base - 22 * s:.1f}", "#6a4a2a", 2) + rect(x + 34 * s, base - 30 * s, 22 * s, 12 * s, "#ffffff", 'stroke="#c0392b" stroke-width="1"')
+        out += words(price, x + 45 * s, base - 28 * s, 6 * s, "#c0392b", width=1)
+    return out
+
+
 def domino_effect():
-    # A row of office workers falling like dominoes down a corridor, the first one tipped by a single pointing finger, the
-    # last one spilling coffee over the boss
+    # The housing market as dominoes (the user, 2026-10-17): a row of houses for sale falling one into the next, the first one
+    # tipped by a single pointing finger marked RATES, the last one landing on a banker spilling his coffee, a price chart
+    # crashing behind them
     defs, body = bg_mind()
+    body += stroke("M20 40 L80 30 L130 46 L180 36 L230 96 L280 120", "#ff3a3a", 4, 'opacity="0.7"') + poly([(286, 126), (270, 124), (282, 110)], "#ff3a3a", 'opacity="0.7"')
     body += rect(0, 170, W, 30, "#8a7aa8")
     body += path("M0 120 C 30 110 40 60 18 20 L28 18 C 52 62 44 114 14 130 Z", SKIN[0], 'stroke="#b08a6a" stroke-width="1.5"')
-    body += rect(18, 14, 8, 10, SKIN[0], 'rx="3"')
-    for i, x in enumerate((70, 112, 154, 196)):
-        tilt = 62 - i * 12
-        worker = rect(-9, -64, 18, 64, ("#4a6a8a", "#8a4a4a", "#4a7a5a", "#6a5a8a")[i], 'rx="4"') + circle(0, -74, 10, SKIN[i % 4])
-        worker += circle(-3, -76, 1.4, "#222") + circle(3, -76, 1.4, "#222") + ellipse(0, -70, 2.5, 3, "#5a1a1a")
-        body += group(worker, f"translate({x} 170) rotate({tilt})")
-    body += speed_lines(66, 96, 3, 22, "#ffffff")
+    body += rect(18, 14, 8, 10, SKIN[0], 'rx="3"') + lettering("RATES", 30, 62, 6, "#c0392b", width=1.3)
+    for i, x in enumerate((70, 116, 162, 208)):
+        tilt = 58 - i * 12
+        body += group(house(-17, 0, 1.0, ("#e8d4b0", "#d8e0e8", "#f0d8d8", "#e0e8d0")[i], ("#a0522d", "#5a6a8a", "#8a3a3a", "#6a7a3a")[i], ("999", "750", "500", "250")[i]),
+                      f"translate({x} 170) rotate({tilt})")
+    body += speed_lines(64, 96, 3, 22, "#ffffff")
     body += person(296, 200, 1.15, SKIN[0], "#1a1a2a", face="shout", hair=OLD_HAIR, tie="#c0392b", brows="angry")
-    body += group(rect(-8, -10, 16, 20, "#ffffff", 'rx="2" stroke="#555" stroke-width="1"'), "translate(246 96) rotate(70)")
-    body += path("M252 104 C 262 112 270 120 278 136 C 284 146 292 150 300 152", "none", 'stroke="#6a3a1a" stroke-width="6" stroke-linecap="round"')
-    for x, y in ((284, 140), (302, 146), (312, 158)):
+    body += group(rect(-8, -10, 16, 20, "#ffffff", 'rx="2" stroke="#555" stroke-width="1"'), "translate(250 100) rotate(70)")
+    body += path("M256 108 C 264 116 272 124 280 138 C 286 148 294 152 302 154", "none", 'stroke="#6a3a1a" stroke-width="6" stroke-linecap="round"')
+    for x, y in ((286, 142), (304, 148), (314, 160)):
         body += circle(x, y, 3, "#6a3a1a")
+    return svg(defs, body)
+
+
+def tourist_trap():
+    # A sunburnt tourist in socks and sandals lured off a beach (the user, 2026-10-17) by a neon sign reading AUTHENTIC, into a
+    # beach restaurant where a waiter already holds out a bill a metre long
+    defs = lin("bg", ["#5ab8e8", "#c8ecfa"]) + lin("sea", ["#2a9ad0", "#1a6aa0"])
+    body = rect(0, 0, W, H, "url(#bg)") + circle(60, 36, 20, "#fff2a0") + rect(0, 112, W, 30, "url(#sea)")
+    for x in range(10, 170, 34):
+        body += path(f"M{x} 124 q 8 -6 16 0", "none", 'stroke="#e8f8ff" stroke-width="1.5"')
+    body += path("M0 136 C 80 128 160 132 200 136 L200 200 L0 200 Z", "#f0d890") + rect(190, 132, 162, 68, "#e8c878")
+    body += stroke("M40 136 L36 70", "#8a5a2a", 5)  # A palm
+    for a in (-60, -20, 20, 60, 100):
+        body += group(path("M0 0 C 14 -6 30 -2 40 8 C 26 4 14 4 0 0 Z", "#3a9a4a"), f"translate(36 70) rotate({a})")
+    body += path("M120 132 L150 92 L180 132 Z", "#ff5a5a") + stroke("M150 92 L150 150", "#5a3a1a", 2)  # A parasol
+    body += rect(200, 40, 152, 132, "#c8884a", 'stroke="#6a4a2a" stroke-width="2"') + poly([(192, 46), (276, 18), (352, 40)], "#d8b060")
+    for x in range(198, 352, 12):
+        body += stroke(f"M{x} 46 l -2 10", "#a88a3a", 2)
+    body += rect(214, 82, 64, 90, "#ffd8a0", 'opacity="0.85"')
+    body += rect(206, 52, 142, 26, "#1a0a1a", 'rx="4" stroke="#ff4fd8" stroke-width="3"') + lettering("AUTHENTIC", 277, 58, 11, "#ff7ae0", width=2, outline="#5a0a4a")
+    body += path("M120 110 C 150 100 180 96 210 104", "none", 'stroke="#ff7ae0" stroke-width="2" stroke-dasharray="5 4"')
+    body += person(96, 200, 1.2, "#f08a6a", "#f4f0a0", face="grin", hat="cap", glasses="shades")
+    for x in (80, 112):
+        body += rect(x - 8, 188, 16, 12, "#f4f4f4") + rect(x - 10, 196, 20, 4, "#8a5a2a")
+    body += camera(126, 162, 1.2)
+    body += person(306, 200, 1.05, SKIN[2], "#1a1a1a", face="smirk", hair="#1a1a1a", tie="#c0392b")
+    body += stroke("M284 164 L256 152", "#1a1a1a", 8)
+    body += path("M254 152 L238 154 L234 198 L250 198 Z", "#ffffff", 'stroke="#999" stroke-width="1"')
+    for y in range(160, 196, 6):
+        body += stroke(f"M238 {y} L248 {y}", "#999", 1)
+    body += words("999", 243, 188, 5, "#c0392b", width=1.1)
+    return svg(defs, body)
+
+
+def istanbul_mosque(cx, base, s=1.0, color="#3a2a3a"):
+    """A great Ottoman mosque's silhouette (the user's reference: Istanbul's Sultan Ahmed Mosque): a main dome over half
+    domes and small domes, six slender minarets."""
+    out = rect(cx - 90 * s, base - 26 * s, 180 * s, 26 * s, color)
+    for dx, r in ((-62, 12), (-34, 16), (34, 16), (62, 12)):
+        out += path(f"M{cx + (dx - r) * s:.1f} {base - 26 * s:.1f} A{r * s:.1f} {r * s:.1f} 0 0 1 {cx + (dx + r) * s:.1f} {base - 26 * s:.1f} Z", color)
+    out += rect(cx - 40 * s, base - 48 * s, 80 * s, 22 * s, color)
+    out += path(f"M{cx - 40 * s:.1f} {base - 48 * s:.1f} A{40 * s:.1f} {34 * s:.1f} 0 0 1 {cx + 40 * s:.1f} {base - 48 * s:.1f} Z", color)
+    out += stroke(f"M{cx:.1f} {base - 82 * s:.1f} L{cx:.1f} {base - 94 * s:.1f}", color, 2 * s)
+    for dx, h in ((-120, 104), (-102, 112), (-84, 96), (84, 96), (102, 112), (120, 104)):
+        x = cx + dx * s
+        out += rect(x - 3 * s, base - h * s, 6 * s, h * s, color) + poly([(x - 4 * s, base - h * s), (x, base - (h + 16) * s), (x + 4 * s, base - h * s)], color)
+        out += rect(x - 5 * s, base - h * 0.62 * s, 10 * s, 3 * s, color) + rect(x - 5 * s, base - h * 0.82 * s, 10 * s, 3 * s, color)
+    return out
+
+
+def mass_emigration():
+    # A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a
+    # podium announces that the economy has never been stronger; behind them, Istanbul's great mosque over the Bosphorus
+    # at sunset (the user, 2026-10-17, after their photo)
+    defs = lin("bg", ["#7ab8c8", "#f0c890", "#f0a060"]) + lin("sea", ["#5a8aa8", "#2a5a7a"])
+    body = rect(0, 0, W, H, "url(#bg)") + rect(0, 120, W, 56, "url(#sea)")
+    body += rect(0, 112, 90, 8, "#c8a088", 'opacity="0.7"') + rect(260, 114, 92, 6, "#b89078", 'opacity="0.6"')
+    body += istanbul_mosque(176, 132, 0.95, "#5a3a4a")
+    body += rect(0, 172, W, 28, "#6a5a4a")
+    body += stroke("M54 176 L54 70", "#6a4a2a", 5)
+    for i, (right, label) in enumerate(((True, "OUT"), (False, "AWAY"), (True, "EXIT"), (False, "BYE"))):
+        y = 70 + i * 18
+        if right:
+            body += poly([(54, y), (96, y), (103, y + 7), (96, y + 14), (54, y + 14)], "#f4ecd8", 'stroke="#6a4a2a" stroke-width="1.5"')
+            body += lettering(label, 76, y + 3.5, 6.5, "#5a3a1a", width=1.2)
+        else:
+            body += poly([(54, y), (14, y), (7, y + 7), (14, y + 14), (54, y + 14)], "#f4ecd8", 'stroke="#6a4a2a" stroke-width="1.5"')
+            body += lettering(label, 32, y + 3.5, 6.5, "#5a3a1a", width=1.2)
+    for i, (x, f) in enumerate(((40, 1), (110, -1), (176, 1), (246, -1), (300, 1))):
+        body += person(x, 200, 0.6, SKIN[i % 4], ("#4a6a8a", "#8a4a4a", "#4a7a5a", "#6a5a8a", "#7a6a3a")[i], face="shout", hair=("#3a2a1a", "#1a1a1a", None, "#c8a86a", "#5a3a1a")[i])
+        body += suitcase(x + f * 26, 178, 0.5, ("#a0522d", "#5a6a7a", "#6a3a8a", "#8a5a2a", "#3a5a3a")[i])
+        body += speed_lines(x - f * 22 if f > 0 else x + 40, 152, 2, 14, "#ffffff")
+    body += rect(296, 96, 48, 40, "#5a3a2a", 'rx="3"') + person(320, 100, 0.6, SKIN[0], "#1a1a2a", face="grin", hair=OLD_HAIR, tie="#c0392b")
+    body += bubble(286, 26, 52, 15, tail=(306, 52)) + lettering("STRONGER", 286, 22, 6, "#333", width=1.2)
     return svg(defs, body)
 
 
@@ -9735,47 +9826,6 @@ def controlled_chaos():
             page += stroke(f"M-8 {-4 + k * 4} L8 {-4 + k * 4}", "#555", 0.8)
         page += circle(-3, -2, 1.6, "#222") + circle(4, 2, 1.6, "#222")
         body += group(page, f"translate({x} {y}) rotate({a})")
-    return svg(defs, body)
-
-
-def tourist_trap():
-    # A sunburnt tourist in socks and sandals lured off the street by a neon sign reading AUTHENTIC, into a restaurant where
-    # a waiter already holds out a bill a metre long
-    defs, body = bg_vapor()
-    body += rect(180, 30, 172, 142, "#3a1a3a") + rect(196, 70, 70, 102, "#ffd8a0", 'opacity="0.85"')
-    body += rect(186, 34, 156, 30, "#1a0a1a", 'rx="4" stroke="#ff4fd8" stroke-width="3"') + lettering("AUTHENTIC", 264, 41, 12, "#ff7ae0", width=2.2, outline="#5a0a4a")
-    body += path("M120 108 C 150 98 176 92 196 100", "none", 'stroke="#ff7ae0" stroke-width="2" stroke-dasharray="5 4"')
-    body += person(100, 200, 1.25, "#f08a6a", "#f4f0a0", face="grin", hat="cap", glasses="shades")
-    for x in (82, 118):
-        body += rect(x - 8, 186, 16, 14, "#f4f4f4") + rect(x - 10, 196, 20, 4, "#8a5a2a")
-    body += camera(130, 160, 1.2)
-    body += person(300, 200, 1.1, SKIN[2], "#1a1a1a", face="smirk", hair="#1a1a1a", tie="#c0392b")
-    body += stroke("M276 162 L246 150", "#1a1a1a", 8)
-    body += path("M244 150 L228 152 L224 196 L240 196 Z", "#ffffff", 'stroke="#999" stroke-width="1"')
-    for y in range(158, 194, 6):
-        body += stroke(f"M228 {y} L238 {y}", "#999", 1)
-    body += words("999", 233, 186, 5, "#c0392b", width=1.1)
-    return svg(defs, body)
-
-
-def mass_emigration():
-    # A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a
-    # podium announces that the economy has never been stronger
-    defs, body = bg_state()
-    body += stroke("M176 172 L176 40", "#6a4a2a", 5)
-    for i, (a, label) in enumerate(((-20, "OUT"), (200, "AWAY"), (15, "EXIT"), (165, "BYE"))):
-        y = 52 + i * 22
-        right = abs(a) < 90
-        x0 = 176 if right else 120
-        board = poly([(x0, y), (x0 + 50, y), (x0 + 58, y + 8), (x0 + 50, y + 16), (x0, y + 16)] if right else
-                     [(176, y), (126, y), (118, y + 8), (126, y + 16), (176, y + 16)], "#f4ecd8", 'stroke="#6a4a2a" stroke-width="1.5"')
-        body += board + lettering(label, (x0 + 25) if right else 150, y + 4, 7, "#5a3a1a", width=1.3)
-    for i, (x, f) in enumerate(((40, 1), (96, -1), (240, 1), (300, -1), (150, 1))):
-        body += person(x, 200, 0.6, SKIN[i % 4], ("#4a6a8a", "#8a4a4a", "#4a7a5a", "#6a5a8a", "#7a6a3a")[i], face="shout", hair=("#3a2a1a", "#1a1a1a", None, "#c8a86a", "#5a3a1a")[i])
-        body += suitcase(x + f * 26, 176, 0.55, ("#a0522d", "#5a6a7a", "#6a3a8a", "#8a5a2a", "#3a5a3a")[i])
-        body += speed_lines(x - f * 22 if f > 0 else x + 40, 150, 2, 16, "#ffffff")
-    body += rect(286, 64, 52, 54, "#5a3a2a", 'rx="3"') + person(312, 70, 0.6, SKIN[0], "#1a1a2a", face="grin", hair=OLD_HAIR, tie="#c0392b")
-    body += bubble(296, 24, 50, 16, tail=(306, 42)) + lettering("STRONGER", 296, 20, 6, "#333", width=1.2)
     return svg(defs, body)
 
 
