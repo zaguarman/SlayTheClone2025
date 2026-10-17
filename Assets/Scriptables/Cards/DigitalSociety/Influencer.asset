@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Partnered with whatever's trending. Allergic to whatever isn't.
   cardType: 0
   faction: 6
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 9c75c75e0ecf6014b9d3f191717ab897, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

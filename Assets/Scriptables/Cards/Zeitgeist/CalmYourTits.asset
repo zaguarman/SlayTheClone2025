@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Said nobody, ever, successfully.
   cardType: 1
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 107b28998c142d84598e85929084f20c, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

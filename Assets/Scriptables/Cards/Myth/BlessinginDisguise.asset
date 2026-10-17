@@ -17,7 +17,7 @@ MonoBehaviour:
   description: It looked like a disaster. It was a disaster. But a blessed one.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 1d38920094e32a343b3c79e47c9ff827, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

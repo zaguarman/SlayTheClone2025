@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 2017's must-have. 2018's landfill.
   cardType: 0
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: c6c49a86d2f356b4f92ef9c1e9132ca1, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

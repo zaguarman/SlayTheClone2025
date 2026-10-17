@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Live forever. Subscription renews monthly.
   cardType: 0
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: c0a31c78b65553944ae890a5d0ee1cf3, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

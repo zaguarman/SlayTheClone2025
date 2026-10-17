@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Twenty-five grand a year to watch other people's money move.
   cardType: 0
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 01484b81226509140a277b4c2391df72, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

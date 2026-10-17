@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Gone for cigarettes. Back for the inheritance.
   cardType: 0
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: f888c58995237a74c994ab7f0e6c6162, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

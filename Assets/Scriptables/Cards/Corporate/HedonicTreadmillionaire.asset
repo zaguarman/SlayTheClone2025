@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Third yacht. Still not happy. Buying a fourth.
   cardType: 0
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 1d623d915b866b345b07542472fbe68b, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

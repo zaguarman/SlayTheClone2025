@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Papers. Purpose of visit. Papers again.
   cardType: 1
   faction: 2
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: d2e2430f5d77a1e419191ac2f4186d6e, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Didn't read your argument. Disagrees anyway. Has posted the trollface.
   cardType: 0
   faction: 6
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: aff3603b694fdf44ca22e7377c21b3fe, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Back in my day we had one channel and we liked it.
   cardType: 0
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 970894d2e3828b544a7ffdf94cc928e1, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

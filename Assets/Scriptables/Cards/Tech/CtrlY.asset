@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Redo. And again. And again.
   cardType: 1
   faction: 5
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 7034324bbe685744ab64a069919ef15f, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

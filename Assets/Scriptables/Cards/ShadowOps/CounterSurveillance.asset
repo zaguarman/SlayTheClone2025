@@ -17,7 +17,7 @@ MonoBehaviour:
   description: We watch the people who watch the people.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 49c4a0fd1b2b6cb4a90231a347592e56, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

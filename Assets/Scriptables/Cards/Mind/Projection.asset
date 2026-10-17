@@ -17,7 +17,7 @@ MonoBehaviour:
   description: It's not my problem. It's yours. It was always yours.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: b9326927d37695541a75a0972e0228de, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

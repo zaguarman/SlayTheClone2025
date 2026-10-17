@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Up, down, charm, strange. Mostly strange.
   cardType: 0
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 5193cec859a269d43b5241488d7e8665, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

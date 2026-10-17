@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Faster than a thought. Cleaner than a scalpel.
   cardType: 1
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: c9a3a3ef70439534d855e94e0fb4fb23, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

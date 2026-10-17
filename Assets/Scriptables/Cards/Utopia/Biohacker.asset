@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Microdoses, cold plunges, and a chip in his hand that opens the fridge.
   cardType: 0
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: fd0625b9fc938f9458dab21cf9611347, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

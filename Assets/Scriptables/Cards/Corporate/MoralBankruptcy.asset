@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Ethics is a cost centre.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: f952c29a35928ca4eb20fa27a1162ce3, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

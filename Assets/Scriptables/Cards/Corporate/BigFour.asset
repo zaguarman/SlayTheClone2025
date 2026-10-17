@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Four firms. Every audit. No findings.
   cardType: 0
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 94293eca79cc61341853f8f63e6bd8af, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

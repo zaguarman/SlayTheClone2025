@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Floats over the problem. Never solves it.
   cardType: 1
   faction: 5
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 1871101b6402b004b80ed5a554cdffe0, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

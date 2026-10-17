@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Not a flamethrower. Legally.
   cardType: 1
   faction: 0
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 25fee47fc8d2d7641a9e5e23ad4fcef0, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 1

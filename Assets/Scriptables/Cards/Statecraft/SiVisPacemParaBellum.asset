@@ -18,7 +18,7 @@ MonoBehaviour:
     for war.
   cardType: 1
   faction: 2
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 7d61699dc58676d48847131eb51353de, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

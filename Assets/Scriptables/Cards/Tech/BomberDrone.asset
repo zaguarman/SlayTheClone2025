@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Delivered in 30 minutes, or your village is free.
   cardType: 0
   faction: 5
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: e8ddced2e9e253649b7bba14510b2323, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

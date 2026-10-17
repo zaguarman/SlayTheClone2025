@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Click once to write. Click three times to stop writing forever.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 7bcf7a0b935405545a174a249ca7f6a0, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

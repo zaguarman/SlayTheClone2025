@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Restructured. Again. Still somehow on the payroll.
   cardType: 0
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: b458175cd14bcf740a431dc3e670f386, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

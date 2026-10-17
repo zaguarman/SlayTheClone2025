@@ -17,7 +17,7 @@ MonoBehaviour:
   description: It's not a bug. It's a feature.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 10323a00fadb86742a362f1586794ed8, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

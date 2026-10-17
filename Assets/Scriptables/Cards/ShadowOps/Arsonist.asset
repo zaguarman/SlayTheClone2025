@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Insurance fraud is a team sport.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 8b3cb6281876a17499151bb8f4066297, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

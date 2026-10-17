@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The worst card ever printed in the history of the universe.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 1722dc82dc3926f4c8e1e92ee20ca08d, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

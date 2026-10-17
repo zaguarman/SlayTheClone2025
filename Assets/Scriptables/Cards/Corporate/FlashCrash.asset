@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Down 1,000 points in 36 minutes. The robots apologise.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 946aec1a3fb662a478ace69ad475cf43, type: 3}
   discardCost: 1
   discardChosen: 0
   singleUse: 0

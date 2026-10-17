@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Calms the nerves. Shortens the rest.
   cardType: 1
   faction: 0
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 5cf8fdb4f4a773741a8f44029f8f2fe6, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 1

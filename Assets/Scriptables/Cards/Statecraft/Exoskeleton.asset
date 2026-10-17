@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Standard issue. Batteries not included. Batteries never included.
   cardType: 1
   faction: 2
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: e1fc12f68f979ac41bb6a9379794ad73, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

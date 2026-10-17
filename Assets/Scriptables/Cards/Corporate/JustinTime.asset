@@ -18,7 +18,7 @@ MonoBehaviour:
     stuck.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 14467e70fc3ebd045b666b1816cc006c, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

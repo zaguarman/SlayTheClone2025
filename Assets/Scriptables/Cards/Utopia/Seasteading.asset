@@ -17,7 +17,7 @@ MonoBehaviour:
   description: No taxes. No laws. No lifeboats.
   cardType: 1
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: ee8b62a1550f13244967b1a80a99581c, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Not today. Probably.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: e4267ed03069e79449803ccf70d7c825, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

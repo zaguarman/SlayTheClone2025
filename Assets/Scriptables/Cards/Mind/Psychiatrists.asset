@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Your issues are fascinating. That'll be 200 an hour.
   cardType: 0
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: c9d2cda2bcefe484ea8fde9f0a31d9d3, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Now pay attention, 007.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: cf96ca99a9d4ee449b272f8648916a69, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

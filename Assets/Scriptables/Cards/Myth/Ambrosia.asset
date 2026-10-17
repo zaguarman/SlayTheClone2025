@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Food of the gods. Gluten-free, apparently.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 63d95ad05670a4e45826e7603fefca5b, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

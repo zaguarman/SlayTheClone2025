@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Born into one crisis, graduated into the next.
   cardType: 0
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 4561adaad24a5e14197415087def82a2, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

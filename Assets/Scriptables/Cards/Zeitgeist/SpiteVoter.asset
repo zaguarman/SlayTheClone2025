@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Didn't like either of them. Voted for the worst one, out of principle.
   cardType: 0
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 2d3129e4d068e074fbaefb276c95d3c4, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

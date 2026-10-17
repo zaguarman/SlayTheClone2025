@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Focus, energy, and a heart rate of 190.
   cardType: 1
   faction: 0
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: bddf7c3cd731daf418333a6785342074, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 1

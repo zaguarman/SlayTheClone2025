@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Taxpayers fund the prayers. God funds nothing.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: fecc0b47c0fe2024591801bb6a719c4e, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

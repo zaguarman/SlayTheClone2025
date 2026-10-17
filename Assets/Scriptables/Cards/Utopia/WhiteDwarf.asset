@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Small. Very white. Incredibly dense.
   cardType: 0
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: e4588d93549e0fc41a0b3eeea6edd584, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

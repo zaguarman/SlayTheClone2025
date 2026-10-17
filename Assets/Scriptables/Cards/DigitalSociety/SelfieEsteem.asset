@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Forty takes. One filter. Zero self-worth.
   cardType: 1
   faction: 6
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: be1fa0e9063b3ea4fabc74fdebd58728, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Crush it. Then crush it again. The quota is a feeling.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: be4055b31f509e5429ecb9504ac288ea, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

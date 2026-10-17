@@ -17,7 +17,7 @@ MonoBehaviour:
   description: It'll be brilliant. Later. Much later.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: b20c8a4568a741a4b8f5918ceb9ac09a, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

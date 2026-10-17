@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Said the Earth was round. Got the stake. Said it louder.
   cardType: 0
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: a7fc7c56f87763348b31353924c03589, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

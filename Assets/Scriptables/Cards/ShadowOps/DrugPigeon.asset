@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Coo. Coo. Cocaine.
   cardType: 0
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: dc6fdc62c1ef00543b8917a7a029de1a, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

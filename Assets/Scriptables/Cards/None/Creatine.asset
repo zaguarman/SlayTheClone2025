@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Gains. Water weight, but gains.
   cardType: 1
   faction: 0
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: dd3a43c5a082cdb479b939956f3d4ae9, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 1

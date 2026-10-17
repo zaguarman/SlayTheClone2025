@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Please remove your shoes, your belt and your dignity.
   cardType: 0
   faction: 2
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 6a7a43f210e80214db5359843390b76c, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

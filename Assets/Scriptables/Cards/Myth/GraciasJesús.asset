@@ -17,7 +17,7 @@ MonoBehaviour:
   description: He brought the food in from the fields. You're welcome.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 01552dd10b00b9f4abcc7aae42189c72, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

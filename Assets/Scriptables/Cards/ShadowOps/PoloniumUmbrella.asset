@@ -17,7 +17,7 @@ MonoBehaviour:
   description: A quick jab at a bus stop. A slow week in hospital.
   cardType: 1
   faction: 3
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 22b15e19b5a1a884288dd55c59120bea, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

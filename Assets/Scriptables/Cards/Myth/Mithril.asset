@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Light as a feather. Hard as dragon scales. Worth a Shire.
   cardType: 1
   faction: 1
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: e8867a618e8ef05449e318ef3a737f63, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

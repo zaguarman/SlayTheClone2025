@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'Van life: no rent, no fixed address, no witnesses.'
   cardType: 0
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 483a5070835749f489cce04b97153352, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

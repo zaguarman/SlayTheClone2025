@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Comes in black, darker black, and invisible.
   cardType: 1
   faction: 0
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 57eb3832bc1c5b745b855aea660ff399, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 1
