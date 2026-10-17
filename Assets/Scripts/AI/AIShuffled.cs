@@ -14,6 +14,26 @@ namespace Zeitgeist {
     public static partial class AITournament {
         public const int ShuffledDecks = 40, ShuffledDeckSize = 30, ShuffledSeed = 20261017;
 
+        /// <summary>Every card's numbers from the last shuffled run (Resources/ShuffledScores.json), for the deck proposals.</summary>
+        [System.Serializable]
+        public class ShuffledScores {
+            [System.Serializable]
+            public class Entry {
+                public string card;
+                public string faction;
+                public bool creature;
+                public float winRate; // Of the games its side played it in
+                public int games;
+                public float impact;  // A game it was played in
+                public string roles;  // The roles it plays, comma-separated
+            }
+            public string writtenUtc;
+            public int gamesPlayed;
+            public List<Entry> cards = new List<Entry>();
+        }
+
+        public static ShuffledScores LastShuffledScores { get; private set; }
+
         /// <summary>The roles a card plays, read from what it does. A card can play several; a creature with nothing printed is a Body.</summary>
         public static IReadOnlyList<string> RolesOf(CardDataScriptableObject card) {
             var roles = new List<string>();
@@ -130,7 +150,16 @@ namespace Zeitgeist {
                 Release(decks);
             }
             Problems = audit.Problems;
-            return ShuffledReport(lists.Select(l => (l.name, l.cards, l.a, l.b)).ToList(), usable, results.Where(r => r.Played).ToList(), ledger) + "\n" + audit.Report();
+            var played = results.Where(r => r.Played).ToList();
+            LastShuffledScores = new ShuffledScores { writtenUtc = System.DateTime.UtcNow.ToString("u"), gamesPlayed = played.Count };
+            foreach (var card in usable) {
+                var record = ledger.Cards.FirstOrDefault(r => r.Name == card.cardName);
+                LastShuffledScores.cards.Add(new ShuffledScores.Entry {
+                    card = card.cardName, faction = card.faction.ToString(), creature = card is CreatureCardScriptableObject,
+                    winRate = record?.WinRate ?? 0f, games = record?.Games ?? 0, impact = record?.ImpactPerGame ?? 0f, roles = string.Join(", ", RolesOf(card))
+                });
+            }
+            return ShuffledReport(lists.Select(l => (l.name, l.cards, l.a, l.b)).ToList(), usable, played, ledger) + "\n" + audit.Report();
         }
 
         private static string ShuffledReport(List<(string name, List<CardDataScriptableObject> cards, Faction? a, Faction? b)> lists,

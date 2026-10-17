@@ -40,6 +40,7 @@ namespace Zeitgeist {
         private static void RunBalanceFromMenu() => RunBalance();
 
         public const string ShuffledReportPath = "Assets/Documentation/Shuffled Tournament.txt";
+        public const string ShuffledScoresPath = "Assets/Resources/ShuffledScores.json";
 
         [MenuItem("Debug/AI Shuffled Tournament")]
         private static void RunShuffledFromMenu() => RunShuffled();
@@ -97,6 +98,11 @@ namespace Zeitgeist {
                     File.WriteAllText(CardScoresPath, UnityEngine.JsonUtility.ToJson(scores, true));
                     AssetDatabase.ImportAsset(CardScoresPath);
                     CardScores.Reload();
+                }
+                // The shuffled run's numbers for every card, for Cards > Propose Decks
+                if (reportPath == ShuffledReportPath && AITournament.LastShuffledScores is { cards: { Count: > 0 } } shuffled) {
+                    File.WriteAllText(ShuffledScoresPath, UnityEngine.JsonUtility.ToJson(shuffled, true));
+                    AssetDatabase.ImportAsset(ShuffledScoresPath);
                 }
                 UnityEngine.Debug.Log($"AI Tournament done, written to {reportPath}:\n{report}");
                 return results;
