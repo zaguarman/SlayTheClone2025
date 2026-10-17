@@ -14,52 +14,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Establishment - Blessed Martyrs
   cards:
-  - {fileID: 11400000, guid: 165f48fe10f0ac143955cdad8d38bae0, type: 2}
-  - {fileID: 11400000, guid: 165f48fe10f0ac143955cdad8d38bae0, type: 2}
-  - {fileID: 11400000, guid: bb9a917d0c64e664597fb242d47068af, type: 2}
-  - {fileID: 11400000, guid: bb9a917d0c64e664597fb242d47068af, type: 2}
-  - {fileID: 11400000, guid: f61d6057329ed744aa50e12dba6ac5ec, type: 2}
-  - {fileID: 11400000, guid: f61d6057329ed744aa50e12dba6ac5ec, type: 2}
-  - {fileID: 11400000, guid: 69d704671f0547340b15e4219f15b29c, type: 2}
-  - {fileID: 11400000, guid: 69d704671f0547340b15e4219f15b29c, type: 2}
-  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
-  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
-  - {fileID: 11400000, guid: c6f0345e31e606d4f99f519a0324f344, type: 2}
-  - {fileID: 11400000, guid: c6f0345e31e606d4f99f519a0324f344, type: 2}
-  - {fileID: 11400000, guid: 8590baeb53c9e8645bf452835140d3e3, type: 2}
-  - {fileID: 11400000, guid: 8590baeb53c9e8645bf452835140d3e3, type: 2}
-  - {fileID: 11400000, guid: b83da39fc1648d74e91f1d386ba008a1, type: 2}
-  - {fileID: 11400000, guid: b83da39fc1648d74e91f1d386ba008a1, type: 2}
-  - {fileID: 11400000, guid: c464253a7813f9349b7c153953a8021c, type: 2}
-  - {fileID: 11400000, guid: c464253a7813f9349b7c153953a8021c, type: 2}
-  - {fileID: 11400000, guid: d6a9b714d663ec54090eaa47a9bc3a85, type: 2}
-  - {fileID: 11400000, guid: d6a9b714d663ec54090eaa47a9bc3a85, type: 2}
-  - {fileID: 11400000, guid: 6c0ff8b17b152ac4db2ed9489bc980bf, type: 2}
-  - {fileID: 11400000, guid: 6c0ff8b17b152ac4db2ed9489bc980bf, type: 2}
-  - {fileID: 11400000, guid: 3001b4d3387572747a0b330721d51dd2, type: 2}
-  - {fileID: 11400000, guid: 3001b4d3387572747a0b330721d51dd2, type: 2}
-  - {fileID: 11400000, guid: 0c2a19c2387eaba4d894a0cd59782e00, type: 2}
-  - {fileID: 11400000, guid: 0c2a19c2387eaba4d894a0cd59782e00, type: 2}
-  - {fileID: 11400000, guid: 5da5c6ae6f66e944abe5ed9f7ef0c109, type: 2}
-  - {fileID: 11400000, guid: 5da5c6ae6f66e944abe5ed9f7ef0c109, type: 2}
-  - {fileID: 11400000, guid: 99e299d60298a0e4d942d0f7349ec62d, type: 2}
-  - {fileID: 11400000, guid: 99e299d60298a0e4d942d0f7349ec62d, type: 2}
-  - {fileID: 11400000, guid: b306141104efb6449942f4bbc31ee7d6, type: 2}
-  - {fileID: 11400000, guid: b306141104efb6449942f4bbc31ee7d6, type: 2}
-  - {fileID: 11400000, guid: d4f6c406c08c7db4bafb7529b9260864, type: 2}
-  - {fileID: 11400000, guid: d4f6c406c08c7db4bafb7529b9260864, type: 2}
-  - {fileID: 11400000, guid: 84b5e25348ca7d24eb7078d50b8ac05d, type: 2}
-  - {fileID: 11400000, guid: 84b5e25348ca7d24eb7078d50b8ac05d, type: 2}
-  - {fileID: 11400000, guid: a832f0b331a98c649811d8a63bfce972, type: 2}
-  - {fileID: 11400000, guid: a832f0b331a98c649811d8a63bfce972, type: 2}
-  - {fileID: 11400000, guid: a7c1bc9f479919a4dafa69b41f287bde, type: 2}
-  - {fileID: 11400000, guid: a7c1bc9f479919a4dafa69b41f287bde, type: 2}
-  - {fileID: 11400000, guid: 01cf59efc70003e4ca83917198e6cfe0, type: 2}
-  - {fileID: 11400000, guid: 01cf59efc70003e4ca83917198e6cfe0, type: 2}
   - {fileID: 11400000, guid: df1a16bb656e51740a9958bda8d722d3, type: 2}
   - {fileID: 11400000, guid: df1a16bb656e51740a9958bda8d722d3, type: 2}
-  - {fileID: 11400000, guid: 71480f28925a8f6408faa75909effad4, type: 2}
+  - {fileID: 11400000, guid: a832f0b331a98c649811d8a63bfce972, type: 2}
+  - {fileID: 11400000, guid: a832f0b331a98c649811d8a63bfce972, type: 2}
+  - {fileID: 11400000, guid: 99e299d60298a0e4d942d0f7349ec62d, type: 2}
+  - {fileID: 11400000, guid: 99e299d60298a0e4d942d0f7349ec62d, type: 2}
+  - {fileID: 11400000, guid: bb9a917d0c64e664597fb242d47068af, type: 2}
+  - {fileID: 11400000, guid: bb9a917d0c64e664597fb242d47068af, type: 2}
+  - {fileID: 11400000, guid: a6a4fb5192548394787288284a53ded3, type: 2}
+  - {fileID: 11400000, guid: a6a4fb5192548394787288284a53ded3, type: 2}
+  - {fileID: 11400000, guid: d6a9b714d663ec54090eaa47a9bc3a85, type: 2}
+  - {fileID: 11400000, guid: 5da5c6ae6f66e944abe5ed9f7ef0c109, type: 2}
+  - {fileID: 11400000, guid: f61d6057329ed744aa50e12dba6ac5ec, type: 2}
+  - {fileID: 11400000, guid: c464253a7813f9349b7c153953a8021c, type: 2}
+  - {fileID: 11400000, guid: c6f0345e31e606d4f99f519a0324f344, type: 2}
+  - {fileID: 11400000, guid: a7c1bc9f479919a4dafa69b41f287bde, type: 2}
+  - {fileID: 11400000, guid: 01cf59efc70003e4ca83917198e6cfe0, type: 2}
+  - {fileID: 11400000, guid: 8590baeb53c9e8645bf452835140d3e3, type: 2}
+  - {fileID: 11400000, guid: 53fb908cccff5704db8655bf6a50761e, type: 2}
   - {fileID: 11400000, guid: d50c4a3c94e970b4aa3350a12dd32521, type: 2}
-  lastUpdated: 2026-10-17T18:03:12.0358949Z
+  - {fileID: 11400000, guid: b83da39fc1648d74e91f1d386ba008a1, type: 2}
+  - {fileID: 11400000, guid: b306141104efb6449942f4bbc31ee7d6, type: 2}
+  - {fileID: 11400000, guid: 400533044c5b65c4e9e2b20a015a7e8f, type: 2}
+  - {fileID: 11400000, guid: 58393f7e44c440c489cea67f229b73f1, type: 2}
+  - {fileID: 11400000, guid: 5c004e52b0ee331428b9660da2a44904, type: 2}
+  - {fileID: 11400000, guid: 71480f28925a8f6408faa75909effad4, type: 2}
+  - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
+  - {fileID: 11400000, guid: 1215031c18e9eb741a8633014341c44f, type: 2}
+  - {fileID: 11400000, guid: 6c0ff8b17b152ac4db2ed9489bc980bf, type: 2}
+  - {fileID: 11400000, guid: d4f6c406c08c7db4bafb7529b9260864, type: 2}
+  - {fileID: 11400000, guid: bdd673e358a34044aa6e898d05eed9f6, type: 2}
+  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
+  - {fileID: 11400000, guid: 8154fce2f847a534da2d48a848ac798d, type: 2}
+  - {fileID: 11400000, guid: 08561350625093a4a87f3a0dac9acca3, type: 2}
+  - {fileID: 11400000, guid: f07845ba706aae34faa8e1602925f073, type: 2}
+  - {fileID: 11400000, guid: 4068c3ec3d4399b449ee806537671ec2, type: 2}
+  lastUpdated: 2026-10-17T20:21:15.8327181Z
   strategy: Engine
   focus: 0

@@ -14,28 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Capital + Digital Society - The Algorithm
   cards:
-  - {fileID: 11400000, guid: f29c7c2bf6a1d9a48b27875162432239, type: 2}
-  - {fileID: 11400000, guid: f29c7c2bf6a1d9a48b27875162432239, type: 2}
-  - {fileID: 11400000, guid: 6d20c6c95200ec9458fb7249d816e5a8, type: 2}
-  - {fileID: 11400000, guid: 6d20c6c95200ec9458fb7249d816e5a8, type: 2}
-  - {fileID: 11400000, guid: a9ceb02a818d514488680ccb253bc352, type: 2}
-  - {fileID: 11400000, guid: a9ceb02a818d514488680ccb253bc352, type: 2}
-  - {fileID: 11400000, guid: 72d889c75d81a174b9f5b4284f478f9d, type: 2}
-  - {fileID: 11400000, guid: 72d889c75d81a174b9f5b4284f478f9d, type: 2}
-  - {fileID: 11400000, guid: e2282bf2988125d4ab1f4b146d03e8ab, type: 2}
-  - {fileID: 11400000, guid: e2282bf2988125d4ab1f4b146d03e8ab, type: 2}
-  - {fileID: 11400000, guid: 08ab3b63101b70e479279bc7dfd9943c, type: 2}
-  - {fileID: 11400000, guid: 08ab3b63101b70e479279bc7dfd9943c, type: 2}
-  - {fileID: 11400000, guid: b41ef19f4b8e5a44599bdf436ab2436a, type: 2}
-  - {fileID: 11400000, guid: b41ef19f4b8e5a44599bdf436ab2436a, type: 2}
-  - {fileID: 11400000, guid: ed6ce3e62ea574f439d28aa08cbc3175, type: 2}
-  - {fileID: 11400000, guid: ed6ce3e62ea574f439d28aa08cbc3175, type: 2}
-  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
-  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
   - {fileID: 11400000, guid: e9521c4f57c50354c9326fd03f310258, type: 2}
   - {fileID: 11400000, guid: e9521c4f57c50354c9326fd03f310258, type: 2}
-  - {fileID: 11400000, guid: 2b1d92e3b3d74bf4199c45f5b081fd0b, type: 2}
+  - {fileID: 11400000, guid: 3ff6885f94e4f5b45879abf387670691, type: 2}
+  - {fileID: 11400000, guid: 3ff6885f94e4f5b45879abf387670691, type: 2}
   - {fileID: 11400000, guid: 1cf9296373cbf7e478b4ba40e42818bb, type: 2}
-  lastUpdated: 2026-10-17T14:17:55.2187722Z
+  - {fileID: 11400000, guid: 1cf9296373cbf7e478b4ba40e42818bb, type: 2}
+  - {fileID: 11400000, guid: 09dfecfa526ad994e8af097fa915182c, type: 2}
+  - {fileID: 11400000, guid: 09dfecfa526ad994e8af097fa915182c, type: 2}
+  - {fileID: 11400000, guid: 5b9606d81a3282d4482537cb6bc1150d, type: 2}
+  - {fileID: 11400000, guid: 5b9606d81a3282d4482537cb6bc1150d, type: 2}
+  - {fileID: 11400000, guid: ed6ce3e62ea574f439d28aa08cbc3175, type: 2}
+  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
+  - {fileID: 11400000, guid: 74909c7cf144073498a31fce1d233b07, type: 2}
+  - {fileID: 11400000, guid: ac11e6092f0f5754695df24113320dc7, type: 2}
+  - {fileID: 11400000, guid: 70add0ece25639e40a05c50b94963a41, type: 2}
+  - {fileID: 11400000, guid: 78d9222cb06de4149bbc255bc3cd051e, type: 2}
+  - {fileID: 11400000, guid: f29c7c2bf6a1d9a48b27875162432239, type: 2}
+  - {fileID: 11400000, guid: aa0a64f22d780ec40b6226b1e4f5e391, type: 2}
+  - {fileID: 11400000, guid: 88a40b486c45db944ac39f04bc2ca194, type: 2}
+  - {fileID: 11400000, guid: 8067d08e7b1cef54ea5563a12c928625, type: 2}
+  - {fileID: 11400000, guid: a9ceb02a818d514488680ccb253bc352, type: 2}
+  - {fileID: 11400000, guid: 65839571c5fe4fd439e0e0e24ac78102, type: 2}
+  - {fileID: 11400000, guid: 6559f470c062bd94caeb4f75e0441938, type: 2}
+  - {fileID: 11400000, guid: d442d62f909529e4ea15b5fa4847d138, type: 2}
+  - {fileID: 11400000, guid: 4110b2e9c48b7c647ad50b0da4aac2e1, type: 2}
+  - {fileID: 11400000, guid: 355b1b7a77be1d94d94e945d8a1bcf6e, type: 2}
+  - {fileID: 11400000, guid: e2282bf2988125d4ab1f4b146d03e8ab, type: 2}
+  - {fileID: 11400000, guid: 7deb5f30f84beca4385335dc3b6b41c6, type: 2}
+  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
+  - {fileID: 11400000, guid: 65710f2d6a1ab8941aada57b7f689842, type: 2}
+  lastUpdated: 2026-10-17T20:21:15.8367490Z
   strategy: Swarm
   focus: 0

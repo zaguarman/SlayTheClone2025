@@ -14,27 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Capital - Move Fast and Break Things
   cards:
-  - {fileID: 11400000, guid: b85f92b48bc770645a7b474083851d11, type: 2}
-  - {fileID: 11400000, guid: b85f92b48bc770645a7b474083851d11, type: 2}
-  - {fileID: 11400000, guid: 355b1b7a77be1d94d94e945d8a1bcf6e, type: 2}
-  - {fileID: 11400000, guid: 355b1b7a77be1d94d94e945d8a1bcf6e, type: 2}
-  - {fileID: 11400000, guid: 3ff6885f94e4f5b45879abf387670691, type: 2}
-  - {fileID: 11400000, guid: 3ff6885f94e4f5b45879abf387670691, type: 2}
-  - {fileID: 11400000, guid: f29c7c2bf6a1d9a48b27875162432239, type: 2}
-  - {fileID: 11400000, guid: f29c7c2bf6a1d9a48b27875162432239, type: 2}
-  - {fileID: 11400000, guid: 09dfecfa526ad994e8af097fa915182c, type: 2}
-  - {fileID: 11400000, guid: 09dfecfa526ad994e8af097fa915182c, type: 2}
-  - {fileID: 11400000, guid: 5b9606d81a3282d4482537cb6bc1150d, type: 2}
-  - {fileID: 11400000, guid: 5b9606d81a3282d4482537cb6bc1150d, type: 2}
   - {fileID: 11400000, guid: e9521c4f57c50354c9326fd03f310258, type: 2}
   - {fileID: 11400000, guid: e9521c4f57c50354c9326fd03f310258, type: 2}
+  - {fileID: 11400000, guid: 09dfecfa526ad994e8af097fa915182c, type: 2}
+  - {fileID: 11400000, guid: 09dfecfa526ad994e8af097fa915182c, type: 2}
+  - {fileID: 11400000, guid: 3ff6885f94e4f5b45879abf387670691, type: 2}
+  - {fileID: 11400000, guid: 3ff6885f94e4f5b45879abf387670691, type: 2}
+  - {fileID: 11400000, guid: 5b9606d81a3282d4482537cb6bc1150d, type: 2}
+  - {fileID: 11400000, guid: 5b9606d81a3282d4482537cb6bc1150d, type: 2}
   - {fileID: 11400000, guid: 1cf9296373cbf7e478b4ba40e42818bb, type: 2}
   - {fileID: 11400000, guid: 1cf9296373cbf7e478b4ba40e42818bb, type: 2}
+  - {fileID: 11400000, guid: 355b1b7a77be1d94d94e945d8a1bcf6e, type: 2}
+  - {fileID: 11400000, guid: 74909c7cf144073498a31fce1d233b07, type: 2}
   - {fileID: 11400000, guid: 78d9222cb06de4149bbc255bc3cd051e, type: 2}
-  - {fileID: 11400000, guid: 14c7984728b3a2b4cae57d75c620d39a, type: 2}
+  - {fileID: 11400000, guid: f29c7c2bf6a1d9a48b27875162432239, type: 2}
+  - {fileID: 11400000, guid: aa0a64f22d780ec40b6226b1e4f5e391, type: 2}
+  - {fileID: 11400000, guid: b85f92b48bc770645a7b474083851d11, type: 2}
+  - {fileID: 11400000, guid: 88a40b486c45db944ac39f04bc2ca194, type: 2}
+  - {fileID: 11400000, guid: 8067d08e7b1cef54ea5563a12c928625, type: 2}
   - {fileID: 11400000, guid: 066b33f864b0b17418d76cebec8ef883, type: 2}
   - {fileID: 11400000, guid: 591eb393342d5c94380d00aea8e8d25a, type: 2}
+  - {fileID: 11400000, guid: 65710f2d6a1ab8941aada57b7f689842, type: 2}
+  - {fileID: 11400000, guid: ef4d1aeb5483cfc4cb470f3e7e5be01d, type: 2}
   - {fileID: 11400000, guid: a0649b416c56bab489f199ec45bad75d, type: 2}
-  lastUpdated: 2026-10-17T18:03:11.9206502Z
+  - {fileID: 11400000, guid: e2282bf2988125d4ab1f4b146d03e8ab, type: 2}
+  - {fileID: 11400000, guid: 14c7984728b3a2b4cae57d75c620d39a, type: 2}
+  - {fileID: 11400000, guid: 886efcce5777c464ab2718a7f2541c5d, type: 2}
+  - {fileID: 11400000, guid: b41ef19f4b8e5a44599bdf436ab2436a, type: 2}
+  - {fileID: 11400000, guid: 355b1b7a77be1d94d94e945d8a1bcf6e, type: 2}
+  - {fileID: 11400000, guid: 74909c7cf144073498a31fce1d233b07, type: 2}
+  - {fileID: 11400000, guid: 78d9222cb06de4149bbc255bc3cd051e, type: 2}
+  lastUpdated: 2026-10-17T20:21:15.7908543Z
   strategy: Midrange
   focus: 0

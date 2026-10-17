@@ -14,32 +14,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Establishment + Capital - Prosperity Gospel
   cards:
-  - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
-  - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
   - {fileID: 11400000, guid: a6a4fb5192548394787288284a53ded3, type: 2}
-  - {fileID: 11400000, guid: 18cc60c8301c8e348afd1ec6332a61a2, type: 2}
-  - {fileID: 11400000, guid: 18cc60c8301c8e348afd1ec6332a61a2, type: 2}
-  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
-  - {fileID: 11400000, guid: 28cc79542139a7847b80c2eb9123f1ca, type: 2}
-  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
-  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
-  - {fileID: 11400000, guid: 0a1ee8666e83eeb46b496294cc6319f9, type: 2}
-  - {fileID: 11400000, guid: 0a1ee8666e83eeb46b496294cc6319f9, type: 2}
-  - {fileID: 11400000, guid: fee5f31226d0f6b49a15db74b37a2743, type: 2}
-  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
-  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
-  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
-  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
-  - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
-  - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
-  - {fileID: 11400000, guid: 2fe34e4b53b602d4ba40ee26e72b5d84, type: 2}
+  - {fileID: 11400000, guid: a6a4fb5192548394787288284a53ded3, type: 2}
+  - {fileID: 11400000, guid: 64e5012847cb3aa49a5c04fd28523ad4, type: 2}
+  - {fileID: 11400000, guid: 64e5012847cb3aa49a5c04fd28523ad4, type: 2}
+  - {fileID: 11400000, guid: df1a16bb656e51740a9958bda8d722d3, type: 2}
+  - {fileID: 11400000, guid: df1a16bb656e51740a9958bda8d722d3, type: 2}
+  - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
+  - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
+  - {fileID: 11400000, guid: a832f0b331a98c649811d8a63bfce972, type: 2}
+  - {fileID: 11400000, guid: a832f0b331a98c649811d8a63bfce972, type: 2}
   - {fileID: 11400000, guid: 5da5c6ae6f66e944abe5ed9f7ef0c109, type: 2}
-  - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
-  - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
+  - {fileID: 11400000, guid: 18cc60c8301c8e348afd1ec6332a61a2, type: 2}
+  - {fileID: 11400000, guid: 369ca31eb0853eb4887301fd7133b353, type: 2}
+  - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
+  - {fileID: 11400000, guid: 497aad0006ec10142bec62c2289ce56d, type: 2}
+  - {fileID: 11400000, guid: c7e1a59d0f11b264e80736a4501747e9, type: 2}
+  - {fileID: 11400000, guid: e317f3b28ecd9ef4ca7caa1f2ea9ca74, type: 2}
+  - {fileID: 11400000, guid: c464253a7813f9349b7c153953a8021c, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
-  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
-  - {fileID: 11400000, guid: 8787b06cd5de4974989f7c3bcfcc9b2e, type: 2}
+  - {fileID: 11400000, guid: 400533044c5b65c4e9e2b20a015a7e8f, type: 2}
+  - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
+  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
+  - {fileID: 11400000, guid: d3d1d40ba92228e4fb95080e01d03b82, type: 2}
+  - {fileID: 11400000, guid: bb9a917d0c64e664597fb242d47068af, type: 2}
+  - {fileID: 11400000, guid: 01cf59efc70003e4ca83917198e6cfe0, type: 2}
+  - {fileID: 11400000, guid: 10634682f82b67646aea9ddde03619f1, type: 2}
   - {fileID: 11400000, guid: e501123363d163a4092e2ad059abc29d, type: 2}
-  lastUpdated: 2026-10-17T18:03:12.0369492Z
+  - {fileID: 11400000, guid: c6f0345e31e606d4f99f519a0324f344, type: 2}
+  - {fileID: 11400000, guid: a7c1bc9f479919a4dafa69b41f287bde, type: 2}
+  - {fileID: 11400000, guid: f61d6057329ed744aa50e12dba6ac5ec, type: 2}
+  - {fileID: 11400000, guid: f4337d8ba90e50140828212e765bc838, type: 2}
+  - {fileID: 11400000, guid: 4b4db16acd9857e4ab6f7170664e7b6b, type: 2}
+  - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
+  - {fileID: 11400000, guid: 1976206d5d92a594fbbbd2c75cf75c95, type: 2}
+  - {fileID: 11400000, guid: 46481a22d80471044a0895bee12c5e64, type: 2}
+  - {fileID: 11400000, guid: 8deee5d2f833ac549a779670d370bb3d, type: 2}
+  lastUpdated: 2026-10-17T20:21:15.8337217Z
   strategy: Combo
   focus: 0

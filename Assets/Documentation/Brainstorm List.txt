@@ -1796,6 +1796,9 @@ sections below stay as the two halves of it: the culture itself, and the interne
 				Fits Offline (Boomer, Ol' Reliable, a Camper Van) or Corporate (Inflation, a petrol company), or an Inflation-style spell)
 			Conversations that start with "Well, technically..." (the user, 2026-10-17: a flavour to place somewhere; the pedant's opening.
 				Fits Mind (a fallacy, a philosopher), Online (the reply guy, the forum) or Tech (the engineer correcting the room))
+			Retardmaxxing (the user, 2026-10-17: a flavour or a name; the -maxxing suffix of the self-improvement forums turned on itself,
+				getting dumber on purpose and proud of it. Fits Online (the forum, the grindset poster) or Offline (a Bodybuilder, a YOLO
+				mood): a creature that grows the less it knows, or a mood that trades a card's text away for Attack)
 			"Nothing beats a Jet2 holiday. And right now you can save £50 per person. That's £200 off for a family of four."
 				(the user, 2026-10-15: the Jet2 advert, quoted as a meme; it names a real company, a trademark risk the user takes on.
 				Fits a cheap package holiday: Tourist Trap (corpo) or Holiday (Myth) are in this list)

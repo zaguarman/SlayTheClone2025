@@ -14,32 +14,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Capital + Digital Society - Hustle Culture
   cards:
-  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
-  - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
-  - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
-  - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
-  - {fileID: 11400000, guid: 9b4570bf79aa0334382937e4d10b9597, type: 2}
-  - {fileID: 11400000, guid: 9b4570bf79aa0334382937e4d10b9597, type: 2}
+  - {fileID: 11400000, guid: 02533c1aba1396c44afbca1c4992d469, type: 2}
+  - {fileID: 11400000, guid: 02533c1aba1396c44afbca1c4992d469, type: 2}
   - {fileID: 11400000, guid: ef48b590c421e8c44a13dd294147182b, type: 2}
   - {fileID: 11400000, guid: ef48b590c421e8c44a13dd294147182b, type: 2}
   - {fileID: 11400000, guid: 958cc07697c5a4441bfc9f1b8affdb10, type: 2}
   - {fileID: 11400000, guid: 958cc07697c5a4441bfc9f1b8affdb10, type: 2}
-  - {fileID: 11400000, guid: 02533c1aba1396c44afbca1c4992d469, type: 2}
-  - {fileID: 11400000, guid: 02533c1aba1396c44afbca1c4992d469, type: 2}
-  - {fileID: 11400000, guid: fbcd0812c94c18d40a893a334a3bbcb9, type: 2}
-  - {fileID: 11400000, guid: fbcd0812c94c18d40a893a334a3bbcb9, type: 2}
-  - {fileID: 11400000, guid: 024fc54db5efae34a949d0ed421d88b2, type: 2}
-  - {fileID: 11400000, guid: 024fc54db5efae34a949d0ed421d88b2, type: 2}
-  - {fileID: 11400000, guid: 822f82c834152ff449d6d660c3f2d302, type: 2}
-  - {fileID: 11400000, guid: 822f82c834152ff449d6d660c3f2d302, type: 2}
-  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
-  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
-  - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
-  - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
-  - {fileID: 11400000, guid: 4d1b91992e3fa194f99ad5471cea7860, type: 2}
-  - {fileID: 11400000, guid: 6da251ed4f0f0e1448dedb752e3e8a1a, type: 2}
-  - {fileID: 11400000, guid: c2d2e6fbfe011824b84a1af5473615cd, type: 2}
+  - {fileID: 11400000, guid: 9b4570bf79aa0334382937e4d10b9597, type: 2}
+  - {fileID: 11400000, guid: 9b4570bf79aa0334382937e4d10b9597, type: 2}
+  - {fileID: 11400000, guid: ef3383c614d6b2b47a388e1aaef2504b, type: 2}
+  - {fileID: 11400000, guid: ef3383c614d6b2b47a388e1aaef2504b, type: 2}
   - {fileID: 11400000, guid: 0a6c69211fbb13449afdf96d8ce5d6f6, type: 2}
-  lastUpdated: 2026-10-17T18:03:12.0379475Z
+  - {fileID: 11400000, guid: 64e5012847cb3aa49a5c04fd28523ad4, type: 2}
+  - {fileID: 11400000, guid: 09afbaabbcbf4be4c998209dc34bad05, type: 2}
+  - {fileID: 11400000, guid: 6da251ed4f0f0e1448dedb752e3e8a1a, type: 2}
+  - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
+  - {fileID: 11400000, guid: 7ae6b3690b1798b488ca1521ea4bf557, type: 2}
+  - {fileID: 11400000, guid: a2e2262377b38db40b2fff5e8ef4dd92, type: 2}
+  - {fileID: 11400000, guid: 8904980fd57533f42ab0421dcb6d0d87, type: 2}
+  - {fileID: 11400000, guid: 978bd1f31a570b14b85f49d8d7173d0d, type: 2}
+  - {fileID: 11400000, guid: 9ad811dc746b83b4f95c8268a4389d0f, type: 2}
+  - {fileID: 11400000, guid: adfe9399b5901a84b93a4d3e894cf36d, type: 2}
+  - {fileID: 11400000, guid: 28f6dee9f60796e4d852f96b221de1db, type: 2}
+  - {fileID: 11400000, guid: cdc96d7a4a0620e40944b4d407e1de16, type: 2}
+  - {fileID: 11400000, guid: 3a91c8bf429eb904c9caeec07841af96, type: 2}
+  - {fileID: 11400000, guid: 7e1512cbdb8ebdb4eb106433a16ebc06, type: 2}
+  - {fileID: 11400000, guid: 76ad62cea64f33f4c8862e0a694ce1f5, type: 2}
+  - {fileID: 11400000, guid: 11420b067491370448ea3827fbb34dc1, type: 2}
+  - {fileID: 11400000, guid: 34353b1e39eb21a47a17e3fbea6fdad1, type: 2}
+  - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
+  - {fileID: 11400000, guid: 9cdc6ae13715dfd4f85ee824d972effb, type: 2}
+  - {fileID: 11400000, guid: e3714ed27f5c5bf49a1749fb3d1bb4bf, type: 2}
+  - {fileID: 11400000, guid: ddac427ce83333f4e844e38db795bc02, type: 2}
+  - {fileID: 11400000, guid: 136368a47c6c05e409600ed0c5d3b94e, type: 2}
+  - {fileID: 11400000, guid: fc6b56691729fb84e8472bcba349d39a, type: 2}
+  - {fileID: 11400000, guid: 3feff565f4aab7e4498dc7ef7150aa27, type: 2}
+  - {fileID: 11400000, guid: 1f3acb3f965f1a64c81c656dc424c030, type: 2}
+  lastUpdated: 2026-10-17T20:21:15.8337217Z
   strategy: Aggro
   focus: 0

@@ -1,0 +1,126 @@
+DECK PROPOSALS (Tools/propose_decks.py): each deck from the numbers, before and after
+
+== Capital - Shareholder Value (Engine; Corporate): 42 -> 36 cards
+   kept 15: Headhunter, Team Building Exercise, Hostile Takeover, Casino, Taxpayer Funds Venture Capital Profits, Just in Time, Inflation, Flash Crash, Fat Tony, Day Trader, Satoshi Nakamoto, Hedonic Treadmillionaire, Micromanager, Charles Ponzi, Peace the Frontier
+   added 16: Venture Capital (66%, A), High-Frequency Trading Scam (62%, S), DMCA (74%, S), Internal Protocol: Quota Crusher Mindset (72%, -), Corporate Bailouts (70%, -), Multimillionaire Philanthropist (61%, D), Tax-Exempt Corruption (53%, B), Golden Parachute (51%, C), Middle Manager (42%, B), Teflon Don (49%, A), Unpaid Intern (50%, D), Job Rotation (36%, C), Inhuman Resources (36%, D), Mass Layoffs (26%, D), Inheritance (28%, A), C-Suite (23%, B)
+   dropped 16: Margin Call (44%, D), Dead Cat Bounce (40%, C), Cleaning Robot (20%, C), Pluriemployed Hustler (32%, D), Moral Bankruptcy (28%, A), Usury (43%, A), Big Four (39%, C), Business Operating Expenses (35%, C), Counterfeit (29%, D), Escape Goat (43%, D), Laissez-Faire (51%, C), NDA (19%, D), Private Equity (46%, D), Solidarity Towards The Small Businessman (32%, C), The Invisible Hand (30%, D), Work Shift Rotation (39%, D)
+
+== Establishment - Order & Paperwork (Control; Statecraft): 30 -> 34 cards
+   kept 23: Internal Revenue Service, Si Vis Pacem, Para Bellum, Panem Et Circenses, Man o' War, King Emeritus, Presidential Pardon, Violence Monopoly, Raised Security Level, Police Officer Productivity Target, Diplomat, Peace Force, Red Tape, Preemptive Strike, Ministry for Equality, Kakistocracy, Lost Landmine, Supreme Court, Ceasefire, Demagogue, Drone Operator, Golden Dome, Protocol Enforcers, Doomsday Clock
+   added 6: Due Process (65%, S), Riot Police (69%, S), Congruent Use of Force (69%, A), Sapper (64%, A), Bomb Squad (61%, A), Curfew (61%, C)
+   dropped 5: Martial Law (47%, D), Supply Depot (65%, D), Spite-Elected President (25%, A), Mercenaries (45%, C), Border Crossing (52%, D)
+
+== Digital Society - Moods of Modern Life (Midrange; Offline): 30 -> 37 cards
+   kept 16: Hipster, Reality TV Star, Ol' Reliable, Antihero, Boomer, Karen, Football Hooligans, This Is Fine, Chain Smoker, Bodybuilder, Zeitgeist, Toxic Positivity, Multipass, Russian Roulette, We Are Not The Same, Listen Kid
+   added 16: The Friends We Made Along the Way (75%, -), Backup Dancer (59%, S), Spite Voter (53%, S), Plot Armor (52%, S), One-Trick Pony (57%, B), Underdog (62%, B), Weaponized Incompetence (66%, -), Absentee Parents (46%, A), Anti-Vaxxer (47%, S), Universal Basic Income (64%, -), Mental Health Day (53%, -), Not on My Watch (48%, A), Clingy Ex (24%, S), One for the Road (35%, -), YOLO (40%, B), Camper Van (48%, C)
+   dropped 2: Fidget Spinner (59%, D), Strike (40%, D)
+
+== Digital Society - Terminally Online (Swarm; Online): 21 -> 30 cards
+   kept 13: Clickbait, Keyboard Warrior, Meta Group Chat, Dogpile, Cancelled, Conspiracy Theorist, Chronically Online, Doomscrolling, Crypto "Entrepreneur", Rage Bait, NPC, Social Panopticon, Digital Nomad
+   added 11: Thirst Trap (51%, A), Its Been 84 Years... (66%, A), Selfie Esteem (48%, C), Content Creator (42%, B), Its A Trap (48%, -), Influencer (43%, B), Short King (42%, D), Good Boi (40%, B), Console Memory Card (53%, D), U Mad Bro? (32%, B), Catfish (37%, C)
+   dropped 0: 
+
+== Enlightenment - Results May Vary (Aggro; Utopia): 35 -> 35 cards
+   kept 20: Black Hole, Ankylorhiza, Resurrected T-Rex, Antimatter, Chimera, Accelerationism, Biohacking, Prion Disease, Cold Fusion, Femtosecond Laser, Splitting The Atom, Absolute Zero, Blood Transfusion, Particle Accelerator, Biohacker, Geomagnetic Reversal, Evolution Theory, Pioneer, Surveillance Giraffe, Longevity Hub
+   added 10: Genetically Modified Organism (88%, A), Stasis Field (82%, S), Exponential Growth (62%, S), Research Lab (58%, -), Vaccine (58%, -), Hypermetamorphosis (48%, A), White Dwarf (53%, B), Peer Review (42%, D), Philosophy PhD (27%, D), Mutation (32%, C)
+   dropped 4: Scientific Method (45%, C), Frankenstein (32%, A), Climate Change (34%, -), Quantum Physicist (32%, D)
+
+== Establishment - Licence to Kill (Aggro; ShadowOps): 36 -> 36 cards
+   kept 20: Arsonist, Secret Anthrax Laboratory, The Golden Gun, False Flag Operation, Involuntary Free Polonium Giveaway, Polonium Umbrella, Supply Chain Attack, If I Told You, I'd Have to Kill You, MK Ultra Test Subject, HAARP, Exploding Pen, Femme Fatale, Human Intelligence, Die Another Day, Fell Out of a Window, Wet Work, Drug Pigeon, Lone Gunman, He Didn't Kill Himself, GoldenEye
+   added 11: Counter-Surveillance (88%, S), Social Engineering (60%, A), Sabotage (59%, A), Deep Cover (61%, C), Signal Jammer (47%, A), Sleeper Agent (66%, D), Political Decoy (45%, B), Hostage Situation (31%, B), Mole (33%, B), Coup d'État (37%, B), Bilderberg Membership (56%, C)
+   dropped 7: Licence to Kill (40%, D), Cleaner (20%, A), Dead Man's Switch (28%, B), Shaken, Not Stirred (48%, C), Death By "Natural Causes" (55%, C), Hollowed-Out Volcano Lair (49%, -), Nonchalant Agent (31%, C)
+
+== Capital - Move Fast and Break Things (Midrange; Tech): 21 -> 30 cards
+   kept 13: DDOS Attack, SysAdmin, Scope Creep, Sex Clanker, Ransomware Attack, Legacy Code, Antivirus, Script Kiddie, Technical Debt, Web Scraping, Meatproxy As A Service, Bomber Drone, Man-in-the-Middle
+   added 9: Ctrl + Y (60%, A), Code Review (59%, B), Ctrl + Z (61%, C), Suspicious USB Stick in the Parking Lot (59%, D), End-to-End Encryption (48%, D), Buffering (40%, B), Threat Hunter (43%, C), EMP Drone (29%, B), Pair Programming (22%, D)
+   dropped 0: 
+
+== Establishment - Old Gods, New Tricks (Control; Myth): 41 -> 37 cards
+   kept 21: Here Be Dragons, Mox Nox, Curse Of Hubris, Holy Hand Grenade of Antioch, Die by the Sword, Grim Reaper, Necronomicon, Blessing in Disguise, Holy War, Lance Of Longinus, Buddy Christ, Exorcism, The Great Flood, Taqiyya, Black Knight, Pyramids, The Lobster Professor, Mummy, The Wicker Man, Pope, God's Grace
+   added 11: Berserker (72%, S), The Last Shall Be First (73%, A), Tutankhamun (62%, A), Reincarnation (55%, S), Omen Reading (74%, S), Publicly Funded Faith Schools (72%, -), Heretic (57%, S), The Holy Grail (69%, -), Tithe (55%, C), Vampire (29%, A), Ambrosia (20%, S)
+   dropped 11: Horsemen Of Apocalypse (45%, B), Templar Knight (49%, B), The Chosen One (50%, C), Living Dead (54%, B), Phoenix Feather (45%, D), Amen (0%, -), Killer Rabbit of Caerbannog (53%, D), Memento Mori (47%, D), Religious Instrumentalization (52%, C), The Lost Ark (42%, C), The Omen (56%, D)
+
+== Enlightenment - All in Your Head (Control; Mind): 20 -> 32 cards
+   kept 12: Roko's Basilisk, Cyberpsychosis, Ship of Theseus, Red Herring, Trolley Problem, Pessimist, Introvert, Imposter Syndrome, Lucid Dreaming, Reflect, Schrodinger's Cat, Mimetic Theory
+   added 15: Tabula Rasa (78%, B), Hyperbole (65%, C), Psychiatrists (54%, S), Socrates (31%, A), Empath (48%, S), Liminal Space (44%, A), Sleepwalker (46%, S), Yesn't (44%, A), Projection (45%, -), Maslow's Pyramid (32%, S), Slow Thinking (29%, A), Momentum (48%, C), Hold That Thought (46%, C), Monkey See, Monkey Do (50%, D), Legerdemain (35%, B)
+   dropped 0: 
+
+== Capital - Hustle Rush (Aggro; Corporate): 46 -> 36 cards
+   kept 17: DMCA, High-Frequency Trading Scam, Venture Capital, Teflon Don, Hostile Takeover, Team Building Exercise, Flash Crash, Resignation Letter, Valet, Legal Department, Middle Manager, Bloomberg Terminal, Charles Ponzi, Day Trader, Micromanager, Insurance Policy, Multilevel Marketing Seller
+   added 14: Fat Tony (68%, C), Internal Protocol: Quota Crusher Mindset (72%, -), Corporate Bailouts (70%, -), Headhunter (60%, B), Casino (56%, A), Taxpayer Funds Venture Capital Profits (54%, B), Tax-Exempt Corruption (53%, B), Hedonic Treadmillionaire (40%, C), Multimillionaire Philanthropist (61%, D), Golden Parachute (51%, C), Counterfeit (29%, D), Dead Cat Bounce (40%, C), NDA (19%, D), Moral Bankruptcy (28%, A)
+   dropped 6: Cleaning Robot (20%, C), Shell Company (31%, C), Inheritance (28%, A), 3rd Parallel Job (39%, B), Job Rotation (36%, C), Seniority Priority (25%, B)
+
+== Establishment - Shock and Awe (Aggro; Statecraft): 45 -> 34 cards
+   kept 23: Riot Police, Due Process, Man o' War, Congruent Use of Force, Panem Et Circenses, Sapper, Bomb Squad, Raised Security Level, Police Officer Productivity Target, Mass Emigration, Preemptive Strike, Mercenaries, Spin Doctor, Demagogue, Curfew, Security Guard, Filibuster, Civil Servant, Drill Sergeant, Weapons of Mass Distraction, Mutually Assured Destruction, Spite-Elected President, Martial Law
+   added 6: Internal Revenue Service (69%, S), Presidential Pardon (72%, A), Si Vis Pacem, Para Bellum (77%, -), Violence Monopoly (71%, B), Peace Force (46%, S), Border Crossing (52%, D)
+   dropped 1: 
+
+== Digital Society - Underdogs (Swarm; Offline): 48 -> 36 cards
+   kept 27: The Friends We Made Along the Way, Underdog, Mental Health Day, Backup Dancer, Ol' Reliable, Spite Voter, Weaponized Incompetence, Plot Armor, Universal Basic Income, One-Trick Pony, Anti-Vaxxer, Groundhog Day, Absentee Parents, Calm Your Tits, Karen, Not on My Watch, Delivery Cyclist, Scam Artist, No Glove, No Love, Freaky Friday, Lost Generation, Florida Man, Tourist Trap, Drug Smuggler, Hikikomori, Rush Hour, Generational Trauma
+   added 4: Reality TV Star (58%, C), Hipster (68%, C), Strike (40%, D), Fidget Spinner (59%, D)
+   dropped 5: One for the Road (35%, -), YOLO (40%, B), Listen Kid (39%, C), Camper Van (48%, C), Clingy Ex (24%, S)
+
+== Enlightenment - Lab Grown (Engine; Utopia): 45 -> 35 cards
+   kept 21: Stasis Field, Ankylorhiza, Exponential Growth, Research Lab, Vaccine, Biohacking, Resurrected T-Rex, Hypermetamorphosis, Placebo, Blood Transfusion, Gene Editing, Extremophile, Biohacker, White Dwarf, Parabiosis, Seasteading, Antimatter, Quark, Mathematician, Perpetual Motion Machine, Heimlich Maneuver
+   added 9: Black Hole (90%, S), Genetically Modified Organism (88%, A), Accelerationism (57%, A), Chimera (60%, C), Prion Disease (67%, C), Clone (26%, B), Quantum Physicist (32%, D), Climate Change (34%, -), Scientific Method (45%, C)
+   dropped 5: Particle Accelerator (40%, B), Cold Fusion (35%, B), Mutation (32%, C), Peer Review (42%, D), Philosophy PhD (27%, D)
+
+== Digital Society - Influencer Economy (Midrange; Online): 28 -> 30 cards
+   kept 15: Its Been 84 Years..., Thirst Trap, Dogpile, Good Boi, Cancelled, Meta Group Chat, Content Creator, Selfie Esteem, Its A Trap, Influencer, Console Memory Card, Short King, Catfish, U Mad Bro?, Social Panopticon
+   added 9: Clickbait (67%, S), Keyboard Warrior (63%, B), Conspiracy Theorist (42%, C), Chronically Online (39%, C), Crypto "Entrepreneur" (37%, C), Doomscrolling (44%, D), Rage Bait (43%, D), NPC (23%, C), Digital Nomad (23%, D)
+   dropped 0: 
+
+== Establishment - Black Budget (Control; ShadowOps): 43 -> 36 cards
+   kept 19: Counter-Surveillance, Secret Anthrax Laboratory, Arsonist, Supply Chain Attack, Sabotage, Perfectly Timed Camera Malfunction, Glomar Response, Tracking Beacon, Sleeper Agent, Political Decoy, Burn Notice, Human Intelligence, Signal Jammer, Control Room, Embassy, Plausible Deniability, Extraction, Dead Drop, Compromised Agent
+   added 12: Involuntary Free Polonium Giveaway (60%, B), The Golden Gun (66%, -), Polonium Umbrella (67%, B), False Flag Operation (69%, C), Femme Fatale (38%, S), MK Ultra Test Subject (47%, A), Exploding Pen (45%, A), Deep Cover (61%, C), Wet Work (49%, B), If I Told You, I'd Have to Kill You (49%, B), Smoke And Mirrors (25%, A), Operation Paperclip (32%, C)
+   dropped 7: Mole (33%, B), Cleaner (20%, A), Hostage Situation (31%, B), Bilderberg Membership (56%, C), Ghost Army (37%, D), Never Let Them Know Your Next Move (16%, B), Witness Protection Program (41%, D)
+
+== Capital - Threat Model (Combo; Tech): 36 -> 30 cards
+   kept 19: DDOS Attack, Ransomware Attack, Code Review, SysAdmin, Scope Creep, Antivirus, Ctrl + Y, Sex Clanker, Ctrl + Z, Buffering, Legacy Code, Script Kiddie, Suspicious USB Stick in the Parking Lot, Threat Hunter, Man-in-the-Middle, End-to-End Encryption, EMP Drone, Technical Debt, Pair Programming
+   added 3: Web Scraping (38%, C), Meatproxy As A Service (30%, C), Bomber Drone (37%, D)
+   dropped 0: 
+
+== Establishment - Blessed Martyrs (Engine; Myth): 46 -> 36 cards
+   kept 19: The Last Shall Be First, Berserker, Publicly Funded Faith Schools, Heretic, Gracias Jesús, Monkey Hand, Reincarnation, Deus Vult, Here Be Dragons, Tutankhamun, Holy Pigeon, Buddy Christ, Omniscient Space-Time Bending Bearded Wizard, Zealot, Thoughts and Prayers, Novena, Mithril, Holy Ghost, Cultist
+   added 12: Omen Reading (74%, S), The Holy Grail (69%, -), Curse Of Hubris (65%, A), Mox Nox (62%, B), Blessing in Disguise (62%, B), Living Dead (54%, B), Holy Hand Grenade of Antioch (67%, B), Memento Mori (47%, D), Religious Instrumentalization (52%, C), The Chosen One (50%, C), Amen (0%, -), Phoenix Feather (45%, D)
+   dropped 5: Pyramids (59%, D), Black Knight (46%, B), Ambrosia (20%, S), Excess of Bread and Wine (20%, B), Tithe (55%, C)
+
+== Enlightenment - Mind Games (Control; Mind): 48 -> 32 cards
+   kept 24: Tabula Rasa, Roko's Basilisk, Ship of Theseus, Hyperbole, Red Herring, Psychiatrists, Trolley Problem, Introvert, Socrates, Empath, Liminal Space, Sleepwalker, Yesn't, Projection, Maslow's Pyramid, Lucid Dreaming, Slow Thinking, Momentum, Hold That Thought, Reality Check, Domino Effect, Schrodinger's Cat, Survivorship Bias, Controlled Chaos
+   added 3: Cyberpsychosis (59%, B), Pessimist (57%, A), Imposter Syndrome (53%, C)
+   dropped 2: Legerdemain (35%, B), Monkey See, Monkey Do (50%, D)
+
+== Establishment + Capital - Prosperity Gospel (Combo; Corporate + Myth): 26 -> 36 cards
+   kept 9: Omen Reading, Holy War, Monkey Hand, Necronomicon, Sacrificial Ritual, Hostile Takeover, Fat Tony, Unpaid Intern, Multimillionaire Philanthropist
+   added 22: DMCA (74%, S), The Last Shall Be First (73%, A), Berserker (72%, S), High-Frequency Trading Scam (62%, S), Venture Capital (66%, A), Inflation (56%, B), Resignation Letter (85%, -), Deus Vult (52%, S), Curse Of Hubris (65%, A), Living Dead (54%, B), Grim Reaper (61%, B), Heretic (57%, S), Holy Pigeon (65%, C), Here Be Dragons (62%, A), Tutankhamun (62%, A), Reincarnation (55%, S), Seniority Priority (25%, B), Private Equity (46%, D), Pluriemployed Hustler (32%, D), Business Operating Expenses (35%, C), Escape Goat (43%, D), Usury (43%, A)
+   dropped 7: Cultist (54%, D), Golden Parachute (51%, C), Charles Ponzi (43%, D), Day Trader (44%, C), Martyr (53%, D), Tax-Exempt Corruption (53%, B), Inhuman Resources (36%, D)
+
+== Digital Society + Establishment - Panopticon (Combo; Online + ShadowOps): 27 -> 36 cards
+   kept 12: Eavesdrop, Frame Job, Perfectly Timed Camera Malfunction, Control Room, Tapped Communications, Keyboard Warrior, Whistleblower, Wet Work, Meta Group Chat, Cleaner, Humanitarian Trafficking Action, Licence to Kill
+   added 19: Counter-Surveillance (88%, S), Social Engineering (60%, A), Glomar Response (56%, B), Clickbait (67%, S), Secret Anthrax Laboratory (69%, A), Sabotage (59%, A), Tracking Beacon (52%, B), Hollowed-Out Volcano Lair (49%, -), HAARP (68%, C), Burn Notice (61%, D), Its Been 84 Years... (66%, A), Arsonist (62%, A), Drug Pigeon (39%, B), Lone Gunman (51%, C), Thirst Trap (51%, A), Deep Cover (61%, C), Never Let Them Know Your Next Move (16%, B), Witness Protection Program (41%, D), Nonchalant Agent (31%, C)
+   dropped 4: Social Panopticon (28%, D), Cancelled (59%, C), Chronically Online (39%, C), Dogpile (41%, S)
+
+== Capital + Digital Society - Hustle Culture (Aggro; Corporate + Offline): 26 -> 36 cards
+   kept 8: Antihero, Football Hooligans, Reality TV Star, Bodybuilder, Internal Protocol: Quota Crusher Mindset, Business Expense, Team Building Exercise, Hostile Takeover
+   added 23: Hipster (68%, C), DMCA (74%, S), Ol' Reliable (62%, A), The Friends We Made Along the Way (75%, -), Spite Voter (53%, S), Fat Tony (68%, C), Absentee Parents (46%, A), One-Trick Pony (57%, B), Valet (60%, B), Backup Dancer (59%, S), Teflon Don (49%, A), Calm Your Tits (55%, -), Groundhog Day (58%, -), Corporate Bailouts (70%, -), Delivery Cyclist (40%, S), Universal Basic Income (64%, -), Boomer (44%, D), 3rd Parallel Job (39%, B), Shell Company (31%, C), Unicorn (34%, D), Cleaning Robot (20%, C), Laissez-Faire (51%, C), Big Four (39%, C)
+   dropped 7: Day Trader (44%, C), Pluriemployed Hustler (32%, D), Overtime (32%, C), YOLO (40%, B), Toxic Positivity (47%, C), Mass Layoffs (26%, D), C-Suite (23%, B)
+
+== Establishment + Capital - Military-Industrial Complex (Midrange; Corporate + Statecraft): 24 -> 35 cards
+   kept 8: Man o' War, Diplomat, Raised Security Level, Corporate Bailouts, Supply Depot, Mercenaries, Preemptive Strike, Margin Call
+   added 22: Internal Revenue Service (69%, S), King Emeritus (66%, C), Presidential Pardon (72%, A), Riot Police (69%, S), Si Vis Pacem, Para Bellum (77%, -), Panem Et Circenses (62%, S), Civil Servant (52%, B), Legal Department (44%, A), Congruent Use of Force (69%, A), Due Process (65%, S), Ceasefire (50%, A), Sapper (64%, A), Mass Emigration (62%, -), Supreme Court (43%, C), Spin Doctor (51%, A), Peace Force (46%, S), Bomb Squad (61%, A), DMCA (74%, S), Overtime (32%, C), Work Shift Rotation (39%, D), Solidarity Towards The Small Businessman (32%, C), The Invisible Hand (30%, D)
+   dropped 6: Fat Tony (68%, C), Cleaning Robot (20%, C), Inflation (56%, B), Taxpayer Funds Venture Capital Profits (54%, B), Unicorn (34%, D)
+
+== Enlightenment + Establishment - Frankenstein (Engine; Myth + Utopia): 26 -> 36 cards
+   kept 12: Genetically Modified Organism, Exponential Growth, The Holy Grail, Phoenix, Living Dead, Templar Knight, Gene Editing, Genesis, Overpopulation, Reincarnation, Resurrected T-Rex, Frankenstein
+   added 19: Stasis Field (82%, S), Black Hole (90%, S), Gracias Jesús (46%, A), Ankylorhiza (74%, A), Publicly Funded Faith Schools (72%, -), Omen Reading (74%, S), Sacrificial Ritual (40%, A), Die by the Sword (63%, C), Exorcism (50%, A), Monkey Hand (52%, B), Omniscient Space-Time Bending Bearded Wizard (42%, S), Zealot (49%, A), Berserker (72%, S), Martyr (53%, D), Excess of Bread and Wine (20%, B), The Lost Ark (42%, C), Killer Rabbit of Caerbannog (53%, D), Horsemen Of Apocalypse (45%, B), The Omen (56%, D)
+   dropped 4: Mutation (32%, C), Phoenix Feather (45%, D), Vampire (29%, A), Clone (26%, B)
+
+== Capital + Digital Society - The Algorithm (Swarm; Online + Tech): 22 -> 30 cards
+   kept 7: DDOS Attack, Ransomware Attack, Clickbait, Dogpile, Script Kiddie, Short King, Threat Hunter
+   added 18: Scope Creep (70%, A), SysAdmin (78%, B), Sex Clanker (64%, B), Ctrl + Y (60%, A), Thirst Trap (51%, A), Its Been 84 Years... (66%, A), Antivirus (63%, B), Code Review (59%, B), Ctrl + Z (61%, C), Suspicious USB Stick in the Parking Lot (59%, D), Selfie Esteem (48%, C), Cancelled (59%, C), Content Creator (42%, B), Keyboard Warrior (63%, B), Legacy Code (42%, A), Its A Trap (48%, -), Meta Group Chat (50%, C), End-to-End Encryption (48%, D)
+   dropped 5: NPC (23%, C), Digital Nomad (23%, D), Crypto "Entrepreneur" (37%, C), Pair Programming (22%, D), Social Panopticon (28%, D)
+
+== Establishment + Enlightenment - Psyop (Control; Mind + ShadowOps): 26 -> 35 cards
+   kept 11: Roko's Basilisk, The Golden Gun, Femme Fatale, Asset Recruitment, Red Herring, Social Engineering, Trolley Problem, Introvert, Sabotage, Counter-Intelligence, Devil's Breath
+   added 19: Counter-Surveillance (88%, S), Involuntary Free Polonium Giveaway (60%, B), Tabula Rasa (78%, B), Secret Anthrax Laboratory (69%, A), Polonium Umbrella (67%, B), False Flag Operation (69%, C), Supply Chain Attack (66%, B), Cyberpsychosis (59%, B), Ship of Theseus (65%, B), Death By "Natural Causes" (55%, C), Arsonist (62%, A), MK Ultra Test Subject (47%, A), Psychiatrists (54%, S), Pessimist (57%, A), Socrates (31%, A), Empath (48%, S), Dead Man's Switch (28%, B), Ghost Army (37%, D), Shaken, Not Stirred (48%, C)
+   dropped 6: Deep Cover (61%, C), Legerdemain (35%, B), Imposter Syndrome (53%, C), Smoke And Mirrors (25%, A), Coup d'État (37%, B), Operation Paperclip (32%, C)

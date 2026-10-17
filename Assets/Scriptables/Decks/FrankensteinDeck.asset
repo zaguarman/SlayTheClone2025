@@ -14,32 +14,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Enlightenment + Establishment - Frankenstein
   cards:
-  - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
-  - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
-  - {fileID: 11400000, guid: 5f98f2c0ee739fe44a86b26eb0869495, type: 2}
-  - {fileID: 11400000, guid: 5f98f2c0ee739fe44a86b26eb0869495, type: 2}
-  - {fileID: 11400000, guid: f61d6057329ed744aa50e12dba6ac5ec, type: 2}
-  - {fileID: 11400000, guid: f61d6057329ed744aa50e12dba6ac5ec, type: 2}
-  - {fileID: 11400000, guid: 8a030b617d685d045985263a7f28528c, type: 2}
-  - {fileID: 11400000, guid: 8a030b617d685d045985263a7f28528c, type: 2}
   - {fileID: 11400000, guid: 6d1e3fcb65a763c4fb1821f7d9baf0e0, type: 2}
   - {fileID: 11400000, guid: 6d1e3fcb65a763c4fb1821f7d9baf0e0, type: 2}
-  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
-  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
-  - {fileID: 11400000, guid: e8804ab51a3a4c741a54f9784201bd42, type: 2}
-  - {fileID: 11400000, guid: e8804ab51a3a4c741a54f9784201bd42, type: 2}
-  - {fileID: 11400000, guid: 4068c3ec3d4399b449ee806537671ec2, type: 2}
-  - {fileID: 11400000, guid: 4068c3ec3d4399b449ee806537671ec2, type: 2}
+  - {fileID: 11400000, guid: 0835bb03ab6103544b65732b290a1099, type: 2}
+  - {fileID: 11400000, guid: 0835bb03ab6103544b65732b290a1099, type: 2}
+  - {fileID: 11400000, guid: f0740ff994d5b884baa17a27a3ab5050, type: 2}
+  - {fileID: 11400000, guid: f0740ff994d5b884baa17a27a3ab5050, type: 2}
   - {fileID: 11400000, guid: 7717b40ee8063f047907afef7e41e7e0, type: 2}
+  - {fileID: 11400000, guid: 7717b40ee8063f047907afef7e41e7e0, type: 2}
+  - {fileID: 11400000, guid: d6a9b714d663ec54090eaa47a9bc3a85, type: 2}
+  - {fileID: 11400000, guid: d6a9b714d663ec54090eaa47a9bc3a85, type: 2}
   - {fileID: 11400000, guid: 53fb908cccff5704db8655bf6a50761e, type: 2}
+  - {fileID: 11400000, guid: e373e11e77224c441898dae393b4628f, type: 2}
+  - {fileID: 11400000, guid: 5f98f2c0ee739fe44a86b26eb0869495, type: 2}
+  - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
   - {fileID: 11400000, guid: da99501379be9924094b1266d4b3a88f, type: 2}
-  - {fileID: 11400000, guid: da99501379be9924094b1266d4b3a88f, type: 2}
-  - {fileID: 11400000, guid: 488d0929b489d5744b1305bca0b1ce0f, type: 2}
-  - {fileID: 11400000, guid: 488d0929b489d5744b1305bca0b1ce0f, type: 2}
+  - {fileID: 11400000, guid: dbb7657fa61de8c4ab4ae150ba60f90d, type: 2}
   - {fileID: 11400000, guid: 60d0f711cb94e2a4aa04c9fe615c003b, type: 2}
-  - {fileID: 11400000, guid: 0d15c21f0ff82f244878df02ced5ee28, type: 2}
-  - {fileID: 11400000, guid: 15122c80637445d49bb99dc37fa3108e, type: 2}
+  - {fileID: 11400000, guid: 99e299d60298a0e4d942d0f7349ec62d, type: 2}
+  - {fileID: 11400000, guid: a6a4fb5192548394787288284a53ded3, type: 2}
+  - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
+  - {fileID: 11400000, guid: 50facdaaa7a5b434fbce9d1f81af759a, type: 2}
+  - {fileID: 11400000, guid: 16728698b2920904aafb4ecb88a5f09c, type: 2}
   - {fileID: 11400000, guid: 4f95cfedbc1cbb54a92ee6f0728595c4, type: 2}
-  lastUpdated: 2026-10-17T18:03:12.0379475Z
+  - {fileID: 11400000, guid: 5da5c6ae6f66e944abe5ed9f7ef0c109, type: 2}
+  - {fileID: 11400000, guid: f61d6057329ed744aa50e12dba6ac5ec, type: 2}
+  - {fileID: 11400000, guid: d50c4a3c94e970b4aa3350a12dd32521, type: 2}
+  - {fileID: 11400000, guid: b83da39fc1648d74e91f1d386ba008a1, type: 2}
+  - {fileID: 11400000, guid: 488d0929b489d5744b1305bca0b1ce0f, type: 2}
+  - {fileID: 11400000, guid: a832f0b331a98c649811d8a63bfce972, type: 2}
+  - {fileID: 11400000, guid: 8a030b617d685d045985263a7f28528c, type: 2}
+  - {fileID: 11400000, guid: dc5d8bf6f0cac6f45a14236c2082ce6b, type: 2}
+  - {fileID: 11400000, guid: 0c2a19c2387eaba4d894a0cd59782e00, type: 2}
+  - {fileID: 11400000, guid: 96aa201384a150646acf9a0bb69fc941, type: 2}
+  - {fileID: 11400000, guid: ac13c245e63f34c4cadc7663e7e42079, type: 2}
+  - {fileID: 11400000, guid: 4a189475bff55954db7d7c9dd6ba6479, type: 2}
+  - {fileID: 11400000, guid: 5c8773554baea2a43885515305062a76, type: 2}
+  lastUpdated: 2026-10-17T20:21:15.8357444Z
   strategy: Engine
   focus: 0

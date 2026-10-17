@@ -14,51 +14,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Establishment - Shock and Awe
   cards:
-  - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
-  - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
-  - {fileID: 11400000, guid: d941c52272e44564496335a69e6e4a15, type: 2}
-  - {fileID: 11400000, guid: d941c52272e44564496335a69e6e4a15, type: 2}
-  - {fileID: 11400000, guid: 812d3392dbadd74459046284afc829d6, type: 2}
-  - {fileID: 11400000, guid: 812d3392dbadd74459046284afc829d6, type: 2}
-  - {fileID: 11400000, guid: 00673e54f9dc0604ba0de7d5cec69515, type: 2}
-  - {fileID: 11400000, guid: 00673e54f9dc0604ba0de7d5cec69515, type: 2}
-  - {fileID: 11400000, guid: 965d63b6d655a714a974a5b5c163ec4f, type: 2}
-  - {fileID: 11400000, guid: 965d63b6d655a714a974a5b5c163ec4f, type: 2}
-  - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
-  - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
-  - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
-  - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
-  - {fileID: 11400000, guid: 310b0094c8b008747aa5b3bd448a289d, type: 2}
-  - {fileID: 11400000, guid: 310b0094c8b008747aa5b3bd448a289d, type: 2}
-  - {fileID: 11400000, guid: f551b8bf2603afc489de81dc57f7f48d, type: 2}
-  - {fileID: 11400000, guid: f551b8bf2603afc489de81dc57f7f48d, type: 2}
-  - {fileID: 11400000, guid: 7ec7af517addad648aab7504c6593165, type: 2}
-  - {fileID: 11400000, guid: f70c89b49a370eb4b80fc6754b6c629c, type: 2}
-  - {fileID: 11400000, guid: f0fa9cfb203620f42a5049750f960932, type: 2}
-  - {fileID: 11400000, guid: f0fa9cfb203620f42a5049750f960932, type: 2}
-  - {fileID: 11400000, guid: afc4896f14f8e5f4d99302407a92e181, type: 2}
-  - {fileID: 11400000, guid: afc4896f14f8e5f4d99302407a92e181, type: 2}
-  - {fileID: 11400000, guid: c1257a36d8368d44c9587af27ff5cf7f, type: 2}
-  - {fileID: 11400000, guid: c1257a36d8368d44c9587af27ff5cf7f, type: 2}
-  - {fileID: 11400000, guid: f482d8041eedae24c8268a53dd327e03, type: 2}
-  - {fileID: 11400000, guid: f482d8041eedae24c8268a53dd327e03, type: 2}
-  - {fileID: 11400000, guid: 3192dbbe231fd5340a4fae852d886190, type: 2}
-  - {fileID: 11400000, guid: 3192dbbe231fd5340a4fae852d886190, type: 2}
-  - {fileID: 11400000, guid: 4b042a7d49107054cace12cc9834a6cc, type: 2}
-  - {fileID: 11400000, guid: 4b042a7d49107054cace12cc9834a6cc, type: 2}
-  - {fileID: 11400000, guid: 969a436d1717bc649983bab40ee642d8, type: 2}
-  - {fileID: 11400000, guid: 969a436d1717bc649983bab40ee642d8, type: 2}
+  - {fileID: 11400000, guid: 89f8e5ce63f8dc74c85e7301170fc19c, type: 2}
+  - {fileID: 11400000, guid: 89f8e5ce63f8dc74c85e7301170fc19c, type: 2}
   - {fileID: 11400000, guid: feaf6497fa7cdeb49afcbd45b6374ae3, type: 2}
   - {fileID: 11400000, guid: feaf6497fa7cdeb49afcbd45b6374ae3, type: 2}
-  - {fileID: 11400000, guid: f5dfa4b83edf1194fa159998f9f0c09e, type: 2}
-  - {fileID: 11400000, guid: f5dfa4b83edf1194fa159998f9f0c09e, type: 2}
-  - {fileID: 11400000, guid: c1bbf6c2be609144fb824c7bcdd6194b, type: 2}
-  - {fileID: 11400000, guid: c1bbf6c2be609144fb824c7bcdd6194b, type: 2}
-  - {fileID: 11400000, guid: 96bf6003f2e24744182611126a47ec10, type: 2}
-  - {fileID: 11400000, guid: 96bf6003f2e24744182611126a47ec10, type: 2}
   - {fileID: 11400000, guid: e4899e810539d9b4386915f753f99225, type: 2}
   - {fileID: 11400000, guid: e4899e810539d9b4386915f753f99225, type: 2}
+  - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
+  - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
   - {fileID: 11400000, guid: 3cefd22ce65e81e4d9ff338db02ed2ab, type: 2}
-  lastUpdated: 2026-10-17T18:03:12.0328769Z
+  - {fileID: 11400000, guid: 3cefd22ce65e81e4d9ff338db02ed2ab, type: 2}
+  - {fileID: 11400000, guid: 7ec7af517addad648aab7504c6593165, type: 2}
+  - {fileID: 11400000, guid: c1bbf6c2be609144fb824c7bcdd6194b, type: 2}
+  - {fileID: 11400000, guid: 969a436d1717bc649983bab40ee642d8, type: 2}
+  - {fileID: 11400000, guid: b7960855c8ae89944bfdcb636dbbf8c3, type: 2}
+  - {fileID: 11400000, guid: 310b0094c8b008747aa5b3bd448a289d, type: 2}
+  - {fileID: 11400000, guid: 8b48e99bd0a81624791978bd1b03785f, type: 2}
+  - {fileID: 11400000, guid: 812d3392dbadd74459046284afc829d6, type: 2}
+  - {fileID: 11400000, guid: afc4896f14f8e5f4d99302407a92e181, type: 2}
+  - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
+  - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
+  - {fileID: 11400000, guid: 1c29a9097a05e0f4697bb40d0e6512b9, type: 2}
+  - {fileID: 11400000, guid: 3192dbbe231fd5340a4fae852d886190, type: 2}
+  - {fileID: 11400000, guid: 965d63b6d655a714a974a5b5c163ec4f, type: 2}
+  - {fileID: 11400000, guid: f482d8041eedae24c8268a53dd327e03, type: 2}
+  - {fileID: 11400000, guid: f0fa9cfb203620f42a5049750f960932, type: 2}
+  - {fileID: 11400000, guid: c1257a36d8368d44c9587af27ff5cf7f, type: 2}
+  - {fileID: 11400000, guid: 4b042a7d49107054cace12cc9834a6cc, type: 2}
+  - {fileID: 11400000, guid: f5dfa4b83edf1194fa159998f9f0c09e, type: 2}
+  - {fileID: 11400000, guid: f70c89b49a370eb4b80fc6754b6c629c, type: 2}
+  - {fileID: 11400000, guid: 189e9eb19a64617499c3606919dc053c, type: 2}
+  - {fileID: 11400000, guid: 96bf6003f2e24744182611126a47ec10, type: 2}
+  - {fileID: 11400000, guid: 00673e54f9dc0604ba0de7d5cec69515, type: 2}
+  - {fileID: 11400000, guid: f551b8bf2603afc489de81dc57f7f48d, type: 2}
+  - {fileID: 11400000, guid: de4b073773222374f8f5eb4d53b27510, type: 2}
+  lastUpdated: 2026-10-17T20:21:15.8286991Z
   strategy: Aggro
   focus: 0

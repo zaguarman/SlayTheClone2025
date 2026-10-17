@@ -14,34 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Digital Society - Influencer Economy
   cards:
-  - {fileID: 11400000, guid: ac11e6092f0f5754695df24113320dc7, type: 2}
-  - {fileID: 11400000, guid: ac11e6092f0f5754695df24113320dc7, type: 2}
-  - {fileID: 11400000, guid: d442d62f909529e4ea15b5fa4847d138, type: 2}
-  - {fileID: 11400000, guid: d442d62f909529e4ea15b5fa4847d138, type: 2}
-  - {fileID: 11400000, guid: a9ceb02a818d514488680ccb253bc352, type: 2}
-  - {fileID: 11400000, guid: a9ceb02a818d514488680ccb253bc352, type: 2}
-  - {fileID: 11400000, guid: 8f9ccbf49634b3c48b37dc94c013cb9a, type: 2}
-  - {fileID: 11400000, guid: 8f9ccbf49634b3c48b37dc94c013cb9a, type: 2}
   - {fileID: 11400000, guid: 70add0ece25639e40a05c50b94963a41, type: 2}
   - {fileID: 11400000, guid: 70add0ece25639e40a05c50b94963a41, type: 2}
-  - {fileID: 11400000, guid: 54ba5287a7b3b184894c02fc4bbc5cc4, type: 2}
-  - {fileID: 11400000, guid: 54ba5287a7b3b184894c02fc4bbc5cc4, type: 2}
-  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
-  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
+  - {fileID: 11400000, guid: ed6ce3e62ea574f439d28aa08cbc3175, type: 2}
+  - {fileID: 11400000, guid: ed6ce3e62ea574f439d28aa08cbc3175, type: 2}
+  - {fileID: 11400000, guid: ac11e6092f0f5754695df24113320dc7, type: 2}
+  - {fileID: 11400000, guid: ac11e6092f0f5754695df24113320dc7, type: 2}
+  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
+  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
+  - {fileID: 11400000, guid: 8f9ccbf49634b3c48b37dc94c013cb9a, type: 2}
+  - {fileID: 11400000, guid: 8f9ccbf49634b3c48b37dc94c013cb9a, type: 2}
+  - {fileID: 11400000, guid: 4110b2e9c48b7c647ad50b0da4aac2e1, type: 2}
   - {fileID: 11400000, guid: 6559f470c062bd94caeb4f75e0441938, type: 2}
-  - {fileID: 11400000, guid: 6559f470c062bd94caeb4f75e0441938, type: 2}
-  - {fileID: 11400000, guid: 2b1d92e3b3d74bf4199c45f5b081fd0b, type: 2}
-  - {fileID: 11400000, guid: 2b1d92e3b3d74bf4199c45f5b081fd0b, type: 2}
+  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
+  - {fileID: 11400000, guid: d442d62f909529e4ea15b5fa4847d138, type: 2}
+  - {fileID: 11400000, guid: 65839571c5fe4fd439e0e0e24ac78102, type: 2}
   - {fileID: 11400000, guid: 7deb5f30f84beca4385335dc3b6b41c6, type: 2}
-  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
-  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
+  - {fileID: 11400000, guid: 5be6dbd6303813c46abc6a95c8b68050, type: 2}
   - {fileID: 11400000, guid: 2bee8d866a3da0c40af866ee21f9dfe1, type: 2}
-  - {fileID: 11400000, guid: 65839571c5fe4fd439e0e0e24ac78102, type: 2}
-  - {fileID: 11400000, guid: 65839571c5fe4fd439e0e0e24ac78102, type: 2}
-  - {fileID: 11400000, guid: 5be6dbd6303813c46abc6a95c8b68050, type: 2}
-  - {fileID: 11400000, guid: 5be6dbd6303813c46abc6a95c8b68050, type: 2}
+  - {fileID: 11400000, guid: a9ceb02a818d514488680ccb253bc352, type: 2}
+  - {fileID: 11400000, guid: 54ba5287a7b3b184894c02fc4bbc5cc4, type: 2}
   - {fileID: 11400000, guid: 2dcf4b75e65be464888784aabe969b56, type: 2}
-  - {fileID: 11400000, guid: 2dcf4b75e65be464888784aabe969b56, type: 2}
-  lastUpdated: 2026-10-17T14:17:55.2156806Z
+  - {fileID: 11400000, guid: 6e40f2c5ee002444685f395995da3303, type: 2}
+  - {fileID: 11400000, guid: d402514b947314147883c34feabe6416, type: 2}
+  - {fileID: 11400000, guid: 08ab3b63101b70e479279bc7dfd9943c, type: 2}
+  - {fileID: 11400000, guid: 875952b86356a014f952d26e4eafbad3, type: 2}
+  - {fileID: 11400000, guid: f7730cc39efc66e439c94707b100bc7f, type: 2}
+  - {fileID: 11400000, guid: 2b1d92e3b3d74bf4199c45f5b081fd0b, type: 2}
+  - {fileID: 11400000, guid: 6d20c6c95200ec9458fb7249d816e5a8, type: 2}
+  - {fileID: 11400000, guid: 72d889c75d81a174b9f5b4284f478f9d, type: 2}
+  - {fileID: 11400000, guid: 4110b2e9c48b7c647ad50b0da4aac2e1, type: 2}
+  lastUpdated: 2026-10-17T20:21:15.8312135Z
   strategy: Midrange
   focus: 0
