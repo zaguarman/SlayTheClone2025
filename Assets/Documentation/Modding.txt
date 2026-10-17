@@ -22,7 +22,7 @@ A CARD
   {
     "name": "Office Printer",
     "type": "creature",                   creature or spell
-    "faction": "Corporate",               Corporate, Statecraft, PopCulture, Myth, ShadowOps, Tech, Mind, Utopia (None for neutral)
+    "faction": "Corporate",               Corporate, Statecraft, DigitalSociety, Myth, ShadowOps, Tech, Mind, Utopia (None for neutral)
     "flavor": "Out of toner.",            the line under the picture
     "notes": "What it's for",             design notes, not printed
     "art": "office_printer.png",          a picture beside the file; 352 x 200 reads best; none shows the faction's frame alone
@@ -52,7 +52,7 @@ AN ACTION
   PlaceSlotEffect: "slotEffect": "Landmine", "value": 3, "days": 0
   SetTrend:    "trend": "RushHour", "days": 3
   GrantAbility: "ability": "Berserk"
-  requires:    a requisite on the target: Revealed, Deploying, Online (a Pop Culture creature)...
+  requires:    a requisite on the target: Revealed, Deploying, Online (a Digital Society creature)...
 
 A DECK
   { "name": "Example - Paper Jam", "opponent": "The Office Manager", "tagline": "...", "strategy": "Control",

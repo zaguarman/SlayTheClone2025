@@ -62,7 +62,6 @@ namespace Zeitgeist {
         public static Color FactionColor(Faction faction) => faction switch {
             Faction.Corporate => Hex(0x3FBF8F),     // Money green
             Faction.Statecraft => Hex(0xD9483B),    // Propaganda red
-            Faction.PopCulture => Hex(0xD95DD0),    // Vaporwave magenta
             Faction.Myth => Hex(0xC9A23D),
             Faction.ShadowOps => Hex(0x7C8A99),
             Faction.Tech => Hex(0x3DA9D6),
@@ -86,7 +85,6 @@ namespace Zeitgeist {
             Faction.ShadowOps => "?",       // What it plans shows as ???
             Faction.Tech => "λ",            // Code
             Faction.DigitalSociety => "@",  // Your handle
-            Faction.PopCulture => "☺",      // The mood of the times
             Faction.Mind => "Ψ",            // Psyche
             Faction.Utopia => "∞",          // Endless progress
             _ => "~"

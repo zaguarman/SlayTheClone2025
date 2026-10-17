@@ -332,7 +332,7 @@ namespace Zeitgeist {
                     return creature.Ours ? mine < theirs : theirs < mine;
                 case TargetRequisite.AttackAtMost: return AttackOf(creature) <= action.value;
                 case TargetRequisite.Deploying: return !creature.Operative;
-                case TargetRequisite.Online: return creature.Creature?.SourceData?.faction == Faction.PopCulture;
+                case TargetRequisite.Online: return creature.Creature?.SourceData?.faction == Faction.DigitalSociety;
                 case TargetRequisite.OutsideHeadquarters: return Formation.PositionOf(creature.Slot.Index) != Formation.Position.Headquarters;
                 default: return true;
             }

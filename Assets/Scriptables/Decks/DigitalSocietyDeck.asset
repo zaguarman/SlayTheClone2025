@@ -12,28 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: DigitalSocietyDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Pop Culture - Terminally Online
+  deckName: Digital Society - Moods of Modern Life
   cards:
-  - {fileID: 11400000, guid: ed6ce3e62ea574f439d28aa08cbc3175, type: 2}
-  - {fileID: 11400000, guid: ed6ce3e62ea574f439d28aa08cbc3175, type: 2}
-  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
-  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
-  - {fileID: 11400000, guid: 4110b2e9c48b7c647ad50b0da4aac2e1, type: 2}
-  - {fileID: 11400000, guid: 4110b2e9c48b7c647ad50b0da4aac2e1, type: 2}
-  - {fileID: 11400000, guid: 6d20c6c95200ec9458fb7249d816e5a8, type: 2}
-  - {fileID: 11400000, guid: 6d20c6c95200ec9458fb7249d816e5a8, type: 2}
-  - {fileID: 11400000, guid: 08ab3b63101b70e479279bc7dfd9943c, type: 2}
-  - {fileID: 11400000, guid: 08ab3b63101b70e479279bc7dfd9943c, type: 2}
-  - {fileID: 11400000, guid: 72d889c75d81a174b9f5b4284f478f9d, type: 2}
-  - {fileID: 11400000, guid: 72d889c75d81a174b9f5b4284f478f9d, type: 2}
-  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
-  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
-  - {fileID: 11400000, guid: 6e40f2c5ee002444685f395995da3303, type: 2}
-  - {fileID: 11400000, guid: 6e40f2c5ee002444685f395995da3303, type: 2}
-  - {fileID: 11400000, guid: f7730cc39efc66e439c94707b100bc7f, type: 2}
-  - {fileID: 11400000, guid: 6559f470c062bd94caeb4f75e0441938, type: 2}
-  - {fileID: 11400000, guid: 2b1d92e3b3d74bf4199c45f5b081fd0b, type: 2}
-  - {fileID: 11400000, guid: d402514b947314147883c34feabe6416, type: 2}
-  lastUpdated: 2026-10-17T14:17:55.2151600Z
-  strategy: Swarm
-  focus: 2
+  - {fileID: 11400000, guid: f0b7205f3d99cd249aa56721098c0181, type: 2}
+  - {fileID: 11400000, guid: f0b7205f3d99cd249aa56721098c0181, type: 2}
+  - {fileID: 11400000, guid: fd1f84c9eced9534a964bb8a5c32cf10, type: 2}
+  - {fileID: 11400000, guid: fd1f84c9eced9534a964bb8a5c32cf10, type: 2}
+  - {fileID: 11400000, guid: ef48b590c421e8c44a13dd294147182b, type: 2}
+  - {fileID: 11400000, guid: ef48b590c421e8c44a13dd294147182b, type: 2}
+  - {fileID: 11400000, guid: ef3383c614d6b2b47a388e1aaef2504b, type: 2}
+  - {fileID: 11400000, guid: ef3383c614d6b2b47a388e1aaef2504b, type: 2}
+  - {fileID: 11400000, guid: 9cdc6ae13715dfd4f85ee824d972effb, type: 2}
+  - {fileID: 11400000, guid: 9cdc6ae13715dfd4f85ee824d972effb, type: 2}
+  - {fileID: 11400000, guid: 8ead1bfbfe6b55e4fb9895b8014b62b5, type: 2}
+  - {fileID: 11400000, guid: 8ead1bfbfe6b55e4fb9895b8014b62b5, type: 2}
+  - {fileID: 11400000, guid: 02533c1aba1396c44afbca1c4992d469, type: 2}
+  - {fileID: 11400000, guid: 02533c1aba1396c44afbca1c4992d469, type: 2}
+  - {fileID: 11400000, guid: 9b4570bf79aa0334382937e4d10b9597, type: 2}
+  - {fileID: 11400000, guid: 9b4570bf79aa0334382937e4d10b9597, type: 2}
+  - {fileID: 11400000, guid: 40ad52cc1348c7d4d8032dc350967b4c, type: 2}
+  - {fileID: 11400000, guid: 958cc07697c5a4441bfc9f1b8affdb10, type: 2}
+  - {fileID: 11400000, guid: 822f82c834152ff449d6d660c3f2d302, type: 2}
+  - {fileID: 11400000, guid: 822f82c834152ff449d6d660c3f2d302, type: 2}
+  - {fileID: 11400000, guid: 09afbaabbcbf4be4c998209dc34bad05, type: 2}
+  - {fileID: 11400000, guid: 09afbaabbcbf4be4c998209dc34bad05, type: 2}
+  - {fileID: 11400000, guid: 9f4905f155bd71642ae2e07a8ebacd24, type: 2}
+  - {fileID: 11400000, guid: 9f4905f155bd71642ae2e07a8ebacd24, type: 2}
+  - {fileID: 11400000, guid: c79f894222ba454429f775d998624523, type: 2}
+  - {fileID: 11400000, guid: c79f894222ba454429f775d998624523, type: 2}
+  lastUpdated: 2026-10-17T15:33:13.7616251Z
+  strategy: Midrange
+  focus: 5

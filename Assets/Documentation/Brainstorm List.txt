@@ -1,6 +1,6 @@
 Card Game Factions Overview
 
-(2026-10-17: the game is called Zeitgeist; the Zeitgeist and Digital Society factions are one faction now, Pop Culture. Their
+(2026-10-17: the game is called Zeitgeist; the Zeitgeist and Digital Society factions are one faction now, Digital Society. Their
 sections below stay as the two halves of it: the culture itself, and the internet's.)
 	Neutral Resources
 		Tools & Objects

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: CryptoEntrepreneur
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 464ccec9-be75-466f-adfd-ecc0a010c443
+  cardName: Crypto "Entrepreneur"
+  description: Funds are safu.
+  cardType: 0
+  faction: 6
+  artwork: {fileID: 3286163911610860551, guid: e4bb8bfa17dbf0545a22455787a226f0, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects: []
+  designNotes: 'Mechanics test: Chain Mail. Its attacks jump on to the next 2 creatures
+    in line, half the damage each jump.'
+  artDescription: A guy in sunglasses and a hoodie on top of a human pyramid of recruits,
+    a glowing coin passed down from hand to hand.
+  attack: 3
+  health: 3
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 24
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

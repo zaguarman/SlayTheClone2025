@@ -135,7 +135,7 @@ numbers, and the plan's lever for those is a rework, not a point. Measured once,
 
 9. MEASURED ONCE (2026-10-17, 7900 games, after the browser build)
 
-Factions (their one-faction decks): Pop Culture 68%, Statecraft 58% (was 44%), Tech 55%, Myth 53% (47%), Shadow Ops. 51%,
+Factions (their one-faction decks): Digital Society 68%, Statecraft 58% (was 44%), Tech 55%, Myth 53% (47%), Shadow Ops. 51%,
 Utopia 41% (39%), Mind 40%, Corporate 40%. The three decks buffed: Shock and Awe 18% -> 41%, Results May Vary 44% -> 47%,
 Blessed Martyrs 32% -> 34%; Lab Grown stays at 34%. Strategies: Swarm 71%, Midrange 70%, Control 57%, Aggro 37%, Engine 33%,
 Combo 30%. Mechanics with the most edge: Prophecy 71%, Trigger: Hurt 66%, Slot effect 64%, Armor 60%, Concealed 58%.

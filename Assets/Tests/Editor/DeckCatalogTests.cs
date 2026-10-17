@@ -29,7 +29,7 @@ namespace Zeitgeist.Tests {
                 CollectionAssert.DoesNotContain(deckFactions, Faction.None, $"{deck.GetDeckName()} has cards without a faction");
                 return string.Join(" + ", deckFactions.OrderBy(f => f));
             }).ToList();
-            CollectionAssert.IsSubsetOf(Enum.GetValues(typeof(Faction)).Cast<Faction>().Where(f => f != Faction.None && f != Faction.DigitalSociety).Select(f => f.ToString()).ToList(), factions, // Digital Society merged into Pop Culture (2026-10-17)
+            CollectionAssert.IsSubsetOf(Enum.GetValues(typeof(Faction)).Cast<Faction>().Where(f => f != Faction.None && f != Faction.PopCulture).Select(f => f.ToString()).ToList(), factions, // PopCulture is a dead value (Zeitgeist merged into Digital Society, 2026-10-17)
                 "Every faction has a deck of its own");
             CollectionAssert.AllItemsAreUnique(catalog.Decks.Select(d => d.GetDeckName()).ToList(), "Every deck has its own name (a faction can have more than one: Shadow Ops. - Black Budget)");
 

@@ -76,7 +76,7 @@ namespace Zeitgeist.Tests {
             StringAssert.Contains("Counterattack", printed["Keyboard Warrior"], "Hitting back for its Attack");
             Assert.AreEqual("Destroy target creature\nSacrifice 1: your weakest creature will be sacrificed to play this", printed["Necronomicon"], "A sacrifice comes after what it buys");
             Assert.AreEqual("5 damage to target creature or player and 2 damage to its neighbors", printed["Holy Hand Grenade of Antioch"], "Its neighbors alone");
-            Assert.AreEqual("2 damage to target creature or player and 3 damage to it if it's Pop Culture", printed["Cyberpsychosis"], "A requisite on a faction");
+            Assert.AreEqual("2 damage to target creature or player and 3 damage to it if it's Digital Society", printed["Cyberpsychosis"], "A requisite on a faction");
             Assert.AreEqual("Disruption\nEvery enemy creature changes slots at random", printed["Mass Emigration"], "A Maneuver says whose creatures it moves");
             StringAssert.EndsWith("When Revealed: exhaust whoever revealed it; revealed by a spell, the enemy draws 1 fewer card with the next hand",
                 printed["Red Herring"], "Whoever revealed it: a creature, or else the enemy");
